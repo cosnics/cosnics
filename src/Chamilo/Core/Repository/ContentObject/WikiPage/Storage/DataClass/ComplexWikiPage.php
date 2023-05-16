@@ -11,17 +11,26 @@ use Chamilo\Libraries\Storage\Query\Variable\PropertyConditionVariable;
 use Chamilo\Libraries\Storage\Query\Variable\StaticConditionVariable;
 
 /**
- *
- * @package repository.lib.content_object.wiki_page
+ * @package Chamilo\Core\Repository\ContentObject\WikiPage\Storage\DataClass
  */
 class ComplexWikiPage extends ComplexContentObjectItem
 {
-    const PROPERTY_IS_HOMEPAGE = 'is_homepage';
-    const PROPERTY_IS_LOCKED = 'is_locked';
+    public const CONTEXT = WikiPage::CONTEXT;
+
+    public const PROPERTY_IS_HOMEPAGE = 'is_homepage';
+    public const PROPERTY_IS_LOCKED = 'is_locked';
 
     public static function getAdditionalPropertyNames(): array
     {
-        return array(self::PROPERTY_IS_HOMEPAGE, self::PROPERTY_IS_LOCKED);
+        return [self::PROPERTY_IS_HOMEPAGE, self::PROPERTY_IS_LOCKED];
+    }
+
+    /**
+     * @return string
+     */
+    public static function getStorageUnitName(): string
+    {
+        return 'repository_complex_wiki_page';
     }
 
     public function get_is_homepage()
@@ -32,14 +41,6 @@ class ComplexWikiPage extends ComplexContentObjectItem
     public function get_is_locked()
     {
         return $this->getAdditionalProperty(self::PROPERTY_IS_LOCKED);
-    }
-
-    /**
-     * @return string
-     */
-    public static function getStorageUnitName(): string
-    {
-        return 'repository_complex_wiki_page';
     }
 
     public function set_is_homepage($value)

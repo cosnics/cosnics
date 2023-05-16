@@ -5,6 +5,8 @@ use Chamilo\Core\Tracking\Storage\DataClass\ChangesTracker;
 
 class PublicationChange extends ChangesTracker
 {
+    public const CONTEXT = 'Chamilo\Application\Weblcms\Integration\Chamilo\Core\Tracking';
+
     /**
      * @return string
      */

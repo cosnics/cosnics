@@ -17,6 +17,8 @@ use Exception;
  */
 abstract class RightsLocation extends NestedSet
 {
+    public const CONTEXT = 'Chamilo\Libraries\Rights';
+
     public const PROPERTY_IDENTIFIER = 'identifier';
     public const PROPERTY_INHERIT = 'inherit';
     public const PROPERTY_LOCKED = 'locked';

@@ -1,24 +1,52 @@
 <?php
 namespace Chamilo\Core\Metadata\Storage\DataClass;
 
+use Chamilo\Core\Metadata\Manager;
 use Chamilo\Core\User\Storage\DataClass\User;
 use Chamilo\Libraries\Storage\DataClass\DataClass;
 use Chamilo\Libraries\Storage\DataManager\DataManager;
 
 /**
- *
  * @package Chamilo\Core\Metadata\Relation\Instance\Storage\DataClass
- * @author Hans De Bisschop <hans.de.bisschop@ehb.be>
- * @author Magali Gillard <magali.gillard@ehb.be>
- * @author Eduard Vossen <eduard.vossen@ehb.be>
+ * @author  Hans De Bisschop <hans.de.bisschop@ehb.be>
+ * @author  Magali Gillard <magali.gillard@ehb.be>
+ * @author  Eduard Vossen <eduard.vossen@ehb.be>
  */
 class ElementInstance extends DataClass
 {
-    const PROPERTY_CREATION_DATE = 'creation_date';
-    const PROPERTY_ELEMENT_ID = 'element_id';
-    const PROPERTY_SCHEMA_INSTANCE_ID = 'schema_instance_id';
-    const PROPERTY_USER_ID = 'user_id';
-    const PROPERTY_VOCABULARY_ID = 'vocabulary_id';
+    public const CONTEXT = Manager::CONTEXT;
+
+    public const PROPERTY_CREATION_DATE = 'creation_date';
+    public const PROPERTY_ELEMENT_ID = 'element_id';
+    public const PROPERTY_SCHEMA_INSTANCE_ID = 'schema_instance_id';
+    public const PROPERTY_USER_ID = 'user_id';
+    public const PROPERTY_VOCABULARY_ID = 'vocabulary_id';
+
+    /**
+     * Get the default properties
+     *
+     * @param string[] $extendedPropertyNames
+     *
+     * @return string[] The property names.
+     */
+    public static function getDefaultPropertyNames(array $extendedPropertyNames = []): array
+    {
+        $extendedPropertyNames[] = self::PROPERTY_SCHEMA_INSTANCE_ID;
+        $extendedPropertyNames[] = self::PROPERTY_ELEMENT_ID;
+        $extendedPropertyNames[] = self::PROPERTY_VOCABULARY_ID;
+        $extendedPropertyNames[] = self::PROPERTY_USER_ID;
+        $extendedPropertyNames[] = self::PROPERTY_CREATION_DATE;
+
+        return parent::getDefaultPropertyNames($extendedPropertyNames);
+    }
+
+    /**
+     * @return string
+     */
+    public static function getStorageUnitName(): string
+    {
+        return 'metadata_element_instance';
+    }
 
     /**
      * **************************************************************************************************************
@@ -43,8 +71,7 @@ class ElementInstance extends DataClass
     }
 
     /**
-     *
-     * @return integer
+     * @return int
      */
     public function get_creation_date()
     {
@@ -52,26 +79,7 @@ class ElementInstance extends DataClass
     }
 
     /**
-     * Get the default properties
-     *
-     * @param string[] $extendedPropertyNames
-     *
-     * @return string[] The property names.
-     */
-    public static function getDefaultPropertyNames(array $extendedPropertyNames = []): array
-    {
-        $extendedPropertyNames[] = self::PROPERTY_SCHEMA_INSTANCE_ID;
-        $extendedPropertyNames[] = self::PROPERTY_ELEMENT_ID;
-        $extendedPropertyNames[] = self::PROPERTY_VOCABULARY_ID;
-        $extendedPropertyNames[] = self::PROPERTY_USER_ID;
-        $extendedPropertyNames[] = self::PROPERTY_CREATION_DATE;
-
-        return parent::getDefaultPropertyNames($extendedPropertyNames);
-    }
-
-    /**
-     *
-     * @return integer
+     * @return int
      */
     public function get_element_id()
     {
@@ -79,8 +87,7 @@ class ElementInstance extends DataClass
     }
 
     /**
-     *
-     * @return integer
+     * @return int
      */
     public function get_schema_instance_id()
     {
@@ -88,16 +95,7 @@ class ElementInstance extends DataClass
     }
 
     /**
-     * @return string
-     */
-    public static function getStorageUnitName(): string
-    {
-        return 'metadata_element_instance';
-    }
-
-    /**
-     *
-     * @return integer
+     * @return int
      */
     public function get_user_id()
     {
@@ -105,8 +103,7 @@ class ElementInstance extends DataClass
     }
 
     /**
-     *
-     * @return integer
+     * @return int
      */
     public function get_vocabulary_id()
     {
@@ -114,8 +111,7 @@ class ElementInstance extends DataClass
     }
 
     /**
-     *
-     * @param integer
+     * @param int
      */
     public function set_creation_date($creationDate)
     {
@@ -123,8 +119,7 @@ class ElementInstance extends DataClass
     }
 
     /**
-     *
-     * @param integer
+     * @param int
      */
     public function set_element_id($elementId)
     {
@@ -132,8 +127,7 @@ class ElementInstance extends DataClass
     }
 
     /**
-     *
-     * @param integer
+     * @param int
      */
     public function set_schema_instance_id($schemaInstanceId)
     {
@@ -141,8 +135,7 @@ class ElementInstance extends DataClass
     }
 
     /**
-     *
-     * @param integer
+     * @param int
      */
     public function set_user_id($userId)
     {
@@ -150,8 +143,7 @@ class ElementInstance extends DataClass
     }
 
     /**
-     *
-     * @param integer
+     * @param int
      */
     public function set_vocabulary_id($vocabularyId)
     {

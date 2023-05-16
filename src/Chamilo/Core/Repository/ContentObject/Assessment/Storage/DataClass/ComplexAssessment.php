@@ -15,14 +15,15 @@ use Chamilo\Core\Repository\ContentObject\OrderingQuestion\Storage\DataClass\Ord
 use Chamilo\Core\Repository\Storage\DataClass\ComplexContentObjectItem;
 
 /**
- *
  * @package repository.lib.content_object.assessment
  */
+
 /**
  * This class represents a complex assessment (used to create complex learning objects)
  */
 class ComplexAssessment extends ComplexContentObjectItem
 {
+    public const CONTEXT = Assessment::CONTEXT;
 
     public function get_allowed_types(): array
     {
@@ -38,6 +39,7 @@ class ComplexAssessment extends ComplexContentObjectItem
         $allowed_types[] = AssessmentMatchNumericQuestion::class;
         $allowed_types[] = AssessmentMatchTextQuestion::class;
         $allowed_types[] = OrderingQuestion::class;
+
         return $allowed_types;
     }
 }

@@ -1,20 +1,19 @@
 <?php
 namespace Chamilo\Application\Portfolio\Storage\DataClass;
 
-use Chamilo\Application\Portfolio\Storage\DataManager;
+use Chamilo\Application\Portfolio\Manager;
 
 /**
- *
  * @package Chamilo\Application\Portfolio\Storage\DataClass
- * @author Hans De Bisschop <hans.de.bisschop@ehb.be>
+ * @author  Hans De Bisschop <hans.de.bisschop@ehb.be>
  */
 class RightsLocationEntityRight extends \Chamilo\Core\Rights\RightsLocationEntityRight
 {
-    // DataClass properties
-    const PROPERTY_PUBLICATION_ID = 'publication_id';
+    public const CONTEXT = Manager::CONTEXT;
+
+    public const PROPERTY_PUBLICATION_ID = 'publication_id';
 
     /**
-     *
      * @return string[]
      */
     public static function getDefaultPropertyNames(array $extendedPropertyNames = []): array
@@ -26,15 +25,6 @@ class RightsLocationEntityRight extends \Chamilo\Core\Rights\RightsLocationEntit
     }
 
     /**
-     *
-     * @return int
-     */
-    public function get_publication_id()
-    {
-        return $this->getDefaultProperty(self::PROPERTY_PUBLICATION_ID);
-    }
-
-    /**
      * @return string
      */
     public static function getStorageUnitName(): string
@@ -43,7 +33,14 @@ class RightsLocationEntityRight extends \Chamilo\Core\Rights\RightsLocationEntit
     }
 
     /**
-     *
+     * @return int
+     */
+    public function get_publication_id()
+    {
+        return $this->getDefaultProperty(self::PROPERTY_PUBLICATION_ID);
+    }
+
+    /**
      * @param int $publication_id
      */
     public function set_publication_id($publication_id)

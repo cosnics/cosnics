@@ -11,19 +11,40 @@ use Chamilo\Libraries\Storage\Query\Variable\PropertyConditionVariable;
 use Chamilo\Libraries\Storage\Query\Variable\StaticConditionVariable;
 
 /**
- *
  * @package application\weblcms\integration\core\tracking
- * @author Hans De Bisschop <hans.de.bisschop@ehb.be>
- * @author Magali Gillard <magali.gillard@ehb.be>
- * @author Eduard Vossen <eduard.vossen@ehb.be>
+ * @author  Hans De Bisschop <hans.de.bisschop@ehb.be>
+ * @author  Magali Gillard <magali.gillard@ehb.be>
+ * @author  Eduard Vossen <eduard.vossen@ehb.be>
  */
 class AssessmentAttempt extends AbstractAttempt
 {
-    const PROPERTY_ASSESSMENT_ID = 'assessment_id';
-    const PROPERTY_COURSE_ID = 'course_id';
+    public const CONTEXT = 'Chamilo\Application\Weblcms\Integration\Chamilo\Core\Tracking';
+
+    public const PROPERTY_ASSESSMENT_ID = 'assessment_id';
+    public const PROPERTY_COURSE_ID = 'course_id';
 
     /**
+     * @param string[] $extendedPropertyNames
      *
+     * @return string[]
+     */
+    public static function getDefaultPropertyNames(array $extendedPropertyNames = []): array
+    {
+        $extendedPropertyNames[] = self::PROPERTY_COURSE_ID;
+        $extendedPropertyNames[] = self::PROPERTY_ASSESSMENT_ID;
+
+        return parent::getDefaultPropertyNames($extendedPropertyNames);
+    }
+
+    /**
+     * @return string
+     */
+    public static function getStorageUnitName(): string
+    {
+        return 'tracking_weblcms_assessment_attempt';
+    }
+
+    /**
      * @return int
      */
     public function get_assessment_id()
@@ -65,34 +86,11 @@ class AssessmentAttempt extends AbstractAttempt
     }
 
     /**
-     *
      * @return int
      */
     public function get_course_id()
     {
         return $this->getDefaultProperty(self::PROPERTY_COURSE_ID);
-    }
-
-    /**
-     *
-     * @param string[] $extendedPropertyNames
-     *
-     * @return string[]
-     */
-    public static function getDefaultPropertyNames(array $extendedPropertyNames = []): array
-    {
-        $extendedPropertyNames[] = self::PROPERTY_COURSE_ID;
-        $extendedPropertyNames[] = self::PROPERTY_ASSESSMENT_ID;
-
-        return parent::getDefaultPropertyNames($extendedPropertyNames);
-    }
-
-    /**
-     * @return string
-     */
-    public static function getStorageUnitName(): string
-    {
-        return 'tracking_weblcms_assessment_attempt';
     }
 
     // TODO: These two methods should NOT be here as they are not related to ONE assessment attempt, but a collection of
@@ -120,7 +118,6 @@ class AssessmentAttempt extends AbstractAttempt
     }
 
     /**
-     *
      * @param int $assessment_id
      */
     public function set_assessment_id($assessment_id)
@@ -129,7 +126,6 @@ class AssessmentAttempt extends AbstractAttempt
     }
 
     /**
-     *
      * @param int $course_id
      */
     public function set_course_id($course_id)

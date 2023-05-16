@@ -1,66 +1,37 @@
 <?php
 namespace Chamilo\Core\Tracking\Storage\DataClass;
 
+use Chamilo\Core\Tracking\Manager;
+
 /**
- *
- * @author Hans De Bisschop
+ * @package Chamilo\Core\Tracking\Storage\DataClass
+ * @author  Hans De Bisschop <hans.de.bisschop@ehb.be>
  */
 abstract class ChangesTracker extends SimpleTracker
 {
-    const PROPERTY_USER_ID = 'user_id';
-    const PROPERTY_REFERENCE_ID = 'reference_id';
-    const PROPERTY_ACTION = 'action';
-    const PROPERTY_DATE = 'date';
+    public const CONTEXT = Manager::CONTEXT;
+
+    public const PROPERTY_ACTION = 'action';
+
+    public const PROPERTY_DATE = 'date';
+
+    public const PROPERTY_REFERENCE_ID = 'reference_id';
+
+    public const PROPERTY_USER_ID = 'user_id';
 
     /**
      * Get the default properties of all aggregate trackers.
-     * 
+     *
      * @return array The property names.
      */
     public static function getDefaultPropertyNames(array $extendedPropertyNames = []): array
     {
         return parent::getDefaultPropertyNames(
-            array(self::PROPERTY_USER_ID, self::PROPERTY_REFERENCE_ID, self::PROPERTY_ACTION, self::PROPERTY_DATE));
+            [self::PROPERTY_USER_ID, self::PROPERTY_REFERENCE_ID, self::PROPERTY_ACTION, self::PROPERTY_DATE]
+        );
     }
 
     /**
-     *
-     * @return the $user_id
-     */
-    public function get_user_id()
-    {
-        return $this->getDefaultProperty(self::PROPERTY_USER_ID);
-    }
-
-    /**
-     *
-     * @param $user_id the $user_id to set
-     */
-    public function set_user_id($user_id)
-    {
-        $this->setDefaultProperty(self::PROPERTY_USER_ID, $user_id);
-    }
-
-    /**
-     *
-     * @return the $reference_id
-     */
-    public function get_reference_id()
-    {
-        return $this->getDefaultProperty(self::PROPERTY_REFERENCE_ID);
-    }
-
-    /**
-     *
-     * @param $reference_id the $reference_id to set
-     */
-    public function set_reference_id($reference_id)
-    {
-        $this->setDefaultProperty(self::PROPERTY_REFERENCE_ID, $reference_id);
-    }
-
-    /**
-     *
      * @return the $action
      */
     public function get_action()
@@ -69,16 +40,6 @@ abstract class ChangesTracker extends SimpleTracker
     }
 
     /**
-     *
-     * @param $action the $action to set
-     */
-    public function set_action($action)
-    {
-        $this->setDefaultProperty(self::PROPERTY_ACTION, $action);
-    }
-
-    /**
-     *
      * @return the $date
      */
     public function get_date()
@@ -87,7 +48,30 @@ abstract class ChangesTracker extends SimpleTracker
     }
 
     /**
-     *
+     * @return the $reference_id
+     */
+    public function get_reference_id()
+    {
+        return $this->getDefaultProperty(self::PROPERTY_REFERENCE_ID);
+    }
+
+    /**
+     * @return the $user_id
+     */
+    public function get_user_id()
+    {
+        return $this->getDefaultProperty(self::PROPERTY_USER_ID);
+    }
+
+    /**
+     * @param $action the $action to set
+     */
+    public function set_action($action)
+    {
+        $this->setDefaultProperty(self::PROPERTY_ACTION, $action);
+    }
+
+    /**
      * @param $date the $date to set
      */
     public function set_date($date)
@@ -96,8 +80,24 @@ abstract class ChangesTracker extends SimpleTracker
     }
 
     /**
+     * @param $reference_id the $reference_id to set
+     */
+    public function set_reference_id($reference_id)
+    {
+        $this->setDefaultProperty(self::PROPERTY_REFERENCE_ID, $reference_id);
+    }
+
+    /**
+     * @param $user_id the $user_id to set
+     */
+    public function set_user_id($user_id)
+    {
+        $this->setDefaultProperty(self::PROPERTY_USER_ID, $user_id);
+    }
+
+    /**
      * Implemented
-     * 
+     *
      * @param array $parameters
      */
     public function validate_parameters(array $parameters = [])

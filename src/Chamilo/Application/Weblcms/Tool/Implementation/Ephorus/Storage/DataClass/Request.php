@@ -5,6 +5,7 @@ use Chamilo\Application\Weblcms\Tool\Implementation\Ephorus\Manager;
 use Chamilo\Core\Repository\ContentObject\File\Storage\DataClass\File;
 use Chamilo\Core\Repository\Storage\DataClass\ContentObject;
 use Chamilo\Core\User\Storage\DataClass\User;
+use Chamilo\Core\User\Storage\DataManager;
 use Chamilo\Libraries\Storage\Query\Condition\EqualityCondition;
 use Chamilo\Libraries\Storage\Query\Variable\PropertyConditionVariable;
 use Chamilo\Libraries\Storage\Query\Variable\StaticConditionVariable;
@@ -19,6 +20,7 @@ use InvalidArgumentException;
  */
 class Request extends EphorusDataClass
 {
+    public const CONTEXT = Manager::CONTEXT;
 
     public const FOREIGN_PROPERTY_AUTHOR = 'author';
     public const FOREIGN_PROPERTY_CONTENT_OBJECT = 'content_object';
@@ -182,7 +184,7 @@ class Request extends EphorusDataClass
      */
     public function get_author()
     {
-        return \Chamilo\Core\User\Storage\DataManager::retrieve_by_id(
+        return DataManager::retrieve_by_id(
             User::class, (int) $this->get_author_id()
         );
     }

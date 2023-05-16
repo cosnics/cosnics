@@ -8,15 +8,15 @@ use Symfony\Component\Uid\Uuid;
  * A dummy Notification class which allows the preview to emulate the Notification functionality
  *
  * @package repository\content_object\portfolio\display
- * @author Hans De Bisschop <hans.de.bisschop@ehb.be>
+ * @author  Hans De Bisschop <hans.de.bisschop@ehb.be>
  */
 class DummyNotification extends Notification
 {
-    // Properties
+    public const CONTEXT = \Chamilo\Core\Repository\ContentObject\Assignment\Display\Manager::CONTEXT;
+
     public const PROPERTY_CONTENT_OBJECT_ID = 'content_object_id';
 
     /**
-     *
      * @see \libraries\storage\DataClass::create()
      */
     public function create(): bool
@@ -27,7 +27,6 @@ class DummyNotification extends Notification
     }
 
     /**
-     *
      * @see \libraries\storage\DataClass::delete()
      */
     public function delete(): bool
@@ -42,11 +41,10 @@ class DummyNotification extends Notification
      */
     public static function getDefaultPropertyNames(array $extendedPropertyNames = []): array
     {
-        return parent::getDefaultPropertyNames(array(self::PROPERTY_CONTENT_OBJECT_ID));
+        return parent::getDefaultPropertyNames([self::PROPERTY_CONTENT_OBJECT_ID]);
     }
 
     /**
-     *
      * @return string
      */
     public static function getStorageUnitName(): string
@@ -55,7 +53,6 @@ class DummyNotification extends Notification
     }
 
     /**
-     *
      * @return int
      */
     public function get_content_object_id()
@@ -64,7 +61,6 @@ class DummyNotification extends Notification
     }
 
     /**
-     *
      * @param int $content_object_id
      */
     public function set_content_object_id($content_object_id)
@@ -73,7 +69,6 @@ class DummyNotification extends Notification
     }
 
     /**
-     *
      * @see \libraries\storage\DataClass::update()
      */
     public function update(): bool

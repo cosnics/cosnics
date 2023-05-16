@@ -42,6 +42,8 @@ class ContentObjectPublication extends Publication implements DisplayOrderDataCl
 {
     public const CONTENT_OBJECT_MODIFICATION_DATE_ALIAS = 'content_object_modification_date';
 
+    public const CONTEXT = Manager::CONTEXT;
+
     public const PROPERTY_ALLOW_COLLABORATION = 'allow_collaboration';
     public const PROPERTY_CATEGORY_ID = 'category_id';
     public const PROPERTY_COURSE_ID = 'course_id';

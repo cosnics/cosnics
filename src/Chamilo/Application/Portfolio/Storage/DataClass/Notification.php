@@ -1,15 +1,17 @@
 <?php
 namespace Chamilo\Application\Portfolio\Storage\DataClass;
 
+use Chamilo\Application\Portfolio\Manager;
+
 /**
- *
  * @package Chamilo\Application\Portfolio\Storage\DataClass
- * @author Hans De Bisschop <hans.de.bisschop@ehb.be>
+ * @author  Hans De Bisschop <hans.de.bisschop@ehb.be>
  */
 class Notification extends \Chamilo\Core\Repository\ContentObject\Portfolio\Storage\DataClass\Notification
 {
-    // Properties
-    const PROPERTY_PUBLICATION_ID = 'publication_id';
+    public const CONTEXT = Manager::CONTEXT;
+
+    public const PROPERTY_PUBLICATION_ID = 'publication_id';
 
     /**
      * Get the default properties of all feedback
@@ -18,20 +20,10 @@ class Notification extends \Chamilo\Core\Repository\ContentObject\Portfolio\Stor
      */
     public static function getDefaultPropertyNames(array $extendedPropertyNames = []): array
     {
-        return parent::getDefaultPropertyNames(array(self::PROPERTY_PUBLICATION_ID));
+        return parent::getDefaultPropertyNames([self::PROPERTY_PUBLICATION_ID]);
     }
 
     /**
-     *
-     * @return int
-     */
-    public function get_publication_id()
-    {
-        return $this->getDefaultProperty(self::PROPERTY_PUBLICATION_ID);
-    }
-
-    /**
-     *
      * @return string
      */
     public static function getStorageUnitName(): string
@@ -40,7 +32,14 @@ class Notification extends \Chamilo\Core\Repository\ContentObject\Portfolio\Stor
     }
 
     /**
-     *
+     * @return int
+     */
+    public function get_publication_id()
+    {
+        return $this->getDefaultProperty(self::PROPERTY_PUBLICATION_ID);
+    }
+
+    /**
      * @param int $content_object_id
      */
     public function set_publication_id($publication_id)

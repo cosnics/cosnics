@@ -1,6 +1,7 @@
 <?php
 namespace Chamilo\Core\Menu\Storage\DataClass;
 
+use Chamilo\Core\Menu\Manager;
 use Chamilo\Libraries\Format\Structure\Glyph\FontAwesomeGlyph;
 
 /**
@@ -11,12 +12,11 @@ use Chamilo\Libraries\Format\Structure\Glyph\FontAwesomeGlyph;
  */
 class ApplicationItem extends Item
 {
+    public const CONTEXT = Manager::CONTEXT;
+
     public const PROPERTY_APPLICATION = 'application';
-
     public const PROPERTY_COMPONENT = 'component';
-
     public const PROPERTY_EXTRA_PARAMETERS = 'extra_parameters';
-
     public const PROPERTY_USE_TRANSLATION = 'use_translation';
 
     /**

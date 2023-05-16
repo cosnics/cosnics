@@ -1,10 +1,11 @@
 <?php
 namespace Chamilo\Application\Weblcms\Request\Rights\Storage\DataClass;
 
-use Chamilo\Application\Weblcms\Request\Rights\Storage\DataManager;
+use Chamilo\Application\Weblcms\Request\Rights\Manager;
 
 class RightsLocationEntityRight extends \Chamilo\Core\Rights\RightsLocationEntityRight
 {
+    public const CONTEXT = Manager::CONTEXT;
 
     /**
      * @return string

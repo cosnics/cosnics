@@ -4,9 +4,9 @@ namespace Chamilo\Core\Repository\ContentObject\RssFeed\Storage\DataClass;
 use Chamilo\Core\Repository\Storage\DataClass\ComplexContentObjectItem;
 
 /**
- *
- * @package repository.lib.content_object.rss_feed
+ * @package Chamilo\Core\Repository\ContentObject\RssFeed\Storage\DataClass
  */
 class ComplexRssFeed extends ComplexContentObjectItem
 {
+    public const CONTEXT = RssFeed::CONTEXT;
 }

@@ -1,20 +1,15 @@
 <?php
 namespace Chamilo\Libraries\Storage\DataManager\Repository;
 
-use Chamilo\Libraries\Architecture\ClassnameUtilities;
-use Chamilo\Libraries\Architecture\Traits\ClassContext;
 use Chamilo\Libraries\Storage\DataManager\Interfaces\StorageUnitDatabaseInterface;
 
 /**
- *
  * @package Chamilo\Libraries\Storage\DataManager\Repository
- * @author Hans De Bisschop <hans.de.bisschop@ehb.be>
- * @author Magali Gillard <magali.gillard@ehb.be>
+ * @author  Hans De Bisschop <hans.de.bisschop@ehb.be>
+ * @author  Magali Gillard <magali.gillard@ehb.be>
  */
 class StorageUnitRepository
 {
-    use ClassContext;
-
     public const ALTER_STORAGE_UNIT_ADD = 1;
     public const ALTER_STORAGE_UNIT_ADD_INDEX = 7;
     public const ALTER_STORAGE_UNIT_ADD_PRIMARY_KEY = 5;
@@ -68,13 +63,6 @@ class StorageUnitRepository
         return $this->storageUnitDatabase;
     }
 
-    public function setStorageUnitDatabase(StorageUnitDatabaseInterface $storageUnitDatabase): StorageUnitRepository
-    {
-        $this->storageUnitDatabase = $storageUnitDatabase;
-
-        return $this;
-    }
-
     public function optimize(string $storageUnitName): bool
     {
         return $this->getStorageUnitDatabase()->optimize($storageUnitName);
@@ -83,6 +71,13 @@ class StorageUnitRepository
     public function rename(string $oldStorageUnitName, string $newStorageUnitName): bool
     {
         return $this->getStorageUnitDatabase()->rename($oldStorageUnitName, $newStorageUnitName);
+    }
+
+    public function setStorageUnitDatabase(StorageUnitDatabaseInterface $storageUnitDatabase): StorageUnitRepository
+    {
+        $this->storageUnitDatabase = $storageUnitDatabase;
+
+        return $this;
     }
 
     public function truncate(string $storageUnitName, ?bool $optimize = true): bool

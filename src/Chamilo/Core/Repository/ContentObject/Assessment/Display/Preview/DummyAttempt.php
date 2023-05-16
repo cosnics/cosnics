@@ -2,21 +2,22 @@
 namespace Chamilo\Core\Repository\ContentObject\Assessment\Display\Preview;
 
 use Chamilo\Core\Repository\ContentObject\Assessment\Display\Attempt\AbstractAttempt;
+use Chamilo\Core\Repository\ContentObject\Assessment\Display\Manager;
 use Symfony\Component\Uid\Uuid;
 
 /**
- *
  * @package core\repository\content_object\assessment\display
- * @author Hans De Bisschop <hans.de.bisschop@ehb.be>
- * @author Magali Gillard <magali.gillard@ehb.be>
- * @author Eduard Vossen <eduard.vossen@ehb.be>
+ * @author  Hans De Bisschop <hans.de.bisschop@ehb.be>
+ * @author  Magali Gillard <magali.gillard@ehb.be>
+ * @author  Eduard Vossen <eduard.vossen@ehb.be>
  */
 class DummyAttempt extends AbstractAttempt
 {
+    public const CONTEXT = Manager::CONTEXT;
+
     public const PROPERTY_CONTENT_OBJECT_ID = 'content_object_id';
 
     /**
-     *
      * @see \libraries\storage\DataClass::create()
      */
     public function create(): bool
@@ -27,7 +28,6 @@ class DummyAttempt extends AbstractAttempt
     }
 
     /**
-     *
      * @see \libraries\storage\DataClass::delete()
      */
     public function delete(): bool
@@ -36,7 +36,6 @@ class DummyAttempt extends AbstractAttempt
     }
 
     /**
-     *
      * @param string[] $extendedPropertyNames
      *
      * @return string[]
@@ -57,7 +56,6 @@ class DummyAttempt extends AbstractAttempt
     }
 
     /**
-     *
      * @return int
      */
     public function get_content_object_id()
@@ -66,7 +64,6 @@ class DummyAttempt extends AbstractAttempt
     }
 
     /**
-     *
      * @param int $content_object_id
      */
     public function set_content_object_id($content_object_id)
@@ -75,7 +72,6 @@ class DummyAttempt extends AbstractAttempt
     }
 
     /**
-     *
      * @see \libraries\storage\DataClass::update()
      */
     public function update(): bool

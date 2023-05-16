@@ -4,9 +4,9 @@ namespace Chamilo\Core\Repository\ContentObject\Webpage\Storage\DataClass;
 use Chamilo\Core\Repository\Storage\DataClass\ComplexContentObjectItem;
 
 /**
- *
- * @package repository.lib.content_object.document
+ * @package Chamilo\Core\Repository\ContentObject\Webpage\Storage\DataClass
  */
 class ComplexWebpage extends ComplexContentObjectItem
 {
+    public const CONTEXT = Webpage::CONTEXT;
 }

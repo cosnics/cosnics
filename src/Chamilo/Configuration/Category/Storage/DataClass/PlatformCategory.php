@@ -1,16 +1,19 @@
 <?php
 namespace Chamilo\Configuration\Category\Storage\DataClass;
 
+use Chamilo\Configuration\Category\Manager;
 use Chamilo\Libraries\Storage\DataClass\DataClass;
 use Chamilo\Libraries\Storage\Query\Condition\EqualityCondition;
 use Chamilo\Libraries\Storage\Query\Variable\PropertyConditionVariable;
 use Chamilo\Libraries\Storage\Query\Variable\StaticConditionVariable;
 
 /**
- * @package application.common.category_manager
+ * @package Chamilo\Configuration\Category\Storage\DataClass
  */
 abstract class PlatformCategory extends DataClass
 {
+    public const CONTEXT = Manager::CONTEXT;
+
     public const PROPERTY_DISPLAY_ORDER = 'display_order';
     public const PROPERTY_NAME = 'name';
     public const PROPERTY_PARENT = 'parent_id';

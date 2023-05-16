@@ -6,14 +6,15 @@ use Chamilo\Core\User\Storage\DataManager;
 use Chamilo\Libraries\Storage\DataClass\DataClass;
 
 /**
- *
  * @package Chamilo\Libraries\Calendar\Event
- * @author Hans De Bisschop <hans.de.bisschop@ehb.be>
- * @author Magali Gillard <magali.gillard@ehb.be>
- * @author Eduard Vossen <eduard.vossen@ehb.be>
+ * @author  Hans De Bisschop <hans.de.bisschop@ehb.be>
+ * @author  Magali Gillard <magali.gillard@ehb.be>
+ * @author  Eduard Vossen <eduard.vossen@ehb.be>
  */
 abstract class Visibility extends DataClass
 {
+    public const CONTEXT = 'Chamilo\Libraries\Calendar';
+
     public const PROPERTY_SOURCE = 'source';
     public const PROPERTY_USER_ID = 'user_id';
 

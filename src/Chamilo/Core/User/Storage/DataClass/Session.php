@@ -1,7 +1,7 @@
 <?php
 namespace Chamilo\Core\User\Storage\DataClass;
 
-use Chamilo\Core\User\Storage\DataManager;
+use Chamilo\Core\User\Manager;
 use Chamilo\Libraries\Storage\DataClass\DataClass;
 
 /**
@@ -11,23 +11,14 @@ use Chamilo\Libraries\Storage\DataClass\DataClass;
  */
 class Session extends DataClass
 {
+    public const CONTEXT = Manager::CONTEXT;
 
-    const PROPERTY_DATA = 'data';
-    const PROPERTY_LIFETIME = 'lifetime';
-    const PROPERTY_MODIFIED = 'modified';
-    const PROPERTY_NAME = 'name';
-    const PROPERTY_SAVE_PATH = 'save_path';
-    const PROPERTY_SESSION_ID = 'session_id';
-
-    /**
-     * Returns the data of this Session.
-     *
-     * @return string The data.
-     */
-    public function get_data()
-    {
-        return $this->getDefaultProperty(self::PROPERTY_DATA);
-    }
+    public const PROPERTY_DATA = 'data';
+    public const PROPERTY_LIFETIME = 'lifetime';
+    public const PROPERTY_MODIFIED = 'modified';
+    public const PROPERTY_NAME = 'name';
+    public const PROPERTY_SAVE_PATH = 'save_path';
+    public const PROPERTY_SESSION_ID = 'session_id';
 
     /**
      * Get the default properties
@@ -46,6 +37,26 @@ class Session extends DataClass
         $extendedPropertyNames[] = self::PROPERTY_SAVE_PATH;
 
         return parent::getDefaultPropertyNames($extendedPropertyNames);
+    }
+
+    /**
+     * Returns the table name for this dataclass
+     *
+     * @return string
+     */
+    public static function getStorageUnitName(): string
+    {
+        return 'user_session';
+    }
+
+    /**
+     * Returns the data of this Session.
+     *
+     * @return string The data.
+     */
+    public function get_data()
+    {
+        return $this->getDefaultProperty(self::PROPERTY_DATA);
     }
 
     public function get_expiration_time()
@@ -101,16 +112,6 @@ class Session extends DataClass
     public function get_session_id()
     {
         return $this->getDefaultProperty(self::PROPERTY_SESSION_ID);
-    }
-
-    /**
-     * Returns the table name for this dataclass
-     *
-     * @return string
-     */
-    public static function getStorageUnitName(): string
-    {
-        return 'user_session';
     }
 
     public function is_valid()

@@ -1,6 +1,7 @@
 <?php
 namespace Chamilo\Core\Group\Storage\DataClass;
 
+use Chamilo\Core\Group\Manager;
 use Chamilo\Core\Group\Storage\DataManager;
 use Chamilo\Libraries\Storage\DataClass\NestedSet;
 use Chamilo\Libraries\Storage\Parameters\DataClassCountParameters;
@@ -18,45 +19,31 @@ use Chamilo\Libraries\Storage\Query\Variable\PropertyConditionVariable;
 use Chamilo\Libraries\Storage\Query\Variable\StaticConditionVariable;
 
 /**
- *
  * @package group.lib
  */
 
 /**
- *
  * @author Hans de Bisschop
  * @author Dieter De Neef
  * @author Sven Vanpoucke
  */
 class Group extends NestedSet
 {
-    const PROPERTY_CODE = 'code';
-    const PROPERTY_DATABASE_QUOTA = 'database_quota';
-    const PROPERTY_DESCRIPTION = 'description';
-    const PROPERTY_DISK_QUOTA = 'disk_quota';
-    const PROPERTY_NAME = 'name';
-    const PROPERTY_SORT = 'sort';
+    public const CONTEXT = Manager::CONTEXT;
+
+    public const PROPERTY_CODE = 'code';
+    public const PROPERTY_DATABASE_QUOTA = 'database_quota';
+    public const PROPERTY_DESCRIPTION = 'description';
+    public const PROPERTY_DISK_QUOTA = 'disk_quota';
+    public const PROPERTY_NAME = 'name';
+    public const PROPERTY_SORT = 'sort';
 
     /**
-     * Array used to cache users in this group, depending on request (include subgroups, recursive subgroups)
+     * Cache of the siblings of a group, depending on request (recursive or not)
      *
      * @var array
      */
-    private $users;
-
-    /**
-     * Array used to cache user counts in this group, depending on request (include subgroups, recursive subgroups)
-     *
-     * @var array
-     */
-    private $user_count;
-
-    /**
-     * Array used to cache subgroups, depending on request (recursive or not)
-     *
-     * @var array
-     */
-    private $subgroups;
+    private $siblings;
 
     private $subgroupIdentifiers;
 
@@ -68,11 +55,25 @@ class Group extends NestedSet
     private $subgroup_count;
 
     /**
-     * Cache of the siblings of a group, depending on request (recursive or not)
+     * Array used to cache subgroups, depending on request (recursive or not)
      *
      * @var array
      */
-    private $siblings;
+    private $subgroups;
+
+    /**
+     * Array used to cache user counts in this group, depending on request (include subgroups, recursive subgroups)
+     *
+     * @var array
+     */
+    private $user_count;
+
+    /**
+     * Array used to cache users in this group, depending on request (include subgroups, recursive subgroups)
+     *
+     * @var array
+     */
+    private $users;
 
     /**
      * @param bool $recursive
@@ -122,13 +123,13 @@ class Group extends NestedSet
                 );
                 $parameters = new DataClassCountParameters(
                     $condition, null, new RetrieveProperties(
-                        array(
+                        [
                             new FunctionConditionVariable(
                                 FunctionConditionVariable::DISTINCT, new PropertyConditionVariable(
                                     GroupRelUser::class, GroupRelUser::PROPERTY_USER_ID
                                 )
                             )
-                        )
+                        ]
                     )
                 );
             }
@@ -140,7 +141,7 @@ class Group extends NestedSet
                         new PropertyConditionVariable(GroupRelUser::class, GroupRelUser::PROPERTY_GROUP_ID)
                     )
                 );
-                $joins = new Joins(array($join));
+                $joins = new Joins([$join]);
 
                 $conditions = [];
                 $conditions[] = new ComparisonCondition(
@@ -155,13 +156,13 @@ class Group extends NestedSet
 
                 $parameters = new DataClassCountParameters(
                     $condition, $joins, new RetrieveProperties(
-                        array(
+                        [
                             new FunctionConditionVariable(
                                 FunctionConditionVariable::DISTINCT, new PropertyConditionVariable(
                                     GroupRelUser::class, GroupRelUser::PROPERTY_USER_ID
                                 )
                             )
-                        )
+                        ]
                     )
                 );
             }
@@ -173,7 +174,7 @@ class Group extends NestedSet
                         new PropertyConditionVariable(GroupRelUser::class, GroupRelUser::PROPERTY_GROUP_ID)
                     )
                 );
-                $joins = new Joins(array($join));
+                $joins = new Joins([$join]);
 
                 $conditions = [];
                 $conditions[] = new EqualityCondition(
@@ -188,13 +189,13 @@ class Group extends NestedSet
 
                 $parameters = new DataClassCountParameters(
                     $condition, $joins, new RetrieveProperties(
-                        array(
+                        [
                             new FunctionConditionVariable(
                                 FunctionConditionVariable::DISTINCT, new PropertyConditionVariable(
                                     GroupRelUser::class, GroupRelUser::PROPERTY_USER_ID
                                 )
                             )
-                        )
+                        ]
                     )
                 );
             }
@@ -232,7 +233,7 @@ class Group extends NestedSet
      *
      * @param $in_batch - delete groups in batch and fix nested values later
      *
-     * @return boolean True if success, false otherwise.
+     * @return bool True if success, false otherwise.
      * @deprecated should use $this->delete() of self::deletes( $array ) instead
      */
     public function delete_group($in_batch = false)
@@ -251,6 +252,33 @@ class Group extends NestedSet
     {
         // First, truncate the group so that users are removed.
         return $this->truncate();
+    }
+
+    /**
+     * Get the default properties of all groups.
+     *
+     * @return array The property names.
+     */
+    public static function getDefaultPropertyNames(array $extendedPropertyNames = []): array
+    {
+        return parent::getDefaultPropertyNames(
+            [
+                self::PROPERTY_NAME,
+                self::PROPERTY_DESCRIPTION,
+                self::PROPERTY_SORT,
+                self::PROPERTY_CODE,
+                self::PROPERTY_DISK_QUOTA,
+                self::PROPERTY_DATABASE_QUOTA
+            ]
+        );
+    }
+
+    /**
+     * @return string
+     */
+    public static function getStorageUnitName(): string
+    {
+        return 'group_group';
     }
 
     /**
@@ -287,7 +315,7 @@ class Group extends NestedSet
             $subgroupIdentifiers = DataManager::distinct(
                 Group::class, new DataClassDistinctParameters(
                     $childrenCondition,
-                    new RetrieveProperties(array(new PropertyConditionVariable(Group::class, Group::PROPERTY_ID)))
+                    new RetrieveProperties([new PropertyConditionVariable(Group::class, Group::PROPERTY_ID)])
                 )
             );
 
@@ -310,25 +338,6 @@ class Group extends NestedSet
     public function get_database_quota()
     {
         return $this->getDefaultProperty(self::PROPERTY_DATABASE_QUOTA);
-    }
-
-    /**
-     * Get the default properties of all groups.
-     *
-     * @return array The property names.
-     */
-    public static function getDefaultPropertyNames(array $extendedPropertyNames = []): array
-    {
-        return parent::getDefaultPropertyNames(
-            array(
-                self::PROPERTY_NAME,
-                self::PROPERTY_DESCRIPTION,
-                self::PROPERTY_SORT,
-                self::PROPERTY_CODE,
-                self::PROPERTY_DISK_QUOTA,
-                self::PROPERTY_DATABASE_QUOTA
-            )
-        );
     }
 
     /**
@@ -442,15 +451,6 @@ class Group extends NestedSet
     }
 
     /**
-     *
-     * @return string
-     */
-    public static function getStorageUnitName(): string
-    {
-        return 'group_group';
-    }
-
-    /**
      * @param bool $include_subgroups
      * @param bool $recursive_subgroups
      *
@@ -495,7 +495,7 @@ class Group extends NestedSet
             $users = DataManager::distinct(
                 GroupRelUser::class, new DataClassDistinctParameters(
                     $condition, new RetrieveProperties(
-                        array(new PropertyConditionVariable(GroupRelUser::class, GroupRelUser::PROPERTY_USER_ID))
+                        [new PropertyConditionVariable(GroupRelUser::class, GroupRelUser::PROPERTY_USER_ID)]
                     )
                 )
             );
@@ -507,7 +507,6 @@ class Group extends NestedSet
     }
 
     /**
-     *
      * @deprecated should use is_descendant_of
      */
     public function is_child_of($parent)
@@ -516,7 +515,6 @@ class Group extends NestedSet
     }
 
     /**
-     *
      * @deprecated Use Group::isAncestorOf()
      */
     public function is_parent_of($child)
@@ -525,10 +523,10 @@ class Group extends NestedSet
     }
 
     /**
-     * @param integer $new_parent_id
-     * @param integer $new_previous_id
+     * @param int $new_parent_id
+     * @param int $new_previous_id
      *
-     * @return boolean
+     * @return bool
      * @deprecated Use GroupService::moveGroup() now
      */
     public function move($new_parent_id = 0, $new_previous_id = null, $condition = null): bool
@@ -574,7 +572,6 @@ class Group extends NestedSet
     }
 
     /**
-     *
      * @deprecated use set_parent_id() || move instead.
      */
     public function set_parent($parent)

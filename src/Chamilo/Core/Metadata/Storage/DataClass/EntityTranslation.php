@@ -1,21 +1,23 @@
 <?php
 namespace Chamilo\Core\Metadata\Storage\DataClass;
 
+use Chamilo\Core\Metadata\Manager;
 use Chamilo\Libraries\Storage\DataClass\DataClass;
 
 /**
- *
  * @package Chamilo\Core\Metadata\Schema\Storage\DataClass
- * @author Hans De Bisschop <hans.de.bisschop@ehb.be>
- * @author Magali Gillard <magali.gillard@ehb.be>
- * @author Eduard Vossen <eduard.vossen@ehb.be>
+ * @author  Hans De Bisschop <hans.de.bisschop@ehb.be>
+ * @author  Magali Gillard <magali.gillard@ehb.be>
+ * @author  Eduard Vossen <eduard.vossen@ehb.be>
  */
 class EntityTranslation extends DataClass
 {
-    const PROPERTY_ENTITY_ID = 'entity_id';
-    const PROPERTY_ENTITY_TYPE = 'entity_type';
-    const PROPERTY_ISOCODE = 'isocode';
-    const PROPERTY_VALUE = 'value';
+    public const CONTEXT = Manager::CONTEXT;
+
+    public const PROPERTY_ENTITY_ID = 'entity_id';
+    public const PROPERTY_ENTITY_TYPE = 'entity_type';
+    public const PROPERTY_ISOCODE = 'isocode';
+    public const PROPERTY_VALUE = 'value';
 
     /**
      * **************************************************************************************************************
@@ -47,8 +49,15 @@ class EntityTranslation extends DataClass
      */
 
     /**
-     *
-     * @return integer
+     * @return string
+     */
+    public static function getStorageUnitName(): string
+    {
+        return 'metadata_entity_translation';
+    }
+
+    /**
+     * @return int
      */
     public function get_entity_id()
     {
@@ -56,8 +65,7 @@ class EntityTranslation extends DataClass
     }
 
     /**
-     *
-     * @return integer
+     * @return int
      */
     public function get_entity_type()
     {
@@ -77,23 +85,13 @@ class EntityTranslation extends DataClass
     /**
      * @return string
      */
-    public static function getStorageUnitName(): string
-    {
-        return 'metadata_entity_translation';
-    }
-
-    /**
-     *
-     * @return string
-     */
     public function get_value()
     {
         return $this->getDefaultProperty(self::PROPERTY_VALUE);
     }
 
     /**
-     *
-     * @param integer
+     * @param int
      */
     public function set_entity_id($entity_id)
     {
@@ -101,8 +99,7 @@ class EntityTranslation extends DataClass
     }
 
     /**
-     *
-     * @param integer
+     * @param int
      */
     public function set_entity_type($entityType)
     {
@@ -120,7 +117,6 @@ class EntityTranslation extends DataClass
     }
 
     /**
-     *
      * @param string
      */
     public function set_value($value)

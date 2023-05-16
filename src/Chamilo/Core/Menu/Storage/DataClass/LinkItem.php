@@ -1,6 +1,7 @@
 <?php
 namespace Chamilo\Core\Menu\Storage\DataClass;
 
+use Chamilo\Core\Menu\Manager;
 use Chamilo\Libraries\Format\Structure\Glyph\FontAwesomeGlyph;
 
 /**
@@ -11,16 +12,14 @@ use Chamilo\Libraries\Format\Structure\Glyph\FontAwesomeGlyph;
  */
 class LinkItem extends Item
 {
-    public const PROPERTY_TARGET = 'target';
+    public const CONTEXT = Manager::CONTEXT;
 
+    public const PROPERTY_TARGET = 'target';
     public const PROPERTY_URL = 'url';
 
     public const TARGET_BLANK = 0;
-
     public const TARGET_PARENT = 2;
-
     public const TARGET_SELF = 1;
-
     public const TARGET_TOP = 3;
 
     /**

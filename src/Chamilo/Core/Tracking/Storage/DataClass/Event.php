@@ -1,24 +1,20 @@
 <?php
 namespace Chamilo\Core\Tracking\Storage\DataClass;
 
-use Chamilo\Core\Tracking\Storage\DataManager;
+use Chamilo\Core\Tracking\Manager;
 use Chamilo\Libraries\Storage\DataClass\DataClass;
 
 /**
- *
- * @package tracking.lib
- */
-
-/**
- * This class presents a event
- *
- * @author Sven Vanpoucke
+ * @package Chamilo\Core\Tracking\Storage\DataClass
+ * @author  Sven Vanpoucke
  */
 abstract class Event extends DataClass
 {
-    const PROPERTY_ACTIVE = 'active';
-    const PROPERTY_CONTEXT = 'context';
-    const PROPERTY_NAME = 'name';
+    public const CONTEXT = Manager::CONTEXT;
+
+    public const PROPERTY_ACTIVE = 'active';
+    public const PROPERTY_CONTEXT = 'context';
+    public const PROPERTY_NAME = 'name';
 
     private $trackers;
 
@@ -45,8 +41,7 @@ abstract class Event extends DataClass
     }
 
     /**
-     *
-     * @param string $name The name of the event
+     * @param string $name        The name of the event
      * @param string $application The name of the application
      *
      * @return Event The event
@@ -59,7 +54,26 @@ abstract class Event extends DataClass
     }
 
     /**
+     * Get the default properties
      *
+     * @return array The property names.
+     */
+    public static function getDefaultPropertyNames(array $extendedPropertyNames = []): array
+    {
+        return parent::getDefaultPropertyNames(
+            [self::PROPERTY_NAME, self::PROPERTY_ACTIVE, self::PROPERTY_CONTEXT]
+        );
+    }
+
+    /**
+     * @return string
+     */
+    public static function getStorageUnitName(): string
+    {
+        return 'tracking_event';
+    }
+
+    /**
      * @return string[]
      */
     public function getTrackerClasses()
@@ -88,18 +102,6 @@ abstract class Event extends DataClass
     }
 
     /**
-     * Get the default properties
-     *
-     * @return array The property names.
-     */
-    public static function getDefaultPropertyNames(array $extendedPropertyNames = []): array
-    {
-        return parent::getDefaultPropertyNames(
-            array(self::PROPERTY_NAME, self::PROPERTY_ACTIVE, self::PROPERTY_CONTEXT)
-        );
-    }
-
-    /**
      * Returns the name of this Event.
      *
      * @return the name.
@@ -107,14 +109,6 @@ abstract class Event extends DataClass
     public function get_name()
     {
         return $this->getDefaultProperty(self::PROPERTY_NAME);
-    }
-
-    /**
-     * @return string
-     */
-    public static function getStorageUnitName(): string
-    {
-        return 'tracking_event';
     }
 
     public function get_trackers()
@@ -134,14 +128,8 @@ abstract class Event extends DataClass
         return $this->trackers;
     }
 
-    public function set_trackers($trackers)
-    {
-        $this->trackers = $trackers;
-    }
-
     /**
-     *
-     * @return boolean
+     * @return bool
      */
     public function is_active()
     {
@@ -176,6 +164,11 @@ abstract class Event extends DataClass
     public function set_name($name)
     {
         $this->setDefaultProperty(self::PROPERTY_NAME, $name);
+    }
+
+    public function set_trackers($trackers)
+    {
+        $this->trackers = $trackers;
     }
 
     public static function trigger($name, $context, $parameters)

@@ -2,10 +2,8 @@
 namespace Chamilo\Libraries\Architecture\Application;
 
 use Chamilo\Core\User\Storage\DataClass\User;
-use Chamilo\Libraries\Architecture\ClassnameUtilities;
 use Chamilo\Libraries\Architecture\Exceptions\NotAllowedException;
 use Chamilo\Libraries\Architecture\Interfaces\NoAuthenticationSupport;
-use Chamilo\Libraries\Architecture\Traits\ClassContext;
 use Chamilo\Libraries\Architecture\Traits\DependencyInjectionContainerTrait;
 use Chamilo\Libraries\File\Path;
 use Chamilo\Libraries\Format\NotificationMessage\NotificationMessage;
@@ -22,7 +20,6 @@ use Symfony\Component\HttpFoundation\RedirectResponse;
  */
 abstract class Application
 {
-    use ClassContext;
     use DependencyInjectionContainerTrait;
 
     public const PARAM_ACTION = 'go';

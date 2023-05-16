@@ -2,79 +2,48 @@
 namespace Chamilo\Core\Repository\Workspace\Storage\DataClass;
 
 use Chamilo\Core\Repository\Storage\DataClass\RepositoryCategory;
+use Chamilo\Core\Repository\Workspace\Manager;
 use Chamilo\Libraries\Storage\DataClass\DataClass;
 use Chamilo\Libraries\Storage\DataManager\DataManager;
 
 /**
- *
  * @package Chamilo\Core\Repository\Workspace\Storage\DataClass
- * @author Hans De Bisschop <hans.de.bisschop@ehb.be>
- * @author Magali Gillard <magali.gillard@ehb.be>
- * @author Eduard Vossen <eduard.vossen@ehb.be>
+ * @author  Hans De Bisschop <hans.de.bisschop@ehb.be>
+ * @author  Magali Gillard <magali.gillard@ehb.be>
+ * @author  Eduard Vossen <eduard.vossen@ehb.be>
  */
 class WorkspaceCategoryRelation extends DataClass
 {
-    
-    // Properties
-    const PROPERTY_WORKSPACE_ID = 'workspace_id';
-    const PROPERTY_CATEGORY_ID = 'category_id';
+    public const CONTEXT = Manager::CONTEXT;
+
+    public const PROPERTY_CATEGORY_ID = 'category_id';
+    public const PROPERTY_WORKSPACE_ID = 'workspace_id';
 
     /**
-     *
-     * @var \Chamilo\Core\Repository\Workspace\Storage\DataClass\Workspace
-     */
-    private $workspace;
-
-    /**
-     *
      * @var \Chamilo\Core\Repository\Storage\DataClass\Category
      */
     private $category;
 
     /**
-     *
-     * @return string[]
+     * @var \Chamilo\Core\Repository\Workspace\Storage\DataClass\Workspace
      */
-    public static function getDefaultPropertyNames(array $extendedPropertyNames = []): array
-    {
-        return parent::getDefaultPropertyNames(array(self::PROPERTY_WORKSPACE_ID, self::PROPERTY_CATEGORY_ID));
-    }
+    private $workspace;
 
     /**
-     *
-     * @return int
+     * @return \Chamilo\Core\Repository\Storage\DataClass\RepositoryCategory
      */
-    public function getWorkspaceId()
+    public function getCategory()
     {
-        return $this->getDefaultProperty(self::PROPERTY_WORKSPACE_ID);
-    }
-
-    /**
-     *
-     * @return \Chamilo\Core\Repository\Workspace\Storage\DataClass\Workspace
-     */
-    public function getWorkspace()
-    {
-        if (! isset($this->workspace))
+        if (!isset($this->category))
         {
-            $this->workspace = DataManager::retrieve_by_id(Workspace::class, $this->getWorkspaceId());
+            $this->category = DataManager::retrieve_by_id(RepositoryCategory::class, $this->getCategoryId());
         }
-        
-        return $this->workspace;
+
+        return $this->category;
     }
 
     /**
-     *
-     * @param integer $workspace_id
-     */
-    public function setWorkspaceId($workspaceId)
-    {
-        $this->setDefaultProperty(self::PROPERTY_WORKSPACE_ID, $workspaceId);
-    }
-
-    /**
-     *
-     * @return integer
+     * @return int
      */
     public function getCategoryId()
     {
@@ -82,26 +51,11 @@ class WorkspaceCategoryRelation extends DataClass
     }
 
     /**
-     *
-     * @return \Chamilo\Core\Repository\Storage\DataClass\RepositoryCategory
+     * @return string[]
      */
-    public function getCategory()
+    public static function getDefaultPropertyNames(array $extendedPropertyNames = []): array
     {
-        if (! isset($this->category))
-        {
-            $this->category = DataManager::retrieve_by_id(RepositoryCategory::class, $this->getCategoryId());
-        }
-        
-        return $this->category;
-    }
-
-    /**
-     *
-     * @param integer $categoryId
-     */
-    public function setCategoryId($categoryId)
-    {
-        $this->setDefaultProperty(self::PROPERTY_CATEGORY_ID, $categoryId);
+        return parent::getDefaultPropertyNames([self::PROPERTY_WORKSPACE_ID, self::PROPERTY_CATEGORY_ID]);
     }
 
     /**
@@ -110,5 +64,42 @@ class WorkspaceCategoryRelation extends DataClass
     public static function getStorageUnitName(): string
     {
         return 'repository_workspace_category_relation';
+    }
+
+    /**
+     * @return \Chamilo\Core\Repository\Workspace\Storage\DataClass\Workspace
+     */
+    public function getWorkspace()
+    {
+        if (!isset($this->workspace))
+        {
+            $this->workspace = DataManager::retrieve_by_id(Workspace::class, $this->getWorkspaceId());
+        }
+
+        return $this->workspace;
+    }
+
+    /**
+     * @return int
+     */
+    public function getWorkspaceId()
+    {
+        return $this->getDefaultProperty(self::PROPERTY_WORKSPACE_ID);
+    }
+
+    /**
+     * @param int $categoryId
+     */
+    public function setCategoryId($categoryId)
+    {
+        $this->setDefaultProperty(self::PROPERTY_CATEGORY_ID, $categoryId);
+    }
+
+    /**
+     * @param int $workspace_id
+     */
+    public function setWorkspaceId($workspaceId)
+    {
+        $this->setDefaultProperty(self::PROPERTY_WORKSPACE_ID, $workspaceId);
     }
 }

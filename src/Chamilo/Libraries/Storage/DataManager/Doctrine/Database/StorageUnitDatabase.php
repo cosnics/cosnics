@@ -1,9 +1,7 @@
 <?php
 namespace Chamilo\Libraries\Storage\DataManager\Doctrine\Database;
 
-use Chamilo\Libraries\Architecture\ClassnameUtilities;
 use Chamilo\Libraries\Architecture\ErrorHandler\ExceptionLogger\ExceptionLoggerInterface;
-use Chamilo\Libraries\Architecture\Traits\ClassContext;
 use Chamilo\Libraries\Storage\DataManager\Interfaces\StorageUnitDatabaseInterface;
 use Chamilo\Libraries\Storage\DataManager\Repository\StorageUnitRepository;
 use Chamilo\Libraries\Storage\DataManager\StorageAliasGenerator;
@@ -20,13 +18,11 @@ use Exception;
  * This class provides basic functionality for storage unit manipulations via Doctrine
  *
  * @package Chamilo\Libraries\Storage\DataManager\Doctrine
- * @author Hans De Bisschop <hans.de.bisschop@ehb.be>
- * @author Magali Gillard <magali.gillard@ehb.be>
+ * @author  Hans De Bisschop <hans.de.bisschop@ehb.be>
+ * @author  Magali Gillard <magali.gillard@ehb.be>
  */
 class StorageUnitDatabase implements StorageUnitDatabaseInterface
 {
-    use ClassContext;
-
     protected Connection $connection;
 
     protected ExceptionLoggerInterface $exceptionLogger;
@@ -319,7 +315,6 @@ class StorageUnitDatabase implements StorageUnitDatabaseInterface
     }
 
     /**
-     *
      * @param string[] $attributes
      *
      * @return string[]
@@ -363,7 +358,6 @@ class StorageUnitDatabase implements StorageUnitDatabaseInterface
     }
 
     /**
-     *
      * @param string[] $attributes
      */
     public static function parsePropertyType(array $attributes = []): string

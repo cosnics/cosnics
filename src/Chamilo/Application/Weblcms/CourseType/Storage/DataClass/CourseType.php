@@ -4,6 +4,7 @@ namespace Chamilo\Application\Weblcms\CourseType\Storage\DataClass;
 use Chamilo\Application\Weblcms\Course\Storage\DataClass\Course;
 use Chamilo\Application\Weblcms\CourseSettingsConnector;
 use Chamilo\Application\Weblcms\CourseSettingsController;
+use Chamilo\Application\Weblcms\CourseType\Manager;
 use Chamilo\Application\Weblcms\CourseType\Storage\DataManager;
 use Chamilo\Application\Weblcms\Rights\CourseManagementRights;
 use Chamilo\Application\Weblcms\Storage\DataClass\CourseSetting;
@@ -24,15 +25,17 @@ use Exception;
  * Describes a course type (templating and rights system for courses)
  *
  * @package application\weblcms\course_type;
- * @author Yannick & Tristan
- * @author Sven Vanpoucke - Hogeschool Gent - Refactoring
+ * @author  Yannick & Tristan
+ * @author  Sven Vanpoucke - Hogeschool Gent - Refactoring
  */
 class CourseType extends DataClass implements DisplayOrderDataClassListenerSupport
 {
-    const PROPERTY_ACTIVE = 'active';
-    const PROPERTY_DESCRIPTION = 'description';
-    const PROPERTY_DISPLAY_ORDER = 'display_order';
-    const PROPERTY_TITLE = 'title';
+    public const CONTEXT = Manager::CONTEXT;
+
+    public const PROPERTY_ACTIVE = 'active';
+    public const PROPERTY_DESCRIPTION = 'description';
+    public const PROPERTY_DISPLAY_ORDER = 'display_order';
+    public const PROPERTY_TITLE = 'title';
 
     /**
      * Constructor
@@ -52,7 +55,7 @@ class CourseType extends DataClass implements DisplayOrderDataClassListenerSuppo
      *
      * @param $right_id int
      *
-     * @return boolean
+     * @return bool
      */
     public function can_change_course_management_right($right_id)
     {
@@ -64,7 +67,7 @@ class CourseType extends DataClass implements DisplayOrderDataClassListenerSuppo
      *
      * @param $course_setting CourseSetting
      *
-     * @return boolean
+     * @return bool
      */
     public function can_change_course_setting($course_setting)
     {
@@ -82,7 +85,7 @@ class CourseType extends DataClass implements DisplayOrderDataClassListenerSuppo
      *
      * @param bool $create_in_batch
      *
-     * @return boolean
+     * @return bool
      */
     public function create(): bool
     {
@@ -107,11 +110,10 @@ class CourseType extends DataClass implements DisplayOrderDataClassListenerSuppo
      * Creates a course setting relation for the given course setting object
      *
      * @param mixed[string] CourseSetting
-     * @param $locked boolean
+     * @param $locked bool
      *
      * @return CourseTypeRelCourseSetting
      * @throws \Exception
-     *
      */
     public function create_course_setting_relation($course_setting, $locked)
     {
@@ -139,7 +141,7 @@ class CourseType extends DataClass implements DisplayOrderDataClassListenerSuppo
      *
      * @param $values string[]
      *
-     * @return boolean
+     * @return bool
      */
     public function create_course_settings_from_values($values)
     {
@@ -149,7 +151,7 @@ class CourseType extends DataClass implements DisplayOrderDataClassListenerSuppo
     /**
      * Deletes the object and fixes the display orders
      *
-     * @return boolean
+     * @return bool
      */
     public function delete(): bool
     {
@@ -171,7 +173,7 @@ class CourseType extends DataClass implements DisplayOrderDataClassListenerSuppo
      * Handles the copied settings for the
      * course table
      *
-     * @return boolean
+     * @return bool
      */
     public function force_course_settings_to_courses()
     {
@@ -207,7 +209,7 @@ class CourseType extends DataClass implements DisplayOrderDataClassListenerSuppo
     /**
      * Forces all the course rights to the courses connected to this course type.
      *
-     * @return boolean
+     * @return bool
      */
     public function force_rights_to_courses()
     {
@@ -224,12 +226,12 @@ class CourseType extends DataClass implements DisplayOrderDataClassListenerSuppo
     public static function getDefaultPropertyNames(array $extendedPropertyNames = []): array
     {
         return parent::getDefaultPropertyNames(
-            array(
+            [
                 self::PROPERTY_TITLE,
                 self::PROPERTY_ACTIVE,
                 self::PROPERTY_DESCRIPTION,
                 self::PROPERTY_DISPLAY_ORDER
-            )
+            ]
         );
     }
 
@@ -238,6 +240,19 @@ class CourseType extends DataClass implements DisplayOrderDataClassListenerSuppo
      * Course Settings Functionality *
      * **************************************************************************************************************
      */
+
+    /**
+     * @return \Chamilo\Libraries\Storage\Query\Variable\PropertyConditionVariable[]
+     */
+    public function getDisplayOrderContextProperties(): array
+    {
+        return [];
+    }
+
+    public function getDisplayOrderProperty(): PropertyConditionVariable
+    {
+        return new PropertyConditionVariable(self::class, self::PROPERTY_DISPLAY_ORDER);
+    }
 
     /**
      * @return string
@@ -261,7 +276,7 @@ class CourseType extends DataClass implements DisplayOrderDataClassListenerSuppo
      * Retrieves course setting values for the given setting name and tool id
      *
      * @param $setting_name string
-     * @param $tool_id int
+     * @param $tool_id      int
      *
      * @return string[]
      */
@@ -276,7 +291,7 @@ class CourseType extends DataClass implements DisplayOrderDataClassListenerSuppo
      * Retrieves the default values for a given course setting
      *
      * @param $setting_name string
-     * @param $tool_id int
+     * @param $tool_id      int
      *
      * @return string[]
      */
@@ -303,19 +318,6 @@ class CourseType extends DataClass implements DisplayOrderDataClassListenerSuppo
     public function get_display_order()
     {
         return $this->getDefaultProperty(self::PROPERTY_DISPLAY_ORDER);
-    }
-    
-    /**
-     * @return \Chamilo\Libraries\Storage\Query\Variable\PropertyConditionVariable[]
-     */
-    public function getDisplayOrderContextProperties(): array
-    {
-        return [];
-    }
-
-    public function getDisplayOrderProperty(): PropertyConditionVariable
-    {
-        return new PropertyConditionVariable(self::class, self::PROPERTY_DISPLAY_ORDER);
     }
 
     /**
@@ -365,7 +367,7 @@ class CourseType extends DataClass implements DisplayOrderDataClassListenerSuppo
     /**
      * Returns the active status of this CourseType object
      *
-     * @return boolean
+     * @return bool
      */
     public function is_active()
     {
@@ -377,7 +379,7 @@ class CourseType extends DataClass implements DisplayOrderDataClassListenerSuppo
      *
      * @param mixed[string] $course_setting
      *
-     * @return boolean
+     * @return bool
      */
     public function is_course_setting_locked($course_setting)
     {
@@ -423,7 +425,7 @@ class CourseType extends DataClass implements DisplayOrderDataClassListenerSuppo
     /**
      * Sets the active status of this CourseType object
      *
-     * @param $active boolean
+     * @param $active bool
      */
     public function set_active($active)
     {
@@ -468,7 +470,6 @@ class CourseType extends DataClass implements DisplayOrderDataClassListenerSuppo
      *
      * @return CourseTypeRelCourseSetting
      * @throws \Exception
-     *
      */
     public function update_course_setting_relation($course_setting, $locked)
     {
@@ -497,7 +498,7 @@ class CourseType extends DataClass implements DisplayOrderDataClassListenerSuppo
      *
      * @param $values string
      *
-     * @return boolean
+     * @return bool
      */
     public function update_course_settings_from_values($values)
     {

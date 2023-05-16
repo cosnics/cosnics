@@ -22,6 +22,8 @@ class ForumPost extends DataClass implements AttachmentSupport
     public const ATTACHMENT_ALL = 'all';
     public const ATTACHMENT_NORMAL = 'normal';
 
+    public const CONTEXT = ForumTopic::CONTEXT;
+
     public const PROPERTIES_ADDITIONAL = 'additional_properties';
     public const PROPERTY_CONTENT = 'content';
     public const PROPERTY_CREATION_DATE = 'created';

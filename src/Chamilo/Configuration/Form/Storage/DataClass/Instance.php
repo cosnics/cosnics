@@ -1,6 +1,7 @@
 <?php
 namespace Chamilo\Configuration\Form\Storage\DataClass;
 
+use Chamilo\Configuration\Form\Manager;
 use Chamilo\Configuration\Form\Storage\DataManager;
 use Chamilo\Libraries\Storage\DataClass\DataClass;
 use Chamilo\Libraries\Storage\Query\Condition\EqualityCondition;
@@ -8,16 +9,16 @@ use Chamilo\Libraries\Storage\Query\Variable\PropertyConditionVariable;
 use Chamilo\Libraries\Storage\Query\Variable\StaticConditionVariable;
 
 /**
- *
  * @package configuration\form
- * @author Sven Vanpoucke <sven.vanpoucke@hogent.be>
- * @author Hans De Bisschop <hans.de.bisschop@ehb.be>
+ * @author  Sven Vanpoucke <sven.vanpoucke@hogent.be>
+ * @author  Hans De Bisschop <hans.de.bisschop@ehb.be>
  */
 class Instance extends DataClass
 {
-    const PROPERTY_APPLICATION = 'application';
+    public const CONTEXT = Manager::CONTEXT;
 
-    const PROPERTY_NAME = 'name';
+    public const PROPERTY_APPLICATION = 'application';
+    public const PROPERTY_NAME = 'name';
 
     private $elements;
 
@@ -25,18 +26,13 @@ class Instance extends DataClass
     {
         if (!is_array($elements))
         {
-            $elements = array($elements);
+            $elements = [$elements];
         }
 
         foreach ($elements as $element)
         {
             $this->elements[] = $element;
         }
-    }
-
-    public function get_application()
-    {
-        return $this->getDefaultProperty(self::PROPERTY_APPLICATION);
     }
 
     /**
@@ -46,7 +42,20 @@ class Instance extends DataClass
      */
     public static function getDefaultPropertyNames(array $extendedPropertyNames = []): array
     {
-        return parent::getDefaultPropertyNames(array(self::PROPERTY_NAME, self::PROPERTY_APPLICATION));
+        return parent::getDefaultPropertyNames([self::PROPERTY_NAME, self::PROPERTY_APPLICATION]);
+    }
+
+    /**
+     * @return string
+     */
+    public static function getStorageUnitName(): string
+    {
+        return 'configuration_form_instance';
+    }
+
+    public function get_application()
+    {
+        return $this->getDefaultProperty(self::PROPERTY_APPLICATION);
     }
 
     public function get_element($index)
@@ -64,22 +73,9 @@ class Instance extends DataClass
         return $this->elements;
     }
 
-    public function set_elements($elements)
-    {
-        $this->elements = $elements;
-    }
-
     public function get_name()
     {
         return $this->getDefaultProperty(self::PROPERTY_NAME);
-    }
-
-    /**
-     * @return string
-     */
-    public static function getStorageUnitName(): string
-    {
-        return 'configuration_form_instance';
     }
 
     public function load_elements()
@@ -97,6 +93,11 @@ class Instance extends DataClass
     public function set_application($application)
     {
         $this->setDefaultProperty(self::PROPERTY_APPLICATION, $application);
+    }
+
+    public function set_elements($elements)
+    {
+        $this->elements = $elements;
     }
 
     public function set_name($name)

@@ -1,11 +1,11 @@
 <?php
 namespace Chamilo\Application\Weblcms\Storage\DataClass;
 
+use Chamilo\Application\Weblcms\Manager;
 use Chamilo\Application\Weblcms\Rights\WeblcmsRights;
 use Chamilo\Libraries\Storage\DataClass\DataClass;
 
 /**
- *
  * @package application.lib.weblcms.course
  */
 
@@ -16,11 +16,13 @@ use Chamilo\Libraries\Storage\DataClass\DataClass;
  */
 class CourseModule extends DataClass
 {
-    const PROPERTY_COURSE_CODE = 'course_id';
-    const PROPERTY_NAME = 'name';
-    const PROPERTY_SECTION = 'section';
-    const PROPERTY_SORT = 'sort';
-    const PROPERTY_VISIBLE = 'visible';
+    public const CONTEXT = Manager::CONTEXT;
+
+    public const PROPERTY_COURSE_CODE = 'course_id';
+    public const PROPERTY_NAME = 'name';
+    public const PROPERTY_SECTION = 'section';
+    public const PROPERTY_SORT = 'sort';
+    public const PROPERTY_VISIBLE = 'visible';
 
     public static function convert_tools($tools, $course_code = null, $course_type_tools = false, $form = null)
     {
@@ -35,14 +37,14 @@ class CourseModule extends DataClass
                 $tool = $tool->get_name();
             }
 
-            $element_default = $tool . "elementdefaulte";
+            $element_default = $tool . 'elementdefaulte';
             $course_module = new CourseModule();
             $course_module->set_course_code($course_code);
             $course_module->set_name($tool);
             $course_module->set_visible(
                 (!is_null($form) ? $form->parse_checkbox_value($form->getSubmitValue($element_default)) : $tool_visible)
             );
-            $course_module->set_section("basic");
+            $course_module->set_section('basic');
             $course_module->set_sort($index);
             $tools_array[] = $course_module;
         }
@@ -82,16 +84,6 @@ class CourseModule extends DataClass
     }
 
     /**
-     * Returns the course_code of this CourseModule.
-     *
-     * @return the course_code.
-     */
-    public function get_course_code()
-    {
-        return $this->getDefaultProperty(self::PROPERTY_COURSE_CODE);
-    }
-
-    /**
      * Get the default properties
      *
      * @return array The property names.
@@ -99,14 +91,32 @@ class CourseModule extends DataClass
     public static function getDefaultPropertyNames(array $extendedPropertyNames = []): array
     {
         return parent::getDefaultPropertyNames(
-            array(
+            [
                 self::PROPERTY_COURSE_CODE,
                 self::PROPERTY_NAME,
                 self::PROPERTY_VISIBLE,
                 self::PROPERTY_SECTION,
                 self::PROPERTY_SORT
-            )
+            ]
         );
+    }
+
+    /**
+     * @return string
+     */
+    public static function getStorageUnitName(): string
+    {
+        return 'weblcms_course_module';
+    }
+
+    /**
+     * Returns the course_code of this CourseModule.
+     *
+     * @return the course_code.
+     */
+    public function get_course_code()
+    {
+        return $this->getDefaultProperty(self::PROPERTY_COURSE_CODE);
     }
 
     /**
@@ -137,14 +147,6 @@ class CourseModule extends DataClass
     public function get_sort()
     {
         return $this->getDefaultProperty(self::PROPERTY_SORT);
-    }
-
-    /**
-     * @return string
-     */
-    public static function getStorageUnitName(): string
-    {
-        return 'weblcms_course_module';
     }
 
     /**

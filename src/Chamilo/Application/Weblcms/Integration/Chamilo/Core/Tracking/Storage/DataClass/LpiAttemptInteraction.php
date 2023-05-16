@@ -5,40 +5,23 @@ use Chamilo\Core\Tracking\Storage\DataClass\SimpleTracker;
 
 class LpiAttemptInteraction extends SimpleTracker
 {
-    const PROPERTY_COMPLETION_TIME = 'completion_time';
+    public const CONTEXT = 'Chamilo\Application\Weblcms\Integration\Chamilo\Core\Tracking';
 
-    const PROPERTY_CORRECT_RESPONSES = 'correct_responses';
-
-    const PROPERTY_DISPLAY_ORDER = 'display_order';
-
-    const PROPERTY_INTERACTION_ID = 'interaction_id';
-
-    const PROPERTY_INTERACTION_TYPE = 'interaction_type';
-
-    const PROPERTY_LATENCY = 'latency';
-
-    const PROPERTY_LPI_VIEW_ID = 'lpi_view_id';
-
-    const PROPERTY_RESULT = 'result';
-
-    const PROPERTY_STUDENT_RESPONSES = 'student_responses';
-
-    const PROPERTY_WEIGHT = 'weight';
-
-    public function get_completion_time()
-    {
-        return $this->getDefaultProperty(self::PROPERTY_COMPLETION_TIME);
-    }
-
-    public function get_correct_responses()
-    {
-        return $this->getDefaultProperty(self::PROPERTY_CORRECT_RESPONSES);
-    }
+    public const PROPERTY_COMPLETION_TIME = 'completion_time';
+    public const PROPERTY_CORRECT_RESPONSES = 'correct_responses';
+    public const PROPERTY_DISPLAY_ORDER = 'display_order';
+    public const PROPERTY_INTERACTION_ID = 'interaction_id';
+    public const PROPERTY_INTERACTION_TYPE = 'interaction_type';
+    public const PROPERTY_LATENCY = 'latency';
+    public const PROPERTY_LPI_VIEW_ID = 'lpi_view_id';
+    public const PROPERTY_RESULT = 'result';
+    public const PROPERTY_STUDENT_RESPONSES = 'student_responses';
+    public const PROPERTY_WEIGHT = 'weight';
 
     public static function getDefaultPropertyNames(array $extendedPropertyNames = []): array
     {
         return parent::getDefaultPropertyNames(
-            array(
+            [
                 self::PROPERTY_LPI_VIEW_ID,
                 self::PROPERTY_INTERACTION_ID,
                 self::PROPERTY_INTERACTION_TYPE,
@@ -49,8 +32,26 @@ class LpiAttemptInteraction extends SimpleTracker
                 self::PROPERTY_RESULT,
                 self::PROPERTY_LATENCY,
                 self::PROPERTY_DISPLAY_ORDER
-            )
+            ]
         );
+    }
+
+    /**
+     * @return string
+     */
+    public static function getStorageUnitName(): string
+    {
+        return 'tracking_weblcms_lpi_attempt_interaction';
+    }
+
+    public function get_completion_time()
+    {
+        return $this->getDefaultProperty(self::PROPERTY_COMPLETION_TIME);
+    }
+
+    public function get_correct_responses()
+    {
+        return $this->getDefaultProperty(self::PROPERTY_CORRECT_RESPONSES);
     }
 
     public function get_display_order()
@@ -86,14 +87,6 @@ class LpiAttemptInteraction extends SimpleTracker
     public function get_student_responses()
     {
         return $this->getDefaultProperty(self::PROPERTY_STUDENT_RESPONSES);
-    }
-
-    /**
-     * @return string
-     */
-    public static function getStorageUnitName(): string
-    {
-        return 'tracking_weblcms_lpi_attempt_interaction';
     }
 
     public function get_weight()

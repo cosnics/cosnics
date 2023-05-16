@@ -1,26 +1,27 @@
 <?php
 namespace Chamilo\Application\Weblcms\Tool\Implementation\Assessment\Storage\DataClass;
 
+use Chamilo\Application\Weblcms\Tool\Implementation\Assessment\Manager;
 use Chamilo\Core\Repository\ContentObject\Assessment\Display\Configuration;
 use Chamilo\Libraries\Storage\DataClass\DataClass;
 
 /**
- *
  * @package application\weblcms\tool\implementation\assessment
- * @author Hans De Bisschop <hans.de.bisschop@ehb.be>
- * @author Magali Gillard <magali.gillard@ehb.be>
- * @author Eduard Vossen <eduard.vossen@ehb.be>
+ * @author  Hans De Bisschop <hans.de.bisschop@ehb.be>
+ * @author  Magali Gillard <magali.gillard@ehb.be>
+ * @author  Eduard Vossen <eduard.vossen@ehb.be>
  */
 class Publication extends DataClass
 {
+    public const CONTEXT = Manager::CONTEXT;
 
-    const PROPERTY_ALLOW_HINTS = 'allow_hints';
-    const PROPERTY_FEEDBACK_LOCATION = 'feedback_location';
-    const PROPERTY_PUBLICATION_ID = 'publication_id';
-    const PROPERTY_SHOW_ANSWER_FEEDBACK = 'show_answer_feedback';
-    const PROPERTY_SHOW_CORRECTION = 'show_correction';
-    const PROPERTY_SHOW_SCORE = 'show_score';
-    const PROPERTY_SHOW_SOLUTION = 'show_solution';
+    public const PROPERTY_ALLOW_HINTS = 'allow_hints';
+    public const PROPERTY_FEEDBACK_LOCATION = 'feedback_location';
+    public const PROPERTY_PUBLICATION_ID = 'publication_id';
+    public const PROPERTY_SHOW_ANSWER_FEEDBACK = 'show_answer_feedback';
+    public const PROPERTY_SHOW_CORRECTION = 'show_correction';
+    public const PROPERTY_SHOW_SCORE = 'show_score';
+    public const PROPERTY_SHOW_SOLUTION = 'show_solution';
 
     /**
      * Get the default properties
@@ -30,7 +31,7 @@ class Publication extends DataClass
     public static function getDefaultPropertyNames(array $extendedPropertyNames = []): array
     {
         return parent::getDefaultPropertyNames(
-            array(
+            [
                 self::PROPERTY_PUBLICATION_ID,
                 self::PROPERTY_ALLOW_HINTS,
                 self::PROPERTY_SHOW_SCORE,
@@ -38,7 +39,7 @@ class Publication extends DataClass
                 self::PROPERTY_SHOW_SOLUTION,
                 self::PROPERTY_SHOW_ANSWER_FEEDBACK,
                 self::PROPERTY_FEEDBACK_LOCATION
-            )
+            ]
         );
     }
 
@@ -51,8 +52,7 @@ class Publication extends DataClass
     }
 
     /**
-     *
-     * @return boolean
+     * @return bool
      */
     public function get_allow_hints()
     {
@@ -60,7 +60,6 @@ class Publication extends DataClass
     }
 
     /**
-     *
      * @return \core\repository\content_object\assessment\Configuration
      */
     public function get_configuration()
@@ -72,7 +71,6 @@ class Publication extends DataClass
     }
 
     /**
-     *
      * @return int
      */
     public function get_feedback_location()
@@ -86,7 +84,6 @@ class Publication extends DataClass
     }
 
     /**
-     *
      * @return int
      */
     public function get_show_answer_feedback()
@@ -95,8 +92,7 @@ class Publication extends DataClass
     }
 
     /**
-     *
-     * @return boolean
+     * @return bool
      */
     public function get_show_correction()
     {
@@ -104,8 +100,7 @@ class Publication extends DataClass
     }
 
     /**
-     *
-     * @return boolean
+     * @return bool
      */
     public function get_show_score()
     {
@@ -113,8 +108,7 @@ class Publication extends DataClass
     }
 
     /**
-     *
-     * @return boolean
+     * @return bool
      */
     public function get_show_solution()
     {
@@ -122,8 +116,7 @@ class Publication extends DataClass
     }
 
     /**
-     *
-     * @param boolean $allow_hints
+     * @param bool $allow_hints
      */
     public function set_allow_hints($allow_hints)
     {
@@ -131,7 +124,6 @@ class Publication extends DataClass
     }
 
     /**
-     *
      * @param int $feedback_location
      */
     public function set_feedback_location($feedback_location)
@@ -145,7 +137,6 @@ class Publication extends DataClass
     }
 
     /**
-     *
      * @param int $show_answer_feedback
      */
     public function set_show_answer_feedback($show_answer_feedback)
@@ -154,8 +145,7 @@ class Publication extends DataClass
     }
 
     /**
-     *
-     * @param boolean $show_correction
+     * @param bool $show_correction
      */
     public function set_show_correction($show_correction)
     {
@@ -163,8 +153,7 @@ class Publication extends DataClass
     }
 
     /**
-     *
-     * @param boolean $show_score
+     * @param bool $show_score
      */
     public function set_show_score($show_score)
     {
@@ -172,8 +161,7 @@ class Publication extends DataClass
     }
 
     /**
-     *
-     * @param boolean $show_solution
+     * @param bool $show_solution
      */
     public function set_show_solution($show_solution)
     {

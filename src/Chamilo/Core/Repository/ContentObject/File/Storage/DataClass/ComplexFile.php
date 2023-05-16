@@ -9,4 +9,5 @@ use Chamilo\Core\Repository\Storage\DataClass\ComplexContentObjectItem;
  */
 class ComplexFile extends ComplexContentObjectItem
 {
+    public const CONTEXT = File::CONTEXT;
 }

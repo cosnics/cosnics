@@ -22,7 +22,7 @@ class User extends DataClass
 {
     public const ANONYMOUS_ID = '1';
 
-    public const CONTEXT = __NAMESPACE__;
+    public const CONTEXT = Manager::CONTEXT;
 
     public const NAME_FORMAT_FIRST = 0;
     public const NAME_FORMAT_LAST = 1;

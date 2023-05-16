@@ -1,10 +1,10 @@
 <?php
 namespace Chamilo\Application\Weblcms\Storage\DataClass;
 
+use Chamilo\Application\Weblcms\Manager;
 use Chamilo\Libraries\Storage\DataClass\DataClass;
 
 /**
- *
  * @package application.lib.weblcms.course
  */
 
@@ -15,12 +15,41 @@ use Chamilo\Libraries\Storage\DataClass\DataClass;
  */
 class CourseModuleLastAccess extends DataClass
 {
+    public const CONTEXT = Manager::CONTEXT;
 
-    const PROPERTY_ACCESS_DATE = 'access_date';
-    const PROPERTY_CATEGORY_ID = 'category_id';
-    const PROPERTY_COURSE_CODE = 'course_id';
-    const PROPERTY_MODULE_NAME = 'module_name';
-    const PROPERTY_USER_ID = 'user_id';
+    public const PROPERTY_ACCESS_DATE = 'access_date';
+    public const PROPERTY_CATEGORY_ID = 'category_id';
+    public const PROPERTY_COURSE_CODE = 'course_id';
+    public const PROPERTY_MODULE_NAME = 'module_name';
+    public const PROPERTY_USER_ID = 'user_id';
+
+    /**
+     * Get the default properties
+     *
+     * @param string[] $extendedPropertyNames
+     *
+     * @return string[] The property names.
+     */
+    public static function getDefaultPropertyNames(array $extendedPropertyNames = []): array
+    {
+        return parent::getDefaultPropertyNames(
+            [
+                self::PROPERTY_COURSE_CODE,
+                self::PROPERTY_USER_ID,
+                self::PROPERTY_MODULE_NAME,
+                self::PROPERTY_CATEGORY_ID,
+                self::PROPERTY_ACCESS_DATE
+            ]
+        );
+    }
+
+    /**
+     * @return string
+     */
+    public static function getStorageUnitName(): string
+    {
+        return 'weblcms_course_module_last_access';
+    }
 
     /**
      * Returns the access_date of this CourseModuleLastAccess.
@@ -53,26 +82,6 @@ class CourseModuleLastAccess extends DataClass
     }
 
     /**
-     * Get the default properties
-     *
-     * @param string[] $extendedPropertyNames
-     *
-     * @return string[] The property names.
-     */
-    public static function getDefaultPropertyNames(array $extendedPropertyNames = []): array
-    {
-        return parent::getDefaultPropertyNames(
-            array(
-                self::PROPERTY_COURSE_CODE,
-                self::PROPERTY_USER_ID,
-                self::PROPERTY_MODULE_NAME,
-                self::PROPERTY_CATEGORY_ID,
-                self::PROPERTY_ACCESS_DATE
-            )
-        );
-    }
-
-    /**
      * Returns the module_name of this CourseModuleLastAccess.
      *
      * @return the module_name.
@@ -80,14 +89,6 @@ class CourseModuleLastAccess extends DataClass
     public function get_module_name()
     {
         return $this->getDefaultProperty(self::PROPERTY_MODULE_NAME);
-    }
-
-    /**
-     * @return string
-     */
-    public static function getStorageUnitName(): string
-    {
-        return 'weblcms_course_module_last_access';
     }
 
     /**

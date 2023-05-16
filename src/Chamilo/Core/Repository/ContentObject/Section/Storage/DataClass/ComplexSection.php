@@ -5,4 +5,5 @@ use Chamilo\Core\Repository\Storage\DataClass\ComplexContentObjectItem;
 
 class ComplexSection extends ComplexContentObjectItem
 {
+    public const CONTEXT = Section::CONTEXT;
 }

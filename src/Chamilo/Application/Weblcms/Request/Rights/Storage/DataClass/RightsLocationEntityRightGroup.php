@@ -2,29 +2,27 @@
 namespace Chamilo\Application\Weblcms\Request\Rights\Storage\DataClass;
 
 use Chamilo\Application\Weblcms\Request\Rights\Manager;
-use Chamilo\Application\Weblcms\Request\Rights\Storage\DataManager;
 use Chamilo\Core\Group\Storage\DataClass\Group;
 use Chamilo\Libraries\Storage\DataClass\DataClass;
 
 /**
- *
  * @author Hans De Bisschop
  */
 class RightsLocationEntityRightGroup extends DataClass
 {
+    public const CONTEXT = Manager::CONTEXT;
 
-    const PROPERTY_GROUP_ID = 'group_id';
-    const PROPERTY_LOCATION_ENTITY_RIGHT_ID = 'location_entity_right_id';
+    public const PROPERTY_GROUP_ID = 'group_id';
+    public const PROPERTY_LOCATION_ENTITY_RIGHT_ID = 'location_entity_right_id';
 
     /**
      * The group of the RightsLocationEntityRightGroup
      *
-     * @var \group\Group
+     * @var Group
      */
     private $group;
 
     /**
-     *
      * @var RightsLocationEntityRightGroup
      */
     private $location_entity_right;
@@ -36,7 +34,7 @@ class RightsLocationEntityRightGroup extends DataClass
      *
      * @return string[] The property names.
      */
-    static function getDefaultPropertyNames(array $extendedPropertyNames = []): array
+    public static function getDefaultPropertyNames(array $extendedPropertyNames = []): array
     {
         $extendedPropertyNames[] = self::PROPERTY_LOCATION_ENTITY_RIGHT_ID;
         $extendedPropertyNames[] = self::PROPERTY_GROUP_ID;
@@ -44,7 +42,15 @@ class RightsLocationEntityRightGroup extends DataClass
         return parent::getDefaultPropertyNames($extendedPropertyNames);
     }
 
-    function get_group()
+    /**
+     * @return string
+     */
+    public static function getStorageUnitName(): string
+    {
+        return 'weblcms_request_rights_location_entity_right_group';
+    }
+
+    public function get_group()
     {
         if (!isset($this->group))
         {
@@ -56,12 +62,12 @@ class RightsLocationEntityRightGroup extends DataClass
         return $this->group;
     }
 
-    function get_group_id()
+    public function get_group_id()
     {
         return $this->getDefaultProperty(self::PROPERTY_GROUP_ID);
     }
 
-    function get_location_entity_right()
+    public function get_location_entity_right()
     {
         if (!isset($this->location_entity_right))
         {
@@ -74,25 +80,17 @@ class RightsLocationEntityRightGroup extends DataClass
         return $this->location_entity_right;
     }
 
-    function get_location_entity_right_id()
+    public function get_location_entity_right_id()
     {
         return $this->getDefaultProperty(self::PROPERTY_LOCATION_ENTITY_RIGHT_ID);
     }
 
-    /**
-     * @return string
-     */
-    public static function getStorageUnitName(): string
-    {
-        return 'weblcms_request_rights_location_entity_right_group';
-    }
-
-    function set_group_id($group_id)
+    public function set_group_id($group_id)
     {
         $this->setDefaultProperty(self::PROPERTY_GROUP_ID, $group_id);
     }
 
-    function set_location_entity_right_id($location_entity_right_id)
+    public function set_location_entity_right_id($location_entity_right_id)
     {
         $this->setDefaultProperty(self::PROPERTY_LOCATION_ENTITY_RIGHT_ID, $location_entity_right_id);
     }

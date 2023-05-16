@@ -10,7 +10,6 @@ use Chamilo\Libraries\Utilities\StringUtilities;
 class AssessmentSelectQuestion extends ContentObject
 {
     public const ANSWER_TYPE_CHECKBOX = 'checkbox';
-
     public const ANSWER_TYPE_RADIO = 'radio';
 
     public const CONTEXT = 'Chamilo\Core\Repository\ContentObject\AssessmentSelectQuestion';

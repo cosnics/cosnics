@@ -1,6 +1,7 @@
 <?php
 namespace Chamilo\Application\Weblcms\Storage\DataClass;
 
+use Chamilo\Application\Weblcms\Manager;
 use Chamilo\Application\Weblcms\Rights\WeblcmsRights;
 use Chamilo\Application\Weblcms\Storage\DataManager;
 use Chamilo\Configuration\Category\Interfaces\CategoryVisibilitySupported;
@@ -14,17 +15,17 @@ use Chamilo\Libraries\Translation\Translation;
 use RuntimeException;
 
 /**
- *
  * @package application.lib.weblcms.category_manager
  */
 
 /**
- *
  * @author Sven Vanpoucke
  */
 class ContentObjectPublicationCategory extends PlatformCategory
     implements CategoryVisibilitySupported, DisplayOrderDataClassListenerSupport
 {
+    public const CONTEXT = Manager::CONTEXT;
+
     public const PROPERTY_ALLOW_CHANGE = 'allow_change';
     public const PROPERTY_COURSE = 'course_id';
     public const PROPERTY_TOOL = 'tool';
@@ -103,7 +104,7 @@ class ContentObjectPublicationCategory extends PlatformCategory
 
     public static function getDefaultPropertyNames(array $extendedPropertyNames = []): array
     {
-        return array(
+        return [
             self::PROPERTY_COURSE,
             self::PROPERTY_ID,
             self::PROPERTY_NAME,
@@ -112,14 +113,14 @@ class ContentObjectPublicationCategory extends PlatformCategory
             self::PROPERTY_DISPLAY_ORDER,
             self::PROPERTY_ALLOW_CHANGE,
             self::PROPERTY_VISIBLE
-        );
+        ];
     }
 
     protected function getDependencies(array $dependencies = []): array
     {
         $id = $this->get_id();
 
-        return array(
+        return [
             ContentObjectPublicationCategory::class => new EqualityCondition(
                 new PropertyConditionVariable(
                     ContentObjectPublicationCategory::class, ContentObjectPublicationCategory::PROPERTY_PARENT
@@ -130,16 +131,16 @@ class ContentObjectPublicationCategory extends PlatformCategory
                     ContentObjectPublication::class, ContentObjectPublication::PROPERTY_CATEGORY_ID
                 ), new StaticConditionVariable($id)
             )
-        );
+        ];
     }
 
     public function getDisplayOrderContextProperties(): array
     {
-        return array(
+        return [
             new PropertyConditionVariable(self::class, self::PROPERTY_PARENT),
             new PropertyConditionVariable(self::class, self::PROPERTY_COURSE),
             new PropertyConditionVariable(self::class, self::PROPERTY_TOOL)
-        );
+        ];
     }
 
     /**
@@ -153,7 +154,6 @@ class ContentObjectPublicationCategory extends PlatformCategory
     }
 
     /**
-     *
      * @return string
      */
     public static function getStorageUnitName(): string
@@ -181,7 +181,6 @@ class ContentObjectPublicationCategory extends PlatformCategory
      */
 
     /**
-     *
      * @return True if the category is visible for everyone.
      */
     public function get_visibility()
@@ -221,10 +220,10 @@ class ContentObjectPublicationCategory extends PlatformCategory
      * Returns whether given category is visible.
      * Reimplementation of is_recursive_visible() working on arrays instead of queuring the database.
      *
-     * @param int $category_id to check visibility of.
+     * @param int $category_id           to check visibility of.
      * @param array $category_parent_ids mapping of child categories onto parent categories.
-     * @param array $visibility Keys: category ID's Values: True or False. @see DataManager ::
-     *        retrieve_publication_category_visibility(...)
+     * @param array $visibility          Keys: category ID's Values: True or False. @see DataManager ::
+     *                                   retrieve_publication_category_visibility(...)
      *
      * @see DataManager::retrieve_publication_category_parent_ids_recursive(...)
      */

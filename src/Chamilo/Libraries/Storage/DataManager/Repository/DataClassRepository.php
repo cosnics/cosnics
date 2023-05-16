@@ -1,9 +1,7 @@
 <?php
 namespace Chamilo\Libraries\Storage\DataManager\Repository;
 
-use Chamilo\Libraries\Architecture\ClassnameUtilities;
 use Chamilo\Libraries\Architecture\Exceptions\ObjectNotExistException;
-use Chamilo\Libraries\Architecture\Traits\ClassContext;
 use Chamilo\Libraries\Storage\Cache\DataClassRepositoryCache;
 use Chamilo\Libraries\Storage\DataClass\CompositeDataClass;
 use Chamilo\Libraries\Storage\DataClass\DataClass;
@@ -44,8 +42,6 @@ use Symfony\Component\Uid\Uuid;
  */
 class DataClassRepository
 {
-    use ClassContext;
-
     public const ALIAS_MAX_SORT = 'max_sort';
 
     private DataClassDatabaseInterface $dataClassDatabase;

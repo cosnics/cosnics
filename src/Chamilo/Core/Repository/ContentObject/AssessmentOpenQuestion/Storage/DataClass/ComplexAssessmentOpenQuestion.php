@@ -5,29 +5,36 @@ use Chamilo\Core\Repository\ContentObject\Assessment\Display\AnswerFeedbackDispl
 use Chamilo\Core\Repository\Storage\DataClass\ComplexContentObjectItem;
 
 /**
- *
  * @package core\repository\content_object\assessment_open_question
- * @author Sven Vanpoucke <sven.vanpoucke@hogent.be>
- * @author Hans De Bisschop <hans.de.bisschop@ehb.be>
- * @author Magali Gillard <magali.gillard@ehb.be>
- * @author Eduard Vossen <eduard.vossen@ehb.be>
+ * @author  Sven Vanpoucke <sven.vanpoucke@hogent.be>
+ * @author  Hans De Bisschop <hans.de.bisschop@ehb.be>
+ * @author  Magali Gillard <magali.gillard@ehb.be>
+ * @author  Eduard Vossen <eduard.vossen@ehb.be>
  */
 class ComplexAssessmentOpenQuestion extends ComplexContentObjectItem implements AnswerFeedbackDisplaySupport
 {
-    const PROPERTY_SHOW_ANSWER_FEEDBACK = 'show_answer_feedback';
-    const PROPERTY_WEIGHT = 'weight';
+    public const CONTEXT = AssessmentOpenQuestion::CONTEXT;
+
+    public const PROPERTY_SHOW_ANSWER_FEEDBACK = 'show_answer_feedback';
+    public const PROPERTY_WEIGHT = 'weight';
 
     /**
-     *
      * @return string[]
      */
     public static function getAdditionalPropertyNames(): array
     {
-        return array(self::PROPERTY_WEIGHT, self::PROPERTY_SHOW_ANSWER_FEEDBACK);
+        return [self::PROPERTY_WEIGHT, self::PROPERTY_SHOW_ANSWER_FEEDBACK];
     }
 
     /**
-     *
+     * @return string
+     */
+    public static function getStorageUnitName(): string
+    {
+        return 'repository_complex_assessment_open_question';
+    }
+
+    /**
      * @return int
      */
     public function get_default_question_weight()
@@ -42,7 +49,6 @@ class ComplexAssessmentOpenQuestion extends ComplexContentObjectItem implements 
     }
 
     /**
-     *
      * @return int
      */
     public function get_show_answer_feedback()
@@ -51,15 +57,6 @@ class ComplexAssessmentOpenQuestion extends ComplexContentObjectItem implements 
     }
 
     /**
-     * @return string
-     */
-    public static function getStorageUnitName(): string
-    {
-        return 'repository_complex_assessment_open_question';
-    }
-
-    /**
-     *
      * @return int
      */
     public function get_weight()
@@ -83,7 +80,6 @@ class ComplexAssessmentOpenQuestion extends ComplexContentObjectItem implements 
     // complex question object.
 
     /**
-     *
      * @param int $value
      */
     public function set_show_answer_feedback($value)
@@ -92,7 +88,6 @@ class ComplexAssessmentOpenQuestion extends ComplexContentObjectItem implements 
     }
 
     /**
-     *
      * @param int $value
      */
     public function set_weight($value)

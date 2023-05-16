@@ -2,6 +2,7 @@
 namespace Chamilo\Core\Repository\Workspace\Storage\DataClass;
 
 use Chamilo\Core\Repository\Workspace\Favourite\Storage\DataClass\WorkspaceUserFavourite;
+use Chamilo\Core\Repository\Workspace\Manager;
 use Chamilo\Libraries\Storage\DataClass\DataClass;
 use Chamilo\Libraries\Storage\Query\Condition\EqualityCondition;
 use Chamilo\Libraries\Storage\Query\Variable\PropertyConditionVariable;
@@ -15,6 +16,8 @@ use Chamilo\Libraries\Storage\Query\Variable\StaticConditionVariable;
  */
 class Workspace extends DataClass
 {
+    public const CONTEXT = Manager::CONTEXT;
+
     public const PROPERTY_CREATION_DATE = 'creation_date';
     public const PROPERTY_CREATOR_ID = 'creator_id';
     public const PROPERTY_DESCRIPTION = 'description';

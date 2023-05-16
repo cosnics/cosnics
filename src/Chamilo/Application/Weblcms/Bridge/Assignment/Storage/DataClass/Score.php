@@ -11,6 +11,8 @@ namespace Chamilo\Application\Weblcms\Bridge\Assignment\Storage\DataClass;
  */
 class Score extends \Chamilo\Core\Repository\ContentObject\Assignment\Display\Bridge\Storage\DataClass\Score
 {
+    public const CONTEXT = 'Chamilo\Application\Weblcms\Bridge\Assignment';
+
     public static function getStorageUnitName(): string
     {
         return 'tracking_weblcms_assignment_score';

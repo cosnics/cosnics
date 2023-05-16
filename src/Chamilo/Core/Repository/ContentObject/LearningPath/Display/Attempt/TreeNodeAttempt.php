@@ -1,26 +1,36 @@
 <?php
-
 namespace Chamilo\Core\Repository\ContentObject\LearningPath\Display\Attempt;
 
+use Chamilo\Core\Repository\ContentObject\LearningPath\Display\Manager;
 use Chamilo\Libraries\Storage\DataClass\DataClass;
 
 /**
- *
  * @package core\repository\content_object\learning_path\display
- * @author Hans De Bisschop <hans.de.bisschop@ehb.be>
- * @author Magali Gillard <magali.gillard@ehb.be>
- * @author Eduard Vossen <eduard.vossen@ehb.be>
+ * @author  Hans De Bisschop <hans.de.bisschop@ehb.be>
+ * @author  Magali Gillard <magali.gillard@ehb.be>
+ * @author  Eduard Vossen <eduard.vossen@ehb.be>
  */
 abstract class TreeNodeAttempt extends DataClass
 {
-    // Properties
-    const PROPERTY_LEARNING_PATH_ID = 'learning_path_id';
-    const PROPERTY_USER_ID = 'user_id';
-    const PROPERTY_TREE_NODE_DATA_ID = 'tree_node_data_id';
-    const PROPERTY_START_TIME = 'start_time';
-    const PROPERTY_TOTAL_TIME = 'total_time';
-    const PROPERTY_SCORE = 'score';
-    const PROPERTY_COMPLETED = 'completed';
+    public const CONTEXT = Manager::CONTEXT;
+
+    public const PROPERTY_COMPLETED = 'completed';
+    public const PROPERTY_LEARNING_PATH_ID = 'learning_path_id';
+    public const PROPERTY_SCORE = 'score';
+    public const PROPERTY_START_TIME = 'start_time';
+    public const PROPERTY_TOTAL_TIME = 'total_time';
+    public const PROPERTY_TREE_NODE_DATA_ID = 'tree_node_data_id';
+    public const PROPERTY_USER_ID = 'user_id';
+
+    /**
+     * Calculates and sets the total time
+     */
+    public function calculateAndSetTotalTime()
+    {
+        $this->set_total_time($this->get_total_time() + (time() - $this->get_start_time()));
+
+        return $this;
+    }
 
     public static function getDefaultPropertyNames(array $extendedPropertyNames = []): array
     {
@@ -35,16 +45,12 @@ abstract class TreeNodeAttempt extends DataClass
         return parent::getDefaultPropertyNames($extendedPropertyNames);
     }
 
-    public function get_start_time()
+    /**
+     * @return int
+     */
+    public function getLearningPathId()
     {
-        return $this->getDefaultProperty(self::PROPERTY_START_TIME);
-    }
-
-    public function set_start_time($start_time)
-    {
-        $this->setDefaultProperty(self::PROPERTY_START_TIME, $start_time);
-
-        return $this;
+        return (int) $this->getDefaultProperty(self::PROPERTY_LEARNING_PATH_ID);
     }
 
     public function getTreeNodeDataId()
@@ -52,23 +58,12 @@ abstract class TreeNodeAttempt extends DataClass
         return $this->getDefaultProperty(self::PROPERTY_TREE_NODE_DATA_ID);
     }
 
-    public function setTreeNodeDataId($learning_path_item_id)
+    /**
+     * @return int
+     */
+    public function getUserId()
     {
-        $this->setDefaultProperty(self::PROPERTY_TREE_NODE_DATA_ID, $learning_path_item_id);
-
-        return $this;
-    }
-
-    public function get_total_time()
-    {
-        return $this->getDefaultProperty(self::PROPERTY_TOTAL_TIME);
-    }
-
-    public function set_total_time($total_time)
-    {
-        $this->setDefaultProperty(self::PROPERTY_TOTAL_TIME, $total_time);
-
-        return $this;
+        return $this->getDefaultProperty(self::PROPERTY_USER_ID);
     }
 
     public function get_score()
@@ -76,11 +71,14 @@ abstract class TreeNodeAttempt extends DataClass
         return $this->getDefaultProperty(self::PROPERTY_SCORE);
     }
 
-    public function set_score($score)
+    public function get_start_time()
     {
-        $this->setDefaultProperty(self::PROPERTY_SCORE, $score);
+        return $this->getDefaultProperty(self::PROPERTY_START_TIME);
+    }
 
-        return $this;
+    public function get_total_time()
+    {
+        return $this->getDefaultProperty(self::PROPERTY_TOTAL_TIME);
     }
 
     /**
@@ -104,14 +102,6 @@ abstract class TreeNodeAttempt extends DataClass
     }
 
     /**
-     * @return int
-     */
-    public function getLearningPathId()
-    {
-        return (int) $this->getDefaultProperty(self::PROPERTY_LEARNING_PATH_ID);
-    }
-
-    /**
      * @param int $learningPathId
      *
      * @return $this
@@ -123,17 +113,14 @@ abstract class TreeNodeAttempt extends DataClass
         return $this;
     }
 
-    /**
-     *
-     * @return int
-     */
-    public function getUserId()
+    public function setTreeNodeDataId($learning_path_item_id)
     {
-        return $this->getDefaultProperty(self::PROPERTY_USER_ID);
+        $this->setDefaultProperty(self::PROPERTY_TREE_NODE_DATA_ID, $learning_path_item_id);
+
+        return $this;
     }
 
     /**
-     *
      * @param int $user_id
      *
      * @return $this
@@ -145,12 +132,23 @@ abstract class TreeNodeAttempt extends DataClass
         return $this;
     }
 
-    /**
-     * Calculates and sets the total time
-     */
-    public function calculateAndSetTotalTime()
+    public function set_score($score)
     {
-        $this->set_total_time($this->get_total_time() + (time() - $this->get_start_time()));
+        $this->setDefaultProperty(self::PROPERTY_SCORE, $score);
+
+        return $this;
+    }
+
+    public function set_start_time($start_time)
+    {
+        $this->setDefaultProperty(self::PROPERTY_START_TIME, $start_time);
+
+        return $this;
+    }
+
+    public function set_total_time($total_time)
+    {
+        $this->setDefaultProperty(self::PROPERTY_TOTAL_TIME, $total_time);
 
         return $this;
     }

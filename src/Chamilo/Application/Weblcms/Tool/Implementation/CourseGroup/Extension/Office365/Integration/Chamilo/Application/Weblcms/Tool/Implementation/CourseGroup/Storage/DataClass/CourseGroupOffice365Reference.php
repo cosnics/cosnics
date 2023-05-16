@@ -2,20 +2,22 @@
 
 namespace Chamilo\Application\Weblcms\Tool\Implementation\CourseGroup\Extension\Office365\Integration\Chamilo\Application\Weblcms\Tool\Implementation\CourseGroup\Storage\DataClass;
 
+use Chamilo\Application\Weblcms\Tool\Implementation\CourseGroup\Extension\Office365\Integration\Chamilo\Application\Weblcms\Tool\Implementation\CourseGroup\Manager;
 use Chamilo\Libraries\Storage\DataClass\DataClass;
 
 /**
  * @package Chamilo\Application\Weblcms\Tool\Implementation\CourseGroup\Extension\Office365\Storage\DataClass
- *
- * @author Sven Vanpoucke - Hogeschool Gent
+ * @author  Sven Vanpoucke - Hogeschool Gent
  */
 class CourseGroupOffice365Reference extends DataClass
 {
-    const PROPERTY_COURSE_GROUP_ID = 'course_group_id';
-    const PROPERTY_LINKED = 'linked';
-    const PROPERTY_OFFICE365_GROUP_ID = 'office365_group_id';
-    const PROPERTY_OFFICE365_HAS_TEAM = 'office365_has_team';
-    const PROPERTY_OFFICE365_PLAN_ID = 'office365_plan_id';
+    public const CONTEXT = Manager::CONTEXT;
+
+    public const PROPERTY_COURSE_GROUP_ID = 'course_group_id';
+    public const PROPERTY_LINKED = 'linked';
+    public const PROPERTY_OFFICE365_GROUP_ID = 'office365_group_id';
+    public const PROPERTY_OFFICE365_HAS_TEAM = 'office365_has_team';
+    public const PROPERTY_OFFICE365_PLAN_ID = 'office365_plan_id';
 
     /**
      * @return int
@@ -23,22 +25,6 @@ class CourseGroupOffice365Reference extends DataClass
     public function getCourseGroupId()
     {
         return $this->getDefaultProperty(self::PROPERTY_COURSE_GROUP_ID);
-    }
-
-    /**
-     * @return string
-     */
-    public function getOffice365GroupId()
-    {
-        return $this->getDefaultProperty(self::PROPERTY_OFFICE365_GROUP_ID);
-    }
-
-    /**
-     * @return string
-     */
-    public function getOffice365PlanId()
-    {
-        return $this->getDefaultProperty(self::PROPERTY_OFFICE365_PLAN_ID);
     }
 
     /**
@@ -55,6 +41,22 @@ class CourseGroupOffice365Reference extends DataClass
         $extendedPropertyNames[] = self::PROPERTY_LINKED;
 
         return parent::getDefaultPropertyNames($extendedPropertyNames);
+    }
+
+    /**
+     * @return string
+     */
+    public function getOffice365GroupId()
+    {
+        return $this->getDefaultProperty(self::PROPERTY_OFFICE365_GROUP_ID);
+    }
+
+    /**
+     * @return string
+     */
+    public function getOffice365PlanId()
+    {
+        return $this->getDefaultProperty(self::PROPERTY_OFFICE365_PLAN_ID);
     }
 
     /**

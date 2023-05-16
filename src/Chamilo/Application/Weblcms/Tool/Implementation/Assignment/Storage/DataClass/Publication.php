@@ -2,20 +2,36 @@
 
 namespace Chamilo\Application\Weblcms\Tool\Implementation\Assignment\Storage\DataClass;
 
+use Chamilo\Application\Weblcms\Tool\Implementation\Assignment\Manager;
 use Chamilo\Libraries\Storage\DataClass\DataClass;
 
 /**
  * @package Chamilo\Application\Weblcms\Tool\Implementation\Assignment\Storage\DataClass
- *
- * @author Sven Vanpoucke - Hogeschool Gent
+ * @author  Sven Vanpoucke - Hogeschool Gent
  */
 class Publication extends DataClass
 {
-    const PROPERTY_ENTITY_TYPE = 'entity_type';
-    const PROPERTY_PUBLICATION_ID = 'publication_id';
+    public const CONTEXT = Manager::CONTEXT;
+
+    public const PROPERTY_ENTITY_TYPE = 'entity_type';
+    public const PROPERTY_PUBLICATION_ID = 'publication_id';
 
     /**
+     * Get the default properties
      *
+     * @return array The property names.
+     */
+    public static function getDefaultPropertyNames(array $extendedPropertyNames = []): array
+    {
+        return parent::getDefaultPropertyNames(
+            [
+                self::PROPERTY_PUBLICATION_ID,
+                self::PROPERTY_ENTITY_TYPE
+            ]
+        );
+    }
+
+    /**
      * @return int
      */
     public function getEntityType()
@@ -31,28 +47,12 @@ class Publication extends DataClass
         return $this->getDefaultProperty(self::PROPERTY_PUBLICATION_ID);
     }
 
-    /**
-     * Get the default properties
-     *
-     * @return array The property names.
-     */
-    public static function getDefaultPropertyNames(array $extendedPropertyNames = []): array
-    {
-        return parent::getDefaultPropertyNames(
-            array(
-                self::PROPERTY_PUBLICATION_ID,
-                self::PROPERTY_ENTITY_TYPE
-            )
-        );
-    }
-
     public static function getStorageUnitName(): string
     {
         return 'weblcms_assignment_publication';
     }
 
     /**
-     *
      * @param int $entityType
      */
     public function setEntityType($entityType)

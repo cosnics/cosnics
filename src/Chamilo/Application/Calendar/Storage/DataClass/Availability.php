@@ -1,79 +1,34 @@
 <?php
 namespace Chamilo\Application\Calendar\Storage\DataClass;
 
-use Chamilo\Application\Calendar\Storage\DataManager;
+use Chamilo\Application\Calendar\Manager;
 use Chamilo\Libraries\Storage\DataClass\DataClass;
 
 /**
- *
  * @package Chamilo\Application\Calendar\Storage\DataClass
- * @author Hans De Bisschop <hans.de.bisschop@ehb.be>
- * @author Magali Gillard <magali.gillard@ehb.be>
- * @author Eduard Vossen <eduard.vossen@ehb.be>
+ * @author  Hans De Bisschop <hans.de.bisschop@ehb.be>
+ * @author  Magali Gillard <magali.gillard@ehb.be>
+ * @author  Eduard Vossen <eduard.vossen@ehb.be>
  */
 class Availability extends DataClass
 {
-    
-    // Properties
-    const PROPERTY_USER_ID = 'user_id';
-    const PROPERTY_CALENDAR_TYPE = 'calendar_type';
-    const PROPERTY_CALENDAR_ID = 'calendar_id';
-    const PROPERTY_AVAILABILITY = 'availability';
-    const PROPERTY_COLOUR = 'colour';
+    public const CONTEXT = Manager::CONTEXT;
+
+    public const PROPERTY_AVAILABILITY = 'availability';
+    public const PROPERTY_CALENDAR_ID = 'calendar_id';
+    public const PROPERTY_CALENDAR_TYPE = 'calendar_type';
+    public const PROPERTY_COLOUR = 'colour';
+    public const PROPERTY_USER_ID = 'user_id';
 
     /**
-     *
-     * @return string[]
+     * @return int
      */
-    public static function getDefaultPropertyNames(array $extendedPropertyNames = []): array
+    public function getAvailability()
     {
-        return parent::getDefaultPropertyNames(
-            array(
-                self::PROPERTY_USER_ID, 
-                self::PROPERTY_CALENDAR_TYPE, 
-                self::PROPERTY_CALENDAR_ID, 
-                self::PROPERTY_AVAILABILITY, 
-                self::PROPERTY_COLOUR));
+        return $this->getDefaultProperty(self::PROPERTY_AVAILABILITY);
     }
 
     /**
-     *
-     * @return integer
-     */
-    public function getUserId()
-    {
-        return $this->getDefaultProperty(self::PROPERTY_USER_ID);
-    }
-
-    /**
-     *
-     * @param integer $userId
-     */
-    public function setUserId($userId)
-    {
-        $this->setDefaultProperty(self::PROPERTY_USER_ID, $userId);
-    }
-
-    /**
-     *
-     * @return string
-     */
-    public function getCalendarType()
-    {
-        return $this->getDefaultProperty(self::PROPERTY_CALENDAR_TYPE);
-    }
-
-    /**
-     *
-     * @param string $calendarType
-     */
-    public function setCalendarType($calendarType)
-    {
-        $this->setDefaultProperty(self::PROPERTY_CALENDAR_TYPE, $calendarType);
-    }
-
-    /**
-     *
      * @return string
      */
     public function getCalendarId()
@@ -82,52 +37,14 @@ class Availability extends DataClass
     }
 
     /**
-     *
-     * @param string $calendarId
+     * @return string
      */
-    public function setCalendarId($calendarId)
+    public function getCalendarType()
     {
-        $this->setDefaultProperty(self::PROPERTY_CALENDAR_ID, $calendarId);
+        return $this->getDefaultProperty(self::PROPERTY_CALENDAR_TYPE);
     }
 
     /**
-     *
-     * @return integer
-     */
-    public function getAvailability()
-    {
-        return $this->getDefaultProperty(self::PROPERTY_AVAILABILITY);
-    }
-
-    /**
-     *
-     * @param integer $availability
-     */
-    public function setAvailability($availability)
-    {
-        $this->setDefaultProperty(self::PROPERTY_AVAILABILITY, $availability);
-    }
-
-    /**
-     *
-     * @return boolean
-     */
-    public function isActive()
-    {
-        return $this->getAvailability() == true;
-    }
-
-    /**
-     *
-     * @return boolean
-     */
-    public function isInactive()
-    {
-        return $this->getAvailability() == false;
-    }
-
-    /**
-     *
      * @return string
      */
     public function getColour()
@@ -136,12 +53,19 @@ class Availability extends DataClass
     }
 
     /**
-     *
-     * @param string $colour
+     * @return string[]
      */
-    public function setColour($colour)
+    public static function getDefaultPropertyNames(array $extendedPropertyNames = []): array
     {
-        $this->setDefaultProperty(self::PROPERTY_COLOUR, $colour);
+        return parent::getDefaultPropertyNames(
+            [
+                self::PROPERTY_USER_ID,
+                self::PROPERTY_CALENDAR_TYPE,
+                self::PROPERTY_CALENDAR_ID,
+                self::PROPERTY_AVAILABILITY,
+                self::PROPERTY_COLOUR
+            ]
+        );
     }
 
     /**
@@ -150,5 +74,69 @@ class Availability extends DataClass
     public static function getStorageUnitName(): string
     {
         return 'calendar_availability';
+    }
+
+    /**
+     * @return int
+     */
+    public function getUserId()
+    {
+        return $this->getDefaultProperty(self::PROPERTY_USER_ID);
+    }
+
+    /**
+     * @return bool
+     */
+    public function isActive()
+    {
+        return $this->getAvailability() == true;
+    }
+
+    /**
+     * @return bool
+     */
+    public function isInactive()
+    {
+        return $this->getAvailability() == false;
+    }
+
+    /**
+     * @param int $availability
+     */
+    public function setAvailability($availability)
+    {
+        $this->setDefaultProperty(self::PROPERTY_AVAILABILITY, $availability);
+    }
+
+    /**
+     * @param string $calendarId
+     */
+    public function setCalendarId($calendarId)
+    {
+        $this->setDefaultProperty(self::PROPERTY_CALENDAR_ID, $calendarId);
+    }
+
+    /**
+     * @param string $calendarType
+     */
+    public function setCalendarType($calendarType)
+    {
+        $this->setDefaultProperty(self::PROPERTY_CALENDAR_TYPE, $calendarType);
+    }
+
+    /**
+     * @param string $colour
+     */
+    public function setColour($colour)
+    {
+        $this->setDefaultProperty(self::PROPERTY_COLOUR, $colour);
+    }
+
+    /**
+     * @param int $userId
+     */
+    public function setUserId($userId)
+    {
+        $this->setDefaultProperty(self::PROPERTY_USER_ID, $userId);
     }
 }

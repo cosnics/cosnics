@@ -5,15 +5,16 @@ use Chamilo\Libraries\Storage\DataClass\DataClass;
 
 /**
  * @package Chamilo\Libraries\Rights\Domain
- *
- * @author Hans De Bisschop <hans.de.bisschop@ehb.be>
+ * @author  Hans De Bisschop <hans.de.bisschop@ehb.be>
  */
 abstract class RightsLocationEntityRight extends DataClass
 {
-    const PROPERTY_ENTITY_ID = 'entity_id';
-    const PROPERTY_ENTITY_TYPE = 'entity_type';
-    const PROPERTY_LOCATION_ID = 'location_id';
-    const PROPERTY_RIGHT_ID = 'right_id';
+    public const CONTEXT = 'Chamilo\Libraries\Rights';
+
+    public const PROPERTY_ENTITY_ID = 'entity_id';
+    public const PROPERTY_ENTITY_TYPE = 'entity_type';
+    public const PROPERTY_LOCATION_ID = 'location_id';
+    public const PROPERTY_RIGHT_ID = 'right_id';
 
     /**
      * @param array $extendedPropertyNames
@@ -23,17 +24,17 @@ abstract class RightsLocationEntityRight extends DataClass
     public static function getDefaultPropertyNames(array $extendedPropertyNames = []): array
     {
         return parent::getDefaultPropertyNames(
-            array(
+            [
                 self::PROPERTY_RIGHT_ID,
                 self::PROPERTY_ENTITY_ID,
                 self::PROPERTY_ENTITY_TYPE,
                 self::PROPERTY_LOCATION_ID
-            )
+            ]
         );
     }
 
     /**
-     * @return integer
+     * @return int
      */
     public function get_entity_id()
     {
@@ -41,7 +42,7 @@ abstract class RightsLocationEntityRight extends DataClass
     }
 
     /**
-     * @return integer
+     * @return int
      */
     public function get_entity_type()
     {
@@ -49,7 +50,7 @@ abstract class RightsLocationEntityRight extends DataClass
     }
 
     /**
-     * @return integer
+     * @return int
      */
     public function get_location_id()
     {
@@ -57,7 +58,7 @@ abstract class RightsLocationEntityRight extends DataClass
     }
 
     /**
-     * @return integer
+     * @return int
      */
     public function get_right_id()
     {
@@ -65,7 +66,7 @@ abstract class RightsLocationEntityRight extends DataClass
     }
 
     /**
-     * @param integer $entityIdentifier
+     * @param int $entityIdentifier
      *
      * @throws \Exception
      */
@@ -75,7 +76,7 @@ abstract class RightsLocationEntityRight extends DataClass
     }
 
     /**
-     * @param integer $entityType
+     * @param int $entityType
      *
      * @throws \Exception
      */
@@ -85,7 +86,7 @@ abstract class RightsLocationEntityRight extends DataClass
     }
 
     /**
-     * @param integer $locationIdentifier
+     * @param int $locationIdentifier
      *
      * @throws \Exception
      */
@@ -95,7 +96,7 @@ abstract class RightsLocationEntityRight extends DataClass
     }
 
     /**
-     * @param integer $rightIdentifier
+     * @param int $rightIdentifier
      *
      * @throws \Exception
      */

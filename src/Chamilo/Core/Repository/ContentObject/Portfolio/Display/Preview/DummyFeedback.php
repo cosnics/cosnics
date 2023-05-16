@@ -8,15 +8,16 @@ use Symfony\Component\Uid\Uuid;
  * A dummy Feedback class which allows the preview to emulate the Feedback functionality
  *
  * @package repository\content_object\portfolio\display
- * @author Hans De Bisschop <hans.de.bisschop@ehb.be>
+ * @author  Hans De Bisschop <hans.de.bisschop@ehb.be>
  */
 class DummyFeedback extends Feedback
 {
+    public const CONTEXT = \Chamilo\Core\Repository\ContentObject\Assignment\Display\Manager::CONTEXT;
+
     // Properties
     public const PROPERTY_CONTENT_OBJECT_ID = 'content_object_id';
 
     /**
-     *
      * @see \libraries\storage\DataClass::create()
      */
     public function create(): bool
@@ -27,7 +28,6 @@ class DummyFeedback extends Feedback
     }
 
     /**
-     *
      * @see \libraries\storage\DataClass::delete()
      */
     public function delete(): bool
@@ -42,7 +42,7 @@ class DummyFeedback extends Feedback
      */
     public static function getDefaultPropertyNames(array $extendedPropertyNames = []): array
     {
-        return parent::getDefaultPropertyNames(array(self::PROPERTY_CONTENT_OBJECT_ID));
+        return parent::getDefaultPropertyNames([self::PROPERTY_CONTENT_OBJECT_ID]);
     }
 
     /**
@@ -54,7 +54,6 @@ class DummyFeedback extends Feedback
     }
 
     /**
-     *
      * @return int
      */
     public function get_content_object_id()
@@ -63,7 +62,6 @@ class DummyFeedback extends Feedback
     }
 
     /**
-     *
      * @param int $content_object_id
      */
     public function set_content_object_id($content_object_id)
@@ -72,7 +70,6 @@ class DummyFeedback extends Feedback
     }
 
     /**
-     *
      * @see \libraries\storage\DataClass::update()
      */
     public function update(): bool

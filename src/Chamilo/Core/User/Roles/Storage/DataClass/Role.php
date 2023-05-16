@@ -1,6 +1,7 @@
 <?php
 namespace Chamilo\Core\User\Roles\Storage\DataClass;
 
+use Chamilo\Core\User\Manager;
 use Chamilo\Libraries\Storage\DataClass\DataClass;
 
 /**
@@ -10,16 +11,9 @@ use Chamilo\Libraries\Storage\DataClass\DataClass;
  */
 class Role extends DataClass
 {
-    public const PROPERTY_ROLE = 'role';
+    public const CONTEXT = Manager::CONTEXT;
 
-    /**
-     *
-     * @return string
-     */
-    public function getRole()
-    {
-        return $this->getDefaultProperty(self::PROPERTY_ROLE);
-    }
+    public const PROPERTY_ROLE = 'role';
 
     /**
      * Get the default properties of all data classes.
@@ -38,13 +32,20 @@ class Role extends DataClass
     /**
      * @return string
      */
+    public function getRole()
+    {
+        return $this->getDefaultProperty(self::PROPERTY_ROLE);
+    }
+
+    /**
+     * @return string
+     */
     public static function getStorageUnitName(): string
     {
         return 'user_role';
     }
 
     /**
-     *
      * @param string $role
      *
      * @return $this

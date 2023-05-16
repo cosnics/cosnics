@@ -2,18 +2,21 @@
 namespace Chamilo\Application\Weblcms\Tool\Implementation\Ephorus\Storage\DataClass;
 
 use Chamilo\Application\Weblcms\Tool\Implementation\Ephorus\Core\DependencyContainer;
+use Chamilo\Application\Weblcms\Tool\Implementation\Ephorus\Manager;
 use Chamilo\Libraries\Storage\DataClass\DataClass;
 
 /**
  * This class extends the DataClass to add extra common functionality
  *
  * @package application\weblcms\tool\ephorus;
- * @author Sven Vanpoucke - Hogeschool Gent
+ * @author  Sven Vanpoucke - Hogeschool Gent
  */
 abstract class EphorusDataClass extends DataClass
 {
-    const DEPENDENCY_DATA_MANAGER_CLASS = 'data_manager_class';
-    const DEPENDENCY_STRING_UTILITIES_CLASS = 'string_utilities_class';
+    public const CONTEXT = Manager::CONTEXT;
+
+    public const DEPENDENCY_DATA_MANAGER_CLASS = 'data_manager_class';
+    public const DEPENDENCY_STRING_UTILITIES_CLASS = 'string_utilities_class';
 
     /**
      * **************************************************************************************************************
@@ -92,16 +95,6 @@ abstract class EphorusDataClass extends DataClass
     }
 
     /**
-     * Sets the dependency container
-     *
-     * @param DependencyContainer $dependency_container
-     */
-    public function set_dependency_container(DependencyContainer $dependency_container)
-    {
-        $this->dependency_container = $dependency_container;
-    }
-
-    /**
      * Returns the string utilities class dependency
      *
      * @return string
@@ -110,12 +103,6 @@ abstract class EphorusDataClass extends DataClass
     {
         return $this->get_dependency(self::DEPENDENCY_STRING_UTILITIES_CLASS);
     }
-
-    /**
-     * **************************************************************************************************************
-     * Delegation Functionality *
-     * **************************************************************************************************************
-     */
 
     /**
      * Initializes the dependencies
@@ -134,6 +121,12 @@ abstract class EphorusDataClass extends DataClass
     }
 
     /**
+     * **************************************************************************************************************
+     * Delegation Functionality *
+     * **************************************************************************************************************
+     */
+
+    /**
      * Replaces an existing dependency with a new dependency
      *
      * @param string $dependency_name
@@ -145,12 +138,6 @@ abstract class EphorusDataClass extends DataClass
     }
 
     /**
-     * **************************************************************************************************************
-     * Getters & Setters *
-     * **************************************************************************************************************
-     */
-
-    /**
      * Sets the data manager class dependency
      *
      * @param string $data_manager_class
@@ -158,6 +145,22 @@ abstract class EphorusDataClass extends DataClass
     public function set_data_manager_class($data_manager_class)
     {
         $this->replace_dependency(self::DEPENDENCY_DATA_MANAGER_CLASS, $data_manager_class);
+    }
+
+    /**
+     * **************************************************************************************************************
+     * Getters & Setters *
+     * **************************************************************************************************************
+     */
+
+    /**
+     * Sets the dependency container
+     *
+     * @param DependencyContainer $dependency_container
+     */
+    public function set_dependency_container(DependencyContainer $dependency_container)
+    {
+        $this->dependency_container = $dependency_container;
     }
 
     /**

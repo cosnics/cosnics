@@ -1,20 +1,21 @@
 <?php
-
 namespace Chamilo\Application\Weblcms\Tool\Implementation\CourseGroup\Storage\DataClass;
 
+use Chamilo\Application\Weblcms\Tool\Implementation\CourseGroup\Manager;
 use Chamilo\Libraries\Storage\DataClass\DataClass;
 
 /**
  * Defines the relation between a CourseGroup and a ContentObjectPublicationCategory
  *
  * @package Chamilo\Application\Weblcms\Tool\Implementation\CourseGroup\Storage\DataClass
- *
- * @author Sven Vanpoucke - Hogeschool Gent
+ * @author  Sven Vanpoucke - Hogeschool Gent
  */
 class CourseGroupPublicationCategory extends DataClass
 {
-    const PROPERTY_COURSE_GROUP_ID = 'course_group_id';
-    const PROPERTY_PUBLICATION_CATEGORY_ID = 'publication_category_id';
+    public const CONTEXT = Manager::CONTEXT;
+
+    public const PROPERTY_COURSE_GROUP_ID = 'course_group_id';
+    public const PROPERTY_PUBLICATION_CATEGORY_ID = 'publication_category_id';
 
     /**
      * @return int
@@ -25,14 +26,6 @@ class CourseGroupPublicationCategory extends DataClass
     }
 
     /**
-     * @return int
-     */
-    public function getPublicationCategoryId()
-    {
-        return $this->getDefaultProperty(self::PROPERTY_PUBLICATION_CATEGORY_ID);
-    }
-
-    /**
      * @return string[]
      */
     public static function getDefaultPropertyNames(array $extendedPropertyNames = []): array
@@ -40,6 +33,14 @@ class CourseGroupPublicationCategory extends DataClass
         return parent::getDefaultPropertyNames(
             [self::PROPERTY_COURSE_GROUP_ID, self::PROPERTY_PUBLICATION_CATEGORY_ID]
         );
+    }
+
+    /**
+     * @return int
+     */
+    public function getPublicationCategoryId()
+    {
+        return $this->getDefaultProperty(self::PROPERTY_PUBLICATION_CATEGORY_ID);
     }
 
     /**

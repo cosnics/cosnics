@@ -1,47 +1,41 @@
 <?php
 namespace Chamilo\Core\Repository\Quota\Storage\DataClass;
 
-use Chamilo\Core\Repository\Quota\Storage\DataManager;
+use Chamilo\Core\Repository\Quota\Manager;
 use Chamilo\Core\User\Storage\DataClass\User;
+use Chamilo\Core\User\Storage\DataManager;
 use Chamilo\Libraries\Format\Structure\Glyph\FontAwesomeGlyph;
 use Chamilo\Libraries\Storage\DataClass\DataClass;
 use Chamilo\Libraries\Translation\Translation;
 use Exception;
 
 /**
- *
  * @author Hans De Bisschop
  */
 class Request extends DataClass
 {
+    public const CONTEXT = Manager::CONTEXT;
 
-    const DECISION_DENIED = 1;
+    public const DECISION_DENIED = 1;
+    public const DECISION_GRANTED = 2;
+    public const DECISION_PENDING = 0;
 
-    const DECISION_GRANTED = 2;
-
-    const DECISION_PENDING = 0;
-
-    const PROPERTY_CREATION_DATE = 'creation_date';
-
-    const PROPERTY_DECISION = 'decision';
-
-    const PROPERTY_DECISION_DATE = 'decision_date';
-
-    const PROPERTY_DECISION_MOTIVATION = 'decision_motivation';
-
-    const PROPERTY_MOTIVATION = 'motivation';
-
-    const PROPERTY_QUOTA = 'quota';
+    public const PROPERTY_CREATION_DATE = 'creation_date';
+    public const PROPERTY_DECISION = 'decision';
+    public const PROPERTY_DECISION_DATE = 'decision_date';
+    public const PROPERTY_DECISION_MOTIVATION = 'decision_motivation';
+    public const PROPERTY_MOTIVATION = 'motivation';
+    public const PROPERTY_QUOTA = 'quota';
 
     /**
      * Request properties
      */
-    const PROPERTY_USER_ID = 'user_id';
+    public const PROPERTY_USER_ID = 'user_id';
 
     /**
      * The user of the request
      *
-     * @var \core\user\User
+     * @var User
      */
     private $user;
 
@@ -74,7 +68,6 @@ class Request extends DataClass
     }
 
     /**
-     *
      * @return string
      */
     public static function decision_string($decision)
@@ -91,81 +84,6 @@ class Request extends DataClass
                 return 'DecisionDenied';
                 break;
         }
-    }
-
-    /**
-     * Returns the creation_date of this Request.
-     *
-     * @return integer The creation_date.
-     */
-    public function get_creation_date()
-    {
-        return $this->getDefaultProperty(self::PROPERTY_CREATION_DATE);
-    }
-
-    /**
-     * Returns the decision of this Request.
-     *
-     * @return integer The decision.
-     */
-    public function get_decision()
-    {
-        return $this->getDefaultProperty(self::PROPERTY_DECISION);
-    }
-
-    /**
-     * Returns the decision_date of this Request.
-     *
-     * @return integer The decision_date.
-     */
-    public function get_decision_date()
-    {
-        return $this->getDefaultProperty(self::PROPERTY_DECISION_DATE);
-    }
-
-    /**
-     *
-     * @return string
-     */
-    public function get_decision_icon()
-    {
-        return self::decision_icon($this->get_decision());
-    }
-
-    /**
-     * Returns the decision_motivation of this Request.
-     *
-     * @return string The decision_motivation.
-     */
-    public function get_decision_motivation()
-    {
-        return $this->getDefaultProperty(self::PROPERTY_DECISION_MOTIVATION);
-    }
-
-    /**
-     *
-     * @return string
-     */
-    public function get_decision_string()
-    {
-        return self::decision_string($this->get_decision());
-    }
-
-    /**
-     *
-     * @param $types_only boolean
-     *
-     * @return multitype:integer string[]
-     */
-    public static function get_decision_types($types_only = false)
-    {
-        $types = [];
-
-        $types[self::DECISION_PENDING] = self::decision_string(self::DECISION_PENDING);
-        $types[self::DECISION_GRANTED] = self::decision_string(self::DECISION_GRANTED);
-        $types[self::DECISION_DENIED] = self::decision_string(self::DECISION_DENIED);
-
-        return ($types_only ? array_keys($types) : $types);
     }
 
     /**
@@ -189,6 +107,86 @@ class Request extends DataClass
     }
 
     /**
+     * @return string
+     */
+    public static function getStorageUnitName(): string
+    {
+        return 'repository_quota_request';
+    }
+
+    /**
+     * Returns the creation_date of this Request.
+     *
+     * @return int The creation_date.
+     */
+    public function get_creation_date()
+    {
+        return $this->getDefaultProperty(self::PROPERTY_CREATION_DATE);
+    }
+
+    /**
+     * Returns the decision of this Request.
+     *
+     * @return int The decision.
+     */
+    public function get_decision()
+    {
+        return $this->getDefaultProperty(self::PROPERTY_DECISION);
+    }
+
+    /**
+     * Returns the decision_date of this Request.
+     *
+     * @return int The decision_date.
+     */
+    public function get_decision_date()
+    {
+        return $this->getDefaultProperty(self::PROPERTY_DECISION_DATE);
+    }
+
+    /**
+     * @return string
+     */
+    public function get_decision_icon()
+    {
+        return self::decision_icon($this->get_decision());
+    }
+
+    /**
+     * Returns the decision_motivation of this Request.
+     *
+     * @return string The decision_motivation.
+     */
+    public function get_decision_motivation()
+    {
+        return $this->getDefaultProperty(self::PROPERTY_DECISION_MOTIVATION);
+    }
+
+    /**
+     * @return string
+     */
+    public function get_decision_string()
+    {
+        return self::decision_string($this->get_decision());
+    }
+
+    /**
+     * @param $types_only bool
+     *
+     * @return string[]
+     */
+    public static function get_decision_types($types_only = false)
+    {
+        $types = [];
+
+        $types[self::DECISION_PENDING] = self::decision_string(self::DECISION_PENDING);
+        $types[self::DECISION_GRANTED] = self::decision_string(self::DECISION_GRANTED);
+        $types[self::DECISION_DENIED] = self::decision_string(self::DECISION_DENIED);
+
+        return ($types_only ? array_keys($types) : $types);
+    }
+
+    /**
      * Returns the motivation of this Request.
      *
      * @return string The motivation.
@@ -201,7 +199,7 @@ class Request extends DataClass
     /**
      * Returns the quota of this Request.
      *
-     * @return integer The quota.
+     * @return int The quota.
      */
     public function get_quota()
     {
@@ -217,7 +215,7 @@ class Request extends DataClass
     {
         if (!isset($this->user))
         {
-            $this->user = \Chamilo\Core\User\Storage\DataManager::retrieve_by_id(
+            $this->user = DataManager::retrieve_by_id(
                 User::class, (int) $this->get_user_id()
             );
         }
@@ -228,7 +226,7 @@ class Request extends DataClass
     /**
      * Returns the user_id of this Request.
      *
-     * @return integer The user_id.
+     * @return int The user_id.
      */
     public function get_user_id()
     {
@@ -238,7 +236,7 @@ class Request extends DataClass
     /**
      * Is the request pending ?
      *
-     * @return boolean
+     * @return bool
      */
     public function is_pending()
     {
@@ -248,7 +246,7 @@ class Request extends DataClass
     /**
      * Sets the creation_date of this Request.
      *
-     * @param $creation_date integer
+     * @param $creation_date int
      */
     public function set_creation_date($creation_date)
     {
@@ -258,7 +256,7 @@ class Request extends DataClass
     /**
      * Sets the decision of this Request.
      *
-     * @param $decision integer
+     * @param $decision int
      */
     public function set_decision($decision)
     {
@@ -268,7 +266,7 @@ class Request extends DataClass
     /**
      * Sets the decision_date of this Request.
      *
-     * @param $decision_date integer
+     * @param $decision_date int
      */
     public function set_decision_date($decision_date)
     {
@@ -298,7 +296,7 @@ class Request extends DataClass
     /**
      * Sets the quota of this Request.
      *
-     * @param $quota integer
+     * @param $quota int
      */
     public function set_quota($quota)
     {
@@ -308,7 +306,7 @@ class Request extends DataClass
     /**
      * Sets the user_id of this Request.
      *
-     * @param $user_id integer
+     * @param $user_id int
      */
     public function set_user_id($user_id)
     {
@@ -318,7 +316,7 @@ class Request extends DataClass
     /**
      * Was the request denied ?
      *
-     * @return boolean
+     * @return bool
      */
     public function was_denied()
     {
@@ -328,18 +326,10 @@ class Request extends DataClass
     /**
      * Was the request granted ?
      *
-     * @return boolean
+     * @return bool
      */
     public function was_granted()
     {
         return $this->get_decision() == self::DECISION_GRANTED;
-    }
-
-    /**
-     * @return string
-     */
-    public static function getStorageUnitName(): string
-    {
-        return 'repository_quota_request';
     }
 }

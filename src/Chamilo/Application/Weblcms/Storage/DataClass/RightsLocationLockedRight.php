@@ -1,25 +1,28 @@
 <?php
 namespace Chamilo\Application\Weblcms\Storage\DataClass;
 
+use Chamilo\Application\Weblcms\Manager;
 use Chamilo\Libraries\Storage\DataClass\DataClass;
 
 /**
  * This class defines that a right on a right location is locked
  *
  * @package application\weblcms;
- * @author Sven Vanpoucke - Hogeschool Gent
+ * @author  Sven Vanpoucke - Hogeschool Gent
  */
 class RightsLocationLockedRight extends DataClass
 {
-    const PROPERTY_LOCATION_ID = 'location_id';
-    const PROPERTY_RIGHT_ID = 'right_id';
+    public const CONTEXT = Manager::CONTEXT;
+
+    public const PROPERTY_LOCATION_ID = 'location_id';
+    public const PROPERTY_RIGHT_ID = 'right_id';
 
     /**
      * Returns the default properties of this dataclass
      *
      * @return String[] - The property names.
      */
-    static function getDefaultPropertyNames(array $extendedPropertyNames = []):array
+    public static function getDefaultPropertyNames(array $extendedPropertyNames = []): array
     {
         $extendedPropertyNames[] = self::PROPERTY_LOCATION_ID;
         $extendedPropertyNames[] = self::PROPERTY_RIGHT_ID;
@@ -34,11 +37,19 @@ class RightsLocationLockedRight extends DataClass
      */
 
     /**
+     * @return string
+     */
+    public static function getStorageUnitName(): string
+    {
+        return 'weblcms_rights_location_locked_right';
+    }
+
+    /**
      * Returns the location_id property of this object
      *
      * @return int
      */
-    function get_location_id()
+    public function get_location_id()
     {
         return $this->getDefaultProperty(self::PROPERTY_LOCATION_ID);
     }
@@ -48,17 +59,9 @@ class RightsLocationLockedRight extends DataClass
      *
      * @return int
      */
-    function get_right_id()
+    public function get_right_id()
     {
         return $this->getDefaultProperty(self::PROPERTY_RIGHT_ID);
-    }
-
-    /**
-     * @return string
-     */
-    public static function getStorageUnitName(): string
-    {
-        return 'weblcms_rights_location_locked_right';
     }
 
     /**
@@ -66,7 +69,7 @@ class RightsLocationLockedRight extends DataClass
      *
      * @param $location_id int
      */
-    function set_location_id($location_id)
+    public function set_location_id($location_id)
     {
         $this->setDefaultProperty(self::PROPERTY_LOCATION_ID, $location_id);
     }
@@ -76,7 +79,7 @@ class RightsLocationLockedRight extends DataClass
      *
      * @param $right_id int
      */
-    function set_right_id($right_id)
+    public function set_right_id($right_id)
     {
         $this->setDefaultProperty(self::PROPERTY_RIGHT_ID, $right_id);
     }

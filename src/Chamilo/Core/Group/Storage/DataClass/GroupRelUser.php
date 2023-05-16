@@ -1,6 +1,7 @@
 <?php
 namespace Chamilo\Core\Group\Storage\DataClass;
 
+use Chamilo\Core\Group\Manager;
 use Chamilo\Core\Group\Storage\DataManager;
 use Chamilo\Libraries\Storage\DataClass\DataClass;
 use Chamilo\Libraries\Storage\Query\Condition\AndCondition;
@@ -15,6 +16,8 @@ use Chamilo\Libraries\Storage\Query\Variable\StaticConditionVariable;
  */
 class GroupRelUser extends DataClass
 {
+    public const CONTEXT = Manager::CONTEXT;
+
     public const PROPERTY_GROUP_ID = 'group_id';
     public const PROPERTY_USER_ID = 'user_id';
 

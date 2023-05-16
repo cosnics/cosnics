@@ -1,6 +1,7 @@
 <?php
 namespace Chamilo\Application\Calendar\Extension\Personal\Storage\DataClass;
 
+use Chamilo\Application\Calendar\Extension\Personal\Manager;
 use Chamilo\Core\Repository\Storage\DataClass\ContentObject;
 
 /**
@@ -10,6 +11,7 @@ use Chamilo\Core\Repository\Storage\DataClass\ContentObject;
  */
 class Publication extends \Chamilo\Core\Repository\Publication\Storage\DataClass\Publication
 {
+    public const CONTEXT = Manager::class;
 
     public const PROPERTY_PUBLISHED = 'published';
     public const PROPERTY_PUBLISHER = 'publisher_id';

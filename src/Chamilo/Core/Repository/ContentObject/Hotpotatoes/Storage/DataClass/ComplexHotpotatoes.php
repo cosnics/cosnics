@@ -10,6 +10,8 @@ use Chamilo\Libraries\Translation\Translation;
 
 class ComplexHotpotatoes extends ComplexContentObjectItem
 {
+    public const CONTEXT = Hotpotatoes::CONTEXT;
+
     public const PROPERTY_MAXIMUM_ATTEMPTS = 'max_attempts';
     public const PROPERTY_PATH = 'path';
 

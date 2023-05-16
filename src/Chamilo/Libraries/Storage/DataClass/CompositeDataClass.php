@@ -2,6 +2,7 @@
 namespace Chamilo\Libraries\Storage\DataClass;
 
 use Chamilo\Libraries\Storage\DataManager\DataManager;
+use Chamilo\Libraries\Utilities\StringUtilities;
 
 /**
  * @package Chamilo\Libraries\Storage\DataClass
@@ -10,6 +11,7 @@ use Chamilo\Libraries\Storage\DataManager\DataManager;
  */
 abstract class CompositeDataClass extends DataClass
 {
+    public const CONTEXT = StringUtilities::LIBRARIES;
     public const PROPERTIES_ADDITIONAL = 'additional_properties';
     public const PROPERTY_TYPE = 'type';
 

@@ -2,31 +2,32 @@
 
 namespace Chamilo\Core\Repository\ContentObject\Assignment\Display\Bridge\Storage\DataClass;
 
+use Chamilo\Core\Repository\ContentObject\Assignment\Display\Manager;
+
 /**
- *
  * @package Chamilo\Core\Repository\ContentObject\Assignment\Display\Bridge\Storage\DataClass
- * @author Hans De Bisschop <hans.de.bisschop@ehb.be>
- * @author Magali Gillard <magali.gillard@ehb.be>
- * @author Eduard Vossen <eduard.vossen@ehb.be>
+ * @author  Hans De Bisschop <hans.de.bisschop@ehb.be>
+ * @author  Magali Gillard <magali.gillard@ehb.be>
+ * @author  Eduard Vossen <eduard.vossen@ehb.be>
  */
 abstract class Feedback extends \Chamilo\Core\Repository\Feedback\Storage\DataClass\Feedback
 {
-    const PROPERTY_ENTRY_ID = 'entry_id';
+    public const CONTEXT = Manager::CONTEXT;
+
+    public const PROPERTY_ENTRY_ID = 'entry_id';
 
     /**
-     *
      * @param string[] $extendedPropertyNames
      *
      * @return string[]
      */
     public static function getDefaultPropertyNames(array $extendedPropertyNames = []): array
     {
-        return parent::getDefaultPropertyNames(array(self::PROPERTY_ENTRY_ID));
+        return parent::getDefaultPropertyNames([self::PROPERTY_ENTRY_ID]);
     }
 
     /**
-     *
-     * @return integer
+     * @return int
      */
     public function getEntryId()
     {
@@ -34,8 +35,7 @@ abstract class Feedback extends \Chamilo\Core\Repository\Feedback\Storage\DataCl
     }
 
     /**
-     *
-     * @param integer $entryId
+     * @param int $entryId
      */
     public function setEntryId($entryId)
     {

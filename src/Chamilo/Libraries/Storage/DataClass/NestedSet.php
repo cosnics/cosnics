@@ -18,6 +18,7 @@ use Chamilo\Libraries\Storage\Query\UpdateProperty;
 use Chamilo\Libraries\Storage\Query\Variable\OperationConditionVariable;
 use Chamilo\Libraries\Storage\Query\Variable\PropertyConditionVariable;
 use Chamilo\Libraries\Storage\Query\Variable\StaticConditionVariable;
+use Chamilo\Libraries\Utilities\StringUtilities;
 use Doctrine\Common\Collections\ArrayCollection;
 
 /**
@@ -32,6 +33,9 @@ abstract class NestedSet extends DataClass
     public const AS_LAST_CHILD_OF = 2;
     public const AS_NEXT_SIBLING_OF = 4;
     public const AS_PREVIOUS_SIBLING_OF = 3;
+
+    public const CONTEXT = StringUtilities::LIBRARIES;
+
     public const PROPERTY_LEFT_VALUE = 'left_value';
     public const PROPERTY_PARENT_ID = 'parent_id';
     public const PROPERTY_RIGHT_VALUE = 'right_value';
@@ -234,7 +238,7 @@ abstract class NestedSet extends DataClass
      * @param mixed $reference_node
      *
      * @throws \Throwable
-     * @see \Chamilo\Libraries\Storage\DataClass\DataClass::create()
+     * @see        \Chamilo\Libraries\Storage\DataClass\DataClass::create()
      * @deprecated Migrated to NestedSetDataClassRepository::create()
      */
     public function create(int $position = self::AS_LAST_CHILD_OF, $reference_node = null): bool
@@ -308,7 +312,7 @@ abstract class NestedSet extends DataClass
 
     /**
      * @throws \Throwable
-     * @see \Chamilo\Libraries\Storage\DataClass\DataClass::delete()
+     * @see        \Chamilo\Libraries\Storage\DataClass\DataClass::delete()
      * @deprecated Migrated to NestedSetDataClassRepository::delete()
      */
     public function delete(?Condition $condition = null): bool
@@ -392,7 +396,6 @@ abstract class NestedSet extends DataClass
     }
 
     /**
-     *
      * @param string[] $extendedPropertyNames
      *
      * @return string[]
@@ -452,7 +455,6 @@ abstract class NestedSet extends DataClass
      *
      * @return \Doctrine\Common\Collections\ArrayCollection<\Chamilo\Libraries\Storage\DataClass\NestedSet>
      * @throws \Chamilo\Libraries\Storage\Exception\DataClassNoResultException
-     *
      * @deprecated Migrated to NestedSetDataClassRepository::findDescendants()
      */
     public function get_children(?Condition $condition = null): ArrayCollection
@@ -979,7 +981,6 @@ abstract class NestedSet extends DataClass
 
     /**
      * @deprecated Use NestedSet::setParentId() now
-     *
      */
     public function set_parent_id(int $parentId)
     {

@@ -1,6 +1,7 @@
 <?php
 namespace Chamilo\Core\Home\Storage\DataClass;
 
+use Chamilo\Core\Home\Manager;
 use Chamilo\Core\Home\Storage\DataManager;
 use Chamilo\Libraries\Storage\Parameters\DataClassCountParameters;
 use Chamilo\Libraries\Storage\Query\Condition\EqualityCondition;
@@ -8,29 +9,28 @@ use Chamilo\Libraries\Storage\Query\Variable\PropertyConditionVariable;
 use Chamilo\Libraries\Storage\Query\Variable\StaticConditionVariable;
 
 /**
- *
  * @package Chamilo\Core\Home\Storage\DataClass-
- * @author Hans De Bisschop <hans.de.bisschop@ehb.be>
- * @author Magali Gillard <magali.gillard@ehb.be>
- * @author Eduard Vossen <eduard.vossen@ehb.be>
+ * @author  Hans De Bisschop <hans.de.bisschop@ehb.be>
+ * @author  Magali Gillard <magali.gillard@ehb.be>
+ * @author  Eduard Vossen <eduard.vossen@ehb.be>
  */
 class Column extends Element
 {
     public const CONFIGURATION_WIDTH = 'width';
 
+    public const CONTEXT = Manager::CONTEXT;
+
     /**
-     *
      * @param string[] $configurationVariables
      *
      * @return string[]
      */
     public static function getConfigurationVariables($configurationVariables = [])
     {
-        return parent::getConfigurationVariables(array(self::CONFIGURATION_WIDTH));
+        return parent::getConfigurationVariables([self::CONFIGURATION_WIDTH]);
     }
 
     /**
-     *
      * @return int
      */
     public function getWidth()
@@ -51,7 +51,6 @@ class Column extends Element
     }
 
     /**
-     *
      * @param int $width
      */
     public function setWidth($width)

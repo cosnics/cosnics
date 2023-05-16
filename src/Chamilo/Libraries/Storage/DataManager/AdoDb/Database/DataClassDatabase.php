@@ -3,9 +3,7 @@ namespace Chamilo\Libraries\Storage\DataManager\AdoDb\Database;
 
 use ADOConnection;
 use ADORecordSet;
-use Chamilo\Libraries\Architecture\ClassnameUtilities;
 use Chamilo\Libraries\Architecture\ErrorHandler\ExceptionLogger\ExceptionLoggerInterface;
-use Chamilo\Libraries\Architecture\Traits\ClassContext;
 use Chamilo\Libraries\Storage\DataClass\CompositeDataClass;
 use Chamilo\Libraries\Storage\DataManager\AdoDb\Query\QueryBuilder;
 use Chamilo\Libraries\Storage\DataManager\AdoDb\Service\ConditionPartTranslatorService;
@@ -29,13 +27,11 @@ use Exception;
  * Select(with use of conditions), Count(with use of conditions)
  *
  * @package Chamilo\Libraries\Storage\DataManager\AdoDb
- * @author Hans De Bisschop <hans.de.bisschop@ehb.be>
- * @author Sven Vanpoucke <sven.vanpoucke@hogent.be>
+ * @author  Hans De Bisschop <hans.de.bisschop@ehb.be>
+ * @author  Sven Vanpoucke <sven.vanpoucke@hogent.be>
  */
 class DataClassDatabase implements DataClassDatabaseInterface
 {
-    use ClassContext;
-
     protected ConditionPartTranslatorService $conditionPartTranslatorService;
 
     protected ADOConnection $connection;
@@ -163,7 +159,9 @@ class DataClassDatabase implements DataClassDatabaseInterface
     public function delete(string $dataClassName, ?Condition $condition = null): bool
     {
         $queryBuilder = new QueryBuilder();
-        $queryBuilder->delete($dataClassName::getStorageUnitName(), $this->getAlias($dataClassName::getStorageUnitName()));
+        $queryBuilder->delete(
+            $dataClassName::getStorageUnitName(), $this->getAlias($dataClassName::getStorageUnitName())
+        );
 
         if (isset($condition))
         {
@@ -230,7 +228,6 @@ class DataClassDatabase implements DataClassDatabaseInterface
     }
 
     /**
-     *
      * @param mixed $text
      *
      * @return mixed
@@ -347,7 +344,6 @@ class DataClassDatabase implements DataClassDatabaseInterface
     }
 
     /**
-     *
      * @param mixed $value
      * @param int|string|Type|null $type
      */
@@ -376,7 +372,6 @@ class DataClassDatabase implements DataClassDatabaseInterface
             $sqlQuery = $queryBuilder->getSQL();
 
             /**
-             *
              * @var \ADORecordSet $statement
              */
             $statement =

@@ -53,7 +53,7 @@ class ContentObject extends CompositeDataClass
     public const ATTACHMENT_ALL = 'all';
     public const ATTACHMENT_NORMAL = 'normal';
 
-    public const CONTEXT = 'Chamilo\Core\Repository';
+    public const CONTEXT = \Chamilo\Core\Repository\Manager::CONTEXT;
 
     public const CURRENT_MULTIPLE = 2;
     public const CURRENT_OLD = 0;

@@ -1,7 +1,7 @@
 <?php
-
 namespace Chamilo\Application\Weblcms\Tool\Implementation\CourseGroup\Storage\DataClass;
 
+use Chamilo\Application\Weblcms\Tool\Implementation\CourseGroup\Manager;
 use Chamilo\Application\Weblcms\Tool\Implementation\CourseGroup\Storage\DataManager;
 use Chamilo\Core\User\Storage\DataClass\User;
 use Chamilo\Libraries\Storage\DataClass\NestedSet;
@@ -13,7 +13,6 @@ use Chamilo\Libraries\Storage\Query\Variable\StaticConditionVariable;
 use Chamilo\Libraries\Translation\Translation;
 
 /**
- *
  * @package application.lib.weblcms.course_group
  */
 
@@ -26,29 +25,29 @@ use Chamilo\Libraries\Translation\Translation;
  */
 class CourseGroup extends NestedSet
 {
-    const PROPERTY_COURSE_CODE = 'course_id';
+    public const CONTEXT = Manager::CONTEXT;
 
-    const PROPERTY_DESCRIPTION = 'description';
-
-    const PROPERTY_GROUP_ID = "group_id";
+    public const PROPERTY_COURSE_CODE = 'course_id';
+    public const PROPERTY_DESCRIPTION = 'description';
+    public const PROPERTY_GROUP_ID = 'group_id';
 
     /**
      * If this course group has child course groups, this setting determines to how many of its direct children members
      * can be subscribed to at any one time.
      */
-    const PROPERTY_MAX_NUMBER_OF_COURSE_GROUP_PER_MEMBER = 'max_number_of_course_group_per_member';
+    public const PROPERTY_MAX_NUMBER_OF_COURSE_GROUP_PER_MEMBER = 'max_number_of_course_group_per_member';
 
-    const PROPERTY_MAX_NUMBER_OF_MEMBERS = 'max_number_of_members';
+    public const PROPERTY_MAX_NUMBER_OF_MEMBERS = 'max_number_of_members';
 
-    const PROPERTY_NAME = 'name';
+    public const PROPERTY_NAME = 'name';
 
-    const PROPERTY_RANDOM_REG = 'random_registration_allowed';
+    public const PROPERTY_RANDOM_REG = 'random_registration_allowed';
     // random registration = randomly selects from the subscribed users of the
     // course and registers for the course_group
 
-    const PROPERTY_SELF_REG = 'self_reg_allowed';
+    public const PROPERTY_SELF_REG = 'self_reg_allowed';
 
-    const PROPERTY_SELF_UNREG = 'self_unreg_allowed';
+    public const PROPERTY_SELF_UNREG = 'self_unreg_allowed';
 
     /**
      * Stores the members of this course group in a cache variable for multiple use
@@ -100,7 +99,7 @@ class CourseGroup extends NestedSet
     public static function getDefaultPropertyNames(array $extendedPropertyNames = []): array
     {
         return parent::getDefaultPropertyNames(
-            array(
+            [
                 self::PROPERTY_ID,
                 self::PROPERTY_COURSE_CODE,
                 self::PROPERTY_NAME,
@@ -110,19 +109,27 @@ class CourseGroup extends NestedSet
                 self::PROPERTY_SELF_UNREG,
                 self::PROPERTY_MAX_NUMBER_OF_COURSE_GROUP_PER_MEMBER,
                 self::PROPERTY_RANDOM_REG
-            )
+            ]
         );
     }
 
     protected function getDependencies(array $dependencies = []): array
     {
-        return array(
+        return [
             CourseGroupUserRelation::class => new EqualityCondition(
                 new PropertyConditionVariable(
                     CourseGroupUserRelation::class, CourseGroupUserRelation::PROPERTY_COURSE_GROUP
                 ), new StaticConditionVariable($this->get_id())
             )
-        );
+        ];
+    }
+
+    /**
+     * @return string
+     */
+    public static function getStorageUnitName(): string
+    {
+        return 'weblcms_course_group';
     }
 
     /**
@@ -130,16 +137,7 @@ class CourseGroup extends NestedSet
      */
     public function getSubTreePropertyNames(): array
     {
-        return array(CourseGroup::PROPERTY_COURSE_CODE);
-    }
-
-    /**
-     *
-     * @return string
-     */
-    public static function getStorageUnitName(): string
-    {
-        return 'weblcms_course_group';
+        return [CourseGroup::PROPERTY_COURSE_CODE];
     }
 
     /**
@@ -206,9 +204,9 @@ class CourseGroup extends NestedSet
     /**
      * Retrieves the users subscribed to this course_group and/or it's children
      *
-     * @param $include_subgroups boolean - Include the children of the subgroups
-     * @param $recursive_subgroups boolean - Include the direct subgroups or include all the subgroups
-     * @param $include_users boolean - Includes the users as real user objects
+     * @param $include_subgroups   bool - Include the children of the subgroups
+     * @param $recursive_subgroups bool - Include the direct subgroups or include all the subgroups
+     * @param $include_users       bool - Includes the users as real user objects
      *
      * @return User[] | int[]
      */
@@ -254,8 +252,8 @@ class CourseGroup extends NestedSet
     /**
      * Returns the condition to retrieve the members of the subgroups
      *
-     * @param $include_subgroups boolean - Include the children of the subgroups
-     * @param $recursive_subgroups boolean - Include the direct subgroups or include all the subgroups
+     * @param $include_subgroups   bool - Include the children of the subgroups
+     * @param $recursive_subgroups bool - Include the direct subgroups or include all the subgroups
      *
      * @return InCondition
      * @throws \Chamilo\Libraries\Storage\Exception\DataClassNoResultException
@@ -316,7 +314,7 @@ class CourseGroup extends NestedSet
      *
      * @param $user User
      *
-     * @return boolean
+     * @return bool
      */
     public function is_member($user)
     {
@@ -326,7 +324,7 @@ class CourseGroup extends NestedSet
     /**
      * Determines if the course group users were randomly subscribed
      *
-     * @return boolean
+     * @return bool
      */
     public function is_random_registration_done()
     {
@@ -336,7 +334,7 @@ class CourseGroup extends NestedSet
     /**
      * Determines if self registration is allowed
      *
-     * @return boolean
+     * @return bool
      */
     public function is_self_registration_allowed()
     {
@@ -346,7 +344,7 @@ class CourseGroup extends NestedSet
     /**
      * Determines if self unregistration is allowed
      *
-     * @return boolean
+     * @return bool
      */
     public function is_self_unregistration_allowed()
     {
@@ -382,7 +380,7 @@ class CourseGroup extends NestedSet
      * Sets the maximum number of child course groups that users can be subscribed to.
      *
      * @param $max_number_of_course_group_per_member int|null If null, no limit is set to the number of child course
-     *        groups.
+     *                                               groups.
      */
     public function set_max_number_of_course_group_per_member($max_number_of_course_group_per_member)
     {
@@ -416,7 +414,7 @@ class CourseGroup extends NestedSet
     /**
      * Sets if the course group users were randomly subscribed
      *
-     * @param $self_reg boolean
+     * @param $self_reg bool
      */
     public function set_random_registration_done($random_registration_done)
     {
@@ -426,7 +424,7 @@ class CourseGroup extends NestedSet
     /**
      * Sets if self registration is allowed
      *
-     * @param $self_reg boolean
+     * @param $self_reg bool
      */
     public function set_self_registration_allowed($self_reg)
     {
@@ -441,7 +439,7 @@ class CourseGroup extends NestedSet
     /**
      * Sets if self unregistration is allowed
      *
-     * @param $self_unreg boolean
+     * @param $self_unreg bool
      */
     public function set_self_unregistration_allowed($self_unreg)
     {

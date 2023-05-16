@@ -1,28 +1,29 @@
 <?php
 namespace Chamilo\Application\Weblcms\Admin\Extension\Platform\Storage\DataClass;
 
+use Chamilo\Application\Weblcms\Admin\Extension\Platform\Manager;
 use Chamilo\Libraries\Storage\DataClass\DataClass;
 
 /**
- *
  * @package Chamilo\Application\Weblcms\Admin\Extension\Platform\Storage\DataClass
- * @author Hans De Bisschop <hans.de.bisschop@ehb.be>
- * @author Magali Gillard <magali.gillard@ehb.be>
- * @author Eduard Vossen <eduard.vossen@ehb.be>
+ * @author  Hans De Bisschop <hans.de.bisschop@ehb.be>
+ * @author  Magali Gillard <magali.gillard@ehb.be>
+ * @author  Eduard Vossen <eduard.vossen@ehb.be>
  */
 class Admin extends DataClass
 {
+    public const CONTEXT = Manager::CONTEXT;
 
-    // Properties
-    const ORIGIN_EXTERNAL = 1;
-    const ORIGIN_INTERNAL = 2;
-    const PROPERTY_CREATED = 'created';
-    const PROPERTY_ENTITY_ID = 'entity_id';
-    const PROPERTY_ENTITY_TYPE = 'entity_type';
-    const PROPERTY_MODIFIED = 'modified';
-    const PROPERTY_ORIGIN = 'origin';
-    const PROPERTY_TARGET_ID = 'target_id';
-    const PROPERTY_TARGET_TYPE = 'target_type';
+    public const ORIGIN_EXTERNAL = 1;
+    public const ORIGIN_INTERNAL = 2;
+
+    public const PROPERTY_CREATED = 'created';
+    public const PROPERTY_ENTITY_ID = 'entity_id';
+    public const PROPERTY_ENTITY_TYPE = 'entity_type';
+    public const PROPERTY_MODIFIED = 'modified';
+    public const PROPERTY_ORIGIN = 'origin';
+    public const PROPERTY_TARGET_ID = 'target_id';
+    public const PROPERTY_TARGET_TYPE = 'target_type';
 
     public function create(): bool
     {
@@ -33,11 +34,6 @@ class Admin extends DataClass
         return parent::create();
     }
 
-    public function get_created()
-    {
-        return $this->getDefaultProperty(self::PROPERTY_CREATED);
-    }
-
     /**
      * Get the default property names
      *
@@ -46,7 +42,7 @@ class Admin extends DataClass
     public static function getDefaultPropertyNames(array $extendedPropertyNames = []): array
     {
         return parent::getDefaultPropertyNames(
-            array(
+            [
                 self::PROPERTY_ORIGIN,
                 self::PROPERTY_ENTITY_TYPE,
                 self::PROPERTY_ENTITY_ID,
@@ -54,8 +50,21 @@ class Admin extends DataClass
                 self::PROPERTY_TARGET_ID,
                 self::PROPERTY_CREATED,
                 self::PROPERTY_MODIFIED
-            )
+            ]
         );
+    }
+
+    /**
+     * @return string
+     */
+    public static function getStorageUnitName(): string
+    {
+        return 'weblcms_admin';
+    }
+
+    public function get_created()
+    {
+        return $this->getDefaultProperty(self::PROPERTY_CREATED);
     }
 
     public function get_entity_id()
@@ -76,14 +85,6 @@ class Admin extends DataClass
     public function get_origin()
     {
         return $this->getDefaultProperty(self::PROPERTY_ORIGIN);
-    }
-
-    /**
-     * @return string
-     */
-    public static function getStorageUnitName(): string
-    {
-        return 'weblcms_admin';
     }
 
     public function get_target_id()

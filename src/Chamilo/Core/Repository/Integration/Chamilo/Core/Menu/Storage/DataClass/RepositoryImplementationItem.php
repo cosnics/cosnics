@@ -12,6 +12,8 @@ use Chamilo\Libraries\Format\Structure\Glyph\FontAwesomeGlyph;
  */
 class RepositoryImplementationItem extends Item
 {
+    public const CONTEXT = 'Chamilo\Core\Repository\Integration\Chamilo\Core\Menu';
+
     public const PROPERTY_IMPLEMENTATION = 'implementation';
     public const PROPERTY_INSTANCE_ID = 'instance_id';
     public const PROPERTY_NAME = 'name';

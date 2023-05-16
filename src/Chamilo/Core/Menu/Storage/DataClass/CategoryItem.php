@@ -1,6 +1,7 @@
 <?php
 namespace Chamilo\Core\Menu\Storage\DataClass;
 
+use Chamilo\Core\Menu\Manager;
 use Chamilo\Libraries\Format\Structure\Glyph\FontAwesomeGlyph;
 
 /**
@@ -11,6 +12,7 @@ use Chamilo\Libraries\Format\Structure\Glyph\FontAwesomeGlyph;
  */
 class CategoryItem extends Item
 {
+    public const CONTEXT = Manager::CONTEXT;
 
     /**
      * @param string[] $defaultProperties

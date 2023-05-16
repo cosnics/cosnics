@@ -1,22 +1,22 @@
 <?php
-
 namespace Chamilo\Core\Repository\ContentObject\Assignment\Integration\Chamilo\Core\Repository\ContentObject\LearningPath\Bridge\Storage\DataClass;
+
+use Chamilo\Core\Repository\ContentObject\Assignment\Storage\DataClass\Assignment;
 
 /**
  * @package Chamilo\Core\Repository\ContentObject\Assignment\Integration\Chamilo\Core\Repository\ContentObject\LearningPath\Bridge\Storage\DataClass
- *
- * @author Sven Vanpoucke - Hogeschool Gent
+ * @author  Sven Vanpoucke - Hogeschool Gent
  */
 abstract class Entry extends \Chamilo\Core\Repository\ContentObject\Assignment\Display\Bridge\Storage\DataClass\Entry
 {
-    const PROPERTY_TREE_NODE_ATTEMPT_ID = 'tree_node_attempt_id';
-    const PROPERTY_TREE_NODE_DATA_ID = 'tree_node_data_id';
+    public const CONTEXT = Assignment::CONTEXT;
 
-    // Entity types
-    const ENTITY_TYPE_USER = 0;
+    public const ENTITY_TYPE_USER = 0;
+
+    public const PROPERTY_TREE_NODE_ATTEMPT_ID = 'tree_node_attempt_id';
+    public const PROPERTY_TREE_NODE_DATA_ID = 'tree_node_data_id';
 
     /**
-     *
      * @param string[] $extendedPropertyNames
      *
      * @return string[]
@@ -30,7 +30,6 @@ abstract class Entry extends \Chamilo\Core\Repository\ContentObject\Assignment\D
     }
 
     /**
-     *
      * @return int
      */
     public function getTreeNodeAttemptId()
@@ -39,16 +38,6 @@ abstract class Entry extends \Chamilo\Core\Repository\ContentObject\Assignment\D
     }
 
     /**
-     *
-     * @param int $treeNodeAttemptId
-     */
-    public function setTreeNodeAttemptId($treeNodeAttemptId)
-    {
-        $this->setDefaultProperty(self::PROPERTY_TREE_NODE_ATTEMPT_ID, $treeNodeAttemptId);
-    }
-
-    /**
-     *
      * @return int
      */
     public function getTreeNodeDataId()
@@ -57,7 +46,14 @@ abstract class Entry extends \Chamilo\Core\Repository\ContentObject\Assignment\D
     }
 
     /**
-     *
+     * @param int $treeNodeAttemptId
+     */
+    public function setTreeNodeAttemptId($treeNodeAttemptId)
+    {
+        $this->setDefaultProperty(self::PROPERTY_TREE_NODE_ATTEMPT_ID, $treeNodeAttemptId);
+    }
+
+    /**
      * @param int $treeNodeAttemptId
      */
     public function setTreeNodeDataId($treeNodeAttemptId)

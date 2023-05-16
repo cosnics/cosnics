@@ -1,6 +1,7 @@
 <?php
 namespace Chamilo\Core\Menu\Storage\DataClass;
 
+use Chamilo\Core\Menu\Manager;
 use Chamilo\Libraries\Format\Structure\Glyph\FontAwesomeGlyph;
 
 /**
@@ -11,8 +12,9 @@ use Chamilo\Libraries\Format\Structure\Glyph\FontAwesomeGlyph;
  */
 class LanguageItem extends Item
 {
-    public const PROPERTY_ISOCODE = 'isocode';
+    public const CONTEXT = Manager::CONTEXT;
 
+    public const PROPERTY_ISOCODE = 'isocode';
     public const PROPERTY_LANGUAGE = 'language';
 
     /**

@@ -1,26 +1,44 @@
 <?php
 namespace Chamilo\Application\Weblcms\Storage\DataClass;
 
+use Chamilo\Application\Weblcms\Manager;
 use Chamilo\Libraries\Storage\DataClass\DataClass;
 
 /**
- *
  * @package application.lib.weblcms.course
  */
 abstract class CommonRequest extends DataClass
 {
-    const ALLOWED_DECISION = 2;
-    const DENIED_DECISION = 1;
-    const NO_DECISION = 0;
+    public const CONTEXT = Manager::CONTEXT;
 
-    const PROPERTY_CREATION_DATE = 'creation_date';
-    const PROPERTY_DECISION = 'decision';
-    const PROPERTY_DECISION_DATE = 'decision_date';
-    const PROPERTY_MOTIVATION = 'motivation';
-    const PROPERTY_SUBJECT = 'subject';
-    const PROPERTY_USER_ID = 'user_id';
+    public const ALLOWED_DECISION = 2;
+    public const DENIED_DECISION = 1;
+    public const NO_DECISION = 0;
 
-    const SUBSCRIPTION_REQUEST = 'subscription_request';
+    public const PROPERTY_CREATION_DATE = 'creation_date';
+    public const PROPERTY_DECISION = 'decision';
+    public const PROPERTY_DECISION_DATE = 'decision_date';
+    public const PROPERTY_MOTIVATION = 'motivation';
+    public const PROPERTY_SUBJECT = 'subject';
+    public const PROPERTY_USER_ID = 'user_id';
+
+    public const SUBSCRIPTION_REQUEST = 'subscription_request';
+
+    public static function getDefaultPropertyNames(array $extendedPropertyNames = []): array
+    {
+        return parent::getDefaultPropertyNames(
+            array_merge(
+                $extendedPropertyNames, [
+                    self::PROPERTY_USER_ID,
+                    self::PROPERTY_SUBJECT,
+                    self::PROPERTY_MOTIVATION,
+                    self::PROPERTY_CREATION_DATE,
+                    self::PROPERTY_DECISION_DATE,
+                    self::PROPERTY_DECISION
+                ]
+            )
+        );
+    }
 
     public function get_creation_date()
     {
@@ -35,22 +53,6 @@ abstract class CommonRequest extends DataClass
     public function get_decision_date()
     {
         return $this->getDefaultProperty(self::PROPERTY_DECISION_DATE);
-    }
-
-    public static function getDefaultPropertyNames(array $extendedPropertyNames = []): array
-    {
-        return parent::getDefaultPropertyNames(
-            array_merge(
-                $extendedPropertyNames, array(
-                    self::PROPERTY_USER_ID,
-                    self::PROPERTY_SUBJECT,
-                    self::PROPERTY_MOTIVATION,
-                    self::PROPERTY_CREATION_DATE,
-                    self::PROPERTY_DECISION_DATE,
-                    self::PROPERTY_DECISION
-                )
-            )
-        );
     }
 
     public function get_motivation()

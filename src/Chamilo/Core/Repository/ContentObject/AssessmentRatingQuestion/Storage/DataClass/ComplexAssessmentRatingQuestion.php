@@ -5,35 +5,25 @@ use Chamilo\Core\Repository\ContentObject\Assessment\Display\AnswerFeedbackDispl
 use Chamilo\Core\Repository\Storage\DataClass\ComplexContentObjectItem;
 
 /**
- *
  * @package core\repository\content_object\assessment_rating_question
- * @author Sven Vanpoucke <sven.vanpoucke@hogent.be>
- * @author Hans De Bisschop <hans.de.bisschop@ehb.be>
- * @author Magali Gillard <magali.gillard@ehb.be>
- * @author Eduard Vossen <eduard.vossen@ehb.be>
+ * @author  Sven Vanpoucke <sven.vanpoucke@hogent.be>
+ * @author  Hans De Bisschop <hans.de.bisschop@ehb.be>
+ * @author  Magali Gillard <magali.gillard@ehb.be>
+ * @author  Eduard Vossen <eduard.vossen@ehb.be>
  */
 class ComplexAssessmentRatingQuestion extends ComplexContentObjectItem implements AnswerFeedbackDisplaySupport
 {
-    const PROPERTY_SHOW_ANSWER_FEEDBACK = 'show_answer_feedback';
+    public const CONTEXT = AssessmentRatingQuestion::CONTEXT;
 
-    const PROPERTY_WEIGHT = 'weight';
+    public const PROPERTY_SHOW_ANSWER_FEEDBACK = 'show_answer_feedback';
+    public const PROPERTY_WEIGHT = 'weight';
 
     /**
-     *
      * @return string[]
      */
     public static function getAdditionalPropertyNames(): array
     {
-        return array(self::PROPERTY_WEIGHT, self::PROPERTY_SHOW_ANSWER_FEEDBACK);
-    }
-
-    /**
-     *
-     * @return int
-     */
-    public function get_show_answer_feedback()
-    {
-        return $this->getAdditionalProperty(self::PROPERTY_SHOW_ANSWER_FEEDBACK);
+        return [self::PROPERTY_WEIGHT, self::PROPERTY_SHOW_ANSWER_FEEDBACK];
     }
 
     /**
@@ -45,7 +35,14 @@ class ComplexAssessmentRatingQuestion extends ComplexContentObjectItem implement
     }
 
     /**
-     *
+     * @return int
+     */
+    public function get_show_answer_feedback()
+    {
+        return $this->getAdditionalProperty(self::PROPERTY_SHOW_ANSWER_FEEDBACK);
+    }
+
+    /**
      * @return int
      */
     public function get_weight()
@@ -54,7 +51,6 @@ class ComplexAssessmentRatingQuestion extends ComplexContentObjectItem implement
     }
 
     /**
-     *
      * @param int $value
      */
     public function set_show_answer_feedback($value)
@@ -63,7 +59,6 @@ class ComplexAssessmentRatingQuestion extends ComplexContentObjectItem implement
     }
 
     /**
-     *
      * @param int $value
      */
     public function set_weight($value)

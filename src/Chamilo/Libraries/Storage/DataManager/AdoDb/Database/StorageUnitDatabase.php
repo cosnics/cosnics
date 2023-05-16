@@ -3,7 +3,6 @@ namespace Chamilo\Libraries\Storage\DataManager\AdoDb\Database;
 
 use ADOConnection;
 use Chamilo\Libraries\Architecture\ErrorHandler\ExceptionLogger\ExceptionLoggerInterface;
-use Chamilo\Libraries\Architecture\Traits\ClassContext;
 use Chamilo\Libraries\Storage\DataManager\Interfaces\StorageUnitDatabaseInterface;
 use Chamilo\Libraries\Storage\DataManager\StorageAliasGenerator;
 
@@ -11,13 +10,11 @@ use Chamilo\Libraries\Storage\DataManager\StorageAliasGenerator;
  * This class provides basic functionality for storage unit manipulations via AdoDb
  *
  * @package Chamilo\Libraries\Storage\DataManager\AdoDb
- * @author Hans De Bisschop <hans.de.bisschop@ehb.be>
- * @todo Not adapted to AdoDb yet
+ * @author  Hans De Bisschop <hans.de.bisschop@ehb.be>
+ * @todo    Not adapted to AdoDb yet
  */
 class StorageUnitDatabase implements StorageUnitDatabaseInterface
 {
-    use ClassContext;
-
     protected ADOConnection $connection;
 
     protected ExceptionLoggerInterface $exceptionLogger;

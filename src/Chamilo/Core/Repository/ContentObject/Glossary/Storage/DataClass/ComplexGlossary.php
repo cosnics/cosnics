@@ -5,14 +5,14 @@ use Chamilo\Core\Repository\ContentObject\GlossaryItem\Storage\DataClass\Glossar
 use Chamilo\Core\Repository\Storage\DataClass\ComplexContentObjectItem;
 
 /**
- *
  * @package repository.lib.content_object.glossary
  */
 class ComplexGlossary extends ComplexContentObjectItem
 {
+    public const CONTEXT = Glossary::CONTEXT;
 
     public function get_allowed_types(): array
     {
-        return array(GlossaryItem::class);
+        return [GlossaryItem::class];
     }
 }

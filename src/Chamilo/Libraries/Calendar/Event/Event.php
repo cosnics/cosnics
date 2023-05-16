@@ -1,20 +1,16 @@
 <?php
 namespace Chamilo\Libraries\Calendar\Event;
 
-use Chamilo\Libraries\Architecture\Traits\ClassContext;
-
 /**
  * An event in the personal calendar as a shell around concepts which exist in the integrating contexts
  *
  * @package Chamilo\Libraries\Calendar\Event
- * @author Hans De Bisschop <hans.de.bisschop@ehb.be>
- * @author Magali Gillard <magali.gillard@ehb.be>
- * @author Eduard Vossen <eduard.vossen@ehb.be>
+ * @author  Hans De Bisschop <hans.de.bisschop@ehb.be>
+ * @author  Magali Gillard <magali.gillard@ehb.be>
+ * @author  Eduard Vossen <eduard.vossen@ehb.be>
  */
 class Event
 {
-    use ClassContext;
-
     private ?string $content;
 
     private ?string $context;
@@ -58,19 +54,9 @@ class Event
         return $this->content;
     }
 
-    public function setContent(?string $content)
-    {
-        $this->content = $content;
-    }
-
     public function getContext(): ?string
     {
         return $this->context;
-    }
-
-    public function setContext(?string $context)
-    {
-        $this->context = $context;
     }
 
     public function getEndDate(): ?int
@@ -78,19 +64,9 @@ class Event
         return $this->endDate;
     }
 
-    public function setEndDate(?int $endDate)
-    {
-        $this->endDate = $endDate;
-    }
-
     public function getId(): ?string
     {
         return $this->id;
-    }
-
-    public function setId(?string $id)
-    {
-        $this->id = $id;
     }
 
     public function getLocation(): ?string
@@ -98,19 +74,9 @@ class Event
         return $this->location;
     }
 
-    public function setLocation(?string $location)
-    {
-        $this->location = $location;
-    }
-
     public function getRecurrenceRules(): ?RecurrenceRules
     {
         return $this->recurrenceRules;
-    }
-
-    public function setRecurrenceRules(?RecurrenceRules $recurrenceRules)
-    {
-        $this->recurrenceRules = $recurrenceRules;
     }
 
     public function getSource(): ?string
@@ -118,19 +84,9 @@ class Event
         return $this->source;
     }
 
-    public function setSource(?string $source)
-    {
-        $this->source = $source;
-    }
-
     public function getStartDate(): ?int
     {
         return $this->startDate;
-    }
-
-    public function setStartDate(?int $startDate)
-    {
-        $this->startDate = $startDate;
     }
 
     public function getTitle(): ?string
@@ -138,14 +94,54 @@ class Event
         return $this->title;
     }
 
-    public function setTitle(?string $title)
-    {
-        $this->title = $title;
-    }
-
     public function getUrl(): ?string
     {
         return $this->url;
+    }
+
+    public function setContent(?string $content)
+    {
+        $this->content = $content;
+    }
+
+    public function setContext(?string $context)
+    {
+        $this->context = $context;
+    }
+
+    public function setEndDate(?int $endDate)
+    {
+        $this->endDate = $endDate;
+    }
+
+    public function setId(?string $id)
+    {
+        $this->id = $id;
+    }
+
+    public function setLocation(?string $location)
+    {
+        $this->location = $location;
+    }
+
+    public function setRecurrenceRules(?RecurrenceRules $recurrenceRules)
+    {
+        $this->recurrenceRules = $recurrenceRules;
+    }
+
+    public function setSource(?string $source)
+    {
+        $this->source = $source;
+    }
+
+    public function setStartDate(?int $startDate)
+    {
+        $this->startDate = $startDate;
+    }
+
+    public function setTitle(?string $title)
+    {
+        $this->title = $title;
     }
 
     public function setUrl(?string $url)

@@ -1,21 +1,37 @@
 <?php
 namespace Chamilo\Core\Menu\Storage\DataClass;
 
+use Chamilo\Core\Menu\Manager;
 use Chamilo\Libraries\Storage\DataClass\DataClass;
 
 /**
- *
  * @package Chamilo\Core\Menu\Storage\DataClass
- * @author Hans De Bisschop <hans.de.bisschop@ehb.be>
- * @author Magali Gillard <magali.gillard@ehb.be>
- * @author Eduard Vossen <eduard.vossen@ehb.be>
+ * @author  Hans De Bisschop <hans.de.bisschop@ehb.be>
+ * @author  Magali Gillard <magali.gillard@ehb.be>
+ * @author  Eduard Vossen <eduard.vossen@ehb.be>
  */
 class ItemTitle extends DataClass
 {
+    public const CONTEXT = Manager::CONTEXT;
+
     public const PROPERTY_ISOCODE = 'isocode';
     public const PROPERTY_ITEM_ID = 'item_id';
     public const PROPERTY_SORT = 'sort';
     public const PROPERTY_TITLE = 'title';
+
+    /**
+     * Get the default properties of all items.
+     *
+     * @param string[] $extendedPropertyNames
+     *
+     * @return array The property names.
+     */
+    public static function getDefaultPropertyNames(array $extendedPropertyNames = []): array
+    {
+        return parent::getDefaultPropertyNames(
+            [self::PROPERTY_ITEM_ID, self::PROPERTY_TITLE, self::PROPERTY_SORT, self::PROPERTY_ISOCODE]
+        );
+    }
 
     /**
      * @return string
@@ -44,23 +60,17 @@ class ItemTitle extends DataClass
     /**
      * @return string
      */
-    public function getTitle()
+    public static function getStorageUnitName(): string
     {
-        return $this->getDefaultProperty(self::PROPERTY_TITLE);
+        return 'menu_item_title';
     }
 
     /**
-     * Get the default properties of all items.
-     *
-     * @param string[] $extendedPropertyNames
-     *
-     * @return array The property names.
+     * @return string
      */
-    public static function getDefaultPropertyNames(array $extendedPropertyNames = []): array
+    public function getTitle()
     {
-        return parent::getDefaultPropertyNames(
-            array(self::PROPERTY_ITEM_ID, self::PROPERTY_TITLE, self::PROPERTY_SORT, self::PROPERTY_ISOCODE)
-        );
+        return $this->getDefaultProperty(self::PROPERTY_TITLE);
     }
 
     /**
@@ -181,13 +191,5 @@ class ItemTitle extends DataClass
     public function set_title($title)
     {
         $this->setTitle($title);
-    }
-
-    /**
-     * @return string
-     */
-    public static function getStorageUnitName(): string
-    {
-        return 'menu_item_title';
     }
 }

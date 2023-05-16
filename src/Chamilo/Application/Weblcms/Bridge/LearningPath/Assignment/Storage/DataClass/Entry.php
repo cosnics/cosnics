@@ -9,6 +9,8 @@ namespace Chamilo\Application\Weblcms\Bridge\LearningPath\Assignment\Storage\Dat
 class Entry extends
     \Chamilo\Core\Repository\ContentObject\Assignment\Integration\Chamilo\Core\Repository\ContentObject\LearningPath\Bridge\Storage\DataClass\Entry
 {
+    public const CONTEXT = 'Chamilo\Application\Weblcms\Bridge\LearningPath\Assignment';
+
     const PROPERTY_CONTENT_OBJECT_PUBLICATION_ID = 'content_object_publication_id';
 
     /**

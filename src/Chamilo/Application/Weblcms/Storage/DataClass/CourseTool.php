@@ -1,6 +1,7 @@
 <?php
 namespace Chamilo\Application\Weblcms\Storage\DataClass;
 
+use Chamilo\Application\Weblcms\Manager;
 use Chamilo\Libraries\Storage\DataClass\DataClass;
 use Chamilo\Libraries\Storage\Query\Condition\EqualityCondition;
 use Chamilo\Libraries\Storage\Query\Variable\PropertyConditionVariable;
@@ -12,13 +13,15 @@ use Chamilo\Libraries\Storage\Query\Variable\StaticConditionVariable;
  * course tool is defined through the course tool setting "active".
  *
  * @package application\weblcms\course;
- * @author Sven Vanpoucke - Hogeschool Gent
+ * @author  Sven Vanpoucke - Hogeschool Gent
  */
 class CourseTool extends DataClass
 {
-    const PROPERTY_CONTEXT = 'context';
-    const PROPERTY_NAME = 'name';
-    const PROPERTY_SECTION_TYPE = 'section_type';
+    public const CONTEXT = Manager::CONTEXT;
+
+    public const PROPERTY_CONTEXT = 'context';
+    public const PROPERTY_NAME = 'name';
+    public const PROPERTY_SECTION_TYPE = 'section_type';
 
     /**
      * **************************************************************************************************************
@@ -27,10 +30,9 @@ class CourseTool extends DataClass
      */
 
     /**
-     *
      * @return string
      */
-    function getContext()
+    public function getContext()
     {
         return $this->getDefaultProperty(self::PROPERTY_CONTEXT);
     }
@@ -40,10 +42,10 @@ class CourseTool extends DataClass
      *
      * @return String[] - The property names.
      */
-    static function getDefaultPropertyNames(array $extendedPropertyNames = []): array
+    public static function getDefaultPropertyNames(array $extendedPropertyNames = []): array
     {
         return parent::getDefaultPropertyNames(
-            array(self::PROPERTY_SECTION_TYPE, self::PROPERTY_NAME, self::PROPERTY_CONTEXT)
+            [self::PROPERTY_SECTION_TYPE, self::PROPERTY_NAME, self::PROPERTY_CONTEXT]
         );
     }
 
@@ -57,39 +59,18 @@ class CourseTool extends DataClass
      * Returns the dependencies for this dataclass
      *
      * @return string[string]
-     *
      */
     protected function getDependencies(array $dependencies = []): array
     {
         $id = $this->get_id();
 
-        return array(
+        return [
             CourseToolRelCourseSection::class => new EqualityCondition(
                 new PropertyConditionVariable(
                     CourseToolRelCourseSection::class, CourseToolRelCourseSection::PROPERTY_TOOL_ID
                 ), new StaticConditionVariable($id)
             )
-        );
-    }
-
-    /**
-     * Returns the name property of this object
-     *
-     * @return String
-     */
-    function get_name()
-    {
-        return $this->getDefaultProperty(self::PROPERTY_NAME);
-    }
-
-    /**
-     * Returns the section_type property of this object
-     *
-     * @return String
-     */
-    function get_section_type()
-    {
-        return $this->getDefaultProperty(self::PROPERTY_SECTION_TYPE);
+        ];
     }
 
     /**
@@ -101,10 +82,29 @@ class CourseTool extends DataClass
     }
 
     /**
+     * Returns the name property of this object
      *
+     * @return String
+     */
+    public function get_name()
+    {
+        return $this->getDefaultProperty(self::PROPERTY_NAME);
+    }
+
+    /**
+     * Returns the section_type property of this object
+     *
+     * @return String
+     */
+    public function get_section_type()
+    {
+        return $this->getDefaultProperty(self::PROPERTY_SECTION_TYPE);
+    }
+
+    /**
      * @param string $context
      */
-    function setContext($context)
+    public function setContext($context)
     {
         $this->setDefaultProperty(self::PROPERTY_CONTEXT, $context);
     }
@@ -114,7 +114,7 @@ class CourseTool extends DataClass
      *
      * @param $name String
      */
-    function set_name($name)
+    public function set_name($name)
     {
         $this->setDefaultProperty(self::PROPERTY_NAME, $name);
     }
@@ -124,7 +124,7 @@ class CourseTool extends DataClass
      *
      * @param $section_type String
      */
-    function set_section_type($section_type)
+    public function set_section_type($section_type)
     {
         $this->setDefaultProperty(self::PROPERTY_SECTION_TYPE, $section_type);
     }

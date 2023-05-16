@@ -4,9 +4,9 @@ namespace Chamilo\Core\Repository\ContentObject\ExternalCalendar\Storage\DataCla
 use Chamilo\Core\Repository\Storage\DataClass\ComplexContentObjectItem;
 
 /**
- *
  * @package repository.lib.content_object.external_calendar
  */
 class ComplexExternalCalendar extends ComplexContentObjectItem
 {
+    public const CONTEXT = ExternalCalendar::CONTEXT;
 }

@@ -14,6 +14,7 @@ use Exception;
  */
 class Package extends DataClass
 {
+    public const CONTEXT = 'Chamilo\Configuration\Package';
 
     public const PROPERTY_ADDITIONAL = 'additional';
     public const PROPERTY_AUTHORS = 'authors';

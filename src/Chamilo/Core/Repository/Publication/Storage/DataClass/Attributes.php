@@ -1,6 +1,7 @@
 <?php
 namespace Chamilo\Core\Repository\Publication\Storage\DataClass;
 
+use Chamilo\Core\Repository\Publication\Manager;
 use Chamilo\Core\Repository\Publication\Storage\DataManager\DataManager;
 use Chamilo\Core\Repository\Storage\DataClass\ContentObject;
 use Chamilo\Libraries\Storage\DataClass\DataClass;
@@ -16,6 +17,8 @@ use Chamilo\Libraries\Storage\DataClass\DataClass;
  */
 class Attributes extends DataClass
 {
+    public const CONTEXT = Manager::CONTEXT;
+
     public const PROPERTY_APPLICATION = 'application';
     public const PROPERTY_CONTENT_OBJECT_ID = 'content_object_id';
     public const PROPERTY_DATE = 'date';

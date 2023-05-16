@@ -1,19 +1,21 @@
 <?php
 namespace Chamilo\Core\Menu\Storage\DataClass;
 
+use Chamilo\Core\Menu\Manager;
 use Chamilo\Libraries\Format\Structure\Glyph\FontAwesomeGlyph;
 use Chamilo\Libraries\Storage\DataClass\CompositeDataClass;
 use Chamilo\Libraries\Storage\DataClass\Interfaces\DataClassDisplayOrderSupport;
 
 /**
- *
  * @package Chamilo\Core\Menu\Storage\DataClass
- * @author Hans De Bisschop <hans.de.bisschop@ehb.be>
- * @author Magali Gillard <magali.gillard@ehb.be>
- * @author Eduard Vossen <eduard.vossen@ehb.be>
+ * @author  Hans De Bisschop <hans.de.bisschop@ehb.be>
+ * @author  Magali Gillard <magali.gillard@ehb.be>
+ * @author  Eduard Vossen <eduard.vossen@ehb.be>
  */
 class Item extends CompositeDataClass implements DataClassDisplayOrderSupport
 {
+    public const CONTEXT = Manager::CONTEXT;
+
     /**
      * Display options
      */
@@ -39,6 +41,27 @@ class Item extends CompositeDataClass implements DataClassDisplayOrderSupport
     public const TYPE_LINK_APPLICATION = 4;
 
     /**
+     * Get the default properties of all items.
+     *
+     * @param string[] $extendedPropertyNames
+     *
+     * @return string[]
+     */
+    public static function getDefaultPropertyNames(array $extendedPropertyNames = []): array
+    {
+        return parent::getDefaultPropertyNames(
+            [
+                self::PROPERTY_PARENT,
+                self::PROPERTY_TYPE,
+                self::PROPERTY_SORT,
+                self::PROPERTY_HIDDEN,
+                self::PROPERTY_DISPLAY,
+                self::PROPERTY_ICON_CLASS
+            ]
+        );
+    }
+
+    /**
      * @return int
      */
     public function getDisplay()
@@ -51,7 +74,7 @@ class Item extends CompositeDataClass implements DataClassDisplayOrderSupport
      */
     public function getDisplayOrderContextPropertyNames(): array
     {
-        return array(self::PROPERTY_PARENT);
+        return [self::PROPERTY_PARENT];
     }
 
     public function getDisplayOrderPropertyName(): string
@@ -100,24 +123,11 @@ class Item extends CompositeDataClass implements DataClassDisplayOrderSupport
     }
 
     /**
-     * Get the default properties of all items.
-     *
-     * @param string[] $extendedPropertyNames
-     *
-     * @return string[]
+     * @return string
      */
-    public static function getDefaultPropertyNames(array $extendedPropertyNames = []): array
+    public static function getStorageUnitName(): string
     {
-        return parent::getDefaultPropertyNames(
-            array(
-                self::PROPERTY_PARENT,
-                self::PROPERTY_TYPE,
-                self::PROPERTY_SORT,
-                self::PROPERTY_HIDDEN,
-                self::PROPERTY_DISPLAY,
-                self::PROPERTY_ICON_CLASS
-            )
-        );
+        return 'menu_item';
     }
 
     /**
@@ -157,14 +167,6 @@ class Item extends CompositeDataClass implements DataClassDisplayOrderSupport
     }
 
     /**
-     * @return string
-     */
-    public static function getStorageUnitName(): string
-    {
-        return 'menu_item';
-    }
-
-    /**
      * @return bool
      * @deprecated Use Item::hadParentId() now
      */
@@ -182,7 +184,6 @@ class Item extends CompositeDataClass implements DataClassDisplayOrderSupport
     }
 
     /**
-     *
      * @return bool
      */
     public function isHidden()
@@ -191,7 +192,6 @@ class Item extends CompositeDataClass implements DataClassDisplayOrderSupport
     }
 
     /**
-     *
      * @return bool
      * @deprecated Use Item::isHidden() now
      */

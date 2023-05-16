@@ -28,10 +28,9 @@ class DataClassPropertyTableColumnFactory
     {
         if (!$title)
         {
-            $context = $className::context();
-
             $title = $this->getTranslator()->trans(
-                $this->getStringUtilities()->createString($property)->upperCamelize()->__toString(), [], $context
+                $this->getStringUtilities()->createString($property)->upperCamelize()->__toString(), [],
+                $className::CONTEXT
             );
         }
 

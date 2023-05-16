@@ -10,13 +10,14 @@ use Chamilo\Libraries\Platform\Session\Session;
 use Chamilo\Libraries\Translation\Translation;
 
 /**
- *
  * @package repository.lib.content_object.forum_topic
- * @author Mattias De Pauw - Hogeschool Gent
+ * @author  Mattias De Pauw - Hogeschool Gent
  */
 class ComplexForumTopic extends ComplexContentObjectItem
 {
-    const PROPERTY_FORUM_TYPE = 'forum_type';
+    public const CONTEXT = ForumTopic::CONTEXT;
+
+    public const PROPERTY_FORUM_TYPE = 'forum_type';
 
     public function create(): bool
     {
@@ -34,9 +35,9 @@ class ComplexForumTopic extends ComplexContentObjectItem
 
         $email_notificator->set_forum($parent);
         $email_notificator->set_topic($lo);
-        $text = Translation::get("TopicAddedEmailTitle", null, 'Chamilo\Core\Repository\ContentObject\Forum\Display');
+        $text = Translation::get('TopicAddedEmailTitle', null, 'Chamilo\Core\Repository\ContentObject\Forum\Display');
         $email_notificator->set_action_title($text);
-        $text = Translation::get("TopicAddedEmailBody", null, 'Chamilo\Core\Repository\ContentObject\Forum\Display');
+        $text = Translation::get('TopicAddedEmailBody', null, 'Chamilo\Core\Repository\ContentObject\Forum\Display');
         $email_notificator->set_action_body($text);
         $email_notificator->set_action_user(
             \Chamilo\Core\User\Storage\DataManager::retrieve_by_id(
@@ -74,17 +75,7 @@ class ComplexForumTopic extends ComplexContentObjectItem
 
     public static function getAdditionalPropertyNames(): array
     {
-        return array(self::PROPERTY_FORUM_TYPE);
-    }
-
-    public function get_allowed_types(): array
-    {
-        return array(ForumPost::class);
-    }
-
-    public function get_forum_type()
-    {
-        return $this->getAdditionalProperty(self::PROPERTY_FORUM_TYPE);
+        return [self::PROPERTY_FORUM_TYPE];
     }
 
     /**
@@ -93,6 +84,16 @@ class ComplexForumTopic extends ComplexContentObjectItem
     public static function getStorageUnitName(): string
     {
         return 'repository_complex_forum_topic';
+    }
+
+    public function get_allowed_types(): array
+    {
+        return [ForumPost::class];
+    }
+
+    public function get_forum_type()
+    {
+        return $this->getAdditionalProperty(self::PROPERTY_FORUM_TYPE);
     }
 
     public function set_forum_type($type)

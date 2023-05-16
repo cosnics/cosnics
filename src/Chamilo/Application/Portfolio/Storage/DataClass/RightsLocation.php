@@ -22,7 +22,7 @@ class RightsLocation extends \Chamilo\Core\Rights\RightsLocation
     public const PROPERTY_PUBLICATION_ID = 'publication_id';
 
     /**
-     * @var \repository\ComplexContentObjectPathNode
+     * @var ComplexContentObjectPathNode
      */
     private $node;
 

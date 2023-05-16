@@ -17,22 +17,24 @@ use RangeException;
  */
 class TreeNodeData extends DataClass implements DisplayOrderDataClassListenerSupport
 {
-    const PROPERTY_LEARNING_PATH_ID = 'learning_path_id';
-    const PROPERTY_PARENT_LEARNING_PATH_CHILD_ID = 'parent_tree_node_data_id';
-    const PROPERTY_CONTENT_OBJECT_ID = 'content_object_id';
-    const PROPERTY_MAX_ATTEMPTS = 'max_attempts';
-    const PROPERTY_MASTERY_SCORE = 'mastery_score';
-    const PROPERTY_ALLOW_HINTS = 'allow_hints';
-    const PROPERTY_SHOW_SCORE = 'show_score';
-    const PROPERTY_SHOW_CORRECTION = 'show_correction';
-    const PROPERTY_SHOW_SOLUTION = 'show_solution';
-    const PROPERTY_SHOW_ANSWER_FEEDBACK = 'show_answer_feedback';
-    const PROPERTY_FEEDBACK_LOCATION = 'feedback_location';
-    const PROPERTY_BLOCKED = 'blocked';
-    const PROPERTY_DISPLAY_ORDER = 'display_order';
-    const PROPERTY_USER_ID = 'user_id';
-    const PROPERTY_ADDED_DATE = 'added_date';
-    const PROPERTY_ENFORCE_DEFAULT_TRAVERSING_ORDER = 'enforce_default_traversing_order';
+    public const CONTEXT = LearningPath::CONTEXT;
+
+    public const PROPERTY_ADDED_DATE = 'added_date';
+    public const PROPERTY_ALLOW_HINTS = 'allow_hints';
+    public const PROPERTY_BLOCKED = 'blocked';
+    public const PROPERTY_CONTENT_OBJECT_ID = 'content_object_id';
+    public const PROPERTY_DISPLAY_ORDER = 'display_order';
+    public const PROPERTY_ENFORCE_DEFAULT_TRAVERSING_ORDER = 'enforce_default_traversing_order';
+    public const PROPERTY_FEEDBACK_LOCATION = 'feedback_location';
+    public const PROPERTY_LEARNING_PATH_ID = 'learning_path_id';
+    public const PROPERTY_MASTERY_SCORE = 'mastery_score';
+    public const PROPERTY_MAX_ATTEMPTS = 'max_attempts';
+    public const PROPERTY_PARENT_LEARNING_PATH_CHILD_ID = 'parent_tree_node_data_id';
+    public const PROPERTY_SHOW_ANSWER_FEEDBACK = 'show_answer_feedback';
+    public const PROPERTY_SHOW_CORRECTION = 'show_correction';
+    public const PROPERTY_SHOW_SCORE = 'show_score';
+    public const PROPERTY_SHOW_SOLUTION = 'show_solution';
+    public const PROPERTY_USER_ID = 'user_id';
 
     /**
      * TreeNodeData constructor.
@@ -47,12 +49,59 @@ class TreeNodeData extends DataClass implements DisplayOrderDataClassListenerSup
     }
 
     /**
+     * Returns whether or not the default traversing order is enforced
+     *
+     * @return bool
+     */
+    public function enforcesDefaultTraversingOrder()
+    {
+        return (bool) $this->getDefaultProperty(self::PROPERTY_ENFORCE_DEFAULT_TRAVERSING_ORDER);
+    }
+
+    /**
+     * @return int
+     */
+    public function getAddedDate()
+    {
+        return (int) $this->getDefaultProperty(self::PROPERTY_ADDED_DATE);
+    }
+
+    /**
+     * @return bool
+     */
+    public function getAllowHints()
+    {
+        return $this->getDefaultProperty(self::PROPERTY_ALLOW_HINTS);
+    }
+
+    /**
+     * Returns the assessment configuration
+     *
+     * @return Configuration
+     */
+    public function getAssessmentConfiguration()
+    {
+        return new Configuration(
+            $this->getAllowHints(), $this->getShowScore(), $this->getShowCorrection(), $this->getShowSolution(),
+            $this->getShowAnswerFeedback(), $this->getFeedbackLocation()
+        );
+    }
+
+    /**
+     * @return int
+     */
+    public function getContentObjectId()
+    {
+        return $this->getDefaultProperty(self::PROPERTY_CONTENT_OBJECT_ID);
+    }
+
+    /**
      * @return string[]
      */
     public static function getDefaultPropertyNames(array $extendedPropertyNames = []): array
     {
         return parent::getDefaultPropertyNames(
-            array(
+            [
                 self::PROPERTY_LEARNING_PATH_ID,
                 self::PROPERTY_PARENT_LEARNING_PATH_CHILD_ID,
                 self::PROPERTY_CONTENT_OBJECT_ID,
@@ -69,8 +118,40 @@ class TreeNodeData extends DataClass implements DisplayOrderDataClassListenerSup
                 self::PROPERTY_USER_ID,
                 self::PROPERTY_ADDED_DATE,
                 self::PROPERTY_ENFORCE_DEFAULT_TRAVERSING_ORDER
-            )
+            ]
         );
+    }
+
+    /**
+     * @return int
+     */
+    public function getDisplayOrder()
+    {
+        return $this->getDefaultProperty(self::PROPERTY_DISPLAY_ORDER);
+    }
+
+    /**
+     * @return \Chamilo\Libraries\Storage\Query\Variable\PropertyConditionVariable[]
+     */
+    public function getDisplayOrderContextProperties(): array
+    {
+        return [
+            new PropertyConditionVariable(self::class, self::PROPERTY_LEARNING_PATH_ID),
+            new PropertyConditionVariable(self::class, self::PROPERTY_PARENT_LEARNING_PATH_CHILD_ID)
+        ];
+    }
+
+    public function getDisplayOrderProperty(): PropertyConditionVariable
+    {
+        return new PropertyConditionVariable(self::class, self::PROPERTY_DISPLAY_ORDER);
+    }
+
+    /**
+     * @return int
+     */
+    public function getFeedbackLocation()
+    {
+        return $this->getDefaultProperty(self::PROPERTY_FEEDBACK_LOCATION);
     }
 
     /**
@@ -82,22 +163,19 @@ class TreeNodeData extends DataClass implements DisplayOrderDataClassListenerSup
     }
 
     /**
-     * @param int $learningPathId
-     *
-     * @return $this
+     * @return int
      */
-    public function setLearningPathId($learningPathId)
+    public function getMasteryScore()
     {
-        if (empty($learningPathId) || !is_integer($learningPathId))
-        {
-            throw new InvalidArgumentException(
-                'The given learning path id must be a valid integer and must not be empty'
-            );
-        }
+        return $this->getDefaultProperty(self::PROPERTY_MASTERY_SCORE);
+    }
 
-        $this->setDefaultProperty(self::PROPERTY_LEARNING_PATH_ID, $learningPathId);
-
-        return $this;
+    /**
+     * @return int
+     */
+    public function getMaxAttempts()
+    {
+        return $this->getDefaultProperty(self::PROPERTY_MAX_ATTEMPTS);
     }
 
     /**
@@ -109,30 +187,113 @@ class TreeNodeData extends DataClass implements DisplayOrderDataClassListenerSup
     }
 
     /**
-     * @param int $parentTreeNodeDataId
-     *
-     * @return $this
+     * @return int
      */
-    public function setParentTreeNodeDataId($parentTreeNodeDataId)
+    public function getShowAnswerFeedback()
     {
-        if (!is_integer($parentTreeNodeDataId))
-        {
-            throw new InvalidArgumentException(
-                'The given parent learning path child id must be a valid integer'
-            );
-        }
+        return $this->getDefaultProperty(self::PROPERTY_SHOW_ANSWER_FEEDBACK);
+    }
 
-        $this->setDefaultProperty(self::PROPERTY_PARENT_LEARNING_PATH_CHILD_ID, $parentTreeNodeDataId);
+    /**
+     * @return bool
+     */
+    public function getShowCorrection()
+    {
+        return $this->getDefaultProperty(self::PROPERTY_SHOW_CORRECTION);
+    }
 
-        return $this;
+    /**
+     * @return bool
+     */
+    public function getShowScore()
+    {
+        return $this->getDefaultProperty(self::PROPERTY_SHOW_SCORE);
+    }
+
+    /**
+     * @return bool
+     */
+    public function getShowSolution()
+    {
+        return $this->getDefaultProperty(self::PROPERTY_SHOW_SOLUTION);
+    }
+
+    /**
+     * This data class needs the learning_path prefix in the database to make clear that the tree node data belongs
+     * to the learning path
+     *
+     * @return string
+     */
+    public static function getStorageUnitName(): string
+    {
+        return 'repository_learning_path_tree_node_data';
     }
 
     /**
      * @return int
      */
-    public function getContentObjectId()
+    public function getUserId()
     {
-        return $this->getDefaultProperty(self::PROPERTY_CONTENT_OBJECT_ID);
+        return (int) $this->getDefaultProperty(self::PROPERTY_USER_ID);
+    }
+
+    /**
+     * @return bool
+     */
+    public function isBlocked()
+    {
+        return $this->getDefaultProperty(self::PROPERTY_BLOCKED);
+    }
+
+    /**
+     * @param int $addedDate
+     *
+     * @return $this
+     */
+    public function setAddedDate($addedDate)
+    {
+        if (!is_integer($addedDate))
+        {
+            throw new InvalidArgumentException('The given added date must be a valid integer');
+        }
+
+        $this->setDefaultProperty(self::PROPERTY_ADDED_DATE, $addedDate);
+
+        return $this;
+    }
+
+    /**
+     * @param bool $allowHints
+     *
+     * @return $this
+     */
+    public function setAllowHints($allowHints)
+    {
+        if (!is_bool($allowHints))
+        {
+            throw new InvalidArgumentException('The given allow hints must be a valid boolean');
+        }
+
+        $this->setDefaultProperty(self::PROPERTY_ALLOW_HINTS, $allowHints);
+
+        return $this;
+    }
+
+    /**
+     * @param bool $blocked
+     *
+     * @return $this
+     */
+    public function setBlocked($blocked = false)
+    {
+        if (!is_bool($blocked))
+        {
+            throw new InvalidArgumentException('The given blocked must be a valid boolean');
+        }
+
+        $this->setDefaultProperty(self::PROPERTY_BLOCKED, $blocked);
+
+        return $this;
     }
 
     /**
@@ -155,38 +316,71 @@ class TreeNodeData extends DataClass implements DisplayOrderDataClassListenerSup
     }
 
     /**
-     * @return int
-     */
-    public function getMaxAttempts()
-    {
-        return $this->getDefaultProperty(self::PROPERTY_MAX_ATTEMPTS);
-    }
-
-    /**
-     * @param int $maxAttempts
+     * @param int $displayOrder
      *
      * @return $this
      */
-    public function setMaxAttempts($maxAttempts)
+    public function setDisplayOrder($displayOrder)
     {
-        if (!is_integer($maxAttempts))
+        if (!is_integer($displayOrder))
         {
-            throw new InvalidArgumentException(
-                'The given max attempts must be a valid integer'
-            );
+            throw new InvalidArgumentException('The given display order must be a valid integer');
         }
 
-        $this->setDefaultProperty(self::PROPERTY_MAX_ATTEMPTS, $maxAttempts);
+        $this->setDefaultProperty(self::PROPERTY_DISPLAY_ORDER, $displayOrder);
 
         return $this;
     }
 
     /**
-     * @return int
+     * Sets whether or not the default traversing order should be enforced
+     *
+     * @param bool $enforceDefaultTraversingOrder
      */
-    public function getMasteryScore()
+    public function setEnforceDefaultTraversingOrder($enforceDefaultTraversingOrder = true)
     {
-        return $this->getDefaultProperty(self::PROPERTY_MASTERY_SCORE);
+        if (!is_bool($enforceDefaultTraversingOrder))
+        {
+            throw new InvalidArgumentException('The given enforceDefaultTraversingOrder is no valid boolean');
+        }
+
+        $this->setDefaultProperty(self::PROPERTY_ENFORCE_DEFAULT_TRAVERSING_ORDER, $enforceDefaultTraversingOrder);
+    }
+
+    /**
+     * @param int $feedbackLocation
+     *
+     * @return $this
+     */
+    public function setFeedbackLocation($feedbackLocation)
+    {
+        if (!is_integer($feedbackLocation))
+        {
+            throw new InvalidArgumentException('The given feedback location must be a valid integer');
+        }
+
+        $this->setDefaultProperty(self::PROPERTY_FEEDBACK_LOCATION, $feedbackLocation);
+
+        return $this;
+    }
+
+    /**
+     * @param int $learningPathId
+     *
+     * @return $this
+     */
+    public function setLearningPathId($learningPathId)
+    {
+        if (empty($learningPathId) || !is_integer($learningPathId))
+        {
+            throw new InvalidArgumentException(
+                'The given learning path id must be a valid integer and must not be empty'
+            );
+        }
+
+        $this->setDefaultProperty(self::PROPERTY_LEARNING_PATH_ID, $learningPathId);
+
+        return $this;
     }
 
     /**
@@ -212,111 +406,41 @@ class TreeNodeData extends DataClass implements DisplayOrderDataClassListenerSup
     }
 
     /**
-     * @return boolean
-     */
-    public function getAllowHints()
-    {
-        return $this->getDefaultProperty(self::PROPERTY_ALLOW_HINTS);
-    }
-
-    /**
-     * @param boolean $allowHints
+     * @param int $maxAttempts
      *
      * @return $this
      */
-    public function setAllowHints($allowHints)
+    public function setMaxAttempts($maxAttempts)
     {
-        if (!is_bool($allowHints))
+        if (!is_integer($maxAttempts))
         {
-            throw new InvalidArgumentException('The given allow hints must be a valid boolean');
+            throw new InvalidArgumentException(
+                'The given max attempts must be a valid integer'
+            );
         }
 
-        $this->setDefaultProperty(self::PROPERTY_ALLOW_HINTS, $allowHints);
+        $this->setDefaultProperty(self::PROPERTY_MAX_ATTEMPTS, $maxAttempts);
 
         return $this;
     }
 
     /**
-     * @return boolean
-     */
-    public function getShowScore()
-    {
-        return $this->getDefaultProperty(self::PROPERTY_SHOW_SCORE);
-    }
-
-    /**
-     * @param boolean $showScore
+     * @param int $parentTreeNodeDataId
      *
      * @return $this
      */
-    public function setShowScore($showScore)
+    public function setParentTreeNodeDataId($parentTreeNodeDataId)
     {
-        if (!is_bool($showScore))
+        if (!is_integer($parentTreeNodeDataId))
         {
-            throw new InvalidArgumentException('The given show score must be a valid boolean');
+            throw new InvalidArgumentException(
+                'The given parent learning path child id must be a valid integer'
+            );
         }
 
-        $this->setDefaultProperty(self::PROPERTY_SHOW_SCORE, $showScore);
+        $this->setDefaultProperty(self::PROPERTY_PARENT_LEARNING_PATH_CHILD_ID, $parentTreeNodeDataId);
 
         return $this;
-    }
-
-    /**
-     * @return boolean
-     */
-    public function getShowCorrection()
-    {
-        return $this->getDefaultProperty(self::PROPERTY_SHOW_CORRECTION);
-    }
-
-    /**
-     * @param boolean $showCorrection
-     *
-     * @return $this
-     */
-    public function setShowCorrection($showCorrection)
-    {
-        if (!is_bool($showCorrection))
-        {
-            throw new InvalidArgumentException('The given show correction must be a valid boolean');
-        }
-
-        $this->setDefaultProperty(self::PROPERTY_SHOW_CORRECTION, $showCorrection);
-
-        return $this;
-    }
-
-    /**
-     * @return boolean
-     */
-    public function getShowSolution()
-    {
-        return $this->getDefaultProperty(self::PROPERTY_SHOW_SOLUTION);
-    }
-
-    /**
-     * @param boolean $showSolution
-     *
-     * @return $this
-     */
-    public function setShowSolution($showSolution)
-    {
-        if (!is_bool($showSolution))
-        {
-            throw new InvalidArgumentException('The given show solution must be a valid boolean');
-        }
-
-        $this->setDefaultProperty(self::PROPERTY_SHOW_SOLUTION, $showSolution);
-
-        return $this;
-    }
-
-    /**
-     * @return int
-     */
-    public function getShowAnswerFeedback()
-    {
-        return $this->getDefaultProperty(self::PROPERTY_SHOW_ANSWER_FEEDBACK);
     }
 
     /**
@@ -337,86 +461,54 @@ class TreeNodeData extends DataClass implements DisplayOrderDataClassListenerSup
     }
 
     /**
-     * @return int
-     */
-    public function getFeedbackLocation()
-    {
-        return $this->getDefaultProperty(self::PROPERTY_FEEDBACK_LOCATION);
-    }
-
-    /**
-     * @param int $feedbackLocation
+     * @param bool $showCorrection
      *
      * @return $this
      */
-    public function setFeedbackLocation($feedbackLocation)
+    public function setShowCorrection($showCorrection)
     {
-        if (!is_integer($feedbackLocation))
+        if (!is_bool($showCorrection))
         {
-            throw new InvalidArgumentException('The given feedback location must be a valid integer');
+            throw new InvalidArgumentException('The given show correction must be a valid boolean');
         }
 
-        $this->setDefaultProperty(self::PROPERTY_FEEDBACK_LOCATION, $feedbackLocation);
+        $this->setDefaultProperty(self::PROPERTY_SHOW_CORRECTION, $showCorrection);
 
         return $this;
     }
 
     /**
-     * @return bool
-     */
-    public function isBlocked()
-    {
-        return $this->getDefaultProperty(self::PROPERTY_BLOCKED);
-    }
-
-    /**
-     * @param bool $blocked
+     * @param bool $showScore
      *
      * @return $this
      */
-    public function setBlocked($blocked = false)
+    public function setShowScore($showScore)
     {
-        if (!is_bool($blocked))
+        if (!is_bool($showScore))
         {
-            throw new InvalidArgumentException('The given blocked must be a valid boolean');
+            throw new InvalidArgumentException('The given show score must be a valid boolean');
         }
 
-        $this->setDefaultProperty(self::PROPERTY_BLOCKED, $blocked);
+        $this->setDefaultProperty(self::PROPERTY_SHOW_SCORE, $showScore);
 
         return $this;
     }
 
     /**
-     * @return int
-     */
-    public function getDisplayOrder()
-    {
-        return $this->getDefaultProperty(self::PROPERTY_DISPLAY_ORDER);
-    }
-
-    /**
-     * @param int $displayOrder
+     * @param bool $showSolution
      *
      * @return $this
      */
-    public function setDisplayOrder($displayOrder)
+    public function setShowSolution($showSolution)
     {
-        if (!is_integer($displayOrder))
+        if (!is_bool($showSolution))
         {
-            throw new InvalidArgumentException('The given display order must be a valid integer');
+            throw new InvalidArgumentException('The given show solution must be a valid boolean');
         }
 
-        $this->setDefaultProperty(self::PROPERTY_DISPLAY_ORDER, $displayOrder);
+        $this->setDefaultProperty(self::PROPERTY_SHOW_SOLUTION, $showSolution);
 
         return $this;
-    }
-
-    /**
-     * @return int
-     */
-    public function getUserId()
-    {
-        return (int) $this->getDefaultProperty(self::PROPERTY_USER_ID);
     }
 
     /**
@@ -434,99 +526,5 @@ class TreeNodeData extends DataClass implements DisplayOrderDataClassListenerSup
         $this->setDefaultProperty(self::PROPERTY_USER_ID, $userId);
 
         return $this;
-    }
-
-    /**
-     * @return int
-     */
-    public function getAddedDate()
-    {
-        return (int) $this->getDefaultProperty(self::PROPERTY_ADDED_DATE);
-    }
-
-    /**
-     * @param int $addedDate
-     *
-     * @return $this
-     */
-    public function setAddedDate($addedDate)
-    {
-        if (!is_integer($addedDate))
-        {
-            throw new InvalidArgumentException('The given added date must be a valid integer');
-        }
-
-        $this->setDefaultProperty(self::PROPERTY_ADDED_DATE, $addedDate);
-
-        return $this;
-    }
-
-    public function getDisplayOrderProperty(): PropertyConditionVariable
-    {
-        return new PropertyConditionVariable(self::class, self::PROPERTY_DISPLAY_ORDER);
-    }
-
-    /**
-     * @return \Chamilo\Libraries\Storage\Query\Variable\PropertyConditionVariable[]
-     */
-    public function getDisplayOrderContextProperties(): array
-    {
-        return array(
-            new PropertyConditionVariable(self::class, self::PROPERTY_LEARNING_PATH_ID),
-            new PropertyConditionVariable(self::class, self::PROPERTY_PARENT_LEARNING_PATH_CHILD_ID)
-        );
-    }
-
-    /**
-     * Sets whether or not the default traversing order should be enforced
-     *
-     * @param bool $enforceDefaultTraversingOrder
-     */
-    public function setEnforceDefaultTraversingOrder($enforceDefaultTraversingOrder = true)
-    {
-        if(!is_bool($enforceDefaultTraversingOrder))
-        {
-            throw new InvalidArgumentException('The given enforceDefaultTraversingOrder is no valid boolean');
-        }
-
-        $this->setDefaultProperty(self::PROPERTY_ENFORCE_DEFAULT_TRAVERSING_ORDER, $enforceDefaultTraversingOrder);
-    }
-
-    /**
-     * Returns whether or not the default traversing order is enforced
-     *
-     * @return bool
-     */
-    public function enforcesDefaultTraversingOrder()
-    {
-        return (bool) $this->getDefaultProperty(self::PROPERTY_ENFORCE_DEFAULT_TRAVERSING_ORDER);
-    }
-
-    /**
-     * Returns the assessment configuration
-     *
-     * @return Configuration
-     */
-    public function getAssessmentConfiguration()
-    {
-        return new Configuration(
-            $this->getAllowHints(),
-            $this->getShowScore(),
-            $this->getShowCorrection(),
-            $this->getShowSolution(),
-            $this->getShowAnswerFeedback(),
-            $this->getFeedbackLocation()
-        );
-    }
-
-    /**
-     * This data class needs the learning_path prefix in the database to make clear that the tree node data belongs
-     * to the learning path
-     *
-     * @return string
-     */
-    public static function getStorageUnitName(): string
-    {
-        return 'repository_learning_path_tree_node_data';
     }
 }

@@ -1,6 +1,7 @@
 <?php
 namespace Chamilo\Application\Weblcms\Storage\DataClass;
 
+use Chamilo\Application\Weblcms\Manager;
 use Chamilo\Libraries\Storage\DataClass\DataClass;
 
 /**
@@ -10,24 +11,59 @@ use Chamilo\Libraries\Storage\DataClass\DataClass;
  * class.
  *
  * @package application\weblcms;
- * @author Sven Vanpoucke - Hogeschool Gent
+ * @author  Sven Vanpoucke - Hogeschool Gent
  */
 class CourseSetting extends DataClass
 {
+    public const CONTEXT = Manager::CONTEXT;
 
-    const COURSE_SETTING_TOOL_ACTIVE = 'active';
-    const COURSE_SETTING_TOOL_VISIBLE = 'visible';
+    public const COURSE_SETTING_TOOL_ACTIVE = 'active';
+    public const COURSE_SETTING_TOOL_VISIBLE = 'visible';
 
-    const FOREIGN_PROPERTY_TOOL = 'tool';
+    public const FOREIGN_PROPERTY_TOOL = 'tool';
 
-    const PROPERTY_COURSE_TOOL_NAME = 'course_tool_name';
-    const PROPERTY_GLOBAL_SETTING = 'global_setting';
-    const PROPERTY_NAME = 'name';
-    const PROPERTY_TOOL_ID = 'tool_id';
+    public const PROPERTY_COURSE_TOOL_NAME = 'course_tool_name';
+    public const PROPERTY_GLOBAL_SETTING = 'global_setting';
+    public const PROPERTY_NAME = 'name';
+    public const PROPERTY_TOOL_ID = 'tool_id';
 
     /**
      * **************************************************************************************************************
      * Inherited Functionality *
+     * **************************************************************************************************************
+     */
+
+    /**
+     * Returns the default properties of this dataclass
+     *
+     * @return String[] - The property names.
+     */
+    public static function getDefaultPropertyNames(array $extendedPropertyNames = []): array
+    {
+        $extendedPropertyNames[] = self::PROPERTY_TOOL_ID;
+        $extendedPropertyNames[] = self::PROPERTY_GLOBAL_SETTING;
+        $extendedPropertyNames[] = self::PROPERTY_NAME;
+
+        return parent::getDefaultPropertyNames($extendedPropertyNames);
+    }
+
+    /**
+     * **************************************************************************************************************
+     * Additional Functionality *
+     * **************************************************************************************************************
+     */
+
+    /**
+     * @return string
+     */
+    public static function getStorageUnitName(): string
+    {
+        return 'weblcms_course_setting';
+    }
+
+    /**
+     * **************************************************************************************************************
+     * Getters and Setters *
      * **************************************************************************************************************
      */
 
@@ -42,12 +78,6 @@ class CourseSetting extends DataClass
             self::FOREIGN_PROPERTY_TOOL, CourseTool::class
         );
     }
-
-    /**
-     * **************************************************************************************************************
-     * Additional Functionality *
-     * **************************************************************************************************************
-     */
 
     /**
      * Returns the name for the course tool foreign object
@@ -70,31 +100,11 @@ class CourseSetting extends DataClass
     }
 
     /**
-     * **************************************************************************************************************
-     * Getters and Setters *
-     * **************************************************************************************************************
-     */
-
-    /**
-     * Returns the default properties of this dataclass
-     *
-     * @return String[] - The property names.
-     */
-    static function getDefaultPropertyNames(array $extendedPropertyNames = []): array
-    {
-        $extendedPropertyNames[] = self::PROPERTY_TOOL_ID;
-        $extendedPropertyNames[] = self::PROPERTY_GLOBAL_SETTING;
-        $extendedPropertyNames[] = self::PROPERTY_NAME;
-
-        return parent::getDefaultPropertyNames($extendedPropertyNames);
-    }
-
-    /**
      * Returns the name property of this object
      *
      * @return String
      */
-    function get_name()
+    public function get_name()
     {
         return $this->getDefaultProperty(self::PROPERTY_NAME);
     }
@@ -104,17 +114,9 @@ class CourseSetting extends DataClass
      *
      * @return String[]
      */
-    static function get_static_tool_settings()
+    public static function get_static_tool_settings()
     {
-        return array(self::COURSE_SETTING_TOOL_ACTIVE, self::COURSE_SETTING_TOOL_VISIBLE);
-    }
-
-    /**
-     * @return string
-     */
-    public static function getStorageUnitName(): string
-    {
-        return 'weblcms_course_setting';
+        return [self::COURSE_SETTING_TOOL_ACTIVE, self::COURSE_SETTING_TOOL_VISIBLE];
     }
 
     /**
@@ -122,7 +124,7 @@ class CourseSetting extends DataClass
      *
      * @return String
      */
-    function get_tool_id()
+    public function get_tool_id()
     {
         return $this->getDefaultProperty(self::PROPERTY_TOOL_ID);
     }
@@ -132,7 +134,7 @@ class CourseSetting extends DataClass
      *
      * @return String
      */
-    function is_global_setting()
+    public function is_global_setting()
     {
         return $this->getDefaultProperty(self::PROPERTY_GLOBAL_SETTING);
     }
@@ -164,7 +166,7 @@ class CourseSetting extends DataClass
      *
      * @param $global_setting String
      */
-    function set_global_setting($global_setting)
+    public function set_global_setting($global_setting)
     {
         $this->setDefaultProperty(self::PROPERTY_GLOBAL_SETTING, $global_setting);
     }
@@ -174,7 +176,7 @@ class CourseSetting extends DataClass
      *
      * @param $name String
      */
-    function set_name($name)
+    public function set_name($name)
     {
         $this->setDefaultProperty(self::PROPERTY_NAME, $name);
     }
@@ -184,7 +186,7 @@ class CourseSetting extends DataClass
      *
      * @param $tool_id String
      */
-    function set_tool_id($tool_id)
+    public function set_tool_id($tool_id)
     {
         $this->setDefaultProperty(self::PROPERTY_TOOL_ID, $tool_id);
     }

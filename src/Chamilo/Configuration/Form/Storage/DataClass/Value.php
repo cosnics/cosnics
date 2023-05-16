@@ -1,24 +1,22 @@
 <?php
 namespace Chamilo\Configuration\Form\Storage\DataClass;
 
-use Chamilo\Configuration\Form\Storage\DataManager;
+use Chamilo\Configuration\Form\Manager;
 use Chamilo\Libraries\Storage\DataClass\DataClass;
 
 /**
- *
  * @package configuration\form
- * @author Sven Vanpoucke <sven.vanpoucke@hogent.be>
- * @author Hans De Bisschop <hans.de.bisschop@ehb.be>
+ * @author  Sven Vanpoucke <sven.vanpoucke@hogent.be>
+ * @author  Hans De Bisschop <hans.de.bisschop@ehb.be>
  */
 class Value extends DataClass
 {
-    const PROPERTY_DYNAMIC_FORM_ELEMENT_ID = 'dynamic_form_element_id';
+    public const CONTEXT = Manager::CONTEXT;
 
-    const PROPERTY_TIME = 'time';
-
-    const PROPERTY_USER_ID = 'user_id';
-
-    const PROPERTY_VALUE = 'value';
+    public const PROPERTY_DYNAMIC_FORM_ELEMENT_ID = 'dynamic_form_element_id';
+    public const PROPERTY_TIME = 'time';
+    public const PROPERTY_USER_ID = 'user_id';
+    public const PROPERTY_VALUE = 'value';
 
     public function create(): bool
     {
@@ -35,18 +33,13 @@ class Value extends DataClass
     public static function getDefaultPropertyNames(array $extendedPropertyNames = []): array
     {
         return parent::getDefaultPropertyNames(
-            array(
+            [
                 self::PROPERTY_DYNAMIC_FORM_ELEMENT_ID,
                 self::PROPERTY_VALUE,
                 self::PROPERTY_USER_ID,
                 self::PROPERTY_TIME
-            )
+            ]
         );
-    }
-
-    public function get_dynamic_form_element_id()
-    {
-        return $this->getDefaultProperty(self::PROPERTY_DYNAMIC_FORM_ELEMENT_ID);
     }
 
     /**
@@ -55,6 +48,11 @@ class Value extends DataClass
     public static function getStorageUnitName(): string
     {
         return 'configuration_form_value';
+    }
+
+    public function get_dynamic_form_element_id()
+    {
+        return $this->getDefaultProperty(self::PROPERTY_DYNAMIC_FORM_ELEMENT_ID);
     }
 
     public function get_time()

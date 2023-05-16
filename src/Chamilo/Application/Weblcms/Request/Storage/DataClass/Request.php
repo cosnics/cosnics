@@ -1,38 +1,40 @@
 <?php
 namespace Chamilo\Application\Weblcms\Request\Storage\DataClass;
 
-use Chamilo\Application\Weblcms\Request\Storage\DataManager;
+use Chamilo\Application\Weblcms\Request\Manager;
 use Chamilo\Core\User\Storage\DataClass\User;
+use Chamilo\Core\User\Storage\DataManager;
 use Chamilo\Libraries\Format\Structure\Glyph\FontAwesomeGlyph;
 use Chamilo\Libraries\Storage\DataClass\DataClass;
 use Chamilo\Libraries\Translation\Translation;
 use Exception;
 
 /**
- *
- * @author Hans De Bisschop
+ * @package Chamilo\Application\Weblcms\Request\Storage\DataClass
+ * @author  Hans De Bisschop <hans.de.bisschop@ehb.be>
  */
 class Request extends DataClass
 {
+    public const CONTEXT = Manager::CONTEXT;
 
-    const DECISION_DENIED = 1;
-    const DECISION_GRANTED = 2;
-    const DECISION_PENDING = 0;
+    public const DECISION_DENIED = 1;
+    public const DECISION_GRANTED = 2;
+    public const DECISION_PENDING = 0;
 
-    const PROPERTY_CATEGORY_ID = 'category_id';
-    const PROPERTY_COURSE_TYPE_ID = 'course_type_id';
-    const PROPERTY_CREATION_DATE = 'creation_date';
-    const PROPERTY_DECISION = 'decision';
-    const PROPERTY_DECISION_DATE = 'decision_date';
-    const PROPERTY_DECISION_MOTIVATION = 'decision_motivation';
-    const PROPERTY_MOTIVATION = 'motivation';
-    const PROPERTY_NAME = 'name';
-    const PROPERTY_SUBJECT = 'subject';
+    public const PROPERTY_CATEGORY_ID = 'category_id';
+    public const PROPERTY_COURSE_TYPE_ID = 'course_type_id';
+    public const PROPERTY_CREATION_DATE = 'creation_date';
+    public const PROPERTY_DECISION = 'decision';
+    public const PROPERTY_DECISION_DATE = 'decision_date';
+    public const PROPERTY_DECISION_MOTIVATION = 'decision_motivation';
+    public const PROPERTY_MOTIVATION = 'motivation';
+    public const PROPERTY_NAME = 'name';
+    public const PROPERTY_SUBJECT = 'subject';
 
     /**
      * Request properties
      */
-    const PROPERTY_USER_ID = 'user_id';
+    public const PROPERTY_USER_ID = 'user_id';
 
     /**
      * The user of the request
@@ -42,12 +44,12 @@ class Request extends DataClass
     private $user;
 
     /**
-     * @param integer $decision
+     * @param int $decision
      *
      * @return string
      * @throws \Exception
      */
-    static function decision_icon($decision)
+    public static function decision_icon($decision)
     {
         switch ($decision)
         {
@@ -71,10 +73,9 @@ class Request extends DataClass
     }
 
     /**
-     *
      * @return string
      */
-    static function decision_string($decision)
+    public static function decision_string($decision)
     {
         switch ($decision)
         {
@@ -90,96 +91,6 @@ class Request extends DataClass
         }
     }
 
-    public function get_category_id()
-    {
-        return $this->getDefaultProperty(self::PROPERTY_CATEGORY_ID);
-    }
-
-    /**
-     * Returns the course type identifier of this Request.
-     *
-     * @return integer The course type identifier.
-     */
-    function get_course_type_id()
-    {
-        return $this->getDefaultProperty(self::PROPERTY_COURSE_TYPE_ID);
-    }
-
-    /**
-     * Returns the creation_date of this Request.
-     *
-     * @return integer The creation_date.
-     */
-    function get_creation_date()
-    {
-        return $this->getDefaultProperty(self::PROPERTY_CREATION_DATE);
-    }
-
-    /**
-     * Returns the decision of this Request.
-     *
-     * @return integer The decision.
-     */
-    function get_decision()
-    {
-        return $this->getDefaultProperty(self::PROPERTY_DECISION);
-    }
-
-    /**
-     * Returns the decision_date of this Request.
-     *
-     * @return integer The decision_date.
-     */
-    function get_decision_date()
-    {
-        return $this->getDefaultProperty(self::PROPERTY_DECISION_DATE);
-    }
-
-    /**
-     *
-     * @return string
-     */
-    function get_decision_icon()
-    {
-        return self::decision_icon($this->get_decision());
-    }
-
-    /**
-     * Returns the decision_motivation of this Request.
-     *
-     * @return string The decision_motivation.
-     */
-    function get_decision_motivation()
-    {
-        return $this->getDefaultProperty(self::PROPERTY_DECISION_MOTIVATION);
-    }
-
-    /**
-     *
-     * @return string
-     */
-    function get_decision_string()
-    {
-        return self::decision_string($this->get_decision());
-    }
-
-    /**
-     *
-     * @param $types_only boolean
-     *
-     * @return integer[] string[]
-     */
-    static function get_decision_types($types_only = false)
-    {
-        $types = [];
-
-        $types[self::DECISION_PENDING] = self::decision_string(self::DECISION_PENDING);
-        $types[self::DECISION_GRANTED] = self::decision_string(self::DECISION_GRANTED);
-        $types[self::DECISION_DENIED] = self::decision_string(self::DECISION_DENIED);
-
-        return ($types_only ? array_keys($types) : $types);
-    }
-
     /**
      * Get the default properties
      *
@@ -187,7 +98,7 @@ class Request extends DataClass
      *
      * @return string[] The property names.
      */
-    static function getDefaultPropertyNames(array $extendedPropertyNames = []): array
+    public static function getDefaultPropertyNames(array $extendedPropertyNames = []): array
     {
         $extendedPropertyNames[] = self::PROPERTY_USER_ID;
         $extendedPropertyNames[] = self::PROPERTY_NAME;
@@ -204,11 +115,106 @@ class Request extends DataClass
     }
 
     /**
+     * @return string
+     */
+    public static function getStorageUnitName(): string
+    {
+        return 'weblcms_request_request';
+    }
+
+    public function get_category_id()
+    {
+        return $this->getDefaultProperty(self::PROPERTY_CATEGORY_ID);
+    }
+
+    /**
+     * Returns the course type identifier of this Request.
+     *
+     * @return int The course type identifier.
+     */
+    public function get_course_type_id()
+    {
+        return $this->getDefaultProperty(self::PROPERTY_COURSE_TYPE_ID);
+    }
+
+    /**
+     * Returns the creation_date of this Request.
+     *
+     * @return int The creation_date.
+     */
+    public function get_creation_date()
+    {
+        return $this->getDefaultProperty(self::PROPERTY_CREATION_DATE);
+    }
+
+    /**
+     * Returns the decision of this Request.
+     *
+     * @return int The decision.
+     */
+    public function get_decision()
+    {
+        return $this->getDefaultProperty(self::PROPERTY_DECISION);
+    }
+
+    /**
+     * Returns the decision_date of this Request.
+     *
+     * @return int The decision_date.
+     */
+    public function get_decision_date()
+    {
+        return $this->getDefaultProperty(self::PROPERTY_DECISION_DATE);
+    }
+
+    /**
+     * @return string
+     */
+    public function get_decision_icon()
+    {
+        return self::decision_icon($this->get_decision());
+    }
+
+    /**
+     * Returns the decision_motivation of this Request.
+     *
+     * @return string The decision_motivation.
+     */
+    public function get_decision_motivation()
+    {
+        return $this->getDefaultProperty(self::PROPERTY_DECISION_MOTIVATION);
+    }
+
+    /**
+     * @return string
+     */
+    public function get_decision_string()
+    {
+        return self::decision_string($this->get_decision());
+    }
+
+    /**
+     * @param $types_only bool
+     *
+     * @return int string[]
+     */
+    public static function get_decision_types($types_only = false)
+    {
+        $types = [];
+
+        $types[self::DECISION_PENDING] = self::decision_string(self::DECISION_PENDING);
+        $types[self::DECISION_GRANTED] = self::decision_string(self::DECISION_GRANTED);
+        $types[self::DECISION_DENIED] = self::decision_string(self::DECISION_DENIED);
+
+        return ($types_only ? array_keys($types) : $types);
+    }
+
+    /**
      * Returns the motivation of this Request.
      *
      * @return string The motivation.
      */
-    function get_motivation()
+    public function get_motivation()
     {
         return $this->getDefaultProperty(self::PROPERTY_MOTIVATION);
     }
@@ -218,7 +224,7 @@ class Request extends DataClass
      *
      * @return string The name.
      */
-    function get_name()
+    public function get_name()
     {
         return $this->getDefaultProperty(self::PROPERTY_NAME);
     }
@@ -228,17 +234,9 @@ class Request extends DataClass
      *
      * @return string The subject.
      */
-    function get_subject()
+    public function get_subject()
     {
         return $this->getDefaultProperty(self::PROPERTY_SUBJECT);
-    }
-
-    /**
-     * @return string
-     */
-    public static function getStorageUnitName(): string
-    {
-        return 'weblcms_request_request';
     }
 
     /**
@@ -246,11 +244,11 @@ class Request extends DataClass
      *
      * @return \core\user\User
      */
-    function get_user()
+    public function get_user()
     {
         if (!isset($this->user))
         {
-            $this->user = \Chamilo\Core\User\Storage\DataManager::retrieve_by_id(
+            $this->user = DataManager::retrieve_by_id(
                 User::class, (int) $this->get_user_id()
             );
         }
@@ -261,9 +259,9 @@ class Request extends DataClass
     /**
      * Returns the user_id of this Request.
      *
-     * @return integer The user_id.
+     * @return int The user_id.
      */
-    function get_user_id()
+    public function get_user_id()
     {
         return $this->getDefaultProperty(self::PROPERTY_USER_ID);
     }
@@ -271,9 +269,9 @@ class Request extends DataClass
     /**
      * Is the request pending ?
      *
-     * @return boolean
+     * @return bool
      */
-    function is_pending()
+    public function is_pending()
     {
         return $this->get_decision() == self::DECISION_PENDING;
     }
@@ -286,9 +284,9 @@ class Request extends DataClass
     /**
      * Sets the course type identifier of this Request.
      *
-     * @param $course_type_id integer
+     * @param $course_type_id int
      */
-    function set_course_type_id($course_type_id)
+    public function set_course_type_id($course_type_id)
     {
         $this->setDefaultProperty(self::PROPERTY_COURSE_TYPE_ID, $course_type_id);
     }
@@ -296,9 +294,9 @@ class Request extends DataClass
     /**
      * Sets the creation_date of this Request.
      *
-     * @param $creation_date integer
+     * @param $creation_date int
      */
-    function set_creation_date($creation_date)
+    public function set_creation_date($creation_date)
     {
         $this->setDefaultProperty(self::PROPERTY_CREATION_DATE, $creation_date);
     }
@@ -306,9 +304,9 @@ class Request extends DataClass
     /**
      * Sets the decision of this Request.
      *
-     * @param $decision integer
+     * @param $decision int
      */
-    function set_decision($decision)
+    public function set_decision($decision)
     {
         $this->setDefaultProperty(self::PROPERTY_DECISION, $decision);
     }
@@ -316,9 +314,9 @@ class Request extends DataClass
     /**
      * Sets the decision_date of this Request.
      *
-     * @param $decision_date integer
+     * @param $decision_date int
      */
-    function set_decision_date($decision_date)
+    public function set_decision_date($decision_date)
     {
         $this->setDefaultProperty(self::PROPERTY_DECISION_DATE, $decision_date);
     }
@@ -328,7 +326,7 @@ class Request extends DataClass
      *
      * @param $decision_motivation string
      */
-    function set_decision_motivation($decision_motivation)
+    public function set_decision_motivation($decision_motivation)
     {
         $this->setDefaultProperty(self::PROPERTY_DECISION_MOTIVATION, $decision_motivation);
     }
@@ -338,7 +336,7 @@ class Request extends DataClass
      *
      * @param $motivation string
      */
-    function set_motivation($motivation)
+    public function set_motivation($motivation)
     {
         $this->setDefaultProperty(self::PROPERTY_MOTIVATION, $motivation);
     }
@@ -348,7 +346,7 @@ class Request extends DataClass
      *
      * @param $name string
      */
-    function set_name($name)
+    public function set_name($name)
     {
         $this->setDefaultProperty(self::PROPERTY_NAME, $name);
     }
@@ -358,7 +356,7 @@ class Request extends DataClass
      *
      * @param $subject string
      */
-    function set_subject($subject)
+    public function set_subject($subject)
     {
         $this->setDefaultProperty(self::PROPERTY_SUBJECT, $subject);
     }
@@ -366,9 +364,9 @@ class Request extends DataClass
     /**
      * Sets the user_id of this Request.
      *
-     * @param $user_id integer
+     * @param $user_id int
      */
-    function set_user_id($user_id)
+    public function set_user_id($user_id)
     {
         $this->setDefaultProperty(self::PROPERTY_USER_ID, $user_id);
     }
@@ -376,9 +374,9 @@ class Request extends DataClass
     /**
      * Was the request denied ?
      *
-     * @return boolean
+     * @return bool
      */
-    function was_denied()
+    public function was_denied()
     {
         return $this->get_decision() == self::DECISION_DENIED;
     }
@@ -386,9 +384,9 @@ class Request extends DataClass
     /**
      * Was the request granted ?
      *
-     * @return boolean
+     * @return bool
      */
-    function was_granted()
+    public function was_granted()
     {
         return $this->get_decision() == self::DECISION_GRANTED;
     }

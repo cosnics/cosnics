@@ -1,6 +1,7 @@
 <?php
 namespace Chamilo\Core\Repository\Storage\DataClass;
 
+use Chamilo\Core\Repository\Manager;
 use Chamilo\Core\Repository\Storage\DataManager;
 use Chamilo\Libraries\Architecture\ClassnameUtilities;
 use Chamilo\Libraries\Architecture\Exceptions\ClassNotExistException;
@@ -12,7 +13,6 @@ use Chamilo\Libraries\Translation\Translation;
 use Chamilo\Libraries\Utilities\StringUtilities;
 
 /**
- *
  * @package repository.lib
  */
 
@@ -23,6 +23,8 @@ use Chamilo\Libraries\Utilities\StringUtilities;
  */
 class ComplexContentObjectItem extends CompositeDataClass implements DisplayOrderDataClassListenerSupport
 {
+    public const CONTEXT = Manager::CONTEXT;
+
     public const PROPERTY_ADD_DATE = 'add_date';
     public const PROPERTY_DISPLAY_ORDER = 'display_order';
     public const PROPERTY_PARENT = 'parent_id';
@@ -30,7 +32,6 @@ class ComplexContentObjectItem extends CompositeDataClass implements DisplayOrde
     public const PROPERTY_USER_ID = 'user_id';
 
     /**
-     *
      * @var ContentObject
      */
     private $reference_object;
@@ -116,13 +117,13 @@ class ComplexContentObjectItem extends CompositeDataClass implements DisplayOrde
     public static function getDefaultPropertyNames(array $extendedPropertyNames = []): array
     {
         return parent::getDefaultPropertyNames(
-            array(
+            [
                 self::PROPERTY_REF,
                 self::PROPERTY_PARENT,
                 self::PROPERTY_USER_ID,
                 self::PROPERTY_DISPLAY_ORDER,
                 self::PROPERTY_ADD_DATE
-            )
+            ]
         );
     }
 
@@ -131,7 +132,7 @@ class ComplexContentObjectItem extends CompositeDataClass implements DisplayOrde
      */
     public function getDisplayOrderContextProperties(): array
     {
-        return array(new PropertyConditionVariable(ComplexContentObjectItem::class, self::PROPERTY_PARENT));
+        return [new PropertyConditionVariable(ComplexContentObjectItem::class, self::PROPERTY_PARENT)];
     }
 
     public function getDisplayOrderProperty(): PropertyConditionVariable
@@ -227,7 +228,6 @@ class ComplexContentObjectItem extends CompositeDataClass implements DisplayOrde
     }
 
     /**
-     *
      * @param ContentObject $reference_object
      */
     public function set_ref_object(ContentObject $reference_object)

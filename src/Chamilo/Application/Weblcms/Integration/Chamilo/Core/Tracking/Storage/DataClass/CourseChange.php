@@ -5,27 +5,22 @@ use Chamilo\Core\Tracking\Storage\DataClass\ChangesTracker;
 
 class CourseChange extends ChangesTracker
 {
-    
+    public const CONTEXT = 'Chamilo\Application\Weblcms\Integration\Chamilo\Core\Tracking';
+
     // Can be used for subscribsion of users / classes
-    const PROPERTY_TARGET_REFERENCE_ID = 'target_reference_id';
+    public const PROPERTY_TARGET_REFERENCE_ID = 'target_reference_id';
 
     public static function getDefaultPropertyNames(array $extendedPropertyNames = []): array
     {
-        return parent::getDefaultPropertyNames(array(self::PROPERTY_TARGET_REFERENCE_ID));
+        return parent::getDefaultPropertyNames([self::PROPERTY_TARGET_REFERENCE_ID]);
     }
 
-    public function validate_parameters(array $parameters = [])
+    /**
+     * @return string
+     */
+    public static function getStorageUnitName(): string
     {
-        parent::validate_parameters($parameters);
-        
-        if ($parameters[self::PROPERTY_TARGET_REFERENCE_ID])
-        {
-            $this->set_target_reference_id($parameters[self::PROPERTY_TARGET_REFERENCE_ID]);
-        }
-        else
-        {
-            $this->set_target_reference_id(0);
-        }
+        return 'tracking_weblcms_course_change';
     }
 
     public function get_target_reference_id()
@@ -38,11 +33,17 @@ class CourseChange extends ChangesTracker
         $this->setDefaultProperty(self::PROPERTY_TARGET_REFERENCE_ID, $target_reference_id);
     }
 
-    /**
-     * @return string
-     */
-    public static function getStorageUnitName(): string
+    public function validate_parameters(array $parameters = [])
     {
-        return 'tracking_weblcms_course_change';
+        parent::validate_parameters($parameters);
+
+        if ($parameters[self::PROPERTY_TARGET_REFERENCE_ID])
+        {
+            $this->set_target_reference_id($parameters[self::PROPERTY_TARGET_REFERENCE_ID]);
+        }
+        else
+        {
+            $this->set_target_reference_id(0);
+        }
     }
 }

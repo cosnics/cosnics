@@ -2,21 +2,22 @@
 namespace Chamilo\Core\Repository\ContentObject\Assessment\Display\Preview;
 
 use Chamilo\Core\Repository\ContentObject\Assessment\Display\Attempt\AbstractQuestionAttempt;
+use Chamilo\Core\Repository\ContentObject\Assessment\Display\Manager;
 use Symfony\Component\Uid\Uuid;
 
 /**
- *
  * @package core\repository\content_object\assessment\display
- * @author Hans De Bisschop <hans.de.bisschop@ehb.be>
- * @author Magali Gillard <magali.gillard@ehb.be>
- * @author Eduard Vossen <eduard.vossen@ehb.be>
+ * @author  Hans De Bisschop <hans.de.bisschop@ehb.be>
+ * @author  Magali Gillard <magali.gillard@ehb.be>
+ * @author  Eduard Vossen <eduard.vossen@ehb.be>
  */
 class DummyQuestionAttempt extends AbstractQuestionAttempt
 {
+    public const CONTEXT = Manager::CONTEXT;
+
     public const PROPERTY_ATTEMPT_ID = 'attempt_id';
 
     /**
-     *
      * @see \libraries\storage\DataClass::create()
      */
     public function create(): bool
@@ -27,7 +28,6 @@ class DummyQuestionAttempt extends AbstractQuestionAttempt
     }
 
     /**
-     *
      * @see \libraries\storage\DataClass::delete()
      */
     public function delete(): bool
@@ -36,7 +36,6 @@ class DummyQuestionAttempt extends AbstractQuestionAttempt
     }
 
     /**
-     *
      * @param string[] $extendedPropertyNames
      *
      * @return string[]
@@ -57,7 +56,6 @@ class DummyQuestionAttempt extends AbstractQuestionAttempt
     }
 
     /**
-     *
      * @return int
      */
     public function get_attempt_id()
@@ -66,7 +64,6 @@ class DummyQuestionAttempt extends AbstractQuestionAttempt
     }
 
     /**
-     *
      * @param int $attempt_id
      */
     public function set_attempt_id($attempt_id)
@@ -75,7 +72,6 @@ class DummyQuestionAttempt extends AbstractQuestionAttempt
     }
 
     /**
-     *
      * @see \libraries\storage\DataClass::update()
      */
     public function update(): bool

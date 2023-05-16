@@ -12,8 +12,9 @@ use Chamilo\Libraries\Format\Structure\Glyph\FontAwesomeGlyph;
  */
 class WorkspaceItem extends Item
 {
-    public const PROPERTY_NAME = 'name';
+    public const CONTEXT = 'Chamilo\Core\Repository\Integration\Chamilo\Core\Menu';
 
+    public const PROPERTY_NAME = 'name';
     public const PROPERTY_WORKSPACE_ID = 'workspace_id';
 
     public function __construct($default_properties = [], $additionalProperties = [])

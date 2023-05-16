@@ -5,4 +5,5 @@ use Chamilo\Core\Repository\Storage\DataClass\ComplexContentObjectItem;
 
 class ComplexTask extends ComplexContentObjectItem
 {
+    public const CONTEXT = Task::CONTEXT;
 }

@@ -1,6 +1,7 @@
 <?php
 namespace Chamilo\Core\Home\Storage\DataClass;
 
+use Chamilo\Core\Home\Manager;
 use Chamilo\Libraries\Storage\DataClass\CompositeDataClass;
 use Chamilo\Libraries\Storage\DataClass\Listeners\DisplayOrderDataClassListener;
 use Chamilo\Libraries\Storage\DataClass\Listeners\DisplayOrderDataClassListenerSupport;
@@ -12,14 +13,15 @@ use Chamilo\Libraries\Storage\Query\Variable\PropertyConditionVariable;
 use Chamilo\Libraries\Storage\Query\Variable\StaticConditionVariable;
 
 /**
- *
  * @package Chamilo\Core\Home\Storage\DataClass
- * @author Hans De Bisschop <hans.de.bisschop@ehb.be>
- * @author Magali Gillard <magali.gillard@ehb.be>
- * @author Eduard Vossen <eduard.vossen@ehb.be>
+ * @author  Hans De Bisschop <hans.de.bisschop@ehb.be>
+ * @author  Magali Gillard <magali.gillard@ehb.be>
+ * @author  Eduard Vossen <eduard.vossen@ehb.be>
  */
 abstract class Element extends CompositeDataClass implements DisplayOrderDataClassListenerSupport
 {
+    public const CONTEXT = Manager::CONTEXT;
+
     public const PROPERTY_CONFIGURATION = 'configuration';
     public const PROPERTY_PARENT_ID = 'parent_id';
     public const PROPERTY_SORT = 'sort';
@@ -30,7 +32,9 @@ abstract class Element extends CompositeDataClass implements DisplayOrderDataCla
     /**
      * @throws \Exception
      */
-    public function __construct(array $defaultProperties = [], array $additionalProperties = [], array $optionalProperties = [])
+    public function __construct(
+        array $defaultProperties = [], array $additionalProperties = [], array $optionalProperties = []
+    )
     {
         parent::__construct($defaultProperties, $additionalProperties, $optionalProperties);
         $this->addListener(new DisplayOrderDataClassListener($this));
@@ -56,7 +60,6 @@ abstract class Element extends CompositeDataClass implements DisplayOrderDataCla
     }
 
     /**
-     *
      * @return int
      */
     public function getConfiguration()
@@ -65,7 +68,6 @@ abstract class Element extends CompositeDataClass implements DisplayOrderDataCla
     }
 
     /**
-     *
      * @param string[] $configurationVariables
      *
      * @return string[]
@@ -78,19 +80,31 @@ abstract class Element extends CompositeDataClass implements DisplayOrderDataCla
     public static function getDefaultPropertyNames(array $extendedPropertyNames = []): array
     {
         return parent::getDefaultPropertyNames(
-            array(
+            [
                 self::PROPERTY_TYPE,
                 self::PROPERTY_PARENT_ID,
                 self::PROPERTY_TITLE,
                 self::PROPERTY_SORT,
                 self::PROPERTY_USER_ID,
                 self::PROPERTY_CONFIGURATION
-            )
+            ]
         );
     }
 
     /**
-     *
+     * @return \Chamilo\Libraries\Storage\Query\Variable\PropertyConditionVariable[]
+     */
+    public function getDisplayOrderContextProperties(): array
+    {
+        return [new PropertyConditionVariable(Element::class, self::PROPERTY_PARENT_ID)];
+    }
+
+    public function getDisplayOrderProperty(): PropertyConditionVariable
+    {
+        return new PropertyConditionVariable(Element::class, self::PROPERTY_SORT);
+    }
+
+    /**
      * @return int
      */
     public function getParentId()
@@ -99,7 +113,6 @@ abstract class Element extends CompositeDataClass implements DisplayOrderDataCla
     }
 
     /**
-     *
      * @param string $variable
      *
      * @return string
@@ -112,7 +125,6 @@ abstract class Element extends CompositeDataClass implements DisplayOrderDataCla
     }
 
     /**
-     *
      * @return int
      */
     public function getSort()
@@ -129,7 +141,6 @@ abstract class Element extends CompositeDataClass implements DisplayOrderDataCla
     }
 
     /**
-     *
      * @return string
      */
     public function getTitle()
@@ -138,7 +149,6 @@ abstract class Element extends CompositeDataClass implements DisplayOrderDataCla
     }
 
     /**
-     *
      * @return string
      */
     public function getType(): string
@@ -147,7 +157,6 @@ abstract class Element extends CompositeDataClass implements DisplayOrderDataCla
     }
 
     /**
-     *
      * @return int
      */
     public function getUserId()
@@ -156,20 +165,6 @@ abstract class Element extends CompositeDataClass implements DisplayOrderDataCla
     }
 
     /**
-     * @return \Chamilo\Libraries\Storage\Query\Variable\PropertyConditionVariable[]
-     */
-    public function getDisplayOrderContextProperties(): array
-    {
-        return array(new PropertyConditionVariable(Element::class, self::PROPERTY_PARENT_ID));
-    }
-
-    public function getDisplayOrderProperty(): PropertyConditionVariable
-    {
-        return new PropertyConditionVariable(Element::class, self::PROPERTY_SORT);
-    }
-
-    /**
-     *
      * @return string
      * @deprecated User Element::getType() now
      */
@@ -196,7 +191,6 @@ abstract class Element extends CompositeDataClass implements DisplayOrderDataCla
     }
 
     /**
-     *
      * @param string $variable
      */
     public function removeSetting($variable)
@@ -208,7 +202,6 @@ abstract class Element extends CompositeDataClass implements DisplayOrderDataCla
     }
 
     /**
-     *
      * @param int $configuration
      */
     public function setConfiguration($configuration)
@@ -217,7 +210,6 @@ abstract class Element extends CompositeDataClass implements DisplayOrderDataCla
     }
 
     /**
-     *
      * @param int $parentId
      */
     public function setParentId($parentId)
@@ -226,7 +218,6 @@ abstract class Element extends CompositeDataClass implements DisplayOrderDataCla
     }
 
     /**
-     *
      * @param string $variable
      * @param string $value
      */
@@ -239,7 +230,6 @@ abstract class Element extends CompositeDataClass implements DisplayOrderDataCla
     }
 
     /**
-     *
      * @param int $sort
      */
     public function setSort($sort)
@@ -248,7 +238,6 @@ abstract class Element extends CompositeDataClass implements DisplayOrderDataCla
     }
 
     /**
-     *
      * @param string $title
      */
     public function setTitle($title)
@@ -257,7 +246,6 @@ abstract class Element extends CompositeDataClass implements DisplayOrderDataCla
     }
 
     /**
-     *
      * @param string $type
      */
     public function setType(string $type): CompositeDataClass
@@ -268,7 +256,6 @@ abstract class Element extends CompositeDataClass implements DisplayOrderDataCla
     }
 
     /**
-     *
      * @param int $userId
      */
     public function setUserId($userId)
@@ -277,7 +264,6 @@ abstract class Element extends CompositeDataClass implements DisplayOrderDataCla
     }
 
     /**
-     *
      * @param string $type
      *
      * @throws \Exception

@@ -1,15 +1,16 @@
 <?php
 namespace Chamilo\Core\Help\Storage\DataClass;
 
-use Chamilo\Core\Help\Storage\DataManager;
+use Chamilo\Core\Help\Manager;
 use Chamilo\Libraries\Storage\DataClass\DataClass;
 
 /**
- *
- * @package help.lib
+ * @package Chamilo\Core\Help\Storage\DataClass
  */
 class HelpItem extends DataClass
 {
+    public const CONTEXT = Manager::CONTEXT;
+
     public const PROPERTY_CONTEXT = 'context';
     public const PROPERTY_IDENTIFIER = 'identifier';
     public const PROPERTY_LANGUAGE = 'language';
@@ -23,7 +24,16 @@ class HelpItem extends DataClass
     public static function getDefaultPropertyNames(array $extendedPropertyNames = []): array
     {
         return parent::getDefaultPropertyNames(
-            array(self::PROPERTY_CONTEXT, self::PROPERTY_IDENTIFIER, self::PROPERTY_URL, self::PROPERTY_LANGUAGE));
+            [self::PROPERTY_CONTEXT, self::PROPERTY_IDENTIFIER, self::PROPERTY_URL, self::PROPERTY_LANGUAGE]
+        );
+    }
+
+    /**
+     * @return string
+     */
+    public static function getStorageUnitName(): string
+    {
+        return 'help_help_item';
     }
 
     /**
@@ -41,6 +51,11 @@ class HelpItem extends DataClass
         return $this->getDefaultProperty(self::PROPERTY_IDENTIFIER);
     }
 
+    public function get_language()
+    {
+        return $this->getDefaultProperty(self::PROPERTY_LANGUAGE);
+    }
+
     /**
      * Returns the url of this group.
      *
@@ -51,9 +66,9 @@ class HelpItem extends DataClass
         return $this->getDefaultProperty(self::PROPERTY_URL);
     }
 
-    public function get_language()
+    public function has_url()
     {
-        return $this->getDefaultProperty(self::PROPERTY_LANGUAGE);
+        return (bool) $this->get_url();
     }
 
     /**
@@ -71,6 +86,11 @@ class HelpItem extends DataClass
         $this->setDefaultProperty(self::PROPERTY_IDENTIFIER, $identifier);
     }
 
+    public function set_language($language)
+    {
+        $this->setDefaultProperty(self::PROPERTY_LANGUAGE, $language);
+    }
+
     /**
      * Sets the url of this group.
      *
@@ -79,23 +99,5 @@ class HelpItem extends DataClass
     public function set_url($url)
     {
         $this->setDefaultProperty(self::PROPERTY_URL, $url);
-    }
-
-    public function set_language($language)
-    {
-        $this->setDefaultProperty(self::PROPERTY_LANGUAGE, $language);
-    }
-
-    public function has_url()
-    {
-        return (bool) $this->get_url();
-    }
-
-    /**
-     * @return string
-     */
-    public static function getStorageUnitName(): string
-    {
-        return 'help_help_item';
     }
 }

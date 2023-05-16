@@ -5,21 +5,17 @@ use Chamilo\Core\Repository\Storage\DataClass\ComplexContentObjectItem;
 use Chamilo\Libraries\Utilities\StringUtilities;
 
 /**
- *
  * @package repository.lib.content_object.learning_path_item
  */
 class ComplexLearningPathItem extends ComplexContentObjectItem
 {
-    const PROPERTY_PREREQUISITES = 'prerequisites';
+    public const CONTEXT = LearningPathItem::CONTEXT;
+
+    public const PROPERTY_PREREQUISITES = 'prerequisites';
 
     public static function getAdditionalPropertyNames(): array
     {
-        return array(self::PROPERTY_PREREQUISITES);
-    }
-
-    public function get_prerequisites()
-    {
-        return $this->getAdditionalProperty(self::PROPERTY_PREREQUISITES);
+        return [self::PROPERTY_PREREQUISITES];
     }
 
     /**
@@ -28,6 +24,11 @@ class ComplexLearningPathItem extends ComplexContentObjectItem
     public static function getStorageUnitName(): string
     {
         return 'repository_complex_learning_path_item';
+    }
+
+    public function get_prerequisites()
+    {
+        return $this->getAdditionalProperty(self::PROPERTY_PREREQUISITES);
     }
 
     public function has_prerequisites()

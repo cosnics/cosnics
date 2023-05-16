@@ -1,6 +1,7 @@
 <?php
 namespace Chamilo\Core\Repository\Workspace\Storage\DataClass;
 
+use Chamilo\Core\Repository\Workspace\Manager;
 use Chamilo\Libraries\Storage\DataClass\DataClass;
 
 /**
@@ -9,6 +10,8 @@ use Chamilo\Libraries\Storage\DataClass\DataClass;
  */
 class WorkspaceUserDefault extends DataClass
 {
+    public const CONTEXT = Manager::CONTEXT;
+    
     public const PROPERTY_USER_ID = 'user_id';
     public const PROPERTY_WORKSPACE_ID = 'workspace_id';
 

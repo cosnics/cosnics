@@ -2,13 +2,10 @@
 namespace Chamilo\Configuration\Package;
 
 use Chamilo\Libraries\Architecture\ClassnameUtilities;
-use Chamilo\Libraries\Architecture\Traits\ClassContext;
 use Chamilo\Libraries\Translation\Translation;
 
 abstract class Action
 {
-    use ClassContext;
-
     // Types
     public const TYPE_CONFIRM = '2';
     public const TYPE_ERROR = '4';

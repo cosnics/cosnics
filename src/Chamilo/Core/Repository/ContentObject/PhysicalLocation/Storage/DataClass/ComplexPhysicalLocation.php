@@ -4,9 +4,9 @@ namespace Chamilo\Core\Repository\ContentObject\PhysicalLocation\Storage\DataCla
 use Chamilo\Core\Repository\Storage\DataClass\ComplexContentObjectItem;
 
 /**
- *
  * @package repository.lib.content_object.physical_location
  */
 class ComplexPhysicalLocation extends ComplexContentObjectItem
 {
+    public const CONTEXT = PhysicalLocation::CONTEXT;
 }

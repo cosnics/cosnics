@@ -11,6 +11,8 @@ use Exception;
  */
 abstract class RecurringContentObject extends ContentObject
 {
+    public const CONTEXT = 'Chamilo\Libraries\Calendar';
+
     public const FREQUENCY_BIWEEKLY = 4;
     public const FREQUENCY_DAILY = 1;
     public const FREQUENCY_MONTHLY = 5;

@@ -2,6 +2,7 @@
 namespace Chamilo\Application\Weblcms\Storage\DataClass;
 
 use Chamilo\Application\Weblcms\Course\Storage\DataClass\Course;
+use Chamilo\Application\Weblcms\Manager;
 use Chamilo\Libraries\Storage\DataClass\DataClass;
 
 /**
@@ -9,23 +10,40 @@ use Chamilo\Libraries\Storage\DataClass\DataClass;
  * user, a group...)
  *
  * @package application\weblcms\course;
- * @author Sven Vanpoucke - Hogeschool Gent
+ * @author  Sven Vanpoucke - Hogeschool Gent
  */
 class CourseEntityRelation extends DataClass
 {
-    const ENTITY_TYPE_GROUP = 2;
-    const ENTITY_TYPE_ROLE = 3;
-    const ENTITY_TYPE_USER = 1;
+    public const CONTEXT = Manager::CONTEXT;
 
-    const FOREIGN_PROPERTY_COURSE = 'course';
+    public const ENTITY_TYPE_GROUP = 2;
+    public const ENTITY_TYPE_ROLE = 3;
+    public const ENTITY_TYPE_USER = 1;
 
-    const PROPERTY_COURSE_ID = 'course_id';
-    const PROPERTY_ENTITY_ID = 'entity_id';
-    const PROPERTY_ENTITY_TYPE = 'entity_type';
-    const PROPERTY_STATUS = 'status';
+    public const FOREIGN_PROPERTY_COURSE = 'course';
 
-    const STATUS_STUDENT = 5;
-    const STATUS_TEACHER = 1;
+    public const PROPERTY_COURSE_ID = 'course_id';
+    public const PROPERTY_ENTITY_ID = 'entity_id';
+    public const PROPERTY_ENTITY_TYPE = 'entity_type';
+    public const PROPERTY_STATUS = 'status';
+
+    public const STATUS_STUDENT = 5;
+    public const STATUS_TEACHER = 1;
+
+    /**
+     * Returns the default properties of this dataclass
+     *
+     * @return String[] - The property names.
+     */
+    public static function getDefaultPropertyNames(array $extendedPropertyNames = []): array
+    {
+        $extendedPropertyNames[] = self::PROPERTY_COURSE_ID;
+        $extendedPropertyNames[] = self::PROPERTY_STATUS;
+        $extendedPropertyNames[] = self::PROPERTY_ENTITY_TYPE;
+        $extendedPropertyNames[] = self::PROPERTY_ENTITY_ID;
+
+        return parent::getDefaultPropertyNames($extendedPropertyNames);
+    }
 
     /**
      * **************************************************************************************************************
@@ -49,6 +67,11 @@ class CourseEntityRelation extends DataClass
         return $this->getDefaultProperty(self::PROPERTY_ENTITY_TYPE);
     }
 
+    public static function getStorageUnitName(): string
+    {
+        return 'weblcms_course_entity_relation';
+    }
+
     /**
      * Returns the course of this course user relation object
      *
@@ -58,6 +81,12 @@ class CourseEntityRelation extends DataClass
     {
         return $this->getForeignProperty(self::FOREIGN_PROPERTY_COURSE, Course::class);
     }
+
+    /**
+     * **************************************************************************************************************
+     * Foreign Properties Setters / Getters *
+     * **************************************************************************************************************
+     */
 
     /**
      * Returns the course id of this course user relation object
@@ -70,27 +99,6 @@ class CourseEntityRelation extends DataClass
     }
 
     /**
-     * Returns the default properties of this dataclass
-     *
-     * @return String[] - The property names.
-     */
-    public static function getDefaultPropertyNames(array $extendedPropertyNames = []): array
-    {
-        $extendedPropertyNames[] = self::PROPERTY_COURSE_ID;
-        $extendedPropertyNames[] = self::PROPERTY_STATUS;
-        $extendedPropertyNames[] = self::PROPERTY_ENTITY_TYPE;
-        $extendedPropertyNames[] = self::PROPERTY_ENTITY_ID;
-
-        return parent::getDefaultPropertyNames($extendedPropertyNames);
-    }
-
-    /**
-     * **************************************************************************************************************
-     * Foreign Properties Setters / Getters *
-     * **************************************************************************************************************
-     */
-
-    /**
      * Returns the status of this course user relation object
      *
      * @return int
@@ -98,11 +106,6 @@ class CourseEntityRelation extends DataClass
     public function get_status()
     {
         return $this->getDefaultProperty(self::PROPERTY_STATUS);
-    }
-
-    public static function getStorageUnitName(): string
-    {
-        return 'weblcms_course_entity_relation';
     }
 
     public function setEntityId($entityId)

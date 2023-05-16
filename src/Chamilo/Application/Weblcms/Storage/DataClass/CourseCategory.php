@@ -2,6 +2,7 @@
 namespace Chamilo\Application\Weblcms\Storage\DataClass;
 
 use Chamilo\Application\Weblcms\Course\Storage\DataClass\Course;
+use Chamilo\Application\Weblcms\Manager;
 use Chamilo\Application\Weblcms\Storage\DataManager;
 use Chamilo\Configuration\Category\Storage\DataClass\PlatformCategory;
 use Chamilo\Libraries\Storage\DataClass\Listeners\DisplayOrderDataClassListener;
@@ -15,19 +16,19 @@ use Chamilo\Libraries\Storage\Query\Variable\PropertyConditionVariable;
 use Chamilo\Libraries\Storage\Query\Variable\StaticConditionVariable;
 
 /**
- *
  * @package application.lib.weblcms.category_manager
  */
 
 /**
- *
  * @author Sven Vanpoucke
  */
 class CourseCategory extends PlatformCategory implements DisplayOrderDataClassListenerSupport
 {
-    const PROPERTY_CODE = 'code';
-    const PROPERTY_STATE = 'state';
-    const STATE_ARCHIVE = 0;
+    public const CONTEXT = Manager::CONTEXT;
+
+    public const PROPERTY_CODE = 'code';
+    public const PROPERTY_STATE = 'state';
+    public const STATE_ARCHIVE = 0;
 
     public function __construct($default_properties = [], $optional_properties = [])
     {
@@ -87,14 +88,13 @@ class CourseCategory extends PlatformCategory implements DisplayOrderDataClassLi
      */
     public static function getDefaultPropertyNames(array $extendedPropertyNames = []): array
     {
-        return parent::getDefaultPropertyNames(array(self::PROPERTY_CODE, self::PROPERTY_STATE));
+        return parent::getDefaultPropertyNames([self::PROPERTY_CODE, self::PROPERTY_STATE]);
     }
 
     /**
      * Returns the dependencies for this dataclass
      *
      * @return string[string]
-     *
      */
     protected function getDependencies(array $dependencies = []): array
     {
@@ -102,7 +102,19 @@ class CourseCategory extends PlatformCategory implements DisplayOrderDataClassLi
     }
 
     /**
-     *
+     * @return \Chamilo\Libraries\Storage\Query\Variable\PropertyConditionVariable[]
+     */
+    public function getDisplayOrderContextProperties(): array
+    {
+        return [new PropertyConditionVariable(self::class, self::PROPERTY_PARENT)];
+    }
+
+    public function getDisplayOrderProperty(): PropertyConditionVariable
+    {
+        return new PropertyConditionVariable(self::class, self::PROPERTY_DISPLAY_ORDER);
+    }
+
+    /**
      * @return string
      */
     public static function getStorageUnitName(): string
@@ -120,7 +132,7 @@ class CourseCategory extends PlatformCategory implements DisplayOrderDataClassLi
         if (!$recursive)
         {
             $parameters = new DataClassDistinctParameters(
-                $condition, new RetrieveProperties(array(new PropertyConditionVariable(self::class, self::PROPERTY_ID)))
+                $condition, new RetrieveProperties([new PropertyConditionVariable(self::class, self::PROPERTY_ID)])
             );
 
             return DataManager::distinct(self::class, $parameters);
@@ -143,19 +155,6 @@ class CourseCategory extends PlatformCategory implements DisplayOrderDataClassLi
     public function get_code()
     {
         return $this->getDefaultProperty(self::PROPERTY_CODE);
-    }
-
-    /**
-     * @return \Chamilo\Libraries\Storage\Query\Variable\PropertyConditionVariable[]
-     */
-    public function getDisplayOrderContextProperties(): array
-    {
-        return array(new PropertyConditionVariable(self::class, self::PROPERTY_PARENT));
-    }
-
-    public function getDisplayOrderProperty(): PropertyConditionVariable
-    {
-        return new PropertyConditionVariable(self::class, self::PROPERTY_DISPLAY_ORDER);
     }
 
     public function get_fully_qualified_name($include_self = true)

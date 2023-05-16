@@ -1,26 +1,29 @@
 <?php
 namespace Chamilo\Application\Weblcms\Tool\Implementation\CourseGroup\Storage\DataClass;
 
+use Chamilo\Application\Weblcms\Tool\Implementation\CourseGroup\Manager;
 use Chamilo\Core\User\Storage\DataClass\User;
 use Chamilo\Core\User\Storage\DataManager;
 use Chamilo\Libraries\Storage\DataClass\DataClass;
 
 /**
- *
  * @package application.lib.weblcms.course_group
  */
 class CourseGroupUserRelation extends DataClass
 {
-    const PROPERTY_COURSE_GROUP = 'course_group_id';
-    const PROPERTY_SUBSCRIPTION_TIME = 'subscription_time';
-    const PROPERTY_USER = 'user_id';
+    public const CONTEXT = Manager::CONTEXT;
+
+    public const PROPERTY_COURSE_GROUP = 'course_group_id';
+    public const PROPERTY_SUBSCRIPTION_TIME = 'subscription_time';
+    public const PROPERTY_USER = 'user_id';
 
     private $defaultProperties;
 
     /**
      * Creates a new course user relation object.
      *
-     * @param $id int The numeric ID of the course user relation object. May be omitted if creating a new object.
+     * @param $id                int The numeric ID of the course user relation object. May be omitted if creating a
+     *                           new object.
      * @param $defaultProperties array The default properties of the course user relation object. Associative array.
      */
     public function __construct($defaultProperties = [])
@@ -42,16 +45,6 @@ class CourseGroupUserRelation extends DataClass
     }
 
     /**
-     * Returns the course group of this course group user relation object
-     *
-     * @return int
-     */
-    public function get_course_group()
-    {
-        return $this->getDefaultProperty(self::PROPERTY_COURSE_GROUP);
-    }
-
-    /**
      * Gets the default properties of this course user relation object.
      *
      * @return array An associative array containing the properties.
@@ -59,13 +52,6 @@ class CourseGroupUserRelation extends DataClass
     public function getDefaultProperties(): array
     {
         return $this->defaultProperties;
-    }
-
-    public function setDefaultProperties(array $defaultProperties): CourseGroupUserRelation
-    {
-        $this->defaultProperties = $defaultProperties;
-
-        return $this;
     }
 
     /**
@@ -85,7 +71,25 @@ class CourseGroupUserRelation extends DataClass
      */
     public static function getDefaultPropertyNames(array $extendedPropertyNames = []): array
     {
-        return array(self::PROPERTY_COURSE_GROUP, self::PROPERTY_USER);
+        return [self::PROPERTY_COURSE_GROUP, self::PROPERTY_USER];
+    }
+
+    /**
+     * @return string
+     */
+    public static function getStorageUnitName(): string
+    {
+        return 'weblcms_course_group_user_relation';
+    }
+
+    /**
+     * Returns the course group of this course group user relation object
+     *
+     * @return int
+     */
+    public function get_course_group()
+    {
+        return $this->getDefaultProperty(self::PROPERTY_COURSE_GROUP);
     }
 
     /**
@@ -96,14 +100,6 @@ class CourseGroupUserRelation extends DataClass
     public function get_subscription_time()
     {
         return $this->getDefaultProperty(self::PROPERTY_SUBSCRIPTION_TIME);
-    }
-
-    /**
-     * @return string
-     */
-    public static function getStorageUnitName(): string
-    {
-        return 'weblcms_course_group_user_relation';
     }
 
     /**
@@ -129,6 +125,24 @@ class CourseGroupUserRelation extends DataClass
         );
     }
 
+    public function setDefaultProperties(array $defaultProperties): CourseGroupUserRelation
+    {
+        $this->defaultProperties = $defaultProperties;
+
+        return $this;
+    }
+
+    /**
+     * Sets a default property of this course user relation object by name.
+     *
+     * @param $name  string The name of the property.
+     * @param $value mixed The new value for the property.
+     */
+    public function setDefaultProperty($name, $value)
+    {
+        $this->defaultProperties[$name] = $value;
+    }
+
     /**
      * Sets the course group of this course group user relation object
      *
@@ -137,17 +151,6 @@ class CourseGroupUserRelation extends DataClass
     public function set_course_group($course_group)
     {
         $this->setDefaultProperty(self::PROPERTY_COURSE_GROUP, $course_group);
-    }
-
-    /**
-     * Sets a default property of this course user relation object by name.
-     *
-     * @param $name string The name of the property.
-     * @param $value mixed The new value for the property.
-     */
-    public function setDefaultProperty($name, $value)
-    {
-        $this->defaultProperties[$name] = $value;
     }
 
     /**

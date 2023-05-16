@@ -1,9 +1,7 @@
 <?php
 namespace Chamilo\Libraries\Storage\DataManager\Doctrine\Database;
 
-use Chamilo\Libraries\Architecture\ClassnameUtilities;
 use Chamilo\Libraries\Architecture\ErrorHandler\ExceptionLogger\ExceptionLoggerInterface;
-use Chamilo\Libraries\Architecture\Traits\ClassContext;
 use Chamilo\Libraries\Storage\DataClass\CompositeDataClass;
 use Chamilo\Libraries\Storage\DataManager\Doctrine\Service\ConditionPartTranslatorService;
 use Chamilo\Libraries\Storage\DataManager\Doctrine\Service\ParametersProcessor;
@@ -29,15 +27,13 @@ use Throwable;
  * Select(with use of conditions), Count(with use of conditions)
  *
  * @package Chamilo\Libraries\Storage\DataManager\Doctrine
- * @author Hans De Bisschop <hans.de.bisschop@ehb.be>
- * @author Sven Vanpoucke <sven.vanpoucke@hogent.be>
- * @author Magali Gillard <magali.gillard@ehb.be>
- * @author Eduard Vossen <eduard.vossen@ehb.be>
+ * @author  Hans De Bisschop <hans.de.bisschop@ehb.be>
+ * @author  Sven Vanpoucke <sven.vanpoucke@hogent.be>
+ * @author  Magali Gillard <magali.gillard@ehb.be>
+ * @author  Eduard Vossen <eduard.vossen@ehb.be>
  */
 class DataClassDatabase implements DataClassDatabaseInterface
 {
-    use ClassContext;
-
     protected ConditionPartTranslatorService $conditionPartTranslatorService;
 
     protected Connection $connection;
@@ -207,7 +203,6 @@ class DataClassDatabase implements DataClassDatabaseInterface
     }
 
     /**
-     *
      * @param mixed $text
      *
      * @return mixed
@@ -277,7 +272,6 @@ class DataClassDatabase implements DataClassDatabaseInterface
     }
 
     /**
-     *
      * @return \Chamilo\Libraries\Storage\DataManager\Doctrine\Service\RecordProcessor
      */
     public function getRecordProcessor(): RecordProcessor
@@ -338,7 +332,6 @@ class DataClassDatabase implements DataClassDatabaseInterface
     }
 
     /**
-     *
      * @param mixed $value
      * @param int|string|Type|null $type
      *
@@ -376,7 +369,7 @@ class DataClassDatabase implements DataClassDatabaseInterface
         }
         catch (Throwable $throwable)
         {
-            if(!$throwable instanceof DataClassNoResultException)
+            if (!$throwable instanceof DataClassNoResultException)
             {
                 $this->handleError($throwable);
             }
@@ -417,7 +410,6 @@ class DataClassDatabase implements DataClassDatabaseInterface
     }
 
     /**
-     *
      * @param callable $function
      *
      * @return mixed

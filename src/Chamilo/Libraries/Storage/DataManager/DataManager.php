@@ -1,7 +1,6 @@
 <?php
 namespace Chamilo\Libraries\Storage\DataManager;
 
-use Chamilo\Libraries\Architecture\Traits\ClassContext;
 use Chamilo\Libraries\DependencyInjection\DependencyInjectionContainerBuilder;
 use Chamilo\Libraries\Storage\DataClass\CompositeDataClass;
 use Chamilo\Libraries\Storage\DataClass\DataClass;
@@ -22,14 +21,13 @@ use Exception;
 /**
  * General and basic DataManager, providing basic functionality for all other DataManager objects
  *
- * @package Chamilo\Libraries\Storage\DataManager
- * @author Hans De Bisschop <hans.de.bisschop@ehb.be>
- * @author Magali Gillard <magali.gillard@ehb.be>
+ * @package    Chamilo\Libraries\Storage\DataManager
+ * @author     Hans De Bisschop <hans.de.bisschop@ehb.be>
+ * @author     Magali Gillard <magali.gillard@ehb.be>
  * @deprecated Replaced by the service-based DataClassRepository and StorageUnitRepository
  */
 class DataManager
 {
-    use ClassContext;
 
     /**
      * @param string[][] $attributes

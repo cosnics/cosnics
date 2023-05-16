@@ -1,10 +1,10 @@
 <?php
 namespace Chamilo\Application\Weblcms\Storage\DataClass;
 
+use Chamilo\Application\Weblcms\Manager;
 use Chamilo\Libraries\Storage\DataClass\DataClass;
 
 /**
- *
  * @package application.lib.weblcms.course
  */
 
@@ -18,7 +18,9 @@ use Chamilo\Libraries\Storage\DataClass\DataClass;
  */
 class CourseUserCategory extends DataClass
 {
-    const PROPERTY_TITLE = 'title';
+    public const CONTEXT = Manager::CONTEXT;
+
+    public const PROPERTY_TITLE = 'title';
 
     /**
      * Get the default properties of all user course user categories.
@@ -27,7 +29,7 @@ class CourseUserCategory extends DataClass
      */
     public static function getDefaultPropertyNames(array $extendedPropertyNames = []): array
     {
-        return parent::getDefaultPropertyNames(array(self::PROPERTY_TITLE));
+        return parent::getDefaultPropertyNames([self::PROPERTY_TITLE]);
     }
 
     /**

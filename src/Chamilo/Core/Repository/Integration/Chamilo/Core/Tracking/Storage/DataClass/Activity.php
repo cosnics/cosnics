@@ -9,26 +9,26 @@ use Chamilo\Libraries\Translation\Translation;
 
 class Activity extends Tracker
 {
+    public const ACTIVITY_ADD_ITEM = 6;
+    public const ACTIVITY_CREATED = 1;
+    public const ACTIVITY_DELETED = 2;
+    public const ACTIVITY_DELETE_ITEM = 7;
+    public const ACTIVITY_MOVE_ITEM = 8;
+    public const ACTIVITY_RECYCLE = 4;
+    public const ACTIVITY_RESTORE = 5;
+    public const ACTIVITY_UPDATED = 3;
+    public const ACTIVITY_UPDATE_ITEM = 9;
 
-    const ACTIVITY_ADD_ITEM = 6;
-    const ACTIVITY_CREATED = 1;
-    const ACTIVITY_DELETED = 2;
-    const ACTIVITY_DELETE_ITEM = 7;
-    const ACTIVITY_MOVE_ITEM = 8;
-    const ACTIVITY_RECYCLE = 4;
-    const ACTIVITY_RESTORE = 5;
-    const ACTIVITY_UPDATED = 3;
-    const ACTIVITY_UPDATE_ITEM = 9;
+    public const CONTEXT = 'Chamilo\Core\Repository\Integration\Chamilo\Core\Tracking';
 
-    const PROPERTY_CONTENT = 'content';
-    const PROPERTY_CONTENT_OBJECT_ID = 'content_object_id';
-    const PROPERTY_DATE = 'date';
-    const PROPERTY_TYPE = 'type';
-    const PROPERTY_USER_ID = 'user_id';
+    public const PROPERTY_CONTENT = 'content';
+    public const PROPERTY_CONTENT_OBJECT_ID = 'content_object_id';
+    public const PROPERTY_DATE = 'date';
+    public const PROPERTY_TYPE = 'type';
+    public const PROPERTY_USER_ID = 'user_id';
 
     /**
-     *
-     * @var \core\user\User
+     * @var User
      */
     private $user;
 
@@ -44,6 +44,37 @@ class Activity extends Tracker
         $this->validate_parameters($parameters);
 
         return $this->save();
+    }
+
+    /**
+     * Get the default properties of all activity
+     *
+     * @return array The property names.
+     */
+    public static function getDefaultPropertyNames(array $extendedPropertyNames = []): array
+    {
+        return parent::getDefaultPropertyNames(
+            [
+                self::PROPERTY_TYPE,
+                self::PROPERTY_USER_ID,
+                self::PROPERTY_DATE,
+                self::PROPERTY_CONTENT,
+                self::PROPERTY_CONTENT_OBJECT_ID
+            ]
+        );
+    }
+
+    /**
+     * @return string
+     */
+    public static function getStorageUnitName(): string
+    {
+        return 'tracking_repository_activity';
+    }
+
+    public function getType()
+    {
+        return $this->getDefaultProperty(self::PROPERTY_TYPE);
     }
 
     public function get_content()
@@ -62,32 +93,6 @@ class Activity extends Tracker
     }
 
     /**
-     * Get the default properties of all activity
-     *
-     * @return array The property names.
-     */
-    public static function getDefaultPropertyNames(array $extendedPropertyNames = []): array
-    {
-        return parent::getDefaultPropertyNames(
-            array(
-                self::PROPERTY_TYPE,
-                self::PROPERTY_USER_ID,
-                self::PROPERTY_DATE,
-                self::PROPERTY_CONTENT,
-                self::PROPERTY_CONTENT_OBJECT_ID
-            )
-        );
-    }
-
-    /**
-     * @return string
-     */
-    public static function getStorageUnitName(): string
-    {
-        return 'tracking_repository_activity';
-    }
-
-    /**
      * @deprecated Use Activity::getType() now
      */
     public function get_type()
@@ -95,13 +100,7 @@ class Activity extends Tracker
         return $this->getType();
     }
 
-    public function getType()
-    {
-        return $this->getDefaultProperty(self::PROPERTY_TYPE);
-    }
-
     /**
-     *
      * @return string
      */
     public function get_type_image()
@@ -110,7 +109,6 @@ class Activity extends Tracker
     }
 
     /**
-     *
      * @return string
      */
     public function get_type_string(): string
@@ -135,19 +133,24 @@ class Activity extends Tracker
         return $this->getDefaultProperty(self::PROPERTY_USER_ID);
     }
 
+    public function setType($type)
+    {
+        $this->setDefaultProperty(self::PROPERTY_TYPE, $type);
+    }
+
     public function set_content($content)
     {
         $this->setDefaultProperty(self::PROPERTY_CONTENT, $content);
     }
 
+    /*
+     * (non-PHPdoc) @see \tracking\Tracker::validate_parameters()
+     */
+
     public function set_content_object_id($content_object_id)
     {
         $this->setDefaultProperty(self::PROPERTY_CONTENT_OBJECT_ID, $content_object_id);
     }
-
-    /*
-     * (non-PHPdoc) @see \tracking\Tracker::validate_parameters()
-     */
 
     public function set_date($date)
     {
@@ -162,18 +165,12 @@ class Activity extends Tracker
         $this->setType($type);
     }
 
-    public function setType($type)
-    {
-        $this->setDefaultProperty(self::PROPERTY_TYPE, $type);
-    }
-
     public function set_user_id($user_id)
     {
         $this->setDefaultProperty(self::PROPERTY_USER_ID, $user_id);
     }
 
     /**
-     *
      * @param int $type_id
      *
      * @return string
@@ -220,7 +217,6 @@ class Activity extends Tracker
     }
 
     /**
-     *
      * @param int $type_id
      *
      * @return string

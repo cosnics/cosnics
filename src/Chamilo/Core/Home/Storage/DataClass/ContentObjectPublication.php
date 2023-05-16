@@ -1,6 +1,7 @@
 <?php
 namespace Chamilo\Core\Home\Storage\DataClass;
 
+use Chamilo\Core\Home\Manager;
 use Chamilo\Core\Repository\Publication\Storage\DataClass\Publication;
 
 /**
@@ -11,6 +12,8 @@ use Chamilo\Core\Repository\Publication\Storage\DataClass\Publication;
  */
 class ContentObjectPublication extends Publication
 {
+    public const CONTEXT = Manager::CONTEXT;
+
     public const PROPERTY_ELEMENT_ID = 'element_id';
 
     /**

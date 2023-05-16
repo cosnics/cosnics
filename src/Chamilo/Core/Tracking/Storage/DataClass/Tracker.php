@@ -1,6 +1,7 @@
 <?php
 namespace Chamilo\Core\Tracking\Storage\DataClass;
 
+use Chamilo\Core\Tracking\Manager;
 use Chamilo\Core\Tracking\Storage\DataManager;
 use Chamilo\Libraries\Storage\DataClass\DataClass;
 use Chamilo\Libraries\Storage\Parameters\DataClassCountParameters;
@@ -10,9 +11,9 @@ use Chamilo\Libraries\Storage\Query\Condition\Condition;
 
 abstract class Tracker extends DataClass
 {
+    public const CONTEXT = Manager::CONTEXT;
 
     /**
-     *
      * @var Event
      */
     private $event;
@@ -20,7 +21,7 @@ abstract class Tracker extends DataClass
     /**
      * Write the values of the properties from the tracker to the database
      *
-     * @return boolean
+     * @return bool
      */
     public function run(array $parameters = [])
     {
@@ -35,13 +36,12 @@ abstract class Tracker extends DataClass
     }
 
     /**
-     *
-     * @param $type string
+     * @param $type        string
      * @param $application string
-     * @param $condition Condition
-     * @param $offset int
+     * @param $condition   Condition
+     * @param $offset      int
      * @param $max_objects int
-     * @param $order_by \Chamilo\Libraries\Storage\Query\OrderBy
+     * @param $order_by    \Chamilo\Libraries\Storage\Query\OrderBy
      *
      * @return \Doctrine\Common\Collections\ArrayCollection The tracker data resultset
      */
@@ -55,7 +55,6 @@ abstract class Tracker extends DataClass
     }
 
     /**
-     *
      * @return Event
      */
     public function get_event()
@@ -64,20 +63,10 @@ abstract class Tracker extends DataClass
     }
 
     /**
-     *
-     * @param $event Event
-     */
-    public function set_event(Event $event)
-    {
-        $this->event = $event;
-    }
-
-    /**
-     *
-     * @param $type string
+     * @param $type        string
      * @param $application string
-     * @param $condition Condition
-     * @param $order_by \Chamilo\Libraries\Storage\Query\OrderBy
+     * @param $condition   Condition
+     * @param $order_by    \Chamilo\Libraries\Storage\Query\OrderBy
      *
      * @return Tracker The tracker
      */
@@ -85,20 +74,6 @@ abstract class Tracker extends DataClass
     {
         return DataManager::retrieve($class_name, new DataClassRetrieveParameters($condition, $order_by));
     }
-
-    /**
-     *
-     * @param $type string
-     * @param $application string
-     *
-     * @return Tracker The tracker object
-     */
-    // public static function factory($type, $context)
-    // {
-    // $class = $context . '\Storage\DataClass\\' .
-    // StringUtilities::getInstance()->createString($type)->upperCamelize();
-    // return new $class();
-    // }
 
     /**
      * Removes tracker items with a given condition
@@ -111,7 +86,27 @@ abstract class Tracker extends DataClass
     }
 
     /**
+     * @param $type        string
+     * @param $application string
      *
+     * @return Tracker The tracker object
+     */
+    // public static function factory($type, $context)
+    // {
+    // $class = $context . '\Storage\DataClass\\' .
+    // StringUtilities::getInstance()->createString($type)->upperCamelize();
+    // return new $class();
+    // }
+
+    /**
+     * @param $event Event
+     */
+    public function set_event(Event $event)
+    {
+        $this->event = $event;
+    }
+
+    /**
      * @deprecated Use run() instead
      */
     public function track(array $parameters = [])

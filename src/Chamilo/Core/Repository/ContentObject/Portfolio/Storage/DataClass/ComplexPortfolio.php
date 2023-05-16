@@ -6,15 +6,16 @@ use Chamilo\Core\Repository\Storage\DataClass\ComplexContentObjectItem;
 
 /**
  * Portfolio complex content object item
- * 
+ *
  * @package repository\content_object\portfolio$ComplexPortfolio
- * @author Hans De Bisschop <hans.de.bisschop@ehb.be>
+ * @author  Hans De Bisschop <hans.de.bisschop@ehb.be>
  */
 class ComplexPortfolio extends ComplexContentObjectItem
 {
+    public const CONTEXT = Portfolio::CONTEXT;
 
     public function get_allowed_types(): array
     {
-        return array(Portfolio::class, PortfolioItem::class);
+        return [Portfolio::class, PortfolioItem::class];
     }
 }

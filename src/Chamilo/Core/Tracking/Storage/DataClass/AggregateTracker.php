@@ -1,6 +1,7 @@
 <?php
 namespace Chamilo\Core\Tracking\Storage\DataClass;
 
+use Chamilo\Core\Tracking\Manager;
 use Chamilo\Libraries\Storage\DataManager\DataManager;
 use Chamilo\Libraries\Storage\Parameters\DataClassRetrievesParameters;
 use Chamilo\Libraries\Storage\Query\Condition\AndCondition;
@@ -9,16 +10,16 @@ use Chamilo\Libraries\Storage\Query\Variable\PropertyConditionVariable;
 use Chamilo\Libraries\Storage\Query\Variable\StaticConditionVariable;
 
 /**
- *
- * @author Hans De Bisschop
+ * @package Chamilo\Core\Tracking\Storage\DataClass
+ * @author  Hans De Bisschop <hans.de.bisschop@ehb.be>
  */
 abstract class AggregateTracker extends Tracker
 {
-    const PROPERTY_NAME = 'name';
+    public const CONTEXT = Manager::CONTEXT;
 
-    const PROPERTY_TYPE = 'type';
-
-    const PROPERTY_VALUE = 'value';
+    public const PROPERTY_NAME = 'name';
+    public const PROPERTY_TYPE = 'type';
+    public const PROPERTY_VALUE = 'value';
 
     public function run(array $parameters = [])
     {
@@ -63,8 +64,13 @@ abstract class AggregateTracker extends Tracker
     public static function getDefaultPropertyNames(array $extendedPropertyNames = []): array
     {
         return parent::getDefaultPropertyNames(
-            array(self::PROPERTY_TYPE, self::PROPERTY_NAME, self::PROPERTY_VALUE)
+            [self::PROPERTY_TYPE, self::PROPERTY_NAME, self::PROPERTY_VALUE]
         );
+    }
+
+    public function getType()
+    {
+        return $this->getDefaultProperty(self::PROPERTY_TYPE);
     }
 
     public function get_name()
@@ -78,11 +84,6 @@ abstract class AggregateTracker extends Tracker
     public function get_type()
     {
         return $this->getType();
-    }
-
-    public function getType()
-    {
-        return $this->getDefaultProperty(self::PROPERTY_TYPE);
     }
 
     public function get_value()

@@ -1,24 +1,27 @@
 <?php
 namespace Chamilo\Application\Weblcms\Storage\DataClass;
 
+use Chamilo\Application\Weblcms\Manager;
 use Chamilo\Libraries\Storage\DataClass\DataClass;
 
 /**
  * Abstract class that describes a value for a course setting
  *
  * @package application\weblcms;
- * @author Sven Vanpoucke - Hogeschool Gent
+ * @author  Sven Vanpoucke - Hogeschool Gent
  */
 abstract class CourseSettingValue extends DataClass
 {
-    const PROPERTY_VALUE = 'value';
+    public const CONTEXT = Manager::CONTEXT;
+
+    public const PROPERTY_VALUE = 'value';
 
     /**
      * Returns the default properties of this dataclass
      *
      * @return String[] - The property names.
      */
-    static function getDefaultPropertyNames(array $extendedPropertyNames = []): array
+    public static function getDefaultPropertyNames(array $extendedPropertyNames = []): array
     {
         $extendedPropertyNames[] = self::PROPERTY_VALUE;
 
@@ -36,7 +39,7 @@ abstract class CourseSettingValue extends DataClass
      *
      * @return String
      */
-    function get_value()
+    public function get_value()
     {
         return $this->getDefaultProperty(self::PROPERTY_VALUE);
     }
@@ -46,7 +49,7 @@ abstract class CourseSettingValue extends DataClass
      *
      * @param $value String
      */
-    function set_value($value)
+    public function set_value($value)
     {
         $this->setDefaultProperty(self::PROPERTY_VALUE, $value);
     }

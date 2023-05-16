@@ -2,19 +2,19 @@
 namespace Chamilo\Core\Repository\ContentObject\LearningPath\Display\Preview;
 
 use Chamilo\Core\Repository\ContentObject\LearningPath\Display\Attempt\TreeNodeAttempt;
+use Chamilo\Core\Repository\ContentObject\LearningPath\Display\Manager;
 
 /**
- *
  * @package core\repository\content_object\learning_path\display
- * @author Hans De Bisschop <hans.de.bisschop@ehb.be>
- * @author Magali Gillard <magali.gillard@ehb.be>
- * @author Eduard Vossen <eduard.vossen@ehb.be>
+ * @author  Hans De Bisschop <hans.de.bisschop@ehb.be>
+ * @author  Magali Gillard <magali.gillard@ehb.be>
+ * @author  Eduard Vossen <eduard.vossen@ehb.be>
  */
 class DummyTreeNodeAttempt extends TreeNodeAttempt
 {
+    public const CONTEXT = Manager::CONTEXT;
 
     /**
-     *
      * @see \libraries\storage\DataClass::create()
      */
     public function create(): bool
@@ -23,7 +23,6 @@ class DummyTreeNodeAttempt extends TreeNodeAttempt
     }
 
     /**
-     *
      * @see \libraries\storage\DataClass::delete()
      */
     public function delete(): bool
@@ -40,7 +39,6 @@ class DummyTreeNodeAttempt extends TreeNodeAttempt
     }
 
     /**
-     *
      * @see \libraries\storage\DataClass::update()
      */
     public function update(): bool

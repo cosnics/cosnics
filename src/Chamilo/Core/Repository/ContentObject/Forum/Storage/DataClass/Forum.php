@@ -18,7 +18,6 @@ use Chamilo\Libraries\Storage\Query\Variable\StaticConditionVariable;
 class Forum extends ContentObject implements ComplexContentObjectSupport
 {
     public const CONTEXT = 'Chamilo\Core\Repository\ContentObject\Forum';
-    public const NAME_SPACE = __NAMESPACE__;
 
     public const PROPERTY_LAST_POST = 'last_post_id';
     public const PROPERTY_LAST_TOPIC_CHANGED_CLOI = 'last_topic_changed_cloi';

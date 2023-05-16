@@ -5,14 +5,14 @@ use Chamilo\Core\Repository\ContentObject\Section\Storage\DataClass\Section;
 use Chamilo\Core\Repository\Storage\DataClass\ComplexContentObjectItem;
 
 /**
- *
  * @package repository.lib.content_object.learning_path
  */
 class ComplexLearningPath extends ComplexContentObjectItem
 {
+    public const CONTEXT = LearningPath::CONTEXT;
 
     public function get_allowed_types(): array
     {
-        return array(Section::class);
+        return [Section::class];
     }
 }

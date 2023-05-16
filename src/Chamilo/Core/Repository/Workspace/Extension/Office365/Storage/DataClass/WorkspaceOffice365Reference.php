@@ -1,20 +1,21 @@
 <?php
-
 namespace Chamilo\Core\Repository\Workspace\Extension\Office365\Storage\DataClass;
 
+use Chamilo\Core\Repository\Workspace\Extension\Office365\Manager;
 use Chamilo\Libraries\Storage\DataClass\DataClass;
 
 /**
  * @package Chamilo\Core\Repository\Workspace\Extension\Office365\Storage\DataClass
- *
- * @author Sven Vanpoucke - Hogeschool Gent
+ * @author  Sven Vanpoucke - Hogeschool Gent
  */
 class WorkspaceOffice365Reference extends DataClass
 {
-    const PROPERTY_WORKSPACE_ID = 'workspace_id';
-    const PROPERTY_OFFICE365_GROUP_ID = 'office365_group_id';
-    const PROPERTY_OFFICE365_PLAN_ID = 'office365_plan_id';
-    const PROPERTY_LINKED = 'linked';
+    public const CONTEXT = Manager::CONTEXT;
+
+    public const PROPERTY_LINKED = 'linked';
+    public const PROPERTY_OFFICE365_GROUP_ID = 'office365_group_id';
+    public const PROPERTY_OFFICE365_PLAN_ID = 'office365_plan_id';
+    public const PROPERTY_WORKSPACE_ID = 'workspace_id';
 
     /**
      * @param array $extendedPropertyNames
@@ -32,43 +33,11 @@ class WorkspaceOffice365Reference extends DataClass
     }
 
     /**
-     * @return int
-     */
-    public function getWorkspaceId()
-    {
-        return $this->getDefaultProperty(self::PROPERTY_WORKSPACE_ID);
-    }
-
-    /**
-     * @param int $workspaceId
-     *
-     * @return WorkspaceOffice365Reference
-     */
-    public function setWorkspaceId($workspaceId)
-    {
-        $this->setDefaultProperty(self::PROPERTY_WORKSPACE_ID, $workspaceId);
-
-        return $this;
-    }
-
-    /**
      * @return string
      */
     public function getOffice365GroupId()
     {
         return $this->getDefaultProperty(self::PROPERTY_OFFICE365_GROUP_ID);
-    }
-
-    /**
-     * @param string $office365GroupId
-     *
-     * @return WorkspaceOffice365Reference
-     */
-    public function setOffice365GroupId($office365GroupId)
-    {
-        $this->setDefaultProperty(self::PROPERTY_OFFICE365_GROUP_ID, $office365GroupId);
-
-        return $this;
     }
 
     /**
@@ -80,15 +49,19 @@ class WorkspaceOffice365Reference extends DataClass
     }
 
     /**
-     * @param string $office365PlanId
-     *
-     * @return WorkspaceOffice365Reference
+     * @return string
      */
-    public function setOffice365PlanId($office365PlanId)
+    public static function getStorageUnitName(): string
     {
-        $this->setDefaultProperty(self::PROPERTY_OFFICE365_PLAN_ID, $office365PlanId);
+        return 'repository_workspace_office365_reference';
+    }
 
-        return $this;
+    /**
+     * @return int
+     */
+    public function getWorkspaceId()
+    {
+        return $this->getDefaultProperty(self::PROPERTY_WORKSPACE_ID);
     }
 
     /**
@@ -118,10 +91,38 @@ class WorkspaceOffice365Reference extends DataClass
     }
 
     /**
-     * @return string
+     * @param string $office365GroupId
+     *
+     * @return WorkspaceOffice365Reference
      */
-    public static function getStorageUnitName(): string
+    public function setOffice365GroupId($office365GroupId)
     {
-        return 'repository_workspace_office365_reference';
+        $this->setDefaultProperty(self::PROPERTY_OFFICE365_GROUP_ID, $office365GroupId);
+
+        return $this;
+    }
+
+    /**
+     * @param string $office365PlanId
+     *
+     * @return WorkspaceOffice365Reference
+     */
+    public function setOffice365PlanId($office365PlanId)
+    {
+        $this->setDefaultProperty(self::PROPERTY_OFFICE365_PLAN_ID, $office365PlanId);
+
+        return $this;
+    }
+
+    /**
+     * @param int $workspaceId
+     *
+     * @return WorkspaceOffice365Reference
+     */
+    public function setWorkspaceId($workspaceId)
+    {
+        $this->setDefaultProperty(self::PROPERTY_WORKSPACE_ID, $workspaceId);
+
+        return $this;
     }
 }

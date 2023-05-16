@@ -1,53 +1,42 @@
 <?php
 namespace Chamilo\Core\Repository\UserView\Storage\DataClass;
 
+use Chamilo\Core\Repository\UserView\Manager;
 use Chamilo\Libraries\Storage\DataClass\DataClass;
 
 /**
- *
  * @package core\repository\user_view
- * @author Sven Vanpoucke <sven.vanpoucke@ehb.be>
- * @author Hans De Bisschop <hans.de.bisschop@ehb.be>
- * @author Magali Gillard <magali.gillard@ehb.be>
- * @author Eduard Vossen <eduard.vossen@ehb.be>
+ * @author  Sven Vanpoucke <sven.vanpoucke@ehb.be>
+ * @author  Hans De Bisschop <hans.de.bisschop@ehb.be>
+ * @author  Magali Gillard <magali.gillard@ehb.be>
+ * @author  Eduard Vossen <eduard.vossen@ehb.be>
  */
 class UserViewRelContentObject extends DataClass
 {
-    
-    // Properties
-    const PROPERTY_USER_VIEW_ID = 'user_view_id';
-    const PROPERTY_CONTENT_OBJECT_TEMPLATE_ID = 'content_object_template_id';
+    public const CONTEXT = Manager::CONTEXT;
+
+    public const PROPERTY_CONTENT_OBJECT_TEMPLATE_ID = 'content_object_template_id';
+    public const PROPERTY_USER_VIEW_ID = 'user_view_id';
 
     /**
-     *
      * @return string[]
      */
     public static function getDefaultPropertyNames(array $extendedPropertyNames = []): array
     {
         return parent::getDefaultPropertyNames(
-            array(self::PROPERTY_USER_VIEW_ID, self::PROPERTY_CONTENT_OBJECT_TEMPLATE_ID));
+            [self::PROPERTY_USER_VIEW_ID, self::PROPERTY_CONTENT_OBJECT_TEMPLATE_ID]
+        );
     }
 
     /**
-     *
-     * @return int
+     * @return string
      */
-    public function get_user_view_id()
+    public static function getStorageUnitName(): string
     {
-        return $this->getDefaultProperty(self::PROPERTY_USER_VIEW_ID);
+        return 'repository_user_view_rel_content_object';
     }
 
     /**
-     *
-     * @param int $user_view_id
-     */
-    public function set_user_view_id($user_view_id)
-    {
-        $this->setDefaultProperty(self::PROPERTY_USER_VIEW_ID, $user_view_id);
-    }
-
-    /**
-     *
      * @return string
      */
     public function get_content_object_template_id()
@@ -56,19 +45,27 @@ class UserViewRelContentObject extends DataClass
     }
 
     /**
-     *
+     * @return int
+     */
+    public function get_user_view_id()
+    {
+        return $this->getDefaultProperty(self::PROPERTY_USER_VIEW_ID);
+    }
+
+    /**
      * @param string $content_object_template_id
      */
     public function set_content_object_template_id($content_object_template_id)
     {
         $this->setDefaultProperty(self::PROPERTY_CONTENT_OBJECT_TEMPLATE_ID, $content_object_template_id);
     }
+
     /**
-     * @return string
+     * @param int $user_view_id
      */
-    public static function getStorageUnitName(): string
+    public function set_user_view_id($user_view_id)
     {
-        return 'repository_user_view_rel_content_object';
+        $this->setDefaultProperty(self::PROPERTY_USER_VIEW_ID, $user_view_id);
     }
 
 }

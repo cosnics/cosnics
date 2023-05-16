@@ -1,31 +1,55 @@
 <?php
 namespace Chamilo\Core\Admin\Announcement\Storage\DataClass;
 
-use Chamilo\Core\Admin\Announcement\Storage\DataManager;
+use Chamilo\Core\Admin\Announcement\Manager;
 use Chamilo\Core\Repository\Storage\DataClass\ContentObject;
 use Chamilo\Libraries\Storage\DataClass\DataClass;
 
 /**
- *
  * @package Chamilo\Core\Admin\Announcement\Storage\DataClass
- * @author Hans De Bisschop <hans.de.bisschop@ehb.be>
+ * @author  Hans De Bisschop <hans.de.bisschop@ehb.be>
  */
 class Publication extends DataClass
 {
-    const PROPERTY_CONTENT_OBJECT_ID = 'content_object_id';
-    const PROPERTY_EMAIL_SENT = 'email_sent';
-    const PROPERTY_FROM_DATE = 'from_date';
-    const PROPERTY_HIDDEN = 'hidden';
-    const PROPERTY_MODIFICATION_DATE = 'modified';
-    const PROPERTY_PUBLICATION_DATE = 'published';
-    const PROPERTY_PUBLISHER_ID = 'publisher_id';
-    const PROPERTY_TO_DATE = 'to_date';
+    public const CONTEXT = Manager::CONTEXT;
+
+    public const PROPERTY_CONTENT_OBJECT_ID = 'content_object_id';
+    public const PROPERTY_EMAIL_SENT = 'email_sent';
+    public const PROPERTY_FROM_DATE = 'from_date';
+    public const PROPERTY_HIDDEN = 'hidden';
+    public const PROPERTY_MODIFICATION_DATE = 'modified';
+    public const PROPERTY_PUBLICATION_DATE = 'published';
+    public const PROPERTY_PUBLISHER_ID = 'publisher_id';
+    public const PROPERTY_TO_DATE = 'to_date';
 
     /**
-     *
      * @var \Chamilo\Core\Repository\Storage\DataClass\ContentObject
      */
     private $content_object;
+
+    public static function getDefaultPropertyNames(array $extendedPropertyNames = []): array
+    {
+        return parent::getDefaultPropertyNames(
+            [
+                self::PROPERTY_CONTENT_OBJECT_ID,
+                self::PROPERTY_FROM_DATE,
+                self::PROPERTY_TO_DATE,
+                self::PROPERTY_HIDDEN,
+                self::PROPERTY_PUBLISHER_ID,
+                self::PROPERTY_PUBLICATION_DATE,
+                self::PROPERTY_MODIFICATION_DATE,
+                self::PROPERTY_EMAIL_SENT
+            ]
+        );
+    }
+
+    /**
+     * @return string
+     */
+    public static function getStorageUnitName(): string
+    {
+        return 'admin_announcement_publication';
+    }
 
     /**
      * @return \Chamilo\Core\Repository\Storage\DataClass\ContentObject
@@ -43,27 +67,11 @@ class Publication extends DataClass
     }
 
     /**
-     * @return integer
+     * @return int
      */
     public function get_content_object_id()
     {
         return $this->getDefaultProperty(self::PROPERTY_CONTENT_OBJECT_ID);
-    }
-
-    public static function getDefaultPropertyNames(array $extendedPropertyNames = []): array
-    {
-        return parent::getDefaultPropertyNames(
-            array(
-                self::PROPERTY_CONTENT_OBJECT_ID,
-                self::PROPERTY_FROM_DATE,
-                self::PROPERTY_TO_DATE,
-                self::PROPERTY_HIDDEN,
-                self::PROPERTY_PUBLISHER_ID,
-                self::PROPERTY_PUBLICATION_DATE,
-                self::PROPERTY_MODIFICATION_DATE,
-                self::PROPERTY_EMAIL_SENT
-            )
-        );
     }
 
     public function get_email_sent()
@@ -101,21 +109,13 @@ class Publication extends DataClass
         return $this->getDefaultProperty(self::PROPERTY_PUBLISHER_ID);
     }
 
-    /**
-     * @return string
-     */
-    public static function getStorageUnitName(): string
-    {
-        return 'admin_announcement_publication';
-    }
-
     public function get_to_date()
     {
         return $this->getDefaultProperty(self::PROPERTY_TO_DATE);
     }
 
     /**
-     * @return boolean
+     * @return bool
      */
     public function is_forever()
     {

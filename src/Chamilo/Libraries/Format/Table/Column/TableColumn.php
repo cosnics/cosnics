@@ -1,8 +1,6 @@
 <?php
 namespace Chamilo\Libraries\Format\Table\Column;
 
-use Chamilo\Libraries\Architecture\Traits\ClassContext;
-
 /**
  * @package Chamilo\Libraries\Format\Table\Column
  * @author  Sven Vanpoucke - Hogeschool Gent
@@ -10,8 +8,6 @@ use Chamilo\Libraries\Architecture\Traits\ClassContext;
  */
 abstract class TableColumn
 {
-    use ClassContext;
-
     public const CSS_CLASSES_COLUMN_CONTENT = 'content';
     public const CSS_CLASSES_COLUMN_HEADER = 'header';
 

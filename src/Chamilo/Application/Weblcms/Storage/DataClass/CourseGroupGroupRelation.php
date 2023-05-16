@@ -1,6 +1,7 @@
 <?php
 namespace Chamilo\Application\Weblcms\Storage\DataClass;
 
+use Chamilo\Application\Weblcms\Manager;
 use Chamilo\Application\Weblcms\Storage\DataManager;
 use Chamilo\Application\Weblcms\Tool\Implementation\CourseGroup\Storage\DataClass\CourseGroup;
 use Chamilo\Libraries\Storage\DataClass\DataClass;
@@ -17,27 +18,30 @@ use Chamilo\Libraries\Storage\Query\Variable\StaticConditionVariable;
  */
 class CourseGroupGroupRelation extends DataClass
 {
-    const PROPERTY_COURSE_CODE = 'course_id';
-    const PROPERTY_DOCUMENT_PUBLICATION_CATEGORY_ID = 'document_publication_category_id';
-    const PROPERTY_FORUM_PUBLICATION_CATEGORY_ID = 'forum_publication_category_id';
-    const PROPERTY_MAX_NUMBER_OF_COURSE_GROUP_PER_MEMBER = 'max_number_of_course_group_per_member';
-    const PROPERTY_NAME = 'group_name';
+    public const CONTEXT = Manager::CONTEXT;
+
+    public const PROPERTY_COURSE_CODE = 'course_id';
+    public const PROPERTY_DOCUMENT_PUBLICATION_CATEGORY_ID = 'document_publication_category_id';
+    public const PROPERTY_FORUM_PUBLICATION_CATEGORY_ID = 'forum_publication_category_id';
+    public const PROPERTY_MAX_NUMBER_OF_COURSE_GROUP_PER_MEMBER = 'max_number_of_course_group_per_member';
+    public const PROPERTY_NAME = 'group_name';
 
     private $defaultProperties;
 
     /**
      * Creates a new course_group group relation object.
      *
-     * @param $id int The numeric ID of the course_group group relation object. May be omitted if creating a new object.
+     * @param $id                int The numeric ID of the course_group group relation object. May be omitted if
+     *                           creating a new object.
      * @param $defaultProperties array The default properties of the course_goup group relation object. Associative
-     *        array.
+     *                           array.
      */
-    function __construct($defaultProperties = [])
+    public function __construct($defaultProperties = [])
     {
         $this->defaultProperties = $defaultProperties;
     }
 
-    function category_exists($tool)
+    public function category_exists($tool)
     {
         $conditions[] = new EqualityCondition(
             new PropertyConditionVariable(
@@ -67,7 +71,7 @@ class CourseGroupGroupRelation extends DataClass
         return false;
     }
 
-    function check_before_saving()
+    public function check_before_saving()
     {
         $conditions[] = new EqualityCondition(
             new PropertyConditionVariable(CourseGroup::class, CourseGroup::PROPERTY_GROUP_ID),
@@ -92,7 +96,7 @@ class CourseGroupGroupRelation extends DataClass
         }
     }
 
-    function count_course_groups()
+    public function count_course_groups()
     {
         $conditions[] = new EqualityCondition(
             new PropertyConditionVariable(CourseGroup::class, CourseGroup::PROPERTY_GROUP_ID),
@@ -110,9 +114,9 @@ class CourseGroupGroupRelation extends DataClass
     /**
      * Creates the course_group group relation object in persistent storage
      *
-     * @return boolean
+     * @return bool
      */
-    function create(): bool
+    public function create(): bool
     {
 
         // if ($wdm->retrieve_course_group_group_relation_by_name($this->get_name()) == null)
@@ -131,17 +135,17 @@ class CourseGroupGroupRelation extends DataClass
          */
     }
 
-    function create_course_group_category($tool)
+    public function create_course_group_category($tool)
     {
         if (!$this->category_exists($tool))
         {
             $content_object_publication_category = new ContentObjectPublicationCategory();
-            $content_object_publication_category->set_parent("0");
+            $content_object_publication_category->set_parent('0');
             $content_object_publication_category->set_tool($tool);
             $content_object_publication_category->set_course($this->get_course_code());
             $content_object_publication_category->set_name($this->get_name());
             $content_object_publication_category->set_allow_change(0);
-            $content_object_publication_category->set_display_order("1");
+            $content_object_publication_category->set_display_order('1');
             $content_object_publication_category->create();
             switch ($tool)
             {
@@ -161,9 +165,9 @@ class CourseGroupGroupRelation extends DataClass
     /**
      * Deletes the course group relation object from persistent storage
      *
-     * @return boolean
+     * @return bool
      */
-    function delete(): bool
+    public function delete(): bool
     {
         $success = DataManager::delete_course_group_group_relation($this);
         if (!$success)
@@ -179,12 +183,12 @@ class CourseGroupGroupRelation extends DataClass
      *
      * @return string
      */
-    function get_course_code()
+    public function get_course_code()
     {
         return $this->getDefaultProperty(self::PROPERTY_COURSE_CODE);
     }
 
-    function get_course_groups_by_group_id()
+    public function get_course_groups_by_group_id()
     {
         $conditions[] = new EqualityCondition(
             new PropertyConditionVariable(CourseGroup::class, CourseGroup::PROPERTY_GROUP_ID),
@@ -207,12 +211,12 @@ class CourseGroupGroupRelation extends DataClass
      *
      * @return array An associative array containing the properties.
      */
-    function getDefaultProperties(): array
+    public function getDefaultProperties(): array
     {
         return $this->defaultProperties;
     }
 
-    function setDefaultProperties(array $defaultProperties): CourseGroupGroupRelation
+    public function setDefaultProperties(array $defaultProperties): CourseGroupGroupRelation
     {
         $this->defaultProperties = $defaultProperties;
 
@@ -224,7 +228,7 @@ class CourseGroupGroupRelation extends DataClass
      *
      * @param $name string The name of the property.
      */
-    function getDefaultProperty($name)
+    public function getDefaultProperty($name)
     {
         return $this->defaultProperties[$name];
     }
@@ -236,14 +240,14 @@ class CourseGroupGroupRelation extends DataClass
      */
     public static function getDefaultPropertyNames(array $extendedPropertyNames = []): array
     {
-        return array(
+        return [
             self::PROPERTY_COURSE_CODE,
             self::PROPERTY_ID,
             self::PROPERTY_MAX_NUMBER_OF_COURSE_GROUP_PER_MEMBER,
             self::PROPERTY_NAME,
             self::PROPERTY_DOCUMENT_PUBLICATION_CATEGORY_ID,
             self::PROPERTY_FORUM_PUBLICATION_CATEGORY_ID
-        );
+        ];
     }
 
     /**
@@ -251,7 +255,7 @@ class CourseGroupGroupRelation extends DataClass
      *
      * @return int
      */
-    function get_document_publication_category_id()
+    public function get_document_publication_category_id()
     {
         return $this->getDefaultProperty(self::PROPERTY_DOCUMENT_PUBLICATION_CATEGORY_ID);
     }
@@ -261,7 +265,7 @@ class CourseGroupGroupRelation extends DataClass
      *
      * @return int
      */
-    function get_forum_publication_category_id()
+    public function get_forum_publication_category_id()
     {
         return $this->getDefaultProperty(self::PROPERTY_FORUM_PUBLICATION_CATEGORY_ID);
     }
@@ -271,7 +275,7 @@ class CourseGroupGroupRelation extends DataClass
      *
      * @return int
      */
-    function get_id(): ?string
+    public function get_id(): ?string
     {
         return $this->getDefaultProperty(self::PROPERTY_ID);
     }
@@ -281,7 +285,7 @@ class CourseGroupGroupRelation extends DataClass
      *
      * @return int
      */
-    function get_max_number_of_course_group_per_member()
+    public function get_max_number_of_course_group_per_member()
     {
         return $this->getDefaultProperty(self::PROPERTY_MAX_NUMBER_OF_COURSE_GROUP_PER_MEMBER);
     }
@@ -291,12 +295,12 @@ class CourseGroupGroupRelation extends DataClass
      *
      * @return string
      */
-    function get_name()
+    public function get_name()
     {
         return $this->getDefaultProperty(self::PROPERTY_NAME);
     }
 
-    function get_parent_id()
+    public function get_parent_id()
     {
         return $this->get_course_code();
     }
@@ -314,7 +318,7 @@ class CourseGroupGroupRelation extends DataClass
         return DataManager::retrieve_course_group_group_relation($id);
     }
 
-    function set_course_code($code)
+    public function set_course_code($code)
     {
         $this->setDefaultProperty(self::PROPERTY_COURSE_CODE, $code);
     }
@@ -322,35 +326,35 @@ class CourseGroupGroupRelation extends DataClass
     /**
      * Sets a default property of this course_group group relation object by name.
      *
-     * @param $name string The name of the property.
+     * @param $name  string The name of the property.
      * @param $value mixed The new value for the property.
      */
-    function setDefaultProperty($name, $value)
+    public function setDefaultProperty($name, $value)
     {
         $this->defaultProperties[$name] = $value;
     }
 
-    function set_document_publication_category_id($id)
+    public function set_document_publication_category_id($id)
     {
         return $this->setDefaultProperty(self::PROPERTY_DOCUMENT_PUBLICATION_CATEGORY_ID, $id);
     }
 
-    function set_forum_publication_category_id($id)
+    public function set_forum_publication_category_id($id)
     {
         return $this->setDefaultProperty(self::PROPERTY_FORUM_PUBLICATION_CATEGORY_ID, $id);
     }
 
-    function set_id(int $id): CourseGroupGroupRelation
+    public function set_id(int $id): CourseGroupGroupRelation
     {
         return $this->setDefaultProperty(self::PROPERTY_ID, $id);
     }
 
-    function set_max_number_of_course_group_per_member($number)
+    public function set_max_number_of_course_group_per_member($number)
     {
         return $this->setDefaultProperty(self::PROPERTY_MAX_NUMBER_OF_COURSE_GROUP_PER_MEMBER, $number);
     }
 
-    function set_name($name)
+    public function set_name($name)
     {
         return $this->setDefaultProperty(self::PROPERTY_NAME, $name);
     }
@@ -361,9 +365,9 @@ class CourseGroupGroupRelation extends DataClass
      *
      * @param $user <type>
      *
-     * @return boolean $result
+     * @return bool $result
      */
-    function subcription_in_any_group_allowed($user)
+    public function subcription_in_any_group_allowed($user)
     {
         // get all groups that belong to this relation
         $group_set = DataManager::retrieve_course_groups_by_course_group_group_relation_id(
@@ -398,9 +402,9 @@ class CourseGroupGroupRelation extends DataClass
     /**
      * Updates the course_group group relation object in persistent storage
      *
-     * @return boolean
+     * @return bool
      */
-    function update(): bool
+    public function update(): bool
     {
         if ($this->check_before_saving())
         {

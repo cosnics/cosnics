@@ -1,9 +1,13 @@
 <?php
 namespace Chamilo\Application\Weblcms\Storage\DataClass;
 
+use Chamilo\Application\Weblcms\Manager;
+
 class Feedback extends \Chamilo\Core\Repository\Feedback\Storage\DataClass\Feedback
 {
-    const PROPERTY_PUBLICATION_ID = 'publication_id';
+    public const CONTEXT = Manager::CONTEXT;
+
+    public const PROPERTY_PUBLICATION_ID = 'publication_id';
 
     /**
      * Get the default properties of all feedback
@@ -12,7 +16,15 @@ class Feedback extends \Chamilo\Core\Repository\Feedback\Storage\DataClass\Feedb
      */
     public static function getDefaultPropertyNames(array $extendedPropertyNames = []): array
     {
-        return parent::getDefaultPropertyNames(array(self::PROPERTY_PUBLICATION_ID));
+        return parent::getDefaultPropertyNames([self::PROPERTY_PUBLICATION_ID]);
+    }
+
+    /**
+     * @return string
+     */
+    public static function getStorageUnitName(): string
+    {
+        return 'weblcms_feedback';
     }
 
     public function get_publication_id()
@@ -23,13 +35,5 @@ class Feedback extends \Chamilo\Core\Repository\Feedback\Storage\DataClass\Feedb
     public function set_publication_id($publication_id)
     {
         $this->setDefaultProperty(self::PROPERTY_PUBLICATION_ID, $publication_id);
-    }
-
-    /**
-     * @return string
-     */
-    public static function getStorageUnitName(): string
-    {
-        return 'weblcms_feedback';
     }
 }

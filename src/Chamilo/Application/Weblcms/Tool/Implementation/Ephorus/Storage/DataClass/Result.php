@@ -1,31 +1,33 @@
 <?php
 namespace Chamilo\Application\Weblcms\Tool\Implementation\Ephorus\Storage\DataClass;
 
-use Chamilo\Application\Weblcms\Tool\Implementation\Ephorus\Storage\DataManager;
+use Chamilo\Application\Weblcms\Tool\Implementation\Ephorus\Manager;
 use Chamilo\Libraries\Translation\Translation;
 
 /**
  * This class defines a result for a request for the ephorus tool
  *
  * @package application\weblcms\tool\ephorus;
- * @author Sven Vanpoucke - Hogeschool Gent
+ * @author  Sven Vanpoucke - Hogeschool Gent
  */
 class Result extends EphorusDataClass
 {
-    const PROPERTY_DIFF = 'diff';
-    const PROPERTY_MIMETYPE = 'mimetype';
-    const PROPERTY_ORIGINAL_GUID = 'original_guid';
-    const PROPERTY_PERCENTAGE = 'percentage';
-    const PROPERTY_REQUEST_ID = 'request_id';
-    const PROPERTY_STUDENT_NAME = 'student_name';
-    const PROPERTY_STUDENT_NUMBER = 'student_number';
-    const PROPERTY_TYPE = 'type';
-    const PROPERTY_URL = 'url';
+    public const CONTEXT = Manager::CONTEXT;
+
+    public const PROPERTY_DIFF = 'diff';
+    public const PROPERTY_MIMETYPE = 'mimetype';
+    public const PROPERTY_ORIGINAL_GUID = 'original_guid';
+    public const PROPERTY_PERCENTAGE = 'percentage';
+    public const PROPERTY_REQUEST_ID = 'request_id';
+    public const PROPERTY_STUDENT_NAME = 'student_name';
+    public const PROPERTY_STUDENT_NUMBER = 'student_number';
+    public const PROPERTY_TYPE = 'type';
+    public const PROPERTY_URL = 'url';
 
     /**
      * Checks this dataclass integrity before saving it to the database
      *
-     * @return boolean @codeCoverageIgnore
+     * @return bool @codeCoverageIgnore
      */
     protected function checkBeforeSave(): bool
     {
@@ -61,6 +63,20 @@ class Result extends EphorusDataClass
      */
 
     /**
+     * @return string
+     */
+    public static function getStorageUnitName(): string
+    {
+        return 'weblcms_ephorus_result';
+    }
+
+    /**
+     * **************************************************************************************************************
+     * Getters & Setters *
+     * **************************************************************************************************************
+     */
+
+    /**
      * Returns the diff property of this object
      *
      * @return int
@@ -69,12 +85,6 @@ class Result extends EphorusDataClass
     {
         return $this->getDefaultProperty(self::PROPERTY_DIFF);
     }
-
-    /**
-     * **************************************************************************************************************
-     * Getters & Setters *
-     * **************************************************************************************************************
-     */
 
     /**
      * Returns the mimetype property of this object
@@ -137,14 +147,6 @@ class Result extends EphorusDataClass
     }
 
     /**
-     * @return string
-     */
-    public static function getStorageUnitName(): string
-    {
-        return 'weblcms_ephorus_result';
-    }
-
-    /**
      * Returns the type property of this object
      *
      * @return int
@@ -167,7 +169,7 @@ class Result extends EphorusDataClass
     /**
      * Checks if the request for this result is valid
      *
-     * @return boolean
+     * @return bool
      */
     protected function is_valid_request()
     {
@@ -189,6 +191,11 @@ class Result extends EphorusDataClass
         }
 
         return true;
+    }
+
+    public function setType($type)
+    {
+        $this->setDefaultProperty(self::PROPERTY_TYPE, $type);
     }
 
     /**
@@ -267,11 +274,6 @@ class Result extends EphorusDataClass
     public function set_type($type)
     {
         $this->setType($type);
-    }
-
-    public function setType($type)
-    {
-        $this->setDefaultProperty(self::PROPERTY_TYPE, $type);
     }
 
     /**

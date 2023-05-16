@@ -2,6 +2,7 @@
 namespace Chamilo\Core\Repository\ContentObject\ForumTopic\Storage\DataClass;
 
 use Chamilo\Core\User\Storage\DataClass\User;
+use Chamilo\Core\User\Storage\DataManager;
 use Chamilo\Libraries\Storage\DataClass\DataClass;
 
 /**
@@ -11,6 +12,7 @@ use Chamilo\Libraries\Storage\DataClass\DataClass;
  */
 class ForumTopicSubscribe extends DataClass
 {
+    public const CONTEXT = ForumTopic::CONTEXT;
 
     public const PROPERTY_FORUM_TOPIC_ID = 'forum_topic_id';
     /*
@@ -59,7 +61,7 @@ class ForumTopicSubscribe extends DataClass
     {
         if (!isset($this->user))
         {
-            $this->user = \Chamilo\Core\User\Storage\DataManager::retrieve_by_id(
+            $this->user = DataManager::retrieve_by_id(
                 User::class, (int) $this->get_user_id()
             );
         }

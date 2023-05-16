@@ -2,6 +2,7 @@
 namespace Chamilo\Core\Repository\Storage\DataClass;
 
 use Chamilo\Core\Repository\Common\Template\Template;
+use Chamilo\Core\Repository\Manager;
 use Chamilo\Core\User\Storage\DataClass\User;
 use Chamilo\Core\User\Storage\DataManager;
 use Chamilo\Libraries\Storage\DataClass\DataClass;
@@ -14,66 +15,21 @@ use Exception;
  */
 class TemplateRegistration extends DataClass
 {
-    const PROPERTY_CONTENT_OBJECT_TYPE = 'content_object_type';
-    const PROPERTY_CREATOR_ID = 'creator_id';
-    const PROPERTY_DEFAULT = 'is_default';
-    const PROPERTY_NAME = 'name';
-    const PROPERTY_TEMPLATE = 'template';
-    const PROPERTY_USER_ID = 'user_id';
+    public const CONTEXT = Manager::CONTEXT;
+
+    public const PROPERTY_CONTENT_OBJECT_TYPE = 'content_object_type';
+    public const PROPERTY_CREATOR_ID = 'creator_id';
+    public const PROPERTY_DEFAULT = 'is_default';
+    public const PROPERTY_NAME = 'name';
+    public const PROPERTY_TEMPLATE = 'template';
+    public const PROPERTY_USER_ID = 'user_id';
 
     /**
-     *
      * @var Template
      */
     private $template;
 
     /**
-     *
-     * @return string
-     */
-    public function get_content_object_type()
-    {
-        return $this->getDefaultProperty(self::PROPERTY_CONTENT_OBJECT_TYPE);
-    }
-
-    /**
-     *
-     * @return \Chamilo\Core\User\Storage\DataClass\User
-     * @throws \Chamilo\Libraries\Architecture\Exceptions\UserException
-     * @throws \ReflectionException
-     */
-    public function get_creator()
-    {
-        if (!isset($this->creator))
-        {
-            $this->creator = DataManager::retrieve_by_id(
-                User::class, $this->get_creator_id()
-            );
-        }
-
-        return $this->creator;
-    }
-
-    /**
-     *
-     * @return int
-     */
-    public function get_creator_id()
-    {
-        return $this->getDefaultProperty(self::PROPERTY_CREATOR_ID);
-    }
-
-    /**
-     *
-     * @return boolean
-     */
-    public function get_default()
-    {
-        return $this->getDefaultProperty(self::PROPERTY_DEFAULT);
-    }
-
-    /**
-     *
      * @param string[] $extendedPropertyNames
      *
      * @return string[]
@@ -91,7 +47,55 @@ class TemplateRegistration extends DataClass
     }
 
     /**
-     *
+     * @return string
+     */
+    public static function getStorageUnitName(): string
+    {
+        return 'repository_template_registration';
+    }
+
+    /**
+     * @return string
+     */
+    public function get_content_object_type()
+    {
+        return $this->getDefaultProperty(self::PROPERTY_CONTENT_OBJECT_TYPE);
+    }
+
+    /**
+     * @return \Chamilo\Core\User\Storage\DataClass\User
+     * @throws \Chamilo\Libraries\Architecture\Exceptions\UserException
+     * @throws \ReflectionException
+     */
+    public function get_creator()
+    {
+        if (!isset($this->creator))
+        {
+            $this->creator = DataManager::retrieve_by_id(
+                User::class, $this->get_creator_id()
+            );
+        }
+
+        return $this->creator;
+    }
+
+    /**
+     * @return int
+     */
+    public function get_creator_id()
+    {
+        return $this->getDefaultProperty(self::PROPERTY_CREATOR_ID);
+    }
+
+    /**
+     * @return bool
+     */
+    public function get_default()
+    {
+        return $this->getDefaultProperty(self::PROPERTY_DEFAULT);
+    }
+
+    /**
      * @return string
      */
     public function get_name()
@@ -100,7 +104,6 @@ class TemplateRegistration extends DataClass
     }
 
     /**
-     *
      * @return Template
      */
     public function get_template()
@@ -109,18 +112,6 @@ class TemplateRegistration extends DataClass
     }
 
     /**
-     *
-     * @param Template $template
-     *
-     * @throws \Exception
-     */
-    public function set_template($template)
-    {
-        $this->setDefaultProperty(self::PROPERTY_TEMPLATE, serialize($template));
-    }
-
-    /**
-     *
      * @return \Chamilo\Core\User\Storage\DataClass\User
      * @throws \Chamilo\Libraries\Architecture\Exceptions\UserException
      * @throws \ReflectionException
@@ -138,7 +129,6 @@ class TemplateRegistration extends DataClass
     }
 
     /**
-     *
      * @return int
      */
     public function get_user_id()
@@ -147,7 +137,6 @@ class TemplateRegistration extends DataClass
     }
 
     /**
-     *
      * @param string $content_object_type
      *
      * @throws \Exception
@@ -158,7 +147,6 @@ class TemplateRegistration extends DataClass
     }
 
     /**
-     *
      * @param int $creator_id
      *
      * @throws \Exception
@@ -169,8 +157,7 @@ class TemplateRegistration extends DataClass
     }
 
     /**
-     *
-     * @param boolean $default
+     * @param bool $default
      *
      * @throws \Exception
      */
@@ -180,11 +167,9 @@ class TemplateRegistration extends DataClass
     }
 
     /**
-     *
      * @param string $name
      *
      * @throws \Exception
-     *
      */
     public function set_name($name)
     {
@@ -192,7 +177,16 @@ class TemplateRegistration extends DataClass
     }
 
     /**
+     * @param Template $template
      *
+     * @throws \Exception
+     */
+    public function set_template($template)
+    {
+        $this->setDefaultProperty(self::PROPERTY_TEMPLATE, serialize($template));
+    }
+
+    /**
      * @param int $user_id
      *
      * @throws \Exception
@@ -214,13 +208,5 @@ class TemplateRegistration extends DataClass
         {
             return false;
         }
-    }
-
-    /**
-     * @return string
-     */
-    public static function getStorageUnitName(): string
-    {
-        return 'repository_template_registration';
     }
 }

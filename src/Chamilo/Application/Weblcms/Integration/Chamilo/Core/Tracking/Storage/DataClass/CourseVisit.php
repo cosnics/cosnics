@@ -15,6 +15,8 @@ class CourseVisit extends Tracker
 {
     use DependencyInjectionContainerTrait;
 
+    public const CONTEXT = 'Chamilo\Application\Weblcms\Integration\Chamilo\Core\Tracking';
+
     public const PROPERTY_CATEGORY_ID = 'category_id';
     public const PROPERTY_COURSE_ID = 'course_id';
     public const PROPERTY_FIRST_ACCESS_DATE = 'first_access_date';
@@ -57,7 +59,7 @@ class CourseVisit extends Tracker
     public static function getDefaultPropertyNames(array $extendedPropertyNames = []): array
     {
         return parent::getDefaultPropertyNames(
-            array(
+            [
                 self::PROPERTY_USER_ID,
                 self::PROPERTY_COURSE_ID,
                 self::PROPERTY_TOOL_ID,
@@ -67,7 +69,7 @@ class CourseVisit extends Tracker
                 self::PROPERTY_FIRST_ACCESS_DATE,
                 self::PROPERTY_LAST_ACCESS_DATE,
                 self::PROPERTY_TOTAL_TIME
-            )
+            ]
         );
     }
 
@@ -302,7 +304,6 @@ class CourseVisit extends Tracker
      *
      * @return CourseVisit
      * @throws \Exception
-     *
      */
     public function track_leave($course_visit)
     {

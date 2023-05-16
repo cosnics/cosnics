@@ -1,12 +1,13 @@
 <?php
 namespace Chamilo\Core\Home\Storage\DataClass;
 
+use Chamilo\Core\Home\Manager;
+
 /**
- *
  * @package Chamilo\Core\Home\Storage\DataClass
- * @author Hans De Bisschop <hans.de.bisschop@ehb.be>
- * @author Magali Gillard <magali.gillard@ehb.be>
- * @author Eduard Vossen <eduard.vossen@ehb.be>
+ * @author  Hans De Bisschop <hans.de.bisschop@ehb.be>
+ * @author  Magali Gillard <magali.gillard@ehb.be>
+ * @author  Eduard Vossen <eduard.vossen@ehb.be>
  */
 class Block extends Element
 {
@@ -14,8 +15,9 @@ class Block extends Element
     public const CONFIGURATION_CONTEXT = 'context';
     public const CONFIGURATION_VISIBILITY = 'visibility';
 
+    public const CONTEXT = Manager::CONTEXT;
+
     /**
-     *
      * @return string
      */
     public function getBlockType()
@@ -24,7 +26,6 @@ class Block extends Element
     }
 
     /**
-     *
      * @param string[] $configurationVariables
      *
      * @return string[]
@@ -32,12 +33,11 @@ class Block extends Element
     public static function getConfigurationVariables($configurationVariables = [])
     {
         return parent::getConfigurationVariables(
-            array(self::CONFIGURATION_VISIBILITY, self::CONFIGURATION_CONTEXT, self::CONFIGURATION_BLOCK_TYPE)
+            [self::CONFIGURATION_VISIBILITY, self::CONFIGURATION_CONTEXT, self::CONFIGURATION_BLOCK_TYPE]
         );
     }
 
     /**
-     *
      * @return string
      */
     public function getContext()
@@ -46,7 +46,6 @@ class Block extends Element
     }
 
     /**
-     *
      * @return bool
      */
     public function getVisibility()
@@ -55,7 +54,6 @@ class Block extends Element
     }
 
     /**
-     *
      * @return bool
      */
     public function isVisible()
@@ -64,7 +62,6 @@ class Block extends Element
     }
 
     /**
-     *
      * @param string $blockType
      */
     public function setBlockType($blockType)
@@ -73,7 +70,6 @@ class Block extends Element
     }
 
     /**
-     *
      * @param string $context
      */
     public function setContext($context)
@@ -82,7 +78,6 @@ class Block extends Element
     }
 
     /**
-     *
      * @param bool $visibility
      */
     public function setVisibility($visibility)

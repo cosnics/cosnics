@@ -1,6 +1,7 @@
 <?php
 namespace Chamilo\Core\Repository\Publication\Storage\DataClass;
 
+use Chamilo\Core\Repository\Publication\Manager;
 use Chamilo\Core\Repository\Storage\DataClass\ContentObject;
 use Chamilo\Core\Repository\Storage\DataManager;
 use Chamilo\Libraries\Storage\DataClass\DataClass;
@@ -13,6 +14,8 @@ use Chamilo\Libraries\Storage\DataClass\DataClass;
  */
 abstract class Publication extends DataClass
 {
+    public const CONTEXT = Manager::CONTEXT;
+
     public const PROPERTY_CONTENT_OBJECT_ID = 'content_object_id';
 
     protected ?ContentObject $contentObject;

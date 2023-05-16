@@ -8,6 +8,8 @@ use Chamilo\Core\Tracking\Storage\DataClass\ChangesTracker;
  */
 class Change extends ChangesTracker
 {
+    public const CONTEXT = 'Chamilo\Core\User\Integration\Chamilo\Core\Tracking';
+
     /**
      * @return string
      */

@@ -5,30 +5,37 @@ use Chamilo\Core\Repository\ContentObject\Assessment\Display\AnswerFeedbackDispl
 use Chamilo\Core\Repository\Storage\DataClass\ComplexContentObjectItem;
 
 /**
- *
  * @package core\repository\content_object\assessment_matching_question
- * @author Sven Vanpoucke <sven.vanpoucke@hogent.be>
- * @author Hans De Bisschop <hans.de.bisschop@ehb.be>
- * @author Magali Gillard <magali.gillard@ehb.be>
- * @author Eduard Vossen <eduard.vossen@ehb.be>
+ * @author  Sven Vanpoucke <sven.vanpoucke@hogent.be>
+ * @author  Hans De Bisschop <hans.de.bisschop@ehb.be>
+ * @author  Magali Gillard <magali.gillard@ehb.be>
+ * @author  Eduard Vossen <eduard.vossen@ehb.be>
  */
 class ComplexAssessmentMatchingQuestion extends ComplexContentObjectItem implements AnswerFeedbackDisplaySupport
 {
-    const PROPERTY_RANDOM = 'random';
-    const PROPERTY_SHOW_ANSWER_FEEDBACK = 'show_answer_feedback';
-    const PROPERTY_WEIGHT = 'weight';
+    public const CONTEXT = AssessmentMatchingQuestion::CONTEXT;
+
+    public const PROPERTY_RANDOM = 'random';
+    public const PROPERTY_SHOW_ANSWER_FEEDBACK = 'show_answer_feedback';
+    public const PROPERTY_WEIGHT = 'weight';
 
     /**
-     *
      * @return string[]
      */
     public static function getAdditionalPropertyNames(): array
     {
-        return array(self::PROPERTY_WEIGHT, self::PROPERTY_RANDOM, self::PROPERTY_SHOW_ANSWER_FEEDBACK);
+        return [self::PROPERTY_WEIGHT, self::PROPERTY_RANDOM, self::PROPERTY_SHOW_ANSWER_FEEDBACK];
     }
 
     /**
-     *
+     * @return string
+     */
+    public static function getStorageUnitName(): string
+    {
+        return 'repository_complex_assessment_matching_question';
+    }
+
+    /**
      * @return int
      */
     public function get_default_question_weight()
@@ -43,8 +50,7 @@ class ComplexAssessmentMatchingQuestion extends ComplexContentObjectItem impleme
     }
 
     /**
-     *
-     * @return boolean
+     * @return bool
      */
     public function get_random()
     {
@@ -52,7 +58,6 @@ class ComplexAssessmentMatchingQuestion extends ComplexContentObjectItem impleme
     }
 
     /**
-     *
      * @return int
      */
     public function get_show_answer_feedback()
@@ -61,15 +66,6 @@ class ComplexAssessmentMatchingQuestion extends ComplexContentObjectItem impleme
     }
 
     /**
-     * @return string
-     */
-    public static function getStorageUnitName(): string
-    {
-        return 'repository_complex_assessment_matching_question';
-    }
-
-    /**
-     *
      * @return int
      */
     public function get_weight()
@@ -90,8 +86,7 @@ class ComplexAssessmentMatchingQuestion extends ComplexContentObjectItem impleme
     }
 
     /**
-     *
-     * @param boolean $value
+     * @param bool $value
      */
     public function set_random($value)
     {
@@ -102,7 +97,6 @@ class ComplexAssessmentMatchingQuestion extends ComplexContentObjectItem impleme
     // complex question object.
 
     /**
-     *
      * @param int $value
      */
     public function set_show_answer_feedback($value)
@@ -111,7 +105,6 @@ class ComplexAssessmentMatchingQuestion extends ComplexContentObjectItem impleme
     }
 
     /**
-     *
      * @param int $value
      */
     public function set_weight($value)

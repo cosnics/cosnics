@@ -3,19 +3,19 @@ namespace Chamilo\Application\Weblcms\Integration\Chamilo\Core\Tracking\Storage\
 
 /**
  * @package Chamilo\Application\Weblcms\Bridge\Assignment\Storage\DataClass
- *
- * @author Sven Vanpoucke - Hogeschool Gent
+ * @author  Sven Vanpoucke - Hogeschool Gent
  */
 class Entry extends \Chamilo\Core\Repository\ContentObject\Assignment\Display\Bridge\Storage\DataClass\Entry
 {
-    const ENTITY_TYPE_COURSE_GROUP = 1;
-    const ENTITY_TYPE_PLATFORM_GROUP = 2;
-    const ENTITY_TYPE_USER = 0;
+    public const CONTEXT = 'Chamilo\Application\Weblcms\Integration\Chamilo\Core\Tracking';
 
-    const PROPERTY_CONTENT_OBJECT_PUBLICATION_ID = 'content_object_publication_id';
+    public const ENTITY_TYPE_COURSE_GROUP = 1;
+    public const ENTITY_TYPE_PLATFORM_GROUP = 2;
+    public const ENTITY_TYPE_USER = 0;
+
+    public const PROPERTY_CONTENT_OBJECT_PUBLICATION_ID = 'content_object_publication_id';
 
     /**
-     *
      * @return int
      */
     public function getContentObjectPublicationId()
@@ -24,7 +24,6 @@ class Entry extends \Chamilo\Core\Repository\ContentObject\Assignment\Display\Br
     }
 
     /**
-     *
      * @param string[] $extendedPropertyNames
      *
      * @return string[]
@@ -42,7 +41,6 @@ class Entry extends \Chamilo\Core\Repository\ContentObject\Assignment\Display\Br
     }
 
     /**
-     *
      * @param int $contentObjectPublicationId
      */
     public function setContentObjectPublicationId($contentObjectPublicationId)

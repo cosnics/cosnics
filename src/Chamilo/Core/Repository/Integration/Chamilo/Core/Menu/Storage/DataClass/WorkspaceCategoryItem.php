@@ -12,6 +12,7 @@ use Chamilo\Libraries\Format\Structure\Glyph\FontAwesomeGlyph;
  */
 class WorkspaceCategoryItem extends Item
 {
+    public const CONTEXT = 'Chamilo\Core\Repository\Integration\Chamilo\Core\Menu';
 
     private $children;
 

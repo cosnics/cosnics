@@ -19,6 +19,7 @@ use Chamilo\Libraries\Storage\Query\Variable\StaticConditionVariable;
  */
 class RepositoryImplementationCategoryItem extends Item
 {
+    public const CONTEXT = 'Chamilo\Core\Repository\Integration\Chamilo\Core\Menu';
 
     private $children;
 

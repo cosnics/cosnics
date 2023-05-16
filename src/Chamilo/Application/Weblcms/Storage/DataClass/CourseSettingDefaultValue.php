@@ -1,20 +1,24 @@
 <?php
 namespace Chamilo\Application\Weblcms\Storage\DataClass;
 
+use Chamilo\Application\Weblcms\Manager;
+
 /**
  * A class that describes a default course_setting_id for a course setting
  *
  * @package application\weblcms;
- * @author Sven Vanpoucke - Hogeschool Gent
+ * @author  Sven Vanpoucke - Hogeschool Gent
  */
 class CourseSettingDefaultValue extends CourseSettingValue
 {
+    public const CONTEXT = Manager::CONTEXT;
+
     /**
      * **************************************************************************************************************
      * Table Properties *
      * **************************************************************************************************************
      */
-    const PROPERTY_COURSE_SETTING_ID = 'course_setting_id';
+    public const PROPERTY_COURSE_SETTING_ID = 'course_setting_id';
 
     /**
      * **************************************************************************************************************
@@ -23,13 +27,15 @@ class CourseSettingDefaultValue extends CourseSettingValue
      */
 
     /**
-     * Returns the course_setting_id of this CourseSettingDefaultValue object
+     * Returns the default properties of this dataclass
      *
-     * @return String
+     * @return String[] - The property names.
      */
-    function get_course_setting_id()
+    public static function getDefaultPropertyNames(array $extendedPropertyNames = []): array
     {
-        return $this->getDefaultProperty(self::PROPERTY_COURSE_SETTING_ID);
+        $extendedPropertyNames[] = self::PROPERTY_COURSE_SETTING_ID;
+
+        return parent::getDefaultPropertyNames($extendedPropertyNames);
     }
 
     /**
@@ -37,18 +43,6 @@ class CourseSettingDefaultValue extends CourseSettingValue
      * Getters and Setters *
      * **************************************************************************************************************
      */
-
-    /**
-     * Returns the default properties of this dataclass
-     *
-     * @return String[] - The property names.
-     */
-    static function getDefaultPropertyNames(array $extendedPropertyNames = []): array
-    {
-        $extendedPropertyNames[] = self::PROPERTY_COURSE_SETTING_ID;
-
-        return parent::getDefaultPropertyNames($extendedPropertyNames);
-    }
 
     /**
      * @return string
@@ -59,11 +53,21 @@ class CourseSettingDefaultValue extends CourseSettingValue
     }
 
     /**
+     * Returns the course_setting_id of this CourseSettingDefaultValue object
+     *
+     * @return String
+     */
+    public function get_course_setting_id()
+    {
+        return $this->getDefaultProperty(self::PROPERTY_COURSE_SETTING_ID);
+    }
+
+    /**
      * Sets the course_setting_id of this CourseSettingDefaultValue object
      *
      * @param $course_setting_id String
      */
-    function set_course_setting_id($course_setting_id)
+    public function set_course_setting_id($course_setting_id)
     {
         $this->setDefaultProperty(self::PROPERTY_COURSE_SETTING_ID, $course_setting_id);
     }

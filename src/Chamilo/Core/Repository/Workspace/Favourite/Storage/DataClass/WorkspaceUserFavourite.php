@@ -1,37 +1,35 @@
 <?php
 namespace Chamilo\Core\Repository\Workspace\Favourite\Storage\DataClass;
 
+use Chamilo\Core\Repository\Workspace\Favourite\Manager;
 use Chamilo\Core\Repository\Workspace\Storage\DataClass\Workspace;
 use Chamilo\Libraries\Storage\DataClass\DataClass;
 use Chamilo\Libraries\Storage\DataManager\DataManager;
 
 /**
- *
  * @package Chamilo\Core\Repository\Workspace\Storage\DataClass
- * @author Hans De Bisschop <hans.de.bisschop@ehb.be>
- * @author Magali Gillard <magali.gillard@ehb.be>
- * @author Eduard Vossen <eduard.vossen@ehb.be>
+ * @author  Hans De Bisschop <hans.de.bisschop@ehb.be>
+ * @author  Magali Gillard <magali.gillard@ehb.be>
+ * @author  Eduard Vossen <eduard.vossen@ehb.be>
  */
 class WorkspaceUserFavourite extends DataClass
 {
+    public const CONTEXT = Manager::CONTEXT;
 
-    // Properties
-    const PROPERTY_USER_ID = 'user_id';
-    const PROPERTY_WORKSPACE_ID = 'workspace_id';
+    public const PROPERTY_USER_ID = 'user_id';
+    public const PROPERTY_WORKSPACE_ID = 'workspace_id';
 
     /**
-     *
      * @var \Chamilo\Core\Repository\Workspace\Storage\DataClass\Workspace
      */
     private $workspace;
 
     /**
-     *
      * @return string[]
      */
     public static function getDefaultPropertyNames(array $extendedPropertyNames = []): array
     {
-        return parent::getDefaultPropertyNames(array(self::PROPERTY_WORKSPACE_ID, self::PROPERTY_USER_ID));
+        return parent::getDefaultPropertyNames([self::PROPERTY_WORKSPACE_ID, self::PROPERTY_USER_ID]);
     }
 
     /**
@@ -43,8 +41,7 @@ class WorkspaceUserFavourite extends DataClass
     }
 
     /**
-     *
-     * @return integer
+     * @return int
      */
     public function get_user_id()
     {
@@ -52,7 +49,6 @@ class WorkspaceUserFavourite extends DataClass
     }
 
     /**
-     *
      * @return \Chamilo\Core\Repository\Workspace\Storage\DataClass\Workspace
      */
     public function get_workspace()
@@ -66,8 +62,7 @@ class WorkspaceUserFavourite extends DataClass
     }
 
     /**
-     *
-     * @return integer
+     * @return int
      */
     public function get_workspace_id()
     {
@@ -75,8 +70,7 @@ class WorkspaceUserFavourite extends DataClass
     }
 
     /**
-     *
-     * @param integer $user_id
+     * @param int $user_id
      */
     public function set_user_id($user_id)
     {
@@ -84,8 +78,7 @@ class WorkspaceUserFavourite extends DataClass
     }
 
     /**
-     *
-     * @param integer $workspace_id
+     * @param int $workspace_id
      */
     public function set_workspace_id($workspace_id)
     {

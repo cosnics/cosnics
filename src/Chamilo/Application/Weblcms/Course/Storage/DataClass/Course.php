@@ -37,26 +37,28 @@ use Exception;
  * This class represents a course in the weblcms.
  *
  * @package application\weblcms\course;
- * @author Previously Author Unknown
- * @author Yannick & Tristan
- * @author Sven Vanpoucke - Hogeschool Gent - Refactoring
+ * @author  Previously Author Unknown
+ * @author  Yannick & Tristan
+ * @author  Sven Vanpoucke - Hogeschool Gent - Refactoring
  */
 class Course extends DataClass
 {
-    const FOREIGN_PROPERTY_COURSE_TYPE = 'course_type';
+    public const CONTEXT = \Chamilo\Application\Weblcms\Course\Manager::CONTEXT;
 
-    const PROPERTY_CATEGORY_ID = 'category_id';
-    const PROPERTY_COURSE_TYPE_ID = 'course_type_id';
-    const PROPERTY_COURSE_TYPE_TITLE = 'course_type_title';
-    const PROPERTY_CREATION_DATE = 'creation_date';
-    const PROPERTY_EXPIRATION_DATE = 'expiration_date';
-    const PROPERTY_LANGUAGE = 'language';
-    const PROPERTY_LAST_EDIT = 'last_edit';
-    const PROPERTY_LAST_VISIT = 'last_visit';
-    const PROPERTY_SYSTEM_CODE = 'system_code';
-    const PROPERTY_TITLE = 'title';
-    const PROPERTY_TITULAR_ID = 'titular_id';
-    const PROPERTY_VISUAL_CODE = 'visual_code';
+    public const FOREIGN_PROPERTY_COURSE_TYPE = 'course_type';
+
+    public const PROPERTY_CATEGORY_ID = 'category_id';
+    public const PROPERTY_COURSE_TYPE_ID = 'course_type_id';
+    public const PROPERTY_COURSE_TYPE_TITLE = 'course_type_title';
+    public const PROPERTY_CREATION_DATE = 'creation_date';
+    public const PROPERTY_EXPIRATION_DATE = 'expiration_date';
+    public const PROPERTY_LANGUAGE = 'language';
+    public const PROPERTY_LAST_EDIT = 'last_edit';
+    public const PROPERTY_LAST_VISIT = 'last_visit';
+    public const PROPERTY_SYSTEM_CODE = 'system_code';
+    public const PROPERTY_TITLE = 'title';
+    public const PROPERTY_TITULAR_ID = 'titular_id';
+    public const PROPERTY_VISUAL_CODE = 'visual_code';
 
     /**
      * **************************************************************************************************************
@@ -81,7 +83,7 @@ class Course extends DataClass
     /**
      * Caches the course admin checks
      *
-     * @var boolean[]
+     * @var bool
      */
     private $is_course_admin_cache;
 
@@ -110,7 +112,7 @@ class Course extends DataClass
      *
      * @param int $right_id
      *
-     * @return boolean
+     * @return bool
      */
     public function can_change_course_management_right($right_id)
     {
@@ -134,7 +136,7 @@ class Course extends DataClass
      *
      * @param mixed[string] CourseSetting
      *
-     * @return boolean
+     * @return bool
      */
     public function can_change_course_setting($course_setting)
     {
@@ -150,7 +152,7 @@ class Course extends DataClass
     /**
      * Creates this course object
      *
-     * @return boolean
+     * @return bool
      */
     public function create($automated_values = true): bool
     {
@@ -190,11 +192,10 @@ class Course extends DataClass
      * Creates a course setting relation for the given course setting object
      *
      * @param mixed[string] CourseSetting
-     * @param boolean $locked
+     * @param bool $locked
      *
      * @return CourseRelCourseSetting
      * @throws \Exception
-     *
      */
     public function create_course_setting_relation($course_setting, $locked)
     {
@@ -214,9 +215,9 @@ class Course extends DataClass
      * Delegation function to create course settings from given values
      *
      * @param string[] $values
-     * @param boolean $force [OPTIONAL] - default false - Sets the values even if the base object is not allowed to.
+     * @param bool $force [OPTIONAL] - default false - Sets the values even if the base object is not allowed to.
      *
-     * @return boolean
+     * @return bool
      */
     public function create_course_settings_from_values($values, $force = false)
     {
@@ -230,9 +231,9 @@ class Course extends DataClass
      * Creates a root location for the course subtree Set view right for everyone on root location Creates a location
      * for each tool in the course subtree
      *
-     * @param boolean $create_in_batch - Whether or not the left and right values should be calculated
+     * @param bool $create_in_batch - Whether or not the left and right values should be calculated
      *
-     * @return boolean
+     * @return bool
      */
     private function create_locations()
     {
@@ -293,7 +294,7 @@ class Course extends DataClass
     /**
      * Creates a course group in the course with the same name as the course
      *
-     * @return boolean
+     * @return bool
      */
     private function create_root_course_group()
     {
@@ -361,7 +362,7 @@ class Course extends DataClass
     {
         $id = $this->get_id();
 
-        return array(
+        return [
             ContentObjectPublicationCategory::class => new EqualityCondition(
                 new PropertyConditionVariable(
                     ContentObjectPublicationCategory::class, ContentObjectPublicationCategory::PROPERTY_COURSE
@@ -404,7 +405,7 @@ class Course extends DataClass
                     CourseTypeUserCategoryRelCourse::class, CourseTypeUserCategoryRelCourse::PROPERTY_COURSE_ID
                 ), new StaticConditionVariable($id)
             )
-        );
+        ];
     }
 
     /**
@@ -495,9 +496,9 @@ class Course extends DataClass
 
         return DataManager::retrieves(
             CourseGroup::class, new DataClassRetrievesParameters(
-                $condition, null, null, new OrderBy(array(
+                $condition, null, null, new OrderBy([
                     new OrderProperty(new PropertyConditionVariable(CourseGroup::class, CourseGroup::PROPERTY_NAME))
-                ))
+                ])
             )
         );
     }
@@ -787,7 +788,7 @@ class Course extends DataClass
     /**
      * Returns if this course has subscribed groups
      *
-     * @return boolean
+     * @return bool
      */
     public function has_subscribed_groups()
     {
@@ -810,7 +811,7 @@ class Course extends DataClass
     /**
      * Returns if this course has subscribed users
      *
-     * @return boolean
+     * @return bool
      */
     public function has_subscribed_users()
     {
@@ -833,17 +834,17 @@ class Course extends DataClass
     /**
      * Initializes the course sections for this course
      *
-     * @return boolean
+     * @return bool
      */
     private function initialize_course_sections()
     {
         $sections = [];
         // translationm::get will be called on display, depending on the course language setting
         // these strings go to the database
-        $sections[] = array('name' => 'SectionTools', 'type' => 1, 'order' => 1);
-        $sections[] = array('name' => 'SectionLinks', 'type' => 2, 'order' => 2);
-        $sections[] = array('name' => 'SectionDisabled', 'type' => 0, 'order' => 3);
-        $sections[] = array('name' => 'SectionCourseAdministration', 'type' => 3, 'order' => 4);
+        $sections[] = ['name' => 'SectionTools', 'type' => 1, 'order' => 1];
+        $sections[] = ['name' => 'SectionLinks', 'type' => 2, 'order' => 2];
+        $sections[] = ['name' => 'SectionDisabled', 'type' => 0, 'order' => 3];
+        $sections[] = ['name' => 'SectionCourseAdministration', 'type' => 3, 'order' => 4];
 
         foreach ($sections as $section)
         {
@@ -882,7 +883,7 @@ class Course extends DataClass
      *
      * @param User $user
      *
-     * @return boolean
+     * @return bool
      */
     public function is_course_admin($user)
     {
@@ -948,7 +949,7 @@ class Course extends DataClass
      *
      * @param mixed[string] CourseSetting
      *
-     * @return boolean
+     * @return bool
      */
     public function is_course_setting_locked($course_setting)
     {
@@ -960,7 +961,7 @@ class Course extends DataClass
      *
      * @param User $user
      *
-     * @return boolean
+     * @return bool
      */
     public function is_subscribed_as_course_admin($user)
     {
@@ -1151,7 +1152,7 @@ class Course extends DataClass
      * Updates this course object If the name of the course changes, the name of the root chamilo course group needs to
      * change
      *
-     * @return boolean
+     * @return bool
      */
     public function update(): bool
     {
@@ -1188,7 +1189,7 @@ class Course extends DataClass
      * Updates a course setting relation for the given course setting object
      *
      * @param mixed[string] CourseSetting
-     * @param boolean $locked
+     * @param bool $locked
      *
      * @return CourseTypeRelCourseSetting
      */
@@ -1202,7 +1203,7 @@ class Course extends DataClass
      *
      * @param string $values
      *
-     * @return boolean
+     * @return bool
      */
     public function update_course_settings_from_values($values)
     {

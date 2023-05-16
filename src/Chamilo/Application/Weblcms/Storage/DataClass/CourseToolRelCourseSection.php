@@ -1,6 +1,7 @@
 <?php
 namespace Chamilo\Application\Weblcms\Storage\DataClass;
 
+use Chamilo\Application\Weblcms\Manager;
 use Chamilo\Libraries\Storage\DataClass\DataClass;
 
 /**
@@ -10,9 +11,10 @@ use Chamilo\Libraries\Storage\DataClass\DataClass;
  */
 class CourseToolRelCourseSection extends DataClass
 {
+    public const CONTEXT = Manager::CONTEXT;
 
-    const PROPERTY_SECTION_ID = 'section_id';
-    const PROPERTY_TOOL_ID = 'tool_id';
+    public const PROPERTY_SECTION_ID = 'section_id';
+    public const PROPERTY_TOOL_ID = 'tool_id';
 
     /**
      * Get the default properties.
@@ -21,17 +23,7 @@ class CourseToolRelCourseSection extends DataClass
      */
     public static function getDefaultPropertyNames(array $extendedPropertyNames = []): array
     {
-        return parent::getDefaultPropertyNames(array(self::PROPERTY_TOOL_ID, self::PROPERTY_SECTION_ID));
-    }
-
-    /**
-     * Returns the section_id property of this object
-     *
-     * @return integer
-     */
-    public function get_section_id()
-    {
-        return $this->getDefaultProperty(self::PROPERTY_SECTION_ID);
+        return parent::getDefaultPropertyNames([self::PROPERTY_TOOL_ID, self::PROPERTY_SECTION_ID]);
     }
 
     /**
@@ -43,9 +35,19 @@ class CourseToolRelCourseSection extends DataClass
     }
 
     /**
+     * Returns the section_id property of this object
+     *
+     * @return int
+     */
+    public function get_section_id()
+    {
+        return $this->getDefaultProperty(self::PROPERTY_SECTION_ID);
+    }
+
+    /**
      * Returns the tool_id property of this object
      *
-     * @return integer
+     * @return int
      */
     public function get_tool_id()
     {

@@ -1,10 +1,13 @@
 <?php
 namespace Chamilo\Core\Admin\Storage\DataClass;
 
+use Chamilo\Core\Admin\Manager;
 use Chamilo\Libraries\Storage\DataClass\DataClass;
 
 class Online extends DataClass
 {
+    public const CONTEXT = Manager::CONTEXT;
+
     public const PARAM_TIME = 'time';
     public const PROPERTY_LAST_ACCESS_DATE = 'last_access_date';
     public const PROPERTY_USER_ID = 'user_id';

@@ -2,13 +2,12 @@
 namespace Chamilo\Core\Group\Integration\Chamilo\Core\Tracking\Storage\DataClass;
 
 use Chamilo\Core\Tracking\Storage\DataClass\ChangesTracker;
-use Chamilo\Libraries\Storage\Query\Condition\EqualityCondition;
-use Chamilo\Libraries\Storage\Query\Variable\PropertyConditionVariable;
-use Chamilo\Libraries\Storage\Query\Variable\StaticColumnConditionVariable;
 
 class Change extends ChangesTracker
 {
-    const PROPERTY_TARGET_USER_ID = 'target_user_id';
+    public const CONTEXT = 'Chamilo\Core\Group\Integration\Chamilo\Core\Tracking';
+    
+    public const PROPERTY_TARGET_USER_ID = 'target_user_id';
 
     /**
      * Get the default properties of all aggregate trackers.
@@ -17,7 +16,7 @@ class Change extends ChangesTracker
      */
     public static function getDefaultPropertyNames(array $extendedPropertyNames = []): array
     {
-        return parent::getDefaultPropertyNames(array(self::PROPERTY_TARGET_USER_ID));
+        return parent::getDefaultPropertyNames([self::PROPERTY_TARGET_USER_ID]);
     }
 
     /**
@@ -29,7 +28,6 @@ class Change extends ChangesTracker
     }
 
     /**
-     *
      * @return the $user_id
      */
     public function get_target_user_id()
@@ -43,7 +41,6 @@ class Change extends ChangesTracker
     }
 
     /**
-     *
      * @param $user_id the $user_id to set
      */
     public function set_target_user_id($target_user_id)

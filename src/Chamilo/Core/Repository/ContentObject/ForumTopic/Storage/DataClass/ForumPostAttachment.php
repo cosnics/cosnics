@@ -1,19 +1,21 @@
 <?php
 namespace Chamilo\Core\Repository\ContentObject\ForumTopic\Storage\DataClass;
 
-use Chamilo\Core\Repository\ContentObject\ForumTopic\Storage\DataManager;
 use Chamilo\Core\Repository\Storage\DataClass\ContentObject;
 use Chamilo\Libraries\Architecture\ClassnameUtilities;
 use Chamilo\Libraries\Storage\DataClass\DataClass;
 
 /**
  * Dataclass that describes a Forum Post Attachments.
+ *
  * @author Maarten Volckaert - Hogeschool Gent - copied class content of ContentObjectAttachment.
  */
 class ForumPostAttachment extends DataClass
 {
-    const PROPERTY_ATTACHMENT_ID = 'attachment_id';
-    const PROPERTY_FORUM_POST_ID = 'forum_post_id';
+    public const CONTEXT = ForumTopic::CONTEXT;
+
+    public const PROPERTY_ATTACHMENT_ID = 'attachment_id';
+    public const PROPERTY_FORUM_POST_ID = 'forum_post_id';
 
     /**
      * Refers to the attached content object.
@@ -41,6 +43,28 @@ class ForumPostAttachment extends DataClass
     }
 
     /**
+     * Get the default properties of all content object attachments.
+     *
+     * @return array The property names.
+     */
+    public static function getDefaultPropertyNames(array $extendedPropertyNames = []): array
+    {
+        return parent::getDefaultPropertyNames([self::PROPERTY_FORUM_POST_ID, self::PROPERTY_ATTACHMENT_ID]);
+    }
+
+    /*
+     * (non-PHPdoc) @see common/database/DataClass#get_data_manager()
+     */
+
+    /**
+     * @return string
+     */
+    public static function getStorageUnitName(): string
+    {
+        return 'repository_forum_post_attachment';
+    }
+
+    /**
      * Gets the id of the ContentObject that is attached to a forum post.
      *
      * @return int The id of the ContentObject that is attached to a forum post.
@@ -49,10 +73,6 @@ class ForumPostAttachment extends DataClass
     {
         return $this->getDefaultProperty(self::PROPERTY_ATTACHMENT_ID);
     }
-
-    /*
-     * (non-PHPdoc) @see common/database/DataClass#get_data_manager()
-     */
 
     /**
      * Gets the content object of the attachment base on the attachment id.
@@ -72,16 +92,6 @@ class ForumPostAttachment extends DataClass
     }
 
     /**
-     * Get the default properties of all content object attachments.
-     *
-     * @return array The property names.
-     */
-    public static function getDefaultPropertyNames(array $extendedPropertyNames = []): array
-    {
-        return parent::getDefaultPropertyNames(array(self::PROPERTY_FORUM_POST_ID, self::PROPERTY_ATTACHMENT_ID));
-    }
-
-    /**
      * Gets the id of the forum post where a ContentObject is attached to.
      *
      * @return int The id of the forum post where a ContentObject is attached to.
@@ -89,14 +99,6 @@ class ForumPostAttachment extends DataClass
     public function get_forum_post_id()
     {
         return $this->getDefaultProperty(self::PROPERTY_FORUM_POST_ID);
-    }
-
-    /**
-     * @return string
-     */
-    public static function getStorageUnitName(): string
-    {
-        return 'repository_forum_post_attachment';
     }
 
     /**

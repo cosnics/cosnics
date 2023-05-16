@@ -1,6 +1,7 @@
 <?php
 namespace Chamilo\Application\Portfolio\Favourite\Storage\DataClass;
 
+use Chamilo\Application\Portfolio\Favourite\Manager;
 use Chamilo\Libraries\Storage\DataClass\DataClass;
 
 /**
@@ -10,39 +11,22 @@ use Chamilo\Libraries\Storage\DataClass\DataClass;
  */
 class UserFavourite extends DataClass
 {
-    const PROPERTY_SOURCE_USER_ID = 'source_user_id';
-    const PROPERTY_FAVOURITE_USER_ID = 'favourite_user_id';
+    public const CONTEXT = Manager::CONTEXT;
+
+    public const PROPERTY_FAVOURITE_USER_ID = 'favourite_user_id';
+    public const PROPERTY_SOURCE_USER_ID = 'source_user_id';
 
     /**
-     *
      * @return string[]
      */
     public static function getDefaultPropertyNames(array $extendedPropertyNames = []): array
     {
         return parent::getDefaultPropertyNames(
-            array(self::PROPERTY_SOURCE_USER_ID, self::PROPERTY_FAVOURITE_USER_ID));
+            [self::PROPERTY_SOURCE_USER_ID, self::PROPERTY_FAVOURITE_USER_ID]
+        );
     }
 
     /**
-     *
-     * @return int
-     */
-    public function getSourceUserId()
-    {
-        return $this->getDefaultProperty(self::PROPERTY_SOURCE_USER_ID);
-    }
-
-    /**
-     *
-     * @param int $sourceUserId
-     */
-    public function setSourceUserId($sourceUserId)
-    {
-        $this->setDefaultProperty(self::PROPERTY_SOURCE_USER_ID, $sourceUserId);
-    }
-
-    /**
-     *
      * @return int
      */
     public function getFavouriteUserId()
@@ -51,7 +35,22 @@ class UserFavourite extends DataClass
     }
 
     /**
-     *
+     * @return int
+     */
+    public function getSourceUserId()
+    {
+        return $this->getDefaultProperty(self::PROPERTY_SOURCE_USER_ID);
+    }
+
+    /**
+     * @return string
+     */
+    public static function getStorageUnitName(): string
+    {
+        return 'portfolio_user_favourite';
+    }
+
+    /**
      * @param int $favouriteUserId
      */
     public function setFavouriteUserId($favouriteUserId)
@@ -60,11 +59,10 @@ class UserFavourite extends DataClass
     }
 
     /**
-     *
-     * @return string
+     * @param int $sourceUserId
      */
-    public static function getStorageUnitName(): string
+    public function setSourceUserId($sourceUserId)
     {
-        return 'portfolio_user_favourite';
+        $this->setDefaultProperty(self::PROPERTY_SOURCE_USER_ID, $sourceUserId);
     }
 }

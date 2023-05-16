@@ -2,6 +2,7 @@
 namespace Chamilo\Core\Repository\Storage\DataClass;
 
 use Chamilo\Configuration\Category\Storage\DataClass\PlatformCategory;
+use Chamilo\Core\Repository\Manager;
 use Chamilo\Core\Repository\Publication\Service\PublicationAggregator;
 use Chamilo\Core\Repository\Storage\DataManager;
 use Chamilo\Core\Repository\Workspace\Storage\DataClass\Workspace;
@@ -24,63 +25,15 @@ use Chamilo\Libraries\Utilities\StringUtilities;
  */
 class RepositoryCategory extends PlatformCategory
 {
+    public const CONTEXT = Manager::CONTEXT;
 
-    /**
-     * **************************************************************************************************************
-     * Properties *
-     * **************************************************************************************************************
-     */
-    const PROPERTY_TYPE_ID = 'type_id';
-    const PROPERTY_TYPE = 'type';
-
-    /**
-     * **************************************************************************************************************
-     * Inherited Functionality *
-     * **************************************************************************************************************
-     */
-
-    /**
-     * Creates this category
-     *
-     * @param $create_in_batch boolean - Creates objects in batch without fixing the right / left values (faster)
-     *
-     * @return boolean
-     */
-    public function create(): bool
-    {
-        $category = $this;
-
-        // TRANSACTION
-        $success = DataManager::transactional(
-            function ($c) use ($category) {
-                if (!$category->checkBeforeSave())
-                {
-                    return false;
-                }
-
-                if (!DataManager::create($category))
-                {
-                    $this->addError(
-                        Translation::get(
-                            'CouldNotCreateObjectInDatabase',
-                            array('OBJECT' => Translation::get('Category'), StringUtilities::LIBRARIES)
-                        )
-                    );
-
-                    return false;
-                }
-
-                return true;
-            }
-        );
-
-        return $success;
-    }
+    public const PROPERTY_TYPE = 'type';
+    public const PROPERTY_TYPE_ID = 'type_id';
 
     /**
      * Checks if the data of this object is valid + adds some default values if some data is not available
      *
-     * @return boolean
+     * @return bool
      */
     public function checkBeforeSave(): bool
     {
@@ -166,32 +119,34 @@ class RepositoryCategory extends PlatformCategory
     }
 
     /**
-     * Updates this object
+     * Creates this category
      *
-     * @param $move boolean
+     * @param $create_in_batch bool - Creates objects in batch without fixing the right / left values (faster)
      *
-     * @return boolean
+     * @return bool
      */
-    public function update($move = false): bool
+    public function create(): bool
     {
         $category = $this;
 
         // TRANSACTION
         $success = DataManager::transactional(
-            function ($c) use ($move, $category) {
+            function ($c) use ($category) {
                 if (!$category->checkBeforeSave())
                 {
                     return false;
                 }
 
-                if (!DataManager::update($category))
+                if (!DataManager::create($category))
                 {
-                    $category->addError(
+                    $this->addError(
                         Translation::get(
-                            'CouldNotUpdateObjectInDatabase',
-                            array('OBJECT' => Translation::get('Category'), StringUtilities::LIBRARIES)
+                            'CouldNotCreateObjectInDatabase',
+                            ['OBJECT' => Translation::get('Category'), StringUtilities::LIBRARIES]
                         )
                     );
+
+                    return false;
                 }
 
                 return true;
@@ -204,7 +159,7 @@ class RepositoryCategory extends PlatformCategory
     /**
      * Deletes this object
      *
-     * @return boolean
+     * @return bool
      */
     public function delete(): bool
     {
@@ -228,7 +183,7 @@ class RepositoryCategory extends PlatformCategory
                         $category->get_id()
                     );
 
-                    foreach($deleted_content_objects as $deleted_content_object)
+                    foreach ($deleted_content_objects as $deleted_content_object)
                     {
                         $deleted_content_object->move(0);
                     }
@@ -249,6 +204,23 @@ class RepositoryCategory extends PlatformCategory
     }
 
     /**
+     * Returns the available property names
+     *
+     * @return string[]
+     */
+    public static function getDefaultPropertyNames(array $extendedPropertyNames = []): array
+    {
+        return [
+            self::PROPERTY_TYPE_ID,
+            self::PROPERTY_TYPE,
+            self::PROPERTY_ID,
+            self::PROPERTY_NAME,
+            self::PROPERTY_PARENT,
+            self::PROPERTY_DISPLAY_ORDER
+        ];
+    }
+
+    /**
      * @return \Chamilo\Core\Repository\Publication\Service\PublicationAggregatorInterface | object
      */
     public function getPublicationAggregator()
@@ -260,16 +232,11 @@ class RepositoryCategory extends PlatformCategory
     }
 
     /**
-     * Returns the available property names
-     *
-     * @return string[]
+     * @return string
      */
-    public static function getDefaultPropertyNames(array $extendedPropertyNames = []): array
+    public static function getStorageUnitName(): string
     {
-        return array(
-            self::PROPERTY_TYPE_ID, self::PROPERTY_TYPE, self::PROPERTY_ID, self::PROPERTY_NAME, self::PROPERTY_PARENT,
-            self::PROPERTY_DISPLAY_ORDER
-        );
+        return 'repository_repository_category';
     }
 
     /**
@@ -277,32 +244,6 @@ class RepositoryCategory extends PlatformCategory
      * Getters & Setters *
      * **************************************************************************************************************
      */
-
-    /**
-     *
-     * @return int
-     */
-    public function get_type_id()
-    {
-        return $this->getDefaultProperty(self::PROPERTY_TYPE_ID);
-    }
-
-    /**
-     *
-     * @param $type_id int
-     */
-    public function set_type_id($type_id)
-    {
-        $this->setDefaultProperty(self::PROPERTY_TYPE_ID, $type_id);
-    }
-
-    /**
-     * @deprecated Use RepositoryCategory::getType() now
-     */
-    public function get_type()
-    {
-        return $this->getType();
-    }
 
     /**
      * Returns the type of this object
@@ -314,17 +255,68 @@ class RepositoryCategory extends PlatformCategory
         return $this->getDefaultProperty(self::PROPERTY_TYPE);
     }
 
-    /**
-     * @deprecated Use RepositoryCategory::setType() now
-     */
-    public function set_type($type)
+    public function get_children_ids($recursive = true)
     {
-        $this->setType($type);
+        $condition = new EqualityCondition(
+            new PropertyConditionVariable(self::class, self::PROPERTY_PARENT),
+            new StaticConditionVariable($this->get_id())
+        );
+
+        if (!$recursive)
+        {
+            $parameters = new DataClassDistinctParameters(
+                $condition, new RetrieveProperties([new PropertyConditionVariable(self::class, self::PROPERTY_ID)])
+            );
+
+            return (DataManager::distinct(self::class, $parameters));
+        }
+        else
+        {
+            $children_ids = [];
+            $children = DataManager::retrieve_categories($condition);
+
+            foreach ($children as $child)
+            {
+                $children_ids[] = $child->get_id();
+                $children_ids = array_merge($children_ids, $child->get_children_ids($recursive));
+            }
+
+            return $children_ids;
+        }
     }
 
-    public function setType($type)
+    public function get_parent_ids()
     {
-        $this->setDefaultProperty(self::PROPERTY_TYPE, $type);
+        if ($this->get_parent() == 0)
+        {
+            return [0];
+        }
+        else
+        {
+            $parent = DataManager::retrieve_by_id(RepositoryCategory::class, $this->get_parent());
+
+            $parent_ids = [];
+            $parent_ids[] = $parent->get_id();
+            $parent_ids = array_merge($parent->get_parent_ids(), $parent_ids);
+
+            return $parent_ids;
+        }
+    }
+
+    /**
+     * @deprecated Use RepositoryCategory::getType() now
+     */
+    public function get_type()
+    {
+        return $this->getType();
+    }
+
+    /**
+     * @return int
+     */
+    public function get_type_id()
+    {
+        return $this->getDefaultProperty(self::PROPERTY_TYPE_ID);
     }
 
     /**
@@ -342,61 +334,60 @@ class RepositoryCategory extends PlatformCategory
         return DataManager::count(RepositoryCategory::class, new DataClassCountParameters($condition)) > 0;
     }
 
-    public function get_children_ids($recursive = true)
+    public function setType($type)
     {
-        $condition = new EqualityCondition(
-            new PropertyConditionVariable(self::class, self::PROPERTY_PARENT),
-            new StaticConditionVariable($this->get_id())
-        );
-
-        if (!$recursive)
-        {
-            $parameters = new DataClassDistinctParameters(
-                $condition,
-                new RetrieveProperties(array(new PropertyConditionVariable(self::class, self::PROPERTY_ID)))
-            );
-
-            return (DataManager::distinct(self::class, $parameters));
-        }
-        else
-        {
-            $children_ids = [];
-            $children = DataManager::retrieve_categories($condition);
-
-            foreach($children as $child)
-            {
-                $children_ids[] = $child->get_id();
-                $children_ids = array_merge($children_ids, $child->get_children_ids($recursive));
-            }
-
-            return $children_ids;
-        }
-    }
-
-    public function get_parent_ids()
-    {
-        if ($this->get_parent() == 0)
-        {
-            return array(0);
-        }
-        else
-        {
-            $parent = DataManager::retrieve_by_id(RepositoryCategory::class, $this->get_parent());
-
-            $parent_ids = [];
-            $parent_ids[] = $parent->get_id();
-            $parent_ids = array_merge($parent->get_parent_ids(), $parent_ids);
-
-            return $parent_ids;
-        }
+        $this->setDefaultProperty(self::PROPERTY_TYPE, $type);
     }
 
     /**
-     *
-     * @return string
+     * @deprecated Use RepositoryCategory::setType() now
      */
-    public static function getStorageUnitName(): string
+    public function set_type($type)
     {
-        return 'repository_repository_category';
+        $this->setType($type);
+    }
+
+    /**
+     * @param $type_id int
+     */
+    public function set_type_id($type_id)
+    {
+        $this->setDefaultProperty(self::PROPERTY_TYPE_ID, $type_id);
+    }
+
+    /**
+     * Updates this object
+     *
+     * @param $move bool
+     *
+     * @return bool
+     */
+    public function update($move = false): bool
+    {
+        $category = $this;
+
+        // TRANSACTION
+        $success = DataManager::transactional(
+            function ($c) use ($move, $category) {
+                if (!$category->checkBeforeSave())
+                {
+                    return false;
+                }
+
+                if (!DataManager::update($category))
+                {
+                    $category->addError(
+                        Translation::get(
+                            'CouldNotUpdateObjectInDatabase',
+                            ['OBJECT' => Translation::get('Category'), StringUtilities::LIBRARIES]
+                        )
+                    );
+                }
+
+                return true;
+            }
+        );
+
+        return $success;
     }
 }

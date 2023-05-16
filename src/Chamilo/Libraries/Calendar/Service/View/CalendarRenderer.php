@@ -1,8 +1,6 @@
 <?php
 namespace Chamilo\Libraries\Calendar\Service\View;
 
-use Chamilo\Libraries\Architecture\Traits\ClassContext;
-
 /**
  * @package Chamilo\Libraries\Calendar\Service\View
  * @author  Hans De Bisschop <hans.de.bisschop@ehb.be>
@@ -11,5 +9,4 @@ use Chamilo\Libraries\Architecture\Traits\ClassContext;
  */
 abstract class CalendarRenderer
 {
-    use ClassContext;
 }

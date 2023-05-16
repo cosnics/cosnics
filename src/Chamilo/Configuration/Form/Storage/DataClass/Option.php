@@ -1,22 +1,22 @@
 <?php
 namespace Chamilo\Configuration\Form\Storage\DataClass;
 
+use Chamilo\Configuration\Form\Manager;
 use Chamilo\Configuration\Form\Storage\DataManager;
 use Chamilo\Libraries\Storage\DataClass\DataClass;
 
 /**
- *
  * @package configuration\form
- * @author Sven Vanpoucke <sven.vanpoucke@hogent.be>
- * @author Hans De Bisschop <hans.de.bisschop@ehb.be>
+ * @author  Sven Vanpoucke <sven.vanpoucke@hogent.be>
+ * @author  Hans De Bisschop <hans.de.bisschop@ehb.be>
  */
 class Option extends DataClass
 {
-    const PROPERTY_DISPLAY_ORDER = 'display_order';
+    public const CONTEXT = Manager::CONTEXT;
 
-    const PROPERTY_DYNAMIC_FORM_ELEMENT_ID = 'dynamic_form_element_id';
-
-    const PROPERTY_NAME = 'name';
+    public const PROPERTY_DISPLAY_ORDER = 'display_order';
+    public const PROPERTY_DYNAMIC_FORM_ELEMENT_ID = 'dynamic_form_element_id';
+    public const PROPERTY_NAME = 'name';
 
     public function create(): bool
     {
@@ -35,8 +35,16 @@ class Option extends DataClass
     public static function getDefaultPropertyNames(array $extendedPropertyNames = []): array
     {
         return parent::getDefaultPropertyNames(
-            array(self::PROPERTY_DYNAMIC_FORM_ELEMENT_ID, self::PROPERTY_NAME, self::PROPERTY_DISPLAY_ORDER)
+            [self::PROPERTY_DYNAMIC_FORM_ELEMENT_ID, self::PROPERTY_NAME, self::PROPERTY_DISPLAY_ORDER]
         );
+    }
+
+    /**
+     * @return string
+     */
+    public static function getStorageUnitName(): string
+    {
+        return 'configuration_form_option';
     }
 
     public function get_display_order()
@@ -52,14 +60,6 @@ class Option extends DataClass
     public function get_name()
     {
         return $this->getDefaultProperty(self::PROPERTY_NAME);
-    }
-
-    /**
-     * @return string
-     */
-    public static function getStorageUnitName(): string
-    {
-        return 'configuration_form_option';
     }
 
     public function set_display_order($display_order)

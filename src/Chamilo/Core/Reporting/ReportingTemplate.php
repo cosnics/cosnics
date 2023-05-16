@@ -1,7 +1,6 @@
 <?php
 namespace Chamilo\Core\Reporting;
 
-use Chamilo\Libraries\Architecture\Traits\ClassContext;
 use Chamilo\Libraries\Architecture\Traits\DependencyInjectionContainerTrait;
 use Chamilo\Libraries\Format\Structure\Breadcrumb;
 use Chamilo\Libraries\Format\Structure\BreadcrumbTrail;
@@ -11,11 +10,10 @@ use Chamilo\Libraries\Format\Structure\BreadcrumbTrail;
  * (header,menu, footer)
  *
  * @package reporting.lib
- * @author Michael Kyndt
+ * @author  Michael Kyndt
  */
 abstract class ReportingTemplate
 {
-    use ClassContext;
     use DependencyInjectionContainerTrait;
 
     private $blocks = [];
@@ -28,28 +26,32 @@ abstract class ReportingTemplate
         $this->initializeContainer();
     }
 
-    /**
-     *
-     * @return number
-     */
-    public function count_blocks()
-    {
-        return count($this->get_blocks());
-    }
-
     public function addCurrentBlockBreadcrumb()
     {
-        if($this->getRequest()->getFromQuery(\Chamilo\Core\Reporting\Viewer\Manager::PARAM_SHOW_ALL))
+        if ($this->getRequest()->getFromQuery(\Chamilo\Core\Reporting\Viewer\Manager::PARAM_SHOW_ALL))
         {
             return;
         }
 
         BreadcrumbTrail::getInstance()->add(
             new Breadcrumb(
-                $this->get_url(),
-                $this->getCurrentBlock()->get_title()
+                $this->get_url(), $this->getCurrentBlock()->get_title()
             )
         );
+    }
+
+    public function add_reporting_block($block)
+    {
+        $block->set_id(count($this->blocks));
+        $this->blocks[] = $block;
+    }
+
+    /**
+     * @return number
+     */
+    public function count_blocks()
+    {
+        return count($this->get_blocks());
     }
 
     /**
@@ -60,12 +62,12 @@ abstract class ReportingTemplate
         $blockId = $this->getRequest()->getFromQuery(\Chamilo\Core\Reporting\Viewer\Manager::PARAM_BLOCK_ID);
         $block = null;
 
-        if($blockId >= 0)
+        if ($blockId >= 0)
         {
             $block = $this->get_block($blockId);
         }
 
-        if(!$block instanceof ReportingBlock)
+        if (!$block instanceof ReportingBlock)
         {
             $block = $this->get_block(0);
         }
@@ -73,36 +75,18 @@ abstract class ReportingTemplate
         return $block;
     }
 
-    public function get_parent()
-    {
-        return $this->parent;
-    }
-
-    public function set_parent($parent)
-    {
-        $this->parent = $parent;
-    }
-
     /**
-     *
-     * @return \Chamilo\Core\Reporting\ReportingBlock[]
+     * @brief Return template style containing properties such as title font size or paper orientation.
+     * Default implementation retrieves values from the cental configuration. See
+     * src/Chamilo/Core/Reporting/Resources/Settings/settings.xml.
+     * Templates can override this function and return a ReportingTemplateStyle object with custom properties.
      */
-    public function get_blocks()
+    public function getStyle()
     {
-        return $this->blocks;
+        return new ReportingTemplateStyle();
     }
 
     /**
-     *
-     * @param \Chamilo\Core\Reporting\ReportingBlock[] $blocks
-     */
-    public function set_blocks($blocks)
-    {
-        $this->blocks = $blocks;
-    }
-
-    /**
-     *
      * @param int $block_id
      *
      * @return \Chamilo\Core\Reporting\ReportingBlock
@@ -112,15 +96,12 @@ abstract class ReportingTemplate
         return $this->blocks[$block_id];
     }
 
-    public function add_reporting_block($block)
+    /**
+     * @return \Chamilo\Core\Reporting\ReportingBlock[]
+     */
+    public function get_blocks()
     {
-        $block->set_id(count($this->blocks));
-        $this->blocks[] = $block;
-    }
-
-    public function get_parameters()
-    {
-        return $this->get_parent()->get_parameters();
+        return $this->blocks;
     }
 
     public function get_parameter($key)
@@ -128,14 +109,27 @@ abstract class ReportingTemplate
         return $this->get_parent()->get_parameter($key);
     }
 
-    public function set_parameters($parameters)
+    public function get_parameters()
     {
-        $this->get_parent()->set_parameters($parameters);
+        return $this->get_parent()->get_parameters();
     }
 
-    public function set_parameter($key, $value)
+    public function get_parent()
     {
-        $this->get_parent()->set_parameter($key, $value);
+        return $this->parent;
+    }
+
+    public function get_url($parameters = [], $filter = [], $encode_entities = false)
+    {
+        return $this->get_parent()->get_url($parameters, $filter, $encode_entities);
+    }
+
+    /**
+     * @param \Chamilo\Core\Reporting\ReportingBlock[] $blocks
+     */
+    public function set_blocks($blocks)
+    {
+        $this->blocks = $blocks;
     }
 
     /**
@@ -156,19 +150,18 @@ abstract class ReportingTemplate
         $breadcrumb_trail->set_breadcrumbtrail($breadcrumbs);
     }
 
-    public function get_url($parameters = [], $filter = [], $encode_entities = false)
+    public function set_parameter($key, $value)
     {
-        return $this->get_parent()->get_url($parameters, $filter, $encode_entities);
+        $this->get_parent()->set_parameter($key, $value);
     }
 
-    /**
-     * @brief Return template style containing properties such as title font size or paper orientation.
-     * Default implementation retrieves values from the cental configuration. See
-     * src/Chamilo/Core/Reporting/Resources/Settings/settings.xml.
-     * Templates can override this function and return a ReportingTemplateStyle object with custom properties.
-     */
-    public function getStyle()
+    public function set_parameters($parameters)
     {
-        return new ReportingTemplateStyle();
+        $this->get_parent()->set_parameters($parameters);
+    }
+
+    public function set_parent($parent)
+    {
+        $this->parent = $parent;
     }
 }

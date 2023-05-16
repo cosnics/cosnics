@@ -5,13 +5,13 @@ use Chamilo\Core\Tracking\Storage\DataClass\SimpleTracker;
 use Chamilo\Libraries\Architecture\Traits\DependencyInjectionContainerTrait;
 
 /**
- * This class tracks the visits to pages
- *
- * @package users.lib.trackers
+ * @package Chamilo\Core\User\Integration\Chamilo\Core\Tracking\Storage\DataClass
  */
 class Visit extends SimpleTracker
 {
     use DependencyInjectionContainerTrait;
+
+    public const CONTEXT = 'Chamilo\Core\User\Integration\Chamilo\Core\Tracking';
 
     public const PROPERTY_ENTER_DATE = 'enter_date';
     public const PROPERTY_LEAVE_DATE = 'leave_date';
@@ -44,12 +44,12 @@ class Visit extends SimpleTracker
     public static function getDefaultPropertyNames(array $extendedPropertyNames = []): array
     {
         return parent::getDefaultPropertyNames(
-            array(
+            [
                 self::PROPERTY_USER_ID,
                 self::PROPERTY_ENTER_DATE,
                 self::PROPERTY_LEAVE_DATE,
                 self::PROPERTY_LOCATION
-            )
+            ]
         );
     }
 

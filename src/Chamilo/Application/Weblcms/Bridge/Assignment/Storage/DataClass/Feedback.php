@@ -10,6 +10,8 @@ namespace Chamilo\Application\Weblcms\Bridge\Assignment\Storage\DataClass;
  */
 class Feedback extends \Chamilo\Core\Repository\ContentObject\Assignment\Display\Bridge\Storage\DataClass\Feedback
 {
+    public const CONTEXT = 'Chamilo\Application\Weblcms\Bridge\Assignment';
+
     public static function getStorageUnitName(): string
     {
         return 'tracking_weblcms_assignment_feedback';

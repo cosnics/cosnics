@@ -2,6 +2,7 @@
 namespace Chamilo\Core\Metadata\Storage\DataClass;
 
 use Chamilo\Core\Metadata\Interfaces\EntityTranslationInterface;
+use Chamilo\Core\Metadata\Manager;
 use Chamilo\Core\Metadata\Traits\EntityTranslationTrait;
 use Chamilo\Libraries\Storage\DataClass\DataClass;
 use Chamilo\Libraries\Storage\Query\Condition\AndCondition;
@@ -14,30 +15,23 @@ use Chamilo\Libraries\Storage\Query\Variable\StaticConditionVariable;
  * This class describes a metadata schema
  *
  * @package Chamilo\Core\Metadata\Schema\Storage\DataClass
- * @author Jens Vanderheyden
- * @author Sven Vanpoucke - Hogeschool Gent
- * @author Hans De Bisschop <hans.de.bisschop@ehb.be>
- * @author Magali Gillard <magali.gillard@ehb.be>
- * @author Eduard Vossen <eduard.vossen@ehb.be>
+ * @author  Jens Vanderheyden
+ * @author  Sven Vanpoucke - Hogeschool Gent
+ * @author  Hans De Bisschop <hans.de.bisschop@ehb.be>
+ * @author  Magali Gillard <magali.gillard@ehb.be>
+ * @author  Eduard Vossen <eduard.vossen@ehb.be>
  */
 class Schema extends DataClass implements EntityTranslationInterface
 {
     use EntityTranslationTrait;
 
-    const PROPERTY_DESCRIPTION = 'description';
-    const PROPERTY_FIXED = 'fixed';
-    const PROPERTY_NAME = 'name';
-    const PROPERTY_NAMESPACE = 'namespace';
-    const PROPERTY_URL = 'url';
+    public const CONTEXT = Manager::CONTEXT;
 
-    /**
-     *
-     * @return string
-     */
-    public function getTranslationFallback()
-    {
-        return $this->get_name();
-    }
+    public const PROPERTY_DESCRIPTION = 'description';
+    public const PROPERTY_FIXED = 'fixed';
+    public const PROPERTY_NAME = 'name';
+    public const PROPERTY_NAMESPACE = 'namespace';
+    public const PROPERTY_URL = 'url';
 
     /**
      * Get the default properties
@@ -67,7 +61,7 @@ class Schema extends DataClass implements EntityTranslationInterface
         $dependencies = [];
 
         $dependencies[EntityTranslation::class] = new AndCondition(
-            array(
+            [
                 new EqualityCondition(
                     new PropertyConditionVariable(
                         EntityTranslation::class, EntityTranslation::PROPERTY_ENTITY_TYPE
@@ -78,11 +72,11 @@ class Schema extends DataClass implements EntityTranslationInterface
                         EntityTranslation::class, EntityTranslation::PROPERTY_ENTITY_ID
                     ), new StaticConditionVariable($this->get_id())
                 )
-            )
+            ]
         );
 
         $sourceConditions = new AndCondition(
-            array(
+            [
                 new EqualityCondition(
                     new PropertyConditionVariable(
                         RelationInstance::class, RelationInstance::PROPERTY_SOURCE_TYPE
@@ -92,11 +86,11 @@ class Schema extends DataClass implements EntityTranslationInterface
                     new PropertyConditionVariable(RelationInstance::class, RelationInstance::PROPERTY_SOURCE_ID),
                     new StaticConditionVariable($this->get_id())
                 )
-            )
+            ]
         );
 
         $targetConditions = new AndCondition(
-            array(
+            [
                 new EqualityCondition(
                     new PropertyConditionVariable(
                         RelationInstance::class, RelationInstance::PROPERTY_TARGET_TYPE
@@ -106,10 +100,10 @@ class Schema extends DataClass implements EntityTranslationInterface
                     new PropertyConditionVariable(RelationInstance::class, RelationInstance::PROPERTY_TARGET_ID),
                     new StaticConditionVariable($this->get_id())
                 )
-            )
+            ]
         );
 
-        $dependencies[RelationInstance::class] = new OrCondition(array($sourceConditions, $targetConditions));
+        $dependencies[RelationInstance::class] = new OrCondition([$sourceConditions, $targetConditions]);
 
         $dependencies[SchemaInstance::class] = new EqualityCondition(
             new PropertyConditionVariable(SchemaInstance::class, SchemaInstance::PROPERTY_SCHEMA_ID),
@@ -122,6 +116,22 @@ class Schema extends DataClass implements EntityTranslationInterface
         );
 
         return $dependencies;
+    }
+
+    /**
+     * @return string
+     */
+    public static function getStorageUnitName(): string
+    {
+        return 'metadata_schema';
+    }
+
+    /**
+     * @return string
+     */
+    public function getTranslationFallback()
+    {
+        return $this->get_name();
     }
 
     /**
@@ -152,14 +162,6 @@ class Schema extends DataClass implements EntityTranslationInterface
     public function get_namespace()
     {
         return $this->getDefaultProperty(self::PROPERTY_NAMESPACE);
-    }
-
-    /**
-     * @return string
-     */
-    public static function getStorageUnitName(): string
-    {
-        return 'metadata_schema';
     }
 
     /**

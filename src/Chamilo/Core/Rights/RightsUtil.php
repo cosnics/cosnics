@@ -4,7 +4,6 @@ namespace Chamilo\Core\Rights;
 use Chamilo\Core\Rights\Exception\RightsLocationNotFoundException;
 use Chamilo\Core\Rights\Storage\DataManager;
 use Chamilo\Core\User\Storage\DataClass\User;
-use Chamilo\Libraries\Architecture\Traits\ClassContext;
 use Chamilo\Libraries\DependencyInjection\DependencyInjectionContainerBuilder;
 use Chamilo\Libraries\Platform\Session\Session;
 use Chamilo\Libraries\Storage\Cache\DataClassRepositoryCache;
@@ -26,8 +25,6 @@ use Exception;
  */
 class RightsUtil
 {
-    use ClassContext;
-
     // Types
     public const TREE_TYPE_ROOT = 0;
     public const TYPE_ROOT = 0;

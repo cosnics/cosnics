@@ -1,26 +1,28 @@
 <?php
 namespace Chamilo\Core\Metadata\Storage\DataClass;
 
+use Chamilo\Core\Metadata\Manager;
 use Chamilo\Core\User\Storage\DataClass\User;
 use Chamilo\Libraries\Storage\DataClass\DataClass;
 use Chamilo\Libraries\Storage\DataManager\DataManager;
 
 /**
- *
  * @package Chamilo\Core\Metadata\Relation\Instance\Storage\DataClass
- * @author Hans De Bisschop <hans.de.bisschop@ehb.be>
- * @author Magali Gillard <magali.gillard@ehb.be>
- * @author Eduard Vossen <eduard.vossen@ehb.be>
+ * @author  Hans De Bisschop <hans.de.bisschop@ehb.be>
+ * @author  Magali Gillard <magali.gillard@ehb.be>
+ * @author  Eduard Vossen <eduard.vossen@ehb.be>
  */
 class RelationInstance extends DataClass
 {
-    const PROPERTY_CREATION_DATE = 'creation_date';
-    const PROPERTY_RELATION_ID = 'relation_id';
-    const PROPERTY_SOURCE_ID = 'source_id';
-    const PROPERTY_SOURCE_TYPE = 'source_type';
-    const PROPERTY_TARGET_ID = 'target_id';
-    const PROPERTY_TARGET_TYPE = 'target_type';
-    const PROPERTY_USER_ID = 'user_id';
+    public const CONTEXT = Manager::CONTEXT;
+
+    public const PROPERTY_CREATION_DATE = 'creation_date';
+    public const PROPERTY_RELATION_ID = 'relation_id';
+    public const PROPERTY_SOURCE_ID = 'source_id';
+    public const PROPERTY_SOURCE_TYPE = 'source_type';
+    public const PROPERTY_TARGET_ID = 'target_id';
+    public const PROPERTY_TARGET_TYPE = 'target_type';
+    public const PROPERTY_USER_ID = 'user_id';
 
     private $relation;
 
@@ -29,40 +31,6 @@ class RelationInstance extends DataClass
      * Extended functionality *
      * **************************************************************************************************************
      */
-
-    /**
-     *
-     * @return \Chamilo\Core\Metadata\Storage\DataClass\Relation
-     */
-    public function getRelation()
-    {
-        if (!isset($this->relation))
-        {
-            $this->relation = DataManager::retrieve_by_id(Relation::class, $this->get_relation_id());
-        }
-
-        return $this->relation;
-    }
-
-    /**
-     * **************************************************************************************************************
-     * Getters & Setters *
-     * **************************************************************************************************************
-     */
-
-    public function getUser()
-    {
-        return DataManager::retrieve_by_id(User::class, $this->get_user_id());
-    }
-
-    /**
-     *
-     * @return integer
-     */
-    public function get_creation_date()
-    {
-        return $this->getDefaultProperty(self::PROPERTY_CREATION_DATE);
-    }
 
     /**
      * Get the default properties
@@ -85,30 +53,16 @@ class RelationInstance extends DataClass
     }
 
     /**
-     *
-     * @return int
+     * @return \Chamilo\Core\Metadata\Storage\DataClass\Relation
      */
-    public function get_relation_id()
+    public function getRelation()
     {
-        return $this->getDefaultProperty(self::PROPERTY_RELATION_ID);
-    }
+        if (!isset($this->relation))
+        {
+            $this->relation = DataManager::retrieve_by_id(Relation::class, $this->get_relation_id());
+        }
 
-    /**
-     *
-     * @return string
-     */
-    public function get_source_id()
-    {
-        return $this->getDefaultProperty(self::PROPERTY_SOURCE_ID);
-    }
-
-    /**
-     *
-     * @return string
-     */
-    public function get_source_type()
-    {
-        return $this->getDefaultProperty(self::PROPERTY_SOURCE_TYPE);
+        return $this->relation;
     }
 
     /**
@@ -120,7 +74,49 @@ class RelationInstance extends DataClass
     }
 
     /**
-     *
+     * **************************************************************************************************************
+     * Getters & Setters *
+     * **************************************************************************************************************
+     */
+
+    public function getUser()
+    {
+        return DataManager::retrieve_by_id(User::class, $this->get_user_id());
+    }
+
+    /**
+     * @return int
+     */
+    public function get_creation_date()
+    {
+        return $this->getDefaultProperty(self::PROPERTY_CREATION_DATE);
+    }
+
+    /**
+     * @return int
+     */
+    public function get_relation_id()
+    {
+        return $this->getDefaultProperty(self::PROPERTY_RELATION_ID);
+    }
+
+    /**
+     * @return string
+     */
+    public function get_source_id()
+    {
+        return $this->getDefaultProperty(self::PROPERTY_SOURCE_ID);
+    }
+
+    /**
+     * @return string
+     */
+    public function get_source_type()
+    {
+        return $this->getDefaultProperty(self::PROPERTY_SOURCE_TYPE);
+    }
+
+    /**
      * @return string
      */
     public function get_target_id()
@@ -129,7 +125,6 @@ class RelationInstance extends DataClass
     }
 
     /**
-     *
      * @return string
      */
     public function get_target_type()
@@ -138,8 +133,7 @@ class RelationInstance extends DataClass
     }
 
     /**
-     *
-     * @return integer
+     * @return int
      */
     public function get_user_id()
     {
@@ -147,8 +141,7 @@ class RelationInstance extends DataClass
     }
 
     /**
-     *
-     * @param integer
+     * @param int
      */
     public function set_creation_date($creationDate)
     {
@@ -156,7 +149,6 @@ class RelationInstance extends DataClass
     }
 
     /**
-     *
      * @param int $relationId
      */
     public function set_relation_id($relationId)
@@ -165,7 +157,6 @@ class RelationInstance extends DataClass
     }
 
     /**
-     *
      * @param string $sourceId
      */
     public function set_source_id($sourceId)
@@ -174,7 +165,6 @@ class RelationInstance extends DataClass
     }
 
     /**
-     *
      * @param string $sourceType
      */
     public function set_source_type($sourceType)
@@ -183,7 +173,6 @@ class RelationInstance extends DataClass
     }
 
     /**
-     *
      * @param string $targetId
      */
     public function set_target_id($targetId)
@@ -192,7 +181,6 @@ class RelationInstance extends DataClass
     }
 
     /**
-     *
      * @param string $targetType
      */
     public function set_target_type($targetType)
@@ -201,8 +189,7 @@ class RelationInstance extends DataClass
     }
 
     /**
-     *
-     * @param integer
+     * @param int
      */
     public function set_user_id($user_id)
     {

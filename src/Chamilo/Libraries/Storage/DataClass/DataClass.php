@@ -1,8 +1,6 @@
 <?php
 namespace Chamilo\Libraries\Storage\DataClass;
 
-use Chamilo\Libraries\Architecture\ClassnameUtilities;
-use Chamilo\Libraries\Architecture\Traits\ClassContext;
 use Chamilo\Libraries\Storage\DataClass\Listeners\DataClassListener;
 use Chamilo\Libraries\Storage\DataManager\DataManager;
 use Chamilo\Libraries\Storage\Parameters\DataClassRetrievesParameters;
@@ -12,13 +10,11 @@ use Chamilo\Libraries\Translation\Translation;
  * Abstract class that describes a dataclass
  *
  * @package Chamilo\Libraries\Storage\DataClass
- * @author Hans De Bisschop - Erasmus Hogeschool Brussel
- * @author Sven Vanpoucke - Hogeschool Gent
+ * @author  Hans De Bisschop - Erasmus Hogeschool Brussel
+ * @author  Sven Vanpoucke - Hogeschool Gent
  */
 abstract class DataClass
 {
-    use ClassContext;
-
     public const NO_UID = - 1;
 
     public const PROPERTIES_DEFAULT = 'default_properties';
@@ -277,16 +273,6 @@ abstract class DataClass
     }
 
     /**
-     * @param \Chamilo\Libraries\Storage\DataClass\Listeners\DataClassListener[] $listeners
-     */
-    public function setListeners(array $listeners): DataClass
-    {
-        $this->listeners = $listeners;
-
-        return $this;
-    }
-
-    /**
      * @return string[]
      */
     public function getOptionalProperties(): array
@@ -308,16 +294,6 @@ abstract class DataClass
     public function getProperties(): array
     {
         return $this->properties;
-    }
-
-    /**
-     * @param string[][] $properties
-     */
-    public function setProperties(array $properties): DataClass
-    {
-        $this->properties = $properties;
-
-        return $this;
     }
 
     /**
@@ -454,6 +430,16 @@ abstract class DataClass
     }
 
     /**
+     * @param \Chamilo\Libraries\Storage\DataClass\Listeners\DataClassListener[] $listeners
+     */
+    public function setListeners(array $listeners): DataClass
+    {
+        $this->listeners = $listeners;
+
+        return $this;
+    }
+
+    /**
      * @param string[] $optionalProperties
      */
     public function setOptionalProperties(array $optionalProperties): DataClass
@@ -469,6 +455,16 @@ abstract class DataClass
     public function setOptionalProperty(string $name, $value): DataClass
     {
         $this->setSpecificProperty(self::PROPERTIES_OPTIONAL, $name, $value);
+
+        return $this;
+    }
+
+    /**
+     * @param string[][] $properties
+     */
+    public function setProperties(array $properties): DataClass
+    {
+        $this->properties = $properties;
 
         return $this;
     }
