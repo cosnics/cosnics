@@ -39,14 +39,7 @@ class ApplicationFactory
 
         if (!class_exists($className))
         {
-            // TODO: Temporary fallback for backwards compatibility
-            $componentName = (string) $this->getStringUtilities()->createString($action)->upperCamelize();
-            $className = $context . '\Component\\' . $componentName . 'Component';
-
-            if (!class_exists($className))
-            {
-                throw new ClassNotExistException($className);
-            }
+            throw new ClassNotExistException($className);
         }
 
         return $className;
@@ -60,8 +53,8 @@ class ApplicationFactory
         string $context, ApplicationConfiguration $applicationConfiguration, ?string $fallBackAction = null
     ): Application
     {
-        $action = $this->getAction($context, $applicationConfiguration, $fallBackAction);
-        $className = $this->getClassName($context, $applicationConfiguration, $action);
+        $action = $this->getAction($context, $fallBackAction);
+        $className = $this->getClassName($context, $action);
 
         /**
          * @var \Chamilo\Libraries\Architecture\Application\Application $application
@@ -85,45 +78,37 @@ class ApplicationFactory
         return $application;
     }
 
-    protected function determineLevel(?Application $application = null): int
-    {
-        if ($application instanceof Application)
-        {
-            $level = $application->get_level();
-            $level ++;
-        }
-        else
-        {
-
-            $level = 0;
-        }
-
-        return $level;
-    }
-
     /**
      * @throws \Chamilo\Libraries\Architecture\Exceptions\UserException
      */
     protected function getAction(
-        string $context, ApplicationConfiguration $applicationConfiguration, ?string $fallBackAction = null
+        string $context, ?string $fallBackAction = null
     ): string
     {
         $actionParameter = $this->getActionParameter($context);
-        $managerClass = $this->getManagerClass($context);
-        $level = $this->determineLevel($applicationConfiguration->getApplication());
 
-        $actions = $this->getRequestedAction($actionParameter, $context, $fallBackAction);
+        $request = $this->getRequest();
 
-        if (is_array($actions))
+        $getAction = $request->query->get($actionParameter);
+
+        if ($getAction)
         {
-            $action = $actions[$level] ?? $managerClass::DEFAULT_ACTION;
-        }
-        else
-        {
-            $action = $actions;
+            return $getAction;
         }
 
-        return $action;
+        $postAction = $request->request->get($actionParameter);
+
+        if ($postAction)
+        {
+            return $postAction;
+        }
+
+        if ($fallBackAction)
+        {
+            return $fallBackAction;
+        }
+
+        return $this->getDefaultAction($context);
     }
 
     /**
@@ -137,7 +122,6 @@ class ApplicationFactory
     }
 
     /**
-     * @throws \ReflectionException
      * @throws \Chamilo\Libraries\Architecture\Exceptions\ClassNotExistException
      * @throws \Chamilo\Libraries\Architecture\Exceptions\UserException
      */
@@ -156,12 +140,12 @@ class ApplicationFactory
      * @throws \Chamilo\Libraries\Architecture\Exceptions\UserException
      */
     public function getClassName(
-        string $context, ApplicationConfiguration $applicationConfiguration, ?string $action = null
+        string $context, ?string $action = null
     ): string
     {
         if (is_null($action))
         {
-            $action = $this->getAction($context, $applicationConfiguration);
+            $action = $this->getAction($context);
         }
 
         return $this->buildClassName($context, $action);
@@ -204,36 +188,6 @@ class ApplicationFactory
     public function getRequest(): ChamiloRequest
     {
         return $this->request;
-    }
-
-    /**
-     * @return string|string[]
-     * @throws \Chamilo\Libraries\Architecture\Exceptions\UserException
-     */
-    protected function getRequestedAction(string $actionParameter, string $context, ?string $fallBackAction = null)
-    {
-        $request = $this->getRequest();
-
-        $getAction = $request->query->get($actionParameter);
-
-        if ($getAction)
-        {
-            return $getAction;
-        }
-
-        $postAction = $request->request->get($actionParameter);
-
-        if ($postAction)
-        {
-            return $postAction;
-        }
-
-        if ($fallBackAction)
-        {
-            return $fallBackAction;
-        }
-
-        return $this->getDefaultAction($context);
     }
 
     public function getStringUtilities(): StringUtilities

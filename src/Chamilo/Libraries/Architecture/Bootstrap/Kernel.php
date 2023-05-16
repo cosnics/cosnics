@@ -110,9 +110,7 @@ class Kernel
      */
     protected function checkAuthentication(): Kernel
     {
-        $applicationClassName = $this->getApplicationFactory()->getClassName(
-            $this->getContext(), $this->getApplicationConfiguration()
-        );
+        $applicationClassName = $this->getApplicationFactory()->getClassName($this->getContext());
         $applicationRequiresAuthentication = !is_subclass_of(
             $applicationClassName, 'Chamilo\Libraries\Architecture\Interfaces\NoAuthenticationSupport'
         );
@@ -213,7 +211,8 @@ class Kernel
     {
         if (!isset($this->context))
         {
-            $this->context = $this->getRequest()->getFromRequestOrQuery(Application::PARAM_CONTEXT, HomeManager::CONTEXT);
+            $this->context =
+                $this->getRequest()->getFromRequestOrQuery(Application::PARAM_CONTEXT, HomeManager::CONTEXT);
         }
 
         return $this->context;
@@ -391,9 +390,7 @@ class Kernel
      */
     protected function traceVisit(): Kernel
     {
-        $applicationClassName = $this->getApplicationFactory()->getClassName(
-            $this->getContext(), $this->getApplicationConfiguration()
-        );
+        $applicationClassName = $this->getApplicationFactory()->getClassName($this->getContext());
         $applicationRequiresTracing = !is_subclass_of(
             $applicationClassName, 'Chamilo\Libraries\Architecture\Interfaces\NoVisitTraceComponentInterface'
         );
