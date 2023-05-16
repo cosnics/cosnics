@@ -13,6 +13,7 @@ use Chamilo\Libraries\Architecture\Application\Routing\UrlGenerator;
 use Chamilo\Libraries\Format\Structure\Glyph\FontAwesomeGlyph;
 use Chamilo\Libraries\Format\Structure\Toolbar;
 use Chamilo\Libraries\Format\Structure\ToolbarItem;
+use Chamilo\Libraries\Format\Table\Column\DataClassPropertyTableColumnFactory;
 use Chamilo\Libraries\Format\Table\Column\StaticTableColumn;
 use Chamilo\Libraries\Format\Table\Column\TableColumn;
 use Chamilo\Libraries\Format\Table\Extension\DataClassListTableRenderer;
@@ -47,14 +48,17 @@ class EntityRelationTableRenderer extends DataClassListTableRenderer
 
     public function __construct(
         UserService $userService, GroupService $groupService, RightsService $rightsService, Translator $translator,
-        UrlGenerator $urlGenerator, ListHtmlTableRenderer $htmlTableRenderer, Pager $pager
+        UrlGenerator $urlGenerator, ListHtmlTableRenderer $htmlTableRenderer, Pager $pager,
+        DataClassPropertyTableColumnFactory $dataClassPropertyTableColumnFactory
     )
     {
         $this->userService = $userService;
         $this->groupService = $groupService;
         $this->rightsService = $rightsService;
 
-        parent::__construct($translator, $urlGenerator, $htmlTableRenderer, $pager);
+        parent::__construct(
+            $translator, $urlGenerator, $htmlTableRenderer, $pager, $dataClassPropertyTableColumnFactory
+        );
     }
 
     public function getGroupService(): GroupService

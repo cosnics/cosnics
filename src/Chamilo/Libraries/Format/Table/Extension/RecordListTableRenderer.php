@@ -27,7 +27,7 @@ abstract class RecordListTableRenderer extends ListTableRenderer
     /**
      * @param string[] $record
      */
-    public function renderIdentifierCell($record): string
+    protected function renderIdentifierCell($record): string
     {
         return $record[DataClass::PROPERTY_ID];
     }

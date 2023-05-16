@@ -14,7 +14,7 @@ use Chamilo\Libraries\Architecture\Application\Routing\UrlGenerator;
 use Chamilo\Libraries\Format\Structure\Glyph\FontAwesomeGlyph;
 use Chamilo\Libraries\Format\Structure\Toolbar;
 use Chamilo\Libraries\Format\Structure\ToolbarItem;
-use Chamilo\Libraries\Format\Table\Column\DataClassPropertyTableColumn;
+use Chamilo\Libraries\Format\Table\Column\DataClassPropertyTableColumnFactory;
 use Chamilo\Libraries\Format\Table\Column\StaticTableColumn;
 use Chamilo\Libraries\Format\Table\Column\TableColumn;
 use Chamilo\Libraries\Format\Table\Extension\DataClassListTableRenderer;
@@ -53,13 +53,16 @@ class UnsubscribedGroupTableRenderer extends DataClassListTableRenderer
 
     public function __construct(
         GroupsTreeTraverser $groupsTreeTraverser, User $user, Translator $translator, UrlGenerator $urlGenerator,
-        ListHtmlTableRenderer $htmlTableRenderer, Pager $pager
+        ListHtmlTableRenderer $htmlTableRenderer, Pager $pager,
+        DataClassPropertyTableColumnFactory $dataClassPropertyTableColumnFactory
     )
     {
         $this->groupsTreeTraverser = $groupsTreeTraverser;
         $this->user = $user;
 
-        parent::__construct($translator, $urlGenerator, $htmlTableRenderer, $pager);
+        parent::__construct(
+            $translator, $urlGenerator, $htmlTableRenderer, $pager, $dataClassPropertyTableColumnFactory
+        );
     }
 
     public function getGroupsTreeTraverser(): GroupsTreeTraverser
@@ -99,9 +102,15 @@ class UnsubscribedGroupTableRenderer extends DataClassListTableRenderer
     {
         $translator = $this->getTranslator();
 
-        $this->addColumn(new DataClassPropertyTableColumn(Group::class, Group::PROPERTY_NAME));
-        $this->addColumn(new DataClassPropertyTableColumn(Group::class, Group::PROPERTY_CODE));
-        $this->addColumn(new DataClassPropertyTableColumn(Group::class, Group::PROPERTY_DESCRIPTION));
+        $this->addColumn(
+            $this->getDataClassPropertyTableColumnFactory()->getColumn(Group::class, Group::PROPERTY_NAME)
+        );
+        $this->addColumn(
+            $this->getDataClassPropertyTableColumnFactory()->getColumn(Group::class, Group::PROPERTY_CODE)
+        );
+        $this->addColumn(
+            $this->getDataClassPropertyTableColumnFactory()->getColumn(Group::class, Group::PROPERTY_DESCRIPTION)
+        );
         $this->addColumn(
             new StaticTableColumn(
                 self::PROPERTY_USERS, $translator->trans(self::PROPERTY_USERS, [], \Chamilo\Core\User\Manager::CONTEXT)

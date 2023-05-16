@@ -54,7 +54,7 @@ class SelectTableRenderer extends DataClassListTableRenderer implements TableRow
             new StaticTableColumn(self::COLUMN_TYPE, $glyph->render())
         );
 
-        $this->addColumn(new DataClassPropertyTableColumn(Vocabulary::class, Vocabulary::PROPERTY_VALUE));
+        $this->addColumn($this->getDataClassPropertyTableColumnFactory()->getColumn(Vocabulary::class, Vocabulary::PROPERTY_VALUE));
     }
 
     /**

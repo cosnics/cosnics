@@ -12,7 +12,7 @@ use Chamilo\Libraries\Architecture\Application\Routing\UrlGenerator;
 use Chamilo\Libraries\Format\Structure\Glyph\FontAwesomeGlyph;
 use Chamilo\Libraries\Format\Structure\Toolbar;
 use Chamilo\Libraries\Format\Structure\ToolbarItem;
-use Chamilo\Libraries\Format\Table\Column\DataClassPropertyTableColumn;
+use Chamilo\Libraries\Format\Table\Column\DataClassPropertyTableColumnFactory;
 use Chamilo\Libraries\Format\Table\Column\StaticTableColumn;
 use Chamilo\Libraries\Format\Table\Column\TableColumn;
 use Chamilo\Libraries\Format\Table\Extension\DataClassListTableRenderer;
@@ -54,13 +54,16 @@ class RequestTableRenderer extends DataClassListTableRenderer implements TableRo
 
     public function __construct(
         DatetimeUtilities $datetimeUtilities, User $user, Translator $translator, UrlGenerator $urlGenerator,
-        ListHtmlTableRenderer $htmlTableRenderer, Pager $pager
+        ListHtmlTableRenderer $htmlTableRenderer, Pager $pager,
+        DataClassPropertyTableColumnFactory $dataClassPropertyTableColumnFactory
     )
     {
         $this->datetimeUtilities = $datetimeUtilities;
         $this->user = $user;
 
-        parent::__construct($translator, $urlGenerator, $htmlTableRenderer, $pager);
+        parent::__construct(
+            $translator, $urlGenerator, $htmlTableRenderer, $pager, $dataClassPropertyTableColumnFactory
+        );
     }
 
     public function getDatetimeUtilities(): DatetimeUtilities
@@ -100,19 +103,31 @@ class RequestTableRenderer extends DataClassListTableRenderer implements TableRo
     protected function initializeColumns()
     {
         $this->addColumn(
-            new DataClassPropertyTableColumn(ContentObject::class, ContentObject::PROPERTY_TITLE)
+            $this->getDataClassPropertyTableColumnFactory()->getColumn(
+                ContentObject::class, ContentObject::PROPERTY_TITLE
+            )
         );
         $this->addColumn(
-            new DataClassPropertyTableColumn(ContentObject::class, ContentObject::PROPERTY_DESCRIPTION)
+            $this->getDataClassPropertyTableColumnFactory()->getColumn(
+                ContentObject::class, ContentObject::PROPERTY_DESCRIPTION
+            )
         );
         $this->addColumn(
             new StaticTableColumn(self::PROPERTY_AUTHOR, $this->getTranslator()->trans('Author', [], Manager::CONTEXT))
         );
-        $this->addColumn(new DataClassPropertyTableColumn(Request::class, Request::PROPERTY_REQUEST_TIME));
-        $this->addColumn(new DataClassPropertyTableColumn(Request::class, Request::PROPERTY_PERCENTAGE));
-        $this->addColumn(new DataClassPropertyTableColumn(Request::class, Request::PROPERTY_STATUS));
         $this->addColumn(
-            new DataClassPropertyTableColumn(Request::class, Request::PROPERTY_VISIBLE_IN_INDEX)
+            $this->getDataClassPropertyTableColumnFactory()->getColumn(Request::class, Request::PROPERTY_REQUEST_TIME)
+        );
+        $this->addColumn(
+            $this->getDataClassPropertyTableColumnFactory()->getColumn(Request::class, Request::PROPERTY_PERCENTAGE)
+        );
+        $this->addColumn(
+            $this->getDataClassPropertyTableColumnFactory()->getColumn(Request::class, Request::PROPERTY_STATUS)
+        );
+        $this->addColumn(
+            $this->getDataClassPropertyTableColumnFactory()->getColumn(
+                Request::class, Request::PROPERTY_VISIBLE_IN_INDEX
+            )
         );
     }
 

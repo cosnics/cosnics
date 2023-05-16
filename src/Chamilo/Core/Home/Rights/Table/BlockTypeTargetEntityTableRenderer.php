@@ -11,7 +11,6 @@ use Chamilo\Libraries\Architecture\Application\Application;
 use Chamilo\Libraries\Format\Structure\Glyph\FontAwesomeGlyph;
 use Chamilo\Libraries\Format\Structure\Toolbar;
 use Chamilo\Libraries\Format\Structure\ToolbarItem;
-use Chamilo\Libraries\Format\Table\Column\DataClassPropertyTableColumn;
 use Chamilo\Libraries\Format\Table\Column\StaticTableColumn;
 use Chamilo\Libraries\Format\Table\Column\TableColumn;
 use Chamilo\Libraries\Format\Table\Extension\RecordListTableRenderer;
@@ -31,7 +30,7 @@ class BlockTypeTargetEntityTableRenderer extends RecordListTableRenderer impleme
         $translator = $this->getTranslator();
 
         $this->addColumn(
-            new DataClassPropertyTableColumn(
+            $this->getDataClassPropertyTableColumnFactory()->getColumn(
                 BlockTypeTargetEntity::class, BlockTypeTargetEntity::PROPERTY_BLOCK_TYPE
             )
         );
@@ -46,7 +45,8 @@ class BlockTypeTargetEntityTableRenderer extends RecordListTableRenderer impleme
     /**
      * @param string[]|string[][] $learningPathChildAttempt
      */
-    public function renderCell(TableColumn $column, TableResultPosition $resultPosition, $learningPathChildAttempt): string
+    public function renderCell(TableColumn $column, TableResultPosition $resultPosition, $learningPathChildAttempt
+    ): string
     {
         if ($column->get_name() == 'target_entities')
         {

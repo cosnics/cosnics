@@ -13,6 +13,7 @@ use Chamilo\Libraries\Format\Structure\Glyph\IdentGlyph;
 use Chamilo\Libraries\Format\Structure\Glyph\NamespaceIdentGlyph;
 use Chamilo\Libraries\Format\Structure\Toolbar;
 use Chamilo\Libraries\Format\Structure\ToolbarItem;
+use Chamilo\Libraries\Format\Table\Column\DataClassPropertyTableColumnFactory;
 use Chamilo\Libraries\Format\Table\Column\StaticTableColumn;
 use Chamilo\Libraries\Format\Table\Column\TableColumn;
 use Chamilo\Libraries\Format\Table\Extension\DataClassListTableRenderer;
@@ -47,14 +48,17 @@ class EntityTableRenderer extends DataClassListTableRenderer implements TableRow
 
     public function __construct(
         GroupService $groupService, UserService $userService, User $user, Translator $translator,
-        UrlGenerator $urlGenerator, ListHtmlTableRenderer $htmlTableRenderer, Pager $pager
+        UrlGenerator $urlGenerator, ListHtmlTableRenderer $htmlTableRenderer, Pager $pager,
+        DataClassPropertyTableColumnFactory $dataClassPropertyTableColumnFactory
     )
     {
         $this->groupService = $groupService;
         $this->userService = $userService;
         $this->user = $user;
 
-        parent::__construct($translator, $urlGenerator, $htmlTableRenderer, $pager);
+        parent::__construct(
+            $translator, $urlGenerator, $htmlTableRenderer, $pager, $dataClassPropertyTableColumnFactory
+        );
     }
 
     public function getGroupService(): GroupService

@@ -11,7 +11,6 @@ use Chamilo\Core\Repository\Storage\DataManager;
 use Chamilo\Libraries\Format\Structure\Glyph\FontAwesomeGlyph;
 use Chamilo\Libraries\Format\Structure\Toolbar;
 use Chamilo\Libraries\Format\Structure\ToolbarItem;
-use Chamilo\Libraries\Format\Table\Column\DataClassPropertyTableColumn;
 use Chamilo\Libraries\Format\Table\Column\TableColumn;
 use Chamilo\Libraries\Format\Table\Extension\DataClassListTableRenderer;
 use Chamilo\Libraries\Format\Table\Interfaces\TableRowActionsSupport;
@@ -37,10 +36,14 @@ class GlossayViewerTableRenderer extends DataClassListTableRenderer implements T
     protected function initializeColumns()
     {
         $this->addColumn(
-            new DataClassPropertyTableColumn(ContentObject::class, ContentObject::PROPERTY_TITLE)
+            $this->getDataClassPropertyTableColumnFactory()->getColumn(
+                ContentObject::class, ContentObject::PROPERTY_TITLE
+            )
         );
         $this->addColumn(
-            new DataClassPropertyTableColumn(ContentObject::class, ContentObject::PROPERTY_DESCRIPTION)
+            $this->getDataClassPropertyTableColumnFactory()->getColumn(
+                ContentObject::class, ContentObject::PROPERTY_DESCRIPTION
+            )
         );
     }
 

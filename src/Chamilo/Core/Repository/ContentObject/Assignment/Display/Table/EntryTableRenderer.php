@@ -13,6 +13,7 @@ use Chamilo\Libraries\Format\Structure\Glyph\FontAwesomeGlyph;
 use Chamilo\Libraries\Format\Structure\Toolbar;
 use Chamilo\Libraries\Format\Structure\ToolbarItem;
 use Chamilo\Libraries\Format\Table\Column\DataClassPropertyTableColumn;
+use Chamilo\Libraries\Format\Table\Column\DataClassPropertyTableColumnFactory;
 use Chamilo\Libraries\Format\Table\Column\StaticTableColumn;
 use Chamilo\Libraries\Format\Table\Column\TableColumn;
 use Chamilo\Libraries\Format\Table\Extension\RecordListTableRenderer;
@@ -60,7 +61,8 @@ abstract class EntryTableRenderer extends RecordListTableRenderer implements Tab
     public function __construct(
         AssignmentDataProvider $assignmentDataProvider, DatetimeUtilities $datetimeUtilities,
         StringUtilities $stringUtilities, User $user, Translator $translator, UrlGenerator $urlGenerator,
-        ListHtmlTableRenderer $htmlTableRenderer, Pager $pager
+        ListHtmlTableRenderer $htmlTableRenderer, Pager $pager,
+        DataClassPropertyTableColumnFactory $dataClassPropertyTableColumnFactory
     )
     {
         $this->assignmentDataProvider = $assignmentDataProvider;
@@ -68,7 +70,9 @@ abstract class EntryTableRenderer extends RecordListTableRenderer implements Tab
         $this->stringUtilities = $stringUtilities;
         $this->user = $user;
 
-        parent::__construct($translator, $urlGenerator, $htmlTableRenderer, $pager);
+        parent::__construct(
+            $translator, $urlGenerator, $htmlTableRenderer, $pager, $dataClassPropertyTableColumnFactory
+        );
     }
 
     protected function formatDate($date): string
@@ -134,11 +138,15 @@ abstract class EntryTableRenderer extends RecordListTableRenderer implements Tab
         $translator = $this->getTranslator();
 
         $this->addColumn(
-            new DataClassPropertyTableColumn(ContentObject::class, ContentObject::PROPERTY_TITLE)
+            $this->getDataClassPropertyTableColumnFactory()->getColumn(
+                ContentObject::class, ContentObject::PROPERTY_TITLE
+            )
         );
 
         $this->addColumn(
-            new DataClassPropertyTableColumn(ContentObject::class, ContentObject::PROPERTY_DESCRIPTION)
+            $this->getDataClassPropertyTableColumnFactory()->getColumn(
+                ContentObject::class, ContentObject::PROPERTY_DESCRIPTION
+            )
         );
 
         $this->addColumn(

@@ -8,6 +8,7 @@ use Chamilo\Core\User\Storage\DataClass\User;
 use Chamilo\Libraries\Architecture\Application\Application;
 use Chamilo\Libraries\Architecture\Application\Routing\UrlGenerator;
 use Chamilo\Libraries\File\Filesystem;
+use Chamilo\Libraries\Format\Table\Column\DataClassPropertyTableColumnFactory;
 use Chamilo\Libraries\Format\Table\Column\StaticTableColumn;
 use Chamilo\Libraries\Format\Table\Column\TableColumn;
 use Chamilo\Libraries\Format\Table\FormAction\TableAction;
@@ -34,13 +35,15 @@ class ManagementRequestTableRenderer extends RequestTableRenderer
     public function __construct(
         Translator $translator, UrlGenerator $urlGenerator, ListHtmlTableRenderer $htmlTableRenderer, Pager $pager,
         RightsService $rightsService, DatetimeUtilities $datetimeUtilities, User $user,
-        StorageSpaceCalculator $storageSpaceCalculator
+        StorageSpaceCalculator $storageSpaceCalculator,
+        DataClassPropertyTableColumnFactory $dataClassPropertyTableColumnFactory
     )
     {
         $this->storageSpaceCalculator = $storageSpaceCalculator;
 
         parent::__construct(
-            $translator, $urlGenerator, $htmlTableRenderer, $pager, $rightsService, $datetimeUtilities, $user
+            $translator, $urlGenerator, $htmlTableRenderer, $pager, $rightsService, $datetimeUtilities, $user,
+            $dataClassPropertyTableColumnFactory
         );
     }
 

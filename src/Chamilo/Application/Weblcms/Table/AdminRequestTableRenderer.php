@@ -9,7 +9,7 @@ use Chamilo\Application\Weblcms\Storage\DataManager;
 use Chamilo\Core\User\Service\UserService;
 use Chamilo\Libraries\Architecture\Application\Application;
 use Chamilo\Libraries\Architecture\Application\Routing\UrlGenerator;
-use Chamilo\Libraries\Format\Table\Column\DataClassPropertyTableColumn;
+use Chamilo\Libraries\Format\Table\Column\DataClassPropertyTableColumnFactory;
 use Chamilo\Libraries\Format\Table\Column\StaticTableColumn;
 use Chamilo\Libraries\Format\Table\Column\TableColumn;
 use Chamilo\Libraries\Format\Table\Extension\DataClassListTableRenderer;
@@ -40,13 +40,16 @@ class AdminRequestTableRenderer extends DataClassListTableRenderer implements Ta
 
     public function __construct(
         DatetimeUtilities $datetimeUtilities, UserService $userService, Translator $translator,
-        UrlGenerator $urlGenerator, ListHtmlTableRenderer $htmlTableRenderer, Pager $pager
+        UrlGenerator $urlGenerator, ListHtmlTableRenderer $htmlTableRenderer, Pager $pager,
+        DataClassPropertyTableColumnFactory $dataClassPropertyTableColumnFactory
     )
     {
         $this->datetimeUtilities = $datetimeUtilities;
         $this->userService = $userService;
 
-        parent::__construct($translator, $urlGenerator, $htmlTableRenderer, $pager);
+        parent::__construct(
+            $translator, $urlGenerator, $htmlTableRenderer, $pager, $dataClassPropertyTableColumnFactory
+        );
     }
 
     public function getDatetimeUtilities(): DatetimeUtilities
@@ -91,16 +94,24 @@ class AdminRequestTableRenderer extends DataClassListTableRenderer implements Ta
             new StaticTableColumn(self::PROPERTY_COURSE_NAME, $translator->trans('CourseName', [], Manager::CONTEXT))
         );
         $this->addColumn(
-            new DataClassPropertyTableColumn(CourseRequest::class, CommonRequest::PROPERTY_SUBJECT)
+            $this->getDataClassPropertyTableColumnFactory()->getColumn(
+                CourseRequest::class, CommonRequest::PROPERTY_SUBJECT
+            )
         );
         $this->addColumn(
-            new DataClassPropertyTableColumn(CourseRequest::class, CommonRequest::PROPERTY_MOTIVATION)
+            $this->getDataClassPropertyTableColumnFactory()->getColumn(
+                CourseRequest::class, CommonRequest::PROPERTY_MOTIVATION
+            )
         );
         $this->addColumn(
-            new DataClassPropertyTableColumn(CourseRequest::class, CommonRequest::PROPERTY_CREATION_DATE)
+            $this->getDataClassPropertyTableColumnFactory()->getColumn(
+                CourseRequest::class, CommonRequest::PROPERTY_CREATION_DATE
+            )
         );
         $this->addColumn(
-            new DataClassPropertyTableColumn(CourseRequest::class, CommonRequest::PROPERTY_DECISION_DATE)
+            $this->getDataClassPropertyTableColumnFactory()->getColumn(
+                CourseRequest::class, CommonRequest::PROPERTY_DECISION_DATE
+            )
         );
     }
 

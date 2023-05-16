@@ -16,6 +16,7 @@ use Chamilo\Libraries\Format\Structure\Glyph\FontAwesomeGlyph;
 use Chamilo\Libraries\Format\Structure\Toolbar;
 use Chamilo\Libraries\Format\Structure\ToolbarItem;
 use Chamilo\Libraries\Format\Table\Column\DataClassPropertyTableColumn;
+use Chamilo\Libraries\Format\Table\Column\DataClassPropertyTableColumnFactory;
 use Chamilo\Libraries\Format\Table\Column\TableColumn;
 use Chamilo\Libraries\Format\Table\Extension\RecordListTableRenderer;
 use Chamilo\Libraries\Format\Table\Interfaces\TableRowActionsSupport;
@@ -40,13 +41,16 @@ class UnsubscribedCourseTableRenderer extends RecordListTableRenderer implements
 
     public function __construct(
         UserService $userService, User $user, Translator $translator, UrlGenerator $urlGenerator,
-        ListHtmlTableRenderer $htmlTableRenderer, Pager $pager
+        ListHtmlTableRenderer $htmlTableRenderer, Pager $pager,
+        DataClassPropertyTableColumnFactory $dataClassPropertyTableColumnFactory
     )
     {
         $this->user = $user;
         $this->userService = $userService;
 
-        parent::__construct($translator, $urlGenerator, $htmlTableRenderer, $pager);
+        parent::__construct(
+            $translator, $urlGenerator, $htmlTableRenderer, $pager, $dataClassPropertyTableColumnFactory
+        );
     }
 
     /**
@@ -114,11 +118,17 @@ class UnsubscribedCourseTableRenderer extends RecordListTableRenderer implements
     {
         $translator = $this->getTranslator();
 
-        $this->addColumn(new DataClassPropertyTableColumn(Course::class, Course::PROPERTY_VISUAL_CODE));
-        $this->addColumn(new DataClassPropertyTableColumn(Course::class, Course::PROPERTY_TITLE));
+        $this->addColumn(
+            $this->getDataClassPropertyTableColumnFactory()->getColumn(Course::class, Course::PROPERTY_VISUAL_CODE)
+        );
+        $this->addColumn(
+            $this->getDataClassPropertyTableColumnFactory()->getColumn(Course::class, Course::PROPERTY_TITLE)
+        );
 
         $this->addColumn(
-            new DataClassPropertyTableColumn(Course::class, Course::PROPERTY_TITULAR_ID, null, false)
+            $this->getDataClassPropertyTableColumnFactory()->getColumn(
+                Course::class, Course::PROPERTY_TITULAR_ID, null, false
+            )
         );
 
         $this->addColumn(

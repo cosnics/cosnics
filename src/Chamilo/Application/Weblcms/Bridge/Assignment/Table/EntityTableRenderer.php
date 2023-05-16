@@ -6,6 +6,7 @@ use Chamilo\Core\Repository\ContentObject\Assignment\Display\Interfaces\Assignme
 use Chamilo\Core\Repository\ContentObject\Assignment\Display\Service\RightsService;
 use Chamilo\Core\User\Storage\DataClass\User;
 use Chamilo\Libraries\Architecture\Application\Routing\UrlGenerator;
+use Chamilo\Libraries\Format\Table\Column\DataClassPropertyTableColumnFactory;
 use Chamilo\Libraries\Format\Table\ListHtmlTableRenderer;
 use Chamilo\Libraries\Format\Table\Pager;
 use Chamilo\Libraries\Storage\DataClass\DataClass;
@@ -26,14 +27,14 @@ abstract class EntityTableRenderer
     public function __construct(
         EntityServiceInterface $entityService, AssignmentDataProvider $assignmentDataProvider,
         DatetimeUtilities $datetimeUtilities, RightsService $rightsService, User $user, Translator $translator,
-        UrlGenerator $urlGenerator, ListHtmlTableRenderer $htmlTableRenderer, Pager $pager
+        UrlGenerator $urlGenerator, ListHtmlTableRenderer $htmlTableRenderer, Pager $pager, DataClassPropertyTableColumnFactory $dataClassPropertyTableColumnFactory
     )
     {
         $this->entityService = $entityService;
 
         parent::__construct(
             $assignmentDataProvider, $datetimeUtilities, $rightsService, $user, $translator, $urlGenerator,
-            $htmlTableRenderer, $pager
+            $htmlTableRenderer, $pager, $dataClassPropertyTableColumnFactory
         );
     }
 

@@ -11,7 +11,7 @@ use Chamilo\Libraries\Architecture\Application\Routing\UrlGenerator;
 use Chamilo\Libraries\Format\Structure\Glyph\FontAwesomeGlyph;
 use Chamilo\Libraries\Format\Structure\Toolbar;
 use Chamilo\Libraries\Format\Structure\ToolbarItem;
-use Chamilo\Libraries\Format\Table\Column\DataClassPropertyTableColumn;
+use Chamilo\Libraries\Format\Table\Column\DataClassPropertyTableColumnFactory;
 use Chamilo\Libraries\Format\Table\Extension\DataClassListTableRenderer;
 use Chamilo\Libraries\Format\Table\FormAction\TableAction;
 use Chamilo\Libraries\Format\Table\FormAction\TableActions;
@@ -41,7 +41,7 @@ class UserTableRenderer extends DataClassListTableRenderer implements TableRowAc
     public function __construct(
         RightsService $rightsService, PublicationService $publicationService, FavouriteService $favouriteService,
         Translator $translator, UrlGenerator $urlGenerator, ListHtmlTableRenderer $htmlTableRenderer, Pager $pager,
-        User $user
+        User $user, DataClassPropertyTableColumnFactory $dataClassPropertyTableColumnFactory
     )
     {
         $this->rightsService = $rightsService;
@@ -49,7 +49,9 @@ class UserTableRenderer extends DataClassListTableRenderer implements TableRowAc
         $this->favouriteService = $favouriteService;
         $this->user = $user;
 
-        parent::__construct($translator, $urlGenerator, $htmlTableRenderer, $pager);
+        parent::__construct(
+            $translator, $urlGenerator, $htmlTableRenderer, $pager, $dataClassPropertyTableColumnFactory
+        );
     }
 
     public function canViewUserPortfolio(User $user): bool
@@ -109,9 +111,15 @@ class UserTableRenderer extends DataClassListTableRenderer implements TableRowAc
 
     protected function initializeColumns()
     {
-        $this->addColumn(new DataClassPropertyTableColumn(User::class, User::PROPERTY_FIRSTNAME));
-        $this->addColumn(new DataClassPropertyTableColumn(User::class, User::PROPERTY_LASTNAME));
-        $this->addColumn(new DataClassPropertyTableColumn(User::class, User::PROPERTY_OFFICIAL_CODE));
+        $this->addColumn(
+            $this->getDataClassPropertyTableColumnFactory()->getColumn(User::class, User::PROPERTY_FIRSTNAME)
+        );
+        $this->addColumn(
+            $this->getDataClassPropertyTableColumnFactory()->getColumn(User::class, User::PROPERTY_LASTNAME)
+        );
+        $this->addColumn(
+            $this->getDataClassPropertyTableColumnFactory()->getColumn(User::class, User::PROPERTY_OFFICIAL_CODE)
+        );
     }
 
     /**

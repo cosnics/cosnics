@@ -25,9 +25,9 @@ class ElementTableRenderer extends DataClassListTableRenderer implements TableRo
 
     protected function initializeColumns()
     {
-        $this->addColumn(new DataClassPropertyTableColumn(Element::class, Element::PROPERTY_TYPE));
-        $this->addColumn(new DataClassPropertyTableColumn(Element::class, Element::PROPERTY_NAME));
-        $this->addColumn(new DataClassPropertyTableColumn(Element::class, Element::PROPERTY_REQUIRED));
+        $this->addColumn($this->getDataClassPropertyTableColumnFactory()->getColumn(Element::class, Element::PROPERTY_TYPE));
+        $this->addColumn($this->getDataClassPropertyTableColumnFactory()->getColumn(Element::class, Element::PROPERTY_NAME));
+        $this->addColumn($this->getDataClassPropertyTableColumnFactory()->getColumn(Element::class, Element::PROPERTY_REQUIRED));
     }
 
     /**

@@ -11,6 +11,7 @@ use Chamilo\Core\User\Storage\DataClass\User;
 use Chamilo\Libraries\Architecture\Application\Application;
 use Chamilo\Libraries\Architecture\Application\Routing\UrlGenerator;
 use Chamilo\Libraries\Format\Table\Column\DataClassPropertyTableColumn;
+use Chamilo\Libraries\Format\Table\Column\DataClassPropertyTableColumnFactory;
 use Chamilo\Libraries\Format\Table\Column\TableColumn;
 use Chamilo\Libraries\Format\Table\FormAction\TableAction;
 use Chamilo\Libraries\Format\Table\FormAction\TableActions;
@@ -37,14 +38,17 @@ class OpenCourseTableRenderer extends CourseTableRenderer
 
     public function __construct(
         AuthorizationChecker $authorizationChecker, OpenCourseService $openCourseService, User $user,
-        Translator $translator, UrlGenerator $urlGenerator, ListHtmlTableRenderer $htmlTableRenderer, Pager $pager
+        Translator $translator, UrlGenerator $urlGenerator, ListHtmlTableRenderer $htmlTableRenderer, Pager $pager,
+        DataClassPropertyTableColumnFactory $dataClassPropertyTableColumnFactory
     )
     {
         $this->authorizationChecker = $authorizationChecker;
         $this->openCourseService = $openCourseService;
         $this->user = $user;
 
-        parent::__construct($translator, $urlGenerator, $htmlTableRenderer, $pager);
+        parent::__construct(
+            $translator, $urlGenerator, $htmlTableRenderer, $pager, $dataClassPropertyTableColumnFactory
+        );
     }
 
     public function getAuthorizationChecker(): AuthorizationChecker
@@ -84,11 +88,17 @@ class OpenCourseTableRenderer extends CourseTableRenderer
     {
         $translator = $this->getTranslator();
 
-        $this->addColumn(new DataClassPropertyTableColumn(Course::class, Course::PROPERTY_VISUAL_CODE));
-        $this->addColumn(new DataClassPropertyTableColumn(Course::class, Course::PROPERTY_TITLE));
+        $this->addColumn(
+            $this->getDataClassPropertyTableColumnFactory()->getColumn(Course::class, Course::PROPERTY_VISUAL_CODE)
+        );
+        $this->addColumn(
+            $this->getDataClassPropertyTableColumnFactory()->getColumn(Course::class, Course::PROPERTY_TITLE)
+        );
 
         $this->addColumn(
-            new DataClassPropertyTableColumn(Course::class, Course::PROPERTY_TITULAR_ID, null, false)
+            $this->getDataClassPropertyTableColumnFactory()->getColumn(
+                Course::class, Course::PROPERTY_TITULAR_ID, null, false
+            )
         );
 
         $isAuthorized =

@@ -43,7 +43,7 @@ class RelationTableRenderer extends DataClassListTableRenderer implements TableR
 
     protected function initializeColumns()
     {
-        $this->addColumn(new DataClassPropertyTableColumn(Relation::class, Relation::PROPERTY_NAME));
+        $this->addColumn($this->getDataClassPropertyTableColumnFactory()->getColumn(Relation::class, Relation::PROPERTY_NAME));
     }
 
     /**

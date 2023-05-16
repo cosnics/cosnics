@@ -2,7 +2,6 @@
 namespace Chamilo\Application\Weblcms\Bridge\Assignment\Table;
 
 use Chamilo\Application\Weblcms\Tool\Implementation\CourseGroup\Storage\DataClass\CourseGroup;
-use Chamilo\Libraries\Format\Table\Column\DataClassPropertyTableColumn;
 use Chamilo\Libraries\Format\Table\Column\TableColumn;
 use Chamilo\Libraries\Format\Table\TableResultPosition;
 
@@ -14,7 +13,9 @@ abstract class CourseGroupEntityTableRenderer extends EntityTableRenderer
 {
     protected function initializeColumns()
     {
-        $this->addColumn(new DataClassPropertyTableColumn(CourseGroup::class, CourseGroup::PROPERTY_NAME));
+        $this->addColumn(
+            $this->getDataClassPropertyTableColumnFactory()->getColumn(CourseGroup::class, CourseGroup::PROPERTY_NAME)
+        );
 
         parent::initializeColumns();
     }

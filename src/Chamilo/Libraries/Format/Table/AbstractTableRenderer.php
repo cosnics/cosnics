@@ -3,8 +3,8 @@ namespace Chamilo\Libraries\Format\Table;
 
 use Chamilo\Libraries\Architecture\Application\Routing\UrlGenerator;
 use Chamilo\Libraries\Architecture\ClassnameUtilities;
-use Chamilo\Libraries\Architecture\Traits\ClassContext;
 use Chamilo\Libraries\Format\Table\Column\AbstractSortableTableColumn;
+use Chamilo\Libraries\Format\Table\Column\DataClassPropertyTableColumnFactory;
 use Chamilo\Libraries\Format\Table\Column\TableColumn;
 use Chamilo\Libraries\Format\Table\FormAction\TableActions;
 use Chamilo\Libraries\Format\Table\Interfaces\TableActionsSupport;
@@ -22,8 +22,6 @@ use Symfony\Component\Translation\Translator;
  */
 abstract class AbstractTableRenderer
 {
-    use ClassContext;
-
     public const DEFAULT_ORDER_COLUMN_DIRECTION = SORT_ASC;
     public const DEFAULT_ORDER_COLUMN_INDEX = 0;
 
@@ -37,6 +35,8 @@ abstract class AbstractTableRenderer
      */
     protected array $columns = [];
 
+    protected DataClassPropertyTableColumnFactory $dataClassPropertyTableColumnFactory;
+
     protected AbstractHtmlTableRenderer $htmlTableRenderer;
 
     protected Pager $pager;
@@ -46,13 +46,15 @@ abstract class AbstractTableRenderer
     protected UrlGenerator $urlGenerator;
 
     public function __construct(
-        Translator $translator, UrlGenerator $urlGenerator, AbstractHtmlTableRenderer $htmlTableRenderer, Pager $pager
+        Translator $translator, UrlGenerator $urlGenerator, AbstractHtmlTableRenderer $htmlTableRenderer, Pager $pager,
+        DataClassPropertyTableColumnFactory $dataClassPropertyTableColumnFactory
     )
     {
         $this->translator = $translator;
         $this->urlGenerator = $urlGenerator;
         $this->htmlTableRenderer = $htmlTableRenderer;
         $this->pager = $pager;
+        $this->dataClassPropertyTableColumnFactory = $dataClassPropertyTableColumnFactory;
 
         $this->initializeColumns();
     }
@@ -154,14 +156,19 @@ abstract class AbstractTableRenderer
         return $this->columns;
     }
 
+    public function getDataClassPropertyTableColumnFactory(): DataClassPropertyTableColumnFactory
+    {
+        return $this->dataClassPropertyTableColumnFactory;
+    }
+
     /**
      * @return int[]
      */
     public function getDefaultParameterValues(): array
     {
         return [
-            TableParameterValues::PARAM_ORDER_COLUMN_DIRECTION => static::DEFAULT_ORDER_COLUMN_DIRECTION,
-            TableParameterValues::PARAM_ORDER_COLUMN_INDEX => static::DEFAULT_ORDER_COLUMN_INDEX,
+            AbstractBaseTableParameters::PARAM_ORDER_COLUMN_DIRECTION => static::DEFAULT_ORDER_COLUMN_DIRECTION,
+            AbstractBaseTableParameters::PARAM_ORDER_COLUMN_INDEX => static::DEFAULT_ORDER_COLUMN_INDEX,
             TableParameterValues::PARAM_NUMBER_OF_ROWS_PER_PAGE => static::DEFAULT_NUMBER_OF_ROWS_PER_PAGE,
             TableParameterValues::PARAM_NUMBER_OF_COLUMNS_PER_PAGE => static::DEFAULT_NUMBER_OF_COLUMNS_PER_PAGE,
         ];
@@ -205,11 +212,12 @@ abstract class AbstractTableRenderer
         return [
             TableParameterValues::PARAM_NUMBER_OF_ROWS_PER_PAGE => $tableName . '_' .
                 TableParameterValues::PARAM_NUMBER_OF_ROWS_PER_PAGE,
-            TableParameterValues::PARAM_ORDER_COLUMN_INDEX => $tableName . '_' .
-                TableParameterValues::PARAM_ORDER_COLUMN_INDEX,
-            TableParameterValues::PARAM_ORDER_COLUMN_DIRECTION => $tableName . '_' .
-                TableParameterValues::PARAM_ORDER_COLUMN_DIRECTION,
-            TableParameterValues::PARAM_PAGE_NUMBER => $tableName . '_' . TableParameterValues::PARAM_PAGE_NUMBER,
+            AbstractBaseTableParameters::PARAM_ORDER_COLUMN_INDEX => $tableName . '_' .
+                AbstractBaseTableParameters::PARAM_ORDER_COLUMN_INDEX,
+            AbstractBaseTableParameters::PARAM_ORDER_COLUMN_DIRECTION => $tableName . '_' .
+                AbstractBaseTableParameters::PARAM_ORDER_COLUMN_DIRECTION,
+            AbstractBaseTableParameters::PARAM_PAGE_NUMBER => $tableName . '_' .
+                AbstractBaseTableParameters::PARAM_PAGE_NUMBER,
             TableParameterValues::PARAM_SELECT_ALL => $tableName . '_' . TableParameterValues::PARAM_SELECT_ALL
         ];
     }

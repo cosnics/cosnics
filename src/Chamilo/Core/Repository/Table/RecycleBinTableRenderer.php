@@ -12,7 +12,7 @@ use Chamilo\Libraries\Format\Structure\Glyph\FontAwesomeGlyph;
 use Chamilo\Libraries\Format\Structure\Glyph\IdentGlyph;
 use Chamilo\Libraries\Format\Structure\Toolbar;
 use Chamilo\Libraries\Format\Structure\ToolbarItem;
-use Chamilo\Libraries\Format\Table\Column\DataClassPropertyTableColumn;
+use Chamilo\Libraries\Format\Table\Column\DataClassPropertyTableColumnFactory;
 use Chamilo\Libraries\Format\Table\Column\StaticTableColumn;
 use Chamilo\Libraries\Format\Table\Column\TableColumn;
 use Chamilo\Libraries\Format\Table\Extension\DataClassListTableRenderer;
@@ -51,13 +51,16 @@ class RecycleBinTableRenderer extends DataClassListTableRenderer implements Tabl
 
     public function __construct(
         ContentObjectUrlGenerator $contentObjectUrlGenerator, StringUtilities $stringUtilities, Translator $translator,
-        UrlGenerator $urlGenerator, ListHtmlTableRenderer $htmlTableRenderer, Pager $pager
+        UrlGenerator $urlGenerator, ListHtmlTableRenderer $htmlTableRenderer, Pager $pager,
+        DataClassPropertyTableColumnFactory $dataClassPropertyTableColumnFactory
     )
     {
         $this->stringUtilities = $stringUtilities;
         $this->contentObjectUrlGenerator = $contentObjectUrlGenerator;
 
-        parent::__construct($translator, $urlGenerator, $htmlTableRenderer, $pager);
+        parent::__construct(
+            $translator, $urlGenerator, $htmlTableRenderer, $pager, $dataClassPropertyTableColumnFactory
+        );
     }
 
     public function getContentObjectUrlGenerator(): ContentObjectUrlGenerator
@@ -116,10 +119,14 @@ class RecycleBinTableRenderer extends DataClassListTableRenderer implements Tabl
             new StaticTableColumn(ContentObject::PROPERTY_TYPE, $glyph->render())
         );
         $this->addColumn(
-            new DataClassPropertyTableColumn(ContentObject::class, ContentObject::PROPERTY_TITLE)
+            $this->getDataClassPropertyTableColumnFactory()->getColumn(
+                ContentObject::class, ContentObject::PROPERTY_TITLE
+            )
         );
         $this->addColumn(
-            new DataClassPropertyTableColumn(ContentObject::class, ContentObject::PROPERTY_DESCRIPTION)
+            $this->getDataClassPropertyTableColumnFactory()->getColumn(
+                ContentObject::class, ContentObject::PROPERTY_DESCRIPTION
+            )
         );
         $this->addColumn(
             new StaticTableColumn(

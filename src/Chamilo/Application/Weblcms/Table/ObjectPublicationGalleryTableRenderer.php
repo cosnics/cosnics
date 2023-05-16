@@ -6,7 +6,6 @@ use Chamilo\Application\Weblcms\Tool\Manager;
 use Chamilo\Core\Repository\Common\Rendition\ContentObjectRendition;
 use Chamilo\Core\Repository\Common\Rendition\ContentObjectRenditionImplementation;
 use Chamilo\Core\Repository\Storage\DataClass\ContentObject;
-use Chamilo\Libraries\Format\Table\Column\DataClassPropertyTableColumn;
 use Chamilo\Libraries\Format\Table\Extension\DataClassGalleryTableRenderer;
 use Chamilo\Libraries\Format\Table\FormAction\TableActions;
 use Chamilo\Libraries\Format\Table\Interfaces\TableActionsSupport;
@@ -38,11 +37,15 @@ class ObjectPublicationGalleryTableRenderer extends DataClassGalleryTableRendere
     protected function initializeColumns()
     {
         $this->addColumn(
-            new DataClassPropertyTableColumn(ContentObject::class, ContentObject::PROPERTY_TITLE)
+            $this->getDataClassPropertyTableColumnFactory()->getColumn(
+                ContentObject::class, ContentObject::PROPERTY_TITLE
+            )
         );
 
         $this->addColumn(
-            new DataClassPropertyTableColumn(ContentObject::class, ContentObject::PROPERTY_DESCRIPTION)
+            $this->getDataClassPropertyTableColumnFactory()->getColumn(
+                ContentObject::class, ContentObject::PROPERTY_DESCRIPTION
+            )
         );
     }
 

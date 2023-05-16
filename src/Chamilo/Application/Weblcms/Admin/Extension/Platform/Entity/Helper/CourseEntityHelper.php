@@ -18,6 +18,7 @@ use Chamilo\Libraries\Storage\Query\Joins;
 use Chamilo\Libraries\Storage\Query\RetrieveProperties;
 use Chamilo\Libraries\Storage\Query\Variable\FunctionConditionVariable;
 use Chamilo\Libraries\Storage\Query\Variable\PropertyConditionVariable;
+use Chamilo\Libraries\Translation\Translation;
 
 class CourseEntityHelper
 {
@@ -105,12 +106,26 @@ class CourseEntityHelper
         return new Joins([$join]);
     }
 
+    /**
+     * @throws \ReflectionException
+     * @throws \Exception
+     */
     public static function get_table_columns()
     {
+        $translator = Translation::getInstance();
+
         $columns = [];
-        $columns[] = new DataClassPropertyTableColumn(Course::class, Course::PROPERTY_TITLE);
-        $columns[] = new StaticTableColumn(self::PROPERTY_PATH);
-        $columns[] = new DataClassPropertyTableColumn(Course::class, Course::PROPERTY_VISUAL_CODE);
+        $columns[] = new DataClassPropertyTableColumn(
+            Course::class, Course::PROPERTY_TITLE,
+            $translator->getTranslation('Title', [], \Chamilo\Application\Weblcms\Manager::CONTEXT)
+        );
+        $columns[] = new StaticTableColumn(
+            self::PROPERTY_PATH, $translator->getTranslation('Path', [], \Chamilo\Application\Weblcms\Manager::CONTEXT)
+        );
+        $columns[] = new DataClassPropertyTableColumn(
+            Course::class, Course::PROPERTY_VISUAL_CODE,
+            $translator->getTranslation('VisualCode', [], \Chamilo\Application\Weblcms\Manager::CONTEXT)
+        );
 
         return $columns;
     }

@@ -8,7 +8,6 @@ use Chamilo\Configuration\Category\Storage\DataClass\PlatformCategory;
 use Chamilo\Libraries\Format\Structure\Glyph\FontAwesomeGlyph;
 use Chamilo\Libraries\Format\Structure\Toolbar;
 use Chamilo\Libraries\Format\Structure\ToolbarItem;
-use Chamilo\Libraries\Format\Table\Column\DataClassPropertyTableColumn;
 use Chamilo\Libraries\Format\Table\Column\StaticTableColumn;
 use Chamilo\Libraries\Format\Table\Column\TableColumn;
 use Chamilo\Libraries\Format\Table\Extension\DataClassListTableRenderer;
@@ -42,7 +41,11 @@ class CategoryTableRenderer extends DataClassListTableRenderer implements TableR
         $this->addColumn(
             new StaticTableColumn(self::CATEGORY, $translator->trans(self::CATEGORY, [], $categoryClassName::CONTEXT))
         );
-        $this->addColumn(new DataClassPropertyTableColumn($categoryClassName, PlatformCategory::PROPERTY_NAME));
+        $this->addColumn(
+            $this->getDataClassPropertyTableColumnFactory()->getColumn(
+                $categoryClassName, PlatformCategory::PROPERTY_NAME
+            )
+        );
 
         if ($this->categoryManagerImplementer->areSubcategoriesAllowed())
         {

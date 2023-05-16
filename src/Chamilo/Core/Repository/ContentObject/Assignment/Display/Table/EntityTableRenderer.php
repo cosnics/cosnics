@@ -5,7 +5,6 @@ use Chamilo\Core\Repository\ContentObject\Assignment\Display\Bridge\Storage\Data
 use Chamilo\Core\Repository\ContentObject\Assignment\Display\Interfaces\AssignmentDataProvider;
 use Chamilo\Core\Repository\ContentObject\Assignment\Display\Manager;
 use Chamilo\Core\Repository\ContentObject\Assignment\Display\Service\RightsService;
-use Chamilo\Core\Repository\ContentObject\Assignment\Display\Table\Entity\EntityTableColumnModel;
 use Chamilo\Core\Repository\ContentObject\Assignment\Storage\DataClass\Assignment;
 use Chamilo\Core\User\Storage\DataClass\User;
 use Chamilo\Libraries\Architecture\Application\Application;
@@ -13,6 +12,7 @@ use Chamilo\Libraries\Architecture\Application\Routing\UrlGenerator;
 use Chamilo\Libraries\Format\Structure\Glyph\FontAwesomeGlyph;
 use Chamilo\Libraries\Format\Structure\Toolbar;
 use Chamilo\Libraries\Format\Structure\ToolbarItem;
+use Chamilo\Libraries\Format\Table\Column\DataClassPropertyTableColumnFactory;
 use Chamilo\Libraries\Format\Table\Column\SortableStaticTableColumn;
 use Chamilo\Libraries\Format\Table\Column\StaticTableColumn;
 use Chamilo\Libraries\Format\Table\Column\TableColumn;
@@ -66,7 +66,8 @@ abstract class EntityTableRenderer extends RecordListTableRenderer
     public function __construct(
         AssignmentDataProvider $assignmentDataProvider, DatetimeUtilities $datetimeUtilities,
         RightsService $rightsService, User $user, Translator $translator, UrlGenerator $urlGenerator,
-        ListHtmlTableRenderer $htmlTableRenderer, Pager $pager
+        ListHtmlTableRenderer $htmlTableRenderer, Pager $pager,
+        DataClassPropertyTableColumnFactory $dataClassPropertyTableColumnFactory
     )
     {
         $this->assignmentDataProvider = $assignmentDataProvider;
@@ -74,13 +75,15 @@ abstract class EntityTableRenderer extends RecordListTableRenderer
         $this->rightsService = $rightsService;
         $this->user = $user;
 
-        parent::__construct($translator, $urlGenerator, $htmlTableRenderer, $pager);
+        parent::__construct(
+            $translator, $urlGenerator, $htmlTableRenderer, $pager, $dataClassPropertyTableColumnFactory
+        );
     }
 
     protected function canViewEntity($entity): bool
     {
         /** @var Assignment $assignment */
-        $hasEntries = $entity[EntityTableColumnModel::PROPERTY_ENTRY_COUNT] > 0;
+        $hasEntries = $entity[self::PROPERTY_ENTRY_COUNT] > 0;
 
         return $this->getRightsService()->canUserViewEntity(
                 $this->getUser(), $this->application->getAssignment(), $entity[Entry::PROPERTY_ENTITY_TYPE],
@@ -266,7 +269,7 @@ abstract class EntityTableRenderer extends RecordListTableRenderer
             );
         }
 
-        $hasEntries = $entity[EntityTableColumnModel::PROPERTY_ENTRY_COUNT] > 0;
+        $hasEntries = $entity[self::PROPERTY_ENTRY_COUNT] > 0;
 
         if ($this->getRightsService()->canUserDownloadEntriesFromEntity(
                 $this->getUser(), $this->application->getAssignment(), $entity[Entry::PROPERTY_ENTITY_TYPE],

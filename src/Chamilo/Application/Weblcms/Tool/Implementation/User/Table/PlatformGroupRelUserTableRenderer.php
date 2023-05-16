@@ -11,7 +11,6 @@ use Chamilo\Libraries\Architecture\Application\Application;
 use Chamilo\Libraries\Format\Structure\Glyph\FontAwesomeGlyph;
 use Chamilo\Libraries\Format\Structure\Toolbar;
 use Chamilo\Libraries\Format\Structure\ToolbarItem;
-use Chamilo\Libraries\Format\Table\Column\DataClassPropertyTableColumn;
 use Chamilo\Libraries\Format\Table\Column\TableColumn;
 use Chamilo\Libraries\Format\Table\Extension\DataClassListTableRenderer;
 use Chamilo\Libraries\Format\Table\Interfaces\TableRowActionsSupport;
@@ -35,7 +34,9 @@ class PlatformGroupRelUserTableRenderer extends DataClassListTableRenderer imple
     protected function initializeColumns()
     {
         $this->addColumn(
-            new DataClassPropertyTableColumn(GroupRelUser::class, GroupRelUser::PROPERTY_USER_ID)
+            $this->getDataClassPropertyTableColumnFactory()->getColumn(
+                GroupRelUser::class, GroupRelUser::PROPERTY_USER_ID
+            )
         );
     }
 

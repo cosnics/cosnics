@@ -2,7 +2,6 @@
 namespace Chamilo\Application\Weblcms\Request\Table;
 
 use Chamilo\Core\Repository\Quota\Storage\DataClass\Request;
-use Chamilo\Libraries\Format\Table\Column\DataClassPropertyTableColumn;
 use Chamilo\Libraries\Format\Table\Column\TableColumn;
 use Chamilo\Libraries\Format\Table\TableResultPosition;
 
@@ -17,7 +16,7 @@ class UserRequestTableRenderer extends RequestTableRenderer
         parent::initializeColumns();
 
         $this->addColumn(
-            new DataClassPropertyTableColumn(Request::class, Request::PROPERTY_DECISION)
+            $this->getDataClassPropertyTableColumnFactory()->getColumn(Request::class, Request::PROPERTY_DECISION)
         );
     }
 

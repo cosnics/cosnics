@@ -12,7 +12,7 @@ use Chamilo\Libraries\Architecture\Application\Routing\UrlGenerator;
 use Chamilo\Libraries\Format\Structure\Glyph\FontAwesomeGlyph;
 use Chamilo\Libraries\Format\Structure\Toolbar;
 use Chamilo\Libraries\Format\Structure\ToolbarItem;
-use Chamilo\Libraries\Format\Table\Column\DataClassPropertyTableColumn;
+use Chamilo\Libraries\Format\Table\Column\DataClassPropertyTableColumnFactory;
 use Chamilo\Libraries\Format\Table\Column\StaticTableColumn;
 use Chamilo\Libraries\Format\Table\Column\TableColumn;
 use Chamilo\Libraries\Format\Table\Extension\DataClassListTableRenderer;
@@ -47,12 +47,14 @@ class CourseGroupTableRenderer extends DataClassListTableRenderer implements Tab
 
     public function __construct(
         User $user, Translator $translator, UrlGenerator $urlGenerator, ListHtmlTableRenderer $htmlTableRenderer,
-        Pager $pager
+        Pager $pager, DataClassPropertyTableColumnFactory $dataClassPropertyTableColumnFactory
     )
     {
         $this->user = $user;
 
-        parent::__construct($translator, $urlGenerator, $htmlTableRenderer, $pager);
+        parent::__construct(
+            $translator, $urlGenerator, $htmlTableRenderer, $pager, $dataClassPropertyTableColumnFactory
+        );
     }
 
     public function getTableActions(): TableActions
@@ -82,9 +84,13 @@ class CourseGroupTableRenderer extends DataClassListTableRenderer implements Tab
 
     protected function initializeColumns()
     {
-        $this->addColumn(new DataClassPropertyTableColumn(CourseGroup::class, CourseGroup::PROPERTY_NAME));
         $this->addColumn(
-            new DataClassPropertyTableColumn(CourseGroup::class, CourseGroup::PROPERTY_DESCRIPTION)
+            $this->getDataClassPropertyTableColumnFactory()->getColumn(CourseGroup::class, CourseGroup::PROPERTY_NAME)
+        );
+        $this->addColumn(
+            $this->getDataClassPropertyTableColumnFactory()->getColumn(
+                CourseGroup::class, CourseGroup::PROPERTY_DESCRIPTION
+            )
         );
 
         $this->addColumn(
@@ -94,7 +100,9 @@ class CourseGroupTableRenderer extends DataClassListTableRenderer implements Tab
         );
 
         $this->addColumn(
-            new DataClassPropertyTableColumn(CourseGroup::class, CourseGroup::PROPERTY_MAX_NUMBER_OF_MEMBERS)
+            $this->getDataClassPropertyTableColumnFactory()->getColumn(
+                CourseGroup::class, CourseGroup::PROPERTY_MAX_NUMBER_OF_MEMBERS
+            )
         );
     }
 

@@ -15,7 +15,7 @@ use Chamilo\Core\User\Storage\DataClass\User;
 use Chamilo\Libraries\Architecture\Application\Application;
 use Chamilo\Libraries\Architecture\Application\ApplicationConfiguration;
 use Chamilo\Libraries\Architecture\Application\Routing\UrlGenerator;
-use Chamilo\Libraries\Format\Table\Column\DataClassPropertyTableColumn;
+use Chamilo\Libraries\Format\Table\Column\DataClassPropertyTableColumnFactory;
 use Chamilo\Libraries\Format\Table\Extension\DataClassGalleryTableRenderer;
 use Chamilo\Libraries\Format\Table\FormAction\TableAction;
 use Chamilo\Libraries\Format\Table\FormAction\TableActions;
@@ -59,7 +59,8 @@ class ContentObjectGalleryTableRenderer extends DataClassGalleryTableRenderer
         Workspace $workspace, User $user, RightsService $rightsService, DatetimeUtilities $datetimeUtilities,
         ContentObjectActionRenderer $contentObjectActionRenderer, ContentObjectUrlGenerator $contentObjectUrlGenerator,
         StringUtilities $stringUtilities, UserService $userService, Translator $translator, UrlGenerator $urlGenerator,
-        GalleryHtmlTableRenderer $htmlTableRenderer, Pager $pager
+        GalleryHtmlTableRenderer $htmlTableRenderer, Pager $pager,
+        DataClassPropertyTableColumnFactory $dataClassPropertyTableColumnFactory
     )
     {
         $this->stringUtilities = $stringUtilities;
@@ -71,7 +72,9 @@ class ContentObjectGalleryTableRenderer extends DataClassGalleryTableRenderer
         $this->workspace = $workspace;
         $this->rightsService = $rightsService;
 
-        parent::__construct($translator, $urlGenerator, $htmlTableRenderer, $pager);
+        parent::__construct(
+            $translator, $urlGenerator, $htmlTableRenderer, $pager, $dataClassPropertyTableColumnFactory
+        );
     }
 
     public function getContentObjectActionRenderer(): ContentObjectActionRenderer
@@ -238,11 +241,15 @@ class ContentObjectGalleryTableRenderer extends DataClassGalleryTableRenderer
     protected function initializeColumns()
     {
         $this->addColumn(
-            new DataClassPropertyTableColumn(ContentObject::class, ContentObject::PROPERTY_TITLE)
+            $this->getDataClassPropertyTableColumnFactory()->getColumn(
+                ContentObject::class, ContentObject::PROPERTY_TITLE
+            )
         );
 
         $this->addColumn(
-            new DataClassPropertyTableColumn(ContentObject::class, ContentObject::PROPERTY_DESCRIPTION)
+            $this->getDataClassPropertyTableColumnFactory()->getColumn(
+                ContentObject::class, ContentObject::PROPERTY_DESCRIPTION
+            )
         );
     }
 

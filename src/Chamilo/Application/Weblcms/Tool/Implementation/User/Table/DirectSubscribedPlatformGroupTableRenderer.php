@@ -12,7 +12,7 @@ use Chamilo\Libraries\Architecture\Application\Routing\UrlGenerator;
 use Chamilo\Libraries\Format\Structure\Glyph\FontAwesomeGlyph;
 use Chamilo\Libraries\Format\Structure\Toolbar;
 use Chamilo\Libraries\Format\Structure\ToolbarItem;
-use Chamilo\Libraries\Format\Table\Column\DataClassPropertyTableColumn;
+use Chamilo\Libraries\Format\Table\Column\DataClassPropertyTableColumnFactory;
 use Chamilo\Libraries\Format\Table\Column\TableColumn;
 use Chamilo\Libraries\Format\Table\Extension\RecordListTableRenderer;
 use Chamilo\Libraries\Format\Table\FormAction\TableAction;
@@ -50,13 +50,16 @@ class DirectSubscribedPlatformGroupTableRenderer extends RecordListTableRenderer
 
     public function __construct(
         StringUtilities $stringUtilities, User $user, Translator $translator, UrlGenerator $urlGenerator,
-        ListHtmlTableRenderer $htmlTableRenderer, Pager $pager
+        ListHtmlTableRenderer $htmlTableRenderer, Pager $pager,
+        DataClassPropertyTableColumnFactory $dataClassPropertyTableColumnFactory
     )
     {
         $this->user = $user;
         $this->stringUtilities = $stringUtilities;
 
-        parent::__construct($translator, $urlGenerator, $htmlTableRenderer, $pager);
+        parent::__construct(
+            $translator, $urlGenerator, $htmlTableRenderer, $pager, $dataClassPropertyTableColumnFactory
+        );
     }
 
     public function getStringUtilities(): StringUtilities
@@ -118,12 +121,20 @@ class DirectSubscribedPlatformGroupTableRenderer extends RecordListTableRenderer
 
     protected function initializeColumns()
     {
-        $this->addColumn(new DataClassPropertyTableColumn(Group::class, Group::PROPERTY_NAME));
-        $this->addColumn(new DataClassPropertyTableColumn(Group::class, Group::PROPERTY_CODE));
-        $this->addColumn(new DataClassPropertyTableColumn(Group::class, Group::PROPERTY_DESCRIPTION));
+        $this->addColumn(
+            $this->getDataClassPropertyTableColumnFactory()->getColumn(Group::class, Group::PROPERTY_NAME)
+        );
+        $this->addColumn(
+            $this->getDataClassPropertyTableColumnFactory()->getColumn(Group::class, Group::PROPERTY_CODE)
+        );
+        $this->addColumn(
+            $this->getDataClassPropertyTableColumnFactory()->getColumn(Group::class, Group::PROPERTY_DESCRIPTION)
+        );
 
         $this->addColumn(
-            new DataClassPropertyTableColumn(CourseEntityRelation::class, CourseEntityRelation::PROPERTY_STATUS)
+            $this->getDataClassPropertyTableColumnFactory()->getColumn(
+                CourseEntityRelation::class, CourseEntityRelation::PROPERTY_STATUS
+            )
         );
     }
 

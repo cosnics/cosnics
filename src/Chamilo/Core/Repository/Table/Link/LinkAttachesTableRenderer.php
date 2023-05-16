@@ -8,6 +8,7 @@ use Chamilo\Core\Repository\Workspace\Service\RightsService;
 use Chamilo\Core\Repository\Workspace\Storage\DataClass\Workspace;
 use Chamilo\Core\User\Storage\DataClass\User;
 use Chamilo\Libraries\Architecture\Application\Routing\UrlGenerator;
+use Chamilo\Libraries\Format\Table\Column\DataClassPropertyTableColumnFactory;
 use Chamilo\Libraries\Format\Table\Interfaces\TableRowActionsSupport;
 use Chamilo\Libraries\Format\Table\ListHtmlTableRenderer;
 use Chamilo\Libraries\Format\Table\Pager;
@@ -32,10 +33,13 @@ class LinkAttachesTableRenderer extends LinkTableRenderer implements TableRowAct
         Translator $translator, UrlGenerator $urlGenerator, ListHtmlTableRenderer $htmlTableRenderer, Pager $pager,
         ContentObjectUrlGenerator $contentObjectUrlGenerator, StringUtilities $stringUtilities,
         PublicationAggregatorInterface $publicationAggregator, RightsService $rightsService, User $user,
-        Workspace $workspace, ChamiloRequest $request
+        Workspace $workspace, ChamiloRequest $request,
+        DataClassPropertyTableColumnFactory $dataClassPropertyTableColumnFactory
     )
     {
-        parent::__construct($translator, $urlGenerator, $htmlTableRenderer, $pager);
+        parent::__construct(
+            $translator, $urlGenerator, $htmlTableRenderer, $pager, $dataClassPropertyTableColumnFactory
+        );
 
         $this->contentObjectUrlGenerator = $contentObjectUrlGenerator;
         $this->stringUtilities = $stringUtilities;

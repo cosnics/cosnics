@@ -8,7 +8,6 @@ use Chamilo\Libraries\Architecture\Application\Application;
 use Chamilo\Libraries\Format\Structure\Glyph\FontAwesomeGlyph;
 use Chamilo\Libraries\Format\Structure\Toolbar;
 use Chamilo\Libraries\Format\Structure\ToolbarItem;
-use Chamilo\Libraries\Format\Table\Column\DataClassPropertyTableColumn;
 use Chamilo\Libraries\Format\Table\Extension\DataClassListTableRenderer;
 use Chamilo\Libraries\Format\Table\FormAction\TableAction;
 use Chamilo\Libraries\Format\Table\FormAction\TableActions;
@@ -20,7 +19,8 @@ use Chamilo\Libraries\Format\Table\TableResultPosition;
  * @package Chamilo\Core\Group\Table
  * @author  Hans De Bisschop <hans.de.bisschop@ehb.be>
  */
-class SubscribedUserTableRenderer extends DataClassListTableRenderer implements TableRowActionsSupport, TableActionsSupport
+class SubscribedUserTableRenderer extends DataClassListTableRenderer
+    implements TableRowActionsSupport, TableActionsSupport
 {
     public const TABLE_IDENTIFIER = Manager::PARAM_GROUP_REL_USER_ID;
 
@@ -47,8 +47,12 @@ class SubscribedUserTableRenderer extends DataClassListTableRenderer implements 
 
     protected function initializeColumns()
     {
-        $this->addColumn(new DataClassPropertyTableColumn(SubscribedUser::class, User::PROPERTY_FIRSTNAME));
-        $this->addColumn(new DataClassPropertyTableColumn(SubscribedUser::class, User::PROPERTY_LASTNAME));
+        $this->addColumn(
+            $this->getDataClassPropertyTableColumnFactory()->getColumn(SubscribedUser::class, User::PROPERTY_FIRSTNAME)
+        );
+        $this->addColumn(
+            $this->getDataClassPropertyTableColumnFactory()->getColumn(SubscribedUser::class, User::PROPERTY_LASTNAME)
+        );
     }
 
     /**

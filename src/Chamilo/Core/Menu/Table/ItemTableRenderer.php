@@ -12,7 +12,7 @@ use Chamilo\Libraries\Architecture\Application\Routing\UrlGenerator;
 use Chamilo\Libraries\Format\Structure\Glyph\FontAwesomeGlyph;
 use Chamilo\Libraries\Format\Structure\Toolbar;
 use Chamilo\Libraries\Format\Structure\ToolbarItem;
-use Chamilo\Libraries\Format\Table\Column\DataClassPropertyTableColumn;
+use Chamilo\Libraries\Format\Table\Column\DataClassPropertyTableColumnFactory;
 use Chamilo\Libraries\Format\Table\Column\StaticTableColumn;
 use Chamilo\Libraries\Format\Table\Column\TableColumn;
 use Chamilo\Libraries\Format\Table\Extension\DataClassListTableRenderer;
@@ -44,14 +44,17 @@ class ItemTableRenderer extends DataClassListTableRenderer implements TableRowAc
 
     public function __construct(
         ItemRendererFactory $itemRendererFactory, ItemService $itemService, RightsService $rightsService,
-        Translator $translator, UrlGenerator $urlGenerator, ListHtmlTableRenderer $htmlTableRenderer, Pager $pager
+        Translator $translator, UrlGenerator $urlGenerator, ListHtmlTableRenderer $htmlTableRenderer, Pager $pager,
+        DataClassPropertyTableColumnFactory $dataClassPropertyTableColumnFactory
     )
     {
         $this->itemRendererFactory = $itemRendererFactory;
         $this->itemService = $itemService;
         $this->rightsService = $rightsService;
 
-        parent::__construct($translator, $urlGenerator, $htmlTableRenderer, $pager);
+        parent::__construct(
+            $translator, $urlGenerator, $htmlTableRenderer, $pager, $dataClassPropertyTableColumnFactory
+        );
     }
 
     public function getItemDeletingUrl(Item $item): string
@@ -125,11 +128,13 @@ class ItemTableRenderer extends DataClassListTableRenderer implements TableRowAc
         $this->addColumn(new StaticTableColumn(self::PROPERTY_TYPE, $translator->trans('Type', [], Manager::CONTEXT)));
 
         $this->addColumn(
-            new DataClassPropertyTableColumn(Item::class, Item::PROPERTY_SORT, null, false)
+            $this->getDataClassPropertyTableColumnFactory()->getColumn(Item::class, Item::PROPERTY_SORT, null, false)
         );
 
         $this->addColumn(
-            new DataClassPropertyTableColumn(ItemTitle::class, ItemTitle::PROPERTY_TITLE, null, false)
+            $this->getDataClassPropertyTableColumnFactory()->getColumn(
+                ItemTitle::class, ItemTitle::PROPERTY_TITLE, null, false
+            )
         );
     }
 

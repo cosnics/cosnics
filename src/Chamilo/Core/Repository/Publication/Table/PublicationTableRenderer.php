@@ -7,7 +7,7 @@ use Chamilo\Libraries\Architecture\Application\Routing\UrlGenerator;
 use Chamilo\Libraries\Format\Structure\Glyph\FontAwesomeGlyph;
 use Chamilo\Libraries\Format\Structure\Toolbar;
 use Chamilo\Libraries\Format\Structure\ToolbarItem;
-use Chamilo\Libraries\Format\Table\Column\DataClassPropertyTableColumn;
+use Chamilo\Libraries\Format\Table\Column\DataClassPropertyTableColumnFactory;
 use Chamilo\Libraries\Format\Table\Column\TableColumn;
 use Chamilo\Libraries\Format\Table\Extension\DataClassListTableRenderer;
 use Chamilo\Libraries\Format\Table\Interfaces\TableRowActionsSupport;
@@ -34,13 +34,16 @@ class PublicationTableRenderer extends DataClassListTableRenderer implements Tab
 
     public function __construct(
         StringUtilities $stringUtilities, DatetimeUtilities $datetimeUtilities, Translator $translator,
-        UrlGenerator $urlGenerator, ListHtmlTableRenderer $htmlTableRenderer, Pager $pager
+        UrlGenerator $urlGenerator, ListHtmlTableRenderer $htmlTableRenderer, Pager $pager,
+        DataClassPropertyTableColumnFactory $dataClassPropertyTableColumnFactory
     )
     {
         $this->datetimeUtilities = $datetimeUtilities;
         $this->stringUtilities = $stringUtilities;
 
-        parent::__construct($translator, $urlGenerator, $htmlTableRenderer, $pager);
+        parent::__construct(
+            $translator, $urlGenerator, $htmlTableRenderer, $pager, $dataClassPropertyTableColumnFactory
+        );
     }
 
     public function getDatetimeUtilities(): DatetimeUtilities
@@ -55,12 +58,20 @@ class PublicationTableRenderer extends DataClassListTableRenderer implements Tab
 
     protected function initializeColumns()
     {
-        $this->addColumn(new DataClassPropertyTableColumn(Attributes::class, Attributes::PROPERTY_TITLE));
         $this->addColumn(
-            new DataClassPropertyTableColumn(Attributes::class, Attributes::PROPERTY_APPLICATION)
+            $this->getDataClassPropertyTableColumnFactory()->getColumn(Attributes::class, Attributes::PROPERTY_TITLE)
         );
-        $this->addColumn(new DataClassPropertyTableColumn(Attributes::class, Attributes::PROPERTY_LOCATION));
-        $this->addColumn(new DataClassPropertyTableColumn(Attributes::class, Attributes::PROPERTY_DATE));
+        $this->addColumn(
+            $this->getDataClassPropertyTableColumnFactory()->getColumn(
+                Attributes::class, Attributes::PROPERTY_APPLICATION
+            )
+        );
+        $this->addColumn(
+            $this->getDataClassPropertyTableColumnFactory()->getColumn(Attributes::class, Attributes::PROPERTY_LOCATION)
+        );
+        $this->addColumn(
+            $this->getDataClassPropertyTableColumnFactory()->getColumn(Attributes::class, Attributes::PROPERTY_DATE)
+        );
     }
 
     /**

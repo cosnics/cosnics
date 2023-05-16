@@ -11,7 +11,6 @@ use Chamilo\Core\Repository\ContentObject\Assignment\Storage\DataClass\Assignmen
 use Chamilo\Core\Repository\Publication\Storage\DataClass\Publication as PublicationAlias;
 use Chamilo\Core\Repository\Storage\DataClass\ContentObject;
 use Chamilo\Libraries\Format\Structure\Glyph\FontAwesomeGlyph;
-use Chamilo\Libraries\Format\Table\Column\DataClassPropertyTableColumn;
 use Chamilo\Libraries\Format\Table\Column\StaticTableColumn;
 use Chamilo\Libraries\Format\Table\Column\TableColumn;
 use Chamilo\Libraries\Format\Table\FormAction\TableActions;
@@ -79,7 +78,9 @@ class ObjectPublicationTableRenderer extends \Chamilo\Application\Weblcms\Table\
         parent::initializeColumns();
 
         $this->addColumn(
-            new DataClassPropertyTableColumn(Assignment::class, Assignment::PROPERTY_END_TIME, null, false)
+            $this->getDataClassPropertyTableColumnFactory()->getColumn(
+                Assignment::class, Assignment::PROPERTY_END_TIME, null, false
+            )
         );
 
         $this->addColumn(

@@ -5,6 +5,7 @@ use Chamilo\Application\Weblcms\Integration\Chamilo\Core\Tracking\Service\Learni
 use Chamilo\Core\Repository\ContentObject\Assignment\Display\Interfaces\AssignmentDataProvider;
 use Chamilo\Core\User\Storage\DataClass\User;
 use Chamilo\Libraries\Architecture\Application\Routing\UrlGenerator;
+use Chamilo\Libraries\Format\Table\Column\DataClassPropertyTableColumnFactory;
 use Chamilo\Libraries\Format\Table\ListHtmlTableRenderer;
 use Chamilo\Libraries\Format\Table\Pager;
 use Chamilo\Libraries\Utilities\DatetimeUtilities;
@@ -22,14 +23,15 @@ class EntryTableRenderer extends \Chamilo\Core\Repository\ContentObject\Assignme
     public function __construct(
         LearningPathAssignmentService $learningPathAssignmentService, AssignmentDataProvider $assignmentDataProvider,
         DatetimeUtilities $datetimeUtilities, StringUtilities $stringUtilities, User $user, Translator $translator,
-        UrlGenerator $urlGenerator, ListHtmlTableRenderer $htmlTableRenderer, Pager $pager
+        UrlGenerator $urlGenerator, ListHtmlTableRenderer $htmlTableRenderer, Pager $pager,
+        DataClassPropertyTableColumnFactory $dataClassPropertyTableColumnFactory
     )
     {
         $this->learningPathAssignmentService = $learningPathAssignmentService;
 
         parent::__construct(
             $assignmentDataProvider, $datetimeUtilities, $stringUtilities, $user, $translator, $urlGenerator,
-            $htmlTableRenderer, $pager
+            $htmlTableRenderer, $pager, $dataClassPropertyTableColumnFactory
         );
     }
 

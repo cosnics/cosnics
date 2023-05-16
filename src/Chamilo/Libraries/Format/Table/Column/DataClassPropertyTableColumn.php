@@ -3,8 +3,6 @@ namespace Chamilo\Libraries\Format\Table\Column;
 
 use Chamilo\Libraries\Storage\Query\Variable\ConditionVariable;
 use Chamilo\Libraries\Storage\Query\Variable\PropertyConditionVariable;
-use Chamilo\Libraries\Translation\Translation;
-use Chamilo\Libraries\Utilities\StringUtilities;
 
 /**
  * @package Chamilo\Libraries\Format\Table\Column
@@ -21,20 +19,11 @@ class DataClassPropertyTableColumn extends AbstractSortableTableColumn
      * @param string[] $contentCssClasses
      */
     public function __construct(
-        string $className, string $property, ?string $title = null, bool $sortable = true,
+        string $className, string $property, string $title, bool $sortable = true,
         ?array $headerCssClasses = null, ?array $contentCssClasses = null
     )
     {
         $this->className = $className;
-
-        $context = $className::context();
-
-        if (!$title)
-        {
-            $title = Translation::get(
-                (string) StringUtilities::getInstance()->createString($property)->upperCamelize(), null, $context
-            );
-        }
 
         parent::__construct($property, $title, $sortable, $headerCssClasses, $contentCssClasses);
     }

@@ -17,7 +17,7 @@ use Chamilo\Libraries\Format\Structure\Glyph\FontAwesomeGlyph;
 use Chamilo\Libraries\Format\Structure\Glyph\IdentGlyph;
 use Chamilo\Libraries\Format\Structure\Toolbar;
 use Chamilo\Libraries\Format\Structure\ToolbarItem;
-use Chamilo\Libraries\Format\Table\Column\DataClassPropertyTableColumn;
+use Chamilo\Libraries\Format\Table\Column\DataClassPropertyTableColumnFactory;
 use Chamilo\Libraries\Format\Table\Column\StaticTableColumn;
 use Chamilo\Libraries\Format\Table\Column\TableColumn;
 use Chamilo\Libraries\Format\Table\Extension\RecordListTableRenderer;
@@ -56,7 +56,8 @@ class PublicationTableRenderer extends RecordListTableRenderer implements TableR
     public function __construct(
         RightsService $rightsService, UserService $userService, GroupService $groupService,
         DatetimeUtilities $datetimeUtilities, ContentObjectService $contentObjectService, User $user,
-        Translator $translator, UrlGenerator $urlGenerator, ListHtmlTableRenderer $htmlTableRenderer, Pager $pager
+        Translator $translator, UrlGenerator $urlGenerator, ListHtmlTableRenderer $htmlTableRenderer, Pager $pager,
+        DataClassPropertyTableColumnFactory $dataClassPropertyTableColumnFactory
     )
     {
         $this->rightsService = $rightsService;
@@ -66,7 +67,9 @@ class PublicationTableRenderer extends RecordListTableRenderer implements TableR
         $this->datetimeUtilities = $datetimeUtilities;
         $this->contentObjectService = $contentObjectService;
 
-        parent::__construct($translator, $urlGenerator, $htmlTableRenderer, $pager);
+        parent::__construct(
+            $translator, $urlGenerator, $htmlTableRenderer, $pager, $dataClassPropertyTableColumnFactory
+        );
     }
 
     public function getContentObjectService(): ContentObjectService
@@ -110,19 +113,27 @@ class PublicationTableRenderer extends RecordListTableRenderer implements TableR
         );
 
         $this->addColumn(
-            new DataClassPropertyTableColumn(ContentObject::class, ContentObject::PROPERTY_TITLE)
+            $this->getDataClassPropertyTableColumnFactory()->getColumn(
+                ContentObject::class, ContentObject::PROPERTY_TITLE
+            )
         );
 
         $this->addColumn(
-            new DataClassPropertyTableColumn(ContentObject::class, ContentObject::PROPERTY_DESCRIPTION)
+            $this->getDataClassPropertyTableColumnFactory()->getColumn(
+                ContentObject::class, ContentObject::PROPERTY_DESCRIPTION
+            )
         );
 
         $this->addColumn(
-            new DataClassPropertyTableColumn(Publication::class, Publication::PROPERTY_PUBLICATION_DATE)
+            $this->getDataClassPropertyTableColumnFactory()->getColumn(
+                Publication::class, Publication::PROPERTY_PUBLICATION_DATE
+            )
         );
 
         $this->addColumn(
-            new DataClassPropertyTableColumn(Publication::class, Publication::PROPERTY_PUBLISHER_ID)
+            $this->getDataClassPropertyTableColumnFactory()->getColumn(
+                Publication::class, Publication::PROPERTY_PUBLISHER_ID
+            )
         );
 
         $this->addColumn(

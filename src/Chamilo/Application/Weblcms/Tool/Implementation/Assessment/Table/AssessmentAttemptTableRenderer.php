@@ -16,7 +16,7 @@ use Chamilo\Libraries\Architecture\Application\Routing\UrlGenerator;
 use Chamilo\Libraries\Format\Structure\Glyph\FontAwesomeGlyph;
 use Chamilo\Libraries\Format\Structure\Toolbar;
 use Chamilo\Libraries\Format\Structure\ToolbarItem;
-use Chamilo\Libraries\Format\Table\Column\DataClassPropertyTableColumn;
+use Chamilo\Libraries\Format\Table\Column\DataClassPropertyTableColumnFactory;
 use Chamilo\Libraries\Format\Table\Column\TableColumn;
 use Chamilo\Libraries\Format\Table\Extension\RecordListTableRenderer;
 use Chamilo\Libraries\Format\Table\Interfaces\TableRowActionsSupport;
@@ -51,12 +51,15 @@ class AssessmentAttemptTableRenderer extends RecordListTableRenderer implements 
 
     public function __construct(
         DatetimeUtilities $datetimeUtilities, Translator $translator, UrlGenerator $urlGenerator,
-        ListHtmlTableRenderer $htmlTableRenderer, Pager $pager
+        ListHtmlTableRenderer $htmlTableRenderer, Pager $pager,
+        DataClassPropertyTableColumnFactory $dataClassPropertyTableColumnFactory
     )
     {
         $this->datetimeUtilities = $datetimeUtilities;
 
-        parent::__construct($translator, $urlGenerator, $htmlTableRenderer, $pager);
+        parent::__construct(
+            $translator, $urlGenerator, $htmlTableRenderer, $pager, $dataClassPropertyTableColumnFactory
+        );
     }
 
     public function getDatetimeUtilities(): DatetimeUtilities
@@ -69,20 +72,32 @@ class AssessmentAttemptTableRenderer extends RecordListTableRenderer implements 
      */
     protected function initializeColumns()
     {
-        $this->addColumn(new DataClassPropertyTableColumn(User::class, User::PROPERTY_FIRSTNAME));
-        $this->addColumn(new DataClassPropertyTableColumn(User::class, User::PROPERTY_LASTNAME));
-        $this->addColumn(new DataClassPropertyTableColumn(User::class, User::PROPERTY_OFFICIAL_CODE));
-
         $this->addColumn(
-            new DataClassPropertyTableColumn(AssessmentAttempt::class, AbstractAttempt::PROPERTY_START_TIME)
+            $this->getDataClassPropertyTableColumnFactory()->getColumn(User::class, User::PROPERTY_FIRSTNAME)
+        );
+        $this->addColumn(
+            $this->getDataClassPropertyTableColumnFactory()->getColumn(User::class, User::PROPERTY_LASTNAME)
+        );
+        $this->addColumn(
+            $this->getDataClassPropertyTableColumnFactory()->getColumn(User::class, User::PROPERTY_OFFICIAL_CODE)
         );
 
         $this->addColumn(
-            new DataClassPropertyTableColumn(AssessmentAttempt::class, AbstractAttempt::PROPERTY_END_TIME)
+            $this->getDataClassPropertyTableColumnFactory()->getColumn(
+                AssessmentAttempt::class, AbstractAttempt::PROPERTY_START_TIME
+            )
         );
 
         $this->addColumn(
-            new DataClassPropertyTableColumn(AssessmentAttempt::class, AbstractAttempt::PROPERTY_TOTAL_TIME)
+            $this->getDataClassPropertyTableColumnFactory()->getColumn(
+                AssessmentAttempt::class, AbstractAttempt::PROPERTY_END_TIME
+            )
+        );
+
+        $this->addColumn(
+            $this->getDataClassPropertyTableColumnFactory()->getColumn(
+                AssessmentAttempt::class, AbstractAttempt::PROPERTY_TOTAL_TIME
+            )
         );
 
         $publication = $this->application->get_publication();
@@ -98,14 +113,16 @@ class AssessmentAttemptTableRenderer extends RecordListTableRenderer implements 
             $assessment_publication->get_configuration()->show_score())
         {
             $this->addColumn(
-                new DataClassPropertyTableColumn(
+                $this->getDataClassPropertyTableColumnFactory()->getColumn(
                     AssessmentAttempt::class, AbstractAttempt::PROPERTY_TOTAL_SCORE
                 )
             );
         }
 
         $this->addColumn(
-            new DataClassPropertyTableColumn(AssessmentAttempt::class, AbstractAttempt::PROPERTY_STATUS)
+            $this->getDataClassPropertyTableColumnFactory()->getColumn(
+                AssessmentAttempt::class, AbstractAttempt::PROPERTY_STATUS
+            )
         );
     }
 

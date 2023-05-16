@@ -43,9 +43,9 @@ class SchemaTableRenderer extends DataClassListTableRenderer implements TableRow
 
     protected function initializeColumns()
     {
-        $this->addColumn(new DataClassPropertyTableColumn(Schema::class, Schema::PROPERTY_NAMESPACE));
-        $this->addColumn(new DataClassPropertyTableColumn(Schema::class, Schema::PROPERTY_NAME));
-        $this->addColumn(new DataClassPropertyTableColumn(Schema::class, Schema::PROPERTY_URL));
+        $this->addColumn($this->getDataClassPropertyTableColumnFactory()->getColumn(Schema::class, Schema::PROPERTY_NAMESPACE));
+        $this->addColumn($this->getDataClassPropertyTableColumnFactory()->getColumn(Schema::class, Schema::PROPERTY_NAME));
+        $this->addColumn($this->getDataClassPropertyTableColumnFactory()->getColumn(Schema::class, Schema::PROPERTY_URL));
     }
 
     /**

@@ -7,7 +7,6 @@ use Chamilo\Application\Weblcms\Tool\Manager as ToolManager;
 use Chamilo\Libraries\Format\Structure\Glyph\FontAwesomeGlyph;
 use Chamilo\Libraries\Format\Structure\Toolbar;
 use Chamilo\Libraries\Format\Structure\ToolbarItem;
-use Chamilo\Libraries\Format\Table\Column\DataClassPropertyTableColumn;
 use Chamilo\Libraries\Format\Table\Extension\DataClassListTableRenderer;
 use Chamilo\Libraries\Format\Table\FormAction\TableAction;
 use Chamilo\Libraries\Format\Table\FormAction\TableActions;
@@ -44,7 +43,11 @@ class CourseSectionsTableRenderer extends DataClassListTableRenderer
 
     protected function initializeColumns()
     {
-        $this->addColumn(new DataClassPropertyTableColumn(CourseSection::class, CourseSection::PROPERTY_NAME));
+        $this->addColumn(
+            $this->getDataClassPropertyTableColumnFactory()->getColumn(
+                CourseSection::class, CourseSection::PROPERTY_NAME
+            )
+        );
     }
 
     /**

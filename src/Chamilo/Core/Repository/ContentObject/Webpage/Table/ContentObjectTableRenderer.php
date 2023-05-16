@@ -3,7 +3,6 @@ namespace Chamilo\Core\Repository\ContentObject\Webpage\Table;
 
 use Chamilo\Core\Repository\ContentObject\Webpage\Storage\DataClass\Webpage;
 use Chamilo\Libraries\File\Filesystem;
-use Chamilo\Libraries\Format\Table\Column\DataClassPropertyTableColumn;
 use Chamilo\Libraries\Format\Table\Column\TableColumn;
 use Chamilo\Libraries\Format\Table\TableResultPosition;
 
@@ -15,8 +14,12 @@ class ContentObjectTableRenderer extends \Chamilo\Core\Repository\Table\ContentO
 {
     protected function initializeColumns()
     {
-        $this->addColumn(new DataClassPropertyTableColumn(Webpage::class, Webpage::PROPERTY_EXTENSION));
-        $this->addColumn(new DataClassPropertyTableColumn(Webpage::class, Webpage::PROPERTY_FILESIZE));
+        $this->addColumn(
+            $this->getDataClassPropertyTableColumnFactory()->getColumn(Webpage::class, Webpage::PROPERTY_EXTENSION)
+        );
+        $this->addColumn(
+            $this->getDataClassPropertyTableColumnFactory()->getColumn(Webpage::class, Webpage::PROPERTY_FILESIZE)
+        );
 
         parent::initializeColumns();
     }

@@ -8,6 +8,7 @@ use Chamilo\Application\Weblcms\Admin\Extension\Platform\Storage\DataManager;
 use Chamilo\Application\Weblcms\Course\Component\BrowseComponent;
 use Chamilo\Application\Weblcms\Course\Storage\DataClass\Course;
 use Chamilo\Application\Weblcms\Storage\DataClass\CourseCategory;
+use Chamilo\Configuration\Category\Storage\DataClass\PlatformCategory;
 use Chamilo\Libraries\Format\Table\Column\DataClassPropertyTableColumn;
 use Chamilo\Libraries\Format\Table\Column\StaticTableColumn;
 use Chamilo\Libraries\Storage\Parameters\DataClassCountParameters;
@@ -20,6 +21,7 @@ use Chamilo\Libraries\Storage\Query\Joins;
 use Chamilo\Libraries\Storage\Query\RetrieveProperties;
 use Chamilo\Libraries\Storage\Query\Variable\FunctionConditionVariable;
 use Chamilo\Libraries\Storage\Query\Variable\PropertyConditionVariable;
+use Chamilo\Libraries\Translation\Translation;
 
 class CourseCategoryEntityHelper
 {
@@ -125,10 +127,19 @@ class CourseCategoryEntityHelper
 
     public static function get_table_columns()
     {
+        $translator = Translation::getInstance();
+
         $columns = [];
-        $columns[] = new DataClassPropertyTableColumn(CourseCategory::class, CourseCategory::PROPERTY_NAME);
-        $columns[] = new StaticTableColumn(self::PROPERTY_PATH);
-        $columns[] = new DataClassPropertyTableColumn(CourseCategory::class, CourseCategory::PROPERTY_CODE);
+        $columns[] = new DataClassPropertyTableColumn(
+            CourseCategory::class, PlatformCategory::PROPERTY_NAME,
+            $translator->getTranslation('Name', [], Manager::CONTEXT)
+        );
+        $columns[] =
+            new StaticTableColumn(self::PROPERTY_PATH, $translator->getTranslation('Path', [], Manager::CONTEXT));
+        $columns[] = new DataClassPropertyTableColumn(
+            CourseCategory::class, CourseCategory::PROPERTY_CODE,
+            $translator->getTranslation('Code', [], Manager::CONTEXT)
+        );
 
         return $columns;
     }

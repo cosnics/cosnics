@@ -3,7 +3,6 @@ namespace Chamilo\Core\Repository\Table\Link;
 
 use Chamilo\Core\Repository\Service\ContentObjectUrlGenerator;
 use Chamilo\Core\Repository\Storage\DataClass\ContentObject;
-use Chamilo\Libraries\Format\Table\Column\DataClassPropertyTableColumn;
 use Chamilo\Libraries\Format\Table\Column\TableColumn;
 use Chamilo\Libraries\Format\Table\TableResultPosition;
 use Chamilo\Libraries\Utilities\StringUtilities;
@@ -33,13 +32,17 @@ trait LinkContentObjectTableRendererTrait
     protected function initializeColumns()
     {
         $this->addColumn(
-            new DataClassPropertyTableColumn(ContentObject::class, ContentObject::PROPERTY_TYPE, null, false)
+            $this->getDataClassPropertyTableColumnFactory()->getColumn(
+                ContentObject::class, ContentObject::PROPERTY_TYPE, null, false
+            )
         );
         $this->addColumn(
-            new DataClassPropertyTableColumn(ContentObject::class, ContentObject::PROPERTY_TITLE, null, false)
+            $this->getDataClassPropertyTableColumnFactory()->getColumn(
+                ContentObject::class, ContentObject::PROPERTY_TITLE, null, false
+            )
         );
         $this->addColumn(
-            new DataClassPropertyTableColumn(
+            $this->getDataClassPropertyTableColumnFactory()->getColumn(
                 ContentObject::class, ContentObject::PROPERTY_DESCRIPTION, null, false
             )
         );

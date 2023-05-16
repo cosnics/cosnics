@@ -2,7 +2,7 @@
 namespace Chamilo\Libraries\Format\Table;
 
 use Chamilo\Libraries\Architecture\Application\Routing\UrlGenerator;
-use Chamilo\Libraries\Architecture\Traits\ClassContext;
+use Chamilo\Libraries\Format\Table\Column\DataClassPropertyTableColumnFactory;
 use Chamilo\Libraries\Format\Table\FormAction\TableActions;
 use Chamilo\Libraries\Format\Table\Interfaces\TableRowActionsSupport;
 use Doctrine\Common\Collections\ArrayCollection;
@@ -15,16 +15,17 @@ use Symfony\Component\Translation\Translator;
  */
 abstract class GalleryTableRenderer extends AbstractTableRenderer
 {
-    use ClassContext;
-
     public const DEFAULT_NUMBER_OF_COLUMNS_PER_PAGE = 4;
     public const DEFAULT_NUMBER_OF_ROWS_PER_PAGE = 5;
 
     public function __construct(
-        Translator $translator, UrlGenerator $urlGenerator, GalleryHtmlTableRenderer $htmlTableRenderer, Pager $pager
+        Translator $translator, UrlGenerator $urlGenerator, GalleryHtmlTableRenderer $htmlTableRenderer, Pager $pager,
+        DataClassPropertyTableColumnFactory $dataClassPropertyTableColumnFactory
     )
     {
-        parent::__construct($translator, $urlGenerator, $htmlTableRenderer, $pager);
+        parent::__construct(
+            $translator, $urlGenerator, $htmlTableRenderer, $pager, $dataClassPropertyTableColumnFactory
+        );
     }
 
     protected function processData(ArrayCollection $results, TableParameterValues $parameterValues): ArrayCollection

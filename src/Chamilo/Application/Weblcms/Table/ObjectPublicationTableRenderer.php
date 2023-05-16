@@ -93,25 +93,31 @@ class ObjectPublicationTableRenderer extends RecordListTableRenderer
         $this->addColumn(new StaticTableColumn(self::PROPERTY_STATUS, '', null, ['publication_table_status_column']));
 
         $this->addColumn(
-            new DataClassPropertyTableColumn(ContentObject::class, ContentObject::PROPERTY_TITLE)
+            $this->getDataClassPropertyTableColumnFactory()->getColumn(
+                ContentObject::class, ContentObject::PROPERTY_TITLE
+            )
         );
 
         $this->addColumn(
-            new DataClassPropertyTableColumn(ContentObject::class, ContentObject::PROPERTY_DESCRIPTION)
+            $this->getDataClassPropertyTableColumnFactory()->getColumn(
+                ContentObject::class, ContentObject::PROPERTY_DESCRIPTION
+            )
         );
 
         $this->addColumn(
-            new DataClassPropertyTableColumn(
+            $this->getDataClassPropertyTableColumnFactory()->getColumn(
                 ContentObjectPublication::class, ContentObjectPublication::PROPERTY_PUBLICATION_DATE
             )
         );
 
         $this->addColumn(
-            new DataClassPropertyTableColumn(ContentObject::class, ContentObject::PROPERTY_MODIFICATION_DATE)
+            $this->getDataClassPropertyTableColumnFactory()->getColumn(
+                ContentObject::class, ContentObject::PROPERTY_MODIFICATION_DATE
+            )
         );
 
         $this->addColumn(
-            new DataClassPropertyTableColumn(
+            $this->getDataClassPropertyTableColumnFactory()->getColumn(
                 ContentObjectPublication::class, ContentObjectPublication::PROPERTY_PUBLISHER_ID
             )
         );
@@ -125,7 +131,7 @@ class ObjectPublicationTableRenderer extends RecordListTableRenderer
         );
 
         $this->addColumn(
-            new DataClassPropertyTableColumn(
+            $this->getDataClassPropertyTableColumnFactory()->getColumn(
                 ContentObjectPublication::class, ContentObjectPublication::PROPERTY_DISPLAY_ORDER_INDEX, null, true,
                 null, ['publication_table_order_column']
             )

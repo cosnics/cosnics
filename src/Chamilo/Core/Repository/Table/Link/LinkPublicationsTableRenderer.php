@@ -9,7 +9,7 @@ use Chamilo\Core\Repository\Workspace\Service\RightsService;
 use Chamilo\Core\Repository\Workspace\Storage\DataClass\Workspace;
 use Chamilo\Core\User\Storage\DataClass\User;
 use Chamilo\Libraries\Architecture\Application\Routing\UrlGenerator;
-use Chamilo\Libraries\Format\Table\Column\DataClassPropertyTableColumn;
+use Chamilo\Libraries\Format\Table\Column\DataClassPropertyTableColumnFactory;
 use Chamilo\Libraries\Format\Table\Column\TableColumn;
 use Chamilo\Libraries\Format\Table\Interfaces\TableRowActionsSupport;
 use Chamilo\Libraries\Format\Table\ListHtmlTableRenderer;
@@ -28,10 +28,12 @@ class LinkPublicationsTableRenderer extends LinkTableRenderer implements TableRo
     public function __construct(
         Translator $translator, UrlGenerator $urlGenerator, ListHtmlTableRenderer $htmlTableRenderer, Pager $pager,
         PublicationAggregatorInterface $publicationAggregator, RightsService $rightsService, User $user,
-        Workspace $workspace
+        Workspace $workspace, DataClassPropertyTableColumnFactory $dataClassPropertyTableColumnFactory
     )
     {
-        parent::__construct($translator, $urlGenerator, $htmlTableRenderer, $pager);
+        parent::__construct(
+            $translator, $urlGenerator, $htmlTableRenderer, $pager, $dataClassPropertyTableColumnFactory
+        );
 
         $this->publicationAggregator = $publicationAggregator;
         $this->rightsService = $rightsService;
@@ -42,12 +44,16 @@ class LinkPublicationsTableRenderer extends LinkTableRenderer implements TableRo
     protected function initializeColumns()
     {
         $this->addColumn(
-            new DataClassPropertyTableColumn(Attributes::class, Attributes::PROPERTY_APPLICATION)
+            $this->getDataClassPropertyTableColumnFactory()->getColumn(
+                Attributes::class, Attributes::PROPERTY_APPLICATION
+            )
         );
         $this->addColumn(
-            new DataClassPropertyTableColumn(Attributes::class, Attributes::PROPERTY_LOCATION)
+            $this->getDataClassPropertyTableColumnFactory()->getColumn(Attributes::class, Attributes::PROPERTY_LOCATION)
         );
-        $this->addColumn(new DataClassPropertyTableColumn(Attributes::class, Attributes::PROPERTY_DATE));
+        $this->addColumn(
+            $this->getDataClassPropertyTableColumnFactory()->getColumn(Attributes::class, Attributes::PROPERTY_DATE)
+        );
     }
 
     /**

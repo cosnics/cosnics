@@ -18,6 +18,7 @@ use Chamilo\Libraries\Storage\Query\RetrieveProperties;
 use Chamilo\Libraries\Storage\Query\Variable\FunctionConditionVariable;
 use Chamilo\Libraries\Storage\Query\Variable\PropertiesConditionVariable;
 use Chamilo\Libraries\Storage\Query\Variable\PropertyConditionVariable;
+use Chamilo\Libraries\Translation\Translation;
 
 class PlatformGroupEntityHelper
 {
@@ -91,13 +92,19 @@ class PlatformGroupEntityHelper
 
     public static function get_table_columns()
     {
+        $translator = Translation::getInstance();
+
         $columns = [];
         $columns[] = new DataClassPropertyTableColumn(
-            Group::class, Group::PROPERTY_NAME
+            Group::class, Group::PROPERTY_NAME,
+            $translator->getTranslation('Name', [], \Chamilo\Core\Group\Manager::CONTEXT)
         );
-        $columns[] = new StaticTableColumn(self::PROPERTY_PATH);
+        $columns[] = new StaticTableColumn(
+            self::PROPERTY_PATH, $translator->getTranslation('Path', [], \Chamilo\Core\Group\Manager::CONTEXT)
+        );
         $columns[] = new DataClassPropertyTableColumn(
-            Group::class, Group::PROPERTY_CODE
+            Group::class, Group::PROPERTY_CODE,
+            $translator->getTranslation('Code', [], \Chamilo\Core\Group\Manager::CONTEXT)
         );
 
         return $columns;

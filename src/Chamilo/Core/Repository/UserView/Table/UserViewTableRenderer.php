@@ -7,7 +7,6 @@ use Chamilo\Libraries\Architecture\Application\Application;
 use Chamilo\Libraries\Format\Structure\Glyph\FontAwesomeGlyph;
 use Chamilo\Libraries\Format\Structure\Toolbar;
 use Chamilo\Libraries\Format\Structure\ToolbarItem;
-use Chamilo\Libraries\Format\Table\Column\DataClassPropertyTableColumn;
 use Chamilo\Libraries\Format\Table\Extension\DataClassListTableRenderer;
 use Chamilo\Libraries\Format\Table\FormAction\TableAction;
 use Chamilo\Libraries\Format\Table\FormAction\TableActions;
@@ -40,8 +39,12 @@ class UserViewTableRenderer extends DataClassListTableRenderer implements TableR
 
     protected function initializeColumns()
     {
-        $this->addColumn(new DataClassPropertyTableColumn(UserView::class, UserView::PROPERTY_NAME));
-        $this->addColumn(new DataClassPropertyTableColumn(UserView::class, UserView::PROPERTY_DESCRIPTION));
+        $this->addColumn(
+            $this->getDataClassPropertyTableColumnFactory()->getColumn(UserView::class, UserView::PROPERTY_NAME)
+        );
+        $this->addColumn(
+            $this->getDataClassPropertyTableColumnFactory()->getColumn(UserView::class, UserView::PROPERTY_DESCRIPTION)
+        );
     }
 
     /**

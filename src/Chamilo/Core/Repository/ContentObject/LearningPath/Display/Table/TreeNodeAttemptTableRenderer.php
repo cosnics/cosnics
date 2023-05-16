@@ -13,6 +13,7 @@ use Chamilo\Libraries\Format\Structure\Glyph\FontAwesomeGlyph;
 use Chamilo\Libraries\Format\Structure\ProgressBarRenderer;
 use Chamilo\Libraries\Format\Structure\Toolbar;
 use Chamilo\Libraries\Format\Structure\ToolbarItem;
+use Chamilo\Libraries\Format\Table\Column\DataClassPropertyTableColumnFactory;
 use Chamilo\Libraries\Format\Table\Column\StaticTableColumn;
 use Chamilo\Libraries\Format\Table\Column\TableColumn;
 use Chamilo\Libraries\Format\Table\Extension\DataClassListTableRenderer;
@@ -55,7 +56,8 @@ class TreeNodeAttemptTableRenderer extends DataClassListTableRenderer implements
     public function __construct(
         ProgressBarRenderer $progressBarRenderer, DatetimeUtilities $datetimeUtilities,
         AutomaticNumberingService $automaticNumberingService, TrackingService $trackingService, User $user,
-        Translator $translator, UrlGenerator $urlGenerator, ListHtmlTableRenderer $htmlTableRenderer, Pager $pager
+        Translator $translator, UrlGenerator $urlGenerator, ListHtmlTableRenderer $htmlTableRenderer, Pager $pager,
+        DataClassPropertyTableColumnFactory $dataClassPropertyTableColumnFactory
     )
     {
         $this->user = $user;
@@ -64,7 +66,9 @@ class TreeNodeAttemptTableRenderer extends DataClassListTableRenderer implements
         $this->datetimeUtilities = $datetimeUtilities;
         $this->progressBarRenderer = $progressBarRenderer;
 
-        parent::__construct($translator, $urlGenerator, $htmlTableRenderer, $pager);
+        parent::__construct(
+            $translator, $urlGenerator, $htmlTableRenderer, $pager, $dataClassPropertyTableColumnFactory
+        );
     }
 
     public function getAutomaticNumberingService(): AutomaticNumberingService

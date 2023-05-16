@@ -7,7 +7,6 @@ use Chamilo\Libraries\Architecture\Application\Application;
 use Chamilo\Libraries\Format\Structure\Glyph\FontAwesomeGlyph;
 use Chamilo\Libraries\Format\Structure\Toolbar;
 use Chamilo\Libraries\Format\Structure\ToolbarItem;
-use Chamilo\Libraries\Format\Table\Column\DataClassPropertyTableColumn;
 use Chamilo\Libraries\Format\Table\Extension\DataClassListTableRenderer;
 use Chamilo\Libraries\Format\Table\Interfaces\TableRowActionsSupport;
 use Chamilo\Libraries\Format\Table\TableResultPosition;
@@ -24,10 +23,18 @@ class ItemTableRenderer extends DataClassListTableRenderer implements TableRowAc
 
     protected function initializeColumns()
     {
-        $this->addColumn(new DataClassPropertyTableColumn(HelpItem::class, HelpItem::PROPERTY_CONTEXT));
-        $this->addColumn(new DataClassPropertyTableColumn(HelpItem::class, HelpItem::PROPERTY_IDENTIFIER));
-        $this->addColumn(new DataClassPropertyTableColumn(HelpItem::class, HelpItem::PROPERTY_LANGUAGE));
-        $this->addColumn(new DataClassPropertyTableColumn(HelpItem::class, HelpItem::PROPERTY_URL));
+        $this->addColumn(
+            $this->getDataClassPropertyTableColumnFactory()->getColumn(HelpItem::class, HelpItem::PROPERTY_CONTEXT)
+        );
+        $this->addColumn(
+            $this->getDataClassPropertyTableColumnFactory()->getColumn(HelpItem::class, HelpItem::PROPERTY_IDENTIFIER)
+        );
+        $this->addColumn(
+            $this->getDataClassPropertyTableColumnFactory()->getColumn(HelpItem::class, HelpItem::PROPERTY_LANGUAGE)
+        );
+        $this->addColumn(
+            $this->getDataClassPropertyTableColumnFactory()->getColumn(HelpItem::class, HelpItem::PROPERTY_URL)
+        );
     }
 
     /**

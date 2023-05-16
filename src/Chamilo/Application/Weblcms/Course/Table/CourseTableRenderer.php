@@ -50,11 +50,17 @@ class CourseTableRenderer extends RecordListTableRenderer implements TableRowAct
     {
         $translator = $this->getTranslator();
 
-        $this->addColumn(new DataClassPropertyTableColumn(Course::class, Course::PROPERTY_VISUAL_CODE));
-        $this->addColumn(new DataClassPropertyTableColumn(Course::class, Course::PROPERTY_TITLE));
+        $this->addColumn(
+            $this->getDataClassPropertyTableColumnFactory()->getColumn(Course::class, Course::PROPERTY_VISUAL_CODE)
+        );
+        $this->addColumn(
+            $this->getDataClassPropertyTableColumnFactory()->getColumn(Course::class, Course::PROPERTY_TITLE)
+        );
 
         $this->addColumn(
-            new DataClassPropertyTableColumn(Course::class, Course::PROPERTY_TITULAR_ID, null, false)
+            $this->getDataClassPropertyTableColumnFactory()->getColumn(
+                Course::class, Course::PROPERTY_TITULAR_ID, null, false
+            )
         );
 
         $this->addColumn(

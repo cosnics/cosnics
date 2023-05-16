@@ -13,7 +13,7 @@ use Chamilo\Libraries\Architecture\Application\Routing\UrlGenerator;
 use Chamilo\Libraries\Format\Structure\Glyph\FontAwesomeGlyph;
 use Chamilo\Libraries\Format\Structure\Toolbar;
 use Chamilo\Libraries\Format\Structure\ToolbarItem;
-use Chamilo\Libraries\Format\Table\Column\DataClassPropertyTableColumn;
+use Chamilo\Libraries\Format\Table\Column\DataClassPropertyTableColumnFactory;
 use Chamilo\Libraries\Format\Table\Column\TableColumn;
 use Chamilo\Libraries\Format\Table\Extension\DataClassListTableRenderer;
 use Chamilo\Libraries\Format\Table\FormAction\TableAction;
@@ -54,14 +54,17 @@ class UnsubscribedUserTableRenderer extends DataClassListTableRenderer
 
     public function __construct(
         ChamiloRequest $chamiloRequest, ConfigurationConsulter $configurationConsulter, User $user,
-        Translator $translator, UrlGenerator $urlGenerator, ListHtmlTableRenderer $htmlTableRenderer, Pager $pager
+        Translator $translator, UrlGenerator $urlGenerator, ListHtmlTableRenderer $htmlTableRenderer, Pager $pager,
+        DataClassPropertyTableColumnFactory $dataClassPropertyTableColumnFactory
     )
     {
         $this->user = $user;
         $this->configurationConsulter = $configurationConsulter;
         $this->chamiloRequest = $chamiloRequest;
 
-        parent::__construct($translator, $urlGenerator, $htmlTableRenderer, $pager);
+        parent::__construct(
+            $translator, $urlGenerator, $htmlTableRenderer, $pager, $dataClassPropertyTableColumnFactory
+        );
     }
 
     public function getChamiloRequest(): ChamiloRequest
@@ -126,16 +129,22 @@ class UnsubscribedUserTableRenderer extends DataClassListTableRenderer
 
     protected function initializeColumns()
     {
-        $this->addColumn(new DataClassPropertyTableColumn(User::class, User::PROPERTY_USERNAME));
+        $this->addColumn(
+            $this->getDataClassPropertyTableColumnFactory()->getColumn(User::class, User::PROPERTY_USERNAME)
+        );
 
         $showEmail = $this->getConfigurationConsulter()->getSetting(['Chamilo\Core\User', 'show_email_addresses']);
 
         if ($showEmail)
         {
-            $this->addColumn(new DataClassPropertyTableColumn(User::class, User::PROPERTY_EMAIL));
+            $this->addColumn(
+                $this->getDataClassPropertyTableColumnFactory()->getColumn(User::class, User::PROPERTY_EMAIL)
+            );
         }
 
-        $this->addColumn(new DataClassPropertyTableColumn(User::class, User::PROPERTY_STATUS));
+        $this->addColumn(
+            $this->getDataClassPropertyTableColumnFactory()->getColumn(User::class, User::PROPERTY_STATUS)
+        );
     }
 
     /**

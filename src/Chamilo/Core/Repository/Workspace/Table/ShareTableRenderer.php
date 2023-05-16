@@ -9,7 +9,7 @@ use Chamilo\Libraries\Architecture\Application\Routing\UrlGenerator;
 use Chamilo\Libraries\Format\Structure\Glyph\FontAwesomeGlyph;
 use Chamilo\Libraries\Format\Structure\Toolbar;
 use Chamilo\Libraries\Format\Structure\ToolbarItem;
-use Chamilo\Libraries\Format\Table\Column\DataClassPropertyTableColumn;
+use Chamilo\Libraries\Format\Table\Column\DataClassPropertyTableColumnFactory;
 use Chamilo\Libraries\Format\Table\Column\TableColumn;
 use Chamilo\Libraries\Format\Table\Extension\DataClassListTableRenderer;
 use Chamilo\Libraries\Format\Table\FormAction\TableAction;
@@ -35,13 +35,16 @@ class ShareTableRenderer extends DataClassListTableRenderer implements TableRowA
 
     public function __construct(
         UserService $userService, DatetimeUtilities $datetimeUtilities, Translator $translator,
-        UrlGenerator $urlGenerator, ListHtmlTableRenderer $htmlTableRenderer, Pager $pager
+        UrlGenerator $urlGenerator, ListHtmlTableRenderer $htmlTableRenderer, Pager $pager,
+        DataClassPropertyTableColumnFactory $dataClassPropertyTableColumnFactory
     )
     {
         $this->datetimeUtilities = $datetimeUtilities;
         $this->userService = $userService;
 
-        parent::__construct($translator, $urlGenerator, $htmlTableRenderer, $pager);
+        parent::__construct(
+            $translator, $urlGenerator, $htmlTableRenderer, $pager, $dataClassPropertyTableColumnFactory
+        );
     }
 
     protected function getDatetimeUtilities(): DatetimeUtilities
@@ -79,12 +82,18 @@ class ShareTableRenderer extends DataClassListTableRenderer implements TableRowA
 
     protected function initializeColumns()
     {
-        $this->addColumn(new DataClassPropertyTableColumn(Workspace::class, Workspace::PROPERTY_NAME));
         $this->addColumn(
-            new DataClassPropertyTableColumn(Workspace::class, Workspace::PROPERTY_CREATOR_ID, null, false)
+            $this->getDataClassPropertyTableColumnFactory()->getColumn(Workspace::class, Workspace::PROPERTY_NAME)
         );
         $this->addColumn(
-            new DataClassPropertyTableColumn(Workspace::class, Workspace::PROPERTY_CREATION_DATE)
+            $this->getDataClassPropertyTableColumnFactory()->getColumn(
+                Workspace::class, Workspace::PROPERTY_CREATOR_ID, null, false
+            )
+        );
+        $this->addColumn(
+            $this->getDataClassPropertyTableColumnFactory()->getColumn(
+                Workspace::class, Workspace::PROPERTY_CREATION_DATE
+            )
         );
     }
 

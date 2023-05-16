@@ -5,7 +5,7 @@ use Chamilo\Core\Repository\Integration\Chamilo\Core\Tracking\Storage\DataClass\
 use Chamilo\Core\Repository\Manager;
 use Chamilo\Libraries\Architecture\Application\Routing\UrlGenerator;
 use Chamilo\Libraries\Format\Structure\Glyph\FontAwesomeGlyph;
-use Chamilo\Libraries\Format\Table\Column\DataClassPropertyTableColumn;
+use Chamilo\Libraries\Format\Table\Column\DataClassPropertyTableColumnFactory;
 use Chamilo\Libraries\Format\Table\Column\StaticTableColumn;
 use Chamilo\Libraries\Format\Table\Column\TableColumn;
 use Chamilo\Libraries\Format\Table\Extension\DataClassListTableRenderer;
@@ -32,12 +32,15 @@ class ActivityTableRenderer extends DataClassListTableRenderer
 
     public function __construct(
         DatetimeUtilities $datetimeUtilities, Translator $translator, UrlGenerator $urlGenerator,
-        ListHtmlTableRenderer $htmlTableRenderer, Pager $pager
+        ListHtmlTableRenderer $htmlTableRenderer, Pager $pager,
+        DataClassPropertyTableColumnFactory $dataClassPropertyTableColumnFactory
     )
     {
         $this->datetimeUtilities = $datetimeUtilities;
 
-        parent::__construct($translator, $urlGenerator, $htmlTableRenderer, $pager);
+        parent::__construct(
+            $translator, $urlGenerator, $htmlTableRenderer, $pager, $dataClassPropertyTableColumnFactory
+        );
     }
 
     public function getDatetimeUtilities(): DatetimeUtilities
@@ -51,10 +54,16 @@ class ActivityTableRenderer extends DataClassListTableRenderer
         $glyph = new FontAwesomeGlyph('mouse', [], $translator->trans('ActivityType', [], Manager::CONTEXT), 'fas');
 
         $this->addColumn(new StaticTableColumn(self::PROPERTY_TYPE_ICON, $glyph->render()));
-        $this->addColumn(new DataClassPropertyTableColumn(Activity::class, Activity::PROPERTY_TYPE));
-        $this->addColumn(new DataClassPropertyTableColumn(Activity::class, Activity::PROPERTY_CONTENT));
+        $this->addColumn(
+            $this->getDataClassPropertyTableColumnFactory()->getColumn(Activity::class, Activity::PROPERTY_TYPE)
+        );
+        $this->addColumn(
+            $this->getDataClassPropertyTableColumnFactory()->getColumn(Activity::class, Activity::PROPERTY_CONTENT)
+        );
         $this->addColumn(new StaticTableColumn(self::PROPERTY_USER, $translator->trans('User')));
-        $this->addColumn(new DataClassPropertyTableColumn(Activity::class, Activity::PROPERTY_DATE));
+        $this->addColumn(
+            $this->getDataClassPropertyTableColumnFactory()->getColumn(Activity::class, Activity::PROPERTY_DATE)
+        );
     }
 
     /**

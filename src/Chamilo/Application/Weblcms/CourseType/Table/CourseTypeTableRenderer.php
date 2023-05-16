@@ -8,7 +8,6 @@ use Chamilo\Libraries\Architecture\Application\Application;
 use Chamilo\Libraries\Format\Structure\Glyph\FontAwesomeGlyph;
 use Chamilo\Libraries\Format\Structure\Toolbar;
 use Chamilo\Libraries\Format\Structure\ToolbarItem;
-use Chamilo\Libraries\Format\Table\Column\DataClassPropertyTableColumn;
 use Chamilo\Libraries\Format\Table\Column\TableColumn;
 use Chamilo\Libraries\Format\Table\Extension\DataClassListTableRenderer;
 use Chamilo\Libraries\Format\Table\FormAction\TableAction;
@@ -69,16 +68,24 @@ class CourseTypeTableRenderer extends DataClassListTableRenderer implements Tabl
     protected function initializeColumns()
     {
         $this->addColumn(
-            new DataClassPropertyTableColumn(CourseType::class, CourseType::PROPERTY_TITLE, null, false)
+            $this->getDataClassPropertyTableColumnFactory()->getColumn(
+                CourseType::class, CourseType::PROPERTY_TITLE, null, false
+            )
         );
         $this->addColumn(
-            new DataClassPropertyTableColumn(CourseType::class, CourseType::PROPERTY_DESCRIPTION, null, false)
+            $this->getDataClassPropertyTableColumnFactory()->getColumn(
+                CourseType::class, CourseType::PROPERTY_DESCRIPTION, null, false
+            )
         );
         $this->addColumn(
-            new DataClassPropertyTableColumn(CourseType::class, CourseType::PROPERTY_ACTIVE, null, false)
+            $this->getDataClassPropertyTableColumnFactory()->getColumn(
+                CourseType::class, CourseType::PROPERTY_ACTIVE, null, false
+            )
         );
         $this->addColumn(
-            new DataClassPropertyTableColumn(CourseType::class, CourseType::PROPERTY_DISPLAY_ORDER, null, false)
+            $this->getDataClassPropertyTableColumnFactory()->getColumn(
+                CourseType::class, CourseType::PROPERTY_DISPLAY_ORDER, null, false
+            )
         );
     }
 

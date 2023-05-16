@@ -18,6 +18,7 @@ use Chamilo\Libraries\Storage\Query\RetrieveProperties;
 use Chamilo\Libraries\Storage\Query\Variable\FunctionConditionVariable;
 use Chamilo\Libraries\Storage\Query\Variable\PropertiesConditionVariable;
 use Chamilo\Libraries\Storage\Query\Variable\PropertyConditionVariable;
+use Chamilo\Libraries\Translation\Translation;
 
 class UserEntityHelper
 {
@@ -92,15 +93,20 @@ class UserEntityHelper
 
     public static function get_table_columns()
     {
+        $translator = Translation::getInstance();
+
         $columns = [];
         $columns[] = new DataClassPropertyTableColumn(
-            User::class, User::PROPERTY_LASTNAME
+            User::class, User::PROPERTY_LASTNAME,
+            $translator->getTranslation('LastName', [], \Chamilo\Core\User\Manager::CONTEXT)
         );
         $columns[] = new DataClassPropertyTableColumn(
-            User::class, User::PROPERTY_FIRSTNAME
+            User::class, User::PROPERTY_FIRSTNAME,
+            $translator->getTranslation('FirstName', [], \Chamilo\Core\User\Manager::CONTEXT)
         );
         $columns[] = new DataClassPropertyTableColumn(
-            User::class, User::PROPERTY_EMAIL
+            User::class, User::PROPERTY_EMAIL,
+            $translator->getTranslation('Email', [], \Chamilo\Core\User\Manager::CONTEXT)
         );
 
         return $columns;

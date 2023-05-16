@@ -33,6 +33,7 @@
         <service id="Chamilo\Libraries\Format\Table\Pager"/>
         <service id="Chamilo\Libraries\Format\Table\PagerRenderer"/>
         <service id="Chamilo\Libraries\Format\Table\RequestTableParameterValuesCompiler"/>
+        <service id="Chamilo\Libraries\Format\Table\Column\DataClassPropertyTableColumnFactory"/>
 
         <service id="Chamilo\Libraries\Format\Tabs\Form\FormTabGenerator"/>
         <service id="Chamilo\Libraries\Format\Tabs\Form\FormTabsGenerator"/>

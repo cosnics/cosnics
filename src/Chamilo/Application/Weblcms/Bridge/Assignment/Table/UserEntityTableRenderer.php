@@ -2,7 +2,6 @@
 namespace Chamilo\Application\Weblcms\Bridge\Assignment\Table;
 
 use Chamilo\Core\User\Storage\DataClass\User;
-use Chamilo\Libraries\Format\Table\Column\DataClassPropertyTableColumn;
 use Chamilo\Libraries\Format\Table\Column\TableColumn;
 use Chamilo\Libraries\Format\Table\TableResultPosition;
 
@@ -14,8 +13,12 @@ abstract class UserEntityTableRenderer extends EntityTableRenderer
 {
     protected function initializeColumns()
     {
-        $this->addColumn(new DataClassPropertyTableColumn(User::class, User::PROPERTY_FIRSTNAME));
-        $this->addColumn(new DataClassPropertyTableColumn(User::class, User::PROPERTY_LASTNAME));
+        $this->addColumn(
+            $this->getDataClassPropertyTableColumnFactory()->getColumn(User::class, User::PROPERTY_FIRSTNAME)
+        );
+        $this->addColumn(
+            $this->getDataClassPropertyTableColumnFactory()->getColumn(User::class, User::PROPERTY_LASTNAME)
+        );
 
         parent::initializeColumns();
     }

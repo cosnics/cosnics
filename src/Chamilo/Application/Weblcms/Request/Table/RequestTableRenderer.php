@@ -12,7 +12,7 @@ use Chamilo\Libraries\Architecture\Application\Routing\UrlGenerator;
 use Chamilo\Libraries\Format\Structure\Glyph\FontAwesomeGlyph;
 use Chamilo\Libraries\Format\Structure\Toolbar;
 use Chamilo\Libraries\Format\Structure\ToolbarItem;
-use Chamilo\Libraries\Format\Table\Column\DataClassPropertyTableColumn;
+use Chamilo\Libraries\Format\Table\Column\DataClassPropertyTableColumnFactory;
 use Chamilo\Libraries\Format\Table\Column\TableColumn;
 use Chamilo\Libraries\Format\Table\Extension\DataClassListTableRenderer;
 use Chamilo\Libraries\Format\Table\FormAction\TableAction;
@@ -45,13 +45,16 @@ class RequestTableRenderer extends DataClassListTableRenderer implements TableRo
 
     public function __construct(
         Translator $translator, UrlGenerator $urlGenerator, ListHtmlTableRenderer $htmlTableRenderer, Pager $pager,
-        DatetimeUtilities $datetimeUtilities, User $user
+        DatetimeUtilities $datetimeUtilities, User $user,
+        DataClassPropertyTableColumnFactory $dataClassPropertyTableColumnFactory
     )
     {
         $this->datetimeUtilities = $datetimeUtilities;
         $this->user = $user;
 
-        parent::__construct($translator, $urlGenerator, $htmlTableRenderer, $pager);
+        parent::__construct(
+            $translator, $urlGenerator, $htmlTableRenderer, $pager, $dataClassPropertyTableColumnFactory
+        );
     }
 
     public function getDatetimeUtilities(): DatetimeUtilities
@@ -84,11 +87,21 @@ class RequestTableRenderer extends DataClassListTableRenderer implements TableRo
 
     protected function initializeColumns()
     {
-        $this->addColumn(new DataClassPropertyTableColumn(Request::class, Request::PROPERTY_CREATION_DATE));
-        $this->addColumn(new DataClassPropertyTableColumn(Request::class, Request::PROPERTY_NAME));
-        $this->addColumn(new DataClassPropertyTableColumn(Request::class, Request::PROPERTY_SUBJECT));
-        $this->addColumn(new DataClassPropertyTableColumn(Request::class, Request::PROPERTY_MOTIVATION));
-        $this->addColumn(new DataClassPropertyTableColumn(Request::class, Request::PROPERTY_CATEGORY_ID));
+        $this->addColumn(
+            $this->getDataClassPropertyTableColumnFactory()->getColumn(Request::class, Request::PROPERTY_CREATION_DATE)
+        );
+        $this->addColumn(
+            $this->getDataClassPropertyTableColumnFactory()->getColumn(Request::class, Request::PROPERTY_NAME)
+        );
+        $this->addColumn(
+            $this->getDataClassPropertyTableColumnFactory()->getColumn(Request::class, Request::PROPERTY_SUBJECT)
+        );
+        $this->addColumn(
+            $this->getDataClassPropertyTableColumnFactory()->getColumn(Request::class, Request::PROPERTY_MOTIVATION)
+        );
+        $this->addColumn(
+            $this->getDataClassPropertyTableColumnFactory()->getColumn(Request::class, Request::PROPERTY_CATEGORY_ID)
+        );
     }
 
     /**

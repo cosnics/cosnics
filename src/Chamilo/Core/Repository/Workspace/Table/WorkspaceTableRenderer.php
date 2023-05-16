@@ -15,7 +15,7 @@ use Chamilo\Libraries\Architecture\Application\Routing\UrlGenerator;
 use Chamilo\Libraries\Format\Structure\Glyph\FontAwesomeGlyph;
 use Chamilo\Libraries\Format\Structure\Toolbar;
 use Chamilo\Libraries\Format\Structure\ToolbarItem;
-use Chamilo\Libraries\Format\Table\Column\DataClassPropertyTableColumn;
+use Chamilo\Libraries\Format\Table\Column\DataClassPropertyTableColumnFactory;
 use Chamilo\Libraries\Format\Table\Column\TableColumn;
 use Chamilo\Libraries\Format\Table\Extension\DataClassListTableRenderer;
 use Chamilo\Libraries\Format\Table\FormAction\TableAction;
@@ -43,14 +43,15 @@ class WorkspaceTableRenderer extends DataClassListTableRenderer implements Table
 
     protected User $user;
 
-    protected WorkspaceService $workspaceService;
-
     protected UserService $userService;
 
+    protected WorkspaceService $workspaceService;
+
     public function __construct(
-        UserService $userService, WorkspaceService $workspaceService, FavouriteService $favouriteService, RightsService $rightsService,
-        User $user, Translator $translator, UrlGenerator $urlGenerator, ListHtmlTableRenderer $htmlTableRenderer,
-        Pager $pager
+        UserService $userService, WorkspaceService $workspaceService, FavouriteService $favouriteService,
+        RightsService $rightsService, User $user, Translator $translator, UrlGenerator $urlGenerator,
+        ListHtmlTableRenderer $htmlTableRenderer, Pager $pager,
+        DataClassPropertyTableColumnFactory $dataClassPropertyTableColumnFactory
     )
     {
         $this->userService = $userService;
@@ -59,15 +60,10 @@ class WorkspaceTableRenderer extends DataClassListTableRenderer implements Table
         $this->rightsService = $rightsService;
         $this->user = $user;
 
-        parent::__construct($translator, $urlGenerator, $htmlTableRenderer, $pager);
+        parent::__construct(
+            $translator, $urlGenerator, $htmlTableRenderer, $pager, $dataClassPropertyTableColumnFactory
+        );
     }
-
-    public function getUserService(): UserService
-    {
-        return $this->userService;
-    }
-
-
 
     public function getFavouriteService(): FavouriteService
     {
@@ -119,6 +115,11 @@ class WorkspaceTableRenderer extends DataClassListTableRenderer implements Table
         return $this->user;
     }
 
+    public function getUserService(): UserService
+    {
+        return $this->userService;
+    }
+
     public function getWorkspaceService(): WorkspaceService
     {
         return $this->workspaceService;
@@ -131,12 +132,18 @@ class WorkspaceTableRenderer extends DataClassListTableRenderer implements Table
 
     protected function initializeColumns()
     {
-        $this->addColumn(new DataClassPropertyTableColumn(Workspace::class, Workspace::PROPERTY_NAME));
         $this->addColumn(
-            new DataClassPropertyTableColumn(Workspace::class, Workspace::PROPERTY_CREATOR_ID, null, false)
+            $this->getDataClassPropertyTableColumnFactory()->getColumn(Workspace::class, Workspace::PROPERTY_NAME)
         );
         $this->addColumn(
-            new DataClassPropertyTableColumn(Workspace::class, Workspace::PROPERTY_CREATION_DATE)
+            $this->getDataClassPropertyTableColumnFactory()->getColumn(
+                Workspace::class, Workspace::PROPERTY_CREATOR_ID, null, false
+            )
+        );
+        $this->addColumn(
+            $this->getDataClassPropertyTableColumnFactory()->getColumn(
+                Workspace::class, Workspace::PROPERTY_CREATION_DATE
+            )
         );
     }
 
