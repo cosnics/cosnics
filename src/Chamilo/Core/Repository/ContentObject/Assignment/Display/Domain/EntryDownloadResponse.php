@@ -1,5 +1,4 @@
 <?php
-
 namespace Chamilo\Core\Repository\ContentObject\Assignment\Display\Domain;
 
 use Symfony\Component\HttpFoundation\BinaryFileResponse;

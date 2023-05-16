@@ -1,5 +1,4 @@
 <?php
-
 namespace Chamilo\Core\Repository\Feedback\Storage\DataClass;
 
 use Chamilo\Core\Repository\Feedback\Manager;

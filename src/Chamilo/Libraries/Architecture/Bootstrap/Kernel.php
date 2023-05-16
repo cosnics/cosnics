@@ -1,5 +1,4 @@
 <?php
-
 namespace Chamilo\Libraries\Architecture\Bootstrap;
 
 use Chamilo\Configuration\Service\Consulter\ConfigurationConsulter;

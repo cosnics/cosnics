@@ -1,5 +1,4 @@
 <?php
-
 namespace Chamilo\Application\Weblcms\Bridge\Assignment\Storage\Repository;
 
 use Chamilo\Application\Weblcms\Bridge\Assignment\Storage\DataClass\Entry;

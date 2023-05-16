@@ -1,5 +1,4 @@
 <?php
-
 namespace Chamilo\Application\Weblcms\Tool\Implementation\Assignment\Form;
 
 use Chamilo\Application\Weblcms\Form\ContentObjectPublicationForm;

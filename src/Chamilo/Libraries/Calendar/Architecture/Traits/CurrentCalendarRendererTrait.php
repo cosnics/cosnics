@@ -1,5 +1,4 @@
 <?php
-
 namespace Chamilo\Libraries\Calendar\Architecture\Traits;
 
 use Chamilo\Core\User\Service\UserSettingService;

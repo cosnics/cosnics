@@ -1,5 +1,4 @@
 <?php
-
 namespace Chamilo\Core\Repository\ContentObject\Forum\Storage\DataClass;
 
 use Chamilo\Core\Repository\ContentObject\ForumTopic\Storage\DataClass\ForumPost;

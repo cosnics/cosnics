@@ -1,5 +1,4 @@
 <?php
-
 namespace Chamilo\Core\Queue\Test\Unit\Service\Producer;
 
 use Chamilo\Core\Queue\Service\Producer\DBALProducer;

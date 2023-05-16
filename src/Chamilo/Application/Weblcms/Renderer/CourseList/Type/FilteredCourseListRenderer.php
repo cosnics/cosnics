@@ -1,5 +1,4 @@
 <?php
-
 namespace Chamilo\Application\Weblcms\Renderer\CourseList\Type;
 
 use ArrayIterator;

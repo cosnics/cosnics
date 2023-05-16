@@ -1,5 +1,4 @@
 <?php
-
 namespace Chamilo\Core\Repository\ContentObject\Assignment\Display\Form;
 
 use Chamilo\Core\Repository\ContentObject\Page\Storage\DataClass\Page;

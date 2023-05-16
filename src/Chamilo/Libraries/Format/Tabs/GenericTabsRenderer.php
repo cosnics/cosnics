@@ -1,5 +1,4 @@
 <?php
-
 namespace Chamilo\Libraries\Format\Tabs;
 
 use Chamilo\Libraries\Platform\ChamiloRequest;

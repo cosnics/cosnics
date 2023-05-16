@@ -1,5 +1,4 @@
 <?php
-
 namespace Chamilo\Core\Repository\ContentObject\Assignment\Integration\Chamilo\Libraries\Calendar\Package;
 
 use Chamilo\Configuration\Package\NotAllowed;

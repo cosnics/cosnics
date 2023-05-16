@@ -1,5 +1,4 @@
 <?php
-
 namespace Chamilo\Core\Queue\Domain;
 
 /**

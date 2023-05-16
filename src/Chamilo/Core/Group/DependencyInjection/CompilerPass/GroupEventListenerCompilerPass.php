@@ -1,5 +1,4 @@
 <?php
-
 namespace Chamilo\Core\Group\DependencyInjection\CompilerPass;
 
 use Chamilo\Core\Group\Service\GroupEventListenerInterface;

@@ -1,5 +1,4 @@
 <?php
-
 namespace Chamilo\Core\User\Roles\Test\Service;
 
 use Chamilo\Core\User\Roles\Service\Interfaces\RoleServiceInterface;

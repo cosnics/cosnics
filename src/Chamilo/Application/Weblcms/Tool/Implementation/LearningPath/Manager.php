@@ -1,5 +1,4 @@
 <?php
-
 namespace Chamilo\Application\Weblcms\Tool\Implementation\LearningPath;
 
 use Chamilo\Application\Weblcms\Renderer\PublicationList\ContentObjectPublicationListRenderer;

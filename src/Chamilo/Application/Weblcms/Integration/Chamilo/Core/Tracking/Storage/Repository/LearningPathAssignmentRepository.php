@@ -1,5 +1,4 @@
 <?php
-
 namespace Chamilo\Application\Weblcms\Integration\Chamilo\Core\Tracking\Storage\Repository;
 
 use Chamilo\Application\Weblcms\Bridge\LearningPath\Assignment\Storage\DataClass\Entry;

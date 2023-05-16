@@ -1,5 +1,4 @@
 <?php
-
 namespace Chamilo\Core\Repository\ContentObject\LearningPath\Test\Unit\Service;
 
 use Chamilo\Core\Repository\ContentObject\LearningPath\Domain\Tree;

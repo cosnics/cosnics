@@ -1,5 +1,4 @@
 <?php
-
 namespace Chamilo\Libraries\Console\Command;
 
 use Chamilo\Libraries\Architecture\Test\PHPUnitGenerator\PHPUnitGeneratorInterface;

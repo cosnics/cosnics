@@ -1,5 +1,4 @@
 <?php
-
 namespace Chamilo\Core\Notification\Test\Unit\Service;
 
 use Chamilo\Core\Notification\Domain\NotificationDTO;

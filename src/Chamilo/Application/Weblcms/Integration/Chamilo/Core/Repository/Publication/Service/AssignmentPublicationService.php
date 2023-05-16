@@ -1,5 +1,4 @@
 <?php
-
 namespace Chamilo\Application\Weblcms\Integration\Chamilo\Core\Repository\Publication\Service;
 
 use Chamilo\Core\Repository\ContentObject\Assignment\Display\Service\AssignmentService;

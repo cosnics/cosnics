@@ -1,5 +1,4 @@
 <?php
-
 namespace Chamilo\Core\Repository\Selector\Renderer;
 
 use Chamilo\Core\Repository\Selector\TypeSelector;

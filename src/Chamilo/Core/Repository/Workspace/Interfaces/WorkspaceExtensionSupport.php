@@ -1,5 +1,4 @@
 <?php
-
 namespace Chamilo\Core\Repository\Workspace\Interfaces;
 
 /**

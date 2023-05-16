@@ -1,5 +1,4 @@
 <?php
-
 namespace Chamilo\Core\Repository\Selector;
 
 use Chamilo\Configuration\Service\Consulter\RegistrationConsulter;

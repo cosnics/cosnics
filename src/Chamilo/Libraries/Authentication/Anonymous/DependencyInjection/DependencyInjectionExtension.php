@@ -1,5 +1,4 @@
 <?php
-
 namespace Chamilo\Libraries\Authentication\Anonymous\DependencyInjection;
 
 use Chamilo\Libraries\DependencyInjection\AbstractDependencyInjectionExtension;

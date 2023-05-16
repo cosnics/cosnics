@@ -1,5 +1,4 @@
 <?php
-
 namespace Chamilo\Libraries\Architecture\Bridge;
 
 use RuntimeException;

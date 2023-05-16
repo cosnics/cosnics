@@ -1,5 +1,4 @@
 <?php
-
 namespace Chamilo\Core\Repository\ContentObject\Assignment\Display\Bridge\Storage\Repository;
 
 use Chamilo\Application\Weblcms\Tool\Implementation\Ephorus\Storage\DataClass\Request;

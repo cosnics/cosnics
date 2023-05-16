@@ -1,5 +1,4 @@
 <?php
-
 namespace Chamilo\Libraries\Protocol\Microsoft\Graph\Service;
 
 use Chamilo\Core\User\Storage\DataClass\User;

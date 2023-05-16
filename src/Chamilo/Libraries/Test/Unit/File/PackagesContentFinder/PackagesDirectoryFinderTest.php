@@ -1,5 +1,4 @@
 <?php
-
 namespace Chamilo\Libraries\Test\Unit\File\PackagesContentFinder;
 
 use Chamilo\Libraries\Architecture\Test\TestCases\ChamiloTestCase;

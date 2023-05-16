@@ -1,5 +1,4 @@
 <?php
-
 namespace Chamilo\Application\Weblcms\Bridge\LearningPath\Assignment\Service\NotificationProcessor;
 
 use Chamilo\Application\Weblcms\Bridge\LearningPath\Assignment\Service\AssignmentService;

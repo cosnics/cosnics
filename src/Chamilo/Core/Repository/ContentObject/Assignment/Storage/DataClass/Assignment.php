@@ -1,5 +1,4 @@
 <?php
-
 namespace Chamilo\Core\Repository\ContentObject\Assignment\Storage\DataClass;
 
 use Chamilo\Core\Repository\Storage\DataClass\ContentObject;

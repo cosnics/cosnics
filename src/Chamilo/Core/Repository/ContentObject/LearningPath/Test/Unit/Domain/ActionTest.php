@@ -1,5 +1,4 @@
 <?php
-
 namespace Chamilo\Core\Repository\ContentObject\LearningPath\Test\Unit\Domain;
 
 use Chamilo\Core\Repository\ContentObject\LearningPath\Domain\Action;

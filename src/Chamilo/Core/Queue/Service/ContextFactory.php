@@ -1,5 +1,4 @@
 <?php
-
 namespace Chamilo\Core\Queue\Service;
 
 use Chamilo\Configuration\Service\Consulter\ConfigurationConsulter;

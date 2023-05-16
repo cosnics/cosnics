@@ -1,5 +1,4 @@
 <?php
-
 namespace Chamilo\Core\Repository\Component;
 
 use Chamilo\Core\Repository\Common\Export\ContentObjectExportImplementation;

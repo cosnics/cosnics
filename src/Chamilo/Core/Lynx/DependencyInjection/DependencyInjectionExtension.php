@@ -1,5 +1,4 @@
 <?php
-
 namespace Chamilo\Core\Lynx\DependencyInjection;
 
 use Chamilo\Libraries\DependencyInjection\AbstractDependencyInjectionExtension;

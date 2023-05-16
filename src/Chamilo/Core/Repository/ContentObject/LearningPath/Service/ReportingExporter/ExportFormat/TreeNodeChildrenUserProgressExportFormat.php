@@ -1,5 +1,4 @@
 <?php
-
 namespace Chamilo\Core\Repository\ContentObject\LearningPath\Service\ReportingExporter\ExportFormat;
 
 use Chamilo\Libraries\Utilities\DatetimeUtilities;

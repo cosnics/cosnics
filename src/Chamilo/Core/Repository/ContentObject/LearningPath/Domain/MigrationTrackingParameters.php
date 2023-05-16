@@ -1,5 +1,4 @@
 <?php
-
 namespace Chamilo\Core\Repository\ContentObject\LearningPath\Domain;
 
 use Chamilo\Application\Weblcms\Tool\Implementation\LearningPath\Domain\TrackingParameters;

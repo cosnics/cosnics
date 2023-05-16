@@ -1,5 +1,4 @@
 <?php
-
 namespace Chamilo\Libraries\Test\Integration\Format\Validator;
 
 use Symfony\Component\Validator\Constraints AS Assert;

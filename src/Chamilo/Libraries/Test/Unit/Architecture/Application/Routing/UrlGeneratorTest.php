@@ -1,5 +1,4 @@
 <?php
-
 namespace Chamilo\Libraries\Test\Unit\Architecture\Application\Routing;
 
 use Chamilo\Libraries\Architecture\Test\TestCases\ChamiloTestCase;

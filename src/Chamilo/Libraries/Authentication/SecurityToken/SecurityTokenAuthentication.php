@@ -1,5 +1,4 @@
 <?php
-
 namespace Chamilo\Libraries\Authentication\SecurityToken;
 
 use Chamilo\Core\User\Storage\DataClass\User;

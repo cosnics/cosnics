@@ -1,5 +1,4 @@
 <?php
-
 namespace Chamilo\Core\Repository\ContentObject\Assignment\Integration\Chamilo\Core\Metadata\Entity;
 
 use Chamilo\Core\Repository\Integration\Chamilo\Core\Metadata\Entity\ContentObjectEntity;

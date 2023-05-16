@@ -1,5 +1,4 @@
 <?php
-
 namespace Chamilo\Core\Repository\ContentObject\LearningPath\Service\Tracking;
 
 use Chamilo\Core\Repository\ContentObject\Assessment\Storage\DataClass\Assessment;

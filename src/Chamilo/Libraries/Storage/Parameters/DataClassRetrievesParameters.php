@@ -1,5 +1,4 @@
 <?php
-
 namespace Chamilo\Libraries\Storage\Parameters;
 
 use Chamilo\Libraries\Storage\Query\Condition\Condition;

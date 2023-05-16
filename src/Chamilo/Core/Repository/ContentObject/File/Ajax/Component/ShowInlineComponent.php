@@ -1,5 +1,4 @@
 <?php
-
 namespace Chamilo\Core\Repository\ContentObject\File\Ajax\Component;
 
 use Chamilo\Core\Repository\ContentObject\Assignment\Ajax\Manager;

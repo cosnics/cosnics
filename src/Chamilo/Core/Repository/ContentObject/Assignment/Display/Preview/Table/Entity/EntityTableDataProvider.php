@@ -1,5 +1,4 @@
 <?php
-
 namespace Chamilo\Core\Repository\ContentObject\Assignment\Display\Preview\Table\Entity;
 
 use Chamilo\Core\User\Storage\DataClass\User;

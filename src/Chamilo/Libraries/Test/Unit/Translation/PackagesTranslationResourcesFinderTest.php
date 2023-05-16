@@ -1,5 +1,4 @@
 <?php
-
 namespace Chamilo\Libraries\Test\Unit\Translation;
 
 use Chamilo\Libraries\Architecture\Test\TestCases\ChamiloTestCase;

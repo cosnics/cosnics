@@ -1,5 +1,4 @@
 <?php
-
 namespace Chamilo\Core\Repository\ContentObject\Assignment\Display\Ajax\Component;
 
 use Chamilo\Application\Weblcms\Bridge\Assignment\Storage\DataClass\EntryAttachment;

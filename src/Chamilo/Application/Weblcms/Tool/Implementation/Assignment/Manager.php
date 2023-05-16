@@ -1,5 +1,4 @@
 <?php
-
 namespace Chamilo\Application\Weblcms\Tool\Implementation\Assignment;
 
 use Chamilo\Application\Weblcms\CourseSettingsController;

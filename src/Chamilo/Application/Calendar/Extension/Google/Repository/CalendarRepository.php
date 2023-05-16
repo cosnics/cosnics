@@ -1,5 +1,4 @@
 <?php
-
 namespace Chamilo\Application\Calendar\Extension\Google\Repository;
 
 use Chamilo\Application\Calendar\Extension\Google\Manager;

@@ -1,5 +1,4 @@
 <?php
-
 namespace Chamilo\Core\Repository\Workspace\Service;
 
 use Chamilo\Core\Group\Integration\Chamilo\Libraries\Rights\Service\GroupEntityProvider;

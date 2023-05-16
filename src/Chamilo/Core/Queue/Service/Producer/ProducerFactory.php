@@ -1,5 +1,4 @@
 <?php
-
 namespace Chamilo\Core\Queue\Service\Producer;
 
 use Chamilo\Core\Queue\Service\Producer\BeanstalkProducer;

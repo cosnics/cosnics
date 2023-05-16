@@ -1,5 +1,4 @@
 <?php
-
 namespace Chamilo\Core\Queue\Console\Command;
 
 use Chamilo\Core\Queue\Service\Worker;

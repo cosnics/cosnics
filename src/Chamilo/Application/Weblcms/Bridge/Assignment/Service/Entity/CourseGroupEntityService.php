@@ -1,5 +1,4 @@
 <?php
-
 namespace Chamilo\Application\Weblcms\Bridge\Assignment\Service\Entity;
 
 use Chamilo\Application\Weblcms\Bridge\Assignment\Table\Entity\CourseGroup\EntityTable;

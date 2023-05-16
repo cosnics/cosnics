@@ -1,5 +1,4 @@
 <?php
-
 namespace Chamilo\Core\User\Test\Unit\Service\UserImporter\ImportParser;
 
 use Chamilo\Core\User\Service\UserImporter\ImportParser\CsvImportParser;

@@ -1,5 +1,4 @@
 <?php
-
 namespace Chamilo\Core\Repository\Console\Command;
 
 use Chamilo\Core\Repository\Service\ResourceFixer\ResourceFixerDirector;

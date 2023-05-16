@@ -1,5 +1,4 @@
 <?php
-
 namespace Chamilo\Core\Repository\ContentObject\Assignment\Display\Service;
 
 use Chamilo\Libraries\File\Compression\Filecompression;

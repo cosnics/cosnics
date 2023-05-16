@@ -1,5 +1,4 @@
 <?php
-
 namespace Chamilo\Application\Weblcms\Tool\Implementation\CourseGroup\Infrastructure\Service;
 
 use Chamilo\Application\Weblcms\Course\Storage\DataClass\Course;

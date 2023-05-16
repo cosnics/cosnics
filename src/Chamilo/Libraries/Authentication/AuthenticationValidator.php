@@ -1,5 +1,4 @@
 <?php
-
 namespace Chamilo\Libraries\Authentication;
 
 use Chamilo\Configuration\Service\Consulter\ConfigurationConsulter;

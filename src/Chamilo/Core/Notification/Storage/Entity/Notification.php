@@ -1,5 +1,4 @@
 <?php
-
 namespace Chamilo\Core\Notification\Storage\Entity;
 
 use DateTime;

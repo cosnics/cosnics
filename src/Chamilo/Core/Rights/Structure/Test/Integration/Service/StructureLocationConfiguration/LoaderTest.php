@@ -1,5 +1,4 @@
 <?php
-
 namespace Chamilo\Core\Rights\Structure\Test\Integration\Service\StructureLocationConfiguration;
 
 use Chamilo\Core\Rights\Structure\Service\StructureLocationConfiguration\Loader;

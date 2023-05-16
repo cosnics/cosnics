@@ -1,5 +1,4 @@
 <?php
-
 namespace Chamilo\Application\Weblcms\Tool\Implementation\User\Component;
 
 use Chamilo\Application\Weblcms\Course\Storage\DataManager as CourseDataManager;

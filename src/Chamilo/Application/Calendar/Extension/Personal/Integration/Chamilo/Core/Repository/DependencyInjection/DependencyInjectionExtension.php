@@ -1,5 +1,4 @@
 <?php
-
 namespace Chamilo\Application\Calendar\Extension\Personal\Integration\Chamilo\Core\Repository\DependencyInjection;
 
 use Chamilo\Libraries\DependencyInjection\AbstractDependencyInjectionExtension;

@@ -1,5 +1,4 @@
 <?php
-
 namespace Chamilo\Core\Notification\Ajax\Component;
 
 use Chamilo\Core\Notification\Ajax\Manager;

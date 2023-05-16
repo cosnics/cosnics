@@ -1,5 +1,4 @@
 <?php
-
 namespace Chamilo\Core\Repository\ContentObject\AssessmentMatchTextQuestion\Integration\Chamilo\Core\Repository\ContentObject\Assessment\Display;
 
 use Chamilo\Core\Repository\Common\ContentObjectResourceRenderer;

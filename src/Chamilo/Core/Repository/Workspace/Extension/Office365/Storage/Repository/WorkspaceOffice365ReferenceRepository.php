@@ -1,5 +1,4 @@
 <?php
-
 namespace Chamilo\Core\Repository\Workspace\Extension\Office365\Storage\Repository;
 
 use Chamilo\Core\Repository\ContentObject\LearningPath\Storage\Repository\CommonDataClassRepository;

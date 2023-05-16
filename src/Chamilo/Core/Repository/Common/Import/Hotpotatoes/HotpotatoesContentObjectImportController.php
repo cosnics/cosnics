@@ -1,5 +1,4 @@
 <?php
-
 namespace Chamilo\Core\Repository\Common\Import\Hotpotatoes;
 
 use Chamilo\Core\Repository\Common\Import\ContentObjectImportController;

@@ -1,5 +1,4 @@
 <?php
-
 namespace Chamilo\Core\Notification\Domain;
 
 use Chamilo\Libraries\File\Redirect;

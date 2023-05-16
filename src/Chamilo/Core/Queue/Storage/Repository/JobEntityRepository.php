@@ -1,5 +1,4 @@
 <?php
-
 namespace Chamilo\Core\Queue\Storage\Repository;
 
 use Chamilo\Core\Queue\Storage\Entity\Job;

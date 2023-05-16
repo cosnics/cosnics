@@ -1,5 +1,4 @@
 <?php
-
 namespace Chamilo\Core\Repository\Service;
 
 use Chamilo\Core\Repository\Workspace\Interfaces\WorkspaceExtensionInterface;

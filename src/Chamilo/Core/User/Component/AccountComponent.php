@@ -1,5 +1,4 @@
 <?php
-
 namespace Chamilo\Core\User\Component;
 
 use Chamilo\Core\User\Form\AccountForm;

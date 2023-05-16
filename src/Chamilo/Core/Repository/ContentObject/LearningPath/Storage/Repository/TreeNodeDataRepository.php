@@ -1,5 +1,4 @@
 <?php
-
 namespace Chamilo\Core\Repository\ContentObject\LearningPath\Storage\Repository;
 
 use Chamilo\Core\Repository\ContentObject\LearningPath\Storage\DataClass\LearningPath;

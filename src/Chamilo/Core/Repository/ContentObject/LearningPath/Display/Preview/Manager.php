@@ -1,5 +1,4 @@
 <?php
-
 namespace Chamilo\Core\Repository\ContentObject\LearningPath\Display\Preview;
 
 use Chamilo\Core\Repository\Common\Path\ComplexContentObjectPathNode;

@@ -1,5 +1,4 @@
 <?php
-
 namespace Chamilo\Application\Weblcms\Test\Integration\Service;
 
 use Chamilo\Libraries\Architecture\Test\TestCases\ChamiloFixturesBasedTestCase;

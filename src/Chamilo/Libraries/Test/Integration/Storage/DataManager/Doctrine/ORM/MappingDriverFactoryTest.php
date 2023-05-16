@@ -1,5 +1,4 @@
 <?php
-
 namespace Chamilo\Test\Integration\Storage\DataManager\Doctrine\ORM;
 
 use Chamilo\Libraries\Architecture\Test\TestCases\DependencyInjectionBasedTestCase;

@@ -1,5 +1,4 @@
 <?php
-
 namespace Chamilo\Core\Repository\Workspace\Interfaces;
 
 use Chamilo\Core\Repository\Workspace\Storage\DataClass\Workspace;

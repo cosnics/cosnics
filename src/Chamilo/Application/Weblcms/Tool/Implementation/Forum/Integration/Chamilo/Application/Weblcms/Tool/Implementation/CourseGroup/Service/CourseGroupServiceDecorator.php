@@ -1,5 +1,4 @@
 <?php
-
 namespace Chamilo\Application\Weblcms\Tool\Implementation\Forum\Integration\Chamilo\Application\Weblcms\Tool\Implementation\CourseGroup\Service;
 
 use Chamilo\Application\Weblcms\Storage\DataClass\ContentObjectPublication;

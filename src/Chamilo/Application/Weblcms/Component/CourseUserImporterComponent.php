@@ -1,5 +1,4 @@
 <?php
-
 namespace Chamilo\Application\Weblcms\Component;
 
 use Chamilo\Application\Weblcms\Form\CourseEntityImportForm;

@@ -1,5 +1,4 @@
 <?php
-
 namespace Chamilo\Core\Repository\ContentObject\Assignment\Common\Rendition\Html;
 
 use Chamilo\Core\Repository\Common\Rendition\ContentObjectRendition;

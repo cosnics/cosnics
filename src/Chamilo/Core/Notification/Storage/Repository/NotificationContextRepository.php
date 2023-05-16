@@ -1,5 +1,4 @@
 <?php
-
 namespace Chamilo\Core\Notification\Storage\Repository;
 
 use Chamilo\Core\Notification\Storage\Entity\NotificationContext;

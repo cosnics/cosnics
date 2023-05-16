@@ -1,5 +1,4 @@
 <?php
-
 namespace Chamilo\Core\Repository\ContentObject\LearningPath\Test\Unit\Service\ActionGenerator;
 
 use Chamilo\Core\Repository\ContentObject\LearningPath\Domain\Action;

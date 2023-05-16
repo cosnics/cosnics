@@ -1,5 +1,4 @@
 <?php
-
 namespace Chamilo\Core\Repository\Feedback\Component;
 
 use Chamilo\Core\Repository\Common\ContentObjectResourceRenderer;

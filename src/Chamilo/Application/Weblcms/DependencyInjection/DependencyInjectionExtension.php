@@ -1,5 +1,4 @@
 <?php
-
 namespace Chamilo\Application\Weblcms\DependencyInjection;
 
 use Chamilo\Libraries\DependencyInjection\AbstractDependencyInjectionExtension;

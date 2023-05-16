@@ -1,5 +1,4 @@
 <?php
-
 namespace Chamilo\Application\Weblcms\Integration\Chamilo\Core\Reporting\Template;
 
 use Chamilo\Application\Weblcms\Integration\Chamilo\Core\Reporting\Block\Assessment\CourseUserExerciseInformationBlock;

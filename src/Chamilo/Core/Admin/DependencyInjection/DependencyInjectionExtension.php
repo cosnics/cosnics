@@ -1,5 +1,4 @@
 <?php
-
 namespace Chamilo\Core\Admin\DependencyInjection;
 
 use Chamilo\Core\Admin\DependencyInjection\CompilerPass\ActionProviderCompilerPass;

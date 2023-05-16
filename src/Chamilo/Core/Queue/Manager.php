@@ -1,5 +1,4 @@
 <?php
-
 namespace Chamilo\Core\Queue;
 
 use Chamilo\Libraries\Architecture\Application\Application;

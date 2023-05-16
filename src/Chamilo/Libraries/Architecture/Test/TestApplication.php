@@ -1,5 +1,4 @@
 <?php
-
 namespace Chamilo\Libraries\Architecture\Test;
 
 use Chamilo\Libraries\Architecture\ClassnameUtilities;

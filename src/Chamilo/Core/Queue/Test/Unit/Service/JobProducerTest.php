@@ -1,5 +1,4 @@
 <?php
-
 namespace Chamilo\Core\Queue\Test\Unit\Service;
 
 use Chamilo\Core\Queue\Service\JobEntityManager;

@@ -1,5 +1,4 @@
 <?php
-
 namespace Chamilo\Application\Weblcms\Tool\Implementation\CourseGroup\Infrastructure\Repository;
 
 use Chamilo\Application\Weblcms\Storage\DataClass\ContentObjectPublicationCategory;

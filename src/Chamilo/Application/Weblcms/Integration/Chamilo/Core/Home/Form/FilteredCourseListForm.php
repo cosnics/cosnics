@@ -1,5 +1,4 @@
 <?php
-
 namespace Chamilo\Application\Weblcms\Integration\Chamilo\Core\Home\Form;
 
 use Chamilo\Application\Weblcms\Integration\Chamilo\Core\Home\Connector;

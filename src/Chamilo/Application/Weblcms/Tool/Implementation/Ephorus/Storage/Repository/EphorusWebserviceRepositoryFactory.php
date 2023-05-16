@@ -1,5 +1,4 @@
 <?php
-
 namespace Chamilo\Application\Weblcms\Tool\Implementation\Ephorus\Storage\Repository;
 
 use Chamilo\Configuration\Service\Consulter\ConfigurationConsulter;

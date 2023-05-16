@@ -1,5 +1,4 @@
 <?php
-
 namespace Chamilo\Libraries\File\Compression\ArchiveCreator;
 
 use Chamilo\Libraries\File\Compression\Filecompression;

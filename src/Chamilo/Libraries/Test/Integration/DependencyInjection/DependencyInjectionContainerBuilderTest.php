@@ -1,5 +1,4 @@
 <?php
-
 namespace Chamilo\Libraries\Test\Integration\DependencyInjection;
 
 use Chamilo\Libraries\Architecture\Test\TestCases\ChamiloTestCase;

@@ -1,5 +1,4 @@
 <?php
-
 namespace Chamilo\Application\Weblcms\Console\Command;
 
 use Chamilo\Application\Weblcms\Console\ConsoleOutputLogger;

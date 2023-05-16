@@ -1,5 +1,4 @@
 <?php
-
 namespace Chamilo\Core\Repository\ContentObject\Assignment\Display\Preview\Component;
 
 use Chamilo\Core\Repository\ContentObject\Assignment\Display\Preview\AssignmentDataProvider;

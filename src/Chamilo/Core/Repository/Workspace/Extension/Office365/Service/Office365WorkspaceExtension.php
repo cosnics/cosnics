@@ -1,5 +1,4 @@
 <?php
-
 namespace Chamilo\Core\Repository\Workspace\Extension\Office365\Service;
 
 use Chamilo\Core\Repository\Component\ExtensionLauncherComponent;

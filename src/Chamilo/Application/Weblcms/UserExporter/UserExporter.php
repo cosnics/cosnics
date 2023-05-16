@@ -1,5 +1,4 @@
 <?php
-
 namespace Chamilo\Application\Weblcms\UserExporter;
 
 use Chamilo\Application\Weblcms\Manager;

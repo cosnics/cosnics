@@ -1,5 +1,4 @@
 <?php
-
 namespace Chamilo\Application\Weblcms\Bridge\Assignment\Table;
 
 use Chamilo\Libraries\Storage\Query\Condition\Condition;

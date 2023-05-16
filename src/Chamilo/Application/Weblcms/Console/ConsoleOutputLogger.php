@@ -1,5 +1,4 @@
 <?php
-
 namespace Chamilo\Application\Weblcms\Console;
 
 use Psr\Log\LoggerInterface;

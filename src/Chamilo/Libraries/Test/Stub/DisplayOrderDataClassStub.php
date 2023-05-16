@@ -1,5 +1,4 @@
 <?php
-
 namespace Chamilo\Libraries\Test\Stub;
 
 use Chamilo\Libraries\Storage\DataClass\Interfaces\DataClassDisplayOrderSupport;

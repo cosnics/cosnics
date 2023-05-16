@@ -1,5 +1,4 @@
 <?php
-
 namespace Chamilo\Core\Repository\ContentObject\LearningPath\Console\Command;
 
 use Chamilo\Core\Repository\ContentObject\LearningPath\Domain\MigrationTrackingParameters;

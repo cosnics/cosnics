@@ -1,5 +1,4 @@
 <?php
-
 namespace Chamilo\Application\Weblcms\Tool\Implementation\Assignment\Storage\DataClass;
 
 use Chamilo\Application\Weblcms\Tool\Implementation\Assignment\Manager;

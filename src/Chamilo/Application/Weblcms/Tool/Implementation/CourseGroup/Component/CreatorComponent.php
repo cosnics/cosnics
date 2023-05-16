@@ -1,5 +1,4 @@
 <?php
-
 namespace Chamilo\Application\Weblcms\Tool\Implementation\CourseGroup\Component;
 
 use Chamilo\Application\Weblcms\Rights\WeblcmsRights;

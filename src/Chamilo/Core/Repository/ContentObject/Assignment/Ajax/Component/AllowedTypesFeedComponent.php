@@ -1,5 +1,4 @@
 <?php
-
 namespace Chamilo\Core\Repository\ContentObject\Assignment\Ajax\Component;
 
 use Chamilo\Configuration\Storage\DataClass\Registration;

@@ -1,5 +1,4 @@
 <?php
-
 namespace Chamilo\Core\Repository\Service\ContentObjectTemplate;
 
 use Chamilo\Core\Repository\Service\TemplateRegistrationCacheDataPreLoader;

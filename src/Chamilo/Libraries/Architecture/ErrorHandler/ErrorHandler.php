@@ -1,5 +1,4 @@
 <?php
-
 namespace Chamilo\Libraries\Architecture\ErrorHandler;
 
 use Chamilo\Libraries\Architecture\ErrorHandler\ExceptionLogger\ExceptionLoggerInterface;

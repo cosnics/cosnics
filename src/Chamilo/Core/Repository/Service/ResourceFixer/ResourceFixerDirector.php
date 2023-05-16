@@ -1,5 +1,4 @@
 <?php
-
 namespace Chamilo\Core\Repository\Service\ResourceFixer;
 
 use Chamilo\Libraries\Utilities\Timer;

@@ -1,5 +1,4 @@
 <?php
-
 namespace Chamilo\Core\Repository\Viewer;
 
 use Chamilo\Core\Repository\Common\Import\ImportTypeSelector;

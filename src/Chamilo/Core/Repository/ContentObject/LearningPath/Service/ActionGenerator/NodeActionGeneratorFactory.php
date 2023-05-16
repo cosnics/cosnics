@@ -1,5 +1,4 @@
 <?php
-
 namespace Chamilo\Core\Repository\ContentObject\LearningPath\Service\ActionGenerator;
 
 use Chamilo\Configuration\Configuration;

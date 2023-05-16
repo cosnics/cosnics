@@ -1,5 +1,4 @@
 <?php
-
 namespace Chamilo\Application\Weblcms\Domain\Importer\CourseEntity;
 
 use Chamilo\Core\User\Domain\UserImporter\ImporterResult;

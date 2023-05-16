@@ -1,5 +1,4 @@
 <?php
-
 namespace Chamilo\Application\Weblcms\Tool\Implementation\Assignment\Service\EntriesDownloader;
 
 use Chamilo\Core\Repository\ContentObject\Assignment\Storage\DataClass\Assignment;

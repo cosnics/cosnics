@@ -1,5 +1,4 @@
 <?php
-
 namespace Chamilo\Application\Weblcms\Tool\Implementation\CourseGroup\Extension\Office365\Exception;
 
 use Chamilo\Core\User\Storage\DataClass\User;

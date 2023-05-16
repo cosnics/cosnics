@@ -1,5 +1,4 @@
 <?php
-
 namespace Chamilo\Core\Repository\DependencyInjection\CompilerPass;
 
 use Chamilo\Core\Repository\Service\WorkspaceExtensionManager;

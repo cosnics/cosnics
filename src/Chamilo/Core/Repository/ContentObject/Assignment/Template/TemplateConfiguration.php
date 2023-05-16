@@ -1,5 +1,4 @@
 <?php
-
 namespace Chamilo\Core\Repository\ContentObject\Assignment\Template;
 
 use Chamilo\Core\Repository\Common\Template\TemplateConfigurationParser;

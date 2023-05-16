@@ -1,5 +1,4 @@
 <?php
-
 namespace Chamilo\Core\Repository\ContentObject\Assignment\Filter;
 
 use Chamilo\Core\Repository\ContentObject\Assignment\Storage\DataClass\Assignment;

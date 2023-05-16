@@ -1,5 +1,4 @@
 <?php
-
 namespace Chamilo\Core\Repository\Common\Import\File;
 
 use Chamilo\Core\Repository\Common\Import\ContentObjectImport;

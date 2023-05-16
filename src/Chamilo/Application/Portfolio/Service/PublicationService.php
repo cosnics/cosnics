@@ -1,5 +1,4 @@
 <?php
-
 namespace Chamilo\Application\Portfolio\Service;
 
 use Chamilo\Application\Portfolio\Storage\DataClass\Publication;

@@ -1,5 +1,4 @@
 <?php
-
 namespace Chamilo\Libraries\Test\Integration\Format\Validator;
 
 use Chamilo\Libraries\Architecture\Test\TestCases\DependencyInjectionBasedTestCase;

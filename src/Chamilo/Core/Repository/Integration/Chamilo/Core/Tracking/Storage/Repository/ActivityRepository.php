@@ -1,5 +1,4 @@
 <?php
-
 namespace Chamilo\Core\Repository\Integration\Chamilo\Core\Tracking\Storage\Repository;
 
 use Chamilo\Core\Repository\ContentObject\LearningPath\Storage\Repository\CommonDataClassRepository;

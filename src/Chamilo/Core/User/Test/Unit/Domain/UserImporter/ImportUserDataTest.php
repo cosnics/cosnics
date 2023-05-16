@@ -1,5 +1,4 @@
 <?php
-
 namespace Chamilo\Core\User\Test\Unit\Domain\UserImporter;
 
 use Chamilo\Core\User\Domain\UserImporter\ImportUserData;

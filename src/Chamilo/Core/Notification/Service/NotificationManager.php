@@ -1,5 +1,4 @@
 <?php
-
 namespace Chamilo\Core\Notification\Service;
 
 use Chamilo\Core\Notification\Domain\FilterDTO;

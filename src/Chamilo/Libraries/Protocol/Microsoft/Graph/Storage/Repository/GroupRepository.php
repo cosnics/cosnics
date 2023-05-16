@@ -1,5 +1,4 @@
 <?php
-
 namespace Chamilo\Libraries\Protocol\Microsoft\Graph\Storage\Repository;
 
 use GuzzleHttp\Exception\ClientException;

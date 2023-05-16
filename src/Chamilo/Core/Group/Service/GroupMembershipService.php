@@ -1,5 +1,4 @@
 <?php
-
 namespace Chamilo\Core\Group\Service;
 
 use Chamilo\Core\Group\Storage\DataClass\Group;

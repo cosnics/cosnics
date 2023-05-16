@@ -1,5 +1,4 @@
 <?php
-
 namespace Chamilo\Core\Repository\ContentObject\Assignment\Integration\Chamilo\Core\Metadata\PropertyProvider;
 
 use Chamilo\Core\Repository\ContentObject\Assignment\Storage\DataClass\Assignment;

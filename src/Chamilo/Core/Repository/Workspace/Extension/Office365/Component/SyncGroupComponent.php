@@ -1,5 +1,4 @@
 <?php
-
 namespace Chamilo\Core\Repository\Workspace\Extension\Office365\Component;
 
 use Chamilo\Core\Repository\Workspace\Extension\Office365\Manager;

@@ -1,5 +1,4 @@
 <?php
-
 namespace Chamilo\Application\Weblcms\Tool\Service;
 
 use Chamilo\Application\Weblcms\Manager;

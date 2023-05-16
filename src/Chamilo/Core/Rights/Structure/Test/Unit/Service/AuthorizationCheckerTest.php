@@ -1,5 +1,4 @@
 <?php
-
 namespace Chamilo\Core\Rights\Structure\Test\Unit\Service;
 
 use Chamilo\Core\Rights\Structure\Service\AuthorizationChecker;

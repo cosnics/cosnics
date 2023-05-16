@@ -1,5 +1,4 @@
 <?php
-
 namespace Chamilo\Application\Weblcms\Tool\Implementation\Ephorus\Component;
 
 use Chamilo\Application\Weblcms\Tool\Implementation\Ephorus\Manager;

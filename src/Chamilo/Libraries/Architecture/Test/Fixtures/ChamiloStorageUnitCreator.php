@@ -1,5 +1,4 @@
 <?php
-
 namespace Chamilo\Libraries\Architecture\Test\Fixtures;
 
 use Chamilo\Libraries\File\PathBuilder;

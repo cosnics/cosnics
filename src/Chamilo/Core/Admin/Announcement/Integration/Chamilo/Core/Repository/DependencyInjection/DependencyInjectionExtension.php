@@ -1,5 +1,4 @@
 <?php
-
 namespace Chamilo\Core\Admin\Announcement\Integration\Chamilo\Core\Repository\DependencyInjection;
 
 use Chamilo\Libraries\DependencyInjection\AbstractDependencyInjectionExtension;

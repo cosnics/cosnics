@@ -1,5 +1,4 @@
 <?php
-
 namespace Chamilo\Core\Notification;
 
 use Chamilo\Core\Notification\Service\NotificationManager;

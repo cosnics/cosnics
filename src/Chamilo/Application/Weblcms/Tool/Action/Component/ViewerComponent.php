@@ -1,5 +1,4 @@
 <?php
-
 namespace Chamilo\Application\Weblcms\Tool\Action\Component;
 
 use Chamilo\Application\Weblcms\CourseSettingsConnector;

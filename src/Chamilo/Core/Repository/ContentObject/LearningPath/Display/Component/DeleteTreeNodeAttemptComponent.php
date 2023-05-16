@@ -1,5 +1,4 @@
 <?php
-
 namespace Chamilo\Core\Repository\ContentObject\LearningPath\Display\Component;
 
 use Chamilo\Libraries\Architecture\Exceptions\NoObjectSelectedException;

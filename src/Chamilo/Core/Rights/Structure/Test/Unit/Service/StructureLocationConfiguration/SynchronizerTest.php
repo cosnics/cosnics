@@ -1,5 +1,4 @@
 <?php
-
 namespace Chamilo\Core\Rights\Structure\Test\Unit\Service\StructureLocationConfiguration;
 
 use Chamilo\Configuration\Service\Consulter\RegistrationConsulter;

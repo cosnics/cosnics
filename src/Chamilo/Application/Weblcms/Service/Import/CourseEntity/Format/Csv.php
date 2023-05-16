@@ -1,5 +1,4 @@
 <?php
-
 namespace Chamilo\Application\Weblcms\Service\Import\CourseEntity\Format;
 
 use Chamilo\Application\Weblcms\Domain\Importer\CourseEntity\CourseEntityRelationImporterResult;

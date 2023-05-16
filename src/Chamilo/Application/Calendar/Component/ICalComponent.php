@@ -1,5 +1,4 @@
 <?php
-
 namespace Chamilo\Application\Calendar\Component;
 
 use Chamilo\Application\Calendar\Manager;

@@ -1,5 +1,4 @@
 <?php
-
 namespace Chamilo\Libraries\DependencyInjection\Configuration;
 
 use Symfony\Component\Config\Definition\Builder\TreeBuilder;

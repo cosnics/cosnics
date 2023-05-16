@@ -1,5 +1,4 @@
 <?php
-
 namespace Chamilo\Libraries\Authentication\Ldap;
 
 use Chamilo\Configuration\Service\Consulter\ConfigurationConsulter;

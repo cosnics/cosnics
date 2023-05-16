@@ -1,5 +1,4 @@
 <?php
-
 namespace Chamilo\Core\Repository\Menu;
 
 use Chamilo\Configuration\Configuration;

@@ -1,5 +1,4 @@
 <?php
-
 namespace Chamilo\Core\Install\Service;
 
 use Chamilo\Core\Install\Configuration;

@@ -1,5 +1,4 @@
 <?php
-
 namespace Chamilo\Core\Queue\Storage\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
