@@ -9,7 +9,7 @@ use Chamilo\Libraries\Translation\Translation;
  * Repo Viewer BreadcrumbGenerator
  *
  * @package common\libraries
- * @author Sven Vanpoucke - Hogeschool Gent
+ * @author  Sven Vanpoucke - Hogeschool Gent
  */
 class BreadcrumbGenerator extends \Chamilo\Libraries\Format\Structure\BreadcrumbGenerator
 {
@@ -28,8 +28,9 @@ class BreadcrumbGenerator extends \Chamilo\Libraries\Format\Structure\Breadcrumb
 
         $this->getBreadcrumbTrail()->add(
             new Breadcrumb(
-                $this->getApplication()->get_url(),
-                Translation::get($variable, null, $this->getApplication()::CONTEXT
+                $this->getApplication()->get_url(), Translation::get(
+                $variable, null, $this->getApplication()::CONTEXT
+            )
             )
         );
     }
