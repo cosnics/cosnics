@@ -40,6 +40,7 @@ class DependencyInjectionExtension extends Extension implements ExtensionInterfa
             )
         );
 
+        $loader->load('repositories.xml');
         $loader->load('services.xml');
     }
 

@@ -21,8 +21,8 @@ class LibrariesConfiguration implements ConfigurationInterface
      */
     public function getConfigTreeBuilder()
     {
-        $treeBuilder = new TreeBuilder();
-        $rootNode = $treeBuilder->root('chamilo_libraries');
+        $treeBuilder = new TreeBuilder('chamilo_libraries');
+        $rootNode = $treeBuilder->getRootNode();
 
         $rootNode->append($this->addDoctrineNode());
         $rootNode->append($this->addPHPStanNode());
@@ -37,8 +37,8 @@ class LibrariesConfiguration implements ConfigurationInterface
      */
     protected function addDoctrineNode()
     {
-        $builder = new TreeBuilder();
-        $node = $builder->root('doctrine');
+        $builder = new TreeBuilder('doctrine');
+        $node = $builder->getRootNode();
 
         $mappingsConfiguration = new DoctrineORMMappingsConfiguration();
 
@@ -60,8 +60,8 @@ class LibrariesConfiguration implements ConfigurationInterface
      */
     protected function addPHPStanNode()
     {
-        $builder = new TreeBuilder();
-        $node = $builder->root('phpstan');
+        $builder = new TreeBuilder('phpstan');
+        $node = $builder->getRootNode();
 
         $node->children()
             ->arrayNode('packages')

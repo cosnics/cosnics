@@ -4,6 +4,7 @@
     xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
     xsi:schemaLocation="http://symfony.com/schema/dic/services http://symfony.com/schema/dic/services/services-1.0.xsd">
     <services>
+        <defaults public="true" autoconfigure="true" autowire="true" />
         <service
             id="chamilo.libraries.file.path"
             class="Chamilo\Libraries\File\Path">
@@ -21,10 +22,18 @@
         </service>
 
         <service
+                alias="chamilo.libraries.file.path_builder"
+                id="Chamilo\Libraries\File\PathBuilder" />
+
+        <service
             id="chamilo.libraries.file.configurable_path_builder"
             class="Chamilo\Libraries\File\ConfigurablePathBuilder">
             <argument>%chamilo.configuration.storage%</argument>
         </service>
+
+        <service
+                alias="chamilo.libraries.file.configurable_path_builder"
+                id="Chamilo\Libraries\File\ConfigurablePathBuilder" />
 
         <service id="chamilo.libraries.file.compression.file_compression" class="Chamilo\Libraries\File\Compression\Filecompression">
             <factory class="Chamilo\Libraries\File\Compression\Filecompression" method="factory" />

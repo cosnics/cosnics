@@ -4,10 +4,14 @@
         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
         xsi:schemaLocation="http://symfony.com/schema/dic/services http://symfony.com/schema/dic/services/services-1.0.xsd">
     <services>
-
+        <defaults public="true" autowire="true" />
         <service
                 id="chamilo.application.weblcms.tool.implementation.gradebook.storage.repository.publication_repository"
                 class="Chamilo\Application\Weblcms\Tool\Implementation\GradeBook\Storage\Repository\PublicationRepository" autowire="true" />
+
+        <service
+                alias="chamilo.application.weblcms.tool.implementation.gradebook.storage.repository.publication_repository"
+                id="Chamilo\Application\Weblcms\Tool\Implementation\GradeBook\Storage\Repository\PublicationRepository" />
 
     </services>
 </container>

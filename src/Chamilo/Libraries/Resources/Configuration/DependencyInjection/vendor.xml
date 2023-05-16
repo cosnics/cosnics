@@ -4,6 +4,7 @@
     xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
     xsi:schemaLocation="http://symfony.com/schema/dic/services http://symfony.com/schema/dic/services/services-1.0.xsd">
     <services>
+        <defaults public="true" autoconfigure="true" autowire="true" />
         <!-- SYMFONY -->
         <service
             id="symfony.component.http_foundation.request"
@@ -14,12 +15,22 @@
         </service>
 
         <service
+                alias="symfony.component.http_foundation.request"
+                id="Chamilo\Libraries\Platform\ChamiloRequest">
+        </service>
+
+        <service
             id="symfony.component.translation.translator"
             class="Symfony\Component\Translation\Translator">
             <factory
                 service="chamilo.libraries.translation.translator_factory"
                 method="createTranslator" />
             <argument>%chamilo.configuration.general.language%</argument>
+        </service>
+
+        <service
+                alias="symfony.component.translation.translator"
+                id="Symfony\Component\Translation\Translator">
         </service>
 
         <service
@@ -60,6 +71,10 @@
         </service>
 
         <service
+                alias="symfony.component.forms.form"
+                id="Symfony\Component\Form\FormFactory" />
+
+        <service
             id="chamilo.libraries.format.form.form_factory_builder"
             class="Chamilo\Libraries\Format\Form\SymfonyFormFactoryBuilder" />
 
@@ -70,6 +85,10 @@
                 method="createValidator"
                 service="chamilo.libraries.format.validator.validator_factory" />
         </service>
+
+        <service
+                alias="symfony.component.validator.validator"
+                id="Symfony\Component\Validator\Validator" />
 
         <service
             id="chamilo.libraries.format.validator.validator_factory"
@@ -117,12 +136,28 @@
         </service>
 
         <service
+                alias="monolog.logger"
+                id="Monolog\Logger" />
+
+        <service
             id="symfony.component.event_dispatcher"
             class="Symfony\Component\EventDispatcher\ContainerAwareEventDispatcher">
             <argument
                 type="service"
                 id="service_container" />
         </service>
+
+        <service
+                alias="symfony.component.event_dispatcher"
+                id="Symfony\Component\EventDispatcher\ContainerAwareEventDispatcher" />
+
+        <service
+                alias="symfony.component.event_dispatcher"
+                id="Symfony\Component\EventDispatcher\EventDispatcherInterface" />
+
+        <service
+                alias="symfony.component.event_dispatcher"
+                id="Symfony\Component\EventDispatcher\EventDispatcher" />
 
         <service
             id="symfony.config.processor"
@@ -132,6 +167,7 @@
             class="Symfony\Component\Yaml\Parser" />
 
         <service id="symfony.component.filesystem.filesystem" class="Symfony\Component\Filesystem\Filesystem" />
+        <service alias="symfony.component.filesystem.filesystem" id="Symfony\Component\Filesystem\Filesystem" />
 
         <service id="Chamilo\Libraries\Console\Command\Vendor\PHPStan\PHPStanPackages" autowire="true" />
 

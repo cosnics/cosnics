@@ -4,7 +4,7 @@
         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
         xsi:schemaLocation="http://symfony.com/schema/dic/services http://symfony.com/schema/dic/services/services-1.0.xsd">
     <services>
-
+        <defaults public="true" autowire="true" />
         <service id="Chamilo\Application\Weblcms\Tool\Implementation\ExamAssignment\Service\EntriesDownloader\EntriesDownloaderFactory" autowire="true"/>
         <service id="Chamilo\Application\Weblcms\Tool\Implementation\ExamAssignment\Service\AssignmentPublicationService" autowire="true"/>
         <service id="Chamilo\Application\Weblcms\Tool\Implementation\ExamAssignment\Service\UserOvertimeService" autowire="true"/>

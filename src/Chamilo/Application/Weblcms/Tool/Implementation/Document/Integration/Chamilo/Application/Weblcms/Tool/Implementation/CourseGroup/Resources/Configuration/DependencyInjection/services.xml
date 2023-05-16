@@ -4,6 +4,7 @@
     xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
     xsi:schemaLocation="http://symfony.com/schema/dic/services http://symfony.com/schema/dic/services/services-1.0.xsd">
     <services>
+        <defaults public="true" autowire="true" />
         <service id="chamilo.application.weblcms.tool.implementation.document.integration.chamilo.application.weblcms.tool.implementation.course_group.form.course_group_form_decorator"
                  class="Chamilo\Application\Weblcms\Tool\Implementation\Document\Integration\Chamilo\Application\Weblcms\Tool\Implementation\CourseGroup\Form\CourseGroupFormDecorator">
             <argument type="service" id="chamilo.application.weblcms.tool.implementation.course_group.service.course_group_publication_category_service" />

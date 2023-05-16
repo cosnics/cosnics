@@ -4,8 +4,12 @@
     xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
     xsi:schemaLocation="http://symfony.com/schema/dic/services http://symfony.com/schema/dic/services/services-1.0.xsd">
     <services>
+        <defaults public="true" autowire="true" />
         <service id="chamilo.application.weblcms.tool.implementation.course_group.decorator.manager"
                  class="Chamilo\Application\Weblcms\Tool\Implementation\CourseGroup\Infrastructure\Service\CourseGroupDecorator\CourseGroupDecoratorsManager" />
+
+        <service alias="chamilo.application.weblcms.tool.implementation.course_group.decorator.manager"
+                 id="Chamilo\Application\Weblcms\Tool\Implementation\CourseGroup\Infrastructure\Service\CourseGroupDecorator\CourseGroupDecoratorsManager" />
 
         <service id="chamilo.application.weblcms.tool.implementation.course_group.service.course_group_publication_category_service"
                  class="Chamilo\Application\Weblcms\Tool\Implementation\CourseGroup\Infrastructure\Service\CourseGroupPublicationCategoryService">

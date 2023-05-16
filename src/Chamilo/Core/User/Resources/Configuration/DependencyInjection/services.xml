@@ -4,6 +4,7 @@
     xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
     xsi:schemaLocation="http://symfony.com/schema/dic/services http://symfony.com/schema/dic/services/services-1.0.xsd">
     <services>
+        <defaults public="true" autowire="true" />
         <service
             id="chamilo.core.user.user"
             class="Chamilo\Core\User\Storage\DataClass\User">
@@ -87,6 +88,8 @@
         <service id="Chamilo\Core\User\Service\PasswordSecurity" autowire="true" />
         <service id="Chamilo\Core\User\Service\UserInviteService" autowire="true" />
 
+        <service id="Chamilo\Core\User\Storage\Repository\UserInviteRepository" autowire="true" />
+
         <service id="Chamilo\Core\User\Form\Type\AcceptInviteFormType" autowire="true">
             <tag name="form.type" />
         </service>
@@ -95,7 +98,7 @@
             <tag name="form.type" />
         </service>
 
-        <service id="Chamilo\Core\User\Renderer\LoginFormRenderer" autowire="true" />
+        <service id="Chamilo\Core\User\Renderer\LoginFormRenderer" autowire="true" public="true" />
 
         <service id="Chamilo\Core\User\Service\UserPropertiesExtension\UserPropertiesExtensionManager" autowire="true" />
 

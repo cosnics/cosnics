@@ -4,6 +4,7 @@
     xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
     xsi:schemaLocation="http://symfony.com/schema/dic/services http://symfony.com/schema/dic/services/services-1.0.xsd">
     <services>
+        <defaults public="true" autowire="true" />
         <service
             id="chamilo.libraries.protocol.microsoft.graph.storage.repository.access_token_repository"
             class="Chamilo\Libraries\Protocol\Microsoft\Graph\Storage\Repository\AccessTokenRepository">
@@ -49,6 +50,10 @@
         </service>
 
         <service
+                alias="chamilo.libraries.protocol.microsoft.graph.storage.repository.graph_repository"
+                id="Chamilo\Libraries\Protocol\Microsoft\Graph\Storage\Repository\GraphRepository" />
+
+        <service
             id="chamilo.libraries.protocol.microsoft.graph.storage.repository.user_repository"
             class="Chamilo\Libraries\Protocol\Microsoft\Graph\Storage\Repository\UserRepository">
             <argument
@@ -62,6 +67,11 @@
             <argument
                     type="service"
                     id="chamilo.libraries.protocol.microsoft.graph.storage.repository.graph_repository" />
+        </service>
+
+        <service
+                alias="chamilo.libraries.protocol.microsoft.graph.storage.repository.team_repository"
+                id="Chamilo\Libraries\Protocol\Microsoft\Graph\Storage\Repository\TeamRepository">
         </service>
 
         <service
@@ -107,6 +117,11 @@
                 id="chamilo.libraries.platform.configuration.local_setting" />
         </service>
 
+        <service
+                alias="chamilo.libraries.protocol.microsoft.graph.service.user_service"
+                id="Chamilo\Libraries\Protocol\Microsoft\Graph\Service\UserService">
+        </service>
+
 
         <service
             id="chamilo.libraries.protocol.microsoft.graph.service.group_service"
@@ -120,6 +135,11 @@
             <argument
                     type="service"
                     id="chamilo.configuration.service.configuration_consulter" />
+        </service>
+
+        <service
+                alias="chamilo.libraries.protocol.microsoft.graph.service.group_service"
+                id="Chamilo\Libraries\Protocol\Microsoft\Graph\Service\GroupService">
         </service>
 
         <service id="Chamilo\Libraries\Protocol\Microsoft\Graph\Service\TeamService" autowire="true"/>

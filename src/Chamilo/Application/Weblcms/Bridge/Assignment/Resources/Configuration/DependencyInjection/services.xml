@@ -8,6 +8,21 @@
 
         <prototype namespace="Chamilo\Application\Weblcms\Bridge\Assignment\" resource="../../../{Service, Storage/Repository}/*" />
 
+        <service id="Chamilo\Application\Weblcms\Bridge\Assignment\Service\AssignmentService" />
+        <service id="Chamilo\Application\Weblcms\Bridge\Assignment\Service\EntryPlagiarismResultService" />
+        <service id="Chamilo\Application\Weblcms\Bridge\Assignment\Service\EphorusService" />
+        <service id="Chamilo\Application\Weblcms\Bridge\Assignment\Service\FeedbackService" />
+        <service id="Chamilo\Application\Weblcms\Bridge\Assignment\Service\NotificationService" />
+
+        <service id="Chamilo\Application\Weblcms\Bridge\Assignment\Storage\Repository\AssignmentRepository" />
+        <service id="Chamilo\Application\Weblcms\Bridge\Assignment\Storage\Repository\EntryPlagiarismResultRepository" />
+        <service id="Chamilo\Application\Weblcms\Bridge\Assignment\Storage\Repository\EphorusRepository" />
+        <service id="Chamilo\Application\Weblcms\Bridge\Assignment\Storage\Repository\FeedbackRepository" />
+
+        <service id="Chamilo\Application\Weblcms\Bridge\Assignment\Service\Entity\CourseGroupEntityService" />
+        <service id="Chamilo\Application\Weblcms\Bridge\Assignment\Service\Entity\UserEntityService" />
+        <service id="Chamilo\Application\Weblcms\Bridge\Assignment\Service\Entity\PlatformGroupEntityService" />
+
         <service id="Chamilo\Application\Weblcms\Bridge\Assignment\AssignmentServiceBridge" />
         <service id="Chamilo\Application\Weblcms\Bridge\Assignment\EphorusServiceBridge" />
         <service id="Chamilo\Application\Weblcms\Bridge\Assignment\FeedbackServiceBridge" />

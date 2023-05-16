@@ -8,11 +8,13 @@
         <service id="Chamilo\Application\Weblcms\Bridge\GradeBook\Service\EntityDataService" />
         <service id="Chamilo\Application\Weblcms\Bridge\GradeBook\Service\ScoreDataService" />
         <service id="Chamilo\Application\Weblcms\Bridge\GradeBook\Service\GradeBookItemService" />
+        <service id="Chamilo\Application\Weblcms\Bridge\GradeBook\Service\TrackingServiceBuilderService" />
         <service id="Chamilo\Application\Weblcms\Bridge\GradeBook\Service\GradeBookItemScoreService" />
         <service id="Chamilo\Application\Weblcms\Bridge\GradeBook\Service\Score\AssessmentScoreService" />
         <service id="Chamilo\Application\Weblcms\Bridge\GradeBook\Service\Score\AssignmentScoreService" />
         <service id="Chamilo\Application\Weblcms\Bridge\GradeBook\Service\Score\EvaluationScoreService" />
         <service id="Chamilo\Application\Weblcms\Bridge\GradeBook\Service\Score\LearningPathTrackingScoreService" />
+
         <service id="Chamilo\Application\Weblcms\Bridge\GradeBook\Service\Score\ScoreServiceManager">
             <call method="addScoreService">
                 <argument type="string">Assessment</argument>

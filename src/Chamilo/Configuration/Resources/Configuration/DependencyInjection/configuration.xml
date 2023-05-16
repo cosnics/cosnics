@@ -4,8 +4,9 @@
     xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
     xsi:schemaLocation="http://symfony.com/schema/dic/services http://symfony.com/schema/dic/services/services-1.0.xsd">
     <services>
+        <defaults public="true" autowire="true" />
         <service
-            id="chamilo.configuration.service.configuration_consulter"
+            id="chamilo.configuration.service.configuration_consulter" public="true"
             class="Chamilo\Configuration\Service\ConfigurationConsulter">
             <argument
                 type="service"
@@ -75,6 +76,10 @@
                 type="service"
                 id="chamilo.libraries.storage.data_manager.doctrine.data_class_repository" />
         </service>
+
+        <service
+                alias="chamilo.configuration.storage.repository.configuration_repository"
+                id="Chamilo\Configuration\Storage\Repository\ConfigurationRepository" />
 
         <service
             id="chamilo.configuration.service.file_configuration_consulter"

@@ -4,6 +4,7 @@
     xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
     xsi:schemaLocation="http://symfony.com/schema/dic/services http://symfony.com/schema/dic/services/services-1.0.xsd">
     <services>
+        <defaults public="true" autoconfigure="true" autowire="true" />
         <service
             id="chamilo.libraries.platform.session.session_utilities"
             class="Chamilo\Libraries\Platform\Session\SessionUtilities">
@@ -65,6 +66,11 @@
             <factory
                 class="Chamilo\Libraries\Platform\Configuration\LocalSetting"
                 method="getInstance" />
+        </service>
+
+        <service
+                alias="chamilo.libraries.platform.configuration.local_setting"
+                id="Chamilo\Libraries\Platform\Configuration\LocalSetting">
         </service>
 
         <service id="Chamilo\Libraries\Platform\IpResolver" autowire="true" />

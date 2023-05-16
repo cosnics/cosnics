@@ -2,6 +2,7 @@
 <container xmlns="http://symfony.com/schema/dic/services" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
            xsi:schemaLocation="http://symfony.com/schema/dic/services http://symfony.com/schema/dic/services/services-1.0.xsd">
     <services>
+        <defaults public="true" autowire="true" />
         <service id="chamilo.application.weblcms.service.course"
                  class="Chamilo\Application\Weblcms\Service\CourseService">
             <argument type="service" id="chamilo.application.weblcms.storage.repository.course_repository" />
@@ -16,6 +17,9 @@
                  class="Chamilo\Application\Weblcms\Service\CourseSettingsService">
             <argument type="service" id="chamilo.application.weblcms.service.course_settings_controller" />
         </service>
+
+        <service alias="chamilo.application.weblcms.service.course_settings"
+                 id="Chamilo\Application\Weblcms\Service\CourseSettingsService" />
 
         <service id="Chamilo\Application\Weblcms\Service\PublicationService"
                  alias="chamilo.application.weblcms.service.publication" />
@@ -50,6 +54,9 @@
             </call>
         </service>
 
+        <service alias="chamilo.application.weblcms.service.rights"
+                 id="Chamilo\Application\Weblcms\Service\RightsService" />
+
         <service id="chamilo.application.weblcms.service.course_settings_controller"
                  class="Chamilo\Application\Weblcms\CourseSettingsController" />
 
@@ -61,6 +68,9 @@
 
         <service id="chamilo.application.weblcms.storage.repository.course_repository"
                  class="Chamilo\Application\Weblcms\Storage\Repository\CourseRepository" />
+
+        <service alias="chamilo.application.weblcms.storage.repository.course_repository"
+                 id="Chamilo\Application\Weblcms\Storage\Repository\CourseRepository" />
 
         <service id="chamilo.application.weblcms.storage.repository.publication_repository"
                  class="Chamilo\Application\Weblcms\Storage\Repository\PublicationRepository" />
@@ -92,6 +102,11 @@
 
         <service id="Chamilo\Application\Weblcms\Service\CourseUserCategoryService" autowire="true"/>
         <service id="Chamilo\Application\Weblcms\Service\CourseSubscriptionService" autowire="true"/>
+        <service
+                 id="Chamilo\Application\Weblcms\Storage\Repository\CourseSubscriptionRepository" autowire="true" />
+
+        <service
+                id="Chamilo\Application\Weblcms\Storage\Repository\CourseUserCategoryRepository" autowire="true" />
 
         <service id="Chamilo\Application\Weblcms\Repository\CourseUserCategoryRepository" autowire="true"/>
 

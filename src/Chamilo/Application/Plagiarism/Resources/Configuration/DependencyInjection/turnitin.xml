@@ -4,10 +4,13 @@
         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
         xsi:schemaLocation="http://symfony.com/schema/dic/services http://symfony.com/schema/dic/services/services-1.0.xsd">
     <services>
+        <defaults public="true" autowire="true" />
         <service id="Chamilo\Application\Plagiarism\Service\Turnitin\PlagiarismChecker" autowire="true" />
         <service id="Chamilo\Application\Plagiarism\Service\Turnitin\WebhookHandler" autowire="true" />
         <service id="Chamilo\Application\Plagiarism\Service\Turnitin\WebhookManager" autowire="true" />
         <service id="Chamilo\Application\Plagiarism\Service\Turnitin\EulaService" autowire="true" />
+        <service id="Chamilo\Application\Plagiarism\Service\Turnitin\SubmissionService" autowire="true" />
+        <service id="Chamilo\Application\Plagiarism\Service\Turnitin\SubmissionStatusParser" autowire="true" />
 
         <service id="Chamilo\Application\Plagiarism\Repository\Turnitin\TurnitinRepositoryFactory" autowire="true" />
 

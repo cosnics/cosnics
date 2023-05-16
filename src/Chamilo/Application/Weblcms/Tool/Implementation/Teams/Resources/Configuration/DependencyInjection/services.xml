@@ -2,6 +2,7 @@
 <container xmlns="http://symfony.com/schema/dic/services" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
            xsi:schemaLocation="http://symfony.com/schema/dic/services http://symfony.com/schema/dic/services/services-1.0.xsd">
     <services>
+        <defaults public="true" autowire="true" />
         <service id="Chamilo\Application\Weblcms\Tool\Implementation\Teams\Service\CourseTeamService" autowire="true" />
         <service id="Chamilo\Application\Weblcms\Tool\Implementation\Teams\Service\PlatformGroupTeamService" autowire="true" />
 
@@ -12,6 +13,9 @@
         <service id="Chamilo\Application\Weblcms\Tool\Implementation\Teams\Form\Type\CreatePlatformGroupTeamType" autowire="true">
             <tag name="form.type" />
         </service>
+
+        <service id="Chamilo\Application\Weblcms\Tool\Implementation\Teams\Storage\Repository\CourseTeamRelationRepository" autowire="true" />
+        <service id="Chamilo\Application\Weblcms\Tool\Implementation\Teams\Storage\Repository\PlatformGroupTeamRepository" autowire="true" />
 
         <service id="Chamilo\Application\Weblcms\Tool\Implementation\Teams\Form\Handler\CreatePlatformGroupTeamFormHandler" autowire="true" />
         <service id="Chamilo\Application\Weblcms\Tool\Implementation\Teams\Form\Handler\EditPlatformGroupTeamFormHandler" autowire="true" />
