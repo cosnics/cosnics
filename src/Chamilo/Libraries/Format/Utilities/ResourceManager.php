@@ -1,14 +1,16 @@
 <?php
 namespace Chamilo\Libraries\Format\Utilities;
 
-use Chamilo\Libraries\File\PathBuilder;
+use Chamilo\Libraries\DependencyInjection\DependencyInjectionContainerBuilder;
+use Chamilo\Libraries\File\SystemPathBuilder;
+use Chamilo\Libraries\File\WebPathBuilder;
 
 /**
  * Manages resources, ensuring that they are only loaded when necessary.
  * Currently only relevant for JavaScript and CSS files.
  *
- * @author Tim De Pauw
- * @author Hans De Bisschop <hans.de.bisschop@ehb.be>
+ * @author  Tim De Pauw
+ * @author  Hans De Bisschop <hans.de.bisschop@ehb.be>
  * @package Chamilo\Libraries\Format\Utilities
  */
 class ResourceManager
@@ -16,17 +18,19 @@ class ResourceManager
 
     private static ?ResourceManager $instance = null;
 
-    private PathBuilder $pathBuilder;
-
     /**
-     *
      * @var string[]
      */
     private array $resources;
 
-    public function __construct(PathBuilder $pathBuilder)
+    private SystemPathBuilder $systemPathBuilder;
+
+    private WebPathBuilder $webPathBuilder;
+
+    public function __construct(SystemPathBuilder $systemPathBuilder, WebPathBuilder $webPathBuilder)
     {
-        $this->pathBuilder = $pathBuilder;
+        $this->systemPathBuilder = $systemPathBuilder;
+        $this->webPathBuilder = $webPathBuilder;
         $this->resources = [];
     }
 
@@ -39,11 +43,26 @@ class ResourceManager
         $this->resources[] = $path;
     }
 
+    /**
+     * @throws \Exception
+     */
     public static function getInstance(): ResourceManager
     {
         if (!isset(self::$instance))
         {
-            self::$instance = new ResourceManager(PathBuilder::getInstance());
+            $container = DependencyInjectionContainerBuilder::getInstance()->createContainer();
+
+            /**
+             * @var \Chamilo\Libraries\File\WebPathBuilder $webPathBuilder
+             */
+
+            $webPathBuilder = $container->get(WebPathBuilder::class);
+            /**
+             * @var \Chamilo\Libraries\File\SystemPathBuilder $systemPathBuilder
+             */
+            $systemPathBuilder = $container->get(SystemPathBuilder::class);
+
+            self::$instance = new ResourceManager($systemPathBuilder, $webPathBuilder);
         }
 
         return self::$instance;
@@ -85,8 +104,8 @@ class ResourceManager
 
     private function renderResourceHtml(string $path): string
     {
-        $webPath = $this->pathBuilder->getBasePath(true);
-        $basePath = $this->pathBuilder->getBasePath() . '../web/';
+        $webPath = $this->webPathBuilder->getBasePath();
+        $basePath = $this->systemPathBuilder->getPublicPath();
 
         $systemPath = str_replace($webPath, $basePath, $path);
         $modificationTime = filemtime($systemPath);
@@ -94,6 +113,7 @@ class ResourceManager
         $matches = [];
         preg_match('/[^.]*$/', $path, $matches);
         $extension = $matches[0];
+
         switch (strtolower($extension))
         {
             case 'css' :

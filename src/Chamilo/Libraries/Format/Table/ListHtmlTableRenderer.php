@@ -54,7 +54,7 @@ class ListHtmlTableRenderer extends AbstractHtmlTableRenderer
 
     public function getTableActionsJavascriptPath(): string
     {
-        return $this->getPathBuilder()->getJavascriptPath(StringUtilities::LIBRARIES, true) . 'SortableTable.js';
+        return $this->getWebPathBuilder()->getJavascriptPath(StringUtilities::LIBRARIES) . 'SortableTable.js';
     }
 
     public function getTableClasses(): string
@@ -161,11 +161,11 @@ class ListHtmlTableRenderer extends AbstractHtmlTableRenderer
             }
 
             $queryParameters = [
-                $parameterNames[TableParameterValues::PARAM_PAGE_NUMBER] => $parameterValues->getPageNumber(),
+                $parameterNames[AbstractBaseTableParameters::PARAM_PAGE_NUMBER] => $parameterValues->getPageNumber(),
                 $parameterNames[TableParameterValues::PARAM_NUMBER_OF_ROWS_PER_PAGE] => $parameterValues->getNumberOfRowsPerPage(
                 ),
-                $parameterNames[TableParameterValues::PARAM_ORDER_COLUMN_INDEX] => $currentOrderColumnIndex,
-                $parameterNames[TableParameterValues::PARAM_ORDER_COLUMN_DIRECTION] => $currentOrderColumnDirection
+                $parameterNames[AbstractBaseTableParameters::PARAM_ORDER_COLUMN_INDEX] => $currentOrderColumnIndex,
+                $parameterNames[AbstractBaseTableParameters::PARAM_ORDER_COLUMN_DIRECTION] => $currentOrderColumnDirection
             ];
 
             $content = '<a href="' . $this->getUrlGenerator()->fromRequest($queryParameters) . '">' . $label . '</a> ' .

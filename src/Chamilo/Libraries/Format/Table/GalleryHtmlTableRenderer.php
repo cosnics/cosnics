@@ -75,7 +75,7 @@ class GalleryHtmlTableRenderer extends AbstractHtmlTableRenderer
 
     public function getTableActionsJavascriptPath(): string
     {
-        return $this->getPathBuilder()->getJavascriptPath(StringUtilities::LIBRARIES, true) . 'GalleryTable.js';
+        return $this->getWebPathBuilder()->getJavascriptPath(StringUtilities::LIBRARIES) . 'GalleryTable.js';
     }
 
     public function getTableClasses(): string

@@ -3,11 +3,11 @@ namespace Chamilo\Core\Repository\Common\Template;
 
 use Chamilo\Core\Repository\Service\ContentObjectTemplate\ContentObjectTemplateLoader;
 use Chamilo\Core\Repository\Storage\DataClass\ContentObject;
-use Chamilo\Libraries\File\PathBuilder;
+use Chamilo\Libraries\DependencyInjection\DependencyInjectionContainerBuilder;
+use Chamilo\Libraries\File\SystemPathBuilder;
 use Chamilo\Libraries\Translation\Translation;
 
 /**
- *
  * @author Eduard Vossen <eduard.vossen@ehb.be>
  * @author Hans De Bisschop <hans.de.bisschop@ehb.be>
  */
@@ -15,25 +15,21 @@ class Template
 {
 
     /**
-     *
      * @var TemplateConfiguration
      */
     private $configuration;
 
     /**
-     *
      * @var ContentObject
      */
     private $content_object;
 
     /**
-     *
      * @var TemplateTranslation
      */
     private $translation;
 
     /**
-     *
      * @param TemplateConfiguration $configuration
      * @param ContentObject $content_object
      * @param TemplateTranslation $translation
@@ -48,7 +44,6 @@ class Template
     }
 
     /**
-     *
      * @param string $content_object_type
      * @param string $template_name
      *
@@ -57,13 +52,18 @@ class Template
      */
     public static function get($content_object_type, $template_name)
     {
-        $contentObjectTemplateLoader = new ContentObjectTemplateLoader(PathBuilder::getInstance());
+        /**
+         * @var \Chamilo\Libraries\File\SystemPathBuilder $systemPathBuilder
+         */
+        $systemPathBuilder =
+            DependencyInjectionContainerBuilder::getInstance()->createContainer()->get(SystemPathBuilder::class);
+
+        $contentObjectTemplateLoader = new ContentObjectTemplateLoader($systemPathBuilder);
 
         return $contentObjectTemplateLoader->loadTemplate($content_object_type, $template_name);
     }
 
     /**
-     *
      * @return TemplateConfiguration
      */
     public function get_configuration()
@@ -72,16 +72,6 @@ class Template
     }
 
     /**
-     *
-     * @param TemplateConfiguration $configuration
-     */
-    public function set_configuration($configuration)
-    {
-        $this->configuration = $configuration;
-    }
-
-    /**
-     *
      * @return ContentObject
      */
     public function get_content_object()
@@ -90,16 +80,6 @@ class Template
     }
 
     /**
-     *
-     * @param ContentObject $content_object
-     */
-    public function set_content_object($content_object)
-    {
-        $this->content_object = $content_object;
-    }
-
-    /**
-     *
      * @return TemplateTranslation
      */
     public function get_translation()
@@ -108,7 +88,22 @@ class Template
     }
 
     /**
-     *
+     * @param TemplateConfiguration $configuration
+     */
+    public function set_configuration($configuration)
+    {
+        $this->configuration = $configuration;
+    }
+
+    /**
+     * @param ContentObject $content_object
+     */
+    public function set_content_object($content_object)
+    {
+        $this->content_object = $content_object;
+    }
+
+    /**
      * @param TemplateTranslation $translation
      */
     public function set_translation($translation)

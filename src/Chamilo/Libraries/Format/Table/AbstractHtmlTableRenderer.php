@@ -2,7 +2,7 @@
 namespace Chamilo\Libraries\Format\Table;
 
 use Chamilo\Libraries\Architecture\Application\Routing\UrlGenerator;
-use Chamilo\Libraries\File\PathBuilder;
+use Chamilo\Libraries\File\WebPathBuilder;
 use Chamilo\Libraries\Format\Structure\ActionBar\AbstractButton;
 use Chamilo\Libraries\Format\Structure\ActionBar\Button;
 use Chamilo\Libraries\Format\Structure\ActionBar\ButtonToolBar;
@@ -34,8 +34,6 @@ abstract class AbstractHtmlTableRenderer
 
     protected PagerRenderer $pagerRenderer;
 
-    protected PathBuilder $pathBuilder;
-
     protected ResourceManager $resourceManager;
 
     protected Security $security;
@@ -44,9 +42,11 @@ abstract class AbstractHtmlTableRenderer
 
     protected UrlGenerator $urlGenerator;
 
+    protected WebPathBuilder $webPathBuilder;
+
     public function __construct(
         Translator $translator, UrlGenerator $urlGenerator, PagerRenderer $pagerRenderer, Security $security,
-        ResourceManager $resourceManager, PathBuilder $pathBuilder
+        ResourceManager $resourceManager, WebPathBuilder $webPathBuilder
     )
     {
         $this->urlGenerator = $urlGenerator;
@@ -54,7 +54,7 @@ abstract class AbstractHtmlTableRenderer
         $this->pagerRenderer = $pagerRenderer;
         $this->security = $security;
         $this->resourceManager = $resourceManager;
-        $this->pathBuilder = $pathBuilder;
+        $this->webPathBuilder = $webPathBuilder;
     }
 
     public function getActionsButtonToolbar(TableActions $tableActions): ButtonToolBar
@@ -126,11 +126,6 @@ abstract class AbstractHtmlTableRenderer
         return $this->pagerRenderer;
     }
 
-    public function getPathBuilder(): PathBuilder
-    {
-        return $this->pathBuilder;
-    }
-
     public function getResourceManager(): ResourceManager
     {
         return $this->resourceManager;
@@ -160,6 +155,11 @@ abstract class AbstractHtmlTableRenderer
     public function getUrlGenerator(): UrlGenerator
     {
         return $this->urlGenerator;
+    }
+
+    public function getWebPathBuilder(): WebPathBuilder
+    {
+        return $this->webPathBuilder;
     }
 
     /**
@@ -260,7 +260,7 @@ abstract class AbstractHtmlTableRenderer
     ): string
     {
         return $this->getPagerRenderer()->renderPaginationWithPageLimit(
-            $parameterValues, $parameterNames[TableParameterValues::PARAM_PAGE_NUMBER]
+            $parameterValues, $parameterNames[AbstractBaseTableParameters::PARAM_PAGE_NUMBER]
         );
     }
 
@@ -298,7 +298,7 @@ abstract class AbstractHtmlTableRenderer
         if ($this->hasSortableColumns($tableColumns))
         {
             $propertyUrl = $this->getUrlGenerator()->fromRequest(
-                [$parameterNames[TableParameterValues::PARAM_ORDER_COLUMN_DIRECTION] => SORT_ASC]
+                [$parameterNames[AbstractBaseTableParameters::PARAM_ORDER_COLUMN_DIRECTION] => SORT_ASC]
             );
             $isSelected = $currentFirstOrderDirection == SORT_ASC;
 
@@ -308,7 +308,7 @@ abstract class AbstractHtmlTableRenderer
             );
 
             $propertyUrl = $this->getUrlGenerator()->fromRequest(
-                [$parameterNames[TableParameterValues::PARAM_ORDER_COLUMN_DIRECTION] => SORT_DESC]
+                [$parameterNames[AbstractBaseTableParameters::PARAM_ORDER_COLUMN_DIRECTION] => SORT_DESC]
             );
             $isSelected = $currentFirstOrderDirection == SORT_DESC;
 
@@ -402,7 +402,7 @@ abstract class AbstractHtmlTableRenderer
             foreach ($tableColumns as $index => $tableColumn)
             {
                 $propertyUrl = $this->getUrlGenerator()->fromRequest(
-                    [$parameterNames[TableParameterValues::PARAM_ORDER_COLUMN_INDEX] => $index]
+                    [$parameterNames[AbstractBaseTableParameters::PARAM_ORDER_COLUMN_INDEX] => $index]
                 );
 
                 $isSelected = $currentOrderColumnIndex == $index;
@@ -585,18 +585,6 @@ abstract class AbstractHtmlTableRenderer
     }
 
     /**
-     * @param \Chamilo\Libraries\File\PathBuilder $pathBuilder
-     *
-     * @return AbstractHtmlTableRenderer
-     */
-    public function setPathBuilder(PathBuilder $pathBuilder): AbstractHtmlTableRenderer
-    {
-        $this->pathBuilder = $pathBuilder;
-
-        return $this;
-    }
-
-    /**
      * @param \Chamilo\Libraries\Format\Utilities\ResourceManager $resourceManager
      *
      * @return AbstractHtmlTableRenderer
@@ -604,6 +592,13 @@ abstract class AbstractHtmlTableRenderer
     public function setResourceManager(ResourceManager $resourceManager): AbstractHtmlTableRenderer
     {
         $this->resourceManager = $resourceManager;
+
+        return $this;
+    }
+
+    public function setWebPathBuilder(WebPathBuilder $webPathBuilder): AbstractHtmlTableRenderer
+    {
+        $this->webPathBuilder = $webPathBuilder;
 
         return $this;
     }

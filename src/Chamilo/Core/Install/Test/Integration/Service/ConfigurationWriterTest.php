@@ -7,7 +7,6 @@ use Chamilo\Core\Install\Service\Interfaces\ConfigurationWriterInterface;
 use Chamilo\Libraries\Architecture\ClassnameUtilities;
 use Chamilo\Libraries\Architecture\Test\TestCases\ChamiloTestCase;
 use Chamilo\Libraries\File\Filesystem;
-use Chamilo\Libraries\File\PathBuilder;
 use Chamilo\Libraries\File\SystemPathBuilder;
 use Chamilo\Libraries\Utilities\StringUtilities;
 
@@ -21,7 +20,6 @@ class ConfigurationWriterTest extends ChamiloTestCase
 {
 
     /**
-     *
      * @var ConfigurationWriterInterface
      */
     protected $configurationWriter;
@@ -30,7 +28,8 @@ class ConfigurationWriterTest extends ChamiloTestCase
     {
         $pathBuilder = new SystemPathBuilder(new ClassnameUtilities(new StringUtilities()));
         $this->configurationWriter = new ConfigurationWriter(
-            $pathBuilder->getResourcesPath('Chamilo\Core\Install') . 'Templates/configuration.xml.tpl');
+            $pathBuilder->getResourcesPath('Chamilo\Core\Install') . 'Templates/configuration.xml.tpl'
+        );
     }
 
     public function tearDown(): void

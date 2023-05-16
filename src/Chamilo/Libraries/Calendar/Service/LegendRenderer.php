@@ -3,7 +3,7 @@ namespace Chamilo\Libraries\Calendar\Service;
 
 use Chamilo\Libraries\Calendar\Architecture\Interfaces\CalendarRendererProviderInterface;
 use Chamilo\Libraries\Calendar\Architecture\Interfaces\VisibilitySupport;
-use Chamilo\Libraries\File\PathBuilder;
+use Chamilo\Libraries\File\WebPathBuilder;
 use Chamilo\Libraries\Format\NotificationMessage\NotificationMessage;
 use Chamilo\Libraries\Format\NotificationMessage\NotificationMessageManager;
 use Chamilo\Libraries\Format\Utilities\ResourceManager;
@@ -12,15 +12,12 @@ use Symfony\Component\Translation\Translator;
 
 /**
  * @package Chamilo\Libraries\Calendar\Service
- *
- * @author Hans De Bisschop <hans.de.bisschop@ehb.be>
+ * @author  Hans De Bisschop <hans.de.bisschop@ehb.be>
  */
 class LegendRenderer
 {
 
     protected NotificationMessageManager $notificationMessageManager;
-
-    protected PathBuilder $pathBuilder;
 
     protected ResourceManager $resourceManager;
 
@@ -31,19 +28,22 @@ class LegendRenderer
 
     protected Translator $translator;
 
+    protected WebPathBuilder $webPathBuilder;
+
     public function __construct(
         NotificationMessageManager $notificationMessageManager, Translator $translator,
-        ResourceManager $resourceManager, PathBuilder $pathBuilder
+        ResourceManager $resourceManager, WebPathBuilder $webPathBuilder
     )
     {
         $this->notificationMessageManager = $notificationMessageManager;
         $this->translator = $translator;
         $this->resourceManager = $resourceManager;
-        $this->pathBuilder = $pathBuilder;
+        $this->webPathBuilder = $webPathBuilder;
     }
 
     /**
      * Builds a color-based legend for the calendar to help users to see the origin of the the published events
+     *
      * @throws \Exception
      */
     public function render(CalendarRendererProviderInterface $dataProvider): string
@@ -108,7 +108,7 @@ class LegendRenderer
                 $result[] = '</script>';
 
                 $result[] = $this->getResourceManager()->getResourceHtml(
-                    $this->getPathBuilder()->getJavascriptPath('Chamilo\Libraries\Calendar', true) . 'Highlight.js'
+                    $this->getWebPathBuilder()->getJavascriptPath('Chamilo\Libraries\Calendar') . 'Highlight.js'
                 );
 
                 if ($visibleSources == 0)
@@ -142,11 +142,6 @@ class LegendRenderer
     public function getNotificationMessageManager(): NotificationMessageManager
     {
         return $this->notificationMessageManager;
-    }
-
-    public function getPathBuilder(): PathBuilder
-    {
-        return $this->pathBuilder;
     }
 
     public function getResourceManager(): ResourceManager
@@ -194,17 +189,14 @@ class LegendRenderer
         return $this->sources;
     }
 
-    /**
-     * @param string[] $sources
-     */
-    public function setSources(array $sources)
-    {
-        $this->sources = $sources;
-    }
-
     public function getTranslator(): Translator
     {
         return $this->translator;
+    }
+
+    public function getWebPathBuilder(): WebPathBuilder
+    {
+        return $this->webPathBuilder;
     }
 
     /**
@@ -213,5 +205,13 @@ class LegendRenderer
     public function hasSources(): bool
     {
         return count($this->getSources()) > 0;
+    }
+
+    /**
+     * @param string[] $sources
+     */
+    public function setSources(array $sources)
+    {
+        $this->sources = $sources;
     }
 }

@@ -1,16 +1,14 @@
 <?php
 namespace Chamilo\Libraries\Format\Structure;
 
-use Chamilo\Libraries\File\Path;
-use Chamilo\Libraries\File\PathBuilder;
+use Chamilo\Libraries\File\WebPathBuilder;
 use Chamilo\Libraries\Format\Theme\ThemePathBuilder;
 
 /**
- *
  * @package Chamilo\Libraries\Format\Structure
- * @author Hans De Bisschop <hans.de.bisschop@ehb.be>
- * @author Magali Gillard <magali.gillard@ehb.be>
- * @author Eduard Vossen <eduard.vossen@ehb.be>
+ * @author  Hans De Bisschop <hans.de.bisschop@ehb.be>
+ * @author  Magali Gillard <magali.gillard@ehb.be>
+ * @author  Eduard Vossen <eduard.vossen@ehb.be>
  */
 class AbstractHeaderRenderer implements HeaderRendererInterface
 {
@@ -18,17 +16,17 @@ class AbstractHeaderRenderer implements HeaderRendererInterface
 
     private PageConfiguration $pageConfiguration;
 
-    private PathBuilder $pathBuilder;
-
     private ThemePathBuilder $themePathBuilder;
 
+    private WebPathBuilder $webPathBuilder;
+
     public function __construct(
-        PageConfiguration $pageConfiguration, PathBuilder $pathBuilder, ThemePathBuilder $themePathBuilder,
+        PageConfiguration $pageConfiguration, WebPathBuilder $webPathBuilder, ThemePathBuilder $themePathBuilder,
         BannerRenderer $bannerRenderer
     )
     {
         $this->pageConfiguration = $pageConfiguration;
-        $this->pathBuilder = $pathBuilder;
+        $this->webPathBuilder = $webPathBuilder;
         $this->themePathBuilder = $themePathBuilder;
         $this->bannerRenderer = $bannerRenderer;
     }
@@ -81,7 +79,7 @@ class AbstractHeaderRenderer implements HeaderRendererInterface
      */
     protected function addDefaultHeaders()
     {
-        $pathBuilder = $this->getPathBuilder();
+        $pathBuilder = $this->getWebPathBuilder();
         $themePathBuilder = $this->getThemePathBuilder();
         $pageConfiguration = $this->getPageConfiguration();
 
@@ -89,19 +87,19 @@ class AbstractHeaderRenderer implements HeaderRendererInterface
         $pageConfiguration->addHtmlHeader('<meta name="viewport" content="width=device-width, initial-scale=1">');
         $pageConfiguration->addHtmlHeader('<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />');
 
-        $cssPath = $pathBuilder->getCssPath('Chamilo/Libraries', true);
-        $javascriptPath = $pathBuilder->getJavascriptPath('Chamilo/Libraries', true);
+        $cssPath = $pathBuilder->getCssPath('Chamilo/Libraries');
+        $javascriptPath = $pathBuilder->getJavascriptPath('Chamilo/Libraries');
 
         $pageConfiguration->addCssFile($cssPath . 'cosnics.vendor.bootstrap.min.css');
         $pageConfiguration->addCssFile($cssPath . 'cosnics.vendor.jquery.min.css');
         $pageConfiguration->addCssFile($cssPath . 'cosnics.vendor.min.css');
         $pageConfiguration->addCssFile($cssPath . 'cosnics.common.' . $themePathBuilder->getTheme() . '.min.css');
 
-        $pageConfiguration->addLink($pathBuilder->getBasePath(true), 'top');
+        $pageConfiguration->addLink($pathBuilder->getBasePath(), 'top');
         $pageConfiguration->addLink($themePathBuilder->getFavouriteIcon(), 'shortcut icon', null, 'image/x-icon');
 
         $pageConfiguration->addHtmlHeader(
-            '<script>var rootWebPath="' . Path::getInstance()->getBasePath(true) . '";</script>'
+            '<script>var rootWebPath="' . $pathBuilder->getBasePath() . '";</script>'
         );
 
         $pageConfiguration->addJavascriptFile($javascriptPath . 'cosnics.vendor.jquery.min.js');
@@ -135,6 +133,16 @@ class AbstractHeaderRenderer implements HeaderRendererInterface
         return $this->pageConfiguration;
     }
 
+    public function getThemePathBuilder(): ThemePathBuilder
+    {
+        return $this->themePathBuilder;
+    }
+
+    public function getWebPathBuilder(): WebPathBuilder
+    {
+        return $this->webPathBuilder;
+    }
+
     public function setPageConfiguration(PageConfiguration $pageConfiguration): AbstractHeaderRenderer
     {
         $this->pageConfiguration = $pageConfiguration;
@@ -142,26 +150,16 @@ class AbstractHeaderRenderer implements HeaderRendererInterface
         return $this;
     }
 
-    public function getPathBuilder(): PathBuilder
+    public function setThemePathBuilder(ThemePathBuilder $themePathBuilder): AbstractHeaderRenderer
     {
-        return $this->pathBuilder;
-    }
-
-    public function setPathBuilder(PathBuilder $pathBuilder): AbstractHeaderRenderer
-    {
-        $this->pathBuilder = $pathBuilder;
+        $this->themePathBuilder = $themePathBuilder;
 
         return $this;
     }
 
-    public function getThemePathBuilder(): ThemePathBuilder
+    public function setWebPathBuilder(WebPathBuilder $webPathBuilder): AbstractHeaderRenderer
     {
-        return $this->themePathBuilder;
-    }
-
-    public function setThemePathBuilder(ThemePathBuilder $themePathBuilder): AbstractHeaderRenderer
-    {
-        $this->themePathBuilder = $themePathBuilder;
+        $this->webPathBuilder = $webPathBuilder;
 
         return $this;
     }

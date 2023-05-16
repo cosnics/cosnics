@@ -95,8 +95,7 @@ abstract class AbstractPathBuilder
 
     public function getPublicStoragePath(string $namespace = null): string
     {
-        return $this->cache[self::PUBLIC_STORAGE][(string) $namespace] =
-            $this->getPublicStorageBasePath() . $this->getDirectorySeparator() .
+        return $this->cache[self::PUBLIC_STORAGE][(string) $namespace] = $this->getPublicStorageBasePath() .
             ($namespace ? $this->getClassnameUtilities()->namespaceToPath($namespace) . $this->getDirectorySeparator() :
                 '');
     }

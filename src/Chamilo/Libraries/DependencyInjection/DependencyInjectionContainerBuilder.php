@@ -18,7 +18,6 @@ use Chamilo\Libraries\DependencyInjection\Interfaces\IConfigurableExtension;
 use Chamilo\Libraries\File\ConfigurablePathBuilder;
 use Chamilo\Libraries\File\Filesystem;
 use Chamilo\Libraries\File\PackagesContentFinder\PackagesClassFinder;
-use Chamilo\Libraries\File\PathBuilder;
 use Chamilo\Libraries\File\SystemPathBuilder;
 use Chamilo\Libraries\File\WebPathBuilder;
 use Chamilo\Libraries\Platform\ChamiloRequest;

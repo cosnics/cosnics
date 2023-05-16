@@ -2,7 +2,7 @@
 namespace Chamilo\Core\Repository\Service\ContentObjectTemplate;
 
 use Chamilo\Core\Repository\Common\Template\Template;
-use Chamilo\Libraries\File\PathBuilder;
+use Chamilo\Libraries\File\SystemPathBuilder;
 use DOMDocument;
 use DOMXPath;
 use Exception;
@@ -16,33 +16,11 @@ use Symfony\Component\Finder\Finder;
  */
 class ContentObjectTemplateLoader
 {
-    /**
-     * @var PathBuilder
-     */
-    protected $pathBuilder;
+    protected SystemPathBuilder $systemPathBuilder;
 
-    /**
-     * ContentObjectTemplateLoader constructor.
-     *
-     * @param PathBuilder $pathBuilder
-     */
-    public function __construct(PathBuilder $pathBuilder)
+    public function __construct(SystemPathBuilder $pathBuilder)
     {
-        $this->pathBuilder = $pathBuilder;
-    }
-
-    /**
-     * Loads templates for a given content object
-     *
-     * @param string $contentObjectNamespace
-     *
-     * @return Template[]
-     *
-     * @throws \Exception
-     */
-    public function loadTemplates($contentObjectNamespace)
-    {
-        return $this->loadTemplatesByNameOrPattern($contentObjectNamespace);
+        $this->systemPathBuilder = $pathBuilder;
     }
 
     /**
@@ -52,13 +30,12 @@ class ContentObjectTemplateLoader
      * @param string $templateName
      *
      * @return Template
-     *
      * @throws \Exception
      */
     public function loadTemplate($contentObjectNamespace, $templateName)
     {
         $templates = $this->loadTemplatesByNameOrPattern($contentObjectNamespace, $templateName);
-        if(empty($templates))
+        if (empty($templates))
         {
             throw new RuntimeException('Could not load the template with the name ' . $templateName);
         }
@@ -67,16 +44,28 @@ class ContentObjectTemplateLoader
     }
 
     /**
+     * Loads templates for a given content object
+     *
+     * @param string $contentObjectNamespace
+     *
+     * @return Template[]
+     * @throws \Exception
+     */
+    public function loadTemplates($contentObjectNamespace)
+    {
+        return $this->loadTemplatesByNameOrPattern($contentObjectNamespace);
+    }
+
+    /**
      * @param string $contentObjectNamespace
      * @param string $templateNameOrPattern
      *
      * @return Template[]
-     *
      * @throws \Exception
      */
     protected function loadTemplatesByNameOrPattern($contentObjectNamespace, $templateNameOrPattern = '*')
     {
-        $contentObjectPath = $this->pathBuilder->namespaceToFullPath($contentObjectNamespace);
+        $contentObjectPath = $this->systemPathBuilder->namespaceToFullPath($contentObjectNamespace);
         if (!file_exists($contentObjectPath) || !is_dir($contentObjectPath))
         {
             throw new Exception(sprintf('The given content object path %s does not exist', $contentObjectPath));
@@ -93,14 +82,12 @@ class ContentObjectTemplateLoader
 
         $finder = new Finder();
 
-        $finder->files()
-            ->in($templatePath)
-            ->name($templateNameOrPattern . '.xml');
+        $finder->files()->in($templatePath)->name($templateNameOrPattern . '.xml');
 
         $templates = [];
-        
+
         /** @var \SplFileInfo $file */
-        foreach($finder as $file)
+        foreach ($finder as $file)
         {
             $templateName = $file->getBasename('.xml');
             $templates[$templateName] = $this->parseTemplate($contentObjectNamespace, $file->getPathname());
@@ -116,7 +103,6 @@ class ContentObjectTemplateLoader
      * @param $templatePath
      *
      * @return Template
-     *
      * @throws \Exception
      */
     protected function parseTemplate($contentObjectNamespace, $templatePath)
@@ -132,12 +118,12 @@ class ContentObjectTemplateLoader
         $dom_document->load($templatePath);
         $dom_xpath = new DOMXPath($dom_document);
 
-        if (! is_subclass_of($template_class_name, 'Chamilo\Core\Repository\Common\Template\TemplateParser'))
+        if (!is_subclass_of($template_class_name, 'Chamilo\Core\Repository\Common\Template\TemplateParser'))
         {
             throw new Exception(
-                $template_class_name .
-                ' doesn\'t seem to support parsing, please implement the' .
-                ' Chamilo\Core\Repository\Common\Template\TemplateParser interface');
+                $template_class_name . ' doesn\'t seem to support parsing, please implement the' .
+                ' Chamilo\Core\Repository\Common\Template\TemplateParser interface'
+            );
         }
 
         return $template_class_name::parse($dom_xpath);

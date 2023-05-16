@@ -13,13 +13,12 @@ use Chamilo\Core\User\Storage\DataClass\User;
 use Chamilo\Libraries\DependencyInjection\DependencyInjectionContainerBuilder;
 use Chamilo\Libraries\File\FileLogger;
 use Chamilo\Libraries\File\Path;
-use Chamilo\Libraries\File\PathBuilder;
 use Chamilo\Libraries\File\Redirect;
+use Chamilo\Libraries\File\WebPathBuilder;
 use Chamilo\Libraries\Format\Theme\ThemePathBuilder;
 use Chamilo\Libraries\Mail\Mailer\MailerInterface;
 use Chamilo\Libraries\Mail\ValueObject\Mail;
 use Chamilo\Libraries\Mail\ValueObject\MailFile;
-use Chamilo\Libraries\Translation\Translation;
 use DOMDocument;
 use Exception;
 use Symfony\Component\Translation\Translator;
@@ -133,7 +132,9 @@ class ContentObjectPublicationMailer
      *
      * @return string
      */
-    public function getTranslation(string $variable, array $parameters = [], string $context = 'Chamilo\Application\Weblcms'): ?string
+    public function getTranslation(
+        string $variable, array $parameters = [], string $context = 'Chamilo\Application\Weblcms'
+    ): ?string
     {
         return $this->translator->trans($variable, $parameters, $context);
     }
@@ -183,8 +184,9 @@ class ContentObjectPublicationMailer
         $link = $this->getContentObjectPublicationUrl($contentObjectPublication);
         $course = $this->courseRepository->findCourse($contentObjectPublication->get_course_id());
 
-        $pathBuilder = DependencyInjectionContainerBuilder::getInstance()->createContainer()->get(PathBuilder::class);
-        $cssPath = $pathBuilder->getCssPath('Chamilo/Libraries', true);
+        $webPathBuilder =
+            DependencyInjectionContainerBuilder::getInstance()->createContainer()->get(WebPathBuilder::class);
+        $cssPath = $webPathBuilder->getCssPath('Chamilo/Libraries');
 
         $body = '<!DOCTYPE html><html lang="en"><head>';
         $body .= '<link rel="stylesheet" type="text/css" href="' . $cssPath . 'cosnics.vendor.bootstrap.min.css' .

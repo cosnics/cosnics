@@ -6,51 +6,29 @@ use Chamilo\Core\Menu\Factory\ItemRendererFactory;
 use Chamilo\Core\Menu\Service\CachedItemService;
 use Chamilo\Core\Menu\Service\RightsCacheService;
 use Chamilo\Core\User\Storage\DataClass\User;
-use Chamilo\Libraries\File\PathBuilder;
+use Chamilo\Libraries\File\WebPathBuilder;
 use Chamilo\Libraries\Format\Theme\ThemePathBuilder;
 use Chamilo\Libraries\Platform\ChamiloRequest;
 
 /**
  * @package Chamilo\Core\Menu\Renderer
- *
- * @author Hans De Bisschop <hans.de.bisschop@ehb.be>
+ * @author  Hans De Bisschop <hans.de.bisschop@ehb.be>
  */
 class MenuRenderer
 {
-    /**
-     * @var \Chamilo\Core\Menu\Service\CachedItemService
-     */
-    private $itemCacheService;
+    private ChamiloRequest $chamiloRequest;
 
-    /**
-     * @var \Chamilo\Core\Menu\Service\RightsCacheService
-     */
-    private $rightsCacheService;
+    private ConfigurationConsulter $configurationConsulter;
 
-    /**
-     * @var \Chamilo\Core\Menu\Factory\ItemRendererFactory
-     */
-    private $itemRendererFactory;
+    private CachedItemService $itemCacheService;
 
-    /**
-     * @var \Chamilo\Libraries\Platform\ChamiloRequest
-     */
-    private $chamiloRequest;
+    private ItemRendererFactory $itemRendererFactory;
 
-    /**
-     * @var \Chamilo\Configuration\Service\Consulter\ConfigurationConsulter
-     */
-    private $configurationConsulter;
+    private RightsCacheService $rightsCacheService;
 
-    /**
-     * @var \Chamilo\Libraries\File\PathBuilder
-     */
-    private $pathBuilder;
+    private ThemePathBuilder $themePathBuilder;
 
-    /**
-     * @var \Chamilo\Libraries\Format\Theme\ThemePathBuilder
-     */
-    private $themePathBuilder;
+    private WebPathBuilder $webPathBuilder;
 
     /**
      * @param \Chamilo\Core\Menu\Service\CachedItemService $itemCacheService
@@ -58,13 +36,13 @@ class MenuRenderer
      * @param \Chamilo\Core\Menu\Factory\ItemRendererFactory $itemRendererFactory
      * @param \Chamilo\Libraries\Platform\ChamiloRequest $chamiloRequest
      * @param \Chamilo\Configuration\Service\Consulter\ConfigurationConsulter $configurationConsulter
-     * @param \Chamilo\Libraries\File\PathBuilder $pathBuilder
      * @param \Chamilo\Libraries\Format\Theme\ThemePathBuilder $themePathBuilder
      */
     public function __construct(
         CachedItemService $itemCacheService, RightsCacheService $rightsCacheService,
         ItemRendererFactory $itemRendererFactory, ChamiloRequest $chamiloRequest,
-        ConfigurationConsulter $configurationConsulter, PathBuilder $pathBuilder, ThemePathBuilder $themePathBuilder
+        ConfigurationConsulter $configurationConsulter, WebPathBuilder $webPathBuilder,
+        ThemePathBuilder $themePathBuilder
     )
     {
         $this->itemCacheService = $itemCacheService;
@@ -72,7 +50,7 @@ class MenuRenderer
         $this->itemRendererFactory = $itemRendererFactory;
         $this->chamiloRequest = $chamiloRequest;
         $this->configurationConsulter = $configurationConsulter;
-        $this->pathBuilder = $pathBuilder;
+        $this->webPathBuilder = $webPathBuilder;
         $this->themePathBuilder = $themePathBuilder;
     }
 
@@ -137,27 +115,11 @@ class MenuRenderer
     }
 
     /**
-     * @param \Chamilo\Libraries\Platform\ChamiloRequest $chamiloRequest
-     */
-    public function setChamiloRequest(ChamiloRequest $chamiloRequest): void
-    {
-        $this->chamiloRequest = $chamiloRequest;
-    }
-
-    /**
      * @return \Chamilo\Configuration\Service\Consulter\ConfigurationConsulter
      */
     public function getConfigurationConsulter(): ConfigurationConsulter
     {
         return $this->configurationConsulter;
-    }
-
-    /**
-     * @param \Chamilo\Configuration\Service\Consulter\ConfigurationConsulter $configurationConsulter
-     */
-    public function setConfigurationConsulter(ConfigurationConsulter $configurationConsulter): void
-    {
-        $this->configurationConsulter = $configurationConsulter;
     }
 
     /**
@@ -169,43 +131,11 @@ class MenuRenderer
     }
 
     /**
-     * @param \Chamilo\Core\Menu\Service\CachedItemService $itemCacheService
-     */
-    public function setItemCacheService(CachedItemService $itemCacheService): void
-    {
-        $this->itemCacheService = $itemCacheService;
-    }
-
-    /**
      * @return \Chamilo\Core\Menu\Factory\ItemRendererFactory
      */
     public function getItemRendererFactory(): ItemRendererFactory
     {
         return $this->itemRendererFactory;
-    }
-
-    /**
-     * @param \Chamilo\Core\Menu\Factory\ItemRendererFactory $itemRendererFactory
-     */
-    public function setItemRendererFactory(ItemRendererFactory $itemRendererFactory): void
-    {
-        $this->itemRendererFactory = $itemRendererFactory;
-    }
-
-    /**
-     * @return \Chamilo\Libraries\File\PathBuilder
-     */
-    public function getPathBuilder(): PathBuilder
-    {
-        return $this->pathBuilder;
-    }
-
-    /**
-     * @param \Chamilo\Libraries\File\PathBuilder $pathBuilder
-     */
-    public function setPathBuilder(PathBuilder $pathBuilder): void
-    {
-        $this->pathBuilder = $pathBuilder;
     }
 
     /**
@@ -217,14 +147,6 @@ class MenuRenderer
     }
 
     /**
-     * @param \Chamilo\Core\Menu\Service\RightsCacheService $rightsCacheService
-     */
-    public function setRightsCacheService(RightsCacheService $rightsCacheService): void
-    {
-        $this->rightsCacheService = $rightsCacheService;
-    }
-
-    /**
      * @return \Chamilo\Libraries\Format\Theme\ThemePathBuilder
      */
     public function getThemePathBuilder(): ThemePathBuilder
@@ -232,12 +154,9 @@ class MenuRenderer
         return $this->themePathBuilder;
     }
 
-    /**
-     * @param \Chamilo\Libraries\Format\Theme\ThemePathBuilder $themePathBuilder
-     */
-    public function setThemePathBuilder(ThemePathBuilder $themePathBuilder): void
+    public function getWebPathBuilder(): WebPathBuilder
     {
-        $this->themePathBuilder = $themePathBuilder;
+        return $this->webPathBuilder;
     }
 
     /**
@@ -247,8 +166,8 @@ class MenuRenderer
     {
         $configurationConsulter = $this->getConfigurationConsulter();
 
-        $siteName = $configurationConsulter->getSetting(array('Chamilo\Core\Admin', 'site_name'));
-        $brandImage = $configurationConsulter->getSetting(array('Chamilo\Core\Menu', 'brand_image'));
+        $siteName = $configurationConsulter->getSetting(['Chamilo\Core\Admin', 'site_name']);
+        $brandImage = $configurationConsulter->getSetting(['Chamilo\Core\Menu', 'brand_image']);
 
         if ($brandImage)
         {
@@ -259,7 +178,7 @@ class MenuRenderer
             $brandSource = $this->getThemePathBuilder()->getImagePath('Chamilo\Configuration', 'LogoHeader');
         }
 
-        $basePath = $this->getPathBuilder()->getBasePath(true);
+        $basePath = $this->getWebPathBuilder()->getBasePath();
 
         return '<a class="navbar-brand" href="' . $basePath . '">' . '<img alt="' . $siteName . '" src="' .
             $brandSource . '"></a>';
@@ -315,6 +234,59 @@ class MenuRenderer
         $html[] = '<ul class="nav navbar-nav navbar-right">';
 
         return implode(PHP_EOL, $html);
+    }
+
+    /**
+     * @param \Chamilo\Libraries\Platform\ChamiloRequest $chamiloRequest
+     */
+    public function setChamiloRequest(ChamiloRequest $chamiloRequest): void
+    {
+        $this->chamiloRequest = $chamiloRequest;
+    }
+
+    /**
+     * @param \Chamilo\Configuration\Service\Consulter\ConfigurationConsulter $configurationConsulter
+     */
+    public function setConfigurationConsulter(ConfigurationConsulter $configurationConsulter): void
+    {
+        $this->configurationConsulter = $configurationConsulter;
+    }
+
+    /**
+     * @param \Chamilo\Core\Menu\Service\CachedItemService $itemCacheService
+     */
+    public function setItemCacheService(CachedItemService $itemCacheService): void
+    {
+        $this->itemCacheService = $itemCacheService;
+    }
+
+    /**
+     * @param \Chamilo\Core\Menu\Factory\ItemRendererFactory $itemRendererFactory
+     */
+    public function setItemRendererFactory(ItemRendererFactory $itemRendererFactory): void
+    {
+        $this->itemRendererFactory = $itemRendererFactory;
+    }
+
+    /**
+     * @param \Chamilo\Core\Menu\Service\RightsCacheService $rightsCacheService
+     */
+    public function setRightsCacheService(RightsCacheService $rightsCacheService): void
+    {
+        $this->rightsCacheService = $rightsCacheService;
+    }
+
+    /**
+     * @param \Chamilo\Libraries\Format\Theme\ThemePathBuilder $themePathBuilder
+     */
+    public function setThemePathBuilder(ThemePathBuilder $themePathBuilder): void
+    {
+        $this->themePathBuilder = $themePathBuilder;
+    }
+
+    public function setWebPathBuilder(WebPathBuilder $webPathBuilder): void
+    {
+        $this->webPathBuilder = $webPathBuilder;
     }
 
 }

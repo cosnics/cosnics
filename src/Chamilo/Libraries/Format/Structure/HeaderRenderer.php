@@ -3,14 +3,13 @@ namespace Chamilo\Libraries\Format\Structure;
 
 use Chamilo\Configuration\Service\Consulter\ConfigurationConsulter;
 use Chamilo\Configuration\Service\FileConfigurationLocator;
-use Chamilo\Libraries\File\PathBuilder;
+use Chamilo\Libraries\File\WebPathBuilder;
 use Chamilo\Libraries\Format\Theme\ThemePathBuilder;
 
 /**
- *
  * @package Chamilo\Libraries\Format\Structure
- * @author Hans De Bisschop <hans.de.bisschop@ehb.be>
- * @author Magali Gillard <magali.gillard@ehb.be>
+ * @author  Hans De Bisschop <hans.de.bisschop@ehb.be>
+ * @author  Magali Gillard <magali.gillard@ehb.be>
  */
 class HeaderRenderer extends AbstractHeaderRenderer
 {
@@ -19,12 +18,12 @@ class HeaderRenderer extends AbstractHeaderRenderer
     private FileConfigurationLocator $fileConfigurationLocator;
 
     public function __construct(
-        PageConfiguration $pageConfiguration, PathBuilder $pathBuilder, ThemePathBuilder $themePathBuilder,
+        PageConfiguration $pageConfiguration, WebPathBuilder $webPathBuilder, ThemePathBuilder $themePathBuilder,
         ConfigurationConsulter $configurationConsulter, FileConfigurationLocator $fileConfigurationLocator,
         BannerRenderer $bannerRenderer
     )
     {
-        parent::__construct($pageConfiguration, $pathBuilder, $themePathBuilder, $bannerRenderer);
+        parent::__construct($pageConfiguration, $webPathBuilder, $themePathBuilder, $bannerRenderer);
 
         $this->configurationConsulter = $configurationConsulter;
         $this->fileConfigurationLocator = $fileConfigurationLocator;
@@ -41,6 +40,7 @@ class HeaderRenderer extends AbstractHeaderRenderer
 
     /**
      * Adds the google analytics tracking to the header if configured
+     *
      * @throws \Exception
      */
     protected function addGoogleAnalyticsTracking()

@@ -23,7 +23,6 @@ use Chamilo\Libraries\Architecture\Interfaces\ComplexContentObjectSupport;
 use Chamilo\Libraries\DependencyInjection\DependencyInjectionContainerBuilder;
 use Chamilo\Libraries\File\FileLogger;
 use Chamilo\Libraries\File\Path;
-use Chamilo\Libraries\File\PathBuilder;
 use Chamilo\Libraries\File\Redirect;
 use Chamilo\Libraries\Format\Form\Element\AdvancedElementFinder\AdvancedElementFinderElements;
 use Chamilo\Libraries\Format\Form\Element\AdvancedElementFinder\AdvancedElementFinderElementTypes;
@@ -674,9 +673,7 @@ class ContentObjectPublicationForm extends BasePublicationForm
         $content_object = $publication->get_content_object();
         $tool = $publication->get_tool();
         $link = $this->get_course_viewer_link($publication);
-
-        $pathBuilder = DependencyInjectionContainerBuilder::getInstance()->createContainer()->get(PathBuilder::class);
-        $cssPath = $pathBuilder->getCssPath('Chamilo/Libraries', true);
+        $cssPath = $this->getWebPathBuilder()->getCssPath('Chamilo/Libraries');
 
         $body = '<!DOCTYPE html><html lang="en"><head>';
         $body .= '<link rel="stylesheet" type="text/css" href="' . $cssPath . 'cosnics.vendor.bootstrap.min.css' .
