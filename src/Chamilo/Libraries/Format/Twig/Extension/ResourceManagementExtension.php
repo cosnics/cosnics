@@ -2,7 +2,8 @@
 namespace Chamilo\Libraries\Format\Twig\Extension;
 
 use Chamilo\Libraries\DependencyInjection\DependencyInjectionContainerBuilder;
-use Chamilo\Libraries\File\Path;
+use Chamilo\Libraries\File\SystemPathBuilder;
+use Chamilo\Libraries\File\WebPathBuilder;
 use Chamilo\Libraries\Format\Theme\ThemePathBuilder;
 use Chamilo\Libraries\Format\Utilities\ResourceManager;
 use Chamilo\Libraries\Utilities\StringUtilities;
@@ -13,7 +14,7 @@ use Twig\TwigFunction;
  * This class is an extension of twig to support resource management
  *
  * @package Chamilo\Libraries\Format\Twig\Extension
- * @author Sven Vanpoucke - Hogeschool Gent
+ * @author  Sven Vanpoucke - Hogeschool Gent
  */
 class ResourceManagementExtension extends AbstractExtension
 {
@@ -31,9 +32,8 @@ class ResourceManagementExtension extends AbstractExtension
 
     protected function addModificationTimeToResourcePath(string $resourceWebPath): string
     {
-        $pathUtil = Path::getInstance();
-        $webPath = $pathUtil->getBasePath(true);
-        $basePath = $pathUtil->getBasePath() . '../web/';
+        $webPath = $this->getWebPathBuilder()->getBasePath();
+        $basePath = $this->getSystemPathBuilder()->getBasePath() . '../web/';
 
         $systemPath = str_replace($webPath, $basePath, $resourceWebPath);
         $modificationTime = filemtime($systemPath);
@@ -69,7 +69,7 @@ class ResourceManagementExtension extends AbstractExtension
      */
     public function getCssPath(string $css, string $context = StringUtilities::LIBRARIES): string
     {
-        return $this->getThemePathBuilder()->getCssPath($context) . $css;
+        return $this->getThemeWebPathBuilder()->getCssPath($context) . $css;
     }
 
     /**
@@ -91,46 +91,12 @@ class ResourceManagementExtension extends AbstractExtension
     }
 
     /**
-     * Returns an image as HTML code for a given image in a given context with a given extension. Optionally adding the
-     * possibility to add a label, a class and a style
-     */
-    public function getImage(
-        string $image, string $context, string $extension = 'png', ?string $label = null, ?string $class = null,
-        ?string $style = null
-    ): string
-    {
-        $imagePath = $this->getImagePath($image, $context, $extension);
-
-        $html = [];
-
-        $html[] = '<img border="0" src="' . $imagePath . '"';
-
-        if (!empty($label))
-        {
-            $html[] = 'alt="' . $label . '" title="' . htmlentities($label) . '"';
-        }
-
-        if (!empty($class))
-        {
-            $html[] = 'class="' . $class . '"';
-        }
-
-        if (!empty($style))
-        {
-            $html[] = 'style="' . $style . '"';
-        }
-
-        $html[] = '/>';
-
-        return implode(' ', $html);
-    }
-
-    /**
      * Returns the path to an image in a given context, depending on the selected theme from the user
      */
-    public function getImagePath(string $image, string $context = StringUtilities::LIBRARIES, string $extension = 'png'): string
+    public function getImagePath(string $image, string $context = StringUtilities::LIBRARIES, string $extension = 'png'
+    ): string
     {
-        return $this->getThemePathBuilder()->getImagePath($context, $image, $extension);
+        return $this->getThemeWebPathBuilder()->getImagePath($context, $image, $extension);
     }
 
     /**
@@ -164,7 +130,7 @@ class ResourceManagementExtension extends AbstractExtension
      */
     public function getJavascriptPath(string $javascript, string $context = StringUtilities::LIBRARIES): string
     {
-        return Path::getInstance()->getJavascriptPath($context, true) . $javascript;
+        return $this->getWebPathBuilder()->getJavascriptPath($context) . $javascript;
     }
 
     public function getName(): string
@@ -181,26 +147,46 @@ class ResourceManagementExtension extends AbstractExtension
 
     public function getPluginPath(string $javascript, string $context = StringUtilities::LIBRARIES): string
     {
-        return Path::getInstance()->getPluginPath($context, true) . $javascript;
+        return $this->getWebPathBuilder()->getPluginPath($context) . $javascript;
     }
 
-    public function getThemePathBuilder(): ThemePathBuilder
+    public function getSystemPathBuilder(): SystemPathBuilder
     {
-        return DependencyInjectionContainerBuilder::getInstance()->createContainer()->get(ThemePathBuilder::class);
+        return DependencyInjectionContainerBuilder::getInstance()->createContainer()->get(
+            WebPathBuilder::class
+        );
+    }
+
+    public function getThemeWebPathBuilder(): ThemePathBuilder
+    {
+        return DependencyInjectionContainerBuilder::getInstance()->createContainer()->get(
+            'Chamilo\Libraries\Format\Theme\ThemeWebPathBuilder'
+        );
     }
 
     public function getVendorCss(string $cssPath): string
     {
-        $vendorCssPath = Path::getInstance()->getBasePath(true) . 'vendor/' . $cssPath;
+        $webPathBuilder = $this->getWebPathBuilder();
+        $vendorCssPath =
+            $webPathBuilder->getBasePath() . 'vendor' . $webPathBuilder->getDirectorySeparator() . $cssPath;
 
         return $this->getCssHtml($vendorCssPath);
     }
 
     public function getVendorJavascript(string $javascriptPath): string
     {
-        $javascriptPath = Path::getInstance()->getBasePath(true) . 'vendor/' . $javascriptPath;
+        $webPathBuilder = $this->getWebPathBuilder();
+        $javascriptPath =
+            $webPathBuilder->getBasePath() . 'vendor' . $webPathBuilder->getDirectorySeparator() . $javascriptPath;
 
         return $this->getJavascriptHtml($javascriptPath);
+    }
+
+    public function getWebPathBuilder(): WebPathBuilder
+    {
+        return DependencyInjectionContainerBuilder::getInstance()->createContainer()->get(
+            WebPathBuilder::class
+        );
     }
 
     public function isUniquePath(string $path): bool

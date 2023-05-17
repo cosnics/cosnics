@@ -16,13 +16,12 @@ use Chamilo\Libraries\Translation\Translation;
  */
 class SettingsConnector
 {
-
-    /**
-     * @return \Chamilo\Libraries\Format\Theme\ThemePathBuilder
-     */
-    public static function getThemePathBuilder()
+    
+    public static function getThemeSystemPathBuilder(): ThemePathBuilder
     {
-        return DependencyInjectionContainerBuilder::getInstance()->createContainer()->get(ThemePathBuilder::class);
+        return DependencyInjectionContainerBuilder::getInstance()->createContainer()->get(
+            'Chamilo\Libraries\Format\Theme\ThemeSystemPathBuilder'
+        );
     }
 
     public static function get_active_applications()
@@ -54,7 +53,7 @@ class SettingsConnector
 
     public static function get_themes()
     {
-        return self::getThemePathBuilder()->getAvailableThemes();
+        return self::getThemeSystemPathBuilder()->getAvailableThemes();
     }
 
     public static function get_working_hours()

@@ -10,8 +10,7 @@ use Chamilo\Libraries\File\Redirect;
 
 /**
  * @package Chamilo\Core\Repository\Integration\Chamilo\Core\Menu\Renderer\Item\Bar\Item
- *
- * @author Hans De Bisschop <hans.de.bisschop@ehb.be>
+ * @author  Hans De Bisschop <hans.de.bisschop@ehb.be>
  */
 class WorkspaceItemRenderer extends ItemRenderer
 {
@@ -35,10 +34,10 @@ class WorkspaceItemRenderer extends ItemRenderer
         }
 
         $redirect = new Redirect(
-            array(
-                Application::PARAM_CONTEXT  => Manager::CONTEXT,
+            [
+                Application::PARAM_CONTEXT => Manager::CONTEXT,
                 Manager::PARAM_WORKSPACE_ID => $item->getWorkspaceId()
-            )
+            ]
         );
 
         $html = [];
@@ -50,7 +49,7 @@ class WorkspaceItemRenderer extends ItemRenderer
         if ($item->showIcon())
         {
             $glyph = $item->getGlyph();
-            $glyph->setExtraClasses(array('fa-2x'));
+            $glyph->setExtraClasses(['fa-2x']);
             $glyph->setTitle($title);
 
             $html[] = $glyph->render();
@@ -71,7 +70,7 @@ class WorkspaceItemRenderer extends ItemRenderer
     /**
      * @param \Chamilo\Core\Repository\Integration\Chamilo\Core\Menu\Storage\DataClass\WorkspaceItem $item
      *
-     * @return boolean
+     * @return bool
      */
     public function isSelected(Item $item)
     {

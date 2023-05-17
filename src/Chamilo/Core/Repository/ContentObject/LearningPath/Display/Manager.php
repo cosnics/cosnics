@@ -314,11 +314,11 @@ abstract class Manager extends \Chamilo\Core\Repository\Display\Manager
         foreach ($javascriptFiles as $javascriptFile)
         {
             $html[] = ResourceManager::getInstance()->getResourceHtml(
-                $this->getPathBuilder()->getResourcesPath(Manager::CONTEXT, true) . 'Javascript/' . $javascriptFile
+                $this->getWebPathBuilder()->getResourcesPath(Manager::CONTEXT, true) . 'Javascript/' . $javascriptFile
             );
         }
 
-        $repoDragPanelPath = $this->getPathBuilder()->getResourcesPath(
+        $repoDragPanelPath = $this->getSystemPathBuilder()->getResourcesPath(
                 "Chamilo\\Core\\Repository\\ContentObject\\LearningPath\\Display"
             ) . '/Templates/RepoDragPanel.html';
         $repoDragPanel = file_get_contents($repoDragPanelPath);

@@ -20,14 +20,12 @@ use Chamilo\Libraries\Architecture\Exceptions\NoObjectSelectedException;
 use Chamilo\Libraries\Architecture\Exceptions\ObjectNotExistException;
 use Chamilo\Libraries\Architecture\Exceptions\UserException;
 use Chamilo\Libraries\Architecture\Interfaces\ComplexContentObjectSupport;
-use Chamilo\Libraries\DependencyInjection\DependencyInjectionContainerBuilder;
 use Chamilo\Libraries\File\FileLogger;
 use Chamilo\Libraries\File\Path;
 use Chamilo\Libraries\File\Redirect;
 use Chamilo\Libraries\Format\Form\Element\AdvancedElementFinder\AdvancedElementFinderElements;
 use Chamilo\Libraries\Format\Form\Element\AdvancedElementFinder\AdvancedElementFinderElementTypes;
 use Chamilo\Libraries\Format\Structure\Glyph\FontAwesomeGlyph;
-use Chamilo\Libraries\Format\Theme\ThemePathBuilder;
 use Chamilo\Libraries\Format\Utilities\ResourceManager;
 use Chamilo\Libraries\Mail\Mailer\MailerFactory;
 use Chamilo\Libraries\Mail\ValueObject\Mail;
@@ -501,19 +499,6 @@ class ContentObjectPublicationForm extends BasePublicationForm
         return $this->getService(RightsService::class);
     }
 
-    protected function getRightsService(): RightsService
-    {
-        return $this->getService(RightsService::class);
-    }
-
-    /**
-     * @return \Chamilo\Libraries\Format\Theme\ThemePathBuilder
-     */
-    public function getThemePathBuilder()
-    {
-        return DependencyInjectionContainerBuilder::getInstance()->createContainer()->get(ThemePathBuilder::class);
-    }
-
     protected function getUser(): ?User
     {
         return $this->getService(User::class);
@@ -681,7 +666,7 @@ class ContentObjectPublicationForm extends BasePublicationForm
         $body .= '<link rel="stylesheet" type="text/css" href="' . $cssPath . 'cosnics.vendor.jquery.min.css' . '" />';
         $body .= '<link rel="stylesheet" type="text/css" href="' . $cssPath . 'cosnics.vendor.min.css' . '" />';
         $body .= '<link rel="stylesheet" type="text/css" href="' . $cssPath . 'cosnics.common.' .
-            $this->getThemePathBuilder()->getTheme() . '.min.css' . '" />';
+            $this->getThemeWebPathBuilder()->getTheme() . '.min.css' . '" />';
         $body .= '</head><body><div class="container-fluid" style="margin-top: 15px;">';
 
         $body .= Translation::get('NewPublicationMailDescription') . ' ' . $this->course->get_title() . ' : <a href="' .

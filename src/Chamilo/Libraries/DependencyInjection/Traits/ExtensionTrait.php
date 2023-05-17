@@ -13,7 +13,7 @@ trait ExtensionTrait
      */
     abstract public function getConfigurationFiles(): array;
 
-    abstract public function getPathBuilder(): SystemPathBuilder;
+    abstract public function getSystemPathBuilder(): SystemPathBuilder;
 
     public function load(array $configs, ContainerBuilder $container)
     {
@@ -21,7 +21,7 @@ trait ExtensionTrait
         {
             $loader = new XmlFileLoader(
                 $container,
-                new FileLocator($this->getPathBuilder()->getConfigurationPath($context) . 'DependencyInjection')
+                new FileLocator($this->getSystemPathBuilder()->getConfigurationPath($context) . 'DependencyInjection')
             );
 
             foreach ($configurationFiles as $configurationFile)

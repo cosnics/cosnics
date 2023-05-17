@@ -9,15 +9,13 @@ use Chamilo\Core\Rights\Structure\Service\Interfaces\AuthorizationCheckerInterfa
 use Chamilo\Core\User\Storage\DataClass\User;
 use Chamilo\Libraries\Architecture\Application\Application;
 use Chamilo\Libraries\File\Redirect;
-use Chamilo\Libraries\Format\Theme\ThemePathBuilder;
 use Chamilo\Libraries\Platform\ChamiloRequest;
 use Symfony\Component\Translation\Translator;
 use Twig_Environment;
 
 /**
  * @package Chamilo\Core\Notification\Integration\Chamilo\Core\Menu\Renderer\Item\Bar\Item
- *
- * @author Sven Vanpoucke - Hogeschool Gent
+ * @author  Sven Vanpoucke - Hogeschool Gent
  */
 class NotificationWidgetItemRenderer extends PriorityItemRenderer
 {
@@ -26,20 +24,12 @@ class NotificationWidgetItemRenderer extends PriorityItemRenderer
      */
     private $twig;
 
-    /**
-     * @param \Chamilo\Core\Rights\Structure\Service\Interfaces\AuthorizationCheckerInterface $authorizationChecker
-     * @param \Symfony\Component\Translation\Translator $translator
-     * @param \Chamilo\Core\Menu\Service\CachedItemService $itemCacheService
-     * @param \Chamilo\Libraries\Format\Theme\ThemePathBuilder $themePathBuilder
-     * @param \Chamilo\Libraries\Platform\ChamiloRequest $request
-     * @param \Twig_Environment $twig
-     */
     public function __construct(
-        AuthorizationCheckerInterface $authorizationChecker, Translator $translator, CachedItemService $itemCacheService,
-        ThemePathBuilder $themePathBuilder, ChamiloRequest $request, Twig_Environment $twig
+        AuthorizationCheckerInterface $authorizationChecker, Translator $translator,
+        CachedItemService $itemCacheService, ChamiloRequest $request, Twig_Environment $twig
     )
     {
-        parent::__construct($authorizationChecker, $translator, $itemCacheService, $themePathBuilder, $request);
+        parent::__construct($authorizationChecker, $translator, $itemCacheService, $request);
 
         $this->twig = $twig;
     }
@@ -84,7 +74,6 @@ class NotificationWidgetItemRenderer extends PriorityItemRenderer
 
     /**
      * @param bool $isSelected
-     *
      * @param array $existingClasses
      *
      * @return array
@@ -106,14 +95,6 @@ class NotificationWidgetItemRenderer extends PriorityItemRenderer
     }
 
     /**
-     * @param \Twig_Environment $twig
-     */
-    public function setTwig(Twig_Environment $twig): void
-    {
-        $this->twig = $twig;
-    }
-
-    /**
      * Returns whether or not the given user can view this menu item
      *
      * @param User $user
@@ -126,5 +107,13 @@ class NotificationWidgetItemRenderer extends PriorityItemRenderer
 
         return Application::is_active('Chamilo\Core\Notification') &&
             $authorizationChecker->isAuthorized($user, 'Chamilo\Core\Notification');
+    }
+
+    /**
+     * @param \Twig_Environment $twig
+     */
+    public function setTwig(Twig_Environment $twig): void
+    {
+        $this->twig = $twig;
     }
 }

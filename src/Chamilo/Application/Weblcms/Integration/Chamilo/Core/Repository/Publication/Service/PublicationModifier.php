@@ -49,7 +49,7 @@ class PublicationModifier implements PublicationModifierInterface
 
     private CourseService $courseService;
 
-    private ThemePathBuilder $themePathBuilder;
+    private ThemePathBuilder $themeWebPathBuilder;
 
     private Translator $translator;
 
@@ -57,7 +57,7 @@ class PublicationModifier implements PublicationModifierInterface
 
     public function __construct(
         Translator $translator, UserService $userService, CourseService $courseService,
-        ThemePathBuilder $themePathBuilder, UrlGenerator $urlGenerator, DatetimeUtilities $datetimeUtilities,
+        ThemePathBuilder $themeWebPathBuilder, UrlGenerator $urlGenerator, DatetimeUtilities $datetimeUtilities,
         RegistrationConsulter $registrationConsulter, AssignmentPublicationService $assignmentPublicationService,
         AssignmentPublicationService $learningPathAssignmentPublicationService
     )
@@ -65,7 +65,7 @@ class PublicationModifier implements PublicationModifierInterface
         $this->translator = $translator;
         $this->userService = $userService;
         $this->courseService = $courseService;
-        $this->themePathBuilder = $themePathBuilder;
+        $this->themeWebPathBuilder = $themeWebPathBuilder;
         $this->urlGenerator = $urlGenerator;
         $this->datetimeUtilities = $datetimeUtilities;
         $this->registrationConsulter = $registrationConsulter;
@@ -218,9 +218,9 @@ class PublicationModifier implements PublicationModifierInterface
         return $this->registrationConsulter;
     }
 
-    public function getThemePathBuilder(): ThemePathBuilder
+    public function getThemeWebPathBuilder(): ThemePathBuilder
     {
-        return $this->themePathBuilder;
+        return $this->themeWebPathBuilder;
     }
 
     public function getTranslator(): Translator
@@ -322,7 +322,7 @@ class PublicationModifier implements PublicationModifierInterface
             $contentObjectPublicationMailer = new ContentObjectPublicationMailer(
                 $mailerFactory->getActiveMailer(), $this->getTranslator(), new CourseRepository(),
                 new PublicationRepository(), new ContentObjectRepository(), $this->getUserService(),
-                $this->getThemePathBuilder()
+                $this->getThemeWebPathBuilder()
             );
 
             $contentObjectPublicationMailer->mailPublication($publication);
@@ -354,38 +354,6 @@ class PublicationModifier implements PublicationModifierInterface
         return new PublicationResult(
             PublicationResult::STATUS_SUCCESS, $successMessage, $publicationUrl
         );
-    }
-
-    /**
-     * @param \Chamilo\Application\Weblcms\Service\CourseService $courseService
-     */
-    public function setCourseService(CourseService $courseService): void
-    {
-        $this->courseService = $courseService;
-    }
-
-    /**
-     * @param \Chamilo\Libraries\Format\Theme\ThemePathBuilder $themePathBuilder
-     */
-    public function setThemePathBuilder(ThemePathBuilder $themePathBuilder): void
-    {
-        $this->themePathBuilder = $themePathBuilder;
-    }
-
-    /**
-     * @param \Symfony\Component\Translation\Translator $translator
-     */
-    public function setTranslator(Translator $translator): void
-    {
-        $this->translator = $translator;
-    }
-
-    /**
-     * @param \Chamilo\Core\User\Service\UserService $userService
-     */
-    public function setUserService(UserService $userService): void
-    {
-        $this->userService = $userService;
     }
 
     public function updateContentObjectPublicationContentObjectIdentifier(Attributes $publicationAttributes): bool

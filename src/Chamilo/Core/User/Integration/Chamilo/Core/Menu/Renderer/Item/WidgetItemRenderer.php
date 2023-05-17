@@ -11,44 +11,35 @@ use Chamilo\Core\User\Picture\UserPictureProviderInterface;
 use Chamilo\Core\User\Storage\DataClass\User;
 use Chamilo\Libraries\Architecture\Application\Application;
 use Chamilo\Libraries\File\Redirect;
-use Chamilo\Libraries\Format\Theme\ThemePathBuilder;
 use Chamilo\Libraries\Platform\ChamiloRequest;
 use Symfony\Component\Translation\Translator;
 
 /**
  * @package Chamilo\Core\User\Integration\Chamilo\Core\Menu\Renderer\ItemRenderer
- *
- * @author Hans De Bisschop <hans.de.bisschop@ehb.be>
+ * @author  Hans De Bisschop <hans.de.bisschop@ehb.be>
  */
 class WidgetItemRenderer extends ItemRenderer
 {
 
-    /**
-     * @var \Chamilo\Configuration\Service\Consulter\ConfigurationConsulter
-     */
-    private $configurationConsulter;
+    private ConfigurationConsulter $configurationConsulter;
 
-    /**
-     * @var \Chamilo\Core\User\Picture\UserPictureProviderInterface
-     */
-    private $userPictureProvider;
+    private UserPictureProviderInterface $userPictureProvider;
 
     /**
      * @param \Chamilo\Core\Rights\Structure\Service\Interfaces\AuthorizationCheckerInterface $authorizationChecker
      * @param \Symfony\Component\Translation\Translator $translator
      * @param \Chamilo\Core\Menu\Service\CachedItemService $itemCacheService
-     * @param \Chamilo\Libraries\Format\Theme\ThemePathBuilder $themePathBuilder
      * @param \Chamilo\Libraries\Platform\ChamiloRequest $request
      * @param \Chamilo\Configuration\Service\Consulter\ConfigurationConsulter $configurationConsulter
      * @param \Chamilo\Core\User\Picture\UserPictureProviderInterface $userPictureProvider ;
      */
     public function __construct(
-        AuthorizationCheckerInterface $authorizationChecker, Translator $translator, CachedItemService $itemCacheService,
-        ThemePathBuilder $themePathBuilder, ChamiloRequest $request, ConfigurationConsulter $configurationConsulter,
+        AuthorizationCheckerInterface $authorizationChecker, Translator $translator,
+        CachedItemService $itemCacheService, ChamiloRequest $request, ConfigurationConsulter $configurationConsulter,
         UserPictureProviderInterface $userPictureProvider
     )
     {
-        parent::__construct($authorizationChecker, $translator, $itemCacheService, $themePathBuilder, $request);
+        parent::__construct($authorizationChecker, $translator, $itemCacheService, $request);
 
         $this->configurationConsulter = $configurationConsulter;
         $this->userPictureProvider = $userPictureProvider;
@@ -105,7 +96,7 @@ class WidgetItemRenderer extends ItemRenderer
 
         // Change user profile picture
         if ($this->getConfigurationConsulter()->getSetting(
-            array(Manager::CONTEXT, 'allow_change_user_picture')
+            [Manager::CONTEXT, 'allow_change_user_picture']
         ))
         {
             $html[] = '<li>';
@@ -147,7 +138,6 @@ class WidgetItemRenderer extends ItemRenderer
     }
 
     /**
-     *
      * @return string
      */
     public function getAccountUrl()
@@ -164,15 +154,6 @@ class WidgetItemRenderer extends ItemRenderer
     }
 
     /**
-     * @param \Chamilo\Configuration\Service\Consulter\ConfigurationConsulter $configurationConsulter
-     */
-    public function setConfigurationConsulter(ConfigurationConsulter $configurationConsulter): void
-    {
-        $this->configurationConsulter = $configurationConsulter;
-    }
-
-    /**
-     *
      * @return string
      */
     public function getLogoutUrl()
@@ -181,7 +162,6 @@ class WidgetItemRenderer extends ItemRenderer
     }
 
     /**
-     *
      * @return string
      */
     public function getPictureUrl()
@@ -190,7 +170,6 @@ class WidgetItemRenderer extends ItemRenderer
     }
 
     /**
-     *
      * @return string
      */
     public function getSettingsUrl()
@@ -207,19 +186,6 @@ class WidgetItemRenderer extends ItemRenderer
     }
 
     /**
-     * @param \Chamilo\Core\User\Picture\UserPictureProviderInterface $userPictureProvider
-     *
-     * @return WidgetItemRenderer
-     */
-    public function setUserPictureProvider(UserPictureProviderInterface $userPictureProvider): WidgetItemRenderer
-    {
-        $this->userPictureProvider = $userPictureProvider;
-
-        return $this;
-    }
-
-    /**
-     *
      * @param string $action
      *
      * @return string
@@ -227,7 +193,7 @@ class WidgetItemRenderer extends ItemRenderer
     public function getUserUrl($action)
     {
         $redirect = new Redirect(
-            array(Application::PARAM_CONTEXT => Manager::CONTEXT, Application::PARAM_ACTION => $action)
+            [Application::PARAM_CONTEXT => Manager::CONTEXT, Application::PARAM_ACTION => $action]
         );
 
         return $redirect->getUrl();
@@ -236,7 +202,7 @@ class WidgetItemRenderer extends ItemRenderer
     /**
      * @param \Chamilo\Core\User\Storage\DataClass\User $user
      *
-     * @return boolean
+     * @return bool
      */
     public function isItemVisibleForUser(User $user)
     {
@@ -251,5 +217,25 @@ class WidgetItemRenderer extends ItemRenderer
     public function renderTitle(Item $item)
     {
         return $this->getTranslator()->trans('MyAccount', [], 'Chamilo\Core\User');
+    }
+
+    /**
+     * @param \Chamilo\Configuration\Service\Consulter\ConfigurationConsulter $configurationConsulter
+     */
+    public function setConfigurationConsulter(ConfigurationConsulter $configurationConsulter): void
+    {
+        $this->configurationConsulter = $configurationConsulter;
+    }
+
+    /**
+     * @param \Chamilo\Core\User\Picture\UserPictureProviderInterface $userPictureProvider
+     *
+     * @return WidgetItemRenderer
+     */
+    public function setUserPictureProvider(UserPictureProviderInterface $userPictureProvider): WidgetItemRenderer
+    {
+        $this->userPictureProvider = $userPictureProvider;
+
+        return $this;
     }
 }

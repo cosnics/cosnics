@@ -39,7 +39,7 @@ class ContentObjectPublicationMailer
 
     protected PublicationRepositoryInterface $publicationRepository;
 
-    protected ThemePathBuilder $themePathBuilder;
+    protected ThemePathBuilder $themeWebPathBuilder;
 
     protected Translator $translator;
 
@@ -48,7 +48,7 @@ class ContentObjectPublicationMailer
     public function __construct(
         MailerInterface $mailer, Translator $translator, CourseRepositoryInterface $courseRepository,
         PublicationRepositoryInterface $publicationRepository, ContentObjectRepository $contentObjectRepository,
-        UserService $userService, ThemePathBuilder $themePathBuilder
+        UserService $userService, ThemePathBuilder $themeWebPathBuilder
     )
     {
         $this->mailer = $mailer;
@@ -57,7 +57,7 @@ class ContentObjectPublicationMailer
         $this->publicationRepository = $publicationRepository;
         $this->contentObjectRepository = $contentObjectRepository;
         $this->userService = $userService;
-        $this->themePathBuilder = $themePathBuilder;
+        $this->themeWebPathBuilder = $themeWebPathBuilder;
     }
 
     /**
@@ -118,9 +118,9 @@ class ContentObjectPublicationMailer
     /**
      * @return \Chamilo\Libraries\Format\Theme\ThemePathBuilder
      */
-    public function getThemePathBuilder(): ThemePathBuilder
+    public function getThemeWebPathBuilder(): ThemePathBuilder
     {
-        return $this->themePathBuilder;
+        return $this->themeWebPathBuilder;
     }
 
     /**
@@ -194,7 +194,7 @@ class ContentObjectPublicationMailer
         $body .= '<link rel="stylesheet" type="text/css" href="' . $cssPath . 'cosnics.vendor.jquery.min.css' . '" />';
         $body .= '<link rel="stylesheet" type="text/css" href="' . $cssPath . 'cosnics.vendor.min.css' . '" />';
         $body .= '<link rel="stylesheet" type="text/css" href="' . $cssPath . 'cosnics.common.' .
-            $this->getThemePathBuilder()->getTheme() . '.min.css' . '" />';
+            $this->getThemeWebPathBuilder()->getTheme() . '.min.css' . '" />';
         $body .= '</head><body><div class="container-fluid" style="margin-top: 15px;">';
 
         $body .= $this->getTranslation('NewPublicationMailDescription') . ' ' . $course->get_title() . ' : <a href="' .
@@ -299,21 +299,5 @@ class ContentObjectPublicationMailer
         }
 
         return $doc->saveHTML();
-    }
-
-    /**
-     * @param \Chamilo\Libraries\Format\Theme\ThemePathBuilder $themePathBuilder
-     */
-    public function setThemePathBuilder(ThemePathBuilder $themePathBuilder): void
-    {
-        $this->themePathBuilder = $themePathBuilder;
-    }
-
-    /**
-     * @param \Chamilo\Core\User\Service\UserService $userService
-     */
-    public function setUserService(UserService $userService)
-    {
-        $this->userService = $userService;
     }
 }

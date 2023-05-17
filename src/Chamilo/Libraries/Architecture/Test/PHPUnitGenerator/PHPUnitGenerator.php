@@ -2,7 +2,7 @@
 namespace Chamilo\Libraries\Architecture\Test\PHPUnitGenerator;
 
 use Chamilo\Configuration\Service\Consulter\RegistrationConsulter;
-use Chamilo\Libraries\File\PathBuilder;
+use Chamilo\Libraries\File\SystemPathBuilder;
 use DOMDocument;
 use DOMXPath;
 use Twig\Environment;
@@ -15,23 +15,7 @@ use Twig\Environment;
 class PHPUnitGenerator implements PHPUnitGeneratorInterface
 {
 
-    /**
-     *
-     * @var \Twig\Environment
-     */
-    protected $twig;
-
-    /**
-     *
-     * @var PathBuilder
-     */
-    protected $pathBuilder;
-
-    /**
-     *
-     * @var RegistrationConsulter
-     */
-    protected $registrationConsulter;
+    protected SystemPathBuilder $pathBuilder;
 
     /**
      * The path to the PHPUnit configuration file
@@ -41,14 +25,17 @@ class PHPUnitGenerator implements PHPUnitGeneratorInterface
     protected $phpUnitFile;
 
     /**
-     * Constructor
-     *
-     * @param \Twig\Environment $twig
-     * @param PathBuilder $pathBuilder
-     * @param RegistrationConsulter $registrationConsulter
+     * @var RegistrationConsulter
      */
+    protected $registrationConsulter;
+
+    /**
+     * @var \Twig\Environment
+     */
+    protected $twig;
+
     public function __construct(
-        Environment $twig, PathBuilder $pathBuilder, RegistrationConsulter $registrationConsulter
+        Environment $twig, SystemPathBuilder $pathBuilder, RegistrationConsulter $registrationConsulter
     )
     {
         $this->twig = $twig;
@@ -60,7 +47,7 @@ class PHPUnitGenerator implements PHPUnitGeneratorInterface
     /**
      * Generates the global phpunit configuration file for Chamilo
      *
-     * @param boolean $includeSource
+     * @param bool $includeSource
      *
      * @throws \Twig\Error\LoaderError
      * @throws \Twig\Error\RuntimeError
@@ -110,10 +97,11 @@ class PHPUnitGenerator implements PHPUnitGeneratorInterface
         }
 
         $phpunitConfiguration = $this->twig->render(
-            'Chamilo\Libraries:PHPUnitGenerator/phpunit.xml.twig', array(
-                'testDirectories' => $testDirectories, 'sourceDirectories' => $sourceDirectories,
+            'Chamilo\Libraries:PHPUnitGenerator/phpunit.xml.twig', [
+                'testDirectories' => $testDirectories,
+                'sourceDirectories' => $sourceDirectories,
                 'excludedDirectories' => $excludedDirectories
-            )
+            ]
         );
 
         file_put_contents($this->phpUnitFile, $phpunitConfiguration);

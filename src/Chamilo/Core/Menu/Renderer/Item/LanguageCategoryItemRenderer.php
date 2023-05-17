@@ -13,43 +13,26 @@ use Chamilo\Core\User\Storage\DataClass\User;
 use Chamilo\Libraries\Architecture\Application\Application;
 use Chamilo\Libraries\File\Redirect;
 use Chamilo\Libraries\Format\Structure\Glyph\FontAwesomeGlyph;
-use Chamilo\Libraries\Format\Theme\ThemePathBuilder;
 use Chamilo\Libraries\Platform\ChamiloRequest;
 use Symfony\Component\Translation\Translator;
 
 /**
  * @package Chamilo\Core\Menu\Renderer\ItemRenderer
- *
- * @author Hans De Bisschop <hans.de.bisschop@ehb.be>
+ * @author  Hans De Bisschop <hans.de.bisschop@ehb.be>
  */
 class LanguageCategoryItemRenderer extends ItemRenderer
 {
-    /**
-     * @var \Chamilo\Configuration\Service\Consulter\LanguageConsulter
-     */
-    private $languageConsulter;
+    private ItemRendererFactory $itemRendererFactory;
 
-    /**
-     * @var \Chamilo\Core\Menu\Factory\ItemRendererFactory
-     */
-    private $itemRendererFactory;
+    private LanguageConsulter $languageConsulter;
 
-    /**
-     * @param \Chamilo\Core\Rights\Structure\Service\Interfaces\AuthorizationCheckerInterface $authorizationChecker
-     * @param \Symfony\Component\Translation\Translator $translator
-     * @param \Chamilo\Core\Menu\Service\CachedItemService $itemCacheService
-     * @param \Chamilo\Libraries\Format\Theme\ThemePathBuilder $themePathBuilder
-     * @param \Chamilo\Libraries\Platform\ChamiloRequest $request
-     * @param \Chamilo\Configuration\Service\Consulter\LanguageConsulter $languageConsulter
-     * @param \Chamilo\Core\Menu\Factory\ItemRendererFactory $itemRendererFactory
-     */
     public function __construct(
-        AuthorizationCheckerInterface $authorizationChecker, Translator $translator, CachedItemService $itemCacheService,
-        ThemePathBuilder $themePathBuilder, ChamiloRequest $request, LanguageConsulter $languageConsulter,
+        AuthorizationCheckerInterface $authorizationChecker, Translator $translator,
+        CachedItemService $itemCacheService, ChamiloRequest $request, LanguageConsulter $languageConsulter,
         ItemRendererFactory $itemRendererFactory
     )
     {
-        parent::__construct($authorizationChecker, $translator, $itemCacheService, $themePathBuilder, $request);
+        parent::__construct($authorizationChecker, $translator, $itemCacheService, $request);
 
         $this->languageConsulter = $languageConsulter;
         $this->itemRendererFactory = $itemRendererFactory;
@@ -80,12 +63,12 @@ class LanguageCategoryItemRenderer extends ItemRenderer
             foreach ($languages as $isocode => $language)
             {
                 $redirect = new Redirect(
-                    array(
+                    [
                         Application::PARAM_CONTEXT => Manager::CONTEXT,
                         Application::PARAM_ACTION => Manager::ACTION_QUICK_LANG,
                         Manager::PARAM_CHOICE => $isocode,
                         Manager::PARAM_REFER => $this->getRequest()->getUri()
-                    )
+                    ]
                 );
 
                 $html = [];
@@ -120,27 +103,11 @@ class LanguageCategoryItemRenderer extends ItemRenderer
     }
 
     /**
-     * @param \Chamilo\Core\Menu\Factory\ItemRendererFactory $itemRendererFactory
-     */
-    public function setItemRendererFactory(ItemRendererFactory $itemRendererFactory): void
-    {
-        $this->itemRendererFactory = $itemRendererFactory;
-    }
-
-    /**
      * @return \Chamilo\Configuration\Service\Consulter\LanguageConsulter
      */
     public function getLanguageConsulter(): LanguageConsulter
     {
         return $this->languageConsulter;
-    }
-
-    /**
-     * @param \Chamilo\Configuration\Service\Consulter\LanguageConsulter $languageConsulter
-     */
-    public function setLanguageConsulter(LanguageConsulter $languageConsulter): void
-    {
-        $this->languageConsulter = $languageConsulter;
     }
 
     /**
@@ -150,7 +117,7 @@ class LanguageCategoryItemRenderer extends ItemRenderer
      */
     public function getRenderedGlyph(bool $showCaret = false)
     {
-        $glyph = new FontAwesomeGlyph('language', array('fa-2x', 'fa-fw'), null, 'fas');
+        $glyph = new FontAwesomeGlyph('language', ['fa-2x', 'fa-fw'], null, 'fas');
 
         $html = [];
 
@@ -264,5 +231,21 @@ class LanguageCategoryItemRenderer extends ItemRenderer
     public function renderTitle(Item $item)
     {
         return strtoupper($this->getTranslator()->getLocale());
+    }
+
+    /**
+     * @param \Chamilo\Core\Menu\Factory\ItemRendererFactory $itemRendererFactory
+     */
+    public function setItemRendererFactory(ItemRendererFactory $itemRendererFactory): void
+    {
+        $this->itemRendererFactory = $itemRendererFactory;
+    }
+
+    /**
+     * @param \Chamilo\Configuration\Service\Consulter\LanguageConsulter $languageConsulter
+     */
+    public function setLanguageConsulter(LanguageConsulter $languageConsulter): void
+    {
+        $this->languageConsulter = $languageConsulter;
     }
 }

@@ -3,7 +3,8 @@ namespace Chamilo\Libraries\Architecture\Test\TestCases;
 
 use Chamilo\Libraries\Architecture\Test\Fixtures\ChamiloFixtureLoader;
 use Chamilo\Libraries\Architecture\Test\Fixtures\ChamiloStorageUnitCreator;
-use Chamilo\Libraries\File\PathBuilder;
+use Chamilo\Libraries\DependencyInjection\DependencyInjectionContainerBuilder;
+use Chamilo\Libraries\File\SystemPathBuilder;
 
 /**
  * Base for test class that uses data fixtures
@@ -13,14 +14,30 @@ use Chamilo\Libraries\File\PathBuilder;
 abstract class ChamiloFixturesBasedTestCase extends FixturesBasedTestCase
 {
     /**
+     * Inserts the fixture data for the tests in the created storage units
+     */
+    protected function createFixtureData()
+    {
+        $testDataClassRepository = $this->getTestDataClassRepository();
+        $chamiloFixtureLoader = new ChamiloFixtureLoader();
+
+        $objects = $chamiloFixtureLoader->loadFixturesFromPackages($this->getFixtureFiles());
+        foreach ($objects as $object)
+        {
+            $testDataClassRepository->create($object);
+        }
+    }
+
+    /**
      * Creates the storage units that are required for the tests
      */
     protected function createStorageUnits()
     {
         $testStorageUnitRepository = $this->getTestStorageUnitRepository();
+        $systemPathBuilder =
+            DependencyInjectionContainerBuilder::getInstance()->createContainer()->get(SystemPathBuilder::class);
 
-        $chamiloStorageUnitCreator =
-            new ChamiloStorageUnitCreator(PathBuilder::getInstance(), $testStorageUnitRepository);
+        $chamiloStorageUnitCreator = new ChamiloStorageUnitCreator($systemPathBuilder, $testStorageUnitRepository);
 
         foreach ($this->getStorageUnitsToCreate() as $context => $storageUnits)
         {
@@ -34,20 +51,5 @@ abstract class ChamiloFixturesBasedTestCase extends FixturesBasedTestCase
     protected function dropStorageUnits()
     {
 
-    }
-
-    /**
-     * Inserts the fixture data for the tests in the created storage units
-     */
-    protected function createFixtureData()
-    {
-        $testDataClassRepository = $this->getTestDataClassRepository();
-        $chamiloFixtureLoader = new ChamiloFixtureLoader();
-
-        $objects = $chamiloFixtureLoader->loadFixturesFromPackages($this->getFixtureFiles());
-        foreach($objects as $object)
-        {
-            $testDataClassRepository->create($object);
-        }
     }
 }

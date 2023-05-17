@@ -21,7 +21,9 @@ class UserFactory
 
     private SessionUtilities $sessionUtilities;
 
-    private ThemePathBuilder $themePathBuilder;
+    private ThemePathBuilder $themeSystemPathBuilder;
+
+    private ThemePathBuilder $themeWebPathBuilder;
 
     private Translator $translator;
 
@@ -31,13 +33,15 @@ class UserFactory
 
     public function __construct(
         SessionUtilities $sessionUtilities, UserService $userService, ConfigurationConsulter $configurationConsulter,
-        ThemePathBuilder $themePathBuilder, Translator $translator, UserSettingService $userSettingService
+        ThemePathBuilder $themeWebPathBuilder, ThemePathBuilder $themeSystemPathBuilder, Translator $translator,
+        UserSettingService $userSettingService
     )
     {
         $this->sessionUtilities = $sessionUtilities;
         $this->userService = $userService;
         $this->configurationConsulter = $configurationConsulter;
-        $this->themePathBuilder = $themePathBuilder;
+        $this->themeWebPathBuilder = $themeWebPathBuilder;
+        $this->themeSystemPathBuilder = $themeSystemPathBuilder;
         $this->translator = $translator;
         $this->userSettingService = $userSettingService;
     }
@@ -52,9 +56,14 @@ class UserFactory
         return $this->sessionUtilities;
     }
 
-    public function getThemePathBuilder(): ThemePathBuilder
+    public function getThemeSystemPathBuilder(): ThemePathBuilder
     {
-        return $this->themePathBuilder;
+        return $this->themeWebPathBuilder;
+    }
+
+    public function getThemeWebPathBuilder(): ThemePathBuilder
+    {
+        return $this->themeWebPathBuilder;
     }
 
     public function getTranslator(): Translator
@@ -78,9 +87,10 @@ class UserFactory
 
                 if ($themeSelectionAllowed)
                 {
-                    $this->getThemePathBuilder()->setTheme(
-                        $this->getUserSettingService()->getSettingForUser($user, 'Chamilo\Core\Admin', 'theme')
-                    );
+                    $theme = $this->getUserSettingService()->getSettingForUser($user, 'Chamilo\Core\Admin', 'theme');
+
+                    $this->getThemeSystemPathBuilder()->setTheme($theme);
+                    $this->getThemeWebPathBuilder()->setTheme($theme);
                 }
 
                 $languageSelectionAllowed = $this->getConfigurationConsulter()->getSetting(

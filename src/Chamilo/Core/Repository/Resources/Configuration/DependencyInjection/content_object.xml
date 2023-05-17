@@ -7,11 +7,7 @@
                   autoconfigure="true"
                   public="true"/>
 
-        <service id="Chamilo\Core\Repository\Service\ContentObjectTemplate\ContentObjectTemplateLoader">
-            <argument type="service"
-                      id="Chamilo\Libraries\File\PathBuilder"/>
-        </service>
-
+        <service id="Chamilo\Core\Repository\Service\ContentObjectTemplate\ContentObjectTemplateLoader"/>
         <service id="Chamilo\Core\Repository\Storage\Repository\ContentObjectTemplateRepository"/>
         <service id="Chamilo\Core\Repository\Workspace\Repository\ContentObjectRepository"/>
         <service id="Chamilo\Core\Repository\Service\ContentObjectTemplate\ContentObjectTemplateSynchronizer"/>

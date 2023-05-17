@@ -451,7 +451,8 @@ class CourseViewerComponent extends Manager implements DelegateComponent
 
         if ($theme_setting)
         {
-            $this->getThemePathBuilder()->setTheme($theme_setting);
+            $this->getThemeSystemPathBuilder()->setTheme($theme_setting);
+            $this->getThemeWebPathBuilder()->setTheme($theme_setting);
         }
     }
 

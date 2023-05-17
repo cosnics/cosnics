@@ -20,15 +20,9 @@ use Symfony\Component\HttpFoundation\StreamedResponse;
  */
 class UserPictureProvider implements UserPictureProviderInterface, UserPictureUpdateProviderInterface
 {
-    /**
-     * @var \Chamilo\Libraries\File\ConfigurablePathBuilder
-     */
-    private $configurablePathBuilder;
+    private ConfigurablePathBuilder $configurablePathBuilder;
 
-    /**
-     * @var \Chamilo\Libraries\Format\Theme\ThemePathBuilder
-     */
-    private $themePathBuilder;
+    private ThemePathBuilder $themeWebPathBuilder;
 
     /**
      * @param \Chamilo\Libraries\File\ConfigurablePathBuilder $configurablePathBuilder
@@ -37,7 +31,7 @@ class UserPictureProvider implements UserPictureProviderInterface, UserPictureUp
     public function __construct(ConfigurablePathBuilder $configurablePathBuilder, ThemePathBuilder $themePathBuilder)
     {
         $this->configurablePathBuilder = $configurablePathBuilder;
-        $this->themePathBuilder = $themePathBuilder;
+        $this->themeWebPathBuilder = $themePathBuilder;
     }
 
     /**
@@ -89,7 +83,7 @@ class UserPictureProvider implements UserPictureProviderInterface, UserPictureUp
             $size = filesize($file);
 
             $response = new StreamedResponse();
-            $response->headers->add(array('Content-Type' => $mime, 'Content-Length' => $size));
+            $response->headers->add(['Content-Type' => $mime, 'Content-Length' => $size]);
             $response->setPublic();
             $response->setMaxAge(3600 * 24); // 24 hours cache
 
@@ -121,18 +115,6 @@ class UserPictureProvider implements UserPictureProviderInterface, UserPictureUp
     }
 
     /**
-     * @param \Chamilo\Libraries\File\ConfigurablePathBuilder $configurablePathBuilder
-     *
-     * @return UserPictureProvider
-     */
-    public function setConfigurablePathBuilder(ConfigurablePathBuilder $configurablePathBuilder): UserPictureProvider
-    {
-        $this->configurablePathBuilder = $configurablePathBuilder;
-
-        return $this;
-    }
-
-    /**
      * @param string $filePath
      *
      * @return string
@@ -151,24 +133,9 @@ class UserPictureProvider implements UserPictureProviderInterface, UserPictureUp
         return 'data:' . $mime . ';base64,' . $imgString;
     }
 
-    /**
-     * @return \Chamilo\Libraries\Format\Theme\ThemePathBuilder
-     */
-    public function getThemePathBuilder(): ThemePathBuilder
+    public function getThemeWebPathBuilder(): ThemePathBuilder
     {
-        return $this->themePathBuilder;
-    }
-
-    /**
-     * @param \Chamilo\Libraries\Format\Theme\ThemePathBuilder $themePathBuilder
-     *
-     * @return UserPictureProvider
-     */
-    public function setThemePathBuilder(ThemePathBuilder $themePathBuilder): UserPictureProvider
-    {
-        $this->themePathBuilder = $themePathBuilder;
-
-        return $this;
+        return $this->themeWebPathBuilder;
     }
 
     /**
@@ -184,7 +151,7 @@ class UserPictureProvider implements UserPictureProviderInterface, UserPictureUp
      */
     private function getUnknownUserPicturePath()
     {
-        return $this->getThemePathBuilder()->getImagePath(
+        return $this->getThemeWebPathBuilder()->getImagePath(
             'Chamilo\Core\User\Picture\Provider\Platform', 'Unknown', 'png', false
         );
     }

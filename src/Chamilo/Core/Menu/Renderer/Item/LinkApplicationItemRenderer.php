@@ -7,8 +7,7 @@ use Chamilo\Core\User\Storage\DataClass\User;
 
 /**
  * @package Chamilo\Core\Menu\Renderer\ItemRenderer
- *
- * @author Hans De Bisschop <hans.de.bisschop@ehb.be>
+ * @author  Hans De Bisschop <hans.de.bisschop@ehb.be>
  */
 class LinkApplicationItemRenderer extends ItemRenderer
 {

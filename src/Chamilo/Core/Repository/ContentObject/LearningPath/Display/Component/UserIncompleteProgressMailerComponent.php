@@ -21,7 +21,7 @@ class UserIncompleteProgressMailerComponent extends Manager
      *
      * @throws NotAllowedException
      */
-    function run()
+    public function run()
     {
         if (!$this->canEditCurrentTreeNode())
         {
@@ -61,9 +61,8 @@ class UserIncompleteProgressMailerComponent extends Manager
         {
             $mailerFactory = new MailerFactory();
             $mail = new Mail(
-                $translator->getTranslation('IncompleteProgressMailTitle', $this->getParameters()),
-                $mailContent, $emailAddresses, true, [], [], $this->getUser()->get_fullname(),
-                $this->getUser()->get_email()
+                $translator->getTranslation('IncompleteProgressMailTitle', $this->getParameters()), $mailContent,
+                $emailAddresses, true, [], [], $this->getUser()->get_fullname(), $this->getUser()->get_email()
             );
 
             $mailer = $mailerFactory->getActiveMailer();
@@ -79,8 +78,7 @@ class UserIncompleteProgressMailerComponent extends Manager
         }
 
         $this->redirectWithMessage(
-            $translator->getTranslation($message), !$success,
-            array(self::PARAM_ACTION => self::ACTION_VIEW_USER_PROGRESS)
+            $translator->getTranslation($message), !$success, [self::PARAM_ACTION => self::ACTION_VIEW_USER_PROGRESS]
         );
     }
 
@@ -95,8 +93,9 @@ class UserIncompleteProgressMailerComponent extends Manager
         $variables = $this->getParameters();
 
         $contents = file_get_contents(
-            $this->getPathBuilder()->getResourcesPath('Chamilo\Core\Repository\ContentObject\LearningPath\Display') .
-            'Templates/Mail/IncompleteProgressMail.' . $language . '.html'
+            $this->getSystemPathBuilder()->getResourcesPath(
+                'Chamilo\Core\Repository\ContentObject\LearningPath\Display'
+            ) . 'Templates/Mail/IncompleteProgressMail.' . $language . '.html'
         );
 
         foreach ($variables as $variable => $value)
@@ -117,12 +116,12 @@ class UserIncompleteProgressMailerComponent extends Manager
             $this->getCurrentTreeNode()
         );
 
-        $variables = array(
+        $variables = [
             'LEARNING_PATH' => $this->learningPath->get_title(),
             'STEP_NAME' => $currentNodeTitle,
             'USER' => $this->getUser()->get_fullname(),
-            'URL' => $this->get_url(array(self::PARAM_ACTION => self::ACTION_VIEW_COMPLEX_CONTENT_OBJECT))
-        );
+            'URL' => $this->get_url([self::PARAM_ACTION => self::ACTION_VIEW_COMPLEX_CONTENT_OBJECT])
+        ];
 
         return $variables;
     }

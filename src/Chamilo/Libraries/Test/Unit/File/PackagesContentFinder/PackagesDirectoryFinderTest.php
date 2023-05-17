@@ -2,15 +2,15 @@
 namespace Chamilo\Libraries\Test\Unit\File\PackagesContentFinder;
 
 use Chamilo\Libraries\Architecture\Test\TestCases\ChamiloTestCase;
-use Chamilo\Libraries\File\PathBuilder;
+use Chamilo\Libraries\DependencyInjection\DependencyInjectionContainerBuilder;
 use Chamilo\Libraries\File\PackagesContentFinder\PackagesDirectoryFinder;
+use Chamilo\Libraries\File\SystemPathBuilder;
 
 /**
  * Tests the packages directory finder
  *
  * @package Chamilo\Libraries
- *
- * @author Sven Vanpoucke - Hogeschool Gent
+ * @author  Sven Vanpoucke - Hogeschool Gent
  */
 class PackagesDirectoryFinderTest extends ChamiloTestCase
 {
@@ -20,6 +20,11 @@ class PackagesDirectoryFinderTest extends ChamiloTestCase
      * @var string
      */
     private $cache_file;
+
+    protected function getSystemPathBuilder(): SystemPathBuilder
+    {
+        return DependencyInjectionContainerBuilder::getInstance()->createContainer()->get(SystemPathBuilder::class);
+    }
 
     /**
      * @inheritDoc
@@ -42,32 +47,11 @@ class PackagesDirectoryFinderTest extends ChamiloTestCase
      */
     public function testFindDirectoriesInPackage()
     {
-        $packages_directories_finder = new PackagesDirectoryFinder(PathBuilder::getInstance(), array('Chamilo\Libraries'));
+        $packages_directories_finder =
+            new PackagesDirectoryFinder($this->getSystemPathBuilder(), ['Chamilo\Libraries']);
         $directories = $packages_directories_finder->findDirectories('Resources/Configuration');
 
         $this->assertContains('Chamilo/Libraries/Resources/Configuration', $directories['Chamilo\Libraries']);
-    }
-
-    /**
-     * Tests the find directories without packages, must return an empty array
-     */
-    public function testFindDirectoriesWithoutPackages()
-    {
-        $packages_directories_finder = new PackagesDirectoryFinder(PathBuilder::getInstance());
-        $directories = $packages_directories_finder->findDirectories('Resources/Configuration');
-
-        $this->assertEmpty($directories);
-    }
-
-    /**
-     * Tests that the package directory finder only returns existing classes
-     */
-    public function testFindInexistingDirectories()
-    {
-        $packages_directories_finder = new PackagesDirectoryFinder(PathBuilder::getInstance());
-        $directories = $packages_directories_finder->findDirectories('Resources/Inexisting');
-
-        $this->assertEmpty($directories);
     }
 
     /**
@@ -76,7 +60,7 @@ class PackagesDirectoryFinderTest extends ChamiloTestCase
     public function testFindDirectoriesWithCacheFile()
     {
         $packages_directories_finder =
-            new PackagesDirectoryFinder(PathBuilder::getInstance(), array('Chamilo\Libraries'), $this->cache_file);
+            new PackagesDirectoryFinder($this->getSystemPathBuilder(), ['Chamilo\Libraries'], $this->cache_file);
         $directories = $packages_directories_finder->findDirectories('Resources/Configuration');
 
         $cached_directories = require $this->cache_file;
@@ -89,12 +73,12 @@ class PackagesDirectoryFinderTest extends ChamiloTestCase
      */
     public function testFindDirectoriesWithExistingCacheFile()
     {
-        $cached_directories = array('Chamilo/Libraries/Resources/Configuration');
+        $cached_directories = ['Chamilo/Libraries/Resources/Configuration'];
 
         file_put_contents($this->cache_file, sprintf('<?php return %s;', var_export($cached_directories, true)));
 
         $packages_directories_finder =
-            new PackagesDirectoryFinder(PathBuilder::getInstance(), array('Chamilo\Libraries'), $this->cache_file);
+            new PackagesDirectoryFinder($this->getSystemPathBuilder(), ['Chamilo\Libraries'], $this->cache_file);
         $directories = $packages_directories_finder->findDirectories('Resources/Configuration');
 
         $this->assertEquals($directories[0], 'Chamilo/Libraries/Resources/Configuration');
@@ -110,7 +94,29 @@ class PackagesDirectoryFinderTest extends ChamiloTestCase
     {
         file_put_contents($this->cache_file, '<?php return 5;');
         $packages_directories_finder =
-            new PackagesDirectoryFinder(PathBuilder::getInstance(), array('Chamilo\Libraries'), $this->cache_file);
+            new PackagesDirectoryFinder($this->getSystemPathBuilder(), ['Chamilo\Libraries'], $this->cache_file);
         $packages_directories_finder->findDirectories('Resources/Configuration');
+    }
+
+    /**
+     * Tests the find directories without packages, must return an empty array
+     */
+    public function testFindDirectoriesWithoutPackages()
+    {
+        $packages_directories_finder = new PackagesDirectoryFinder($this->getSystemPathBuilder());
+        $directories = $packages_directories_finder->findDirectories('Resources/Configuration');
+
+        $this->assertEmpty($directories);
+    }
+
+    /**
+     * Tests that the package directory finder only returns existing classes
+     */
+    public function testFindInexistingDirectories()
+    {
+        $packages_directories_finder = new PackagesDirectoryFinder($this->getSystemPathBuilder());
+        $directories = $packages_directories_finder->findDirectories('Resources/Inexisting');
+
+        $this->assertEmpty($directories);
     }
 }

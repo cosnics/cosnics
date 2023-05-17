@@ -211,12 +211,11 @@ class ContentObjectPublication extends Publication implements DisplayOrderDataCl
         return 'weblcms_content_object_publication';
     }
 
-    /**
-     * @return \Chamilo\Libraries\Format\Theme\ThemePathBuilder
-     */
-    public function getThemePathBuilder()
+    public function getThemeWebPathBuilder(): ThemePathBuilder
     {
-        return DependencyInjectionContainerBuilder::getInstance()->createContainer()->get(ThemePathBuilder::class);
+        return DependencyInjectionContainerBuilder::getInstance()->createContainer()->get(
+            'Chamilo\Libraries\Format\Theme\ThemeWebPathBuilder'
+        );
     }
 
     public function get_allow_collaboration()
@@ -514,7 +513,7 @@ class ContentObjectPublication extends Publication implements DisplayOrderDataCl
         $body .= '<link rel="stylesheet" type="text/css" href="' . $cssPath . 'cosnics.vendor.jquery.min.css' . '" />';
         $body .= '<link rel="stylesheet" type="text/css" href="' . $cssPath . 'cosnics.vendor.min.css' . '" />';
         $body .= '<link rel="stylesheet" type="text/css" href="' . $cssPath . 'cosnics.common.' .
-            $this->getThemePathBuilder()->getTheme() . '.min.css' . '" />';
+            $this->getThemeWebPathBuilder()->getTheme() . '.min.css' . '" />';
         $body .= '</head><body><div class="container-fluid" style="margin-top: 15px;">';
 
         $body .= Translation::get('NewPublicationMailDescription') . ' ' . $course->get_title() . ' : <a href="' .

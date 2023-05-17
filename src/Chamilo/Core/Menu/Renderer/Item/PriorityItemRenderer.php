@@ -5,8 +5,7 @@ use Chamilo\Core\Menu\Renderer\ItemRenderer;
 
 /**
  * @package Chamilo\Core\Menu\Renderer\Item\Bar
- *
- * @author Sven Vanpoucke - Hogeschool Gent
+ * @author  Sven Vanpoucke - Hogeschool Gent
  */
 abstract class PriorityItemRenderer extends ItemRenderer
 {

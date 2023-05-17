@@ -25,6 +25,9 @@
             <argument key="$learningPathAssignmentPublicationService"
                       type="service"
                       id="Chamilo\Application\Weblcms\Integration\Chamilo\Core\Repository\Publication\Service\PublicationAggregator\LearningPathAssignmentPublicationService"/>
+            <argument key="$themeWebPathBuilder"
+                      type="service"
+                      id="Chamilo\Libraries\Format\Theme\ThemeWebPathBuilder"/>
         </service>
 
         <service id="Chamilo\Application\Weblcms\Integration\Chamilo\Core\Repository\Publication\Service\PublicationAggregator\AssignmentPublicationService"

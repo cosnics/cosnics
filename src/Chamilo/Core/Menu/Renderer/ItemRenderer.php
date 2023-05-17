@@ -5,58 +5,31 @@ use Chamilo\Core\Menu\Service\CachedItemService;
 use Chamilo\Core\Menu\Storage\DataClass\Item;
 use Chamilo\Core\Rights\Structure\Service\Interfaces\AuthorizationCheckerInterface;
 use Chamilo\Core\User\Storage\DataClass\User;
-use Chamilo\Libraries\Format\Theme\ThemePathBuilder;
 use Chamilo\Libraries\Platform\ChamiloRequest;
 use Symfony\Component\Translation\Translator;
 
 /**
  * @package Chamilo\Core\Menu\Renderer
- *
- * @author Hans De Bisschop <hans.de.bisschop@ehb.be>
+ * @author  Hans De Bisschop <hans.de.bisschop@ehb.be>
  */
 abstract class ItemRenderer
 {
-    /**
-     * @var \Chamilo\Core\Rights\Structure\Service\Interfaces\AuthorizationCheckerInterface
-     */
-    private $authorizationChecker;
+    private AuthorizationCheckerInterface $authorizationChecker;
 
-    /**
-     * @var \Symfony\Component\Translation\Translator
-     */
-    private $translator;
+    private CachedItemService $itemCacheService;
 
-    /**
-     * @var \Chamilo\Core\Menu\Service\CachedItemService
-     */
-    private $itemCacheService;
+    private ChamiloRequest $request;
 
-    /**
-     * @var \Chamilo\Libraries\Format\Theme\ThemePathBuilder
-     */
-    private $themePathBuilder;
+    private Translator $translator;
 
-    /**
-     * @var \Chamilo\Libraries\Platform\ChamiloRequest
-     */
-    private $request;
-
-    /**
-     * @param \Chamilo\Core\Rights\Structure\Service\Interfaces\AuthorizationCheckerInterface $authorizationChecker
-     * @param \Symfony\Component\Translation\Translator $translator
-     * @param \Chamilo\Core\Menu\Service\CachedItemService $itemCacheService
-     * @param \Chamilo\Libraries\Format\Theme\ThemePathBuilder $themePathBuilder
-     * @param \Chamilo\Libraries\Platform\ChamiloRequest $request
-     */
     public function __construct(
-        AuthorizationCheckerInterface $authorizationChecker, Translator $translator, CachedItemService $itemCacheService,
-        ThemePathBuilder $themePathBuilder, ChamiloRequest $request
+        AuthorizationCheckerInterface $authorizationChecker, Translator $translator,
+        CachedItemService $itemCacheService, ChamiloRequest $request
     )
     {
         $this->authorizationChecker = $authorizationChecker;
         $this->translator = $translator;
         $this->itemCacheService = $itemCacheService;
-        $this->themePathBuilder = $themePathBuilder;
         $this->request = $request;
     }
 
@@ -74,14 +47,6 @@ abstract class ItemRenderer
     public function getAuthorizationChecker(): AuthorizationCheckerInterface
     {
         return $this->authorizationChecker;
-    }
-
-    /**
-     * @param \Chamilo\Core\Rights\Structure\Service\Interfaces\AuthorizationCheckerInterface $authorizationChecker
-     */
-    public function setAuthorizationChecker(AuthorizationCheckerInterface $authorizationChecker): void
-    {
-        $this->authorizationChecker = $authorizationChecker;
     }
 
     /**
@@ -109,14 +74,6 @@ abstract class ItemRenderer
     }
 
     /**
-     * @param \Chamilo\Core\Menu\Service\CachedItemService $itemCacheService
-     */
-    public function setItemCacheService(CachedItemService $itemCacheService): void
-    {
-        $this->itemCacheService = $itemCacheService;
-    }
-
-    /**
      * @return \Chamilo\Libraries\Platform\ChamiloRequest
      */
     public function getRequest(): ChamiloRequest
@@ -125,43 +82,11 @@ abstract class ItemRenderer
     }
 
     /**
-     * @param \Chamilo\Libraries\Platform\ChamiloRequest $request
-     */
-    public function setRequest(ChamiloRequest $request): void
-    {
-        $this->request = $request;
-    }
-
-    /**
-     * @return \Chamilo\Libraries\Format\Theme\ThemePathBuilder
-     */
-    public function getThemePathBuilder(): ThemePathBuilder
-    {
-        return $this->themePathBuilder;
-    }
-
-    /**
-     * @param \Chamilo\Libraries\Format\Theme\ThemePathBuilder $themePathBuilder
-     */
-    public function setThemePathBuilder(ThemePathBuilder $themePathBuilder): void
-    {
-        $this->themePathBuilder = $themePathBuilder;
-    }
-
-    /**
      * @return \Symfony\Component\Translation\Translator
      */
     public function getTranslator(): Translator
     {
         return $this->translator;
-    }
-
-    /**
-     * @param \Symfony\Component\Translation\Translator $translator
-     */
-    public function setTranslator(Translator $translator): void
-    {
-        $this->translator = $translator;
     }
 
     /**
@@ -200,5 +125,37 @@ abstract class ItemRenderer
     public function renderTitle(Item $item)
     {
         return $this->getItemCacheService()->getItemTitleForCurrentLanguage($item);
+    }
+
+    /**
+     * @param \Chamilo\Core\Rights\Structure\Service\Interfaces\AuthorizationCheckerInterface $authorizationChecker
+     */
+    public function setAuthorizationChecker(AuthorizationCheckerInterface $authorizationChecker): void
+    {
+        $this->authorizationChecker = $authorizationChecker;
+    }
+
+    /**
+     * @param \Chamilo\Core\Menu\Service\CachedItemService $itemCacheService
+     */
+    public function setItemCacheService(CachedItemService $itemCacheService): void
+    {
+        $this->itemCacheService = $itemCacheService;
+    }
+
+    /**
+     * @param \Chamilo\Libraries\Platform\ChamiloRequest $request
+     */
+    public function setRequest(ChamiloRequest $request): void
+    {
+        $this->request = $request;
+    }
+
+    /**
+     * @param \Symfony\Component\Translation\Translator $translator
+     */
+    public function setTranslator(Translator $translator): void
+    {
+        $this->translator = $translator;
     }
 }

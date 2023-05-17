@@ -11,30 +11,30 @@ use Throwable;
  * Manages the error handler, the exception handler and the shutdown function
  *
  * @package Chamilo\Libraries\Architecture\ErrorHandler
- * @author Sven Vanpoucke - Hogeschool Gent
- * @author Hans De Bisschop <hans.de.bisschop@ehb.be>
+ * @author  Sven Vanpoucke - Hogeschool Gent
+ * @author  Hans De Bisschop <hans.de.bisschop@ehb.be>
  */
 class ErrorHandler
 {
 
     protected ExceptionLoggerInterface $exceptionLogger;
 
-    protected ThemePathBuilder $themePathBuilder;
+    protected ThemePathBuilder $themeSystemPathBuilder;
 
     protected Translator $translator;
 
     public function __construct(
-        ExceptionLoggerInterface $exceptionLogger, Translator $translator, ThemePathBuilder $themePathBuilder
+        ExceptionLoggerInterface $exceptionLogger, Translator $translator, ThemePathBuilder $themeSystemPathBuilder
     )
     {
         $this->exceptionLogger = $exceptionLogger;
         $this->translator = $translator;
-        $this->themePathBuilder = $themePathBuilder;
+        $this->themeSystemPathBuilder = $themeSystemPathBuilder;
     }
 
     protected function displayGeneralErrorPage()
     {
-        $path = $this->getThemePathBuilder()->getTemplatePath('Chamilo\Configuration', false) . 'Error.html.tpl';
+        $path = $this->getThemeSystemPathBuilder()->getTemplatePath('Chamilo\Configuration', false) . 'Error.html.tpl';
 
         $template = file_get_contents($path);
 
@@ -58,22 +58,13 @@ class ErrorHandler
         return $this->exceptionLogger;
     }
 
-    public function setExceptionLogger(ExceptionLoggerInterface $exceptionLogger)
+    public function getThemeSystemPathBuilder(): ThemePathBuilder
     {
-        $this->exceptionLogger = $exceptionLogger;
+        return $this->themeSystemPathBuilder;
     }
 
-    public function getThemePathBuilder(): ThemePathBuilder
-    {
-        return $this->themePathBuilder;
-    }
-
-    public function setThemePathBuilder(ThemePathBuilder $themePathBuilder)
-    {
-        $this->themePathBuilder = $themePathBuilder;
-    }
-
-    protected function getTranslation(string $variable, array $parameters = [], string $context = 'Chamilo\Configuration'
+    protected function getTranslation(
+        string $variable, array $parameters = [], string $context = 'Chamilo\Configuration'
     ): string
     {
         return $this->getTranslator()->trans($variable, $parameters, $context);
@@ -82,11 +73,6 @@ class ErrorHandler
     public function getTranslator(): Translator
     {
         return $this->translator;
-    }
-
-    public function setTranslator(Translator $translator)
-    {
-        $this->translator = $translator;
     }
 
     public function handleError(int $errorNumber, string $errorString, string $file, int $line): bool

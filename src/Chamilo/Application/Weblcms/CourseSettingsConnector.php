@@ -19,86 +19,79 @@ use Chamilo\Libraries\Translation\Translation;
  * Simple connector class to facilitate rendering course settings
  *
  * @package application\weblcms;
- * @author Sven Vanpoucke - Hogeschool Gent
+ * @author  Sven Vanpoucke - Hogeschool Gent
  */
 class CourseSettingsConnector
 {
-    const ALLOW_FEEDBACK = 'allow_feedback';
+    public const ALLOW_FEEDBACK = 'allow_feedback';
 
-    const ALLOW_INTRODUCTION_TEXT = 'allow_introduction_text';
+    public const ALLOW_INTRODUCTION_TEXT = 'allow_introduction_text';
 
-    const BREADCRUMB_LAYOUT = 'breadcrumb_layout';
+    public const BREADCRUMB_LAYOUT = 'breadcrumb_layout';
 
-    const BREADCRUMB_LAYOUT_COURSE_HOME = 3;
+    public const BREADCRUMB_LAYOUT_COURSE_HOME = 3;
 
-    const BREADCRUMB_LAYOUT_TITLE = 1;
+    public const BREADCRUMB_LAYOUT_TITLE = 1;
 
-    const BREADCRUMB_LAYOUT_VISUAL_CODE = 2;
+    public const BREADCRUMB_LAYOUT_VISUAL_CODE = 2;
 
-    const CATEGORY = 'category';
+    public const CATEGORY = 'category';
 
-    const COURSE_ACCESS = 'course_access';
+    public const COURSE_ACCESS = 'course_access';
 
-    const COURSE_ACCESS_CLOSED = 2;
+    public const COURSE_ACCESS_CLOSED = 2;
 
     /**
      * **************************************************************************************************************
      * Definition of setting options *
      * **************************************************************************************************************
      */
-    const COURSE_ACCESS_OPEN = 1;
+    public const COURSE_ACCESS_OPEN = 1;
 
-    const LANGUAGE = 'language';
+    public const LANGUAGE = 'language';
 
-    const OPEN_COURSE_ACCESS_PLATFORM = 2;
+    public const OPEN_COURSE_ACCESS_PLATFORM = 2;
 
-    const OPEN_COURSE_ACCESS_REGISTERED_USERS = 1;
+    public const OPEN_COURSE_ACCESS_REGISTERED_USERS = 1;
 
-    const OPEN_COURSE_ACCESS_TYPE = 'open_course_access_type';
+    public const OPEN_COURSE_ACCESS_TYPE = 'open_course_access_type';
 
-    const OPEN_COURSE_ACCESS_WORLD = 3;
+    public const OPEN_COURSE_ACCESS_WORLD = 3;
 
-    const SHOW_COURSE_CODE = 'show_course_code';
+    public const SHOW_COURSE_CODE = 'show_course_code';
 
-    const SHOW_COURSE_LANGUAGE = 'show_course_language';
+    public const SHOW_COURSE_LANGUAGE = 'show_course_language';
 
-    const SHOW_COURSE_TITULAR = 'show_course_titular';
+    public const SHOW_COURSE_TITULAR = 'show_course_titular';
 
-    const THEME = 'theme';
+    public const THEME = 'theme';
 
-    const TITULAR = 'titular';
+    public const TITULAR = 'titular';
 
-    const TOOL_LAYOUT = 'tool_layout';
+    public const TOOL_LAYOUT = 'tool_layout';
 
-    const TOOL_LAYOUT_THREE_COLUMNS = 2;
+    public const TOOL_LAYOUT_THREE_COLUMNS = 2;
 
-    const TOOL_LAYOUT_THREE_COLUMNS_GROUP_INACTIVE = 4;
+    public const TOOL_LAYOUT_THREE_COLUMNS_GROUP_INACTIVE = 4;
 
-    const TOOL_LAYOUT_TWO_COLUMNS = 1;
+    public const TOOL_LAYOUT_TWO_COLUMNS = 1;
 
-    const TOOL_LAYOUT_TWO_COLUMNS_GROUP_INACTIVE = 3;
+    public const TOOL_LAYOUT_TWO_COLUMNS_GROUP_INACTIVE = 3;
 
-    const TOOL_SHORTCUT_MENU = 'tool_shortcut_menu';
+    public const TOOL_SHORTCUT_MENU = 'tool_shortcut_menu';
 
     /**
      * **************************************************************************************************************
      * Definition of settings *
      * **************************************************************************************************************
      */
-    const VISIBILITY = 'visibility';
-
-    /**
-     * **************************************************************************************************************
-     * Connector Functions *
-     * **************************************************************************************************************
-     */
-
-    /**
-     * @return \Chamilo\Libraries\Format\Theme\ThemePathBuilder
-     */
-    public static function getThemePathBuilder()
+    public const VISIBILITY = 'visibility';
+    
+    public static function getThemeSystemPathBuilder(): ThemePathBuilder
     {
-        return DependencyInjectionContainerBuilder::getInstance()->createContainer()->get(ThemePathBuilder::class);
+        return DependencyInjectionContainerBuilder::getInstance()->createContainer()->get(
+            'Chamilo\Libraries\Format\Theme\ThemeSystemPathBuilder'
+        );
     }
 
     /**
@@ -149,11 +142,11 @@ class CourseSettingsConnector
      */
     public static function get_copied_settings_for_course()
     {
-        return array(
+        return [
             self::LANGUAGE => Course::PROPERTY_LANGUAGE,
             self::CATEGORY => Course::PROPERTY_CATEGORY_ID,
             self::TITULAR => Course::PROPERTY_TITULAR_ID
-        );
+        ];
     }
 
     /**
@@ -194,7 +187,7 @@ class CourseSettingsConnector
     {
         return array_merge(
             Configuration::getInstance()->getLanguages(),
-            array('platform_language' => Translation::get('PlatformLanguage', null, 'Chamilo\Core\Admin'))
+            ['platform_language' => Translation::get('PlatformLanguage', null, 'Chamilo\Core\Admin')]
         );
     }
 
@@ -205,7 +198,7 @@ class CourseSettingsConnector
      */
     public static function get_themes()
     {
-        return self:: getThemePathBuilder()->getAvailableThemes();
+        return self:: getThemeSystemPathBuilder()->getAvailableThemes();
     }
 
     /**
@@ -223,12 +216,12 @@ class CourseSettingsConnector
             new StaticConditionVariable(User::STATUS_TEACHER)
         );
 
-        $order = array(
+        $order = [
             new OrderProperty(new PropertyConditionVariable(User::class, User::PROPERTY_FIRSTNAME)),
             new OrderProperty(new PropertyConditionVariable(User::class, User::PROPERTY_LASTNAME))
-        );
+        ];
 
-        $format = Configuration::getInstance()->get_setting(array('Chamilo\Core\User', 'fullname_format'));
+        $format = Configuration::getInstance()->get_setting(['Chamilo\Core\User', 'fullname_format']);
         if ($format == User::NAME_FORMAT_LAST)
         {
             $order = array_reverse($order);

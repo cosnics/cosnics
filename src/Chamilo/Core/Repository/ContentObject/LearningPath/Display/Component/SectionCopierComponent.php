@@ -169,12 +169,12 @@ class SectionCopierComponent extends BaseHtmlTreeComponent
         foreach ($javascriptFiles as $javascriptFile)
         {
             $html[] = ResourceManager::getInstance()->getResourceHtml(
-                $this->getPathBuilder()->getResourcesPath(Manager::CONTEXT, true) . 'Javascript/' . $javascriptFile
+                $this->getWebPathBuilder()->getResourcesPath(Manager::CONTEXT) . 'Javascript/' . $javascriptFile
             );
         }
 
         $sectionCopierHtml = file_get_contents(
-            $this->getPathBuilder()->getResourcesPath(Manager::CONTEXT) . 'Templates/SectionCopier.html'
+            $this->getSystemPathBuilder()->getResourcesPath(Manager::CONTEXT) . 'Templates/SectionCopier.html'
         );
 
         $parameters = ['FORM_URL' => $this->get_url()];

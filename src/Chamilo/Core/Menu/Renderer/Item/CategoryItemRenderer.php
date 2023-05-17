@@ -9,44 +9,27 @@ use Chamilo\Core\Menu\Storage\DataClass\Item;
 use Chamilo\Core\Rights\Structure\Service\Interfaces\AuthorizationCheckerInterface;
 use Chamilo\Core\User\Storage\DataClass\User;
 use Chamilo\Libraries\Format\Structure\Glyph\FontAwesomeGlyph;
-use Chamilo\Libraries\Format\Theme\ThemePathBuilder;
 use Chamilo\Libraries\Platform\ChamiloRequest;
 use Symfony\Component\Translation\Translator;
 
 /**
  * @package Chamilo\Core\Menu\Renderer\ItemRenderer
- *
- * @author Hans De Bisschop <hans.de.bisschop@ehb.be>
+ * @author  Hans De Bisschop <hans.de.bisschop@ehb.be>
  */
 class CategoryItemRenderer extends ItemRenderer
 {
 
-    /**
-     * @var \Chamilo\Core\Menu\Service\RightsService
-     */
-    private $rightsCacheService;
+    private ItemRendererFactory $itemRendererFactory;
 
-    /**
-     * @var \Chamilo\Core\Menu\Factory\ItemRendererFactory
-     */
-    private $itemRendererFactory;
+    private RightsCacheService $rightsCacheService;
 
-    /**
-     * @param \Chamilo\Core\Rights\Structure\Service\Interfaces\AuthorizationCheckerInterface $authorizationChecker
-     * @param \Symfony\Component\Translation\Translator $translator
-     * @param \Chamilo\Core\Menu\Service\CachedItemService $itemCacheService
-     * @param \Chamilo\Libraries\Format\Theme\ThemePathBuilder $themePathBuilder
-     * @param \Chamilo\Libraries\Platform\ChamiloRequest $request
-     * @param \Chamilo\Core\Menu\Service\RightsCacheService $rightsCacheService
-     * @param \Chamilo\Core\Menu\Factory\ItemRendererFactory $itemRendererFactory
-     */
     public function __construct(
-        AuthorizationCheckerInterface $authorizationChecker, Translator $translator, CachedItemService $itemCacheService,
-        ThemePathBuilder $themePathBuilder, ChamiloRequest $request, RightsCacheService $rightsCacheService,
+        AuthorizationCheckerInterface $authorizationChecker, Translator $translator,
+        CachedItemService $itemCacheService, ChamiloRequest $request, RightsCacheService $rightsCacheService,
         ItemRendererFactory $itemRendererFactory
     )
     {
-        parent::__construct($authorizationChecker, $translator, $itemCacheService, $themePathBuilder, $request);
+        parent::__construct($authorizationChecker, $translator, $itemCacheService, $request);
 
         $this->rightsCacheService = $rightsCacheService;
         $this->itemRendererFactory = $itemRendererFactory;
@@ -78,13 +61,13 @@ class CategoryItemRenderer extends ItemRenderer
             if ($selected)
             {
                 $glyph = new FontAwesomeGlyph(
-                    'folder-open', array('fa-2x', 'fa-fw'), $title, 'fas'
+                    'folder-open', ['fa-2x', 'fa-fw'], $title, 'fas'
                 );
             }
             else
             {
                 $glyph = new FontAwesomeGlyph(
-                    'folder', array('fa-2x', 'fa-fw'), $title, 'fas'
+                    'folder', ['fa-2x', 'fa-fw'], $title, 'fas'
                 );
             }
 
@@ -134,14 +117,6 @@ class CategoryItemRenderer extends ItemRenderer
     public function getItemRendererFactory(): ItemRendererFactory
     {
         return $this->itemRendererFactory;
-    }
-
-    /**
-     * @param \Chamilo\Core\Menu\Factory\ItemRendererFactory $itemRendererFactory
-     */
-    public function setItemRendererFactory(ItemRendererFactory $itemRendererFactory): void
-    {
-        $this->itemRendererFactory = $itemRendererFactory;
     }
 
     /**
@@ -207,6 +182,14 @@ class CategoryItemRenderer extends ItemRenderer
         $html[] = '</ul>';
 
         return implode(PHP_EOL, $html);
+    }
+
+    /**
+     * @param \Chamilo\Core\Menu\Factory\ItemRendererFactory $itemRendererFactory
+     */
+    public function setItemRendererFactory(ItemRendererFactory $itemRendererFactory): void
+    {
+        $this->itemRendererFactory = $itemRendererFactory;
     }
 
     /**

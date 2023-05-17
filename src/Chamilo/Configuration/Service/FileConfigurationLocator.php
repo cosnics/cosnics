@@ -11,11 +11,11 @@ use Chamilo\Libraries\File\SystemPathBuilder;
 class FileConfigurationLocator
 {
 
-    private SystemPathBuilder $pathBuilder;
+    private SystemPathBuilder $systemPathBuilder;
 
     public function __construct(SystemPathBuilder $pathBuilder)
     {
-        $this->pathBuilder = $pathBuilder;
+        $this->systemPathBuilder = $pathBuilder;
     }
 
     public function getDefaultFileName(): string
@@ -25,7 +25,7 @@ class FileConfigurationLocator
 
     public function getDefaultFilePath(): string
     {
-        return $this->getPathBuilder()->getConfigurationPath();
+        return $this->getSystemPathBuilder()->getConfigurationPath();
     }
 
     public function getDefaultFilePathName(): string
@@ -40,7 +40,7 @@ class FileConfigurationLocator
 
     public function getFilePath(): string
     {
-        return $this->getPathBuilder()->getStoragePath() . 'configuration';
+        return $this->getSystemPathBuilder()->getStoragePath() . 'configuration';
     }
 
     public function getFilePathName(): string
@@ -48,11 +48,11 @@ class FileConfigurationLocator
         return $this->getFilePath() . DIRECTORY_SEPARATOR . $this->getFileName();
     }
 
-    public function getPathBuilder(): SystemPathBuilder
+    public function getSystemPathBuilder(): SystemPathBuilder
     {
-        return $this->pathBuilder;
+        return $this->systemPathBuilder;
     }
-    
+
     public function isAvailable(): bool
     {
         $file = $this->getFilePathName();

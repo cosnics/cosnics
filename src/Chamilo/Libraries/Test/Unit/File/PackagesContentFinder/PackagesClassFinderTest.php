@@ -2,15 +2,15 @@
 namespace Chamilo\Libraries\Test\Unit\File\PackagesContentFinder;
 
 use Chamilo\Libraries\Architecture\Test\TestCases\ChamiloTestCase;
+use Chamilo\Libraries\DependencyInjection\DependencyInjectionContainerBuilder;
 use Chamilo\Libraries\File\PackagesContentFinder\PackagesClassFinder;
-use Chamilo\Libraries\File\PathBuilder;
+use Chamilo\Libraries\File\SystemPathBuilder;
 
 /**
  * Tests the packages class finder
  *
  * @package common\libraries
- *
- * @author Sven Vanpoucke - Hogeschool Gent
+ * @author  Sven Vanpoucke - Hogeschool Gent
  */
 class PackagesClassFinderTest extends ChamiloTestCase
 {
@@ -20,6 +20,11 @@ class PackagesClassFinderTest extends ChamiloTestCase
      * @var string
      */
     private $cache_file;
+
+    protected function getSystemPathBuilder(): SystemPathBuilder
+    {
+        return DependencyInjectionContainerBuilder::getInstance()->createContainer()->get(SystemPathBuilder::class);
+    }
 
     /**
      * @inheritDoc
@@ -42,7 +47,7 @@ class PackagesClassFinderTest extends ChamiloTestCase
      */
     public function testFindClassesInPackage()
     {
-        $packages_class_finder = new PackagesClassFinder(PathBuilder::getInstance(), array('Chamilo\Libraries'));
+        $packages_class_finder = new PackagesClassFinder($this->getSystemPathBuilder(), ['Chamilo\Libraries']);
         $classes = $packages_class_finder->findClasses(
             'Console/Command/ClearCacheCommand.php', 'Console\Command\ClearCacheCommand'
         );
@@ -51,38 +56,12 @@ class PackagesClassFinderTest extends ChamiloTestCase
     }
 
     /**
-     * Tests the find classes without packages, must return an empty array
-     */
-    public function testFindClassesWithoutPackages()
-    {
-        $packages_class_finder = new PackagesClassFinder(PathBuilder::getInstance());
-        $classes = $packages_class_finder->findClasses(
-            'Console/Command/ClearCacheCommand.php', 'Console\Command\ClearCacheCommand'
-        );
-
-        $this->assertEmpty($classes);
-    }
-
-    /**
-     * Tests that the package class finder only returns existing classes
-     */
-    public function testFindInexistingClasses()
-    {
-        $packages_class_finder = new PackagesClassFinder(PathBuilder::getInstance(), array('Chamilo\Libraries'));
-        $classes = $packages_class_finder->findClasses(
-            'Console/Command/ClearCacheCommand.php', 'Console\Command\ClearCacheCommandInexisting'
-        );
-
-        $this->assertEmpty($classes);
-    }
-
-    /**
      * Tests that the find classes writes it's list to an existing cache file
      */
     public function testFindClassesWithCacheFile()
     {
         $packages_class_finder = new PackagesClassFinder(
-            PathBuilder::getInstance(), array('Chamilo\Libraries'), $this->cache_file
+            $this->getSystemPathBuilder(), ['Chamilo\Libraries'], $this->cache_file
         );
 
         $classes = $packages_class_finder->findClasses(
@@ -99,12 +78,12 @@ class PackagesClassFinderTest extends ChamiloTestCase
      */
     public function testFindClassesWithExistingCacheFile()
     {
-        $cached_classes = array('test\ClearCacheCommand');
+        $cached_classes = ['test\ClearCacheCommand'];
 
         file_put_contents($this->cache_file, sprintf('<?php return %s;', var_export($cached_classes, true)));
 
         $packages_class_finder = new PackagesClassFinder(
-            PathBuilder::getInstance(), array('Chamilo\Libraries'), $this->cache_file
+            $this->getSystemPathBuilder(), ['Chamilo\Libraries'], $this->cache_file
         );
 
         $classes = $packages_class_finder->findClasses(
@@ -125,11 +104,37 @@ class PackagesClassFinderTest extends ChamiloTestCase
         file_put_contents($this->cache_file, '<?php return 5;');
 
         $packages_class_finder = new PackagesClassFinder(
-            PathBuilder::getInstance(), array('Chamilo\Libraries'), $this->cache_file
+            $this->getSystemPathBuilder(), ['Chamilo\Libraries'], $this->cache_file
         );
 
         $packages_class_finder->findClasses(
             'Console/Command/ClearCacheCommand.php', 'Console\Command\ClearCacheCommand'
         );
+    }
+
+    /**
+     * Tests the find classes without packages, must return an empty array
+     */
+    public function testFindClassesWithoutPackages()
+    {
+        $packages_class_finder = new PackagesClassFinder($this->getSystemPathBuilder());
+        $classes = $packages_class_finder->findClasses(
+            'Console/Command/ClearCacheCommand.php', 'Console\Command\ClearCacheCommand'
+        );
+
+        $this->assertEmpty($classes);
+    }
+
+    /**
+     * Tests that the package class finder only returns existing classes
+     */
+    public function testFindInexistingClasses()
+    {
+        $packages_class_finder = new PackagesClassFinder($this->getSystemPathBuilder(), ['Chamilo\Libraries']);
+        $classes = $packages_class_finder->findClasses(
+            'Console/Command/ClearCacheCommand.php', 'Console\Command\ClearCacheCommandInexisting'
+        );
+
+        $this->assertEmpty($classes);
     }
 }

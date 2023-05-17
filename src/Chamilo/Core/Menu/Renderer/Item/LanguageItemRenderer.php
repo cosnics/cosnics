@@ -10,8 +10,7 @@ use Chamilo\Libraries\File\Redirect;
 
 /**
  * @package Chamilo\Core\Menu\Renderer\ItemRenderer
- *
- * @author Hans De Bisschop <hans.de.bisschop@ehb.be>
+ * @author  Hans De Bisschop <hans.de.bisschop@ehb.be>
  */
 class LanguageItemRenderer extends ItemRenderer
 {
@@ -30,11 +29,12 @@ class LanguageItemRenderer extends ItemRenderer
         }
 
         $redirect = new Redirect(
-            array(
+            [
                 Application::PARAM_CONTEXT => Manager::CONTEXT,
-                Application::PARAM_ACTION => Manager::ACTION_QUICK_LANG, Manager::PARAM_CHOICE => $item->getIsocode(),
+                Application::PARAM_ACTION => Manager::ACTION_QUICK_LANG,
+                Manager::PARAM_CHOICE => $item->getIsocode(),
                 Manager::PARAM_REFER => $item->getCurrentUrl()
-            )
+            ]
         );
 
         $html = [];

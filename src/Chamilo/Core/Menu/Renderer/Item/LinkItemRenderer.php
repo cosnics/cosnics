@@ -8,37 +8,24 @@ use Chamilo\Core\Rights\Structure\Service\Interfaces\AuthorizationCheckerInterfa
 use Chamilo\Core\User\Storage\DataClass\User;
 use Chamilo\Libraries\Architecture\ClassnameUtilities;
 use Chamilo\Libraries\Format\Structure\Glyph\FontAwesomeGlyph;
-use Chamilo\Libraries\Format\Theme\ThemePathBuilder;
 use Chamilo\Libraries\Platform\ChamiloRequest;
 use Symfony\Component\Translation\Translator;
 
 /**
  * @package Chamilo\Core\Menu\Renderer\ItemRenderer
- *
- * @author Hans De Bisschop <hans.de.bisschop@ehb.be>
+ * @author  Hans De Bisschop <hans.de.bisschop@ehb.be>
  */
 class LinkItemRenderer extends ItemRenderer
 {
 
-    /**
-     * @var \Chamilo\Libraries\Architecture\ClassnameUtilities
-     */
-    private $classnameUtilities;
+    private ClassnameUtilities $classnameUtilities;
 
-    /**
-     * @param \Chamilo\Core\Rights\Structure\Service\Interfaces\AuthorizationCheckerInterface $authorizationChecker
-     * @param \Symfony\Component\Translation\Translator $translator
-     * @param \Chamilo\Core\Menu\Service\CachedItemService $itemCacheService
-     * @param \Chamilo\Libraries\Format\Theme\ThemePathBuilder $themePathBuilder
-     * @param \Chamilo\Libraries\Platform\ChamiloRequest $request
-     * @param \Chamilo\Libraries\Architecture\ClassnameUtilities $classnameUtilities
-     */
     public function __construct(
-        AuthorizationCheckerInterface $authorizationChecker, Translator $translator, CachedItemService $itemCacheService,
-        ThemePathBuilder $themePathBuilder, ChamiloRequest $request, ClassnameUtilities $classnameUtilities
+        AuthorizationCheckerInterface $authorizationChecker, Translator $translator,
+        CachedItemService $itemCacheService, ChamiloRequest $request, ClassnameUtilities $classnameUtilities
     )
     {
-        parent::__construct($authorizationChecker, $translator, $itemCacheService, $themePathBuilder, $request);
+        parent::__construct($authorizationChecker, $translator, $itemCacheService, $request);
 
         $this->classnameUtilities = $classnameUtilities;
     }
@@ -67,7 +54,7 @@ class LinkItemRenderer extends ItemRenderer
             }
             else
             {
-                $glyph = new FontAwesomeGlyph('link', array('fa-2x'), null, 'fas');
+                $glyph = new FontAwesomeGlyph('link', ['fa-2x'], null, 'fas');
                 $html[] = $glyph->render();
             }
         }

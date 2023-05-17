@@ -1,7 +1,7 @@
 <?php
 namespace Chamilo\Libraries\Architecture\Test\Fixtures;
 
-use Chamilo\Libraries\File\PathBuilder;
+use Chamilo\Libraries\File\SystemPathBuilder;
 use Chamilo\Libraries\Storage\DataManager\Repository\StorageUnitRepository;
 use DOMDocument;
 use InvalidArgumentException;
@@ -11,66 +11,23 @@ use Symfony\Component\Finder\SplFileInfo;
 
 class ChamiloStorageUnitCreator
 {
-    /**
-     * @var PathBuilder
-     */
-    protected $pathBuilder;
 
     /**
      * @var StorageUnitRepository
      */
     protected $storageUnitRepository;
 
+    protected SystemPathBuilder $systemPathBuilder;
+
     /**
      * ChamiloStorageUnitCreator constructor.
      *
-     * @param PathBuilder $pathBuilder
      * @param StorageUnitRepository $storageUnitRepository
      */
-    public function __construct(PathBuilder $pathBuilder, StorageUnitRepository $storageUnitRepository)
+    public function __construct(SystemPathBuilder $systemPathBuilder, StorageUnitRepository $storageUnitRepository)
     {
-        $this->pathBuilder = $pathBuilder;
+        $this->systemPathBuilder = $systemPathBuilder;
         $this->storageUnitRepository = $storageUnitRepository;
-    }
-
-    /**
-     * Creates all the defined storage units for a given context identified by his namespace
-     *
-     * @param string $contextNamespace
-     * @param string[] $storageUnitNames
-     */
-    public function createStorageUnitsForContext($contextNamespace, $storageUnitNames = [])
-    {
-        $storagePath = $this->pathBuilder->namespaceToFullPath($contextNamespace) . 'Resources/Storage';
-        if (!is_dir($storagePath) || !file_exists($storagePath))
-        {
-            throw new InvalidArgumentException(
-                sprintf('The given context %s does not have a valid storage path', $contextNamespace)
-            );
-        }
-
-        $finder = new Finder();
-
-        /** @var SplFileInfo[] | Finder $files */
-        $files = $finder->in($storagePath)
-            ->files();
-
-        if(!empty($storageUnitNames))
-        {
-            foreach($storageUnitNames as $storageUnitName)
-            {
-                $files->name($storageUnitName . '.xml');
-            }
-        }
-        else
-        {
-            $files->name('*.xml');
-        }
-
-        foreach ($files as $file)
-        {
-            $this->createStorageUnitFromXMLFile($file->getPathname());
-        }
     }
 
     /**
@@ -90,7 +47,7 @@ class ChamiloStorageUnitCreator
 
         $object = $doc->getElementsByTagname('object')->item(0);
         $name = $object->getAttribute('name');
-        $attributes = array('type', 'length', 'unsigned', 'notnull', 'default', 'autoincrement', 'fixed');
+        $attributes = ['type', 'length', 'unsigned', 'notnull', 'default', 'autoincrement', 'fixed'];
 
         $xmlProperties = $doc->getElementsByTagname('property');
         foreach ($xmlProperties as $index => $property)
@@ -121,9 +78,9 @@ class ChamiloStorageUnitCreator
             {
                 /** @var \DOMElement $indexProperty */
 
-                $indexInfo['fields'][$indexProperty->getAttribute('name')] = array(
+                $indexInfo['fields'][$indexProperty->getAttribute('name')] = [
                     'length' => $indexProperty->getAttribute('length')
-                );
+                ];
             }
             $indexes[$index->getAttribute('name')] = $indexInfo;
         }
@@ -131,6 +88,45 @@ class ChamiloStorageUnitCreator
         if (!$this->storageUnitRepository->create($name, $properties, $indexes))
         {
             throw new RuntimeException('Could not create the storage unit with name ' . $name);
+        }
+    }
+
+    /**
+     * Creates all the defined storage units for a given context identified by his namespace
+     *
+     * @param string $contextNamespace
+     * @param string[] $storageUnitNames
+     */
+    public function createStorageUnitsForContext($contextNamespace, $storageUnitNames = [])
+    {
+        $storagePath = $this->systemPathBuilder->namespaceToFullPath($contextNamespace) . 'Resources/Storage';
+        if (!is_dir($storagePath) || !file_exists($storagePath))
+        {
+            throw new InvalidArgumentException(
+                sprintf('The given context %s does not have a valid storage path', $contextNamespace)
+            );
+        }
+
+        $finder = new Finder();
+
+        /** @var SplFileInfo[] | Finder $files */
+        $files = $finder->in($storagePath)->files();
+
+        if (!empty($storageUnitNames))
+        {
+            foreach ($storageUnitNames as $storageUnitName)
+            {
+                $files->name($storageUnitName . '.xml');
+            }
+        }
+        else
+        {
+            $files->name('*.xml');
+        }
+
+        foreach ($files as $file)
+        {
+            $this->createStorageUnitFromXMLFile($file->getPathname());
         }
     }
 

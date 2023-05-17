@@ -1,7 +1,8 @@
 <?php
 namespace Chamilo\Libraries\Architecture\Test\Fixtures;
 
-use Chamilo\Libraries\File\PathBuilder;
+use Chamilo\Libraries\DependencyInjection\DependencyInjectionContainerBuilder;
+use Chamilo\Libraries\File\SystemPathBuilder;
 use Nelmio\Alice\Loader\NativeLoader;
 use Nelmio\Alice\PropertyAccess\StdPropertyAccessor;
 use Symfony\Component\PropertyAccess\PropertyAccess;
@@ -18,9 +19,7 @@ class ChamiloFixtureLoader extends NativeLoader
     {
         return new StdPropertyAccessor(
             new ChamiloPropertyAccessor(
-                PropertyAccess::createPropertyAccessorBuilder()
-                    ->enableMagicCall()
-                    ->getPropertyAccessor()
+                PropertyAccess::createPropertyAccessorBuilder()->enableMagicCall()->getPropertyAccessor()
             )
         );
     }
@@ -34,6 +33,11 @@ class ChamiloFixtureLoader extends NativeLoader
     protected function getSeed()
     {
         return 100;
+    }
+
+    protected function getSystemPathBuilder(): SystemPathBuilder
+    {
+        return DependencyInjectionContainerBuilder::getInstance()->createContainer()->get(SystemPathBuilder::class);
     }
 
     /**
@@ -52,11 +56,11 @@ class ChamiloFixtureLoader extends NativeLoader
 
         foreach ($packagesFixtureFiles as $context => $fixtureFiles)
         {
-            $basePath = PathBuilder::getInstance()->namespaceToFullPath($context . '\Test') . 'Fixtures/';
+            $basePath = $this->getSystemPathBuilder()->namespaceToFullPath($context . '\Test') . 'Fixtures/';
 
             foreach ($fixtureFiles as $fixtureFile)
             {
-                if(strpos($fixtureFile, '.yml') === false)
+                if (strpos($fixtureFile, '.yml') === false)
                 {
                     $fixtureFile = $basePath . $fixtureFile . '.yml';
                 }

@@ -48,7 +48,7 @@ class UtilitiesComponent extends Manager
 
             // Retrieve the current theme
             case 'theme' :
-                $properties[self::PROPERTY_RESULT] = $this->getThemePathBuilder()->getTheme();
+                $properties[self::PROPERTY_RESULT] = $this->getThemeWebPathBuilder()->getTheme();
                 break;
 
             // Get a translation

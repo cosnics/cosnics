@@ -2,15 +2,15 @@
 namespace Chamilo\Libraries\Test\Unit\File\PackagesContentFinder;
 
 use Chamilo\Libraries\Architecture\Test\TestCases\ChamiloTestCase;
-use Chamilo\Libraries\File\PathBuilder;
+use Chamilo\Libraries\DependencyInjection\DependencyInjectionContainerBuilder;
 use Chamilo\Libraries\File\PackagesContentFinder\PackagesFilesFinder;
+use Chamilo\Libraries\File\SystemPathBuilder;
 
 /**
  * Tests the packages files finder
  *
  * @package Chamilo\Libraries
- *
- * @author Sven Vanpoucke - Hogeschool Gent
+ * @author  Sven Vanpoucke - Hogeschool Gent
  */
 class PackagesFilesFinderTest extends ChamiloTestCase
 {
@@ -20,6 +20,11 @@ class PackagesFilesFinderTest extends ChamiloTestCase
      * @var string
      */
     private $cache_file;
+
+    protected function getSystemPathBuilder(): SystemPathBuilder
+    {
+        return DependencyInjectionContainerBuilder::getInstance()->createContainer()->get(SystemPathBuilder::class);
+    }
 
     /**
      * @inheritDoc
@@ -42,43 +47,10 @@ class PackagesFilesFinderTest extends ChamiloTestCase
      */
     public function testFindFilesInPackage()
     {
-        $packages_files_finder = new PackagesFilesFinder(PathBuilder::getInstance(), array('Chamilo\Libraries'));
+        $packages_files_finder = new PackagesFilesFinder($this->getSystemPathBuilder(), ['Chamilo\Libraries']);
         $files = $packages_files_finder->findFiles('Resources/Test/PackagesContentFinder');
 
         $this->assertEquals(count($files['Chamilo\Libraries']), 3);
-    }
-
-    /**
-     * Tests the find files without packages, must return an empty array
-     */
-    public function testFindFilesWithoutPackages()
-    {
-        $packages_files_finder = new PackagesFilesFinder(PathBuilder::getInstance());
-        $files = $packages_files_finder->findFiles('Resources/Test/PackagesContentFinder');
-
-        $this->assertEmpty($files);
-    }
-
-    /**
-     * Tests that the package files finder only returns existing files
-     */
-    public function testFindInexistingFiles()
-    {
-        $packages_files_finder = new PackagesFilesFinder(PathBuilder::getInstance(), array('Chamilo\Libraries'));
-        $files = $packages_files_finder->findFiles('Resources/Test/PackagesContentFinder', '*.php');
-
-        $this->assertEmpty($files);
-    }
-
-    /**
-     * Tests that the package files finder only returns files in existing folders
-     */
-    public function testFindFilesWithInexistingDirectory()
-    {
-        $packages_files_finder = new PackagesFilesFinder(PathBuilder::getInstance(), array('Chamilo\Libraries'));
-        $files = $packages_files_finder->findFiles('Resources/Test/PackagesContentFinderInexisting');
-
-        $this->assertEmpty($files);
     }
 
     /**
@@ -87,7 +59,7 @@ class PackagesFilesFinderTest extends ChamiloTestCase
     public function testFindFilesWithCacheFile()
     {
         $packages_files_finder =
-            new PackagesFilesFinder(PathBuilder::getInstance(), array('Chamilo\Libraries'), $this->cache_file);
+            new PackagesFilesFinder($this->getSystemPathBuilder(), ['Chamilo\Libraries'], $this->cache_file);
         $files = $packages_files_finder->findFiles('Resources/Test/PackagesContentFinder');
 
         $cached_files = require $this->cache_file;
@@ -100,16 +72,27 @@ class PackagesFilesFinderTest extends ChamiloTestCase
      */
     public function testFindFilesWithExistingCacheFile()
     {
-        $cached_files = array('test.txt');
+        $cached_files = ['test.txt'];
 
         file_put_contents($this->cache_file, sprintf('<?php return %s;', var_export($cached_files, true)));
 
         $packages_files_finder =
-            new PackagesFilesFinder(PathBuilder::getInstance(), array('Chamilo\Libraries'), $this->cache_file);
+            new PackagesFilesFinder($this->getSystemPathBuilder(), ['Chamilo\Libraries'], $this->cache_file);
         $files = $packages_files_finder->findFiles('Resources/Test/PackagesContentFinder');
 
         $this->assertEquals($files[0], 'test.txt');
         $this->assertEquals(count($files), 1);
+    }
+
+    /**
+     * Tests that the package files finder only returns files in existing folders
+     */
+    public function testFindFilesWithInexistingDirectory()
+    {
+        $packages_files_finder = new PackagesFilesFinder($this->getSystemPathBuilder(), ['Chamilo\Libraries']);
+        $files = $packages_files_finder->findFiles('Resources/Test/PackagesContentFinderInexisting');
+
+        $this->assertEmpty($files);
     }
 
     /**
@@ -121,7 +104,29 @@ class PackagesFilesFinderTest extends ChamiloTestCase
     {
         file_put_contents($this->cache_file, '<?php return 5;');
         $packages_files_finder =
-            new PackagesFilesFinder(PathBuilder::getInstance(), array('Chamilo\Libraries'), $this->cache_file);
+            new PackagesFilesFinder($this->getSystemPathBuilder(), ['Chamilo\Libraries'], $this->cache_file);
         $packages_files_finder->findFiles('Resources/Test/PackagesContentFinder');
+    }
+
+    /**
+     * Tests the find files without packages, must return an empty array
+     */
+    public function testFindFilesWithoutPackages()
+    {
+        $packages_files_finder = new PackagesFilesFinder($this->getSystemPathBuilder());
+        $files = $packages_files_finder->findFiles('Resources/Test/PackagesContentFinder');
+
+        $this->assertEmpty($files);
+    }
+
+    /**
+     * Tests that the package files finder only returns existing files
+     */
+    public function testFindInexistingFiles()
+    {
+        $packages_files_finder = new PackagesFilesFinder($this->getSystemPathBuilder(), ['Chamilo\Libraries']);
+        $files = $packages_files_finder->findFiles('Resources/Test/PackagesContentFinder', '*.php');
+
+        $this->assertEmpty($files);
     }
 }

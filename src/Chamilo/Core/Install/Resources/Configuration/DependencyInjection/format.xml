@@ -7,7 +7,11 @@
                   autoconfigure="true"
                   public="true"/>
 
-        <service id="Chamilo\Core\Install\Format\Structure\BannerRenderer"/>
+        <service id="Chamilo\Core\Install\Format\Structure\BannerRenderer">
+            <argument key="$themeWebPathBuilder"
+                      type="service"
+                      id="Chamilo\Libraries\Format\Theme\ThemeWebPathBuilder"/>
+        </service>
         <service id="Chamilo\Core\Install\Format\Structure\FooterRenderer"/>
         <service id="Chamilo\Core\Install\Format\Structure\HeaderRenderer"
                  class="Chamilo\Libraries\Format\Structure\HeaderRenderer">

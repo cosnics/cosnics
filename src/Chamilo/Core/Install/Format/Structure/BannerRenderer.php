@@ -19,14 +19,14 @@ use Symfony\Component\Translation\Translator;
  */
 class BannerRenderer extends \Chamilo\Libraries\Format\Structure\BannerRenderer
 {
-    private ThemePathBuilder $themePathBuilder;
+    private ThemePathBuilder $themeWebPathBuilder;
 
     private WebPathBuilder $webPathBuilder;
 
     public function __construct(
         PageConfiguration $pageConfiguration, SessionUtilities $sessionUtilities, Translator $translator,
         ConfigurationConsulter $configurationConsulter, UrlGenerator $urlGenerator, MenuRenderer $menuRenderer,
-        BreadcrumbTrailRenderer $breadcrumbTrailRenderer, ThemePathBuilder $themePathBuilder,
+        BreadcrumbTrailRenderer $breadcrumbTrailRenderer, ThemePathBuilder $themeWebPathBuilder,
         WebPathBuilder $webPathBuilder
     )
     {
@@ -35,7 +35,7 @@ class BannerRenderer extends \Chamilo\Libraries\Format\Structure\BannerRenderer
             $breadcrumbTrailRenderer
         );
 
-        $this->themePathBuilder = $themePathBuilder;
+        $this->themeWebPathBuilder = $themeWebPathBuilder;
         $this->webPathBuilder = $webPathBuilder;
     }
 
@@ -47,7 +47,7 @@ class BannerRenderer extends \Chamilo\Libraries\Format\Structure\BannerRenderer
         $html[] = '<div class="' . $this->getPageConfiguration()->getContainerMode() . '">';
         $html[] = '<div class="navbar-header">';
 
-        $brandSource = $this->getThemePathBuilder()->getImagePath('Chamilo\Libraries', 'LogoHeader');
+        $brandSource = $this->getThemeWebPathBuilder()->getImagePath('Chamilo\Libraries', 'LogoHeader');
 
         $html[] = '<a class="navbar-brand" href="' . $this->getWebPathBuilder()->getBasePath() . '">';
         $html[] = '<img alt="' . $this->getTranslator()->trans('ChamiloInstallationTitle', [], 'Chamilo\Core\Install') .
@@ -61,9 +61,9 @@ class BannerRenderer extends \Chamilo\Libraries\Format\Structure\BannerRenderer
         return implode(PHP_EOL, $html);
     }
 
-    public function getThemePathBuilder(): ThemePathBuilder
+    public function getThemeWebPathBuilder(): ThemePathBuilder
     {
-        return $this->themePathBuilder;
+        return $this->themeWebPathBuilder;
     }
 
     public function getWebPathBuilder(): WebPathBuilder

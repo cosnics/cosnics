@@ -7,7 +7,17 @@
                   autoconfigure="true"
                   public="true"/>
 
-        <service id="Chamilo\Libraries\Format\Theme\ThemePathBuilder">
+        <service id="Chamilo\Libraries\Format\Theme\ThemeSystemPathBuilder">
+            <argument key="$pathBuilder"
+                      type="service"
+                      id="Chamilo\Libraries\File\SystemPathBuilder"/>
+            <argument key="$theme">%chamilo.configuration.general.theme%</argument>
+        </service>
+
+        <service id="Chamilo\Libraries\Format\Theme\ThemeWebPathBuilder">
+            <argument key="$pathBuilder"
+                      type="service"
+                      id="Chamilo\Libraries\File\WebPathBuilder"/>
             <argument key="$theme">%chamilo.configuration.general.theme%</argument>
         </service>
 
@@ -51,7 +61,13 @@
         <service id="Chamilo\Libraries\Format\Structure\BannerRenderer"/>
         <service id="Chamilo\Libraries\Format\Structure\PageConfiguration"/>
         <service id="Chamilo\Libraries\Format\Structure\FooterRenderer"/>
-        <service id="Chamilo\Libraries\Format\Structure\HeaderRenderer"/>
+
+        <service id="Chamilo\Libraries\Format\Structure\HeaderRenderer">
+            <argument key="$themeWebPathBuilder"
+                      type="service"
+                      id="Chamilo\Libraries\Format\Theme\ThemeWebPathBuilder"/>
+        </service>
+
         <service id="Chamilo\Libraries\Format\Structure\PanelRenderer"/>
     </services>
 </container>

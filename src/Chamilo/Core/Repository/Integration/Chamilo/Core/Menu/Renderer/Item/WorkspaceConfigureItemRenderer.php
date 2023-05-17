@@ -9,11 +9,10 @@ use Chamilo\Libraries\Architecture\Application\Application;
 use Chamilo\Libraries\File\Redirect;
 
 /**
- *
  * @package Chamilo\Core\User\Integration\Chamilo\Core\Menu\Renderer\Item\Bar\Item
- * @author Hans De Bisschop <hans.de.bisschop@ehb.be>
- * @author Magali Gillard <magali.gillard@ehb.be>
- * @author Eduard Vossen <eduard.vossen@ehb.be>
+ * @author  Hans De Bisschop <hans.de.bisschop@ehb.be>
+ * @author  Magali Gillard <magali.gillard@ehb.be>
+ * @author  Eduard Vossen <eduard.vossen@ehb.be>
  */
 class WorkspaceConfigureItemRenderer extends ItemRenderer
 {
@@ -27,7 +26,7 @@ class WorkspaceConfigureItemRenderer extends ItemRenderer
     {
         $selected = $this->isSelected($item);
 
-        $urlRenderer = new Redirect(array(Application::PARAM_CONTEXT => Manager::CONTEXT));
+        $urlRenderer = new Redirect([Application::PARAM_CONTEXT => Manager::CONTEXT]);
 
         $html[] = '<li' . ($selected ? ' class="active"' : '') . '>';
         $html[] = '<a href="' . $urlRenderer->getUrl() . '">';
@@ -37,7 +36,7 @@ class WorkspaceConfigureItemRenderer extends ItemRenderer
         if ($item->showIcon())
         {
             $glyph = $item->getGlyph();
-            $glyph->setExtraClasses(array('fa-2x'));
+            $glyph->setExtraClasses(['fa-2x']);
             $glyph->setTitle($title);
 
             $html[] = $glyph->render();

@@ -45,8 +45,8 @@ class BrowserComponent extends Manager implements DelegateComponent
         $this->checkLoggedInAs();
 
         $this->getPageConfiguration()->addCssFile(
-            $this->getPathBuilder()->getCssPath(Manager::CONTEXT, true) . 'print.' .
-            $this->getThemePathBuilder()->getTheme() . '.min.css', 'print'
+            $this->getWebPathBuilder()->getCssPath(Manager::CONTEXT) . 'print.' .
+            $this->getThemeWebPathBuilder()->getTheme() . '.min.css', 'print'
         );
 
         $this->set_parameter(HtmlCalendarRenderer::PARAM_TYPE, $this->getCurrentRendererType());

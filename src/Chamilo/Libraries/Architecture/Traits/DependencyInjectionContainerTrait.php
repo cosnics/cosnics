@@ -14,7 +14,6 @@ use Chamilo\Libraries\Architecture\ErrorHandler\ExceptionLogger\ExceptionLoggerI
 use Chamilo\Libraries\Architecture\Factory\ApplicationFactory;
 use Chamilo\Libraries\DependencyInjection\DependencyInjectionContainerBuilder;
 use Chamilo\Libraries\File\ConfigurablePathBuilder;
-use Chamilo\Libraries\File\PathBuilder;
 use Chamilo\Libraries\File\SystemPathBuilder;
 use Chamilo\Libraries\File\WebPathBuilder;
 use Chamilo\Libraries\Format\NotificationMessage\NotificationMessageManager;
@@ -139,14 +138,6 @@ trait DependencyInjectionContainerTrait
         return $this->getService(PageConfiguration::class);
     }
 
-    /**
-     * @deprecated Use getSystemPathBuilder() or getWebPathBuilder() now
-     */
-    public function getPathBuilder(): PathBuilder
-    {
-        return $this->getService(PathBuilder::class);
-    }
-
     public function getRegistrationConsulter(): RegistrationConsulter
     {
         return $this->getService(RegistrationConsulter::class);
@@ -194,9 +185,14 @@ trait DependencyInjectionContainerTrait
         return $this->getService(SystemPathBuilder::class);
     }
 
-    public function getThemePathBuilder(): ThemePathBuilder
+    public function getThemeSystemPathBuilder(): ThemePathBuilder
     {
-        return $this->getService(ThemePathBuilder::class);
+        return $this->getService('Chamilo\Libraries\Format\Theme\ThemeSystemPathBuilder');
+    }
+
+    public function getThemeWebPathBuilder(): ThemePathBuilder
+    {
+        return $this->getService('Chamilo\Libraries\Format\Theme\ThemeWebPathBuilder');
     }
 
     public function getTranslator(): Translator

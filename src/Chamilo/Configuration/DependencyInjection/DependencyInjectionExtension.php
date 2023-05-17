@@ -35,7 +35,7 @@ class DependencyInjectionExtension extends AbstractDependencyInjectionExtension 
     {
         $this->extentensionLoad($configs, $container);
 
-        $fileConfigurationLocator = new FileConfigurationLocator($this->getPathBuilder());
+        $fileConfigurationLocator = new FileConfigurationLocator($this->getSystemPathBuilder());
 
         if ($fileConfigurationLocator->isAvailable())
         {

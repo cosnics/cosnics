@@ -19,21 +19,21 @@ use Twig\Loader\FilesystemLoader;
 class TwigCacheService extends FileBasedCacheService
 {
 
-    protected SystemPathBuilder $pathBuilder;
-
     protected RegistrationConsulter $registrationConsulter;
+
+    protected SystemPathBuilder $systemPathBuilder;
 
     protected Environment $twig;
 
     public function __construct(
-        ConfigurablePathBuilder $configurablePathBuilder, Environment $twig, SystemPathBuilder $pathBuilder,
+        ConfigurablePathBuilder $configurablePathBuilder, Environment $twig, SystemPathBuilder $systemPathBuilder,
         RegistrationConsulter $registrationConsulter
     )
     {
         parent::__construct($configurablePathBuilder);
 
         $this->twig = $twig;
-        $this->pathBuilder = $pathBuilder;
+        $this->systemPathBuilder = $systemPathBuilder;
         $this->registrationConsulter = $registrationConsulter;
     }
 
@@ -42,14 +42,14 @@ class TwigCacheService extends FileBasedCacheService
         return $this->getConfigurablePathBuilder()->getCachePath(__NAMESPACE__);
     }
 
-    public function getPathBuilder(): SystemPathBuilder
-    {
-        return $this->pathBuilder;
-    }
-
     public function getRegistrationConsulter(): RegistrationConsulter
     {
         return $this->registrationConsulter;
+    }
+
+    public function getSystemPathBuilder(): SystemPathBuilder
+    {
+        return $this->systemPathBuilder;
     }
 
     public function getTwig(): Environment
@@ -67,12 +67,12 @@ class TwigCacheService extends FileBasedCacheService
     public function initializeCache()
     {
         $packagesFilesFinder = new PackagesFilesFinder(
-            $this->getPathBuilder(), $this->getRegistrationConsulter()->getRegistrationContexts()
+            $this->getSystemPathBuilder(), $this->getRegistrationConsulter()->getRegistrationContexts()
         );
 
         $templatesPerPackage = $packagesFilesFinder->findFiles('Resources/Templates', '*.html.twig');
 
-        $basePath = $this->getPathBuilder()->getBasePath();
+        $basePath = $this->getSystemPathBuilder()->getBasePath();
 
         $this->getTwig()->getLoader()->addLoader(new FilesystemLoader([$basePath]));
 

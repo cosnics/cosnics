@@ -13,14 +13,14 @@ trait IConfigurableExtensionTrait
      */
     abstract public function getContainerConfigurationFiles(): array;
 
-    abstract public function getPathBuilder(): SystemPathBuilder;
+    abstract public function getSystemPathBuilder(): SystemPathBuilder;
 
     public function loadContainerConfiguration(ContainerBuilder $container)
     {
         foreach ($this->getContainerConfigurationFiles() as $context => $configurationFiles)
         {
             $loader = new YamlFileLoader(
-                $container, new FileLocator($this->getPathBuilder()->getConfigurationPath($context))
+                $container, new FileLocator($this->getSystemPathBuilder()->getConfigurationPath($context))
             );
 
             foreach ($configurationFiles as $configurationFile)

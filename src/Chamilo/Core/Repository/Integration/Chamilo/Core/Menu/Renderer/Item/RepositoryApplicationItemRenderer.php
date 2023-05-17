@@ -7,11 +7,10 @@ use Chamilo\Core\Repository\Manager;
 use Chamilo\Libraries\Architecture\Application\Application;
 
 /**
- *
  * @package Chamilo\Core\Menu\Renderer\Item\Bar\Item
- * @author Hans De Bisschop <hans.de.bisschop@ehb.be>
- * @author Magali Gillard <magali.gillard@ehb.be>
- * @author Eduard Vossen <eduard.vossen@ehb.be>
+ * @author  Hans De Bisschop <hans.de.bisschop@ehb.be>
+ * @author  Magali Gillard <magali.gillard@ehb.be>
+ * @author  Eduard Vossen <eduard.vossen@ehb.be>
  */
 class RepositoryApplicationItemRenderer extends ApplicationItemRenderer
 {

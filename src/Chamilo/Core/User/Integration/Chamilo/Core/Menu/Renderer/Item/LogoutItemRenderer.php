@@ -9,8 +9,7 @@ use Chamilo\Libraries\Format\Structure\Glyph\FontAwesomeGlyph;
 
 /**
  * @package Chamilo\Core\User\Integration\Chamilo\Core\Menu\Renderer\ItemRenderer
- *
- * @author Hans De Bisschop <hans.de.bisschop@ehb.be>
+ * @author  Hans De Bisschop <hans.de.bisschop@ehb.be>
  */
 class LogoutItemRenderer extends MenuItemRenderer
 {
@@ -19,7 +18,7 @@ class LogoutItemRenderer extends MenuItemRenderer
      */
     public function getGlyph()
     {
-        return new FontAwesomeGlyph('sign-out-alt', array('fa-2x'), null, 'fas');
+        return new FontAwesomeGlyph('sign-out-alt', ['fa-2x'], null, 'fas');
     }
 
     /**
@@ -28,7 +27,7 @@ class LogoutItemRenderer extends MenuItemRenderer
     public function getUrl()
     {
         $redirect = new Redirect(
-            array(Application::PARAM_CONTEXT => Manager::CONTEXT, Application::PARAM_ACTION => Manager::ACTION_LOGOUT)
+            [Application::PARAM_CONTEXT => Manager::CONTEXT, Application::PARAM_ACTION => Manager::ACTION_LOGOUT]
         );
 
         return $redirect->getUrl();

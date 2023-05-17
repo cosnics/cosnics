@@ -9,11 +9,10 @@ use InvalidArgumentException;
 use RuntimeException;
 
 /**
- *
  * @package core\repository\content_object\assessment\integration\core\repository\content_object\learning_path\display
- * @author Hans De Bisschop <hans.de.bisschop@ehb.be>
- * @author Magali Gillard <magali.gillard@ehb.be>
- * @author Eduard Vossen <eduard.vossen@ehb.be>
+ * @author  Hans De Bisschop <hans.de.bisschop@ehb.be>
+ * @author  Magali Gillard <magali.gillard@ehb.be>
+ * @author  Eduard Vossen <eduard.vossen@ehb.be>
  */
 class MasteryComponent extends Manager
 {
@@ -28,7 +27,9 @@ class MasteryComponent extends Manager
         {
             $succes = $this->set_mastery_score($treeNodeData, $form->exportValues());
             $message = $succes ? 'MasteryScoreSet' : 'MasteryScoreNotSet';
-            $this->redirectWithMessage(Translation::get($message), !$succes, $this->get_application()->get_parameters());
+            $this->redirectWithMessage(
+                Translation::get($message), !$succes, $this->get_application()->get_parameters()
+            );
         }
         else
         {
@@ -59,7 +60,7 @@ class MasteryComponent extends Manager
 
         if ($treeNodeData->getMasteryScore())
         {
-            $form->setDefaults(array('mastery_score' => $treeNodeData->getMasteryScore()));
+            $form->setDefaults(['mastery_score' => $treeNodeData->getMasteryScore()]);
         }
 
         $form->addElement('html', $this->renderTemplate(Manager::CONTEXT, 'MasteryScoreSlider.html'));
@@ -80,7 +81,7 @@ class MasteryComponent extends Manager
      */
     protected function renderTemplate($context, $template, $parameters = [])
     {
-        $templatePath = $this->getPathBuilder()->getTemplatesPath($context) . $template;
+        $templatePath = $this->getSystemPathBuilder()->getTemplatesPath($context) . $template;
 
         if (!file_exists($templatePath))
         {

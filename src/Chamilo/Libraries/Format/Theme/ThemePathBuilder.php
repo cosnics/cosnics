@@ -2,15 +2,13 @@
 namespace Chamilo\Libraries\Format\Theme;
 
 use Chamilo\Libraries\Architecture\ClassnameUtilities;
+use Chamilo\Libraries\File\AbstractPathBuilder;
 use Chamilo\Libraries\File\Filesystem;
-use Chamilo\Libraries\File\PathBuilder;
-use Chamilo\Libraries\Format\Structure\ToolbarItem;
 use Chamilo\Libraries\Utilities\StringUtilities;
 
 /**
  * @package Chamilo\Libraries\Format\Theme
- *
- * @author Hans De Bisschop <hans.de.bisschop@ehb.be>
+ * @author  Hans De Bisschop <hans.de.bisschop@ehb.be>
  */
 class ThemePathBuilder
 {
@@ -21,14 +19,14 @@ class ThemePathBuilder
 
     private ClassnameUtilities $classnameUtilities;
 
-    private PathBuilder $pathBuilder;
+    private AbstractPathBuilder $pathBuilder;
 
     private StringUtilities $stringUtilities;
 
     private string $theme;
 
     public function __construct(
-        StringUtilities $stringUtilities, ClassnameUtilities $classnameUtilities, PathBuilder $pathBuilder,
+        StringUtilities $stringUtilities, ClassnameUtilities $classnameUtilities, AbstractPathBuilder $pathBuilder,
         string $theme
     )
     {
@@ -45,10 +43,10 @@ class ThemePathBuilder
     {
         $availableThemes = [];
 
-        $path = $this->getCssPath('Chamilo\Configuration', false, false);
+        $path = $this->getCssPath('Chamilo\Configuration', false);
         $directories = Filesystem::get_directory_content($path, Filesystem::LIST_DIRECTORIES, false);
 
-        foreach ($directories as $index => $directory)
+        foreach ($directories as $directory)
         {
             if (substr($directory, 0, 1) != '.')
             {
@@ -65,54 +63,21 @@ class ThemePathBuilder
         return $this->classnameUtilities;
     }
 
-    public function setClassnameUtilities(ClassnameUtilities $classnameUtilities)
+    public function getCssPath(string $namespace, bool $includeTheme = true): string
     {
-        $this->classnameUtilities = $classnameUtilities;
-    }
-
-    public function getCommonImage(
-        string $image, string $extension = 'png', ?string $label = null, ?string $href = null,
-        int $display = ToolbarItem::DISPLAY_ICON_AND_LABEL, bool $confirmation = false
-    ): string
-    {
-        return $this->getImage(StringUtilities::LIBRARIES, $image, $extension, $label, $href, $display, $confirmation);
-    }
-
-    /**
-     * Backwards compatible legacy method to get the a common image
-     *
-     * @deprecated Use ThemePathBuilder::getImagePath() now in combination with a valid namespace
-     */
-    public function getCommonImagePath(string $image, string $extension = 'png', bool $web = true): string
-    {
-        return $this->getImagePath('Chamilo\Configuration', $image, $extension, $web);
-    }
-
-    /**
-     * Backwards compatible legacy method to get the main stylesheet path
-     *
-     * @deprecated Use ThemePathBuilder::getStylesheetPath() now in combination with a valid namespace
-     */
-    public function getCommonStylesheetPath(bool $web = true): string
-    {
-        return $this->getStylesheetPath('Chamilo\Configuration', $web);
-    }
-
-    public function getCssPath(string $namespace, bool $web = true, bool $includeTheme = true): string
-    {
-        $cssPath = $this->getPathBuilder()->getCssPath($namespace, $web);
+        $cssPath = $this->getPathBuilder()->getCssPath($namespace);
 
         if ($includeTheme)
         {
-            $cssPath .= $this->getTheme() . $this->getDirectorySeparator($web);
+            $cssPath .= $this->getTheme() . $this->getDirectorySeparator();
         }
 
         return $cssPath;
     }
 
-    public function getDirectorySeparator(bool $web = true): string
+    public function getDirectorySeparator(): string
     {
-        return ($web ? '/' : DIRECTORY_SEPARATOR);
+        return $this->getPathBuilder()->getDirectorySeparator();
     }
 
     public function getFavouriteIcon(): string
@@ -120,37 +85,19 @@ class ThemePathBuilder
         return $this->getImagePath('Chamilo\Libraries', 'Favicon', 'ico');
     }
 
-    public function getImage(
-        string $context, string $image, string $extension = 'png', ?string $label = null, ?string $href = null,
-        int $display = ToolbarItem::DISPLAY_ICON_AND_LABEL, bool $confirmation = false
-    ): string
+    public function getImagePath(string $context, string $image, string $extension = 'png'): string
     {
-        $icon = new ToolbarItem(
-            $label, $this->getImagePath($context, $image, $extension), $href, $display, $confirmation
-        );
-
-        return $icon->render();
+        return $this->getImagesPath($context) . $image . '.' . $extension;
     }
 
-    public function getImagePath(string $context, string $image, string $extension = 'png', bool $web = true): string
+    public function getImagesPath(string $context): string
     {
-        return $this->getImagesPath($context, $web) . $image . '.' . $extension;
+        return $this->getPathBuilder()->getImagesPath($context) . $this->getTheme() . $this->getDirectorySeparator();
     }
 
-    public function getImagesPath(string $context, bool $web = true): string
-    {
-        return $this->getPathBuilder()->getImagesPath($context, $web) . $this->getTheme() .
-            $this->getDirectorySeparator($web);
-    }
-
-    public function getPathBuilder(): PathBuilder
+    public function getPathBuilder(): AbstractPathBuilder
     {
         return $this->pathBuilder;
-    }
-
-    public function setPathBuilder(PathBuilder $pathBuilder)
-    {
-        $this->pathBuilder = $pathBuilder;
     }
 
     public function getStringUtilities(): StringUtilities
@@ -158,23 +105,18 @@ class ThemePathBuilder
         return $this->stringUtilities;
     }
 
-    public function setStringUtilities(StringUtilities $stringUtilities)
+    public function getStylesheetPath(?string $namespace = null, bool $minified = false): string
     {
-        $this->stringUtilities = $stringUtilities;
+        return $this->getCssPath($namespace) . 'Stylesheet' . ($minified ? '.min' : '') . '.css';
     }
 
-    public function getStylesheetPath(?string $namespace = null, bool $web = true, bool $minified = false): string
+    public function getTemplatePath(string $namespace, bool $includeTheme = true): string
     {
-        return $this->getCssPath($namespace, $web) . 'Stylesheet' . ($minified ? '.min' : '') . '.css';
-    }
-
-    public function getTemplatePath(string $namespace, bool $web = true, bool $includeTheme = true): string
-    {
-        $cssPath = $this->getPathBuilder()->getTemplatesPath($namespace, $web);
+        $cssPath = $this->getPathBuilder()->getTemplatesPath($namespace);
 
         if ($includeTheme)
         {
-            $cssPath .= $this->getTheme() . $this->getDirectorySeparator($web);
+            $cssPath .= $this->getTheme() . $this->getDirectorySeparator();
         }
 
         return $cssPath;
@@ -185,8 +127,10 @@ class ThemePathBuilder
         return $this->theme;
     }
 
-    public function setTheme(string $theme)
+    public function setTheme(string $theme): ThemePathBuilder
     {
         $this->theme = $theme;
+
+        return $this;
     }
 }

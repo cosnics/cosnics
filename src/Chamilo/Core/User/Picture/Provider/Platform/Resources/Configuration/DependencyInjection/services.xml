@@ -7,7 +7,11 @@
                   autoconfigure="true"
                   public="true"/>
 
-        <service id="Chamilo\Core\User\Picture\Provider\Platform\UserPictureProvider"/>
+        <service id="Chamilo\Core\User\Picture\Provider\Platform\UserPictureProvider">
+            <argument key="$themeWebPathBuilder"
+                      type="service"
+                      id="Chamilo\Libraries\Format\Theme\ThemeWebPathBuilder"/>
+        </service>
 
     </services>
 </container>

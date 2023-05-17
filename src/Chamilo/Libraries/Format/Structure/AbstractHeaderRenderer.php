@@ -16,18 +16,18 @@ class AbstractHeaderRenderer implements HeaderRendererInterface
 
     private PageConfiguration $pageConfiguration;
 
-    private ThemePathBuilder $themePathBuilder;
+    private ThemePathBuilder $themeWebPathBuilder;
 
     private WebPathBuilder $webPathBuilder;
 
     public function __construct(
-        PageConfiguration $pageConfiguration, WebPathBuilder $webPathBuilder, ThemePathBuilder $themePathBuilder,
+        PageConfiguration $pageConfiguration, WebPathBuilder $webPathBuilder, ThemePathBuilder $themeWebWebPathBuilder,
         BannerRenderer $bannerRenderer
     )
     {
         $this->pageConfiguration = $pageConfiguration;
         $this->webPathBuilder = $webPathBuilder;
-        $this->themePathBuilder = $themePathBuilder;
+        $this->themeWebPathBuilder = $themeWebWebPathBuilder;
         $this->bannerRenderer = $bannerRenderer;
     }
 
@@ -80,7 +80,7 @@ class AbstractHeaderRenderer implements HeaderRendererInterface
     protected function addDefaultHeaders()
     {
         $pathBuilder = $this->getWebPathBuilder();
-        $themePathBuilder = $this->getThemePathBuilder();
+        $themeWebPathBuilder = $this->getThemeWebPathBuilder();
         $pageConfiguration = $this->getPageConfiguration();
 
         $pageConfiguration->addHtmlHeader('<meta http-equiv="X-UA-Compatible" content="IE=edge">');
@@ -93,10 +93,10 @@ class AbstractHeaderRenderer implements HeaderRendererInterface
         $pageConfiguration->addCssFile($cssPath . 'cosnics.vendor.bootstrap.min.css');
         $pageConfiguration->addCssFile($cssPath . 'cosnics.vendor.jquery.min.css');
         $pageConfiguration->addCssFile($cssPath . 'cosnics.vendor.min.css');
-        $pageConfiguration->addCssFile($cssPath . 'cosnics.common.' . $themePathBuilder->getTheme() . '.min.css');
+        $pageConfiguration->addCssFile($cssPath . 'cosnics.common.' . $themeWebPathBuilder->getTheme() . '.min.css');
 
         $pageConfiguration->addLink($pathBuilder->getBasePath(), 'top');
-        $pageConfiguration->addLink($themePathBuilder->getFavouriteIcon(), 'shortcut icon', null, 'image/x-icon');
+        $pageConfiguration->addLink($themeWebPathBuilder->getFavouriteIcon(), 'shortcut icon', null, 'image/x-icon');
 
         $pageConfiguration->addHtmlHeader(
             '<script>var rootWebPath="' . $pathBuilder->getBasePath() . '";</script>'
@@ -133,34 +133,13 @@ class AbstractHeaderRenderer implements HeaderRendererInterface
         return $this->pageConfiguration;
     }
 
-    public function getThemePathBuilder(): ThemePathBuilder
+    public function getThemeWebPathBuilder(): ThemePathBuilder
     {
-        return $this->themePathBuilder;
+        return $this->themeWebPathBuilder;
     }
 
     public function getWebPathBuilder(): WebPathBuilder
     {
         return $this->webPathBuilder;
-    }
-
-    public function setPageConfiguration(PageConfiguration $pageConfiguration): AbstractHeaderRenderer
-    {
-        $this->pageConfiguration = $pageConfiguration;
-
-        return $this;
-    }
-
-    public function setThemePathBuilder(ThemePathBuilder $themePathBuilder): AbstractHeaderRenderer
-    {
-        $this->themePathBuilder = $themePathBuilder;
-
-        return $this;
-    }
-
-    public function setWebPathBuilder(WebPathBuilder $webPathBuilder): AbstractHeaderRenderer
-    {
-        $this->webPathBuilder = $webPathBuilder;
-
-        return $this;
     }
 }

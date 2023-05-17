@@ -5,44 +5,30 @@ use Chamilo\Configuration\Package\PlatformPackageBundles;
 use Chamilo\Configuration\Package\Storage\DataClass\Package;
 use Chamilo\Configuration\Service\PackageContextSequencer;
 use Chamilo\Libraries\File\Filesystem;
-use Chamilo\Libraries\File\PathBuilder;
+use Chamilo\Libraries\File\SystemPathBuilder;
 use stdClass;
 
 /**
  * @package Chamilo\Libraries\Architecture\Resource
- *
- * @author Hans De Bisschop <hans.de.bisschop@ehb.be>
+ * @author  Hans De Bisschop <hans.de.bisschop@ehb.be>
  */
 class ResourceGenerator
 {
-    /**
-     * @var \Chamilo\Configuration\Package\PlatformPackageBundles
-     */
-    private $platformPackageBundles;
 
-    /**
-     * @var \Chamilo\Configuration\Service\PackageContextSequencer
-     */
-    private $packageContextSequencer;
+    private PackageContextSequencer $packageContextSequencer;
 
-    /**
-     * @var \Chamilo\Libraries\File\PathBuilder
-     */
-    private $pathBuilder;
+    private PlatformPackageBundles $platformPackageBundles;
 
-    /**
-     * @param \Chamilo\Configuration\Package\PlatformPackageBundles $platformPackageBundles
-     * @param \Chamilo\Configuration\Service\PackageContextSequencer $packageContextSequencer
-     * @param \Chamilo\Libraries\File\PathBuilder $pathBuilder
-     */
+    private SystemPathBuilder $systemPathBuilder;
+
     public function __construct(
         PlatformPackageBundles $platformPackageBundles, PackageContextSequencer $packageContextSequencer,
-        PathBuilder $pathBuilder
+        SystemPathBuilder $systemPathBuilder
     )
     {
         $this->platformPackageBundles = $platformPackageBundles;
         $this->packageContextSequencer = $packageContextSequencer;
-        $this->pathBuilder = $pathBuilder;
+        $this->systemPathBuilder = $systemPathBuilder;
     }
 
     /**
@@ -54,7 +40,7 @@ class ResourceGenerator
         stdClass $resourceDefinition, array &$resourceFiles, Package $package
     )
     {
-        $path = $this->getPathBuilder()->namespaceToFullPath($package->get_context());
+        $path = $this->getSystemPathBuilder()->namespaceToFullPath($package->get_context());
 
         if (is_array($resourceDefinition->input))
         {
@@ -71,7 +57,11 @@ class ResourceGenerator
         }
     }
 
-    protected function aggregateResources()
+    /**
+     * @return string[][]
+     * @throws \Exception
+     */
+    protected function aggregateResources(): array
     {
         $orderedPackageContexts = $this->getPackageContextSequencer()->sequencePackageContexts(
             $this->getPlatformPackageBundles()->get_packages_contexts()
@@ -89,6 +79,9 @@ class ResourceGenerator
         return $resourceFiles;
     }
 
+    /**
+     * @throws \Exception
+     */
     public function generateResources()
     {
         $aggregatedResourceFiles = $this->aggregateResources();
@@ -99,96 +92,48 @@ class ResourceGenerator
         }
     }
 
-    /**
-     * @return \Chamilo\Configuration\Service\PackageContextSequencer
-     */
     public function getPackageContextSequencer(): PackageContextSequencer
     {
         return $this->packageContextSequencer;
     }
 
-    /**
-     * @param \Chamilo\Configuration\Service\PackageContextSequencer $packageContextSequencer
-     */
-    public function setPackageContextSequencer(PackageContextSequencer $packageContextSequencer)
-    {
-        $this->packageContextSequencer = $packageContextSequencer;
-    }
-
-    /**
-     * @return \Chamilo\Libraries\File\PathBuilder
-     */
-    public function getPathBuilder(): PathBuilder
-    {
-        return $this->pathBuilder;
-    }
-
-    /**
-     * @param \Chamilo\Libraries\File\PathBuilder $pathBuilder
-     */
-    public function setPathBuilder(PathBuilder $pathBuilder)
-    {
-        $this->pathBuilder = $pathBuilder;
-    }
-
-    /**
-     * @return \Chamilo\Configuration\Package\PlatformPackageBundles
-     */
     public function getPlatformPackageBundles(): PlatformPackageBundles
     {
         return $this->platformPackageBundles;
     }
 
-    /**
-     * @param \Chamilo\Configuration\Package\PlatformPackageBundles $platformPackageBundles
-     */
-    public function setPlatformPackageBundles(PlatformPackageBundles $platformPackageBundles)
+    public function getSystemPathBuilder(): SystemPathBuilder
     {
-        $this->platformPackageBundles = $platformPackageBundles;
+        return $this->systemPathBuilder;
     }
 
-    /**
-     * @param string $outputPath
-     *
-     * @return boolean
-     */
-    protected function isOutputPathDirectory(string $outputPath)
+    protected function isOutputPathDirectory(string $outputPath): bool
     {
         return $outputPath[- 1] == DIRECTORY_SEPARATOR;
     }
 
-    /**
-     * @param string $resourcePath
-     *
-     * @return string
-     */
-    protected function parseResourcePath($resourcePath)
+    protected function parseResourcePath(string $resourcePath): string
     {
         return str_replace('/', DIRECTORY_SEPARATOR, $resourcePath);
     }
 
     /**
      * @param string[][] $resourceFiles
-     * @param \Chamilo\Configuration\Package\Storage\DataClass\Package $package
      */
     protected function processPackageResourceDefiniton(array &$resourceFiles, Package $package)
     {
-        if ($package instanceof Package)
+        foreach ($package->getResources() as $resourceDefinition)
         {
-            foreach ($package->getResources() as $resourceDefinition)
-            {
-                $this->addResourceDefinitiontoResourceFiles($resourceDefinition, $resourceFiles, $package);
-            }
+            $this->addResourceDefinitiontoResourceFiles($resourceDefinition, $resourceFiles, $package);
         }
     }
 
     /**
-     * @param string $outputPath
      * @param string[] $inputPaths
      */
-    protected function writeResource($outputPath, $inputPaths)
+    protected function writeResource(string $outputPath, array $inputPaths)
     {
-        $basePath = $this->getPathBuilder()->getBasePath();
+        $basePath = $this->getSystemPathBuilder()->getBasePath();
         $baseWebPath = realpath($basePath . '..') . DIRECTORY_SEPARATOR . 'web' . DIRECTORY_SEPARATOR;
 
         $fullOutputSourcePath = $basePath . $this->parseResourcePath($outputPath);
@@ -205,10 +150,9 @@ class ResourceGenerator
     }
 
     /**
-     * @param string $outputPath
      * @param string[] $inputPaths
      */
-    protected function writeResourcesFile($outputPath, $inputPaths)
+    protected function writeResourcesFile(string $outputPath, array $inputPaths)
     {
         if (count($inputPaths) == 1)
         {
@@ -228,10 +172,9 @@ class ResourceGenerator
     }
 
     /**
-     * @param string $outputPath
      * @param string[] $inputPaths
      */
-    protected function writeResourcesFolder($outputPath, $inputPaths)
+    protected function writeResourcesFolder(string $outputPath, array $inputPaths)
     {
         foreach ($inputPaths as $inputPath)
         {

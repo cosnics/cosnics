@@ -12,14 +12,12 @@ use Chamilo\Libraries\Architecture\Application\Application;
 use Chamilo\Libraries\Architecture\Application\Routing\UrlGenerator;
 use Chamilo\Libraries\Format\Structure\Glyph\IdentGlyph;
 use Chamilo\Libraries\Format\Structure\Glyph\NamespaceIdentGlyph;
-use Chamilo\Libraries\Format\Theme\ThemePathBuilder;
 use Chamilo\Libraries\Platform\ChamiloRequest;
 use Symfony\Component\Translation\Translator;
 
 /**
  * @package Chamilo\Core\Menu\Renderer\ItemRenderer
- *
- * @author Hans De Bisschop <hans.de.bisschop@ehb.be>
+ * @author  Hans De Bisschop <hans.de.bisschop@ehb.be>
  */
 class ApplicationItemRenderer extends ItemRenderer
 {
@@ -28,12 +26,12 @@ class ApplicationItemRenderer extends ItemRenderer
     private UrlGenerator $urlGenerator;
 
     public function __construct(
-        AuthorizationCheckerInterface $authorizationChecker, Translator $translator, CachedItemService $itemCacheService,
-        ThemePathBuilder $themePathBuilder, ChamiloRequest $request, RegistrationConsulter $registrationConsulter,
+        AuthorizationCheckerInterface $authorizationChecker, Translator $translator,
+        CachedItemService $itemCacheService, ChamiloRequest $request, RegistrationConsulter $registrationConsulter,
         UrlGenerator $urlGenerator
     )
     {
-        parent::__construct($authorizationChecker, $translator, $itemCacheService, $themePathBuilder, $request);
+        parent::__construct($authorizationChecker, $translator, $itemCacheService, $request);
 
         $this->registrationConsulter = $registrationConsulter;
         $this->urlGenerator = $urlGenerator;
@@ -92,7 +90,6 @@ class ApplicationItemRenderer extends ItemRenderer
     }
 
     /**
-     *
      * @param \Chamilo\Core\Menu\Storage\DataClass\ApplicationItem $item
      *
      * @return string
@@ -132,14 +129,6 @@ class ApplicationItemRenderer extends ItemRenderer
     public function getRegistrationConsulter(): RegistrationConsulter
     {
         return $this->registrationConsulter;
-    }
-
-    /**
-     * @param \Chamilo\Configuration\Service\Consulter\RegistrationConsulter $registrationConsulter
-     */
-    public function setRegistrationConsulter(RegistrationConsulter $registrationConsulter): void
-    {
-        $this->registrationConsulter = $registrationConsulter;
     }
 
     public function getUrlGenerator(): UrlGenerator
@@ -199,5 +188,13 @@ class ApplicationItemRenderer extends ItemRenderer
         }
 
         return parent::renderTitle($item);
+    }
+
+    /**
+     * @param \Chamilo\Configuration\Service\Consulter\RegistrationConsulter $registrationConsulter
+     */
+    public function setRegistrationConsulter(RegistrationConsulter $registrationConsulter): void
+    {
+        $this->registrationConsulter = $registrationConsulter;
     }
 }

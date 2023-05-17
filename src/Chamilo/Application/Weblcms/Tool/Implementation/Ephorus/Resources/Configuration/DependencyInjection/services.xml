@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8" ?>
-<container xmlns="http://symfony.com/schema/dic/services"
-           xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+<container xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+           xmlns="http://symfony.com/schema/dic/services"
            xsi:schemaLocation="http://symfony.com/schema/dic/services http://symfony.com/schema/dic/services/services-1.0.xsd">
     <services>
         <defaults autowire="true"
@@ -17,6 +17,10 @@
 
         <service id="Chamilo\Application\Weblcms\Tool\Implementation\Ephorus\Service\RequestManager"/>
         <service id="Chamilo\Application\Weblcms\Tool\Implementation\Ephorus\Renderer\ReportRenderer"/>
-        <service id="Chamilo\Application\Weblcms\Tool\Implementation\Ephorus\Service\ReportExporter"/>
+        <service id="Chamilo\Application\Weblcms\Tool\Implementation\Ephorus\Service\ReportExporter">
+            <argument key="$themeWebPathBuilder"
+                      type="service"
+                      id="Chamilo\Libraries\Format\Theme\ThemeWebPathBuilder"/>
+        </service>
     </services>
 </container>

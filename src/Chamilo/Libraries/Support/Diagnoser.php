@@ -3,7 +3,7 @@ namespace Chamilo\Libraries\Support;
 
 use Chamilo\Configuration\Service\Consulter\ConfigurationConsulter;
 use Chamilo\Libraries\File\ConfigurablePathBuilder;
-use Chamilo\Libraries\File\PathBuilder;
+use Chamilo\Libraries\File\SystemPathBuilder;
 use Chamilo\Libraries\Format\Structure\Glyph\FontAwesomeGlyph;
 use Chamilo\Libraries\Format\Table\SimpleTableRenderer;
 use Chamilo\Libraries\Format\Tabs\AbstractTab;
@@ -37,9 +37,9 @@ class Diagnoser
 
     protected SimpleTableRenderer $diagnoserTableRenderer;
 
-    protected PathBuilder $pathBuilder;
-
     protected ChamiloRequest $request;
+
+    protected SystemPathBuilder $systemPathBuilder;
 
     protected TabsRenderer $tabsRenderer;
 
@@ -47,14 +47,14 @@ class Diagnoser
 
     public function __construct(
         ConfigurationConsulter $configurationConsulter, Connection $connection, ChamiloRequest $request,
-        PathBuilder $pathBuilder, ConfigurablePathBuilder $configurablePathBuilder, Translator $translator,
+        SystemPathBuilder $systemPathBuilder, ConfigurablePathBuilder $configurablePathBuilder, Translator $translator,
         DatetimeUtilities $datetimeUtilities, TabsRenderer $tabsRenderer, SimpleTableRenderer $diagnoserTableRenderer
     )
     {
         $this->configurationConsulter = $configurationConsulter;
         $this->connection = $connection;
         $this->request = $request;
-        $this->pathBuilder = $pathBuilder;
+        $this->systemPathBuilder = $systemPathBuilder;
         $this->configurablePathBuilder = $configurablePathBuilder;
         $this->translator = $translator;
         $this->datetimeUtilities = $datetimeUtilities;
@@ -62,6 +62,9 @@ class Diagnoser
         $this->diagnoserTableRenderer = $diagnoserTableRenderer;
     }
 
+    /**
+     * @throws \TableException
+     */
     public function render(): string
     {
         $sections = ['Chamilo', 'Php', 'Database', 'Webserver'];
@@ -98,23 +101,23 @@ class Diagnoser
         {
             case self::STATUS_OK :
                 $glyph = new FontAwesomeGlyph(
-                    'check-circle', ['text-success'], $status, 'fas'
+                    'check-circle', ['text-success'], (string) $status, 'fas'
                 );
                 break;
             case self::STATUS_WARNING :
                 $glyph = new FontAwesomeGlyph(
-                    'exclamation-circle', ['text-warning'], $status, 'fas'
+                    'exclamation-circle', ['text-warning'], (string) $status, 'fas'
                 );
                 break;
             case self::STATUS_ERROR :
                 $glyph = new FontAwesomeGlyph(
-                    'minus-circle', ['text-danger'], $status, 'fas'
+                    'minus-circle', ['text-danger'], (string) $status, 'fas'
                 );
                 break;
             case self::STATUS_INFORMATION :
             default:
                 $glyph = new FontAwesomeGlyph(
-                    'lightbulb', ['text-info'], $status, 'fas'
+                    'lightbulb', ['text-info'], (string) $status, 'fas'
                 );
                 break;
         }
@@ -147,16 +150,12 @@ class Diagnoser
 
     public function formatOnOff(string $value): string
     {
-        return $value ? $this->getTranslation('ConfirmOn', []) : $this->getTranslation(
-            'ConfirmOff', []
-        );
+        return $this->getTranslation($value ? 'ConfirmOn' : 'ConfirmOff');
     }
 
     public function formatYesNo(string $value): string
     {
-        return $value ? $this->getTranslation('ConfirmYes', []) : $this->getTranslation(
-            'ConfirmNo', []
-        );
+        return $this->getTranslation($value ? 'ConfirmYes' : 'ConfirmNo');
     }
 
     /**
@@ -168,7 +167,7 @@ class Diagnoser
         $array = [];
 
         $writable_folders = [];
-        $writable_folders[] = $this->pathBuilder->getPublicStoragePath();
+        $writable_folders[] = $this->systemPathBuilder->getPublicStoragePath();
         $writable_folders[] = $this->configurablePathBuilder->getRepositoryPath();
         $writable_folders[] = $this->configurablePathBuilder->getTemporaryPath();
 
@@ -183,7 +182,7 @@ class Diagnoser
             );
         }
 
-        $installationPath = $this->pathBuilder->namespaceToFullPath('Chamilo\Core\Install');
+        $installationPath = $this->systemPathBuilder->namespaceToFullPath('Chamilo\Core\Install');
 
         $exists = !file_exists($installationPath);
         $status = $exists ? self::STATUS_OK : self::STATUS_WARNING;
@@ -194,7 +193,7 @@ class Diagnoser
 
         $date = $this->configurationConsulter->getSetting(['Chamilo\Configuration', 'general', 'install_date']);
         $date = $this->datetimeUtilities->formatLocaleDate(
-            $this->getTranslation('DateFormatShort', []) . ', ' . $this->getTranslation('TimeNoSecFormat', []), $date
+            $this->getTranslation('DateFormatShort') . ', ' . $this->getTranslation('TimeNoSecFormat'), (int) $date
         );
         $array[] = $this->build_setting(
             1, '[INFORMATION]', $this->getTranslation('InstallDate'), '', $date, '', null,

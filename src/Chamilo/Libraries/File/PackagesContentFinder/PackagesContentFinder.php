@@ -30,20 +30,20 @@ abstract class PackagesContentFinder
      */
     private $packages;
 
-    private SystemPathBuilder $pathBuilder;
+    private SystemPathBuilder $systemPathBuilder;
 
     /**
      * Constructor
      *
-     * @param \Chamilo\Libraries\File\SystemPathBuilder $pathBuilder
+     * @param \Chamilo\Libraries\File\SystemPathBuilder $systemPathBuilder
      * @param string[] $packages
      * @param string $cacheFile
      */
-    public function __construct(SystemPathBuilder $pathBuilder, array $packages = [], $cacheFile = null)
+    public function __construct(SystemPathBuilder $systemPathBuilder, array $packages = [], $cacheFile = null)
     {
         $this->packages = $packages;
         $this->cacheFile = $cacheFile;
-        $this->pathBuilder = $pathBuilder;
+        $this->systemPathBuilder = $systemPathBuilder;
     }
 
     /**
@@ -92,7 +92,7 @@ abstract class PackagesContentFinder
      */
     protected function getPackagePath($package)
     {
-        return $this->pathBuilder->namespaceToFullPath($package);
+        return $this->systemPathBuilder->namespaceToFullPath($package);
     }
 
     /**
@@ -102,5 +102,5 @@ abstract class PackagesContentFinder
      *
      * @return string[]
      */
-    public abstract function handlePackage($package);
+    abstract public function handlePackage($package);
 }

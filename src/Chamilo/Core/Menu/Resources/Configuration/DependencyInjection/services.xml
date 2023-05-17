@@ -52,7 +52,12 @@
         <service id="Chamilo\Core\Menu\Storage\Repository\ItemRepository"/>
         <service id="Chamilo\Core\Menu\Storage\Repository\RightsRepository"/>
 
-        <service id="Chamilo\Core\Menu\Renderer\MenuRenderer"/>
+        <service id="Chamilo\Core\Menu\Renderer\MenuRenderer">
+            <argument key="$themeWebPathBuilder"
+                      type="service"
+                      id="Chamilo\Libraries\Format\Theme\ThemeWebPathBuilder"/>
+        </service>
+
         <service id="Chamilo\Core\Menu\Renderer\Item\ApplicationItemRenderer"/>
         <service id="Chamilo\Core\Menu\Renderer\Item\CategoryItemRenderer"/>
         <service id="Chamilo\Core\Menu\Renderer\Item\LanguageCategoryItemRenderer"/>

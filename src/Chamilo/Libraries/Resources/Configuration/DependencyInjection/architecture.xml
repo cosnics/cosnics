@@ -22,7 +22,11 @@
         <service id="Chamilo\Libraries\Architecture\Factory\ApplicationFactory"/>
         <service id="Chamilo\Libraries\Architecture\ClassnameUtilities"/>
 
-        <service id="Chamilo\Libraries\Architecture\ErrorHandler\ErrorHandler"/>
+        <service id="Chamilo\Libraries\Architecture\ErrorHandler\ErrorHandler">
+            <argument key="$themeSystemPathBuilder"
+                      type="service"
+                      id="Chamilo\Libraries\Format\Theme\ThemeSystemPathBuilder"/>
+        </service>
 
         <service id="Chamilo\Libraries\Architecture\ErrorHandler\ExceptionLogger">
             <factory service="Chamilo\Libraries\Architecture\ErrorHandler\ExceptionLogger\ExceptionLoggerFactory"
