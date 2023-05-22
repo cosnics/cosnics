@@ -6,14 +6,11 @@ use Chamilo\Core\Repository\Form\ContentObjectForm;
 use Chamilo\Core\Repository\Quota\Calculator;
 use Chamilo\Core\User\Storage\DataClass\User;
 use Chamilo\Core\User\Storage\DataManager;
-use Chamilo\Libraries\File\Path;
 use Chamilo\Libraries\File\Properties\FileProperties;
-use Chamilo\Libraries\Format\Utilities\ResourceManager;
 use Chamilo\Libraries\Translation\Translation;
 use Chamilo\Libraries\Utilities\StringUtilities;
 
 /**
- *
  * @package repository.lib.content_object.external_calendar
  */
 class ExternalCalendarForm extends ContentObjectForm
@@ -48,7 +45,7 @@ class ExternalCalendarForm extends ContentObjectForm
 
         $this->add_textfield(
             ExternalCalendar::PROPERTY_PATH . '[' . ExternalCalendar::PATH_TYPE_REMOTE . ']', null, false,
-            array('size' => '100')
+            ['size' => '100']
         );
 
         $this->addElement('html', '</div>');
@@ -83,8 +80,8 @@ class ExternalCalendarForm extends ContentObjectForm
 
         $this->addElement('html', '</div>');
         $this->addElement(
-            'html', ResourceManager::getInstance()->getResourceHtml(
-            Path::getInstance()->getJavascriptPath('Chamilo\Core\Repository\ContentObject\ExternalCalendar', true) .
+            'html', $this->getResourceManager()->getResourceHtml(
+            $this->getWebPathBuilder()->getJavascriptPath('Chamilo\Core\Repository\ContentObject\ExternalCalendar') .
             'ExternalCalendar.js'
         )
         );

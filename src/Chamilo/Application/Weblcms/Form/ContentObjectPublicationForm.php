@@ -21,7 +21,6 @@ use Chamilo\Libraries\Architecture\Exceptions\ObjectNotExistException;
 use Chamilo\Libraries\Architecture\Exceptions\UserException;
 use Chamilo\Libraries\Architecture\Interfaces\ComplexContentObjectSupport;
 use Chamilo\Libraries\File\FileLogger;
-use Chamilo\Libraries\File\Path;
 use Chamilo\Libraries\File\Redirect;
 use Chamilo\Libraries\Format\Form\Element\AdvancedElementFinder\AdvancedElementFinderElements;
 use Chamilo\Libraries\Format\Form\Element\AdvancedElementFinder\AdvancedElementFinderElementTypes;
@@ -191,7 +190,7 @@ class ContentObjectPublicationForm extends BasePublicationForm
     {
         $this->addElement(
             'html', ResourceManager::getInstance()->getResourceHtml(
-            Path::getInstance()->namespaceToFullPath(Manager::CONTEXT, true) .
+            $this->getWebPathBuilder()->namespaceToFullPath(Manager::CONTEXT) .
             'Resources/Javascript/ContentObjectPublicationForm.js'
         )
         );
@@ -468,7 +467,7 @@ class ContentObjectPublicationForm extends BasePublicationForm
 
         $this->addElement(
             'html', ResourceManager::getInstance()->getResourceHtml(
-            Path::getInstance()->getJavascriptPath('Chamilo\Application\Weblcms', true) . 'RightsForm.js'
+            $this->getWebPathBuilder()->getJavascriptPath('Chamilo\Application\Weblcms') . 'RightsForm.js'
         )
         );
 
@@ -780,14 +779,14 @@ class ContentObjectPublicationForm extends BasePublicationForm
 
         if ($logMails)
         {
-            $dir = Path::getInstance()->getLogPath() . 'mail';
+            $dir = $this->getConfigurablePathBuilder()->getLogPath() . 'mail';
 
             if (!file_exists($dir) and !is_dir($dir))
             {
                 mkdir($dir);
             }
 
-            $today = date('Ymd', mktime());
+            $today = date('Ymd', time());
             $logfile = $dir . '//' . "mails_sent_$today" . '.log';
             $mail_log = new FileLogger($logfile, true);
             $mail_log->log_message($log, true);

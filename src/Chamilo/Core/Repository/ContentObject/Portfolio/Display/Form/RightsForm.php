@@ -130,8 +130,8 @@ class RightsForm extends FormValidator
         $this->addGroup($buttons, self::PROPERTY_BUTTONS, null, '&nbsp;', false);
 
         $this->addElement(
-            'html', ResourceManager::getInstance()->getResourceHtml(
-            Path::getInstance()->getJavascriptPath('Chamilo\Core\Repository\ContentObject\Portfolio\Display', true) .
+            'html', $this->getResourceManager()->getResourceHtml(
+            $this->getWebPathBuilder()->getJavascriptPath('Chamilo\Core\Repository\ContentObject\Portfolio\Display') .
             'RightsForm.js'
         )
         );

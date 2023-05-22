@@ -3,15 +3,12 @@ namespace Chamilo\Libraries\Calendar\Form;
 
 use Chamilo\Core\Repository\Form\ContentObjectForm;
 use Chamilo\Libraries\Calendar\Event\RecurringContentObject;
-use Chamilo\Libraries\File\Path;
-use Chamilo\Libraries\Format\Utilities\ResourceManager;
 use Chamilo\Libraries\Utilities\DatetimeUtilities;
 
 /**
  * @package Chamilo\Core\Repository\ContentObject\CalendarEvent\Form
- *
- * @author Hans De Bisschop <hans.de.bisschop@ehb.be>
- * @author Dieter De Neef
+ * @author  Hans De Bisschop <hans.de.bisschop@ehb.be>
+ * @author  Dieter De Neef
  */
 class RecurringContentObjectForm extends ContentObjectForm
 {
@@ -323,8 +320,8 @@ class RecurringContentObjectForm extends ContentObjectForm
 
         $this->addElement('html', implode(PHP_EOL, $html));
         $this->addElement(
-            'html', ResourceManager::getInstance()->getResourceHtml(
-            Path::getInstance()->getJavascriptPath('Chamilo\Libraries\Calendar', true) .
+            'html', $this->getResourceManager()->getResourceHtml(
+            $this->getWebPathBuilder()->getJavascriptPath('Chamilo\Libraries\Calendar',) .
             'jquery.contentObjectRecurrenceForm.js'
         )
         );

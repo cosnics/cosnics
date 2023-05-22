@@ -4,14 +4,11 @@ namespace Chamilo\Core\Repository\ContentObject\AssessmentMatrixQuestion\Form;
 use Chamilo\Core\Repository\ContentObject\AssessmentMatrixQuestion\Storage\DataClass\AssessmentMatrixQuestion;
 use Chamilo\Core\Repository\ContentObject\AssessmentMatrixQuestion\Storage\DataClass\AssessmentMatrixQuestionOption;
 use Chamilo\Core\Repository\Form\ContentObjectForm;
-use Chamilo\Libraries\File\Path;
 use Chamilo\Libraries\Format\Structure\Glyph\FontAwesomeGlyph;
-use Chamilo\Libraries\Format\Utilities\ResourceManager;
 use Chamilo\Libraries\Translation\Translation;
 use Chamilo\Libraries\Utilities\StringUtilities;
 
 /**
- *
  * @package repository.lib.content_object.matrix_question
  */
 class AssessmentMatrixQuestionForm extends ContentObjectForm
@@ -58,7 +55,7 @@ class AssessmentMatrixQuestionForm extends ContentObjectForm
 
         $buttons = [];
         $buttons[] = $this->createElement(
-            'style_button', 'add_match[]', Translation::get('AddMatch'), array('id' => 'add_match'), null,
+            'style_button', 'add_match[]', Translation::get('AddMatch'), ['id' => 'add_match'], null,
             new FontAwesomeGlyph('plus')
         );
         $this->addGroup($buttons, 'question_buttons', null, '', false);
@@ -104,13 +101,13 @@ class AssessmentMatrixQuestionForm extends ContentObjectForm
                 {
                     $group[] = $this->createElement(
                         'style_button', 'remove_match[' . $match_number . ']', null,
-                        array('class' => 'remove_match', 'id' => 'remove_match_' . $match_number), null,
+                        ['class' => 'remove_match', 'id' => 'remove_match_' . $match_number], null,
                         new FontAwesomeGlyph('times', [], null, 'fas')
                     );
                 }
                 else
                 {
-                    $glyph = new FontAwesomeGlyph('times', array('text-muted', 'remove_match'));
+                    $glyph = new FontAwesomeGlyph('times', ['text-muted', 'remove_match']);
                     $group[] = &$this->createElement('static', null, null, $glyph->render());
                 }
 
@@ -180,12 +177,12 @@ class AssessmentMatrixQuestionForm extends ContentObjectForm
 
         $buttons = [];
         $buttons[] = $this->createElement(
-            'style_button', 'change_matrix_type[]', $switch_label, array('class' => 'change_matrix_type'), null,
+            'style_button', 'change_matrix_type[]', $switch_label, ['class' => 'change_matrix_type'], null,
             new FontAwesomeGlyph('retweet')
         );
         $buttons[] = $this->createElement(
-            'style_button', 'add_option[]', Translation::get('AddMatrixQuestionOption'), array('id' => 'add_option'),
-            null, new FontAwesomeGlyph('plus')
+            'style_button', 'add_option[]', Translation::get('AddMatrixQuestionOption'), ['id' => 'add_option'], null,
+            new FontAwesomeGlyph('plus')
         );
         $this->addGroup($buttons, 'question_buttons', null, '', false);
 
@@ -228,7 +225,7 @@ class AssessmentMatrixQuestionForm extends ContentObjectForm
 
                 $group[] = $this->createElement(
                     'select', 'matches_to[' . $option_number . ']', Translation::get('Matches'), $matches,
-                    array('class' => 'option_matches')
+                    ['class' => 'option_matches']
                 );
                 $group[2]->setMultiple($multiple);
                 $group[] = $this->create_html_editor(
@@ -244,13 +241,13 @@ class AssessmentMatrixQuestionForm extends ContentObjectForm
                 {
                     $group[] = $this->createElement(
                         'style_button', 'remove_option[' . $option_number . ']', null,
-                        array('class' => 'remove_option', 'id' => 'remove_option_' . $option_number), null,
+                        ['class' => 'remove_option', 'id' => 'remove_option_' . $option_number], null,
                         new FontAwesomeGlyph('times', [], null, 'fas')
                     );
                 }
                 else
                 {
-                    $glyph = new FontAwesomeGlyph('times', array('text-muted', 'remove_option'));
+                    $glyph = new FontAwesomeGlyph('times', ['text-muted', 'remove_option']);
                     $group[] = &$this->createElement('static', null, null, $glyph->render());
                 }
 
@@ -259,14 +256,14 @@ class AssessmentMatrixQuestionForm extends ContentObjectForm
                 );
 
                 $this->addGroupRule(
-                    AssessmentMatrixQuestionOption::PROPERTY_VALUE . '_' . $option_number, array(
-                        AssessmentMatrixQuestionOption::PROPERTY_SCORE . '[' . $option_number . ']' => array(
-                            array(
+                    AssessmentMatrixQuestionOption::PROPERTY_VALUE . '_' . $option_number, [
+                        AssessmentMatrixQuestionOption::PROPERTY_SCORE . '[' . $option_number . ']' => [
+                            [
                                 Translation::get('ThisFieldShouldBeNumeric', null, StringUtilities::LIBRARIES),
                                 'numeric'
-                            )
-                        )
-                    )
+                            ]
+                        ]
+                    ]
                 );
 
                 $renderer->setElementTemplate(
@@ -298,9 +295,9 @@ class AssessmentMatrixQuestionForm extends ContentObjectForm
         parent::build_creation_form();
         $this->build_options_and_matches();
         $this->addElement(
-            'html', ResourceManager::getInstance()->getResourceHtml(
-            Path::getInstance()->getJavascriptPath(
-                'Chamilo\Core\Repository\ContentObject\AssessmentMatrixQuestion', true
+            'html', $this->getResourceManager()->getResourceHtml(
+            $this->getWebPathBuilder()->getJavascriptPath(
+                'Chamilo\Core\Repository\ContentObject\AssessmentMatrixQuestion'
             ) . 'AssessmentMatrixQuestion.js'
         )
         );
@@ -311,9 +308,9 @@ class AssessmentMatrixQuestionForm extends ContentObjectForm
         parent::build_editing_form();
         $this->build_options_and_matches();
         $this->addElement(
-            'html', ResourceManager::getInstance()->getResourceHtml(
-            Path::getInstance()->getJavascriptPath(
-                'Chamilo\Core\Repository\ContentObject\AssessmentMatrixQuestion', true
+            'html', $this->getResourceManager()->getResourceHtml(
+            $this->getWebPathBuilder()->getJavascriptPath(
+                'Chamilo\Core\Repository\ContentObject\AssessmentMatrixQuestion'
             ) . 'AssessmentMatrixQuestion.js'
         )
         );
@@ -462,12 +459,12 @@ class AssessmentMatrixQuestionForm extends ContentObjectForm
         }
 
         $this->addElement(
-            'hidden', 'mq_number_of_options', $_SESSION['mq_number_of_options'], array('id' => 'mq_number_of_options')
+            'hidden', 'mq_number_of_options', $_SESSION['mq_number_of_options'], ['id' => 'mq_number_of_options']
         );
         $this->addElement(
-            'hidden', 'mq_number_of_matches', $_SESSION['mq_number_of_matches'], array('id' => 'mq_number_of_matches')
+            'hidden', 'mq_number_of_matches', $_SESSION['mq_number_of_matches'], ['id' => 'mq_number_of_matches']
         );
-        $this->addElement('hidden', 'mq_matrix_type', $_SESSION['mq_matrix_type'], array('id' => 'mq_matrix_type'));
+        $this->addElement('hidden', 'mq_matrix_type', $_SESSION['mq_matrix_type'], ['id' => 'mq_matrix_type']);
     }
 
     public function validate()

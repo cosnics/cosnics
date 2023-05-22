@@ -3,37 +3,35 @@ namespace Chamilo\Libraries\Rights\Form;
 
 use Chamilo\Core\User\Integration\Chamilo\Libraries\Rights\Service\UserEntityProvider;
 use Chamilo\Core\User\Storage\DataClass\User;
-use Chamilo\Libraries\File\Path;
 use Chamilo\Libraries\Format\Form\Element\AdvancedElementFinder\AdvancedElementFinderElements;
 use Chamilo\Libraries\Format\Form\Element\AdvancedElementFinder\AdvancedElementFinderElementTypes;
 use Chamilo\Libraries\Format\Form\FormValidator;
 use Chamilo\Libraries\Format\Structure\Glyph\FontAwesomeGlyph;
-use Chamilo\Libraries\Format\Utilities\ResourceManager;
 use Chamilo\Libraries\Utilities\StringUtilities;
 
 /**
  * @package Chamilo\Libraries\Rights\Form
- * @author Sven Vanpoucke
- * @author Hans De Bisschop <hans.de.bisschop@ehb.be>
+ * @author  Sven Vanpoucke
+ * @author  Hans De Bisschop <hans.de.bisschop@ehb.be>
  */
 class RightsForm extends FormValidator
 {
-    const INHERIT_FALSE = 1;
-    const INHERIT_TRUE = 0;
+    public const INHERIT_FALSE = 1;
+    public const INHERIT_TRUE = 0;
 
-    const PROPERTY_BUTTONS = 'buttons';
-    const PROPERTY_INHERIT = 'inherit';
-    const PROPERTY_RESET = 'reset';
-    const PROPERTY_RIGHT_OPTION = 'right_option';
-    const PROPERTY_SUBMIT = 'submit';
-    const PROPERTY_TARGETS = 'targets';
+    public const PROPERTY_BUTTONS = 'buttons';
+    public const PROPERTY_INHERIT = 'inherit';
+    public const PROPERTY_RESET = 'reset';
+    public const PROPERTY_RIGHT_OPTION = 'right_option';
+    public const PROPERTY_SUBMIT = 'submit';
+    public const PROPERTY_TARGETS = 'targets';
 
-    const RIGHT_OPTION_ALL = 0;
-    const RIGHT_OPTION_ME = 1;
-    const RIGHT_OPTION_SELECT = 2;
+    public const RIGHT_OPTION_ALL = 0;
+    public const RIGHT_OPTION_ME = 1;
+    public const RIGHT_OPTION_SELECT = 2;
 
     /**
-     * @var integer[]
+     * @var int
      */
     private $availableRights;
 
@@ -43,15 +41,15 @@ class RightsForm extends FormValidator
     private $entities;
 
     /**
-     * @var boolean
+     * @var bool
      */
     private $isAllowedToInherit;
 
     /**
      * @param string $postBackUrl
      * @param \Symfony\Component\Translation\Translator $translator
-     * @param boolean $isAllowedToInherit
-     * @param integer[] $availableRights
+     * @param bool $isAllowedToInherit
+     * @param int $availableRights
      * @param \Chamilo\Libraries\Rights\Interfaces\RightsEntityProvider[] $entities
      *
      * @throws \Exception
@@ -110,8 +108,8 @@ class RightsForm extends FormValidator
         $this->addGroup($buttons, self::PROPERTY_BUTTONS, null, '&nbsp;', false);
 
         $this->addElement(
-            'html', ResourceManager::getInstance()->getResourceHtml(
-            Path::getInstance()->getJavascriptPath('Chamilo\Core\Rights\Editor', true) . 'RightsForm.js'
+            'html', $this->getResourceManager()->getResourceHtml(
+            $this->getWebPathBuilder()->getJavascriptPath('Chamilo\Core\Rights\Editor') . 'RightsForm.js'
         )
         );
     }
@@ -129,22 +127,22 @@ class RightsForm extends FormValidator
 
         if ($this->isAllowedToInherit())
         {
-            $group[] = &$this->createElement(
+            $group[] = $this->createElement(
                 'radio', null, null, $translator->trans('InheritRights', [], 'Chamilo\Libraries\Rights'),
-                self::INHERIT_TRUE, array('class' => 'inherit_rights_selector')
+                self::INHERIT_TRUE, ['class' => 'inherit_rights_selector']
             );
         }
         else
         {
-            $group[] = &$this->createElement(
+            $group[] = $this->createElement(
                 'radio', null, null, $translator->trans('InheritRights', [], 'Chamilo\Libraries\Rights'),
-                self::INHERIT_TRUE, array('class' => 'inherit_rights_selector', 'disabled' => 'disabled')
+                self::INHERIT_TRUE, ['class' => 'inherit_rights_selector', 'disabled' => 'disabled']
             );
         }
 
-        $group[] = &$this->createElement(
+        $group[] = $this->createElement(
             'radio', null, null, $translator->trans('UseSpecificRights', [], 'Chamilo\Libraries\Rights'),
-            self::INHERIT_FALSE, array('class' => 'specific_rights_selector')
+            self::INHERIT_FALSE, ['class' => 'specific_rights_selector']
         );
 
         $this->addGroup($group, self::PROPERTY_INHERIT, null, '');
@@ -154,7 +152,7 @@ class RightsForm extends FormValidator
      * Builds the form for a given right
      *
      * @param string $rightName
-     * @param integer $rightIdentifier
+     * @param int $rightIdentifier
      */
     protected function buildRightForm($rightName, $rightIdentifier)
     {
@@ -169,15 +167,15 @@ class RightsForm extends FormValidator
 
         $group[] = &$this->createElement(
             'radio', null, null, $translator->trans('Everyone', [], 'Chamilo\Libraries\Rights'), self::RIGHT_OPTION_ALL,
-            array('class' => 'other_option_selected')
+            ['class' => 'other_option_selected']
         );
         $group[] = &$this->createElement(
             'radio', null, null, $translator->trans('OnlyForMe', [], 'Chamilo\Libraries\Rights'), self::RIGHT_OPTION_ME,
-            array('class' => 'other_option_selected')
+            ['class' => 'other_option_selected']
         );
         $group[] = &$this->createElement(
             'radio', null, null, $translator->trans('SelectSpecificEntities', [], 'Chamilo\Libraries\Rights'),
-            self::RIGHT_OPTION_SELECT, array('class' => 'entity_option_selected')
+            self::RIGHT_OPTION_SELECT, ['class' => 'entity_option_selected']
         );
 
         $this->addGroup($group, $name, '', '');
@@ -199,7 +197,7 @@ class RightsForm extends FormValidator
     }
 
     /**
-     * @return integer[]
+     * @return int
      */
     public function getAvailableRights(): array
     {
@@ -215,7 +213,7 @@ class RightsForm extends FormValidator
     }
 
     /**
-     * @param integer $entityType
+     * @param int $entityType
      *
      * @return \Chamilo\Libraries\Rights\Interfaces\RightsEntityProvider
      */
@@ -256,8 +254,8 @@ class RightsForm extends FormValidator
 
     /**
      * @param \Chamilo\Core\User\Storage\DataClass\User $user
-     * @param integer $rightIdentifier
-     * @param integer[][] $targetEntities
+     * @param int $rightIdentifier
+     * @param int $targetEntities
      *
      * @throws \Exception
      */
@@ -313,8 +311,8 @@ class RightsForm extends FormValidator
 
     /**
      * @param \Chamilo\Core\User\Storage\DataClass\User $user
-     * @param boolean $rightsLocationInherits
-     * @param integer[][][] $targetEntities
+     * @param bool $rightsLocationInherits
+     * @param int $targetEntities
      *
      * @throws \Exception
      */

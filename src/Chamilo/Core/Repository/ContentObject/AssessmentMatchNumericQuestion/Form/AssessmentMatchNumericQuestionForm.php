@@ -5,22 +5,19 @@ use Chamilo\Core\Repository\ContentObject\AssessmentMatchNumericQuestion\Storage
 use Chamilo\Core\Repository\ContentObject\AssessmentMatchNumericQuestion\Storage\DataClass\AssessmentMatchNumericQuestionOption;
 use Chamilo\Core\Repository\Form\ContentObjectForm;
 use Chamilo\Libraries\Architecture\ClassnameUtilities;
-use Chamilo\Libraries\File\Path;
 use Chamilo\Libraries\Format\Structure\ActionBar\Button;
 use Chamilo\Libraries\Format\Structure\ActionBar\ButtonToolBar;
 use Chamilo\Libraries\Format\Structure\ActionBar\Renderer\ButtonToolBarRenderer;
 use Chamilo\Libraries\Format\Structure\Glyph\FontAwesomeGlyph;
 use Chamilo\Libraries\Format\Tabs\Form\FormTab;
-use Chamilo\Libraries\Format\Utilities\ResourceManager;
 use Chamilo\Libraries\Platform\Session\Request;
 use Chamilo\Libraries\Platform\Session\Session;
 use Chamilo\Libraries\Translation\Translation;
 
 /**
- *
  * @package Chamilo\Core\Repository\ContentObject\AssessmentMatchNumericQuestion\Form
- * @author Hans De Bisschop <hans.de.bisschop@ehb.be>
- * @author Magali Gillard <magali.gillard@ehb.be>
+ * @author  Hans De Bisschop <hans.de.bisschop@ehb.be>
+ * @author  Magali Gillard <magali.gillard@ehb.be>
  */
 class AssessmentMatchNumericQuestionForm extends ContentObjectForm
 {
@@ -29,7 +26,7 @@ class AssessmentMatchNumericQuestionForm extends ContentObjectForm
     {
         $this->getTabsCollection()->add(
             new FormTab(
-                'add-hint', Translation::get('AddHint'), new FontAwesomeGlyph('magic', array('fa-sm')), 'buildHintForm'
+                'add-hint', Translation::get('AddHint'), new FontAwesomeGlyph('magic', ['fa-sm']), 'buildHintForm'
             )
         );
     }
@@ -63,7 +60,7 @@ class AssessmentMatchNumericQuestionForm extends ContentObjectForm
 
         $this->addElement('category', Translation::get('PossibleAnswers'));
         $this->addElement(
-            'hidden', 'match_number_of_options', $number_of_options, array('id' => 'match_number_of_options')
+            'hidden', 'match_number_of_options', $number_of_options, ['id' => 'match_number_of_options']
         );
 
         $htmlEditorOptions = [];
@@ -90,7 +87,7 @@ class AssessmentMatchNumericQuestionForm extends ContentObjectForm
                 // Answer
                 $this->addElement(
                     'textarea', AssessmentMatchNumericQuestionOption::PROPERTY_VALUE . '[' . $option_number . ']',
-                    Translation::get('Answer'), array('class' => 'form-control', 'style' => 'height: 80px;')
+                    Translation::get('Answer'), ['class' => 'form-control', 'style' => 'height: 80px;']
                 );
 
                 $renderer->setElementTemplate(
@@ -210,9 +207,9 @@ class AssessmentMatchNumericQuestionForm extends ContentObjectForm
         );
 
         $this->addElement(
-            'html', ResourceManager::getInstance()->getResourceHtml(
-            Path::getInstance()->getJavascriptPath(
-                'Chamilo\Core\Repository\ContentObject\AssessmentMatchNumericQuestion', true
+            'html', $this->getResourceManager()->getResourceHtml(
+            $this->getWebPathBuilder()->getJavascriptPath(
+                'Chamilo\Core\Repository\ContentObject\AssessmentMatchNumericQuestion'
             ) . 'AssessmentMatchNumericQuestion.js'
         )
         );
@@ -283,7 +280,7 @@ class AssessmentMatchNumericQuestionForm extends ContentObjectForm
         $this->add_options_to_object();
     }
 
-    public function setDefaults($defaults = array(), $filter = null)
+    public function setDefaults($defaults = [], $filter = null)
     {
         if (!$this->isSubmitted())
         {

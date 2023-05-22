@@ -6,16 +6,13 @@ use Chamilo\Core\Repository\Manager;
 use Chamilo\Core\Repository\Menu\ContentObjectCategoryMenu;
 use Chamilo\Core\Repository\Storage\DataClass\ContentObject;
 use Chamilo\Libraries\Architecture\Exceptions\UserException;
-use Chamilo\Libraries\File\Path;
 use Chamilo\Libraries\Format\Form\FormValidator;
 use Chamilo\Libraries\Format\Menu\OptionsMenuRenderer;
 use Chamilo\Libraries\Format\Structure\Glyph\FontAwesomeGlyph;
-use Chamilo\Libraries\Format\Utilities\ResourceManager;
 use Chamilo\Libraries\Translation\Translation;
 use Chamilo\Libraries\Utilities\StringUtilities;
 
 /**
- *
  * @package repository.lib
  */
 
@@ -24,14 +21,13 @@ use Chamilo\Libraries\Utilities\StringUtilities;
  */
 abstract class ContentObjectImportForm extends FormValidator
 {
-    const IMPORT_FILE_NAME = 'content_object_file';
+    public const IMPORT_FILE_NAME = 'content_object_file';
 
-    const NEW_CATEGORY = 'new_category';
+    public const NEW_CATEGORY = 'new_category';
 
-    const PROPERTY_TYPE = 'type';
+    public const PROPERTY_TYPE = 'type';
 
     /**
-     *
      * @var ImportFormParameters
      */
     protected $importFormParameters;
@@ -60,14 +56,14 @@ abstract class ContentObjectImportForm extends FormValidator
 
         $buttons[] = $this->createElement(
             'style_submit_button', 'import_button', Translation::get('Import', null, StringUtilities::LIBRARIES),
-            array('id' => 'import_button'), null, new FontAwesomeGlyph('import')
+            ['id' => 'import_button'], null, new FontAwesomeGlyph('import')
         );
 
         $this->addGroup($buttons, 'buttons', null, '&nbsp;', false);
 
         $this->addElement(
-            'html', ResourceManager::getInstance()->getResourceHtml(
-            Path::getInstance()->getJavascriptPath('Chamilo\Core\Repository', true) . 'Import.js'
+            'html', $this->getResourceManager()->getResourceHtml(
+            $this->getWebPathBuilder()->getJavascriptPath('Chamilo\Core\Repository') . 'Import.js'
         )
         );
     }
@@ -81,7 +77,7 @@ abstract class ContentObjectImportForm extends FormValidator
 
         $this->addElement(
             'select', ContentObject::PROPERTY_PARENT_ID, Translation::get('CategoryTypeName'), $this->get_categories(),
-            array('class' => 'form-control', 'id' => 'parent_id')
+            ['class' => 'form-control', 'id' => 'parent_id']
         );
 
         if (!$this->implementsDropZoneSupport())
@@ -95,8 +91,7 @@ abstract class ContentObjectImportForm extends FormValidator
                 '<span class="input-group-addon">' . Translation::get('AddNewCategory') . '</span>'
             );
 
-            $category_group[] =
-                $this->createElement('text', self::NEW_CATEGORY, null, array('class' => 'form-control'));
+            $category_group[] = $this->createElement('text', self::NEW_CATEGORY, null, ['class' => 'form-control']);
             $category_group[] = $this->createElement('static', null, null, '</div>');
 
             $this->addGroup($category_group, 'category_form_group', null, ' ', false);
@@ -104,7 +99,6 @@ abstract class ContentObjectImportForm extends FormValidator
     }
 
     /**
-     *
      * @param ImportFormParameters $importFormParameters
      *
      * @return ContentObjectImportForm
@@ -121,7 +115,7 @@ abstract class ContentObjectImportForm extends FormValidator
         {
             throw new UserException(
                 Translation::getInstance()->getTranslation(
-                    'UnknownImportType', array('TYPE' => $importFormParameters->getImportFormType())
+                    'UnknownImportType', ['TYPE' => $importFormParameters->getImportFormType()]
                 )
             );
         }
@@ -151,8 +145,7 @@ abstract class ContentObjectImportForm extends FormValidator
     }
 
     /**
-     *
-     * @return boolean
+     * @return bool
      */
     protected function implementsDropZoneSupport()
     {

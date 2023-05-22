@@ -4,37 +4,34 @@ namespace Chamilo\Core\Repository\ContentObject\AssessmentMatchingQuestion\Form;
 use Chamilo\Core\Repository\ContentObject\AssessmentMatchingQuestion\Storage\DataClass\AssessmentMatchingQuestion;
 use Chamilo\Core\Repository\ContentObject\AssessmentMatchingQuestion\Storage\DataClass\AssessmentMatchingQuestionOption;
 use Chamilo\Core\Repository\Form\ContentObjectForm;
-use Chamilo\Libraries\File\Path;
 use Chamilo\Libraries\Format\Structure\Glyph\FontAwesomeGlyph;
-use Chamilo\Libraries\Format\Utilities\ResourceManager;
 use Chamilo\Libraries\Translation\Translation;
 use Chamilo\Libraries\Utilities\StringUtilities;
 
 /**
- *
  * @package repository.lib.content_object.matching_question
  */
 class AssessmentMatchingQuestionForm extends ContentObjectForm
 {
-    const PROPERTY_ADD_MATCH = 'add_match';
+    public const PROPERTY_ADD_MATCH = 'add_match';
 
-    const PROPERTY_ADD_OPTION = 'add_option';
+    public const PROPERTY_ADD_OPTION = 'add_option';
 
-    const PROPERTY_DEFAULTS_MATCH = 'match';
+    public const PROPERTY_DEFAULTS_MATCH = 'match';
 
-    const PROPERTY_DEFAULTS_MATCHES_TO = 'matches_to';
+    public const PROPERTY_DEFAULTS_MATCHES_TO = 'matches_to';
 
-    const PROPERTY_MQ_NUMBER_OF_MATCHES = 'mq_number_of_matches';
+    public const PROPERTY_MQ_NUMBER_OF_MATCHES = 'mq_number_of_matches';
 
-    const PROPERTY_MQ_NUMBER_OF_OPTIONS = 'mq_number_of_options';
+    public const PROPERTY_MQ_NUMBER_OF_OPTIONS = 'mq_number_of_options';
 
-    const PROPERTY_MQ_SKIP_MATCHES = 'mq_skip_matches';
+    public const PROPERTY_MQ_SKIP_MATCHES = 'mq_skip_matches';
 
-    const PROPERTY_MQ_SKIP_OPTIONS = 'mq_skip_options';
+    public const PROPERTY_MQ_SKIP_OPTIONS = 'mq_skip_options';
 
-    const PROPERTY_REMOVE_MATCH = 'remove_match';
+    public const PROPERTY_REMOVE_MATCH = 'remove_match';
 
-    const PROPERTY_REMOVE_OPTION = 'remove_option';
+    public const PROPERTY_REMOVE_OPTION = 'remove_option';
 
     /**
      * Adds the answer to the current learning object.
@@ -79,12 +76,12 @@ class AssessmentMatchingQuestionForm extends ContentObjectForm
 
         $this->addElement(
             'hidden', self::PROPERTY_MQ_NUMBER_OF_MATCHES, $_SESSION[self::PROPERTY_MQ_NUMBER_OF_MATCHES],
-            array('id' => self::PROPERTY_MQ_NUMBER_OF_MATCHES)
+            ['id' => self::PROPERTY_MQ_NUMBER_OF_MATCHES]
         );
 
         $buttons = [];
         $buttons[] = $this->createElement(
-            'style_button', 'add_match[]', Translation::get('AddMatch'), array('id' => self::PROPERTY_ADD_MATCH), null,
+            'style_button', 'add_match[]', Translation::get('AddMatch'), ['id' => self::PROPERTY_ADD_MATCH], null,
             new FontAwesomeGlyph('plus')
         );
         $this->addGroup($buttons, 'question_buttons', null, '', false);
@@ -133,13 +130,13 @@ class AssessmentMatchingQuestionForm extends ContentObjectForm
                 {
                     $group[] = $this->createElement(
                         'style_button', 'remove_match[' . $match_number . ']', null,
-                        array('class' => self::PROPERTY_REMOVE_MATCH, 'id' => 'remove_match_' . $match_number), null,
+                        ['class' => self::PROPERTY_REMOVE_MATCH, 'id' => 'remove_match_' . $match_number], null,
                         new FontAwesomeGlyph('times', [], null, 'fas')
                     );
                 }
                 else
                 {
-                    $glyph = new FontAwesomeGlyph('times', array('text-muted', 'remove_match'));
+                    $glyph = new FontAwesomeGlyph('times', ['text-muted', 'remove_match']);
                     $group[] = &$this->createElement('static', null, null, $glyph->render());
                 }
 
@@ -197,13 +194,13 @@ class AssessmentMatchingQuestionForm extends ContentObjectForm
         $this->addElement('category', Translation::get('Options'));
         $this->addElement(
             'hidden', self::PROPERTY_MQ_NUMBER_OF_OPTIONS, $_SESSION[self::PROPERTY_MQ_NUMBER_OF_OPTIONS],
-            array('id' => self::PROPERTY_MQ_NUMBER_OF_OPTIONS)
+            ['id' => self::PROPERTY_MQ_NUMBER_OF_OPTIONS]
         );
 
         $buttons = [];
         $buttons[] = $this->createElement(
             'style_button', 'add_option[]', Translation::get('AddMatchingQuestionOption'),
-            array('id' => self::PROPERTY_ADD_OPTION), null, new FontAwesomeGlyph('plus')
+            ['id' => self::PROPERTY_ADD_OPTION], null, new FontAwesomeGlyph('plus')
         );
         $this->addGroup($buttons, 'question_buttons', null, '', false);
 
@@ -260,13 +257,13 @@ class AssessmentMatchingQuestionForm extends ContentObjectForm
                 {
                     $group[] = $this->createElement(
                         'style_button', 'remove_option[' . $option_number . ']', null,
-                        array('class' => self::PROPERTY_REMOVE_OPTION, 'id' => 'remove_option_' . $option_number), null,
+                        ['class' => self::PROPERTY_REMOVE_OPTION, 'id' => 'remove_option_' . $option_number], null,
                         new FontAwesomeGlyph('times', [], null, 'fas')
                     );
                 }
                 else
                 {
-                    $glyph = new FontAwesomeGlyph('times', array('text-muted', 'remove_option'));
+                    $glyph = new FontAwesomeGlyph('times', ['text-muted', 'remove_option']);
                     $group[] = &$this->createElement('static', null, null, $glyph->render());
                 }
 
@@ -275,14 +272,14 @@ class AssessmentMatchingQuestionForm extends ContentObjectForm
                 );
 
                 $this->addGroupRule(
-                    AssessmentMatchingQuestionOption::PROPERTY_VALUE . '_' . $option_number, array(
-                        AssessmentMatchingQuestionOption::PROPERTY_SCORE . '[' . $option_number . ']' => array(
-                            array(
+                    AssessmentMatchingQuestionOption::PROPERTY_VALUE . '_' . $option_number, [
+                        AssessmentMatchingQuestionOption::PROPERTY_SCORE . '[' . $option_number . ']' => [
+                            [
                                 Translation::get('ThisFieldShouldBeNumeric', null, StringUtilities::LIBRARIES),
                                 'numeric'
-                            )
-                        )
-                    )
+                            ]
+                        ]
+                    ]
                 );
 
                 $renderer->setElementTemplate(
@@ -314,9 +311,9 @@ class AssessmentMatchingQuestionForm extends ContentObjectForm
         parent::build_creation_form();
         $this->build_options_and_matches();
         $this->addElement(
-            'html', ResourceManager::getInstance()->getResourceHtml(
-            Path::getInstance()->getJavascriptPath(
-                'Chamilo\Core\Repository\ContentObject\AssessmentMatchingQuestion', true
+            'html', $this->getResourceManager()->getResourceHtml(
+            $this->getWebPathBuilder()->getJavascriptPath(
+                'Chamilo\Core\Repository\ContentObject\AssessmentMatchingQuestion'
             ) . 'AssessmentMatchingQuestion.js'
         )
         );
@@ -327,9 +324,9 @@ class AssessmentMatchingQuestionForm extends ContentObjectForm
         parent::build_editing_form();
         $this->build_options_and_matches();
         $this->addElement(
-            'html', ResourceManager::getInstance()->getResourceHtml(
-            Path::getInstance()->getJavascriptPath(
-                'Chamilo\Core\Repository\ContentObject\AssessmentMatchingQuestion', true
+            'html', $this->getResourceManager()->getResourceHtml(
+            $this->getWebPathBuilder()->getJavascriptPath(
+                'Chamilo\Core\Repository\ContentObject\AssessmentMatchingQuestion'
             ) . 'AssessmentMatchingQuestion.js'
         )
         );

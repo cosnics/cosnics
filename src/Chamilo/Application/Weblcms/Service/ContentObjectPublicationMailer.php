@@ -11,8 +11,8 @@ use Chamilo\Core\Repository\Workspace\Repository\ContentObjectRepository;
 use Chamilo\Core\User\Service\UserService;
 use Chamilo\Core\User\Storage\DataClass\User;
 use Chamilo\Libraries\DependencyInjection\DependencyInjectionContainerBuilder;
+use Chamilo\Libraries\File\ConfigurablePathBuilder;
 use Chamilo\Libraries\File\FileLogger;
-use Chamilo\Libraries\File\Path;
 use Chamilo\Libraries\File\Redirect;
 use Chamilo\Libraries\File\WebPathBuilder;
 use Chamilo\Libraries\Format\Theme\ThemePathBuilder;
@@ -31,6 +31,8 @@ use Symfony\Component\Translation\Translator;
 class ContentObjectPublicationMailer
 {
 
+    protected ConfigurablePathBuilder $configurablePathBuilder;
+
     protected ContentObjectRepository $contentObjectRepository;
 
     protected CourseRepositoryInterface $courseRepository;
@@ -48,7 +50,8 @@ class ContentObjectPublicationMailer
     public function __construct(
         MailerInterface $mailer, Translator $translator, CourseRepositoryInterface $courseRepository,
         PublicationRepositoryInterface $publicationRepository, ContentObjectRepository $contentObjectRepository,
-        UserService $userService, ThemePathBuilder $themeWebPathBuilder
+        UserService $userService, ThemePathBuilder $themeWebPathBuilder,
+        ConfigurablePathBuilder $configurablePathBuilder
     )
     {
         $this->mailer = $mailer;
@@ -58,6 +61,12 @@ class ContentObjectPublicationMailer
         $this->contentObjectRepository = $contentObjectRepository;
         $this->userService = $userService;
         $this->themeWebPathBuilder = $themeWebPathBuilder;
+        $this->configurablePathBuilder = $configurablePathBuilder;
+    }
+
+    public function getConfigurablePathBuilder(): ConfigurablePathBuilder
+    {
+        return $this->configurablePathBuilder;
     }
 
     /**
@@ -153,14 +162,14 @@ class ContentObjectPublicationMailer
     {
         if (Configuration::getInstance()->get_setting(['Chamilo\Application\Weblcms', 'log_mails']))
         {
-            $dir = Path::getInstance()->getLogPath() . 'mail';
+            $dir = $this->getConfigurablePathBuilder()->getLogPath() . 'mail';
 
             if (!file_exists($dir) and !is_dir($dir))
             {
                 mkdir($dir);
             }
 
-            $today = date('Ymd', mktime());
+            $today = date('Ymd', time());
             $logfile = $dir . '//' . "mails_sent_$today" . '.log';
             $mail_log = new FileLogger($logfile, true);
             $mail_log->log_message($logMessage, true);

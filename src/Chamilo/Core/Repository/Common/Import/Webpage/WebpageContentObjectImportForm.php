@@ -3,19 +3,17 @@ namespace Chamilo\Core\Repository\Common\Import\Webpage;
 
 use Chamilo\Core\Repository\Common\Import\ContentObjectImport;
 use Chamilo\Core\Repository\Form\ContentObjectImportForm;
-use Chamilo\Libraries\File\Path;
-use Chamilo\Libraries\Format\Utilities\ResourceManager;
 use Chamilo\Libraries\Translation\Translation;
 
 class WebpageContentObjectImportForm extends ContentObjectImportForm
 {
-    const DOCUMENT_LINK = 1;
+    public const DOCUMENT_LINK = 1;
 
-    const DOCUMENT_UPLOAD = 0;
+    public const DOCUMENT_UPLOAD = 0;
 
-    const PARAM_WEBPAGE_TYPE = 'webpage_type';
+    public const PARAM_WEBPAGE_TYPE = 'webpage_type';
 
-    const PROPERTY_LINK = 'url';
+    public const PROPERTY_LINK = 'url';
 
     public function build_basic_form()
     {
@@ -39,8 +37,8 @@ class WebpageContentObjectImportForm extends ContentObjectImportForm
         $this->addElement('html', '</div>');
 
         $this->addElement(
-            'html', ResourceManager::getInstance()->getResourceHtml(
-            Path::getInstance()->getJavascriptPath('Chamilo\Core\Repository', true) . 'WebpageImportForm.js'
+            'html', $this->getResourceManager()->getResourceHtml(
+            $this->getWebPathBuilder()->getJavascriptPath('Chamilo\Core\Repository') . 'WebpageImportForm.js'
         )
         );
     }
@@ -48,11 +46,11 @@ class WebpageContentObjectImportForm extends ContentObjectImportForm
     public function setDefaults($defaults = [], $filter = null)
     {
         parent::setDefaults(
-            array(
+            [
                 self::PARAM_WEBPAGE_TYPE => self::DOCUMENT_UPLOAD,
                 self::PROPERTY_TYPE => ContentObjectImport::FORMAT_WEBPAGE,
                 self::PROPERTY_LINK => 'http://'
-            )
+            ]
         );
     }
 }

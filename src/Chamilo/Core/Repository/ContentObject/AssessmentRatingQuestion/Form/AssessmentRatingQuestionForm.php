@@ -4,15 +4,12 @@ namespace Chamilo\Core\Repository\ContentObject\AssessmentRatingQuestion\Form;
 use Chamilo\Core\Repository\ContentObject\AssessmentRatingQuestion\Storage\DataClass\AssessmentRatingQuestion;
 use Chamilo\Core\Repository\Form\ContentObjectForm;
 use Chamilo\Libraries\Architecture\ClassnameUtilities;
-use Chamilo\Libraries\File\Path;
 use Chamilo\Libraries\Format\Structure\Glyph\FontAwesomeGlyph;
 use Chamilo\Libraries\Format\Tabs\Form\FormTab;
-use Chamilo\Libraries\Format\Utilities\ResourceManager;
 use Chamilo\Libraries\Translation\Translation;
 use Chamilo\Libraries\Utilities\StringUtilities;
 
 /**
- *
  * @package repository.lib.content_object.rating_question
  */
 
@@ -21,15 +18,15 @@ use Chamilo\Libraries\Utilities\StringUtilities;
  */
 class AssessmentRatingQuestionForm extends ContentObjectForm
 {
-    const PROPERTY_RATING_TYPE = 'ratingtype';
-    const RATING_TYPE_PERCENTAGE = 0;
-    const RATING_TYPE_RATING = 1;
+    public const PROPERTY_RATING_TYPE = 'ratingtype';
+    public const RATING_TYPE_PERCENTAGE = 0;
+    public const RATING_TYPE_RATING = 1;
 
     public function addHintTab()
     {
         $this->getTabsCollection()->add(
             new FormTab(
-                'add-hint', Translation::get('AddHint'), new FontAwesomeGlyph('magic', array('fa-sm')), 'buildHintForm'
+                'add-hint', Translation::get('AddHint'), new FontAwesomeGlyph('magic', ['fa-sm']), 'buildHintForm'
             )
         );
     }
@@ -40,11 +37,11 @@ class AssessmentRatingQuestionForm extends ContentObjectForm
 
         $elem[] = $this->createElement(
             'radio', 'ratingtype', null, Translation::get('Percentage') . ' (0-100)', 0,
-            array('onclick' => 'javascript:hide_controls(\'buttons\')')
+            ['onclick' => 'javascript:hide_controls(\'buttons\')']
         );
         $elem[] = $this->createElement(
             'radio', 'ratingtype', null, Translation::get('Rating'), 1,
-            array('onclick' => 'javascript:show_controls(\'buttons\')')
+            ['onclick' => 'javascript:show_controls(\'buttons\')']
         );
         $this->addGroup($elem, 'type', Translation::get('Type', null, StringUtilities::LIBRARIES), '', false);
 
@@ -64,8 +61,7 @@ class AssessmentRatingQuestionForm extends ContentObjectForm
         $this->addElement('html', '<div class="input-group-addon">' . $glyph->render() . '</div>');
 
         $this->addElement(
-            'text', AssessmentRatingQuestion::PROPERTY_LOW, null,
-            array('class' => 'rating_question_low_value form-control')
+            'text', AssessmentRatingQuestion::PROPERTY_LOW, null, ['class' => 'rating_question_low_value form-control']
         );
 
         $this->addElement('html', '</div>');
@@ -80,7 +76,7 @@ class AssessmentRatingQuestionForm extends ContentObjectForm
 
         $this->addElement(
             'text', AssessmentRatingQuestion::PROPERTY_HIGH, null,
-            array('class' => 'rating_question_high_value form-control')
+            ['class' => 'rating_question_high_value form-control']
         );
 
         $this->addElement('html', '</div>');
@@ -139,9 +135,9 @@ class AssessmentRatingQuestionForm extends ContentObjectForm
         );
 
         $this->addElement(
-            'html', ResourceManager::getInstance()->getResourceHtml(
-            Path::getInstance()->getJavascriptPath(
-                'Chamilo\Core\Repository\ContentObject\AssessmentRatingQuestion', true
+            'html', $this->getResourceManager()->getResourceHtml(
+            $this->getWebPathBuilder()->getJavascriptPath(
+                'Chamilo\Core\Repository\ContentObject\AssessmentRatingQuestion'
             ) . 'AssessmentRatingQuestion.js'
         )
         );
@@ -181,6 +177,14 @@ class AssessmentRatingQuestionForm extends ContentObjectForm
         return parent::create_content_object();
     }
 
+    public function generateTabs()
+    {
+        $this->addDefaultTab();
+        $this->addHintTab();
+        $this->addInstructionsTab();
+        $this->addMetadataTabs();
+    }
+
     protected function getDescriptionHtmlEditorOptions()
     {
         $htmlEditorOptions = [];
@@ -190,14 +194,6 @@ class AssessmentRatingQuestionForm extends ContentObjectForm
         $htmlEditorOptions['show_tags'] = false;
 
         return $htmlEditorOptions;
-    }
-
-    public function generateTabs()
-    {
-        $this->addDefaultTab();
-        $this->addHintTab();
-        $this->addInstructionsTab();
-        $this->addMetadataTabs();
     }
 
     public function setDefaults($defaults = [], $filter = null)

@@ -5,40 +5,30 @@ use Chamilo\Core\Admin\Announcement\Storage\DataClass\Publication;
 use Chamilo\Core\Group\Integration\Chamilo\Libraries\Rights\Service\GroupEntityProvider;
 use Chamilo\Core\User\Integration\Chamilo\Libraries\Rights\Service\UserEntityProvider;
 use Chamilo\Core\User\Storage\DataClass\User;
-use Chamilo\Libraries\File\Path;
 use Chamilo\Libraries\Format\Form\Element\AdvancedElementFinder\AdvancedElementFinderElements;
 use Chamilo\Libraries\Format\Form\Element\AdvancedElementFinder\AdvancedElementFinderElementTypes;
 use Chamilo\Libraries\Format\Form\FormValidator;
 use Chamilo\Libraries\Format\Structure\Glyph\FontAwesomeGlyph;
-use Chamilo\Libraries\Format\Utilities\ResourceManager;
 use Chamilo\Libraries\Translation\Translation;
 use Chamilo\Libraries\Utilities\StringUtilities;
 
 /**
  * @package Chamilo\Core\Admin\Announcement\Form
- *
- * @author Hans De Bisschop <hans.de.bisschop@ehb.be>
+ * @author  Hans De Bisschop <hans.de.bisschop@ehb.be>
  */
 class PublicationForm extends FormValidator
 {
 
-    const PROPERTY_PUBLISH_AND_BUILD = 'publish_and_build';
-    const PROPERTY_RIGHT_OPTION = 'right_option';
-    const PROPERTY_TARGETS = 'targets';
+    public const PROPERTY_PUBLISH_AND_BUILD = 'publish_and_build';
+    public const PROPERTY_RIGHT_OPTION = 'right_option';
+    public const PROPERTY_TARGETS = 'targets';
 
-    const RIGHT_OPTION_ALL = 0;
-    const RIGHT_OPTION_ME = 1;
-    const RIGHT_OPTION_SELECT = 2;
+    public const RIGHT_OPTION_ALL = 0;
+    public const RIGHT_OPTION_ME = 1;
+    public const RIGHT_OPTION_SELECT = 2;
 
-    const TYPE_CREATE = 1;
-    const TYPE_UPDATE = 2;
-
-    /**
-     * The type of the form (create or edit)
-     *
-     * @var int
-     */
-    private $form_type;
+    public const TYPE_CREATE = 1;
+    public const TYPE_UPDATE = 2;
 
     /**
      * Available entities for the view rights
@@ -46,6 +36,13 @@ class PublicationForm extends FormValidator
      * @var \Chamilo\Libraries\Rights\Interfaces\RightsEntityProvider[]
      */
     private $entities;
+
+    /**
+     * The type of the form (create or edit)
+     *
+     * @var int
+     */
+    private $form_type;
 
     /**
      * @param int $formType
@@ -118,15 +115,15 @@ class PublicationForm extends FormValidator
 
         $group[] = &$this->createElement(
             'radio', null, null, Translation::get('Everyone'), self::RIGHT_OPTION_ALL,
-            array('class' => 'other_option_selected')
+            ['class' => 'other_option_selected']
         );
         $group[] = &$this->createElement(
             'radio', null, null, Translation::get('OnlyForMe'), self::RIGHT_OPTION_ME,
-            array('class' => 'other_option_selected')
+            ['class' => 'other_option_selected']
         );
         $group[] = &$this->createElement(
             'radio', null, null, Translation::get('SelectSpecificEntities'), self::RIGHT_OPTION_SELECT,
-            array('class' => 'entity_option_selected')
+            ['class' => 'entity_option_selected']
         );
 
         $this->addGroup(
@@ -147,8 +144,8 @@ class PublicationForm extends FormValidator
         $this->addElement('html', '</div>');
 
         $this->addElement(
-            'html', ResourceManager::getInstance()->getResourceHtml(
-            Path::getInstance()->getJavascriptPath('Chamilo\Core\Admin\Announcement', true) . 'RightsForm.js'
+            'html', $this->getResourceManager()->getResourceHtml(
+            $this->getWebPathBuilder()->getJavascriptPath('Chamilo\Core\Admin\Announcement') . 'RightsForm.js'
         )
         );
     }
@@ -189,7 +186,7 @@ class PublicationForm extends FormValidator
     /**
      * @param \Chamilo\Core\User\Storage\DataClass\User $user
      * @param \Chamilo\Core\Admin\Announcement\Storage\DataClass\Publication $publication
-     * @param integer[][] $targetUsersAndGroups
+     * @param int $targetUsersAndGroups
      *
      * @throws \Exception
      */

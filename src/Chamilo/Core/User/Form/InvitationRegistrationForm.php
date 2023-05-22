@@ -187,7 +187,7 @@ class InvitationRegistrationForm extends FormValidator
         $options['username'] = $user->get_username();
         $options['password'] = $this->exportValue(self::PASSWORD);
         $options['site_name'] = Configuration::getInstance()->get_setting(array('Chamilo\Core\Admin', 'site_name'));
-        $options['site_url'] = Path::getInstance()->getBasePath(true);
+        $options['site_url'] = $this->getWebPathBuilder()->getBasePath();
         $options['admin_firstname'] = Configuration::getInstance()->get_setting(
             array('Chamilo\Core\Admin', 'administrator_firstname')
         );

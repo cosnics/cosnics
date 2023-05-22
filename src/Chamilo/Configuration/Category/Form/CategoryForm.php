@@ -3,10 +3,8 @@ namespace Chamilo\Configuration\Category\Form;
 
 use Chamilo\Configuration\Category\Storage\DataClass\PlatformCategory;
 use Chamilo\Libraries\Architecture\ClassnameUtilities;
-use Chamilo\Libraries\File\Path;
 use Chamilo\Libraries\Format\Form\FormValidator;
 use Chamilo\Libraries\Format\Structure\Glyph\FontAwesomeGlyph;
-use Chamilo\Libraries\Format\Utilities\ResourceManager;
 use Chamilo\Libraries\Storage\Query\Condition\AndCondition;
 use Chamilo\Libraries\Storage\Query\Condition\EqualityCondition;
 use Chamilo\Libraries\Storage\Query\Condition\NotCondition;
@@ -16,26 +14,25 @@ use Chamilo\Libraries\Translation\Translation;
 use Chamilo\Libraries\Utilities\StringUtilities;
 
 /**
- *
  * @package application.common.category_manager
  */
 class CategoryForm extends FormValidator
 {
-    const RESULT_ERROR = 'CategoryUpdateFailed';
+    public const RESULT_ERROR = 'CategoryUpdateFailed';
 
-    const RESULT_SUCCESS = 'CategoryUpdated';
+    public const RESULT_SUCCESS = 'CategoryUpdated';
 
-    const TYPE_CREATE = 1;
+    public const TYPE_CREATE = 1;
 
-    const TYPE_EDIT = 2;
+    public const TYPE_EDIT = 2;
 
     private $category;
-
-    private $user;
 
     private $form_type;
 
     private $manager;
+
+    private $user;
 
     /**
      * Creates a new LanguageForm
@@ -66,7 +63,7 @@ class CategoryForm extends FormValidator
     public function add_name_field($number = null)
     {
         $element = $this->createElement(
-            'text', PlatformCategory::PROPERTY_NAME . $number, Translation::get('Name'), array("size" => "50")
+            'text', PlatformCategory::PROPERTY_NAME . $number, Translation::get('Name'), ['size' => '50']
         );
         // $this->addRule(PlatformCategory::PROPERTY_NAME . $number,
         // Translation::get('ThisFieldIsRequired'), 'required');
@@ -162,8 +159,8 @@ class CategoryForm extends FormValidator
 
         $this->addGroup($buttons, 'buttons', null, '&nbsp;', false);
         $this->addElement(
-            'html', ResourceManager::getInstance()->getResourceHtml(
-            Path::getInstance()->getJavascriptPath('Chamilo\Libraries', true) . 'CategoryForm.js'
+            'html', $this->getResourceManager()->getResourceHtml(
+            $this->getWebPathBuilder()->getJavascriptPath('Chamilo\Libraries') . 'CategoryForm.js'
         )
         );
     }

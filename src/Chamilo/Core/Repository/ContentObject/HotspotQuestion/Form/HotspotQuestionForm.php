@@ -11,18 +11,15 @@ use Chamilo\Core\User\Storage\DataClass\User;
 use Chamilo\Core\User\Storage\DataManager;
 use Chamilo\Libraries\Architecture\Application\Application;
 use Chamilo\Libraries\File\ImageManipulation\ImageManipulation;
-use Chamilo\Libraries\File\Path;
 use Chamilo\Libraries\File\Redirect;
 use Chamilo\Libraries\Format\Form\Element\AdvancedElementFinder\AdvancedElementFinderElementType;
 use Chamilo\Libraries\Format\Form\Element\AdvancedElementFinder\AdvancedElementFinderElementTypes;
 use Chamilo\Libraries\Format\Structure\Glyph\FontAwesomeGlyph;
-use Chamilo\Libraries\Format\Utilities\ResourceManager;
 use Chamilo\Libraries\Platform\Session\Session;
 use Chamilo\Libraries\Translation\Translation;
 use Chamilo\Libraries\Utilities\StringUtilities;
 
 /**
- *
  * @package repository.lib.content_object.hotspot_question
  */
 
@@ -32,7 +29,7 @@ use Chamilo\Libraries\Utilities\StringUtilities;
 class HotspotQuestionForm extends ContentObjectForm
 {
 
-    private $colours = array(
+    private $colours = [
         '#ff0000',
         '#f2ef00',
         '#00ff00',
@@ -44,7 +41,7 @@ class HotspotQuestionForm extends ContentObjectForm
         '#00ff80',
         '#ff8000',
         '#8000ff'
-    );
+    ];
 
     protected function addFileUploadSelection()
     {
@@ -55,13 +52,13 @@ class HotspotQuestionForm extends ContentObjectForm
         );
 
         $uploadUrl = new Redirect(
-            array(
+            [
                 Application::PARAM_CONTEXT => \Chamilo\Core\Repository\Ajax\Manager::CONTEXT,
                 \Chamilo\Core\Repository\Ajax\Manager::PARAM_ACTION => \Chamilo\Core\Repository\Ajax\Manager::ACTION_IMPORT_FILE
-            )
+            ]
         );
 
-        $dropZoneParameters = array(
+        $dropZoneParameters = [
             'name' => HotspotQuestion::PROPERTY_IMAGE . '_dropzone',
             'maxFilesize' => $calculator->getMaximumUploadSize(),
             'uploadUrl' => $uploadUrl->getUrl(),
@@ -69,15 +66,15 @@ class HotspotQuestionForm extends ContentObjectForm
             'successCallbackFunction' => 'chamilo.core.repository.importImage.processUploadedFile',
             'sendingCallbackFunction' => 'chamilo.core.repository.importImage.prepareRequest',
             'removedfileCallbackFunction' => 'chamilo.core.repository.importImage.deleteUploadedFile'
-        );
+        ];
 
         $this->addElement('html', '<div id="hotspot-image-select">');
 
         $this->addFileDropzone(HotspotQuestion::PROPERTY_IMAGE . '_dropzone', $dropZoneParameters);
 
         $this->addElement(
-            'html', ResourceManager::getInstance()->getResourceHtml(
-            Path::getInstance()->getJavascriptPath(Manager::CONTEXT, true) . 'Plugin/jquery.file.upload.import.js'
+            'html', $this->getResourceManager()->getResourceHtml(
+            $this->getWebPathBuilder()->getJavascriptPath(Manager::CONTEXT) . 'Plugin/jquery.file.upload.import.js'
         )
         );
 
@@ -178,12 +175,12 @@ class HotspotQuestionForm extends ContentObjectForm
         $number_of_options = intval($_SESSION['mc_number_of_options']);
 
         $this->addElement(
-            'hidden', 'mc_number_of_options', $_SESSION['mc_number_of_options'], array('id' => 'mc_number_of_options')
+            'hidden', 'mc_number_of_options', $_SESSION['mc_number_of_options'], ['id' => 'mc_number_of_options']
         );
 
         $buttons = [];
         $buttons[] = $this->createElement(
-            'style_button', 'add[]', Translation::get('AddHotspotOption'), array('class' => 'add_option'), null,
+            'style_button', 'add[]', Translation::get('AddHotspotOption'), ['class' => 'add_option'], null,
             new FontAwesomeGlyph('plus')
         );
         $this->addGroup($buttons, 'question_buttons', null, '', false);
@@ -237,13 +234,13 @@ class HotspotQuestionForm extends ContentObjectForm
 
                 $hotspot_actions[] = $this->createElement(
                     'style_button', 'edit[' . $option_number . ']', null,
-                    array('class' => 'edit_option', 'id' => 'edit_' . $option_number), null,
+                    ['class' => 'edit_option', 'id' => 'edit_' . $option_number], null,
                     new FontAwesomeGlyph('pencil-alt', [], null, 'fas')
                 );
 
                 $hotspot_actions[] = $this->createElement(
                     'style_button', 'reset[' . $option_number . ']', null,
-                    array('class' => 'reset_option', 'id' => 'reset_' . $option_number), null,
+                    ['class' => 'reset_option', 'id' => 'reset_' . $option_number], null,
                     new FontAwesomeGlyph('undo', [], null, 'fas')
                 );
 
@@ -251,13 +248,13 @@ class HotspotQuestionForm extends ContentObjectForm
                 {
                     $hotspot_actions[] = $this->createElement(
                         'style_button', 'remove[' . $option_number . ']', null,
-                        array('class' => 'remove_option', 'id' => 'remove_' . $option_number), null,
+                        ['class' => 'remove_option', 'id' => 'remove_' . $option_number], null,
                         new FontAwesomeGlyph('times', [], null, 'fas')
                     );
                 }
                 else
                 {
-                    $glyph = new FontAwesomeGlyph('times', array('text-muted', 'remove_option'));
+                    $glyph = new FontAwesomeGlyph('times', ['text-muted', 'remove_option']);
                     $hotspot_actions[] = $this->createElement(
                         'static', null, null,
                         '<button class="btn btn-default" disabled=""disabled">' . $glyph->render() . '</button>'
@@ -271,14 +268,14 @@ class HotspotQuestionForm extends ContentObjectForm
                 $this->addGroup($group, 'option_' . $option_number, null, '', false);
 
                 $this->addGroupRule(
-                    'option_' . $option_number, array(
-                        "option_weight[$option_number]" => array(
-                            array(
+                    'option_' . $option_number, [
+                        "option_weight[$option_number]" => [
+                            [
                                 Translation::get('ThisFieldShouldBeNumeric', null, StringUtilities::LIBRARIES),
                                 'numeric'
-                            )
-                        )
-                    )
+                            ]
+                        ]
+                    ]
                 );
 
                 $renderer->setElementTemplate(
@@ -330,8 +327,8 @@ class HotspotQuestionForm extends ContentObjectForm
         parent::build_creation_form();
 
         $this->addElement(
-            'html', ResourceManager::getInstance()->getResourceHtml(
-            Path::getInstance()->getPluginPath('Chamilo\Core\Repository\ContentObject\HotspotQuestion', true) .
+            'html', $this->getResourceManager()->getResourceHtml(
+            $this->getWebPathBuilder()->getPluginPath('Chamilo\Core\Repository\ContentObject\HotspotQuestion') .
             'jquery.draw.js'
         )
         );
@@ -363,9 +360,10 @@ class HotspotQuestionForm extends ContentObjectForm
         $this->addElement('html', '</div>');
 
         $this->addElement(
-            'html', ResourceManager::getInstance()->getResourceHtml(
-            Path::getInstance()->getJavascriptPath('Chamilo\Core\Repository\ContentObject\HotspotQuestion', true) .
-            'HotspotQuestionForm.js'
+            'html', $this->getResourceManager()->getResourceHtml(
+            $this->getWebPathBuilder()->getJavascriptPath(
+                'Chamilo\Core\Repository\ContentObject\HotspotQuestion'
+            ) . 'HotspotQuestionForm.js'
         )
         );
 
@@ -377,8 +375,8 @@ class HotspotQuestionForm extends ContentObjectForm
         parent::build_editing_form();
 
         $this->addElement(
-            'html', ResourceManager::getInstance()->getResourceHtml(
-            Path::getInstance()->getPluginPath('Chamilo\Core\Repository\ContentObject\HotspotQuestion', true) .
+            'html', $this->getResourceManager()->getResourceHtml(
+            $this->getWebPathBuilder()->getPluginPath('Chamilo\Core\Repository\ContentObject\HotspotQuestion') .
             'jquery.draw.js'
         )
         );
@@ -404,8 +402,8 @@ class HotspotQuestionForm extends ContentObjectForm
         $this->addImagePreview();
 
         $this->addElement(
-            'html', ResourceManager::getInstance()->getResourceHtml(
-            Path::getInstance()->getJavascriptPath('Chamilo\Core\Repository\ContentObject\HotspotQuestion', true) .
+            'html', $this->getResourceManager()->getResourceHtml(
+            $this->getWebPathBuilder()->getJavascriptPath('Chamilo\Core\Repository\ContentObject\HotspotQuestion') .
             'HotspotQuestionForm.js'
         )
         );

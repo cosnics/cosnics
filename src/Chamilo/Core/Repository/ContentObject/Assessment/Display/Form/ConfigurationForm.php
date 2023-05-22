@@ -3,26 +3,22 @@ namespace Chamilo\Core\Repository\ContentObject\Assessment\Display\Form;
 
 use Chamilo\Core\Repository\ContentObject\Assessment\Display\Configuration;
 use Chamilo\Core\Repository\ContentObject\Assessment\Display\Manager;
-use Chamilo\Libraries\File\Path;
 use Chamilo\Libraries\Format\Form\FormValidator;
 use Chamilo\Libraries\Format\Structure\Glyph\FontAwesomeGlyph;
-use Chamilo\Libraries\Format\Utilities\ResourceManager;
 use Chamilo\Libraries\Translation\Translation;
 use Chamilo\Libraries\Utilities\StringUtilities;
 
 /**
- *
  * @package core\repository\content_object\assessment\display
- * @author Hans De Bisschop <hans.de.bisschop@ehb.be>
- * @author Magali Gillard <magali.gillard@ehb.be>
- * @author Eduard Vossen <eduard.vossen@ehb.be>
+ * @author  Hans De Bisschop <hans.de.bisschop@ehb.be>
+ * @author  Magali Gillard <magali.gillard@ehb.be>
+ * @author  Eduard Vossen <eduard.vossen@ehb.be>
  */
 class ConfigurationForm extends FormValidator
 {
-    const PROPERTY_ANSWER_FEEDBACK_OPTION = 'answer_feedback_option';
+    public const PROPERTY_ANSWER_FEEDBACK_OPTION = 'answer_feedback_option';
 
     /**
-     *
      * @param Configuration $configuration
      * @param string $action
      */
@@ -35,26 +31,10 @@ class ConfigurationForm extends FormValidator
         self::defaults($this, $configuration);
     }
 
-    public function build_form()
-    {
-        self::build($this);
-
-        $buttons = [];
-        $buttons[] = $this->createElement(
-            'style_submit_button', 'submit', Translation::get('Save', null, StringUtilities::LIBRARIES), null, null,
-            new FontAwesomeGlyph('arrow-right')
-        );
-        $buttons[] = $this->createElement(
-            'style_reset_button', 'reset', Translation::get('Reset', null, StringUtilities::LIBRARIES)
-        );
-        $this->addGroup($buttons, 'buttons', null, '&nbsp;', false);
-    }
-
     /**
-     *
      * @param FormValidator $form
      */
-    static public function build(FormValidator $form)
+    public static function build(FormValidator $form)
     {
         // Hinting
         $form->addElement('category', self::getContextTranslation('Hinting'));
@@ -80,12 +60,15 @@ class ConfigurationForm extends FormValidator
 
         $form->addElement(
             self::build_answer_feedback(
-                $form, array(
-                    Configuration::ANSWER_FEEDBACK_TYPE_QUESTION, Configuration::ANSWER_FEEDBACK_TYPE_GIVEN,
-                    Configuration::ANSWER_FEEDBACK_TYPE_GIVEN_CORRECT, Configuration::ANSWER_FEEDBACK_TYPE_GIVEN_WRONG,
-                    Configuration::ANSWER_FEEDBACK_TYPE_CORRECT, Configuration::ANSWER_FEEDBACK_TYPE_WRONG,
+                $form, [
+                    Configuration::ANSWER_FEEDBACK_TYPE_QUESTION,
+                    Configuration::ANSWER_FEEDBACK_TYPE_GIVEN,
+                    Configuration::ANSWER_FEEDBACK_TYPE_GIVEN_CORRECT,
+                    Configuration::ANSWER_FEEDBACK_TYPE_GIVEN_WRONG,
+                    Configuration::ANSWER_FEEDBACK_TYPE_CORRECT,
+                    Configuration::ANSWER_FEEDBACK_TYPE_WRONG,
                     Configuration::ANSWER_FEEDBACK_TYPE_ALL
-                )
+                ]
             )
         );
 
@@ -108,21 +91,20 @@ class ConfigurationForm extends FormValidator
         $form->addElement('category');
 
         $form->addElement(
-            'html', ResourceManager::getInstance()->getResourceHtml(
-            Path::getInstance()->getJavascriptPath('Chamilo\Core\Repository\ContentObject\Assessment\Display', true) .
+            'html', $form->getResourceManager()->getResourceHtml(
+            $form->getWebPathBuilder()->getJavascriptPath('Chamilo\Core\Repository\ContentObject\Assessment\Display') .
             'FeedbackForm.js'
         )
         );
     }
 
     /**
-     *
      * @param FormValidator $form
      * @param int[] $answer_feedback_types
      *
      * @return HTML_QuickForm_Element[]
      */
-    static function build_answer_feedback(FormValidator $form, $answer_feedback_types = [])
+    public static function build_answer_feedback(FormValidator $form, $answer_feedback_types = [])
     {
         $answer_feedback_fields = [];
 
@@ -156,12 +138,26 @@ class ConfigurationForm extends FormValidator
         );
     }
 
+    public function build_form()
+    {
+        self::build($this);
+
+        $buttons = [];
+        $buttons[] = $this->createElement(
+            'style_submit_button', 'submit', Translation::get('Save', null, StringUtilities::LIBRARIES), null, null,
+            new FontAwesomeGlyph('arrow-right')
+        );
+        $buttons[] = $this->createElement(
+            'style_reset_button', 'reset', Translation::get('Reset', null, StringUtilities::LIBRARIES)
+        );
+        $this->addGroup($buttons, 'buttons', null, '&nbsp;', false);
+    }
+
     /**
-     *
      * @param FormValidator $form
      * @param Configuration $configuration
      */
-    static public function defaults(FormValidator $form, Configuration $configuration)
+    public static function defaults(FormValidator $form, Configuration $configuration)
     {
         $defaults[Configuration::PROPERTY_ALLOW_HINTS] = $configuration->get_allow_hints();
         $defaults[Configuration::PROPERTY_SHOW_SCORE] = $configuration->get_show_score();
@@ -183,7 +179,7 @@ class ConfigurationForm extends FormValidator
         $form->setDefaults($defaults);
     }
 
-    static function getContextTranslation($variable, $parameters = [])
+    public static function getContextTranslation($variable, $parameters = [])
     {
         return Translation::getInstance()->getTranslation($variable, $parameters, Manager::CONTEXT);
     }

@@ -8,9 +8,7 @@ use Chamilo\Core\Repository\Quota\Calculator;
 use Chamilo\Core\User\Storage\DataClass\User;
 use Chamilo\Core\User\Storage\DataManager;
 use Chamilo\Libraries\Architecture\Application\Application;
-use Chamilo\Libraries\File\Path;
 use Chamilo\Libraries\File\Redirect;
-use Chamilo\Libraries\Format\Utilities\ResourceManager;
 use Chamilo\Libraries\Translation\Translation;
 
 class FileContentObjectImportForm extends ContentObjectImportForm
@@ -70,8 +68,8 @@ class FileContentObjectImportForm extends ContentObjectImportForm
         $this->addFileDropzone(self::IMPORT_FILE_NAME, $dropZoneParameters, false);
 
         $this->addElement(
-            'html', ResourceManager::getInstance()->getResourceHtml(
-            Path::getInstance()->getJavascriptPath(Manager::CONTEXT, true) . 'Plugin/jquery.file.upload.import.js'
+            'html', $this->getResourceManager()->getResourceHtml(
+            $this->getWebPathBuilder()->getJavascriptPath(Manager::CONTEXT) . 'Plugin/jquery.file.upload.import.js'
         )
         );
 

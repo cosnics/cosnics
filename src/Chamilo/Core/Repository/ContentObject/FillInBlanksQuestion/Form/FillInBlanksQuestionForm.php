@@ -3,10 +3,8 @@ namespace Chamilo\Core\Repository\ContentObject\FillInBlanksQuestion\Form;
 
 use Chamilo\Core\Repository\ContentObject\FillInBlanksQuestion\Storage\DataClass\FillInBlanksQuestion;
 use Chamilo\Core\Repository\Form\ContentObjectForm;
-use Chamilo\Libraries\File\Path;
 use Chamilo\Libraries\Format\Structure\Glyph\FontAwesomeGlyph;
 use Chamilo\Libraries\Format\Tabs\Form\FormTab;
-use Chamilo\Libraries\Format\Utilities\ResourceManager;
 use Chamilo\Libraries\Translation\Translation;
 use Chamilo\Libraries\Utilities\StringUtilities;
 
@@ -116,9 +114,9 @@ class FillInBlanksQuestionForm extends ContentObjectForm
             Translation::get('ThisFieldIsRequired', null, StringUtilities::LIBRARIES), 'required'
         );
         $this->addElement(
-            'html', ResourceManager::getInstance()->getResourceHtml(
-            Path::getInstance()->getJavascriptPath(
-                'Chamilo\Core\Repository\ContentObject\FillInBlanksQuestion', true
+            'html', $this->getResourceManager()->getResourceHtml(
+            $this->getWebPathBuilder()->getJavascriptPath(
+                'Chamilo\Core\Repository\ContentObject\FillInBlanksQuestion'
             ) . 'FillInTheBlanks.js'
         )
         );

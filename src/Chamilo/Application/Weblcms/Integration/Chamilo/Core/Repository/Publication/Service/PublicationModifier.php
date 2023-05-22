@@ -22,6 +22,7 @@ use Chamilo\Core\Repository\Workspace\Repository\ContentObjectRepository;
 use Chamilo\Core\User\Service\UserService;
 use Chamilo\Libraries\Architecture\Application\Application;
 use Chamilo\Libraries\Architecture\Application\Routing\UrlGenerator;
+use Chamilo\Libraries\File\ConfigurablePathBuilder;
 use Chamilo\Libraries\Format\Form\FormValidator;
 use Chamilo\Libraries\Format\Theme\ThemePathBuilder;
 use Chamilo\Libraries\Mail\Mailer\MailerFactory;
@@ -55,11 +56,13 @@ class PublicationModifier implements PublicationModifierInterface
 
     private UserService $userService;
 
+    protected ConfigurablePathBuilder $configurablePathBuilder;
+
     public function __construct(
         Translator $translator, UserService $userService, CourseService $courseService,
         ThemePathBuilder $themeWebPathBuilder, UrlGenerator $urlGenerator, DatetimeUtilities $datetimeUtilities,
         RegistrationConsulter $registrationConsulter, AssignmentPublicationService $assignmentPublicationService,
-        AssignmentPublicationService $learningPathAssignmentPublicationService
+        AssignmentPublicationService $learningPathAssignmentPublicationService, ConfigurablePathBuilder $configurablePathBuilder
     )
     {
         $this->translator = $translator;
@@ -71,6 +74,12 @@ class PublicationModifier implements PublicationModifierInterface
         $this->registrationConsulter = $registrationConsulter;
         $this->assignmentPublicationService = $assignmentPublicationService;
         $this->learningPathAssignmentPublicationService = $learningPathAssignmentPublicationService;
+        $this->configurablePathBuilder = $configurablePathBuilder;
+    }
+
+    public function getConfigurablePathBuilder(): ConfigurablePathBuilder
+    {
+        return $this->configurablePathBuilder;
     }
 
     /**
@@ -322,7 +331,7 @@ class PublicationModifier implements PublicationModifierInterface
             $contentObjectPublicationMailer = new ContentObjectPublicationMailer(
                 $mailerFactory->getActiveMailer(), $this->getTranslator(), new CourseRepository(),
                 new PublicationRepository(), new ContentObjectRepository(), $this->getUserService(),
-                $this->getThemeWebPathBuilder()
+                $this->getThemeWebPathBuilder(), $this->getConfigurablePathBuilder()
             );
 
             $contentObjectPublicationMailer->mailPublication($publication);

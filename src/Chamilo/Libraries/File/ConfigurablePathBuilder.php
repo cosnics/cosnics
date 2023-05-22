@@ -2,89 +2,79 @@
 namespace Chamilo\Libraries\File;
 
 /**
- *
  * @package Chamilo\Libraries\File
- * @author Hans De Bisschop <hans.de.bisschop@ehb.be>
- * @author Sven Vanpoucke <sven.vanpoucke@hogent.be>
- * @author Magali Gillard <magali.gillard@ehb.be>
+ * @author  Hans De Bisschop <hans.de.bisschop@ehb.be>
+ * @author  Sven Vanpoucke <sven.vanpoucke@hogent.be>
+ * @author  Magali Gillard <magali.gillard@ehb.be>
  */
 class ConfigurablePathBuilder
 {
-    const ARCHIVE = 4;
-    const CACHE = 2;
-    const LOG = 3;
-    const PROFILE_PICTURE = 6;
-    const REPOSITORY = 5;
-    const TEMPORARY = 1;
+    public const ARCHIVE = 4;
+    public const CACHE = 2;
+    public const GARBAGE = 7;
+    public const LOG = 3;
+    public const PROFILE_PICTURE = 6;
+    public const REPOSITORY = 5;
+    public const SCORM = 7;
+    public const TEMPORARY = 1;
+    public const USER_PICTURES = 8;
 
     /**
-     *
      * @var string[]
      */
     protected $cache;
 
     /**
-     *
-     * @var string[]
-     */
-    private $configuredPaths;
-
-    /**
-     *
      * @var string
      */
     private $configuredArchivePath;
 
     /**
-     *
      * @var string
      */
     private $configuredCachePath;
 
     /**
-     *
      * @var string
      */
     private $configuredGarbagePath;
 
     /**
-     *
      * @var string
      */
     private $configuredHotpotatoesPath;
 
     /**
-     *
      * @var string
      */
     private $configuredLogsPath;
 
     /**
-     *
+     * @var string[]
+     */
+    private $configuredPaths;
+
+    /**
      * @var string
      */
     private $configuredRepositoryPath;
 
     /**
-     *
      * @var string
      */
     private $configuredScormPath;
 
     /**
-     *
      * @var string
      */
     private $configuredTempPath;
 
     /**
-     *
      * @var string
      */
     private $configuredUserPicturesPath;
 
     /**
-     *
      * @param string[] $configuredPaths
      */
     public function __construct($configuredPaths)
@@ -94,7 +84,6 @@ class ConfigurablePathBuilder
     }
 
     /**
-     *
      * @return string
      */
     public function getArchivePath()
@@ -103,7 +92,6 @@ class ConfigurablePathBuilder
     }
 
     /**
-     *
      * @return string[]
      */
     public function getCache()
@@ -112,16 +100,6 @@ class ConfigurablePathBuilder
     }
 
     /**
-     *
-     * @param string[] $cache
-     */
-    public function setCache($cache)
-    {
-        $this->cache = $cache;
-    }
-
-    /**
-     *
      * @param string $namespace
      *
      * @return string
@@ -136,7 +114,6 @@ class ConfigurablePathBuilder
     }
 
     /**
-     *
      * @return string
      */
     public function getConfiguredArchivePath()
@@ -151,7 +128,6 @@ class ConfigurablePathBuilder
     }
 
     /**
-     *
      * @return string
      */
     public function getConfiguredCachePath()
@@ -166,7 +142,6 @@ class ConfigurablePathBuilder
     }
 
     /**
-     *
      * @return string
      */
     public function getConfiguredGarbagePath()
@@ -181,7 +156,6 @@ class ConfigurablePathBuilder
     }
 
     /**
-     *
      * @return string
      */
     public function getConfiguredHotpotatoesPath()
@@ -196,7 +170,6 @@ class ConfigurablePathBuilder
     }
 
     /**
-     *
      * @return string
      */
     public function getConfiguredLogsPath()
@@ -211,7 +184,6 @@ class ConfigurablePathBuilder
     }
 
     /**
-     *
      * @return string[]
      */
     public function getConfiguredPaths()
@@ -220,7 +192,6 @@ class ConfigurablePathBuilder
     }
 
     /**
-     *
      * @return string
      */
     public function getConfiguredRepositoryPath()
@@ -235,7 +206,6 @@ class ConfigurablePathBuilder
     }
 
     /**
-     *
      * @return string
      */
     public function getConfiguredScormPath()
@@ -250,7 +220,6 @@ class ConfigurablePathBuilder
     }
 
     /**
-     *
      * @return string
      */
     public function getConfiguredTempPath()
@@ -265,7 +234,6 @@ class ConfigurablePathBuilder
     }
 
     /**
-     *
      * @return string
      */
     public function getConfiguredUserPicturesPath()
@@ -279,8 +247,12 @@ class ConfigurablePathBuilder
         return $this->configuredUserPicturesPath;
     }
 
+    public function getGarbagePath()
+    {
+        return $this->cache[self::GARBAGE] = $this->getConfiguredGarbagePath();
+    }
+
     /**
-     *
      * @return string
      */
     public function getLogPath()
@@ -289,7 +261,6 @@ class ConfigurablePathBuilder
     }
 
     /**
-     *
      * @return string
      */
     public function getProfilePicturePath()
@@ -298,7 +269,6 @@ class ConfigurablePathBuilder
     }
 
     /**
-     *
      * @return string
      */
     public function getRepositoryPath()
@@ -306,8 +276,12 @@ class ConfigurablePathBuilder
         return $this->cache[self::REPOSITORY] = $this->getConfiguredRepositoryPath();
     }
 
+    public function getScormPath()
+    {
+        return $this->cache[self::SCORM] = $this->getConfiguredScormPath();
+    }
+
     /**
-     *
      * @param string $namespace
      *
      * @return string
@@ -318,5 +292,18 @@ class ConfigurablePathBuilder
 
         return $this->cache[self::TEMPORARY][(string) $completeNamespace] =
             $this->getConfiguredTempPath() . md5($namespace) . DIRECTORY_SEPARATOR;
+    }
+
+    public function getUserPicturesPath()
+    {
+        return $this->cache[self::USER_PICTURES] = $this->getConfiguredUserPicturesPath();
+    }
+
+    /**
+     * @param string[] $cache
+     */
+    public function setCache($cache)
+    {
+        $this->cache = $cache;
     }
 }

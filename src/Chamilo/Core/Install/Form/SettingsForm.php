@@ -9,7 +9,6 @@ use Chamilo\Core\Install\ValidateDatabaseConnection;
 use Chamilo\Core\Repository\ContentObject\Hotpotatoes\Storage\DataClass\Hotpotatoes;
 use Chamilo\Libraries\Architecture\Application\Application;
 use Chamilo\Libraries\Architecture\ClassnameUtilities;
-use Chamilo\Libraries\File\Path;
 use Chamilo\Libraries\Format\Form\FormValidator;
 use Chamilo\Libraries\Format\Structure\Glyph\FontAwesomeGlyph;
 use Chamilo\Libraries\Format\Structure\Glyph\NamespaceIdentGlyph;
@@ -21,10 +20,9 @@ use Chamilo\Libraries\Translation\Translation;
 use Chamilo\Libraries\Utilities\StringUtilities;
 
 /**
- *
  * @package Chamilo\Core\Install\Form
- * @author Hans De Bisschop <hans.de.bisschop@ehb.be>
- * @author Magali Gillard <magali.gillard@ehb.be>
+ * @author  Hans De Bisschop <hans.de.bisschop@ehb.be>
+ * @author  Magali Gillard <magali.gillard@ehb.be>
  */
 class SettingsForm extends FormValidator
 {
@@ -32,7 +30,6 @@ class SettingsForm extends FormValidator
     private Application $application;
 
     /**
-     *
      * @param Application $application
      * @param string $action
      */
@@ -50,11 +47,11 @@ class SettingsForm extends FormValidator
         $this->addElement(
             'select', 'database_driver', Translation::get('DatabaseDriver'), $this->get_database_drivers()
         );
-        $this->addElement('text', 'database_host', Translation::get('DatabaseHost'), array('size' => '40'));
-        $this->addElement('text', 'database_name', Translation::get('DatabaseName'), array('size' => '40'));
+        $this->addElement('text', 'database_host', Translation::get('DatabaseHost'), ['size' => '40']);
+        $this->addElement('text', 'database_name', Translation::get('DatabaseName'), ['size' => '40']);
 
-        $this->addElement('text', 'database_username', Translation::get('DatabaseLogin'), array('size' => '40'));
-        $this->addElement('password', 'database_password', Translation::get('DatabasePassword'), array('size' => '40'));
+        $this->addElement('text', 'database_username', Translation::get('DatabaseLogin'), ['size' => '40']);
+        $this->addElement('password', 'database_password', Translation::get('DatabasePassword'), ['size' => '40']);
 
         $this->addElement('checkbox', 'database_overwrite', Translation::get('DatabaseOverwrite'));
 
@@ -65,7 +62,7 @@ class SettingsForm extends FormValidator
         $pattern = '/(^[a-zA-Z$_][0-9a-zA-Z$_]*$)|(^[0-9][0-9a-zA-Z$_]*[a-zA-Z$_][0-9a-zA-Z$_]*$)/';
         $this->addRule('database_name', 'OnlyCharactersNumbersUnderscoresAndDollarSigns', 'regex', $pattern);
         $this->addRule(
-            array('database_driver', 'database_host', 'database_username', 'database_password', 'database_name'),
+            ['database_driver', 'database_host', 'database_username', 'database_password', 'database_name'],
             Translation::get('CouldNotConnectToDatabase'), new ValidateDatabaseConnection()
         );
     }
@@ -78,39 +75,39 @@ class SettingsForm extends FormValidator
         );
 
         $this->addElement('category', Translation::get('Administrator'));
-        $this->addElement('text', 'admin_email', Translation::get('AdminEmail'), array('size' => '40'));
+        $this->addElement('text', 'admin_email', Translation::get('AdminEmail'), ['size' => '40']);
         $this->addRule(
             'admin_email', Translation::get('ThisFieldIsRequired', null, StringUtilities::LIBRARIES), 'required'
         );
         $this->addRule('admin_email', Translation::get('WrongEmail'), 'email');
-        $this->addElement('text', 'admin_surname', Translation::get('AdminLastName'), array('size' => '40'));
+        $this->addElement('text', 'admin_surname', Translation::get('AdminLastName'), ['size' => '40']);
         $this->addRule(
             'admin_surname', Translation::get('ThisFieldIsRequired', null, StringUtilities::LIBRARIES), 'required'
         );
-        $this->addElement('text', 'admin_firstname', Translation::get('AdminFirstName'), array('size' => '40'));
+        $this->addElement('text', 'admin_firstname', Translation::get('AdminFirstName'), ['size' => '40']);
         $this->addRule(
             'admin_firstname', Translation::get('ThisFieldIsRequired', null, StringUtilities::LIBRARIES), 'required'
         );
-        $this->addElement('text', 'admin_phone', Translation::get('AdminPhone'), array('size' => '40'));
-        $this->addElement('text', 'admin_username', Translation::get('AdminLogin'), array('size' => '40'));
+        $this->addElement('text', 'admin_phone', Translation::get('AdminPhone'), ['size' => '40']);
+        $this->addElement('text', 'admin_username', Translation::get('AdminLogin'), ['size' => '40']);
         $this->addRule(
             'admin_username', Translation::get('ThisFieldIsRequired', null, StringUtilities::LIBRARIES), 'required'
         );
-        $this->addElement('text', 'admin_password', Translation::get('AdminPass'), array('size' => '40'));
+        $this->addElement('text', 'admin_password', Translation::get('AdminPass'), ['size' => '40']);
         $this->addRule(
             'admin_password', Translation::get('ThisFieldIsRequired', null, StringUtilities::LIBRARIES), 'required'
         );
 
         $this->addElement('category', Translation::get('Platform'));
-        $this->addElement('text', 'site_name', Translation::get('CampusName'), array('size' => '40'));
+        $this->addElement('text', 'site_name', Translation::get('CampusName'), ['size' => '40']);
         $this->addRule(
             'site_name', Translation::get('ThisFieldIsRequired', null, StringUtilities::LIBRARIES), 'required'
         );
-        $this->addElement('text', 'organization_name', Translation::get('InstituteShortName'), array('size' => '40'));
+        $this->addElement('text', 'organization_name', Translation::get('InstituteShortName'), ['size' => '40']);
         $this->addRule(
             'organization_name', Translation::get('ThisFieldIsRequired', null, StringUtilities::LIBRARIES), 'required'
         );
-        $this->addElement('text', 'organization_url', Translation::get('InstituteURL'), array('size' => '40'));
+        $this->addElement('text', 'organization_url', Translation::get('InstituteURL'), ['size' => '40']);
         $this->addRule(
             'organization_url', Translation::get('ThisFieldIsRequired', null, StringUtilities::LIBRARIES), 'required'
         );
@@ -132,15 +129,15 @@ class SettingsForm extends FormValidator
         );
 
         $this->addElement('category', Translation::get('Storage'));
-        $this->addElement('text', 'archive_path', Translation::get('ArchivePath'), array('size' => '40'));
-        $this->addElement('text', 'cache_path', Translation::get('CachePath'), array('size' => '40'));
-        $this->addElement('text', 'garbage_path', Translation::get('GarbagePath'), array('size' => '40'));
-        $this->addElement('text', 'hotpotatoes_path', Translation::get('HotpotatoesPath'), array('size' => '40'));
-        $this->addElement('text', 'logs_path', Translation::get('LogsPath'), array('size' => '40'));
-        $this->addElement('text', 'repository_path', Translation::get('RepositoryPath'), array('size' => '40'));
-        $this->addElement('text', 'scorm_path', Translation::get('ScormPath'), array('size' => '40'));
-        $this->addElement('text', 'temp_path', Translation::get('TempPath'), array('size' => '40'));
-        $this->addElement('text', 'userpictures_path', Translation::get('UserPicturesPath'), array('size' => '40'));
+        $this->addElement('text', 'archive_path', Translation::get('ArchivePath'), ['size' => '40']);
+        $this->addElement('text', 'cache_path', Translation::get('CachePath'), ['size' => '40']);
+        $this->addElement('text', 'garbage_path', Translation::get('GarbagePath'), ['size' => '40']);
+        $this->addElement('text', 'hotpotatoes_path', Translation::get('HotpotatoesPath'), ['size' => '40']);
+        $this->addElement('text', 'logs_path', Translation::get('LogsPath'), ['size' => '40']);
+        $this->addElement('text', 'repository_path', Translation::get('RepositoryPath'), ['size' => '40']);
+        $this->addElement('text', 'scorm_path', Translation::get('ScormPath'), ['size' => '40']);
+        $this->addElement('text', 'temp_path', Translation::get('TempPath'), ['size' => '40']);
+        $this->addElement('text', 'userpictures_path', Translation::get('UserPicturesPath'), ['size' => '40']);
     }
 
     protected function addPackageSelectionToggle()
@@ -181,7 +178,7 @@ class SettingsForm extends FormValidator
 
         $html = [];
 
-        $html[] = '<script src="' . Path::getInstance()->getJavascriptPath('Chamilo\Core\Install', true) .
+        $html[] = '<script src="' . $this->getWebPathBuilder()->getJavascriptPath('Chamilo\Core\Install') .
             'Install.js"></script>';
         $html[] = '</div>';
 
@@ -210,20 +207,19 @@ class SettingsForm extends FormValidator
 
         $buttons[] = $this->createElement(
             'static', null, null,
-            '<a href="' . $this->getApplication()->get_url(array(Manager::PARAM_ACTION => Manager::ACTION_LICENSE)) .
+            '<a href="' . $this->getApplication()->get_url([Manager::PARAM_ACTION => Manager::ACTION_LICENSE]) .
             '" class="btn btn-default">' . $glyph->render() .
             Translation::get('Previous', null, StringUtilities::LIBRARIES) . '</a>'
         );
 
         $buttons[] = $this->createElement(
             'style_button', 'next', Translation::get('Next', null, StringUtilities::LIBRARIES),
-            array('class' => 'btn-primary'), null, new FontAwesomeGlyph('chevron-right')
+            ['class' => 'btn-primary'], null, new FontAwesomeGlyph('chevron-right')
         );
         $this->addGroup($buttons, 'buttons', null, '&nbsp;', false);
     }
 
     /**
-     *
      * @param \Chamilo\Configuration\Package\PackageList $packageList
      *
      * @return \Chamilo\Configuration\Package\Storage\DataClass\Package[]
@@ -240,13 +236,12 @@ class SettingsForm extends FormValidator
             }
         }
 
-        usort($packages, array($this, 'orderPackages'));
+        usort($packages, [$this, 'orderPackages']);
 
         return $packages;
     }
 
     /**
-     *
      * @return \Chamilo\Libraries\Architecture\Application\Application
      */
     public function getApplication()
@@ -255,23 +250,13 @@ class SettingsForm extends FormValidator
     }
 
     /**
-     *
-     * @param \Chamilo\Libraries\Architecture\Application\Application $application
-     */
-    public function setApplication($application)
-    {
-        $this->application = $application;
-    }
-
-    /**
-     *
      * @param \Chamilo\Configuration\Package\Storage\DataClass\Package $package
      *
      * @return string
      */
     private function getPackageClasses(Package $package)
     {
-        $classes = array('btn');
+        $classes = ['btn'];
 
         if ($package->getCoreInstall())
         {
@@ -309,7 +294,6 @@ class SettingsForm extends FormValidator
     }
 
     /**
-     *
      * @return string[]
      */
     protected function getSessionSettings()
@@ -377,7 +361,6 @@ class SettingsForm extends FormValidator
     }
 
     /**
-     *
      * @param \Chamilo\Configuration\Package\PackageList $packageList
      */
     public function renderPackages(PackageList $packageList)
@@ -469,6 +452,14 @@ class SettingsForm extends FormValidator
         }
     }
 
+    /**
+     * @param \Chamilo\Libraries\Architecture\Application\Application $application
+     */
+    public function setApplication($application)
+    {
+        $this->application = $application;
+    }
+
     public function setDefaults($defaults = [], $filter = null)
     {
         $sessionSettings = $this->getSessionSettings();
@@ -504,15 +495,15 @@ class SettingsForm extends FormValidator
             $defaults['hashing_algorithm'] = 'Sha1';
 
             // Storage paths
-            $defaults['archive_path'] = Path::getInstance()->getStoragePath('archive');
-            $defaults['cache_path'] = Path::getInstance()->getStoragePath('cache');
-            $defaults['garbage_path'] = Path::getInstance()->getStoragePath('garbage');
-            $defaults['hotpotatoes_path'] = Path::getInstance()->getPublicStoragePath(Hotpotatoes::CONTEXT);
-            $defaults['logs_path'] = Path::getInstance()->getStoragePath('logs');
-            $defaults['repository_path'] = Path::getInstance()->getStoragePath('repository');
-            $defaults['scorm_path'] = Path::getInstance()->getStoragePath('scorm');
-            $defaults['temp_path'] = Path::getInstance()->getStoragePath('temp');
-            $defaults['userpictures_path'] = Path::getInstance()->getStoragePath('userpictures');
+            $defaults['archive_path'] = $this->getConfigurablePathBuilder()->getArchivePath();
+            $defaults['cache_path'] = $this->getConfigurablePathBuilder()->getCachePath();
+            $defaults['garbage_path'] = $this->getConfigurablePathBuilder()->getGarbagePath();
+            $defaults['hotpotatoes_path'] = $this->getSystemPathBuilder()->getPublicStoragePath(Hotpotatoes::CONTEXT);
+            $defaults['logs_path'] = $this->getConfigurablePathBuilder()->getLogPath();
+            $defaults['repository_path'] = $this->getConfigurablePathBuilder()->getRepositoryPath();
+            $defaults['scorm_path'] = $this->getConfigurablePathBuilder()->getScormPath();
+            $defaults['temp_path'] = $this->getConfigurablePathBuilder()->getTemporaryPath();
+            $defaults['userpictures_path'] = $this->getConfigurablePathBuilder()->getUserPicturesPath();
         }
 
         parent::setDefaults($defaults);

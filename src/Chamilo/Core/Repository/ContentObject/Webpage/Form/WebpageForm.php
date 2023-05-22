@@ -1,7 +1,6 @@
 <?php
 namespace Chamilo\Core\Repository\ContentObject\Webpage\Form;
 
-use Chamilo\Configuration\Configuration;
 use Chamilo\Core\Repository\Common\ContentObjectResourceRenderer;
 use Chamilo\Core\Repository\ContentObject\Webpage\Storage\DataClass\Webpage;
 use Chamilo\Core\Repository\Form\ContentObjectForm;
@@ -9,14 +8,12 @@ use Chamilo\Core\Repository\Quota\Calculator;
 use Chamilo\Core\User\Storage\DataClass\User;
 use Chamilo\Core\User\Storage\DataManager;
 use Chamilo\Libraries\File\Filesystem;
-use Chamilo\Libraries\File\Path;
 use Chamilo\Libraries\Format\Form\FormValidatorHtmlEditorOptions;
 use Chamilo\Libraries\Translation\Translation;
 use Chamilo\Libraries\Utilities\StringUtilities;
 use HTML_QuickForm_Rule_Required;
 
 /**
- *
  * @package repository.lib.content_object.document
  */
 
@@ -44,14 +41,14 @@ class WebpageForm extends ContentObjectForm
         );
 
         $this->add_html_editor(
-            'html_content', null, false, array(
+            'html_content', null, false, [
                 FormValidatorHtmlEditorOptions::OPTION_HEIGHT => '500',
                 FormValidatorHtmlEditorOptions::OPTION_WIDTH => '100%',
                 FormValidatorHtmlEditorOptions::OPTION_FULL_PAGE => true,
                 FormValidatorHtmlEditorOptions::OPTION_TOOLBAR => 'Webpage'
-            )
+            ]
         );
-        $this->addFormRule(array($this, 'check_document_form'));
+        $this->addFormRule([$this, 'check_document_form']);
 
         $renderer = $this->get_renderer();
         $renderer->setElementTemplate('{element}', 'html_content');
@@ -74,12 +71,12 @@ class WebpageForm extends ContentObjectForm
         );
 
         $this->add_html_editor(
-            'html_content', null, false, array(
+            'html_content', null, false, [
                 FormValidatorHtmlEditorOptions::OPTION_HEIGHT => '500',
                 FormValidatorHtmlEditorOptions::OPTION_WIDTH => '100%',
                 FormValidatorHtmlEditorOptions::OPTION_FULL_PAGE => true,
                 FormValidatorHtmlEditorOptions::OPTION_TOOLBAR => 'Webpage'
-            )
+            ]
         );
         $this->addRule(
             'html_content', Translation::get('DiskQuotaExceeded', null, StringUtilities::LIBRARIES), 'disk_quota'
@@ -138,18 +135,13 @@ class WebpageForm extends ContentObjectForm
         $document = parent::create_content_object();
 
         $owner = $this->get_owner_id();
-        $owner_path = $this->get_upload_path() . $owner;
-
-        $permissions_new_files = Configuration::getInstance()->get_setting(
-            array('Chamilo\Core\Admin', 'permissions_new_files')
-        );
 
         return $document;
     }
 
-    private static function get_upload_path()
+    private function get_upload_path()
     {
-        return Path::getInstance()->getRepositoryPath();
+        return $this->getConfigurablePathBuilder()->getRepositoryPath();
     }
 
     public function setDefaults($defaults = [], $filter = null)

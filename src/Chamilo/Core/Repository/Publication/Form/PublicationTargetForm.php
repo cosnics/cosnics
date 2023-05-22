@@ -11,7 +11,6 @@ use Chamilo\Libraries\Architecture\Exceptions\NoObjectSelectedException;
 use Chamilo\Libraries\Architecture\Exceptions\NotAllowedException;
 use Chamilo\Libraries\Architecture\Exceptions\UserException;
 use Chamilo\Libraries\DependencyInjection\DependencyInjectionContainerBuilder;
-use Chamilo\Libraries\File\Path;
 use Chamilo\Libraries\Format\Form\FormValidator;
 use Chamilo\Libraries\Format\Structure\Glyph\FontAwesomeGlyph;
 use Chamilo\Libraries\Format\Structure\Glyph\IdentGlyph;
@@ -198,7 +197,7 @@ class PublicationTargetForm extends FormValidator
 
         $this->addElement(
             'html',
-            '<script src="' . Path::getInstance()->getJavascriptPath('Chamilo\Core\Repository\Publication', true) .
+            '<script src="' . $this->getWebPathBuilder()->getJavascriptPath('Chamilo\Core\Repository\Publication') .
             'Visibility.js' . '"></script>'
         );
     }

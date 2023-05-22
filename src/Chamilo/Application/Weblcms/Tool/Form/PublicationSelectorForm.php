@@ -14,13 +14,13 @@ use Chamilo\Libraries\Utilities\StringUtilities;
 class PublicationSelectorForm
 {
 
-    private $publications;
-
     private $categories;
+
+    private $check_parents;
 
     private $course_title;
 
-    private $check_parents;
+    private $publications;
 
     private $translations;
 
@@ -65,8 +65,9 @@ class PublicationSelectorForm
         $html[] = '</div>';
 
         $html[] = '<div id="checkboxes_action" style="margin-left: 20%; padding-top: 5px;">';
-        $html[] = '<a id="selectAll" href="#">' .
-            $translator->getTranslation('SelectAll', null, StringUtilities::LIBRARIES) . '</a>';
+        $html[] =
+            '<a id="selectAll" href="#">' . $translator->getTranslation('SelectAll', null, StringUtilities::LIBRARIES) .
+            '</a>';
         $html[] = '<a id="deselectAll" href="#" style="padding-left: 20px;">' .
             $translator->getTranslation('UnselectAll', null, StringUtilities::LIBRARIES) . '</a>';
         $html[] = '</div>';

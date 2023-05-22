@@ -3,14 +3,11 @@ namespace Chamilo\Core\Repository\ContentObject\Assessment\Form;
 
 use Chamilo\Core\Repository\ContentObject\Assessment\Storage\DataClass\Assessment;
 use Chamilo\Core\Repository\Form\ContentObjectForm;
-use Chamilo\Libraries\File\Path;
-use Chamilo\Libraries\Format\Utilities\ResourceManager;
 use Chamilo\Libraries\Platform\Session\Session;
 use Chamilo\Libraries\Translation\Translation;
 use Chamilo\Libraries\Utilities\StringUtilities;
 
 /**
- *
  * @package repository.lib.content_object.assessment
  */
 
@@ -19,17 +16,17 @@ use Chamilo\Libraries\Utilities\StringUtilities;
  */
 class AssessmentForm extends ContentObjectForm
 {
-    const ALL_QUESTIONS = 'all_questions';
+    public const ALL_QUESTIONS = 'all_questions';
 
-    const LIMITED_ATTEMPTS = 'limited_attempts';
+    public const LIMITED_ATTEMPTS = 'limited_attempts';
 
-    const RANDOM_QUESTIONS = 'random';
+    public const RANDOM_QUESTIONS = 'random';
 
-    const SESSION_QUESTIONS = 'questions';
+    public const SESSION_QUESTIONS = 'questions';
 
-    const UNLIMITED_ATTEMPTS = 'unlimited_attempts';
+    public const UNLIMITED_ATTEMPTS = 'unlimited_attempts';
 
-    const UNLIMITED_TIME = 'unlimited_time';
+    public const UNLIMITED_TIME = 'unlimited_time';
 
     protected function build_creation_form($htmleditor_options = [], $in_tab = false)
     {
@@ -39,79 +36,79 @@ class AssessmentForm extends ContentObjectForm
         // Number of attempts
         $choices = [];
         $choices[] = $this->createElement(
-            'radio', self::UNLIMITED_ATTEMPTS, '', Translation:: get('UnlimitedAttempts'), 0, array(
+            'radio', self::UNLIMITED_ATTEMPTS, '', Translation:: get('UnlimitedAttempts'), 0, [
                 'onclick' => 'javascript:window_hide(\'' . self::UNLIMITED_ATTEMPTS . '_window\')',
                 'id' => self::UNLIMITED_ATTEMPTS
-            )
+            ]
         );
         $choices[] = $this->createElement(
-            'radio', self::UNLIMITED_ATTEMPTS, '', Translation:: get('LimitedAttempts'), 1, array(
+            'radio', self::UNLIMITED_ATTEMPTS, '', Translation:: get('LimitedAttempts'), 1, [
                 'onclick' => 'javascript:window_show(\'' . self::UNLIMITED_ATTEMPTS . '_window\')',
                 'id' => self::LIMITED_ATTEMPTS
-            )
+            ]
         );
         $this->addGroup($choices, null, Translation::get('MaximumAttempts'), '', false);
         $this->addElement(
             'html', '<div style="margin-left: 25px; display: block;" id="' . self::UNLIMITED_ATTEMPTS . '_window">'
         );
-        $this->add_textfield(Assessment::PROPERTY_MAXIMUM_ATTEMPTS, null, false, array('id' => 'attempts'));
+        $this->add_textfield(Assessment::PROPERTY_MAXIMUM_ATTEMPTS, null, false, ['id' => 'attempts']);
         $this->addElement('html', '</div>');
 
         // Number of questions per page
         $choices = [];
         $choices[] = $this->createElement(
-            'radio', self::ALL_QUESTIONS, '', Translation::get('AllQuestionsOnOnePage'), 0, array(
+            'radio', self::ALL_QUESTIONS, '', Translation::get('AllQuestionsOnOnePage'), 0, [
                 'onclick' => 'javascript:window_hide(\'' . self::ALL_QUESTIONS . '_window\')',
                 'id' => self::ALL_QUESTIONS
-            )
+            ]
         );
         $choices[] = $this->createElement(
             'radio', self::ALL_QUESTIONS, '', Translation::get('LimitedQuestionsOnOnePage'), 1,
-            array('onclick' => 'javascript:window_show(\'' . self::ALL_QUESTIONS . '_window\')')
+            ['onclick' => 'javascript:window_show(\'' . self::ALL_QUESTIONS . '_window\')']
         );
         $this->addGroup($choices, null, Translation::get('QuestionsPerPage'), '', false);
         $this->addElement(
             'html', '<div style="margin-left: 25px; display: block;" id="' . self::ALL_QUESTIONS . '_window">'
         );
-        $this->add_textfield(Assessment::PROPERTY_QUESTIONS_PER_PAGE, null, false, array('id' => 'questions'));
+        $this->add_textfield(Assessment::PROPERTY_QUESTIONS_PER_PAGE, null, false, ['id' => 'questions']);
         $this->addElement('html', '</div>');
 
         // Maximum time allowed
         $choices = [];
         $choices[] = $this->createElement(
-            'radio', self::UNLIMITED_TIME, '', Translation::get('Unlimited'), 0, array(
+            'radio', self::UNLIMITED_TIME, '', Translation::get('Unlimited'), 0, [
                 'onclick' => 'javascript:window_hide(\'' . self::UNLIMITED_TIME . '_window\')',
                 'id' => self::UNLIMITED_TIME
-            )
+            ]
         );
         $choices[] = $this->createElement(
             'radio', self::UNLIMITED_TIME, '', Translation::get('Limited'), 1,
-            array('onclick' => 'javascript:window_show(\'' . self::UNLIMITED_TIME . '_window\')')
+            ['onclick' => 'javascript:window_show(\'' . self::UNLIMITED_TIME . '_window\')']
         );
         $this->addGroup($choices, null, Translation::get('MaximumTimeAllowedMinutes'), '', false);
         $this->addElement(
             'html', '<div style="margin-left: 25px; display: block;" id="' . self::UNLIMITED_TIME . '_window">'
         );
-        $this->add_textfield(Assessment::PROPERTY_MAXIMUM_TIME, null, false, array('id' => 'time'));
+        $this->add_textfield(Assessment::PROPERTY_MAXIMUM_TIME, null, false, ['id' => 'time']);
         $this->addElement('html', '</div>');
 
         // Random questions
         $choices = [];
         $choices[] = $this->createElement(
-            'radio', self::RANDOM_QUESTIONS, '', Translation:: get('NoRandomization'), 0, array(
+            'radio', self::RANDOM_QUESTIONS, '', Translation:: get('NoRandomization'), 0, [
                 'onclick' => 'javascript:window_hide(\'' . self::RANDOM_QUESTIONS . '_window\')',
                 'id' => self::RANDOM_QUESTIONS
-            )
+            ]
         );
         $choices[] = $this->createElement(
             'radio', self::RANDOM_QUESTIONS, '', Translation::get('RandomQuestions'), 1,
-            array('onclick' => 'javascript:window_show(\'' . self::RANDOM_QUESTIONS . '_window\')')
+            ['onclick' => 'javascript:window_show(\'' . self::RANDOM_QUESTIONS . '_window\')']
         );
         $this->addGroup($choices, null, Translation::get('AmountOfRandomQuestions'), '', false);
         $this->addElement(
             'html', '<div style="margin-left: 25px; display: block;" id="' . self::RANDOM_QUESTIONS . '_window">'
         );
-        $this->add_textfield(Assessment::PROPERTY_RANDOM_QUESTIONS, null, false, array('id' => 'number_random'));
+        $this->add_textfield(Assessment::PROPERTY_RANDOM_QUESTIONS, null, false, ['id' => 'number_random']);
         $this->addElement('html', '</div>');
 
         $this->addElement(
@@ -171,8 +168,8 @@ class AssessmentForm extends ContentObjectForm
         );
 
         $this->addElement(
-            'html', ResourceManager::getInstance()->getResourceHtml(
-            Path::getInstance()->getJavascriptPath('Chamilo\Core\Repository\ContentObject\Assessment', true) .
+            'html', $this->getResourceManager()->getResourceHtml(
+            $this->getWebPathBuilder()->getJavascriptPath('Chamilo\Core\Repository\ContentObject\Assessment') .
             'AssessmentForm.js'
         )
         );
@@ -186,79 +183,79 @@ class AssessmentForm extends ContentObjectForm
         // Number of attempts
         $choices = [];
         $choices[] = $this->createElement(
-            'radio', self::UNLIMITED_ATTEMPTS, '', Translation:: get('UnlimitedAttempts'), 0, array(
+            'radio', self::UNLIMITED_ATTEMPTS, '', Translation:: get('UnlimitedAttempts'), 0, [
                 'onclick' => 'javascript:window_hide(\'' . self::UNLIMITED_ATTEMPTS . '_window\')',
                 'id' => self::UNLIMITED_ATTEMPTS
-            )
+            ]
         );
         $choices[] = $this->createElement(
-            'radio', self::UNLIMITED_ATTEMPTS, '', Translation:: get('LimitedAttempts'), 1, array(
+            'radio', self::UNLIMITED_ATTEMPTS, '', Translation:: get('LimitedAttempts'), 1, [
                 'onclick' => 'javascript:window_show(\'' . self::UNLIMITED_ATTEMPTS . '_window\')',
                 'id' => self::LIMITED_ATTEMPTS
-            )
+            ]
         );
         $this->addGroup($choices, null, Translation::get('MaximumAttempts'), '', false);
         $this->addElement(
             'html', '<div style="margin-left: 25px; display: block;" id="' . self::UNLIMITED_ATTEMPTS . '_window">'
         );
-        $this->add_textfield(Assessment::PROPERTY_MAXIMUM_ATTEMPTS, null, false, array('id' => 'attempts'));
+        $this->add_textfield(Assessment::PROPERTY_MAXIMUM_ATTEMPTS, null, false, ['id' => 'attempts']);
         $this->addElement('html', '</div>');
 
         // Number of questions per page
         $choices = [];
         $choices[] = $this->createElement(
-            'radio', self::ALL_QUESTIONS, '', Translation::get('AllQuestionsOnOnePage'), 0, array(
+            'radio', self::ALL_QUESTIONS, '', Translation::get('AllQuestionsOnOnePage'), 0, [
                 'onclick' => 'javascript:window_hide(\'' . self::ALL_QUESTIONS . '_window\')',
                 'id' => self::ALL_QUESTIONS
-            )
+            ]
         );
         $choices[] = $this->createElement(
             'radio', self::ALL_QUESTIONS, '', Translation::get('LimitedQuestionsOnOnePage'), 1,
-            array('onclick' => 'javascript:window_show(\'' . self::ALL_QUESTIONS . '_window\')')
+            ['onclick' => 'javascript:window_show(\'' . self::ALL_QUESTIONS . '_window\')']
         );
         $this->addGroup($choices, null, Translation::get('QuestionsPerPage'), '', false);
         $this->addElement(
             'html', '<div style="margin-left: 25px; display: block;" id="' . self::ALL_QUESTIONS . '_window">'
         );
-        $this->add_textfield(Assessment::PROPERTY_QUESTIONS_PER_PAGE, null, false, array('id' => 'questions'));
+        $this->add_textfield(Assessment::PROPERTY_QUESTIONS_PER_PAGE, null, false, ['id' => 'questions']);
         $this->addElement('html', '</div>');
 
         // Maximum time allowed
         $choices = [];
         $choices[] = $this->createElement(
-            'radio', self::UNLIMITED_TIME, '', Translation::get('Unlimited'), 0, array(
+            'radio', self::UNLIMITED_TIME, '', Translation::get('Unlimited'), 0, [
                 'onclick' => 'javascript:window_hide(\'' . self::UNLIMITED_TIME . '_window\')',
                 'id' => self::UNLIMITED_TIME
-            )
+            ]
         );
         $choices[] = $this->createElement(
             'radio', self::UNLIMITED_TIME, '', Translation::get('Limited'), 1,
-            array('onclick' => 'javascript:window_show(\'' . self::UNLIMITED_TIME . '_window\')')
+            ['onclick' => 'javascript:window_show(\'' . self::UNLIMITED_TIME . '_window\')']
         );
         $this->addGroup($choices, null, Translation::get('MaximumTimeAllowedMinutes'), '', false);
         $this->addElement(
             'html', '<div style="margin-left: 25px; display: block;" id="' . self::UNLIMITED_TIME . '_window">'
         );
-        $this->add_textfield(Assessment::PROPERTY_MAXIMUM_TIME, null, false, array('id' => 'time'));
+        $this->add_textfield(Assessment::PROPERTY_MAXIMUM_TIME, null, false, ['id' => 'time']);
         $this->addElement('html', '</div>');
 
         // Random questions
         $choices = [];
         $choices[] = $this->createElement(
-            'radio', self::RANDOM_QUESTIONS, '', Translation:: get('NoRandomization'), 0, array(
+            'radio', self::RANDOM_QUESTIONS, '', Translation:: get('NoRandomization'), 0, [
                 'onclick' => 'javascript:window_hide(\'' . self::RANDOM_QUESTIONS . '_window\')',
                 'id' => self::RANDOM_QUESTIONS
-            )
+            ]
         );
         $choices[] = $this->createElement(
             'radio', self::RANDOM_QUESTIONS, '', Translation::get('RandomQuestions'), 1,
-            array('onclick' => 'javascript:window_show(\'' . self::RANDOM_QUESTIONS . '_window\')')
+            ['onclick' => 'javascript:window_show(\'' . self::RANDOM_QUESTIONS . '_window\')']
         );
         $this->addGroup($choices, null, Translation::get('AmountOfRandomQuestions'), '', false);
         $this->addElement(
             'html', '<div style="margin-left: 25px; display: block;" id="' . self::RANDOM_QUESTIONS . '_window">'
         );
-        $this->add_textfield(Assessment::PROPERTY_RANDOM_QUESTIONS, null, false, array('id' => 'number_random'));
+        $this->add_textfield(Assessment::PROPERTY_RANDOM_QUESTIONS, null, false, ['id' => 'number_random']);
         $this->addElement('html', '</div>');
 
         $this->addElement(
@@ -318,8 +315,8 @@ class AssessmentForm extends ContentObjectForm
         );
 
         $this->addElement(
-            'html', ResourceManager::getInstance()->getResourceHtml(
-            Path::getInstance()->getJavascriptPath('Chamilo\Core\Repository\ContentObject\Assessment', true) .
+            'html', $this->getResourceManager()->getResourceHtml(
+            $this->getWebPathBuilder()->getJavascriptPath('Chamilo\Core\Repository\ContentObject\Assessment') .
             'AssessmentForm.js'
         )
         );

@@ -15,7 +15,6 @@ use Chamilo\Application\Weblcms\Storage\DataManager;
 use Chamilo\Core\Rights\Entity\PlatformGroupEntity;
 use Chamilo\Core\Rights\Entity\UserEntity;
 use Chamilo\Libraries\Architecture\ClassnameUtilities;
-use Chamilo\Libraries\File\Path;
 use Chamilo\Libraries\Format\Form\Element\AdvancedElementFinder\AdvancedElementFinderElement;
 use Chamilo\Libraries\Format\Form\Element\AdvancedElementFinder\AdvancedElementFinderElements;
 use Chamilo\Libraries\Format\Form\Element\AdvancedElementFinder\AdvancedElementFinderElementTypes;
@@ -26,7 +25,6 @@ use Chamilo\Libraries\Format\Menu\DynamicContentMenu\FormDynamicContentMenuItem;
 use Chamilo\Libraries\Format\Structure\Glyph\IdentGlyph;
 use Chamilo\Libraries\Format\Structure\Glyph\NamespaceIdentGlyph;
 use Chamilo\Libraries\Format\Tabs\Form\FormTab;
-use Chamilo\Libraries\Format\Tabs\Form\FormTabsGenerator;
 use Chamilo\Libraries\Format\Tabs\TabsCollection;
 use Chamilo\Libraries\Format\Utilities\ResourceManager;
 use Chamilo\Libraries\Platform\Session\Session;
@@ -46,8 +44,8 @@ use Chamilo\Libraries\Utilities\StringUtilities;
  * This class describes a form for the course object
  *
  * @package \application\weblcms
- * @author Yannick & Tristan
- * @author Sven Vanpoucke - Hogeschool Gent - Refactoring
+ * @author  Yannick & Tristan
+ * @author  Sven Vanpoucke - Hogeschool Gent - Refactoring
  */
 abstract class CommonCourseForm extends FormValidator implements CourseSettingsXmlFormParserSupport
 {
@@ -133,9 +131,9 @@ abstract class CommonCourseForm extends FormValidator implements CourseSettingsX
      * Adds xml defined settings to the form
      *
      * @param String $xml_file_path
-     * @param String $context - [OPTIONAL] The context - Default common\libraries
+     * @param String $context         - [OPTIONAL] The context - Default common\libraries
      * @param Object $connector_class - [OPTIONAL] The connector class to retrieve the dynamic options
-     * @param String $prefix - [OPTIONAL] The prefix for the elements
+     * @param String $prefix          - [OPTIONAL] The prefix for the elements
      */
     protected function add_settings_from_xml(
         $xml_file_path, $context = null, $connector_class = null, $prefix = null, $tool_id = 0
@@ -176,19 +174,19 @@ abstract class CommonCourseForm extends FormValidator implements CourseSettingsX
 
         $group[] = &$this->createElement(
             'radio', null, null, Translation::get('Nobody'), CourseManagementRights::RIGHT_OPTION_NOBODY,
-            array('class' => 'rights_selector')
+            ['class' => 'rights_selector']
         );
         $group[] = &$this->createElement(
             'radio', null, null, Translation::get('Everyone'), CourseManagementRights::RIGHT_OPTION_ALL,
-            array('class' => 'rights_selector')
+            ['class' => 'rights_selector']
         );
         $group[] = &$this->createElement(
             'radio', null, null, Translation::get('OnlyForMe'), CourseManagementRights::RIGHT_OTPION_ME,
-            array('class' => 'rights_selector')
+            ['class' => 'rights_selector']
         );
         $group[] = &$this->createElement(
             'radio', null, null, Translation::get('SelectSpecificEntities'),
-            CourseManagementRights::RIGHT_OPTION_SELECT, array('class' => 'rights_selector specific_rights_selector')
+            CourseManagementRights::RIGHT_OPTION_SELECT, ['class' => 'rights_selector specific_rights_selector']
         );
 
         $this->addGroup($group, $name, Translation::get('Target'), '');
@@ -264,7 +262,7 @@ abstract class CommonCourseForm extends FormValidator implements CourseSettingsX
         $this->addElement('html', '</div>');
         $this->addElement(
             'html', ResourceManager::getInstance()->getResourceHtml(
-            Path::getInstance()->getJavascriptPath('Chamilo\Application\Weblcms', true) . 'RightsForm.js'
+            $this->getWebPathBuilder()->getJavascriptPath('Chamilo\Application\Weblcms') . 'RightsForm.js'
         )
         );
     }
@@ -275,8 +273,8 @@ abstract class CommonCourseForm extends FormValidator implements CourseSettingsX
     public function build_settings_tab_form_elements()
     {
         $this->add_settings_from_xml(
-            Path::getInstance()->namespaceToFullPath('Chamilo\Application\Weblcms') .
-            join(DIRECTORY_SEPARATOR, array('Resources', 'Settings', 'course_settings.xml')), Manager::CONTEXT,
+            $this->getSystemPathBuilder()->namespaceToFullPath('Chamilo\Application\Weblcms') .
+            join(DIRECTORY_SEPARATOR, ['Resources', 'Settings', 'course_settings.xml']), Manager::CONTEXT,
             new CourseSettingsConnector(), CourseSettingsController::SETTING_PARAM_COURSE_SETTINGS
         );
     }
@@ -295,7 +293,7 @@ abstract class CommonCourseForm extends FormValidator implements CourseSettingsX
         $tool_id = $menu_item_id[1];
 
         $tool_namespace = \Chamilo\Application\Weblcms\Tool\Manager::get_tool_type_namespace($tool);
-        $tool_path = Path::getInstance()->namespaceToFullPath($tool_namespace);
+        $tool_path = $this->getSystemPathBuilder()->namespaceToFullPath($tool_namespace);
         $settings_xml_path = $tool_path . 'Resources/Settings/course_settings.xml';
 
         $this->add_settings_from_xml(
@@ -620,6 +618,15 @@ abstract class CommonCourseForm extends FormValidator implements CourseSettingsX
      */
 
     /**
+     * Returns the defaults for the selected base object (course_type)
+     *
+     * @param DataClass $base_object
+     *
+     * @return string[]
+     */
+    abstract public function get_base_object_default_values(DataClass $base_object);
+
+    /**
      * Sets the base object for this form
      *
      * @param DataClass $base_object
@@ -628,15 +635,6 @@ abstract class CommonCourseForm extends FormValidator implements CourseSettingsX
     {
         $this->base_object = $base_object;
     }
-
-    /**
-     * Returns the defaults for the selected base object (course_type)
-     *
-     * @param DataClass $base_object
-     *
-     * @return string[]
-     */
-    abstract public function get_base_object_default_values(DataClass $base_object);
 
     /**
      * **************************************************************************************************************

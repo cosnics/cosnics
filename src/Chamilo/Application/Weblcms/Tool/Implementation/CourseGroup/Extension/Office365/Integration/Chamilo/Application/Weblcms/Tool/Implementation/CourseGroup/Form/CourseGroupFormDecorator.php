@@ -11,8 +11,7 @@ use Chamilo\Libraries\Translation\Translation;
  * Decorates the CourseGroup form with additional items
  *
  * @package Chamilo\Application\Weblcms\Tool\Implementation\CourseGroup\Extension\Office365\Integration\Chamilo\Application\Weblcms\Tool\Implementation\CourseGroup\Package
- *
- * @author Sven Vanpoucke - Hogeschool Gent
+ * @author  Sven Vanpoucke - Hogeschool Gent
  */
 class CourseGroupFormDecorator implements CourseGroupFormDecoratorInterface
 {
@@ -50,17 +49,6 @@ class CourseGroupFormDecorator implements CourseGroupFormDecoratorInterface
             'checkbox', self::PROPERTY_USE_GROUP . '[' . $id . ']',
             Translation::getInstance()->getTranslation('UseOffice365Group')
         );
-
-        /*$courseGroupForm->addElement(
-            'checkbox', self::PROPERTY_USE_GROUP_AND_TEAM . '[' . $id . ']',
-            Translation::getInstance()->getTranslation('UseOffice365GroupAndTeam')
-        );
-
-        $courseGroupForm->addElement(
-            'html',
-            ResourceManager::getInstance()->getResourceHtml(
-                Path::getInstance()->getJavascriptPath('Chamilo\Application\Weblcms\Tool\Implementation\CourseGroup\Extension\Office365\Integration\Chamilo\Application\Weblcms\Tool\Implementation\CourseGroup', true) .
-                'TeamAndGroupFormSelection.js'));*/
 
         $defaults = [];
         $office365Reference = $this->courseGroupOffice365ReferenceService->getCourseGroupReference($courseGroup);

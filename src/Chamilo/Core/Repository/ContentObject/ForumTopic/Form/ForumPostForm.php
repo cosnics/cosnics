@@ -7,13 +7,11 @@ use Chamilo\Core\Repository\Quota\Calculator;
 use Chamilo\Core\User\Storage\DataClass\User;
 use Chamilo\Core\User\Storage\DataManager;
 use Chamilo\Libraries\Architecture\Application\Application;
-use Chamilo\Libraries\File\Path;
 use Chamilo\Libraries\File\Redirect;
 use Chamilo\Libraries\Format\Form\Element\AdvancedElementFinder\AdvancedElementFinderElementType;
 use Chamilo\Libraries\Format\Form\Element\AdvancedElementFinder\AdvancedElementFinderElementTypes;
 use Chamilo\Libraries\Format\Form\FormValidator;
 use Chamilo\Libraries\Format\Structure\Glyph\FontAwesomeGlyph;
-use Chamilo\Libraries\Format\Utilities\ResourceManager;
 use Chamilo\Libraries\Platform\Session\Session;
 use Chamilo\Libraries\Translation\Translation;
 use Chamilo\Libraries\Utilities\StringUtilities;
@@ -29,11 +27,11 @@ class ForumPostForm extends FormValidator
      * Variables *
      * **************************************************************************************************************
      */
-    const TYPE_CREATE = 1;
+    public const TYPE_CREATE = 1;
 
-    const TYPE_EDIT = 3;
+    public const TYPE_EDIT = 3;
 
-    const TYPE_QUOTE = 2;
+    public const TYPE_QUOTE = 2;
 
     /**
      * Determine which kind of form it is.
@@ -85,20 +83,20 @@ class ForumPostForm extends FormValidator
         );
 
         $uploadUrl = new Redirect(
-            array(
+            [
                 Application::PARAM_CONTEXT => \Chamilo\Core\Repository\Ajax\Manager::CONTEXT,
                 \Chamilo\Core\Repository\Ajax\Manager::PARAM_ACTION => \Chamilo\Core\Repository\Ajax\Manager::ACTION_IMPORT_FILE
-            )
+            ]
         );
 
-        $dropZoneParameters = array(
+        $dropZoneParameters = [
             'name' => 'attachments_importer',
             'maxFilesize' => $calculator->getMaximumUploadSize(),
             'uploadUrl' => $uploadUrl->getUrl(),
             'successCallbackFunction' => 'chamilo.core.repository.importAttachment.processUploadedFile',
             'sendingCallbackFunction' => 'chamilo.core.repository.importAttachment.prepareRequest',
             'removedfileCallbackFunction' => 'chamilo.core.repository.importAttachment.deleteUploadedFile'
-        );
+        ];
 
         $this->addElement(
             'category', '<a href="#">' . Translation::get('Attachments') . '</a>'
@@ -107,8 +105,8 @@ class ForumPostForm extends FormValidator
         $this->addFileDropzone('attachments_importer', $dropZoneParameters, true);
 
         $this->addElement(
-            'html', ResourceManager::getInstance()->getResourceHtml(
-            Path::getInstance()->getJavascriptPath(Manager::CONTEXT, true) . 'Plugin/jquery.file.upload.import.js'
+            'html', $this->getResourceManager()->getResourceHtml(
+            $this->getWebPathBuilder()->getJavascriptPath(Manager::CONTEXT) . 'Plugin/jquery.file.upload.import.js'
         )
         );
 
@@ -158,15 +156,13 @@ class ForumPostForm extends FormValidator
                 break;
             case self::TYPE_QUOTE :
                 $buttons[] = $this->createElement(
-                    'style_submit_button', 'submit_button',
-                    Translation::get('Quote', null, StringUtilities::LIBRARIES), null, null,
-                    new FontAwesomeGlyph('envelope')
+                    'style_submit_button', 'submit_button', Translation::get('Quote', null, StringUtilities::LIBRARIES),
+                    null, null, new FontAwesomeGlyph('envelope')
                 );
                 break;
             default :
                 $buttons[] = $this->createElement(
-                    'style_submit_button', 'submit_button',
-                    Translation::get('Create', null, StringUtilities::LIBRARIES)
+                    'style_submit_button', 'submit_button', Translation::get('Create', null, StringUtilities::LIBRARIES)
                 );
                 break;
         }
@@ -177,8 +173,8 @@ class ForumPostForm extends FormValidator
         $this->addGroup($buttons, 'buttons', null, '&nbsp;', false);
 
         $this->addElement(
-            'html', ResourceManager::getInstance()->getResourceHtml(
-            Path::getInstance()->getJavascriptPath('Chamilo\Core\Repository', true) . 'ContentObjectFormUpload.js'
+            'html', $this->getResourceManager()->getResourceHtml(
+            $this->getWebPathBuilder()->getJavascriptPath('Chamilo\Core\Repository') . 'ContentObjectFormUpload.js'
         )
         );
     }
@@ -197,7 +193,7 @@ class ForumPostForm extends FormValidator
         $this->addElement('category', Translation::get('Properties', null, StringUtilities::LIBRARIES));
 
         // title field
-        $this->add_textfield(ForumPost::PROPERTY_TITLE, Translation::get('Title'), false, array("size" => "50"));
+        $this->add_textfield(ForumPost::PROPERTY_TITLE, Translation::get('Title'), false, ['size' => '50']);
 
         // content HTML editor
         $this->add_html_editor(ForumPost::PROPERTY_CONTENT, Translation::get('Content'), true);

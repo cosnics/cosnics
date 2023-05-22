@@ -6,7 +6,6 @@ use Chamilo\Libraries\File\Path;
 use Chamilo\Libraries\Format\Utilities\ResourceManager;
 
 /**
- *
  * @package application.lib.weblcms.tool.geolocation.component.geolocation_browser
  */
 class GeolocationDetailsRenderer extends ContentObjectPublicationDetailsRenderer
@@ -28,7 +27,8 @@ class GeolocationDetailsRenderer extends ContentObjectPublicationDetailsRenderer
         $html[] = '<script src="http://maps.google.com/maps/api/js?sensor=false"></script>';
         $html[] = ResourceManager::getInstance()->getResourceHtml(
             Path::getInstance()->getJavascriptPath('Chamilo\Core\Repository\ContentObject\PhysicalLocation', true) .
-                 'Plugin\GoogleMaps.js');
+            'Plugin\GoogleMaps.js'
+        );
         $html[] = '<div id="map_canvas" style="border: 1px solid black; height:500px"></div>';
         $html[] = '<script>';
         $html[] = 'initialize(12);';

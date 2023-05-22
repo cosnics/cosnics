@@ -9,7 +9,6 @@ use Chamilo\Application\Weblcms\Tool\Implementation\CourseGroup\Infrastructure\S
 use Chamilo\Application\Weblcms\Tool\Implementation\CourseGroup\Storage\DataClass\CourseGroup;
 use Chamilo\Application\Weblcms\Tool\Implementation\CourseGroup\Storage\DataManager;
 use Chamilo\Core\User\Storage\DataClass\User;
-use Chamilo\Libraries\File\Path;
 use Chamilo\Libraries\Format\Form\FormValidator;
 use Chamilo\Libraries\Format\Menu\OptionsMenuRenderer;
 use Chamilo\Libraries\Format\Structure\Glyph\FontAwesomeGlyph;
@@ -26,8 +25,7 @@ use Chamilo\Libraries\Translation\Translation;
 use Chamilo\Libraries\Utilities\StringUtilities;
 
 /**
- *
- * @author Anthony Hurst (Hogeschool Gent)
+ * @author  Anthony Hurst (Hogeschool Gent)
  * @package application.lib.weblcms.course_group
  */
 class CourseGroupForm extends FormValidator
@@ -119,7 +117,7 @@ class CourseGroupForm extends FormValidator
     {
         $element = $this->createElement(
             'text', CourseGroup::PROPERTY_NAME . $number,
-            Translation::getInstance()->getTranslation('Title', null, StringUtilities::LIBRARIES), array('size' => '50')
+            Translation::getInstance()->getTranslation('Title', null, StringUtilities::LIBRARIES), ['size' => '50']
         );
 
         return $element;
@@ -164,7 +162,7 @@ class CourseGroupForm extends FormValidator
         $this->build_header($this->course_group->get_name());
         $this->addElement(
             'text', CourseGroup::PROPERTY_NAME,
-            Translation::getInstance()->getTranslation('Title', null, StringUtilities::LIBRARIES), array('size' => '50')
+            Translation::getInstance()->getTranslation('Title', null, StringUtilities::LIBRARIES), ['size' => '50']
         );
 
         $this->addElement(
@@ -311,8 +309,8 @@ class CourseGroupForm extends FormValidator
 
         $this->addElement(
             'html', ResourceManager::getInstance()->getResourceHtml(
-            Path::getInstance()->getJavascriptPath(
-                'Chamilo\Application\Weblcms\Tool\Implementation\CourseGroup', true
+            $this->getWebPathBuilder()->getJavascriptPath(
+                'Chamilo\Application\Weblcms\Tool\Implementation\CourseGroup'
             ) . 'CourseGroupForm.js'
         )
         );
@@ -342,7 +340,7 @@ class CourseGroupForm extends FormValidator
 
                 $this->addGroup(
                     $group, CourseGroup::PROPERTY_NAME . $option_number,
-                    Translation::getInstance()->getTranslation('CountedTitle', array('COUNT' => $numbering)), '', false
+                    Translation::getInstance()->getTranslation('CountedTitle', ['COUNT' => $numbering]), '', false
                 );
                 // fill the title field automatically
                 // $defaults[CourseGroup::PROPERTY_NAME . $option_number] =
@@ -358,14 +356,14 @@ class CourseGroupForm extends FormValidator
 
         $this->addElement(
             'style_button', 'add[]', null, [], null, new FontAwesomeGlyph(
-                'plus', array('title' => Translation::getInstance()->getTranslation('AddGroupExplained')), null, 'fas'
+                'plus', ['title' => Translation::getInstance()->getTranslation('AddGroupExplained')], null, 'fas'
             )
         );
 
         $this->addElement(
-            'html', ResourceManager::getInstance()->getResourceHtml(
-            Path::getInstance()->getJavascriptPath(
-                'Chamilo\Application\Weblcms\Tool\Implementation\CourseGroup', true
+            'html', $this->getResourceManager()->getResourceHtml(
+            $this->getWebPathBuilder()->getJavascriptPath(
+                'Chamilo\Application\Weblcms\Tool\Implementation\CourseGroup'
             ) . 'CourseGroupForm.js'
         )
         );
@@ -447,8 +445,7 @@ class CourseGroupForm extends FormValidator
 
             $this->addElement(
                 'text', CourseGroup::PROPERTY_NAME . $counter,
-                Translation::getInstance()->getTranslation('Title', null, StringUtilities::LIBRARIES),
-                array('size' => '50')
+                Translation::getInstance()->getTranslation('Title', null, StringUtilities::LIBRARIES), ['size' => '50']
             );
 
             $this->addElement(
@@ -553,17 +550,17 @@ class CourseGroupForm extends FormValidator
         $choices = [];
         $choices[] = $this->createElement(
             'radio', self::PARENT_GROUP_SELECTION, '', Translation::getInstance()->getTranslation('NoParentGroup'),
-            self::OPTION_PARENT_GROUP_NONE, array('id' => self::PARENT_GROUP_NONE)
+            self::OPTION_PARENT_GROUP_NONE, ['id' => self::PARENT_GROUP_NONE]
         );
         $choices[] = $this->createElement(
             'radio', self::PARENT_GROUP_SELECTION, '',
             Translation::getInstance()->getTranslation('ExistingParentGroup'), self::OPTION_PARENT_GROUP_EXISTING,
-            array('id' => self::PARENT_GROUP_EXISTING)
+            ['id' => self::PARENT_GROUP_EXISTING]
         );
 
         $choices[] = $this->createElement(
             'radio', self::PARENT_GROUP_SELECTION, '', Translation::getInstance()->getTranslation('NewParentGroup'),
-            self::OPTION_PARENT_GROUP_NEW, array('id' => self::PARENT_GROUP_NEW)
+            self::OPTION_PARENT_GROUP_NEW, ['id' => self::PARENT_GROUP_NEW]
         );
         $this->addGroup($choices, null, Translation::getInstance()->getTranslation('ParentGroupType'), '', false);
 
@@ -580,7 +577,7 @@ class CourseGroupForm extends FormValidator
         $this->addElement(
             'text', 'parent_' . CourseGroup::PROPERTY_NAME,
             Translation::getInstance()->getTranslation('ParentGroupTitle'),
-            array('id' => 'parent_' . CourseGroup::PROPERTY_NAME, 'size' => '50')
+            ['id' => 'parent_' . CourseGroup::PROPERTY_NAME, 'size' => '50']
         );
         $this->addRule(
             'parent_' . CourseGroup::PROPERTY_NAME,
@@ -593,7 +590,7 @@ class CourseGroupForm extends FormValidator
         $this->addElement(
             'text', 'parent_' . CourseGroup::PROPERTY_MAX_NUMBER_OF_COURSE_GROUP_PER_MEMBER,
             Translation::getInstance()->getTranslation('MaximumGroupSubscriptionsPerMember'),
-            array('id' => 'parent_' . CourseGroup::PROPERTY_MAX_NUMBER_OF_COURSE_GROUP_PER_MEMBER, 'size' => '4')
+            ['id' => 'parent_' . CourseGroup::PROPERTY_MAX_NUMBER_OF_COURSE_GROUP_PER_MEMBER, 'size' => '4']
         );
         $this->addRule(
             'parent_' . CourseGroup::PROPERTY_MAX_NUMBER_OF_COURSE_GROUP_PER_MEMBER,
@@ -612,8 +609,8 @@ class CourseGroupForm extends FormValidator
     {
         $counter = 0; // Index 0 is the 'parent' course group.
         $this->addElement(
-            'html', ResourceManager::getInstance()->getResourceHtml(
-            Path::getInstance()->getJavascriptPath(
+            'html', $this->getResourceManager()->getResourceHtml(
+            $this->getWebPathBuilder()->getJavascriptPath(
                 'Chamilo\Application\Weblcms\Tool\Implementation\CourseGroup', true
             ) . 'CourseGroupEditForm.js'
         )
@@ -625,7 +622,7 @@ class CourseGroupForm extends FormValidator
 
         $this->addElement(
             'text', CourseGroup::PROPERTY_NAME . $counter,
-            Translation::getInstance()->getTranslation('Title', null, StringUtilities::LIBRARIES), array('size' => '50')
+            Translation::getInstance()->getTranslation('Title', null, StringUtilities::LIBRARIES), ['size' => '50']
         );
 
         $this->build_basic_form($counter);
@@ -633,7 +630,6 @@ class CourseGroupForm extends FormValidator
     }
 
     /**
-     *
      * @param CourseGroup $parent_course_group
      * @param int $child_max_size
      *
@@ -685,7 +681,7 @@ class CourseGroupForm extends FormValidator
      *
      * @param string $new_title The title of the new CourseGroup.
      * @param string $course_code
-     * @param mixed[] $values The form values.
+     * @param mixed[] $values   The form values.
      *
      * @return CourseGroup The constructed, but not created CourseGroup.
      */
@@ -717,8 +713,8 @@ class CourseGroupForm extends FormValidator
      * Creates a set of new course groups based on the titles received.
      *
      * @param string[] $new_titles The titles for which new course groups are to be created.
-     * @param string $course_code The course code.
-     * @param mixed[] $values The form values.
+     * @param string $course_code  The course code.
+     * @param mixed[] $values      The form values.
      *
      * @return CourseGroup[] The constructed, but not created CourseGroups.
      */
@@ -845,7 +841,7 @@ class CourseGroupForm extends FormValidator
                 {
                     $this->course_group->addError(
                         Translation::getInstance()->getTranslation(
-                            'CourseGroupTitleExists', array('NAME' => $parent_group->get_name())
+                            'CourseGroupTitleExists', ['NAME' => $parent_group->get_name()]
                         )
                     );
                 }
@@ -854,7 +850,7 @@ class CourseGroupForm extends FormValidator
                 {
                     $course_group->addError(
                         Translation::getInstance()->getTranslation(
-                            'CannotCreateCourseGroup', array('NAME' => $parent_group->get_name())
+                            'CannotCreateCourseGroup', ['NAME' => $parent_group->get_name()]
                         )
                     );
                 }
@@ -887,7 +883,7 @@ class CourseGroupForm extends FormValidator
                     {
                         $course_group->addError(
                             Translation::getInstance()->getTranslation(
-                                'CreationFailed', array('NAME' => $course_group->get_name())
+                                'CreationFailed', ['NAME' => $course_group->get_name()]
                             )
                         );
                     }
@@ -896,7 +892,7 @@ class CourseGroupForm extends FormValidator
                 {
                     $this->course_group->addError(
                         Translation::getInstance()->getTranslation(
-                            'CourseGroupTitleExists', array('NAME' => $course_group->get_name())
+                            'CourseGroupTitleExists', ['NAME' => $course_group->get_name()]
                         )
                     );
                 }
@@ -1283,7 +1279,7 @@ class CourseGroupForm extends FormValidator
                         $this->course_group->addError(
                             Translation::getInstance()->getTranslation(
                                 'CourseGroupNotUpdated',
-                                array('NAME_OLD' => $old_name, 'NAME_NEW' => $course_group->get_name())
+                                ['NAME_OLD' => $old_name, 'NAME_NEW' => $course_group->get_name()]
                             )
                         );
                         continue;

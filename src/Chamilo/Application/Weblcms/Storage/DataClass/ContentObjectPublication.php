@@ -633,7 +633,7 @@ class ContentObjectPublication extends Publication implements DisplayOrderDataCl
                 mkdir($dir);
             }
 
-            $today = date('Ymd', mktime());
+            $today = date('Ymd', time());
             $logfile = $dir . '//' . "mails_sent_$today" . '.log';
             $mail_log = new FileLogger($logfile, true);
             $mail_log->log_message($log, true);

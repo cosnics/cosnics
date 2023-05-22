@@ -6,10 +6,7 @@ use Chamilo\Core\Repository\ContentObject\LearningPath\Domain\Tree;
 use Chamilo\Core\Repository\ContentObject\LearningPath\Domain\TreeNode;
 use Chamilo\Core\Repository\ContentObject\LearningPath\Service\AutomaticNumberingService;
 use Chamilo\Core\Repository\ContentObject\Section\Storage\DataClass\Section;
-use Chamilo\Libraries\File\Path;
 use Chamilo\Libraries\Format\Form\FormValidator;
-use Chamilo\Libraries\Format\Utilities\ResourceManager;
-use Chamilo\Libraries\Translation\Translation;
 
 /**
  * Form to display the possible places for direct movement
@@ -18,25 +15,24 @@ use Chamilo\Libraries\Translation\Translation;
  */
 class DirectMoverForm extends FormValidator
 {
-    const PARAM_TITLE = 'title';
-    const PARAM_DISPLAY_ORDER = 'displayOrder';
+    public const PARAM_DISPLAY_ORDER = 'displayOrder';
 
-    /**
-     *
-     * @var Tree
-     */
-    protected $tree;
-
-    /**
-     *
-     * @var TreeNode
-     */
-    protected $treeNode;
+    public const PARAM_TITLE = 'title';
 
     /**
      * @var AutomaticNumberingService
      */
     protected $automaticNumberingService;
+
+    /**
+     * @var Tree
+     */
+    protected $tree;
+
+    /**
+     * @var TreeNode
+     */
+    protected $treeNode;
 
     /**
      * DirectMoverForm constructor.
@@ -47,8 +43,7 @@ class DirectMoverForm extends FormValidator
      * @param AutomaticNumberingService $automaticNumberingService
      */
     public function __construct(
-        $action, Tree $tree,
-        TreeNode $treeNode, AutomaticNumberingService $automaticNumberingService
+        $action, Tree $tree, TreeNode $treeNode, AutomaticNumberingService $automaticNumberingService
     )
     {
         parent::__construct('direct_mover_form', self::FORM_METHOD_POST, $action);
@@ -88,10 +83,10 @@ class DirectMoverForm extends FormValidator
 
                 $displayOrder = 1;
 
-                $positionsPerParent[$node->getId()][] = array(
+                $positionsPerParent[$node->getId()][] = [
                     self::PARAM_TITLE => $this->getTranslation('FirstItem'),
                     self::PARAM_DISPLAY_ORDER => $displayOrder
-                );
+                ];
 
                 $displayOrder ++;
 
@@ -103,13 +98,12 @@ class DirectMoverForm extends FormValidator
                         continue;
                     }
 
-                    $positionsPerParent[$node->getId()][] = array(
+                    $positionsPerParent[$node->getId()][] = [
                         self::PARAM_TITLE => $this->getTranslation(
-                            'AfterContentObject',
-                            array('CONTENT_OBJECT' => $child->getContentObject()->get_title())
+                            'AfterContentObject', ['CONTENT_OBJECT' => $child->getContentObject()->get_title()]
                         ),
                         self::PARAM_DISPLAY_ORDER => $displayOrder
-                    );
+                    ];
 
                     $displayOrder ++;
                 }
@@ -117,24 +111,15 @@ class DirectMoverForm extends FormValidator
         }
 
         $this->addElement(
-            'select',
-            Manager::PARAM_PARENT_ID,
-            $this->getTranslation('NewParent'),
-            $parents,
-            array('id' => 'mover-parent-id', 'class' => 'form-control')
+            'select', Manager::PARAM_PARENT_ID, $this->getTranslation('NewParent'), $parents,
+            ['id' => 'mover-parent-id', 'class' => 'form-control']
         );
         $this->addElement(
-            'select',
-            Manager::PARAM_DISPLAY_ORDER,
-            $this->getTranslation('NewPosition'),
-            [],
-            array('id' => 'mover-display-order', 'class' => 'form-control')
+            'select', Manager::PARAM_DISPLAY_ORDER, $this->getTranslation('NewPosition'), [],
+            ['id' => 'mover-display-order', 'class' => 'form-control']
         );
         $this->addElement(
-            'style_submit_button',
-            self::PARAM_SUBMIT,
-            $this->getTranslation('Move'),
-            array('style' => 'margin-top: 20px;')
+            'style_submit_button', self::PARAM_SUBMIT, $this->getTranslation('Move'), ['style' => 'margin-top: 20px;']
         );
 
         $this->addElement(
@@ -144,11 +129,9 @@ class DirectMoverForm extends FormValidator
         );
 
         $this->addElement(
-            'html',
-            ResourceManager::getInstance()->getResourceHtml(
-                Path::getInstance()->namespaceToFullPath(Manager::CONTEXT, true) .
-                'Resources/Javascript/DirectMover.js'
-            )
+            'html', $this->getResourceManager()->getResourceHtml(
+            $this->getWebPathBuilder()->namespaceToFullPath(Manager::CONTEXT) . 'Resources/Javascript/DirectMover.js'
+        )
         );
     }
 }

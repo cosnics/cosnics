@@ -45,6 +45,7 @@ class ResourceManager
 
     /**
      * @throws \Exception
+     * @deprecated Use Dependency injection if possible
      */
     public static function getInstance(): ResourceManager
     {

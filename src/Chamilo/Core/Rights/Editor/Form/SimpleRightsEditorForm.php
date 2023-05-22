@@ -123,8 +123,8 @@ class SimpleRightsEditorForm extends FormValidator
         $this->addGroup($buttons, self::PROPERTY_BUTTONS, null, '&nbsp;', false);
 
         $this->addElement(
-            'html', ResourceManager::getInstance()->getResourceHtml(
-            Path::getInstance()->getJavascriptPath('Chamilo\Core\Rights\Editor', true) . 'RightsForm.js'
+            'html', $this->getResourceManager()->getResourceHtml(
+            $this->getWebPathBuilder()->getJavascriptPath('Chamilo\Core\Rights\Editor') . 'RightsForm.js'
         )
         );
     }

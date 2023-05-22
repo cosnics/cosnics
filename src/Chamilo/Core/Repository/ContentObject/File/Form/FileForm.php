@@ -11,7 +11,6 @@ use Chamilo\Core\Repository\Workspace\Storage\DataClass\Workspace;
 use Chamilo\Core\User\Storage\DataClass\User;
 use Chamilo\Core\User\Storage\DataManager;
 use Chamilo\Libraries\File\Filesystem;
-use Chamilo\Libraries\File\Path;
 use Chamilo\Libraries\Translation\Translation;
 use Chamilo\Libraries\Utilities\StringUtilities;
 
@@ -228,7 +227,8 @@ class FileForm extends ContentObjectForm
         elseif (isset($fields['file_upload_data']) && !empty($fields['file_upload_data']))
         {
             $fileUploadData = json_decode($this->exportValue('file_upload_data'));
-            $temporaryFilePath = Path::getInstance()->getTemporaryPath('Chamilo\Libraries\Ajax\Component') .
+            $temporaryFilePath =
+                $this->getConfigurablePathBuilder()->getTemporaryPath('Chamilo\Libraries\Ajax\Component') .
                 $fileUploadData->temporaryFileName;
 
             $size = filesize($temporaryFilePath);
@@ -264,7 +264,8 @@ class FileForm extends ContentObjectForm
         else
         {
             $fileUploadData = json_decode($this->exportValue('file_upload_data'));
-            $temporaryFilePath = Path::getInstance()->getTemporaryPath('Chamilo\Libraries\Ajax\Component') .
+            $temporaryFilePath =
+                $this->getConfigurablePathBuilder()->getTemporaryPath('Chamilo\Libraries\Ajax\Component') .
                 $fileUploadData->temporaryFileName;
 
             $object->set_filename($fileUploadData->name);
@@ -275,17 +276,7 @@ class FileForm extends ContentObjectForm
 
         $this->set_content_object($object);
 
-        $document = parent::create_content_object();
-
-        $owner = $this->get_owner_id();
-        $owner_path = $this->get_upload_path() . $owner;
-
-        return $document;
-    }
-
-    private static function get_upload_path()
-    {
-        return Path::getInstance()->getRepositoryPath();
+        return parent::create_content_object();
     }
 
     public function setDefaults($defaults = [], $filter = null)
@@ -311,7 +302,8 @@ class FileForm extends ContentObjectForm
 
             if ($fileUploadData)
             {
-                $temporaryFilePath = Path::getInstance()->getTemporaryPath('Chamilo\Libraries\Ajax\Component') .
+                $temporaryFilePath =
+                    $this->getConfigurablePathBuilder()->getTemporaryPath('Chamilo\Libraries\Ajax\Component') .
                     $fileUploadData->temporaryFileName;
 
                 $document->set_filename($fileUploadData->name);

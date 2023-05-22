@@ -272,7 +272,7 @@ class ConfigurationForm extends FormValidator
     {
         $context = $this->context;
 
-        $file = Path::getInstance()->namespaceToFullPath($context) . 'Resources/Settings/settings.xml';
+        $file = $this->getSystemPathBuilder()->namespaceToFullPath($context) . 'Resources/Settings/settings.xml';
         $result = [];
 
         if (file_exists($file))

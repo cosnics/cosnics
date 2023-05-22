@@ -5,12 +5,10 @@ use Chamilo\Core\Repository\ContentObject\Assessment\Storage\DataClass\Assessmen
 use Chamilo\Core\Repository\ContentObject\Hotpotatoes\Storage\DataClass\Hotpotatoes;
 use Chamilo\Core\Repository\Form\ContentObjectForm;
 use Chamilo\Libraries\File\Filesystem;
-use Chamilo\Libraries\File\Path;
 use Chamilo\Libraries\Translation\Translation;
 use Chamilo\Libraries\Utilities\StringUtilities;
 
 /**
- *
  * @package repository.lib.content_object.hotpotatoes
  */
 
@@ -107,14 +105,14 @@ class HotpotatoesForm extends ContentObjectForm
     {
         $owner = $this->get_owner_id();
         $filename = Filesystem::create_unique_name(
-            Path::getInstance()->getPublicStoragePath(Hotpotatoes::CONTEXT) . $owner, $_FILES['file']['name']
+            $this->getSystemPathBuilder()->getPublicStoragePath(Hotpotatoes::CONTEXT) . $owner, $_FILES['file']['name']
         );
 
         $filename_split = explode('.', $filename);
         unset($filename_split[count($filename_split) - 1]);
         $file = implode('.', $filename_split);
 
-        $hotpot_path = Path::getInstance()->getPublicStoragePath(Hotpotatoes::CONTEXT) . $owner . '/';
+        $hotpot_path = $this->getSystemPathBuilder()->getPublicStoragePath(Hotpotatoes::CONTEXT) . $owner . '/';
         $real_path = $hotpot_path . Filesystem::create_unique_name($hotpot_path, $file) . '/';
 
         if (!is_dir($real_path))

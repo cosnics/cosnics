@@ -9,7 +9,6 @@ use Chamilo\Libraries\Architecture\Application\ApplicationConfigurationInterface
 use Chamilo\Libraries\Architecture\ClassnameUtilities;
 use Chamilo\Libraries\Architecture\Interfaces\NoContextComponent;
 use Chamilo\Libraries\File\Filesystem;
-use Chamilo\Libraries\File\Path;
 use Chamilo\Libraries\Format\Structure\FooterRendererInterface;
 use Chamilo\Libraries\Format\Structure\HeaderRendererInterface;
 use Chamilo\Libraries\Format\Structure\WizardHeader\WizardHeader;
@@ -108,7 +107,8 @@ abstract class Manager extends Application implements NoContextComponent
 
     public function getLanguages()
     {
-        $language_path = Path::getInstance()->namespaceToFullPath('Chamilo\Configuration') . 'Resources/I18n/';
+        $language_path =
+            $this->getSystemPathBuilder()->namespaceToFullPath('Chamilo\Configuration') . 'Resources/I18n/';
         $language_files = Filesystem::get_directory_content($language_path, Filesystem::LIST_FILES, false);
 
         $language_list = [];

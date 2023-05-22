@@ -288,8 +288,8 @@ abstract class ContentObjectForm extends FormValidator
             $this->addFileDropzone('attachments_importer', $dropZoneParameters, true);
 
             $this->addElement(
-                'html', ResourceManager::getInstance()->getResourceHtml(
-                Path::getInstance()->getJavascriptPath(Manager::CONTEXT, true) . 'Plugin/jquery.file.upload.import.js'
+                'html', $this->getResourceManager()->getResourceHtml(
+                $this->getWebPathBuilder()->getJavascriptPath(Manager::CONTEXT) . 'Plugin/jquery.file.upload.import.js'
             )
             );
 
@@ -314,8 +314,8 @@ abstract class ContentObjectForm extends FormValidator
     {
         // separated upload and check behaviour into independent javascript files
         $this->addElement(
-            'html', ResourceManager::getInstance()->getResourceHtml(
-            Path::getInstance()->getJavascriptPath('Chamilo\Core\Repository', true) . 'ContentObjectFormUpload.min.js'
+            'html', $this->getResourceManager()->getResourceHtml(
+            $this->getWebPathBuilder()->getJavascriptPath('Chamilo\Core\Repository') . 'ContentObjectFormUpload.min.js'
         )
         );
 
@@ -326,15 +326,15 @@ abstract class ContentObjectForm extends FormValidator
         if ($omitContentObjectTitleCheck != 1)
         {
             $this->addElement(
-                'html', ResourceManager::getInstance()->getResourceHtml(
-                Path::getInstance()->getJavascriptPath('Chamilo\Core\Repository', true) . 'ContentObjectFormCheck.js'
+                'html', $this->getResourceManager()->getResourceHtml(
+                $this->getWebPathBuilder()->getJavascriptPath('Chamilo\Core\Repository') . 'ContentObjectFormCheck.js'
             )
             );
         }
 
         $this->addElement(
-            'html', ResourceManager::getInstance()->getResourceHtml(
-            Path::getInstance()->getJavascriptPath('Chamilo\Libraries', true) . 'HeartBeat.js'
+            'html', $this->getResourceManager()->getResourceHtml(
+            $this->getWebPathBuilder()->getJavascriptPath('Chamilo\Libraries') . 'HeartBeat.js'
         )
         );
 
@@ -500,8 +500,8 @@ abstract class ContentObjectForm extends FormValidator
         );
 
         $this->addElement(
-            'html', ResourceManager::getInstance()->getResourceHtml(
-            Path::getInstance()->getJavascriptPath('Chamilo\Core\Repository', true) . 'ContentObjectUpdate.js'
+            'html', $this->getResourceManager()->getResourceHtml(
+            $this->getWebPathBuilder()->getJavascriptPath('Chamilo\Core\Repository') . 'ContentObjectUpdate.js'
         )
         );
     }
