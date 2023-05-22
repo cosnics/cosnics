@@ -30,19 +30,11 @@ class MenuRenderer
 
     private WebPathBuilder $webPathBuilder;
 
-    /**
-     * @param \Chamilo\Core\Menu\Service\CachedItemService $itemCacheService
-     * @param \Chamilo\Core\Menu\Service\RightsCacheService $rightsCacheService
-     * @param \Chamilo\Core\Menu\Factory\ItemRendererFactory $itemRendererFactory
-     * @param \Chamilo\Libraries\Platform\ChamiloRequest $chamiloRequest
-     * @param \Chamilo\Configuration\Service\Consulter\ConfigurationConsulter $configurationConsulter
-     * @param \Chamilo\Libraries\Format\Theme\ThemePathBuilder $themePathBuilder
-     */
     public function __construct(
         CachedItemService $itemCacheService, RightsCacheService $rightsCacheService,
         ItemRendererFactory $itemRendererFactory, ChamiloRequest $chamiloRequest,
         ConfigurationConsulter $configurationConsulter, WebPathBuilder $webPathBuilder,
-        ThemePathBuilder $themePathBuilder
+        ThemePathBuilder $themeWebPathBuilder
     )
     {
         $this->itemCacheService = $itemCacheService;
@@ -51,7 +43,7 @@ class MenuRenderer
         $this->chamiloRequest = $chamiloRequest;
         $this->configurationConsulter = $configurationConsulter;
         $this->webPathBuilder = $webPathBuilder;
-        $this->themeWebPathBuilder = $themePathBuilder;
+        $this->themeWebPathBuilder = $themeWebPathBuilder;
     }
 
     /**

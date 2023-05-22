@@ -13,7 +13,14 @@
                      method="getUser"/>
         </service>
 
-        <service id="Chamilo\Core\User\Factory\UserFactory"/>
+        <service id="Chamilo\Core\User\Factory\UserFactory">
+            <argument key="$themeWebPathBuilder"
+                      type="service"
+                      id="Chamilo\Libraries\Format\Theme\ThemeWebPathBuilder"/>
+            <argument key="$themeSystemPathBuilder"
+                      type="service"
+                      id="Chamilo\Libraries\Format\Theme\ThemeSystemPathBuilder"/>
+        </service>
         <service id="Chamilo\Core\User\Service\UserService"/>
         <service id="Chamilo\Core\User\Service\UserSettingService">
             <argument key="$userSettingsCache"

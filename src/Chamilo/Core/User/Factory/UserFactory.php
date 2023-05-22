@@ -58,7 +58,7 @@ class UserFactory
 
     public function getThemeSystemPathBuilder(): ThemePathBuilder
     {
-        return $this->themeWebPathBuilder;
+        return $this->themeSystemPathBuilder;
     }
 
     public function getThemeWebPathBuilder(): ThemePathBuilder

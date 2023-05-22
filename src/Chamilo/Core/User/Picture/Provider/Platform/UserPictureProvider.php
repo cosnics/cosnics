@@ -22,12 +22,14 @@ class UserPictureProvider implements UserPictureProviderInterface, UserPictureUp
 {
     private ConfigurablePathBuilder $configurablePathBuilder;
 
-    private ThemePathBuilder $themeWebPathBuilder;
+    private ThemePathBuilder $themeSystemPathBuilder;
 
-    public function __construct(ConfigurablePathBuilder $configurablePathBuilder, ThemePathBuilder $themeWebPathBuilder)
+    public function __construct(
+        ConfigurablePathBuilder $configurablePathBuilder, ThemePathBuilder $themeSystemPathBuilder
+    )
     {
         $this->configurablePathBuilder = $configurablePathBuilder;
-        $this->themeWebPathBuilder = $themeWebPathBuilder;
+        $this->themeSystemPathBuilder = $themeSystemPathBuilder;
     }
 
     /**
@@ -129,9 +131,9 @@ class UserPictureProvider implements UserPictureProviderInterface, UserPictureUp
         return 'data:' . $mime . ';base64,' . $imgString;
     }
 
-    public function getThemeWebPathBuilder(): ThemePathBuilder
+    public function getThemeSystemPathBuilder(): ThemePathBuilder
     {
-        return $this->themeWebPathBuilder;
+        return $this->themeSystemPathBuilder;
     }
 
     /**
@@ -147,7 +149,7 @@ class UserPictureProvider implements UserPictureProviderInterface, UserPictureUp
      */
     private function getUnknownUserPicturePath()
     {
-        return $this->getThemeWebPathBuilder()->getImagePath(
+        return $this->getThemeSystemPathBuilder()->getImagePath(
             'Chamilo\Core\User\Picture\Provider\Platform', 'Unknown', 'png', false
         );
     }
@@ -179,22 +181,19 @@ class UserPictureProvider implements UserPictureProviderInterface, UserPictureUp
      * @return string
      * @throws \Exception
      */
-    private function getUserPicturePath(User $user, $useFallback = true)
+    private function getUserPicturePath(User $user, bool $useFallback = true)
     {
         if ($this->doesUserHavePicture($user))
         {
             return $this->getConfigurablePathBuilder()->getProfilePicturePath() . $user->get_picture_uri();
         }
+        elseif ($useFallback)
+        {
+            return $this->getUnknownUserPicturePath();
+        }
         else
         {
-            if ($useFallback)
-            {
-                return $this->getUnknownUserPicturePath();
-            }
-            else
-            {
-                throw new Exception('NoPictureForUser');
-            }
+            throw new Exception('NoPictureForUser');
         }
     }
 

@@ -8,9 +8,9 @@
                   public="true"/>
 
         <service id="Chamilo\Core\User\Picture\Provider\Platform\UserPictureProvider">
-            <argument key="$themeWebPathBuilder"
+            <argument key="$themeSystemPathBuilder"
                       type="service"
-                      id="Chamilo\Libraries\Format\Theme\ThemeWebPathBuilder"/>
+                      id="Chamilo\Libraries\Format\Theme\ThemeSystemPathBuilder"/>
         </service>
 
     </services>

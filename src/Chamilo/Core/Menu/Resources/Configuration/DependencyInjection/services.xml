@@ -55,6 +55,9 @@
         <service id="Chamilo\Core\Menu\Renderer\MenuRenderer">
             <argument key="$webPathBuilder"
                       type="service"
+                      id="Chamilo\Libraries\File\WebPathBuilder"/>
+            <argument key="$themeWebPathBuilder"
+                      type="service"
                       id="Chamilo\Libraries\Format\Theme\ThemeWebPathBuilder"/>
         </service>
 
