@@ -789,7 +789,7 @@ class ContentObjectPublicationForm extends BasePublicationForm
             $today = date('Ymd', time());
             $logfile = $dir . '//' . "mails_sent_$today" . '.log';
             $mail_log = new FileLogger($logfile, true);
-            $mail_log->log_message($log, true);
+            $mail_log->log_message($log);
         }
 
         $publication->set_email_sent(true);

@@ -16,7 +16,6 @@ abstract class Filecompression
 {
 
     /**
-     *
      * @var string
      */
     private $filename;
@@ -67,22 +66,11 @@ abstract class Filecompression
     }
 
     /**
-     *
      * @return string
      */
     public function get_filename()
     {
         return $this->filename;
-    }
-
-    /**
-     *
-     * @param string $filename
-     * @param string $fileExtension
-     */
-    public function set_filename($filename, $fileExtension = 'cpo')
-    {
-        $this->filename = Filesystem::create_safe_name($filename) . '.' . $fileExtension;
     }
 
     /**
@@ -97,7 +85,16 @@ abstract class Filecompression
      *
      * @param string $mimetype
      *
-     * @return boolean True if the given mimetype is supported.
+     * @return bool True if the given mimetype is supported.
      */
     abstract public function is_supported_mimetype($mimetype);
+
+    /**
+     * @param string $filename
+     * @param string $fileExtension
+     */
+    public function set_filename($filename, $fileExtension = 'cpo')
+    {
+        $this->filename = Filesystem::create_safe_name($filename) . '.' . $fileExtension;
+    }
 }

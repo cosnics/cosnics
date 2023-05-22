@@ -5,27 +5,33 @@ use Chamilo\Libraries\Architecture\Application\Routing\UrlGenerator;
 use Chamilo\Libraries\Calendar\Architecture\Interfaces\CalendarRendererProviderInterface;
 use Chamilo\Libraries\Calendar\Form\JumpForm;
 use Chamilo\Libraries\Calendar\Service\LegendRenderer;
-use Chamilo\Libraries\File\Path;
+use Chamilo\Libraries\File\WebPathBuilder;
 use Chamilo\Libraries\Format\Utilities\ResourceManager;
 use Symfony\Component\Translation\Translator;
 
 /**
  * @package Chamilo\Libraries\Calendar\Service\View
- *
- * @author Hans De Bisschop <hans.de.bisschop@ehb.be>
+ * @author  Hans De Bisschop <hans.de.bisschop@ehb.be>
  */
 abstract class SidebarCalendarRenderer extends HtmlCalendarRenderer
 {
     protected MiniMonthCalendarRenderer $miniMonthCalendarRenderer;
 
+    protected ResourceManager $resourceManager;
+
+    protected WebPathBuilder $webPathBuilder;
+
     public function __construct(
         LegendRenderer $legendRenderer, UrlGenerator $urlGenerator, Translator $translator,
-        MiniMonthCalendarRenderer $miniMonthCalendarRenderer
+        MiniMonthCalendarRenderer $miniMonthCalendarRenderer, WebPathBuilder $webPathBuilder,
+        ResourceManager $resourceManager
     )
     {
         parent::__construct($legendRenderer, $urlGenerator, $translator);
 
         $this->miniMonthCalendarRenderer = $miniMonthCalendarRenderer;
+        $this->webPathBuilder = $webPathBuilder;
+        $this->resourceManager = $resourceManager;
     }
 
     /**
@@ -69,8 +75,8 @@ abstract class SidebarCalendarRenderer extends HtmlCalendarRenderer
 
         $html[] = '<div class="clearfix"></div>';
 
-        $html[] = ResourceManager::getInstance()->getResourceHtml(
-            Path::getInstance()->getJavascriptPath('Chamilo\Libraries\Calendar', true) . 'EventTooltip.js'
+        $html[] = $this->getResourceManager()->getResourceHtml(
+            $this->getWebPathBuilder()->getJavascriptPath('Chamilo\Libraries\Calendar') . 'EventTooltip.js'
         );
 
         return implode(PHP_EOL, $html);
@@ -89,6 +95,16 @@ abstract class SidebarCalendarRenderer extends HtmlCalendarRenderer
     public function getMiniMonthCalendarRenderer(): MiniMonthCalendarRenderer
     {
         return $this->miniMonthCalendarRenderer;
+    }
+
+    public function getResourceManager(): ResourceManager
+    {
+        return $this->resourceManager;
+    }
+
+    public function getWebPathBuilder(): WebPathBuilder
+    {
+        return $this->webPathBuilder;
     }
 
     abstract public function renderFullCalendar(CalendarRendererProviderInterface $dataProvider, int $displayTime

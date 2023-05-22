@@ -11,8 +11,8 @@ use Chamilo\Core\Metadata\Storage\DataClass\Vocabulary;
 use Chamilo\Core\Metadata\Vocabulary\Service\VocabularyService;
 use Chamilo\Core\User\Storage\DataClass\User;
 use Chamilo\Libraries\Architecture\Application\Application;
-use Chamilo\Libraries\File\Path;
 use Chamilo\Libraries\File\Redirect;
+use Chamilo\Libraries\File\WebPathBuilder;
 use Chamilo\Libraries\Format\Form\FormValidator;
 use Chamilo\Libraries\Format\Structure\Glyph\FontAwesomeGlyph;
 use Chamilo\Libraries\Format\Structure\ToolbarItem;
@@ -22,15 +22,18 @@ use stdClass;
 use Symfony\Component\Uid\Uuid;
 
 /**
- *
  * @package Chamilo\Core\Metadata\Service
- * @author Sven Vanpoucke - Hogeschool Gent
- * @author Hans De Bisschop <hans.de.bisschop@ehb.be>
- * @author Magali Gillard <magali.gillard@ehb.be>
- * @author Eduard Vossen <eduard.vossen@ehb.be>
+ * @author  Sven Vanpoucke - Hogeschool Gent
+ * @author  Hans De Bisschop <hans.de.bisschop@ehb.be>
+ * @author  Magali Gillard <magali.gillard@ehb.be>
+ * @author  Eduard Vossen <eduard.vossen@ehb.be>
  */
 class EntityFormService
 {
+
+    protected ResourceManager $resourceManager;
+
+    protected WebPathBuilder $webPathBuilder;
 
     /**
      * @var \Chamilo\Core\Metadata\Element\Service\ElementService
@@ -54,12 +57,14 @@ class EntityFormService
      */
     public function __construct(
         PropertyProviderService $propertyProviderService, VocabularyService $vocabularyService,
-        ElementService $elementService
+        ElementService $elementService, WebPathBuilder $webPathBuilder, ResourceManager $resourceManager
     )
     {
         $this->propertyProviderService = $propertyProviderService;
         $this->vocabularyService = $vocabularyService;
         $this->elementService = $elementService;
+        $this->webPathBuilder = $webPathBuilder;
+        $this->resourceManager = $resourceManager;
     }
 
     /**
@@ -67,8 +72,8 @@ class EntityFormService
      */
     private function addDependencies(FormValidator $formValidator)
     {
-        $resource_manager = ResourceManager::getInstance();
-        $plugin_path = Path::getInstance()->getPluginPath('Chamilo\Core\Metadata', true) . 'Bootstrap/Tagsinput/';
+        $resource_manager = $this->getResourceManager();
+        $plugin_path = $this->getWebPathBuilder()->getPluginPath('Chamilo\Core\Metadata') . 'Bootstrap/Tagsinput/';
 
         $dependencies = [];
 
@@ -76,7 +81,7 @@ class EntityFormService
         $dependencies[] = $resource_manager->getResourceHtml($plugin_path . 'bootstrap-tagsinput.js');
         $dependencies[] = $resource_manager->getResourceHtml($plugin_path . 'bootstrap-tagsinput.css');
         $dependencies[] = $resource_manager->getResourceHtml(
-            Path::getInstance()->getJavascriptPath('Chamilo\Core\Metadata', true) . 'Input.js'
+            $this->getWebPathBuilder()->getJavascriptPath('Chamilo\Core\Metadata') . 'Input.js'
         );
 
         $formValidator->addElement('html', implode(PHP_EOL, $dependencies));
@@ -166,32 +171,31 @@ class EntityFormService
 
                     $tagElementGroup = [];
                     $tagElementGroup[] = $formValidator->createElement(
-                        'text', $elementName . '[' . EntityService::PROPERTY_METADATA_SCHEMA_EXISTING . ']', null,
-                        array(
+                        'text', $elementName . '[' . EntityService::PROPERTY_METADATA_SCHEMA_EXISTING . ']', null, [
                             'id' => $uniqueIdentifier,
                             'class' => $class,
                             'data-schema-id' => $schemaInstance->get_schema_id(),
                             'data-schema-instance-id' => $schemaInstance->getId(),
                             'data-element-id' => $element->get_id(),
                             'data-element-value-limit' => $element->get_value_limit()
-                        )
+                        ]
                     );
 
                     if ($element->isVocabularyUserDefined())
                     {
                         $tagElementGroup[] = $formValidator->createElement(
                             'hidden', $elementName . '[' . EntityService::PROPERTY_METADATA_SCHEMA_NEW . ']', null,
-                            array('id' => 'new-' . $uniqueIdentifier)
+                            ['id' => 'new-' . $uniqueIdentifier]
                         );
                     }
 
                     $urlRenderer = new Redirect(
-                        array(
+                        [
                             Application::PARAM_CONTEXT => \Chamilo\Core\Metadata\Vocabulary\Ajax\Manager::CONTEXT,
                             Application::PARAM_ACTION => \Chamilo\Core\Metadata\Vocabulary\Ajax\Manager::ACTION_SELECT,
                             \Chamilo\Core\Metadata\Vocabulary\Ajax\Manager::PARAM_ELEMENT_IDENTIFIER => $uniqueIdentifier,
                             Manager::PARAM_ELEMENT_ID => $element->get_id()
-                        )
+                        ]
                     );
                     $vocabularyUrl = $urlRenderer->getUrl();
                     $onclick =
@@ -212,7 +216,7 @@ class EntityFormService
                 {
                     $formValidator->addElement(
                         'textarea', $elementName, $element->get_display_name(),
-                        array('cols' => 60, 'rows' => 6, 'maxlength' => 1000)
+                        ['cols' => 60, 'rows' => 6, 'maxlength' => 1000]
                     );
                 }
             }
@@ -228,14 +232,6 @@ class EntityFormService
     }
 
     /**
-     * @param \Chamilo\Core\Metadata\Element\Service\ElementService $elementService
-     */
-    public function setElementService(ElementService $elementService): void
-    {
-        $this->elementService = $elementService;
-    }
-
-    /**
      * @return \Chamilo\Core\Metadata\Provider\Service\PropertyProviderService
      */
     public function getPropertyProviderService(): PropertyProviderService
@@ -243,14 +239,9 @@ class EntityFormService
         return $this->propertyProviderService;
     }
 
-    /**
-     * @param \Chamilo\Core\Metadata\Provider\Service\PropertyProviderService $propertyProviderService
-     */
-    public function setPropertyProviderService(
-        PropertyProviderService $propertyProviderService
-    ): void
+    public function getResourceManager(): ResourceManager
     {
-        $this->propertyProviderService = $propertyProviderService;
+        return $this->resourceManager;
     }
 
     /**
@@ -261,12 +252,9 @@ class EntityFormService
         return $this->vocabularyService;
     }
 
-    /**
-     * @param \Chamilo\Core\Metadata\Vocabulary\Service\VocabularyService $vocabularyService
-     */
-    public function setVocabularyService(VocabularyService $vocabularyService): void
+    public function getWebPathBuilder(): WebPathBuilder
     {
-        $this->vocabularyService = $vocabularyService;
+        return $this->webPathBuilder;
     }
 
     /**
@@ -357,5 +345,31 @@ class EntityFormService
         }
 
         $formValidator->setDefaults($defaults);
+    }
+
+    /**
+     * @param \Chamilo\Core\Metadata\Element\Service\ElementService $elementService
+     */
+    public function setElementService(ElementService $elementService): void
+    {
+        $this->elementService = $elementService;
+    }
+
+    /**
+     * @param \Chamilo\Core\Metadata\Provider\Service\PropertyProviderService $propertyProviderService
+     */
+    public function setPropertyProviderService(
+        PropertyProviderService $propertyProviderService
+    ): void
+    {
+        $this->propertyProviderService = $propertyProviderService;
+    }
+
+    /**
+     * @param \Chamilo\Core\Metadata\Vocabulary\Service\VocabularyService $vocabularyService
+     */
+    public function setVocabularyService(VocabularyService $vocabularyService): void
+    {
+        $this->vocabularyService = $vocabularyService;
     }
 }

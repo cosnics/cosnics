@@ -6,6 +6,7 @@ use Chamilo\Core\Repository\ContentObject\Assessment\Storage\DataClass\Assessmen
 use Chamilo\Core\Repository\Storage\DataClass\ContentObject;
 use Chamilo\Core\Repository\Storage\DataManager;
 use Chamilo\Libraries\Architecture\ClassnameUtilities;
+use Chamilo\Libraries\Format\Form\FormValidator;
 
 /**
  *
@@ -73,7 +74,7 @@ abstract class QuestionDisplay
         return $this->renderer;
     }
 
-    public function get_formvalidator()
+    public function get_formvalidator(): FormValidator
     {
         return $this->formvalidator;
     }

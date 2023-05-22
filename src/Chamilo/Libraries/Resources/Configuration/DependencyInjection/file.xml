@@ -21,5 +21,20 @@
                      method="factory"/>
         </service>
 
+        <service id="Chamilo\Libraries\File\Rss\Parser\SimplePieRssFeedParser">
+            <argument key="$cacheAdapter"
+                      type="service"
+                      id="Chamilo\Libraries\File\Rss\Parser\SimplePieRssFeedParser\CacheAdapter"/>
+        </service>
+
+        <service id="Chamilo\Libraries\File\Rss\Parser\SimplePieRssFeedParser\CacheAdapter"
+                 class="Symfony\Component\Cache\Adapter\FilesystemAdapter">
+            <tag name="Symfony\Component\Cache\Adapter"/>
+            <factory service="Chamilo\Libraries\Cache\SymfonyCacheAdapterFactory"
+                     method="createFilesystemAdapter"/>
+            <argument key="$namespace">Chamilo\Libraries\File\Rss\Parser\SimplePieRssFeedParser</argument>
+            <argument key="$defaultLifetime">%chamilo.configuration.cache.external.defaultLifetime%</argument>
+        </service>
+
     </services>
 </container>

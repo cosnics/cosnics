@@ -7,10 +7,8 @@ use Chamilo\Core\Repository\ContentObject\Assessment\Storage\DataClass\Assessmen
 use Chamilo\Core\Repository\ContentObject\AssessmentOpenQuestion\Storage\DataClass\AssessmentOpenQuestion;
 use Chamilo\Core\Repository\Manager;
 use Chamilo\Libraries\Architecture\Application\Application;
-use Chamilo\Libraries\File\Path;
 use Chamilo\Libraries\File\Redirect;
 use Chamilo\Libraries\Format\Structure\Glyph\FontAwesomeGlyph;
-use Chamilo\Libraries\Format\Utilities\ResourceManager;
 use Chamilo\Libraries\Translation\Translation;
 
 /**
@@ -134,8 +132,8 @@ class Display extends QuestionDisplay
         $formvalidator->addElement('html', '</div>');
 
         $formvalidator->addElement(
-            'html', ResourceManager::getInstance()->getResourceHtml(
-            Path::getInstance()->getJavascriptPath(Assessment::CONTEXT, true) . 'GiveHint.js'
+            'html', $formvalidator->getResourceManager()->getResourceHtml(
+            $formvalidator->getWebPathBuilder()->getJavascriptPath(Assessment::CONTEXT) . 'GiveHint.js'
         )
         );
     }

@@ -2,7 +2,7 @@
 namespace Chamilo\Libraries\Console\Command;
 
 use Chamilo\Configuration\Package\PlatformPackageBundles;
-use Chamilo\Libraries\File\Path;
+use Chamilo\Libraries\File\SystemPathBuilder;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
@@ -11,19 +11,22 @@ use Twig\Environment;
 /**
  * Command to generate the phpunit configuration file for all the chamilo packages individually
  *
- * @author Sven Vanpoucke - Hogeschool Gent
+ * @author  Sven Vanpoucke - Hogeschool Gent
  * @package Chamilo\Libraries\Console\Command
  */
 class PackagesPHPUnitGeneratorCommand extends Command
 {
 
+    protected SystemPathBuilder $systemPathBuilder;
+
     protected Environment $twig;
 
-    public function __construct(Environment $twig)
+    public function __construct(Environment $twig, SystemPathBuilder $systemPathBuilder)
     {
         parent::__construct();
 
         $this->twig = $twig;
+        $this->systemPathBuilder = $systemPathBuilder;
     }
 
     protected function configure()
@@ -42,13 +45,11 @@ class PackagesPHPUnitGeneratorCommand extends Command
      */
     protected function execute(InputInterface $input, OutputInterface $output)
     {
-        $packages = PlatformPackageBundles::getInstance()->get_package_list()->get_list(
-            true
-        );
+        $packages = PlatformPackageBundles::getInstance()->get_package_list()->get_list();
 
         foreach ($packages as $packageContext => $package)
         {
-            $packagePath = Path::getInstance()->namespaceToFullPath($packageContext);
+            $packagePath = $this->systemPathBuilder->namespaceToFullPath($packageContext);
             $testPath = $packagePath . 'Test';
             $phpUnitFile = $testPath . DIRECTORY_SEPARATOR . 'phpunit.xml';
 

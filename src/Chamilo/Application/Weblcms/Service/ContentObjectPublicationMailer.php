@@ -172,7 +172,7 @@ class ContentObjectPublicationMailer
             $today = date('Ymd', time());
             $logfile = $dir . '//' . "mails_sent_$today" . '.log';
             $mail_log = new FileLogger($logfile, true);
-            $mail_log->log_message($logMessage, true);
+            $mail_log->log_message($logMessage);
         }
     }
 

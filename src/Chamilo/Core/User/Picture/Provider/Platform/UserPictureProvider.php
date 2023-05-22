@@ -7,7 +7,7 @@ use Chamilo\Core\User\Storage\DataClass\User;
 use Chamilo\Libraries\File\ConfigurablePathBuilder;
 use Chamilo\Libraries\File\Filesystem;
 use Chamilo\Libraries\File\ImageManipulation\ImageManipulation;
-use Chamilo\Libraries\File\Path;
+use Chamilo\Libraries\File\WebPathBuilder;
 use Chamilo\Libraries\Format\Theme\ThemePathBuilder;
 use DateTime;
 use Exception;
@@ -20,16 +20,20 @@ use Symfony\Component\HttpFoundation\StreamedResponse;
  */
 class UserPictureProvider implements UserPictureProviderInterface, UserPictureUpdateProviderInterface
 {
+    protected WebPathBuilder $webPathBuilder;
+
     private ConfigurablePathBuilder $configurablePathBuilder;
 
     private ThemePathBuilder $themeSystemPathBuilder;
 
     public function __construct(
-        ConfigurablePathBuilder $configurablePathBuilder, ThemePathBuilder $themeSystemPathBuilder
+        ConfigurablePathBuilder $configurablePathBuilder, ThemePathBuilder $themeSystemPathBuilder,
+        WebPathBuilder $webPathBuilder
     )
     {
         $this->configurablePathBuilder = $configurablePathBuilder;
         $this->themeSystemPathBuilder = $themeSystemPathBuilder;
+        $this->webPathBuilder = $webPathBuilder;
     }
 
     /**
@@ -57,7 +61,7 @@ class UserPictureProvider implements UserPictureProviderInterface, UserPictureUp
     {
         $uri = $user->get_picture_uri();
 
-        return ((strlen($uri) > 0) && (Path::getInstance()->isWebUri($uri) || file_exists(
+        return ((strlen($uri) > 0) && ($this->getWebPathBuilder()->isWebUri($uri) || file_exists(
                     $this->getConfigurablePathBuilder()->getProfilePicturePath() . $uri
                 )));
     }
@@ -195,6 +199,11 @@ class UserPictureProvider implements UserPictureProviderInterface, UserPictureUp
         {
             throw new Exception('NoPictureForUser');
         }
+    }
+
+    public function getWebPathBuilder(): WebPathBuilder
+    {
+        return $this->webPathBuilder;
     }
 
     /**

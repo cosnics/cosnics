@@ -5,21 +5,19 @@ namespace Chamilo\Libraries\File;
  * A class which can be used to log messages to a file
  *
  * @package Chamilo\Libraries\File
- * @author Vanpoucke Sven
+ * @author  Vanpoucke Sven
  */
 class FileLogger
 {
 
     /**
-     *
      * @var resource
      */
     private $handle;
 
     /**
-     *
      * @param string $file
-     * @param boolean $append
+     * @param bool $append
      */
     public function __construct($file, $append = false)
     {
@@ -28,7 +26,6 @@ class FileLogger
     }
 
     /**
-     *
      * @param string[] $trace
      */
     public function call_trace($trace)
@@ -59,11 +56,11 @@ class FileLogger
     /**
      * Gets the current timestamp
      *
-     * @return integer
+     * @return int
      */
     public function get_timestamp()
     {
-        $timestamp = strftime("[%d/%m/%Y - %H:%M:%S] ", time());
+        $timestamp = strftime('[%d/%m/%Y - %H:%M:%S] ', time());
 
         return $timestamp;
     }
@@ -72,7 +69,7 @@ class FileLogger
      * Logs a message to the file
      *
      * @param string $message
-     * @param boolean $includeTimestamp
+     * @param bool $includeTimestamp
      */
     public function log_message($message, $includeTimestamp = true)
     {

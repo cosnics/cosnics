@@ -1,48 +1,30 @@
 <?php
 namespace Chamilo\Libraries\File\Rss\Parser;
 
-use Chamilo\Libraries\File\Filesystem;
-use Chamilo\Libraries\File\Path;
 use HTMLPurifier;
 use InvalidArgumentException;
-use SimplePie;
+use SimplePie\SimplePie;
+use Symfony\Component\Cache\Adapter\AdapterInterface;
+use Symfony\Component\Cache\Psr16Cache;
 
 /**
  * Parses Rss Feeds with SimplePie
  *
- * @author Sven Vanpoucke - Hogeschool Gent
+ * @author  Sven Vanpoucke - Hogeschool Gent
  * @package Chamilo\Libraries\File\Rss\Parser
  */
-class SimplePieRssFeedParser implements RssFeedParserInterface
+class SimplePieRssFeedParser
 {
 
-    /**
-     *
-     * @var \SimplePie
-     */
-    private $simplePie;
+    private HTMLPurifier $purifier;
 
-    /**
-     *
-     * @var \HTMLPurifier
-     */
-    private $purifier;
+    private SimplePie $simplePie;
 
-    /**
-     * Constructor
-     *
-     * @param \SimplePie $simplePie
-     * @param \HTMLPurifier $purifier
-     */
-    public function __construct(SimplePie $simplePie, HTMLPurifier $purifier)
+    public function __construct(
+        SimplePie $simplePie, HTMLPurifier $purifier, AdapterInterface $cacheAdapter
+    )
     {
-        $cachePath = Path::getInstance()->getCachePath() . 'rss';
-        if (!is_dir($cachePath))
-        {
-            Filesystem::create_dir($cachePath);
-        }
-
-        $simplePie->set_cache_location($cachePath);
+        $simplePie->set_cache(new Psr16Cache($cacheAdapter));
 
         $this->simplePie = $simplePie;
         $this->purifier = $purifier;
@@ -50,7 +32,7 @@ class SimplePieRssFeedParser implements RssFeedParserInterface
 
     /**
      * @param string $url
-     * @param integer $numberOfEntries
+     * @param int $numberOfEntries
      *
      * @return string[][]
      */

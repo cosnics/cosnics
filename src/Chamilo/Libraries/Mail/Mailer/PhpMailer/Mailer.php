@@ -14,20 +14,17 @@ use RuntimeException;
  * PHPMailer mailer service
  *
  * @package Chamilo\Libraries\Mail\Mailer\PhpMailer
- *
- * @author Sven Vanpoucke - Hogeschool Gent
+ * @author  Sven Vanpoucke - Hogeschool Gent
  */
 class Mailer extends AbstractMailer
 {
 
     /**
-     *
      * @var \Chamilo\Configuration\Configuration
      */
     protected $configuration;
 
     /**
-     *
      * @var PHPMailer
      */
     protected $phpMailer;

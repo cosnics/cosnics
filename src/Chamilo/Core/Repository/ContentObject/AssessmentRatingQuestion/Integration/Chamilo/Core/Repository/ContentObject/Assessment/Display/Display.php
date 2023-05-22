@@ -3,15 +3,13 @@ namespace Chamilo\Core\Repository\ContentObject\AssessmentRatingQuestion\Integra
 
 use Chamilo\Core\Repository\ContentObject\Assessment\Display\Component\Viewer\QuestionDisplay;
 use Chamilo\Core\Repository\ContentObject\Assessment\Storage\DataClass\Assessment;
-use Chamilo\Libraries\File\Path;
 use Chamilo\Libraries\Format\Structure\Glyph\FontAwesomeGlyph;
 use Chamilo\Libraries\Format\Utilities\ResourceManager;
 use Chamilo\Libraries\Translation\Translation;
 
 /**
  * @package Chamilo\Core\Repository\ContentObject\AssessmentRatingQuestion\Integration\Chamilo\Core\Repository\ContentObject\Assessment\Display
- *
- * @author Hans De Bisschop <hans.de.bisschop@ehb.be>
+ * @author  Hans De Bisschop <hans.de.bisschop@ehb.be>
  */
 class Display extends QuestionDisplay
 {
@@ -69,15 +67,15 @@ class Display extends QuestionDisplay
         $renderer->setElementTemplate($element_template, $question_name);
         $formvalidator->addElement(
             'html', ResourceManager::getInstance()->getResourceHtml(
-            Path::getInstance()->getJavascriptPath(
-                'Chamilo\Core\Repository\ContentObject\AssessmentRatingQuestion', true
+            $formvalidator->getWebPathBuilder()->getJavascriptPath(
+                'Chamilo\Core\Repository\ContentObject\AssessmentRatingQuestion'
             ) . 'AssessmentRatingQuestion.min.js'
         )
         );
 
         $formvalidator->addElement(
             'html', ResourceManager::getInstance()->getResourceHtml(
-            Path::getInstance()->getJavascriptPath(Assessment::CONTEXT, true) . 'GiveHint.js'
+            $formvalidator->getWebPathBuilder()->getJavascriptPath(Assessment::CONTEXT) . 'GiveHint.js'
         )
         );
     }

@@ -8,7 +8,7 @@ use Chamilo\Libraries\Calendar\Service\Event\EventMiniMonthRenderer;
 use Chamilo\Libraries\Calendar\Service\LegendRenderer;
 use Chamilo\Libraries\Calendar\Service\View\TableBuilder\CalendarTableBuilder;
 use Chamilo\Libraries\Calendar\Service\View\TableBuilder\MiniMonthCalendarTableBuilder;
-use Chamilo\Libraries\File\Path;
+use Chamilo\Libraries\File\WebPathBuilder;
 use Chamilo\Libraries\Format\Structure\Glyph\FontAwesomeGlyph;
 use Chamilo\Libraries\Format\Utilities\ResourceManager;
 use Chamilo\Libraries\Utilities\StringUtilities;
@@ -16,8 +16,7 @@ use Symfony\Component\Translation\Translator;
 
 /**
  * @package Chamilo\Libraries\Calendar\Service\View
- *
- * @author Hans De Bisschop <hans.de.bisschop@ehb.be>
+ * @author  Hans De Bisschop <hans.de.bisschop@ehb.be>
  */
 class MiniMonthCalendarRenderer extends MiniCalendarRenderer
 {
@@ -25,15 +24,22 @@ class MiniMonthCalendarRenderer extends MiniCalendarRenderer
 
     protected MiniMonthCalendarTableBuilder $miniMonthCalendarTableBuilder;
 
+    protected ResourceManager $resourceManager;
+
+    protected WebPathBuilder $webPathBuilder;
+
     public function __construct(
         LegendRenderer $legendRenderer, UrlGenerator $urlGenerator, Translator $translator,
-        EventMiniMonthRenderer $eventMiniMonthRenderer, MiniMonthCalendarTableBuilder $miniMonthCalendarTableBuilder
+        EventMiniMonthRenderer $eventMiniMonthRenderer, MiniMonthCalendarTableBuilder $miniMonthCalendarTableBuilder,
+        WebPathBuilder $webPathBuilder, ResourceManager $resourceManager
     )
     {
         parent::__construct($legendRenderer, $urlGenerator, $translator);
 
         $this->eventMiniMonthRenderer = $eventMiniMonthRenderer;
         $this->miniMonthCalendarTableBuilder = $miniMonthCalendarTableBuilder;
+        $this->webPathBuilder = $webPathBuilder;
+        $this->resourceManager = $resourceManager;
     }
 
     /**
@@ -65,6 +71,16 @@ class MiniMonthCalendarRenderer extends MiniCalendarRenderer
     public function getMiniMonthCalendarTableBuilder(): MiniMonthCalendarTableBuilder
     {
         return $this->miniMonthCalendarTableBuilder;
+    }
+
+    public function getResourceManager(): ResourceManager
+    {
+        return $this->resourceManager;
+    }
+
+    public function getWebPathBuilder(): WebPathBuilder
+    {
+        return $this->webPathBuilder;
     }
 
     public function isFadedEvent(int $displayTime, Event $event): bool
@@ -124,8 +140,8 @@ class MiniMonthCalendarRenderer extends MiniCalendarRenderer
         $html[] = '</div>';
         $html[] = '<div class="clearfix"></div>';
 
-        $html[] = ResourceManager::getInstance()->getResourceHtml(
-            Path::getInstance()->getJavascriptPath('Chamilo\Libraries\Calendar', true) . 'EventTooltip.js'
+        $html[] = $this->getResourceManager()->getResourceHtml(
+            $this->getWebPathBuilder()->getJavascriptPath('Chamilo\Libraries\Calendar') . 'EventTooltip.js'
         );
 
         return implode(PHP_EOL, $html);
