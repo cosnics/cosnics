@@ -18,6 +18,9 @@
             <argument key="$bannerRenderer"
                       type="service"
                       id="Chamilo\Core\Install\Format\Structure\BannerRenderer"/>
+            <argument key="$themeWebPathBuilder"
+                      type="service"
+                      id="Chamilo\Libraries\Format\Theme\ThemeWebPathBuilder"/>
         </service>
     </services>
 </container>

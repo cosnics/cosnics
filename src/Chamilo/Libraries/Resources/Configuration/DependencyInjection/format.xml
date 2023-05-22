@@ -7,14 +7,16 @@
                   autoconfigure="true"
                   public="true"/>
 
-        <service id="Chamilo\Libraries\Format\Theme\ThemeSystemPathBuilder">
+        <service id="Chamilo\Libraries\Format\Theme\ThemeSystemPathBuilder"
+                 class="Chamilo\Libraries\Format\Theme\ThemePathBuilder">
             <argument key="$pathBuilder"
                       type="service"
                       id="Chamilo\Libraries\File\SystemPathBuilder"/>
             <argument key="$theme">%chamilo.configuration.general.theme%</argument>
         </service>
 
-        <service id="Chamilo\Libraries\Format\Theme\ThemeWebPathBuilder">
+        <service id="Chamilo\Libraries\Format\Theme\ThemeWebPathBuilder"
+                 class="Chamilo\Libraries\Format\Theme\ThemePathBuilder">
             <argument key="$pathBuilder"
                       type="service"
                       id="Chamilo\Libraries\File\WebPathBuilder"/>

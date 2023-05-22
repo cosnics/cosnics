@@ -24,14 +24,10 @@ class UserPictureProvider implements UserPictureProviderInterface, UserPictureUp
 
     private ThemePathBuilder $themeWebPathBuilder;
 
-    /**
-     * @param \Chamilo\Libraries\File\ConfigurablePathBuilder $configurablePathBuilder
-     * @param \Chamilo\Libraries\Format\Theme\ThemePathBuilder $themePathBuilder
-     */
-    public function __construct(ConfigurablePathBuilder $configurablePathBuilder, ThemePathBuilder $themePathBuilder)
+    public function __construct(ConfigurablePathBuilder $configurablePathBuilder, ThemePathBuilder $themeWebPathBuilder)
     {
         $this->configurablePathBuilder = $configurablePathBuilder;
-        $this->themeWebPathBuilder = $themePathBuilder;
+        $this->themeWebPathBuilder = $themeWebPathBuilder;
     }
 
     /**
