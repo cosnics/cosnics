@@ -12,7 +12,6 @@ use Chamilo\Core\Repository\Workspace\Storage\DataClass\Workspace;
 use Chamilo\Core\User\Storage\DataClass\User;
 use Chamilo\Libraries\Architecture\Application\Application;
 use Chamilo\Libraries\File\Filesystem;
-use Chamilo\Libraries\File\Path;
 use Chamilo\Libraries\File\Properties\FileProperties;
 use Chamilo\Libraries\File\Redirect;
 use Chamilo\Libraries\Storage\Query\Condition\AndCondition;
@@ -61,7 +60,8 @@ class WebpageContentObjectImportController extends ContentObjectImportController
 
                     if ($calculator->canUpload($file->get_size()))
                     {
-                        $temp_path = Path::getInstance()->getTemporaryPath() . 'repository/import/webpage/' .
+                        $temp_path =
+                            $this->getConfigurablePathBuilder()->getTemporaryPath() . 'repository/import/webpage/' .
                             $file->get_name_extension();
 
                         if (file_exists($temp_path))

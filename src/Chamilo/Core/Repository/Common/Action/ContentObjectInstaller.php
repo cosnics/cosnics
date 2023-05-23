@@ -8,10 +8,7 @@ use Chamilo\Core\Repository\Common\Import\ImportParameters;
 use Chamilo\Core\Repository\Service\ContentObjectTemplate\ContentObjectTemplateSynchronizer;
 use Chamilo\Core\User\Storage\DataClass\User;
 use Chamilo\Core\User\Storage\DataManager;
-use Chamilo\Libraries\Architecture\ClassnameUtilities;
-use Chamilo\Libraries\DependencyInjection\DependencyInjectionContainerBuilder;
 use Chamilo\Libraries\File\Filesystem;
-use Chamilo\Libraries\File\Path;
 use Chamilo\Libraries\File\Properties\FileProperties;
 use Chamilo\Libraries\Platform\Session\Session;
 use Chamilo\Libraries\Storage\Parameters\DataClassRetrievesParameters;
@@ -48,15 +45,9 @@ abstract class ContentObjectInstaller extends Installer
         return true;
     }
 
-    /**
-     * @return \Chamilo\Core\Repository\Service\ContentObjectTemplate\ContentObjectTemplateSynchronizer
-     * @throws \Exception
-     */
-    public function getContentObjectTemplateSynchronizer()
+    public function getContentObjectTemplateSynchronizer(): ContentObjectTemplateSynchronizer
     {
-        return DependencyInjectionContainerBuilder::getInstance()->createContainer()->get(
-            ContentObjectTemplateSynchronizer::class
-        );
+        return $this->getService(ContentObjectTemplateSynchronizer::class);
     }
 
     /**
@@ -66,8 +57,7 @@ abstract class ContentObjectInstaller extends Installer
      */
     public function import_content_object()
     {
-        $context = ClassnameUtilities::getInstance()->getNamespaceFromObject($this);
-        $exampleFolderPath = Path::getInstance()->getResourcesPath($context) . 'Example/';
+        $exampleFolderPath = $this->getSystemPathBuilder()->getResourcesPath(static::CONTEXT) . 'Example/';
 
         $examplePaths = Filesystem::get_directory_content($exampleFolderPath);
 

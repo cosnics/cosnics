@@ -26,7 +26,7 @@ use Chamilo\Libraries\Format\Form\Element\AdvancedElementFinder\AdvancedElementF
 use Chamilo\Libraries\Format\Form\Element\AdvancedElementFinder\AdvancedElementFinderElementTypes;
 use Chamilo\Libraries\Format\Structure\Glyph\FontAwesomeGlyph;
 use Chamilo\Libraries\Format\Utilities\ResourceManager;
-use Chamilo\Libraries\Mail\Mailer\MailerFactory;
+use Chamilo\Libraries\Mail\Mailer\MailerInterface;
 use Chamilo\Libraries\Mail\ValueObject\Mail;
 use Chamilo\Libraries\Mail\ValueObject\MailFile;
 use Chamilo\Libraries\Platform\Session\Request;
@@ -493,6 +493,11 @@ class ContentObjectPublicationForm extends BasePublicationForm
         $this->addGroup($buttons, 'buttons', null, '&nbsp;', false);
     }
 
+    protected function getActiveMailer(): MailerInterface
+    {
+        return $this->getService('Chamilo\Libraries\Mail\Mailer\ActiveMailer');
+    }
+
     protected function getRightsService(): RightsService
     {
         return $this->getService(RightsService::class);
@@ -761,8 +766,7 @@ class ContentObjectPublicationForm extends BasePublicationForm
             $mailFiles
         );
 
-        $mailerFactory = new MailerFactory(Configuration::getInstance());
-        $mailer = $mailerFactory->getActiveMailer();
+        $mailer = $this->getActiveMailer();
 
         try
         {

@@ -1,7 +1,7 @@
 <?php
 namespace Chamilo\Libraries\File\Compression\ZipArchive;
 
-use Chamilo\Libraries\File\Compression\Filecompression;
+use Chamilo\Libraries\File\ConfigurablePathBuilder;
 use Chamilo\Libraries\File\Filesystem;
 use RecursiveDirectoryIterator;
 use RecursiveIteratorIterator;
@@ -9,27 +9,36 @@ use ZipArchive;
 
 /**
  * @package Chamilo\Libraries\File\Compression\ZipArchive
- *
- * @author Hans De Bisschop <hans.de.bisschop@ehb.be>
+ * @author  Hans De Bisschop <hans.de.bisschop@ehb.be>
  */
-class ZipArchiveFilecompression extends Filecompression
+class ZipArchiveFilecompression
 {
-    /**
-     * @param string $path
-     *
-     * @return string
-     */
-    public function create_archive($path)
+    protected ConfigurablePathBuilder $configurablePathBuilder;
+
+    public function __construct(ConfigurablePathBuilder $configurablePathBuilder)
+    {
+        $this->configurablePathBuilder = $configurablePathBuilder;
+    }
+
+    protected function createTemporaryDirectory(): string
+    {
+        $path = $this->getConfigurablePathBuilder()->getTemporaryPath(__NAMESPACE__) . uniqid() . DIRECTORY_SEPARATOR;
+        Filesystem::create_dir($path);
+
+        return $path;
+    }
+
+    public function createArchive(string $path, ?string $fileName = null, string $fileExtension = 'cpo'): string
     {
         $pathToBeZipped = realpath($path);
-        $archiveFileName = $this->get_filename();
+        $temporaryPath = $this->createTemporaryDirectory();
 
-        $temporaryPath = $this->create_temporary_directory();
-
-        if (!isset($archiveFileName))
+        if (!isset($fileName))
         {
-            $archiveFileName = Filesystem::create_unique_name($temporaryPath, uniqid() . '.zip');
+            $fileName = Filesystem::create_unique_name($temporaryPath, uniqid());
         }
+
+        $archiveFileName = Filesystem::create_safe_name($fileName) . '.' . $fileExtension;
 
         $archiveFilePath = $temporaryPath . $archiveFileName;
 
@@ -44,7 +53,7 @@ class ZipArchiveFilecompression extends Filecompression
             new RecursiveDirectoryIterator($pathToBeZipped), RecursiveIteratorIterator::LEAVES_ONLY
         );
 
-        foreach ($files as $name => $file)
+        foreach ($files as $file)
         {
             // Skip directories (they would be added automatically)
             if (!$file->isDir())
@@ -62,14 +71,19 @@ class ZipArchiveFilecompression extends Filecompression
     }
 
     /**
-     * @param string $file
-     * @param boolean $withSafeNames
+     * Extracts a compressed file to a given directory.
+     * This function will also make sure that all resulting directory-
+     * and filenames are safe using the Filesystem::create_safe_names function.
      *
-     * @return string
+     * @param string $file The full path to the file which should be extracted
+     *
+     * @return string boolean full path to the directory where the file was extracted or boolean false if extraction
+     *         wasn't successfull
+     * @see Filesystem::create_safe_names
      */
-    public function extract_file($file, bool $withSafeNames = true)
+    public function extractFile(string $file, bool $withSafeNames = true): string
     {
-        $extractedFilesDirectory = $this->create_temporary_directory();
+        $extractedFilesDirectory = $this->createTemporaryDirectory();
 
         $zipArchive = new ZipArchive();
         $zipArchive->open($file);
@@ -89,14 +103,17 @@ class ZipArchiveFilecompression extends Filecompression
         return $extractedFilesDirectory;
     }
 
+    public function getConfigurablePathBuilder(): ConfigurablePathBuilder
+    {
+        return $this->configurablePathBuilder;
+    }
+
     /**
      * Retrieves the file information metadata from the zip archive
      *
-     * @param \ZipArchive $zipArchive
-     *
      * @return string[][]
      */
-    protected function getFilesInfo(ZipArchive $zipArchive)
+    protected function getFilesInfo(ZipArchive $zipArchive): array
     {
         $filesInfo = [];
 
@@ -120,26 +137,23 @@ class ZipArchiveFilecompression extends Filecompression
     }
 
     /**
+     * Retrieves an array of all supported mimetypes for this file compression implementation.
+     *
      * @return string[]
      */
-    public function get_supported_mimetypes()
+    public function getSupportedMimetypes(): array
     {
-        return array(
+        return [
             'application/x-zip-compressed',
             'application/zip',
             'multipart/x-zip',
             'application/x-gzip',
             'multipart/x-gzip'
-        );
+        ];
     }
 
-    /**
-     * @param string $mimetype
-     *
-     * @return boolean
-     */
-    public function is_supported_mimetype($mimetype)
+    public function isSupportedMimetype(string $mimetype): bool
     {
-        return in_array($mimetype, $this->get_supported_mimetypes());
+        return in_array($mimetype, $this->getSupportedMimetypes());
     }
 }

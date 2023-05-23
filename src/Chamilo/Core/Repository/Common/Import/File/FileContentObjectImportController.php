@@ -59,7 +59,7 @@ class FileContentObjectImportController extends ContentObjectImportController
 
                     if ($calculator->canUpload($file->get_size()))
                     {
-                        $temp_path = Path::getInstance()->getTemporaryPath() . 'repository/import/file/' .
+                        $temp_path = $this->getConfigurablePathBuilder()->getTemporaryPath() . 'repository/import/file/' .
                             $file->get_name_extension();
 
                         if (file_exists($temp_path))

@@ -1,9 +1,9 @@
 <?php
 namespace Chamilo\Libraries\Mail\Mailer\PhpMailer;
 
-use Chamilo\Configuration\Configuration;
+use Chamilo\Configuration\Service\Consulter\ConfigurationConsulter;
 use Chamilo\Configuration\Storage\DataClass\MailLog;
-use Chamilo\Libraries\File\Path;
+use Chamilo\Libraries\File\SystemPathBuilder;
 use Chamilo\Libraries\Mail\Mailer\AbstractMailer;
 use Chamilo\Libraries\Mail\ValueObject\Mail;
 use Exception;
@@ -18,35 +18,22 @@ use RuntimeException;
  */
 class Mailer extends AbstractMailer
 {
+    protected PHPMailer $phpMailer;
+
+    protected SystemPathBuilder $systemPathBuilder;
 
     /**
-     * @var \Chamilo\Configuration\Configuration
+     * @throws \PHPMailer\PHPMailer\Exception
      */
-    protected $configuration;
-
-    /**
-     * @var PHPMailer
-     */
-    protected $phpMailer;
-
-    /**
-     * Mailer constructor.
-     *
-     * @param \Chamilo\Configuration\Configuration $configuration
-     * @param PHPMailer $phpMailer
-     */
-    public function __construct(Configuration $configuration = null, PHPMailer $phpMailer = null)
+    public function __construct(ConfigurationConsulter $configurationConsulter, SystemPathBuilder $systemPathBuilder)
     {
-        parent::__construct($configuration);
+        parent::__construct($configurationConsulter);
 
-        $this->setPHPMailer($phpMailer);
+        $this->systemPathBuilder = $systemPathBuilder;
+        $this->initializePhpMailer();
     }
 
     /**
-     * Adds the attachments
-     *
-     * @param \Chamilo\Libraries\Mail\ValueObject\Mail $mail
-     *
      * @throws \PHPMailer\PHPMailer\Exception
      */
     protected function addAttachments(Mail $mail)
@@ -57,11 +44,6 @@ class Mailer extends AbstractMailer
         }
     }
 
-    /**
-     * Adds the content
-     *
-     * @param \Chamilo\Libraries\Mail\ValueObject\Mail $mail
-     */
     protected function addContent(Mail $mail)
     {
         $this->phpMailer->Body = $mail->getMessage();
@@ -69,9 +51,7 @@ class Mailer extends AbstractMailer
     }
 
     /**
-     * Adds the embedded images
-     *
-     * @param \Chamilo\Libraries\Mail\ValueObject\Mail $mail
+     * @throws \PHPMailer\PHPMailer\Exception
      */
     protected function addEmbeddedImages(Mail $mail)
     {
@@ -84,9 +64,7 @@ class Mailer extends AbstractMailer
     }
 
     /**
-     * Adds the recipients
-     *
-     * @param \Chamilo\Libraries\Mail\ValueObject\Mail $mail
+     * @throws \PHPMailer\PHPMailer\Exception
      */
     protected function addRecipients(Mail $mail)
     {
@@ -107,9 +85,7 @@ class Mailer extends AbstractMailer
     }
 
     /**
-     * Adds optionally reply information
-     *
-     * @param \Chamilo\Libraries\Mail\ValueObject\Mail $mail
+     * @throws \PHPMailer\PHPMailer\Exception
      */
     protected function addReplyInformation(Mail $mail)
     {
@@ -136,6 +112,48 @@ class Mailer extends AbstractMailer
         $this->phpMailer->FromName = $this->determineFromName($mail);
     }
 
+    public function getSystemPathBuilder(): SystemPathBuilder
+    {
+        return $this->systemPathBuilder;
+    }
+
+    /**
+     * @throws \PHPMailer\PHPMailer\Exception
+     */
+    protected function initializePhpMailer()
+    {
+        if (!isset($this->phpMailer))
+        {
+            global $phpMailerConfiguration;
+            require_once($this->getSystemPathBuilder()->getStoragePath() . 'configuration/phpmailer.conf.php');
+
+            $this->phpMailer = new PHPMailer();
+
+            $this->phpMailer->isHTML(true);
+            $this->phpMailer->CharSet = 'utf-8';
+            $this->phpMailer->Mailer = $phpMailerConfiguration['SMTP_MAILER'];
+            $this->phpMailer->Host = $phpMailerConfiguration['SMTP_HOST'];
+            $this->phpMailer->Port = $phpMailerConfiguration['SMTP_PORT'];
+
+            if ($phpMailerConfiguration['SMTP_SECURE'])
+            {
+                $this->phpMailer->SMTPSecure = $phpMailerConfiguration['SMTP_SECURE'];
+            }
+
+            if ($phpMailerConfiguration['SMTP_AUTH'])
+            {
+                $this->phpMailer->SMTPAuth = 1;
+                $this->phpMailer->Username = $phpMailerConfiguration['SMTP_USER'];
+                $this->phpMailer->Password = $phpMailerConfiguration['SMTP_PASS'];
+            }
+
+            $this->phpMailer->Priority = 3;
+            $this->phpMailer->addCustomHeader('Errors-To: ' . $phpMailerConfiguration['SMTP_FROM_EMAIL']);
+
+            $this->phpMailer->SMTPKeepAlive = true;
+        }
+    }
+
     /**
      * Resets the mailer after sending each mail
      */
@@ -148,10 +166,6 @@ class Mailer extends AbstractMailer
     }
 
     /**
-     * Sends the actual mail
-     *
-     * @param \Chamilo\Libraries\Mail\ValueObject\Mail $mail
-     *
      * @throws \PHPMailer\PHPMailer\Exception
      */
     protected function send(Mail $mail)
@@ -168,10 +182,7 @@ class Mailer extends AbstractMailer
     }
 
     /**
-     * Sends the mail individually
-     *
-     * @param \Chamilo\Libraries\Mail\ValueObject\Mail $mail
-     *
+     * @throws \PHPMailer\PHPMailer\Exception
      * @throws \Exception
      */
     protected function sendIndividually(Mail $mail)
@@ -201,12 +212,7 @@ class Mailer extends AbstractMailer
     }
 
     /**
-     * Sends a single mail
-     *
-     * @param \Chamilo\Libraries\Mail\ValueObject\Mail $mail
-     *
      * @throws \PHPMailer\PHPMailer\Exception
-     * @throws \Exception
      */
     public function sendMail(Mail $mail)
     {
@@ -227,46 +233,5 @@ class Mailer extends AbstractMailer
         }
 
         $this->resetMailer();
-    }
-
-    /**
-     * Sets and optionally initializes the phpmailer
-     *
-     * @param PHPMailer $phpMailer
-     */
-    protected function setPHPMailer(PHPMailer $phpMailer = null)
-    {
-        if (!isset($phpMailer) || !$phpMailer instanceof PHPMailer)
-        {
-            global $phpMailerConfiguration;
-            require_once(Path::getInstance()->getStoragePath() . 'configuration/phpmailer.conf.php');
-
-            $phpMailer = new PHPMailer();
-
-            $phpMailer->isHTML(true);
-            $phpMailer->CharSet = 'utf-8';
-            $phpMailer->Mailer = $phpMailerConfiguration['SMTP_MAILER'];
-            $phpMailer->Host = $phpMailerConfiguration['SMTP_HOST'];
-            $phpMailer->Port = $phpMailerConfiguration['SMTP_PORT'];
-
-            if ($phpMailerConfiguration['SMTP_SECURE'])
-            {
-                $phpMailer->SMTPSecure = $phpMailerConfiguration['SMTP_SECURE'];
-            }
-
-            if ($phpMailerConfiguration['SMTP_AUTH'])
-            {
-                $phpMailer->SMTPAuth = 1;
-                $phpMailer->Username = $phpMailerConfiguration['SMTP_USER'];
-                $phpMailer->Password = $phpMailerConfiguration['SMTP_PASS'];
-            }
-
-            $phpMailer->Priority = 3;
-            $phpMailer->addCustomHeader('Errors-To: ' . $phpMailerConfiguration['SMTP_FROM_EMAIL']);
-
-            $phpMailer->SMTPKeepAlive = true;
-        }
-
-        $this->phpMailer = $phpMailer;
     }
 }

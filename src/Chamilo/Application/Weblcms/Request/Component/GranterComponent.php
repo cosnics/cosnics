@@ -9,9 +9,7 @@ use Chamilo\Application\Weblcms\Request\Rights\Rights;
 use Chamilo\Application\Weblcms\Request\Storage\DataClass\Request;
 use Chamilo\Application\Weblcms\Request\Storage\DataManager;
 use Chamilo\Application\Weblcms\Rights\CourseManagementRights;
-use Chamilo\Configuration\Configuration;
 use Chamilo\Libraries\Architecture\Exceptions\NotAllowedException;
-use Chamilo\Libraries\Mail\Mailer\MailerFactory;
 use Chamilo\Libraries\Mail\ValueObject\Mail;
 use Chamilo\Libraries\Translation\Translation;
 use Chamilo\Libraries\Utilities\StringUtilities;
@@ -20,36 +18,36 @@ use Exception;
 class GranterComponent extends Manager
 {
 
-    function run()
+    public function run()
     {
-        if (! Rights::getInstance()->request_is_allowed())
+        if (!Rights::getInstance()->request_is_allowed())
         {
             throw new NotAllowedException();
         }
-        
+
         $ids = $this->getRequest()->getFromRequestOrQuery(self::PARAM_REQUEST_ID);
         $failures = 0;
-        
-        if (! empty($ids))
+
+        if (!empty($ids))
         {
-            if (! is_array($ids))
+            if (!is_array($ids))
             {
-                $ids = array($ids);
+                $ids = [$ids];
             }
-            
+
             foreach ($ids as $id)
             {
                 $request = DataManager::retrieve_by_id(Request::class, (int) $id);
-                
-                if (! Rights::getInstance()->is_target_user(
-                    $this->get_user(), 
-                    $request->get_user_id()) && ! $this->get_user()->is_platform_admin())
+
+                if (!Rights::getInstance()->is_target_user(
+                        $this->get_user(), $request->get_user_id()
+                    ) && !$this->get_user()->is_platform_admin())
                 {
                     $failures ++;
                 }
                 else
                 {
-                    
+
                     if ($request->was_granted())
                     {
                         $failures ++;
@@ -57,31 +55,31 @@ class GranterComponent extends Manager
                     else
                     {
                         $course = new Course();
-                        
+
                         $course->set_title($request->get_name());
                         $course->set_course_type_id($request->get_course_type_id());
                         $course->set_visual_code(strtoupper(uniqid()));
                         $course->set_titular_id($request->get_user_id());
                         $course->set_category_id($request->get_category_id());
-                        
+
                         if ($course->create())
                         {
                             $course_settings = [];
-                            $course_settings[CourseSettingsController::SETTING_PARAM_COURSE_SETTINGS][CourseSettingsConnector::TITULAR] = $course->get_titular_id();
-                            
+                            $course_settings[CourseSettingsController::SETTING_PARAM_COURSE_SETTINGS][CourseSettingsConnector::TITULAR] =
+                                $course->get_titular_id();
+
                             if ($course->create_course_settings_from_values($course_settings, true))
                             {
                                 if (CourseManagementRights::getInstance()->create_rights_from_values($course, []))
                                 {
                                     if (\Chamilo\Application\Weblcms\Course\Storage\DataManager::subscribe_user_to_course(
-                                        $course->get_id(), 
-                                        '1', 
-                                        $request->get_user_id()))
+                                        $course->get_id(), '1', $request->get_user_id()
+                                    ))
                                     {
                                         $request->set_decision(Request::DECISION_GRANTED);
                                         $request->set_decision_date(time());
-                                        
-                                        if (! $request->update())
+
+                                        if (!$request->update())
                                         {
                                             $failures ++;
                                         }
@@ -112,23 +110,23 @@ class GranterComponent extends Manager
                     }
                 }
             }
-            
+
             if ($failures)
             {
                 if (count($ids) == 1)
                 {
                     $message = 'ObjectNotGranted';
-                    $parameter = array('OBJECT' => Translation::get('Request'));
+                    $parameter = ['OBJECT' => Translation::get('Request')];
                 }
                 elseif (count($ids) > $failures)
                 {
                     $message = 'SomeObjectsNotGranted';
-                    $parameter = array('OBJECTS' => Translation::get('Requests'));
+                    $parameter = ['OBJECTS' => Translation::get('Requests')];
                 }
                 else
                 {
                     $message = 'ObjectsNotGranted';
-                    $parameter = array('OBJECTS' => Translation::get('Requests'));
+                    $parameter = ['OBJECTS' => Translation::get('Requests')];
                 }
             }
             else
@@ -136,51 +134,53 @@ class GranterComponent extends Manager
                 if (count($ids) == 1)
                 {
                     $message = 'ObjectGranted';
-                    $parameter = array('OBJECT' => Translation::get('Request'));
+                    $parameter = ['OBJECT' => Translation::get('Request')];
                 }
                 else
                 {
                     $message = 'ObjectsGranted';
-                    $parameter = array('OBJECTS' => Translation::get('Requests'));
+                    $parameter = ['OBJECTS' => Translation::get('Requests')];
                 }
             }
-            
+
             $this->redirectWithMessage(
                 Translation::get($message, $parameter, StringUtilities::LIBRARIES), (bool) $failures,
-                array(self::PARAM_ACTION => self::ACTION_BROWSE));
+                [self::PARAM_ACTION => self::ACTION_BROWSE]
+            );
         }
         else
         {
             return $this->display_error_page(
                 htmlentities(
                     Translation::get(
-                        'NoObjectSelected', 
-                        array('OBJECT' => Translation::get('Request')), 
-                        StringUtilities::LIBRARIES)));
+                        'NoObjectSelected', ['OBJECT' => Translation::get('Request')], StringUtilities::LIBRARIES
+                    )
+                )
+            );
         }
     }
 
-    function send_mail(Request $request)
+    public function send_mail(Request $request)
     {
         set_time_limit(3600);
-        
+
         $recipient = $request->get_user();
-        
-        $siteName = Configuration::getInstance()->get_setting(array('Chamilo\Core\Admin', 'site_name'));
-        
+
+        $siteName = $this->getConfigurationConsulter()->getSetting(['Chamilo\Core\Admin', 'site_name']);
+
         $title = Translation::get(
-            'RequestGrantedMailTitle', 
-            array('PLATFORM' => $siteName, 'NAME' => $request->get_name()));
-        
+            'RequestGrantedMailTitle', ['PLATFORM' => $siteName, 'NAME' => $request->get_name()]
+        );
+
         $body = Translation::get(
-            'RequestGrantedMailBody', 
-            array('USER' => $recipient->get_fullname(), 'PLATFORM' => $siteName, 'NAME' => $request->get_name()));
-        
+            'RequestGrantedMailBody',
+            ['USER' => $recipient->get_fullname(), 'PLATFORM' => $siteName, 'NAME' => $request->get_name()]
+        );
+
         $mail = new Mail($title, $body, $recipient->get_email());
-        
-        $mailerFactory = new MailerFactory(Configuration::getInstance());
-        $mailer = $mailerFactory->getActiveMailer();
-        
+
+        $mailer = $this->getActiveMailer();
+
         try
         {
             $mailer->sendMail($mail);

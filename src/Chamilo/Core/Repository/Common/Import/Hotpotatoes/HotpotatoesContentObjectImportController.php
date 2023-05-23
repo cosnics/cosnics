@@ -5,9 +5,8 @@ use Chamilo\Core\Repository\Common\Import\ContentObjectImportController;
 use Chamilo\Core\Repository\Storage\DataClass\ContentObject;
 use Chamilo\Core\Repository\Storage\DataManager;
 use Chamilo\Core\Repository\Workspace\Storage\DataClass\Workspace;
-use Chamilo\Libraries\File\Compression\Filecompression;
+use Chamilo\Libraries\File\Compression\ZipArchive\ZipArchiveFilecompression;
 use Chamilo\Libraries\File\Filesystem;
-use Chamilo\Libraries\File\Path;
 use Chamilo\Libraries\File\Properties\FileProperties;
 use Chamilo\Libraries\File\Properties\WebpageProperties;
 use Chamilo\Libraries\Translation\Translation;
@@ -33,7 +32,7 @@ class HotpotatoesContentObjectImportController extends ContentObjectImportContro
                 {
                     $filename_hash = md5($file->get_path());
                     $relative_folder_path = Text::char_at($filename_hash, 0);
-                    $full_folder_path = Path::getInstance()->getPublicStoragePath(
+                    $full_folder_path = $this->getSystemPathBuilder()->getPublicStoragePath(
                             'Chamilo\Core\Repository\ContentObject\Hotpotatoes'
                         ) . $this->get_parameters()->get_user() . '/' . $relative_folder_path;
 
@@ -89,6 +88,11 @@ class HotpotatoesContentObjectImportController extends ContentObjectImportContro
         return 0;
     }
 
+    protected function getZipArchiveFilecompression(): ZipArchiveFilecompression
+    {
+        return $this->getService(ZipArchiveFilecompression::class);
+    }
+
     /**
      * @return string[]
      */
@@ -104,11 +108,7 @@ class HotpotatoesContentObjectImportController extends ContentObjectImportContro
 
     public function process_archive($archive_path)
     {
-        $htm_files = [];
-        $extra_files = [];
-
-        $zip = Filecompression::factory();
-        $extracted_files_dir = $zip->extract_file($archive_path, false);
+        $extracted_files_dir = $this->getZipArchiveFilecompression()->extractFile($archive_path, false);
         $this->process_folder($extracted_files_dir);
         Filesystem::remove($extracted_files_dir);
     }
@@ -169,7 +169,7 @@ class HotpotatoesContentObjectImportController extends ContentObjectImportContro
 
     public function process_folder($folder_path)
     {
-        $hotpotatoes_path = Path::getInstance()->getPublicStoragePath(
+        $hotpotatoes_path = $this->getSystemPathBuilder()->getPublicStoragePath(
                 'Chamilo\Core\Repository\ContentObject\Hotpotatoes'
             ) . $this->get_parameters()->get_user() . '/';
 
@@ -237,7 +237,7 @@ class HotpotatoesContentObjectImportController extends ContentObjectImportContro
             {
                 $masher_hash = md5($masher->get_path());
                 $relative_folder_path = Text::char_at($masher_hash, 0);
-                $full_folder_path = Path::getInstance()->getPublicStoragePath(
+                $full_folder_path = $this->getSystemPathBuilder()->getPublicStoragePath(
                         'Chamilo\Core\Repository\ContentObject\Hotpotatoes'
                     ) . $this->get_parameters()->get_user() . '/' . $relative_folder_path;
 
@@ -277,7 +277,7 @@ class HotpotatoesContentObjectImportController extends ContentObjectImportContro
                 {
                     $hot_potatoes_hash = md5($hot_potatoes_file_properties->get_path());
                     $relative_folder_path = Text::char_at($hot_potatoes_hash, 0);
-                    $full_folder_path = Path::getInstance()->getPublicStoragePath(
+                    $full_folder_path = $this->getSystemPathBuilder()->getPublicStoragePath(
                             'Chamilo\Core\Repository\ContentObject\Hotpotatoes'
                         ) . $this->get_parameters()->get_user() . '/' . $relative_folder_path;
 

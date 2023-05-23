@@ -6,11 +6,11 @@ use Chamilo\Core\User\Storage\DataClass\User;
 use Chamilo\Core\User\Storage\DataManager;
 use Chamilo\Libraries\File\Filesystem;
 use Chamilo\Libraries\File\Path;
-use Chamilo\Libraries\Translation\Translation;
 use Chamilo\Libraries\Storage\Parameters\DataClassRetrievesParameters;
 use Chamilo\Libraries\Storage\Query\Condition\EqualityCondition;
 use Chamilo\Libraries\Storage\Query\Variable\PropertyConditionVariable;
 use Chamilo\Libraries\Storage\Query\Variable\StaticConditionVariable;
+use Chamilo\Libraries\Translation\Translation;
 use Chamilo\Libraries\Utilities\DatetimeUtilities;
 use Chamilo\Libraries\Utilities\StringUtilities;
 use ReflectionClass;
@@ -19,32 +19,27 @@ use ReflectionClass;
  * Class that exports the results of an assessment
  *
  * @package repository\content_object\assessment
- * @author Sven Vanpoucke - Hogeschool Gent
+ * @author  Sven Vanpoucke - Hogeschool Gent
  */
 class AssessmentResultsExportController
 {
-    /**
-     * **************************************************************************************************************
-     * COLUMN DEFINITIONS *
-     * **************************************************************************************************************
-     */
-    const COLUMN_OFFICIAL_CODE = 'official_code';
-    const COLUMN_FIRSTNAME = 'firstname';
-    const COLUMN_LASTNAME = 'lastname';
-    const COLUMN_ASSESSMENT_TITLE = 'assessment_title';
-    const COLUMN_ASSESSMENT_DESCRIPTION = 'assessment_description';
-    const COLUMN_ATTEMTP_ID = 'attempt_id';
-    const COLUMN_ATTEMPT_START_TIME = 'attempt_start_time';
-    const COLUMN_ATTEMPT_END_TIME = 'attempt_end_time';
-    const COLUMN_ATTEMPT_TOTAL_TIME = 'attempt_total_time';
-    const COLUMN_ATTEMPT_TOTAL_SCORE = 'attempt_total_score';
-    const COLUMN_QUESTION_NUMBER = 'question_number';
-    const COLUMN_QUESTION_ID = 'question_id';
-    const COLUMN_QUESTION_TITLE = 'question_title';
-    const COLUMN_QUESTION_DESCRIPTION = 'question_description';
-    const COLUMN_ATTEMPT_ANSWER = 'attempt_answer';
-    const COLUMN_ATTEMPT_SCORE = 'attempt_score';
-    const COLUMN_QUESTION_WEIGHT = 'question_weight';
+    public const COLUMN_ASSESSMENT_DESCRIPTION = 'assessment_description';
+    public const COLUMN_ASSESSMENT_TITLE = 'assessment_title';
+    public const COLUMN_ATTEMPT_ANSWER = 'attempt_answer';
+    public const COLUMN_ATTEMPT_END_TIME = 'attempt_end_time';
+    public const COLUMN_ATTEMPT_SCORE = 'attempt_score';
+    public const COLUMN_ATTEMPT_START_TIME = 'attempt_start_time';
+    public const COLUMN_ATTEMPT_TOTAL_SCORE = 'attempt_total_score';
+    public const COLUMN_ATTEMPT_TOTAL_TIME = 'attempt_total_time';
+    public const COLUMN_ATTEMTP_ID = 'attempt_id';
+    public const COLUMN_FIRSTNAME = 'firstname';
+    public const COLUMN_LASTNAME = 'lastname';
+    public const COLUMN_OFFICIAL_CODE = 'official_code';
+    public const COLUMN_QUESTION_DESCRIPTION = 'question_description';
+    public const COLUMN_QUESTION_ID = 'question_id';
+    public const COLUMN_QUESTION_NUMBER = 'question_number';
+    public const COLUMN_QUESTION_TITLE = 'question_title';
+    public const COLUMN_QUESTION_WEIGHT = 'question_weight';
 
     /**
      * **************************************************************************************************************
@@ -53,11 +48,12 @@ class AssessmentResultsExportController
      */
 
     /**
-     * The assessments that need to be exported
+     * Additional column headers that need to be exported
      *
-     * @var Assessment[]
+     * @var string[string]
+     * @example $additional_column_headers[column_header_id] = column_translation
      */
-    private $assessments;
+    private $additional_column_headers;
 
     /**
      * The assessment results
@@ -67,20 +63,18 @@ class AssessmentResultsExportController
     private $assessment_results;
 
     /**
-     * Additional column headers that need to be exported
+     * The assessments that need to be exported
      *
-     * @var string[string]
-     *
-     * @example $additional_column_headers[column_header_id] = column_translation
+     * @var Assessment[]
      */
-    private $additional_column_headers;
+    private $assessments;
 
     /**
-     * The question results ordered by question id
+     * The export data of one row
      *
-     * @var QuestionResult[]
+     * @var string[]
      */
-    private $question_results_by_question;
+    private $data_row;
 
     /**
      * The export data
@@ -90,11 +84,11 @@ class AssessmentResultsExportController
     private $export_data;
 
     /**
-     * The export data of one row
+     * The question results ordered by question id
      *
-     * @var string[]
+     * @var QuestionResult[]
      */
-    private $data_row;
+    private $question_results_by_question;
 
     /**
      * **************************************************************************************************************
@@ -139,14 +133,25 @@ class AssessmentResultsExportController
     }
 
     /**
-     * Adds data to the current row
+     * Adds the additional information columns for a single question result
      *
-     * @param string $column
-     * @param string $data
+     * @param QuestionResult $question_result
      */
-    public function add_data_to_current_row($column, $data)
+    protected function add_additional_information_columns(QuestionResult $question_result)
     {
-        $this->data_row[$column] = $data;
+        $additional_information = $question_result->get_additional_information();
+        if (!is_array($additional_information) || count($additional_information) == 0)
+        {
+            return;
+        }
+
+        foreach ($this->additional_column_headers as $column_header_id => $column_translation)
+        {
+            if (array_key_exists($column_header_id, $additional_information))
+            {
+                $this->add_data_to_current_row($column_header_id, $additional_information[$column_header_id]);
+            }
+        }
     }
 
     /**
@@ -169,50 +174,39 @@ class AssessmentResultsExportController
      */
 
     /**
-     * Sets the assessment results
+     * Adds data to the current row
      *
-     * @param AssessmentResult[] $assessment_results
+     * @param string $column
+     * @param string $data
      */
-    public function set_assessment_results($assessment_results)
+    public function add_data_to_current_row($column, $data)
     {
-        $this->assessment_results = $assessment_results;
+        $this->data_row[$column] = $data;
     }
 
     /**
-     * Returns the assessment results
+     * Exports a single assessment
      *
-     * @return AssessmentResult[]
+     * @param Assessment | Hotpotatoes $assessment
      */
-    public function get_assessment_results()
+    protected function export_assessment($assessment)
     {
-        return $this->assessment_results;
-    }
+        $condition = new EqualityCondition(
+            new PropertyConditionVariable(
+                ComplexContentObjectItem::class, ComplexContentObjectItem::PROPERTY_PARENT
+            ), new StaticConditionVariable($assessment->get_id())
+        );
 
-    /**
-     * Sets the assessments
-     *
-     * @param Assessment[] $assessments
-     */
-    public function set_assessments($assessments)
-    {
-        $this->assessments = $assessments;
-    }
+        $complex_questions_resultset =
+            \Chamilo\Core\Repository\Storage\DataManager::retrieve_complex_content_object_items(
+                ComplexContentObjectItem::class, new DataClassRetrievesParameters($condition)
+            );
 
-    /**
-     * Returns the assessments
-     *
-     * @return Assessment[]
-     */
-    public function get_assessments()
-    {
-        return $this->assessments;
+        foreach ($complex_questions_resultset as $complex_question)
+        {
+            $this->export_question($complex_question, $assessment);
+        }
     }
-
-    /**
-     * **************************************************************************************************************
-     * Protected functionality *
-     * **************************************************************************************************************
-     */
 
     /**
      * Exports the headers of the csv file
@@ -228,7 +222,8 @@ class AssessmentResultsExportController
             {
                 $this->add_data_to_current_row(
                     $constant,
-                    Translation::get((string) StringUtilities::getInstance()->createString($value)->upperCamelize()));
+                    Translation::get((string) StringUtilities::getInstance()->createString($value)->upperCamelize())
+                );
             }
         }
 
@@ -238,29 +233,6 @@ class AssessmentResultsExportController
         }
 
         $this->add_current_row_to_export_data();
-    }
-
-    /**
-     * Exports a single assessment
-     *
-     * @param Assessment | Hotpotatoes $assessment
-     */
-    protected function export_assessment($assessment)
-    {
-        $condition = new EqualityCondition(
-            new PropertyConditionVariable(
-                ComplexContentObjectItem::class,
-                ComplexContentObjectItem::PROPERTY_PARENT),
-            new StaticConditionVariable($assessment->get_id()));
-
-        $complex_questions_resultset = \Chamilo\Core\Repository\Storage\DataManager::retrieve_complex_content_object_items(
-            ComplexContentObjectItem::class,
-            new DataClassRetrievesParameters($condition));
-
-        foreach($complex_questions_resultset as $complex_question)
-        {
-            $this->export_question($complex_question, $assessment);
-        }
     }
 
     /**
@@ -279,19 +251,26 @@ class AssessmentResultsExportController
     }
 
     /**
+     * **************************************************************************************************************
+     * Protected functionality *
+     * **************************************************************************************************************
+     */
+
+    /**
      * Exports the data for one question result
      *
      * @param QuestionResult $question_result
      * @param ComplexContentObjectItem $complex_question
      * @param Assessment | Hotpotatoes $assessment
      */
-    protected function export_question_result(QuestionResult $question_result,
-        ComplexContentObjectItem $complex_question, $assessment)
+    protected function export_question_result(
+        QuestionResult $question_result, ComplexContentObjectItem $complex_question, $assessment
+    )
     {
         $assessment_result = $question_result->get_assessment_result();
         $user = DataManager::retrieve_by_id(
-            User::class,
-            $assessment_result->get_user_id());
+            User::class, $assessment_result->get_user_id()
+        );
 
         if ($user)
         {
@@ -309,9 +288,10 @@ class AssessmentResultsExportController
 
         $start_time = DatetimeUtilities::getInstance()->formatLocaleDate(null, $assessment_result->get_start_time());
 
-        $end_time = is_null($assessment_result->get_end_time()) ? '-' : DateTimeUtilities::getInstance()->formatLocaleDate(
-            null,
-            $assessment_result->get_end_time());
+        $end_time =
+            is_null($assessment_result->get_end_time()) ? '-' : DateTimeUtilities::getInstance()->formatLocaleDate(
+                null, $assessment_result->get_end_time()
+            );
 
         $total_time = DateTimeUtilities::getInstance()->convertSecondsToHours($assessment_result->get_total_time());
 
@@ -341,25 +321,49 @@ class AssessmentResultsExportController
     }
 
     /**
-     * Adds the additional information columns for a single question result
-     *
-     * @param QuestionResult $question_result
+     * Exports the export data to a csv file
      */
-    protected function add_additional_information_columns(QuestionResult $question_result)
+    protected function export_to_csv()
     {
-        $additional_information = $question_result->get_additional_information();
-        if (! is_array($additional_information) || count($additional_information) == 0)
+        $path = Path::getInstance()->getTemporaryPath();
+
+        if (!file_exists($path))
         {
-            return;
+            Filesystem::create_dir($path);
         }
 
-        foreach ($this->additional_column_headers as $column_header_id => $column_translation)
+        $path = $path . Filesystem::create_unique_name($path, 'raw_assessment_export' . date('_Y-m-d_H-i-s') . '.csv');
+
+        $fp = fopen($path, 'w');
+
+        foreach ($this->export_data as $fields)
         {
-            if (array_key_exists($column_header_id, $additional_information))
-            {
-                $this->add_data_to_current_row($column_header_id, $additional_information[$column_header_id]);
-            }
+            fputcsv($fp, $fields, ';');
         }
+
+        fclose($fp);
+
+        return $path;
+    }
+
+    /**
+     * Returns the assessment results
+     *
+     * @return AssessmentResult[]
+     */
+    public function get_assessment_results()
+    {
+        return $this->assessment_results;
+    }
+
+    /**
+     * Returns the assessments
+     *
+     * @return Assessment[]
+     */
+    public function get_assessments()
+    {
+        return $this->assessments;
     }
 
     /**
@@ -377,28 +381,22 @@ class AssessmentResultsExportController
     }
 
     /**
-     * Exports the export data to a csv file
+     * Sets the assessment results
+     *
+     * @param AssessmentResult[] $assessment_results
      */
-    protected function export_to_csv()
+    public function set_assessment_results($assessment_results)
     {
-        $path = Path::getInstance()->getTemporaryPath();
+        $this->assessment_results = $assessment_results;
+    }
 
-        if (! file_exists($path))
-        {
-            Filesystem::create_dir($path);
-        }
-
-        $path = $path . Filesystem::create_unique_name($path, 'raw_assessment_export' . date('_Y-m-d_H-i-s') . '.csv');
-
-        $fp = fopen($path, 'w');
-
-        foreach ($this->export_data as $fields)
-        {
-            fputcsv($fp, $fields, ';');
-        }
-
-        fclose($fp);
-
-        return $path;
+    /**
+     * Sets the assessments
+     *
+     * @param Assessment[] $assessments
+     */
+    public function set_assessments($assessments)
+    {
+        $this->assessments = $assessments;
     }
 }

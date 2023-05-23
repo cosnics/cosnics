@@ -1,7 +1,6 @@
 <?php
 namespace Chamilo\Core\User\Component;
 
-use Chamilo\Configuration\Configuration;
 use Chamilo\Core\Tracking\Storage\DataClass\ChangesTracker;
 use Chamilo\Core\Tracking\Storage\DataClass\Event;
 use Chamilo\Core\User\Manager;
@@ -9,11 +8,9 @@ use Chamilo\Core\User\Storage\DataClass\User;
 use Chamilo\Core\User\Storage\DataManager;
 use Chamilo\Libraries\Architecture\Application\Application;
 use Chamilo\Libraries\Architecture\Exceptions\NotAllowedException;
-use Chamilo\Libraries\File\Path;
 use Chamilo\Libraries\Format\Structure\Breadcrumb;
 use Chamilo\Libraries\Format\Structure\BreadcrumbTrail;
 use Chamilo\Libraries\Hashing\HashingUtilities;
-use Chamilo\Libraries\Mail\Mailer\MailerFactory;
 use Chamilo\Libraries\Mail\ValueObject\Mail;
 use Chamilo\Libraries\Translation\Translation;
 use Chamilo\Libraries\Utilities\String\Text;
@@ -21,20 +18,10 @@ use Chamilo\Libraries\Utilities\StringUtilities;
 use Exception;
 
 /**
- *
  * @package user.lib.user_manager.component
  */
 class MultiPasswordResetterComponent extends Manager
 {
-
-    /**
-     *
-     * @return \Chamilo\Libraries\Hashing\HashingUtilities
-     */
-    public function getHashingUtilities()
-    {
-        return $this->getService(HashingUtilities::class);
-    }
 
     /**
      * Runs this component and displays its output.
@@ -44,14 +31,14 @@ class MultiPasswordResetterComponent extends Manager
         $ids = $this->getRequest()->getFromRequestOrQuery(self::PARAM_USER_USER_ID);
         $this->set_parameter(self::PARAM_USER_USER_ID, $ids);
 
-        if (! $this->get_user()->is_platform_admin())
+        if (!$this->get_user()->is_platform_admin())
         {
             throw new NotAllowedException();
         }
 
-        if (! is_array($ids))
+        if (!is_array($ids))
         {
-            $ids = array($ids);
+            $ids = [$ids];
         }
 
         if (count($ids) > 0)
@@ -61,8 +48,8 @@ class MultiPasswordResetterComponent extends Manager
             foreach ($ids as $id)
             {
                 $user = DataManager::retrieve_by_id(
-                    User::class,
-                    (int) $id);
+                    User::class, (int) $id
+                );
 
                 $password = Text::generate_password();
                 $user->set_password($this->getHashingUtilities()->hashString($password));
@@ -73,7 +60,8 @@ class MultiPasswordResetterComponent extends Manager
                     $mail_body = [];
 
                     $mail_body[] = $user->get_fullname() . ',';
-                    $mail_body[] = Translation::get('YourAccountParam') . ' ' . $this->getWebPathBuilder()->getBasePath();
+                    $mail_body[] =
+                        Translation::get('YourAccountParam') . ' ' . $this->getWebPathBuilder()->getBasePath();
                     $mail_body[] = Translation::get('UserName') . ' :' . $user->get_username();
                     $mail_body[] = Translation::get('Password') . ' :' . $password;
 
@@ -81,8 +69,7 @@ class MultiPasswordResetterComponent extends Manager
 
                     $mail = new Mail($mail_subject, $mail_body, $user->get_email());
 
-                    $mailerFactory = new MailerFactory(Configuration::getInstance());
-                    $mailer = $mailerFactory->getActiveMailer();
+                    $mailer = $this->getActiveMailer();
 
                     try
                     {
@@ -93,11 +80,11 @@ class MultiPasswordResetterComponent extends Manager
                     }
 
                     Event::trigger(
-                        'Update',
-                        Manager::CONTEXT,
-                        array(
+                        'Update', Manager::CONTEXT, [
                             ChangesTracker::PROPERTY_REFERENCE_ID => $user->get_id(),
-                            ChangesTracker::PROPERTY_USER_ID => $this->get_user()->get_id()));
+                            ChangesTracker::PROPERTY_USER_ID => $this->get_user()->get_id()
+                        ]
+                    );
                 }
                 else
                 {
@@ -106,23 +93,23 @@ class MultiPasswordResetterComponent extends Manager
             }
 
             $message = $this->get_result(
-                $failures,
-                count($ids),
-                'UserPasswordNotResetted',
-                'UserPasswordsNotResetted',
-                'UserPasswordResetted',
-                'UserPasswordsResetted');
+                $failures, count($ids), 'UserPasswordNotResetted', 'UserPasswordsNotResetted', 'UserPasswordResetted',
+                'UserPasswordsResetted'
+            );
 
-            $this->redirectWithMessage($message, ($failures > 0), array(Application::PARAM_ACTION => self::ACTION_BROWSE_USERS));
+            $this->redirectWithMessage(
+                $message, ($failures > 0), [Application::PARAM_ACTION => self::ACTION_BROWSE_USERS]
+            );
         }
         else
         {
             return $this->display_error_page(
                 htmlentities(
                     Translation::get(
-                        'NoObjectSelected',
-                        array('OBJECT' => Translation::get('User')),
-                        StringUtilities::LIBRARIES)));
+                        'NoObjectSelected', ['OBJECT' => Translation::get('User')], StringUtilities::LIBRARIES
+                    )
+                )
+            );
         }
     }
 
@@ -130,7 +117,17 @@ class MultiPasswordResetterComponent extends Manager
     {
         $breadcrumbtrail->add(
             new Breadcrumb(
-                $this->get_url(array(self::PARAM_ACTION => self::ACTION_BROWSE_USERS)),
-                Translation::get('AdminUserBrowserComponent')));
+                $this->get_url([self::PARAM_ACTION => self::ACTION_BROWSE_USERS]),
+                Translation::get('AdminUserBrowserComponent')
+            )
+        );
+    }
+
+    /**
+     * @return \Chamilo\Libraries\Hashing\HashingUtilities
+     */
+    public function getHashingUtilities()
+    {
+        return $this->getService(HashingUtilities::class);
     }
 }

@@ -16,10 +16,7 @@
             <argument>%chamilo.configuration.storage%</argument>
         </service>
 
-        <service id="Chamilo\Libraries\File\Compression\Filecompression">
-            <factory class="Chamilo\Libraries\File\Compression\Filecompression"
-                     method="factory"/>
-        </service>
+        <service id="Chamilo\Libraries\File\Compression\ZipArchive\ZipArchiveFilecompression"/>
 
         <service id="Chamilo\Libraries\File\Rss\Parser\SimplePieRssFeedParser">
             <argument key="$cacheAdapter"

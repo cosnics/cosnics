@@ -10,7 +10,6 @@ use Chamilo\Core\Repository\Storage\DataManager;
 use Chamilo\Core\Repository\Workspace\Storage\DataClass\Workspace;
 use Chamilo\Core\User\Storage\DataClass\User;
 use Chamilo\Libraries\File\Filesystem;
-use Chamilo\Libraries\File\Path;
 use Chamilo\Libraries\Translation\Translation;
 use ZipArchive;
 
@@ -323,7 +322,7 @@ class ZipContentObjectImportController extends ContentObjectImportController
      */
     protected function handle_files(ZipArchive $zip_archive, array $files_info)
     {
-        $extracted_files_dir = Path::getInstance()->getTemporaryPath() . uniqid();
+        $extracted_files_dir = $this->getConfigurablePathBuilder()->getTemporaryPath() . uniqid();
         Filesystem::create_dir($extracted_files_dir);
 
         $failures = 0;
@@ -411,7 +410,7 @@ class ZipContentObjectImportController extends ContentObjectImportController
 
     public function tryout($file)
     {
-        $extracted_files_dir = $path = Path::getInstance()->getTemporaryPath() . uniqid();
+        $extracted_files_dir = $path = $this->getConfigurablePathBuilder()->getTemporaryPath() . uniqid();
         Filesystem::create_dir($path);
 
         $zip = new ZipArchive();

@@ -8,7 +8,6 @@ use Chamilo\Configuration\Package\Storage\DataClass\Package;
 use Chamilo\Configuration\Storage\DataClass\Setting;
 use Chamilo\Configuration\Storage\DataManager;
 use Chamilo\Libraries\File\Filesystem;
-use Chamilo\Libraries\File\Path;
 use Chamilo\Libraries\Translation\Translation;
 use DOMDocument;
 
@@ -171,7 +170,7 @@ abstract class Remover extends Action
 
     public function get_path()
     {
-        return Path::getInstance()->namespaceToFullPath(static::CONTEXT);
+        return $this->getSystemPathBuilder()->namespaceToFullPath(static::CONTEXT);
     }
 
     public function parse_application_settings($file)

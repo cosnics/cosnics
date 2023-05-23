@@ -13,7 +13,7 @@ use Chamilo\Core\Repository\Storage\DataClass\RepositoryCategory;
 use Chamilo\Core\Repository\Storage\DataManager;
 use Chamilo\Core\Repository\Workspace\Storage\DataClass\WorkspaceContentObjectRelation;
 use Chamilo\Libraries\Architecture\Interfaces\ComplexContentObjectSupport;
-use Chamilo\Libraries\File\Compression\Filecompression;
+use Chamilo\Libraries\File\Compression\ZipArchive\ZipArchiveFilecompression;
 use Chamilo\Libraries\File\Filesystem;
 use Chamilo\Libraries\File\Path;
 use Chamilo\Libraries\Platform\Session\Session;
@@ -160,6 +160,11 @@ class CpoContentObjectExportController extends ContentObjectExportController
     public function add_files($source, $destination)
     {
         Filesystem::recurse_copy($source, $this->temporary_directory . $destination, true);
+    }
+
+    protected function getZipArchiveFilecompression(): ZipArchiveFilecompression
+    {
+        return $this->getService(ZipArchiveFilecompression::class);
     }
 
     /**
@@ -630,6 +635,10 @@ class CpoContentObjectExportController extends ContentObjectExportController
         $this->category_id_cache[] = $category_id;
     }
 
+    /*
+     * (non-PHPdoc) @see repository.ContentObjectExportController::get_filename()
+     */
+
     /**
      * @param $dom_document DOMDocument
      */
@@ -637,10 +646,6 @@ class CpoContentObjectExportController extends ContentObjectExportController
     {
         $this->dom_document = $dom_document;
     }
-
-    /*
-     * (non-PHPdoc) @see repository.ContentObjectExportController::get_filename()
-     */
 
     /**
      * @param $dom_xpath DOMXPath
@@ -657,8 +662,8 @@ class CpoContentObjectExportController extends ContentObjectExportController
 
     public function zip()
     {
-        $zip = Filecompression::factory();
-        $zip_path = $zip->create_archive($this->temporary_directory);
+        $zip = $this->getZipArchiveFilecompression();
+        $zip_path = $zip->createArchive($this->temporary_directory);
         Filesystem::remove($this->temporary_directory);
 
         return $zip_path;

@@ -14,7 +14,7 @@ use Chamilo\Core\Repository\Storage\DataManager;
 use Chamilo\Core\Repository\Workspace\Storage\DataClass\Workspace;
 use Chamilo\Libraries\Architecture\ClassnameUtilities;
 use Chamilo\Libraries\Architecture\Exceptions\NoObjectSelectedException;
-use Chamilo\Libraries\File\Compression\Filecompression;
+use Chamilo\Libraries\File\Compression\ZipArchive\ZipArchiveFilecompression;
 use Chamilo\Libraries\File\Filesystem;
 use Chamilo\Libraries\Platform\Session\Session;
 use Chamilo\Libraries\Translation\Translation;
@@ -245,6 +245,11 @@ class CpoContentObjectImportController extends ContentObjectImportController
     public function determine_parent_id($parent_id)
     {
         return 0;
+    }
+
+    protected function getZipArchiveFilecompression(): ZipArchiveFilecompression
+    {
+        return $this->getService(ZipArchiveFilecompression::class);
     }
 
     public static function get_allowed_extensions()
@@ -574,9 +579,7 @@ class CpoContentObjectImportController extends ContentObjectImportController
 
     public function unzip()
     {
-        $unzip = Filecompression::factory();
-
-        return $unzip->extract_file($this->get_parameters()->get_file()->get_path());
+        return $this->getZipArchiveFilecompression()->extractFile($this->get_parameters()->get_file()->get_path());
     }
 
     public function update_helpers($content_object_node, $content_object)

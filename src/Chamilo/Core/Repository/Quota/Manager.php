@@ -3,6 +3,7 @@ namespace Chamilo\Core\Repository\Quota;
 
 use Chamilo\Core\Repository\Quota\Rights\Service\RightsService;
 use Chamilo\Libraries\Architecture\Application\Application;
+use Chamilo\Libraries\Mail\Mailer\MailerInterface;
 
 /**
  * @package Chamilo\Core\Repository\Quota
@@ -24,6 +25,11 @@ abstract class Manager extends Application
     public const PARAM_ACTION = 'quota_action';
     public const PARAM_REQUEST_ID = 'request_id';
     public const PARAM_RESET_CACHE = 'reset_cache';
+
+    protected function getActiveMailer(): MailerInterface
+    {
+        return $this->getService('Chamilo\Libraries\Mail\Mailer\ActiveMailer');
+    }
 
     /**
      * @return \Chamilo\Core\Repository\Quota\Rights\Service\RightsService

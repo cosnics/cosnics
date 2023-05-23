@@ -19,11 +19,13 @@ class SettingsConnector
 
     public static function getMailers()
     {
-        $mailerFactory = new MailerFactory(Configuration::getInstance());
+        $mailerFactory = DependencyInjectionContainerBuilder::getInstance()->createContainer()->get(
+            MailerFactory::class
+        );
 
         return $mailerFactory->getAvailableMailers();
     }
-    
+
     public static function getThemeSystemPathBuilder(): ThemePathBuilder
     {
         return DependencyInjectionContainerBuilder::getInstance()->createContainer()->get(

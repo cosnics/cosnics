@@ -15,7 +15,7 @@ use Chamilo\Libraries\File\Path;
 use Chamilo\Libraries\File\Redirect;
 use Chamilo\Libraries\File\WebPathBuilder;
 use Chamilo\Libraries\Format\Theme\ThemePathBuilder;
-use Chamilo\Libraries\Mail\Mailer\MailerFactory;
+use Chamilo\Libraries\Mail\Mailer\MailerInterface;
 use Chamilo\Libraries\Mail\ValueObject\Mail;
 use Chamilo\Libraries\Mail\ValueObject\MailFile;
 use Chamilo\Libraries\Storage\DataClass\Listeners\DisplayOrderDataClassListener;
@@ -163,6 +163,19 @@ class ContentObjectPublication extends Publication implements DisplayOrderDataCl
         );
 
         return DataManager::deletes(Feedback::class, $condition);
+    }
+
+    /**
+     * @throws \Exception
+     */
+    protected function getActiveMailer(): MailerInterface
+    {
+        /**
+         * @var \Chamilo\Libraries\Mail\Mailer\MailerInterface
+         */
+        return DependencyInjectionContainerBuilder::getInstance()->createContainer()->get(
+            'Chamilo\Libraries\Mail\Mailer\ActiveMailer'
+        );
     }
 
     public static function getDefaultPropertyNames(array $extendedPropertyNames = []): array
@@ -608,8 +621,7 @@ class ContentObjectPublication extends Publication implements DisplayOrderDataCl
             $mailFiles
         );
 
-        $mailerFactory = new MailerFactory(Configuration::getInstance());
-        $mailer = $mailerFactory->getActiveMailer();
+        $mailer = $this->getActiveMailer();
 
         try
         {

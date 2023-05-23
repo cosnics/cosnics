@@ -1,81 +1,92 @@
 <?php
 namespace Chamilo\Libraries\Mail\Mailer;
 
-use Chamilo\Configuration\Configuration;
-use Chamilo\Libraries\Translation\Translation;
+use Chamilo\Configuration\Service\Consulter\ConfigurationConsulter;
+use Chamilo\Configuration\Service\Consulter\RegistrationConsulter;
+use Chamilo\Libraries\DependencyInjection\DependencyInjectionContainerBuilder;
+use Chamilo\Libraries\File\SystemPathBuilder;
+use Chamilo\Libraries\Utilities\StringUtilities;
 use Exception;
+use Symfony\Component\Translation\Translator;
 
 /**
- * Factory to instantiate the mailer
- *
  * @package Chamilo\Libraries\Mail\Mailer
  * @author  Sven Vanpoucke - Hogeschool Gent
+ * @author  Hans De Bisschop <hans.de.bisschop@ehb.be>
  */
 class MailerFactory
 {
 
-    /**
-     * The configuration
-     *
-     * @var \Chamilo\Configuration\Configuration
-     */
-    protected $configuration;
+    protected ConfigurationConsulter $configurationConsulter;
 
-    /**
-     * Constructor
-     *
-     * @param \Chamilo\Configuration\Configuration $configuration
-     */
-    public function __construct(Configuration $configuration = null)
+    protected RegistrationConsulter $registrationConsulter;
+
+    protected SystemPathBuilder $systemPathBuilder;
+
+    protected Translator $translator;
+
+    public function __construct(
+        ConfigurationConsulter $configurationConsulter, RegistrationConsulter $registrationConsulter,
+        SystemPathBuilder $systemPathBuilder, Translator $translator
+    )
     {
-        if (is_null($configuration) || !$configuration instanceof Configuration)
-        {
-            $configuration = Configuration::getInstance();
-        }
-
-        $this->configuration = $configuration;
+        $this->configurationConsulter = $configurationConsulter;
+        $this->registrationConsulter = $registrationConsulter;
+        $this->translator = $translator;
     }
 
     /**
-     * Returns the active mailer
-     *
-     * @return \Chamilo\Libraries\Mail\Mailer\MailerInterface
      * @throws \Exception
      */
-    public function getActiveMailer()
+    public function getActiveMailer(): MailerInterface
     {
-        $mailerClass = $this->configuration->get_setting(['Chamilo\Core\Admin', 'mailer']);
-        if (!class_exists($mailerClass))
+        $mailerClass = $this->getConfigurationConsulter()->getSetting(['Chamilo\Core\Admin', 'mailer']);
+
+        if (!class_exists($mailerClass) || !is_subclass_of($mailerClass, MailerInterface::class))
         {
-            throw new Exception(Translation::getInstance()->getTranslation('InvalidMailerClass'));
+            throw new Exception($this->getTranslator()->trans('InvalidMailerClass', [], StringUtilities::LIBRARIES));
         }
 
-        return new $mailerClass($this->configuration);
+        /**
+         * @var \Chamilo\Libraries\Mail\Mailer\MailerInterface
+         */
+        return DependencyInjectionContainerBuilder::getInstance()->createContainer()->get($mailerClass);
     }
 
     /**
-     * Returns a list of available picture providers
-     *
-     * @return string[]
+     * @throws \Symfony\Component\Cache\Exception\CacheException
      */
-    public function getAvailableMailers()
+    public function getAvailableMailers(): array
     {
         $mailers = [];
 
-        $mailerPackages = $this->configuration->get_registrations_by_type(__NAMESPACE__);
+        $mailerPackages = $this->getRegistrationConsulter()->getRegistrationsByType(__NAMESPACE__);
 
         foreach ($mailerPackages as $package)
         {
-            /** @var MailerInterface|string $mailerClass */
             $mailerClass = $package['context'] . '\Mailer';
 
             if (class_exists($mailerClass))
             {
-                $mailers[$mailerClass] =
-                    Translation::getInstance()->getTranslation('TypeName', [], $package['context']);
+                $mailers[$mailerClass] = $this->getTranslator()->trans('TypeName', [], $package['context']);
             }
         }
 
         return $mailers;
+    }
+
+    public function getConfigurationConsulter(): ConfigurationConsulter
+    {
+        return $this->configurationConsulter;
+    }
+
+    public function getRegistrationConsulter(): RegistrationConsulter
+    {
+        return $this->registrationConsulter;
+    }
+
+    public function getTranslator(): Translator
+    {
+        return $this->translator;
     }
 }

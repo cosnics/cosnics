@@ -15,7 +15,6 @@ use Chamilo\Libraries\Format\Structure\BreadcrumbGenerator;
 use Chamilo\Libraries\Format\Structure\BreadcrumbGeneratorInterface;
 use Chamilo\Libraries\Format\Structure\BreadcrumbTrail;
 use Chamilo\Libraries\Hashing\HashingUtilities;
-use Chamilo\Libraries\Mail\Mailer\MailerFactory;
 use Chamilo\Libraries\Mail\ValueObject\Mail;
 use Chamilo\Libraries\Platform\Session\Request;
 use Chamilo\Libraries\Platform\Session\Session;
@@ -214,8 +213,7 @@ class ResetPasswordComponent extends Manager implements NoAuthenticationSupport
 
         $mail = new Mail($mail_subject, $mail_body, $user->get_email());
 
-        $mailerFactory = new MailerFactory(Configuration::getInstance());
-        $mailer = $mailerFactory->getActiveMailer();
+        $mailer = $this->getActiveMailer();
 
         try
         {
@@ -292,8 +290,7 @@ class ResetPasswordComponent extends Manager implements NoAuthenticationSupport
 
         $mail = new Mail($mail_subject, $mail_body, $user->get_email());
 
-        $mailerFactory = new MailerFactory(Configuration::getInstance());
-        $mailer = $mailerFactory->getActiveMailer();
+        $mailer = $this->getActiveMailer();
 
         try
         {

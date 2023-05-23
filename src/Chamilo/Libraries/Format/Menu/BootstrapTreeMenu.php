@@ -7,35 +7,30 @@ use Chamilo\Libraries\Format\Utilities\ResourceManager;
 use Chamilo\Libraries\Utilities\StringUtilities;
 
 /**
- *
  * @package Chamilo\Libraries\Format\Menu
- * @author Hans De Bisschop <hans.de.bisschop@ehb.be>
- * @author Magali Gillard <magali.gillard@ehb.be>
+ * @author  Hans De Bisschop <hans.de.bisschop@ehb.be>
+ * @author  Magali Gillard <magali.gillard@ehb.be>
  */
 abstract class BootstrapTreeMenu
 {
-    const NODE_PLACEHOLDER = '__NODE__';
+    public const NODE_PLACEHOLDER = '__NODE__';
 
     /**
-     *
      * @var \Chamilo\Libraries\Architecture\Application\Application
      */
     private $application;
 
     /**
-     *
      * @var string
      */
     private $menuName;
 
     /**
-     *
      * @var string
      */
     private $treeMenuUrl;
 
     /**
-     *
      * @param \Chamilo\Libraries\Architecture\Application\Application $application
      * @param string $treeMenuUrl
      * @param string $menuName
@@ -48,7 +43,6 @@ abstract class BootstrapTreeMenu
     }
 
     /**
-     *
      * @return string
      * @todo Remove the revealNode and expandNode functionality due to issues with own node-ids generated
      *       by plugin
@@ -73,11 +67,11 @@ abstract class BootstrapTreeMenu
                         color: '#428bca',
                         showBorder: false,
                         checkedIcon: 'inline-glyph fas fa-check fa-fw',
-                        data: " . json_encode($this->getNodes()) . "
+                        data: " . json_encode($this->getNodes()) . '
                     })
                 });
             });
-        </script>";
+        </script>';
 
         $html[] = ResourceManager::getInstance()->getResourceHtml(
             Path::getInstance()->getJavascriptPath(StringUtilities::LIBRARIES, true) .
@@ -88,7 +82,6 @@ abstract class BootstrapTreeMenu
     }
 
     /**
-     *
      * @return \Chamilo\Libraries\Architecture\Application\Application
      */
     public function getApplication()
@@ -97,22 +90,11 @@ abstract class BootstrapTreeMenu
     }
 
     /**
-     *
-     * @param \Chamilo\Libraries\Architecture\Application\Application $application
+     * @return int
      */
-    public function setApplication(Application $application)
-    {
-        $this->application = $application;
-    }
+    public abstract function getCurrentNodeId();
 
     /**
-     *
-     * @return integer
-     */
-    abstract function getCurrentNodeId();
-
-    /**
-     *
      * @return string
      */
     public function getMenuName()
@@ -121,17 +103,7 @@ abstract class BootstrapTreeMenu
     }
 
     /**
-     *
-     * @param string $menuName
-     */
-    public function setMenuName($menuName)
-    {
-        $this->menuName = $menuName;
-    }
-
-    /**
-     *
-     * @param integer $nodeIdentifier
+     * @param int $nodeIdentifier
      *
      * @return string
      */
@@ -141,13 +113,11 @@ abstract class BootstrapTreeMenu
     }
 
     /**
-     *
      * @return string[]
      */
-    abstract function getNodes();
+    public abstract function getNodes();
 
     /**
-     *
      * @return string
      */
     public function getTreeMenuUrl()
@@ -156,7 +126,22 @@ abstract class BootstrapTreeMenu
     }
 
     /**
-     *
+     * @param \Chamilo\Libraries\Architecture\Application\Application $application
+     */
+    public function setApplication(Application $application)
+    {
+        $this->application = $application;
+    }
+
+    /**
+     * @param string $menuName
+     */
+    public function setMenuName($menuName)
+    {
+        $this->menuName = $menuName;
+    }
+
+    /**
      * @param string $treeMenuUrl
      */
     public function setTreeMenuUrl($treeMenuUrl)

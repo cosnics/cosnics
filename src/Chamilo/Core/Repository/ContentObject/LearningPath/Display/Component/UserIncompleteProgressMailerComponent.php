@@ -4,7 +4,7 @@ namespace Chamilo\Core\Repository\ContentObject\LearningPath\Display\Component;
 use Chamilo\Core\Repository\ContentObject\LearningPath\Display\Manager;
 use Chamilo\Core\User\Storage\DataClass\User;
 use Chamilo\Libraries\Architecture\Exceptions\NotAllowedException;
-use Chamilo\Libraries\Mail\Mailer\MailerFactory;
+use Chamilo\Libraries\Mail\Mailer\MailerInterface;
 use Chamilo\Libraries\Mail\ValueObject\Mail;
 use Chamilo\Libraries\Translation\Translation;
 use Exception;
@@ -59,13 +59,12 @@ class UserIncompleteProgressMailerComponent extends Manager
 
         try
         {
-            $mailerFactory = new MailerFactory();
             $mail = new Mail(
                 $translator->getTranslation('IncompleteProgressMailTitle', $this->getParameters()), $mailContent,
                 $emailAddresses, true, [], [], $this->getUser()->get_fullname(), $this->getUser()->get_email()
             );
 
-            $mailer = $mailerFactory->getActiveMailer();
+            $mailer = $this->getActiveMailer();
             $mailer->sendMail($mail);
 
             $success = true;
@@ -80,6 +79,11 @@ class UserIncompleteProgressMailerComponent extends Manager
         $this->redirectWithMessage(
             $translator->getTranslation($message), !$success, [self::PARAM_ACTION => self::ACTION_VIEW_USER_PROGRESS]
         );
+    }
+
+    protected function getActiveMailer(): MailerInterface
+    {
+        return $this->getService('Chamilo\Libraries\Mail\Mailer\ActiveMailer');
     }
 
     /**

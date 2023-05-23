@@ -8,7 +8,6 @@ use Chamilo\Core\Repository\Quota\Storage\DataClass\Request;
 use Chamilo\Core\Repository\Quota\Storage\DataManager;
 use Chamilo\Libraries\Architecture\Exceptions\NotAllowedException;
 use Chamilo\Libraries\File\Filesystem;
-use Chamilo\Libraries\Mail\Mailer\MailerFactory;
 use Chamilo\Libraries\Mail\ValueObject\Mail;
 use Chamilo\Libraries\Translation\Translation;
 use Chamilo\Libraries\Utilities\StringUtilities;
@@ -16,8 +15,7 @@ use Exception;
 
 /**
  * @package Chamilo\Core\Repository\Quota\Component
- *
- * @author Hans De Bisschop <hans.de.bisschop@ehb.be>
+ * @author  Hans De Bisschop <hans.de.bisschop@ehb.be>
  */
 class GranterComponent extends Manager
 {
@@ -36,7 +34,7 @@ class GranterComponent extends Manager
         {
             if (!is_array($ids))
             {
-                $ids = array($ids);
+                $ids = [$ids];
             }
 
             foreach ($ids as $id)
@@ -97,17 +95,17 @@ class GranterComponent extends Manager
                 if (count($ids) == 1)
                 {
                     $message = 'ObjectNotGranted';
-                    $parameter = array('OBJECT' => Translation::get('Request'));
+                    $parameter = ['OBJECT' => Translation::get('Request')];
                 }
                 elseif (count($ids) > $failures)
                 {
                     $message = 'SomeObjectsNotGranted';
-                    $parameter = array('OBJECTS' => Translation::get('Requests'));
+                    $parameter = ['OBJECTS' => Translation::get('Requests')];
                 }
                 else
                 {
                     $message = 'ObjectsNotGranted';
-                    $parameter = array('OBJECTS' => Translation::get('Requests'));
+                    $parameter = ['OBJECTS' => Translation::get('Requests')];
                 }
             }
             else
@@ -115,18 +113,18 @@ class GranterComponent extends Manager
                 if (count($ids) == 1)
                 {
                     $message = 'ObjectGranted';
-                    $parameter = array('OBJECT' => Translation::get('Request'));
+                    $parameter = ['OBJECT' => Translation::get('Request')];
                 }
                 else
                 {
                     $message = 'ObjectsGranted';
-                    $parameter = array('OBJECTS' => Translation::get('Requests'));
+                    $parameter = ['OBJECTS' => Translation::get('Requests')];
                 }
             }
 
             $this->redirectWithMessage(
                 Translation::get($message, $parameter, StringUtilities::LIBRARIES), (bool) $failures,
-                array(self::PARAM_ACTION => self::ACTION_BROWSE)
+                [self::PARAM_ACTION => self::ACTION_BROWSE]
             );
         }
         else
@@ -134,7 +132,7 @@ class GranterComponent extends Manager
             return $this->display_error_page(
                 htmlentities(
                     Translation::get(
-                        'NoObjectSelected', array('OBJECT' => Translation::get('Request')), StringUtilities::LIBRARIES
+                        'NoObjectSelected', ['OBJECT' => Translation::get('Request')], StringUtilities::LIBRARIES
                     )
                 )
             );
@@ -148,25 +146,24 @@ class GranterComponent extends Manager
         $recipient = $request->get_user();
 
         $title = Translation::get(
-            'RequestGrantedMailTitle', array(
-                'PLATFORM' => Configuration::getInstance()->get_setting(array('Chamilo\Core\Admin', 'site_name')),
+            'RequestGrantedMailTitle', [
+                'PLATFORM' => Configuration::getInstance()->get_setting(['Chamilo\Core\Admin', 'site_name']),
                 'ADDED_QUOTA' => Filesystem::format_file_size($request->get_quota())
-            )
+            ]
         );
 
         $body = Translation::get(
-            'RequestGrantedMailBody', array(
+            'RequestGrantedMailBody', [
                 'USER' => $recipient->get_fullname(),
-                'PLATFORM' => Configuration::getInstance()->get_setting(array('Chamilo\Core\Admin', 'site_name')),
+                'PLATFORM' => $this->getConfigurationConsulter()->getSetting(['Chamilo\Core\Admin', 'site_name']),
                 'ADDED_QUOTA' => Filesystem::format_file_size($request->get_quota()),
                 'QUOTA' => Filesystem::format_file_size($calculator->getMaximumUserDiskQuota())
-            )
+            ]
         );
 
         $mail = new Mail($title, $body, $recipient->get_email());
 
-        $mailerFactory = new MailerFactory(Configuration::getInstance());
-        $mailer = $mailerFactory->getActiveMailer();
+        $mailer = $this->getActiveMailer();
 
         try
         {

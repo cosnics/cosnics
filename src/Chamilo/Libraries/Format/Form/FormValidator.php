@@ -2,7 +2,6 @@
 namespace Chamilo\Libraries\Format\Form;
 
 use Chamilo\Libraries\Architecture\Traits\DependencyInjectionContainerTrait;
-use Chamilo\Libraries\File\Path;
 use Chamilo\Libraries\Format\Display;
 use Chamilo\Libraries\Format\Form\Element\HTML_QuickForm_advanced_element_finder;
 use Chamilo\Libraries\Format\Form\Element\HTML_QuickForm_bootstrap_radio;
@@ -90,7 +89,7 @@ class FormValidator extends HTML_QuickForm
 
         $this->addElement(
             'html', $this->getResourceManager()->getResourceHtml(
-            Path::getInstance()->getJavascriptPath('Chamilo\Libraries', true) . 'Reset.js'
+            $this->getWebPathBuilder()->getJavascriptPath('Chamilo\Libraries') . 'Reset.js'
         )
         );
 
@@ -277,7 +276,7 @@ EOT;
 
         $this->addElement(
             'html', $this->getResourceManager()->getResourceHtml(
-            Path::getInstance()->getJavascriptPath('Chamilo\Libraries', true) . 'Jquery/jquery.file.upload.js'
+            $this->getWebPathBuilder()->getJavascriptPath('Chamilo\Libraries') . 'Jquery/jquery.file.upload.js'
         )
         );
 
@@ -343,7 +342,8 @@ EOT;
         $glyph = new FontAwesomeGlyph('image', ['image-uploader-preview', 'fa-10x', 'text-muted'], null, 'fas');
 
         $this->addElement(
-            'static', 'thumbnail', $label, '<div class="thumbnail" data-element="' . $name . '">' . $glyph->render() . '</div>'
+            'static', 'thumbnail', $label,
+            '<div class="thumbnail" data-element="' . $name . '">' . $glyph->render() . '</div>'
         );
         $this->addElement('file', $name . '-file', null, 'class="image-uploader-file" data-element="' . $name . '"');
 
@@ -351,7 +351,7 @@ EOT;
 
         $this->addElement(
             'html', $this->getResourceManager()->getResourceHtml(
-            Path::getInstance()->getJavascriptPath('Chamilo\Libraries', true) . 'ImageUploader.js'
+            $this->getWebPathBuilder()->getJavascriptPath('Chamilo\Libraries') . 'ImageUploader.js'
         )
         );
     }
@@ -428,7 +428,7 @@ EOT;
 
         $this->addElement(
             'html', $this->getResourceManager()->getResourceHtml(
-            Path::getInstance()->getJavascriptPath('Chamilo\Libraries', true) . 'Jquery/jquery.file.upload.single.js'
+            $this->getWebPathBuilder()->getJavascriptPath('Chamilo\Libraries') . 'Jquery/jquery.file.upload.single.js'
         )
         );
     }
@@ -475,7 +475,7 @@ EOT;
 
         $this->addElement(
             'html', $this->getResourceManager()->getResourceHtml(
-            Path::getInstance()->getJavascriptPath('Chamilo\Libraries', true) . 'FormTimePeriod.min.js'
+            $this->getWebPathBuilder()->getJavascriptPath('Chamilo\Libraries') . 'FormTimePeriod.min.js'
         )
         );
 
@@ -881,14 +881,6 @@ EOT;
     }
 
     /**
-     * @param \HTML_QuickForm_Renderer_Default $renderer
-     */
-    public function set_renderer($renderer)
-    {
-        $this->renderer = $renderer;
-    }
-
-    /**
      * Formats an multiple dimension array to a single dimension array to support default values in the quickform
      * library because quickform produces arrays when an array is used in the name, but quickform does not accept arrays
      * for the default values, instead the inner arrays are converted as strings
@@ -994,6 +986,14 @@ EOT;
         $this->renderer->setFormTemplate($this->getFormTemplate());
         $this->renderer->setElementTemplate($this->getElementTemplate());
         $this->renderer->setRequiredNoteTemplate($this->getRequiredNoteTemplate());
+    }
+
+    /**
+     * @param \HTML_QuickForm_Renderer_Default $renderer
+     */
+    public function set_renderer($renderer)
+    {
+        $this->renderer = $renderer;
     }
 
     /**

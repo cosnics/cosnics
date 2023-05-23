@@ -7,22 +7,14 @@ use Chamilo\Libraries\Mail\ValueObject\Mail;
 use RuntimeException;
 
 /**
- * Default platform mailer
- *
  * @package Chamilo\Libraries\Mail\Mailer\Platform
- * @author Sven Vanpoucke - Hogeschool Gent
+ * @author  Sven Vanpoucke - Hogeschool Gent
+ * @author  Hans De Bisschop <hans.de.bisschop@ehb.be>
  */
 class Mailer extends AbstractMailer
 {
 
-    /**
-     * Sends the actual mail to the given recipients
-     *
-     * @param \Chamilo\Libraries\Mail\ValueObject\Mail $mail
-     * @param string $recipients
-     * @param string[] $headers
-     */
-    protected function send(Mail $mail, $recipients, $headers = [])
+    protected function send(Mail $mail, string $recipients, string $headers)
     {
         if (!mail($recipients, $mail->getSubject(), $mail->getMessage(), $headers))
         {
@@ -34,10 +26,6 @@ class Mailer extends AbstractMailer
     }
 
     /**
-     * Sends a single mail
-     *
-     * @param \Chamilo\Libraries\Mail\ValueObject\Mail $mail
-     *
      * @throws \RuntimeException
      */
     public function sendMail(Mail $mail)

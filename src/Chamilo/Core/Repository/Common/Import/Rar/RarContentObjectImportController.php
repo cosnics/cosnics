@@ -10,7 +10,6 @@ use Chamilo\Core\Repository\Storage\DataManager;
 use Chamilo\Core\Repository\Workspace\Storage\DataClass\Workspace;
 use Chamilo\Core\User\Storage\DataClass\User;
 use Chamilo\Libraries\File\Filesystem;
-use Chamilo\Libraries\File\Path;
 use Chamilo\Libraries\Translation\Translation;
 use RarArchive;
 
@@ -41,7 +40,7 @@ class RarContentObjectImportController extends ContentObjectImportController
         parent::__construct($parameters);
         $this->created_categories = [];
         $this->created_content_object_ids = [];
-        $this->temporary_path = Path::getInstance()->getTemporaryPath() . uniqid();
+        $this->temporary_path = $this->getConfigurablePathBuilder()->getTemporaryPath() . uniqid();
         Filesystem::create_dir($this->temporary_path);
     }
 

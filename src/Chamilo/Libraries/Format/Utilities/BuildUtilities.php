@@ -3,19 +3,20 @@ namespace Chamilo\Libraries\Format\Utilities;
 
 use Chamilo\Configuration\Package\Finder\BasicBundles;
 use Chamilo\Configuration\Package\PackageList;
-use Chamilo\Libraries\File\Path;
+use Chamilo\Libraries\Architecture\ClassnameUtilities;
+use Chamilo\Libraries\File\SystemPathBuilder;
+use Chamilo\Libraries\Utilities\StringUtilities;
 use Composer\Package\Loader\JsonLoader;
 use Composer\Script\Event;
 use Exception;
 
 /**
- *
  * @package Chamilo\Libraries\Format\Utilities
- * @author Hans De Bisschop <hans.de.bisschop@ehb.be>
+ * @author  Hans De Bisschop <hans.de.bisschop@ehb.be>
  */
 class BuildUtilities
 {
-    
+
     public static function processComposer(Event $event)
     {
         $packageBundles = new BasicBundles(PackageList::ROOT);
@@ -31,9 +32,11 @@ class BuildUtilities
 
         $repositoryManager = $composer->getRepositoryManager();
 
+        $systemPathBuilder = new SystemPathBuilder(new ClassnameUtilities(new StringUtilities()));
+
         foreach ($packageNamespaces as $packageNamespace)
         {
-            $packageComposerPath = Path::getInstance()->namespaceToFullPath($packageNamespace) . 'composer.json';
+            $packageComposerPath = $systemPathBuilder->namespaceToFullPath($packageNamespace) . 'composer.json';
 
             if (file_exists($packageComposerPath))
             {

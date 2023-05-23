@@ -3,7 +3,8 @@ namespace Chamilo\Core\Repository\ContentObject\Hotpotatoes\Storage\DataClass;
 
 use Chamilo\Core\Repository\Storage\DataClass\ContentObject;
 use Chamilo\Libraries\Architecture\Interfaces\Versionable;
-use Chamilo\Libraries\File\Compression\Filecompression;
+use Chamilo\Libraries\DependencyInjection\DependencyInjectionContainerBuilder;
+use Chamilo\Libraries\File\Compression\ZipArchive\ZipArchiveFilecompression;
 use Chamilo\Libraries\File\Filesystem;
 use Chamilo\Libraries\File\Path;
 use Chamilo\Libraries\Platform\Session\Session;
@@ -63,6 +64,13 @@ class Hotpotatoes extends ContentObject implements Versionable
         return 'repository_hotpotatoes';
     }
 
+    protected function getZipArchiveFilecompression(): ZipArchiveFilecompression
+    {
+        return DependencyInjectionContainerBuilder::getInstance()->createContainer()->get(
+            ZipArchiveFilecompression::class
+        );
+    }
+
     public function get_assessment_type()
     {
         return self::TYPE_HOTPOTATOES;
@@ -118,8 +126,7 @@ class Hotpotatoes extends ContentObject implements Versionable
         $hotpot_path = Path::getInstance()->getPublicStoragePath(Hotpotatoes::CONTEXT) . Session::get_user_id() . '/';
         $full_path = $hotpot_path . dirname($path_to_zip) . '/';
 
-        $filecompression = Filecompression::factory();
-        $dir = $filecompression->extract_file($full_path . $zip_file_name);
+        $dir = $this->getZipArchiveFilecompression()->extractFile($full_path . $zip_file_name);
         $entries = Filesystem::get_directory_content($dir);
 
         foreach ($entries as $entry)

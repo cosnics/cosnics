@@ -1,7 +1,6 @@
 <?php
 namespace Chamilo\Core\Repository\ContentObject\Portfolio\Display\Component;
 
-use Chamilo\Configuration\Configuration;
 use Chamilo\Core\Repository\ContentObject\Portfolio\Display\Infrastructure\Service\MailNotificationHandler;
 use Chamilo\Core\Repository\ContentObject\Portfolio\Display\Manager;
 use Chamilo\Core\Repository\ContentObject\Portfolio\Display\Menu;
@@ -11,7 +10,7 @@ use Chamilo\Libraries\Architecture\Interfaces\DelegateComponent;
 use Chamilo\Libraries\Format\Structure\Breadcrumb;
 use Chamilo\Libraries\Format\Structure\BreadcrumbTrail;
 use Chamilo\Libraries\Format\Structure\Glyph\FontAwesomeGlyph;
-use Chamilo\Libraries\Mail\Mailer\MailerFactory;
+use Chamilo\Libraries\Mail\Mailer\MailerInterface;
 use Chamilo\Libraries\Translation\Translation;
 
 abstract class ItemComponent extends Manager implements DelegateComponent
@@ -48,21 +47,25 @@ abstract class ItemComponent extends Manager implements DelegateComponent
 
     abstract public function build();
 
+    protected function getActiveMailer(): MailerInterface
+    {
+        return $this->getService('Chamilo\Libraries\Mail\Mailer\ActiveMailer');
+    }
+
     /**
      * Returns an array of notification handlers
      *
-     * @return NotificationHandlerInterface[]
+     * @return \Chamilo\Core\Repository\Feedback\Infrastructure\Service\NotificationHandlerInterface[]
      */
     public function get_notification_handlers()
     {
-        $mailerFactory = new MailerFactory(Configuration::getInstance());
 
-        return array(
+        return [
             new MailNotificationHandler(
-                $mailerFactory->getActiveMailer(), $this->get_root_content_object()->get_owner(),
+                $this->getActiveMailer(), $this->get_root_content_object()->get_owner(),
                 $this->get_current_node()->get_content_object(), $this->get_url()
             )
-        );
+        ];
     }
 
     public function render_footer(): string
@@ -90,13 +93,13 @@ abstract class ItemComponent extends Manager implements DelegateComponent
 
             if ($virtual_user instanceof User)
             {
-                $revert_url = $this->get_url(array(self::PARAM_ACTION => self::ACTION_USER));
+                $revert_url = $this->get_url([self::PARAM_ACTION => self::ACTION_USER]);
                 $glyph = new FontAwesomeGlyph('user', [], null, 'fas');
 
                 $html[] = '<div class="alert alert-warning">';
                 $html[] = Translation::get(
                     'ViewingPortfolioAsUser',
-                    array('USER' => $virtual_user->get_fullname(), 'URL' => $revert_url, 'GLYPH' => $glyph->render())
+                    ['USER' => $virtual_user->get_fullname(), 'URL' => $revert_url, 'GLYPH' => $glyph->render()]
                 );
                 $html[] = '</div>';
             }

@@ -1,11 +1,9 @@
 <?php
 namespace Chamilo\Configuration\Package\Action;
 
-use Chamilo\Libraries\Architecture\ClassnameUtilities;
 use Chamilo\Libraries\DependencyInjection\DependencyInjectionContainerBuilder;
 use Chamilo\Libraries\DependencyInjection\ExtensionFinder\DirectoryContainerExtensionFinder;
 use Chamilo\Libraries\File\Filesystem;
-use Chamilo\Libraries\File\Path;
 use Chamilo\Libraries\Storage\DataManager\Doctrine\ORM\PackagesMappingDriverFactory;
 use Doctrine\ORM\EntityManager;
 use Doctrine\ORM\Tools\SchemaTool;
@@ -36,7 +34,7 @@ abstract class DoctrineInstaller extends Installer
      */
     public function install_storage_units()
     {
-        $cacheDir = Path::getInstance()->getCachePath('Hogent\Libraries\DependencyInjection');
+        $cacheDir = $this->getConfigurablePathBuilder()->getCachePath('Hogent\Libraries\DependencyInjection');
         $cacheFile = $cacheDir . 'InstallDependencyInjection.php';
 
         if (!is_dir($cacheDir))
@@ -45,7 +43,7 @@ abstract class DoctrineInstaller extends Installer
         }
 
         $containerBuilder = new DependencyInjectionContainerBuilder(
-            null, new DirectoryContainerExtensionFinder(Path::getInstance()->getBasePath()), $cacheFile,
+            null, new DirectoryContainerExtensionFinder($this->getSystemPathBuilder()->getBasePath()), $cacheFile,
             'ChamiloInstallContainer'
         );
 
@@ -64,7 +62,7 @@ abstract class DoctrineInstaller extends Installer
         try
         {
             $packages = [
-                static::CONTEXT => Path::getInstance()->namespaceToFullPath(static::CONTEXT) .
+                static::CONTEXT => $this->getSystemPathBuilder()->namespaceToFullPath(static::CONTEXT) .
                     'Resources/Configuration/Config.yml'
             ];
 

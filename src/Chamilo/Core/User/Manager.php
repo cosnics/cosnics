@@ -9,6 +9,7 @@ use Chamilo\Libraries\Authentication\AuthenticationValidator;
 use Chamilo\Libraries\File\Path;
 use Chamilo\Libraries\Format\Structure\BreadcrumbGeneratorInterface;
 use Chamilo\Libraries\Format\Structure\BreadcrumbTrail;
+use Chamilo\Libraries\Mail\Mailer\MailerInterface;
 
 /**
  * @package user.lib.user_manager
@@ -61,6 +62,11 @@ abstract class Manager extends Application
     public const PARAM_FIRSTLETTER = 'firstletter';
     public const PARAM_REFER = 'refer';
     public const PARAM_USER_USER_ID = 'user_id';
+
+    protected function getActiveMailer(): MailerInterface
+    {
+        return $this->getService('Chamilo\Libraries\Mail\Mailer\ActiveMailer');
+    }
 
     /**
      * @return AuthenticationValidator

@@ -12,7 +12,6 @@ use Chamilo\Libraries\Format\Structure\ActionBar\ButtonGroup;
 use Chamilo\Libraries\Format\Structure\ActionBar\ButtonToolBar;
 use Chamilo\Libraries\Format\Structure\ActionBar\Renderer\ButtonToolBarRenderer;
 use Chamilo\Libraries\Format\Structure\Glyph\FontAwesomeGlyph;
-use Chamilo\Libraries\Mail\Mailer\MailerFactory;
 use Chamilo\Libraries\Mail\ValueObject\Mail;
 use Chamilo\Libraries\Translation\Translation;
 use Chamilo\Libraries\Utilities\StringUtilities;
@@ -22,7 +21,6 @@ class CreatorComponent extends Manager
 {
 
     /**
-     *
      * @var ButtonToolBarRenderer
      */
     private $buttonToolbarRenderer;
@@ -42,7 +40,7 @@ class CreatorComponent extends Manager
         $request = new Request();
         $request->set_user_id($this->get_user_id());
 
-        $form = new RequestForm($request, $this->get_url(array(self::PARAM_ACTION => self::ACTION_CREATE)));
+        $form = new RequestForm($request, $this->get_url([self::PARAM_ACTION => self::ACTION_CREATE]));
 
         if ($form->validate())
         {
@@ -63,26 +61,25 @@ class CreatorComponent extends Manager
                 set_time_limit(3600);
 
                 $title = Translation::get(
-                    'QuotaCreatedMailTitle', array(
-                        'PLATFORM' => Configuration::getInstance()->get_setting(
-                            array('Chamilo\Core\Admin', 'site_name')
+                    'QuotaCreatedMailTitle', [
+                        'PLATFORM' => $this->getConfigurationConsulter()->getSetting(
+                            ['Chamilo\Core\Admin', 'site_name']
                         )
-                    )
+                    ]
                 );
 
-                $mailerFactory = new MailerFactory(Configuration::getInstance());
-                $mailer = $mailerFactory->getActiveMailer();
+                $mailer = $this->getActiveMailer();
 
                 foreach ($authorized_users as $authorized_user)
                 {
                     $mail = new Mail(
                         $title, Translation::get(
-                        'QuotaCreatedMailBody', array(
+                        'QuotaCreatedMailBody', [
                             'USER' => $authorized_user->get_fullname(),
-                            'PLATFORM' => Configuration::getInstance()->get_setting(
-                                array('Chamilo\Core\Admin', 'site_name')
+                            'PLATFORM' => $this->getConfigurationConsulter()->getSetting(
+                                ['Chamilo\Core\Admin', 'site_name']
                             )
-                        )
+                        ]
                     ), $authorized_user->get_email()
                     );
 
@@ -101,7 +98,7 @@ class CreatorComponent extends Manager
 
             $this->redirectWithMessage(
                 Translation::get(
-                    $success ? 'ObjectCreated' : 'ObjectNotCreated', array('OBJECT' => Translation::get('Request')),
+                    $success ? 'ObjectCreated' : 'ObjectNotCreated', ['OBJECT' => Translation::get('Request')],
                     StringUtilities::LIBRARIES
                 ), !$success, $parameters
             );
@@ -128,10 +125,10 @@ class CreatorComponent extends Manager
             $toolActions = new ButtonGroup();
 
             $allow_upgrade = Configuration::getInstance()->get_setting(
-                array('Chamilo\Core\Repository', 'allow_upgrade')
+                ['Chamilo\Core\Repository', 'allow_upgrade']
             );
             $maximum_user_disk_space = Configuration::getInstance()->get_setting(
-                array('Chamilo\Core\Repository', 'maximum_user')
+                ['Chamilo\Core\Repository', 'maximum_user']
             );
 
             if ($this->calculator->upgradeAllowed())
@@ -139,7 +136,7 @@ class CreatorComponent extends Manager
                 $commonActions->addButton(
                     new Button(
                         Translation::get('UpgradeQuota'), new FontAwesomeGlyph('angle-double-up', [], null, 'fas'),
-                        $this->get_url(array(self::PARAM_ACTION => self::ACTION_UPGRADE))
+                        $this->get_url([self::PARAM_ACTION => self::ACTION_UPGRADE])
                     )
                 );
             }
@@ -147,7 +144,7 @@ class CreatorComponent extends Manager
             $toolActions->addButton(
                 new Button(
                     Translation::get('BackToOverview'), new FontAwesomeGlyph('folder', [], null, 'fas'),
-                    $this->get_url(array(self::PARAM_ACTION => self::ACTION_BROWSE))
+                    $this->get_url([self::PARAM_ACTION => self::ACTION_BROWSE])
                 )
             );
 

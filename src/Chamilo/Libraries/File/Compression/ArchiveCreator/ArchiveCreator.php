@@ -1,7 +1,7 @@
 <?php
 namespace Chamilo\Libraries\File\Compression\ArchiveCreator;
 
-use Chamilo\Libraries\File\Compression\Filecompression;
+use Chamilo\Libraries\File\Compression\ZipArchive\ZipArchiveFilecompression;
 use Chamilo\Libraries\File\ConfigurablePathBuilder;
 use Symfony\Component\Filesystem\Filesystem;
 use Symfony\Component\HttpFoundation\BinaryFileResponse;
@@ -10,35 +10,20 @@ use Symfony\Component\HttpFoundation\ResponseHeaderBag;
 
 /**
  * @package Chamilo\Libraries\File\Compression\ArchiveCreator
- *
- * @author Sven Vanpoucke - Hogeschool Gent
+ * @author  Sven Vanpoucke - Hogeschool Gent
+ * @author  Hans De Bisschop <hans.de.bisschop@ehb.be>
  */
 class ArchiveCreator
 {
-    /**
-     * @var \Symfony\Component\Filesystem\Filesystem
-     */
-    protected $fileSystem;
+    protected ConfigurablePathBuilder $configurablePathBuilder;
 
-    /**
-     * @var \Chamilo\Libraries\File\Compression\Filecompression
-     */
-    protected $fileCompression;
+    protected ZipArchiveFilecompression $fileCompression;
 
-    /**
-     * @var \Chamilo\Libraries\File\ConfigurablePathBuilder
-     */
-    protected $configurablePathBuilder;
+    protected Filesystem $fileSystem;
 
-    /**
-     * ArchiveCreator constructor.
-     *
-     * @param \Symfony\Component\Filesystem\Filesystem $fileSystem
-     * @param \Chamilo\Libraries\File\Compression\Filecompression $fileCompression
-     * @param \Chamilo\Libraries\File\ConfigurablePathBuilder $configurablePathBuilder
-     */
     public function __construct(
-        Filesystem $fileSystem, Filecompression $fileCompression, ConfigurablePathBuilder $configurablePathBuilder
+        Filesystem $fileSystem, ZipArchiveFilecompression $fileCompression,
+        ConfigurablePathBuilder $configurablePathBuilder
     )
     {
         $this->fileSystem = $fileSystem;
@@ -72,12 +57,9 @@ class ArchiveCreator
         $temporaryFolder =
             $this->configurablePathBuilder->getTemporaryPath(__NAMESPACE__) . DIRECTORY_SEPARATOR . uniqid();
 
-        foreach ($archive->getArchiveItems() as $archiveItem)
-        {
-            $this->handleArchiveItem($archiveItem, $temporaryFolder);
-        }
+        $this->handleArchiveItems($archive->getArchiveItems(), $temporaryFolder);
 
-        $archivePath = $this->fileCompression->create_archive($temporaryFolder);
+        $archivePath = $this->fileCompression->createArchive($temporaryFolder);
         $this->fileSystem->remove([$temporaryFolder]);
 
         return $archivePath;
@@ -94,7 +76,7 @@ class ArchiveCreator
     {
         $archivePath = $this->createArchive($archive);
 
-        $response = new BinaryFileResponse($archivePath, 200, array('Content-Type' => 'application/zip'));
+        $response = new BinaryFileResponse($archivePath, 200, ['Content-Type' => 'application/zip']);
 
         $response->setContentDisposition(
             ResponseHeaderBag::DISPOSITION_ATTACHMENT, $archive->getName() . '.zip',
@@ -161,7 +143,7 @@ class ArchiveCreator
      * @param \Chamilo\Libraries\File\Compression\ArchiveCreator\ArchiveItem[] $archiveItems
      * @param string $temporaryFolder
      */
-    protected function handleArchiveItems($archiveItems = [], $temporaryFolder)
+    protected function handleArchiveItems(array $archiveItems, $temporaryFolder)
     {
         foreach ($archiveItems as $archiveItem)
         {

@@ -11,7 +11,7 @@ use Chamilo\Core\Repository\ContentObject\Webpage\Storage\DataClass\Webpage;
 use Chamilo\Core\Repository\Storage\DataClass\ContentObject;
 use Chamilo\Core\Repository\Storage\DataManager;
 use Chamilo\Libraries\Architecture\Exceptions\UserException;
-use Chamilo\Libraries\File\Compression\Filecompression;
+use Chamilo\Libraries\File\Compression\ZipArchive\ZipArchiveFilecompression;
 use Chamilo\Libraries\File\Filesystem;
 use Chamilo\Libraries\Format\Structure\BreadcrumbTrail;
 use Chamilo\Libraries\Storage\Parameters\DataClassRetrievesParameters;
@@ -202,8 +202,8 @@ class ZipAndDownloadComponent extends Manager
             throw new UserException(Translation::get('NoDocumentsPublished'));
         }
 
-        $compression = Filecompression::factory();
-        $archiveFile = $compression->create_archive($target_path);
+        $compression = $this->getZipArchiveFilecompression();
+        $archiveFile = $compression->createArchive($target_path);
 
         Filesystem::remove($target_path);
 
@@ -284,5 +284,10 @@ class ZipAndDownloadComponent extends Manager
         }
 
         return $category_folder_mapping;
+    }
+
+    protected function getZipArchiveFilecompression(): ZipArchiveFilecompression
+    {
+        return $this->getService(ZipArchiveFilecompression::class);
     }
 }

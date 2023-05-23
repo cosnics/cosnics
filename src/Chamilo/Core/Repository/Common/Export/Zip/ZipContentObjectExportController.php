@@ -7,7 +7,7 @@ use Chamilo\Core\Repository\Common\Export\ContentObjectExportImplementation;
 use Chamilo\Core\Repository\Common\Export\ExportParameters;
 use Chamilo\Core\Repository\Storage\DataClass\ContentObject;
 use Chamilo\Core\Repository\Storage\DataManager;
-use Chamilo\Libraries\File\Compression\Filecompression;
+use Chamilo\Libraries\File\Compression\ZipArchive\ZipArchiveFilecompression;
 use Chamilo\Libraries\File\Filesystem;
 use Chamilo\Libraries\File\Path;
 use Chamilo\Libraries\Platform\Session\Session;
@@ -64,6 +64,11 @@ class ZipContentObjectExportController extends ContentObjectExportController
         $result = Filesystem::recurse_copy($source, $this->temporary_directory . $destination, true);
     }
 
+    protected function getZipArchiveFilecompression(): ZipArchiveFilecompression
+    {
+        return $this->getService(ZipArchiveFilecompression::class);
+    }
+
     public function get_filename()
     {
         return 'content_objects.zip';
@@ -102,8 +107,8 @@ class ZipContentObjectExportController extends ContentObjectExportController
 
     public function zip()
     {
-        $zip = Filecompression::factory();
-        $zip_path = $zip->create_archive($this->temporary_directory);
+        $zip = $this->getZipArchiveFilecompression();
+        $zip_path = $zip->createArchive($this->temporary_directory);
         Filesystem::remove($this->temporary_directory);
 
         return $zip_path;

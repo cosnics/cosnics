@@ -1,26 +1,24 @@
 <?php
 namespace Chamilo\Core\User\Email\Form;
 
-use Chamilo\Configuration\Configuration;
 use Chamilo\Core\User\Storage\DataClass\User;
 use Chamilo\Libraries\Format\Form\FormValidator;
 use Chamilo\Libraries\Format\Structure\Glyph\FontAwesomeGlyph;
-use Chamilo\Libraries\Mail\Mailer\MailerFactory;
+use Chamilo\Libraries\Mail\Mailer\MailerInterface;
 use Chamilo\Libraries\Mail\ValueObject\Mail;
 use Chamilo\Libraries\Translation\Translation;
 use Chamilo\Libraries\Utilities\StringUtilities;
 use Exception;
 
 /**
- *
  * @package application.common.category_manager
  */
 class EmailForm extends FormValidator
 {
 
-    private $user;
-
     private $target_users;
+
+    private $user;
 
     /**
      * Creates a new LanguageForm
@@ -39,11 +37,11 @@ class EmailForm extends FormValidator
     {
         $this->addElement('category', Translation::get('Email'));
 
-        $this->addElement('text', 'title', Translation::get('EmailTitle'), array('size' => '50'));
+        $this->addElement('text', 'title', Translation::get('EmailTitle'), ['size' => '50']);
         $this->addRule('title', Translation::get('ThisFieldIsRequired', null, StringUtilities::LIBRARIES), 'required');
 
         $this->add_html_editor(
-            'message', Translation::get('EmailMessage'), true, array('height' => 500, 'width' => 750)
+            'message', Translation::get('EmailMessage'), true, ['height' => 500, 'width' => 750]
         );
 
         $buttons[] = $this->createElement(
@@ -63,10 +61,9 @@ class EmailForm extends FormValidator
         $message = $values['message'];
         $targets = $this->get_target_email_addresses();
 
-        $mail = new Mail($title, $message, $targets, false, array($this->user->get_email()));
+        $mail = new Mail($title, $message, $targets, false, [$this->user->get_email()]);
 
-        $mailerFactory = new MailerFactory(Configuration::getInstance());
-        $mailer = $mailerFactory->getActiveMailer();
+        $mailer = $this->getActiveMailer();
 
         try
         {
@@ -77,6 +74,11 @@ class EmailForm extends FormValidator
         }
 
         return true;
+    }
+
+    protected function getActiveMailer(): MailerInterface
+    {
+        return $this->getService('Chamilo\Libraries\Mail\Mailer\ActiveMailer');
     }
 
     public function get_target_email_addresses()

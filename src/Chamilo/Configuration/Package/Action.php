@@ -2,11 +2,13 @@
 namespace Chamilo\Configuration\Package;
 
 use Chamilo\Libraries\Architecture\ClassnameUtilities;
+use Chamilo\Libraries\Architecture\Traits\DependencyInjectionContainerTrait;
 use Chamilo\Libraries\Translation\Translation;
 
 abstract class Action
 {
-    // Types
+    use DependencyInjectionContainerTrait;
+
     public const TYPE_CONFIRM = '2';
     public const TYPE_ERROR = '4';
     public const TYPE_NORMAL = '1';
@@ -17,6 +19,8 @@ abstract class Action
     public function __construct()
     {
         $this->message = [];
+
+        $this->initializeContainer();
     }
 
     public function add_message($type = self::TYPE_NORMAL, $message)

@@ -6,10 +6,9 @@ use Chamilo\Core\Tracking\Storage\DataClass\Event;
 use Chamilo\Core\User\Manager;
 use Chamilo\Core\User\Storage\DataClass\User;
 use Chamilo\Libraries\Architecture\Traits\DependencyInjectionContainerTrait;
-use Chamilo\Libraries\File\Path;
 use Chamilo\Libraries\Format\Form\FormValidator;
 use Chamilo\Libraries\Hashing\HashingUtilities;
-use Chamilo\Libraries\Mail\Mailer\MailerFactory;
+use Chamilo\Libraries\Mail\Mailer\MailerInterface;
 use Chamilo\Libraries\Mail\ValueObject\Mail;
 use Chamilo\Libraries\Platform\Session\Session;
 use Chamilo\Libraries\Translation\Translation;
@@ -17,7 +16,6 @@ use Chamilo\Libraries\Utilities\StringUtilities;
 use Exception;
 
 /**
- *
  * @package user.lib.forms
  */
 class InvitationRegistrationForm extends FormValidator
@@ -29,7 +27,6 @@ class InvitationRegistrationForm extends FormValidator
     public const PASSWORD_CONFIRMATION = 'password_confirmation';
 
     /**
-     *
      * @var Invitation
      */
     private $invitation;
@@ -58,7 +55,7 @@ class InvitationRegistrationForm extends FormValidator
 
         $this->addElement('category', Translation::get('Profile'));
 
-        $this->addElement('text', User::PROPERTY_USERNAME, Translation::get('Username'), array('size' => '50'));
+        $this->addElement('text', User::PROPERTY_USERNAME, Translation::get('Username'), ['size' => '50']);
         $this->addRule(
             User::PROPERTY_USERNAME, Translation::get('ThisFieldIsRequired', null, StringUtilities::LIBRARIES),
             'required'
@@ -69,13 +66,13 @@ class InvitationRegistrationForm extends FormValidator
 
         $this->addElement(
             'password', self::PASSWORD, Translation::get('Password'),
-            array('size' => 40, 'autocomplete' => 'off', 'id' => 'password')
+            ['size' => 40, 'autocomplete' => 'off', 'id' => 'password']
         );
         $this->addElement(
             'password', self::PASSWORD_CONFIRMATION, Translation::get('PasswordConfirmation'),
-            array('size' => 40, 'autocomplete' => 'off')
+            ['size' => 40, 'autocomplete' => 'off']
         );
-        $this->addRule(array(self::PASSWORD, self::PASSWORD_CONFIRMATION), Translation::get('PassTwo'), 'compare');
+        $this->addRule([self::PASSWORD, self::PASSWORD_CONFIRMATION], Translation::get('PassTwo'), 'compare');
         $this->addRule(
             self::PASSWORD, Translation::get('ThisFieldIsRequired', null, StringUtilities::LIBRARIES), 'required'
         );
@@ -86,30 +83,30 @@ class InvitationRegistrationForm extends FormValidator
 
         $this->addElement('category', Translation::get('BasicProfile'));
 
-        $this->addElement('text', User::PROPERTY_FIRSTNAME, Translation::get('FirstName'), array('size' => '50'));
+        $this->addElement('text', User::PROPERTY_FIRSTNAME, Translation::get('FirstName'), ['size' => '50']);
         $this->addRule(
             User::PROPERTY_FIRSTNAME, Translation::get('ThisFieldIsRequired', null, StringUtilities::LIBRARIES),
             'required'
         );
 
-        $this->addElement('text', User::PROPERTY_LASTNAME, Translation::get('LastName'), array('size' => '50'));
+        $this->addElement('text', User::PROPERTY_LASTNAME, Translation::get('LastName'), ['size' => '50']);
         $this->addRule(
             User::PROPERTY_LASTNAME, Translation::get('ThisFieldIsRequired', null, StringUtilities::LIBRARIES),
             'required'
         );
 
         // Email
-        $this->addElement('text', User::PROPERTY_EMAIL, Translation::get('Email'), array('size' => '50'));
+        $this->addElement('text', User::PROPERTY_EMAIL, Translation::get('Email'), ['size' => '50']);
         // $this->addRule(User::PROPERTY_EMAIL, Translation::get('ThisFieldIsRequired', null, StringUtilities::LIBRARIES), 'required');
         // $this->addRule(User::PROPERTY_EMAIL, Translation::get('WrongEmail'), 'email');
         $this->freeze(User::PROPERTY_EMAIL);
 
-        if (Configuration::getInstance()->get_setting(array(Manager::CONTEXT, 'enable_terms_and_conditions')))
+        if (Configuration::getInstance()->get_setting([Manager::CONTEXT, 'enable_terms_and_conditions']))
         {
             $this->addElement('category', Translation::get('Information'));
             $this->addElement(
                 'textarea', 'conditions', Translation::get('TermsAndConditions'),
-                array('cols' => 80, 'rows' => 20, 'disabled' => 'disabled', 'style' => 'background-color: white;')
+                ['cols' => 80, 'rows' => 20, 'disabled' => 'disabled', 'style' => 'background-color: white;']
             );
             $this->addElement('checkbox', 'conditions_accept', '', Translation::get('IAccept'));
             $this->addRule(
@@ -154,10 +151,9 @@ class InvitationRegistrationForm extends FormValidator
 
             Session::register('_uid', intval($user->get_id()));
             Event::trigger(
-                'Register', Manager::CONTEXT,
-                array('target_user_id' => $user->get_id(), 'action_user_id' => $user->get_id())
+                'Register', Manager::CONTEXT, ['target_user_id' => $user->get_id(), 'action_user_id' => $user->get_id()]
             );
-            Event::trigger('Login', Manager::CONTEXT, array('server' => $_SERVER, 'user' => $user));
+            Event::trigger('Login', Manager::CONTEXT, ['server' => $_SERVER, 'user' => $user]);
 
             return true;
         }
@@ -167,8 +163,12 @@ class InvitationRegistrationForm extends FormValidator
         }
     }
 
+    protected function getActiveMailer(): MailerInterface
+    {
+        return $this->getService('Chamilo\Libraries\Mail\Mailer\ActiveMailer');
+    }
+
     /**
-     *
      * @return \Chamilo\Libraries\Hashing\HashingUtilities
      */
     public function getHashingUtilities()
@@ -186,24 +186,24 @@ class InvitationRegistrationForm extends FormValidator
         $options['lastname'] = $user->get_lastname();
         $options['username'] = $user->get_username();
         $options['password'] = $this->exportValue(self::PASSWORD);
-        $options['site_name'] = Configuration::getInstance()->get_setting(array('Chamilo\Core\Admin', 'site_name'));
+        $options['site_name'] = Configuration::getInstance()->get_setting(['Chamilo\Core\Admin', 'site_name']);
         $options['site_url'] = $this->getWebPathBuilder()->getBasePath();
         $options['admin_firstname'] = Configuration::getInstance()->get_setting(
-            array('Chamilo\Core\Admin', 'administrator_firstname')
+            ['Chamilo\Core\Admin', 'administrator_firstname']
         );
         $options['admin_surname'] = Configuration::getInstance()->get_setting(
-            array('Chamilo\Core\Admin', 'administrator_surname')
+            ['Chamilo\Core\Admin', 'administrator_surname']
         );
         $options['admin_telephone'] = Configuration::getInstance()->get_setting(
-            array('Chamilo\Core\Admin', 'administrator_telephone')
+            ['Chamilo\Core\Admin', 'administrator_telephone']
         );
         $options['admin_email'] = Configuration::getInstance()->get_setting(
-            array('Chamilo\Core\Admin', 'administrator_email')
+            ['Chamilo\Core\Admin', 'administrator_email']
         );
 
         $subject = Translation::get('YourRegistrationOn') . ' ' . $options['site_name'];
 
-        $body = Configuration::getInstance()->get_setting(array(Manager::CONTEXT, 'email_template'));
+        $body = Configuration::getInstance()->get_setting([Manager::CONTEXT, 'email_template']);
         foreach ($options as $option => $value)
         {
             $body = str_replace('[' . $option . ']', $value, $body);
@@ -211,8 +211,7 @@ class InvitationRegistrationForm extends FormValidator
 
         $mail = new Mail($subject, $body, $user->get_email());
 
-        $mailerFactory = new MailerFactory(Configuration::getInstance());
-        $mailer = $mailerFactory->getActiveMailer();
+        $mailer = $this->getActiveMailer();
 
         try
         {

@@ -8,13 +8,9 @@ use Chamilo\Core\User\Service\UserImporter\ImportParser\ImportParserFactory;
 use Chamilo\Core\User\Service\UserImporter\UserImporter;
 use Chamilo\Core\User\Service\UserService;
 use Chamilo\Libraries\Architecture\Exceptions\NotAllowedException;
-use Chamilo\Libraries\Format\Structure\BreadcrumbTrail;
 use Chamilo\Libraries\Hashing\HashingUtilities;
-use Chamilo\Libraries\Mail\Mailer\MailerFactory;
-use Chamilo\Libraries\Mail\Mailer\MailerInterface;
 
 /**
- *
  * @package user.lib.user_manager.component
  */
 class ImporterComponent extends Manager
@@ -38,7 +34,7 @@ class ImporterComponent extends Manager
         {
             $userImporter = new UserImporter(
                 new ImportParserFactory(), $this->getService(UserService::class), $this->getConfigurationConsulter(),
-                $this->getHashingUtilities(), $this->getMailer(), $this->getTranslator()
+                $this->getHashingUtilities(), $this->getActiveMailer(), $this->getTranslator()
             );
 
             $uploadedFile = $this->getRequest()->files->get('file');
@@ -52,7 +48,7 @@ class ImporterComponent extends Manager
         }
         else
         {
-            $emailRequired = Configuration::getInstance()->get_setting(array(Manager::CONTEXT, 'require_email'));
+            $emailRequired = Configuration::getInstance()->get_setting([Manager::CONTEXT, 'require_email']);
             $rendition = $this->getTwig()->render(
                 'Chamilo\Core\User:UserImporter.html.twig',
                 ['emailRequired' => $emailRequired, 'form' => $form->toHtml()]
@@ -69,22 +65,10 @@ class ImporterComponent extends Manager
     }
 
     /**
-     *
      * @return HashingUtilities | object
      */
     protected function getHashingUtilities()
     {
         return $this->getService(HashingUtilities::class);
-    }
-
-    /**
-     *
-     * @return MailerInterface
-     */
-    protected function getMailer()
-    {
-        $factory = new MailerFactory();
-
-        return $factory->getActiveMailer();
     }
 }

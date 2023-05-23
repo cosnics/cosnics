@@ -2,7 +2,8 @@
 namespace Chamilo\Core\Repository\ContentObject\Forum\EmailNotification;
 
 use Chamilo\Configuration\Configuration;
-use Chamilo\Libraries\Mail\Mailer\MailerFactory;
+use Chamilo\Libraries\DependencyInjection\DependencyInjectionContainerBuilder;
+use Chamilo\Libraries\Mail\Mailer\MailerInterface;
 use Chamilo\Libraries\Mail\ValueObject\Mail;
 use Chamilo\Libraries\Translation\Translation;
 use Exception;
@@ -15,6 +16,8 @@ use Exception;
 class PostEmailNotificator extends EmailNotificator
 {
 
+    private $first_post_text;
+
     /**
      * **************************************************************************************************************
      * Variables *
@@ -22,30 +25,23 @@ class PostEmailNotificator extends EmailNotificator
      */
     private $post;
 
-    private $first_post_text;
-
     /**
-     * set the post which is changed
-     *
-     * @param $post
+     * @throws \Exception
      */
-    public function set_post($post)
+    protected function getActiveMailer(): MailerInterface
     {
-        $this->post = $post;
-    }
-
-    /**
-     * set if the post is the first post of a topic
-     *
-     * @param $first_post_text
-     */
-    public function set_first_post_text($first_post_text)
-    {
-        $this->first_post_text = $first_post_text;
+        /**
+         * @var \Chamilo\Libraries\Mail\Mailer\MailerInterface
+         */
+        return DependencyInjectionContainerBuilder::getInstance()->createContainer()->get(
+            'Chamilo\Libraries\Mail\Mailer\ActiveMailer'
+        );
     }
 
     /**
      * send a message to all the subscribers
+     *
+     * @throws \Exception
      */
     public function send_emails()
     {
@@ -55,7 +51,7 @@ class PostEmailNotificator extends EmailNotificator
             $targetUsers[] = $user->get_email();
         }
 
-        $site_name = Configuration::getInstance()->get_setting(array('Chamilo\Core\Admin', 'site_name'));
+        $site_name = Configuration::getInstance()->get_setting(['Chamilo\Core\Admin', 'site_name']);
 
         $subject = '[' . $site_name . '] ' . $this->action_title . ' ' . $this->topic->get_title();
 
@@ -69,7 +65,7 @@ class PostEmailNotificator extends EmailNotificator
         );
 
         $message = str_replace('[/quote]', '</div>', $message);
-        $message = $message . '<br/>' . Translation::get("By") . ': ' . $this->action_user->get_firstname() . ' ' .
+        $message = $message . '<br/>' . Translation::get('By') . ': ' . $this->action_user->get_firstname() . ' ' .
             $this->action_user->get_lastname();
 
         if ($this->first_post_text)
@@ -82,8 +78,7 @@ class PostEmailNotificator extends EmailNotificator
             $this->action_user->get_email()
         );
 
-        $mailerFactory = new MailerFactory(Configuration::getInstance());
-        $mailer = $mailerFactory->getActiveMailer();
+        $mailer = $this->getActiveMailer();
 
         try
         {
@@ -92,5 +87,25 @@ class PostEmailNotificator extends EmailNotificator
         catch (Exception $ex)
         {
         }
+    }
+
+    /**
+     * set if the post is the first post of a topic
+     *
+     * @param $first_post_text
+     */
+    public function set_first_post_text($first_post_text)
+    {
+        $this->first_post_text = $first_post_text;
+    }
+
+    /**
+     * set the post which is changed
+     *
+     * @param $post
+     */
+    public function set_post($post)
+    {
+        $this->post = $post;
     }
 }
