@@ -43,7 +43,8 @@
                       id="Symfony\Component\Validator\Validator"/>
         </service>
 
-        <service id="HTMLPurifier">
+        <service id="HTMLPurifier"
+                 class="HTMLPurifier">
             <factory method="buildHtmlPurifier"
                      service="Chamilo\Libraries\File\HtmlPurifierFactory"/>
         </service>

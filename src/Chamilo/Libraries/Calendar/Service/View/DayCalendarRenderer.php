@@ -6,13 +6,14 @@ use Chamilo\Libraries\Calendar\Architecture\Interfaces\CalendarRendererProviderI
 use Chamilo\Libraries\Calendar\Service\Event\EventDayRenderer;
 use Chamilo\Libraries\Calendar\Service\LegendRenderer;
 use Chamilo\Libraries\Calendar\Service\View\TableBuilder\DayCalendarTableBuilder;
+use Chamilo\Libraries\File\WebPathBuilder;
+use Chamilo\Libraries\Format\Utilities\ResourceManager;
 use Chamilo\Libraries\Utilities\DatetimeUtilities;
 use Symfony\Component\Translation\Translator;
 
 /**
  * @package Chamilo\Libraries\Calendar\Service\View
- *
- * @author Hans De Bisschop <hans.de.bisschop@ehb.be>
+ * @author  Hans De Bisschop <hans.de.bisschop@ehb.be>
  */
 class DayCalendarRenderer extends SidebarTableCalendarRenderer
 {
@@ -25,11 +26,12 @@ class DayCalendarRenderer extends SidebarTableCalendarRenderer
     public function __construct(
         LegendRenderer $legendRenderer, UrlGenerator $urlGenerator, Translator $translator,
         MiniMonthCalendarRenderer $miniMonthCalendarRenderer, DatetimeUtilities $datetimeUtilities,
-        EventDayRenderer $eventDayRenderer, DayCalendarTableBuilder $dayCalendarTableBuilder
+        EventDayRenderer $eventDayRenderer, DayCalendarTableBuilder $dayCalendarTableBuilder,
+        WebPathBuilder $webPathBuilder, ResourceManager $resourceManager
     )
     {
         parent::__construct(
-            $legendRenderer, $urlGenerator, $translator, $miniMonthCalendarRenderer
+            $legendRenderer, $urlGenerator, $translator, $miniMonthCalendarRenderer, $webPathBuilder, $resourceManager
         );
 
         $this->eventDayRenderer = $eventDayRenderer;
