@@ -14,7 +14,7 @@ class ArrayLoader extends \Composer\Package\Loader\ArrayLoader
      *
      * @see \Composer\Package\Loader\ArrayLoader::load()
      */
-    public function load(array $config, $class = 'Composer\Package\CompletePackage')
+    public function load(array $config, string $class = 'Composer\Package\CompletePackage'): BasePackage
     {
         $package = parent::load($config, $class);
 
