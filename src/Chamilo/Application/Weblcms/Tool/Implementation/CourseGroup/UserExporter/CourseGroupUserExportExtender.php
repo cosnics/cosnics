@@ -1,73 +1,59 @@
 <?php
 namespace Chamilo\Application\Weblcms\Tool\Implementation\CourseGroup\UserExporter;
 
+use Chamilo\Application\Weblcms\Tool\Implementation\CourseGroup\Manager;
 use Chamilo\Application\Weblcms\Tool\Implementation\CourseGroup\Storage\DataManager;
 use Chamilo\Application\Weblcms\UserExporter\UserExportExtender;
 use Chamilo\Core\User\Storage\DataClass\User;
-use Chamilo\Libraries\Translation\Translation;
+use Symfony\Component\Translation\Translator;
 
 /**
  * Extends the user exporter with additional data for the course groups
- * 
+ *
  * @package application\weblcms\tool\course_group
- * @author Sven Vanpoucke - Hogeschool Gent
+ * @author  Sven Vanpoucke - Hogeschool Gent
+ * @author  Hans De Bisschop <hans.de.bisschop@ehb.be>
  */
 class CourseGroupUserExportExtender implements UserExportExtender
 {
-    const EXPORT_COLUMN_COURSE_GROUPS = 'course_groups';
+    public const EXPORT_COLUMN_COURSE_GROUPS = 'course_groups';
 
-    /**
-     * The id of the current course
-     * 
-     * @var int
-     */
-    private $course_id;
+    protected Translator $translator;
 
-    /**
-     * The constructor
-     * 
-     * @param int $course_id
-     */
-    public function __construct($course_id)
+    public function __construct(Translator $translator)
     {
-        $this->course_id = $course_id;
+        $this->translator = $translator;
     }
 
-    /**
-     * Exports additional headers
-     * 
-     * @return array
-     */
-    public function export_headers()
+    public function export_headers(string $courseIdentifier): array
     {
         $headers = [];
-        
-        $headers[self::EXPORT_COLUMN_COURSE_GROUPS] = Translation::get('CourseGroups');
-        
+
+        $headers[self::EXPORT_COLUMN_COURSE_GROUPS] =
+            $this->getTranslator()->trans('CourseGroups', [], Manager::CONTEXT);
+
         return $headers;
     }
 
-    /**
-     * Exports additional data for a given user
-     * 
-     * @param User $user
-     *
-     * @return array
-     */
-    public function export_user(User $user)
+    public function export_user(string $courseIdentifier, User $user): array
     {
         $data = [];
-        
-        $course_groups = DataManager::retrieve_course_groups_from_user($user->get_id(), $this->course_id);
-        
+
+        $course_groups = DataManager::retrieve_course_groups_from_user($user->getId(), $courseIdentifier);
+
         $course_groups_subscribed = [];
-        foreach($course_groups as $course_group)
+        foreach ($course_groups as $course_group)
         {
             $course_groups_subscribed[] = $course_group->get_name();
         }
-        
-        $data[self::EXPORT_COLUMN_COURSE_GROUPS] = implode(", ", $course_groups_subscribed);
-        
+
+        $data[self::EXPORT_COLUMN_COURSE_GROUPS] = implode(', ', $course_groups_subscribed);
+
         return $data;
+    }
+
+    public function getTranslator(): Translator
+    {
+        return $this->translator;
     }
 }

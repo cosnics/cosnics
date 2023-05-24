@@ -3,11 +3,9 @@ namespace Chamilo\Application\Weblcms\Tool\Implementation\User\Component;
 
 use Chamilo\Application\Weblcms\Course\Storage\DataManager as CourseDataManager;
 use Chamilo\Application\Weblcms\Storage\DataClass\CourseEntityRelation;
-use Chamilo\Application\Weblcms\Tool\Implementation\CourseGroup\UserExporter\CourseGroupUserExportExtender;
 use Chamilo\Application\Weblcms\Tool\Implementation\User\Domain\UserExportParameters;
 use Chamilo\Application\Weblcms\Tool\Implementation\User\Manager;
 use Chamilo\Application\Weblcms\Tool\Implementation\User\UserExporter\CourseUserExportExtender;
-use Chamilo\Application\Weblcms\UserExporter\Renderer\ExcelUserExportRenderer;
 use Chamilo\Application\Weblcms\UserExporter\UserExporter;
 use Chamilo\Core\Group\Storage\DataClass\Group;
 use Chamilo\Core\User\Storage\DataClass\User;
@@ -22,7 +20,6 @@ use Chamilo\Libraries\Storage\Query\Condition\InCondition;
 use Chamilo\Libraries\Storage\Query\OrderBy;
 use Chamilo\Libraries\Storage\Query\OrderProperty;
 use Chamilo\Libraries\Storage\Query\Variable\PropertyConditionVariable;
-use Chamilo\Libraries\Storage\Query\Variable\StaticColumnConditionVariable;
 use Chamilo\Libraries\Storage\Query\Variable\StaticConditionVariable;
 use Chamilo\Libraries\Translation\Translation;
 use Chamilo\Libraries\Utilities\StringUtilities;
@@ -39,14 +36,7 @@ class ExporterComponent extends Manager
     {
         $userExportParameters = $this->getUserExportParameters();
 
-        $exporter = new UserExporter(
-            new ExcelUserExportRenderer(), array(
-                new CourseUserExportExtender($this->get_course_id()),
-                new CourseGroupUserExportExtender($this->get_course_id())
-            )
-        );
-
-        $file_path = $exporter->export($userExportParameters->getUsers());
+        $file_path = $this->getUserExporter()->export($this->get_course_id(), $userExportParameters->getUsers());
 
         Filesystem::file_send_for_download(
             $file_path, true, $userExportParameters->getExportFilename(), 'application/vnd.openxmlformats'
@@ -114,11 +104,11 @@ class ExporterComponent extends Manager
     protected function exportAllUsers()
     {
         $user_records = CourseDataManager::retrieve_all_course_users(
-            $this->get_course_id(), null, null, null, new OrderBy(array(
-                    new OrderProperty(new StaticConditionVariable('subscription_status', false)),
-                    new OrderProperty(new PropertyConditionVariable(User::class, User::PROPERTY_LASTNAME)),
-                    new OrderProperty(new PropertyConditionVariable(User::class, User::PROPERTY_FIRSTNAME))
-                ))
+            $this->get_course_id(), null, null, null, new OrderBy([
+                new OrderProperty(new StaticConditionVariable('subscription_status', false)),
+                new OrderProperty(new PropertyConditionVariable(User::class, User::PROPERTY_LASTNAME)),
+                new OrderProperty(new PropertyConditionVariable(User::class, User::PROPERTY_FIRSTNAME))
+            ])
         );
 
         $users = [];
@@ -129,9 +119,9 @@ class ExporterComponent extends Manager
         }
 
         $filename = Translation::getInstance()->getTranslation(
-            'ExportUsersFilename', array(
+            'ExportUsersFilename', [
                 'COURSE_NAME' => $this->createSafeName($this->get_course()->get_title())
-            )
+            ]
         );
 
         return new UserExportParameters($users, $filename . '.xlsx');
@@ -150,7 +140,7 @@ class ExporterComponent extends Manager
         );
 
         $individualUsers = CourseDataManager::retrieve_users_directly_subscribed_to_course(
-            $condition, null, null, new OrderBy(array(
+            $condition, null, null, new OrderBy([
                 new OrderProperty(
                     new PropertyConditionVariable(
                         CourseEntityRelation::class, CourseEntityRelation::PROPERTY_STATUS
@@ -158,7 +148,7 @@ class ExporterComponent extends Manager
                 ),
                 new OrderProperty(new PropertyConditionVariable(User::class, User::PROPERTY_LASTNAME)),
                 new OrderProperty(new PropertyConditionVariable(User::class, User::PROPERTY_FIRSTNAME))
-            ))
+            ])
         );
 
         $users = [];
@@ -178,9 +168,9 @@ class ExporterComponent extends Manager
         }
 
         $filename = Translation::getInstance()->getTranslation(
-            'ExportDirectlySubscribedUsersFilename', array(
+            'ExportDirectlySubscribedUsersFilename', [
                 'COURSE_NAME' => $this->createSafeName($this->get_course()->get_title())
-            )
+            ]
         );
 
         return new UserExportParameters($users, $filename . '.xlsx');
@@ -222,10 +212,10 @@ class ExporterComponent extends Manager
         {
             $condition = new InCondition(new PropertyConditionVariable(User::class, User::PROPERTY_ID), $groupUsersIds);
 
-            $orderBy = array(
+            $orderBy = [
                 new OrderProperty(new PropertyConditionVariable(User::class, User::PROPERTY_LASTNAME)),
                 new OrderProperty(new PropertyConditionVariable(User::class, User::PROPERTY_FIRSTNAME))
-            );
+            ];
 
             $groupUsers = DataManager::retrieves(
                 User::class, new DataClassRetrievesParameters(
@@ -244,9 +234,9 @@ class ExporterComponent extends Manager
         }
 
         $filename = Translation::getInstance()->getTranslation(
-            'ExportGroupUsersFilename', array(
+            'ExportGroupUsersFilename', [
                 'GROUP_NAME' => $this->createSafeName($group->get_name())
-            )
+            ]
         );
 
         return new UserExportParameters($groupUsers, $filename . '.xlsx');
@@ -256,7 +246,6 @@ class ExporterComponent extends Manager
      * Returns a list of users to export
      *
      * @return \Chamilo\Application\Weblcms\Tool\Implementation\User\Domain\UserExportParameters
-     *
      * @throws \Chamilo\Libraries\Architecture\Exceptions\UserException
      */
     protected function getUserExportParameters()
@@ -277,5 +266,10 @@ class ExporterComponent extends Manager
         throw new UserException(
             $this->getTranslator()->trans('ExportTypeNotFound', null, 'Chamilo\Application\Weblcms')
         );
+    }
+
+    protected function getUserExporter(): UserExporter
+    {
+        return $this->getService('Chamilo\Application\Weblcms\Tool\Implementation\User\UserExporter');
     }
 }

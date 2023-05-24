@@ -15,7 +15,6 @@ abstract class Export
 {
 
     /**
-     *
      * @var string[]
      */
     private $data;
@@ -28,7 +27,6 @@ abstract class Export
     private $filename;
 
     /**
-     *
      * @var string
      */
     private $path;
@@ -61,6 +59,11 @@ abstract class Export
     }
 
     /**
+     * @return string
+     */
+    abstract public function getType();
+
+    /**
      * Gets the data
      *
      * @return mixed
@@ -71,7 +74,6 @@ abstract class Export
     }
 
     /**
-     *
      * @return string
      */
     public function get_filename()
@@ -80,16 +82,6 @@ abstract class Export
     }
 
     /**
-     *
-     * @param string $filename
-     */
-    public function set_filename($filename)
-    {
-        $this->filename = $filename . '.' . $this->getType();
-    }
-
-    /**
-     *
      * @return string
      */
     public function get_path()
@@ -102,15 +94,6 @@ abstract class Export
         {
             return Path::getInstance()->getArchivePath();
         }
-    }
-
-    /**
-     *
-     * @param string $path
-     */
-    public function set_path($path)
-    {
-        $this->path = $path;
     }
 
     /**
@@ -139,12 +122,6 @@ abstract class Export
     }
 
     /**
-     *
-     * @return string
-     */
-    abstract public function getType();
-
-    /**
      * @deprecated Use Export::getType() now
      */
     public function get_type()
@@ -153,7 +130,6 @@ abstract class Export
     }
 
     /**
-     *
      * @return string
      */
     abstract public function render_data();
@@ -169,6 +145,22 @@ abstract class Export
             Filesystem::file_send_for_download($file, true, $this->get_filename());
             exit();
         }
+    }
+
+    /**
+     * @param string $filename
+     */
+    public function set_filename($filename)
+    {
+        $this->filename = $filename . '.' . $this->getType();
+    }
+
+    /**
+     * @param string $path
+     */
+    public function set_path($path)
+    {
+        $this->path = $path;
     }
 
     /**

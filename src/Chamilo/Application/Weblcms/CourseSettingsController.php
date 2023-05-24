@@ -10,8 +10,8 @@ use Chamilo\Configuration\Package\Action\Installer;
 use Chamilo\Libraries\Architecture\Exceptions\ObjectNotExistException;
 use Chamilo\Libraries\DependencyInjection\DependencyInjectionContainerBuilder;
 use Chamilo\Libraries\File\Path;
-use Chamilo\Libraries\Translation\Translation;
 use Chamilo\Libraries\Storage\DataClass\DataClass;
+use Chamilo\Libraries\Translation\Translation;
 use DOMDocument;
 use DOMXPath;
 use Exception;
@@ -22,21 +22,21 @@ use Exception;
  * type
  *
  * @package application\weblcms;
- * @author Sven Vanpoucke - Hogeschool Gent
+ * @author  Sven Vanpoucke - Hogeschool Gent
  */
 class CourseSettingsController
 {
-    const PROPERTY_VALUE = 'value';
+    public const PROPERTY_VALUE = 'value';
 
-    const SETTING_ACTION_CREATE = 'create';
-    const SETTING_ACTION_UPDATE = 'update';
-    const SETTING_PARAM_COURSE_SETTINGS = 'course_settings';
-    const SETTING_PARAM_LOCKED_PREFIX = 'locked_';
-    const SETTING_PARAM_TOOL_SETTINGS = 'tool_settings';
+    public const SETTING_ACTION_CREATE = 'create';
+    public const SETTING_ACTION_UPDATE = 'update';
+    public const SETTING_PARAM_COURSE_SETTINGS = 'course_settings';
+    public const SETTING_PARAM_LOCKED_PREFIX = 'locked_';
+    public const SETTING_PARAM_TOOL_SETTINGS = 'tool_settings';
 
-    const SETTING_TYPE_COURSE = 1;
-    const SETTING_TYPE_COURSE_TYPE = 2;
-    const SETTING_TYPE_DEFAULT = 3;
+    public const SETTING_TYPE_COURSE = 1;
+    public const SETTING_TYPE_COURSE_TYPE = 2;
+    public const SETTING_TYPE_DEFAULT = 3;
 
     /**
      * Singleton variable
@@ -52,21 +52,20 @@ class CourseSettingsController
      */
 
     /**
-     * Caches the course settings values The keys of the array are hashes hash1: settingtype_objectid hash2:
-     * toolid_settingname
-     *
-     * @var String[String][String]
-     *
-     * @example $course_settings_values_cache[hash1][hash2] = value
-     */
-    private $course_settings_values_cache;
-
-    /**
      * Caches the course settings joined with the tools
      *
      * @var \Doctrine\Common\Collections\ArrayCollection<\Chamilo\Application\Weblcms\Storage\DataClass\CourseSetting>
      */
     private $course_settings_cache;
+
+    /**
+     * Caches the course settings values The keys of the array are hashes hash1: settingtype_objectid hash2:
+     * toolid_settingname
+     *
+     * @var String[String][String]
+     * @example $course_settings_values_cache[hash1][hash2] = value
+     */
+    private $course_settings_values_cache;
 
     /**
      * **************************************************************************************************************
@@ -106,7 +105,7 @@ class CourseSettingsController
      * Clears the cache for a given type and object
      *
      * @param $settings_type int
-     * @param $object_id int - [OPTIONAL] default 0
+     * @param $object_id     int - [OPTIONAL] default 0
      */
     public function clear_cache_for_type_and_object($settings_type, $object_id = null)
     {
@@ -180,10 +179,10 @@ class CourseSettingsController
     /**
      * Parses the course settings xml file and creates course setting objects and course setting default values objects
      *
-     * @param $settings_file String - The path to the course settings file
+     * @param $settings_file        String - The path to the course settings file
      * @param $tool_registration_id int - OPTIONAL - The tool registration id
      *
-     * @return boolean
+     * @return bool
      */
     protected static function create_course_settings_from_xml($settings_file, $tool_registration_id = null)
     {
@@ -247,9 +246,9 @@ class CourseSettingsController
      * The settings are cached for future retrieval If the setting is not found we check the settings from
      * the course type of the course
      *
-     * @param $course_id int
+     * @param $course_id    int
      * @param $setting_name string
-     * @param $tool_id int - [OPTIONAL]
+     * @param $tool_id      int - [OPTIONAL]
      *
      * @return string | null
      */
@@ -278,7 +277,6 @@ class CourseSettingsController
      *
      * @return mixed[string]
      * @throws \libraries\architecture\ObjectNotExistException
-     *
      */
     public function get_course_setting_by_id($course_setting_id)
     {
@@ -295,7 +293,7 @@ class CourseSettingsController
      * Retrieves a course setting with a given name and optional tool id
      *
      * @param $setting_name string
-     * @param $tool_id int - [OPTIONAL] default 0
+     * @param $tool_id      int - [OPTIONAL] default 0
      *
      * @return CourseSetting
      */
@@ -343,8 +341,8 @@ class CourseSettingsController
      * The settings are cached for future retrieval
      *
      * @param $course_type_id int
-     * @param $setting_name string
-     * @param $tool_id int - [OPTIONAL]
+     * @param $setting_name   string
+     * @param $tool_id        int - [OPTIONAL]
      *
      * @return string | null
      */
@@ -364,7 +362,7 @@ class CourseSettingsController
      * Retrieves the default value for a given setting
      *
      * @param $setting_name string
-     * @param $tool_id int - [OPTIONAL]
+     * @param $tool_id      int - [OPTIONAL]
      *
      * @return string | null
      */
@@ -377,9 +375,9 @@ class CourseSettingsController
      * Returns whether or not the setting is locked in the given values array
      *
      * @param $course_setting array
-     * @param $values ; string[]
+     * @param $values         ; string[]
      *
-     * @return boolean
+     * @return bool
      */
     protected function get_locked_value_for_setting_from_values_array($course_setting, $values)
     {
@@ -394,8 +392,8 @@ class CourseSettingsController
      *
      * @param $setting_type int - The setting types as described in the consts above
      * @param $setting_name String
-     * @param $tool_id int - [OPTIONAL]
-     * @param $object_id int - The id of either the course type or the course (depending on the type) - [OPTIONAL]
+     * @param $tool_id      int - [OPTIONAL]
+     * @param $object_id    int - The id of either the course type or the course (depending on the type) - [OPTIONAL]
      *
      * @return string
      */
@@ -425,7 +423,7 @@ class CourseSettingsController
      * Returns the caching hash for a given setting name and optional tool_id
      *
      * @param $setting_name string
-     * @param $tool_id int
+     * @param $tool_id      int
      *
      * @return string[]
      */
@@ -441,8 +439,8 @@ class CourseSettingsController
      *
      * @param $setting_type int
      * @param $setting_name string
-     * @param $object_id int
-     * @param $tool_id int - [OPTIONAL]
+     * @param $object_id    int
+     * @param $tool_id      int - [OPTIONAL]
      *
      * @return string
      */
@@ -464,7 +462,7 @@ class CourseSettingsController
      * Returns the caching hash for a given setting type and optional object id
      *
      * @param $settings_type int
-     * @param $object_id int
+     * @param $object_id     int
      *
      * @return string[]
      */
@@ -484,8 +482,8 @@ class CourseSettingsController
      * using the prefix
      *
      * @param $course_setting array
-     * @param $values string[]
-     * @param $prefix string - [OPTIONAL] default empty
+     * @param $values         string[]
+     * @param $prefix         string - [OPTIONAL] default empty
      *
      * @return string[]
      */
@@ -521,13 +519,13 @@ class CourseSettingsController
     /**
      * Abstract function to handle the settings for a given object with the given values
      *
-     * @param $base_object DataClass
-     * @param $values string[string]
-     * @param $action string - [OPTIONAL] - default create
-     * @param $load_default boolean [OPTIONAL] - default true
-     * @param boolean $force [OPTIONAL] - default false - Sets the values even if the base object is not allowed to.
+     * @param $base_object  DataClass
+     * @param $values       string[string]
+     * @param $action       string - [OPTIONAL] - default create
+     * @param $load_default bool [OPTIONAL] - default true
+     * @param bool $force   [OPTIONAL] - default false - Sets the values even if the base object is not allowed to.
      *
-     * @return boolean
+     * @return bool
      */
     public function handle_settings_for_object_with_given_values(
         DataClass $base_object, $values, $action = self::SETTING_ACTION_CREATE, $force = false
@@ -567,7 +565,7 @@ class CourseSettingsController
              */
             if (!is_null($course_setting_values) && !is_array($course_setting_values))
             {
-                $course_setting_values = array($course_setting_values);
+                $course_setting_values = [$course_setting_values];
             }
 
             $course_setting_relation = null;
@@ -623,17 +621,16 @@ class CourseSettingsController
      * Installer for course settings.
      * Can be used by both the weblcms and tool installer
      *
-     * @param $installer \configuration\package\action\Installer - The installer
+     * @param $installer            \configuration\package\action\Installer - The installer
      * @param $tool_registration_id int - OPTIONAL - The tool registration id
      *
-     * @return boolean
+     * @return bool
      */
     public static function install_course_settings(
         Installer $installer, $tool_registration_id = null
     )
     {
-        $settings_file =
-            Path::getInstance()->getResourcesPath($installer::CONTEXT) . 'Settings' . DIRECTORY_SEPARATOR .
+        $settings_file = Path::getInstance()->getResourcesPath($installer::CONTEXT) . 'Settings' . DIRECTORY_SEPARATOR .
             'course_settings.xml';
 
         if (self::create_course_settings_from_xml($settings_file, $tool_registration_id))
@@ -666,7 +663,7 @@ class CourseSettingsController
      * course
      *
      * @param $setting_type int - The setting type as described in the consts above
-     * @param $object_id int - The id of either the course type or the course (depending on the type)
+     * @param $object_id    int - The id of either the course type or the course (depending on the type)
      *
      * @return String[int][String] - The settings
      */
@@ -674,7 +671,7 @@ class CourseSettingsController
     {
         if (!is_array($object_ids))
         {
-            $object_ids = array($object_ids);
+            $object_ids = [$object_ids];
         }
 
         $course_setting_objects = $this->retrieve_course_setting_objects($setting_type, $object_ids);
@@ -716,7 +713,7 @@ class CourseSettingsController
      * Retrieves the settings values of a given setting type and a given object
      *
      * @param $setting_type int
-     * @param $object_id int
+     * @param $object_id    int
      *
      * @return \Doctrine\Common\Collections\ArrayCollection
      */

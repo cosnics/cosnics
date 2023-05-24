@@ -6,7 +6,6 @@ use Chamilo\Core\User\Component\UserApproverComponent;
 use Chamilo\Core\User\Storage\DataManager;
 use Chamilo\Libraries\Architecture\Application\Application;
 use Chamilo\Libraries\Authentication\AuthenticationValidator;
-use Chamilo\Libraries\File\Path;
 use Chamilo\Libraries\Format\Structure\BreadcrumbGeneratorInterface;
 use Chamilo\Libraries\Format\Structure\BreadcrumbTrail;
 use Chamilo\Libraries\Mail\Mailer\MailerInterface;
@@ -146,16 +145,6 @@ abstract class Manager extends Application
     }
 
     /**
-     * get the text for the terms and conditions
-     *
-     * @return <string> terms & conditions
-     */
-    public static function get_terms_and_conditions()
-    {
-        return implode(PHP_EOL, file(Path::getInstance()->getBasePath() . 'files/documentation/license.txt'));
-    }
-
-    /**
      * gets the user delete url
      *
      * @param return the requested url
@@ -196,32 +185,6 @@ abstract class Manager extends Application
     public function retrieve_user_by_username($username)
     {
         return DataManager::retrieve_user_by_username($username);
-    }
-
-    /**
-     * Updates the terms and conditions set the text for the terms and conditions
-     *
-     * @param string $text
-     *
-     * @return bool
-     */
-    public static function set_terms_and_conditions($text)
-    {
-        $success = true;
-
-        $ConditionsFile = Path::getInstance()->getBasePath() . 'files/documentation/license.txt';
-        $fh = fopen($ConditionsFile, 'w') or die("can't open file");
-        $stringData = $text;
-        $success &= fwrite($fh, $stringData);
-
-        $platform_setting = \Chamilo\Configuration\Storage\DataManager::retrieve_setting_from_variable_name(
-            'date_terms_and_conditions_update', Manager::CONTEXT
-        );
-
-        $platform_setting->set_value(time());
-        $success &= $platform_setting->update();
-
-        return $success;
     }
 
     public function user_deletion_allowed($user)

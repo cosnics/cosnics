@@ -41,6 +41,7 @@ class DependencyInjectionExtension extends AbstractDependencyInjectionExtension
                 'file.xml',
                 'format.xml',
                 'hashing.xml',
+                'mail.xml',
                 'platform.xml',
                 'storage.xml',
                 'storage.adodb.xml',

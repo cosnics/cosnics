@@ -7,16 +7,12 @@ use Chamilo\Application\Weblcms\Tool\Implementation\CourseGroup\Manager;
 use Chamilo\Application\Weblcms\Tool\Implementation\CourseGroup\Storage\DataClass\CourseGroup;
 use Chamilo\Application\Weblcms\Tool\Implementation\CourseGroup\Storage\DataClass\CourseGroupUserRelation;
 use Chamilo\Application\Weblcms\Tool\Implementation\CourseGroup\Storage\DataManager;
-use Chamilo\Application\Weblcms\Tool\Implementation\CourseGroup\UserExporter\CourseGroupUserExportExtender;
-use Chamilo\Application\Weblcms\UserExporter\Renderer\ExcelUserExportRenderer;
 use Chamilo\Application\Weblcms\UserExporter\UserExporter;
 use Chamilo\Core\User\Storage\DataClass\User;
 use Chamilo\Libraries\Architecture\Exceptions\NotAllowedException;
 use Chamilo\Libraries\File\Filesystem;
-use Chamilo\Libraries\File\Path;
 use Chamilo\Libraries\Platform\Session\Request;
 use Chamilo\Libraries\Storage\DataClass\DataClass;
-use Doctrine\Common\Collections\ArrayCollection;
 use Chamilo\Libraries\Storage\Query\Condition\AndCondition;
 use Chamilo\Libraries\Storage\Query\Condition\EqualityCondition;
 use Chamilo\Libraries\Storage\Query\Condition\NotCondition;
@@ -26,6 +22,7 @@ use Chamilo\Libraries\Storage\Query\Variable\PropertyConditionVariable;
 use Chamilo\Libraries\Storage\Query\Variable\StaticConditionVariable;
 use Chamilo\Libraries\Translation\Translation;
 use Chamilo\Libraries\Utilities\DatetimeUtilities;
+use Doctrine\Common\Collections\ArrayCollection;
 use PhpOffice\PhpSpreadsheet\IOFactory;
 use PhpOffice\PhpSpreadsheet\Spreadsheet;
 use PhpOffice\PhpSpreadsheet\Style\Alignment;
@@ -41,7 +38,7 @@ use PhpOffice\PhpSpreadsheet\Worksheet\Worksheet;
  */
 class ExporterComponent extends Manager
 {
-    const PROPERTY_SORT_NAME = 'SortName';
+    public const PROPERTY_SORT_NAME = 'SortName';
 
     private $course_group;
 
@@ -135,10 +132,10 @@ class ExporterComponent extends Manager
     public function export_users()
     {
         $user_records = CourseDataManager::retrieve_all_course_users(
-            $this->get_course_id(), null, null, null, new OrderBy(array(
+            $this->get_course_id(), null, null, null, new OrderBy([
                 new OrderProperty(new PropertyConditionVariable(User::class, User::PROPERTY_LASTNAME)),
                 new OrderProperty(new PropertyConditionVariable(User::class, User::PROPERTY_FIRSTNAME))
-            ))
+            ])
         );
 
         $users = [];
@@ -148,11 +145,12 @@ class ExporterComponent extends Manager
             $users[] = DataClass::factory(User::class, $user_record);
         }
 
-        $exporter = new UserExporter(
-            new ExcelUserExportRenderer(), array(new CourseGroupUserExportExtender($this->get_course_id()))
-        );
+        return $this->getUserExporter()->export($this->get_course_id(), $users);
+    }
 
-        return $exporter->export($users);
+    protected function getUserExporter(): UserExporter
+    {
+        return $this->getService('Chamilo\Application\Weblcms\Tool\Implementation\CourseGroup\UserExporter');
     }
 
     /**
@@ -197,10 +195,10 @@ class ExporterComponent extends Manager
         // retrieve_all_course_users($this->get_course_id(),
         // $this->get_condition(), null, null, null);
         $data = DataManager::retrieve_course_group_users_with_subscription_time(
-            $this->course_group->get_id(), null, null, null, new OrderBy(array(
+            $this->course_group->get_id(), null, null, null, new OrderBy([
                 new OrderProperty(new PropertyConditionVariable(User::class, User::PROPERTY_LASTNAME)),
                 new OrderProperty(new PropertyConditionVariable(User::class, User::PROPERTY_FIRSTNAME))
-            ))
+            ])
         );
 
         $table = $this->get_users_table($data);
@@ -306,10 +304,11 @@ class ExporterComponent extends Manager
             );
 
             $table[$index][User::PROPERTY_EMAIL] = $block_data[User::PROPERTY_EMAIL];
-            $table[$index][CourseGroupUserRelation::PROPERTY_SUBSCRIPTION_TIME] = DatetimeUtilities::getInstance()->formatLocaleDate(
-                Translation::getInstance()->getTranslation('SubscriptionTimeFormat', null, Manager::CONTEXT),
-                $block_data[CourseGroupUserRelation::PROPERTY_SUBSCRIPTION_TIME]
-            );
+            $table[$index][CourseGroupUserRelation::PROPERTY_SUBSCRIPTION_TIME] =
+                DatetimeUtilities::getInstance()->formatLocaleDate(
+                    Translation::getInstance()->getTranslation('SubscriptionTimeFormat', null, Manager::CONTEXT),
+                    $block_data[CourseGroupUserRelation::PROPERTY_SUBSCRIPTION_TIME]
+                );
 
             $table[$index]['Course Groups'] = $course_groups_string;
         }
@@ -331,10 +330,10 @@ class ExporterComponent extends Manager
         foreach ($course_groups as $course_group)
         {
             $course_group_users = DataManager::retrieve_course_group_users_with_subscription_time(
-                $course_group->get_id(), null, null, null, new OrderBy(array(
+                $course_group->get_id(), null, null, null, new OrderBy([
                     new OrderProperty(new PropertyConditionVariable(User::class, User::PROPERTY_LASTNAME)),
                     new OrderProperty(new PropertyConditionVariable(User::class, User::PROPERTY_FIRSTNAME))
-                ))
+                ])
             );
 
             $users_table = $this->get_users_table($course_group_users);
@@ -354,8 +353,8 @@ class ExporterComponent extends Manager
      * Renders the data
      *
      * @param $worksheet Worksheet
-     * @param $title String
-     * @param $table String[]
+     * @param $title     String
+     * @param $table     String[]
      * @param $block_row Integer
      *
      * @return Integer
@@ -367,9 +366,9 @@ class ExporterComponent extends Manager
         $column2 = 3;
         $color = Color::COLOR_BLUE;
 
-        $styleArray = array(
-            'font' => array('underline' => Font::UNDERLINE_SINGLE, 'color' => array('argb' => $color))
-        );
+        $styleArray = [
+            'font' => ['underline' => Font::UNDERLINE_SINGLE, 'color' => ['argb' => $color]]
+        ];
 
         $block_row ++;
         $block_row ++;
@@ -453,7 +452,7 @@ class ExporterComponent extends Manager
 
         if ($this->course_group)
         {
-            $filename = $course->get_title() . '_' . $this->course_group->get_name() . "_" . date('Ymd') . '.xlsx';
+            $filename = $course->get_title() . '_' . $this->course_group->get_name() . '_' . date('Ymd') . '.xlsx';
         }
         else
         {

@@ -1,10 +1,12 @@
 <?php
 namespace Chamilo\Application\Weblcms\Tool\Form;
 
-use Chamilo\Libraries\File\Path;
+use Chamilo\Libraries\DependencyInjection\DependencyInjectionContainerBuilder;
+use Chamilo\Libraries\File\WebPathBuilder;
 use Chamilo\Libraries\Format\Utilities\ResourceManager;
-use Chamilo\Libraries\Translation\Translation;
 use Chamilo\Libraries\Utilities\StringUtilities;
+use Symfony\Component\DependencyInjection\ContainerInterface;
+use Symfony\Component\Translation\Translator;
 
 /**
  * Enhancement form to select publications with JSTree
@@ -36,9 +38,9 @@ class PublicationSelectorForm
     public function render()
     {
         $html = [];
-        $resourceManager = ResourceManager::getInstance();
-        $path = Path::getInstance();
-        $translator = Translation::getInstance();
+        $resourceManager = $this->getResourceManager();
+        $path = $this->getWebPathBuilder();
+        $translator = $this->getTranslator();
 
         $context = 'Chamilo\Application\Weblcms\Tool';
 
@@ -60,18 +62,37 @@ class PublicationSelectorForm
 
         $html[] = '<div class="form-row row">';
         $html[] = '<div class="col-xs-12 col-sm-4 col-md-3 col-lg-2 form-label">' .
-            $translator->getTranslation('Publications', null, $context) . '</div>';
+            $translator->trans('Publications', [], $context) . '</div>';
         $html[] = '<div id="publications_tree" class="col-xs-12 col-sm-8 col-md-9 col-lg-10 formw"></div>';
         $html[] = '</div>';
 
         $html[] = '<div id="checkboxes_action" style="margin-left: 20%; padding-top: 5px;">';
         $html[] =
-            '<a id="selectAll" href="#">' . $translator->getTranslation('SelectAll', null, StringUtilities::LIBRARIES) .
-            '</a>';
+            '<a id="selectAll" href="#">' . $translator->trans('SelectAll', [], StringUtilities::LIBRARIES) . '</a>';
         $html[] = '<a id="deselectAll" href="#" style="padding-left: 20px;">' .
-            $translator->getTranslation('UnselectAll', null, StringUtilities::LIBRARIES) . '</a>';
+            $translator->trans('UnselectAll', [], StringUtilities::LIBRARIES) . '</a>';
         $html[] = '</div>';
 
         return implode(PHP_EOL, $html);
+    }
+
+    protected function getContainer(): ContainerInterface
+    {
+        return DependencyInjectionContainerBuilder::getInstance()->createContainer();
+    }
+
+    protected function getResourceManager(): ResourceManager
+    {
+        return $this->getContainer()->get(ResourceManager::class);
+    }
+
+    protected function getTranslator(): Translator
+    {
+        return $this->getContainer()->get(Translator::class);
+    }
+
+    protected function getWebPathBuilder(): WebPathBuilder
+    {
+        return $this->getContainer()->get(WebPathBuilder::class);
     }
 }

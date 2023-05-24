@@ -12,7 +12,6 @@ use Chamilo\Libraries\Architecture\Application\Application;
 use Chamilo\Libraries\Architecture\ClassnameUtilities;
 use Chamilo\Libraries\Architecture\Interfaces\Categorizable;
 use Chamilo\Libraries\Architecture\Interfaces\ComplexContentObjectSupport;
-use Chamilo\Libraries\File\Path;
 use Chamilo\Libraries\Format\Display;
 use Chamilo\Libraries\Format\Structure\ActionBar\Button;
 use Chamilo\Libraries\Format\Structure\ActionBar\ButtonGroup;
@@ -25,7 +24,6 @@ use Chamilo\Libraries\Format\Structure\Glyph\FontAwesomeGlyph;
 use Chamilo\Libraries\Format\Table\FormAction\TableActions;
 use Chamilo\Libraries\Format\Table\Pager;
 use Chamilo\Libraries\Format\Table\PagerRenderer;
-use Chamilo\Libraries\Format\Utilities\ResourceManager;
 use Chamilo\Libraries\Translation\Translation;
 use Chamilo\Libraries\Utilities\StringUtilities;
 
@@ -382,8 +380,8 @@ class ListContentObjectPublicationListRenderer extends ContentObjectPublicationL
         {
             $html[] = '<input type="submit" name="Submit" value="Submit" class="hidden" />';
             $html[] = '</form>';
-            $html[] = ResourceManager::getInstance()->getResourceHtml(
-                Path::getInstance()->getJavascriptPath(Manager::CONTEXT, true) . 'list.view.selector.js'
+            $html[] = $this->getResourceManager()->getResourceHtml(
+                $this->getWebPathBuilder()->getJavascriptPath(Manager::CONTEXT) . 'list.view.selector.js'
             );
         }
 
@@ -494,7 +492,7 @@ class ListContentObjectPublicationListRenderer extends ContentObjectPublicationL
 
         $publication_id = $publication[ContentObjectPublication::PROPERTY_ID];
         $publication_type = $this->get_publication_type();
-        
+
         $content_object = $this->get_content_object_from_publication($publication);
 
         $details_url = $this->get_url(

@@ -31,10 +31,6 @@ class ArchiveCreator
         $this->configurablePathBuilder = $configurablePathBuilder;
     }
 
-    /**
-     * @param \Chamilo\Libraries\File\Compression\ArchiveCreator\Archive $archive
-     * @param \Symfony\Component\HttpFoundation\Request $request
-     */
     public function createAndDownloadArchive(Archive $archive, Request $request)
     {
         $downloadResponse = $this->createArchiveWithDownloadResponse($archive);
@@ -47,12 +43,8 @@ class ArchiveCreator
 
     /**
      * Makes an actual zipped file from a given archive and returns the path to the archive
-     *
-     * @param \Chamilo\Libraries\File\Compression\ArchiveCreator\Archive $archive
-     *
-     * @return string
      */
-    public function createArchive(Archive $archive)
+    public function createArchive(Archive $archive): string
     {
         $temporaryFolder =
             $this->configurablePathBuilder->getTemporaryPath(__NAMESPACE__) . DIRECTORY_SEPARATOR . uniqid();
@@ -67,12 +59,8 @@ class ArchiveCreator
 
     /**
      * Makes an actual zipped file from a given archive and embeds the archive in a binary response
-     *
-     * @param \Chamilo\Libraries\File\Compression\ArchiveCreator\Archive $archive
-     *
-     * @return \Symfony\Component\HttpFoundation\BinaryFileResponse
      */
-    public function createArchiveWithDownloadResponse(Archive $archive)
+    public function createArchiveWithDownloadResponse(Archive $archive): BinaryFileResponse
     {
         $archivePath = $this->createArchive($archive);
 
@@ -86,11 +74,7 @@ class ArchiveCreator
         return $response;
     }
 
-    /**
-     * @param \Chamilo\Libraries\File\Compression\ArchiveCreator\ArchiveFile $archiveFile
-     * @param string $temporaryPath
-     */
-    protected function handleArchiveFile(ArchiveFile $archiveFile, $temporaryPath)
+    protected function handleArchiveFile(ArchiveFile $archiveFile, string $temporaryPath)
     {
         $fileName = \Chamilo\Libraries\File\Filesystem::create_unique_name($temporaryPath, $archiveFile->getName());
         $filePath = $temporaryPath . DIRECTORY_SEPARATOR . $fileName;
@@ -106,11 +90,7 @@ class ArchiveCreator
         }
     }
 
-    /**
-     * @param \Chamilo\Libraries\File\Compression\ArchiveCreator\ArchiveFolder $archiveFolder
-     * @param string $temporaryPath
-     */
-    protected function handleArchiveFolder(ArchiveFolder $archiveFolder, $temporaryPath)
+    protected function handleArchiveFolder(ArchiveFolder $archiveFolder, string $temporaryPath)
     {
         $folderName = \Chamilo\Libraries\File\Filesystem::create_unique_name($temporaryPath, $archiveFolder->getName());
         $folderPath = $temporaryPath . DIRECTORY_SEPARATOR . $folderName;
@@ -122,11 +102,7 @@ class ArchiveCreator
         }
     }
 
-    /**
-     * @param \Chamilo\Libraries\File\Compression\ArchiveCreator\ArchiveItem $archiveItem
-     * @param string $temporaryPath
-     */
-    protected function handleArchiveItem(ArchiveItem $archiveItem, $temporaryPath)
+    protected function handleArchiveItem(ArchiveItem $archiveItem, string $temporaryPath)
     {
         if ($archiveItem instanceof ArchiveFolder)
         {
@@ -141,9 +117,8 @@ class ArchiveCreator
 
     /**
      * @param \Chamilo\Libraries\File\Compression\ArchiveCreator\ArchiveItem[] $archiveItems
-     * @param string $temporaryFolder
      */
-    protected function handleArchiveItems(array $archiveItems, $temporaryFolder)
+    protected function handleArchiveItems(array $archiveItems, string $temporaryFolder)
     {
         foreach ($archiveItems as $archiveItem)
         {
@@ -153,8 +128,6 @@ class ArchiveCreator
 
     /**
      * Removes the archive path after downloading the
-     *
-     * @param \Symfony\Component\HttpFoundation\BinaryFileResponse $binaryFileResponse
      */
     public function removeArchiveAfterDownload(BinaryFileResponse $binaryFileResponse)
     {

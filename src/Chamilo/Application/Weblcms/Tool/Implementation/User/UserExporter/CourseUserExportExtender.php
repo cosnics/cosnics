@@ -2,115 +2,119 @@
 namespace Chamilo\Application\Weblcms\Tool\Implementation\User\UserExporter;
 
 use Chamilo\Application\Weblcms\Course\Storage\DataManager;
+use Chamilo\Application\Weblcms\Tool\Implementation\User\Manager;
 use Chamilo\Application\Weblcms\UserExporter\UserExportExtender;
 use Chamilo\Core\User\Storage\DataClass\User;
-use Chamilo\Libraries\Translation\Translation;
+use Symfony\Component\Translation\Translator;
 
 /**
  * Extends the user exporter with additional data for the user list (subscription type, status)
- * 
+ *
  * @package application\weblcms\tool\user
- * @author Sven Vanpoucke - Hogeschool Gent
+ * @author  Sven Vanpoucke - Hogeschool Gent
  */
 class CourseUserExportExtender implements UserExportExtender
 {
-    const EXPORT_COLUMN_SUBSCRIPTION_STATUS = 'subscription_status';
-    const EXPORT_COLUMN_SUBSCRIPTION_TYPE = 'subscription_type';
-    const EXPORT_COLUMN_PLATFORM_GROUPS = 'platform_groups';
+    public const EXPORT_COLUMN_PLATFORM_GROUPS = 'platform_groups';
+    public const EXPORT_COLUMN_SUBSCRIPTION_STATUS = 'subscription_status';
+    public const EXPORT_COLUMN_SUBSCRIPTION_TYPE = 'subscription_type';
 
-    /**
-     * The platform groups that are subscribed to the course, inclusively the subgroups
-     * 
-     * @var Group[int]
-     */
-    private $course_platform_groups;
+    protected Translator $translator;
 
-    /**
-     * The constructor
-     * 
-     * @param int $course_id
-     */
-    public function __construct($course_id)
+    public function __construct(Translator $translator)
     {
-        $course_platform_groups = DataManager::retrieve_all_subscribed_platform_groups(
-            array($course_id));
-        
-        $this->course_platform_groups = [];
-        
-        foreach($course_platform_groups as $course_platform_group)
-        {
-            $this->course_platform_groups[$course_platform_group->get_id()] = $course_platform_group;
-        }
+        $this->translator = $translator;
     }
 
-    /**
-     * Exports additional headers
-     * 
-     * @return array
-     */
-    public function export_headers()
+    public function export_headers(string $courseIdentifier): array
     {
+        $translator = $this->getTranslator();
+
         $headers = [];
-        
-        $headers[self::EXPORT_COLUMN_SUBSCRIPTION_STATUS] = Translation::get('SubscriptionStatus');
-        $headers[self::EXPORT_COLUMN_SUBSCRIPTION_TYPE] = Translation::get('SubscriptionType');
-        
-        if (count($this->course_platform_groups) > 0)
+
+        $headers[self::EXPORT_COLUMN_SUBSCRIPTION_STATUS] =
+            $translator->trans('SubscriptionStatus', [], Manager::CONTEXT);
+        $headers[self::EXPORT_COLUMN_SUBSCRIPTION_TYPE] = $translator->trans('SubscriptionType', [], Manager::CONTEXT);
+
+        if (count($this->getCoursePlatformGroups($courseIdentifier)) > 0)
         {
-            $headers[self::EXPORT_COLUMN_PLATFORM_GROUPS] = Translation::get('PlatformGroups');
+            $headers[self::EXPORT_COLUMN_PLATFORM_GROUPS] = $translator->trans('PlatformGroups', [], Manager::CONTEXT);
         }
-        
+
         return $headers;
     }
 
-    /**
-     * Exports additional data for a given user
-     * 
-     * @param User $user
-     *
-     * @return array
-     */
-    public function export_user(User $user)
+    public function export_user(string $courseIdentifier, User $user): array
     {
+        $translator = $this->getTranslator();
+
         $data = [];
-        
+
         $data[self::EXPORT_COLUMN_SUBSCRIPTION_STATUS] = $user->getOptionalProperty(
-            self::EXPORT_COLUMN_SUBSCRIPTION_STATUS) == 1 ? Translation::get('Teacher') : Translation::get('Student');
-        
+            self::EXPORT_COLUMN_SUBSCRIPTION_STATUS
+        ) == 1 ? $translator->trans('Teacher', [], Manager::CONTEXT) :
+            $translator->trans('Student', [], Manager::CONTEXT);
+
         $data[self::EXPORT_COLUMN_SUBSCRIPTION_TYPE] = $user->getOptionalProperty(
-            self::EXPORT_COLUMN_SUBSCRIPTION_TYPE) == 1 ? Translation::get('DirectSubscriptions') : Translation::get(
-            'GroupSubscriptions');
-        
-        if (count($this->course_platform_groups) > 0)
+            self::EXPORT_COLUMN_SUBSCRIPTION_TYPE
+        ) == 1 ? $translator->trans('DirectSubscriptions', [], Manager::CONTEXT) : $translator->trans(
+            'GroupSubscriptions', [], Manager::CONTEXT
+        );
+
+        $coursePlatformGroups = $this->getCoursePlatformGroups($courseIdentifier);
+
+        if (count($coursePlatformGroups) > 0)
         {
-            $platform_groups = $this->get_platform_group_names_for_user_in_course($user);
-            
-            $data[self::EXPORT_COLUMN_PLATFORM_GROUPS] = implode(", ", $platform_groups);
+            $platform_groups = $this->get_platform_group_names_for_user_in_course($coursePlatformGroups, $user);
+
+            $data[self::EXPORT_COLUMN_PLATFORM_GROUPS] = implode(', ', $platform_groups);
         }
-        
+
         return $data;
     }
 
     /**
-     * Returns the platform group names for a given user that are also subscribed to the current course
-     * 
-     * @param User $user
-     *
-     * @return Group[]
+     * @return \Chamilo\Core\Group\Storage\DataClass\Group[]
      */
-    protected function get_platform_group_names_for_user_in_course(User $user)
+    protected function getCoursePlatformGroups(string $courseIdentifier): array
+    {
+        $subscribedPlatformGroups = DataManager::retrieve_all_subscribed_platform_groups([$courseIdentifier]);
+
+        $coursePlatformGroups = [];
+
+        foreach ($subscribedPlatformGroups as $coursePlatformGroup)
+        {
+            $coursePlatformGroups[$coursePlatformGroup->getId()] = $coursePlatformGroup;
+        }
+
+        return $coursePlatformGroups;
+    }
+
+    public function getTranslator(): Translator
+    {
+        return $this->translator;
+    }
+
+    /**
+     * Returns the platform group names for a given user that are also subscribed to the current course
+     *
+     * @param \Chamilo\Core\Group\Storage\DataClass\Group[] $coursePlatformGroups
+     *
+     * @return \Chamilo\Core\Group\Storage\DataClass\Group[]
+     */
+    protected function get_platform_group_names_for_user_in_course(array $coursePlatformGroups, User $user): array
     {
         $user_platform_groups_in_course = [];
-        
+
         $user_subscribed_group_ids = $user->get_groups(true);
         foreach ($user_subscribed_group_ids as $user_subscribed_group_id)
         {
-            if (array_key_exists($user_subscribed_group_id, $this->course_platform_groups))
+            if (array_key_exists($user_subscribed_group_id, $coursePlatformGroups))
             {
-                $user_platform_groups_in_course[] = $this->course_platform_groups[$user_subscribed_group_id]->get_name();
+                $user_platform_groups_in_course[] = $coursePlatformGroups[$user_subscribed_group_id]->get_name();
             }
         }
-        
+
         return $user_platform_groups_in_course;
     }
 }

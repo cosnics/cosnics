@@ -1,6 +1,7 @@
 <?php
 namespace Chamilo\Core\User\Form;
 
+use Chamilo\Configuration\Storage\DataManager;
 use Chamilo\Core\User\Manager;
 use Chamilo\Libraries\Format\Form\FormValidator;
 use Chamilo\Libraries\Format\Structure\Glyph\FontAwesomeGlyph;
@@ -62,7 +63,7 @@ class TermsConditionsForm extends FormValidator
 
         $this->addElement('category', Translation::get('TermsConditions'));
         $this->addElement(
-            'textarea', 'conditions', null, array('cols' => 80, 'rows' => 20, 'style' => 'background-color: white;')
+            'textarea', 'conditions', null, ['cols' => 80, 'rows' => 20, 'style' => 'background-color: white;']
         );
 
         $buttons[] = $this->createElement(
@@ -85,7 +86,7 @@ class TermsConditionsForm extends FormValidator
         $this->addElement('category', Translation::get('NewTermsConditions'));
         $this->addElement(
             'textarea', 'conditions', null,
-            array('cols' => 80, 'rows' => 20, 'readonly' => '', 'style' => 'background-color: white;')
+            ['cols' => 80, 'rows' => 20, 'readonly' => '', 'style' => 'background-color: white;']
         );
 
         $buttons[] = $this->createElement(
@@ -100,7 +101,18 @@ class TermsConditionsForm extends FormValidator
     {
         $values = $this->exportValues();
         $text = $values['conditions'];
-        Manager::set_terms_and_conditions($text);
+
+        $ConditionsFile = $this->getSystemPathBuilder()->getBasePath() . 'files/documentation/license.txt';
+        $fh = fopen($ConditionsFile, 'w') or die("can't open file");
+        $stringData = $text;
+        fwrite($fh, $stringData);
+
+        $platform_setting = DataManager::retrieve_setting_from_variable_name(
+            'date_terms_and_conditions_update', Manager::CONTEXT
+        );
+
+        $platform_setting->set_value(time());
+        $platform_setting->update();
     }
 
     /**
@@ -120,7 +132,8 @@ class TermsConditionsForm extends FormValidator
      */
     public function setDefaults($defaults = [], $filter = null)
     {
-        $defaults['conditions'] = Manager::get_terms_and_conditions();
+        $defaults['conditions'] =
+            implode(PHP_EOL, file($this->getSystemPathBuilder()->getBasePath() . 'files/documentation/license.txt'));
         parent::setDefaults($defaults);
     }
 }

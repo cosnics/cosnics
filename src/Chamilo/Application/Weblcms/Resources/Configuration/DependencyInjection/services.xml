@@ -74,5 +74,7 @@
             <tag name="Chamilo\Core\Admin\Service\ImportActionProvider"/>
         </service>
 
+        <service id="Chamilo\Application\Weblcms\UserExporter\Renderer\ExcelUserExportRenderer"/>
+
     </services>
 </container>

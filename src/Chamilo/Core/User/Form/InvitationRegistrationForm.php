@@ -231,7 +231,8 @@ class InvitationRegistrationForm extends FormValidator
     {
         $invitation = $this->invitation;
         $defaults[User::PROPERTY_EMAIL] = $invitation->get_email();
-        $defaults['conditions'] = Manager::get_terms_and_conditions();
+        $defaults['conditions'] =
+            implode(PHP_EOL, file($this->getSystemPathBuilder()->getBasePath() . 'files/documentation/license.txt'));
         parent::setDefaults($defaults);
     }
 }

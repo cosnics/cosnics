@@ -373,7 +373,8 @@ class RegisterForm extends FormValidator
         $defaults[User::PROPERTY_OFFICIAL_CODE] = $user->get_official_code();
         $defaults[User::PROPERTY_PICTURE_URI] = $user->get_picture_uri();
         $defaults[User::PROPERTY_PHONE] = $user->get_phone();
-        $defaults['conditions'] = Manager::get_terms_and_conditions();
+        $defaults['conditions'] =
+            implode(PHP_EOL, file($this->getSystemPathBuilder()->getBasePath() . 'files/documentation/license.txt'));
         parent::setDefaults($defaults);
     }
 }

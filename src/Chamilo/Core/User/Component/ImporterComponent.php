@@ -1,23 +1,24 @@
 <?php
 namespace Chamilo\Core\User\Component;
 
-use Chamilo\Configuration\Configuration;
 use Chamilo\Core\User\Form\UserImportForm;
 use Chamilo\Core\User\Manager;
-use Chamilo\Core\User\Service\UserImporter\ImportParser\ImportParserFactory;
 use Chamilo\Core\User\Service\UserImporter\UserImporter;
-use Chamilo\Core\User\Service\UserService;
 use Chamilo\Libraries\Architecture\Exceptions\NotAllowedException;
-use Chamilo\Libraries\Hashing\HashingUtilities;
 
 /**
- * @package user.lib.user_manager.component
+ * @package Chamilo\Core\User\Component
  */
 class ImporterComponent extends Manager
 {
 
     /**
-     * Runs this component and displays its output.
+     * @throws \Chamilo\Libraries\Architecture\Exceptions\NotAllowedException
+     * @throws \Chamilo\Libraries\Storage\Exception\DataClassNoResultException
+     * @throws \QuickformException
+     * @throws \Twig\Error\LoaderError
+     * @throws \Twig\Error\RuntimeError
+     * @throws \Twig\Error\SyntaxError
      */
     public function run()
     {
@@ -28,17 +29,12 @@ class ImporterComponent extends Manager
             throw new NotAllowedException();
         }
 
-        $form = new UserImportForm(UserImportForm::TYPE_IMPORT, $this->get_url(), $this->get_user());
+        $form = new UserImportForm(UserImportForm::TYPE_IMPORT, $this->get_url(), $this->getUser());
 
         if ($form->validate())
         {
-            $userImporter = new UserImporter(
-                new ImportParserFactory(), $this->getService(UserService::class), $this->getConfigurationConsulter(),
-                $this->getHashingUtilities(), $this->getActiveMailer(), $this->getTranslator()
-            );
-
             $uploadedFile = $this->getRequest()->files->get('file');
-            $userImporterResult = $userImporter->importUsersFromFile(
+            $userImporterResult = $this->getUserImporter()->importUsersFromFile(
                 $this->getUser(), $uploadedFile, boolval($form->exportValues()['mail']['send_mail'])
             );
 
@@ -48,27 +44,24 @@ class ImporterComponent extends Manager
         }
         else
         {
-            $emailRequired = Configuration::getInstance()->get_setting([Manager::CONTEXT, 'require_email']);
+            $emailRequired = $this->getConfigurationConsulter()->getSetting([Manager::CONTEXT, 'require_email']);
             $rendition = $this->getTwig()->render(
                 'Chamilo\Core\User:UserImporter.html.twig',
-                ['emailRequired' => $emailRequired, 'form' => $form->toHtml()]
+                ['emailRequired' => $emailRequired, 'form' => $form->render()]
             );
         }
 
         $html = [];
 
-        $html[] = $this->render_header();
+        $html[] = $this->renderHeader();
         $html[] = $rendition;
-        $html[] = $this->render_footer();
+        $html[] = $this->renderFooter();
 
         return implode(PHP_EOL, $html);
     }
 
-    /**
-     * @return HashingUtilities | object
-     */
-    protected function getHashingUtilities()
+    protected function getUserImporter(): UserImporter
     {
-        return $this->getService(HashingUtilities::class);
+        return $this->getService(UserImporter::class);
     }
 }

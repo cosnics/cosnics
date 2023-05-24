@@ -3,135 +3,98 @@ namespace Chamilo\Application\Weblcms\UserExporter;
 
 use Chamilo\Application\Weblcms\Manager;
 use Chamilo\Core\User\Storage\DataClass\User;
-use Chamilo\Libraries\Translation\Translation;
 use InvalidArgumentException;
+use Symfony\Component\Translation\Translator;
 
 /**
- * Class to export users
- *
- * @package application\weblcms
- * @author Sven Vanpoucke - Hogeschool Gent
+ * @package Chamilo\Application\Weblcms\UserExporter
+ * @author  Sven Vanpoucke - Hogeschool Gent
+ * @author  Hans De Bisschop <hans.de.bisschop@ehb.be>
  */
 class UserExporter
 {
-    const PROPERTY_SORT_NAME = 'SortName';
+    public const PROPERTY_SORT_NAME = 'SortName';
 
-    /**
-     * The user export renderer
-     *
-     * @var UserExportRenderer
-     */
-    private $user_export_renderer;
+    protected Translator $translator;
 
     /**
      * The list of user export extenders
      *
-     * @var UserExportExtender[]
+     * @var \Chamilo\Application\Weblcms\UserExporter\UserExportExtender[]
      */
-    private $user_export_extenders;
+    private array $userExportExtenders;
+
+    private UserExportRenderer $userExportRenderer;
 
     /**
-     * Constructor
-     *
-     * @param UserExportRenderer $user_export_renderer
-     * @param UserExportExtender[] $user_export_extenders
+     * @param \Chamilo\Application\Weblcms\UserExporter\UserExportExtender[] $userExportExtenders
      */
-    public function __construct(UserExportRenderer $user_export_renderer = null, array $user_export_extenders = [])
+    public function __construct(
+        Translator $translator, UserExportRenderer $userExportRenderer, array $userExportExtenders = []
+    )
     {
-        $this->set_user_export_renderer($user_export_renderer);
-        $this->set_user_export_extenders($user_export_extenders);
+        $this->translator = $translator;
+        $this->userExportRenderer = $userExportRenderer;
+        $this->userExportExtenders = $userExportExtenders;
     }
 
-    /**
-     * Sets the user export extenders
-     *
-     * @param $user_export_extenders
-     *
-     * @throws \InvalidArgumentException
-     */
-    public function set_user_export_extenders($user_export_extenders)
+    protected function add_additional_headers(string $courseIdentifier, array &$headers_export_data)
     {
-        foreach ($user_export_extenders as $user_export_extender)
+        foreach ($this->getUserExportExtenders() as $user_export_extender)
         {
-            if (!$user_export_extender instanceof UserExportExtender)
-            {
-                throw new InvalidArgumentException(
-                    'The given user export extenders must be an instance of UserExportExtender'
-                );
-            }
+            $headers_export_data =
+                array_merge($headers_export_data, $user_export_extender->export_headers($courseIdentifier));
         }
-        $this->user_export_extenders = $user_export_extenders;
     }
 
-    /**
-     * Sets the user export renderer
-     *
-     * @param \application\weblcms\UserExportRenderer $user_export_renderer
-     *
-     * @throws \InvalidArgumentException
-     */
-    public function set_user_export_renderer(UserExportRenderer $user_export_renderer)
+    protected function add_additional_user_data(string $courseIdentifier, array &$user_export_data, User $user)
     {
-        if (!$user_export_renderer instanceof UserExportRenderer)
+        foreach ($this->getUserExportExtenders() as $user_export_extender)
         {
-            throw new InvalidArgumentException(
-                'The given user export renderer must be an instance of UserExportRenderer'
-            );
+            $user_export_data =
+                array_merge($user_export_data, $user_export_extender->export_user($courseIdentifier, $user));
         }
-
-        $this->user_export_renderer = $user_export_renderer;
     }
 
     /**
      * Exports the given users
      *
-     * @param User[] $users
+     * @param \Chamilo\Core\User\Storage\DataClass\User[] $users
      *
      * @return mixed
-     *
      * @throws \InvalidArgumentException
      */
-    public function export(array $users)
+    public function export(string $courseIdentifier, array $users)
     {
+        $translator = $this->getTranslator();
+
         $user_export_headers = [];
 
-        $user_export_headers[User::PROPERTY_OFFICIAL_CODE] = Translation::get(
-            'OfficialCode',
-            null,
-            \Chamilo\Core\User\Manager::CONTEXT
+        $user_export_headers[User::PROPERTY_OFFICIAL_CODE] = $translator->trans(
+            'OfficialCode', [], \Chamilo\Core\User\Manager::CONTEXT
         );
 
-        $user_export_headers[User::PROPERTY_USERNAME] = Translation::get(
-            'Username',
-            null,
-            \Chamilo\Core\User\Manager::CONTEXT
+        $user_export_headers[User::PROPERTY_USERNAME] = $translator->trans(
+            'Username', [], \Chamilo\Core\User\Manager::CONTEXT
         );
 
-        $user_export_headers[User::PROPERTY_LASTNAME] = Translation::get(
-            'Lastname',
-            null,
-            \Chamilo\Core\User\Manager::CONTEXT
+        $user_export_headers[User::PROPERTY_LASTNAME] = $translator->trans(
+            'Lastname', [], \Chamilo\Core\User\Manager::CONTEXT
         );
 
-        $user_export_headers[User::PROPERTY_FIRSTNAME] = Translation::get(
-            'Firstname',
-            null,
-            \Chamilo\Core\User\Manager::CONTEXT
+        $user_export_headers[User::PROPERTY_FIRSTNAME] = $translator->trans(
+            'Firstname', [], \Chamilo\Core\User\Manager::CONTEXT
         );
 
-        $user_export_headers[self::PROPERTY_SORT_NAME] = Translation::get(
-            'SortName',
-            null,
-            Manager::CONTEXT
+        $user_export_headers[self::PROPERTY_SORT_NAME] = $translator->trans(
+            'SortName', [], Manager::CONTEXT
         );
 
-        $user_export_headers[User::PROPERTY_EMAIL] = Translation::get(
-            'Email',
-            null,
-            \Chamilo\Core\User\Manager::CONTEXT
+        $user_export_headers[User::PROPERTY_EMAIL] = $translator->trans(
+            'Email', [], \Chamilo\Core\User\Manager::CONTEXT
         );
 
-        $this->add_additional_headers($user_export_headers);
+        $this->add_additional_headers($courseIdentifier, $user_export_headers);
 
         $exported_users = [];
 
@@ -154,7 +117,7 @@ class UserExporter
 
             $user_export_data[User::PROPERTY_EMAIL] = $user->get_email();
 
-            $this->add_additional_user_data($user_export_data, $user);
+            $this->add_additional_user_data($courseIdentifier, $user_export_data, $user);
 
             $exported_users[] = $user_export_data;
         }
@@ -162,44 +125,23 @@ class UserExporter
         return $this->render_exported_users($user_export_headers, $exported_users);
     }
 
-    /**
-     * Renders the exported users
-     *
-     * @param array $user_export_headers
-     * @param array $exported_users
-     *
-     * @return mixed
-     */
+    public function getTranslator(): Translator
+    {
+        return $this->translator;
+    }
+
+    public function getUserExportExtenders(): array
+    {
+        return $this->userExportExtenders;
+    }
+
+    public function getUserExportRenderer(): UserExportRenderer
+    {
+        return $this->userExportRenderer;
+    }
+
     protected function render_exported_users(array $user_export_headers, array $exported_users)
     {
-        if ($this->user_export_renderer)
-        {
-            return $this->user_export_renderer->render($user_export_headers, $exported_users);
-        }
-    }
-
-    /**
-     * Adds additional headers
-     */
-    protected function add_additional_headers(array &$headers_export_data)
-    {
-        foreach ($this->user_export_extenders as $user_export_extender)
-        {
-            $headers_export_data = array_merge($headers_export_data, $user_export_extender->export_headers());
-        }
-    }
-
-    /**
-     * Adds additional user data
-     *
-     * @param array $user_export_data
-     * @param User $user
-     */
-    protected function add_additional_user_data(array &$user_export_data, User $user)
-    {
-        foreach ($this->user_export_extenders as $user_export_extender)
-        {
-            $user_export_data = array_merge($user_export_data, $user_export_extender->export_user($user));
-        }
+        return $this->getUserExportRenderer()->render($user_export_headers, $exported_users);
     }
 }

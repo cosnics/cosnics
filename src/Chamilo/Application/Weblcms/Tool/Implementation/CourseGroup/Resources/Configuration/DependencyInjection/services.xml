@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8" ?>
-<container xmlns="http://symfony.com/schema/dic/services"
-           xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+<container xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+           xmlns="http://symfony.com/schema/dic/services"
            xsi:schemaLocation="http://symfony.com/schema/dic/services http://symfony.com/schema/dic/services/services-1.0.xsd">
     <services>
         <defaults autowire="true"
@@ -12,6 +12,18 @@
         <service id="Chamilo\Application\Weblcms\Tool\Implementation\CourseGroup\Infrastructure\Repository\CourseGroupPublicationCategoryRepository"/>
         <service id="Chamilo\Application\Weblcms\Tool\Implementation\CourseGroup\Infrastructure\Service\CourseGroupService"/>
         <service id="Chamilo\Application\Weblcms\Tool\Implementation\CourseGroup\Infrastructure\Repository\CourseGroupRepository"/>
+
+        <service id="Chamilo\Application\Weblcms\Tool\Implementation\CourseGroup\UserExporter\CourseGroupUserExportExtender"/>
+
+        <service id="Chamilo\Application\Weblcms\Tool\Implementation\CourseGroup\UserExporter">
+            <argument key="$userExportRenderer"
+                      type="service"
+                      id="Chamilo\Application\Weblcms\UserExporter\Renderer\ExcelUserExportRenderer"/>
+            <argument type="collection">
+                <argument type="service"
+                          id="Chamilo\Application\Weblcms\Tool\Implementation\CourseGroup\UserExporter\CourseGroupUserExportExtender"></argument>
+            </argument>
+        </service>
 
     </services>
 </container>

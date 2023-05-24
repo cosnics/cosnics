@@ -21,6 +21,13 @@
                       type="service"
                       id="Chamilo\Libraries\Format\Theme\ThemeSystemPathBuilder"/>
         </service>
+
+        <service id="Chamilo\Core\User\Service\UserImporter\UserImporter">
+            <argument key="$mailer"
+                      type="service"
+                      id="Chamilo\Libraries\Mail\Mailer\ActiveMailer"/>
+        </service>
+        <service id="Chamilo\Core\User\Service\UserImporter\ImportParser\ImportParserFactory"/>
         <service id="Chamilo\Core\User\Service\UserService"/>
         <service id="Chamilo\Core\User\Service\UserSettingService">
             <argument key="$userSettingsCache"

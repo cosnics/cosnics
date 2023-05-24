@@ -6,33 +6,29 @@ use RuntimeException;
 /**
  * Describes the result of the importer action
  *
- * @author Sven Vanpoucke - Hogeschool Gent
+ * @package Chamilo\Core\User\Domain\UserImporter
+ * @author  Sven Vanpoucke - Hogeschool Gent
+ * @author  Hans De Bisschop <hans.de.bisschop@ehb.be>
  */
 class ImporterResult
 {
     /**
-     * @var string
-     */
-    protected $rawImportDataHeader;
-
-    /**
-     * @var string
-     */
-    protected $rawImportDataFooter;
-
-    /**
      * List of import data results that have failed
      *
-     * @var ImportDataResult[]
+     * @var \Chamilo\Core\User\Domain\UserImporter\ImportDataResult[]
      */
-    protected $failedUserResults;
+    protected array $failedUserResults;
+
+    protected string $rawImportDataFooter;
+
+    protected string $rawImportDataHeader;
 
     /**
      * List of import data results that are successful
      *
-     * @var ImportDataResult[]
+     * @var \Chamilo\Core\User\Domain\UserImporter\ImportDataResult[]
      */
-    protected $successUserResults;
+    protected array $successUserResults;
 
     /**
      * UserImporterResult constructor.
@@ -47,7 +43,7 @@ class ImporterResult
      */
     public function addFailedImportDataResult(ImportDataResult $importDataResult)
     {
-        if(!$importDataResult->hasFailed())
+        if (!$importDataResult->hasFailed())
         {
             throw new RuntimeException('The import result could not be added because the import did not fail');
         }
@@ -56,26 +52,9 @@ class ImporterResult
     }
 
     /**
-     * @param ImportDataResult $importDataResult
-     */
-    public function addSuccessImportDataResult(ImportDataResult $importDataResult)
-    {
-        if(!$importDataResult->isSuccessful())
-        {
-            throw new RuntimeException(
-                'The import result could not be added because the import was not successful'
-            );
-        }
-
-        $this->successUserResults[] = $importDataResult;
-    }
-
-    /**
      * Adds the result of a single import.
      *
      * @param ImportDataResult $importDataResult
-     *
-     * @throws \Exception
      */
     public function addImportDataResult(ImportDataResult $importDataResult)
     {
@@ -96,11 +75,51 @@ class ImporterResult
     }
 
     /**
+     * @param ImportDataResult $importDataResult
+     */
+    public function addSuccessImportDataResult(ImportDataResult $importDataResult)
+    {
+        if (!$importDataResult->isSuccessful())
+        {
+            throw new RuntimeException(
+                'The import result could not be added because the import was not successful'
+            );
+        }
+
+        $this->successUserResults[] = $importDataResult;
+    }
+
+    public function countFailedUserResults(): int
+    {
+        return count($this->failedUserResults);
+    }
+
+    public function countResults(): int
+    {
+        return $this->countSuccessUserResults() + $this->countFailedUserResults();
+    }
+
+    public function countSuccessUserResults(): int
+    {
+        return count($this->successUserResults);
+    }
+
+    /**
      * @return ImportDataResult[]
      */
     public function getFailedImportDataResults(): array
     {
         return $this->failedUserResults;
+    }
+
+    public function getRawImportDataFooter(): string
+    {
+        return $this->rawImportDataFooter;
+    }
+
+    public function getRawImportDataHeader(): string
+    {
+        return $this->rawImportDataHeader;
     }
 
     /**
@@ -111,73 +130,17 @@ class ImporterResult
         return $this->successUserResults;
     }
 
-    /**
-     * @return string
-     */
-    public function getRawImportDataHeader()
-    {
-        return $this->rawImportDataHeader;
-    }
-
-    /**
-     * @param string $rawImportDataHeader
-     *
-     * @return $this
-     */
-    public function setRawImportDataHeader($rawImportDataHeader)
-    {
-        $this->rawImportDataHeader = $rawImportDataHeader;
-
-        return $this;
-    }
-
-    /**
-     * @return string
-     */
-    public function getRawImportDataFooter()
-    {
-        return $this->rawImportDataFooter;
-    }
-
-    /**
-     * @param string $rawImportDataFooter
-     *
-     * @return $this
-     */
-    public function setRawImportDataFooter($rawImportDataFooter)
+    public function setRawImportDataFooter(string $rawImportDataFooter): ImporterResult
     {
         $this->rawImportDataFooter = $rawImportDataFooter;
 
         return $this;
     }
 
-    /**
-     * Counts the total amount of results
-     *
-     * @return int
-     */
-    public function countResults()
+    public function setRawImportDataHeader(string $rawImportDataHeader): ImporterResult
     {
-        return $this->countSuccessUserResults() + $this->countFailedUserResults();
-    }
+        $this->rawImportDataHeader = $rawImportDataHeader;
 
-    /**
-     * Counts the successful results
-     *
-     * @return int
-     */
-    public function countSuccessUserResults()
-    {
-        return count($this->successUserResults);
-    }
-
-    /**
-     * Counts the failed results
-     *
-     * @return int
-     */
-    public function countFailedUserResults()
-    {
-        return count($this->failedUserResults);
+        return $this;
     }
 }

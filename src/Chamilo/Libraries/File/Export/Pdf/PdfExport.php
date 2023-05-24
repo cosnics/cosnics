@@ -13,7 +13,7 @@ use Spipu\Html2Pdf\Html2Pdf;
  */
 class PdfExport extends Export
 {
-    const EXPORT_TYPE = 'pdf';
+    public const EXPORT_TYPE = 'pdf';
 
     /**
      * convert the HTML of a real page, to a code adapted to HTML2PDF
@@ -52,7 +52,6 @@ class PdfExport extends Export
     }
 
     /**
-     *
      * @see \Chamilo\Libraries\File\Export\Export::getType()
      */
     public function getType()
@@ -61,7 +60,6 @@ class PdfExport extends Export
     }
 
     /**
-     *
      * @see \Chamilo\Libraries\File\Export\Export::render_data()
      */
     public function render_data()
@@ -77,7 +75,7 @@ class PdfExport extends Export
             {
                 $title = $datapair['key'];
                 $table_data = $datapair['data'];
-                $pdf->ezTable($table_data, null, $title, array('fontSize' => 5));
+                $pdf->ezTable($table_data, null, $title, ['fontSize' => 5]);
             }
 
             return $pdf->ezOutput();
