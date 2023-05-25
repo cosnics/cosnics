@@ -193,12 +193,16 @@ class InstallerComponent extends Manager implements NoAuthenticationSupport, Ins
                 $values = [];
             }
 
-            $factory = new Factory();
-            $this->installer = $factory->getInstallerFromArray($installerObserver, $values);
+            $this->installer = $this->getInstallerFactory()->getInstallerFromArray($installerObserver, $values);
             unset($values);
         }
 
         return $this->installer;
+    }
+
+    protected function getInstallerFactory(): Factory
+    {
+        return $this->getService(Factory::class);
     }
 
     /**

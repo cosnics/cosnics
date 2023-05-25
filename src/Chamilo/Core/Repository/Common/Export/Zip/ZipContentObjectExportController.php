@@ -9,8 +9,6 @@ use Chamilo\Core\Repository\Storage\DataClass\ContentObject;
 use Chamilo\Core\Repository\Storage\DataManager;
 use Chamilo\Libraries\File\Compression\ZipArchive\ZipArchiveFilecompression;
 use Chamilo\Libraries\File\Filesystem;
-use Chamilo\Libraries\File\Path;
-use Chamilo\Libraries\Platform\Session\Session;
 use Chamilo\Libraries\Storage\Parameters\DataClassRetrievesParameters;
 use Chamilo\Libraries\Storage\Query\Condition\InCondition;
 use Chamilo\Libraries\Storage\Query\Variable\PropertyConditionVariable;
@@ -81,10 +79,10 @@ class ZipContentObjectExportController extends ContentObjectExportController
 
     public function prepare_file_system()
     {
-        $user_id = Session::get_user_id();
+        $user_id = $this->getSessionUtilities()->getUserId();
 
         $this->temporary_directory =
-            Path::getInstance()->getTemporaryPath(__NAMESPACE__) . $user_id . DIRECTORY_SEPARATOR .
+            $this->getConfigurablePathBuilder()->getTemporaryPath(__NAMESPACE__) . $user_id . DIRECTORY_SEPARATOR .
             'export_content_objects' . DIRECTORY_SEPARATOR;
 
         if (!is_dir($this->temporary_directory))

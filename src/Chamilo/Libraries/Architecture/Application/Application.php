@@ -5,7 +5,6 @@ use Chamilo\Core\User\Storage\DataClass\User;
 use Chamilo\Libraries\Architecture\Exceptions\NotAllowedException;
 use Chamilo\Libraries\Architecture\Interfaces\NoAuthenticationSupport;
 use Chamilo\Libraries\Architecture\Traits\DependencyInjectionContainerTrait;
-use Chamilo\Libraries\File\Path;
 use Chamilo\Libraries\Format\NotificationMessage\NotificationMessage;
 use Chamilo\Libraries\Format\Structure\BreadcrumbGenerator;
 use Chamilo\Libraries\Format\Structure\BreadcrumbGeneratorInterface;
@@ -145,17 +144,6 @@ abstract class Application
         return implode(PHP_EOL, $html);
     }
 
-    public static function exists(string $application): bool
-    {
-        if (!isset(self::$application_path_cache[$application]))
-        {
-            $application_path = Path::getInstance()->namespaceToFullPath($application);
-            self::$application_path_cache[$application] = is_dir($application_path);
-        }
-
-        return self::$application_path_cache[$application];
-    }
-
     public function getAdditionalParameters(array $additionalParameters = []): array
     {
         return $additionalParameters;
@@ -203,9 +191,6 @@ abstract class Application
         return new BreadcrumbGenerator($this, BreadcrumbTrail::getInstance());
     }
 
-    /**
-     * @throws \ReflectionException
-     */
     public function get_general_result(
         int $failures, int $count, string $singleObject, string $multipleObject,
         string $type = Application::RESULT_TYPE_CREATED
@@ -278,9 +263,6 @@ abstract class Application
         return $this->get_application();
     }
 
-    /**
-     * @throws \ReflectionException
-     */
     public function get_result(
         int $failures, int $count, string $failMessageSingle, string $failMessageMultiple, string $succesMessageSingle,
         string $succesMessageMultiple, string $context = null
@@ -501,7 +483,7 @@ abstract class Application
 
         if ($breadcrumbTrail->size() > 0)
         {
-            $pageTitle = BreadcrumbTrail::getInstance()->get_last()->get_name();
+            $pageTitle = BreadcrumbTrail::getInstance()->get_last()->getName();
 
             return '<h3 id="page-title" title="' . htmlentities(strip_tags($pageTitle)) . '">' . $pageTitle . '</h3>';
         }

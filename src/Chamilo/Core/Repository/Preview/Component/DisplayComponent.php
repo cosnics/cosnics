@@ -14,8 +14,9 @@ class DisplayComponent extends Manager
      */
     public function run()
     {
-        if (! \Chamilo\Core\Repository\Display\Manager::exists(
-            $this->get_content_object()::CONTEXT . '\Display\Preview'))
+        $className = $this->get_content_object()::CONTEXT . '\Display\Preview\Manager';
+
+        if (! class_exists($className))
         {
             throw new NoObjectSelectedException(Translation::get('ContentObject'));
         }

@@ -13,8 +13,9 @@ use Chamilo\Core\Home\Service\AngularConnectorService;
 use Chamilo\Core\Home\Service\HomeService;
 use Chamilo\Core\Home\Storage\DataClass\Tab;
 use Chamilo\Core\User\Storage\DataClass\User;
-use Chamilo\Libraries\File\Path;
+use Chamilo\Libraries\DependencyInjection\DependencyInjectionContainerBuilder;
 use Chamilo\Libraries\File\Redirect;
+use Chamilo\Libraries\File\WebPathBuilder;
 use Chamilo\Libraries\Format\Structure\ActionBar\Button;
 use Chamilo\Libraries\Format\Structure\ActionBar\ButtonToolBar;
 use Chamilo\Libraries\Format\Structure\ActionBar\Renderer\ButtonToolBarRenderer;
@@ -26,11 +27,10 @@ use Chamilo\Libraries\Translation\Translation;
 use Chamilo\Libraries\Utilities\StringUtilities;
 
 /**
- *
  * @package Chamilo\Core\Home\Renderer
- * @author Hans De Bisschop <hans.de.bisschop@ehb.be>
- * @author Magali Gillard <magali.gillard@ehb.be>
- * @author Eduard Vossen <eduard.vossen@ehb.be>
+ * @author  Hans De Bisschop <hans.de.bisschop@ehb.be>
+ * @author  Magali Gillard <magali.gillard@ehb.be>
+ * @author  Eduard Vossen <eduard.vossen@ehb.be>
  */
 class Basic extends Renderer
 {
@@ -43,32 +43,34 @@ class Basic extends Renderer
     protected $generalMode;
 
     /**
-     *
      * @var \Chamilo\Core\Home\Storage\DataClass\Element[]
      */
     private $elements;
 
     /**
-     *
      * @var \Chamilo\Core\Home\Service\HomeService
      */
     private $homeService;
 
     /**
-     *
      * @var int
      */
     private $homeUserIdentifier;
 
     /**
-     *
      * @see \Chamilo\Core\Home\Renderer\Renderer::render()
      */
     public function render()
     {
+        /**
+         * @var \Chamilo\Libraries\File\WebPathBuilder $webPathBuilder
+         */
+        $webPathBuilder =
+            DependencyInjectionContainerBuilder::getInstance()->createContainer()->get(WebPathBuilder::class);
+
         $user = $this->get_user();
 
-        $userHomeAllowed = Configuration::getInstance()->get_setting(array(Manager::CONTEXT, 'allow_user_home'));
+        $userHomeAllowed = Configuration::getInstance()->get_setting([Manager::CONTEXT, 'allow_user_home']);
         $generalMode = $this->isGeneralMode();
 
         $isEditable = ($user instanceof User && ($userHomeAllowed || ($user->is_platform_admin() && $generalMode)));
@@ -76,15 +78,15 @@ class Basic extends Renderer
 
         if ($isEditable)
         {
-            $html[] =
-                '<script src="' . Path::getInstance()->getJavascriptPath('Chamilo\Core\Home', true) . 'HomeAjax.js' .
+            $html[] = '<script src="' . $webPathBuilder->getJavascriptPath('Chamilo\Core\Home') . 'HomeAjax.js' .
                 '"></script>';
         }
 
         if ($this->isGeneralMode())
         {
-            $html[] = '<script src="' . Path::getInstance()->getJavascriptPath('Chamilo\Core\Home', true) .
-                'HomeGeneralModeAjax.js' . '"></script>';
+            $html[] =
+                '<script src="' . $webPathBuilder->getJavascriptPath('Chamilo\Core\Home') . 'HomeGeneralModeAjax.js' .
+                '"></script>';
         }
 
         $html[] = $this->renderTabs();
@@ -102,14 +104,13 @@ class Basic extends Renderer
         $html[] = $this->renderPackageContainer();
         $html[] = $this->renderContent();
 
-        $html[] = '<script src="' . Path::getInstance()->getJavascriptPath('Chamilo\Core\Home', true) . 'HomeView.js' .
-            '"></script>';
+        $html[] =
+            '<script src="' . $webPathBuilder->getJavascriptPath('Chamilo\Core\Home') . 'HomeView.js' . '"></script>';
 
         return implode(PHP_EOL, $html);
     }
 
     /**
-     *
      * @return \Chamilo\Core\Home\Service\HomeService
      */
     private function getHomeService()
@@ -139,13 +140,12 @@ class Basic extends Renderer
     }
 
     /**
-     *
      * @return string
      */
     public function renderButtons()
     {
         $user = $this->get_user();
-        $userHomeAllowed = Configuration::getInstance()->get_setting(array(Manager::CONTEXT, 'allow_user_home'));
+        $userHomeAllowed = Configuration::getInstance()->get_setting([Manager::CONTEXT, 'allow_user_home']);
         $generalMode = $this->isGeneralMode();
         $homeUserIdentifier = $this->getHomeService()->determineHomeUserIdentifier($this->get_user());
 
@@ -177,7 +177,7 @@ class Basic extends Renderer
                     )
                 );
 
-                $truncateLink = new Redirect(array(Manager::PARAM_ACTION => Manager::ACTION_TRUNCATE));
+                $truncateLink = new Redirect([Manager::PARAM_ACTION => Manager::ACTION_TRUNCATE]);
 
                 if ($homeUserIdentifier != '0')
                 {
@@ -193,7 +193,7 @@ class Basic extends Renderer
 
             if (!$generalMode && $user->is_platform_admin())
             {
-                $redirect = new Redirect(array(Manager::PARAM_ACTION => Manager::ACTION_MANAGE_HOME));
+                $redirect = new Redirect([Manager::PARAM_ACTION => Manager::ACTION_MANAGE_HOME]);
 
                 $buttonToolBar->addItem(
                     new Button(
@@ -203,7 +203,7 @@ class Basic extends Renderer
             }
             elseif ($generalMode && $user->is_platform_admin())
             {
-                $redirect = new Redirect(array(Manager::PARAM_ACTION => Manager::ACTION_PERSONAL));
+                $redirect = new Redirect([Manager::PARAM_ACTION => Manager::ACTION_PERSONAL]);
 
                 $title = $userHomeAllowed ? 'BackToPersonal' : 'ViewDefault';
 
@@ -232,7 +232,6 @@ class Basic extends Renderer
     }
 
     /**
-     *
      * @return string
      */
     public function renderContent()
@@ -270,7 +269,6 @@ class Basic extends Renderer
     }
 
     /**
-     *
      * @return string
      */
     public function renderPackageContainer()
@@ -359,7 +357,6 @@ class Basic extends Renderer
     }
 
     /**
-     *
      * @return string
      */
     public function renderTabs()

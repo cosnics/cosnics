@@ -4,52 +4,24 @@ namespace Chamilo\Libraries\File\Export\Xml;
 use Chamilo\Libraries\File\Export\Export;
 
 /**
- * Exports data to XML-format
- *
  * @package Chamilo\Libraries\File\Export\Xml
  */
 class XmlExport extends Export
 {
-    const EXPORT_TYPE = 'xml';
-
-    /**
-     *
-     * @var integer
-     */
-    private $level = 0;
-
-    /**
-     *
-     * @see \Chamilo\Libraries\File\Export\Export::getType()
-     */
-    public function getType()
+    public function render_data($data): string
     {
-        return self::EXPORT_TYPE;
-    }
+        $level = 0;
 
-    /**
-     *
-     * @see \Chamilo\Libraries\File\Export\Export::render_data()
-     */
-    public function render_data()
-    {
         $all = '<?xml version="1.0" encoding="UTF-8"?>' . PHP_EOL;
-        $all .= str_repeat("\t", $this->level) . '<rootItem>' . PHP_EOL;
-        $this->level ++;
-        $all .= $this->write_array($this->get_data());
-        $this->level --;
-        $all .= str_repeat("\t", $this->level) . '</rootItem>' . PHP_EOL;
+        $all .= '<rootItem>' . PHP_EOL;
+        $level ++;
+        $all .= $this->write_array($level, $data);
+        $all .= '</rootItem>' . PHP_EOL;
 
         return utf8_encode($all);
     }
 
-    /**
-     *
-     * @param string[] $row
-     *
-     * @return string
-     */
-    public function write_array($row)
+    public function write_array(int $level, $row): string
     {
         $all = '';
 
@@ -62,15 +34,15 @@ class XmlExport extends Export
 
             if (is_array($value))
             {
-                $all = str_repeat("\t", $this->level) . '<' . $key . '>' . PHP_EOL;
-                $this->level ++;
-                $all .= $this->write_array($value);
-                $this->level --;
-                $all .= str_repeat("\t", $this->level) . '</' . $key . '>' . PHP_EOL;
+                $all = str_repeat("\t", $level) . '<' . $key . '>' . PHP_EOL;
+                $level ++;
+                $all .= $this->write_array($level, $value);
+                $level --;
+                $all .= str_repeat("\t", $level) . '</' . $key . '>' . PHP_EOL;
             }
             else
             {
-                $all = str_repeat("\t", $this->level) . '<' . $key . '>' . $value . '</' . $key . '>' . PHP_EOL;
+                $all = str_repeat("\t", $level) . '<' . $key . '>' . $value . '</' . $key . '>' . PHP_EOL;
             }
         }
 

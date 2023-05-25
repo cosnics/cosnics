@@ -17,17 +17,17 @@ class Filesystem
     /**
      * Constant representing "Directories"
      */
-    const LIST_DIRECTORIES = 3;
+    public const LIST_DIRECTORIES = 3;
 
     /**
      * Constant representing "Files"
      */
-    const LIST_FILES = 2;
+    public const LIST_FILES = 2;
 
     /**
      * Constant representing "Files and directories"
      */
-    const LIST_FILES_AND_DIRECTORIES = 1;
+    public const LIST_FILES_AND_DIRECTORIES = 1;
 
     /**
      * Call the chmod function on the given file path.
@@ -81,9 +81,9 @@ class Filesystem
      *
      * @param string $source
      * @param string $destination
-     * @param boolean $overwrite
+     * @param bool $overwrite
      *
-     * @return boolean
+     * @return bool
      */
     public static function copy_file($source, $destination, $overwrite = false)
     {
@@ -107,7 +107,7 @@ class Filesystem
      * @param string $path
      * @param string $mode
      *
-     * @return boolean
+     * @return bool
      */
     public static function create_dir($path, $mode = null)
     {
@@ -257,10 +257,10 @@ class Filesystem
      * This function streams a file to the client
      *
      * @param string $fullFileName
-     * @param boolean $forced
+     * @param bool $forced
      * @param string $name
      *
-     * @return boolean
+     * @return bool
      */
     public static function file_send_for_download($fullFileName, $forced = false, $name = '', $contentType = '')
     {
@@ -286,7 +286,7 @@ class Filesystem
 
             header('Content-length: ' . (string) $len);
 
-            if (preg_match("/MSIE 5.5/", $_SERVER['HTTP_USER_AGENT']))
+            if (preg_match('/MSIE 5.5/', $_SERVER['HTTP_USER_AGENT']))
             {
                 header('Content-Disposition: filename= ' . $filename);
             }
@@ -356,10 +356,10 @@ class Filesystem
     /**
      * Transform the file size in a human readable format.
      *
-     * @param integer $fileSize
-     * @param boolean $postfix
+     * @param int $fileSize
+     * @param bool $postfix
      *
-     * @return integer
+     * @return int
      */
     public static function format_file_size($fileSize, $postfix = true)
     {
@@ -392,8 +392,8 @@ class Filesystem
      * Retrieves all contents (files and/or directories) of a directory
      *
      * @param string $path
-     * @param integer $type
-     * @param boolean $recursive
+     * @param int $type
+     * @param bool $recursive
      *
      * @return string[]
      */
@@ -450,7 +450,7 @@ class Filesystem
      *
      * @param string $path
      *
-     * @return integer
+     * @return int
      */
     public static function get_disk_space($path)
     {
@@ -501,7 +501,7 @@ class Filesystem
      *
      * @param string $content
      *
-     * @return integer
+     * @return int
      */
     public static function guess_disk_space($content)
     {
@@ -514,14 +514,13 @@ class Filesystem
     }
 
     /**
-     *
      * @param string $fileSize
      *
-     * @return integer
+     * @return int
      */
     public static function interpret_file_size($fileSize)
     {
-        $bytesArray = array(
+        $bytesArray = [
             'B' => 1,
             'KB' => 1024,
             'MB' => pow(1024, 2),
@@ -533,7 +532,7 @@ class Filesystem
             'G' => pow(1024, 3),
             'T' => pow(1024, 4),
             'P' => pow(1024, 5)
-        );
+        ];
 
         $bytes = floatval($fileSize);
 
@@ -554,9 +553,9 @@ class Filesystem
      *
      * @param string $source
      * @param string $destination
-     * @param boolean $overwrite
+     * @param bool $overwrite
      *
-     * @return boolean
+     * @return bool
      */
     public static function move_file($source, $destination, $overwrite = false)
     {
@@ -580,9 +579,9 @@ class Filesystem
      *
      * @param string $source
      * @param string $destination
-     * @param boolean $overwrite
+     * @param bool $overwrite
      *
-     * @return boolean
+     * @return bool
      */
     public static function recurse_copy($source, $destination, $overwrite = false)
     {
@@ -615,12 +614,11 @@ class Filesystem
     }
 
     /**
-     *
      * @param string $source
      * @param string $destination
-     * @param boolean $overwrite
+     * @param bool $overwrite
      *
-     * @return boolean
+     * @return bool
      */
     public static function recurse_move($source, $destination, $overwrite = false)
     {
@@ -658,7 +656,7 @@ class Filesystem
      *
      * @param string $path
      *
-     * @return boolean
+     * @return bool
      */
     public static function remove($path)
     {
@@ -702,9 +700,9 @@ class Filesystem
      *
      * @param string $file
      * @param string $content
-     * @param boolean $append
+     * @param bool $append
      *
-     * @return boolean
+     * @return bool
      */
     public static function write_to_file($file, $content, $append = false)
     {

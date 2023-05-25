@@ -9,7 +9,7 @@ use Chamilo\Application\Weblcms\Storage\DataManager;
 use Chamilo\Configuration\Package\Action\Installer;
 use Chamilo\Libraries\Architecture\Exceptions\ObjectNotExistException;
 use Chamilo\Libraries\DependencyInjection\DependencyInjectionContainerBuilder;
-use Chamilo\Libraries\File\Path;
+use Chamilo\Libraries\File\SystemPathBuilder;
 use Chamilo\Libraries\Storage\DataClass\DataClass;
 use Chamilo\Libraries\Translation\Translation;
 use DOMDocument;
@@ -630,7 +630,13 @@ class CourseSettingsController
         Installer $installer, $tool_registration_id = null
     )
     {
-        $settings_file = Path::getInstance()->getResourcesPath($installer::CONTEXT) . 'Settings' . DIRECTORY_SEPARATOR .
+        /**
+         * @var \Chamilo\Libraries\File\SystemPathBuilder $systemPathBuilder
+         */
+        $systemPathBuilder =
+            DependencyInjectionContainerBuilder::getInstance()->createContainer()->get(SystemPathBuilder::class);
+
+        $settings_file = $systemPathBuilder->getResourcesPath($installer::CONTEXT) . 'Settings' . DIRECTORY_SEPARATOR .
             'course_settings.xml';
 
         if (self::create_course_settings_from_xml($settings_file, $tool_registration_id))

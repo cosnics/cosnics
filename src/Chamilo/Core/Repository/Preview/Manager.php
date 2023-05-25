@@ -94,9 +94,8 @@ abstract class Manager extends Application
             $buttonToolBar->addItem($dropdownButton);
 
             $isDisplayAction = $this->get_action() == self::ACTION_DISPLAY;
-            $previewExists = \Chamilo\Core\Repository\Display\Manager::exists(
-                $this->get_content_object()::CONTEXT . '\Display\Preview'
-            );
+
+            $previewExists = class_exists($this->get_content_object()::CONTEXT . '\Display\Preview\Manager');
 
             if ($previewExists)
             {
@@ -192,8 +191,7 @@ abstract class Manager extends Application
     {
         $translator = $this->getTranslator();
 
-        $translation =
-            $translator->trans('PreviewModeWarning', [], $this->get_content_object()::CONTEXT . '\Display');
+        $translation = $translator->trans('PreviewModeWarning', [], $this->get_content_object()::CONTEXT . '\Display');
 
         if ($translation == 'PreviewModeWarning')
         {
@@ -236,7 +234,7 @@ abstract class Manager extends Application
             throw new NoObjectSelectedException(Translation::get('ContentObject'));
         }
 
-        if (\Chamilo\Core\Repository\Display\Manager::exists($contentObject::CONTEXT . '\Display\Preview'))
+        if (class_exists($contentObject::CONTEXT . '\Display\Preview\Manager'))
         {
             $action = self::ACTION_DISPLAY;
         }

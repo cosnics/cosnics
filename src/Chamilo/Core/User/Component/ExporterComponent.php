@@ -74,16 +74,24 @@ class ExporterComponent extends Manager
         }
     }
 
+    /**
+     * @throws \Exception
+     */
     public function export_users($file_type, $data)
     {
         $filename = 'export_users_' . date('Y-m-d_H-i-s');
+
         if ($file_type == 'pdf')
         {
             $data = [['key' => 'users', 'data' => $data]];
         }
-        $export = Export::factory($file_type, $data);
-        $export->set_filename($filename);
-        $export->send_to_browser();
+
+        $this->getExporter($file_type)->send_to_browser($filename, $data);
+    }
+
+    protected function getExporter($fileType): Export
+    {
+        return $this->getService('Chamilo\Libraries\File\Export\'' . $fileType . '\'' . $fileType . 'Export');
     }
 
     protected function getPlatformLanguageForUser(User $user): string
@@ -157,7 +165,7 @@ class ExporterComponent extends Manager
             (string) StringUtilities::getInstance()->createString(User::PROPERTY_EXPIRATION_DATE)->upperCamelize()
         );
         $auth_source_title = Translation::get(
-            (string) StringUtilities::getInstance()->createString(User::PROPERTY_AUTH_SOURCE)->uperCamelize()
+            (string) StringUtilities::getInstance()->createString(User::PROPERTY_AUTH_SOURCE)->upperCamelize()
         );
 
         $user_array[$lastname_title] = $user->get_lastname();

@@ -1,12 +1,12 @@
 <?php
 namespace Chamilo\Libraries\Format\Form\Element;
 
-use Chamilo\Libraries\File\Path;
+use Chamilo\Libraries\DependencyInjection\DependencyInjectionContainerBuilder;
+use Chamilo\Libraries\File\WebPathBuilder;
 use Chamilo\Libraries\Format\Form\Element\AdvancedElementFinder\AdvancedElementFinderElements;
 use Chamilo\Libraries\Format\Form\Element\AdvancedElementFinder\AdvancedElementFinderElementTypes;
 use Chamilo\Libraries\Format\Structure\Glyph\FontAwesomeGlyph;
 use Chamilo\Libraries\Format\Utilities\ResourceManager;
-use Chamilo\Libraries\Translation\Translation;
 use Chamilo\Libraries\Utilities\StringUtilities;
 use HTML_QuickForm_element;
 use HTML_QuickForm_group;
@@ -14,6 +14,7 @@ use HTML_QuickForm_hidden;
 use HTML_QuickForm_Renderer;
 use HTML_QuickForm_select;
 use HTML_QuickForm_text;
+use Symfony\Component\Translation\Translator;
 
 /**
  * Advanced ajax based element finder.
@@ -92,6 +93,12 @@ class HTML_QuickForm_advanced_element_finder extends HTML_QuickForm_group
      */
     private function build_elements()
     {
+        $container = DependencyInjectionContainerBuilder::getInstance()->createContainer();
+        /**
+         * @var \Symfony\Component\Translation\Translator $translator
+         */
+        $translator = $container->get(Translator::class);
+
         $active_hidden_id = 'hidden_active_elements';
         $activate_button_id = 'activate_button';
         $deactivate_button_id = 'deactivate_button';
@@ -105,7 +112,7 @@ class HTML_QuickForm_advanced_element_finder extends HTML_QuickForm_group
 
         $element_types_array = [];
         $element_types_array[- 1] =
-            '-- ' . Translation::get('SelectElementType', null, StringUtilities::LIBRARIES) . ' --';
+            '-- ' . $translator->trans('SelectElementType', [], StringUtilities::LIBRARIES) . ' --';
 
         foreach ($this->element_types->get_types() as $element_type)
         {
@@ -126,13 +133,13 @@ class HTML_QuickForm_advanced_element_finder extends HTML_QuickForm_group
         );
 
         $this->_elements[] = new HTML_QuickForm_stylebutton(
-            'activate_' . $this->getName(), Translation::get('AddToSelection', [], StringUtilities::LIBRARIES),
+            'activate_' . $this->getName(), $translator->trans('AddToSelection', [], StringUtilities::LIBRARIES),
             ['id' => $activate_button_id, 'class' => 'btn-primary activate_elements form-control'], '',
             new FontAwesomeGlyph('arrow-alt-circle-right', [], null, 'fas')
         );
 
         $this->_elements[] = new HTML_QuickForm_stylebutton(
-            'deactivate_' . $this->getName(), Translation::get('RemoveFromSelection', [], StringUtilities::LIBRARIES),
+            'deactivate_' . $this->getName(), $translator->trans('RemoveFromSelection', [], StringUtilities::LIBRARIES),
             ['id' => $deactivate_button_id, 'class' => 'btn-danger deactivate_elements form-control'], '',
             new FontAwesomeGlyph('arrow-alt-circle-left', [], null, 'fas')
         );
@@ -152,11 +159,6 @@ class HTML_QuickForm_advanced_element_finder extends HTML_QuickForm_group
     public function getHeight(): int
     {
         return $this->height;
-    }
-
-    public function setHeight(int $height)
-    {
-        $this->height = $height;
     }
 
     public function getValue()
@@ -182,11 +184,6 @@ class HTML_QuickForm_advanced_element_finder extends HTML_QuickForm_group
         return $this->width;
     }
 
-    public function setWidth(int $width)
-    {
-        $this->width = $width;
-    }
-
     public function setDefaultValues(?AdvancedElementFinderElements $defaultValues)
     {
         if (!$defaultValues)
@@ -207,8 +204,28 @@ class HTML_QuickForm_advanced_element_finder extends HTML_QuickForm_group
         $this->_elements[0]->setValue($encoded);
     }
 
+    public function setHeight(int $height)
+    {
+        $this->height = $height;
+    }
+
+    public function setWidth(int $width)
+    {
+        $this->width = $width;
+    }
+
     public function toHtml(): string
     {
+        $container = DependencyInjectionContainerBuilder::getInstance()->createContainer();
+        /**
+         * @var \Chamilo\Libraries\Format\Utilities\ResourceManager $resourceManager
+         */
+        $resourceManager = $container->get(ResourceManager::class);
+        /**
+         * @var \Chamilo\Libraries\File\WebPathBuilder $webPathBuilder
+         */
+        $webPathBuilder = $container->get(WebPathBuilder::class);
+
         // Create a safe name for the id (remove array values)
         $safe_name = str_replace('[', '_', $this->getName());
         $safe_name = str_replace(']', '', $safe_name);
@@ -291,8 +308,8 @@ class HTML_QuickForm_advanced_element_finder extends HTML_QuickForm_group
         // Make sure everything is within the general div.
         $html[] = '</div>';
 
-        $html[] = ResourceManager::getInstance()->getResourceHtml(
-            Path::getInstance()->getJavascriptPath('Chamilo\Libraries', true) . 'Jquery/jquery.advelementfinder.min.js'
+        $html[] = $resourceManager->getResourceHtml(
+            $webPathBuilder->getJavascriptPath('Chamilo\Libraries') . 'Jquery/jquery.advelementfinder.min.js'
         );
         $html[] = '<script>';
 

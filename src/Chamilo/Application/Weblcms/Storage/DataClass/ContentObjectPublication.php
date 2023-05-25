@@ -5,13 +5,13 @@ use Chamilo\Application\Weblcms\Course\Storage\DataManager as CourseDataManager;
 use Chamilo\Application\Weblcms\Manager;
 use Chamilo\Application\Weblcms\Rights\WeblcmsRights;
 use Chamilo\Application\Weblcms\Storage\DataManager;
-use Chamilo\Configuration\Configuration;
+use Chamilo\Configuration\Service\Consulter\ConfigurationConsulter;
 use Chamilo\Core\Repository\Publication\Storage\DataClass\Publication;
 use Chamilo\Core\Repository\Storage\DataClass\ContentObject;
 use Chamilo\Core\User\Storage\DataClass\User;
 use Chamilo\Libraries\DependencyInjection\DependencyInjectionContainerBuilder;
+use Chamilo\Libraries\File\ConfigurablePathBuilder;
 use Chamilo\Libraries\File\FileLogger;
-use Chamilo\Libraries\File\Path;
 use Chamilo\Libraries\File\Redirect;
 use Chamilo\Libraries\File\WebPathBuilder;
 use Chamilo\Libraries\Format\Theme\ThemePathBuilder;
@@ -23,11 +23,11 @@ use Chamilo\Libraries\Storage\DataClass\Listeners\DisplayOrderDataClassListenerS
 use Chamilo\Libraries\Storage\Query\Condition\EqualityCondition;
 use Chamilo\Libraries\Storage\Query\Variable\PropertyConditionVariable;
 use Chamilo\Libraries\Storage\Query\Variable\StaticConditionVariable;
-use Chamilo\Libraries\Translation\Translation;
 use DOMDocument;
 use ErrorException;
 use Exception;
 use RuntimeException;
+use Symfony\Component\Translation\Translator;
 
 /**
  * This class represents a learning object publication.
@@ -507,6 +507,25 @@ class ContentObjectPublication extends Publication implements DisplayOrderDataCl
      */
     public function mail_publication($after_publication = false)
     {
+        $container = DependencyInjectionContainerBuilder::getInstance()->createContainer();
+
+        /**
+         * @var \Chamilo\Libraries\File\WebPathBuilder $webPathBuilder
+         */
+        $webPathBuilder = $container->get(WebPathBuilder::class);
+        /**
+         * @var \Chamilo\Libraries\File\ConfigurablePathBuilder $configurablePathBuilder
+         */
+        $configurablePathBuilder = $container->get(ConfigurablePathBuilder::class);
+        /**
+         * @var \Symfony\Component\Translation\Translator $translator
+         */
+        $translator = $container->get(Translator::class);
+        /**
+         * @var \Chamilo\Configuration\Service\Consulter\ConfigurationConsulter $configurationConsulter
+         */
+        $configurationConsulter = $container->get(ConfigurationConsulter::class);
+
         set_time_limit(3600);
 
         // prepare mail
@@ -516,8 +535,6 @@ class ContentObjectPublication extends Publication implements DisplayOrderDataCl
         $link = $this->get_course_viewer_link();
         $course = CourseDataManager::retrieve_course($this->get_course_id());
 
-        $webPathBuilder =
-            DependencyInjectionContainerBuilder::getInstance()->createContainer()->get(WebPathBuilder::class);
         $cssPath = $webPathBuilder->getCssPath('Chamilo/Libraries');
 
         $body = '<!DOCTYPE html><html lang="en"><head>';
@@ -529,12 +546,13 @@ class ContentObjectPublication extends Publication implements DisplayOrderDataCl
             $this->getThemeWebPathBuilder()->getTheme() . '.min.css' . '" />';
         $body .= '</head><body><div class="container-fluid" style="margin-top: 15px;">';
 
-        $body .= Translation::get('NewPublicationMailDescription') . ' ' . $course->get_title() . ' : <a href="' .
-            $link . '" target="_blank">' . utf8_decode($content_object->get_title()) . '</a><br />--<br />';
+        $body .= $translator->trans('NewPublicationMailDescription', [], self::CONTEXT) . ' ' . $course->get_title() .
+            ' : <a href="' . $link . '" target="_blank">' . utf8_decode($content_object->get_title()) .
+            '</a><br />--<br />';
         $body .= $content_object->get_description();
         $body .= '--<br />';
         $body .= $user->get_fullname() . ' - ' . $course->get_visual_code() . ' - ' . $course->get_title() . ' - ' .
-            Translation::get('TypeName', null, 'Chamilo\Application\Weblcms\Tool\Implementation\\' . $tool);
+            $translator->trans('TypeName', [], 'Chamilo\Application\Weblcms\Tool\Implementation\\' . $tool);
 
         // get targets
         $target_email = [];
@@ -554,8 +572,6 @@ class ContentObjectPublication extends Publication implements DisplayOrderDataCl
 
         // safety check: filter any dubbles
         $unique_email = array_unique($target_email);
-
-        $site_name = Configuration::getInstance()->get_setting(['Chamilo\Core\Admin', 'site_name']);
 
         $doc = new DOMDocument();
         $doc->loadHTML('<?xml encoding="utf-8" ?>' . $body);
@@ -602,18 +618,18 @@ class ContentObjectPublication extends Publication implements DisplayOrderDataCl
 
         if ($content_object->has_attachments())
         {
-            $body .= '<br ><br >' . Translation::get('AttachmentWarning', ['LINK' => $link]);
+            $body .= '<br ><br >' . $translator->trans('AttachmentWarning', ['LINK' => $link], self::CONTEXT);
         }
 
         $body .= '</div></body></html>';
 
-        $log = 'mail for publication ' . $this->get_id() . ' in course ';
+        $log = 'mail for publication ' . $this->getId() . ' in course ';
         $log .= $course->get_title();
         $log .= " to: \n";
 
-        $subject = Translation::get(
+        $subject = $translator->trans(
             'NewPublicationMailSubject',
-            ['COURSE' => $course->get_title(), 'CONTENTOBJECT' => $content_object->get_title()]
+            ['COURSE' => $course->get_title(), 'CONTENTOBJECT' => $content_object->get_title()], self::CONTEXT
         );
 
         $mail = new Mail(
@@ -634,11 +650,11 @@ class ContentObjectPublication extends Publication implements DisplayOrderDataCl
             $log .= " (unsuccessfull)\n";
         }
 
-        $logMails = Configuration::getInstance()->get_setting(['Chamilo\Application\Weblcms', 'log_mails']);
+        $logMails = $configurationConsulter->getSetting(['Chamilo\Application\Weblcms', 'log_mails']);
 
         if ($logMails)
         {
-            $dir = Path::getInstance()->getLogPath() . 'mail';
+            $dir = $configurablePathBuilder->getLogPath() . 'mail';
 
             if (!file_exists($dir) and !is_dir($dir))
             {

@@ -133,13 +133,6 @@ abstract class Manager extends Application
         );
     }
 
-    public static function exists(string $content_object_type): bool
-    {
-        $class_name = $content_object_type . '\Builder\Manager';
-
-        return class_exists($class_name);
-    }
-
     public static function factory($type, $application)
     {
         $class = 'Chamilo\Core\Repository\ContentObject\\' .

@@ -2,39 +2,26 @@
 namespace Chamilo\Libraries\File\Export\Excel;
 
 use Chamilo\Libraries\File\Export\Export;
+use Chamilo\Libraries\File\Filesystem;
 use PhpOffice\PhpSpreadsheet\IOFactory;
 use PhpOffice\PhpSpreadsheet\Spreadsheet;
 
 /**
- * Exports data to Excel
- *
  * @package Chamilo\Libraries\File\Export\Excel
  */
 class ExcelExport extends Export
 {
-    const EXPORT_TYPE = 'xlsx';
 
     /**
-     * @return string
-     */
-    public function getType()
-    {
-        return self::EXPORT_TYPE;
-    }
-
-    /**
-     * @return string
      * @throws \PhpOffice\PhpSpreadsheet\Exception
      * @throws \PhpOffice\PhpSpreadsheet\Writer\Exception
      */
-    public function render_data()
+    public function render_data($data): string
     {
         $excel = new Spreadsheet();
 
-        $data = $this->get_data();
         $letters = range('A', 'Z');
 
-        $i = 0;
         $cell_number = 1;
 
         $excel->setActiveSheetIndex(0);
@@ -57,15 +44,14 @@ class ExcelExport extends Export
                 $letters[$cell_letter] . $cell_number, $this->transcode_string($block_description)
             );
 
-            if ($block_description != "")
+            if ($block_description != '')
             {
                 $this->wrap_text($excel, $letters[$cell_letter] . $cell_number);
             }
 
             ++ $cell_number;
-            // (matrix question) rows
 
-            foreach ($block_content_data->get_rows() as $row_id => $row_name)
+            foreach ($block_content_data->get_rows() as $row_name)
             {
                 $cell_letter ++;
                 $excel->getActiveSheet()->getColumnDimension($letters[$cell_letter])->setWidth(15);
@@ -91,41 +77,30 @@ class ExcelExport extends Export
                         $this->transcode_string($block_content_data->get_data_category_row($category_id, $row_id))
                     );
                 }
-                $i ++;
             }
         }
 
-        header('Content-Type: application/vnd.openxmlformats-officedocument.spreadsheetml.sheet');
-        header('Content-Disposition: attachment;filename="' . $this->get_filename() . '"');
-        header('Cache-Control: max-age=0');
-        $objWriter = IOFactory::createWriter($excel, 'Xlsx');
+        $temporaryFilePath = $this->getConfigurablePathBuilder()->getTemporaryPath() . uniqid();
 
-        return $objWriter->save('php://output');
+        $objWriter = IOFactory::createWriter($excel, 'Xlsx');
+        $objWriter->save($temporaryFilePath);
+
+        $content = file_get_contents($temporaryFilePath);
+
+        Filesystem::remove($temporaryFilePath);
+
+        return $content;
     }
 
-    /**
-     *
-     * @param string $string
-     *
-     * @return string
-     */
-    static public function transcode_string($string)
+    public function transcode_string($string): string
     {
         $strippedAnswer = trim(strip_tags(html_entity_decode($string, ENT_QUOTES, 'UTF-8')));
         $strippedAnswer = str_replace(html_entity_decode('&nbsp;', ENT_COMPAT, 'UTF-8'), ' ', $strippedAnswer);
-        $strippedAnswer = preg_replace('/[ \n\r\t]{2,}/', ' ', $strippedAnswer);
 
-        return $strippedAnswer;
+        return preg_replace('/[ \n\r\t]{2,}/', ' ', $strippedAnswer);
     }
 
-    /**
-     *
-     * @param Spreadsheet $excel
-     * @param string $cell
-     *
-     * @throws \PhpOffice\PhpSpreadsheet\Exception
-     */
-    public function wrap_text($excel, $cell)
+    public function wrap_text(Spreadsheet $excel, string $cell)
     {
         $excel->getActiveSheet()->getStyle($cell)->getAlignment()->setWrapText(true);
     }

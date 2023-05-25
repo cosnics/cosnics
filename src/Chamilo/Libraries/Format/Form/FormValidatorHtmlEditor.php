@@ -1,70 +1,64 @@
 <?php
 namespace Chamilo\Libraries\Format\Form;
 
-use Chamilo\Libraries\File\Path;
+use Chamilo\Libraries\DependencyInjection\DependencyInjectionContainerBuilder;
+use Chamilo\Libraries\File\SystemPathBuilder;
+use Chamilo\Libraries\File\WebPathBuilder;
 use Chamilo\Libraries\Format\Utilities\ResourceManager;
 use Chamilo\Libraries\Translation\Translation;
 
 /**
- *
  * @package Chamilo\Libraries\Format\Form
- * @author Hans De Bisschop <hans.de.bisschop@ehb.be>
+ * @author  Hans De Bisschop <hans.de.bisschop@ehb.be>
  */
 class FormValidatorHtmlEditor
 {
-    const SETTING_COLLAPSE_TOOLBAR = 'collapse_toolbar';
-    const SETTING_CONFIGURATION = 'configuration';
-    const SETTING_ENTER_MODE = 'enter_mode';
-    const SETTING_FULL_PAGE = 'full_page';
-    const SETTING_HEIGHT = 'height';
-    const SETTING_LANGUAGE = 'language';
-    const SETTING_SHIFT_ENTER_MODE = 'shift_enter_mode';
-    const SETTING_TEMPLATES = 'templates';
-    const SETTING_THEME = 'theme';
-    const SETTING_TOOLBAR = 'toolbar';
-    const SETTING_WIDTH = 'width';
+    public const SETTING_COLLAPSE_TOOLBAR = 'collapse_toolbar';
+    public const SETTING_CONFIGURATION = 'configuration';
+    public const SETTING_ENTER_MODE = 'enter_mode';
+    public const SETTING_FULL_PAGE = 'full_page';
+    public const SETTING_HEIGHT = 'height';
+    public const SETTING_LANGUAGE = 'language';
+    public const SETTING_SHIFT_ENTER_MODE = 'shift_enter_mode';
+    public const SETTING_TEMPLATES = 'templates';
+    public const SETTING_THEME = 'theme';
+    public const SETTING_TOOLBAR = 'toolbar';
+    public const SETTING_WIDTH = 'width';
 
     /**
-     *
-     * @var \Chamilo\Libraries\Format\Form\FormValidator
-     */
-    private $form;
-
-    /**
-     *
-     * @var string
-     */
-    private $name;
-
-    /**
-     *
-     * @var string
-     */
-    private $label;
-
-    /**
-     *
-     * @var boolean
-     */
-    private $required;
-
-    /**
-     *
      * @var string[]
      */
     private $attributes;
 
     /**
-     *
+     * @var \Chamilo\Libraries\Format\Form\FormValidator
+     */
+    private $form;
+
+    /**
+     * @var string
+     */
+    private $label;
+
+    /**
+     * @var string
+     */
+    private $name;
+
+    /**
      * @var string[]
      */
     private $options;
 
     /**
-     *
+     * @var bool
+     */
+    private $required;
+
+    /**
      * @param string $name
      * @param string $label
-     * @param boolean $required
+     * @param bool $required
      * @param string[] $options
      * @param string[] $attributes
      */
@@ -84,7 +78,6 @@ class FormValidatorHtmlEditor
     }
 
     /**
-     *
      * @return string
      */
     public function render()
@@ -117,15 +110,20 @@ class FormValidatorHtmlEditor
     }
 
     /**
-     *
      * @return string[]
      */
     public function add_pre_javascript_config()
     {
+        /**
+         * @var \Chamilo\Libraries\File\WebPathBuilder $webPathBuilder
+         */
+        $webPathBuilder =
+            DependencyInjectionContainerBuilder::getInstance()->createContainer()->get(WebPathBuilder::class);
+
         $javascript = [];
 
         $javascript[] = '<script>';
-        $javascript[] = 'window.CKEDITOR_BASEPATH = "' . Path::getInstance()->getPluginPath('Chamilo\Libraries', true) .
+        $javascript[] = 'window.CKEDITOR_BASEPATH = "' . $webPathBuilder->getPluginPath('Chamilo\Libraries') .
             '" + "HtmlEditor/Ckeditor/"';
         $javascript[] = '</script>';
 
@@ -133,7 +131,6 @@ class FormValidatorHtmlEditor
     }
 
     /**
-     *
      * @return \HTML_QuickForm_textarea
      */
     public function create()
@@ -159,7 +156,6 @@ class FormValidatorHtmlEditor
     }
 
     /**
-     *
      * @return string[]
      */
     public function get_attributes()
@@ -168,16 +164,6 @@ class FormValidatorHtmlEditor
     }
 
     /**
-     *
-     * @param string[] $attributes
-     */
-    public function set_attributes($attributes)
-    {
-        $this->attributes = $attributes;
-    }
-
-    /**
-     *
      * @return \Chamilo\Libraries\Format\Form\FormValidator
      */
     public function get_form()
@@ -186,24 +172,26 @@ class FormValidatorHtmlEditor
     }
 
     /**
-     *
-     * @param \Chamilo\Libraries\Format\Form\FormValidator $form
-     */
-    public function set_form($form)
-    {
-        $this->form = $form;
-    }
-
-    /**
-     *
      * @return string[]
      */
     public function get_includes()
     {
-        $pathUtilities = Path::getInstance();
-        $resourceManager = ResourceManager::getInstance();
+        $container = DependencyInjectionContainerBuilder::getInstance()->createContainer();
 
-        $configFile = $pathUtilities->getBasePath() .
+        /**
+         * @var \Chamilo\Libraries\File\SystemPathBuilder $systemPathBuilder
+         */
+        $systemPathBuilder = $container->get(SystemPathBuilder::class);
+        /**
+         * @var \Chamilo\Libraries\File\WebPathBuilder $webPathBuilder
+         */
+        $webPathBuilder = $container->get(WebPathBuilder::class);
+        /**
+         * @var \Chamilo\Libraries\Format\Utilities\ResourceManager $resourceManager
+         */
+        $resourceManager = $container->get(ResourceManager::class);
+
+        $configFile = $systemPathBuilder->getBasePath() .
             '../web/Chamilo/Libraries/Resources/Plugin/HtmlEditor/CkeditorInstanceConfig.js';
 
         $timestamp = filemtime($configFile);
@@ -211,32 +199,37 @@ class FormValidatorHtmlEditor
         $scripts = [];
 
         $scripts[] = $resourceManager->getResourceHtml(
-            $pathUtilities->getPluginPath('Chamilo\Libraries', true) . 'HtmlEditor/Ckeditor/ckeditor.js'
+            $webPathBuilder->getPluginPath('Chamilo\Libraries') . 'HtmlEditor/Ckeditor/ckeditor.js'
         );
         $scripts[] = '<script>';
         $scripts[] = 'CKEDITOR.timestamp = "' . $timestamp . '";';
-        $scripts[] = 'var web_path = \'' . $pathUtilities->getBasePath(true) . '\';';
+        $scripts[] = 'var web_path = \'' . $webPathBuilder->getBasePath() . '\';';
         $scripts[] = '</script>';
         $scripts[] = $resourceManager->getResourceHtml(
-            $pathUtilities->getPluginPath('Chamilo\Libraries', true) . 'HtmlEditor/CkeditorGlobalConfig.js'
+            $webPathBuilder->getPluginPath('Chamilo\Libraries') . 'HtmlEditor/CkeditorGlobalConfig.js'
         );
         $scripts[] = $resourceManager->getResourceHtml(
-            $pathUtilities->getPluginPath('Chamilo\Libraries', true) . 'HtmlEditor/Ckeditor/adapters/jquery.js'
+            $webPathBuilder->getPluginPath('Chamilo\Libraries') . 'HtmlEditor/Ckeditor/adapters/jquery.js'
         );
 
         return $scripts;
     }
 
     /**
-     *
      * @return string[]
      */
     public function get_javascript()
     {
+        /**
+         * @var \Chamilo\Libraries\File\WebPathBuilder $webPathBuilder
+         */
+        $webPathBuilder =
+            DependencyInjectionContainerBuilder::getInstance()->createContainer()->get(WebPathBuilder::class);
+
         $javascript = [];
 
         $javascript[] = '<script>';
-        $javascript[] = 'var web_path = \'' . Path::getInstance()->getBasePath(true) . '\'';
+        $javascript[] = 'var web_path = \'' . $webPathBuilder->getBasePath() . '\'';
         $javascript[] = '$(function ()';
         $javascript[] = '{';
         $javascript[] = '	$(document).ready(function ()';
@@ -255,7 +248,6 @@ class FormValidatorHtmlEditor
     }
 
     /**
-     *
      * @return string
      */
     public function get_label()
@@ -264,16 +256,6 @@ class FormValidatorHtmlEditor
     }
 
     /**
-     *
-     * @param string $label
-     */
-    public function set_label($label)
-    {
-        $this->label = $label;
-    }
-
-    /**
-     *
      * @return string
      */
     public function get_name()
@@ -282,16 +264,6 @@ class FormValidatorHtmlEditor
     }
 
     /**
-     *
-     * @param string $name
-     */
-    public function set_name($name)
-    {
-        $this->name = $name;
-    }
-
-    /**
-     *
      * @param string $variable
      *
      * @return string
@@ -309,7 +281,6 @@ class FormValidatorHtmlEditor
     }
 
     /**
-     *
      * @return string[]
      */
     public function get_options()
@@ -318,7 +289,55 @@ class FormValidatorHtmlEditor
     }
 
     /**
-     *
+     * @return bool
+     */
+    public function get_required()
+    {
+        return $this->required;
+    }
+
+    /**
+     * @param string[] $attributes
+     */
+    public function set_attributes($attributes)
+    {
+        $this->attributes = $attributes;
+    }
+
+    /**
+     * @param \Chamilo\Libraries\Format\Form\FormValidator $form
+     */
+    public function set_form($form)
+    {
+        $this->form = $form;
+    }
+
+    /**
+     * @param string $label
+     */
+    public function set_label($label)
+    {
+        $this->label = $label;
+    }
+
+    /**
+     * @param string $name
+     */
+    public function set_name($name)
+    {
+        $this->name = $name;
+    }
+
+    /**
+     * @param string $variable
+     * @param string $value
+     */
+    public function set_option($variable, $value)
+    {
+        $this->options[$variable] = $value;
+    }
+
+    /**
      * @param string[] $options
      */
     public function set_options($options)
@@ -327,30 +346,10 @@ class FormValidatorHtmlEditor
     }
 
     /**
-     *
-     * @return boolean
-     */
-    public function get_required()
-    {
-        return $this->required;
-    }
-
-    /**
-     *
-     * @param boolean $required
+     * @param bool $required
      */
     public function set_required($required)
     {
         $this->required = $required;
-    }
-
-    /**
-     *
-     * @param string $variable
-     * @param string $value
-     */
-    public function set_option($variable, $value)
-    {
-        $this->options[$variable] = $value;
     }
 }

@@ -43,7 +43,7 @@ class GroupExportForm extends FormValidator
     {
         $this->addElement(
             'select', 'file_type', Translation::get('OutputFileType', null, StringUtilities::LIBRARIES),
-            Export::get_supported_filetypes(array('Ical', 'Csv', 'Pdf', 'Excel'))
+            ['Xml']
         );
 
         $buttons[] = $this->createElement(

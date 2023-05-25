@@ -7,6 +7,7 @@ use Chamilo\Libraries\Architecture\Application\Application;
 use Chamilo\Libraries\DependencyInjection\DependencyInjectionContainerBuilder;
 use Chamilo\Libraries\File\ConfigurablePathBuilder;
 use Chamilo\Libraries\File\Redirect;
+use Chamilo\Libraries\File\SystemPathBuilder;
 use Chamilo\Libraries\Format\Display;
 use Chamilo\Libraries\Translation\Translation;
 use Chamilo\Libraries\Utilities\StringUtilities;
@@ -18,6 +19,17 @@ use Chamilo\Libraries\Utilities\StringUtilities;
  */
 abstract class Chart extends Html
 {
+
+    protected function getVendorPath(): string
+    {
+        $container = DependencyInjectionContainerBuilder::getInstance()->createContainer();
+        /**
+         * @var \Chamilo\Libraries\File\SystemPathBuilder $systemPathBuilder
+         */
+        $systemPathBuilder = $container->get(SystemPathBuilder::class);
+
+        return $systemPathBuilder->getVendorPath();
+    }
 
     /**
      *

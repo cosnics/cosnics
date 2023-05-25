@@ -8,7 +8,6 @@ use Chamilo\Core\Repository\Common\Export\ExportParameters;
 use Chamilo\Core\Repository\Storage\DataClass\ContentObject;
 use Chamilo\Core\Repository\Storage\DataManager;
 use Chamilo\Libraries\File\Filesystem;
-use Chamilo\Libraries\File\Path;
 use Chamilo\Libraries\Platform\Session\Session;
 use Chamilo\Libraries\Storage\Parameters\DataClassRetrievesParameters;
 use Chamilo\Libraries\Storage\Query\Condition\InCondition;
@@ -110,7 +109,8 @@ class HtmlContentObjectExportController extends ContentObjectExportController
     {
         $user_id = Session::get_user_id();
 
-        $this->temporary_directory = Path::getInstance()->getTemporaryPath() . $user_id . '/export_content_objects/';
+        $this->temporary_directory =
+            $this->getConfigurablePathBuilder()->getTemporaryPath() . $user_id . '/export_content_objects/';
         if (!is_dir($this->temporary_directory))
         {
             mkdir($this->temporary_directory, 0777, true);

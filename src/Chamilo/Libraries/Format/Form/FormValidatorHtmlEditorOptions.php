@@ -1,8 +1,10 @@
 <?php
 namespace Chamilo\Libraries\Format\Form;
 
-use Chamilo\Libraries\File\Path;
-use Chamilo\Libraries\Platform\Session\Request;
+use Chamilo\Libraries\DependencyInjection\DependencyInjectionContainerBuilder;
+use Chamilo\Libraries\File\SystemPathBuilder;
+use Chamilo\Libraries\File\WebPathBuilder;
+use Chamilo\Libraries\Platform\ChamiloRequest;
 use Chamilo\Libraries\Translation\Translation;
 
 /**
@@ -10,63 +12,61 @@ use Chamilo\Libraries\Translation\Translation;
  * to translate the generic option values
  *
  * @package Chamilo\Libraries\Format\Form
- * @author Scaramanga
+ * @author  Scaramanga
  */
 class FormValidatorHtmlEditorOptions
 {
     /**
      * Whether or not the toolbar should be collapse by default
      */
-    const OPTION_COLLAPSE_TOOLBAR = 'toolbarStartupExpanded';
+    public const OPTION_COLLAPSE_TOOLBAR = 'toolbarStartupExpanded';
 
     /**
      * Path to the editors configuration file
      */
-    const OPTION_CONFIGURATION = 'customConfig';
+    public const OPTION_CONFIGURATION = 'customConfig';
 
     /**
      * Whether or not the content of the editor should be treated as a standalone page
      */
-    const OPTION_FULL_PAGE = 'fullPage';
+    public const OPTION_FULL_PAGE = 'fullPage';
 
     /**
      * The height of the editor in pixels
      */
-    const OPTION_HEIGHT = 'height';
+    public const OPTION_HEIGHT = 'height';
 
     /**
      * Name of the language to be used for the editor
      */
-    const OPTION_LANGUAGE = 'language';
+    public const OPTION_LANGUAGE = 'language';
 
-    const OPTION_RENDER_RESOURCE_INLINE = 'render_resource_inline';
+    public const OPTION_RENDER_RESOURCE_INLINE = 'render_resource_inline';
 
-    const OPTION_SKIN = 'skin';
+    public const OPTION_SKIN = 'skin';
 
     /**
      * Path to available templates for the editor
      */
-    const OPTION_TEMPLATES = 'templates_files';
+    public const OPTION_TEMPLATES = 'templates_files';
 
     /**
      * The name of the toolbar set e.g.
      * Basic, Wiki, Assessment
      */
-    const OPTION_TOOLBAR = 'toolbar';
+    public const OPTION_TOOLBAR = 'toolbar';
 
     /**
      * The width of the editor in pixels or percent
      */
-    const OPTION_WIDTH = 'width';
+    public const OPTION_WIDTH = 'width';
 
     /**
-     *
      * @var string[]
      */
     private $options;
 
     /**
-     *
      * @param string[] $options
      */
     public function __construct($options)
@@ -76,7 +76,6 @@ class FormValidatorHtmlEditorOptions
     }
 
     /**
-     *
      * @param string $value
      *
      * @return string
@@ -116,7 +115,6 @@ class FormValidatorHtmlEditorOptions
     }
 
     /**
-     *
      * @return string[]
      */
     public function get_mapping()
@@ -150,7 +148,7 @@ class FormValidatorHtmlEditorOptions
      */
     public function get_option_names()
     {
-        return array(
+        return [
             self::OPTION_COLLAPSE_TOOLBAR,
             self::OPTION_CONFIGURATION,
             self::OPTION_FULL_PAGE,
@@ -161,7 +159,7 @@ class FormValidatorHtmlEditorOptions
             self::OPTION_HEIGHT,
             self::OPTION_WIDTH,
             self::OPTION_RENDER_RESOURCE_INLINE
-        );
+        ];
     }
 
     /**
@@ -175,20 +173,9 @@ class FormValidatorHtmlEditorOptions
     }
 
     /**
-     * Set the options
+     * @param bool $value
      *
-     * @param string[] $options
-     */
-    public function set_options($options)
-    {
-        $this->options = $options;
-    }
-
-    /**
-     *
-     * @param boolean $value
-     *
-     * @return boolean
+     * @return bool
      */
     public function process_toolbarStartupExpanded($value)
     {
@@ -224,7 +211,7 @@ class FormValidatorHtmlEditorOptions
                     $processing_function = 'process_' . $available_option;
                     if (method_exists($this, $processing_function))
                     {
-                        $value = call_user_func(array($this, $processing_function), $value);
+                        $value = call_user_func([$this, $processing_function], $value);
                     }
 
                     $javascript[] =
@@ -238,17 +225,30 @@ class FormValidatorHtmlEditorOptions
 
     public function set_defaults()
     {
-        $pathUtilities = Path::getInstance();
-        $application = Request::get('application');
-        $app_sys_path = $pathUtilities->getPluginPath($application) . 'HtmlEditor/CkeditorInstanceConfig.js';
+        $container = DependencyInjectionContainerBuilder::getInstance()->createContainer();
+        /**
+         * @var \Chamilo\Libraries\File\SystemPathBuilder $systemPathBuilder
+         */
+        $systemPathBuilder = $container->get(SystemPathBuilder::class);
+        /**
+         * @var \Chamilo\Libraries\File\WebPathBuilder $webPathBuilder
+         */
+        $webPathBuilder = $container->get(WebPathBuilder::class);
+        /**
+         * @var \Chamilo\Libraries\Platform\ChamiloRequest $request
+         */
+        $request = $container->get(ChamiloRequest::class);
+
+        $application = $request->query->get('application');
+        $app_sys_path = $systemPathBuilder->getPluginPath($application) . 'HtmlEditor/CkeditorInstanceConfig.js';
 
         if (file_exists($app_sys_path))
         {
-            $path = $pathUtilities->getPluginPath($application, true) . 'HtmlEditor/CkeditorInstanceConfig.js';
+            $path = $webPathBuilder->getPluginPath($application) . 'HtmlEditor/CkeditorInstanceConfig.js';
         }
         else
         {
-            $path = $pathUtilities->getPluginPath('Chamilo\Libraries', true) . 'HtmlEditor/CkeditorInstanceConfig.js';
+            $path = $webPathBuilder->getPluginPath('Chamilo\Libraries') . 'HtmlEditor/CkeditorInstanceConfig.js';
         }
 
         $available_options = $this->get_option_names();
@@ -306,5 +306,15 @@ class FormValidatorHtmlEditorOptions
     public function set_option($variable, $value)
     {
         $this->options[$variable] = $value;
+    }
+
+    /**
+     * Set the options
+     *
+     * @param string[] $options
+     */
+    public function set_options($options)
+    {
+        $this->options = $options;
     }
 }

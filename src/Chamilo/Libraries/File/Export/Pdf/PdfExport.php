@@ -2,27 +2,27 @@
 namespace Chamilo\Libraries\File\Export\Pdf;
 
 use Cezpdf;
+use Chamilo\Libraries\File\ConfigurablePathBuilder;
 use Chamilo\Libraries\File\Export\Export;
-use Chamilo\Libraries\File\Path;
+use Chamilo\Libraries\File\SystemPathBuilder;
 use Spipu\Html2Pdf\Html2Pdf;
 
 /**
- * Exports data to Pdf
- *
  * @package Chamilo\Libraries\File\Export\Pdf
+ * @author  Hans De Bisschop <hans.de.bisschop@ehb.be>
  */
 class PdfExport extends Export
 {
-    public const EXPORT_TYPE = 'pdf';
+    protected SystemPathBuilder $systemPathBuilder;
 
-    /**
-     * convert the HTML of a real page, to a code adapted to HTML2PDF
-     *
-     * @param string HTML of a real page
-     *
-     * @return string HTML adapted to HTML2PDF
-     */
-    public function getHtmlFromPage($html)
+    public function __construct(ConfigurablePathBuilder $configurablePathBuilder, SystemPathBuilder $systemPathBuilder)
+    {
+        parent::__construct($configurablePathBuilder);
+
+        $this->systemPathBuilder = $systemPathBuilder;
+    }
+
+    public function getHtmlFromPage(string $html): string
     {
         $html = str_replace('<BODY', '<body', $html);
         $html = str_replace('</BODY', '</body', $html);
@@ -36,7 +36,7 @@ class PdfExport extends Export
         $content = explode('</body', $content);
         $content = $content[0] . '</page>';
         // extract the link tags
-        preg_match_all('/<link([^>]*)>/isU', $html, $match);
+        preg_match_all('/<link([^>]*)>/iU', $html, $match);
         foreach ($match[0] as $src)
         {
             $content = $src . '</link>' . $content;
@@ -51,25 +51,22 @@ class PdfExport extends Export
         return $content;
     }
 
-    /**
-     * @see \Chamilo\Libraries\File\Export\Export::getType()
-     */
-    public function getType()
+    public function getSystemPathBuilder(): SystemPathBuilder
     {
-        return self::EXPORT_TYPE;
+        return $this->systemPathBuilder;
     }
 
     /**
-     * @see \Chamilo\Libraries\File\Export\Export::render_data()
+     * @throws \Spipu\Html2Pdf\Exception\Html2PdfException
      */
-    public function render_data()
+    public function render_data($data): string
     {
-        $data = $this->get_data();
         if (is_array($data))
         {
             $pdf = new Cezpdf();
             $pdf->selectFont(
-                Path::getInstance()->namespaceToFullPath('Chamilo\Configuration') . 'Plugin/ezpdf/fonts/Helvetica.afm'
+                $this->getSystemPathBuilder()->namespaceToFullPath('Chamilo\Configuration') .
+                'Plugin/ezpdf/fonts/Helvetica.afm'
             );
             foreach ($data as $datapair)
             {
@@ -83,7 +80,7 @@ class PdfExport extends Export
         else
         {
             $pdf = new Html2Pdf('p', 'A4', 'en');
-            $pdf->writeHtml($this->getHtmlFromPage($data));
+            $pdf->writeHTML($this->getHtmlFromPage($data));
 
             return $pdf->output('', 'S');
         }

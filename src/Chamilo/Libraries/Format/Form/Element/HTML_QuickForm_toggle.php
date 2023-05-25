@@ -1,7 +1,8 @@
 <?php
 namespace Chamilo\Libraries\Format\Form\Element;
 
-use Chamilo\Libraries\File\Path;
+use Chamilo\Libraries\DependencyInjection\DependencyInjectionContainerBuilder;
+use Chamilo\Libraries\File\WebPathBuilder;
 use Chamilo\Libraries\Format\Utilities\ResourceManager;
 use Chamilo\Libraries\Utilities\StringUtilities;
 
@@ -35,11 +36,21 @@ class HTML_QuickForm_toggle extends HTML_QuickForm_extended_checkbox
 
     public function toHtml(): string
     {
+        $container = DependencyInjectionContainerBuilder::getInstance()->createContainer();
+        /**
+         * @var \Chamilo\Libraries\Format\Utilities\ResourceManager $resourceManager
+         */
+        $resourceManager = $container->get(ResourceManager::class);
+        /**
+         * @var \Chamilo\Libraries\File\WebPathBuilder $webPathBuilder
+         */
+        $webPathBuilder = $container->get(WebPathBuilder::class);
+
         $html = [];
 
         $html[] = parent::toHtml();
-        $html[] = ResourceManager::getInstance()->getResourceHtml(
-            Path::getInstance()->getJavascriptPath(StringUtilities::LIBRARIES, true) . 'Toggle.js'
+        $html[] = $resourceManager->getResourceHtml(
+            $webPathBuilder->getJavascriptPath(StringUtilities::LIBRARIES) . 'Toggle.js'
         );
 
         return implode(PHP_EOL, $html);

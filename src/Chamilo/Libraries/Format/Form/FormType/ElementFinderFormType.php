@@ -1,87 +1,45 @@
 <?php
 namespace Chamilo\Libraries\Format\Form\FormType;
 
-use Chamilo\Libraries\File\Path;
+use Chamilo\Libraries\DependencyInjection\DependencyInjectionContainerBuilder;
+use Chamilo\Libraries\File\WebPathBuilder;
 use Chamilo\Libraries\Format\Form\DataTransformer\ElementFinderDataTransformer;
 use Chamilo\Libraries\Format\Utilities\ResourceManager;
-use Chamilo\Libraries\Translation\Translation;
+use Chamilo\Libraries\Utilities\StringUtilities;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\Form\FormInterface;
 use Symfony\Component\Form\FormView;
 use Symfony\Component\OptionsResolver\OptionsResolver;
+use Symfony\Component\Translation\Translator;
 
 /**
  * Javascript based element finder form type
  *
  * @package Chamilo\Libraries\Format\Form\FormType
- * @author Sven Vanpoucke - Hogeschool Gent
+ * @author  Sven Vanpoucke - Hogeschool Gent
  */
 class ElementFinderFormType extends AbstractType
 {
-    const DEFAULT_HEIGHT = 300;
-    const DEFAULT_WIDTH = 292;
+    public const DEFAULT_HEIGHT = 300;
+    public const DEFAULT_WIDTH = 292;
 
     /**
+     * Adds the configuration json to the form view
      *
-     * @see \Symfony\Component\Form\AbstractType::buildForm()
+     * @param \Symfony\Component\Form\FormView $view
+     * @param string[] $options
      */
-    public function buildForm(FormBuilderInterface $builder, array $options)
+    protected function add_configuration_json(FormView $view, array $options)
     {
-        $builder->addModelTransformer(new ElementFinderDataTransformer());
-    }
+        $configuration_json = '';
+        foreach ($options['element_finder_configuration'] as $name => $value)
+        {
+            $configuration_json .= ' ' . $name . ': ' . $value . ', ';
+        }
+        $configuration_json = substr($configuration_json, 0, strlen($configuration_json) - 2);
 
-    /**
-     *
-     * @see \Symfony\Component\Form\AbstractType::setDefaultOptions()
-     */
-    public function setDefaultOptions(OptionsResolver $resolver)
-    {
-        $resolver->setDefaults(
-            array(
-                'height' => self::DEFAULT_HEIGHT,
-                'width' => self::DEFAULT_WIDTH,
-                'collapsed' => false,
-                'element_types' => null,
-                'element_finder_configuration' => [],
-                'compound' => false,
-                'data_class' => null
-            )
-        );
-
-        $resolver->setRequired(array('element_types'));
-
-        $resolver->setAllowedTypes(
-            array(
-                'element_types' => array(
-                    '\Chamilo\Libraries\Format\Form\Element\AdvancedElementFinder\AdvancedElementFinderElementTypes'
-                )
-            )
-        );
-    }
-
-    /**
-     *
-     * @see \Symfony\Component\Form\AbstractType::buildView()
-     */
-    public function buildView(FormView $view, FormInterface $form, array $options)
-    {
-        $view->vars['translations'] = array(
-            'show' => Translation::get('Show'),
-            'hide' => Translation::get('Hide'),
-            'select_element_type' => Translation::get('SelectElementType')
-        );
-
-        $view->vars['height'] = $options['height'];
-        $view->vars['width'] = $options['width'];
-        $view->vars['collapsed'] = $options['collapsed'];
-
-        $view->vars['element_finder_plugin'] = ResourceManager::getInstance()->getResourceHtml(
-            Path::getInstance()->getJavascriptPath('Chamilo\Libraries', true) . 'Jquery/jquery.advelementfinder.min.js'
-        );
-
-        $this->add_element_types($view, $options);
-        $this->add_configuration_json($view, $options);
+        $view->vars['configuration_json'] = $configuration_json;
     }
 
     /**
@@ -107,29 +65,79 @@ class ElementFinderFormType extends AbstractType
     }
 
     /**
-     * Adds the configuration json to the form view
-     *
-     * @param \Symfony\Component\Form\FormView $view
-     * @param string[] $options
+     * @see \Symfony\Component\Form\AbstractType::buildForm()
      */
-    protected function add_configuration_json(FormView $view, array $options)
+    public function buildForm(FormBuilderInterface $builder, array $options)
     {
-        $configuration_json = '';
-        foreach ($options['element_finder_configuration'] as $name => $value)
-        {
-            $configuration_json .= ' ' . $name . ': ' . $value . ', ';
-        }
-        $configuration_json = substr($configuration_json, 0, strlen($configuration_json) - 2);
-
-        $view->vars['configuration_json'] = $configuration_json;
+        $builder->addModelTransformer(new ElementFinderDataTransformer());
     }
 
     /**
-     *
+     * @see \Symfony\Component\Form\AbstractType::buildView()
+     */
+    public function buildView(FormView $view, FormInterface $form, array $options)
+    {
+        $container = DependencyInjectionContainerBuilder::getInstance()->createContainer();
+        /**
+         * @var \Chamilo\Libraries\Format\Utilities\ResourceManager $resourceManager
+         */
+        $resourceManager = $container->get(ResourceManager::class);
+        /**
+         * @var \Chamilo\Libraries\File\WebPathBuilder $webPathBuilder
+         */
+        $webPathBuilder = $container->get(WebPathBuilder::class);
+        /**
+         * @var \Symfony\Component\Translation\Translator $translator
+         */
+        $translator = $container->get(Translator::class);
+
+        $view->vars['translations'] = [
+            'show' => $translator->trans('Show', [], StringUtilities::LIBRARIES),
+            'hide' => $translator->trans('Hide', [], StringUtilities::LIBRARIES),
+            'select_element_type' => $translator->trans('SelectElementType', [], StringUtilities::LIBRARIES)
+        ];
+
+        $view->vars['height'] = $options['height'];
+        $view->vars['width'] = $options['width'];
+        $view->vars['collapsed'] = $options['collapsed'];
+
+        $view->vars['element_finder_plugin'] = $resourceManager->getResourceHtml(
+            $webPathBuilder->getJavascriptPath('Chamilo\Libraries') . 'Jquery/jquery.advelementfinder.min.js'
+        );
+
+        $this->add_element_types($view, $options);
+        $this->add_configuration_json($view, $options);
+    }
+
+    /**
      * @see \Symfony\Component\Form\AbstractType::getName()
      */
     public function getName()
     {
         return 'element_finder';
+    }
+
+    /**
+     * @see \Symfony\Component\Form\AbstractType::setDefaultOptions()
+     */
+    public function setDefaultOptions(OptionsResolver $resolver)
+    {
+        $resolver->setDefaults(
+            [
+                'height' => self::DEFAULT_HEIGHT,
+                'width' => self::DEFAULT_WIDTH,
+                'collapsed' => false,
+                'element_types' => null,
+                'element_finder_configuration' => [],
+                'compound' => false,
+                'data_class' => null
+            ]
+        );
+
+        $resolver->setRequired(['element_types']);
+        $resolver->setAllowedTypes(
+            'element_types',
+            ['\Chamilo\Libraries\Format\Form\Element\AdvancedElementFinder\AdvancedElementFinderElementTypes']
+        );
     }
 }

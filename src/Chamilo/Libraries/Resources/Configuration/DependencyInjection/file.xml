@@ -12,6 +12,11 @@
         <service id="Chamilo\Libraries\File\WebPathBuilder"/>
         <service id="Chamilo\Libraries\File\Compression\ArchiveCreator\ArchiveCreator"/>
 
+        <service id="Chamilo\Libraries\File\Export\Csv\CsvExport"/>
+        <service id="Chamilo\Libraries\File\Export\Pdf\PdfExport"/>
+        <service id="Chamilo\Libraries\File\Export\Excel\ExcelExport"/>
+        <service id="Chamilo\Libraries\File\Export\Xml\XmlExport"/>
+
         <service id="Chamilo\Libraries\File\HtmlPurifierFactory"/>
 
         <service id="Chamilo\Libraries\File\ConfigurablePathBuilder">

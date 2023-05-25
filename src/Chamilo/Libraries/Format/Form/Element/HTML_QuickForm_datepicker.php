@@ -1,7 +1,8 @@
 <?php
 namespace Chamilo\Libraries\Format\Form\Element;
 
-use Chamilo\Libraries\File\Path;
+use Chamilo\Libraries\DependencyInjection\DependencyInjectionContainerBuilder;
+use Chamilo\Libraries\File\WebPathBuilder;
 use Chamilo\Libraries\Format\Structure\Glyph\FontAwesomeGlyph;
 use Chamilo\Libraries\Format\Utilities\ResourceManager;
 use Chamilo\Libraries\Translation\Translation;
@@ -209,16 +210,23 @@ class HTML_QuickForm_datepicker extends HTML_QuickForm_date
 
     public function toHtml(): string
     {
-        $pathBuilder = Path::getInstance();
-        $resourceManager = ResourceManager::getInstance();
+        $container = DependencyInjectionContainerBuilder::getInstance()->createContainer();
+        /**
+         * @var \Chamilo\Libraries\Format\Utilities\ResourceManager $resourceManager
+         */
+        $resourceManager = $container->get(ResourceManager::class);
+        /**
+         * @var \Chamilo\Libraries\File\WebPathBuilder $webPathBuilder
+         */
+        $webPathBuilder = $container->get(WebPathBuilder::class);
 
         $html = [];
 
         $html[] = $resourceManager->getResourceHtml(
-            $pathBuilder->getJavascriptPath('Chamilo\Libraries\Format', true) . 'TblChange.js'
+            $webPathBuilder->getJavascriptPath('Chamilo\Libraries\Format') . 'TblChange.js'
         );
         $html[] = '<script>';
-        $html[] = 'var max_year="' . (date('Y') + 10) . '";';
+        $html[] = 'var max_year="' . ((int) date('Y') + 10) . '";';
         $html[] = '</script>';
         $html[] = parent::toHtml();
 

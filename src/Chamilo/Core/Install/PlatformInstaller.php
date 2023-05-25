@@ -12,7 +12,6 @@ use Chamilo\Libraries\DependencyInjection\DependencyInjectionContainerBuilder;
 use Chamilo\Libraries\DependencyInjection\ExtensionFinder\PackagesContainerExtensionFinder;
 use Chamilo\Libraries\File\Filesystem;
 use Chamilo\Libraries\File\PackagesContentFinder\PackagesClassFinder;
-use Chamilo\Libraries\File\Path;
 use Chamilo\Libraries\File\SystemPathBuilder;
 use Chamilo\Libraries\Translation\Translation;
 use Chamilo\Libraries\Utilities\StringUtilities;
@@ -25,6 +24,8 @@ use Exception;
  */
 class PlatformInstaller
 {
+
+    protected SystemPathBuilder $systemPathBuilder;
 
     /**
      * @var \Chamilo\Core\Install\Configuration
@@ -51,18 +52,17 @@ class PlatformInstaller
      */
     private $packages;
 
-    /**
-     * @param \Chamilo\Core\Install\Observer\InstallerObserver $installerObserver
-     * @param \Chamilo\Core\Install\ $configuration
-     * @param unknown $dataManager
-     */
-    public function __construct(InstallerObserver $installerObserver, Configuration $configuration, $dataManager)
+    public function __construct(
+        InstallerObserver $installerObserver, Configuration $configuration, $dataManager,
+        SystemPathBuilder $systemPathBuilder
+    )
     {
         $this->installerObserver = $installerObserver;
         $this->configuration = $configuration;
         $this->dataManager = $dataManager;
+        $this->systemPathBuilder = $systemPathBuilder;
 
-        $this->configurationFilePath = Path::getInstance()->getStoragePath() . 'configuration/configuration.xml';
+        $this->configurationFilePath = $systemPathBuilder->getStoragePath() . 'configuration/configuration.xml';
         $this->packages = [];
     }
 
@@ -145,7 +145,7 @@ class PlatformInstaller
             }
         }
 
-        $publicFilesPath = Path::getInstance()->getPublicStoragePath();
+        $publicFilesPath = $this->getSystemPathBuilder()->getPublicStoragePath();
 
         if (!Filesystem::create_dir($publicFilesPath))
         {
@@ -173,6 +173,11 @@ class PlatformInstaller
     public function getPackages()
     {
         return $this->packages;
+    }
+
+    public function getSystemPathBuilder(): SystemPathBuilder
+    {
+        return $this->systemPathBuilder;
     }
 
     private function initializeInstallation()

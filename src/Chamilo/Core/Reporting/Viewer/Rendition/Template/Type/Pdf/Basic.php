@@ -6,21 +6,18 @@ use Chamilo\Core\Reporting\Viewer\Rendition\Block\Type\Pdf as PdfBlockRendition;
 use Chamilo\Core\Reporting\Viewer\Rendition\Template\Type\Pdf;
 use Chamilo\Libraries\Architecture\ClassnameUtilities;
 use Chamilo\Libraries\File\Filesystem;
-use Chamilo\Libraries\File\Path;
 use Chamilo\Libraries\Translation\Translation;
 use PDF_MC_Table;
 
 /**
- *
- * @author Andras Zolnay
+ * @author  Andras Zolnay
  * @package reporting.viewer
- * @see For details on PDF report customization see Chamilo/Core/Reporting/ReportingDataStyle.php.
+ * @see     For details on PDF report customization see Chamilo/Core/Reporting/ReportingDataStyle.php.
  */
 class Basic extends Pdf
 {
 
     /**
-     *
      * @var \PDF_MC_Table
      */
     private $pdf_mc_table;
@@ -39,7 +36,7 @@ class Basic extends Pdf
         ), date('d-m-Y'), $this->get_template()->getStyle()
         );
 
-        $this->pdf_mc_table->SetFooter(Translation::get("PdfReportFooter"), $this->get_template()->getStyle());
+        $this->pdf_mc_table->SetFooter(Translation::get('PdfReportFooter'), $this->get_template()->getStyle());
 
         $this->pdf_mc_table->AddPage();
 
@@ -81,12 +78,12 @@ class Basic extends Pdf
                         $rendered_block = BlockRenditionImplementation::launch(
                             $this, $block, $this->get_format(), PdfBlockRendition::VIEW_BASIC
                         );
-                        $data[] = array(
+                        $data[] = [
                             Translation::get(
                                 ClassnameUtilities::getInstance()->getClassnameFromObject($block), null,
                                 ClassnameUtilities::getInstance()->getNamespaceFromObject($block)
                             )
-                        );
+                        ];
                         $data[] = [];
                         $data = array_merge($data, $rendered_block);
                         $data[] = [];
@@ -108,12 +105,12 @@ class Basic extends Pdf
                     $rendered_block = BlockRenditionImplementation::launch(
                         $this, $block, $this->get_format(), PdfBlockRendition::VIEW_BASIC
                     );
-                    $data[] = array(
+                    $data[] = [
                         Translation::get(
                             ClassnameUtilities::getInstance()->getClassnameFromObject($block), null,
                             ClassnameUtilities::getInstance()->getClassnameFromObject($block)
                         )
-                    );
+                    ];
                     $data[] = [];
                     $data = array_merge($data, $rendered_block);
                     $data[] = [];
@@ -139,8 +136,7 @@ class Basic extends Pdf
             );
         }
 
-        $file = Path::getInstance()->getArchivePath() .
-            Filesystem::create_unique_name(Path::getInstance()->getArchivePath(), $file_name);
+        $file = $this->getArchivePath() . Filesystem::create_unique_name($this->getArchivePath(), $file_name);
 
         $handle = fopen($file, 'a+');
         if (!fwrite($handle, $this->pdf_mc_table->Output('', 'S')))
@@ -156,7 +152,6 @@ class Basic extends Pdf
     }
 
     /**
-     *
      * @return \PDF_MC_Table
      */
     public function get_pdf_mc_table()

@@ -26,26 +26,6 @@ class FileLogger
     }
 
     /**
-     * @param string[] $trace
-     */
-    public function call_trace($trace)
-    {
-        $logfile = Path::getInstance()->getLogPath() . '/call_errors.log';
-        $logger = new self($logfile, true);
-
-        $i = 0;
-
-        while (!isset($trace[$i]['line']))
-        {
-            $i ++;
-        }
-
-        $message = '[' . $trace[0]['class'] . '] [' . $trace[$i]['line'] . '] ==> ' . $trace[$i]['file'];
-
-        $logger->log_message($message);
-    }
-
-    /**
      * Closes the file handle
      */
     public function close_file()
