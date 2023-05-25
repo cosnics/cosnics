@@ -2,6 +2,10 @@
 namespace Chamilo\Core\Repository\Common\Rendition;
 
 use Chamilo\Core\Repository\Storage\DataClass\ContentObject;
+use Chamilo\Libraries\DependencyInjection\DependencyInjectionContainerBuilder;
+use Chamilo\Libraries\File\ConfigurablePathBuilder;
+use Chamilo\Libraries\File\SystemPathBuilder;
+use Chamilo\Libraries\File\WebPathBuilder;
 
 /**
  * @package repository.lib
@@ -15,6 +19,16 @@ abstract class AbstractContentObjectRenditionImplementation
     public function __construct(ContentObject $content_object)
     {
         $this->content_object = $content_object;
+    }
+
+    public function getWebPathBuilder(): WebPathBuilder
+    {
+        return DependencyInjectionContainerBuilder::getInstance()->createContainer()->get(WebPathBuilder::class);
+    }
+
+    public function getConfigurablePathBuilder(): ConfigurablePathBuilder
+    {
+        return DependencyInjectionContainerBuilder::getInstance()->createContainer()->get(ConfigurablePathBuilder::class);
     }
 
     /**

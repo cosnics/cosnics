@@ -4,7 +4,6 @@ namespace Chamilo\Core\Repository\ContentObject\ForumTopic\Common\Export\Html;
 use Chamilo\Core\Repository\ContentObject\ForumTopic\Common\Export\HtmlExportImplementation;
 use Chamilo\Core\Repository\ContentObject\ForumTopic\Storage\DataManager;
 use Chamilo\Core\Repository\Storage\DataClass\ContentObject;
-use Chamilo\Libraries\File\Path;
 use Chamilo\Libraries\Translation\Translation;
 use Chamilo\Libraries\Utilities\DatetimeUtilities;
 use DOMDocument;
@@ -13,7 +12,7 @@ use HTML_Table;
 
 /**
  * Class responsible for the creation of the HTML Export File of a Forum Topic.
- * 
+ *
  * @author Maarten Volckaert - Hogeschool Gent
  */
 class HtmlDefaultExportImplementation extends HtmlExportImplementation
@@ -24,31 +23,31 @@ class HtmlDefaultExportImplementation extends HtmlExportImplementation
      * Variables *
      * **************************************************************************************************************
      */
-    
+
     /**
      * Contains the Content object that needs to be rendered in a HTML file.
-     * 
+     *
      * @var ContentObject
      */
     private $content_object;
 
     /**
      * An Array filled with all the Forum posts.
-     * 
+     *
      * @var Array
      */
     private $data;
 
     /**
      * The path to the file that will be made.
-     * 
+     *
      * @var string
      */
     private $file;
 
     /**
      * Variable used for all writes to the file.
-     * 
+     *
      * @var fopen
      */
     private $handle;
@@ -58,7 +57,7 @@ class HtmlDefaultExportImplementation extends HtmlExportImplementation
      * Main functionality *
      * **************************************************************************************************************
      */
-    
+
     /**
      * Render the export in HTML Format of Forum Topic.
      */
@@ -66,11 +65,11 @@ class HtmlDefaultExportImplementation extends HtmlExportImplementation
     {
         $this->content_object = $this->get_content_object();
         $this->data = DataManager::retrieve_forum_posts($this->content_object->get_id());
-        
+
         // Set filename
-        $this->file = Path::getInstance()->getTemporaryPath() . $this->content_object->get_owner_id() .
-             '/export_content_objects/content_object.html';
-        
+        $this->file = $this->getConfigurablePathBuilder()->getTemporaryPath() . $this->content_object->get_owner_id() .
+            '/export_content_objects/content_object.html';
+
         // Open file and start writing the HTML
         $this->handle = fopen($this->file, 'w');
         fwrite($this->handle, '<html><body>');
@@ -82,86 +81,10 @@ class HtmlDefaultExportImplementation extends HtmlExportImplementation
     }
 
     /**
-     * Build a the table of topic post and render the HTML.
-     * 
-     * @param Array $data
-     *
-     * @return \HTML_Table
-     *
-     */
-    public function get_table($data)
-    {
-        $row = 0;
-        $table = new HTML_Table(array('class' => 'forum', 'cellspacing' => 2));
-        $post_counter = 0;
-        
-        foreach ($data as $post)
-        {
-            $class = ($post_counter % 2 == 0 ? 'row1' : 'row2');
-            $table->setCellContents(
-                $row, 
-                0, 
-                '<div style="float:right;"><b>' . Translation::get('Subject') . ':</b> ' . $post->get_title() . '</div>');
-            $table->setCellAttributes(
-                $row, 
-                0, 
-                array('class' => $class, 'height' => 25, 'style' => 'padding-left: 10px;'));
-            
-            $row ++;
-            
-            $info = DatetimeUtilities::getInstance()->formatLocaleDate(null, $post->get_creation_date());
-            
-            $message = $this->format_message($post->get_content());
-            $message .= '</ul></div>';
-            
-            $table->setCellContents($row, 0, $message);
-            $table->setCellAttributes(
-                $row, 
-                0, 
-                array('class' => $class, 'valign' => 'top', 'style' => 'padding: 10px; padding-top: 10px;'));
-            
-            $row ++;
-            
-            $bottom_bar = '<div style="float: right;"><a name="post_' . $post->get_id() . '"></a>' .
-                 Translation::get('Created by') . '<b> ' . $post->get_user()->get_fullname() . '</b> ' .
-                 Translation::get('On') . ' <b> ' . $info . '</b></div>';
-            $table->setCellContents($row, 0, $bottom_bar);
-            $table->setCellAttributes($row, 0, array('class' => $class, 'style' => 'padding: 10px;', 'width' => 500));
-            
-            $row ++;
-            
-            $table->setCellContents($row, 0, ' ');
-            $table->setCellAttributes($row, 0, array('colspan' => '1', 'class' => 'spacer'));
-            
-            $row ++;
-        }
-        
-        $html = $this->convert_images($table->toHtml());
-        return $html;
-    }
-
-    /**
-     * Function used for formating the content.
-     * 
-     * @param string $message
-     *
-     * @return string
-     *
-     */
-    private function format_message($message)
-    {
-        $message = preg_replace(
-            '/\[quote=("|&quot;)(.*)("|&quot;)\]/', 
-            "<div class=\"quotetitle\">$2 " . Translation::get('Wrote') . ":</div><div class=\"quotecontent\">", 
-            $message);
-        $message = str_replace('[/quote]', '</div>', $message);
-        return $message;
-    }
-
-    /**
      * Convert all image files in the table to encoded base64 string format.
-     * 
+     *
      * @param HTML Table $body
+     *
      * @return HTML Table
      */
     private function convert_images($body)
@@ -169,9 +92,9 @@ class HtmlDefaultExportImplementation extends HtmlExportImplementation
         $doc = new DOMDocument();
         $doc->loadHTML($body);
         $xpath = new DOMXPath($doc);
-        
+
         $elements = $xpath->query('//resource');
-        
+
         // replace image document resource tags with a html img tag with base64 data
         // remove all other resource tags
         foreach ($elements as $i => $element)
@@ -181,36 +104,40 @@ class HtmlDefaultExportImplementation extends HtmlExportImplementation
             if ($type == 'document')
             {
                 $obj = \Chamilo\Core\Repository\Storage\DataManager::retrieve_by_id(ContentObject::class, $id);
-                
+
                 if ($obj->is_image())
                 {
                     $img_src = $obj->get_full_path();
-                    $imgbinary = fread(fopen($img_src, "r"), filesize($img_src));
+                    $imgbinary = fread(fopen($img_src, 'r'), filesize($img_src));
                     $img_str = base64_encode($imgbinary);
-                    
+
                     fclose($img_src);
-                    
+
                     $elem = $doc->createElement('img');
-                    $elem->setAttribute('src', "data:image/jpg;base64," . $img_str);
+                    $elem->setAttribute('src', 'data:image/jpg;base64,' . $img_str);
                     $elem->setAttribute('alt', $obj->get_filename());
                     $element->parentNode->replaceChild($elem, $element);
                 }
                 else
+                {
                     $element->parentNode->removeChild($element);
+                }
             }
             else
+            {
                 $element->parentNode->removeChild($element);
+            }
         }
-        
+
         $body = $doc->saveHTML();
+
         return $body;
     }
 
     /**
      * Function used for the inline css build up.
-     * 
-     * @return string
      *
+     * @return string
      */
     private function define_css()
     {
@@ -323,5 +250,81 @@ class HtmlDefaultExportImplementation extends HtmlExportImplementation
         }
         </style>
         ';
+    }
+
+    /**
+     * Function used for formating the content.
+     *
+     * @param string $message
+     *
+     * @return string
+     */
+    private function format_message($message)
+    {
+        $message = preg_replace(
+            '/\[quote=("|&quot;)(.*)("|&quot;)\]/',
+            "<div class=\"quotetitle\">$2 " . Translation::get('Wrote') . ":</div><div class=\"quotecontent\">",
+            $message
+        );
+        $message = str_replace('[/quote]', '</div>', $message);
+
+        return $message;
+    }
+
+    /**
+     * Build a the table of topic post and render the HTML.
+     *
+     * @param Array $data
+     *
+     * @return \HTML_Table
+     */
+    public function get_table($data)
+    {
+        $row = 0;
+        $table = new HTML_Table(['class' => 'forum', 'cellspacing' => 2]);
+        $post_counter = 0;
+
+        foreach ($data as $post)
+        {
+            $class = ($post_counter % 2 == 0 ? 'row1' : 'row2');
+            $table->setCellContents(
+                $row, 0,
+                '<div style="float:right;"><b>' . Translation::get('Subject') . ':</b> ' . $post->get_title() . '</div>'
+            );
+            $table->setCellAttributes(
+                $row, 0, ['class' => $class, 'height' => 25, 'style' => 'padding-left: 10px;']
+            );
+
+            $row ++;
+
+            $info = DatetimeUtilities::getInstance()->formatLocaleDate(null, $post->get_creation_date());
+
+            $message = $this->format_message($post->get_content());
+            $message .= '</ul></div>';
+
+            $table->setCellContents($row, 0, $message);
+            $table->setCellAttributes(
+                $row, 0, ['class' => $class, 'valign' => 'top', 'style' => 'padding: 10px; padding-top: 10px;']
+            );
+
+            $row ++;
+
+            $bottom_bar = '<div style="float: right;"><a name="post_' . $post->get_id() . '"></a>' .
+                Translation::get('Created by') . '<b> ' . $post->get_user()->get_fullname() . '</b> ' .
+                Translation::get('On') . ' <b> ' . $info . '</b></div>';
+            $table->setCellContents($row, 0, $bottom_bar);
+            $table->setCellAttributes($row, 0, ['class' => $class, 'style' => 'padding: 10px;', 'width' => 500]);
+
+            $row ++;
+
+            $table->setCellContents($row, 0, ' ');
+            $table->setCellAttributes($row, 0, ['colspan' => '1', 'class' => 'spacer']);
+
+            $row ++;
+        }
+
+        $html = $this->convert_images($table->toHtml());
+
+        return $html;
     }
 }

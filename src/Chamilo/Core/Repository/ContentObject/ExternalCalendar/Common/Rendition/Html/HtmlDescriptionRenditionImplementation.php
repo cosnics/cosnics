@@ -6,7 +6,6 @@ use Chamilo\Core\Repository\ContentObject\ExternalCalendar\Common\Rendition\Html
 use Chamilo\Core\Repository\ContentObject\ExternalCalendar\Storage\DataClass\ExternalCalendar;
 use Chamilo\Core\Repository\Manager;
 use Chamilo\Libraries\File\Filesystem;
-use Chamilo\Libraries\File\Path;
 use Chamilo\Libraries\Platform\Session\Request;
 use Chamilo\Libraries\Translation\Translation;
 use Chamilo\Libraries\Utilities\DatetimeUtilities;
@@ -35,13 +34,14 @@ class HtmlDescriptionRenditionImplementation extends HtmlRenditionImplementation
             $html[] = Translation::get('From', null, StringUtilities::LIBRARIES);
             $html[] = ' ';
             $html[] = DatetimeUtilities::getInstance()->formatLocaleDate(
-                $date_format,
-                $event->DTSTART->getDateTime()->getTimeStamp()
+                $date_format, $event->DTSTART->getDateTime()->getTimeStamp()
             );
             $html[] = ' ';
             $html[] = Translation::get('Until', null, StringUtilities::LIBRARIES);
             $html[] = ' ';
-            $html[] = DatetimeUtilities::getInstance()->formatLocaleDate($date_format, $event->DTEND->getDateTime()->getTimeStamp());
+            $html[] = DatetimeUtilities::getInstance()->formatLocaleDate(
+                $date_format, $event->DTEND->getDateTime()->getTimeStamp()
+            );
             $html[] = '</div>';
 
             if ($event->RRULE)
@@ -65,14 +65,12 @@ class HtmlDescriptionRenditionImplementation extends HtmlRenditionImplementation
             else
             {
                 $name = $object->get_filename();
-                $url = Path::getInstance()->getBasePath(true) .
-                    Manager::get_document_downloader_url(
-                        $object->get_id(),
-                        $object->calculate_security_code()
+                $url = $this->getWebPathBuilder()->getBasePath() . Manager::get_document_downloader_url(
+                        $object->get_id(), $object->calculate_security_code()
                     );
 
-                $html[] = '<div><a href="' . htmlentities($url) . '">' . htmlentities($name) .
-                    '</a> (' . Filesystem::format_file_size($object->get_filesize()) . ')</div>';
+                $html[] = '<div><a href="' . htmlentities($url) . '">' . htmlentities($name) . '</a> (' .
+                    Filesystem::format_file_size($object->get_filesize()) . ')</div>';
             }
 
             try

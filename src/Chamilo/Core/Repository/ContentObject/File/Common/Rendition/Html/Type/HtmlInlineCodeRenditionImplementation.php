@@ -24,7 +24,7 @@ class HtmlInlineCodeRenditionImplementation extends HtmlInlineRenditionImplement
          */
         $file = $this->get_content_object();
         $html[] = '<pre><code>';
-        $html[] = file_get_contents(Path::getInstance()->getRepositoryPath() . $file->get_path());
+        $html[] = file_get_contents($this->getConfigurablePathBuilder()->getRepositoryPath() . $file->get_path());
         $html[] = '</code></pre>';
         $html[] = $this->renderActions(['btn-info']);
 

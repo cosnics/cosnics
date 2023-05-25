@@ -3,50 +3,45 @@ namespace Chamilo\Core\Repository\ContentObject\File\Common\Rendition\Html\Exten
 
 use Chamilo\Core\Repository\ContentObject\File\Common\Rendition\Html\HtmlInlineRenditionImplementation;
 use Chamilo\Core\Repository\Manager;
-use Chamilo\Libraries\File\Path;
 use Chamilo\Libraries\Translation\Translation;
 use Chamilo\Libraries\Utilities\StringUtilities;
 
 /**
- *
  * @package Chamilo\Core\Repository\ContentObject\File\Common\Rendition\Html\Extension
- * @author Hans De Bisschop <hans.de.bisschop@ehb.be>
- * @author Magali Gillard <magali.gillard@ehb.be>
+ * @author  Hans De Bisschop <hans.de.bisschop@ehb.be>
+ * @author  Magali Gillard <magali.gillard@ehb.be>
  */
 class HtmlInlinePdfRenditionImplementation extends HtmlInlineRenditionImplementation
 {
 
     /**
-     *
      * @see \Chamilo\Core\Repository\ContentObject\File\Common\Rendition\Html\HtmlInlineRenditionImplementation::render()
      */
     public function render($parameters)
     {
         $object = $this->get_content_object();
         $url = Manager::get_document_downloader_url(
-            $object->get_id(), 
-            $object->calculate_security_code()) . '&display=1&saveName=' . urlencode($object->get_filename());
-        
-        $viewerPath = Path::getInstance()->getPluginPath(StringUtilities::LIBRARIES, true) .
-             'PDFJS/web/viewer.html';
-        
+                $object->get_id(), $object->calculate_security_code()
+            ) . '&display=1&saveName=' . urlencode($object->get_filename());
+
+        $viewerPath = $this->getWebPathBuilder()->getPluginPath(StringUtilities::LIBRARIES) . 'PDFJS/web/viewer.html';
+
         $url = $viewerPath . '?file=' . urlencode($url);
-        
+
         $html = [];
 
         $html[] = '<div class="pull-right">';
         $html[] = '<a href="' . $url . '" target="_blank">';
         $html[] = '<input type="button" class="btn btn-default" value="' . Translation::getInstance()->getTranslation(
-            'OpenInFullScreen', 
-            null, 
-            'Chamilo\Core\Repository\ContentObject\File') . '" />';
+                'OpenInFullScreen', null, 'Chamilo\Core\Repository\ContentObject\File'
+            ) . '" />';
         $html[] = '</div>';
         $html[] = '</a>';
         $html[] = '<div class="clearfix"></div>';
-        
+
         $html[] = '<div style="margin-top: 20px; border: 1px solid grey;"><iframe border="0" style="border: 0;"
                 width="100%" height="600"  src="' . $url . '"></iframe></div>';
-        
+
         return implode(PHP_EOL, $html);
     }
 }

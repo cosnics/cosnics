@@ -3,7 +3,6 @@ namespace Chamilo\Core\Repository\ContentObject\AssessmentRatingQuestion\Common\
 
 use Chamilo\Core\Repository\Common\Rendition\ContentObjectRendition;
 use Chamilo\Core\Repository\ContentObject\AssessmentRatingQuestion\Common\Rendition\HtmlRenditionImplementation;
-use Chamilo\Libraries\File\Path;
 use Chamilo\Libraries\Format\Utilities\ResourceManager;
 
 class HtmlDescriptionRenditionImplementation extends HtmlRenditionImplementation
@@ -19,7 +18,7 @@ class HtmlDescriptionRenditionImplementation extends HtmlRenditionImplementation
         $question = $this->get_content_object();
         $min = $question->get_low();
         $max = $question->get_high();
-        
+
         $html = [];
         $html[] = '<div class="question">';
         $html[] = '<div class="answer">';
@@ -35,10 +34,11 @@ class HtmlDescriptionRenditionImplementation extends HtmlRenditionImplementation
         $html[] = '</div>';
         $html[] = '</div>';
         $html[] = ResourceManager::getInstance()->getResourceHtml(
-            Path::getInstance()->getJavascriptPath(
-                'Chamilo\Core\Repository\ContentObject\AssessmentRatingQuestion', 
-                true) . 'AssessmentRatingQuestion.js');
-        
+            $this->getWebPathBuilder()->getJavascriptPath(
+                'Chamilo\Core\Repository\ContentObject\AssessmentRatingQuestion'
+            ) . 'AssessmentRatingQuestion.js'
+        );
+
         return implode(PHP_EOL, $html);
     }
 }

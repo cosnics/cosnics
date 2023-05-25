@@ -42,7 +42,7 @@ class HtmlDescriptionRenditionImplementation extends HtmlRenditionImplementation
         
         $html[] = '<script src="https://maps.google.com/maps/api/js?sensor=false"></script>';
         $html[] = ResourceManager::getInstance()->getResourceHtml(
-            Path::getInstance()->getJavascriptPath('Chamilo\Core\Repository\ContentObject\PhysicalLocation', true) .
+            $this->getWebPathBuilder()->getJavascriptPath('Chamilo\Core\Repository\ContentObject\PhysicalLocation') .
                  'Plugin/GoogleMaps.js');
         $html[] = '<div id="map_canvas" style="width:100%; border: 1px solid black; height:500px"></div>';
         $html[] = '<script>';

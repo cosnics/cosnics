@@ -7,7 +7,6 @@ use Chamilo\Core\Repository\ContentObject\File\Common\Rendition\HtmlRenditionImp
 use Chamilo\Core\Repository\Manager;
 use Chamilo\Libraries\Architecture\Application\Application;
 use Chamilo\Libraries\File\ImageManipulation\ImageManipulation;
-use Chamilo\Libraries\File\Path;
 use Chamilo\Libraries\File\Redirect;
 
 /**
@@ -30,10 +29,9 @@ class HtmlThumbnailRenditionImplementation extends HtmlRenditionImplementation
             $width = 200;
             $height = 200;
 
-            $thumbnail_path = Path::getInstance()->getTemporaryPath() . md5($object->get_full_path()) .
+            $thumbnail_path = $this->getConfigurablePathBuilder()->getTemporaryPath() . md5($object->get_full_path()) .
                 basename($object->get_full_path());
-            $thumbnal_web_path = Path::getInstance()->getTemporaryPath(null, true) . md5($object->get_full_path()) .
-                basename($object->get_full_path());
+
             if (!is_file($thumbnail_path))
             {
                 $thumbnail_creator = ImageManipulation::factory($object->get_full_path());

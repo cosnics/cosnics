@@ -19,7 +19,7 @@ class HtmlRenditionImplementation extends RenditionImplementation
         $html = [];
         
         $html[] = ResourceManager::getInstance()->getResourceHtml(
-            Path::getInstance()->namespaceToFullPath('Chamilo\Core\Repository\ContentObject\RssFeed', true) .
+            $this->getWebPathBuilder()->namespaceToFullPath('Chamilo\Core\Repository\ContentObject\RssFeed') .
                  'Resources/Javascript/RssFeedRenderer/rssFeedRenderer.js');
         
         $html[] = '<ul class="list-group" ng-app="rssFeedRendererApp">';
