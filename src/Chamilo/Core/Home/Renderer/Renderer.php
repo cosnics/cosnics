@@ -2,7 +2,8 @@
 namespace Chamilo\Core\Home\Renderer;
 
 use Chamilo\Libraries\Architecture\Application\Application;
-use Chamilo\Libraries\File\Redirect;
+use Chamilo\Libraries\Architecture\Application\Routing\UrlGenerator;
+use Chamilo\Libraries\DependencyInjection\DependencyInjectionContainerBuilder;
 
 /**
  * @package Chamilo\Core\Home\Renderer
@@ -45,6 +46,11 @@ abstract class Renderer
         return $this->application;
     }
 
+    public function getUrlGenerator(): UrlGenerator
+    {
+        return DependencyInjectionContainerBuilder::getInstance()->createContainer()->get(UrlGenerator::class);
+    }
+
     /**
      * Gets a link to the personal calendar application
      *
@@ -53,9 +59,7 @@ abstract class Renderer
      */
     public function get_link($parameters = [], $filter = [], $encode_entities = false)
     {
-        $redirect = new Redirect($parameters, $filter, $encode_entities);
-
-        return $redirect->getUrl();
+        return $this->getUrlGenerator()->fromParameters($parameters, $filter, $encode_entities);
     }
 
     /**
@@ -83,11 +87,9 @@ abstract class Renderer
         return $this->parameters;
     }
 
-    public function get_url($parameters = [], $filter = [], $encode_entities = false)
+    public function get_url($parameters = [], $filter = [])
     {
-        $redirect = new Redirect($parameters, $filter, $encode_entities);
-
-        return $redirect->getUrl();
+        return $this->getUrlGenerator()->fromParameters($parameters, $filter);
     }
 
     /**

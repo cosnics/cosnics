@@ -5,7 +5,8 @@ use Chamilo\Application\Weblcms\Course\Storage\DataClass\Course;
 use Chamilo\Application\Weblcms\Integration\Chamilo\Libraries\Calendar\Event\EventParser;
 use Chamilo\Application\Weblcms\Service\PublicationService;
 use Chamilo\Core\User\Storage\DataClass\User;
-use Chamilo\Libraries\File\Redirect;
+use Chamilo\Libraries\Architecture\Application\Routing\UrlGenerator;
+use Chamilo\Libraries\DependencyInjection\DependencyInjectionContainerBuilder;
 
 /**
  * @package Chamilo\Application\Weblcms\Tool\Implementation\Calendar\Service
@@ -87,11 +88,14 @@ class CalendarRendererProvider extends \Chamilo\Libraries\Calendar\Service\Calen
     /**
      * @see \Chamilo\Libraries\Calendar\Architecture\Interfaces\CalendarRendererProviderInterface::getUrl()
      */
-    public function getUrl($parameters = [], $filterParameters = [], $encodeEntities = false)
+    public function getUrl($parameters = [], $filterParameters = [])
     {
-        $redirect = new Redirect($parameters, $filterParameters, $encodeEntities);
+        return $this->getUrlGenerator()->fromParameters($parameters, $filterParameters);
+    }
 
-        return $redirect->getUrl();
+    public function getUrlGenerator(): UrlGenerator
+    {
+        return DependencyInjectionContainerBuilder::getInstance()->createContainer()->get(UrlGenerator::class);
     }
 
     /**

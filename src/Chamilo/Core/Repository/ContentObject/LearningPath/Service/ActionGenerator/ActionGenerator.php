@@ -2,7 +2,8 @@
 namespace Chamilo\Core\Repository\ContentObject\LearningPath\Service\ActionGenerator;
 
 use Chamilo\Core\Repository\ContentObject\LearningPath\Display\Manager;
-use Chamilo\Libraries\File\Redirect;
+use Chamilo\Libraries\Architecture\Application\Routing\UrlGenerator;
+use Chamilo\Libraries\DependencyInjection\DependencyInjectionContainerBuilder;
 use Chamilo\Libraries\Translation\Translation;
 
 /**
@@ -13,14 +14,14 @@ use Chamilo\Libraries\Translation\Translation;
 abstract class ActionGenerator
 {
     /**
-     * @var Translation
-     */
-    protected $translator;
-
-    /**
      * @var array
      */
     protected $baseParameters;
+
+    /**
+     * @var Translation
+     */
+    protected $translator;
 
     /**
      * @var string[]
@@ -52,9 +53,7 @@ abstract class ActionGenerator
     {
         $parameters = (count($parameters) ? array_merge($this->baseParameters, $parameters) : $this->baseParameters);
 
-        $redirect = new Redirect($parameters, $filter, $encode_entities);
-
-        return $redirect->getUrl();
+        return $this->getUrlGenerator()->fromParameters($parameters, $filter);
     }
 
     /**
@@ -70,12 +69,17 @@ abstract class ActionGenerator
         $nodePlaceholder = '__NODE__';
 
         $cacheKey = md5(serialize($parameters));
-        if(!array_key_exists($cacheKey, $this->urlCache))
+        if (!array_key_exists($cacheKey, $this->urlCache))
         {
             $parameters[Manager::PARAM_CHILD_ID] = $nodePlaceholder;
             $this->urlCache[$cacheKey] = $this->getUrl($parameters);
         }
 
         return str_replace($nodePlaceholder, $treeNodeId, $this->urlCache[$cacheKey]);
+    }
+
+    public function getUrlGenerator(): UrlGenerator
+    {
+        return DependencyInjectionContainerBuilder::getInstance()->createContainer()->get(UrlGenerator::class);
     }
 }

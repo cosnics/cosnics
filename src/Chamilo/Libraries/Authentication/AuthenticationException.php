@@ -2,18 +2,16 @@
 namespace Chamilo\Libraries\Authentication;
 
 use Chamilo\Libraries\Architecture\Exceptions\NotAllowedException;
-use Chamilo\Libraries\File\Redirect;
 use Chamilo\Libraries\Platform\Session\Session;
 use Chamilo\Libraries\Translation\Translation;
 use Chamilo\Libraries\Utilities\StringUtilities;
 use Exception;
 
 /**
- *
  * @package Chamilo\Libraries\Authentication
- * @author Hans De Bisschop <hans.de.bisschop@ehb.be>
- * @author Magali Gillard <magali.gillard@ehb.be>
- * @author Eduard Vossen <eduard.vossen@ehb.be>
+ * @author  Hans De Bisschop <hans.de.bisschop@ehb.be>
+ * @author  Magali Gillard <magali.gillard@ehb.be>
+ * @author  Eduard Vossen <eduard.vossen@ehb.be>
  */
 class AuthenticationException extends NotAllowedException
 {
@@ -26,9 +24,8 @@ class AuthenticationException extends NotAllowedException
     protected $errorMessage;
 
     /**
-     *
      * @param string $message
-     * @param integer $code
+     * @param int $code
      * @param string $previous
      */
     public function __construct($message = null, $code = null, $previous = null)
@@ -37,8 +34,7 @@ class AuthenticationException extends NotAllowedException
 
         $this->errorMessage = $message;
 
-        $redirect = new Redirect();
-        $currentUrl = $redirect->getCurrentUrl();
+        $currentUrl = $this->getRequest()->getUri();
 
         $html = [];
         $html[] = $message;

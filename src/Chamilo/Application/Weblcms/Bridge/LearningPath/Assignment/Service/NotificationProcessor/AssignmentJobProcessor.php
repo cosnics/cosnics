@@ -2,12 +2,11 @@
 namespace Chamilo\Application\Weblcms\Bridge\LearningPath\Assignment\Service\NotificationProcessor;
 
 use Chamilo\Application\Weblcms\Bridge\LearningPath\Assignment\Service\AssignmentService;
-use Chamilo\Application\Weblcms\Course\Storage\DataClass\Course;
 use Chamilo\Application\Weblcms\Bridge\LearningPath\Assignment\Storage\DataClass\Entry;
+use Chamilo\Application\Weblcms\Course\Storage\DataClass\Course;
 use Chamilo\Application\Weblcms\Service\CourseService;
 use Chamilo\Application\Weblcms\Service\PublicationService;
 use Chamilo\Application\Weblcms\Storage\DataClass\ContentObjectPublication;
-use Chamilo\Core\Notification\Domain\NotificationRedirect;
 use Chamilo\Core\Notification\Domain\TranslationContext;
 use Chamilo\Core\Notification\Domain\ViewingContext;
 use Chamilo\Core\Notification\Service\FilterManager;
@@ -23,12 +22,12 @@ use Chamilo\Core\Repository\ContentObject\LearningPath\Storage\DataClass\TreeNod
 use Chamilo\Core\Repository\Workspace\Repository\ContentObjectRepository;
 use Chamilo\Core\User\Service\UserService;
 use Chamilo\Libraries\Architecture\Application\Application;
+use Chamilo\Libraries\Architecture\Application\Routing\UrlGenerator;
 use DateTime;
 
 /**
  * @package Chamilo\Application\Weblcms\Tool\Implementation\Assignment\Service
- *
- * @author Sven Vanpoucke - Hogeschool Gent
+ * @author  Sven Vanpoucke - Hogeschool Gent
  */
 abstract class AssignmentJobProcessor implements JobProcessorInterface
 {
@@ -38,29 +37,14 @@ abstract class AssignmentJobProcessor implements JobProcessorInterface
     protected $assignmentService;
 
     /**
-     * @var \Chamilo\Core\Repository\ContentObject\LearningPath\Service\TreeNodeDataService
+     * @var \Chamilo\Core\Repository\Workspace\Repository\ContentObjectRepository
      */
-    protected $treeNodeDataService;
-
-    /**
-     * @var \Chamilo\Application\Weblcms\Service\PublicationService
-     */
-    protected $publicationService;
+    protected $contentObjectRepository;
 
     /**
      * @var \Chamilo\Application\Weblcms\Service\CourseService
      */
     protected $courseService;
-
-    /**
-     * @var \Chamilo\Core\User\Service\UserService
-     */
-    protected $userService;
-
-    /**
-     * @var \Chamilo\Core\Repository\Workspace\Repository\ContentObjectRepository
-     */
-    protected $contentObjectRepository;
 
     /**
      * @var FilterManager
@@ -71,6 +55,23 @@ abstract class AssignmentJobProcessor implements JobProcessorInterface
      * @var NotificationManager
      */
     protected $notificationManager;
+
+    /**
+     * @var \Chamilo\Application\Weblcms\Service\PublicationService
+     */
+    protected $publicationService;
+
+    /**
+     * @var \Chamilo\Core\Repository\ContentObject\LearningPath\Service\TreeNodeDataService
+     */
+    protected $treeNodeDataService;
+
+    protected UrlGenerator $urlGenerator;
+
+    /**
+     * @var \Chamilo\Core\User\Service\UserService
+     */
+    protected $userService;
 
     /**
      * EntryNotificationProcessor constructor.
@@ -86,9 +87,9 @@ abstract class AssignmentJobProcessor implements JobProcessorInterface
      */
     public function __construct(
         AssignmentService $assignmentService, TreeNodeDataService $treeNodeDataService,
-        PublicationService $publicationService, CourseService $courseService,
-        UserService $userService, ContentObjectRepository $contentObjectRepository,
-        FilterManager $filterManager, NotificationManager $notificationManager
+        PublicationService $publicationService, CourseService $courseService, UserService $userService,
+        ContentObjectRepository $contentObjectRepository, FilterManager $filterManager,
+        NotificationManager $notificationManager, UrlGenerator $urlGenerator
     )
     {
         $this->assignmentService = $assignmentService;
@@ -99,7 +100,265 @@ abstract class AssignmentJobProcessor implements JobProcessorInterface
         $this->contentObjectRepository = $contentObjectRepository;
         $this->filterManager = $filterManager;
         $this->notificationManager = $notificationManager;
+        $this->urlGenerator = $urlGenerator;
     }
+
+    /**
+     * @param \Chamilo\Application\Weblcms\Bridge\LearningPath\Assignment\Storage\DataClass\Entry $entry
+     * @param array $targetUserIds
+     *
+     * @return array
+     */
+    protected function filterTargetUsers(Entry $entry, $targetUserIds = [])
+    {
+        foreach ($targetUserIds as $key => $targetUserId)
+        {
+            if ($targetUserId == $this->getUserId($entry))
+            {
+                unset($targetUserIds[$key]);
+            }
+        }
+
+        return $targetUserIds;
+    }
+
+    /**
+     * @param \Chamilo\Application\Weblcms\Bridge\LearningPath\Assignment\Storage\DataClass\Entry $entry
+     *
+     * @return int
+     */
+    abstract protected function getCreationDate(Entry $entry);
+
+    /**
+     * @param ContentObjectPublication $publication
+     * @param Course $course
+     * @param Assignment $assignment
+     * @param \Chamilo\Core\Repository\ContentObject\LearningPath\Storage\DataClass\LearningPath $learningPath
+     * @param \Chamilo\Core\Repository\ContentObject\LearningPath\Storage\DataClass\TreeNodeData $treeNodeData
+     *
+     * @return Filter[]
+     * @throws \Doctrine\ORM\ORMException
+     * @throws \Doctrine\ORM\OptimisticLockException
+     */
+    protected function getFilters(
+        ContentObjectPublication $publication, Course $course, Assignment $assignment, LearningPath $learningPath,
+        TreeNodeData $treeNodeData
+    )
+    {
+        $filters = [
+            $this->filterManager->getOrCreateFilterByContextPath(
+                'Chamilo\\Application\\Weblcms::Course:' . $course->getId(), new TranslationContext(
+                    'Chamilo\Application\Weblcms', 'NotificationFilterCourse',
+                    ['{COURSE_TITLE}' => $course->get_title()]
+                )
+            ),
+            $this->filterManager->getOrCreateFilterByContextPath(
+                'Chamilo\\Application\\Weblcms::Tool:' . $publication->get_tool() . '::Course:' .
+                $publication->get_course_id(), new TranslationContext(
+                    'Chamilo\Application\Weblcms', 'NotificationFilterTool', [
+                        '{COURSE_TITLE}' => $course->get_title(),
+                        '{TOOL}' => new TranslationContext(
+                            'Chamilo\Application\Weblcms\Tool\Implementation\\' . $publication->get_tool(), 'TypeName'
+                        )
+                    ]
+                )
+            ),
+            $this->filterManager->getOrCreateFilterByContextPath(
+                'Chamilo\\Application\\Weblcms::ContentObjectPublication:' . $publication->getId(),
+                new TranslationContext(
+                    'Chamilo\Application\Weblcms\Tool\Implementation\LearningPath', 'NotificationFilterPublication', [
+                        '{COURSE_TITLE}' => $course->get_title(),
+                        '{LEARNING_PATH_TITLE}' => $learningPath->get_title()
+                    ]
+
+                )
+            ),
+            $this->filterManager->getOrCreateFilterByContextPath(
+                'Chamilo\\Application\\Weblcms\\Tool\\Implementation\\LearningPath:' . $publication->getId() .
+                '::TreeNodeData:' . $treeNodeData->getId(), new TranslationContext(
+                    'Chamilo\Application\Weblcms\Bridge\LearningPath\Assignment',
+                    'NotificationFilterLearningPathAssignment', [
+                        '{COURSE_TITLE}' => $course->get_title(),
+                        '{LEARNING_PATH_TITLE}' => $learningPath->get_title(),
+                        '{ASSIGNMENT_TITLE}' => $assignment->get_title()
+                    ]
+
+                )
+            )
+        ];
+
+        return $filters;
+    }
+
+    /**
+     * @param \Chamilo\Application\Weblcms\Storage\DataClass\ContentObjectPublication $publication
+     * @param \Chamilo\Application\Weblcms\Course\Storage\DataClass\Course $course
+     * @param \Chamilo\Core\Repository\ContentObject\LearningPath\Storage\DataClass\TreeNodeData $treeNodeData
+     *
+     * @return string[]
+     */
+    protected function getNotificationContexts(
+        ContentObjectPublication $publication, Course $course, TreeNodeData $treeNodeData
+    )
+    {
+        return [
+            'Chamilo',
+            'Assignment',
+            'Chamilo\\Application\\Weblcms::Course:' . $course->getId(),
+            'Chamilo\\Application\\Weblcms::Tool:' . $publication->get_tool() . '::Course:' . $course->getId(),
+            'Chamilo\\Application\\Weblcms::ContentObjectPublication:' . $publication->getId(),
+            'Chamilo\\Application\\Weblcms\\Tool\\Implementation\\LearningPath:' . $publication->getId() .
+            '::TreeNodeData:' . $treeNodeData->getId()
+        ];
+    }
+
+    /**
+     * @param Course $course
+     * @param ContentObjectPublication $publication
+     * @param \Chamilo\Core\Repository\ContentObject\LearningPath\Storage\DataClass\TreeNodeData $treeNodeData
+     * @param Entry $entry
+     *
+     * @return string
+     */
+    protected function getNotificationUrl(
+        Course $course, ContentObjectPublication $publication, TreeNodeData $treeNodeData, Entry $entry
+    )
+    {
+        $parameters = [
+            Application::PARAM_CONTEXT => 'Chamilo\Application\Weblcms',
+            Application::PARAM_ACTION => \Chamilo\Application\Weblcms\Manager::ACTION_VIEW_COURSE,
+            \Chamilo\Application\Weblcms\Manager::PARAM_COURSE => $course->getId(),
+            \Chamilo\Application\Weblcms\Manager::PARAM_TOOL => 'LearningPath',
+            \Chamilo\Application\Weblcms\Manager::PARAM_TOOL_ACTION => \Chamilo\Application\Weblcms\Tool\Implementation\LearningPath\Manager::ACTION_DISPLAY_COMPLEX_CONTENT_OBJECT,
+            \Chamilo\Application\Weblcms\Tool\Manager::PARAM_PUBLICATION_ID => $publication->get_id(),
+            \Chamilo\Application\Weblcms\Manager::PARAM_CATEGORY => $publication->get_category_id(),
+            \Chamilo\Core\Repository\ContentObject\LearningPath\Display\Manager::PARAM_CHILD_ID => $treeNodeData->getId(
+            ),
+            Manager::PARAM_ACTION => Manager::ACTION_ENTRY,
+            Manager::PARAM_ENTRY_ID => $entry->getId(),
+            Manager::PARAM_ENTITY_ID => $entry->getEntityId(),
+            Manager::PARAM_ENTITY_TYPE => $entry->getEntityType()
+        ];
+
+        return $this->getUrlGenerator()->fromParameters($parameters);
+    }
+
+    /**
+     * @param \Chamilo\Application\Weblcms\Course\Storage\DataClass\Course $course
+     * @param \Chamilo\Application\Weblcms\Storage\DataClass\ContentObjectPublication $publication
+     * @param \Chamilo\Core\Repository\ContentObject\LearningPath\Storage\DataClass\TreeNodeData $treeNodeData
+     *
+     * @return array
+     */
+    abstract protected function getNotificationViewingContextVariables(
+        Course $course, ContentObjectPublication $publication, TreeNodeData $treeNodeData
+    );
+
+    /**
+     * @param ContentObjectPublication $publication
+     * @param Assignment $assignment
+     * @param \Chamilo\Core\Repository\ContentObject\LearningPath\Storage\DataClass\LearningPath $learningPath
+     * @param \Chamilo\Core\Repository\ContentObject\LearningPath\Storage\DataClass\TreeNodeData $treeNodeData
+     * @param Course $course
+     * @param Entry $entry
+     *
+     * @return ViewingContext[]
+     */
+    protected function getNotificationViewingContexts(
+        ContentObjectPublication $publication, Assignment $assignment, LearningPath $learningPath,
+        TreeNodeData $treeNodeData, Course $course, Entry $entry
+    )
+    {
+        $translations = $this->getNotificationViewingContextVariables($course, $publication, $treeNodeData);
+
+        $viewingContexts = [];
+
+        $key = 'Chamilo';
+        $viewingContexts[] = new ViewingContext(
+            $key, new TranslationContext(
+                'Chamilo\Application\Weblcms\Bridge\LearningPath\Assignment', $translations[$key], [
+                    '{LEARNING_PATH_TITLE}' => $learningPath->get_title(),
+                    '{ASSIGNMENT_TITLE}' => $assignment->get_title(),
+                    '{COURSE_TITLE}' => $course->get_title(),
+                    '{USER}' => $this->userService->getUserFullNameById($this->getUserId($entry))
+                ]
+            )
+        );
+
+        $key = 'Chamilo\\Application\\Weblcms::Course:' . $course->getId();
+        $viewingContexts[] = new ViewingContext(
+            $key, new TranslationContext(
+                'Chamilo\Application\Weblcms\Bridge\LearningPath\Assignment', $translations[$key], [
+                    '{LEARNING_PATH_TITLE}' => $learningPath->get_title(),
+                    '{ASSIGNMENT_TITLE}' => $assignment->get_title(),
+                    '{COURSE_TITLE}' => $course->get_title(),
+                    '{USER}' => $this->userService->getUserFullNameById($this->getUserId($entry))
+                ]
+            )
+        );
+
+        $key = 'Chamilo\\Application\\Weblcms::ContentObjectPublication:' . $publication->getId();
+        $viewingContexts[] = new ViewingContext(
+            $key, new TranslationContext(
+                'Chamilo\Application\Weblcms\Bridge\LearningPath\Assignment', $translations[$key], [
+                    '{LEARNING_PATH_TITLE}' => $learningPath->get_title(),
+                    '{ASSIGNMENT_TITLE}' => $assignment->get_title(),
+                    '{COURSE_TITLE}' => $course->get_title(),
+                    '{USER}' => $this->userService->getUserFullNameById($this->getUserId($entry))
+                ]
+            )
+        );
+
+        $key = 'Chamilo\\Application\\Weblcms\\Tool\\Implementation\\LearningPath:' . $publication->getId() .
+            '::TreeNodeData:' . $treeNodeData->getId();
+        $viewingContexts[] = new ViewingContext(
+            $key, new TranslationContext(
+                'Chamilo\Application\Weblcms\Bridge\LearningPath\Assignment', $translations[$key], [
+                    '{LEARNING_PATH_TITLE}' => $assignment->get_title(),
+                    '{ASSIGNMENT_TITLE}' => $assignment->get_title(),
+                    '{COURSE_TITLE}' => $course->get_title(),
+                    '{USER}' => $this->userService->getUserFullNameById($this->getUserId($entry))
+                ]
+            )
+        );
+
+        return $viewingContexts;
+    }
+
+    /**
+     * @param Course $course
+     * @param Entry $entry
+     *
+     * @return int[]
+     */
+    protected function getTargetUserIds($course, $entry)
+    {
+        $courseTeachers = $this->courseService->getTeachersFromCourse($course);
+
+        $targetUserIds = [];
+        $targetUserIds[] = $entry->getUserId();
+
+        foreach ($courseTeachers as $courseTeacher)
+        {
+            $targetUserIds[] = $courseTeacher->getId();
+        }
+
+        $targetUserIds = $this->filterTargetUsers($entry, $targetUserIds);
+
+        return array_unique($targetUserIds);
+    }
+
+    public function getUrlGenerator(): UrlGenerator
+    {
+        return $this->urlGenerator;
+    }
+
+    /**
+     * @param \Chamilo\Application\Weblcms\Bridge\LearningPath\Assignment\Storage\DataClass\Entry $entry
+     *
+     * @return int
+     */
+    abstract protected function getUserId(Entry $entry);
 
     /**
      * @param int $entryId
@@ -121,12 +380,11 @@ abstract class AssignmentJobProcessor implements JobProcessorInterface
         }
 
         $treeNodeData = $this->treeNodeDataService->getTreeNodeDataById($entry->getTreeNodeDataId());
-        if(!$treeNodeData instanceof TreeNodeData)
+        if (!$treeNodeData instanceof TreeNodeData)
         {
             throw new JobNoLongerValidException(
                 sprintf(
-                    'The given tree node with id %s could not be found',
-                    $entry->getTreeNodeDataId()
+                    'The given tree node with id %s could not be found', $entry->getTreeNodeDataId()
                 )
             );
         }
@@ -147,8 +405,7 @@ abstract class AssignmentJobProcessor implements JobProcessorInterface
 
             throw new JobNoLongerValidException(
                 sprintf(
-                    'The given content object publication with id %s could not be found',
-                    $contentObjectPublicationID
+                    'The given content object publication with id %s could not be found', $contentObjectPublicationID
                 )
             );
         }
@@ -176,7 +433,9 @@ abstract class AssignmentJobProcessor implements JobProcessorInterface
         $targetUserIds = $this->getTargetUserIds($course, $entry);
         $filters = $this->getFilters($publication, $course, $assignment, $learningPath, $treeNodeData);
         $url = $this->getNotificationUrl($course, $publication, $treeNodeData, $entry);
-        $viewingContexts = $this->getNotificationViewingContexts($publication, $assignment, $learningPath, $treeNodeData, $course, $entry);
+        $viewingContexts = $this->getNotificationViewingContexts(
+            $publication, $assignment, $learningPath, $treeNodeData, $course, $entry
+        );
         $notificationContexts = $this->getNotificationContexts($publication, $course, $treeNodeData);
 
         $date = new DateTime();
@@ -185,258 +444,5 @@ abstract class AssignmentJobProcessor implements JobProcessorInterface
         $this->notificationManager->createNotificationForUsers(
             $url, $viewingContexts, $date, $targetUserIds, $filters, $notificationContexts
         );
-    }
-
-    /**
-     * @param Course $course
-     * @param ContentObjectPublication $publication
-     * @param \Chamilo\Core\Repository\ContentObject\LearningPath\Storage\DataClass\TreeNodeData $treeNodeData
-     * @param Entry $entry
-     *
-     * @return string
-     */
-    protected function getNotificationUrl(Course $course, ContentObjectPublication $publication, TreeNodeData $treeNodeData, Entry $entry)
-    {
-        $parameters = [
-            Application::PARAM_CONTEXT => 'Chamilo\Application\Weblcms',
-            Application::PARAM_ACTION => \Chamilo\Application\Weblcms\Manager::ACTION_VIEW_COURSE,
-            \Chamilo\Application\Weblcms\Manager::PARAM_COURSE => $course->getId(),
-            \Chamilo\Application\Weblcms\Manager::PARAM_TOOL => 'LearningPath',
-            \Chamilo\Application\Weblcms\Manager::PARAM_TOOL_ACTION => \Chamilo\Application\Weblcms\Tool\Implementation\LearningPath\Manager::ACTION_DISPLAY_COMPLEX_CONTENT_OBJECT,
-            \Chamilo\Application\Weblcms\Tool\Manager::PARAM_PUBLICATION_ID => $publication->get_id(),
-            \Chamilo\Application\Weblcms\Manager::PARAM_CATEGORY => $publication->get_category_id(),
-            \Chamilo\Core\Repository\ContentObject\LearningPath\Display\Manager::PARAM_CHILD_ID => $treeNodeData->getId(),
-            Manager::PARAM_ACTION => Manager::ACTION_ENTRY,
-            Manager::PARAM_ENTRY_ID => $entry->getId(),
-            Manager::PARAM_ENTITY_ID => $entry->getEntityId(),
-            Manager::PARAM_ENTITY_TYPE => $entry->getEntityType(
-            )
-        ];
-
-        $redirect = new NotificationRedirect($parameters);
-        $url = $redirect->getUrl();
-
-        return $url;
-    }
-
-    /**
-     * @param ContentObjectPublication $publication
-     * @param Course $course
-     * @param Assignment $assignment
-     * @param \Chamilo\Core\Repository\ContentObject\LearningPath\Storage\DataClass\LearningPath $learningPath
-     * @param \Chamilo\Core\Repository\ContentObject\LearningPath\Storage\DataClass\TreeNodeData $treeNodeData
-     *
-     * @return Filter[]
-     *
-     * @throws \Doctrine\ORM\ORMException
-     * @throws \Doctrine\ORM\OptimisticLockException
-     */
-    protected function getFilters(
-        ContentObjectPublication $publication, Course $course, Assignment $assignment,
-        LearningPath $learningPath, TreeNodeData $treeNodeData
-    )
-    {
-        $filters = [
-            $this->filterManager->getOrCreateFilterByContextPath(
-                'Chamilo\\Application\\Weblcms::Course:' . $course->getId(),
-                new TranslationContext(
-                    'Chamilo\Application\Weblcms', 'NotificationFilterCourse',
-                    ['{COURSE_TITLE}' => $course->get_title()]
-                )
-            ),
-            $this->filterManager->getOrCreateFilterByContextPath(
-                'Chamilo\\Application\\Weblcms::Tool:' . $publication->get_tool() . '::Course:' . $publication->get_course_id(),
-                new TranslationContext(
-                    'Chamilo\Application\Weblcms', 'NotificationFilterTool',
-                    [
-                        '{COURSE_TITLE}' => $course->get_title(),
-                        '{TOOL}' => new TranslationContext(
-                            'Chamilo\Application\Weblcms\Tool\Implementation\\' . $publication->get_tool(), 'TypeName'
-                        )
-                    ]
-                )
-            ),
-            $this->filterManager->getOrCreateFilterByContextPath(
-                'Chamilo\\Application\\Weblcms::ContentObjectPublication:' . $publication->getId(),
-                new TranslationContext(
-                    'Chamilo\Application\Weblcms\Tool\Implementation\LearningPath', 'NotificationFilterPublication',
-                    [
-                        '{COURSE_TITLE}' => $course->get_title(), '{LEARNING_PATH_TITLE}' => $learningPath->get_title()
-                    ]
-
-                )
-            ),
-            $this->filterManager->getOrCreateFilterByContextPath(
-                'Chamilo\\Application\\Weblcms\\Tool\\Implementation\\LearningPath:' . $publication->getId() . '::TreeNodeData:' . $treeNodeData->getId(),
-                new TranslationContext(
-                    'Chamilo\Application\Weblcms\Bridge\LearningPath\Assignment', 'NotificationFilterLearningPathAssignment',
-                    [
-                        '{COURSE_TITLE}' => $course->get_title(), '{LEARNING_PATH_TITLE}' => $learningPath->get_title(),
-                        '{ASSIGNMENT_TITLE}' => $assignment->get_title()
-                    ]
-
-                )
-            )
-        ];
-
-        return $filters;
-    }
-
-    /**
-     * @param \Chamilo\Application\Weblcms\Storage\DataClass\ContentObjectPublication $publication
-     * @param \Chamilo\Application\Weblcms\Course\Storage\DataClass\Course $course
-     * @param \Chamilo\Core\Repository\ContentObject\LearningPath\Storage\DataClass\TreeNodeData $treeNodeData
-     *
-     * @return string[]
-     */
-    protected function getNotificationContexts(ContentObjectPublication $publication, Course $course, TreeNodeData $treeNodeData)
-    {
-        return [
-            'Chamilo',
-            'Assignment',
-            'Chamilo\\Application\\Weblcms::Course:' . $course->getId(),
-            'Chamilo\\Application\\Weblcms::Tool:' . $publication->get_tool() . '::Course:' . $course->getId(),
-            'Chamilo\\Application\\Weblcms::ContentObjectPublication:' . $publication->getId(),
-            'Chamilo\\Application\\Weblcms\\Tool\\Implementation\\LearningPath:' . $publication->getId() . '::TreeNodeData:' . $treeNodeData->getId()
-        ];
-    }
-
-    /**
-     * @param ContentObjectPublication $publication
-     * @param Assignment $assignment
-     * @param \Chamilo\Core\Repository\ContentObject\LearningPath\Storage\DataClass\LearningPath $learningPath
-     * @param \Chamilo\Core\Repository\ContentObject\LearningPath\Storage\DataClass\TreeNodeData $treeNodeData
-     * @param Course $course
-     * @param Entry $entry
-     *
-     * @return ViewingContext[]
-     */
-    protected function getNotificationViewingContexts(
-        ContentObjectPublication $publication, Assignment $assignment,
-        LearningPath $learningPath, TreeNodeData $treeNodeData, Course $course, Entry $entry
-    )
-    {
-        $translations = $this->getNotificationViewingContextVariables($course, $publication, $treeNodeData);
-
-        $viewingContexts = [];
-
-        $key = 'Chamilo';
-        $viewingContexts[] = new ViewingContext(
-            $key,
-            new TranslationContext(
-                'Chamilo\Application\Weblcms\Bridge\LearningPath\Assignment', $translations[$key],
-                [
-                    '{LEARNING_PATH_TITLE}' => $learningPath->get_title(),
-                    '{ASSIGNMENT_TITLE}' => $assignment->get_title(), '{COURSE_TITLE}' => $course->get_title(),
-                    '{USER}' => $this->userService->getUserFullNameById($this->getUserId($entry))
-                ]
-            )
-        );
-
-        $key = 'Chamilo\\Application\\Weblcms::Course:' . $course->getId();
-        $viewingContexts[] = new ViewingContext(
-            $key,
-            new TranslationContext(
-                'Chamilo\Application\Weblcms\Bridge\LearningPath\Assignment', $translations[$key],
-                [
-                    '{LEARNING_PATH_TITLE}' => $learningPath->get_title(),
-                    '{ASSIGNMENT_TITLE}' => $assignment->get_title(), '{COURSE_TITLE}' => $course->get_title(),
-                    '{USER}' => $this->userService->getUserFullNameById($this->getUserId($entry))
-                ]
-            )
-        );
-
-        $key = 'Chamilo\\Application\\Weblcms::ContentObjectPublication:' . $publication->getId();
-        $viewingContexts[] = new ViewingContext(
-            $key,
-            new TranslationContext(
-                'Chamilo\Application\Weblcms\Bridge\LearningPath\Assignment', $translations[$key],
-                [
-                    '{LEARNING_PATH_TITLE}' => $learningPath->get_title(),
-                    '{ASSIGNMENT_TITLE}' => $assignment->get_title(), '{COURSE_TITLE}' => $course->get_title(),
-                    '{USER}' => $this->userService->getUserFullNameById($this->getUserId($entry))
-                ]
-            )
-        );
-
-        $key = 'Chamilo\\Application\\Weblcms\\Tool\\Implementation\\LearningPath:' . $publication->getId() . '::TreeNodeData:' . $treeNodeData->getId();
-        $viewingContexts[] = new ViewingContext(
-            $key,
-            new TranslationContext(
-                'Chamilo\Application\Weblcms\Bridge\LearningPath\Assignment', $translations[$key],
-                [
-                    '{LEARNING_PATH_TITLE}' => $assignment->get_title(),
-                    '{ASSIGNMENT_TITLE}' => $assignment->get_title(), '{COURSE_TITLE}' => $course->get_title(),
-                    '{USER}' => $this->userService->getUserFullNameById($this->getUserId($entry))
-                ]
-            )
-        );
-
-        return $viewingContexts;
-    }
-
-    /**
-     * @param \Chamilo\Application\Weblcms\Course\Storage\DataClass\Course $course
-     * @param \Chamilo\Application\Weblcms\Storage\DataClass\ContentObjectPublication $publication
-     * @param \Chamilo\Core\Repository\ContentObject\LearningPath\Storage\DataClass\TreeNodeData $treeNodeData
-     *
-     * @return array
-     */
-    abstract protected function getNotificationViewingContextVariables(Course $course, ContentObjectPublication $publication, TreeNodeData $treeNodeData);
-
-    /**
-     * @param \Chamilo\Application\Weblcms\Bridge\LearningPath\Assignment\Storage\DataClass\Entry $entry
-     *
-     * @return int
-     */
-    abstract protected function getCreationDate(Entry $entry);
-
-    /**
-     * @param \Chamilo\Application\Weblcms\Bridge\LearningPath\Assignment\Storage\DataClass\Entry $entry
-     *
-     * @return int
-     */
-    abstract protected function getUserId(Entry $entry);
-
-    /**
-     * @param Course $course
-     * @param Entry $entry
-     *
-     * @return int[]
-     */
-    protected function getTargetUserIds($course, $entry)
-    {
-        $courseTeachers = $this->courseService->getTeachersFromCourse($course);
-
-        $targetUserIds = [];
-        $targetUserIds[] = $entry->getUserId();
-
-        foreach ($courseTeachers as $courseTeacher)
-        {
-            $targetUserIds[] = $courseTeacher->getId();
-        }
-
-        $targetUserIds = $this->filterTargetUsers($entry, $targetUserIds);
-
-        return array_unique($targetUserIds);
-    }
-
-    /**
-     * @param \Chamilo\Application\Weblcms\Bridge\LearningPath\Assignment\Storage\DataClass\Entry $entry
-     * @param array $targetUserIds
-     *
-     * @return array
-     */
-    protected function filterTargetUsers(Entry $entry, $targetUserIds = [])
-    {
-        foreach($targetUserIds as $key => $targetUserId)
-        {
-            if($targetUserId == $this->getUserId($entry))
-            {
-                unset($targetUserIds[$key]);
-            }
-        }
-
-        return $targetUserIds;
     }
 }

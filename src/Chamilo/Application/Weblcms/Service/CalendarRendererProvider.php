@@ -8,33 +8,31 @@ use Chamilo\Application\Weblcms\Tool\Manager;
 use Chamilo\Core\Repository\Storage\DataClass\ContentObject;
 use Chamilo\Core\User\Storage\DataClass\User;
 use Chamilo\Libraries\Architecture\Application\Application;
+use Chamilo\Libraries\Architecture\Application\Routing\UrlGenerator;
 use Chamilo\Libraries\Calendar\Architecture\Interfaces\ActionSupport;
 use Chamilo\Libraries\Calendar\Event\Event;
-use Chamilo\Libraries\File\Redirect;
+use Chamilo\Libraries\DependencyInjection\DependencyInjectionContainerBuilder;
 use Chamilo\Libraries\Format\Structure\Glyph\FontAwesomeGlyph;
 use Chamilo\Libraries\Format\Structure\ToolbarItem;
 use Chamilo\Libraries\Translation\Translation;
 use Chamilo\Libraries\Utilities\StringUtilities;
 
 /**
- *
  * @package Chamilo\Application\Calendar\Service
- * @author Hans De Bisschop <hans.de.bisschop@ehb.be>
- * @author Magali Gillard <magali.gillard@ehb.be>
- * @author Eduard Vossen <eduard.vossen@ehb.be>
+ * @author  Hans De Bisschop <hans.de.bisschop@ehb.be>
+ * @author  Magali Gillard <magali.gillard@ehb.be>
+ * @author  Eduard Vossen <eduard.vossen@ehb.be>
  */
 class CalendarRendererProvider extends \Chamilo\Libraries\Calendar\Service\CalendarRendererProvider
     implements ActionSupport
 {
 
     /**
-     *
      * @var \Chamilo\Application\Weblcms\Tool\Action\Component\BrowserComponent
      */
     private $renderer;
 
     /**
-     *
      * @param \Chamilo\Application\Weblcms\Tool\Action\Component\BrowserComponent $renderer
      * @param \Chamilo\Core\User\Storage\DataClass\User $dataUser
      * @param string[] $displayParameters ;
@@ -113,7 +111,6 @@ class CalendarRendererProvider extends \Chamilo\Libraries\Calendar\Service\Calen
     }
 
     /**
-     *
      * @return \Chamilo\Application\Weblcms\Tool\Action\Component\BrowserComponent
      */
     public function getRenderer()
@@ -122,22 +119,23 @@ class CalendarRendererProvider extends \Chamilo\Libraries\Calendar\Service\Calen
     }
 
     /**
-     *
+     * @see \Chamilo\Libraries\Calendar\Architecture\Interfaces\CalendarRendererProviderInterface::getUrl()
+     */
+    public function getUrl($parameters = [], $filterParameters = [])
+    {
+        return $this->getUrlGenerator()->fromParameters($parameters, $filterParameters);
+    }
+
+    public function getUrlGenerator(): UrlGenerator
+    {
+        return DependencyInjectionContainerBuilder::getInstance()->createContainer()->get(UrlGenerator::class);
+    }
+
+    /**
      * @param \Chamilo\Application\Weblcms\Tool\Action\Component\BrowserComponent $renderer
      */
     public function setRenderer(BrowserComponent $renderer)
     {
         $this->renderer = $renderer;
-    }
-
-    /**
-     *
-     * @see \Chamilo\Libraries\Calendar\Architecture\Interfaces\CalendarRendererProviderInterface::getUrl()
-     */
-    public function getUrl($parameters = [], $filterParameters = [], $encodeEntities = false)
-    {
-        $redirect = new Redirect($parameters, $filterParameters, $encodeEntities);
-
-        return $redirect->getUrl();
     }
 }

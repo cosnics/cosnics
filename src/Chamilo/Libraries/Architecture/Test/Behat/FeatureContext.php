@@ -4,8 +4,8 @@ namespace Chamilo\Libraries\Architecture\Test\Behat;
 use Behat\MinkExtension\Context\MinkContext;
 use Chamilo\Core\Install\Observer\Type\CommandLineInstaller;
 use Chamilo\Libraries\Architecture\Application\Application;
+use Chamilo\Libraries\Architecture\Application\Routing\UrlGenerator;
 use Chamilo\Libraries\DependencyInjection\DependencyInjectionContainerBuilder;
-use Chamilo\Libraries\File\Redirect;
 use Chamilo\Libraries\File\SystemPathBuilder;
 use Exception;
 
@@ -17,10 +17,15 @@ class FeatureContext extends MinkContext
     /**
      *  'I go to application "Chamilo\Core\Repository" ...'
      *  If $shouldUseLcms4Urls is true: we use the URL /index.php?application=repository
-     *  Else: we generate the URL by calling Chamilo\Libraries\File\Redirect
+     *  Else: we generate the URL
      *  See iGoToApplication(...) and iAmInApplicationAndDoAction(...).
      */
     protected $shouldUseLcms4Urls = false;
+
+    public function getUrlGenerator(): UrlGenerator
+    {
+        return DependencyInjectionContainerBuilder::getInstance()->createContainer()->get(UrlGenerator::class);
+    }
 
     /**
      * Go to an application and do an action
@@ -32,11 +37,11 @@ class FeatureContext extends MinkContext
     {
         if (!$this->shouldUseLcms4Urls)
         {
-            $redirect = new Redirect(
+            $actionUrl = $this->getUrlGenerator()->fromParameters(
                 [Application::PARAM_CONTEXT => $application, Application::PARAM_ACTION => $action]
             );
 
-            $this->visit($redirect->getUrl());
+            $this->visit($actionUrl);
         }
         else
         {   // Example: from 'Chamilo\Core\Repository' extract 'repository'.
@@ -84,8 +89,8 @@ class FeatureContext extends MinkContext
     {
         if (!$this->shouldUseLcms4Urls)
         {
-            $redirect = new Redirect([Application::PARAM_CONTEXT => $application]);
-            $this->visit($redirect->getUrl());
+            $contextUrl = $this->getUrlGenerator()->fromParameters([Application::PARAM_CONTEXT => $application]);
+            $this->visit($contextUrl);
         }
         else
         {   // Example: from 'Chamilo\Core\Repository' extract 'repository'.

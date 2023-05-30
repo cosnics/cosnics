@@ -7,10 +7,11 @@ use Chamilo\Configuration\Configuration;
 use Chamilo\Configuration\Storage\DataClass\Registration;
 use Chamilo\Core\User\Storage\DataClass\User;
 use Chamilo\Libraries\Architecture\Application\Application;
+use Chamilo\Libraries\Architecture\Application\Routing\UrlGenerator;
 use Chamilo\Libraries\Calendar\Architecture\Interfaces\ActionSupport;
 use Chamilo\Libraries\Calendar\Architecture\Interfaces\VisibilitySupport;
 use Chamilo\Libraries\Calendar\Event\Event;
-use Chamilo\Libraries\File\Redirect;
+use Chamilo\Libraries\DependencyInjection\DependencyInjectionContainerBuilder;
 use Chamilo\Libraries\Format\Structure\Glyph\FontAwesomeGlyph;
 use Chamilo\Libraries\Format\Structure\ToolbarItem;
 use Chamilo\Libraries\Translation\Translation;
@@ -115,15 +116,13 @@ class CalendarRendererProvider extends \Chamilo\Libraries\Calendar\Service\Calen
      */
     private function getPublicationDeletingUrl($eventIdentifier)
     {
-        $redirect = new Redirect(
+        return $this->getUrlGenerator()->fromParameters(
             [
                 Application::PARAM_CONTEXT => \Chamilo\Application\Calendar\Extension\Personal\Manager::CONTEXT,
                 \Chamilo\Application\Calendar\Extension\Personal\Manager::PARAM_ACTION => \Chamilo\Application\Calendar\Extension\Personal\Manager::ACTION_DELETE,
                 \Chamilo\Application\Calendar\Extension\Personal\Manager::PARAM_PUBLICATION_ID => $eventIdentifier
             ]
         );
-
-        return $redirect->getUrl();
     }
 
     /**
@@ -133,15 +132,13 @@ class CalendarRendererProvider extends \Chamilo\Libraries\Calendar\Service\Calen
      */
     private function getPublicationEditingUrl($eventIdentifier)
     {
-        $redirect = new Redirect(
+        return $this->getUrlGenerator()->fromParameters(
             [
                 Application::PARAM_CONTEXT => \Chamilo\Application\Calendar\Extension\Personal\Manager::CONTEXT,
                 \Chamilo\Application\Calendar\Extension\Personal\Manager::PARAM_ACTION => \Chamilo\Application\Calendar\Extension\Personal\Manager::ACTION_EDIT,
                 \Chamilo\Application\Calendar\Extension\Personal\Manager::PARAM_PUBLICATION_ID => $eventIdentifier
             ]
         );
-
-        return $redirect->getUrl();
     }
 
     public function getSourceNames()
@@ -194,6 +191,11 @@ class CalendarRendererProvider extends \Chamilo\Libraries\Calendar\Service\Calen
         }
 
         return $sources;
+    }
+
+    public function getUrlGenerator(): UrlGenerator
+    {
+        return DependencyInjectionContainerBuilder::getInstance()->createContainer()->get(UrlGenerator::class);
     }
 
     public function getVisibilities($userIdentifier)

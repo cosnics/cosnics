@@ -4,12 +4,12 @@ namespace Chamilo\Core\Repository\Selector\Renderer;
 use Chamilo\Core\Repository\Selector\TypeSelector;
 use Chamilo\Core\Repository\Selector\TypeSelectorRenderer;
 use Chamilo\Libraries\Architecture\Application\Application;
-use Chamilo\Libraries\File\Redirect;
+use Chamilo\Libraries\Architecture\Application\Routing\UrlGenerator;
+use Chamilo\Libraries\DependencyInjection\DependencyInjectionContainerBuilder;
 use Chamilo\Libraries\Format\Structure\ActionBar\SubButton;
 use Chamilo\Libraries\Format\Structure\Glyph\IdentGlyph;
 
 /**
- *
  * @author Hans De Bisschop <hans.de.bisschop@ehb.be>
  * @author Magali Gillard <magali.gillard@ehb.be>
  * @author Eduard Vossen <eduard.vossen@ehb.be>
@@ -18,13 +18,11 @@ class SubButtonTypeSelectorRenderer extends TypeSelectorRenderer
 {
 
     /**
-     *
      * @var string[]
      */
     private $parameters;
 
     /**
-     *
      * @param \Chamilo\Libraries\Architecture\Application\Application $parent
      * @param \Chamilo\Core\Repository\Selector\TypeSelector $typeSelector
      * @param string[] $parameters
@@ -39,7 +37,6 @@ class SubButtonTypeSelectorRenderer extends TypeSelectorRenderer
     }
 
     /**
-     *
      * @return \Chamilo\Libraries\Format\Structure\ActionBar\SubButton[]
      */
     public function render()
@@ -61,8 +58,7 @@ class SubButtonTypeSelectorRenderer extends TypeSelectorRenderer
     }
 
     /**
-     *
-     * @param integer $templateRegistrationIdentifier
+     * @param int $templateRegistrationIdentifier
      *
      * @return string
      */
@@ -71,13 +67,10 @@ class SubButtonTypeSelectorRenderer extends TypeSelectorRenderer
         $objectTypeParameters = $this->getParameters();
         $objectTypeParameters[TypeSelector::PARAM_SELECTION] = $templateRegistrationIdentifier;
 
-        $url = new Redirect($objectTypeParameters);
-
-        return $url->getUrl();
+        return $this->getUrlGenerator()->fromParameters($objectTypeParameters);
     }
 
     /**
-     *
      * @return string[]
      */
     public function getParameters()
@@ -85,8 +78,12 @@ class SubButtonTypeSelectorRenderer extends TypeSelectorRenderer
         return $this->parameters;
     }
 
+    public function getUrlGenerator(): UrlGenerator
+    {
+        return DependencyInjectionContainerBuilder::getInstance()->createContainer()->get(UrlGenerator::class);
+    }
+
     /**
-     *
      * @param string[] $parameters
      */
     public function setParameters($parameters)

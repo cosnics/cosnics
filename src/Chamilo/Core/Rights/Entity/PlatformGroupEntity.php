@@ -5,7 +5,8 @@ use Chamilo\Core\Group\Storage\DataClass\Group;
 use Chamilo\Core\Group\Storage\DataManager;
 use Chamilo\Core\Rights\Manager;
 use Chamilo\Libraries\Architecture\Application\Application;
-use Chamilo\Libraries\File\Redirect;
+use Chamilo\Libraries\Architecture\Application\Routing\UrlGenerator;
+use Chamilo\Libraries\DependencyInjection\DependencyInjectionContainerBuilder;
 use Chamilo\Libraries\Format\Form\Element\AdvancedElementFinder\AdvancedElementFinderElement;
 use Chamilo\Libraries\Format\Form\Element\AdvancedElementFinder\AdvancedElementFinderElementType;
 use Chamilo\Libraries\Format\Structure\Glyph\FontAwesomeGlyph;
@@ -17,7 +18,7 @@ use Chamilo\Libraries\Utilities\StringUtilities;
 /**
  * Class that describes the platform groups for the rights editor
  *
- * @author Sven Vanpoucke
+ * @author     Sven Vanpoucke
  * @deprecated Use the \Chamilo\Core\Group\Integration\Chamilo\Libraries\Rights\Service\GroupEntityProvider service now
  */
 class PlatformGroupEntity implements NestedRightsEntity
@@ -89,6 +90,11 @@ class PlatformGroupEntity implements NestedRightsEntity
         }
 
         return self::$instance;
+    }
+
+    public function getUrlGenerator(): UrlGenerator
+    {
+        return DependencyInjectionContainerBuilder::getInstance()->createContainer()->get(UrlGenerator::class);
     }
 
     /**
@@ -189,7 +195,7 @@ class PlatformGroupEntity implements NestedRightsEntity
      */
     public function get_root_ids()
     {
-        return array(DataManager::get_root_group()->get_id());
+        return [DataManager::get_root_group()->get_id()];
     }
 
     /**
@@ -199,7 +205,7 @@ class PlatformGroupEntity implements NestedRightsEntity
      */
     public function get_search_properties()
     {
-        return array(Group::PROPERTY_NAME, Group::PROPERTY_CODE);
+        return [Group::PROPERTY_NAME, Group::PROPERTY_CODE];
     }
 
     /**
@@ -217,14 +223,12 @@ class PlatformGroupEntity implements NestedRightsEntity
      */
     public function get_xml_feed()
     {
-        $redirect = new Redirect(
-            array(
+        return $this->getUrlGenerator()->fromParameters(
+            [
                 Application::PARAM_CONTEXT => \Chamilo\Core\Group\Ajax\Manager::CONTEXT,
                 \Chamilo\Core\Group\Ajax\Manager::PARAM_ACTION => 'xml_group_menu_feed'
-            )
+            ]
         );
-
-        return $redirect->getUrl();
     }
 
     /**
@@ -251,7 +255,7 @@ class PlatformGroupEntity implements NestedRightsEntity
      *
      * @param $condition
      * @param $offset int
-     * @param $count int
+     * @param $count  int
      * @param $order_property
      *
      * @return \Doctrine\Common\Collections\ArrayCollection

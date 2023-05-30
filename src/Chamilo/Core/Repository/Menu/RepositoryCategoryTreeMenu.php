@@ -7,7 +7,8 @@ use Chamilo\Core\Repository\Storage\DataClass\RepositoryCategory;
 use Chamilo\Core\Repository\Storage\DataManager;
 use Chamilo\Core\Repository\Workspace\Storage\DataClass\Workspace;
 use Chamilo\Libraries\Architecture\Application\Application;
-use Chamilo\Libraries\File\Redirect;
+use Chamilo\Libraries\Architecture\Application\Routing\UrlGenerator;
+use Chamilo\Libraries\DependencyInjection\DependencyInjectionContainerBuilder;
 use Chamilo\Libraries\Format\Menu\TreeMenu\GenericTree;
 use Chamilo\Libraries\Format\Structure\Glyph\FontAwesomeGlyph;
 use Chamilo\Libraries\Format\Tabs\GenericTabsRenderer;
@@ -65,6 +66,11 @@ class RepositoryCategoryTreeMenu extends GenericTree
         {
             $this->tree[] = $additional_item;
         }
+    }
+
+    public function getUrlGenerator(): UrlGenerator
+    {
+        return DependencyInjectionContainerBuilder::getInstance()->createContainer()->get(UrlGenerator::class);
     }
 
     public function get_breadcrumbs()
@@ -193,14 +199,12 @@ class RepositoryCategoryTreeMenu extends GenericTree
 
     public function get_search_url()
     {
-        $redirect = new Redirect(
+        return $this->getUrlGenerator()->fromParameters(
             [
                 Application::PARAM_CONTEXT => \Chamilo\Core\Repository\Ajax\Manager::CONTEXT,
                 \Chamilo\Core\Repository\Ajax\Manager::PARAM_ACTION => \Chamilo\Core\Repository\Ajax\Manager::ACTION_CATEGORY_MENU_FEED
             ]
         );
-
-        return $redirect->getUrl();
     }
 
     public function get_url_format()

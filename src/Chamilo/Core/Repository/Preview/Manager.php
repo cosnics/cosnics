@@ -8,9 +8,10 @@ use Chamilo\Core\Repository\Workspace\Service\RightsService;
 use Chamilo\Libraries\Architecture\Application\Application;
 use Chamilo\Libraries\Architecture\Application\ApplicationConfiguration;
 use Chamilo\Libraries\Architecture\Application\ApplicationConfigurationInterface;
+use Chamilo\Libraries\Architecture\Application\Routing\UrlGenerator;
 use Chamilo\Libraries\Architecture\Exceptions\NoObjectSelectedException;
 use Chamilo\Libraries\Architecture\Exceptions\NotAllowedException;
-use Chamilo\Libraries\File\Redirect;
+use Chamilo\Libraries\DependencyInjection\DependencyInjectionContainerBuilder;
 use Chamilo\Libraries\Format\Structure\ActionBar\Button;
 use Chamilo\Libraries\Format\Structure\ActionBar\ButtonToolBar;
 use Chamilo\Libraries\Format\Structure\ActionBar\DropdownButton;
@@ -243,15 +244,18 @@ abstract class Manager extends Application
             $action = self::ACTION_RENDITION;
         }
 
-        $redirect = new Redirect(
+        /**
+         * @var \Chamilo\Libraries\Architecture\Application\Routing\UrlGenerator $urlGenerator
+         */
+        $urlGenerator = DependencyInjectionContainerBuilder::getInstance()->createContainer()->get(UrlGenerator::class);
+
+        return $urlGenerator->fromParameters(
             [
                 self::PARAM_CONTEXT => self::CONTEXT,
                 self::PARAM_ACTION => $action,
-                self::PARAM_CONTENT_OBJECT_ID => $contentObject->get_id()
+                self::PARAM_CONTENT_OBJECT_ID => $contentObject->getId()
             ]
         );
-
-        return $redirect->getUrl();
     }
 
     /**

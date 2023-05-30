@@ -2,8 +2,9 @@
 namespace Chamilo\Core\Repository\Common\Import;
 
 use Chamilo\Core\Repository\Manager;
+use Chamilo\Libraries\Architecture\Application\Routing\UrlGenerator;
 use Chamilo\Libraries\Architecture\ClassnameUtilities;
-use Chamilo\Libraries\File\Redirect;
+use Chamilo\Libraries\DependencyInjection\DependencyInjectionContainerBuilder;
 use Chamilo\Libraries\Format\Structure\ActionBar\Button;
 use Chamilo\Libraries\Format\Structure\ActionBar\DropdownButton;
 use Chamilo\Libraries\Format\Structure\ActionBar\SubButton;
@@ -14,29 +15,25 @@ use Chamilo\Libraries\Translation\Translation;
 use Chamilo\Libraries\Utilities\StringUtilities;
 
 /**
- *
  * @package Chamilo\Core\Repository\Common\Import
- * @author Hans De Bisschop <hans.de.bisschop@ehb.be>
- * @author Magali Gillard <magali.gillard@ehb.be>
- * @author Eduard Vossen <eduard.vossen@ehb.be>
+ * @author  Hans De Bisschop <hans.de.bisschop@ehb.be>
+ * @author  Magali Gillard <magali.gillard@ehb.be>
+ * @author  Eduard Vossen <eduard.vossen@ehb.be>
  */
 class ImportTypeSelector
 {
 
     /**
-     *
-     * @var string[]
-     */
-    private $parameters;
-
-    /**
-     *
      * @var string[]
      */
     private $allowedContentObjectTypes;
 
     /**
-     *
+     * @var string[]
+     */
+    private $parameters;
+
+    /**
      * @param string[] $parameters
      * @param string[] $allowedContentObjectTypes
      */
@@ -47,21 +44,11 @@ class ImportTypeSelector
     }
 
     /**
-     *
      * @return string[]
      */
     public function getAllowedContentObjectTypes()
     {
         return $this->allowedContentObjectTypes;
-    }
-
-    /**
-     *
-     * @param string[] $allowedContentObjectTypes
-     */
-    public function setAllowedContentObjectTypes($allowedContentObjectTypes)
-    {
-        $this->allowedContentObjectTypes = $allowedContentObjectTypes;
     }
 
     /**
@@ -92,12 +79,12 @@ class ImportTypeSelector
 
                     if (class_exists($class) && $class::is_available())
                     {
-                        $importTypes[$objectImportType] = array(
+                        $importTypes[$objectImportType] = [
                             'label' => Translation::get(
                                 'ImportType' . $importTypeName, null, Manager::CONTEXT
                             ),
                             'namespace' => 'Chamilo\Core\Repository\Import\\' . $importTypeName
-                        );
+                        ];
                     }
                 }
             }
@@ -118,13 +105,10 @@ class ImportTypeSelector
         $parameters = $this->getParameters();
         $parameters[ContentObjectImportService::PARAM_IMPORT_TYPE] = $importType;
 
-        $importUrl = new Redirect($parameters);
-
-        return $importUrl->getUrl();
+        return $this->getUrlGenerator()->fromParameters($parameters);
     }
 
     /**
-     *
      * @return string[]
      */
     public function getParameters()
@@ -133,16 +117,6 @@ class ImportTypeSelector
     }
 
     /**
-     *
-     * @param string[] $parameters
-     */
-    public function setParameters($parameters)
-    {
-        $this->parameters = $parameters;
-    }
-
-    /**
-     *
      * @return \Chamilo\Libraries\Format\Structure\ActionBar\DropdownButton
      */
     public function getTypeSelectorDropdownButton()
@@ -158,7 +132,6 @@ class ImportTypeSelector
     }
 
     /**
-     *
      * @return \Chamilo\Libraries\Format\Structure\ActionBar\SubButton[]
      */
     public function getTypeSelectorSubButtons()
@@ -168,7 +141,7 @@ class ImportTypeSelector
         foreach ($this->getImportTypes() as $type => $properties)
         {
             $glyph = new NamespaceIdentGlyph(
-                $properties['namespace'], true, false, false, IdentGlyph::SIZE_MINI, array('fa-fw')
+                $properties['namespace'], true, false, false, IdentGlyph::SIZE_MINI, ['fa-fw']
             );
 
             $subButtons[] = new SubButton($properties['label'], $glyph, $this->getLink($type));
@@ -177,8 +150,12 @@ class ImportTypeSelector
         return $subButtons;
     }
 
+    public function getUrlGenerator(): UrlGenerator
+    {
+        return DependencyInjectionContainerBuilder::getInstance()->createContainer()->get(UrlGenerator::class);
+    }
+
     /**
-     *
      * @return string
      */
     public function renderTypeSelector()
@@ -192,7 +169,7 @@ class ImportTypeSelector
             $html[] = '<a class="btn btn-default" href="' . $this->getLink($type) . '">';
 
             $glyph = new NamespaceIdentGlyph(
-                $properties['namespace'], true, false, false, IdentGlyph::SIZE_BIG, array('fa-fw')
+                $properties['namespace'], true, false, false, IdentGlyph::SIZE_BIG, ['fa-fw']
             );
 
             $html[] = $glyph->render();
@@ -204,5 +181,21 @@ class ImportTypeSelector
         $html[] = '</div>';
 
         return implode(PHP_EOL, $html);
+    }
+
+    /**
+     * @param string[] $allowedContentObjectTypes
+     */
+    public function setAllowedContentObjectTypes($allowedContentObjectTypes)
+    {
+        $this->allowedContentObjectTypes = $allowedContentObjectTypes;
+    }
+
+    /**
+     * @param string[] $parameters
+     */
+    public function setParameters($parameters)
+    {
+        $this->parameters = $parameters;
     }
 }

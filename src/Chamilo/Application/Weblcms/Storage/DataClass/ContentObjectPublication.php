@@ -9,10 +9,10 @@ use Chamilo\Configuration\Service\Consulter\ConfigurationConsulter;
 use Chamilo\Core\Repository\Publication\Storage\DataClass\Publication;
 use Chamilo\Core\Repository\Storage\DataClass\ContentObject;
 use Chamilo\Core\User\Storage\DataClass\User;
+use Chamilo\Libraries\Architecture\Application\Routing\UrlGenerator;
 use Chamilo\Libraries\DependencyInjection\DependencyInjectionContainerBuilder;
 use Chamilo\Libraries\File\ConfigurablePathBuilder;
 use Chamilo\Libraries\File\FileLogger;
-use Chamilo\Libraries\File\Redirect;
 use Chamilo\Libraries\File\WebPathBuilder;
 use Chamilo\Libraries\Format\Theme\ThemePathBuilder;
 use Chamilo\Libraries\Mail\Mailer\MailerInterface;
@@ -231,6 +231,11 @@ class ContentObjectPublication extends Publication implements DisplayOrderDataCl
         );
     }
 
+    public function getUrlGenerator(): UrlGenerator
+    {
+        return DependencyInjectionContainerBuilder::getInstance()->createContainer()->get(UrlGenerator::class);
+    }
+
     public function get_allow_collaboration()
     {
         return $this->getDefaultProperty(self::PROPERTY_ALLOW_COLLABORATION);
@@ -292,9 +297,7 @@ class ContentObjectPublication extends Publication implements DisplayOrderDataCl
             \Chamilo\Application\Weblcms\Tool\Manager::ACTION_VIEW;
         $params[\Chamilo\Application\Weblcms\Tool\Manager::PARAM_PUBLICATION_ID] = $this->getId();
 
-        $redirect = new Redirect($params);
-
-        return $redirect->getUrl();
+        return $this->getUrlGenerator()->fromParameters($params);
     }
 
     public function get_display_order_index()

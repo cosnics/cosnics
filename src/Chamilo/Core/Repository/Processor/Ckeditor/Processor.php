@@ -6,8 +6,9 @@ use Chamilo\Core\Repository\ContentObject\File\Storage\DataClass\File;
 use Chamilo\Core\Repository\Manager;
 use Chamilo\Core\Repository\Storage\DataClass\ContentObject;
 use Chamilo\Core\Repository\Storage\DataManager;
+use Chamilo\Libraries\Architecture\Application\Routing\UrlGenerator;
 use Chamilo\Libraries\Architecture\ClassnameUtilities;
-use Chamilo\Libraries\File\Redirect;
+use Chamilo\Libraries\DependencyInjection\DependencyInjectionContainerBuilder;
 use Exception;
 
 class Processor
@@ -112,9 +113,12 @@ class Processor
             [Manager::PARAM_ACTION => Manager::ACTION_DOWNLOAD_DOCUMENT, 'display' => 1], $parameters
         );
 
-        $redirect = new Redirect($parameters, $filter, $encode_entities);
+        /**
+         * @var \Chamilo\Libraries\Architecture\Application\Routing\UrlGenerator $urlGenerator
+         */
+        $urlGenerator = DependencyInjectionContainerBuilder::getInstance()->createContainer()->get(UrlGenerator::class);
 
-        return $redirect->getUrl();
+        return $urlGenerator->fromParameters($parameters, $filter);
     }
 
     public function get_selected_content_objects()

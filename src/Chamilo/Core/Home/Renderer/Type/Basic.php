@@ -13,8 +13,8 @@ use Chamilo\Core\Home\Service\AngularConnectorService;
 use Chamilo\Core\Home\Service\HomeService;
 use Chamilo\Core\Home\Storage\DataClass\Tab;
 use Chamilo\Core\User\Storage\DataClass\User;
+use Chamilo\Libraries\Architecture\Application\Routing\UrlGenerator;
 use Chamilo\Libraries\DependencyInjection\DependencyInjectionContainerBuilder;
-use Chamilo\Libraries\File\Redirect;
 use Chamilo\Libraries\File\WebPathBuilder;
 use Chamilo\Libraries\Format\Structure\ActionBar\Button;
 use Chamilo\Libraries\Format\Structure\ActionBar\ButtonToolBar;
@@ -124,6 +124,11 @@ class Basic extends Renderer
         return $this->homeService;
     }
 
+    public function getUrlGenerator(): UrlGenerator
+    {
+        return DependencyInjectionContainerBuilder::getInstance()->createContainer()->get(UrlGenerator::class);
+    }
+
     /**
      * Returns whether or not the home viewer is in general mode
      *
@@ -177,13 +182,14 @@ class Basic extends Renderer
                     )
                 );
 
-                $truncateLink = new Redirect([Manager::PARAM_ACTION => Manager::ACTION_TRUNCATE]);
+                $truncateLink =
+                    $this->getUrlGenerator()->fromParameters([Manager::PARAM_ACTION => Manager::ACTION_TRUNCATE]);
 
                 if ($homeUserIdentifier != '0')
                 {
                     $splitDropdownButton->addSubButton(
                         new SubButton(
-                            Translation::get('ResetHomepage'), null, $truncateLink->getUrl(), SubButton::DISPLAY_LABEL,
+                            Translation::get('ResetHomepage'), null, $truncateLink, SubButton::DISPLAY_LABEL,
                             Translation::get('ConfirmChosenAction', [], StringUtilities::LIBRARIES),
                             ['portal-reset', 'btn-link']
                         )
@@ -193,17 +199,19 @@ class Basic extends Renderer
 
             if (!$generalMode && $user->is_platform_admin())
             {
-                $redirect = new Redirect([Manager::PARAM_ACTION => Manager::ACTION_MANAGE_HOME]);
+                $homeUrl =
+                    $this->getUrlGenerator()->fromParameters([Manager::PARAM_ACTION => Manager::ACTION_MANAGE_HOME]);
 
                 $buttonToolBar->addItem(
                     new Button(
-                        Translation::get('ConfigureDefault'), new FontAwesomeGlyph('wrench'), $redirect->getUrl()
+                        Translation::get('ConfigureDefault'), new FontAwesomeGlyph('wrench'), $homeUrl
                     )
                 );
             }
             elseif ($generalMode && $user->is_platform_admin())
             {
-                $redirect = new Redirect([Manager::PARAM_ACTION => Manager::ACTION_PERSONAL]);
+                $personalUrl =
+                    $this->getUrlGenerator()->fromParameters([Manager::PARAM_ACTION => Manager::ACTION_PERSONAL]);
 
                 $title = $userHomeAllowed ? 'BackToPersonal' : 'ViewDefault';
 
@@ -211,7 +219,7 @@ class Basic extends Renderer
                 {
                     $splitDropdownButton->addSubButton(
                         new SubButton(
-                            Translation::get($title), new FontAwesomeGlyph('home'), $redirect->getUrl(),
+                            Translation::get($title), new FontAwesomeGlyph('home'), $personalUrl,
                             SubButton::DISPLAY_LABEL
                         )
                     );
@@ -219,7 +227,7 @@ class Basic extends Renderer
                 else
                 {
                     $buttonToolBar->addItem(
-                        new Button(Translation::get($title), new FontAwesomeGlyph('home'), $redirect->getUrl())
+                        new Button(Translation::get($title), new FontAwesomeGlyph('home'), $personalUrl)
                     );
                 }
             }

@@ -11,17 +11,15 @@ use Chamilo\Core\Home\Interfaces\StaticBlockTitleInterface;
 use Chamilo\Core\Notification\Manager;
 use Chamilo\Core\Notification\Service\NotificationManager;
 use Chamilo\Libraries\Architecture\Application\Application;
-use Chamilo\Libraries\File\Redirect;
 use Chamilo\Libraries\Translation\Translation;
 
 /**
  * @package Chamilo\Application\Weblcms\Integration\Chamilo\Core\Home\Type
- *
- * @author Sven Vanpoucke - Hogeschool Gent
+ * @author  Sven Vanpoucke - Hogeschool Gent
  */
 class AssignmentNotifications extends Block implements ConfigurableInterface, StaticBlockTitleInterface
 {
-    const CONFIGURATION_COURSE_TYPE = 'course_type';
+    public const CONFIGURATION_COURSE_TYPE = 'course_type';
 
     /**
      * The cached course type id
@@ -31,6 +29,11 @@ class AssignmentNotifications extends Block implements ConfigurableInterface, St
     protected $courseTypeId;
 
     /**
+     * @var bool
+     */
+    protected $settingsLoaded;
+
+    /**
      * The cached user course category id
      *
      * @var int
@@ -38,13 +41,7 @@ class AssignmentNotifications extends Block implements ConfigurableInterface, St
     protected $userCourseCategoryId;
 
     /**
-     * @var bool
-     */
-    protected $settingsLoaded;
-
-    /**
      * @return string
-     *
      * @throws \Twig_Error_Loader
      * @throws \Twig_Error_Runtime
      * @throws \Twig_Error_Syntax
@@ -71,22 +68,48 @@ class AssignmentNotifications extends Block implements ConfigurableInterface, St
         );
 
         return $this->getTwig()->render(
-            'Chamilo\Application\Weblcms\Integration\Chamilo\Core\Home:AssignmentNotifications.html.twig',
-            [
+            'Chamilo\Application\Weblcms\Integration\Chamilo\Core\Home:AssignmentNotifications.html.twig', [
                 'RETRIEVE_NOTIFICATIONS_URL' => $retrieveNotificationsUrl,
                 'VIEW_NOTIFICATION_URL' => $viewNotificationUrl,
                 'BLOCK_ID' => $this->getBlock()->getId(),
                 'HIDDEN' => !$this->getBlock()->isVisible(),
-                'ADMIN_EMAIL' => $this->getConfigurationConsulter()->getSetting(['Chamilo\Core\Admin', 'administrator_email'])
+                'ADMIN_EMAIL' => $this->getConfigurationConsulter()->getSetting(
+                    ['Chamilo\Core\Admin', 'administrator_email']
+                )
             ]
         );
+    }
+
+    /**
+     * @see \Chamilo\Core\Home\Architecture\ConfigurableInterface::getConfigurationVariables()
+     */
+    public function getConfigurationVariables()
+    {
+        return [self::CONFIGURATION_COURSE_TYPE];
+    }
+
+    /**
+     * Returns the selected course type id
+     *
+     * @return int
+     */
+    public function getCourseTypeId()
+    {
+        return $this->courseTypeId;
+    }
+
+    /**
+     * @return \Chamilo\Core\Notification\Service\NotificationManager
+     */
+    protected function getNotificationManager()
+    {
+        return $this->getService(NotificationManager::class);
     }
 
     /**
      * Returns the block's title to display.
      *
      * @return string
-     *
      * @throws \Doctrine\ORM\NonUniqueResultException
      */
     public function getTitle()
@@ -94,8 +117,8 @@ class AssignmentNotifications extends Block implements ConfigurableInterface, St
         $this->loadSettings();
 
         $title = '<span style="display: flex; align-items: center;">' . $this->getTranslator()->trans(
-            'AssignmentNotifications', [], 'Chamilo\Application\Weblcms\Integration\Chamilo\Core\Home'
-        );
+                'AssignmentNotifications', [], 'Chamilo\Application\Weblcms\Integration\Chamilo\Core\Home'
+            );
 
         $notificationCount = $this->getNotificationManager()->countUnseenNotificationsByContextPathForUser(
             'Assignment', $this->get_user()
@@ -129,7 +152,7 @@ class AssignmentNotifications extends Block implements ConfigurableInterface, St
                 return Translation::get('NoSuchCourseType');
             }
         }
-        elseif($course_type_id === 0)
+        elseif ($course_type_id === 0)
         {
             $course_type_title = Translation::get('NoCourseType');
         }
@@ -144,8 +167,8 @@ class AssignmentNotifications extends Block implements ConfigurableInterface, St
         {
 
             $course_user_category = DataManager::retrieve_by_id(
-                CourseUserCategory::class,
-                $user_course_category_id);
+                CourseUserCategory::class, $user_course_category_id
+            );
 
             if ($course_user_category)
             {
@@ -154,32 +177,6 @@ class AssignmentNotifications extends Block implements ConfigurableInterface, St
         }
 
         return $course_type_title . $course_user_category_title;
-    }
-
-    /**
-     *
-     * @see \Chamilo\Core\Home\Renderer\Type\Basic\BlockRenderer::renderContentHeader()
-     */
-    public function renderContentHeader()
-    {
-    }
-
-    /**
-     *
-     * @see \Chamilo\Core\Home\Renderer\Type\Basic\BlockRenderer::renderContentFooter()
-     */
-    public function renderContentFooter()
-    {
-    }
-
-    /**
-     * Returns the selected course type id
-     *
-     * @return int
-     */
-    public function getCourseTypeId()
-    {
-        return $this->courseTypeId;
     }
 
     /**
@@ -197,16 +194,16 @@ class AssignmentNotifications extends Block implements ConfigurableInterface, St
      */
     private function loadSettings()
     {
-        if($this->settingsLoaded)
+        if ($this->settingsLoaded)
         {
             return;
         }
 
         $courseTypeIds = json_decode($this->getBlock()->getSetting(self::CONFIGURATION_COURSE_TYPE));
 
-        if (! is_array($courseTypeIds))
+        if (!is_array($courseTypeIds))
         {
-            $courseTypeIds = array($courseTypeIds);
+            $courseTypeIds = [$courseTypeIds];
         }
 
         $this->courseTypeId = $courseTypeIds[0];
@@ -215,19 +212,16 @@ class AssignmentNotifications extends Block implements ConfigurableInterface, St
     }
 
     /**
-     *
-     * @see \Chamilo\Core\Home\Architecture\ConfigurableInterface::getConfigurationVariables()
+     * @see \Chamilo\Core\Home\Renderer\Type\Basic\BlockRenderer::renderContentFooter()
      */
-    public function getConfigurationVariables()
+    public function renderContentFooter()
     {
-        return array(self::CONFIGURATION_COURSE_TYPE);
     }
 
     /**
-     * @return \Chamilo\Core\Notification\Service\NotificationManager
+     * @see \Chamilo\Core\Home\Renderer\Type\Basic\BlockRenderer::renderContentHeader()
      */
-    protected function getNotificationManager()
+    public function renderContentHeader()
     {
-        return $this->getService(NotificationManager::class);
     }
 }

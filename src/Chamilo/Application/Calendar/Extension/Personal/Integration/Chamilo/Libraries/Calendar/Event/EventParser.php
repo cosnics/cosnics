@@ -5,9 +5,9 @@ use Chamilo\Application\Calendar\Extension\Personal\Manager;
 use Chamilo\Application\Calendar\Extension\Personal\Storage\DataClass\Publication;
 use Chamilo\Core\User\Service\UserService;
 use Chamilo\Libraries\Architecture\Application\Application;
+use Chamilo\Libraries\Architecture\Application\Routing\UrlGenerator;
 use Chamilo\Libraries\Calendar\Service\CalendarRendererProvider;
 use Chamilo\Libraries\DependencyInjection\DependencyInjectionContainerBuilder;
-use Chamilo\Libraries\File\Redirect;
 
 /**
  * @package Chamilo\Application\Calendar\Extension\Personal\Integration\Chamilo\Libraries\Calendar\Event
@@ -92,8 +92,7 @@ class EventParser
             $parameters[Manager::PARAM_ACTION] = Manager::ACTION_VIEW;
             $parameters[Manager::PARAM_PUBLICATION_ID] = $this->getPublication()->getId();
 
-            $redirect = new Redirect($parameters);
-            $parsedEvent->setUrl($redirect->getUrl());
+            $parsedEvent->setUrl($this->getUrlGenerator()->fromParameters($parameters));
 
             $events[] = $parsedEvent;
         }
@@ -123,6 +122,11 @@ class EventParser
     public function getToDate()
     {
         return $this->toDate;
+    }
+
+    public function getUrlGenerator(): UrlGenerator
+    {
+        return DependencyInjectionContainerBuilder::getInstance()->createContainer()->get(UrlGenerator::class);
     }
 
     /**

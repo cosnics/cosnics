@@ -5,7 +5,8 @@ use Chamilo\Application\Weblcms\Tool\Implementation\User\Component\UnsubscribeBr
 use Chamilo\Core\Group\Storage\DataClass\Group;
 use Chamilo\Core\Group\Storage\DataManager;
 use Chamilo\Libraries\Architecture\Application\Application;
-use Chamilo\Libraries\File\Redirect;
+use Chamilo\Libraries\Architecture\Application\Routing\UrlGenerator;
+use Chamilo\Libraries\DependencyInjection\DependencyInjectionContainerBuilder;
 use Chamilo\Libraries\Format\Menu\TreeMenu\GenericTree;
 use Chamilo\Libraries\Format\Structure\Glyph\FontAwesomeGlyph;
 use Chamilo\Libraries\Platform\Session\Request;
@@ -46,6 +47,11 @@ class PlatformgroupMenuRenderer extends GenericTree
     protected function getDefaultNodeId()
     {
         return $this->root_ids[0];
+    }
+
+    public function getUrlGenerator(): UrlGenerator
+    {
+        return DependencyInjectionContainerBuilder::getInstance()->createContainer()->get(UrlGenerator::class);
     }
 
     /**
@@ -156,14 +162,12 @@ class PlatformgroupMenuRenderer extends GenericTree
      */
     public function get_search_url()
     {
-        $searchUrl = new Redirect(
+        return $this->getUrlGenerator()->fromParameters(
             [
                 Application::PARAM_CONTEXT => \Chamilo\Core\Group\Ajax\Manager::CONTEXT,
                 \Chamilo\Core\Group\Ajax\Manager::PARAM_ACTION => \Chamilo\Core\Group\Ajax\Manager::ACTION_XML_GROUP_MENU_FEED
             ]
         );
-
-        return $searchUrl->getUrl();
     }
 
     public function get_url_format()

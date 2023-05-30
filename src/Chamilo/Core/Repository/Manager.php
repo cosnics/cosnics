@@ -21,9 +21,10 @@ use Chamilo\Core\Repository\Workspace\Service\WorkspaceService;
 use Chamilo\Core\Repository\Workspace\Storage\DataClass\Workspace;
 use Chamilo\Libraries\Architecture\Application\Application;
 use Chamilo\Libraries\Architecture\Application\ApplicationConfigurationInterface;
+use Chamilo\Libraries\Architecture\Application\Routing\UrlGenerator;
 use Chamilo\Libraries\Architecture\ClassnameUtilities;
 use Chamilo\Libraries\Architecture\Exceptions\ObjectNotExistException;
-use Chamilo\Libraries\File\Redirect;
+use Chamilo\Libraries\DependencyInjection\DependencyInjectionContainerBuilder;
 use Chamilo\Libraries\Format\Structure\BreadcrumbGeneratorInterface;
 use Chamilo\Libraries\Format\Structure\BreadcrumbTrail;
 use Chamilo\Libraries\Format\Structure\Glyph\FontAwesomeGlyph;
@@ -572,7 +573,12 @@ abstract class Manager extends Application
             }
         }
 
-        $redirect = new Redirect(
+        /**
+         * @var \Chamilo\Libraries\Architecture\Application\Routing\UrlGenerator $urlGenerator
+         */
+        $urlGenerator = DependencyInjectionContainerBuilder::getInstance()->createContainer()->get(UrlGenerator::class);
+
+        return $urlGenerator->fromParameters(
             [
                 self::PARAM_CONTEXT => Manager::CONTEXT,
                 self::PARAM_ACTION => self::ACTION_DOWNLOAD_DOCUMENT,
@@ -580,8 +586,6 @@ abstract class Manager extends Application
                 ContentObject::PARAM_SECURITY_CODE => $securityCode
             ]
         );
-
-        return $redirect->getUrl();
     }
 
     public function get_menu(): string

@@ -5,8 +5,9 @@ use Chamilo\Application\Weblcms\Manager;
 use Chamilo\Application\Weblcms\Storage\DataClass\ContentObjectPublicationCategory;
 use Chamilo\Application\Weblcms\Storage\DataManager;
 use Chamilo\Libraries\Architecture\Application\Application;
+use Chamilo\Libraries\Architecture\Application\Routing\UrlGenerator;
 use Chamilo\Libraries\Architecture\ClassnameUtilities;
-use Chamilo\Libraries\File\Redirect;
+use Chamilo\Libraries\DependencyInjection\DependencyInjectionContainerBuilder;
 use Chamilo\Libraries\Format\Menu\TreeMenu\GenericTree;
 use Chamilo\Libraries\Format\Structure\Glyph\FontAwesomeGlyph;
 use Chamilo\Libraries\Platform\Session\Request;
@@ -21,7 +22,6 @@ use Chamilo\Libraries\Storage\Query\Variable\StaticConditionVariable;
 use Chamilo\Libraries\Translation\Translation;
 
 /**
- *
  * @package group.lib
  */
 
@@ -32,23 +32,28 @@ use Chamilo\Libraries\Translation\Translation;
  */
 class PublicationCategoriesTree extends GenericTree
 {
-    const TREE_NAME = __CLASS__;
+    public const TREE_NAME = __CLASS__;
 
     private $browser;
 
     /**
      * Creates a new category navigation menu.
      *
-     * @param $owner int The ID of the owner of the categories to provide in this menu.
+     * @param $owner            int The ID of the owner of the categories to provide in this menu.
      * @param $current_category int The ID of the current category in the menu.
-     * @param $url_format string The format to use for the URL of a category. Passed to sprintf(). Defaults to the
-     *        string "?category=%s".
-     * @param $extra_items array An array of extra tree items, added to the root.
+     * @param $url_format       string The format to use for the URL of a category. Passed to sprintf(). Defaults to the
+     *                          string "?category=%s".
+     * @param $extra_items      array An array of extra tree items, added to the root.
      */
     public function __construct($browser)
     {
         $this->browser = $browser;
         parent::__construct();
+    }
+
+    public function getUrlGenerator(): UrlGenerator
+    {
+        return DependencyInjectionContainerBuilder::getInstance()->createContainer()->get(UrlGenerator::class);
     }
 
     public function get_current_node_id()
@@ -90,14 +95,14 @@ class PublicationCategoriesTree extends GenericTree
 
         $children = DataManager::retrieves(
             ContentObjectPublicationCategory::class, new DataClassRetrievesParameters(
-                $condition, null, null, new OrderBy(array(
-                        new OrderProperty(
-                            new PropertyConditionVariable(
-                                ContentObjectPublicationCategory::class,
-                                ContentObjectPublicationCategory::PROPERTY_DISPLAY_ORDER
-                            )
+                $condition, null, null, new OrderBy([
+                    new OrderProperty(
+                        new PropertyConditionVariable(
+                            ContentObjectPublicationCategory::class,
+                            ContentObjectPublicationCategory::PROPERTY_DISPLAY_ORDER
                         )
-                    ))
+                    )
+                ])
             )
         );
 
@@ -110,7 +115,7 @@ class PublicationCategoriesTree extends GenericTree
         {
             if ($this->browser->tool_category_has_new_publications($node->get_id()))
             {
-                $glyph = new FontAwesomeGlyph('folder', array('fas-ci-new'), null, 'fas');
+                $glyph = new FontAwesomeGlyph('folder', ['fas-ci-new'], null, 'fas');
 
                 return $glyph->getClassNamesString();
             }
@@ -123,7 +128,7 @@ class PublicationCategoriesTree extends GenericTree
         }
         else
         {
-            $glyph = new FontAwesomeGlyph('folder', array('text-muted'), null, 'fas');
+            $glyph = new FontAwesomeGlyph('folder', ['text-muted'], null, 'fas');
 
             return $glyph->getClassNamesString();
         }
@@ -182,14 +187,12 @@ class PublicationCategoriesTree extends GenericTree
 
     public function get_search_url()
     {
-        $searchUrl = new Redirect(
-            array(
+        return $this->getUrlGenerator()->fromParameters(
+            [
                 Application::PARAM_CONTEXT => \Chamilo\Application\Weblcms\Ajax\Manager::CONTEXT,
                 \Chamilo\Application\Weblcms\Ajax\Manager::PARAM_ACTION => \Chamilo\Application\Weblcms\Ajax\Manager::ACTION_XML_GROUP_MENU_FEED
-            )
+            ]
         );
-
-        return $searchUrl->getUrl();
     }
 
     public function get_url_format()

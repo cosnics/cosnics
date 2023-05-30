@@ -6,7 +6,8 @@ use Chamilo\Application\Weblcms\Storage\DataClass\CourseCategory;
 use Chamilo\Application\Weblcms\Storage\DataManager;
 use Chamilo\Core\Rights\Entity\NestedRightsEntity;
 use Chamilo\Libraries\Architecture\Application\Application;
-use Chamilo\Libraries\File\Redirect;
+use Chamilo\Libraries\Architecture\Application\Routing\UrlGenerator;
+use Chamilo\Libraries\DependencyInjection\DependencyInjectionContainerBuilder;
 use Chamilo\Libraries\Format\Form\Element\AdvancedElementFinder\AdvancedElementFinderElement;
 use Chamilo\Libraries\Format\Form\Element\AdvancedElementFinder\AdvancedElementFinderElementType;
 use Chamilo\Libraries\Format\Structure\Glyph\FontAwesomeGlyph;
@@ -96,6 +97,11 @@ class CourseCategoryEntity implements NestedRightsEntity
         }
 
         return self::$instance;
+    }
+
+    public function getUrlGenerator(): UrlGenerator
+    {
+        return DependencyInjectionContainerBuilder::getInstance()->createContainer()->get(UrlGenerator::class);
     }
 
     /**
@@ -250,14 +256,12 @@ class CourseCategoryEntity implements NestedRightsEntity
      */
     public function get_xml_feed()
     {
-        $redirect = new Redirect(
+        return $this->getUrlGenerator()->fromParameters(
             [
                 Application::PARAM_CONTEXT => Manager::CONTEXT,
                 Manager::PARAM_ACTION => 'course_category'
             ]
         );
-
-        return $redirect->getUrl();
     }
 
     /**

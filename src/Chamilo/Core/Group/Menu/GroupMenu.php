@@ -5,9 +5,10 @@ use Chamilo\Core\Group\Ajax\Manager;
 use Chamilo\Core\Group\Storage\DataClass\Group;
 use Chamilo\Core\Group\Storage\DataManager;
 use Chamilo\Libraries\Architecture\Application\Application;
+use Chamilo\Libraries\Architecture\Application\Routing\UrlGenerator;
 use Chamilo\Libraries\Architecture\ClassnameUtilities;
 use Chamilo\Libraries\Architecture\Exceptions\ObjectNotExistException;
-use Chamilo\Libraries\File\Redirect;
+use Chamilo\Libraries\DependencyInjection\DependencyInjectionContainerBuilder;
 use Chamilo\Libraries\Format\Menu\Library\HtmlMenu;
 use Chamilo\Libraries\Format\Menu\Library\Renderer\HtmlMenuArrayRenderer;
 use Chamilo\Libraries\Format\Menu\OptionsMenuRenderer;
@@ -108,7 +109,12 @@ class GroupMenu extends HtmlMenu
         $menu = $this->get_menu();
         parent::__construct($menu);
         $this->array_renderer = new HtmlMenuArrayRenderer();
-        $this->forceCurrentUrl($this->get_url($this->current_category->get_id()));
+        $this->forceCurrentUrl($this->get_url($this->current_category->getId()));
+    }
+
+    public function getUrlGenerator(): UrlGenerator
+    {
+        return DependencyInjectionContainerBuilder::getInstance()->createContainer()->get(UrlGenerator::class);
     }
 
     /**
@@ -264,11 +270,11 @@ class GroupMenu extends HtmlMenu
      */
     public function render_as_tree()
     {
-        $redirect = new Redirect(
+        $feedUrl = $this->getUrlGenerator()->fromParameters(
             [Application::PARAM_CONTEXT => Manager::CONTEXT, Manager::PARAM_ACTION => 'xml_group_menu_feed']
         );
 
-        $renderer = new TreeMenuRenderer($this->get_tree_name(), $redirect->getUrl(), $this->urlFmt);
+        $renderer = new TreeMenuRenderer($this->get_tree_name(), $feedUrl, $this->urlFmt);
         $this->render($renderer, 'sitemap');
 
         return $renderer->toHtml();

@@ -9,8 +9,8 @@ use Chamilo\Core\Home\Renderer\Type\Basic\BlockRenderer;
 use Chamilo\Core\Repository\Storage\DataClass\ContentObject;
 use Chamilo\Core\Repository\Storage\DataManager;
 use Chamilo\Libraries\Architecture\Application\Application;
+use Chamilo\Libraries\Architecture\Application\Routing\UrlGenerator;
 use Chamilo\Libraries\DependencyInjection\DependencyInjectionContainerBuilder;
-use Chamilo\Libraries\File\Redirect;
 use Chamilo\Libraries\Format\Structure\Glyph\IdentGlyph;
 use Chamilo\Libraries\Translation\Translation;
 
@@ -72,9 +72,7 @@ class SystemAnnouncements extends BlockRenderer implements ConfigurableInterface
         $parameters[Manager::PARAM_ACTION] = Manager::ACTION_VIEW;
         $parameters[Manager::PARAM_SYSTEM_ANNOUNCEMENT_ID] = $publication[Publication::PROPERTY_ID];
 
-        $redirect = new Redirect($parameters);
-
-        return $redirect->getUrl();
+        return $this->getUrlGenerator()->fromParameters($parameters);
     }
 
     /**
@@ -96,6 +94,11 @@ class SystemAnnouncements extends BlockRenderer implements ConfigurableInterface
         }
 
         return $this->publications;
+    }
+
+    public function getUrlGenerator(): UrlGenerator
+    {
+        return DependencyInjectionContainerBuilder::getInstance()->createContainer()->get(UrlGenerator::class);
     }
 
     public function isEmpty()

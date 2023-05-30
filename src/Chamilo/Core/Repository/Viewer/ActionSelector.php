@@ -7,8 +7,9 @@ use Chamilo\Core\Repository\Selector\TypeSelectorFactory;
 use Chamilo\Core\Repository\Workspace\Service\RightsService;
 use Chamilo\Core\Repository\Workspace\Service\WorkspaceService;
 use Chamilo\Libraries\Architecture\Application\Application;
+use Chamilo\Libraries\Architecture\Application\Routing\UrlGenerator;
 use Chamilo\Libraries\Architecture\Traits\DependencyInjectionContainerTrait;
-use Chamilo\Libraries\File\Redirect;
+use Chamilo\Libraries\DependencyInjection\DependencyInjectionContainerBuilder;
 use Chamilo\Libraries\Format\Structure\ActionBar\DropdownButton;
 use Chamilo\Libraries\Format\Structure\ActionBar\SplitDropdownButton;
 use Chamilo\Libraries\Format\Structure\ActionBar\SubButton;
@@ -197,9 +198,7 @@ class ActionSelector
             $parameters[Manager::PARAM_IN_WORKSPACES] = 1;
         }
 
-        $existingLink = new Redirect($parameters);
-
-        return $existingLink->getUrl();
+        return $this->getUrlGenerator()->fromParameters($parameters);
     }
 
     /**
@@ -337,6 +336,11 @@ class ActionSelector
         }
 
         return $this->typeSelector;
+    }
+
+    public function getUrlGenerator(): UrlGenerator
+    {
+        return DependencyInjectionContainerBuilder::getInstance()->createContainer()->get(UrlGenerator::class);
     }
 
     /**

@@ -3,14 +3,12 @@ namespace Chamilo\Core\User\Component;
 
 use Chamilo\Core\User\Manager;
 use Chamilo\Libraries\Architecture\Exceptions\NotAllowedException;
-use Chamilo\Libraries\File\Redirect;
 use Chamilo\Libraries\Platform\Session\Session;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 
 /**
- *
  * @package user.lib.user_manager.component Component to change back from user view to your normal account
- * @author Sven Vanpoucke
+ * @author  Sven Vanpoucke
  */
 class AdminUserComponent extends Manager
 {

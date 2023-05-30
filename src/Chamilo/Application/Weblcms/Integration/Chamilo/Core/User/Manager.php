@@ -4,7 +4,8 @@ namespace Chamilo\Application\Weblcms\Integration\Chamilo\Core\User;
 use Chamilo\Application\Weblcms\Course\Storage\DataManager;
 use Chamilo\Core\User\Storage\DataClass\User;
 use Chamilo\Core\User\UserInterface;
-use Chamilo\Libraries\File\Redirect;
+use Chamilo\Libraries\Architecture\Application\Routing\UrlGenerator;
+use Chamilo\Libraries\DependencyInjection\DependencyInjectionContainerBuilder;
 use Chamilo\Libraries\Translation\Translation;
 use HTML_Table;
 
@@ -36,16 +37,20 @@ class Manager implements UserInterface
 
         $index = 2;
 
+        /**
+         * @var \Chamilo\Libraries\Architecture\Application\Routing\UrlGenerator $urlGenerator
+         */
+        $urlGenerator = DependencyInjectionContainerBuilder::getInstance()->createContainer()->get(UrlGenerator::class);
+
         foreach ($courses as $course)
         {
-            $redirect = new Redirect(
+            $url = $urlGenerator->fromParameters(
                 [
                     \Chamilo\Application\Weblcms\Manager::PARAM_CONTEXT => \Chamilo\Application\Weblcms\Manager::CONTEXT,
                     \Chamilo\Application\Weblcms\Manager::PARAM_ACTION => \Chamilo\Application\Weblcms\Manager::ACTION_VIEW_COURSE,
-                    \Chamilo\Application\Weblcms\Manager::PARAM_COURSE => $course->get_id()
+                    \Chamilo\Application\Weblcms\Manager::PARAM_COURSE => $course->getId()
                 ]
             );
-            $url = $redirect->getUrl();
 
             $url = '<a href="' . $url . '">';
             $table->setCellContents($index, 0, $url . $course->get_visual_code() . '</a>');

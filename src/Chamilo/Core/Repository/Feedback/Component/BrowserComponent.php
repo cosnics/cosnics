@@ -11,7 +11,6 @@ use Chamilo\Core\Repository\Feedback\Storage\DataClass\Notification;
 use Chamilo\Libraries\Architecture\Application\Application;
 use Chamilo\Libraries\Architecture\Exceptions\NotAllowedException;
 use Chamilo\Libraries\Architecture\Interfaces\DelegateComponent;
-use Chamilo\Libraries\File\Redirect;
 use Chamilo\Libraries\Format\Structure\ActionBar\ButtonToolBar;
 use Chamilo\Libraries\Format\Structure\ActionBar\Renderer\ButtonToolBarRenderer;
 use Chamilo\Libraries\Format\Structure\Glyph\FontAwesomeGlyph;
@@ -23,8 +22,8 @@ use Chamilo\Libraries\Utilities\StringUtilities;
 
 class BrowserComponent extends Manager implements DelegateComponent
 {
-    const PARAM_COUNT = 'feedback_count';
-    const PARAM_PAGE_NUMBER = 'feedback_page_nr';
+    public const PARAM_COUNT = 'feedback_count';
+    public const PARAM_PAGE_NUMBER = 'feedback_page_nr';
 
     /**
      * Executes this controller
@@ -50,18 +49,17 @@ class BrowserComponent extends Manager implements DelegateComponent
 
             $values = $form->exportValues();
 
-            $feedback = $this->feedbackServiceBridge->createFeedback($this->getUser(), $values[Feedback::PROPERTY_COMMENT]);
+            $feedback =
+                $this->feedbackServiceBridge->createFeedback($this->getUser(), $values[Feedback::PROPERTY_COMMENT]);
             $success = $feedback instanceof Feedback;
 
             $this->notifyNewFeedback($feedback);
 
             $this->redirectWithMessage(
                 Translation::get(
-                    $success ? 'ObjectCreated' : 'ObjectNotCreated',
-                    array('OBJECT' => Translation::get('Feedback')),
+                    $success ? 'ObjectCreated' : 'ObjectNotCreated', ['OBJECT' => Translation::get('Feedback')],
                     StringUtilities::LIBRARIES
-                ),
-                !$success
+                ), !$success
             );
         }
         else
@@ -70,8 +68,7 @@ class BrowserComponent extends Manager implements DelegateComponent
             $html = [];
 
             $feedbacks = $this->feedbackServiceBridge->getFeedback(
-                $this->getPager()->getNumberOfItemsPerPage(),
-                $this->getPager()->getCurrentRangeOffset()
+                $this->getPager()->getNumberOfItemsPerPage(), $this->getPager()->getCurrentRangeOffset()
             );
 
             $feedbackCount = count($feedbacks);
@@ -108,19 +105,18 @@ class BrowserComponent extends Manager implements DelegateComponent
 
                     $html[] = '<div style="display:flex;">';
                     $profilePhotoUrl = $this->getUrlGenerator()->fromParameters(
-                        array(
+                        [
                             Application::PARAM_CONTEXT => \Chamilo\Core\User\Ajax\Manager::CONTEXT,
                             Application::PARAM_ACTION => \Chamilo\Core\User\Ajax\Manager::ACTION_USER_PICTURE,
                             \Chamilo\Core\User\Manager::PARAM_USER_USER_ID => $feedback->get_user()->getId()
-                        )
+                        ]
                     );
 
                     $html[] = '<img class="panel-feedback-profile" src="' . $profilePhotoUrl . '" />';
 
                     $html[] = '<h4 class="list-group-item-heading" style="flex-grow: 2;">' .
-                        $feedback->get_user()->get_fullname() .
-                        '<div class="feedback-date">' . $this->format_date($feedback->get_creation_date()) .
-                        '</div></h4>';
+                        $feedback->get_user()->get_fullname() . '<div class="feedback-date">' .
+                        $this->format_date($feedback->get_creation_date()) . '</div></h4>';
 
                     $allowedToUpdateFeedback = $this->feedbackRightsServiceBridge->canEditFeedback($feedback);
                     $allowedToDeleteFeedback = $this->feedbackRightsServiceBridge->canDeleteFeedback($feedback);
@@ -157,8 +153,7 @@ class BrowserComponent extends Manager implements DelegateComponent
                     $html[] = '<div class="row">';
                     $html[] = '<div class="col-xs-12 feedback-pagination">';
                     $html[] = $this->getPagerRenderer()->renderPaginationWithPageLimit(
-                        $this->get_parameters(),
-                        self::PARAM_PAGE_NUMBER
+                        $this->get_parameters(), self::PARAM_PAGE_NUMBER
                     );
                     $html[] = '</div>';
                     $html[] = '</div>';
@@ -181,13 +176,60 @@ class BrowserComponent extends Manager implements DelegateComponent
         }
     }
 
-    protected function renderFeedbackContent(Feedback $feedback)
+    /**
+     * @param int $date
+     *
+     * @return string
+     */
+    public function format_date($date)
     {
-        $content = $feedback->get_comment();
+        $date_format = Translation::get('DateTimeFormatLong', null, StringUtilities::LIBRARIES);
 
-        $descriptionRenderer = new ContentObjectResourceRenderer($content);
+        return DatetimeUtilities::getInstance()->formatLocaleDate($date_format, $date);
+    }
 
-        return $descriptionRenderer->run();
+    /**
+     * @return int
+     */
+    public function getCount()
+    {
+        return $this->getRequest()->query->get(self::PARAM_COUNT, 5);
+    }
+
+    /**
+     * @return int
+     */
+    public function getPageNumber()
+    {
+        return $this->getRequest()->query->get(self::PARAM_PAGE_NUMBER, 1);
+    }
+
+    /**
+     * @return \Chamilo\Libraries\Format\Table\Pager
+     */
+    public function getPager()
+    {
+        if (is_null($this->pager))
+        {
+            $this->pager = new Pager(
+                $this->getCount(), 1, $this->feedbackServiceBridge->countFeedback(), $this->getPageNumber()
+            );
+        }
+
+        return $this->pager;
+    }
+
+    /**
+     * @return \Chamilo\Libraries\Format\Table\PagerRenderer
+     */
+    public function getPagerRenderer()
+    {
+        if (is_null($this->pagerRenderer))
+        {
+            $this->pagerRenderer = new PagerRenderer($this->getPager());
+        }
+
+        return $this->pagerRenderer;
     }
 
     /**
@@ -197,7 +239,7 @@ class BrowserComponent extends Manager implements DelegateComponent
      */
     protected function renderFeedbackButtonToolbar()
     {
-        $buttonToolbar = new ButtonToolBar(null, [], array('receive-feedback-buttons'));
+        $buttonToolbar = new ButtonToolBar(null, [], ['receive-feedback-buttons']);
         $buttonToolbarRenderer = new ButtonToolBarRenderer($buttonToolbar);
 
         if (!$this->get_application() instanceof FeedbackNotificationSupport)
@@ -227,11 +269,7 @@ class BrowserComponent extends Manager implements DelegateComponent
             }
 
             $actionsGenerator = new ActionsGenerator(
-                $this->get_application(),
-                $baseParameters,
-                $isAllowedToViewFeedback,
-                $feedbackCount,
-                $hasNotification
+                $this->get_application(), $baseParameters, $isAllowedToViewFeedback, $feedbackCount, $hasNotification
             );
 
             $buttonToolbar->addItems($actionsGenerator->run());
@@ -259,8 +297,16 @@ class BrowserComponent extends Manager implements DelegateComponent
         return implode(PHP_EOL, $html);
     }
 
+    protected function renderFeedbackContent(Feedback $feedback)
+    {
+        $content = $feedback->get_comment();
+
+        $descriptionRenderer = new ContentObjectResourceRenderer($content);
+
+        return $descriptionRenderer->run();
+    }
+
     /**
-     *
      * @param \core\repository\content_object\portfolio\feedback\Feedback $feedback
      *
      * @return string
@@ -268,10 +314,10 @@ class BrowserComponent extends Manager implements DelegateComponent
     public function render_delete_action($feedback_publication)
     {
         $delete_url = $this->get_url(
-            array(
+            [
                 Manager::PARAM_ACTION => Manager::ACTION_DELETE,
                 Manager::PARAM_FEEDBACK_ID => $feedback_publication->get_id()
-            )
+            ]
         );
 
         $bootstrapGlyph = new FontAwesomeGlyph('times');
@@ -284,7 +330,6 @@ class BrowserComponent extends Manager implements DelegateComponent
     }
 
     /**
-     *
      * @param \core\repository\content_object\portfolio\feedback\Feedback $feedback
      *
      * @return string
@@ -292,82 +337,17 @@ class BrowserComponent extends Manager implements DelegateComponent
     public function render_update_action($feedback_publication)
     {
         $update_url = $this->get_url(
-            array(
+            [
                 Manager::PARAM_ACTION => Manager::ACTION_UPDATE,
                 Manager::PARAM_FEEDBACK_ID => $feedback_publication->get_id()
-            )
+            ]
         );
 
         $bootstrapGlyph = new FontAwesomeGlyph('pencil-alt');
         $title = Translation::get('Edit', null, StringUtilities::LIBRARIES);
         $update_link =
-            '<a title="' . htmlentities($title) . '" href="' . $update_url . '">' . $bootstrapGlyph->render() .
-            '</a>';
+            '<a title="' . htmlentities($title) . '" href="' . $update_url . '">' . $bootstrapGlyph->render() . '</a>';
 
         return $update_link;
-    }
-
-    /**
-     *
-     * @param int $date
-     *
-     * @return string
-     */
-    public function format_date($date)
-    {
-        $date_format = Translation::get('DateTimeFormatLong', null, StringUtilities::LIBRARIES);
-
-        return DatetimeUtilities::getInstance()->formatLocaleDate($date_format, $date);
-    }
-
-    /**
-     *
-     * @return integer
-     */
-    public function getCount()
-    {
-        return $this->getRequest()->query->get(self::PARAM_COUNT, 5);
-    }
-
-    /**
-     *
-     * @return integer
-     */
-    public function getPageNumber()
-    {
-        return $this->getRequest()->query->get(self::PARAM_PAGE_NUMBER, 1);
-    }
-
-    /**
-     *
-     * @return \Chamilo\Libraries\Format\Table\Pager
-     */
-    public function getPager()
-    {
-        if (is_null($this->pager))
-        {
-            $this->pager = new Pager(
-                $this->getCount(),
-                1,
-                $this->feedbackServiceBridge->countFeedback(),
-                $this->getPageNumber()
-            );
-        }
-
-        return $this->pager;
-    }
-
-    /**
-     *
-     * @return \Chamilo\Libraries\Format\Table\PagerRenderer
-     */
-    public function getPagerRenderer()
-    {
-        if (is_null($this->pagerRenderer))
-        {
-            $this->pagerRenderer = new PagerRenderer($this->getPager());
-        }
-
-        return $this->pagerRenderer;
     }
 }

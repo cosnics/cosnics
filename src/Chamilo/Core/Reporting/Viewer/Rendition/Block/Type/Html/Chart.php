@@ -4,56 +4,20 @@ namespace Chamilo\Core\Reporting\Viewer\Rendition\Block\Type\Html;
 use Chamilo\Core\Reporting\Viewer\Ajax\Manager;
 use Chamilo\Core\Reporting\Viewer\Rendition\Block\Type\Html;
 use Chamilo\Libraries\Architecture\Application\Application;
+use Chamilo\Libraries\Architecture\Application\Routing\UrlGenerator;
 use Chamilo\Libraries\DependencyInjection\DependencyInjectionContainerBuilder;
 use Chamilo\Libraries\File\ConfigurablePathBuilder;
-use Chamilo\Libraries\File\Redirect;
 use Chamilo\Libraries\File\SystemPathBuilder;
 use Chamilo\Libraries\Format\Display;
 use Chamilo\Libraries\Translation\Translation;
 use Chamilo\Libraries\Utilities\StringUtilities;
 
 /**
- *
- * @author Hans De Bisschop & Magali Gillard
+ * @author  Hans De Bisschop & Magali Gillard
  * @package reporting.viewer
  */
 abstract class Chart extends Html
 {
-
-    protected function getVendorPath(): string
-    {
-        $container = DependencyInjectionContainerBuilder::getInstance()->createContainer();
-        /**
-         * @var \Chamilo\Libraries\File\SystemPathBuilder $systemPathBuilder
-         */
-        $systemPathBuilder = $container->get(SystemPathBuilder::class);
-
-        return $systemPathBuilder->getVendorPath();
-    }
-
-    /**
-     *
-     * @return string
-     */
-    public function get_content()
-    {
-        $path = $this->get_path();
-        if ($path)
-        {
-            return '<img src="' . $this->get_path() . '" border="0" />';
-        }
-        else
-        {
-            return Display::normal_message(Translation::get('NoDataNoChart'), true);
-        }
-    }
-
-    /**
-     *
-     * @return string
-     */
-    abstract public function get_path();
-
 
     public function convert_reporting_data()
     {
@@ -100,44 +64,17 @@ abstract class Chart extends Html
         }
     }
 
-    protected function strip_data_names($data)
-    {
-        foreach ($data as $key => $value)
-        {
-            foreach ($value as $key2 => $value2)
-            {
-                if ($key2 == "Name")
-                {
-                    $value[$key2] = StringUtilities::getInstance()->truncate(
-                        trim(html_entity_decode(strip_tags($value2), ENT_COMPAT, 'utf-8')), 30, false, '...'
-                    );
-                }
-            }
-            $data[$key] = $value;
-        }
-
-        return $data;
-    }
-
     /**
-     *
-     * @return string
+     * @return ConfigurablePathBuilder
      */
-    public function getUrl($md5)
+    protected function getConfigurablePathBuilder()
     {
-        $graphUrl = new Redirect(
-            array(
-                Application::PARAM_CONTEXT => Manager::CONTEXT,
-                Application::PARAM_ACTION => Manager::ACTION_GRAPH,
-                Manager::PARAM_GRAPHMD5 => $md5
-            )
-        );
+        $container = DependencyInjectionContainerBuilder::getInstance()->createContainer();
 
-        return $graphUrl->getUrl();
+        return $container->get(ConfigurablePathBuilder::class);
     }
 
     /**
-     *
      * @return string
      */
     public function getFilePath($md5)
@@ -148,13 +85,72 @@ abstract class Chart extends Html
     }
 
     /**
-     *
-     * @return ConfigurablePathBuilder
+     * @return string
      */
-    protected function getConfigurablePathBuilder()
+    public function getUrl($md5)
+    {
+        return $this->getUrlGenerator()->fromParameters(
+            [
+                Application::PARAM_CONTEXT => Manager::CONTEXT,
+                Application::PARAM_ACTION => Manager::ACTION_GRAPH,
+                Manager::PARAM_GRAPHMD5 => $md5
+            ]
+        );
+    }
+
+    public function getUrlGenerator(): UrlGenerator
+    {
+        return DependencyInjectionContainerBuilder::getInstance()->createContainer()->get(UrlGenerator::class);
+    }
+
+    protected function getVendorPath(): string
     {
         $container = DependencyInjectionContainerBuilder::getInstance()->createContainer();
+        /**
+         * @var \Chamilo\Libraries\File\SystemPathBuilder $systemPathBuilder
+         */
+        $systemPathBuilder = $container->get(SystemPathBuilder::class);
 
-        return $container->get(ConfigurablePathBuilder::class);
+        return $systemPathBuilder->getVendorPath();
+    }
+
+    /**
+     * @return string
+     */
+    public function get_content()
+    {
+        $path = $this->get_path();
+        if ($path)
+        {
+            return '<img src="' . $this->get_path() . '" border="0" />';
+        }
+        else
+        {
+            return Display::normal_message(Translation::get('NoDataNoChart'), true);
+        }
+    }
+
+    /**
+     * @return string
+     */
+    abstract public function get_path();
+
+    protected function strip_data_names($data)
+    {
+        foreach ($data as $key => $value)
+        {
+            foreach ($value as $key2 => $value2)
+            {
+                if ($key2 == 'Name')
+                {
+                    $value[$key2] = StringUtilities::getInstance()->truncate(
+                        trim(html_entity_decode(strip_tags($value2), ENT_COMPAT, 'utf-8')), 30, false, '...'
+                    );
+                }
+            }
+            $data[$key] = $value;
+        }
+
+        return $data;
     }
 }
