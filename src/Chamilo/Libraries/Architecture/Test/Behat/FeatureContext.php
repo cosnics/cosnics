@@ -4,8 +4,9 @@ namespace Chamilo\Libraries\Architecture\Test\Behat;
 use Behat\MinkExtension\Context\MinkContext;
 use Chamilo\Core\Install\Observer\Type\CommandLineInstaller;
 use Chamilo\Libraries\Architecture\Application\Application;
-use Chamilo\Libraries\File\Path;
+use Chamilo\Libraries\DependencyInjection\DependencyInjectionContainerBuilder;
 use Chamilo\Libraries\File\Redirect;
+use Chamilo\Libraries\File\SystemPathBuilder;
 use Exception;
 
 /**
@@ -14,23 +15,36 @@ use Exception;
 class FeatureContext extends MinkContext
 {
     /**
-     *  'I go to application "Chamilo\Core\Repository" ...' 
-     *
+     *  'I go to application "Chamilo\Core\Repository" ...'
      *  If $shouldUseLcms4Urls is true: we use the URL /index.php?application=repository
-     *  Else: we generate the URL by calling Chamilo\Libraries\File\Redirect  
-     *
+     *  Else: we generate the URL by calling Chamilo\Libraries\File\Redirect
      *  See iGoToApplication(...) and iAmInApplicationAndDoAction(...).
      */
     protected $shouldUseLcms4Urls = false;
 
     /**
-     * @BeforeSuite
+     * Go to an application and do an action
+     * @When /^I (?:am in|go to) application "(?P<application>[^"]+)" and do action "(?P<action>[^"]+)"$/
+     *
+     * @param unknown $application
      */
-    public static function installChamilo()
+    public function iAmInApplicationAndDoAction($application, $action)
     {
-        $config_file = Path::getInstance()->getStoragePath() . 'configuration/command_line_configuration.php';
-        $installer = new CommandLineInstaller($config_file);
-        $installer->run();
+        if (!$this->shouldUseLcms4Urls)
+        {
+            $redirect = new Redirect(
+                [Application::PARAM_CONTEXT => $application, Application::PARAM_ACTION => $action]
+            );
+
+            $this->visit($redirect->getUrl());
+        }
+        else
+        {   // Example: from 'Chamilo\Core\Repository' extract 'repository'.
+            $application = strtolower(array_pop(explode('\\', $application)));
+            $this->visit('/index.php?application=' . $application . '&go=' . $action);
+        }
+
+        $this->thePageShouldBeSuccessfullyLoaded();
     }
 
     /**
@@ -43,6 +57,61 @@ class FeatureContext extends MinkContext
         $this->fillField('login', 'admin');
         $this->fillField('password', 'admin');
         $this->pressButton('Login');
+    }
+
+    /**
+     * @When /^I follow "([^"]*)" in the row containing "([^"]*)"$/
+     */
+    public function iFollowInTheRowContaining($linkName, $rowText)
+    {
+        /** @var $row \Behat\Mink\Element\NodeElement */
+        $row = $this->getSession()->getPage()->find('css', sprintf('table tr:contains("%s")', $rowText));
+        if (!$row)
+        {
+            throw new Exception(sprintf('Cannot find any row on the page containing the text "%s"', $rowText));
+        }
+
+        $row->clickLink($linkName);
+    }
+
+    /**
+     * Go to an application
+     * @When /^I (?:am in|go to) application "(?P<application>[^"]+)"$/
+     *
+     * @param unknown $application
+     */
+    public function iGoToApplication($application)
+    {
+        if (!$this->shouldUseLcms4Urls)
+        {
+            $redirect = new Redirect([Application::PARAM_CONTEXT => $application]);
+            $this->visit($redirect->getUrl());
+        }
+        else
+        {   // Example: from 'Chamilo\Core\Repository' extract 'repository'.
+            $application = strtolower(array_pop(explode('\\', $application)));
+            $this->visit('/index.php?application=' . $application);
+        }
+
+        $this->thePageShouldBeSuccessfullyLoaded();
+    }
+
+    /**
+     * Checks if a notification div is not available
+     * @Then /^I should not see an error box$/
+     */
+    public function iShouldNotSeeAnErrorBox()
+    {
+        $this->assertElementNotOnPage('.notification-1');
+    }
+
+    /**
+     * Checks if no exception is shown on the page
+     * @Then /^I should not see an exception$/
+     */
+    public function iShouldNotSeeAnExceptionBox()
+    {
+        $this->assertElementNotOnPage('.error-message');
     }
 
     /**
@@ -64,15 +133,6 @@ class FeatureContext extends MinkContext
     }
 
     /**
-     * Checks if a notification div is not available
-     * @Then /^I should not see an error box$/
-     */
-    public function iShouldNotSeeAnErrorBox()
-    {
-        $this->assertElementNotOnPage('.notification-1');
-    }
-
-    /**
      * Checks if an exception is shown on the page
      * @Then /^I should see an exception$/
      */
@@ -82,12 +142,16 @@ class FeatureContext extends MinkContext
     }
 
     /**
-     * Checks if no exception is shown on the page
-     * @Then /^I should not see an exception$/
+     * @BeforeSuite
      */
-    public function iShouldNotSeeAnExceptionBox()
+    public static function installChamilo()
     {
-        $this->assertElementNotOnPage('.error-message');
+        $systemPathBuilder =
+            DependencyInjectionContainerBuilder::getInstance()->createContainer()->get(SystemPathBuilder::class);
+
+        $config_file = $systemPathBuilder->getStoragePath() . 'configuration/command_line_configuration.php';
+        $installer = new CommandLineInstaller($config_file);
+        $installer->run();
     }
 
     /**
@@ -100,66 +164,5 @@ class FeatureContext extends MinkContext
         $this->iShouldNotSeeAnExceptionBox();
         $this->assertElementOnPage('#footer');
         $this->assertElementNotOnPage('table.xdebug-error');
-    }
-
-    /**
-     * Go to an application
-     * @When /^I (?:am in|go to) application "(?P<application>[^"]+)"$/
-     * 
-     * @param unknown $application
-     */
-    public function iGoToApplication($application)
-    {
-        if (! $this->shouldUseLcms4Urls)
-        {
-            $redirect = new Redirect(array(Application::PARAM_CONTEXT => $application));
-            $this->visit($redirect->getUrl());
-        }
-        else
-        {   // Example: from 'Chamilo\Core\Repository' extract 'repository'. 
-            $application = strtolower(array_pop(explode('\\', $application)));
-            $this->visit('/index.php?application=' . $application);
-        }
-
-        $this->thePageShouldBeSuccessfullyLoaded();
-    }
-
-    /**
-     * Go to an application and do an action
-     * @When /^I (?:am in|go to) application "(?P<application>[^"]+)" and do action "(?P<action>[^"]+)"$/
-     * 
-     * @param unknown $application
-     */
-    public function iAmInApplicationAndDoAction($application, $action)
-    {
-        if (! $this->shouldUseLcms4Urls)
-        {
-            $redirect = new Redirect(
-                array(Application::PARAM_CONTEXT => $application, Application::PARAM_ACTION => $action));
-        
-            $this->visit($redirect->getUrl());
-        }
-        else
-        {   // Example: from 'Chamilo\Core\Repository' extract 'repository'.
-            $application = strtolower(array_pop(explode('\\', $application)));
-            $this->visit('/index.php?application=' . $application . '&go=' . $action);
-        }
-
-        $this->thePageShouldBeSuccessfullyLoaded();
-    }
-
-    /**
-     * @When /^I follow "([^"]*)" in the row containing "([^"]*)"$/
-     */
-    public function iFollowInTheRowContaining($linkName, $rowText)
-    {
-        /** @var $row \Behat\Mink\Element\NodeElement */
-        $row = $this->getSession()->getPage()->find('css', sprintf('table tr:contains("%s")', $rowText));
-        if (! $row) 
-        {
-            throw new Exception(sprintf('Cannot find any row on the page containing the text "%s"', $rowText));
-        }
-
-        $row->clickLink($linkName);
     }
 }

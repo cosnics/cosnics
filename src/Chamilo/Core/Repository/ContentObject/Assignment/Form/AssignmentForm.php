@@ -13,7 +13,6 @@ use Chamilo\Core\Repository\Storage\DataManager;
 use Chamilo\Core\User\Storage\DataClass\User;
 use Chamilo\Libraries\Architecture\Application\Application;
 use Chamilo\Libraries\Architecture\ClassnameUtilities;
-use Chamilo\Libraries\File\Path;
 use Chamilo\Libraries\File\Redirect;
 use Chamilo\Libraries\Format\Form\Element\AdvancedElementFinder\AdvancedElementFinderElement;
 use Chamilo\Libraries\Format\Form\Element\AdvancedElementFinder\AdvancedElementFinderElements;
@@ -21,7 +20,6 @@ use Chamilo\Libraries\Format\Form\Element\AdvancedElementFinder\AdvancedElementF
 use Chamilo\Libraries\Format\Form\Element\AdvancedElementFinder\AdvancedElementFinderElementTypes;
 use Chamilo\Libraries\Format\Structure\Glyph\IdentGlyph;
 use Chamilo\Libraries\Format\Structure\Glyph\NamespaceIdentGlyph;
-use Chamilo\Libraries\Format\Utilities\ResourceManager;
 use Chamilo\Libraries\Storage\Parameters\DataClassRetrievesParameters;
 use Chamilo\Libraries\Storage\Query\Condition\InCondition;
 use Chamilo\Libraries\Storage\Query\Variable\PropertyConditionVariable;
@@ -30,10 +28,9 @@ use Chamilo\Libraries\Utilities\DatetimeUtilities;
 use Chamilo\Libraries\Utilities\StringUtilities;
 
 /**
- *
  * @package repository.content_object.assignment.php This class represents a form to create or update assignments
- * @author Joris Willems <joris.willems@gmail.com>
- * @author Alexander Van Paemel
+ * @author  Joris Willems <joris.willems@gmail.com>
+ * @author  Alexander Van Paemel
  */
 class AssignmentForm extends ContentObjectForm
 {
@@ -114,20 +111,20 @@ class AssignmentForm extends ContentObjectForm
         );
 
         $uploadUrl = new Redirect(
-            array(
+            [
                 Application::PARAM_CONTEXT => \Chamilo\Core\Repository\Ajax\Manager::CONTEXT,
                 \Chamilo\Core\Repository\Ajax\Manager::PARAM_ACTION => \Chamilo\Core\Repository\Ajax\Manager::ACTION_IMPORT_FILE
-            )
+            ]
         );
 
-        $dropZoneParameters = array(
+        $dropZoneParameters = [
             'name' => 'select_attachment_importer',
             'maxFilesize' => $calculator->getMaximumUploadSize(),
             'uploadUrl' => $uploadUrl->getUrl(),
             'successCallbackFunction' => 'chamilo.core.repository.importFeedbackAttachment.processUploadedFile',
             'sendingCallbackFunction' => 'chamilo.core.repository.importFeedbackAttachment.prepareRequest',
             'removedfileCallbackFunction' => 'chamilo.core.repository.importFeedbackAttachment.deleteUploadedFile'
-        );
+        ];
 
         $this->addFileDropzone('select_attachment_importer', $dropZoneParameters, true);
 
@@ -172,8 +169,12 @@ class AssignmentForm extends ContentObjectForm
     {
         $object = new Assignment();
         $values = $this->exportValues();
-        $object->set_start_time(DatetimeUtilities::getInstance()->timeFromDatepicker($values[Assignment::PROPERTY_START_TIME]));
-        $object->set_end_time(DatetimeUtilities::getInstance()->timeFromDatepicker($values[Assignment::PROPERTY_END_TIME]));
+        $object->set_start_time(
+            DatetimeUtilities::getInstance()->timeFromDatepicker($values[Assignment::PROPERTY_START_TIME])
+        );
+        $object->set_end_time(
+            DatetimeUtilities::getInstance()->timeFromDatepicker($values[Assignment::PROPERTY_END_TIME])
+        );
         $object->set_visibility_submissions($values[Assignment::PROPERTY_VISIBILITY_SUBMISSIONS]);
         $object->set_allow_late_submissions($values[Assignment::PROPERTY_ALLOW_LATE_SUBMISSIONS]);
 
@@ -271,7 +272,7 @@ class AssignmentForm extends ContentObjectForm
                 $allowedTypeTranslation = Translation::getInstance()->getTranslation('TypeName', [], $basePackage);
 
                 $glyph = new NamespaceIdentGlyph(
-                    $basePackage, true, false, false, IdentGlyph::SIZE_MINI, array('fa-fw')
+                    $basePackage, true, false, false, IdentGlyph::SIZE_MINI, ['fa-fw']
                 );
 
                 $defaultElements->add_element(
@@ -331,7 +332,7 @@ class AssignmentForm extends ContentObjectForm
                     $defaultAttachments->add_element(
                         new AdvancedElementFinderElement(
                             'content_object_' . $attachment->getId(),
-                            $attachment->getGlyph(IdentGlyph::SIZE_MINI, true, array('fa-fw'))->getClassNamesString(),
+                            $attachment->getGlyph(IdentGlyph::SIZE_MINI, true, ['fa-fw'])->getClassNamesString(),
                             $attachment->get_title(), $attachment->get_type_string()
                         )
                     );
@@ -346,7 +347,7 @@ class AssignmentForm extends ContentObjectForm
             $defaults[Assignment::PROPERTY_VISIBILITY_SUBMISSIONS] = 0;
             $defaults[Assignment::PROPERTY_ALLOW_LATE_SUBMISSIONS] = 1;
             $defaults[Assignment::PROPERTY_VISIBILTY_FEEDBACK] = Assignment::VISIBILITY_FEEDBACK_AFTER_SUBMISSION;
-            $defaults[Assignment::PROPERTY_ALLOWED_TYPES] = array(File::class);
+            $defaults[Assignment::PROPERTY_ALLOWED_TYPES] = [File::class];
             $defaults[Assignment::PROPERTY_START_TIME] = time();
             $defaults[Assignment::PROPERTY_END_TIME] = strtotime('+1 day', time());
         }
@@ -362,8 +363,12 @@ class AssignmentForm extends ContentObjectForm
 
         $object = $this->get_content_object();
         $values = $this->exportValues();
-        $object->set_start_time(DatetimeUtilities::getInstance()->timeFromDatepicker($values[Assignment::PROPERTY_START_TIME]));
-        $object->set_end_time(DatetimeUtilities::getInstance()->timeFromDatepicker($values[Assignment::PROPERTY_END_TIME]));
+        $object->set_start_time(
+            DatetimeUtilities::getInstance()->timeFromDatepicker($values[Assignment::PROPERTY_START_TIME])
+        );
+        $object->set_end_time(
+            DatetimeUtilities::getInstance()->timeFromDatepicker($values[Assignment::PROPERTY_END_TIME])
+        );
         $object->set_visibility_submissions($values[Assignment::PROPERTY_VISIBILITY_SUBMISSIONS]);
         $object->set_allow_late_submissions($values[Assignment::PROPERTY_ALLOW_LATE_SUBMISSIONS]);
 

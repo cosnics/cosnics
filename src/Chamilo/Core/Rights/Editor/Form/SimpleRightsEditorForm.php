@@ -4,12 +4,10 @@ namespace Chamilo\Core\Rights\Editor\Form;
 use Chamilo\Core\Rights\RightsLocation;
 use Chamilo\Core\Rights\RightsUtil;
 use Chamilo\Core\Rights\Storage\DataManager;
-use Chamilo\Libraries\File\Path;
 use Chamilo\Libraries\Format\Form\Element\AdvancedElementFinder\AdvancedElementFinderElements;
 use Chamilo\Libraries\Format\Form\Element\AdvancedElementFinder\AdvancedElementFinderElementTypes;
 use Chamilo\Libraries\Format\Form\FormValidator;
 use Chamilo\Libraries\Format\Structure\Glyph\FontAwesomeGlyph;
-use Chamilo\Libraries\Format\Utilities\ResourceManager;
 use Chamilo\Libraries\Platform\Session\Session;
 use Chamilo\Libraries\Translation\Translation;
 use Chamilo\Libraries\Utilities\StringUtilities;
@@ -17,45 +15,33 @@ use Chamilo\Libraries\Utilities\StringUtilities;
 /**
  * Form to display the rights on a more usable way with radio buttons.
  *
- * @author Sven Vanpoucke
- * @package application.common.rights_editor_manager.component
+ * @author     Sven Vanpoucke
+ * @package    application.common.rights_editor_manager.component
  * @deprecated Use \Chamilo\Libraries\Rights\Form\RightsForm now
  */
 class SimpleRightsEditorForm extends FormValidator
 {
-    const INHERIT_FALSE = 1;
+    public const INHERIT_FALSE = 1;
 
-    const INHERIT_TRUE = 0;
+    public const INHERIT_TRUE = 0;
 
-    const PROPERTY_BUTTONS = 'buttons';
+    public const PROPERTY_BUTTONS = 'buttons';
 
-    const PROPERTY_INHERIT = 'inherit';
+    public const PROPERTY_INHERIT = 'inherit';
 
-    const PROPERTY_RESET = 'reset';
+    public const PROPERTY_RESET = 'reset';
 
-    const PROPERTY_RIGHT_OPTION = 'right_option';
+    public const PROPERTY_RIGHT_OPTION = 'right_option';
 
-    const PROPERTY_SUBMIT = 'submit';
+    public const PROPERTY_SUBMIT = 'submit';
 
-    const PROPERTY_TARGETS = 'targets';
+    public const PROPERTY_TARGETS = 'targets';
 
-    const RIGHT_OPTION_ALL = 0;
+    public const RIGHT_OPTION_ALL = 0;
 
-    const RIGHT_OPTION_SELECT = 2;
+    public const RIGHT_OPTION_SELECT = 2;
 
-    const RIGHT_OTPION_ME = 1;
-
-    /**
-     * The context for the rights form
-     */
-    private $context;
-
-    /**
-     * The selected location ids
-     *
-     * @var Array<Int>
-     */
-    private $locations;
+    public const RIGHT_OTPION_ME = 1;
 
     /**
      * The available rights
@@ -65,11 +51,23 @@ class SimpleRightsEditorForm extends FormValidator
     private $available_rights;
 
     /**
+     * The context for the rights form
+     */
+    private $context;
+
+    /**
      * The selected entities
      *
      * @param Array<RightEntity>
      */
     private $entities;
+
+    /**
+     * The selected location ids
+     *
+     * @var Array<Int>
+     */
+    private $locations;
 
     public function __construct($action, $context, $locations, $available_rights, $entities)
     {
@@ -150,19 +148,19 @@ class SimpleRightsEditorForm extends FormValidator
         {
             $group[] = &$this->createElement(
                 'radio', null, null, Translation::get('InheritRights'), self::INHERIT_TRUE,
-                array('class' => 'inherit_rights_selector')
+                ['class' => 'inherit_rights_selector']
             );
         }
         else
         {
             $group[] = &$this->createElement(
                 'radio', null, null, Translation::get('InheritRights'), self::INHERIT_TRUE,
-                array('class' => 'inherit_rights_selector', 'disabled' => 'disabled')
+                ['class' => 'inherit_rights_selector', 'disabled' => 'disabled']
             );
         }
         $group[] = &$this->createElement(
             'radio', null, null, Translation::get('UseSpecificRights'), self::INHERIT_FALSE,
-            array('class' => 'specific_rights_selector')
+            ['class' => 'specific_rights_selector']
         );
 
         $this->addGroup($group, self::PROPERTY_INHERIT, null, '');
@@ -185,15 +183,15 @@ class SimpleRightsEditorForm extends FormValidator
 
         $group[] = &$this->createElement(
             'radio', null, null, Translation::get('Everyone'), self::RIGHT_OPTION_ALL,
-            array('class' => 'other_option_selected')
+            ['class' => 'other_option_selected']
         );
         $group[] = &$this->createElement(
             'radio', null, null, Translation::get('OnlyForMe'), self::RIGHT_OTPION_ME,
-            array('class' => 'other_option_selected')
+            ['class' => 'other_option_selected']
         );
         $group[] = &$this->createElement(
             'radio', null, null, Translation::get('SelectSpecificEntities'), self::RIGHT_OPTION_SELECT,
-            array('class' => 'entity_option_selected')
+            ['class' => 'entity_option_selected']
         );
 
         $this->addGroup($group, $name, '', '');
@@ -329,7 +327,7 @@ class SimpleRightsEditorForm extends FormValidator
             );
 
             $selected_entities_per_right = [];
-            foreach($selected_entities as $selected_entity)
+            foreach ($selected_entities as $selected_entity)
             {
                 $selected_entities_per_right[$selected_entity->get_right_id()][] = $selected_entity;
             }

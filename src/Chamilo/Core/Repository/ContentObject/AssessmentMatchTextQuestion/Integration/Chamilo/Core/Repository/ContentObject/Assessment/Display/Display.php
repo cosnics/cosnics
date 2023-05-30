@@ -3,15 +3,13 @@ namespace Chamilo\Core\Repository\ContentObject\AssessmentMatchTextQuestion\Inte
 
 use Chamilo\Core\Repository\ContentObject\Assessment\Display\Component\Viewer\QuestionDisplay;
 use Chamilo\Core\Repository\ContentObject\Assessment\Storage\DataClass\Assessment;
-use Chamilo\Libraries\File\Path;
 use Chamilo\Libraries\Format\Structure\Glyph\FontAwesomeGlyph;
 use Chamilo\Libraries\Format\Utilities\ResourceManager;
 use Chamilo\Libraries\Translation\Translation;
 
 /**
  * @package Chamilo\Core\Repository\ContentObject\AssessmentMatchTextQuestion\Integration\Chamilo\Core\Repository\ContentObject\Assessment\Display
- *
- * @author Hans De Bisschop <hans.de.bisschop@ehb.be>
+ * @author  Hans De Bisschop <hans.de.bisschop@ehb.be>
  */
 class Display extends QuestionDisplay
 {
@@ -61,7 +59,7 @@ class Display extends QuestionDisplay
         $element_template = implode(PHP_EOL, $element_template);
 
         $name = $clo_question->get_id() . '_0';
-        $formvalidator->addElement('textarea', $name, '', array('style' => $textarea_style));
+        $formvalidator->addElement('textarea', $name, '', ['style' => $textarea_style]);
         $renderer->setElementTemplate($element_template, $name);
 
         $formvalidator->addElement('html', '</div>');

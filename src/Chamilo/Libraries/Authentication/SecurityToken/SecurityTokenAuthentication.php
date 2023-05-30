@@ -5,6 +5,7 @@ use Chamilo\Core\User\Storage\DataClass\User;
 use Chamilo\Libraries\Authentication\Authentication;
 use Chamilo\Libraries\Authentication\AuthenticationException;
 use Chamilo\Libraries\Authentication\AuthenticationInterface;
+use Chamilo\Libraries\Utilities\StringUtilities;
 
 /**
  *
@@ -55,7 +56,7 @@ class SecurityTokenAuthentication extends Authentication implements Authenticati
             if (!$user instanceof User)
             {
                 throw new AuthenticationException(
-                    $this->translator->trans('InvalidSecurityToken', [], 'Chamilo\Libraries')
+                    $this->translator->trans('InvalidSecurityToken', [], StringUtilities::LIBRARIES)
                 );
             }
 

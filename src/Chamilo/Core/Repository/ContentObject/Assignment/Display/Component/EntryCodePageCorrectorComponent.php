@@ -10,6 +10,7 @@ use Chamilo\Libraries\Architecture\Application\ApplicationConfigurationInterface
 use Chamilo\Libraries\Architecture\Exceptions\NotAllowedException;
 use Chamilo\Libraries\Format\Structure\BreadcrumbTrail;
 use Chamilo\Libraries\Translation\Translation;
+use Chamilo\Libraries\Utilities\StringUtilities;
 
 /**
  * Class EntryRevisorInPageComponent
@@ -68,7 +69,7 @@ class EntryCodePageCorrectorComponent extends Manager
                 $this->getTranslator()->trans(
                     $success ? 'ObjectCreated' : 'ObjectNotCreated',
                     ['OBJECT' => $this->getTranslator()->trans('Page', [], 'Chamilo\Core\Repository\Page')],
-                    'Chamilo\Libraries'
+                    StringUtilities::LIBRARIES
                 ), !$success, [
                     self::PARAM_ACTION => self::ACTION_ENTRY
                 ]

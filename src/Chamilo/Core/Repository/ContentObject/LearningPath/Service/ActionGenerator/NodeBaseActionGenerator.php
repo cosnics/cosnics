@@ -13,6 +13,7 @@ use Chamilo\Core\Repository\Selector\TypeSelector;
 use Chamilo\Core\Repository\Selector\TypeSelectorFactory;
 use Chamilo\Libraries\Platform\Session\Session;
 use Chamilo\Libraries\Translation\Translation;
+use Chamilo\Libraries\Utilities\StringUtilities;
 
 /**
  * Generates the actions for a given TreeNode
@@ -234,7 +235,7 @@ class NodeBaseActionGenerator extends NodeActionGenerator
 
         return new Action(
             'delete', $title, $url, 'fas fa-times fa-fw',
-            $this->translator->getTranslation('Confirm', null, 'Chamilo\Libraries')
+            $this->translator->getTranslation('Confirm', null, StringUtilities::LIBRARIES)
         );
     }
 

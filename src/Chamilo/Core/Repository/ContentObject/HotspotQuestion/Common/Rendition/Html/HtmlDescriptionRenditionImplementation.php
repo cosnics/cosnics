@@ -6,7 +6,6 @@ use Chamilo\Core\Repository\Common\Rendition\ContentObjectRendition;
 use Chamilo\Core\Repository\ContentObject\HotspotQuestion\Common\Rendition\HtmlRenditionImplementation;
 use Chamilo\Core\Repository\Manager;
 use Chamilo\Libraries\File\ImageManipulation\ImageManipulation;
-use Chamilo\Libraries\File\Path;
 use Chamilo\Libraries\Format\Utilities\ResourceManager;
 use Chamilo\Libraries\Translation\Translation;
 use Nette\Utils\Image;

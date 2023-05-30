@@ -6,6 +6,7 @@ use Chamilo\Libraries\File\SystemPathBuilder;
 use Chamilo\Libraries\File\WebPathBuilder;
 use Chamilo\Libraries\Platform\ChamiloRequest;
 use Chamilo\Libraries\Translation\Translation;
+use Chamilo\Libraries\Utilities\StringUtilities;
 
 /**
  * The combination of options available for the FormValidatorHtmlEditor Should be implemented for each specific editor
@@ -248,7 +249,7 @@ class FormValidatorHtmlEditorOptions
         }
         else
         {
-            $path = $webPathBuilder->getPluginPath('Chamilo\Libraries') . 'HtmlEditor/CkeditorInstanceConfig.js';
+            $path = $webPathBuilder->getPluginPath(StringUtilities::LIBRARIES) . 'HtmlEditor/CkeditorInstanceConfig.js';
         }
 
         $available_options = $this->get_option_names();

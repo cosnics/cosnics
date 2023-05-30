@@ -5,15 +5,13 @@ use Chamilo\Core\Repository\Common\ContentObjectResourceRenderer;
 use Chamilo\Core\Repository\ContentObject\Assessment\Display\Component\Viewer\QuestionDisplay;
 use Chamilo\Core\Repository\ContentObject\Assessment\Storage\DataClass\Assessment;
 use Chamilo\Core\Repository\ContentObject\AssessmentMultipleChoiceQuestion\Storage\DataClass\AssessmentMultipleChoiceQuestion;
-use Chamilo\Libraries\File\Path;
 use Chamilo\Libraries\Format\Structure\Glyph\FontAwesomeGlyph;
 use Chamilo\Libraries\Format\Utilities\ResourceManager;
 use Chamilo\Libraries\Translation\Translation;
 
 /**
  * @package Chamilo\Core\Repository\ContentObject\AssessmentMultipleChoiceQuestion\Integration\Chamilo\Core\Repository\ContentObject\Assessment\Display
- *
- * @author Hans De Bisschop <hans.de.bisschop@ehb.be>
+ * @author  Hans De Bisschop <hans.de.bisschop@ehb.be>
  */
 class Display extends QuestionDisplay
 {
@@ -75,7 +73,8 @@ class Display extends QuestionDisplay
         {
             $group = [];
 
-            $object_renderer = new ContentObjectResourceRenderer($answer->get_value()
+            $object_renderer = new ContentObjectResourceRenderer(
+                $answer->get_value()
             );
 
             if ($type == AssessmentMultipleChoiceQuestion::ANSWER_TYPE_RADIO)

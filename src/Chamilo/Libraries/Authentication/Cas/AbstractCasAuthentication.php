@@ -9,6 +9,7 @@ use Chamilo\Libraries\Authentication\AuthenticationException;
 use Chamilo\Libraries\Authentication\AuthenticationInterface;
 use Chamilo\Libraries\Platform\ChamiloRequest;
 use Chamilo\Libraries\Platform\Session\SessionUtilities;
+use Chamilo\Libraries\Utilities\StringUtilities;
 use Exception;
 use phpCAS;
 use Symfony\Component\Translation\Translator;
@@ -177,7 +178,7 @@ abstract class AbstractCasAuthentication extends Authentication implements Authe
                 'PLATFORM' => $this->configurationConsulter->getSetting(
                     ['Chamilo\Core\Admin', 'site_name']
                 )
-            ], 'Chamilo\Libraries'
+            ], StringUtilities::LIBRARIES
             )
         );
 

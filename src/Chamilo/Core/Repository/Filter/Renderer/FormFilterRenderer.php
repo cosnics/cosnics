@@ -10,11 +10,9 @@ use Chamilo\Core\Repository\Storage\DataClass\ContentObject;
 use Chamilo\Core\Repository\Storage\DataManager;
 use Chamilo\Core\Repository\UserView\Storage\DataClass\UserView;
 use Chamilo\Core\Repository\Workspace\Storage\DataClass\Workspace;
-use Chamilo\Libraries\File\Path;
 use Chamilo\Libraries\Format\Form\FormValidator;
 use Chamilo\Libraries\Format\Menu\OptionsMenuRenderer;
 use Chamilo\Libraries\Format\Structure\Glyph\FontAwesomeGlyph;
-use Chamilo\Libraries\Format\Utilities\ResourceManager;
 use Chamilo\Libraries\Storage\Parameters\DataClassRetrievesParameters;
 use Chamilo\Libraries\Storage\Query\Condition\EqualityCondition;
 use Chamilo\Libraries\Storage\Query\Variable\PropertyConditionVariable;
@@ -83,8 +81,8 @@ class FormFilterRenderer extends FilterRenderer
     public function add_footer()
     {
         $this->form_validator->addElement(
-            'html', ResourceManager::getInstance()->getResourceHtml(
-            Path::getInstance()->getJavascriptPath(Manager::CONTEXT, true) . 'Search.js'
+            'html', $this->form_validator->getResourceManager()->getResourceHtml(
+            $this->form_validator->getWebPathBuilder()->getJavascriptPath(Manager::CONTEXT) . 'Search.js'
         )
         );
         $this->form_validator->addElement(

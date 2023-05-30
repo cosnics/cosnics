@@ -9,9 +9,10 @@ use Chamilo\Core\Repository\Storage\DataClass\ContentObject;
 use Chamilo\Libraries\Architecture\Interfaces\FileStorageSupport;
 use Chamilo\Libraries\Architecture\Interfaces\Includeable;
 use Chamilo\Libraries\Architecture\Interfaces\Versionable;
+use Chamilo\Libraries\DependencyInjection\DependencyInjectionContainerBuilder;
+use Chamilo\Libraries\File\ConfigurablePathBuilder;
 use Chamilo\Libraries\File\Filesystem;
 use Chamilo\Libraries\File\FileType;
-use Chamilo\Libraries\File\Path;
 use Chamilo\Libraries\Format\Structure\Glyph\IdentGlyph;
 use Chamilo\Libraries\Translation\Translation;
 use Chamilo\Libraries\Utilities\String\Text;
@@ -228,15 +229,22 @@ class File extends ContentObject implements Versionable, Includeable, FileStorag
 
         if (file_exists($full_current_file_path))
         {
+            /**
+             * @var \Chamilo\Libraries\File\ConfigurablePathBuilder $configurablePathBuilder
+             */
+            $configurablePathBuilder = DependencyInjectionContainerBuilder::getInstance()->createContainer()->get(
+                ConfigurablePathBuilder::class
+            );
+
             $filename_hash = md5($this->get_filename());
             $relative_folder_path = $this->get_owner_id() . '/' . Text::char_at($filename_hash, 0);
-            $full_folder_path = Path::getInstance()->getRepositoryPath() . $relative_folder_path;
+            $full_folder_path = $configurablePathBuilder->getRepositoryPath() . $relative_folder_path;
 
             $unique_filename_hash = Filesystem::create_unique_name($full_folder_path, $filename_hash);
 
             $path_to_copied_file = $full_folder_path . '/' . $unique_filename_hash;
 
-            $this->set_storage_path(Path::getInstance()->getRepositoryPath());
+            $this->set_storage_path($configurablePathBuilder->getRepositoryPath());
             $this->set_path($relative_folder_path . '/' . $unique_filename_hash);
             $this->set_hash($unique_filename_hash);
 
@@ -471,7 +479,13 @@ class File extends ContentObject implements Versionable, Includeable, FileStorag
 
     public function get_url()
     {
-        return Path::getInstance()->getRepositoryPath(true) . $this->get_path();
+        /**
+         * @var \Chamilo\Libraries\File\ConfigurablePathBuilder $configurablePathBuilder
+         */
+        $configurablePathBuilder =
+            DependencyInjectionContainerBuilder::getInstance()->createContainer()->get(ConfigurablePathBuilder::class);
+
+        return $configurablePathBuilder->getRepositoryPath() . $this->get_path();
     }
 
     /**
@@ -588,8 +602,16 @@ class File extends ContentObject implements Versionable, Includeable, FileStorag
         if ($this->has_file_to_save())
         {
             $filename = $this->get_filename();
+
             if (isset($filename))
             {
+                /**
+                 * @var \Chamilo\Libraries\File\ConfigurablePathBuilder $configurablePathBuilder
+                 */
+                $configurablePathBuilder = DependencyInjectionContainerBuilder::getInstance()->createContainer()->get(
+                    ConfigurablePathBuilder::class
+                );
+
                 /*
                  * Delete current file before to create it again if the object is not saved as a new version @TODO: This
                  * should not happen when the object is newly created, only for an update
@@ -599,15 +621,15 @@ class File extends ContentObject implements Versionable, Includeable, FileStorag
                 {
                     $current_path = $this->get_path();
 
-                    if (isset($current_path) && is_file(Path::getInstance()->getRepositoryPath() . $current_path))
+                    if (isset($current_path) && is_file($configurablePathBuilder->getRepositoryPath() . $current_path))
                     {
-                        Filesystem::remove(Path::getInstance()->getRepositoryPath() . $current_path);
+                        Filesystem::remove($configurablePathBuilder->getRepositoryPath() . $current_path);
                     }
                 }
 
                 $filename_hash = md5($filename);
                 $relative_folder_path = $this->get_owner_id() . '/' . Text::char_at($filename_hash, 0);
-                $full_folder_path = Path::getInstance()->getRepositoryPath() . $relative_folder_path;
+                $full_folder_path = $configurablePathBuilder->getRepositoryPath() . $relative_folder_path;
 
                 Filesystem::create_dir($full_folder_path);
                 $unique_hash = Filesystem::create_unique_name($full_folder_path, $filename_hash);
@@ -665,7 +687,7 @@ class File extends ContentObject implements Versionable, Includeable, FileStorag
                     $file_bytes = Filesystem::get_disk_space($path_to_save);
 
                     $this->set_filesize($file_bytes);
-                    $this->set_storage_path(Path::getInstance()->getRepositoryPath());
+                    $this->set_storage_path($configurablePathBuilder->getRepositoryPath());
                     $this->set_path($relative_path);
                     $this->set_hash($unique_hash);
                     $this->set_content_hash(md5_file($path_to_save));

@@ -3,7 +3,7 @@ namespace Chamilo\Libraries\Architecture\Test\TestCases;
 
 use Chamilo\Libraries\Architecture\ClassnameUtilities;
 use Chamilo\Libraries\Architecture\Test\Fixtures\ChamiloFixtureLoader;
-use Chamilo\Libraries\File\Path;
+use Chamilo\Libraries\File\SystemPathBuilder;
 use Chamilo\Libraries\Storage\DataManager\Doctrine\ORM\PackagesMappingDriverFactory;
 use Doctrine\ORM\Mapping\ClassMetadata;
 use Exception;
@@ -13,20 +13,48 @@ use Hogent\Elearning\Administration\Domain\Entity\Company;
  * TestCase that recreates the database (partially) and installs fixture in the database for this test case
  *
  * @package common\libraries
- *
- * @author Sven Vanpoucke - Hogeschool Gent
+ * @author  Sven Vanpoucke - Hogeschool Gent
  */
 abstract class DoctrineORMFixturesBasedTestCase extends FixturesBasedTestCase
 {
+    /**
+     * @var ClassMetadata[]
+     */
+    protected $classMetadata;
+
     /**
      * @var string[]
      */
     protected $entityClassNames;
 
     /**
-     * @var ClassMetadata[]
+     * Loads the fixtures
      */
-    protected $classMetadata;
+    protected function createFixtureData()
+    {
+        $entityManager = $this->getTestEntityManager();
+        $chamiloFixtureLoader = new ChamiloFixtureLoader();
+
+        $objects = $chamiloFixtureLoader->loadFixturesFromPackages($this->getFixtureFiles());
+        foreach ($objects as $object)
+        {
+            if (!in_array(get_class($object), $this->entityClassNames))
+            {
+                continue;
+            }
+
+            $entityManager->persist($object);
+        }
+
+        try
+        {
+            $entityManager->flush();
+        }
+        catch (Exception $ex)
+        {
+            var_dump($ex->getMessage());
+        }
+    }
 
     /**
      * Resets the database
@@ -44,8 +72,8 @@ abstract class DoctrineORMFixturesBasedTestCase extends FixturesBasedTestCase
         $packages = $this->getStorageUnitsToCreate();
         foreach ($packages as $packageContext => $entitiesToCreateForPackage)
         {
-            $configurationPath =
-                Path::getInstance()->namespaceToFullPath($packageContext) . 'Resources/Configuration/Config.yml';
+            $configurationPath = $this->getSystemPathBuilder()->namespaceToFullPath($packageContext) .
+                'Resources/Configuration/Config.yml';
 
             if (file_exists($configurationPath))
             {
@@ -83,32 +111,11 @@ abstract class DoctrineORMFixturesBasedTestCase extends FixturesBasedTestCase
     }
 
     /**
-     * Loads the fixtures
+     * @return object | ClassnameUtilities
      */
-    protected function createFixtureData()
+    public function getClassNameUtilities()
     {
-        $entityManager = $this->getTestEntityManager();
-        $chamiloFixtureLoader = new ChamiloFixtureLoader();
-
-        $objects = $chamiloFixtureLoader->loadFixturesFromPackages($this->getFixtureFiles());
-        foreach ($objects as $object)
-        {
-            if (!in_array(get_class($object), $this->entityClassNames))
-            {
-                continue;
-            }
-
-            $entityManager->persist($object);
-        }
-
-        try
-        {
-            $entityManager->flush();
-        }
-        catch (Exception $ex)
-        {
-            var_dump($ex->getMessage());
-        }
+        return $this->getService(ClassnameUtilities::class);
     }
 
     /**
@@ -119,6 +126,11 @@ abstract class DoctrineORMFixturesBasedTestCase extends FixturesBasedTestCase
         return $this->getService('Doctrine\ORM\PackagesMappingDriverFactory');
     }
 
+    public function getSystemPathBuilder(): SystemPathBuilder
+    {
+        return $this->getService(SystemPathBuilder::class);
+    }
+
     /**
      * Returns the test entity manager from the dependency injection container
      *
@@ -127,13 +139,5 @@ abstract class DoctrineORMFixturesBasedTestCase extends FixturesBasedTestCase
     public function getTestSchemaTool()
     {
         return $this->getService('Doctrine\ORM\Test\Tools\SchemaTool');
-    }
-
-    /**
-     * @return object | ClassnameUtilities
-     */
-    public function getClassNameUtilities()
-    {
-        return $this->getService(ClassnameUtilities::class);
     }
 }

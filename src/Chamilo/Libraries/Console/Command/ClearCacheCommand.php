@@ -2,6 +2,7 @@
 namespace Chamilo\Libraries\Console\Command;
 
 use Chamilo\Libraries\Cache\CacheManagement\SymfonyCacheAdapterManager;
+use Chamilo\Libraries\Utilities\StringUtilities;
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Input\InputOption;
@@ -33,24 +34,24 @@ class ClearCacheCommand extends ChamiloCommand
     protected function clear(InputInterface $input, OutputInterface $output)
     {
         $this->symfonyCacheAdapterManager->clear($this->getSelectedCacheDataPreLoadServices($input));
-        $output->writeln($this->translator->trans('CacheCleared', [], 'Chamilo\Libraries'));
+        $output->writeln($this->translator->trans('CacheCleared', [], StringUtilities::LIBRARIES));
     }
 
     protected function configure()
     {
         $this->setName('chamilo:cache:clear')->addOption(
             self::OPT_CLEAR, self::OPT_CLEAR_SHORT, InputOption::VALUE_NONE,
-            $this->translator->trans('ClearCache', [], 'Chamilo\Libraries')
+            $this->translator->trans('ClearCache', [], StringUtilities::LIBRARIES)
         )->setDescription(
-            $this->translator->trans('ClearCacheDescription', [], 'Chamilo\Libraries')
+            $this->translator->trans('ClearCacheDescription', [], StringUtilities::LIBRARIES)
         );
 
         $this->addOption(
             self::OPT_LIST, self::OPT_LIST_SHORT, InputOption::VALUE_NONE,
-            $this->translator->trans('ListCacheAdapters', [], 'Chamilo\Libraries')
+            $this->translator->trans('ListCacheAdapters', [], StringUtilities::LIBRARIES)
         )->addArgument(
             self::ARG_CACHE_ADAPTERS, InputArgument::IS_ARRAY | InputArgument::OPTIONAL,
-            $this->translator->trans('CacheAdapters', [], 'Chamilo\Libraries')
+            $this->translator->trans('CacheAdapters', [], StringUtilities::LIBRARIES)
         );
     }
 
@@ -82,7 +83,7 @@ class ClearCacheCommand extends ChamiloCommand
         if ($input->getOption(self::OPT_LIST))
         {
             $output->writeln(
-                '<comment>' . $this->translator->trans('AvailableCacheAdapters', [], 'Chamilo\Libraries') . '</comment>'
+                '<comment>' . $this->translator->trans('AvailableCacheAdapters', [], StringUtilities::LIBRARIES) . '</comment>'
             );
             $output->writeln('');
 

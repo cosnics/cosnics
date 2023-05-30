@@ -7,7 +7,7 @@ use Chamilo\Libraries\Architecture\Bootstrap\Bootstrap;
 use Chamilo\Libraries\Architecture\ClassnameUtilities;
 use Chamilo\Libraries\DependencyInjection\DependencyInjectionContainerBuilder;
 use Chamilo\Libraries\File\Filesystem;
-use Chamilo\Libraries\File\Path;
+use Chamilo\Libraries\File\SystemPathBuilder;
 use Chamilo\Libraries\Translation\Translation;
 
 require_once realpath(__DIR__ . '/../../../../') . '/vendor/autoload.php';
@@ -16,25 +16,21 @@ class BuildGenerator
 {
 
     /**
-     *
      * @var \configuration\package\storage\data_class\PackageList
      */
     private $package_list;
 
     /**
-     *
-     * @var string
-     */
-    private $web_url;
-
-    /**
-     *
      * @var string
      */
     private $system_url;
 
     /**
-     *
+     * @var string
+     */
+    private $web_url;
+
+    /**
      * @param \configuration\package\storage\data_class\PackageList $package_list
      * @param string $web_url
      * @param string $system_url
@@ -46,8 +42,45 @@ class BuildGenerator
         $this->system_url = $system_url;
     }
 
+    public function run()
+    {
+        $this->process($this->package_list);
+    }
+
     /**
+     * @param string $context
      *
+     * @return string
+     */
+    public function get_folder($context)
+    {
+        $systemPathBuilder =
+            DependencyInjectionContainerBuilder::getInstance()->createContainer()->get(SystemPathBuilder::class);
+
+        return $systemPathBuilder->namespaceToFullPath($context) . 'build/config/';
+    }
+
+    /**
+     * @param string $context
+     *
+     * @return string
+     */
+    public function get_job_name($context)
+    {
+        return str_replace('\\', '_', $context);
+    }
+
+    /**
+     * @param string $context
+     *
+     * @return int
+     */
+    public function get_level($context)
+    {
+        return count(explode('\\', $context)) + 2;
+    }
+
+    /**
      * @return \configuration\package\storage\data_class\PackageList
      */
     public function get_package_list()
@@ -56,34 +89,38 @@ class BuildGenerator
     }
 
     /**
-     *
-     * @param \configuration\package\storage\data_class\PackageList $package_list
-     */
-    public function set_package_list($package_list)
-    {
-        $this->package_list = $package_list;
-    }
-
-    /**
+     * @param string $context
      *
      * @return string
      */
-    public function get_web_url()
+    public function get_path($context)
     {
-        return $this->web_url;
+        return str_repeat('../', $this->get_level($context));
     }
 
     /**
-     *
-     * @param string $web_url
+     * @param string $context
      */
-    public function set_web_url($web_url)
+    public function get_source_repository($context)
     {
-        $this->web_url = $web_url;
+        $systemPathBuilder =
+            DependencyInjectionContainerBuilder::getInstance()->createContainer()->get(SystemPathBuilder::class);
+
+        $source_repository_path = $systemPathBuilder->namespaceToFullPath($context) . '.hg/hgrc';
+
+        if (file_exists($source_repository_path))
+        {
+            $source_repository_configuration = parse_ini_file($source_repository_path);
+
+            return $source_repository_configuration['default'];
+        }
+        else
+        {
+            return false;
+        }
     }
 
     /**
-     *
      * @return string
      */
     public function get_system_url()
@@ -92,21 +129,14 @@ class BuildGenerator
     }
 
     /**
-     *
-     * @param string $system_url
+     * @return string
      */
-    public function set_system_url($system_url)
+    public function get_web_url()
     {
-        $this->system_url = $system_url;
-    }
-
-    public function run()
-    {
-        $this->process($this->package_list);
+        return $this->web_url;
     }
 
     /**
-     *
      * @param \configuration\package\storage\data_class\PackageList $package_list
      */
     public function process(PackageList $package_list)
@@ -131,71 +161,30 @@ class BuildGenerator
     }
 
     /**
-     *
-     * @param string $context
-     *
-     * @return int
+     * @param \configuration\package\storage\data_class\PackageList $package_list
      */
-    public function get_level($context)
+    public function set_package_list($package_list)
     {
-        return count(explode('\\', $context)) + 2;
+        $this->package_list = $package_list;
     }
 
     /**
-     *
-     * @param string $context
-     *
-     * @return string
+     * @param string $system_url
      */
-    public function get_path($context)
+    public function set_system_url($system_url)
     {
-        return str_repeat('../', $this->get_level($context));
+        $this->system_url = $system_url;
     }
 
     /**
-     *
-     * @param string $context
-     *
-     * @return string
+     * @param string $web_url
      */
-    public function get_folder($context)
+    public function set_web_url($web_url)
     {
-        return Path::getInstance()->namespaceToFullPath($context) . 'build/config/';
+        $this->web_url = $web_url;
     }
 
     /**
-     *
-     * @param string $context
-     *
-     * @return string
-     */
-    public function get_job_name($context)
-    {
-        return str_replace('\\', '_', $context);
-    }
-
-    /**
-     *
-     * @param string $context
-     */
-    public function get_source_repository($context)
-    {
-        $source_repository_path = Path::getInstance()->namespaceToFullPath($context) . '.hg/hgrc';
-
-        if (file_exists($source_repository_path))
-        {
-            $source_repository_configuration = parse_ini_file($source_repository_path);
-
-            return $source_repository_configuration['default'];
-        }
-        else
-        {
-            return false;
-        }
-    }
-
-    /**
-     *
      * @param string $context
      */
     public function write_build($context)
@@ -211,36 +200,6 @@ class BuildGenerator
     }
 
     /**
-     *
-     * @param string $context
-     */
-    public function write_phpunit($context)
-    {
-        $content = '<phpunit bootstrap="' . $this->get_path($context) . 'libraries/architecture/php/lib/test/bootstrap.php">
-	<testsuites>
-		<testsuite name="Source">
-			<directory suffix="_test.class.php">../../test/php/source</directory>
-		</testsuite>
-        <testsuite name="Unit">
-            <directory suffix="_test.class.php">../../test/php/unit</directory>
-        </testsuite>
-        <testsuite name="Integration">
-            <directory suffix="_test.class.php">../../test/php/integration</directory>
-        </testsuite>
-	</testsuites>
-	<filter>
-		<whitelist>
-			<directory suffix=".php">../../php</directory>
-		</whitelist>
-	</filter>
-</phpunit>';
-
-        $path = $this->get_folder($context) . 'phpunit.xml';
-        Filesystem::write_to_file($path, $content, false);
-    }
-
-    /**
-     *
      * @param string $context
      * @param string[] $sub_jobs
      * @param string $source_respository
@@ -251,7 +210,10 @@ class BuildGenerator
             $this->get_web_url() . ClassnameUtilities::getInstance()->namespaceToPath($context) . '/build/chart/';
         $workspace_url = $this->get_system_url() . ClassnameUtilities::getInstance()->namespaceToPath($context) . '/';
 
-        $php_class_path = Path::getInstance()->namespaceToFullPath($context) . 'php/';
+        $systemPathBuilder =
+            DependencyInjectionContainerBuilder::getInstance()->createContainer()->get(SystemPathBuilder::class);
+
+        $php_class_path = $systemPathBuilder->namespaceToFullPath($context) . 'php/';
         $has_php_classes = is_dir($php_class_path);
 
         $content = '<?xml version="1.0" encoding="UTF-8"?>
@@ -871,6 +833,34 @@ class BuildGenerator
 </project>';
 
         $path = $this->get_folder($context) . 'config.xml';
+        Filesystem::write_to_file($path, $content, false);
+    }
+
+    /**
+     * @param string $context
+     */
+    public function write_phpunit($context)
+    {
+        $content = '<phpunit bootstrap="' . $this->get_path($context) . 'libraries/architecture/php/lib/test/bootstrap.php">
+	<testsuites>
+		<testsuite name="Source">
+			<directory suffix="_test.class.php">../../test/php/source</directory>
+		</testsuite>
+        <testsuite name="Unit">
+            <directory suffix="_test.class.php">../../test/php/unit</directory>
+        </testsuite>
+        <testsuite name="Integration">
+            <directory suffix="_test.class.php">../../test/php/integration</directory>
+        </testsuite>
+	</testsuites>
+	<filter>
+		<whitelist>
+			<directory suffix=".php">../../php</directory>
+		</whitelist>
+	</filter>
+</phpunit>';
+
+        $path = $this->get_folder($context) . 'phpunit.xml';
         Filesystem::write_to_file($path, $content, false);
     }
 }

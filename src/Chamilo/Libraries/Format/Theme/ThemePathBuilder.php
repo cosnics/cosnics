@@ -82,7 +82,7 @@ class ThemePathBuilder
 
     public function getFavouriteIcon(): string
     {
-        return $this->getImagePath('Chamilo\Libraries', 'Favicon', 'ico');
+        return $this->getImagePath(StringUtilities::LIBRARIES, 'Favicon', 'ico');
     }
 
     public function getImagePath(string $context, string $image, string $extension = 'png'): string

@@ -2,7 +2,8 @@
 namespace Chamilo\Libraries\Format\Menu;
 
 use Chamilo\Libraries\Architecture\Application\Application;
-use Chamilo\Libraries\File\Path;
+use Chamilo\Libraries\DependencyInjection\DependencyInjectionContainerBuilder;
+use Chamilo\Libraries\File\WebPathBuilder;
 use Chamilo\Libraries\Format\Utilities\ResourceManager;
 use Chamilo\Libraries\Utilities\StringUtilities;
 
@@ -73,8 +74,20 @@ abstract class BootstrapTreeMenu
             });
         </script>';
 
-        $html[] = ResourceManager::getInstance()->getResourceHtml(
-            Path::getInstance()->getJavascriptPath(StringUtilities::LIBRARIES, true) .
+        $container = DependencyInjectionContainerBuilder::getInstance()->createContainer();
+
+        /**
+         * @var \Chamilo\Libraries\Format\Utilities\ResourceManager $resourceManager
+         */
+        $resourceManager = $container->get(ResourceManager::class);
+
+        /**
+         * @var \Chamilo\Libraries\File\WebPathBuilder $webPathBuilder
+         */
+        $webPathBuilder = $container->get(WebPathBuilder::class);
+
+        $html[] = $resourceManager->getResourceHtml(
+            $webPathBuilder->getJavascriptPath(StringUtilities::LIBRARIES) .
             'Plugin/Bootstrap/treeview/dist/bootstrap-treeview.min.js'
         );
 
@@ -92,7 +105,7 @@ abstract class BootstrapTreeMenu
     /**
      * @return int
      */
-    public abstract function getCurrentNodeId();
+    abstract public function getCurrentNodeId();
 
     /**
      * @return string
@@ -115,7 +128,7 @@ abstract class BootstrapTreeMenu
     /**
      * @return string[]
      */
-    public abstract function getNodes();
+    abstract public function getNodes();
 
     /**
      * @return string

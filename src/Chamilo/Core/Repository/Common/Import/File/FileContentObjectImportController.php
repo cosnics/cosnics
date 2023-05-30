@@ -11,7 +11,6 @@ use Chamilo\Core\Repository\Workspace\Storage\DataClass\Workspace;
 use Chamilo\Core\User\Storage\DataClass\User;
 use Chamilo\Libraries\Architecture\Application\Application;
 use Chamilo\Libraries\File\Filesystem;
-use Chamilo\Libraries\File\Path;
 use Chamilo\Libraries\File\Properties\FileProperties;
 use Chamilo\Libraries\File\Redirect;
 use Chamilo\Libraries\Storage\Parameters\DataClassRetrievesParameters;
@@ -59,7 +58,8 @@ class FileContentObjectImportController extends ContentObjectImportController
 
                     if ($calculator->canUpload($file->get_size()))
                     {
-                        $temp_path = $this->getConfigurablePathBuilder()->getTemporaryPath() . 'repository/import/file/' .
+                        $temp_path =
+                            $this->getConfigurablePathBuilder()->getTemporaryPath() . 'repository/import/file/' .
                             $file->get_name_extension();
 
                         if (file_exists($temp_path))

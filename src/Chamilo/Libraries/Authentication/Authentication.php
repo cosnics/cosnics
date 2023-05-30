@@ -5,6 +5,7 @@ use Chamilo\Configuration\Service\Consulter\ConfigurationConsulter;
 use Chamilo\Core\User\Service\UserService;
 use Chamilo\Core\User\Storage\DataClass\User;
 use Chamilo\Libraries\Platform\ChamiloRequest;
+use Chamilo\Libraries\Utilities\StringUtilities;
 use Symfony\Component\Translation\Translator;
 
 /**
@@ -60,7 +61,7 @@ abstract class Authentication implements AuthenticationInterface
         $user = $this->userService->getUserByUsernameOrEmail($username);
         if (!$user instanceof User)
         {
-            throw new AuthenticationException($this->translator->trans('InvalidUsername', [], 'Chamilo\Libraries'));
+            throw new AuthenticationException($this->translator->trans('InvalidUsername', [], StringUtilities::LIBRARIES));
         }
 
         if ($user->getAuthenticationSource() != $this->getAuthenticationType())
@@ -70,7 +71,7 @@ abstract class Authentication implements AuthenticationInterface
 
         if (!$this->isAuthSourceActive())
         {
-            throw new AuthenticationException($this->translator->trans('AuthSourceNotActive', [], 'Chamilo\Libraries'));
+            throw new AuthenticationException($this->translator->trans('AuthSourceNotActive', [], StringUtilities::LIBRARIES));
         }
 
         return $user;

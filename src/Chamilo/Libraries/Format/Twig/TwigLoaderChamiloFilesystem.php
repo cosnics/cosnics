@@ -1,7 +1,8 @@
 <?php
 namespace Chamilo\Libraries\Format\Twig;
 
-use Chamilo\Libraries\File\Path;
+use Chamilo\Libraries\DependencyInjection\DependencyInjectionContainerBuilder;
+use Chamilo\Libraries\File\SystemPathBuilder;
 use Exception;
 use Twig\Error\LoaderError;
 use Twig\Loader\LoaderInterface;
@@ -13,8 +14,8 @@ use Twig\Source;
  * the template with a package namespace.
  *
  * @package Chamilo\Libraries\Format\Twig
- * @author Sven Vanpoucke <sven.vanpoucke@hogent.be>
- * @author Hans De Bisschop <hans.de.bisschop@ehb.be>
+ * @author  Sven Vanpoucke <sven.vanpoucke@hogent.be>
+ * @author  Hans De Bisschop <hans.de.bisschop@ehb.be>
  */
 class TwigLoaderChamiloFilesystem implements LoaderInterface
 {
@@ -62,7 +63,10 @@ class TwigLoaderChamiloFilesystem implements LoaderInterface
             );
         }
 
-        $namespacePath = Path::getInstance()->namespaceToFullPath($namespace);
+        $systemPathBuilder =
+            DependencyInjectionContainerBuilder::getInstance()->createContainer()->get(SystemPathBuilder::class);
+
+        $namespacePath = $systemPathBuilder->namespaceToFullPath($namespace);
 
         if (!file_exists($namespacePath) || !is_dir($namespacePath))
         {

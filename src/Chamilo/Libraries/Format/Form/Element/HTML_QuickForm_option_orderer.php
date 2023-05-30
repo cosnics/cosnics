@@ -4,6 +4,7 @@ namespace Chamilo\Libraries\Format\Form\Element;
 use Chamilo\Libraries\DependencyInjection\DependencyInjectionContainerBuilder;
 use Chamilo\Libraries\File\WebPathBuilder;
 use Chamilo\Libraries\Format\Utilities\ResourceManager;
+use Chamilo\Libraries\Utilities\StringUtilities;
 use HTML_QuickForm_hidden;
 
 /**
@@ -87,7 +88,7 @@ class HTML_QuickForm_option_orderer extends HTML_QuickForm_hidden
         $html = [];
 
         $html[] = $resourceManager->getResourceHtml(
-            $webPathBuilder->getJavascriptPath('Chamilo\Libraries') . 'OptionOrderer.js'
+            $webPathBuilder->getJavascriptPath(StringUtilities::LIBRARIES) . 'OptionOrderer.js'
         );
         $html[] = $this->getFrozenHtml();
 

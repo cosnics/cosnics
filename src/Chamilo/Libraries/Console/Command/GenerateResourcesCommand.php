@@ -2,6 +2,7 @@
 namespace Chamilo\Libraries\Console\Command;
 
 use Chamilo\Libraries\Architecture\Resource\ResourceGenerator;
+use Chamilo\Libraries\Utilities\StringUtilities;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Translation\Translator;
@@ -27,7 +28,7 @@ class GenerateResourcesCommand extends ChamiloCommand
     protected function configure()
     {
         $this->setName('chamilo:generate_resources')->setDescription(
-            $this->translator->trans('GenerateResourcesCommandDescription', [], 'Chamilo\Libraries')
+            $this->translator->trans('GenerateResourcesCommandDescription', [], StringUtilities::LIBRARIES)
         );
     }
 

@@ -3,7 +3,8 @@ namespace Chamilo\Core\Rights\Structure\Test\Integration\Service\StructureLocati
 
 use Chamilo\Core\Rights\Structure\Service\StructureLocationConfiguration\Loader;
 use Chamilo\Libraries\Architecture\Test\TestCases\ChamiloTestCase;
-use Chamilo\Libraries\File\Path;
+use Chamilo\Libraries\DependencyInjection\DependencyInjectionContainerBuilder;
+use Chamilo\Libraries\File\SystemPathBuilder;
 
 /**
  * Integration test for the Chamilo\Core\Rights\Structure\Service\StructureLocationConfiguration\Loader class
@@ -19,13 +20,19 @@ class LoaderTest extends ChamiloTestCase
 
     public function setUp(): void
     {
-        $this->configurationLoader = new Loader(Path::getInstance());
+        /**
+         * @var \Chamilo\Libraries\File\SystemPathBuilder $systemPathBuilder
+         */
+        $systemPathBuilder =
+            DependencyInjectionContainerBuilder::getInstance()->createContainer()->get(SystemPathBuilder::class);
+
+        $this->configurationLoader = new Loader($systemPathBuilder);
     }
 
     public function testLoadConfiguration()
     {
-        $configuration = $this->configurationLoader->loadConfiguration(array('Chamilo\Core\Repository'));
-        $expectedConfig = array('Chamilo\Core\Repository' => array(array('Package' => 'ROLE_DEFAULT_USER')));
+        $configuration = $this->configurationLoader->loadConfiguration(['Chamilo\Core\Repository']);
+        $expectedConfig = ['Chamilo\Core\Repository' => [['Package' => 'ROLE_DEFAULT_USER']]];
 
         $this->assertEquals($expectedConfig, $configuration);
     }
@@ -36,7 +43,7 @@ class LoaderTest extends ChamiloTestCase
      */
     public function testLoadConfigurationWithoutValidConfiguration()
     {
-        $config = $this->configurationLoader->loadConfiguration(array('Chamilo\Core\NotExistingPackage'));
+        $config = $this->configurationLoader->loadConfiguration(['Chamilo\Core\NotExistingPackage']);
         $this->assertEquals([], $config);
     }
 }

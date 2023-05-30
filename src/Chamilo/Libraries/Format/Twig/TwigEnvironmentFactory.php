@@ -2,7 +2,8 @@
 namespace Chamilo\Libraries\Format\Twig;
 
 use Chamilo\Libraries\Architecture\Application\Routing\UrlGenerator;
-use Chamilo\Libraries\File\Path;
+use Chamilo\Libraries\DependencyInjection\DependencyInjectionContainerBuilder;
+use Chamilo\Libraries\File\ConfigurablePathBuilder;
 use Chamilo\Libraries\Format\Twig\Extension\DateExtension;
 use Chamilo\Libraries\Format\Twig\Extension\ResourceManagementExtension;
 use Chamilo\Libraries\Format\Twig\Extension\UrlGenerationExtension;
@@ -17,7 +18,7 @@ use Twig\Loader\ChainLoader;
  * Builds the Twig_Environment
  *
  * @package Chamilo\Libraries\Format\Twig
- * @author Sven Vanpoucke - Hogeschool Gent
+ * @author  Sven Vanpoucke - Hogeschool Gent
  */
 class TwigEnvironmentFactory
 {
@@ -37,10 +38,13 @@ class TwigEnvironmentFactory
     {
         $loader = new ChainLoader([new TwigLoaderChamiloFilesystem()]);
 
+        $configurablePathBuilder =
+            DependencyInjectionContainerBuilder::getInstance()->createContainer()->get(ConfigurablePathBuilder::class);
+
         $options = [
             'debug' => true,
             'auto_reload' => true,
-            'cache' => Path::getInstance()->getCachePath() . 'templates/'
+            'cache' => $configurablePathBuilder->getCachePath() . 'templates/'
         ];
 
         $twig = new Environment($loader, $options);

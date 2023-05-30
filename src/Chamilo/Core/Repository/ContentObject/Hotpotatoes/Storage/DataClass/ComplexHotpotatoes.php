@@ -5,9 +5,11 @@ use Chamilo\Core\Repository\Storage\DataClass\ComplexContentObjectItem;
 use Chamilo\Libraries\DependencyInjection\DependencyInjectionContainerBuilder;
 use Chamilo\Libraries\File\Compression\ZipArchive\ZipArchiveFilecompression;
 use Chamilo\Libraries\File\Filesystem;
-use Chamilo\Libraries\File\Path;
+use Chamilo\Libraries\File\SystemPathBuilder;
+use Chamilo\Libraries\File\WebPathBuilder;
 use Chamilo\Libraries\Platform\Session\Session;
 use Chamilo\Libraries\Translation\Translation;
+use Chamilo\Libraries\Utilities\StringUtilities;
 
 class ComplexHotpotatoes extends ComplexContentObjectItem
 {
@@ -63,13 +65,25 @@ class ComplexHotpotatoes extends ComplexContentObjectItem
 
     public function get_full_path()
     {
-        return Path::getInstance()->getPublicStoragePath(Hotpotatoes::CONTEXT) . $this->get_owner_id() . '/' .
+        /**
+         * @var \Chamilo\Libraries\File\SystemPathBuilder $systemPathBuilder
+         */
+        $systemPathBuilder =
+            DependencyInjectionContainerBuilder::getInstance()->createContainer()->get(SystemPathBuilder::class);
+
+        return $systemPathBuilder->getPublicStoragePath(Hotpotatoes::CONTEXT) . $this->get_owner_id() . '/' .
             $this->get_path();
     }
 
     public function get_full_url()
     {
-        return Path::getInstance()->getPublicStoragePath(Hotpotatoes::CONTEXT, true) . $this->get_owner_id() . '/' .
+        /**
+         * @var \Chamilo\Libraries\File\WebPathBuilder $webPathBuilder
+         */
+        $webPathBuilder =
+            DependencyInjectionContainerBuilder::getInstance()->createContainer()->get(WebPathBuilder::class);
+
+        return $webPathBuilder->getPublicStoragePath(Hotpotatoes::CONTEXT) . $this->get_owner_id() . '/' .
             $this->get_path();
     }
 
@@ -104,7 +118,13 @@ class ComplexHotpotatoes extends ComplexContentObjectItem
         $this->set_title($file_name);
         $this->set_description($file_name);
 
-        $hotpot_path = Path::getInstance()->getPublicStoragePath(Hotpotatoes::CONTEXT) . Session::get_user_id() . '/';
+        /**
+         * @var \Chamilo\Libraries\File\SystemPathBuilder $systemPathBuilder
+         */
+        $systemPathBuilder =
+            DependencyInjectionContainerBuilder::getInstance()->createContainer()->get(SystemPathBuilder::class);
+
+        $hotpot_path = $systemPathBuilder->getPublicStoragePath(Hotpotatoes::CONTEXT) . Session::get_user_id() . '/';
         $full_path = $hotpot_path . dirname($path_to_zip) . '/';
 
         $dir = $this->getZipArchiveFilecompression()->extractFile($full_path . $zip_file_name);
@@ -168,7 +188,13 @@ class ComplexHotpotatoes extends ComplexContentObjectItem
         $posthref = '<!-- BeginTopNavButtons --><!-- edited by Chamilo -->';
         $newcontent = str_replace($prehref, $posthref, $newcontent);
 
-        $jquery_content = "<head>\n<script src='" . Path::getInstance()->getJavascriptPath('Chamilo\Libraries', true) .
+        /**
+         * @var \Chamilo\Libraries\File\WebPathBuilder $webPathBuilder
+         */
+        $webPathBuilder =
+            DependencyInjectionContainerBuilder::getInstance()->createContainer()->get(WebPathBuilder::class);
+
+        $jquery_content = "<head>\n<script src='" . $webPathBuilder->getJavascriptPath(StringUtilities::LIBRARIES) .
             "Plugin/Jquery/jquery.min.js' type='text/javascript'></script>";
         $add_to = '<head>';
         $newcontent = str_replace($add_to, $jquery_content, $newcontent);

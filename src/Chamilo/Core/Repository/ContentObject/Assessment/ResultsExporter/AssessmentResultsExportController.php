@@ -4,8 +4,9 @@ namespace Chamilo\Core\Repository\ContentObject\Assessment\ResultsExporter;
 use Chamilo\Core\Repository\Storage\DataClass\ComplexContentObjectItem;
 use Chamilo\Core\User\Storage\DataClass\User;
 use Chamilo\Core\User\Storage\DataManager;
+use Chamilo\Libraries\DependencyInjection\DependencyInjectionContainerBuilder;
+use Chamilo\Libraries\File\ConfigurablePathBuilder;
 use Chamilo\Libraries\File\Filesystem;
-use Chamilo\Libraries\File\Path;
 use Chamilo\Libraries\Storage\Parameters\DataClassRetrievesParameters;
 use Chamilo\Libraries\Storage\Query\Condition\EqualityCondition;
 use Chamilo\Libraries\Storage\Query\Variable\PropertyConditionVariable;
@@ -325,7 +326,13 @@ class AssessmentResultsExportController
      */
     protected function export_to_csv()
     {
-        $path = Path::getInstance()->getTemporaryPath();
+        /**
+         * @var \Chamilo\Libraries\File\ConfigurablePathBuilder $configurablePathBuilder
+         */
+        $configurablePathBuilder =
+            DependencyInjectionContainerBuilder::getInstance()->createContainer()->get(ConfigurablePathBuilder::class);
+
+        $path = $configurablePathBuilder->getTemporaryPath();
 
         if (!file_exists($path))
         {

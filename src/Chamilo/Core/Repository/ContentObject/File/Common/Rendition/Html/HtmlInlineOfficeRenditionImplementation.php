@@ -4,7 +4,6 @@ namespace Chamilo\Core\Repository\ContentObject\File\Common\Rendition\Html;
 use Chamilo\Configuration\Configuration;
 use Chamilo\Core\Repository\ContentObject\File\Storage\DataClass\File;
 use Chamilo\Libraries\File\Filesystem;
-use Chamilo\Libraries\File\Path;
 use Chamilo\Libraries\Format\Structure\ActionBar\Button;
 use Chamilo\Libraries\Format\Structure\Glyph\FontAwesomeGlyph;
 use Chamilo\Libraries\Format\Utilities\ResourceManager;
@@ -12,26 +11,24 @@ use Chamilo\Libraries\Translation\Translation;
 use Chamilo\Libraries\Utilities\StringUtilities;
 
 /**
- *
  * @package Chamilo\Core\Repository\ContentObject\File\Common\Rendition\Html
- * @author Hans De Bisschop <hans.de.bisschop@ehb.be>
- * @author Magali Gillard <magali.gillard@ehb.be>
+ * @author  Hans De Bisschop <hans.de.bisschop@ehb.be>
+ * @author  Magali Gillard <magali.gillard@ehb.be>
  */
 abstract class HtmlInlineOfficeRenditionImplementation extends HtmlInlineRenditionImplementation
 {
     // View type
-    const VIEWER_URL_EMBED = 'https://view.officeapps.live.com/op/embed.aspx?src=';
+    public const VIEWER_URL_EMBED = 'https://view.officeapps.live.com/op/embed.aspx?src=';
 
-    const VIEWER_URL_FULL = 'https://view.officeapps.live.com/op/view.aspx?src=';
+    public const VIEWER_URL_FULL = 'https://view.officeapps.live.com/op/view.aspx?src=';
 
     // Viewer URL
 
-    const VIEW_TYPE_EMBED = 'embed';
+    public const VIEW_TYPE_EMBED = 'embed';
 
-    const VIEW_TYPE_FULL = 'full';
+    public const VIEW_TYPE_FULL = 'full';
 
     /**
-     *
      * @see \Chamilo\Core\Repository\ContentObject\File\Common\Rendition\Html\HtmlInlineRenditionImplementation::render()
      */
     public function render($parameters)
@@ -86,8 +83,7 @@ abstract class HtmlInlineOfficeRenditionImplementation extends HtmlInlineRenditi
     }
 
     /**
-     *
-     * @return boolean
+     * @return bool
      */
     public function allowsFullScreen()
     {
@@ -95,8 +91,7 @@ abstract class HtmlInlineOfficeRenditionImplementation extends HtmlInlineRenditi
     }
 
     /**
-     *
-     * @return boolean
+     * @return bool
      */
     public function canBeDisplayed()
     {
@@ -104,7 +99,6 @@ abstract class HtmlInlineOfficeRenditionImplementation extends HtmlInlineRenditi
     }
 
     /**
-     *
      * @param string $classes
      *
      * @return \Chamilo\Libraries\Format\Structure\ActionBar\ButtonToolBar
@@ -127,7 +121,6 @@ abstract class HtmlInlineOfficeRenditionImplementation extends HtmlInlineRenditi
     }
 
     /**
-     *
      * @param string[] $parameters
      *
      * @return string
@@ -154,7 +147,6 @@ abstract class HtmlInlineOfficeRenditionImplementation extends HtmlInlineRenditi
     }
 
     /**
-     *
      * @return string
      */
     public function getIFrameSource()
@@ -163,13 +155,11 @@ abstract class HtmlInlineOfficeRenditionImplementation extends HtmlInlineRenditi
     }
 
     /**
-     *
-     * @return integer
+     * @return int
      */
     abstract public function getSizeLimit();
 
     /**
-     *
      * @return string
      */
     public function getViewerBaseUrl()
@@ -186,12 +176,11 @@ abstract class HtmlInlineOfficeRenditionImplementation extends HtmlInlineRenditi
     }
 
     /**
-     *
      * @return string[]
      */
     public function getViewerFrameClasses()
     {
-        $classes = array('office-viewer-frame');
+        $classes = ['office-viewer-frame'];
 
         if ($this->getViewerType() == self::VIEW_TYPE_EMBED)
         {
@@ -202,12 +191,11 @@ abstract class HtmlInlineOfficeRenditionImplementation extends HtmlInlineRenditi
     }
 
     /**
-     *
      * @return string
      */
     public function getViewerType()
     {
-        $viewerType = Configuration::getInstance()->get_setting(array(File::CONTEXT, 'office_viewer_type'));
+        $viewerType = Configuration::getInstance()->get_setting([File::CONTEXT, 'office_viewer_type']);
 
         if (is_null($viewerType))
         {

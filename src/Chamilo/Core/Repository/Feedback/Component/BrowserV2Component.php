@@ -16,6 +16,7 @@ use Chamilo\Libraries\Format\Structure\ActionBar\ButtonToolBar;
 use Chamilo\Libraries\Format\Structure\ActionBar\Renderer\ButtonToolBarRenderer;
 use Chamilo\Libraries\Format\Table\Pager;
 use Chamilo\Libraries\Format\Table\PagerRenderer;
+use Chamilo\Libraries\Utilities\StringUtilities;
 
 class BrowserV2Component extends Manager implements DelegateComponent
 {
@@ -63,7 +64,7 @@ class BrowserV2Component extends Manager implements DelegateComponent
                             'Feedback', [], 'Chamilo\Core\Repository\Feedback'
                         )
                     ),
-                    'Chamilo\Libraries'
+                    StringUtilities::LIBRARIES
                 ),
                 !$success
             );

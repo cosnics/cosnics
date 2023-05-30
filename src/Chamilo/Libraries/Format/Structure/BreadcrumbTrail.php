@@ -4,7 +4,7 @@ namespace Chamilo\Libraries\Format\Structure;
 use Chamilo\Configuration\Configuration;
 use Chamilo\Configuration\Service\FileConfigurationLocator;
 use Chamilo\Libraries\Architecture\ClassnameUtilities;
-use Chamilo\Libraries\File\Path;
+use Chamilo\Libraries\DependencyInjection\DependencyInjectionContainerBuilder;
 use Chamilo\Libraries\File\SystemPathBuilder;
 use Chamilo\Libraries\File\WebPathBuilder;
 use Chamilo\Libraries\Format\Structure\Glyph\FontAwesomeGlyph;
@@ -184,12 +184,17 @@ class BreadcrumbTrail
     {
         $this->breadcrumbs = [];
 
+        /**
+         * @var \Chamilo\Libraries\File\WebPathBuilder $webPathBuilder
+         */
+        $webPathBuilder =
+            DependencyInjectionContainerBuilder::getInstance()->createContainer()->get(WebPathBuilder::class);
+
         if ($keepMainIndex)
         {
             $this->add(
                 new Breadcrumb(
-                    Path::getInstance()->getBasePath(true) . 'index.php',
-                    $this->get_setting('site_name', 'Chamilo\Core\Admin')
+                    $webPathBuilder->getBasePath() . 'index.php', $this->get_setting('site_name', 'Chamilo\Core\Admin')
                 )
             );
         }

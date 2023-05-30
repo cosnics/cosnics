@@ -11,7 +11,7 @@ use Chamilo\Core\Repository\Storage\DataManager;
 use Chamilo\Core\Repository\UserView\Storage\DataClass\UserView;
 use Chamilo\Core\Repository\Workspace\Storage\DataClass\Workspace;
 use Chamilo\Libraries\DependencyInjection\DependencyInjectionContainerBuilder;
-use Chamilo\Libraries\File\Path;
+use Chamilo\Libraries\File\WebPathBuilder;
 use Chamilo\Libraries\Format\Structure\Glyph\FontAwesomeGlyph;
 use Chamilo\Libraries\Format\Utilities\ResourceManager;
 use Chamilo\Libraries\Translation\Translation;
@@ -48,8 +48,20 @@ class HtmlFilterRenderer extends FilterRenderer
         $html[] = '</div>';
         $html[] = '</div>';
 
-        $html[] = ResourceManager::getInstance()->getResourceHtml(
-            Path::getInstance()->getJavascriptPath(Manager::CONTEXT, true) . 'Search.js'
+        $container = DependencyInjectionContainerBuilder::getInstance()->createContainer();
+
+        /**
+         * @var \Chamilo\Libraries\Format\Utilities\ResourceManager $resourceManager
+         */
+        $resourceManager = $container->get(ResourceManager::class);
+
+        /**
+         * @var \Chamilo\Libraries\File\WebPathBuilder $webPathBuilder
+         */
+        $webPathBuilder = $container->get(WebPathBuilder::class);
+
+        $html[] = $resourceManager->getResourceHtml(
+            $webPathBuilder->getJavascriptPath(Manager::CONTEXT) . 'Search.js'
         );
 
         return implode(PHP_EOL, $html);

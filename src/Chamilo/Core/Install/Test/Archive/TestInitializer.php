@@ -1,20 +1,17 @@
 <?php
 /**
  * PHP version 5
- * 
+ *
  * @author Systho
  */
 require_once __DIR__ . '/../../../libraries/file/php/lib/path.class.php';
 require_once __DIR__ . '/../../../libraries/utilities/php/lib/utilities.class.php';
 
-use Chamilo\Libraries\File\Path;
+use Chamilo\Libraries\DependencyInjection\DependencyInjectionContainerBuilder;
+use Chamilo\Libraries\File\SystemPathBuilder;
+
 class TestInitializer
 {
-
-    public static function initGlobals()
-    {
-        $GLOBALS['language_interface'] = "en";
-    }
 
     /**
      * Initialize the environment
@@ -29,6 +26,12 @@ class TestInitializer
         self::initGlobals();
     }
 
+    private static function initAutoload()
+    {
+        require_once 'PHPUnit/Autoload.php';
+        spl_autoload_register('libraries\utilities\Utilities::autoload');
+    }
+
     /**
      * Initialize the default timezone which is mandatory for PHP 5
      */
@@ -37,25 +40,27 @@ class TestInitializer
         date_default_timezone_set('UTC');
     }
 
+    public static function initGlobals()
+    {
+        $GLOBALS['language_interface'] = 'en';
+    }
+
     /**
      * Initialize the PHP include_path
      */
     private static function initIncludePath()
     {
-        $pearPath = realpath(Path::getInstance()->getPluginPath() . 'pear');
-        $googleLibraryPath = realpath(Path::getInstance()->getPluginPath() . 'google/library');
-        $scriptLibrariesPath = realpath(Path::getInstance()->getBasePath() . 'script/lib');
-        
-        $path = array($pearPath, $googleLibraryPath, $scriptLibrariesPath);
-        $new_include_path = implode(PATH_SEPARATOR, $path) . PATH_SEPARATOR . get_include_path();
-        
-        set_include_path($new_include_path);
-    }
+        $systemPathBuilder =
+            DependencyInjectionContainerBuilder::getInstance()->createContainer()->get(SystemPathBuilder::class);
 
-    private static function initAutoload()
-    {
-        require_once 'PHPUnit/Autoload.php';
-        spl_autoload_register('libraries\utilities\Utilities::autoload');
+        $pearPath = realpath($systemPathBuilder->getPluginPath() . 'pear');
+        $googleLibraryPath = realpath($systemPathBuilder->getPluginPath() . 'google/library');
+        $scriptLibrariesPath = realpath($systemPathBuilder->getBasePath() . 'script/lib');
+
+        $path = [$pearPath, $googleLibraryPath, $scriptLibrariesPath];
+        $new_include_path = implode(PATH_SEPARATOR, $path) . PATH_SEPARATOR . get_include_path();
+
+        set_include_path($new_include_path);
     }
 
     private static function initPHPSettings()

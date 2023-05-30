@@ -3,6 +3,7 @@ namespace Chamilo\Core\Repository\ContentObject\Assignment\Display\Form;
 
 use Chamilo\Core\Repository\ContentObject\Page\Storage\DataClass\Page;
 use Chamilo\Libraries\Format\Form\FormType\HtmlEditorFormType;
+use Chamilo\Libraries\Utilities\StringUtilities;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\Translation\Translator;
@@ -44,7 +45,7 @@ class CodePageCorrectorFormType extends AbstractType
                 'label' => 'Inhoud ',
                 'constraints' => [
                     new NotBlank([
-                        'message' => $this->translator->trans('NotBlank', [], 'Chamilo\Libraries')
+                        'message' => $this->translator->trans('NotBlank', [], StringUtilities::LIBRARIES)
                     ])
                 ]
             ]

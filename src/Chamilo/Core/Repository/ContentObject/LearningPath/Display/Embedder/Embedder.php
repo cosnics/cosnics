@@ -2,11 +2,13 @@
 namespace Chamilo\Core\Repository\ContentObject\LearningPath\Display\Embedder;
 
 use Chamilo\Core\Repository\ContentObject\LearningPath\Display\Embedder\Type\ContentObjectEmbedder;
+use Chamilo\Core\Repository\ContentObject\LearningPath\Display\Manager;
 use Chamilo\Core\Repository\ContentObject\LearningPath\Domain\TreeNode;
 use Chamilo\Core\Repository\ContentObject\LearningPath\Service\Tracking\TrackingService;
 use Chamilo\Core\Repository\ContentObject\LearningPath\Storage\DataClass\LearningPath;
 use Chamilo\Libraries\Architecture\Application\Application;
-use Chamilo\Libraries\File\Path;
+use Chamilo\Libraries\DependencyInjection\DependencyInjectionContainerBuilder;
+use Chamilo\Libraries\File\WebPathBuilder;
 use Chamilo\Libraries\Format\Utilities\ResourceManager;
 use Chamilo\Libraries\Platform\Session\Request;
 
@@ -143,9 +145,20 @@ abstract class Embedder
         $html[] = '    var trackerContext = ' . json_encode($namespace) . ';';
         $html[] = '</script>';
 
-        $html[] = ResourceManager::getInstance()->getResourceHtml(
-            Path::getInstance()->getJavascriptPath('Chamilo\Core\Repository\ContentObject\LearningPath\Display', true) .
-            'LearningPathItem.js'
+        $container = DependencyInjectionContainerBuilder::getInstance()->createContainer();
+
+        /**
+         * @var \Chamilo\Libraries\Format\Utilities\ResourceManager $resourceManager
+         */
+        $resourceManager = $container->get(ResourceManager::class);
+
+        /**
+         * @var \Chamilo\Libraries\File\WebPathBuilder $webPathBuilder
+         */
+        $webPathBuilder = $container->get(WebPathBuilder::class);
+
+        $html[] = $resourceManager->getResourceHtml(
+            $webPathBuilder->getJavascriptPath(Manager::CONTEXT) . 'LearningPathItem.js'
         );
 
         return implode(PHP_EOL, $html);

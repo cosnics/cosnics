@@ -5,19 +5,17 @@ use Chamilo\Core\Repository\Common\ContentObjectResourceRenderer;
 use Chamilo\Core\Repository\ContentObject\Assessment\Display\Component\Viewer\QuestionDisplay;
 use Chamilo\Core\Repository\Manager;
 use Chamilo\Libraries\File\ImageManipulation\ImageManipulation;
-use Chamilo\Libraries\File\Path;
 use Chamilo\Libraries\Format\Structure\Glyph\FontAwesomeGlyph;
 use Chamilo\Libraries\Format\Utilities\ResourceManager;
 use Chamilo\Libraries\Translation\Translation;
 
 /**
  * @package Chamilo\Core\Repository\ContentObject\HotspotQuestion\Integration\Chamilo\Core\Repository\ContentObject\Assessment\Display
- *
- * @author Hans De Bisschop <hans.de.bisschop@ehb.be>
+ * @author  Hans De Bisschop <hans.de.bisschop@ehb.be>
  */
 class Display extends QuestionDisplay
 {
-    private $colours = array(
+    private $colours = [
         '#ff0000',
         '#f2ef00',
         '#00ff00',
@@ -29,7 +27,7 @@ class Display extends QuestionDisplay
         '#00ff80',
         '#ff8000',
         '#8000ff'
-    );
+    ];
 
     public function add_question_form()
     {
@@ -52,14 +50,16 @@ class Display extends QuestionDisplay
 
         $formvalidator->addElement(
             'html', ResourceManager::getInstance()->getResourceHtml(
-            $formvalidator->getWebPathBuilder()->getJavascriptPath('Chamilo\Core\Repository\ContentObject\HotspotQuestion') .
-            'Plugin/jquery.draw.js'
+            $formvalidator->getWebPathBuilder()->getJavascriptPath(
+                'Chamilo\Core\Repository\ContentObject\HotspotQuestion'
+            ) . 'Plugin/jquery.draw.js'
         )
         );
         $formvalidator->addElement(
             'html', ResourceManager::getInstance()->getResourceHtml(
-            $formvalidator->getWebPathBuilder()->getJavascriptPath('Chamilo\Core\Repository\ContentObject\HotspotQuestion') .
-            'HotspotQuestionDisplay.js'
+            $formvalidator->getWebPathBuilder()->getJavascriptPath(
+                'Chamilo\Core\Repository\ContentObject\HotspotQuestion'
+            ) . 'HotspotQuestionDisplay.js'
         )
         );
 
@@ -117,7 +117,8 @@ class Display extends QuestionDisplay
                 $this->colours[$i] . ';"></div>'
             );
 
-            $object_renderer = new ContentObjectResourceRenderer($answer->get_answer()
+            $object_renderer = new ContentObjectResourceRenderer(
+                $answer->get_answer()
             );
 
             $group[] = $formvalidator->createElement('static', null, null, $object_renderer->run());

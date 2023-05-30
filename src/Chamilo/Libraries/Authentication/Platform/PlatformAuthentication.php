@@ -13,6 +13,7 @@ use Chamilo\Libraries\Authentication\AuthenticationException;
 use Chamilo\Libraries\Authentication\AuthenticationInterface;
 use Chamilo\Libraries\Hashing\HashingUtilities;
 use Chamilo\Libraries\Platform\ChamiloRequest;
+use Chamilo\Libraries\Utilities\StringUtilities;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\Translation\Translator;
 
@@ -105,7 +106,7 @@ class PlatformAuthentication extends Authentication
         }
 
         throw new AuthenticationException(
-            $this->translator->trans('UsernameOrPasswordIncorrect', [], 'Chamilo\Libraries')
+            $this->translator->trans('UsernameOrPasswordIncorrect', [], StringUtilities::LIBRARIES)
         );
     }
 

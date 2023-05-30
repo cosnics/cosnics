@@ -36,7 +36,7 @@ class PackagesMappingDriverFactory
      * @param string[] $packages
      *
      * @example $packages = array(
-     *          'application/weblcms' => Path::getInstance()->getBasePath() .
+     *          'application/weblcms' => $systemPathBuilder->getBasePath() .
      *          'application/weblcms/resources/configuration/config.yml'
      *          )
      */

@@ -6,47 +6,26 @@ use Chamilo\Configuration\Package\PlatformPackageBundles;
 use Chamilo\Libraries\Architecture\Bootstrap\Bootstrap;
 use Chamilo\Libraries\DependencyInjection\DependencyInjectionContainerBuilder;
 use Chamilo\Libraries\File\Filesystem;
-use Chamilo\Libraries\File\Path;
+use Chamilo\Libraries\File\SystemPathBuilder;
 
 require_once realpath(__DIR__ . '/../../../../') . '/vendor/autoload.php';
 
 /**
- *
  * @package Chamilo\Libraries\Utilities\Jenkins
- * @author Hans De Bisschop <hans.de.bisschop@ehb.be>
+ * @author  Hans De Bisschop <hans.de.bisschop@ehb.be>
  */
 class SourceCodeTestGenerator
 {
 
     /**
-     *
      * @var \configuration\package\storage\data_class\PackageList
      */
     private $package_list;
 
     /**
-     *
      * @param \configuration\package\storage\data_class\PackageList $package_list
      */
     public function __construct(PackageList $package_list)
-    {
-        $this->package_list = $package_list;
-    }
-
-    /**
-     *
-     * @return \configuration\package\storage\data_class\PackageList
-     */
-    public function get_package_list()
-    {
-        return $this->package_list;
-    }
-
-    /**
-     *
-     * @param \configuration\package\storage\data_class\PackageList $package_list
-     */
-    public function set_package_list($package_list)
     {
         $this->package_list = $package_list;
     }
@@ -57,7 +36,27 @@ class SourceCodeTestGenerator
     }
 
     /**
+     * @param string $context
      *
+     * @return string
+     */
+    public function get_folder($context)
+    {
+        $systemPathBuilder =
+            DependencyInjectionContainerBuilder::getInstance()->createContainer()->get(SystemPathBuilder::class);
+
+        return $systemPathBuilder->namespaceToFullPath($context) . 'test/php/source/';
+    }
+
+    /**
+     * @return \configuration\package\storage\data_class\PackageList
+     */
+    public function get_package_list()
+    {
+        return $this->package_list;
+    }
+
+    /**
      * @param \configuration\package\storage\data_class\PackageList $package_list
      */
     public function process(PackageList $package_list)
@@ -74,18 +73,14 @@ class SourceCodeTestGenerator
     }
 
     /**
-     *
-     * @param string $context
-     *
-     * @return string
+     * @param \configuration\package\storage\data_class\PackageList $package_list
      */
-    public function get_folder($context)
+    public function set_package_list($package_list)
     {
-        return Path::getInstance()->namespaceToFullPath($context) . 'test/php/source/';
+        $this->package_list = $package_list;
     }
 
     /**
-     *
      * @param string $context
      */
     public function write_source_code_test($context)
@@ -125,8 +120,11 @@ class CheckSourceCodeTest extends \libraries\architecture\test\source\CheckSourc
 }';
         }
 
+        $systemPathBuilder =
+            DependencyInjectionContainerBuilder::getInstance()->createContainer()->get(SystemPathBuilder::class);
+
         $path = $this->get_folder($context) . 'check_source_code_test.class.php';
-        $php_class_path = Path::getInstance()->namespaceToFullPath($context) . 'php/';
+        $php_class_path = $systemPathBuilder->namespaceToFullPath($context) . 'php/';
 
         if (!file_exists($path) && is_dir($php_class_path))
         {

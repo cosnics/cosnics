@@ -4,16 +4,17 @@ namespace Chamilo\Core\Repository\ContentObject\HotspotQuestion\Integration\Cham
 use Chamilo\Core\Repository\Common\ContentObjectResourceRenderer;
 use Chamilo\Core\Repository\ContentObject\Assessment\Display\AnswerFeedbackDisplay;
 use Chamilo\Core\Repository\ContentObject\Assessment\Display\Component\Viewer\AssessmentQuestionResultDisplay;
+use Chamilo\Core\Repository\ContentObject\HotspotQuestion\Storage\DataClass\HotspotQuestion;
 use Chamilo\Core\Repository\Manager;
+use Chamilo\Libraries\DependencyInjection\DependencyInjectionContainerBuilder;
 use Chamilo\Libraries\File\ImageManipulation\ImageManipulation;
-use Chamilo\Libraries\File\Path;
+use Chamilo\Libraries\File\WebPathBuilder;
 use Chamilo\Libraries\Format\Structure\Glyph\FontAwesomeGlyph;
 use Chamilo\Libraries\Format\Utilities\ResourceManager;
 use Chamilo\Libraries\Translation\Translation;
 use Chamilo\Libraries\Utilities\PointInPolygon;
 
 /**
- *
  * @package
  *          core\repository\content_object\hotspot_question\integration\core\repository\content_object\assessment\display
  * @author Sven Vanpoucke <sven.vanpoucke@hogent.be>
@@ -47,18 +48,30 @@ class ResultDisplay extends AssessmentQuestionResultDisplay
             Manager::get_document_downloader_url(
                 $image_object->get_id(), $image_object->calculate_security_code()
             ) . ')"></div></div>';
-        $html[] = '<script src="' . htmlspecialchars(
-                Path::getInstance()->getJavascriptPath('Chamilo\Core\Repository\ContentObject\HotspotQuestion', true) .
-                'Plugin/jquery.draw.js'
-            ) . '"></script>';
-        $html[] = ResourceManager::getInstance()->getResourceHtml(
-            Path::getInstance()->getJavascriptPath('Chamilo\Core\Repository\ContentObject\HotspotQuestion', true) .
-            'HotspotQuestionResultDisplay.js'
+
+        $container = DependencyInjectionContainerBuilder::getInstance()->createContainer();
+
+        /**
+         * @var \Chamilo\Libraries\Format\Utilities\ResourceManager $resourceManager
+         */
+        $resourceManager = $container->get(ResourceManager::class);
+
+        /**
+         * @var \Chamilo\Libraries\File\WebPathBuilder $webPathBuilder
+         */
+        $webPathBuilder = $container->get(WebPathBuilder::class);
+
+        $html[] = $resourceManager->getResourceHtml(
+            $webPathBuilder->getJavascriptPath(HotspotQuestion::CONTEXT) . 'Plugin/jquery.draw.js'
+        );
+
+        $html[] = $resourceManager->getResourceHtml(
+            $webPathBuilder->getJavascriptPath(HotspotQuestion::CONTEXT) . 'HotspotQuestionResultDisplay.js'
         );
         $html[] = '<div class="clearfix"></div></div>';
 
         $user_answers = $this->get_answers();
-        $colors = array(
+        $colors = [
             '#ff0000',
             '#f2ef00',
             '#00ff00',
@@ -70,7 +83,7 @@ class ResultDisplay extends AssessmentQuestionResultDisplay
             '#00ff80',
             '#ff8000',
             '#8000ff'
-        );
+        ];
 
         $html[] = '<table class="table table-striped table-bordered table-hover table-data take_assessment">';
         $html[] = '<thead>';
@@ -105,14 +118,14 @@ class ResultDisplay extends AssessmentQuestionResultDisplay
                 if ($valid_answer)
                 {
                     $glyph = new FontAwesomeGlyph(
-                        'check', array('text-success'),
+                        'check', ['text-success'],
                         Translation::get('Correct', [], 'Chamilo\Core\Repository\ContentObject\Assessment'), 'fas'
                     );
                 }
                 else
                 {
                     $glyph = new FontAwesomeGlyph(
-                        'times', array('text-danger'),
+                        'times', ['text-danger'],
                         Translation::get('Wrong', [], 'Chamilo\Core\Repository\ContentObject\Assessment'), 'fas'
                     );
                 }
@@ -127,7 +140,8 @@ class ResultDisplay extends AssessmentQuestionResultDisplay
                 $configuration, $this->get_complex_content_object_question(), true, $valid_answer
             ))
             {
-                $object_renderer = new ContentObjectResourceRenderer($answer->get_comment()
+                $object_renderer = new ContentObjectResourceRenderer(
+                    $answer->get_comment()
                 );
 
                 $html[] = '<td>' . $object_renderer->run() . '</td>';

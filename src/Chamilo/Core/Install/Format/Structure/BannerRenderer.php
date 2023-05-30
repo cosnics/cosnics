@@ -9,6 +9,7 @@ use Chamilo\Libraries\Format\Structure\BreadcrumbTrailRenderer;
 use Chamilo\Libraries\Format\Structure\PageConfiguration;
 use Chamilo\Libraries\Format\Theme\ThemePathBuilder;
 use Chamilo\Libraries\Platform\Session\SessionUtilities;
+use Chamilo\Libraries\Utilities\StringUtilities;
 use Symfony\Component\Translation\Translator;
 
 /**
@@ -47,7 +48,7 @@ class BannerRenderer extends \Chamilo\Libraries\Format\Structure\BannerRenderer
         $html[] = '<div class="' . $this->getPageConfiguration()->getContainerMode() . '">';
         $html[] = '<div class="navbar-header">';
 
-        $brandSource = $this->getThemeWebPathBuilder()->getImagePath('Chamilo\Libraries', 'LogoHeader');
+        $brandSource = $this->getThemeWebPathBuilder()->getImagePath(StringUtilities::LIBRARIES, 'LogoHeader');
 
         $html[] = '<a class="navbar-brand" href="' . $this->getWebPathBuilder()->getBasePath() . '">';
         $html[] = '<img alt="' . $this->getTranslator()->trans('ChamiloInstallationTitle', [], 'Chamilo\Core\Install') .

@@ -5,6 +5,7 @@ use Chamilo\Core\Repository\ContentObject\Assignment\Ajax\Manager;
 use Chamilo\Core\Repository\ContentObject\File\Storage\DataClass\File;
 use Chamilo\Libraries\Architecture\JsonAjaxResult;
 use Chamilo\Libraries\Architecture\Traits\DependencyInjectionContainerTrait;
+use Chamilo\Libraries\Utilities\StringUtilities;
 use Exception;
 
 /**
@@ -44,7 +45,7 @@ class ShowInlineComponent extends Manager
             $file = $this->getDataClassRepository()->retrieveById(File::class, $fileId);
 
             if($this->getUser()->getId() != $file->get_owner_id()) { //@todo better rights check
-                $this->returnError($this->getTranslator()->trans('NotAllowed', [], 'Chamilo\Libraries'));
+                $this->returnError($this->getTranslator()->trans('NotAllowed', [], StringUtilities::LIBRARIES));
             } else {
                 $file->setShowInline($showInline);
                 $file->save();

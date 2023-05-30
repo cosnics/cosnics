@@ -4,11 +4,12 @@ namespace Chamilo\Libraries\Architecture\Test\Source;
 use Chamilo\Libraries\Architecture\ClassnameUtilities;
 use Chamilo\Libraries\Architecture\Test\TestCases\ChamiloTestCase;
 use Chamilo\Libraries\Architecture\Traits\DirectoryScanner;
-use Chamilo\Libraries\File\Path;
+use Chamilo\Libraries\DependencyInjection\DependencyInjectionContainerBuilder;
+use Chamilo\Libraries\File\SystemPathBuilder;
 
 /**
  * Abstract test case that checks the php syntax for the php files of a package
- * 
+ *
  * @author Sven Vanpoucke - Hogeschool Gent
  */
 abstract class CheckSourceCodeTest extends ChamiloTestCase
@@ -20,10 +21,10 @@ abstract class CheckSourceCodeTest extends ChamiloTestCase
      * Caching variables *
      * **************************************************************************************************************
      */
-    
+
     /**
      * Caches the source files for reuse in multiple tests
-     * 
+     *
      * @var string[]
      */
     private $source_files;
@@ -33,50 +34,49 @@ abstract class CheckSourceCodeTest extends ChamiloTestCase
      * Tests *
      * **************************************************************************************************************
      */
-    
+
     /**
-     * This test checks if the syntax for a given php file is correct (Uses php lint for the check)
-     * 
-     * @param string $file @dataProvider php_files_data_provider
+     * Determines the package namespace depending on the namespace of the test class
+     *
+     * @return string
      */
-    public function test_php_syntax($file)
+    protected function determinePackageNamespace()
     {
-        $lint_result = exec('php -l ' . $file);
-        $syntax_correct = (strpos($lint_result, 'No syntax errors detected') !== false);
-        
-        $this->assertTrue($syntax_correct);
+        return ClassnameUtilities::getInstance()->getNamespaceParent(
+            ClassnameUtilities::getInstance()->getNamespaceParent(
+                ClassnameUtilities::getInstance()->getNamespaceFromClassname(get_called_class())
+            )
+        );
     }
 
-//    /**
-//     * This test checks if the package uses the correct installer
-//     */
-//    public function test_package_uses_installer()
-//    {
-//        $namespace = $this->determinePackageNamespace();
-//        $class_name = $namespace . '\Package\Installer';
-//
-//        $this->assertTrue(class_exists($class_name));
-//    }
+    //    /**
+    //     * This test checks if the package uses the correct installer
+    //     */
+    //    public function test_package_uses_installer()
+    //    {
+    //        $namespace = $this->determinePackageNamespace();
+    //        $class_name = $namespace . '\Package\Installer';
+    //
+    //        $this->assertTrue(class_exists($class_name));
+    //    }
 
     /**
      * **************************************************************************************************************
      * Data Providers *
      * **************************************************************************************************************
      */
-    
+
     /**
-     * Provides the data for the check php syntax test
-     * 
-     * @return string[][]
+     * Returns the path to the source files
+     *
+     * @return string
      */
-    public function php_files_data_provider()
+    protected function get_source_path()
     {
-        if (! isset($this->source_files))
-        {
-            $this->source_files = $this->scanFilesInDirectory($this->get_source_path(), '/^.+\.php$/i');
-        }
-        
-        return $this->source_files;
+        $systemPathBuilder =
+            DependencyInjectionContainerBuilder::getInstance()->createContainer()->get(SystemPathBuilder::class);
+
+        return $systemPathBuilder->namespaceToFullPath($this->determinePackageNamespace());
     }
 
     /**
@@ -84,26 +84,32 @@ abstract class CheckSourceCodeTest extends ChamiloTestCase
      * Helper functionality *
      * **************************************************************************************************************
      */
-    
+
     /**
-     * Returns the path to the source files
-     * 
-     * @return string
+     * Provides the data for the check php syntax test
+     *
+     * @return string[][]
      */
-    protected function get_source_path()
+    public function php_files_data_provider()
     {
-        return Path::getInstance()->namespaceToFullPath($this->determinePackageNamespace());
+        if (!isset($this->source_files))
+        {
+            $this->source_files = $this->scanFilesInDirectory($this->get_source_path(), '/^.+\.php$/i');
+        }
+
+        return $this->source_files;
     }
 
     /**
-     * Determines the package namespace depending on the namespace of the test class
-     * 
-     * @return string
+     * This test checks if the syntax for a given php file is correct (Uses php lint for the check)
+     *
+     * @param string $file @dataProvider php_files_data_provider
      */
-    protected function determinePackageNamespace()
+    public function test_php_syntax($file)
     {
-        return ClassnameUtilities::getInstance()->getNamespaceParent(
-            ClassnameUtilities::getInstance()->getNamespaceParent(
-                ClassnameUtilities::getInstance()->getNamespaceFromClassname(get_called_class())));
+        $lint_result = exec('php -l ' . $file);
+        $syntax_correct = (strpos($lint_result, 'No syntax errors detected') !== false);
+
+        $this->assertTrue($syntax_correct);
     }
 }

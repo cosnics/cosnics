@@ -4,9 +4,7 @@ namespace Chamilo\Core\Repository\ContentObject\AssessmentSelectQuestion\Integra
 use Chamilo\Core\Repository\ContentObject\Assessment\Display\Component\Viewer\QuestionDisplay;
 use Chamilo\Core\Repository\ContentObject\Assessment\Storage\DataClass\Assessment;
 use Chamilo\Core\Repository\ContentObject\AssessmentSelectQuestion\Storage\DataClass\AssessmentSelectQuestion;
-use Chamilo\Libraries\File\Path;
 use Chamilo\Libraries\Format\Structure\Glyph\FontAwesomeGlyph;
-use Chamilo\Libraries\Format\Utilities\ResourceManager;
 use Chamilo\Libraries\Translation\Translation;
 
 /**
@@ -100,8 +98,8 @@ class Display extends QuestionDisplay
         $renderer->setElementTemplate($element_template, $question_name);
 
         $formvalidator->addElement(
-            'html', ResourceManager:: getInstance()->getResourceHtml(
-            Path:: getInstance()->getJavascriptPath(Assessment::CONTEXT, true) . 'GiveHint.js'
+            'html', $formvalidator->getResourceManager()->getResourceHtml(
+            $formvalidator->getWebPathBuilder()->getJavascriptPath(Assessment::CONTEXT, true) . 'GiveHint.js'
         )
         );
 

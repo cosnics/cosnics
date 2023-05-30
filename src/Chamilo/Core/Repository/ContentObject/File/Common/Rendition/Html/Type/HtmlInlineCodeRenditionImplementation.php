@@ -3,7 +3,6 @@ namespace Chamilo\Core\Repository\ContentObject\File\Common\Rendition\Html\Type;
 
 use Chamilo\Core\Repository\ContentObject\File\Common\Rendition\Html\HtmlInlineRenditionImplementation;
 use Chamilo\Core\Repository\ContentObject\File\Storage\DataClass\File;
-use Chamilo\Libraries\File\Path;
 
 /**
  * Class HtmlInlineCodeRenditionImplementation
@@ -12,7 +11,6 @@ class HtmlInlineCodeRenditionImplementation extends HtmlInlineRenditionImplement
 {
 
     /**
-     *
      * @see \Chamilo\Core\Repository\ContentObject\File\Common\Rendition\Html\HtmlInlineRenditionImplementation::render()
      */
     public function render($parameters)

@@ -172,7 +172,7 @@ class ApplicationFactory
         {
             throw new UserException(
                 $this->getTranslator()->trans(
-                    'InvalidApplication', ['CONTEXT' => $context], 'Chamilo\Libraries'
+                    'InvalidApplication', ['CONTEXT' => $context], StringUtilities::LIBRARIES
                 )
             );
         }

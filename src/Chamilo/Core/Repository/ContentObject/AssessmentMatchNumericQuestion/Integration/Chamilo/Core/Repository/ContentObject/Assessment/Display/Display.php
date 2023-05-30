@@ -3,7 +3,6 @@ namespace Chamilo\Core\Repository\ContentObject\AssessmentMatchNumericQuestion\I
 
 use Chamilo\Core\Repository\ContentObject\Assessment\Display\Component\Viewer\QuestionDisplay;
 use Chamilo\Core\Repository\ContentObject\Assessment\Storage\DataClass\Assessment;
-use Chamilo\Libraries\File\Path;
 use Chamilo\Libraries\Format\Structure\Glyph\FontAwesomeGlyph;
 use Chamilo\Libraries\Format\Utilities\ResourceManager;
 use Chamilo\Libraries\Translation\Translation;

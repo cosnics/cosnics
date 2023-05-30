@@ -6,6 +6,7 @@ use Chamilo\Libraries\File\SystemPathBuilder;
 use Chamilo\Libraries\File\WebPathBuilder;
 use Chamilo\Libraries\Format\Utilities\ResourceManager;
 use Chamilo\Libraries\Translation\Translation;
+use Chamilo\Libraries\Utilities\StringUtilities;
 
 /**
  * @package Chamilo\Libraries\Format\Form
@@ -123,7 +124,7 @@ class FormValidatorHtmlEditor
         $javascript = [];
 
         $javascript[] = '<script>';
-        $javascript[] = 'window.CKEDITOR_BASEPATH = "' . $webPathBuilder->getPluginPath('Chamilo\Libraries') .
+        $javascript[] = 'window.CKEDITOR_BASEPATH = "' . $webPathBuilder->getPluginPath(StringUtilities::LIBRARIES) .
             '" + "HtmlEditor/Ckeditor/"';
         $javascript[] = '</script>';
 
@@ -199,17 +200,17 @@ class FormValidatorHtmlEditor
         $scripts = [];
 
         $scripts[] = $resourceManager->getResourceHtml(
-            $webPathBuilder->getPluginPath('Chamilo\Libraries') . 'HtmlEditor/Ckeditor/ckeditor.js'
+            $webPathBuilder->getPluginPath(StringUtilities::LIBRARIES) . 'HtmlEditor/Ckeditor/ckeditor.js'
         );
         $scripts[] = '<script>';
         $scripts[] = 'CKEDITOR.timestamp = "' . $timestamp . '";';
         $scripts[] = 'var web_path = \'' . $webPathBuilder->getBasePath() . '\';';
         $scripts[] = '</script>';
         $scripts[] = $resourceManager->getResourceHtml(
-            $webPathBuilder->getPluginPath('Chamilo\Libraries') . 'HtmlEditor/CkeditorGlobalConfig.js'
+            $webPathBuilder->getPluginPath(StringUtilities::LIBRARIES) . 'HtmlEditor/CkeditorGlobalConfig.js'
         );
         $scripts[] = $resourceManager->getResourceHtml(
-            $webPathBuilder->getPluginPath('Chamilo\Libraries') . 'HtmlEditor/Ckeditor/adapters/jquery.js'
+            $webPathBuilder->getPluginPath(StringUtilities::LIBRARIES) . 'HtmlEditor/Ckeditor/adapters/jquery.js'
         );
 
         return $scripts;

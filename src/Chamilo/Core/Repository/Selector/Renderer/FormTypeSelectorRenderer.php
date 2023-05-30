@@ -5,11 +5,13 @@ use Chamilo\Core\Repository\Selector\TypeSelector;
 use Chamilo\Core\Repository\Selector\TypeSelectorRenderer;
 use Chamilo\Libraries\Architecture\Application\Application;
 use Chamilo\Libraries\Architecture\ClassnameUtilities;
-use Chamilo\Libraries\File\Path;
+use Chamilo\Libraries\DependencyInjection\DependencyInjectionContainerBuilder;
+use Chamilo\Libraries\File\WebPathBuilder;
 use Chamilo\Libraries\Format\Form\FormValidator;
 use Chamilo\Libraries\Format\Structure\Glyph\FontAwesomeGlyph;
 use Chamilo\Libraries\Format\Utilities\ResourceManager;
 use Chamilo\Libraries\Translation\Translation;
+use Chamilo\Libraries\Utilities\StringUtilities;
 
 /**
  * Render content object type selection tabs based on their category
@@ -20,23 +22,20 @@ class FormTypeSelectorRenderer extends TypeSelectorRenderer
 {
 
     /**
-     *
      * @var \libraries\format\FormValidator
      */
     private $form;
 
     /**
-     *
      * @var string
      */
     private $postback_url;
 
     /**
-     *
      * @param \Chamilo\Libraries\Architecture\Application\Application $parent
      * @param string[] $content_object_types
      * @param string[][] $additional_links
-     * @param boolean $use_general_statistics
+     * @param bool $use_general_statistics
      * @param string $postback_url
      */
     public function __construct(Application $parent, TypeSelector $type_selector, $postback_url = null)
@@ -60,13 +59,12 @@ class FormTypeSelectorRenderer extends TypeSelectorRenderer
         $form = $this->get_form();
 
         $select = $form->addElement(
-            'select', TypeSelector::PARAM_SELECTION, Translation::get('CreateANew'), [],
-            array('class' => 'postback')
+            'select', TypeSelector::PARAM_SELECTION, Translation::get('CreateANew'), [], ['class' => 'postback']
         );
 
         foreach ($this->get_type_selector()->as_tree() as $key => $type)
         {
-            $attributes = !is_integer($key) ? array('disabled') : [];
+            $attributes = !is_integer($key) ? ['disabled'] : [];
             $select->addOption($type, $key, $attributes);
         }
 
@@ -80,11 +78,23 @@ class FormTypeSelectorRenderer extends TypeSelectorRenderer
         $renderer->setElementTemplate('{label}&nbsp;&nbsp;{element}&nbsp;');
         $form->accept($renderer);
 
+        $container = DependencyInjectionContainerBuilder::getInstance()->createContainer();
+
+        /**
+         * @var \Chamilo\Libraries\Format\Utilities\ResourceManager $resourceManager
+         */
+        $resourceManager = $container->get(ResourceManager::class);
+
+        /**
+         * @var \Chamilo\Libraries\File\WebPathBuilder $webPathBuilder
+         */
+        $webPathBuilder = $container->get(WebPathBuilder::class);
+
         $html = [];
         $html[] = '<div style="margin-bottom: 20px;">';
         $html[] = $renderer->toHtml();
-        $html[] = ResourceManager::getInstance()->getResourceHtml(
-            Path::getInstance()->getJavascriptPath('Chamilo\Libraries', true) . 'Postback.js'
+        $html[] = $resourceManager->getResourceHtml(
+            $webPathBuilder->getJavascriptPath(StringUtilities::LIBRARIES) . 'Postback.js'
         );
         $html[] = '</div>';
 
@@ -92,7 +102,6 @@ class FormTypeSelectorRenderer extends TypeSelectorRenderer
     }
 
     /**
-     *
      * @return \libraries\format\FormValidator
      */
     public function get_form()
@@ -101,7 +110,6 @@ class FormTypeSelectorRenderer extends TypeSelectorRenderer
     }
 
     /**
-     *
      * @return string
      */
     public function get_postback_url()

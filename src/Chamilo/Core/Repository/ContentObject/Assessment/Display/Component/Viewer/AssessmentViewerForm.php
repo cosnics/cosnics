@@ -176,7 +176,7 @@ class AssessmentViewerForm extends FormValidator
 
         $this->addElement(
             'html', $this->getResourceManager()->getResourceHtml(
-            $this->getWebPathBuilder()->getJavascriptPath('Chamilo\Libraries') . 'HeartBeat.js'
+            $this->getWebPathBuilder()->getJavascriptPath(StringUtilities::LIBRARIES) . 'HeartBeat.js'
         )
         );
     }

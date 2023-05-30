@@ -4,8 +4,9 @@ namespace Chamilo\Core\Repository\ContentObject\Blog\Storage\DataClass;
 use Chamilo\Core\Repository\ContentObject\BlogItem\Storage\DataClass\BlogItem;
 use Chamilo\Core\Repository\Storage\DataClass\ContentObject;
 use Chamilo\Libraries\Architecture\Interfaces\ComplexContentObjectSupport;
+use Chamilo\Libraries\DependencyInjection\DependencyInjectionContainerBuilder;
 use Chamilo\Libraries\File\Filesystem;
-use Chamilo\Libraries\File\Path;
+use Chamilo\Libraries\File\SystemPathBuilder;
 use Chamilo\Libraries\Translation\Translation;
 
 /**
@@ -42,7 +43,12 @@ class Blog extends ContentObject implements ComplexContentObjectSupport
     {
         $blog_layouts = [];
 
-        $dir = Path::getInstance()->namespaceToFullPath(Blog::CONTEXT . '\Display\Component\Viewer\BlogLayout');
+        /**
+         * @var \Chamilo\Libraries\File\SystemPathBuilder $systemPathBuilder
+         */
+        $systemPathBuilder =
+            DependencyInjectionContainerBuilder::getInstance()->createContainer()->get(SystemPathBuilder::class);
+        $dir = $systemPathBuilder->namespaceToFullPath(Blog::CONTEXT . '\Display\Component\Viewer\BlogLayout');
         $files = Filesystem::get_directory_content($dir, Filesystem::LIST_FILES, false);
 
         foreach ($files as $file)

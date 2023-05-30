@@ -2,7 +2,8 @@
 namespace Chamilo\Libraries\Storage\DataManager\Doctrine\ORM;
 
 use Chamilo\Libraries\DependencyInjection\Configuration\DoctrineORMMappingsConfiguration;
-use Chamilo\Libraries\File\Path;
+use Chamilo\Libraries\DependencyInjection\DependencyInjectionContainerBuilder;
+use Chamilo\Libraries\File\SystemPathBuilder;
 use Doctrine\ORM\Configuration;
 use Doctrine\ORM\Mapping\Driver\XmlDriver;
 use Doctrine\ORM\Mapping\Driver\YamlDriver;
@@ -14,9 +15,7 @@ use InvalidArgumentException;
 
 /**
  * Factory class to create a mapping driver for doctrine with a given configuration array
- *
  * The configuration array should look like this
- *
  *  array(
  *      'default' => array(
  *          'mapping_path1', 'mapping_path2'
@@ -31,7 +30,7 @@ use InvalidArgumentException;
  *  )
  *
  * @package Chamilo\Libraries\Storage\DataManager\Doctrine\ORM
- * @author Sven Vanpoucke - Hogeschool Gent
+ * @author  Sven Vanpoucke - Hogeschool Gent
  */
 class MappingDriverFactory
 {
@@ -42,8 +41,11 @@ class MappingDriverFactory
 
     public function __construct(Configuration $doctrineConfiguration, ?string $chamiloRootPath = null)
     {
+        $systemPathBuilder =
+            DependencyInjectionContainerBuilder::getInstance()->createContainer()->get(SystemPathBuilder::class);
+
         $this->doctrineConfiguration = $doctrineConfiguration;
-        $this->chamiloRootPath = !is_null($chamiloRootPath) ? $chamiloRootPath : Path::getInstance()->getBasePath();
+        $this->chamiloRootPath = !is_null($chamiloRootPath) ? $chamiloRootPath : $systemPathBuilder->getBasePath();
     }
 
     /**

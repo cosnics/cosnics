@@ -10,6 +10,7 @@ use Chamilo\Libraries\Authentication\Authentication;
 use Chamilo\Libraries\Authentication\AuthenticationException;
 use Chamilo\Libraries\Authentication\AuthenticationInterface;
 use Chamilo\Libraries\Platform\ChamiloRequest;
+use Chamilo\Libraries\Utilities\StringUtilities;
 use Exception;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\Translation\Translator;
@@ -102,7 +103,7 @@ class LdapAuthentication extends Authentication implements AuthenticationInterfa
 
         if (!$this->isConfigured())
         {
-            throw new Exception($this->translator->trans('CheckLDAPConfiguration', [], 'Chamilo\Libraries'));
+            throw new Exception($this->translator->trans('CheckLDAPConfiguration', [], StringUtilities::LIBRARIES));
         }
 
         $password = $this->request->getFromRequest(self::PARAM_PASSWORD);
@@ -127,19 +128,19 @@ class LdapAuthentication extends Authentication implements AuthenticationInterfa
         else
         {
             throw new AuthenticationException(
-                $this->translator->trans('CouldNotConnectToLDAPServer', [], 'Chamilo\Libraries')
+                $this->translator->trans('CouldNotConnectToLDAPServer', [], StringUtilities::LIBRARIES)
             );
         }
 
         if (!$dn)
         {
-            throw new AuthenticationException($this->translator->trans('UserNotFoundInLDAP', [], 'Chamilo\Libraries'));
+            throw new AuthenticationException($this->translator->trans('UserNotFoundInLDAP', [], StringUtilities::LIBRARIES));
         }
 
         if (!$password)
         {
             throw new AuthenticationException(
-                $this->translator->trans('UsernameOrPasswordIncorrect', [], 'Chamilo\Libraries')
+                $this->translator->trans('UsernameOrPasswordIncorrect', [], StringUtilities::LIBRARIES)
             );
         }
 
@@ -149,12 +150,12 @@ class LdapAuthentication extends Authentication implements AuthenticationInterfa
          */
         if ($info[0]['useraccountcontrol'][0] & 2) // account is disabled
         {
-            throw new AuthenticationException($this->translator->trans('AccountDisabled', [], 'Chamilo\Libraries'));
+            throw new AuthenticationException($this->translator->trans('AccountDisabled', [], StringUtilities::LIBRARIES));
         }
 
         if ($info[0]['useraccountcontrol'][0] & 16) // account is locked out
         {
-            throw new AuthenticationException($this->translator->trans('AccountLocked', [], 'Chamilo\Libraries'));
+            throw new AuthenticationException($this->translator->trans('AccountLocked', [], StringUtilities::LIBRARIES));
         }
 
         $ldapConnect = ldap_connect($settings['host'], $settings['port']);
@@ -165,7 +166,7 @@ class LdapAuthentication extends Authentication implements AuthenticationInterfa
             ldap_close($ldapConnect);
 
             throw new AuthenticationException(
-                $this->translator->trans('UsernameOrPasswordIncorrect', [], 'Chamilo\Libraries')
+                $this->translator->trans('UsernameOrPasswordIncorrect', [], StringUtilities::LIBRARIES)
             );
         }
         else

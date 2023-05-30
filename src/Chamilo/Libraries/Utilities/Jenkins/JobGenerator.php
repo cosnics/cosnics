@@ -4,9 +4,9 @@ namespace Chamilo\Libraries\Utilities\Jenkins;
 use Chamilo\Configuration\Package\PackageList;
 use Chamilo\Configuration\Package\PlatformPackageBundles;
 use Chamilo\Libraries\Architecture\Bootstrap\Bootstrap;
-use Chamilo\Libraries\File\Filesystem;
-use Chamilo\Libraries\File\Path;
 use Chamilo\Libraries\DependencyInjection\DependencyInjectionContainerBuilder;
+use Chamilo\Libraries\File\Filesystem;
+use Chamilo\Libraries\File\SystemPathBuilder;
 
 require_once realpath(__DIR__ . '/../../../../') . '/vendor/autoload.php';
 
@@ -14,19 +14,16 @@ class JobGenerator
 {
 
     /**
-     *
-     * @var \configuration\package\storage\data_class\PackageList
-     */
-    private $package_list;
-
-    /**
-     *
      * @var string
      */
     private $job_path;
 
     /**
-     *
+     * @var \configuration\package\storage\data_class\PackageList
+     */
+    private $package_list;
+
+    /**
      * @param \configuration\package\storage\data_class\PackageList $package_list
      * @param string $job_path
      */
@@ -36,26 +33,42 @@ class JobGenerator
         $this->job_path = $job_path;
     }
 
-    /**
-     *
-     * @return \configuration\package\storage\data_class\PackageList
-     */
-    public function get_package_list()
+    public function run()
     {
-        return $this->package_list;
+        $this->process($this->package_list);
     }
 
     /**
+     * @param string $context
      *
-     * @param \configuration\package\storage\data_class\PackageList $package_list
+     * @return string
      */
-    public function set_package_list($package_list)
+    public function get_folder($context)
     {
-        $this->package_list = $package_list;
+        $systemPathBuilder =
+            DependencyInjectionContainerBuilder::getInstance()->createContainer()->get(SystemPathBuilder::class);
+
+        return $systemPathBuilder->namespaceToFullPath($context) . 'build/config/';
     }
 
     /**
+     * @param string $context
      *
+     * @return string
+     */
+    public function get_job_name($context)
+    {
+        if ($context)
+        {
+            return str_replace('\\', '_', $context);
+        }
+        else
+        {
+            return 'chamilo';
+        }
+    }
+
+    /**
      * @return string
      */
     public function get_job_path()
@@ -64,21 +77,14 @@ class JobGenerator
     }
 
     /**
-     *
-     * @param string $job_path
+     * @return \configuration\package\storage\data_class\PackageList
      */
-    public function set_job_path($job_path)
+    public function get_package_list()
     {
-        $this->job_path = $job_path;
-    }
-
-    public function run()
-    {
-        $this->process($this->package_list);
+        return $this->package_list;
     }
 
     /**
-     *
      * @param \configuration\package\storage\data_class\PackageList $package_list
      */
     public function process(PackageList $package_list)
@@ -103,32 +109,19 @@ class JobGenerator
     }
 
     /**
-     *
-     * @param string $context
-     *
-     * @return string
+     * @param string $job_path
      */
-    public function get_folder($context)
+    public function set_job_path($job_path)
     {
-        return Path::getInstance()->namespaceToFullPath($context) . 'build/config/';
+        $this->job_path = $job_path;
     }
 
     /**
-     *
-     * @param string $context
-     *
-     * @return string
+     * @param \configuration\package\storage\data_class\PackageList $package_list
      */
-    public function get_job_name($context)
+    public function set_package_list($package_list)
     {
-        if ($context)
-        {
-            return str_replace('\\', '_', $context);
-        }
-        else
-        {
-            return 'chamilo';
-        }
+        $this->package_list = $package_list;
     }
 }
 

@@ -28,7 +28,6 @@ use Chamilo\Libraries\Architecture\Exceptions\NotAllowedException;
 use Chamilo\Libraries\Architecture\Interfaces\AttachmentSupport;
 use Chamilo\Libraries\Architecture\Interfaces\ForcedVersionSupport;
 use Chamilo\Libraries\Architecture\Interfaces\Versionable;
-use Chamilo\Libraries\File\Path;
 use Chamilo\Libraries\File\Redirect;
 use Chamilo\Libraries\Format\Form\Element\AdvancedElementFinder\AdvancedElementFinderElement;
 use Chamilo\Libraries\Format\Form\Element\AdvancedElementFinder\AdvancedElementFinderElements;
@@ -40,7 +39,6 @@ use Chamilo\Libraries\Format\Structure\Glyph\FontAwesomeGlyph;
 use Chamilo\Libraries\Format\Structure\Glyph\IdentGlyph;
 use Chamilo\Libraries\Format\Tabs\Form\FormTab;
 use Chamilo\Libraries\Format\Tabs\TabsCollection;
-use Chamilo\Libraries\Format\Utilities\ResourceManager;
 use Chamilo\Libraries\Platform\Session\Session;
 use Chamilo\Libraries\Storage\Parameters\DataClassRetrieveParameters;
 use Chamilo\Libraries\Storage\Query\Condition\AndCondition;
@@ -334,7 +332,7 @@ abstract class ContentObjectForm extends FormValidator
 
         $this->addElement(
             'html', $this->getResourceManager()->getResourceHtml(
-            $this->getWebPathBuilder()->getJavascriptPath('Chamilo\Libraries') . 'HeartBeat.js'
+            $this->getWebPathBuilder()->getJavascriptPath(StringUtilities::LIBRARIES) . 'HeartBeat.js'
         )
         );
 

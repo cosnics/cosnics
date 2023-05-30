@@ -3,6 +3,7 @@ namespace Chamilo\Core\Repository\Feedback\Form;
 
 use Chamilo\Core\Repository\Feedback\Storage\DataClass\Feedback;
 use Chamilo\Libraries\Format\Form\FormType\HtmlEditorFormType;
+use Chamilo\Libraries\Utilities\StringUtilities;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\Translation\Translator;
@@ -47,7 +48,7 @@ class AddFeedbackFormType extends AbstractType
                 'label' => 'Voeg feedback toe: ',
                 'constraints' => [
                     new NotBlank([
-                        'message' => $this->translator->trans('NotBlank', [], 'Chamilo\Libraries')
+                        'message' => $this->translator->trans('NotBlank', [], StringUtilities::LIBRARIES)
                     ])
                 ]
             ]

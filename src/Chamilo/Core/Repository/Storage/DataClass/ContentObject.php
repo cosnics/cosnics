@@ -19,7 +19,7 @@ use Chamilo\Libraries\Architecture\Interfaces\ComplexContentObjectSupport;
 use Chamilo\Libraries\Architecture\Interfaces\Versionable;
 use Chamilo\Libraries\DependencyInjection\DependencyInjectionContainerBuilder;
 use Chamilo\Libraries\File\Filesystem;
-use Chamilo\Libraries\File\Path;
+use Chamilo\Libraries\File\SystemPathBuilder;
 use Chamilo\Libraries\Format\Structure\Glyph\IdentGlyph;
 use Chamilo\Libraries\Format\Structure\Glyph\NamespaceIdentGlyph;
 use Chamilo\Libraries\Storage\Cache\DataClassRepositoryCache;
@@ -1955,9 +1955,20 @@ class ContentObject extends CompositeDataClass
 
     public static function type_exists($type)
     {
-        $path = Path::getInstance()->namespaceToFullPath(
-            'Chamilo\Core\Repository\ContentObject\\' .
-            (string) StringUtilities::getInstance()->createString($type)->upperCamelize()
+        $container = DependencyInjectionContainerBuilder::getInstance()->createContainer();
+
+        /**
+         * @var \Chamilo\Libraries\Utilities\StringUtilities $stringUtilities
+         */
+        $stringUtilities = $container->get(StringUtilities::class);
+
+        /**
+         * @var \Chamilo\Libraries\File\SystemPathBuilder $systemPathBuilder
+         */
+        $systemPathBuilder = $container->get(SystemPathBuilder::class);
+
+        $path = $systemPathBuilder->namespaceToFullPath(
+            'Chamilo\Core\Repository\ContentObject\\' . (string) $stringUtilities->createString($type)->upperCamelize()
         );
 
         if (file_exists($path) && is_dir($path))

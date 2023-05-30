@@ -160,7 +160,7 @@ class CategoryForm extends FormValidator
         $this->addGroup($buttons, 'buttons', null, '&nbsp;', false);
         $this->addElement(
             'html', $this->getResourceManager()->getResourceHtml(
-            $this->getWebPathBuilder()->getJavascriptPath('Chamilo\Libraries') . 'CategoryForm.js'
+            $this->getWebPathBuilder()->getJavascriptPath(StringUtilities::LIBRARIES) . 'CategoryForm.js'
         )
         );
     }

@@ -4,17 +4,15 @@ namespace Chamilo\Core\Repository\ContentObject\FillInBlanksQuestion\Integration
 use Chamilo\Core\Repository\ContentObject\Assessment\Display\Component\Viewer\QuestionDisplay;
 use Chamilo\Core\Repository\ContentObject\FillInBlanksQuestion\Storage\DataClass\FillInBlanksQuestion;
 use Chamilo\Core\Repository\ContentObject\FillInBlanksQuestion\Storage\DataClass\FillInBlanksQuestionAnswer;
-use Chamilo\Core\Repository\Storage\DataClass\ContentObject;
-use Chamilo\Libraries\Architecture\ClassnameUtilities;
-use Chamilo\Libraries\File\Path;
+use Chamilo\Libraries\DependencyInjection\DependencyInjectionContainerBuilder;
+use Chamilo\Libraries\File\WebPathBuilder;
 use Chamilo\Libraries\Format\Structure\Glyph\FontAwesomeGlyph;
 use Chamilo\Libraries\Format\Utilities\ResourceManager;
 use Chamilo\Libraries\Translation\Translation;
 
 /**
  * @package Chamilo\Core\Repository\ContentObject\FillInBlanksQuestion\Integration\Chamilo\Core\Repository\ContentObject\Assessment\Display
- *
- * @author Hans De Bisschop <hans.de.bisschop@ehb.be>
+ * @author  Hans De Bisschop <hans.de.bisschop@ehb.be>
  */
 class Display extends QuestionDisplay
 {
@@ -95,7 +93,7 @@ class Display extends QuestionDisplay
                 }
             }
 
-            $hint_buttons = implode(" ", $html);
+            $hint_buttons = implode(' ', $html);
             $hint_buttons = strlen($hint_buttons) > 0 ? ' ' . $hint_buttons : '';
 
             $group[] = $formvalidator->createElement('static', null, null, $hint_buttons);
@@ -165,7 +163,7 @@ class Display extends QuestionDisplay
                 {
                     $this->add_html(
                         '<span class="fill_in_the_blanks_gap">' . Translation::get(
-                            'GapNumber', array('NUMBER' => ($index + 1)),
+                            'GapNumber', ['NUMBER' => ($index + 1)],
                             'Chamilo\Core\Repository\ContentObject\FillInBlanksQuestion'
                         ) . '</span>'
                     );
@@ -247,11 +245,21 @@ class Display extends QuestionDisplay
             $this->add_html(implode(PHP_EOL, $hint_table));
         }
 
+        $container = DependencyInjectionContainerBuilder::getInstance()->createContainer();
+
+        /**
+         * @var \Chamilo\Libraries\Format\Utilities\ResourceManager $resourceManager
+         */
+        $resourceManager = $container->get(ResourceManager::class);
+
+        /**
+         * @var \Chamilo\Libraries\File\WebPathBuilder $webPathBuilder
+         */
+        $webPathBuilder = $container->get(WebPathBuilder::class);
+
         $formvalidator->addElement(
-            'html', ResourceManager::getInstance()->getResourceHtml(
-            Path::getInstance()->getJavascriptPath(
-                ClassnameUtilities::getInstance()->getNamespaceParent(__NAMESPACE__, 7), true
-            ) . 'GiveHint.js'
+            'html', $resourceManager->getResourceHtml(
+            $webPathBuilder->getJavascriptPath(FillInBlanksQuestion::CONTEXT) . 'GiveHint.js'
         )
         );
     }
@@ -276,7 +284,7 @@ class Display extends QuestionDisplay
 
         return $formvalidator->createElement(
             'text', $name, null,
-            array('class' => FillInBlanksQuestion::TEXT_INPUT_FIELD_CSS_CLASS, 'size' => $size, 'autocomplete' => 'off')
+            ['class' => FillInBlanksQuestion::TEXT_INPUT_FIELD_CSS_CLASS, 'size' => $size, 'autocomplete' => 'off']
         );
     }
 

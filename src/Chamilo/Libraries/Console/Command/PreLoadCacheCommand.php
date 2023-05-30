@@ -2,6 +2,7 @@
 namespace Chamilo\Libraries\Console\Command;
 
 use Chamilo\Libraries\Cache\CacheManagement\CacheDataPreLoaderManager;
+use Chamilo\Libraries\Utilities\StringUtilities;
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Input\InputOption;
@@ -35,17 +36,17 @@ class PreLoadCacheCommand extends ChamiloCommand
     {
         $this->setName('chamilo:cache:preload')->addOption(
             self::OPT_PRELOAD, self::OPT_PRELOAD_SHORT, InputOption::VALUE_NONE,
-            $this->translator->trans('PreLoadCache', [], 'Chamilo\Libraries')
+            $this->translator->trans('PreLoadCache', [], StringUtilities::LIBRARIES)
         )->setDescription(
-            $this->translator->trans('PreLoadCacheDescription', [], 'Chamilo\Libraries')
+            $this->translator->trans('PreLoadCacheDescription', [], StringUtilities::LIBRARIES)
         );
 
         $this->addOption(
             self::OPT_LIST, self::OPT_LIST_SHORT, InputOption::VALUE_NONE,
-            $this->translator->trans('ListCacheDataPreLoaderManagers', [], 'Chamilo\Libraries')
+            $this->translator->trans('ListCacheDataPreLoaderManagers', [], StringUtilities::LIBRARIES)
         )->addArgument(
             self::ARG_CACHE_DATA_PRELOADER_SERVICES, InputArgument::IS_ARRAY | InputArgument::OPTIONAL,
-            $this->translator->trans('CacheDataPreLoaderManagers', [], 'Chamilo\Libraries')
+            $this->translator->trans('CacheDataPreLoaderManagers', [], StringUtilities::LIBRARIES)
         );
     }
 
@@ -77,7 +78,7 @@ class PreLoadCacheCommand extends ChamiloCommand
         if ($input->getOption(self::OPT_LIST))
         {
             $output->writeln(
-                '<comment>' . $this->translator->trans('AvailableCacheDataPreLoaderServices', [], 'Chamilo\Libraries') .
+                '<comment>' . $this->translator->trans('AvailableCacheDataPreLoaderServices', [], StringUtilities::LIBRARIES) .
                 '</comment>'
             );
             $output->writeln('');
@@ -96,6 +97,6 @@ class PreLoadCacheCommand extends ChamiloCommand
     protected function preLoad(InputInterface $input, OutputInterface $output)
     {
         $this->cacheDataPreLoaderManager->preLoad($this->getSelectedCacheDataPreLoadServices($input));
-        $output->writeln($this->translator->trans('CachePreLoaded', [], 'Chamilo\Libraries'));
+        $output->writeln($this->translator->trans('CachePreLoaded', [], StringUtilities::LIBRARIES));
     }
 }

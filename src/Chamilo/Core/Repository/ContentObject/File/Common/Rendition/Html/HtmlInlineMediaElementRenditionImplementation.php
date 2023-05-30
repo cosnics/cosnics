@@ -3,21 +3,18 @@ namespace Chamilo\Core\Repository\ContentObject\File\Common\Rendition\Html;
 
 use Chamilo\Core\Repository\ContentObject\File\Storage\DataClass\File;
 use Chamilo\Core\Repository\Manager;
-use Chamilo\Libraries\File\Path;
 use Chamilo\Libraries\Format\Utilities\ResourceManager;
 use Chamilo\Libraries\Utilities\StringUtilities;
 
 /**
- *
  * @package Chamilo\Core\Repository\ContentObject\File\Common\Rendition\Html
- * @author Hans De Bisschop <hans.de.bisschop@ehb.be>
- * @author Magali Gillard <magali.gillard@ehb.be>
+ * @author  Hans De Bisschop <hans.de.bisschop@ehb.be>
+ * @author  Magali Gillard <magali.gillard@ehb.be>
  */
 abstract class HtmlInlineMediaElementRenditionImplementation extends HtmlInlineMediaRenditionImplementation
 {
 
     /**
-     *
      * @see \Chamilo\Core\Repository\ContentObject\File\Common\Rendition\Html\HtmlInlineRenditionImplementation::render()
      */
     public function render($parameters)
@@ -46,7 +43,6 @@ abstract class HtmlInlineMediaElementRenditionImplementation extends HtmlInlineM
     }
 
     /**
-     *
      * @param string[] $parameters
      *
      * @return string
@@ -73,7 +69,6 @@ abstract class HtmlInlineMediaElementRenditionImplementation extends HtmlInlineM
     }
 
     /**
-     *
      * @return string
      */
     public function getMediaUrl()
@@ -86,7 +81,6 @@ abstract class HtmlInlineMediaElementRenditionImplementation extends HtmlInlineM
     }
 
     /**
-     *
      * @param string[] $parameters
      *
      * @return string

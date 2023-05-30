@@ -4,15 +4,13 @@ namespace Chamilo\Core\Repository\ContentObject\OrderingQuestion\Integration\Cha
 use Chamilo\Core\Repository\Common\ContentObjectResourceRenderer;
 use Chamilo\Core\Repository\ContentObject\Assessment\Display\Component\Viewer\QuestionDisplay;
 use Chamilo\Core\Repository\ContentObject\Assessment\Storage\DataClass\Assessment;
-use Chamilo\Libraries\File\Path;
 use Chamilo\Libraries\Format\Structure\Glyph\FontAwesomeGlyph;
 use Chamilo\Libraries\Format\Utilities\ResourceManager;
 use Chamilo\Libraries\Translation\Translation;
 
 /**
  * @package Chamilo\Core\Repository\ContentObject\OrderingQuestion\Integration\Chamilo\Core\Repository\ContentObject\Assessment\Display
- *
- * @author Hans De Bisschop <hans.de.bisschop@ehb.be>
+ * @author  Hans De Bisschop <hans.de.bisschop@ehb.be>
  */
 class Display extends QuestionDisplay
 {
@@ -74,7 +72,8 @@ class Display extends QuestionDisplay
             $answer_name = $question_id . '_' . ($i + 1);
             $group[] = $formvalidator->createElement('select', $answer_name, null, $order_options);
 
-            $object_renderer = new ContentObjectResourceRenderer($answer->get_value()
+            $object_renderer = new ContentObjectResourceRenderer(
+                $answer->get_value()
             );
 
             $group[] = $formvalidator->createElement('static', null, null, $object_renderer->run());

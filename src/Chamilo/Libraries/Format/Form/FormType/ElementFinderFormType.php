@@ -102,7 +102,7 @@ class ElementFinderFormType extends AbstractType
         $view->vars['collapsed'] = $options['collapsed'];
 
         $view->vars['element_finder_plugin'] = $resourceManager->getResourceHtml(
-            $webPathBuilder->getJavascriptPath('Chamilo\Libraries') . 'Jquery/jquery.advelementfinder.min.js'
+            $webPathBuilder->getJavascriptPath(StringUtilities::LIBRARIES) . 'Jquery/jquery.advelementfinder.min.js'
         );
 
         $this->add_element_types($view, $options);

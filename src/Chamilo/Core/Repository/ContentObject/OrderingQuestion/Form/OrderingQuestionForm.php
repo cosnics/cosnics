@@ -5,14 +5,11 @@ use Chamilo\Core\Repository\ContentObject\OrderingQuestion\Storage\DataClass\Ord
 use Chamilo\Core\Repository\ContentObject\OrderingQuestion\Storage\DataClass\OrderingQuestionOption;
 use Chamilo\Core\Repository\Form\ContentObjectForm;
 use Chamilo\Libraries\Architecture\ClassnameUtilities;
-use Chamilo\Libraries\File\Path;
 use Chamilo\Libraries\Format\Structure\Glyph\FontAwesomeGlyph;
 use Chamilo\Libraries\Format\Tabs\Form\FormTab;
-use Chamilo\Libraries\Format\Utilities\ResourceManager;
 use Chamilo\Libraries\Translation\Translation;
 
 /**
- *
  * @package repository.lib.content_object.ordering_question
  */
 class OrderingQuestionForm extends ContentObjectForm
@@ -22,7 +19,7 @@ class OrderingQuestionForm extends ContentObjectForm
     {
         $this->getTabsCollection()->add(
             new FormTab(
-                'add-hint', Translation::get('AddHint'), new FontAwesomeGlyph('magic', array('fa-sm')), 'buildHintForm'
+                'add-hint', Translation::get('AddHint'), new FontAwesomeGlyph('magic', ['fa-sm']), 'buildHintForm'
             )
         );
     }
@@ -65,14 +62,14 @@ class OrderingQuestionForm extends ContentObjectForm
 
         $this->addElement(
             'hidden', 'ordering_number_of_options', $_SESSION['ordering_number_of_options'],
-            array('id' => 'ordering_number_of_options')
+            ['id' => 'ordering_number_of_options']
         );
 
         $buttons = [];
         // Notice: The [] are added to this element name so we don't have to deal with the _x and _y suffixes added when
         // clicking an image button
         $buttons[] = $this->createElement(
-            'style_button', 'add[]', Translation::get('AddItem'), array('id' => 'add_option'), null,
+            'style_button', 'add[]', Translation::get('AddItem'), ['id' => 'add_option'], null,
             new FontAwesomeGlyph('plus')
         );
         $this->addGroup($buttons, 'question_buttons', null, '', false);
@@ -129,13 +126,13 @@ class OrderingQuestionForm extends ContentObjectForm
                 {
                     $group[] = $this->createElement(
                         'style_button', 'remove[' . $option_number . ']', null,
-                        array('class' => 'remove_option', 'id' => 'remove_' . $option_number), null,
+                        ['class' => 'remove_option', 'id' => 'remove_' . $option_number], null,
                         new FontAwesomeGlyph('times', [], null, 'fas')
                     );
                 }
                 else
                 {
-                    $glyph = new FontAwesomeGlyph('times', array('text-muted', 'remove_option'));
+                    $glyph = new FontAwesomeGlyph('times', ['text-muted', 'remove_option']);
                     $group[] = &$this->createElement('static', null, null, $glyph->render());
                 }
 
@@ -144,11 +141,11 @@ class OrderingQuestionForm extends ContentObjectForm
                 $error = '<tr><td colspan="5" class="error">' . Translation::get('ScoreBigger') . '</td></tr>';
 
                 $this->addGroupRule(
-                    OrderingQuestionOption::PROPERTY_VALUE . '_' . $option_number, array(
-                        OrderingQuestionOption::PROPERTY_SCORE . '[' . $option_number . ']' => array(
-                            array($error, 'number_compare', '>', 0)
-                        )
-                    )
+                    OrderingQuestionOption::PROPERTY_VALUE . '_' . $option_number, [
+                        OrderingQuestionOption::PROPERTY_SCORE . '[' . $option_number . ']' => [
+                            [$error, 'number_compare', '>', 0]
+                        ]
+                    ]
                 );
 
                 $renderer->setElementTemplate(

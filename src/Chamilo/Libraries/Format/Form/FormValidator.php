@@ -89,7 +89,7 @@ class FormValidator extends HTML_QuickForm
 
         $this->addElement(
             'html', $this->getResourceManager()->getResourceHtml(
-            $this->getWebPathBuilder()->getJavascriptPath('Chamilo\Libraries') . 'Reset.js'
+            $this->getWebPathBuilder()->getJavascriptPath(StringUtilities::LIBRARIES) . 'Reset.js'
         )
         );
 
@@ -276,7 +276,7 @@ EOT;
 
         $this->addElement(
             'html', $this->getResourceManager()->getResourceHtml(
-            $this->getWebPathBuilder()->getJavascriptPath('Chamilo\Libraries') . 'Jquery/jquery.file.upload.js'
+            $this->getWebPathBuilder()->getJavascriptPath(StringUtilities::LIBRARIES) . 'Jquery/jquery.file.upload.js'
         )
         );
 
@@ -351,7 +351,7 @@ EOT;
 
         $this->addElement(
             'html', $this->getResourceManager()->getResourceHtml(
-            $this->getWebPathBuilder()->getJavascriptPath('Chamilo\Libraries') . 'ImageUploader.js'
+            $this->getWebPathBuilder()->getJavascriptPath(StringUtilities::LIBRARIES) . 'ImageUploader.js'
         )
         );
     }
@@ -428,7 +428,7 @@ EOT;
 
         $this->addElement(
             'html', $this->getResourceManager()->getResourceHtml(
-            $this->getWebPathBuilder()->getJavascriptPath('Chamilo\Libraries') . 'Jquery/jquery.file.upload.single.js'
+            $this->getWebPathBuilder()->getJavascriptPath(StringUtilities::LIBRARIES) . 'Jquery/jquery.file.upload.single.js'
         )
         );
     }
@@ -475,7 +475,7 @@ EOT;
 
         $this->addElement(
             'html', $this->getResourceManager()->getResourceHtml(
-            $this->getWebPathBuilder()->getJavascriptPath('Chamilo\Libraries') . 'FormTimePeriod.min.js'
+            $this->getWebPathBuilder()->getJavascriptPath(StringUtilities::LIBRARIES) . 'FormTimePeriod.min.js'
         )
         );
 

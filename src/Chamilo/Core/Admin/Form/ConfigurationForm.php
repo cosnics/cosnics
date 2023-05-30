@@ -5,7 +5,7 @@ use Chamilo\Configuration\Configuration;
 use Chamilo\Configuration\Storage\DataClass\Setting;
 use Chamilo\Core\User\Storage\DataClass\User;
 use Chamilo\Core\User\Storage\DataClass\UserSetting;
-use Chamilo\Libraries\File\Path;
+use Chamilo\Core\User\Storage\DataManager;
 use Chamilo\Libraries\Format\Form\FormValidator;
 use Chamilo\Libraries\Platform\Session\Session;
 use Chamilo\Libraries\Storage\Parameters\DataClassRetrieveParameters;
@@ -586,7 +586,7 @@ class ConfigurationForm extends FormValidator
                         new StaticConditionVariable(Session::get_user_id())
                     );
                     $condition = new AndCondition($conditions);
-                    $user_setting = \Chamilo\Core\User\Storage\DataManager::retrieve(
+                    $user_setting = DataManager::retrieve(
                         UserSetting::class, new DataClassRetrieveParameters($condition)
                     );
 

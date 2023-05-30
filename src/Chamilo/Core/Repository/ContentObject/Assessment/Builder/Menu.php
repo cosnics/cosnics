@@ -8,7 +8,8 @@ use Chamilo\Core\Repository\Storage\DataManager;
 use Chamilo\Libraries\Architecture\Application\Application;
 use Chamilo\Libraries\Architecture\ClassnameUtilities;
 use Chamilo\Libraries\Architecture\Interfaces\ComplexContentObjectSupport;
-use Chamilo\Libraries\File\Path;
+use Chamilo\Libraries\DependencyInjection\DependencyInjectionContainerBuilder;
+use Chamilo\Libraries\File\WebPathBuilder;
 use Chamilo\Libraries\Format\Menu\Library\HtmlMenu;
 use Chamilo\Libraries\Format\Menu\Library\Renderer\HtmlMenuArrayRenderer;
 use Chamilo\Libraries\Format\Menu\OptionsMenuRenderer;
@@ -118,7 +119,13 @@ class Menu extends HtmlMenu
 
     private function get_build_complex_url($object)
     {
-        return Path::getInstance()->getBasePath(true) . 'index.php?' . Application::PARAM_CONTEXT . '=' .
+        /**
+         * @var \Chamilo\Libraries\File\WebPathBuilder $webPathBuilder
+         */
+        $webPathBuilder =
+            DependencyInjectionContainerBuilder::getInstance()->createContainer()->get(WebPathBuilder::class);
+
+        return $webPathBuilder->getBasePath() . 'index.php?' . Application::PARAM_CONTEXT . '=' .
             \Chamilo\Core\Repository\Manager::CONTEXT . '&' . Application::PARAM_ACTION . '=' .
             \Chamilo\Core\Repository\Manager::ACTION_BUILD_COMPLEX_CONTENT_OBJECT . '&' .
             \Chamilo\Core\Repository\Manager::PARAM_CONTENT_OBJECT_ID . '=' . $object->get_id() . '&' .
