@@ -11,7 +11,6 @@ use Chamilo\Core\User\Storage\DataClass\User;
 use Chamilo\Core\User\Storage\DataManager;
 use Chamilo\Libraries\Architecture\Application\Application;
 use Chamilo\Libraries\File\ImageManipulation\ImageManipulation;
-use Chamilo\Libraries\File\Redirect;
 use Chamilo\Libraries\Format\Form\Element\AdvancedElementFinder\AdvancedElementFinderElementType;
 use Chamilo\Libraries\Format\Form\Element\AdvancedElementFinder\AdvancedElementFinderElementTypes;
 use Chamilo\Libraries\Format\Structure\Glyph\FontAwesomeGlyph;
@@ -51,7 +50,7 @@ class HotspotQuestionForm extends ContentObjectForm
             )
         );
 
-        $uploadUrl = new Redirect(
+        $uploadUrl = $this->getUrlGenerator()->fromParameters(
             [
                 Application::PARAM_CONTEXT => \Chamilo\Core\Repository\Ajax\Manager::CONTEXT,
                 \Chamilo\Core\Repository\Ajax\Manager::PARAM_ACTION => \Chamilo\Core\Repository\Ajax\Manager::ACTION_IMPORT_FILE
@@ -61,7 +60,7 @@ class HotspotQuestionForm extends ContentObjectForm
         $dropZoneParameters = [
             'name' => HotspotQuestion::PROPERTY_IMAGE . '_dropzone',
             'maxFilesize' => $calculator->getMaximumUploadSize(),
-            'uploadUrl' => $uploadUrl->getUrl(),
+            'uploadUrl' => $uploadUrl,
             'maxFiles' => 1,
             'successCallbackFunction' => 'chamilo.core.repository.importImage.processUploadedFile',
             'sendingCallbackFunction' => 'chamilo.core.repository.importImage.prepareRequest',

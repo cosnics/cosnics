@@ -13,7 +13,6 @@ use Chamilo\Core\Repository\ContentObject\Assessment\Display\Interfaces\Assessme
 use Chamilo\Core\Repository\ContentObject\Hotpotatoes\Storage\DataClass\Hotpotatoes;
 use Chamilo\Libraries\Architecture\Application\ApplicationConfiguration;
 use Chamilo\Libraries\Architecture\Interfaces\DelegateComponent;
-use Chamilo\Libraries\File\Redirect;
 use Chamilo\Libraries\Format\Structure\BreadcrumbTrail;
 use Chamilo\Libraries\Platform\Session\Request;
 use Chamilo\Libraries\Storage\Parameters\DataClassRetrieveParameters;
@@ -141,7 +140,7 @@ class ComplexDisplayComponent extends Manager implements AssessmentDisplaySuppor
 
             $html[] = $this->render_header();
 
-            $redirect = new Redirect(
+            $saveUrl = $this->getUrlGenerator()->fromParameters(
                 [
                     \Chamilo\Application\Weblcms\Manager::PARAM_CONTEXT => \Chamilo\Application\Weblcms\Ajax\Manager::CONTEXT,
                     \Chamilo\Application\Weblcms\Manager::PARAM_ACTION => \Chamilo\Application\Weblcms\Ajax\Manager::ACTION_SAVE_HOTPOTATOES_SCORE
@@ -149,7 +148,7 @@ class ComplexDisplayComponent extends Manager implements AssessmentDisplaySuppor
             );
 
             $path = $this->assessment->add_javascript(
-                $redirect->getUrl(), $this->get_assessment_back_url(), $this->assessment_attempt->get_id()
+                $saveUrl, $this->get_assessment_back_url(), $this->assessment_attempt->get_id()
             );
 
             $html[] = '<iframe src="' . $path . '" width="100%" height="600">

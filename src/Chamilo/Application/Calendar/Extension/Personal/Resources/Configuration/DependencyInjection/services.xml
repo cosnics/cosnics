@@ -12,5 +12,6 @@
         <service id="Chamilo\Application\Calendar\Extension\Personal\Service\RightsService"/>
         <service id="Chamilo\Application\Calendar\Extension\Personal\Storage\Repository\PublicationRepository"/>
         <service id="Chamilo\Application\Calendar\Extension\Personal\Storage\Repository\RightsRepository"/>
+        <service id="Chamilo\Application\Calendar\Extension\Personal\Actions"/>
     </services>
 </container>

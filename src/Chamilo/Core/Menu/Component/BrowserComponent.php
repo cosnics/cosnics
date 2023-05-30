@@ -9,7 +9,6 @@ use Chamilo\Core\Menu\Storage\DataClass\CategoryItem;
 use Chamilo\Core\Menu\Storage\DataClass\LinkItem;
 use Chamilo\Core\Menu\Table\ItemTableRenderer;
 use Chamilo\Libraries\Architecture\Interfaces\DelegateComponent;
-use Chamilo\Libraries\File\Redirect;
 use Chamilo\Libraries\Format\Structure\ActionBar\Button;
 use Chamilo\Libraries\Format\Structure\ActionBar\ButtonGroup;
 use Chamilo\Libraries\Format\Structure\ActionBar\ButtonToolBar;
@@ -157,7 +156,7 @@ class BrowserComponent extends Manager implements DelegateComponent
      */
     public function getMenu()
     {
-        $urlFormat = new Redirect(
+        $urlFormat = $this->getUrlGenerator()->fromParameters(
             [
                 self::PARAM_CONTEXT => Manager::CONTEXT,
                 self::PARAM_ACTION => self::ACTION_BROWSE,
@@ -166,7 +165,7 @@ class BrowserComponent extends Manager implements DelegateComponent
         );
 
         return new ItemMenu(
-            $this->getItemService(), $this->getTranslator(), $urlFormat->getUrl(), $this->getParentIdentifier()
+            $this->getItemService(), $this->getTranslator(), $urlFormat, $this->getParentIdentifier()
         );
     }
 

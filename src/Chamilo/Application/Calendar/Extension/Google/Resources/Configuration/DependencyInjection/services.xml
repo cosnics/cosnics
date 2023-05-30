@@ -34,5 +34,7 @@
                      method="createFilesystemAdapter"/>
             <argument key="$namespace">Chamilo\Application\Calendar\Extension\Google\Events</argument>
         </service>
+
+        <service id="Chamilo\Application\Calendar\Extension\Google\Actions"/>
     </services>
 </container>

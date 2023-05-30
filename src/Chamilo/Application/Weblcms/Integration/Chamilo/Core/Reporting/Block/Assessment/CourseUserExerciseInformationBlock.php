@@ -13,7 +13,6 @@ use Chamilo\Core\Repository\Storage\DataClass\ContentObject;
 use Chamilo\Core\Repository\Storage\DataManager;
 use Chamilo\Libraries\Architecture\Application\Application;
 use Chamilo\Libraries\Architecture\ClassnameUtilities;
-use Chamilo\Libraries\File\Redirect;
 use Chamilo\Libraries\Format\Structure\Glyph\FontAwesomeGlyph;
 use Chamilo\Libraries\Storage\Parameters\DataClassRetrievesParameters;
 use Chamilo\Libraries\Storage\Query\Condition\AndCondition;
@@ -25,11 +24,10 @@ use Chamilo\Libraries\Utilities\DatetimeUtilities;
 use Chamilo\Libraries\Utilities\StringUtilities;
 
 /**
- *
  * @package application.weblcms.php.reporting.blocks Reporting block with an overiew of the assessments the user has
  *          attempted
- * @author Joris Willems <joris.willems@gmail.com>
- * @author Alexander Van Paemel
+ * @author  Joris Willems <joris.willems@gmail.com>
+ * @author  Alexander Van Paemel
  */
 class CourseUserExerciseInformationBlock extends ToolBlock
 {
@@ -38,14 +36,14 @@ class CourseUserExerciseInformationBlock extends ToolBlock
     {
         $reporting_data = new ReportingData();
         $reporting_data->set_rows(
-            array(
+            [
                 Translation::get('Title'),
                 Translation::get('NumberOfAttempts'),
                 Translation::get('LastAttempt'),
                 Translation::get('TotalTime'),
                 Translation::get('AverageScore'),
                 Translation::get('Attempts')
-            )
+            ]
         );
         $course_id = $this->getCourseId();
         $user_id = $this->get_user_id();
@@ -68,7 +66,7 @@ class CourseUserExerciseInformationBlock extends ToolBlock
 
         $exercises = [];
         // $score_count = 0;
-        foreach($trackerdata as $value)
+        foreach ($trackerdata as $value)
         {
             if ($value->get_status() == AssessmentAttempt::STATUS_COMPLETED)
             {
@@ -90,14 +88,12 @@ class CourseUserExerciseInformationBlock extends ToolBlock
         $params[Application::PARAM_CONTEXT] = Manager::CONTEXT;
         $params[Manager::PARAM_COURSE] = $course_id;
         $params[Manager::PARAM_TOOL] = 'assessment';
-        $params[Manager::PARAM_TOOL_ACTION] =
-            \Chamilo\Application\Weblcms\Tool\Manager::ACTION_VIEW;
+        $params[Manager::PARAM_TOOL_ACTION] = \Chamilo\Application\Weblcms\Tool\Manager::ACTION_VIEW;
 
-        $filterParams = array(\Chamilo\Core\Reporting\Viewer\Manager::PARAM_BLOCK_ID);
+        $filterParams = [\Chamilo\Core\Reporting\Viewer\Manager::PARAM_BLOCK_ID];
 
         $params_detail = $this->get_parent()->get_parameters();
-        $params_detail[Manager::PARAM_TEMPLATE_ID] =
-            AssessmentAttemptsUserTemplate::class;
+        $params_detail[Manager::PARAM_TEMPLATE_ID] = AssessmentAttemptsUserTemplate::class;
 
         $conditions = [];
         $conditions[] = new EqualityCondition(
@@ -119,7 +115,7 @@ class CourseUserExerciseInformationBlock extends ToolBlock
             );
 
         $key = 0;
-        foreach($publications_resultset as $publication)
+        foreach ($publications_resultset as $publication)
         {
             if (!\Chamilo\Application\Weblcms\Storage\DataManager::is_publication_target_user(
                 $user_id, $publication[ContentObjectPublication::PROPERTY_ID]
@@ -141,22 +137,19 @@ class CourseUserExerciseInformationBlock extends ToolBlock
                     Translation::get('DateFormatShort', null, StringUtilities::LIBRARIES) . ', ' .
                     Translation::get('TimeNoSecFormat', null, StringUtilities::LIBRARIES), $value['last']
                 );
-                $params_detail[Manager::PARAM_PUBLICATION] =
-                    $publication[ContentObjectPublication::PROPERTY_ID];
+                $params_detail[Manager::PARAM_PUBLICATION] = $publication[ContentObjectPublication::PROPERTY_ID];
                 $link = '<a href="' . $this->get_parent()->get_url($params_detail, $filterParams) . '">' .
                     $glyph->render() . '</a>';
                 $count = $value['count'];
             }
 
-            $params[Manager::PARAM_PUBLICATION] =
-                $publication[ContentObjectPublication::PROPERTY_ID];
+            $params[Manager::PARAM_PUBLICATION] = $publication[ContentObjectPublication::PROPERTY_ID];
 
             $content_object = DataManager::retrieve_by_id(
                 ContentObject::class, $publication[ContentObjectPublication::PROPERTY_CONTENT_OBJECT_ID]
             );
 
-            $redirect = new Redirect($params, $filterParams);
-            $objectLink = $redirect->getUrl();
+            $objectLink = $this->getUrlGenerator()->fromParameters($params, $filterParams);
 
             $title = '<a href="' . $objectLink . '">' . $content_object->get_title() . '</a>';
 
@@ -175,7 +168,7 @@ class CourseUserExerciseInformationBlock extends ToolBlock
 
     public function get_views()
     {
-        return array(Html::VIEW_TABLE);
+        return [Html::VIEW_TABLE];
     }
 
     public function retrieve_data()

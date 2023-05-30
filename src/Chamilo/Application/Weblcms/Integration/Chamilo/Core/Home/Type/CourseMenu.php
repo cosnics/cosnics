@@ -8,7 +8,6 @@ use Chamilo\Application\Weblcms\Rights\CourseManagementRights;
 use Chamilo\Configuration\Configuration;
 use Chamilo\Core\User\Storage\DataClass\User;
 use Chamilo\Libraries\Architecture\Application\Application;
-use Chamilo\Libraries\File\Redirect;
 use Chamilo\Libraries\Format\Structure\Glyph\FontAwesomeGlyph;
 use Chamilo\Libraries\Translation\Translation;
 use Chamilo\Libraries\Utilities\String\SimpleTemplate;
@@ -19,8 +18,8 @@ use Chamilo\Libraries\Utilities\String\SimpleTemplate;
  * register/unregister to course, etc. Do not display less common actions such as manage categories.
  *
  * @copyright (c) 2011 University of Geneva
- * @license GNU General Public License - http://www.gnu.org/copyleft/gpl.html
- * @author lopprecht
+ * @license       GNU General Public License - http://www.gnu.org/copyleft/gpl.html
+ * @author        lopprecht
  */
 class CourseMenu extends Block
 {
@@ -67,7 +66,7 @@ class CourseMenu extends Block
         $this->displayAdminMenu($template);
         SimpleTemplate::all($template, $this->getEditCourseMenu());
 
-        return SimpleTemplate::ex($html, array('ADMIN_MENU' => $ADMIN_MENU, 'USER_MENU' => $USER_MENU));
+        return SimpleTemplate::ex($html, ['ADMIN_MENU' => $ADMIN_MENU, 'USER_MENU' => $USER_MENU]);
     }
 
     public function getCourseActionUrl($action, $params = [])
@@ -75,9 +74,7 @@ class CourseMenu extends Block
         $params[Manager::PARAM_CONTEXT] = Manager::CONTEXT;
         $params[Manager::PARAM_ACTION] = $action;
 
-        $redirect = new Redirect($params);
-
-        return htmlspecialchars($redirect->getUrl());
+        return htmlspecialchars($this->getUrlGenerator()->fromParameters($params));
     }
 
     public function getCreateCourseMenu()
@@ -95,7 +92,7 @@ class CourseMenu extends Block
 
         $course_types = CourseTypeDataManager::retrieve_active_course_types();
 
-        foreach($course_types as $course_type)
+        foreach ($course_types as $course_type)
         {
             if ($course_management_rights->is_allowed_management(
                 CourseManagementRights::CREATE_COURSE_RIGHT, $course_type->get_id(),
@@ -114,7 +111,7 @@ class CourseMenu extends Block
         }
 
         $allowCourseCreationWithoutCourseType = Configuration::getInstance()->get_setting(
-            array('Chamilo\Application\Weblcms', 'allow_course_creation_without_coursetype')
+            ['Chamilo\Application\Weblcms', 'allow_course_creation_without_coursetype']
         );
 
         if ($allowCourseCreationWithoutCourseType)
@@ -125,9 +122,9 @@ class CourseMenu extends Block
         if ($count_direct)
         {
             $href = $this->getCourseActionUrl(
-                Manager::ACTION_COURSE_MANAGER, array(
+                Manager::ACTION_COURSE_MANAGER, [
                     \Chamilo\Application\Weblcms\Course\Manager::PARAM_ACTION => \Chamilo\Application\Weblcms\Course\Manager::ACTION_QUICK_CREATE
-                )
+                ]
             );
             $TEXT = htmlspecialchars(Translation::get('CourseCreate'));
             $glyph = new FontAwesomeGlyph('plus');
@@ -138,11 +135,11 @@ class CourseMenu extends Block
         if ($count_request)
         {
             $HREF = $this->getUrl(
-                array(
+                [
                     Application::PARAM_CONTEXT => Manager::CONTEXT,
                     Application::PARAM_ACTION => Manager::ACTION_REQUEST,
                     \Chamilo\Application\Weblcms\Request\Manager::PARAM_ACTION => \Chamilo\Application\Weblcms\Request\Manager::ACTION_CREATE
-                )
+                ]
             );
 
             $TEXT = htmlspecialchars(Translation::get('CourseRequest'));
@@ -159,9 +156,9 @@ class CourseMenu extends Block
         $result = [];
 
         $HREF = $this->getCourseActionUrl(
-            Manager::ACTION_COURSE_MANAGER, array(
+            Manager::ACTION_COURSE_MANAGER, [
                 \Chamilo\Application\Weblcms\Course\Manager::PARAM_ACTION => \Chamilo\Application\Weblcms\Course\Manager::ACTION_BROWSE_UNSUBSCRIBED_COURSES
-            )
+            ]
         );
 
         $TEXT = htmlspecialchars(Translation::get('CourseSubscribe'));
@@ -170,9 +167,9 @@ class CourseMenu extends Block
         $result[] = compact('HREF', 'TEXT', 'GLYPH_RENDER');
 
         $HREF = $this->getCourseActionUrl(
-            Manager::ACTION_COURSE_MANAGER, array(
+            Manager::ACTION_COURSE_MANAGER, [
                 \Chamilo\Application\Weblcms\Course\Manager::PARAM_ACTION => \Chamilo\Application\Weblcms\Course\Manager::ACTION_BROWSE_SUBSCRIBED_COURSES
-            )
+            ]
         );
 
         $TEXT = htmlspecialchars(Translation::get('CourseUnsubscribe'));
@@ -188,9 +185,9 @@ class CourseMenu extends Block
         $result = [];
 
         $HREF = $this->getCourseActionUrl(
-            Manager::ACTION_COURSE_MANAGER, array(
+            Manager::ACTION_COURSE_MANAGER, [
                 \Chamilo\Application\Weblcms\Course\Manager::PARAM_ACTION => \Chamilo\Application\Weblcms\Course\Manager::ACTION_QUICK_CREATE
-            )
+            ]
         );
         $TEXT = htmlspecialchars(Translation::get('CourseCreate'));
         $glyph = new FontAwesomeGlyph('plus');

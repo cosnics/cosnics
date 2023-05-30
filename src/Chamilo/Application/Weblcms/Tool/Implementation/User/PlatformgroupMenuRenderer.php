@@ -25,11 +25,10 @@ use Chamilo\Libraries\Utilities\StringUtilities;
 class PlatformgroupMenuRenderer extends GenericTree
 {
 
-    const NODE_CLASS = 'category';
+    public const NODE_CLASS = 'category';
+    public const ROOT_NODE_CLASS = 'home';
 
-    const ROOT_NODE_CLASS = 'home';
-
-    const TREE_NAME = __CLASS__;
+    public const TREE_NAME = __CLASS__;
 
     private $browser;
 
@@ -89,7 +88,7 @@ class PlatformgroupMenuRenderer extends GenericTree
         // fetch groups
         $parameters = new DataClassRetrievesParameters(
             $condition, null, null,
-            new OrderBy(array(new OrderProperty(new PropertyConditionVariable(Group::class, Group::PROPERTY_NAME))))
+            new OrderBy([new OrderProperty(new PropertyConditionVariable(Group::class, Group::PROPERTY_NAME))])
         );
 
         return DataManager::retrieves(Group::class, $parameters);
@@ -158,10 +157,10 @@ class PlatformgroupMenuRenderer extends GenericTree
     public function get_search_url()
     {
         $searchUrl = new Redirect(
-            array(
+            [
                 Application::PARAM_CONTEXT => \Chamilo\Core\Group\Ajax\Manager::CONTEXT,
                 \Chamilo\Core\Group\Ajax\Manager::PARAM_ACTION => \Chamilo\Core\Group\Ajax\Manager::ACTION_XML_GROUP_MENU_FEED
-            )
+            ]
         );
 
         return $searchUrl->getUrl();
@@ -190,7 +189,7 @@ class PlatformgroupMenuRenderer extends GenericTree
      *
      * @param $node_id int The node id
      *
-     * @return boolean
+     * @return bool
      */
     public function node_has_children($node_id)
     {

@@ -9,18 +9,16 @@ use Chamilo\Application\Weblcms\Service\Import\CourseEntity\Format\ImportFormatF
 use Chamilo\Application\Weblcms\Storage\Repository\WeblcmsRepository;
 use Chamilo\Libraries\Architecture\Application\Application;
 use Chamilo\Libraries\File\Import;
-use Chamilo\Libraries\File\Redirect;
 use Chamilo\Libraries\Format\Structure\Breadcrumb;
 use Chamilo\Libraries\Format\Structure\BreadcrumbTrail;
 use Chamilo\Libraries\Translation\Translation;
 use Exception;
 use Symfony\Component\HttpFoundation\File\UploadedFile;
 
-ini_set("max_execution_time", - 1);
-ini_set("memory_limit", - 1);
+ini_set('max_execution_time', - 1);
+ini_set('memory_limit', - 1);
 
 /**
- *
  * @package Chamilo\Application\Weblcms\Component
  *          Weblcms component allows the use to import course user relations
  */
@@ -48,9 +46,7 @@ class CourseUserImporterComponent extends Manager
                 $importers[] = new Csv(new Import());
 
                 $courseEntityImporter = new CourseEntityImporter(
-                    new ImportFormatFactory($importers),
-                    new WeblcmsRepository(),
-                    $this->getTranslator()
+                    new ImportFormatFactory($importers), new WeblcmsRepository(), $this->getTranslator()
                 );
 
                 $file = new UploadedFile($_FILES['file']['tmp_name'], $_FILES['file']['name'], $_FILES['file']['type']);
@@ -58,11 +54,10 @@ class CourseUserImporterComponent extends Manager
                 $result = $courseEntityImporter->importCourseEntitiesFromFile($file);
 
                 $html[] = $this->getTwig()->render(
-                    'Chamilo\Application\Weblcms:CourseUserImporterResult.html.twig',
-                    ['importerResult' => $result]
+                    'Chamilo\Application\Weblcms:CourseUserImporterResult.html.twig', ['importerResult' => $result]
                 );
             }
-            catch(Exception $ex)
+            catch (Exception $ex)
             {
                 $html[] = $this->getTwig()->render(
                     'Chamilo\Application\Weblcms:CourseUserImporter.html.twig',
@@ -73,8 +68,7 @@ class CourseUserImporterComponent extends Manager
         else
         {
             $html[] = $this->getTwig()->render(
-                'Chamilo\Application\Weblcms:CourseUserImporter.html.twig',
-                ['form' => $form->toHtml()]
+                'Chamilo\Application\Weblcms:CourseUserImporter.html.twig', ['form' => $form->toHtml()]
             );
         }
 
@@ -87,14 +81,15 @@ class CourseUserImporterComponent extends Manager
     {
         if ($this->getUser()->is_platform_admin())
         {
-            $redirect = new Redirect(
-                array(
+            $browseUrl = $this->getUrlGenerator()->fromParameters(
+                [
                     Application::PARAM_CONTEXT => \Chamilo\Core\Admin\Manager::CONTEXT,
                     \Chamilo\Core\Admin\Manager::PARAM_ACTION => \Chamilo\Core\Admin\Manager::ACTION_ADMIN_BROWSER
-                )
+                ]
             );
+
             $breadcrumbtrail->add(
-                new Breadcrumb($redirect->getUrl(), Translation::get('TypeName', null, 'Chamilo\Core\Admin'))
+                new Breadcrumb($browseUrl, Translation::get('TypeName', null, 'Chamilo\Core\Admin'))
             );
         }
     }

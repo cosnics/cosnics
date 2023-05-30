@@ -8,27 +8,23 @@ use Chamilo\Core\User\Storage\DataClass\User;
 use Chamilo\Libraries\File\Redirect;
 
 /**
- *
  * @package Chamilo\Application\Weblcms\Tool\Implementation\Calendar\Service
- * @author Hans De Bisschop <hans.de.bisschop@ehb.be>
+ * @author  Hans De Bisschop <hans.de.bisschop@ehb.be>
  */
 class CalendarRendererProvider extends \Chamilo\Libraries\Calendar\Service\CalendarRendererProvider
 {
 
     /**
-     *
      * @var \Chamilo\Application\Weblcms\Course\Storage\DataClass\Course
      */
     private $course;
 
     /**
-     *
      * @var \Chamilo\Application\Weblcms\Service\PublicationService
      */
     private $publicationService;
 
     /**
-     *
      * @var string
      */
     private $tool;
@@ -65,7 +61,6 @@ class CalendarRendererProvider extends \Chamilo\Libraries\Calendar\Service\Calen
     }
 
     /**
-     *
      * @return \Chamilo\Application\Weblcms\Course\Storage\DataClass\Course
      */
     public function getCourse()
@@ -74,16 +69,6 @@ class CalendarRendererProvider extends \Chamilo\Libraries\Calendar\Service\Calen
     }
 
     /**
-     *
-     * @param \Chamilo\Application\Weblcms\Course\Storage\DataClass\Course $course
-     */
-    public function setCourse(Course $course)
-    {
-        $this->course = $course;
-    }
-
-    /**
-     *
      * @return \Chamilo\Application\Weblcms\Service\PublicationService
      */
     public function getPublicationService()
@@ -92,16 +77,6 @@ class CalendarRendererProvider extends \Chamilo\Libraries\Calendar\Service\Calen
     }
 
     /**
-     *
-     * @param \Chamilo\Application\Weblcms\Service\PublicationService $publicationService
-     */
-    public function setPublicationService(PublicationService $publicationService)
-    {
-        $this->publicationService = $publicationService;
-    }
-
-    /**
-     *
      * @return string
      */
     public function getTool()
@@ -110,16 +85,6 @@ class CalendarRendererProvider extends \Chamilo\Libraries\Calendar\Service\Calen
     }
 
     /**
-     *
-     * @param string $tool
-     */
-    public function setTool($tool)
-    {
-        $this->tool = $tool;
-    }
-
-    /**
-     *
      * @see \Chamilo\Libraries\Calendar\Architecture\Interfaces\CalendarRendererProviderInterface::getUrl()
      */
     public function getUrl($parameters = [], $filterParameters = [], $encodeEntities = false)
@@ -127,5 +92,29 @@ class CalendarRendererProvider extends \Chamilo\Libraries\Calendar\Service\Calen
         $redirect = new Redirect($parameters, $filterParameters, $encodeEntities);
 
         return $redirect->getUrl();
+    }
+
+    /**
+     * @param \Chamilo\Application\Weblcms\Course\Storage\DataClass\Course $course
+     */
+    public function setCourse(Course $course)
+    {
+        $this->course = $course;
+    }
+
+    /**
+     * @param \Chamilo\Application\Weblcms\Service\PublicationService $publicationService
+     */
+    public function setPublicationService(PublicationService $publicationService)
+    {
+        $this->publicationService = $publicationService;
+    }
+
+    /**
+     * @param string $tool
+     */
+    public function setTool($tool)
+    {
+        $this->tool = $tool;
     }
 }

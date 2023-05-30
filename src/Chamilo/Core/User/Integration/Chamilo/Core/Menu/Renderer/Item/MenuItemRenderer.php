@@ -6,6 +6,7 @@ use Chamilo\Core\Menu\Service\CachedItemService;
 use Chamilo\Core\Menu\Storage\DataClass\Item;
 use Chamilo\Core\Rights\Structure\Service\Interfaces\AuthorizationCheckerInterface;
 use Chamilo\Core\User\Storage\DataClass\User;
+use Chamilo\Libraries\Architecture\Application\Routing\UrlGenerator;
 use Chamilo\Libraries\Architecture\ClassnameUtilities;
 use Chamilo\Libraries\Platform\ChamiloRequest;
 use Symfony\Component\Translation\Translator;
@@ -17,16 +18,20 @@ use Symfony\Component\Translation\Translator;
 abstract class MenuItemRenderer extends ItemRenderer
 {
 
+    protected UrlGenerator $urlGenerator;
+
     private ClassnameUtilities $classnameUtilities;
 
     public function __construct(
         AuthorizationCheckerInterface $authorizationChecker, Translator $translator,
-        CachedItemService $itemCacheService, ChamiloRequest $request, ClassnameUtilities $classnameUtilities
+        CachedItemService $itemCacheService, ChamiloRequest $request, ClassnameUtilities $classnameUtilities,
+        UrlGenerator $urlGenerator
     )
     {
         parent::__construct($authorizationChecker, $translator, $itemCacheService, $request);
 
         $this->classnameUtilities = $classnameUtilities;
+        $this->urlGenerator = $urlGenerator;
     }
 
     /**
@@ -80,6 +85,11 @@ abstract class MenuItemRenderer extends ItemRenderer
      * @return string
      */
     abstract public function getUrl();
+
+    public function getUrlGenerator(): UrlGenerator
+    {
+        return $this->urlGenerator;
+    }
 
     /**
      * @param \Chamilo\Libraries\Architecture\ClassnameUtilities $classnameUtilities

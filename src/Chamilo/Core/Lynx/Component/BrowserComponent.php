@@ -9,16 +9,15 @@ use Chamilo\Core\Lynx\Menu\PackageTypeMenu;
 use Chamilo\Libraries\Architecture\Application\Application;
 use Chamilo\Libraries\Architecture\ClassnameUtilities;
 use Chamilo\Libraries\Architecture\Interfaces\DelegateComponent;
-use Chamilo\Libraries\File\Redirect;
 use Chamilo\Libraries\Format\Display;
 use Chamilo\Libraries\Format\Structure\Breadcrumb;
 use Chamilo\Libraries\Format\Structure\BreadcrumbTrail;
 use Chamilo\Libraries\Format\Structure\Glyph\FontAwesomeGlyph;
 use Chamilo\Libraries\Format\Structure\Toolbar;
 use Chamilo\Libraries\Format\Structure\ToolbarItem;
+use Chamilo\Libraries\Format\Table\ArrayCollectionTableRenderer;
 use Chamilo\Libraries\Format\Table\Column\SortableStaticTableColumn;
 use Chamilo\Libraries\Format\Table\Column\StaticTableColumn;
-use Chamilo\Libraries\Format\Table\ArrayCollectionTableRenderer;
 use Chamilo\Libraries\Format\Tabs\ContentTab;
 use Chamilo\Libraries\Format\Tabs\TabsCollection;
 use Chamilo\Libraries\Format\Tabs\TabsRenderer;
@@ -64,11 +63,14 @@ class BrowserComponent extends Manager implements DelegateComponent
         $breadcrumb_trail = BreadcrumbTrail::getInstance();
         $breadcrumbs = $breadcrumb_trail->get_breadcrumbs();
 
-        $redirect = new Redirect(array(Application::PARAM_CONTEXT => \Chamilo\Core\Admin\Manager::CONTEXT));
+        $adminUrl = $this->getUrlGenerator()->fromParameters(
+            [Application::PARAM_CONTEXT => \Chamilo\Core\Admin\Manager::CONTEXT]
+        );
 
         array_splice(
-            $breadcrumbs, 1, 0, array(new Breadcrumb($redirect->getUrl(), Translation::get('Administration')))
+            $breadcrumbs, 1, 0, [new Breadcrumb($adminUrl, Translation::get('Administration'))]
         );
+
         $breadcrumb_trail->set($breadcrumbs);
     }
 
@@ -106,20 +108,20 @@ class BrowserComponent extends Manager implements DelegateComponent
                 new ToolbarItem(
                     Translation::get('ViewPackageDetails'), new FontAwesomeGlyph('desktop', [], null, 'fas'),
                     $this->get_url(
-                        array(
+                        [
                             self::PARAM_ACTION => self::ACTION_VIEW,
                             self::PARAM_CONTEXT => $package_info->get_context()
-                        )
+                        ]
                     ), ToolbarItem::DISPLAY_ICON
                 )
             );
             $toolbar->add_item(
                 new ToolbarItem(
                     Translation::get('Install'), new FontAwesomeGlyph('box', [], null, 'fas'), $this->get_url(
-                    array(
+                    [
                         self::PARAM_ACTION => self::ACTION_INSTALL,
                         self::PARAM_CONTEXT => $package_info->get_context()
-                    )
+                    ]
                 ), ToolbarItem::DISPLAY_ICON
                 )
             );
@@ -161,7 +163,7 @@ class BrowserComponent extends Manager implements DelegateComponent
                 new ContentTab(
                     self::STATUS_INSTALLED, Translation::get('InstalledPackages'),
                     $this->get_registered_packages_table(),
-                    new FontAwesomeGlyph('check-circle', array('fa-lg', 'fas-ci-va', 'text-success'), null, 'fas')
+                    new FontAwesomeGlyph('check-circle', ['fa-lg', 'fas-ci-va', 'text-success'], null, 'fas')
                 )
             );
         }
@@ -176,7 +178,7 @@ class BrowserComponent extends Manager implements DelegateComponent
                 new ContentTab(
                     self::STATUS_AVAILABLE, Translation::get('AvailablePackages'),
                     $this->get_available_packages_table(),
-                    new FontAwesomeGlyph('box', array('fa-lg', 'fas-ci-va'), null, 'fas')
+                    new FontAwesomeGlyph('box', ['fa-lg', 'fas-ci-va'], null, 'fas')
                 )
             );
         }
@@ -196,7 +198,7 @@ class BrowserComponent extends Manager implements DelegateComponent
     public function get_menu(): string
     {
         $menu = new PackageTypeMenu(
-            $this->getCurrentType(), $this->get_url(array(Manager::PARAM_REGISTRATION_TYPE => '__type__'))
+            $this->getCurrentType(), $this->get_url([Manager::PARAM_REGISTRATION_TYPE => '__type__'])
         );
 
         return $menu->render_as_tree();
@@ -222,10 +224,10 @@ class BrowserComponent extends Manager implements DelegateComponent
                 new ToolbarItem(
                     Translation::get('ViewPackageDetails'), new FontAwesomeGlyph('desktop', [], null, 'fas'),
                     $this->get_url(
-                        array(
+                        [
                             Manager::PARAM_ACTION => Manager::ACTION_VIEW,
                             Manager::PARAM_CONTEXT => $registration->get_context()
-                        )
+                        ]
                     ), ToolbarItem::DISPLAY_ICON
                 )
             );
@@ -240,10 +242,10 @@ class BrowserComponent extends Manager implements DelegateComponent
                         new ToolbarItem(
                             Translation::get('Deactivate', [], StringUtilities::LIBRARIES),
                             new FontAwesomeGlyph('pause-circle', [], null, 'fas'), $this->get_url(
-                            array(
+                            [
                                 Manager::PARAM_ACTION => Manager::ACTION_DEACTIVATE,
                                 Manager::PARAM_CONTEXT => $registration->get_context()
-                            )
+                            ]
                         ), ToolbarItem::DISPLAY_ICON
                         )
                     );
@@ -259,10 +261,10 @@ class BrowserComponent extends Manager implements DelegateComponent
                         new ToolbarItem(
                             Translation::get('Activate', [], StringUtilities::LIBRARIES),
                             new FontAwesomeGlyph('play-circle', [], null, 'fas'), $this->get_url(
-                            array(
+                            [
                                 Manager::PARAM_ACTION => Manager::ACTION_ACTIVATE,
                                 Manager::PARAM_CONTEXT => $registration->get_context()
-                            )
+                            ]
                         ), ToolbarItem::DISPLAY_ICON
                         )
                     );
@@ -275,10 +277,10 @@ class BrowserComponent extends Manager implements DelegateComponent
                     new ToolbarItem(
                         Translation::get('Remove', [], StringUtilities::LIBRARIES),
                         new FontAwesomeGlyph('trash-alt', [], null, 'fas'), $this->get_url(
-                        array(
+                        [
                             Manager::PARAM_ACTION => Manager::ACTION_REMOVE,
                             Manager::PARAM_CONTEXT => $registration->get_context()
-                        )
+                        ]
                     ), ToolbarItem::DISPLAY_ICON
                     )
                 );

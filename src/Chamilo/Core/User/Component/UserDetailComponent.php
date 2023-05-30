@@ -9,7 +9,6 @@ use Chamilo\Core\User\Storage\DataClass\User;
 use Chamilo\Core\User\Storage\DataManager;
 use Chamilo\Libraries\Architecture\Application\Application;
 use Chamilo\Libraries\Architecture\Exceptions\NotAllowedException;
-use Chamilo\Libraries\File\Redirect;
 use Chamilo\Libraries\Format\Structure\ActionBar\Button;
 use Chamilo\Libraries\Format\Structure\ActionBar\ButtonGroup;
 use Chamilo\Libraries\Format\Structure\ActionBar\ButtonToolBar;
@@ -147,7 +146,7 @@ class UserDetailComponent extends Manager
 
             foreach ($groups as $group)
             {
-                $redirect = new Redirect(
+                $viewUrl = $this->getUrlGenerator()->fromParameters(
                     [
                         Application::PARAM_CONTEXT => \Chamilo\Core\Group\Manager::CONTEXT,
                         \Chamilo\Core\Group\Manager::PARAM_ACTION => \Chamilo\Core\Group\Manager::ACTION_VIEW_GROUP,
@@ -155,7 +154,7 @@ class UserDetailComponent extends Manager
                     ]
                 );
 
-                $url = '<a href="' . $redirect->getUrl() . '">';
+                $url = '<a href="' . $viewUrl . '">';
 
                 $table->setCellContents($i, 0, $url . $group->get_code() . '</a>');
                 $table->setCellAttributes($i, 0, ['style' => 'width: 150px;']);

@@ -2,11 +2,15 @@
 namespace Chamilo\Core\Repository\Integration\Chamilo\Core\Menu\Renderer\Item;
 
 use Chamilo\Core\Menu\Renderer\ItemRenderer;
+use Chamilo\Core\Menu\Service\CachedItemService;
 use Chamilo\Core\Menu\Storage\DataClass\Item;
 use Chamilo\Core\Repository\Workspace\Manager;
+use Chamilo\Core\Rights\Structure\Service\Interfaces\AuthorizationCheckerInterface;
 use Chamilo\Core\User\Storage\DataClass\User;
 use Chamilo\Libraries\Architecture\Application\Application;
-use Chamilo\Libraries\File\Redirect;
+use Chamilo\Libraries\Architecture\Application\Routing\UrlGenerator;
+use Chamilo\Libraries\Platform\ChamiloRequest;
+use Symfony\Component\Translation\Translator;
 
 /**
  * @package Chamilo\Core\User\Integration\Chamilo\Core\Menu\Renderer\Item\Bar\Item
@@ -16,6 +20,18 @@ use Chamilo\Libraries\File\Redirect;
  */
 class WorkspaceConfigureItemRenderer extends ItemRenderer
 {
+    protected UrlGenerator $urlGenerator;
+
+    public function __construct(
+        AuthorizationCheckerInterface $authorizationChecker, Translator $translator,
+        CachedItemService $itemCacheService, ChamiloRequest $request, UrlGenerator $urlGenerator
+    )
+    {
+        parent::__construct($authorizationChecker, $translator, $itemCacheService, $request);
+
+        $this->urlGenerator = $urlGenerator;
+    }
+
     /**
      * @param \Chamilo\Core\Menu\Storage\DataClass\Item $item
      * @param \Chamilo\Core\User\Storage\DataClass\User $user
@@ -26,10 +42,10 @@ class WorkspaceConfigureItemRenderer extends ItemRenderer
     {
         $selected = $this->isSelected($item);
 
-        $urlRenderer = new Redirect([Application::PARAM_CONTEXT => Manager::CONTEXT]);
+        $url = $this->getUrlGenerator()->fromParameters([Application::PARAM_CONTEXT => Manager::CONTEXT]);
 
         $html[] = '<li' . ($selected ? ' class="active"' : '') . '>';
-        $html[] = '<a href="' . $urlRenderer->getUrl() . '">';
+        $html[] = '<a href="' . $url . '">';
 
         $title = $this->renderTitle($item);
 
@@ -52,6 +68,11 @@ class WorkspaceConfigureItemRenderer extends ItemRenderer
         $html[] = '</li>';
 
         return implode(PHP_EOL, $html);
+    }
+
+    public function getUrlGenerator(): UrlGenerator
+    {
+        return $this->urlGenerator;
     }
 
     public function isSelected(Item $item)

@@ -129,7 +129,7 @@ class FileContentObjectImportController extends ContentObjectImportController
                 {
                     $content_object = $content_objects->current();
 
-                    $redirect = new Redirect(
+                    $viewUrl = $this->getUrlGenerator()->fromParameters(
                         [
                             Application::PARAM_CONTEXT => Manager::CONTEXT,
                             Application::PARAM_ACTION => Manager::ACTION_VIEW_CONTENT_OBJECTS,
@@ -138,7 +138,7 @@ class FileContentObjectImportController extends ContentObjectImportController
                     );
 
                     $this->add_message(
-                        Translation::get('ObjectAlreadyExists', ['LINK' => $redirect->getUrl()]), self::TYPE_ERROR
+                        Translation::get('ObjectAlreadyExists', ['LINK' => $viewUrl]), self::TYPE_ERROR
                     );
 
                     return [];

@@ -10,7 +10,6 @@ use Chamilo\Core\Repository\Storage\DataClass\ContentObject;
 use Chamilo\Core\Repository\Storage\DataManager;
 use Chamilo\Libraries\Architecture\Application\Application;
 use Chamilo\Libraries\Architecture\ClassnameUtilities;
-use Chamilo\Libraries\File\Redirect;
 use Chamilo\Libraries\Format\Structure\Glyph\FontAwesomeGlyph;
 use Chamilo\Libraries\Storage\Query\Condition\AndCondition;
 use Chamilo\Libraries\Storage\Query\Condition\EqualityCondition;
@@ -19,11 +18,10 @@ use Chamilo\Libraries\Storage\Query\Variable\StaticConditionVariable;
 use Chamilo\Libraries\Translation\Translation;
 
 /**
- *
  * @package application.weblcms.php.reporting.blocks Reporting block displaying all learning paths within a course and
  *          their attempt stats
- * @author Joris Willems <joris.willems@gmail.com>
- * @author Alexander Van Paemel
+ * @author  Joris Willems <joris.willems@gmail.com>
+ * @author  Alexander Van Paemel
  */
 class LearningPathBlock extends CourseBlock
 {
@@ -32,10 +30,10 @@ class LearningPathBlock extends CourseBlock
     {
         $reporting_data = new ReportingData();
         $reporting_data->set_rows(
-            array(
+            [
                 Translation::get('Title'),
                 Translation::get('LearningPathDetails')
-            )
+            ]
         );
 
         $course_id = $this->getCourseId();
@@ -61,7 +59,7 @@ class LearningPathBlock extends CourseBlock
             $condition
         );
 
-        foreach($pub_resultset as $pub)
+        foreach ($pub_resultset as $pub)
         {
             $params = [];
             $params[Application::PARAM_ACTION] = \Chamilo\Application\Weblcms\Manager::ACTION_VIEW_COURSE;
@@ -74,15 +72,13 @@ class LearningPathBlock extends CourseBlock
                 \Chamilo\Application\Weblcms\Tool\Manager::ACTION_DISPLAY_COMPLEX_CONTENT_OBJECT;
 
             $detailParams = $params;
-            $detailParams[Manager::PARAM_ACTION] =
-                Manager::ACTION_VIEW_USER_PROGRESS;
+            $detailParams[Manager::PARAM_ACTION] = Manager::ACTION_VIEW_USER_PROGRESS;
 
             $link =
                 '<a href="' . $this->get_parent()->get_url($detailParams) . '" target="_blank"">' . $glyph->render() .
                 '</a>';
 
-            $redirect = new Redirect($params);
-            $url_title = $redirect->getUrl();
+            $url_title = $this->getUrlGenerator()->fromParameters($params);
 
             $content_object = DataManager::retrieve_by_id(
                 ContentObject::class, $pub[ContentObjectPublication::PROPERTY_CONTENT_OBJECT_ID]
@@ -104,7 +100,7 @@ class LearningPathBlock extends CourseBlock
 
     public function get_views()
     {
-        return array(Html::VIEW_TABLE);
+        return [Html::VIEW_TABLE];
     }
 
     public function retrieve_data()

@@ -4,7 +4,6 @@ namespace Chamilo\Core\User\Integration\Chamilo\Core\Menu\Renderer\Item;
 use Chamilo\Core\Menu\Storage\DataClass\Item;
 use Chamilo\Core\User\Manager;
 use Chamilo\Libraries\Architecture\Application\Application;
-use Chamilo\Libraries\File\Redirect;
 use Chamilo\Libraries\Format\Structure\Glyph\FontAwesomeGlyph;
 
 /**
@@ -26,14 +25,12 @@ class AccountItemRenderer extends MenuItemRenderer
      */
     public function getUrl()
     {
-        $redirect = new Redirect(
+        return $this->getUrlGenerator()->fromParameters(
             [
                 Application::PARAM_CONTEXT => Manager::CONTEXT,
                 Application::PARAM_ACTION => Manager::ACTION_VIEW_ACCOUNT
             ]
         );
-
-        return $redirect->getUrl();
     }
 
     /**

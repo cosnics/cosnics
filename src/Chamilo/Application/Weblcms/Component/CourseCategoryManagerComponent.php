@@ -10,7 +10,6 @@ use Chamilo\Libraries\Architecture\Application\Application;
 use Chamilo\Libraries\Architecture\Application\ApplicationConfiguration;
 use Chamilo\Libraries\Architecture\ClassnameUtilities;
 use Chamilo\Libraries\Architecture\Interfaces\DelegateComponent;
-use Chamilo\Libraries\File\Redirect;
 use Chamilo\Libraries\Format\Structure\Breadcrumb;
 use Chamilo\Libraries\Format\Structure\BreadcrumbTrail;
 use Chamilo\Libraries\Format\Tabs\GenericTabsRenderer;
@@ -41,17 +40,17 @@ class CourseCategoryManagerComponent extends Manager implements DelegateComponen
     {
         if ($this->get_user()->is_platform_admin())
         {
-            $redirect = new Redirect(
+            $typeUrl = $this->getUrlGenerator()->fromParameters(
                 [
                     Application::PARAM_CONTEXT => \Chamilo\Core\Admin\Manager::CONTEXT,
                     \Chamilo\Core\Admin\Manager::PARAM_ACTION => \Chamilo\Core\Admin\Manager::ACTION_ADMIN_BROWSER
                 ]
             );
             $breadcrumbtrail->add(
-                new Breadcrumb($redirect->getUrl(), Translation::get('TypeName', null, 'Chamilo\Core\Admin'))
+                new Breadcrumb($typeUrl, Translation::get('TypeName', [], 'Chamilo\Core\Admin'))
             );
 
-            $redirect = new Redirect(
+            $coursesUrl = $this->getUrlGenerator()->fromParameters(
                 [
                     Application::PARAM_CONTEXT => \Chamilo\Core\Admin\Manager::CONTEXT,
                     \Chamilo\Core\Admin\Manager::PARAM_ACTION => \Chamilo\Core\Admin\Manager::ACTION_ADMIN_BROWSER,
@@ -60,7 +59,7 @@ class CourseCategoryManagerComponent extends Manager implements DelegateComponen
                     )
                 ]
             );
-            $breadcrumbtrail->add(new Breadcrumb($redirect->getUrl(), Translation::get('Courses')));
+            $breadcrumbtrail->add(new Breadcrumb($coursesUrl, Translation::get('Courses')));
         }
     }
 

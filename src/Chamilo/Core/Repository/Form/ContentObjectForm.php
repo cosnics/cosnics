@@ -263,7 +263,7 @@ abstract class ContentObjectForm extends FormValidator
                 )
             );
 
-            $uploadUrl = new Redirect(
+            $uploadUrl = $this->getUrlGenerator()->fromParameters(
                 [
                     Application::PARAM_CONTEXT => \Chamilo\Core\Repository\Ajax\Manager::CONTEXT,
                     \Chamilo\Core\Repository\Ajax\Manager::PARAM_ACTION => \Chamilo\Core\Repository\Ajax\Manager::ACTION_IMPORT_FILE
@@ -273,7 +273,7 @@ abstract class ContentObjectForm extends FormValidator
             $dropZoneParameters = [
                 'name' => 'attachments_importer',
                 'maxFilesize' => $calculator->getMaximumUploadSize(),
-                'uploadUrl' => $uploadUrl->getUrl(),
+                'uploadUrl' => $uploadUrl,
                 'successCallbackFunction' => 'chamilo.core.repository.importAttachment.processUploadedFile',
                 'sendingCallbackFunction' => 'chamilo.core.repository.importAttachment.prepareRequest',
                 'removedfileCallbackFunction' => 'chamilo.core.repository.importAttachment.deleteUploadedFile'

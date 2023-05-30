@@ -11,7 +11,6 @@ use Chamilo\Core\Repository\Feedback\Storage\DataClass\Notification;
 use Chamilo\Libraries\Architecture\Application\Application;
 use Chamilo\Libraries\Architecture\Exceptions\NotAllowedException;
 use Chamilo\Libraries\Architecture\Interfaces\DelegateComponent;
-use Chamilo\Libraries\File\Redirect;
 use Chamilo\Libraries\Format\Structure\ActionBar\ButtonToolBar;
 use Chamilo\Libraries\Format\Structure\ActionBar\Renderer\ButtonToolBarRenderer;
 use Chamilo\Libraries\Format\Table\Pager;
@@ -20,8 +19,8 @@ use Chamilo\Libraries\Utilities\StringUtilities;
 
 class BrowserV2Component extends Manager implements DelegateComponent
 {
-    const PARAM_COUNT = 'feedback_count';
-    const PARAM_PAGE_NUMBER = 'feedback_page_nr';
+    public const PARAM_COUNT = 'feedback_count';
+    public const PARAM_PAGE_NUMBER = 'feedback_page_nr';
 
     /**
      * Executes this controller
@@ -51,28 +50,25 @@ class BrowserV2Component extends Manager implements DelegateComponent
 
             $formData = $form->getData();
 
-            $feedback = $this->feedbackServiceBridge->createFeedback($this->getUser(), $formData[Feedback::PROPERTY_COMMENT]);
+            $feedback =
+                $this->feedbackServiceBridge->createFeedback($this->getUser(), $formData[Feedback::PROPERTY_COMMENT]);
             $success = $feedback instanceof Feedback;
 
             $this->notifyNewFeedback($feedback);
 
             $this->redirectWithMessage(
                 $this->getTranslator()->trans(
-                    $success ? 'ObjectCreated' : 'ObjectNotCreated',
-                    array(
+                    $success ? 'ObjectCreated' : 'ObjectNotCreated', [
                         'OBJECT' => $this->getTranslator()->trans(
                             'Feedback', [], 'Chamilo\Core\Repository\Feedback'
                         )
-                    ),
-                    StringUtilities::LIBRARIES
-                ),
-                !$success
+                    ], StringUtilities::LIBRARIES
+                ), !$success
             );
         }
 
         $feedback = $this->feedbackServiceBridge->getFeedback(
-            $this->getPager()->getNumberOfItemsPerPage(),
-            $this->getPager()->getCurrentRangeOffset()
+            $this->getPager()->getNumberOfItemsPerPage(), $this->getPager()->getCurrentRangeOffset()
         );
 
         $feedbackCount = count($feedback);
@@ -80,8 +76,7 @@ class BrowserV2Component extends Manager implements DelegateComponent
         if ($this->feedbackServiceBridge->countFeedback() > $feedbackCount)
         {
             $pagination = $this->getPagerRenderer()->renderPaginationWithPageLimit(
-                $this->get_parameters(),
-                self::PARAM_PAGE_NUMBER
+                $this->get_parameters(), self::PARAM_PAGE_NUMBER
             );
         }
         else
@@ -91,10 +86,8 @@ class BrowserV2Component extends Manager implements DelegateComponent
 
         $formView = $form->createView();
 
-        return $this->getTwig()
-            ->render(
-                Manager::CONTEXT . ':add_feedback.html.twig',
-                [
+        return $this->getTwig()->render(
+                Manager::CONTEXT . ':add_feedback.html.twig', [
                     'form' => $formView,
                     'createRight' => $canCreateFeedback,
                     'feedbackCount' => $feedbackCount,
@@ -106,55 +99,48 @@ class BrowserV2Component extends Manager implements DelegateComponent
             );
     }
 
-    protected function toFeedbackDTOs($feedback)
+    /**
+     * @return int
+     */
+    public function getCount()
     {
-        $feedbackDTOs = [];
-        foreach ($feedback as $feedbackItem)
-        {
-            /**
-             * @var Feedback $feedbackItem
-             */
-            $feedbackDTO = [];
-            $profilePhotoUrl = new Redirect(
-                array(
-                    Application::PARAM_CONTEXT => \Chamilo\Core\User\Ajax\Manager::CONTEXT,
-                    Application::PARAM_ACTION => \Chamilo\Core\User\Ajax\Manager::ACTION_USER_PICTURE,
-                    \Chamilo\Core\User\Manager::PARAM_USER_USER_ID => $feedbackItem->get_user()->getId()
-                )
-            );
-
-            $feedbackDTO['photoUrl'] = $profilePhotoUrl->getUrl();
-            $feedbackDTO['updateAllowed'] = $this->feedbackRightsServiceBridge->canEditFeedback($feedbackItem);
-            $feedbackDTO['updateUrl'] = $this->get_url(
-                [
-                    Manager::PARAM_ACTION => Manager::ACTION_UPDATE,
-                    Manager::PARAM_FEEDBACK_ID => $feedbackItem->get_id()
-                ]
-            );
-            $feedbackDTO['deleteAllowed'] = $this->feedbackRightsServiceBridge->canDeleteFeedback($feedbackItem);
-            $feedbackDTO['deleteUrl'] = $this->get_url(
-                [
-                    Manager::PARAM_ACTION => Manager::ACTION_DELETE,
-                    Manager::PARAM_FEEDBACK_ID => $feedbackItem->getId()
-                ]
-            );
-            $feedbackDTO['userFullname'] = $feedbackItem->get_user()->get_fullname();
-            $feedbackDTO['creationDate'] = $feedbackItem->get_creation_date();
-            $feedbackDTO['content'] = $this->renderFeedbackContent($feedbackItem);
-
-            $feedbackDTOs[] = $feedbackDTO;
-        }
-
-        return $feedbackDTOs;
+        return $this->getRequest()->query->get(self::PARAM_COUNT, 5);
     }
 
-    protected function renderFeedbackContent(Feedback $feedback)
+    /**
+     * @return int
+     */
+    public function getPageNumber()
     {
-        $content = $feedback->get_comment();
+        return $this->getRequest()->query->get(self::PARAM_PAGE_NUMBER, 1);
+    }
 
-        $descriptionRenderer = new ContentObjectResourceRenderer( $content);
+    /**
+     * @return \Chamilo\Libraries\Format\Table\Pager
+     */
+    public function getPager()
+    {
+        if (is_null($this->pager))
+        {
+            $this->pager = new Pager(
+                $this->getCount(), 1, $this->feedbackServiceBridge->countFeedback(), $this->getPageNumber()
+            );
+        }
 
-        return $descriptionRenderer->run();
+        return $this->pager;
+    }
+
+    /**
+     * @return \Chamilo\Libraries\Format\Table\PagerRenderer
+     */
+    public function getPagerRenderer()
+    {
+        if (is_null($this->pagerRenderer))
+        {
+            $this->pagerRenderer = new PagerRenderer($this->getPager());
+        }
+
+        return $this->pagerRenderer;
     }
 
     /**
@@ -164,7 +150,7 @@ class BrowserV2Component extends Manager implements DelegateComponent
      */
     protected function renderFeedbackButtonToolbar()
     {
-        $buttonToolbar = new ButtonToolBar(null, [], array('receive-feedback-buttons'));
+        $buttonToolbar = new ButtonToolBar(null, [], ['receive-feedback-buttons']);
         $buttonToolbarRenderer = new ButtonToolBarRenderer($buttonToolbar);
 
         if (!$this->get_application() instanceof FeedbackNotificationSupport)
@@ -194,11 +180,7 @@ class BrowserV2Component extends Manager implements DelegateComponent
             }
 
             $actionsGenerator = new ActionsGenerator(
-                $this->get_application(),
-                $baseParameters,
-                $isAllowedToViewFeedback,
-                $feedbackCount,
-                $hasNotification
+                $this->get_application(), $baseParameters, $isAllowedToViewFeedback, $feedbackCount, $hasNotification
             );
 
             $buttonToolbar->addItems($actionsGenerator->run());
@@ -226,54 +208,54 @@ class BrowserV2Component extends Manager implements DelegateComponent
         return implode(PHP_EOL, $html);
     }
 
-    /**
-     *
-     * @return integer
-     */
-    public function getCount()
+    protected function renderFeedbackContent(Feedback $feedback)
     {
-        return $this->getRequest()->query->get(self::PARAM_COUNT, 5);
+        $content = $feedback->get_comment();
+
+        $descriptionRenderer = new ContentObjectResourceRenderer($content);
+
+        return $descriptionRenderer->run();
     }
 
-    /**
-     *
-     * @return integer
-     */
-    public function getPageNumber()
+    protected function toFeedbackDTOs($feedback)
     {
-        return $this->getRequest()->query->get(self::PARAM_PAGE_NUMBER, 1);
-    }
-
-    /**
-     *
-     * @return \Chamilo\Libraries\Format\Table\Pager
-     */
-    public function getPager()
-    {
-        if (is_null($this->pager))
+        $feedbackDTOs = [];
+        foreach ($feedback as $feedbackItem)
         {
-            $this->pager = new Pager(
-                $this->getCount(),
-                1,
-                $this->feedbackServiceBridge->countFeedback(),
-                $this->getPageNumber()
+            /**
+             * @var Feedback $feedbackItem
+             */
+            $feedbackDTO = [];
+            $profilePhotoUrl = $this->getUrlGenerator()->fromParameters(
+                [
+                    Application::PARAM_CONTEXT => \Chamilo\Core\User\Ajax\Manager::CONTEXT,
+                    Application::PARAM_ACTION => \Chamilo\Core\User\Ajax\Manager::ACTION_USER_PICTURE,
+                    \Chamilo\Core\User\Manager::PARAM_USER_USER_ID => $feedbackItem->get_user()->getId()
+                ]
             );
+
+            $feedbackDTO['photoUrl'] = $profilePhotoUrl;
+            $feedbackDTO['updateAllowed'] = $this->feedbackRightsServiceBridge->canEditFeedback($feedbackItem);
+            $feedbackDTO['updateUrl'] = $this->get_url(
+                [
+                    Manager::PARAM_ACTION => Manager::ACTION_UPDATE,
+                    Manager::PARAM_FEEDBACK_ID => $feedbackItem->get_id()
+                ]
+            );
+            $feedbackDTO['deleteAllowed'] = $this->feedbackRightsServiceBridge->canDeleteFeedback($feedbackItem);
+            $feedbackDTO['deleteUrl'] = $this->get_url(
+                [
+                    Manager::PARAM_ACTION => Manager::ACTION_DELETE,
+                    Manager::PARAM_FEEDBACK_ID => $feedbackItem->getId()
+                ]
+            );
+            $feedbackDTO['userFullname'] = $feedbackItem->get_user()->get_fullname();
+            $feedbackDTO['creationDate'] = $feedbackItem->get_creation_date();
+            $feedbackDTO['content'] = $this->renderFeedbackContent($feedbackItem);
+
+            $feedbackDTOs[] = $feedbackDTO;
         }
 
-        return $this->pager;
-    }
-
-    /**
-     *
-     * @return \Chamilo\Libraries\Format\Table\PagerRenderer
-     */
-    public function getPagerRenderer()
-    {
-        if (is_null($this->pagerRenderer))
-        {
-            $this->pagerRenderer = new PagerRenderer($this->getPager());
-        }
-
-        return $this->pagerRenderer;
+        return $feedbackDTOs;
     }
 }

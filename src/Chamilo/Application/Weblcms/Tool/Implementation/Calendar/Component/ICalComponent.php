@@ -14,24 +14,21 @@ use Chamilo\Libraries\Architecture\Interfaces\NoAuthenticationSupport;
 use Chamilo\Libraries\Authentication\AuthenticationValidator;
 use Chamilo\Libraries\Authentication\SecurityToken\SecurityTokenAuthentication;
 use Chamilo\Libraries\Calendar\Service\View\ICalCalendarRenderer;
-use Chamilo\Libraries\File\Redirect;
 use Chamilo\Libraries\Format\Display;
 use Chamilo\Libraries\Translation\Translation;
 use Symfony\Component\HttpFoundation\Response;
 
 /**
- *
  * @package Chamilo\Application\Calendar\Component
- * @author Hans De Bisschop <hans.de.bisschop@ehb.be>
- * @author Magali Gillard <magali.gillard@ehb.be>
- * @author Eduard Vossen <eduard.vossen@ehb.be>
+ * @author  Hans De Bisschop <hans.de.bisschop@ehb.be>
+ * @author  Magali Gillard <magali.gillard@ehb.be>
+ * @author  Eduard Vossen <eduard.vossen@ehb.be>
  */
 class ICalComponent extends Manager implements NoAuthenticationSupport
 {
     public const PARAM_DOWNLOAD = 'download';
 
     /**
-     *
      * @var \Chamilo\Application\Calendar\Service\CalendarRendererProvider
      */
     private $calendarRendererProvider;
@@ -50,7 +47,6 @@ class ICalComponent extends Manager implements NoAuthenticationSupport
 
     /**
      * @return string
-     *
      * @throws NotAllowedException
      */
     public function run()
@@ -97,14 +93,14 @@ class ICalComponent extends Manager implements NoAuthenticationSupport
                 $downloadParameters = $this->get_parameters();
                 $downloadParameters[self::PARAM_DOWNLOAD] = 1;
 
-                $icalDownloadUrl = new Redirect($downloadParameters);
+                $icalDownloadUrl = $this->getUrlGenerator()->fromParameters($downloadParameters);
 
                 $externalParameters = $this->get_parameters();
                 $externalParameters[Application::PARAM_CONTEXT] =
                     'Chamilo\Application\Weblcms\Tool\Implementation\Calendar';
                 $externalParameters[User::PROPERTY_SECURITY_TOKEN] = $this->getUser()->get_security_token();
 
-                $icalExternalUrl = new Redirect(
+                $icalExternalUrl = $this->getUrlGenerator()->fromParameters(
                     $externalParameters, [Application::PARAM_ACTION, \Chamilo\Application\Weblcms\Manager::PARAM_TOOL]
                 );
 
@@ -113,11 +109,11 @@ class ICalComponent extends Manager implements NoAuthenticationSupport
                 $html[] = $this->render_header();
 
                 $html[] = Display::normal_message(
-                    Translation::get('ICalExternalMessage', array('URL' => $icalExternalUrl->getUrl()))
+                    Translation::get('ICalExternalMessage', ['URL' => $icalExternalUrl])
                 );
 
                 $html[] = Display::normal_message(
-                    Translation::get('ICalDownloadMessage', array('URL' => $icalDownloadUrl->getUrl()))
+                    Translation::get('ICalDownloadMessage', ['URL' => $icalDownloadUrl])
                 );
 
                 $html[] = $this->render_footer();
@@ -136,7 +132,6 @@ class ICalComponent extends Manager implements NoAuthenticationSupport
     }
 
     /**
-     *
      * @param User $user
      *
      * @return \Chamilo\Application\Calendar\Service\CalendarRendererProvider
@@ -159,7 +154,6 @@ class ICalComponent extends Manager implements NoAuthenticationSupport
     }
 
     /**
-     *
      * @return \Chamilo\Application\Weblcms\Service\PublicationService
      */
     protected function getPublicationService()
@@ -184,7 +178,6 @@ class ICalComponent extends Manager implements NoAuthenticationSupport
     }
 
     /**
-     *
      * @return \Chamilo\Application\Weblcms\Storage\DataClass\ContentObjectPublication[]
      */
     public function get_publications()

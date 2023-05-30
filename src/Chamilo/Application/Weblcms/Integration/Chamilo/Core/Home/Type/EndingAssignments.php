@@ -10,7 +10,6 @@ use Chamilo\Application\Weblcms\Tool\Manager;
 use Chamilo\Core\Repository\ContentObject\Assignment\Storage\DataClass\Assignment;
 use Chamilo\Core\Repository\Storage\DataClass\ContentObject;
 use Chamilo\Libraries\Architecture\Application\Application;
-use Chamilo\Libraries\File\Redirect;
 use Chamilo\Libraries\Storage\Parameters\DataClassRetrievesParameters;
 use Chamilo\Libraries\Storage\Query\Condition\AndCondition;
 use Chamilo\Libraries\Storage\Query\Condition\EqualityCondition;
@@ -68,13 +67,13 @@ class EndingAssignments extends Block
 
         $publications = DataManager::retrieves(
             ContentObjectPublication::class, new DataClassRetrievesParameters(
-                $condition, null, null, new OrderBy(array(
+                $condition, null, null, new OrderBy([
                     new OrderProperty(
                         new PropertyConditionVariable(
                             ContentObjectPublication::class, ContentObjectPublication::PROPERTY_DISPLAY_ORDER_INDEX
                         )
                     )
-                ))
+                ])
             )
         );
 
@@ -84,23 +83,22 @@ class EndingAssignments extends Block
             $assignment = $publication->get_content_object();
             if ($assignment->get_end_time() > time() && $assignment->get_end_time() < $deadline)
             {
-                $parameters = array(
+                $parameters = [
                     \Chamilo\Application\Weblcms\Manager::PARAM_COURSE => $publication->get_course_id(),
                     Application::PARAM_CONTEXT => \Chamilo\Application\Weblcms\Manager::CONTEXT,
                     Application::PARAM_ACTION => \Chamilo\Application\Weblcms\Manager::ACTION_VIEW_COURSE,
                     \Chamilo\Application\Weblcms\Manager::PARAM_TOOL => NewBlock::TOOL_ASSIGNMENT,
                     \Chamilo\Application\Weblcms\Manager::PARAM_TOOL_ACTION => \Chamilo\Application\Weblcms\Tool\Implementation\Assignment\Manager::ACTION_DISPLAY,
                     Manager::PARAM_PUBLICATION_ID => $publication->get_id()
-                );
+                ];
 
-                $redirect = new Redirect($parameters);
-                $link = $redirect->getUrl();
+                $link = $this->getUrlGenerator()->fromParameters($parameters);
 
-                $ending_assignments[$assignment->get_end_time() . ' ' . $publication->get_id()] = array(
+                $ending_assignments[$assignment->get_end_time() . ' ' . $publication->get_id()] = [
                     'title' => $assignment->get_title(),
                     'link' => $link,
                     'end_time' => $assignment->get_end_time()
-                );
+                ];
             }
         }
 

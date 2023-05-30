@@ -9,10 +9,8 @@ use Chamilo\Application\Weblcms\Tool\Implementation\Assessment\Manager;
 use Chamilo\Core\Repository\ContentObject\Assessment\Storage\DataClass\Assessment;
 use Chamilo\Libraries\Architecture\Application\Application;
 use Chamilo\Libraries\Architecture\ClassnameUtilities;
-use Chamilo\Libraries\File\Redirect;
 use Chamilo\Libraries\Format\Structure\Glyph\FontAwesomeGlyph;
 use Chamilo\Libraries\Platform\Session\Request;
-use Doctrine\Common\Collections\ArrayCollection;
 use Chamilo\Libraries\Storage\Parameters\DataClassRetrievesParameters;
 use Chamilo\Libraries\Storage\Query\Condition\AndCondition;
 use Chamilo\Libraries\Storage\Query\Condition\EqualityCondition;
@@ -21,6 +19,7 @@ use Chamilo\Libraries\Storage\Query\Variable\PropertyConditionVariable;
 use Chamilo\Libraries\Storage\Query\Variable\StaticConditionVariable;
 use Chamilo\Libraries\Translation\Translation;
 use Chamilo\Libraries\Utilities\DatetimeUtilities;
+use Doctrine\Common\Collections\ArrayCollection;
 
 /**
  * Abstract class that defines common functionality for blocks of the assessment
@@ -29,7 +28,7 @@ use Chamilo\Libraries\Utilities\DatetimeUtilities;
  */
 abstract class AssessmentBlock extends ToolBlock
 {
-    const PROPERTY_ASSESSMENT_ATTEMPT = 'assessment_attempt';
+    public const PROPERTY_ASSESSMENT_ATTEMPT = 'assessment_attempt';
 
     /**
      * Adds a category to the reporting data from the given array data
@@ -130,12 +129,12 @@ abstract class AssessmentBlock extends ToolBlock
      */
     protected function get_assessment_information_headers()
     {
-        return array(
+        return [
             Translation::get('AssessmentTitle'),
             Translation::get('AssessmentDescription'),
             Translation::get('Published'),
             Translation::get('LastModified')
-        );
+        ];
     }
 
     /**
@@ -169,8 +168,7 @@ abstract class AssessmentBlock extends ToolBlock
 
         $params[Manager::PARAM_ASSESSMENT] = $this->getPublicationId();
 
-        $redirect = new Redirect($params);
-        $link = $redirect->getUrl();
+        $link = $this->getUrlGenerator()->fromParameters($params);
 
         return '<a href="' . $link . '">' . $glyph->render() . '</a>';
     }
@@ -195,8 +193,7 @@ abstract class AssessmentBlock extends ToolBlock
         $params[\Chamilo\Application\Weblcms\Manager::PARAM_TOOL_ACTION] =
             \Chamilo\Application\Weblcms\Tool\Manager::ACTION_VIEW;
 
-        $redirect = new Redirect($params);
-        $url = $redirect->getUrl();
+        $url = $this->getUrlGenerator()->fromParameters($params);
 
         return '<a href="' . $url . '">' . $assessment->get_title() . '</a>';
     }
@@ -227,7 +224,7 @@ abstract class AssessmentBlock extends ToolBlock
         {
             if (!is_array($assessment_attempt_ids))
             {
-                $assessment_attempt_ids = array($assessment_attempt_ids);
+                $assessment_attempt_ids = [$assessment_attempt_ids];
             }
 
             $conditions[] = new InCondition(
@@ -324,11 +321,11 @@ abstract class AssessmentBlock extends ToolBlock
      */
     protected function get_question_information_headers()
     {
-        return array(
+        return [
             Translation::get('QuestionTitle'),
             Translation::get('QuestionDescription'),
             Translation::get('QuestionType')
-        );
+        ];
     }
 
     /**

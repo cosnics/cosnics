@@ -10,7 +10,6 @@ use Chamilo\Libraries\Architecture\Interfaces\NoAuthenticationSupport;
 use Chamilo\Libraries\Authentication\AuthenticationValidator;
 use Chamilo\Libraries\Authentication\SecurityToken\SecurityTokenAuthentication;
 use Chamilo\Libraries\Calendar\Service\View\ICalCalendarRenderer;
-use Chamilo\Libraries\File\Redirect;
 use Chamilo\Libraries\Format\Display;
 use Chamilo\Libraries\Translation\Translation;
 use Symfony\Component\HttpFoundation\Response;
@@ -75,7 +74,7 @@ class ICalComponent extends Manager implements NoAuthenticationSupport
             }
             else
             {
-                $icalDownloadUrl = new Redirect(
+                $icalDownloadUrl = $this->getUrlGenerator()->fromParameters(
                     [
                         Application::PARAM_CONTEXT => Manager::CONTEXT,
                         self::PARAM_ACTION => Manager::ACTION_ICAL,
@@ -83,7 +82,7 @@ class ICalComponent extends Manager implements NoAuthenticationSupport
                     ]
                 );
 
-                $icalExternalUrl = new Redirect(
+                $icalExternalUrl = $this->getUrlGenerator()->fromParameters(
                     [
                         Application::PARAM_CONTEXT => Manager::CONTEXT,
                         self::PARAM_ACTION => Manager::ACTION_ICAL,
@@ -99,11 +98,11 @@ class ICalComponent extends Manager implements NoAuthenticationSupport
                 $html[] = $this->render_header();
 
                 $html[] = Display::normal_message(
-                    Translation::get('ICalExternalMessage', ['URL' => $icalExternalUrl->getUrl()])
+                    Translation::get('ICalExternalMessage', ['URL' => $icalExternalUrl])
                 );
 
                 $html[] = Display::normal_message(
-                    Translation::get('ICalDownloadMessage', ['URL' => $icalDownloadUrl->getUrl()])
+                    Translation::get('ICalDownloadMessage', ['URL' => $icalDownloadUrl])
                 );
 
                 $html[] = Display::warning_message(

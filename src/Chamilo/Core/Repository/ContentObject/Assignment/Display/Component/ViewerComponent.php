@@ -7,7 +7,6 @@ use Chamilo\Core\Repository\ContentObject\Assignment\Display\Manager;
 use Chamilo\Core\Repository\ContentObject\Assignment\Storage\DataClass\Assignment;
 use Chamilo\Libraries\Architecture\Application\Application;
 use Chamilo\Libraries\Architecture\Exceptions\NotAllowedException;
-use Chamilo\Libraries\File\Redirect;
 use Chamilo\Libraries\Format\Structure\ActionBar\Button;
 use Chamilo\Libraries\Format\Structure\ActionBar\ButtonGroup;
 use Chamilo\Libraries\Format\Structure\ActionBar\ButtonToolBar;
@@ -129,7 +128,7 @@ class ViewerComponent extends Manager
 
         $notificationsCount = $this->getNotificationServiceBridge()->countUnseenNotificationsForUser($this->getUser());
 
-        $redirect = new Redirect(
+        $viewNotificationUrl = $this->getUrlGenerator()->fromParameters(
             [
                 Application::PARAM_CONTEXT => \Chamilo\Core\Notification\Manager::CONTEXT,
                 Application::PARAM_ACTION => \Chamilo\Core\Notification\Manager::ACTION_VIEW_NOTIFICATION,
@@ -137,11 +136,9 @@ class ViewerComponent extends Manager
             ]
         );
 
-        $viewNotificationUrl = $redirect->getUrl();
-
         return [
-            'HEADER' => $this->render_header(),
-            'FOOTER' => $this->render_footer(),
+            'HEADER' => $this->renderHeader(),
+            'FOOTER' => $this->renderFooter(),
             'BUTTON_TOOLBAR' => $this->getButtonToolbarRenderer()->render(),
             'CONTENT_OBJECT_TITLE' => $this->get_root_content_object()->get_title(),
             'CONTENT_OBJECT_RENDITION' => $this->renderContentObject(),

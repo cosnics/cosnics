@@ -13,7 +13,6 @@ use Chamilo\Core\Repository\Storage\DataManager;
 use Chamilo\Core\User\Storage\DataClass\User;
 use Chamilo\Libraries\Architecture\Application\Application;
 use Chamilo\Libraries\Architecture\ClassnameUtilities;
-use Chamilo\Libraries\File\Redirect;
 use Chamilo\Libraries\Format\Form\Element\AdvancedElementFinder\AdvancedElementFinderElement;
 use Chamilo\Libraries\Format\Form\Element\AdvancedElementFinder\AdvancedElementFinderElements;
 use Chamilo\Libraries\Format\Form\Element\AdvancedElementFinder\AdvancedElementFinderElementType;
@@ -110,7 +109,7 @@ class AssignmentForm extends ContentObjectForm
             )
         );
 
-        $uploadUrl = new Redirect(
+        $uploadUrl = $this->getUrlGenerator()->fromParameters(
             [
                 Application::PARAM_CONTEXT => \Chamilo\Core\Repository\Ajax\Manager::CONTEXT,
                 \Chamilo\Core\Repository\Ajax\Manager::PARAM_ACTION => \Chamilo\Core\Repository\Ajax\Manager::ACTION_IMPORT_FILE
@@ -120,7 +119,7 @@ class AssignmentForm extends ContentObjectForm
         $dropZoneParameters = [
             'name' => 'select_attachment_importer',
             'maxFilesize' => $calculator->getMaximumUploadSize(),
-            'uploadUrl' => $uploadUrl->getUrl(),
+            'uploadUrl' => $uploadUrl,
             'successCallbackFunction' => 'chamilo.core.repository.importFeedbackAttachment.processUploadedFile',
             'sendingCallbackFunction' => 'chamilo.core.repository.importFeedbackAttachment.prepareRequest',
             'removedfileCallbackFunction' => 'chamilo.core.repository.importFeedbackAttachment.deleteUploadedFile'

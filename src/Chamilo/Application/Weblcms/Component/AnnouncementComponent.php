@@ -13,9 +13,8 @@ use Chamilo\Application\Weblcms\Storage\DataClass\ContentObjectPublication;
 use Chamilo\Application\Weblcms\Storage\DataManager as WeblcmsDataManager;
 use Chamilo\Core\Repository\ContentObject\Announcement\Storage\DataClass\Announcement;
 use Chamilo\Core\Repository\Storage\DataClass\ContentObject;
-use Chamilo\Libraries\File\Redirect;
-use Chamilo\Libraries\Format\Table\Column\SortableStaticTableColumn;
 use Chamilo\Libraries\Format\Table\ArrayCollectionTableRenderer;
+use Chamilo\Libraries\Format\Table\Column\SortableStaticTableColumn;
 use Chamilo\Libraries\Storage\Query\Condition\AndCondition;
 use Chamilo\Libraries\Storage\Query\Condition\ComparisonCondition;
 use Chamilo\Libraries\Storage\Query\OrderProperty;
@@ -25,15 +24,14 @@ use Chamilo\Libraries\Translation\Translation;
 use Chamilo\Libraries\Utilities\DatetimeUtilities;
 
 /**
- *
  * @package Chamilo\Application\Weblcms\Component
- * @author Hans De Bisschop <hans.de.bisschop@ehb.be>
- * @author Magali Gillard <magali.gillard@ehb.be>
- * @author Eduard Vossen <eduard.vossen@ehb.be>
+ * @author  Hans De Bisschop <hans.de.bisschop@ehb.be>
+ * @author  Magali Gillard <magali.gillard@ehb.be>
+ * @author  Eduard Vossen <eduard.vossen@ehb.be>
  */
 class AnnouncementComponent extends Manager
 {
-    const TOOL_ANNOUNCEMENT = 'announcement';
+    public const TOOL_ANNOUNCEMENT = 'announcement';
 
     private $courses;
 
@@ -73,8 +71,8 @@ class AnnouncementComponent extends Manager
                 $condition = $this->get_publication_conditions($course, $tool);
                 $course_module_id = WeblcmsDataManager::retrieve_course_tool_by_name($tool)->get_id();
                 $location = WeblcmsRights::getInstance()->get_weblcms_location_by_identifier_from_courses_subtree(
-                        WeblcmsRights::TYPE_COURSE_MODULE, $course_module_id, $course->get_id()
-                    );
+                    WeblcmsRights::TYPE_COURSE_MODULE, $course_module_id, $course->get_id()
+                );
 
                 $entities = [];
                 $entities[CourseGroupEntity::ENTITY_TYPE] = CourseGroupEntity::getInstance(
@@ -85,14 +83,14 @@ class AnnouncementComponent extends Manager
 
                 $publications =
                     WeblcmsDataManager::retrieve_content_object_publications_with_view_right_granted_in_category_location(
-                        $location, $entities, $condition, array(
+                        $location, $entities, $condition, [
                             new OrderProperty(
                                 new PropertyConditionVariable(
                                     ContentObjectPublication::class,
                                     ContentObjectPublication::PROPERTY_DISPLAY_ORDER_INDEX
                                 )
                             )
-                        )
+                        ]
                     );
 
                 if ($publications == 0)
@@ -116,7 +114,6 @@ class AnnouncementComponent extends Manager
     }
 
     /**
-     *
      * @param \Chamilo\Application\Weblcms\Course\Storage\DataClass\Course $course
      * @param string[] $publication
      *
@@ -134,9 +131,7 @@ class AnnouncementComponent extends Manager
             \Chamilo\Application\Weblcms\Tool\Manager::ACTION_VIEW;
         $parameters[\Chamilo\Application\Weblcms\Tool\Manager::PARAM_PUBLICATION_ID] = $id;
 
-        $redirect = new Redirect($parameters);
-
-        return $redirect->getUrl();
+        return $this->getUrlGenerator()->fromParameters($parameters);
     }
 
     private function get_publication_conditions($course, $tool)
@@ -159,7 +154,6 @@ class AnnouncementComponent extends Manager
     }
 
     /**
-     *
      * @return string
      */
     public function renderAnnouncements()

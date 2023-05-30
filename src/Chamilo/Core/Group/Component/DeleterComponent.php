@@ -7,7 +7,6 @@ use Chamilo\Core\Tracking\Storage\DataClass\Event;
 use Chamilo\Libraries\Architecture\Application\Application;
 use Chamilo\Libraries\Architecture\ClassnameUtilities;
 use Chamilo\Libraries\Architecture\Exceptions\NotAllowedException;
-use Chamilo\Libraries\File\Redirect;
 use Chamilo\Libraries\Format\Structure\Breadcrumb;
 use Chamilo\Libraries\Format\Structure\BreadcrumbTrail;
 use Chamilo\Libraries\Format\Tabs\GenericTabsRenderer;
@@ -39,15 +38,15 @@ class DeleterComponent extends Manager
 
         $trail = BreadcrumbTrail::getInstance();
 
-        $redirect = new Redirect(
+        $browseUrl = $this->getUrlGenerator()->fromParameters(
             [
                 Application::PARAM_CONTEXT => \Chamilo\Core\Admin\Manager::CONTEXT,
                 \Chamilo\Core\Admin\Manager::PARAM_ACTION => \Chamilo\Core\Admin\Manager::ACTION_ADMIN_BROWSER
             ]
         );
-        $trail->add(new Breadcrumb($redirect->getUrl(), Translation::get('Administration')));
+        $trail->add(new Breadcrumb($browseUrl, Translation::get('Administration')));
 
-        $redirect = new Redirect(
+        $browseTabUrl = $this->getUrlGenerator()->fromParameters(
             [
                 Application::PARAM_CONTEXT => \Chamilo\Core\Admin\Manager::CONTEXT,
                 \Chamilo\Core\Admin\Manager::PARAM_ACTION => \Chamilo\Core\Admin\Manager::ACTION_ADMIN_BROWSER,
@@ -56,7 +55,7 @@ class DeleterComponent extends Manager
                 )
             ]
         );
-        $trail->add(new Breadcrumb($redirect->getUrl(), Translation::get('Group')));
+        $trail->add(new Breadcrumb($browseTabUrl, Translation::get('Group')));
 
         $trail->add(
             new Breadcrumb(

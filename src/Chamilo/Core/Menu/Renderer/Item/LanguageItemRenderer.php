@@ -2,11 +2,15 @@
 namespace Chamilo\Core\Menu\Renderer\Item;
 
 use Chamilo\Core\Menu\Renderer\ItemRenderer;
+use Chamilo\Core\Menu\Service\CachedItemService;
 use Chamilo\Core\Menu\Storage\DataClass\Item;
+use Chamilo\Core\Rights\Structure\Service\Interfaces\AuthorizationCheckerInterface;
 use Chamilo\Core\User\Manager;
 use Chamilo\Core\User\Storage\DataClass\User;
 use Chamilo\Libraries\Architecture\Application\Application;
-use Chamilo\Libraries\File\Redirect;
+use Chamilo\Libraries\Architecture\Application\Routing\UrlGenerator;
+use Chamilo\Libraries\Platform\ChamiloRequest;
+use Symfony\Component\Translation\Translator;
 
 /**
  * @package Chamilo\Core\Menu\Renderer\ItemRenderer
@@ -14,6 +18,17 @@ use Chamilo\Libraries\File\Redirect;
  */
 class LanguageItemRenderer extends ItemRenderer
 {
+    protected UrlGenerator $urlGenerator;
+
+    public function __construct(
+        AuthorizationCheckerInterface $authorizationChecker, Translator $translator,
+        CachedItemService $itemCacheService, ChamiloRequest $request, UrlGenerator $urlGenerator
+    )
+    {
+        parent::__construct($authorizationChecker, $translator, $itemCacheService, $request);
+
+        $this->urlGenerator = $urlGenerator;
+    }
 
     /**
      * @param \Chamilo\Core\Menu\Storage\DataClass\LanguageItem $item
@@ -28,7 +43,7 @@ class LanguageItemRenderer extends ItemRenderer
             return '';
         }
 
-        $redirect = new Redirect(
+        $languageUrl = $this->getUrlGenerator()->fromParameters(
             [
                 Application::PARAM_CONTEXT => Manager::CONTEXT,
                 Application::PARAM_ACTION => Manager::ACTION_QUICK_LANG,
@@ -40,7 +55,7 @@ class LanguageItemRenderer extends ItemRenderer
         $html = [];
 
         $html[] = '<li>';
-        $html[] = '<a href="' . $redirect->getUrl() . '">';
+        $html[] = '<a href="' . $languageUrl . '">';
         $html[] = '<div>';
         $html[] = $this->renderTitle($item);
         $html[] = '</div>';
@@ -48,6 +63,11 @@ class LanguageItemRenderer extends ItemRenderer
         $html[] = '</li>';
 
         return implode(PHP_EOL, $html);
+    }
+
+    public function getUrlGenerator(): UrlGenerator
+    {
+        return $this->urlGenerator;
     }
 
     /**

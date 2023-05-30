@@ -10,7 +10,6 @@ use Chamilo\Core\Reporting\Viewer\Rendition\Block\Type\Html;
 use Chamilo\Core\Repository\Storage\DataClass\ContentObject;
 use Chamilo\Core\Repository\Storage\DataManager;
 use Chamilo\Libraries\Architecture\Application\Application;
-use Chamilo\Libraries\File\Redirect;
 use Chamilo\Libraries\Format\Structure\Glyph\FontAwesomeGlyph;
 use Chamilo\Libraries\Platform\Session\Request;
 use Chamilo\Libraries\Storage\Parameters\DataClassRetrievesParameters;
@@ -32,7 +31,7 @@ class ToolPublicationsBlock extends ToolBlock
         $user_id = $this->get_user_id();
         $tool = Request::get(\Chamilo\Application\Weblcms\Tool\Implementation\Reporting\Manager::PARAM_REPORTING_TOOL);
 
-        $reporting_data->set_rows(array(Translation::get('Title'), Translation::get('Description')));
+        $reporting_data->set_rows([Translation::get('Title'), Translation::get('Description')]);
 
         $this->add_reporting_data_rows_for_course_visit_data($reporting_data);
 
@@ -73,7 +72,7 @@ class ToolPublicationsBlock extends ToolBlock
         $glyph = new FontAwesomeGlyph('chart-pie', [], Translation::get('Details'));
 
         $index = 1;
-        foreach($content_object_publications as $content_object_publication)
+        foreach ($content_object_publications as $content_object_publication)
         {
             $params = [];
 
@@ -84,8 +83,7 @@ class ToolPublicationsBlock extends ToolBlock
             $params[Manager::PARAM_PUBLICATION] = $content_object_publication->get_id();
             $params[Manager::PARAM_TOOL_ACTION] = \Chamilo\Application\Weblcms\Tool\Manager::ACTION_VIEW;
 
-            $redirect = new Redirect($params);
-            $url = $redirect->getUrl();
+            $url = $this->getUrlGenerator()->fromParameters($params);
 
             $content_object = DataManager::retrieve_by_id(
                 ContentObject::class, $content_object_publication->get_content_object_id()
@@ -132,7 +130,7 @@ class ToolPublicationsBlock extends ToolBlock
 
     public function get_views()
     {
-        return array(Html::VIEW_TABLE);
+        return [Html::VIEW_TABLE];
     }
 
     public function retrieve_data()

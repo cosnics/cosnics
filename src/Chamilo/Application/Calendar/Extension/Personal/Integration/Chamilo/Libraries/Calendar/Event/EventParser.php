@@ -10,49 +10,42 @@ use Chamilo\Libraries\DependencyInjection\DependencyInjectionContainerBuilder;
 use Chamilo\Libraries\File\Redirect;
 
 /**
- *
  * @package Chamilo\Application\Calendar\Extension\Personal\Integration\Chamilo\Libraries\Calendar\Event
- * @author Hans De Bisschop <hans.de.bisschop@ehb.be>
- * @author Magali Gillard <magali.gillard@ehb.be>
- * @author Eduard Vossen <eduard.vossen@ehb.be>
+ * @author  Hans De Bisschop <hans.de.bisschop@ehb.be>
+ * @author  Magali Gillard <magali.gillard@ehb.be>
+ * @author  Eduard Vossen <eduard.vossen@ehb.be>
  */
 class EventParser
 {
 
     /**
-     *
      * @var \Chamilo\Libraries\Calendar\Service\CalendarRendererProvider
      */
     private $calendarRendererProvider;
 
     /**
-     *
+     * @var int
+     */
+    private $fromDate;
+
+    /**
      * @var \Chamilo\Application\Calendar\Extension\Personal\Storage\DataClass\Publication
      */
     private $publication;
 
     /**
-     *
-     * @var integer
-     */
-    private $fromDate;
-
-    /**
-     *
-     * @var integer
+     * @var int
      */
     private $toDate;
 
     /**
-     *
      * @param \Chamilo\Libraries\Calendar\Service\CalendarRendererProvider $calendarRendererProvider
      * @param \Chamilo\Application\Calendar\Extension\Personal\Storage\DataClass\Publication $publication
-     * @param integer $fromDate
-     * @param integer $toDate
+     * @param int $fromDate
+     * @param int $toDate
      */
     public function __construct(
-        CalendarRendererProvider $calendarRendererProvider,
-        Publication $publication, $fromDate, $toDate
+        CalendarRendererProvider $calendarRendererProvider, Publication $publication, $fromDate, $toDate
     )
     {
         $this->calendarRendererProvider = $calendarRendererProvider;
@@ -62,7 +55,6 @@ class EventParser
     }
 
     /**
-     *
      * @return \Chamilo\Libraries\Calendar\Service\View\CalendarRenderer
      */
     public function getCalendarRendererProvider()
@@ -71,72 +63,6 @@ class EventParser
     }
 
     /**
-     *
-     * @param \Chamilo\Libraries\Calendar\Service\View\CalendarRenderer $renderer
-     */
-    public function setCalendarRendererProvider(
-        CalendarRendererProvider $calendarRendererProvider
-    )
-    {
-        $this->calendarRendererProvider = $calendarRendererProvider;
-    }
-
-    /**
-     *
-     * @return \Chamilo\Application\Calendar\Extension\Personal\Storage\DataClass\Publication
-     */
-    public function getPublication()
-    {
-        return $this->publication;
-    }
-
-    /**
-     *
-     * @param \Chamilo\Application\Calendar\Extension\Personal\Storage\DataClass\Publication $publication
-     */
-    public function setPublication($publication)
-    {
-        $this->publication = $publication;
-    }
-
-    /**
-     *
-     * @return integer
-     */
-    public function getFromDate()
-    {
-        return $this->fromDate;
-    }
-
-    /**
-     *
-     * @param integer $fromDate
-     */
-    public function setFromDate($fromDate)
-    {
-        $this->fromDate = $fromDate;
-    }
-
-    /**
-     *
-     * @return integer
-     */
-    public function getToDate()
-    {
-        return $this->toDate;
-    }
-
-    /**
-     *
-     * @param integer $toDate
-     */
-    public function setToDate($toDate)
-    {
-        $this->toDate = $toDate;
-    }
-
-    /**
-     *
      * @return \Chamilo\Core\Repository\Integration\Chamilo\Libraries\Calendar\Event\Event[]
      */
     public function getEvents()
@@ -147,8 +73,7 @@ class EventParser
         $publishingUser = $this->getUserService()->findUserByIdentifier($this->getPublication()->get_publisher());
 
         $parser = \Chamilo\Core\Repository\Integration\Chamilo\Libraries\Calendar\Event\EventParser::factory(
-            $this->getPublication()->get_publication_object(), $this->getFromDate(), $this->getToDate(),
-            Event::class
+            $this->getPublication()->get_publication_object(), $this->getFromDate(), $this->getToDate(), Event::class
         );
 
         $parsedEvents = $parser->getEvents();
@@ -163,12 +88,9 @@ class EventParser
             $parsedEvent->setContext(Manager::CONTEXT);
 
             $parameters = [];
-            $parameters[Application::PARAM_CONTEXT] =
-                Manager::CONTEXT;
-            $parameters[Manager::PARAM_ACTION] =
-                Manager::ACTION_VIEW;
-            $parameters[Manager::PARAM_PUBLICATION_ID] =
-                $this->getPublication()->getId();
+            $parameters[Application::PARAM_CONTEXT] = Manager::CONTEXT;
+            $parameters[Manager::PARAM_ACTION] = Manager::ACTION_VIEW;
+            $parameters[Manager::PARAM_PUBLICATION_ID] = $this->getPublication()->getId();
 
             $redirect = new Redirect($parameters);
             $parsedEvent->setUrl($redirect->getUrl());
@@ -180,6 +102,30 @@ class EventParser
     }
 
     /**
+     * @return int
+     */
+    public function getFromDate()
+    {
+        return $this->fromDate;
+    }
+
+    /**
+     * @return \Chamilo\Application\Calendar\Extension\Personal\Storage\DataClass\Publication
+     */
+    public function getPublication()
+    {
+        return $this->publication;
+    }
+
+    /**
+     * @return int
+     */
+    public function getToDate()
+    {
+        return $this->toDate;
+    }
+
+    /**
      * @return \Chamilo\Core\User\Service\UserService
      */
     private function getUserService()
@@ -187,5 +133,39 @@ class EventParser
         $container = DependencyInjectionContainerBuilder::getInstance()->createContainer();
 
         return $container->get(UserService::class);
+    }
+
+    /**
+     * @param \Chamilo\Libraries\Calendar\Service\View\CalendarRenderer $renderer
+     */
+    public function setCalendarRendererProvider(
+        CalendarRendererProvider $calendarRendererProvider
+    )
+    {
+        $this->calendarRendererProvider = $calendarRendererProvider;
+    }
+
+    /**
+     * @param int $fromDate
+     */
+    public function setFromDate($fromDate)
+    {
+        $this->fromDate = $fromDate;
+    }
+
+    /**
+     * @param \Chamilo\Application\Calendar\Extension\Personal\Storage\DataClass\Publication $publication
+     */
+    public function setPublication($publication)
+    {
+        $this->publication = $publication;
+    }
+
+    /**
+     * @param int $toDate
+     */
+    public function setToDate($toDate)
+    {
+        $this->toDate = $toDate;
     }
 }

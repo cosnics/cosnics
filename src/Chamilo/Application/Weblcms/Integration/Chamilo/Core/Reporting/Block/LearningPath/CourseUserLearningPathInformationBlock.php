@@ -17,7 +17,6 @@ use Chamilo\Core\User\Storage\DataClass\User;
 use Chamilo\Libraries\Architecture\Application\Application;
 use Chamilo\Libraries\Architecture\ClassnameUtilities;
 use Chamilo\Libraries\DependencyInjection\DependencyInjectionContainerBuilder;
-use Chamilo\Libraries\File\Redirect;
 use Chamilo\Libraries\Format\Structure\Glyph\FontAwesomeGlyph;
 use Chamilo\Libraries\Storage\Query\Condition\AndCondition;
 use Chamilo\Libraries\Storage\Query\Condition\EqualityCondition;
@@ -26,11 +25,10 @@ use Chamilo\Libraries\Storage\Query\Variable\StaticConditionVariable;
 use Chamilo\Libraries\Translation\Translation;
 
 /**
- *
  * @package application.weblcms.php.reporting.blocks Reporting block with an overiew of the learning paths the user has
  *          attempted
- * @author Joris Willems <joris.willems@gmail.com>
- * @author Alexander Van Paemel
+ * @author  Joris Willems <joris.willems@gmail.com>
+ * @author  Alexander Van Paemel
  */
 class CourseUserLearningPathInformationBlock extends ToolBlock
 {
@@ -39,7 +37,7 @@ class CourseUserLearningPathInformationBlock extends ToolBlock
     {
         $reporting_data = new ReportingData();
         $reporting_data->set_rows(
-            array(Translation::get('Title'), Translation::get('Progress'), Translation::get('LearningPathDetails'))
+            [Translation::get('Title'), Translation::get('Progress'), Translation::get('LearningPathDetails')]
         );
         $course_id = $this->get_parent()->get_parent()->get_parent()->get_parameter(
             \Chamilo\Application\Weblcms\Manager::PARAM_COURSE
@@ -78,7 +76,7 @@ class CourseUserLearningPathInformationBlock extends ToolBlock
          * $publications_arr = $publications_resultset;
          */
         $key = 0;
-        foreach($publications_resultset as $publication)
+        foreach ($publications_resultset as $publication)
         {
             $progress = $url = $link = null;
             if (!\Chamilo\Application\Weblcms\Storage\DataManager::is_publication_target_user(
@@ -124,8 +122,8 @@ class CourseUserLearningPathInformationBlock extends ToolBlock
                 $trackingService->getLearningPathProgress($learning_path, $user, $tree->getRoot())
             );
 
-            $redirect = new Redirect($params);
-            $url = '<a href="' . $redirect->getUrl() . '" target="_blank">' . $learning_path->get_title() . '</a>';
+            $reportingUrl = $this->getUrlGenerator()->fromParameters($params);
+            $url = '<a href="' . $reportingUrl . '" target="_blank">' . $learning_path->get_title() . '</a>';
 
             $reporting_data->add_category($key);
             $reporting_data->add_data_category_row($key, Translation::get('Title'), $url);
@@ -154,7 +152,6 @@ class CourseUserLearningPathInformationBlock extends ToolBlock
     }
 
     /**
-     *
      * @return \Chamilo\Libraries\Storage\DataManager\Repository\DataClassRepository
      * @throws \Exception
      */
@@ -186,7 +183,6 @@ class CourseUserLearningPathInformationBlock extends ToolBlock
     }
 
     /**
-     *
      * @return TrackingServiceBuilder | object
      */
     protected function getTrackingServiceBuilder()
@@ -196,7 +192,7 @@ class CourseUserLearningPathInformationBlock extends ToolBlock
 
     public function get_views()
     {
-        return array(Html::VIEW_TABLE);
+        return [Html::VIEW_TABLE];
     }
 
     public function retrieve_data()

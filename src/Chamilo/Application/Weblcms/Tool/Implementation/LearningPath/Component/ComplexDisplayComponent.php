@@ -37,7 +37,6 @@ use Chamilo\Libraries\Architecture\Exceptions\NoObjectSelectedException;
 use Chamilo\Libraries\Architecture\Exceptions\ObjectNotExistException;
 use Chamilo\Libraries\Architecture\Exceptions\UserException;
 use Chamilo\Libraries\Architecture\Interfaces\DelegateComponent;
-use Chamilo\Libraries\File\Redirect;
 use Chamilo\Libraries\Format\Structure\BreadcrumbTrail;
 use Chamilo\Libraries\Format\Structure\PageConfiguration;
 use Chamilo\Libraries\Platform\Session\Request;
@@ -453,9 +452,7 @@ class ComplexDisplayComponent extends Manager
                 \Chamilo\Core\Repository\ContentObject\LearningPath\Display\Manager::PARAM_FULL_SCREEN
             );
 
-        $redirect = new Redirect($parameters);
-
-        return $redirect->getUrl();
+        return $this->getUrlGenerator()->fromParameters($parameters);
     }
 
     public function get_wiki_page_statistics_reporting_template_name()

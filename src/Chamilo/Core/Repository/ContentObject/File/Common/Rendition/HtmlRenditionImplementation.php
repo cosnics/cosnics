@@ -7,7 +7,6 @@ use Chamilo\Core\Repository\Manager;
 use Chamilo\Core\Repository\Storage\DataClass\ContentObject;
 use Chamilo\Libraries\Architecture\Traits\DependencyInjectionContainerTrait;
 use Chamilo\Libraries\File\Filesystem;
-use Chamilo\Libraries\File\Redirect;
 use Chamilo\Libraries\Format\Structure\ActionBar\Button;
 use Chamilo\Libraries\Format\Structure\ActionBar\ButtonToolBar;
 use Chamilo\Libraries\Format\Structure\ActionBar\Renderer\ButtonToolBarRenderer;
@@ -63,9 +62,7 @@ class HtmlRenditionImplementation extends RenditionImplementation
      */
     protected function getPopupUrl(ContentObject $contentObject)
     {
-        $redirect = new Redirect();
-
-        return $redirect->getUrl();
+        return $this->getUrlGenerator()->fromParameters();
     }
 
     /**

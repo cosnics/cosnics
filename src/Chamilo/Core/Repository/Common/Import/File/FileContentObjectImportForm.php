@@ -8,7 +8,6 @@ use Chamilo\Core\Repository\Quota\Calculator;
 use Chamilo\Core\User\Storage\DataClass\User;
 use Chamilo\Core\User\Storage\DataManager;
 use Chamilo\Libraries\Architecture\Application\Application;
-use Chamilo\Libraries\File\Redirect;
 use Chamilo\Libraries\Translation\Translation;
 
 class FileContentObjectImportForm extends ContentObjectImportForm
@@ -44,7 +43,7 @@ class FileContentObjectImportForm extends ContentObjectImportForm
             )
         );
 
-        $uploadUrl = new Redirect(
+        $uploadUrl = $this->getUrlGenerator()->fromParameters(
             [
                 Application::PARAM_CONTEXT => \Chamilo\Core\Repository\Ajax\Manager::CONTEXT,
                 \Chamilo\Core\Repository\Ajax\Manager::PARAM_ACTION => \Chamilo\Core\Repository\Ajax\Manager::ACTION_IMPORT_FILE
@@ -54,7 +53,7 @@ class FileContentObjectImportForm extends ContentObjectImportForm
         $dropZoneParameters = [
             'name' => self::IMPORT_FILE_NAME,
             'maxFilesize' => $calculator->getMaximumUploadSize(),
-            'uploadUrl' => $uploadUrl->getUrl(),
+            'uploadUrl' => $uploadUrl,
             'successCallbackFunction' => 'chamilo.core.repository.import.processUploadedFile',
             'sendingCallbackFunction' => 'chamilo.core.repository.import.prepareRequest',
             'removedfileCallbackFunction' => 'chamilo.core.repository.import.deleteUploadedFile'

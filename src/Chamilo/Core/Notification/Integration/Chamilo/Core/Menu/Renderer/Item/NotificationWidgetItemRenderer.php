@@ -1,6 +1,7 @@
 <?php
 namespace Chamilo\Core\Notification\Integration\Chamilo\Core\Menu\Renderer\Item;
 
+use Chamilo\Configuration\Service\Consulter\RegistrationConsulter;
 use Chamilo\Core\Menu\Renderer\Item\PriorityItemRenderer;
 use Chamilo\Core\Menu\Service\CachedItemService;
 use Chamilo\Core\Menu\Storage\DataClass\Item;
@@ -8,10 +9,10 @@ use Chamilo\Core\Notification\Manager;
 use Chamilo\Core\Rights\Structure\Service\Interfaces\AuthorizationCheckerInterface;
 use Chamilo\Core\User\Storage\DataClass\User;
 use Chamilo\Libraries\Architecture\Application\Application;
-use Chamilo\Libraries\File\Redirect;
+use Chamilo\Libraries\Architecture\Application\Routing\UrlGenerator;
 use Chamilo\Libraries\Platform\ChamiloRequest;
 use Symfony\Component\Translation\Translator;
-use Twig_Environment;
+use Twig\Environment;
 
 /**
  * @package Chamilo\Core\Notification\Integration\Chamilo\Core\Menu\Renderer\Item\Bar\Item
@@ -19,29 +20,31 @@ use Twig_Environment;
  */
 class NotificationWidgetItemRenderer extends PriorityItemRenderer
 {
-    /**
-     * @var \Twig_Environment
-     */
-    private $twig;
+    protected RegistrationConsulter $registrationConsulter;
+
+    protected UrlGenerator $urlGenerator;
+
+    private Environment $twig;
 
     public function __construct(
         AuthorizationCheckerInterface $authorizationChecker, Translator $translator,
-        CachedItemService $itemCacheService, ChamiloRequest $request, Twig_Environment $twig
+        CachedItemService $itemCacheService, ChamiloRequest $request, Environment $twig, UrlGenerator $urlGenerator,
+        RegistrationConsulter $registrationConsulter
     )
     {
         parent::__construct($authorizationChecker, $translator, $itemCacheService, $request);
 
         $this->twig = $twig;
+        $this->urlGenerator = $urlGenerator;
+        $this->registrationConsulter = $registrationConsulter;
     }
 
     /**
-     * @param \Chamilo\Core\Menu\Storage\DataClass\Item $item
-     * @param \Chamilo\Core\User\Storage\DataClass\User $user
-     *
      * @return string
-     * @throws \Twig_Error_Loader
-     * @throws \Twig_Error_Runtime
-     * @throws \Twig_Error_Syntax
+     * @throws \Symfony\Component\Cache\Exception\CacheException
+     * @throws \Twig\Error\LoaderError
+     * @throws \Twig\Error\RuntimeError
+     * @throws \Twig\Error\SyntaxError
      */
     public function render(Item $item, User $user)
     {
@@ -50,14 +53,14 @@ class NotificationWidgetItemRenderer extends PriorityItemRenderer
             return '';
         }
 
-        $viewerUrl = new Redirect(
+        $viewerUrl = $this->getUrlGenerator()->fromParameters(
             [
                 Application::PARAM_CONTEXT => Manager::CONTEXT,
                 Application::PARAM_ACTION => Manager::ACTION_VIEW
             ]
         );
 
-        $filterManagerUrl = new Redirect(
+        $filterManagerUrl = $this->getUrlGenerator()->fromParameters(
             [
                 Application::PARAM_CONTEXT => Manager::CONTEXT,
                 Application::PARAM_ACTION => Manager::ACTION_MANAGE_FILTERS
@@ -66,8 +69,8 @@ class NotificationWidgetItemRenderer extends PriorityItemRenderer
 
         return $this->getTwig()->render(
             'Chamilo\Core\Notification\Integration\Chamilo\Core\Menu:NotificationWidgetItem.html.twig', [
-                'VIEWER_URL' => $viewerUrl->getUrl(),
-                'FILTER_MANAGER_URL' => $filterManagerUrl->getUrl()
+                'VIEWER_URL' => $viewerUrl,
+                'FILTER_MANAGER_URL' => $filterManagerUrl
             ]
         );
     }
@@ -86,33 +89,36 @@ class NotificationWidgetItemRenderer extends PriorityItemRenderer
         return parent::getClasses($isSelected, $existingClasses);
     }
 
-    /**
-     * @return \Twig_Environment
-     */
-    public function getTwig(): Twig_Environment
+    public function getRegistrationConsulter(): RegistrationConsulter
+    {
+        return $this->registrationConsulter;
+    }
+
+    public function getTwig(): Environment
     {
         return $this->twig;
     }
 
+    public function getUrlGenerator(): UrlGenerator
+    {
+        return $this->urlGenerator;
+    }
+
     /**
-     * Returns whether or not the given user can view this menu item
-     *
-     * @param User $user
+     * @param \Chamilo\Core\User\Storage\DataClass\User $user
      *
      * @return bool
+     * @throws \Symfony\Component\Cache\Exception\CacheException
      */
     public function isItemVisibleForUser(User $user)
     {
         $authorizationChecker = $this->getAuthorizationChecker();
 
-        return Application::is_active('Chamilo\Core\Notification') &&
+        return $this->getRegistrationConsulter()->isContextRegisteredAndActive('Chamilo\Core\Notification') &&
             $authorizationChecker->isAuthorized($user, 'Chamilo\Core\Notification');
     }
 
-    /**
-     * @param \Twig_Environment $twig
-     */
-    public function setTwig(Twig_Environment $twig): void
+    public function setTwig(Environment $twig): void
     {
         $this->twig = $twig;
     }

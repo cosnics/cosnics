@@ -4,7 +4,6 @@ namespace Chamilo\Application\Weblcms\Course\OpenCourse;
 use Chamilo\Application\Weblcms\Course\OpenCourse\Service\OpenCourseService;
 use Chamilo\Libraries\Architecture\Application\Application;
 use Chamilo\Libraries\Architecture\Exceptions\NoObjectSelectedException;
-use Chamilo\Libraries\File\Redirect;
 use Chamilo\Libraries\Translation\Translation;
 
 /**
@@ -113,8 +112,6 @@ abstract class Manager extends Application
             \Chamilo\Application\Weblcms\Manager::PARAM_COURSE => $courseId
         ];
 
-        $redirect = new Redirect($parameters);
-
-        return $redirect->getUrl();
+        return $this->getUrlGenerator()->fromParameters($parameters);
     }
 }

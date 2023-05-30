@@ -10,7 +10,7 @@ use Chamilo\Core\User\Manager;
 use Chamilo\Core\User\Picture\UserPictureProviderInterface;
 use Chamilo\Core\User\Storage\DataClass\User;
 use Chamilo\Libraries\Architecture\Application\Application;
-use Chamilo\Libraries\File\Redirect;
+use Chamilo\Libraries\Architecture\Application\Routing\UrlGenerator;
 use Chamilo\Libraries\Platform\ChamiloRequest;
 use Symfony\Component\Translation\Translator;
 
@@ -21,28 +21,23 @@ use Symfony\Component\Translation\Translator;
 class WidgetItemRenderer extends ItemRenderer
 {
 
+    protected UrlGenerator $urlGenerator;
+
     private ConfigurationConsulter $configurationConsulter;
 
     private UserPictureProviderInterface $userPictureProvider;
 
-    /**
-     * @param \Chamilo\Core\Rights\Structure\Service\Interfaces\AuthorizationCheckerInterface $authorizationChecker
-     * @param \Symfony\Component\Translation\Translator $translator
-     * @param \Chamilo\Core\Menu\Service\CachedItemService $itemCacheService
-     * @param \Chamilo\Libraries\Platform\ChamiloRequest $request
-     * @param \Chamilo\Configuration\Service\Consulter\ConfigurationConsulter $configurationConsulter
-     * @param \Chamilo\Core\User\Picture\UserPictureProviderInterface $userPictureProvider ;
-     */
     public function __construct(
         AuthorizationCheckerInterface $authorizationChecker, Translator $translator,
         CachedItemService $itemCacheService, ChamiloRequest $request, ConfigurationConsulter $configurationConsulter,
-        UserPictureProviderInterface $userPictureProvider
+        UserPictureProviderInterface $userPictureProvider, UrlGenerator $urlGenerator
     )
     {
         parent::__construct($authorizationChecker, $translator, $itemCacheService, $request);
 
         $this->configurationConsulter = $configurationConsulter;
         $this->userPictureProvider = $userPictureProvider;
+        $this->urlGenerator = $urlGenerator;
     }
 
     /**
@@ -177,6 +172,11 @@ class WidgetItemRenderer extends ItemRenderer
         return $this->getUserUrl(Manager::ACTION_USER_SETTINGS);
     }
 
+    public function getUrlGenerator(): UrlGenerator
+    {
+        return $this->urlGenerator;
+    }
+
     /**
      * @return \Chamilo\Core\User\Picture\UserPictureProviderInterface
      */
@@ -192,11 +192,9 @@ class WidgetItemRenderer extends ItemRenderer
      */
     public function getUserUrl($action)
     {
-        $redirect = new Redirect(
+        return $this->getUrlGenerator()->fromParameters(
             [Application::PARAM_CONTEXT => Manager::CONTEXT, Application::PARAM_ACTION => $action]
         );
-
-        return $redirect->getUrl();
     }
 
     /**

@@ -10,10 +10,10 @@ use Chamilo\Core\Repository\ContentObject\File\Storage\DataClass\File;
 use Chamilo\Core\Repository\Workspace\Repository\ContentObjectRepository;
 use Chamilo\Core\User\Service\UserService;
 use Chamilo\Core\User\Storage\DataClass\User;
+use Chamilo\Libraries\Architecture\Application\Routing\UrlGenerator;
 use Chamilo\Libraries\DependencyInjection\DependencyInjectionContainerBuilder;
 use Chamilo\Libraries\File\ConfigurablePathBuilder;
 use Chamilo\Libraries\File\FileLogger;
-use Chamilo\Libraries\File\Redirect;
 use Chamilo\Libraries\File\WebPathBuilder;
 use Chamilo\Libraries\Format\Theme\ThemePathBuilder;
 use Chamilo\Libraries\Mail\Mailer\MailerInterface;
@@ -45,13 +45,15 @@ class ContentObjectPublicationMailer
 
     protected Translator $translator;
 
+    protected UrlGenerator $urlGenerator;
+
     protected UserService $userService;
 
     public function __construct(
         MailerInterface $mailer, Translator $translator, CourseRepositoryInterface $courseRepository,
         PublicationRepositoryInterface $publicationRepository, ContentObjectRepository $contentObjectRepository,
         UserService $userService, ThemePathBuilder $themeWebPathBuilder,
-        ConfigurablePathBuilder $configurablePathBuilder
+        ConfigurablePathBuilder $configurablePathBuilder, UrlGenerator $urlGenerator
     )
     {
         $this->mailer = $mailer;
@@ -62,6 +64,7 @@ class ContentObjectPublicationMailer
         $this->userService = $userService;
         $this->themeWebPathBuilder = $themeWebPathBuilder;
         $this->configurablePathBuilder = $configurablePathBuilder;
+        $this->urlGenerator = $urlGenerator;
     }
 
     public function getConfigurablePathBuilder(): ConfigurablePathBuilder
@@ -91,9 +94,7 @@ class ContentObjectPublicationMailer
         $parameters[\Chamilo\Application\Weblcms\Tool\Manager::PARAM_PUBLICATION_ID] =
             $contentObjectPublication->getId();
 
-        $redirect = new Redirect($parameters);
-
-        return $redirect->getUrl();
+        return $this->getUrlGenerator()->fromParameters($parameters);
     }
 
     /**
@@ -146,6 +147,11 @@ class ContentObjectPublicationMailer
     ): ?string
     {
         return $this->translator->trans($variable, $parameters, $context);
+    }
+
+    public function getUrlGenerator(): UrlGenerator
+    {
+        return $this->urlGenerator;
     }
 
     public function getUserService(): UserService

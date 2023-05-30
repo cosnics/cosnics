@@ -2,11 +2,15 @@
 namespace Chamilo\Core\Repository\Integration\Chamilo\Core\Menu\Renderer\Item;
 
 use Chamilo\Core\Menu\Renderer\ItemRenderer;
+use Chamilo\Core\Menu\Service\CachedItemService;
 use Chamilo\Core\Menu\Storage\DataClass\Item;
 use Chamilo\Core\Repository\Manager;
+use Chamilo\Core\Rights\Structure\Service\Interfaces\AuthorizationCheckerInterface;
 use Chamilo\Core\User\Storage\DataClass\User;
 use Chamilo\Libraries\Architecture\Application\Application;
-use Chamilo\Libraries\File\Redirect;
+use Chamilo\Libraries\Architecture\Application\Routing\UrlGenerator;
+use Chamilo\Libraries\Platform\ChamiloRequest;
+use Symfony\Component\Translation\Translator;
 
 /**
  * @package Chamilo\Core\Repository\Integration\Chamilo\Core\Menu\Renderer\Item\Bar\Item
@@ -14,6 +18,18 @@ use Chamilo\Libraries\File\Redirect;
  */
 class WorkspaceItemRenderer extends ItemRenderer
 {
+    protected UrlGenerator $urlGenerator;
+
+    public function __construct(
+        AuthorizationCheckerInterface $authorizationChecker, Translator $translator,
+        CachedItemService $itemCacheService, ChamiloRequest $request, UrlGenerator $urlGenerator
+    )
+    {
+        parent::__construct($authorizationChecker, $translator, $itemCacheService, $request);
+
+        $this->urlGenerator = $urlGenerator;
+    }
+
     /**
      * @param \Chamilo\Core\Repository\Integration\Chamilo\Core\Menu\Storage\DataClass\WorkspaceItem $item
      * @param \Chamilo\Core\User\Storage\DataClass\User $user
@@ -24,16 +40,7 @@ class WorkspaceItemRenderer extends ItemRenderer
     {
         $selected = $this->isSelected($item);
 
-        if ($selected)
-        {
-            $class = 'class="active" ';
-        }
-        else
-        {
-            $class = '';
-        }
-
-        $redirect = new Redirect(
+        $workspaceUrl = $this->getUrlGenerator()->fromParameters(
             [
                 Application::PARAM_CONTEXT => Manager::CONTEXT,
                 Manager::PARAM_WORKSPACE_ID => $item->getWorkspaceId()
@@ -43,7 +50,7 @@ class WorkspaceItemRenderer extends ItemRenderer
         $html = [];
 
         $html[] = '<li' . ($selected ? ' class="active"' : '') . '>';
-        $html[] = '<a href="' . $redirect->getUrl() . '">';
+        $html[] = '<a href="' . $workspaceUrl . '">';
         $title = $this->renderTitle($item);
 
         if ($item->showIcon())
@@ -65,6 +72,11 @@ class WorkspaceItemRenderer extends ItemRenderer
         $html[] = '</li>';
 
         return implode(PHP_EOL, $html);
+    }
+
+    public function getUrlGenerator(): UrlGenerator
+    {
+        return $this->urlGenerator;
     }
 
     /**

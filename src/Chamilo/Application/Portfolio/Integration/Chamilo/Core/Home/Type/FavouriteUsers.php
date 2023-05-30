@@ -7,7 +7,6 @@ use Chamilo\Application\Portfolio\Manager;
 use Chamilo\Core\Home\Renderer\Type\Basic\BlockRenderer;
 use Chamilo\Core\User\Storage\DataClass\User;
 use Chamilo\Libraries\DependencyInjection\DependencyInjectionContainerBuilder;
-use Chamilo\Libraries\File\Redirect;
 
 /**
  * Renders the favourite users
@@ -26,15 +25,15 @@ class FavouriteUsers extends BlockRenderer
         {
             $html[] = '<ul style="list-style: none; margin: 0; padding: 0;">';
 
-            foreach($favouriteUsers as $favouriteUser)
+            foreach ($favouriteUsers as $favouriteUser)
             {
-                $redirect = new Redirect(
-                    array(
+                $portfolioURL = $this->getUrlGenerator()->fromParameters(
+                    [
                         Manager::PARAM_CONTEXT => Manager::CONTEXT,
                         Manager::PARAM_ACTION => Manager::ACTION_HOME,
-                        Manager::PARAM_USER_ID => $favouriteUser[FavouriteRepository::PROPERTY_USER_ID]));
-
-                $portfolioURL = $redirect->getUrl();
+                        Manager::PARAM_USER_ID => $favouriteUser[FavouriteRepository::PROPERTY_USER_ID]
+                    ]
+                );
 
                 $html[] = '<li style="padding: 3px;">';
                 $html[] = '<a href="' . $portfolioURL . '">';
@@ -50,12 +49,12 @@ class FavouriteUsers extends BlockRenderer
     }
 
     /**
-     *
      * @return \Chamilo\Application\Portfolio\Favourite\Service\FavouriteService
      */
     public function getFavouriteService()
     {
         $container = DependencyInjectionContainerBuilder::getInstance()->createContainer();
+
         return $container->get(FavouriteService::class);
     }
 }

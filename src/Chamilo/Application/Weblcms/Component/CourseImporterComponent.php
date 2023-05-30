@@ -5,7 +5,6 @@ use Chamilo\Application\Weblcms\Form\CourseImportForm;
 use Chamilo\Application\Weblcms\Manager;
 use Chamilo\Libraries\Architecture\Application\Application;
 use Chamilo\Libraries\Architecture\ClassnameUtilities;
-use Chamilo\Libraries\File\Redirect;
 use Chamilo\Libraries\Format\Structure\Breadcrumb;
 use Chamilo\Libraries\Format\Structure\BreadcrumbTrail;
 use Chamilo\Libraries\Format\Tabs\GenericTabsRenderer;
@@ -57,17 +56,17 @@ class CourseImporterComponent extends Manager
     {
         if ($this->get_user()->is_platform_admin())
         {
-            $redirect = new Redirect(
+            $browserUrl = $this->getUrlGenerator()->fromParameters(
                 [
                     Application::PARAM_CONTEXT => \Chamilo\Core\Admin\Manager::CONTEXT,
                     \Chamilo\Core\Admin\Manager::PARAM_ACTION => \Chamilo\Core\Admin\Manager::ACTION_ADMIN_BROWSER
                 ]
             );
             $breadcrumbtrail->add(
-                new Breadcrumb($redirect->getUrl(), Translation::get('TypeName', null, 'Chamilo\Core\Admin'))
+                new Breadcrumb($browserUrl, Translation::get('TypeName', null, 'Chamilo\Core\Admin'))
             );
 
-            $redirect = new Redirect(
+            $browserTabUrl = $this->getUrlGenerator()->fromParameters(
                 [
                     Application::PARAM_CONTEXT => \Chamilo\Core\Admin\Manager::CONTEXT,
                     \Chamilo\Core\Admin\Manager::PARAM_ACTION => \Chamilo\Core\Admin\Manager::ACTION_ADMIN_BROWSER,
@@ -76,7 +75,7 @@ class CourseImporterComponent extends Manager
                     )
                 ]
             );
-            $breadcrumbtrail->add(new Breadcrumb($redirect->getUrl(), Translation::get('Courses')));
+            $breadcrumbtrail->add(new Breadcrumb($browserTabUrl, Translation::get('Courses')));
         }
     }
 

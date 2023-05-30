@@ -7,7 +7,6 @@ use Chamilo\Core\Repository\ContentObject\Assessment\Storage\DataClass\Assessmen
 use Chamilo\Core\Repository\ContentObject\AssessmentOpenQuestion\Storage\DataClass\AssessmentOpenQuestion;
 use Chamilo\Core\Repository\Manager;
 use Chamilo\Libraries\Architecture\Application\Application;
-use Chamilo\Libraries\File\Redirect;
 use Chamilo\Libraries\Format\Structure\Glyph\FontAwesomeGlyph;
 use Chamilo\Libraries\Translation\Translation;
 
@@ -43,7 +42,7 @@ class Display extends QuestionDisplay
         );
         $group[] = $formvalidator->createElement('hidden', $name_2);
 
-        $link = new Redirect(
+        $link = $formvalidator->getUrlGenerator()->fromParameters(
             [
                 Application::PARAM_CONTEXT => Manager::CONTEXT,
                 Application::PARAM_ACTION => Manager::ACTION_REPOSITORY_VIEWER,
@@ -55,8 +54,8 @@ class Display extends QuestionDisplay
 
         $group[] = $formvalidator->createElement(
             'static', null, null,
-            '<a class="btn btn-default" onclick="openPopup(\'' . addslashes($link->getUrl()) . '\');">' .
-            $uploadGlyph->render() . ' ' . Translation::get('BrowseContentObjects') . '</a>'
+            '<a class="btn btn-default" onclick="openPopup(\'' . addslashes($link) . '\');">' . $uploadGlyph->render() .
+            ' ' . Translation::get('BrowseContentObjects') . '</a>'
         );
 
         $formvalidator->addGroup($group, '');

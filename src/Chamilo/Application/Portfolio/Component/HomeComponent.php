@@ -6,37 +6,34 @@ use Chamilo\Application\Portfolio\Storage\DataClass\Publication;
 use Chamilo\Core\Repository\Common\Path\ComplexContentObjectPathNode;
 use Chamilo\Core\Repository\ContentObject\Bookmark\Storage\DataClass\Bookmark;
 use Chamilo\Core\Repository\ContentObject\Portfolio\Display\Manager as PortfolioDisplayManager;
-use Chamilo\Core\Repository\ContentObject\Portfolio\Display\Menu;
 use Chamilo\Core\Repository\ContentObject\Portfolio\Display\PortfolioBookmarkSupport;
 use Chamilo\Core\Repository\ContentObject\Portfolio\Display\PortfolioComplexRights;
 use Chamilo\Core\Repository\ContentObject\Portfolio\Display\PortfolioDisplaySupport;
 use Chamilo\Core\Repository\ContentObject\Portfolio\Storage\DataClass\Portfolio;
+use Chamilo\Core\Repository\Display\Manager as DisplayManager;
 use Chamilo\Core\Rights\Entity\PlatformGroupEntity;
 use Chamilo\Core\Rights\Entity\UserEntity;
 use Chamilo\Libraries\Architecture\Application\Application;
 use Chamilo\Libraries\Architecture\Application\ApplicationConfiguration;
 use Chamilo\Libraries\Architecture\Interfaces\DelegateComponent;
-use Chamilo\Libraries\File\Redirect;
+use Chamilo\Libraries\Format\Menu\BootstrapTreeMenu;
 use Chamilo\Libraries\Format\Structure\ActionBar\Button;
 use Chamilo\Libraries\Format\Structure\Glyph\FontAwesomeGlyph;
 
 /**
- *
  * @package Chamilo\Application\Portfolio\Component
- * @author Hans De Bisschop <hans.de.bisschop@ehb.be>
+ * @author  Hans De Bisschop <hans.de.bisschop@ehb.be>
  */
 class HomeComponent extends Manager
     implements PortfolioDisplaySupport, DelegateComponent, PortfolioComplexRights, PortfolioBookmarkSupport
 {
 
     /**
-     *
      * @var \Chamilo\Application\Portfolio\Storage\DataClass\Publication
      */
     private $publication;
 
     /**
-     *
      * @see \Chamilo\Libraries\Architecture\Application\Application::run()
      */
     public function run()
@@ -44,13 +41,11 @@ class HomeComponent extends Manager
         $this->set_parameter(self::PARAM_USER_ID, $this->getCurrentUserId());
 
         return $this->getApplicationFactory()->getApplication(
-            Portfolio::CONTEXT . '\Display',
-            new ApplicationConfiguration($this->getRequest(), $this->getUser(), $this)
+            Portfolio::CONTEXT . '\Display', new ApplicationConfiguration($this->getRequest(), $this->getUser(), $this)
         )->run();
     }
 
     /**
-     *
      * @see \Chamilo\Core\Repository\ContentObject\Portfolio\Display\PortfolioComplexRights::clear_virtual_user_id()
      */
     public function clear_virtual_user_id()
@@ -59,7 +54,6 @@ class HomeComponent extends Manager
     }
 
     /**
-     *
      * @see \Chamilo\Core\Repository\ContentObject\Portfolio\Display\PortfolioDisplaySupport::count_portfolio_feedbacks()
      */
     public function count_portfolio_feedbacks(ComplexContentObjectPathNode $node)
@@ -70,7 +64,6 @@ class HomeComponent extends Manager
     }
 
     /**
-     *
      * @see \Chamilo\Core\Repository\ContentObject\Portfolio\Display\PortfolioComplexRights::count_portfolio_possible_view_users()
      */
     public function count_portfolio_possible_view_users($condition)
@@ -79,7 +72,6 @@ class HomeComponent extends Manager
     }
 
     /**
-     *
      * @return \Chamilo\Application\Portfolio\Storage\DataClass\Publication
      */
     public function getPublication()
@@ -102,7 +94,6 @@ class HomeComponent extends Manager
     }
 
     /**
-     *
      * @see \Chamilo\Core\Repository\ContentObject\Portfolio\Display\PortfolioComplexRights::get_available_rights()
      */
     public function get_available_rights()
@@ -111,18 +102,17 @@ class HomeComponent extends Manager
     }
 
     /**
-     *
      * @see \Chamilo\Core\Repository\ContentObject\Portfolio\Display\PortfolioComplexRights::get_entities()
      */
     public function get_entities()
     {
-        return array(
-            UserEntity::ENTITY_TYPE => new UserEntity(), PlatformGroupEntity::ENTITY_TYPE => new PlatformGroupEntity()
-        );
+        return [
+            UserEntity::ENTITY_TYPE => new UserEntity(),
+            PlatformGroupEntity::ENTITY_TYPE => new PlatformGroupEntity()
+        ];
     }
 
     /**
-     *
      * @see \Chamilo\Core\Repository\ContentObject\Portfolio\Display\PortfolioComplexRights::get_locations()
      */
     public function get_locations($nodes)
@@ -138,25 +128,25 @@ class HomeComponent extends Manager
     }
 
     /**
-     *
      * @see \Chamilo\Core\Repository\ContentObject\Portfolio\Display\PortfolioDisplaySupport::get_portfolio_additional_actions()
      */
     public function get_portfolio_additional_actions()
     {
-        return array(
+        return [
             new Button(
-                $this->getTranslator()->trans('BrowserComponent', [], Manager::CONTEXT),
-                new FontAwesomeGlyph('search'), $this->get_url(
-                array(self::PARAM_ACTION => self::ACTION_BROWSE), array(
-                    self::PARAM_USER_ID, PortfolioDisplayManager::PARAM_ACTION, PortfolioDisplayManager::PARAM_STEP
+                $this->getTranslator()->trans('BrowserComponent', [], Manager::CONTEXT), new FontAwesomeGlyph('search'),
+                $this->get_url(
+                    [self::PARAM_ACTION => self::ACTION_BROWSE], [
+                        self::PARAM_USER_ID,
+                        PortfolioDisplayManager::PARAM_ACTION,
+                        PortfolioDisplayManager::PARAM_STEP
+                    ]
                 )
             )
-            )
-        );
+        ];
     }
 
     /**
-     *
      * @see \Chamilo\Core\Repository\ContentObject\Portfolio\Display\PortfolioBookmarkSupport::get_portfolio_bookmark()
      */
     public function get_portfolio_bookmark($current_step)
@@ -177,10 +167,10 @@ class HomeComponent extends Manager
         $content_object->set_application(__NAMESPACE__);
         $content_object->set_url(
             $this->get_url(
-                array(
+                [
                     PortfolioDisplayManager::PARAM_ACTION => PortfolioDisplayManager::ACTION_VIEW_COMPLEX_CONTENT_OBJECT,
                     PortfolioDisplayManager::PARAM_STEP => $current_step
-                )
+                ]
             )
         );
         $content_object->set_owner_id($this->get_user_id());
@@ -189,7 +179,6 @@ class HomeComponent extends Manager
     }
 
     /**
-     *
      * @see \Chamilo\Core\Repository\ContentObject\Portfolio\Display\PortfolioDisplaySupport::get_portfolio_feedback()
      */
     public function get_portfolio_feedback()
@@ -198,7 +187,6 @@ class HomeComponent extends Manager
     }
 
     /**
-     *
      * @see \Chamilo\Core\Repository\ContentObject\Portfolio\Display\PortfolioDisplaySupport::get_portfolio_notification()
      */
     public function get_portfolio_notification()
@@ -207,25 +195,22 @@ class HomeComponent extends Manager
     }
 
     /**
-     *
      * @see \Chamilo\Core\Repository\ContentObject\Portfolio\Display\PortfolioDisplaySupport::get_portfolio_tree_menu_url()
      */
     public function get_portfolio_tree_menu_url()
     {
-        $redirect = new Redirect(
-            array(
-                Application::PARAM_CONTEXT => Manager::CONTEXT, Application::PARAM_ACTION => Manager::ACTION_HOME,
+        return $this->getUrlGenerator()->fromParameters(
+            [
+                Application::PARAM_CONTEXT => Manager::CONTEXT,
+                Application::PARAM_ACTION => Manager::ACTION_HOME,
                 Manager::PARAM_USER_ID => $this->getCurrentUserId(),
-                PortfolioDisplayManager::PARAM_ACTION => PortfolioDisplayManager::ACTION_VIEW_COMPLEX_CONTENT_OBJECT,
-                PortfolioDisplayManager::PARAM_STEP => Menu::NODE_PLACEHOLDER
-            )
+                DisplayManager::PARAM_ACTION => DisplayManager::ACTION_VIEW_COMPLEX_CONTENT_OBJECT,
+                PortfolioDisplayManager::PARAM_STEP => BootstrapTreeMenu::NODE_PLACEHOLDER
+            ]
         );
-
-        return $redirect->getUrl();
     }
 
     /**
-     *
      * @see \Chamilo\Core\Repository\ContentObject\Portfolio\Display\PortfolioComplexRights::get_portfolio_virtual_user()
      */
     public function get_portfolio_virtual_user()
@@ -234,7 +219,6 @@ class HomeComponent extends Manager
     }
 
     /**
-     *
      * @see \Chamilo\Core\Repository\ContentObject\Portfolio\Display\PortfolioDisplaySupport::get_root_content_object()
      */
     public function get_root_content_object()
@@ -243,7 +227,6 @@ class HomeComponent extends Manager
     }
 
     /**
-     *
      * @see \Chamilo\Core\Repository\ContentObject\Portfolio\Display\PortfolioComplexRights::get_selected_entities()
      */
     public function get_selected_entities(ComplexContentObjectPathNode $node)
@@ -254,7 +237,6 @@ class HomeComponent extends Manager
     }
 
     /**
-     *
      * @see \Chamilo\Core\Repository\ContentObject\Portfolio\Display\PortfolioComplexRights::invert_location_entity_right()
      */
     public function invert_location_entity_right($rightId, $entityId, $entityType, $locationId)
@@ -265,7 +247,6 @@ class HomeComponent extends Manager
     }
 
     /**
-     *
      * @see \Chamilo\Core\Repository\ContentObject\Portfolio\Display\PortfolioDisplaySupport::is_allowed_to_create_feedback()
      */
     public function is_allowed_to_create_feedback(ComplexContentObjectPathNode $node = null)
@@ -274,7 +255,6 @@ class HomeComponent extends Manager
     }
 
     /**
-     *
      * @see \Chamilo\Core\Repository\ContentObject\Portfolio\Display\PortfolioDisplaySupport::is_allowed_to_delete_feedback()
      */
     public function is_allowed_to_delete_feedback($feedback)
@@ -283,7 +263,6 @@ class HomeComponent extends Manager
     }
 
     /**
-     *
      * @see \Chamilo\Core\Repository\ContentObject\Portfolio\Display\PortfolioDisplaySupport::is_allowed_to_edit_content_object()
      */
     public function is_allowed_to_edit_content_object(ComplexContentObjectPathNode $node = null)
@@ -294,7 +273,6 @@ class HomeComponent extends Manager
     }
 
     /**
-     *
      * @see \Chamilo\Core\Repository\ContentObject\Portfolio\Display\PortfolioComplexRights::is_allowed_to_set_content_object_rights()
      */
     public function is_allowed_to_set_content_object_rights()
@@ -303,7 +281,6 @@ class HomeComponent extends Manager
     }
 
     /**
-     *
      * @see \Chamilo\Core\Repository\ContentObject\Portfolio\Display\PortfolioDisplaySupport::is_allowed_to_update_feedback()
      */
     public function is_allowed_to_update_feedback($feedback)
@@ -312,7 +289,6 @@ class HomeComponent extends Manager
     }
 
     /**
-     *
      * @see \Chamilo\Core\Repository\ContentObject\Portfolio\Display\PortfolioDisplaySupport::is_allowed_to_view_content_object()
      */
     public function is_allowed_to_view_content_object(ComplexContentObjectPathNode $node = null)
@@ -323,7 +299,6 @@ class HomeComponent extends Manager
     }
 
     /**
-     *
      * @see \Chamilo\Core\Repository\ContentObject\Portfolio\Display\PortfolioDisplaySupport::is_allowed_to_view_feedback()
      */
     public function is_allowed_to_view_feedback(ComplexContentObjectPathNode $node = null)
@@ -332,7 +307,6 @@ class HomeComponent extends Manager
     }
 
     /**
-     *
      * @see \Chamilo\Core\Repository\ContentObject\Portfolio\Display\PortfolioDisplaySupport::is_own_portfolio()
      */
     public function is_own_portfolio()
@@ -341,7 +315,6 @@ class HomeComponent extends Manager
     }
 
     /**
-     *
      * @see \Chamilo\Core\Repository\ContentObject\Portfolio\Display\PortfolioDisplaySupport::retrievePortfolioNotifications()
      */
     public function retrievePortfolioNotifications(
@@ -354,7 +327,6 @@ class HomeComponent extends Manager
     }
 
     /**
-     *
      * @see \Chamilo\Core\Repository\ContentObject\Portfolio\Display\PortfolioDisplaySupport::retrieve_portfolio_feedback()
      */
     public function retrieve_portfolio_feedback($feedbackIdentifier)
@@ -363,7 +335,6 @@ class HomeComponent extends Manager
     }
 
     /**
-     *
      * @see \Chamilo\Core\Repository\ContentObject\Portfolio\Display\PortfolioDisplaySupport::retrieve_portfolio_feedbacks()
      */
     public function retrieve_portfolio_feedbacks(ComplexContentObjectPathNode $node, $count, $offset)
@@ -374,7 +345,6 @@ class HomeComponent extends Manager
     }
 
     /**
-     *
      * @see \Chamilo\Core\Repository\ContentObject\Portfolio\Display\PortfolioDisplaySupport::retrieve_portfolio_notification()
      */
     public function retrieve_portfolio_notification(
@@ -387,7 +357,6 @@ class HomeComponent extends Manager
     }
 
     /**
-     *
      * @see \Chamilo\Core\Repository\ContentObject\Portfolio\Display\PortfolioComplexRights::retrieve_portfolio_possible_view_users()
      */
     public function retrieve_portfolio_possible_view_users($condition, $count, $offset, $orderProperty)
@@ -396,7 +365,6 @@ class HomeComponent extends Manager
     }
 
     /**
-     *
      * @see \Chamilo\Core\Repository\ContentObject\Portfolio\Display\PortfolioComplexRights::set_portfolio_virtual_user_id()
      */
     public function set_portfolio_virtual_user_id($virtualUserIdentifier)

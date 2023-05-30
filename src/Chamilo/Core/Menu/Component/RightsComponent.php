@@ -5,7 +5,6 @@ use Chamilo\Core\Menu\Manager;
 use Chamilo\Core\Menu\Storage\DataClass\Item;
 use Chamilo\Libraries\Architecture\Exceptions\ObjectNotExistException;
 use Chamilo\Libraries\Architecture\Interfaces\DelegateComponent;
-use Chamilo\Libraries\File\Redirect;
 use Chamilo\Libraries\Rights\Form\RightsForm;
 
 /**
@@ -40,7 +39,7 @@ class RightsComponent extends Manager implements DelegateComponent
 
         $itemIdentifier = $this->getItemIdentifier();
 
-        $postBackUrl = new Redirect(
+        $postBackUrl = $this->getUrlGenerator()->fromParameters(
             [
                 self::PARAM_CONTEXT => Manager::CONTEXT,
                 self::PARAM_ACTION => self::ACTION_RIGHTS,
@@ -51,7 +50,7 @@ class RightsComponent extends Manager implements DelegateComponent
         $rightsLocation = $rightsService->findRightsLocationForItemIdentifier($itemIdentifier);
 
         $rightsForm = new RightsForm(
-            $postBackUrl->getUrl(), $itemIdentifier != 0, $rightsService->getAvailableRights(),
+            $postBackUrl, $itemIdentifier != 0, $rightsService->getAvailableRights(),
             $rightsService->getAvailableEntities()
         );
 

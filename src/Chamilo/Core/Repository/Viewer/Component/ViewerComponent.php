@@ -8,7 +8,6 @@ use Chamilo\Core\Repository\Storage\DataManager;
 use Chamilo\Core\Repository\Viewer\Manager;
 use Chamilo\Core\Repository\Workspace\Service\RightsService;
 use Chamilo\Libraries\Architecture\Application\Application;
-use Chamilo\Libraries\File\Redirect;
 use Chamilo\Libraries\Format\Structure\ActionBar\Button;
 use Chamilo\Libraries\Format\Structure\ActionBar\ButtonToolBar;
 use Chamilo\Libraries\Format\Structure\ActionBar\Renderer\ButtonToolBarRenderer;
@@ -111,7 +110,7 @@ class ViewerComponent extends Manager
 
         $contentObjectIdentifier = $this->getRequest()->query->get(self::PARAM_VIEW_ID);
 
-        $redirect = new Redirect(
+        return $this->getUrlGenerator()->fromParameters(
             [
                 Application::PARAM_CONTEXT => 'Chamilo\Core\Repository',
                 Application::PARAM_ACTION => \Chamilo\Core\Repository\Manager::ACTION_VIEW_ATTACHMENT,
@@ -119,7 +118,5 @@ class ViewerComponent extends Manager
                 \Chamilo\Core\Repository\Manager::PARAM_ATTACHMENT_ID => $attachment->getId()
             ]
         );
-
-        return $redirect->getUrl();
     }
 }

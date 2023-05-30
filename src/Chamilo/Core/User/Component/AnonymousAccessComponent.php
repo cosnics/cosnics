@@ -10,7 +10,6 @@ use Chamilo\Core\User\Roles\Service\UserRoleService;
 use Chamilo\Core\User\Storage\DataClass\User;
 use Chamilo\Libraries\Architecture\Exceptions\NotAllowedException;
 use Chamilo\Libraries\Architecture\Interfaces\NoAuthenticationSupport;
-use Chamilo\Libraries\File\Redirect;
 use Chamilo\Libraries\Format\Structure\Page;
 use Chamilo\Libraries\Format\Structure\PageConfiguration;
 use Chamilo\Libraries\Platform\Session\Session;
@@ -197,9 +196,7 @@ class AnonymousAccessComponent extends Manager implements NoAuthenticationSuppor
             ];
         }
 
-        $redirect = new Redirect($parameters);
-
-        $response = new RedirectResponse($redirect->getUrl());
+        $response = new RedirectResponse($this->getUrlGenerator()->fromParameters($parameters));
         $response->headers->setCookie($cookie);
 
         $response->send();

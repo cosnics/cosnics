@@ -6,7 +6,6 @@ use Chamilo\Core\Menu\Service\ItemService;
 use Chamilo\Core\Menu\Service\RightsService;
 use Chamilo\Libraries\Architecture\Application\Application;
 use Chamilo\Libraries\Architecture\Application\ApplicationConfigurationInterface;
-use Chamilo\Libraries\File\Redirect;
 use Chamilo\Libraries\Format\Structure\BreadcrumbGeneratorInterface;
 use Chamilo\Libraries\Format\Structure\BreadcrumbTrail;
 
@@ -52,9 +51,7 @@ abstract class Manager extends Application
      */
     public function getHomeUrl()
     {
-        $redirect = new Redirect([Application::PARAM_ACTION => Manager::ACTION_BROWSE]);
-
-        return $redirect->getUrl();
+        return $this->getUrlGenerator()->fromParameters([Application::PARAM_ACTION => Manager::ACTION_BROWSE]);
     }
 
     /**

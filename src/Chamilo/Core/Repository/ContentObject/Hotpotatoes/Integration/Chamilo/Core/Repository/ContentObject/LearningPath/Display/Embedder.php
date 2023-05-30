@@ -7,17 +7,15 @@ use Chamilo\Core\Repository\ContentObject\LearningPath\Display\Embedder\Type\Con
 use Chamilo\Libraries\File\Redirect;
 
 /**
- *
  * @package core\repository\content_object\hotpotatoes\integration\core\repository\content_object\learning_path\display
- * @author Hans De Bisschop <hans.de.bisschop@ehb.be>
- * @author Magali Gillard <magali.gillard@ehb.be>
- * @author Eduard Vossen <eduard.vossen@ehb.be>
+ * @author  Hans De Bisschop <hans.de.bisschop@ehb.be>
+ * @author  Magali Gillard <magali.gillard@ehb.be>
+ * @author  Eduard Vossen <eduard.vossen@ehb.be>
  */
 class Embedder extends ContentObjectEmbedder
 {
 
     /**
-     *
      * @see \core\repository\content_object\learning_path\display\Embedder::run()
      */
     public function run()
@@ -27,21 +25,17 @@ class Embedder extends ContentObjectEmbedder
         );
 
         $redirect = new Redirect(
-            array(
-                \Chamilo\Application\Weblcms\Manager::PARAM_CONTEXT =>
-                    Manager::CONTEXT,
-                \Chamilo\Application\Weblcms\Manager::PARAM_ACTION =>
-                    Manager::ACTION_SAVE_LEARNING_PATH_HOTPOTATOES_SCORE
-            )
+            [
+                \Chamilo\Application\Weblcms\Manager::PARAM_CONTEXT => Manager::CONTEXT,
+                \Chamilo\Application\Weblcms\Manager::PARAM_ACTION => Manager::ACTION_SAVE_LEARNING_PATH_HOTPOTATOES_SCORE
+            ]
         );
 
         /** @var Hotpotatoes $hotpotoatoes */
         $hotpotoatoes = $this->treeNode->getContentObject();
 
         $link = $hotpotoatoes->add_javascript(
-            $redirect->getUrl(),
-            null,
-            $activeAttemptId
+            $redirect->getUrl(), null, $activeAttemptId
         );
 
         $html = [];

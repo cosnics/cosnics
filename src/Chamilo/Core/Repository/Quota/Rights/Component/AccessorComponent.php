@@ -1,17 +1,15 @@
 <?php
 namespace Chamilo\Core\Repository\Quota\Rights\Component;
 
-use Chamilo\Core\Repository\Quota\Rights\Manager;
-use Chamilo\Libraries\Architecture\Exceptions\NotAllowedException;
-use Chamilo\Libraries\File\Redirect;
-use Chamilo\Libraries\Rights\Form\RightsForm;
 use Chamilo\Core\Repository\Manager as RepositoryManager;
 use Chamilo\Core\Repository\Quota\Manager as QuotaManager;
+use Chamilo\Core\Repository\Quota\Rights\Manager;
+use Chamilo\Libraries\Architecture\Exceptions\NotAllowedException;
+use Chamilo\Libraries\Rights\Form\RightsForm;
 
 /**
  * @package Chamilo\Core\Repository\Quota\Rights\Component
- *
- * @author Hans De Bisschop <hans.de.bisschop@ehb.be>
+ * @author  Hans De Bisschop <hans.de.bisschop@ehb.be>
  */
 class AccessorComponent extends Manager
 {
@@ -30,17 +28,17 @@ class AccessorComponent extends Manager
 
         $rightsService = $this->getRightsService();
 
-        $urlParameters = array(
+        $urlParameters = [
             RepositoryManager::PARAM_CONTEXT => RepositoryManager::CONTEXT,
             RepositoryManager::PARAM_ACTION => RepositoryManager::ACTION_QUOTA,
-            QuotaManager::PARAM_ACTION => QuotaManager::ACTION_RIGHTS, Manager::PARAM_ACTION => Manager::ACTION_ACCESS
-        );
+            QuotaManager::PARAM_ACTION => QuotaManager::ACTION_RIGHTS,
+            Manager::PARAM_ACTION => Manager::ACTION_ACCESS
+        ];
 
-        $postBackUrl = new Redirect($urlParameters);
+        $postBackUrl = $this->getUrlGenerator()->fromParameters($urlParameters);
 
         $rightsForm = new RightsForm(
-            $postBackUrl->getUrl(), false, $rightsService->getAvailableRights(),
-            $rightsService->getAvailableEntities()
+            $postBackUrl, false, $rightsService->getAvailableRights(), $rightsService->getAvailableEntities()
         );
 
         $rightsForm->setRightsDefaults(
@@ -55,7 +53,7 @@ class AccessorComponent extends Manager
 
             $message = $this->getTranslator()->trans(
                 $success ? 'RightsConfigured' : 'RightsNotConfigured',
-                array('OBJECT' => $this->getTranslator()->trans('Quota', [], 'Chamilo\Core\Repository\Quota\Rights')),
+                ['OBJECT' => $this->getTranslator()->trans('Quota', [], 'Chamilo\Core\Repository\Quota\Rights')],
                 'Chamilo\Libraries\Rights'
             );
 

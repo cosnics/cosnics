@@ -11,7 +11,7 @@ use Chamilo\Core\Metadata\Storage\DataClass\Vocabulary;
 use Chamilo\Core\Metadata\Vocabulary\Service\VocabularyService;
 use Chamilo\Core\User\Storage\DataClass\User;
 use Chamilo\Libraries\Architecture\Application\Application;
-use Chamilo\Libraries\File\Redirect;
+use Chamilo\Libraries\Architecture\Application\Routing\UrlGenerator;
 use Chamilo\Libraries\File\WebPathBuilder;
 use Chamilo\Libraries\Format\Form\FormValidator;
 use Chamilo\Libraries\Format\Structure\Glyph\FontAwesomeGlyph;
@@ -32,6 +32,8 @@ class EntityFormService
 {
 
     protected ResourceManager $resourceManager;
+
+    protected UrlGenerator $urlGenerator;
 
     protected WebPathBuilder $webPathBuilder;
 
@@ -57,7 +59,8 @@ class EntityFormService
      */
     public function __construct(
         PropertyProviderService $propertyProviderService, VocabularyService $vocabularyService,
-        ElementService $elementService, WebPathBuilder $webPathBuilder, ResourceManager $resourceManager
+        ElementService $elementService, WebPathBuilder $webPathBuilder, ResourceManager $resourceManager,
+        UrlGenerator $urlGenerator
     )
     {
         $this->propertyProviderService = $propertyProviderService;
@@ -65,6 +68,7 @@ class EntityFormService
         $this->elementService = $elementService;
         $this->webPathBuilder = $webPathBuilder;
         $this->resourceManager = $resourceManager;
+        $this->urlGenerator = $urlGenerator;
     }
 
     /**
@@ -189,15 +193,15 @@ class EntityFormService
                         );
                     }
 
-                    $urlRenderer = new Redirect(
+                    $vocabularyUrl = $this->getUrlGenerator()->fromParameters(
                         [
                             Application::PARAM_CONTEXT => \Chamilo\Core\Metadata\Vocabulary\Ajax\Manager::CONTEXT,
                             Application::PARAM_ACTION => \Chamilo\Core\Metadata\Vocabulary\Ajax\Manager::ACTION_SELECT,
                             \Chamilo\Core\Metadata\Vocabulary\Ajax\Manager::PARAM_ELEMENT_IDENTIFIER => $uniqueIdentifier,
-                            Manager::PARAM_ELEMENT_ID => $element->get_id()
+                            Manager::PARAM_ELEMENT_ID => $element->getId()
                         ]
                     );
-                    $vocabularyUrl = $urlRenderer->getUrl();
+
                     $onclick =
                         'vocabulary-selector" onclick="javascript:openPopup(\'' . $vocabularyUrl . '\'); return false;';
 
@@ -242,6 +246,11 @@ class EntityFormService
     public function getResourceManager(): ResourceManager
     {
         return $this->resourceManager;
+    }
+
+    public function getUrlGenerator(): UrlGenerator
+    {
+        return $this->urlGenerator;
     }
 
     /**

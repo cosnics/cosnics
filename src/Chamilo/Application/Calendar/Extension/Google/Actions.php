@@ -4,12 +4,12 @@ namespace Chamilo\Application\Calendar\Extension\Google;
 use Chamilo\Application\Calendar\ActionsInterface;
 use Chamilo\Core\User\Service\UserSettingService;
 use Chamilo\Libraries\Architecture\Application\Application;
-use Chamilo\Libraries\DependencyInjection\DependencyInjectionContainerBuilder;
-use Chamilo\Libraries\File\Redirect;
+use Chamilo\Libraries\Architecture\Application\Routing\UrlGenerator;
+use Chamilo\Libraries\Format\Structure\ActionBar\AbstractButton;
 use Chamilo\Libraries\Format\Structure\ActionBar\DropdownButton;
 use Chamilo\Libraries\Format\Structure\ActionBar\SubButton;
 use Chamilo\Libraries\Format\Structure\Glyph\FontAwesomeGlyph;
-use Chamilo\Libraries\Translation\Translation;
+use Symfony\Component\Translation\Translator;
 
 /**
  * @package Chamilo\Application\Calendar\Extension\Google
@@ -19,24 +19,35 @@ use Chamilo\Libraries\Translation\Translation;
  */
 class Actions implements ActionsInterface
 {
+    protected Translator $translator;
+
+    protected UrlGenerator $urlGenerator;
+
+    protected UserSettingService $userSettingService;
+
+    public function __construct(
+        UrlGenerator $urlGenerator, UserSettingService $userSettingService, Translator $translator
+    )
+    {
+        $this->urlGenerator = $urlGenerator;
+        $this->userSettingService = $userSettingService;
+        $this->translator = $translator;
+    }
 
     /**
-     * @see \Chamilo\Application\Calendar\ActionsInterface::getAdditional()
+     * @return \Chamilo\Libraries\Format\Structure\ActionBar\AbstractButtonToolBarItem[]
      */
-    public function getAdditional(Application $application)
+    public function getAdditional(Application $application): array
     {
+        $translator = $this->getTranslator();
+
         $dropdownButton = new DropdownButton(
-            Translation::get('TypeName', null, __NAMESPACE__), new FontAwesomeGlyph('google', [], null, 'fab'),
-            DropdownButton::DISPLAY_ICON_AND_LABEL, [], ['dropdown-menu-right']
+            $translator->trans('TypeName', [], __NAMESPACE__), new FontAwesomeGlyph('google', [], null, 'fab'),
+            AbstractButton::DISPLAY_ICON_AND_LABEL, [], ['dropdown-menu-right']
         );
 
-        /**
-         * @var \Chamilo\Core\User\Service\UserSettingService $userSettingsService
-         */
-        $userSettingsService =
-            DependencyInjectionContainerBuilder::getInstance()->createContainer()->get(UserSettingService::class);
-
-        $accessToken = $userSettingsService->getSettingForUser($application->getUser(), Manager::CONTEXT, 'token');
+        $accessToken =
+            $this->getUserSettingService()->getSettingForUser($application->getUser(), Manager::CONTEXT, 'token');
 
         if (!$accessToken)
         {
@@ -44,11 +55,13 @@ class Actions implements ActionsInterface
             $parameters[Application::PARAM_CONTEXT] = __NAMESPACE__;
             $parameters[Manager::PARAM_ACTION] = Manager::ACTION_LOGIN;
 
-            $redirect = new Redirect($parameters);
-            $link = $redirect->getUrl();
+            $link = $this->getUrlGenerator()->fromParameters($parameters);
 
             $dropdownButton->addSubButton(
-                new SubButton(Translation::get('GoogleCalendarLogin'), new FontAwesomeGlyph('sign-in-alt'), $link)
+                new SubButton(
+                    $translator->trans('GoogleCalendarLogin', [], Manager::CONTEXT),
+                    new FontAwesomeGlyph('sign-in-alt'), $link
+                )
             );
         }
         else
@@ -57,11 +70,13 @@ class Actions implements ActionsInterface
             $parameters[Application::PARAM_CONTEXT] = __NAMESPACE__;
             $parameters[Manager::PARAM_ACTION] = Manager::ACTION_LOGOUT;
 
-            $redirect = new Redirect($parameters);
-            $link = $redirect->getUrl();
+            $link = $this->getUrlGenerator()->fromParameters($parameters);
 
             $dropdownButton->addSubButton(
-                new SubButton(Translation::get('GoogleCalendarLogout'), new FontAwesomeGlyph('sign-out-alt'), $link)
+                new SubButton(
+                    $translator->trans('GoogleCalendarLogout', [], Manager::CONTEXT),
+                    new FontAwesomeGlyph('sign-out-alt'), $link
+                )
             );
         }
 
@@ -69,10 +84,25 @@ class Actions implements ActionsInterface
     }
 
     /**
-     * @see \Chamilo\Application\Calendar\ActionsInterface::getPrimary()
+     * @return \Chamilo\Libraries\Format\Structure\ActionBar\AbstractButtonToolBarItem[]
      */
-    public function getPrimary(Application $application)
+    public function getPrimary(Application $application): array
     {
         return [];
+    }
+
+    public function getTranslator(): Translator
+    {
+        return $this->translator;
+    }
+
+    public function getUrlGenerator(): UrlGenerator
+    {
+        return $this->urlGenerator;
+    }
+
+    public function getUserSettingService(): UserSettingService
+    {
+        return $this->userSettingService;
     }
 }

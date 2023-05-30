@@ -14,13 +14,11 @@ use Chamilo\Core\Repository\Storage\DataClass\ContentObject;
 use Chamilo\Core\User\Storage\DataClass\User;
 use Chamilo\Libraries\Architecture\Application\Application;
 use Chamilo\Libraries\Architecture\Traits\DependencyInjectionContainerTrait;
-use Chamilo\Libraries\File\Redirect;
 use Chamilo\Libraries\Format\Structure\Glyph\FontAwesomeGlyph;
 use Chamilo\Libraries\Platform\Session\Session;
 use Chamilo\Libraries\Translation\Translation;
 
 /**
- *
  * @package common.libraries
  */
 class BlockRenderer
@@ -51,19 +49,16 @@ class BlockRenderer
     protected $source;
 
     /**
-     *
      * @var \Chamilo\Core\Home\Storage\DataClass\Block
      */
     private $block;
 
     /**
-     *
      * @var \Chamilo\Core\Home\Service\HomeService
      */
     private $homeService;
 
     /**
-     *
      * @var \Chamilo\Core\Home\Renderer\Renderer
      */
     private $renderer;
@@ -71,7 +66,6 @@ class BlockRenderer
     private $type;
 
     /**
-     *
      * @param \Chamilo\Libraries\Architecture\Application\Application $application
      * @param \Chamilo\Core\Home\Service\HomeService $homeService
      * @param \Chamilo\Core\Home\Storage\DataClass\Block $block
@@ -93,7 +87,7 @@ class BlockRenderer
     {
         $html = [];
 
-        $userHomeAllowed = Configuration::getInstance()->get_setting(array(Manager::CONTEXT, 'allow_user_home'));
+        $userHomeAllowed = Configuration::getInstance()->get_setting([Manager::CONTEXT, 'allow_user_home']);
         $generalMode = $this->isInGeneralMode();
         $isIdentifiedUser = $this->getUser() && !$this->getUser()->is_anonymous_user();
 
@@ -149,7 +143,6 @@ class BlockRenderer
     }
 
     /**
-     *
      * @return string
      */
     public function displayContent()
@@ -172,7 +165,6 @@ class BlockRenderer
     }
 
     /**
-     *
      * @return \Chamilo\Core\Home\Storage\DataClass\Block
      */
     public function getBlock()
@@ -181,7 +173,6 @@ class BlockRenderer
     }
 
     /**
-     *
      * @return \Chamilo\Core\Home\Service\HomeService
      */
     public function getHomeService()
@@ -189,20 +180,9 @@ class BlockRenderer
         return $this->homeService;
     }
 
-    /**
-     *
-     * @param \Chamilo\Core\Home\Service\HomeService $homeService
-     */
-    public function setHomeService(HomeService $homeService)
+    public function getLink($parameters = [])
     {
-        $this->homeService = $homeService;
-    }
-
-    public function getLink($parameters = [], $encode = false)
-    {
-        $redirect = new Redirect($parameters, [], $encode);
-
-        return $redirect->getUrl();
+        return $this->getUrlGenerator()->fromParameters($parameters);
     }
 
     /**
@@ -216,7 +196,6 @@ class BlockRenderer
     }
 
     /**
-     *
      * @return \Chamilo\Core\Home\Renderer\Renderer
      */
     public function getRenderer()
@@ -225,7 +204,6 @@ class BlockRenderer
     }
 
     /**
-     *
      * @return int
      */
     public function getSource()
@@ -264,7 +242,6 @@ class BlockRenderer
     }
 
     /**
-     *
      * @see Tool::get_user_id()
      */
     public function getUserId()
@@ -273,7 +250,6 @@ class BlockRenderer
     }
 
     /**
-     *
      * @param string[] $parameters
      * @param bool $encode
      *
@@ -296,7 +272,6 @@ class BlockRenderer
     }
 
     /**
-     *
      * @return bool
      */
     public function hasStaticTitle()
@@ -305,7 +280,6 @@ class BlockRenderer
     }
 
     /**
-     *
      * @return bool
      */
     public function isConfigurable()
@@ -314,7 +288,6 @@ class BlockRenderer
     }
 
     /**
-     *
      * @return bool
      */
     public function isDeletable()
@@ -323,7 +296,6 @@ class BlockRenderer
     }
 
     /**
-     *
      * @return bool
      */
     public function isEditable()
@@ -332,7 +304,6 @@ class BlockRenderer
     }
 
     /**
-     *
      * @return bool
      */
     public function isHidable()
@@ -341,7 +312,6 @@ class BlockRenderer
     }
 
     /**
-     *
      * @return bool
      */
     protected function isInGeneralMode()
@@ -381,7 +351,6 @@ class BlockRenderer
     }
 
     /**
-     *
      * @return string
      */
     public function renderContentFooter()
@@ -393,7 +362,6 @@ class BlockRenderer
     }
 
     /**
-     *
      * @return string
      */
     public function renderContentHeader()
@@ -407,7 +375,6 @@ class BlockRenderer
     }
 
     /**
-     *
      * @return string
      */
     public function renderFooter()
@@ -466,6 +433,14 @@ class BlockRenderer
         $html[] = '<div style="overflow:auto;">';
 
         return implode(PHP_EOL, $html);
+    }
+
+    /**
+     * @param \Chamilo\Core\Home\Service\HomeService $homeService
+     */
+    public function setHomeService(HomeService $homeService)
+    {
+        $this->homeService = $homeService;
     }
 
     public function toHtml($view = '')

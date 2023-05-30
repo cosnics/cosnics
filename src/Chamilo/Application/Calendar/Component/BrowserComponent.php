@@ -1,6 +1,7 @@
 <?php
 namespace Chamilo\Application\Calendar\Component;
 
+use Chamilo\Application\Calendar\ActionsInterface;
 use Chamilo\Application\Calendar\Manager;
 use Chamilo\Application\Calendar\Repository\CalendarRendererProviderRepository;
 use Chamilo\Application\Calendar\Service\CalendarRendererProvider;
@@ -14,7 +15,6 @@ use Chamilo\Libraries\Architecture\Interfaces\DelegateComponent;
 use Chamilo\Libraries\Calendar\Architecture\Factory\HtmlCalendarRendererFactory;
 use Chamilo\Libraries\Calendar\Form\JumpForm;
 use Chamilo\Libraries\Calendar\Service\View\HtmlCalendarRenderer;
-use Chamilo\Libraries\File\Redirect;
 use Chamilo\Libraries\Format\Structure\ActionBar\Button;
 use Chamilo\Libraries\Format\Structure\ActionBar\ButtonGroup;
 use Chamilo\Libraries\Format\Structure\ActionBar\SplitDropdownButton;
@@ -108,7 +108,7 @@ class BrowserComponent extends Manager implements DelegateComponent
     {
         $buttonGroup = new ButtonGroup();
 
-        $printUrl = new Redirect(
+        $printUrl = $this->getUrlGenerator()->fromParameters(
             [
                 self::PARAM_CONTEXT => Manager::CONTEXT,
                 self::PARAM_ACTION => self::ACTION_PRINT,
@@ -119,19 +119,19 @@ class BrowserComponent extends Manager implements DelegateComponent
 
         $buttonGroup->addButton(
             new Button(
-                Translation::get(self::ACTION_PRINT . 'Component'), new FontAwesomeGlyph('print'), $printUrl->getUrl()
+                Translation::get(self::ACTION_PRINT . 'Component'), new FontAwesomeGlyph('print'), $printUrl
             )
         );
 
-        $iCalUrl = new Redirect(
+        $iCalUrl = $this->getUrlGenerator()->fromParameters(
             [Application::PARAM_CONTEXT => Manager::CONTEXT, self::PARAM_ACTION => Manager::ACTION_ICAL]
         );
 
         $buttonGroup->addButton(
-            new Button(Translation::get('ICalExternal'), new FontAwesomeGlyph('globe'), $iCalUrl->getUrl())
+            new Button(Translation::get('ICalExternal'), new FontAwesomeGlyph('globe'), $iCalUrl)
         );
 
-        $settingsUrl = new Redirect(
+        $settingsUrl = $this->getUrlGenerator()->fromParameters(
             [
                 Application::PARAM_CONTEXT => \Chamilo\Core\User\Manager::CONTEXT,
                 Application::PARAM_ACTION => \Chamilo\Core\User\Manager::ACTION_USER_SETTINGS,
@@ -140,18 +140,17 @@ class BrowserComponent extends Manager implements DelegateComponent
         );
 
         $splitDropdownButton = new SplitDropdownButton(
-            Translation::get('ConfigComponent'), new FontAwesomeGlyph('cog'), $settingsUrl->getUrl(),
+            Translation::get('ConfigComponent'), new FontAwesomeGlyph('cog'), $settingsUrl,
             SplitDropdownButton::DISPLAY_ICON_AND_LABEL, null, [], null, ['dropdown-menu-right']
         );
 
-        $availabilityUrl = new Redirect(
+        $availabilityUrl = $this->getUrlGenerator()->fromParameters(
             [Application::PARAM_CONTEXT => Manager::CONTEXT, self::PARAM_ACTION => Manager::ACTION_AVAILABILITY]
         );
 
         $splitDropdownButton->addSubButton(
             new SubButton(
-                Translation::get('AvailabilityComponent'), new FontAwesomeGlyph('check-circle'),
-                $availabilityUrl->getUrl()
+                Translation::get('AvailabilityComponent'), new FontAwesomeGlyph('check-circle'), $availabilityUrl
             )
         );
 
@@ -175,8 +174,7 @@ class BrowserComponent extends Manager implements DelegateComponent
         {
             if ($extensionRegistration[Registration::PROPERTY_STATUS] == 1)
             {
-                $actionRendererClass = $extensionRegistration[Registration::PROPERTY_CONTEXT] . '\Actions';
-                $actionRenderer = new $actionRendererClass();
+                $actionRenderer = $this->getActionRenderer($extensionRegistration[Registration::PROPERTY_CONTEXT]);
 
                 $primaryExtensionActions = array_merge($primaryExtensionActions, $actionRenderer->getPrimary($this));
                 $additionalExtensionActions = array_merge(
@@ -191,6 +189,11 @@ class BrowserComponent extends Manager implements DelegateComponent
         $actions[] = $this->getGeneralActions();
 
         return $actions;
+    }
+
+    protected function getActionRenderer(string $context): ActionsInterface
+    {
+        return $this->getService($context . '\Actions');
     }
 
     protected function renderNormalCalendar()

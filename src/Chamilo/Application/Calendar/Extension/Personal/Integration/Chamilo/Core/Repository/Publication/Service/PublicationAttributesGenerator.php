@@ -4,32 +4,28 @@ namespace Chamilo\Application\Calendar\Extension\Personal\Integration\Chamilo\Co
 use Chamilo\Application\Calendar\Extension\Personal\Manager;
 use Chamilo\Application\Calendar\Extension\Personal\Storage\DataClass\Publication;
 use Chamilo\Core\Repository\Publication\Storage\DataClass\Attributes;
+use Chamilo\Core\Repository\Publication\Storage\DataClass\Publication as RepositoryPublication;
 use Chamilo\Core\Repository\Storage\DataClass\ContentObject;
 use Chamilo\Libraries\Architecture\Application\Application;
-use Chamilo\Libraries\File\Redirect;
+use Chamilo\Libraries\Architecture\Application\Routing\UrlGenerator;
+use Chamilo\Libraries\Storage\DataClass\DataClass;
 use Symfony\Component\Translation\Translator;
 
 /**
  * @package Chamilo\Application\Calendar\Extension\Personal\Integration\Chamilo\Core\Repository\Publication\Service
- *
- * @author Hans De Bisschop <hans.de.bisschop@ehb.be>
+ * @author  Hans De Bisschop <hans.de.bisschop@ehb.be>
  */
 class PublicationAttributesGenerator
 {
 
-    /**
-     *
-     * @var \Symfony\Component\Translation\Translator
-     */
-    private $translator;
+    protected UrlGenerator $urlGenerator;
 
-    /**
-     *
-     * @param \Symfony\Component\Translation\Translator $translator
-     */
-    public function __construct(Translator $translator)
+    private Translator $translator;
+
+    public function __construct(Translator $translator, UrlGenerator $urlGenerator)
     {
         $this->translator = $translator;
+        $this->urlGenerator = $urlGenerator;
     }
 
     /**
@@ -41,7 +37,7 @@ class PublicationAttributesGenerator
     {
         $attributes = new Attributes();
 
-        $attributes->setId($record[Publication::PROPERTY_ID]);
+        $attributes->setId($record[DataClass::PROPERTY_ID]);
         $attributes->set_publisher_id($record[Publication::PROPERTY_PUBLISHER]);
         $attributes->set_date($record[Publication::PROPERTY_PUBLISHED]);
         $attributes->set_application(Manager::CONTEXT);
@@ -50,17 +46,17 @@ class PublicationAttributesGenerator
             $this->getTranslator()->trans('TypeName', [], \Chamilo\Application\Calendar\Manager::CONTEXT)
         );
 
-        $redirect = new Redirect(
-            array(
+        $url = $this->getUrlGenerator()->fromParameters(
+            [
                 Application::PARAM_CONTEXT => Manager::CONTEXT,
                 Application::PARAM_ACTION => Manager::ACTION_VIEW,
-                Manager::PARAM_PUBLICATION_ID => $record[Publication::PROPERTY_ID]
-            )
+                Manager::PARAM_PUBLICATION_ID => $record[DataClass::PROPERTY_ID]
+            ]
         );
 
-        $attributes->set_url($redirect->getUrl());
+        $attributes->set_url($url);
         $attributes->set_title($record[ContentObject::PROPERTY_TITLE]);
-        $attributes->set_content_object_id($record[Publication::PROPERTY_CONTENT_OBJECT_ID]);
+        $attributes->set_content_object_id($record[RepositoryPublication::PROPERTY_CONTENT_OBJECT_ID]);
         $attributes->setModifierServiceIdentifier(PublicationModifier::class);
 
         return $attributes;
@@ -72,6 +68,11 @@ class PublicationAttributesGenerator
     public function getTranslator(): Translator
     {
         return $this->translator;
+    }
+
+    public function getUrlGenerator(): UrlGenerator
+    {
+        return $this->urlGenerator;
     }
 
     /**

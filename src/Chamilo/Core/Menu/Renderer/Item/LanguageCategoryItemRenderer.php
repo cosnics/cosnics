@@ -11,7 +11,7 @@ use Chamilo\Core\Rights\Structure\Service\Interfaces\AuthorizationCheckerInterfa
 use Chamilo\Core\User\Manager;
 use Chamilo\Core\User\Storage\DataClass\User;
 use Chamilo\Libraries\Architecture\Application\Application;
-use Chamilo\Libraries\File\Redirect;
+use Chamilo\Libraries\Architecture\Application\Routing\UrlGenerator;
 use Chamilo\Libraries\Format\Structure\Glyph\FontAwesomeGlyph;
 use Chamilo\Libraries\Platform\ChamiloRequest;
 use Symfony\Component\Translation\Translator;
@@ -22,6 +22,8 @@ use Symfony\Component\Translation\Translator;
  */
 class LanguageCategoryItemRenderer extends ItemRenderer
 {
+    protected UrlGenerator $urlGenerator;
+
     private ItemRendererFactory $itemRendererFactory;
 
     private LanguageConsulter $languageConsulter;
@@ -29,13 +31,14 @@ class LanguageCategoryItemRenderer extends ItemRenderer
     public function __construct(
         AuthorizationCheckerInterface $authorizationChecker, Translator $translator,
         CachedItemService $itemCacheService, ChamiloRequest $request, LanguageConsulter $languageConsulter,
-        ItemRendererFactory $itemRendererFactory
+        ItemRendererFactory $itemRendererFactory, UrlGenerator $urlGenerator
     )
     {
         parent::__construct($authorizationChecker, $translator, $itemCacheService, $request);
 
         $this->languageConsulter = $languageConsulter;
         $this->itemRendererFactory = $itemRendererFactory;
+        $this->urlGenerator = $urlGenerator;
     }
 
     /**
@@ -62,7 +65,7 @@ class LanguageCategoryItemRenderer extends ItemRenderer
         {
             foreach ($languages as $isocode => $language)
             {
-                $redirect = new Redirect(
+                $languageUrl = $this->getUrlGenerator()->fromParameters(
                     [
                         Application::PARAM_CONTEXT => Manager::CONTEXT,
                         Application::PARAM_ACTION => Manager::ACTION_QUICK_LANG,
@@ -74,7 +77,7 @@ class LanguageCategoryItemRenderer extends ItemRenderer
                 $html = [];
 
                 $html[] = '<li>';
-                $html[] = '<a href="' . $redirect->getUrl() . '">';
+                $html[] = '<a href="' . $languageUrl . '">';
 
                 if ($item->showIcon())
                 {
@@ -133,6 +136,11 @@ class LanguageCategoryItemRenderer extends ItemRenderer
         $html[] = '</div>';
 
         return implode(PHP_EOL, $html);
+    }
+
+    public function getUrlGenerator(): UrlGenerator
+    {
+        return $this->urlGenerator;
     }
 
     /**
@@ -197,8 +205,7 @@ class LanguageCategoryItemRenderer extends ItemRenderer
 
         if (count($languages) > 1)
         {
-            $redirect = new Redirect();
-            $currentUrl = $redirect->getCurrentUrl();
+            $currentUrl = $this->getRequest()->getUri();
 
             $html[] = '<ul class="dropdown-menu">';
 

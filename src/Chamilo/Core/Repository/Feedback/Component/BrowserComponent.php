@@ -107,15 +107,15 @@ class BrowserComponent extends Manager implements DelegateComponent
                     $html[] = '<div class="list-group-item" id="feedback' . $feedback->getId() . '">';
 
                     $html[] = '<div style="display:flex;">';
-                    $profilePhotoUrl = new Redirect(
+                    $profilePhotoUrl = $this->getUrlGenerator()->fromParameters(
                         array(
                             Application::PARAM_CONTEXT => \Chamilo\Core\User\Ajax\Manager::CONTEXT,
                             Application::PARAM_ACTION => \Chamilo\Core\User\Ajax\Manager::ACTION_USER_PICTURE,
-                            \Chamilo\Core\User\Manager::PARAM_USER_USER_ID => $feedback->get_user()->get_id()
+                            \Chamilo\Core\User\Manager::PARAM_USER_USER_ID => $feedback->get_user()->getId()
                         )
                     );
 
-                    $html[] = '<img class="panel-feedback-profile" src="' . $profilePhotoUrl->getUrl() . '" />';
+                    $html[] = '<img class="panel-feedback-profile" src="' . $profilePhotoUrl . '" />';
 
                     $html[] = '<h4 class="list-group-item-heading" style="flex-grow: 2;">' .
                         $feedback->get_user()->get_fullname() .

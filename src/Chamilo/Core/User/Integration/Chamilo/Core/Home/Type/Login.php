@@ -7,7 +7,6 @@ use Chamilo\Core\User\Manager;
 use Chamilo\Core\User\Storage\DataClass\User;
 use Chamilo\Libraries\Architecture\Application\Application;
 use Chamilo\Libraries\Authentication\AuthenticationValidator;
-use Chamilo\Libraries\File\Redirect;
 use Chamilo\Libraries\Format\Form\FormValidator;
 use Chamilo\Libraries\Format\Structure\Glyph\FontAwesomeGlyph;
 use Chamilo\Libraries\Translation\Translation;
@@ -35,7 +34,7 @@ class Login extends BlockRenderer
             $html[] = $this->displayLoginForm();
 
             if (!Configuration::getInstance()->get_setting(
-                array(Manager::CONTEXT, 'allow_registration')
+                [Manager::CONTEXT, 'allow_registration']
             ))
             {
                 // add custom info here if you do not allow registration (if you use LDAP...)
@@ -46,27 +45,26 @@ class Login extends BlockRenderer
         {
             $user = $this->getUser();
 
-            $profilePhotoUrl = new Redirect(
-                array(
+            $profilePhotoUrl = $this->getUrlGenerator()->fromParameters(
+                [
                     Application::PARAM_CONTEXT => \Chamilo\Core\User\Ajax\Manager::CONTEXT,
                     Application::PARAM_ACTION => \Chamilo\Core\User\Ajax\Manager::ACTION_USER_PICTURE,
                     Manager::PARAM_USER_USER_ID => $user->get_id()
-                )
+                ]
             );
 
             $maximumHeight = Configuration::getInstance()->get_setting(
-                array(Manager::CONTEXT, 'restrict_picture_height')
+                [Manager::CONTEXT, 'restrict_picture_height']
             ) ? 'max-height:100px' : null;
 
-            $redirect = new Redirect(
-                array(
+            $logoutLink = $this->getUrlGenerator()->fromParameters(
+                [
                     Application::PARAM_CONTEXT => Manager::CONTEXT,
                     Application::PARAM_ACTION => Manager::ACTION_LOGOUT
-                )
+                ]
             );
-            $logoutLink = $redirect->getUrl();
 
-            $html[] = '<img src="' . htmlspecialchars($profilePhotoUrl->getUrl()) . '" alt="' .
+            $html[] = '<img src="' . htmlspecialchars($profilePhotoUrl) . '" alt="' .
                 htmlspecialchars($user->get_fullname()) . '"  class="img-thumbnail" style="max-width: 100%; ' .
                 $maximumHeight . '" />';
             $html[] = '<h3>' . htmlspecialchars($user->get_fullname()) . '</h3>';
@@ -89,9 +87,9 @@ class Login extends BlockRenderer
         $form->setRequiredNote(null);
         $html = '<script>$(document).ready(function(){document.formLogin.login.focus();});</script>';
         $form->addElement('html', $html);
-        $form->addElement('text', 'login', Translation::get('UserName'), array('style' => 'width: 90%;'));
+        $form->addElement('text', 'login', Translation::get('UserName'), ['style' => 'width: 90%;']);
         $form->addRule('login', Translation::get('ThisFieldIsRequired', null, StringUtilities::LIBRARIES), 'required');
-        $form->addElement('password', 'password', Translation::get('Password'), array('style' => 'width: 90%;'));
+        $form->addElement('password', 'password', Translation::get('Password'), ['style' => 'width: 90%;']);
         $form->addRule(
             'password', Translation::get('ThisFieldIsRequired', null, StringUtilities::LIBRARIES), 'required'
         );
@@ -103,22 +101,21 @@ class Login extends BlockRenderer
         );
 
         if (Configuration::getInstance()->get_setting(
-                array(Manager::CONTEXT, 'allow_registration')
+                [Manager::CONTEXT, 'allow_registration']
             ) || Configuration::getInstance()->get_setting(
-                array(Manager::CONTEXT, 'allow_password_retrieval')
+                [Manager::CONTEXT, 'allow_password_retrieval']
             ))
         {
             if (Configuration::getInstance()->get_setting(
-                array(Manager::CONTEXT, 'allow_registration')
+                [Manager::CONTEXT, 'allow_registration']
             ))
             {
-                $redirect = new Redirect(
-                    array(
+                $link = $this->getUrlGenerator()->fromParameters(
+                    [
                         Application::PARAM_CONTEXT => Manager::CONTEXT,
                         Application::PARAM_ACTION => Manager::ACTION_REGISTER_USER
-                    )
+                    ]
                 );
-                $link = $redirect->getUrl();
 
                 $glyph = new FontAwesomeGlyph('user', [], null, 'fas');
 
@@ -131,16 +128,15 @@ class Login extends BlockRenderer
                 );
             }
             if (Configuration::getInstance()->get_setting(
-                array(Manager::CONTEXT, 'allow_password_retrieval')
+                [Manager::CONTEXT, 'allow_password_retrieval']
             ))
             {
-                $redirect = new Redirect(
-                    array(
+                $link = $this->getUrlGenerator()->fromParameters(
+                    [
                         Application::PARAM_CONTEXT => Manager::CONTEXT,
                         Application::PARAM_ACTION => Manager::ACTION_RESET_PASSWORD
-                    )
+                    ]
                 );
-                $link = $redirect->getUrl();
 
                 $glyph = new FontAwesomeGlyph('question-circle', [], null, 'fas');
 

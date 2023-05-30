@@ -15,7 +15,6 @@ use Chamilo\Core\Repository\ContentObject\Assignment\Storage\DataClass\Assignmen
 use Chamilo\Core\Repository\Storage\DataClass\ContentObject;
 use Chamilo\Libraries\Architecture\Application\Application;
 use Chamilo\Libraries\Architecture\ClassnameUtilities;
-use Chamilo\Libraries\File\Redirect;
 use Chamilo\Libraries\Storage\DataClass\DataClass;
 use Chamilo\Libraries\Storage\Query\Condition\AndCondition;
 use Chamilo\Libraries\Storage\Query\Condition\EqualityCondition;
@@ -94,7 +93,7 @@ abstract class AssignmentReportingManager extends ToolBlock
     /**
      * Formats a date and colours it red when it is later than the critical date.
      *
-     * @param $date int The date to be formatted.
+     * @param $date          int The date to be formatted.
      * @param $critical_date int The date that is used to decide whether $date is later.
      *
      * @return string The date in coloured HTML format.
@@ -132,7 +131,7 @@ abstract class AssignmentReportingManager extends ToolBlock
             $colour = null;
 
             $passingPercentage = Configuration::getInstance()->get_setting(
-                array('Chamilo\Core\Admin', 'passing_percentage')
+                ['Chamilo\Core\Admin', 'passing_percentage']
             );
 
             if ($score < $passingPercentage)
@@ -181,9 +180,7 @@ abstract class AssignmentReportingManager extends ToolBlock
         $params[\Chamilo\Application\Weblcms\Manager::PARAM_TOOL_ACTION] =
             \Chamilo\Application\Weblcms\Tool\Implementation\Assignment\Manager::ACTION_DISPLAY;
 
-        $redirect = new Redirect($params);
-
-        return $redirect->getUrl();
+        return $this->getUrlGenerator()->fromParameters($params);
     }
 
     /**
@@ -289,10 +286,7 @@ abstract class AssignmentReportingManager extends ToolBlock
         $params[\Chamilo\Core\Repository\ContentObject\Assignment\Display\Manager::PARAM_ENTITY_TYPE] = $entityType;
         $params[\Chamilo\Core\Repository\ContentObject\Assignment\Display\Manager::PARAM_ENTITY_ID] = $entityId;
 
-        $redirect = new Redirect($params);
-        $link = $redirect->getUrl();
-
-        return $link;
+        return $this->getUrlGenerator()->fromParameters($params);
     }
 
     /**
@@ -327,10 +321,7 @@ abstract class AssignmentReportingManager extends ToolBlock
         $params[\Chamilo\Core\Repository\ContentObject\Assignment\Display\Manager::PARAM_ENTITY_ID] = $entityId;
         $params[\Chamilo\Core\Repository\ContentObject\Assignment\Display\Manager::PARAM_ENTRY_ID] = $entryId;
 
-        $redirect = new Redirect($params);
-        $link = $redirect->getUrl();
-
-        return $link;
+        return $this->getUrlGenerator()->fromParameters($params);
     }
 
     /**
@@ -380,13 +371,13 @@ abstract class AssignmentReportingManager extends ToolBlock
         );
 
         $condition = new AndCondition($conditions);
-        $order_by = array(
+        $order_by = [
             new OrderProperty(
                 new PropertyConditionVariable(
                     ContentObjectPublication::class, ContentObjectPublication::PROPERTY_MODIFIED_DATE
                 )
             )
-        );
+        ];
 
         $publication_resultset = DataManager::retrieve_content_object_publications(
             $condition, $order_by

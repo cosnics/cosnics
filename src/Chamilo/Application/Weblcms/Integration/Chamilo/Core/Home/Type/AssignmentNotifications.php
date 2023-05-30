@@ -53,7 +53,7 @@ class AssignmentNotifications extends Block implements ConfigurableInterface, St
     {
         $this->loadSettings();
 
-        $redirect = new Redirect(
+        $retrieveNotificationsUrl = $this->getUrlGenerator()->fromParameters(
             [
                 Application::PARAM_CONTEXT => \Chamilo\Application\Weblcms\Integration\Chamilo\Core\Home\Ajax\Manager::CONTEXT,
                 Application::PARAM_ACTION => \Chamilo\Application\Weblcms\Integration\Chamilo\Core\Home\Ajax\Manager::ACTION_GET_ASSIGNMENT_NOTIFICATIONS,
@@ -62,17 +62,13 @@ class AssignmentNotifications extends Block implements ConfigurableInterface, St
             ]
         );
 
-        $retrieveNotificationsUrl = $redirect->getUrl();
-
-        $redirect = new Redirect(
+        $viewNotificationUrl = $this->getUrlGenerator()->fromParameters(
             [
                 Application::PARAM_CONTEXT => Manager::CONTEXT,
                 Application::PARAM_ACTION => Manager::ACTION_VIEW_NOTIFICATION,
                 Manager::PROPERTY_NOTIFICATION_ID => '__NOTIFICATION_ID__'
             ]
         );
-
-        $viewNotificationUrl = $redirect->getUrl();
 
         return $this->getTwig()->render(
             'Chamilo\Application\Weblcms\Integration\Chamilo\Core\Home:AssignmentNotifications.html.twig',

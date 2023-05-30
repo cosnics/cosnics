@@ -7,7 +7,6 @@ use Chamilo\Core\Repository\ContentObject\File\Common\Rendition\HtmlRenditionImp
 use Chamilo\Core\Repository\Manager;
 use Chamilo\Libraries\Architecture\Application\Application;
 use Chamilo\Libraries\File\ImageManipulation\ImageManipulation;
-use Chamilo\Libraries\File\Redirect;
 
 /**
  * @package Chamilo\Core\Repository\ContentObject\File\Common\Rendition\Html
@@ -39,7 +38,7 @@ class HtmlThumbnailRenditionImplementation extends HtmlRenditionImplementation
                 $thumbnail_creator->write_to_file($thumbnail_path);
             }
 
-            $thumbnailUrl = new Redirect(
+            $thumbnailUrl = $this->getUrlGenerator()->fromParameters(
                 [
                     Application::PARAM_CONTEXT => \Chamilo\Core\Repository\Ajax\Manager::CONTEXT,
                     \Chamilo\Core\Repository\Ajax\Manager::PARAM_ACTION => \Chamilo\Core\Repository\Ajax\Manager::ACTION_THUMBNAIL,
@@ -49,7 +48,7 @@ class HtmlThumbnailRenditionImplementation extends HtmlRenditionImplementation
                 ]
             );
 
-            return '<img src="' . $thumbnailUrl->getUrl() . '" title="' . htmlentities($object->get_title()) .
+            return '<img src="' . $thumbnailUrl . '" title="' . htmlentities($object->get_title()) .
                 '" class="thumbnail-image" />';
         }
         else
