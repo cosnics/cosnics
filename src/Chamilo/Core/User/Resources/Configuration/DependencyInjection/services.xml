@@ -47,11 +47,6 @@
         <service id="Chamilo\Core\User\Service\UserDetailsRenderer"/>
         <service id="Chamilo\Core\User\Storage\Repository\UserRepository"/>
 
-        <service id="Chamilo\Core\User\Service\SessionHandler">
-            <factory service="Chamilo\Core\User\Factory\SessionHandlerFactory"
-                     method="getSessionHandler"/>
-        </service>
-
         <service id="Chamilo\Core\User\Storage\Repository\SessionRepository"/>
 
         <service id="Chamilo\Core\User\Factory\SessionHandlerFactory">

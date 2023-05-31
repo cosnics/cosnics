@@ -57,6 +57,7 @@ use Symfony\Component\Cache\Adapter\PhpFilesAdapter;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 use Symfony\Component\DependencyInjection\Dumper\PhpDumper;
+use Symfony\Component\HttpFoundation\Session\Session;
 
 /**
  * Builds the default dependency injection container for Chamilo
@@ -308,9 +309,9 @@ class DependencyInjectionContainerBuilder
 
             $exceptionLoggerFactory = new ExceptionLoggerFactory(
                 $this->getFileConfigurationConsulter(), new SessionUtilities(
-                $this->getFileConfigurationConsulter()->getSetting(
-                    ['Chamilo\Configuration', 'general', 'security_key']
-                )
+                new Session(), $this->getFileConfigurationConsulter()->getSetting(
+                ['Chamilo\Configuration', 'general', 'security_key']
+            )
             ), new UrlGenerator($this->getRequest(), $this->getWebPathBuilder())
             );
 

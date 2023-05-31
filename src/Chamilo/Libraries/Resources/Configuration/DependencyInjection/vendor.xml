@@ -19,6 +19,23 @@
             <argument>%chamilo.configuration.general.language%</argument>
         </service>
 
+        <service id="Symfony\Component\HttpFoundation\Session\Session">
+            <argument key="$storage"
+                      type="service"
+                      id="Symfony\Component\HttpFoundation\Session\Storage\NativeSessionStorage"/>
+        </service>
+
+        <service id="Symfony\Component\HttpFoundation\Session\Storage\NativeSessionStorage">
+            <argument key="$handler"
+                      type="service"
+                      id="Symfony\Component\HttpFoundation\Session\Storage\Handler\PdoSessionHandler"/>
+        </service>
+
+        <service id="Symfony\Component\HttpFoundation\Session\Storage\Handler\PdoSessionHandler">
+            <factory service="Chamilo\Core\User\Factory\SessionHandlerFactory"
+                     method="getSessionHandler"/>
+        </service>
+
         <service id="Chamilo\Libraries\Format\Twig\TwigEnvironmentFactory"/>
 
         <service id="Twig\Environment">

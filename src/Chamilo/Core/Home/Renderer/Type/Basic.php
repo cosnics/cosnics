@@ -118,7 +118,7 @@ class Basic extends Renderer
         if (!isset($this->homeService))
         {
             $this->homeService = new HomeService(
-                new HomeRepository(), new ElementRightsService(new RightsRepository()), new SessionUtilities()
+                new HomeRepository(), new ElementRightsService(new RightsRepository()), $this->getSessionUtilities()
             );
         }
 

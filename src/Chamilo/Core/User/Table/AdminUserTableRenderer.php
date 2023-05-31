@@ -10,7 +10,6 @@ use Chamilo\Libraries\Architecture\Application\Routing\UrlGenerator;
 use Chamilo\Libraries\Format\Structure\Glyph\FontAwesomeGlyph;
 use Chamilo\Libraries\Format\Structure\Toolbar;
 use Chamilo\Libraries\Format\Structure\ToolbarItem;
-use Chamilo\Libraries\Format\Table\Column\DataClassPropertyTableColumn;
 use Chamilo\Libraries\Format\Table\Column\DataClassPropertyTableColumnFactory;
 use Chamilo\Libraries\Format\Table\Column\TableColumn;
 use Chamilo\Libraries\Format\Table\Extension\DataClassListTableRenderer;
@@ -128,14 +127,28 @@ class AdminUserTableRenderer extends DataClassListTableRenderer implements Table
 
     protected function initializeColumns()
     {
-        $this->addColumn($this->getDataClassPropertyTableColumnFactory()->getColumn(User::class, User::PROPERTY_OFFICIAL_CODE));
-        $this->addColumn($this->getDataClassPropertyTableColumnFactory()->getColumn(User::class, User::PROPERTY_LASTNAME));
-        $this->addColumn($this->getDataClassPropertyTableColumnFactory()->getColumn(User::class, User::PROPERTY_FIRSTNAME));
-        $this->addColumn($this->getDataClassPropertyTableColumnFactory()->getColumn(User::class, User::PROPERTY_USERNAME));
+        $this->addColumn(
+            $this->getDataClassPropertyTableColumnFactory()->getColumn(User::class, User::PROPERTY_OFFICIAL_CODE)
+        );
+        $this->addColumn(
+            $this->getDataClassPropertyTableColumnFactory()->getColumn(User::class, User::PROPERTY_LASTNAME)
+        );
+        $this->addColumn(
+            $this->getDataClassPropertyTableColumnFactory()->getColumn(User::class, User::PROPERTY_FIRSTNAME)
+        );
+        $this->addColumn(
+            $this->getDataClassPropertyTableColumnFactory()->getColumn(User::class, User::PROPERTY_USERNAME)
+        );
         $this->addColumn($this->getDataClassPropertyTableColumnFactory()->getColumn(User::class, User::PROPERTY_EMAIL));
-        $this->addColumn($this->getDataClassPropertyTableColumnFactory()->getColumn(User::class, User::PROPERTY_STATUS));
-        $this->addColumn($this->getDataClassPropertyTableColumnFactory()->getColumn(User::class, User::PROPERTY_PLATFORMADMIN));
-        $this->addColumn($this->getDataClassPropertyTableColumnFactory()->getColumn(User::class, User::PROPERTY_ACTIVE));
+        $this->addColumn(
+            $this->getDataClassPropertyTableColumnFactory()->getColumn(User::class, User::PROPERTY_STATUS)
+        );
+        $this->addColumn(
+            $this->getDataClassPropertyTableColumnFactory()->getColumn(User::class, User::PROPERTY_PLATFORMADMIN)
+        );
+        $this->addColumn(
+            $this->getDataClassPropertyTableColumnFactory()->getColumn(User::class, User::PROPERTY_ACTIVE)
+        );
     }
 
     /**
@@ -296,7 +309,7 @@ class AdminUserTableRenderer extends DataClassListTableRenderer implements Table
             {
                 $changeUserUrl = $urlGenerator->fromParameters(
                     [
-                        Application::PARAM_CONTEXT,
+                        Application::PARAM_CONTEXT => Manager::CONTEXT,
                         Manager::PARAM_ACTION => Manager::ACTION_CHANGE_USER,
                         Manager::PARAM_USER_USER_ID => $user->getId()
                     ]

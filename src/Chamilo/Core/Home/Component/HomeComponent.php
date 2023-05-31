@@ -9,11 +9,10 @@ use Chamilo\Libraries\Authentication\AuthenticationValidator;
 use Chamilo\Libraries\Format\Structure\BreadcrumbTrail;
 
 /**
- *
  * @package Chamilo\Core\Home\Component
- * @author Hans De Bisschop <hans.de.bisschop@ehb.be>
- * @author Magali Gillard <magali.gillard@ehb.be>
- * @author Eduard Vossen <eduard.vossen@ehb.be>
+ * @author  Hans De Bisschop <hans.de.bisschop@ehb.be>
+ * @author  Magali Gillard <magali.gillard@ehb.be>
+ * @author  Eduard Vossen <eduard.vossen@ehb.be>
  */
 class HomeComponent extends Manager implements NoAuthenticationSupport
 {
@@ -25,18 +24,18 @@ class HomeComponent extends Manager implements NoAuthenticationSupport
     {
         $authenticationValidator = $this->getAuthenticationValidator();
         $authenticationValidator->validate();
-        
+
         BreadcrumbTrail::getInstance()->truncate();
-        
+
         $type = $this->getRequest()->query->get(self::PARAM_RENDERER_TYPE, Renderer::TYPE_BASIC);
         $rendererFactory = new Factory($type, $this);
-        
+
         $html = [];
-        
-        $html[] = $this->render_header();
+
+        $html[] = $this->renderHeader();
         $html[] = $rendererFactory->getRenderer()->render();
-        $html[] = $this->render_footer();
-        
+        $html[] = $this->renderFooter();
+
         return implode(PHP_EOL, $html);
     }
 

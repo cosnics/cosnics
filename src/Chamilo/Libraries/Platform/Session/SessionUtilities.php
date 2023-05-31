@@ -1,6 +1,8 @@
 <?php
 namespace Chamilo\Libraries\Platform\Session;
 
+use Symfony\Component\HttpFoundation\Session\Session;
+
 /**
  * @package Chamilo\Libraries\Platform\Session
  * @author  Hans De Bisschop <hans.de.bisschop@ehb.be>
@@ -10,34 +12,36 @@ class SessionUtilities
 {
     private ?string $securityKey;
 
-    public function __construct(?string $securityKey = null)
+    private Session $session;
+
+    public function __construct(Session $session, ?string $securityKey = null)
     {
+        $this->session = $session;
         $this->securityKey = $securityKey;
     }
 
     public function clear()
     {
-        session_unset();
-        $_SESSION = [];
+        $this->getSession()->clear();
     }
 
     public function destroy()
     {
-        session_unset();
-        $_SESSION = [];
-        session_destroy();
+        $this->getSession()->invalidate();
     }
 
     public function exists(string $variable): bool
     {
-        return array_key_exists($variable, $_SESSION);
+        return $this->getSession()->has($variable);
     }
 
     public function get(string $variable, $default = null)
     {
-        if (array_key_exists($variable, $_SESSION))
+        $session = $this->getSession();
+
+        if ($session->has($variable))
         {
-            return $_SESSION[$variable];
+            return $session->get($variable);
         }
         else
         {
@@ -48,6 +52,11 @@ class SessionUtilities
     public function getSecurityKey(): ?string
     {
         return $this->securityKey;
+    }
+
+    public function getSession(): Session
+    {
+        return $this->session;
     }
 
     public function getUserId(): ?int
@@ -65,7 +74,7 @@ class SessionUtilities
 
     public function register(string $variable, $value)
     {
-        $_SESSION[$variable] = $value;
+        $this->getSession()->set($variable, $value);
     }
 
     public function registerIfNotSet(string $variable, $value)
@@ -80,9 +89,11 @@ class SessionUtilities
 
     public function retrieve(string $variable)
     {
-        if ($this->exists($variable))
+        $session = $this->getSession();
+
+        if ($session->has($variable))
         {
-            return $_SESSION[$variable];
+            return $session->get($variable);
         }
 
         return null;
@@ -95,11 +106,6 @@ class SessionUtilities
 
     public function start()
     {
-        /**
-         * Disables PHP automatically provided cache headers
-         */
-        session_cache_limiter('');
-
         $sessionKey = $this->getSecurityKey();
 
         if (is_null($sessionKey))
@@ -107,16 +113,18 @@ class SessionUtilities
             $sessionKey = 'dk_sid';
         }
 
-        session_name($sessionKey);
-        session_start();
+        $session = $this->getSession();
+        $session->setName($sessionKey);
+        $session->start();
     }
 
     public function unregister(string $variable)
     {
-        if (array_key_exists($variable, $_SESSION))
+        $session = $this->getSession();
+
+        if ($session->has($variable))
         {
-            $_SESSION[$variable] = null;
-            unset($GLOBALS[$variable]);
+            $session->remove($variable);
         }
     }
 }
