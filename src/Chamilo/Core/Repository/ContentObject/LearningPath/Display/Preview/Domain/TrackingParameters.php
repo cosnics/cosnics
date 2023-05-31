@@ -5,7 +5,8 @@ use Chamilo\Core\Repository\ContentObject\LearningPath\Display\Preview\DummyQues
 use Chamilo\Core\Repository\ContentObject\LearningPath\Display\Preview\DummyTreeNodeAttempt;
 use Chamilo\Core\Repository\ContentObject\LearningPath\Domain\TrackingParametersInterface;
 use Chamilo\Core\Repository\ContentObject\LearningPath\Storage\DataClass\LearningPath;
-use Chamilo\Libraries\Platform\Session\Session;
+use Chamilo\Libraries\DependencyInjection\DependencyInjectionContainerBuilder;
+use Chamilo\Libraries\Platform\Session\SessionUtilities;
 use Chamilo\Libraries\Storage\Query\Condition\Condition;
 
 /**
@@ -15,33 +16,6 @@ use Chamilo\Libraries\Storage\Query\Condition\Condition;
  */
 class TrackingParameters implements TrackingParametersInterface
 {
-
-    /**
-     *
-     * @return string
-     */
-    public function getTreeNodeAttemptClassName()
-    {
-        return DummyTreeNodeAttempt::class;
-    }
-
-    /**
-     *
-     * @return string
-     */
-    public function getTreeNodeQuestionAttemptClassName()
-    {
-        return DummyQuestionAttempt::class;
-    }
-
-    /**
-     *
-     * @return Condition
-     */
-    public function getTreeNodeAttemptConditions()
-    {
-        return null;
-    }
 
     /**
      * Creates a new instance of the TreeNodeAttempt extension
@@ -72,11 +46,40 @@ class TrackingParameters implements TrackingParametersInterface
      */
     public function getLearningPathTargetUserIds(LearningPath $learningPath)
     {
-        if (empty(Session::get_user_id()))
+        if (empty($this->getSessionUtilities()->getUserId()))
         {
             return [];
         }
 
-        return [Session::get_user_id()];
+        return [$this->getSessionUtilities()->getUserId()];
+    }
+
+    public function getSessionUtilities(): SessionUtilities
+    {
+        return DependencyInjectionContainerBuilder::getInstance()->createContainer()->get(SessionUtilities::class);
+    }
+
+    /**
+     * @return string
+     */
+    public function getTreeNodeAttemptClassName()
+    {
+        return DummyTreeNodeAttempt::class;
+    }
+
+    /**
+     * @return Condition
+     */
+    public function getTreeNodeAttemptConditions()
+    {
+        return null;
+    }
+
+    /**
+     * @return string
+     */
+    public function getTreeNodeQuestionAttemptClassName()
+    {
+        return DummyQuestionAttempt::class;
     }
 }

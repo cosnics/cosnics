@@ -29,7 +29,6 @@ use Chamilo\Libraries\Mail\Mailer\MailerInterface;
 use Chamilo\Libraries\Mail\ValueObject\Mail;
 use Chamilo\Libraries\Mail\ValueObject\MailFile;
 use Chamilo\Libraries\Platform\Session\Request;
-use Chamilo\Libraries\Platform\Session\Session;
 use Chamilo\Libraries\Storage\Parameters\DataClassRetrievesParameters;
 use Chamilo\Libraries\Storage\Query\Condition\AndCondition;
 use Chamilo\Libraries\Storage\Query\Condition\EqualityCondition;
@@ -931,7 +930,7 @@ class ContentObjectPublicationForm extends BasePublicationForm
                     break;
                 case self::RIGHTS_FOR_ME :
                     if (!$weblcms_rights->invert_location_entity_right(
-                        Manager::CONTEXT, WeblcmsRights::VIEW_RIGHT, Session::get_user_id(),
+                        Manager::CONTEXT, WeblcmsRights::VIEW_RIGHT, $this->getSessionUtilities()->getUserId(),
                         CourseUserEntity::ENTITY_TYPE, $location_id
                     ))
                     {
@@ -1034,7 +1033,7 @@ class ContentObjectPublicationForm extends BasePublicationForm
                 }
 
                 if ($selected_entity->get_entity_type() == 1 &&
-                    $selected_entity->get_entity_id() == Session::get_user_id())
+                    $selected_entity->get_entity_id() == $this->getSessionUtilities()->getUserId())
                 {
                     $right_defaults[self::PROPERTY_RIGHTS_SELECTOR] = self::RIGHTS_FOR_ME;
 

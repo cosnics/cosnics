@@ -14,28 +14,27 @@ use Chamilo\Libraries\Architecture\Interfaces\DelegateComponent;
 use Chamilo\Libraries\Format\Structure\Breadcrumb;
 use Chamilo\Libraries\Format\Structure\BreadcrumbTrail;
 use Chamilo\Libraries\Format\Structure\Glyph\FontAwesomeGlyph;
-use Chamilo\Libraries\Platform\Session\Session;
 use Chamilo\Libraries\Translation\Translation;
 
 /**
  * Component that will allow the user to do course requests for multiple users.
  *
- * @author Minas Zilyas - Hogeschool Gent
+ * @author  Minas Zilyas - Hogeschool Gent
  * @package application\weblcms\tool\user
  */
 class RequestSubscribeUsersComponent extends Manager implements DelegateComponent
 {
 
-    private $user_ids;
-
     private $form;
+
+    private $user_ids;
 
     public function run()
     {
         $request = new CourseRequest();
         $this->form = new CourseRequestForm(
             CourseRequestForm::TYPE_CREATE, $this->get_url(), $this->get_course(), $this, $request, false,
-            Session::get_user_id()
+            $this->getSessionUtilities()->getUserId()
         );
 
         $this->user_ids = $this->get_selected_user_ids();
@@ -49,14 +48,13 @@ class RequestSubscribeUsersComponent extends Manager implements DelegateComponen
             $array_type['go'] = \Chamilo\Application\Weblcms\Manager::ACTION_VIEW_WEBLCMS_HOME;
             $this->redirectWithMessage(
                 Translation::get($success_requests ? 'CourseCreateRequestSent' : 'CourseCreateRequestNotSent'),
-                !$success_requests, $array_type,
-                array(\Chamilo\Application\Weblcms\Manager::PARAM_COURSE)
+                !$success_requests, $array_type, [\Chamilo\Application\Weblcms\Manager::PARAM_COURSE]
             );
         }
         else
         {
             $this->form->addElement('hidden', 'user_ids');
-            $this->form->setDefaults(array('user_ids' => json_encode($this->user_ids)));
+            $this->form->setDefaults(['user_ids' => json_encode($this->user_ids)]);
 
             $html = [];
 
@@ -70,21 +68,20 @@ class RequestSubscribeUsersComponent extends Manager implements DelegateComponen
     }
 
     /**
-     *
      * @param BreadcrumbTrail $breadcrumbtrail
      */
     public function add_additional_breadcrumbs(BreadcrumbTrail $breadcrumbtrail)
     {
         $breadcrumbtrail->add(
             new Breadcrumb(
-                $this->get_url(array(self::PARAM_ACTION => self::ACTION_SUBSCRIBE_USER_BROWSER)),
+                $this->get_url([self::PARAM_ACTION => self::ACTION_SUBSCRIBE_USER_BROWSER]),
                 Translation::get('SubscribeBrowserComponent')
             )
         );
 
         $breadcrumbtrail->add(
             new Breadcrumb(
-                $this->get_url(array(self::PARAM_ACTION => self::ACTION_SUBSCRIBE_USER_BROWSER)),
+                $this->get_url([self::PARAM_ACTION => self::ACTION_SUBSCRIBE_USER_BROWSER]),
                 Translation::get('RequestSubscribeUsersComponent')
             )
         );
@@ -158,7 +155,6 @@ class RequestSubscribeUsersComponent extends Manager implements DelegateComponen
     }
 
     /**
-     *
      * @param \user\User[] $users
      */
     public function display_selected_users($users)
@@ -216,12 +212,12 @@ class RequestSubscribeUsersComponent extends Manager implements DelegateComponen
 
         if (!is_array($user_ids))
         {
-            $user_ids = array($user_ids);
+            $user_ids = [$user_ids];
         }
 
         if (count($user_ids) == 0)
         {
-            Throw new NoObjectSelectedException(Translation::get('User'));
+            throw new NoObjectSelectedException(Translation::get('User'));
         }
 
         return $user_ids;
@@ -257,7 +253,7 @@ class RequestSubscribeUsersComponent extends Manager implements DelegateComponen
 
         if (!$users || count($users) == 0)
         {
-            Throw new NoObjectSelectedException(Translation::get('User'));
+            throw new NoObjectSelectedException(Translation::get('User'));
         }
 
         return $users;

@@ -11,7 +11,8 @@ use Chamilo\Core\Repository\ContentObject\LearningPath\Storage\DataClass\Learnin
 use Chamilo\Core\Repository\ContentObject\Section\Storage\DataClass\Section;
 use Chamilo\Core\Repository\Selector\TypeSelector;
 use Chamilo\Core\Repository\Selector\TypeSelectorFactory;
-use Chamilo\Libraries\Platform\Session\Session;
+use Chamilo\Libraries\DependencyInjection\DependencyInjectionContainerBuilder;
+use Chamilo\Libraries\Platform\Session\SessionUtilities;
 use Chamilo\Libraries\Translation\Translation;
 use Chamilo\Libraries\Utilities\StringUtilities;
 
@@ -31,18 +32,18 @@ class NodeBaseActionGenerator extends NodeActionGenerator
     protected $contentObjectTypeNodeActionGenerators;
 
     /**
-     * Caching for create actions
-     *
-     * @var TypeSelectorOption[]
-     */
-    protected $typeSelectorOptions;
-
-    /**
      * Caching for import actions
      *
      * @var string[]
      */
     protected $importTypes;
+
+    /**
+     * Caching for create actions
+     *
+     * @var TypeSelectorOption[]
+     */
+    protected $typeSelectorOptions;
 
     /**
      * NodeActionGenerator constructor.
@@ -61,7 +62,6 @@ class NodeBaseActionGenerator extends NodeActionGenerator
     }
 
     /**
-     *
      * @param array $actions
      * @param TreeNode $treeNode
      */
@@ -170,7 +170,7 @@ class NodeBaseActionGenerator extends NodeActionGenerator
 
         $title = $this->translator->getTranslation($translationVariable, null, Manager::CONTEXT);
         $url = $this->getUrlForNode(
-            array(Manager::PARAM_ACTION => Manager::ACTION_TOGGLE_BLOCKED_STATUS), $treeNode->getId()
+            [Manager::PARAM_ACTION => Manager::ACTION_TOGGLE_BLOCKED_STATUS], $treeNode->getId()
         );
 
         return new Action('block', $title, $url, 'fas fa-' . $icon . '  fa-fw');
@@ -195,7 +195,8 @@ class NodeBaseActionGenerator extends NodeActionGenerator
             /** @var LearningPath $learningPath */
             $learningPath = $treeNode->getTree()->getRoot()->getContentObject();
             $typeSelectorFactory = new TypeSelectorFactory(
-                $learningPath->get_allowed_types(), Session::get_user_id(), TypeSelectorFactory::MODE_FLAT_LIST, false
+                $learningPath->get_allowed_types(), $this->getSessionUtilities()->getUserId(),
+                TypeSelectorFactory::MODE_FLAT_LIST, false
             );
 
             $typeSelector = $typeSelectorFactory->getTypeSelector();
@@ -230,7 +231,7 @@ class NodeBaseActionGenerator extends NodeActionGenerator
     {
         $title = $this->translator->getTranslation('DeleterComponent', null, Manager::CONTEXT);
         $url = $this->getUrlForNode(
-            array(Manager::PARAM_ACTION => Manager::ACTION_DELETE_COMPLEX_CONTENT_OBJECT_ITEM), $treeNode->getId()
+            [Manager::PARAM_ACTION => Manager::ACTION_DELETE_COMPLEX_CONTENT_OBJECT_ITEM], $treeNode->getId()
         );
 
         return new Action(
@@ -288,7 +289,7 @@ class NodeBaseActionGenerator extends NodeActionGenerator
     protected function getManageNodesAction(TreeNode $treeNode)
     {
         $title = $this->translator->getTranslation('ManagerComponent', null, Manager::CONTEXT);
-        $url = $this->getUrlForNode(array(Manager::PARAM_ACTION => Manager::ACTION_MANAGE), $treeNode->getId());
+        $url = $this->getUrlForNode([Manager::PARAM_ACTION => Manager::ACTION_MANAGE], $treeNode->getId());
 
         return new Action('manage', $title, $url, 'fas fa-bars fa-fw');
     }
@@ -303,7 +304,7 @@ class NodeBaseActionGenerator extends NodeActionGenerator
     protected function getMoveNodeAction(TreeNode $treeNode)
     {
         $title = $this->translator->getTranslation('Move', null, Manager::CONTEXT);
-        $url = $this->getUrlForNode(array(Manager::PARAM_ACTION => Manager::ACTION_MOVE), $treeNode->getId());
+        $url = $this->getUrlForNode([Manager::PARAM_ACTION => Manager::ACTION_MOVE], $treeNode->getId());
 
         return new Action('move', $title, $url, 'fas fa-random fa-fw');
     }
@@ -318,7 +319,7 @@ class NodeBaseActionGenerator extends NodeActionGenerator
     protected function getMyProgressNodeAction(TreeNode $treeNode)
     {
         $title = $this->translator->getTranslation('MyProgress', null, Manager::CONTEXT);
-        $url = $this->getUrlForNode(array(Manager::PARAM_ACTION => Manager::ACTION_REPORTING), $treeNode->getId());
+        $url = $this->getUrlForNode([Manager::PARAM_ACTION => Manager::ACTION_REPORTING], $treeNode->getId());
 
         return new Action('progress', $title, $url, 'fas fa-chart-pie fa-fw');
     }
@@ -333,7 +334,7 @@ class NodeBaseActionGenerator extends NodeActionGenerator
     protected function getNodeActivityAction(TreeNode $treeNode)
     {
         $title = $this->translator->getTranslation('ActivityComponent', null, Manager::CONTEXT);
-        $url = $this->getUrlForNode(array(Manager::PARAM_ACTION => Manager::ACTION_ACTIVITY), $treeNode->getId());
+        $url = $this->getUrlForNode([Manager::PARAM_ACTION => Manager::ACTION_ACTIVITY], $treeNode->getId());
 
         return new Action('activity', $title, $url, 'fas fa-mouse-pointer fa-fw');
     }
@@ -349,7 +350,7 @@ class NodeBaseActionGenerator extends NodeActionGenerator
     {
         $title = $this->translator->getTranslation('Reporting', null, Manager::CONTEXT);
         $url = $this->getUrlForNode(
-            array(Manager::PARAM_ACTION => Manager::ACTION_VIEW_USER_PROGRESS), $treeNode->getId()
+            [Manager::PARAM_ACTION => Manager::ACTION_VIEW_USER_PROGRESS], $treeNode->getId()
         );
 
         return new Action('reporting', $title, $url, 'fas fa-chart-bar fa-fw');
@@ -376,6 +377,11 @@ class NodeBaseActionGenerator extends NodeActionGenerator
         return [];
     }
 
+    public function getSessionUtilities(): SessionUtilities
+    {
+        return DependencyInjectionContainerBuilder::getInstance()->createContainer()->get(SessionUtilities::class);
+    }
+
     /**
      * Returns the action to toggle the default traversing order for a given TreeNode
      *
@@ -394,7 +400,7 @@ class NodeBaseActionGenerator extends NodeActionGenerator
 
         $title = $this->translator->getTranslation($translationVariable, null, Manager::CONTEXT);
         $url = $this->getUrlForNode(
-            array(Manager::PARAM_ACTION => Manager::ACTION_TOGGLE_ENFORCE_DEFAULT_TRAVERSING_ORDER), $treeNode->getId()
+            [Manager::PARAM_ACTION => Manager::ACTION_TOGGLE_ENFORCE_DEFAULT_TRAVERSING_ORDER], $treeNode->getId()
         );
 
         return new Action('default_traversing_order', $title, $url, 'fas fa-' . $icon . '  fa-fw');
@@ -411,7 +417,7 @@ class NodeBaseActionGenerator extends NodeActionGenerator
     {
         $title = $this->translator->getTranslation('UpdaterComponent', null, Manager::CONTEXT);
         $url = $this->getUrlForNode(
-            array(Manager::PARAM_ACTION => Manager::ACTION_UPDATE_COMPLEX_CONTENT_OBJECT_ITEM), $treeNode->getId()
+            [Manager::PARAM_ACTION => Manager::ACTION_UPDATE_COMPLEX_CONTENT_OBJECT_ITEM], $treeNode->getId()
         );
 
         return new Action('edit', $title, $url, 'fas fa-pencil fa-fw');
@@ -428,7 +434,7 @@ class NodeBaseActionGenerator extends NodeActionGenerator
     {
         $title = $this->translator->getTranslation('ReturnToLearningPath', null, Manager::CONTEXT);
         $url = $this->getUrlForNode(
-            array(Manager::PARAM_ACTION => Manager::ACTION_VIEW_COMPLEX_CONTENT_OBJECT), $treeNode->getId()
+            [Manager::PARAM_ACTION => Manager::ACTION_VIEW_COMPLEX_CONTENT_OBJECT], $treeNode->getId()
         );
 
         return new Action('view', $title, $url, 'fas fa-file fa-fw');

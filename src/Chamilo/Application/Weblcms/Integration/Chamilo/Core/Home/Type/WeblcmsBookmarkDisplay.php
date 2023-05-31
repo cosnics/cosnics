@@ -9,7 +9,6 @@ use Chamilo\Core\Repository\Common\Rendition\ContentObjectRenditionImplementatio
 use Chamilo\Core\Repository\ContentObject\Bookmark\Storage\DataClass\Bookmark;
 use Chamilo\Core\Repository\Storage\DataClass\ContentObject;
 use Chamilo\Core\Repository\Storage\DataManager;
-use Chamilo\Libraries\Platform\Session\Session;
 use Chamilo\Libraries\Storage\Parameters\DataClassRetrievesParameters;
 use Chamilo\Libraries\Storage\Query\Condition\AndCondition;
 use Chamilo\Libraries\Storage\Query\Condition\EqualityCondition;
@@ -18,31 +17,68 @@ use Chamilo\Libraries\Storage\Query\Variable\StaticConditionVariable;
 
 /**
  * Block to display all bookmarks foor the handbooks application
- * 
+ *
  * @package handbook.block
  */
-class WeblcmsBookmarkDisplay extends Block implements
-    ConfigurableInterface
+class WeblcmsBookmarkDisplay extends Block implements ConfigurableInterface
 {
-    const CONFIGURATION_SHOW_EMPTY = 'show_when_empty';
+    public const CONFIGURATION_SHOW_EMPTY = 'show_when_empty';
+
+    /**
+     * Returns the html to display when the block is configured.
+     *
+     * @return string
+     */
+    public function displayContent()
+    {
+        $bookmarks = $this->getBookmarks();
+
+        foreach ($bookmarks as $bookmark)
+        {
+            $display = ContentObjectRenditionImplementation::factory(
+                $bookmark, ContentObjectRendition::FORMAT_HTML, ContentObjectRendition::VIEW_SHORT, $this
+            );
+
+            $html[] = $display->render();
+            $html[] = '</br>';
+        }
+
+        return implode(PHP_EOL, $html);
+    }
+
+    public function getBookmarks()
+    {
+        $conditions = [];
+        $conditions[] = new EqualityCondition(
+            new PropertyConditionVariable(Bookmark::class, Bookmark::PROPERTY_APPLICATION),
+            new StaticConditionVariable(Manager::CONTEXT)
+        );
+        $conditions[] = new EqualityCondition(
+            new PropertyConditionVariable(ContentObject::class, ContentObject::PROPERTY_OWNER_ID),
+            new StaticConditionVariable($this->getSessionUtilities()->getUserId())
+        );
+
+        $condition = new AndCondition($conditions);
+        $parameters = new DataClassRetrievesParameters($condition);
+
+        $bookmarks_resultset = DataManager::retrieve_active_content_objects(
+            Bookmark::class, $parameters
+        );
+
+        return $bookmarks_resultset;
+    }
+
+    /**
+     * @see \Chamilo\Core\Home\Architecture\ConfigurableInterface::getConfigurationVariables()
+     */
+    public function getConfigurationVariables()
+    {
+        return [self::CONFIGURATION_SHOW_EMPTY];
+    }
 
     public function isConfigured()
     {
         // no configuration needed for now
-        return true;
-    }
-
-    public function isVisible()
-    {
-        if ($this->isEmpty() && ! $this->showWhenEmpty())
-        {
-            return false;
-        }
-        return true; // i.e.display on homepage when anonymous
-    }
-
-    public function isHidable()
-    {
         return true;
     }
 
@@ -51,65 +87,28 @@ class WeblcmsBookmarkDisplay extends Block implements
         return true;
     }
 
-    /**
-     * Returns the html to display when the block is configured.
-     * 
-     * @return string
-     */
-    public function displayContent()
-    {
-        $bookmarks = $this->getBookmarks();
-        
-        foreach($bookmarks as $bookmark)
-        {
-            $display = ContentObjectRenditionImplementation::factory(
-                $bookmark, 
-                ContentObjectRendition::FORMAT_HTML, 
-                ContentObjectRendition::VIEW_SHORT, 
-                $this);
-            
-            $html[] = $display->render();
-            $html[] = '</br>';
-        }
-        return implode(PHP_EOL, $html);
-    }
-
-    public function showWhenEmpty()
-    {
-        return $this->getBlock()->getSetting(self::CONFIGURATION_SHOW_EMPTY, true);
-    }
-
     public function isEmpty()
     {
         return $this->getBookmarks()->count() == 0;
     }
 
-    public function getBookmarks()
+    public function isHidable()
     {
-        $conditions = [];
-        $conditions[] = new EqualityCondition(
-            new PropertyConditionVariable(Bookmark::class, Bookmark::PROPERTY_APPLICATION),
-            new StaticConditionVariable(Manager::CONTEXT));
-        $conditions[] = new EqualityCondition(
-            new PropertyConditionVariable(ContentObject::class, ContentObject::PROPERTY_OWNER_ID),
-            new StaticConditionVariable(Session::get_user_id()));
-        
-        $condition = new AndCondition($conditions);
-        $parameters = new DataClassRetrievesParameters($condition);
-        
-        $bookmarks_resultset = DataManager::retrieve_active_content_objects(
-            Bookmark::class,
-            $parameters);
-        
-        return $bookmarks_resultset;
+        return true;
     }
 
-    /**
-     *
-     * @see \Chamilo\Core\Home\Architecture\ConfigurableInterface::getConfigurationVariables()
-     */
-    public function getConfigurationVariables()
+    public function isVisible()
     {
-        return array(self::CONFIGURATION_SHOW_EMPTY);
+        if ($this->isEmpty() && !$this->showWhenEmpty())
+        {
+            return false;
+        }
+
+        return true; // i.e.display on homepage when anonymous
+    }
+
+    public function showWhenEmpty()
+    {
+        return $this->getBlock()->getSetting(self::CONFIGURATION_SHOW_EMPTY, true);
     }
 }

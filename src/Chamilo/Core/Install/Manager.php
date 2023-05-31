@@ -13,7 +13,6 @@ use Chamilo\Libraries\Format\Structure\FooterRendererInterface;
 use Chamilo\Libraries\Format\Structure\HeaderRendererInterface;
 use Chamilo\Libraries\Format\Structure\WizardHeader\WizardHeader;
 use Chamilo\Libraries\Format\Structure\WizardHeader\WizardHeaderRenderer;
-use Chamilo\Libraries\Platform\Session\Session;
 use Chamilo\Libraries\Translation\Translation;
 use DOMDocument;
 use DOMXPath;
@@ -250,9 +249,9 @@ abstract class Manager extends Application implements NoContextComponent
 
         if ($language)
         {
-            Session::register(self::PARAM_LANGUAGE, $language);
+            $this->getSessionUtilities()->register(self::PARAM_LANGUAGE, $language);
         }
 
-        Translation::getInstance()->setLanguageIsocode(Session::retrieve(self::PARAM_LANGUAGE));
+        Translation::getInstance()->setLanguageIsocode($this->getSessionUtilities()->retrieve(self::PARAM_LANGUAGE));
     }
 }

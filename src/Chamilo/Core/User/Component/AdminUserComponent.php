@@ -3,7 +3,6 @@ namespace Chamilo\Core\User\Component;
 
 use Chamilo\Core\User\Manager;
 use Chamilo\Libraries\Architecture\Exceptions\NotAllowedException;
-use Chamilo\Libraries\Platform\Session\Session;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 
 /**
@@ -18,14 +17,14 @@ class AdminUserComponent extends Manager
      */
     public function run()
     {
-        $admin_user = Session::retrieve('_as_admin');
+        $admin_user = $this->getSessionUtilities()->retrieve('_as_admin');
 
         if ($admin_user)
         {
-            $checkurl = Session::retrieve('checkChamiloURL');
-            Session::clear();
-            Session::register('_uid', $admin_user);
-            Session::register('checkChamiloURL', $checkurl);
+            $checkurl = $this->getSessionUtilities()->retrieve('checkChamiloURL');
+            $this->getSessionUtilities()->clear();
+            $this->getSessionUtilities()->register('_uid', $admin_user);
+            $this->getSessionUtilities()->register('checkChamiloURL', $checkurl);
 
             return new RedirectResponse($this->getUrlGenerator()->fromParameters());
         }

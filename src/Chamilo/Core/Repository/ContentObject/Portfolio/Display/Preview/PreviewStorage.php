@@ -2,22 +2,21 @@
 namespace Chamilo\Core\Repository\ContentObject\Portfolio\Display\Preview;
 
 use ArrayIterator;
-use Chamilo\Libraries\Platform\Session\Session;
+use Chamilo\Libraries\DependencyInjection\DependencyInjectionContainerBuilder;
+use Chamilo\Libraries\Platform\Session\SessionUtilities;
 
 /**
- *
  * @package core\repository\content_object\portfolio\display
- * @author Hans De Bisschop <hans.de.bisschop@ehb.be>
- * @author Magali Gillard <magali.gillard@ehb.be>
- * @author Eduard Vossen <eduard.vossen@ehb.be>
+ * @author  Hans De Bisschop <hans.de.bisschop@ehb.be>
+ * @author  Magali Gillard <magali.gillard@ehb.be>
+ * @author  Eduard Vossen <eduard.vossen@ehb.be>
  */
 class PreviewStorage
 {
-    const PROPERTY_FEEDBACK = 'feedback';
-    const PROPERTY_NOTIFICATION = 'notification';
+    public const PROPERTY_FEEDBACK = 'feedback';
+    public const PROPERTY_NOTIFICATION = 'notification';
 
     /**
-     *
      * @var \Chamilo\Core\Repository\ContentObject\Portfolio\Display\Preview\PreviewStorage
      */
     private static $instance;
@@ -36,10 +35,9 @@ class PreviewStorage
     }
 
     /**
-     *
      * @param DummyFeedback $feedback
      *
-     * @return boolean
+     * @return bool
      */
     public function create_feedback(DummyFeedback $feedback)
     {
@@ -51,10 +49,9 @@ class PreviewStorage
     }
 
     /**
-     *
      * @param DummyNotification $notification
      *
-     * @return boolean
+     * @return bool
      */
     public function create_notification(DummyNotification $notification)
     {
@@ -66,10 +63,9 @@ class PreviewStorage
     }
 
     /**
-     *
      * @param DummyFeedback $feedback
      *
-     * @return boolean
+     * @return bool
      */
     public function delete_feedback(DummyFeedback $feedback)
     {
@@ -83,10 +79,9 @@ class PreviewStorage
     }
 
     /**
-     *
      * @param DummyNotification $notification
      *
-     * @return boolean
+     * @return bool
      */
     public function delete_notification(DummyNotification $notification)
     {
@@ -97,7 +92,6 @@ class PreviewStorage
     }
 
     /**
-     *
      * @return \Chamilo\Core\Repository\ContentObject\Portfolio\Display\Preview\PreviewStorage
      */
     public static function getInstance()
@@ -110,8 +104,12 @@ class PreviewStorage
         return self::$instance;
     }
 
+    public function getSessionUtilities(): SessionUtilities
+    {
+        return DependencyInjectionContainerBuilder::getInstance()->createContainer()->get(SessionUtilities::class);
+    }
+
     /**
-     *
      * @return DummyFeedback[]
      */
     public function get_feedbacks()
@@ -128,7 +126,6 @@ class PreviewStorage
     }
 
     /**
-     *
      * @return DummyNotification[]
      */
     public function get_notifications()
@@ -145,7 +142,6 @@ class PreviewStorage
     }
 
     /**
-     *
      * @param string $property
      *
      * @return mixed
@@ -158,18 +154,17 @@ class PreviewStorage
     }
 
     /**
-     *
      * @return mixed
      */
     public function get_storage()
     {
-        return unserialize(Session::retrieve(__NAMESPACE__));
+        return unserialize($this->getSessionUtilities()->retrieve(__NAMESPACE__));
     }
 
     /**
      * Empty the storage
      *
-     * @return boolean
+     * @return bool
      */
     public function reset()
     {
@@ -177,7 +172,6 @@ class PreviewStorage
     }
 
     /**
-     *
      * @param string $feedback_id
      */
     public function retrieve_feedback($feedback_id)
@@ -201,7 +195,6 @@ class PreviewStorage
     }
 
     /**
-     *
      * @param int $content_object_id
      * @param int $complex_content_object_item_id
      *
@@ -217,7 +210,6 @@ class PreviewStorage
     }
 
     /**
-     *
      * @param int $content_object_id
      * @param int $complex_content_object_item_id
      *
@@ -231,7 +223,6 @@ class PreviewStorage
     }
 
     /**
-     *
      * @param int $content_object_id
      * @param int $complex_content_object_item_id
      *
@@ -241,11 +232,10 @@ class PreviewStorage
     {
         $notifications = $this->get_notifications();
 
-        return new ArrayIterator(array($notifications[$content_object_id][$complex_content_object_item_id]));
+        return new ArrayIterator([$notifications[$content_object_id][$complex_content_object_item_id]]);
     }
 
     /**
-     *
      * @param string $property
      * @param mixed $value
      */
@@ -258,23 +248,21 @@ class PreviewStorage
     }
 
     /**
-     *
      * @param mixed $data
      *
-     * @return boolean
+     * @return bool
      */
     public function set_storage($data)
     {
-        Session::register(__NAMESPACE__, serialize($data));
+        $this->getSessionUtilities()->register(__NAMESPACE__, serialize($data));
 
         return true;
     }
 
     /**
-     *
      * @param DummyFeedback $attempt
      *
-     * @return boolean
+     * @return bool
      */
     public function update_feedback(DummyFeedback $feedback)
     {
@@ -282,10 +270,9 @@ class PreviewStorage
     }
 
     /**
-     *
      * @param DummyNotification $attempt
      *
-     * @return boolean
+     * @return bool
      */
     public function update_notification(DummyNotification $notification)
     {

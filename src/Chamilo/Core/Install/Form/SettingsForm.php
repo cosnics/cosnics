@@ -15,7 +15,6 @@ use Chamilo\Libraries\Format\Structure\Glyph\NamespaceIdentGlyph;
 use Chamilo\Libraries\Format\Tabs\Form\FormTab;
 use Chamilo\Libraries\Format\Tabs\TabsCollection;
 use Chamilo\Libraries\Hashing\HashingUtilities;
-use Chamilo\Libraries\Platform\Session\Session;
 use Chamilo\Libraries\Translation\Translation;
 use Chamilo\Libraries\Utilities\StringUtilities;
 
@@ -300,7 +299,7 @@ class SettingsForm extends FormValidator
     {
         if (!isset($this->sessionSettings))
         {
-            $sessionSettings = Session::retrieve(Manager::PARAM_SETTINGS);
+            $sessionSettings = $this->getSessionUtilities()->retrieve(Manager::PARAM_SETTINGS);
 
             if (is_null($sessionSettings))
             {

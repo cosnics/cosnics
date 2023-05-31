@@ -4,107 +4,43 @@ namespace Chamilo\Core\User\Factory;
 use Chamilo\Configuration\Service\FileConfigurationLocator;
 use Chamilo\Core\User\Service\SessionHandler;
 use Chamilo\Core\User\Storage\Repository\SessionRepository;
+use SessionHandlerInterface;
 
 /**
- *
  * @package Chamilo\Core\User\Factory
- * @author Hans De Bisschop <hans.de.bisschop@ehb.be>
- * @author Magali Gillard <magali.gillard@ehb.be>
+ * @author  Hans De Bisschop <hans.de.bisschop@ehb.be>
+ * @author  Magali Gillard <magali.gillard@ehb.be>
  */
 class SessionHandlerFactory
 {
 
-    /**
-     *
-     * @var \Chamilo\Configuration\Service\FileConfigurationLocator
-     */
-    private $fileConfigurationLocator;
+    private string $configuredSessionHandler;
 
-    /**
-     *
-     * @var string
-     */
-    private $configuredSessionHandler;
+    private FileConfigurationLocator $fileConfigurationLocator;
 
-    /**
-     *
-     * @var \Chamilo\Core\User\Storage\Repository\SessionRepository
-     */
-    private $sessionRepository;
+    private ?SessionRepository $sessionRepository;
 
-    /**
-     *
-     * @param \Chamilo\Configuration\Service\FileConfigurationLocator $fileConfigurationLocator
-     * @param string $configuredSessionHandler
-     * @param \Chamilo\Core\User\Storage\Repository\SessionRepository
-     */
-    public function __construct(FileConfigurationLocator $fileConfigurationLocator, $configuredSessionHandler, 
-        SessionRepository $sessionRepository = null)
+    public function __construct(
+        FileConfigurationLocator $fileConfigurationLocator, string $configuredSessionHandler,
+        ?SessionRepository $sessionRepository = null
+    )
     {
         $this->fileConfigurationLocator = $fileConfigurationLocator;
         $this->configuredSessionHandler = $configuredSessionHandler;
         $this->sessionRepository = $sessionRepository;
     }
 
-    /**
-     *
-     * @return \Chamilo\Configuration\Service\FileConfigurationLocator
-     */
-    public function getFileConfigurationLocator()
-    {
-        return $this->fileConfigurationLocator;
-    }
-
-    /**
-     *
-     * @param \Chamilo\Configuration\Service\FileConfigurationLocator $fileConfigurationLocator
-     */
-    public function setFileConfigurationLocator(FileConfigurationLocator $fileConfigurationLocator)
-    {
-        $this->fileConfigurationLocator = $fileConfigurationLocator;
-    }
-
-    /**
-     *
-     * @return string
-     */
-    public function getConfiguredSessionHandler()
+    public function getConfiguredSessionHandler(): string
     {
         return $this->configuredSessionHandler;
     }
 
-    /**
-     *
-     * @return \Chamilo\Core\User\Storage\Repository\SessionRepository
-     */
-    public function getSessionRepository()
+    public function getFileConfigurationLocator(): FileConfigurationLocator
     {
-        return $this->sessionRepository;
+        return $this->fileConfigurationLocator;
     }
 
-    /**
-     *
-     * @param \Chamilo\Core\User\Storage\Repository\SessionRepository $sessionRepository
-     */
-    public function setSessionRepository(SessionRepository $sessionRepository)
-    {
-        $this->sessionRepository = $sessionRepository;
-    }
-
-    /**
-     *
-     * @param string $configuredSessionHandler
-     */
-    public function setConfiguredSessionHandler($configuredSessionHandler)
-    {
-        $this->configuredConfiguredSessionHandler = $configuredSessionHandler;
-    }
-
-    /**
-     *
-     * @return \Chamilo\Core\User\Service\SessionHandler|NULL
-     */
-    public function getSessionHandler()
+    public function getSessionHandler(): ?SessionHandlerInterface
     {
         if ($this->getFileConfigurationLocator()->isAvailable())
         {
@@ -113,8 +49,13 @@ class SessionHandlerFactory
                 return new SessionHandler($this->getSessionRepository());
             }
         }
-        
+
         return null;
+    }
+
+    public function getSessionRepository(): SessionRepository
+    {
+        return $this->sessionRepository;
     }
 }
 

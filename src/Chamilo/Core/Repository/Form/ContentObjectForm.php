@@ -38,7 +38,6 @@ use Chamilo\Libraries\Format\Structure\Glyph\FontAwesomeGlyph;
 use Chamilo\Libraries\Format\Structure\Glyph\IdentGlyph;
 use Chamilo\Libraries\Format\Tabs\Form\FormTab;
 use Chamilo\Libraries\Format\Tabs\TabsCollection;
-use Chamilo\Libraries\Platform\Session\Session;
 use Chamilo\Libraries\Storage\Parameters\DataClassRetrieveParameters;
 use Chamilo\Libraries\Storage\Query\Condition\AndCondition;
 use Chamilo\Libraries\Storage\Query\Condition\EqualityCondition;
@@ -369,7 +368,7 @@ abstract class ContentObjectForm extends FormValidator
     protected function allows_category_selection()
     {
         return ($this->form_type == self::TYPE_CREATE || $this->form_type == self::TYPE_EDIT) &&
-            Session::get_user_id() == $this->get_owner_id();
+            $this->getSessionUtilities()->getUserId() == $this->get_owner_id();
     }
 
     public function buildInstructionsForm()

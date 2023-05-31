@@ -5,7 +5,8 @@ use Chamilo\Core\Repository\ContentObject\Forum\Integration\Chamilo\Core\Reposit
 use Chamilo\Core\Repository\ContentObject\Forum\Storage\DataManager;
 use Chamilo\Core\Repository\ContentObject\LearningPath\Domain\Action;
 use Chamilo\Core\Repository\ContentObject\LearningPath\Domain\TreeNode;
-use Chamilo\Libraries\Platform\Session\Session;
+use Chamilo\Libraries\DependencyInjection\DependencyInjectionContainerBuilder;
+use Chamilo\Libraries\Platform\Session\SessionUtilities;
 
 /**
  * Generates the actions for a given TreeNode
@@ -46,7 +47,7 @@ class NodeActionGenerator
         $contentObject = $learningPathTreeNode->getContentObject();
 
         $subscribed = DataManager::retrieve_subscribe(
-            $contentObject->getId(), Session::get_user_id()
+            $contentObject->getId(), $this->getSessionUtilities()->getUserId()
         );
 
         if (!$subscribed)
@@ -64,14 +65,19 @@ class NodeActionGenerator
 
         $title = $this->translator->getTranslation($titleVariable, null, Manager::CONTEXT);
         $url = $this->getUrlForNode(
-            array(
+            [
                 \Chamilo\Core\Repository\ContentObject\LearningPath\Display\Manager::PARAM_ACTION => \Chamilo\Core\Repository\ContentObject\LearningPath\Display\Manager::ACTION_TYPE_SPECIFIC,
                 \Chamilo\Core\Repository\ContentObject\LearningPath\Display\Manager::PARAM_CONTENT_OBJECT_ID => $learningPathTreeNode->getContentObject(
                 )->getId(),
                 Manager::PARAM_ACTION => $action
-            ), $learningPathTreeNode->getId()
+            ], $learningPathTreeNode->getId()
         );
 
         return new Action('forumSubscribe', $title, $url, $icon);
+    }
+
+    public function getSessionUtilities(): SessionUtilities
+    {
+        return DependencyInjectionContainerBuilder::getInstance()->createContainer()->get(SessionUtilities::class);
     }
 }

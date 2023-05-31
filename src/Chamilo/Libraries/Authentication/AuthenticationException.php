@@ -2,8 +2,6 @@
 namespace Chamilo\Libraries\Authentication;
 
 use Chamilo\Libraries\Architecture\Exceptions\NotAllowedException;
-use Chamilo\Libraries\Platform\Session\Session;
-use Chamilo\Libraries\Translation\Translation;
 use Chamilo\Libraries\Utilities\StringUtilities;
 use Exception;
 
@@ -30,16 +28,17 @@ class AuthenticationException extends NotAllowedException
      */
     public function __construct($message = null, $code = null, $previous = null)
     {
-        Session::register('request_uri', $_SERVER['REQUEST_URI']);
+        $this->getSessionUtilities()->register('request_uri', $_SERVER['REQUEST_URI']);
 
         $this->errorMessage = $message;
 
         $currentUrl = $this->getRequest()->getUri();
 
         $html = [];
+
         $html[] = $message;
         $html[] = '<p style="margin-top: 10px;"><a href="' . $currentUrl . '" class="btn btn-success">';
-        $html[] = Translation::getInstance()->getTranslation('LoginTryAgain', null, StringUtilities::LIBRARIES);
+        $html[] = $this->getTranslator()->trans('LoginTryAgain', [], StringUtilities::LIBRARIES);
         $html[] = '</a></p>';
 
         Exception::__construct(implode(PHP_EOL, $html), $code, $previous);

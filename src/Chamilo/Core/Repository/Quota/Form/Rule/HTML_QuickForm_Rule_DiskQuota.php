@@ -4,7 +4,8 @@ namespace Chamilo\Core\Repository\Quota\Form\Rule;
 use Chamilo\Core\Repository\Quota\Calculator;
 use Chamilo\Core\User\Storage\DataClass\User;
 use Chamilo\Core\User\Storage\DataManager;
-use Chamilo\Libraries\Platform\Session\Session;
+use Chamilo\Libraries\DependencyInjection\DependencyInjectionContainerBuilder;
+use Chamilo\Libraries\Platform\Session\SessionUtilities;
 use HTML_QuickForm_Rule;
 
 /**
@@ -12,6 +13,11 @@ use HTML_QuickForm_Rule;
  */
 class HTML_QuickForm_Rule_DiskQuota extends HTML_QuickForm_Rule
 {
+
+    public function getSessionUtilities(): SessionUtilities
+    {
+        return DependencyInjectionContainerBuilder::getInstance()->createContainer()->get(SessionUtilities::class);
+    }
 
     /**
      * Function to check if an uploaded file can be stored in the repository
@@ -27,7 +33,7 @@ class HTML_QuickForm_Rule_DiskQuota extends HTML_QuickForm_Rule
 
         $calculator = new Calculator(
             DataManager::retrieve_by_id(
-                User::class, (int) Session::get_user_id()
+                User::class, (int) $this->getSessionUtilities()->getUserId()
             )
         );
 

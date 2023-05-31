@@ -14,7 +14,7 @@ use Chamilo\Libraries\Format\Tabs\Link\LinkTab;
 use Chamilo\Libraries\Format\Tabs\Link\LinkTabsRenderer;
 use Chamilo\Libraries\Format\Tabs\TabsCollection;
 use Chamilo\Libraries\Platform\Session\Request;
-use Chamilo\Libraries\Platform\Session\Session;
+use Chamilo\Libraries\Platform\Session\SessionUtilities;
 use Chamilo\Libraries\Storage\DataClass\DataClass;
 use Chamilo\Libraries\Translation\Translation;
 use Exception;
@@ -31,7 +31,7 @@ class Renderer extends CourseListRenderer
      * Parameters *
      * **************************************************************************************************************
      */
-    const PARAM_SELECTED_COURSE_TYPE = 'selected_course_type';
+    public const PARAM_SELECTED_COURSE_TYPE = 'selected_course_type';
 
     /**
      * **************************************************************************************************************
@@ -203,7 +203,7 @@ class Renderer extends CourseListRenderer
                 }
                 else
                 {
-                    $glyph = new FontAwesomeGlyph('user', array('text-muted'));
+                    $glyph = new FontAwesomeGlyph('user', ['text-muted']);
                 }
 
                 if (!$course_visible)
@@ -248,6 +248,11 @@ class Renderer extends CourseListRenderer
         );
     }
 
+    public function getSessionUtilities(): SessionUtilities
+    {
+        return DependencyInjectionContainerBuilder::getInstance()->createContainer()->get(SessionUtilities::class);
+    }
+
     /**
      * Returns the url for the selected course type
      *
@@ -276,7 +281,7 @@ class Renderer extends CourseListRenderer
 
     public function get_invisible_text_style()
     {
-        return "color: #999;";
+        return 'color: #999;';
     }
 
     /**
@@ -284,7 +289,6 @@ class Renderer extends CourseListRenderer
      *
      * @return int
      * @throws \Exception
-     *
      */
     public function get_selected_course_type()
     {
@@ -324,7 +328,7 @@ class Renderer extends CourseListRenderer
 
             // Register the selected parameter id in the session for later retrieval
             $selected_course_type_id = (is_null($course_type)) ? $selected_course_type_id : $course_type->get_id();
-            Session::register(self::PARAM_SELECTED_COURSE_TYPE, $selected_course_type_id);
+            $this->getSessionUtilities()->register(self::PARAM_SELECTED_COURSE_TYPE, $selected_course_type_id);
 
             $this->selected_course_type = $course_type;
         }

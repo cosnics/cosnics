@@ -7,16 +7,14 @@ use Chamilo\Libraries\Format\Structure\ActionBar\Button;
 use Chamilo\Libraries\Format\Structure\ActionBar\ButtonToolBar;
 use Chamilo\Libraries\Format\Structure\ActionBar\Renderer\ButtonToolBarRenderer;
 use Chamilo\Libraries\Format\Structure\Glyph\FontAwesomeGlyph;
-use Chamilo\Libraries\Platform\Session\Session;
 use Chamilo\Libraries\Translation\Translation;
 use Chamilo\Libraries\Utilities\StringUtilities;
 
 /**
- *
  * @package Chamilo\Core\Install\Component
- * @author Hans De Bisschop <hans.de.bisschop@ehb.be>
- * @author Magali Gillard <magali.gillard@ehb.be>
- * @author Eduard Vossen <eduard.vossen@ehb.be>
+ * @author  Hans De Bisschop <hans.de.bisschop@ehb.be>
+ * @author  Magali Gillard <magali.gillard@ehb.be>
+ * @author  Eduard Vossen <eduard.vossen@ehb.be>
  */
 class LicenseComponent extends Manager implements NoAuthenticationSupport
 {
@@ -34,7 +32,7 @@ class LicenseComponent extends Manager implements NoAuthenticationSupport
 
         $html[] = '<form class="form">';
         $html[] = '<textarea class="form-control" cols="80" rows="30">' .
-             implode("", file(realpath(__DIR__ . '/../../../../../LICENSE'))) . '</textarea>';
+            implode('', file(realpath(__DIR__ . '/../../../../../LICENSE'))) . '</textarea>';
         $html[] = '</form>';
 
         $html[] = '<br />';
@@ -47,7 +45,6 @@ class LicenseComponent extends Manager implements NoAuthenticationSupport
     }
 
     /**
-     *
      * @return string
      */
     public function getButtons()
@@ -56,21 +53,21 @@ class LicenseComponent extends Manager implements NoAuthenticationSupport
 
         $buttonToolBar->addItem(
             new Button(
-                Translation::get('Previous', null, StringUtilities::LIBRARIES),
-                new FontAwesomeGlyph('chevron-left'),
-                $this->get_url(array(self::PARAM_ACTION => self::ACTION_REQUIREMENTS))));
+                Translation::get('Previous', null, StringUtilities::LIBRARIES), new FontAwesomeGlyph('chevron-left'),
+                $this->get_url([self::PARAM_ACTION => self::ACTION_REQUIREMENTS])
+            )
+        );
 
         $buttonToolBar->addItem(
             new Button(
-                Translation::get('AgreeAndContinue'),
-                new FontAwesomeGlyph('chevron-right'),
-                $this->get_url(
-                    array(
-                        self::PARAM_ACTION => self::ACTION_SETTINGS,
-                        self::PARAM_LANGUAGE => Session::retrieve(self::PARAM_LANGUAGE))),
-                Button::DISPLAY_ICON_AND_LABEL,
-                null,
-                ['btn-primary']));
+                Translation::get('AgreeAndContinue'), new FontAwesomeGlyph('chevron-right'), $this->get_url(
+                [
+                    self::PARAM_ACTION => self::ACTION_SETTINGS,
+                    self::PARAM_LANGUAGE => $this->getSessionUtilities()->retrieve(self::PARAM_LANGUAGE)
+                ]
+            ), Button::DISPLAY_ICON_AND_LABEL, null, ['btn-primary']
+            )
+        );
 
         $buttonToolbarRenderer = new ButtonToolBarRenderer($buttonToolBar);
 

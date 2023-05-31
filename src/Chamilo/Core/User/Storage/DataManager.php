@@ -2,8 +2,8 @@
 namespace Chamilo\Core\User\Storage;
 
 use Chamilo\Core\User\Storage\DataClass\User;
-use Chamilo\Libraries\Platform\Session\Session;
-use Chamilo\Libraries\Translation\Translation;
+use Chamilo\Libraries\DependencyInjection\DependencyInjectionContainerBuilder;
+use Chamilo\Libraries\Platform\Session\SessionUtilities;
 use Chamilo\Libraries\Storage\Parameters\DataClassCountParameters;
 use Chamilo\Libraries\Storage\Parameters\DataClassRetrieveParameters;
 use Chamilo\Libraries\Storage\Parameters\DataClassRetrievesParameters;
@@ -13,16 +13,16 @@ use Chamilo\Libraries\Storage\Query\Condition\InCondition;
 use Chamilo\Libraries\Storage\Query\Condition\OrCondition;
 use Chamilo\Libraries\Storage\Query\Variable\PropertyConditionVariable;
 use Chamilo\Libraries\Storage\Query\Variable\StaticConditionVariable;
+use Chamilo\Libraries\Translation\Translation;
 
 /**
- *
- * @author Hans De Bisschop
- * @author Sven Vanpoucke
+ * @author  Hans De Bisschop
+ * @author  Sven Vanpoucke
  * @package user.lib This is a skeleton for a data manager for the User application.
  */
 class DataManager extends \Chamilo\Libraries\Storage\DataManager\DataManager
 {
-    const PREFIX = 'user_';
+    public const PREFIX = 'user_';
 
     /**
      * Count the users who are currently active
@@ -108,13 +108,16 @@ class DataManager extends \Chamilo\Libraries\Storage\DataManager\DataManager
      */
     public static function get_current_user()
     {
-        return self::retrieve_by_id(User::class, Session::get_user_id());
+        $sessionUtilities =
+            DependencyInjectionContainerBuilder::getInstance()->createContainer()->get(SessionUtilities::class);
+
+        return self::retrieve_by_id(User::class, $sessionUtilities->getUserId());
     }
 
     /**
      * Return the full name for a specific user, or a translation if provided or if the user does not exist
      *
-     * @param $id int
+     * @param $id                       int
      * @param $unknown_user_translation string
      *
      * @return string
@@ -139,9 +142,9 @@ class DataManager extends \Chamilo\Libraries\Storage\DataManager\DataManager
      * Is the username still available in the storage layer or not?
      *
      * @param $username string
-     * @param $user_id int
+     * @param $user_id  int
      *
-     * @return boolean
+     * @return bool
      */
     public static function is_username_available($username, $user_id = null)
     {
@@ -159,7 +162,6 @@ class DataManager extends \Chamilo\Libraries\Storage\DataManager\DataManager
     }
 
     /**
-     *
      * @param string $userName
      *
      * @return \Chamilo\Core\User\Storage\DataClass\User
@@ -174,7 +176,6 @@ class DataManager extends \Chamilo\Libraries\Storage\DataManager\DataManager
     }
 
     /**
-     *
      * @param string $userIdentifier
      *
      * @return \Chamilo\Core\User\Storage\DataClass\User
@@ -199,9 +200,9 @@ class DataManager extends \Chamilo\Libraries\Storage\DataManager\DataManager
      * Retrieve the users who are currently active
      *
      * @param $condition \Chamilo\Libraries\Storage\Query\Condition\Condition
-     * @param $count int
-     * @param $offset int
-     * @param $order_by \Chamilo\Libraries\Storage\Query\OrderBy
+     * @param $count     int
+     * @param $offset    int
+     * @param $order_by  \Chamilo\Libraries\Storage\Query\OrderBy
      *
      * @return \Doctrine\Common\Collections\ArrayCollection
      */
@@ -242,14 +243,13 @@ class DataManager extends \Chamilo\Libraries\Storage\DataManager\DataManager
      * Retrieve the users who are currently not approved
      *
      * @param $condition \Chamilo\Libraries\Storage\Query\Condition\Condition
-     * @param $count int
-     * @param $offset int
-     * @param $order_by \Chamilo\Libraries\Storage\Query\OrderBy
+     * @param $count     int
+     * @param $offset    int
+     * @param $order_by  \Chamilo\Libraries\Storage\Query\OrderBy
      *
      * @return \Doctrine\Common\Collections\ArrayCollection
      */
-    public static function retrieve_approval_users($condition = null, $count = null, $offset = null, $order_by = null
-    )
+    public static function retrieve_approval_users($condition = null, $count = null, $offset = null, $order_by = null)
     {
         $conditions = [];
         if ($condition)
@@ -271,14 +271,13 @@ class DataManager extends \Chamilo\Libraries\Storage\DataManager\DataManager
      * Retrieve the users who are currently approved
      *
      * @param $condition \Chamilo\Libraries\Storage\Query\Condition\Condition
-     * @param $count int
-     * @param $offset int
-     * @param $order_by \Chamilo\Libraries\Storage\Query\OrderBy
+     * @param $count     int
+     * @param $offset    int
+     * @param $order_by  \Chamilo\Libraries\Storage\Query\OrderBy
      *
      * @return \Doctrine\Common\Collections\ArrayCollection
      */
-    public static function retrieve_approved_users($condition = null, $count = null, $offset = null, $order_by = null
-    )
+    public static function retrieve_approved_users($condition = null, $count = null, $offset = null, $order_by = null)
     {
         $conditions = [];
         if ($condition)

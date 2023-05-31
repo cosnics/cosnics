@@ -11,7 +11,6 @@ use Chamilo\Libraries\Format\Structure\ActionBar\Renderer\ButtonToolBarRenderer;
 use Chamilo\Libraries\Format\Structure\Glyph\FontAwesomeGlyph;
 use Chamilo\Libraries\Format\Tabs\Form\FormTab;
 use Chamilo\Libraries\Platform\Session\Request;
-use Chamilo\Libraries\Platform\Session\Session;
 use Chamilo\Libraries\Translation\Translation;
 
 /**
@@ -53,8 +52,8 @@ class AssessmentMatchTextQuestionForm extends ContentObjectForm
         $renderer = $this->get_renderer();
         $this->setOptionsSessionValues();
 
-        $number_of_options = (int) Session::retrieve('match_number_of_options');
-        $skippedOptions = Session::retrieve('match_skip_options');
+        $number_of_options = (int) $this->getSessionUtilities()->retrieve('match_number_of_options');
+        $skippedOptions = $this->getSessionUtilities()->retrieve('match_skip_options');
 
         $this->addElement('category', Translation::get('PossibleAnswers'));
         $this->addElement(
@@ -288,7 +287,7 @@ class AssessmentMatchTextQuestionForm extends ContentObjectForm
                 $defaults[AssessmentMatchTextQuestion::PROPERTY_USE_WILDCARDS] = true;
                 $defaults[AssessmentMatchTextQuestion::PROPERTY_IGNORE_CASE] = true;
 
-                $number_of_options = (int) Session::retrieve('match_number_of_options');
+                $number_of_options = (int) $this->getSessionUtilities()->retrieve('match_number_of_options');
 
                 for ($option_number = 0; $option_number < $number_of_options; $option_number ++)
                 {
@@ -304,35 +303,37 @@ class AssessmentMatchTextQuestionForm extends ContentObjectForm
     {
         if (!$this->isSubmitted())
         {
-            Session::unregister('match_number_of_options');
-            Session::unregister('match_skip_options');
+            $this->getSessionUtilities()->unregister('match_number_of_options');
+            $this->getSessionUtilities()->unregister('match_skip_options');
         }
 
-        Session::registerIfNotSet('match_number_of_options', 1);
-        Session::registerIfNotSet('match_skip_options', []);
+        $this->getSessionUtilities()->registerIfNotSet('match_number_of_options', 1);
+        $this->getSessionUtilities()->registerIfNotSet('match_skip_options', []);
 
         $extraOptionRequested = Request::post('add');
         $removedOptions = Request::post('remove');
 
         if (isset($extraOptionRequested))
         {
-            Session::register('match_number_of_options', (Session::retrieve('match_number_of_options') + 1));
+            $this->getSessionUtilities()->register(
+                'match_number_of_options', ($this->getSessionUtilities()->retrieve('match_number_of_options') + 1)
+            );
         }
 
         if (isset($removedOptions))
         {
             $indexes = array_keys($removedOptions);
-            $skippedOptions = Session::retrieve('match_skip_options');
+            $skippedOptions = $this->getSessionUtilities()->retrieve('match_skip_options');
             $skippedOptions[] = $indexes[0];
 
-            Session::register('match_skip_options', $skippedOptions);
+            $this->getSessionUtilities()->register('match_skip_options', $skippedOptions);
         }
 
         $object = $this->get_content_object();
 
         if (!$this->isSubmitted() && $object->get_number_of_options() != 0)
         {
-            Session::register('match_number_of_options', $object->get_number_of_options());
+            $this->getSessionUtilities()->register('match_number_of_options', $object->get_number_of_options());
         }
     }
 

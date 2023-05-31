@@ -8,7 +8,8 @@ use Chamilo\Core\Repository\ContentObject\LearningPath\Display\Preview\DummyQues
 use Chamilo\Core\Repository\ContentObject\LearningPath\Display\Preview\DummyTreeNodeAttempt;
 use Chamilo\Core\Repository\ContentObject\LearningPath\Storage\DataClass\LearningPath;
 use Chamilo\Libraries\Architecture\Test\TestCases\ChamiloTestCase;
-use Chamilo\Libraries\Platform\Session\Session;
+use Chamilo\Libraries\DependencyInjection\DependencyInjectionContainerBuilder;
+use Chamilo\Libraries\Platform\Session\SessionUtilities;
 
 /**
  * Tests the preview TrackingParameters class
@@ -17,24 +18,9 @@ use Chamilo\Libraries\Platform\Session\Session;
  */
 class TrackingParametersTest extends ChamiloTestCase
 {
-    public function testGetTreeNodeAttemptClassName()
+    public function getSessionUtilities(): SessionUtilities
     {
-        $trackingParameters = new TrackingParameters();
-        $this->assertEquals(DummyTreeNodeAttempt::class, $trackingParameters->getTreeNodeAttemptClassName());
-    }
-
-    public function testGetTreeNodeQuestionAttemptClassName()
-    {
-        $trackingParameters = new TrackingParameters();
-        $this->assertEquals(
-            DummyQuestionAttempt::class, $trackingParameters->getTreeNodeQuestionAttemptClassName()
-        );
-    }
-
-    public function testGetTreeNodeAttemptConditions()
-    {
-        $trackingParameters = new TrackingParameters();
-        $this->assertNull($trackingParameters->getTreeNodeAttemptConditions());
+        return DependencyInjectionContainerBuilder::getInstance()->createContainer()->get(SessionUtilities::class);
     }
 
     public function testCreateTreeNodeAttemptInstance()
@@ -66,10 +52,30 @@ class TrackingParametersTest extends ChamiloTestCase
         $learningPath = new LearningPath();
         $trackingParameters = new TrackingParameters();
 
-        Session::register('_uid', 2);
+        $this->getSessionUtilities()->register('_uid', 2);
 
         $this->assertEquals(
             [2], $trackingParameters->getLearningPathTargetUserIds($learningPath)
+        );
+    }
+
+    public function testGetTreeNodeAttemptClassName()
+    {
+        $trackingParameters = new TrackingParameters();
+        $this->assertEquals(DummyTreeNodeAttempt::class, $trackingParameters->getTreeNodeAttemptClassName());
+    }
+
+    public function testGetTreeNodeAttemptConditions()
+    {
+        $trackingParameters = new TrackingParameters();
+        $this->assertNull($trackingParameters->getTreeNodeAttemptConditions());
+    }
+
+    public function testGetTreeNodeQuestionAttemptClassName()
+    {
+        $trackingParameters = new TrackingParameters();
+        $this->assertEquals(
+            DummyQuestionAttempt::class, $trackingParameters->getTreeNodeQuestionAttemptClassName()
         );
     }
 }

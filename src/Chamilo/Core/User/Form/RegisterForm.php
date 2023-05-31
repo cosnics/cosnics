@@ -13,7 +13,6 @@ use Chamilo\Libraries\Format\Structure\Glyph\FontAwesomeGlyph;
 use Chamilo\Libraries\Hashing\HashingUtilities;
 use Chamilo\Libraries\Mail\Mailer\MailerInterface;
 use Chamilo\Libraries\Mail\ValueObject\Mail;
-use Chamilo\Libraries\Platform\Session\Session;
 use Chamilo\Libraries\Translation\Translation;
 use Chamilo\Libraries\Utilities\String\Text;
 use Chamilo\Libraries\Utilities\StringUtilities;
@@ -237,7 +236,7 @@ class RegisterForm extends FormValidator
 
             if ($user->create())
             {
-                Session::register('_uid', intval($user->get_id()));
+                $this->getSessionUtilities()->register('_uid', intval($user->get_id()));
                 Event::trigger(
                     'Register', Manager::CONTEXT,
                     ['target_user_id' => $user->get_id(), 'action_user_id' => $user->get_id()]

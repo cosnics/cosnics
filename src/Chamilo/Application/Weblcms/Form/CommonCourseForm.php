@@ -27,7 +27,6 @@ use Chamilo\Libraries\Format\Structure\Glyph\NamespaceIdentGlyph;
 use Chamilo\Libraries\Format\Tabs\Form\FormTab;
 use Chamilo\Libraries\Format\Tabs\TabsCollection;
 use Chamilo\Libraries\Format\Utilities\ResourceManager;
-use Chamilo\Libraries\Platform\Session\Session;
 use Chamilo\Libraries\Storage\DataClass\DataClass;
 use Chamilo\Libraries\Storage\Parameters\DataClassRetrievesParameters;
 use Chamilo\Libraries\Storage\Query\Condition\AndCondition;
@@ -711,7 +710,7 @@ abstract class CommonCourseForm extends FormValidator implements CourseSettingsX
                 }
 
                 if ($selected_entity->get_entity_type() == 1 &&
-                    $selected_entity->get_entity_id() == Session::get_user_id())
+                    $selected_entity->get_entity_id() == $this->getSessionUtilities()->getUserId())
                 {
                     $defaults[$option_name] = CourseManagementRights::RIGHT_OTPION_ME;
                     continue;

@@ -6,7 +6,6 @@ use Chamilo\Libraries\Format\Form\Element\AdvancedElementFinder\AdvancedElementF
 use Chamilo\Libraries\Format\Form\Element\AdvancedElementFinder\AdvancedElementFinderElementTypes;
 use Chamilo\Libraries\Format\Form\FormValidator;
 use Chamilo\Libraries\Format\Structure\Glyph\FontAwesomeGlyph;
-use Chamilo\Libraries\Platform\Session\Session;
 use Chamilo\Libraries\Translation\Translation;
 use Chamilo\Libraries\Utilities\StringUtilities;
 
@@ -291,7 +290,7 @@ class RightsForm extends FormValidator
                 {
 
                     if ($selected_entity->get_entity_type() == 1 &&
-                        $selected_entity->get_entity_id() == Session::get_user_id())
+                        $selected_entity->get_entity_id() == $this->getSessionUtilities()->getUserId())
                     {
                         $defaults[self::PROPERTY_RIGHT_OPTION . '_' . $right_id] = self::RIGHT_OPTION_ME;
                         continue;

@@ -19,7 +19,8 @@ use Chamilo\Application\Weblcms\Storage\DataClass\CourseTypeUserCategoryRelCours
 use Chamilo\Application\Weblcms\Tool\Implementation\CourseGroup\Storage\DataClass\CourseGroup;
 use Chamilo\Application\Weblcms\Tool\Manager;
 use Chamilo\Core\User\Storage\DataClass\User;
-use Chamilo\Libraries\Platform\Session\Session;
+use Chamilo\Libraries\DependencyInjection\DependencyInjectionContainerBuilder;
+use Chamilo\Libraries\Platform\Session\SessionUtilities;
 use Chamilo\Libraries\Storage\DataClass\DataClass;
 use Chamilo\Libraries\Storage\Parameters\DataClassCountParameters;
 use Chamilo\Libraries\Storage\Parameters\DataClassRetrieveParameters;
@@ -414,6 +415,11 @@ class Course extends DataClass
      * **************************************************************************************************************
      */
 
+    public function getSessionUtilities(): SessionUtilities
+    {
+        return DependencyInjectionContainerBuilder::getInstance()->createContainer()->get(SessionUtilities::class);
+    }
+
     /**
      * @return string
      */
@@ -517,6 +523,12 @@ class Course extends DataClass
     }
 
     /**
+     * **************************************************************************************************************
+     * Helper Functionality *
+     * **************************************************************************************************************
+     */
+
+    /**
      * Returns the course type of this course object (lazy loading)
      *
      * @return \application\weblcms\course_type\CourseType
@@ -530,12 +542,6 @@ class Course extends DataClass
 
         return DataManager::retrieve_by_id(CourseType::class, $this->get_course_type_id());
     }
-
-    /**
-     * **************************************************************************************************************
-     * Helper Functionality *
-     * **************************************************************************************************************
-     */
 
     /**
      * Returns the course type id of this course object
@@ -566,6 +572,12 @@ class Course extends DataClass
     }
 
     /**
+     * **************************************************************************************************************
+     * Delegation Functionality *
+     * **************************************************************************************************************
+     */
+
+    /**
      * Returns the creation date of this course object
      *
      * @return int
@@ -574,12 +586,6 @@ class Course extends DataClass
     {
         return $this->getDefaultProperty(self::PROPERTY_CREATION_DATE);
     }
-
-    /**
-     * **************************************************************************************************************
-     * Delegation Functionality *
-     * **************************************************************************************************************
-     */
 
     /**
      * Retrieves the default values for a given course setting
@@ -694,6 +700,12 @@ class Course extends DataClass
     }
 
     /**
+     * **************************************************************************************************************
+     * Getters and Setters *
+     * **************************************************************************************************************
+     */
+
+    /**
      * Gets the subscribed groups of this course
      *
      * @return \Chamilo\Application\Weblcms\Storage\DataClass\CourseEntityRelation[]
@@ -715,12 +727,6 @@ class Course extends DataClass
             CourseEntityRelation::class, new DataClassRetrievesParameters(new AndCondition($relationConditions))
         );
     }
-
-    /**
-     * **************************************************************************************************************
-     * Getters and Setters *
-     * **************************************************************************************************************
-     */
 
     /**
      * Gets the subscribed users of this course
@@ -890,8 +896,8 @@ class Course extends DataClass
         $courseValidator = CourseAdminValidator::getInstance();
 
         // fix for view as
-        $va_id = Session::get(Manager::PARAM_VIEW_AS_ID);
-        $course_id = Session::get(Manager::PARAM_VIEW_AS_COURSE_ID);
+        $va_id = $this->getSessionUtilities()->get(Manager::PARAM_VIEW_AS_ID);
+        $course_id = $this->getSessionUtilities()->get(Manager::PARAM_VIEW_AS_COURSE_ID);
         $id = $user->get_id();
         if (isset($va_id) && isset($course_id))
         {
@@ -929,7 +935,7 @@ class Course extends DataClass
 
         if (is_null($this->is_course_admin_cache[$id]))
         {
-            $studentview = Session::retrieve('studentview');
+            $studentview = $this->getSessionUtilities()->retrieve('studentview');
 
             if ($studentview)
             {

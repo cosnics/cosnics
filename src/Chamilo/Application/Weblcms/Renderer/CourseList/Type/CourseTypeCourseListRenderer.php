@@ -12,9 +12,10 @@ use Chamilo\Application\Weblcms\Storage\DataClass\CourseTypeUserCategoryRelCours
 use Chamilo\Application\Weblcms\Storage\DataClass\CourseUserCategory;
 use Chamilo\Application\Weblcms\Storage\DataManager;
 use Chamilo\Configuration\Configuration;
+use Chamilo\Libraries\DependencyInjection\DependencyInjectionContainerBuilder;
 use Chamilo\Libraries\Format\Structure\Glyph\FontAwesomeGlyph;
 use Chamilo\Libraries\Platform\Session\Request;
-use Chamilo\Libraries\Platform\Session\Session;
+use Chamilo\Libraries\Platform\Session\SessionUtilities;
 use Chamilo\Libraries\Storage\DataClass\DataClass;
 use Chamilo\Libraries\Translation\Translation;
 use Exception;
@@ -31,7 +32,7 @@ class CourseTypeCourseListRenderer extends CourseListRenderer
      * Parameters *
      * **************************************************************************************************************
      */
-    const PARAM_SELECTED_COURSE_TYPE = 'selected_course_type';
+    public const PARAM_SELECTED_COURSE_TYPE = 'selected_course_type';
 
     /**
      * **************************************************************************************************************
@@ -436,6 +437,17 @@ class CourseTypeCourseListRenderer extends CourseListRenderer
         }
     }
 
+    public function getSessionUtilities(): SessionUtilities
+    {
+        return DependencyInjectionContainerBuilder::getInstance()->createContainer()->get(SessionUtilities::class);
+    }
+
+    /**
+     * **************************************************************************************************************
+     * Display Functionality *
+     * **************************************************************************************************************
+     */
+
     /**
      * Retrieves the actions for the given course
      *
@@ -454,12 +466,6 @@ class CourseTypeCourseListRenderer extends CourseListRenderer
             return $this->get_parent()->get_course_actions($course_type_user_category, $course, $offset, $count);
         }
     }
-
-    /**
-     * **************************************************************************************************************
-     * Display Functionality *
-     * **************************************************************************************************************
-     */
 
     /**
      * Returns the url for the selected course type
@@ -516,7 +522,6 @@ class CourseTypeCourseListRenderer extends CourseListRenderer
      *
      * @return int
      * @throws \Exception
-     *
      */
     public function get_selected_course_type()
     {
@@ -556,13 +561,19 @@ class CourseTypeCourseListRenderer extends CourseListRenderer
 
             // Register the selected parameter id in the session for later retrieval
             $selected_course_type_id = (is_null($course_type)) ? $selected_course_type_id : $course_type->get_id();
-            Session::register(self::PARAM_SELECTED_COURSE_TYPE, $selected_course_type_id);
+            $this->getSessionUtilities()->register(self::PARAM_SELECTED_COURSE_TYPE, $selected_course_type_id);
 
             $this->selected_course_type = $course_type;
         }
 
         return $this->selected_course_type;
     }
+
+    /**
+     * **************************************************************************************************************
+     * Helper Functionality *
+     * **************************************************************************************************************
+     */
 
     /**
      * Returns the id of the selected course type
@@ -582,12 +593,6 @@ class CourseTypeCourseListRenderer extends CourseListRenderer
     }
 
     /**
-     * **************************************************************************************************************
-     * Helper Functionality *
-     * **************************************************************************************************************
-     */
-
-    /**
      * Retrieve the selected course type parameter value either from the request or the session
      *
      * @return int
@@ -598,7 +603,7 @@ class CourseTypeCourseListRenderer extends CourseListRenderer
 
         if (!isset($selected_course_type))
         {
-            $selected_course_type = Session::retrieve(self::PARAM_SELECTED_COURSE_TYPE);
+            $selected_course_type = $this->getSessionUtilities()->retrieve(self::PARAM_SELECTED_COURSE_TYPE);
         }
 
         return $selected_course_type;

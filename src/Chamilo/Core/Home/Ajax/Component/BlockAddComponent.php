@@ -81,7 +81,7 @@ class BlockAddComponent extends Manager
                 // $rendererFactory = new Factory(Renderer::TYPE_BASIC, $this);
                 // $renderer = $rendererFactory->getRenderer();
                 
-                $homeService = new HomeService(new HomeRepository(), new ElementRightsService(new RightsRepository()));
+                $homeService = new HomeService(new HomeRepository(), new ElementRightsService(new RightsRepository()), $this->getSessionUtilities());
                 $blockRendererFactory = new BlockRendererFactory(
                     $this, 
                     $homeService, 

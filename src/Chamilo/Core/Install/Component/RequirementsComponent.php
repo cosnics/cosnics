@@ -8,7 +8,6 @@ use Chamilo\Libraries\Format\Structure\ActionBar\ButtonToolBar;
 use Chamilo\Libraries\Format\Structure\ActionBar\Renderer\ButtonToolBarRenderer;
 use Chamilo\Libraries\Format\Structure\Glyph\FontAwesomeGlyph;
 use Chamilo\Libraries\Format\Table\SimpleTableRenderer;
-use Chamilo\Libraries\Platform\Session\Session;
 use Chamilo\Libraries\Support\Diagnoser;
 use Chamilo\Libraries\Support\DiagnoserCellRenderer;
 use Chamilo\Libraries\Translation\Translation;
@@ -64,7 +63,7 @@ class RequirementsComponent extends Manager implements NoAuthenticationSupport
                 $this->get_url(
                     [
                         self::PARAM_ACTION => self::ACTION_REQUIREMENTS,
-                        self::PARAM_LANGUAGE => Session::retrieve(self::PARAM_LANGUAGE)
+                        self::PARAM_LANGUAGE => $this->getSessionUtilities()->retrieve(self::PARAM_LANGUAGE)
                     ]
                 )
             )
@@ -76,7 +75,7 @@ class RequirementsComponent extends Manager implements NoAuthenticationSupport
                 $this->get_url(
                     [
                         self::PARAM_ACTION => self::ACTION_LICENSE,
-                        self::PARAM_LANGUAGE => Session::retrieve(self::PARAM_LANGUAGE)
+                        self::PARAM_LANGUAGE => $this->getSessionUtilities()->retrieve(self::PARAM_LANGUAGE)
                     ]
                 ), Button::DISPLAY_ICON_AND_LABEL, null, ['btn-primary']
             )

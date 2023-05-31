@@ -13,8 +13,9 @@ use Chamilo\Core\Rights\RightsLocation;
 use Chamilo\Core\Rights\RightsUtil;
 use Chamilo\Core\User\Storage\DataClass\User;
 use Chamilo\Core\User\Storage\DataManager;
+use Chamilo\Libraries\DependencyInjection\DependencyInjectionContainerBuilder;
 use Chamilo\Libraries\Platform\Session\Request;
-use Chamilo\Libraries\Platform\Session\Session;
+use Chamilo\Libraries\Platform\Session\SessionUtilities;
 use Chamilo\Libraries\Translation\Translation;
 use Chamilo\Libraries\Utilities\StringUtilities;
 
@@ -78,6 +79,11 @@ class WeblcmsRights extends RightsUtil
         }
 
         return self::$instance;
+    }
+
+    public function getSessionUtilities(): SessionUtilities
+    {
+        return DependencyInjectionContainerBuilder::getInstance()->createContainer()->get(SessionUtilities::class);
     }
 
     public static function get_available_rights($location)
@@ -174,7 +180,7 @@ class WeblcmsRights extends RightsUtil
     {
         if (is_null($user_id))
         {
-            $user_id = Session::get_user_id();
+            $user_id = $this->getSessionUtilities()->getUserId();
         }
         $course_id = Request::get(Manager::PARAM_COURSE);
 

@@ -44,7 +44,6 @@ use Chamilo\Libraries\Format\Structure\Glyph\FontAwesomeGlyph;
 use Chamilo\Libraries\Format\Structure\Page;
 use Chamilo\Libraries\Format\Structure\ToolbarItem;
 use Chamilo\Libraries\Platform\Session\Request;
-use Chamilo\Libraries\Platform\Session\Session;
 use Chamilo\Libraries\Storage\Parameters\DataClassRetrievesParameters;
 use Chamilo\Libraries\Translation\Translation;
 use Chamilo\Libraries\Utilities\StringUtilities;
@@ -586,8 +585,8 @@ abstract class Manager extends Application
 
     public function get_user_id(): ?string
     {
-        $va_id = Session::get(self::PARAM_VIEW_AS_ID);
-        $course_id = Session::get(self::PARAM_VIEW_AS_COURSE_ID);
+        $va_id = $this->getSessionUtilities()->get(self::PARAM_VIEW_AS_ID);
+        $course_id = $this->getSessionUtilities()->get(self::PARAM_VIEW_AS_COURSE_ID);
         // fake the id with the set "login as id" only if we're in the right
         // course
         if (isset($va_id) && isset($course_id))
@@ -691,15 +690,15 @@ abstract class Manager extends Application
                 }
             }
 
-            $studentview = Session::retrieve('studentview');
+            $studentview = $this->getSessionUtilities()->retrieve('studentview');
             if ($studentview == 1)
             {
                 return false;
             }
             // add check for student view/login as
-            $id = Session::get_user_id();
-            $va_id = Session::get(self::PARAM_VIEW_AS_ID);
-            $course_id = Session::get(self::PARAM_VIEW_AS_COURSE_ID);
+            $id = $this->getSessionUtilities()->getUserId();
+            $va_id = $this->getSessionUtilities()->get(self::PARAM_VIEW_AS_ID);
+            $course_id = $this->getSessionUtilities()->get(self::PARAM_VIEW_AS_COURSE_ID);
 
             // fake the id with the set "login as id" only if we're in the right
             // course

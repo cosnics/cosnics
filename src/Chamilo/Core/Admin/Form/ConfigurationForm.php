@@ -7,7 +7,6 @@ use Chamilo\Core\User\Storage\DataClass\User;
 use Chamilo\Core\User\Storage\DataClass\UserSetting;
 use Chamilo\Core\User\Storage\DataManager;
 use Chamilo\Libraries\Format\Form\FormValidator;
-use Chamilo\Libraries\Platform\Session\Session;
 use Chamilo\Libraries\Storage\Parameters\DataClassRetrieveParameters;
 use Chamilo\Libraries\Storage\Query\Condition\AndCondition;
 use Chamilo\Libraries\Storage\Query\Condition\EqualityCondition;
@@ -583,7 +582,7 @@ class ConfigurationForm extends FormValidator
                     );
                     $conditions[] = new EqualityCondition(
                         new PropertyConditionVariable(UserSetting::class, UserSetting::PROPERTY_USER_ID),
-                        new StaticConditionVariable(Session::get_user_id())
+                        new StaticConditionVariable($this->getSessionUtilities()->getUserId())
                     );
                     $condition = new AndCondition($conditions);
                     $user_setting = DataManager::retrieve(
@@ -603,7 +602,7 @@ class ConfigurationForm extends FormValidator
                         $user_setting = new UserSetting();
                         $user_setting->set_setting_id($setting->get_id());
                         $user_setting->set_value($value);
-                        $user_setting->set_user_id(Session::get_user_id());
+                        $user_setting->set_user_id($this->getSessionUtilities()->getUserId());
                         if (!$user_setting->create())
                         {
                             $problems ++;

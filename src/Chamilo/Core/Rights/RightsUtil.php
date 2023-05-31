@@ -5,7 +5,7 @@ use Chamilo\Core\Rights\Exception\RightsLocationNotFoundException;
 use Chamilo\Core\Rights\Storage\DataManager;
 use Chamilo\Core\User\Storage\DataClass\User;
 use Chamilo\Libraries\DependencyInjection\DependencyInjectionContainerBuilder;
-use Chamilo\Libraries\Platform\Session\Session;
+use Chamilo\Libraries\Platform\Session\SessionUtilities;
 use Chamilo\Libraries\Storage\Cache\DataClassRepositoryCache;
 use Chamilo\Libraries\Storage\Query\Condition\AndCondition;
 use Chamilo\Libraries\Storage\Query\Condition\EqualityCondition;
@@ -49,15 +49,11 @@ class RightsUtil
 
     private $rights_cache_specific_entity;
 
-    /*
-     * DONE
-     */
-
     public function count_location_overview_with_rights_granted(
         $context, $user_id, $entities, $right_ids = [], $retrieve_types = [], $tree_type = null, $tree_identifier = null
     )
     {
-        $user_id = $user_id ?: Session::get_user_id();
+        $user_id = $user_id ?: $this->getSessionUtilities()->getUserId();
         $entities_condition = $this->get_entities_condition($context, $user_id, $entities);
 
         $context_location = ($context . '\Storage\DataClass\RightsLocation');
@@ -100,10 +96,6 @@ class RightsUtil
 
         return DataManager::count_location_overview_with_rights_granted($context, $condition, $entities_condition);
     }
-
-    /*
-     * DONE
-     */
 
     public function create_location(
         $context, $type = self::TYPE_ROOT, $identifier = 0, $inherit = 0, $parent = 0, $locked = 0,
@@ -168,7 +160,7 @@ class RightsUtil
     }
 
     /*
-     * DONE - No longer used
+     * DONE
      */
 
     public function create_subtree_root_location($context, $tree_identifier, $tree_type, $return_location = false)
@@ -179,7 +171,7 @@ class RightsUtil
     }
 
     /*
-     * DONE
+     * DONE - No longer used
      */
 
     /**
@@ -274,6 +266,15 @@ class RightsUtil
         }
 
         return self::$instance;
+    }
+
+    /*
+     * DONE
+     */
+
+    public function getSessionUtilities(): SessionUtilities
+    {
+        return DependencyInjectionContainerBuilder::getInstance()->createContainer()->get(SessionUtilities::class);
     }
 
     /*
@@ -393,7 +394,7 @@ class RightsUtil
         $right_id, $context, $parent_location, $retrieve_type, $user_id, $entities
     )
     {
-        $user_id = $user_id ?: Session::get_user_id();
+        $user_id = $user_id ?: $this->getSessionUtilities()->getUserId();
 
         $context_location = ($context . '\Storage\DataClass\RightsLocation');
 
@@ -468,7 +469,7 @@ class RightsUtil
         $context, $user_id, $entities, $right_ids = [], $retrieve_types = [], $tree_type = null, $tree_identifier = null
     )
     {
-        $user_id = $user_id ?: Session::get_user_id();
+        $user_id = $user_id ?: $this->getSessionUtilities()->getUserId();
         $entities_condition = $this->get_entities_condition($context, $user_id, $entities);
 
         $context_location = ($context . '\Storage\DataClass\RightsLocation');
@@ -832,9 +833,8 @@ class RightsUtil
         $tree_type = self::TREE_TYPE_ROOT
     )
     {
-
         // //todo: make inherit optional check
-        $user_id = $user_id ?: Session::get_user_id();
+        $user_id = $user_id ?: $this->getSessionUtilities()->getUserId();
 
         $user = \Chamilo\Core\User\Storage\DataManager::retrieve_by_id(
             User::class, (int) $user_id

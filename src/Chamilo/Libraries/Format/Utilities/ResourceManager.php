@@ -89,15 +89,6 @@ class ResourceManager
         return $this->resources;
     }
 
-    /**
-     * @return string[]
-     * @deprecated Use ResourceManager::getResources() now
-     */
-    public function get_resources(): array
-    {
-        return $this->getResources();
-    }
-
     public function hasResourceAlreadyBeenLoaded(string $path): bool
     {
         return in_array($path, $this->resources);

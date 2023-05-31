@@ -10,7 +10,6 @@ use Chamilo\Application\Weblcms\Rights\CourseManagementRights;
 use Chamilo\Configuration\Configuration;
 use Chamilo\Libraries\Architecture\ClassnameUtilities;
 use Chamilo\Libraries\Platform\Session\Request;
-use Chamilo\Libraries\Platform\Session\Session;
 use Chamilo\Libraries\Storage\DataClass\DataClass;
 use Chamilo\Libraries\Translation\Translation;
 
@@ -155,7 +154,7 @@ class CourseForm extends CommonCourseForm
         if (!$this->get_base_object()->isIdentified())
         {
             $default_values[CourseSettingsController::SETTING_PARAM_COURSE_SETTINGS . '[' .
-            CourseSettingsConnector::TITULAR . ']'] = Session::get_user_id();
+            CourseSettingsConnector::TITULAR . ']'] = $this->getSessionUtilities()->getUserId();
 
             $this->setDefaults($default_values);
         }

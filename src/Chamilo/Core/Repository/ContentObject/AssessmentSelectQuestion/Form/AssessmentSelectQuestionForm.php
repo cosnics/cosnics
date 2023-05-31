@@ -11,7 +11,6 @@ use Chamilo\Libraries\Format\Structure\ActionBar\Renderer\ButtonToolBarRenderer;
 use Chamilo\Libraries\Format\Structure\Glyph\FontAwesomeGlyph;
 use Chamilo\Libraries\Format\Tabs\Form\FormTab;
 use Chamilo\Libraries\Platform\Session\Request;
-use Chamilo\Libraries\Platform\Session\Session;
 use Chamilo\Libraries\Translation\Translation;
 
 /**
@@ -31,7 +30,7 @@ class AssessmentSelectQuestionForm extends ContentObjectForm
 
     protected function addOptionsButtons()
     {
-        $answerType = Session::retrieve('select_answer_type');
+        $answerType = $this->getSessionUtilities()->retrieve('select_answer_type');
 
         if ($answerType == AssessmentSelectQuestion::ANSWER_TYPE_RADIO)
         {
@@ -70,9 +69,9 @@ class AssessmentSelectQuestionForm extends ContentObjectForm
         $renderer = $this->defaultRenderer();
         $this->setOptionsSessionValues();
 
-        $number_of_options = (int) Session::retrieve('select_number_of_options');
-        $skippedOptions = Session::retrieve('select_skip_options');
-        $answerType = Session::retrieve('select_answer_type');
+        $number_of_options = (int) $this->getSessionUtilities()->retrieve('select_number_of_options');
+        $skippedOptions = $this->getSessionUtilities()->retrieve('select_skip_options');
+        $answerType = $this->getSessionUtilities()->retrieve('select_answer_type');
 
         $this->addElement('category', Translation::get('Options'));
 
@@ -192,7 +191,7 @@ class AssessmentSelectQuestionForm extends ContentObjectForm
     {
         $object = $this->get_content_object();
         $values = $this->exportValues();
-        $answerType = Session::retrieve('select_answer_type');
+        $answerType = $this->getSessionUtilities()->retrieve('select_answer_type');
 
         $options = [];
 
@@ -321,7 +320,7 @@ class AssessmentSelectQuestionForm extends ContentObjectForm
             }
             else
             {
-                $number_of_options = (int) Session::retrieve('select_number_of_options');
+                $number_of_options = (int) $this->getSessionUtilities()->retrieve('select_number_of_options');
 
                 for ($option_number = 0; $option_number < $number_of_options; $option_number ++)
                 {
@@ -340,14 +339,16 @@ class AssessmentSelectQuestionForm extends ContentObjectForm
     {
         if (!$this->isSubmitted())
         {
-            Session::unregister('select_number_of_options');
-            Session::unregister('select_skip_options');
-            Session::unregister('select_answer_type');
+            $this->getSessionUtilities()->unregister('select_number_of_options');
+            $this->getSessionUtilities()->unregister('select_skip_options');
+            $this->getSessionUtilities()->unregister('select_answer_type');
         }
 
-        Session::registerIfNotSet('select_number_of_options', 3);
-        Session::registerIfNotSet('select_skip_options', []);
-        Session::registerIfNotSet('select_answer_type', AssessmentSelectQuestion::ANSWER_TYPE_RADIO);
+        $this->getSessionUtilities()->registerIfNotSet('select_number_of_options', 3);
+        $this->getSessionUtilities()->registerIfNotSet('select_skip_options', []);
+        $this->getSessionUtilities()->registerIfNotSet(
+            'select_answer_type', AssessmentSelectQuestion::ANSWER_TYPE_RADIO
+        );
 
         $extraOptionRequested = Request::post('add');
         $removedOptions = Request::post('remove');
@@ -355,21 +356,23 @@ class AssessmentSelectQuestionForm extends ContentObjectForm
 
         if (isset($extraOptionRequested))
         {
-            Session::register('select_number_of_options', (Session::retrieve('select_number_of_options') + 1));
+            $this->getSessionUtilities()->register(
+                'select_number_of_options', ($this->getSessionUtilities()->retrieve('select_number_of_options') + 1)
+            );
         }
 
         if (isset($removedOptions))
         {
             $indexes = array_keys($removedOptions);
-            $skippedOptions = Session::retrieve('select_skip_options');
+            $skippedOptions = $this->getSessionUtilities()->retrieve('select_skip_options');
             $skippedOptions[] = $indexes[0];
 
-            Session::register('select_skip_options', $skippedOptions);
+            $this->getSessionUtilities()->register('select_skip_options', $skippedOptions);
         }
 
         if (isset($answerTypeChanged))
         {
-            $currentAnswerType = Session::retrieve('select_answer_type');
+            $currentAnswerType = $this->getSessionUtilities()->retrieve('select_answer_type');
 
             if ($currentAnswerType == AssessmentSelectQuestion::ANSWER_TYPE_RADIO)
             {
@@ -380,15 +383,15 @@ class AssessmentSelectQuestionForm extends ContentObjectForm
                 $newAnswerType = AssessmentSelectQuestion::ANSWER_TYPE_RADIO;
             }
 
-            Session::register('select_answer_type', $newAnswerType);
+            $this->getSessionUtilities()->register('select_answer_type', $newAnswerType);
         }
 
         $object = $this->get_content_object();
 
         if (!$this->isSubmitted() && $object->get_number_of_options() != 0)
         {
-            Session::register('select_number_of_options', $object->get_number_of_options());
-            Session::register('select_answer_type', $object->get_answer_type());
+            $this->getSessionUtilities()->register('select_number_of_options', $object->get_number_of_options());
+            $this->getSessionUtilities()->register('select_answer_type', $object->get_answer_type());
         }
     }
 
@@ -415,7 +418,7 @@ class AssessmentSelectQuestionForm extends ContentObjectForm
 
     public function validate_selected_answers($fields)
     {
-        $answerType = Session::retrieve('select_answer_type');
+        $answerType = $this->getSessionUtilities()->retrieve('select_answer_type');
 
         if (!isset($fields[AssessmentSelectQuestionOption::PROPERTY_CORRECT]))
         {

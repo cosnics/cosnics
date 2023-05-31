@@ -5,13 +5,11 @@ use Chamilo\Core\Admin\Core\BreadcrumbGenerator;
 use Chamilo\Core\Home\Manager;
 use Chamilo\Libraries\Format\Structure\BreadcrumbGeneratorInterface;
 use Chamilo\Libraries\Format\Structure\BreadcrumbTrail;
-use Chamilo\Libraries\Platform\Session\Session;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 
 /**
- *
  * @package Chamilo\Core\Home\Component
- * @author Hans De Bisschop <hans.de.bisschop@ehb.be>
+ * @author  Hans De Bisschop <hans.de.bisschop@ehb.be>
  */
 class PersonalComponent extends Manager
 {
@@ -25,7 +23,7 @@ class PersonalComponent extends Manager
     {
         if ($this->get_user()->is_platform_admin())
         {
-            Session::unregister('Chamilo\Core\Home\General');
+            $this->getSessionUtilities()->unregister('Chamilo\Core\Home\General');
         }
 
         return new RedirectResponse($this->getUrlGenerator()->fromParameters());

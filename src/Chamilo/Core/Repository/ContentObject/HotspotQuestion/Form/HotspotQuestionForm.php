@@ -14,7 +14,6 @@ use Chamilo\Libraries\File\ImageManipulation\ImageManipulation;
 use Chamilo\Libraries\Format\Form\Element\AdvancedElementFinder\AdvancedElementFinderElementType;
 use Chamilo\Libraries\Format\Form\Element\AdvancedElementFinder\AdvancedElementFinderElementTypes;
 use Chamilo\Libraries\Format\Structure\Glyph\FontAwesomeGlyph;
-use Chamilo\Libraries\Platform\Session\Session;
 use Chamilo\Libraries\Translation\Translation;
 use Chamilo\Libraries\Utilities\StringUtilities;
 
@@ -46,7 +45,7 @@ class HotspotQuestionForm extends ContentObjectForm
     {
         $calculator = new Calculator(
             DataManager::retrieve_by_id(
-                User::class, (int) Session::get_user_id()
+                User::class, (int) $this->getSessionUtilities()->getUserId()
             )
         );
 

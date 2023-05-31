@@ -17,7 +17,7 @@ use Chamilo\Core\Repository\Workspace\Storage\DataClass\WorkspaceContentObjectRe
 use Chamilo\Libraries\Architecture\ClassnameUtilities;
 use Chamilo\Libraries\Architecture\Interfaces\ComplexContentObjectSupport;
 use Chamilo\Libraries\DependencyInjection\DependencyInjectionContainerBuilder;
-use Chamilo\Libraries\Platform\Session\Session;
+use Chamilo\Libraries\Platform\Session\SessionUtilities;
 use Chamilo\Libraries\Storage\DataClass\DataClass;
 use Chamilo\Libraries\Storage\Parameters\DataClassCountGroupedParameters;
 use Chamilo\Libraries\Storage\Parameters\DataClassCountParameters;
@@ -289,6 +289,9 @@ class DataManager extends \Chamilo\Libraries\Storage\DataManager\DataManager
 
     public static function content_object_title_exists($title, $parent_id = null, $content_object_id = null)
     {
+        $sessionUtilities =
+            DependencyInjectionContainerBuilder::getInstance()->createContainer()->get(SessionUtilities::class);
+
         $conditions = [];
         if (!is_null($parent_id))
         {
@@ -313,7 +316,7 @@ class DataManager extends \Chamilo\Libraries\Storage\DataManager\DataManager
         );
         $conditions[] = new EqualityCondition(
             new PropertyConditionVariable(ContentObject::class, ContentObject::PROPERTY_OWNER_ID),
-            new StaticConditionVariable(Session::get_user_id())
+            new StaticConditionVariable($sessionUtilities->getUserId())
         );
         $conditions[] = new InCondition(
             new PropertyConditionVariable(ContentObject::class, ContentObject::PROPERTY_TYPE),

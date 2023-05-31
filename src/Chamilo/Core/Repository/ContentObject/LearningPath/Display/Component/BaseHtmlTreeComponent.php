@@ -14,7 +14,6 @@ use Chamilo\Libraries\Format\Structure\Glyph\FontAwesomeGlyph;
 use Chamilo\Libraries\Format\Structure\PageConfiguration;
 use Chamilo\Libraries\Format\Structure\ProgressBarRenderer;
 use Chamilo\Libraries\Format\Utilities\ResourceManager;
-use Chamilo\Libraries\Platform\Session\Session;
 use Chamilo\Libraries\Translation\Translation;
 use Chamilo\Libraries\Utilities\StringUtilities;
 
@@ -127,7 +126,7 @@ abstract class BaseHtmlTreeComponent extends Manager implements DelegateComponen
             $html[] = $glyph->render();
         }
 
-        $isMenuHidden = Session::retrieve('learningPathMenuIsHidden');
+        $isMenuHidden = $this->getSessionUtilities()->retrieve('learningPathMenuIsHidden');
 
         $classes = ['learning-path-action-menu-show', 'fa-3x'];
         if ($isMenuHidden != 'true')
@@ -214,7 +213,7 @@ abstract class BaseHtmlTreeComponent extends Manager implements DelegateComponen
     public function render_header(string $pageTitle = ''): string
     {
         $isFullScreen = $this->getRequest()->query->get(self::PARAM_FULL_SCREEN, false);
-        $isMenuHidden = Session::retrieve('learningPathMenuIsHidden');
+        $isMenuHidden = $this->getSessionUtilities()->retrieve('learningPathMenuIsHidden');
 
         if ($isFullScreen)
         {

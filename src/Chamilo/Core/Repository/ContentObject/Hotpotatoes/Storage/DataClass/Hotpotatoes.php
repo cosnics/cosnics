@@ -8,7 +8,7 @@ use Chamilo\Libraries\File\Compression\ZipArchive\ZipArchiveFilecompression;
 use Chamilo\Libraries\File\Filesystem;
 use Chamilo\Libraries\File\SystemPathBuilder;
 use Chamilo\Libraries\File\WebPathBuilder;
-use Chamilo\Libraries\Platform\Session\Session;
+use Chamilo\Libraries\Platform\Session\SessionUtilities;
 use Chamilo\Libraries\Translation\Translation;
 use Chamilo\Libraries\Utilities\String\Text;
 use Chamilo\Libraries\Utilities\StringUtilities;
@@ -56,6 +56,11 @@ class Hotpotatoes extends ContentObject implements Versionable
     public static function getAdditionalPropertyNames(): array
     {
         return [self::PROPERTY_PATH, self::PROPERTY_MAXIMUM_ATTEMPTS];
+    }
+
+    public function getSessionUtilities(): SessionUtilities
+    {
+        return DependencyInjectionContainerBuilder::getInstance()->createContainer()->get(SessionUtilities::class);
     }
 
     /**
@@ -143,7 +148,9 @@ class Hotpotatoes extends ContentObject implements Versionable
         $systemPathBuilder =
             DependencyInjectionContainerBuilder::getInstance()->createContainer()->get(SystemPathBuilder::class);
 
-        $hotpot_path = $systemPathBuilder->getPublicStoragePath(Hotpotatoes::CONTEXT) . Session::get_user_id() . '/';
+        $hotpot_path =
+            $systemPathBuilder->getPublicStoragePath(Hotpotatoes::CONTEXT) . $this->getSessionUtilities()->getUserId() .
+            '/';
         $full_path = $hotpot_path . dirname($path_to_zip) . '/';
 
         $dir = $this->getZipArchiveFilecompression()->extractFile($full_path . $zip_file_name);

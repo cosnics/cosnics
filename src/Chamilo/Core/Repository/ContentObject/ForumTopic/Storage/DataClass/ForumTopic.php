@@ -8,7 +8,8 @@ use Chamilo\Core\Repository\Storage\DataClass\ContentObject;
 use Chamilo\Core\User\Storage\DataClass\User;
 use Chamilo\Libraries\Architecture\Interfaces\AttachmentSupport;
 use Chamilo\Libraries\Architecture\Interfaces\Versionable;
-use Chamilo\Libraries\Platform\Session\Session;
+use Chamilo\Libraries\DependencyInjection\DependencyInjectionContainerBuilder;
+use Chamilo\Libraries\Platform\Session\SessionUtilities;
 use Chamilo\Libraries\Storage\Query\Condition\EqualityCondition;
 use Chamilo\Libraries\Storage\Query\Variable\PropertyConditionVariable;
 use Chamilo\Libraries\Storage\Query\Variable\StaticConditionVariable;
@@ -173,6 +174,11 @@ class ForumTopic extends ContentObject implements Versionable, AttachmentSupport
         return [self::PROPERTY_LOCKED, self::PROPERTY_TOTAL_POSTS, self::PROPERTY_LAST_POST];
     }
 
+    public function getSessionUtilities(): SessionUtilities
+    {
+        return DependencyInjectionContainerBuilder::getInstance()->createContainer()->get(SessionUtilities::class);
+    }
+
     /**
      * @return string
      */
@@ -192,16 +198,6 @@ class ForumTopic extends ContentObject implements Versionable, AttachmentSupport
     }
 
     /**
-     * Gets the id of the last post in this topic.
-     *
-     * @return int The id of the last post.
-     */
-    public function get_last_post()
-    {
-        return $this->getAdditionalProperty(self::PROPERTY_LAST_POST);
-    }
-
-    /**
      * **************************************************************************************************************
      * CRUD *
      * **************************************************************************************************************
@@ -217,6 +213,16 @@ class ForumTopic extends ContentObject implements Versionable, AttachmentSupport
      */
 
     /**
+     * Gets the id of the last post in this topic.
+     *
+     * @return int The id of the last post.
+     */
+    public function get_last_post()
+    {
+        return $this->getAdditionalProperty(self::PROPERTY_LAST_POST);
+    }
+
+    /**
      * Gets whether this object is locked.
      *
      * @return int
@@ -225,6 +231,12 @@ class ForumTopic extends ContentObject implements Versionable, AttachmentSupport
     {
         return $this->getAdditionalProperty(self::PROPERTY_LOCKED);
     }
+
+    /*
+     * This function attaches a content object to a forum topic. @param int $aid The id of the content object that needs
+     * to be attached to the forum topic. @param const $type @return boolean $success Returns true if content object is
+     * attached succesful
+     */
 
     /**
      * Gets the total number of posts of this topic.
@@ -235,12 +247,6 @@ class ForumTopic extends ContentObject implements Versionable, AttachmentSupport
     {
         return $this->getAdditionalProperty(self::PROPERTY_TOTAL_POSTS);
     }
-
-    /*
-     * This function attaches a content object to a forum topic. @param int $aid The id of the content object that needs
-     * to be attached to the forum topic. @param const $type @return boolean $success Returns true if content object is
-     * attached succesful
-     */
 
     public function invert_locked()
     {
@@ -311,6 +317,12 @@ class ForumTopic extends ContentObject implements Versionable, AttachmentSupport
         return false;
     }
 
+    /*
+     * This function subtracts a number of posts from the total post property of a topic and does this aswell for all
+     * its parents. @param int $posts Number of posts that needs to be subtracted. @param int $forum_topic_id The id of
+     * the topic of which we subtract a number of posts.
+     */
+
     /**
      * The subscribed users to this topic and his parents notifieren
      *
@@ -341,12 +353,6 @@ class ForumTopic extends ContentObject implements Versionable, AttachmentSupport
             $lo->notify_subscribed_users($emailnotificator);
         }
     }
-
-    /*
-     * This function subtracts a number of posts from the total post property of a topic and does this aswell for all
-     * its parents. @param int $posts Number of posts that needs to be subtracted. @param int $forum_topic_id The id of
-     * the topic of which we subtract a number of posts.
-     */
 
     /**
      * This function is used to recalculate the last post of a specific forum topic.
@@ -471,7 +477,7 @@ class ForumTopic extends ContentObject implements Versionable, AttachmentSupport
                 $email_notificator->set_action_body($text);
                 $email_notificator->set_action_user(
                     \Chamilo\Core\User\Storage\DataManager::retrieve_by_id(
-                        User::class, (int) Session::get_user_id()
+                        User::class, (int) $this->getSessionUtilities()->getUserId()
                     )
                 );
                 $email_notificator->set_is_topic_edited(true);

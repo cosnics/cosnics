@@ -6,7 +6,8 @@ use Chamilo\Core\Repository\Storage\DataClass\ComplexContentObjectItem;
 use Chamilo\Core\Repository\Storage\DataClass\ContentObject;
 use Chamilo\Core\Repository\Storage\DataManager;
 use Chamilo\Core\User\Storage\DataClass\User;
-use Chamilo\Libraries\Platform\Session\Session;
+use Chamilo\Libraries\DependencyInjection\DependencyInjectionContainerBuilder;
+use Chamilo\Libraries\Platform\Session\SessionUtilities;
 use Chamilo\Libraries\Translation\Translation;
 
 /**
@@ -41,7 +42,7 @@ class ComplexForumTopic extends ComplexContentObjectItem
         $email_notificator->set_action_body($text);
         $email_notificator->set_action_user(
             \Chamilo\Core\User\Storage\DataManager::retrieve_by_id(
-                User::class, (int) Session::get_user_id()
+                User::class, (int) $this->getSessionUtilities()->getUserId()
             )
         );
 
@@ -76,6 +77,11 @@ class ComplexForumTopic extends ComplexContentObjectItem
     public static function getAdditionalPropertyNames(): array
     {
         return [self::PROPERTY_FORUM_TYPE];
+    }
+
+    public function getSessionUtilities(): SessionUtilities
+    {
+        return DependencyInjectionContainerBuilder::getInstance()->createContainer()->get(SessionUtilities::class);
     }
 
     /**

@@ -4,11 +4,10 @@ namespace Chamilo\Core\Repository\ContentObject\Task\Ajax\Component;
 use Chamilo\Core\Repository\ContentObject\Task\Ajax\Manager;
 use Chamilo\Core\Repository\ContentObject\Task\Storage\DataClass\Task;
 use Chamilo\Libraries\Architecture\JsonAjaxResult;
-use Chamilo\Libraries\Platform\Session\Session;
 
 class ClearParameterComponent extends Manager
 {
-    const PARAM_PARAMETER = 'parameter';
+    public const PARAM_PARAMETER = 'parameter';
 
     /*
      * (non-PHPdoc) @see common\libraries.AjaxManager::required_parameters()
@@ -19,7 +18,7 @@ class ClearParameterComponent extends Manager
         $parameter = $this->getPostDataValue(self::PARAM_PARAMETER);
         $parameter = explode('_', $parameter, 3);
 
-        $session = unserialize(Session::retrieve('advanced_filter'));
+        $session = unserialize($this->getSessionUtilities()->retrieve('advanced_filter'));
 
         if ($parameter[1] == 'task')
         {
@@ -46,7 +45,7 @@ class ClearParameterComponent extends Manager
                     break;
             }
 
-            Session::register('advanced_filter', serialize($session));
+            $this->getSessionUtilities()->register('advanced_filter', serialize($session));
             JsonAjaxResult::success();
         }
         else
@@ -61,6 +60,6 @@ class ClearParameterComponent extends Manager
 
     public function getRequiredPostParameters(): array
     {
-        return array(self::PARAM_PARAMETER);
+        return [self::PARAM_PARAMETER];
     }
 }

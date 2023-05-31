@@ -6,7 +6,8 @@ use Chamilo\Core\Repository\ContentObject\ForumTopic\Storage\DataManager;
 use Chamilo\Core\Repository\Storage\DataClass\ContentObject;
 use Chamilo\Core\User\Storage\DataClass\User;
 use Chamilo\Libraries\Architecture\Interfaces\AttachmentSupport;
-use Chamilo\Libraries\Platform\Session\Session;
+use Chamilo\Libraries\DependencyInjection\DependencyInjectionContainerBuilder;
+use Chamilo\Libraries\Platform\Session\SessionUtilities;
 use Chamilo\Libraries\Storage\DataClass\DataClass;
 use Chamilo\Libraries\Translation\Translation;
 
@@ -112,7 +113,7 @@ class ForumPost extends DataClass implements AttachmentSupport
 
             $email_notificator->set_action_user(
                 \Chamilo\Core\User\Storage\DataManager::retrieve_by_id(
-                    User::class, (int) Session::get_user_id()
+                    User::class, (int) $this->getSessionUtilities()->getUserId()
                 )
             );
             $succes = parent::create($this);
@@ -211,6 +212,11 @@ class ForumPost extends DataClass implements AttachmentSupport
         );
     }
 
+    public function getSessionUtilities(): SessionUtilities
+    {
+        return DependencyInjectionContainerBuilder::getInstance()->createContainer()->get(SessionUtilities::class);
+    }
+
     /**
      * @return string
      */
@@ -254,6 +260,12 @@ class ForumPost extends DataClass implements AttachmentSupport
     }
 
     /**
+     * **************************************************************************************************************
+     * Setters *
+     * **************************************************************************************************************
+     */
+
+    /**
      * Returns the numeric identifier of the object's parent.
      *
      * @return int The identifier.
@@ -262,12 +274,6 @@ class ForumPost extends DataClass implements AttachmentSupport
     {
         return $this->getDefaultProperty(self::PROPERTY_FORUM_TOPIC_ID);
     }
-
-    /**
-     * **************************************************************************************************************
-     * Setters *
-     * **************************************************************************************************************
-     */
 
     /**
      * Returns the date when this object was last modified, as returned by PHP's time() function.
@@ -327,6 +333,12 @@ class ForumPost extends DataClass implements AttachmentSupport
     }
 
     /**
+     * **************************************************************************************************************
+     * CRUD *
+     * **************************************************************************************************************
+     */
+
+    /**
      * Sets the content of this object.
      *
      * @param string $content The content of the post.
@@ -335,12 +347,6 @@ class ForumPost extends DataClass implements AttachmentSupport
     {
         $this->setDefaultProperty(self::PROPERTY_CONTENT, $content);
     }
-
-    /**
-     * **************************************************************************************************************
-     * CRUD *
-     * **************************************************************************************************************
-     */
 
     /**
      * Sets the date when this object was created.
@@ -363,6 +369,12 @@ class ForumPost extends DataClass implements AttachmentSupport
     }
 
     /**
+     * **************************************************************************************************************
+     * Attachments *
+     * **************************************************************************************************************
+     */
+
+    /**
      * Sets the date when this object was modified.
      *
      * @param int $modified The modification date of this post object.
@@ -371,12 +383,6 @@ class ForumPost extends DataClass implements AttachmentSupport
     {
         $this->setDefaultProperty(self::PROPERTY_MODIFICATION_DATE, $modified);
     }
-
-    /**
-     * **************************************************************************************************************
-     * Attachments *
-     * **************************************************************************************************************
-     */
 
     /**
      * Sets the ID of the reply on a post .
@@ -440,7 +446,7 @@ class ForumPost extends DataClass implements AttachmentSupport
             $email_notificator->set_post($this);
             $email_notificator->set_action_user(
                 \Chamilo\Core\User\Storage\DataManager::retrieve_by_id(
-                    User::class, (int) Session::get_user_id()
+                    User::class, (int) $this->getSessionUtilities()->getUserId()
                 )
             );
 

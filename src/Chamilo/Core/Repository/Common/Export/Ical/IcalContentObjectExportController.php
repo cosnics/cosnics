@@ -7,7 +7,6 @@ use Chamilo\Core\Repository\Common\Export\ContentObjectExportImplementation;
 use Chamilo\Core\Repository\Common\Export\ExportParameters;
 use Chamilo\Core\Repository\Storage\DataClass\ContentObject;
 use Chamilo\Core\Repository\Storage\DataManager;
-use Chamilo\Libraries\Platform\Session\Session;
 use Chamilo\Libraries\Storage\Parameters\DataClassRetrievesParameters;
 use Chamilo\Libraries\Storage\Query\Condition\InCondition;
 use Chamilo\Libraries\Storage\Query\Variable\PropertyConditionVariable;
@@ -161,7 +160,7 @@ class IcalContentObjectExportController extends ContentObjectExportController
 
     public function prepare_file_system()
     {
-        $user_id = Session::get_user_id();
+        $user_id = $this->getSessionUtilities()->getUserId();
         $directory = $this->getConfigurablePathBuilder()->getTemporaryPath() . $user_id . '/';
 
         if (!is_dir($directory))

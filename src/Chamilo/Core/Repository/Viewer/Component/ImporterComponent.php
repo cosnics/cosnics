@@ -22,7 +22,6 @@ use Chamilo\Libraries\Format\Structure\BreadcrumbTrail;
 use Chamilo\Libraries\Format\Structure\Glyph\FontAwesomeGlyph;
 use Chamilo\Libraries\Format\Utilities\ResourceManager;
 use Chamilo\Libraries\Platform\Session\Request;
-use Chamilo\Libraries\Platform\Session\Session;
 use Chamilo\Libraries\Storage\Parameters\DataClassDistinctParameters;
 use Chamilo\Libraries\Storage\Query\Condition\AndCondition;
 use Chamilo\Libraries\Storage\Query\Condition\InCondition;
@@ -108,7 +107,7 @@ class ImporterComponent extends Manager implements DelegateComponent
                 $filtered_content_object_ids = $this->filter_content_object_ids($content_object_ids);
                 $messages = $controller->get_messages_for_url();
 
-                Session::register(Application::PARAM_MESSAGES, $messages);
+                $this->getSessionUtilities()->register(Application::PARAM_MESSAGES, $messages);
 
                 if (!$controller->has_messages(ContentObjectImportController::TYPE_ERROR))
                 {
@@ -116,12 +115,12 @@ class ImporterComponent extends Manager implements DelegateComponent
                     {
                         if (count($content_object_ids) > 1)
                         {
-                            $messages = Session::retrieve(Application::PARAM_MESSAGES);
+                            $messages = $this->getSessionUtilities()->retrieve(Application::PARAM_MESSAGES);
                             $messages[Application::PARAM_MESSAGE][] = Translation::get(
                                 'MultipleObjectsImportedButOneUseable'
                             );
                             $messages[Application::PARAM_MESSAGE_TYPE][] = ContentObjectImportController::TYPE_ERROR;
-                            Session::register(Application::PARAM_MESSAGES, $messages);
+                            $this->getSessionUtilities()->register(Application::PARAM_MESSAGES, $messages);
                         }
 
                         $this->redirect([self::PARAM_ID => $filtered_content_object_ids[0]]);
@@ -130,12 +129,12 @@ class ImporterComponent extends Manager implements DelegateComponent
                     {
                         if (count($content_object_ids) > 0)
                         {
-                            $messages = Session::retrieve(Application::PARAM_MESSAGES);
+                            $messages = $this->getSessionUtilities()->retrieve(Application::PARAM_MESSAGES);
                             $message = (count($content_object_ids) == 1 ? 'ObjectImportedButNoneUseable' :
                                 'ObjectsImportedButNoneUseable');
                             $messages[Application::PARAM_MESSAGE][] = Translation::get($message);
                             $messages[Application::PARAM_MESSAGE_TYPE][] = ContentObjectImportController::TYPE_ERROR;
-                            Session::register(Application::PARAM_MESSAGES, $messages);
+                            $this->getSessionUtilities()->register(Application::PARAM_MESSAGES, $messages);
                         }
 
                         $this->redirect();

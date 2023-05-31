@@ -10,7 +10,6 @@ use Chamilo\Libraries\Format\Form\FormValidator;
 use Chamilo\Libraries\Hashing\HashingUtilities;
 use Chamilo\Libraries\Mail\Mailer\MailerInterface;
 use Chamilo\Libraries\Mail\ValueObject\Mail;
-use Chamilo\Libraries\Platform\Session\Session;
 use Chamilo\Libraries\Translation\Translation;
 use Chamilo\Libraries\Utilities\StringUtilities;
 use Exception;
@@ -149,9 +148,9 @@ class InvitationRegistrationForm extends FormValidator
 
             $this->send_mail($user);
 
-            Session::register('_uid', intval($user->get_id()));
+            $this->getSessionUtilities()->register('_uid', intval($user->getId()));
             Event::trigger(
-                'Register', Manager::CONTEXT, ['target_user_id' => $user->get_id(), 'action_user_id' => $user->get_id()]
+                'Register', Manager::CONTEXT, ['target_user_id' => $user->getId(), 'action_user_id' => $user->getId()]
             );
             Event::trigger('Login', Manager::CONTEXT, ['server' => $_SERVER, 'user' => $user]);
 

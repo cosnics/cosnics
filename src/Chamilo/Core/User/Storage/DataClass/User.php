@@ -3,8 +3,8 @@ namespace Chamilo\Core\User\Storage\DataClass;
 
 use Chamilo\Configuration\Configuration;
 use Chamilo\Core\Group\Storage\DataClass\GroupRelUser;
+use Chamilo\Core\Group\Storage\DataManager;
 use Chamilo\Core\User\Manager;
-use Chamilo\Core\User\Storage\DataManager;
 use Chamilo\Libraries\Storage\DataClass\DataClass;
 use Chamilo\Libraries\Storage\Query\Condition\EqualityCondition;
 use Chamilo\Libraries\Storage\Query\Variable\PropertyConditionVariable;
@@ -54,19 +54,6 @@ class User extends DataClass
     public const STATUS_STUDENT = 5;
     public const STATUS_TEACHER = 1;
 
-    public static function admin()
-    {
-        $user_id = \Chamilo\Libraries\Platform\Session\Session::get_user_id();
-        if ($user_id && $user_id != '')
-        {
-            return DataManager::retrieve_by_id(User::class, (int) $user_id)->is_platform_admin();
-        }
-        else
-        {
-            return false;
-        }
-    }
-
     /**
      * Instructs the Datamanager to create this user.
      *
@@ -91,7 +78,7 @@ class User extends DataClass
             new PropertyConditionVariable(GroupRelUser::class, GroupRelUser::PROPERTY_USER_ID),
             new StaticConditionVariable($this->get_id())
         );
-        $success = \Chamilo\Core\Group\Storage\DataManager::deletes(
+        $success = DataManager::deletes(
             GroupRelUser::class, $group_rel_user_condition
         );
 
@@ -314,7 +301,7 @@ class User extends DataClass
      */
     public function get_groups($only_retrieve_ids = false)
     {
-        return \Chamilo\Core\Group\Storage\DataManager::retrieve_all_subscribed_groups_array(
+        return DataManager::retrieve_all_subscribed_groups_array(
             $this->getId(), $only_retrieve_ids
         );
     }
@@ -434,7 +421,7 @@ class User extends DataClass
 
     public function get_user_groups()
     {
-        return \Chamilo\Core\Group\Storage\DataManager::retrieve_user_groups($this->get_id());
+        return DataManager::retrieve_user_groups($this->get_id());
     }
 
     /**

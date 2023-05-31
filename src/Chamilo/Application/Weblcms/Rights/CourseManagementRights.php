@@ -12,7 +12,8 @@ use Chamilo\Core\Group\Storage\DataClass\Group;
 use Chamilo\Core\Rights\Entity\PlatformGroupEntity;
 use Chamilo\Core\Rights\Entity\UserEntity;
 use Chamilo\Core\Rights\RightsUtil;
-use Chamilo\Libraries\Platform\Session\Session;
+use Chamilo\Libraries\DependencyInjection\DependencyInjectionContainerBuilder;
+use Chamilo\Libraries\Platform\Session\SessionUtilities;
 use Chamilo\Libraries\Storage\DataClass\DataClass;
 use Chamilo\Libraries\Storage\Query\Condition\AndCondition;
 use Chamilo\Libraries\Storage\Query\Condition\EqualityCondition;
@@ -230,7 +231,7 @@ class CourseManagementRights extends WeblcmsRights
                     break;
                 case self::RIGHT_OTPION_ME :
                     $succes &= $this->invert_location_entity_right(
-                        Manager::CONTEXT, $right_id, Session::get_user_id(), 1, $location_id
+                        Manager::CONTEXT, $right_id, $this->getSessionUtilities()->getUserId(), 1, $location_id
                     );
                     break;
                 case self::RIGHT_OPTION_SELECT :
@@ -268,12 +269,6 @@ class CourseManagementRights extends WeblcmsRights
     }
 
     /**
-     * **************************************************************************************************************
-     * Metadata Functionality *
-     * **************************************************************************************************************
-     */
-
-    /**
      * Singleton
      *
      * @return CourseManagementRights
@@ -286,6 +281,17 @@ class CourseManagementRights extends WeblcmsRights
         }
 
         return self::$instance;
+    }
+
+    /**
+     * **************************************************************************************************************
+     * Metadata Functionality *
+     * **************************************************************************************************************
+     */
+
+    public function getSessionUtilities(): SessionUtilities
+    {
+        return DependencyInjectionContainerBuilder::getInstance()->createContainer()->get(SessionUtilities::class);
     }
 
     /**

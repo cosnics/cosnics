@@ -7,7 +7,6 @@ use Chamilo\Core\Repository\Storage\DataClass\ContentObject;
 use Chamilo\Core\Repository\Storage\DataManager;
 use Chamilo\Libraries\Architecture\Exceptions\NoObjectSelectedException;
 use Chamilo\Libraries\Platform\Session\Request;
-use Chamilo\Libraries\Platform\Session\Session;
 use Chamilo\Libraries\Translation\Translation;
 
 /**
@@ -69,7 +68,7 @@ class CopierComponent extends Manager
             }
         }
 
-        Session::register(self::PARAM_MESSAGES, $messages);
+        $this->getSessionUtilities()->register(self::PARAM_MESSAGES, $messages);
         $parameters = [self::PARAM_ACTION => self::ACTION_BROWSE_CONTENT_OBJECTS];
         $this->redirect($parameters);
     }

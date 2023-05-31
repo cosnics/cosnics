@@ -5,7 +5,6 @@ use Chamilo\Core\Repository\Ajax\Manager;
 use Chamilo\Core\Repository\Storage\DataClass\ContentObject;
 use Chamilo\Core\Repository\Storage\DataManager;
 use Chamilo\Libraries\Platform\Session\Request;
-use Chamilo\Libraries\Platform\Session\Session;
 use Chamilo\Libraries\Storage\Parameters\DataClassRetrievesParameters;
 use Chamilo\Libraries\Storage\Query\Condition\AndCondition;
 use Chamilo\Libraries\Storage\Query\Condition\ContainsCondition;
@@ -18,11 +17,10 @@ use Chamilo\Libraries\Storage\Query\Variable\StaticConditionVariable;
 use Chamilo\Libraries\Utilities\StringUtilities;
 
 /**
- *
  * @package Chamilo\Core\Repository\Ajax\Component
- * @author Hans De Bisschop <hans.de.bisschop@ehb.be>
- * @author Magali Gillard <magali.gillard@ehb.be>
- * @author Eduard Vossen <eduard.vossen@ehb.be>
+ * @author  Hans De Bisschop <hans.de.bisschop@ehb.be>
+ * @author  Magali Gillard <magali.gillard@ehb.be>
+ * @author  Eduard Vossen <eduard.vossen@ehb.be>
  */
 class SearchCompleteComponent extends Manager
 {
@@ -36,7 +34,7 @@ class SearchCompleteComponent extends Manager
         $conditions = [];
         $conditions[] = new EqualityCondition(
             new PropertyConditionVariable(ContentObject::class, ContentObject::PROPERTY_OWNER_ID),
-            new StaticConditionVariable(Session::get_user_id())
+            new StaticConditionVariable($this->getSessionUtilities()->getUserId())
         );
         $or_conditions[] = new ContainsCondition(
             new PropertyConditionVariable(ContentObject::class, ContentObject::PROPERTY_TITLE), $query
@@ -48,21 +46,21 @@ class SearchCompleteComponent extends Manager
         $condition = new AndCondition($conditions);
 
         $parameters = new DataClassRetrievesParameters(
-            $condition, null, null, new OrderBy(array(
+            $condition, null, null, new OrderBy([
                 new OrderProperty(
                     new PropertyConditionVariable(ContentObject::class, ContentObject::PROPERTY_TITLE)
                 )
-            ))
+            ])
         );
         $objects = DataManager::retrieve_active_content_objects(ContentObject::class, $parameters);
 
         foreach ($objects as $object)
         {
-            $response[] = array(
+            $response[] = [
                 'id' => $object->get_id(),
                 'label' => StringUtilities::getInstance()->truncate($object->get_title(), 23),
                 'value' => $object->get_title()
-            );
+            ];
         }
 
         echo json_encode($response);

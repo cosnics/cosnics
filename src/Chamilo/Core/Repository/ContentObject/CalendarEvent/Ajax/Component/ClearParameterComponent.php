@@ -4,37 +4,28 @@ namespace Chamilo\Core\Repository\ContentObject\CalendarEvent\Ajax\Component;
 use Chamilo\Core\Repository\ContentObject\CalendarEvent\Ajax\Manager;
 use Chamilo\Core\Repository\ContentObject\CalendarEvent\Storage\DataClass\CalendarEvent;
 use Chamilo\Libraries\Architecture\JsonAjaxResult;
-use Chamilo\Libraries\Platform\Session\Session;
 
 /**
- *
  * @package Chamilo\Core\Repository\ContentObject\CalendarEvent\Ajax\Component
- * @author Hans De Bisschop <hans.de.bisschop@ehb.be>
- * @author Magali Gillard <magali.gillard@ehb.be>
- * @author Eduard Vossen <eduard.vossen@ehb.be>
+ * @author  Hans De Bisschop <hans.de.bisschop@ehb.be>
+ * @author  Magali Gillard <magali.gillard@ehb.be>
+ * @author  Eduard Vossen <eduard.vossen@ehb.be>
  */
 class ClearParameterComponent extends Manager
 {
-    const PARAM_PARAMETER = 'parameter';
+    public const PARAM_PARAMETER = 'parameter';
 
     /*
      * (non-PHPdoc) @see common\libraries.AjaxManager::required_parameters()
      */
-    public function getRequiredPostParameters(): array
-    {
-        return array(self::PARAM_PARAMETER);
-    }
 
-    /*
-     * (non-PHPdoc) @see common\libraries.AjaxManager::run()
-     */
     public function run()
     {
         $parameter = $this->getPostDataValue(self::PARAM_PARAMETER);
         $parameter = explode('_', $parameter, 3);
-        
-        $session = unserialize(Session::retrieve('advanced_filter'));
-        
+
+        $session = unserialize($this->getSessionUtilities()->retrieve('advanced_filter'));
+
         if ($parameter[1] == 'calendar_event')
         {
             switch ($parameter[2])
@@ -53,13 +44,22 @@ class ClearParameterComponent extends Manager
                     unset($session[CalendarEvent::PROPERTY_FREQUENCY]);
                     break;
             }
-            
-            Session::register('advanced_filter', serialize($session));
+
+            $this->getSessionUtilities()->register('advanced_filter', serialize($session));
             JsonAjaxResult::success();
         }
         else
         {
             JsonAjaxResult::bad_request();
         }
+    }
+
+    /*
+     * (non-PHPdoc) @see common\libraries.AjaxManager::run()
+     */
+
+    public function getRequiredPostParameters(): array
+    {
+        return [self::PARAM_PARAMETER];
     }
 }

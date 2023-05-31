@@ -8,7 +8,6 @@ use Chamilo\Core\Repository\Common\Export\ExportParameters;
 use Chamilo\Core\Repository\Storage\DataClass\ContentObject;
 use Chamilo\Core\Repository\Storage\DataManager;
 use Chamilo\Libraries\File\Filesystem;
-use Chamilo\Libraries\Platform\Session\Session;
 use Chamilo\Libraries\Storage\Parameters\DataClassRetrievesParameters;
 use Chamilo\Libraries\Storage\Query\Condition\InCondition;
 use Chamilo\Libraries\Storage\Query\Variable\PropertyConditionVariable;
@@ -36,8 +35,6 @@ class HtmlContentObjectExportController extends ContentObjectExportController
 
     /**
      * Main function of this class, retrieves the content object by condition and returns a HTML file.
-     *
-     * @return HTML file
      */
     public function run()
     {
@@ -107,7 +104,7 @@ class HtmlContentObjectExportController extends ContentObjectExportController
      */
     public function prepare_file_system()
     {
-        $user_id = Session::get_user_id();
+        $user_id = $this->getSessionUtilities()->getUserId();
 
         $this->temporary_directory =
             $this->getConfigurablePathBuilder()->getTemporaryPath() . $user_id . '/export_content_objects/';

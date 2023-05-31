@@ -11,7 +11,6 @@ use Chamilo\Libraries\Format\Structure\Glyph\IdentGlyph;
 use Chamilo\Libraries\Format\Structure\Glyph\InlineGlyph;
 use Chamilo\Libraries\Format\Structure\Glyph\NamespaceIdentGlyph;
 use Chamilo\Libraries\Format\Utilities\ResourceManager;
-use Chamilo\Libraries\Platform\Session\Session;
 use Chamilo\Libraries\Translation\Translation;
 use Symfony\Component\HttpFoundation\StreamedResponse;
 
@@ -51,8 +50,8 @@ class InstallerComponent extends Manager implements NoAuthenticationSupport, Ins
                 flush();
 
                 session_start();
-                Session::unregister(self::PARAM_SETTINGS);
-                Session::unregister(self::PARAM_LANGUAGE);
+                $this->getSessionUtilities()->unregister(self::PARAM_SETTINGS);
+                $this->getSessionUtilities()->unregister(self::PARAM_LANGUAGE);
                 session_write_close();
             }
         );
@@ -187,7 +186,7 @@ class InstallerComponent extends Manager implements NoAuthenticationSupport, Ins
     {
         if (!isset($this->installer))
         {
-            $values = unserialize(Session::retrieve(self::PARAM_SETTINGS));
+            $values = unserialize($this->getSessionUtilities()->retrieve(self::PARAM_SETTINGS));
             if (!is_array($values))
             {
                 $values = [];

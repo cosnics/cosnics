@@ -9,9 +9,10 @@ use Chamilo\Core\Home\Storage\DataClass\Block;
 use Chamilo\Core\Home\Storage\DataClass\Element;
 use Chamilo\Core\User\Storage\DataClass\User;
 use Chamilo\Libraries\Architecture\ClassnameUtilities;
+use Chamilo\Libraries\DependencyInjection\DependencyInjectionContainerBuilder;
 use Chamilo\Libraries\Format\Structure\Glyph\IdentGlyph;
 use Chamilo\Libraries\Format\Structure\Glyph\NamespaceIdentGlyph;
-use Chamilo\Libraries\Platform\Session\Session;
+use Chamilo\Libraries\Platform\Session\SessionUtilities;
 use Chamilo\Libraries\Storage\Parameters\DataClassDistinctParameters;
 use Chamilo\Libraries\Storage\Parameters\DataClassRetrievesParameters;
 use Chamilo\Libraries\Storage\Query\Condition\EqualityCondition;
@@ -32,13 +33,16 @@ class DataManager extends \Chamilo\Libraries\Storage\DataManager\DataManager
 
     public static function determine_user_id()
     {
-        $current_user_id = Session::get_user_id();
+        $sessionUtilities =
+            DependencyInjectionContainerBuilder::getInstance()->createContainer()->get(SessionUtilities::class);
+
+        $current_user_id = $sessionUtilities->getUserId();
         $current_user = \Chamilo\Core\User\Storage\DataManager::retrieve_by_id(
             User::class, intval($current_user_id)
         );
 
         $user_home_allowed = Configuration::getInstance()->get_setting([Manager::CONTEXT, 'allow_user_home']);
-        $generalMode = Session::retrieve('Chamilo\Core\Home\General');
+        $generalMode = $sessionUtilities->retrieve('Chamilo\Core\Home\General');
 
         if ($current_user instanceof User)
         {

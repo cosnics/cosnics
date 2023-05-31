@@ -10,7 +10,6 @@ use Chamilo\Core\Repository\ContentObject\LearningPath\Storage\DataClass\Learnin
 use Chamilo\Libraries\Architecture\Application\ApplicationConfigurationInterface;
 use Chamilo\Libraries\Architecture\Exceptions\ObjectNotExistException;
 use Chamilo\Libraries\Format\Utilities\ResourceManager;
-use Chamilo\Libraries\Platform\Session\Session;
 use Chamilo\Libraries\Translation\Translation;
 use Exception;
 use RuntimeException;
@@ -273,7 +272,7 @@ abstract class Manager extends \Chamilo\Core\Repository\Display\Manager
     {
         $studentViewSessionVariable = $this->getStudentViewSessionVariable();
 
-        return Session::get($studentViewSessionVariable) == 1;
+        return $this->getSessionUtilities()->get($studentViewSessionVariable) == 1;
     }
 
     /**

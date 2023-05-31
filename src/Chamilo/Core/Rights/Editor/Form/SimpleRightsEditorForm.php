@@ -8,7 +8,6 @@ use Chamilo\Libraries\Format\Form\Element\AdvancedElementFinder\AdvancedElementF
 use Chamilo\Libraries\Format\Form\Element\AdvancedElementFinder\AdvancedElementFinderElementTypes;
 use Chamilo\Libraries\Format\Form\FormValidator;
 use Chamilo\Libraries\Format\Structure\Glyph\FontAwesomeGlyph;
-use Chamilo\Libraries\Platform\Session\Session;
 use Chamilo\Libraries\Translation\Translation;
 use Chamilo\Libraries\Utilities\StringUtilities;
 
@@ -277,7 +276,7 @@ class SimpleRightsEditorForm extends FormValidator
                     break;
                 case self::RIGHT_OTPION_ME :
                     $succes &= $rights_util->invert_location_entity_right(
-                        $this->context, $right_id, Session::get_user_id(), 1, $location_id
+                        $this->context, $right_id, $this->getSessionUtilities()->getUserId(), 1, $location_id
                     );
                     break;
                 case self::RIGHT_OPTION_SELECT :
@@ -349,7 +348,7 @@ class SimpleRightsEditorForm extends FormValidator
                     $selected_entity = $selected_entities_per_right[$right_id][0];
 
                     if ($selected_entity->get_entity_type() == 1 &&
-                        $selected_entity->get_entity_id() == Session::get_user_id())
+                        $selected_entity->get_entity_id() == $this->getSessionUtilities()->getUserId())
                     {
                         $defaults[self::PROPERTY_RIGHT_OPTION . '_' . $right_id] = self::RIGHT_OTPION_ME;
                         continue;

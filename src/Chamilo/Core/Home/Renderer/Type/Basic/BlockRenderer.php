@@ -15,7 +15,6 @@ use Chamilo\Core\User\Storage\DataClass\User;
 use Chamilo\Libraries\Architecture\Application\Application;
 use Chamilo\Libraries\Architecture\Traits\DependencyInjectionContainerTrait;
 use Chamilo\Libraries\Format\Structure\Glyph\FontAwesomeGlyph;
-use Chamilo\Libraries\Platform\Session\Session;
 use Chamilo\Libraries\Translation\Translation;
 
 /**
@@ -347,7 +346,7 @@ class BlockRenderer
      */
     public function isVisible()
     {
-        return Session::get_user_id() != 0;
+        return $this->getSessionUtilities()->getUserId() != 0;
     }
 
     /**

@@ -22,7 +22,7 @@ use Chamilo\Libraries\Format\Structure\ActionBar\Renderer\ButtonToolBarRenderer;
 use Chamilo\Libraries\Format\Structure\ActionBar\SplitDropdownButton;
 use Chamilo\Libraries\Format\Structure\ActionBar\SubButton;
 use Chamilo\Libraries\Format\Structure\Glyph\FontAwesomeGlyph;
-use Chamilo\Libraries\Platform\Session\Session;
+use Chamilo\Libraries\Platform\Session\SessionUtilities;
 use Chamilo\Libraries\Translation\Translation;
 use Chamilo\Libraries\Utilities\StringUtilities;
 
@@ -117,11 +117,17 @@ class Basic extends Renderer
     {
         if (!isset($this->homeService))
         {
-            $this->homeService =
-                new HomeService(new HomeRepository(), new ElementRightsService(new RightsRepository()));
+            $this->homeService = new HomeService(
+                new HomeRepository(), new ElementRightsService(new RightsRepository()), new SessionUtilities()
+            );
         }
 
         return $this->homeService;
+    }
+
+    public function getSessionUtilities(): SessionUtilities
+    {
+        return DependencyInjectionContainerBuilder::getInstance()->createContainer()->get(SessionUtilities::class);
     }
 
     public function getUrlGenerator(): UrlGenerator
@@ -138,7 +144,7 @@ class Basic extends Renderer
     {
         if (!isset($this->generalMode))
         {
-            $this->generalMode = Session::retrieve('Chamilo\Core\Home\General');
+            $this->generalMode = $this->getSessionUtilities()->retrieve('Chamilo\Core\Home\General');
         }
 
         return $this->generalMode;

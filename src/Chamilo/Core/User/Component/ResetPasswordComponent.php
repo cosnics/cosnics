@@ -17,7 +17,6 @@ use Chamilo\Libraries\Format\Structure\BreadcrumbTrail;
 use Chamilo\Libraries\Hashing\HashingUtilities;
 use Chamilo\Libraries\Mail\ValueObject\Mail;
 use Chamilo\Libraries\Platform\Session\Request;
-use Chamilo\Libraries\Platform\Session\Session;
 use Chamilo\Libraries\Translation\Translation;
 use Chamilo\Libraries\Utilities\String\Text;
 use Chamilo\Libraries\Utilities\StringUtilities;
@@ -42,7 +41,7 @@ class ResetPasswordComponent extends Manager implements NoAuthenticationSupport
      */
     public function run()
     {
-        $user_id = Session::get_user_id();
+        $user_id = $this->getSessionUtilities()->getUserId();
         $allow_password_retrieval = Configuration::getInstance()->get_setting(
             [Manager::CONTEXT, 'allow_password_retrieval']
         );

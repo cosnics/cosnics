@@ -12,7 +12,7 @@ use Chamilo\Core\User\Storage\DataClass\User;
 use Chamilo\Libraries\Architecture\ClassnameUtilities;
 use Chamilo\Libraries\Architecture\Interfaces\ComplexContentObjectSupport;
 use Chamilo\Libraries\DependencyInjection\DependencyInjectionContainerBuilder;
-use Chamilo\Libraries\Platform\Session\Session;
+use Chamilo\Libraries\Platform\Session\SessionUtilities;
 use InvalidArgumentException;
 
 /**
@@ -20,10 +20,11 @@ use InvalidArgumentException;
  */
 class LearningPath extends ContentObject implements ComplexContentObjectSupport, DisplayAndBuildSupport
 {
-    public const CONTEXT = 'Chamilo\Core\Repository\ContentObject\LearningPath';
-
     public const AUTOMATIC_NUMBERING_DIGITS = 'digits';
+
     public const AUTOMATIC_NUMBERING_NONE = 'none';
+
+    public const CONTEXT = 'Chamilo\Core\Repository\ContentObject\LearningPath';
 
     public const PROPERTY_AUTOMATIC_NUMBERING = 'automatic_numbering';
     public const PROPERTY_ENFORCE_DEFAULT_TRAVERSING_ORDER = 'enforce_default_traversing_order';
@@ -47,7 +48,7 @@ class LearningPath extends ContentObject implements ComplexContentObjectSupport,
         }
 
         $user = new User();
-        $user->setId(Session::get_user_id());
+        $user->setId($this->getSessionUtilities()->getUserId());
 
         $this->getTreeNodeDataService()->createTreeNodeDataForLearningPath($this, $user);
 
@@ -129,6 +130,11 @@ class LearningPath extends ContentObject implements ComplexContentObjectSupport,
         return DependencyInjectionContainerBuilder::getInstance()->createContainer()->get(
             $serviceName
         );
+    }
+
+    public function getSessionUtilities(): SessionUtilities
+    {
+        return $this->getService(SessionUtilities::class);
     }
 
     /**

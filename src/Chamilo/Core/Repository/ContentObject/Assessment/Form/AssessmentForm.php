@@ -3,7 +3,6 @@ namespace Chamilo\Core\Repository\ContentObject\Assessment\Form;
 
 use Chamilo\Core\Repository\ContentObject\Assessment\Storage\DataClass\Assessment;
 use Chamilo\Core\Repository\Form\ContentObjectForm;
-use Chamilo\Libraries\Platform\Session\Session;
 use Chamilo\Libraries\Translation\Translation;
 use Chamilo\Libraries\Utilities\StringUtilities;
 
@@ -429,7 +428,7 @@ class AssessmentForm extends ContentObjectForm
                 if ($object->get_random_questions() != $values[Assessment::PROPERTY_RANDOM_QUESTIONS])
                 {
                     // Regenerate random questions.
-                    Session::unregister(self::SESSION_QUESTIONS);
+                    $this->getSessionUtilities()->unregister(self::SESSION_QUESTIONS);
                 }
                 $object->set_random_questions($values[Assessment::PROPERTY_RANDOM_QUESTIONS]);
             }

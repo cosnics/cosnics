@@ -9,7 +9,8 @@ use Chamilo\Core\Repository\ContentObject\LearningPath\Domain\TreeNode;
 use Chamilo\Core\Repository\ContentObject\LearningPath\Storage\DataClass\LearningPath;
 use Chamilo\Core\Repository\ContentObject\LearningPath\Storage\Repository\TrackingRepositoryInterface;
 use Chamilo\Core\User\Storage\DataClass\User;
-use Chamilo\Libraries\Platform\Session\Session;
+use Chamilo\Libraries\DependencyInjection\DependencyInjectionContainerBuilder;
+use Chamilo\Libraries\Platform\Session\SessionUtilities;
 use Chamilo\Libraries\Storage\DataClass\DataClass;
 use Chamilo\Libraries\Storage\Query\Condition\Condition;
 use Doctrine\Common\Collections\ArrayCollection;
@@ -252,7 +253,7 @@ class TrackingRepository implements TrackingRepositoryInterface
                     $childQuestionAttempts = $questionAttempts[$treeNodeAttempt->getId()];
                     foreach ($childQuestionAttempts as $questionAttempt)
                     {
-                        $allData[] = array(
+                        $allData[] = [
                             TreeNodeAttempt::PROPERTY_USER_ID => $treeNodeAttempt->getUserId(),
                             TreeNodeAttempt::PROPERTY_LEARNING_PATH_ID => $treeNodeAttempt->getLearningPathId(),
                             'tree_node_attempt_id' => $treeNodeAttempt->getId(),
@@ -268,7 +269,7 @@ class TrackingRepository implements TrackingRepositoryInterface
                             TreeNodeQuestionAttempt::PROPERTY_FEEDBACK => $questionAttempt->get_feedback(),
                             TreeNodeQuestionAttempt::PROPERTY_SCORE => $questionAttempt->get_score(),
                             TreeNodeQuestionAttempt::PROPERTY_HINT => $questionAttempt->get_hint()
-                        );
+                        ];
                     }
                 }
             }
@@ -413,6 +414,11 @@ class TrackingRepository implements TrackingRepositoryInterface
         return $data[$property];
     }
 
+    public function getSessionUtilities(): SessionUtilities
+    {
+        return DependencyInjectionContainerBuilder::getInstance()->createContainer()->get(SessionUtilities::class);
+    }
+
     /**
      * Returns the stored data from the session
      *
@@ -420,7 +426,7 @@ class TrackingRepository implements TrackingRepositoryInterface
      */
     protected function getStorage()
     {
-        return unserialize(Session::retrieve(__NAMESPACE__));
+        return unserialize($this->getSessionUtilities()->retrieve(__NAMESPACE__));
     }
 
     /**
@@ -451,7 +457,7 @@ class TrackingRepository implements TrackingRepositoryInterface
      */
     protected function setStorage($data)
     {
-        Session::register(__NAMESPACE__, serialize($data));
+        $this->getSessionUtilities()->register(__NAMESPACE__, serialize($data));
     }
 
     /**

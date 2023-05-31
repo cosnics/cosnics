@@ -12,7 +12,6 @@ use Chamilo\Core\Rights\Entity\PlatformGroupEntity;
 use Chamilo\Core\Rights\Entity\UserEntity;
 use Chamilo\Core\User\Service\UserService;
 use Chamilo\Core\User\Storage\DataClass\User;
-use Chamilo\Libraries\Platform\Session\Session;
 use Chamilo\Libraries\Platform\Session\SessionUtilities;
 use Chamilo\Libraries\Storage\Cache\DataClassRepositoryCache;
 use Chamilo\Libraries\Storage\Query\Condition\AndCondition;
@@ -25,68 +24,24 @@ use Exception;
 use Symfony\Component\Translation\Translator;
 
 /**
- *
  * @package Chamilo\Application\Portfolio\Service
- * @author Hans De Bisschop <hans.de.bisschop@ehb.be>
+ * @author  Hans De Bisschop <hans.de.bisschop@ehb.be>
  */
 class RightsService
 {
     // Parameters
-    const EDIT_RIGHT = 4;
+    public const EDIT_RIGHT = 4;
 
     // Rights
-    const GIVE_FEEDBACK_RIGHT = 3;
-    const PARAM_VIRTUAL_USER_ID = 'virtual_user_id';
-    const VIEW_FEEDBACK_RIGHT = 2;
-    const VIEW_RIGHT = 1;
+    public const GIVE_FEEDBACK_RIGHT = 3;
+    public const PARAM_VIRTUAL_USER_ID = 'virtual_user_id';
+    public const VIEW_FEEDBACK_RIGHT = 2;
+    public const VIEW_RIGHT = 1;
 
     /**
-     *
      * @var Rights
      */
     private static $instance;
-
-    /**
-     *
-     * @var boolean[]
-     */
-    private $entities_condition_cache;
-
-    /**
-     *
-     * @var int[]
-     */
-    private $granted_rights_cache;
-
-    /**
-     *
-     * @var \Chamilo\Application\Portfolio\Storage\Repository\RightsRepository
-     */
-    private $rightsRepository;
-
-    /**
-     *
-     * @var \Chamilo\Core\User\Service\UserService
-     */
-    private $userService;
-
-    /**
-     *
-     * @var \Symfony\Component\Translation\Translator
-     */
-    private $translator;
-
-    /**
-     *
-     * @var \Chamilo\Libraries\Platform\Session\SessionUtilities
-     */
-    private $sessionUtilities;
-
-    /**
-     *
-     * @var \Chamilo\Core\Repository\Workspace\Service\RightsService
-     */
-    private $workspaceRightsService;
 
     /**
      * @var \Chamilo\Libraries\Storage\Cache\DataClassRepositoryCache
@@ -94,7 +49,41 @@ class RightsService
     private $dataClassRepositoryCache;
 
     /**
-     *
+     * @var bool
+     */
+    private $entities_condition_cache;
+
+    /**
+     * @var int[]
+     */
+    private $granted_rights_cache;
+
+    /**
+     * @var \Chamilo\Application\Portfolio\Storage\Repository\RightsRepository
+     */
+    private $rightsRepository;
+
+    /**
+     * @var \Chamilo\Libraries\Platform\Session\SessionUtilities
+     */
+    private $sessionUtilities;
+
+    /**
+     * @var \Symfony\Component\Translation\Translator
+     */
+    private $translator;
+
+    /**
+     * @var \Chamilo\Core\User\Service\UserService
+     */
+    private $userService;
+
+    /**
+     * @var \Chamilo\Core\Repository\Workspace\Service\RightsService
+     */
+    private $workspaceRightsService;
+
+    /**
      * @param \Chamilo\Application\Portfolio\Storage\Repository\RightsRepository $rightsRepository
      * @param \Chamilo\Core\User\Service\UserService $userService
      * @param \Symfony\Component\Translation\Translator $translator
@@ -118,8 +107,7 @@ class RightsService
     }
 
     /**
-     *
-     * @return boolean
+     * @return bool
      */
     public function clearVirtualUser()
     {
@@ -131,11 +119,10 @@ class RightsService
     }
 
     /**
-     *
-     * @param integer $publicationId
+     * @param int $publicationId
      * @param \Chamilo\Core\Repository\ContentObject\Portfolio\Storage\DataClass\Portfolio $portfolio
      *
-     * @return boolean
+     * @return bool
      */
     public function createRightsForEveryUserAtPortfolioRoot($publicationId, Portfolio $portfolio)
     {
@@ -149,10 +136,10 @@ class RightsService
     /**
      * Creates rights for the "everyone" entity on a given location
      *
-     * @param integer $publicationId
-     * @param integer $nodeId
+     * @param int $publicationId
+     * @param int $nodeId
      *
-     * @return boolean
+     * @return bool
      */
     public function createRightsForEveryUserOnLocation($publicationId, $nodeId)
     {
@@ -162,10 +149,9 @@ class RightsService
     }
 
     /**
-     *
      * @param \Chamilo\Application\Portfolio\Storage\DataClass\RightsLocationEntityRight $locationEntityRight
      *
-     * @return boolean
+     * @return bool
      */
     public function createRightsLocationEntityRight(RightsLocationEntityRight $locationEntityRight)
     {
@@ -180,7 +166,7 @@ class RightsService
      * @param int $entityType
      * @param int $locationId
      *
-     * @return boolean
+     * @return bool
      */
     private function createRightsLocationEntityRightFromParameters(
         $right, $entityId, $entityType, $locationId, $publicationId
@@ -198,10 +184,9 @@ class RightsService
     }
 
     /**
-     *
      * @param RightsLocationEntityRight $rightsLocationEntityRight
      *
-     * @return boolean
+     * @return bool
      * @todo DataClass executes additional business logic when deleting an instance, needs to be move or reimplemented
      *       before using the non-dataclass-based delete method(s)
      */
@@ -211,10 +196,9 @@ class RightsService
     }
 
     /**
-     *
-     * @param integer $right
-     * @param integer $entityId
-     * @param integer $entityType
+     * @param int $right
+     * @param int $entityId
+     * @param int $entityType
      * @param string $locationId
      * @param int $publicationId
      *
@@ -228,9 +212,8 @@ class RightsService
     }
 
     /**
-     *
      * @param \Chamilo\Application\Portfolio\Storage\DataClass\RightsLocation $location
-     * @param integer[] $rights
+     * @param int $rights
      *
      * @return \Chamilo\Application\Portfolio\Storage\DataClass\RightsLocationEntityRight[]
      */
@@ -238,14 +221,13 @@ class RightsService
     {
         if (!is_array($rights))
         {
-            $rights = array($rights);
+            $rights = [$rights];
         }
 
         return $this->getRightsRepository()->findRightsLocationEntityRightsForLocationAndRights($location, $rights);
     }
 
     /**
-     *
      * @param \Chamilo\Core\Repository\Common\Path\ComplexContentObjectPathNode $node
      */
     public function findRightsLocationEntityRightsForPublicationNodeAndAvailableRights(
@@ -258,7 +240,6 @@ class RightsService
     }
 
     /**
-     *
      * @param \Chamilo\Application\Portfolio\Storage\DataClass\RightsLocation $location
      * @param \Chamilo\Libraries\Storage\Query\Condition\Condition $entitiesCondition
      *
@@ -274,9 +255,8 @@ class RightsService
     }
 
     /**
-     *
-     * @param integer $publicationIdentifier
-     * @param integer $nodeIdentifier
+     * @param int $publicationIdentifier
+     * @param int $nodeIdentifier
      *
      * @return string[]
      */
@@ -288,19 +268,18 @@ class RightsService
     }
 
     /**
-     *
      * @return string[]
      */
     public function getAvailableRights()
     {
         $translator = $this->getTranslator();
 
-        return array(
+        return [
             $translator->trans('ViewRight', [], 'Chamilo\Application\Portfolio') => self::VIEW_RIGHT,
             $translator->trans('ViewFeedbackRight', [], 'Chamilo\Application\Portfolio') => self::VIEW_FEEDBACK_RIGHT,
             $translator->trans('GiveFeedbackRight', [], 'Chamilo\Application\Portfolio') => self::GIVE_FEEDBACK_RIGHT,
             $translator->trans('EditRight', [], 'Chamilo\Application\Portfolio') => self::EDIT_RIGHT
-        );
+        ];
     }
 
     /**
@@ -312,19 +291,6 @@ class RightsService
     }
 
     /**
-     * @param \Chamilo\Libraries\Storage\Cache\DataClassRepositoryCache $dataClassRepositoryCache
-     *
-     * @return RightsService
-     */
-    public function setDataClassRepositoryCache(DataClassRepositoryCache $dataClassRepositoryCache): RightsService
-    {
-        $this->dataClassRepositoryCache = $dataClassRepositoryCache;
-
-        return $this;
-    }
-
-    /**
-     *
      * @return string[]
      */
     private function getEmulationStorage()
@@ -333,21 +299,11 @@ class RightsService
     }
 
     /**
-     *
      * @return \Chamilo\Application\Portfolio\Storage\Repository\RightsRepository
      */
     public function getRightsRepository()
     {
         return $this->rightsRepository;
-    }
-
-    /**
-     *
-     * @param \Chamilo\Application\Portfolio\Storage\Repository\RightsRepository $rightsRepository
-     */
-    public function setRightsRepository(RightsRepository $rightsRepository)
-    {
-        $this->rightsRepository = $rightsRepository;
     }
 
     /**
@@ -370,7 +326,6 @@ class RightsService
     }
 
     /**
-     *
      * @return \Chamilo\Libraries\Platform\Session\SessionUtilities
      */
     public function getSessionUtilities()
@@ -379,16 +334,6 @@ class RightsService
     }
 
     /**
-     *
-     * @param \Chamilo\Libraries\Platform\Session\SessionUtilities $sessionUtilities
-     */
-    public function setSessionUtilities(SessionUtilities $sessionUtilities)
-    {
-        $this->sessionUtilities = $sessionUtilities;
-    }
-
-    /**
-     *
      * @return \Symfony\Component\Translation\Translator
      */
     public function getTranslator()
@@ -397,16 +342,6 @@ class RightsService
     }
 
     /**
-     *
-     * @param \Symfony\Component\Translation\Translator $translator
-     */
-    public function setTranslator($translator)
-    {
-        $this->translator = $translator;
-    }
-
-    /**
-     *
      * @return \Chamilo\Core\User\Service\UserService
      */
     public function getUserService()
@@ -415,16 +350,6 @@ class RightsService
     }
 
     /**
-     *
-     * @param \Chamilo\Core\User\Service\UserService $userService
-     */
-    public function setUserService(UserService $userService)
-    {
-        $this->userService = $userService;
-    }
-
-    /**
-     *
      * @return \Chamilo\Core\User\Storage\DataClass\User
      */
     public function getVirtualUser()
@@ -436,7 +361,6 @@ class RightsService
     }
 
     /**
-     *
      * @return \Chamilo\Core\Repository\Workspace\Service\RightsService
      */
     public function getWorkspaceRightsService()
@@ -445,21 +369,9 @@ class RightsService
     }
 
     /**
-     *
-     * @param \Chamilo\Core\Repository\Workspace\Service\RightsService $workspaceRightsService
-     */
-    public function setWorkspaceRightsService(
-        \Chamilo\Core\Repository\Workspace\Service\RightsService $workspaceRightsService
-    )
-    {
-        $this->workspaceRightsService = $workspaceRightsService;
-    }
-
-    /**
-     *
      * @param int $user_id
      * @param \rights\RightsEntity[] $entities
-     * @param boolean $to_string
+     * @param bool $to_string
      *
      * @return \Chamilo\Libraries\Storage\Query\Condition\Condition
      */
@@ -523,9 +435,8 @@ class RightsService
     }
 
     /**
-     *
      * @param ComplexContentObjectPath $node
-     * @param integer $publication_id
+     * @param int $publication_id
      *
      * @return \Chamilo\Application\Portfolio\Storage\DataClass\RightsLocation
      */
@@ -588,14 +499,13 @@ class RightsService
     }
 
     /**
-     *
      * @param int $right
      * @param int $entityId
      * @param int $entityType
      * @param string $locationId
      * @param int $publicationId
      *
-     * @return boolean
+     * @return bool
      */
     public function invertLocationEntityRight($right, $entityId, $entityType, $locationId, $publicationId)
     {
@@ -626,13 +536,12 @@ class RightsService
     }
 
     /**
-     *
-     * @param integer $right
+     * @param int $right
      * @param \Chamilo\Application\Portfolio\Storage\DataClass\Publication $publication
      * @param \Chamilo\Core\User\Storage\DataClass\User $user
      * @param \Chamilo\Core\Repository\Common\Path\ComplexContentObjectPathNode $node
      *
-     * @return boolean
+     * @return bool
      */
     public function isAllowedForFeedbackRight(
         int $right, Publication $publication, User $user, ComplexContentObjectPathNode $node = null
@@ -646,12 +555,11 @@ class RightsService
     }
 
     /**
-     *
      * @param \Chamilo\Application\Portfolio\Storage\DataClass\Publication $publication
      * @param \Chamilo\Core\User\Storage\DataClass\User $user
      * @param \Chamilo\Core\Repository\Common\Path\ComplexContentObjectPathNode $node
      *
-     * @return boolean
+     * @return bool
      */
     public function isAllowedToCreateFeedback(
         Publication $publication, User $user, ComplexContentObjectPathNode $node = null
@@ -661,12 +569,11 @@ class RightsService
     }
 
     /**
-     *
      * @param \Chamilo\Application\Portfolio\Storage\DataClass\Publication $publication
      * @param \Chamilo\Core\User\Storage\DataClass\User $user
      * @param \Chamilo\Core\Repository\Common\Path\ComplexContentObjectPathNode $node
      *
-     * @return boolean
+     * @return bool
      */
     public function isAllowedToEditContentObject(
         Publication $publication, User $user, ComplexContentObjectPathNode $node = null
@@ -689,11 +596,10 @@ class RightsService
     }
 
     /**
-     *
      * @param \Chamilo\Core\User\Storage\DataClass\User $user
      * @param \Chamilo\Core\Repository\Common\Path\ComplexContentObjectPathNode $node
      *
-     * @return boolean
+     * @return bool
      */
     public function isAllowedToEditContentObjectInWorkspace(User $user, ComplexContentObjectPathNode $node = null)
     {
@@ -712,11 +618,10 @@ class RightsService
     }
 
     /**
-     *
      * @param \Chamilo\Core\User\Storage\DataClass\User $currentUser
      * @param \Chamilo\Application\Portfolio\Storage\DataClass\Publication $publication
      *
-     * @return boolean
+     * @return bool
      */
     public function isAllowedToSetContentObjectRights(User $currentUser, Publication $publication)
     {
@@ -724,12 +629,11 @@ class RightsService
     }
 
     /**
-     *
      * @param \Chamilo\Application\Portfolio\Storage\DataClass\Publication $publication
      * @param \Chamilo\Core\User\Storage\DataClass\User $user
      * @param \Chamilo\Application\Portfolio\Storage\DataClass\RightsLocation $rightsLocation
      *
-     * @return boolean
+     * @return bool
      */
     public function isAllowedToViewContentObject(Publication $publication, User $user, RightsLocation $rightsLocation)
     {
@@ -743,12 +647,11 @@ class RightsService
     }
 
     /**
-     *
      * @param \Chamilo\Application\Portfolio\Storage\DataClass\Publication $publication
      * @param \Chamilo\Core\User\Storage\DataClass\User $user
      * @param \Chamilo\Core\Repository\Common\Path\ComplexContentObjectPathNode $node
      *
-     * @return boolean
+     * @return bool
      */
     public function isAllowedToViewContentObjectForNode(
         Publication $publication, User $user, ComplexContentObjectPathNode $node = null
@@ -760,12 +663,11 @@ class RightsService
     }
 
     /**
-     *
      * @param \Chamilo\Application\Portfolio\Storage\DataClass\Publication $publication
      * @param \Chamilo\Core\User\Storage\DataClass\User $user
      * @param \Chamilo\Core\Repository\Common\Path\ComplexContentObjectPathNode $node
      *
-     * @return boolean
+     * @return bool
      */
     public function isAllowedToViewFeedback(
         Publication $publication, User $user, ComplexContentObjectPathNode $node = null
@@ -775,18 +677,17 @@ class RightsService
     }
 
     /**
-     *
      * @param \Chamilo\Application\Portfolio\Storage\DataClass\Publication $publication
      * @param \Chamilo\Core\User\Storage\DataClass\User $user
      *
-     * @return boolean
+     * @return bool
      */
     public function isAllowedToViewUserPublication(Publication $publication, User $user)
     {
         $isPublisher = $this->isPublisher($publication, $user);
 
         $location = new RightsLocation();
-        $location->set_node_id(md5(serialize(array($publication->get_content_object_id()))));
+        $location->set_node_id(md5(serialize([$publication->get_content_object_id()])));
         $location->set_publication_id($publication->get_id());
         $location->set_inherit(0);
         $location->set_parent_id(null);
@@ -797,11 +698,10 @@ class RightsService
     }
 
     /**
-     *
      * @param \Chamilo\Application\Portfolio\Storage\DataClass\Feedback $feedback
      * @param \Chamilo\Core\User\Storage\DataClass\User $user
      *
-     * @return boolean
+     * @return bool
      */
     public function isFeedbackOwner(Feedback $feedback, User $user)
     {
@@ -809,11 +709,10 @@ class RightsService
     }
 
     /**
-     *
      * @param \Chamilo\Application\Portfolio\Storage\DataClass\Publication $publication
      * @param \Chamilo\Core\User\Storage\DataClass\User $user
      *
-     * @return boolean
+     * @return bool
      */
     public function isPublisher(Publication $publication, User $user)
     {
@@ -821,18 +720,17 @@ class RightsService
     }
 
     /**
-     *
      * @param int $right
      * @param RightsLocation $location
      * @param int $user_id
      *
-     * @return boolean
+     * @return bool
      */
     public function is_allowed($right, $location, $userIdentifier)
     {
-        $userIdentifier = $userIdentifier ?: Session::get_user_id();
+        $userIdentifier = $userIdentifier ?: $this->getSessionUtilities()->getUserId();
 
-        $user = $this->getUserService()->findUserByIdentifier((int) $userIdentifier);
+        $user = $this->getUserService()->findUserByIdentifier($userIdentifier);
 
         if ($user->is_platform_admin())
         {
@@ -852,13 +750,12 @@ class RightsService
     }
 
     /**
-     *
      * @param int $right
      * @param int $user_id
      * @param \rights\RightsEntity[] $entities
      * @param RightsLocation $location
      *
-     * @return boolean
+     * @return bool
      */
     public function is_allowed_on_location($right, $user_id, $entities, $location)
     {
@@ -912,10 +809,53 @@ class RightsService
     }
 
     /**
+     * @param \Chamilo\Libraries\Storage\Cache\DataClassRepositoryCache $dataClassRepositoryCache
      *
-     * @param integer $virtualUserIdentifier
+     * @return RightsService
+     */
+    public function setDataClassRepositoryCache(DataClassRepositoryCache $dataClassRepositoryCache): RightsService
+    {
+        $this->dataClassRepositoryCache = $dataClassRepositoryCache;
+
+        return $this;
+    }
+
+    /**
+     * @param \Chamilo\Application\Portfolio\Storage\Repository\RightsRepository $rightsRepository
+     */
+    public function setRightsRepository(RightsRepository $rightsRepository)
+    {
+        $this->rightsRepository = $rightsRepository;
+    }
+
+    /**
+     * @param \Chamilo\Libraries\Platform\Session\SessionUtilities $sessionUtilities
+     */
+    public function setSessionUtilities(SessionUtilities $sessionUtilities)
+    {
+        $this->sessionUtilities = $sessionUtilities;
+    }
+
+    /**
+     * @param \Symfony\Component\Translation\Translator $translator
+     */
+    public function setTranslator($translator)
+    {
+        $this->translator = $translator;
+    }
+
+    /**
+     * @param \Chamilo\Core\User\Service\UserService $userService
+     */
+    public function setUserService(UserService $userService)
+    {
+        $this->userService = $userService;
+    }
+
+    /**
+     * @param int $virtualUserIdentifier
      *
-     * @return boolean
+     * @return bool
      */
     public function setVirtualUser($virtualUserIdentifier)
     {
@@ -933,5 +873,15 @@ class RightsService
         {
             return false;
         }
+    }
+
+    /**
+     * @param \Chamilo\Core\Repository\Workspace\Service\RightsService $workspaceRightsService
+     */
+    public function setWorkspaceRightsService(
+        \Chamilo\Core\Repository\Workspace\Service\RightsService $workspaceRightsService
+    )
+    {
+        $this->workspaceRightsService = $workspaceRightsService;
     }
 }

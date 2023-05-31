@@ -4,27 +4,33 @@ namespace Chamilo\Core\Repository\ContentObject\RssFeed\Integration\Chamilo\Core
 use Chamilo\Core\Repository\ContentObject\RssFeed\Storage\DataClass\RssFeed;
 use Chamilo\Core\Repository\Storage\DataClass\ContentObject;
 use Chamilo\Core\Repository\Storage\DataManager;
-use Chamilo\Libraries\Platform\Session\Session;
-use Chamilo\Libraries\Translation\Translation;
+use Chamilo\Libraries\DependencyInjection\DependencyInjectionContainerBuilder;
+use Chamilo\Libraries\Platform\Session\SessionUtilities;
 use Chamilo\Libraries\Storage\Query\Condition\EqualityCondition;
 use Chamilo\Libraries\Storage\Query\Variable\PropertyConditionVariable;
 use Chamilo\Libraries\Storage\Query\Variable\StaticConditionVariable;
+use Chamilo\Libraries\Translation\Translation;
 
 class Connector
 {
+    public function getSessionUtilities(): SessionUtilities
+    {
+        return DependencyInjectionContainerBuilder::getInstance()->createContainer()->get(SessionUtilities::class);
+    }
 
     public function get_rss_feed_objects()
     {
         $options = [];
-        
+
         $condition = new EqualityCondition(
             new PropertyConditionVariable(ContentObject::class, ContentObject::PROPERTY_OWNER_ID),
-            new StaticConditionVariable(Session::get_user_id()));
-        
+            new StaticConditionVariable($this->getSessionUtilities()->getUserId())
+        );
+
         $objects = DataManager::retrieve_active_content_objects(
-            RssFeed::class,
-            $condition);
-        
+            RssFeed::class, $condition
+        );
+
         if ($objects->count() == 0)
         {
             $options[0] = Translation::get('CreateRssFeedFirst');
@@ -32,12 +38,12 @@ class Connector
         else
         {
             $options[0] = Translation::get('SelectRssFeed');
-            foreach($objects as $object)
+            foreach ($objects as $object)
             {
                 $options[$object->get_id()] = $object->get_title();
             }
         }
-        
+
         return $options;
     }
 }

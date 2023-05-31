@@ -10,7 +10,6 @@ use Chamilo\Core\User\Storage\DataClass\User;
 use Chamilo\Core\User\Storage\DataManager;
 use Chamilo\Libraries\File\Filesystem;
 use Chamilo\Libraries\File\Properties\FileProperties;
-use Chamilo\Libraries\Platform\Session\Session;
 use Chamilo\Libraries\Storage\Parameters\DataClassRetrievesParameters;
 use Chamilo\Libraries\Storage\Query\Condition\EqualityCondition;
 use Chamilo\Libraries\Storage\Query\Variable\PropertyConditionVariable;
@@ -70,7 +69,7 @@ abstract class ContentObjectInstaller extends Installer
                 User::class, new DataClassRetrievesParameters($condition)
             )->current();
 
-            Session::register('_uid', $user->get_id());
+            $this->getSessionUtilities()->register('_uid', $user->get_id());
 
             $parameters = ImportParameters::factory(
                 ContentObjectImport::FORMAT_CPO, $user->get_id(), 0, FileProperties::from_path($examplePath)
@@ -78,7 +77,7 @@ abstract class ContentObjectInstaller extends Installer
             $import = ContentObjectImportController::factory($parameters);
             $import->run();
 
-            Session::unregister('_uid');
+            $this->getSessionUtilities()->unregister('_uid');
 
             if ($import->has_messages(ContentObjectImportController::TYPE_ERROR))
             {

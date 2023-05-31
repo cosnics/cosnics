@@ -10,22 +10,19 @@ use Chamilo\Libraries\Format\Structure\ActionBar\ButtonToolBar;
 use Chamilo\Libraries\Format\Structure\ActionBar\Renderer\ButtonToolBarRenderer;
 use Chamilo\Libraries\Format\Structure\Glyph\FontAwesomeGlyph;
 use Chamilo\Libraries\Format\Structure\Glyph\NamespaceIdentGlyph;
-use Chamilo\Libraries\Platform\Session\Session;
 use Chamilo\Libraries\Translation\Translation;
 use Chamilo\Libraries\Utilities\StringUtilities;
 
 /**
- *
  * @package Chamilo\Core\Install\Component
- * @author Hans De Bisschop <hans.de.bisschop@ehb.be>
- * @author Magali Gillard <magali.gillard@ehb.be>
- * @author Eduard Vossen <eduard.vossen@ehb.be>
+ * @author  Hans De Bisschop <hans.de.bisschop@ehb.be>
+ * @author  Magali Gillard <magali.gillard@ehb.be>
+ * @author  Eduard Vossen <eduard.vossen@ehb.be>
  */
 class SettingsComponent extends Manager implements NoAuthenticationSupport
 {
 
     /**
-     *
      * @var \Chamilo\Core\Install\Form\SettingsForm
      */
     private $settingsForm;
@@ -42,7 +39,7 @@ class SettingsComponent extends Manager implements NoAuthenticationSupport
         if ($form->validate())
         {
             $settingsValues = $form->exportValues();
-            Session::register(self::PARAM_SETTINGS, serialize($settingsValues));
+            $this->getSessionUtilities()->register(self::PARAM_SETTINGS, serialize($settingsValues));
 
             $settingsDisplayer = new SettingsOverview($settingsValues);
             $wizardHeader = $this->getWizardHeader();
@@ -70,7 +67,6 @@ class SettingsComponent extends Manager implements NoAuthenticationSupport
     }
 
     /**
-     *
      * @return string
      */
     public function getButtons()
@@ -80,17 +76,17 @@ class SettingsComponent extends Manager implements NoAuthenticationSupport
         $buttonToolBar->addItem(
             new Button(
                 Translation::get('Previous', null, StringUtilities::LIBRARIES), new FontAwesomeGlyph('chevron-left'),
-                $this->get_url(array(self::PARAM_ACTION => self::ACTION_SETTINGS))
+                $this->get_url([self::PARAM_ACTION => self::ACTION_SETTINGS])
             )
         );
 
         $buttonToolBar->addItem(
             new Button(
                 Translation::get('Install'), new FontAwesomeGlyph('check'), $this->get_url(
-                array(
+                [
                     self::PARAM_ACTION => self::ACTION_INSTALL_PLATFORM,
-                    self::PARAM_LANGUAGE => Session::retrieve(self::PARAM_LANGUAGE)
-                )
+                    self::PARAM_LANGUAGE => $this->getSessionUtilities()->retrieve(self::PARAM_LANGUAGE)
+                ]
             ), Button::DISPLAY_ICON_AND_LABEL, null, ['btn-success']
             )
         );
@@ -137,7 +133,6 @@ class SettingsComponent extends Manager implements NoAuthenticationSupport
     }
 
     /**
-     *
      * @return \Chamilo\Core\Install\Form\SettingsForm
      */
     public function getSettingsForm()
@@ -145,7 +140,8 @@ class SettingsComponent extends Manager implements NoAuthenticationSupport
         if (!isset($this->settingsForm))
         {
             $this->settingsForm = new SettingsForm(
-                $this, $this->get_url(array(self::PARAM_LANGUAGE => Session::retrieve(self::PARAM_LANGUAGE)))
+                $this,
+                $this->get_url([self::PARAM_LANGUAGE => $this->getSessionUtilities()->retrieve(self::PARAM_LANGUAGE)])
             );
         }
 

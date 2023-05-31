@@ -13,7 +13,7 @@ use Chamilo\Libraries\Architecture\Test\Fixtures\ChamiloFixtureLoader;
 use Chamilo\Libraries\Architecture\Test\TestCases\DependencyInjectionBasedTestCase;
 use Chamilo\Libraries\DependencyInjection\DependencyInjectionContainerBuilder;
 use Chamilo\Libraries\File\SystemPathBuilder;
-use Chamilo\Libraries\Platform\Session\Session;
+use Chamilo\Libraries\Platform\Session\SessionUtilities;
 
 /**
  * Tests the TrackingRepository
@@ -72,9 +72,14 @@ class TrackingRepositoryTest extends DependencyInjectionBasedTestCase
 
         $data[DummyQuestionAttempt::class] = $dummyQuestionAttemptsData;
 
-        Session::register(
+        $this->getSessionUtilities()->register(
             'Chamilo\Core\Repository\ContentObject\LearningPath\Display\Preview\Storage\Repository', serialize($data)
         );
+    }
+
+    public function getSessionUtilities(): SessionUtilities
+    {
+        return DependencyInjectionContainerBuilder::getInstance()->createContainer()->get(SessionUtilities::class);
     }
 
     /**
@@ -92,7 +97,7 @@ class TrackingRepositoryTest extends DependencyInjectionBasedTestCase
     public function tearDown(): void
     {
         unset($this->trackingRepository);
-        Session::clear();
+        $this->getSessionUtilities()->clear();
     }
 
     public function testClearTreeNodeAttemptCache()
@@ -294,7 +299,9 @@ class TrackingRepositoryTest extends DependencyInjectionBasedTestCase
         $this->trackingRepository->resetStorage();
         $this->assertEmpty(
             unserialize(
-                Session::get('Chamilo\Core\Repository\ContentObject\LearningPath\Display\Preview\Storage\Repository')
+                $this->getSessionUtilities()->get(
+                    'Chamilo\Core\Repository\ContentObject\LearningPath\Display\Preview\Storage\Repository'
+                )
             )
         );
     }

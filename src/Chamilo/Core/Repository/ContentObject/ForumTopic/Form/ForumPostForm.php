@@ -11,7 +11,6 @@ use Chamilo\Libraries\Format\Form\Element\AdvancedElementFinder\AdvancedElementF
 use Chamilo\Libraries\Format\Form\Element\AdvancedElementFinder\AdvancedElementFinderElementTypes;
 use Chamilo\Libraries\Format\Form\FormValidator;
 use Chamilo\Libraries\Format\Structure\Glyph\FontAwesomeGlyph;
-use Chamilo\Libraries\Platform\Session\Session;
 use Chamilo\Libraries\Translation\Translation;
 use Chamilo\Libraries\Utilities\StringUtilities;
 
@@ -77,7 +76,7 @@ class ForumPostForm extends FormValidator
     {
         $calculator = new Calculator(
             DataManager::retrieve_by_id(
-                User::class, Session::get_user_id()
+                User::class, $this->getSessionUtilities()->getUserId()
             )
         );
 

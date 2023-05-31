@@ -3,16 +3,16 @@ namespace Chamilo\Core\Repository\Integration\Chamilo\Core\Home;
 
 use Chamilo\Core\Repository\Storage\DataClass\ContentObject;
 use Chamilo\Core\Repository\Storage\DataManager;
-use Chamilo\Libraries\Platform\Session\Session;
-use Chamilo\Libraries\Translation\Translation;
+use Chamilo\Libraries\DependencyInjection\DependencyInjectionContainerBuilder;
+use Chamilo\Libraries\Platform\Session\SessionUtilities;
 use Chamilo\Libraries\Storage\Query\Condition\AndCondition;
 use Chamilo\Libraries\Storage\Query\Condition\EqualityCondition;
 use Chamilo\Libraries\Storage\Query\Condition\OrCondition;
 use Chamilo\Libraries\Storage\Query\Variable\PropertyConditionVariable;
 use Chamilo\Libraries\Storage\Query\Variable\StaticConditionVariable;
+use Chamilo\Libraries\Translation\Translation;
 
 /**
- *
  * @package repository.block.connectors
  */
 
@@ -24,50 +24,6 @@ use Chamilo\Libraries\Storage\Query\Variable\StaticConditionVariable;
  */
 class Connector
 {
-
-    /**
-     * Returns a list of objects for the specified types.
-     *
-     * @param array $types
-     * @return array
-     */
-    public static function get_objects($types)
-    {
-        $result = [];
-
-        $conditions = [];
-        $conditions[] = new EqualityCondition(
-            new PropertyConditionVariable(ContentObject::class, ContentObject::PROPERTY_OWNER_ID),
-            new StaticConditionVariable(Session::get_user_id()));
-
-        $types_condition = [];
-        foreach ($types as $type)
-        {
-            $types_condition[] = new EqualityCondition(
-                new PropertyConditionVariable(ContentObject::class, ContentObject::PROPERTY_TYPE),
-                new StaticConditionVariable($type));
-        }
-        $conditions[] = new OrCondition($types_condition);
-        $condition = new AndCondition($conditions);
-
-        $objects = DataManager::retrieve_active_content_objects(
-            ContentObject::class,
-            $condition);
-
-        if ($objects->count() == 0)
-        {
-            $result[0] = Translation::get('CreateObjectFirst');
-        }
-        else
-        {
-            foreach($objects as $object)
-            {
-                $result[$object->get_id()] = $object->get_title();
-            }
-        }
-
-        return $result;
-    }
 
     public function getDisplayerObjects()
     {
@@ -84,5 +40,55 @@ class Connector
         $objectTypes[] = 'Chamilo\Core\Repository\ContentObject\Youtube\Storage\DataClass\Youtube';
 
         return self::get_objects($objectTypes);
+    }
+
+    /**
+     * Returns a list of objects for the specified types.
+     *
+     * @param array $types
+     *
+     * @return array
+     */
+    public static function get_objects($types)
+    {
+        $sessionUtilities =
+            DependencyInjectionContainerBuilder::getInstance()->createContainer()->get(SessionUtilities::class);
+
+        $result = [];
+
+        $conditions = [];
+        $conditions[] = new EqualityCondition(
+            new PropertyConditionVariable(ContentObject::class, ContentObject::PROPERTY_OWNER_ID),
+            new StaticConditionVariable($sessionUtilities->getUserId())
+        );
+
+        $types_condition = [];
+        foreach ($types as $type)
+        {
+            $types_condition[] = new EqualityCondition(
+                new PropertyConditionVariable(ContentObject::class, ContentObject::PROPERTY_TYPE),
+                new StaticConditionVariable($type)
+            );
+        }
+        $conditions[] = new OrCondition($types_condition);
+        $condition = new AndCondition($conditions);
+
+        $objects = DataManager::retrieve_active_content_objects(
+            ContentObject::class, $condition
+        );
+
+        if ($objects->count() == 0)
+        {
+            $result[0] = Translation::get('CreateObjectFirst');
+        }
+        else
+        {
+            foreach ($objects as $object)
+            {
+                $result[$object->get_id()] = $object->get_title();
+            }
+        }
+
+        return $result;
     }
 }

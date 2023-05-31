@@ -12,7 +12,6 @@ use Chamilo\Libraries\Architecture\Exceptions\NotAllowedException;
 use Chamilo\Libraries\Architecture\Interfaces\NoAuthenticationSupport;
 use Chamilo\Libraries\Format\Structure\Page;
 use Chamilo\Libraries\Format\Structure\PageConfiguration;
-use Chamilo\Libraries\Platform\Session\Session;
 use Chamilo\Libraries\Translation\Translation;
 use Exception;
 use ReCaptcha\ReCaptcha;
@@ -183,7 +182,7 @@ class AnonymousAccessComponent extends Manager implements NoAuthenticationSuppor
     {
         $cookie = new Cookie(md5('anonymous_authentication'), $user->get_security_token());
 
-        $parameters = Session::get('requested_url_parameters');
+        $parameters = $this->getSessionUtilities()->get('requested_url_parameters');
 
         if (empty($parameters) || ($parameters[self::PARAM_CONTEXT] == Manager::CONTEXT &&
                 $parameters[self::PARAM_ACTION] == self::ACTION_ACCESS_ANONYMOUSLY) ||
