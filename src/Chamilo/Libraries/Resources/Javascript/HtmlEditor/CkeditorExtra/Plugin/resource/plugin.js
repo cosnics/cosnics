@@ -129,7 +129,9 @@
 
                         el.children = []; //remove the existing rendition
 
-                        var coProperties = JSON.parse(getResourceRendition(data.coId, data.securityCode, data.type));
+                        var coProperties = getResourceRendition(data.coId, data.securityCode, data.type);
+                        if(typeof coProperties === 'string')
+                            coProperties = JSON.parse(coProperties);
 
                         if(data.renderInline === "1") {
                             var renditionFragment = CKEDITOR.htmlParser.fragment.fromHtml(
