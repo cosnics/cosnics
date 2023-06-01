@@ -28,12 +28,17 @@
         <service id="Symfony\Component\HttpFoundation\Session\Storage\NativeSessionStorage">
             <argument key="$handler"
                       type="service"
-                      id="Symfony\Component\HttpFoundation\Session\Storage\Handler\PdoSessionHandler"/>
+                      id="Symfony\Component\HttpFoundation\Session\Storage\SessionHandler"/>
+        </service>
+
+        <service id="Symfony\Component\HttpFoundation\Session\Storage\SessionHandler">
+            <factory service="Chamilo\Core\User\Factory\SessionHandlerFactory"
+                     method="getSessionHandler"/>
         </service>
 
         <service id="Symfony\Component\HttpFoundation\Session\Storage\Handler\PdoSessionHandler">
-            <factory service="Chamilo\Core\User\Factory\SessionHandlerFactory"
-                     method="getSessionHandler"/>
+            <factory service="Chamilo\Core\User\Factory\PdoSessionHandlerFactory"
+                     method="getPdoSessionHandler"/>
         </service>
 
         <service id="Chamilo\Libraries\Format\Twig\TwigEnvironmentFactory"/>
