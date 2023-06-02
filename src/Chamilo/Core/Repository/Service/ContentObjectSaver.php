@@ -88,7 +88,7 @@ class ContentObjectSaver
      * @var \Chamilo\Core\User\Service\UserService
      */
     private $userService;
-    
+
     public function __construct(
         ContentObjectRepository $contentObjectRepository, RepositoryCategoryService $repositoryCategoryService,
         PublicationAggregatorInterface $publicationAggregator,

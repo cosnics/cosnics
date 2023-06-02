@@ -182,7 +182,7 @@ class AnonymousAccessComponent extends Manager implements NoAuthenticationSuppor
     {
         $cookie = new Cookie(md5('anonymous_authentication'), $user->get_security_token());
 
-        $parameters = $this->getSessionUtilities()->get('requested_url_parameters');
+        $parameters = $this->getSession()->get('requested_url_parameters');
 
         if (empty($parameters) || ($parameters[self::PARAM_CONTEXT] == Manager::CONTEXT &&
                 $parameters[self::PARAM_ACTION] == self::ACTION_ACCESS_ANONYMOUSLY) ||

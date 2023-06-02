@@ -3,30 +3,30 @@ namespace Chamilo\Libraries\Architecture\ErrorHandler\ExceptionLogger;
 
 use Chamilo\Configuration\Service\Consulter\ConfigurationConsulter;
 use Chamilo\Libraries\Architecture\Application\Routing\UrlGenerator;
-use Chamilo\Libraries\Platform\Session\SessionUtilities;
 use Exception;
+use Symfony\Component\HttpFoundation\Session\SessionInterface;
 
 /**
  * Builds the SentryExceptionLogger class
  *
  * @package Chamilo\Libraries\Architecture\ErrorHandler\ExceptionLogger
- * @author Sven Vanpoucke - Hogeschool Gent
+ * @author  Sven Vanpoucke - Hogeschool Gent
  */
 class SentryExceptionLoggerBuilder implements ExceptionLoggerBuilderInterface
 {
 
     protected ConfigurationConsulter $configurationConsulter;
 
-    protected SessionUtilities $sessionUtilities;
+    protected SessionInterface $session;
 
     protected UrlGenerator $urlGenerator;
 
     public function __construct(
-        ConfigurationConsulter $configurationConsulter, SessionUtilities $sessionUtilities, UrlGenerator $urlGenerator
+        ConfigurationConsulter $configurationConsulter, SessionInterface $session, UrlGenerator $urlGenerator
     )
     {
         $this->configurationConsulter = $configurationConsulter;
-        $this->sessionUtilities = $sessionUtilities;
+        $this->session = $session;
         $this->urlGenerator = $urlGenerator;
     }
 
@@ -48,7 +48,7 @@ class SentryExceptionLoggerBuilder implements ExceptionLoggerBuilderInterface
             );
         }
 
-        return new SentryExceptionLogger($this->getSessionUtilities(), $this->getUrlGenerator(), $clientDSNKey);
+        return new SentryExceptionLogger($this->getSession(), $this->getUrlGenerator(), $clientDSNKey);
     }
 
     public function getConfigurationConsulter(): ConfigurationConsulter
@@ -56,14 +56,14 @@ class SentryExceptionLoggerBuilder implements ExceptionLoggerBuilderInterface
         return $this->configurationConsulter;
     }
 
-    public function getSessionUtilities(): SessionUtilities
+    public function getSession(): SessionInterface
     {
-        return $this->sessionUtilities;
+        return $this->session;
     }
 
     public function getUrlGenerator(): UrlGenerator
     {
         return $this->urlGenerator;
     }
-    
+
 }

@@ -236,7 +236,7 @@ class RegisterForm extends FormValidator
 
             if ($user->create())
             {
-                $this->getSessionUtilities()->register('_uid', intval($user->get_id()));
+                $this->getSession()->set(Manager::SESSION_USER_IO, intval($user->get_id()));
                 Event::trigger(
                     'Register', Manager::CONTEXT,
                     ['target_user_id' => $user->get_id(), 'action_user_id' => $user->get_id()]

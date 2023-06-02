@@ -12,7 +12,6 @@ use Chamilo\Libraries\Utilities\StringUtilities;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 
 /**
- *
  * @package user.lib.user_manager.component
  */
 class ChangeUserComponent extends Manager
@@ -35,13 +34,13 @@ class ChangeUserComponent extends Manager
 
         if ($id)
         {
-            $sessionUtilities = $this->getSessionUtilities();
+            $session = $this->getSession();
 
-            $checkurl = $sessionUtilities->retrieve('checkChamiloURL');
-            $sessionUtilities->clear();
-            $sessionUtilities->register('_uid', $id);
-            $sessionUtilities->register('_as_admin', $this->getUser()->getId());
-            $sessionUtilities->register('checkChamiloURL', $checkurl);
+            $checkurl = $session->get('checkChamiloURL');
+            $session->clear();
+            $session->set(Manager::SESSION_USER_IO, $id);
+            $session->set('_as_admin', $this->getUser()->getId());
+            $session->set('checkChamiloURL', $checkurl);
 
             $loginApplication = Configuration::get('Chamilo\Core\Admin', 'page_after_login');
 
@@ -65,7 +64,7 @@ class ChangeUserComponent extends Manager
     {
         $breadcrumbtrail->add(
             new Breadcrumb(
-                $this->get_url(array(self::PARAM_ACTION => self::ACTION_BROWSE_USERS)),
+                $this->get_url([self::PARAM_ACTION => self::ACTION_BROWSE_USERS]),
                 Translation::get('AdminUserBrowserComponent')
             )
         );

@@ -64,22 +64,22 @@ class UtilitiesComponent extends Manager
             // Get, set or clear a session variable
             case 'memory' :
                 $action = $request->request->get(self::PARAM_ACTION);
-                $sessionUtilities = $this->getSessionUtilities();
+                $session = $this->getSession();
 
                 switch ($action)
                 {
                     case 'set' :
-                        $sessionUtilities->register(
+                        $session->set(
                             $request->request->get(self::PARAM_VARIABLE), $request->request->get(self::PARAM_VALUE)
                         );
                         break;
                     case 'clear' :
-                        $sessionUtilities->unregister($request->request->get(self::PARAM_VARIABLE));
+                        $session->remove($request->request->get(self::PARAM_VARIABLE));
                         break;
                     case 'get' :
                     default :
                         $properties[self::PROPERTY_RESULT] =
-                            $sessionUtilities->get($request->request->get(self::PARAM_VARIABLE));
+                            $session->get($request->request->get(self::PARAM_VARIABLE));
                         break;
                 }
                 break;

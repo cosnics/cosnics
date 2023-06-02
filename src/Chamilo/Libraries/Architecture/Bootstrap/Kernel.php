@@ -22,10 +22,10 @@ use Chamilo\Libraries\Format\Response\NotAuthenticatedResponse;
 use Chamilo\Libraries\Format\Response\PlatformNotAvailableResponse;
 use Chamilo\Libraries\Format\Structure\PageConfiguration;
 use Chamilo\Libraries\Platform\ChamiloRequest;
-use Chamilo\Libraries\Platform\Session\SessionUtilities;
 use Exception;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\HttpFoundation\Session\SessionInterface;
 
 /**
  * @package Chamilo\Libraries\Architecture\Bootstrap
@@ -40,7 +40,7 @@ class Kernel
 
     protected AuthenticationValidator $authenticationValidator;
 
-    protected SessionUtilities $sessionUtilities;
+    protected SessionInterface $session;
 
     protected WhoIsOnlineService $whoIsOnlineService;
 
@@ -64,15 +64,15 @@ class Kernel
 
     public function __construct(
         ChamiloRequest $request, ConfigurationConsulter $configurationConsulter, ApplicationFactory $applicationFactory,
-        SessionUtilities $sessionUtilities, ExceptionLoggerInterface $exceptionLogger,
-        WhoIsOnlineService $whoIsOnlineService, AuthenticationValidator $authenticationValidator,
-        UrlGenerator $urlGenerator, PageConfiguration $pageConfiguration, User $user = null
+        SessionInterface $session, ExceptionLoggerInterface $exceptionLogger, WhoIsOnlineService $whoIsOnlineService,
+        AuthenticationValidator $authenticationValidator, UrlGenerator $urlGenerator,
+        PageConfiguration $pageConfiguration, User $user = null
     )
     {
         $this->request = $request;
         $this->configurationConsulter = $configurationConsulter;
         $this->applicationFactory = $applicationFactory;
-        $this->sessionUtilities = $sessionUtilities;
+        $this->session = $session;
         $this->exceptionLogger = $exceptionLogger;
         $this->urlGenerator = $urlGenerator;
         $this->pageConfiguration = $pageConfiguration;
@@ -132,7 +132,7 @@ class Kernel
     {
         if ($this->getConfigurationConsulter()->getSetting(['Chamilo\Core\Admin', 'maintenance_block_access']))
         {
-            $asAdmin = $this->getSessionUtilities()->get('_as_admin');
+            $asAdmin = $this->getSession()->get('_as_admin');
 
             if ($this->getUser() instanceof User && !$this->getUser()->is_platform_admin() && !$asAdmin)
             {
@@ -249,9 +249,9 @@ class Kernel
         return $this->request;
     }
 
-    public function getSessionUtilities(): SessionUtilities
+    public function getSession(): SessionInterface
     {
-        return $this->sessionUtilities;
+        return $this->session;
     }
 
     public function getUrlGenerator(): UrlGenerator

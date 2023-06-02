@@ -23,7 +23,6 @@ use Chamilo\Libraries\File\WebPathBuilder;
 use Chamilo\Libraries\Platform\ChamiloRequest;
 use Chamilo\Libraries\Platform\Session\PdoSessionHandlerFactory;
 use Chamilo\Libraries\Platform\Session\SessionFactory;
-use Chamilo\Libraries\Platform\Session\SessionUtilities;
 use Chamilo\Libraries\Storage\Cache\ConditionPartCache;
 use Chamilo\Libraries\Storage\Cache\DataClassRepositoryCache;
 use Chamilo\Libraries\Storage\DataClass\DataClassFactory;
@@ -325,11 +324,8 @@ class DependencyInjectionContainerBuilder
             );
 
             $exceptionLoggerFactory = new ExceptionLoggerFactory(
-                $this->getFileConfigurationConsulter(), new SessionUtilities(
-                $this->getSession(), $this->getFileConfigurationConsulter()->getSetting(
-                ['Chamilo\Configuration', 'general', 'security_key']
-            )
-            ), new UrlGenerator($this->getRequest(), $this->getWebPathBuilder())
+                $this->getFileConfigurationConsulter(), $this->getSession(),
+                new UrlGenerator($this->getRequest(), $this->getWebPathBuilder())
             );
 
             $dataClassRepositoryCache = new DataClassRepositoryCache();

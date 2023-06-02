@@ -20,7 +20,6 @@ use Chamilo\Application\Weblcms\Tool\Implementation\CourseGroup\Storage\DataClas
 use Chamilo\Application\Weblcms\Tool\Manager;
 use Chamilo\Core\User\Storage\DataClass\User;
 use Chamilo\Libraries\DependencyInjection\DependencyInjectionContainerBuilder;
-use Chamilo\Libraries\Platform\Session\SessionUtilities;
 use Chamilo\Libraries\Storage\DataClass\DataClass;
 use Chamilo\Libraries\Storage\Parameters\DataClassCountParameters;
 use Chamilo\Libraries\Storage\Parameters\DataClassRetrieveParameters;
@@ -33,6 +32,7 @@ use Chamilo\Libraries\Storage\Query\Variable\PropertyConditionVariable;
 use Chamilo\Libraries\Storage\Query\Variable\StaticConditionVariable;
 use Chamilo\Libraries\Translation\Translation;
 use Exception;
+use Symfony\Component\HttpFoundation\Session\SessionInterface;
 
 /**
  * This class represents a course in the weblcms.
@@ -415,9 +415,9 @@ class Course extends DataClass
      * **************************************************************************************************************
      */
 
-    public function getSessionUtilities(): SessionUtilities
+    public function getSession(): SessionInterface
     {
-        return DependencyInjectionContainerBuilder::getInstance()->createContainer()->get(SessionUtilities::class);
+        return DependencyInjectionContainerBuilder::getInstance()->createContainer()->get(SessionInterface::class);
     }
 
     /**
@@ -896,8 +896,8 @@ class Course extends DataClass
         $courseValidator = CourseAdminValidator::getInstance();
 
         // fix for view as
-        $va_id = $this->getSessionUtilities()->get(Manager::PARAM_VIEW_AS_ID);
-        $course_id = $this->getSessionUtilities()->get(Manager::PARAM_VIEW_AS_COURSE_ID);
+        $va_id = $this->getSession()->get(Manager::PARAM_VIEW_AS_ID);
+        $course_id = $this->getSession()->get(Manager::PARAM_VIEW_AS_COURSE_ID);
         $id = $user->get_id();
         if (isset($va_id) && isset($course_id))
         {
@@ -935,7 +935,7 @@ class Course extends DataClass
 
         if (is_null($this->is_course_admin_cache[$id]))
         {
-            $studentview = $this->getSessionUtilities()->retrieve('studentview');
+            $studentview = $this->getSession()->retrieve('studentview');
 
             if ($studentview)
             {

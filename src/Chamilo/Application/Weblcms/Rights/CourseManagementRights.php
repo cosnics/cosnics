@@ -13,7 +13,6 @@ use Chamilo\Core\Rights\Entity\PlatformGroupEntity;
 use Chamilo\Core\Rights\Entity\UserEntity;
 use Chamilo\Core\Rights\RightsUtil;
 use Chamilo\Libraries\DependencyInjection\DependencyInjectionContainerBuilder;
-use Chamilo\Libraries\Platform\Session\SessionUtilities;
 use Chamilo\Libraries\Storage\DataClass\DataClass;
 use Chamilo\Libraries\Storage\Query\Condition\AndCondition;
 use Chamilo\Libraries\Storage\Query\Condition\EqualityCondition;
@@ -22,6 +21,7 @@ use Chamilo\Libraries\Storage\Query\Condition\OrCondition;
 use Chamilo\Libraries\Storage\Query\Variable\PropertyConditionVariable;
 use Chamilo\Libraries\Storage\Query\Variable\StaticConditionVariable;
 use Chamilo\Libraries\Translation\Translation;
+use Symfony\Component\HttpFoundation\Session\SessionInterface;
 
 /**
  * Extension on the weblcms rights to define rights utilities for course management (courses / course types)
@@ -231,7 +231,8 @@ class CourseManagementRights extends WeblcmsRights
                     break;
                 case self::RIGHT_OTPION_ME :
                     $succes &= $this->invert_location_entity_right(
-                        Manager::CONTEXT, $right_id, $this->getSessionUtilities()->getUserId(), 1, $location_id
+                        Manager::CONTEXT, $right_id,
+                        $this->getSession()->get(\Chamilo\Core\User\Manager::SESSION_USER_IO), 1, $location_id
                     );
                     break;
                 case self::RIGHT_OPTION_SELECT :
@@ -281,17 +282,6 @@ class CourseManagementRights extends WeblcmsRights
         }
 
         return self::$instance;
-    }
-
-    /**
-     * **************************************************************************************************************
-     * Metadata Functionality *
-     * **************************************************************************************************************
-     */
-
-    public function getSessionUtilities(): SessionUtilities
-    {
-        return DependencyInjectionContainerBuilder::getInstance()->createContainer()->get(SessionUtilities::class);
     }
 
     /**

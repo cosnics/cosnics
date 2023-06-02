@@ -439,12 +439,12 @@ abstract class Application
         }
 
         // Display messages
-        $sessionUtilities = $this->getSessionUtilities();
+        $session = $this->getSession();
         $request = $this->getRequest();
 
-        $messages = $sessionUtilities->retrieve(self::PARAM_MESSAGES);
+        $messages = $session->get(self::PARAM_MESSAGES);
 
-        $sessionUtilities->unregister(self::PARAM_MESSAGES);
+        $session->remove(self::PARAM_MESSAGES);
         if (is_array($messages))
         {
             $html[] = $this->display_messages($messages[self::PARAM_MESSAGE], $messages[self::PARAM_MESSAGE_TYPE]);

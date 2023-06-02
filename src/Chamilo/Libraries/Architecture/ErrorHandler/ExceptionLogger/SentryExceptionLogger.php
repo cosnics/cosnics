@@ -5,9 +5,9 @@ use Chamilo\Core\User\Manager;
 use Chamilo\Libraries\Architecture\Application\Application;
 use Chamilo\Libraries\Architecture\Application\Routing\UrlGenerator;
 use Chamilo\Libraries\Format\Structure\PageConfiguration;
-use Chamilo\Libraries\Platform\Session\SessionUtilities;
 use Exception;
 use Sentry\Event;
+use Symfony\Component\HttpFoundation\Session\SessionInterface;
 use Throwable;
 use function Sentry\captureException;
 use function Sentry\init;
@@ -16,14 +16,14 @@ use function Sentry\init;
  * Logs Exceptions to Sentry (sentry.io)
  *
  * @package Chamilo\Libraries\Architecture\ErrorHandler\ExceptionLogger
- * @author Sven Vanpoucke - Hogeschool Gent
+ * @author  Sven Vanpoucke - Hogeschool Gent
  */
 class SentryExceptionLogger implements ExceptionLoggerInterface
 {
 
     protected string $sentryConnectionString;
 
-    protected SessionUtilities $sessionUtilities;
+    protected SessionInterface $session;
 
     protected UrlGenerator $urlGenerator;
 
@@ -31,7 +31,7 @@ class SentryExceptionLogger implements ExceptionLoggerInterface
      * @throws \Exception
      */
     public function __construct(
-        SessionUtilities $sessionUtilities, UrlGenerator $urlGenerator, string $sentryConnectionString
+        SessionInterface $session, UrlGenerator $urlGenerator, string $sentryConnectionString
     )
     {
         if (!class_exists('\Sentry\SentrySdk'))
@@ -45,15 +45,15 @@ class SentryExceptionLogger implements ExceptionLoggerInterface
         }
 
         $this->sentryConnectionString = $sentryConnectionString;
-        $this->sessionUtilities = $sessionUtilities;
+        $this->session = $session;
         $this->urlGenerator = $urlGenerator;
 
         init(
             [
                 'dsn' => $sentryConnectionString,
                 'traces_sample_rate' => 0.01,
-                'before_send' => function (Event $event) use ($sessionUtilities, $urlGenerator): ?Event {
-                    $userId = $sessionUtilities->getUserId();
+                'before_send' => function (Event $event) use ($session, $urlGenerator): ?Event {
+                    $userId = $session->get(Manager::SESSION_USER_IO);
 
                     if ($userId)
                     {
@@ -91,7 +91,7 @@ class SentryExceptionLogger implements ExceptionLoggerInterface
                 crossorigin="anonymous"
             ></script>';
 
-        $userId = $this->getSessionUtilities()->getUserId();
+        $userId = $this->getSession()->get(Manager::SESSION_USER_IO);
 
         $profilePage = $_SERVER['REQUEST_SCHEME'] . '://' . $_SERVER['SERVER_NAME'] . $_SERVER['SCRIPT_NAME'] .
             '?application=Chamilo\\\\Core\\\\User&go=UserDetail&user_id=' . $userId;
@@ -120,9 +120,9 @@ class SentryExceptionLogger implements ExceptionLoggerInterface
         return $this->sentryConnectionString;
     }
 
-    public function getSessionUtilities(): SessionUtilities
+    public function getSession(): SessionInterface
     {
-        return $this->sessionUtilities;
+        return $this->session;
     }
 
     public function logException(

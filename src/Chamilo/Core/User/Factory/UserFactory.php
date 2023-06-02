@@ -2,11 +2,12 @@
 namespace Chamilo\Core\User\Factory;
 
 use Chamilo\Configuration\Service\Consulter\ConfigurationConsulter;
+use Chamilo\Core\User\Manager;
 use Chamilo\Core\User\Service\UserService;
 use Chamilo\Core\User\Service\UserSettingService;
 use Chamilo\Core\User\Storage\DataClass\User;
 use Chamilo\Libraries\Format\Theme\ThemePathBuilder;
-use Chamilo\Libraries\Platform\Session\SessionUtilities;
+use Symfony\Component\HttpFoundation\Session\SessionInterface;
 use Symfony\Component\Translation\Translator;
 
 /**
@@ -19,7 +20,7 @@ class UserFactory
 
     private ConfigurationConsulter $configurationConsulter;
 
-    private SessionUtilities $sessionUtilities;
+    private SessionInterface $session;
 
     private ThemePathBuilder $themeSystemPathBuilder;
 
@@ -32,12 +33,12 @@ class UserFactory
     private UserSettingService $userSettingService;
 
     public function __construct(
-        SessionUtilities $sessionUtilities, UserService $userService, ConfigurationConsulter $configurationConsulter,
+        SessionInterface $session, UserService $userService, ConfigurationConsulter $configurationConsulter,
         ThemePathBuilder $themeWebPathBuilder, ThemePathBuilder $themeSystemPathBuilder, Translator $translator,
         UserSettingService $userSettingService
     )
     {
-        $this->sessionUtilities = $sessionUtilities;
+        $this->session = $session;
         $this->userService = $userService;
         $this->configurationConsulter = $configurationConsulter;
         $this->themeWebPathBuilder = $themeWebPathBuilder;
@@ -51,9 +52,9 @@ class UserFactory
         return $this->configurationConsulter;
     }
 
-    public function getSessionUtilities(): SessionUtilities
+    public function getSession(): SessionInterface
     {
-        return $this->sessionUtilities;
+        return $this->session;
     }
 
     public function getThemeSystemPathBuilder(): ThemePathBuilder
@@ -73,7 +74,7 @@ class UserFactory
 
     public function getUser(): ?User
     {
-        $userIdentifier = $this->getSessionUtilities()->getUserId();
+        $userIdentifier = $this->getSession()->get(Manager::SESSION_USER_IO);
 
         if ($userIdentifier)
         {

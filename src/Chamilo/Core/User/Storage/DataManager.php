@@ -1,9 +1,9 @@
 <?php
 namespace Chamilo\Core\User\Storage;
 
+use Chamilo\Core\User\Manager;
 use Chamilo\Core\User\Storage\DataClass\User;
 use Chamilo\Libraries\DependencyInjection\DependencyInjectionContainerBuilder;
-use Chamilo\Libraries\Platform\Session\SessionUtilities;
 use Chamilo\Libraries\Storage\Parameters\DataClassCountParameters;
 use Chamilo\Libraries\Storage\Parameters\DataClassRetrieveParameters;
 use Chamilo\Libraries\Storage\Parameters\DataClassRetrievesParameters;
@@ -14,6 +14,7 @@ use Chamilo\Libraries\Storage\Query\Condition\OrCondition;
 use Chamilo\Libraries\Storage\Query\Variable\PropertyConditionVariable;
 use Chamilo\Libraries\Storage\Query\Variable\StaticConditionVariable;
 use Chamilo\Libraries\Translation\Translation;
+use Symfony\Component\HttpFoundation\Session\SessionInterface;
 
 /**
  * @author  Hans De Bisschop
@@ -108,10 +109,9 @@ class DataManager extends \Chamilo\Libraries\Storage\DataManager\DataManager
      */
     public static function get_current_user()
     {
-        $sessionUtilities =
-            DependencyInjectionContainerBuilder::getInstance()->createContainer()->get(SessionUtilities::class);
+        $session = DependencyInjectionContainerBuilder::getInstance()->createContainer()->get(SessionInterface::class);
 
-        return self::retrieve_by_id(User::class, $sessionUtilities->getUserId());
+        return self::retrieve_by_id(User::class, $session->get(Manager::SESSION_USER_IO));
     }
 
     /**

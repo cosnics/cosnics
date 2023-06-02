@@ -4,28 +4,28 @@ namespace Chamilo\Libraries\Architecture\ErrorHandler\ExceptionLogger;
 use Chamilo\Configuration\Service\Consulter\ConfigurationConsulter;
 use Chamilo\Libraries\Architecture\Application\Routing\UrlGenerator;
 use Chamilo\Libraries\File\ConfigurablePathBuilder;
-use Chamilo\Libraries\Platform\Session\SessionUtilities;
+use Symfony\Component\HttpFoundation\Session\SessionInterface;
 
 /**
  * Builds the FileExceptionLogger class
  *
  * @package Chamilo\Libraries\Architecture\ErrorHandler\ExceptionLogger
- * @author Sven Vanpoucke - Hogeschool Gent
+ * @author  Sven Vanpoucke - Hogeschool Gent
  */
 class FileExceptionLoggerBuilder implements ExceptionLoggerBuilderInterface
 {
     protected ConfigurationConsulter $configurationConsulter;
 
-    protected SessionUtilities $sessionUtilities;
+    protected SessionInterface $session;
 
     protected UrlGenerator $urlGenerator;
 
     public function __construct(
-        ConfigurationConsulter $configurationConsulter, SessionUtilities $sessionUtilities, UrlGenerator $urlGenerator
+        ConfigurationConsulter $configurationConsulter, SessionInterface $session, UrlGenerator $urlGenerator
     )
     {
         $this->configurationConsulter = $configurationConsulter;
-        $this->sessionUtilities = $sessionUtilities;
+        $this->session = $session;
         $this->urlGenerator = $urlGenerator;
     }
 
@@ -47,22 +47,22 @@ class FileExceptionLoggerBuilder implements ExceptionLoggerBuilderInterface
         return $this->configurationConsulter;
     }
 
+    public function getSession(): SessionInterface
+    {
+        return $this->session;
+    }
+
+    public function getUrlGenerator(): UrlGenerator
+    {
+        return $this->urlGenerator;
+    }
+
     public function setConfigurationConsulter(ConfigurationConsulter $configurationConsulter
     ): FileExceptionLoggerBuilder
     {
         $this->configurationConsulter = $configurationConsulter;
 
         return $this;
-    }
-
-    public function getSessionUtilities(): SessionUtilities
-    {
-        return $this->sessionUtilities;
-    }
-
-    public function getUrlGenerator(): UrlGenerator
-    {
-        return $this->urlGenerator;
     }
 
 }
