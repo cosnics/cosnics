@@ -63,7 +63,7 @@ class LicenseComponent extends Manager implements NoAuthenticationSupport
                 Translation::get('AgreeAndContinue'), new FontAwesomeGlyph('chevron-right'), $this->get_url(
                 [
                     self::PARAM_ACTION => self::ACTION_SETTINGS,
-                    self::PARAM_LANGUAGE => $this->getSessionUtilities()->retrieve(self::PARAM_LANGUAGE)
+                    self::PARAM_LANGUAGE => $this->getSession()->get(self::PARAM_LANGUAGE)
                 ]
             ), Button::DISPLAY_ICON_AND_LABEL, null, ['btn-primary']
             )

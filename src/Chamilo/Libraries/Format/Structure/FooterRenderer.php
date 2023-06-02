@@ -7,16 +7,15 @@ use Chamilo\Core\Rights\Structure\Service\AuthorizationChecker;
 use Chamilo\Core\User\Storage\DataClass\User;
 use Chamilo\Libraries\Architecture\Application\Application;
 use Chamilo\Libraries\Architecture\Application\Routing\UrlGenerator;
-use Chamilo\Libraries\Platform\Session\SessionUtilities;
 use Chamilo\Libraries\Utilities\StringUtilities;
+use Symfony\Component\HttpFoundation\Session\SessionInterface;
 use Symfony\Component\Translation\Translator;
 
 /**
- *
  * @package Chamilo\Libraries\Format\Structure
- * @author Hans De Bisschop <hans.de.bisschop@ehb.be>
- * @author Magali Gillard <magali.gillard@ehb.be>
- * @author Eduard Vossen <eduard.vossen@ehb.be>
+ * @author  Hans De Bisschop <hans.de.bisschop@ehb.be>
+ * @author  Magali Gillard <magali.gillard@ehb.be>
+ * @author  Eduard Vossen <eduard.vossen@ehb.be>
  */
 class FooterRenderer extends AbstractFooterRenderer
 {
@@ -24,7 +23,7 @@ class FooterRenderer extends AbstractFooterRenderer
 
     private ConfigurationConsulter $configurationConsulter;
 
-    private SessionUtilities $sessionUtilities;
+    private SessionInterface $session;
 
     private StringUtilities $stringUtilities;
 
@@ -35,7 +34,7 @@ class FooterRenderer extends AbstractFooterRenderer
     public function __construct(
         PageConfiguration $pageConfiguration, StringUtilities $stringUtilities,
         ConfigurationConsulter $configurationConsulter, AuthorizationChecker $authorizationChecker,
-        Translator $translator, SessionUtilities $sessionUtilities, UrlGenerator $urlGenerator
+        Translator $translator, SessionInterface $session, UrlGenerator $urlGenerator
     )
     {
         parent::__construct($pageConfiguration);
@@ -44,13 +43,10 @@ class FooterRenderer extends AbstractFooterRenderer
         $this->authorizationChecker = $authorizationChecker;
         $this->configurationConsulter = $configurationConsulter;
         $this->translator = $translator;
-        $this->sessionUtilities = $sessionUtilities;
+        $this->session = $session;
         $this->urlGenerator = $urlGenerator;
     }
 
-    /**
-     * @throws \ReflectionException
-     */
     public function render(): string
     {
         $html = [];
@@ -81,7 +77,6 @@ class FooterRenderer extends AbstractFooterRenderer
 
     /**
      * @return string[]
-     * @throws \ReflectionException
      */
     protected function getLinks(): array
     {
@@ -141,10 +136,10 @@ class FooterRenderer extends AbstractFooterRenderer
                 $configurationConsulter->getSetting(['Chamilo\Core\Admin', 'version']);
         }
 
-        if ($this->getSessionUtilities()->exists('_uid'))
+        if ($this->getSession()->has(\Chamilo\Core\User\Manager::SESSION_USER_IO))
         {
             $user = new User();
-            $user->setId($this->getSessionUtilities()->getUserId());
+            $user->setId($this->getSession()->get(\Chamilo\Core\User\Manager::SESSION_USER_IO));
             $whoisOnlineAuthorized = $this->getAuthorizationChecker()->isAuthorized(
                 $user, 'Chamilo\Core\Admin', 'ViewWhoisOnline'
             );
@@ -164,9 +159,9 @@ class FooterRenderer extends AbstractFooterRenderer
         return $links;
     }
 
-    public function getSessionUtilities(): SessionUtilities
+    public function getSession(): SessionInterface
     {
-        return $this->sessionUtilities;
+        return $this->session;
     }
 
     public function getStringUtilities(): StringUtilities

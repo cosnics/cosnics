@@ -21,7 +21,7 @@ class ManagerComponent extends Manager
     {
         if ($this->getUser()->is_platform_admin())
         {
-            $this->getSessionUtilities()->register('Chamilo\Core\Home\General', '1');
+            $this->getSession()->set('Chamilo\Core\Home\General', '1');
         }
 
         return new RedirectResponse($this->getUrlGenerator()->fromParameters());

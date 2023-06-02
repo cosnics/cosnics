@@ -12,6 +12,7 @@ use Chamilo\Core\Repository\Storage\DataClass\ContentObjectInclude;
 use Chamilo\Core\Repository\Storage\DataClass\RepositoryCategory;
 use Chamilo\Core\Repository\Storage\DataManager;
 use Chamilo\Core\Repository\Workspace\Storage\DataClass\WorkspaceContentObjectRelation;
+use Chamilo\Core\User\Manager;
 use Chamilo\Libraries\Architecture\Interfaces\ComplexContentObjectSupport;
 use Chamilo\Libraries\File\Compression\ZipArchive\ZipArchiveFilecompression;
 use Chamilo\Libraries\File\Filesystem;
@@ -368,7 +369,7 @@ class CpoContentObjectExportController extends ContentObjectExportController
 
     public function prepare_file_system()
     {
-        $user_id = $this->getSessionUtilities()->getUserId();
+        $user_id = $this->getSession()->get(Manager::SESSION_USER_IO);
 
         $this->temporary_directory =
             $this->getConfigurablePathBuilder()->getTemporaryPath() . md5($user_id . '_export') . '/';

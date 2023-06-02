@@ -4,8 +4,8 @@ namespace Chamilo\Libraries\Protocol\Microsoft\Graph\Storage\Repository;
 use Chamilo\Core\User\Service\UserService;
 use Chamilo\Core\User\Service\UserSettingService;
 use Chamilo\Core\User\Storage\DataClass\User;
-use Chamilo\Libraries\Platform\Session\SessionUtilities;
 use League\OAuth2\Client\Token\AccessToken;
+use Symfony\Component\HttpFoundation\Session\SessionInterface;
 
 /**
  * Storage solution for the Graph access token
@@ -17,7 +17,7 @@ use League\OAuth2\Client\Token\AccessToken;
 class AccessTokenRepository implements AccessTokenRepositoryInterface
 {
 
-    protected SessionUtilities $sessionUtilities;
+    protected SessionInterface $session;
 
     protected User $user;
 
@@ -26,13 +26,13 @@ class AccessTokenRepository implements AccessTokenRepositoryInterface
     protected UserService $userservice;
 
     public function __construct(
-        User $user, UserService $userservice, UserSettingService $userSettingService, SessionUtilities $sessionUtilities
+        User $user, UserService $userservice, UserSettingService $userSettingService, SessionInterface $session
     )
     {
         $this->user = $user;
         $this->userservice = $userservice;
         $this->userSettingService = $userSettingService;
-        $this->sessionUtilities = $sessionUtilities;
+        $this->session = $session;
     }
 
     public function getApplicationAccessToken(): ?AccessToken
@@ -51,7 +51,7 @@ class AccessTokenRepository implements AccessTokenRepositoryInterface
 
     public function getDelegatedAccessToken(): ?AccessToken
     {
-        $accessTokenData = $this->getSessionUtilities()->get('graph_delegated_access_token');
+        $accessTokenData = $this->getSession()->get('graph_delegated_access_token');
 
         if (empty($accessTokenData))
         {
@@ -61,9 +61,9 @@ class AccessTokenRepository implements AccessTokenRepositoryInterface
         return new AccessToken(json_decode($accessTokenData, true));
     }
 
-    public function getSessionUtilities(): SessionUtilities
+    public function getSession(): SessionInterface
     {
-        return $this->sessionUtilities;
+        return $this->session;
     }
 
     public function getUser(): User
@@ -99,6 +99,6 @@ class AccessTokenRepository implements AccessTokenRepositoryInterface
      */
     public function storeDelegatedAccessToken(AccessToken $accessToken)
     {
-        $this->sessionUtilities->register('graph_delegated_access_token', json_encode($accessToken->jsonSerialize()));
+        $this->session->set('graph_delegated_access_token', json_encode($accessToken->jsonSerialize()));
     }
 }

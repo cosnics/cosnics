@@ -11,9 +11,9 @@ use Chamilo\Core\Home\Storage\DataClass\Element;
 use Chamilo\Core\Home\Storage\DataClass\Tab;
 use Chamilo\Core\User\Storage\DataClass\User;
 use Chamilo\Libraries\Platform\ChamiloRequest;
-use Chamilo\Libraries\Platform\Session\SessionUtilities;
 use Chamilo\Libraries\Translation\Translation;
 use Exception;
+use Symfony\Component\HttpFoundation\Session\SessionInterface;
 
 /**
  * @package Chamilo\Core\Repository\Home\Service
@@ -30,7 +30,7 @@ class HomeService
      */
     protected $elementRightsService;
 
-    protected SessionUtilities $sessionUtilities;
+    protected SessionInterface $session;
 
     /**
      * @var \Chamilo\Core\Home\Repository\HomeRepository
@@ -42,12 +42,12 @@ class HomeService
      * @param ElementRightsService $elementRightsService
      */
     public function __construct(
-        HomeRepository $homeRepository, ElementRightsService $elementRightsService, SessionUtilities $sessionUtilities
+        HomeRepository $homeRepository, ElementRightsService $elementRightsService, SessionInterface $session
     )
     {
         $this->homeRepository = $homeRepository;
         $this->elementRightsService = $elementRightsService;
-        $this->sessionUtilities = $sessionUtilities;
+        $this->session = $session;
     }
 
     /**
@@ -155,7 +155,7 @@ class HomeService
         if (!isset($this->homeUserIdentifier))
         {
             $userHomeAllowed = Configuration::getInstance()->get_setting([Manager::CONTEXT, 'allow_user_home']);
-            $generalMode = $this->getSessionUtilities()->retrieve('Chamilo\Core\Home\General');
+            $generalMode = $this->getSession()->get('Chamilo\Core\Home\General');
 
             // Get user id
             if ($user instanceof User && $generalMode && $user->is_platform_admin())
@@ -253,9 +253,9 @@ class HomeService
         return $this->homeRepository;
     }
 
-    public function getSessionUtilities(): SessionUtilities
+    public function getSession(): SessionInterface
     {
-        return $this->sessionUtilities;
+        return $this->session;
     }
 
     /**
@@ -277,7 +277,7 @@ class HomeService
      */
     public function isInGeneralMode()
     {
-        return (boolean) $this->getSessionUtilities()->retrieve('Chamilo\Core\Home\General');
+        return (boolean) $this->getSession()->get('Chamilo\Core\Home\General');
     }
 
     /**

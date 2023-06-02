@@ -63,7 +63,7 @@ class RequirementsComponent extends Manager implements NoAuthenticationSupport
                 $this->get_url(
                     [
                         self::PARAM_ACTION => self::ACTION_REQUIREMENTS,
-                        self::PARAM_LANGUAGE => $this->getSessionUtilities()->retrieve(self::PARAM_LANGUAGE)
+                        self::PARAM_LANGUAGE => $this->getSession()->get(self::PARAM_LANGUAGE)
                     ]
                 )
             )
@@ -75,7 +75,7 @@ class RequirementsComponent extends Manager implements NoAuthenticationSupport
                 $this->get_url(
                     [
                         self::PARAM_ACTION => self::ACTION_LICENSE,
-                        self::PARAM_LANGUAGE => $this->getSessionUtilities()->retrieve(self::PARAM_LANGUAGE)
+                        self::PARAM_LANGUAGE => $this->getSession()->get(self::PARAM_LANGUAGE)
                     ]
                 ), Button::DISPLAY_ICON_AND_LABEL, null, ['btn-primary']
             )

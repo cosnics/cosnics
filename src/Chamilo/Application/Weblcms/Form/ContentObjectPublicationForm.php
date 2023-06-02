@@ -930,8 +930,9 @@ class ContentObjectPublicationForm extends BasePublicationForm
                     break;
                 case self::RIGHTS_FOR_ME :
                     if (!$weblcms_rights->invert_location_entity_right(
-                        Manager::CONTEXT, WeblcmsRights::VIEW_RIGHT, $this->getSessionUtilities()->getUserId(),
-                        CourseUserEntity::ENTITY_TYPE, $location_id
+                        Manager::CONTEXT, WeblcmsRights::VIEW_RIGHT, $this->getSession()->get(
+                        \Chamilo\Core\User\Manager::SESSION_USER_IO
+                    ), CourseUserEntity::ENTITY_TYPE, $location_id
                     ))
                     {
                         return false;
@@ -1032,8 +1033,8 @@ class ContentObjectPublicationForm extends BasePublicationForm
                     return $right_defaults;
                 }
 
-                if ($selected_entity->get_entity_type() == 1 &&
-                    $selected_entity->get_entity_id() == $this->getSessionUtilities()->getUserId())
+                if ($selected_entity->get_entity_type() == 1 && $selected_entity->get_entity_id() ==
+                    $this->getSession()->get(\Chamilo\Core\User\Manager::SESSION_USER_IO))
                 {
                     $right_defaults[self::PROPERTY_RIGHTS_SELECTOR] = self::RIGHTS_FOR_ME;
 

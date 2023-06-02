@@ -2,10 +2,9 @@
 namespace Chamilo\Libraries\Platform;
 
 use Chamilo\Libraries\Hashing\HashingUtilities;
-use Chamilo\Libraries\Platform\Session\SessionUtilities;
+use Symfony\Component\HttpFoundation\Session\SessionInterface;
 
 /**
- *
  * @package Chamilo\Libraries\Platform
  */
 class Security
@@ -14,13 +13,13 @@ class Security
 
     private HashingUtilities $hashingUtilities;
 
-    private SessionUtilities $sessionUtilities;
+    private SessionInterface $session;
 
     public function __construct(
-        SessionUtilities $sessionUtilities, ChamiloRequest $chamiloRequest, HashingUtilities $hashingUtilities
+        SessionInterface $session, ChamiloRequest $chamiloRequest, HashingUtilities $hashingUtilities
     )
     {
-        $this->sessionUtilities = $sessionUtilities;
+        $this->session = $session;
         $this->chamiloRequest = $chamiloRequest;
         $this->hashingUtilities = $hashingUtilities;
     }
@@ -31,10 +30,10 @@ class Security
      */
     public function checkToken(string $tokenType = 'post'): bool
     {
-        $sessionUtilities = $this->getSessionUtilities();
+        $sessionUtilities = $this->getSession();
         $request = $this->getChamiloRequest();
 
-        $sessionToken = $sessionUtilities->retrieve('sec_token');
+        $sessionToken = $sessionUtilities->get('sec_token');
         $tokenTypeValue = $tokenType;
 
         if ($tokenType == 'get')
@@ -60,11 +59,11 @@ class Security
      */
     public function checkUa(): bool
     {
-        $sessionUtilities = $this->getSessionUtilities();
+        $sessionUtilities = $this->getSession();
         $request = $this->getChamiloRequest();
 
-        $session_agent = $sessionUtilities->retrieve('sec_ua');
-        $current_agent = $request->server->get('HTTP_USER_AGENT') . $sessionUtilities->retrieve('sec_ua_seed');
+        $session_agent = $sessionUtilities->get('sec_ua');
+        $current_agent = $request->server->get('HTTP_USER_AGENT') . $sessionUtilities->get('sec_ua_seed');
 
         if (isset($session_agent) and $session_agent === $current_agent)
         {
@@ -100,9 +99,9 @@ class Security
         return $this->hashingUtilities;
     }
 
-    public function getSessionUtilities(): SessionUtilities
+    public function getSession(): SessionInterface
     {
-        return $this->sessionUtilities;
+        return $this->session;
     }
 
     /**
@@ -114,7 +113,7 @@ class Security
     public function getToken(): string
     {
         $token = $this->getHashingUtilities()->hashString(uniqid(rand(), true));
-        $this->getSessionUtilities()->register('sec_token', $token);
+        $this->getSession()->set('sec_token', $token);
 
         return $token;
     }
@@ -124,11 +123,10 @@ class Security
      */
     public function getUa()
     {
-        $sessionUtilities = $this->getSessionUtilities();
-        $sessionUtilities->register('sec_ua_seed', uniqid(rand(), true));
-        $sessionUtilities->register(
-            'sec_ua',
-            $this->getChamiloRequest()->server->get('HTTP_USER_AGENT') . $sessionUtilities->retrieve('sec_ua_seed')
+        $sessionUtilities = $this->getSession();
+        $sessionUtilities->set('sec_ua_seed', uniqid(rand(), true));
+        $sessionUtilities->set(
+            'sec_ua', $this->getChamiloRequest()->server->get('HTTP_USER_AGENT') . $sessionUtilities->get('sec_ua_seed')
         );
     }
 

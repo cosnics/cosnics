@@ -5,8 +5,8 @@ use Chamilo\Application\Weblcms\CourseType\Storage\DataManager as CourseTypeData
 use Chamilo\Application\Weblcms\Storage\DataClass\CourseTypeUserCategory;
 use Chamilo\Application\Weblcms\Storage\DataClass\CourseUserCategory;
 use Chamilo\Application\Weblcms\Storage\DataManager;
+use Chamilo\Core\User\Manager;
 use Chamilo\Libraries\DependencyInjection\DependencyInjectionContainerBuilder;
-use Chamilo\Libraries\Platform\Session\SessionUtilities;
 use Chamilo\Libraries\Storage\Parameters\DataClassRetrievesParameters;
 use Chamilo\Libraries\Storage\Query\Condition\AndCondition;
 use Chamilo\Libraries\Storage\Query\Condition\EqualityCondition;
@@ -14,6 +14,7 @@ use Chamilo\Libraries\Storage\Query\Condition\SubselectCondition;
 use Chamilo\Libraries\Storage\Query\Variable\PropertyConditionVariable;
 use Chamilo\Libraries\Storage\Query\Variable\StaticConditionVariable;
 use Chamilo\Libraries\Translation\Translation;
+use Symfony\Component\HttpFoundation\Session\SessionInterface;
 
 /**
  * Connector for the weblcms blocks configurations
@@ -29,9 +30,9 @@ class Connector
      * **************************************************************************************************************
      */
 
-    public function getSessionUtilities(): SessionUtilities
+    public function getSession(): SessionInterface
     {
-        return DependencyInjectionContainerBuilder::getInstance()->createContainer()->get(SessionUtilities::class);
+        return DependencyInjectionContainerBuilder::getInstance()->createContainer()->get(SessionInterface::class);
     }
 
     public function get_all_course_types()
@@ -97,7 +98,7 @@ class Connector
         $subconditions[] = new EqualityCondition(
             new PropertyConditionVariable(
                 CourseTypeUserCategory::class, CourseTypeUserCategory::PROPERTY_USER_ID
-            ), new StaticConditionVariable($this->getSessionUtilities()->getUserId())
+            ), new StaticConditionVariable($this->getSession()->get(Manager::SESSION_USER_IO))
         );
 
         $subconditions[] = new EqualityCondition(

@@ -170,7 +170,7 @@ class CourseViewerComponent extends Manager implements DelegateComponent
                 $this->get_course(), CourseSettingsConnector::COURSE_ACCESS
             );
 
-            $viewAsCourseId = $this->getSessionUtilities()->get('view_as_course_id');
+            $viewAsCourseId = $this->getSession()->get('view_as_course_id');
 
             if ($course_access == CourseSettingsConnector::COURSE_ACCESS_CLOSED &&
                 (!isset($viewAsCourseId) || $viewAsCourseId != $this->get_course_id()))
@@ -264,9 +264,9 @@ class CourseViewerComponent extends Manager implements DelegateComponent
      */
     public function get_user(): ?User
     {
-        $va_id = $this->getSessionUtilities()->get(\Chamilo\Application\Weblcms\Tool\Manager::PARAM_VIEW_AS_ID);
+        $va_id = $this->getSession()->get(\Chamilo\Application\Weblcms\Tool\Manager::PARAM_VIEW_AS_ID);
         $course_id =
-            $this->getSessionUtilities()->get(\Chamilo\Application\Weblcms\Tool\Manager::PARAM_VIEW_AS_COURSE_ID);
+            $this->getSession()->get(\Chamilo\Application\Weblcms\Tool\Manager::PARAM_VIEW_AS_COURSE_ID);
 
         if (isset($va_id) && isset($course_id))
         {
@@ -285,9 +285,9 @@ class CourseViewerComponent extends Manager implements DelegateComponent
      */
     public function get_user_id(): ?string
     {
-        $va_id = $this->getSessionUtilities()->get(\Chamilo\Application\Weblcms\Tool\Manager::PARAM_VIEW_AS_ID);
+        $va_id = $this->getSession()->get(\Chamilo\Application\Weblcms\Tool\Manager::PARAM_VIEW_AS_ID);
         $course_id =
-            $this->getSessionUtilities()->get(\Chamilo\Application\Weblcms\Tool\Manager::PARAM_VIEW_AS_COURSE_ID);
+            $this->getSession()->get(\Chamilo\Application\Weblcms\Tool\Manager::PARAM_VIEW_AS_COURSE_ID);
 
         if (isset($va_id) && isset($course_id))
         {
@@ -307,7 +307,7 @@ class CourseViewerComponent extends Manager implements DelegateComponent
      */
     protected function isReturningToNormalUser()
     {
-        if ($this->getSessionUtilities()->get('view_as_course_id') == $this->get_course_id())
+        if ($this->getSession()->get('view_as_course_id') == $this->get_course_id())
         {
             if ($this->getRequest()->getFromRequestOrQuery(self::PARAM_TOOL) == 'User' &&
                 $this->getRequest()->getFromRequestOrQuery(
@@ -468,10 +468,10 @@ class CourseViewerComponent extends Manager implements DelegateComponent
     {
         $html = [];
 
-        $html[] = parent::render_header($pageTitle);
-        $va_id = $this->getSessionUtilities()->get(\Chamilo\Application\Weblcms\Tool\Manager::PARAM_VIEW_AS_ID);
+        $html[] = parent::renderHeader($pageTitle);
+        $va_id = $this->getSession()->get(\Chamilo\Application\Weblcms\Tool\Manager::PARAM_VIEW_AS_ID);
         $course_id =
-            $this->getSessionUtilities()->get(\Chamilo\Application\Weblcms\Tool\Manager::PARAM_VIEW_AS_COURSE_ID);
+            $this->getSession()->get(\Chamilo\Application\Weblcms\Tool\Manager::PARAM_VIEW_AS_COURSE_ID);
 
         if (isset($va_id) && isset($course_id))
         {
@@ -490,7 +490,7 @@ class CourseViewerComponent extends Manager implements DelegateComponent
             }
         }
 
-        $html[] = ResourceManager::getInstance()->getResourceHtml(
+        $html[] = $this->getResourceManager()->getResourceHtml(
             $this->getWebPathBuilder()->getJavascriptPath('Chamilo\Application\Weblcms', true) . 'CourseVisit.js'
         );
 

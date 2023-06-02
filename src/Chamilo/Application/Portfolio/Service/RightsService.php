@@ -10,9 +10,9 @@ use Chamilo\Core\Repository\Common\Path\ComplexContentObjectPathNode;
 use Chamilo\Core\Repository\ContentObject\Portfolio\Storage\DataClass\Portfolio;
 use Chamilo\Core\Rights\Entity\PlatformGroupEntity;
 use Chamilo\Core\Rights\Entity\UserEntity;
+use Chamilo\Core\User\Manager;
 use Chamilo\Core\User\Service\UserService;
 use Chamilo\Core\User\Storage\DataClass\User;
-use Chamilo\Libraries\Platform\Session\SessionUtilities;
 use Chamilo\Libraries\Storage\Cache\DataClassRepositoryCache;
 use Chamilo\Libraries\Storage\Query\Condition\AndCondition;
 use Chamilo\Libraries\Storage\Query\Condition\Condition;
@@ -21,6 +21,7 @@ use Chamilo\Libraries\Storage\Query\Condition\OrCondition;
 use Chamilo\Libraries\Storage\Query\Variable\PropertyConditionVariable;
 use Chamilo\Libraries\Storage\Query\Variable\StaticConditionVariable;
 use Exception;
+use Symfony\Component\HttpFoundation\Session\SessionInterface;
 use Symfony\Component\Translation\Translator;
 
 /**
@@ -63,10 +64,7 @@ class RightsService
      */
     private $rightsRepository;
 
-    /**
-     * @var \Chamilo\Libraries\Platform\Session\SessionUtilities
-     */
-    private $sessionUtilities;
+    private SessionInterface $session;
 
     /**
      * @var \Symfony\Component\Translation\Translator
@@ -83,17 +81,8 @@ class RightsService
      */
     private $workspaceRightsService;
 
-    /**
-     * @param \Chamilo\Application\Portfolio\Storage\Repository\RightsRepository $rightsRepository
-     * @param \Chamilo\Core\User\Service\UserService $userService
-     * @param \Symfony\Component\Translation\Translator $translator
-     * @param \Chamilo\Libraries\Platform\Session\SessionUtilities $sessionUtilities
-     * @param \Chamilo\Core\Repository\Workspace\Service\RightsService $workspaceRightsService
-     * @param \Chamilo\Libraries\Storage\Cache\DataClassRepositoryCache $dataClassRepositoryCache
-     */
     public function __construct(
-        RightsRepository $rightsRepository, UserService $userService, Translator $translator,
-        SessionUtilities $sessionUtilities,
+        RightsRepository $rightsRepository, UserService $userService, Translator $translator, SessionInterface $session,
         \Chamilo\Core\Repository\Workspace\Service\RightsService $workspaceRightsService,
         DataClassRepositoryCache $dataClassRepositoryCache
     )
@@ -101,7 +90,7 @@ class RightsService
         $this->userService = $userService;
         $this->rightsRepository = $rightsRepository;
         $this->translator = $translator;
-        $this->sessionUtilities = $sessionUtilities;
+        $this->session = $session;
         $this->workspaceRightsService = $workspaceRightsService;
         $this->dataClassRepositoryCache = $dataClassRepositoryCache;
     }
@@ -113,7 +102,7 @@ class RightsService
     {
         $emulation = $this->getEmulationStorage();
         unset($emulation[self::PARAM_VIRTUAL_USER_ID]);
-        $this->getSessionUtilities()->register(__NAMESPACE__, serialize($emulation));
+        $this->getSession()->set(__NAMESPACE__, serialize($emulation));
 
         return true;
     }
@@ -295,7 +284,7 @@ class RightsService
      */
     private function getEmulationStorage()
     {
-        return (array) unserialize($this->getSessionUtilities()->retrieve(__NAMESPACE__));
+        return (array) unserialize($this->getSession()->get(__NAMESPACE__));
     }
 
     /**
@@ -325,12 +314,9 @@ class RightsService
         }
     }
 
-    /**
-     * @return \Chamilo\Libraries\Platform\Session\SessionUtilities
-     */
-    public function getSessionUtilities()
+    public function getSession(): SessionInterface
     {
-        return $this->sessionUtilities;
+        return $this->session;
     }
 
     /**
@@ -728,7 +714,7 @@ class RightsService
      */
     public function is_allowed($right, $location, $userIdentifier)
     {
-        $userIdentifier = $userIdentifier ?: $this->getSessionUtilities()->getUserId();
+        $userIdentifier = $userIdentifier ?: $this->getSession()->get(Manager::SESSION_USER_IO);
 
         $user = $this->getUserService()->findUserByIdentifier($userIdentifier);
 
@@ -828,12 +814,9 @@ class RightsService
         $this->rightsRepository = $rightsRepository;
     }
 
-    /**
-     * @param \Chamilo\Libraries\Platform\Session\SessionUtilities $sessionUtilities
-     */
-    public function setSessionUtilities(SessionUtilities $sessionUtilities)
+    public function setSession(SessionInterface $session)
     {
-        $this->sessionUtilities = $sessionUtilities;
+        $this->session = $session;
     }
 
     /**
@@ -865,7 +848,7 @@ class RightsService
         {
             $emulation = $this->getEmulationStorage();
             $emulation[self::PARAM_VIRTUAL_USER_ID] = $virtualUserIdentifier;
-            $this->getSessionUtilities()->register(__NAMESPACE__, serialize($emulation));
+            $this->getSession()->set(__NAMESPACE__, serialize($emulation));
 
             return true;
         }

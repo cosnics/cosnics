@@ -68,7 +68,7 @@ class CopierComponent extends Manager
             }
         }
 
-        $this->getSessionUtilities()->register(self::PARAM_MESSAGES, $messages);
+        $this->getSession()->set(self::PARAM_MESSAGES, $messages);
         $parameters = [self::PARAM_ACTION => self::ACTION_BROWSE_CONTENT_OBJECTS];
         $this->redirect($parameters);
     }

@@ -32,7 +32,7 @@ class SetElementTargetEntitiesComponent extends Manager
     public function run()
     {
         $userId = DataManager::determine_user_id();
-        $generalMode = $this->getSessionUtilities()->retrieve('Chamilo\Core\Home\General');
+        $generalMode = $this->getSession()->get('Chamilo\Core\Home\General');
 
         if ($userId === false || !$generalMode || !$this->getUser()->is_platform_admin() || $userId > 0)
         {
@@ -43,7 +43,7 @@ class SetElementTargetEntitiesComponent extends Manager
         $targetEntities = $this->getTargetEntitiesFromRequest();
 
         $elementRightsService = new ElementRightsService(new RightsRepository());
-        $homeService = new HomeService(new HomeRepository(), $elementRightsService, $this->getSessionUtilities());
+        $homeService = new HomeService(new HomeRepository(), $elementRightsService, $this->getSession());
         $element = $homeService->getElementByIdentifier($elementId);
 
         try

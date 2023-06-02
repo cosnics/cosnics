@@ -22,9 +22,9 @@ use Chamilo\Libraries\Format\Structure\ActionBar\Renderer\ButtonToolBarRenderer;
 use Chamilo\Libraries\Format\Structure\ActionBar\SplitDropdownButton;
 use Chamilo\Libraries\Format\Structure\ActionBar\SubButton;
 use Chamilo\Libraries\Format\Structure\Glyph\FontAwesomeGlyph;
-use Chamilo\Libraries\Platform\Session\SessionUtilities;
 use Chamilo\Libraries\Translation\Translation;
 use Chamilo\Libraries\Utilities\StringUtilities;
+use Symfony\Component\HttpFoundation\Session\SessionInterface;
 
 /**
  * @package Chamilo\Core\Home\Renderer
@@ -118,16 +118,16 @@ class Basic extends Renderer
         if (!isset($this->homeService))
         {
             $this->homeService = new HomeService(
-                new HomeRepository(), new ElementRightsService(new RightsRepository()), $this->getSessionUtilities()
+                new HomeRepository(), new ElementRightsService(new RightsRepository()), $this->getSession()
             );
         }
 
         return $this->homeService;
     }
 
-    public function getSessionUtilities(): SessionUtilities
+    public function getSession(): SessionInterface
     {
-        return DependencyInjectionContainerBuilder::getInstance()->createContainer()->get(SessionUtilities::class);
+        return DependencyInjectionContainerBuilder::getInstance()->createContainer()->get(SessionInterface::class);
     }
 
     public function getUrlGenerator(): UrlGenerator
@@ -144,7 +144,7 @@ class Basic extends Renderer
     {
         if (!isset($this->generalMode))
         {
-            $this->generalMode = $this->getSessionUtilities()->retrieve('Chamilo\Core\Home\General');
+            $this->generalMode = $this->getSession()->get('Chamilo\Core\Home\General');
         }
 
         return $this->generalMode;

@@ -29,7 +29,7 @@ class AuthenticationException extends NotAllowedException
     public function __construct($message = null, $code = null, $previous = null)
     {
         $this->initializeContainer();
-        $this->getSessionUtilities()->register('request_uri', $_SERVER['REQUEST_URI']);
+        $this->getSession()->set('request_uri', $_SERVER['REQUEST_URI']);
 
         $this->errorMessage = $message;
 

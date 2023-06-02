@@ -10,8 +10,8 @@ use Chamilo\Libraries\Architecture\Application\Routing\UrlGenerator;
 use Chamilo\Libraries\Authentication\Authentication;
 use Chamilo\Libraries\Authentication\AuthenticationInterface;
 use Chamilo\Libraries\Platform\ChamiloRequest;
-use Chamilo\Libraries\Platform\Session\SessionUtilities;
 use Symfony\Component\HttpFoundation\RedirectResponse;
+use Symfony\Component\HttpFoundation\Session\SessionInterface;
 use Symfony\Component\Translation\Translator;
 
 /**
@@ -23,22 +23,22 @@ use Symfony\Component\Translation\Translator;
  * same anonymous user. This will make sure that the users are not constantly redirected to the landing page.
  *
  * @package Chamilo\Libraries\Authentication\Anonymous
- * @author Sven Vanpoucke - Hogeschool Gent
+ * @author  Sven Vanpoucke - Hogeschool Gent
  */
 class AnonymousAuthentication extends Authentication implements AuthenticationInterface
 {
-    protected SessionUtilities $sessionUtilities;
+    protected SessionInterface $session;
 
     protected UrlGenerator $urlGenerator;
 
     public function __construct(
         ConfigurationConsulter $configurationConsulter, Translator $translator, ChamiloRequest $request,
-        UserService $userService, SessionUtilities $sessionUtilities, UrlGenerator $urlGenerator
+        UserService $userService, SessionInterface $session, UrlGenerator $urlGenerator
     )
     {
         parent::__construct($configurationConsulter, $translator, $request, $userService);
 
-        $this->sessionUtilities = $sessionUtilities;
+        $this->session = $session;
         $this->urlGenerator = $urlGenerator;
     }
 
@@ -52,9 +52,6 @@ class AnonymousAuthentication extends Authentication implements AuthenticationIn
         return 400;
     }
 
-    /**
-     * @throws \ReflectionException
-     */
     public function login(): ?User
     {
         if (!$this->isAuthSourceActive())
@@ -63,7 +60,7 @@ class AnonymousAuthentication extends Authentication implements AuthenticationIn
         }
 
         $allowedAnonymousAuthenticationUrl = $this->configurationConsulter->getSetting(
-            array('Chamilo\Core\Admin', 'anonymous_authentication_url')
+            ['Chamilo\Core\Admin', 'anonymous_authentication_url']
         );
 
         $allowedAnonymousAuthenticationUrl = str_replace('http://', '', $allowedAnonymousAuthenticationUrl);
@@ -83,7 +80,7 @@ class AnonymousAuthentication extends Authentication implements AuthenticationIn
         }
 
         $requestedUrlParameters = $this->request->query->all();
-        $this->sessionUtilities->register('requested_url_parameters', $requestedUrlParameters);
+        $this->session->set('requested_url_parameters', $requestedUrlParameters);
 
         $redirect = new RedirectResponse(
             $this->urlGenerator->fromParameters([

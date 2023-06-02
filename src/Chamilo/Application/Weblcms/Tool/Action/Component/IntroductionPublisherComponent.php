@@ -49,7 +49,7 @@ class IntroductionPublisherComponent extends Manager implements ViewerInterface,
             $pub->set_category_id(0);
             $pub->set_from_date(0);
             $pub->set_to_date(0);
-            $pub->set_publisher_id($this->getSessionUtilities()->getUserId());
+            $pub->set_publisher_id($this->getSession()->get(\Chamilo\Core\User\Manager::SESSION_USER_IO));
             $pub->set_publication_date(time());
             $pub->set_modified_date(time());
             $pub->set_hidden(0);

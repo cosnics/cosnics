@@ -34,7 +34,7 @@ class SearchCompleteComponent extends Manager
         $conditions = [];
         $conditions[] = new EqualityCondition(
             new PropertyConditionVariable(ContentObject::class, ContentObject::PROPERTY_OWNER_ID),
-            new StaticConditionVariable($this->getSessionUtilities()->getUserId())
+            new StaticConditionVariable($this->getSession()->get(\Chamilo\Core\User\Manager::SESSION_USER_IO))
         );
         $or_conditions[] = new ContainsCondition(
             new PropertyConditionVariable(ContentObject::class, ContentObject::PROPERTY_TITLE), $query

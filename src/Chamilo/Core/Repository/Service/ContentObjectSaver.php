@@ -13,11 +13,12 @@ use Chamilo\Core\Repository\Storage\Repository\ContentObjectRepository;
 use Chamilo\Core\Repository\Workspace\Service\ContentObjectRelationService;
 use Chamilo\Core\Repository\Workspace\Storage\DataClass\Workspace;
 use Chamilo\Core\Repository\Workspace\Storage\DataClass\WorkspaceContentObjectRelation;
+use Chamilo\Core\User\Manager;
 use Chamilo\Core\User\Service\UserService;
 use Chamilo\Libraries\Architecture\ClassnameUtilities;
 use Chamilo\Libraries\Architecture\Interfaces\AttachmentSupport;
-use Chamilo\Libraries\Platform\Session\SessionUtilities;
 use Chamilo\Libraries\Utilities\StringUtilities;
+use Symfony\Component\HttpFoundation\Session\SessionInterface;
 use Symfony\Component\Uid\Uuid;
 
 /**
@@ -71,10 +72,7 @@ class ContentObjectSaver
      */
     private $repositoryCategoryService;
 
-    /**
-     * @var \Chamilo\Libraries\Platform\Session\SessionUtilities
-     */
-    private $sessionUtilities;
+    private SessionInterface $session;
 
     /**
      * @var \Chamilo\Libraries\Utilities\StringUtilities
@@ -90,29 +88,14 @@ class ContentObjectSaver
      * @var \Chamilo\Core\User\Service\UserService
      */
     private $userService;
-
-    /**
-     * @param \Chamilo\Core\Repository\Storage\Repository\ContentObjectRepository $contentObjectRepository
-     * @param \Chamilo\Core\Repository\Service\RepositoryCategoryService $repositoryCategoryService
-     * @param \Chamilo\Core\Repository\Publication\Service\PublicationAggregatorInterface $publicationAggregator
-     * @param \Chamilo\Core\Repository\Workspace\Service\ContentObjectRelationService $contentObjectRelationService
-     * @param \Chamilo\Core\Repository\Service\IncludeParserManager $includeParserManager
-     * @param \Chamilo\Core\Metadata\Service\InstanceService $metadataInstanceService
-     * @param \Chamilo\Core\Metadata\Entity\DataClassEntityFactory $dataClassEntityFactory
-     * @param \Chamilo\Core\Metadata\Service\EntityService $metadataEntityService
-     * @param \Chamilo\Core\User\Service\UserService $userService
-     * @param \Chamilo\Core\Repository\Service\TemplateRegistrationConsulter $templateRegistrationConsulter
-     * @param \Chamilo\Libraries\Platform\Session\SessionUtilities $sessionUtilities
-     * @param \Chamilo\Libraries\Utilities\StringUtilities $stringUtilities
-     * @param \Chamilo\Libraries\Architecture\ClassnameUtilities $classnameUtilities
-     */
+    
     public function __construct(
         ContentObjectRepository $contentObjectRepository, RepositoryCategoryService $repositoryCategoryService,
         PublicationAggregatorInterface $publicationAggregator,
         ContentObjectRelationService $contentObjectRelationService, IncludeParserManager $includeParserManager,
         InstanceService $metadataInstanceService, DataClassEntityFactory $dataClassEntityFactory,
         EntityService $metadataEntityService, UserService $userService,
-        TemplateRegistrationConsulter $templateRegistrationConsulter, SessionUtilities $sessionUtilities,
+        TemplateRegistrationConsulter $templateRegistrationConsulter, SessionInterface $session,
         StringUtilities $stringUtilities, ClassnameUtilities $classnameUtilities
     )
     {
@@ -126,7 +109,7 @@ class ContentObjectSaver
         $this->metadataEntityService = $metadataEntityService;
         $this->userService = $userService;
         $this->templateRegistrationConsulter = $templateRegistrationConsulter;
-        $this->sessionUtilities = $sessionUtilities;
+        $this->session = $session;
         $this->stringUtilities = $stringUtilities;
         $this->classnameUtilities = $classnameUtilities;
     }
@@ -139,7 +122,7 @@ class ContentObjectSaver
     protected function allowsCategorySelection(ContentObject $contentObject)
     {
         return !$contentObject->isIdentified() || ($contentObject->isIdentified() &&
-                $contentObject->get_owner_id() == $this->getSessionUtilities()->getUserId());
+                $contentObject->get_owner_id() == $this->getSession()->get(Manager::SESSION_USER_IO));
     }
 
     /**
@@ -566,12 +549,9 @@ class ContentObjectSaver
         return $this->repositoryCategoryService;
     }
 
-    /**
-     * @return \Chamilo\Libraries\Platform\Session\SessionUtilities
-     */
-    public function getSessionUtilities()
+    public function getSession(): SessionInterface
     {
-        return $this->sessionUtilities;
+        return $this->session;
     }
 
     /**
@@ -736,12 +716,9 @@ class ContentObjectSaver
         $this->repositoryCategoryService = $repositoryCategoryService;
     }
 
-    /**
-     * @param \Chamilo\Libraries\Platform\Session\SessionUtilities $sessionUtilities
-     */
-    public function setSessionUtilities(SessionUtilities $sessionUtilities)
+    public function setSession(SessionInterface $session)
     {
-        $this->sessionUtilities = $sessionUtilities;
+        $this->session = $session;
     }
 
     /**

@@ -249,9 +249,9 @@ abstract class Manager extends Application implements NoContextComponent
 
         if ($language)
         {
-            $this->getSessionUtilities()->register(self::PARAM_LANGUAGE, $language);
+            $this->getSession()->set(self::PARAM_LANGUAGE, $language);
         }
 
-        Translation::getInstance()->setLanguageIsocode($this->getSessionUtilities()->retrieve(self::PARAM_LANGUAGE));
+        Translation::getInstance()->setLanguageIsocode($this->getSession()->get(self::PARAM_LANGUAGE));
     }
 }

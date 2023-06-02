@@ -34,7 +34,7 @@ class RequestSubscribeUsersComponent extends Manager implements DelegateComponen
         $request = new CourseRequest();
         $this->form = new CourseRequestForm(
             CourseRequestForm::TYPE_CREATE, $this->get_url(), $this->get_course(), $this, $request, false,
-            $this->getSessionUtilities()->getUserId()
+            $this->getSession()->get(\Chamilo\Core\User\Manager::SESSION_USER_IO)
         );
 
         $this->user_ids = $this->get_selected_user_ids();

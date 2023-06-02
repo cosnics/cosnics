@@ -50,8 +50,8 @@ class InstallerComponent extends Manager implements NoAuthenticationSupport, Ins
                 flush();
 
                 session_start();
-                $this->getSessionUtilities()->unregister(self::PARAM_SETTINGS);
-                $this->getSessionUtilities()->unregister(self::PARAM_LANGUAGE);
+                $this->getSession()->remove(self::PARAM_SETTINGS);
+                $this->getSession()->remove(self::PARAM_LANGUAGE);
                 session_write_close();
             }
         );
@@ -186,7 +186,7 @@ class InstallerComponent extends Manager implements NoAuthenticationSupport, Ins
     {
         if (!isset($this->installer))
         {
-            $values = unserialize($this->getSessionUtilities()->retrieve(self::PARAM_SETTINGS));
+            $values = unserialize($this->getSession()->get(self::PARAM_SETTINGS));
             if (!is_array($values))
             {
                 $values = [];

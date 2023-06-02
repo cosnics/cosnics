@@ -61,7 +61,7 @@ class BlockConfigComponent extends Manager
             // $rendererFactory = new \Chamilo\Core\Home\Renderer\Factory(Renderer::TYPE_BASIC, $this);
             // $renderer = $rendererFactory->getRenderer();
             
-            $homeService = new HomeService(new HomeRepository(), new ElementRightsService(new RightsRepository()), $this->getSessionUtilities());
+            $homeService = new HomeService(new HomeRepository(), new ElementRightsService(new RightsRepository()), $this->getSession());
             
             $blockRendererFactory = new BlockRendererFactory(
                 $this, 

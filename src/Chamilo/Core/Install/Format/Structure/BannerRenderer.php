@@ -25,14 +25,14 @@ class BannerRenderer extends \Chamilo\Libraries\Format\Structure\BannerRenderer
     private WebPathBuilder $webPathBuilder;
 
     public function __construct(
-        PageConfiguration $pageConfiguration, SessionUtilities $sessionUtilities, Translator $translator,
+        PageConfiguration $pageConfiguration, SessionUtilities $session, Translator $translator,
         ConfigurationConsulter $configurationConsulter, UrlGenerator $urlGenerator, MenuRenderer $menuRenderer,
         BreadcrumbTrailRenderer $breadcrumbTrailRenderer, ThemePathBuilder $themeWebPathBuilder,
         WebPathBuilder $webPathBuilder
     )
     {
         parent::__construct(
-            $pageConfiguration, $sessionUtilities, $translator, $configurationConsulter, $urlGenerator, $menuRenderer,
+            $pageConfiguration, $session, $translator, $configurationConsulter, $urlGenerator, $menuRenderer,
             $breadcrumbTrailRenderer
         );
 

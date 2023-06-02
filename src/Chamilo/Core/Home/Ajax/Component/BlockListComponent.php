@@ -27,7 +27,7 @@ class BlockListComponent extends Manager
     {
         $rightsRepository = new RightsRepository();
         $homeRepository = new HomeRepository();
-        $homeService = new HomeService($homeRepository, new ElementRightsService($rightsRepository), $this->getSessionUtilities());
+        $homeService = new HomeService($homeRepository, new ElementRightsService($rightsRepository), $this->getSession());
         $blockTypeRightsService = new BlockTypeRightsService($rightsRepository, new HomeRepository());
         
         $platformBlocks = DataManager::getPlatformBlocks();

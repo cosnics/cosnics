@@ -55,7 +55,7 @@ class WeblcmsBookmarkDisplay extends Block implements ConfigurableInterface
         );
         $conditions[] = new EqualityCondition(
             new PropertyConditionVariable(ContentObject::class, ContentObject::PROPERTY_OWNER_ID),
-            new StaticConditionVariable($this->getSessionUtilities()->getUserId())
+            new StaticConditionVariable($this->getSession()->get(\Chamilo\Core\User\Manager::SESSION_USER_IO))
         );
 
         $condition = new AndCondition($conditions);

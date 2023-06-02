@@ -39,7 +39,7 @@ class SettingsComponent extends Manager implements NoAuthenticationSupport
         if ($form->validate())
         {
             $settingsValues = $form->exportValues();
-            $this->getSessionUtilities()->register(self::PARAM_SETTINGS, serialize($settingsValues));
+            $this->getSession()->set(self::PARAM_SETTINGS, serialize($settingsValues));
 
             $settingsDisplayer = new SettingsOverview($settingsValues);
             $wizardHeader = $this->getWizardHeader();
@@ -85,7 +85,7 @@ class SettingsComponent extends Manager implements NoAuthenticationSupport
                 Translation::get('Install'), new FontAwesomeGlyph('check'), $this->get_url(
                 [
                     self::PARAM_ACTION => self::ACTION_INSTALL_PLATFORM,
-                    self::PARAM_LANGUAGE => $this->getSessionUtilities()->retrieve(self::PARAM_LANGUAGE)
+                    self::PARAM_LANGUAGE => $this->getSession()->get(self::PARAM_LANGUAGE)
                 ]
             ), Button::DISPLAY_ICON_AND_LABEL, null, ['btn-success']
             )
@@ -140,8 +140,7 @@ class SettingsComponent extends Manager implements NoAuthenticationSupport
         if (!isset($this->settingsForm))
         {
             $this->settingsForm = new SettingsForm(
-                $this,
-                $this->get_url([self::PARAM_LANGUAGE => $this->getSessionUtilities()->retrieve(self::PARAM_LANGUAGE)])
+                $this, $this->get_url([self::PARAM_LANGUAGE => $this->getSession()->get(self::PARAM_LANGUAGE)])
             );
         }
 

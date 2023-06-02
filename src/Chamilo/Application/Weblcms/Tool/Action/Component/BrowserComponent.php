@@ -375,11 +375,11 @@ class BrowserComponent extends Manager implements DelegateComponent
             // remaining conditions. Skip the publisher
             // condition when ALL.
             case \Chamilo\Application\Weblcms\Tool\Manager::PUBLICATION_TYPE_FROM_ME :
-                $va_id = $this->getSessionUtilities()->get(\Chamilo\Application\Weblcms\Tool\Manager::PARAM_VIEW_AS_ID);
-                $course_id = $this->getSessionUtilities()->get(
+                $va_id = $this->getSession()->get(\Chamilo\Application\Weblcms\Tool\Manager::PARAM_VIEW_AS_ID);
+                $course_id = $this->getSession()->get(
                     \Chamilo\Application\Weblcms\Tool\Manager::PARAM_VIEW_AS_COURSE_ID
                 );
-                $user_id = $this->getSessionUtilities()->getUserId();
+                $user_id = $this->getSession()->get(\Chamilo\Core\User\Manager::SESSION_USER_IO);
 
                 $publisher_id =
                     (isset($va_id) && isset($course_id) && $course_id == $this->get_course_id()) ? $va_id : $user_id;

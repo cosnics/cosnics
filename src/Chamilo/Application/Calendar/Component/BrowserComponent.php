@@ -63,10 +63,12 @@ class BrowserComponent extends Manager implements DelegateComponent
         return implode(PHP_EOL, $html);
     }
 
+    /**
+     * @throws \Chamilo\Libraries\Architecture\Exceptions\NotAllowedException
+     */
     protected function checkLoggedInAs()
     {
-        $sessionUtilities = $this->getSessionUtilities();
-        $asAdmin = $sessionUtilities->get('_as_admin');
+        $asAdmin = $this->getSession()->get('_as_admin');
 
         if ($asAdmin && $asAdmin > 0)
         {
@@ -77,6 +79,11 @@ class BrowserComponent extends Manager implements DelegateComponent
                 throw new NotAllowedException();
             }
         }
+    }
+
+    protected function getActionRenderer(string $context): ActionsInterface
+    {
+        return $this->getService($context . '\Actions');
     }
 
     protected function getCalendarDataProvider()
@@ -189,11 +196,6 @@ class BrowserComponent extends Manager implements DelegateComponent
         $actions[] = $this->getGeneralActions();
 
         return $actions;
-    }
-
-    protected function getActionRenderer(string $context): ActionsInterface
-    {
-        return $this->getService($context . '\Actions');
     }
 
     protected function renderNormalCalendar()

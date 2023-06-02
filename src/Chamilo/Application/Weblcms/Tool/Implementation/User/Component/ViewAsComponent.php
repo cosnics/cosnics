@@ -44,8 +44,8 @@ class ViewAsComponent extends Manager
             // if the teacher is already logged in as another user, log him out
             // this time.
 
-            $this->getSessionUtilities()->unregister(\Chamilo\Application\Weblcms\Tool\Manager::PARAM_VIEW_AS_ID);
-            $this->getSessionUtilities()->unregister(
+            $this->getSession()->remove(\Chamilo\Application\Weblcms\Tool\Manager::PARAM_VIEW_AS_ID);
+            $this->getSession()->remove(
                 \Chamilo\Application\Weblcms\Tool\Manager::PARAM_VIEW_AS_COURSE_ID
             );
 
@@ -61,10 +61,10 @@ class ViewAsComponent extends Manager
         {
             if ($this->get_parent()->is_teacher())
             {
-                $this->getSessionUtilities()->register(
+                $this->getSession()->set(
                     \Chamilo\Application\Weblcms\Tool\Manager::PARAM_VIEW_AS_ID, $view_as_user_id
                 );
-                $this->getSessionUtilities()->register(
+                $this->getSession()->set(
                     \Chamilo\Application\Weblcms\Tool\Manager::PARAM_VIEW_AS_COURSE_ID,
                     Request::get(\Chamilo\Application\Weblcms\Manager::PARAM_COURSE)
                 );

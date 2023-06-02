@@ -1,13 +1,13 @@
 <?php
 namespace Chamilo\Libraries\Format\NotificationMessage;
 
-use Chamilo\Libraries\Platform\Session\SessionUtilities;
+use Symfony\Component\HttpFoundation\Session\SessionInterface;
 
 /**
  * Stores user notification messages into the session
  *
  * @package Chamilo\Libraries\Format\NotificationMessage
- * @author Sven Vanpoucke - Hogeschool Gent
+ * @author  Sven Vanpoucke - Hogeschool Gent
  */
 class NotificationMessageSessionStorage implements NotificationMessageStorageInterface
 {
@@ -16,21 +16,21 @@ class NotificationMessageSessionStorage implements NotificationMessageStorageInt
     public const PARAM_NOTIFICATION_MESSAGES = 'notification_messages';
     public const PARAM_TYPE = 'type';
 
-    protected SessionUtilities $sessionUtilities;
+    protected SessionInterface $session;
 
-    public function __construct(SessionUtilities $sessionUtilities)
+    public function __construct(SessionInterface $session)
     {
-        $this->sessionUtilities = $sessionUtilities;
+        $this->session = $session;
     }
 
     public function clear()
     {
-        $this->getSessionUtilities()->unregister(self::PARAM_NOTIFICATION_MESSAGES);
+        $this->getSession()->remove(self::PARAM_NOTIFICATION_MESSAGES);
     }
 
-    public function getSessionUtilities(): SessionUtilities
+    public function getSession(): SessionInterface
     {
-        return $this->sessionUtilities;
+        return $this->session;
     }
 
     /**
@@ -38,7 +38,7 @@ class NotificationMessageSessionStorage implements NotificationMessageStorageInt
      */
     public function retrieve(): array
     {
-        $notificationMessagesAsArray = $this->getSessionUtilities()->get(self::PARAM_NOTIFICATION_MESSAGES, []);
+        $notificationMessagesAsArray = $this->getSession()->get(self::PARAM_NOTIFICATION_MESSAGES, []);
 
         $notificationMessages = [];
 
@@ -69,6 +69,6 @@ class NotificationMessageSessionStorage implements NotificationMessageStorageInt
             ];
         }
 
-        $this->getSessionUtilities()->register(self::PARAM_NOTIFICATION_MESSAGES, $notificationMessagesAsArray);
+        $this->getSession()->set(self::PARAM_NOTIFICATION_MESSAGES, $notificationMessagesAsArray);
     }
 }

@@ -21,9 +21,9 @@ class PersonalComponent extends Manager
      */
     public function run()
     {
-        if ($this->get_user()->is_platform_admin())
+        if ($this->getUser()->is_platform_admin())
         {
-            $this->getSessionUtilities()->unregister('Chamilo\Core\Home\General');
+            $this->getSession()->remove('Chamilo\Core\Home\General');
         }
 
         return new RedirectResponse($this->getUrlGenerator()->fromParameters());

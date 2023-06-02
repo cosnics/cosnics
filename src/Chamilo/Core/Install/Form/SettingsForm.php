@@ -299,7 +299,7 @@ class SettingsForm extends FormValidator
     {
         if (!isset($this->sessionSettings))
         {
-            $sessionSettings = $this->getSessionUtilities()->retrieve(Manager::PARAM_SETTINGS);
+            $sessionSettings = $this->getSession()->get(Manager::PARAM_SETTINGS);
 
             if (is_null($sessionSettings))
             {

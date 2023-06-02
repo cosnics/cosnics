@@ -8,10 +8,10 @@ use Chamilo\Libraries\Authentication\Authentication;
 use Chamilo\Libraries\Authentication\AuthenticationException;
 use Chamilo\Libraries\Authentication\AuthenticationInterface;
 use Chamilo\Libraries\Platform\ChamiloRequest;
-use Chamilo\Libraries\Platform\Session\SessionUtilities;
 use Chamilo\Libraries\Utilities\StringUtilities;
 use Exception;
 use phpCAS;
+use Symfony\Component\HttpFoundation\Session\SessionInterface;
 use Symfony\Component\Translation\Translator;
 
 /**
@@ -23,7 +23,7 @@ use Symfony\Component\Translation\Translator;
 abstract class AbstractCasAuthentication extends Authentication implements AuthenticationInterface
 {
 
-    protected SessionUtilities $sessionUtilities;
+    protected SessionInterface $session;
 
     /**
      * @var string[]
@@ -32,11 +32,11 @@ abstract class AbstractCasAuthentication extends Authentication implements Authe
 
     public function __construct(
         ConfigurationConsulter $configurationConsulter, Translator $translator, ChamiloRequest $request,
-        UserService $userService, SessionUtilities $sessionUtilities
+        UserService $userService, SessionInterface $session
     )
     {
         parent::__construct($configurationConsulter, $translator, $request, $userService);
-        $this->sessionUtilities = $sessionUtilities;
+        $this->session = $session;
     }
 
     abstract public function getAuthenticationType(): string;
@@ -69,9 +69,9 @@ abstract class AbstractCasAuthentication extends Authentication implements Authe
 
     abstract public function getPriority(): int;
 
-    public function getSessionUtilities(): SessionUtilities
+    public function getSession(): SessionInterface
     {
-        return $this->sessionUtilities;
+        return $this->session;
     }
 
     abstract protected function getUserByCasUserIdentifier(string $userIdentifier): ?User;
@@ -202,7 +202,7 @@ abstract class AbstractCasAuthentication extends Authentication implements Authe
                 {
                     $surrogateUserName = array_pop($userAttributes['surrogatePrincipal']);
                     $surrogateUser = $this->userService->findUserByUsername($surrogateUserName);
-                    $this->getSessionUtilities()->register('_as_admin', $surrogateUser->getId());
+                    $this->getSession()->set('_as_admin', $surrogateUser->getId());
                 }
 
                 return $user;

@@ -14,10 +14,10 @@ use Chamilo\Libraries\Format\Tabs\Link\LinkTab;
 use Chamilo\Libraries\Format\Tabs\Link\LinkTabsRenderer;
 use Chamilo\Libraries\Format\Tabs\TabsCollection;
 use Chamilo\Libraries\Platform\Session\Request;
-use Chamilo\Libraries\Platform\Session\SessionUtilities;
 use Chamilo\Libraries\Storage\DataClass\DataClass;
 use Chamilo\Libraries\Translation\Translation;
 use Exception;
+use Symfony\Component\HttpFoundation\Session\SessionInterface;
 
 /**
  * Course list renderer to render the course list with tabs for the course types (used in courses home, courses sorter)
@@ -248,9 +248,9 @@ class Renderer extends CourseListRenderer
         );
     }
 
-    public function getSessionUtilities(): SessionUtilities
+    public function getSession(): SessionInterface
     {
-        return DependencyInjectionContainerBuilder::getInstance()->createContainer()->get(SessionUtilities::class);
+        return DependencyInjectionContainerBuilder::getInstance()->createContainer()->get(SessionInterface::class);
     }
 
     /**
@@ -328,7 +328,7 @@ class Renderer extends CourseListRenderer
 
             // Register the selected parameter id in the session for later retrieval
             $selected_course_type_id = (is_null($course_type)) ? $selected_course_type_id : $course_type->get_id();
-            $this->getSessionUtilities()->register(self::PARAM_SELECTED_COURSE_TYPE, $selected_course_type_id);
+            $this->getSession()->set(self::PARAM_SELECTED_COURSE_TYPE, $selected_course_type_id);
 
             $this->selected_course_type = $course_type;
         }

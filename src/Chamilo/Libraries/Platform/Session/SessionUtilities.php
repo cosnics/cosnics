@@ -107,7 +107,7 @@ class SessionUtilities
     }
 
     /**
-     * @deprecated Use \Symfony\Component\HttpFoundation\Session\Session::unregister($variable)
+     * @deprecated Use \Symfony\Component\HttpFoundation\Session\Session::remove($variable)
      */
     public function unregister(string $variable): void
     {

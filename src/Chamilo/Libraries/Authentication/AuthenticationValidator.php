@@ -8,9 +8,9 @@ use Chamilo\Core\User\Storage\DataClass\User;
 use Chamilo\Libraries\Architecture\Application\Application;
 use Chamilo\Libraries\Architecture\Application\Routing\UrlGenerator;
 use Chamilo\Libraries\Platform\ChamiloRequest;
-use Chamilo\Libraries\Platform\Session\SessionUtilities;
 use Chamilo\Libraries\Utilities\StringUtilities;
 use Symfony\Component\HttpFoundation\RedirectResponse;
+use Symfony\Component\HttpFoundation\Session\SessionInterface;
 use Symfony\Component\Translation\Translator;
 
 /**
@@ -38,10 +38,7 @@ class AuthenticationValidator
      */
     protected $request;
 
-    /**
-     * @var \Chamilo\Libraries\Platform\Session\SessionUtilities
-     */
-    protected $sessionUtilities;
+    protected SessionInterface $session;
 
     /**
      * @var \Symfony\Component\Translation\Translator
@@ -50,23 +47,15 @@ class AuthenticationValidator
 
     protected UrlGenerator $urlGenerator;
 
-    /**
-     * AuthenticationValidator constructor.
-     *
-     * @param ChamiloRequest $request
-     * @param ConfigurationConsulter $configurationConsulter
-     * @param \Symfony\Component\Translation\Translator $translator
-     * @param \Chamilo\Libraries\Platform\Session\SessionUtilities $sessionUtilities
-     */
     public function __construct(
         ChamiloRequest $request, ConfigurationConsulter $configurationConsulter, Translator $translator,
-        SessionUtilities $sessionUtilities, UrlGenerator $urlGenerator
+        SessionInterface $session, UrlGenerator $urlGenerator
     )
     {
         $this->request = $request;
         $this->configurationConsulter = $configurationConsulter;
         $this->translator = $translator;
-        $this->sessionUtilities = $sessionUtilities;
+        $this->session = $session;
         $this->urlGenerator = $urlGenerator;
 
         $this->authentications = [];
@@ -104,7 +93,7 @@ class AuthenticationValidator
      */
     public function isAuthenticated()
     {
-        $user_id = $this->sessionUtilities->getUserId();
+        $user_id = $this->session->get(Manager::SESSION_USER_IO);
 
         return !empty($user_id);
     }
@@ -117,7 +106,7 @@ class AuthenticationValidator
     public function logout(User $user)
     {
         Event::trigger('Logout', Manager::CONTEXT, ['server' => $_SERVER, 'user' => $user]);
-        $this->sessionUtilities->destroy();
+        $this->session->invalidate();
 
         foreach ($this->authentications as $authentication)
         {
@@ -158,7 +147,7 @@ class AuthenticationValidator
      */
     protected function setAuthenticatedUser(User $user)
     {
-        $this->sessionUtilities->register('_uid', $user->getId());
+        $this->session->set(Manager::SESSION_USER_IO, $user->getId());
     }
 
     /**

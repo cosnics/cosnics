@@ -7,15 +7,15 @@ use Chamilo\Core\User\Manager;
 use Chamilo\Core\User\Storage\DataClass\User;
 use Chamilo\Libraries\Architecture\Application\Application;
 use Chamilo\Libraries\Architecture\Application\Routing\UrlGenerator;
-use Chamilo\Libraries\Platform\Session\SessionUtilities;
 use Chamilo\Libraries\Utilities\StringUtilities;
+use Symfony\Component\HttpFoundation\Session\SessionInterface;
 use Symfony\Component\Translation\Translator;
 
 /**
  * @package Chamilo\Libraries\Format\Structure
- * @author Hans De Bisschop <hans.de.bisschop@ehb.be>
- * @author Magali Gillard <magali.gillard@ehb.be>
- * @author Eduard Vossen <eduard.vossen@ehb.be>
+ * @author  Hans De Bisschop <hans.de.bisschop@ehb.be>
+ * @author  Magali Gillard <magali.gillard@ehb.be>
+ * @author  Eduard Vossen <eduard.vossen@ehb.be>
  */
 class BannerRenderer
 {
@@ -27,20 +27,20 @@ class BannerRenderer
 
     private PageConfiguration $pageConfiguration;
 
-    private SessionUtilities $sessionUtilities;
+    private SessionInterface $session;
 
     private Translator $translator;
 
     private UrlGenerator $urlGenerator;
 
     public function __construct(
-        PageConfiguration $pageConfiguration, SessionUtilities $sessionUtilities, Translator $translator,
+        PageConfiguration $pageConfiguration, SessionInterface $session, Translator $translator,
         ConfigurationConsulter $configurationConsulter, UrlGenerator $urlGenerator, MenuRenderer $menuRenderer,
         BreadcrumbTrailRenderer $breadcrumbTrailRenderer
     )
     {
         $this->pageConfiguration = $pageConfiguration;
-        $this->sessionUtilities = $sessionUtilities;
+        $this->session = $session;
         $this->configurationConsulter = $configurationConsulter;
         $this->translator = $translator;
         $this->urlGenerator = $urlGenerator;
@@ -54,7 +54,7 @@ class BannerRenderer
     public function render(): string
     {
         $pageConfiguration = $this->getPageConfiguration();
-        $sessionUtilities = $this->getSessionUtilities();
+        $sessionUtilities = $this->getSession();
         $configurationConsulter = $this->getConfigurationConsulter();
         $translator = $this->getTranslator();
 
@@ -141,9 +141,9 @@ class BannerRenderer
         return $this->pageConfiguration;
     }
 
-    public function getSessionUtilities(): SessionUtilities
+    public function getSession(): SessionInterface
     {
-        return $this->sessionUtilities;
+        return $this->session;
     }
 
     public function getTranslator(): Translator
