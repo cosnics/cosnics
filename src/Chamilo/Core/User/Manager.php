@@ -11,13 +11,7 @@ use Chamilo\Libraries\Format\Structure\BreadcrumbTrail;
 use Chamilo\Libraries\Mail\Mailer\MailerInterface;
 
 /**
- * @package user.lib.user_manager
- */
-
-/**
- * A user manager provides some functionalities to the admin to manage his users.
- * For each functionality a component is
- * available.
+ * @package Chamilo\Core\User
  */
 abstract class Manager extends Application
 {
@@ -61,6 +55,8 @@ abstract class Manager extends Application
     public const PARAM_FIRSTLETTER = 'firstletter';
     public const PARAM_REFER = 'refer';
     public const PARAM_USER_USER_ID = 'user_id';
+
+    public const SESSION_USER_IO = '_uid';
 
     protected function getActiveMailer(): MailerInterface
     {

@@ -1,8 +1,8 @@
 <?php
 namespace Chamilo\Libraries\Calendar\Architecture\Factory;
 
-use Chamilo\Libraries\Architecture\Traits\DependencyInjectionContainerTrait;
 use Chamilo\Libraries\Calendar\Service\View\HtmlCalendarRenderer;
+use Chamilo\Libraries\DependencyInjection\Traits\DependencyInjectionContainerTrait;
 
 /**
  * @package Chamilo\Libraries\Calendar\Architecture\Factory

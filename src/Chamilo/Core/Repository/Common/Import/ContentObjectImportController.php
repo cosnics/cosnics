@@ -3,7 +3,7 @@ namespace Chamilo\Core\Repository\Common\Import;
 
 use Chamilo\Core\Repository\Workspace\Service\ContentObjectRelationService;
 use Chamilo\Libraries\Architecture\Application\Application;
-use Chamilo\Libraries\Architecture\Traits\DependencyInjectionContainerTrait;
+use Chamilo\Libraries\DependencyInjection\Traits\DependencyInjectionContainerTrait;
 use Chamilo\Libraries\Utilities\StringUtilities;
 
 /**

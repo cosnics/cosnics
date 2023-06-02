@@ -7,7 +7,7 @@ use Chamilo\Configuration\Service\Consulter\RegistrationConsulter;
 use Chamilo\Configuration\Service\FileConfigurationLocator;
 use Chamilo\Configuration\Storage\DataClass\Registration;
 use Chamilo\Configuration\Storage\DataClass\Setting;
-use Chamilo\Libraries\Architecture\Traits\DependencyInjectionContainerTrait;
+use Chamilo\Libraries\DependencyInjection\Traits\DependencyInjectionContainerTrait;
 use Chamilo\Libraries\Storage\Cache\DataClassRepositoryCache;
 use Chamilo\Libraries\Storage\DataManager\DataSourceName;
 use Doctrine\DBAL\DriverManager;

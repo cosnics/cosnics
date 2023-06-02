@@ -19,10 +19,12 @@
             <argument>%chamilo.configuration.general.language%</argument>
         </service>
 
+        <service id="Symfony\Component\HttpFoundation\Session\SessionInterface"
+                 alias="Symfony\Component\HttpFoundation\Session\Session"/>
+
         <service id="Symfony\Component\HttpFoundation\Session\Session">
-            <argument key="$storage"
-                      type="service"
-                      id="Symfony\Component\HttpFoundation\Session\Storage\NativeSessionStorage"/>
+            <factory service="Chamilo\Libraries\Platform\Session\SessionFactory"
+                     method="getSession"/>
         </service>
 
         <service id="Symfony\Component\HttpFoundation\Session\Storage\NativeSessionStorage">
@@ -32,12 +34,12 @@
         </service>
 
         <service id="Symfony\Component\HttpFoundation\Session\Storage\SessionHandler">
-            <factory service="Chamilo\Core\User\Factory\SessionHandlerFactory"
+            <factory service="Chamilo\Libraries\Platform\Session\SessionHandlerFactory"
                      method="getSessionHandler"/>
         </service>
 
         <service id="Symfony\Component\HttpFoundation\Session\Storage\Handler\PdoSessionHandler">
-            <factory service="Chamilo\Core\User\Factory\PdoSessionHandlerFactory"
+            <factory service="Chamilo\Libraries\Platform\Session\PdoSessionHandlerFactory"
                      method="getPdoSessionHandler"/>
         </service>
 

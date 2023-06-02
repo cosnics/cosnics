@@ -8,8 +8,8 @@ use Chamilo\Application\Calendar\Extension\Google\Service\CalendarService;
 use Chamilo\Application\Calendar\Service\AvailabilityService;
 use Chamilo\Core\User\Storage\DataClass\User;
 use Chamilo\Libraries\Architecture\ClassnameUtilities;
-use Chamilo\Libraries\Architecture\Traits\DependencyInjectionContainerTrait;
 use Chamilo\Libraries\Calendar\Service\CalendarRendererProvider;
+use Chamilo\Libraries\DependencyInjection\Traits\DependencyInjectionContainerTrait;
 
 /**
  * @package Chamilo\Application\Calendar\Extension\Personal\Integration\Chamilo\Application\Calendar

@@ -9,6 +9,19 @@
 
         <service id="Chamilo\Libraries\Platform\Security"/>
 
+        <service id="Chamilo\Libraries\Platform\Session\SessionFactory">
+            <argument key="$sessionStorage"
+                      type="service"
+                      id="Symfony\Component\HttpFoundation\Session\Storage\NativeSessionStorage"/>
+            <argument key="$securityKey">%chamilo.configuration.general.security_key%</argument>
+        </service>
+
+        <service id="Chamilo\Libraries\Platform\Session\SessionHandlerFactory">
+            <argument key="$configuredSessionHandler">%chamilo.configuration.session.session_handler%</argument>
+        </service>
+
+        <service id="Chamilo\Libraries\Platform\Session\PdoSessionHandlerFactory"/>
+
         <service id="Chamilo\Libraries\Platform\Session\SessionUtilities">
             <argument key="$securityKey">%chamilo.configuration.general.security_key%</argument>
         </service>

@@ -1,7 +1,7 @@
 <?php
 namespace Chamilo\Application\Weblcms\Renderer\ToolList;
 
-use Chamilo\Libraries\Architecture\Traits\DependencyInjectionContainerTrait;
+use Chamilo\Libraries\DependencyInjection\Traits\DependencyInjectionContainerTrait;
 use Chamilo\Libraries\Translation\Translation;
 use Chamilo\Libraries\Utilities\StringUtilities;
 use Exception;

@@ -5,7 +5,7 @@ use Chamilo\Configuration\Configuration;
 use Chamilo\Core\Tracking\Storage\DataClass\Event;
 use Chamilo\Core\User\Manager;
 use Chamilo\Core\User\Storage\DataClass\User;
-use Chamilo\Libraries\Architecture\Traits\DependencyInjectionContainerTrait;
+use Chamilo\Libraries\DependencyInjection\Traits\DependencyInjectionContainerTrait;
 use Chamilo\Libraries\Format\Form\FormValidator;
 use Chamilo\Libraries\Hashing\HashingUtilities;
 use Chamilo\Libraries\Mail\Mailer\MailerInterface;

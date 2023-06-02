@@ -1,12 +1,12 @@
 <?php
-namespace Chamilo\Core\User\Factory;
+namespace Chamilo\Libraries\Platform\Session;
 
 use Chamilo\Configuration\Service\FileConfigurationLocator;
 use Chamilo\Libraries\DependencyInjection\DependencyInjectionContainerBuilder;
 use SessionHandlerInterface;
 
 /**
- * @package Chamilo\Core\User\Factory
+ * @package Chamilo\Libraries\Platform\Session
  * @author  Hans De Bisschop <hans.de.bisschop@ehb.be>
  * @author  Magali Gillard <magali.gillard@ehb.be>
  */

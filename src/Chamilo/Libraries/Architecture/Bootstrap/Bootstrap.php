@@ -6,8 +6,7 @@ use Chamilo\Core\Install\Manager as InstallationManager;
 use Chamilo\Libraries\Architecture\Application\Application;
 use Chamilo\Libraries\Architecture\ErrorHandler\ErrorHandler;
 use Chamilo\Libraries\Platform\ChamiloRequest;
-use Chamilo\Libraries\Platform\Session\SessionUtilities;
-use Symfony\Component\HttpFoundation\Session\Session;
+use Symfony\Component\HttpFoundation\Session\SessionInterface;
 
 /**
  * @package Chamilo\Libraries\Architecture\Bootstrap
@@ -23,20 +22,17 @@ class Bootstrap
 
     private ChamiloRequest $request;
 
-    private Session $session;
-
-    private SessionUtilities $sessionUtilities;
+    private SessionInterface $session;
 
     private bool $showErrors;
 
     public function __construct(
-        ChamiloRequest $request, FileConfigurationLocator $fileConfigurationLocator, SessionUtilities $sessionUtilities,
-        ErrorHandler $errorHandler, Session $session, bool $showErrors = false
+        ChamiloRequest $request, FileConfigurationLocator $fileConfigurationLocator, ErrorHandler $errorHandler,
+        SessionInterface $session, bool $showErrors = false
     )
     {
         $this->request = $request;
         $this->fileConfigurationLocator = $fileConfigurationLocator;
-        $this->sessionUtilities = $sessionUtilities;
         $this->session = $session;
         $this->errorHandler = $errorHandler;
         $this->showErrors = $showErrors;
@@ -69,14 +65,9 @@ class Bootstrap
         return $this->request;
     }
 
-    public function getSession(): Session
+    public function getSession(): SessionInterface
     {
         return $this->session;
-    }
-
-    public function getSessionUtilities(): SessionUtilities
-    {
-        return $this->sessionUtilities;
     }
 
     public function getShowErrors(): bool
@@ -101,7 +92,7 @@ class Bootstrap
 
     protected function startSession(): Bootstrap
     {
-        $this->getSessionUtilities()->start();
+        $this->getSession()->start();
         $this->getRequest()->setSession($this->getSession());
 
         return $this;

@@ -4,7 +4,7 @@ namespace Chamilo\Core\Repository\Common\Rendition\Html\Type;
 use Chamilo\Core\Repository\Common\Rendition\ContentObjectRendition;
 use Chamilo\Core\Repository\Common\Rendition\ContentObjectRenditionImplementation;
 use Chamilo\Core\Repository\Common\Rendition\Html\HtmlContentObjectRendition;
-use Chamilo\Libraries\Architecture\Traits\DependencyInjectionContainerTrait;
+use Chamilo\Libraries\DependencyInjection\Traits\DependencyInjectionContainerTrait;
 use Chamilo\Libraries\Format\Structure\Glyph\IdentGlyph;
 
 class HtmlFullThumbnailContentObjectRendition extends HtmlContentObjectRendition

@@ -2,7 +2,7 @@
 namespace Chamilo\Configuration\Package;
 
 use Chamilo\Libraries\Architecture\ClassnameUtilities;
-use Chamilo\Libraries\Architecture\Traits\DependencyInjectionContainerTrait;
+use Chamilo\Libraries\DependencyInjection\Traits\DependencyInjectionContainerTrait;
 use Chamilo\Libraries\Translation\Translation;
 
 abstract class Action

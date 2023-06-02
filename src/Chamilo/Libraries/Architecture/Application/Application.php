@@ -4,7 +4,7 @@ namespace Chamilo\Libraries\Architecture\Application;
 use Chamilo\Core\User\Storage\DataClass\User;
 use Chamilo\Libraries\Architecture\Exceptions\NotAllowedException;
 use Chamilo\Libraries\Architecture\Interfaces\NoAuthenticationSupport;
-use Chamilo\Libraries\Architecture\Traits\DependencyInjectionContainerTrait;
+use Chamilo\Libraries\DependencyInjection\Traits\DependencyInjectionContainerTrait;
 use Chamilo\Libraries\Format\NotificationMessage\NotificationMessage;
 use Chamilo\Libraries\Format\Structure\BreadcrumbGenerator;
 use Chamilo\Libraries\Format\Structure\BreadcrumbGeneratorInterface;

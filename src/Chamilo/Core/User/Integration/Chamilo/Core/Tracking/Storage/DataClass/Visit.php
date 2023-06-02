@@ -2,7 +2,7 @@
 namespace Chamilo\Core\User\Integration\Chamilo\Core\Tracking\Storage\DataClass;
 
 use Chamilo\Core\Tracking\Storage\DataClass\SimpleTracker;
-use Chamilo\Libraries\Architecture\Traits\DependencyInjectionContainerTrait;
+use Chamilo\Libraries\DependencyInjection\Traits\DependencyInjectionContainerTrait;
 
 /**
  * @package Chamilo\Core\User\Integration\Chamilo\Core\Tracking\Storage\DataClass

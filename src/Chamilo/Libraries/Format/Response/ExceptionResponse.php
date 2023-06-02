@@ -2,7 +2,7 @@
 namespace Chamilo\Libraries\Format\Response;
 
 use Chamilo\Libraries\Architecture\Application\Application;
-use Chamilo\Libraries\Architecture\Traits\DependencyInjectionContainerTrait;
+use Chamilo\Libraries\DependencyInjection\Traits\DependencyInjectionContainerTrait;
 use Chamilo\Libraries\Format\Display;
 use Exception;
 use Symfony\Component\HttpFoundation\Response;

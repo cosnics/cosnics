@@ -1,13 +1,14 @@
 <?php
-namespace Chamilo\Core\User\Factory;
+namespace Chamilo\Libraries\Platform\Session;
 
 use Chamilo\Core\User\Storage\DataClass\Session;
 use Doctrine\DBAL\Connection;
 use Symfony\Component\HttpFoundation\Session\Storage\Handler\PdoSessionHandler;
 
 /**
- * @package Chamilo\Core\User\Factory
+ * @package Chamilo\Libraries\Platform\Session
  * @author  Hans De Bisschop <hans.de.bisschop@ehb.be>
+ * @author  Magali Gillard <magali.gillard@ehb.be>
  */
 class PdoSessionHandlerFactory
 {

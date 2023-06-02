@@ -3,7 +3,7 @@ namespace Chamilo\Core\User\Picture;
 
 use Chamilo\Configuration\Service\Consulter\ConfigurationConsulter;
 use Chamilo\Configuration\Service\Consulter\RegistrationConsulter;
-use Chamilo\Libraries\Architecture\Traits\DependencyInjectionContainerTrait;
+use Chamilo\Libraries\DependencyInjection\Traits\DependencyInjectionContainerTrait;
 use Exception;
 use Symfony\Component\Translation\Translator;
 

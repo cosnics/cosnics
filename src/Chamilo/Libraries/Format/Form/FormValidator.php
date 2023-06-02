@@ -1,7 +1,7 @@
 <?php
 namespace Chamilo\Libraries\Format\Form;
 
-use Chamilo\Libraries\Architecture\Traits\DependencyInjectionContainerTrait;
+use Chamilo\Libraries\DependencyInjection\Traits\DependencyInjectionContainerTrait;
 use Chamilo\Libraries\Format\Display;
 use Chamilo\Libraries\Format\Form\Element\HTML_QuickForm_advanced_element_finder;
 use Chamilo\Libraries\Format\Form\Element\HTML_QuickForm_bootstrap_radio;

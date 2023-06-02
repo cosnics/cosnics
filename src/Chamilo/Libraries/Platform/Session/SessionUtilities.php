@@ -1,83 +1,86 @@
 <?php
 namespace Chamilo\Libraries\Platform\Session;
 
-use Symfony\Component\HttpFoundation\Session\Session;
+use Symfony\Component\HttpFoundation\Session\SessionInterface;
 
 /**
- * @package Chamilo\Libraries\Platform\Session
- * @author  Hans De Bisschop <hans.de.bisschop@ehb.be>
- * @author  Magali Gillard <magali.gillard@ehb.be>
+ * @package    Chamilo\Libraries\Platform\Session
+ * @author     Hans De Bisschop <hans.de.bisschop@ehb.be>
+ * @author     Magali Gillard <magali.gillard@ehb.be>
+ * @deprecated Use \Symfony\Component\HttpFoundation\Session\Session
  */
 class SessionUtilities
 {
     private ?string $securityKey;
 
-    private Session $session;
+    private SessionInterface $session;
 
-    public function __construct(Session $session, ?string $securityKey = null)
+    public function __construct(SessionInterface $session, ?string $securityKey = null)
     {
         $this->session = $session;
         $this->securityKey = $securityKey;
     }
 
-    public function clear()
+    /**
+     * @deprecated Use \Symfony\Component\HttpFoundation\Session\Session::clear()
+     */
+    public function clear(): void
     {
         $this->getSession()->clear();
     }
 
-    public function destroy()
+    /**
+     * @deprecated Use \Symfony\Component\HttpFoundation\Session\Session::invalidate()
+     */
+    public function destroy(): void
     {
         $this->getSession()->invalidate();
     }
 
+    /**
+     * @deprecated Use \Symfony\Component\HttpFoundation\Session\Session::has($variable)
+     */
     public function exists(string $variable): bool
     {
         return $this->getSession()->has($variable);
     }
 
+    /**
+     * @deprecated Use \Symfony\Component\HttpFoundation\Session\Session::get($variable, $default)
+     */
     public function get(string $variable, $default = null)
     {
-        $session = $this->getSession();
-
-        if ($session->has($variable))
-        {
-            return $session->get($variable);
-        }
-        else
-        {
-            return $default;
-        }
+        return $this->getSession()->get($variable, $default);
     }
 
-    public function getSecurityKey(): ?string
+    protected function getSecurityKey(): ?string
     {
         return $this->securityKey;
     }
 
-    public function getSession(): Session
+    protected function getSession(): SessionInterface
     {
         return $this->session;
     }
 
+    /**
+     * @deprecated Use
+     *             \Symfony\Component\HttpFoundation\Session\Session::get(\Chamilo\Core\User\Manager::SESSION_USER_IO)
+     */
     public function getUserId(): ?int
     {
         return $this->retrieve('_uid');
     }
 
     /**
-     * @deprecated Use SessionUtilities::getUserId() now
+     * @deprecated Use \Symfony\Component\HttpFoundation\Session\Session::set($variable, $value)
      */
-    public function get_user_id(): ?int
-    {
-        return $this->getUserId();
-    }
-
-    public function register(string $variable, $value)
+    public function register(string $variable, $value): void
     {
         $this->getSession()->set($variable, $value);
     }
 
-    public function registerIfNotSet(string $variable, $value)
+    public function registerIfNotSet(string $variable, $value): void
     {
         $sessionValue = $this->retrieve($variable);
 
@@ -87,44 +90,27 @@ class SessionUtilities
         }
     }
 
+    /**
+     * @deprecated Use \Symfony\Component\HttpFoundation\Session\Session::get($variable)
+     */
     public function retrieve(string $variable)
     {
-        $session = $this->getSession();
-
-        if ($session->has($variable))
-        {
-            return $session->get($variable);
-        }
-
-        return null;
+        return $this->getSession()->get($variable);
     }
 
-    public function setSecurityKey(?string $securityKey)
+    /**
+     * @deprecated Use \Symfony\Component\HttpFoundation\Session\Session::start()
+     */
+    public function start(): void
     {
-        $this->securityKey = $securityKey;
+        $this->getSession()->start();
     }
 
-    public function start()
+    /**
+     * @deprecated Use \Symfony\Component\HttpFoundation\Session\Session::unregister($variable)
+     */
+    public function unregister(string $variable): void
     {
-        $sessionKey = $this->getSecurityKey();
-
-        if (is_null($sessionKey))
-        {
-            $sessionKey = 'dk_sid';
-        }
-
-        $session = $this->getSession();
-        $session->setName($sessionKey);
-        $session->start();
-    }
-
-    public function unregister(string $variable)
-    {
-        $session = $this->getSession();
-
-        if ($session->has($variable))
-        {
-            $session->remove($variable);
-        }
+        $this->getSession()->remove($variable);
     }
 }

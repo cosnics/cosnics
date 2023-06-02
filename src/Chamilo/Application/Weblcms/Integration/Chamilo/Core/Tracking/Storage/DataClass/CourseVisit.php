@@ -3,7 +3,7 @@ namespace Chamilo\Application\Weblcms\Integration\Chamilo\Core\Tracking\Storage\
 
 use Chamilo\Application\Weblcms\Integration\Chamilo\Core\Tracking\Storage\DataManager;
 use Chamilo\Core\Tracking\Storage\DataClass\Tracker;
-use Chamilo\Libraries\Architecture\Traits\DependencyInjectionContainerTrait;
+use Chamilo\Libraries\DependencyInjection\Traits\DependencyInjectionContainerTrait;
 use Exception;
 
 /**

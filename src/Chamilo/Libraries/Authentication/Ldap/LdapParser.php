@@ -8,8 +8,8 @@ namespace Chamilo\Libraries\Authentication\Ldap;
  */
 
 use Chamilo\Core\User\Storage\DataClass\User;
-use Chamilo\Libraries\Architecture\Traits\DependencyInjectionContainerTrait;
 use Chamilo\Libraries\Authentication\AuthenticationException;
+use Chamilo\Libraries\DependencyInjection\Traits\DependencyInjectionContainerTrait;
 use Chamilo\Libraries\Hashing\HashingUtilities;
 use Chamilo\Libraries\Translation\Translation;
 

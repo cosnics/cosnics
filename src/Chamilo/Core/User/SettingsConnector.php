@@ -3,7 +3,7 @@ namespace Chamilo\Core\User;
 
 use Chamilo\Core\User\Picture\UserPictureProviderFactory;
 use Chamilo\Core\User\Storage\DataClass\User;
-use Chamilo\Libraries\Architecture\Traits\DependencyInjectionContainerTrait;
+use Chamilo\Libraries\DependencyInjection\Traits\DependencyInjectionContainerTrait;
 use function Strftime;
 
 /**

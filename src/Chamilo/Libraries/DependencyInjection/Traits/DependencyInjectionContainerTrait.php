@@ -1,5 +1,5 @@
 <?php
-namespace Chamilo\Libraries\Architecture\Traits;
+namespace Chamilo\Libraries\DependencyInjection\Traits;
 
 use Chamilo\Configuration\Service\Consulter\ConfigurationConsulter;
 use Chamilo\Configuration\Service\Consulter\RegistrationConsulter;
@@ -34,6 +34,7 @@ use Doctrine\ORM\EntityManager;
 use Monolog\Logger;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 use Symfony\Component\Form\FormFactory;
+use Symfony\Component\HttpFoundation\Session\SessionInterface;
 use Symfony\Component\Serializer\Serializer;
 use Symfony\Component\Translation\Translator;
 use Twig\Environment;
@@ -170,9 +171,17 @@ trait DependencyInjectionContainerTrait
         return $this->getContainer()->get($serviceId);
     }
 
+    /**
+     * @deprecated Use DependendyInjectionContainerTrait::getSession()
+     */
     public function getSessionUtilities(): SessionUtilities
     {
         return $this->getService(SessionUtilities::class);
+    }
+
+    public function getSession(): SessionInterface
+    {
+        return $this->getRequest()->getSession();
     }
 
     public function getStringUtilities(): StringUtilities

@@ -4,7 +4,7 @@ namespace Chamilo\Core\Repository\ContentObject\File\Ajax\Component;
 use Chamilo\Core\Repository\ContentObject\Assignment\Ajax\Manager;
 use Chamilo\Core\Repository\ContentObject\File\Storage\DataClass\File;
 use Chamilo\Libraries\Architecture\JsonAjaxResult;
-use Chamilo\Libraries\Architecture\Traits\DependencyInjectionContainerTrait;
+use Chamilo\Libraries\DependencyInjection\Traits\DependencyInjectionContainerTrait;
 use Chamilo\Libraries\Utilities\StringUtilities;
 use Exception;
 

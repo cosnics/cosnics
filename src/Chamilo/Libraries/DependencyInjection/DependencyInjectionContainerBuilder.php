@@ -21,6 +21,8 @@ use Chamilo\Libraries\File\PackagesContentFinder\PackagesClassFinder;
 use Chamilo\Libraries\File\SystemPathBuilder;
 use Chamilo\Libraries\File\WebPathBuilder;
 use Chamilo\Libraries\Platform\ChamiloRequest;
+use Chamilo\Libraries\Platform\Session\PdoSessionHandlerFactory;
+use Chamilo\Libraries\Platform\Session\SessionFactory;
 use Chamilo\Libraries\Platform\Session\SessionUtilities;
 use Chamilo\Libraries\Storage\Cache\ConditionPartCache;
 use Chamilo\Libraries\Storage\Cache\DataClassRepositoryCache;
@@ -58,6 +60,7 @@ use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 use Symfony\Component\DependencyInjection\Dumper\PhpDumper;
 use Symfony\Component\HttpFoundation\Session\Session;
+use Symfony\Component\HttpFoundation\Session\Storage\NativeSessionStorage;
 
 /**
  * Builds the default dependency injection container for Chamilo
@@ -72,6 +75,10 @@ class DependencyInjectionContainerBuilder
     private static ?ContainerInterface $container = null;
 
     private static ?DependencyInjectionContainerBuilder $instance = null;
+
+    protected ConnectionFactory $connectionFactory;
+
+    protected ChamiloRequest $request;
 
     protected SystemPathBuilder $systemPathBuilder;
 
@@ -114,7 +121,7 @@ class DependencyInjectionContainerBuilder
         $this->containerExtensionFinder = $containerExtensionFinder;
     }
 
-    protected function cacheContainer(ContainerBuilder $container, string $cacheFile)
+    protected function cacheContainer(ContainerBuilder $container, string $cacheFile): void
     {
         if (!is_dir(dirname($cacheFile)))
         {
@@ -125,7 +132,7 @@ class DependencyInjectionContainerBuilder
         file_put_contents($cacheFile, $dumper->dump(['class' => $this->cacheClass]));
     }
 
-    public function clearContainerInstance()
+    public function clearContainerInstance(): void
     {
         self::$container = null;
     }
@@ -183,6 +190,20 @@ class DependencyInjectionContainerBuilder
         }
 
         return $this->configurablePathBuilder;
+    }
+
+    protected function getConnectionFactory(): ConnectionFactory
+    {
+        if (!isset($this->connectionFactory))
+        {
+            $this->connectionFactory = new ConnectionFactory(
+                new DataSourceName(
+                    $this->getFileConfigurationConsulter()->getSetting(['Chamilo\Configuration', 'database'])
+                )
+            );
+        }
+
+        return $this->connectionFactory;
     }
 
     /**
@@ -277,11 +298,7 @@ class DependencyInjectionContainerBuilder
     {
         if (!isset($this->registrationConsulter))
         {
-            $connectionFactory = new ConnectionFactory(
-                new DataSourceName(
-                    $this->getFileConfigurationConsulter()->getSetting(['Chamilo\Configuration', 'database'])
-                )
-            );
+            $connectionFactory = $this->getConnectionFactory();
 
             $storageAliasGenerator = new StorageAliasGenerator($this->getClassnameUtilities());
 
@@ -309,7 +326,7 @@ class DependencyInjectionContainerBuilder
 
             $exceptionLoggerFactory = new ExceptionLoggerFactory(
                 $this->getFileConfigurationConsulter(), new SessionUtilities(
-                new Session(), $this->getFileConfigurationConsulter()->getSetting(
+                $this->getSession(), $this->getFileConfigurationConsulter()->getSetting(
                 ['Chamilo\Configuration', 'general', 'security_key']
             )
             ), new UrlGenerator($this->getRequest(), $this->getWebPathBuilder())
@@ -346,6 +363,21 @@ class DependencyInjectionContainerBuilder
         }
 
         return $this->request;
+    }
+
+    /**
+     * @throws \Chamilo\Libraries\Storage\Exception\ConnectionException
+     */
+    protected function getSession(): Session
+    {
+        $securityKey =
+            $this->getFileConfigurationConsulter()->getSetting(['Chamilo\Configuration', 'general', 'security_key']);
+
+        $pdoSessionHandlerFactory = new PdoSessionHandlerFactory($this->getConnectionFactory()->getConnection());
+        $nativeSessionStorage = new NativeSessionStorage([], $pdoSessionHandlerFactory->getPdoSessionHandler());
+        $sessionFactory = new SessionFactory($nativeSessionStorage, $securityKey);
+
+        return $sessionFactory->getSession();
     }
 
     protected function getStringUtilities(): StringUtilities
@@ -389,7 +421,7 @@ class DependencyInjectionContainerBuilder
      *
      * @throws \Exception
      */
-    protected function loadContainerExtensions(ContainerBuilder $container)
+    protected function loadContainerExtensions(ContainerBuilder $container): void
     {
         $extensionClasses = $this->getContainerExtensionFinder()->findContainerExtensions();
         $extensions = [];
@@ -438,7 +470,7 @@ class DependencyInjectionContainerBuilder
         return $newContainer;
     }
 
-    public function removeContainerCache()
+    public function removeContainerCache(): void
     {
         if (file_exists($this->cacheFile))
         {
@@ -451,12 +483,13 @@ class DependencyInjectionContainerBuilder
         }
     }
 
-    public function setBuilder(?ContainerBuilder $builder = null)
+    public function setBuilder(?ContainerBuilder $builder = null): void
     {
         $this->builder = $builder;
     }
 
-    public function setContainerExtensionFinder(?ContainerExtensionFinderInterface $containerExtensionFinder = null)
+    public function setContainerExtensionFinder(?ContainerExtensionFinderInterface $containerExtensionFinder = null
+    ): void
     {
         $this->containerExtensionFinder = $containerExtensionFinder;
     }

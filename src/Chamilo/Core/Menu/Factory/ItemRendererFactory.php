@@ -3,7 +3,7 @@ namespace Chamilo\Core\Menu\Factory;
 
 use Chamilo\Core\Menu\Storage\DataClass\Item;
 use Chamilo\Libraries\Architecture\ClassnameUtilities;
-use Chamilo\Libraries\Architecture\Traits\DependencyInjectionContainerTrait;
+use Chamilo\Libraries\DependencyInjection\Traits\DependencyInjectionContainerTrait;
 
 /**
  * @package Chamilo\Core\Menu\Renderer

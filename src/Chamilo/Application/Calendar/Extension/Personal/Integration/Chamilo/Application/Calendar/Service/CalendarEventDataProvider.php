@@ -13,8 +13,8 @@ use Chamilo\Configuration\Storage\DataClass\Registration;
 use Chamilo\Core\Repository\Publication\Storage\Repository\PublicationRepository;
 use Chamilo\Core\User\Storage\DataClass\User;
 use Chamilo\Libraries\Architecture\ClassnameUtilities;
-use Chamilo\Libraries\Architecture\Traits\DependencyInjectionContainerTrait;
 use Chamilo\Libraries\Calendar\Service\CalendarRendererProvider;
+use Chamilo\Libraries\DependencyInjection\Traits\DependencyInjectionContainerTrait;
 use Chamilo\Libraries\Storage\Parameters\RecordRetrievesParameters;
 use Chamilo\Libraries\Translation\Translation;
 
