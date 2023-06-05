@@ -12,7 +12,6 @@ use Chamilo\Libraries\Architecture\ClassnameUtilities;
 use Chamilo\Libraries\DependencyInjection\DependencyInjectionContainerBuilder;
 use Chamilo\Libraries\Format\Structure\Glyph\IdentGlyph;
 use Chamilo\Libraries\Format\Structure\Glyph\NamespaceIdentGlyph;
-use Chamilo\Libraries\Platform\Session\SessionUtilities;
 use Chamilo\Libraries\Storage\Parameters\DataClassDistinctParameters;
 use Chamilo\Libraries\Storage\Parameters\DataClassRetrievesParameters;
 use Chamilo\Libraries\Storage\Query\Condition\EqualityCondition;
@@ -21,6 +20,7 @@ use Chamilo\Libraries\Storage\Query\RetrieveProperties;
 use Chamilo\Libraries\Storage\Query\Variable\PropertyConditionVariable;
 use Chamilo\Libraries\Storage\Query\Variable\StaticConditionVariable;
 use Chamilo\Libraries\Translation\Translation;
+use Symfony\Component\HttpFoundation\Session\SessionInterface;
 
 /**
  * @package home.lib This is a skeleton for a data manager for the Home application.
@@ -33,16 +33,18 @@ class DataManager extends \Chamilo\Libraries\Storage\DataManager\DataManager
 
     public static function determine_user_id()
     {
-        $sessionUtilities =
-            DependencyInjectionContainerBuilder::getInstance()->createContainer()->get(SessionUtilities::class);
+        /**
+         * @var SessionInterface $session
+         */
+        $session = DependencyInjectionContainerBuilder::getInstance()->createContainer()->get(SessionInterface::class);
 
-        $current_user_id = $sessionUtilities->getUserId();
+        $current_user_id = $session->get(\Chamilo\Core\User\Manager::SESSION_USER_IO);
         $current_user = \Chamilo\Core\User\Storage\DataManager::retrieve_by_id(
             User::class, intval($current_user_id)
         );
 
         $user_home_allowed = Configuration::getInstance()->get_setting([Manager::CONTEXT, 'allow_user_home']);
-        $generalMode = $sessionUtilities->retrieve('Chamilo\Core\Home\General');
+        $generalMode = $session->get('Chamilo\Core\Home\General');
 
         if ($current_user instanceof User)
         {
@@ -52,7 +54,7 @@ class DataManager extends \Chamilo\Libraries\Storage\DataManager\DataManager
             }
             elseif ($user_home_allowed)
             {
-                return $current_user->get_id();
+                return $current_user->getId();
             }
             elseif (!$user_home_allowed && $current_user->is_platform_admin())
             {

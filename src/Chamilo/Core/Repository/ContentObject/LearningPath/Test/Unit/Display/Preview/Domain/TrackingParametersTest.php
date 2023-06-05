@@ -7,9 +7,10 @@ use Chamilo\Core\Repository\ContentObject\LearningPath\Display\Preview\Domain\Tr
 use Chamilo\Core\Repository\ContentObject\LearningPath\Display\Preview\DummyQuestionAttempt;
 use Chamilo\Core\Repository\ContentObject\LearningPath\Display\Preview\DummyTreeNodeAttempt;
 use Chamilo\Core\Repository\ContentObject\LearningPath\Storage\DataClass\LearningPath;
+use Chamilo\Core\User\Manager;
 use Chamilo\Libraries\Architecture\Test\TestCases\ChamiloTestCase;
 use Chamilo\Libraries\DependencyInjection\DependencyInjectionContainerBuilder;
-use Chamilo\Libraries\Platform\Session\SessionUtilities;
+use Symfony\Component\HttpFoundation\Session\SessionInterface;
 
 /**
  * Tests the preview TrackingParameters class
@@ -18,9 +19,9 @@ use Chamilo\Libraries\Platform\Session\SessionUtilities;
  */
 class TrackingParametersTest extends ChamiloTestCase
 {
-    public function getSessionUtilities(): SessionUtilities
+    public function getSession(): SessionInterface
     {
-        return DependencyInjectionContainerBuilder::getInstance()->createContainer()->get(SessionUtilities::class);
+        return DependencyInjectionContainerBuilder::getInstance()->createContainer()->get(SessionInterface::class);
     }
 
     public function testCreateTreeNodeAttemptInstance()
@@ -52,7 +53,7 @@ class TrackingParametersTest extends ChamiloTestCase
         $learningPath = new LearningPath();
         $trackingParameters = new TrackingParameters();
 
-        $this->getSessionUtilities()->register('_uid', 2);
+        $this->getSession()->set(Manager::SESSION_USER_IO, 2);
 
         $this->assertEquals(
             [2], $trackingParameters->getLearningPathTargetUserIds($learningPath)

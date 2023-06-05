@@ -8,7 +8,7 @@ use Chamilo\Core\Repository\Workspace\Storage\DataClass\Workspace;
 use Chamilo\Libraries\Architecture\ClassnameUtilities;
 use Chamilo\Libraries\DependencyInjection\DependencyInjectionContainerBuilder;
 use Chamilo\Libraries\Platform\Session\Request;
-use Chamilo\Libraries\Platform\Session\SessionUtilities;
+use Symfony\Component\HttpFoundation\Session\SessionInterface;
 
 /**
  * The data set via Session, $_POST and $_GET variables related to filtering a set of content objects
@@ -183,9 +183,9 @@ class FilterData
         return self::$instance;
     }
 
-    public function getSessionUtilities(): SessionUtilities
+    public function getSession(): SessionInterface
     {
-        return DependencyInjectionContainerBuilder::getInstance()->createContainer()->get(SessionUtilities::class);
+        return DependencyInjectionContainerBuilder::getInstance()->createContainer()->get(SessionInterface::class);
     }
 
     /**
@@ -406,7 +406,7 @@ class FilterData
      */
     public function initialize()
     {
-        $this->storage = unserialize($this->getSessionUtilities()->retrieve($this->getStorageKey()));
+        $this->storage = unserialize($this->getSession()->get($this->getStorageKey()));
 
         foreach ($this->get_filter_properties() as $filter_property)
         {
@@ -461,6 +461,6 @@ class FilterData
     public function update_session()
     {
         $data = serialize($this->get_storage());
-        $this->getSessionUtilities()->register($this->getStorageKey(), $data);
+        $this->getSession()->set($this->getStorageKey(), $data);
     }
 }

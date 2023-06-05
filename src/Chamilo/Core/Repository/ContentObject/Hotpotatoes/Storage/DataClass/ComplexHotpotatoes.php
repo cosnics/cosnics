@@ -2,14 +2,15 @@
 namespace Chamilo\Core\Repository\ContentObject\Hotpotatoes\Storage\DataClass;
 
 use Chamilo\Core\Repository\Storage\DataClass\ComplexContentObjectItem;
+use Chamilo\Core\User\Manager;
 use Chamilo\Libraries\DependencyInjection\DependencyInjectionContainerBuilder;
 use Chamilo\Libraries\File\Compression\ZipArchive\ZipArchiveFilecompression;
 use Chamilo\Libraries\File\Filesystem;
 use Chamilo\Libraries\File\SystemPathBuilder;
 use Chamilo\Libraries\File\WebPathBuilder;
-use Chamilo\Libraries\Platform\Session\SessionUtilities;
 use Chamilo\Libraries\Translation\Translation;
 use Chamilo\Libraries\Utilities\StringUtilities;
+use Symfony\Component\HttpFoundation\Session\SessionInterface;
 
 class ComplexHotpotatoes extends ComplexContentObjectItem
 {
@@ -46,9 +47,9 @@ class ComplexHotpotatoes extends ComplexContentObjectItem
         return [self::PROPERTY_PATH, self::PROPERTY_MAXIMUM_ATTEMPTS];
     }
 
-    public function getSessionUtilities(): SessionUtilities
+    public function getSession(): SessionInterface
     {
-        return DependencyInjectionContainerBuilder::getInstance()->createContainer()->get(SessionUtilities::class);
+        return DependencyInjectionContainerBuilder::getInstance()->createContainer()->get(SessionInterface::class);
     }
 
     protected function getZipArchiveFilecompression(): ZipArchiveFilecompression
@@ -119,7 +120,7 @@ class ComplexHotpotatoes extends ComplexContentObjectItem
         array_pop($file_name_parts);
         $file_name = implode(' ', $file_name_parts);
 
-        $this->set_owner_id($this->getSessionUtilities()->getUserId());
+        $this->set_owner_id($this->getSession()->get(Manager::SESSION_USER_IO));
         $this->set_title($file_name);
         $this->set_description($file_name);
 
@@ -129,9 +130,8 @@ class ComplexHotpotatoes extends ComplexContentObjectItem
         $systemPathBuilder =
             DependencyInjectionContainerBuilder::getInstance()->createContainer()->get(SystemPathBuilder::class);
 
-        $hotpot_path =
-            $systemPathBuilder->getPublicStoragePath(Hotpotatoes::CONTEXT) . $this->getSessionUtilities()->getUserId() .
-            '/';
+        $hotpot_path = $systemPathBuilder->getPublicStoragePath(Hotpotatoes::CONTEXT) .
+            $this->getSession()->get(Manager::SESSION_USER_IO) . '/';
         $full_path = $hotpot_path . dirname($path_to_zip) . '/';
 
         $dir = $this->getZipArchiveFilecompression()->extractFile($full_path . $zip_file_name);

@@ -31,7 +31,7 @@ class AssessmentMultipleChoiceQuestionForm extends ContentObjectForm
 
     protected function addOptionsButtons()
     {
-        $answerType = $this->getSessionUtilities()->retrieve('mc_answer_type');
+        $answerType = $this->getSession()->get('mc_answer_type');
 
         if ($answerType == AssessmentMultipleChoiceQuestion::ANSWER_TYPE_RADIO)
         {
@@ -70,9 +70,9 @@ class AssessmentMultipleChoiceQuestionForm extends ContentObjectForm
         $renderer = $this->get_renderer();
         $this->setOptionsSessionValues();
 
-        $number_of_options = (int) $this->getSessionUtilities()->retrieve('mc_number_of_options');
-        $skippedOptions = $this->getSessionUtilities()->retrieve('mc_skip_options');
-        $answerType = $this->getSessionUtilities()->retrieve('mc_answer_type');
+        $number_of_options = (int) $this->getSession()->get('mc_number_of_options');
+        $skippedOptions = $this->getSession()->get('mc_skip_options');
+        $answerType = $this->getSession()->get('mc_answer_type');
 
         $this->addElement('category', Translation::get('Options'));
 
@@ -199,7 +199,7 @@ class AssessmentMultipleChoiceQuestionForm extends ContentObjectForm
     {
         $object = $this->get_content_object();
         $values = $this->exportValues();
-        $answerType = $this->getSessionUtilities()->retrieve('mc_answer_type');
+        $answerType = $this->getSession()->get('mc_answer_type');
 
         $options = [];
 
@@ -331,7 +331,7 @@ class AssessmentMultipleChoiceQuestionForm extends ContentObjectForm
             }
             else
             {
-                $number_of_options = (int) $this->getSessionUtilities()->retrieve('mc_number_of_options');
+                $number_of_options = (int) $this->getSession()->get('mc_number_of_options');
 
                 for ($option_number = 0; $option_number < $number_of_options; $option_number ++)
                 {
@@ -350,16 +350,27 @@ class AssessmentMultipleChoiceQuestionForm extends ContentObjectForm
     {
         if (!$this->isSubmitted())
         {
-            $this->getSessionUtilities()->unregister('mc_number_of_options');
-            $this->getSessionUtilities()->unregister('mc_skip_options');
-            $this->getSessionUtilities()->unregister('mc_answer_type');
+            $this->getSession()->remove('mc_number_of_options');
+            $this->getSession()->remove('mc_skip_options');
+            $this->getSession()->remove('mc_answer_type');
         }
 
-        $this->getSessionUtilities()->registerIfNotSet('mc_number_of_options', 3);
-        $this->getSessionUtilities()->registerIfNotSet('mc_skip_options', []);
-        $this->getSessionUtilities()->registerIfNotSet(
-            'mc_answer_type', AssessmentMultipleChoiceQuestion::ANSWER_TYPE_RADIO
-        );
+        $session = $this->getSession();
+
+        if (!$session->has('mc_number_of_options'))
+        {
+            $session->set('mc_number_of_options', 3);
+        }
+
+        if (!$session->has('mc_skip_options'))
+        {
+            $session->set('mc_skip_options', []);
+        }
+
+        if (!$session->has('mc_answer_type'))
+        {
+            $session->set('mc_answer_type', AssessmentMultipleChoiceQuestion::ANSWER_TYPE_RADIO);
+        }
 
         $extraOptionRequested = Request::post('add');
         $removedOptions = Request::post('remove');
@@ -367,23 +378,23 @@ class AssessmentMultipleChoiceQuestionForm extends ContentObjectForm
 
         if (isset($extraOptionRequested))
         {
-            $this->getSessionUtilities()->register(
-                'mc_number_of_options', ($this->getSessionUtilities()->retrieve('mc_number_of_options') + 1)
+            $this->getSession()->set(
+                'mc_number_of_options', ($this->getSession()->get('mc_number_of_options') + 1)
             );
         }
 
         if (isset($removedOptions))
         {
             $indexes = array_keys($removedOptions);
-            $skippedOptions = $this->getSessionUtilities()->retrieve('mc_skip_options');
+            $skippedOptions = $this->getSession()->get('mc_skip_options');
             $skippedOptions[] = $indexes[0];
 
-            $this->getSessionUtilities()->register('mc_skip_options', $skippedOptions);
+            $this->getSession()->set('mc_skip_options', $skippedOptions);
         }
 
         if (isset($answerTypeChanged))
         {
-            $currentAnswerType = $this->getSessionUtilities()->retrieve('mc_answer_type');
+            $currentAnswerType = $this->getSession()->get('mc_answer_type');
 
             if ($currentAnswerType == AssessmentMultipleChoiceQuestion::ANSWER_TYPE_RADIO)
             {
@@ -394,15 +405,15 @@ class AssessmentMultipleChoiceQuestionForm extends ContentObjectForm
                 $newAnswerType = AssessmentMultipleChoiceQuestion::ANSWER_TYPE_RADIO;
             }
 
-            $this->getSessionUtilities()->register('mc_answer_type', $newAnswerType);
+            $this->getSession()->set('mc_answer_type', $newAnswerType);
         }
 
         $object = $this->get_content_object();
 
         if (!$this->isSubmitted() && $object->get_number_of_options() != 0)
         {
-            $this->getSessionUtilities()->register('mc_number_of_options', $object->get_number_of_options());
-            $this->getSessionUtilities()->register('mc_answer_type', $object->get_answer_type());
+            $this->getSession()->set('mc_number_of_options', $object->get_number_of_options());
+            $this->getSession()->set('mc_answer_type', $object->get_answer_type());
         }
     }
 
@@ -429,7 +440,7 @@ class AssessmentMultipleChoiceQuestionForm extends ContentObjectForm
 
     public function validate_selected_answers($fields)
     {
-        $answerType = $this->getSessionUtilities()->retrieve('mc_answer_type');
+        $answerType = $this->getSession()->get('mc_answer_type');
 
         if (!isset($fields[AssessmentMultipleChoiceQuestionOption::PROPERTY_CORRECT]))
         {

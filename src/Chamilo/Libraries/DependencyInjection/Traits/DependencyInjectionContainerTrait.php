@@ -27,7 +27,6 @@ use Chamilo\Libraries\Format\Theme\ThemePathBuilder;
 use Chamilo\Libraries\Format\Utilities\ResourceManager;
 use Chamilo\Libraries\Format\Validator\ValidatorDecorator;
 use Chamilo\Libraries\Platform\ChamiloRequest;
-use Chamilo\Libraries\Platform\Session\SessionUtilities;
 use Chamilo\Libraries\Storage\DataManager\Repository\DataClassRepository;
 use Chamilo\Libraries\Utilities\StringUtilities;
 use Doctrine\ORM\EntityManager;
@@ -169,14 +168,6 @@ trait DependencyInjectionContainerTrait
     public function getService(string $serviceId)
     {
         return $this->getContainer()->get($serviceId);
-    }
-
-    /**
-     * @deprecated Use DependendyInjectionContainerTrait::getSession()
-     */
-    public function getSessionUtilities(): SessionUtilities
-    {
-        return $this->getService(SessionUtilities::class);
     }
 
     public function getSession(): SessionInterface

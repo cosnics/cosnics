@@ -5,9 +5,10 @@ use Chamilo\Core\Repository\ContentObject\LearningPath\Display\Preview\DummyQues
 use Chamilo\Core\Repository\ContentObject\LearningPath\Display\Preview\DummyTreeNodeAttempt;
 use Chamilo\Core\Repository\ContentObject\LearningPath\Domain\TrackingParametersInterface;
 use Chamilo\Core\Repository\ContentObject\LearningPath\Storage\DataClass\LearningPath;
+use Chamilo\Core\User\Manager;
 use Chamilo\Libraries\DependencyInjection\DependencyInjectionContainerBuilder;
-use Chamilo\Libraries\Platform\Session\SessionUtilities;
 use Chamilo\Libraries\Storage\Query\Condition\Condition;
+use Symfony\Component\HttpFoundation\Session\SessionInterface;
 
 /**
  * Tracking parameters for the learning path tracking service and repository
@@ -46,17 +47,17 @@ class TrackingParameters implements TrackingParametersInterface
      */
     public function getLearningPathTargetUserIds(LearningPath $learningPath)
     {
-        if (empty($this->getSessionUtilities()->getUserId()))
+        if (empty($this->getSession()->get(Manager::SESSION_USER_IO)))
         {
             return [];
         }
 
-        return [$this->getSessionUtilities()->getUserId()];
+        return [$this->getSession()->get(Manager::SESSION_USER_IO)];
     }
 
-    public function getSessionUtilities(): SessionUtilities
+    public function getSession(): SessionInterface
     {
-        return DependencyInjectionContainerBuilder::getInstance()->createContainer()->get(SessionUtilities::class);
+        return DependencyInjectionContainerBuilder::getInstance()->createContainer()->get(SessionInterface::class);
     }
 
     /**

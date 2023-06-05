@@ -4,13 +4,13 @@ namespace Chamilo\Core\Repository\Integration\Chamilo\Core\Home;
 use Chamilo\Core\Repository\Storage\DataClass\ContentObject;
 use Chamilo\Core\Repository\Storage\DataManager;
 use Chamilo\Libraries\DependencyInjection\DependencyInjectionContainerBuilder;
-use Chamilo\Libraries\Platform\Session\SessionUtilities;
 use Chamilo\Libraries\Storage\Query\Condition\AndCondition;
 use Chamilo\Libraries\Storage\Query\Condition\EqualityCondition;
 use Chamilo\Libraries\Storage\Query\Condition\OrCondition;
 use Chamilo\Libraries\Storage\Query\Variable\PropertyConditionVariable;
 use Chamilo\Libraries\Storage\Query\Variable\StaticConditionVariable;
 use Chamilo\Libraries\Translation\Translation;
+use Symfony\Component\HttpFoundation\Session\SessionInterface;
 
 /**
  * @package repository.block.connectors
@@ -51,15 +51,14 @@ class Connector
      */
     public static function get_objects($types)
     {
-        $sessionUtilities =
-            DependencyInjectionContainerBuilder::getInstance()->createContainer()->get(SessionUtilities::class);
+        $session = DependencyInjectionContainerBuilder::getInstance()->createContainer()->get(SessionInterface::class);
 
         $result = [];
 
         $conditions = [];
         $conditions[] = new EqualityCondition(
             new PropertyConditionVariable(ContentObject::class, ContentObject::PROPERTY_OWNER_ID),
-            new StaticConditionVariable($sessionUtilities->getUserId())
+            new StaticConditionVariable($session->get(\Chamilo\Core\User\Manager::SESSION_USER_IO))
         );
 
         $types_condition = [];

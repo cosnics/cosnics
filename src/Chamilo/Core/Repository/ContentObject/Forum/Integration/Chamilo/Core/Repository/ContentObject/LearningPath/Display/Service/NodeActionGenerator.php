@@ -6,7 +6,7 @@ use Chamilo\Core\Repository\ContentObject\Forum\Storage\DataManager;
 use Chamilo\Core\Repository\ContentObject\LearningPath\Domain\Action;
 use Chamilo\Core\Repository\ContentObject\LearningPath\Domain\TreeNode;
 use Chamilo\Libraries\DependencyInjection\DependencyInjectionContainerBuilder;
-use Chamilo\Libraries\Platform\Session\SessionUtilities;
+use Symfony\Component\HttpFoundation\Session\SessionInterface;
 
 /**
  * Generates the actions for a given TreeNode
@@ -47,7 +47,7 @@ class NodeActionGenerator
         $contentObject = $learningPathTreeNode->getContentObject();
 
         $subscribed = DataManager::retrieve_subscribe(
-            $contentObject->getId(), $this->getSessionUtilities()->getUserId()
+            $contentObject->getId(), $this->getSession()->get(\Chamilo\Core\User\Manager::SESSION_USER_IO)
         );
 
         if (!$subscribed)
@@ -76,8 +76,8 @@ class NodeActionGenerator
         return new Action('forumSubscribe', $title, $url, $icon);
     }
 
-    public function getSessionUtilities(): SessionUtilities
+    public function getSession(): SessionInterface
     {
-        return DependencyInjectionContainerBuilder::getInstance()->createContainer()->get(SessionUtilities::class);
+        return DependencyInjectionContainerBuilder::getInstance()->createContainer()->get(SessionInterface::class);
     }
 }

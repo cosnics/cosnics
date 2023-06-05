@@ -107,7 +107,7 @@ class ImporterComponent extends Manager implements DelegateComponent
                 $filtered_content_object_ids = $this->filter_content_object_ids($content_object_ids);
                 $messages = $controller->get_messages_for_url();
 
-                $this->getSessionUtilities()->register(Application::PARAM_MESSAGES, $messages);
+                $this->getSession()->set(Application::PARAM_MESSAGES, $messages);
 
                 if (!$controller->has_messages(ContentObjectImportController::TYPE_ERROR))
                 {
@@ -115,12 +115,12 @@ class ImporterComponent extends Manager implements DelegateComponent
                     {
                         if (count($content_object_ids) > 1)
                         {
-                            $messages = $this->getSessionUtilities()->retrieve(Application::PARAM_MESSAGES);
+                            $messages = $this->getSession()->get(Application::PARAM_MESSAGES);
                             $messages[Application::PARAM_MESSAGE][] = Translation::get(
                                 'MultipleObjectsImportedButOneUseable'
                             );
                             $messages[Application::PARAM_MESSAGE_TYPE][] = ContentObjectImportController::TYPE_ERROR;
-                            $this->getSessionUtilities()->register(Application::PARAM_MESSAGES, $messages);
+                            $this->getSession()->set(Application::PARAM_MESSAGES, $messages);
                         }
 
                         $this->redirect([self::PARAM_ID => $filtered_content_object_ids[0]]);
@@ -129,12 +129,12 @@ class ImporterComponent extends Manager implements DelegateComponent
                     {
                         if (count($content_object_ids) > 0)
                         {
-                            $messages = $this->getSessionUtilities()->retrieve(Application::PARAM_MESSAGES);
+                            $messages = $this->getSession()->get(Application::PARAM_MESSAGES);
                             $message = (count($content_object_ids) == 1 ? 'ObjectImportedButNoneUseable' :
                                 'ObjectsImportedButNoneUseable');
                             $messages[Application::PARAM_MESSAGE][] = Translation::get($message);
                             $messages[Application::PARAM_MESSAGE_TYPE][] = ContentObjectImportController::TYPE_ERROR;
-                            $this->getSessionUtilities()->register(Application::PARAM_MESSAGES, $messages);
+                            $this->getSession()->set(Application::PARAM_MESSAGES, $messages);
                         }
 
                         $this->redirect();

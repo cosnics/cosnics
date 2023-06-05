@@ -1,6 +1,7 @@
 <?php
 namespace Chamilo\Core\Repository\ContentObject\Portfolio\Display\Form;
 
+use Chamilo\Core\User\Manager;
 use Chamilo\Libraries\Format\Form\Element\AdvancedElementFinder\AdvancedElementFinderElement;
 use Chamilo\Libraries\Format\Form\Element\AdvancedElementFinder\AdvancedElementFinderElements;
 use Chamilo\Libraries\Format\Form\Element\AdvancedElementFinder\AdvancedElementFinderElementTypes;
@@ -290,7 +291,7 @@ class RightsForm extends FormValidator
                 {
 
                     if ($selected_entity->get_entity_type() == 1 &&
-                        $selected_entity->get_entity_id() == $this->getSessionUtilities()->getUserId())
+                        $selected_entity->get_entity_id() == $this->getSession()->get(Manager::SESSION_USER_IO))
                     {
                         $defaults[self::PROPERTY_RIGHT_OPTION . '_' . $right_id] = self::RIGHT_OPTION_ME;
                         continue;

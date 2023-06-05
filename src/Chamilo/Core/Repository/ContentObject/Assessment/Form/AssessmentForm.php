@@ -428,7 +428,7 @@ class AssessmentForm extends ContentObjectForm
                 if ($object->get_random_questions() != $values[Assessment::PROPERTY_RANDOM_QUESTIONS])
                 {
                     // Regenerate random questions.
-                    $this->getSessionUtilities()->unregister(self::SESSION_QUESTIONS);
+                    $this->getSession()->remove(self::SESSION_QUESTIONS);
                 }
                 $object->set_random_questions($values[Assessment::PROPERTY_RANDOM_QUESTIONS]);
             }

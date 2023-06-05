@@ -18,7 +18,7 @@ class ClearParameterComponent extends Manager
         $parameter = $this->getPostDataValue(self::PARAM_PARAMETER);
         $parameter = explode('_', $parameter, 3);
 
-        $session = unserialize($this->getSessionUtilities()->retrieve('advanced_filter'));
+        $session = unserialize($this->getSession()->get('advanced_filter'));
 
         if ($parameter[1] == 'task')
         {
@@ -45,7 +45,7 @@ class ClearParameterComponent extends Manager
                     break;
             }
 
-            $this->getSessionUtilities()->register('advanced_filter', serialize($session));
+            $this->getSession()->set('advanced_filter', serialize($session));
             JsonAjaxResult::success();
         }
         else

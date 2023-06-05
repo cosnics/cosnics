@@ -5,10 +5,11 @@ use Chamilo\Core\Repository\ContentObject\Forum\EmailNotification\TopicEmailNoti
 use Chamilo\Core\Repository\Storage\DataClass\ComplexContentObjectItem;
 use Chamilo\Core\Repository\Storage\DataClass\ContentObject;
 use Chamilo\Core\Repository\Storage\DataManager;
+use Chamilo\Core\User\Manager;
 use Chamilo\Core\User\Storage\DataClass\User;
 use Chamilo\Libraries\DependencyInjection\DependencyInjectionContainerBuilder;
-use Chamilo\Libraries\Platform\Session\SessionUtilities;
 use Chamilo\Libraries\Translation\Translation;
+use Symfony\Component\HttpFoundation\Session\SessionInterface;
 
 /**
  * @package repository.lib.content_object.forum_topic
@@ -42,7 +43,7 @@ class ComplexForumTopic extends ComplexContentObjectItem
         $email_notificator->set_action_body($text);
         $email_notificator->set_action_user(
             \Chamilo\Core\User\Storage\DataManager::retrieve_by_id(
-                User::class, (int) $this->getSessionUtilities()->getUserId()
+                User::class, (int) $this->getSession()->get(Manager::SESSION_USER_IO)
             )
         );
 
@@ -79,9 +80,9 @@ class ComplexForumTopic extends ComplexContentObjectItem
         return [self::PROPERTY_FORUM_TYPE];
     }
 
-    public function getSessionUtilities(): SessionUtilities
+    public function getSession(): SessionInterface
     {
-        return DependencyInjectionContainerBuilder::getInstance()->createContainer()->get(SessionUtilities::class);
+        return DependencyInjectionContainerBuilder::getInstance()->createContainer()->get(SessionInterface::class);
     }
 
     /**

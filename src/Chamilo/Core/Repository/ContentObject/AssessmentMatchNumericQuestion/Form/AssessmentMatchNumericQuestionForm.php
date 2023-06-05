@@ -54,8 +54,8 @@ class AssessmentMatchNumericQuestionForm extends ContentObjectForm
         $renderer = $this->get_renderer();
         $this->setOptionsSessionValues();
 
-        $number_of_options = (int) $this->getSessionUtilities()->retrieve('match_number_of_options');
-        $skippedOptions = $this->getSessionUtilities()->retrieve('match_skip_options');
+        $number_of_options = (int) $this->getSession()->get('match_number_of_options');
+        $skippedOptions = $this->getSession()->get('match_skip_options');
 
         $this->addElement('category', Translation::get('PossibleAnswers'));
         $this->addElement(
@@ -306,7 +306,7 @@ class AssessmentMatchNumericQuestionForm extends ContentObjectForm
             }
             else
             {
-                $number_of_options = (int) $this->getSessionUtilities()->retrieve('match_number_of_options');
+                $number_of_options = (int) $this->getSession()->get('match_number_of_options');
 
                 for ($option_number = 0; $option_number < $number_of_options; $option_number ++)
                 {
@@ -323,37 +323,46 @@ class AssessmentMatchNumericQuestionForm extends ContentObjectForm
     {
         if (!$this->isSubmitted())
         {
-            $this->getSessionUtilities()->unregister('match_number_of_options');
-            $this->getSessionUtilities()->unregister('match_skip_options');
+            $this->getSession()->remove('match_number_of_options');
+            $this->getSession()->remove('match_skip_options');
         }
 
-        $this->getSessionUtilities()->registerIfNotSet('match_number_of_options', 1);
-        $this->getSessionUtilities()->registerIfNotSet('match_skip_options', []);
+        $session = $this->getSession();
+
+        if (!$session->has('match_number_of_options'))
+        {
+            $session->set('match_number_of_options', 1);
+        }
+
+        if (!$session->has('match_skip_options'))
+        {
+            $session->set('match_skip_options', []);
+        }
 
         $extraOptionRequested = Request::post('add');
         $removedOptions = Request::post('remove');
 
         if (isset($extraOptionRequested))
         {
-            $this->getSessionUtilities()->register(
-                'match_number_of_options', ($this->getSessionUtilities()->retrieve('match_number_of_options') + 1)
+            $this->getSession()->set(
+                'match_number_of_options', ($this->getSession()->get('match_number_of_options') + 1)
             );
         }
 
         if (isset($removedOptions))
         {
             $indexes = array_keys($removedOptions);
-            $skippedOptions = $this->getSessionUtilities()->retrieve('match_skip_options');
+            $skippedOptions = $this->getSession()->get('match_skip_options');
             $skippedOptions[] = $indexes[0];
 
-            $this->getSessionUtilities()->register('match_skip_options', $skippedOptions);
+            $this->getSession()->set('match_skip_options', $skippedOptions);
         }
 
         $object = $this->get_content_object();
 
         if (!$this->isSubmitted() && $object->get_number_of_options() != 0)
         {
-            $this->getSessionUtilities()->register('match_number_of_options', $object->get_number_of_options());
+            $this->getSession()->set('match_number_of_options', $object->get_number_of_options());
         }
     }
 

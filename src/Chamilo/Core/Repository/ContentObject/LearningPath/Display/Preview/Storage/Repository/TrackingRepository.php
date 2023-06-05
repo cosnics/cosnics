@@ -10,10 +10,10 @@ use Chamilo\Core\Repository\ContentObject\LearningPath\Storage\DataClass\Learnin
 use Chamilo\Core\Repository\ContentObject\LearningPath\Storage\Repository\TrackingRepositoryInterface;
 use Chamilo\Core\User\Storage\DataClass\User;
 use Chamilo\Libraries\DependencyInjection\DependencyInjectionContainerBuilder;
-use Chamilo\Libraries\Platform\Session\SessionUtilities;
 use Chamilo\Libraries\Storage\DataClass\DataClass;
 use Chamilo\Libraries\Storage\Query\Condition\Condition;
 use Doctrine\Common\Collections\ArrayCollection;
+use Symfony\Component\HttpFoundation\Session\SessionInterface;
 use Symfony\Component\Uid\Uuid;
 
 /**
@@ -28,7 +28,7 @@ class TrackingRepository implements TrackingRepositoryInterface
     {
         $storage = $this->getStorage();
 
-        if (!isset($storage) || empty($storage))
+        if (empty($storage))
         {
             $this->setStorage([]);
         }
@@ -106,7 +106,7 @@ class TrackingRepository implements TrackingRepositoryInterface
     {
         if (!$dummyQuestionAttempt->isIdentified())
         {
-            $dummyQuestionAttempt->setId(Uuid::v4());
+            $dummyQuestionAttempt->setId(Uuid::v4()->__toString());
         }
 
         $questionAttempts = $this->getFromStorage(DummyQuestionAttempt::class);
@@ -129,7 +129,7 @@ class TrackingRepository implements TrackingRepositoryInterface
     {
         if (!$dummyTreeNodeAttempt->isIdentified())
         {
-            $dummyTreeNodeAttempt->setId(Uuid::v4());
+            $dummyTreeNodeAttempt->setId(Uuid::v4()->__toString());
         }
 
         $treeNodeAttempts = $this->getFromStorage(DummyTreeNodeAttempt::class);
@@ -414,9 +414,9 @@ class TrackingRepository implements TrackingRepositoryInterface
         return $data[$property];
     }
 
-    public function getSessionUtilities(): SessionUtilities
+    public function getSession(): SessionInterface
     {
-        return DependencyInjectionContainerBuilder::getInstance()->createContainer()->get(SessionUtilities::class);
+        return DependencyInjectionContainerBuilder::getInstance()->createContainer()->get(SessionInterface::class);
     }
 
     /**
@@ -426,7 +426,7 @@ class TrackingRepository implements TrackingRepositoryInterface
      */
     protected function getStorage()
     {
-        return unserialize($this->getSessionUtilities()->retrieve(__NAMESPACE__));
+        return unserialize($this->getSession()->get(__NAMESPACE__));
     }
 
     /**
@@ -457,7 +457,7 @@ class TrackingRepository implements TrackingRepositoryInterface
      */
     protected function setStorage($data)
     {
-        $this->getSessionUtilities()->register(__NAMESPACE__, serialize($data));
+        $this->getSession()->set(__NAMESPACE__, serialize($data));
     }
 
     /**

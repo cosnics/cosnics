@@ -126,7 +126,7 @@ abstract class BaseHtmlTreeComponent extends Manager implements DelegateComponen
             $html[] = $glyph->render();
         }
 
-        $isMenuHidden = $this->getSessionUtilities()->retrieve('learningPathMenuIsHidden');
+        $isMenuHidden = $this->getSession()->get('learningPathMenuIsHidden');
 
         $classes = ['learning-path-action-menu-show', 'fa-3x'];
         if ($isMenuHidden != 'true')
@@ -213,7 +213,7 @@ abstract class BaseHtmlTreeComponent extends Manager implements DelegateComponen
     public function render_header(string $pageTitle = ''): string
     {
         $isFullScreen = $this->getRequest()->query->get(self::PARAM_FULL_SCREEN, false);
-        $isMenuHidden = $this->getSessionUtilities()->retrieve('learningPathMenuIsHidden');
+        $isMenuHidden = $this->getSession()->get('learningPathMenuIsHidden');
 
         if ($isFullScreen)
         {

@@ -12,8 +12,8 @@ use Chamilo\Core\User\Storage\DataClass\User;
 use Chamilo\Libraries\Architecture\ClassnameUtilities;
 use Chamilo\Libraries\Architecture\Interfaces\ComplexContentObjectSupport;
 use Chamilo\Libraries\DependencyInjection\DependencyInjectionContainerBuilder;
-use Chamilo\Libraries\Platform\Session\SessionUtilities;
 use InvalidArgumentException;
+use Symfony\Component\HttpFoundation\Session\SessionInterface;
 
 /**
  * @package Chamilo\Core\Repository\ContentObject\LearningPath\Storage\DataClass
@@ -48,7 +48,7 @@ class LearningPath extends ContentObject implements ComplexContentObjectSupport,
         }
 
         $user = new User();
-        $user->setId($this->getSessionUtilities()->getUserId());
+        $user->setId($this->getSession()->get(\Chamilo\Core\User\Manager::SESSION_USER_IO));
 
         $this->getTreeNodeDataService()->createTreeNodeDataForLearningPath($this, $user);
 
@@ -132,9 +132,9 @@ class LearningPath extends ContentObject implements ComplexContentObjectSupport,
         );
     }
 
-    public function getSessionUtilities(): SessionUtilities
+    public function getSession(): SessionInterface
     {
-        return $this->getService(SessionUtilities::class);
+        return $this->getService(SessionInterface::class);
     }
 
     /**

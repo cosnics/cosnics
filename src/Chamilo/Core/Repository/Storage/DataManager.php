@@ -17,7 +17,6 @@ use Chamilo\Core\Repository\Workspace\Storage\DataClass\WorkspaceContentObjectRe
 use Chamilo\Libraries\Architecture\ClassnameUtilities;
 use Chamilo\Libraries\Architecture\Interfaces\ComplexContentObjectSupport;
 use Chamilo\Libraries\DependencyInjection\DependencyInjectionContainerBuilder;
-use Chamilo\Libraries\Platform\Session\SessionUtilities;
 use Chamilo\Libraries\Storage\DataClass\DataClass;
 use Chamilo\Libraries\Storage\Parameters\DataClassCountGroupedParameters;
 use Chamilo\Libraries\Storage\Parameters\DataClassCountParameters;
@@ -43,6 +42,7 @@ use Chamilo\Libraries\Storage\Query\Variable\PropertyConditionVariable;
 use Chamilo\Libraries\Storage\Query\Variable\StaticConditionVariable;
 use Chamilo\Libraries\Utilities\StringUtilities;
 use Doctrine\Common\Collections\ArrayCollection;
+use Symfony\Component\HttpFoundation\Session\SessionInterface;
 
 class DataManager extends \Chamilo\Libraries\Storage\DataManager\DataManager
 {
@@ -289,8 +289,7 @@ class DataManager extends \Chamilo\Libraries\Storage\DataManager\DataManager
 
     public static function content_object_title_exists($title, $parent_id = null, $content_object_id = null)
     {
-        $sessionUtilities =
-            DependencyInjectionContainerBuilder::getInstance()->createContainer()->get(SessionUtilities::class);
+        $session = DependencyInjectionContainerBuilder::getInstance()->createContainer()->get(SessionInterface::class);
 
         $conditions = [];
         if (!is_null($parent_id))
@@ -316,7 +315,7 @@ class DataManager extends \Chamilo\Libraries\Storage\DataManager\DataManager
         );
         $conditions[] = new EqualityCondition(
             new PropertyConditionVariable(ContentObject::class, ContentObject::PROPERTY_OWNER_ID),
-            new StaticConditionVariable($sessionUtilities->getUserId())
+            new StaticConditionVariable($session->get(\Chamilo\Core\User\Manager::SESSION_USER_IO))
         );
         $conditions[] = new InCondition(
             new PropertyConditionVariable(ContentObject::class, ContentObject::PROPERTY_TYPE),

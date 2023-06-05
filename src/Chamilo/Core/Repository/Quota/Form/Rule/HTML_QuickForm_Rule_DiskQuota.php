@@ -2,11 +2,12 @@
 namespace Chamilo\Core\Repository\Quota\Form\Rule;
 
 use Chamilo\Core\Repository\Quota\Calculator;
+use Chamilo\Core\User\Manager;
 use Chamilo\Core\User\Storage\DataClass\User;
 use Chamilo\Core\User\Storage\DataManager;
 use Chamilo\Libraries\DependencyInjection\DependencyInjectionContainerBuilder;
-use Chamilo\Libraries\Platform\Session\SessionUtilities;
 use HTML_QuickForm_Rule;
+use Symfony\Component\HttpFoundation\Session\SessionInterface;
 
 /**
  * QuickForm rule to check if uploading a document is possible compared to the available disk quota.
@@ -14,9 +15,9 @@ use HTML_QuickForm_Rule;
 class HTML_QuickForm_Rule_DiskQuota extends HTML_QuickForm_Rule
 {
 
-    public function getSessionUtilities(): SessionUtilities
+    public function getSession(): SessionInterface
     {
-        return DependencyInjectionContainerBuilder::getInstance()->createContainer()->get(SessionUtilities::class);
+        return DependencyInjectionContainerBuilder::getInstance()->createContainer()->get(SessionInterface::class);
     }
 
     /**
@@ -33,7 +34,7 @@ class HTML_QuickForm_Rule_DiskQuota extends HTML_QuickForm_Rule
 
         $calculator = new Calculator(
             DataManager::retrieve_by_id(
-                User::class, (int) $this->getSessionUtilities()->getUserId()
+                User::class, (int) $this->getSession()->get(Manager::class)
             )
         );
 

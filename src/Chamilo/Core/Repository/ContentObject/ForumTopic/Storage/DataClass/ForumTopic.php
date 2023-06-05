@@ -5,15 +5,16 @@ use Chamilo\Core\Repository\ContentObject\Forum\EmailNotification\TopicEmailNoti
 use Chamilo\Core\Repository\ContentObject\ForumTopic\Storage\DataManager;
 use Chamilo\Core\Repository\Storage\DataClass\ComplexContentObjectItem;
 use Chamilo\Core\Repository\Storage\DataClass\ContentObject;
+use Chamilo\Core\User\Manager;
 use Chamilo\Core\User\Storage\DataClass\User;
 use Chamilo\Libraries\Architecture\Interfaces\AttachmentSupport;
 use Chamilo\Libraries\Architecture\Interfaces\Versionable;
 use Chamilo\Libraries\DependencyInjection\DependencyInjectionContainerBuilder;
-use Chamilo\Libraries\Platform\Session\SessionUtilities;
 use Chamilo\Libraries\Storage\Query\Condition\EqualityCondition;
 use Chamilo\Libraries\Storage\Query\Variable\PropertyConditionVariable;
 use Chamilo\Libraries\Storage\Query\Variable\StaticConditionVariable;
 use Chamilo\Libraries\Translation\Translation;
+use Symfony\Component\HttpFoundation\Session\SessionInterface;
 
 /**
  * @package Chamilo\Core\Repository\ContentObject\ForumTopic\Storage\DataClass
@@ -174,9 +175,9 @@ class ForumTopic extends ContentObject implements Versionable, AttachmentSupport
         return [self::PROPERTY_LOCKED, self::PROPERTY_TOTAL_POSTS, self::PROPERTY_LAST_POST];
     }
 
-    public function getSessionUtilities(): SessionUtilities
+    public function getSession(): SessionInterface
     {
-        return DependencyInjectionContainerBuilder::getInstance()->createContainer()->get(SessionUtilities::class);
+        return DependencyInjectionContainerBuilder::getInstance()->createContainer()->get(SessionInterface::class);
     }
 
     /**
@@ -477,7 +478,7 @@ class ForumTopic extends ContentObject implements Versionable, AttachmentSupport
                 $email_notificator->set_action_body($text);
                 $email_notificator->set_action_user(
                     \Chamilo\Core\User\Storage\DataManager::retrieve_by_id(
-                        User::class, (int) $this->getSessionUtilities()->getUserId()
+                        User::class, (int) $this->getSession()->get(Manager::SESSION_USER_IO)
                     )
                 );
                 $email_notificator->set_is_topic_edited(true);

@@ -3,7 +3,7 @@ namespace Chamilo\Core\Repository\ContentObject\Assessment\Display\Preview;
 
 use Chamilo\Core\Repository\ContentObject\Assessment\Display\Attempt\AbstractAttempt;
 use Chamilo\Libraries\DependencyInjection\DependencyInjectionContainerBuilder;
-use Chamilo\Libraries\Platform\Session\SessionUtilities;
+use Symfony\Component\HttpFoundation\Session\SessionInterface;
 
 /**
  * @package core\repository\content_object\assessment\display
@@ -17,10 +17,7 @@ class PreviewStorage
 
     public const PROPERTY_ASSESSMENT_QUESTION_ATTEMPT = 'assessment_question_attempt';
 
-    /**
-     * @var \core\repository\content_object\assessment\display\PreviewStorage
-     */
-    private static $instance;
+    private static ?PreviewStorage $instance = null;
 
     /**
      * Constructor
@@ -101,9 +98,9 @@ class PreviewStorage
         return self::$instance;
     }
 
-    public function getSessionUtilities(): SessionUtilities
+    public function getSession(): SessionInterface
     {
-        return DependencyInjectionContainerBuilder::getInstance()->createContainer()->get(SessionUtilities::class);
+        return DependencyInjectionContainerBuilder::getInstance()->createContainer()->get(SessionInterface::class);
     }
 
     /**
@@ -153,7 +150,7 @@ class PreviewStorage
      */
     public function get_storage()
     {
-        return unserialize($this->getSessionUtilities()->retrieve(__NAMESPACE__));
+        return unserialize($this->getSession()->get(__NAMESPACE__));
     }
 
     /**
@@ -256,7 +253,7 @@ class PreviewStorage
      */
     public function set_storage($data)
     {
-        $this->getSessionUtilities()->register(__NAMESPACE__, serialize($data));
+        $this->getSession()->set(__NAMESPACE__, serialize($data));
 
         return true;
     }

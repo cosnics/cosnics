@@ -4,6 +4,7 @@ namespace Chamilo\Core\Rights\Editor\Form;
 use Chamilo\Core\Rights\RightsLocation;
 use Chamilo\Core\Rights\RightsUtil;
 use Chamilo\Core\Rights\Storage\DataManager;
+use Chamilo\Core\User\Manager;
 use Chamilo\Libraries\Format\Form\Element\AdvancedElementFinder\AdvancedElementFinderElements;
 use Chamilo\Libraries\Format\Form\Element\AdvancedElementFinder\AdvancedElementFinderElementTypes;
 use Chamilo\Libraries\Format\Form\FormValidator;
@@ -276,7 +277,7 @@ class SimpleRightsEditorForm extends FormValidator
                     break;
                 case self::RIGHT_OTPION_ME :
                     $succes &= $rights_util->invert_location_entity_right(
-                        $this->context, $right_id, $this->getSessionUtilities()->getUserId(), 1, $location_id
+                        $this->context, $right_id, $this->getSession()->get(Manager::SESSION_USER_IO), 1, $location_id
                     );
                     break;
                 case self::RIGHT_OPTION_SELECT :
@@ -348,7 +349,7 @@ class SimpleRightsEditorForm extends FormValidator
                     $selected_entity = $selected_entities_per_right[$right_id][0];
 
                     if ($selected_entity->get_entity_type() == 1 &&
-                        $selected_entity->get_entity_id() == $this->getSessionUtilities()->getUserId())
+                        $selected_entity->get_entity_id() == $this->getSession()->get(Manager::SESSION_USER_IO))
                     {
                         $defaults[self::PROPERTY_RIGHT_OPTION . '_' . $right_id] = self::RIGHT_OTPION_ME;
                         continue;

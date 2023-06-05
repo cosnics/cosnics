@@ -2,16 +2,17 @@
 namespace Chamilo\Core\Repository\ContentObject\Hotpotatoes\Storage\DataClass;
 
 use Chamilo\Core\Repository\Storage\DataClass\ContentObject;
+use Chamilo\Core\User\Manager;
 use Chamilo\Libraries\Architecture\Interfaces\Versionable;
 use Chamilo\Libraries\DependencyInjection\DependencyInjectionContainerBuilder;
 use Chamilo\Libraries\File\Compression\ZipArchive\ZipArchiveFilecompression;
 use Chamilo\Libraries\File\Filesystem;
 use Chamilo\Libraries\File\SystemPathBuilder;
 use Chamilo\Libraries\File\WebPathBuilder;
-use Chamilo\Libraries\Platform\Session\SessionUtilities;
 use Chamilo\Libraries\Translation\Translation;
 use Chamilo\Libraries\Utilities\String\Text;
 use Chamilo\Libraries\Utilities\StringUtilities;
+use Symfony\Component\HttpFoundation\Session\SessionInterface;
 
 /**
  * @package Chamilo\Core\Repository\ContentObject\Hotpotatoes\Storage\DataClass
@@ -58,9 +59,9 @@ class Hotpotatoes extends ContentObject implements Versionable
         return [self::PROPERTY_PATH, self::PROPERTY_MAXIMUM_ATTEMPTS];
     }
 
-    public function getSessionUtilities(): SessionUtilities
+    public function getSession(): SessionInterface
     {
-        return DependencyInjectionContainerBuilder::getInstance()->createContainer()->get(SessionUtilities::class);
+        return DependencyInjectionContainerBuilder::getInstance()->createContainer()->get(SessionInterface::class);
     }
 
     /**
@@ -148,9 +149,8 @@ class Hotpotatoes extends ContentObject implements Versionable
         $systemPathBuilder =
             DependencyInjectionContainerBuilder::getInstance()->createContainer()->get(SystemPathBuilder::class);
 
-        $hotpot_path =
-            $systemPathBuilder->getPublicStoragePath(Hotpotatoes::CONTEXT) . $this->getSessionUtilities()->getUserId() .
-            '/';
+        $hotpot_path = $systemPathBuilder->getPublicStoragePath(Hotpotatoes::CONTEXT) .
+            $this->getSession()->get(Manager::SESSION_USER_IO) . '/';
         $full_path = $hotpot_path . dirname($path_to_zip) . '/';
 
         $dir = $this->getZipArchiveFilecompression()->extractFile($full_path . $zip_file_name);

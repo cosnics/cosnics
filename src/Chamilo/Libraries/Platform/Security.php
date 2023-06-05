@@ -30,10 +30,10 @@ class Security
      */
     public function checkToken(string $tokenType = 'post'): bool
     {
-        $sessionUtilities = $this->getSession();
+        $session = $this->getSession();
         $request = $this->getChamiloRequest();
 
-        $sessionToken = $sessionUtilities->get('sec_token');
+        $sessionToken = $session->get('sec_token');
         $tokenTypeValue = $tokenType;
 
         if ($tokenType == 'get')
@@ -59,11 +59,11 @@ class Security
      */
     public function checkUa(): bool
     {
-        $sessionUtilities = $this->getSession();
+        $session = $this->getSession();
         $request = $this->getChamiloRequest();
 
-        $session_agent = $sessionUtilities->get('sec_ua');
-        $current_agent = $request->server->get('HTTP_USER_AGENT') . $sessionUtilities->get('sec_ua_seed');
+        $session_agent = $session->get('sec_ua');
+        $current_agent = $request->server->get('HTTP_USER_AGENT') . $session->get('sec_ua_seed');
 
         if (isset($session_agent) and $session_agent === $current_agent)
         {
@@ -123,10 +123,10 @@ class Security
      */
     public function getUa()
     {
-        $sessionUtilities = $this->getSession();
-        $sessionUtilities->set('sec_ua_seed', uniqid(rand(), true));
-        $sessionUtilities->set(
-            'sec_ua', $this->getChamiloRequest()->server->get('HTTP_USER_AGENT') . $sessionUtilities->get('sec_ua_seed')
+        $session = $this->getSession();
+        $session->set('sec_ua_seed', uniqid(rand(), true));
+        $session->set(
+            'sec_ua', $this->getChamiloRequest()->server->get('HTTP_USER_AGENT') . $session->get('sec_ua_seed')
         );
     }
 

@@ -54,7 +54,7 @@ class BannerRenderer
     public function render(): string
     {
         $pageConfiguration = $this->getPageConfiguration();
-        $sessionUtilities = $this->getSession();
+        $session = $this->getSession();
         $configurationConsulter = $this->getConfigurationConsulter();
         $translator = $this->getTranslator();
 
@@ -89,7 +89,7 @@ class BannerRenderer
             }
         }
 
-        if (!is_null($sessionUtilities->get('_as_admin')))
+        if (!is_null($session->get('_as_admin')))
         {
             $link = $this->getUrlGenerator()->fromParameters([
                 Application::PARAM_CONTEXT => Manager::CONTEXT,

@@ -76,7 +76,7 @@ class ForumPostForm extends FormValidator
     {
         $calculator = new Calculator(
             DataManager::retrieve_by_id(
-                User::class, $this->getSessionUtilities()->getUserId()
+                User::class, $this->getSession()->get(\Chamilo\Core\User\Manager::SESSION_USER_IO)
             )
         );
 

@@ -272,7 +272,7 @@ abstract class Manager extends \Chamilo\Core\Repository\Display\Manager
     {
         $studentViewSessionVariable = $this->getStudentViewSessionVariable();
 
-        return $this->getSessionUtilities()->get($studentViewSessionVariable) == 1;
+        return $this->getSession()->get($studentViewSessionVariable) == 1;
     }
 
     /**

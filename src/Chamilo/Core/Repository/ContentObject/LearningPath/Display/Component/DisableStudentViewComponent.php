@@ -15,14 +15,14 @@ class DisableStudentViewComponent extends Manager
     public function run()
     {
         $sessionVariable = $this->getStudentViewSessionVariable();
-        $sessionValue = $this->getSessionUtilities()->get($sessionVariable);
+        $sessionValue = $this->getSession()->get($sessionVariable);
 
         if (empty($sessionValue))
         {
             throw new NotAllowedException();
         }
 
-        $this->getSessionUtilities()->unregister($sessionVariable);
+        $this->getSession()->remove($sessionVariable);
 
         $this->redirectWithMessage('', false, [self::PARAM_ACTION => self::ACTION_VIEW_COMPLEX_CONTENT_OBJECT]);
     }

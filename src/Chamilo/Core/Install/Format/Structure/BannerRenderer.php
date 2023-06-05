@@ -8,8 +8,8 @@ use Chamilo\Libraries\File\WebPathBuilder;
 use Chamilo\Libraries\Format\Structure\BreadcrumbTrailRenderer;
 use Chamilo\Libraries\Format\Structure\PageConfiguration;
 use Chamilo\Libraries\Format\Theme\ThemePathBuilder;
-use Chamilo\Libraries\Platform\Session\SessionUtilities;
 use Chamilo\Libraries\Utilities\StringUtilities;
+use Symfony\Component\HttpFoundation\Session\SessionInterface;
 use Symfony\Component\Translation\Translator;
 
 /**
@@ -25,7 +25,7 @@ class BannerRenderer extends \Chamilo\Libraries\Format\Structure\BannerRenderer
     private WebPathBuilder $webPathBuilder;
 
     public function __construct(
-        PageConfiguration $pageConfiguration, SessionUtilities $session, Translator $translator,
+        PageConfiguration $pageConfiguration, SessionInterface $session, Translator $translator,
         ConfigurationConsulter $configurationConsulter, UrlGenerator $urlGenerator, MenuRenderer $menuRenderer,
         BreadcrumbTrailRenderer $breadcrumbTrailRenderer, ThemePathBuilder $themeWebPathBuilder,
         WebPathBuilder $webPathBuilder

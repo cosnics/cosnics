@@ -12,9 +12,9 @@ use Chamilo\Core\Repository\ContentObject\Section\Storage\DataClass\Section;
 use Chamilo\Core\Repository\Selector\TypeSelector;
 use Chamilo\Core\Repository\Selector\TypeSelectorFactory;
 use Chamilo\Libraries\DependencyInjection\DependencyInjectionContainerBuilder;
-use Chamilo\Libraries\Platform\Session\SessionUtilities;
 use Chamilo\Libraries\Translation\Translation;
 use Chamilo\Libraries\Utilities\StringUtilities;
+use Symfony\Component\HttpFoundation\Session\SessionInterface;
 
 /**
  * Generates the actions for a given TreeNode
@@ -195,7 +195,8 @@ class NodeBaseActionGenerator extends NodeActionGenerator
             /** @var LearningPath $learningPath */
             $learningPath = $treeNode->getTree()->getRoot()->getContentObject();
             $typeSelectorFactory = new TypeSelectorFactory(
-                $learningPath->get_allowed_types(), $this->getSessionUtilities()->getUserId(),
+                $learningPath->get_allowed_types(),
+                $this->getSession()->get(\Chamilo\Core\User\Manager::SESSION_USER_IO),
                 TypeSelectorFactory::MODE_FLAT_LIST, false
             );
 
@@ -377,9 +378,9 @@ class NodeBaseActionGenerator extends NodeActionGenerator
         return [];
     }
 
-    public function getSessionUtilities(): SessionUtilities
+    public function getSession(): SessionInterface
     {
-        return DependencyInjectionContainerBuilder::getInstance()->createContainer()->get(SessionUtilities::class);
+        return DependencyInjectionContainerBuilder::getInstance()->createContainer()->get(SessionInterface::class);
     }
 
     /**

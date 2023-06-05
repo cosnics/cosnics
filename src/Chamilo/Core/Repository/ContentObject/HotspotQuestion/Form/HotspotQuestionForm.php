@@ -45,7 +45,7 @@ class HotspotQuestionForm extends ContentObjectForm
     {
         $calculator = new Calculator(
             DataManager::retrieve_by_id(
-                User::class, (int) $this->getSessionUtilities()->getUserId()
+                User::class, (int) $this->getSession()->get(\Chamilo\Core\User\Manager::SESSION_USER_IO)
             )
         );
 

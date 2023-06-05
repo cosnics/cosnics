@@ -5,17 +5,17 @@ use Chamilo\Core\Repository\ContentObject\RssFeed\Storage\DataClass\RssFeed;
 use Chamilo\Core\Repository\Storage\DataClass\ContentObject;
 use Chamilo\Core\Repository\Storage\DataManager;
 use Chamilo\Libraries\DependencyInjection\DependencyInjectionContainerBuilder;
-use Chamilo\Libraries\Platform\Session\SessionUtilities;
 use Chamilo\Libraries\Storage\Query\Condition\EqualityCondition;
 use Chamilo\Libraries\Storage\Query\Variable\PropertyConditionVariable;
 use Chamilo\Libraries\Storage\Query\Variable\StaticConditionVariable;
 use Chamilo\Libraries\Translation\Translation;
+use Symfony\Component\HttpFoundation\Session\SessionInterface;
 
 class Connector
 {
-    public function getSessionUtilities(): SessionUtilities
+    public function getSession(): SessionInterface
     {
-        return DependencyInjectionContainerBuilder::getInstance()->createContainer()->get(SessionUtilities::class);
+        return DependencyInjectionContainerBuilder::getInstance()->createContainer()->get(SessionInterface::class);
     }
 
     public function get_rss_feed_objects()
@@ -24,7 +24,7 @@ class Connector
 
         $condition = new EqualityCondition(
             new PropertyConditionVariable(ContentObject::class, ContentObject::PROPERTY_OWNER_ID),
-            new StaticConditionVariable($this->getSessionUtilities()->getUserId())
+            new StaticConditionVariable($this->getSession()->get(\Chamilo\Core\User\Manager::SESSION_USER_IO))
         );
 
         $objects = DataManager::retrieve_active_content_objects(

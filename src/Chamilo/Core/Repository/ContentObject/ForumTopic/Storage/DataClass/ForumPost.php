@@ -4,12 +4,13 @@ namespace Chamilo\Core\Repository\ContentObject\ForumTopic\Storage\DataClass;
 use Chamilo\Core\Repository\ContentObject\Forum\EmailNotification\PostEmailNotificator;
 use Chamilo\Core\Repository\ContentObject\ForumTopic\Storage\DataManager;
 use Chamilo\Core\Repository\Storage\DataClass\ContentObject;
+use Chamilo\Core\User\Manager;
 use Chamilo\Core\User\Storage\DataClass\User;
 use Chamilo\Libraries\Architecture\Interfaces\AttachmentSupport;
 use Chamilo\Libraries\DependencyInjection\DependencyInjectionContainerBuilder;
-use Chamilo\Libraries\Platform\Session\SessionUtilities;
 use Chamilo\Libraries\Storage\DataClass\DataClass;
 use Chamilo\Libraries\Translation\Translation;
+use Symfony\Component\HttpFoundation\Session\SessionInterface;
 
 /**
  * Describes a Forum post.
@@ -113,7 +114,7 @@ class ForumPost extends DataClass implements AttachmentSupport
 
             $email_notificator->set_action_user(
                 \Chamilo\Core\User\Storage\DataManager::retrieve_by_id(
-                    User::class, (int) $this->getSessionUtilities()->getUserId()
+                    User::class, (int) $this->getSession()->get(Manager::SESSION_USER_IO)
                 )
             );
             $succes = parent::create($this);
@@ -212,9 +213,9 @@ class ForumPost extends DataClass implements AttachmentSupport
         );
     }
 
-    public function getSessionUtilities(): SessionUtilities
+    public function getSession(): SessionInterface
     {
-        return DependencyInjectionContainerBuilder::getInstance()->createContainer()->get(SessionUtilities::class);
+        return DependencyInjectionContainerBuilder::getInstance()->createContainer()->get(SessionInterface::class);
     }
 
     /**
@@ -446,7 +447,7 @@ class ForumPost extends DataClass implements AttachmentSupport
             $email_notificator->set_post($this);
             $email_notificator->set_action_user(
                 \Chamilo\Core\User\Storage\DataManager::retrieve_by_id(
-                    User::class, (int) $this->getSessionUtilities()->getUserId()
+                    User::class, (int) $this->getSession()->get(Manager::SESSION_USER_IO)
                 )
             );
 
