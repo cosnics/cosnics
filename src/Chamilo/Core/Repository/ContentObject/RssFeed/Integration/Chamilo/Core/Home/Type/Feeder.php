@@ -1,10 +1,10 @@
 <?php
 namespace Chamilo\Core\Repository\ContentObject\RssFeed\Integration\Chamilo\Core\Home\Type;
 
-use Chamilo\Core\Home\Architecture\ConfigurableInterface;
-use Chamilo\Core\Home\Architecture\ContentObjectPublicationBlockInterface;
-use Chamilo\Core\Home\Interfaces\AnonymousBlockRendererInterface;
-use Chamilo\Core\Home\Interfaces\StaticBlockTitleInterface;
+use Chamilo\Core\Home\Architecture\Interfaces\AnonymousBlockInterface;
+use Chamilo\Core\Home\Architecture\Interfaces\ConfigurableBlockInterface;
+use Chamilo\Core\Home\Architecture\Interfaces\ContentObjectPublicationBlockInterface;
+use Chamilo\Core\Home\Architecture\Interfaces\StaticBlockTitleInterface;
 use Chamilo\Core\Home\Service\HomeService;
 use Chamilo\Core\Repository\Service\Home\BlockRenderer;
 use Chamilo\Libraries\Format\Structure\Glyph\IdentGlyph;
@@ -12,8 +12,8 @@ use Chamilo\Libraries\Format\Structure\Glyph\NamespaceIdentGlyph;
 use Chamilo\Libraries\Translation\Translation;
 
 class Feeder extends BlockRenderer
-    implements ConfigurableInterface, StaticBlockTitleInterface, ContentObjectPublicationBlockInterface,
-    AnonymousBlockRendererInterface
+    implements ConfigurableBlockInterface, StaticBlockTitleInterface, ContentObjectPublicationBlockInterface,
+    AnonymousBlockInterface
 {
 
     public function __construct(HomeService $homeService, $defaultTitle = '')
@@ -26,7 +26,7 @@ class Feeder extends BlockRenderer
      *
      * @return string
      */
-    public function displayContent()
+    public function displayRepositoryContent(): string
     {
         if ($this->getSource() == self::SOURCE_AJAX)
         {

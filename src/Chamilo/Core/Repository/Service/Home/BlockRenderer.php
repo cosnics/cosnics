@@ -6,8 +6,6 @@ use Chamilo\Core\Home\Repository\ContentObjectPublicationRepository;
 use Chamilo\Core\Home\Service\ContentObjectPublicationService;
 use Chamilo\Core\Home\Service\HomeService;
 use Chamilo\Core\Home\Storage\DataClass\ContentObjectPublication;
-use Chamilo\Core\Repository\Common\Rendition\ContentObjectRendition;
-use Chamilo\Core\Repository\Common\Rendition\ContentObjectRenditionImplementation;
 use Chamilo\Core\Repository\Publication\Storage\Repository\PublicationRepository;
 use Chamilo\Core\Repository\Storage\DataClass\ContentObject;
 use Chamilo\Libraries\Translation\Translation;
@@ -47,18 +45,9 @@ class BlockRenderer extends \Chamilo\Core\Home\Renderer\BlockRenderer
         );
     }
 
-    /**
-     * Returns the html to display when the block is configured.
-     *
-     * @return string
-     */
-    public function displayContent()
+    public function displayContent(): string
     {
-        $content_object = $this->getObject();
-
-        return ContentObjectRenditionImplementation::launch(
-            $content_object, ContentObjectRendition::FORMAT_HTML, ContentObjectRendition::VIEW_DESCRIPTION, $this
-        );
+        return $this->isConfigured() ? $this->displayRepositoryContent() : $this->displayEmpty();
     }
 
     /**
@@ -66,13 +55,15 @@ class BlockRenderer extends \Chamilo\Core\Home\Renderer\BlockRenderer
      *
      * @return string
      */
-    public function displayEmpty()
+    public function displayEmpty(): string
     {
         return Translation::get('ConfigureBlockFirst', null, Manager::CONTEXT);
     }
 
+    abstract public function displayRepositoryContent(): string;
+
     /**
-     * @see \Chamilo\Core\Home\Architecture\ConfigurableInterface::getConfigurationVariables()
+     * @see \Chamilo\Core\Home\Architecture\Interfaces\ConfigurableBlockInterface::getConfigurationVariables()
      */
     public function getConfigurationVariables()
     {
@@ -167,6 +158,11 @@ class BlockRenderer extends \Chamilo\Core\Home\Renderer\BlockRenderer
         return empty($content_object) ? $this->getDefaultTitle() : $content_object->get_title();
     }
 
+    // BASIC TEMPLATING FUNCTIONS.
+
+    // @TODO: remove that when we move to a templating system
+    // @NOTE: could be more efficient to do an include or eval
+
     /**
      * Constructs the attachment url for the given attachment and the current object.
      *
@@ -176,25 +172,8 @@ class BlockRenderer extends \Chamilo\Core\Home\Renderer\BlockRenderer
      */
     public function get_content_object_display_attachment_url($attachment)
     {
-        if (!$this->isViewAttachmentAllowed($this->getObject()))
-        {
-            return null;
-        }
-
-        return $this->getUrl(
-            [
-                Manager::PARAM_CONTEXT => Manager::CONTEXT,
-                Manager::PARAM_ACTION => Manager::ACTION_VIEW_ATTACHMENT,
-                Manager::PARAM_PARENT_ID => $this->getObject()->get_id(),
-                Manager::PARAM_OBJECT_ID => $attachment->get_id()
-            ]
-        );
+        return null;
     }
-
-    // BASIC TEMPLATING FUNCTIONS.
-
-    // @TODO: remove that when we move to a templating system
-    // @NOTE: could be more efficient to do an include or eval
 
     /**
      * Return true if the block is linked to an object.
@@ -230,18 +209,4 @@ class BlockRenderer extends \Chamilo\Core\Home\Renderer\BlockRenderer
         $this->defaultTitle = $value;
     }
 
-    public function toHtml($view = '')
-    {
-        if (!$this->isVisible())
-        {
-            return '';
-        }
-
-        $html = [];
-        $html[] = $this->renderHeader();
-        $html[] = $this->isConfigured() ? $this->displayContent() : $this->displayEmpty();
-        $html[] = $this->renderFooter();
-
-        return implode(PHP_EOL, $html);
-    }
 }

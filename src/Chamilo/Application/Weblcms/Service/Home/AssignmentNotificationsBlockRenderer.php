@@ -5,8 +5,8 @@ use Chamilo\Application\Weblcms\CourseType\Storage\DataClass\CourseType;
 use Chamilo\Application\Weblcms\CourseType\Storage\DataManager as CourseTypeDataManager;
 use Chamilo\Application\Weblcms\Storage\DataClass\CourseUserCategory;
 use Chamilo\Application\Weblcms\Storage\DataManager;
-use Chamilo\Core\Home\Architecture\ConfigurableInterface;
-use Chamilo\Core\Home\Interfaces\StaticBlockTitleInterface;
+use Chamilo\Core\Home\Architecture\Interfaces\ConfigurableBlockInterface;
+use Chamilo\Core\Home\Architecture\Interfaces\StaticBlockTitleInterface;
 use Chamilo\Core\Notification\Manager;
 use Chamilo\Core\Notification\Service\NotificationManager;
 use Chamilo\Libraries\Architecture\Application\Application;
@@ -17,7 +17,7 @@ use Chamilo\Libraries\Translation\Translation;
  * @author  Sven Vanpoucke - Hogeschool Gent
  */
 class AssignmentNotificationsBlockRenderer extends BlockRenderer
-    implements ConfigurableInterface, StaticBlockTitleInterface
+    implements ConfigurableBlockInterface, StaticBlockTitleInterface
 {
     public const CONFIGURATION_COURSE_TYPE = 'course_type';
 
@@ -81,7 +81,7 @@ class AssignmentNotificationsBlockRenderer extends BlockRenderer
     }
 
     /**
-     * @see \Chamilo\Core\Home\Architecture\ConfigurableInterface::getConfigurationVariables()
+     * @see \Chamilo\Core\Home\Architecture\Interfaces\ConfigurableBlockInterface::getConfigurationVariables()
      */
     public function getConfigurationVariables()
     {

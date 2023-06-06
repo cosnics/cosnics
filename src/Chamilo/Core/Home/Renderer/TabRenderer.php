@@ -26,7 +26,7 @@ class TabRenderer
     }
 
     public function render(
-        Tab $tab, int $tabKey, ?int $currentTabIdentifier = null, ?User $user = null
+        Tab $tab, int $tabKey, ?int $currentTabIdentifier = null, bool $isGeneralMode = false, ?User $user = null
     ): string
     {
         $columnRenderer = $this->getColumnRenderer();
@@ -44,7 +44,7 @@ class TabRenderer
 
         foreach ($columns as $column)
         {
-            $html[] = $columnRenderer->render($column, $user);
+            $html[] = $columnRenderer->render($column, $isGeneralMode, $user);
         }
 
         $html[] = '</div>';

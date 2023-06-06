@@ -4,8 +4,8 @@ namespace Chamilo\Application\Calendar\Service\Home;
 use Chamilo\Application\Calendar\Ajax\Manager;
 use Chamilo\Application\Calendar\Repository\CalendarRendererProviderRepository;
 use Chamilo\Application\Calendar\Service\CalendarRendererProvider;
-use Chamilo\Core\Home\Architecture\ConfigurableInterface;
-use Chamilo\Core\Home\Interfaces\StaticBlockTitleInterface;
+use Chamilo\Core\Home\Architecture\Interfaces\ConfigurableBlockInterface;
+use Chamilo\Core\Home\Architecture\Interfaces\StaticBlockTitleInterface;
 use Chamilo\Core\Home\Renderer\BlockRenderer;
 use Chamilo\Libraries\Calendar\Service\LegendRenderer;
 use Chamilo\Libraries\Calendar\Service\View\MiniDayCalendarRenderer;
@@ -17,7 +17,7 @@ use Chamilo\Libraries\Platform\Session\Request;
  * @author  Magali Gillard <magali.gillard@ehb.be>
  * @author  Eduard Vossen <eduard.vossen@ehb.be>
  */
-class DayBlockRenderer extends BlockRenderer implements ConfigurableInterface, StaticBlockTitleInterface
+class DayBlockRenderer extends BlockRenderer implements ConfigurableBlockInterface, StaticBlockTitleInterface
 {
     public const CONFIGURATION_HOUR_STEP = 'hour_step';
     public const CONFIGURATION_TIME_END = 'time_end';
@@ -62,7 +62,7 @@ class DayBlockRenderer extends BlockRenderer implements ConfigurableInterface, S
     }
 
     /**
-     * @see \Chamilo\Core\Home\Architecture\ConfigurableInterface::getConfigurationVariables()
+     * @see \Chamilo\Core\Home\Architecture\Interfaces\ConfigurableBlockInterface::getConfigurationVariables()
      */
     public function getConfigurationVariables()
     {

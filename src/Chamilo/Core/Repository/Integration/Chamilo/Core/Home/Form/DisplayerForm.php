@@ -7,7 +7,7 @@ use Chamilo\Core\Home\Service\ContentObjectPublicationService;
 use Chamilo\Core\Home\Storage\DataClass\Block;
 use Chamilo\Core\Repository\Publication\Storage\Repository\PublicationRepository;
 use Chamilo\Core\Repository\Service\Home\Connector;
-use Chamilo\Core\Repository\Service\Home\DisplayerBlockRenderer;
+use Chamilo\Core\Repository\Service\Home\DisplayerBlock;
 use Chamilo\Libraries\Translation\Translation;
 
 class DisplayerForm extends ConfigurationForm
@@ -42,7 +42,7 @@ class DisplayerForm extends ConfigurationForm
         
         $this->addElement(
             'select', 
-            DisplayerBlockRenderer::CONFIGURATION_OBJECT_ID,
+            DisplayerBlock::CONFIGURATION_OBJECT_ID,
             Translation::get('UseObject'), 
             $connector->getDisplayerObjects());
     }
@@ -56,7 +56,7 @@ class DisplayerForm extends ConfigurationForm
         
         if ($contentObjectPublication)
         {
-            $defaults[DisplayerBlockRenderer::CONFIGURATION_OBJECT_ID] = $contentObjectPublication->get_content_object_id();
+            $defaults[DisplayerBlock::CONFIGURATION_OBJECT_ID] = $contentObjectPublication->get_content_object_id();
         }
         
         parent::setDefaults($defaults, $filter);

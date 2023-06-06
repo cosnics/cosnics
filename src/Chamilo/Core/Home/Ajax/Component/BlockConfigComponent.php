@@ -2,8 +2,8 @@
 namespace Chamilo\Core\Home\Ajax\Component;
 
 use Chamilo\Core\Home\Ajax\Manager;
-use Chamilo\Core\Home\Architecture\ConfigurableInterface;
-use Chamilo\Core\Home\Architecture\ContentObjectPublicationBlockInterface;
+use Chamilo\Core\Home\Architecture\Interfaces\ConfigurableBlockInterface;
+use Chamilo\Core\Home\Architecture\Interfaces\ContentObjectPublicationBlockInterface;
 use Chamilo\Core\Home\Renderer\BlockRendererFactory;
 use Chamilo\Core\Home\Repository\ContentObjectPublicationRepository;
 use Chamilo\Core\Home\Repository\HomeRepository;
@@ -74,10 +74,10 @@ class BlockConfigComponent extends Manager
             $contentObjectPublicationService = new ContentObjectPublicationService(
                 new ContentObjectPublicationRepository(new PublicationRepository()));
             
-            if ($blockRenderer instanceof ConfigurableInterface ||
+            if ($blockRenderer instanceof ConfigurableBlockInterface ||
                  $blockRenderer instanceof ContentObjectPublicationBlockInterface)
             {
-                if ($blockRenderer instanceof ConfigurableInterface)
+                if ($blockRenderer instanceof ConfigurableBlockInterface)
                 {
                     foreach ($blockRenderer->getConfigurationVariables() as $configurationVariable)
                     {

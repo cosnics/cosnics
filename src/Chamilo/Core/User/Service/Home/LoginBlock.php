@@ -2,7 +2,8 @@
 namespace Chamilo\Core\User\Service\Home;
 
 use Chamilo\Configuration\Configuration;
-use Chamilo\Core\Home\Interfaces\AnonymousBlockRendererInterface;
+use Chamilo\Core\Home\Architecture\Interfaces\AnonymousBlockInterface;
+use Chamilo\Core\Home\Architecture\Interfaces\ReadOnlyBlockInterface;
 use Chamilo\Core\Home\Renderer\BlockRenderer;
 use Chamilo\Core\User\Manager;
 use Chamilo\Core\User\Storage\DataClass\User;
@@ -13,7 +14,7 @@ use Chamilo\Libraries\Format\Structure\Glyph\FontAwesomeGlyph;
 use Chamilo\Libraries\Translation\Translation;
 use Chamilo\Libraries\Utilities\StringUtilities;
 
-class LoginBlockRenderer extends BlockRenderer implements AnonymousBlockRendererInterface
+class LoginBlock extends BlockRenderer implements AnonymousBlockInterface, ReadOnlyBlockInterface
 {
 
     public function displayContent()
@@ -154,20 +155,5 @@ class LoginBlockRenderer extends BlockRenderer implements AnonymousBlockRenderer
         $form->addGroup($buttons, 'buttons', null, '&nbsp;', false);
 
         return $form->toHtml();
-    }
-
-    public function isDeletable()
-    {
-        return false;
-    }
-
-    public function isEditable()
-    {
-        return false;
-    }
-
-    public function isHidable()
-    {
-        return false;
     }
 }

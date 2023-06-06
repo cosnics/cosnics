@@ -1,7 +1,7 @@
 <?php
 namespace Chamilo\Core\Home\Renderer;
 
-use Chamilo\Core\Home\Interfaces\AnonymousBlockRendererInterface;
+use Chamilo\Core\Home\Architecture\Interfaces\AnonymousBlockInterface;
 use Chamilo\Core\Home\Manager;
 use Chamilo\Core\Home\Service\HomeService;
 use Chamilo\Core\Home\Storage\DataClass\Block;
@@ -34,7 +34,7 @@ class ColumnRenderer
         $this->blockRendererFactory = $blockRendererFactory;
     }
 
-    public function render(Column $column, ?User $user = null): string
+    public function render(Column $column, bool $isGeneralMode = false, ?User $user = null): string
     {
         $html = [];
 
@@ -49,10 +49,10 @@ class ColumnRenderer
         foreach ($blocks as $block)
         {
             $blockRenderer = $this->getBlockRendererFactory()->getRenderer($block);
-            
-            if ($blockRenderer instanceof AnonymousBlockRendererInterface || $blockRenderer->isVisible($user))
+
+            if ($blockRenderer instanceof AnonymousBlockInterface || $blockRenderer->isVisible($user))
             {
-                $html[] = $blockRenderer->toHtml();
+                $html[] = $blockRenderer->render($block, $isGeneralMode, $user);
             }
         }
 

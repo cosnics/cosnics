@@ -100,7 +100,7 @@ class HomeRenderer
         }
 
         $html[] = $this->renderPackageContainer();
-        $html[] = $this->renderContent($currentTabIdentifier, $user);
+        $html[] = $this->renderContent($currentTabIdentifier, $isGeneralMode, $user);
 
         $html[] =
             '<script src="' . $webPathBuilder->getJavascriptPath('Chamilo\Core\Home') . 'HomeView.js' . '"></script>';
@@ -252,7 +252,7 @@ class HomeRenderer
         return implode(PHP_EOL, $html);
     }
 
-    public function renderContent(?int $currentTabIdentifier = null, ?User $user = null): string
+    public function renderContent(?int $currentTabIdentifier = null,bool $isGeneralMode = false, ?User $user = null): string
     {
         $angularConnectorService = $this->getAngularConnectorService();
         $tabRenderer = $this->getTabRenderer();
@@ -277,7 +277,7 @@ class HomeRenderer
 
         foreach ($tabs as $tabKey => $tab)
         {
-            $html[] = $tabRenderer->render($tab, $tabKey, $currentTabIdentifier, $user);
+            $html[] = $tabRenderer->render($tab, $tabKey, $currentTabIdentifier, $isGeneralMode, $user);
         }
 
         $html[] = '</div>';

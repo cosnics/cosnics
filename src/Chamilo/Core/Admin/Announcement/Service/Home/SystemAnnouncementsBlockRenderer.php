@@ -4,7 +4,7 @@ namespace Chamilo\Core\Admin\Announcement\Service\Home;
 use Chamilo\Core\Admin\Announcement\Manager;
 use Chamilo\Core\Admin\Announcement\Service\PublicationService;
 use Chamilo\Core\Admin\Announcement\Storage\DataClass\Publication;
-use Chamilo\Core\Home\Architecture\ConfigurableInterface;
+use Chamilo\Core\Home\Architecture\Interfaces\ConfigurableBlockInterface;
 use Chamilo\Core\Home\Renderer\BlockRenderer;
 use Chamilo\Core\Repository\Storage\DataClass\ContentObject;
 use Chamilo\Core\Repository\Storage\DataManager;
@@ -15,7 +15,7 @@ use Chamilo\Libraries\DependencyInjection\DependencyInjectionContainerBuilder;
 use Chamilo\Libraries\Format\Structure\Glyph\IdentGlyph;
 use Chamilo\Libraries\Translation\Translation;
 
-class SystemAnnouncementsBlockRenderer extends BlockRenderer implements ConfigurableInterface
+class SystemAnnouncementsBlockRenderer extends BlockRenderer implements ConfigurableBlockInterface
 {
     public const CONFIGURATION_SHOW_EMPTY = 'show_when_empty';
 
@@ -57,7 +57,7 @@ class SystemAnnouncementsBlockRenderer extends BlockRenderer implements Configur
     }
 
     /**
-     * @see \Chamilo\Core\Home\Architecture\ConfigurableInterface::getConfigurationVariables()
+     * @see \Chamilo\Core\Home\Architecture\Interfaces\ConfigurableBlockInterface::getConfigurationVariables()
      */
     public function getConfigurationVariables()
     {

@@ -4,7 +4,7 @@ namespace Chamilo\Application\Weblcms\Service\Home;
 use Chamilo\Application\Weblcms\Course\Storage\DataClass\Course;
 use Chamilo\Application\Weblcms\Storage\DataClass\ContentObjectPublication;
 use Chamilo\Application\Weblcms\Tool\Manager;
-use Chamilo\Core\Home\Architecture\ConfigurableInterface;
+use Chamilo\Core\Home\Architecture\Interfaces\ConfigurableBlockInterface;
 use Chamilo\Core\Repository\ContentObject\Announcement\Storage\DataClass\Announcement;
 use Chamilo\Libraries\Architecture\Application\Application;
 use Chamilo\Libraries\Translation\Translation;
@@ -15,7 +15,7 @@ use Chamilo\Libraries\Translation\Translation;
  * @author  Magali Gillard <magali.gillard@ehb.be>
  * @author  Eduard Vossen <eduard.vossen@ehb.be>
  */
-class NewAnnouncementsBlockRenderer extends NewBlockRenderer implements ConfigurableInterface
+class NewAnnouncementsBlockRenderer extends NewBlockRenderer implements ConfigurableBlockInterface
 {
     public const CONFIGURATION_SHOW_CONTENT = 'show_content';
 
@@ -48,7 +48,7 @@ class NewAnnouncementsBlockRenderer extends NewBlockRenderer implements Configur
     }
 
     /**
-     * @see \Chamilo\Core\Home\Architecture\ConfigurableInterface::getConfigurationVariables()
+     * @see \Chamilo\Core\Home\Architecture\Interfaces\ConfigurableBlockInterface::getConfigurationVariables()
      */
     public function getConfigurationVariables()
     {

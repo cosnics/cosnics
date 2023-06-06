@@ -10,8 +10,8 @@ use Chamilo\Application\Weblcms\Service\CourseService;
 use Chamilo\Application\Weblcms\Service\CourseUserCategoryService;
 use Chamilo\Application\Weblcms\Storage\DataClass\CourseUserCategory;
 use Chamilo\Application\Weblcms\Storage\DataManager;
-use Chamilo\Core\Home\Architecture\ConfigurableInterface;
-use Chamilo\Core\Home\Interfaces\StaticBlockTitleInterface;
+use Chamilo\Core\Home\Architecture\Interfaces\ConfigurableBlockInterface;
+use Chamilo\Core\Home\Architecture\Interfaces\StaticBlockTitleInterface;
 use Chamilo\Libraries\Architecture\Application\Application;
 use Chamilo\Libraries\Translation\Translation;
 
@@ -20,7 +20,7 @@ use Chamilo\Libraries\Translation\Translation;
  *
  * @author Sven Vanpoucke - Hogeschool Gent
  */
-class FilteredCourseListBlockRenderer extends BlockRenderer implements ConfigurableInterface, StaticBlockTitleInterface
+class FilteredCourseListBlockRenderer extends BlockRenderer implements ConfigurableBlockInterface, StaticBlockTitleInterface
 {
     public const CONFIGURATION_COURSE_TYPE = 'course_type';
 
@@ -75,7 +75,7 @@ class FilteredCourseListBlockRenderer extends BlockRenderer implements Configura
     }
 
     /**
-     * @see \Chamilo\Core\Home\Architecture\ConfigurableInterface::getConfigurationVariables()
+     * @see \Chamilo\Core\Home\Architecture\Interfaces\ConfigurableBlockInterface::getConfigurationVariables()
      */
     public function getConfigurationVariables()
     {
