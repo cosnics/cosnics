@@ -111,7 +111,7 @@ class DataManager extends \Chamilo\Libraries\Storage\DataManager\DataManager
     {
         $session = DependencyInjectionContainerBuilder::getInstance()->createContainer()->get(SessionInterface::class);
 
-        return self::retrieve_by_id(User::class, $session->get(Manager::SESSION_USER_IO));
+        return self::retrieve_by_id(User::class, $session->get(Manager::SESSION_USER_ID));
     }
 
     /**

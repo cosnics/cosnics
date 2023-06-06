@@ -41,7 +41,7 @@ class ResetPasswordComponent extends Manager implements NoAuthenticationSupport
      */
     public function run()
     {
-        $user_id = $this->getSession()->get(Manager::SESSION_USER_IO);
+        $user_id = $this->getSession()->get(Manager::SESSION_USER_ID);
         $allow_password_retrieval = Configuration::getInstance()->get_setting(
             [Manager::CONTEXT, 'allow_password_retrieval']
         );

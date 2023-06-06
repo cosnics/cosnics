@@ -136,10 +136,10 @@ class FooterRenderer extends AbstractFooterRenderer
                 $configurationConsulter->getSetting(['Chamilo\Core\Admin', 'version']);
         }
 
-        if ($this->getSession()->has(\Chamilo\Core\User\Manager::SESSION_USER_IO))
+        if ($this->getSession()->has(\Chamilo\Core\User\Manager::SESSION_USER_ID))
         {
             $user = new User();
-            $user->setId($this->getSession()->get(\Chamilo\Core\User\Manager::SESSION_USER_IO));
+            $user->setId($this->getSession()->get(\Chamilo\Core\User\Manager::SESSION_USER_ID));
             $whoisOnlineAuthorized = $this->getAuthorizationChecker()->isAuthorized(
                 $user, 'Chamilo\Core\Admin', 'ViewWhoisOnline'
             );

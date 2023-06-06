@@ -120,7 +120,7 @@ class ComplexHotpotatoes extends ComplexContentObjectItem
         array_pop($file_name_parts);
         $file_name = implode(' ', $file_name_parts);
 
-        $this->set_owner_id($this->getSession()->get(Manager::SESSION_USER_IO));
+        $this->set_owner_id($this->getSession()->get(Manager::SESSION_USER_ID));
         $this->set_title($file_name);
         $this->set_description($file_name);
 
@@ -131,7 +131,7 @@ class ComplexHotpotatoes extends ComplexContentObjectItem
             DependencyInjectionContainerBuilder::getInstance()->createContainer()->get(SystemPathBuilder::class);
 
         $hotpot_path = $systemPathBuilder->getPublicStoragePath(Hotpotatoes::CONTEXT) .
-            $this->getSession()->get(Manager::SESSION_USER_IO) . '/';
+            $this->getSession()->get(Manager::SESSION_USER_ID) . '/';
         $full_path = $hotpot_path . dirname($path_to_zip) . '/';
 
         $dir = $this->getZipArchiveFilecompression()->extractFile($full_path . $zip_file_name);

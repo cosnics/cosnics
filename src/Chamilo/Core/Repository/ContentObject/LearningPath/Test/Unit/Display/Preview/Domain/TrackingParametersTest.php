@@ -53,7 +53,7 @@ class TrackingParametersTest extends ChamiloTestCase
         $learningPath = new LearningPath();
         $trackingParameters = new TrackingParameters();
 
-        $this->getSession()->set(Manager::SESSION_USER_IO, 2);
+        $this->getSession()->set(Manager::SESSION_USER_ID, 2);
 
         $this->assertEquals(
             [2], $trackingParameters->getLearningPathTargetUserIds($learningPath)

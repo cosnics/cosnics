@@ -70,7 +70,7 @@ abstract class ContentObjectInstaller extends Installer
                 User::class, new DataClassRetrievesParameters($condition)
             )->current();
 
-            $this->getSession()->set(Manager::SESSION_USER_IO, $user->get_id());
+            $this->getSession()->set(Manager::SESSION_USER_ID, $user->get_id());
 
             $parameters = ImportParameters::factory(
                 ContentObjectImport::FORMAT_CPO, $user->get_id(), 0, FileProperties::from_path($examplePath)
@@ -78,7 +78,7 @@ abstract class ContentObjectInstaller extends Installer
             $import = ContentObjectImportController::factory($parameters);
             $import->run();
 
-            $this->getSession()->remove(Manager::SESSION_USER_IO);
+            $this->getSession()->remove(Manager::SESSION_USER_ID);
 
             if ($import->has_messages(ContentObjectImportController::TYPE_ERROR))
             {

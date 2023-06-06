@@ -315,7 +315,7 @@ class DataManager extends \Chamilo\Libraries\Storage\DataManager\DataManager
         );
         $conditions[] = new EqualityCondition(
             new PropertyConditionVariable(ContentObject::class, ContentObject::PROPERTY_OWNER_ID),
-            new StaticConditionVariable($session->get(\Chamilo\Core\User\Manager::SESSION_USER_IO))
+            new StaticConditionVariable($session->get(\Chamilo\Core\User\Manager::SESSION_USER_ID))
         );
         $conditions[] = new InCondition(
             new PropertyConditionVariable(ContentObject::class, ContentObject::PROPERTY_TYPE),

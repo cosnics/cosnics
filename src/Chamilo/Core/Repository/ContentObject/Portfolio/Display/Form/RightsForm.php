@@ -291,7 +291,7 @@ class RightsForm extends FormValidator
                 {
 
                     if ($selected_entity->get_entity_type() == 1 &&
-                        $selected_entity->get_entity_id() == $this->getSession()->get(Manager::SESSION_USER_IO))
+                        $selected_entity->get_entity_id() == $this->getSession()->get(Manager::SESSION_USER_ID))
                     {
                         $defaults[self::PROPERTY_RIGHT_OPTION . '_' . $right_id] = self::RIGHT_OPTION_ME;
                         continue;

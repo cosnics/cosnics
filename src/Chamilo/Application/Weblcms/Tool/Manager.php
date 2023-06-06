@@ -696,7 +696,7 @@ abstract class Manager extends Application
                 return false;
             }
             // add check for student view/login as
-            $id = $this->getSession()->get(\Chamilo\Core\User\Manager::SESSION_USER_IO);
+            $id = $this->getSession()->get(\Chamilo\Core\User\Manager::SESSION_USER_ID);
             $va_id = $this->getSession()->get(self::PARAM_VIEW_AS_ID);
             $course_id = $this->getSession()->get(self::PARAM_VIEW_AS_COURSE_ID);
 

@@ -74,7 +74,7 @@ class UserFactory
 
     public function getUser(): ?User
     {
-        $userIdentifier = $this->getSession()->get(Manager::SESSION_USER_IO);
+        $userIdentifier = $this->getSession()->get(Manager::SESSION_USER_ID);
 
         if ($userIdentifier)
         {

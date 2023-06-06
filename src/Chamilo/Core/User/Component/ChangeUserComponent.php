@@ -38,7 +38,7 @@ class ChangeUserComponent extends Manager
 
             $checkurl = $session->get('checkChamiloURL');
             $session->clear();
-            $session->set(Manager::SESSION_USER_IO, $id);
+            $session->set(Manager::SESSION_USER_ID, $id);
             $session->set('_as_admin', $this->getUser()->getId());
             $session->set('checkChamiloURL', $checkurl);
 

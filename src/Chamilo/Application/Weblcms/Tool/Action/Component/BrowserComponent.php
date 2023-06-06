@@ -379,7 +379,7 @@ class BrowserComponent extends Manager implements DelegateComponent
                 $course_id = $this->getSession()->get(
                     \Chamilo\Application\Weblcms\Tool\Manager::PARAM_VIEW_AS_COURSE_ID
                 );
-                $user_id = $this->getSession()->get(\Chamilo\Core\User\Manager::SESSION_USER_IO);
+                $user_id = $this->getSession()->get(\Chamilo\Core\User\Manager::SESSION_USER_ID);
 
                 $publisher_id =
                     (isset($va_id) && isset($course_id) && $course_id == $this->get_course_id()) ? $va_id : $user_id;

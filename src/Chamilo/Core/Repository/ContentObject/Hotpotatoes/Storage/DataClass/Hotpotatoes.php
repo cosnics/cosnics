@@ -150,7 +150,7 @@ class Hotpotatoes extends ContentObject implements Versionable
             DependencyInjectionContainerBuilder::getInstance()->createContainer()->get(SystemPathBuilder::class);
 
         $hotpot_path = $systemPathBuilder->getPublicStoragePath(Hotpotatoes::CONTEXT) .
-            $this->getSession()->get(Manager::SESSION_USER_IO) . '/';
+            $this->getSession()->get(Manager::SESSION_USER_ID) . '/';
         $full_path = $hotpot_path . dirname($path_to_zip) . '/';
 
         $dir = $this->getZipArchiveFilecompression()->extractFile($full_path . $zip_file_name);

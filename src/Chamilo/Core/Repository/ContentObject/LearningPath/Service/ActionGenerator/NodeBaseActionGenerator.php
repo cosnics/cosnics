@@ -196,7 +196,7 @@ class NodeBaseActionGenerator extends NodeActionGenerator
             $learningPath = $treeNode->getTree()->getRoot()->getContentObject();
             $typeSelectorFactory = new TypeSelectorFactory(
                 $learningPath->get_allowed_types(),
-                $this->getSession()->get(\Chamilo\Core\User\Manager::SESSION_USER_IO),
+                $this->getSession()->get(\Chamilo\Core\User\Manager::SESSION_USER_ID),
                 TypeSelectorFactory::MODE_FLAT_LIST, false
             );
 

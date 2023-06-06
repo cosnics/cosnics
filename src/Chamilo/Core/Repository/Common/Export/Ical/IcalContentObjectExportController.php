@@ -161,7 +161,7 @@ class IcalContentObjectExportController extends ContentObjectExportController
 
     public function prepare_file_system()
     {
-        $user_id = $this->getSession()->get(Manager::SESSION_USER_IO);
+        $user_id = $this->getSession()->get(Manager::SESSION_USER_ID);
         $directory = $this->getConfigurablePathBuilder()->getTemporaryPath() . $user_id . '/';
 
         if (!is_dir($directory))

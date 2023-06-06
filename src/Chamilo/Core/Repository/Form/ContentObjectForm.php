@@ -368,7 +368,7 @@ abstract class ContentObjectForm extends FormValidator
     protected function allows_category_selection()
     {
         return ($this->form_type == self::TYPE_CREATE || $this->form_type == self::TYPE_EDIT) &&
-            $this->getSession()->get(\Chamilo\Core\User\Manager::SESSION_USER_IO) == $this->get_owner_id();
+            $this->getSession()->get(\Chamilo\Core\User\Manager::SESSION_USER_ID) == $this->get_owner_id();
     }
 
     public function buildInstructionsForm()

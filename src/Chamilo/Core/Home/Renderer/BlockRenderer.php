@@ -332,7 +332,7 @@ class BlockRenderer
      */
     public function isVisible()
     {
-        return $this->getSession()->get(\Chamilo\Core\User\Manager::SESSION_USER_IO) != 0;
+        return $this->getSession()->get(\Chamilo\Core\User\Manager::SESSION_USER_ID) != 0;
     }
 
     /**

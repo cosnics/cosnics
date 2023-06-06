@@ -93,7 +93,7 @@ class AuthenticationValidator
      */
     public function isAuthenticated()
     {
-        $user_id = $this->session->get(Manager::SESSION_USER_IO);
+        $user_id = $this->session->get(Manager::SESSION_USER_ID);
 
         return !empty($user_id);
     }
@@ -147,7 +147,7 @@ class AuthenticationValidator
      */
     protected function setAuthenticatedUser(User $user)
     {
-        $this->session->set(Manager::SESSION_USER_IO, $user->getId());
+        $this->session->set(Manager::SESSION_USER_ID, $user->getId());
     }
 
     /**

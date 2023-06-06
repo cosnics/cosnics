@@ -23,7 +23,7 @@ class AdminUserComponent extends Manager
         {
             $checkurl = $this->getSession()->get('checkChamiloURL');
             $this->getSession()->clear();
-            $this->getSession()->set(Manager::SESSION_USER_IO, $admin_user);
+            $this->getSession()->set(Manager::SESSION_USER_ID, $admin_user);
             $this->getSession()->set('checkChamiloURL', $checkurl);
 
             return new RedirectResponse($this->getUrlGenerator()->fromParameters());

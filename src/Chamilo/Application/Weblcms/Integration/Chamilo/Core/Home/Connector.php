@@ -98,7 +98,7 @@ class Connector
         $subconditions[] = new EqualityCondition(
             new PropertyConditionVariable(
                 CourseTypeUserCategory::class, CourseTypeUserCategory::PROPERTY_USER_ID
-            ), new StaticConditionVariable($this->getSession()->get(Manager::SESSION_USER_IO))
+            ), new StaticConditionVariable($this->getSession()->get(Manager::SESSION_USER_ID))
         );
 
         $subconditions[] = new EqualityCondition(

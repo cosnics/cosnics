@@ -277,7 +277,7 @@ class SimpleRightsEditorForm extends FormValidator
                     break;
                 case self::RIGHT_OTPION_ME :
                     $succes &= $rights_util->invert_location_entity_right(
-                        $this->context, $right_id, $this->getSession()->get(Manager::SESSION_USER_IO), 1, $location_id
+                        $this->context, $right_id, $this->getSession()->get(Manager::SESSION_USER_ID), 1, $location_id
                     );
                     break;
                 case self::RIGHT_OPTION_SELECT :
@@ -349,7 +349,7 @@ class SimpleRightsEditorForm extends FormValidator
                     $selected_entity = $selected_entities_per_right[$right_id][0];
 
                     if ($selected_entity->get_entity_type() == 1 &&
-                        $selected_entity->get_entity_id() == $this->getSession()->get(Manager::SESSION_USER_IO))
+                        $selected_entity->get_entity_id() == $this->getSession()->get(Manager::SESSION_USER_ID))
                     {
                         $defaults[self::PROPERTY_RIGHT_OPTION . '_' . $right_id] = self::RIGHT_OTPION_ME;
                         continue;

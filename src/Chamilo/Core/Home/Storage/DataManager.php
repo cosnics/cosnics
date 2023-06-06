@@ -38,7 +38,7 @@ class DataManager extends \Chamilo\Libraries\Storage\DataManager\DataManager
          */
         $session = DependencyInjectionContainerBuilder::getInstance()->createContainer()->get(SessionInterface::class);
 
-        $current_user_id = $session->get(\Chamilo\Core\User\Manager::SESSION_USER_IO);
+        $current_user_id = $session->get(\Chamilo\Core\User\Manager::SESSION_USER_ID);
         $current_user = \Chamilo\Core\User\Storage\DataManager::retrieve_by_id(
             User::class, intval($current_user_id)
         );

@@ -155,7 +155,7 @@ class CourseForm extends CommonCourseForm
         if (!$this->get_base_object()->isIdentified())
         {
             $default_values[CourseSettingsController::SETTING_PARAM_COURSE_SETTINGS . '[' .
-            CourseSettingsConnector::TITULAR . ']'] = $this->getSession()->get(Manager::SESSION_USER_IO);
+            CourseSettingsConnector::TITULAR . ']'] = $this->getSession()->get(Manager::SESSION_USER_ID);
 
             $this->setDefaults($default_values);
         }

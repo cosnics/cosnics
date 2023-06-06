@@ -232,7 +232,7 @@ class CourseManagementRights extends WeblcmsRights
                 case self::RIGHT_OTPION_ME :
                     $succes &= $this->invert_location_entity_right(
                         Manager::CONTEXT, $right_id,
-                        $this->getSession()->get(\Chamilo\Core\User\Manager::SESSION_USER_IO), 1, $location_id
+                        $this->getSession()->get(\Chamilo\Core\User\Manager::SESSION_USER_ID), 1, $location_id
                     );
                     break;
                 case self::RIGHT_OPTION_SELECT :

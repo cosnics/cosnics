@@ -148,7 +148,7 @@ class InvitationRegistrationForm extends FormValidator
 
             $this->send_mail($user);
 
-            $this->getSession()->set(Manager::SESSION_USER_IO, intval($user->getId()));
+            $this->getSession()->set(Manager::SESSION_USER_ID, intval($user->getId()));
             Event::trigger(
                 'Register', Manager::CONTEXT, ['target_user_id' => $user->getId(), 'action_user_id' => $user->getId()]
             );

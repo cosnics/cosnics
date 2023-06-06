@@ -53,7 +53,7 @@ class SentryExceptionLogger implements ExceptionLoggerInterface
                 'dsn' => $sentryConnectionString,
                 'traces_sample_rate' => 0.01,
                 'before_send' => function (Event $event) use ($session, $urlGenerator): ?Event {
-                    $userId = $session->get(Manager::SESSION_USER_IO);
+                    $userId = $session->get(Manager::SESSION_USER_ID);
 
                     if ($userId)
                     {
@@ -91,7 +91,7 @@ class SentryExceptionLogger implements ExceptionLoggerInterface
                 crossorigin="anonymous"
             ></script>';
 
-        $userId = $this->getSession()->get(Manager::SESSION_USER_IO);
+        $userId = $this->getSession()->get(Manager::SESSION_USER_ID);
 
         $profilePage = $_SERVER['REQUEST_SCHEME'] . '://' . $_SERVER['SERVER_NAME'] . $_SERVER['SCRIPT_NAME'] .
             '?application=Chamilo\\\\Core\\\\User&go=UserDetail&user_id=' . $userId;

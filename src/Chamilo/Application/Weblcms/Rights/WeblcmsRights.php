@@ -180,7 +180,7 @@ class WeblcmsRights extends RightsUtil
     {
         if (is_null($user_id))
         {
-            $user_id = $this->getSession()->get(\Chamilo\Core\User\Manager::SESSION_USER_IO);
+            $user_id = $this->getSession()->get(\Chamilo\Core\User\Manager::SESSION_USER_ID);
         }
         $course_id = Request::get(Manager::PARAM_COURSE);
 

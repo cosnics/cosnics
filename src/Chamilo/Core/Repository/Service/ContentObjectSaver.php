@@ -122,7 +122,7 @@ class ContentObjectSaver
     protected function allowsCategorySelection(ContentObject $contentObject)
     {
         return !$contentObject->isIdentified() || ($contentObject->isIdentified() &&
-                $contentObject->get_owner_id() == $this->getSession()->get(Manager::SESSION_USER_IO));
+                $contentObject->get_owner_id() == $this->getSession()->get(Manager::SESSION_USER_ID));
     }
 
     /**

@@ -32,7 +32,7 @@ class XmlSearchFeedComponent extends Manager
 
         $owner_condition = new EqualityCondition(
             new PropertyConditionVariable(ContentObject::class, ContentObject::PROPERTY_OWNER_ID),
-            new StaticConditionVariable($this->getSession()->get(\Chamilo\Core\User\Manager::SESSION_USER_IO))
+            new StaticConditionVariable($this->getSession()->get(\Chamilo\Core\User\Manager::SESSION_USER_ID))
         );
         $conditions[] = $owner_condition;
 

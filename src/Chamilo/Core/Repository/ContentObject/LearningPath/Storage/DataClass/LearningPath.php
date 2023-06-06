@@ -48,7 +48,7 @@ class LearningPath extends ContentObject implements ComplexContentObjectSupport,
         }
 
         $user = new User();
-        $user->setId($this->getSession()->get(\Chamilo\Core\User\Manager::SESSION_USER_IO));
+        $user->setId($this->getSession()->get(\Chamilo\Core\User\Manager::SESSION_USER_ID));
 
         $this->getTreeNodeDataService()->createTreeNodeDataForLearningPath($this, $user);
 

@@ -181,7 +181,7 @@ class CpoContentObjectImportController extends ContentObjectImportController
                 );
 
                 $complex_content_object_item->set_ref($this->get_content_object_id_cache_id($id_ref));
-                $complex_content_object_item->set_user_id($this->getSession()->get(Manager::SESSION_USER_IO));
+                $complex_content_object_item->set_user_id($this->getSession()->get(Manager::SESSION_USER_ID));
                 $complex_content_object_item->set_parent(
                     $this->get_content_object_id_cache_id($content_object_node->getAttribute('id'))
                 );

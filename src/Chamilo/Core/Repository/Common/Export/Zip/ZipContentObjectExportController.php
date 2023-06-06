@@ -80,7 +80,7 @@ class ZipContentObjectExportController extends ContentObjectExportController
 
     public function prepare_file_system()
     {
-        $user_id = $this->getSession()->get(Manager::SESSION_USER_IO);
+        $user_id = $this->getSession()->get(Manager::SESSION_USER_ID);
 
         $this->temporary_directory =
             $this->getConfigurablePathBuilder()->getTemporaryPath(__NAMESPACE__) . $user_id . DIRECTORY_SEPARATOR .

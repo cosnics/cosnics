@@ -47,7 +47,7 @@ class NodeActionGenerator
         $contentObject = $learningPathTreeNode->getContentObject();
 
         $subscribed = DataManager::retrieve_subscribe(
-            $contentObject->getId(), $this->getSession()->get(\Chamilo\Core\User\Manager::SESSION_USER_IO)
+            $contentObject->getId(), $this->getSession()->get(\Chamilo\Core\User\Manager::SESSION_USER_ID)
         );
 
         if (!$subscribed)

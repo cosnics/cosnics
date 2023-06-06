@@ -56,7 +56,7 @@ abstract class Manager extends Application
     public const PARAM_REFER = 'refer';
     public const PARAM_USER_USER_ID = 'user_id';
 
-    public const SESSION_USER_IO = '_uid';
+    public const SESSION_USER_ID = '_uid';
 
     protected function getActiveMailer(): MailerInterface
     {

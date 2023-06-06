@@ -53,7 +53,7 @@ class RightsUtil
         $context, $user_id, $entities, $right_ids = [], $retrieve_types = [], $tree_type = null, $tree_identifier = null
     )
     {
-        $user_id = $user_id ?: $this->getSession()->get(\Chamilo\Core\User\Manager::SESSION_USER_IO);
+        $user_id = $user_id ?: $this->getSession()->get(\Chamilo\Core\User\Manager::SESSION_USER_ID);
         $entities_condition = $this->get_entities_condition($context, $user_id, $entities);
 
         $context_location = ($context . '\Storage\DataClass\RightsLocation');
@@ -394,7 +394,7 @@ class RightsUtil
         $right_id, $context, $parent_location, $retrieve_type, $user_id, $entities
     )
     {
-        $user_id = $user_id ?: $this->getSession()->get(\Chamilo\Core\User\Manager::SESSION_USER_IO);
+        $user_id = $user_id ?: $this->getSession()->get(\Chamilo\Core\User\Manager::SESSION_USER_ID);
 
         $context_location = ($context . '\Storage\DataClass\RightsLocation');
 
@@ -469,7 +469,7 @@ class RightsUtil
         $context, $user_id, $entities, $right_ids = [], $retrieve_types = [], $tree_type = null, $tree_identifier = null
     )
     {
-        $user_id = $user_id ?: $this->getSession()->get(\Chamilo\Core\User\Manager::SESSION_USER_IO);
+        $user_id = $user_id ?: $this->getSession()->get(\Chamilo\Core\User\Manager::SESSION_USER_ID);
         $entities_condition = $this->get_entities_condition($context, $user_id, $entities);
 
         $context_location = ($context . '\Storage\DataClass\RightsLocation');
@@ -834,7 +834,7 @@ class RightsUtil
     )
     {
         // //todo: make inherit optional check
-        $user_id = $user_id ?: $this->getSession()->get(\Chamilo\Core\User\Manager::SESSION_USER_IO);
+        $user_id = $user_id ?: $this->getSession()->get(\Chamilo\Core\User\Manager::SESSION_USER_ID);
 
         $user = \Chamilo\Core\User\Storage\DataManager::retrieve_by_id(
             User::class, (int) $user_id

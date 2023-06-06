@@ -583,7 +583,7 @@ class ConfigurationForm extends FormValidator
                     );
                     $conditions[] = new EqualityCondition(
                         new PropertyConditionVariable(UserSetting::class, UserSetting::PROPERTY_USER_ID),
-                        new StaticConditionVariable($this->getSession()->get(Manager::SESSION_USER_IO))
+                        new StaticConditionVariable($this->getSession()->get(Manager::SESSION_USER_ID))
                     );
                     $condition = new AndCondition($conditions);
                     $user_setting = DataManager::retrieve(
@@ -603,7 +603,7 @@ class ConfigurationForm extends FormValidator
                         $user_setting = new UserSetting();
                         $user_setting->set_setting_id($setting->get_id());
                         $user_setting->set_value($value);
-                        $user_setting->set_user_id($this->getSession()->get(Manager::SESSION_USER_IO));
+                        $user_setting->set_user_id($this->getSession()->get(Manager::SESSION_USER_ID));
                         if (!$user_setting->create())
                         {
                             $problems ++;
