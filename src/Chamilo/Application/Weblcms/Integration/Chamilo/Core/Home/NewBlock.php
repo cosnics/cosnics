@@ -43,8 +43,7 @@ abstract class NewBlock extends Block
     private $courses;
 
     /**
-     *
-     * @see \Chamilo\Core\Home\Renderer\Type\Basic\BlockRenderer::displayContent()
+     * @see \Chamilo\Core\Home\Renderer\BlockRenderer::displayContent()
      */
     public function displayContent()
     {
@@ -263,16 +262,14 @@ abstract class NewBlock extends Block
     abstract public function getToolName();
 
     /**
-     *
-     * @see \Chamilo\Core\Home\Renderer\Type\Basic\BlockRenderer::renderContentFooter()
+     * @see \Chamilo\Core\Home\Renderer\BlockRenderer::renderContentFooter()
      */
     public function renderContentFooter()
     {
     }
 
     /**
-     *
-     * @see \Chamilo\Core\Home\Renderer\Type\Basic\BlockRenderer::renderContentHeader()
+     * @see \Chamilo\Core\Home\Renderer\BlockRenderer::renderContentHeader()
      */
     public function renderContentHeader()
     {

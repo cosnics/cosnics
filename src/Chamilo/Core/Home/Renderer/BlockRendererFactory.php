@@ -1,9 +1,8 @@
 <?php
-namespace Chamilo\Core\Home\Renderer\Type\Basic;
+namespace Chamilo\Core\Home\Renderer;
 
 use Chamilo\Core\Home\Service\HomeService;
-use Chamilo\Core\Home\Storage\DataClass\Column;
-use Chamilo\Core\Home\Storage\DataClass\Tab;
+use Chamilo\Core\Home\Storage\DataClass\Block;
 use Chamilo\Libraries\Architecture\Application\Application;
 
 /**
@@ -13,8 +12,10 @@ use Chamilo\Libraries\Architecture\Application\Application;
  * @author Magali Gillard <magali.gillard@ehb.be>
  * @author Eduard Vossen <eduard.vossen@ehb.be>
  */
-class TabRenderer
+class BlockRendererFactory
 {
+    public const SOURCE_DEFAULT = 1;
+    public const SOURCE_AJAX = 2;
 
     /**
      *
@@ -30,21 +31,31 @@ class TabRenderer
 
     /**
      *
-     * @var \Chamilo\Core\Home\Storage\DataClass\Tab
+     * @var \Chamilo\Core\Home\Storage\DataClass\Block
      */
-    private $tab;
+    private $block;
+
+    /**
+     * The source from which this block renderer is called
+     * 
+     * @var int
+     */
+    protected $source;
 
     /**
      *
      * @param \Chamilo\Libraries\Architecture\Application\Application $application
      * @param \Chamilo\Core\Home\Service\HomeService $homeService
-     * @param \Chamilo\Core\Home\Storage\DataClass\Tab $tab
+     * @param \Chamilo\Core\Home\Storage\DataClass\Block $block
+     * @param int $source
      */
-    public function __construct(Application $application, HomeService $homeService, Tab $tab)
+    public function __construct(Application $application, HomeService $homeService, Block $block, 
+        $source = self::SOURCE_DEFAULT)
     {
         $this->application = $application;
         $this->homeService = $homeService;
-        $this->tab = $tab;
+        $this->block = $block;
+        $this->source = $source;
     }
 
     /**
@@ -78,56 +89,47 @@ class TabRenderer
      *
      * @param \Chamilo\Core\Home\Service\HomeService $homeService
      */
-    public function setHomeService($homeService)
+    public function setHomeService(HomeService $homeService)
     {
         $this->homeService = $homeService;
     }
 
     /**
      *
-     * @return \Chamilo\Core\Home\Storage\DataClass\Tab
+     * @return \Chamilo\Core\Home\Storage\DataClass\Block
      */
-    public function getTab()
+    public function getBlock()
     {
-        return $this->tab;
+        return $this->block;
     }
 
     /**
      *
-     * @param \Chamilo\Core\Home\Storage\DataClass\Tab $tab
+     * @param \Chamilo\Core\Home\Storage\DataClass\Block $block
      */
-    public function setTab(Tab $tab)
+    public function setBlock(Block $block)
     {
-        $this->tab = $tab;
+        $this->block = $block;
     }
 
     /**
      *
-     * @return string
+     * @return int
      */
-    public function render($isActiveTab)
+    public function getSource()
     {
-        $tab = $this->getTab();
-        $request = $this->getApplication()->getRequest();
+        return $this->source;
+    }
+
+    /**
+     *
+     * @return \Chamilo\Core\Home\Renderer\BlockRenderer
+     */
+    public function getRenderer()
+    {
+        $block = $this->getBlock();
+        $class = $block->getContext() . '\Integration\Chamilo\Core\Home\Type\\' . $block->getBlockType();
         
-        $html = [];
-        
-        $html[] = '<div class="row portal-tab ' . ($isActiveTab ? 'show' : 'hidden') . '" data-element-id="' .
-             $tab->getId() . '">';
-        
-        $columns = $this->getHomeService()->getElements(
-            $this->getApplication()->getUser(), 
-            Column::class,
-            $tab->getId());
-        
-        foreach ($columns as $column)
-        {
-            $columnRenderer = new ColumnRenderer($this->getApplication(), $this->getHomeService(), $column);
-            $html[] = $columnRenderer->render();
-        }
-        
-        $html[] = '</div>';
-        
-        return implode(PHP_EOL, $html);
+        return new $class($this->getApplication(), $this->getHomeService(), $block, $this->source);
     }
 }

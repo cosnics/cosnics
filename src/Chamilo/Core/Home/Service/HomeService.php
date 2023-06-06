@@ -258,17 +258,8 @@ class HomeService
         return $this->session;
     }
 
-    /**
-     * @param \Chamilo\Libraries\Platform\ChamiloRequest $request
-     * @param int $tabKey
-     * @param \Chamilo\Core\Home\Storage\DataClass\Tab $tab
-     *
-     * @return bool
-     */
-    public function isActiveTab(ChamiloRequest $request, $tabKey, Tab $tab)
+    public function isActiveTab(int $tabKey, Tab $tab, ?int $currentTabIdentifier = null): bool
     {
-        $currentTabIdentifier = $this->getCurrentTabIdentifier($request);
-
         return ($currentTabIdentifier == $tab->getId() || (!isset($currentTabIdentifier) && $tabKey == 0));
     }
 

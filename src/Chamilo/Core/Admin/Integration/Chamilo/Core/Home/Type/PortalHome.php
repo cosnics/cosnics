@@ -2,7 +2,7 @@
 namespace Chamilo\Core\Admin\Integration\Chamilo\Core\Home\Type;
 
 use Chamilo\Configuration\Configuration;
-use Chamilo\Core\Home\Renderer\Type\Basic\BlockRenderer;
+use Chamilo\Core\Home\Renderer\BlockRenderer;
 use Chamilo\Core\Repository\Common\ContentObjectResourceRenderer;
 use Chamilo\Libraries\Translation\Translation;
 

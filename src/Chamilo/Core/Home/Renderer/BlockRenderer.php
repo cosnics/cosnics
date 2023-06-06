@@ -1,5 +1,5 @@
 <?php
-namespace Chamilo\Core\Home\Renderer\Type\Basic;
+namespace Chamilo\Core\Home\Renderer;
 
 use Chamilo\Configuration\Configuration;
 use Chamilo\Core\Home\Architecture\ConfigurableInterface;

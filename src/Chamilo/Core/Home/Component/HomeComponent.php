@@ -2,8 +2,7 @@
 namespace Chamilo\Core\Home\Component;
 
 use Chamilo\Core\Home\Manager;
-use Chamilo\Core\Home\Renderer\Factory;
-use Chamilo\Core\Home\Renderer\Renderer;
+use Chamilo\Core\Home\Renderer\HomeRenderer;
 use Chamilo\Libraries\Architecture\Interfaces\NoAuthenticationSupport;
 use Chamilo\Libraries\Authentication\AuthenticationValidator;
 use Chamilo\Libraries\Format\Structure\BreadcrumbTrail;
@@ -17,9 +16,6 @@ use Chamilo\Libraries\Format\Structure\BreadcrumbTrail;
 class HomeComponent extends Manager implements NoAuthenticationSupport
 {
 
-    /**
-     * Runs this component and displays its output.
-     */
     public function run()
     {
         $authenticationValidator = $this->getAuthenticationValidator();
@@ -27,23 +23,26 @@ class HomeComponent extends Manager implements NoAuthenticationSupport
 
         BreadcrumbTrail::getInstance()->truncate();
 
-        $type = $this->getRequest()->query->get(self::PARAM_RENDERER_TYPE, Renderer::TYPE_BASIC);
-        $rendererFactory = new Factory($type, $this);
+        $currentTabIdentifier = $this->getRequest()->query->get(self::PARAM_TAB_ID);
+        $isGeneralMode = (bool) $this->getSession()->get('Chamilo\Core\Home\General', false);
+        $homeRenderer = $this->getHomeRenderer();
 
         $html = [];
 
         $html[] = $this->renderHeader();
-        $html[] = $rendererFactory->getRenderer()->render();
+        $html[] = $homeRenderer->render($currentTabIdentifier, $isGeneralMode, $this->getUser());
         $html[] = $this->renderFooter();
 
         return implode(PHP_EOL, $html);
     }
 
-    /**
-     * @return AuthenticationValidator
-     */
-    protected function getAuthenticationValidator()
+    protected function getAuthenticationValidator(): AuthenticationValidator
     {
         return $this->getService(AuthenticationValidator::class);
+    }
+
+    protected function getHomeRenderer(): HomeRenderer
+    {
+        return $this->getService(HomeRenderer::class);
     }
 }

@@ -1,5 +1,5 @@
 <?php
-namespace Chamilo\Core\Home\Renderer\Type\Basic;
+namespace Chamilo\Core\Home\Renderer;
 
 use Chamilo\Core\Home\Service\HomeService;
 use Chamilo\Core\Home\Storage\DataClass\Block;

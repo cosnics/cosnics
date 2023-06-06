@@ -11,8 +11,16 @@
             <tag name="Chamilo\Core\Admin\Service\ActionProvider"/>
         </service>
 
+        <service id="Chamilo\Core\Home\Renderer\HomeRenderer"/>
+
+        <service id="Chamilo\Core\Home\Service\AngularConnectorService"/>
+        <service id="Chamilo\Core\Home\Service\HomeService"/>
+        <service id="Chamilo\Core\Home\Repository\HomeRepository"/>
+
         <service id="Chamilo\Core\Home\Service\ContentObjectPublicationService"/>
         <service id="Chamilo\Core\Home\Repository\ContentObjectPublicationRepository"/>
 
+        <service id="Chamilo\Core\Home\Rights\Service\ElementRightsService"/>
+        <service id="Chamilo\Core\Home\Rights\Storage\Repository\RightsRepository"/>
     </services>
 </container>

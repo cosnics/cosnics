@@ -212,14 +212,14 @@ class AssignmentNotifications extends Block implements ConfigurableInterface, St
     }
 
     /**
-     * @see \Chamilo\Core\Home\Renderer\Type\Basic\BlockRenderer::renderContentFooter()
+     * @see \Chamilo\Core\Home\Renderer\BlockRenderer::renderContentFooter()
      */
     public function renderContentFooter()
     {
     }
 
     /**
-     * @see \Chamilo\Core\Home\Renderer\Type\Basic\BlockRenderer::renderContentHeader()
+     * @see \Chamilo\Core\Home\Renderer\BlockRenderer::renderContentHeader()
      */
     public function renderContentHeader()
     {

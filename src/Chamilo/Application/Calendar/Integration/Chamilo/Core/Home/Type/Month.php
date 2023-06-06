@@ -5,7 +5,7 @@ use Chamilo\Application\Calendar\Ajax\Manager;
 use Chamilo\Application\Calendar\Repository\CalendarRendererProviderRepository;
 use Chamilo\Application\Calendar\Service\CalendarRendererProvider;
 use Chamilo\Core\Home\Interfaces\StaticBlockTitleInterface;
-use Chamilo\Core\Home\Renderer\Type\Basic\BlockRenderer;
+use Chamilo\Core\Home\Renderer\BlockRenderer;
 use Chamilo\Libraries\Architecture\Application\Application;
 use Chamilo\Libraries\Calendar\Service\LegendRenderer;
 use Chamilo\Libraries\Calendar\Service\View\MiniMonthCalendarRenderer;
