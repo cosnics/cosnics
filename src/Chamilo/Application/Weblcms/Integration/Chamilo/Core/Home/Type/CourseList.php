@@ -8,8 +8,7 @@ class CourseList extends Block
 {
 
     /**
-     *
-     * @see \Chamilo\Core\Home\Renderer\Type\Basic\BlockRenderer::renderContentHeader()
+     * @see \Chamilo\Core\Home\Renderer\BlockRenderer::renderContentHeader()
      */
     public function renderContentHeader()
     {
@@ -18,8 +17,7 @@ class CourseList extends Block
     }
 
     /**
-     *
-     * @see \Chamilo\Core\Home\Renderer\Type\Basic\BlockRenderer::renderContentFooter()
+     * @see \Chamilo\Core\Home\Renderer\BlockRenderer::renderContentFooter()
      */
     public function renderContentFooter()
     {

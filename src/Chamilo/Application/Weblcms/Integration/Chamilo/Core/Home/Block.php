@@ -1,7 +1,7 @@
 <?php
 namespace Chamilo\Application\Weblcms\Integration\Chamilo\Core\Home;
 
-use Chamilo\Core\Home\Renderer\Type\Basic\BlockRenderer;
+use Chamilo\Core\Home\Renderer\BlockRenderer;
 use Chamilo\Core\Tracking\Storage\DataManager;
 use Chamilo\Core\User\Integration\Chamilo\Core\Tracking\Storage\DataClass\LoginLogout;
 use Chamilo\Libraries\Storage\Parameters\DataClassRetrievesParameters;

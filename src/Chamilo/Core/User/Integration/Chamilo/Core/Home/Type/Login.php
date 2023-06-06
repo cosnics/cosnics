@@ -2,7 +2,7 @@
 namespace Chamilo\Core\User\Integration\Chamilo\Core\Home\Type;
 
 use Chamilo\Configuration\Configuration;
-use Chamilo\Core\Home\Renderer\Type\Basic\BlockRenderer;
+use Chamilo\Core\Home\Renderer\BlockRenderer;
 use Chamilo\Core\User\Manager;
 use Chamilo\Core\User\Storage\DataClass\User;
 use Chamilo\Libraries\Architecture\Application\Application;

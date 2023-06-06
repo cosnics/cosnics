@@ -1,5 +1,4 @@
 <?php
-
 use Chamilo\Libraries\Architecture\Bootstrap\Bootstrap;
 use Chamilo\Libraries\DependencyInjection\DependencyInjectionContainerBuilder;
 use Doctrine\Common\Annotations\AnnotationRegistry;

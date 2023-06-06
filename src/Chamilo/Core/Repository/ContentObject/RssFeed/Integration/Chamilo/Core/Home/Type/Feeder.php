@@ -5,30 +5,20 @@ use Chamilo\Core\Home\Architecture\ConfigurableInterface;
 use Chamilo\Core\Home\Architecture\ContentObjectPublicationBlockInterface;
 use Chamilo\Core\Home\Interfaces\StaticBlockTitleInterface;
 use Chamilo\Core\Home\Service\HomeService;
-use Chamilo\Core\Home\Storage\DataClass\Block;
-use Chamilo\Libraries\Architecture\Application\Application;
+use Chamilo\Core\Repository\Integration\Chamilo\Core\Home\Block;
 use Chamilo\Libraries\Format\Structure\Glyph\IdentGlyph;
 use Chamilo\Libraries\Format\Structure\Glyph\NamespaceIdentGlyph;
 use Chamilo\Libraries\Translation\Translation;
 
-class Feeder extends \Chamilo\Core\Repository\Integration\Chamilo\Core\Home\Block
+class Feeder extends Block
     implements ConfigurableInterface, StaticBlockTitleInterface, ContentObjectPublicationBlockInterface
 {
 
-    /**
-     *
-     * @param \Chamilo\Libraries\Architecture\Application\Application $application
-     * @param \Chamilo\Core\Home\Service\HomeService $homeService
-     * @param \Chamilo\Core\Home\Storage\DataClass\Block $block
-     * @param int $source
-     * @param string $defaultTitle
-     */
     public function __construct(
-        Application $application, HomeService $homeService, Block $block, $source = self::SOURCE_DEFAULT,
-        $defaultTitle = ''
+        HomeService $homeService, $source = self::SOURCE_DEFAULT, $defaultTitle = ''
     )
     {
-        parent::__construct($application, $homeService, $block, $source, Translation::get('Feeder'));
+        parent::__construct($homeService, $source, Translation::get('Feeder'));
     }
 
     /**
@@ -60,8 +50,7 @@ class Feeder extends \Chamilo\Core\Repository\Integration\Chamilo\Core\Home\Bloc
         $html[] = '<li ng-repeat="entry in main.feedEntries" class="rss_feed_item">';
 
         $glyph = new NamespaceIdentGlyph(
-            'Chamilo\Core\Repository\ContentObject\RssFeed', true, false, false,
-            IdentGlyph::SIZE_MINI
+            'Chamilo\Core\Repository\ContentObject\RssFeed', true, false, false, IdentGlyph::SIZE_MINI
         );
 
         $html[] = $glyph->render() . ' ' . '<a href="{{ entry.link }}" ' . $target . '>{{ entry.title }}</a>';

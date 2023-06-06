@@ -4,62 +4,30 @@ namespace Chamilo\Core\Home\Renderer;
 use Chamilo\Core\Home\Service\HomeService;
 use Chamilo\Core\Home\Storage\DataClass\Tab;
 use Chamilo\Core\User\Storage\DataClass\User;
-use Chamilo\Libraries\Architecture\Application\Application;
 use Chamilo\Libraries\Format\Structure\Glyph\FontAwesomeGlyph;
 
 /**
- *
- * @package Chamilo\Core\Home\Renderer\Type\Basic
- * @author Hans De Bisschop <hans.de.bisschop@ehb.be>
- * @author Magali Gillard <magali.gillard@ehb.be>
- * @author Eduard Vossen <eduard.vossen@ehb.be>
+ * @package Chamilo\Core\Home\Renderer
+ * @author  Hans De Bisschop <hans.de.bisschop@ehb.be>
+ * @author  Magali Gillard <magali.gillard@ehb.be>
+ * @author  Eduard Vossen <eduard.vossen@ehb.be>
  */
 class TabHeaderRenderer
 {
+    protected HomeService $homeService;
 
-    /**
-     *
-     * @var \Chamilo\Libraries\Architecture\Application\Application
-     */
-    private $application;
-
-    /**
-     *
-     * @var \Chamilo\Core\Home\Service\HomeService
-     */
-    private $homeService;
-
-    /**
-     *
-     * @var \Chamilo\Core\Home\Storage\DataClass\Tab
-     */
-    private $tab;
-
-    /**
-     *
-     * @param \Chamilo\Libraries\Architecture\Application\Application $application
-     * @param \Chamilo\Core\Home\Service\HomeService $homeService
-     * @param \Chamilo\Core\Home\Storage\DataClass\Tab $tab
-     */
-    public function __construct(Application $application, HomeService $homeService, Tab $tab)
+    public function __construct(HomeService $homeService)
     {
-        $this->application = $application;
         $this->homeService = $homeService;
-        $this->tab = $tab;
     }
 
-    /**
-     *
-     * @return string
-     */
-    public function render($isActiveTab)
+    public function render(
+        Tab $tab, int $tabKey, ?int $currentTabIdentifier = null, bool $isGeneralMode = false, ?User $user = null
+    ): string
     {
-        $tab = $this->getTab();
-        $request = $this->getApplication()->getRequest();
+        $isActiveTab = $this->getHomeService()->isActiveTab($tabKey, $tab, $currentTabIdentifier);
 
         $html = [];
-
-        $tab_id = $tab->get_id();
 
         $listItem = [];
 
@@ -74,7 +42,7 @@ class TabHeaderRenderer
             $listItem[] = 'class="portal-nav-tab"';
         }
 
-        $listItem[] = ' data-tab-id="' . $tab->get_id() . '"';
+        $listItem[] = ' data-tab-id="' . $tab->getId() . '"';
         $listItem[] = ' data-tab-title="' . $tab->getTitle() . '"';
         $listItem[] = '>';
 
@@ -84,17 +52,16 @@ class TabHeaderRenderer
 
         $html[] = '<span class="portal-nav-tab-title">' . htmlspecialchars($tab->getTitle()) . '</span>';
 
-        $user = $this->getApplication()->getUser();
         $isUser = $user instanceof User;
-        $homeAllowed = $isUser && ($this->getHomeService()->isUserHomeAllowed() ||
-                ($user->is_platform_admin()) && $this->getHomeService()->isInGeneralMode());
+        $homeAllowed =
+            $isUser && ($this->getHomeService()->isUserHomeAllowed() || ($user->is_platform_admin()) && $isGeneralMode);
         $isAnonymous = $isUser && $user->is_anonymous_user();
 
         if ($isUser && $homeAllowed && !$isAnonymous)
         {
             $userHasMultipleTabs = $this->getHomeService()->userHasMultipleTabs($user);
 
-            $classes = array('portal-action-tab-delete');
+            $classes = ['portal-action-tab-delete'];
             $classes[] = ($userHasMultipleTabs ? 'show' : 'hidden');
 
             $glyph = new FontAwesomeGlyph('times', $classes, null, 'fas');
@@ -109,57 +76,8 @@ class TabHeaderRenderer
         return implode(PHP_EOL, $html);
     }
 
-    /**
-     *
-     * @return \Chamilo\Libraries\Architecture\Application\Application
-     */
-    public function getApplication()
-    {
-        return $this->application;
-    }
-
-    /**
-     *
-     * @param \Chamilo\Libraries\Architecture\Application\Application $application
-     */
-    public function setApplication(Application $application)
-    {
-        $this->application = $application;
-    }
-
-    /**
-     *
-     * @return \Chamilo\Core\Home\Service\HomeService
-     */
-    public function getHomeService()
+    public function getHomeService(): HomeService
     {
         return $this->homeService;
-    }
-
-    /**
-     *
-     * @param \Chamilo\Core\Home\Service\HomeService $homeService
-     */
-    public function setHomeService($homeService)
-    {
-        $this->homeService = $homeService;
-    }
-
-    /**
-     *
-     * @return \Chamilo\Core\Home\Storage\DataClass\Tab
-     */
-    public function getTab()
-    {
-        return $this->tab;
-    }
-
-    /**
-     *
-     * @param \Chamilo\Core\Home\Storage\DataClass\Tab $tab
-     */
-    public function setTab(Tab $tab)
-    {
-        $this->tab = $tab;
     }
 }

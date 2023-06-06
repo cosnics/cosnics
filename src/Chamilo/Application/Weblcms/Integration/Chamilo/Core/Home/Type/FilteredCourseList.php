@@ -214,7 +214,7 @@ class FilteredCourseList extends Block implements ConfigurableInterface, StaticB
     }
 
     /**
-     * @see \Chamilo\Core\Home\Renderer\Type\Basic\BlockRenderer::renderContentFooter()
+     * @see \Chamilo\Core\Home\Renderer\BlockRenderer::renderContentFooter()
      */
     public function renderContentFooter()
     {
@@ -240,7 +240,7 @@ class FilteredCourseList extends Block implements ConfigurableInterface, StaticB
     }
 
     /**
-     * @see \Chamilo\Core\Home\Renderer\Type\Basic\BlockRenderer::renderContentHeader()
+     * @see \Chamilo\Core\Home\Renderer\BlockRenderer::renderContentHeader()
      */
     public function renderContentHeader()
     {

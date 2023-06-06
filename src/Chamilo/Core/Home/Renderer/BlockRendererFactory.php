@@ -6,51 +6,48 @@ use Chamilo\Core\Home\Storage\DataClass\Block;
 use Chamilo\Libraries\Architecture\Application\Application;
 
 /**
- *
  * @package Chamilo\Core\Home\Renderer\Type\Basic
- * @author Hans De Bisschop <hans.de.bisschop@ehb.be>
- * @author Magali Gillard <magali.gillard@ehb.be>
- * @author Eduard Vossen <eduard.vossen@ehb.be>
+ * @author  Hans De Bisschop <hans.de.bisschop@ehb.be>
+ * @author  Magali Gillard <magali.gillard@ehb.be>
+ * @author  Eduard Vossen <eduard.vossen@ehb.be>
  */
 class BlockRendererFactory
 {
-    public const SOURCE_DEFAULT = 1;
     public const SOURCE_AJAX = 2;
 
-    /**
-     *
-     * @var \Chamilo\Libraries\Architecture\Application\Application
-     */
-    private $application;
-
-    /**
-     *
-     * @var \Chamilo\Core\Home\Service\HomeService
-     */
-    private $homeService;
-
-    /**
-     *
-     * @var \Chamilo\Core\Home\Storage\DataClass\Block
-     */
-    private $block;
+    public const SOURCE_DEFAULT = 1;
 
     /**
      * The source from which this block renderer is called
-     * 
+     *
      * @var int
      */
     protected $source;
 
     /**
-     *
+     * @var \Chamilo\Libraries\Architecture\Application\Application
+     */
+    private $application;
+
+    /**
+     * @var \Chamilo\Core\Home\Storage\DataClass\Block
+     */
+    private $block;
+
+    /**
+     * @var \Chamilo\Core\Home\Service\HomeService
+     */
+    private $homeService;
+
+    /**
      * @param \Chamilo\Libraries\Architecture\Application\Application $application
      * @param \Chamilo\Core\Home\Service\HomeService $homeService
      * @param \Chamilo\Core\Home\Storage\DataClass\Block $block
      * @param int $source
      */
-    public function __construct(Application $application, HomeService $homeService, Block $block, 
-        $source = self::SOURCE_DEFAULT)
+    public function __construct(
+        Application $application, HomeService $homeService, Block $block, $source = self::SOURCE_DEFAULT
+    )
     {
         $this->application = $application;
         $this->homeService = $homeService;
@@ -59,7 +56,6 @@ class BlockRendererFactory
     }
 
     /**
-     *
      * @return \Chamilo\Libraries\Architecture\Application\Application
      */
     public function getApplication()
@@ -68,34 +64,6 @@ class BlockRendererFactory
     }
 
     /**
-     *
-     * @param \Chamilo\Libraries\Architecture\Application\Application $application
-     */
-    public function setApplication(Application $application)
-    {
-        $this->application = $application;
-    }
-
-    /**
-     *
-     * @return \Chamilo\Core\Home\Service\HomeService
-     */
-    public function getHomeService()
-    {
-        return $this->homeService;
-    }
-
-    /**
-     *
-     * @param \Chamilo\Core\Home\Service\HomeService $homeService
-     */
-    public function setHomeService(HomeService $homeService)
-    {
-        $this->homeService = $homeService;
-    }
-
-    /**
-     *
      * @return \Chamilo\Core\Home\Storage\DataClass\Block
      */
     public function getBlock()
@@ -104,16 +72,25 @@ class BlockRendererFactory
     }
 
     /**
-     *
-     * @param \Chamilo\Core\Home\Storage\DataClass\Block $block
+     * @return \Chamilo\Core\Home\Service\HomeService
      */
-    public function setBlock(Block $block)
+    public function getHomeService()
     {
-        $this->block = $block;
+        return $this->homeService;
     }
 
     /**
-     *
+     * @return \Chamilo\Core\Home\Renderer\BlockRenderer
+     */
+    public function getRenderer()
+    {
+        $block = $this->getBlock();
+        $class = $block->getContext() . '\Integration\Chamilo\Core\Home\Type\\' . $block->getBlockType();
+
+        return new $class($this->getApplication(), $this->getHomeService(), $block, $this->source);
+    }
+
+    /**
      * @return int
      */
     public function getSource()
@@ -122,14 +99,26 @@ class BlockRendererFactory
     }
 
     /**
-     *
-     * @return \Chamilo\Core\Home\Renderer\BlockRenderer
+     * @param \Chamilo\Libraries\Architecture\Application\Application $application
      */
-    public function getRenderer()
+    public function setApplication(Application $application)
     {
-        $block = $this->getBlock();
-        $class = $block->getContext() . '\Integration\Chamilo\Core\Home\Type\\' . $block->getBlockType();
-        
-        return new $class($this->getApplication(), $this->getHomeService(), $block, $this->source);
+        $this->application = $application;
+    }
+
+    /**
+     * @param \Chamilo\Core\Home\Storage\DataClass\Block $block
+     */
+    public function setBlock(Block $block)
+    {
+        $this->block = $block;
+    }
+
+    /**
+     * @param \Chamilo\Core\Home\Service\HomeService $homeService
+     */
+    public function setHomeService(HomeService $homeService)
+    {
+        $this->homeService = $homeService;
     }
 }

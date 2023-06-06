@@ -9,10 +9,8 @@ use Chamilo\Core\Home\Rights\Form\ElementTargetEntitiesForm;
 use Chamilo\Core\Home\Rights\Service\ElementRightsService;
 use Chamilo\Core\Home\Rights\Storage\Repository\RightsRepository;
 use Chamilo\Core\Home\Service\HomeService;
-use Chamilo\Core\Home\Storage\DataClass\Block;
 use Chamilo\Core\Repository\Storage\DataClass\ContentObject;
 use Chamilo\Core\User\Storage\DataClass\User;
-use Chamilo\Libraries\Architecture\Application\Application;
 use Chamilo\Libraries\DependencyInjection\Traits\DependencyInjectionContainerTrait;
 use Chamilo\Libraries\Format\Structure\Glyph\FontAwesomeGlyph;
 use Chamilo\Libraries\Translation\Translation;
@@ -48,19 +46,9 @@ class BlockRenderer
     protected $source;
 
     /**
-     * @var \Chamilo\Core\Home\Storage\DataClass\Block
-     */
-    private $block;
-
-    /**
      * @var \Chamilo\Core\Home\Service\HomeService
      */
     private $homeService;
-
-    /**
-     * @var \Chamilo\Core\Home\Renderer\Renderer
-     */
-    private $renderer;
 
     private $type;
 
@@ -71,12 +59,10 @@ class BlockRenderer
      * @param int $source
      */
     public function __construct(
-        Application $application, HomeService $homeService, Block $block, $source = self::SOURCE_DEFAULT
+        HomeService $homeService, $source = self::SOURCE_DEFAULT
     )
     {
-        $this->renderer = $application;
         $this->homeService = $homeService;
-        $this->block = $block;
         $this->source = $source;
 
         $this->initializeContainer();

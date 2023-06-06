@@ -4,7 +4,7 @@ namespace Chamilo\Core\Home\Ajax\Component;
 use Chamilo\Core\Home\Ajax\Manager;
 use Chamilo\Core\Home\Architecture\ConfigurableInterface;
 use Chamilo\Core\Home\Architecture\ContentObjectPublicationBlockInterface;
-use Chamilo\Core\Home\Renderer\Type\Basic\BlockRendererFactory;
+use Chamilo\Core\Home\Renderer\BlockRendererFactory;
 use Chamilo\Core\Home\Repository\ContentObjectPublicationRepository;
 use Chamilo\Core\Home\Repository\HomeRepository;
 use Chamilo\Core\Home\Rights\Service\ElementRightsService;

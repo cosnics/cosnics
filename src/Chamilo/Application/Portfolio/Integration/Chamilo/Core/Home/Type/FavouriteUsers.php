@@ -4,7 +4,7 @@ namespace Chamilo\Application\Portfolio\Integration\Chamilo\Core\Home\Type;
 use Chamilo\Application\Portfolio\Favourite\Service\FavouriteService;
 use Chamilo\Application\Portfolio\Favourite\Storage\Repository\FavouriteRepository;
 use Chamilo\Application\Portfolio\Manager;
-use Chamilo\Core\Home\Renderer\Type\Basic\BlockRenderer;
+use Chamilo\Core\Home\Renderer\BlockRenderer;
 use Chamilo\Core\User\Storage\DataClass\User;
 use Chamilo\Libraries\DependencyInjection\DependencyInjectionContainerBuilder;
 

@@ -5,7 +5,7 @@ use Chamilo\Core\Admin\Announcement\Manager;
 use Chamilo\Core\Admin\Announcement\Service\PublicationService;
 use Chamilo\Core\Admin\Announcement\Storage\DataClass\Publication;
 use Chamilo\Core\Home\Architecture\ConfigurableInterface;
-use Chamilo\Core\Home\Renderer\Type\Basic\BlockRenderer;
+use Chamilo\Core\Home\Renderer\BlockRenderer;
 use Chamilo\Core\Repository\Storage\DataClass\ContentObject;
 use Chamilo\Core\Repository\Storage\DataManager;
 use Chamilo\Libraries\Architecture\Application\Application;
@@ -117,7 +117,7 @@ class SystemAnnouncements extends BlockRenderer implements ConfigurableInterface
     }
 
     /**
-     * @see \Chamilo\Core\Home\Renderer\Type\Basic\BlockRenderer::renderContentFooter()
+     * @see \Chamilo\Core\Home\Renderer\BlockRenderer::renderContentFooter()
      */
     public function renderContentFooter()
     {
@@ -125,7 +125,7 @@ class SystemAnnouncements extends BlockRenderer implements ConfigurableInterface
     }
 
     /**
-     * @see \Chamilo\Core\Home\Renderer\Type\Basic\BlockRenderer::renderContentHeader()
+     * @see \Chamilo\Core\Home\Renderer\BlockRenderer::renderContentHeader()
      */
     public function renderContentHeader()
     {

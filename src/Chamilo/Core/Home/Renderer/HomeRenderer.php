@@ -34,25 +34,20 @@ class HomeRenderer
 
     protected HomeService $homeService;
 
+    protected TabHeaderRenderer $tabHeaderRenderer;
+
+    protected TabRenderer $tabRenderer;
+
     protected Translator $translator;
 
     protected UrlGenerator $urlGenerator;
 
     protected WebPathBuilder $webPathBuilder;
 
-    private array $parameters;
-
-    /**
-     * @param \Chamilo\Core\Home\Service\AngularConnectorService $angularConnectorService
-     * @param \Chamilo\Configuration\Service\Consulter\ConfigurationConsulter $configurationConsulter
-     * @param \Chamilo\Core\Home\Service\HomeService $homeService
-     * @param \Symfony\Component\Translation\Translator $translator
-     * @param \Chamilo\Libraries\Architecture\Application\Routing\UrlGenerator $urlGenerator
-     * @param \Chamilo\Libraries\File\WebPathBuilder $webPathBuilder
-     */
     public function __construct(
         AngularConnectorService $angularConnectorService, ConfigurationConsulter $configurationConsulter,
-        HomeService $homeService, Translator $translator, UrlGenerator $urlGenerator, WebPathBuilder $webPathBuilder
+        HomeService $homeService, Translator $translator, UrlGenerator $urlGenerator, WebPathBuilder $webPathBuilder,
+        TabHeaderRenderer $tabHeaderRenderer, TabRenderer $tabRenderer
     )
     {
         $this->angularConnectorService = $angularConnectorService;
@@ -61,6 +56,8 @@ class HomeRenderer
         $this->translator = $translator;
         $this->urlGenerator = $urlGenerator;
         $this->webPathBuilder = $webPathBuilder;
+        $this->tabHeaderRenderer = $tabHeaderRenderer;
+        $this->tabRenderer = $tabRenderer;
     }
 
     /**
@@ -103,7 +100,7 @@ class HomeRenderer
         }
 
         $html[] = $this->renderPackageContainer();
-        //$html[] = $this->renderContent($currentTabIdentifier, $user);
+        $html[] = $this->renderContent($currentTabIdentifier, $user);
 
         $html[] =
             '<script src="' . $webPathBuilder->getJavascriptPath('Chamilo\Core\Home') . 'HomeView.js' . '"></script>';
@@ -126,6 +123,16 @@ class HomeRenderer
         return $this->homeService;
     }
 
+    public function getTabHeaderRenderer(): TabHeaderRenderer
+    {
+        return $this->tabHeaderRenderer;
+    }
+
+    public function getTabRenderer(): TabRenderer
+    {
+        return $this->tabRenderer;
+    }
+
     public function getTranslator(): Translator
     {
         return $this->translator;
@@ -144,31 +151,6 @@ class HomeRenderer
     public function getWebPathBuilder(): WebPathBuilder
     {
         return $this->webPathBuilder;
-    }
-
-    /**
-     * Returns the value of the given URL parameter.
-     *
-     * @param string $name The parameter name.
-     *
-     * @return string The parameter value.
-     */
-    public function get_parameter($name)
-    {
-        if (array_key_exists($name, $this->parameters))
-        {
-            return $this->parameters[$name];
-        }
-    }
-
-    /**
-     * Returns the current URL parameters.
-     *
-     * @return array The parameters.
-     */
-    public function get_parameters()
-    {
-        return $this->parameters;
     }
 
     /**
@@ -211,7 +193,7 @@ class HomeRenderer
                 );
 
                 $truncateLink =
-                    $this->getUrlGenerator()->fromParameters([Manager::PARAM_ACTION => Manager::ACTION_TRUNCATE]);
+                    $this->getUrlGenerator()->fromParameters([Application::PARAM_ACTION => Manager::ACTION_TRUNCATE]);
 
                 if ($homeUserIdentifier != '0')
                 {
@@ -273,6 +255,8 @@ class HomeRenderer
     public function renderContent(?int $currentTabIdentifier = null, ?User $user = null): string
     {
         $angularConnectorService = $this->getAngularConnectorService();
+        $tabRenderer = $this->getTabRenderer();
+
         $modules = $angularConnectorService->getAngularModules();
         $moduleString = count($modules) > 0 ? '\'' . implode('\', \'', $modules) . '\'' : '';
 
@@ -293,10 +277,7 @@ class HomeRenderer
 
         foreach ($tabs as $tabKey => $tab)
         {
-            $tabRenderer = new TabRenderer($this->getHomeService(), $tab);
-            $html[] = $tabRenderer->render(
-                $this->getHomeService()->isActiveTab($tabKey, $tab, $currentTabIdentifier)
-            );
+            $html[] = $tabRenderer->render($tab, $tabKey, $currentTabIdentifier, $user);
         }
 
         $html[] = '</div>';
@@ -401,6 +382,8 @@ class HomeRenderer
     public function renderTabs(?int $currentTabIdentifier = null, bool $isGeneralMode = false, ?User $user = null
     ): string
     {
+        $tabHeaderRenderer = $this->getTabHeaderRenderer();
+
         $html = [];
 
         $html[] = '<ul class="nav nav-tabs portal-nav-tabs">';
@@ -409,9 +392,8 @@ class HomeRenderer
 
         foreach ($tabs as $tabKey => $tab)
         {
-            $tabHeaderRenderer = new TabHeaderRenderer($this->getApplication(), $this->getHomeService(), $tab);
             $html[] = $tabHeaderRenderer->render(
-                $this->getHomeService()->isActiveTab($tabKey, $tab, $currentTabIdentifier)
+                $tab, $tabKey, $currentTabIdentifier, $isGeneralMode, $user
             );
         }
 
@@ -420,32 +402,5 @@ class HomeRenderer
         $html[] = '</ul>';
 
         return implode(PHP_EOL, $html);
-    }
-
-    /**
-     * @param \Chamilo\Libraries\Architecture\Application\Application $application
-     */
-    public function setApplication($application)
-    {
-        $this->application = $application;
-    }
-
-    /**
-     * Sets the value of a URL parameter.
-     *
-     * @param string $name  The parameter name.
-     * @param string $value The parameter value.
-     */
-    public function set_parameter($name, $value)
-    {
-        $this->parameters[$name] = $value;
-    }
-
-    /**
-     * @param array $parameters
-     */
-    public function set_parameters($parameters)
-    {
-        $this->parameters = $parameters;
     }
 }
