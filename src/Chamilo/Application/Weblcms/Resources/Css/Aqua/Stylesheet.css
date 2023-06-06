@@ -241,3 +241,54 @@ table th.tools_column_toggle, table tr td.tools_column_toggle {
 .target-entities-list .target-entities-default {
     display: none;
 }
+
+.portal-block-course-list ul.list-group {
+    margin: 10px 0px;
+}
+
+.portal-block-course-list ul.list-group li.list-group-item {
+    border: 0px solid white;
+    padding: 5px 15px;
+}
+
+span.badge-date {
+    background-color: #337ab7;
+    font-weight: normal;
+    opacity: 0.5;
+}
+
+@media ( min-width: 768px) {
+    .portal-block-content.list-group.portal-block-new-list {
+        max-height: 500px;
+        overflow: auto;
+    }
+}
+
+.portal-block-content.list-group.portal-block-new-list .list-group-item .list-group-item-text {
+    color: #337ab7;
+    font-size: 13px;
+}
+
+.notifications-block {
+    max-height: 500px;
+    overflow-y: scroll;
+}
+
+.notifications-block .list-group-item {
+    border-left: none;
+}
+
+.notifications-block .list-group-item:last-child {
+    border-bottom: none;
+}
+
+.notifications-block-new-label {
+    background-color: red;
+    border-radius: 20px;
+    box-shadow: 0 0 10px 0 rgba(0, 0, 0, 0.5);
+    color: white !important;
+    font-size: 10px;
+    margin-left: 5px;
+    margin-right: 5px;
+    padding: 5px 8px;
+}

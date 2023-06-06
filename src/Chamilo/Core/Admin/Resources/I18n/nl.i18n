@@ -419,3 +419,5 @@ WhoisOnlineTableChanged = "De inhoud van de tabel 'wie is online' is veranderd e
 MaintenanceWarningShow = "Toon een waarschuwing voor (aankomend) onderhoud"
 MaintenanceWarningMessage = "Waarschuwingsboodschap"
 MaintenanceBlockAccess = "Blokkeer de toegang tot het platform (enkel mogelijk in combinatie met boodschap)"
+ConfigurePortalHomeFirst = "Welkom bij Cosnics. Configureer dit startportaal eerst"
+PortalHome = "Portaal"

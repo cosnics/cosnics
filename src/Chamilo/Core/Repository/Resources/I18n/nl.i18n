@@ -522,3 +522,4 @@ ContentObjectTemplateSynchronizerDescription = "Synchroniseert de templates van 
 UnknownImportType = "Het gegeven import type {TYPE} bestaat niet"
 RepositoryManagerBrowserComponent = "Browser"
 DifferenceProperty = "Property: {PROPERTY}"
+Displayer = "Toon een content object"

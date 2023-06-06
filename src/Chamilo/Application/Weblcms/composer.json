@@ -46,7 +46,10 @@
                 },
                 {
                     "output": "Chamilo/Libraries/Resources/Css/cosnics.common.Ruby.min.css",
-                    "input": "Resources/Css/Aqua/Stylesheet.min.css"
+                    "input": [
+                        "Resources/Css/Aqua/Stylesheet.min.css",
+                        "Resources/Css/Ruby/Stylesheet.min.css"
+                    ]
                 }
             ],
             "install": {

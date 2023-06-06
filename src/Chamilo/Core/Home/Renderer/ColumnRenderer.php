@@ -1,6 +1,7 @@
 <?php
 namespace Chamilo\Core\Home\Renderer;
 
+use Chamilo\Core\Home\Interfaces\AnonymousBlockRendererInterface;
 use Chamilo\Core\Home\Manager;
 use Chamilo\Core\Home\Service\HomeService;
 use Chamilo\Core\Home\Storage\DataClass\Block;
@@ -18,14 +19,19 @@ use Symfony\Component\Translation\Translator;
 class ColumnRenderer
 {
 
+    protected BlockRendererFactory $blockRendererFactory;
+
     protected HomeService $homeService;
 
     protected Translator $translator;
 
-    public function __construct(HomeService $homeService, Translator $translator)
+    public function __construct(
+        HomeService $homeService, Translator $translator, BlockRendererFactory $blockRendererFactory
+    )
     {
         $this->homeService = $homeService;
         $this->translator = $translator;
+        $this->blockRendererFactory = $blockRendererFactory;
     }
 
     public function render(Column $column, ?User $user = null): string
@@ -41,15 +47,13 @@ class ColumnRenderer
         );
 
         foreach ($blocks as $block)
-        {/*
-            $blockRendererFactory = new BlockRendererFactory($this->getApplication(), $this->getHomeService(), $block);
-            $blockRenderer = $blockRendererFactory->getRenderer();
-
-            if ($blockRenderer->isVisible())
+        {
+            $blockRenderer = $this->getBlockRendererFactory()->getRenderer($block);
+            
+            if ($blockRenderer instanceof AnonymousBlockRendererInterface || $blockRenderer->isVisible($user))
             {
                 $html[] = $blockRenderer->toHtml();
             }
-        */
         }
 
         $hasMultipleColumns = $this->getHomeService()->tabByUserAndIdentifierHasMultipleColumns(
@@ -61,6 +65,11 @@ class ColumnRenderer
         $html[] = '</div>';
 
         return implode(PHP_EOL, $html);
+    }
+
+    public function getBlockRendererFactory(): BlockRendererFactory
+    {
+        return $this->blockRendererFactory;
     }
 
     public function getHomeService(): HomeService

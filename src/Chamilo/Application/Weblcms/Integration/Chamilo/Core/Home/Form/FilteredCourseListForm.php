@@ -1,8 +1,8 @@
 <?php
 namespace Chamilo\Application\Weblcms\Integration\Chamilo\Core\Home\Form;
 
-use Chamilo\Application\Weblcms\Integration\Chamilo\Core\Home\Connector;
-use Chamilo\Application\Weblcms\Integration\Chamilo\Core\Home\Type\FilteredCourseList;
+use Chamilo\Application\Weblcms\Service\Home\Connector;
+use Chamilo\Application\Weblcms\Service\Home\FilteredCourseListBlockRenderer;
 use Chamilo\Core\Home\Form\ConfigurationForm;
 use Chamilo\Libraries\Translation\Translation;
 
@@ -17,7 +17,7 @@ class FilteredCourseListForm extends ConfigurationForm
     {
         $this->addElement(
             'checkbox',
-            FilteredCourseList::CONFIGURATION_SHOW_NEW_ICONS,
+            FilteredCourseListBlockRenderer::CONFIGURATION_SHOW_NEW_ICONS,
             Translation::get('ShowNewIcons')
         );
 
@@ -29,7 +29,7 @@ class FilteredCourseListForm extends ConfigurationForm
 
         $this->addElement(
             'select',
-            FilteredCourseList::CONFIGURATION_COURSE_TYPE,
+            FilteredCourseListBlockRenderer::CONFIGURATION_COURSE_TYPE,
             Translation::get('CourseType'),
             $courseTypes
         );
@@ -39,13 +39,13 @@ class FilteredCourseListForm extends ConfigurationForm
     {
         $defaults = [];
 
-        $defaults[FilteredCourseList::CONFIGURATION_SHOW_NEW_ICONS] = $this->getBlock()->getSetting(
-            FilteredCourseList::CONFIGURATION_SHOW_NEW_ICONS,
+        $defaults[FilteredCourseListBlockRenderer::CONFIGURATION_SHOW_NEW_ICONS] = $this->getBlock()->getSetting(
+            FilteredCourseListBlockRenderer::CONFIGURATION_SHOW_NEW_ICONS,
             true
         );
 
-        $defaults[FilteredCourseList::CONFIGURATION_COURSE_TYPE] = $this->getBlock()->getSetting(
-            FilteredCourseList::CONFIGURATION_COURSE_TYPE,
+        $defaults[FilteredCourseListBlockRenderer::CONFIGURATION_COURSE_TYPE] = $this->getBlock()->getSetting(
+            FilteredCourseListBlockRenderer::CONFIGURATION_COURSE_TYPE,
             "-1"
         );
 

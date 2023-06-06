@@ -3,22 +3,22 @@ namespace Chamilo\Core\Repository\ContentObject\RssFeed\Integration\Chamilo\Core
 
 use Chamilo\Core\Home\Architecture\ConfigurableInterface;
 use Chamilo\Core\Home\Architecture\ContentObjectPublicationBlockInterface;
+use Chamilo\Core\Home\Interfaces\AnonymousBlockRendererInterface;
 use Chamilo\Core\Home\Interfaces\StaticBlockTitleInterface;
 use Chamilo\Core\Home\Service\HomeService;
-use Chamilo\Core\Repository\Integration\Chamilo\Core\Home\Block;
+use Chamilo\Core\Repository\Service\Home\BlockRenderer;
 use Chamilo\Libraries\Format\Structure\Glyph\IdentGlyph;
 use Chamilo\Libraries\Format\Structure\Glyph\NamespaceIdentGlyph;
 use Chamilo\Libraries\Translation\Translation;
 
-class Feeder extends Block
-    implements ConfigurableInterface, StaticBlockTitleInterface, ContentObjectPublicationBlockInterface
+class Feeder extends BlockRenderer
+    implements ConfigurableInterface, StaticBlockTitleInterface, ContentObjectPublicationBlockInterface,
+    AnonymousBlockRendererInterface
 {
 
-    public function __construct(
-        HomeService $homeService, $source = self::SOURCE_DEFAULT, $defaultTitle = ''
-    )
+    public function __construct(HomeService $homeService, $defaultTitle = '')
     {
-        parent::__construct($homeService, $source, Translation::get('Feeder'));
+        parent::__construct($homeService, Translation::get('Feeder'));
     }
 
     /**
@@ -80,10 +80,5 @@ class Feeder extends Block
         }
 
         return parent::getTitle();
-    }
-
-    public function isVisible()
-    {
-        return true; // i.e.display on homepage when anonymous
     }
 }

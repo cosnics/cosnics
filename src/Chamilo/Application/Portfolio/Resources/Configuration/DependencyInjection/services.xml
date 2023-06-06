@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8" ?>
-<container xmlns="http://symfony.com/schema/dic/services"
-           xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+<container xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+           xmlns="http://symfony.com/schema/dic/services"
            xsi:schemaLocation="http://symfony.com/schema/dic/services http://symfony.com/schema/dic/services/services-1.0.xsd">
     <services>
         <defaults autowire="true"
@@ -19,5 +19,9 @@
         <service id="Chamilo\Application\Portfolio\Storage\Repository\NotificationRepository"/>
         <service id="Chamilo\Application\Portfolio\Storage\Repository\PublicationRepository"/>
         <service id="Chamilo\Application\Portfolio\Storage\Repository\RightsRepository"/>
+
+        <service id="Chamilo\Application\Portfolio\Service\Home\FavouriteUsersBlockRenderer">
+            <tag name="Chamilo\Core\Home\Renderer\BlockRenderer"/>
+        </service>
     </services>
 </container>

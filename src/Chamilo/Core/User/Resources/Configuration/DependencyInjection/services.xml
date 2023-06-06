@@ -63,5 +63,9 @@
             <tag name="Chamilo\Core\Admin\Service\ImportActionProvider"/>
         </service>
 
+        <service id="Chamilo\Core\User\Service\Home\LoginBlockRenderer">
+            <tag name="Chamilo\Core\Home\Renderer\BlockRenderer"/>
+        </service>
+
     </services>
 </container>

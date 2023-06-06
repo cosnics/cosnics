@@ -1,9 +1,8 @@
 <?php
 namespace Chamilo\Application\Weblcms\Integration\Chamilo\Core\Home\Form;
 
-use Chamilo\Application\Weblcms\Integration\Chamilo\Core\Home\Connector;
-use Chamilo\Application\Weblcms\Integration\Chamilo\Core\Home\Type\AssignmentNotifications;
-use Chamilo\Application\Weblcms\Integration\Chamilo\Core\Home\Type\FilteredCourseList;
+use Chamilo\Application\Weblcms\Service\Home\AssignmentNotificationsBlockRenderer;
+use Chamilo\Application\Weblcms\Service\Home\Connector;
 use Chamilo\Core\Home\Form\ConfigurationForm;
 use Chamilo\Libraries\Translation\Translation;
 
@@ -26,7 +25,7 @@ class AssignmentNotificationsForm extends ConfigurationForm
 
         $this->addElement(
             'select',
-            AssignmentNotifications::CONFIGURATION_COURSE_TYPE,
+            AssignmentNotificationsBlockRenderer::CONFIGURATION_COURSE_TYPE,
             Translation::get('CourseType'),
             $courseTypes
         );
@@ -34,8 +33,8 @@ class AssignmentNotificationsForm extends ConfigurationForm
 
     public function setDefaults($defaults = [], $filter = null)
     {
-        $defaults[AssignmentNotifications::CONFIGURATION_COURSE_TYPE] = $this->getBlock()->getSetting(
-            AssignmentNotifications::CONFIGURATION_COURSE_TYPE,
+        $defaults[AssignmentNotificationsBlockRenderer::CONFIGURATION_COURSE_TYPE] = $this->getBlock()->getSetting(
+            AssignmentNotificationsBlockRenderer::CONFIGURATION_COURSE_TYPE,
             '-1'
         );
 

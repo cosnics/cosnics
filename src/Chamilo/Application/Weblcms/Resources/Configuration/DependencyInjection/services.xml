@@ -76,5 +76,41 @@
 
         <service id="Chamilo\Application\Weblcms\UserExporter\Renderer\ExcelUserExportRenderer"/>
 
+        <service id="Chamilo\Application\Weblcms\Service\Home\AssignmentNotificationsBlockRenderer">
+            <tag name="Chamilo\Core\Home\Renderer\BlockRenderer"/>
+        </service>
+
+        <service id="Chamilo\Application\Weblcms\Service\Home\AssignmentSubmissionsBlockRenderer">
+            <tag name="Chamilo\Core\Home\Renderer\BlockRenderer"/>
+        </service>
+
+        <service id="Chamilo\Application\Weblcms\Service\Home\CourseListBlockRenderer">
+            <tag name="Chamilo\Core\Home\Renderer\BlockRenderer"/>
+        </service>
+
+        <service id="Chamilo\Application\Weblcms\Service\Home\CourseMenuBlockRenderer">
+            <tag name="Chamilo\Core\Home\Renderer\BlockRenderer"/>
+        </service>
+
+        <service id="Chamilo\Application\Weblcms\Service\Home\EndingAssignmentsBlockRenderer">
+            <tag name="Chamilo\Core\Home\Renderer\BlockRenderer"/>
+        </service>
+
+        <service id="Chamilo\Application\Weblcms\Service\Home\FilteredCourseListBlockRenderer">
+            <tag name="Chamilo\Core\Home\Renderer\BlockRenderer"/>
+        </service>
+
+        <service id="Chamilo\Application\Weblcms\Service\Home\NewAnnouncementsBlockRenderer">
+            <tag name="Chamilo\Core\Home\Renderer\BlockRenderer"/>
+        </service>
+
+        <service id="Chamilo\Application\Weblcms\Service\Home\NewAssignmentsBlockRenderer">
+            <tag name="Chamilo\Core\Home\Renderer\BlockRenderer"/>
+        </service>
+
+        <service id="Chamilo\Application\Weblcms\Service\Home\NewDocumentsBlockRenderer">
+            <tag name="Chamilo\Core\Home\Renderer\BlockRenderer"/>
+        </service>
+
     </services>
 </container>

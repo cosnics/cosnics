@@ -15,6 +15,7 @@
         <service id="Chamilo\Core\Home\Renderer\TabRenderer"/>
         <service id="Chamilo\Core\Home\Renderer\TabHeaderRenderer"/>
         <service id="Chamilo\Core\Home\Renderer\ColumnRenderer"/>
+        <service id="Chamilo\Core\Home\Renderer\BlockRendererFactory"/>
 
         <service id="Chamilo\Core\Home\Service\AngularConnectorService"/>
         <service id="Chamilo\Core\Home\Service\HomeService"/>

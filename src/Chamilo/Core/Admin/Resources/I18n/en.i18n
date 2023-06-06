@@ -419,3 +419,5 @@ WhoisOnlineTableChanged = "The content of the whois online table has changed and
 MaintenanceWarningShow = "Show maintenance warning"
 MaintenanceWarningMessage = "Maintenance warning"
 MaintenanceBlockAccess = "Block the access to the platform (only possible when the maintenance message is shown)"
+ConfigurePortalHomeFirst = "Welcome to Cosnics. Configure this portal first"
+PortalHome = "Portal Home"

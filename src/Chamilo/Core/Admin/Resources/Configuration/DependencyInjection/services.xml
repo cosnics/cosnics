@@ -7,17 +7,6 @@
                   autoconfigure="true"
                   public="true"/>
 
-        <service id="Chamilo\Core\Admin\Announcement\Service\PublicationService"/>
-        <service id="Chamilo\Core\Admin\Announcement\Service\RightsService">
-            <argument key="$rightsRepository"
-                      type="service"
-                      id="Chamilo\Core\Admin\Announcement\Storage\Repository\RightsRepository"/>
-        </service>
-
-        <service id="Chamilo\Core\Admin\Announcement\Storage\Repository\PublicationRepository"/>
-        <service id="Chamilo\Core\Admin\Announcement\Storage\Repository\RightsRepository"/>
-        <service id="Chamilo\Core\Admin\Announcement\Table\PublicationTableRenderer"/>
-
         <service id="Chamilo\Core\Admin\Service\WhoIsOnlineService"/>
         <service id="Chamilo\Core\Admin\Repository\WhoIsOnlineRepository"/>
 
@@ -25,6 +14,10 @@
         <service id="Chamilo\Core\Admin\Service\ImportActionProvider"/>
         <service id="Chamilo\Core\Admin\Service\AdminActionProvider">
             <tag name="Chamilo\Core\Admin\Service\ActionProvider"/>
+        </service>
+
+        <service id="Chamilo\Core\Admin\Service\Home\PortalHomeBlockRenderer">
+            <tag name="Chamilo\Core\Home\Renderer\BlockRenderer"/>
         </service>
 
     </services>

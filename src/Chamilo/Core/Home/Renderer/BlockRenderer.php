@@ -11,17 +11,14 @@ use Chamilo\Core\Home\Rights\Storage\Repository\RightsRepository;
 use Chamilo\Core\Home\Service\HomeService;
 use Chamilo\Core\Repository\Storage\DataClass\ContentObject;
 use Chamilo\Core\User\Storage\DataClass\User;
-use Chamilo\Libraries\DependencyInjection\Traits\DependencyInjectionContainerTrait;
 use Chamilo\Libraries\Format\Structure\Glyph\FontAwesomeGlyph;
 use Chamilo\Libraries\Translation\Translation;
 
 /**
- * @package common.libraries
+ * @package Chamilo\Core\Home\Renderer
  */
 class BlockRenderer
 {
-    use DependencyInjectionContainerTrait;
-
     public const BLOCK_PROPERTY_ID = 'id';
     public const BLOCK_PROPERTY_IMAGE = 'image';
     public const BLOCK_PROPERTY_NAME = 'name';
@@ -39,33 +36,13 @@ class BlockRenderer
     protected $generalMode;
 
     /**
-     * The source from which this block renderer is called
-     *
-     * @var int
-     */
-    protected $source;
-
-    /**
      * @var \Chamilo\Core\Home\Service\HomeService
      */
-    private $homeService;
+    private HomeService $homeService;
 
-    private $type;
-
-    /**
-     * @param \Chamilo\Libraries\Architecture\Application\Application $application
-     * @param \Chamilo\Core\Home\Service\HomeService $homeService
-     * @param \Chamilo\Core\Home\Storage\DataClass\Block $block
-     * @param int $source
-     */
-    public function __construct(
-        HomeService $homeService, $source = self::SOURCE_DEFAULT
-    )
+    public function __construct(HomeService $homeService)
     {
         $this->homeService = $homeService;
-        $this->source = $source;
-
-        $this->initializeContainer();
     }
 
     public function displayActions()
@@ -206,16 +183,6 @@ class BlockRenderer
         return htmlspecialchars($this->getBlock()->getTitle());
     }
 
-    /**
-     * Returns the types of content object that this object may publish
-     *
-     * @return array The types.
-     */
-    public function getType()
-    {
-        return $this->type;
-    }
-
     public function getUrl($parameters = [], $filter = [], $encode_entities = false)
     {
         return $this->getRenderer()->get_url($parameters, $filter, $encode_entities);
@@ -324,15 +291,12 @@ class BlockRenderer
     }
 
     /**
-     * Returns true if the block is to be displayed, false otherwise.
-     * By default do not show on home page when user is
+     * By default do not show on home page block when user is
      * not connected.
-     *
-     * @return bool
      */
-    public function isVisible()
+    public function isVisible(?User $user = null): bool
     {
-        return $this->getSession()->get(\Chamilo\Core\User\Manager::SESSION_USER_ID) != 0;
+        return $user instanceof User;
     }
 
     /**

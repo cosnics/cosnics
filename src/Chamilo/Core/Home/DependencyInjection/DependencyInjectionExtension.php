@@ -1,16 +1,19 @@
 <?php
 namespace Chamilo\Core\Home\DependencyInjection;
 
+use Chamilo\Core\Home\DependencyInjection\CompilerPass\AvailableBlockRendererCompilerPass;
 use Chamilo\Libraries\DependencyInjection\AbstractDependencyInjectionExtension;
+use Chamilo\Libraries\DependencyInjection\Interfaces\ICompilerPassExtension;
 use Chamilo\Libraries\DependencyInjection\Traits\ExtensionTrait;
+use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symfony\Component\DependencyInjection\Extension\ExtensionInterface;
 
 /**
  * @package Chamilo\Core\Home\Integration\Chamilo\Core\Admin\DependencyInjection
- *
- * @author Hans De Bisschop <hans.de.bisschop@ehb.be>
+ * @author  Hans De Bisschop <hans.de.bisschop@ehb.be>
  */
-class DependencyInjectionExtension extends AbstractDependencyInjectionExtension implements ExtensionInterface
+class DependencyInjectionExtension extends AbstractDependencyInjectionExtension
+    implements ExtensionInterface, ICompilerPassExtension
 {
     use ExtensionTrait;
 
@@ -22,5 +25,10 @@ class DependencyInjectionExtension extends AbstractDependencyInjectionExtension 
     public function getConfigurationFiles(): array
     {
         return ['Chamilo\Core\Home' => ['services.xml', 'tables.xml']];
+    }
+
+    public function registerCompilerPasses(ContainerBuilder $container)
+    {
+        $container->addCompilerPass(new AvailableBlockRendererCompilerPass());
     }
 }

@@ -24,7 +24,7 @@ class Connector
 
         $condition = new EqualityCondition(
             new PropertyConditionVariable(ContentObject::class, ContentObject::PROPERTY_OWNER_ID),
-            new StaticConditionVariable($this->getSession()->get(\Chamilo\Core\User\Manager::SESSION_USER_IO))
+            new StaticConditionVariable($this->getSession()->get(\Chamilo\Core\User\Manager::SESSION_USER_ID))
         );
 
         $objects = DataManager::retrieve_active_content_objects(

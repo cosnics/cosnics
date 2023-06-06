@@ -710,7 +710,7 @@ abstract class CommonCourseForm extends FormValidator implements CourseSettingsX
                 }
 
                 if ($selected_entity->get_entity_type() == 1 &&
-                    $selected_entity->get_entity_id() == $this->getSession()->get(\Chamilo\Core\User\Manager::SESSION_USER_IO))
+                    $selected_entity->get_entity_id() == $this->getSession()->get(\Chamilo\Core\User\Manager::SESSION_USER_ID))
                 {
                     $defaults[$option_name] = CourseManagementRights::RIGHT_OTPION_ME;
                     continue;
