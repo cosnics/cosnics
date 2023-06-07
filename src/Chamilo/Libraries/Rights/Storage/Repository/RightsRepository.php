@@ -30,25 +30,16 @@ use Doctrine\Common\Collections\ArrayCollection;
 
 /**
  * @package Chamilo\Core\Rights\Storage\Repository
- *
  * @author  Hans De Bisschop <hans.de.bisschop@ehb.be>
  */
 abstract class RightsRepository
 {
     /**
-     *
-     * @var \Chamilo\Libraries\Storage\DataManager\Repository\NestedSetDataClassRepository
-     */
-    private $nestedSetDataClassRepository;
-
-    /**
-     *
      * @var \Chamilo\Libraries\Storage\DataManager\Repository\DataClassRepository
      */
     private $dataClassRepository;
 
     /**
-     *
      * @var \Chamilo\Libraries\Storage\Cache\DataClassRepositoryCache
      */
     private $dataClassRepositoryCache;
@@ -62,6 +53,11 @@ abstract class RightsRepository
      * @var \Chamilo\Libraries\Storage\Query\Condition\Condition[]
      */
     private $entityItemConditionCache;
+
+    /**
+     * @var \Chamilo\Libraries\Storage\DataManager\Repository\NestedSetDataClassRepository
+     */
+    private $nestedSetDataClassRepository;
 
     /**
      * @param \Chamilo\Libraries\Storage\DataManager\Repository\NestedSetDataClassRepository $nestedSetDataClassRepository
@@ -79,14 +75,14 @@ abstract class RightsRepository
     }
 
     /**
-     * @param integer $userIdentifier
+     * @param int $userIdentifier
      * @param \Chamilo\Libraries\Rights\Interfaces\RightsEntityProvider[] $entities
-     * @param integer[] $rights
-     * @param integer[] $types
-     * @param integer $treeType
-     * @param integer $treeIdentifier
+     * @param int $rights
+     * @param int $types
+     * @param int $treeType
+     * @param int $treeIdentifier
      *
-     * @return integer
+     * @return int
      */
     public function countLocationOverviewWithGrantedRights(
         int $userIdentifier, array $entities, array $rights = [], array $types = [], $treeType = null,
@@ -101,13 +97,13 @@ abstract class RightsRepository
 
         $parameters = new DataClassCountParameters(
             $condition, $joins, new RetrieveProperties(
-                array(
+                [
                     new FunctionConditionVariable(
                         FunctionConditionVariable::DISTINCT, new PropertyConditionVariable(
                             $rightsLocationClassName, RightsLocation::PROPERTY_IDENTIFIER
                         )
                     )
-                )
+                ]
             )
         );
 
@@ -117,7 +113,7 @@ abstract class RightsRepository
     /**
      * @param \Chamilo\Libraries\Rights\Domain\RightsLocation $location
      *
-     * @return boolean
+     * @return bool
      * @throws \Exception
      */
     public function createRightsLocation(RightsLocation $location)
@@ -128,7 +124,7 @@ abstract class RightsRepository
     /**
      * @param \Chamilo\Libraries\Rights\Domain\RightsLocationEntityRight $rightsLocationEntityRight
      *
-     * @return boolean
+     * @return bool
      * @throws \Exception
      */
     public function createRightsLocationEntityRight(RightsLocationEntityRight $rightsLocationEntityRight)
@@ -141,7 +137,7 @@ abstract class RightsRepository
     /**
      * @param \Chamilo\Libraries\Rights\Domain\RightsLocation $rightsLocation
      *
-     * @return boolean
+     * @return bool
      * @throws \Exception
      */
     public function deleteRightsLocation(RightsLocation $rightsLocation)
@@ -167,7 +163,7 @@ abstract class RightsRepository
     /**
      * @param \Chamilo\Libraries\Rights\Domain\RightsLocationEntityRight $rightsLocationEntityRight
      *
-     * @return boolean
+     * @return bool
      */
     public function deleteRightsLocationEntityRight(RightsLocationEntityRight $rightsLocationEntityRight)
     {
@@ -176,11 +172,11 @@ abstract class RightsRepository
 
     /**
      * @param \Chamilo\Libraries\Rights\Domain\RightsLocation $location
-     * @param integer $entityIdentifier
-     * @param integer $entityType
-     * @param integer $right
+     * @param int $entityIdentifier
+     * @param int $entityType
+     * @param int $right
      *
-     * @return boolean
+     * @return bool
      * @see DataManager::delete_rights_location_entity_rights()
      */
     public function deleteRightsLocationEntityRightsForLocationAndParameters(
@@ -230,11 +226,11 @@ abstract class RightsRepository
     }
 
     /**
-     * @param integer $entityIdentifier
-     * @param integer $entityType
+     * @param int $entityIdentifier
+     * @param int $entityType
      * @param \Chamilo\Libraries\Rights\Domain\RightsLocation $location
      *
-     * @return integer[]
+     * @return int
      * @throws \Exception
      */
     public function findGrantedRightsForEntityAndLocation(
@@ -250,8 +246,7 @@ abstract class RightsRepository
      * @param \Chamilo\Libraries\Rights\Domain\RightsLocation $location
      * @param \Chamilo\Libraries\Storage\Query\Condition\Condition $condition
      *
-     * @return integer[]
-     * @throws \Exception
+     * @return int
      */
     public function findGrantedRightsForLocationAndCondition(
         RightsLocation $location, Condition $condition
@@ -270,7 +265,7 @@ abstract class RightsRepository
 
         $join = new Join(
             $rightsLocationClassName, new AndCondition(
-                array(
+                [
                     new EqualityCondition(
                         new PropertyConditionVariable($rightsLocationClassName, RightsLocation::PROPERTY_ID),
                         new StaticConditionVariable($location->getId())
@@ -283,23 +278,23 @@ abstract class RightsRepository
                             $rightsLocationClassName, RightsLocation::PROPERTY_ID
                         )
                     )
-                )
+                ]
             )
         );
 
         return $this->getDataClassRepository()->distinct(
             $rightsLocationEntityRightClassName, new DataClassDistinctParameters(
-                $condition, $properties, new Joins(array($join))
+                $condition, $properties, new Joins([$join])
             )
         );
     }
 
     /**
-     * @param integer $userIdentifier
+     * @param int $userIdentifier
      * @param \Chamilo\Libraries\Rights\Domain\RightsLocation $location
      * @param \Chamilo\Libraries\Rights\Interfaces\RightsEntityProvider[] $entities
      *
-     * @return integer[]
+     * @return int
      * @throws \Exception
      */
     public function findGrantedRightsForUserIdentifierLocationAndEntities(
@@ -314,7 +309,7 @@ abstract class RightsRepository
     /**
      * @param \Chamilo\Libraries\Storage\Query\Condition\Condition $condition
      *
-     * @return integer[]
+     * @return int
      * @throws \Exception
      */
     public function findInheritingIdentifiers(Condition $condition)
@@ -333,11 +328,11 @@ abstract class RightsRepository
             new AndCondition(
                 $conditions
             ), new RetrieveProperties(
-                array(
+                [
                     new PropertyConditionVariable(
                         $rightsLocationClassName, RightsLocation::PROPERTY_IDENTIFIER
                     )
-                )
+                ]
             )
         );
 
@@ -347,10 +342,10 @@ abstract class RightsRepository
     /**
      * Returns those ID's from $location_ids which user ($entity_condition) has given right to.
      *
-     * @param integer $userIdentifier
+     * @param int $userIdentifier
      * @param \Chamilo\Libraries\Rights\Interfaces\RightsEntityProvider[] $entities
-     * @param integer $right
-     * @param integer[] $locationIdentifiers
+     * @param int $right
+     * @param int $locationIdentifiers
      *
      * @return string[][] Keys: Those locations ID's from $location_ids which user has given right to. Values: True.
      * @throws \Exception
@@ -390,7 +385,7 @@ abstract class RightsRepository
     }
 
     /**
-     * @param integer[] $locationIdentifiers
+     * @param int $locationIdentifiers
      *
      * @return string[][]
      * @throws \Exception
@@ -430,12 +425,12 @@ abstract class RightsRepository
     }
 
     /**
-     * @param integer $userIdentifier
+     * @param int $userIdentifier
      * @param \Chamilo\Libraries\Rights\Interfaces\RightsEntityProvider[] $entities
-     * @param integer[] $rights
-     * @param integer[] $types
-     * @param integer $treeType
-     * @param integer $treeIdentifier
+     * @param int $rights
+     * @param int $types
+     * @param int $treeType
+     * @param int $treeIdentifier
      *
      * @return string[][]
      * @throws \Exception
@@ -468,9 +463,9 @@ abstract class RightsRepository
     /**
      * @param \Chamilo\Libraries\Storage\Query\Condition\Condition $condition
      * @param \Chamilo\Libraries\Storage\Query\Condition\Condition $entitiesCondition
-     * @param integer $right
+     * @param int $right
      *
-     * @return integer[]
+     * @return int
      * @throws \Exception
      */
     public function findNonInheritingIdentifiers(Condition $condition, Condition $entitiesCondition, int $right)
@@ -493,11 +488,11 @@ abstract class RightsRepository
 
         $parameters = new DataClassDistinctParameters(
             new AndCondition($nonInheritingConditions), new RetrieveProperties(
-            array(
+            [
                 new PropertyConditionVariable(
                     $rightsLocationClassName, RightsLocation::PROPERTY_IDENTIFIER
                 )
-            )
+            ]
         ), $this->getRightsLocationEntityRightJoins()
         );
 
@@ -505,7 +500,7 @@ abstract class RightsRepository
     }
 
     /**
-     * @param integer $right
+     * @param int $right
      * @param \Chamilo\Libraries\Rights\Domain\RightsLocation $location
      *
      * @return string[][]
@@ -575,7 +570,7 @@ abstract class RightsRepository
     }
 
     /**
-     * @param integer $identifier
+     * @param int $identifier
      *
      * @return \Chamilo\Libraries\Rights\Domain\RightsLocation
      * @see DataManager::retrieve_rights_location_by_id()
@@ -586,10 +581,10 @@ abstract class RightsRepository
     }
 
     /**
-     * @param integer $identifier
-     * @param integer $type
-     * @param integer $treeIdentifier
-     * @param integer $treeType
+     * @param int $identifier
+     * @param int $type
+     * @param int $treeIdentifier
+     * @param int $treeType
      *
      * @return \Chamilo\Libraries\Rights\Domain\RightsLocation
      * @see DataManager::retrieve_rights_location_by_identifier()
@@ -631,7 +626,7 @@ abstract class RightsRepository
     }
 
     /**
-     * @param integer $identifier
+     * @param int $identifier
      *
      * @return \Chamilo\Libraries\Rights\Domain\RightsLocationEntityRight
      * @see DataManager::retrieve_rights_location_entity_right_by_id()
@@ -644,10 +639,10 @@ abstract class RightsRepository
     }
 
     /**
-     * @param integer $right
-     * @param integer $entityIdentifier
-     * @param integer $entityType
-     * @param integer $locationIdentifier
+     * @param int $right
+     * @param int $entityIdentifier
+     * @param int $entityType
+     * @param int $locationIdentifier
      *
      * @return \Chamilo\Libraries\Rights\Domain\RightsLocationEntityRight
      * @see DataManager::retrieve_rights_location_entity_right()
@@ -691,8 +686,8 @@ abstract class RightsRepository
 
     /**
      * @param \Chamilo\Libraries\Storage\Query\Condition\Condition $condition
-     * @param integer $offset
-     * @param integer $count
+     * @param int $offset
+     * @param int $count
      * @param \Chamilo\Libraries\Storage\Query\OrderBy $orderBy
      *
      * @return \Chamilo\Libraries\Rights\Domain\RightsLocationEntityRight[]
@@ -709,10 +704,10 @@ abstract class RightsRepository
     }
 
     /**
-     * @param integer $right
-     * @param integer[] $entityIdentifiers
-     * @param integer $entityType
-     * @param integer $locationIdentifier
+     * @param int $right
+     * @param int $entityIdentifiers
+     * @param int $entityType
+     * @param int $locationIdentifier
      *
      * @return \Chamilo\Libraries\Rights\Domain\RightsLocationEntityRight[]
      */
@@ -754,14 +749,14 @@ abstract class RightsRepository
     }
 
     /**
-     * @param integer $right
+     * @param int $right
      * @param \Chamilo\Libraries\Rights\Domain\RightsLocation $parentLocation
-     * @param integer $type
-     * @param integer $userIdentifier
+     * @param int $type
+     * @param int $userIdentifier
      * @param \Chamilo\Libraries\Rights\Interfaces\RightsEntityProvider[] $entities
-     * @param boolean $parentHasRight
+     * @param bool $parentHasRight
      *
-     * @return integer[]
+     * @return int
      * @throws \Exception
      */
     public function findRightsLocationIdentifiersWithGrantedRight(
@@ -806,11 +801,11 @@ abstract class RightsRepository
 
             $parameters = new DataClassDistinctParameters(
                 new AndCondition($conditions), new RetrieveProperties(
-                array(
+                [
                     new PropertyConditionVariable(
                         $rightsLocationClassName, RightsLocation::PROPERTY_IDENTIFIER
                     )
-                )
+                ]
             ), $this->getRightsLocationEntityRightJoins()
             );
 
@@ -826,8 +821,8 @@ abstract class RightsRepository
     }
 
     /**
-     * @param integer[] $identifiers
-     * @param integer $type
+     * @param int $identifiers
+     * @param int $type
      *
      * @return string[][]
      * @throws \Exception
@@ -855,8 +850,8 @@ abstract class RightsRepository
     }
 
     /**
-     * @param integer $locationIdentifier
-     * @param integer[] $rights
+     * @param int $locationIdentifier
+     * @param int $rights
      *
      * @return \Chamilo\Libraries\Rights\Domain\RightsLocationEntityRight[]
      */
@@ -866,7 +861,7 @@ abstract class RightsRepository
 
         if (!is_array($rights))
         {
-            $rights = array($rights);
+            $rights = [$rights];
         }
 
         $conditions[] = new EqualityCondition(
@@ -890,12 +885,12 @@ abstract class RightsRepository
             ), SORT_ASC
         );
 
-        return $this->findRightsLocationEntityRights($condition, null, null, new OrderBy(array($orderBy)));
+        return $this->findRightsLocationEntityRights($condition, null, null, new OrderBy([$orderBy]));
     }
 
     /**
-     * @param integer $treeType
-     * @param integer $treeIdentifier
+     * @param int $treeType
+     * @param int $treeIdentifier
      *
      * @return \Chamilo\Libraries\Rights\Domain\RightsLocation
      */
@@ -931,15 +926,6 @@ abstract class RightsRepository
     }
 
     /**
-     * @param \Chamilo\Libraries\Storage\DataManager\Repository\DataClassRepository $dataClassRepository
-     */
-    public function setDataClassRepository(DataClassRepository $dataClassRepository): void
-    {
-        $this->dataClassRepository = $dataClassRepository;
-    }
-
-    /**
-     *
      * @return \Chamilo\Libraries\Storage\Cache\DataClassRepositoryCache
      */
     public function getDataClassRepositoryCache()
@@ -948,16 +934,7 @@ abstract class RightsRepository
     }
 
     /**
-     *
-     * @param \Chamilo\Libraries\Storage\Cache\DataClassRepositoryCache $dataClassRepositoryCache
-     */
-    public function setDataClassRepositoryCache(DataClassRepositoryCache $dataClassRepositoryCache)
-    {
-        $this->dataClassRepositoryCache = $dataClassRepositoryCache;
-    }
-
-    /**
-     * @param integer $userIdentifier
+     * @param int $userIdentifier
      * @param \Chamilo\Libraries\Rights\Interfaces\RightsEntityProvider[] $entities
      *
      * @return \Chamilo\Libraries\Storage\Query\Condition\Condition
@@ -1032,16 +1009,16 @@ abstract class RightsRepository
 
         foreach ($entities as $entityType => $entityProvider)
         {
-            $entitiesIdentifiers[] = array($entityType, get_class($entityProvider));
+            $entitiesIdentifiers[] = [$entityType, get_class($entityProvider)];
         }
 
         return md5(serialize($entitiesIdentifiers));
     }
 
     /**
-     * @param integer $entityIdentifier
-     * @param integer $entityType
-     * @param integer $locationIdentifier
+     * @param int $entityIdentifier
+     * @param int $entityType
+     * @param int $locationIdentifier
      *
      * @return \Chamilo\Libraries\Storage\Query\Condition\Condition
      */
@@ -1164,7 +1141,7 @@ abstract class RightsRepository
         );
 
         return new Joins(
-            array(new Join($rightsLocationEntityRightClassName, new AndCondition($joinConditions)))
+            [new Join($rightsLocationEntityRightClassName, new AndCondition($joinConditions))]
         );
     }
 
@@ -1174,14 +1151,6 @@ abstract class RightsRepository
     public function getNestedSetDataClassRepository(): NestedSetDataClassRepository
     {
         return $this->nestedSetDataClassRepository;
-    }
-
-    /**
-     * @param \Chamilo\Libraries\Storage\DataManager\Repository\NestedSetDataClassRepository $nestedSetDataClassRepository
-     */
-    public function setNestedSetDataClassRepository(NestedSetDataClassRepository $nestedSetDataClassRepository): void
-    {
-        $this->nestedSetDataClassRepository = $nestedSetDataClassRepository;
     }
 
     /**
@@ -1211,14 +1180,14 @@ abstract class RightsRepository
             )
         );
 
-        return new Joins(array($join));
+        return new Joins([$join]);
     }
 
     /**
      * @param \Chamilo\Libraries\Rights\Domain\RightsLocation $location
-     * @param integer $parentLocationIdentifier
+     * @param int $parentLocationIdentifier
      *
-     * @return boolean
+     * @return bool
      * @throws \Exception
      */
     public function moveRightsLocation(RightsLocation $location, $parentLocationIdentifier)
@@ -1227,9 +1196,33 @@ abstract class RightsRepository
     }
 
     /**
+     * @param \Chamilo\Libraries\Storage\DataManager\Repository\DataClassRepository $dataClassRepository
+     */
+    public function setDataClassRepository(DataClassRepository $dataClassRepository): void
+    {
+        $this->dataClassRepository = $dataClassRepository;
+    }
+
+    /**
+     * @param \Chamilo\Libraries\Storage\Cache\DataClassRepositoryCache $dataClassRepositoryCache
+     */
+    public function setDataClassRepositoryCache(DataClassRepositoryCache $dataClassRepositoryCache)
+    {
+        $this->dataClassRepositoryCache = $dataClassRepositoryCache;
+    }
+
+    /**
+     * @param \Chamilo\Libraries\Storage\DataManager\Repository\NestedSetDataClassRepository $nestedSetDataClassRepository
+     */
+    public function setNestedSetDataClassRepository(NestedSetDataClassRepository $nestedSetDataClassRepository): void
+    {
+        $this->nestedSetDataClassRepository = $nestedSetDataClassRepository;
+    }
+
+    /**
      * @param \Chamilo\Libraries\Rights\Domain\RightsLocation $location
      *
-     * @return boolean
+     * @return bool
      * @throws \Exception
      */
     public function updateRightsLocation(RightsLocation $location)

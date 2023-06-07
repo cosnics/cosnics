@@ -1,5 +1,5 @@
 <?php
-namespace Chamilo\Core\Repository\ContentObject\RssFeed\Integration\Chamilo\Core\Home;
+namespace Chamilo\Core\Repository\ContentObject\RssFeed\Service\Home;
 
 use Chamilo\Core\Repository\ContentObject\RssFeed\Storage\DataClass\RssFeed;
 use Chamilo\Core\Repository\Storage\DataClass\ContentObject;

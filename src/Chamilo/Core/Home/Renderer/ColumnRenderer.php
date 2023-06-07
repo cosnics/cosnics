@@ -50,7 +50,7 @@ class ColumnRenderer
         {
             $blockRenderer = $this->getBlockRendererFactory()->getRenderer($block);
 
-            if ($blockRenderer instanceof AnonymousBlockInterface || $blockRenderer->isVisible($user))
+            if ($blockRenderer instanceof AnonymousBlockInterface || $blockRenderer->isVisible($block, $user))
             {
                 $html[] = $blockRenderer->render($block, $isGeneralMode, $user);
             }

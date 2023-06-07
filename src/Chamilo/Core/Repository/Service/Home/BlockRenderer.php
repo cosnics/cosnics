@@ -1,14 +1,16 @@
 <?php
 namespace Chamilo\Core\Repository\Service\Home;
 
+use Chamilo\Configuration\Service\Consulter\ConfigurationConsulter;
 use Chamilo\Core\Home\Manager;
-use Chamilo\Core\Home\Repository\ContentObjectPublicationRepository;
 use Chamilo\Core\Home\Service\ContentObjectPublicationService;
 use Chamilo\Core\Home\Service\HomeService;
+use Chamilo\Core\Home\Storage\DataClass\Block;
 use Chamilo\Core\Home\Storage\DataClass\ContentObjectPublication;
-use Chamilo\Core\Repository\Publication\Storage\Repository\PublicationRepository;
 use Chamilo\Core\Repository\Storage\DataClass\ContentObject;
-use Chamilo\Libraries\Translation\Translation;
+use Chamilo\Core\User\Storage\DataClass\User;
+use Chamilo\Libraries\Architecture\Application\Routing\UrlGenerator;
+use Symfony\Component\Translation\Translator;
 
 /**
  * Base class for blocks based on a content object.
@@ -17,106 +19,59 @@ use Chamilo\Libraries\Translation\Translation;
  * @license       GNU General Public License - http://www.gnu.org/copyleft/gpl.html
  * @author        lopprecht
  */
-class BlockRenderer extends \Chamilo\Core\Home\Renderer\BlockRenderer
+abstract class BlockRenderer extends \Chamilo\Core\Home\Renderer\BlockRenderer
 {
     public const CONFIGURATION_OBJECT_ID = 'use_object';
 
-    /**
-     * @var ContentObjectPublication
-     */
-    protected $contentObjectPublication;
+    protected ContentObjectPublicationService $contentObjectPublicationService;
 
-    /**
-     * @var ContentObjectPublicationService
-     */
-    protected $contentObjectPublicationService;
-
-    protected $defaultTitle = '';
-
-    private $template_callback_context = [];
-
-    public function __construct(HomeService $homeService, $defaultTitle = '')
+    public function __construct(
+        HomeService $homeService, UrlGenerator $urlGenerator, Translator $translator,
+        ConfigurationConsulter $configurationConsulter, ContentObjectPublicationService $contentObjectPublicationService
+    )
     {
-        parent::__construct($homeService);
-        $this->defaultTitle = $defaultTitle ?: Translation::get('Object');
+        parent::__construct($homeService, $urlGenerator, $translator, $configurationConsulter);
 
-        $this->contentObjectPublicationService = new ContentObjectPublicationService(
-            new ContentObjectPublicationRepository(new PublicationRepository())
-        );
+        $this->contentObjectPublicationService = $contentObjectPublicationService;
     }
 
-    public function displayContent(): string
+    public function displayContent(Block $block, ?User $user = null): string
     {
-        return $this->isConfigured() ? $this->displayRepositoryContent() : $this->displayEmpty();
+        return $this->isConfigured($block) ? $this->displayRepositoryContent($block) : $this->displayEmpty();
     }
 
-    /**
-     * Returns the html to display when the block is not configured.
-     *
-     * @return string
-     */
     public function displayEmpty(): string
     {
-        return Translation::get('ConfigureBlockFirst', null, Manager::CONTEXT);
+        return $this->getTranslator()->trans('ConfigureBlockFirst', [], Manager::CONTEXT);
     }
 
-    abstract public function displayRepositoryContent(): string;
+    abstract public function displayRepositoryContent(Block $block): string;
 
-    /**
-     * @see \Chamilo\Core\Home\Architecture\Interfaces\ConfigurableBlockInterface::getConfigurationVariables()
-     */
-    public function getConfigurationVariables()
+    public function getConfigurationVariables(): array
     {
         return [];
     }
 
-    /**
-     * Returns an array of the configuration values that return content object ids that need to be published in the
-     * home application
-     *
-     * @return string[]
-     */
-    public function getContentObjectConfigurationVariables()
+    public function getContentObjectConfigurationVariables(): array
     {
         return [self::CONFIGURATION_OBJECT_ID];
     }
 
-    /**
-     * Returns the content object publication for this block
-     */
-    protected function getContentObjectPublication()
+    protected function getContentObjectPublication(Block $block): ?ContentObjectPublication
     {
-        if (!isset($this->contentObjectPublication))
-        {
-            $this->contentObjectPublication =
-                $this->contentObjectPublicationService->getFirstContentObjectPublicationForElement(
-                    $this->getBlock()
-                );
-        }
-
-        return $this->contentObjectPublication;
+        return $this->getContentObjectPublicationService()->getFirstContentObjectPublicationForElement($block);
     }
 
-    /**
-     * The default's title value.
-     * That is the title to display when the block is not linked to a content object.
-     *
-     * @return string
-     */
-    protected function getDefaultTitle()
+    public function getContentObjectPublicationService(): ContentObjectPublicationService
     {
-        return $this->defaultTitle;
+        return $this->contentObjectPublicationService;
     }
 
-    /**
-     * If the block is linked to an object returns it.
-     * Otherwise returns null.
-     *
-     * @return ContentObject
-     */
-    public function getObject()
+    abstract protected function getDefaultTitle(): string;
+
+    public function getObject(Block $block): ?ContentObject
     {
-        $contentObjectPublication = $this->getContentObjectPublication();
+        $contentObjectPublication = $this->getContentObjectPublication($block);
 
         if ($contentObjectPublication instanceof ContentObjectPublication)
         {
@@ -126,15 +81,9 @@ class BlockRenderer extends \Chamilo\Core\Home\Renderer\BlockRenderer
         return null;
     }
 
-    /**
-     * If the block is linked to an object returns the object id.
-     * Otherwise returns 0.
-     *
-     * @return int
-     */
-    public function getObjectId()
+    public function getObjectId(Block $block): ?int
     {
-        $contentObjectPublication = $this->getContentObjectPublication();
+        $contentObjectPublication = $this->getContentObjectPublication($block);
 
         if ($contentObjectPublication instanceof ContentObjectPublication)
         {
@@ -144,69 +93,20 @@ class BlockRenderer extends \Chamilo\Core\Home\Renderer\BlockRenderer
         return null;
     }
 
-    /**
-     * Returns the text title to display.
-     * That is the content's object title if the block is configured or the default
-     * title otherwise;
-     *
-     * @return string
-     */
-    public function getTitle()
+    public function getTitle(Block $block, ?User $user = null): string
     {
-        $content_object = $this->getObject();
+        $content_object = $this->getObject($block);
 
         return empty($content_object) ? $this->getDefaultTitle() : $content_object->get_title();
-    }
-
-    // BASIC TEMPLATING FUNCTIONS.
-
-    // @TODO: remove that when we move to a templating system
-    // @NOTE: could be more efficient to do an include or eval
-
-    /**
-     * Constructs the attachment url for the given attachment and the current object.
-     *
-     * @param ContentObject $attachment The attachment for which the url is needed.
-     *
-     * @return mixed the url, or null if no view right.
-     */
-    public function get_content_object_display_attachment_url($attachment)
-    {
-        return null;
     }
 
     /**
      * Return true if the block is linked to an object.
      * Otherwise returns false.
-     *
-     * @return bool
      */
-    public function isConfigured()
+    public function isConfigured(Block $block): bool
     {
-        return $this->getObjectId() != 0;
-    }
-
-    protected function process_template($template, $vars)
-    {
-        $pattern = '/\{\$[a-zA-Z_][a-zA-Z0-9_]*\}/';
-        $this->template_callback_context = $vars;
-        $template = preg_replace_callback($pattern, [$this, 'process_template_callback'], $template);
-
-        return $template;
-    }
-
-    private function process_template_callback($matches)
-    {
-        $vars = $this->template_callback_context;
-        $name = trim($matches[0], '{$}');
-        $result = isset($vars[$name]) ? $vars[$name] : '';
-
-        return $result;
-    }
-
-    protected function setDefaultTitle($value)
-    {
-        $this->defaultTitle = $value;
+        return $this->getObjectId($block) != 0;
     }
 
 }

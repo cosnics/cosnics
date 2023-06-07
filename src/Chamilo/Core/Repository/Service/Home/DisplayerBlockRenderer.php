@@ -5,29 +5,35 @@ use Chamilo\Core\Home\Architecture\Interfaces\AnonymousBlockInterface;
 use Chamilo\Core\Home\Architecture\Interfaces\ConfigurableBlockInterface;
 use Chamilo\Core\Home\Architecture\Interfaces\ContentObjectPublicationBlockInterface;
 use Chamilo\Core\Home\Architecture\Interfaces\StaticBlockTitleInterface;
-use Chamilo\Core\Home\Service\HomeService;
+use Chamilo\Core\Home\Storage\DataClass\Block;
 use Chamilo\Core\Repository\Common\Rendition\ContentObjectRendition;
 use Chamilo\Core\Repository\Common\Rendition\ContentObjectRenditionImplementation;
-use Chamilo\Libraries\Translation\Translation;
+use Chamilo\Core\Repository\Manager;
+use Chamilo\Core\Repository\Storage\DataClass\ContentObject;
 
-class DisplayerBlock extends BlockRenderer
+class DisplayerBlockRenderer extends BlockRenderer
     implements ConfigurableBlockInterface, StaticBlockTitleInterface, ContentObjectPublicationBlockInterface,
     AnonymousBlockInterface
 {
 
-    public function __construct(HomeService $homeService, $defaultTitle = '')
+    public function displayRepositoryContent(Block $block): string
     {
-        parent::__construct($homeService, Translation::get('Displayer'));
-    }
-
-    public function displayRepositoryContent(): string
-    {
-        $content_object = $this->getObject();
+        $content_object = $this->getObject($block);
 
         $display = ContentObjectRenditionImplementation::factory(
-            $content_object, ContentObjectRendition::FORMAT_HTML, ContentObjectRendition::VIEW_DESCRIPTION, $this
+            $content_object, ContentObjectRendition::FORMAT_HTML, ContentObjectRendition::VIEW_DESCRIPTION
         );
 
         return $display->render();
+    }
+
+    protected function getDefaultTitle(): string
+    {
+        return $this->getTranslator()->trans('Displayer', [], Manager::CONTEXT);
+    }
+
+    public function get_content_object_display_attachment_url(ContentObject $attachment): ?string
+    {
+        return null;
     }
 }

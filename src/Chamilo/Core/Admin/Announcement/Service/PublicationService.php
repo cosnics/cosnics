@@ -330,16 +330,10 @@ class PublicationService
     }
 
     /**
-     * @param int $userIdentifier
-     * @param \Chamilo\Libraries\Storage\Query\Condition\Condition $condition
-     * @param int $count
-     * @param int $offset
-     * @param \Chamilo\Libraries\Storage\Query\OrderBy $orderBy
-     *
-     * @throws \Exception
+     * @throws \Chamilo\Libraries\Storage\Exception\DataClassNoResultException
      */
     public function findVisiblePublicationRecordsForUserIdentifier(
-        int $userIdentifier, Condition $condition = null, int $count = null, int $offset = null,
+        string $userIdentifier, Condition $condition = null, int $count = null, int $offset = null,
         ?OrderBy $orderBy = null
     ): ArrayCollection
     {

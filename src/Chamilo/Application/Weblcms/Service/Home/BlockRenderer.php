@@ -11,20 +11,32 @@ use Chamilo\Libraries\Storage\Query\OrderProperty;
 use Chamilo\Libraries\Storage\Query\Variable\PropertyConditionVariable;
 use Chamilo\Libraries\Storage\Query\Variable\StaticConditionVariable;
 
-class BlockRenderer extends \Chamilo\Core\Home\Renderer\BlockRenderer
+/**
+ * @package Chamilo\Application\Weblcms\Service\Home
+ */
+abstract class BlockRenderer extends \Chamilo\Core\Home\Renderer\BlockRenderer
 {
 
-    public function getLastLogin($user_id)
+    /**
+     * @throws \Chamilo\Libraries\Storage\Exception\DataClassNoResultException
+     */
+    public function getLastLogin(string $userIdentifier)
     {
-        return $this->getLoginLogout($user_id, 'login');
+        return $this->getLoginLogout($userIdentifier, 'login');
     }
 
-    public function getLastLogout($user_id)
+    /**
+     * @throws \Chamilo\Libraries\Storage\Exception\DataClassNoResultException
+     */
+    public function getLastLogout(string $userIdentifier)
     {
-        return $this->getLoginLogout($user_id, 'logout');
+        return $this->getLoginLogout($userIdentifier, 'logout');
     }
 
-    protected function getLoginLogout($user_id, $type)
+    /**
+     * @throws \Chamilo\Libraries\Storage\Exception\DataClassNoResultException
+     */
+    protected function getLoginLogout(string $userIdentifier, $type)
     {
         $order_by = new OrderProperty(
             new PropertyConditionVariable(
@@ -36,7 +48,7 @@ class BlockRenderer extends \Chamilo\Core\Home\Renderer\BlockRenderer
         $conditions[] = new EqualityCondition(
             new PropertyConditionVariable(
                 LoginLogout::class, LoginLogout::PROPERTY_USER_ID
-            ), new StaticConditionVariable($user_id)
+            ), new StaticConditionVariable($userIdentifier)
         );
         $conditions[] = new EqualityCondition(
             new PropertyConditionVariable(
@@ -46,7 +58,7 @@ class BlockRenderer extends \Chamilo\Core\Home\Renderer\BlockRenderer
         $condition = new AndCondition($conditions);
 
         $trackers = DataManager::retrieves(
-            LoginLogout::class, new DataClassRetrievesParameters($condition, 1, 0, new OrderBy(array($order_by)))
+            LoginLogout::class, new DataClassRetrievesParameters($condition, 1, 0, new OrderBy([$order_by]))
         );
 
         $tracker = $trackers->current();
@@ -57,18 +69,5 @@ class BlockRenderer extends \Chamilo\Core\Home\Renderer\BlockRenderer
         }
 
         return $tracker->get_date();
-    }
-
-    /**
-     * @return \Chamilo\Core\Home\Renderer\User|\Chamilo\Core\User\Storage\DataClass\User
-     */
-    public function get_user()
-    {
-        return $this->getUser();
-    }
-
-    public function get_user_id()
-    {
-        return $this->getUserId();
     }
 }

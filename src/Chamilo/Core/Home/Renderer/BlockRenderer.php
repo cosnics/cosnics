@@ -57,15 +57,15 @@ abstract class BlockRenderer
      */
     public function render(Block $block, bool $isGeneralMode = false, ?User $user = null): string
     {
-        if (!$this instanceof AnonymousBlockInterface && !$this->isVisible($user))
+        if (!$this instanceof AnonymousBlockInterface && !$this->isVisible($block, $user))
         {
             return '';
         }
 
         $html = [];
         $html[] = $this->renderHeader($block, $isGeneralMode, $user);
-        $html[] = $this->displayContent();
-        $html[] = $this->renderFooter();
+        $html[] = $this->displayContent($block, $user);
+        $html[] = $this->renderFooter($block);
 
         return implode(PHP_EOL, $html);
     }
@@ -130,7 +130,7 @@ abstract class BlockRenderer
         return implode(PHP_EOL, $html);
     }
 
-    abstract public function displayContent(): string;
+    abstract public function displayContent(Block $block, ?User $user = null): string;
 
     public function displayTitle(Block $block, bool $isGeneralMode = false, ?User $user = null): string
     {
@@ -138,7 +138,7 @@ abstract class BlockRenderer
 
         $html[] = '<div class="panel-heading' . ($block->isVisible() ? '' : ' panel-heading-without-content') . '">';
         $html[] = '<div class="pull-right">' . $this->displayActions($block, $isGeneralMode, $user) . '</div>';
-        $html[] = '<h3 class="panel-title">' . $this->getTitle($block) . '</h3>';
+        $html[] = '<h3 class="panel-title">' . $this->getTitle($block, $user) . '</h3>';
         $html[] = '</div>';
 
         return implode(PHP_EOL, $html);
@@ -154,7 +154,7 @@ abstract class BlockRenderer
         return $this->homeService;
     }
 
-    public function getTitle(Block $block): string
+    public function getTitle(Block $block, ?User $user = null): string
     {
         return htmlspecialchars($block->getTitle());
     }
@@ -188,12 +188,12 @@ abstract class BlockRenderer
      * By default do not show on home page block when user is
      * not connected.
      */
-    public function isVisible(?User $user = null): bool
+    public function isVisible(Block $block, ?User $user = null): bool
     {
         return $user instanceof User;
     }
 
-    public function renderContentFooter(): string
+    public function renderContentFooter(Block $block): string
     {
         $html[] = '</div>';
         $html[] = '</div>';
@@ -211,11 +211,11 @@ abstract class BlockRenderer
         return implode(PHP_EOL, $html);
     }
 
-    public function renderFooter(): string
+    public function renderFooter(Block $block): string
     {
         $html = [];
 
-        $html[] = $this->renderContentFooter();
+        $html[] = $this->renderContentFooter($block);
         $html[] = '</div>';
         $html[] = '</div>';
 

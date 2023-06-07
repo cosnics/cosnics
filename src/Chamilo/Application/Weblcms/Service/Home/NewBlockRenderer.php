@@ -5,14 +5,19 @@ use Chamilo\Application\Weblcms\Course\Storage\DataClass\Course;
 use Chamilo\Application\Weblcms\Course\Storage\DataManager as CourseDataManager;
 use Chamilo\Application\Weblcms\CourseSettingsConnector;
 use Chamilo\Application\Weblcms\CourseSettingsController;
+use Chamilo\Application\Weblcms\Manager;
 use Chamilo\Application\Weblcms\Rights\Entities\CourseGroupEntity;
 use Chamilo\Application\Weblcms\Rights\Entities\CoursePlatformGroupEntity;
 use Chamilo\Application\Weblcms\Rights\Entities\CourseUserEntity;
 use Chamilo\Application\Weblcms\Rights\WeblcmsRights;
 use Chamilo\Application\Weblcms\Storage\DataClass\ContentObjectPublication;
 use Chamilo\Application\Weblcms\Storage\DataManager as WeblcmsDataManager;
-use Chamilo\Configuration\Configuration;
+use Chamilo\Core\Group\Integration\Chamilo\Libraries\Rights\Service\GroupEntityProvider;
+use Chamilo\Core\Home\Storage\DataClass\Block;
 use Chamilo\Core\Repository\Storage\DataClass\ContentObject;
+use Chamilo\Core\User\Integration\Chamilo\Libraries\Rights\Service\UserEntityProvider;
+use Chamilo\Core\User\Storage\DataClass\User;
+use Chamilo\Libraries\Storage\DataClass\DataClass;
 use Chamilo\Libraries\Storage\Query\Condition\AndCondition;
 use Chamilo\Libraries\Storage\Query\Condition\ComparisonCondition;
 use Chamilo\Libraries\Storage\Query\Condition\InCondition;
@@ -21,86 +26,62 @@ use Chamilo\Libraries\Storage\Query\OrderBy;
 use Chamilo\Libraries\Storage\Query\OrderProperty;
 use Chamilo\Libraries\Storage\Query\Variable\PropertyConditionVariable;
 use Chamilo\Libraries\Storage\Query\Variable\StaticConditionVariable;
-use Chamilo\Libraries\Translation\Translation;
 
 /**
- *
- * @package Chamilo\Application\Weblcms\Integration\Chamilo\Core\Home
- * @author Hans De Bisschop <hans.de.bisschop@ehb.be>
- * @author Magali Gillard <magali.gillard@ehb.be>
- * @author Eduard Vossen <eduard.vossen@ehb.be>
+ * @package Chamilo\Application\Weblcms\Service\Home
+ * @author  Hans De Bisschop <hans.de.bisschop@ehb.be>
+ * @author  Magali Gillard <magali.gillard@ehb.be>
+ * @author  Eduard Vossen <eduard.vossen@ehb.be>
  */
 abstract class NewBlockRenderer extends BlockRenderer
 {
-    const TOOL_ANNOUNCEMENT = 'Announcement';
-    const TOOL_ASSIGNMENT = 'Assignment';
-    const TOOL_DOCUMENT = 'Document';
+    public const TOOL_ANNOUNCEMENT = 'Announcement';
+    public const TOOL_ASSIGNMENT = 'Assignment';
+    public const TOOL_DOCUMENT = 'Document';
 
-    /**
-     *
-     * @var \Chamilo\Application\Weblcms\Course\Storage\DataClass\Course[]
-     */
-    private $courses;
-
-    /**
-     * @see \Chamilo\Core\Home\Renderer\BlockRenderer::displayContent()
-     */
-    public function displayContent()
+    public function displayContent(Block $block, ?User $user = null): string
     {
-        $publications = $this->getContent($this->getToolName());
+        $publications = $this->getContent($this->getToolName(), $user);
 
         if (count($publications) == 0)
         {
             $html = [];
 
-            $html[] =
-                '<div class="panel-body portal-block-content' . ($this->getBlock()->isVisible() ? '' : ' hidden') .
-                '">';
-            $html[] = Translation::get('NoNewPublicationsSinceLastVisit');
+            $html[] = '<div class="panel-body portal-block-content' . ($block->isVisible() ? '' : ' hidden') . '">';
+            $html[] = $this->getTranslator()->trans('NoNewPublicationsSinceLastVisit', [], Manager::CONTEXT);
             $html[] = '</div>';
 
             return implode(PHP_EOL, $html);
         }
 
-        return $this->displayNewItems($publications);
+        return $this->displayNewItems($block, $publications);
     }
 
     /**
-     *
      * @param string[] $publication
-     *
-     * @return string
      */
-    public function displayNewItem($publication)
+    public function displayNewItem(array $publication): string
     {
         $html = [];
 
-        $course_id = $publication[ContentObjectPublication::PROPERTY_COURSE_ID];
-        $title = $publication[ContentObject::PROPERTY_TITLE];
-        $link = $this->getCourseViewerLink($this->getCourseById($course_id), $publication);
-
-        $html[] = '<a href="' . $link . '" class="list-group-item">';
+        $html[] = '<a href="' . $this->getCourseViewerLink($publication) . '" class="list-group-item">';
         $html[] = $this->getBadgeContent($publication);
-        $html[] = '<p class="list-group-item-text">' . $title . '</p>';
-        $html[] = '<h5 class="list-group-item-heading">' . $this->getCourseById($course_id)->get_title() . '</h5>';
-
+        $html[] = '<p class="list-group-item-text">' . $publication[ContentObject::PROPERTY_TITLE] . '</p>';
+        $html[] = '<h5 class="list-group-item-heading">' . $publication[Course::PROPERTY_TITLE] . '</h5>';
         $html[] = '</a>';
 
         return implode(PHP_EOL, $html);
     }
 
     /**
-     *
      * @param string[][] $publications
-     *
-     * @return string
      */
-    public function displayNewItems($publications)
+    public function displayNewItems(Block $block, array $publications): string
     {
         $html = [];
 
         $html[] = '<div class="list-group portal-block-content portal-block-new-list' .
-            ($this->getBlock()->isVisible() ? '' : ' hidden') . '">';
+            ($block->isVisible() ? '' : ' hidden') . '">';
 
         foreach ($publications as $publication)
         {
@@ -112,30 +93,20 @@ abstract class NewBlockRenderer extends BlockRenderer
         return implode(PHP_EOL, $html);
     }
 
-    /**
-     *
-     * @param string[] $publication
-     *
-     * @return string
-     */
-    public function getBadgeContent($publication)
+    public function getBadgeContent(array $publication): string
     {
         return '<span class="badge badge-date">' .
-            date('j M', $publication[ContentObjectPublication::PROPERTY_MODIFIED_DATE]) . '</span>';
+            date('j M', (int) $publication[ContentObjectPublication::PROPERTY_MODIFIED_DATE]) . '</span>';
     }
 
     /**
-     *
-     * @param string $tool
-     *
      * @return string[][]
      */
-    public function getContent($tool)
+    public function getContent(string $tool, ?User $user = null): array
     {
         // All user courses for active course types
         $excludedCourseTypes = explode(
-            ',',
-            Configuration::getInstance()->get_setting(array('Chamilo\Application\Weblcms', 'excluded_course_types'))
+            ',', $this->getConfigurationConsulter()->getSetting([Manager::CONTEXT, 'excluded_course_types'])
         );
         $archiveCondition = new NotCondition(
             new InCondition(
@@ -144,107 +115,80 @@ abstract class NewBlockRenderer extends BlockRenderer
         );
 
         // All user courses
-        $user_courses = CourseDataManager::retrieve_all_courses_from_user($this->getUser(), $archiveCondition);
+        $courses = CourseDataManager::retrieve_all_courses_from_user($user, $archiveCondition);
 
-        $this->courses = [];
+        $courseSettingsController = CourseSettingsController::getInstance();
+        $uniquePublications = [];
 
-        $course_settings_controller = CourseSettingsController::getInstance();
-        $unique_publications = [];
-
-        foreach ($user_courses as $course)
+        foreach ($courses as $course)
         {
-            $this->courses[$course->get_id()] = $course;
-
-            if ($course_settings_controller->get_course_setting(
+            if ($courseSettingsController->get_course_setting(
                     $course, CourseSettingsConnector::VISIBILITY
                 ) == 1)
             {
-                $condition = $this->getPublicationConditions($course, $tool);
-                $course_module_id = WeblcmsDataManager::retrieve_course_tool_by_name($tool)->get_id();
+                $condition = $this->getPublicationConditions($course, $tool, $user);
+                $course_module_id = WeblcmsDataManager::retrieve_course_tool_by_name($tool)->getId();
                 $location = WeblcmsRights::getInstance()->get_weblcms_location_by_identifier_from_courses_subtree(
-                    WeblcmsRights::TYPE_COURSE_MODULE, $course_module_id, $course->get_id()
+                    WeblcmsRights::TYPE_COURSE_MODULE, $course_module_id, $course->getId()
                 );
 
                 $entities = [];
                 $entities[CourseGroupEntity::ENTITY_TYPE] = CourseGroupEntity::getInstance(
-                    $course->get_id()
+                    $course->getId()
                 );
-                $entities[CourseUserEntity::ENTITY_TYPE] = CourseUserEntity::getInstance();
-                $entities[CoursePlatformGroupEntity::ENTITY_TYPE] = CoursePlatformGroupEntity::getInstance();
+                $entities[UserEntityProvider::ENTITY_TYPE] = CourseUserEntity::getInstance();
+                $entities[GroupEntityProvider::ENTITY_TYPE] = CoursePlatformGroupEntity::getInstance();
 
                 $publications =
                     WeblcmsDataManager::retrieve_content_object_publications_with_view_right_granted_in_category_location(
-                        $location, $entities, $condition, new OrderBy(array(
-                                new OrderProperty(
-                                    new PropertyConditionVariable(
-                                        ContentObjectPublication::class,
-                                        ContentObjectPublication::PROPERTY_DISPLAY_ORDER_INDEX
-                                    )
+                        $location, $entities, $condition, new OrderBy([
+                            new OrderProperty(
+                                new PropertyConditionVariable(
+                                    ContentObjectPublication::class,
+                                    ContentObjectPublication::PROPERTY_DISPLAY_ORDER_INDEX
                                 )
-                            ))
+                            )
+                        ])
                     );
 
                 if ($publications == 0)
                 {
                     continue;
                 }
+
                 foreach ($publications as $publication)
                 {
-                    $unique_publications[$course->get_id() . '.' .
-                    $publication[ContentObjectPublication::PROPERTY_ID]] = $publication;
+                    $publication[Course::PROPERTY_TITLE] = $course->get_title();
+
+                    $uniquePublications[$course->getId() . '.' . $publication[DataClass::PROPERTY_ID]] = $publication;
                 }
             }
         }
 
-        usort($unique_publications, array($this, 'sortPublications'));
+        usort($uniquePublications, [$this, 'sortPublications']);
 
-        return $unique_publications;
+        return $uniquePublications;
     }
 
     /**
-     *
      * @return string[]
      */
-    abstract public function getContentObjectTypes();
+    abstract public function getContentObjectTypes(): array;
 
     /**
-     *
-     * @param integer $course_id
-     *
-     * @return \Chamilo\Application\Weblcms\Course\Storage\DataClass\Course
-     */
-    protected function getCourseById($course_id)
-    {
-        return $this->courses[$course_id];
-    }
-
-    /**
-     *
-     * @param \Chamilo\Application\Weblcms\Course\Storage\DataClass\Course $course
      * @param string[] $publication
-     *
-     * @return string
      */
-    abstract public function getCourseViewerLink(Course $course, $publication);
+    abstract public function getCourseViewerLink(array $publication): string;
 
-    /**
-     *
-     * @param \Chamilo\Application\Weblcms\Course\Storage\DataClass\Course $course
-     * @param string $tool
-     *
-     * @return \Chamilo\Libraries\Storage\Query\Condition\AndCondition
-     */
-    private function getPublicationConditions($course, $tool)
+    private function getPublicationConditions(Course $course, string $tool, ?User $user = null): AndCondition
     {
-        $type = null;
-
         $last_visit_date = WeblcmsDataManager::get_last_visit_date(
-            $course->get_id(), $this->getUserId(), $tool
+            $course->getId(), $user->getId(), $tool
         );
 
         $conditions = [];
         $conditions[] = WeblcmsDataManager::get_publications_condition(
-            $course, $this->getUser(), $tool, $this->getContentObjectTypes()
+            $course, $user, $tool, $this->getContentObjectTypes()
         );
         $conditions[] = new ComparisonCondition(
             new PropertyConditionVariable(
@@ -255,34 +199,25 @@ abstract class NewBlockRenderer extends BlockRenderer
         return new AndCondition($conditions);
     }
 
-    /**
-     *
-     * @return string
-     */
-    abstract public function getToolName();
+    abstract public function getToolName(): string;
 
-    /**
-     * @see \Chamilo\Core\Home\Renderer\BlockRenderer::renderContentFooter()
-     */
-    public function renderContentFooter()
+    public function renderContentFooter(Block $block): string
     {
+        return '';
+    }
+
+    public function renderContentHeader(Block $block): string
+    {
+        return '';
     }
 
     /**
-     * @see \Chamilo\Core\Home\Renderer\BlockRenderer::renderContentHeader()
-     */
-    public function renderContentHeader()
-    {
-    }
-
-    /**
-     *
      * @param string[] $publicationLeft
      * @param string[] $publicationRight
      *
-     * @return integer
+     * @return int
      */
-    public function sortPublications($publicationLeft, $publicationRight)
+    public function sortPublications(array $publicationLeft, array $publicationRight): int
     {
         if ($publicationLeft[ContentObjectPublication::PROPERTY_MODIFIED_DATE] ==
             $publicationRight[ContentObjectPublication::PROPERTY_MODIFIED_DATE])

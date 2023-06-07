@@ -20,9 +20,6 @@ abstract class Publication extends DataClass
 
     protected ?ContentObject $contentObject;
 
-    /**
-     * @throws \ReflectionException
-     */
     public function getContentObject(): ContentObject
     {
         if (is_null($this->contentObject))

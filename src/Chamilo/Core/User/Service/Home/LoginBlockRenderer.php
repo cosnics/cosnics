@@ -1,30 +1,47 @@
 <?php
 namespace Chamilo\Core\User\Service\Home;
 
-use Chamilo\Configuration\Configuration;
+use Chamilo\Configuration\Service\Consulter\ConfigurationConsulter;
 use Chamilo\Core\Home\Architecture\Interfaces\AnonymousBlockInterface;
 use Chamilo\Core\Home\Architecture\Interfaces\ReadOnlyBlockInterface;
 use Chamilo\Core\Home\Renderer\BlockRenderer;
+use Chamilo\Core\Home\Service\HomeService;
+use Chamilo\Core\Home\Storage\DataClass\Block;
 use Chamilo\Core\User\Manager;
 use Chamilo\Core\User\Storage\DataClass\User;
 use Chamilo\Libraries\Architecture\Application\Application;
+use Chamilo\Libraries\Architecture\Application\Routing\UrlGenerator;
 use Chamilo\Libraries\Authentication\AuthenticationValidator;
 use Chamilo\Libraries\Format\Form\FormValidator;
 use Chamilo\Libraries\Format\Structure\Glyph\FontAwesomeGlyph;
-use Chamilo\Libraries\Translation\Translation;
+use Chamilo\Libraries\Platform\ChamiloRequest;
 use Chamilo\Libraries\Utilities\StringUtilities;
+use Symfony\Component\Translation\Translator;
 
-class LoginBlock extends BlockRenderer implements AnonymousBlockInterface, ReadOnlyBlockInterface
+class LoginBlockRenderer extends BlockRenderer implements AnonymousBlockInterface, ReadOnlyBlockInterface
 {
+    protected ChamiloRequest $request;
 
-    public function displayContent()
+    public function __construct(
+        HomeService $homeService, UrlGenerator $urlGenerator, Translator $translator,
+        ConfigurationConsulter $configurationConsulter, ChamiloRequest $request
+    )
+    {
+        parent::__construct($homeService, $urlGenerator, $translator, $configurationConsulter);
+
+        $this->request = $request;
+    }
+
+    /**
+     * @throws \QuickformException
+     */
+    public function displayContent(Block $block, ?User $user = null): string
     {
         $html = [];
 
-        if (!$this->getUser() || ($this->getUser() instanceof User && $this->getUser()->is_anonymous_user()))
+        if (!$user instanceof User || $user->is_anonymous_user())
         {
-            $request = $this->getRenderer()->getApplicationConfiguration()->getRequest();
-            $message = $request->query->get(AuthenticationValidator::PARAM_AUTHENTICATION_ERROR);
+            $message = $this->getRequest()->query->get(AuthenticationValidator::PARAM_AUTHENTICATION_ERROR);
 
             if ($message)
             {
@@ -34,28 +51,18 @@ class LoginBlock extends BlockRenderer implements AnonymousBlockInterface, ReadO
             }
 
             $html[] = $this->displayLoginForm();
-
-            if (!Configuration::getInstance()->get_setting(
-                [Manager::CONTEXT, 'allow_registration']
-            ))
-            {
-                // add custom info here if you do not allow registration (if you use LDAP...)
-                // $html[] = "<p>Helpdesk:</p>";
-            }
         }
         else
         {
-            $user = $this->getUser();
-
             $profilePhotoUrl = $this->getUrlGenerator()->fromParameters(
                 [
                     Application::PARAM_CONTEXT => \Chamilo\Core\User\Ajax\Manager::CONTEXT,
                     Application::PARAM_ACTION => \Chamilo\Core\User\Ajax\Manager::ACTION_USER_PICTURE,
-                    Manager::PARAM_USER_USER_ID => $user->get_id()
+                    Manager::PARAM_USER_USER_ID => $user->getId()
                 ]
             );
 
-            $maximumHeight = Configuration::getInstance()->get_setting(
+            $maximumHeight = $this->getConfigurationConsulter()->getSetting(
                 [Manager::CONTEXT, 'restrict_picture_height']
             ) ? 'max-height:100px' : null;
 
@@ -72,43 +79,51 @@ class LoginBlock extends BlockRenderer implements AnonymousBlockInterface, ReadO
             $html[] = '<h3>' . htmlspecialchars($user->get_fullname()) . '</h3>';
             $html[] = '<p>' . htmlspecialchars($user->get_email()) . '</p>';
             $html[] = '<p><a href="' . $logoutLink . '" class="btn btn-danger" role="button">' . htmlspecialchars(
-                    Translation::get('Logout')
+                    $this->getTranslator()->trans('Logout', [], Manager::CONTEXT)
                 ) . '</a></p>';
         }
 
         return implode(PHP_EOL, $html);
     }
 
-    public function displayLoginForm()
+    /**
+     * @throws \QuickformException
+     */
+    public function displayLoginForm(): string
     {
-        $request = $this->getRenderer()->getApplicationConfiguration()->getRequest();
+        $translator = $this->getTranslator();
+        $configurationConsulter = $this->getConfigurationConsulter();
 
         $form = new FormValidator('formLogin', FormValidator::FORM_METHOD_POST);
-        $renderer = &$form->defaultRenderer();
+        $renderer = $form->defaultRenderer();
         $renderer->setElementTemplate('<div class="form-row">{label}<br />{element}</div>');
-        $form->setRequiredNote(null);
+        $form->setRequiredNote('');
         $html = '<script>$(document).ready(function(){document.formLogin.login.focus();});</script>';
         $form->addElement('html', $html);
-        $form->addElement('text', 'login', Translation::get('UserName'), ['style' => 'width: 90%;']);
-        $form->addRule('login', Translation::get('ThisFieldIsRequired', null, StringUtilities::LIBRARIES), 'required');
-        $form->addElement('password', 'password', Translation::get('Password'), ['style' => 'width: 90%;']);
+        $form->addElement(
+            'text', 'login', $translator->trans('UserName', [], Manager::CONTEXT), ['style' => 'width: 90%;']
+        );
+        $form->addRule('login', $translator->trans('ThisFieldIsRequired', [], StringUtilities::LIBRARIES), 'required');
+        $form->addElement(
+            'password', 'password', $translator->trans('Password', [], Manager::CONTEXT), ['style' => 'width: 90%;']
+        );
         $form->addRule(
-            'password', Translation::get('ThisFieldIsRequired', null, StringUtilities::LIBRARIES), 'required'
+            'password', $translator->trans('ThisFieldIsRequired', [], StringUtilities::LIBRARIES), 'required'
         );
 
         $buttons = [];
         $buttons[] = $form->createElement(
-            'style_submit_button', 'submitAuth', Translation::get('Login'), null, null,
+            'style_submit_button', 'submitAuth', $translator->trans('Login', [], Manager::CONTEXT), null, null,
             new FontAwesomeGlyph('sign-in-alt')
         );
 
-        if (Configuration::getInstance()->get_setting(
+        if ($configurationConsulter->getSetting(
                 [Manager::CONTEXT, 'allow_registration']
-            ) || Configuration::getInstance()->get_setting(
+            ) || $configurationConsulter->getSetting(
                 [Manager::CONTEXT, 'allow_password_retrieval']
             ))
         {
-            if (Configuration::getInstance()->get_setting(
+            if ($configurationConsulter->getSetting(
                 [Manager::CONTEXT, 'allow_registration']
             ))
             {
@@ -125,11 +140,11 @@ class LoginBlock extends BlockRenderer implements AnonymousBlockInterface, ReadO
                     'static', null, null,
                     '<a href="' . htmlspecialchars($link) . '" class="btn btn-default">' . $glyph->render() . ' ' .
                     htmlspecialchars(
-                        Translation::get('Reg')
+                        $translator->trans('Reg', [], Manager::CONTEXT)
                     ) . '</a>'
                 );
             }
-            if (Configuration::getInstance()->get_setting(
+            if ($configurationConsulter->getSetting(
                 [Manager::CONTEXT, 'allow_password_retrieval']
             ))
             {
@@ -146,7 +161,7 @@ class LoginBlock extends BlockRenderer implements AnonymousBlockInterface, ReadO
                     'static', null, null,
                     '<a href="' . htmlspecialchars($link) . '" class="btn btn-default">' . $glyph->render() . ' ' .
                     htmlspecialchars(
-                        Translation::get('ResetPassword')
+                        $translator->trans('ResetPassword', [], Manager::CONTEXT)
                     ) . '</a>'
                 );
             }
@@ -154,6 +169,11 @@ class LoginBlock extends BlockRenderer implements AnonymousBlockInterface, ReadO
 
         $form->addGroup($buttons, 'buttons', null, '&nbsp;', false);
 
-        return $form->toHtml();
+        return $form->render();
+    }
+
+    public function getRequest(): ChamiloRequest
+    {
+        return $this->request;
     }
 }

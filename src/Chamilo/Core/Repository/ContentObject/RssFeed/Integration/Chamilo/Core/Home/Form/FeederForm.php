@@ -5,10 +5,10 @@ use Chamilo\Core\Home\Form\ConfigurationForm;
 use Chamilo\Core\Home\Repository\ContentObjectPublicationRepository;
 use Chamilo\Core\Home\Service\ContentObjectPublicationService;
 use Chamilo\Core\Home\Storage\DataClass\Block;
+use Chamilo\Core\Repository\ContentObject\RssFeed\Service\Home\Connector;
+use Chamilo\Core\Repository\ContentObject\RssFeed\Service\Home\FeederBlockRenderer;
 use Chamilo\Core\Repository\Publication\Storage\Repository\PublicationRepository;
 use Chamilo\Libraries\Translation\Translation;
-use Chamilo\Core\Repository\ContentObject\RssFeed\Integration\Chamilo\Core\Home\Connector;
-use Chamilo\Core\Repository\ContentObject\RssFeed\Integration\Chamilo\Core\Home\Type\Feeder;
 
 class FeederForm extends ConfigurationForm
 {
@@ -42,7 +42,7 @@ class FeederForm extends ConfigurationForm
         
         $this->addElement(
             'select', 
-            Feeder::CONFIGURATION_OBJECT_ID, 
+            FeederBlockRenderer::CONFIGURATION_OBJECT_ID,
             Translation::get('UseObject'), 
             $connector->get_rss_feed_objects(), 
             array('class' => 'form-control'));
@@ -57,7 +57,7 @@ class FeederForm extends ConfigurationForm
         
         if ($contentObjectPublication)
         {
-            $defaults[Feeder::CONFIGURATION_OBJECT_ID] = $contentObjectPublication->get_content_object_id();
+            $defaults[FeederBlockRenderer::CONFIGURATION_OBJECT_ID] = $contentObjectPublication->get_content_object_id();
         }
         
         parent::setDefaults($defaults, $filter);

@@ -153,9 +153,6 @@ class DataManager
         return self::getStorageUnitRepository()->drop($storageUnitName);
     }
 
-    /**
-     * @throws \Exception
-     */
     public static function getDataClassRepository(): DataClassRepository
     {
         return self::getService(
@@ -163,9 +160,7 @@ class DataManager
         );
     }
 
-    /**
-     * @throws \Exception
-     */
+
     public static function getService(string $serviceName)
     {
         return DependencyInjectionContainerBuilder::getInstance()->createContainer()->get(
@@ -258,8 +253,6 @@ class DataManager
      * @param int $identifier
      *
      * @return retrieveById
-     * @throws \ReflectionException
-     * @throws \Exception
      */
     public static function retrieve_by_id(string $dataClassName, int $identifier)
     {

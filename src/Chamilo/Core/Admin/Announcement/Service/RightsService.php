@@ -99,7 +99,6 @@ class RightsService extends \Chamilo\Libraries\Rights\Service\RightsService
      * @param integer $userIdentifier
      *
      * @return integer[]
-     * @throws \Exception
      *
      */
     public function findPublicationIdentifiersWithRightForUserIdentifier(
@@ -115,7 +114,6 @@ class RightsService extends \Chamilo\Libraries\Rights\Service\RightsService
      * @param integer $userIdentifier
      *
      * @return integer[]
-     * @throws \Exception
      */
     public function findPublicationIdentifiersWithViewRightForUserIdentifier(
         $userIdentifier

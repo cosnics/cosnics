@@ -14,5 +14,5 @@ interface ContentObjectPublicationBlockInterface
      *
      * @return string[]
      */
-    public function getContentObjectConfigurationVariables();
+    public function getContentObjectConfigurationVariables(): array;
 }

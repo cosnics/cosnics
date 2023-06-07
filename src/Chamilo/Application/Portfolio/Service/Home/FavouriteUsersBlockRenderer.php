@@ -4,23 +4,40 @@ namespace Chamilo\Application\Portfolio\Service\Home;
 use Chamilo\Application\Portfolio\Favourite\Service\FavouriteService;
 use Chamilo\Application\Portfolio\Favourite\Storage\Repository\FavouriteRepository;
 use Chamilo\Application\Portfolio\Manager;
+use Chamilo\Configuration\Service\Consulter\ConfigurationConsulter;
 use Chamilo\Core\Home\Renderer\BlockRenderer;
+use Chamilo\Core\Home\Service\HomeService;
+use Chamilo\Core\Home\Storage\DataClass\Block;
 use Chamilo\Core\User\Storage\DataClass\User;
-use Chamilo\Libraries\DependencyInjection\DependencyInjectionContainerBuilder;
+use Chamilo\Libraries\Architecture\Application\Application;
+use Chamilo\Libraries\Architecture\Application\Routing\UrlGenerator;
+use Symfony\Component\Translation\Translator;
 
 /**
- * Renders the favourite users
- *
- * @author Sven Vanpoucke - Hogeschool Gent
+ * @package Chamilo\Application\Portfolio\Service\Home
+ * @author  Sven Vanpoucke - Hogeschool Gent
+ * @author  Hans De Bisschop <hans.de.bisschop@ehb.be>
  */
 class FavouriteUsersBlockRenderer extends BlockRenderer
 {
+    protected FavouriteService $favouriteService;
 
-    public function displayContent()
+    public function __construct(
+        HomeService $homeService, UrlGenerator $urlGenerator, Translator $translator,
+        ConfigurationConsulter $configurationConsulter, FavouriteService $favouriteService
+    )
+    {
+        parent::__construct($homeService, $urlGenerator, $translator, $configurationConsulter);
+
+        $this->favouriteService = $favouriteService;
+    }
+
+    public function displayContent(Block $block, ?User $user = null): string
     {
         $html = [];
 
-        $favouriteUsers = $this->getFavouriteService()->findFavouriteUsers($this->getUser());
+        $favouriteUsers = $this->getFavouriteService()->findFavouriteUsers($user);
+
         if ($favouriteUsers->count() > 0)
         {
             $html[] = '<ul style="list-style: none; margin: 0; padding: 0;">';
@@ -29,8 +46,8 @@ class FavouriteUsersBlockRenderer extends BlockRenderer
             {
                 $portfolioURL = $this->getUrlGenerator()->fromParameters(
                     [
-                        Manager::PARAM_CONTEXT => Manager::CONTEXT,
-                        Manager::PARAM_ACTION => Manager::ACTION_HOME,
+                        Application::PARAM_CONTEXT => Manager::CONTEXT,
+                        Application::PARAM_ACTION => Manager::ACTION_HOME,
                         Manager::PARAM_USER_ID => $favouriteUser[FavouriteRepository::PROPERTY_USER_ID]
                     ]
                 );
@@ -48,13 +65,8 @@ class FavouriteUsersBlockRenderer extends BlockRenderer
         return implode(PHP_EOL, $html);
     }
 
-    /**
-     * @return \Chamilo\Application\Portfolio\Favourite\Service\FavouriteService
-     */
-    public function getFavouriteService()
+    public function getFavouriteService(): FavouriteService
     {
-        $container = DependencyInjectionContainerBuilder::getInstance()->createContainer();
-
-        return $container->get(FavouriteService::class);
+        return $this->favouriteService;
     }
 }

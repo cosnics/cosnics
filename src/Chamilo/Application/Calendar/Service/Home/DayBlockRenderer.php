@@ -4,15 +4,21 @@ namespace Chamilo\Application\Calendar\Service\Home;
 use Chamilo\Application\Calendar\Ajax\Manager;
 use Chamilo\Application\Calendar\Repository\CalendarRendererProviderRepository;
 use Chamilo\Application\Calendar\Service\CalendarRendererProvider;
+use Chamilo\Configuration\Service\Consulter\ConfigurationConsulter;
 use Chamilo\Core\Home\Architecture\Interfaces\ConfigurableBlockInterface;
 use Chamilo\Core\Home\Architecture\Interfaces\StaticBlockTitleInterface;
 use Chamilo\Core\Home\Renderer\BlockRenderer;
-use Chamilo\Libraries\Calendar\Service\LegendRenderer;
+use Chamilo\Core\Home\Service\HomeService;
+use Chamilo\Core\Home\Storage\DataClass\Block;
+use Chamilo\Core\User\Storage\DataClass\User;
+use Chamilo\Libraries\Architecture\Application\Routing\UrlGenerator;
 use Chamilo\Libraries\Calendar\Service\View\MiniDayCalendarRenderer;
-use Chamilo\Libraries\Platform\Session\Request;
+use Chamilo\Libraries\Platform\ChamiloRequest;
+use Chamilo\Libraries\Utilities\DatetimeUtilities;
+use Symfony\Component\Translation\Translator;
 
 /**
- * @package Chamilo\Application\Calendar\Integration\Chamilo\Core\Home\Type
+ * @package Chamilo\Application\Calendar\Service\Home
  * @author  Hans De Bisschop <hans.de.bisschop@ehb.be>
  * @author  Magali Gillard <magali.gillard@ehb.be>
  * @author  Eduard Vossen <eduard.vossen@ehb.be>
@@ -24,47 +30,42 @@ class DayBlockRenderer extends BlockRenderer implements ConfigurableBlockInterfa
     public const CONFIGURATION_TIME_HIDE = 'time_hide';
     public const CONFIGURATION_TIME_START = 'time_start';
 
-    public function displayContent()
+    protected DatetimeUtilities $datetimeUtilities;
+
+    protected MiniDayCalendarRenderer $miniDayCalendarRenderer;
+
+    protected ChamiloRequest $request;
+
+    public function __construct(
+        HomeService $homeService, UrlGenerator $urlGenerator, Translator $translator,
+        ConfigurationConsulter $configurationConsulter, DatetimeUtilities $datetimeUtilities,
+        MiniDayCalendarRenderer $miniDayCalendarRenderer, ChamiloRequest $request
+    )
     {
-        return '<div style="max-height: 500px; overflow: auto;">' . $this->getCalendarRenderer()->renderFullCalendar() .
-            '</div>';
+        parent::__construct($homeService, $urlGenerator, $translator, $configurationConsulter);
+
+        $this->datetimeUtilities = $datetimeUtilities;
+        $this->miniDayCalendarRenderer = $miniDayCalendarRenderer;
+        $this->request = $request;
     }
 
     /**
-     * @return \Chamilo\Libraries\Calendar\Service\View\MiniDayCalendarRenderer
+     * @throws \ReflectionException
      */
-    protected function getCalendarRenderer()
+    public function displayContent(Block $block, ?User $user = null): string
     {
-        if (!isset($this->calendarRenderer))
-        {
-            $dataProvider = new CalendarRendererProvider(
-                new CalendarRendererProviderRepository(), $this->getUser(), [], Manager::CONTEXT
-            );
+        $dataProvider = new CalendarRendererProvider(
+            new CalendarRendererProviderRepository(), $user, [], Manager::CONTEXT
+        );
 
-            $calendarLegend = new LegendRenderer($this->getNotificationMessageManager(), $dataProvider);
-            $time = Request::get('time') ? intval(Request::get('time')) : time();
-
-            $hourStep = (int) $this->getBlock()->getSetting(self::CONFIGURATION_HOUR_STEP, 1);
-            if (!is_integer($hourStep) || $hourStep < 1)
-            {
-                $hourStep = 1;
-            }
-
-            return new MiniDayCalendarRenderer(
-                $dataProvider, $calendarLegend, $time, [], $this->getLinkTarget(), $hourStep,
-                $this->getBlock()->getSetting(self::CONFIGURATION_TIME_START, 8),
-                $this->getBlock()->getSetting(self::CONFIGURATION_TIME_END, 17),
-                $this->getBlock()->getSetting(self::CONFIGURATION_TIME_HIDE, 17)
-            );
-        }
-
-        return $this->calendarRenderer;
+        return '<div style="max-height: 500px; overflow: auto;">' .
+            $this->getMiniDayCalendarRenderer()->renderFullCalendar($dataProvider, $this->getDisplayTime()) . '</div>';
     }
 
     /**
      * @see \Chamilo\Core\Home\Architecture\Interfaces\ConfigurableBlockInterface::getConfigurationVariables()
      */
-    public function getConfigurationVariables()
+    public function getConfigurationVariables(): array
     {
         return [
             self::CONFIGURATION_HOUR_STEP,
@@ -74,24 +75,38 @@ class DayBlockRenderer extends BlockRenderer implements ConfigurableBlockInterfa
         ];
     }
 
-    public function getTitle()
+    public function getDatetimeUtilities(): DatetimeUtilities
     {
-        return $this->getCalendarRenderer()->renderTitle();
+        return $this->datetimeUtilities;
     }
 
-    public function renderContentFooter()
+    protected function getDisplayTime(): int
     {
-        $html[] = '</div>';
-
-        return implode(PHP_EOL, $html);
+        return (int) $this->getRequest()->query->get('time', time());
     }
 
-    public function renderContentHeader()
+    public function getMiniDayCalendarRenderer(): MiniDayCalendarRenderer
     {
-        $html = [];
+        return $this->miniDayCalendarRenderer;
+    }
 
-        $html[] = '<div class="portal-block-content' . ($this->getBlock()->isVisible() ? '' : ' hidden') . '">';
+    public function getRequest(): ChamiloRequest
+    {
+        return $this->request;
+    }
 
-        return implode(PHP_EOL, $html);
+    public function getTitle(Block $block, ?User $user = null): string
+    {
+        return $this->getDatetimeUtilities()->formatLocaleDate('%A %d %B %Y', $this->getDisplayTime());
+    }
+
+    public function renderContentFooter(Block $block): string
+    {
+        return '</div>';
+    }
+
+    public function renderContentHeader(Block $block): string
+    {
+        return '<div class="portal-block-content' . ($block->isVisible() ? '' : ' hidden') . '">';
     }
 }

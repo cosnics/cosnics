@@ -1,16 +1,17 @@
 <?php
 namespace Chamilo\Application\Weblcms\Service\Home;
 
-use Chamilo\Application\Weblcms\Course\Storage\DataClass\Course;
 use Chamilo\Application\Weblcms\Storage\DataClass\ContentObjectPublication;
 use Chamilo\Application\Weblcms\Tool\Manager;
 use Chamilo\Core\Repository\ContentObject\Assignment\Storage\DataClass\Assignment;
+use Chamilo\Core\Repository\Publication\Storage\DataClass\Publication;
 use Chamilo\Core\Repository\Storage\DataClass\ContentObject;
 use Chamilo\Core\Repository\Storage\DataManager;
 use Chamilo\Libraries\Architecture\Application\Application;
+use Chamilo\Libraries\Storage\DataClass\DataClass;
 
 /**
- * @package Chamilo\Application\Weblcms\Integration\Chamilo\Core\Home\Type
+ * @package Chamilo\Application\Weblcms\Service\Home
  * @author  Hans De Bisschop <hans.de.bisschop@ehb.be>
  * @author  Magali Gillard <magali.gillard@ehb.be>
  * @author  Eduard Vossen <eduard.vossen@ehb.be>
@@ -18,62 +19,47 @@ use Chamilo\Libraries\Architecture\Application\Application;
 class NewAssignmentsBlockRenderer extends NewBlockRenderer
 {
 
-    /**
-     * @see \Chamilo\Application\Weblcms\Service\Home\NewBlockRenderer::displayNewItem()
-     */
-    public function displayNewItem($publication)
+    public function displayNewItem(array $publication): string
     {
         if ($publication[ContentObject::PROPERTY_TYPE] != Assignment::class)
         {
-            return;
+            return '';
         }
 
         return parent::displayNewItem($publication);
     }
 
-    /**
-     * @see \Chamilo\Application\Weblcms\Service\Home\NewBlockRenderer::getBadgeContent()
-     */
-    public function getBadgeContent($publication)
+    public function getBadgeContent($publication): string
     {
         $content_object = DataManager::retrieve_by_id(
-            Assignment::class, $publication[ContentObjectPublication::PROPERTY_CONTENT_OBJECT_ID]
+            Assignment::class, $publication[Publication::PROPERTY_CONTENT_OBJECT_ID]
         );
 
         return '<span class="badge badge-date">' . date('j M Y', $content_object->get_start_time()) . ' - ' .
             date('j M Y', $content_object->get_end_time()) . '</span>';
     }
 
-    /**
-     * @see \Chamilo\Application\Weblcms\Service\Home\NewBlockRenderer::getContentObjectTypes()
-     */
-    public function getContentObjectTypes()
+    public function getContentObjectTypes(): array
     {
         return [Assignment::class];
     }
 
-    /**
-     * @see \Chamilo\Application\Weblcms\Service\Home\NewBlockRenderer::getCourseViewerLink()
-     */
-    public function getCourseViewerLink(Course $course, $publication)
+    public function getCourseViewerLink(array $publication): string
     {
         $parameters = [
-            \Chamilo\Application\Weblcms\Manager::PARAM_COURSE => $course->get_id(),
+            \Chamilo\Application\Weblcms\Manager::PARAM_COURSE => $publication[ContentObjectPublication::PROPERTY_COURSE_ID],
             Application::PARAM_ACTION => \Chamilo\Application\Weblcms\Manager::ACTION_VIEW_COURSE,
             Application::PARAM_CONTEXT => \Chamilo\Application\Weblcms\Manager::CONTEXT,
-            \Chamilo\Application\Weblcms\Manager::PARAM_TOOL => NewBlockRenderer::TOOL_ASSIGNMENT,
+            \Chamilo\Application\Weblcms\Manager::PARAM_TOOL => self::TOOL_ASSIGNMENT,
             \Chamilo\Application\Weblcms\Manager::PARAM_TOOL_ACTION => \Chamilo\Application\Weblcms\Tool\Implementation\Assignment\Manager::ACTION_DISPLAY,
-            Manager::PARAM_PUBLICATION_ID => $publication[ContentObjectPublication::PROPERTY_ID]
+            Manager::PARAM_PUBLICATION_ID => $publication[DataClass::PROPERTY_ID]
         ];
 
-        return $this->getLink($parameters);
+        return $this->getUrlGenerator()->fromParameters($parameters);
     }
 
-    /**
-     * @see \Chamilo\Application\Weblcms\Service\Home\NewBlockRenderer::getToolName()
-     */
-    public function getToolName()
+    public function getToolName(): string
     {
-        return 'Assignment';
+        return self::TOOL_ASSIGNMENT;
     }
 }

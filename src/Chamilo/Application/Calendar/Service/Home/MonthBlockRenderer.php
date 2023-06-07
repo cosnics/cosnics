@@ -4,12 +4,19 @@ namespace Chamilo\Application\Calendar\Service\Home;
 use Chamilo\Application\Calendar\Ajax\Manager;
 use Chamilo\Application\Calendar\Repository\CalendarRendererProviderRepository;
 use Chamilo\Application\Calendar\Service\CalendarRendererProvider;
+use Chamilo\Configuration\Service\Consulter\ConfigurationConsulter;
 use Chamilo\Core\Home\Architecture\Interfaces\StaticBlockTitleInterface;
 use Chamilo\Core\Home\Renderer\BlockRenderer;
+use Chamilo\Core\Home\Service\HomeService;
+use Chamilo\Core\Home\Storage\DataClass\Block;
+use Chamilo\Core\User\Storage\DataClass\User;
 use Chamilo\Libraries\Architecture\Application\Application;
-use Chamilo\Libraries\Calendar\Service\LegendRenderer;
+use Chamilo\Libraries\Architecture\Application\Routing\UrlGenerator;
+use Chamilo\Libraries\Calendar\Service\View\HtmlCalendarRenderer;
 use Chamilo\Libraries\Calendar\Service\View\MiniMonthCalendarRenderer;
-use Chamilo\Libraries\Platform\Session\Request;
+use Chamilo\Libraries\Platform\ChamiloRequest;
+use Chamilo\Libraries\Utilities\StringUtilities;
+use Symfony\Component\Translation\Translator;
 
 /**
  * @package Chamilo\Application\Calendar\Integration\Chamilo\Core\Home\Type
@@ -20,62 +27,65 @@ use Chamilo\Libraries\Platform\Session\Request;
 class MonthBlockRenderer extends BlockRenderer implements StaticBlockTitleInterface
 {
 
-    private $calendarRenderer;
+    protected MiniMonthCalendarRenderer $miniMonthCalendarRenderer;
 
-    public function displayContent()
+    protected ChamiloRequest $request;
+
+    public function __construct(
+        HomeService $homeService, UrlGenerator $urlGenerator, Translator $translator,
+        ConfigurationConsulter $configurationConsulter, MiniMonthCalendarRenderer $miniMonthCalendarRenderer,
+        ChamiloRequest $request
+    )
     {
-        return $this->getCalendarRenderer()->renderCalendar();
+        parent::__construct($homeService, $urlGenerator, $translator, $configurationConsulter);
+
+        $this->miniMonthCalendarRenderer = $miniMonthCalendarRenderer;
+        $this->request = $request;
     }
 
     /**
-     * @return \Chamilo\Libraries\Calendar\Service\View\MiniMonthCalendarRenderer
+     * @throws \Exception
      */
-    protected function getCalendarRenderer()
+    public function displayContent(Block $block, ?User $user = null): string
     {
-        if (!isset($this->calendarRenderer))
-        {
-            $dataProvider = new CalendarRendererProvider(
-                new CalendarRendererProviderRepository(), $this->getUser(), [
-                Application::PARAM_CONTEXT => \Chamilo\Application\Calendar\Manager::CONTEXT,
-                MiniMonthCalendarRenderer::PARAM_TYPE => MiniMonthCalendarRenderer::TYPE_DAY
-            ], Manager::CONTEXT
-            );
+        $dataProvider = new CalendarRendererProvider(
+            new CalendarRendererProviderRepository(), $user, [
+            Application::PARAM_CONTEXT => \Chamilo\Application\Calendar\Manager::CONTEXT,
+            HtmlCalendarRenderer::PARAM_TYPE => HtmlCalendarRenderer::TYPE_DAY
+        ], Manager::CONTEXT
+        );
 
-            $calendarLegend = new LegendRenderer($this->getNotificationMessageManager(), $dataProvider);
-
-            $time = Request::get('time') ? intval(Request::get('time')) : time();
-
-            $this->calendarRenderer =
-                new MiniMonthCalendarRenderer($dataProvider, $calendarLegend, $time, [], $this->getLinkTarget());
-        }
-
-        return $this->calendarRenderer;
+        return $this->getMiniMonthCalendarRenderer()->renderCalendar($dataProvider, $this->getDisplayTime());
     }
 
-    public function getTitle()
+    protected function getDisplayTime(): int
     {
-        return $this->getCalendarRenderer()->renderTitle();
+        return (int) $this->getRequest()->query->get('time', time());
     }
 
-    /**
-     * @return string
-     */
-    public function renderContentFooter()
+    public function getMiniMonthCalendarRenderer(): MiniMonthCalendarRenderer
     {
-        $html[] = '</div>';
-
-        return implode(PHP_EOL, $html);
+        return $this->miniMonthCalendarRenderer;
     }
 
-    /**
-     * @return string
-     */
-    public function renderContentHeader()
+    public function getRequest(): ChamiloRequest
     {
-        $html = [];
+        return $this->request;
+    }
 
-        $html[] = '<div class="portal-block-content' . ($this->getBlock()->isVisible() ? '' : ' hidden') . '">';
+    public function getTitle(Block $block, ?User $user = null): string
+    {
+        return $this->getTranslator()->trans(date('F', $this->getDisplayTime()) . 'Long', [], StringUtilities::LIBRARIES
+            ) . ' ' . date('Y', $this->getDisplayTime());
+    }
 
-        return implode(PHP_EOL, $html);
+    public function renderContentFooter(Block $block): string
+    {
+        return '</div>';
+    }
+
+    public function renderContentHeader(Block $block): string
+    {
+        return '<div class="portal-block-content' . ($block->isVisible() ? '' : ' hidden') . '">';
     }
 }

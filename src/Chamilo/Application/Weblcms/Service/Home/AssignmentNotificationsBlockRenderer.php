@@ -5,15 +5,21 @@ use Chamilo\Application\Weblcms\CourseType\Storage\DataClass\CourseType;
 use Chamilo\Application\Weblcms\CourseType\Storage\DataManager as CourseTypeDataManager;
 use Chamilo\Application\Weblcms\Storage\DataClass\CourseUserCategory;
 use Chamilo\Application\Weblcms\Storage\DataManager;
+use Chamilo\Configuration\Service\Consulter\ConfigurationConsulter;
 use Chamilo\Core\Home\Architecture\Interfaces\ConfigurableBlockInterface;
 use Chamilo\Core\Home\Architecture\Interfaces\StaticBlockTitleInterface;
+use Chamilo\Core\Home\Service\HomeService;
+use Chamilo\Core\Home\Storage\DataClass\Block;
 use Chamilo\Core\Notification\Manager;
 use Chamilo\Core\Notification\Service\NotificationManager;
+use Chamilo\Core\User\Storage\DataClass\User;
 use Chamilo\Libraries\Architecture\Application\Application;
-use Chamilo\Libraries\Translation\Translation;
+use Chamilo\Libraries\Architecture\Application\Routing\UrlGenerator;
+use Symfony\Component\Translation\Translator;
+use Twig\Environment;
 
 /**
- * @package Chamilo\Application\Weblcms\Integration\Chamilo\Core\Home\Type
+ * @package Chamilo\Application\Weblcms\Service\Home
  * @author  Sven Vanpoucke - Hogeschool Gent
  */
 class AssignmentNotificationsBlockRenderer extends BlockRenderer
@@ -21,41 +27,37 @@ class AssignmentNotificationsBlockRenderer extends BlockRenderer
 {
     public const CONFIGURATION_COURSE_TYPE = 'course_type';
 
-    /**
-     * The cached course type id
-     *
-     * @var int
-     */
-    protected $courseTypeId;
+    protected NotificationManager $notificationManager;
 
-    /**
-     * @var bool
-     */
-    protected $settingsLoaded;
+    protected Environment $twigEnvironment;
 
-    /**
-     * The cached user course category id
-     *
-     * @var int
-     */
-    protected $userCourseCategoryId;
-
-    /**
-     * @return string
-     * @throws \Twig_Error_Loader
-     * @throws \Twig_Error_Runtime
-     * @throws \Twig_Error_Syntax
-     */
-    public function displayContent()
+    public function __construct(
+        HomeService $homeService, UrlGenerator $urlGenerator, Translator $translator,
+        ConfigurationConsulter $configurationConsulter, NotificationManager $notificationManager,
+        Environment $twigEnvironment
+    )
     {
-        $this->loadSettings();
+        parent::__construct($homeService, $urlGenerator, $translator, $configurationConsulter);
 
+        $this->notificationManager = $notificationManager;
+        $this->twigEnvironment = $twigEnvironment;
+    }
+
+    /**
+     * @throws \Twig\Error\SyntaxError
+     * @throws \Twig\Error\RuntimeError
+     * @throws \Twig\Error\LoaderError
+     */
+    public function displayContent(Block $block, ?User $user = null): string
+    {
         $retrieveNotificationsUrl = $this->getUrlGenerator()->fromParameters(
             [
                 Application::PARAM_CONTEXT => \Chamilo\Application\Weblcms\Ajax\Manager::CONTEXT,
                 Application::PARAM_ACTION => \Chamilo\Application\Weblcms\Ajax\Manager::ACTION_GET_ASSIGNMENT_NOTIFICATIONS,
-                \Chamilo\Application\Weblcms\Ajax\Manager::PARAM_COURSE_TYPE_ID => $this->courseTypeId,
-                \Chamilo\Application\Weblcms\Ajax\Manager::PARAM_USER_COURSE_CATEGORY_ID => $this->userCourseCategoryId
+                \Chamilo\Application\Weblcms\Ajax\Manager::PARAM_COURSE_TYPE_ID => $this->getCourseTypeId($block),
+                \Chamilo\Application\Weblcms\Ajax\Manager::PARAM_USER_COURSE_CATEGORY_ID => $this->getUserCourseCategoryId(
+                    $block
+                )
             ]
         );
 
@@ -71,8 +73,8 @@ class AssignmentNotificationsBlockRenderer extends BlockRenderer
             'Chamilo\Application\Weblcms:AssignmentNotifications.html.twig', [
                 'RETRIEVE_NOTIFICATIONS_URL' => $retrieveNotificationsUrl,
                 'VIEW_NOTIFICATION_URL' => $viewNotificationUrl,
-                'BLOCK_ID' => $this->getBlock()->getId(),
-                'HIDDEN' => !$this->getBlock()->isVisible(),
+                'BLOCK_ID' => $block->getId(),
+                'HIDDEN' => !$block->isVisible(),
                 'ADMIN_EMAIL' => $this->getConfigurationConsulter()->getSetting(
                     ['Chamilo\Core\Admin', 'administrator_email']
                 )
@@ -83,45 +85,46 @@ class AssignmentNotificationsBlockRenderer extends BlockRenderer
     /**
      * @see \Chamilo\Core\Home\Architecture\Interfaces\ConfigurableBlockInterface::getConfigurationVariables()
      */
-    public function getConfigurationVariables()
+    public function getConfigurationVariables(): array
     {
         return [self::CONFIGURATION_COURSE_TYPE];
     }
 
-    /**
-     * Returns the selected course type id
-     *
-     * @return int
-     */
-    public function getCourseTypeId()
+    protected function getCourseTypeConfiguration(Block $block): array
     {
-        return $this->courseTypeId;
+        $courseTypeIds = json_decode($block->getSetting(self::CONFIGURATION_COURSE_TYPE));
+
+        if (!is_array($courseTypeIds))
+        {
+            $courseTypeIds = [$courseTypeIds];
+        }
+
+        return $courseTypeIds;
+    }
+
+    protected function getCourseTypeId(Block $block): int
+    {
+        $courseTypeIds = $this->getCourseTypeConfiguration($block);
+
+        return (int) $courseTypeIds[0];
+    }
+
+    protected function getNotificationManager(): NotificationManager
+    {
+        return $this->notificationManager;
     }
 
     /**
-     * @return \Chamilo\Core\Notification\Service\NotificationManager
-     */
-    protected function getNotificationManager()
-    {
-        return $this->getService(NotificationManager::class);
-    }
-
-    /**
-     * Returns the block's title to display.
-     *
-     * @return string
      * @throws \Doctrine\ORM\NonUniqueResultException
      */
-    public function getTitle()
+    public function getTitle(Block $block, ?User $user = null): string
     {
-        $this->loadSettings();
-
         $title = '<span style="display: flex; align-items: center;">' . $this->getTranslator()->trans(
                 'AssignmentNotifications', [], 'Chamilo\Application\Weblcms'
             );
 
         $notificationCount = $this->getNotificationManager()->countUnseenNotificationsByContextPathForUser(
-            'Assignment', $this->get_user()
+            'Assignment', $user
         );
 
         if ($notificationCount > 0)
@@ -129,15 +132,16 @@ class AssignmentNotificationsBlockRenderer extends BlockRenderer
             $title .= '<span class="notifications-block-new-label">' . $notificationCount . '</span>';
         }
 
-        $title .= ' (' . $this->getTitleForCourseTypeAndCourseCategory() . ')';
+        $title .= ' (' . $this->getTitleForCourseTypeAndCourseCategory($block) . ')';
         $title .= '</span>';
 
         return $title;
     }
 
-    protected function getTitleForCourseTypeAndCourseCategory()
+    protected function getTitleForCourseTypeAndCourseCategory(Block $block): string
     {
-        $course_type_id = $this->getCourseTypeId();
+        $translator = $this->getTranslator();
+        $course_type_id = $this->getCourseTypeId($block);
 
         if ($course_type_id > 0)
         {
@@ -149,19 +153,19 @@ class AssignmentNotificationsBlockRenderer extends BlockRenderer
             }
             else
             {
-                return Translation::get('NoSuchCourseType');
+                return $translator->trans('NoSuchCourseType', [], Manager::CONTEXT);
             }
         }
         elseif ($course_type_id === 0)
         {
-            $course_type_title = Translation::get('NoCourseType');
+            $course_type_title = $translator->trans('NoCourseType', [], Manager::CONTEXT);
         }
         else
         {
-            $course_type_title = Translation::get('AllCourses');
+            $course_type_title = $translator->trans('AllCourses', [], Manager::CONTEXT);
         }
 
-        $user_course_category_id = $this->getUserCourseCategoryId();
+        $user_course_category_id = $this->getUserCourseCategoryId($block);
 
         if ($user_course_category_id > 0)
         {
@@ -172,56 +176,32 @@ class AssignmentNotificationsBlockRenderer extends BlockRenderer
 
             if ($course_user_category)
             {
-                $course_user_category_title = ' - ' . $course_user_category->get_title();
+                return $course_type_title . ' - ' . $course_user_category->get_title();
             }
         }
 
-        return $course_type_title . $course_user_category_title;
+        return $course_type_title;
     }
 
-    /**
-     * Returns the selected user course category id (if any)
-     *
-     * @return int
-     */
-    public function getUserCourseCategoryId()
+    protected function getTwig(): Environment
     {
-        return $this->userCourseCategoryId;
+        return $this->twigEnvironment;
     }
 
-    /**
-     * Loads the settings of this block
-     */
-    private function loadSettings()
+    protected function getUserCourseCategoryId(Block $block): int
     {
-        if ($this->settingsLoaded)
-        {
-            return;
-        }
+        $courseTypeIds = $this->getCourseTypeConfiguration($block);
 
-        $courseTypeIds = json_decode($this->getBlock()->getSetting(self::CONFIGURATION_COURSE_TYPE));
-
-        if (!is_array($courseTypeIds))
-        {
-            $courseTypeIds = [$courseTypeIds];
-        }
-
-        $this->courseTypeId = $courseTypeIds[0];
-        $this->userCourseCategoryId = $courseTypeIds[1];
-        $this->settingsLoaded = true;
+        return (int) $courseTypeIds[1];
     }
 
-    /**
-     * @see \Chamilo\Core\Home\Renderer\BlockRenderer::renderContentFooter()
-     */
-    public function renderContentFooter()
+    public function renderContentFooter(Block $block): string
     {
+        return '';
     }
 
-    /**
-     * @see \Chamilo\Core\Home\Renderer\BlockRenderer::renderContentHeader()
-     */
-    public function renderContentHeader()
+    public function renderContentHeader(Block $block): string
     {
+        return '';
     }
 }

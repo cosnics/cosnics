@@ -5,9 +5,16 @@ use Chamilo\Application\Weblcms\Course\Storage\DataManager as CourseDataManager;
 use Chamilo\Application\Weblcms\Storage\DataClass\ContentObjectPublication;
 use Chamilo\Application\Weblcms\Storage\DataManager;
 use Chamilo\Application\Weblcms\Tool\Manager;
+use Chamilo\Configuration\Service\Consulter\ConfigurationConsulter;
+use Chamilo\Core\Home\Service\HomeService;
+use Chamilo\Core\Home\Storage\DataClass\Block;
 use Chamilo\Core\Repository\ContentObject\Assignment\Storage\DataClass\Assignment;
+use Chamilo\Core\Repository\Publication\Storage\DataClass\Publication;
 use Chamilo\Core\Repository\Storage\DataClass\ContentObject;
+use Chamilo\Core\User\Storage\DataClass\User;
 use Chamilo\Libraries\Architecture\Application\Application;
+use Chamilo\Libraries\Architecture\Application\Routing\UrlGenerator;
+use Chamilo\Libraries\Storage\DataClass\DataClass;
 use Chamilo\Libraries\Storage\Parameters\DataClassRetrievesParameters;
 use Chamilo\Libraries\Storage\Query\Condition\AndCondition;
 use Chamilo\Libraries\Storage\Query\Condition\EqualityCondition;
@@ -17,26 +24,44 @@ use Chamilo\Libraries\Storage\Query\OrderBy;
 use Chamilo\Libraries\Storage\Query\OrderProperty;
 use Chamilo\Libraries\Storage\Query\Variable\PropertyConditionVariable;
 use Chamilo\Libraries\Storage\Query\Variable\StaticConditionVariable;
-use Chamilo\Libraries\Translation\Translation;
 use Chamilo\Libraries\Utilities\DatetimeUtilities;
 use Chamilo\Libraries\Utilities\StringUtilities;
+use Symfony\Component\Translation\Translator;
 
 /**
  * A notificationblock for new assignment submissions (assignmenttool)
+ *
+ * @package Chamilo\Application\Weblcms\Service\Home
  */
 class EndingAssignmentsBlockRenderer extends BlockRenderer
 {
 
-    public function displayContent()
+    protected DatetimeUtilities $datetimeUtilities;
+
+    public function __construct(
+        HomeService $homeService, UrlGenerator $urlGenerator, Translator $translator,
+        ConfigurationConsulter $configurationConsulter, DatetimeUtilities $datetimeUtilities
+    )
+    {
+        parent::__construct($homeService, $urlGenerator, $translator, $configurationConsulter);
+
+        $this->datetimeUtilities = $datetimeUtilities;
+    }
+
+    /**
+     * @throws \Chamilo\Libraries\Storage\Exception\DataClassNoResultException
+     */
+    public function displayContent(Block $block, ?User $user = null): string
     {
         // deadline min 1 week (60 * 60 * 24 * 7)
         $deadline = time() + 604800;
 
-        $courses = CourseDataManager::retrieve_all_courses_from_user($this->getUser());
+        $courses = CourseDataManager::retrieve_all_courses_from_user($user);
+        $course_ids = [];
 
         foreach ($courses as $course)
         {
-            $course_ids[$course->get_id()] = $course->get_id();
+            $course_ids[$course->getId()] = $course->getId();
         }
 
         $conditions = [];
@@ -58,8 +83,8 @@ class EndingAssignmentsBlockRenderer extends BlockRenderer
 
         $conditions[] = new SubselectCondition(
             new PropertyConditionVariable(
-                ContentObjectPublication::class, ContentObjectPublication::PROPERTY_CONTENT_OBJECT_ID
-            ), new PropertyConditionVariable(ContentObject::class, ContentObject::PROPERTY_ID), $subselect_condition
+                ContentObjectPublication::class, Publication::PROPERTY_CONTENT_OBJECT_ID
+            ), new PropertyConditionVariable(ContentObject::class, DataClass::PROPERTY_ID), $subselect_condition
         );
         $condition = new AndCondition($conditions);
 
@@ -78,7 +103,11 @@ class EndingAssignmentsBlockRenderer extends BlockRenderer
         $ending_assignments = [];
         foreach ($publications as $publication)
         {
+            /**
+             * @var \Chamilo\Core\Repository\ContentObject\Assignment\Storage\DataClass\Assignment $assignment
+             */
             $assignment = $publication->get_content_object();
+
             if ($assignment->get_end_time() > time() && $assignment->get_end_time() < $deadline)
             {
                 $parameters = [
@@ -87,12 +116,12 @@ class EndingAssignmentsBlockRenderer extends BlockRenderer
                     Application::PARAM_ACTION => \Chamilo\Application\Weblcms\Manager::ACTION_VIEW_COURSE,
                     \Chamilo\Application\Weblcms\Manager::PARAM_TOOL => NewBlockRenderer::TOOL_ASSIGNMENT,
                     \Chamilo\Application\Weblcms\Manager::PARAM_TOOL_ACTION => \Chamilo\Application\Weblcms\Tool\Implementation\Assignment\Manager::ACTION_DISPLAY,
-                    Manager::PARAM_PUBLICATION_ID => $publication->get_id()
+                    Manager::PARAM_PUBLICATION_ID => $publication->getId()
                 ];
 
                 $link = $this->getUrlGenerator()->fromParameters($parameters);
 
-                $ending_assignments[$assignment->get_end_time() . ' ' . $publication->get_id()] = [
+                $ending_assignments[$assignment->get_end_time() . ' ' . $publication->getId()] = [
                     'title' => $assignment->get_title(),
                     'link' => $link,
                     'end_time' => $assignment->get_end_time()
@@ -105,27 +134,36 @@ class EndingAssignmentsBlockRenderer extends BlockRenderer
 
         if (count($html) == 0)
         {
-            return Translation::get('NoAssignmentsEndComingWeek');
+            return $this->getTranslator()->trans('NoAssignmentsEndComingWeek', [],
+                \Chamilo\Application\Weblcms\Manager::CONTEXT);
         }
 
         return implode(PHP_EOL, $html);
     }
 
-    public function displayNewItems($items)
+    public function displayNewItems($items): array
     {
+        $translator = $this->getTranslator();
+
         $html = [];
+
         foreach ($items as $item)
         {
-            $end_date = DatetimeUtilities::getInstance()->formatLocaleDate(
-                Translation::get('DateFormatShort', null, StringUtilities::LIBRARIES) . ', ' . Translation::get(
-                    'TimeNoSecFormat', null, StringUtilities::LIBRARIES
+            $end_date = $this->getDatetimeUtilities()->formatLocaleDate(
+                $translator->trans('DateFormatShort', [], StringUtilities::LIBRARIES) . ', ' . $translator->trans(
+                    'TimeNoSecFormat', [], StringUtilities::LIBRARIES
                 ), $item['end_time']
             );
 
-            $html[] = '<a href="' . $item['link'] . '">' . $item['title'] . '</a>: ' . Translation::get('Until') . ' ' .
-                $end_date . '<br />';
+            $html[] = '<a href="' . $item['link'] . '">' . $item['title'] . '</a>: ' .
+                $translator->trans('Until', [], StringUtilities::LIBRARIES) . ' ' . $end_date . '<br />';
         }
 
         return $html;
+    }
+
+    public function getDatetimeUtilities(): DatetimeUtilities
+    {
+        return $this->datetimeUtilities;
     }
 }
