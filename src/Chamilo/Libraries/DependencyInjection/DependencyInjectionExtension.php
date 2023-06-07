@@ -5,6 +5,7 @@ use Chamilo\Libraries\DependencyInjection\CompilerPass\AuthenticationCompilerPas
 use Chamilo\Libraries\DependencyInjection\CompilerPass\CacheAdapterCompilerPass;
 use Chamilo\Libraries\DependencyInjection\CompilerPass\CacheDataPreLoaderCompilerPass;
 use Chamilo\Libraries\DependencyInjection\CompilerPass\ConsoleCompilerPass;
+use Chamilo\Libraries\DependencyInjection\CompilerPass\DoctrineConditionPartTranslatorCompilerPass;
 use Chamilo\Libraries\DependencyInjection\CompilerPass\DoctrineEventListenerCompilerPass;
 use Chamilo\Libraries\DependencyInjection\CompilerPass\FormTypeCompilerPass;
 use Chamilo\Libraries\DependencyInjection\Configuration\LibrariesConfiguration;
@@ -111,5 +112,6 @@ class DependencyInjectionExtension extends AbstractDependencyInjectionExtension
         $container->addCompilerPass(new DoctrineEventListenerCompilerPass());
         $container->addCompilerPass(new FormTypeCompilerPass());
         $container->addCompilerPass(new AuthenticationCompilerPass());
+        $container->addCompilerPass(new DoctrineConditionPartTranslatorCompilerPass());
     }
 }

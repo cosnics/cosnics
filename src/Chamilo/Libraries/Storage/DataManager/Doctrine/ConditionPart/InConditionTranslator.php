@@ -1,23 +1,21 @@
 <?php
 namespace Chamilo\Libraries\Storage\DataManager\Doctrine\ConditionPart;
 
-use Chamilo\Libraries\Storage\DataManager\Doctrine\Service\ConditionPartTranslatorService;
 use Chamilo\Libraries\Storage\DataManager\Interfaces\DataClassDatabaseInterface;
 use Chamilo\Libraries\Storage\Query\Condition\InCondition;
 use Chamilo\Libraries\Storage\Query\ConditionTranslator;
 
 /**
- *
  * @package Chamilo\Libraries\Storage\DataManager\Doctrine\ConditionPart
- * @author Hans De Bisschop <hans.de.bisschop@ehb.be>
- * @author Magali Gillard <magali.gillard@ehb.be>
+ * @author  Hans De Bisschop <hans.de.bisschop@ehb.be>
+ * @author  Magali Gillard <magali.gillard@ehb.be>
  */
 class InConditionTranslator extends ConditionTranslator
 {
+    public const CONDITION_CLASS = InCondition::class;
 
     public function translate(
-        ConditionPartTranslatorService $conditionPartTranslatorService, DataClassDatabaseInterface $dataClassDatabase,
-        InCondition $inCondition, ?bool $enableAliasing = true
+        DataClassDatabaseInterface $dataClassDatabase, InCondition $inCondition, ?bool $enableAliasing = true
     ): string
     {
         $values = $inCondition->getValues();
@@ -26,7 +24,7 @@ class InConditionTranslator extends ConditionTranslator
         {
             $where_clause = [];
 
-            $where_clause[] = $conditionPartTranslatorService->translate(
+            $where_clause[] = $this->getConditionPartTranslatorService()->translate(
                     $dataClassDatabase, $inCondition->getConditionVariable(), $enableAliasing
                 ) . ' IN (';
 

@@ -1,30 +1,29 @@
 <?php
 namespace Chamilo\Libraries\Storage\DataManager\Doctrine\ConditionPart;
 
-use Chamilo\Libraries\Storage\DataManager\Doctrine\Service\ConditionPartTranslatorService;
 use Chamilo\Libraries\Storage\DataManager\Interfaces\DataClassDatabaseInterface;
 use Chamilo\Libraries\Storage\Query\ConditionVariableTranslator;
 use Chamilo\Libraries\Storage\Query\Variable\OperationConditionVariable;
 
 /**
- *
  * @package Chamilo\Libraries\Storage\DataManager\Doctrine\ConditionPart
- * @author Hans De Bisschop <hans.de.bisschop@ehb.be>
- * @author Magali Gillard <magali.gillard@ehb.be>
- * @author Eduard Vossen <eduard.vossen@ehb.be>
+ * @author  Hans De Bisschop <hans.de.bisschop@ehb.be>
+ * @author  Magali Gillard <magali.gillard@ehb.be>
+ * @author  Eduard Vossen <eduard.vossen@ehb.be>
  */
 class OperationConditionVariableTranslator extends ConditionVariableTranslator
 {
+    public const CONDITION_CLASS = OperationConditionVariable::class;
 
     public function translate(
-        ConditionPartTranslatorService $conditionPartTranslatorService, DataClassDatabaseInterface $dataClassDatabase,
-        OperationConditionVariable $operationConditionVariable, ?bool $enableAliasing = true
+        DataClassDatabaseInterface $dataClassDatabase, OperationConditionVariable $operationConditionVariable,
+        ?bool $enableAliasing = true
     ): string
     {
         $strings = [];
 
         $strings[] = '(';
-        $strings[] = $conditionPartTranslatorService->translate(
+        $strings[] = $this->getConditionPartTranslatorService()->translate(
             $dataClassDatabase, $operationConditionVariable->getLeftConditionVariable(), $enableAliasing
         );
 
@@ -50,7 +49,7 @@ class OperationConditionVariableTranslator extends ConditionVariableTranslator
                 break;
         }
 
-        $strings[] = $conditionPartTranslatorService->translate(
+        $strings[] = $this->getConditionPartTranslatorService()->translate(
             $dataClassDatabase, $operationConditionVariable->getRightConditionVariable(), $enableAliasing
         );
         $strings[] = ')';

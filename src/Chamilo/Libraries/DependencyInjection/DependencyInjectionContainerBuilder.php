@@ -26,16 +26,18 @@ use Chamilo\Libraries\Platform\Session\SessionFactory;
 use Chamilo\Libraries\Storage\Cache\ConditionPartCache;
 use Chamilo\Libraries\Storage\Cache\DataClassRepositoryCache;
 use Chamilo\Libraries\Storage\DataClass\DataClassFactory;
+use Chamilo\Libraries\Storage\DataManager\Doctrine\ConditionPart\AndConditionTranslator;
 use Chamilo\Libraries\Storage\DataManager\Doctrine\ConditionPart\CaseConditionVariableTranslator;
 use Chamilo\Libraries\Storage\DataManager\Doctrine\ConditionPart\CaseElementConditionVariableTranslator;
 use Chamilo\Libraries\Storage\DataManager\Doctrine\ConditionPart\ComparisonConditionTranslator;
 use Chamilo\Libraries\Storage\DataManager\Doctrine\ConditionPart\DateFormatConditionVariableTranslator;
 use Chamilo\Libraries\Storage\DataManager\Doctrine\ConditionPart\DistinctConditionVariableTranslator;
+use Chamilo\Libraries\Storage\DataManager\Doctrine\ConditionPart\EqualityConditionTranslator;
 use Chamilo\Libraries\Storage\DataManager\Doctrine\ConditionPart\FunctionConditionVariableTranslator;
 use Chamilo\Libraries\Storage\DataManager\Doctrine\ConditionPart\InConditionTranslator;
-use Chamilo\Libraries\Storage\DataManager\Doctrine\ConditionPart\MultipleAggregateConditionTranslator;
 use Chamilo\Libraries\Storage\DataManager\Doctrine\ConditionPart\NotConditionTranslator;
 use Chamilo\Libraries\Storage\DataManager\Doctrine\ConditionPart\OperationConditionVariableTranslator;
+use Chamilo\Libraries\Storage\DataManager\Doctrine\ConditionPart\OrConditionTranslator;
 use Chamilo\Libraries\Storage\DataManager\Doctrine\ConditionPart\PatternMatchConditionTranslator;
 use Chamilo\Libraries\Storage\DataManager\Doctrine\ConditionPart\PropertiesConditionVariableTranslator;
 use Chamilo\Libraries\Storage\DataManager\Doctrine\ConditionPart\PropertyConditionVariableTranslator;
@@ -302,24 +304,73 @@ class DependencyInjectionContainerBuilder
             $storageAliasGenerator = new StorageAliasGenerator($this->getClassnameUtilities());
 
             $conditionPartTranslatorService = new ConditionPartTranslatorService(
-                new CaseConditionVariableTranslator($storageAliasGenerator),
-                new CaseElementConditionVariableTranslator($storageAliasGenerator),
-                new ComparisonConditionTranslator($storageAliasGenerator),
-                new DateFormatConditionVariableTranslator($storageAliasGenerator),
-                new DistinctConditionVariableTranslator($storageAliasGenerator),
-                new FunctionConditionVariableTranslator($storageAliasGenerator),
-                new InConditionTranslator($storageAliasGenerator),
-                new MultipleAggregateConditionTranslator($storageAliasGenerator),
-                new NotConditionTranslator($storageAliasGenerator),
-                new OperationConditionVariableTranslator($storageAliasGenerator),
-                new PatternMatchConditionTranslator($storageAliasGenerator),
-                new PropertiesConditionVariableTranslator($storageAliasGenerator),
-                new PropertyConditionVariableTranslator($storageAliasGenerator),
-                new RegularExpressionConditionTranslator($storageAliasGenerator),
-                new StaticConditionVariableTranslator($storageAliasGenerator),
-                new SubselectConditionTranslator($storageAliasGenerator), new ConditionPartCache(),
-                $this->getFileConfigurationConsulter()->getSetting(
-                    ['Chamilo\Configuration', 'debug', 'enable_query_cache']
+                new ConditionPartCache(), $this->getFileConfigurationConsulter()->getSetting(
+                ['Chamilo\Configuration', 'debug', 'enable_query_cache']
+            )
+            );
+
+            $conditionPartTranslatorService->addConditionPartTranslator(
+                new CaseConditionVariableTranslator($conditionPartTranslatorService, $storageAliasGenerator)
+            );
+            $conditionPartTranslatorService->addConditionPartTranslator(
+                new CaseElementConditionVariableTranslator($conditionPartTranslatorService, $storageAliasGenerator)
+            );
+            $conditionPartTranslatorService->addConditionPartTranslator(
+                new ComparisonConditionTranslator($conditionPartTranslatorService, $storageAliasGenerator)
+            );
+            $conditionPartTranslatorService->addConditionPartTranslator(
+                new EqualityConditionTranslator($conditionPartTranslatorService, $storageAliasGenerator)
+            );
+            $conditionPartTranslatorService->addConditionPartTranslator(
+                new DateFormatConditionVariableTranslator($conditionPartTranslatorService, $storageAliasGenerator)
+            );
+            $conditionPartTranslatorService->addConditionPartTranslator(
+                new DistinctConditionVariableTranslator($conditionPartTranslatorService, $storageAliasGenerator)
+            );
+            $conditionPartTranslatorService->addConditionPartTranslator(
+                new FunctionConditionVariableTranslator($conditionPartTranslatorService, $storageAliasGenerator)
+            );
+            $conditionPartTranslatorService->addConditionPartTranslator(
+                new InConditionTranslator($conditionPartTranslatorService, $storageAliasGenerator)
+            );
+            $conditionPartTranslatorService->addConditionPartTranslator(
+                new AndConditionTranslator($conditionPartTranslatorService, $storageAliasGenerator)
+            );
+            $conditionPartTranslatorService->addConditionPartTranslator(
+                new OrConditionTranslator($conditionPartTranslatorService, $storageAliasGenerator)
+            );
+            $conditionPartTranslatorService->addConditionPartTranslator(
+                new NotConditionTranslator($conditionPartTranslatorService, $storageAliasGenerator)
+            );
+            $conditionPartTranslatorService->addConditionPartTranslator(
+                new OperationConditionVariableTranslator($conditionPartTranslatorService, $storageAliasGenerator)
+            );
+            $conditionPartTranslatorService->addConditionPartTranslator(
+                new PatternMatchConditionTranslator($conditionPartTranslatorService, $storageAliasGenerator)
+            );
+            $conditionPartTranslatorService->addConditionPartTranslator(
+                new PropertiesConditionVariableTranslator(
+                    $conditionPartTranslatorService, $storageAliasGenerator
+                )
+            );
+            $conditionPartTranslatorService->addConditionPartTranslator(
+                new PropertyConditionVariableTranslator(
+                    $conditionPartTranslatorService, $storageAliasGenerator
+                )
+            );
+            $conditionPartTranslatorService->addConditionPartTranslator(
+                new RegularExpressionConditionTranslator(
+                    $conditionPartTranslatorService, $storageAliasGenerator
+                )
+            );
+            $conditionPartTranslatorService->addConditionPartTranslator(
+                new StaticConditionVariableTranslator(
+                    $conditionPartTranslatorService, $storageAliasGenerator
+                )
+            );
+            $conditionPartTranslatorService->addConditionPartTranslator(
+                new SubselectConditionTranslator(
+                    $conditionPartTranslatorService, $storageAliasGenerator
                 )
             );
 

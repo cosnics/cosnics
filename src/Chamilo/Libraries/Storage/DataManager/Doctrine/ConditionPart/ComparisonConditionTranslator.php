@@ -1,28 +1,27 @@
 <?php
 namespace Chamilo\Libraries\Storage\DataManager\Doctrine\ConditionPart;
 
-use Chamilo\Libraries\Storage\DataManager\Doctrine\Service\ConditionPartTranslatorService;
 use Chamilo\Libraries\Storage\DataManager\Interfaces\DataClassDatabaseInterface;
 use Chamilo\Libraries\Storage\Query\Condition\ComparisonCondition;
 use Chamilo\Libraries\Storage\Query\ConditionTranslator;
 
 /**
- *
  * @package Chamilo\Libraries\Storage\DataManager\Doctrine\ConditionPart
- * @author Hans De Bisschop <hans.de.bisschop@ehb.be>
- * @author Magali Gillard <magali.gillard@ehb.be>
+ * @author  Hans De Bisschop <hans.de.bisschop@ehb.be>
+ * @author  Magali Gillard <magali.gillard@ehb.be>
  */
 class ComparisonConditionTranslator extends ConditionTranslator
 {
+    public const CONDITION_CLASS = ComparisonCondition::class;
 
     public function translate(
-        ConditionPartTranslatorService $conditionPartTranslatorService, DataClassDatabaseInterface $dataClassDatabase,
-        ComparisonCondition $comparisonCondition, ?bool $enableAliasing = true
+        DataClassDatabaseInterface $dataClassDatabase, ComparisonCondition $comparisonCondition,
+        ?bool $enableAliasing = true
     ): string
     {
         $translationParts = [];
 
-        $translationParts[] = $conditionPartTranslatorService->translate(
+        $translationParts[] = $this->getConditionPartTranslatorService()->translate(
             $dataClassDatabase, $comparisonCondition->getLeftConditionVariable(), $enableAliasing
         );
 
@@ -36,7 +35,7 @@ class ComparisonConditionTranslator extends ConditionTranslator
 
         $translationParts[] = $this->translateOperator($comparisonCondition->getOperator());
 
-        $translationParts[] = $conditionPartTranslatorService->translate(
+        $translationParts[] = $this->getConditionPartTranslatorService()->translate(
             $dataClassDatabase, $comparisonCondition->getRightConditionVariable(), $enableAliasing
         );
 
