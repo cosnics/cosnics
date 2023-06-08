@@ -3,8 +3,8 @@ namespace Chamilo\Core\Repository\Publication\Storage\Repository;
 
 use Chamilo\Core\Repository\Publication\Storage\DataClass\Publication;
 use Chamilo\Core\Repository\Storage\DataClass\ContentObject;
-use Chamilo\Core\Repository\Storage\DataManager;
 use Chamilo\Libraries\Storage\DataClass\DataClass;
+use Chamilo\Libraries\Storage\DataManager\Repository\DataClassRepository;
 use Chamilo\Libraries\Storage\Parameters\DataClassCountParameters;
 use Chamilo\Libraries\Storage\Parameters\RecordRetrievesParameters;
 use Chamilo\Libraries\Storage\Query\Condition\EqualityCondition;
@@ -16,7 +16,6 @@ use Chamilo\Libraries\Storage\Query\Variable\PropertyConditionVariable;
 use Doctrine\Common\Collections\ArrayCollection;
 use DomainException;
 use InvalidArgumentException;
-use ReflectionClass;
 
 /**
  * Repository to manage publications with their content objects
@@ -27,16 +26,19 @@ use ReflectionClass;
 class PublicationRepository
 {
 
+    protected DataClassRepository $dataClassRepository;
+
+    public function __construct(DataClassRepository $dataClassRepository)
+    {
+        $this->dataClassRepository = $dataClassRepository;
+    }
+
     /**
      * Validates the publication class name to be a valid publication class
-     *
-     * @throws \ReflectionException
      */
-    protected function checkPublicationClassName(string $publicationClassName)
+    protected function checkPublicationClassName(string $publicationClassName): void
     {
-        $reflectionClass = new ReflectionClass($publicationClassName);
-
-        if (!$reflectionClass->isSubclassOf(Publication::class))
+        if (!is_subclass_of($publicationClassName, Publication::class))
         {
             throw new InvalidArgumentException(
                 sprintf(
@@ -53,9 +55,6 @@ class PublicationRepository
      * Chamilo\Core\Repository\Publication\Storage\DataClass\Publication.
      * Optionally add the content object type class  name to limit the retrieval of content objects to a specific type
      * and to join with the additional attributes of that type
-     *
-     * @throws \ReflectionException
-     * @throws \Exception
      */
     public function countPublicationsWithContentObjects(
         DataClassCountParameters $baseCountParameters, string $publicationClassName,
@@ -70,7 +69,12 @@ class PublicationRepository
         ), $baseCountParameters->getRetrieveProperties()
         );
 
-        return DataManager::count($publicationClassName, $parameters);
+        return $this->getDataClassRepository()->count($publicationClassName, $parameters);
+    }
+
+    public function getDataClassRepository(): DataClassRepository
+    {
+        return $this->dataClassRepository;
     }
 
     /**
@@ -114,9 +118,10 @@ class PublicationRepository
      * Optionally add the content object type class name to limit the retrieval of content objects to a specific type
      * and to join with the additional attributes of that type
      *
+     * @param ?class-string<\Chamilo\Core\Repository\Storage\DataClass\ContentObject> $contentObjectTypeClassName
+     *
      * @return \Chamilo\Core\Repository\Publication\Storage\DataClass\Publication[]
      * @throws \Chamilo\Libraries\Storage\Exception\DataClassNoResultException
-     * @throws \ReflectionException
      */
     public function getPublicationsWithContentObjects(
         RecordRetrievesParameters $baseRecordRetrievesParameters, string $publicationClassName,
@@ -160,7 +165,7 @@ class PublicationRepository
             ), $baseRecordRetrievesParameters->getGroupBy()
         );
 
-        $records = DataManager::records(
+        $records = $this->getDataClassRepository()->records(
             $publicationClassName, $recordRetrievesParameters
         );
 
@@ -177,11 +182,17 @@ class PublicationRepository
         return new Join($contentObjectTypeClassName, $joinCondition);
     }
 
+    /**
+     * @param array $record
+     * @param class-string<\Chamilo\Core\Repository\Publication\Storage\DataClass\Publication> $publicationClassName
+     * @param ?class-string<\Chamilo\Core\Repository\Storage\DataClass\ContentObject> $contentObjectTypeClassName
+     *
+     * @return \Chamilo\Core\Repository\Publication\Storage\DataClass\Publication
+     */
     protected function hydratePublication(
         array $record, string $publicationClassName, ?string $contentObjectTypeClassName = null
     ): Publication
     {
-        /** @var Publication $publication */
         $publication = new $publicationClassName(
             array_intersect_key($record, array_flip($publicationClassName::getDefaultPropertyNames()))
         );

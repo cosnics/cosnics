@@ -68,7 +68,7 @@ class HomeRenderer
     {
         $webPathBuilder = $this->getWebPathBuilder();
 
-        $userHomeAllowed = $this->getConfigurationConsulter()->getSetting([Manager::CONTEXT, 'allow_user_home']);
+        $userHomeAllowed = $this->getHomeService()->isUserHomeAllowed();
 
         $isEditable = ($user instanceof User && ($userHomeAllowed || ($user->is_platform_admin() && $isGeneralMode)));
         $isGeneralMode = ($isGeneralMode && $user instanceof User && $user->is_platform_admin());
@@ -159,7 +159,7 @@ class HomeRenderer
      */
     public function renderButtons(bool $isGeneralMode = false, ?User $user = null): string
     {
-        $userHomeAllowed = $this->getConfigurationConsulter()->getSetting([Manager::CONTEXT, 'allow_user_home']);
+        $userHomeAllowed = $this->getHomeService()->isUserHomeAllowed();
         $homeUserIdentifier = $this->getHomeService()->determineHomeUserIdentifier($user);
         $translator = $this->getTranslator();
 
@@ -252,7 +252,8 @@ class HomeRenderer
         return implode(PHP_EOL, $html);
     }
 
-    public function renderContent(?int $currentTabIdentifier = null,bool $isGeneralMode = false, ?User $user = null): string
+    public function renderContent(?int $currentTabIdentifier = null, bool $isGeneralMode = false, ?User $user = null
+    ): string
     {
         $angularConnectorService = $this->getAngularConnectorService();
         $tabRenderer = $this->getTabRenderer();
@@ -273,7 +274,7 @@ class HomeRenderer
 
         $html[] = '<div class="portal-tabs" ng-app="homeApp">';
 
-        $tabs = $this->getHomeService()->getElements($user, Tab::class);
+        $tabs = $this->getHomeService()->findElementsByTypeUserAndParentIdentifier(Tab::class, $user);
 
         foreach ($tabs as $tabKey => $tab)
         {
@@ -388,7 +389,7 @@ class HomeRenderer
 
         $html[] = '<ul class="nav nav-tabs portal-nav-tabs">';
 
-        $tabs = $this->getHomeService()->getElements($user, Tab::class);
+        $tabs = $this->getHomeService()->findElementsByTypeUserAndParentIdentifier(Tab::class, $user);
 
         foreach ($tabs as $tabKey => $tab)
         {

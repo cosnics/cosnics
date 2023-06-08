@@ -42,8 +42,8 @@ class ColumnRenderer
             $column->getParentId() . '" data-element-id="' . $column->getId() . '" data-element-width="' .
             $column->getWidth() . '">';
 
-        $blocks = $this->getHomeService()->getElements(
-            $user, Block::class, $column->getId()
+        $blocks = $this->getHomeService()->findElementsByTypeUserAndParentIdentifier(
+            Block::class, $user, $column->getId()
         );
 
         foreach ($blocks as $block)
@@ -57,7 +57,7 @@ class ColumnRenderer
         }
 
         $hasMultipleColumns = $this->getHomeService()->tabByUserAndIdentifierHasMultipleColumns(
-            $user, $column->getParentId()
+            $column->getParentId(), $user
         );
 
         $html[] = $this->renderEmptyColumn($column->getId(), (count($blocks) > 0), !$hasMultipleColumns);

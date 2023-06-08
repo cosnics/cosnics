@@ -24,26 +24,17 @@ class BlockTypeTargetEntity extends HomeTargetEntity
         return parent::getDefaultPropertyNames([self::PROPERTY_BLOCK_TYPE]);
     }
 
-    /**
-     * @return string
-     */
     public static function getStorageUnitName(): string
     {
         return 'home_block_type_target_entity';
     }
 
-    /**
-     * @return string
-     */
-    public function get_block_type()
+    public function get_block_type(): string
     {
         return $this->getDefaultProperty(self::PROPERTY_BLOCK_TYPE);
     }
 
-    /**
-     * @param string $block_type
-     */
-    public function set_block_type($block_type)
+    public function set_block_type(string $block_type): void
     {
         $this->setDefaultProperty(self::PROPERTY_BLOCK_TYPE, $block_type);
     }

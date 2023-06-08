@@ -25,21 +25,4 @@ abstract class Manager extends Application
     {
         return new BreadcrumbGenerator($this, BreadcrumbTrail::getInstance());
     }
-
-    /**
-     * Returns the URL to the SetBlockTypeTargetEntities Component
-     *
-     * @param string $blockType
-     *
-     * @return string
-     */
-    public function get_set_block_type_target_entities_url($blockType)
-    {
-        $parameters = [
-            self::PARAM_ACTION => self::ACTION_SET_BLOCK_TYPE_TARGET_ENTITIES,
-            self::PARAM_BLOCK_TYPE => $blockType
-        ];
-
-        return $this->get_url($parameters);
-    }
 }

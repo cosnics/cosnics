@@ -38,8 +38,8 @@ class TabRenderer
             '<div class="row portal-tab ' . ($isActiveTab ? 'show' : 'hidden') . '" data-element-id="' . $tab->getId() .
             '">';
 
-        $columns = $this->getHomeService()->getElements(
-            $user, Column::class, $tab->getId()
+        $columns = $this->getHomeService()->findElementsByTypeUserAndParentIdentifier(
+            Column::class, $user, $tab->getId()
         );
 
         foreach ($columns as $column)

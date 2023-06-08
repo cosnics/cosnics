@@ -24,6 +24,7 @@
         <service id="Chamilo\Core\Home\Service\ContentObjectPublicationService"/>
         <service id="Chamilo\Core\Home\Repository\ContentObjectPublicationRepository"/>
 
+        <service id="Chamilo\Core\Home\Rights\Service\BlockTypeRightsService"/>
         <service id="Chamilo\Core\Home\Rights\Service\ElementRightsService"/>
         <service id="Chamilo\Core\Home\Rights\Storage\Repository\RightsRepository"/>
     </services>

@@ -2,9 +2,10 @@
 namespace Chamilo\Core\Home\Repository;
 
 use Chamilo\Core\Home\Storage\DataClass\ContentObjectPublication;
-use Chamilo\Core\Home\Storage\DataManager;
+use Chamilo\Core\Repository\Publication\Storage\DataClass\Publication;
 use Chamilo\Core\Repository\Publication\Storage\Repository\PublicationRepository;
 use Chamilo\Core\Repository\Storage\DataClass\ContentObject;
+use Chamilo\Libraries\Storage\DataManager\Repository\DataClassRepository;
 use Chamilo\Libraries\Storage\Parameters\DataClassCountParameters;
 use Chamilo\Libraries\Storage\Parameters\DataClassRetrieveParameters;
 use Chamilo\Libraries\Storage\Parameters\RecordRetrievesParameters;
@@ -20,196 +21,132 @@ use Chamilo\Libraries\Storage\Query\Variable\StaticConditionVariable;
  */
 class ContentObjectPublicationRepository
 {
+    protected DataClassRepository $dataClassRepository;
 
     protected PublicationRepository $publicationRepository;
-    
-    public function __construct(PublicationRepository $publicationRepository)
+
+    public function __construct(DataClassRepository $dataClassRepository, PublicationRepository $publicationRepository)
     {
+        $this->dataClassRepository = $dataClassRepository;
         $this->publicationRepository = $publicationRepository;
     }
 
-    /**
-     * Returns the amount of content object publications by a given content object id
-     *
-     * @param int $contentObjectId
-     *
-     * @return int
-     */
-    public function countContentObjectPublicationsByContentObjectId($contentObjectId)
+    public function countContentObjectPublicationsByContentObjectId($contentObjectId): int
     {
-        return DataManager::count(
+        return $this->getDataClassRepository()->count(
             ContentObjectPublication::class,
             new DataClassCountParameters($this->getConditionByContentObjectId($contentObjectId))
         );
     }
 
-    /**
-     * Returns the amount of content object publications by multiple content object ids
-     *
-     * @param int[] $contentObjectIds
-     *
-     * @return int
-     */
-    public function countContentObjectPublicationsByContentObjectIds($contentObjectIds = [])
+    public function countContentObjectPublicationsByContentObjectIds($contentObjectIds = []): int
     {
-        return DataManager::count(
+        return $this->getDataClassRepository()->count(
             ContentObjectPublication::class,
             new DataClassCountParameters($this->getConditionByContentObjectIds($contentObjectIds))
         );
     }
 
     /**
-     * Count content object publications by a given content object owner id
-     *
-     * @param int $ownerId
-     *
-     * @return int
+     * @throws \Exception
      */
-    public function countContentObjectPublicationsByContentObjectOwnerId($ownerId)
+    public function countContentObjectPublicationsByContentObjectOwnerId(string $ownerId): int
     {
-        return $this->publicationRepository->countPublicationsWithContentObjects(
+        return $this->getPublicationRepository()->countPublicationsWithContentObjects(
             new DataClassCountParameters($this->getConditionByContentObjectOwnerId($ownerId)),
             ContentObjectPublication::class
         );
     }
 
     /**
-     * Deletes content object publications for a given content object id
-     *
-     * @param int $contentObjectId
-     *
-     * @return bool
+     * @throws \Chamilo\Libraries\Storage\Exception\DataClassNoResultException
      */
-    public function deleteContentObjectPublicationsByContentObjectId($contentObjectId)
+    public function createContentObjectPublication(ContentObjectPublication $contentObjectPublication): bool
     {
-        return DataManager::deletes(
+        return $this->getDataClassRepository()->create($contentObjectPublication);
+    }
+
+    public function deleteContentObjectPublicationsByContentObjectId(string $contentObjectId): bool
+    {
+        return $this->getDataClassRepository()->deletes(
             ContentObjectPublication::class, $this->getConditionByContentObjectId($contentObjectId)
         );
     }
 
-    /**
-     * Clears the content object publications for a given element
-     *
-     * @param int $elementId
-     *
-     * @return bool
-     */
-    public function deleteContentObjectPublicationsForElement($elementId)
+    public function deleteContentObjectPublicationsForElement(string $elementId): bool
     {
-        return DataManager::deletes(ContentObjectPublication::class, $this->getConditionByElementId($elementId));
+        return $this->getDataClassRepository()->deletes(
+            ContentObjectPublication::class, $this->getConditionByElementId($elementId)
+        );
+    }
+
+    public function findContentObjectPublicationById(string $publicationId): ?ContentObjectPublication
+    {
+        return $this->getDataClassRepository()->retrieveById(ContentObjectPublication::class, $publicationId);
     }
 
     /**
-     * Returns a single content object publication by a given id
-     *
-     * @param int $publicationId
-     *
-     * @return ContentObjectPublication
+     * @return \Chamilo\Core\Home\Storage\DataClass\ContentObjectPublication[]
+     * @throws \Chamilo\Libraries\Storage\Exception\DataClassNoResultException
      */
-    public function findContentObjectPublicationById($publicationId)
+    public function findContentObjectPublicationsByContentObjectId(string $contentObjectId): array
     {
-        return DataManager::retrieve_by_id(ContentObjectPublication::class, $publicationId);
-    }
-
-    /**
-     * Returns the content object publications by a given content object id
-     *
-     * @param int $contentObjectId
-     *
-     * @return ContentObjectPublication[]
-     */
-    public function findContentObjectPublicationsByContentObjectId($contentObjectId)
-    {
-        return $this->publicationRepository->getPublicationsWithContentObjects(
+        return $this->getPublicationRepository()->getPublicationsWithContentObjects(
             new RecordRetrievesParameters(null, $this->getConditionByContentObjectId($contentObjectId)),
             ContentObjectPublication::class
         );
     }
 
     /**
-     * Retrieves content object publications by a given content object owner id
-     *
-     * @param int $ownerId
-     *
-     * @return ContentObjectPublication[]
+     * @return \Chamilo\Core\Home\Storage\DataClass\ContentObjectPublication[]
+     * @throws \Chamilo\Libraries\Storage\Exception\DataClassNoResultException
      */
-    public function findContentObjectPublicationsByContentObjectOwnerId($ownerId)
+    public function findContentObjectPublicationsByContentObjectOwnerId(string $ownerId): array
     {
-        return $this->publicationRepository->getPublicationsWithContentObjects(
+        return $this->getPublicationRepository()->getPublicationsWithContentObjects(
             new RecordRetrievesParameters(null, $this->getConditionByContentObjectOwnerId($ownerId)),
             ContentObjectPublication::class
         );
     }
 
     /**
-     * Finds the content object publications by element id
-     *
-     * @param int $elementId
-     *
-     * @return ContentObjectPublication[]
+     * @return \Chamilo\Core\Home\Storage\DataClass\ContentObjectPublication[]
+     * @throws \Chamilo\Libraries\Storage\Exception\DataClassNoResultException
      */
-    public function findContentObjectPublicationsByElementId($elementId)
+    public function findContentObjectPublicationsByElementId(string $elementId): array
     {
-        return $this->publicationRepository->getPublicationsWithContentObjects(
+        return $this->getPublicationRepository()->getPublicationsWithContentObjects(
             new RecordRetrievesParameters(null, $this->getConditionByElementId($elementId)),
             ContentObjectPublication::class
         );
     }
 
-    /**
-     * Finds a single content object publication by a given element id
-     *
-     * @param int $elementId
-     *
-     * @return ContentObjectPublication
-     */
-    public function findFirstContentObjectPublicationByElementId($elementId)
+    public function findFirstContentObjectPublicationByElementId(string $elementId): ?ContentObjectPublication
     {
-        return DataManager::retrieve(
+        return $this->getDataClassRepository()->retrieve(
             ContentObjectPublication::class, new DataClassRetrieveParameters($this->getConditionByElementId($elementId))
         );
     }
 
-    /**
-     * Builds the condition for ContentObjectPublications based on a content object id
-     *
-     * @param int $contentObjectId
-     *
-     * @return EqualityCondition
-     */
-    protected function getConditionByContentObjectId($contentObjectId)
+    protected function getConditionByContentObjectId(string $contentObjectId): EqualityCondition
     {
         return new EqualityCondition(
             new PropertyConditionVariable(
-                ContentObjectPublication::class, ContentObjectPublication::PROPERTY_CONTENT_OBJECT_ID
+                ContentObjectPublication::class, Publication::PROPERTY_CONTENT_OBJECT_ID
             ), new StaticConditionVariable($contentObjectId)
         );
     }
 
-    /**
-     * Builds the condition for ContentObjectPublications based on multiple content object ids
-     *
-     * @param int[] $contentObjectIds
-     *
-     * @return EqualityCondition
-     */
-    protected function getConditionByContentObjectIds($contentObjectIds = [])
+    protected function getConditionByContentObjectIds(array $contentObjectIds = []): InCondition
     {
         return new InCondition(
             new PropertyConditionVariable(
-                ContentObjectPublication::class, ContentObjectPublication::PROPERTY_CONTENT_OBJECT_ID
+                ContentObjectPublication::class, Publication::PROPERTY_CONTENT_OBJECT_ID
             ), $contentObjectIds
         );
     }
 
-    /**
-     * Builds the condition for ContentObjectPublications based on an content object owner id
-     *
-     * @param int $ownerId
-     *
-     * @return EqualityCondition
-     */
-    protected function getConditionByContentObjectOwnerId($ownerId)
+    protected function getConditionByContentObjectOwnerId(string $ownerId): EqualityCondition
     {
         return new EqualityCondition(
             new PropertyConditionVariable(ContentObject::class, ContentObject::PROPERTY_OWNER_ID),
@@ -217,19 +154,22 @@ class ContentObjectPublicationRepository
         );
     }
 
-    /**
-     * Builds the condition for ContentObjectPublications based on an element id
-     *
-     * @param int $elementId
-     *
-     * @return EqualityCondition
-     */
-    protected function getConditionByElementId($elementId)
+    protected function getConditionByElementId(string $elementId): EqualityCondition
     {
         return new EqualityCondition(
             new PropertyConditionVariable(
                 ContentObjectPublication::class, ContentObjectPublication::PROPERTY_ELEMENT_ID
             ), new StaticConditionVariable($elementId)
         );
+    }
+
+    public function getDataClassRepository(): DataClassRepository
+    {
+        return $this->dataClassRepository;
+    }
+
+    public function getPublicationRepository(): PublicationRepository
+    {
+        return $this->publicationRepository;
     }
 }

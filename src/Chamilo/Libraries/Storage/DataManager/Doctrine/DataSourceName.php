@@ -4,11 +4,10 @@ namespace Chamilo\Libraries\Storage\DataManager\Doctrine;
 use Exception;
 
 /**
- *
  * @package Chamilo\Libraries\Storage\DataManager\Doctrine
- * @author Hans De Bisschop <hans.de.bisschop@ehb.be>
- * @author Magali Gillard <magali.gillard@ehb.be>
- * @author Eduard Vossen <eduard.vossen@ehb.be>
+ * @author  Hans De Bisschop <hans.de.bisschop@ehb.be>
+ * @author  Magali Gillard <magali.gillard@ehb.be>
+ * @author  Eduard Vossen <eduard.vossen@ehb.be>
  */
 class DataSourceName extends \Chamilo\Libraries\Storage\DataManager\DataSourceName
 {

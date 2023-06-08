@@ -2,206 +2,213 @@
 namespace Chamilo\Core\Home\Rights\Service;
 
 use Chamilo\Core\Home\Renderer\BlockRenderer;
+use Chamilo\Core\Home\Renderer\BlockRendererFactory;
 use Chamilo\Core\Home\Repository\HomeRepository;
 use Chamilo\Core\Home\Rights\Storage\DataClass\BlockTypeTargetEntity;
 use Chamilo\Core\Home\Rights\Storage\Repository\RightsRepository;
 use Chamilo\Core\Home\Storage\DataClass\Block;
 use Chamilo\Core\User\Storage\DataClass\User;
 use Chamilo\Libraries\Architecture\ClassnameUtilities;
+use Doctrine\Common\Collections\ArrayCollection;
 use RuntimeException;
 
 /**
  * Service to manage the rights for the given block types
- * 
- * @author Sven Vanpoucke - Hogeschool Gent
+ *
+ * @package Chamilo\Core\Home\Rights\Service
+ * @author  Sven Vanpoucke - Hogeschool Gent
+ * @author  Hans De Bisschop <hans.de.bisschop@ehb.be>
  */
 class BlockTypeRightsService
 {
 
-    /**
-     *
-     * @var RightsRepository
-     */
-    protected $rightsRepository;
+    protected BlockRendererFactory $blockRendererFactory;
 
-    /**
-     *
-     * @var HomeRepository
-     */
-    protected $homeRepository;
+    protected HomeRepository $homeRepository;
 
-    /**
-     * BlockTypeRightsService constructor.
-     * 
-     * @param RightsRepository $rightsRepository
-     */
-    public function __construct(RightsRepository $rightsRepository, HomeRepository $homeRepository)
+    protected RightsRepository $rightsRepository;
+
+    public function __construct(
+        RightsRepository $rightsRepository, HomeRepository $homeRepository, BlockRendererFactory $blockRendererFactory
+    )
     {
         $this->rightsRepository = $rightsRepository;
         $this->homeRepository = $homeRepository;
-    }
-
-    /**
-     * Sets the target entities for a given element
-     * 
-     * @param string $blockType
-     * @param array $targetEntities
-     */
-    public function setTargetEntitiesForBlockType($blockType, $targetEntities = [])
-    {
-        if (! $this->rightsRepository->clearTargetEntitiesForBlockType($blockType))
-        {
-            throw new RuntimeException('Failed to delete the target entities for block type ' . $blockType);
-        }
-        
-        foreach ($targetEntities as $targetEntityType => $targetEntityIdentifiers)
-        {
-            foreach ($targetEntityIdentifiers as $targetEntityIdentifier)
-            {
-                $elementTargetEntity = new BlockTypeTargetEntity();
-                $elementTargetEntity->set_block_type($blockType);
-                $elementTargetEntity->set_entity_type($targetEntityType);
-                $elementTargetEntity->set_entity_id($targetEntityIdentifier);
-                
-                if (! $elementTargetEntity->create())
-                {
-                    throw new RuntimeException(
-                        sprintf(
-                            'Could not create a new $blockType target entity for $blockType %s, ' .
-                                 'entity type %s and entity id %s', 
-                                $blockType, 
-                                $targetEntityType, 
-                                $targetEntityIdentifier));
-                }
-            }
-        }
-    }
-
-    /**
-     * Returns the target entities for a given block type
-     * 
-     * @param string $blockType
-     *
-     * @return BlockTypeTargetEntity[]
-     */
-    public function getTargetEntitiesForBlockType($blockType)
-    {
-        return $this->rightsRepository->findTargetEntitiesForBlockType($blockType);
-    }
-
-    /**
-     * Checks whether or not a user can view the given block type
-     * 
-     * @param User $user
-     * @param string $blockType
-     *
-     * @return bool
-     */
-    public function canUserViewBlockType(User $user, $blockType)
-    {
-        if ($user->is_platform_admin())
-        {
-            return true;
-        }
-        
-        $targetedBlockTypes = $this->rightsRepository->findTargetedBlockTypes();
-        
-        if (! in_array($blockType, $targetedBlockTypes))
-        {
-            return true;
-        }
-        
-        $blockTypesForUser = $this->rightsRepository->findBlockTypesTargetedForUser($user);
-        
-        return in_array($blockType, $blockTypesForUser);
+        $this->blockRendererFactory = $blockRendererFactory;
     }
 
     /**
      * Checks whether or not a user can view the given block renderer, checking the target entities and checking
-     * if the block is not deletable and already added to the homepage
-     * 
-     * @param User $user
-     * @param BlockRenderer $blockRenderer
+     * if the block is not read only and already added to the homepage
      *
-     * @return bool
+     * @throws \ReflectionException
+     * @throws \Chamilo\Libraries\Storage\Exception\DataClassNoResultException
      */
-    public function canUserViewBlockRenderer(User $user, BlockRenderer $blockRenderer)
+    public function canUserViewBlockRenderer(User $user, BlockRenderer $blockRenderer): bool
     {
-        if (! $this->canUserViewBlockType($user, get_class($blockRenderer)))
+        if (!$this->canUserViewBlockType($user, get_class($blockRenderer)))
         {
             return false;
         }
-        
-        if ($blockRenderer->isDeletable())
+
+        if ($blockRenderer->isReadOnly())
         {
             return true;
         }
-        
+
         $classNameUtilities = ClassnameUtilities::getInstance();
         $blockClass = get_class($blockRenderer);
         $blockClassName = $classNameUtilities->getClassnameFromNamespace($blockClass);
         $blockClassContext = $classNameUtilities->getNamespaceParent($blockClass, 6);
-        
-        $userBlocks = $this->homeRepository->findBlocksByUserIdentifier($user->getId());
-        foreach($userBlocks as $userBlock)
+
+        $userBlocks = $this->getHomeRepository()->findBlocksByUserIdentifier($user->getId());
+
+        foreach ($userBlocks as $userBlock)
         {
-            
+
             /** @var Block $userBlock */
             if ($userBlock->getBlockType() == $blockClassName && $userBlock->getContext() == $blockClassContext)
             {
                 return false;
             }
         }
-        
+
         return true;
     }
 
     /**
-     * Returns a list of block types with target entities
+     * Checks whether or not a user can view the given block type
+     *
+     * @param User $user
+     * @param string $blockType
+     *
+     * @return bool
      */
-    public function getBlockTypesWithTargetEntities()
+    public function canUserViewBlockType(User $user, string $blockType): bool
+    {
+        if ($user->is_platform_admin())
+        {
+            return true;
+        }
+
+        $targetedBlockTypes = $this->getRightsRepository()->findTargetedBlockTypes();
+
+        if (!in_array($blockType, $targetedBlockTypes))
+        {
+            return true;
+        }
+
+        $blockTypesForUser = $this->getRightsRepository()->findBlockTypesTargetedForUser($user);
+
+        return in_array($blockType, $blockTypesForUser);
+    }
+
+    public function getBlockRendererFactory(): BlockRendererFactory
+    {
+        return $this->blockRendererFactory;
+    }
+
+    /**
+     * Returns a list of block types with target entities
+     *
+     * @throws \Chamilo\Libraries\Storage\Exception\DataClassNoResultException
+     */
+    public function getBlockTypesWithTargetEntities(): array
     {
         $targetEntitiesPerBlockType = $this->getTargetEntitiesPerBlockType();
-        
+
         $blockTypesWithTargetEntities = [];
-        
-        $blockTypes = $this->homeRepository->findBlockTypes();
+
+        $blockTypes = $this->getBlockRendererFactory()->getAvailableBlockRendererTypes();
+
         foreach ($blockTypes as $blockType)
         {
             $blockTypeWithTargetEntity = [];
             $blockTypeWithTargetEntity['block_type'] = $blockType;
-            
+
             if (array_key_exists($blockType, $targetEntitiesPerBlockType))
             {
                 $targetEntities = $targetEntitiesPerBlockType[$blockType];
                 foreach ($targetEntities as $targetEntity)
                 {
-                    $blockTypeWithTargetEntity['target_entities'][$targetEntity->get_entity_type()][] = $targetEntity->get_entity_id();
+                    $blockTypeWithTargetEntity['target_entities'][$targetEntity->get_entity_type()][] =
+                        $targetEntity->get_entity_id();
                 }
             }
-            
+
             $blockTypesWithTargetEntities[] = $blockTypeWithTargetEntity;
         }
-        
+
         return $blockTypesWithTargetEntities;
+    }
+
+    public function getHomeRepository(): HomeRepository
+    {
+        return $this->homeRepository;
+    }
+
+    public function getRightsRepository(): RightsRepository
+    {
+        return $this->rightsRepository;
+    }
+
+    /**
+     * @param string $blockType
+     *
+     * @return \Doctrine\Common\Collections\ArrayCollection
+     * @throws \Chamilo\Libraries\Storage\Exception\DataClassNoResultException
+     */
+    public function getTargetEntitiesForBlockType(string $blockType): ArrayCollection
+    {
+        return $this->getRightsRepository()->findTargetEntitiesForBlockType($blockType);
     }
 
     /**
      * Helper function to get the target entities grouped per block type
-     * 
-     * @return BlockTypeTargetEntity[][]
+     *
+     * @return \Chamilo\Core\Home\Rights\Storage\DataClass\BlockTypeTargetEntity[][]
+     * @throws \Chamilo\Libraries\Storage\Exception\DataClassNoResultException
      */
-    protected function getTargetEntitiesPerBlockType()
+    protected function getTargetEntitiesPerBlockType(): array
     {
         $targetEntitiesPerBlockType = [];
-        
-        $blockTypeTargetEntities = $this->rightsRepository->findBlockTypeTargetEntities();
-        
+
+        $blockTypeTargetEntities = $this->getRightsRepository()->findBlockTypeTargetEntities();
+
         foreach ($blockTypeTargetEntities as $blockTypeTargetEntity)
         {
             $targetEntitiesPerBlockType[$blockTypeTargetEntity->get_block_type()][] = $blockTypeTargetEntity;
         }
-        
+
         return $targetEntitiesPerBlockType;
+    }
+
+    public function setTargetEntitiesForBlockType(string $blockType, array $targetEntities = []): void
+    {
+        if (!$this->getRightsRepository()->clearTargetEntitiesForBlockType($blockType))
+        {
+            throw new RuntimeException('Failed to delete the target entities for block type ' . $blockType);
+        }
+
+        foreach ($targetEntities as $targetEntityType => $targetEntityIdentifiers)
+        {
+            foreach ($targetEntityIdentifiers as $targetEntityIdentifier)
+            {
+                $blockTypeTargetEntity = new BlockTypeTargetEntity();
+                $blockTypeTargetEntity->set_block_type($blockType);
+                $blockTypeTargetEntity->set_entity_type($targetEntityType);
+                $blockTypeTargetEntity->set_entity_id($targetEntityIdentifier);
+
+                if (!$this->getRightsRepository()->createBlockTypeTargetEntity($blockTypeTargetEntity))
+                {
+                    throw new RuntimeException(
+                        sprintf(
+                            'Could not create a new $blockType target entity for $blockType %s, ' .
+                            'entity type %s and entity id %s', $blockType, $targetEntityType, $targetEntityIdentifier
+                        )
+                    );
+                }
+            }
+        }
     }
 }

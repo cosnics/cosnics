@@ -24,26 +24,17 @@ class ElementTargetEntity extends HomeTargetEntity
         return parent::getDefaultPropertyNames([self::PROPERTY_ELEMENT_ID]);
     }
 
-    /**
-     * @return string
-     */
     public static function getStorageUnitName(): string
     {
         return 'home_element_type_target_entity';
     }
 
-    /**
-     * @return int
-     */
-    public function get_element_id()
+    public function get_element_id(): string
     {
         return $this->getDefaultProperty(self::PROPERTY_ELEMENT_ID);
     }
 
-    /**
-     * @param int $element_id
-     */
-    public function set_element_id($element_id)
+    public function set_element_id(string $element_id): void
     {
         $this->setDefaultProperty(self::PROPERTY_ELEMENT_ID, $element_id);
     }

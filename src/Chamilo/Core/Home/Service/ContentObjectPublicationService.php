@@ -9,7 +9,9 @@ use RuntimeException;
 /**
  * Service to manage content object publications for this application
  *
- * @author Sven Vanpoucke - Hogeschool Gent
+ * @package Chamilo\Core\Home\Service
+ * @author  Sven Vanpoucke - Hogeschool Gent
+ * @author  Hans De Bisschop <hans.de.bisschop@ehb.be>
  */
 class ContentObjectPublicationService
 {
@@ -23,35 +25,33 @@ class ContentObjectPublicationService
 
     public function countContentObjectPublicationsByContentObjectId($contentObjectId): int
     {
-        return $this->contentObjectPublicationRepository->countContentObjectPublicationsByContentObjectId(
+        return $this->getContentObjectPublicationRepository()->countContentObjectPublicationsByContentObjectId(
             $contentObjectId
         );
     }
 
     /**
-     * @param int[] $contentObjectIds
+     * @param string[] $contentObjectIds
      */
-    public function countContentObjectPublicationsByContentObjectIds($contentObjectIds = []): int
+    public function countContentObjectPublicationsByContentObjectIds(array $contentObjectIds = []): int
     {
-        return $this->contentObjectPublicationRepository->countContentObjectPublicationsByContentObjectIds(
+        return $this->getContentObjectPublicationRepository()->countContentObjectPublicationsByContentObjectIds(
             $contentObjectIds
         );
     }
 
-    /**
-     * @param int $ownerId
-     */
-    public function countContentObjectPublicationsByContentObjectOwnerId($ownerId): int
+    public function countContentObjectPublicationsByContentObjectOwnerId(string $ownerId): int
     {
-        return $this->contentObjectPublicationRepository->countContentObjectPublicationsByContentObjectOwnerId(
+        return $this->getContentObjectPublicationRepository()->countContentObjectPublicationsByContentObjectOwnerId(
             $ownerId
         );
     }
 
     /**
-     * @param int $publicationId
+     * @throws \ReflectionException
+     * @throws \Chamilo\Libraries\Storage\Exception\DataClassNoResultException
      */
-    public function deleteContentObjectPublicationById($publicationId): bool
+    public function deleteContentObjectPublicationById(string $publicationId): bool
     {
         $contentObjectPublication = $this->getContentObjectPublicationById($publicationId);
 
@@ -63,87 +63,66 @@ class ContentObjectPublicationService
         return $contentObjectPublication->delete();
     }
 
-    /**
-     * Deletes content object publications for a given content object id
-     *
-     * @param int $contentObjectId
-     */
-    public function deleteContentObjectPublicationsByContentObjectId($contentObjectId)
+    public function deleteContentObjectPublicationsByContentObjectId(string $contentObjectId): void
     {
-        $this->contentObjectPublicationRepository->deleteContentObjectPublicationsByContentObjectId($contentObjectId);
+        $this->getContentObjectPublicationRepository()->deleteContentObjectPublicationsByContentObjectId(
+            $contentObjectId
+        );
+    }
+
+    public function getContentObjectPublicationById(string $publicationId): ?ContentObjectPublication
+    {
+        return $this->getContentObjectPublicationRepository()->findContentObjectPublicationById($publicationId);
+    }
+
+    public function getContentObjectPublicationRepository(): ContentObjectPublicationRepository
+    {
+        return $this->contentObjectPublicationRepository;
     }
 
     /**
-     * Returns a single content object publication by a given id
-     *
-     * @param int $publicationId
-     *
-     * @return ContentObjectPublication
+     * @return \Chamilo\Core\Home\Storage\DataClass\ContentObjectPublication[]
+     * @throws \Chamilo\Libraries\Storage\Exception\DataClassNoResultException
+     * @throws \ReflectionException
      */
-    public function getContentObjectPublicationById($publicationId): ?ContentObjectPublication
+    public function getContentObjectPublicationsByContentObjectId(string $contentObjectId): array
     {
-        return $this->contentObjectPublicationRepository->findContentObjectPublicationById($publicationId);
-    }
-
-    /**
-     * Returns the content object publications by a given content object id
-     *
-     * @param int $contentObjectId
-     *
-     * @return ContentObjectPublication[]
-     */
-    public function getContentObjectPublicationsByContentObjectId($contentObjectId)
-    {
-        return $this->contentObjectPublicationRepository->findContentObjectPublicationsByContentObjectId(
+        return $this->getContentObjectPublicationRepository()->findContentObjectPublicationsByContentObjectId(
             $contentObjectId
         );
     }
 
     /**
-     * Retrieves content object publications by a given content object owner id
-     *
-     * @param int $ownerId
-     *
-     * @return ContentObjectPublication[]
-     */
-    public function getContentObjectPublicationsByContentObjectOwnerId($ownerId)
-    {
-        return $this->contentObjectPublicationRepository->findContentObjectPublicationsByContentObjectOwnerId($ownerId);
-    }
-
-    /**
-     * Returns the content object publications for a given element
-     *
-     * @param Element $element
-     *
      * @return \Chamilo\Core\Home\Storage\DataClass\ContentObjectPublication[]
      */
-    public function getContentObjectPublicationsForElement(Element $element)
+    public function getContentObjectPublicationsByContentObjectOwnerId(string $ownerId): array
     {
-        return $this->contentObjectPublicationRepository->findContentObjectPublicationsByElementId($element->getId());
+        return $this->getContentObjectPublicationRepository()->findContentObjectPublicationsByContentObjectOwnerId(
+            $ownerId
+        );
     }
 
     /**
-     * Returns the first content object publication for a given element
-     *
-     * @param Element $element
-     *
-     * @return ContentObjectPublication
+     * @return \Chamilo\Core\Home\Storage\DataClass\ContentObjectPublication[]
      */
-    public function getFirstContentObjectPublicationForElement(Element $element)
+    public function getContentObjectPublicationsForElement(Element $element): array
     {
-        return $this->contentObjectPublicationRepository->findFirstContentObjectPublicationByElementId(
+        return $this->getContentObjectPublicationRepository()->findContentObjectPublicationsByElementId(
+            $element->getId()
+        );
+    }
+
+    public function getFirstContentObjectPublicationForElement(Element $element): ?ContentObjectPublication
+    {
+        return $this->getContentObjectPublicationRepository()->findFirstContentObjectPublicationByElementId(
             $element->getId()
         );
     }
 
     /**
-     * Publish a content object by a given element and content object id
-     *
-     * @param Element $element
-     * @param int $contentObjectId
+     * @throws \Chamilo\Libraries\Storage\Exception\DataClassNoResultException
      */
-    public function publishContentObject(Element $element, $contentObjectId)
+    public function publishContentObject(Element $element, string $contentObjectId): void
     {
         if ($contentObjectId == 0)
         {
@@ -152,9 +131,9 @@ class ContentObjectPublicationService
 
         $contentObjectPublication = new ContentObjectPublication();
         $contentObjectPublication->set_element_id($element->getId());
-        $contentObjectPublication->set_content_object_id($contentObjectId);
+        $contentObjectPublication->set_content_object_id((int) $contentObjectId);
 
-        if (!$contentObjectPublication->create())
+        if (!$this->getContentObjectPublicationRepository()->createContentObjectPublication($contentObjectPublication))
         {
             throw new RuntimeException(
                 sprintf('Could not publish the content object %s in element %s', $contentObjectId, $element->getId())
@@ -163,14 +142,13 @@ class ContentObjectPublicationService
     }
 
     /**
-     * Clears the content object publications for a given element and publishes a new content object
-     *
-     * @param Element $element
-     * @param int $contentObjectId
+     * @throws \Chamilo\Libraries\Storage\Exception\DataClassNoResultException
      */
-    public function setOnlyContentObjectForElement(Element $element, $contentObjectId)
+    public function setOnlyContentObjectForElement(Element $element, string $contentObjectId): void
     {
-        if (!$this->contentObjectPublicationRepository->deleteContentObjectPublicationsForElement($element->getId()))
+        if (!$this->getContentObjectPublicationRepository()->deleteContentObjectPublicationsForElement(
+            $element->getId()
+        ))
         {
             throw new RuntimeException('Could not clear the publications for element ' . $element->getId());
         }

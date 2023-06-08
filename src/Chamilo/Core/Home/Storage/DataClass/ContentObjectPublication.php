@@ -7,6 +7,7 @@ use Chamilo\Core\Repository\Publication\Storage\DataClass\Publication;
 /**
  * Better storage for home elements using content objects
  *
+ * @package Chamilo\Core\Home\Storage\DataClass
  * @author  Sven Vanpoucke - Hogeschool Gent
  * @author  Hans De Bisschop <hans.de.bisschop@ehb.be>
  */
@@ -31,12 +32,12 @@ class ContentObjectPublication extends Publication
         return 'home_content_object_publication';
     }
 
-    public function get_element_id(): int
+    public function get_element_id(): string
     {
         return $this->getDefaultProperty(self::PROPERTY_ELEMENT_ID);
     }
 
-    public function set_element_id(int $element_id)
+    public function set_element_id(string $element_id): void
     {
         $this->setDefaultProperty(self::PROPERTY_ELEMENT_ID, $element_id);
     }

@@ -27,34 +27,22 @@ abstract class HomeTargetEntity extends DataClass
         return parent::getDefaultPropertyNames($extendedPropertyNames);
     }
 
-    /**
-     * @return int
-     */
-    public function get_entity_id()
+    public function get_entity_id(): string
     {
         return $this->getDefaultProperty(self::PROPERTY_ENTITY_ID);
     }
 
-    /**
-     * @return string
-     */
-    public function get_entity_type()
+    public function get_entity_type(): string
     {
         return $this->getDefaultProperty(self::PROPERTY_ENTITY_TYPE);
     }
 
-    /**
-     * @param int $entity_id
-     */
-    public function set_entity_id($entity_id)
+    public function set_entity_id(string $entity_id): void
     {
         $this->setDefaultProperty(self::PROPERTY_ENTITY_ID, $entity_id);
     }
 
-    /**
-     * @param string $entity_type
-     */
-    public function set_entity_type($entity_type)
+    public function set_entity_type(string $entity_type): void
     {
         $this->setDefaultProperty(self::PROPERTY_ENTITY_TYPE, $entity_type);
     }

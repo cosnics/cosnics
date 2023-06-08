@@ -32,6 +32,17 @@ class BlockRendererFactory
         return $this->availableBlockRenderers[$blockRendererType];
     }
 
+    /**
+     * @return string[]
+     */
+    public function getAvailableBlockRendererTypes(): array
+    {
+        return array_keys($this->getAvailableBlockRenderers());
+    }
+
+    /**
+     * @return \Chamilo\Core\Home\Renderer\BlockRenderer[]
+     */
     public function getAvailableBlockRenderers(): array
     {
         return $this->availableBlockRenderers;

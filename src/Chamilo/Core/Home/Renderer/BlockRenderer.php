@@ -76,7 +76,7 @@ abstract class BlockRenderer
 
         $html = [];
 
-        $userHomeAllowed = $this->getConfigurationConsulter()->getSetting([Manager::CONTEXT, 'allow_user_home']);
+        $userHomeAllowed = $this->getHomeService()->isUserHomeAllowed();
         $isIdentifiedUser = $user && !$user->is_anonymous_user();
 
         if ($user instanceof User && ($userHomeAllowed || $isGeneralMode) && $isIdentifiedUser)
