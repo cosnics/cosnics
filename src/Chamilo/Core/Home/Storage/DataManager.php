@@ -5,19 +5,11 @@ use Chamilo\Configuration\Configuration;
 use Chamilo\Configuration\Storage\DataClass\Registration;
 use Chamilo\Core\Home\Manager;
 use Chamilo\Core\Home\Renderer\BlockRenderer;
-use Chamilo\Core\Home\Storage\DataClass\Element;
 use Chamilo\Core\User\Storage\DataClass\User;
 use Chamilo\Libraries\Architecture\ClassnameUtilities;
 use Chamilo\Libraries\DependencyInjection\DependencyInjectionContainerBuilder;
 use Chamilo\Libraries\Format\Structure\Glyph\IdentGlyph;
 use Chamilo\Libraries\Format\Structure\Glyph\NamespaceIdentGlyph;
-use Chamilo\Libraries\Storage\Parameters\DataClassDistinctParameters;
-use Chamilo\Libraries\Storage\Parameters\DataClassRetrievesParameters;
-use Chamilo\Libraries\Storage\Query\Condition\EqualityCondition;
-use Chamilo\Libraries\Storage\Query\Condition\InCondition;
-use Chamilo\Libraries\Storage\Query\RetrieveProperties;
-use Chamilo\Libraries\Storage\Query\Variable\PropertyConditionVariable;
-use Chamilo\Libraries\Storage\Query\Variable\StaticConditionVariable;
 use Chamilo\Libraries\Translation\Translation;
 use Symfony\Component\HttpFoundation\Session\SessionInterface;
 
@@ -109,41 +101,5 @@ class DataManager extends \Chamilo\Libraries\Storage\DataManager\DataManager
         }
 
         return $blocks;
-    }
-
-    public static function retrieveTabBlocks($tabElement)
-    {
-        $columnCondition = new EqualityCondition(
-            new PropertyConditionVariable(Element::class, Element::PROPERTY_PARENT_ID),
-            new StaticConditionVariable($tabElement->getId())
-        );
-
-        $columnIdentifiers = self::distinct(
-            Element::class, new DataClassDistinctParameters(
-                $columnCondition,
-                new RetrieveProperties([new PropertyConditionVariable(Element::class, Element::PROPERTY_ID)])
-            )
-        );
-
-        $condition = new InCondition(
-            new PropertyConditionVariable(Element::class, Element::PROPERTY_PARENT_ID), $columnIdentifiers
-        );
-
-        return self::retrieves(Block::class, new DataClassRetrievesParameters($condition));
-    }
-
-    /**
-     * @param int $userIdentifier
-     *
-     * @return bool
-     */
-    public static function truncateHome($userIdentifier)
-    {
-        return self::deletes(
-            Element::class, new EqualityCondition(
-                new PropertyConditionVariable(Element::class, Element::PROPERTY_USER_ID),
-                new StaticConditionVariable($userIdentifier)
-            )
-        );
     }
 }

@@ -170,6 +170,26 @@ class HomeService
         return true;
     }
 
+    /**
+     * @throws \Chamilo\Libraries\Storage\Exception\DataClassNoResultException
+     */
+    public function deleteElementsForUserIdentifier(string $userIdentifier): bool
+    {
+        $userTabs = $this->getHomeRepository()->findElementsByTypeUserIdentifierAndParentIdentifier(
+            Element::TYPE_TAB, $userIdentifier
+        );
+
+        foreach ($userTabs as $userTab)
+        {
+            if (!$this->deleteElement($userTab))
+            {
+                return false;
+            }
+        }
+
+        return true;
+    }
+
     public function determineHomeUserIdentifier(User $user = null): string
     {
         $generalMode = $this->getSession()->get('Chamilo\Core\Home\General');
