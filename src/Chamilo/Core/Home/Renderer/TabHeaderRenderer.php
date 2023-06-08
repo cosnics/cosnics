@@ -21,6 +21,9 @@ class TabHeaderRenderer
         $this->homeService = $homeService;
     }
 
+    /**
+     * @throws \Chamilo\Libraries\Storage\Exception\DataClassNoResultException
+     */
     public function render(
         Tab $tab, int $tabKey, ?int $currentTabIdentifier = null, bool $isGeneralMode = false, ?User $user = null
     ): string

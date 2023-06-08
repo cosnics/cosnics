@@ -9,7 +9,6 @@ use Chamilo\Core\Home\Architecture\Interfaces\StaticBlockTitleInterface;
 use Chamilo\Core\Home\Manager;
 use Chamilo\Core\Home\Rights\Form\ElementTargetEntitiesForm;
 use Chamilo\Core\Home\Rights\Service\ElementRightsService;
-use Chamilo\Core\Home\Rights\Storage\Repository\RightsRepository;
 use Chamilo\Core\Home\Service\HomeService;
 use Chamilo\Core\Home\Storage\DataClass\Block;
 use Chamilo\Core\User\Storage\DataClass\User;
@@ -35,6 +34,8 @@ abstract class BlockRenderer
 
     protected ConfigurationConsulter $configurationConsulter;
 
+    protected ElementRightsService $elementRightsService;
+
     protected HomeService $homeService;
 
     protected Translator $translator;
@@ -43,13 +44,14 @@ abstract class BlockRenderer
 
     public function __construct(
         HomeService $homeService, UrlGenerator $urlGenerator, Translator $translator,
-        ConfigurationConsulter $configurationConsulter
+        ConfigurationConsulter $configurationConsulter, ElementRightsService $elementRightsService
     )
     {
         $this->homeService = $homeService;
         $this->urlGenerator = $urlGenerator;
         $this->translator = $translator;
         $this->configurationConsulter = $configurationConsulter;
+        $this->elementRightsService = $elementRightsService;
     }
 
     /**
@@ -147,6 +149,11 @@ abstract class BlockRenderer
     public function getConfigurationConsulter(): ConfigurationConsulter
     {
         return $this->configurationConsulter;
+    }
+
+    public function getElementRightsService(): ElementRightsService
+    {
+        return $this->elementRightsService;
     }
 
     public function getHomeService(): HomeService
@@ -258,7 +265,7 @@ abstract class BlockRenderer
             $form = new ElementTargetEntitiesForm(
                 $block,
                 $this->getUrlGenerator()->fromParameters([Application::PARAM_CONTEXT => Manager::ACTION_VIEW_HOME]),
-                new ElementRightsService(new RightsRepository())
+                $this->getElementRightsService()
             );
 
             $html[] = $form->render();
@@ -273,4 +280,5 @@ abstract class BlockRenderer
 
         return implode(PHP_EOL, $html);
     }
+
 }

@@ -15,12 +15,10 @@ interface AngularConnectorInterface
      *
      * @return string[]
      */
-    public function getAngularModules();
+    public function getAngularModules(): array;
 
     /**
      * Loads the angular javascript modules and returns them as HTML code
-     *
-     * @return string
      */
-    public function loadAngularModules();
+    public function loadAngularModules(): string;
 }

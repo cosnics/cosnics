@@ -13,6 +13,7 @@ use Chamilo\Application\Weblcms\Storage\DataManager;
 use Chamilo\Configuration\Service\Consulter\ConfigurationConsulter;
 use Chamilo\Core\Home\Architecture\Interfaces\ConfigurableBlockInterface;
 use Chamilo\Core\Home\Architecture\Interfaces\StaticBlockTitleInterface;
+use Chamilo\Core\Home\Rights\Service\ElementRightsService;
 use Chamilo\Core\Home\Service\HomeService;
 use Chamilo\Core\Home\Storage\DataClass\Block;
 use Chamilo\Core\User\Storage\DataClass\User;
@@ -41,10 +42,10 @@ class FilteredCourseListBlockRenderer extends BlockRenderer
     public function __construct(
         HomeService $homeService, UrlGenerator $urlGenerator, Translator $translator,
         ConfigurationConsulter $configurationConsulter, CourseService $courseService,
-        CourseUserCategoryService $courseUserCategoryService
+        CourseUserCategoryService $courseUserCategoryService, ElementRightsService $elementRightsService
     )
     {
-        parent::__construct($homeService, $urlGenerator, $translator, $configurationConsulter);
+        parent::__construct($homeService, $urlGenerator, $translator, $configurationConsulter, $elementRightsService);
 
         $this->courseService = $courseService;
         $this->courseUserCategoryService = $courseUserCategoryService;

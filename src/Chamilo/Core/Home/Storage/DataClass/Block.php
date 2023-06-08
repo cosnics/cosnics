@@ -17,10 +17,7 @@ class Block extends Element
 
     public const CONTEXT = Manager::CONTEXT;
 
-    /**
-     * @return string
-     */
-    public function getBlockType()
+    public function getBlockType(): string
     {
         return $this->getSetting(self::CONFIGURATION_BLOCK_TYPE);
     }
@@ -30,57 +27,39 @@ class Block extends Element
      *
      * @return string[]
      */
-    public static function getConfigurationVariables($configurationVariables = [])
+    public static function getConfigurationVariables($configurationVariables = []): array
     {
         return parent::getConfigurationVariables(
             [self::CONFIGURATION_VISIBILITY, self::CONFIGURATION_CONTEXT, self::CONFIGURATION_BLOCK_TYPE]
         );
     }
 
-    /**
-     * @return string
-     */
-    public function getContext()
+    public function getContext(): string
     {
         return $this->getSetting(self::CONFIGURATION_CONTEXT);
     }
 
-    /**
-     * @return bool
-     */
-    public function getVisibility()
+    public function getVisibility(): bool
     {
-        return $this->getSetting(self::CONFIGURATION_VISIBILITY);
+        return (bool) $this->getSetting(self::CONFIGURATION_VISIBILITY);
     }
 
-    /**
-     * @return bool
-     */
-    public function isVisible()
+    public function isVisible(): bool
     {
         return $this->getVisibility();
     }
 
-    /**
-     * @param string $blockType
-     */
-    public function setBlockType($blockType)
+    public function setBlockType(string $blockType): void
     {
         $this->setSetting(self::CONFIGURATION_BLOCK_TYPE, $blockType);
     }
 
-    /**
-     * @param string $context
-     */
-    public function setContext($context)
+    public function setContext(string $context): void
     {
         $this->setSetting(self::CONFIGURATION_CONTEXT, $context);
     }
 
-    /**
-     * @param bool $visibility
-     */
-    public function setVisibility($visibility)
+    public function setVisibility(bool $visibility): void
     {
         $this->setSetting(self::CONFIGURATION_VISIBILITY, $visibility);
     }

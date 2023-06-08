@@ -2,11 +2,6 @@
 namespace Chamilo\Core\Home\Storage\DataClass;
 
 use Chamilo\Core\Home\Manager;
-use Chamilo\Core\Home\Storage\DataManager;
-use Chamilo\Libraries\Storage\Parameters\DataClassCountParameters;
-use Chamilo\Libraries\Storage\Query\Condition\EqualityCondition;
-use Chamilo\Libraries\Storage\Query\Variable\PropertyConditionVariable;
-use Chamilo\Libraries\Storage\Query\Variable\StaticConditionVariable;
 
 /**
  * @package Chamilo\Core\Home\Storage\DataClass-
@@ -25,35 +20,17 @@ class Column extends Element
      *
      * @return string[]
      */
-    public static function getConfigurationVariables($configurationVariables = [])
+    public static function getConfigurationVariables($configurationVariables = []): array
     {
         return parent::getConfigurationVariables([self::CONFIGURATION_WIDTH]);
     }
 
-    /**
-     * @return int
-     */
-    public function getWidth()
+    public function getWidth(): int
     {
-        return $this->getSetting(self::CONFIGURATION_WIDTH);
+        return (int) $this->getSetting(self::CONFIGURATION_WIDTH);
     }
 
-    public function is_empty()
-    {
-        $condition = new EqualityCondition(
-            new PropertyConditionVariable(Block::class, Block::PROPERTY_PARENT_ID),
-            new StaticConditionVariable($this->get_id())
-        );
-
-        $blocks_count = DataManager::count(Block::class, new DataClassCountParameters($condition));
-
-        return ($blocks_count == 0);
-    }
-
-    /**
-     * @param int $width
-     */
-    public function setWidth($width)
+    public function setWidth(int $width): void
     {
         $this->setSetting(self::CONFIGURATION_WIDTH, $width);
     }

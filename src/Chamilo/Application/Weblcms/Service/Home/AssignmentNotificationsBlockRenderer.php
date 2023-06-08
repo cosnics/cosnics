@@ -8,6 +8,7 @@ use Chamilo\Application\Weblcms\Storage\DataManager;
 use Chamilo\Configuration\Service\Consulter\ConfigurationConsulter;
 use Chamilo\Core\Home\Architecture\Interfaces\ConfigurableBlockInterface;
 use Chamilo\Core\Home\Architecture\Interfaces\StaticBlockTitleInterface;
+use Chamilo\Core\Home\Rights\Service\ElementRightsService;
 use Chamilo\Core\Home\Service\HomeService;
 use Chamilo\Core\Home\Storage\DataClass\Block;
 use Chamilo\Core\Notification\Manager;
@@ -34,10 +35,10 @@ class AssignmentNotificationsBlockRenderer extends BlockRenderer
     public function __construct(
         HomeService $homeService, UrlGenerator $urlGenerator, Translator $translator,
         ConfigurationConsulter $configurationConsulter, NotificationManager $notificationManager,
-        Environment $twigEnvironment
+        Environment $twigEnvironment, ElementRightsService $elementRightsService
     )
     {
-        parent::__construct($homeService, $urlGenerator, $translator, $configurationConsulter);
+        parent::__construct($homeService, $urlGenerator, $translator, $configurationConsulter, $elementRightsService);
 
         $this->notificationManager = $notificationManager;
         $this->twigEnvironment = $twigEnvironment;

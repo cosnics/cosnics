@@ -284,7 +284,7 @@ class DataClassDatabase implements DataClassDatabaseInterface
         return $this->storageAliasGenerator;
     }
 
-    protected function handleError(Throwable $throwable)
+    protected function handleError(Throwable $throwable): void
     {
         $this->getExceptionLogger()->logException(
             new Exception('[Message: ' . $throwable->getMessage() . ']')

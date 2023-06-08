@@ -1,7 +1,7 @@
 <?php
 namespace Chamilo\Core\Home\Service;
 
-use Chamilo\Configuration\Configuration;
+use Chamilo\Core\Home\Architecture\Interfaces\AngularConnectorInterface;
 
 /**
  * Services that connects to the several home integration packages and connects their angular functionality
@@ -15,47 +15,28 @@ class AngularConnectorService
     /**
      * List of available angular connectors
      *
-     * @var AngularConnectorInterface[]
+     * @var \Chamilo\Core\Home\Architecture\Interfaces\AngularConnectorInterface[]
      */
-    protected $angularConnectors;
+    protected array $angularConnectors;
 
-    /**
-     * Constructor
-     *
-     * @param Configuration $configuration
-     */
-    public function __construct(Configuration $configuration = null)
+    public function addAngularConnector(AngularConnectorInterface $angularConnector): void
     {
-        if (!$configuration)
-        {
-            $configuration = Configuration::getInstance();
-        }
+        $this->angularConnectors[get_class($angularConnector)] = $angularConnector;
+    }
 
-        $this->angularConnectors = [];
-
-        $homeIntegrationPackages = $configuration->getIntegrationRegistrations('Chamilo\Core\Home');
-        foreach ($homeIntegrationPackages as $homeIntegrationPackage)
-        {
-            $packageContext = $homeIntegrationPackage['context'];
-            $class = $packageContext . '\\AngularConnector';
-
-            if (class_exists($class))
-            {
-                $this->angularConnectors[] = new $class();
-            }
-        }
+    public function getAngularConnectors(): array
+    {
+        return $this->angularConnectors;
     }
 
     /**
-     * Returns the list of angular modules
-     *
      * @return string[]
      */
-    public function getAngularModules()
+    public function getAngularModules(): array
     {
         $angularModules = [];
 
-        foreach ($this->angularConnectors as $angularConnector)
+        foreach ($this->getAngularConnectors() as $angularConnector)
         {
             $angularModules = array_merge($angularModules, $angularConnector->getAngularModules());
         }
@@ -63,16 +44,11 @@ class AngularConnectorService
         return $angularModules;
     }
 
-    /**
-     * Loads the angular modules javascript as html
-     *
-     * @return string[]
-     */
-    public function loadAngularModules()
+    public function loadAngularModules(): string
     {
         $html = [];
 
-        foreach ($this->angularConnectors as $angularConnector)
+        foreach ($this->getAngularConnectors() as $angularConnector)
         {
             $html[] = $angularConnector->loadAngularModules();
         }

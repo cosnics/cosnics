@@ -25,6 +25,10 @@ class TabRenderer
         $this->columnRenderer = $columnRenderer;
     }
 
+    /**
+     * @throws \Chamilo\Libraries\Storage\Exception\DataClassNoResultException
+     * @throws \QuickformException
+     */
     public function render(
         Tab $tab, int $tabKey, ?int $currentTabIdentifier = null, bool $isGeneralMode = false, ?User $user = null
     ): string

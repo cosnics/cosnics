@@ -34,6 +34,10 @@ class ColumnRenderer
         $this->blockRendererFactory = $blockRendererFactory;
     }
 
+    /**
+     * @throws \Chamilo\Libraries\Storage\Exception\DataClassNoResultException
+     * @throws \QuickformException
+     */
     public function render(Column $column, bool $isGeneralMode = false, ?User $user = null): string
     {
         $html = [];

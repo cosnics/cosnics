@@ -11,5 +11,9 @@
         <service id="Chamilo\Core\Repository\ContentObject\RssFeed\Service\Home\FeederBlockRenderer">
             <tag name="Chamilo\Core\Home\Renderer\BlockRenderer"/>
         </service>
+
+        <service id="Chamilo\Core\Repository\ContentObject\RssFeed\Service\Home\AngularConnector">
+            <tag name="Chamilo\Core\Home\Service\AngularConnectorService"/>
+        </service>
     </services>
 </container>

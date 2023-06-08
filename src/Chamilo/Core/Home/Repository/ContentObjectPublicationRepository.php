@@ -47,9 +47,6 @@ class ContentObjectPublicationRepository
         );
     }
 
-    /**
-     * @throws \Exception
-     */
     public function countContentObjectPublicationsByContentObjectOwnerId(string $ownerId): int
     {
         return $this->getPublicationRepository()->countPublicationsWithContentObjects(

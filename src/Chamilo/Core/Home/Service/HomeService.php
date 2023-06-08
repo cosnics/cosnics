@@ -54,7 +54,7 @@ class HomeService
     }
 
     /**
-     * @param int[] $elementIdentifierMap
+     * @param string[] $elementIdentifierMap
      *
      * @throws \Exception
      */
@@ -83,7 +83,7 @@ class HomeService
 
     /**
      * @param \Chamilo\Core\Home\Storage\DataClass\Element[] $defaultElements
-     * @param int[] $elementIdentifierMap
+     * @param string[] $elementIdentifierMap
      *
      * @throws \Exception
      */
@@ -117,7 +117,7 @@ class HomeService
 
         foreach ($defaultElementResultSet as $defaultElement)
         {
-            if ($this->elementRightsService->canUserViewElement($user, $defaultElement))
+            if ($this->getElementRightsService()->canUserViewElement($user, $defaultElement))
             {
                 $defaultElements[$defaultElement->getType()][$defaultElement->getParentId()][] = $defaultElement;
             }
@@ -167,6 +167,25 @@ class HomeService
         {
             return '0';
         }
+    }
+
+    /**
+     * @param string $tabIdentifier
+     *
+     * @return \Doctrine\Common\Collections\ArrayCollection<\Chamilo\Core\Home\Storage\DataClass\Block>
+     * @throws \Chamilo\Libraries\Storage\Exception\DataClassNoResultException
+     */
+    public function findBlocksForTabIdentifier(string $tabIdentifier): ArrayCollection
+    {
+        return $this->getHomeRepository()->findBlocksForTabIdentifier($tabIdentifier);
+    }
+
+    /**
+     * @return string[]
+     */
+    public function findColumnIdentifiersForTabIdentifier(string $tabIdentifier): array
+    {
+        return $this->getHomeRepository()->findColumnIdentifiersForTabIdentifier($tabIdentifier);
     }
 
     /**
@@ -259,6 +278,11 @@ class HomeService
     public function tabByUserAndIdentifierHasMultipleColumns(string $tabIdentifier, User $user = null): bool
     {
         return $this->findElementsByTypeUserAndParentIdentifier(Column::class, $user, $tabIdentifier)->count() > 1;
+    }
+
+    public function tabCanBeDeleted(Tab $tab): bool
+    {
+        $tabBlocks = $this->findBlocksForTabIdentifier($tab->getId());
     }
 
     /**

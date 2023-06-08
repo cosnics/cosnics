@@ -1,6 +1,7 @@
 <?php
 namespace Chamilo\Core\Home\DependencyInjection;
 
+use Chamilo\Core\Home\DependencyInjection\CompilerPass\AngularConnectorCompilerPass;
 use Chamilo\Core\Home\DependencyInjection\CompilerPass\AvailableBlockRendererCompilerPass;
 use Chamilo\Libraries\DependencyInjection\AbstractDependencyInjectionExtension;
 use Chamilo\Libraries\DependencyInjection\Interfaces\ICompilerPassExtension;
@@ -30,5 +31,6 @@ class DependencyInjectionExtension extends AbstractDependencyInjectionExtension
     public function registerCompilerPasses(ContainerBuilder $container)
     {
         $container->addCompilerPass(new AvailableBlockRendererCompilerPass());
+        $container->addCompilerPass(new AngularConnectorCompilerPass());
     }
 }

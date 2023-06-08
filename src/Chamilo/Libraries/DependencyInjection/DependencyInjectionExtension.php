@@ -45,7 +45,6 @@ class DependencyInjectionExtension extends AbstractDependencyInjectionExtension
                 'mail.xml',
                 'platform.xml',
                 'storage.xml',
-                'storage.adodb.xml',
                 'storage.doctrine.xml',
                 'storage.doctrine_test.xml',
                 'storage.doctrine_orm.xml',

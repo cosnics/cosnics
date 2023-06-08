@@ -5,6 +5,7 @@ use Chamilo\Configuration\Service\Consulter\ConfigurationConsulter;
 use Chamilo\Core\Home\Manager;
 use Chamilo\Core\Home\Service\AngularConnectorService;
 use Chamilo\Core\Home\Service\HomeService;
+use Chamilo\Core\Home\Storage\DataClass\Block;
 use Chamilo\Core\Home\Storage\DataClass\Tab;
 use Chamilo\Core\User\Storage\DataClass\User;
 use Chamilo\Libraries\Architecture\Application\Application;
@@ -61,7 +62,7 @@ class HomeRenderer
     }
 
     /**
-     * @throws \ReflectionException
+     * @throws \Chamilo\Libraries\Storage\Exception\DataClassNoResultException
      * @throws \QuickformException
      */
     public function render(?int $currentTabIdentifier = null, bool $isGeneralMode = false, ?User $user = null): string
@@ -154,7 +155,6 @@ class HomeRenderer
     }
 
     /**
-     * @throws \ReflectionException
      * @throws \QuickformException
      */
     public function renderButtons(bool $isGeneralMode = false, ?User $user = null): string
@@ -252,6 +252,10 @@ class HomeRenderer
         return implode(PHP_EOL, $html);
     }
 
+    /**
+     * @throws \Chamilo\Libraries\Storage\Exception\DataClassNoResultException
+     * @throws \QuickformException
+     */
     public function renderContent(?int $currentTabIdentifier = null, bool $isGeneralMode = false, ?User $user = null
     ): string
     {
@@ -377,7 +381,7 @@ class HomeRenderer
     }
 
     /**
-     * @throws \ReflectionException
+     * @throws \Chamilo\Libraries\Storage\Exception\DataClassNoResultException
      * @throws \QuickformException
      */
     public function renderTabs(?int $currentTabIdentifier = null, bool $isGeneralMode = false, ?User $user = null

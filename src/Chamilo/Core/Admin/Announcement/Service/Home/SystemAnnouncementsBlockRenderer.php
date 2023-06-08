@@ -7,6 +7,7 @@ use Chamilo\Core\Admin\Announcement\Service\PublicationService;
 use Chamilo\Core\Admin\Announcement\Storage\DataClass\Publication;
 use Chamilo\Core\Home\Architecture\Interfaces\ConfigurableBlockInterface;
 use Chamilo\Core\Home\Renderer\BlockRenderer;
+use Chamilo\Core\Home\Rights\Service\ElementRightsService;
 use Chamilo\Core\Home\Service\HomeService;
 use Chamilo\Core\Home\Storage\DataClass\Block;
 use Chamilo\Core\Repository\Storage\DataClass\ContentObject;
@@ -27,16 +28,16 @@ class SystemAnnouncementsBlockRenderer extends BlockRenderer implements Configur
 
     public function __construct(
         HomeService $homeService, UrlGenerator $urlGenerator, Translator $translator,
-        ConfigurationConsulter $configurationConsulter, PublicationService $publicationService
+        ConfigurationConsulter $configurationConsulter, PublicationService $publicationService,
+        ElementRightsService $elementRightsService
     )
     {
-        parent::__construct($homeService, $urlGenerator, $translator, $configurationConsulter);
+        parent::__construct($homeService, $urlGenerator, $translator, $configurationConsulter, $elementRightsService);
 
         $this->publicationService = $publicationService;
     }
 
     /**
-     * @throws \ReflectionException
      * @throws \Chamilo\Libraries\Architecture\Exceptions\ObjectNotExistException
      * @throws \Chamilo\Libraries\Storage\Exception\DataClassNoResultException
      */

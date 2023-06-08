@@ -30,7 +30,6 @@ class ButtonToolBarRenderer
 
     /**
      * @throws \QuickformException
-     * @throws \ReflectionException
      */
     public function render(): string
     {

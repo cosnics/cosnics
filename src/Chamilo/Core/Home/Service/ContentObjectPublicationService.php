@@ -83,7 +83,6 @@ class ContentObjectPublicationService
     /**
      * @return \Chamilo\Core\Home\Storage\DataClass\ContentObjectPublication[]
      * @throws \Chamilo\Libraries\Storage\Exception\DataClassNoResultException
-     * @throws \ReflectionException
      */
     public function getContentObjectPublicationsByContentObjectId(string $contentObjectId): array
     {
@@ -94,6 +93,7 @@ class ContentObjectPublicationService
 
     /**
      * @return \Chamilo\Core\Home\Storage\DataClass\ContentObjectPublication[]
+     * @throws \Chamilo\Libraries\Storage\Exception\DataClassNoResultException
      */
     public function getContentObjectPublicationsByContentObjectOwnerId(string $ownerId): array
     {
@@ -104,6 +104,7 @@ class ContentObjectPublicationService
 
     /**
      * @return \Chamilo\Core\Home\Storage\DataClass\ContentObjectPublication[]
+     * @throws \Chamilo\Libraries\Storage\Exception\DataClassNoResultException
      */
     public function getContentObjectPublicationsForElement(Element $element): array
     {

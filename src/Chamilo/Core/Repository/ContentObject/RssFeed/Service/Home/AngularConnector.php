@@ -3,7 +3,6 @@ namespace Chamilo\Core\Repository\ContentObject\RssFeed\Service\Home;
 
 use Chamilo\Core\Home\Architecture\Interfaces\AngularConnectorInterface;
 use Chamilo\Core\Repository\ContentObject\RssFeed\Storage\DataClass\RssFeed;
-use Chamilo\Libraries\DependencyInjection\DependencyInjectionContainerBuilder;
 use Chamilo\Libraries\File\WebPathBuilder;
 use Chamilo\Libraries\Format\Utilities\ResourceManager;
 
@@ -15,37 +14,38 @@ use Chamilo\Libraries\Format\Utilities\ResourceManager;
 class AngularConnector implements AngularConnectorInterface
 {
 
+    protected ResourceManager $resourceManager;
+
+    protected WebPathBuilder $webPathBuilder;
+
+    public function __construct(ResourceManager $resourceManager, WebPathBuilder $webPathBuilder)
+    {
+        $this->resourceManager = $resourceManager;
+        $this->webPathBuilder = $webPathBuilder;
+    }
+
     /**
-     * Returns a list of angular modules that must be registered
-     *
      * @return string[]
      */
-    public function getAngularModules()
+    public function getAngularModules(): array
     {
         return ['rssFeedRendererApp'];
     }
 
-    /**
-     * Loads the angular javascript modules and returns them as HTML code
-     *
-     * @return string
-     */
-    public function loadAngularModules()
+    public function getResourceManager(): ResourceManager
     {
-        $container = DependencyInjectionContainerBuilder::getInstance()->createContainer();
+        return $this->resourceManager;
+    }
 
-        /**
-         * @var \Chamilo\Libraries\Format\Utilities\ResourceManager $resourceManager
-         */
-        $resourceManager = $container->get(ResourceManager::class);
+    public function getWebPathBuilder(): WebPathBuilder
+    {
+        return $this->webPathBuilder;
+    }
 
-        /**
-         * @var \Chamilo\Libraries\File\WebPathBuilder $webPathBuilder
-         */
-        $webPathBuilder = $container->get(WebPathBuilder::class);
-
-        return $resourceManager->getResourceHtml(
-            $webPathBuilder->getJavascriptPath(RssFeed::CONTEXT) . 'RssFeedRenderer/rssFeedRenderer.js'
+    public function loadAngularModules(): string
+    {
+        return $this->getResourceManager()->getResourceHtml(
+            $this->getWebPathBuilder()->getJavascriptPath(RssFeed::CONTEXT) . 'RssFeedRenderer/rssFeedRenderer.js'
         );
     }
 }

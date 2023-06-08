@@ -104,10 +104,7 @@ abstract class Element extends CompositeDataClass implements DisplayOrderDataCla
         return new PropertyConditionVariable(Element::class, self::PROPERTY_SORT);
     }
 
-    /**
-     * @return int
-     */
-    public function getParentId()
+    public function getParentId(): string
     {
         return $this->getDefaultProperty(self::PROPERTY_PARENT_ID);
     }
@@ -209,10 +206,7 @@ abstract class Element extends CompositeDataClass implements DisplayOrderDataCla
         $this->setDefaultProperty(self::PROPERTY_CONFIGURATION, serialize($configuration));
     }
 
-    /**
-     * @param int $parentId
-     */
-    public function setParentId($parentId)
+    public function setParentId(string $parentId): void
     {
         $this->setDefaultProperty(self::PROPERTY_PARENT_ID, $parentId);
     }

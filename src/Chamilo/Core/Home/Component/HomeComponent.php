@@ -16,6 +16,12 @@ use Chamilo\Libraries\Format\Structure\BreadcrumbTrail;
 class HomeComponent extends Manager implements NoAuthenticationSupport
 {
 
+    /**
+     * @throws \Chamilo\Libraries\Storage\Exception\DataClassNoResultException
+     * @throws \ReflectionException
+     * @throws \Chamilo\Libraries\Authentication\AuthenticationException
+     * @throws \QuickformException
+     */
     public function run()
     {
         $authenticationValidator = $this->getAuthenticationValidator();
@@ -25,12 +31,11 @@ class HomeComponent extends Manager implements NoAuthenticationSupport
 
         $currentTabIdentifier = $this->getRequest()->query->get(self::PARAM_TAB_ID);
         $isGeneralMode = (bool) $this->getSession()->get('Chamilo\Core\Home\General', false);
-        $homeRenderer = $this->getHomeRenderer();
 
         $html = [];
 
         $html[] = $this->renderHeader();
-        $html[] = $homeRenderer->render($currentTabIdentifier, $isGeneralMode, $this->getUser());
+        $html[] = $this->getHomeRenderer()->render($currentTabIdentifier, $isGeneralMode, $this->getUser());
         $html[] = $this->renderFooter();
 
         return implode(PHP_EOL, $html);

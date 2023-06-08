@@ -7,6 +7,7 @@ use Chamilo\Application\Calendar\Service\CalendarRendererProvider;
 use Chamilo\Configuration\Service\Consulter\ConfigurationConsulter;
 use Chamilo\Core\Home\Architecture\Interfaces\StaticBlockTitleInterface;
 use Chamilo\Core\Home\Renderer\BlockRenderer;
+use Chamilo\Core\Home\Rights\Service\ElementRightsService;
 use Chamilo\Core\Home\Service\HomeService;
 use Chamilo\Core\Home\Storage\DataClass\Block;
 use Chamilo\Core\User\Storage\DataClass\User;
@@ -34,10 +35,10 @@ class MonthBlockRenderer extends BlockRenderer implements StaticBlockTitleInterf
     public function __construct(
         HomeService $homeService, UrlGenerator $urlGenerator, Translator $translator,
         ConfigurationConsulter $configurationConsulter, MiniMonthCalendarRenderer $miniMonthCalendarRenderer,
-        ChamiloRequest $request
+        ChamiloRequest $request, ElementRightsService $elementRightsService
     )
     {
-        parent::__construct($homeService, $urlGenerator, $translator, $configurationConsulter);
+        parent::__construct($homeService, $urlGenerator, $translator, $configurationConsulter, $elementRightsService);
 
         $this->miniMonthCalendarRenderer = $miniMonthCalendarRenderer;
         $this->request = $request;
