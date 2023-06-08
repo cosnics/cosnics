@@ -12,7 +12,7 @@ use Chamilo\Application\Weblcms\Tool\Implementation\Assignment\Storage\Repositor
 use Chamilo\Configuration\Service\Consulter\ConfigurationConsulter;
 use Chamilo\Core\Home\Rights\Service\ElementRightsService;
 use Chamilo\Core\Home\Service\HomeService;
-use Chamilo\Core\Home\Storage\DataClass\Block;
+use Chamilo\Core\Home\Storage\DataClass\Element;
 use Chamilo\Core\User\Storage\DataClass\User;
 use Chamilo\Libraries\Architecture\Application\Application;
 use Chamilo\Libraries\Architecture\Application\Routing\UrlGenerator;
@@ -50,7 +50,7 @@ class AssignmentSubmissionsBlockRenderer extends BlockRenderer
      * @throws \Chamilo\Libraries\Storage\Exception\DataClassNoResultException
      * @throws \Chamilo\Libraries\Architecture\Exceptions\UserException
      */
-    public function displayContent(Block $block, ?User $user = null): string
+    public function displayContent(Element $block, ?User $user = null): string
     {
         $translator = $this->getTranslator();
         $user_id = $user->getId();

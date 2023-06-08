@@ -6,8 +6,8 @@ use Chamilo\Core\Home\Manager;
 use Chamilo\Core\Home\Rights\Service\ElementRightsService;
 use Chamilo\Core\Home\Service\ContentObjectPublicationService;
 use Chamilo\Core\Home\Service\HomeService;
-use Chamilo\Core\Home\Storage\DataClass\Block;
 use Chamilo\Core\Home\Storage\DataClass\ContentObjectPublication;
+use Chamilo\Core\Home\Storage\DataClass\Element;
 use Chamilo\Core\Repository\Storage\DataClass\ContentObject;
 use Chamilo\Core\User\Storage\DataClass\User;
 use Chamilo\Libraries\Architecture\Application\Routing\UrlGenerator;
@@ -37,7 +37,7 @@ abstract class BlockRenderer extends \Chamilo\Core\Home\Renderer\BlockRenderer
         $this->contentObjectPublicationService = $contentObjectPublicationService;
     }
 
-    public function displayContent(Block $block, ?User $user = null): string
+    public function displayContent(Element $block, ?User $user = null): string
     {
         return $this->isConfigured($block) ? $this->displayRepositoryContent($block) : $this->displayEmpty();
     }
@@ -47,7 +47,7 @@ abstract class BlockRenderer extends \Chamilo\Core\Home\Renderer\BlockRenderer
         return $this->getTranslator()->trans('ConfigureBlockFirst', [], Manager::CONTEXT);
     }
 
-    abstract public function displayRepositoryContent(Block $block): string;
+    abstract public function displayRepositoryContent(Element $block): string;
 
     public function getConfigurationVariables(): array
     {
@@ -59,7 +59,7 @@ abstract class BlockRenderer extends \Chamilo\Core\Home\Renderer\BlockRenderer
         return [self::CONFIGURATION_OBJECT_ID];
     }
 
-    protected function getContentObjectPublication(Block $block): ?ContentObjectPublication
+    protected function getContentObjectPublication(Element $block): ?ContentObjectPublication
     {
         return $this->getContentObjectPublicationService()->getFirstContentObjectPublicationForElement($block);
     }
@@ -71,7 +71,7 @@ abstract class BlockRenderer extends \Chamilo\Core\Home\Renderer\BlockRenderer
 
     abstract protected function getDefaultTitle(): string;
 
-    public function getObject(Block $block): ?ContentObject
+    public function getObject(Element $block): ?ContentObject
     {
         $contentObjectPublication = $this->getContentObjectPublication($block);
 
@@ -83,7 +83,7 @@ abstract class BlockRenderer extends \Chamilo\Core\Home\Renderer\BlockRenderer
         return null;
     }
 
-    public function getObjectId(Block $block): ?int
+    public function getObjectId(Element $block): ?int
     {
         $contentObjectPublication = $this->getContentObjectPublication($block);
 
@@ -95,7 +95,7 @@ abstract class BlockRenderer extends \Chamilo\Core\Home\Renderer\BlockRenderer
         return null;
     }
 
-    public function getTitle(Block $block, ?User $user = null): string
+    public function getTitle(Element $block, ?User $user = null): string
     {
         $content_object = $this->getObject($block);
 
@@ -106,7 +106,7 @@ abstract class BlockRenderer extends \Chamilo\Core\Home\Renderer\BlockRenderer
      * Return true if the block is linked to an object.
      * Otherwise returns false.
      */
-    public function isConfigured(Block $block): bool
+    public function isConfigured(Element $block): bool
     {
         return $this->getObjectId($block) != 0;
     }

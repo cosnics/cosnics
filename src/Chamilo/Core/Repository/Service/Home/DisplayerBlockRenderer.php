@@ -5,7 +5,7 @@ use Chamilo\Core\Home\Architecture\Interfaces\AnonymousBlockInterface;
 use Chamilo\Core\Home\Architecture\Interfaces\ConfigurableBlockInterface;
 use Chamilo\Core\Home\Architecture\Interfaces\ContentObjectPublicationBlockInterface;
 use Chamilo\Core\Home\Architecture\Interfaces\StaticBlockTitleInterface;
-use Chamilo\Core\Home\Storage\DataClass\Block;
+use Chamilo\Core\Home\Storage\DataClass\Element;
 use Chamilo\Core\Repository\Common\Rendition\ContentObjectRendition;
 use Chamilo\Core\Repository\Common\Rendition\ContentObjectRenditionImplementation;
 use Chamilo\Core\Repository\Manager;
@@ -16,7 +16,7 @@ class DisplayerBlockRenderer extends BlockRenderer
     AnonymousBlockInterface
 {
 
-    public function displayRepositoryContent(Block $block): string
+    public function displayRepositoryContent(Element $block): string
     {
         $content_object = $this->getObject($block);
 

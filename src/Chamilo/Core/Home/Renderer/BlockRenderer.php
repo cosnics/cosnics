@@ -10,7 +10,7 @@ use Chamilo\Core\Home\Manager;
 use Chamilo\Core\Home\Rights\Form\ElementTargetEntitiesForm;
 use Chamilo\Core\Home\Rights\Service\ElementRightsService;
 use Chamilo\Core\Home\Service\HomeService;
-use Chamilo\Core\Home\Storage\DataClass\Block;
+use Chamilo\Core\Home\Storage\DataClass\Element;
 use Chamilo\Core\User\Storage\DataClass\User;
 use Chamilo\Libraries\Architecture\Application\Application;
 use Chamilo\Libraries\Architecture\Application\Routing\UrlGenerator;
@@ -57,7 +57,7 @@ abstract class BlockRenderer
     /**
      * @throws \QuickformException
      */
-    public function render(Block $block, bool $isGeneralMode = false, ?User $user = null): string
+    public function render(Element $block, bool $isGeneralMode = false, ?User $user = null): string
     {
         if (!$this instanceof AnonymousBlockInterface && !$this->isVisible($block, $user))
         {
@@ -72,7 +72,7 @@ abstract class BlockRenderer
         return implode(PHP_EOL, $html);
     }
 
-    public function displayActions(Block $block, bool $isGeneralMode = false, ?User $user = null): string
+    public function displayActions(Element $block, bool $isGeneralMode = false, ?User $user = null): string
     {
         $translator = $this->getTranslator();
 
@@ -132,9 +132,9 @@ abstract class BlockRenderer
         return implode(PHP_EOL, $html);
     }
 
-    abstract public function displayContent(Block $block, ?User $user = null): string;
+    abstract public function displayContent(Element $block, ?User $user = null): string;
 
-    public function displayTitle(Block $block, bool $isGeneralMode = false, ?User $user = null): string
+    public function displayTitle(Element $block, bool $isGeneralMode = false, ?User $user = null): string
     {
         $html = [];
 
@@ -161,7 +161,7 @@ abstract class BlockRenderer
         return $this->homeService;
     }
 
-    public function getTitle(Block $block, ?User $user = null): string
+    public function getTitle(Element $block, ?User $user = null): string
     {
         return htmlspecialchars($block->getTitle());
     }
@@ -195,12 +195,12 @@ abstract class BlockRenderer
      * By default do not show on home page block when user is
      * not connected.
      */
-    public function isVisible(Block $block, ?User $user = null): bool
+    public function isVisible(Element $block, ?User $user = null): bool
     {
         return $user instanceof User;
     }
 
-    public function renderContentFooter(Block $block): string
+    public function renderContentFooter(Element $block): string
     {
         $html[] = '</div>';
         $html[] = '</div>';
@@ -208,7 +208,7 @@ abstract class BlockRenderer
         return implode(PHP_EOL, $html);
     }
 
-    public function renderContentHeader(Block $block): string
+    public function renderContentHeader(Element $block): string
     {
         $html = [];
 
@@ -218,7 +218,7 @@ abstract class BlockRenderer
         return implode(PHP_EOL, $html);
     }
 
-    public function renderFooter(Block $block): string
+    public function renderFooter(Element $block): string
     {
         $html = [];
 
@@ -232,7 +232,7 @@ abstract class BlockRenderer
     /**
      * @throws \QuickformException
      */
-    public function renderHeader(Block $block, bool $isGeneralMode = false, ?User $user = null): string
+    public function renderHeader(Element $block, bool $isGeneralMode = false, ?User $user = null): string
     {
         $html = [];
         $html[] = '<div class="panel panel-default portal-block" data-column-id="' . $block->getParentId() .

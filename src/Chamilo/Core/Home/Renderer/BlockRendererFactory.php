@@ -1,7 +1,7 @@
 <?php
 namespace Chamilo\Core\Home\Renderer;
 
-use Chamilo\Core\Home\Storage\DataClass\Block;
+use Chamilo\Core\Home\Storage\DataClass\Element;
 use OutOfBoundsException;
 
 /**
@@ -48,7 +48,7 @@ class BlockRendererFactory
         return $this->availableBlockRenderers;
     }
 
-    public function getRenderer(Block $block): BlockRenderer
+    public function getRenderer(Element $block): BlockRenderer
     {
         $blockRendererType = $block->getContext() . '\Service\Home\\' . $block->getBlockType() . 'BlockRenderer';
 

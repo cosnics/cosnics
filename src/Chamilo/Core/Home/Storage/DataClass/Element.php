@@ -2,7 +2,7 @@
 namespace Chamilo\Core\Home\Storage\DataClass;
 
 use Chamilo\Core\Home\Manager;
-use Chamilo\Libraries\Storage\DataClass\CompositeDataClass;
+use Chamilo\Libraries\Storage\DataClass\DataClass;
 use Chamilo\Libraries\Storage\DataClass\Listeners\DisplayOrderDataClassListener;
 use Chamilo\Libraries\Storage\DataClass\Listeners\DisplayOrderDataClassListenerSupport;
 use Chamilo\Libraries\Storage\DataManager\DataManager;
@@ -18,8 +18,12 @@ use Chamilo\Libraries\Storage\Query\Variable\StaticConditionVariable;
  * @author  Magali Gillard <magali.gillard@ehb.be>
  * @author  Eduard Vossen <eduard.vossen@ehb.be>
  */
-abstract class Element extends CompositeDataClass implements DisplayOrderDataClassListenerSupport
+class Element extends DataClass implements DisplayOrderDataClassListenerSupport
 {
+    public const CONFIGURATION_BLOCK_TYPE = 'block_type';
+    public const CONFIGURATION_CONTEXT = 'context';
+    public const CONFIGURATION_VISIBILITY = 'visibility';
+    public const CONFIGURATION_WIDTH = 'width';
     public const CONTEXT = Manager::CONTEXT;
 
     public const PROPERTY_CONFIGURATION = 'configuration';
@@ -29,14 +33,16 @@ abstract class Element extends CompositeDataClass implements DisplayOrderDataCla
     public const PROPERTY_TYPE = 'type';
     public const PROPERTY_USER_ID = 'user_id';
 
+    public const TYPE_BLOCK = 'Chamilo\Core\Home\Storage\DataClass\Block';
+    public const TYPE_COLUMN = 'Chamilo\Core\Home\Storage\DataClass\Column';
+    public const TYPE_TAB = 'Chamilo\Core\Home\Storage\DataClass\Tab';
+
     /**
      * @throws \Exception
      */
-    public function __construct(
-        array $defaultProperties = [], array $additionalProperties = [], array $optionalProperties = []
-    )
+    public function __construct(array $defaultProperties = [], array $additionalProperties = [])
     {
-        parent::__construct($defaultProperties, $additionalProperties, $optionalProperties);
+        parent::__construct($defaultProperties, $additionalProperties);
         $this->addListener(new DisplayOrderDataClassListener($this));
     }
 
@@ -44,9 +50,9 @@ abstract class Element extends CompositeDataClass implements DisplayOrderDataCla
     {
         $condition = new EqualityCondition(
             new PropertyConditionVariable(Element::class, static::PROPERTY_PARENT_ID),
-            new StaticConditionVariable($this->get_id())
+            new StaticConditionVariable($this->getId())
         );
-        $childElements = DataManager::retrieves(Block::class, new DataClassRetrievesParameters($condition));
+        $childElements = DataManager::retrieves(Element::class, new DataClassRetrievesParameters($condition));
 
         foreach ($childElements as $childElement)
         {
@@ -59,22 +65,32 @@ abstract class Element extends CompositeDataClass implements DisplayOrderDataCla
         return parent::delete();
     }
 
+    public function getBlockType(): ?string
+    {
+        if ($this->getType() == self::TYPE_BLOCK)
+        {
+            return $this->getSetting(self::CONFIGURATION_BLOCK_TYPE);
+        }
+
+        return null;
+    }
+
     /**
-     * @return int
+     * @return string[]
      */
-    public function getConfiguration()
+    public function getConfiguration(): array
     {
         return unserialize($this->getDefaultProperty(self::PROPERTY_CONFIGURATION));
     }
 
-    /**
-     * @param string[] $configurationVariables
-     *
-     * @return string[]
-     */
-    public static function getConfigurationVariables($configurationVariables = [])
+    public function getContext(): ?string
     {
-        return $configurationVariables;
+        if ($this->getType() == self::TYPE_BLOCK)
+        {
+            return $this->getSetting(self::CONFIGURATION_CONTEXT);
+        }
+
+        return null;
     }
 
     public static function getDefaultPropertyNames(array $extendedPropertyNames = []): array
@@ -109,162 +125,205 @@ abstract class Element extends CompositeDataClass implements DisplayOrderDataCla
         return $this->getDefaultProperty(self::PROPERTY_PARENT_ID);
     }
 
-    /**
-     * @param string $variable
-     *
-     * @return string
-     */
-    public function getSetting($variable, $defaultValue = null)
+    public function getSetting(string $variable, $defaultValue = null): string
     {
         $configuration = $this->getConfiguration();
 
-        return (isset($configuration[$variable]) ? $configuration[$variable] : $defaultValue);
+        return ($configuration[$variable] ?? $defaultValue);
     }
 
-    /**
-     * @return int
-     */
-    public function getSort()
+    public function getSort(): int
     {
         return $this->getDefaultProperty(self::PROPERTY_SORT);
     }
 
-    /**
-     * @return string
-     */
     public static function getStorageUnitName(): string
     {
         return 'home_element';
     }
 
-    /**
-     * @return string
-     */
-    public function getTitle()
+    public function getTitle(): string
     {
         return $this->getDefaultProperty(self::PROPERTY_TITLE);
     }
 
-    /**
-     * @return string
-     */
     public function getType(): string
     {
         return $this->getDefaultProperty(self::PROPERTY_TYPE);
     }
 
-    /**
-     * @return int
-     */
-    public function getUserId()
+    public function getUserId(): string
     {
         return $this->getDefaultProperty(self::PROPERTY_USER_ID);
     }
 
-    /**
-     * @return string
-     * @deprecated User Element::getType() now
-     */
-    public function get_type(): string
+    public function getVisibility(): ?bool
     {
-        return $this->getType();
+        if ($this->getType() == self::TYPE_BLOCK)
+        {
+            return (bool) $this->getSetting(self::CONFIGURATION_VISIBILITY);
+        }
+
+        return null;
     }
 
-    public function hasChildren()
+    public function getWidth(): ?int
+    {
+        if ($this->getType() == self::TYPE_COLUMN)
+        {
+            return (int) $this->getSetting(self::CONFIGURATION_WIDTH);
+        }
+
+        return null;
+    }
+
+    /**
+     * @throws \Exception
+     */
+    public function hasChildren(): bool
     {
         $condition = new EqualityCondition(
             new PropertyConditionVariable(Element::class, self::PROPERTY_PARENT_ID),
-            new StaticConditionVariable($this->get_id())
+            new StaticConditionVariable($this->getId())
         );
 
-        $childCount = DataManager::count(Block::class, new DataClassCountParameters($condition));
+        $childCount = DataManager::count(Elementt::class, new DataClassCountParameters($condition));
 
         return ($childCount == 0);
     }
 
-    public function isOnTopLevel()
+    public function isBlock(): bool
+    {
+        return $this->getType() === self::TYPE_BLOCK;
+    }
+
+    public function isColumn(): bool
+    {
+        return $this->getType() === self::TYPE_COLUMN;
+    }
+
+    public function isOnTopLevel(): bool
     {
         return $this->getParentId() == 0;
     }
 
-    /**
-     * @param string $variable
-     */
-    public function removeSetting($variable)
+    public function isTab(): bool
+    {
+        return $this->getType() === self::TYPE_TAB;
+    }
+
+    public function isVisible(): ?bool
+    {
+        if ($this->getType() == self::TYPE_BLOCK)
+        {
+            return $this->getVisibility();
+        }
+
+        return null;
+    }
+
+    public function removeSetting(string $variable): Element
     {
         $configuration = $this->getConfiguration();
         unset($configuration[$variable]);
 
         $this->setConfiguration($configuration);
+
+        return $this;
+    }
+
+    public function setBlockType(string $blockType): Element
+    {
+        if ($this->getType() == self::TYPE_BLOCK)
+        {
+            $this->setSetting(self::CONFIGURATION_BLOCK_TYPE, $blockType);
+        }
+
+        return $this;
     }
 
     /**
-     * @param int $configuration
+     * @param string[] $configuration
      */
-    public function setConfiguration($configuration)
+    public function setConfiguration(array $configuration): Element
     {
         $this->setDefaultProperty(self::PROPERTY_CONFIGURATION, serialize($configuration));
+
+        return $this;
     }
 
-    public function setParentId(string $parentId): void
+    public function setContext(string $context): Element
+    {
+        if ($this->getType() == self::TYPE_BLOCK)
+        {
+            $this->setSetting(self::CONFIGURATION_CONTEXT, $context);
+        }
+
+        return $this;
+    }
+
+    public function setParentId(string $parentId): Element
     {
         $this->setDefaultProperty(self::PROPERTY_PARENT_ID, $parentId);
+
+        return $this;
     }
 
-    /**
-     * @param string $variable
-     * @param string $value
-     */
-    public function setSetting($variable, $value)
+    public function setSetting(string $variable, string $value): Element
     {
         $configuration = $this->getConfiguration();
         $configuration[$variable] = $value;
 
         $this->setConfiguration($configuration);
+
+        return $this;
     }
 
-    /**
-     * @param int $sort
-     */
-    public function setSort($sort)
+    public function setSort(int $sort): Element
     {
         $this->setDefaultProperty(self::PROPERTY_SORT, $sort);
+
+        return $this;
     }
 
-    /**
-     * @param string $title
-     */
-    public function setTitle($title)
+    public function setTitle(string $title): Element
     {
         $this->setDefaultProperty(self::PROPERTY_TITLE, $title);
+
+        return $this;
     }
 
-    /**
-     * @param string $type
-     */
-    public function setType(string $type): CompositeDataClass
+    public function setType(string $type): Element
     {
         $this->setDefaultProperty(self::PROPERTY_TYPE, $type);
 
         return $this;
     }
 
-    /**
-     * @param int $userId
-     */
-    public function setUserId($userId)
+    public function setUserId(string $userId): Element
     {
         $this->setDefaultProperty(self::PROPERTY_USER_ID, $userId);
+
+        return $this;
     }
 
-    /**
-     * @param string $type
-     *
-     * @throws \Exception
-     * @deprecated Use Element::setType() now
-     */
-    public function set_type(string $type): CompositeDataClass
+    public function setVisibility(bool $visibility): Element
     {
-        $this->setType($type);
+        if ($this->getType() == self::TYPE_BLOCK)
+        {
+            $this->setSetting(self::CONFIGURATION_VISIBILITY, (string) (int) $visibility);
+        }
+
+        return $this;
+    }
+
+    public function setWidth(int $width): Element
+    {
+        if ($this->getType() == self::TYPE_COLUMN)
+        {
+            $this->setSetting(self::CONFIGURATION_WIDTH, (string) $width);
+        }
+
+        return $this;
     }
 }

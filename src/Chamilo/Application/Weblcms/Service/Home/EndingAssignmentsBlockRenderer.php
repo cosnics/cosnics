@@ -8,7 +8,7 @@ use Chamilo\Application\Weblcms\Tool\Manager;
 use Chamilo\Configuration\Service\Consulter\ConfigurationConsulter;
 use Chamilo\Core\Home\Rights\Service\ElementRightsService;
 use Chamilo\Core\Home\Service\HomeService;
-use Chamilo\Core\Home\Storage\DataClass\Block;
+use Chamilo\Core\Home\Storage\DataClass\Element;
 use Chamilo\Core\Repository\ContentObject\Assignment\Storage\DataClass\Assignment;
 use Chamilo\Core\Repository\Publication\Storage\DataClass\Publication;
 use Chamilo\Core\Repository\Storage\DataClass\ContentObject;
@@ -53,7 +53,7 @@ class EndingAssignmentsBlockRenderer extends BlockRenderer
     /**
      * @throws \Chamilo\Libraries\Storage\Exception\DataClassNoResultException
      */
-    public function displayContent(Block $block, ?User $user = null): string
+    public function displayContent(Element $block, ?User $user = null): string
     {
         // deadline min 1 week (60 * 60 * 24 * 7)
         $deadline = time() + 604800;

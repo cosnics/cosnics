@@ -10,7 +10,7 @@ use Chamilo\Core\Home\Architecture\Interfaces\StaticBlockTitleInterface;
 use Chamilo\Core\Home\Renderer\BlockRenderer;
 use Chamilo\Core\Home\Rights\Service\ElementRightsService;
 use Chamilo\Core\Home\Service\HomeService;
-use Chamilo\Core\Home\Storage\DataClass\Block;
+use Chamilo\Core\Home\Storage\DataClass\Element;
 use Chamilo\Core\User\Storage\DataClass\User;
 use Chamilo\Libraries\Architecture\Application\Routing\UrlGenerator;
 use Chamilo\Libraries\Calendar\Service\View\MiniDayCalendarRenderer;
@@ -54,7 +54,7 @@ class DayBlockRenderer extends BlockRenderer implements ConfigurableBlockInterfa
     /**
      * @throws \ReflectionException
      */
-    public function displayContent(Block $block, ?User $user = null): string
+    public function displayContent(Element $block, ?User $user = null): string
     {
         $dataProvider = new CalendarRendererProvider(
             new CalendarRendererProviderRepository(), $user, [], Manager::CONTEXT
@@ -97,17 +97,17 @@ class DayBlockRenderer extends BlockRenderer implements ConfigurableBlockInterfa
         return $this->request;
     }
 
-    public function getTitle(Block $block, ?User $user = null): string
+    public function getTitle(Element $block, ?User $user = null): string
     {
         return $this->getDatetimeUtilities()->formatLocaleDate('%A %d %B %Y', $this->getDisplayTime());
     }
 
-    public function renderContentFooter(Block $block): string
+    public function renderContentFooter(Element $block): string
     {
         return '</div>';
     }
 
-    public function renderContentHeader(Block $block): string
+    public function renderContentHeader(Element $block): string
     {
         return '<div class="portal-block-content' . ($block->isVisible() ? '' : ' hidden') . '">';
     }

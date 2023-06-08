@@ -4,7 +4,6 @@ namespace Chamilo\Core\Repository\ContentObject\RssFeed\Integration\Chamilo\Core
 use Chamilo\Core\Home\Form\ConfigurationForm;
 use Chamilo\Core\Home\Repository\ContentObjectPublicationRepository;
 use Chamilo\Core\Home\Service\ContentObjectPublicationService;
-use Chamilo\Core\Home\Storage\DataClass\Block;
 use Chamilo\Core\Repository\ContentObject\RssFeed\Service\Home\Connector;
 use Chamilo\Core\Repository\ContentObject\RssFeed\Service\Home\FeederBlockRenderer;
 use Chamilo\Core\Repository\Publication\Storage\Repository\PublicationRepository;

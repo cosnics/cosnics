@@ -2,8 +2,7 @@
 namespace Chamilo\Core\Home\Renderer;
 
 use Chamilo\Core\Home\Service\HomeService;
-use Chamilo\Core\Home\Storage\DataClass\Column;
-use Chamilo\Core\Home\Storage\DataClass\Tab;
+use Chamilo\Core\Home\Storage\DataClass\Element;
 use Chamilo\Core\User\Storage\DataClass\User;
 
 /**
@@ -30,7 +29,7 @@ class TabRenderer
      * @throws \QuickformException
      */
     public function render(
-        Tab $tab, int $tabKey, ?int $currentTabIdentifier = null, bool $isGeneralMode = false, ?User $user = null
+        Element $tab, int $tabKey, ?int $currentTabIdentifier = null, bool $isGeneralMode = false, ?User $user = null
     ): string
     {
         $columnRenderer = $this->getColumnRenderer();
@@ -43,7 +42,7 @@ class TabRenderer
             '">';
 
         $columns = $this->getHomeService()->findElementsByTypeUserAndParentIdentifier(
-            Column::class, $user, $tab->getId()
+            Element::TYPE_COLUMN, $user, $tab->getId()
         );
 
         foreach ($columns as $column)

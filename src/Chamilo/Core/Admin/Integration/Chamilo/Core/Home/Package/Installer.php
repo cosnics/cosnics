@@ -2,8 +2,6 @@
 namespace Chamilo\Core\Admin\Integration\Chamilo\Core\Home\Package;
 
 use Chamilo\Core\Admin\Manager;
-use Chamilo\Core\Home\Storage\DataClass\Block;
-use Chamilo\Core\Home\Storage\DataClass\Column;
 use Chamilo\Core\Home\Storage\DataClass\Element;
 use Chamilo\Core\Home\Storage\DataManager;
 use Chamilo\Libraries\Storage\Parameters\DataClassRetrieveParameters;

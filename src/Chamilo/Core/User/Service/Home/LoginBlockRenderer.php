@@ -7,7 +7,7 @@ use Chamilo\Core\Home\Architecture\Interfaces\ReadOnlyBlockInterface;
 use Chamilo\Core\Home\Renderer\BlockRenderer;
 use Chamilo\Core\Home\Rights\Service\ElementRightsService;
 use Chamilo\Core\Home\Service\HomeService;
-use Chamilo\Core\Home\Storage\DataClass\Block;
+use Chamilo\Core\Home\Storage\DataClass\Element;
 use Chamilo\Core\User\Manager;
 use Chamilo\Core\User\Storage\DataClass\User;
 use Chamilo\Libraries\Architecture\Application\Application;
@@ -37,7 +37,7 @@ class LoginBlockRenderer extends BlockRenderer implements AnonymousBlockInterfac
     /**
      * @throws \QuickformException
      */
-    public function displayContent(Block $block, ?User $user = null): string
+    public function displayContent(Element $block, ?User $user = null): string
     {
         $html = [];
 

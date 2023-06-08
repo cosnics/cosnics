@@ -4,8 +4,7 @@ namespace Chamilo\Core\Home\Renderer;
 use Chamilo\Core\Home\Architecture\Interfaces\AnonymousBlockInterface;
 use Chamilo\Core\Home\Manager;
 use Chamilo\Core\Home\Service\HomeService;
-use Chamilo\Core\Home\Storage\DataClass\Block;
-use Chamilo\Core\Home\Storage\DataClass\Column;
+use Chamilo\Core\Home\Storage\DataClass\Element;
 use Chamilo\Core\User\Storage\DataClass\User;
 use Chamilo\Libraries\Format\Structure\Glyph\FontAwesomeGlyph;
 use Symfony\Component\Translation\Translator;
@@ -38,7 +37,7 @@ class ColumnRenderer
      * @throws \Chamilo\Libraries\Storage\Exception\DataClassNoResultException
      * @throws \QuickformException
      */
-    public function render(Column $column, bool $isGeneralMode = false, ?User $user = null): string
+    public function render(Element $column, bool $isGeneralMode = false, ?User $user = null): string
     {
         $html = [];
 
@@ -47,7 +46,7 @@ class ColumnRenderer
             $column->getWidth() . '">';
 
         $blocks = $this->getHomeService()->findElementsByTypeUserAndParentIdentifier(
-            Block::class, $user, $column->getId()
+            Element::TYPE_BLOCK, $user, $column->getId()
         );
 
         foreach ($blocks as $block)

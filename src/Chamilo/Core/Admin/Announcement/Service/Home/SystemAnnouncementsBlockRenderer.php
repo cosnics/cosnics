@@ -9,7 +9,7 @@ use Chamilo\Core\Home\Architecture\Interfaces\ConfigurableBlockInterface;
 use Chamilo\Core\Home\Renderer\BlockRenderer;
 use Chamilo\Core\Home\Rights\Service\ElementRightsService;
 use Chamilo\Core\Home\Service\HomeService;
-use Chamilo\Core\Home\Storage\DataClass\Block;
+use Chamilo\Core\Home\Storage\DataClass\Element;
 use Chamilo\Core\Repository\Storage\DataClass\ContentObject;
 use Chamilo\Core\Repository\Storage\DataManager;
 use Chamilo\Core\User\Storage\DataClass\User;
@@ -41,7 +41,7 @@ class SystemAnnouncementsBlockRenderer extends BlockRenderer implements Configur
      * @throws \Chamilo\Libraries\Architecture\Exceptions\ObjectNotExistException
      * @throws \Chamilo\Libraries\Storage\Exception\DataClassNoResultException
      */
-    public function displayContent(Block $block, ?User $user = null): string
+    public function displayContent(Element $block, ?User $user = null): string
     {
         $html = [];
 
@@ -117,7 +117,7 @@ class SystemAnnouncementsBlockRenderer extends BlockRenderer implements Configur
     /**
      * @throws \Chamilo\Libraries\Storage\Exception\DataClassNoResultException
      */
-    public function isVisible(Block $block, ?User $user = null): bool
+    public function isVisible(Element $block, ?User $user = null): bool
     {
         if (!parent::isVisible($block, $user) || ($this->isEmpty($user) && !$this->showWhenEmpty($block)))
         {
@@ -127,17 +127,17 @@ class SystemAnnouncementsBlockRenderer extends BlockRenderer implements Configur
         return true;
     }
 
-    public function renderContentFooter(Block $block): string
+    public function renderContentFooter(Element $block): string
     {
         return '</div>';
     }
 
-    public function renderContentHeader(Block $block): string
+    public function renderContentHeader(Element $block): string
     {
         return '<div class="list-group portal-block-content' . ($block->isVisible() ? '' : ' hidden') . '">';
     }
 
-    public function showWhenEmpty(Block $block): bool
+    public function showWhenEmpty(Element $block): bool
     {
         return (bool) $block->getSetting(self::CONFIGURATION_SHOW_EMPTY, true);
     }

@@ -9,7 +9,7 @@ use Chamilo\Core\Home\Architecture\Interfaces\StaticBlockTitleInterface;
 use Chamilo\Core\Home\Renderer\BlockRenderer;
 use Chamilo\Core\Home\Rights\Service\ElementRightsService;
 use Chamilo\Core\Home\Service\HomeService;
-use Chamilo\Core\Home\Storage\DataClass\Block;
+use Chamilo\Core\Home\Storage\DataClass\Element;
 use Chamilo\Core\User\Storage\DataClass\User;
 use Chamilo\Libraries\Architecture\Application\Application;
 use Chamilo\Libraries\Architecture\Application\Routing\UrlGenerator;
@@ -47,7 +47,7 @@ class MonthBlockRenderer extends BlockRenderer implements StaticBlockTitleInterf
     /**
      * @throws \Exception
      */
-    public function displayContent(Block $block, ?User $user = null): string
+    public function displayContent(Element $block, ?User $user = null): string
     {
         $dataProvider = new CalendarRendererProvider(
             new CalendarRendererProviderRepository(), $user, [
@@ -74,18 +74,18 @@ class MonthBlockRenderer extends BlockRenderer implements StaticBlockTitleInterf
         return $this->request;
     }
 
-    public function getTitle(Block $block, ?User $user = null): string
+    public function getTitle(Element $block, ?User $user = null): string
     {
         return $this->getTranslator()->trans(date('F', $this->getDisplayTime()) . 'Long', [], StringUtilities::LIBRARIES
             ) . ' ' . date('Y', $this->getDisplayTime());
     }
 
-    public function renderContentFooter(Block $block): string
+    public function renderContentFooter(Element $block): string
     {
         return '</div>';
     }
 
-    public function renderContentHeader(Block $block): string
+    public function renderContentHeader(Element $block): string
     {
         return '<div class="portal-block-content' . ($block->isVisible() ? '' : ' hidden') . '">';
     }

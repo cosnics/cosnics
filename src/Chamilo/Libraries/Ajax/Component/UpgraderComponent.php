@@ -3,7 +3,6 @@ namespace Chamilo\Libraries\Ajax\Component;
 
 use Chamilo\Core\Home\Repository\ContentObjectPublicationRepository;
 use Chamilo\Core\Home\Service\ContentObjectPublicationService;
-use Chamilo\Core\Home\Storage\DataClass\Block;
 use Chamilo\Core\Home\Storage\DataClass\Element;
 use Chamilo\Core\Repository\Common\Template\Template;
 use Chamilo\Core\Repository\ContentObject\AssessmentMatchingQuestion\Storage\DataClass\AssessmentMatchingQuestion;

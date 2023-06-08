@@ -5,7 +5,7 @@ use Chamilo\Application\Weblcms\CourseType\Storage\DataManager as CourseTypeData
 use Chamilo\Application\Weblcms\Manager;
 use Chamilo\Application\Weblcms\Rights\CourseManagementRights;
 use Chamilo\Application\Weblcms\Rights\WeblcmsRights;
-use Chamilo\Core\Home\Storage\DataClass\Block;
+use Chamilo\Core\Home\Storage\DataClass\Element;
 use Chamilo\Core\User\Storage\DataClass\User;
 use Chamilo\Libraries\Architecture\Application\Application;
 use Chamilo\Libraries\Format\Structure\Glyph\FontAwesomeGlyph;
@@ -43,7 +43,7 @@ class CourseMenuBlockRenderer extends BlockRenderer
         return implode(PHP_EOL, $result);
     }
 
-    public function displayContent(Block $block, ?User $user = null): string
+    public function displayContent(Element $block, ?User $user = null): string
     {
         $html = [];
         $html[] = '<div class="tool_menu">';

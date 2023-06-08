@@ -2,7 +2,7 @@
 namespace Chamilo\Core\Home\Renderer;
 
 use Chamilo\Core\Home\Service\HomeService;
-use Chamilo\Core\Home\Storage\DataClass\Tab;
+use Chamilo\Core\Home\Storage\DataClass\Element;
 use Chamilo\Core\User\Storage\DataClass\User;
 use Chamilo\Libraries\Format\Structure\Glyph\FontAwesomeGlyph;
 
@@ -25,7 +25,7 @@ class TabHeaderRenderer
      * @throws \Chamilo\Libraries\Storage\Exception\DataClassNoResultException
      */
     public function render(
-        Tab $tab, int $tabKey, ?int $currentTabIdentifier = null, bool $isGeneralMode = false, ?User $user = null
+        Element $tab, int $tabKey, ?int $currentTabIdentifier = null, bool $isGeneralMode = false, ?User $user = null
     ): string
     {
         $isActiveTab = $this->getHomeService()->isActiveTab($tabKey, $tab, $currentTabIdentifier);

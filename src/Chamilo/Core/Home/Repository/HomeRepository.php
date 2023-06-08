@@ -2,18 +2,14 @@
 namespace Chamilo\Core\Home\Repository;
 
 use Chamilo\Configuration\Service\Consulter\RegistrationConsulter;
-use Chamilo\Core\Home\Storage\DataClass\Block;
-use Chamilo\Core\Home\Storage\DataClass\Column;
 use Chamilo\Core\Home\Storage\DataClass\Element;
-use Chamilo\Core\Home\Storage\DataClass\Tab;
 use Chamilo\Libraries\Storage\DataManager\Repository\DataClassRepository;
 use Chamilo\Libraries\Storage\Parameters\DataClassCountParameters;
 use Chamilo\Libraries\Storage\Parameters\DataClassDistinctParameters;
 use Chamilo\Libraries\Storage\Parameters\DataClassRetrievesParameters;
 use Chamilo\Libraries\Storage\Query\Condition\AndCondition;
 use Chamilo\Libraries\Storage\Query\Condition\EqualityCondition;
-use Chamilo\Libraries\Storage\Query\Join;
-use Chamilo\Libraries\Storage\Query\Joins;
+use Chamilo\Libraries\Storage\Query\Condition\InCondition;
 use Chamilo\Libraries\Storage\Query\OrderBy;
 use Chamilo\Libraries\Storage\Query\OrderProperty;
 use Chamilo\Libraries\Storage\Query\RetrieveProperties;
@@ -51,51 +47,51 @@ class HomeRepository
     /**
      * @param string $userIdentifier
      *
-     * @return \Doctrine\Common\Collections\ArrayCollection<\Chamilo\Core\Home\Storage\DataClass\Block>
+     * @return \Doctrine\Common\Collections\ArrayCollection<\Chamilo\Core\Home\Storage\DataClass\Element>
      * @throws \Chamilo\Libraries\Storage\Exception\DataClassNoResultException
      */
     public function findBlocksByUserIdentifier(string $userIdentifier): ArrayCollection
     {
-        $parameters = new DataClassRetrievesParameters(
-            new EqualityCondition(
-                new PropertyConditionVariable(Element::class, Element::PROPERTY_USER_ID),
-                new StaticConditionVariable($userIdentifier)
-            )
+        $conditions = [];
+
+        $conditions[] = new EqualityCondition(
+            new PropertyConditionVariable(Element::class, Element::PROPERTY_USER_ID),
+            new StaticConditionVariable($userIdentifier)
         );
 
-        return $this->getDataClassRepository()->retrieves(Block::class, $parameters);
-    }
-
-    /**
-     * @param string $tabIdentifier
-     *
-     * @return \Doctrine\Common\Collections\ArrayCollection<\Chamilo\Core\Home\Storage\DataClass\Block>
-     * @throws \Chamilo\Libraries\Storage\Exception\DataClassNoResultException
-     */
-    public function findBlocksForTabIdentifier(string $tabIdentifier): ArrayCollection
-    {
-        $condition = new EqualityCondition(
-            new PropertyConditionVariable(Tab::class, Tab::PROPERTY_ID), new StaticConditionVariable($tabIdentifier)
-        );
-
-        $joins = [];
-
-        $joins[] = new Join(
-            Column::class, new EqualityCondition(
-                new PropertyConditionVariable(Block::class, Block::PROPERTY_PARENT_ID),
-                new PropertyConditionVariable(Column::class, Column::PROPERTY_ID)
-            )
-        );
-
-        $joins[] = new Join(
-            Tab::class, new EqualityCondition(
-                new PropertyConditionVariable(Column::class, Column::PROPERTY_PARENT_ID),
-                new PropertyConditionVariable(Tab::class, Tab::PROPERTY_ID)
-            )
+        $conditions[] = new EqualityCondition(
+            new PropertyConditionVariable(Element::class, Element::PROPERTY_TYPE),
+            new StaticConditionVariable(Element::TYPE_BLOCK)
         );
 
         return $this->getDataClassRepository()->retrieves(
-            Block::class, new DataClassRetrievesParameters($condition, null, null, null, new Joins($joins))
+            Element::class, new DataClassRetrievesParameters(
+                new AndCondition($conditions)
+            )
+        );
+    }
+
+    /**
+     * @param string[] $columnIdentifiers
+     *
+     * @return \Doctrine\Common\Collections\ArrayCollection<\Chamilo\Core\Home\Storage\DataClass\Element>
+     * @throws \Chamilo\Libraries\Storage\Exception\DataClassNoResultException
+     */
+    public function findBlocksForColumnIdentifiers(array $columnIdentifiers): ArrayCollection
+    {
+        $conditions = [];
+
+        $conditions[] = new InCondition(
+            new PropertyConditionVariable(Element::class, Element::PROPERTY_PARENT_ID), $columnIdentifiers
+        );
+
+        $conditions[] = new EqualityCondition(
+            new PropertyConditionVariable(Element::class, Element::PROPERTY_TYPE),
+            new StaticConditionVariable(Element::TYPE_BLOCK)
+        );
+
+        return $this->getDataClassRepository()->retrieves(
+            Element::class, new DataClassRetrievesParameters(new AndCondition($conditions))
         );
     }
 
@@ -104,15 +100,22 @@ class HomeRepository
      */
     public function findColumnIdentifiersForTabIdentifier(string $tabIdentifier): array
     {
-        $columnCondition = new EqualityCondition(
+        $conditions = [];
+
+        $conditions[] = new EqualityCondition(
             new PropertyConditionVariable(Element::class, Element::PROPERTY_PARENT_ID), new StaticConditionVariable(
                 $tabIdentifier
             )
         );
 
+        $conditions[] = new EqualityCondition(
+            new PropertyConditionVariable(Element::class, Element::PROPERTY_TYPE),
+            new StaticConditionVariable(Element::TYPE_COLUMN)
+        );
+
         return $this->getDataClassRepository()->distinct(
             Element::class, new DataClassDistinctParameters(
-                $columnCondition,
+                new AndCondition($conditions),
                 new RetrieveProperties([new PropertyConditionVariable(Element::class, Element::PROPERTY_ID)])
             )
         );

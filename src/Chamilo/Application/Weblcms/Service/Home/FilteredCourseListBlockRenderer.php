@@ -15,7 +15,7 @@ use Chamilo\Core\Home\Architecture\Interfaces\ConfigurableBlockInterface;
 use Chamilo\Core\Home\Architecture\Interfaces\StaticBlockTitleInterface;
 use Chamilo\Core\Home\Rights\Service\ElementRightsService;
 use Chamilo\Core\Home\Service\HomeService;
-use Chamilo\Core\Home\Storage\DataClass\Block;
+use Chamilo\Core\Home\Storage\DataClass\Element;
 use Chamilo\Core\User\Storage\DataClass\User;
 use Chamilo\Libraries\Architecture\Application\Application;
 use Chamilo\Libraries\Architecture\Application\Routing\UrlGenerator;
@@ -51,7 +51,7 @@ class FilteredCourseListBlockRenderer extends BlockRenderer
         $this->courseUserCategoryService = $courseUserCategoryService;
     }
 
-    public function displayContent(Block $block, ?User $user = null): string
+    public function displayContent(Element $block, ?User $user = null): string
     {
         $renderer = $this->getCourseListRenderer($block);
 
@@ -68,7 +68,7 @@ class FilteredCourseListBlockRenderer extends BlockRenderer
         return [self::CONFIGURATION_SHOW_NEW_ICONS, self::CONFIGURATION_COURSE_TYPE];
     }
 
-    public function getCourseListRenderer(Block $block): FilteredCourseListRenderer
+    public function getCourseListRenderer(Element $block): FilteredCourseListRenderer
     {
         return new FilteredCourseListRenderer(
             $this, '', $this->getCourseTypeId($block), $this->getUserCourseCategoryId($block),
@@ -81,7 +81,7 @@ class FilteredCourseListBlockRenderer extends BlockRenderer
         return $this->courseService;
     }
 
-    protected function getCourseTypeConfiguration(Block $block): array
+    protected function getCourseTypeConfiguration(Element $block): array
     {
         $courseTypeIds = json_decode($block->getSetting(self::CONFIGURATION_COURSE_TYPE));
 
@@ -93,7 +93,7 @@ class FilteredCourseListBlockRenderer extends BlockRenderer
         return $courseTypeIds;
     }
 
-    protected function getCourseTypeId(Block $block): int
+    protected function getCourseTypeId(Element $block): int
     {
         $courseTypeIds = $this->getCourseTypeConfiguration($block);
 
@@ -109,7 +109,7 @@ class FilteredCourseListBlockRenderer extends BlockRenderer
      * Returns the title of this block Changes the default title of the block to the title of the course type and
      * (optionally) the title of the selected user course category
      */
-    public function getTitle(Block $block, ?User $user = null): string
+    public function getTitle(Element $block, ?User $user = null): string
     {
         $translator = $this->getTranslator();
 
@@ -155,14 +155,14 @@ class FilteredCourseListBlockRenderer extends BlockRenderer
         return $courseTypeTitle;
     }
 
-    protected function getUserCourseCategoryId(Block $block): int
+    protected function getUserCourseCategoryId(Element $block): int
     {
         $courseTypeIds = $this->getCourseTypeConfiguration($block);
 
         return (int) $courseTypeIds[1];
     }
 
-    public function renderContentFooter(Block $block): string
+    public function renderContentFooter(Element $block): string
     {
         $html = [];
 
@@ -185,7 +185,7 @@ class FilteredCourseListBlockRenderer extends BlockRenderer
         return implode(PHP_EOL, $html);
     }
 
-    public function renderContentHeader(Block $block): string
+    public function renderContentHeader(Element $block): string
     {
         return '<div class="portal-block-content portal-block-course-list' . ($block->isVisible() ? '' : ' hidden') .
             '">';

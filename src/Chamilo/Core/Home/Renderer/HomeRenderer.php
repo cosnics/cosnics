@@ -5,8 +5,7 @@ use Chamilo\Configuration\Service\Consulter\ConfigurationConsulter;
 use Chamilo\Core\Home\Manager;
 use Chamilo\Core\Home\Service\AngularConnectorService;
 use Chamilo\Core\Home\Service\HomeService;
-use Chamilo\Core\Home\Storage\DataClass\Block;
-use Chamilo\Core\Home\Storage\DataClass\Tab;
+use Chamilo\Core\Home\Storage\DataClass\Element;
 use Chamilo\Core\User\Storage\DataClass\User;
 use Chamilo\Libraries\Architecture\Application\Application;
 use Chamilo\Libraries\Architecture\Application\Routing\UrlGenerator;
@@ -278,7 +277,7 @@ class HomeRenderer
 
         $html[] = '<div class="portal-tabs" ng-app="homeApp">';
 
-        $tabs = $this->getHomeService()->findElementsByTypeUserAndParentIdentifier(Tab::class, $user);
+        $tabs = $this->getHomeService()->findElementsByTypeUserAndParentIdentifier(Element::TYPE_TAB, $user);
 
         foreach ($tabs as $tabKey => $tab)
         {
@@ -393,7 +392,7 @@ class HomeRenderer
 
         $html[] = '<ul class="nav nav-tabs portal-nav-tabs">';
 
-        $tabs = $this->getHomeService()->findElementsByTypeUserAndParentIdentifier(Tab::class, $user);
+        $tabs = $this->getHomeService()->findElementsByTypeUserAndParentIdentifier(Element::TYPE_TAB, $user);
 
         foreach ($tabs as $tabKey => $tab)
         {

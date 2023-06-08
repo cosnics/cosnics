@@ -4,7 +4,7 @@ namespace Chamilo\Application\Weblcms\Service\Home;
 use Chamilo\Application\Weblcms\Storage\DataClass\ContentObjectPublication;
 use Chamilo\Application\Weblcms\Tool\Manager;
 use Chamilo\Core\Home\Architecture\Interfaces\ConfigurableBlockInterface;
-use Chamilo\Core\Home\Storage\DataClass\Block;
+use Chamilo\Core\Home\Storage\DataClass\Element;
 use Chamilo\Core\Repository\ContentObject\Announcement\Storage\DataClass\Announcement;
 use Chamilo\Core\User\Storage\DataClass\User;
 use Chamilo\Libraries\Architecture\Application\Application;
@@ -20,7 +20,7 @@ class NewAnnouncementsBlockRenderer extends NewBlockRenderer implements Configur
 {
     public const CONFIGURATION_SHOW_CONTENT = 'show_content';
 
-    public function displayContent(Block $block, ?User $user = null): string
+    public function displayContent(Element $block, ?User $user = null): string
     {
         if (!$block->getSetting(self::CONFIGURATION_SHOW_CONTENT, false))
         {

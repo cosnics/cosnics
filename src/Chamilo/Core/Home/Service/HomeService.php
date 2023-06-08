@@ -5,10 +5,7 @@ use Chamilo\Configuration\Service\Consulter\ConfigurationConsulter;
 use Chamilo\Core\Home\Manager;
 use Chamilo\Core\Home\Repository\HomeRepository;
 use Chamilo\Core\Home\Rights\Service\ElementRightsService;
-use Chamilo\Core\Home\Storage\DataClass\Block;
-use Chamilo\Core\Home\Storage\DataClass\Column;
 use Chamilo\Core\Home\Storage\DataClass\Element;
-use Chamilo\Core\Home\Storage\DataClass\Tab;
 use Chamilo\Core\User\Storage\DataClass\User;
 use Chamilo\Libraries\Platform\ChamiloRequest;
 use Doctrine\Common\Collections\ArrayCollection;
@@ -172,12 +169,12 @@ class HomeService
     /**
      * @param string $tabIdentifier
      *
-     * @return \Doctrine\Common\Collections\ArrayCollection<\Chamilo\Core\Home\Storage\DataClass\Block>
+     * @return \Doctrine\Common\Collections\ArrayCollection<\Chamilo\Core\Home\Storage\DataClass\Element>
      * @throws \Chamilo\Libraries\Storage\Exception\DataClassNoResultException
      */
     public function findBlocksForTabIdentifier(string $tabIdentifier): ArrayCollection
     {
-        return $this->getHomeRepository()->findBlocksForTabIdentifier($tabIdentifier);
+        return $this->getHomeRepository()->findBlocksForColumnIdentifiers($this->findColumnIdentifiersForTabIdentifier($tabIdentifier));
     }
 
     /**
@@ -262,7 +259,7 @@ class HomeService
         return $this->translator;
     }
 
-    public function isActiveTab(int $tabKey, Tab $tab, ?int $currentTabIdentifier = null): bool
+    public function isActiveTab(int $tabKey, Element $tab, ?int $currentTabIdentifier = null): bool
     {
         return ($currentTabIdentifier == $tab->getId() || (!isset($currentTabIdentifier) && $tabKey == 0));
     }
@@ -277,12 +274,23 @@ class HomeService
      */
     public function tabByUserAndIdentifierHasMultipleColumns(string $tabIdentifier, User $user = null): bool
     {
-        return $this->findElementsByTypeUserAndParentIdentifier(Column::class, $user, $tabIdentifier)->count() > 1;
+        return $this->findElementsByTypeUserAndParentIdentifier(Element::TYPE_COLUMN, $user, $tabIdentifier)->count() >
+            1;
     }
 
-    public function tabCanBeDeleted(Tab $tab): bool
+    public function tabCanBeDeleted(Element $tab): bool
     {
         $tabBlocks = $this->findBlocksForTabIdentifier($tab->getId());
+
+        foreach ($tabBlocks as $tabBlock)
+        {
+            if ($tabBlock->getContext() == 'Chamilo\Core\Admin' || $tabBlock->getContext() == 'Chamilo\Core\User')
+            {
+                return false;
+            }
+        }
+
+        return true;
     }
 
     /**
@@ -290,6 +298,6 @@ class HomeService
      */
     public function userHasMultipleTabs(User $user = null): bool
     {
-        return $this->findElementsByTypeUserAndParentIdentifier(Tab::class, $user)->count() > 1;
+        return $this->findElementsByTypeUserAndParentIdentifier(Element::TYPE_TAB, $user)->count() > 1;
     }
 }

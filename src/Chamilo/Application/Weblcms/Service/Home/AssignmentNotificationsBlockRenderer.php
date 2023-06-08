@@ -10,7 +10,7 @@ use Chamilo\Core\Home\Architecture\Interfaces\ConfigurableBlockInterface;
 use Chamilo\Core\Home\Architecture\Interfaces\StaticBlockTitleInterface;
 use Chamilo\Core\Home\Rights\Service\ElementRightsService;
 use Chamilo\Core\Home\Service\HomeService;
-use Chamilo\Core\Home\Storage\DataClass\Block;
+use Chamilo\Core\Home\Storage\DataClass\Element;
 use Chamilo\Core\Notification\Manager;
 use Chamilo\Core\Notification\Service\NotificationManager;
 use Chamilo\Core\User\Storage\DataClass\User;
@@ -49,7 +49,7 @@ class AssignmentNotificationsBlockRenderer extends BlockRenderer
      * @throws \Twig\Error\RuntimeError
      * @throws \Twig\Error\LoaderError
      */
-    public function displayContent(Block $block, ?User $user = null): string
+    public function displayContent(Element $block, ?User $user = null): string
     {
         $retrieveNotificationsUrl = $this->getUrlGenerator()->fromParameters(
             [
@@ -91,7 +91,7 @@ class AssignmentNotificationsBlockRenderer extends BlockRenderer
         return [self::CONFIGURATION_COURSE_TYPE];
     }
 
-    protected function getCourseTypeConfiguration(Block $block): array
+    protected function getCourseTypeConfiguration(Element $block): array
     {
         $courseTypeIds = json_decode($block->getSetting(self::CONFIGURATION_COURSE_TYPE));
 
@@ -103,7 +103,7 @@ class AssignmentNotificationsBlockRenderer extends BlockRenderer
         return $courseTypeIds;
     }
 
-    protected function getCourseTypeId(Block $block): int
+    protected function getCourseTypeId(Element $block): int
     {
         $courseTypeIds = $this->getCourseTypeConfiguration($block);
 
@@ -118,7 +118,7 @@ class AssignmentNotificationsBlockRenderer extends BlockRenderer
     /**
      * @throws \Doctrine\ORM\NonUniqueResultException
      */
-    public function getTitle(Block $block, ?User $user = null): string
+    public function getTitle(Element $block, ?User $user = null): string
     {
         $title = '<span style="display: flex; align-items: center;">' . $this->getTranslator()->trans(
                 'AssignmentNotifications', [], 'Chamilo\Application\Weblcms'
@@ -139,7 +139,7 @@ class AssignmentNotificationsBlockRenderer extends BlockRenderer
         return $title;
     }
 
-    protected function getTitleForCourseTypeAndCourseCategory(Block $block): string
+    protected function getTitleForCourseTypeAndCourseCategory(Element $block): string
     {
         $translator = $this->getTranslator();
         $course_type_id = $this->getCourseTypeId($block);
@@ -189,19 +189,19 @@ class AssignmentNotificationsBlockRenderer extends BlockRenderer
         return $this->twigEnvironment;
     }
 
-    protected function getUserCourseCategoryId(Block $block): int
+    protected function getUserCourseCategoryId(Element $block): int
     {
         $courseTypeIds = $this->getCourseTypeConfiguration($block);
 
         return (int) $courseTypeIds[1];
     }
 
-    public function renderContentFooter(Block $block): string
+    public function renderContentFooter(Element $block): string
     {
         return '';
     }
 
-    public function renderContentHeader(Block $block): string
+    public function renderContentHeader(Element $block): string
     {
         return '';
     }

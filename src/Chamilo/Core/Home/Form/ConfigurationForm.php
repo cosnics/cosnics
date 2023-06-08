@@ -1,26 +1,26 @@
 <?php
 namespace Chamilo\Core\Home\Form;
 
-use Chamilo\Core\Home\Storage\DataClass\Block;
+use Chamilo\Core\Home\Storage\DataClass\Element;
 use Chamilo\Libraries\Format\Form\FormValidator;
 use Chamilo\Libraries\Format\Structure\Glyph\FontAwesomeGlyph;
 use Chamilo\Libraries\Translation\Translation;
 use Chamilo\Libraries\Utilities\StringUtilities;
 
 /**
- *
  * @package Chamilo\Core\Home\Form
- * @author Hans De Bisschop <hans.de.bisschop@ehb.be>
- * @author Magali Gillard <magali.gillard@ehb.be>
- * @author Eduard Vossen <eduard.vossen@ehb.be>
+ * @author  Hans De Bisschop <hans.de.bisschop@ehb.be>
+ * @author  Magali Gillard <magali.gillard@ehb.be>
+ * @author  Eduard Vossen <eduard.vossen@ehb.be>
  */
 abstract class ConfigurationForm extends FormValidator
 {
-    public const RESULT_SUCCESS = 'ObjectUpdated';
     public const RESULT_ERROR = 'ObjectUpdateFailed';
 
+    public const RESULT_SUCCESS = 'ObjectUpdated';
+
     /**
-     * @var \Chamilo\Core\Home\Storage\DataClass\Block
+     * @var \Chamilo\Core\Home\Storage\DataClass\Element
      */
     private $block;
 
@@ -30,11 +30,11 @@ abstract class ConfigurationForm extends FormValidator
     private $hasStaticTitle;
 
     /**
-     * @param \Chamilo\Core\Home\Storage\DataClass\Block $block
+     * @param \Chamilo\Core\Home\Storage\DataClass\Element $block
      * @param bool $hasStaticTitle
      * @param string $action
      */
-    public function __construct(Block $block, $hasStaticTitle)
+    public function __construct(Element $block, $hasStaticTitle)
     {
         parent::__construct('block', self::FORM_METHOD_POST);
 
@@ -45,34 +45,20 @@ abstract class ConfigurationForm extends FormValidator
         $this->setDefaults();
     }
 
-    /**
-     * @return \Chamilo\Core\Home\Storage\DataClass\Block
-     */
-    public function getBlock()
-    {
-        return $this->block;
-    }
-
-    /**
-     * @return bool
-     */
-    public function getHasStaticTitle()
-    {
-        return $this->hasStaticTitle;
-    }
+    abstract public function addSettings();
 
     public function buildForm()
     {
         if (!$this->hasStaticTitle)
         {
             $this->addElement(
-                'text', Block::PROPERTY_TITLE, Translation::get('Title'), ['class' => 'form-control']
+                'text', Element::PROPERTY_TITLE, Translation::get('Title'), ['class' => 'form-control']
             );
         }
 
         $this->addSettings();
 
-        $this->addElement('hidden', Block::PROPERTY_ID, $this->getBlock()->get_id());
+        $this->addElement('hidden', Element::PROPERTY_ID, $this->getBlock()->get_id());
 
         $buttons[] = $this->createElement(
             'style_submit_button', 'submit', Translation::get('Save', null, StringUtilities::LIBRARIES), null, null,
@@ -89,7 +75,21 @@ abstract class ConfigurationForm extends FormValidator
         $this->addGroup($buttons, 'buttons', null, '&nbsp;', false);
     }
 
-    public abstract function addSettings();
+    /**
+     * @return \Chamilo\Core\Home\Storage\DataClass\Element
+     */
+    public function getBlock()
+    {
+        return $this->block;
+    }
+
+    /**
+     * @return bool
+     */
+    public function getHasStaticTitle()
+    {
+        return $this->hasStaticTitle;
+    }
 
     /**
      * @see HTML_QuickForm::setDefaults()
@@ -98,7 +98,7 @@ abstract class ConfigurationForm extends FormValidator
     {
         if (!$this->hasStaticTitle)
         {
-            $defaults[Block::PROPERTY_TITLE] = $this->getBlock()->getTitle();
+            $defaults[Element::PROPERTY_TITLE] = $this->getBlock()->getTitle();
         }
 
         parent::setDefaults($defaults);

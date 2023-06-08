@@ -5,7 +5,7 @@ use Chamilo\Core\Home\Architecture\Interfaces\AnonymousBlockInterface;
 use Chamilo\Core\Home\Architecture\Interfaces\ConfigurableBlockInterface;
 use Chamilo\Core\Home\Architecture\Interfaces\ContentObjectPublicationBlockInterface;
 use Chamilo\Core\Home\Architecture\Interfaces\StaticBlockTitleInterface;
-use Chamilo\Core\Home\Storage\DataClass\Block;
+use Chamilo\Core\Home\Storage\DataClass\Element;
 use Chamilo\Core\Repository\ContentObject\RssFeed\Storage\DataClass\RssFeed;
 use Chamilo\Core\Repository\Service\Home\BlockRenderer;
 use Chamilo\Core\User\Storage\DataClass\User;
@@ -17,7 +17,7 @@ class FeederBlockRenderer extends BlockRenderer
     AnonymousBlockInterface
 {
 
-    public function displayRepositoryContent(Block $block): string
+    public function displayRepositoryContent(Element $block): string
     {
         //        if ($this->getSource() == self::SOURCE_AJAX)
         //        {
@@ -65,7 +65,7 @@ class FeederBlockRenderer extends BlockRenderer
     /**
      * Displays the title of the feed or the generic title if no object selected
      */
-    public function getTitle(Block $block, ?User $user = null): string
+    public function getTitle(Element $block, ?User $user = null): string
     {
         $contentObject = $this->getObject($block);
 

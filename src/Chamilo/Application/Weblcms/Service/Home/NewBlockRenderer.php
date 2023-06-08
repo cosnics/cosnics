@@ -13,7 +13,7 @@ use Chamilo\Application\Weblcms\Rights\WeblcmsRights;
 use Chamilo\Application\Weblcms\Storage\DataClass\ContentObjectPublication;
 use Chamilo\Application\Weblcms\Storage\DataManager as WeblcmsDataManager;
 use Chamilo\Core\Group\Integration\Chamilo\Libraries\Rights\Service\GroupEntityProvider;
-use Chamilo\Core\Home\Storage\DataClass\Block;
+use Chamilo\Core\Home\Storage\DataClass\Element;
 use Chamilo\Core\Repository\Storage\DataClass\ContentObject;
 use Chamilo\Core\User\Integration\Chamilo\Libraries\Rights\Service\UserEntityProvider;
 use Chamilo\Core\User\Storage\DataClass\User;
@@ -39,7 +39,7 @@ abstract class NewBlockRenderer extends BlockRenderer
     public const TOOL_ASSIGNMENT = 'Assignment';
     public const TOOL_DOCUMENT = 'Document';
 
-    public function displayContent(Block $block, ?User $user = null): string
+    public function displayContent(Element $block, ?User $user = null): string
     {
         $publications = $this->getContent($this->getToolName(), $user);
 
@@ -76,7 +76,7 @@ abstract class NewBlockRenderer extends BlockRenderer
     /**
      * @param string[][] $publications
      */
-    public function displayNewItems(Block $block, array $publications): string
+    public function displayNewItems(Element $block, array $publications): string
     {
         $html = [];
 
@@ -201,12 +201,12 @@ abstract class NewBlockRenderer extends BlockRenderer
 
     abstract public function getToolName(): string;
 
-    public function renderContentFooter(Block $block): string
+    public function renderContentFooter(Element $block): string
     {
         return '';
     }
 
-    public function renderContentHeader(Block $block): string
+    public function renderContentHeader(Element $block): string
     {
         return '';
     }

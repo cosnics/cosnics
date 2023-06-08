@@ -6,7 +6,6 @@ use Chamilo\Core\Home\Renderer\BlockRendererFactory;
 use Chamilo\Core\Home\Repository\HomeRepository;
 use Chamilo\Core\Home\Rights\Storage\DataClass\BlockTypeTargetEntity;
 use Chamilo\Core\Home\Rights\Storage\Repository\RightsRepository;
-use Chamilo\Core\Home\Storage\DataClass\Block;
 use Chamilo\Core\User\Storage\DataClass\User;
 use Chamilo\Libraries\Architecture\ClassnameUtilities;
 use Doctrine\Common\Collections\ArrayCollection;
