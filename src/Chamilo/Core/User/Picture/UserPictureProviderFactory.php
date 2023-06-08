@@ -52,13 +52,12 @@ class UserPictureProviderFactory
      * Returns the active picture provider
      *
      * @return UserPictureProviderInterface
-     *
      * @throws \Exception
      */
     public function getActivePictureProvider()
     {
         $pictureProvider =
-            $this->getConfigurationConsulter()->getSetting(array('Chamilo\Core\User', 'user_picture_provider'));
+            $this->getConfigurationConsulter()->getSetting(['Chamilo\Core\User', 'user_picture_provider']);
 
         if (!class_exists($pictureProvider))
         {
@@ -105,6 +104,22 @@ class UserPictureProviderFactory
     }
 
     /**
+     * @return \Chamilo\Configuration\Service\Consulter\RegistrationConsulter
+     */
+    public function getRegistrationConsulter(): RegistrationConsulter
+    {
+        return $this->registrationConsulter;
+    }
+
+    /**
+     * @return \Symfony\Component\Translation\Translator
+     */
+    public function getTranslator(): Translator
+    {
+        return $this->translator;
+    }
+
+    /**
      * @param \Chamilo\Configuration\Service\Consulter\ConfigurationConsulter $configurationConsulter
      *
      * @return UserPictureProviderFactory
@@ -119,14 +134,6 @@ class UserPictureProviderFactory
     }
 
     /**
-     * @return \Chamilo\Configuration\Service\Consulter\RegistrationConsulter
-     */
-    public function getRegistrationConsulter(): RegistrationConsulter
-    {
-        return $this->registrationConsulter;
-    }
-
-    /**
      * @param \Chamilo\Configuration\Service\Consulter\RegistrationConsulter $registrationConsulter
      *
      * @return UserPictureProviderFactory
@@ -136,14 +143,6 @@ class UserPictureProviderFactory
         $this->registrationConsulter = $registrationConsulter;
 
         return $this;
-    }
-
-    /**
-     * @return \Symfony\Component\Translation\Translator
-     */
-    public function getTranslator(): Translator
-    {
-        return $this->translator;
     }
 
     /**
