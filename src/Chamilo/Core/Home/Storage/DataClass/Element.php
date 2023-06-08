@@ -5,12 +5,7 @@ use Chamilo\Core\Home\Manager;
 use Chamilo\Libraries\Storage\DataClass\DataClass;
 use Chamilo\Libraries\Storage\DataClass\Listeners\DisplayOrderDataClassListener;
 use Chamilo\Libraries\Storage\DataClass\Listeners\DisplayOrderDataClassListenerSupport;
-use Chamilo\Libraries\Storage\DataManager\DataManager;
-use Chamilo\Libraries\Storage\Parameters\DataClassCountParameters;
-use Chamilo\Libraries\Storage\Parameters\DataClassRetrievesParameters;
-use Chamilo\Libraries\Storage\Query\Condition\EqualityCondition;
 use Chamilo\Libraries\Storage\Query\Variable\PropertyConditionVariable;
-use Chamilo\Libraries\Storage\Query\Variable\StaticConditionVariable;
 
 /**
  * @package Chamilo\Core\Home\Storage\DataClass
@@ -44,25 +39,6 @@ class Element extends DataClass implements DisplayOrderDataClassListenerSupport
     {
         parent::__construct($defaultProperties, $additionalProperties);
         $this->addListener(new DisplayOrderDataClassListener($this));
-    }
-
-    public function delete(): bool
-    {
-        $condition = new EqualityCondition(
-            new PropertyConditionVariable(Element::class, static::PROPERTY_PARENT_ID),
-            new StaticConditionVariable($this->getId())
-        );
-        $childElements = DataManager::retrieves(Element::class, new DataClassRetrievesParameters($condition));
-
-        foreach ($childElements as $childElement)
-        {
-            if (!$childElement->delete())
-            {
-                return false;
-            }
-        }
-
-        return parent::delete();
     }
 
     public function getBlockType(): ?string
@@ -175,21 +151,6 @@ class Element extends DataClass implements DisplayOrderDataClassListenerSupport
         }
 
         return null;
-    }
-
-    /**
-     * @throws \Exception
-     */
-    public function hasChildren(): bool
-    {
-        $condition = new EqualityCondition(
-            new PropertyConditionVariable(Element::class, self::PROPERTY_PARENT_ID),
-            new StaticConditionVariable($this->getId())
-        );
-
-        $childCount = DataManager::count(Elementt::class, new DataClassCountParameters($condition));
-
-        return ($childCount == 0);
     }
 
     public function isBlock(): bool

@@ -45,6 +45,11 @@ class HomeService
         $this->translator = $translator;
     }
 
+    public function countElementsByParentIdentifier(string $parentIdentifier): int
+    {
+        return $this->getHomeRepository()->countElementsByParentIdentifier($parentIdentifier);
+    }
+
     public function countElementsByUserIdentifier(string $userIdentifier): int
     {
         return $this->getHomeRepository()->countElementsByUserIdentifier($userIdentifier);
@@ -122,7 +127,7 @@ class HomeService
 
         // Process tabs
         if (!$this->createDefaultElementsByUserIdentifier(
-            Tab::class, $defaultElements, $elementIdentifierMap, $user->getId()
+            Element::TYPE_TAB, $defaultElements, $elementIdentifierMap, $user->getId()
         ))
         {
             return false;
@@ -130,7 +135,7 @@ class HomeService
 
         // Process columns
         if ($this->createDefaultElementsByUserIdentifier(
-            Column::class, $defaultElements, $elementIdentifierMap, $user->getId()
+            Element::TYPE_COLUMN, $defaultElements, $elementIdentifierMap, $user->getId()
         ))
         {
             return false;
@@ -138,10 +143,28 @@ class HomeService
 
         // Process blocks
         if ($this->createDefaultElementsByUserIdentifier(
-            Block::class, $defaultElements, $elementIdentifierMap, $user->getId()
+            Element::TYPE_BLOCK, $defaultElements, $elementIdentifierMap, $user->getId()
         ))
         {
             return false;
+        }
+
+        return true;
+    }
+
+    /**
+     * @throws \Chamilo\Libraries\Storage\Exception\DataClassNoResultException
+     */
+    public function deleteElement(Element $element): bool
+    {
+        $childElements = $this->findElementsByParentIdentifier($element->getId());
+
+        foreach ($childElements as $childElement)
+        {
+            if (!$this->deleteElement($childElement))
+            {
+                return false;
+            }
         }
 
         return true;
@@ -166,6 +189,11 @@ class HomeService
         }
     }
 
+    public function elementHasChildren(Element $element): bool
+    {
+        return $this->countElementsByParentIdentifier($element->getId()) > 0;
+    }
+
     /**
      * @param string $tabIdentifier
      *
@@ -174,7 +202,9 @@ class HomeService
      */
     public function findBlocksForTabIdentifier(string $tabIdentifier): ArrayCollection
     {
-        return $this->getHomeRepository()->findBlocksForColumnIdentifiers($this->findColumnIdentifiersForTabIdentifier($tabIdentifier));
+        return $this->getHomeRepository()->findBlocksForColumnIdentifiers(
+            $this->findColumnIdentifiersForTabIdentifier($tabIdentifier)
+        );
     }
 
     /**
@@ -183,6 +213,17 @@ class HomeService
     public function findColumnIdentifiersForTabIdentifier(string $tabIdentifier): array
     {
         return $this->getHomeRepository()->findColumnIdentifiersForTabIdentifier($tabIdentifier);
+    }
+
+    /**
+     * @param string $parentIdentifier
+     *
+     * @return \Doctrine\Common\Collections\ArrayCollection<\Chamilo\Core\Home\Storage\DataClass\Element>
+     * @throws \Chamilo\Libraries\Storage\Exception\DataClassNoResultException
+     */
+    public function findElementsByParentIdentifier(string $parentIdentifier): ArrayCollection
+    {
+        return $this->getHomeRepository()->findElementsByParentIdentifier($parentIdentifier);
     }
 
     /**
@@ -278,6 +319,9 @@ class HomeService
             1;
     }
 
+    /**
+     * @throws \Chamilo\Libraries\Storage\Exception\DataClassNoResultException
+     */
     public function tabCanBeDeleted(Element $tab): bool
     {
         $tabBlocks = $this->findBlocksForTabIdentifier($tab->getId());

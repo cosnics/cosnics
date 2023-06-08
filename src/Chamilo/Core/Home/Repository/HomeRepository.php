@@ -29,6 +29,16 @@ class HomeRepository
         $this->registrationConsulter = $registrationConsulter;
     }
 
+    public function countElementsByParentIdentifier(string $parentIdentifier): int
+    {
+        $condition = new EqualityCondition(
+            new PropertyConditionVariable(Element::class, Element::PROPERTY_PARENT_ID),
+            new StaticConditionVariable($parentIdentifier)
+        );
+
+        return $this->getDataClassRepository()->count(Element::class, new DataClassCountParameters($condition));
+    }
+
     public function countElementsByUserIdentifier(string $userIdentifier): int
     {
         $parameters = new DataClassCountParameters($this->getElementsByUserIdentifierCondition($userIdentifier));
@@ -124,6 +134,22 @@ class HomeRepository
     public function findElementByIdentifier(string $elementIdentifier): ?Element
     {
         return $this->getDataClassRepository()->retrieveById(Element::class, $elementIdentifier);
+    }
+
+    /**
+     * @param string $parentIdentifier
+     *
+     * @return \Doctrine\Common\Collections\ArrayCollection<\Chamilo\Core\Home\Storage\DataClass\Element>
+     * @throws \Chamilo\Libraries\Storage\Exception\DataClassNoResultException
+     */
+    public function findElementsByParentIdentifier(string $parentIdentifier): ArrayCollection
+    {
+        $condition = new EqualityCondition(
+            new PropertyConditionVariable(Element::class, Element::PROPERTY_PARENT_ID),
+            new StaticConditionVariable($parentIdentifier)
+        );
+
+        return $this->getDataClassRepository()->retrieves(Element::class, new DataClassRetrievesParameters($condition));
     }
 
     /**
