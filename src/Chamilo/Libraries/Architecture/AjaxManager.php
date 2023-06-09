@@ -6,11 +6,10 @@ use Chamilo\Libraries\Architecture\Application\ApplicationConfigurationInterface
 use Symfony\Component\HttpFoundation\JsonResponse;
 
 /**
- *
  * @package Chamilo\Libraries\Architecture
- * @author Hans De Bisschop <hans.de.bisschop@ehb.be>
- * @author Magali Gillard <magali.gillard@ehb.be>
- * @author Eduard Vossen <eduard.vossen@ehb.be>
+ * @author  Hans De Bisschop <hans.de.bisschop@ehb.be>
+ * @author  Magali Gillard <magali.gillard@ehb.be>
+ * @author  Eduard Vossen <eduard.vossen@ehb.be>
  */
 abstract class AjaxManager extends Application
 {
@@ -23,7 +22,6 @@ abstract class AjaxManager extends Application
     private $postDataValues = [];
 
     /**
-     *
      * @param \Chamilo\Libraries\Architecture\Application\ApplicationConfigurationInterface $applicationConfiguration
      */
     public function __construct(ApplicationConfigurationInterface $applicationConfiguration)
@@ -58,17 +56,6 @@ abstract class AjaxManager extends Application
     }
 
     /**
-     * Set the postDataValues
-     *
-     * @param string[] $postDataValues
-     */
-    public function setPostDataValues($postDataValues)
-    {
-        $this->postDataValues = $postDataValues;
-    }
-
-    /**
-     *
      * @param string $parameter
      *
      * @return string
@@ -97,15 +84,16 @@ abstract class AjaxManager extends Application
     }
 
     /**
+     * @param string[] $postParameters
+     *
      * @return string[]
      */
-    public function getRequiredPostParameters(): array
+    public function getRequiredPostParameters(array $postParameters = []): array
     {
-        return [];
+        return $postParameters;
     }
 
     /**
-     *
      * @param $exception
      *
      * @return \Symfony\Component\HttpFoundation\JsonResponse
@@ -126,6 +114,16 @@ abstract class AjaxManager extends Application
     public function setPostDataValue($name, $value)
     {
         $this->postDataValues[$name] = $value;
+    }
+
+    /**
+     * Set the postDataValues
+     *
+     * @param string[] $postDataValues
+     */
+    public function setPostDataValues($postDataValues)
+    {
+        $this->postDataValues = $postDataValues;
     }
 
     /**

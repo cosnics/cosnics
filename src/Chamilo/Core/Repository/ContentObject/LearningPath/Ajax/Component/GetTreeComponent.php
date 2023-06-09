@@ -93,7 +93,7 @@ class GetTreeComponent extends Manager
     /**
      * @return array
      */
-    public function getRequiredPostParameters(): array
+    public function getRequiredPostParameters(array $postParameters = []): array
     {
         return array(self::PARAM_LEARNING_PATH_ID);
     }

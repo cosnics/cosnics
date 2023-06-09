@@ -101,7 +101,7 @@ class UtilitiesComponent extends Manager
     /**
      * @see \Chamilo\Libraries\Architecture\AjaxManager::getRequiredPostParameters()
      */
-    public function getRequiredPostParameters(): array
+    public function getRequiredPostParameters(array $postParameters = []): array
     {
         return [self::PARAM_TYPE];
     }

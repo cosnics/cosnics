@@ -31,7 +31,7 @@ class LeaveCourseComponent extends \Chamilo\Application\Weblcms\Ajax\Manager
      * 
      * @return array
      */
-    public function getRequiredPostParameters(): array
+    public function getRequiredPostParameters(array $postParameters = []): array
     {
         return array(self::PARAM_COURSE_VISIT_TRACKER_ID);
     }

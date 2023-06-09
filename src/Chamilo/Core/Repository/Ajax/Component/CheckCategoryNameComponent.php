@@ -37,7 +37,7 @@ class CheckCategoryNameComponent extends Manager
         }
     }
 
-    public function getRequiredPostParameters(): array
+    public function getRequiredPostParameters(array $postParameters = []): array
     {
         return [self::PARAM_NAME, self::PARAM_PARENT_ID, self::PARAM_WORKSPACE_TYPE, self::PARAM_WORKSPACE_ID];
     }

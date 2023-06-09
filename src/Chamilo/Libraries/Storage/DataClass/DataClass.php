@@ -87,6 +87,7 @@ abstract class DataClass
 
     /**
      * @throws \Exception
+     * @deprecated Should be handled through services
      */
     public function create(): bool
     {
@@ -105,6 +106,7 @@ abstract class DataClass
     /**
      * @throws \Chamilo\Libraries\Storage\Exception\DataClassNoResultException
      * @throws \ReflectionException
+     * @deprecated Should be handled through services
      */
     public function delete(): bool
     {
@@ -371,6 +373,7 @@ abstract class DataClass
 
     /**
      * @throws \Exception
+     * @deprecated Should be handled through services
      */
     public function save(): bool
     {
@@ -500,6 +503,7 @@ abstract class DataClass
 
     /**
      * @throws \Exception
+     * @deprecated Should be handled through services
      */
     public function update(): bool
     {

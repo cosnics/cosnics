@@ -55,6 +55,14 @@ class HomeRepository
     }
 
     /**
+     * @throws \Chamilo\Libraries\Storage\Exception\DataClassNoResultException
+     */
+    public function updateElement(Element $element): bool
+    {
+        return $this->getDataClassRepository()->update($element);
+    }
+
+    /**
      * @param string $userIdentifier
      *
      * @return \Doctrine\Common\Collections\ArrayCollection<\Chamilo\Core\Home\Storage\DataClass\Element>

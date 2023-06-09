@@ -2,62 +2,70 @@
 namespace Chamilo\Core\Home\Ajax\Component;
 
 use Chamilo\Core\Home\Ajax\Manager;
-use Chamilo\Core\Home\Storage\DataManager;
+use Chamilo\Core\Home\Storage\DataClass\Element;
+use Chamilo\Libraries\Architecture\Exceptions\NotAllowedException;
 use Chamilo\Libraries\Architecture\Exceptions\ObjectNotExistException;
 use Chamilo\Libraries\Architecture\JsonAjaxResult;
-use Chamilo\Libraries\Translation\Translation;
+use Throwable;
 
 /**
- *
- * @author Hans De Bisschop @dependency repository.content_object.assessment_multiple_choice_question;
+ * @package Chamilo\Core\Home\Ajax\Component
+ * @author  Hans De Bisschop <hans.de.bisschop@ehb.be>
  */
 class BlockDeleteComponent extends Manager
 {
     public const PARAM_BLOCK = 'block';
 
-    /*
-     * (non-PHPdoc) @see common\libraries.AjaxManager::required_parameters()
-     */
-    public function getRequiredPostParameters(): array
-    {
-        return array(self::PARAM_BLOCK);
-    }
-
-    /*
-     * (non-PHPdoc) @see common\libraries.AjaxManager::run()
-     */
     public function run()
     {
-        $userId = DataManager::determine_user_id();
-        
-        if ($userId === false)
+        try
         {
-            JsonAjaxResult::not_allowed();
-        }
-        
-        $blockId = $this->getPostDataValue(self::PARAM_BLOCK);
-        
-        $block = DataManager::retrieve_by_id(Block::class, $blockId);
+            $translator = $this->getTranslator();
 
-        if(!$block instanceof Block)
-        {
-            throw new ObjectNotExistException(Translation::getInstance()->getTranslation('Block'), $blockId);
-        }
-        
-        if ($block->getUserId() == $userId)
-        {
-            if ($block->delete())
+            $isGeneralMode = $this->getSession()->get('Chamilo\Core\Home\General');
+            $homepageUser = $this->getHomeService()->determineUser(
+                $this->getUser(), $isGeneralMode
+            );
+
+            $blockId = $this->getPostDataValue(self::PARAM_BLOCK);
+
+            $block = $this->getHomeService()->findElementByIdentifier($blockId);
+
+            if (!$block instanceof Element)
             {
-                JsonAjaxResult::success();
+                throw new ObjectNotExistException($translator->trans('Block', [], Manager::CONTEXT), $blockId);
+            }
+
+            if ($block->getUserId() == $homepageUser->getId())
+            {
+                if ($this->getHomeService()->deleteElement($block))
+                {
+                    JsonAjaxResult::success();
+                }
+                else
+                {
+                    JsonAjaxResult::error(409, $translator->trans('BlockNotDeleted', [], Manager::CONTEXT));
+                }
             }
             else
             {
-                JsonAjaxResult::error(409, Translation::get('BlockNotDeleted'));
+                JsonAjaxResult::not_allowed();
             }
         }
-        else
+        catch (NotAllowedException $exception)
         {
-            JsonAjaxResult::not_allowed();
+            JsonAjaxResult::not_allowed($exception->getMessage());
         }
+        catch (Throwable $throwable)
+        {
+            JsonAjaxResult::error(500, $throwable->getMessage());
+        }
+    }
+
+    public function getRequiredPostParameters(array $postParameters = []): array
+    {
+        $postParameters[] = self::PARAM_BLOCK;
+
+        return parent::getRequiredPostParameters($postParameters);
     }
 }

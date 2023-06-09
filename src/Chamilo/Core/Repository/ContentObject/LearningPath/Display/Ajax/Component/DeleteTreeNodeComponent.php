@@ -42,7 +42,7 @@ class DeleteTreeNodeComponent extends Manager
      *
      * @return string
      */
-    public function getRequiredPostParameters(): array
+    public function getRequiredPostParameters(array $postParameters = []): array
     {
         return array(self::PARAM_NODE_ID);
     }

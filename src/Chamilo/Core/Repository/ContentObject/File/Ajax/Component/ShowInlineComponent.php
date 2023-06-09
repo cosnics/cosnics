@@ -22,7 +22,7 @@ class ShowInlineComponent extends Manager
     /**
      * @return array|string[]
      */
-    public function getRequiredPostParameters(): array
+    public function getRequiredPostParameters(array $postParameters = []): array
     {
         return array(self::PARAM_SHOW_INLINE, self::PARAM_FILE_ID);
     }

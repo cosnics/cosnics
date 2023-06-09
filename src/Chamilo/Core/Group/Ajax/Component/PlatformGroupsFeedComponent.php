@@ -33,7 +33,7 @@ class PlatformGroupsFeedComponent extends GroupsFeedComponent
     const PARAM_GROUP = 'group';
     const PARAM_USER = 'user';
 
-    public function getRequiredPostParameters(): array
+    public function getRequiredPostParameters(array $postParameters = []): array
     {
         return [];
     }

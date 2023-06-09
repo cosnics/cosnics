@@ -71,7 +71,7 @@ class SetElementTargetEntitiesComponent extends Manager
      * Executes this component and returns the json based result
      */
 
-    public function getRequiredPostParameters(): array
+    public function getRequiredPostParameters(array $postParameters = []): array
     {
         return [self::PARAM_ELEMENT_ID];
     }

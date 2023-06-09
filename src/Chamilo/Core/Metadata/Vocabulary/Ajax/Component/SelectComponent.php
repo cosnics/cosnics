@@ -158,7 +158,7 @@ class SelectComponent extends Manager
         return $this->getService(RequestTableParameterValuesCompiler::class);
     }
 
-    public function getRequiredPostParameters(): array
+    public function getRequiredPostParameters(array $postParameters = []): array
     {
         return [\Chamilo\Core\Metadata\Element\Manager::PARAM_ELEMENT_ID];
     }

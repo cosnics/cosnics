@@ -2,12 +2,11 @@
 namespace Chamilo\Core\Home\Ajax\Component;
 
 use Chamilo\Core\Home\Ajax\Manager;
-use Chamilo\Core\Home\Storage\DataManager;
+use Chamilo\Libraries\Architecture\Exceptions\NotAllowedException;
 use Chamilo\Libraries\Architecture\JsonAjaxResult;
-use Chamilo\Libraries\Translation\Translation;
+use Throwable;
 
 /**
- *
  * @author Hans De Bisschop @dependency repository.content_object.assessment_multiple_choice_question;
  */
 class BlockVisibilityComponent extends Manager
@@ -18,43 +17,55 @@ class BlockVisibilityComponent extends Manager
     /*
      * (non-PHPdoc) @see common\libraries.AjaxManager::required_parameters()
      */
-    public function getRequiredPostParameters(): array
-    {
-        return array(self::PARAM_BLOCK, self::PARAM_VISIBILITY);
-    }
 
-    /*
-     * (non-PHPdoc) @see common\libraries.AjaxManager::run()
-     */
     public function run()
     {
-        $userId = DataManager::determine_user_id();
-        
-        if ($userId === false)
+        try
         {
-            JsonAjaxResult::not_allowed();
-        }
-        
-        $blockId = $this->getPostDataValue(self::PARAM_BLOCK);
-        
-        $block = DataManager::retrieve_by_id(Block::class, $blockId);
-        
-        if ($block->getUserId() == $userId)
-        {
-            $block->setVisibility(!($this->getPostDataValue(self::PARAM_VISIBILITY) == 'false'));
-            
-            if ($block->update())
+            $translator = $this->getTranslator();
+
+            $isGeneralMode = $this->getSession()->get('Chamilo\Core\Home\General');
+            $homepageUser = $this->getHomeService()->determineUser(
+                $this->getUser(), $isGeneralMode
+            );
+
+            $blockId = $this->getPostDataValue(self::PARAM_BLOCK);
+
+            $block = $this->getHomeService()->findElementByIdentifier($blockId);
+
+            if ($block->getUserId() == $homepageUser->getId())
             {
-                JsonAjaxResult::success();
+                $block->setVisibility(!($this->getPostDataValue(self::PARAM_VISIBILITY) == 'false'));
+
+                if ($this->getHomeService()->updateElement($block))
+                {
+                    JsonAjaxResult::success();
+                }
+                else
+                {
+                    JsonAjaxResult::error(409, $translator->trans('BlockNotUpdated', [], Manager::CONTEXT));
+                }
             }
             else
             {
-                JsonAjaxResult::error(409, Translation::get('BlockNotUpdated'));
+                JsonAjaxResult::not_allowed();
             }
         }
-        else
+        catch (NotAllowedException $exception)
         {
-            JsonAjaxResult::not_allowed();
+            JsonAjaxResult::not_allowed($exception->getMessage());
         }
+        catch (Throwable $throwable)
+        {
+            JsonAjaxResult::error(500, $throwable->getMessage());
+        }
+    }
+
+    public function getRequiredPostParameters(array $postParameters = []): array
+    {
+        $postParameters[] = self::PARAM_BLOCK;
+        $postParameters[] = self::PARAM_VISIBILITY;
+
+        return parent::getRequiredPostParameters($postParameters);
     }
 }

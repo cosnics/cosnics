@@ -85,7 +85,7 @@ abstract class CalendarEventVisibilityComponent extends Manager
         }
     }
 
-    public function getRequiredPostParameters(): array
+    public function getRequiredPostParameters(array $postParameters = []): array
     {
         return [self::PARAM_SOURCE];
     }

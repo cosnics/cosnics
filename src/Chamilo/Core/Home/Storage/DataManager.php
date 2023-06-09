@@ -83,6 +83,7 @@ class DataManager extends \Chamilo\Libraries\Storage\DataManager\DataManager
 
                 $blocks[$packageId]['name'] = Translation::get('TypeName', null, $parentNamespace);
                 $blocks[$packageId]['image'] = $packageGlyph->render();
+
                 foreach ($blockTypes as $blockType)
                 {
                     $blockName = ClassnameUtilities::getInstance()->getClassnameFromNamespace($blockType);

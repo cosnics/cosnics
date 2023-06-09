@@ -45,7 +45,7 @@ class DeleteTemporaryFileComponent extends Manager
      *
      * @see \Chamilo\Libraries\Architecture\AjaxManager::getRequiredPostParameters()
      */
-    public function getRequiredPostParameters(): array
+    public function getRequiredPostParameters(array $postParameters = []): array
     {
         return array(self::PARAM_FILE);
     }

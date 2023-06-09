@@ -7,6 +7,7 @@ use Chamilo\Core\Home\Repository\HomeRepository;
 use Chamilo\Core\Home\Rights\Service\ElementRightsService;
 use Chamilo\Core\Home\Storage\DataClass\Element;
 use Chamilo\Core\User\Storage\DataClass\User;
+use Chamilo\Libraries\Architecture\Exceptions\NotAllowedException;
 use Chamilo\Libraries\Platform\ChamiloRequest;
 use Doctrine\Common\Collections\ArrayCollection;
 use Exception;
@@ -155,6 +156,14 @@ class HomeService
     /**
      * @throws \Chamilo\Libraries\Storage\Exception\DataClassNoResultException
      */
+    public function createElement(Element $element): bool
+    {
+        return $this->getHomeRepository()->createElement($element);
+    }
+
+    /**
+     * @throws \Chamilo\Libraries\Storage\Exception\DataClassNoResultException
+     */
     public function deleteElement(Element $element): bool
     {
         $childElements = $this->findElementsByParentIdentifier($element->getId());
@@ -209,6 +218,48 @@ class HomeService
         }
     }
 
+    /**
+     * @throws \Chamilo\Libraries\Architecture\Exceptions\NotAllowedException
+     */
+    public function determineUser(?User $currentUser = null, bool $isGeneralMode = false): ?User
+    {
+        $userHomeAllowed = $this->getConfigurationConsulter()->getSetting([Manager::CONTEXT, 'allow_user_home']);
+
+        if ($currentUser instanceof User)
+        {
+            if ($isGeneralMode && $currentUser->isPlatformAdmin())
+            {
+                return null;
+            }
+            elseif ($userHomeAllowed)
+            {
+                return $currentUser;
+            }
+            elseif ($currentUser->isPlatformAdmin())
+            {
+                return null;
+            }
+            else
+            {
+                throw new NotAllowedException();
+            }
+        }
+        else
+        {
+            throw new NotAllowedException();
+        }
+    }
+
+    /**
+     * @throws \Chamilo\Libraries\Architecture\Exceptions\NotAllowedException
+     */
+    public function determineUserId(?User $currentUser = null, bool $isGeneralMode = false): string
+    {
+        $user = $this->determineUser($currentUser, $isGeneralMode);
+
+        return $user instanceof User ? $user->getId() : '0';
+    }
+
     public function elementHasChildren(Element $element): bool
     {
         return $this->countElementsByParentIdentifier($element->getId()) > 0;
@@ -233,6 +284,11 @@ class HomeService
     public function findColumnIdentifiersForTabIdentifier(string $tabIdentifier): array
     {
         return $this->getHomeRepository()->findColumnIdentifiersForTabIdentifier($tabIdentifier);
+    }
+
+    public function findElementByIdentifier(string $elementIdentifier): ?Element
+    {
+        return $this->getHomeRepository()->findElementByIdentifier($elementIdentifier);
     }
 
     /**
@@ -355,6 +411,14 @@ class HomeService
         }
 
         return true;
+    }
+
+    /**
+     * @throws \Chamilo\Libraries\Storage\Exception\DataClassNoResultException
+     */
+    public function updateElement(Element $element): bool
+    {
+        return $this->getHomeRepository()->updateElement($element);
     }
 
     /**

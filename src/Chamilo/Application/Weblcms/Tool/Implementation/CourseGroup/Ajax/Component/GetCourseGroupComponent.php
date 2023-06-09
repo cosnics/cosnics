@@ -43,7 +43,7 @@ class GetCourseGroupComponent extends Manager
         return DataManager::retrieve_by_id(CourseGroup::class, $id);
     }
 
-    public function getRequiredPostParameters(): array
+    public function getRequiredPostParameters(array $postParameters = []): array
     {
         return array(self::PARAM_COURSE_GROUP_ID);
     }

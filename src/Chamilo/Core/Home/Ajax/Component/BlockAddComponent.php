@@ -3,103 +3,96 @@ namespace Chamilo\Core\Home\Ajax\Component;
 
 use Chamilo\Core\Home\Ajax\Manager;
 use Chamilo\Core\Home\Renderer\BlockRendererFactory;
-use Chamilo\Core\Home\Repository\HomeRepository;
-use Chamilo\Core\Home\Rights\Service\ElementRightsService;
-use Chamilo\Core\Home\Rights\Storage\Repository\RightsRepository;
-use Chamilo\Core\Home\Service\HomeService;
-use Chamilo\Core\Home\Storage\DataManager;
-use Chamilo\Libraries\Architecture\ClassnameUtilities;
+use Chamilo\Core\Home\Storage\DataClass\Element;
+use Chamilo\Core\User\Storage\DataClass\User;
+use Chamilo\Libraries\Architecture\Exceptions\NotAllowedException;
 use Chamilo\Libraries\Architecture\JsonAjaxResult;
-use Chamilo\Libraries\Translation\Translation;
+use Throwable;
 
 /**
- *
- * @author Hans De Bisschop @dependency repository.content_object.assessment_multiple_choice_question;
+ * @package Chamilo\Core\Home\Ajax\Component
+ * @author  Hans De Bisschop <hans.de.bisschop@ehb.be>
  */
 class BlockAddComponent extends Manager
 {
     public const PARAM_BLOCK = 'block';
     public const PARAM_COLUMN = 'column';
     public const PARAM_ORDER = 'order';
+
     public const PROPERTY_BLOCK = 'block';
 
-    /*
-     * (non-PHPdoc) @see common\libraries.AjaxManager::required_parameters()
-     */
-    public function getRequiredPostParameters(): array
-    {
-        return array(self::PARAM_BLOCK, self::PARAM_COLUMN);
-    }
-
-    public function unserialize_jquery($jquery)
-    {
-        $block_data = explode('&', $jquery);
-        $blocks = [];
-        
-        foreach ($block_data as $block)
-        {
-            $block_split = explode('=', $block);
-            $blocks[] = $block_split[1];
-        }
-        
-        return $blocks;
-    }
-
-    /*
-     * (non-PHPdoc) @see common\libraries.AjaxManager::run()
-     */
     public function run()
     {
-        $userId = DataManager::determine_user_id();
-        
-        if ($userId === false)
+        try
         {
-            JsonAjaxResult::not_allowed();
-        }
-        
-        $columnId = $this->getPostDataValue(self::PARAM_COLUMN);
-        $block = $this->getPostDataValue(self::PARAM_BLOCK);
-        $context = ClassnameUtilities::getInstance()->getNamespaceParent($block, 6);
-        $translationContext = ClassnameUtilities::getInstance()->getNamespaceParent($block, 2);
-        $blockType = ClassnameUtilities::getInstance()->getClassnameFromNamespace($block);
-        
-        $block = new Block();
-        $block->setParentId($columnId);
-        $block->setTitle(Translation::get($blockType, null, $translationContext));
-        $block->setContext($context);
-        $block->setBlockType($blockType);
-        $block->setVisibility(1);
-        $block->setUserId($userId);
-        
-        if ($block->create())
-        {
-            $block->setSort(1);
-            
-            if ($block->update())
+            $classnameUtilities = $this->getClassnameUtilities();
+
+            $isGeneralMode = $this->getSession()->get('Chamilo\Core\Home\General');
+            $homepageUser = $this->getHomeService()->determineUser(
+                $this->getUser(), $isGeneralMode
+            );
+
+            $homepageUserId = $homepageUser instanceof User ? $homepageUser->getId() : 0;
+
+            $columnId = $this->getPostDataValue(self::PARAM_COLUMN);
+            $block = $this->getPostDataValue(self::PARAM_BLOCK);
+            $context = $classnameUtilities->getNamespaceParent($block, 6);
+            $translationContext = $classnameUtilities->getNamespaceParent($block, 2);
+            $blockType = $classnameUtilities->getClassnameFromNamespace($block);
+
+            $block = new Element();
+            $block->setType(Element::TYPE_BLOCK);
+            $block->setParentId($columnId);
+            $block->setTitle($this->getTranslator()->trans($blockType, [], $translationContext));
+            $block->setContext($context);
+            $block->setBlockType($blockType);
+            $block->setVisibility(true);
+            $block->setUserId($homepageUserId);
+
+            if ($this->getHomeService()->createElement($block))
             {
-                // $rendererFactory = new Factory(Renderer::TYPE_BASIC, $this);
-                // $renderer = $rendererFactory->getRenderer();
-                
-                $homeService = new HomeService(new HomeRepository(), new ElementRightsService(new RightsRepository()), $this->getSession());
-                $blockRendererFactory = new BlockRendererFactory(
-                    $this, 
-                    $homeService, 
-                    $block, 
-                    BlockRendererFactory::SOURCE_AJAX);
-                $blockRenderer = $blockRendererFactory->getRenderer();
-                
-                $result = new JsonAjaxResult(200);
-                $result->set_property(self::PROPERTY_BLOCK, $blockRenderer->toHtml());
-                $result->display();
+                $block->setSort(1);
+
+                if ($this->getHomeService()->updateElement($block))
+                {
+                    $blockRenderer = $this->getBlockRendererFactory()->getRenderer($block);
+
+                    $result = new JsonAjaxResult(200);
+                    $result->set_property(
+                        self::PROPERTY_BLOCK, $blockRenderer->render($block, $isGeneralMode, $homepageUser)
+                    );
+                    $result->display();
+                }
+                else
+                {
+                    JsonAjaxResult::error(500);
+                }
             }
             else
             {
                 JsonAjaxResult::error(500);
             }
         }
-        else
+        catch (NotAllowedException $exception)
         {
-            JsonAjaxResult::error(500);
+            JsonAjaxResult::not_allowed($exception->getMessage());
         }
+        catch (Throwable $throwable)
+        {
+            JsonAjaxResult::error(500, $throwable->getMessage());
+        }
+    }
+
+    public function getBlockRendererFactory(): BlockRendererFactory
+    {
+        return $this->getService(BlockRendererFactory::class);
+    }
+
+    public function getRequiredPostParameters(array $postParameters = []): array
+    {
+        $postParameters[] = self::PARAM_BLOCK;
+        $postParameters[] = self::PARAM_COLUMN;
+
+        return parent::getRequiredPostParameters($postParameters);
     }
 }

@@ -53,7 +53,7 @@ class LeaveItemComponent extends Manager
     /**
      * @return array
      */
-    public function getRequiredPostParameters(): array
+    public function getRequiredPostParameters(array $postParameters = []): array
     {
         return [self::PARAM_TRACKER_ID];
     }

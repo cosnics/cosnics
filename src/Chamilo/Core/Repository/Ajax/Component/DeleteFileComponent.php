@@ -20,7 +20,7 @@ class DeleteFileComponent extends Manager
     /*
      * (non-PHPdoc) @see common\libraries.AjaxManager::required_parameters()
      */
-    public function getRequiredPostParameters(): array
+    public function getRequiredPostParameters(array $postParameters = []): array
     {
         return array(self::PARAM_CONTENT_OBJECT_ID);
     }

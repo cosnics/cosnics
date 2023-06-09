@@ -169,6 +169,11 @@ class User extends DataClass
         );
     }
 
+    public function getPlatformAdmin(): int
+    {
+        return (int) $this->getDefaultProperty(self::PROPERTY_PLATFORMADMIN);
+    }
+
     /**
      * @return string
      */
@@ -357,13 +362,11 @@ class User extends DataClass
     }
 
     /**
-     * Returns if the user is platformadmin or not.
-     *
-     * @return Int platformadmin
+     * @deprecated Use User::getPlatformAdmin()
      */
-    public function get_platformadmin()
+    public function get_platformadmin(): int
     {
-        return $this->getDefaultProperty(self::PROPERTY_PLATFORMADMIN);
+        return $this->getPlatformAdmin();
     }
 
     public function get_registration_date()
@@ -434,6 +437,11 @@ class User extends DataClass
         return $this->getDefaultProperty(self::PROPERTY_USERNAME);
     }
 
+    public function isPlatformAdmin(): bool
+    {
+        return $this->getPlatformAdmin() == 1;
+    }
+
     public function is_active()
     {
         if ($this->get_active())
@@ -456,13 +464,11 @@ class User extends DataClass
     }
 
     /**
-     * Checks if this user is a platform admin or not
-     *
-     * @return bool true if the user is a platforma admin, false otherwise
+     * @deprecated Use User::isPlatformAdmin()
      */
-    public function is_platform_admin()
+    public function is_platform_admin(): bool
     {
-        return $this->get_platformadmin() == 1;
+        return $this->isPlatformAdmin();
     }
 
     /**

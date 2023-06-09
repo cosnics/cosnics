@@ -2,22 +2,19 @@
 namespace Chamilo\Core\Home\Ajax\Component;
 
 use Chamilo\Core\Home\Ajax\Manager;
-use Chamilo\Core\Home\Storage\DataClass\Column;
 use Chamilo\Core\Home\Storage\DataClass\Element;
-use Chamilo\Core\Home\Storage\DataManager;
+use Chamilo\Core\User\Storage\DataClass\User;
+use Chamilo\Libraries\Architecture\Exceptions\NotAllowedException;
 use Chamilo\Libraries\Architecture\JsonAjaxResult;
 use Chamilo\Libraries\Format\Structure\Glyph\FontAwesomeGlyph;
-use Chamilo\Libraries\Translation\Translation;
-use Chamilo\Libraries\Storage\Parameters\DataClassRetrievesParameters;
-use Chamilo\Libraries\Storage\Query\Condition\AndCondition;
-use Chamilo\Libraries\Storage\Query\Condition\EqualityCondition;
-use Chamilo\Libraries\Storage\Query\Variable\PropertyConditionVariable;
-use Chamilo\Libraries\Storage\Query\Variable\StaticConditionVariable;
+use Chamilo\Libraries\Utilities\StringUtilities;
+use Doctrine\Common\Collections\ArrayCollection;
 use Exception;
+use Throwable;
 
 /**
- *
- * @author Hans De Bisschop
+ * @package Chamilo\Core\Home\Ajax\Component
+ * @author  Hans De Bisschop <hans.de.bisschop@ehb.be>
  */
 class ColumnAddComponent extends Manager
 {
@@ -25,107 +22,180 @@ class ColumnAddComponent extends Manager
     public const PROPERTY_HTML = 'html';
     public const PROPERTY_WIDTH = 'width';
 
-    /**
-     *
-     * @var \Chamilo\Core\Home\Storage\DataClass\Column[]
-     */
-    private $columns;
-
-    /*
-     * (non-PHPdoc) @see common\libraries.AjaxManager::required_parameters()
-     */
-    public function getRequiredPostParameters(): array
-    {
-        return array(self::PARAM_TAB);
-    }
-
-    /*
-     * (non-PHPdoc) @see common\libraries.AjaxManager::run()
-     */
     public function run()
     {
-        $userId = DataManager::determine_user_id();
-
-        if ($userId === false)
+        try
         {
-            JsonAjaxResult::not_allowed();
+            $translator = $this->getTranslator();
+
+            $isGeneralMode = $this->getSession()->get('Chamilo\Core\Home\General');
+            $homepageUser = $this->getHomeService()->determineUser(
+                $this->getUser(), $isGeneralMode
+            );
+
+            $homepageUserId = $this->getHomeService()->determineUserId($this->getUser(), $isGeneralMode);
+
+            $tabId = $this->getPostDataValue(self::PARAM_TAB);
+
+            if (isset($tabId))
+            {
+                $columns = $this->getColumns($tabId, $homepageUser);
+
+                if ($columns->count() >= 12)
+                {
+                    JsonAjaxResult::general_error($translator->trans('TooManyColumns', [], Manager::CONTEXT));
+                }
+
+                try
+                {
+                    $newColumnWidth = $this->determineNewColumnWidth($columns);
+                }
+                catch (Exception $exception)
+                {
+                    $newColumnWidth = 1;
+                    $newWidths = $this->recalculateColumnWidths($columns);
+                }
+
+                // Create the new column + a dummy block for it
+                $newColumn = new Element();
+                $newColumn->setType(Element::TYPE_COLUMN);
+                $newColumn->setParentId($tabId);
+                $newColumn->setTitle($translator->trans('NewColumn', [], Manager::CONTEXT));
+                $newColumn->setWidth($newColumnWidth);
+                $newColumn->setUserId($homepageUserId);
+
+                if (!$this->getHomeService()->createElement($newColumn))
+                {
+                    JsonAjaxResult::general_error($translator->trans('ColumnNotAdded', [], Manager::CONTEXT));
+                }
+
+                // Render the actual html to be displayed
+                $html[] = '<div class="col-xs-12 col-md-' . $newColumn->getWidth() . ' portal-column" data-tab-id="' .
+                    $tabId . '" data-element-id="' . $newColumn->getId() . '">';
+
+                $html[] = '<div class="panel panel-warning portal-column-empty show">';
+                $html[] = '<div class="panel-heading">';
+                $html[] = '<div class="pull-right">';
+
+                $glyph = new FontAwesomeGlyph('times');
+
+                $html[] = '<a href="#" class="portal-action portal-action-column-delete show" data-column-id="' .
+                    $newColumn->getId() . ' title="' . $translator->trans('Delete', [], StringUtilities::LIBRARIES) .
+                    '">';
+                $html[] = $glyph->render() . '</a>';
+
+                $html[] = '</div>';
+                $html[] =
+                    '<h3 class="panel-title">' . $translator->trans('EmptyColumnTitle', [], Manager::CONTEXT) . '</h3>';
+                $html[] = '</div>';
+                $html[] = '<div class="panel-body">';
+                $html[] = $translator->trans('EmptyColumnBody', [], Manager::CONTEXT);
+                $html[] = '</div>';
+                $html[] = '</div>';
+
+                $html[] = '</div>';
+
+                $result = new JsonAjaxResult(200);
+                $result->set_property(self::PROPERTY_HTML, implode(PHP_EOL, $html));
+
+                if (isset($newWidths))
+                {
+                    $result->set_property(self::PROPERTY_WIDTH, $newWidths);
+                }
+
+                $result->display();
+            }
+            else
+            {
+                JsonAjaxResult::bad_request();
+            }
         }
-
-        $tabId = $this->getPostDataValue(self::PARAM_TAB);
-
-        if (isset($tabId))
+        catch (NotAllowedException $exception)
         {
-            if (count($this->getColumns()) >= 12)
-            {
-                JsonAjaxResult::general_error(Translation::get('TooManyColumns'));
-            }
+            JsonAjaxResult::not_allowed($exception->getMessage());
+        }
+        catch (Throwable $throwable)
+        {
+            JsonAjaxResult::error(500, $throwable->getMessage());
+        }
+    }
 
-            try
-            {
-                $newColumnWidth = $this->determineNewColumnWidth();
-            }
-            catch (Exception $exception)
-            {
-                $newColumnWidth = 1;
-                $newWidths = $this->recalculateColumnWidths();
-            }
+    /**
+     * @throws \Exception
+     */
+    public function determineNewColumnWidth(ArrayCollection $columns): int
+    {
+        $widthTotal = $this->getCurrentTotalWidth($columns);
 
-            // Create the new column + a dummy block for it
-            $newColumn = new Column();
-            $newColumn->setParentId($tabId);
-            $newColumn->setTitle(Translation::get('NewColumn'));
-            $newColumn->setWidth($newColumnWidth);
-            $newColumn->setUserId($userId);
-
-            if (! $newColumn->create())
-            {
-                JsonAjaxResult::general_error(Translation::get('ColumnNotAdded'));
-            }
-
-            // Render the actual html to be displayed
-            $html[] = '<div class="col-xs-12 col-md-' . $newColumn->getWidth() . ' portal-column" data-tab-id="' . $tabId .
-                 '" data-element-id="' . $newColumn->get_id() . '">';
-
-            $html[] = '<div class="panel panel-warning portal-column-empty show">';
-            $html[] = '<div class="panel-heading">';
-            $html[] = '<div class="pull-right">';
-
-            $glyph = new FontAwesomeGlyph('times');
-
-            $html[] = '<a href="#" class="portal-action portal-action-column-delete show" data-column-id="' .
-                 $newColumn->get_id() . ' title="' . Translation::get('Delete') . '">';
-            $html[] = $glyph->render() . '</a>';
-
-            $html[] = '</div>';
-            $html[] = '<h3 class="panel-title">' . Translation::get('EmptyColumnTitle') . '</h3>';
-            $html[] = '</div>';
-            $html[] = '<div class="panel-body">';
-            $html[] = Translation::get('EmptyColumnBody');
-            $html[] = '</div>';
-            $html[] = '</div>';
-
-            $html[] = '</div>';
-
-            $result = new JsonAjaxResult(200);
-            $result->set_property(self::PROPERTY_HTML, implode(PHP_EOL, $html));
-
-            if (isset($newWidths))
-            {
-                $result->set_property(self::PROPERTY_WIDTH, $newWidths);
-            }
-
-            $result->display();
+        if ($widthTotal < 12)
+        {
+            return 12 - $widthTotal;
         }
         else
         {
-            JsonAjaxResult::bad_request();
+            throw new Exception($this->getTranslator()->trans('ColumnsTooWide', [], Manager::CONTEXT));
         }
     }
 
-    public function recalculateColumnWidths()
+    /**
+     * @param string $tabId
+     * @param ?\Chamilo\Core\User\Storage\DataClass\User $user
+     *
+     * @return \Doctrine\Common\Collections\ArrayCollection<\Chamilo\Core\Home\Storage\DataClass\Element>
+     * @throws \Chamilo\Libraries\Storage\Exception\DataClassNoResultException
+     */
+    public function getColumns(string $tabId, ?User $user = null): ArrayCollection
     {
-        $currentTotal = $this->getCurrentTotalWidth();
-        $columns = $this->getColumns();
+        return $this->getHomeService()->findElementsByTypeUserAndParentIdentifier(
+            Element::TYPE_COLUMN, $user, $tabId
+        );
+    }
+
+    /**
+     * @throws \Chamilo\Libraries\Storage\Exception\DataClassNoResultException
+     */
+    public function getCurrentTotalWidth(ArrayCollection $columns): int
+    {
+        $widthTotal = 0;
+
+        foreach ($columns as $column)
+        {
+            $widthTotal += $column->getWidth();
+        }
+
+        return $widthTotal;
+    }
+
+    public function getRequiredPostParameters(array $postParameters = []): array
+    {
+        $postParameters[] = self::PARAM_TAB;
+
+        return parent::getRequiredPostParameters($postParameters);
+    }
+
+    public function orderColumnsByWidth($widthLeft, $widthRight): int
+    {
+        if ($widthLeft < $widthRight)
+        {
+            return - 1;
+        }
+        elseif ($widthLeft > $widthRight)
+        {
+            return 1;
+        }
+        else
+        {
+            return 0;
+        }
+    }
+
+    /**
+     * @return int[]
+     * @throws \Chamilo\Libraries\Storage\Exception\DataClassNoResultException
+     */
+    public function recalculateColumnWidths(ArrayCollection $columns): array
+    {
+        $currentTotal = $this->getCurrentTotalWidth($columns);
         $newWidths = [];
 
         foreach ($columns as $column)
@@ -153,82 +223,5 @@ class ColumnAddComponent extends Manager
         }
 
         return $newWidths;
-    }
-
-    public function orderColumnsByWidth($widthLeft, $widthRight)
-    {
-        if ($widthLeft < $widthRight)
-        {
-            return - 1;
-        }
-        elseif ($widthLeft > $widthRight)
-        {
-            return 1;
-        }
-        else
-        {
-            return 0;
-        }
-    }
-
-    /**
-     *
-     * @return int
-     */
-    public function getCurrentTotalWidth()
-    {
-        $widthTotal = 0;
-
-        foreach ($this->getColumns() as $column)
-        {
-            $widthTotal += $column->getWidth();
-        }
-
-        return $widthTotal;
-    }
-
-    /**
-     *
-     * @return int
-     */
-    public function determineNewColumnWidth()
-    {
-        $widthTotal = $this->getCurrentTotalWidth();
-
-        if ($widthTotal < 12)
-        {
-            return 12 - $widthTotal;
-        }
-        else
-        {
-            throw new Exception('ColumnsTooWide');
-        }
-    }
-
-    /**
-     *
-     * @return \Chamilo\Core\Home\Storage\DataClass\Column[]
-     */
-    public function getColumns()
-    {
-        if (! isset($this->columns))
-        {
-            $tabId = $this->getPostDataValue(self::PARAM_TAB);
-            $userId = DataManager::determine_user_id();
-
-            $conditions = [];
-
-            $conditions[] = new EqualityCondition(
-                new PropertyConditionVariable(Element::class, Element::PROPERTY_PARENT_ID),
-                new StaticConditionVariable($tabId));
-            $conditions[] = new EqualityCondition(
-                new PropertyConditionVariable(Element::class, Element::PROPERTY_USER_ID),
-                new StaticConditionVariable($userId));
-
-            $parameters = new DataClassRetrievesParameters(new AndCondition($conditions));
-            $this->columns = DataManager::retrieves(Column::class, $parameters);
-        }
-
-        return $this->columns;
     }
 }

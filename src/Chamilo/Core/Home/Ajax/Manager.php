@@ -1,6 +1,7 @@
 <?php
 namespace Chamilo\Core\Home\Ajax;
 
+use Chamilo\Core\Home\Service\HomeService;
 use Chamilo\Libraries\Architecture\AjaxManager;
 
 /**
@@ -12,4 +13,9 @@ use Chamilo\Libraries\Architecture\AjaxManager;
 abstract class Manager extends AjaxManager
 {
     public const CONTEXT = __NAMESPACE__;
+
+    public function getHomeService(): HomeService
+    {
+        return $this->getService(HomeService::class);
+    }
 }

@@ -2,58 +2,59 @@
 namespace Chamilo\Core\Home\Ajax\Component;
 
 use Chamilo\Core\Home\Ajax\Manager;
-use Chamilo\Core\Home\Storage\DataClass\Column;
-use Chamilo\Core\Home\Storage\DataManager;
+use Chamilo\Libraries\Architecture\Exceptions\NotAllowedException;
 use Chamilo\Libraries\Architecture\JsonAjaxResult;
-use Chamilo\Libraries\Translation\Translation;
+use Throwable;
 
 /**
- *
- * @package home.ajax
- * @author Hans De Bisschop
+ * @package Chamilo\Core\Home\Ajax\Component
+ * @author  Hans De Bisschop <hans.de.bisschop@ehb.be>
  */
 class ColumnDeleteComponent extends Manager
 {
     public const PARAM_COLUMN = 'column';
 
-    /*
-     * (non-PHPdoc) @see common\libraries.AjaxManager::required_parameters()
-     */
-    public function getRequiredPostParameters(): array
-    {
-        return array(self::PARAM_COLUMN);
-    }
-
-    /*
-     * (non-PHPdoc) @see common\libraries.AjaxManager::run()
-     */
     public function run()
     {
-        $userId = DataManager::determine_user_id();
-        
-        if ($userId === false)
+        try
         {
-            JsonAjaxResult::not_allowed();
-        }
-        
-        $column = DataManager::retrieve_by_id(
-            Column::class,
-            intval($this->getPostDataValue(self::PARAM_COLUMN)));
-        
-        if ($column->getUserId() == $userId)
-        {
-            if ($column->delete())
+            $translator = $this->getTranslator();
+            $homepageUserId = $this->getHomeService()->determineUserId(
+                $this->getUser(), $this->getSession()->get('Chamilo\Core\Home\General')
+            );
+
+            $column = $this->getHomeService()->findElementByIdentifier($this->getPostDataValue(self::PARAM_COLUMN));
+
+            if ($column->getUserId() == $homepageUserId)
             {
-                JsonAjaxResult::success();
+                if ($this->getHomeService()->deleteElement($column))
+                {
+                    JsonAjaxResult::success();
+                }
+                else
+                {
+                    JsonAjaxResult::general_error($translator->trans('ColumnNotDeleted', [], Manager::CONTEXT));
+                }
             }
             else
             {
-                JsonAjaxResult::general_error(Translation::get('ColumnNotDeleted'));
+                JsonAjaxResult::not_allowed();
             }
         }
-        else
+        catch (NotAllowedException $exception)
         {
-            JsonAjaxResult::not_allowed();
+            JsonAjaxResult::not_allowed($exception->getMessage());
         }
+        catch (Throwable $throwable)
+        {
+            JsonAjaxResult::error(500, $throwable->getMessage());
+        }
+    }
+
+    public function getRequiredPostParameters(array $postParameters = []): array
+    {
+        $postParameters[] = self::PARAM_COLUMN;
+
+        return parent::getRequiredPostParameters($postParameters);
     }
 }

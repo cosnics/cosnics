@@ -55,7 +55,7 @@ class ClearParameterComponent extends Manager
      * (non-PHPdoc) @see common\libraries.AjaxManager::run()
      */
 
-    public function getRequiredPostParameters(): array
+    public function getRequiredPostParameters(array $postParameters = []): array
     {
         return [self::PARAM_PARAMETER];
     }

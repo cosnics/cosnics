@@ -70,7 +70,7 @@ class RenditionImplementationComponent extends Manager
      * (non-PHPdoc) @see common\libraries.AjaxManager::run()
      */
 
-    public function getRequiredPostParameters(): array
+    public function getRequiredPostParameters(array $postParameters = []): array
     {
         return array(
             self::PARAM_CONTENT_OBJECT_ID, self::PARAM_FORMAT, self::PARAM_VIEW, self::PARAM_SECURITY_CODE,
