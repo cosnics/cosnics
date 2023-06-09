@@ -2,76 +2,91 @@
 namespace Chamilo\Core\Home\Ajax\Component;
 
 use Chamilo\Core\Home\Ajax\Manager;
-use Chamilo\Core\Home\Storage\DataManager;
+use Chamilo\Core\Home\Storage\DataClass\Element;
+use Chamilo\Libraries\Architecture\Exceptions\NotAllowedException;
 use Chamilo\Libraries\Architecture\JsonAjaxResult;
-use Chamilo\Libraries\Translation\Translation;
+use Throwable;
 
 /**
- *
- * @author Hans De Bisschop @dependency repository.content_object.assessment_multiple_choice_question;
+ * @package Chamilo\Core\Home\Ajax\Component
+ * @author  Hans De Bisschop <hans.de.bisschop@ehb.be>
  */
 class BlockSortComponent extends Manager
 {
     public const PARAM_COLUMN = 'column';
     public const PARAM_ORDER = 'order';
 
-    /*
-     * (non-PHPdoc) @see common\libraries.AjaxManager::required_parameters()
-     */
-    public function getRequiredPostParameters(array $postParameters = []): array
-    {
-        return array(self::PARAM_COLUMN, self::PARAM_ORDER);
-    }
-
-    /*
-     * (non-PHPdoc) @see common\libraries.AjaxManager::run()
-     */
     public function run()
     {
-        $userId = DataManager::determine_user_id();
-        
-        if ($userId === false)
+        try
         {
-            JsonAjaxResult::not_allowed();
-        }
-        
-        $columnId = $this->getPostDataValue(self::PARAM_COLUMN);
-        parse_str($this->getPostDataValue(self::PARAM_ORDER), $blocks);
-        
-        $column = DataManager::retrieve_by_id(Column::class, $columnId);
-        
-        if ($column->getUserId() == $userId)
-        {
-            $errors = 0;
-            
-            foreach ($blocks[self::PARAM_ORDER] as $sortOrder => $blockId)
+            $translator = $this->getTranslator();
+            $homepageUserId = $this->getHomeService()->determineUserId(
+                $this->getUser(), $this->getSession()->get('Chamilo\Core\Home\General')
+            );
+
+            parse_str($this->getPostDataValue(self::PARAM_ORDER), $blocks);
+
+            $column = $this->getHomeService()->findElementByIdentifier($this->getPostDataValue(self::PARAM_COLUMN));
+
+            if (!$column instanceof Element || !$column->isColumn())
             {
-                $block = DataManager::retrieve_by_id(Block::class, intval($blockId));
-                
-                if ($block)
+                JsonAjaxResult::general_error($translator->trans('NoValidBlockSelected', [], Manager::CONTEXT));
+            }
+
+            if ($column->getUserId() == $homepageUserId)
+            {
+                $errors = 0;
+
+                foreach ($blocks[self::PARAM_ORDER] as $sortOrder => $blockId)
                 {
-                    $block->setParentId($column->get_id());
-                    $block->setSort($sortOrder + 1);
-                    
-                    if (! $block->update())
+                    $block = $this->getHomeService()->findElementByIdentifier($blockId);
+
+                    if ($block instanceof Element && $block->isBlock() && $block->getUserId() == $homepageUserId)
+                    {
+                        $block->setParentId($column->getId());
+                        $block->setSort($sortOrder + 1);
+
+                        if (!$this->getHomeService()->updateElement($block))
+                        {
+                            $errors ++;
+                        }
+                    }
+                    else
                     {
                         $errors ++;
                     }
                 }
-            }
-            
-            if ($errors > 0)
-            {
-                JsonAjaxResult::error(409, Translation::get('OneOrMoreBlocksNotUpdated'));
+
+                if ($errors > 0)
+                {
+                    JsonAjaxResult::error(409, $translator->trans('OneOrMoreBlocksNotUpdated'));
+                }
+                else
+                {
+                    JsonAjaxResult::success();
+                }
             }
             else
             {
-                JsonAjaxResult::success();
+                JsonAjaxResult::not_allowed();
             }
         }
-        else
+        catch (NotAllowedException $exception)
         {
-            JsonAjaxResult::not_allowed();
+            JsonAjaxResult::not_allowed($exception->getMessage());
         }
+        catch (Throwable $throwable)
+        {
+            JsonAjaxResult::error(500, $throwable->getMessage());
+        }
+    }
+
+    public function getRequiredPostParameters(array $postParameters = []): array
+    {
+        $postParameters[] = self::PARAM_COLUMN;
+        $postParameters[] = self::PARAM_ORDER;
+
+        return parent::getRequiredPostParameters($postParameters);
     }
 }

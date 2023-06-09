@@ -2,62 +2,65 @@
 namespace Chamilo\Core\Home\Ajax\Component;
 
 use Chamilo\Core\Home\Ajax\Manager;
-use Chamilo\Core\Home\Storage\DataClass\Tab;
-use Chamilo\Core\Home\Storage\DataManager;
+use Chamilo\Libraries\Architecture\Exceptions\NotAllowedException;
 use Chamilo\Libraries\Architecture\JsonAjaxResult;
-use Chamilo\Libraries\Translation\Translation;
+use Throwable;
 
 /**
- *
- * @package home.ajax
- * @author Hans De Bisschop
+ * @package Chamilo\Core\Home\Ajax\Component
+ * @author  Hans De Bisschop <hans.de.bisschop@ehb.be>
  */
 class TabEditComponent extends Manager
 {
     public const PARAM_TAB = 'tab';
     public const PARAM_TITLE = 'title';
 
-    /*
-     * (non-PHPdoc) @see common\libraries.AjaxManager::required_parameters()
-     */
-    public function getRequiredPostParameters(array $postParameters = []): array
-    {
-        return array(self::PARAM_TAB, self::PARAM_TITLE);
-    }
-
-    /*
-     * (non-PHPdoc) @see common\libraries.AjaxManager::run()
-     */
     public function run()
     {
-        $userId = DataManager::determine_user_id();
-        
-        if ($userId === false)
+        try
         {
-            JsonAjaxResult::not_allowed();
-        }
-        
-        $tab = intval($this->getPostDataValue(self::PARAM_TAB));
-        $title = $this->getPostDataValue(self::PARAM_TITLE);
-        
-        $tab = DataManager::retrieve_by_id(Tab::class, $tab);
-        
-        if ($tab->getUserId() == $userId)
-        {
-            $tab->setTitle($title);
-            
-            if ($tab->update())
+            $translator = $this->getTranslator();
+            $homepageUserId = $this->getHomeService()->determineUserId(
+                $this->getUser(), $this->getSession()->get('Chamilo\Core\Home\General')
+            );
+
+            $title = $this->getPostDataValue(self::PARAM_TITLE);
+
+            $tab = $this->getHomeService()->findElementByIdentifier($this->getPostDataValue(self::PARAM_TAB));
+
+            if ($tab->getUserId() == $homepageUserId)
             {
-                JsonAjaxResult::success();
+                $tab->setTitle($title);
+
+                if ($this->getHomeService()->updateElement($tab))
+                {
+                    JsonAjaxResult::success();
+                }
+                else
+                {
+                    JsonAjaxResult::general_error($translator->trans('TabNotUpdated', [], Manager::CONTEXT));
+                }
             }
             else
             {
-                JsonAjaxResult::general_error(Translation::get('TabNotUpdated'));
+                JsonAjaxResult::not_allowed();
             }
         }
-        else
+        catch (NotAllowedException $exception)
         {
-            JsonAjaxResult::not_allowed();
+            JsonAjaxResult::not_allowed($exception->getMessage());
         }
+        catch (Throwable $throwable)
+        {
+            JsonAjaxResult::error(500, $throwable->getMessage());
+        }
+    }
+
+    public function getRequiredPostParameters(array $postParameters = []): array
+    {
+        $postParameters[] = self::PARAM_TAB;
+        $postParameters[] = self::PARAM_TITLE;
+
+        return parent::getRequiredPostParameters($postParameters);
     }
 }

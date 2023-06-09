@@ -2,6 +2,7 @@
 namespace Chamilo\Core\Home\Ajax\Component;
 
 use Chamilo\Core\Home\Ajax\Manager;
+use Chamilo\Core\Home\Storage\DataClass\Element;
 use Chamilo\Libraries\Architecture\Exceptions\NotAllowedException;
 use Chamilo\Libraries\Architecture\JsonAjaxResult;
 use Throwable;
@@ -24,6 +25,11 @@ class ColumnDeleteComponent extends Manager
             );
 
             $column = $this->getHomeService()->findElementByIdentifier($this->getPostDataValue(self::PARAM_COLUMN));
+
+            if (!$column instanceof Element || !$column->isColumn())
+            {
+                JsonAjaxResult::general_error($translator->trans('NoValidColumnSelected', [], Manager::CONTEXT));
+            }
 
             if ($column->getUserId() == $homepageUserId)
             {

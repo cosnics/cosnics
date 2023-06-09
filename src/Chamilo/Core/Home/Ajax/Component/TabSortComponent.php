@@ -2,61 +2,73 @@
 namespace Chamilo\Core\Home\Ajax\Component;
 
 use Chamilo\Core\Home\Ajax\Manager;
-use Chamilo\Core\Home\Storage\DataClass\Tab;
-use Chamilo\Core\Home\Storage\DataManager;
+use Chamilo\Libraries\Architecture\Exceptions\NotAllowedException;
 use Chamilo\Libraries\Architecture\JsonAjaxResult;
-use Chamilo\Libraries\Translation\Translation;
+use Throwable;
 
 /**
- *
- * @author Hans De Bisschop @dependency repository.content_object.assessment_multiple_choice_question;
+ * @package Chamilo\Core\Home\Ajax\Component
+ * @author  Hans De Bisschop <hans.de.bisschop@ehb.be>
  */
 class TabSortComponent extends Manager
 {
     public const PARAM_ORDER = 'order';
 
-    /*
-     * (non-PHPdoc) @see common\libraries.AjaxManager::required_parameters()
-     */
-    public function getRequiredPostParameters(array $postParameters = []): array
-    {
-        return array(self::PARAM_ORDER);
-    }
-
-    /*
-     * (non-PHPdoc) @see common\libraries.AjaxManager::run()
-     */
     public function run()
     {
-        $user_id = DataManager::determine_user_id();
-        
-        if ($user_id === false)
+        try
         {
-            JsonAjaxResult::not_allowed();
-        }
-        
-        parse_str($this->getPostDataValue(self::PARAM_ORDER), $tabs);
-        
-        $errors = 0;
-        
-        foreach ($tabs[self::PARAM_ORDER] as $sortOrder => $tabId)
-        {
-            $tab = DataManager::retrieve_by_id(Tab::class, intval($tabId));
-            $tab->setSort($sortOrder + 1);
-            
-            if (! $tab->update())
+            $translator = $this->getTranslator();
+            $homepageUserId = $this->getHomeService()->determineUserId(
+                $this->getUser(), $this->getSession()->get('Chamilo\Core\Home\General')
+            );
+
+            parse_str($this->getPostDataValue(self::PARAM_ORDER), $tabs);
+
+            $errors = 0;
+
+            foreach ($tabs[self::PARAM_ORDER] as $sortOrder => $tabId)
             {
-                $errors ++;
+                $tab = $this->getHomeService()->findElementByIdentifier($tabId);
+
+                if ($tab->getUserId() == $homepageUserId)
+                {
+                    $tab->setSort($sortOrder + 1);
+
+                    if (!$this->getHomeService()->updateElement($tab))
+                    {
+                        $errors ++;
+                    }
+                }
+                else
+                {
+                    $errors ++;
+                }
+            }
+
+            if ($errors > 0)
+            {
+                JsonAjaxResult::error(409, $translator->trans('OneOrMoreTabsNotUpdated', [], Manager::CONTEXT));
+            }
+            else
+            {
+                JsonAjaxResult::success();
             }
         }
-        
-        if ($errors > 0)
+        catch (NotAllowedException $exception)
         {
-            JsonAjaxResult::error(409, Translation::get('OneOrMoreTabsNotUpdated'));
+            JsonAjaxResult::not_allowed($exception->getMessage());
         }
-        else
+        catch (Throwable $throwable)
         {
-            JsonAjaxResult::success();
+            JsonAjaxResult::error(500, $throwable->getMessage());
         }
+    }
+
+    public function getRequiredPostParameters(array $postParameters = []): array
+    {
+        $postParameters[] = self::PARAM_ORDER;
+
+        return parent::getRequiredPostParameters($postParameters);
     }
 }

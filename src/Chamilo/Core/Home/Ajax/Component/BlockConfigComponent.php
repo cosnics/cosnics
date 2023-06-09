@@ -5,21 +5,15 @@ use Chamilo\Core\Home\Ajax\Manager;
 use Chamilo\Core\Home\Architecture\Interfaces\ConfigurableBlockInterface;
 use Chamilo\Core\Home\Architecture\Interfaces\ContentObjectPublicationBlockInterface;
 use Chamilo\Core\Home\Renderer\BlockRendererFactory;
-use Chamilo\Core\Home\Repository\ContentObjectPublicationRepository;
-use Chamilo\Core\Home\Repository\HomeRepository;
-use Chamilo\Core\Home\Rights\Service\ElementRightsService;
-use Chamilo\Core\Home\Rights\Storage\Repository\RightsRepository;
 use Chamilo\Core\Home\Service\ContentObjectPublicationService;
-use Chamilo\Core\Home\Service\HomeService;
 use Chamilo\Core\Home\Storage\DataClass\Element;
-use Chamilo\Core\Home\Storage\DataManager;
-use Chamilo\Core\Repository\Publication\Storage\Repository\PublicationRepository;
+use Chamilo\Libraries\Architecture\Exceptions\NotAllowedException;
 use Chamilo\Libraries\Architecture\JsonAjaxResult;
+use Throwable;
 
 /**
- *
  * @package home.ajax
- * @author Hans De Bisschop
+ * @author  Hans De Bisschop
  */
 class BlockConfigComponent extends Manager
 {
@@ -27,98 +21,108 @@ class BlockConfigComponent extends Manager
     public const PARAM_DATA = 'data';
     public const PROPERTY_BLOCK = 'block';
 
-    /*
-     * (non-PHPdoc) @see common\libraries.AjaxManager::required_parameters()
-     */
-    public function getRequiredPostParameters(array $postParameters = []): array
-    {
-        return array(self::PARAM_BLOCK, self::PARAM_DATA);
-    }
-
-    /*
-     * (non-PHPdoc) @see common\libraries.AjaxManager::run()
-     */
     public function run()
     {
-        $userId = DataManager::determine_user_id();
-        
-        if ($userId === false)
+        try
         {
-            JsonAjaxResult::not_allowed();
-        }
-        
-        $block = intval($this->getPostDataValue(self::PARAM_BLOCK));
-        $data = $this->getPostDataValue(self::PARAM_DATA);
-        
-        $block = DataManager::retrieve_by_id(Block::class, $block);
-        
-        /** @var Element $block */
-        if ($block->getUserId() == $userId)
-        {
-            $postedValues = $this->getPostDataValue(self::PARAM_DATA);
-            
-            // $rendererFactory = new \Chamilo\Core\Home\Renderer\Factory(Renderer::TYPE_BASIC, $this);
-            // $renderer = $rendererFactory->getRenderer();
-            
-            $homeService = new HomeService(new HomeRepository(), new ElementRightsService(new RightsRepository()), $this->getSession());
-            
-            $blockRendererFactory = new BlockRendererFactory(
-                $this, 
-                $homeService, 
-                $block, 
-                BlockRendererFactory::SOURCE_AJAX);
-            
-            $blockRenderer = $blockRendererFactory->getRenderer();
-            
-            $contentObjectPublicationService = new ContentObjectPublicationService(
-                new ContentObjectPublicationRepository(new PublicationRepository()));
-            
-            if ($blockRenderer instanceof ConfigurableBlockInterface ||
-                 $blockRenderer instanceof ContentObjectPublicationBlockInterface)
+            $translator = $this->getTranslator();
+
+            $isGeneralMode = $this->getSession()->get('Chamilo\Core\Home\General');
+            $homepageUser = $this->getHomeService()->determineUser(
+                $this->getUser(), $isGeneralMode
+            );
+            $homepageUserId = $this->getHomeService()->determineUserId(
+                $this->getUser(), $isGeneralMode
+            );
+
+            $block = $this->getHomeService()->findElementByIdentifier($this->getPostDataValue(self::PARAM_BLOCK));
+
+            if (!$block instanceof Element || !$block->isBlock())
             {
-                if ($blockRenderer instanceof ConfigurableBlockInterface)
+                JsonAjaxResult::general_error($translator->trans('NoValidBlockSelected', [], Manager::CONTEXT));
+            }
+
+            if ($block->getUserId() == $homepageUserId)
+            {
+                $postedValues = $this->getPostDataValue(self::PARAM_DATA);
+
+                $blockRenderer = $this->getBlockRendererFactory()->getRenderer($block);
+
+                if ($blockRenderer instanceof ConfigurableBlockInterface ||
+                    $blockRenderer instanceof ContentObjectPublicationBlockInterface)
                 {
-                    foreach ($blockRenderer->getConfigurationVariables() as $configurationVariable)
+                    if ($blockRenderer instanceof ConfigurableBlockInterface)
                     {
-                        $block->setSetting($configurationVariable, $postedValues[$configurationVariable]);
+                        foreach ($blockRenderer->getConfigurationVariables() as $configurationVariable)
+                        {
+                            $block->setSetting($configurationVariable, $postedValues[$configurationVariable]);
+                        }
                     }
-                }
-                
-                if ($blockRenderer instanceof ContentObjectPublicationBlockInterface)
-                {
-                    foreach ($blockRenderer->getContentObjectConfigurationVariables() as $configurationVariable)
+
+                    if ($blockRenderer instanceof ContentObjectPublicationBlockInterface)
                     {
-                        $contentObjectPublicationService->setOnlyContentObjectForElement(
-                            $block, 
-                            $postedValues[$configurationVariable]);
+                        foreach ($blockRenderer->getContentObjectConfigurationVariables() as $configurationVariable)
+                        {
+                            $this->getContentObjectPublicationService()->setOnlyContentObjectForElement(
+                                $block, $postedValues[$configurationVariable]
+                            );
+                        }
                     }
-                }
-                
-                if (isset($postedValues[Block::PROPERTY_TITLE]))
-                {
-                    $block->setTitle($postedValues[Block::PROPERTY_TITLE]);
-                }
-                
-                if (! $block->update())
-                {
-                    JsonAjaxResult::general_error();
+
+                    if (isset($postedValues[Element::PROPERTY_TITLE]))
+                    {
+                        $block->setTitle($postedValues[Element::PROPERTY_TITLE]);
+                    }
+
+                    if (!$this->getHomeService()->updateElement($block))
+                    {
+                        JsonAjaxResult::general_error();
+                    }
+                    else
+                    {
+
+                        $result = new JsonAjaxResult(200);
+                        $result->set_property(
+                            self::PROPERTY_BLOCK, $blockRenderer->render($block, $isGeneralMode, $homepageUser)
+                        );
+                        $result->display();
+                    }
                 }
                 else
                 {
-                    
-                    $result = new JsonAjaxResult(200);
-                    $result->set_property(self::PROPERTY_BLOCK, $blockRenderer->toHtml());
-                    $result->display();
+                    JsonAjaxResult::bad_request();
                 }
             }
             else
             {
-                JsonAjaxResult::bad_request();
+                JsonAjaxResult::not_allowed();
             }
         }
-        else
+        catch (NotAllowedException $exception)
         {
-            JsonAjaxResult::not_allowed();
+            JsonAjaxResult::not_allowed($exception->getMessage());
         }
+        catch (Throwable $throwable)
+        {
+            JsonAjaxResult::error(500, $throwable->getMessage());
+        }
+    }
+
+    public function getBlockRendererFactory(): BlockRendererFactory
+    {
+        return $this->getService(BlockRendererFactory::class);
+    }
+
+    public function getContentObjectPublicationService(): ContentObjectPublicationService
+    {
+        return $this->getService(ContentObjectPublicationService::class);
+    }
+
+    public function getRequiredPostParameters(array $postParameters = []): array
+    {
+        $postParameters[] = self::PARAM_BLOCK;
+        $postParameters[] = self::PARAM_DATA;
+
+        return parent::getRequiredPostParameters($postParameters);
     }
 }

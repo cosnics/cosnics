@@ -2,68 +2,66 @@
 namespace Chamilo\Core\Home\Ajax\Component;
 
 use Chamilo\Core\Home\Ajax\Manager;
-use Chamilo\Core\Home\Service\HomeService;
+use Chamilo\Core\Home\Storage\DataClass\Element;
 use Chamilo\Core\Home\Storage\DataClass\Tab;
-use Chamilo\Core\Home\Storage\DataManager;
+use Chamilo\Libraries\Architecture\Exceptions\NotAllowedException;
 use Chamilo\Libraries\Architecture\JsonAjaxResult;
-use Chamilo\Libraries\Translation\Translation;
+use Throwable;
 
 /**
- * @package home.ajax
- * @author  Hans De Bisschop
+ * @package Chamilo\Core\Home\Ajax\Component
+ * @author  Hans De Bisschop <hans.de.bisschop@ehb.be>
  */
 class TabDeleteComponent extends Manager
 {
     public const PARAM_TAB = 'tab';
 
-    /*
-     * (non-PHPdoc) @see common\libraries.AjaxManager::required_parameters()
-     */
-
     public function run()
     {
-        $userId = DataManager::determine_user_id();
-
-        if ($userId === false)
+        try
         {
-            JsonAjaxResult::not_allowed();
-        }
+            $translator = $this->getTranslator();
+            $homepageUserId = $this->getHomeService()->determineUserId(
+                $this->getUser(), $this->getSession()->get('Chamilo\Core\Home\General')
+            );
 
-        $tab = DataManager::retrieve_by_id(Tab::class, intval($this->getPostDataValue(self::PARAM_TAB)));
+            $tab = $this->getHomeService()->findElementByIdentifier($this->getPostDataValue(self::PARAM_TAB));
 
-        if (!$tab instanceof Tab)
-        {
-            JsonAjaxResult::general_error(Translation::getInstance()->getTranslation('NoValidTabSelected'));
-        }
-
-        if ($tab->getUserId() == $userId && $this->getHomeService()->tabCanBeDeleted($tab))
-        {
-            if ($tab->delete())
+            if (!$tab instanceof Element || !$tab->isTab())
             {
-                JsonAjaxResult::success();
+                JsonAjaxResult::general_error($translator->trans('NoValidTabSelected', [], Manager::CONTEXT));
+            }
+
+            if ($tab->getUserId() == $homepageUserId && $this->getHomeService()->tabCanBeDeleted($tab))
+            {
+                if ($this->getHomeService()->deleteElement($tab))
+                {
+                    JsonAjaxResult::success();
+                }
+                else
+                {
+                    JsonAjaxResult::general_error($translator->trans('TabNotDeleted', [], Manager::CONTEXT));
+                }
             }
             else
             {
-                JsonAjaxResult::general_error(Translation::get('TabNotDeleted'));
+                JsonAjaxResult::not_allowed();
             }
         }
-        else
+        catch (NotAllowedException $exception)
         {
-            JsonAjaxResult::not_allowed();
+            JsonAjaxResult::not_allowed($exception->getMessage());
+        }
+        catch (Throwable $throwable)
+        {
+            JsonAjaxResult::error(500, $throwable->getMessage());
         }
     }
-
-    public function getHomeService(): HomeService
-    {
-        return $this->getService(HomeService::class);
-    }
-
-    /*
-     * (non-PHPdoc) @see common\libraries.AjaxManager::run()
-     */
 
     public function getRequiredPostParameters(array $postParameters = []): array
     {
-        return [self::PARAM_TAB];
+        $postParameters[] = self::PARAM_TAB;
+
+        return parent::getRequiredPostParameters($postParameters);
     }
 }

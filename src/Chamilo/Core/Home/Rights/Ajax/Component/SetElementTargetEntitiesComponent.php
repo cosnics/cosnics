@@ -2,15 +2,16 @@
 namespace Chamilo\Core\Home\Rights\Ajax\Component;
 
 use Chamilo\Core\Home\Renderer\BlockRendererFactory;
-use Chamilo\Core\Home\Repository\HomeRepository;
 use Chamilo\Core\Home\Rights\Ajax\Manager;
 use Chamilo\Core\Home\Rights\Service\ElementRightsService;
-use Chamilo\Core\Home\Rights\Storage\Repository\RightsRepository;
 use Chamilo\Core\Home\Service\HomeService;
-use Chamilo\Core\Home\Storage\DataManager;
+use Chamilo\Core\Home\Storage\DataClass\Element;
+use Chamilo\Core\User\Storage\DataClass\User;
+use Chamilo\Libraries\Architecture\Exceptions\NotAllowedException;
 use Chamilo\Libraries\Architecture\JsonAjaxResult;
 use Exception;
 use RuntimeException;
+use Throwable;
 
 /**
  * Ajax request to set the element target entities for a specific element instance
@@ -23,65 +24,81 @@ class SetElementTargetEntitiesComponent extends Manager
     public const PARAM_TARGET_ENTITIES = 'targetEntities';
     public const RESULT_PROPERTY_BLOCK = 'block';
 
-    /*
-     * Returns the required post parameters
-     * @return array
-     */
-
     public function run()
     {
-        $userId = DataManager::determine_user_id();
-        $generalMode = $this->getSession()->get('Chamilo\Core\Home\General');
-
-        if ($userId === false || !$generalMode || !$this->getUser()->is_platform_admin() || $userId > 0)
-        {
-            JsonAjaxResult::not_allowed();
-        }
-
-        $elementId = intval($this->getPostDataValue(self::PARAM_ELEMENT_ID));
-        $targetEntities = $this->getTargetEntitiesFromRequest();
-
-        $elementRightsService = new ElementRightsService(new RightsRepository());
-        $homeService = new HomeService(new HomeRepository(), $elementRightsService, $this->getSession());
-        $element = $homeService->getElementByIdentifier($elementId);
-
         try
         {
-            $elementRightsService->setTargetEntitiesForElement($element, $targetEntities);
+            $isGeneralMode = $this->getSession()->get('Chamilo\Core\Home\General');
+            $homepageUser = $this->getHomeService()->determineUser(
+                $this->getUser(), $isGeneralMode
+            );
 
-            if ($element->getType() != Block::class)
+            if (!is_null($homepageUser) || ($homepageUser instanceof User && !$homepageUser->isPlatformAdmin()))
             {
-                throw new RuntimeException('Only blocks are allowed at this time');
+                JsonAjaxResult::not_allowed();
             }
 
-            $blockRendererFactory = new BlockRendererFactory($this, $homeService, $element);
-            $blockRenderer = $blockRendererFactory->getRenderer();
+            try
+            {
+                $block =
+                    $this->getHomeService()->getElementByIdentifier($this->getPostDataValue(self::PARAM_ELEMENT_ID));
 
-            $result = new JsonAjaxResult(200);
-            $result->set_property(self::RESULT_PROPERTY_BLOCK, $blockRenderer->toHtml());
-            $result->display();
+                if (!$block instanceof Element || !$block->isBlock())
+                {
+                    throw new RuntimeException('Only blocks are allowed at this time');
+                }
+
+                $this->getElementRightsService()->setTargetEntitiesForElement(
+                    $block, $this->getTargetEntitiesFromRequest()
+                );
+
+                $blockRenderer = $this->getBlockRendererFactory()->getRenderer($block);
+
+                $result = new JsonAjaxResult(200);
+                $result->set_property(
+                    self::RESULT_PROPERTY_BLOCK, $blockRenderer->render($block, $isGeneralMode, $homepageUser)
+                );
+
+                $result->display();
+            }
+            catch (Exception $ex)
+            {
+                JsonAjaxResult::bad_request($ex->getMessage());
+            }
         }
-        catch (Exception $ex)
+        catch (NotAllowedException $exception)
         {
-            JsonAjaxResult::bad_request($ex->getMessage());
+            JsonAjaxResult::not_allowed($exception->getMessage());
+        }
+        catch (Throwable $throwable)
+        {
+            JsonAjaxResult::error(500, $throwable->getMessage());
         }
     }
 
-    /*
-     * Executes this component and returns the json based result
-     */
+    public function getBlockRendererFactory(): BlockRendererFactory
+    {
+        return $this->getService(BlockRendererFactory::class);
+    }
+
+    public function getElementRightsService(): ElementRightsService
+    {
+        return $this->getService(ElementRightsService::class);
+    }
+
+    public function getHomeService(): HomeService
+    {
+        return $this->getService(HomeService::class);
+    }
 
     public function getRequiredPostParameters(array $postParameters = []): array
     {
-        return [self::PARAM_ELEMENT_ID];
+        $postParameters[] = self::PARAM_ELEMENT_ID;
+
+        return parent::getRequiredPostParameters($postParameters);
     }
 
-    /**
-     * Retrieves and parses the target entities from the ajax request
-     *
-     * @return array
-     */
-    protected function getTargetEntitiesFromRequest()
+    protected function getTargetEntitiesFromRequest(): array
     {
         $results = [];
         $values = json_decode($this->getRequest()->getFromRequestOrQuery(self::PARAM_TARGET_ENTITIES));

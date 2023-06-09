@@ -31,7 +31,7 @@ class BlockDeleteComponent extends Manager
 
             $block = $this->getHomeService()->findElementByIdentifier($blockId);
 
-            if (!$block instanceof Element)
+            if (!$block instanceof Element || !$block->isBlock())
             {
                 throw new ObjectNotExistException($translator->trans('Block', [], Manager::CONTEXT), $blockId);
             }

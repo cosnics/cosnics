@@ -2,64 +2,69 @@
 namespace Chamilo\Core\Home\Ajax\Component;
 
 use Chamilo\Core\Home\Ajax\Manager;
-use Chamilo\Core\Home\Storage\DataManager;
-use Chamilo\Libraries\Architecture\Exceptions\ObjectNotExistException;
+use Chamilo\Core\Home\Storage\DataClass\Element;
+use Chamilo\Libraries\Architecture\Exceptions\NotAllowedException;
 use Chamilo\Libraries\Architecture\JsonAjaxResult;
-use Chamilo\Libraries\Translation\Translation;
+use Throwable;
 
 /**
- *
- * @package home.ajax
- * @author Hans De Bisschop
+ * @package Chamilo\Core\Home\Ajax\Component
+ * @author  Hans De Bisschop <hans.de.bisschop@ehb.be>
  */
 class BlockMoveComponent extends Manager
 {
-    public const PARAM_COLUMN = 'column';
     public const PARAM_BLOCK = 'block';
+    public const PARAM_COLUMN = 'column';
 
-    /*
-     * (non-PHPdoc) @see common\libraries.AjaxManager::required_parameters()
-     */
-    public function getRequiredPostParameters(array $postParameters = []): array
-    {
-        return array(self::PARAM_COLUMN, self::PARAM_BLOCK);
-    }
-
-    /*
-     * (non-PHPdoc) @see common\libraries.AjaxManager::run()
-     */
     public function run()
     {
-        $user_id = DataManager::determine_user_id();
-        
-        if ($user_id === false)
+        try
         {
-            JsonAjaxResult::not_allowed();
-        }
-        
-        $block = DataManager::retrieve_by_id(Block::class, intval($this->getPostDataValue(self::PARAM_BLOCK)));
+            $translator = $this->getTranslator();
+            $homepageUserId = $this->getHomeService()->determineUserId(
+                $this->getUser(), $this->getSession()->get('Chamilo\Core\Home\General')
+            );
 
-        if(!$block instanceof Block)
-        {
-            throw new ObjectNotExistException(Translation::getInstance()->getTranslation('Block'));
-        }
+            $block = $this->getHomeService()->findElementByIdentifier($this->getPostDataValue(self::PARAM_BLOCK));
 
-        if ($block->getUserId() == $user_id)
-        {
-            $block->setParentId($this->getPostDataValue(self::PARAM_COLUMN));
-            
-            if ($block->update())
+            if (!$block instanceof Element || !$block->isBlock())
             {
-                JsonAjaxResult::success();
+                JsonAjaxResult::general_error($translator->trans('NoValidBlockSelected', [], Manager::CONTEXT));
+            }
+
+            if ($block->getUserId() == $homepageUserId)
+            {
+                $block->setParentId($this->getPostDataValue(self::PARAM_COLUMN));
+
+                if ($this->getHomeService()->updateElement($block))
+                {
+                    JsonAjaxResult::success();
+                }
+                else
+                {
+                    JsonAjaxResult::general_error($translator->trans('BlockNotMovedToTab', [], Manager::CONTEXT));
+                }
             }
             else
             {
-                JsonAjaxResult::general_error(Translation::get('BlockNotMovedToTab'));
+                JsonAjaxResult::not_allowed();
             }
         }
-        else
+        catch (NotAllowedException $exception)
         {
-            JsonAjaxResult::not_allowed();
+            JsonAjaxResult::not_allowed($exception->getMessage());
         }
+        catch (Throwable $throwable)
+        {
+            JsonAjaxResult::error(500, $throwable->getMessage());
+        }
+    }
+
+    public function getRequiredPostParameters(array $postParameters = []): array
+    {
+        $postParameters[] = self::PARAM_COLUMN;
+        $postParameters[] = self::PARAM_BLOCK;
+
+        return parent::getRequiredPostParameters($postParameters);
     }
 }
