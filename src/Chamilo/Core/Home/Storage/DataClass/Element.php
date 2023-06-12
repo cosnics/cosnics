@@ -45,7 +45,7 @@ class Element extends DataClass implements DisplayOrderDataClassListenerSupport
     {
         if ($this->getType() == self::TYPE_BLOCK)
         {
-            return $this->getSetting(self::CONFIGURATION_BLOCK_TYPE);
+            return (string) $this->getSetting(self::CONFIGURATION_BLOCK_TYPE);
         }
 
         return null;
@@ -56,14 +56,16 @@ class Element extends DataClass implements DisplayOrderDataClassListenerSupport
      */
     public function getConfiguration(): array
     {
-        return unserialize($this->getDefaultProperty(self::PROPERTY_CONFIGURATION));
+        $serializedConfiguration = $this->getDefaultProperty(self::PROPERTY_CONFIGURATION);
+
+        return unserialize($serializedConfiguration ?: serialize([]));
     }
 
     public function getContext(): ?string
     {
         if ($this->getType() == self::TYPE_BLOCK)
         {
-            return $this->getSetting(self::CONFIGURATION_CONTEXT);
+            return (string) $this->getSetting(self::CONFIGURATION_CONTEXT);
         }
 
         return null;
@@ -101,7 +103,7 @@ class Element extends DataClass implements DisplayOrderDataClassListenerSupport
         return $this->getDefaultProperty(self::PROPERTY_PARENT_ID);
     }
 
-    public function getSetting(string $variable, $defaultValue = null): string
+    public function getSetting(string $variable, mixed $defaultValue = null): mixed
     {
         $configuration = $this->getConfiguration();
 
@@ -230,7 +232,7 @@ class Element extends DataClass implements DisplayOrderDataClassListenerSupport
         return $this;
     }
 
-    public function setSetting(string $variable, string $value): Element
+    public function setSetting(string $variable, mixed $value): Element
     {
         $configuration = $this->getConfiguration();
         $configuration[$variable] = $value;
@@ -272,7 +274,7 @@ class Element extends DataClass implements DisplayOrderDataClassListenerSupport
     {
         if ($this->getType() == self::TYPE_BLOCK)
         {
-            $this->setSetting(self::CONFIGURATION_VISIBILITY, (string) (int) $visibility);
+            $this->setSetting(self::CONFIGURATION_VISIBILITY, $visibility);
         }
 
         return $this;
@@ -282,7 +284,7 @@ class Element extends DataClass implements DisplayOrderDataClassListenerSupport
     {
         if ($this->getType() == self::TYPE_COLUMN)
         {
-            $this->setSetting(self::CONFIGURATION_WIDTH, (string) $width);
+            $this->setSetting(self::CONFIGURATION_WIDTH, $width);
         }
 
         return $this;

@@ -5,3 +5,10 @@
 .vertical-action div.icon {
     margin: 8px 15px 8px 0px;
 }
+
+/*
+ * Home Block Type: Chamilo\Core\Admin\Service\Home\PortalHomeBlockRenderer
+ */
+.fas-ci-3e6ec0c483645c8ff8f348bc40f68ebf:before {
+    content: "\f015";
+}

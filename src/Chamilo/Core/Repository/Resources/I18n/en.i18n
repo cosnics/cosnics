@@ -525,4 +525,4 @@ ContentObjectTemplateSynchronizerDescription = "Synchronizes the templates of a 
 UnknownImportType = "Unknown import type {TYPE}"
 RepositoryManagerBrowserComponent = "Browser"
 DifferenceProperty = "Property: {PROPERTY}"
-Displayer = "Display a content object"
+DisplayerBlockRenderer = "Display a content object"

@@ -42,3 +42,10 @@
         width: 500px;
     }
 }
+
+/*
+ * Home Block Type: Chamilo\Core\User\Service\Home\LoginBlockRenderer
+ */
+.fas-ci-32e88cb6784a5056d4a621a6955b3aaf:before {
+    content: "\f2f6";
+}

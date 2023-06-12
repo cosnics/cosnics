@@ -193,6 +193,11 @@ class HomeService
             }
         }
 
+        if(!$this->getHomeRepository()->deleteElement($element))
+        {
+            return false;
+        }
+
         return true;
     }
 

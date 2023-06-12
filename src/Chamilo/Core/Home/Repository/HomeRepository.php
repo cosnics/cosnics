@@ -54,12 +54,9 @@ class HomeRepository
         return $this->getDataClassRepository()->create($element);
     }
 
-    /**
-     * @throws \Chamilo\Libraries\Storage\Exception\DataClassNoResultException
-     */
-    public function updateElement(Element $element): bool
+    public function deleteElement(Element $element): bool
     {
-        return $this->getDataClassRepository()->update($element);
+        return $this->getDataClassRepository()->delete($element);
     }
 
     /**
@@ -229,5 +226,13 @@ class HomeRepository
     public function getRegistrationConsulter(): RegistrationConsulter
     {
         return $this->registrationConsulter;
+    }
+
+    /**
+     * @throws \Chamilo\Libraries\Storage\Exception\DataClassNoResultException
+     */
+    public function updateElement(Element $element): bool
+    {
+        return $this->getDataClassRepository()->update($element);
     }
 }

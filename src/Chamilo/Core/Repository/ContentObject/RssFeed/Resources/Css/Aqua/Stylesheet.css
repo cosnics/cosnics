@@ -10,3 +10,22 @@
     border-top-width: 1px;
     border-width: 0px;
 }
+
+/*
+ * Home Block Type: Chamilo\Core\Repository\ContentObject\RssFeed\Service\Home\FeederBlockRenderer
+ */
+.fas-ci-2d8ab37d66d35b311ea1e73ce73fea20:before {
+    content: "\f143";
+}
+
+li.rss_feed_item {
+    background-repeat: no-repeat;
+    list-style-type: none;
+    padding-left: 25px;
+}
+
+ul.rss_feeds {
+    list-style-type: none;
+    margin: 0;
+    padding: 0;
+}

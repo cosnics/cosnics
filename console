@@ -1,13 +1,9 @@
 <?php
 
-use Chamilo\Configuration\Service\Consulter\ConfigurationConsulter;
-use Chamilo\Libraries\Architecture\Application\Routing\UrlGenerator;
 use Chamilo\Libraries\Architecture\Bootstrap\Bootstrap;
-use Chamilo\Libraries\Architecture\ErrorHandler\ExceptionLogger\ExceptionLoggerFactory;
 use Chamilo\Libraries\Architecture\ErrorHandler\ExceptionLogger\ExceptionLoggerInterface;
 use Chamilo\Libraries\Console;
 use Chamilo\Libraries\DependencyInjection\DependencyInjectionContainerBuilder;
-use Chamilo\Libraries\Platform\Session\SessionUtilities;
 use Doctrine\Common\Annotations\AnnotationRegistry;
 use Symfony\Component\Console\Output\ConsoleOutput;
 
@@ -17,16 +13,10 @@ AnnotationRegistry::registerLoader([$autoloader, 'loadClass']);
 $container = DependencyInjectionContainerBuilder::getInstance()->createContainer();
 $container->get(Bootstrap::class)->setup();
 
-/** @var \Chamilo\Configuration\Service\Consulter\ConfigurationConsulter $configurationConsulter */
-$configurationConsulter = $container->get(ConfigurationConsulter::class);
-/** @var \Chamilo\Libraries\Platform\Session\SessionUtilities $sessionUtilities */
-$sessionUtilities = $container->get(SessionUtilities::class);
-
-/** @var \Chamilo\Libraries\Architecture\Application\Routing\UrlGenerator $urlGenerator */
-$urlGenerator = $container->get(UrlGenerator::class);
-
-$exceptionLoggerFactory = new ExceptionLoggerFactory($configurationConsulter, $sessionUtilities, $urlGenerator);
-$exceptionLogger = $exceptionLoggerFactory->createExceptionLogger();
+/**
+ * @var \Chamilo\Libraries\Architecture\ErrorHandler\ExceptionLogger\ExceptionLoggerInterface $exceptionLogger
+ */
+$exceptionLogger = $container->get('Chamilo\Libraries\Architecture\ErrorHandler\ExceptionLogger');
 
 /** @var \Symfony\Component\Console\Application $console */
 $console = $container->get('Chamilo\Libraries\Console');

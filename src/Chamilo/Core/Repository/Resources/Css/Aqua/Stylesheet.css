@@ -238,3 +238,10 @@
 .table-difference th.col-sm-1 {
     text-align: center;
 }
+
+/*
+ * Home Block Type: Chamilo\Core\Repository\Service\Home\DisplayerBlockRenderer
+ */
+.fas-ci-1ee17e889e12311e09f1255944fb9ad8:before {
+    content: "\f108";
+}

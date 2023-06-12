@@ -43,7 +43,7 @@ $(function()
     {
         var parameters = {
             'application' : ajaxContext,
-            'go' : 'block_list'
+            'go' : 'BlockList'
         };
         
         var response = $.ajax({

@@ -20,7 +20,7 @@ class BlockAddComponent extends Manager
     public const PARAM_ORDER = 'order';
 
     public const PROPERTY_BLOCK = 'block';
-
+    
     public function run()
     {
         try
@@ -35,16 +35,14 @@ class BlockAddComponent extends Manager
             $homepageUserId = $homepageUser instanceof User ? $homepageUser->getId() : 0;
 
             $columnId = $this->getPostDataValue(self::PARAM_COLUMN);
-            $block = $this->getPostDataValue(self::PARAM_BLOCK);
-            $context = $classnameUtilities->getNamespaceParent($block, 6);
-            $translationContext = $classnameUtilities->getNamespaceParent($block, 2);
-            $blockType = $classnameUtilities->getClassnameFromNamespace($block);
+            $blockType = $this->getPostDataValue(self::PARAM_BLOCK);
+            $blockName = $classnameUtilities->getClassnameFromNamespace($blockType);
 
             $block = new Element();
             $block->setType(Element::TYPE_BLOCK);
             $block->setParentId($columnId);
-            $block->setTitle($this->getTranslator()->trans($blockType, [], $translationContext));
-            $block->setContext($context);
+            $block->setTitle($this->getTranslator()->trans($blockName, [], $blockType::CONTEXT));
+            $block->setContext($blockType::CONTEXT);
             $block->setBlockType($blockType);
             $block->setVisibility(true);
             $block->setUserId($homepageUserId);

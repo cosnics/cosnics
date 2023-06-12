@@ -122,7 +122,7 @@ class CalendarEventDataProvider extends MixedCalendar
             Manager::CONTEXT
         );
 
-        $publicationRepository = new PublicationRepository();
+        $publicationRepository = $this->getPublicationRepository();
 
         foreach ($registrations as $registration)
         {
@@ -146,6 +146,11 @@ class CalendarEventDataProvider extends MixedCalendar
         }
 
         return $this->renderEvents($calendarRendererProvider, $publications, $fromDate, $toDate);
+    }
+
+    protected function getPublicationRepository(): PublicationRepository
+    {
+        return $this->getService(PublicationRepository::class);
     }
 
     /**

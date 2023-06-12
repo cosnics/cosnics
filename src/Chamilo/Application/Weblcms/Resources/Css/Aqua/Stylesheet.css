@@ -242,6 +242,69 @@ table th.tools_column_toggle, table tr td.tools_column_toggle {
     display: none;
 }
 
+/*
+ * Home Block Type: Chamilo\Application\Weblcms\Service\Home\AssignmentNotificationsBlockRenderer
+ */
+.fas-ci-c0b78c8d9f317a2e924fdb3a0cb22275:before {
+    content: "\f658";
+}
+
+/*
+ * Home Block Type: Chamilo\Application\Weblcms\Service\Home\AssignmentSubmissionsBlockRenderer
+ */
+.fas-ci-6b26bf5a60feaeeef547b96485cc15f7:before {
+    content: "\f01c";
+}
+
+/*
+ * Home Block Type: Chamilo\Application\Weblcms\Service\Home\CourseListBlockRenderer
+ */
+.fas-ci-2b63627d4742768d4eb204dcebe82917:before {
+    content: "\f51b";
+}
+
+/*
+ * Home Block Type: Chamilo\Application\Weblcms\Service\Home\CourseMenuBlockRenderer
+ */
+.fas-ci-c978467aa9f8996023e2f78eee9adb35:before {
+    content: "\f0ad";
+}
+
+/*
+ * Home Block Type: Chamilo\Application\Weblcms\Service\Home\EndingAssignmentsBlockRenderer
+ */
+.fas-ci-41e95bad648cd2de00f1109aded8e1b8:before {
+    content: "\f2f2";
+}
+
+/*
+ * Home Block Type: Chamilo\Application\Weblcms\Service\Home\FilteredCourseListBlockRenderer
+ */
+.fas-ci-fb77baca35f45aea2d92f4407ba03c69:before {
+    content: "\f51c";
+}
+
+/*
+ * Home Block Type: Chamilo\Application\Weblcms\Service\Home\NewAnnouncementsBlockRenderer
+ */
+.fas-ci-0760c8e8d5215955fe7edc28fe55cfc8:before {
+    content: "\f130";
+}
+
+/*
+ * Home Block Type: Chamilo\Application\Weblcms\Service\Home\NewAssignmentsBlockRenderer
+ */
+.fas-ci-f73eac3e0e71bdabfa81bf84163d9f6b:before {
+    content: "\f093";
+}
+
+/*
+ * Home Block Type: Chamilo\Application\Weblcms\Service\Home\NewDocumentsBlockRenderer
+ */
+.fas-ci-09c8a6c46e133f1167d5e0047ccf91c4:before {
+    content: "\f07c";
+}
+
 .portal-block-course-list ul.list-group {
     margin: 10px 0px;
 }
@@ -292,3 +355,4 @@ span.badge-date {
     margin-right: 5px;
     padding: 5px 8px;
 }
+

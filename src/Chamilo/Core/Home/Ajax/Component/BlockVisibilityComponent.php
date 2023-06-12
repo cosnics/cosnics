@@ -22,7 +22,7 @@ class BlockVisibilityComponent extends Manager
             $translator = $this->getTranslator();
 
             $isGeneralMode = $this->getSession()->get(\Chamilo\Core\Home\Manager::SESSION_GENERAL_MODE, false);
-            $homepageUser = $this->getHomeService()->determineUser(
+            $homepageUserId = $this->getHomeService()->determineUserId(
                 $this->getUser(), $isGeneralMode
             );
 
@@ -30,7 +30,7 @@ class BlockVisibilityComponent extends Manager
 
             $block = $this->getHomeService()->findElementByIdentifier($blockId);
 
-            if ($block->getUserId() == $homepageUser->getId())
+            if ($block->getUserId() == $homepageUserId)
             {
                 $block->setVisibility(!($this->getPostDataValue(self::PARAM_VISIBILITY) == 'false'));
 

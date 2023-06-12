@@ -23,7 +23,7 @@ class BlockDeleteComponent extends Manager
             $translator = $this->getTranslator();
 
             $isGeneralMode = $this->getSession()->get(\Chamilo\Core\Home\Manager::SESSION_GENERAL_MODE, false);
-            $homepageUser = $this->getHomeService()->determineUser(
+            $homepageUserId = $this->getHomeService()->determineUserId(
                 $this->getUser(), $isGeneralMode
             );
 
@@ -36,7 +36,7 @@ class BlockDeleteComponent extends Manager
                 throw new ObjectNotExistException($translator->trans('Block', [], Manager::CONTEXT), $blockId);
             }
 
-            if ($block->getUserId() == $homepageUser->getId())
+            if ($block->getUserId() == $homepageUserId)
             {
                 if ($this->getHomeService()->deleteElement($block))
                 {
