@@ -36,6 +36,7 @@ use Symfony\Component\Translation\Translator;
  */
 class EndingAssignmentsBlockRenderer extends BlockRenderer
 {
+    public const CONTEXT = \Chamilo\Application\Weblcms\Manager::CONTEXT;
 
     protected DatetimeUtilities $datetimeUtilities;
 

@@ -28,7 +28,7 @@ class ColumnAddComponent extends Manager
         {
             $translator = $this->getTranslator();
 
-            $isGeneralMode = $this->getSession()->get('Chamilo\Core\Home\General');
+            $isGeneralMode = $this->getSession()->get(\Chamilo\Core\Home\Manager::SESSION_GENERAL_MODE, false);
             $homepageUser = $this->getHomeService()->determineUser(
                 $this->getUser(), $isGeneralMode
             );

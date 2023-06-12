@@ -17,6 +17,7 @@ use Chamilo\Libraries\Storage\DataClass\DataClass;
  */
 class NewDocumentsBlockRenderer extends NewBlockRenderer
 {
+    public const CONTEXT = \Chamilo\Application\Weblcms\Manager::CONTEXT;
 
     public function getContentObjectTypes(): array
     {

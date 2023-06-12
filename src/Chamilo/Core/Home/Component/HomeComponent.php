@@ -30,7 +30,7 @@ class HomeComponent extends Manager implements NoAuthenticationSupport
         BreadcrumbTrail::getInstance()->truncate();
 
         $currentTabIdentifier = $this->getRequest()->query->get(self::PARAM_TAB_ID);
-        $isGeneralMode = (bool) $this->getSession()->get('Chamilo\Core\Home\General', false);
+        $isGeneralMode = (bool) $this->getSession()->get(Manager::SESSION_GENERAL_MODE, false);
 
         $html = [];
 

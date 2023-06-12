@@ -24,6 +24,7 @@ use Chamilo\Libraries\Utilities\String\SimpleTemplate;
  */
 class CourseMenuBlockRenderer extends BlockRenderer
 {
+    public const CONTEXT = Manager::CONTEXT;
 
     public function displayAdminMenu($template, ?User $user = null): string
     {

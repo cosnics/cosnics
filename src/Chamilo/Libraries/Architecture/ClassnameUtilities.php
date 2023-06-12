@@ -125,7 +125,7 @@ class ClassnameUtilities
      */
     public function getClassnameFromObject($object, $convertToUnderscores = false)
     {
-        return $this->getClassnameFromNamespace((string) get_class($object), $convertToUnderscores);
+        return $this->getClassnameFromNamespace(get_class($object), $convertToUnderscores);
     }
 
     /**

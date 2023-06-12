@@ -33,6 +33,8 @@ class FilteredCourseListBlockRenderer extends BlockRenderer
     public const CONFIGURATION_COURSE_TYPE = 'course_type';
     public const CONFIGURATION_SHOW_NEW_ICONS = 'show_new_icons';
 
+    public const CONTEXT = Manager::CONTEXT;
+
     public const PARAM_COURSE_TYPE = 'course_type';
 
     protected CourseService $courseService;

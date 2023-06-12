@@ -3,11 +3,17 @@ namespace Chamilo\Core\Home\Service;
 
 use Chamilo\Configuration\Service\Consulter\ConfigurationConsulter;
 use Chamilo\Core\Home\Manager;
+use Chamilo\Core\Home\Renderer\BlockRenderer;
+use Chamilo\Core\Home\Renderer\BlockRendererFactory;
 use Chamilo\Core\Home\Repository\HomeRepository;
+use Chamilo\Core\Home\Rights\Service\BlockTypeRightsService;
 use Chamilo\Core\Home\Rights\Service\ElementRightsService;
 use Chamilo\Core\Home\Storage\DataClass\Element;
 use Chamilo\Core\User\Storage\DataClass\User;
+use Chamilo\Libraries\Architecture\ClassnameUtilities;
 use Chamilo\Libraries\Architecture\Exceptions\NotAllowedException;
+use Chamilo\Libraries\Format\Structure\Glyph\IdentGlyph;
+use Chamilo\Libraries\Format\Structure\Glyph\NamespaceIdentGlyph;
 use Chamilo\Libraries\Platform\ChamiloRequest;
 use Doctrine\Common\Collections\ArrayCollection;
 use Exception;
@@ -24,6 +30,12 @@ class HomeService
 {
     public const PARAM_TAB_ID = 'tab';
 
+    protected BlockRendererFactory $blockRendererFactory;
+
+    protected BlockTypeRightsService $blockTypeRightsService;
+
+    protected ClassnameUtilities $classnameUtilities;
+
     protected ConfigurationConsulter $configurationConsulter;
 
     protected ElementRightsService $elementRightsService;
@@ -36,7 +48,9 @@ class HomeService
 
     public function __construct(
         HomeRepository $homeRepository, ElementRightsService $elementRightsService, SessionInterface $session,
-        ConfigurationConsulter $configurationConsulter, Translator $translator
+        ConfigurationConsulter $configurationConsulter, Translator $translator,
+        BlockRendererFactory $blockRendererFactory, ClassnameUtilities $classnameUtilities,
+        BlockTypeRightsService $blockTypeRightsService
     )
     {
         $this->homeRepository = $homeRepository;
@@ -44,6 +58,9 @@ class HomeService
         $this->session = $session;
         $this->configurationConsulter = $configurationConsulter;
         $this->translator = $translator;
+        $this->blockRendererFactory = $blockRendererFactory;
+        $this->classnameUtilities = $classnameUtilities;
+        $this->blockTypeRightsService = $blockTypeRightsService;
     }
 
     public function countElementsByParentIdentifier(string $parentIdentifier): int
@@ -201,10 +218,10 @@ class HomeService
 
     public function determineHomeUserIdentifier(User $user = null): string
     {
-        $generalMode = $this->getSession()->get('Chamilo\Core\Home\General');
+        $generalMode = $this->getSession()->get(Manager::SESSION_GENERAL_MODE, false);
 
         // Get user id
-        if ($user instanceof User && $generalMode && $user->is_platform_admin())
+        if ($user instanceof User && $generalMode && $user->isPlatformAdmin())
         {
             return '0';
         }
@@ -328,6 +345,79 @@ class HomeService
         return $this->getHomeRepository()->findElementsByTypeUserIdentifierAndParentIdentifier(
             $type, $homeUserIdentifier, $parentIdentifier
         );
+    }
+
+    /**
+     * @throws \ReflectionException
+     * @throws \Chamilo\Libraries\Storage\Exception\DataClassNoResultException
+     */
+    public function getAvailableBlockRenderersForUser(User $user): array
+    {
+        $blockRendererFactory = $this->getBlockRendererFactory();
+        $blockTypeRightsService = $this->getBlockTypeRightsService();
+        $translator = $this->getTranslator();
+
+        $platformBlocks = [];
+
+        foreach ($blockRendererFactory->getAvailableBlockRenderers() as $availableBlockRenderer)
+        {
+            $rendererContext = $availableBlockRenderer::CONTEXT;
+            $availableBlockRendererClassName = get_class($availableBlockRenderer);
+
+            if (!array_key_exists($rendererContext, $platformBlocks))
+            {
+                $platformBlocks[$rendererContext] = [];
+
+                $packageGlyph = new NamespaceIdentGlyph(
+                    $rendererContext, true, false, false, IdentGlyph::SIZE_MINI, ['fa-fw']
+                );
+
+                $platformBlocks[$rendererContext]['name'] = $translator->trans('TypeName', [], $rendererContext);
+                $platformBlocks[$rendererContext]['image'] = $packageGlyph->render();
+
+                $platformBlocks[$rendererContext]['components'] = [];
+            }
+
+            if ($blockTypeRightsService->canUserViewBlockRenderer($user, $availableBlockRenderer))
+            {
+                $blockName = $this->getClassnameUtilities()->getClassnameFromObject($availableBlockRenderer);
+
+                $blockGlyph = new NamespaceIdentGlyph(
+                    $availableBlockRendererClassName, true, false, false, IdentGlyph::SIZE_MINI, ['fa-fw']
+                );
+
+                $platformBlocks[$rendererContext]['components'][] = [
+                    BlockRenderer::BLOCK_PROPERTY_ID => $availableBlockRendererClassName,
+                    BlockRenderer::BLOCK_PROPERTY_NAME => $translator->trans($blockName, [], $rendererContext),
+                    BlockRenderer::BLOCK_PROPERTY_IMAGE => $blockGlyph->render()
+                ];
+            }
+        }
+
+        foreach ($platformBlocks as $rendererContext => $platformBlock)
+        {
+            if (count($platformBlock['components']) == 0)
+            {
+                unset($platformBlocks[$rendererContext]);
+            }
+        }
+
+        return $platformBlocks;
+    }
+
+    public function getBlockRendererFactory(): BlockRendererFactory
+    {
+        return $this->blockRendererFactory;
+    }
+
+    public function getBlockTypeRightsService(): BlockTypeRightsService
+    {
+        return $this->blockTypeRightsService;
+    }
+
+    public function getClassnameUtilities(): ClassnameUtilities
+    {
+        return $this->classnameUtilities;
     }
 
     public function getConfigurationConsulter(): ConfigurationConsulter

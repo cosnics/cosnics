@@ -28,6 +28,8 @@ class AssignmentNotificationsBlockRenderer extends BlockRenderer
 {
     public const CONFIGURATION_COURSE_TYPE = 'course_type';
 
+    public const CONTEXT = \Chamilo\Application\Weblcms\Manager::CONTEXT;
+
     protected NotificationManager $notificationManager;
 
     protected Environment $twigEnvironment;

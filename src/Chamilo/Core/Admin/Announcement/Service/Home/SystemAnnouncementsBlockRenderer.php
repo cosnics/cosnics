@@ -24,6 +24,8 @@ class SystemAnnouncementsBlockRenderer extends BlockRenderer implements Configur
 {
     public const CONFIGURATION_SHOW_EMPTY = 'show_when_empty';
 
+    public const CONTEXT = Manager::CONTEXT;
+
     protected PublicationService $publicationService;
 
     public function __construct(

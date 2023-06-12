@@ -15,6 +15,7 @@ class DisplayerBlockRenderer extends BlockRenderer
     implements ConfigurableBlockInterface, StaticBlockTitleInterface, ContentObjectPublicationBlockInterface,
     AnonymousBlockInterface
 {
+    public const CONTEXT = Manager::CONTEXT;
 
     public function displayRepositoryContent(Element $block): string
     {

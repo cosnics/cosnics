@@ -50,8 +50,7 @@ class BlockRendererFactory
 
     public function getRenderer(Element $block): BlockRenderer
     {
-        $blockRendererType = $block->getContext() . '\Service\Home\\' . $block->getBlockType() . 'BlockRenderer';
-
-        return $this->getAvailableBlockRenderer($blockRendererType);
+        return $this->getAvailableBlockRenderer($block->getBlockType());
     }
+
 }

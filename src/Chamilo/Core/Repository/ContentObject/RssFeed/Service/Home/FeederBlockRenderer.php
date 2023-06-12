@@ -16,6 +16,7 @@ class FeederBlockRenderer extends BlockRenderer
     implements ConfigurableBlockInterface, StaticBlockTitleInterface, ContentObjectPublicationBlockInterface,
     AnonymousBlockInterface
 {
+    public const CONTEXT = RssFeed::CONTEXT;
 
     public function displayRepositoryContent(Element $block): string
     {

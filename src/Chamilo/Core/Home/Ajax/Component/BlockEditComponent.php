@@ -22,7 +22,7 @@ class BlockEditComponent extends Manager
         {
             $translator = $this->getTranslator();
             $homepageUserId = $this->getHomeService()->determineUserId(
-                $this->getUser(), $this->getSession()->get('Chamilo\Core\Home\General')
+                $this->getUser(), $this->getSession()->get(\Chamilo\Core\Home\Manager::SESSION_GENERAL_MODE, false)
             );
 
             $block = $this->getHomeService()->findElementByIdentifier($this->getPostDataValue(self::PARAM_BLOCK));

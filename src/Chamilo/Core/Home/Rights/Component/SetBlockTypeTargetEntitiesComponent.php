@@ -1,45 +1,44 @@
 <?php
 namespace Chamilo\Core\Home\Rights\Component;
 
-use Chamilo\Core\Home\Repository\HomeRepository;
 use Chamilo\Core\Home\Rights\Form\BlockTypeTargetEntitiesForm;
 use Chamilo\Core\Home\Rights\Manager;
 use Chamilo\Core\Home\Rights\Service\BlockTypeRightsService;
-use Chamilo\Core\Home\Rights\Storage\Repository\RightsRepository;
 use Chamilo\Libraries\Architecture\Exceptions\NoObjectSelectedException;
 use Chamilo\Libraries\Architecture\Exceptions\NotAllowedException;
-use Chamilo\Libraries\Translation\Translation;
 use Exception;
 
 /**
  * Sets the target entities for a block type
- * 
+ *
  * @author Sven Vanpoucke - Hogeschool Gent
  */
 class SetBlockTypeTargetEntitiesComponent extends Manager
 {
 
     /**
-     * Executes this component and renders it's output
+     * @throws \Chamilo\Libraries\Architecture\Exceptions\NoObjectSelectedException
+     * @throws \Chamilo\Libraries\Architecture\Exceptions\NotAllowedException
+     * @throws \QuickformException
      */
     public function run()
     {
-        if (! $this->getUser()->is_platform_admin())
+        if (!$this->getUser()->isPlatformAdmin())
         {
             throw new NotAllowedException();
         }
-        
+
         $blockType = $this->getBlockType();
-        $blockTypeRightsService = new BlockTypeRightsService(new RightsRepository(), new HomeRepository());
-        
+        $blockTypeRightsService = $this->getBlockTypeRightsService();
+
         $form = new BlockTypeTargetEntitiesForm($this->get_url(), $blockType, $blockTypeRightsService);
-        
+
         if ($form->validate())
         {
             try
             {
                 $blockTypeRightsService->setTargetEntitiesForBlockType($blockType, $form->getTargetEntities());
-                
+
                 $message = 'BlockTypeTargetEntitiesSet';
                 $success = true;
             }
@@ -48,48 +47,52 @@ class SetBlockTypeTargetEntitiesComponent extends Manager
                 $message = 'BlockTypeTargetEntitiesNotSet';
                 $success = false;
             }
-            
+
             $this->redirectWithMessage(
-                Translation::getInstance()->getTranslation($message, null, Manager::CONTEXT),
-                ! $success, 
-                array(self::PARAM_ACTION => self::ACTION_BROWSE_BLOCK_TYPE_TARGET_ENTITIES));
+                $this->getTranslator()->trans($message, [], Manager::CONTEXT), !$success,
+                [self::PARAM_ACTION => self::ACTION_BROWSE_BLOCK_TYPE_TARGET_ENTITIES]
+            );
         }
         else
         {
             $html = [];
-            
-            $html[] = $this->render_header();
-            $html[] = $form->toHtml();
-            $html[] = $this->render_footer();
-            
+
+            $html[] = $this->renderHeader();
+            $html[] = $form->render();
+            $html[] = $this->renderFooter();
+
             return implode(PHP_EOL, $html);
         }
     }
 
+    public function getAdditionalParameters(array $additionalParameters = []): array
+    {
+        $additionalParameters[] = self::PARAM_BLOCK_TYPE;
+
+        return parent::getAdditionalParameters($additionalParameters);
+    }
+
     /**
      * Returns the block type from the request
+     *
+     * @throws \Chamilo\Libraries\Architecture\Exceptions\NoObjectSelectedException
      */
     protected function getBlockType()
     {
         $blockType = $this->getRequest()->getFromRequestOrQuery(self::PARAM_BLOCK_TYPE);
-        
-        if (! $blockType)
+
+        if (!$blockType)
         {
             throw new NoObjectSelectedException(
-                Translation::getInstance()->getTranslation('BlockType', null, Manager::CONTEXT));
+                $this->getTranslator()->trans('BlockType', [], Manager::CONTEXT)
+            );
         }
-        
+
         return $blockType;
     }
 
-    /**
-     * Registers these parameters from the request
-     * 
-     * @return array
-     */
-    public function getAdditionalParameters(array $additionalParameters = []): array
+    protected function getBlockTypeRightsService(): BlockTypeRightsService
     {
-        $additionalParameters[] = self::PARAM_BLOCK_TYPE;
-        return parent::getAdditionalParameters($additionalParameters);
+        return $this->getService(BlockTypeRightsService::class);
     }
 }

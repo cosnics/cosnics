@@ -30,6 +30,8 @@ use Symfony\Component\Translation\Translator;
  */
 class AssignmentSubmissionsBlockRenderer extends BlockRenderer
 {
+    public const CONTEXT = Manager::CONTEXT;
+
     protected AssignmentService $assignmentService;
 
     protected PublicationRepository $publicationRepository;

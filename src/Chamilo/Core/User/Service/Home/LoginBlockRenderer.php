@@ -21,6 +21,8 @@ use Symfony\Component\Translation\Translator;
 
 class LoginBlockRenderer extends BlockRenderer implements AnonymousBlockInterface, ReadOnlyBlockInterface
 {
+    public const CONTEXT = Manager::CONTEXT;
+
     protected ChamiloRequest $request;
 
     public function __construct(

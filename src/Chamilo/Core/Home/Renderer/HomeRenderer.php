@@ -138,11 +138,6 @@ class HomeRenderer
         return $this->translator;
     }
 
-    public function getUrl(array $parameters = [], array $filter = []): string
-    {
-        return $this->getUrlGenerator()->fromParameters($parameters, $filter);
-    }
-
     public function getUrlGenerator(): UrlGenerator
     {
         return $this->urlGenerator;
@@ -164,7 +159,7 @@ class HomeRenderer
 
         $html = [];
 
-        if ($user instanceof User && ($userHomeAllowed || $user->is_platform_admin()))
+        if ($user instanceof User && ($userHomeAllowed || $user->isPlatformAdmin()))
         {
             $buttonToolBar = new ButtonToolBar();
 
@@ -191,8 +186,12 @@ class HomeRenderer
                     )
                 );
 
-                $truncateLink =
-                    $this->getUrlGenerator()->fromParameters([Application::PARAM_ACTION => Manager::ACTION_TRUNCATE]);
+                $truncateLink = $this->getUrlGenerator()->fromParameters(
+                    [
+                        Application::PARAM_CONTEXT => Manager::CONTEXT,
+                        Application::PARAM_ACTION => Manager::ACTION_TRUNCATE
+                    ]
+                );
 
                 if ($homeUserIdentifier != '0')
                 {
@@ -207,11 +206,14 @@ class HomeRenderer
                 }
             }
 
-            if (!$isGeneralMode && $user->is_platform_admin())
+            if (!$isGeneralMode && $user->isPlatformAdmin())
             {
-                $homeUrl =
-                    $this->getUrlGenerator()->fromParameters([Application::PARAM_ACTION => Manager::ACTION_MANAGE_HOME]
-                    );
+                $homeUrl = $this->getUrlGenerator()->fromParameters(
+                    [
+                        Application::PARAM_CONTEXT => Manager::CONTEXT,
+                        Application::PARAM_ACTION => Manager::ACTION_MANAGE_HOME
+                    ]
+                );
 
                 $buttonToolBar->addItem(
                     new Button(
@@ -220,10 +222,14 @@ class HomeRenderer
                     )
                 );
             }
-            elseif ($isGeneralMode && $user->is_platform_admin())
+            elseif ($isGeneralMode && $user->isPlatformAdmin())
             {
-                $personalUrl =
-                    $this->getUrlGenerator()->fromParameters([Application::PARAM_ACTION => Manager::ACTION_PERSONAL]);
+                $personalUrl = $this->getUrlGenerator()->fromParameters(
+                    [
+                        Application::PARAM_CONTEXT => Manager::CONTEXT,
+                        Application::PARAM_ACTION => Manager::ACTION_MANAGE_HOME
+                    ]
+                );
 
                 $title = $userHomeAllowed ? 'BackToPersonal' : 'ViewDefault';
 

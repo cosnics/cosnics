@@ -39,6 +39,8 @@ abstract class Manager extends Application
     public const PARAM_RENDERER_TYPE = 'renderer_type';
     public const PARAM_TAB_ID = 'tab';
 
+    public const SESSION_GENERAL_MODE = 'Chamilo\Core\Home\General';
+
     public const TYPE_BLOCK = 'block';
     public const TYPE_COLUMN = 'column';
     public const TYPE_ROW = 'row';

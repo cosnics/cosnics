@@ -7,7 +7,6 @@ use Chamilo\Core\Home\Repository\HomeRepository;
 use Chamilo\Core\Home\Rights\Storage\DataClass\BlockTypeTargetEntity;
 use Chamilo\Core\Home\Rights\Storage\Repository\RightsRepository;
 use Chamilo\Core\User\Storage\DataClass\User;
-use Chamilo\Libraries\Architecture\ClassnameUtilities;
 use Doctrine\Common\Collections\ArrayCollection;
 use RuntimeException;
 
@@ -40,7 +39,6 @@ class BlockTypeRightsService
      * Checks whether or not a user can view the given block renderer, checking the target entities and checking
      * if the block is not read only and already added to the homepage
      *
-     * @throws \ReflectionException
      * @throws \Chamilo\Libraries\Storage\Exception\DataClassNoResultException
      */
     public function canUserViewBlockRenderer(User $user, BlockRenderer $blockRenderer): bool
@@ -55,18 +53,12 @@ class BlockTypeRightsService
             return true;
         }
 
-        $classNameUtilities = ClassnameUtilities::getInstance();
-        $blockClass = get_class($blockRenderer);
-        $blockClassName = $classNameUtilities->getClassnameFromNamespace($blockClass);
-        $blockClassContext = $classNameUtilities->getNamespaceParent($blockClass, 6);
-
         $userBlocks = $this->getHomeRepository()->findBlocksByUserIdentifier($user->getId());
 
         foreach ($userBlocks as $userBlock)
         {
-
-            /** @var Block $userBlock */
-            if ($userBlock->getBlockType() == $blockClassName && $userBlock->getContext() == $blockClassContext)
+            if ($userBlock->isBlock() && $userBlock->getBlockType() == get_class($blockRenderer) &&
+                $userBlock->getContext() == $blockRenderer::CONTEXT)
             {
                 return false;
             }
@@ -85,7 +77,7 @@ class BlockTypeRightsService
      */
     public function canUserViewBlockType(User $user, string $blockType): bool
     {
-        if ($user->is_platform_admin())
+        if ($user->isPlatformAdmin())
         {
             return true;
         }
@@ -182,6 +174,9 @@ class BlockTypeRightsService
         return $targetEntitiesPerBlockType;
     }
 
+    /**
+     * @throws \Chamilo\Libraries\Storage\Exception\DataClassNoResultException
+     */
     public function setTargetEntitiesForBlockType(string $blockType, array $targetEntities = []): void
     {
         if (!$this->getRightsRepository()->clearTargetEntitiesForBlockType($blockType))

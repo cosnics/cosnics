@@ -27,6 +27,7 @@ use Symfony\Component\Translation\Translator;
  */
 class MonthBlockRenderer extends BlockRenderer implements StaticBlockTitleInterface
 {
+    public const CONTEXT = \Chamilo\Application\Calendar\Manager::CONTEXT;
 
     protected MiniMonthCalendarRenderer $miniMonthCalendarRenderer;
 

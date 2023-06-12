@@ -10,6 +10,7 @@ use Chamilo\Core\User\Storage\DataClass\User;
 
 class PortalHomeBlockRenderer extends BlockRenderer implements AnonymousBlockInterface
 {
+    public const CONTEXT = Manager::CONTEXT;
 
     public function displayContent(Element $block, ?User $user = null): string
     {

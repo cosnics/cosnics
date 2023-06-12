@@ -7,16 +7,13 @@ use Chamilo\Libraries\Architecture\JsonAjaxResult;
 use Throwable;
 
 /**
- * @author Hans De Bisschop @dependency repository.content_object.assessment_multiple_choice_question;
+ * @package Chamilo\Core\Home\Ajax\Component
+ * @author  Hans De Bisschop <hans.de.bisschop@ehb.be>
  */
 class BlockVisibilityComponent extends Manager
 {
     public const PARAM_BLOCK = 'block';
     public const PARAM_VISIBILITY = 'visibility';
-
-    /*
-     * (non-PHPdoc) @see common\libraries.AjaxManager::required_parameters()
-     */
 
     public function run()
     {
@@ -24,7 +21,7 @@ class BlockVisibilityComponent extends Manager
         {
             $translator = $this->getTranslator();
 
-            $isGeneralMode = $this->getSession()->get('Chamilo\Core\Home\General');
+            $isGeneralMode = $this->getSession()->get(\Chamilo\Core\Home\Manager::SESSION_GENERAL_MODE, false);
             $homepageUser = $this->getHomeService()->determineUser(
                 $this->getUser(), $isGeneralMode
             );

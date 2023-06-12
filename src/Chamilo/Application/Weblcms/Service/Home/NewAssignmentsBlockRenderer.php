@@ -18,6 +18,7 @@ use Chamilo\Libraries\Storage\DataClass\DataClass;
  */
 class NewAssignmentsBlockRenderer extends NewBlockRenderer
 {
+    public const CONTEXT = \Chamilo\Application\Weblcms\Manager::CONTEXT;
 
     public function displayNewItem(array $publication): string
     {

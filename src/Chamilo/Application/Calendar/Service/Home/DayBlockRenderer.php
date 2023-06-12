@@ -31,6 +31,8 @@ class DayBlockRenderer extends BlockRenderer implements ConfigurableBlockInterfa
     public const CONFIGURATION_TIME_HIDE = 'time_hide';
     public const CONFIGURATION_TIME_START = 'time_start';
 
+    public const CONTEXT = \Chamilo\Application\Calendar\Manager::CONTEXT;
+
     protected DatetimeUtilities $datetimeUtilities;
 
     protected MiniDayCalendarRenderer $miniDayCalendarRenderer;

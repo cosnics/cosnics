@@ -20,6 +20,8 @@ class NewAnnouncementsBlockRenderer extends NewBlockRenderer implements Configur
 {
     public const CONFIGURATION_SHOW_CONTENT = 'show_content';
 
+    public const CONTEXT = \Chamilo\Application\Weblcms\Manager::CONTEXT;
+
     public function displayContent(Element $block, ?User $user = null): string
     {
         if (!$block->getSetting(self::CONFIGURATION_SHOW_CONTENT, false))

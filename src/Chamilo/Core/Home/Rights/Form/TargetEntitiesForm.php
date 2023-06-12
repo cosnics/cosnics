@@ -113,7 +113,7 @@ abstract class TargetEntitiesForm extends FormValidator
     /**
      * Returns the target entities for the form
      *
-     * @return string
+     * @return string[]
      *
      * @throws \Exception
      */

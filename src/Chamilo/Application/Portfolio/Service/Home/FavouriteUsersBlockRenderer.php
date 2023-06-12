@@ -21,6 +21,8 @@ use Symfony\Component\Translation\Translator;
  */
 class FavouriteUsersBlockRenderer extends BlockRenderer
 {
+    public const CONTEXT = Manager::CONTEXT;
+
     protected FavouriteService $favouriteService;
 
     public function __construct(

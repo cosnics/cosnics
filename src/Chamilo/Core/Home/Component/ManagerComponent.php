@@ -1,10 +1,8 @@
 <?php
 namespace Chamilo\Core\Home\Component;
 
-use Chamilo\Core\Admin\Core\BreadcrumbGenerator;
 use Chamilo\Core\Home\Manager;
-use Chamilo\Libraries\Format\Structure\BreadcrumbGeneratorInterface;
-use Chamilo\Libraries\Format\Structure\BreadcrumbTrail;
+use Chamilo\Libraries\Architecture\Application\Application;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 
 /**
@@ -14,21 +12,26 @@ use Symfony\Component\HttpFoundation\RedirectResponse;
 class ManagerComponent extends Manager
 {
 
-    /**
-     * Runs this component and displays its output.
-     */
     public function run()
     {
-        if ($this->getUser()->is_platform_admin())
+        if ($this->getUser()->isPlatformAdmin())
         {
-            $this->getSession()->set('Chamilo\Core\Home\General', '1');
+            $session = $this->getSession();
+
+            if ($session->has(self::SESSION_GENERAL_MODE))
+            {
+                $this->getSession()->remove(self::SESSION_GENERAL_MODE);
+            }
+            else
+            {
+                $this->getSession()->set(self::SESSION_GENERAL_MODE, true);
+            }
         }
 
-        return new RedirectResponse($this->getUrlGenerator()->fromParameters());
-    }
-
-    public function get_breadcrumb_generator(): BreadcrumbGeneratorInterface
-    {
-        return new BreadcrumbGenerator($this, BreadcrumbTrail::getInstance());
+        return new RedirectResponse(
+            $this->getUrlGenerator()->fromParameters(
+                [Application::PARAM_CONTEXT => Manager::CONTEXT, Application::PARAM_ACTION => Manager::ACTION_VIEW_HOME]
+            )
+        );
     }
 }
