@@ -20,7 +20,7 @@ class BlockAddComponent extends Manager
     public const PARAM_ORDER = 'order';
 
     public const PROPERTY_BLOCK = 'block';
-    
+
     public function run()
     {
         try
@@ -49,8 +49,6 @@ class BlockAddComponent extends Manager
 
             if ($this->getHomeService()->createElement($block))
             {
-                $block->setSort(1);
-
                 if ($this->getHomeService()->updateElement($block))
                 {
                     $blockRenderer = $this->getBlockRendererFactory()->getRenderer($block);

@@ -85,11 +85,11 @@ class ColumnAddComponent extends Manager
                 $html[] = $glyph->render() . '</a>';
 
                 $html[] = '</div>';
-                $html[] =
-                    '<h3 class="panel-title">' . $translator->trans('EmptyColumnTitle', [], Manager::CONTEXT) . '</h3>';
+                $html[] = '<h3 class="panel-title">' .
+                    $translator->trans('EmptyColumnTitle', [], \Chamilo\Core\Home\Manager::CONTEXT) . '</h3>';
                 $html[] = '</div>';
                 $html[] = '<div class="panel-body">';
-                $html[] = $translator->trans('EmptyColumnBody', [], Manager::CONTEXT);
+                $html[] = $translator->trans('EmptyColumnBody', [], \Chamilo\Core\Home\Manager::CONTEXT);
                 $html[] = '</div>';
                 $html[] = '</div>';
 

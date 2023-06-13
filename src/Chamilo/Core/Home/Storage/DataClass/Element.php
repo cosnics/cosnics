@@ -3,8 +3,7 @@ namespace Chamilo\Core\Home\Storage\DataClass;
 
 use Chamilo\Core\Home\Manager;
 use Chamilo\Libraries\Storage\DataClass\DataClass;
-use Chamilo\Libraries\Storage\DataClass\Listeners\DisplayOrderDataClassListener;
-use Chamilo\Libraries\Storage\DataClass\Listeners\DisplayOrderDataClassListenerSupport;
+use Chamilo\Libraries\Storage\DataClass\Interfaces\DataClassDisplayOrderSupport;
 use Chamilo\Libraries\Storage\Query\Variable\PropertyConditionVariable;
 
 /**
@@ -13,7 +12,7 @@ use Chamilo\Libraries\Storage\Query\Variable\PropertyConditionVariable;
  * @author  Magali Gillard <magali.gillard@ehb.be>
  * @author  Eduard Vossen <eduard.vossen@ehb.be>
  */
-class Element extends DataClass implements DisplayOrderDataClassListenerSupport
+class Element extends DataClass implements DataClassDisplayOrderSupport
 {
     public const CONFIGURATION_BLOCK_TYPE = 'block_type';
     public const CONFIGURATION_CONTEXT = 'context';
@@ -31,15 +30,6 @@ class Element extends DataClass implements DisplayOrderDataClassListenerSupport
     public const TYPE_BLOCK = 'Chamilo\Core\Home\Storage\DataClass\Block';
     public const TYPE_COLUMN = 'Chamilo\Core\Home\Storage\DataClass\Column';
     public const TYPE_TAB = 'Chamilo\Core\Home\Storage\DataClass\Tab';
-
-    /**
-     * @throws \Exception
-     */
-    public function __construct(array $defaultProperties = [], array $additionalProperties = [])
-    {
-        parent::__construct($defaultProperties, $additionalProperties);
-        $this->addListener(new DisplayOrderDataClassListener($this));
-    }
 
     public function getBlockType(): ?string
     {
@@ -73,29 +63,27 @@ class Element extends DataClass implements DisplayOrderDataClassListenerSupport
 
     public static function getDefaultPropertyNames(array $extendedPropertyNames = []): array
     {
-        return parent::getDefaultPropertyNames(
-            [
-                self::PROPERTY_TYPE,
-                self::PROPERTY_PARENT_ID,
-                self::PROPERTY_TITLE,
-                self::PROPERTY_SORT,
-                self::PROPERTY_USER_ID,
-                self::PROPERTY_CONFIGURATION
-            ]
-        );
+        $extendedPropertyNames[] = self::PROPERTY_TYPE;
+        $extendedPropertyNames[] = self::PROPERTY_PARENT_ID;
+        $extendedPropertyNames[] = self::PROPERTY_TITLE;
+        $extendedPropertyNames[] = self::PROPERTY_SORT;
+        $extendedPropertyNames[] = self::PROPERTY_USER_ID;
+        $extendedPropertyNames[] = self::PROPERTY_CONFIGURATION;
+
+        return parent::getDefaultPropertyNames($extendedPropertyNames);
     }
 
     /**
-     * @return \Chamilo\Libraries\Storage\Query\Variable\PropertyConditionVariable[]
+     * @return string[]
      */
-    public function getDisplayOrderContextProperties(): array
+    public function getDisplayOrderContextPropertyNames(): array
     {
-        return [new PropertyConditionVariable(Element::class, self::PROPERTY_PARENT_ID)];
+        return [self::PROPERTY_PARENT_ID];
     }
 
-    public function getDisplayOrderProperty(): PropertyConditionVariable
+    public function getDisplayOrderPropertyName(): string
     {
-        return new PropertyConditionVariable(Element::class, self::PROPERTY_SORT);
+        return self::PROPERTY_SORT;
     }
 
     public function getParentId(): string

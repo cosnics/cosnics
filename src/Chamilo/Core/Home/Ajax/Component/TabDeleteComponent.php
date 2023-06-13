@@ -3,7 +3,6 @@ namespace Chamilo\Core\Home\Ajax\Component;
 
 use Chamilo\Core\Home\Ajax\Manager;
 use Chamilo\Core\Home\Storage\DataClass\Element;
-use Chamilo\Core\Home\Storage\DataClass\Tab;
 use Chamilo\Libraries\Architecture\Exceptions\NotAllowedException;
 use Chamilo\Libraries\Architecture\JsonAjaxResult;
 use Throwable;

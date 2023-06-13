@@ -15,6 +15,7 @@ use Chamilo\Libraries\Architecture\Exceptions\NotAllowedException;
 use Chamilo\Libraries\Format\Structure\Glyph\IdentGlyph;
 use Chamilo\Libraries\Format\Structure\Glyph\NamespaceIdentGlyph;
 use Chamilo\Libraries\Platform\ChamiloRequest;
+use Chamilo\Libraries\Storage\Service\DisplayOrderHandler;
 use Doctrine\Common\Collections\ArrayCollection;
 use Exception;
 use Symfony\Component\HttpFoundation\Session\SessionInterface;
@@ -44,13 +45,15 @@ class HomeService
 
     protected Translator $translator;
 
+    private DisplayOrderHandler $displayOrderHandler;
+
     private HomeRepository $homeRepository;
 
     public function __construct(
         HomeRepository $homeRepository, ElementRightsService $elementRightsService, SessionInterface $session,
         ConfigurationConsulter $configurationConsulter, Translator $translator,
         BlockRendererFactory $blockRendererFactory, ClassnameUtilities $classnameUtilities,
-        BlockTypeRightsService $blockTypeRightsService
+        BlockTypeRightsService $blockTypeRightsService, DisplayOrderHandler $displayOrderHandler
     )
     {
         $this->homeRepository = $homeRepository;
@@ -61,6 +64,7 @@ class HomeService
         $this->blockRendererFactory = $blockRendererFactory;
         $this->classnameUtilities = $classnameUtilities;
         $this->blockTypeRightsService = $blockTypeRightsService;
+        $this->displayOrderHandler = $displayOrderHandler;
     }
 
     public function countElementsByParentIdentifier(string $parentIdentifier): int
@@ -172,9 +176,15 @@ class HomeService
 
     /**
      * @throws \Chamilo\Libraries\Storage\Exception\DataClassNoResultException
+     * @throws \Chamilo\Libraries\Storage\Exception\DisplayOrderException
      */
     public function createElement(Element $element): bool
     {
+        if (!$this->getDisplayOrderHandler()->handleDisplayOrderBeforeCreate($element))
+        {
+            return false;
+        }
+
         return $this->getHomeRepository()->createElement($element);
     }
 
@@ -193,7 +203,12 @@ class HomeService
             }
         }
 
-        if(!$this->getHomeRepository()->deleteElement($element))
+        if (!$this->getHomeRepository()->deleteElement($element))
+        {
+            return false;
+        }
+
+        if (!$this->getDisplayOrderHandler()->handleDisplayOrderAfterDelete($element))
         {
             return false;
         }
@@ -435,6 +450,11 @@ class HomeService
         return $request->query->get(self::PARAM_TAB_ID);
     }
 
+    public function getDisplayOrderHandler(): DisplayOrderHandler
+    {
+        return $this->displayOrderHandler;
+    }
+
     public function getElementByIdentifier(string $elementIdentifier): ?Element
     {
         return $this->getHomeRepository()->findElementByIdentifier($elementIdentifier);
@@ -510,9 +530,15 @@ class HomeService
 
     /**
      * @throws \Chamilo\Libraries\Storage\Exception\DataClassNoResultException
+     * @throws \Chamilo\Libraries\Storage\Exception\DisplayOrderException
      */
     public function updateElement(Element $element): bool
     {
+        if (!$this->getDisplayOrderHandler()->handleDisplayOrderBeforeUpdate($element))
+        {
+            return false;
+        }
+
         return $this->getHomeRepository()->updateElement($element);
     }
 

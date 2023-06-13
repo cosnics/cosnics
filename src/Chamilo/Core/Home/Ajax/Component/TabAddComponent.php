@@ -9,7 +9,8 @@ use Chamilo\Libraries\Format\Structure\Glyph\FontAwesomeGlyph;
 use Throwable;
 
 /**
- * @author Hans De Bisschop
+ * @package Chamilo\Core\Home\Ajax\Component
+ * @author  Hans De Bisschop <hans.de.bisschop@ehb.be>
  */
 class TabAddComponent extends Manager
 {

@@ -12,8 +12,8 @@ use Chamilo\Libraries\Architecture\JsonAjaxResult;
 use Throwable;
 
 /**
- * @package home.ajax
- * @author  Hans De Bisschop
+ * @package Chamilo\Core\Home\Ajax\Component
+ * @author  Hans De Bisschop <hans.de.bisschop@ehb.be>
  */
 class BlockConfigComponent extends Manager
 {

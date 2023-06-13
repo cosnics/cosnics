@@ -5,8 +5,8 @@ use Chamilo\Core\Home\Ajax\Manager;
 use Chamilo\Libraries\Architecture\JsonAjaxResult;
 
 /**
- * @author     Hans De Bisschop
- * @dependency repository.content_object.assessment_multiple_choice_question;
+ * @package Chamilo\Core\Home\Ajax\Component
+ * @author  Hans De Bisschop <hans.de.bisschop@ehb.be>
  */
 class BlockListComponent extends Manager
 {

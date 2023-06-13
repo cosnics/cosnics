@@ -9,7 +9,6 @@ use Symfony\Component\Translation\Translator;
 
 /**
  * @package Chamilo\Libraries\Storage\Service
- *
  * @author  Hans De Bisschop <hans.de.bisschop@ehb.be>
  */
 class DisplayOrderHandler
@@ -97,7 +96,7 @@ class DisplayOrderHandler
         return $this->displayOrderRepository;
     }
 
-    protected function getDisplayOrderValue(DataClassDisplayOrderSupport $dataClass): int
+    protected function getDisplayOrderValue(DataClassDisplayOrderSupport $dataClass): ?int
     {
         return $dataClass->getDefaultProperty($dataClass->getDisplayOrderPropertyName());
     }
@@ -107,9 +106,9 @@ class DisplayOrderHandler
      */
     protected function getDisplayOrderValueFromRecord(
         DataClassDisplayOrderSupport $dataClass, array $displayOrderPropertiesRecord
-    ): int
+    ): ?int
     {
-        return $displayOrderPropertiesRecord[$dataClass->getDisplayOrderPropertyName()];
+        return (int) $displayOrderPropertiesRecord[$dataClass->getDisplayOrderPropertyName()];
     }
 
     public function getTranslator(): Translator
