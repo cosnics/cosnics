@@ -1,12 +1,9 @@
 <?php
 namespace Chamilo\Core\Home\Component;
 
-use Chamilo\Core\Admin\Core\BreadcrumbGenerator;
 use Chamilo\Core\Home\Manager;
 use Chamilo\Core\Home\Service\HomeService;
 use Chamilo\Libraries\Architecture\Application\Application;
-use Chamilo\Libraries\Format\Structure\BreadcrumbGeneratorInterface;
-use Chamilo\Libraries\Format\Structure\BreadcrumbTrail;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 
 /**
@@ -16,6 +13,9 @@ use Symfony\Component\HttpFoundation\RedirectResponse;
 class TruncaterComponent extends Manager
 {
 
+    /**
+     * @throws \Chamilo\Libraries\Storage\Exception\DataClassNoResultException
+     */
     public function run()
     {
         $this->getHomeService()->deleteElementsForUserIdentifier($this->getUser()->getId());
@@ -30,10 +30,5 @@ class TruncaterComponent extends Manager
     public function getHomeService(): HomeService
     {
         return $this->getService(HomeService::class);
-    }
-
-    public function get_breadcrumb_generator(): BreadcrumbGeneratorInterface
-    {
-        return new BreadcrumbGenerator($this, BreadcrumbTrail::getInstance());
     }
 }
