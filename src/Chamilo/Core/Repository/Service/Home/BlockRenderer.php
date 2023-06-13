@@ -2,6 +2,7 @@
 namespace Chamilo\Core\Repository\Service\Home;
 
 use Chamilo\Configuration\Service\Consulter\ConfigurationConsulter;
+use Chamilo\Core\Home\Form\ConfigurationFormFactory;
 use Chamilo\Core\Home\Manager;
 use Chamilo\Core\Home\Rights\Service\ElementRightsService;
 use Chamilo\Core\Home\Service\ContentObjectPublicationService;
@@ -29,10 +30,14 @@ abstract class BlockRenderer extends \Chamilo\Core\Home\Renderer\BlockRenderer
     public function __construct(
         HomeService $homeService, UrlGenerator $urlGenerator, Translator $translator,
         ConfigurationConsulter $configurationConsulter,
-        ContentObjectPublicationService $contentObjectPublicationService, ElementRightsService $elementRightsService
+        ContentObjectPublicationService $contentObjectPublicationService, ElementRightsService $elementRightsService,
+        ConfigurationFormFactory $configurationFormFactory
     )
     {
-        parent::__construct($homeService, $urlGenerator, $translator, $configurationConsulter, $elementRightsService);
+        parent::__construct(
+            $homeService, $urlGenerator, $translator, $configurationConsulter, $elementRightsService,
+            $configurationFormFactory
+        );
 
         $this->contentObjectPublicationService = $contentObjectPublicationService;
     }

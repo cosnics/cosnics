@@ -11,8 +11,10 @@ use Chamilo\Application\Weblcms\Service\CourseUserCategoryService;
 use Chamilo\Application\Weblcms\Storage\DataClass\CourseUserCategory;
 use Chamilo\Application\Weblcms\Storage\DataManager;
 use Chamilo\Configuration\Service\Consulter\ConfigurationConsulter;
-use Chamilo\Core\Home\Architecture\Interfaces\ConfigurableBlockInterface;
+use Chamilo\Core\Home\Architecture\Interfaces\ConfigurableBlockRendererInterface;
 use Chamilo\Core\Home\Architecture\Interfaces\StaticBlockTitleInterface;
+use Chamilo\Core\Home\Form\ConfigurationForm;
+use Chamilo\Core\Home\Form\ConfigurationFormFactory;
 use Chamilo\Core\Home\Rights\Service\ElementRightsService;
 use Chamilo\Core\Home\Service\HomeService;
 use Chamilo\Core\Home\Storage\DataClass\Element;
@@ -28,7 +30,7 @@ use Symfony\Component\Translation\Translator;
  * @author  Sven Vanpoucke - Hogeschool Gent
  */
 class FilteredCourseListBlockRenderer extends BlockRenderer
-    implements ConfigurableBlockInterface, StaticBlockTitleInterface
+    implements ConfigurableBlockRendererInterface, StaticBlockTitleInterface
 {
     public const CONFIGURATION_COURSE_TYPE = 'course_type';
     public const CONFIGURATION_SHOW_NEW_ICONS = 'show_new_icons';
@@ -37,6 +39,8 @@ class FilteredCourseListBlockRenderer extends BlockRenderer
 
     public const PARAM_COURSE_TYPE = 'course_type';
 
+    protected Connector $connector;
+
     protected CourseService $courseService;
 
     protected CourseUserCategoryService $courseUserCategoryService;
@@ -44,13 +48,52 @@ class FilteredCourseListBlockRenderer extends BlockRenderer
     public function __construct(
         HomeService $homeService, UrlGenerator $urlGenerator, Translator $translator,
         ConfigurationConsulter $configurationConsulter, CourseService $courseService,
-        CourseUserCategoryService $courseUserCategoryService, ElementRightsService $elementRightsService
+        CourseUserCategoryService $courseUserCategoryService, ElementRightsService $elementRightsService,
+        ConfigurationFormFactory $configurationFormFactory, Connector $connector
     )
     {
-        parent::__construct($homeService, $urlGenerator, $translator, $configurationConsulter, $elementRightsService);
+        parent::__construct(
+            $homeService, $urlGenerator, $translator, $configurationConsulter, $elementRightsService,
+            $configurationFormFactory
+        );
 
         $this->courseService = $courseService;
         $this->courseUserCategoryService = $courseUserCategoryService;
+        $this->connector = $connector;
+    }
+
+    /**
+     * @throws \QuickformException
+     */
+    public function addConfigurationFieldsToForm(ConfigurationForm $configurationForm, Element $block): void
+    {
+        $translator = $this->getTranslator();
+
+        $configurationForm->addElement(
+            'checkbox', FilteredCourseListBlockRenderer::CONFIGURATION_SHOW_NEW_ICONS,
+            $translator->trans('ShowNewIcons', [], Manager::CONTEXT)
+        );
+
+        $courseTypes = [];
+        $courseTypes['-1'] = '-- ' . $translator->trans('AllCourses', [], Manager::CONTEXT) . ' --';
+        $courseTypes = $courseTypes + $this->getConnector()->get_course_types();
+
+        $configurationForm->addElement(
+            'select', FilteredCourseListBlockRenderer::CONFIGURATION_COURSE_TYPE,
+            $translator->trans('CourseType', [], Manager::CONTEXT), $courseTypes
+        );
+
+        $defaults = [];
+
+        $defaults[FilteredCourseListBlockRenderer::CONFIGURATION_SHOW_NEW_ICONS] = $block->getSetting(
+            FilteredCourseListBlockRenderer::CONFIGURATION_SHOW_NEW_ICONS, true
+        );
+
+        $defaults[FilteredCourseListBlockRenderer::CONFIGURATION_COURSE_TYPE] = $block->getSetting(
+            FilteredCourseListBlockRenderer::CONFIGURATION_COURSE_TYPE, '-1'
+        );
+
+        $configurationForm->setDefaults($defaults);
     }
 
     public function displayContent(Element $block, ?User $user = null): string
@@ -68,6 +111,11 @@ class FilteredCourseListBlockRenderer extends BlockRenderer
     public function getConfigurationVariables(): array
     {
         return [self::CONFIGURATION_SHOW_NEW_ICONS, self::CONFIGURATION_COURSE_TYPE];
+    }
+
+    public function getConnector(): Connector
+    {
+        return $this->connector;
     }
 
     public function getCourseListRenderer(Element $block): FilteredCourseListRenderer

@@ -6,8 +6,10 @@ use Chamilo\Application\Weblcms\CourseType\Storage\DataManager as CourseTypeData
 use Chamilo\Application\Weblcms\Storage\DataClass\CourseUserCategory;
 use Chamilo\Application\Weblcms\Storage\DataManager;
 use Chamilo\Configuration\Service\Consulter\ConfigurationConsulter;
-use Chamilo\Core\Home\Architecture\Interfaces\ConfigurableBlockInterface;
+use Chamilo\Core\Home\Architecture\Interfaces\ConfigurableBlockRendererInterface;
 use Chamilo\Core\Home\Architecture\Interfaces\StaticBlockTitleInterface;
+use Chamilo\Core\Home\Form\ConfigurationForm;
+use Chamilo\Core\Home\Form\ConfigurationFormFactory;
 use Chamilo\Core\Home\Rights\Service\ElementRightsService;
 use Chamilo\Core\Home\Service\HomeService;
 use Chamilo\Core\Home\Storage\DataClass\Element;
@@ -24,11 +26,13 @@ use Twig\Environment;
  * @author  Sven Vanpoucke - Hogeschool Gent
  */
 class AssignmentNotificationsBlockRenderer extends BlockRenderer
-    implements ConfigurableBlockInterface, StaticBlockTitleInterface
+    implements ConfigurableBlockRendererInterface, StaticBlockTitleInterface
 {
     public const CONFIGURATION_COURSE_TYPE = 'course_type';
 
     public const CONTEXT = \Chamilo\Application\Weblcms\Manager::CONTEXT;
+
+    protected Connector $connector;
 
     protected NotificationManager $notificationManager;
 
@@ -37,13 +41,41 @@ class AssignmentNotificationsBlockRenderer extends BlockRenderer
     public function __construct(
         HomeService $homeService, UrlGenerator $urlGenerator, Translator $translator,
         ConfigurationConsulter $configurationConsulter, NotificationManager $notificationManager,
-        Environment $twigEnvironment, ElementRightsService $elementRightsService
+        Environment $twigEnvironment, ElementRightsService $elementRightsService,
+        ConfigurationFormFactory $configurationFormFactory, Connector $connector
     )
     {
-        parent::__construct($homeService, $urlGenerator, $translator, $configurationConsulter, $elementRightsService);
+        parent::__construct(
+            $homeService, $urlGenerator, $translator, $configurationConsulter, $elementRightsService,
+            $configurationFormFactory
+        );
 
         $this->notificationManager = $notificationManager;
         $this->twigEnvironment = $twigEnvironment;
+        $this->connector = $connector;
+    }
+
+    /**
+     * @throws \QuickformException
+     */
+    public function addConfigurationFieldsToForm(ConfigurationForm $configurationForm, Element $block): void
+    {
+        $translator = $this->getTranslator();
+
+        $courseTypes = [];
+        $courseTypes['-1'] = '-- ' . $translator->trans('AllCourses', [], Manager::CONTEXT) . ' --';
+        $courseTypes = $courseTypes + $this->getConnector()->get_course_types();
+
+        $configurationForm->addElement(
+            'select', self::CONFIGURATION_COURSE_TYPE, $translator->trans('CourseType', [], Manager::CONTEXT),
+            $courseTypes
+        );
+
+        $configurationForm->setDefaults([
+            self::CONFIGURATION_COURSE_TYPE => $block->getSetting(
+                self::CONFIGURATION_COURSE_TYPE, '-1'
+            )
+        ]);
     }
 
     /**
@@ -86,11 +118,16 @@ class AssignmentNotificationsBlockRenderer extends BlockRenderer
     }
 
     /**
-     * @see \Chamilo\Core\Home\Architecture\Interfaces\ConfigurableBlockInterface::getConfigurationVariables()
+     * @see \Chamilo\Core\Home\Architecture\Interfaces\ConfigurableBlockRendererInterface::getConfigurationVariables()
      */
     public function getConfigurationVariables(): array
     {
         return [self::CONFIGURATION_COURSE_TYPE];
+    }
+
+    public function getConnector(): Connector
+    {
+        return $this->connector;
     }
 
     protected function getCourseTypeConfiguration(Element $block): array

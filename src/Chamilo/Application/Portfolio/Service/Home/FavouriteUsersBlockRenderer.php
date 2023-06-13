@@ -5,6 +5,7 @@ use Chamilo\Application\Portfolio\Favourite\Service\FavouriteService;
 use Chamilo\Application\Portfolio\Favourite\Storage\Repository\FavouriteRepository;
 use Chamilo\Application\Portfolio\Manager;
 use Chamilo\Configuration\Service\Consulter\ConfigurationConsulter;
+use Chamilo\Core\Home\Form\ConfigurationFormFactory;
 use Chamilo\Core\Home\Renderer\BlockRenderer;
 use Chamilo\Core\Home\Rights\Service\ElementRightsService;
 use Chamilo\Core\Home\Service\HomeService;
@@ -28,10 +29,13 @@ class FavouriteUsersBlockRenderer extends BlockRenderer
     public function __construct(
         HomeService $homeService, UrlGenerator $urlGenerator, Translator $translator,
         ConfigurationConsulter $configurationConsulter, FavouriteService $favouriteService,
-        ElementRightsService $elementRightsService
+        ElementRightsService $elementRightsService, ConfigurationFormFactory $configurationFormFactory
     )
     {
-        parent::__construct($homeService, $urlGenerator, $translator, $configurationConsulter, $elementRightsService);
+        parent::__construct(
+            $homeService, $urlGenerator, $translator, $configurationConsulter, $elementRightsService,
+            $configurationFormFactory
+        );
 
         $this->favouriteService = $favouriteService;
     }

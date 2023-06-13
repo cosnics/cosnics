@@ -3,9 +3,10 @@ namespace Chamilo\Core\Home\Renderer;
 
 use Chamilo\Configuration\Service\Consulter\ConfigurationConsulter;
 use Chamilo\Core\Home\Architecture\Interfaces\AnonymousBlockInterface;
-use Chamilo\Core\Home\Architecture\Interfaces\ConfigurableBlockInterface;
+use Chamilo\Core\Home\Architecture\Interfaces\ConfigurableBlockRendererInterface;
 use Chamilo\Core\Home\Architecture\Interfaces\ReadOnlyBlockInterface;
 use Chamilo\Core\Home\Architecture\Interfaces\StaticBlockTitleInterface;
+use Chamilo\Core\Home\Form\ConfigurationFormFactory;
 use Chamilo\Core\Home\Manager;
 use Chamilo\Core\Home\Rights\Form\ElementTargetEntitiesForm;
 use Chamilo\Core\Home\Rights\Service\ElementRightsService;
@@ -34,6 +35,8 @@ abstract class BlockRenderer
 
     protected ConfigurationConsulter $configurationConsulter;
 
+    protected ConfigurationFormFactory $configurationFormFactory;
+
     protected ElementRightsService $elementRightsService;
 
     protected HomeService $homeService;
@@ -44,7 +47,8 @@ abstract class BlockRenderer
 
     public function __construct(
         HomeService $homeService, UrlGenerator $urlGenerator, Translator $translator,
-        ConfigurationConsulter $configurationConsulter, ElementRightsService $elementRightsService
+        ConfigurationConsulter $configurationConsulter, ElementRightsService $elementRightsService,
+        ConfigurationFormFactory $configurationFormFactory
     )
     {
         $this->homeService = $homeService;
@@ -52,6 +56,7 @@ abstract class BlockRenderer
         $this->translator = $translator;
         $this->configurationConsulter = $configurationConsulter;
         $this->elementRightsService = $elementRightsService;
+        $this->configurationFormFactory = $configurationFormFactory;
     }
 
     /**
@@ -109,7 +114,7 @@ abstract class BlockRenderer
                     $configure_text . '">' . $glyph->render() . '</a>';
             }
 
-            if ($this->isConfigurable())
+            if ($this instanceof ConfigurableBlockRendererInterface)
             {
                 $glyph = new FontAwesomeGlyph('wrench');
                 $configure_text = $translator->trans('Configure', [], StringUtilities::LIBRARIES);
@@ -151,6 +156,11 @@ abstract class BlockRenderer
         return $this->configurationConsulter;
     }
 
+    public function getConfigurationFormFactory(): ConfigurationFormFactory
+    {
+        return $this->configurationFormFactory;
+    }
+
     public function getElementRightsService(): ElementRightsService
     {
         return $this->elementRightsService;
@@ -179,11 +189,6 @@ abstract class BlockRenderer
     public function hasStaticTitle(): bool
     {
         return $this instanceof StaticBlockTitleInterface;
-    }
-
-    public function isConfigurable(): bool
-    {
-        return $this instanceof ConfigurableBlockInterface;
     }
 
     public function isReadOnly(): bool
@@ -239,19 +244,14 @@ abstract class BlockRenderer
             '" data-element-id="' . $block->getId() . '">';
         $html[] = $this->displayTitle($block, $isGeneralMode, $user);
 
-        if ($this->isConfigurable())
+        if ($this instanceof ConfigurableBlockRendererInterface)
         {
             $html[] = '<div class="portal-block-form hidden">';
             $html[] = '<div class="panel-body">';
 
-            $formClassName =
-                $block->getContext() . '\Integration\Chamilo\Core\Home\Form\\' . $block->getBlockType() . 'Form';
-
-            if (class_exists($formClassName))
-            {
-                $form = new $formClassName($block, $this->hasStaticTitle());
-                $html[] = $form->toHtml();
-            }
+            $form =
+                $this->getConfigurationFormFactory()->buildConfigurationForm($this, $block, $this->hasStaticTitle());
+            $html[] = $form->render();
 
             $html[] = '</div>';
             $html[] = '</div>';

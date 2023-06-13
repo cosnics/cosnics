@@ -618,7 +618,7 @@ EOT;
      * @param string[] $attributes Optional list of attributes for the form-element
      *
      * @return \HTML_QuickForm_text The element.
-     * @throws \Exception
+     * @throws \QuickformException
      */
     public function add_textfield($name, $label, $required = true, $attributes = [])
     {

@@ -11,6 +11,8 @@
             <tag name="Chamilo\Core\Admin\Service\ActionProvider"/>
         </service>
 
+        <service id="Chamilo\Core\Home\Form\ConfigurationFormFactory"/>
+
         <service id="Chamilo\Core\Home\Renderer\HomeRenderer"/>
         <service id="Chamilo\Core\Home\Renderer\TabRenderer"/>
         <service id="Chamilo\Core\Home\Renderer\TabHeaderRenderer"/>

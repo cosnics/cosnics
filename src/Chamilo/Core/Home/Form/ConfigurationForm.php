@@ -4,7 +4,7 @@ namespace Chamilo\Core\Home\Form;
 use Chamilo\Core\Home\Storage\DataClass\Element;
 use Chamilo\Libraries\Format\Form\FormValidator;
 use Chamilo\Libraries\Format\Structure\Glyph\FontAwesomeGlyph;
-use Chamilo\Libraries\Translation\Translation;
+use Chamilo\Libraries\Storage\DataClass\DataClass;
 use Chamilo\Libraries\Utilities\StringUtilities;
 
 /**
@@ -13,62 +13,34 @@ use Chamilo\Libraries\Utilities\StringUtilities;
  * @author  Magali Gillard <magali.gillard@ehb.be>
  * @author  Eduard Vossen <eduard.vossen@ehb.be>
  */
-abstract class ConfigurationForm extends FormValidator
+class ConfigurationForm extends FormValidator
 {
     public const RESULT_ERROR = 'ObjectUpdateFailed';
-
     public const RESULT_SUCCESS = 'ObjectUpdated';
 
-    /**
-     * @var \Chamilo\Core\Home\Storage\DataClass\Element
-     */
-    private $block;
-
-    /**
-     * @var bool
-     */
-    private $hasStaticTitle;
-
-    /**
-     * @param \Chamilo\Core\Home\Storage\DataClass\Element $block
-     * @param bool $hasStaticTitle
-     * @param string $action
-     */
-    public function __construct(Element $block, $hasStaticTitle)
+    public function __construct()
     {
-        parent::__construct('block', self::FORM_METHOD_POST);
-
-        $this->block = $block;
-        $this->hasStaticTitle = $hasStaticTitle;
-
-        $this->buildForm();
-        $this->setDefaults();
+        parent::__construct('BlockRendererConfigurationForm');
     }
 
-    abstract public function addSettings();
-
-    public function buildForm()
+    /**
+     * @throws \QuickformException
+     */
+    public function addSubmitButtons(Element $block): void
     {
-        if (!$this->hasStaticTitle)
-        {
-            $this->addElement(
-                'text', Element::PROPERTY_TITLE, Translation::get('Title'), ['class' => 'form-control']
-            );
-        }
+        $translator = $this->getTranslator();
 
-        $this->addSettings();
-
-        $this->addElement('hidden', Element::PROPERTY_ID, $this->getBlock()->get_id());
+        $this->addElement('hidden', DataClass::PROPERTY_ID, $block->getId());
 
         $buttons[] = $this->createElement(
-            'style_submit_button', 'submit', Translation::get('Save', null, StringUtilities::LIBRARIES), null, null,
+            'style_submit_button', 'submit', $translator->trans('Save', [], StringUtilities::LIBRARIES), null, null,
             new FontAwesomeGlyph('save')
         );
         $buttons[] = $this->createElement(
-            'style_reset_button', 'reset', Translation::get('Reset', null, StringUtilities::LIBRARIES)
+            'style_reset_button', 'reset', $translator->trans('Reset', [], StringUtilities::LIBRARIES)
         );
         $buttons[] = $this->createElement(
-            'style_submit_button', 'cancel', Translation::get('Cancel', null, StringUtilities::LIBRARIES),
+            'style_submit_button', 'cancel', $translator->trans('Cancel', [], StringUtilities::LIBRARIES),
             ['class' => 'btn-danger'], null, new FontAwesomeGlyph('times')
         );
 
@@ -76,31 +48,19 @@ abstract class ConfigurationForm extends FormValidator
     }
 
     /**
-     * @return \Chamilo\Core\Home\Storage\DataClass\Element
+     * @throws \QuickformException
      */
-    public function getBlock()
+    public function addTitleField(Element $block, bool $hasStaticTitle = true): void
     {
-        return $this->block;
-    }
+        $translator = $this->getTranslator();
 
-    /**
-     * @return bool
-     */
-    public function getHasStaticTitle()
-    {
-        return $this->hasStaticTitle;
-    }
-
-    /**
-     * @see HTML_QuickForm::setDefaults()
-     */
-    public function setDefaults($defaults = [], $filter = null)
-    {
-        if (!$this->hasStaticTitle)
+        if (!$hasStaticTitle)
         {
-            $defaults[Element::PROPERTY_TITLE] = $this->getBlock()->getTitle();
-        }
+            $this->addElement(
+                'text', Element::PROPERTY_TITLE, $translator->trans('Title'), ['class' => 'form-control']
+            );
 
-        parent::setDefaults($defaults);
+            parent::setDefaults([Element::PROPERTY_TITLE => $block->getTitle()]);
+        }
     }
 }

@@ -102,6 +102,7 @@
             <tag name="Chamilo\Core\Admin\Service\ActionProvider"/>
         </service>
 
+        <service id="Chamilo\Core\Repository\Service\Home\Connector"/>
         <service id="Chamilo\Core\Repository\Service\Home\DisplayerBlockRenderer">
             <tag name="Chamilo\Core\Home\Renderer\BlockRenderer"/>
         </service>

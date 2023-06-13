@@ -10,6 +10,7 @@ use Chamilo\Application\Weblcms\Storage\DataManager as WeblcmsDataManager;
 use Chamilo\Application\Weblcms\Tool\Implementation\Assignment\Storage\DataClass\Publication;
 use Chamilo\Application\Weblcms\Tool\Implementation\Assignment\Storage\Repository\PublicationRepository;
 use Chamilo\Configuration\Service\Consulter\ConfigurationConsulter;
+use Chamilo\Core\Home\Form\ConfigurationFormFactory;
 use Chamilo\Core\Home\Rights\Service\ElementRightsService;
 use Chamilo\Core\Home\Service\HomeService;
 use Chamilo\Core\Home\Storage\DataClass\Element;
@@ -39,10 +40,14 @@ class AssignmentSubmissionsBlockRenderer extends BlockRenderer
     public function __construct(
         HomeService $homeService, UrlGenerator $urlGenerator, Translator $translator,
         ConfigurationConsulter $configurationConsulter, AssignmentService $assignmentService,
-        PublicationRepository $publicationRepository, ElementRightsService $elementRightsService
+        PublicationRepository $publicationRepository, ElementRightsService $elementRightsService,
+        ConfigurationFormFactory $configurationFormFactory
     )
     {
-        parent::__construct($homeService, $urlGenerator, $translator, $configurationConsulter, $elementRightsService);
+        parent::__construct(
+            $homeService, $urlGenerator, $translator, $configurationConsulter, $elementRightsService,
+            $configurationFormFactory
+        );
 
         $this->assignmentService = $assignmentService;
         $this->publicationRepository = $publicationRepository;

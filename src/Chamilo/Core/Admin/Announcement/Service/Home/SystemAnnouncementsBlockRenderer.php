@@ -5,7 +5,9 @@ use Chamilo\Configuration\Service\Consulter\ConfigurationConsulter;
 use Chamilo\Core\Admin\Announcement\Manager;
 use Chamilo\Core\Admin\Announcement\Service\PublicationService;
 use Chamilo\Core\Admin\Announcement\Storage\DataClass\Publication;
-use Chamilo\Core\Home\Architecture\Interfaces\ConfigurableBlockInterface;
+use Chamilo\Core\Home\Architecture\Interfaces\ConfigurableBlockRendererInterface;
+use Chamilo\Core\Home\Form\ConfigurationForm;
+use Chamilo\Core\Home\Form\ConfigurationFormFactory;
 use Chamilo\Core\Home\Renderer\BlockRenderer;
 use Chamilo\Core\Home\Rights\Service\ElementRightsService;
 use Chamilo\Core\Home\Service\HomeService;
@@ -17,10 +19,11 @@ use Chamilo\Libraries\Architecture\Application\Application;
 use Chamilo\Libraries\Architecture\Application\Routing\UrlGenerator;
 use Chamilo\Libraries\Format\Structure\Glyph\IdentGlyph;
 use Chamilo\Libraries\Storage\DataClass\DataClass;
+use Chamilo\Libraries\Utilities\StringUtilities;
 use Doctrine\Common\Collections\ArrayCollection;
 use Symfony\Component\Translation\Translator;
 
-class SystemAnnouncementsBlockRenderer extends BlockRenderer implements ConfigurableBlockInterface
+class SystemAnnouncementsBlockRenderer extends BlockRenderer implements ConfigurableBlockRendererInterface
 {
     public const CONFIGURATION_SHOW_EMPTY = 'show_when_empty';
 
@@ -31,12 +34,41 @@ class SystemAnnouncementsBlockRenderer extends BlockRenderer implements Configur
     public function __construct(
         HomeService $homeService, UrlGenerator $urlGenerator, Translator $translator,
         ConfigurationConsulter $configurationConsulter, PublicationService $publicationService,
-        ElementRightsService $elementRightsService
+        ElementRightsService $elementRightsService, ConfigurationFormFactory $configurationFormFactory
     )
     {
-        parent::__construct($homeService, $urlGenerator, $translator, $configurationConsulter, $elementRightsService);
+        parent::__construct(
+            $homeService, $urlGenerator, $translator, $configurationConsulter, $elementRightsService,
+            $configurationFormFactory
+        );
 
         $this->publicationService = $publicationService;
+    }
+
+    /**
+     * @throws \QuickformException
+     */
+    public function addConfigurationFieldsToForm(ConfigurationForm $configurationForm, Element $block): void
+    {
+        $translator = $this->getTranslator();
+
+        $group = [];
+        $group[] = $configurationForm->createElement(
+            'radio', self::CONFIGURATION_SHOW_EMPTY, null, $translator->trans('True', [], StringUtilities::LIBRARIES), 1
+        );
+        $group[] = $configurationForm->createElement(
+            'radio', self::CONFIGURATION_SHOW_EMPTY, null, $translator->trans('False', [], StringUtilities::LIBRARIES),
+            0
+        );
+
+        $configurationForm->addGroup(
+            $group, self::CONFIGURATION_SHOW_EMPTY, $translator->trans('ShowWhenEmpty', [], StringUtilities::LIBRARIES),
+            '', false
+        );
+
+        $configurationForm->setDefaults(
+            [self::CONFIGURATION_SHOW_EMPTY => $block->getSetting(self::CONFIGURATION_SHOW_EMPTY, 1)]
+        );
     }
 
     /**

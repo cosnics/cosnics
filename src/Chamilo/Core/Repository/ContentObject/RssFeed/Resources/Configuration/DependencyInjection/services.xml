@@ -8,6 +8,7 @@
                   autoconfigure="true"
                   public="true"/>
 
+        <service id="Chamilo\Core\Repository\ContentObject\RssFeed\Service\Home\Connector"/>
         <service id="Chamilo\Core\Repository\ContentObject\RssFeed\Service\Home\FeederBlockRenderer">
             <tag name="Chamilo\Core\Home\Renderer\BlockRenderer"/>
         </service>

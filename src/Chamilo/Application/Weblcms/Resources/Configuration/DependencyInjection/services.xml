@@ -76,6 +76,8 @@
 
         <service id="Chamilo\Application\Weblcms\UserExporter\Renderer\ExcelUserExportRenderer"/>
 
+        <service id="Chamilo\Application\Weblcms\Service\Home\Connector"/>
+
         <service id="Chamilo\Application\Weblcms\Service\Home\AssignmentNotificationsBlockRenderer">
             <tag name="Chamilo\Core\Home\Renderer\BlockRenderer"/>
         </service>

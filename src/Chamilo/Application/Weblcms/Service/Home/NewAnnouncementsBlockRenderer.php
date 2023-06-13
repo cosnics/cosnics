@@ -3,7 +3,8 @@ namespace Chamilo\Application\Weblcms\Service\Home;
 
 use Chamilo\Application\Weblcms\Storage\DataClass\ContentObjectPublication;
 use Chamilo\Application\Weblcms\Tool\Manager;
-use Chamilo\Core\Home\Architecture\Interfaces\ConfigurableBlockInterface;
+use Chamilo\Core\Home\Architecture\Interfaces\ConfigurableBlockRendererInterface;
+use Chamilo\Core\Home\Form\ConfigurationForm;
 use Chamilo\Core\Home\Storage\DataClass\Element;
 use Chamilo\Core\Repository\ContentObject\Announcement\Storage\DataClass\Announcement;
 use Chamilo\Core\User\Storage\DataClass\User;
@@ -16,11 +17,27 @@ use Chamilo\Libraries\Storage\DataClass\DataClass;
  * @author  Magali Gillard <magali.gillard@ehb.be>
  * @author  Eduard Vossen <eduard.vossen@ehb.be>
  */
-class NewAnnouncementsBlockRenderer extends NewBlockRenderer implements ConfigurableBlockInterface
+class NewAnnouncementsBlockRenderer extends NewBlockRenderer implements ConfigurableBlockRendererInterface
 {
     public const CONFIGURATION_SHOW_CONTENT = 'show_content';
 
     public const CONTEXT = \Chamilo\Application\Weblcms\Manager::CONTEXT;
+
+    /**
+     * @throws \QuickformException
+     */
+    public function addConfigurationFieldsToForm(ConfigurationForm $configurationForm, Element $block): void
+    {
+        $configurationForm->addElement(
+            'checkbox', self::CONFIGURATION_SHOW_CONTENT, $this->getTranslator()->trans('ShowContent')
+        );
+
+        $configurationForm->setDefaults([
+            self::CONFIGURATION_SHOW_CONTENT => $block->getSetting(
+                self::CONFIGURATION_SHOW_CONTENT, true
+            )
+        ]);
+    }
 
     public function displayContent(Element $block, ?User $user = null): string
     {

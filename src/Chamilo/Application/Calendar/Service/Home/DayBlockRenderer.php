@@ -5,8 +5,10 @@ use Chamilo\Application\Calendar\Ajax\Manager;
 use Chamilo\Application\Calendar\Repository\CalendarRendererProviderRepository;
 use Chamilo\Application\Calendar\Service\CalendarRendererProvider;
 use Chamilo\Configuration\Service\Consulter\ConfigurationConsulter;
-use Chamilo\Core\Home\Architecture\Interfaces\ConfigurableBlockInterface;
+use Chamilo\Core\Home\Architecture\Interfaces\ConfigurableBlockRendererInterface;
 use Chamilo\Core\Home\Architecture\Interfaces\StaticBlockTitleInterface;
+use Chamilo\Core\Home\Form\ConfigurationForm;
+use Chamilo\Core\Home\Form\ConfigurationFormFactory;
 use Chamilo\Core\Home\Renderer\BlockRenderer;
 use Chamilo\Core\Home\Rights\Service\ElementRightsService;
 use Chamilo\Core\Home\Service\HomeService;
@@ -24,7 +26,7 @@ use Symfony\Component\Translation\Translator;
  * @author  Magali Gillard <magali.gillard@ehb.be>
  * @author  Eduard Vossen <eduard.vossen@ehb.be>
  */
-class DayBlockRenderer extends BlockRenderer implements ConfigurableBlockInterface, StaticBlockTitleInterface
+class DayBlockRenderer extends BlockRenderer implements ConfigurableBlockRendererInterface, StaticBlockTitleInterface
 {
     public const CONFIGURATION_HOUR_STEP = 'hour_step';
     public const CONFIGURATION_TIME_END = 'time_end';
@@ -43,14 +45,47 @@ class DayBlockRenderer extends BlockRenderer implements ConfigurableBlockInterfa
         HomeService $homeService, UrlGenerator $urlGenerator, Translator $translator,
         ConfigurationConsulter $configurationConsulter, DatetimeUtilities $datetimeUtilities,
         MiniDayCalendarRenderer $miniDayCalendarRenderer, ChamiloRequest $request,
-        ElementRightsService $elementRightsService
+        ElementRightsService $elementRightsService, ConfigurationFormFactory $configurationFormFactory
     )
     {
-        parent::__construct($homeService, $urlGenerator, $translator, $configurationConsulter, $elementRightsService);
+        parent::__construct(
+            $homeService, $urlGenerator, $translator, $configurationConsulter, $elementRightsService,
+            $configurationFormFactory
+        );
 
         $this->datetimeUtilities = $datetimeUtilities;
         $this->miniDayCalendarRenderer = $miniDayCalendarRenderer;
         $this->request = $request;
+    }
+
+    /**
+     * @throws \QuickformException
+     */
+    public function addConfigurationFieldsToForm(ConfigurationForm $configurationForm, Element $block): void
+    {
+        $translator = $this->getTranslator();
+
+        $configurationForm->add_textfield(
+            DayBlockRenderer::CONFIGURATION_HOUR_STEP, $translator->trans('HourStep', [], Manager::CONTEXT)
+        );
+        $configurationForm->add_textfield(
+            DayBlockRenderer::CONFIGURATION_TIME_START, $translator->trans('TimeStart', [], Manager::CONTEXT)
+        );
+        $configurationForm->add_textfield(
+            DayBlockRenderer::CONFIGURATION_TIME_END, $translator->trans('TimeEnd', [], Manager::CONTEXT)
+        );
+        $configurationForm->addElement(
+            'checkbox', DayBlockRenderer::CONFIGURATION_TIME_HIDE, $translator->trans('TimeHide', [], Manager::CONTEXT)
+        );
+
+        $defaults = [];
+
+        $defaults[self::CONFIGURATION_HOUR_STEP] = $block->getSetting(self::CONFIGURATION_HOUR_STEP, 1);
+        $defaults[self::CONFIGURATION_TIME_START] = $block->getSetting(self::CONFIGURATION_TIME_START, 8);
+        $defaults[self::CONFIGURATION_TIME_END] = $block->getSetting(self::CONFIGURATION_TIME_END, 17);
+        $defaults[self::CONFIGURATION_TIME_HIDE] = $block->getSetting(self::CONFIGURATION_TIME_HIDE, 0);
+
+        $configurationForm->setDefaults($defaults);
     }
 
     /**
@@ -67,7 +102,7 @@ class DayBlockRenderer extends BlockRenderer implements ConfigurableBlockInterfa
     }
 
     /**
-     * @see \Chamilo\Core\Home\Architecture\Interfaces\ConfigurableBlockInterface::getConfigurationVariables()
+     * @see \Chamilo\Core\Home\Architecture\Interfaces\ConfigurableBlockRendererInterface::getConfigurationVariables()
      */
     public function getConfigurationVariables(): array
     {

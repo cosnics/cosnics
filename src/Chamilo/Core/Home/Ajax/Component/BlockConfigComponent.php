@@ -2,7 +2,7 @@
 namespace Chamilo\Core\Home\Ajax\Component;
 
 use Chamilo\Core\Home\Ajax\Manager;
-use Chamilo\Core\Home\Architecture\Interfaces\ConfigurableBlockInterface;
+use Chamilo\Core\Home\Architecture\Interfaces\ConfigurableBlockRendererInterface;
 use Chamilo\Core\Home\Architecture\Interfaces\ContentObjectPublicationBlockInterface;
 use Chamilo\Core\Home\Renderer\BlockRendererFactory;
 use Chamilo\Core\Home\Service\ContentObjectPublicationService;
@@ -48,10 +48,10 @@ class BlockConfigComponent extends Manager
 
                 $blockRenderer = $this->getBlockRendererFactory()->getRenderer($block);
 
-                if ($blockRenderer instanceof ConfigurableBlockInterface ||
+                if ($blockRenderer instanceof ConfigurableBlockRendererInterface ||
                     $blockRenderer instanceof ContentObjectPublicationBlockInterface)
                 {
-                    if ($blockRenderer instanceof ConfigurableBlockInterface)
+                    if ($blockRenderer instanceof ConfigurableBlockRendererInterface)
                     {
                         foreach ($blockRenderer->getConfigurationVariables() as $configurationVariable)
                         {
