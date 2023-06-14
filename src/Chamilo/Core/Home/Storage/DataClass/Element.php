@@ -2,9 +2,9 @@
 namespace Chamilo\Core\Home\Storage\DataClass;
 
 use Chamilo\Core\Home\Manager;
+use Chamilo\Libraries\Storage\DataClass\ConfigurableDataClassTrait;
 use Chamilo\Libraries\Storage\DataClass\DataClass;
 use Chamilo\Libraries\Storage\DataClass\Interfaces\DataClassDisplayOrderSupport;
-use Chamilo\Libraries\Storage\Query\Variable\PropertyConditionVariable;
 
 /**
  * @package Chamilo\Core\Home\Storage\DataClass
@@ -14,6 +14,8 @@ use Chamilo\Libraries\Storage\Query\Variable\PropertyConditionVariable;
  */
 class Element extends DataClass implements DataClassDisplayOrderSupport
 {
+    use ConfigurableDataClassTrait;
+
     public const CONFIGURATION_BLOCK_TYPE = 'block_type';
     public const CONFIGURATION_CONTEXT = 'context';
     public const CONFIGURATION_VISIBILITY = 'visibility';
@@ -39,16 +41,6 @@ class Element extends DataClass implements DataClassDisplayOrderSupport
         }
 
         return null;
-    }
-
-    /**
-     * @return string[]
-     */
-    public function getConfiguration(): array
-    {
-        $serializedConfiguration = $this->getDefaultProperty(self::PROPERTY_CONFIGURATION);
-
-        return unserialize($serializedConfiguration ?: serialize([]));
     }
 
     public function getContext(): ?string
@@ -89,13 +81,6 @@ class Element extends DataClass implements DataClassDisplayOrderSupport
     public function getParentId(): string
     {
         return $this->getDefaultProperty(self::PROPERTY_PARENT_ID);
-    }
-
-    public function getSetting(string $variable, mixed $defaultValue = null): mixed
-    {
-        $configuration = $this->getConfiguration();
-
-        return ($configuration[$variable] ?? $defaultValue);
     }
 
     public function getSort(): int
@@ -193,16 +178,6 @@ class Element extends DataClass implements DataClassDisplayOrderSupport
         return $this;
     }
 
-    /**
-     * @param string[] $configuration
-     */
-    public function setConfiguration(array $configuration): Element
-    {
-        $this->setDefaultProperty(self::PROPERTY_CONFIGURATION, serialize($configuration));
-
-        return $this;
-    }
-
     public function setContext(string $context): Element
     {
         if ($this->getType() == self::TYPE_BLOCK)
@@ -216,16 +191,6 @@ class Element extends DataClass implements DataClassDisplayOrderSupport
     public function setParentId(string $parentId): Element
     {
         $this->setDefaultProperty(self::PROPERTY_PARENT_ID, $parentId);
-
-        return $this;
-    }
-
-    public function setSetting(string $variable, mixed $value): Element
-    {
-        $configuration = $this->getConfiguration();
-        $configuration[$variable] = $value;
-
-        $this->setConfiguration($configuration);
 
         return $this;
     }
