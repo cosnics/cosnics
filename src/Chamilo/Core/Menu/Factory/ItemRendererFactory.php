@@ -1,71 +1,55 @@
 <?php
 namespace Chamilo\Core\Menu\Factory;
 
+use Chamilo\Core\Menu\Renderer\ItemRenderer;
 use Chamilo\Core\Menu\Storage\DataClass\Item;
-use Chamilo\Libraries\Architecture\ClassnameUtilities;
-use Chamilo\Libraries\DependencyInjection\Traits\DependencyInjectionContainerTrait;
+use OutOfBoundsException;
 
 /**
- * @package Chamilo\Core\Menu\Renderer
- *
- * @author Hans De Bisschop <hans.de.bisschop@ehb.be>
+ * @package Chamilo\Core\Menu\Factory
+ * @author  Hans De Bisschop <hans.de.bisschop@ehb.be>
  */
 class ItemRendererFactory
 {
-    use DependencyInjectionContainerTrait;
 
     /**
-     * @var \Chamilo\Libraries\Architecture\ClassnameUtilities
+     * @var \Chamilo\Core\Menu\Renderer\ItemRenderer[]
      */
-    private $classnameUtilities;
+    protected array $availableItemRenderers;
 
-    /**
-     * @param \Chamilo\Libraries\Architecture\ClassnameUtilities $classnameUtilities
-     */
-    public function __construct(ClassnameUtilities $classnameUtilities)
+    public function addAvailableItemRenderer(ItemRenderer $itemRenderer): void
     {
-        $this->classnameUtilities = $classnameUtilities;
+        $this->availableItemRenderers[get_class($itemRenderer)] = $itemRenderer;
+    }
 
-        $this->initializeContainer();
+    public function getAvailableItemRenderer(string $itemRendererType): ItemRenderer
+    {
+        if (!array_key_exists($itemRendererType, $this->availableItemRenderers))
+        {
+            throw new OutOfBoundsException($itemRendererType . ' is not a valid ItemRenderer');
+        }
+
+        return $this->availableItemRenderers[$itemRendererType];
     }
 
     /**
-     * @return \Chamilo\Libraries\Architecture\ClassnameUtilities
+     * @return string[]
      */
-    public function getClassnameUtilities(): ClassnameUtilities
+    public function getAvailableItemRendererTypes(): array
     {
-        return $this->classnameUtilities;
+        return array_keys($this->getAvailableItemRenderers());
     }
 
     /**
-     * @param \Chamilo\Libraries\Architecture\ClassnameUtilities $classnameUtilities
+     * @return \Chamilo\Core\Menu\Renderer\ItemRenderer[]
      */
-    public function setClassnameUtilities(ClassnameUtilities $classnameUtilities): void
+    public function getAvailableItemRenderers(): array
     {
-        $this->classnameUtilities = $classnameUtilities;
+        return $this->availableItemRenderers;
     }
 
-    /**
-     * @param \Chamilo\Core\Menu\Storage\DataClass\Item $item
-     *
-     * @return \Chamilo\Core\Menu\Renderer\ItemRenderer
-     */
-    public function getItemRenderer(Item $item)
+    public function getItemRenderer(Item $item): ItemRenderer
     {
-        return $this->getService($this->determineItemRendererServiceName($item));
-    }
-
-    /**
-     * @param \Chamilo\Core\Menu\Storage\DataClass\Item $item
-     *
-     * @return string
-     */
-    public function determineItemRendererServiceName(Item $item)
-    {
-        $itemNamespace = $this->getClassnameUtilities()->getNamespaceFromObject($item);
-        $itemPackage = $this->getClassnameUtilities()->getNamespaceParent($itemNamespace, 2);
-        $itemType = $this->getClassnameUtilities()->getClassnameFromObject($item);
-
-        return $itemPackage . '\Renderer\Item\\' . $itemType . 'Renderer';
+        return $this->getAvailableItemRenderer($item->getItemType());
     }
 }

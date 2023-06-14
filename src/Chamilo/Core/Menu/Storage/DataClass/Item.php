@@ -3,7 +3,10 @@ namespace Chamilo\Core\Menu\Storage\DataClass;
 
 use Chamilo\Core\Menu\Manager;
 use Chamilo\Libraries\Format\Structure\Glyph\FontAwesomeGlyph;
+use Chamilo\Libraries\Format\Structure\Glyph\InlineGlyph;
 use Chamilo\Libraries\Storage\DataClass\CompositeDataClass;
+use Chamilo\Libraries\Storage\DataClass\ConfigurableDataClassInterface;
+use Chamilo\Libraries\Storage\DataClass\ConfigurableDataClassTrait;
 use Chamilo\Libraries\Storage\DataClass\Interfaces\DataClassDisplayOrderSupport;
 
 /**
@@ -12,42 +15,33 @@ use Chamilo\Libraries\Storage\DataClass\Interfaces\DataClassDisplayOrderSupport;
  * @author  Magali Gillard <magali.gillard@ehb.be>
  * @author  Eduard Vossen <eduard.vossen@ehb.be>
  */
-class Item extends CompositeDataClass implements DataClassDisplayOrderSupport
+class Item extends CompositeDataClass implements DataClassDisplayOrderSupport, ConfigurableDataClassInterface
 {
+    use ConfigurableDataClassTrait;
+
     public const CONTEXT = Manager::CONTEXT;
 
-    /**
-     * Display options
-     */
     public const DISPLAY_BOTH = 3;
     public const DISPLAY_ICON = 1;
     public const DISPLAY_TEXT = 2;
 
-    /**
-     * Properties
-     */
     public const PROPERTY_DISPLAY = 'display';
     public const PROPERTY_HIDDEN = 'hidden';
     public const PROPERTY_ICON_CLASS = 'icon_class';
     public const PROPERTY_PARENT = 'parent';
     public const PROPERTY_SORT = 'sort';
 
-    /**
-     * Item types
-     */
     public const TYPE_APPLICATION = 1;
     public const TYPE_CATEGORY = 3;
     public const TYPE_LINK = 2;
     public const TYPE_LINK_APPLICATION = 4;
 
     /**
-     * Get the default properties of all items.
-     *
      * @param string[] $extendedPropertyNames
      *
      * @return string[]
      */
-    public static function getDefaultPropertyNames(array $extendedPropertyNames = []): array
+    public static function getDefaultPropertyNamesForConfigurableClass(array $extendedPropertyNames = []): array
     {
         return parent::getDefaultPropertyNames(
             [
@@ -61,10 +55,7 @@ class Item extends CompositeDataClass implements DataClassDisplayOrderSupport
         );
     }
 
-    /**
-     * @return int
-     */
-    public function getDisplay()
+    public function getDisplay(): int
     {
         return $this->getDefaultProperty(self::PROPERTY_DISPLAY);
     }
@@ -82,18 +73,12 @@ class Item extends CompositeDataClass implements DataClassDisplayOrderSupport
         return self::PROPERTY_SORT;
     }
 
-    /**
-     * @return \Chamilo\Libraries\Format\Structure\Glyph\FontAwesomeGlyph
-     */
-    public function getGlyph()
+    public function getGlyph(): InlineGlyph
     {
         return new FontAwesomeGlyph('file', [], null, 'fas');
     }
 
-    /**
-     * @return int
-     */
-    public function getHidden()
+    public function getHidden(): int
     {
         return $this->getDefaultProperty(self::PROPERTY_HIDDEN);
     }
@@ -106,210 +91,170 @@ class Item extends CompositeDataClass implements DataClassDisplayOrderSupport
         return $this->getDefaultProperty(self::PROPERTY_ICON_CLASS);
     }
 
-    /**
-     * @return int
-     */
-    public function getParentId()
+    public function getParentId(): int
     {
         return $this->getDefaultProperty(self::PROPERTY_PARENT);
     }
 
-    /**
-     * @return int
-     */
-    public function getSort()
+    public function getSort(): int
     {
         return $this->getDefaultProperty(self::PROPERTY_SORT);
     }
 
-    /**
-     * @return string
-     */
     public static function getStorageUnitName(): string
     {
         return 'menu_item';
     }
 
     /**
-     * @return int
      * @deprecated Use Item::getDisplay() now
      */
-    public function get_display()
+    public function get_display(): int
     {
         return $this->getDisplay();
     }
 
     /**
-     * @return int
      * @deprecated Use Item::getHidden() now
      */
-    public function get_hidden()
+    public function get_hidden(): int
     {
         return $this->getHidden();
     }
 
     /**
-     * @return int
      * @deprecated Use Item::getParent() now
      */
-    public function get_parent()
+    public function get_parent(): int
     {
         return $this->getParentId();
     }
 
     /**
-     * @return int
      * @deprecated Use Item::getSort() now
      */
-    public function get_sort()
+    public function get_sort(): int
     {
         return $this->getSort();
     }
 
     /**
-     * @return bool
      * @deprecated Use Item::hadParentId() now
      */
-    public function hasParent()
+    public function hasParent(): bool
     {
         return $this->hasParentId();
     }
 
-    /**
-     * @return bool
-     */
-    public function hasParentId()
+    public function hasParentId(): bool
     {
         return $this->getParentId() != 0;
     }
 
-    /**
-     * @return bool
-     */
-    public function isHidden()
+    public function isHidden(): bool
     {
         return (bool) $this->getHidden();
     }
 
     /**
-     * @return bool
      * @deprecated Use Item::isHidden() now
      */
-    public function is_hidden()
+    public function is_hidden(): bool
     {
         return $this->isHidden();
     }
 
-    /**
-     * @param int $display
-     */
-    public function setDisplay($display = self::DISPLAY_ICON)
+    public function setDisplay(int $display = self::DISPLAY_ICON): Item
     {
         $this->setDefaultProperty(self::PROPERTY_DISPLAY, $display);
+
+        return $this;
     }
 
-    /**
-     * @param int $hidden
-     */
-    public function setHidden($hidden = 0)
+    public function setHidden(int $hidden = 0): Item
     {
         $this->setDefaultProperty(self::PROPERTY_HIDDEN, $hidden);
+
+        return $this;
     }
 
-    /**
-     * @param string $iconClass
-     */
-    public function setIconClass($iconClass = '')
+    public function setIconClass(string $iconClass = ''): Item
     {
         $this->setDefaultProperty(self::PROPERTY_ICON_CLASS, $iconClass);
+
+        return $this;
     }
 
-    /**
-     * @param int $parent
-     */
-    public function setParentId($parent)
+    public function setParentId(int $parent): Item
     {
         $this->setDefaultProperty(self::PROPERTY_PARENT, $parent);
+
+        return $this;
     }
 
-    /**
-     * @param ?int $sort
-     */
-    public function setSort($sort)
+    public function setSort(?int $sort): Item
     {
         $this->setDefaultProperty(self::PROPERTY_SORT, $sort);
+
+        return $this;
     }
 
     /**
-     * @param int $display
-     *
      * @deprecated Use Item::setDisplay() now
      */
-    public function set_display($display = self::DISPLAY_ICON)
+    public function set_display(int $display = self::DISPLAY_ICON): Item
     {
-        $this->setDisplay($display);
+        return $this->setDisplay($display);
     }
 
     /**
-     * @param int $hidden
-     *
      * @deprecated User Item::setHidden() now
      */
-    public function set_hidden($hidden = 0)
+    public function set_hidden(int $hidden = 0): Item
     {
-        $this->setHidden($hidden);
+        return $this->setHidden($hidden);
     }
 
     /**
-     * @param int $parent
-     *
      * @deprecated Use Item::setParent() now
      */
-    public function set_parent($parent)
+    public function set_parent(int $parent): Item
     {
-        $this->setParentId($parent);
+        return $this->setParentId($parent);
     }
 
     /**
-     * @param int $sort
-     *
      * @deprecated Use Item::setSort() now
      */
-    public function set_sort($sort)
+    public function set_sort(int $sort): Item
     {
         $this->setSort($sort);
+
+        return $this;
     }
 
-    /**
-     * @return bool
-     */
-    public function showIcon()
+    public function showIcon(): bool
     {
         return $this->getDisplay() == self::DISPLAY_BOTH || $this->getDisplay() == self::DISPLAY_ICON;
     }
 
-    /**
-     * @return bool
-     */
-    public function showTitle()
+    public function showTitle(): bool
     {
         return $this->getDisplay() == self::DISPLAY_TEXT || $this->getDisplay() == self::DISPLAY_BOTH;
     }
 
     /**
-     * @return bool
      * @deprecated Use Item::showIcon() now
      */
-    public function show_icon()
+    public function show_icon(): bool
     {
         return $this->showIcon();
     }
 
     /**
-     * @return bool
      * @deprecated Use Item::showTitle() now
      */
-    public function show_title()
+    public function show_title(): bool
     {
         return $this->showTitle();
     }
