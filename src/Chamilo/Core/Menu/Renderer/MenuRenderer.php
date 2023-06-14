@@ -55,7 +55,6 @@ class MenuRenderer
      */
     public function render(string $containerMode = 'container-fluid', User $user = null)
     {
-        return '';
         $html = [];
 
         $numberOfItems = 0;

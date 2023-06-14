@@ -4,9 +4,9 @@ namespace Chamilo\Core\Menu\Storage\DataClass;
 use Chamilo\Core\Menu\Manager;
 use Chamilo\Libraries\Format\Structure\Glyph\FontAwesomeGlyph;
 use Chamilo\Libraries\Format\Structure\Glyph\InlineGlyph;
-use Chamilo\Libraries\Storage\DataClass\CompositeDataClass;
 use Chamilo\Libraries\Storage\DataClass\ConfigurableDataClassInterface;
 use Chamilo\Libraries\Storage\DataClass\ConfigurableDataClassTrait;
+use Chamilo\Libraries\Storage\DataClass\DataClass;
 use Chamilo\Libraries\Storage\DataClass\Interfaces\DataClassDisplayOrderSupport;
 
 /**
@@ -15,7 +15,7 @@ use Chamilo\Libraries\Storage\DataClass\Interfaces\DataClassDisplayOrderSupport;
  * @author  Magali Gillard <magali.gillard@ehb.be>
  * @author  Eduard Vossen <eduard.vossen@ehb.be>
  */
-class Item extends CompositeDataClass implements DataClassDisplayOrderSupport, ConfigurableDataClassInterface
+class Item extends DataClass implements DataClassDisplayOrderSupport, ConfigurableDataClassInterface
 {
     use ConfigurableDataClassTrait;
 
@@ -30,6 +30,8 @@ class Item extends CompositeDataClass implements DataClassDisplayOrderSupport, C
     public const PROPERTY_ICON_CLASS = 'icon_class';
     public const PROPERTY_PARENT = 'parent';
     public const PROPERTY_SORT = 'sort';
+    public const PROPERTY_TYPE = 'type';
+    public const PROPERTY_TITLES = 'titles';
 
     public const TYPE_APPLICATION = 1;
     public const TYPE_CATEGORY = 3;
@@ -45,12 +47,14 @@ class Item extends CompositeDataClass implements DataClassDisplayOrderSupport, C
     {
         return parent::getDefaultPropertyNames(
             [
+                self::PROPERTY_TYPE,
                 self::PROPERTY_PARENT,
                 self::PROPERTY_TYPE,
                 self::PROPERTY_SORT,
                 self::PROPERTY_HIDDEN,
                 self::PROPERTY_DISPLAY,
-                self::PROPERTY_ICON_CLASS
+                self::PROPERTY_ICON_CLASS,
+                self::PROPERTY_TITLES
             ]
         );
     }
@@ -104,6 +108,11 @@ class Item extends CompositeDataClass implements DataClassDisplayOrderSupport, C
     public static function getStorageUnitName(): string
     {
         return 'menu_item';
+    }
+
+    public function getType(): string
+    {
+        return $this->getDefaultProperty(self::PROPERTY_TYPE);
     }
 
     /**
@@ -195,6 +204,13 @@ class Item extends CompositeDataClass implements DataClassDisplayOrderSupport, C
     public function setSort(?int $sort): Item
     {
         $this->setDefaultProperty(self::PROPERTY_SORT, $sort);
+
+        return $this;
+    }
+
+    public function setType(string $type): Item
+    {
+        $this->setDefaultProperty(self::PROPERTY_TYPE, $type);
 
         return $this;
     }

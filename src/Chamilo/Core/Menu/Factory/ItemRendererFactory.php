@@ -50,6 +50,6 @@ class ItemRendererFactory
 
     public function getItemRenderer(Item $item): ItemRenderer
     {
-        return $this->getAvailableItemRenderer($item->getItemType());
+        return $this->getAvailableItemRenderer($item->getType());
     }
 }
