@@ -193,10 +193,7 @@ abstract class DataClass
         return $this->getSpecificProperties(self::PROPERTIES_DEFAULT);
     }
 
-    /**
-     * @return mixed
-     */
-    public function getDefaultProperty(string $name)
+    public function getDefaultProperty(string $name): mixed
     {
         return $this->getSpecificProperty(self::PROPERTIES_DEFAULT, $name);
     }

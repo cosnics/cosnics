@@ -13,10 +13,7 @@ use Chamilo\Libraries\Storage\Query\Variable\PropertyConditionVariable;
 interface DisplayOrderDataClassListenerSupport
 {
 
-    /**
-     * @return mixed
-     */
-    public function getDefaultProperty(string $name);
+    public function getDefaultProperty(string $name): mixed;
 
     /**
      * @return \Chamilo\Libraries\Storage\Query\Variable\PropertyConditionVariable[]

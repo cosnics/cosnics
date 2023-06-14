@@ -19,10 +19,17 @@ trait ConfigurableDataClassTrait
         return unserialize($serializedConfiguration ?: serialize([]));
     }
 
-    /**
-     * @return mixed
-     */
-    abstract public function getDefaultProperty(string $name);
+    abstract public function getDefaultProperty(string $name): mixed;
+
+    public static function getDefaultPropertyNames(array $extendedPropertyNames = []): array
+    {
+        $extendedPropertyNames[] = self::PROPERTY_CONFIGURATION;
+
+        return static::getDefaultPropertyNamesForConfigurableClass($extendedPropertyNames);
+    }
+
+    abstract public static function getDefaultPropertyNamesForConfigurableClass(array $extendedPropertyNames = []
+    ): array;
 
     public function getSetting(string $variable, mixed $defaultValue = null): mixed
     {

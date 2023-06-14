@@ -2,6 +2,7 @@
 namespace Chamilo\Core\Home\Storage\DataClass;
 
 use Chamilo\Core\Home\Manager;
+use Chamilo\Libraries\Storage\DataClass\ConfigurableDataClassInterface;
 use Chamilo\Libraries\Storage\DataClass\ConfigurableDataClassTrait;
 use Chamilo\Libraries\Storage\DataClass\DataClass;
 use Chamilo\Libraries\Storage\DataClass\Interfaces\DataClassDisplayOrderSupport;
@@ -12,7 +13,7 @@ use Chamilo\Libraries\Storage\DataClass\Interfaces\DataClassDisplayOrderSupport;
  * @author  Magali Gillard <magali.gillard@ehb.be>
  * @author  Eduard Vossen <eduard.vossen@ehb.be>
  */
-class Element extends DataClass implements DataClassDisplayOrderSupport
+class Element extends DataClass implements DataClassDisplayOrderSupport, ConfigurableDataClassInterface
 {
     use ConfigurableDataClassTrait;
 
@@ -20,9 +21,9 @@ class Element extends DataClass implements DataClassDisplayOrderSupport
     public const CONFIGURATION_CONTEXT = 'context';
     public const CONFIGURATION_VISIBILITY = 'visibility';
     public const CONFIGURATION_WIDTH = 'width';
+    
     public const CONTEXT = Manager::CONTEXT;
 
-    public const PROPERTY_CONFIGURATION = 'configuration';
     public const PROPERTY_PARENT_ID = 'parent_id';
     public const PROPERTY_SORT = 'sort';
     public const PROPERTY_TITLE = 'title';
@@ -53,14 +54,13 @@ class Element extends DataClass implements DataClassDisplayOrderSupport
         return null;
     }
 
-    public static function getDefaultPropertyNames(array $extendedPropertyNames = []): array
+    public static function getDefaultPropertyNamesForConfigurableClass(array $extendedPropertyNames = []): array
     {
         $extendedPropertyNames[] = self::PROPERTY_TYPE;
         $extendedPropertyNames[] = self::PROPERTY_PARENT_ID;
         $extendedPropertyNames[] = self::PROPERTY_TITLE;
         $extendedPropertyNames[] = self::PROPERTY_SORT;
         $extendedPropertyNames[] = self::PROPERTY_USER_ID;
-        $extendedPropertyNames[] = self::PROPERTY_CONFIGURATION;
 
         return parent::getDefaultPropertyNames($extendedPropertyNames);
     }

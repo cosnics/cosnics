@@ -13,10 +13,7 @@ interface DataClassDisplayOrderSupport
      */
     public function getDefaultProperties(): array;
 
-    /**
-     * @return mixed
-     */
-    public function getDefaultProperty(string $name);
+    public function getDefaultProperty(string $name): mixed;
 
     /**
      * @return string[]
