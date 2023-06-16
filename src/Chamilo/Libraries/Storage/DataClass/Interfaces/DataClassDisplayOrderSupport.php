@@ -29,5 +29,5 @@ interface DataClassDisplayOrderSupport
     /**
      * @param mixed $value
      */
-    public function setDefaultProperty(string $name, $value);
+    public function setDefaultProperty(string $name, mixed $value);
 }

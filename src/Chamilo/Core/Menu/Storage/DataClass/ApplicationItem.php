@@ -3,6 +3,7 @@ namespace Chamilo\Core\Menu\Storage\DataClass;
 
 use Chamilo\Core\Menu\Manager;
 use Chamilo\Libraries\Format\Structure\Glyph\FontAwesomeGlyph;
+use Chamilo\Libraries\Format\Structure\Glyph\InlineGlyph;
 
 /**
  * @package Chamilo\Core\Menu\Storage\DataClass
@@ -71,7 +72,7 @@ class ApplicationItem extends Item
     /**
      * @return \Chamilo\Libraries\Format\Structure\Glyph\FontAwesomeGlyph
      */
-    public function getGlyph()
+    public function getGlyph(): InlineGlyph
     {
         return new FontAwesomeGlyph('desktop', [], null, 'fas');
     }

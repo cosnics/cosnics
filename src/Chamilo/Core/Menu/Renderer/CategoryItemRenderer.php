@@ -1,8 +1,7 @@
 <?php
-namespace Chamilo\Core\Menu\Renderer\Item;
+namespace Chamilo\Core\Menu\Renderer;
 
 use Chamilo\Core\Menu\Factory\ItemRendererFactory;
-use Chamilo\Core\Menu\Renderer\ItemRenderer;
 use Chamilo\Core\Menu\Service\CachedItemService;
 use Chamilo\Core\Menu\Service\RightsCacheService;
 use Chamilo\Core\Menu\Storage\DataClass\Item;
@@ -42,7 +41,7 @@ class CategoryItemRenderer extends ItemRenderer
      * @return string
      * @throws \Psr\SimpleCache\InvalidArgumentException
      */
-    public function render(Item $item, User $user)
+    public function render(Item $item, User $user): string
     {
         $html = [];
 
@@ -104,7 +103,7 @@ class CategoryItemRenderer extends ItemRenderer
      *
      * @return string[]
      */
-    protected function getClasses($isSelected = false, $existingClasses = [])
+    protected function getClasses($isSelected = false, $existingClasses = []): array
     {
         $existingClasses[] = 'dropdown';
 
@@ -132,7 +131,7 @@ class CategoryItemRenderer extends ItemRenderer
      *
      * @return bool
      */
-    public function isSelected(Item $item)
+    public function isSelected(Item $item): bool
     {
         $childItems = $this->getItemCacheService()->findItemsByParentIdentifier($item->getId());
 

@@ -394,7 +394,7 @@ abstract class DataClass
     /**
      * @param mixed $value
      */
-    public function setDefaultProperty(string $name, $value)
+    public function setDefaultProperty(string $name, mixed $value)
     {
         $this->notify(DataClassListener::BEFORE_SET_PROPERTY, [$name, $value]);
         $this->setSpecificProperty(self::PROPERTIES_DEFAULT, $name, $value);

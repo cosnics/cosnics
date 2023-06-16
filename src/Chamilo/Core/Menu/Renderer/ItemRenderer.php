@@ -33,29 +33,19 @@ abstract class ItemRenderer
         $this->request = $request;
     }
 
-    /**
-     * @param \Chamilo\Core\Menu\Storage\DataClass\Item $item
-     * @param \Chamilo\Core\User\Storage\DataClass\User $user
-     *
-     * @return string
-     */
-    abstract public function render(Item $item, User $user);
+    abstract public function render(Item $item, User $user): string;
 
-    /**
-     * @return \Chamilo\Core\Rights\Structure\Service\Interfaces\AuthorizationCheckerInterface
-     */
     public function getAuthorizationChecker(): AuthorizationCheckerInterface
     {
         return $this->authorizationChecker;
     }
 
     /**
-     * @param bool $isSelected
      * @param string[] $existingClasses
      *
      * @return string[]
      */
-    protected function getClasses($isSelected = false, $existingClasses = [])
+    protected function getClasses(bool $isSelected = false, array $existingClasses = []): array
     {
         if ($isSelected)
         {
@@ -65,46 +55,24 @@ abstract class ItemRenderer
         return $existingClasses;
     }
 
-    /**
-     * @return \Chamilo\Core\Menu\Service\CachedItemService
-     */
     public function getItemCacheService(): CachedItemService
     {
         return $this->itemCacheService;
     }
 
-    /**
-     * @return \Chamilo\Libraries\Platform\ChamiloRequest
-     */
     public function getRequest(): ChamiloRequest
     {
         return $this->request;
     }
 
-    /**
-     * @return \Symfony\Component\Translation\Translator
-     */
     public function getTranslator(): Translator
     {
         return $this->translator;
     }
 
-    /**
-     * @param \Chamilo\Core\Menu\Storage\DataClass\Item $item
-     *
-     * @return bool
-     */
-    public function isSelected(Item $item)
-    {
-        return false;
-    }
+    abstract public function isSelected(Item $item): bool;
 
-    /**
-     * @param \Chamilo\Core\Menu\Storage\DataClass\Item $item
-     *
-     * @return string
-     */
-    protected function renderCssIcon(Item $item)
+    protected function renderCssIcon(Item $item): string
     {
         $html = [];
 
@@ -116,46 +84,8 @@ abstract class ItemRenderer
         return implode(PHP_EOL, $html);
     }
 
-    /**
-     * @param \Chamilo\Core\Menu\Storage\DataClass\Item $item
-     *
-     * @return string
-     * @throws \Psr\SimpleCache\InvalidArgumentException
-     */
-    public function renderTitle(Item $item)
+    public function renderTitle(Item $item): string
     {
         return $this->getItemCacheService()->getItemTitleForCurrentLanguage($item);
-    }
-
-    /**
-     * @param \Chamilo\Core\Rights\Structure\Service\Interfaces\AuthorizationCheckerInterface $authorizationChecker
-     */
-    public function setAuthorizationChecker(AuthorizationCheckerInterface $authorizationChecker): void
-    {
-        $this->authorizationChecker = $authorizationChecker;
-    }
-
-    /**
-     * @param \Chamilo\Core\Menu\Service\CachedItemService $itemCacheService
-     */
-    public function setItemCacheService(CachedItemService $itemCacheService): void
-    {
-        $this->itemCacheService = $itemCacheService;
-    }
-
-    /**
-     * @param \Chamilo\Libraries\Platform\ChamiloRequest $request
-     */
-    public function setRequest(ChamiloRequest $request): void
-    {
-        $this->request = $request;
-    }
-
-    /**
-     * @param \Symfony\Component\Translation\Translator $translator
-     */
-    public function setTranslator(Translator $translator): void
-    {
-        $this->translator = $translator;
     }
 }

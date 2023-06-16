@@ -15,7 +15,7 @@ class BlockRendererFactory
     /**
      * @var \Chamilo\Core\Home\Renderer\BlockRenderer[]
      */
-    protected array $availableBlockRenderers;
+    protected array $availableBlockRenderers = [];
 
     public function addAvailableBlockRenderer(BlockRenderer $blockRenderer): void
     {

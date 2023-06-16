@@ -1,7 +1,6 @@
 <?php
-namespace Chamilo\Core\Menu\Renderer\Item;
+namespace Chamilo\Core\Menu\Renderer;
 
-use Chamilo\Core\Menu\Renderer\ItemRenderer;
 use Chamilo\Core\Menu\Service\CachedItemService;
 use Chamilo\Core\Menu\Storage\DataClass\Item;
 use Chamilo\Core\Rights\Structure\Service\Interfaces\AuthorizationCheckerInterface;
@@ -36,7 +35,7 @@ class LanguageItemRenderer extends ItemRenderer
      *
      * @return string
      */
-    public function render(Item $item, User $user)
+    public function render(Item $item, User $user): string
     {
         if (!$this->isItemVisibleForUser($user))
         {
@@ -85,8 +84,13 @@ class LanguageItemRenderer extends ItemRenderer
      *
      * @return string
      */
-    public function renderTitle(Item $item)
+    public function renderTitle(Item $item): string
     {
         return $item->getLanguage();
+    }
+
+    public function isSelected(Item $item): bool
+    {
+        return false;
     }
 }

@@ -1,5 +1,5 @@
 <?php
-namespace Chamilo\Core\Repository\Integration\Chamilo\Core\Menu\Renderer\Item;
+namespace Chamilo\Core\Repository\Service\Menu;
 
 use Chamilo\Core\Menu\Renderer\ItemRenderer;
 use Chamilo\Core\Menu\Service\CachedItemService;
@@ -38,7 +38,7 @@ class WorkspaceConfigureItemRenderer extends ItemRenderer
      *
      * @return string
      */
-    public function render(Item $item, User $user)
+    public function render(Item $item, User $user): string
     {
         $selected = $this->isSelected($item);
 
@@ -75,7 +75,7 @@ class WorkspaceConfigureItemRenderer extends ItemRenderer
         return $this->urlGenerator;
     }
 
-    public function isSelected(Item $item)
+    public function isSelected(Item $item): bool
     {
         $currentContext = $this->getRequest()->query->get(Application::PARAM_CONTEXT);
 
@@ -87,7 +87,7 @@ class WorkspaceConfigureItemRenderer extends ItemRenderer
      *
      * @return string
      */
-    public function renderTitle(Item $item)
+    public function renderTitle(Item $item): string
     {
         return $this->getTranslator()->trans('ConfigureWorkspaces', [], 'Chamilo\Core\Repository\Workspace');
     }

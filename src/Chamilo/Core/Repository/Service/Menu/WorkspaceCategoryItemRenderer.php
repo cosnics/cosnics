@@ -1,11 +1,10 @@
 <?php
-namespace Chamilo\Core\Repository\Integration\Chamilo\Core\Menu\Renderer\Item;
+namespace Chamilo\Core\Repository\Service\Menu;
 
 use Chamilo\Core\Menu\Factory\ItemRendererFactory;
 use Chamilo\Core\Menu\Renderer\ItemRenderer;
 use Chamilo\Core\Menu\Service\CachedItemService;
 use Chamilo\Core\Menu\Storage\DataClass\Item;
-use Chamilo\Core\Repository\Integration\Chamilo\Core\Menu\Storage\DataClass\WorkspaceCategoryItem;
 use Chamilo\Core\Repository\Integration\Chamilo\Core\Menu\Storage\DataClass\WorkspaceConfigureItem;
 use Chamilo\Core\Repository\Integration\Chamilo\Core\Menu\Storage\DataClass\WorkspaceItem;
 use Chamilo\Core\Repository\Manager as RepositoryManager;
@@ -48,11 +47,11 @@ class WorkspaceCategoryItemRenderer extends ItemRenderer
      * @return string
      * @throws \Exception
      */
-    public function render(Item $item, User $user)
+    public function render(Item $item, User $user): string
     {
         if (!$this->isItemVisibleForUser($item, $user))
         {
-            return;
+            return '';
         }
 
         $html = [];
@@ -119,12 +118,12 @@ class WorkspaceCategoryItemRenderer extends ItemRenderer
      *
      * @return bool
      */
-    public function isItemVisibleForUser(WorkspaceCategoryItem $item, User $user)
+    public function isItemVisibleForUser(Item $item, User $user): bool
     {
         return $this->getAuthorizationChecker()->isAuthorized($user, 'Chamilo\Core\Repository');
     }
 
-    public function isSelected(Item $item)
+    public function isSelected(Item $item): bool
     {
         $request = $this->getRequest();
 
@@ -145,7 +144,7 @@ class WorkspaceCategoryItemRenderer extends ItemRenderer
      *
      * @return string
      */
-    public function renderTitle(Item $item)
+    public function renderTitle(Item $item): string
     {
         return $this->getTranslator()->trans('Workspaces', [], 'Chamilo\Core\Repository');
     }

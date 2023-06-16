@@ -1,10 +1,8 @@
 <?php
-namespace Chamilo\Core\Menu\Renderer\Item;
+namespace Chamilo\Core\Menu\Renderer;
 
 use Chamilo\Configuration\Service\Consulter\RegistrationConsulter;
-use Chamilo\Core\Menu\Renderer\ItemRenderer;
 use Chamilo\Core\Menu\Service\CachedItemService;
-use Chamilo\Core\Menu\Storage\DataClass\ApplicationItem;
 use Chamilo\Core\Menu\Storage\DataClass\Item;
 use Chamilo\Core\Rights\Structure\Service\Interfaces\AuthorizationCheckerInterface;
 use Chamilo\Core\User\Storage\DataClass\User;
@@ -21,6 +19,11 @@ use Symfony\Component\Translation\Translator;
  */
 class ApplicationItemRenderer extends ItemRenderer
 {
+    public const CONFIGURATION_APPLICATION = 'application';
+    public const CONFIGURATION_COMPONENT = 'component';
+    public const CONFIGURATION_EXTRA_PARAMETERS = 'extra_parameters';
+    public const CONFIGURATION_USE_TRANSLATION = 'use_translation';
+
     private RegistrationConsulter $registrationConsulter;
 
     private UrlGenerator $urlGenerator;
@@ -38,12 +41,9 @@ class ApplicationItemRenderer extends ItemRenderer
     }
 
     /**
-     * @param \Chamilo\Core\Menu\Storage\DataClass\ApplicationItem $item
-     * @param \Chamilo\Core\User\Storage\DataClass\User $user
-     *
-     * @return string
+     * @throws \Symfony\Component\Cache\Exception\CacheException
      */
-    public function render(Item $item, User $user)
+    public function render(Item $item, User $user): string
     {
         if (!$this->isItemVisibleForUser($item, $user))
         {
@@ -71,7 +71,8 @@ class ApplicationItemRenderer extends ItemRenderer
             else
             {
                 $glyph = new NamespaceIdentGlyph(
-                    $item->getApplication(), false, false, false, IdentGlyph::SIZE_MEDIUM, [], $title
+                    $item->getSetting(self::CONFIGURATION_APPLICATION), false, false, false, IdentGlyph::SIZE_MEDIUM,
+                    [], $title
                 );
 
                 $html[] = $glyph->render();
@@ -89,32 +90,33 @@ class ApplicationItemRenderer extends ItemRenderer
         return implode(PHP_EOL, $html);
     }
 
-    /**
-     * @param \Chamilo\Core\Menu\Storage\DataClass\ApplicationItem $item
-     *
-     * @return string
-     */
-    protected function getApplicationItemUrl(ApplicationItem $item)
+    protected function getApplicationItemUrl(Item $item): string
     {
-        if ($item->getApplication() == 'root')
+        $application = $item->getSetting(self::CONFIGURATION_APPLICATION);
+
+        if ($application == 'root')
         {
             return $this->getUrlGenerator()->fromParameters();
         }
 
         $parameters = [];
 
-        $parameters[Application::PARAM_CONTEXT] = $item->getApplication();
+        $parameters[Application::PARAM_CONTEXT] = $application;
 
-        if ($item->getComponent())
+        $component = $item->getSetting(self::CONFIGURATION_COMPONENT);
+
+        if ($component)
         {
-            $parameters[Application::PARAM_ACTION] = $item->getComponent();
+            $parameters[Application::PARAM_ACTION] = $component;
         }
 
-        if ($item->getExtraParameters())
-        {
-            parse_str($item->getExtraParameters(), $extraParameters);
+        $extraParameters = $item->getSetting(self::CONFIGURATION_EXTRA_PARAMETERS);
 
-            foreach ($extraParameters as $key => $value)
+        if ($extraParameters)
+        {
+            parse_str($extraParameters, $parsedExtraParameters);
+
+            foreach ($parsedExtraParameters as $key => $value)
             {
                 $parameters[$key] = $value;
             }
@@ -123,9 +125,6 @@ class ApplicationItemRenderer extends ItemRenderer
         return $this->getUrlGenerator()->fromParameters($parameters);
     }
 
-    /**
-     * @return \Chamilo\Configuration\Service\Consulter\RegistrationConsulter
-     */
     public function getRegistrationConsulter(): RegistrationConsulter
     {
         return $this->registrationConsulter;
@@ -137,37 +136,33 @@ class ApplicationItemRenderer extends ItemRenderer
     }
 
     /**
-     * @param \Chamilo\Core\Menu\Storage\DataClass\ApplicationItem $item
-     * @param \Chamilo\Core\User\Storage\DataClass\User $user
-     *
-     * @return bool
+     * @throws \Symfony\Component\Cache\Exception\CacheException
      */
-    public function isItemVisibleForUser(ApplicationItem $item, User $user)
+    public function isItemVisibleForUser(Item $item, User $user): bool
     {
-        $isAuthorized = $this->getAuthorizationChecker()->isAuthorized($user, $item->getApplication());
-        $isActiveApplication = $this->getRegistrationConsulter()->isContextRegisteredAndActive($item->getApplication());
+        $application = $item->getSetting(self::CONFIGURATION_APPLICATION);
+
+        $isAuthorized = $this->getAuthorizationChecker()->isAuthorized($user, $application);
+        $isActiveApplication = $this->getRegistrationConsulter()->isContextRegisteredAndActive($application);
 
         return $isAuthorized && $isActiveApplication;
     }
 
-    /**
-     * @param \Chamilo\Core\Menu\Storage\DataClass\ApplicationItem $item
-     *
-     * @return bool
-     */
-    public function isSelected(Item $item)
+    public function isSelected(Item $item): bool
     {
         $request = $this->getRequest();
 
         $currentContext = $request->query->get(Application::PARAM_CONTEXT);
         $currentAction = $request->query->get(Application::PARAM_ACTION);
 
-        if ($currentContext != $item->getApplication())
+        if ($currentContext != $item->getSetting(self::CONFIGURATION_APPLICATION))
         {
             return false;
         }
 
-        if ($item->getComponent() && $currentAction != $item->getComponent())
+        $component = $item->getSetting(self::CONFIGURATION_COMPONENT);
+
+        if ($component && $currentAction != $component)
         {
             return false;
         }
@@ -175,26 +170,13 @@ class ApplicationItemRenderer extends ItemRenderer
         return true;
     }
 
-    /**
-     * @param \Chamilo\Core\Menu\Storage\DataClass\ApplicationItem $item
-     *
-     * @return string
-     */
-    public function renderTitle(Item $item)
+    public function renderTitle(Item $item): string
     {
-        if ($item->getUseTranslation())
+        if ($item->getSetting(self::CONFIGURATION_USE_TRANSLATION))
         {
-            return $this->getTranslator()->trans('TypeName', [], $item->getApplication());
+            return $this->getTranslator()->trans('TypeName', [], $item->getSetting(self::CONFIGURATION_APPLICATION));
         }
 
         return parent::renderTitle($item);
-    }
-
-    /**
-     * @param \Chamilo\Configuration\Service\Consulter\RegistrationConsulter $registrationConsulter
-     */
-    public function setRegistrationConsulter(RegistrationConsulter $registrationConsulter): void
-    {
-        $this->registrationConsulter = $registrationConsulter;
     }
 }

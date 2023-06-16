@@ -30,8 +30,10 @@ class Item extends DataClass implements DataClassDisplayOrderSupport, Configurab
     public const PROPERTY_ICON_CLASS = 'icon_class';
     public const PROPERTY_PARENT = 'parent';
     public const PROPERTY_SORT = 'sort';
-    public const PROPERTY_TYPE = 'type';
+
     public const PROPERTY_TITLES = 'titles';
+
+    public const PROPERTY_TYPE = 'type';
 
     public const TYPE_APPLICATION = 1;
     public const TYPE_CATEGORY = 3;
@@ -43,7 +45,7 @@ class Item extends DataClass implements DataClassDisplayOrderSupport, Configurab
      *
      * @return string[]
      */
-    public static function getDefaultPropertyNamesForConfigurableClass(array $extendedPropertyNames = []): array
+    public static function getDefaultPropertyNames(array $extendedPropertyNames = []): array
     {
         return parent::getDefaultPropertyNames(
             [
@@ -54,6 +56,7 @@ class Item extends DataClass implements DataClassDisplayOrderSupport, Configurab
                 self::PROPERTY_HIDDEN,
                 self::PROPERTY_DISPLAY,
                 self::PROPERTY_ICON_CLASS,
+                self::PROPERTY_CONFIGURATION,
                 self::PROPERTY_TITLES
             ]
         );
@@ -108,6 +111,19 @@ class Item extends DataClass implements DataClassDisplayOrderSupport, Configurab
     public static function getStorageUnitName(): string
     {
         return 'menu_item';
+    }
+
+    public function getTitleForIsoCode(string $isoCode): ?string
+    {
+        return $this->getSerializedPropertyValue(self::PROPERTY_TITLES, $isoCode);
+    }
+
+    /**
+     * @return string[]
+     */
+    public function getTitles(): array
+    {
+        return $this->getSerializedProperty(self::PROPERTY_TITLES);
     }
 
     public function getType(): string
@@ -208,6 +224,19 @@ class Item extends DataClass implements DataClassDisplayOrderSupport, Configurab
         return $this;
     }
 
+    public function setTitleForIsoCode(string $isoCode, string $title): Item
+    {
+        return $this->setSerializedPropertyValue(self::PROPERTY_TITLES, $isoCode, $title);
+    }
+
+    /**
+     * @param string[] $titles
+     */
+    public function setTitles(array $titles): Item
+    {
+        return $this->setSerializedProperty(self::PROPERTY_TITLES, $titles);
+    }
+
     public function setType(string $type): Item
     {
         $this->setDefaultProperty(self::PROPERTY_TYPE, $type);
@@ -274,4 +303,5 @@ class Item extends DataClass implements DataClassDisplayOrderSupport, Configurab
     {
         return $this->showTitle();
     }
+
 }

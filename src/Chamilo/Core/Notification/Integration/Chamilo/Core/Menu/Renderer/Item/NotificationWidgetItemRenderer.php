@@ -2,7 +2,7 @@
 namespace Chamilo\Core\Notification\Integration\Chamilo\Core\Menu\Renderer\Item;
 
 use Chamilo\Configuration\Service\Consulter\RegistrationConsulter;
-use Chamilo\Core\Menu\Renderer\Item\PriorityItemRenderer;
+use Chamilo\Core\Menu\Renderer\PriorityItemRenderer;
 use Chamilo\Core\Menu\Service\CachedItemService;
 use Chamilo\Core\Menu\Storage\DataClass\Item;
 use Chamilo\Core\Notification\Manager;

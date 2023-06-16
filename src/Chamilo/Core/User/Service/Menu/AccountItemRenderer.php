@@ -1,5 +1,5 @@
 <?php
-namespace Chamilo\Core\User\Integration\Chamilo\Core\Menu\Renderer\Item;
+namespace Chamilo\Core\User\Service\Menu;
 
 use Chamilo\Core\Menu\Storage\DataClass\Item;
 use Chamilo\Core\User\Manager;
@@ -38,7 +38,7 @@ class AccountItemRenderer extends MenuItemRenderer
      *
      * @return bool
      */
-    public function isSelected(Item $item)
+    public function isSelected(Item $item): bool
     {
         $currentContext = $this->getRequest()->query->get(Application::PARAM_CONTEXT);
         $currentAction = $this->getRequest()->query->get(Manager::PARAM_ACTION);
@@ -51,7 +51,7 @@ class AccountItemRenderer extends MenuItemRenderer
      *
      * @return string
      */
-    public function renderTitle(Item $item)
+    public function renderTitle(Item $item): string
     {
         return $this->getTranslator()->trans('MyAccount', [], 'Chamilo\Core\User');
     }

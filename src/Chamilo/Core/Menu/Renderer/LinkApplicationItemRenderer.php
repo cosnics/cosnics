@@ -1,7 +1,6 @@
 <?php
-namespace Chamilo\Core\Menu\Renderer\Item;
+namespace Chamilo\Core\Menu\Renderer;
 
-use Chamilo\Core\Menu\Renderer\ItemRenderer;
 use Chamilo\Core\Menu\Storage\DataClass\Item;
 use Chamilo\Core\User\Storage\DataClass\User;
 
@@ -19,7 +18,7 @@ class LinkApplicationItemRenderer extends ItemRenderer
      * @return string
      * @throws \Psr\SimpleCache\InvalidArgumentException
      */
-    public function render(Item $item, User $user)
+    public function render(Item $item, User $user): string
     {
         $html = [];
 
@@ -30,5 +29,10 @@ class LinkApplicationItemRenderer extends ItemRenderer
         $html[] = '</li>';
 
         return implode(PHP_EOL, $html);
+    }
+
+    public function isSelected(Item $item): bool
+    {
+        return false;
     }
 }

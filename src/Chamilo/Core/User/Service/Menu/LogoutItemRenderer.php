@@ -1,5 +1,5 @@
 <?php
-namespace Chamilo\Core\User\Integration\Chamilo\Core\Menu\Renderer\Item;
+namespace Chamilo\Core\User\Service\Menu;
 
 use Chamilo\Core\Menu\Storage\DataClass\Item;
 use Chamilo\Core\User\Manager;
@@ -35,8 +35,13 @@ class LogoutItemRenderer extends MenuItemRenderer
      *
      * @return string
      */
-    public function renderTitle(Item $item)
+    public function renderTitle(Item $item): string
     {
         return $this->getTranslator()->trans('Logout', [], 'Chamilo\Core\User');
+    }
+
+    public function isSelected(Item $item): bool
+    {
+        return false;
     }
 }

@@ -1,62 +1,60 @@
 <?php
-namespace Chamilo\Core\Menu\Renderer\Item;
+namespace Chamilo\Core\User\Service\Menu;
 
 use Chamilo\Core\Menu\Renderer\ItemRenderer;
 use Chamilo\Core\Menu\Service\CachedItemService;
 use Chamilo\Core\Menu\Storage\DataClass\Item;
 use Chamilo\Core\Rights\Structure\Service\Interfaces\AuthorizationCheckerInterface;
 use Chamilo\Core\User\Storage\DataClass\User;
+use Chamilo\Libraries\Architecture\Application\Routing\UrlGenerator;
 use Chamilo\Libraries\Architecture\ClassnameUtilities;
-use Chamilo\Libraries\Format\Structure\Glyph\FontAwesomeGlyph;
 use Chamilo\Libraries\Platform\ChamiloRequest;
 use Symfony\Component\Translation\Translator;
 
 /**
- * @package Chamilo\Core\Menu\Renderer\ItemRenderer
+ * @package Chamilo\Core\User\Integration\Chamilo\Core\Menu\Renderer\ItemRenderer
  * @author  Hans De Bisschop <hans.de.bisschop@ehb.be>
  */
-class LinkItemRenderer extends ItemRenderer
+abstract class MenuItemRenderer extends ItemRenderer
 {
+
+    protected UrlGenerator $urlGenerator;
 
     private ClassnameUtilities $classnameUtilities;
 
     public function __construct(
         AuthorizationCheckerInterface $authorizationChecker, Translator $translator,
-        CachedItemService $itemCacheService, ChamiloRequest $request, ClassnameUtilities $classnameUtilities
+        CachedItemService $itemCacheService, ChamiloRequest $request, ClassnameUtilities $classnameUtilities,
+        UrlGenerator $urlGenerator
     )
     {
         parent::__construct($authorizationChecker, $translator, $itemCacheService, $request);
 
         $this->classnameUtilities = $classnameUtilities;
+        $this->urlGenerator = $urlGenerator;
     }
 
     /**
-     * @param \Chamilo\Core\Menu\Storage\DataClass\LinkItem $item
+     * @param \Chamilo\Core\Menu\Storage\DataClass\Item $item
      * @param \Chamilo\Core\User\Storage\DataClass\User $user
      *
      * @return string
      * @throws \Psr\SimpleCache\InvalidArgumentException
      */
-    public function render(Item $item, User $user)
+    public function render(Item $item, User $user): string
     {
-        $title = $this->renderTitle($item);
-
         $html = [];
 
-        $html[] = '<li>';
-        $html[] = '<a href="' . $item->getUrl() . '" target="' . $item->getTargetString() . '">';
+        $selected = $this->isSelected($item);
+
+        $html[] = '<li' . ($selected ? ' class="active"' : '') . '>';
+        $html[] = '<a href="' . $this->getUrl() . '">';
+
+        $title = $this->renderTitle($item);
 
         if ($item->showIcon())
         {
-            if (!empty($item->getIconClass()))
-            {
-                $html[] = $this->renderCssIcon($item);
-            }
-            else
-            {
-                $glyph = new FontAwesomeGlyph('link', ['fa-2x'], null, 'fas');
-                $html[] = $glyph->render();
-            }
+            $html[] = $this->getGlyph()->render();
         }
 
         if ($item->showTitle())
@@ -76,6 +74,21 @@ class LinkItemRenderer extends ItemRenderer
     public function getClassnameUtilities(): ClassnameUtilities
     {
         return $this->classnameUtilities;
+    }
+
+    /**
+     * @return \Chamilo\Libraries\Format\Structure\Glyph\InlineGlyph
+     */
+    abstract public function getGlyph();
+
+    /**
+     * @return string
+     */
+    abstract public function getUrl();
+
+    public function getUrlGenerator(): UrlGenerator
+    {
+        return $this->urlGenerator;
     }
 
     /**

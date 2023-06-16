@@ -7,6 +7,8 @@ namespace Chamilo\Libraries\Storage\DataClass;
  */
 trait ConfigurableDataClassTrait
 {
+    use DataClassSerializedPropertyTrait;
+
     public const PROPERTY_CONFIGURATION = 'configuration';
 
     /**
@@ -14,28 +16,12 @@ trait ConfigurableDataClassTrait
      */
     public function getConfiguration(): array
     {
-        $serializedConfiguration = $this->getDefaultProperty(self::PROPERTY_CONFIGURATION);
-
-        return unserialize($serializedConfiguration ?: serialize([]));
+        return $this->getSerializedProperty(self::PROPERTY_CONFIGURATION);
     }
-
-    abstract public function getDefaultProperty(string $name): mixed;
-
-    public static function getDefaultPropertyNames(array $extendedPropertyNames = []): array
-    {
-        $extendedPropertyNames[] = self::PROPERTY_CONFIGURATION;
-
-        return static::getDefaultPropertyNamesForConfigurableClass($extendedPropertyNames);
-    }
-
-    abstract public static function getDefaultPropertyNamesForConfigurableClass(array $extendedPropertyNames = []
-    ): array;
 
     public function getSetting(string $variable, mixed $defaultValue = null): mixed
     {
-        $configuration = $this->getConfiguration();
-
-        return ($configuration[$variable] ?? $defaultValue);
+        return $this->getSerializedPropertyValue(self::PROPERTY_CONFIGURATION, $variable, $defaultValue);
     }
 
     /**
@@ -43,23 +29,11 @@ trait ConfigurableDataClassTrait
      */
     public function setConfiguration(array $configuration): static
     {
-        $this->setDefaultProperty(self::PROPERTY_CONFIGURATION, serialize($configuration));
-
-        return $this;
+        return $this->setSerializedProperty(self::PROPERTY_CONFIGURATION, $configuration);
     }
-
-    /**
-     * @param mixed $value
-     */
-    abstract public function setDefaultProperty(string $name, $value);
 
     public function setSetting(string $variable, mixed $value): static
     {
-        $configuration = $this->getConfiguration();
-        $configuration[$variable] = $value;
-
-        $this->setConfiguration($configuration);
-
-        return $this;
+        return $this->setSerializedPropertyValue(self::PROPERTY_CONFIGURATION, $variable, $value);
     }
 }

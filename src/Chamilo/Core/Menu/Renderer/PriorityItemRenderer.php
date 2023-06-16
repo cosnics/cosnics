@@ -1,7 +1,5 @@
 <?php
-namespace Chamilo\Core\Menu\Renderer\Item;
-
-use Chamilo\Core\Menu\Renderer\ItemRenderer;
+namespace Chamilo\Core\Menu\Renderer;
 
 /**
  * @package Chamilo\Core\Menu\Renderer\Item\Bar
@@ -15,7 +13,7 @@ abstract class PriorityItemRenderer extends ItemRenderer
      *
      * @return string[]
      */
-    protected function getClasses($isSelected = false, $existingClasses = [])
+    protected function getClasses($isSelected = false, $existingClasses = []): array
     {
         $existingClasses[] = 'chamilo-menu-item-priority';
 

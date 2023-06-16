@@ -1,9 +1,8 @@
 <?php
-namespace Chamilo\Core\Menu\Renderer\Item;
+namespace Chamilo\Core\Menu\Renderer;
 
 use Chamilo\Configuration\Service\Consulter\LanguageConsulter;
 use Chamilo\Core\Menu\Factory\ItemRendererFactory;
-use Chamilo\Core\Menu\Renderer\ItemRenderer;
 use Chamilo\Core\Menu\Service\CachedItemService;
 use Chamilo\Core\Menu\Storage\DataClass\Item;
 use Chamilo\Core\Menu\Storage\DataClass\LanguageItem;
@@ -48,7 +47,7 @@ class LanguageCategoryItemRenderer extends ItemRenderer
      * @return string
      * @throws \Exception
      */
-    public function render(Item $item, User $user)
+    public function render(Item $item, User $user): string
     {
         if (!$this->isItemVisibleForUser($user))
         {
@@ -153,6 +152,11 @@ class LanguageCategoryItemRenderer extends ItemRenderer
         return $this->getAuthorizationChecker()->isAuthorized($user, 'Chamilo\Core\User', 'ChangeLanguage');
     }
 
+    public function isSelected(Item $item): bool
+    {
+        return false;
+    }
+
     /**
      * @param \Chamilo\Core\Menu\Storage\DataClass\Item $item
      * @param \Chamilo\Core\User\Storage\DataClass\User $user
@@ -235,7 +239,7 @@ class LanguageCategoryItemRenderer extends ItemRenderer
      *
      * @return string
      */
-    public function renderTitle(Item $item)
+    public function renderTitle(Item $item): string
     {
         return strtoupper($this->getTranslator()->getLocale());
     }

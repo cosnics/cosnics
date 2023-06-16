@@ -15,7 +15,7 @@ class ItemRendererFactory
     /**
      * @var \Chamilo\Core\Menu\Renderer\ItemRenderer[]
      */
-    protected array $availableItemRenderers;
+    protected array $availableItemRenderers = [];
 
     public function addAvailableItemRenderer(ItemRenderer $itemRenderer): void
     {

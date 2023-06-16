@@ -9,6 +9,7 @@ use Chamilo\Core\User\Storage\DataClass\User;
 use Chamilo\Libraries\File\WebPathBuilder;
 use Chamilo\Libraries\Format\Theme\ThemePathBuilder;
 use Chamilo\Libraries\Platform\ChamiloRequest;
+use Doctrine\Common\Collections\ArrayCollection;
 
 /**
  * @package Chamilo\Core\Menu\Renderer
@@ -47,13 +48,9 @@ class MenuRenderer
     }
 
     /**
-     * @param string $containerMode
-     * @param \Chamilo\Core\User\Storage\DataClass\User $user
-     *
-     * @return string
-     * @throws \Exception
+     * @throws \Symfony\Component\Cache\Exception\CacheException
      */
-    public function render(string $containerMode = 'container-fluid', User $user = null)
+    public function render(string $containerMode = 'container-fluid', ?User $user = null): string
     {
         $html = [];
 
@@ -64,13 +61,12 @@ class MenuRenderer
         {
             foreach ($this->findRootItems() as $item)
             {
-                $userCanViewItem = $this->getRightsCacheService()->canUserViewItem($user, $item);
-
-                if ($userCanViewItem)
+                if ($this->getRightsCacheService()->canUserViewItem($user, $item))
                 {
                     if (!$item->isHidden())
                     {
                         $itemRenderer = $this->getItemRendererFactory()->getItemRenderer($item);
+
                         $itemHtml = $itemRenderer->render($item, $user);
 
                         if (!empty($itemHtml))
@@ -91,40 +87,28 @@ class MenuRenderer
     }
 
     /**
-     * @return \Chamilo\Core\Menu\Storage\DataClass\Item[]
+     * @return \Doctrine\Common\Collections\ArrayCollection<\Chamilo\Core\Menu\Storage\DataClass\Item>
      */
-    public function findRootItems()
+    public function findRootItems(): ArrayCollection
     {
-        return $this->getItemCacheService()->findItemsByParentIdentifier(0);
+        return $this->getItemCacheService()->findItemsByParentIdentifier('0');
     }
 
-    /**
-     * @return \Chamilo\Libraries\Platform\ChamiloRequest
-     */
     public function getChamiloRequest(): ChamiloRequest
     {
         return $this->chamiloRequest;
     }
 
-    /**
-     * @return \Chamilo\Configuration\Service\Consulter\ConfigurationConsulter
-     */
     public function getConfigurationConsulter(): ConfigurationConsulter
     {
         return $this->configurationConsulter;
     }
 
-    /**
-     * @return \Chamilo\Core\Menu\Service\CachedItemService
-     */
     public function getItemCacheService(): CachedItemService
     {
         return $this->itemCacheService;
     }
 
-    /**
-     * @return \Chamilo\Core\Menu\Factory\ItemRendererFactory
-     */
     public function getItemRendererFactory(): ItemRendererFactory
     {
         return $this->itemRendererFactory;
@@ -145,10 +129,7 @@ class MenuRenderer
         return $this->webPathBuilder;
     }
 
-    /**
-     * @return string
-     */
-    public function renderBrand()
+    public function renderBrand(): string
     {
         $configurationConsulter = $this->getConfigurationConsulter();
 
@@ -170,10 +151,7 @@ class MenuRenderer
             $brandSource . '"></a>';
     }
 
-    /**
-     * @return string
-     */
-    public function renderFooter()
+    public function renderFooter(): string
     {
         $html = [];
 
@@ -185,13 +163,7 @@ class MenuRenderer
         return implode(PHP_EOL, $html);
     }
 
-    /**
-     * @param string $containerMode
-     * @param int $numberOfItems
-     *
-     * @return string
-     */
-    public function renderHeader(string $containerMode, int $numberOfItems = 0)
+    public function renderHeader(string $containerMode, int $numberOfItems = 0): string
     {
         $html = [];
 

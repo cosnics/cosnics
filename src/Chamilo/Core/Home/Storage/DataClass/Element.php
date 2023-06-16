@@ -21,7 +21,7 @@ class Element extends DataClass implements DataClassDisplayOrderSupport, Configu
     public const CONFIGURATION_CONTEXT = 'context';
     public const CONFIGURATION_VISIBILITY = 'visibility';
     public const CONFIGURATION_WIDTH = 'width';
-    
+
     public const CONTEXT = Manager::CONTEXT;
 
     public const PROPERTY_PARENT_ID = 'parent_id';
@@ -54,13 +54,14 @@ class Element extends DataClass implements DataClassDisplayOrderSupport, Configu
         return null;
     }
 
-    public static function getDefaultPropertyNamesForConfigurableClass(array $extendedPropertyNames = []): array
+    public static function getDefaultPropertyNames(array $extendedPropertyNames = []): array
     {
         $extendedPropertyNames[] = self::PROPERTY_TYPE;
         $extendedPropertyNames[] = self::PROPERTY_PARENT_ID;
         $extendedPropertyNames[] = self::PROPERTY_TITLE;
         $extendedPropertyNames[] = self::PROPERTY_SORT;
         $extendedPropertyNames[] = self::PROPERTY_USER_ID;
+        $extendedPropertyNames[] = self::PROPERTY_CONFIGURATION;
 
         return parent::getDefaultPropertyNames($extendedPropertyNames);
     }

@@ -1,5 +1,5 @@
 <?php
-namespace Chamilo\Core\User\Integration\Chamilo\Core\Menu\Renderer\Item;
+namespace Chamilo\Core\User\Service\Menu;
 
 use Chamilo\Configuration\Service\Consulter\ConfigurationConsulter;
 use Chamilo\Core\Menu\Renderer\ItemRenderer;
@@ -47,7 +47,7 @@ class WidgetItemRenderer extends ItemRenderer
      * @return string
      * @throws \Exception
      */
-    public function render(Item $item, User $user)
+    public function render(Item $item, User $user): string
     {
         $translator = $this->getTranslator();
 
@@ -212,7 +212,7 @@ class WidgetItemRenderer extends ItemRenderer
      *
      * @return string
      */
-    public function renderTitle(Item $item)
+    public function renderTitle(Item $item): string
     {
         return $this->getTranslator()->trans('MyAccount', [], 'Chamilo\Core\User');
     }
@@ -235,5 +235,10 @@ class WidgetItemRenderer extends ItemRenderer
         $this->userPictureProvider = $userPictureProvider;
 
         return $this;
+    }
+
+    public function isSelected(Item $item): bool
+    {
+        return false;
     }
 }

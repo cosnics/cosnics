@@ -38,7 +38,8 @@ class DependencyInjectionExtension extends AbstractDependencyInjectionExtension
                 'content_object.xml',
                 'registration.xml',
                 'services.xml',
-                'tables.xml'
+                'tables.xml',
+                'menu.xml'
             ],
             'Chamilo\Core\Repository\Feedback' => ['services.xml'],
             'Chamilo\Core\Repository\UserView' => ['tables.xml'],

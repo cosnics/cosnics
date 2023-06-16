@@ -27,5 +27,5 @@ interface DisplayOrderDataClassListenerSupport
      *
      * @throws \Exception
      */
-    public function setDefaultProperty(string $name, $value);
+    public function setDefaultProperty(string $name, mixed $value);
 }
