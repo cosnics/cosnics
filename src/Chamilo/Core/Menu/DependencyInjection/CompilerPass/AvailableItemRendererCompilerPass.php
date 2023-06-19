@@ -2,7 +2,7 @@
 namespace Chamilo\Core\Menu\DependencyInjection\CompilerPass;
 
 use Chamilo\Core\Menu\Factory\ItemRendererFactory;
-use Chamilo\Core\Menu\Renderer\ItemRenderer;
+use Chamilo\Core\Menu\Service\Renderer\ItemRenderer;
 use Symfony\Component\DependencyInjection\Compiler\CompilerPassInterface;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symfony\Component\DependencyInjection\Reference;

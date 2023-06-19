@@ -8,20 +8,20 @@
                   public="true"/>
 
         <service id="Chamilo\Core\Repository\Service\Menu\RepositoryApplicationItemRenderer">
-            <tag name="Chamilo\Core\Menu\Renderer\ItemRenderer"/>
+            <tag name="Chamilo\Core\Menu\Service\Renderer\ItemRenderer"/>
             <argument key="$fallbackIsoCodes">%chamilo.configuration.general.language.fallback%</argument>
         </service>
 
         <service id="Chamilo\Core\Repository\Service\Menu\WorkspaceCategoryItemRenderer">
-            <tag name="Chamilo\Core\Menu\Renderer\ItemRenderer"/>
+            <tag name="Chamilo\Core\Menu\Service\Renderer\ItemRenderer"/>
         </service>
 
         <service id="Chamilo\Core\Repository\Service\Menu\WorkspaceConfigureItemRenderer">
-            <tag name="Chamilo\Core\Menu\Renderer\ItemRenderer"/>
+            <tag name="Chamilo\Core\Menu\Service\Renderer\ItemRenderer"/>
         </service>
 
         <service id="Chamilo\Core\Repository\Service\Menu\WorkspaceItemRenderer">
-            <tag name="Chamilo\Core\Menu\Renderer\ItemRenderer"/>
+            <tag name="Chamilo\Core\Menu\Service\Renderer\ItemRenderer"/>
         </service>
     </services>
 </container>

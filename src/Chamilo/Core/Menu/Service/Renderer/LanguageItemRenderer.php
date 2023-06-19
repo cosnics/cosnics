@@ -1,5 +1,5 @@
 <?php
-namespace Chamilo\Core\Menu\Renderer;
+namespace Chamilo\Core\Menu\Service\Renderer;
 
 use Chamilo\Configuration\Service\Consulter\LanguageConsulter;
 use Chamilo\Core\Menu\Factory\ItemRendererFactory;
@@ -15,7 +15,7 @@ use Chamilo\Libraries\Platform\ChamiloRequest;
 use Symfony\Component\Translation\Translator;
 
 /**
- * @package Chamilo\Core\Menu\Renderer
+ * @package Chamilo\Core\Menu\Service\Renderer
  * @author  Hans De Bisschop <hans.de.bisschop@ehb.be>
  */
 class LanguageItemRenderer extends ItemRenderer

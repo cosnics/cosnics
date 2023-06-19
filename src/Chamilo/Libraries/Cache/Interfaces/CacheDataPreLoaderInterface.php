@@ -11,5 +11,5 @@ interface CacheDataPreLoaderInterface
      * @return mixed
      * @throws \Symfony\Component\Cache\Exception\CacheException
      */
-    public function preLoadCacheData();
+    public function preLoadCacheData(): mixed;
 }

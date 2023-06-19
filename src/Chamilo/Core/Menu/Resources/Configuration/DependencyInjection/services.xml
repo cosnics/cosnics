@@ -52,7 +52,7 @@
         <service id="Chamilo\Core\Menu\Storage\Repository\ItemRepository"/>
         <service id="Chamilo\Core\Menu\Storage\Repository\RightsRepository"/>
 
-        <service id="Chamilo\Core\Menu\Renderer\MenuRenderer">
+        <service id="Chamilo\Core\Menu\Service\Renderer\MenuRenderer">
             <argument key="$webPathBuilder"
                       type="service"
                       id="Chamilo\Libraries\File\WebPathBuilder"/>

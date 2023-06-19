@@ -1,7 +1,7 @@
 <?php
 namespace Chamilo\Core\Menu\Factory;
 
-use Chamilo\Core\Menu\Renderer\ItemRenderer;
+use Chamilo\Core\Menu\Service\Renderer\ItemRenderer;
 use Chamilo\Core\Menu\Storage\DataClass\Item;
 use OutOfBoundsException;
 
@@ -13,7 +13,7 @@ class ItemRendererFactory
 {
 
     /**
-     * @var \Chamilo\Core\Menu\Renderer\ItemRenderer[]
+     * @var \Chamilo\Core\Menu\Service\Renderer\ItemRenderer[]
      */
     protected array $availableItemRenderers = [];
 
@@ -41,7 +41,7 @@ class ItemRendererFactory
     }
 
     /**
-     * @return \Chamilo\Core\Menu\Renderer\ItemRenderer[]
+     * @return \Chamilo\Core\Menu\Service\Renderer\ItemRenderer[]
      */
     public function getAvailableItemRenderers(): array
     {

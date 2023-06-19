@@ -2,7 +2,7 @@
 namespace Chamilo\Core\Install\Format\Structure;
 
 use Chamilo\Configuration\Service\Consulter\ConfigurationConsulter;
-use Chamilo\Core\Menu\Renderer\MenuRenderer;
+use Chamilo\Core\Menu\Service\Renderer\MenuRenderer;
 use Chamilo\Libraries\Architecture\Application\Routing\UrlGenerator;
 use Chamilo\Libraries\File\WebPathBuilder;
 use Chamilo\Libraries\Format\Structure\BreadcrumbTrailRenderer;

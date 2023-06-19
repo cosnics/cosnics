@@ -8,15 +8,15 @@
                   public="true"/>
 
         <service id="Chamilo\Core\User\Service\Menu\AccountItemRenderer">
-            <tag name="Chamilo\Core\Menu\Renderer\ItemRenderer"/>
+            <tag name="Chamilo\Core\Menu\Service\Renderer\ItemRenderer"/>
         </service>
 
         <service id="Chamilo\Core\User\Service\Menu\LogoutItemRenderer">
-            <tag name="Chamilo\Core\Menu\Renderer\ItemRenderer"/>
+            <tag name="Chamilo\Core\Menu\Service\Renderer\ItemRenderer"/>
         </service>
 
         <service id="Chamilo\Core\User\Service\Menu\WidgetItemRenderer">
-            <tag name="Chamilo\Core\Menu\Renderer\ItemRenderer"/>
+            <tag name="Chamilo\Core\Menu\Service\Renderer\ItemRenderer"/>
         </service>
     </services>
 </container>

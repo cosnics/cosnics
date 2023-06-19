@@ -1,5 +1,5 @@
 <?php
-namespace Chamilo\Core\Menu\Renderer;
+namespace Chamilo\Core\Menu\Service\Renderer;
 
 use Chamilo\Core\Menu\Architecture\Interfaces\TranslatableItemInterface;
 use Chamilo\Core\Menu\Architecture\Interfaces\TranslatableItemTrait;
@@ -13,7 +13,7 @@ use Chamilo\Libraries\Platform\ChamiloRequest;
 use Symfony\Component\Translation\Translator;
 
 /**
- * @package Chamilo\Core\Menu\Renderer
+ * @package Chamilo\Core\Menu\Service\Renderer
  * @author  Hans De Bisschop <hans.de.bisschop@ehb.be>
  */
 class LinkItemRenderer extends ItemRenderer implements TranslatableItemInterface
@@ -23,10 +23,10 @@ class LinkItemRenderer extends ItemRenderer implements TranslatableItemInterface
     public const CONFIGURATION_TARGET = 'target';
     public const CONFIGURATION_URL = 'url';
 
-    public const TARGET_BLANK = 0;
-    public const TARGET_PARENT = 2;
-    public const TARGET_SELF = 1;
-    public const TARGET_TOP = 3;
+    public const TARGET_BLANK = '_blank';
+    public const TARGET_PARENT = '_parent';
+    public const TARGET_SELF = '_self';
+    public const TARGET_TOP = '_top';
 
     private ClassnameUtilities $classnameUtilities;
 

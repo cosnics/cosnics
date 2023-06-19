@@ -54,7 +54,7 @@ class CreatorComponent extends Manager implements DelegateComponent
 
         if ($itemForm->validate())
         {
-            $item = $this->getItemService()->createItemWithTitlesForTypeFromValues(
+            $item = $this->getItemService()->createItemForTypeFromValues(
                 $itemType, $itemForm->exportValues()
             );
 

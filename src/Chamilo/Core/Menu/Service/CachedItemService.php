@@ -3,7 +3,6 @@ namespace Chamilo\Core\Menu\Service;
 
 use Chamilo\Core\Menu\Architecture\Interfaces\ItemServiceInterface;
 use Chamilo\Core\Menu\Storage\DataClass\Item;
-use Chamilo\Core\Menu\Storage\DataClass\ItemTitle;
 use Chamilo\Libraries\Cache\Interfaces\CacheDataPreLoaderInterface;
 use Chamilo\Libraries\Cache\Traits\CacheAdapterHandlerTrait;
 use Chamilo\Libraries\Storage\DataClass\PropertyMapper;
@@ -34,15 +33,6 @@ class CachedItemService implements CacheDataPreLoaderInterface, ItemServiceInter
         $this->itemService = $itemService;
         $this->cacheAdapter = $cacheAdapter;
         $this->propertyMapper = $propertyMapper;
-    }
-
-    /**
-     * @return \Chamilo\Core\Menu\Storage\DataClass\ItemTitle[][][]
-     * @throws \Chamilo\Libraries\Storage\Exception\DataClassNoResultException
-     */
-    protected function __findItemTitlesGroupedByItemIdentifierAndIsocode(): array
-    {
-        return $this->getItemService()->findItemTitlesGroupedByItemIdentifierAndIsocode();
     }
 
     /**
@@ -81,49 +71,6 @@ class CachedItemService implements CacheDataPreLoaderInterface, ItemServiceInter
         return $item;
     }
 
-    public function createItemTitle(ItemTitle $itemTitle): bool
-    {
-        if (!$this->getItemService()->createItemTitle($itemTitle))
-        {
-            return false;
-        }
-
-        return $this->clearCacheDataForKeyParts([__CLASS__, self::KEY_ITEM_TITLES]);
-    }
-
-    public function createItemTitleForItemFromParameters(Item $item, string $isocode, string $title): bool
-    {
-        if (!$this->getItemService()->createItemTitleForItemFromParameters($item, $isocode, $title))
-        {
-            return false;
-        }
-
-        return $this->clearCacheDataForKeyParts([__CLASS__, self::KEY_ITEM_TITLES]);
-    }
-
-    public function createItemTitlesForItemFromValues(Item $item, array $values): bool
-    {
-        if (!$this->getItemService()->createItemTitlesForItemFromValues($item, $values))
-        {
-            return false;
-        }
-
-        return $this->clearCacheDataForKeyParts([__CLASS__, self::KEY_ITEM_TITLES]);
-    }
-
-    public function createItemWithTitlesForTypeFromValues(string $itemType, array $values): ?Item
-    {
-        $item = $this->getItemService()->createItemWithTitlesForTypeFromValues($itemType, $values);
-
-        if (!$item || !$this->clearCacheDataForKeyParts([__CLASS__, self::KEY_ITEMS]) ||
-            !$this->clearCacheDataForKeyParts([__CLASS__, self::KEY_ITEM_TITLES]))
-        {
-            return null;
-        }
-
-        return $item;
-    }
-
     public function deleteItem(Item $item): bool
     {
         if (!$this->getItemService()->deleteItem($item))
@@ -150,42 +97,6 @@ class CachedItemService implements CacheDataPreLoaderInterface, ItemServiceInter
         return $this->clearCacheDataForKeyParts([__CLASS__, self::KEY_ITEMS]);
     }
 
-    /**
-     * @throws \Symfony\Component\Cache\Exception\CacheException
-     */
-    public function deleteItemTitle(ItemTitle $itemTitle): bool
-    {
-        if (!$this->getItemService()->deleteItemTitle($itemTitle))
-        {
-            return false;
-        }
-
-        return $this->clearCacheDataForKeyParts([__CLASS__, self::KEY_ITEM_TITLES]);
-    }
-
-    /**
-     * @throws \Symfony\Component\Cache\Exception\CacheException
-     */
-    public function deleteItemTitlesForItem(Item $item): bool
-    {
-        if (!$this->getItemService()->deleteItemTitlesForItem($item))
-        {
-            return false;
-        }
-
-        return $this->clearCacheDataForKeyParts([__CLASS__, self::KEY_ITEM_TITLES]);
-    }
-
-    public function determineItemTitleForCurrentLanguage(array $itemTitles): string
-    {
-        return $this->getItemService()->determineItemTitleForCurrentLanguage($itemTitles);
-    }
-
-    public function determineItemTitleForIsoCode(array $itemTitles, string $isoCode): string
-    {
-        return $this->getItemService()->determineItemTitleForIsoCode($itemTitles, $isoCode);
-    }
-
     public function doesItemHaveChildren(Item $item): bool
     {
         $groupedItems = $this->findItemsGroupedByParentIdentifier();
@@ -196,37 +107,6 @@ class CachedItemService implements CacheDataPreLoaderInterface, ItemServiceInter
     public function findItemByIdentifier(string $identifier): ?Item
     {
         return $this->getItemService()->findItemByIdentifier($identifier);
-    }
-
-    public function findItemTitles(): ArrayCollection
-    {
-        return $this->getItemService()->findItemTitles();
-    }
-
-    public function findItemTitlesByItemIdentifier(string $itemIdentifier): ArrayCollection
-    {
-        return $this->getItemService()->findItemTitlesByItemIdentifier($itemIdentifier);
-    }
-
-    public function findItemTitlesByItemIdentifierIndexedByIsoCode(string $itemIdentifier): array
-    {
-        return $this->getItemService()->findItemTitlesByItemIdentifierIndexedByIsoCode($itemIdentifier);
-    }
-
-    /**
-     * @return \Chamilo\Core\Menu\Storage\DataClass\ItemTitle[][]
-     */
-    public function findItemTitlesGroupedByItemIdentifierAndIsocode(): array
-    {
-        try
-        {
-            return $this->loadCacheDataForKeyParts([__CLASS__, self::KEY_ITEM_TITLES],
-                [$this, '__findItemTitlesGroupedByItemIdentifierAndIsocode']);
-        }
-        catch (CacheException $e)
-        {
-            return [];
-        }
     }
 
     public function findItems(): ArrayCollection
@@ -289,33 +169,6 @@ class CachedItemService implements CacheDataPreLoaderInterface, ItemServiceInter
         return $this->itemService;
     }
 
-    /**
-     * @param \Chamilo\Core\Menu\Storage\DataClass\Item $item
-     *
-     * @return string
-     */
-    public function getItemTitleForCurrentLanguage(Item $item): string
-    {
-        return $this->getItemService()->determineItemTitleForCurrentLanguage($this->getItemTitles($item));
-    }
-
-    public function getItemTitleForIsoCode(Item $item, string $isoCode): string
-    {
-        return $this->getItemService()->getItemTitleForIsoCode($item, $isoCode);
-    }
-
-    /**
-     * @return \Chamilo\Core\Menu\Storage\DataClass\ItemTitle[]
-     */
-    protected function getItemTitles(Item $item): array
-    {
-        $groupedItemTitles = $this->findItemTitlesGroupedByItemIdentifierAndIsocode();
-
-        $itemKeyExists = array_key_exists($item->getId(), $groupedItemTitles);
-
-        return $itemKeyExists ? $groupedItemTitles[$item->getId()] : [];
-    }
-
     public function getNextItemSortValueByParentIdentifier(string $parentIdentifier): int
     {
         return $this->getItemService()->getNextItemSortValueByParentIdentifier($parentIdentifier);
@@ -324,12 +177,6 @@ class CachedItemService implements CacheDataPreLoaderInterface, ItemServiceInter
     public function getPropertyMapper(): PropertyMapper
     {
         return $this->propertyMapper;
-    }
-
-    public function preLoadCacheData()
-    {
-        $this->findItemTitlesGroupedByItemIdentifierAndIsocode();
-        $this->findItemsGroupedByParentIdentifier();
     }
 
     /**
@@ -347,6 +194,11 @@ class CachedItemService implements CacheDataPreLoaderInterface, ItemServiceInter
         return $this->clearCacheDataForKeyParts([__CLASS__, self::KEY_ITEMS]);
     }
 
+    public function preLoadCacheData(): mixed
+    {
+        $this->findItemsGroupedByParentIdentifier();
+    }
+
     /**
      * @throws \Chamilo\Libraries\Storage\Exception\DataClassNoResultException
      * @throws \Symfony\Component\Cache\Exception\CacheException
@@ -362,36 +214,6 @@ class CachedItemService implements CacheDataPreLoaderInterface, ItemServiceInter
         return $this->clearCacheDataForKeyParts([__CLASS__, self::KEY_ITEMS]);
     }
 
-    public function saveItemTitlesForItemFromValues(Item $item, array $values): bool
-    {
-        if (!$this->getItemService() - $this->saveItemTitlesForItemFromValues($item, $values))
-        {
-            return false;
-        }
-
-        return $this->clearCacheDataForKeyParts([__CLASS__, self::KEY_ITEM_TITLES]);
-    }
-
-    public function saveItemWithTitlesFromValues(Item $item, array $values): bool
-    {
-        if (!$this->getItemService() - $this->saveItemWithTitlesFromValues($item, $values))
-        {
-            return false;
-        }
-
-        if (!$this->clearCacheDataForKeyParts([__CLASS__, self::KEY_ITEM_TITLES]))
-        {
-            return false;
-        }
-
-        if (!$this->clearCacheDataForKeyParts([__CLASS__, self::KEY_ITEMS]))
-        {
-            return false;
-        }
-
-        return true;
-    }
-
     /**
      * @throws \Chamilo\Libraries\Storage\Exception\DataClassNoResultException
      * @throws \Symfony\Component\Cache\Exception\CacheException
@@ -405,19 +227,5 @@ class CachedItemService implements CacheDataPreLoaderInterface, ItemServiceInter
         }
 
         return $this->clearCacheDataForKeyParts([__CLASS__, self::KEY_ITEMS]);
-    }
-
-    /**
-     * @throws \Chamilo\Libraries\Storage\Exception\DataClassNoResultException
-     * @throws \Symfony\Component\Cache\Exception\CacheException
-     */
-    public function updateItemTitle(ItemTitle $itemTitle): bool
-    {
-        if (!$this->getItemService() - $this->updateItemTitle($itemTitle))
-        {
-            return false;
-        }
-
-        return $this->clearCacheDataForKeyParts([__CLASS__, self::KEY_ITEM_TITLES]);
     }
 }

@@ -1,5 +1,5 @@
 <?php
-namespace Chamilo\Core\Menu\Renderer;
+namespace Chamilo\Core\Menu\Service\Renderer;
 
 use Chamilo\Configuration\Service\Consulter\ConfigurationConsulter;
 use Chamilo\Core\Menu\Factory\ItemRendererFactory;
@@ -12,7 +12,7 @@ use Chamilo\Libraries\Platform\ChamiloRequest;
 use Doctrine\Common\Collections\ArrayCollection;
 
 /**
- * @package Chamilo\Core\Menu\Renderer
+ * @package Chamilo\Core\Menu\Service\Renderer
  * @author  Hans De Bisschop <hans.de.bisschop@ehb.be>
  */
 class MenuRenderer

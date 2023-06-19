@@ -1,7 +1,7 @@
 <?php
 namespace Chamilo\Core\Repository\Service\Menu;
 
-use Chamilo\Core\Menu\Renderer\ApplicationItemRenderer;
+use Chamilo\Core\Menu\Service\Renderer\ApplicationItemRenderer;
 use Chamilo\Core\Menu\Storage\DataClass\Item;
 use Chamilo\Core\Repository\Manager;
 use Chamilo\Core\User\Storage\DataClass\User;

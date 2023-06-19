@@ -3,7 +3,6 @@ namespace Chamilo\Core\Menu\Service;
 
 use Chamilo\Core\Menu\Architecture\Interfaces\ItemServiceInterface;
 use Chamilo\Core\Menu\Storage\DataClass\Item;
-use Chamilo\Core\Menu\Storage\DataClass\ItemTitle;
 use Chamilo\Core\Menu\Storage\Repository\ItemRepository;
 use Chamilo\Libraries\Storage\DataClass\PropertyMapper;
 use Chamilo\Libraries\Storage\Query\OrderBy;
@@ -123,78 +122,6 @@ class ItemService implements ItemServiceInterface
     }
 
     /**
-     * @throws \Exception
-     */
-    public function createItemTitle(ItemTitle $itemTitle): bool
-    {
-        if (!$this->getItemRepository()->createItemTitle($itemTitle))
-        {
-            return false;
-        }
-
-        return true;
-    }
-
-    /**
-     * @throws \Exception
-     */
-    public function createItemTitleForItemFromParameters(Item $item, string $isocode, string $title): bool
-    {
-        $itemTitle = new ItemTitle();
-        $itemTitle->setTitle($title);
-        $itemTitle->setIsocode($isocode);
-        $itemTitle->setItemId($item->getId());
-
-        return $this->createItemTitle($itemTitle);
-    }
-
-    /**
-     * @param string[][] $values
-     *
-     * @throws \Exception
-     */
-    public function createItemTitlesForItemFromValues(Item $item, array $values): bool
-    {
-        foreach ($values[ItemTitle::PROPERTY_TITLE] as $isocode => $title)
-        {
-            if (!$this->getStringUtilities()->isNullOrEmpty($title, true))
-            {
-                if (!$this->createItemTitleForItemFromParameters($item, $isocode, $title))
-                {
-                    return false;
-                }
-            }
-        }
-
-        return true;
-    }
-
-    /**
-     * @param string $itemType
-     * @param string[][] $values
-     *
-     * @return \Chamilo\Core\Menu\Storage\DataClass\Item
-     * @throws \Chamilo\Libraries\Storage\Exception\DisplayOrderException
-     * @throws \Exception
-     */
-    public function createItemWithTitlesForTypeFromValues(string $itemType, array $values): ?Item
-    {
-        $item = $this->createItemForTypeFromValues($itemType, $values);
-
-        if (!$item instanceof Item)
-        {
-            return null;
-        }
-
-        if (!$this->createItemTitlesForItemFromValues($item, $values))
-        {
-            return null;
-        }
-
-        return $item;
-    }
-
-    /**
      * @throws \Psr\Cache\InvalidArgumentException
      * @throws \Psr\SimpleCache\InvalidArgumentException
      * @throws \Exception
@@ -212,11 +139,6 @@ class ItemService implements ItemServiceInterface
         }
 
         if (!$this->getDisplayOrderHandler()->handleDisplayOrderAfterDelete($item))
-        {
-            return false;
-        }
-
-        if (!$this->deleteItemTitlesForItem($item))
         {
             return false;
         }
@@ -249,59 +171,6 @@ class ItemService implements ItemServiceInterface
         return true;
     }
 
-    public function deleteItemTitle(ItemTitle $itemTitle): bool
-    {
-        if (!$this->getItemRepository()->deleteItemTitle($itemTitle))
-        {
-            return false;
-        }
-
-        return true;
-    }
-
-    public function deleteItemTitlesForItem(Item $item): bool
-    {
-        if (!$this->getItemRepository()->deleteItemTitlesForItem($item))
-        {
-            return false;
-        }
-
-        return true;
-    }
-
-    /**
-     * @param \Chamilo\Core\Menu\Storage\DataClass\ItemTitle[] $itemTitles
-     */
-    public function determineItemTitleForCurrentLanguage(array $itemTitles): string
-    {
-        return $this->determineItemTitleForIsoCode($itemTitles, $this->getTranslator()->getLocale());
-    }
-
-    /**
-     * @param \Chamilo\Core\Menu\Storage\DataClass\ItemTitle[] $itemTitles
-     */
-    public function determineItemTitleForIsoCode(array $itemTitles, string $isoCode): string
-    {
-        if (key_exists($isoCode, $itemTitles))
-        {
-            return $itemTitles[$isoCode]->getTitle();
-        }
-        else
-        {
-            $fallbackIsoCodes = $this->getFallbackIsoCodes();
-
-            foreach ($fallbackIsoCodes as $fallbackIsoCode)
-            {
-                if (key_exists($fallbackIsoCode, $itemTitles))
-                {
-                    return $itemTitles[$fallbackIsoCode]->getTitle();
-                }
-            }
-        }
-
-        return $this->getTranslator()->trans('MenuItem', [], 'Chamilo\Core\Menu');
-    }
-
     public function doesItemHaveChildren(Item $item): bool
     {
         return $this->countItemsByParentIdentifier($item->getId()) > 0;
@@ -310,69 +179,6 @@ class ItemService implements ItemServiceInterface
     public function findItemByIdentifier(string $identifier): ?Item
     {
         return $this->getItemRepository()->findItemByIdentifier($identifier);
-    }
-
-    /**
-     * @return \Doctrine\Common\Collections\ArrayCollection<\Chamilo\Core\Menu\Storage\DataClass\ItemTitle>
-     * @throws \Chamilo\Libraries\Storage\Exception\DataClassNoResultException
-     */
-    public function findItemTitles(): ArrayCollection
-    {
-        return $this->getItemRepository()->findItemTitles();
-    }
-
-    /**
-     * @param string $itemIdentifier
-     *
-     * @return \Doctrine\Common\Collections\ArrayCollection<\Chamilo\Core\Menu\Storage\DataClass\ItemTitle>
-     * @throws \Chamilo\Libraries\Storage\Exception\DataClassNoResultException
-     */
-    public function findItemTitlesByItemIdentifier(string $itemIdentifier): ArrayCollection
-    {
-        return $this->getItemRepository()->findItemTitlesByItemIdentifier($itemIdentifier);
-    }
-
-    /**
-     * @return \Chamilo\Core\Menu\Storage\DataClass\ItemTitle[]
-     * @throws \Chamilo\Libraries\Storage\Exception\DataClassNoResultException
-     */
-    public function findItemTitlesByItemIdentifierIndexedByIsoCode(string $itemIdentifier): array
-    {
-        return $this->getPropertyMapper()->mapDataClassByProperty(
-            $this->findItemTitlesByItemIdentifier($itemIdentifier), ItemTitle::PROPERTY_ISOCODE
-        );
-    }
-
-    /**
-     * @return \Chamilo\Core\Menu\Storage\DataClass\ItemTitle[][][]
-     * @throws \Chamilo\Libraries\Storage\Exception\DataClassNoResultException
-     */
-    public function findItemTitlesGroupedByItemIdentifierAndIsocode(): array
-    {
-        $itemTitles = $this->findItemTitles();
-        $groupedItemTitles = [];
-
-        /**
-         * @var \Chamilo\Core\Menu\Storage\DataClass\ItemTitle[][] $itemTitlesGroupedByIdentifiers
-         */
-        $itemTitlesGroupedByIdentifiers =
-            $this->getPropertyMapper()->groupDataClassByProperty($itemTitles, ItemTitle::PROPERTY_ITEM_ID);
-
-        foreach ($itemTitlesGroupedByIdentifiers as $itemIdentifier => $itemTitlesGroupedByIdentifier)
-        {
-            foreach ($itemTitlesGroupedByIdentifier as $itemTitle)
-
-            {
-                if (!array_key_exists($itemIdentifier, $groupedItemTitles))
-                {
-                    $groupedItemTitles[$itemIdentifier] = [];
-                }
-
-                $groupedItemTitles[$itemIdentifier][$itemTitle->getIsocode()] = $itemTitle;
-            }
-        }
-
-        return $groupedItemTitles;
     }
 
     /**
@@ -425,7 +231,7 @@ class ItemService implements ItemServiceInterface
     }
 
     /**
-     * @return \Doctrine\Common\Collections\ArrayCollection<\Chamilo\Core\Menu\Storage\DataClass\CategoryItem>
+     * @return \Doctrine\Common\Collections\ArrayCollection<\Chamilo\Core\Menu\Storage\DataClass\Item>
      * @throws \Chamilo\Libraries\Storage\Exception\DataClassNoResultException
      */
     public function findRootCategoryItems(): ArrayCollection
@@ -464,26 +270,6 @@ class ItemService implements ItemServiceInterface
     public function getItemRepository(): ItemRepository
     {
         return $this->itemRepository;
-    }
-
-    /**
-     * @throws \Chamilo\Libraries\Storage\Exception\DataClassNoResultException
-     */
-    public function getItemTitleForCurrentLanguage(Item $item): string
-    {
-        return $this->determineItemTitleForCurrentLanguage(
-            $this->findItemTitlesByItemIdentifierIndexedByIsoCode($item->getId())
-        );
-    }
-
-    /**
-     * @throws \Chamilo\Libraries\Storage\Exception\DataClassNoResultException
-     */
-    public function getItemTitleForIsoCode(Item $item, string $isoCode): string
-    {
-        return $this->determineItemTitleForIsoCode(
-            $this->findItemTitlesByItemIdentifierIndexedByIsoCode($item->getId()), $isoCode
-        );
     }
 
     /**
@@ -561,83 +347,7 @@ class ItemService implements ItemServiceInterface
             }
         }
 
-        foreach ($item::getAdditionalPropertyNames() as $property)
-        {
-            if (isset($values[$property]))
-            {
-                $item->setAdditionalProperty($property, $values[$property]);
-            }
-        }
-
         if (!$this->updateItem($item))
-        {
-            return false;
-        }
-
-        return true;
-    }
-
-    /**
-     * @param string[][] $values
-     *
-     * @throws \Exception
-     */
-    public function saveItemTitlesForItemFromValues(Item $item, array $values): bool
-    {
-        $existingItemTitles = $this->findItemTitlesByItemIdentifierIndexedByIsoCode($item->getId());
-        $valuesItemTitles = $values[ItemTitle::PROPERTY_TITLE];
-
-        $existingIsoCodes = array_keys($existingItemTitles);
-        $valuesIsoCodes = array_keys($valuesItemTitles);
-
-        $isoCodesToDelete = array_diff($existingIsoCodes, $valuesIsoCodes);
-        $isoCodesToAdd = array_diff($valuesIsoCodes, $existingIsoCodes);
-        $isoCodesToUpdate = array_intersect($existingIsoCodes, $valuesIsoCodes);
-
-        foreach ($isoCodesToDelete as $isoCodeToDelete)
-        {
-            if (!$this->deleteItemTitle($existingItemTitles[$isoCodeToDelete]))
-            {
-                return false;
-            }
-        }
-
-        foreach ($isoCodesToAdd as $isoCodeToAdd)
-        {
-            if (!$this->createItemTitleForItemFromParameters($item, $isoCodeToAdd, $valuesItemTitles[$isoCodeToAdd]))
-            {
-                return false;
-            }
-        }
-
-        foreach ($isoCodesToUpdate as $isoCodeToUpdate)
-        {
-            $itemTitle = $existingItemTitles[$isoCodeToUpdate];
-            $itemTitle->setTitle($valuesItemTitles[$isoCodeToUpdate]);
-
-            if (!$this->updateItemTitle($itemTitle))
-            {
-                return false;
-            }
-        }
-
-        return true;
-    }
-
-    /**
-     * @param string[][] $values
-     *
-     * @throws \Chamilo\Libraries\Storage\Exception\DisplayOrderException
-     * @throws \Exception
-     */
-    public function saveItemWithTitlesFromValues(Item $item, array $values): bool
-    {
-        if (!$this->saveItemFromValues($item, $values))
-        {
-            return false;
-        }
-
-        if (!$this->saveItemTitlesForItemFromValues($item, $values))
         {
             return false;
         }
@@ -662,19 +372,6 @@ class ItemService implements ItemServiceInterface
         }
 
         if (!$this->getRightsService()->moveItemRightsLocation($item))
-        {
-            return false;
-        }
-
-        return true;
-    }
-
-    /**
-     * @throws \Chamilo\Libraries\Storage\Exception\DataClassNoResultException
-     */
-    public function updateItemTitle(ItemTitle $itemTitle): bool
-    {
-        if (!$this->getItemRepository()->updateItemTitle($itemTitle))
         {
             return false;
         }

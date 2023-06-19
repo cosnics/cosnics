@@ -2,7 +2,6 @@
 namespace Chamilo\Core\Menu\Architecture\Interfaces;
 
 use Chamilo\Core\Menu\Storage\DataClass\Item;
-use Chamilo\Core\Menu\Storage\DataClass\ItemTitle;
 use Chamilo\Libraries\Storage\Query\OrderBy;
 use Doctrine\Common\Collections\ArrayCollection;
 
@@ -29,33 +28,6 @@ interface ItemServiceInterface
     public function createItemForTypeFromValues(string $itemType, array $values): ?Item;
 
     /**
-     * @throws \Exception
-     */
-    public function createItemTitle(ItemTitle $itemTitle): bool;
-
-    /**
-     * @throws \Exception
-     */
-    public function createItemTitleForItemFromParameters(Item $item, string $isocode, string $title): bool;
-
-    /**
-     * @param string[][] $values
-     *
-     * @throws \Exception
-     */
-    public function createItemTitlesForItemFromValues(Item $item, array $values): bool;
-
-    /**
-     * @param string $itemType
-     * @param string[][] $values
-     *
-     * @return \Chamilo\Core\Menu\Storage\DataClass\Item
-     * @throws \Chamilo\Libraries\Storage\Exception\DisplayOrderException
-     * @throws \Exception
-     */
-    public function createItemWithTitlesForTypeFromValues(string $itemType, array $values): ?Item;
-
-    /**
      * @throws \Psr\Cache\InvalidArgumentException
      * @throws \Psr\SimpleCache\InvalidArgumentException
      * @throws \Exception
@@ -69,49 +41,9 @@ interface ItemServiceInterface
      */
     public function deleteItemChildren(Item $item): bool;
 
-    public function deleteItemTitle(ItemTitle $itemTitle): bool;
-
-    public function deleteItemTitlesForItem(Item $item): bool;
-
-    /**
-     * @param \Chamilo\Core\Menu\Storage\DataClass\ItemTitle[] $itemTitles
-     */
-    public function determineItemTitleForCurrentLanguage(array $itemTitles): string;
-
-    /**
-     * @param \Chamilo\Core\Menu\Storage\DataClass\ItemTitle[] $itemTitles
-     */
-    public function determineItemTitleForIsoCode(array $itemTitles, string $isoCode): string;
-
     public function doesItemHaveChildren(Item $item): bool;
 
     public function findItemByIdentifier(string $identifier): ?Item;
-
-    /**
-     * @return \Doctrine\Common\Collections\ArrayCollection<\Chamilo\Core\Menu\Storage\DataClass\ItemTitle>
-     * @throws \Chamilo\Libraries\Storage\Exception\DataClassNoResultException
-     */
-    public function findItemTitles(): ArrayCollection;
-
-    /**
-     * @param string $itemIdentifier
-     *
-     * @return \Doctrine\Common\Collections\ArrayCollection<\Chamilo\Core\Menu\Storage\DataClass\ItemTitle>
-     * @throws \Chamilo\Libraries\Storage\Exception\DataClassNoResultException
-     */
-    public function findItemTitlesByItemIdentifier(string $itemIdentifier): ArrayCollection;
-
-    /**
-     * @return \Chamilo\Core\Menu\Storage\DataClass\ItemTitle[]
-     * @throws \Chamilo\Libraries\Storage\Exception\DataClassNoResultException
-     */
-    public function findItemTitlesByItemIdentifierIndexedByIsoCode(string $itemIdentifier): array;
-
-    /**
-     * @return \Chamilo\Core\Menu\Storage\DataClass\ItemTitle[][][]
-     * @throws \Chamilo\Libraries\Storage\Exception\DataClassNoResultException
-     */
-    public function findItemTitlesGroupedByItemIdentifierAndIsocode(): array;
 
     /**
      * @return \Doctrine\Common\Collections\ArrayCollection<\Chamilo\Core\Menu\Storage\DataClass\Item>
@@ -147,7 +79,7 @@ interface ItemServiceInterface
     public function findItemsGroupedByParentIdentifier(): array;
 
     /**
-     * @return \Doctrine\Common\Collections\ArrayCollection<\Chamilo\Core\Menu\Storage\DataClass\CategoryItem>
+     * @return \Doctrine\Common\Collections\ArrayCollection<\Chamilo\Core\Menu\Storage\DataClass\Item>
      * @throws \Chamilo\Libraries\Storage\Exception\DataClassNoResultException
      */
     public function findRootCategoryItems(): ArrayCollection;
@@ -157,16 +89,6 @@ interface ItemServiceInterface
      * @throws \Chamilo\Libraries\Storage\Exception\DataClassNoResultException
      */
     public function findRootItems(): ArrayCollection;
-
-    /**
-     * @throws \Chamilo\Libraries\Storage\Exception\DataClassNoResultException
-     */
-    public function getItemTitleForCurrentLanguage(Item $item): string;
-
-    /**
-     * @throws \Chamilo\Libraries\Storage\Exception\DataClassNoResultException
-     */
-    public function getItemTitleForIsoCode(Item $item, string $isoCode): string;
 
     /**
      * @throws \Chamilo\Libraries\Storage\Exception\DataClassNoResultException
@@ -188,28 +110,8 @@ interface ItemServiceInterface
     public function saveItemFromValues(Item $item, array $values): bool;
 
     /**
-     * @param string[][] $values
-     *
-     * @throws \Exception
-     */
-    public function saveItemTitlesForItemFromValues(Item $item, array $values): bool;
-
-    /**
-     * @param string[][] $values
-     *
-     * @throws \Chamilo\Libraries\Storage\Exception\DisplayOrderException
-     * @throws \Exception
-     */
-    public function saveItemWithTitlesFromValues(Item $item, array $values): bool;
-
-    /**
      * @throws \Chamilo\Libraries\Storage\Exception\DataClassNoResultException
      * @throws \Chamilo\Libraries\Storage\Exception\DisplayOrderException
      */
     public function updateItem(Item $item): bool;
-
-    /**
-     * @throws \Chamilo\Libraries\Storage\Exception\DataClassNoResultException
-     */
-    public function updateItemTitle(ItemTitle $itemTitle): bool;
 }

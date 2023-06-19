@@ -7,23 +7,23 @@
                   autoconfigure="true"
                   public="true"/>
 
-        <service id="Chamilo\Core\Menu\Renderer\ApplicationItemRenderer">
-            <tag name="Chamilo\Core\Menu\Renderer\ItemRenderer"/>
+        <service id="Chamilo\Core\Menu\Service\Renderer\ApplicationItemRenderer">
+            <tag name="Chamilo\Core\Menu\Service\Renderer\ItemRenderer"/>
             <argument key="$fallbackIsoCodes">%chamilo.configuration.general.language.fallback%</argument>
         </service>
-        <service id="Chamilo\Core\Menu\Renderer\CategoryItemRenderer">
-            <tag name="Chamilo\Core\Menu\Renderer\ItemRenderer"/>
+        <service id="Chamilo\Core\Menu\Service\Renderer\CategoryItemRenderer">
+            <tag name="Chamilo\Core\Menu\Service\Renderer\ItemRenderer"/>
             <argument key="$fallbackIsoCodes">%chamilo.configuration.general.language.fallback%</argument>
         </service>
-        <service id="Chamilo\Core\Menu\Renderer\LanguageItemRenderer">
-            <tag name="Chamilo\Core\Menu\Renderer\ItemRenderer"/>
+        <service id="Chamilo\Core\Menu\Service\Renderer\LanguageItemRenderer">
+            <tag name="Chamilo\Core\Menu\Service\Renderer\ItemRenderer"/>
         </service>
-        <service id="Chamilo\Core\Menu\Renderer\LinkApplicationItemRenderer">
-            <tag name="Chamilo\Core\Menu\Renderer\ItemRenderer"/>
+        <service id="Chamilo\Core\Menu\Service\Renderer\LinkApplicationItemRenderer">
+            <tag name="Chamilo\Core\Menu\Service\Renderer\ItemRenderer"/>
             <argument key="$fallbackIsoCodes">%chamilo.configuration.general.language.fallback%</argument>
         </service>
-        <service id="Chamilo\Core\Menu\Renderer\LinkItemRenderer">
-            <tag name="Chamilo\Core\Menu\Renderer\ItemRenderer"/>
+        <service id="Chamilo\Core\Menu\Service\Renderer\LinkItemRenderer">
+            <tag name="Chamilo\Core\Menu\Service\Renderer\ItemRenderer"/>
             <argument key="$fallbackIsoCodes">%chamilo.configuration.general.language.fallback%</argument>
         </service>
     </services>

@@ -1,5 +1,5 @@
 <?php
-namespace Chamilo\Core\Menu\Renderer;
+namespace Chamilo\Core\Menu\Service\Renderer;
 
 use Chamilo\Configuration\Service\Consulter\RegistrationConsulter;
 use Chamilo\Core\Menu\Architecture\Interfaces\SelectableItemInterface;
@@ -18,7 +18,7 @@ use Chamilo\Libraries\Platform\ChamiloRequest;
 use Symfony\Component\Translation\Translator;
 
 /**
- * @package Chamilo\Core\Menu\Renderer\ItemRenderer
+ * @package Chamilo\Core\Menu\Service\Renderer\ItemRenderer
  * @author  Hans De Bisschop <hans.de.bisschop@ehb.be>
  */
 class ApplicationItemRenderer extends ItemRenderer implements SelectableItemInterface, TranslatableItemInterface
