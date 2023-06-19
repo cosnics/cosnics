@@ -61,25 +61,6 @@
                       id="Chamilo\Libraries\Format\Theme\ThemeWebPathBuilder"/>
         </service>
 
-        <service id="Chamilo\Core\Menu\Renderer\ApplicationItemRenderer">
-            <tag name="Chamilo\Core\Menu\Renderer\ItemRenderer"/>
-        </service>
-        <service id="Chamilo\Core\Menu\Renderer\CategoryItemRenderer">
-            <tag name="Chamilo\Core\Menu\Renderer\ItemRenderer"/>
-        </service>
-        <service id="Chamilo\Core\Menu\Renderer\LanguageCategoryItemRenderer">
-            <tag name="Chamilo\Core\Menu\Renderer\ItemRenderer"/>
-        </service>
-        <service id="Chamilo\Core\Menu\Renderer\LanguageItemRenderer">
-            <tag name="Chamilo\Core\Menu\Renderer\ItemRenderer"/>
-        </service>
-        <service id="Chamilo\Core\Menu\Renderer\LinkApplicationItemRenderer">
-            <tag name="Chamilo\Core\Menu\Renderer\ItemRenderer"/>
-        </service>
-        <service id="Chamilo\Core\Menu\Renderer\LinkItemRenderer">
-            <tag name="Chamilo\Core\Menu\Renderer\ItemRenderer"/>
-        </service>
-
         <service id="Chamilo\Core\Menu\Service\AdminActionProvider">
             <tag name="Chamilo\Core\Admin\Service\ActionProvider"/>
         </service>

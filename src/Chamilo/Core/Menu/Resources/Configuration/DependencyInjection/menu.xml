@@ -7,21 +7,24 @@
                   autoconfigure="true"
                   public="true"/>
 
-        <service id="Chamilo\Core\Repository\Service\Menu\RepositoryApplicationItemRenderer">
+        <service id="Chamilo\Core\Menu\Renderer\ApplicationItemRenderer">
             <tag name="Chamilo\Core\Menu\Renderer\ItemRenderer"/>
             <argument key="$fallbackIsoCodes">%chamilo.configuration.general.language.fallback%</argument>
         </service>
-
-        <service id="Chamilo\Core\Repository\Service\Menu\WorkspaceCategoryItemRenderer">
+        <service id="Chamilo\Core\Menu\Renderer\CategoryItemRenderer">
+            <tag name="Chamilo\Core\Menu\Renderer\ItemRenderer"/>
+            <argument key="$fallbackIsoCodes">%chamilo.configuration.general.language.fallback%</argument>
+        </service>
+        <service id="Chamilo\Core\Menu\Renderer\LanguageItemRenderer">
             <tag name="Chamilo\Core\Menu\Renderer\ItemRenderer"/>
         </service>
-
-        <service id="Chamilo\Core\Repository\Service\Menu\WorkspaceConfigureItemRenderer">
+        <service id="Chamilo\Core\Menu\Renderer\LinkApplicationItemRenderer">
             <tag name="Chamilo\Core\Menu\Renderer\ItemRenderer"/>
+            <argument key="$fallbackIsoCodes">%chamilo.configuration.general.language.fallback%</argument>
         </service>
-
-        <service id="Chamilo\Core\Repository\Service\Menu\WorkspaceItemRenderer">
+        <service id="Chamilo\Core\Menu\Renderer\LinkItemRenderer">
             <tag name="Chamilo\Core\Menu\Renderer\ItemRenderer"/>
+            <argument key="$fallbackIsoCodes">%chamilo.configuration.general.language.fallback%</argument>
         </service>
     </services>
 </container>

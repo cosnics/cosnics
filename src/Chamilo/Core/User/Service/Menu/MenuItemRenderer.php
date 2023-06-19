@@ -1,6 +1,7 @@
 <?php
 namespace Chamilo\Core\User\Service\Menu;
 
+use Chamilo\Core\Menu\Architecture\Interfaces\SelectableItemInterface;
 use Chamilo\Core\Menu\Renderer\ItemRenderer;
 use Chamilo\Core\Menu\Service\CachedItemService;
 use Chamilo\Core\Menu\Storage\DataClass\Item;
@@ -8,11 +9,12 @@ use Chamilo\Core\Rights\Structure\Service\Interfaces\AuthorizationCheckerInterfa
 use Chamilo\Core\User\Storage\DataClass\User;
 use Chamilo\Libraries\Architecture\Application\Routing\UrlGenerator;
 use Chamilo\Libraries\Architecture\ClassnameUtilities;
+use Chamilo\Libraries\Format\Structure\Glyph\InlineGlyph;
 use Chamilo\Libraries\Platform\ChamiloRequest;
 use Symfony\Component\Translation\Translator;
 
 /**
- * @package Chamilo\Core\User\Integration\Chamilo\Core\Menu\Renderer\ItemRenderer
+ * @package Chamilo\Core\User\Service\Menu
  * @author  Hans De Bisschop <hans.de.bisschop@ehb.be>
  */
 abstract class MenuItemRenderer extends ItemRenderer
@@ -34,23 +36,16 @@ abstract class MenuItemRenderer extends ItemRenderer
         $this->urlGenerator = $urlGenerator;
     }
 
-    /**
-     * @param \Chamilo\Core\Menu\Storage\DataClass\Item $item
-     * @param \Chamilo\Core\User\Storage\DataClass\User $user
-     *
-     * @return string
-     * @throws \Psr\SimpleCache\InvalidArgumentException
-     */
     public function render(Item $item, User $user): string
     {
         $html = [];
 
-        $selected = $this->isSelected($item);
+        $selected = $this instanceof SelectableItemInterface && $this->isSelected($item, $user);
 
         $html[] = '<li' . ($selected ? ' class="active"' : '') . '>';
         $html[] = '<a href="' . $this->getUrl() . '">';
 
-        $title = $this->renderTitle($item);
+        $title = $this->renderTitle();
 
         if ($item->showIcon())
         {
@@ -68,34 +63,19 @@ abstract class MenuItemRenderer extends ItemRenderer
         return implode(PHP_EOL, $html);
     }
 
-    /**
-     * @return \Chamilo\Libraries\Architecture\ClassnameUtilities
-     */
     public function getClassnameUtilities(): ClassnameUtilities
     {
         return $this->classnameUtilities;
     }
 
-    /**
-     * @return \Chamilo\Libraries\Format\Structure\Glyph\InlineGlyph
-     */
-    abstract public function getGlyph();
+    abstract public function getGlyph(): InlineGlyph;
 
-    /**
-     * @return string
-     */
-    abstract public function getUrl();
+    abstract public function getUrl(): string;
 
     public function getUrlGenerator(): UrlGenerator
     {
         return $this->urlGenerator;
     }
 
-    /**
-     * @param \Chamilo\Libraries\Architecture\ClassnameUtilities $classnameUtilities
-     */
-    public function setClassnameUtilities(ClassnameUtilities $classnameUtilities): void
-    {
-        $this->classnameUtilities = $classnameUtilities;
-    }
+    abstract public function renderTitle(): string;
 }

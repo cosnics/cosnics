@@ -2,12 +2,16 @@
 namespace Chamilo\Core\Menu\Renderer;
 
 use Chamilo\Configuration\Service\Consulter\RegistrationConsulter;
+use Chamilo\Core\Menu\Architecture\Interfaces\SelectableItemInterface;
+use Chamilo\Core\Menu\Architecture\Interfaces\TranslatableItemInterface;
+use Chamilo\Core\Menu\Architecture\Interfaces\TranslatableItemTrait;
 use Chamilo\Core\Menu\Service\CachedItemService;
 use Chamilo\Core\Menu\Storage\DataClass\Item;
 use Chamilo\Core\Rights\Structure\Service\Interfaces\AuthorizationCheckerInterface;
 use Chamilo\Core\User\Storage\DataClass\User;
 use Chamilo\Libraries\Architecture\Application\Application;
 use Chamilo\Libraries\Architecture\Application\Routing\UrlGenerator;
+use Chamilo\Libraries\Format\Structure\Glyph\FontAwesomeGlyph;
 use Chamilo\Libraries\Format\Structure\Glyph\IdentGlyph;
 use Chamilo\Libraries\Format\Structure\Glyph\NamespaceIdentGlyph;
 use Chamilo\Libraries\Platform\ChamiloRequest;
@@ -17,8 +21,10 @@ use Symfony\Component\Translation\Translator;
  * @package Chamilo\Core\Menu\Renderer\ItemRenderer
  * @author  Hans De Bisschop <hans.de.bisschop@ehb.be>
  */
-class ApplicationItemRenderer extends ItemRenderer
+class ApplicationItemRenderer extends ItemRenderer implements SelectableItemInterface, TranslatableItemInterface
 {
+    use TranslatableItemTrait;
+
     public const CONFIGURATION_APPLICATION = 'application';
     public const CONFIGURATION_COMPONENT = 'component';
     public const CONFIGURATION_EXTRA_PARAMETERS = 'extra_parameters';
@@ -31,13 +37,14 @@ class ApplicationItemRenderer extends ItemRenderer
     public function __construct(
         AuthorizationCheckerInterface $authorizationChecker, Translator $translator,
         CachedItemService $itemCacheService, ChamiloRequest $request, RegistrationConsulter $registrationConsulter,
-        UrlGenerator $urlGenerator
+        UrlGenerator $urlGenerator, array $fallbackIsoCodes
     )
     {
         parent::__construct($authorizationChecker, $translator, $itemCacheService, $request);
 
         $this->registrationConsulter = $registrationConsulter;
         $this->urlGenerator = $urlGenerator;
+        $this->fallbackIsoCodes = $fallbackIsoCodes;
     }
 
     /**
@@ -50,23 +57,19 @@ class ApplicationItemRenderer extends ItemRenderer
             return '';
         }
 
-        $url = $this->getApplicationItemUrl($item);
-
         $html = [];
 
-        $isSelected = $this->isSelected($item);
-
-        $html[] = '<li class="' . implode(' ', $this->getClasses($isSelected)) . '">';
+        $html[] = '<li class="' . ($this->isSelected($item, $user) ? 'active' : '') . '">';
 
         $title = $this->renderTitle($item);
 
-        $html[] = '<a href="' . $url . '">';
+        $html[] = '<a href="' . $this->getApplicationItemUrl($item) . '">';
 
         if ($item->showIcon())
         {
             if (!empty($item->getIconClass()))
             {
-                $html[] = $this->renderCssIcon($item);
+                $glyph = new FontAwesomeGlyph($item->getIconClass(), ['fa-2x'], $title, 'fas');
             }
             else
             {
@@ -74,9 +77,9 @@ class ApplicationItemRenderer extends ItemRenderer
                     $item->getSetting(self::CONFIGURATION_APPLICATION), false, false, false, IdentGlyph::SIZE_MEDIUM,
                     [], $title
                 );
-
-                $html[] = $glyph->render();
             }
+
+            $html[] = $glyph->render();
         }
 
         if ($item->showTitle())
@@ -148,7 +151,7 @@ class ApplicationItemRenderer extends ItemRenderer
         return $isAuthorized && $isActiveApplication;
     }
 
-    public function isSelected(Item $item): bool
+    public function isSelected(Item $item, User $user): bool
     {
         $request = $this->getRequest();
 
@@ -177,6 +180,6 @@ class ApplicationItemRenderer extends ItemRenderer
             return $this->getTranslator()->trans('TypeName', [], $item->getSetting(self::CONFIGURATION_APPLICATION));
         }
 
-        return parent::renderTitle($item);
+        return $this->determineItemTitleForCurrentLanguage($item);
     }
 }

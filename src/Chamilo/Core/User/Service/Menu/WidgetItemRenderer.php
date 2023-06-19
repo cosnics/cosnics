@@ -15,7 +15,7 @@ use Chamilo\Libraries\Platform\ChamiloRequest;
 use Symfony\Component\Translation\Translator;
 
 /**
- * @package Chamilo\Core\User\Integration\Chamilo\Core\Menu\Renderer\ItemRenderer
+ * @package Chamilo\Core\User\Service\Menu
  * @author  Hans De Bisschop <hans.de.bisschop@ehb.be>
  */
 class WidgetItemRenderer extends ItemRenderer
@@ -40,13 +40,6 @@ class WidgetItemRenderer extends ItemRenderer
         $this->urlGenerator = $urlGenerator;
     }
 
-    /**
-     * @param \Chamilo\Core\User\Integration\Chamilo\Core\Menu\Storage\DataClass\WidgetItem $item
-     * @param \Chamilo\Core\User\Storage\DataClass\User $user
-     *
-     * @return string
-     * @throws \Exception
-     */
     public function render(Item $item, User $user): string
     {
         $translator = $this->getTranslator();
@@ -60,10 +53,9 @@ class WidgetItemRenderer extends ItemRenderer
 
         $html = [];
 
-        $selected = $this->isSelected($item);
-        $title = $this->renderTitle($item);
+        $title = $this->getTranslator()->trans('MyAccount', [], 'Chamilo\Core\User');
 
-        $html[] = '<li class="' . implode(' ', $this->getClasses($selected)) . '">';
+        $html[] = '<li>';
         $html[] =
             '<a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">';
 
@@ -132,42 +124,27 @@ class WidgetItemRenderer extends ItemRenderer
         return implode(PHP_EOL, $html);
     }
 
-    /**
-     * @return string
-     */
-    public function getAccountUrl()
+    public function getAccountUrl(): string
     {
         return $this->getUserUrl(Manager::ACTION_VIEW_ACCOUNT);
     }
 
-    /**
-     * @return \Chamilo\Configuration\Service\Consulter\ConfigurationConsulter
-     */
     public function getConfigurationConsulter(): ConfigurationConsulter
     {
         return $this->configurationConsulter;
     }
 
-    /**
-     * @return string
-     */
-    public function getLogoutUrl()
+    public function getLogoutUrl(): string
     {
         return $this->getUserUrl(Manager::ACTION_LOGOUT);
     }
 
-    /**
-     * @return string
-     */
-    public function getPictureUrl()
+    public function getPictureUrl(): string
     {
         return $this->getUserUrl(Manager::ACTION_CHANGE_PICTURE);
     }
 
-    /**
-     * @return string
-     */
-    public function getSettingsUrl()
+    public function getSettingsUrl(): string
     {
         return $this->getUserUrl(Manager::ACTION_USER_SETTINGS);
     }
@@ -177,68 +154,20 @@ class WidgetItemRenderer extends ItemRenderer
         return $this->urlGenerator;
     }
 
-    /**
-     * @return \Chamilo\Core\User\Picture\UserPictureProviderInterface
-     */
     public function getUserPictureProvider(): UserPictureProviderInterface
     {
         return $this->userPictureProvider;
     }
 
-    /**
-     * @param string $action
-     *
-     * @return string
-     */
-    public function getUserUrl($action)
+    public function getUserUrl(string $action): string
     {
         return $this->getUrlGenerator()->fromParameters(
             [Application::PARAM_CONTEXT => Manager::CONTEXT, Application::PARAM_ACTION => $action]
         );
     }
 
-    /**
-     * @param \Chamilo\Core\User\Storage\DataClass\User $user
-     *
-     * @return bool
-     */
-    public function isItemVisibleForUser(User $user)
+    public function isItemVisibleForUser(User $user): bool
     {
         return $this->getAuthorizationChecker()->isAuthorized($user, 'Chamilo\Core\User', 'ManageAccount');
-    }
-
-    /**
-     * @param \Chamilo\Core\Menu\Storage\DataClass\Item $item
-     *
-     * @return string
-     */
-    public function renderTitle(Item $item): string
-    {
-        return $this->getTranslator()->trans('MyAccount', [], 'Chamilo\Core\User');
-    }
-
-    /**
-     * @param \Chamilo\Configuration\Service\Consulter\ConfigurationConsulter $configurationConsulter
-     */
-    public function setConfigurationConsulter(ConfigurationConsulter $configurationConsulter): void
-    {
-        $this->configurationConsulter = $configurationConsulter;
-    }
-
-    /**
-     * @param \Chamilo\Core\User\Picture\UserPictureProviderInterface $userPictureProvider
-     *
-     * @return WidgetItemRenderer
-     */
-    public function setUserPictureProvider(UserPictureProviderInterface $userPictureProvider): WidgetItemRenderer
-    {
-        $this->userPictureProvider = $userPictureProvider;
-
-        return $this;
-    }
-
-    public function isSelected(Item $item): bool
-    {
-        return false;
     }
 }

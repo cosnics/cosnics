@@ -98,7 +98,7 @@ class Item extends DataClass implements DataClassDisplayOrderSupport, Configurab
         return $this->getDefaultProperty(self::PROPERTY_ICON_CLASS);
     }
 
-    public function getParentId(): int
+    public function getParentId(): string
     {
         return $this->getDefaultProperty(self::PROPERTY_PARENT);
     }
@@ -150,7 +150,7 @@ class Item extends DataClass implements DataClassDisplayOrderSupport, Configurab
     /**
      * @deprecated Use Item::getParent() now
      */
-    public function get_parent(): int
+    public function get_parent(): string
     {
         return $this->getParentId();
     }
@@ -210,7 +210,7 @@ class Item extends DataClass implements DataClassDisplayOrderSupport, Configurab
         return $this;
     }
 
-    public function setParentId(int $parent): Item
+    public function setParentId(string $parent): Item
     {
         $this->setDefaultProperty(self::PROPERTY_PARENT, $parent);
 
@@ -263,7 +263,7 @@ class Item extends DataClass implements DataClassDisplayOrderSupport, Configurab
     /**
      * @deprecated Use Item::setParent() now
      */
-    public function set_parent(int $parent): Item
+    public function set_parent(string $parent): Item
     {
         return $this->setParentId($parent);
     }

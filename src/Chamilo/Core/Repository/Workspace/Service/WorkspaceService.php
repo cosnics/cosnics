@@ -58,9 +58,9 @@ class WorkspaceService
         return $this->getWorkspaceRepository()->countSharedWorkspacesForEntities($this->getEntitiesForUser($user));
     }
 
-    public function countWorkspaceFavouritesByUser(User $user): int
+    public function countFavouriteWorkspacesByUser(User $user): int
     {
-        return $this->getWorkspaceRepository()->countWorkspaceFavouritesByUser(
+        return $this->getWorkspaceRepository()->countFavouriteWorkspacesByUser(
             $user, $this->getEntityService()->getEntitiesForUser($user)
         );
     }
@@ -190,6 +190,43 @@ class WorkspaceService
         return $this->getWorkspaceRepository()->retrieveDefaultWorkspaceForUserIdentifier($userIdentifier);
     }
 
+    /**
+     * @return string[]
+     */
+    public function findFavouriteWorkspaceIdentifiersByUser(User $user): array
+    {
+        return $this->getWorkspaceRepository()->findFavouriteWorkspaceIdentifiersByUser(
+            $user, $this->getEntityService()->getEntitiesForUser($user)
+        );
+    }
+
+    /**
+     * @param \Chamilo\Core\User\Storage\DataClass\User $user
+     * @param ?int $limit
+     * @param ?int $offset
+     * @param ?\Chamilo\Libraries\Storage\Query\OrderBy $orderProperty
+     *
+     * @return \Doctrine\Common\Collections\ArrayCollection<\Chamilo\Core\Repository\Workspace\Storage\DataClass\Workspace>
+     * @throws \Chamilo\Libraries\Storage\Exception\DataClassNoResultException
+     */
+    public function findFavouriteWorkspacesByUser(
+        User $user, ?int $limit = null, ?int $offset = null, ?OrderBy $orderProperty = null
+    ): ArrayCollection
+    {
+        if (is_null($orderProperty))
+        {
+            $orderProperty = new OrderBy([
+                new OrderProperty(
+                    new PropertyConditionVariable(Workspace::class, Workspace::PROPERTY_NAME), SORT_ASC
+                )
+            ]);
+        }
+
+        return $this->getWorkspaceRepository()->findFavouriteWorkspacesByUser(
+            $user, $this->getEntityService()->getEntitiesForUser($user), $limit, $offset, $orderProperty
+        );
+    }
+
     public function findWorkspaceUserDefaultForUserIdentifier(string $userIdentifier): ?WorkspaceUserDefault
     {
         return $this->getWorkspaceRepository()->retrieveWorkspaceUserDefaultForUserIdentifier($userIdentifier);
@@ -274,58 +311,6 @@ class WorkspaceService
     public function getWorkspaceByIdentifier(string $identifier): ?Workspace
     {
         return $this->getWorkspaceRepository()->findWorkspaceByIdentifier($identifier);
-    }
-
-    /**
-     * @param \Chamilo\Core\User\Storage\DataClass\User $user
-     * @param ?int $limit
-     * @param ?int $offset
-     * @param ?\Chamilo\Libraries\Storage\Query\OrderBy $orderProperty
-     *
-     * @return \Doctrine\Common\Collections\ArrayCollection<\Chamilo\Core\Repository\Workspace\Storage\DataClass\Workspace>
-     * @throws \Chamilo\Libraries\Storage\Exception\DataClassNoResultException
-     */
-    public function getWorkspaceFavouritesByUser(
-        User $user, ?int $limit = null, ?int $offset = null, ?OrderBy $orderProperty = null
-    ): ArrayCollection
-    {
-        if (is_null($orderProperty))
-        {
-            $orderProperty = new OrderBy([
-                new OrderProperty(
-                    new PropertyConditionVariable(Workspace::class, Workspace::PROPERTY_NAME), SORT_ASC
-                )
-            ]);
-        }
-
-        return $this->getWorkspaceRepository()->findWorkspaceFavouritesByUser(
-            $user, $this->getEntityService()->getEntitiesForUser($user), $limit, $offset, $orderProperty
-        );
-    }
-
-    /**
-     * @param \Chamilo\Core\User\Storage\DataClass\User $user
-     * @param ?int $limit
-     * @param ?int $offset
-     * @param ?\Chamilo\Libraries\Storage\Query\OrderBy $orderProperty
-     *
-     * @return \Doctrine\Common\Collections\ArrayCollection<\Chamilo\Core\Repository\Workspace\Storage\DataClass\Workspace>
-     * @throws \Chamilo\Libraries\Storage\Exception\DataClassNoResultException
-     */
-    public function getWorkspaceFavouritesByUserFast(
-        User $user, ?int $limit = null, ?int $offset = null, ?OrderBy $orderProperty = null
-    ): ArrayCollection
-    {
-        if (is_null($orderProperty))
-        {
-            $orderProperty = new OrderBy([
-                new OrderProperty(new PropertyConditionVariable(Workspace::class, Workspace::PROPERTY_NAME), SORT_ASC)
-            ]);
-        }
-
-        return $this->getWorkspaceRepository()->findWorkspaceFavouritesByUserFast(
-            $user, $limit, $offset, $orderProperty
-        );
     }
 
     public function getWorkspaceRepository(): WorkspaceRepository
@@ -467,8 +452,8 @@ class WorkspaceService
         return $this->getWorkspaceRepository()->updateWorkspaceUserDefault($workspaceUserDefault);
     }
 
-    public function userHasWorkspaceFavourites(User $user): bool
+    public function userHasFavouriteWorkspaces(User $user): bool
     {
-        return $this->countWorkspaceFavouritesByUser($user) > 0;
+        return $this->countFavouriteWorkspacesByUser($user) > 0;
     }
 }

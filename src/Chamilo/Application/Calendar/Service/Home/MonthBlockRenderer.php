@@ -21,7 +21,7 @@ use Chamilo\Libraries\Utilities\StringUtilities;
 use Symfony\Component\Translation\Translator;
 
 /**
- * @package Chamilo\Application\Calendar\Integration\Chamilo\Core\Home\Type
+ * @package Chamilo\Application\Calendar\Service\Home
  * @author  Hans De Bisschop <hans.de.bisschop@ehb.be>
  * @author  Magali Gillard <magali.gillard@ehb.be>
  * @author  Eduard Vossen <eduard.vossen@ehb.be>

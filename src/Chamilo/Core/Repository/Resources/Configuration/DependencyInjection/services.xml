@@ -106,5 +106,6 @@
         <service id="Chamilo\Core\Repository\Service\Home\DisplayerBlockRenderer">
             <tag name="Chamilo\Core\Home\Renderer\BlockRenderer"/>
         </service>
+
     </services>
 </container>

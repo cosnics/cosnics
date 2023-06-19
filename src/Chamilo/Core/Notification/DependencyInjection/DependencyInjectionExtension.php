@@ -9,8 +9,7 @@ use Symfony\Component\DependencyInjection\Extension\ExtensionInterface;
 
 /**
  * @package Chamilo\Core\Notification\DependencyInjection
- *
- * @author Sven Vanpoucke - Hogeschool Gent
+ * @author  Sven Vanpoucke - Hogeschool Gent
  */
 class DependencyInjectionExtension extends AbstractDependencyInjectionExtension
     implements ExtensionInterface, IConfigurableExtension
@@ -25,7 +24,7 @@ class DependencyInjectionExtension extends AbstractDependencyInjectionExtension
 
     public function getConfigurationFiles(): array
     {
-        return ['Chamilo\Core\Notification' => ['services.xml']];
+        return ['Chamilo\Core\Notification' => ['menu.xml', 'services.xml']];
     }
 
     public function getContainerConfigurationFiles(): array

@@ -1,6 +1,9 @@
 <?php
 namespace Chamilo\Core\Menu\Renderer;
 
+use Chamilo\Core\Menu\Architecture\Interfaces\SelectableItemInterface;
+use Chamilo\Core\Menu\Architecture\Interfaces\TranslatableItemInterface;
+use Chamilo\Core\Menu\Architecture\Interfaces\TranslatableItemTrait;
 use Chamilo\Core\Menu\Factory\ItemRendererFactory;
 use Chamilo\Core\Menu\Service\CachedItemService;
 use Chamilo\Core\Menu\Service\RightsCacheService;
@@ -12,11 +15,12 @@ use Chamilo\Libraries\Platform\ChamiloRequest;
 use Symfony\Component\Translation\Translator;
 
 /**
- * @package Chamilo\Core\Menu\Renderer\ItemRenderer
+ * @package Chamilo\Core\Menu\Renderer
  * @author  Hans De Bisschop <hans.de.bisschop@ehb.be>
  */
-class CategoryItemRenderer extends ItemRenderer
+class CategoryItemRenderer extends ItemRenderer implements TranslatableItemInterface
 {
+    use TranslatableItemTrait;
 
     private ItemRendererFactory $itemRendererFactory;
 
@@ -25,31 +29,28 @@ class CategoryItemRenderer extends ItemRenderer
     public function __construct(
         AuthorizationCheckerInterface $authorizationChecker, Translator $translator,
         CachedItemService $itemCacheService, ChamiloRequest $request, RightsCacheService $rightsCacheService,
-        ItemRendererFactory $itemRendererFactory
+        ItemRendererFactory $itemRendererFactory, array $fallbackIsoCodes
     )
     {
         parent::__construct($authorizationChecker, $translator, $itemCacheService, $request);
 
         $this->rightsCacheService = $rightsCacheService;
         $this->itemRendererFactory = $itemRendererFactory;
+        $this->fallbackIsoCodes = $fallbackIsoCodes;
     }
 
     /**
-     * @param \Chamilo\Core\Menu\Storage\DataClass\CategoryItem $item
-     * @param \Chamilo\Core\User\Storage\DataClass\User $user
-     *
-     * @return string
-     * @throws \Psr\SimpleCache\InvalidArgumentException
+     * @throws \Symfony\Component\Cache\Exception\CacheException
      */
     public function render(Item $item, User $user): string
     {
         $html = [];
 
-        $selected = $this->isSelected($item);
+        $isSelected = $this->isSelected($item, $user);
 
-        $title = $this->renderTitle($item);
+        $title = $this->determineItemTitleForCurrentLanguage($item);
 
-        $html[] = '<li class="' . implode(' ', $this->getClasses($selected)) . '">';
+        $html[] = '<li class="dropdown' . ($isSelected ? ' active' : '') . '">';
         $html[] =
             '<a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">';
 
@@ -57,7 +58,7 @@ class CategoryItemRenderer extends ItemRenderer
         {
             $html[] = '<div>';
 
-            if ($selected)
+            if ($isSelected)
             {
                 $glyph = new FontAwesomeGlyph(
                     'folder-open', ['fa-2x', 'fa-fw'], $title, 'fas'
@@ -97,41 +98,17 @@ class CategoryItemRenderer extends ItemRenderer
         return implode(PHP_EOL, $html);
     }
 
-    /**
-     * @param bool $isSelected
-     * @param string[] $existingClasses
-     *
-     * @return string[]
-     */
-    protected function getClasses($isSelected = false, $existingClasses = []): array
-    {
-        $existingClasses[] = 'dropdown';
-
-        return parent::getClasses($isSelected, $existingClasses);
-    }
-
-    /**
-     * @return \Chamilo\Core\Menu\Factory\ItemRendererFactory
-     */
     public function getItemRendererFactory(): ItemRendererFactory
     {
         return $this->itemRendererFactory;
     }
 
-    /**
-     * @return \Chamilo\Core\Menu\Service\RightsCacheService
-     */
     public function getRightsCacheService(): RightsCacheService
     {
         return $this->rightsCacheService;
     }
 
-    /**
-     * @param \Chamilo\Core\Menu\Storage\DataClass\Item $item
-     *
-     * @return bool
-     */
-    public function isSelected(Item $item): bool
+    public function isSelected(Item $item, User $user): bool
     {
         $childItems = $this->getItemCacheService()->findItemsByParentIdentifier($item->getId());
 
@@ -139,7 +116,7 @@ class CategoryItemRenderer extends ItemRenderer
         {
             $itemRenderer = $this->getItemRendererFactory()->getItemRenderer($childItem);
 
-            if ($itemRenderer->isSelected($childItem))
+            if ($itemRenderer instanceof SelectableItemInterface && $itemRenderer->isSelected($childItem, $user))
             {
                 return true;
             }
@@ -149,12 +126,9 @@ class CategoryItemRenderer extends ItemRenderer
     }
 
     /**
-     * @param \Chamilo\Core\Menu\Storage\DataClass\Item $item
-     * @param \Chamilo\Core\User\Storage\DataClass\User $user
-     *
-     * @return string
+     * @throws \Symfony\Component\Cache\Exception\CacheException
      */
-    public function renderChildren(Item $item, User $user)
+    public function renderChildren(Item $item, User $user): string
     {
         $childItems = $this->getItemCacheService()->findItemsByParentIdentifier($item->getId());
 
@@ -170,7 +144,7 @@ class CategoryItemRenderer extends ItemRenderer
             {
                 if (!$childItem->isHidden())
                 {
-                    $childItem->set_display(Item::DISPLAY_TEXT);
+                    $childItem->setDisplay(Item::DISPLAY_TEXT);
 
                     $itemRenderer = $this->getItemRendererFactory()->getItemRenderer($childItem);
                     $html[] = $itemRenderer->render($childItem, $user);
@@ -181,22 +155,6 @@ class CategoryItemRenderer extends ItemRenderer
         $html[] = '</ul>';
 
         return implode(PHP_EOL, $html);
-    }
-
-    /**
-     * @param \Chamilo\Core\Menu\Factory\ItemRendererFactory $itemRendererFactory
-     */
-    public function setItemRendererFactory(ItemRendererFactory $itemRendererFactory): void
-    {
-        $this->itemRendererFactory = $itemRendererFactory;
-    }
-
-    /**
-     * @param \Chamilo\Core\Menu\Service\RightsCacheService $rightsCacheService
-     */
-    public function setRightsService(RightsCacheService $rightsCacheService): void
-    {
-        $this->rightsCacheService = $rightsCacheService;
     }
 
 }

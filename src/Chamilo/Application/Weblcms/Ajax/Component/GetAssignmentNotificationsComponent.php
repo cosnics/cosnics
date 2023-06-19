@@ -10,7 +10,7 @@ use Chamilo\Core\Notification\Service\NotificationManager;
 use Symfony\Component\HttpFoundation\JsonResponse;
 
 /**
- * @package Chamilo\Application\Weblcms\Integration\Chamilo\Core\Home\Ajax\Component
+ * @package Chamilo\Application\Weblcms\Ajax\Component
  * @author  Sven Vanpoucke - Hogeschool Gent
  */
 class GetAssignmentNotificationsComponent extends Manager

@@ -9,15 +9,19 @@ use Chamilo\Core\Rights\Structure\Service\Interfaces\AuthorizationCheckerInterfa
 use Chamilo\Core\User\Storage\DataClass\User;
 use Chamilo\Libraries\Architecture\Application\Application;
 use Chamilo\Libraries\Architecture\Application\Routing\UrlGenerator;
+use Chamilo\Libraries\Format\Structure\Glyph\FontAwesomeGlyph;
 use Chamilo\Libraries\Platform\ChamiloRequest;
 use Symfony\Component\Translation\Translator;
 
 /**
- * @package Chamilo\Core\Repository\Integration\Chamilo\Core\Menu\Renderer\Item\Bar\Item
+ * @package Chamilo\Core\Repository\Service\Menu
  * @author  Hans De Bisschop <hans.de.bisschop@ehb.be>
  */
 class WorkspaceItemRenderer extends ItemRenderer
 {
+    public const CONFIGURATION_NAME = 'name';
+    public const CONFIGURATION_WORKSPACE_ID = 'workspace_id';
+
     protected UrlGenerator $urlGenerator;
 
     public function __construct(
@@ -30,20 +34,14 @@ class WorkspaceItemRenderer extends ItemRenderer
         $this->urlGenerator = $urlGenerator;
     }
 
-    /**
-     * @param \Chamilo\Core\Repository\Integration\Chamilo\Core\Menu\Storage\DataClass\WorkspaceItem $item
-     * @param \Chamilo\Core\User\Storage\DataClass\User $user
-     *
-     * @return string
-     */
     public function render(Item $item, User $user): string
     {
-        $selected = $this->isSelected($item);
+        $selected = $this->isSelected($item, $user);
 
         $workspaceUrl = $this->getUrlGenerator()->fromParameters(
             [
                 Application::PARAM_CONTEXT => Manager::CONTEXT,
-                Manager::PARAM_WORKSPACE_ID => $item->getWorkspaceId()
+                Manager::PARAM_WORKSPACE_ID => $item->getSetting(self::CONFIGURATION_WORKSPACE_ID)
             ]
         );
 
@@ -51,11 +49,11 @@ class WorkspaceItemRenderer extends ItemRenderer
 
         $html[] = '<li' . ($selected ? ' class="active"' : '') . '>';
         $html[] = '<a href="' . $workspaceUrl . '">';
-        $title = $this->renderTitle($item);
+        $title = $item->getSetting(self::CONFIGURATION_NAME);
 
         if ($item->showIcon())
         {
-            $glyph = $item->getGlyph();
+            $glyph = new FontAwesomeGlyph('hdd', [], null, 'fas');
             $glyph->setExtraClasses(['fa-2x']);
             $glyph->setTitle($title);
 
@@ -79,28 +77,14 @@ class WorkspaceItemRenderer extends ItemRenderer
         return $this->urlGenerator;
     }
 
-    /**
-     * @param \Chamilo\Core\Repository\Integration\Chamilo\Core\Menu\Storage\DataClass\WorkspaceItem $item
-     *
-     * @return bool
-     */
-    public function isSelected(Item $item): bool
+    public function isSelected(Item $item, User $user): bool
     {
         $request = $this->getRequest();
 
         $currentContext = $request->query->get(Application::PARAM_CONTEXT);
         $currentWorkspace = $request->query->get(Manager::PARAM_WORKSPACE_ID);
 
-        return $currentContext == Manager::CONTEXT && $currentWorkspace == $item->getWorkspaceId();
-    }
-
-    /**
-     * @param \Chamilo\Core\Repository\Integration\Chamilo\Core\Menu\Storage\DataClass\WorkspaceItem $item
-     *
-     * @return string
-     */
-    public function renderTitle(Item $item): string
-    {
-        return $item->getName();
+        return $currentContext == Manager::CONTEXT &&
+            $currentWorkspace == $item->getSetting(self::CONFIGURATION_WORKSPACE_ID);
     }
 }

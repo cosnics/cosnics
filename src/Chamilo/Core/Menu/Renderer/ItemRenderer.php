@@ -69,23 +69,4 @@ abstract class ItemRenderer
     {
         return $this->translator;
     }
-
-    abstract public function isSelected(Item $item): bool;
-
-    protected function renderCssIcon(Item $item): string
-    {
-        $html = [];
-
-        $html[] = '<div class="chamilo-menu-item-css-icon' .
-            ($item->showTitle() ? ' chamilo-menu-item-image-with-label' : '') . '">';
-        $html[] = '<span class="chamilo-menu-item-css-icon-class ' . $item->getIconClass() . '"></span>';
-        $html[] = '</div>';
-
-        return implode(PHP_EOL, $html);
-    }
-
-    public function renderTitle(Item $item): string
-    {
-        return $this->getItemCacheService()->getItemTitleForCurrentLanguage($item);
-    }
 }

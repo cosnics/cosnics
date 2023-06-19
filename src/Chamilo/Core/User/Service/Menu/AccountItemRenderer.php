@@ -1,29 +1,27 @@
 <?php
 namespace Chamilo\Core\User\Service\Menu;
 
+use Chamilo\Core\Menu\Architecture\Interfaces\SelectableItemInterface;
 use Chamilo\Core\Menu\Storage\DataClass\Item;
 use Chamilo\Core\User\Manager;
+use Chamilo\Core\User\Storage\DataClass\User;
 use Chamilo\Libraries\Architecture\Application\Application;
 use Chamilo\Libraries\Format\Structure\Glyph\FontAwesomeGlyph;
+use Chamilo\Libraries\Format\Structure\Glyph\InlineGlyph;
 
 /**
- * @package Chamilo\Core\User\Integration\Chamilo\Core\Menu\Renderer\ItemRenderer
+ * @package Chamilo\Core\User\Service\Menu
  * @author  Hans De Bisschop <hans.de.bisschop@ehb.be>
  */
-class AccountItemRenderer extends MenuItemRenderer
+class AccountItemRenderer extends MenuItemRenderer implements SelectableItemInterface
 {
-    /**
-     * @return \Chamilo\Libraries\Format\Structure\Glyph\FontAwesomeGlyph
-     */
-    public function getGlyph()
+
+    public function getGlyph(): InlineGlyph
     {
         return new FontAwesomeGlyph('user', ['fa-2x'], null, 'fas');
     }
 
-    /**
-     * @return string
-     */
-    public function getUrl()
+    public function getUrl(): string
     {
         return $this->getUrlGenerator()->fromParameters(
             [
@@ -33,25 +31,15 @@ class AccountItemRenderer extends MenuItemRenderer
         );
     }
 
-    /**
-     * @param \Chamilo\Core\Menu\Storage\DataClass\Item $item
-     *
-     * @return bool
-     */
-    public function isSelected(Item $item): bool
+    public function isSelected(Item $item, User $user): bool
     {
         $currentContext = $this->getRequest()->query->get(Application::PARAM_CONTEXT);
-        $currentAction = $this->getRequest()->query->get(Manager::PARAM_ACTION);
+        $currentAction = $this->getRequest()->query->get(Application::PARAM_ACTION);
 
         return $currentContext == Manager::CONTEXT && $currentAction == Manager::ACTION_VIEW_ACCOUNT;
     }
 
-    /**
-     * @param \Chamilo\Core\Menu\Storage\DataClass\Item $item
-     *
-     * @return string
-     */
-    public function renderTitle(Item $item): string
+    public function renderTitle(): string
     {
         return $this->getTranslator()->trans('MyAccount', [], 'Chamilo\Core\User');
     }

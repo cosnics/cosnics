@@ -4,6 +4,7 @@ namespace Chamilo\Core\Repository\Service\Menu;
 use Chamilo\Core\Menu\Renderer\ApplicationItemRenderer;
 use Chamilo\Core\Menu\Storage\DataClass\Item;
 use Chamilo\Core\Repository\Manager;
+use Chamilo\Core\User\Storage\DataClass\User;
 
 /**
  * @package Chamilo\Core\Repository\Service\Menu
@@ -14,12 +15,12 @@ use Chamilo\Core\Repository\Manager;
 class RepositoryApplicationItemRenderer extends ApplicationItemRenderer
 {
 
-    public function isSelected(Item $item): bool
+    public function isSelected(Item $item, User $user): bool
     {
         $currentWorkspace = $this->getRequest()->query->get(
             Manager::PARAM_WORKSPACE_ID
         );
 
-        return parent::isSelected($item) && !isset($currentWorkspace);
+        return parent::isSelected($item, $user) && !isset($currentWorkspace);
     }
 }

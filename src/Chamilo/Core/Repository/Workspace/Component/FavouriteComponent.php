@@ -28,7 +28,7 @@ class FavouriteComponent extends TabComponent implements DelegateComponent
 
         $html[] = $this->render_header();
 
-        if (!$this->getWorkspaceService()->userHasWorkspaceFavourites($this->getUser()))
+        if (!$this->getWorkspaceService()->userHasFavouriteWorkspaces($this->getUser()))
         {
             $html[] = '<div class="alert alert-info">';
             $html[] = $this->getTranslator()->trans('FavouritesInfo', [], Manager::CONTEXT);
@@ -60,7 +60,7 @@ class FavouriteComponent extends TabComponent implements DelegateComponent
      */
     protected function renderTable(): string
     {
-        $totalNumberOfItems = $this->getWorkspaceService()->countWorkspaceFavouritesByUser($this->getUser());
+        $totalNumberOfItems = $this->getWorkspaceService()->countFavouriteWorkspacesByUser($this->getUser());
         $workspaceTableRenderer = $this->getWorkspaceTableRenderer();
 
         $tableParameterValues = $this->getRequestTableParameterValuesCompiler()->determineParameterValues(
@@ -68,7 +68,7 @@ class FavouriteComponent extends TabComponent implements DelegateComponent
             $totalNumberOfItems
         );
 
-        $workspaces = $this->getWorkspaceService()->getWorkspaceFavouritesByUser(
+        $workspaces = $this->getWorkspaceService()->findFavouriteWorkspacesByUser(
             $this->getUser(), $tableParameterValues->getNumberOfItemsPerPage(), $tableParameterValues->getOffset(),
             $workspaceTableRenderer->determineOrderBy($tableParameterValues)
         );

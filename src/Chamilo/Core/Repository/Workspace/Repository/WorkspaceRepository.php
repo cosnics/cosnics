@@ -10,6 +10,7 @@ use Chamilo\Core\User\Storage\DataClass\User;
 use Chamilo\Libraries\Storage\DataClass\DataClass;
 use Chamilo\Libraries\Storage\DataManager\Repository\DataClassRepository;
 use Chamilo\Libraries\Storage\Parameters\DataClassCountParameters;
+use Chamilo\Libraries\Storage\Parameters\DataClassDistinctParameters;
 use Chamilo\Libraries\Storage\Parameters\DataClassRetrieveParameters;
 use Chamilo\Libraries\Storage\Parameters\DataClassRetrievesParameters;
 use Chamilo\Libraries\Storage\Query\Condition\AndCondition;
@@ -52,25 +53,12 @@ class WorkspaceRepository
     /**
      * @param int[][] $entities
      */
-    public function countSharedWorkspacesForEntities(array $entities): int
+    public function countFavouriteWorkspacesByUser(User $user, array $entities): int
     {
         return $this->getDataClassRepository()->count(
             Workspace::class, new DataClassCountParameters(
-                $this->getSharedWorkspacesForEntitiesWithRightCondition($entities),
-                new Joins([$this->getSharedWorkspacesJoin()])
-            )
-        );
-    }
-
-    /**
-     * @param int[][] $entities
-     */
-    public function countWorkspaceFavouritesByUser(User $user, array $entities): int
-    {
-        return $this->getDataClassRepository()->count(
-            Workspace::class, new DataClassCountParameters(
-                $this->getWorkspaceFavouritesByUserCondition($user, $entities, RightsService::RIGHT_VIEW),
-                $this->getWorkspaceFavouritesByUserJoins(), new RetrieveProperties(
+                $this->getFavouriteWorkspacesByUserCondition($user, $entities, RightsService::RIGHT_VIEW),
+                $this->getFavouriteWorkspacesByUserJoins(), new RetrieveProperties(
                     [
                         new FunctionConditionVariable(
                             FunctionConditionVariable::DISTINCT,
@@ -78,6 +66,19 @@ class WorkspaceRepository
                         )
                     ]
                 )
+            )
+        );
+    }
+
+    /**
+     * @param int[][] $entities
+     */
+    public function countSharedWorkspacesForEntities(array $entities): int
+    {
+        return $this->getDataClassRepository()->count(
+            Workspace::class, new DataClassCountParameters(
+                $this->getSharedWorkspacesForEntitiesWithRightCondition($entities),
+                new Joins([$this->getSharedWorkspacesJoin()])
             )
         );
     }
@@ -162,6 +163,51 @@ class WorkspaceRepository
     }
 
     /**
+     * @param \Chamilo\Core\User\Storage\DataClass\User $user
+     * @param int[][] $entities
+     *
+     * @return string[]
+     */
+    public function findFavouriteWorkspaceIdentifiersByUser(User $user, array $entities): array
+    {
+        return $this->getDataClassRepository()->distinct(
+            Workspace::class, new DataClassDistinctParameters(
+                $this->getFavouriteWorkspacesByUserCondition($user, $entities, RightsService::RIGHT_VIEW),
+                new RetrieveProperties([new PropertyConditionVariable(Workspace::class, Workspace::PROPERTY_ID)]),
+                $this->getFavouriteWorkspacesByUserJoins()
+            )
+        );
+    }
+
+    /**
+     * @param \Chamilo\Core\User\Storage\DataClass\User $user
+     * @param int[][] $entities
+     * @param ?int $limit
+     * @param ?int $offset
+     * @param ?\Chamilo\Libraries\Storage\Query\OrderBy $orderProperty
+     *
+     * @return \Doctrine\Common\Collections\ArrayCollection<\Chamilo\Core\Repository\Workspace\Storage\DataClass\Workspace>
+     * @throws \Chamilo\Libraries\Storage\Exception\DataClassNoResultException
+     */
+    public function findFavouriteWorkspacesByUser(
+        User $user, array $entities, ?int $limit = null, ?int $offset = null, ?OrderBy $orderProperty = null
+    ): ArrayCollection
+    {
+        return $this->getDataClassRepository()->retrieves(
+            Workspace::class, new DataClassRetrievesParameters(
+                $this->getFavouriteWorkspacesByUserCondition($user, $entities, RightsService::RIGHT_VIEW), $limit,
+                $offset, $orderProperty, $this->getFavouriteWorkspacesByUserJoins(), null, null, new RetrieveProperties(
+                    [
+                        new FunctionConditionVariable(
+                            FunctionConditionVariable::DISTINCT, new PropertiesConditionVariable(Workspace::class)
+                        )
+                    ]
+                )
+            )
+        );
+    }
+
+    /**
      * @param int[][] $entities
      * @param ?int $limit
      * @param ?int $offset
@@ -185,62 +231,6 @@ class WorkspaceRepository
     public function findWorkspaceByIdentifier(string $identifier): ?Workspace
     {
         return $this->getDataClassRepository()->retrieveById(Workspace::class, $identifier);
-    }
-
-    /**
-     * @param \Chamilo\Core\User\Storage\DataClass\User $user
-     * @param int[][] $entities
-     * @param ?int $limit
-     * @param ?int $offset
-     * @param ?\Chamilo\Libraries\Storage\Query\OrderBy $orderProperty
-     *
-     * @return \Doctrine\Common\Collections\ArrayCollection<\Chamilo\Core\Repository\Workspace\Storage\DataClass\Workspace>
-     * @throws \Chamilo\Libraries\Storage\Exception\DataClassNoResultException
-     */
-    public function findWorkspaceFavouritesByUser(
-        User $user, array $entities, ?int $limit = null, ?int $offset = null, ?OrderBy $orderProperty = null
-    ): ArrayCollection
-    {
-        return $this->getDataClassRepository()->retrieves(
-            Workspace::class, new DataClassRetrievesParameters(
-                $this->getWorkspaceFavouritesByUserCondition($user, $entities, RightsService::RIGHT_VIEW), $limit,
-                $offset, $orderProperty, $this->getWorkspaceFavouritesByUserJoins(), null, null, new RetrieveProperties(
-                    [
-                        new FunctionConditionVariable(
-                            FunctionConditionVariable::DISTINCT, new PropertiesConditionVariable(Workspace::class)
-                        )
-                    ]
-                )
-            )
-        );
-    }
-
-    /**
-     * @param \Chamilo\Core\User\Storage\DataClass\User $user
-     * @param ?int $limit
-     * @param ?int $offset
-     * @param ?\Chamilo\Libraries\Storage\Query\OrderBy $orderProperty
-     *
-     * @return \Doctrine\Common\Collections\ArrayCollection<\Chamilo\Core\Repository\Workspace\Storage\DataClass\Workspace>
-     * @throws \Chamilo\Libraries\Storage\Exception\DataClassNoResultException
-     */
-    public function findWorkspaceFavouritesByUserFast(
-        User $user, ?int $limit = null, ?int $offset = null, ?OrderBy $orderProperty = null
-    ): ArrayCollection
-    {
-        $joins = new Joins();
-        $joins->add($this->getFavouritesJoin());
-
-        $condition = new EqualityCondition(
-            new PropertyConditionVariable(WorkspaceUserFavourite::class, WorkspaceUserFavourite::PROPERTY_USER_ID),
-            new StaticConditionVariable($user->getId())
-        );
-
-        return $this->getDataClassRepository()->retrieves(
-            Workspace::class, new DataClassRetrievesParameters(
-                $condition, $limit, $offset, $orderProperty, $joins
-            )
-        );
     }
 
     /**
@@ -347,6 +337,40 @@ class WorkspaceRepository
         );
     }
 
+    /**
+     * @param \Chamilo\Core\User\Storage\DataClass\User $user
+     * @param int[][] $entities
+     * @param int $right
+     *
+     * @return \Chamilo\Libraries\Storage\Query\Condition\AndCondition
+     */
+    private function getFavouriteWorkspacesByUserCondition(User $user, array $entities, int $right): AndCondition
+    {
+        $andConditions = [];
+
+        if (!$user->is_platform_admin())
+        {
+            $andConditions[] = $this->getWorkspaceByUserCondition($user, $entities, $right);
+        }
+
+        $andConditions[] = new EqualityCondition(
+            new PropertyConditionVariable(WorkspaceUserFavourite::class, WorkspaceUserFavourite::PROPERTY_USER_ID),
+            new StaticConditionVariable($user->getId())
+        );
+
+        return new AndCondition($andConditions);
+    }
+
+    private function getFavouriteWorkspacesByUserJoins(): Joins
+    {
+        $joins = new Joins();
+
+        $joins->add($this->getSharedWorkspacesJoin(Join::TYPE_LEFT));
+        $joins->add($this->getFavouritesJoin());
+
+        return $joins;
+    }
+
     private function getFavouritesJoin(int $joinType = Join::TYPE_NORMAL): Join
     {
         return new Join(
@@ -437,40 +461,6 @@ class WorkspaceRepository
         }
 
         return new AndCondition($conditions);
-    }
-
-    /**
-     * @param \Chamilo\Core\User\Storage\DataClass\User $user
-     * @param int[][] $entities
-     * @param int $right
-     *
-     * @return \Chamilo\Libraries\Storage\Query\Condition\AndCondition
-     */
-    private function getWorkspaceFavouritesByUserCondition(User $user, array $entities, int $right): AndCondition
-    {
-        $andConditions = [];
-
-        if (!$user->is_platform_admin())
-        {
-            $andConditions[] = $this->getWorkspaceByUserCondition($user, $entities, $right);
-        }
-
-        $andConditions[] = new EqualityCondition(
-            new PropertyConditionVariable(WorkspaceUserFavourite::class, WorkspaceUserFavourite::PROPERTY_USER_ID),
-            new StaticConditionVariable($user->getId())
-        );
-
-        return new AndCondition($andConditions);
-    }
-
-    private function getWorkspaceFavouritesByUserJoins(): Joins
-    {
-        $joins = new Joins();
-
-        $joins->add($this->getSharedWorkspacesJoin(Join::TYPE_LEFT));
-        $joins->add($this->getFavouritesJoin());
-
-        return $joins;
     }
 
     private function getWorkspacesByCreatorCondition(User $user): EqualityCondition
