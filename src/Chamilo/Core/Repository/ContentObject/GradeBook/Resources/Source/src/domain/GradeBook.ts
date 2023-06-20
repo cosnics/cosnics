@@ -296,7 +296,7 @@ export default class GradeBook {
         const total = this.getResult('totals', user.id);
         if (total === null) { return false; } // unsynchronized user, cannot update
         if (typeof total !== 'number') { return true; }
-        return total.toFixed(2) !== this.getEndResult(user.id, false).toFixed(2);
+        return total.toFixed(2) !== parseFloat(this.getEndResult(user.id, false).toPrecision(8)).toFixed(2);
     }
 
     get totalsNeedUpdating(): boolean {

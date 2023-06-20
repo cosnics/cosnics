@@ -80,7 +80,7 @@ type Column = EmptyColumn|ScoreColumn;
             if (v === null) {
                 return '';
             }
-            return v.toLocaleString(undefined, {maximumFractionDigits: 2});
+            return parseFloat(v.toPrecision(8)).toLocaleString(undefined, {maximumFractionDigits: 2});
         }
     }
 })
