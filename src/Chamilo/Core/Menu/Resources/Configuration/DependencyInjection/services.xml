@@ -25,9 +25,6 @@
                       id="Chamilo\Core\Menu\Cache\RightsCacheProvider"/>
         </service>
         <service id="Chamilo\Core\Menu\Service\RightsService">
-            <argument key="$rightsRepository"
-                      type="service"
-                      id="Chamilo\Core\Menu\Storage\Repository\RightsRepository"/>
             <argument key="$configurationConsulter"
                       type="service"
                       id="Chamilo\Configuration\Service\Consulter\ConfigurationConsulter"/>
@@ -50,7 +47,6 @@
         </service>
 
         <service id="Chamilo\Core\Menu\Storage\Repository\ItemRepository"/>
-        <service id="Chamilo\Core\Menu\Storage\Repository\RightsRepository"/>
 
         <service id="Chamilo\Core\Menu\Service\Renderer\MenuRenderer">
             <argument key="$webPathBuilder"

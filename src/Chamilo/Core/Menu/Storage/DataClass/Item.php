@@ -30,15 +30,8 @@ class Item extends DataClass implements DataClassDisplayOrderSupport, Configurab
     public const PROPERTY_ICON_CLASS = 'icon_class';
     public const PROPERTY_PARENT = 'parent';
     public const PROPERTY_SORT = 'sort';
-
     public const PROPERTY_TITLES = 'titles';
-
     public const PROPERTY_TYPE = 'type';
-
-    public const TYPE_APPLICATION = 1;
-    public const TYPE_CATEGORY = 3;
-    public const TYPE_LINK = 2;
-    public const TYPE_LINK_APPLICATION = 4;
 
     /**
      * @param string[] $extendedPropertyNames
@@ -90,10 +83,7 @@ class Item extends DataClass implements DataClassDisplayOrderSupport, Configurab
         return $this->getDefaultProperty(self::PROPERTY_HIDDEN);
     }
 
-    /**
-     * @string mixed
-     */
-    public function getIconClass()
+    public function getIconClass(): ?string
     {
         return $this->getDefaultProperty(self::PROPERTY_ICON_CLASS);
     }

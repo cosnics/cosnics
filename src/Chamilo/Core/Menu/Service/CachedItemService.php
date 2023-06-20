@@ -104,6 +104,15 @@ class CachedItemService implements CacheDataPreLoaderInterface, ItemServiceInter
         return array_key_exists($item->getId(), $groupedItems);
     }
 
+    /**
+     * @return \Doctrine\Common\Collections\ArrayCollection<\Chamilo\Core\Menu\Storage\DataClass\Item>
+     * @throws \Chamilo\Libraries\Storage\Exception\DataClassNoResultException
+     */
+    public function findApplicationItems(): ArrayCollection
+    {
+        return $this->getItemService()->findApplicationItems();
+    }
+
     public function findItemByIdentifier(string $identifier): ?Item
     {
         return $this->getItemService()->findItemByIdentifier($identifier);

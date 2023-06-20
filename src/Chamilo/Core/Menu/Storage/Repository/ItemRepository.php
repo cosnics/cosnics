@@ -122,6 +122,22 @@ class ItemRepository
     }
 
     /**
+     * @param string $type
+     *
+     * @return \Doctrine\Common\Collections\ArrayCollection<\Chamilo\Core\Menu\Storage\DataClass\Item>
+     * @throws \Chamilo\Libraries\Storage\Exception\DataClassNoResultException
+     */
+    public function findItemsByType(string $type): ArrayCollection
+    {
+        $condition = new EqualityCondition(
+            new PropertyConditionVariable(Item::class, CompositeDataClass::PROPERTY_TYPE),
+            new StaticConditionVariable(CategoryItemRenderer::class)
+        );
+
+        return $this->getDataClassRepository()->retrieves(Item::class, new DataClassRetrievesParameters($condition));
+    }
+
+    /**
      * @return \Doctrine\Common\Collections\ArrayCollection<\Chamilo\Core\Menu\Storage\DataClass\Item>
      * @throws \Chamilo\Libraries\Storage\Exception\DataClassNoResultException
      */

@@ -7,7 +7,6 @@ use Chamilo\Core\Menu\Service\RightsService;
 use Chamilo\Core\Menu\Storage\DataClass\Item;
 use Chamilo\Core\Menu\Storage\DataClass\ItemTitle;
 use Chamilo\Core\Menu\Storage\DataClass\LanguageCategoryItem;
-use Chamilo\Core\Menu\Storage\DataClass\RightsLocation;
 use Chamilo\Libraries\DependencyInjection\DependencyInjectionContainerBuilder;
 use Chamilo\Libraries\Utilities\StringUtilities;
 use Symfony\Component\Translation\Translator;
@@ -27,11 +26,9 @@ class Installer extends \Chamilo\Configuration\Package\Action\Installer
      * @throws \Chamilo\Libraries\Storage\Exception\DisplayOrderException
      * @throws \Exception
      */
-    public function extra()
+    public function extra(): bool
     {
-        $location = $this->getRightsService()->createRoot(true);
-
-        if (!$location instanceof RightsLocation)
+        if (!$this->getRightsService()->createRoot())
         {
             return false;
         }

@@ -46,26 +46,17 @@ abstract class Manager extends Application
         $this->checkAuthorization(Manager::CONTEXT);
     }
 
-    /**
-     * @return string
-     */
-    public function getHomeUrl()
+    public function getHomeUrl(): string
     {
         return $this->getUrlGenerator()->fromParameters([Application::PARAM_ACTION => Manager::ACTION_BROWSE]);
     }
 
-    /**
-     * @return \Chamilo\Core\Menu\Service\ItemService
-     */
-    public function getItemService()
+    public function getItemService(): ItemService
     {
         return $this->getService(ItemService::class);
     }
 
-    /**
-     * @return \Chamilo\Core\Menu\Service\RightsService
-     */
-    public function getRightsService()
+    public function getRightsService(): RightsService
     {
         return $this->getService(RightsService::class);
     }

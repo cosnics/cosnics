@@ -45,7 +45,7 @@ abstract class Installer extends \Chamilo\Configuration\Package\Action\Installer
      * @return bool
      * @throws \Exception
      */
-    public function extra()
+    public function extra(): bool
     {
         $translator = $this->getTranslator();
         $context = $this->getClassnameUtilities()->getNamespaceParent(static::CONTEXT, 5);

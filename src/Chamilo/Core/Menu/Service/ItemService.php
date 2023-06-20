@@ -2,6 +2,7 @@
 namespace Chamilo\Core\Menu\Service;
 
 use Chamilo\Core\Menu\Architecture\Interfaces\ItemServiceInterface;
+use Chamilo\Core\Menu\Service\Renderer\ApplicationItemRenderer;
 use Chamilo\Core\Menu\Storage\DataClass\Item;
 use Chamilo\Core\Menu\Storage\Repository\ItemRepository;
 use Chamilo\Libraries\Storage\DataClass\PropertyMapper;
@@ -176,6 +177,15 @@ class ItemService implements ItemServiceInterface
         return $this->countItemsByParentIdentifier($item->getId()) > 0;
     }
 
+    /**
+     * @return \Doctrine\Common\Collections\ArrayCollection<\Chamilo\Core\Menu\Storage\DataClass\Item>
+     * @throws \Chamilo\Libraries\Storage\Exception\DataClassNoResultException
+     */
+    public function findApplicationItems(): ArrayCollection
+    {
+        return $this->findItemsByType(ApplicationItemRenderer::class);
+    }
+
     public function findItemByIdentifier(string $identifier): ?Item
     {
         return $this->getItemRepository()->findItemByIdentifier($identifier);
@@ -217,6 +227,17 @@ class ItemService implements ItemServiceInterface
         return $this->getItemRepository()->findItemsByParentIdentifier(
             $parentIdentifier, $count, $offset, $orderBy
         );
+    }
+
+    /**
+     * @param string $type
+     *
+     * @return \Doctrine\Common\Collections\ArrayCollection<\Chamilo\Core\Menu\Storage\DataClass\Item>
+     * @throws \Chamilo\Libraries\Storage\Exception\DataClassNoResultException
+     */
+    public function findItemsByType(string $type): ArrayCollection
+    {
+        return $this->getItemRepository()->findItemsByType($type);
     }
 
     /**
