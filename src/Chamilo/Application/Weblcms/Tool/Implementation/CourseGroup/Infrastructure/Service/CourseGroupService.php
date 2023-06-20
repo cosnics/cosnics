@@ -155,6 +155,14 @@ class CourseGroupService
     }
 
     /**
+     * @return int[]
+     */
+    public function getUserIdsDirectlySubscribedInGroup(CourseGroup $courseGroup)
+    {
+        return $this->courseGroupRepository->getUserIdsDirectlySubscribedInGroup($courseGroup);
+    }
+
+    /**
      * @param CourseGroup $courseGroup
      *
      * @return int
