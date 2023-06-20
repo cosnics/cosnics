@@ -33,6 +33,7 @@ use Chamilo\Libraries\Storage\Query\Variable\PropertyConditionVariable;
 use Chamilo\Libraries\Storage\Query\Variable\StaticConditionVariable;
 use Chamilo\Libraries\Storage\Service\ParametersHandler;
 use Doctrine\Common\Collections\ArrayCollection;
+use Exception;
 use Symfony\Component\Uid\Uuid;
 
 /**
@@ -265,9 +266,6 @@ class DataClassRepository
         }
     }
 
-    /**
-     * @throws \Chamilo\Libraries\Storage\Exception\DataClassNoResultException
-     */
     public function create(DataClass $dataClass): bool
     {
         if ($dataClass instanceof CompositeDataClass)
@@ -301,7 +299,15 @@ class DataClassRepository
 
             if ($dataClass instanceof CompositeDataClass && $dataClass::isExtended())
             {
-                $objectProperties = $dataClass->getAdditionalProperties();
+                try
+                {
+                    $objectProperties = $dataClass->getAdditionalProperties();
+                }
+                catch (Exception)
+                {
+                    return false;
+                }
+
                 $objectProperties[DataClass::PROPERTY_ID] = $dataClass->getId();
 
                 if (!$this->getDataClassDatabase()->create($dataClass::getStorageUnitName(), $objectProperties))
@@ -626,6 +632,10 @@ class DataClassRepository
     }
 
     /**
+     * @param string $dataClassName
+     * @param \Chamilo\Libraries\Storage\Parameters\RecordRetrievesParameters $parameters
+     *
+     * @return \Doctrine\Common\Collections\ArrayCollection<string[]>
      * @throws \Chamilo\Libraries\Storage\Exception\DataClassNoResultException
      */
     public function records(string $dataClassName, RecordRetrievesParameters $parameters): ArrayCollection
@@ -925,16 +935,12 @@ class DataClassRepository
      * @param callable $function
      *
      * @return mixed
-     * @throws \Throwable
      */
     public function transactional(callable $function)
     {
         return $this->getDataClassDatabase()->transactional($function);
     }
 
-    /**
-     * @throws \Chamilo\Libraries\Storage\Exception\DataClassNoResultException
-     */
     public function update(DataClass $dataClass): bool
     {
         if ($dataClass instanceof CompositeDataClass)
@@ -967,9 +973,16 @@ class DataClassRepository
                 new StaticConditionVariable($dataClass->getId())
             );
 
-            $result = $this->getDataClassDatabase()->update(
-                $dataClass::getStorageUnitName(), $condition, $dataClass->getAdditionalProperties()
-            );
+            try
+            {
+                $result = $this->getDataClassDatabase()->update(
+                    $dataClass::getStorageUnitName(), $condition, $dataClass->getAdditionalProperties()
+                );
+            }
+            catch (Exception)
+            {
+                return false;
+            }
         }
 
         return $result;

@@ -230,9 +230,6 @@ trait DependencyInjectionContainerTrait
         return $this->getService(WebPathBuilder::class);
     }
 
-    /**
-     * @throws \Exception
-     */
     public function initializeContainer(): void
     {
         if (!isset($this->container))

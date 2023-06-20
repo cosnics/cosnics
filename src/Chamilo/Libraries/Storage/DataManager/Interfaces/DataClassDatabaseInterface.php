@@ -67,8 +67,6 @@ interface DataClassDatabaseInterface
      * @param callable $function
      *
      * @return mixed
-     * @throws \Exception
-     * @throws \Throwable
      */
     public function transactional(callable $function);
 

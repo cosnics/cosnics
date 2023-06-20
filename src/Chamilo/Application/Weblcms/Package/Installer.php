@@ -107,7 +107,7 @@ class Installer extends \Chamilo\Configuration\Package\Action\Installer
     /**
      * Runs the install-script.
      */
-    public function extra()
+    public function extra(): bool
     {
         if (!$this->create_courses_subtree())
         {

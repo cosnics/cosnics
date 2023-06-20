@@ -43,9 +43,6 @@ abstract class Application
 
     protected ApplicationConfigurationInterface $applicationConfiguration;
 
-    /**
-     * @throws \Exception
-     */
     public function __construct(ApplicationConfigurationInterface $applicationConfiguration)
     {
         $this->applicationConfiguration = $applicationConfiguration;

@@ -79,7 +79,6 @@ class NestedSetDataClassRepository
     }
 
     /**
-     * @throws \Throwable
      * @see NestedSet::create()
      */
     public function create(NestedSet $nestedSet, int $previousNestedSetIdentifier = 0): bool
@@ -153,11 +152,13 @@ class NestedSetDataClassRepository
     }
 
     /**
-     * @return \Chamilo\Libraries\Storage\DataClass\NestedSet[]|bool
-     * @throws \Throwable
+     * @param \Chamilo\Libraries\Storage\DataClass\NestedSet $nestedSet
+     * @param \Chamilo\Libraries\Storage\Query\Condition\Condition|null $condition
+     *
+     * @return \Doctrine\Common\Collections\ArrayCollection<\Chamilo\Libraries\Storage\DataClass\NestedSet>
      * @see NestedSet::delete()
      */
-    public function delete(NestedSet $nestedSet, ?Condition $condition = null)
+    public function delete(NestedSet $nestedSet, ?Condition $condition = null): ArrayCollection
     {
         // Deleting a node from a nested set requires multiple updates which have to be performed atomically and
         // consistently. Use a transaction to guarantee this.
@@ -175,13 +176,13 @@ class NestedSetDataClassRepository
                 // Delete this node as well as its offspring
                 if (!$this->getDataClassRepository()->deletes(get_class($nestedSet), $deleteCondition))
                 {
-                    return false;
+                    throw new \Exception('Nested Set delete failed');
                 }
 
                 // Shift the remaining nodes left to fill the gap created by deleting this node and its offspring.
                 if (!$this->postDelete($nestedSet, $condition))
                 {
-                    return false;
+                    throw new \Exception('Nested Set delete failed');
                 }
 
                 return $associatedNestedSets;
@@ -495,7 +496,6 @@ class NestedSetDataClassRepository
     }
 
     /**
-     * @throws \Throwable
      * @see NestedSet::move()
      */
     public function move(
@@ -931,9 +931,6 @@ class NestedSetDataClassRepository
         return $this->getDataClassRepository()->retrieves($dataClassName, $parameters);
     }
 
-    /**
-     * @throws \Chamilo\Libraries\Storage\Exception\DataClassNoResultException
-     */
     public function update(NestedSet $nestedSet): bool
     {
         return $this->getDataClassRepository()->update($nestedSet);

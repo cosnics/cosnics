@@ -21,7 +21,7 @@ abstract class Installer extends \Chamilo\Configuration\Package\Action\Installer
      *
      * @return bool
      */
-    public function extra()
+    public function extra(): bool
     {
         if (!$this->registerPropertyProviders())
         {

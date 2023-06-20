@@ -21,7 +21,7 @@ class Installer extends \Chamilo\Configuration\Package\Action\Installer
     /**
      * Runs the install-script.
      */
-    public function extra()
+    public function extra(): bool
     {
         // Update the default settings to the database
         if (!$this->update_settings())
@@ -37,9 +37,7 @@ class Installer extends \Chamilo\Configuration\Package\Action\Installer
             );
         }
 
-        $location = $this->getRightsService()->createRoot(true);
-
-        if (!$location instanceof RightsLocation)
+        if (!$this->getRightsService()->createRoot())
         {
             return false;
         }

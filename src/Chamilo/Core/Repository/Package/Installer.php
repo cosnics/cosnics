@@ -15,11 +15,9 @@ class Installer extends \Chamilo\Configuration\Package\Action\Installer
 {
     public const CONTEXT = Manager::CONTEXT;
 
-    public function extra()
+    public function extra(): bool
     {
-        $location = $this->getRightsService()->createRoot(true);
-
-        if (!$location instanceof RightsLocation)
+        if (! $this->getRightsService()->createRoot())
         {
             return false;
         }

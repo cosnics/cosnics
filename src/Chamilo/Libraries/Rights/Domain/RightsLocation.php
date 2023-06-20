@@ -26,9 +26,6 @@ abstract class RightsLocation extends NestedSet
     public const PROPERTY_TREE_TYPE = 'tree_type';
     public const PROPERTY_TYPE = 'type';
 
-    /**
-     * @throws \Exception
-     */
     public function disinherit()
     {
         $this->set_inherit(0);
@@ -83,7 +80,6 @@ abstract class RightsLocation extends NestedSet
      * @param int $right_id - [OPTIONAL] default null
      *
      * @return \Doctrine\Common\Collections\ArrayCollection
-     * @throws \Exception
      * @deprecated Use RightsService::findRightsLocationRightsEntitiesForLocationAndRight() now
      */
     public function get_rights_entities($right_id = null)
@@ -142,9 +138,6 @@ abstract class RightsLocation extends NestedSet
         return $this->getDefaultProperty(self::PROPERTY_TYPE);
     }
 
-    /**
-     * @throws \Exception
-     */
     public function inherit()
     {
         $this->set_inherit(1);
@@ -176,9 +169,6 @@ abstract class RightsLocation extends NestedSet
         return ($parent == 0);
     }
 
-    /**
-     * @throws \Exception
-     */
     public function lock()
     {
         $this->set_locked(true);
@@ -186,8 +176,6 @@ abstract class RightsLocation extends NestedSet
 
     /**
      * @param string $type
-     *
-     * @throws \Exception
      */
     public function setType($type)
     {
@@ -196,8 +184,6 @@ abstract class RightsLocation extends NestedSet
 
     /**
      * @param int $identifier
-     *
-     * @throws \Exception
      */
     public function set_identifier($identifier)
     {
@@ -206,8 +192,6 @@ abstract class RightsLocation extends NestedSet
 
     /**
      * @param int $inherit
-     *
-     * @throws \Exception
      */
     public function set_inherit($inherit)
     {
@@ -216,8 +200,6 @@ abstract class RightsLocation extends NestedSet
 
     /**
      * @param int $locked
-     *
-     * @throws \Exception
      */
     public function set_locked($locked)
     {
@@ -226,8 +208,6 @@ abstract class RightsLocation extends NestedSet
 
     /**
      * @param int $tree_identifier
-     *
-     * @throws \Exception
      */
     public function set_tree_identifier($tree_identifier)
     {
@@ -236,8 +216,6 @@ abstract class RightsLocation extends NestedSet
 
     /**
      * @param int $tree_type
-     *
-     * @throws \Exception
      */
     public function set_tree_type($tree_type)
     {
@@ -256,16 +234,12 @@ abstract class RightsLocation extends NestedSet
      * @param $object
      *
      * @throws \ReflectionException
-     * @throws \Exception
      */
     public function set_type_from_object($object)
     {
         $this->setType(ClassnameUtilities::getInstance()->getClassnameFromObject($object, true));
     }
 
-    /**
-     * @throws \Exception
-     */
     public function switch_inherit()
     {
         if ($this->inherits())
@@ -278,9 +252,6 @@ abstract class RightsLocation extends NestedSet
         }
     }
 
-    /**
-     * @throws \Exception
-     */
     public function switch_lock()
     {
         if ($this->is_locked())
@@ -293,9 +264,6 @@ abstract class RightsLocation extends NestedSet
         }
     }
 
-    /**
-     * @throws \Exception
-     */
     public function unlock()
     {
         $this->set_locked(false);

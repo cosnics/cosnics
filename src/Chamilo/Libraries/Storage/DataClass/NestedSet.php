@@ -414,7 +414,7 @@ abstract class NestedSet extends DataClass
         return $this->getDefaultProperty(self::PROPERTY_LEFT_VALUE);
     }
 
-    public function getParentId(): int
+    public function getParentId(): string
     {
         return $this->getDefaultProperty(self::PROPERTY_PARENT_ID);
     }
@@ -514,7 +514,7 @@ abstract class NestedSet extends DataClass
     /**
      * @deprecated Use NestedSet::getParentId() now
      */
-    public function get_parent_id(): int
+    public function get_parent_id(): string
     {
         return $this->getParentId();
     }
@@ -961,7 +961,7 @@ abstract class NestedSet extends DataClass
         $this->setDefaultProperty(self::PROPERTY_LEFT_VALUE, $leftValue);
     }
 
-    public function setParentId(int $parentId)
+    public function setParentId(string $parentId)
     {
         $this->setDefaultProperty(self::PROPERTY_PARENT_ID, $parentId);
     }
@@ -982,7 +982,7 @@ abstract class NestedSet extends DataClass
     /**
      * @deprecated Use NestedSet::setParentId() now
      */
-    public function set_parent_id(int $parentId)
+    public function set_parent_id(string $parentId)
     {
         $this->setParentId($parentId);
     }

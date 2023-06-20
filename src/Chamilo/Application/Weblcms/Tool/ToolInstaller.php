@@ -59,7 +59,7 @@ abstract class ToolInstaller extends Installer
      *
      * @return boolean
      */
-    public function extra()
+    public function extra(): bool
     {
         // Set time and memory limit very low because this could be a lengthy process
         ini_set('memory_limit', -1);

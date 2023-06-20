@@ -19,7 +19,7 @@ class Installer extends \Chamilo\Configuration\Package\Action\Installer
 {
     public const CONTEXT = Manager::CONTEXT;
 
-    public function extra()
+    public function extra(): bool
     {
         if (!$this->installDefaultSchemas())
         {

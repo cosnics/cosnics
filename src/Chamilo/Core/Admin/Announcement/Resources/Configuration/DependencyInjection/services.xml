@@ -8,14 +8,9 @@
                   public="true"/>
 
         <service id="Chamilo\Core\Admin\Announcement\Service\PublicationService"/>
-        <service id="Chamilo\Core\Admin\Announcement\Service\RightsService">
-            <argument key="$rightsRepository"
-                      type="service"
-                      id="Chamilo\Core\Admin\Announcement\Storage\Repository\RightsRepository"/>
-        </service>
+        <service id="Chamilo\Core\Admin\Announcement\Service\RightsService"/>
 
         <service id="Chamilo\Core\Admin\Announcement\Storage\Repository\PublicationRepository"/>
-        <service id="Chamilo\Core\Admin\Announcement\Storage\Repository\RightsRepository"/>
 
         <service id="Chamilo\Core\Admin\Announcement\Service\Home\SystemAnnouncementsBlockRenderer">
             <tag name="Chamilo\Core\Home\Renderer\BlockRenderer"/>

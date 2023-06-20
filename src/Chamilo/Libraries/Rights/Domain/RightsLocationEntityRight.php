@@ -67,8 +67,6 @@ abstract class RightsLocationEntityRight extends DataClass
 
     /**
      * @param int $entityIdentifier
-     *
-     * @throws \Exception
      */
     public function set_entity_id($entityIdentifier)
     {
@@ -77,8 +75,6 @@ abstract class RightsLocationEntityRight extends DataClass
 
     /**
      * @param int $entityType
-     *
-     * @throws \Exception
      */
     public function set_entity_type($entityType)
     {
@@ -87,8 +83,6 @@ abstract class RightsLocationEntityRight extends DataClass
 
     /**
      * @param int $locationIdentifier
-     *
-     * @throws \Exception
      */
     public function set_location_id($locationIdentifier)
     {
@@ -97,8 +91,6 @@ abstract class RightsLocationEntityRight extends DataClass
 
     /**
      * @param int $rightIdentifier
-     *
-     * @throws \Exception
      */
     public function set_right_id($rightIdentifier)
     {

@@ -65,7 +65,7 @@ class Installer extends Action\Installer
     /**
      * Runs the install-script.
      */
-    public function extra()
+    public function extra(): bool
     {
 
         // Add the default language entries in the database

@@ -27,7 +27,7 @@ class Installer extends \Chamilo\Configuration\Package\Action\Installer
     /**
      * Additional installation steps.
      */
-    public function extra()
+    public function extra(): bool
     {
         if (!$this->create_root_group())
         {

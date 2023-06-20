@@ -123,7 +123,7 @@ class Installer extends \Chamilo\Configuration\Package\Action\Installer
     /**
      * Runs the install-script.
      */
-    public function extra()
+    public function extra(): bool
     {
         $values = $this->get_form_values();
 

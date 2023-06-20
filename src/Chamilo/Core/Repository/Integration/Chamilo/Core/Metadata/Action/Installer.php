@@ -20,7 +20,7 @@ use Chamilo\Libraries\Translation\Translation;
 abstract class Installer extends \Chamilo\Core\Metadata\Action\Installer
 {
 
-    public function extra()
+    public function extra(): bool
     {
         if (!parent::extra())
         {

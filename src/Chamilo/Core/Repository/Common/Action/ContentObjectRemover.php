@@ -17,7 +17,7 @@ abstract class ContentObjectRemover extends Remover
      *
      * @return bool
      */
-    public function extra()
+    public function extra(): bool
     {
         $context = static::CONTEXT;
         $class = $context . '\\' . ClassnameUtilities::getInstance()->getPackageNameFromNamespace($context, true);

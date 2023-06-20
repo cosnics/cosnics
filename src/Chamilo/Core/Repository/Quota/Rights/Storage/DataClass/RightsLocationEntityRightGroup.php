@@ -28,16 +28,13 @@ class RightsLocationEntityRightGroup extends DataClass
         return parent::getDefaultPropertyNames($extendedPropertyNames);
     }
 
-    /**
-     * @return string
-     */
     public static function getStorageUnitName(): string
     {
         return 'repository_quote_rights_location_entity_right_group';
     }
 
     /**
-     * @return int
+     * @return string
      */
     public function get_group_id()
     {
@@ -45,29 +42,19 @@ class RightsLocationEntityRightGroup extends DataClass
     }
 
     /**
-     * @return int
+     * @return string
      */
     public function get_location_entity_right_id()
     {
         return $this->getDefaultProperty(self::PROPERTY_LOCATION_ENTITY_RIGHT_ID);
     }
 
-    /**
-     * @param int $groupId
-     *
-     * @throws \Exception
-     */
-    public function set_group_id($groupId)
+    public function set_group_id(string $groupId)
     {
         $this->setDefaultProperty(self::PROPERTY_GROUP_ID, $groupId);
     }
 
-    /**
-     * @param int $locationEntityRightId
-     *
-     * @throws \Exception
-     */
-    public function set_location_entity_right_id($locationEntityRightId)
+    public function set_location_entity_right_id(string $locationEntityRightId)
     {
         $this->setDefaultProperty(self::PROPERTY_LOCATION_ENTITY_RIGHT_ID, $locationEntityRightId);
     }

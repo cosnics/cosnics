@@ -2,9 +2,10 @@
 namespace Chamilo\Core\Repository\Quota\Rights\Storage\Repository;
 
 use Chamilo\Core\Group\Storage\DataClass\Group;
-use Chamilo\Core\Repository\Quota\Rights\Storage\DataClass\RightsLocation;
 use Chamilo\Core\Repository\Quota\Rights\Storage\DataClass\RightsLocationEntityRight;
 use Chamilo\Core\Repository\Quota\Rights\Storage\DataClass\RightsLocationEntityRightGroup;
+use Chamilo\Libraries\Rights\Domain\RightsLocationEntityRight as DomainRightsLocationEntityRight;
+use Chamilo\Libraries\Storage\DataClass\DataClass;
 use Chamilo\Libraries\Storage\Parameters\DataClassCountParameters;
 use Chamilo\Libraries\Storage\Parameters\DataClassRetrieveParameters;
 use Chamilo\Libraries\Storage\Parameters\DataClassRetrievesParameters;
@@ -18,61 +19,60 @@ use Chamilo\Libraries\Storage\Query\Joins;
 use Chamilo\Libraries\Storage\Query\RetrieveProperties;
 use Chamilo\Libraries\Storage\Query\Variable\PropertyConditionVariable;
 use Chamilo\Libraries\Storage\Query\Variable\StaticConditionVariable;
+use Doctrine\Common\Collections\ArrayCollection;
 
 /**
  * @package Chamilo\Core\Repository\Quota\Rights\Storage\Repository
- *
- * @author Hans De Bisschop <hans.de.bisschop@ehb.be>
+ * @author  Hans De Bisschop <hans.de.bisschop@ehb.be>
  */
 class RightsRepository extends \Chamilo\Libraries\Rights\Storage\Repository\RightsRepository
 {
-    const PROPERTY_GROUP_ID = 'group_id';
+    public const PROPERTY_GROUP_ID = 'group_id';
 
-    /**
-     * @param \Chamilo\Libraries\Storage\Query\Condition\Condition $condition
-     *
-     * @return integer
-     */
-    public function countRightsLocationEntityRightGroups(Condition $condition = null)
+    public function countRightsLocationEntityRightGroups(?Condition $condition = null): int
     {
         return $this->getDataClassRepository()->count(
             RightsLocationEntityRightGroup::class, new DataClassCountParameters($condition)
         );
     }
 
-    /**
-     * @param \Chamilo\Core\Repository\Quota\Rights\Storage\DataClass\RightsLocationEntityRightGroup $rightsLocationEntityRightGroup
-     *
-     * @return boolean
-     * @throws \Exception
-     */
     public function createRightsLocationEntityRightGroup(
         RightsLocationEntityRightGroup $rightsLocationEntityRightGroup
-    )
+    ): bool
     {
         return $this->getDataClassRepository()->create($rightsLocationEntityRightGroup);
     }
 
-    /**
-     * @param \Chamilo\Core\Repository\Quota\Rights\Storage\DataClass\RightsLocationEntityRightGroup $rightsLocationEntityRightGroup
-     *
-     * @return boolean
-     */
-    public function deleteRightsLocationEntityRightGroup(RightsLocationEntityRightGroup $rightsLocationEntityRightGroup)
+    public function deleteRightLocationEntityRightGroupsForRightsLocationEntityRight(
+        DomainRightsLocationEntityRight $rightsLocationEntityRight
+    ): bool
+    {
+        $condition = new EqualityCondition(
+            new PropertyConditionVariable(
+                RightsLocationEntityRightGroup::class, RightsLocationEntityRightGroup::PROPERTY_LOCATION_ENTITY_RIGHT_ID
+            ), new StaticConditionVariable($rightsLocationEntityRight->getId())
+        );
+
+        return $this->getDataClassRepository()->deletes(RightsLocationEntityRightGroup::class, $condition);
+    }
+
+    public function deleteRightsLocationEntityRightGroup(RightsLocationEntityRightGroup $rightsLocationEntityRightGroup
+    ): bool
     {
         return $this->getDataClassRepository()->delete($rightsLocationEntityRightGroup);
     }
 
     /**
-     * @param integer[] $identifiers
+     * @param string[] $identifiers
      *
-     * @return \Chamilo\Core\Repository\Quota\Rights\Storage\DataClass\RightsLocationEntityRightGroup[]
+     * @return \Doctrine\Common\Collections\ArrayCollection<\Chamilo\Core\Repository\Quota\Rights\Storage\DataClass\RightsLocationEntityRightGroup>
+     * @throws \Chamilo\Libraries\Storage\Exception\DataClassNoResultException
      */
-    public function findRightsLocationEntityRightGroupByIdentifiers(array $identifiers = [])
+    public function findRightsLocationEntityRightGroupByIdentifiers(array $identifiers = []): ArrayCollection
     {
         $condition = new InCondition(
             new PropertyConditionVariable(
-                RightsLocationEntityRightGroup::class, RightsLocationEntityRightGroup::PROPERTY_ID
+                RightsLocationEntityRightGroup::class, DataClass::PROPERTY_ID
             ), $identifiers
         );
 
@@ -81,15 +81,9 @@ class RightsRepository extends \Chamilo\Libraries\Rights\Storage\Repository\Righ
         );
     }
 
-    /**
-     * @param integer $rightsLocationEntityRightIdentifier
-     * @param integer $groupIdentifier
-     *
-     * @return \Chamilo\Core\Repository\Quota\Rights\Storage\DataClass\RightsLocationEntityRightGroup
-     */
     public function findRightsLocationEntityRightGroupByParameters(
-        int $rightsLocationEntityRightIdentifier, int $groupIdentifier
-    )
+        string $rightsLocationEntityRightIdentifier, string $groupIdentifier
+    ): ?RightsLocationEntityRightGroup
     {
         $conditions = [];
 
@@ -111,33 +105,75 @@ class RightsRepository extends \Chamilo\Libraries\Rights\Storage\Repository\Righ
     }
 
     /**
-     * @return string[][]
-     * @throws \Exception
+     * @param \Chamilo\Core\Repository\Quota\Rights\Storage\DataClass\RightsLocationEntityRight $rightsLocationEntityRight
+     *
+     * @return \Doctrine\Common\Collections\ArrayCollection<\Chamilo\Core\Repository\Quota\Rights\Storage\DataClass\RightsLocationEntityRightGroup>
+     * @throws \Chamilo\Libraries\Storage\Exception\DataClassNoResultException
      */
-    public function findRightsLocationEntityRightGroupsWithEntityAndGroupRecords()
+    public function findRightsLocationEntityRightGroupsForRightsLocationEntityRight(
+        RightsLocationEntityRight $rightsLocationEntityRight
+    ): ArrayCollection
+    {
+        $condition = new EqualityCondition(
+            new PropertyConditionVariable(
+                RightsLocationEntityRightGroup::class, RightsLocationEntityRightGroup::PROPERTY_LOCATION_ENTITY_RIGHT_ID
+            ), new StaticConditionVariable($rightsLocationEntityRight->getId())
+        );
+
+        return $this->getDataClassRepository()->retrieves(
+            RightsLocationEntityRightGroup::class, new DataClassRetrievesParameters($condition)
+        );
+    }
+
+    /**
+     * @param string[] $rightsLocationEntityRightIdentifiers
+     *
+     * @return \Doctrine\Common\Collections\ArrayCollection<\Chamilo\Core\Repository\Quota\Rights\Storage\DataClass\RightsLocationEntityRightGroup>
+     * @throws \Chamilo\Libraries\Storage\Exception\DataClassNoResultException
+     */
+    public function findRightsLocationEntityRightGroupsForRightsLocationEntityRightIdentifiers(
+        array $rightsLocationEntityRightIdentifiers
+    ): ArrayCollection
+    {
+        $condition = new InCondition(
+            new PropertyConditionVariable(
+                RightsLocationEntityRightGroup::class, RightsLocationEntityRightGroup::PROPERTY_LOCATION_ENTITY_RIGHT_ID
+            ), $rightsLocationEntityRightIdentifiers
+        );
+
+        return $this->getDataClassRepository()->retrieves(
+            RightsLocationEntityRightGroup::class, new DataClassRetrievesParameters($condition)
+        );
+    }
+
+    /**
+     * @return \Doctrine\Common\Collections\ArrayCollection<string[]>
+     * @throws \Chamilo\Libraries\Storage\Exception\DataClassNoResultException
+     */
+    public function findRightsLocationEntityRightGroupsWithEntityAndGroupRecords(): ArrayCollection
     {
         $retrieveProperties = new RetrieveProperties();
 
         $retrieveProperties->add(
             new PropertyConditionVariable(
-                RightsLocationEntityRightGroup::class, RightsLocationEntityRightGroup::PROPERTY_ID
+                RightsLocationEntityRightGroup::class, DataClass::PROPERTY_ID
             )
         );
 
         $retrieveProperties->add(
             new PropertyConditionVariable(
-                RightsLocationEntityRight::class, RightsLocationEntityRight::PROPERTY_ENTITY_ID
+                RightsLocationEntityRight::class, DomainRightsLocationEntityRight::PROPERTY_ENTITY_ID
             )
         );
 
         $retrieveProperties->add(
             new PropertyConditionVariable(
-                RightsLocationEntityRight::class, RightsLocationEntityRight::PROPERTY_ENTITY_TYPE
+                RightsLocationEntityRight::class, DomainRightsLocationEntityRight::PROPERTY_ENTITY_TYPE
             )
         );
 
         $retrieveProperties->add(
-            new PropertyConditionVariable(Group::class, Group::PROPERTY_ID, self::PROPERTY_GROUP_ID)
+            new PropertyConditionVariable(Group::class, DataClass::PROPERTY_ID, self::PROPERTY_GROUP_ID)
         );
         $retrieveProperties->add(new PropertyConditionVariable(Group::class, Group::PROPERTY_NAME));
 
@@ -147,7 +183,7 @@ class RightsRepository extends \Chamilo\Libraries\Rights\Storage\Repository\Righ
             new Join(
                 RightsLocationEntityRight::class, new EqualityCondition(
                     new PropertyConditionVariable(
-                        RightsLocationEntityRight::class, RightsLocationEntityRight::PROPERTY_ID
+                        RightsLocationEntityRight::class, DataClass::PROPERTY_ID
                     ), new PropertyConditionVariable(
                         RightsLocationEntityRightGroup::class,
                         RightsLocationEntityRightGroup::PROPERTY_LOCATION_ENTITY_RIGHT_ID
@@ -160,7 +196,7 @@ class RightsRepository extends \Chamilo\Libraries\Rights\Storage\Repository\Righ
             new Join(
                 Group::class, new EqualityCondition(
                     new PropertyConditionVariable(
-                        Group::class, Group::PROPERTY_ID
+                        Group::class, DataClass::PROPERTY_ID
                     ), new PropertyConditionVariable(
                         RightsLocationEntityRightGroup::class, RightsLocationEntityRightGroup::PROPERTY_GROUP_ID
                     )
@@ -175,67 +211,13 @@ class RightsRepository extends \Chamilo\Libraries\Rights\Storage\Repository\Righ
     }
 
     /**
-     * @return string
-     */
-    public function getRightsLocationClassName(): string
-    {
-        return RightsLocation::class;
-    }
-
-    /**
-     * @return string
-     */
-    public function getRightsLocationEntityRightClassName(): string
-    {
-        return RightsLocationEntityRight::class;
-    }
-
-    /**
-     * @param \Chamilo\Core\Repository\Quota\Rights\Storage\DataClass\RightsLocationEntityRight $rightsLocationEntityRight
+     * @param string[] $targetGroupIdentifiers
      *
-     * @return \Chamilo\Core\Repository\Quota\Rights\Storage\DataClass\RightsLocationEntityRightGroup[]
+     * @return \Doctrine\Common\Collections\ArrayCollection<\Chamilo\Core\Repository\Quota\Rights\Storage\DataClass\RightsLocationEntityRight>
+     * @throws \Chamilo\Libraries\Storage\Exception\DataClassNoResultException
      */
-    public function findRightsLocationEntityRightGroupsForRightsLocationEntityRight(
-        RightsLocationEntityRight $rightsLocationEntityRight
-    )
-    {
-        $condition = new EqualityCondition(
-            new PropertyConditionVariable(
-                RightsLocationEntityRightGroup::class, RightsLocationEntityRightGroup::PROPERTY_LOCATION_ENTITY_RIGHT_ID
-            ), new StaticConditionVariable($rightsLocationEntityRight->getId())
-        );
-
-        return $this->getDataClassRepository()->retrieves(
-            RightsLocationEntityRightGroup::class, new DataClassRetrievesParameters($condition)
-        );
-    }
-
-    /**
-     * @param integer[] $rightsLocationEntityRightIdentifiers
-     *
-     * @return \Chamilo\Core\Repository\Quota\Rights\Storage\DataClass\RightsLocationEntityRightGroup[]
-     */
-    public function findRightsLocationEntityRightGroupsForRightsLocationEntityRightIdentifiers(
-        array $rightsLocationEntityRightIdentifiers
-    )
-    {
-        $condition = new InCondition(
-            new PropertyConditionVariable(
-                RightsLocationEntityRightGroup::class, RightsLocationEntityRightGroup::PROPERTY_LOCATION_ENTITY_RIGHT_ID
-            ), $rightsLocationEntityRightIdentifiers
-        );
-
-        return $this->getDataClassRepository()->retrieves(
-            RightsLocationEntityRightGroup::class, new DataClassRetrievesParameters($condition)
-        );
-    }
-
-    /**
-     * @param integer[] $targetGroupIdentifiers
-     *
-     * @return \Chamilo\Core\Repository\Quota\Rights\Storage\DataClass\RightsLocationEntityRight[]
-     */
-    public function findRightsLocationEntityRightsForTargetGroupIdentifiers(array $targetGroupIdentifiers)
+    public function findRightsLocationEntityRightsForTargetGroupIdentifiers(array $targetGroupIdentifiers
+    ): ArrayCollection
     {
         $condition = new InCondition(
             new PropertyConditionVariable(
@@ -251,7 +233,7 @@ class RightsRepository extends \Chamilo\Libraries\Rights\Storage\Repository\Righ
                             RightsLocationEntityRightGroup::class,
                             RightsLocationEntityRightGroup::PROPERTY_LOCATION_ENTITY_RIGHT_ID
                         ), new PropertyConditionVariable(
-                            RightsLocationEntityRight::class, RightsLocationEntityRight::PROPERTY_ID
+                            RightsLocationEntityRight::class, DataClass::PROPERTY_ID
                         )
                     )
                 )
@@ -261,23 +243,5 @@ class RightsRepository extends \Chamilo\Libraries\Rights\Storage\Repository\Righ
         return $this->getDataClassRepository()->retrieves(
             RightsLocationEntityRight::class, new DataClassRetrievesParameters($condition, null, null, null, $joins)
         );
-    }
-
-    /**
-     * @param \Chamilo\Core\Repository\Quota\Rights\Storage\DataClass\RightsLocationEntityRight $rightsLocationEntityRight
-     *
-     * @return boolean
-     */
-    public function deleteRightLocationEntityRightGroupsForRightsLocationEntityRight(
-        RightsLocationEntityRight $rightsLocationEntityRight
-    )
-    {
-        $condition = new EqualityCondition(
-            new PropertyConditionVariable(
-                RightsLocationEntityRightGroup::class, RightsLocationEntityRightGroup::PROPERTY_LOCATION_ENTITY_RIGHT_ID
-            ), new StaticConditionVariable($rightsLocationEntityRight->getId())
-        );
-
-        return $this->getDataClassRepository()->deletes(RightsLocationEntityRightGroup::class, $condition);
     }
 }

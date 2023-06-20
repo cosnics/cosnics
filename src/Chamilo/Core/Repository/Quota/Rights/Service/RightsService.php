@@ -4,19 +4,21 @@ namespace Chamilo\Core\Repository\Quota\Rights\Service;
 use Chamilo\Configuration\Service\Consulter\ConfigurationConsulter;
 use Chamilo\Core\Group\Integration\Chamilo\Libraries\Rights\Service\GroupEntityProvider;
 use Chamilo\Core\Group\Service\GroupService;
+use Chamilo\Core\Group\Service\GroupsTreeTraverser;
 use Chamilo\Core\Repository\Quota\Rights\Form\RightsGroupForm;
 use Chamilo\Core\Repository\Quota\Rights\Storage\DataClass\RightsLocation;
 use Chamilo\Core\Repository\Quota\Rights\Storage\DataClass\RightsLocationEntityRight;
 use Chamilo\Core\Repository\Quota\Rights\Storage\DataClass\RightsLocationEntityRightGroup;
-use Chamilo\Core\Repository\Quota\Rights\Storage\Repository\RightsRepository as QuotaRightsRepository;
-use Chamilo\Core\Repository\Quota\Rights\Table\Entity\EntityTableColumnModel;
+use Chamilo\Core\Repository\Quota\Rights\Storage\Repository\RightsRepository;
+use Chamilo\Core\Repository\Quota\Rights\Table\EntityTableRenderer;
 use Chamilo\Core\Repository\Quota\Service\StorageSpaceCalculator;
 use Chamilo\Core\User\Integration\Chamilo\Libraries\Rights\Service\UserEntityProvider;
 use Chamilo\Core\User\Service\UserService;
 use Chamilo\Core\User\Storage\DataClass\User;
 use Chamilo\Libraries\Format\Structure\Glyph\FontAwesomeGlyph;
+use Chamilo\Libraries\Rights\Domain\RightsLocationEntityRight as RightsLocationEntityRightAlias;
 use Chamilo\Libraries\Rights\Form\RightsForm;
-use Chamilo\Libraries\Rights\Storage\Repository\RightsRepository;
+use Chamilo\Libraries\Rights\Interfaces\RightsEntityProvider;
 use Chamilo\Libraries\Storage\Query\OrderBy;
 use Doctrine\Common\Collections\ArrayCollection;
 use Symfony\Component\Translation\Translator;
@@ -25,79 +27,62 @@ use Symfony\Component\Translation\Translator;
  * @package Chamilo\Core\Repository\Quota\Rights\Service
  * @author  Hans De Bisschop <hans.de.bisschop@ehb.be>
  */
-class RightsService extends \Chamilo\Libraries\Rights\Service\RightsService
+class RightsService
 {
 
     public const VIEW_RIGHT = 1;
 
-    /**
-     * @var \Chamilo\Core\User\Storage\DataClass\User[]
-     */
-    private $authorizedUsersCache = [];
+    protected GroupsTreeTraverser $groupsTreeTraverser;
+
+    protected RightsRepository $rightsRepository;
+
+    protected \Chamilo\Libraries\Rights\Service\RightsService $rightsService;
+
+    protected Translator $translator;
+
+    protected UserService $userService;
+
+    private array $authorizedUsersCache = [];
+
+    private ConfigurationConsulter $configurationConsulter;
+
+    private GroupEntityProvider $groupEntityProvider;
+
+    private GroupService $groupService;
+
+    private StorageSpaceCalculator $storageSpaceCalculator;
 
     /**
-     * @var \Chamilo\Configuration\Service\Consulter\ConfigurationConsulter
+     * @var string[]
      */
-    private $configurationConsulter;
+    private array $targetUsersCache = [];
 
-    /**
-     * @var \Chamilo\Core\Group\Integration\Chamilo\Libraries\Rights\Service\GroupEntityProvider
-     */
-    private $groupEntityProvider;
+    private UserEntityProvider $userEntityProvider;
 
-    /**
-     * @var \Chamilo\Core\Group\Service\GroupService
-     */
-    private $groupService;
-
-    /**
-     * @var \Chamilo\Core\Repository\Quota\Service\StorageSpaceCalculator
-     */
-    private $storageSpaceCalculator;
-
-    /**
-     * @var int
-     */
-    private $targetUsersCache = [];
-
-    /**
-     * @var \Chamilo\Core\User\Integration\Chamilo\Libraries\Rights\Service\UserEntityProvider
-     */
-    private $userEntityProvider;
-
-    /**
-     * @param \Chamilo\Core\Repository\Quota\Rights\Storage\Repository\RightsRepository $rightsRepository
-     * @param \Chamilo\Core\User\Service\UserService $userService
-     * @param \Symfony\Component\Translation\Translator $translator
-     * @param \Chamilo\Core\User\Integration\Chamilo\Libraries\Rights\Service\UserEntityProvider $userEntityProvider
-     * @param \Chamilo\Core\Group\Integration\Chamilo\Libraries\Rights\Service\GroupEntityProvider $groupEntityProvider
-     * @param \Chamilo\Core\Group\Service\GroupService $groupService
-     * @param \Chamilo\Core\Repository\Quota\Service\StorageSpaceCalculator $storageSpaceCalculator
-     * @param \Chamilo\Configuration\Service\Consulter\ConfigurationConsulter $configurationConsulter
-     */
     public function __construct(
-        RightsRepository $rightsRepository, UserService $userService, Translator $translator,
-        UserEntityProvider $userEntityProvider, GroupEntityProvider $groupEntityProvider, GroupService $groupService,
-        StorageSpaceCalculator $storageSpaceCalculator, ConfigurationConsulter $configurationConsulter
+        \Chamilo\Libraries\Rights\Service\RightsService $rightsService, RightsRepository $rightsRepository,
+        UserService $userService, Translator $translator, UserEntityProvider $userEntityProvider,
+        GroupEntityProvider $groupEntityProvider, GroupService $groupService,
+        StorageSpaceCalculator $storageSpaceCalculator, ConfigurationConsulter $configurationConsulter,
+        GroupsTreeTraverser $groupsTreeTraverser
     )
     {
-        parent::__construct($rightsRepository, $userService, $translator);
-
+        $this->rightsService = $rightsService;
+        $this->rightsRepository = $rightsRepository;
+        $this->userService = $userService;
+        $this->translator = $translator;
         $this->userEntityProvider = $userEntityProvider;
         $this->groupEntityProvider = $groupEntityProvider;
         $this->groupService = $groupService;
         $this->storageSpaceCalculator = $storageSpaceCalculator;
         $this->configurationConsulter = $configurationConsulter;
+        $this->groupsTreeTraverser = $groupsTreeTraverser;
     }
 
     /**
-     * @param \Chamilo\Core\User\Storage\DataClass\User $user
-     *
-     * @return bool
      * @throws \Chamilo\Libraries\Rights\Exception\RightsLocationNotFoundException
-     * @throws \Exception
      */
-    public function canUserRequestAdditionalStorageSpace(User $user)
+    public function canUserRequestAdditionalStorageSpace(User $user): bool
     {
         $quotaCalculator = $this->getStorageSpaceCalculator();
 
@@ -133,19 +118,13 @@ class RightsService extends \Chamilo\Libraries\Rights\Service\RightsService
         return false;
     }
 
-    /**
-     * @param \Chamilo\Core\User\Storage\DataClass\User $user
-     *
-     * @return bool
-     */
-    public function canUserSetRightsForQuotaRequests(User $user)
+    public function canUserSetRightsForQuotaRequests(User $user): bool
     {
-        return $user->is_platform_admin();
+        return $user->isPlatformAdmin();
     }
 
     /**
      * @throws \Chamilo\Libraries\Rights\Exception\RightsLocationNotFoundException
-     * @throws \Exception
      */
     public function canUserUpgradeStorageSpace(User $user): bool
     {
@@ -183,47 +162,30 @@ class RightsService extends \Chamilo\Libraries\Rights\Service\RightsService
         return false;
     }
 
-    /**
-     * @param \Chamilo\Core\User\Storage\DataClass\User $user
-     *
-     * @return bool
-     */
-    public function canUserViewAllQuotaRequests(User $user)
+    public function canUserViewAllQuotaRequests(User $user): bool
     {
-        return $user->is_platform_admin();
+        return $user->isPlatformAdmin();
     }
 
     /**
-     * @param \Chamilo\Core\User\Storage\DataClass\User $user
-     *
-     * @return bool
      * @throws \Chamilo\Libraries\Rights\Exception\RightsLocationNotFoundException
      */
-    public function canUserViewQuotaRequests(User $user)
+    public function canUserViewQuotaRequests(User $user): bool
     {
-        return $this->doesUserIdentifierHaveRightForEntitiesAndLocationIdentifier(
-            $user->getId(), self::VIEW_RIGHT, $this->getAvailableEntities()
+        return $this->getRightsService()->doesUserIdentifierHaveRightForEntitiesAndLocationIdentifier(
+            RightsLocation::class, RightsLocationEntityRight::class, $user->getId(), self::VIEW_RIGHT,
+            $this->getAvailableEntities()
         );
     }
 
-    /**
-     * @return int
-     */
-    public function countAllRightsLocationEntityRightGroups()
+    public function countAllRightsLocationEntityRightGroups(): int
     {
         return $this->getRightsRepository()->countRightsLocationEntityRightGroups();
     }
 
-    /**
-     * @param int $rightsLocationEntityRightIdentifier
-     * @param int $groupIdentifier
-     *
-     * @return bool
-     * @throws \Exception
-     */
     protected function createRightsLocationEntityRightGroupFromParameters(
-        int $rightsLocationEntityRightIdentifier, int $groupIdentifier
-    )
+        string $rightsLocationEntityRightIdentifier, string $groupIdentifier
+    ): bool
     {
         $rightsLocationEntityRightGroup = new RightsLocationEntityRightGroup();
 
@@ -233,92 +195,65 @@ class RightsService extends \Chamilo\Libraries\Rights\Service\RightsService
         return $this->getRightsRepository()->createRightsLocationEntityRightGroup($rightsLocationEntityRightGroup);
     }
 
-    /**
-     * @param bool $returnLocation
-     *
-     * @return \Chamilo\Libraries\Rights\Domain\RightsLocation
-     * @throws \Exception
-     */
-    public function createRoot(bool $returnLocation = true)
+    public function createRoot(): bool
     {
-        return $this->createSubtreeRootLocation(0, self::TREE_TYPE_ROOT, $returnLocation);
+        return $this->getRightsService()->createSubtreeRootLocation(
+            RightsLocation::class, '0', \Chamilo\Libraries\Rights\Service\RightsService::TREE_TYPE_ROOT
+        );
     }
 
-    /**
-     * @param \Chamilo\Core\Repository\Quota\Rights\Storage\DataClass\RightsLocationEntityRight $rightsLocationEntityRight
-     *
-     * @return bool
-     */
     public function deleteRightLocationEntityRightGroupsForRightsLocationEntityRight(
-        RightsLocationEntityRight $rightsLocationEntityRight
-    )
+        RightsLocationEntityRightAlias $rightsLocationEntityRight
+    ): bool
     {
         return $this->getRightsRepository()->deleteRightLocationEntityRightGroupsForRightsLocationEntityRight(
             $rightsLocationEntityRight
         );
     }
 
-    /**
-     * @param \Chamilo\Core\Repository\Quota\Rights\Storage\DataClass\RightsLocationEntityRight $rightsLocationEntityRight
-     *
-     * @return bool
-     */
     protected function deleteRightsLocationEntityRight(
-        \Chamilo\Libraries\Rights\Domain\RightsLocationEntityRight $rightsLocationEntityRight
-    )
+        RightsLocationEntityRightAlias $rightsLocationEntityRight
+    ): bool
     {
         if (!$this->deleteRightLocationEntityRightGroupsForRightsLocationEntityRight($rightsLocationEntityRight))
         {
             return false;
         }
 
-        return parent::deleteRightsLocationEntityRight(
+        return $this->getRightsService()->deleteRightsLocationEntityRight(
             $rightsLocationEntityRight
         );
     }
 
-    /**
-     * @param \Chamilo\Core\Repository\Quota\Rights\Storage\DataClass\RightsLocationEntityRightGroup $rightsLocationEntityRightGroup
-     *
-     * @return bool
-     */
-    public function deleteRightsLocationEntityRightGroup(RightsLocationEntityRightGroup $rightsLocationEntityRightGroup)
+    public function deleteRightsLocationEntityRightGroup(RightsLocationEntityRightGroup $rightsLocationEntityRightGroup
+    ): bool
     {
         return $this->getRightsRepository()->deleteRightsLocationEntityRightGroup($rightsLocationEntityRightGroup);
     }
 
-    /**
-     * @param int $entityIdentifier
-     * @param int $entityType
-     *
-     * @return \Chamilo\Libraries\Rights\Domain\RightsLocationEntityRight
-     */
-    protected function findRightsLocationEntityRightForEntityIdentifierAndType(int $entityIdentifier, int $entityType)
+    protected function findRightsLocationEntityRightForEntityIdentifierAndType(string $entityIdentifier, int $entityType
+    ): ?RightsLocationEntityRightAlias
     {
-        return $this->findRightsLocationEntityRightByParameters(
-            self::VIEW_RIGHT, $entityIdentifier, $entityType, $this->getRootLocationIdentifier()
+        return $this->getRightsService()->findRightsLocationEntityRightByParameters(
+            RightsLocationEntityRight::class, self::VIEW_RIGHT, $entityIdentifier, $entityType,
+            $this->getRightsService()->getRootLocationIdentifier(RightsLocation::class)
         );
     }
 
     /**
-     * @param int $identifiers
+     * @param string[] $identifiers
      *
-     * @return \Chamilo\Core\Repository\Quota\Rights\Storage\DataClass\RightsLocationEntityRightGroup[]
+     * @return \Doctrine\Common\Collections\ArrayCollection<\Chamilo\Core\Repository\Quota\Rights\Storage\DataClass\RightsLocationEntityRightGroup>
+     * @throws \Chamilo\Libraries\Storage\Exception\DataClassNoResultException
      */
-    public function findRightsLocationEntityRightGroupByIdentifiers(array $identifiers = [])
+    public function findRightsLocationEntityRightGroupByIdentifiers(array $identifiers = []): ArrayCollection
     {
         return $this->getRightsRepository()->findRightsLocationEntityRightGroupByIdentifiers($identifiers);
     }
 
-    /**
-     * @param int $rightsLocationEntityRightIdentifier
-     * @param int $groupIdentifier
-     *
-     * @return \Chamilo\Core\Repository\Quota\Rights\Storage\DataClass\RightsLocationEntityRightGroup
-     */
     protected function findRightsLocationEntityRightGroupByParameters(
-        int $rightsLocationEntityRightIdentifier, int $groupIdentifier
-    )
+        string $rightsLocationEntityRightIdentifier, string $groupIdentifier
+    ): ?RightsLocationEntityRightGroup
     {
         return $this->getRightsRepository()->findRightsLocationEntityRightGroupByParameters(
             $rightsLocationEntityRightIdentifier, $groupIdentifier
@@ -328,9 +263,10 @@ class RightsService extends \Chamilo\Libraries\Rights\Service\RightsService
     /**
      * @param \Chamilo\Core\User\Storage\DataClass\User $user
      *
-     * @return int
+     * @return string[]
+     * @throws \Chamilo\Libraries\Storage\Exception\DataClassNoResultException
      */
-    public function findRightsLocationEntityRightGroupIdentifiersForUser(User $user)
+    public function findRightsLocationEntityRightGroupIdentifiersForUser(User $user): array
     {
         $rightsLocationEntityRightGroups = $this->findRightsLocationEntityRightGroupsForUser($user);
         $groupIdentifiers = [];
@@ -344,13 +280,14 @@ class RightsService extends \Chamilo\Libraries\Rights\Service\RightsService
     }
 
     /**
-     * @param \Chamilo\Libraries\Rights\Domain\RightsLocationEntityRight[] $locationEntityRights
+     * @param \Doctrine\Common\Collections\ArrayCollection<\Chamilo\Core\Repository\Quota\Rights\Storage\DataClass\RightsLocationEntityRight> $locationEntityRights
      *
-     * @return \Chamilo\Core\Repository\Quota\Rights\Storage\DataClass\RightsLocationEntityRightGroup[]
+     * @return \Doctrine\Common\Collections\ArrayCollection<\Chamilo\Core\Repository\Quota\Rights\Storage\DataClass\RightsLocationEntityRightGroup>
+     * @throws \Chamilo\Libraries\Storage\Exception\DataClassNoResultException
      */
     public function findRightsLocationEntityRightGroupsForRightsLocationEntityRights(
         ArrayCollection $locationEntityRights
-    )
+    ): ArrayCollection
     {
         $locationEntityRightIdentifiers = [];
 
@@ -367,13 +304,13 @@ class RightsService extends \Chamilo\Libraries\Rights\Service\RightsService
     /**
      * @param \Chamilo\Core\User\Storage\DataClass\User $user
      *
-     * @return \Chamilo\Core\Repository\Quota\Rights\Storage\DataClass\RightsLocationEntityRightGroup[]
-     * @throws \Exception
+     * @return \Doctrine\Common\Collections\ArrayCollection<\Chamilo\Core\Repository\Quota\Rights\Storage\DataClass\RightsLocationEntityRightGroup>
+     * @throws \Chamilo\Libraries\Storage\Exception\DataClassNoResultException
      */
-    public function findRightsLocationEntityRightGroupsForSubscribedUserGroups(User $user)
+    public function findRightsLocationEntityRightGroupsForSubscribedUserGroups(User $user): ArrayCollection
     {
         $userGroupIdentifiers =
-            $this->getGroupService()->findAllSubscribedGroupIdentifiersForUserIdentifier($user->getId());
+            $this->getGroupsTreeTraverser()->findAllSubscribedGroupIdentifiersForUserIdentifier($user->getId());
 
         $locationEntityRights = $this->findRightsLocationEntityRightsForEntityIdentifiersAndType(
             $userGroupIdentifiers, GroupEntityProvider::ENTITY_TYPE
@@ -385,9 +322,10 @@ class RightsService extends \Chamilo\Libraries\Rights\Service\RightsService
     /**
      * @param \Chamilo\Core\User\Storage\DataClass\User $user
      *
-     * @return \Chamilo\Core\Repository\Quota\Rights\Storage\DataClass\RightsLocationEntityRightGroup[]
+     * @return \Doctrine\Common\Collections\ArrayCollection<\Chamilo\Core\Repository\Quota\Rights\Storage\DataClass\RightsLocationEntityRightGroup>
+     * @throws \Chamilo\Libraries\Storage\Exception\DataClassNoResultException
      */
-    public function findRightsLocationEntityRightGroupsForUser(User $user)
+    public function findRightsLocationEntityRightGroupsForUser(User $user): ArrayCollection
     {
         $locationEntityRight = $this->findRightsLocationEntityRightForEntityIdentifierAndType(
             $user->getId(), UserEntityProvider::ENTITY_TYPE
@@ -409,10 +347,10 @@ class RightsService extends \Chamilo\Libraries\Rights\Service\RightsService
     /**
      * @param \Chamilo\Core\User\Storage\DataClass\User $user
      *
-     * @return int
-     * @throws \Exception
+     * @return string[]
+     * @throws \Chamilo\Libraries\Storage\Exception\DataClassNoResultException
      */
-    public function findRightsLocationEntityRightGroupsIdentifiersForUser(User $user)
+    public function findRightsLocationEntityRightGroupsIdentifiersForUser(User $user): array
     {
         $rightsLocationEntityRightGroups = $this->findRightsLocationEntityRightGroupsForSubscribedUserGroups($user);
         $groupIdentifiers = [];
@@ -426,26 +364,30 @@ class RightsService extends \Chamilo\Libraries\Rights\Service\RightsService
     }
 
     /**
-     * @param int $entityIdentifiers
+     * @param string[] $entityIdentifiers
      * @param int $entityType
      *
-     * @return \Chamilo\Libraries\Rights\Domain\RightsLocationEntityRight[]
+     * @return \Doctrine\Common\Collections\ArrayCollection<\Chamilo\Libraries\Rights\Domain\RightsLocationEntityRight>
+     * @throws \Chamilo\Libraries\Storage\Exception\DataClassNoResultException
      */
     protected function findRightsLocationEntityRightsForEntityIdentifiersAndType(
         array $entityIdentifiers, int $entityType
-    )
+    ): ArrayCollection
     {
-        return $this->findRightsLocationEntityRightsByParameters(
-            self::VIEW_RIGHT, $entityIdentifiers, $entityType, $this->getRootLocationIdentifier()
+        return $this->getRightsService()->findRightsLocationEntityRightsByParameters(
+            RightsLocationEntityRight::class, self::VIEW_RIGHT, $entityIdentifiers, $entityType,
+            $this->getRightsService()->getRootLocationIdentifier(RightsLocation::class)
         );
     }
 
     /**
-     * @param int $userGroupIdentifiers
+     * @param string[] $userGroupIdentifiers
      *
-     * @return \Chamilo\Core\Repository\Quota\Rights\Storage\DataClass\RightsLocationEntityRight[]
+     * @return \Doctrine\Common\Collections\ArrayCollection<\Chamilo\Core\Repository\Quota\Rights\Storage\DataClass\RightsLocationEntityRight>
+     * @throws \Chamilo\Libraries\Storage\Exception\DataClassNoResultException
      */
-    public function findRightsLocationEntityRightsForTargetGroupIdentifiers(array $userGroupIdentifiers)
+    public function findRightsLocationEntityRightsForTargetGroupIdentifiers(array $userGroupIdentifiers
+    ): ArrayCollection
     {
         return $this->getRightsRepository()->findRightsLocationEntityRightsForTargetGroupIdentifiers(
             $userGroupIdentifiers
@@ -455,13 +397,13 @@ class RightsService extends \Chamilo\Libraries\Rights\Service\RightsService
     /**
      * @param \Chamilo\Core\User\Storage\DataClass\User $user
      *
-     * @return int
-     * @throws \Exception
+     * @return string[]
+     * @throws \Chamilo\Libraries\Storage\Exception\DataClassNoResultException
      */
-    public function getAuthorizedUserIdentifiersForUser(User $user)
+    public function getAuthorizedUserIdentifiersForUser(User $user): array
     {
         $userGroupIdentifiers =
-            $this->getGroupService()->findAllSubscribedGroupIdentifiersForUserIdentifier($user->getId());
+            $this->getGroupsTreeTraverser()->findAllSubscribedGroupIdentifiersForUserIdentifier($user->getId());
 
         $rightsLocationEntityRights =
             $this->findRightsLocationEntityRightsForTargetGroupIdentifiers($userGroupIdentifiers);
@@ -478,7 +420,10 @@ class RightsService extends \Chamilo\Libraries\Rights\Service\RightsService
                 case GroupEntityProvider::ENTITY_TYPE:
                     $group =
                         $this->getGroupService()->findGroupByIdentifier($rightsLocationEntityRight->get_entity_id());
-                    $userIdentifiers = array_merge($userIdentifiers, $group->get_users(true, true));
+
+                    $groupUsers = $this->getGroupsTreeTraverser()->findUserIdentifiersForGroup($group, true, true);
+
+                    $userIdentifiers = array_merge($userIdentifiers, $groupUsers);
                     break;
             }
         }
@@ -487,12 +432,10 @@ class RightsService extends \Chamilo\Libraries\Rights\Service\RightsService
     }
 
     /**
-     * @param \Chamilo\Core\User\Storage\DataClass\User $user
-     *
      * @return \Chamilo\Core\User\Storage\DataClass\User[]
-     * @throws \Exception
+     * @throws \Chamilo\Libraries\Storage\Exception\DataClassNoResultException
      */
-    public function getAuthorizedUsersForUser(User $user)
+    public function getAuthorizedUsersForUser(User $user): array
     {
         if (!isset($this->authorizedUsersCache[$user->getId()]))
         {
@@ -516,7 +459,7 @@ class RightsService extends \Chamilo\Libraries\Rights\Service\RightsService
     /**
      * @return \Chamilo\Libraries\Rights\Interfaces\RightsEntityProvider[]
      */
-    public function getAvailableEntities()
+    public function getAvailableEntities(): array
     {
         $entities = [];
 
@@ -526,12 +469,7 @@ class RightsService extends \Chamilo\Libraries\Rights\Service\RightsService
         return $entities;
     }
 
-    /**
-     * @param int $entityType
-     *
-     * @return \Chamilo\Libraries\Rights\Interfaces\RightsEntityProvider
-     */
-    public function getAvailableEntityByType(int $entityType)
+    public function getAvailableEntityByType(int $entityType): RightsEntityProvider
     {
         $entities = $this->getAvailableEntities();
 
@@ -539,79 +477,73 @@ class RightsService extends \Chamilo\Libraries\Rights\Service\RightsService
     }
 
     /**
-     * @return int
+     * @return int[]
      */
-    public function getAvailableRights()
+    public function getAvailableRights(): array
     {
         return ['View' => self::VIEW_RIGHT];
     }
 
-    /**
-     * @return \Chamilo\Configuration\Service\Consulter\ConfigurationConsulter
-     */
     public function getConfigurationConsulter(): ConfigurationConsulter
     {
         return $this->configurationConsulter;
     }
 
-    /**
-     * @return \Chamilo\Core\Group\Integration\Chamilo\Libraries\Rights\Service\GroupEntityProvider
-     */
     public function getGroupEntityProvider(): GroupEntityProvider
     {
         return $this->groupEntityProvider;
     }
 
-    /**
-     * @return \Chamilo\Core\Group\Service\GroupService
-     */
     public function getGroupService(): GroupService
     {
         return $this->groupService;
     }
 
+    public function getGroupsTreeTraverser(): GroupsTreeTraverser
+    {
+        return $this->groupsTreeTraverser;
+    }
+
     /**
-     * @param int $offset
-     * @param int $count
-     * @param \Chamilo\Libraries\Storage\Query\OrderBy $orderBy
-     *
      * @return string[][]
-     * @throws \Exception
+     * @throws \Chamilo\Libraries\Storage\Exception\DataClassNoResultException
      */
     public function getRightsLocationEntityRightGroupsWithEntityAndGroup(
-        int $offset = null, int $count = null, ?OrderBy $orderBy = null
-    )
+        ?int $offset = null, ?int $count = null, ?OrderBy $orderBy = null
+    ): array
     {
         $groupRecordCollection =
             $this->getRightsRepository()->findRightsLocationEntityRightGroupsWithEntityAndGroupRecords();
 
         foreach ($groupRecordCollection as &$groupRecord)
         {
-            $entityType = $groupRecord[RightsLocationEntityRight::PROPERTY_ENTITY_TYPE];
-            $entityIdentifier = $groupRecord[RightsLocationEntityRight::PROPERTY_ENTITY_ID];
+            $entityType = $groupRecord[RightsLocationEntityRightAlias::PROPERTY_ENTITY_TYPE];
+            $entityIdentifier = $groupRecord[RightsLocationEntityRightAlias::PROPERTY_ENTITY_ID];
 
             if ($entityType != 0)
             {
                 $entityService = $this->getAvailableEntityByType($entityType);
 
-                $groupRecord[EntityTableColumnModel::PROPERTY_ENTITY_TITLE] =
+                $groupRecord[EntityTableRenderer::PROPERTY_ENTITY_TITLE] =
                     $entityService->getEntityTitleByIdentifier($entityIdentifier);
-                $groupRecord[EntityTableColumnModel::PROPERTY_ENTITY_DESCRIPTION] =
+                $groupRecord[EntityTableRenderer::PROPERTY_ENTITY_DESCRIPTION] =
                     $entityService->getEntityDescriptionByIdentifier($entityIdentifier);
-                $groupRecord[EntityTableColumnModel::PROPERTY_ENTITY_GLYPH] = $entityService->getEntityGlyph();
+                $groupRecord[EntityTableRenderer::PROPERTY_ENTITY_GLYPH] = $entityService->getEntityGlyph();
             }
             else
             {
-                $groupRecord[EntityTableColumnModel::PROPERTY_ENTITY_TITLE] = $this->getTranslator()->trans('Everyone');
-                $groupRecord[EntityTableColumnModel::PROPERTY_ENTITY_DESCRIPTION] = '';
-                $groupRecord[EntityTableColumnModel::PROPERTY_ENTITY_GLYPH] = new FontAwesomeGlyph('globe');
+                $groupRecord[EntityTableRenderer::PROPERTY_ENTITY_TITLE] = $this->getTranslator()->trans('Everyone');
+                $groupRecord[EntityTableRenderer::PROPERTY_ENTITY_DESCRIPTION] = '';
+                $groupRecord[EntityTableRenderer::PROPERTY_ENTITY_GLYPH] = new FontAwesomeGlyph('globe');
             }
 
-            $group =
-                $this->getGroupService()->findGroupByIdentifier($groupRecord[QuotaRightsRepository::PROPERTY_GROUP_ID]);
+            $group = $this->getGroupService()->findGroupByIdentifier(
+                $groupRecord[RightsRepository::PROPERTY_GROUP_ID]
+            );
 
-            $groupRecord[EntityTableColumnModel::PROPERTY_GROUP_NAME] = $group->get_name();
-            $groupRecord[EntityTableColumnModel::PROPERTY_GROUP_PATH] = $this->getGroupService()->getGroupPath($group);
+            $groupRecord[EntityTableRenderer::PROPERTY_GROUP_NAME] = $group->get_name();
+            $groupRecord[EntityTableRenderer::PROPERTY_GROUP_PATH] =
+                $this->getGroupsTreeTraverser()->getGroupPath($group);
         }
 
         $orderProperty = $orderBy->getFirst();
@@ -641,45 +573,36 @@ class RightsService extends \Chamilo\Libraries\Rights\Service\RightsService
         return array_slice($groupRecords, $offset, $count);
     }
 
-    /**
-     * @return \Chamilo\Core\Repository\Quota\Rights\Storage\DataClass\RightsLocationEntityRight
-     */
-    protected function getRightsLocationEntityRightInstance()
+    protected function getRightsLocationEntityRightInstance(): RightsLocationEntityRightAlias
     {
         return new RightsLocationEntityRight();
     }
 
-    /**
-     * @return \Chamilo\Core\Repository\Quota\Rights\Storage\DataClass\RightsLocation
-     */
-    protected function getRightsLocationInstance()
+    protected function getRightsLocationInstance(): \Chamilo\Libraries\Rights\Domain\RightsLocation
     {
         return new RightsLocation();
     }
 
-    /**
-     * @return \Chamilo\Core\Repository\Quota\Rights\Storage\Repository\RightsRepository
-     */
-    protected function getRightsRepository(): RightsRepository
+    public function getRightsRepository(): RightsRepository
     {
-        return parent::getRightsRepository();
+        return $this->rightsRepository;
     }
 
-    /**
-     * @return \Chamilo\Core\Repository\Quota\Service\StorageSpaceCalculator
-     */
+    public function getRightsService(): \Chamilo\Libraries\Rights\Service\RightsService
+    {
+        return $this->rightsService;
+    }
+
     public function getStorageSpaceCalculator(): StorageSpaceCalculator
     {
         return $this->storageSpaceCalculator;
     }
 
     /**
-     * @param \Chamilo\Core\User\Storage\DataClass\User $user
-     *
-     * @return int
-     * @throws \Exception
+     * @return string[]
+     * @throws \Chamilo\Libraries\Storage\Exception\DataClassNoResultException
      */
-    public function getTargetGroupIdentifiersForUser(User $user)
+    public function getTargetGroupIdentifiersForUser(User $user): array
     {
         $userTargetGroupIdentifiers = $this->findRightsLocationEntityRightGroupIdentifiersForUser($user);
         $userGroupTargetGroupIdentifiers = $this->findRightsLocationEntityRightGroupsIdentifiersForUser($user);
@@ -688,21 +611,22 @@ class RightsService extends \Chamilo\Libraries\Rights\Service\RightsService
     }
 
     /**
-     * @return int
-     * @throws \Exception
+     * @return string[][][]
+     * @throws \Chamilo\Libraries\Storage\Exception\DataClassNoResultException
      */
-    public function getTargetUsersAndGroupsForAvailableRights()
+    public function getTargetUsersAndGroupsForAvailableRights(): array
     {
-        return $this->getTargetEntitiesForRightsAndLocation($this->getAvailableRights(), $this->getRootLocation());
+        return $this->getRightsService()->getTargetEntitiesForRightsAndLocation(
+            RightsLocationEntityRight::class, $this->getAvailableRights(),
+            $this->getRightsService()->getRootLocation(RightsLocation::class)
+        );
     }
 
     /**
-     * @param \Chamilo\Core\User\Storage\DataClass\User $user
-     *
-     * @return int[]
-     * @throws \Exception
+     * @return string[]
+     * @throws \Chamilo\Libraries\Storage\Exception\DataClassNoResultException
      */
-    public function getTargetUsersForUser(User $user)
+    public function getTargetUsersForUser(User $user): array
     {
         if (!isset($this->targetUsersCache[$user->getId()]))
         {
@@ -713,8 +637,8 @@ class RightsService extends \Chamilo\Libraries\Rights\Service\RightsService
 
             foreach ($targetGroups as $targetGroup)
             {
-                //TODO: $targetGroup->get_users() should be re-implemented in the GroupService
-                $userIdentifiers = $targetGroup->get_users(true, true);
+                $userIdentifiers =
+                    $this->getGroupsTreeTraverser()->findUserIdentifiersForGroup($targetGroup, true, true);
                 $targetUserIdentifiers = array_merge($targetUserIdentifiers, $userIdentifiers);
             }
 
@@ -724,76 +648,50 @@ class RightsService extends \Chamilo\Libraries\Rights\Service\RightsService
         return $this->targetUsersCache[$user->getId()];
     }
 
-    /**
-     * @return \Chamilo\Core\User\Integration\Chamilo\Libraries\Rights\Service\UserEntityProvider
-     */
+    public function getTranslator(): Translator
+    {
+        return $this->translator;
+    }
+
     public function getUserEntityProvider(): UserEntityProvider
     {
         return $this->userEntityProvider;
     }
 
-    /**
-     * @param int $userIdentifier
-     * @param \Chamilo\Core\User\Storage\DataClass\User $user
-     *
-     * @return bool
-     * @throws \Exception
-     */
-    public function isUserIdentifierTargetForUser(int $userIdentifier, User $user)
+    public function getUserService(): UserService
     {
-        return $user->is_platform_admin() || in_array($userIdentifier, $this->getTargetUsersForUser($user));
+        return $this->userService;
     }
 
     /**
-     * @param \Chamilo\Core\User\Storage\DataClass\User $user
-     * @param int $values
-     *
-     * @return bool
-     * @throws \Exception
+     * @throws \Chamilo\Libraries\Storage\Exception\DataClassNoResultException
      */
-    public function saveRightsConfigurationForUserFromValues(User $user, array $values)
+    public function isUserIdentifierTargetForUser(string $userIdentifier, User $user): bool
     {
-        $rightsLocation = $this->getRootLocation();
-
-        return $this->saveRightsConfigurationForRightsLocationAndUserFromValues($rightsLocation, $user, $values);
+        return $user->isPlatformAdmin() || in_array($userIdentifier, $this->getTargetUsersForUser($user));
     }
 
     /**
-     * @param \Chamilo\Configuration\Service\Consulter\ConfigurationConsulter $configurationConsulter
+     * @param int[][] $values
      */
-    public function setConfigurationConsulter(ConfigurationConsulter $configurationConsulter): void
+    public function saveRightsConfigurationForUserFromValues(User $user, array $values): bool
     {
-        $this->configurationConsulter = $configurationConsulter;
+        return $this->getRightsService()->saveRightsConfigurationForRightsLocationAndUserFromValues(
+            RightsLocationEntityRight::class, $this->getRightsService()->getRootLocation(RightsLocation::class), $user,
+            $values
+        );
     }
 
     /**
-     * @param \Chamilo\Core\Group\Integration\Chamilo\Libraries\Rights\Service\GroupEntityProvider $groupEntityProvider
+     * @param int[][] $values
      */
-    public function setGroupEntityProvider(GroupEntityProvider $groupEntityProvider): void
+    public function setRightsConfigurationForUserFromValues(User $user, array $values): bool
     {
-        $this->groupEntityProvider = $groupEntityProvider;
-    }
+        $rightsLocation = $this->getRightsService()->getRootLocation(RightsLocation::class);
 
-    /**
-     * @param \Chamilo\Core\Group\Service\GroupService $groupService
-     */
-    public function setGroupService(GroupService $groupService): void
-    {
-        $this->groupService = $groupService;
-    }
-
-    /**
-     * @param \Chamilo\Core\User\Storage\DataClass\User $user
-     * @param int $values
-     *
-     * @return bool
-     * @throws \Exception
-     */
-    public function setRightsConfigurationForUserFromValues(User $user, array $values)
-    {
-        $rightsLocation = $this->getRootLocation();
-
-        if (!$this->setRightsLocationEntityRightsForRightsLocationAndUserFromValues($rightsLocation, $user, $values))
+        if (!$this->getRightsService()->setRightsLocationEntityRightsForRightsLocationAndUserFromValues(
+            RightsLocationEntityRight::class, $rightsLocation, $user, $values
+        ))
         {
             return false;
         }
@@ -807,15 +705,11 @@ class RightsService extends \Chamilo\Libraries\Rights\Service\RightsService
     }
 
     /**
-     * @param \Chamilo\Core\Repository\Quota\Rights\Storage\DataClass\RightsLocationEntityRight $rightsLocationEntityRight
-     * @param int $values
-     *
-     * @return bool
-     * @throws \Exception
+     * @param int[][] $values
      */
     protected function setRightsLocationEntityRightGroupsForRightsLocationEntityRightFromValues(
-        RightsLocationEntityRight $rightsLocationEntityRight, array $values
-    )
+        RightsLocationEntityRightAlias $rightsLocationEntityRight, array $values
+    ): bool
     {
         if (!array_key_exists(RightsGroupForm::PROPERTY_TARGET_GROUPS, $values))
         {
@@ -843,16 +737,11 @@ class RightsService extends \Chamilo\Libraries\Rights\Service\RightsService
     }
 
     /**
-     * @param \Chamilo\Core\Repository\Quota\Rights\Storage\DataClass\RightsLocation $location
-     * @param \Chamilo\Core\User\Storage\DataClass\User $user
-     * @param int $values
-     *
-     * @return bool
-     * @throws \Exception
+     * @param int[][] $values
      */
     protected function setRightsLocationEntityRightGroupsForRightsLocationFromValues(
-        RightsLocation $location, User $user, array $values
-    )
+        \Chamilo\Libraries\Rights\Domain\RightsLocation $location, User $user, array $values
+    ): bool
     {
         $success = true;
 
@@ -861,8 +750,8 @@ class RightsService extends \Chamilo\Libraries\Rights\Service\RightsService
             switch ($rightsOption)
             {
                 case RightsForm::RIGHT_OPTION_ALL :
-                    $locationEntityRight = $this->findRightsLocationEntityRightByParameters(
-                        $rightIdentifier, 0, 0, $location->getId()
+                    $locationEntityRight = $this->getRightsService()->findRightsLocationEntityRightByParameters(
+                        RightsLocationEntityRight::class, $rightIdentifier, '0', 0, $location->getId()
                     );
 
                     $success &= $this->setRightsLocationEntityRightGroupsForRightsLocationEntityRightFromValues(
@@ -870,8 +759,9 @@ class RightsService extends \Chamilo\Libraries\Rights\Service\RightsService
                     );
                     break;
                 case RightsForm::RIGHT_OPTION_ME :
-                    $locationEntityRight = $this->findRightsLocationEntityRightByParameters(
-                        $rightIdentifier, $user->getId(), UserEntityProvider::ENTITY_TYPE, $location->getId()
+                    $locationEntityRight = $this->getRightsService()->findRightsLocationEntityRightByParameters(
+                        RightsLocationEntityRight::class, $rightIdentifier, $user->getId(),
+                        UserEntityProvider::ENTITY_TYPE, $location->getId()
                     );
 
                     $success &= $this->setRightsLocationEntityRightGroupsForRightsLocationEntityRightFromValues(
@@ -886,8 +776,9 @@ class RightsService extends \Chamilo\Libraries\Rights\Service\RightsService
                     {
                         foreach ($entityIdentifiers as $entityIdentifier)
                         {
-                            $locationEntityRight = $this->findRightsLocationEntityRightByParameters(
-                                $rightIdentifier, $entityIdentifier, $entityType, $location->getId()
+                            $locationEntityRight = $this->getRightsService()->findRightsLocationEntityRightByParameters(
+                                RightsLocationEntityRight::class, $rightIdentifier, $entityIdentifier, $entityType,
+                                $location->getId()
                             );
 
                             $success &= $this->setRightsLocationEntityRightGroupsForRightsLocationEntityRightFromValues(
@@ -900,21 +791,4 @@ class RightsService extends \Chamilo\Libraries\Rights\Service\RightsService
 
         return $success;
     }
-
-    /**
-     * @param \Chamilo\Core\Repository\Quota\Service\StorageSpaceCalculator $storageSpaceCalculator
-     */
-    public function setStorageSpaceCalculator(StorageSpaceCalculator $storageSpaceCalculator): void
-    {
-        $this->storageSpaceCalculator = $storageSpaceCalculator;
-    }
-
-    /**
-     * @param \Chamilo\Core\User\Integration\Chamilo\Libraries\Rights\Service\UserEntityProvider $userEntityProvider
-     */
-    public function setUserEntityProvider(UserEntityProvider $userEntityProvider): void
-    {
-        $this->userEntityProvider = $userEntityProvider;
-    }
-
 }

@@ -30,7 +30,7 @@ abstract class ContentObjectInstaller extends Installer
      *
      * @return bool
      */
-    public function extra()
+    public function extra(): bool
     {
         if (!$this->register_templates())
         {

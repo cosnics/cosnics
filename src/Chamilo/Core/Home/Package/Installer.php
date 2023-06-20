@@ -55,7 +55,7 @@ class Installer extends \Chamilo\Configuration\Package\Action\Installer
      * @todo This function now uses the function of the RepositoryInstaller class. These shared functions should be
      *       available in a common base class.
      */
-    public function extra()
+    public function extra(): bool
     {
         if (!$this->create_basic_home())
         {

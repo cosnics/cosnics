@@ -55,6 +55,7 @@ use Chamilo\Libraries\Storage\DataManager\StorageAliasGenerator;
 use Chamilo\Libraries\Storage\Exception\ConnectionException;
 use Chamilo\Libraries\Storage\Service\ParametersHandler;
 use Chamilo\Libraries\Utilities\StringUtilities;
+use Exception;
 use Symfony\Component\Cache\Adapter\ArrayAdapter;
 use Symfony\Component\Cache\Adapter\PhpFilesAdapter;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
@@ -140,8 +141,6 @@ class DependencyInjectionContainerBuilder
 
     /**
      * Creates and returns the default dependency injection container for Chamilo
-     *
-     * @throws \Exception
      */
     public function createContainer(): ContainerInterface
     {
@@ -207,9 +206,6 @@ class DependencyInjectionContainerBuilder
         return $this->connectionFactory;
     }
 
-    /**
-     * @throws \Exception
-     */
     public function getContainerExtensionFinder(): ContainerExtensionFinderInterface
     {
         if (!isset($this->containerExtensionFinder))
@@ -258,7 +254,6 @@ class DependencyInjectionContainerBuilder
 
     /**
      * @return string[]
-     * @throws \Exception
      */
     protected function getPackageNamespaces(): array
     {
@@ -270,7 +265,7 @@ class DependencyInjectionContainerBuilder
             {
                 return $this->getRegistrationConsulter()->getRegistrationContexts();
             }
-            catch (ConnectionException $exception)
+            catch (Exception $exception)
             {
                 return $this->getPackageNamespacesFromFilesystem();
             }
@@ -465,8 +460,6 @@ class DependencyInjectionContainerBuilder
      * Loads the extensions for the container
      *
      * @param \Symfony\Component\DependencyInjection\ContainerBuilder $container
-     *
-     * @throws \Exception
      */
     protected function loadContainerExtensions(ContainerBuilder $container): void
     {
