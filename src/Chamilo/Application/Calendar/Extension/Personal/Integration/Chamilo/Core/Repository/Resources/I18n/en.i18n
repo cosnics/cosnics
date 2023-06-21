@@ -1,8 +1,0 @@
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-; Package = application\personal_calendar
-; Language = en
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-
-TypeName = "Repository"
-PublicationFailure = "Publication of <em>%CONTENT_OBJECT%</em> in your calender has failed"
-PublicationSuccess = "<em>%CONTENT_OBJECT%</em> was successfully published in your calendar"

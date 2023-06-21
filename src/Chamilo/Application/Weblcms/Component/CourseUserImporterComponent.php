@@ -79,7 +79,7 @@ class CourseUserImporterComponent extends Manager
 
     public function add_additional_breadcrumbs(BreadcrumbTrail $breadcrumbtrail)
     {
-        if ($this->getUser()->is_platform_admin())
+        if ($this->getUser()->isPlatformAdmin())
         {
             $browseUrl = $this->getUrlGenerator()->fromParameters(
                 [

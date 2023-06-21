@@ -29,7 +29,7 @@ class Calculator
     /**
      * @deprecated Use StorageSpaceCalculator::addUploadWarningToForm() now
      */
-    public function addUploadWarningToForm(FormValidator $form)
+    public function addUploadWarningToForm(FormValidator $form): void
     {
         $this->getStorageSpaceCalculator()->addUploadWarningToFormForUser($form, $this->getUser());
     }

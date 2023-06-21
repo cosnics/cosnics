@@ -54,7 +54,7 @@ abstract class TabComponent extends Manager
             )
         );
 
-        if ($this->getUser()->is_platform_admin())
+        if ($this->getUser()->isPlatformAdmin())
         {
             $this->tabsCollection->add(
                 new LinkTab(

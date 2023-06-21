@@ -112,15 +112,14 @@ class RequestTableRenderer extends DataClassListTableRenderer implements TableRo
     {
         $datetimeUtilities = $this->getDatetimeUtilities();
 
-        switch ($column->get_name())
+        return match ($column->get_name())
         {
-            case Request::PROPERTY_QUOTA :
-                return Filesystem::format_file_size($request->get_quota());
-            case Request::PROPERTY_CREATION_DATE :
-                return $datetimeUtilities->formatLocaleDate(null, $request->get_creation_date());
-        }
-
-        return parent::renderCell($column, $resultPosition, $request);
+            Request::PROPERTY_QUOTA => Filesystem::format_file_size($request->get_quota()),
+            Request::PROPERTY_CREATION_DATE => $datetimeUtilities->formatLocaleDate(
+                null, $request->get_creation_date()
+            ),
+            default => parent::renderCell($column, $resultPosition, $request),
+        };
     }
 
     /**
@@ -139,7 +138,7 @@ class RequestTableRenderer extends DataClassListTableRenderer implements TableRo
         if ($rightsService->canUserViewQuotaRequests($this->getUser()))
         {
             if (!$request->was_granted() && $rightsService->isUserIdentifierTargetForUser(
-                    $request->get_user_id(), $this->getUser()
+                    (string) $request->get_user_id(), $this->getUser()
                 ))
             {
                 $toolbar->add_item(
@@ -157,7 +156,7 @@ class RequestTableRenderer extends DataClassListTableRenderer implements TableRo
             }
 
             if (!$request->is_pending() && $rightsService->isUserIdentifierTargetForUser(
-                    $request->get_user_id(), $this->getUser()
+                    (string) $request->get_user_id(), $this->getUser()
                 ))
             {
                 $toolbar->add_item(
@@ -175,7 +174,7 @@ class RequestTableRenderer extends DataClassListTableRenderer implements TableRo
             }
         }
 
-        if ($this->getUser()->is_platform_admin() ||
+        if ($this->getUser()->isPlatformAdmin() ||
             ($this->getUser()->getId() == $request->get_user_id() && $request->is_pending()))
         {
             $toolbar->add_item(

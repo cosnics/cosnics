@@ -195,7 +195,7 @@ class UserForm extends FormValidator
         $status[1] = Translation::get('CourseAdmin');
         $this->addElement('select', User::PROPERTY_STATUS, Translation::get('Status'), $status);
         // Platform admin
-        if ($this->user->is_platform_admin() && $this->user->get_id() == $this->form_user->get_id() &&
+        if ($this->user->isPlatformAdmin() && $this->user->get_id() == $this->form_user->get_id() &&
             $this->form_type == self::TYPE_EDIT)
         {
             $this->add_warning_message('admin_lockout_message', null, Translation::get('LockOutWarningMessage'));
@@ -492,7 +492,7 @@ class UserForm extends FormValidator
             $defaults[User::PROPERTY_DISK_QUOTA] = '209715200';
         }
 
-        $defaults['admin'][User::PROPERTY_PLATFORMADMIN] = $user->get_platformadmin();
+        $defaults['admin'][User::PROPERTY_PLATFORMADMIN] = $user->getPlatformAdmin();
         $defaults['mail']['send_mail'] = 0;
         $defaults[User::PROPERTY_ID] = $user->get_id();
         $defaults[User::PROPERTY_LASTNAME] = $user->get_lastname();

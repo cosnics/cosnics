@@ -20,7 +20,7 @@ class ForumTopicDeleterComponent extends Manager
     {
         $topic = $this->get_selected_complex_content_object_item();
 
-        if ($this->get_user()->get_id() == $topic->get_user_id() || $this->get_user()->is_platform_admin() ||
+        if ($this->get_user()->get_id() == $topic->get_user_id() || $this->get_user()->isPlatformAdmin() ||
              $this->is_forum_manager($this->get_user()))
         {
             $topic = $this->get_selected_complex_content_object_item();

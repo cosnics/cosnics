@@ -28,7 +28,7 @@ class CreatorComponent extends Manager
         $user = $this->get_user();
         $user_id = $user->get_id();
 
-        if (! $user->is_platform_admin())
+        if (! $user->isPlatformAdmin())
         {
             throw new NotAllowedException();
         }

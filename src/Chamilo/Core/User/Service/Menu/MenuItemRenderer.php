@@ -77,5 +77,5 @@ abstract class MenuItemRenderer extends ItemRenderer
         return $this->urlGenerator;
     }
 
-    abstract public function renderTitle(): string;
+    abstract public function renderTitle(Item $item): string;
 }

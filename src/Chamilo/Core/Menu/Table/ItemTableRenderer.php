@@ -6,7 +6,6 @@ use Chamilo\Core\Menu\Manager;
 use Chamilo\Core\Menu\Service\ItemService;
 use Chamilo\Core\Menu\Service\RightsService;
 use Chamilo\Core\Menu\Storage\DataClass\Item;
-use Chamilo\Core\Menu\Storage\DataClass\ItemTitle;
 use Chamilo\Libraries\Architecture\Application\Application;
 use Chamilo\Libraries\Architecture\Application\Routing\UrlGenerator;
 use Chamilo\Libraries\Format\Structure\Glyph\FontAwesomeGlyph;
@@ -133,7 +132,7 @@ class ItemTableRenderer extends DataClassListTableRenderer implements TableRowAc
 
         $this->addColumn(
             $this->getDataClassPropertyTableColumnFactory()->getColumn(
-                ItemTitle::class, ItemTitle::PROPERTY_TITLE, null, false
+                Item::class, Item::PROPERTY_TITLES, null, false
             )
         );
     }
@@ -145,17 +144,12 @@ class ItemTableRenderer extends DataClassListTableRenderer implements TableRowAc
      */
     protected function renderCell(TableColumn $column, TableResultPosition $resultPosition, $item): string
     {
-        switch ($column->get_name())
+        return match ($column->get_name())
         {
-            case ItemTitle::PROPERTY_TITLE :
-                $itemRenderer = $this->getItemRendererFactory()->getItemRenderer($item);
-
-                return $itemRenderer->renderTitle($item);
-            case self::PROPERTY_TYPE :
-                return $item->getGlyph()->render();
-        }
-
-        return parent::renderCell($column, $resultPosition, $item);
+            Item::PROPERTY_TITLES => $this->getItemRendererFactory()->getItemRenderer($item)->renderTitle($item),
+            self::PROPERTY_TYPE => $item->getGlyph()->render(),
+            default => parent::renderCell($column, $resultPosition, $item),
+        };
     }
 
     /**

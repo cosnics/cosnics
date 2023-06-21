@@ -111,7 +111,7 @@ class BrowserComponent extends Manager implements DelegateComponent
                     new PropertyConditionVariable(Request::class, Request::PROPERTY_DECISION),
                     new StaticConditionVariable(Request::DECISION_PENDING)
                 );
-                if (!$this->getUser()->is_platform_admin())
+                if (!$this->getUser()->isPlatformAdmin())
                 {
                     $conditions[] = $target_condition;
                 }
@@ -134,7 +134,7 @@ class BrowserComponent extends Manager implements DelegateComponent
                     new PropertyConditionVariable(Request::class, Request::PROPERTY_DECISION),
                     new StaticConditionVariable(Request::DECISION_GRANTED)
                 );
-                if (!$this->getUser()->is_platform_admin())
+                if (!$this->getUser()->isPlatformAdmin())
                 {
                     $conditions[] = $target_condition;
                 }
@@ -157,7 +157,7 @@ class BrowserComponent extends Manager implements DelegateComponent
                     new PropertyConditionVariable(Request::class, Request::PROPERTY_DECISION),
                     new StaticConditionVariable(Request::DECISION_DENIED)
                 );
-                if (!$this->getUser()->is_platform_admin())
+                if (!$this->getUser()->isPlatformAdmin())
                 {
                     $conditions[] = $target_condition;
                 }
@@ -178,7 +178,7 @@ class BrowserComponent extends Manager implements DelegateComponent
         }
 
         if ($user_requests > 0 || (Rights::getInstance()->request_is_allowed() && $tabs->count() > 0) ||
-            $this->getUser()->is_platform_admin())
+            $this->getUser()->isPlatformAdmin())
         {
             $html = [];
 
@@ -218,7 +218,7 @@ class BrowserComponent extends Manager implements DelegateComponent
                 );
             }
 
-            if ($this->getUser()->is_platform_admin())
+            if ($this->getUser()->isPlatformAdmin())
             {
                 $toolActions->addButton(
                     new Button(
@@ -275,7 +275,7 @@ class BrowserComponent extends Manager implements DelegateComponent
                 break;
         }
 
-        if (!$this->getUser()->is_platform_admin() && Rights::getInstance()->request_is_allowed() &&
+        if (!$this->getUser()->isPlatformAdmin() && Rights::getInstance()->request_is_allowed() &&
             $requestType != RequestTable::TYPE_PERSONAL)
         {
             $target_users = Rights::getInstance()->get_target_users(

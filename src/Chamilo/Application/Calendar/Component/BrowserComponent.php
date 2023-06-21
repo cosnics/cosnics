@@ -74,7 +74,7 @@ class BrowserComponent extends Manager implements DelegateComponent
         {
 
             $user = $this->getUserService()->findUserByIdentifier($asAdmin);
-            if (!$user instanceof User || !$user->is_platform_admin())
+            if (!$user instanceof User || !$user->isPlatformAdmin())
             {
                 throw new NotAllowedException();
             }

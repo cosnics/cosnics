@@ -57,7 +57,7 @@ class TabHeaderRenderer
 
         $isUser = $user instanceof User;
         $homeAllowed =
-            $isUser && ($this->getHomeService()->isUserHomeAllowed() || ($user->is_platform_admin()) && $isGeneralMode);
+            $isUser && ($this->getHomeService()->isUserHomeAllowed() || ($user->isPlatformAdmin()) && $isGeneralMode);
         $isAnonymous = $isUser && $user->is_anonymous_user();
 
         if ($isUser && $homeAllowed && !$isAnonymous)

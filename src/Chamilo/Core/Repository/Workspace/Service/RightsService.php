@@ -170,7 +170,7 @@ class RightsService
     public function hasContentObjectOwnerRights(User $user, ContentObject $contentObject): bool
     {
         // Check if the user is a platform administrator
-        if ($user->is_platform_admin())
+        if ($user->isPlatformAdmin())
         {
             return true;
         }
@@ -249,7 +249,7 @@ class RightsService
     public function hasWorkspaceCreatorRights(User $user, Workspace $workspaceImplementation): bool
     {
         // Check if the user is a platform administrator
-        if ($user->is_platform_admin())
+        if ($user->isPlatformAdmin())
         {
             return true;
         }

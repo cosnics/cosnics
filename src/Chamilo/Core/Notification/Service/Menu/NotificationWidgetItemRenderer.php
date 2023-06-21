@@ -100,6 +100,11 @@ class NotificationWidgetItemRenderer extends ItemRenderer
             $authorizationChecker->isAuthorized($user, 'Chamilo\Core\Notification');
     }
 
+    public function renderTitle(Item $item): string
+    {
+        return $this->getTranslator()->trans('Notifications', [], Manager::CONTEXT);
+    }
+
     public function setTwig(Environment $twig): void
     {
         $this->twig = $twig;

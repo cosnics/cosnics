@@ -210,7 +210,7 @@ class AuthenticationValidator
         $accountHasExpired = ($userExpirationDate != '0' && $userExpirationDate < time());
         $accountNotActivated = ($userActivationDate != '0' && $userActivationDate > time());
 
-        if (($accountHasExpired || $accountNotActivated || !$user->get_active()) && !$user->is_platform_admin())
+        if (($accountHasExpired || $accountNotActivated || !$user->get_active()) && !$user->isPlatformAdmin())
         {
             throw new AuthenticationException(
                 $this->translator->trans('AccountNotActive', [], StringUtilities::LIBRARIES)

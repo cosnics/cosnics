@@ -26,7 +26,7 @@ class DeleterComponent extends Manager
             {
                 $request = DataManager::retrieve_by_id(Request::class, (int) $id);
                 
-                if ($this->get_user()->is_platform_admin() ||
+                if ($this->get_user()->isPlatformAdmin() ||
                      ($this->get_user_id() == $request->get_user_id() && $request->is_pending()))
                 {
                     if (! $request->delete())

@@ -30,7 +30,7 @@ abstract class Manager extends Application
 
     public function request_allowed()
     {
-        if ($this->get_user()->is_platform_admin())
+        if ($this->get_user()->isPlatformAdmin())
         {
             return true;
         }

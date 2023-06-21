@@ -38,7 +38,7 @@ class CourseCategoryManagerComponent extends Manager implements DelegateComponen
 
     public function add_additional_breadcrumbs(BreadcrumbTrail $breadcrumbtrail)
     {
-        if ($this->get_user()->is_platform_admin())
+        if ($this->get_user()->isPlatformAdmin())
         {
             $typeUrl = $this->getUrlGenerator()->fromParameters(
                 [

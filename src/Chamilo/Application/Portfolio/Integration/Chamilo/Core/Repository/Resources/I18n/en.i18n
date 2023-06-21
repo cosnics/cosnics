@@ -1,8 +1,0 @@
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-; Package = Chamilo\Application\Portfolio\Integration\Chamilo\Core\Repository
-; Language = en
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-
-TypeName = "Repository"
-PublicationFailure = "Publication of <em>%CONTENT_OBJECT%</em> in the portfolio of <em>%USER%</em> has failed"
-PublicationSuccess = "<em>%CONTENT_OBJECT%</em> was successfully published in the portfolio of <em>%USER%</em>"

@@ -24,7 +24,7 @@ class ManagementRequestTableRenderer extends RequestTableRenderer
         $translator = $this->getTranslator();
         $urlGenerator = $this->getUrlGenerator();
 
-        if ($this->getUser()->is_platform_admin())
+        if ($this->getUser()->isPlatformAdmin())
         {
             $tableActions->addAction(
                 new TableAction(

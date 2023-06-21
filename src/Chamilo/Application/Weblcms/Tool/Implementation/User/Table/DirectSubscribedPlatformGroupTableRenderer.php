@@ -193,7 +193,7 @@ class DirectSubscribedPlatformGroupTableRenderer extends RecordListTableRenderer
 
         if ($this->application->is_allowed(WeblcmsRights::EDIT_RIGHT))
         {
-            if ($this->getUser()->is_platform_admin() || ($this->application->is_allowed(
+            if ($this->getUser()->isPlatformAdmin() || ($this->application->is_allowed(
                         WeblcmsRights::EDIT_RIGHT
                     ) && CourseManagementRights::getInstance()->is_allowed_for_platform_group(
                         CourseManagementRights::TEACHER_UNSUBSCRIBE_RIGHT, $groupIdentifier,

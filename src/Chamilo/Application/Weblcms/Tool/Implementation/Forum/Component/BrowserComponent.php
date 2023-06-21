@@ -168,7 +168,7 @@ class BrowserComponent extends Manager implements DelegateComponent
                 );
             }
 
-            if ($this->get_course()->is_course_admin($this->get_user()) || $this->get_user()->is_platform_admin())
+            if ($this->get_course()->is_course_admin($this->get_user()) || $this->get_user()->isPlatformAdmin())
             {
                 $commonActions->addButton(
                     new Button(

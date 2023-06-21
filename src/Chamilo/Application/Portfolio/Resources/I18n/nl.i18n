@@ -17,3 +17,5 @@ EditRight = "Aanpassen <b style=\"color: maroon;\">(Let op !  Gebruiker kan inho
 ViewFeedbackRight = "Feedback bekijken" 
 GiveFeedbackRight = "Feedback geven"
 FavouriteUsers = "Favoriete portfolio gebruikers"
+PublicationFailure = "Publicatie van <em>%CONTENT_OBJECT%</em> in het portfolio van <em>%USER%</em> is mislukt"
+PublicationSuccess = "<em>%CONTENT_OBJECT%</em> werd succesvol gepubliceerd in het portfolio van <em>%USER%</em>"

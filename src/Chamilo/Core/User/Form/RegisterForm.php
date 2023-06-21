@@ -362,7 +362,7 @@ class RegisterForm extends FormValidator
             $defaults[User::PROPERTY_DISK_QUOTA] = '209715200';
         }
 
-        $defaults['admin'][User::PROPERTY_PLATFORMADMIN] = $user->get_platformadmin();
+        $defaults['admin'][User::PROPERTY_PLATFORMADMIN] = $user->getPlatformAdmin();
         $defaults['mail']['send_mail'] = 1;
         $defaults[User::PROPERTY_ID] = $user->get_id();
         $defaults[User::PROPERTY_LASTNAME] = $user->get_lastname();

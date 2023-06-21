@@ -30,7 +30,7 @@ class CourseMenuBlockRenderer extends BlockRenderer
     {
         $result = [];
 
-        if ($user->is_platform_admin())
+        if ($user->isPlatformAdmin())
         {
             $menu = $this->getPlatformAdminMenu();
             $result[] = SimpleTemplate::all($template, $menu);

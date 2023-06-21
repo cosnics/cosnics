@@ -144,7 +144,7 @@ class EntityTableRenderer extends RecordListTableRenderer implements TableRowAct
 
         $toolbar = new Toolbar();
 
-        if ($this->getUser()->is_platform_admin())
+        if ($this->getUser()->isPlatformAdmin())
         {
             $deleteUrl = $urlGenerator->fromParameters(
                 [

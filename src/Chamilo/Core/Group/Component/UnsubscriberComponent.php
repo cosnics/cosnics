@@ -28,7 +28,7 @@ class UnsubscriberComponent extends Manager
     {
         $user = $this->get_user();
 
-        if (! $this->get_user()->is_platform_admin())
+        if (! $this->get_user()->isPlatformAdmin())
         {
             throw new NotAllowedException();
         }

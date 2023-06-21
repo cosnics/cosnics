@@ -207,4 +207,9 @@ class LanguageItemRenderer extends ItemRenderer
 
         return implode(PHP_EOL, $html);
     }
+
+    public function renderTitle(Item $item): string
+    {
+        return $this->getTranslator()->trans('LanguageItem', [], \Chamilo\Core\Menu\Manager::CONTEXT);
+    }
 }

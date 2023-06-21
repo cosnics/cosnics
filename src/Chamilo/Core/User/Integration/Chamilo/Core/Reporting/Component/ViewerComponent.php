@@ -24,7 +24,7 @@ class ViewerComponent extends Manager
             $this->getRequest()->query->get(\Chamilo\Core\User\Manager::PARAM_USER_USER_ID)
         );
 
-        if (!$this->get_user()->is_platform_admin())
+        if (!$this->get_user()->isPlatformAdmin())
         {
             throw new NotAllowedException();
         }

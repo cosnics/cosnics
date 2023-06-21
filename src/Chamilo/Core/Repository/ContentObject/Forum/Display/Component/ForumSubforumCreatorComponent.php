@@ -30,7 +30,7 @@ class ForumSubforumCreatorComponent extends Manager implements ViewerInterface,
     {
         $forum = $this->getForum();
 
-        if ($this->get_user()->is_platform_admin() || $this->get_user_id() == $forum->get_owner_id() ||
+        if ($this->get_user()->isPlatformAdmin() || $this->get_user_id() == $forum->get_owner_id() ||
              $this->isForumManager($this->get_user()))
         {
 

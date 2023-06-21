@@ -4,11 +4,11 @@ namespace Chamilo\Core\Admin\Announcement\Table;
 use Chamilo\Core\Admin\Announcement\Manager;
 use Chamilo\Core\Admin\Announcement\Service\RightsService;
 use Chamilo\Core\Admin\Announcement\Storage\DataClass\Publication;
+use Chamilo\Core\Group\Integration\Chamilo\Libraries\Rights\Service\GroupEntityProvider;
 use Chamilo\Core\Group\Service\GroupService;
 use Chamilo\Core\Repository\Service\ContentObjectService;
 use Chamilo\Core\Repository\Storage\DataClass\ContentObject;
-use Chamilo\Core\Rights\Entity\PlatformGroupEntity;
-use Chamilo\Core\Rights\Entity\UserEntity;
+use Chamilo\Core\User\Integration\Chamilo\Libraries\Rights\Service\UserEntityProvider;
 use Chamilo\Core\User\Service\UserService;
 use Chamilo\Core\User\Storage\DataClass\User;
 use Chamilo\Libraries\Architecture\Application\Application;
@@ -189,7 +189,7 @@ class PublicationTableRenderer extends RecordListTableRenderer implements TableR
                     $data;
             case Publication::PROPERTY_PUBLISHER_ID :
                 $user = $this->getUserService()->findUserByIdentifier(
-                    (int) $publication[Publication::PROPERTY_PUBLISHER_ID]
+                    $publication[Publication::PROPERTY_PUBLISHER_ID]
                 );
 
                 if (!$user)
@@ -255,7 +255,7 @@ class PublicationTableRenderer extends RecordListTableRenderer implements TableR
             {
                 switch ($entity_type)
                 {
-                    case PlatformGroupEntity::ENTITY_TYPE :
+                    case GroupEntityProvider::ENTITY_TYPE :
                         foreach ($entity_ids as $group_id)
                         {
                             $group = $this->getGroupService()->findGroupByIdentifier($group_id);
@@ -266,7 +266,7 @@ class PublicationTableRenderer extends RecordListTableRenderer implements TableR
                             }
                         }
                         break;
-                    case UserEntity::ENTITY_TYPE :
+                    case UserEntityProvider::ENTITY_TYPE :
                         foreach ($entity_ids as $user_id)
                         {
                             $user = $this->getUserService()->findUserByIdentifier($user_id);
@@ -291,8 +291,6 @@ class PublicationTableRenderer extends RecordListTableRenderer implements TableR
 
     /**
      * @param string[]|int[] $publication
-     *
-     * @throws \ReflectionException
      */
     public function renderTableRowActions(TableResultPosition $resultPosition, $publication): string
     {
@@ -301,7 +299,7 @@ class PublicationTableRenderer extends RecordListTableRenderer implements TableR
 
         $toolbar = new Toolbar();
 
-        if ($this->getUser()->is_platform_admin() ||
+        if ($this->getUser()->isPlatformAdmin() ||
             $publication[Publication::PROPERTY_PUBLISHER_ID] == $this->getUser()->getId())
         {
             $toolbar->add_item(

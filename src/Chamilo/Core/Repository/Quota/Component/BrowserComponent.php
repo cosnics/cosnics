@@ -59,7 +59,7 @@ class BrowserComponent extends Manager
 
         $html[] = $this->renderHeader();
 
-        if ($storageSpaceCalculator->isStorageQuotumEnabled() || $this->getUser()->is_platform_admin())
+        if ($storageSpaceCalculator->isStorageQuotumEnabled() || $this->getUser()->isPlatformAdmin())
         {
             $html[] = $this->getButtonToolbarRenderer()->render();
         }
@@ -116,7 +116,7 @@ class BrowserComponent extends Manager
 
             if ($rightsService->canUserViewQuotaRequests($this->getUser()))
             {
-                if ($this->getUser()->is_platform_admin())
+                if ($this->getUser()->isPlatformAdmin())
                 {
                     $progressBarRenderer = $this->getProgressBarRenderer();
 
@@ -187,7 +187,7 @@ class BrowserComponent extends Manager
                         new StaticConditionVariable(Request::DECISION_PENDING)
                     );
 
-                    if (!$this->getUser()->is_platform_admin())
+                    if (!$this->getUser()->isPlatformAdmin())
                     {
                         $conditions[] = $target_condition;
                     }
@@ -212,7 +212,7 @@ class BrowserComponent extends Manager
                         new StaticConditionVariable(Request::DECISION_GRANTED)
                     );
 
-                    if (!$this->getUser()->is_platform_admin())
+                    if (!$this->getUser()->isPlatformAdmin())
                     {
                         $conditions[] = $target_condition;
                     }
@@ -237,7 +237,7 @@ class BrowserComponent extends Manager
                         new StaticConditionVariable(Request::DECISION_DENIED)
                     );
 
-                    if (!$this->getUser()->is_platform_admin())
+                    if (!$this->getUser()->isPlatformAdmin())
                     {
                         $conditions[] = $target_condition;
                     }
@@ -310,7 +310,7 @@ class BrowserComponent extends Manager
                 );
             }
 
-            if ($this->getUser()->is_platform_admin())
+            if ($this->getUser()->isPlatformAdmin())
             {
                 if ($this->getStorageSpaceCalculator()->isStorageQuotumEnabled())
                 {
@@ -402,7 +402,7 @@ class BrowserComponent extends Manager
                 break;
         }
 
-        if (!$this->getUser()->is_platform_admin() && $rightsService->canUserViewQuotaRequests($this->getUser()) &&
+        if (!$this->getUser()->isPlatformAdmin() && $rightsService->canUserViewQuotaRequests($this->getUser()) &&
             $requestType != RequestTableRenderer::TYPE_PERSONAL)
         {
             $target_users = $rightsService->getTargetUsersForUser($this->getUser());

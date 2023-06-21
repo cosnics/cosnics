@@ -59,7 +59,7 @@ class GroupSubscribeComponent extends Manager
                         continue;
                     }
 
-                    if (!$this->get_user()->is_platform_admin() &&
+                    if (!$this->get_user()->isPlatformAdmin() &&
                         !$course_management_rights->is_allowed_for_platform_group(
                             CourseManagementRights::TEACHER_DIRECT_SUBSCRIBE_RIGHT, $group_id, $course->get_id()
                         ))

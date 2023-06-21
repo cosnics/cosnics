@@ -71,7 +71,7 @@ class PublicationModifier implements PublicationModifierInterface
         return new PublicationResult(
             PublicationResult::STATUS_FAILURE, $this->getTranslator()->trans(
             'PublicationImpossible', ['%CONTENT_OBJECT%' => $contentObject->get_title()],
-            'Chamilo\Core\Repository\ContentObject\LearningPath\Integration\Chamilo\Core\Repository'
+            'Chamilo\Core\Repository\ContentObject\LearningPath'
         )
         );
     }

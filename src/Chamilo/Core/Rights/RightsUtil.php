@@ -211,7 +211,7 @@ class RightsUtil
     public function filter_location_identifiers_by_granted_right($context, $user, $entities, $right, $identifiers, $type
     )
     {
-        if ($user->is_platform_admin())
+        if ($user->isPlatformAdmin())
         {
             return $identifiers;
         }
@@ -840,7 +840,7 @@ class RightsUtil
             User::class, (int) $user_id
         );
 
-        if ($user->is_platform_admin())
+        if ($user->isPlatformAdmin())
         {
             return true;
         }

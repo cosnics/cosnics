@@ -134,7 +134,7 @@ class Kernel
         {
             $asAdmin = $this->getSession()->get('_as_admin');
 
-            if ($this->getUser() instanceof User && !$this->getUser()->is_platform_admin() && !$asAdmin)
+            if ($this->getUser() instanceof User && !$this->getUser()->isPlatformAdmin() && !$asAdmin)
             {
                 throw new PlatformNotAvailableException('Platform temporarily unavailable due to maintenance.');
             }

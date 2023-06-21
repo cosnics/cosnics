@@ -4,11 +4,8 @@ namespace Chamilo\Core\Admin\Package;
 use Chamilo\Configuration\Storage\DataClass\Setting;
 use Chamilo\Configuration\Storage\DataManager;
 use Chamilo\Core\Admin\Announcement\Service\RightsService;
-use Chamilo\Core\Admin\Announcement\Storage\DataClass\RightsLocation;
 use Chamilo\Core\Admin\Manager;
-use Chamilo\Libraries\DependencyInjection\DependencyInjectionContainerBuilder;
 use Chamilo\Libraries\Storage\Cache\DataClassRepositoryCache;
-use Chamilo\Libraries\Translation\Translation;
 use Chamilo\Libraries\Utilities\StringUtilities;
 
 /**
@@ -19,10 +16,12 @@ class Installer extends \Chamilo\Configuration\Package\Action\Installer
     public const CONTEXT = Manager::CONTEXT;
 
     /**
-     * Runs the install-script.
+     * @throws \Exception
      */
     public function extra(): bool
     {
+        $translator = $this->getTranslator();
+
         // Update the default settings to the database
         if (!$this->update_settings())
         {
@@ -31,8 +30,9 @@ class Installer extends \Chamilo\Configuration\Package\Action\Installer
         else
         {
             $this->add_message(
-                self::TYPE_NORMAL, Translation::get(
-                'ObjectsAdded', ['OBJECTS' => Translation::get('DefaultSettings')], StringUtilities::LIBRARIES
+                self::TYPE_NORMAL, $translator->trans(
+                'ObjectsAdded', ['OBJECTS' => $translator->trans('DefaultSettings', [], Manager::CONTEXT)],
+                StringUtilities::LIBRARIES
             )
             );
         }
@@ -44,8 +44,9 @@ class Installer extends \Chamilo\Configuration\Package\Action\Installer
         else
         {
             $this->add_message(
-                self::TYPE_NORMAL, Translation::get(
-                'ObjectCreated', ['OBJECT' => Translation::get('RightsTree')], StringUtilities::LIBRARIES
+                self::TYPE_NORMAL, $translator->trans(
+                'ObjectCreated', ['OBJECT' => $translator->trans('RightsTree, [], Manager::CONTEXT')],
+                StringUtilities::LIBRARIES
             )
             );
         }
@@ -53,37 +54,21 @@ class Installer extends \Chamilo\Configuration\Package\Action\Installer
         return true;
     }
 
-    /**
-     * @return \Chamilo\Libraries\Storage\Cache\DataClassRepositoryCache
-     */
-    protected function getDataClassRepositoryCache()
+    protected function getDataClassRepositoryCache(): DataClassRepositoryCache
     {
         return $this->getService(
             DataClassRepositoryCache::class
         );
     }
 
-    /**
-     * @return \Chamilo\Core\Admin\Announcement\Service\RightsService
-     */
-    protected function getRightsService()
+    protected function getRightsService(): RightsService
     {
         return $this->getService(RightsService::class);
     }
 
     /**
-     * @param string $serviceName
-     *
-     * @return object
      * @throws \Exception
      */
-    protected function getService(string $serviceName)
-    {
-        return DependencyInjectionContainerBuilder::getInstance()->createContainer()->get(
-            $serviceName
-        );
-    }
-
     public function update_settings()
     {
         $values = $this->get_form_values();
@@ -108,7 +93,7 @@ class Installer extends \Chamilo\Configuration\Package\Action\Installer
         foreach ($settings as $setting)
         {
             $setting_object = DataManager::retrieve_setting_from_variable_name($setting[1], $setting[0]);
-            $setting_object->set_application($setting[0]);
+            $setting_object->set_context($setting[0]);
             $setting_object->set_variable($setting[1]);
             $setting_object->set_value($setting[2]);
 

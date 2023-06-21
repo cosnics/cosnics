@@ -267,7 +267,7 @@ class PublicationService implements PublicationServiceInterface
      */
     public function getPublicationsForUser(User $user, Course $course, $tool)
     {
-        if ($this->courseService->isUserTeacherInCourse($user, $course) || $user->is_platform_admin())
+        if ($this->courseService->isUserTeacherInCourse($user, $course) || $user->isPlatformAdmin())
         {
             return $this->getPublicationsByCourseAndTool($course, $tool);
         }
@@ -309,7 +309,7 @@ class PublicationService implements PublicationServiceInterface
         User $user, Course $course,
         $tool, ContentObjectPublicationCategory $category = null)
     {
-        if ($this->courseService->isUserTeacherInCourse($user, $course) || $user->is_platform_admin())
+        if ($this->courseService->isUserTeacherInCourse($user, $course) || $user->isPlatformAdmin())
         {
             return $this->getPublicationsByCourseAndToolAndCategory($course, $tool, $category);
         }

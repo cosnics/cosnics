@@ -49,7 +49,7 @@ class UnsubscribeComponent extends Manager
                 {
                     if (! is_null($user_id) && $user_id != $this->get_user_id())
                     {
-                        if (! $this->get_user()->is_platform_admin() && (! $course_management_rights->is_allowed_management(
+                        if (! $this->get_user()->isPlatformAdmin() && (! $course_management_rights->is_allowed_management(
                             CourseManagementRights::TEACHER_UNSUBSCRIBE_RIGHT,
                             $course->get_id(),
                             CourseManagementRights::TYPE_COURSE,

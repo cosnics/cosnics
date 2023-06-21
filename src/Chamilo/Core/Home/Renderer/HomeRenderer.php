@@ -70,8 +70,8 @@ class HomeRenderer
 
         $userHomeAllowed = $this->getHomeService()->isUserHomeAllowed();
 
-        $isEditable = ($user instanceof User && ($userHomeAllowed || ($user->is_platform_admin() && $isGeneralMode)));
-        $isGeneralMode = ($isGeneralMode && $user instanceof User && $user->is_platform_admin());
+        $isEditable = ($user instanceof User && ($userHomeAllowed || ($user->isPlatformAdmin() && $isGeneralMode)));
+        $isGeneralMode = ($isGeneralMode && $user instanceof User && $user->isPlatformAdmin());
 
         if ($isEditable)
         {

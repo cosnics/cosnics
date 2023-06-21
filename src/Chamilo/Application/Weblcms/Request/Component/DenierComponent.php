@@ -56,7 +56,7 @@ class DenierComponent extends Manager
 
             if (!Rights::getInstance()->is_target_user(
                     $this->get_user(), $request->get_user_id()
-                ) && !$this->get_user()->is_platform_admin())
+                ) && !$this->get_user()->isPlatformAdmin())
             {
                 $failures ++;
             }
@@ -184,7 +184,7 @@ class DenierComponent extends Manager
 
         if (!Rights::getInstance()->is_target_user(
                 $this->get_user(), $request->get_user_id()
-            ) && !$this->get_user()->is_platform_admin())
+            ) && !$this->get_user()->isPlatformAdmin())
         {
             throw new NotAllowedException();
         }

@@ -5,7 +5,6 @@ use Chamilo\Configuration\Form\Storage\DataClass\Element;
 use Chamilo\Configuration\Form\Storage\DataClass\Instance;
 use Chamilo\Configuration\Form\Storage\DataClass\Value;
 use Chamilo\Configuration\Form\Storage\DataManager;
-use Doctrine\Common\Collections\ArrayCollection;
 use Chamilo\Libraries\Storage\Parameters\DataClassRetrieveParameters;
 use Chamilo\Libraries\Storage\Parameters\DataClassRetrievesParameters;
 use Chamilo\Libraries\Storage\Query\Condition\AndCondition;
@@ -13,35 +12,31 @@ use Chamilo\Libraries\Storage\Query\Condition\EqualityCondition;
 use Chamilo\Libraries\Storage\Query\Condition\SubselectCondition;
 use Chamilo\Libraries\Storage\Query\Variable\PropertyConditionVariable;
 use Chamilo\Libraries\Storage\Query\Variable\StaticConditionVariable;
-use Chamilo\Libraries\Translation\Translation;
-use Chamilo\Libraries\Utilities\StringUtilities;
+use Doctrine\Common\Collections\ArrayCollection;
 use HTML_Table;
 
 /**
- *
- * @package configuration\form
- * @author Sven Vanpoucke <sven.vanpoucke@hogent.be>
- * @author Hans De Bisschop <hans.de.bisschop@ehb.be>
+ * @package Chamilo\Configuration\Form
+ * @author  Sven Vanpoucke <sven.vanpoucke@hogent.be>
+ * @author  Hans De Bisschop <hans.de.bisschop@ehb.be>
  */
 class Viewer
 {
 
-    private $context;
+    private string $context;
 
-    private $name;
+    private string $name;
 
-    private $user_id;
+    private ?string $title;
 
-    private $title;
+    private string $user_id;
 
-    public function __construct($context, $name, $user_id, $title = null)
+    public function __construct(string $context, string $name, string $user_id, ?string $title = null)
     {
         $this->context = $context;
         $this->name = $name;
         $this->user_id = $user_id;
-        $this->title = $title ?: Translation::get(
-            (string) StringUtilities::getInstance()->createString($name)->upperCamelize(), $context
-        );
+        $this->title = $title;
     }
 
     public function render()
@@ -51,10 +46,9 @@ class Viewer
         if ($values->count() != 0)
         {
 
-            $table = new HTML_Table(array('class' => 'table table-striped table-bordered table-hover table-data'));
+            $table = new HTML_Table(['class' => 'table table-striped table-bordered table-hover table-data']);
             $table->setHeaderContents(0, 0, $this->title);
-            $table->setCellAttributes(0, 0, array('colspan' => 2, 'style' => 'text-align: center;'));
-            $table->altRowAttributes(0, array('class' => 'row_odd'), array('class' => 'row_even'), true);
+            $table->setCellAttributes(0, 0, ['colspan' => 2, 'style' => 'text-align: center;']);
 
             $counter = 1;
 
@@ -67,7 +61,7 @@ class Viewer
                 $element = DataManager::retrieve_dynamic_form_elements($condition)->current();
 
                 $table->setCellContents($counter, 0, $element->get_name());
-                $table->setCellAttributes($counter, 0, array('style' => 'width: 150px;'));
+                $table->setCellAttributes($counter, 0, ['style' => 'width: 150px;']);
 
                 $table->setCellContents($counter, 1, $value->get_value());
 
@@ -76,6 +70,8 @@ class Viewer
 
             return $table->toHtml();
         }
+
+        return '';
     }
 
     /**

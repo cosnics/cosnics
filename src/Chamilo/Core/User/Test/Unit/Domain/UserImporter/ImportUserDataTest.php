@@ -325,7 +325,7 @@ class ImportUserDataTest extends ChamiloTestCase
         $referenceDate = new DateTime('2017-01-05 00:00:00');
 
         $this->assertEquals($username, $user->get_username());
-        $this->assertEquals(0, $user->get_platformadmin());
+        $this->assertEquals(0, $user->getPlatformAdmin());
         $this->assertEquals($firstName, $user->get_firstname());
         $this->assertEquals($lastName, $user->get_lastname());
         $this->assertEquals($email, $user->get_email());

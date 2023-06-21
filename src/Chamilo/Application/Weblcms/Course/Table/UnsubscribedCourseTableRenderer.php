@@ -147,7 +147,7 @@ class UnsubscribedCourseTableRenderer extends RecordListTableRenderer implements
             $relation =
                 CourseDataManager::retrieve_course_user_relation_by_course_and_user($courseIdentifier, $user->getId());
 
-            if (($relation && $relation->get_status() == 1) || $user->is_platform_admin())
+            if (($relation && $relation->get_status() == 1) || $user->isPlatformAdmin())
             {
                 return true;
             }

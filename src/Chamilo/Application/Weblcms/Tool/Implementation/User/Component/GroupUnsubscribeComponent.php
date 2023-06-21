@@ -45,7 +45,7 @@ class GroupUnsubscribeComponent extends Manager
 
                 foreach ($group_ids as $group_id)
                 {
-                    if (! $this->get_user()->is_platform_admin() && ! $course_management_rights->is_allowed_for_platform_group(
+                    if (! $this->get_user()->isPlatformAdmin() && ! $course_management_rights->is_allowed_for_platform_group(
                         CourseManagementRights::TEACHER_UNSUBSCRIBE_RIGHT,
                         $group_id,
                         $course->get_id()))

@@ -34,10 +34,6 @@ class RightsService
      */
     private array $locationIdentifiersCache = [];
 
-    private string $rightsLocationClassName;
-
-    private string $rightsLocationEntityRightClassName;
-
     private RightsRepository $rightsRepository;
 
     private Translator $translator;

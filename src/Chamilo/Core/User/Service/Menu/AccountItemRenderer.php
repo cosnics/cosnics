@@ -39,7 +39,7 @@ class AccountItemRenderer extends MenuItemRenderer implements SelectableItemInte
         return $currentContext == Manager::CONTEXT && $currentAction == Manager::ACTION_VIEW_ACCOUNT;
     }
 
-    public function renderTitle(): string
+    public function renderTitle(Item $item): string
     {
         return $this->getTranslator()->trans('MyAccount', [], 'Chamilo\Core\User');
     }

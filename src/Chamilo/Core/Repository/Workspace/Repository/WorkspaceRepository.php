@@ -348,7 +348,7 @@ class WorkspaceRepository
     {
         $andConditions = [];
 
-        if (!$user->is_platform_admin())
+        if (!$user->isPlatformAdmin())
         {
             $andConditions[] = $this->getWorkspaceByUserCondition($user, $entities, $right);
         }

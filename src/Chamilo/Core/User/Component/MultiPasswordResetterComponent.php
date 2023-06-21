@@ -31,7 +31,7 @@ class MultiPasswordResetterComponent extends Manager
         $ids = $this->getRequest()->getFromRequestOrQuery(self::PARAM_USER_USER_ID);
         $this->set_parameter(self::PARAM_USER_USER_ID, $ids);
 
-        if (!$this->get_user()->is_platform_admin())
+        if (!$this->get_user()->isPlatformAdmin())
         {
             throw new NotAllowedException();
         }

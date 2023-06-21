@@ -498,7 +498,7 @@ abstract class ContentObjectPublicationListRenderer
             }
         }
         $course = $this->get_tool_browser()->get_course();
-        if ($course->is_course_admin($this->get_user()) || $this->get_user()->is_platform_admin())
+        if ($course->is_course_admin($this->get_user()) || $this->get_user()->isPlatformAdmin())
         {
             $toolbar->add_item(
                 new ToolbarItem(

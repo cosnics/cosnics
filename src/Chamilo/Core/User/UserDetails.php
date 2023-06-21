@@ -69,7 +69,7 @@ class UserDetails
         $html[] = '<br />' . Translation::get('Status') . ': ' .
             ($this->user->get_status() == 1 ? Translation::get('Teacher') : Translation::get('Student'));
 
-        if ($this->user->is_platform_admin())
+        if ($this->user->isPlatformAdmin())
         {
             $html[] = ', ' . Translation::get('PlatformAdministrator');
         }

@@ -2,7 +2,7 @@
 namespace Chamilo\Core\Menu\Service\Renderer;
 
 use Chamilo\Core\Menu\Architecture\Interfaces\TranslatableItemInterface;
-use Chamilo\Core\Menu\Architecture\Interfaces\TranslatableItemTrait;
+use Chamilo\Core\Menu\Architecture\Traits\TranslatableItemTrait;
 use Chamilo\Core\Menu\Service\CachedItemService;
 use Chamilo\Core\Menu\Storage\DataClass\Item;
 use Chamilo\Core\Rights\Structure\Service\Interfaces\AuthorizationCheckerInterface;
@@ -44,10 +44,15 @@ class LinkApplicationItemRenderer extends ItemRenderer implements TranslatableIt
         $html[] = '<li>';
         $html[] = '<a href="' . $item->getSetting(self::CONFIGURATION_URL) . '" target="' .
             $item->getSetting(self::CONFIGURATION_TARGET) . '">';
-        $html[] = '<div>' . $this->determineItemTitleForCurrentLanguage($item) . '</div>';
+        $html[] = '<div>' . $this->renderTitle($item) . '</div>';
         $html[] = '</a>';
         $html[] = '</li>';
 
         return implode(PHP_EOL, $html);
+    }
+
+    public function renderTitle(Item $item): string
+    {
+        return $this->determineItemTitleForCurrentLanguage($item);
     }
 }

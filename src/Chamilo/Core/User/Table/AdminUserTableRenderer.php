@@ -62,7 +62,7 @@ class AdminUserTableRenderer extends DataClassListTableRenderer implements Table
         $actions = new TableActions(__NAMESPACE__, self::TABLE_IDENTIFIER);
 
         $deleteUrl = $urlGenerator->fromParameters(
-            [Application::PARAM_CONTEXT => Manager::CONTEXT, Manager::PARAM_ACTION => Manager::ACTION_DELETE_USER]
+            [Application::PARAM_CONTEXT => Manager::CONTEXT, Application::PARAM_ACTION => Manager::ACTION_DELETE_USER]
         );
 
         $actions->addAction(
@@ -72,7 +72,7 @@ class AdminUserTableRenderer extends DataClassListTableRenderer implements Table
         );
 
         $activateUrl = $urlGenerator->fromParameters(
-            [Application::PARAM_CONTEXT => Manager::CONTEXT, Manager::PARAM_ACTION => Manager::ACTION_ACTIVATE]
+            [Application::PARAM_CONTEXT => Manager::CONTEXT, Application::PARAM_ACTION => Manager::ACTION_ACTIVATE]
         );
 
         $actions->addAction(
@@ -82,7 +82,7 @@ class AdminUserTableRenderer extends DataClassListTableRenderer implements Table
         );
 
         $deactivateUrl = $urlGenerator->fromParameters(
-            [Application::PARAM_CONTEXT => Manager::CONTEXT, Manager::PARAM_ACTION => Manager::ACTION_DEACTIVATE]
+            [Application::PARAM_CONTEXT => Manager::CONTEXT, Application::PARAM_ACTION => Manager::ACTION_DEACTIVATE]
         );
 
         $actions->addAction(
@@ -94,7 +94,7 @@ class AdminUserTableRenderer extends DataClassListTableRenderer implements Table
         $resetPasswordUrl = $urlGenerator->fromParameters(
             [
                 Application::PARAM_CONTEXT => Manager::CONTEXT,
-                Manager::PARAM_ACTION => Manager::ACTION_RESET_PASSWORD_MULTI
+                Application::PARAM_ACTION => Manager::ACTION_RESET_PASSWORD_MULTI
             ]
         );
 
@@ -107,7 +107,7 @@ class AdminUserTableRenderer extends DataClassListTableRenderer implements Table
         if ($this->getConfigurationConsulter()->getSetting(['Chamilo\Core\Admin', 'active_online_email_editor']))
         {
             $emailUrl = $urlGenerator->fromParameters(
-                [Application::PARAM_CONTEXT => Manager::CONTEXT, Manager::PARAM_ACTION => Manager::ACTION_EMAIL]
+                [Application::PARAM_CONTEXT => Manager::CONTEXT, Application::PARAM_ACTION => Manager::ACTION_EMAIL]
             );
 
             $actions->addAction(
@@ -175,7 +175,7 @@ class AdminUserTableRenderer extends DataClassListTableRenderer implements Table
                     return $translator->trans('Student', [], Manager::CONTEXT);
                 }
             case User::PROPERTY_PLATFORMADMIN :
-                return $user->get_platformadmin() ? $trueGlyph->render() : $falseGlyph->render();
+                return $user->getPlatformAdmin() ? $trueGlyph->render() : $falseGlyph->render();
             case User::PROPERTY_ACTIVE :
                 return $user->get_active() ? $trueGlyph->render() : $falseGlyph->render();
         }
@@ -183,9 +183,6 @@ class AdminUserTableRenderer extends DataClassListTableRenderer implements Table
         return parent::renderCell($column, $resultPosition, $user);
     }
 
-    /**
-     * @throws \ReflectionException
-     */
     public function renderTableRowActions(TableResultPosition $resultPosition, $user): string
     {
         $urlGenerator = $this->getUrlGenerator();
@@ -193,12 +190,12 @@ class AdminUserTableRenderer extends DataClassListTableRenderer implements Table
 
         $toolbar = new Toolbar();
 
-        if ($this->getUser()->is_platform_admin())
+        if ($this->getUser()->isPlatformAdmin())
         {
             $editUrl = $urlGenerator->fromParameters(
                 [
-                    Application::PARAM_CONTEXT,
-                    Manager::PARAM_ACTION => Manager::ACTION_UPDATE_USER,
+                    Application::PARAM_CONTEXT => Manager::CONTEXT,
+                    Application::PARAM_ACTION => Manager::ACTION_UPDATE_USER,
                     Manager::PARAM_USER_USER_ID => $user->getId()
                 ]
             );
@@ -212,8 +209,8 @@ class AdminUserTableRenderer extends DataClassListTableRenderer implements Table
 
             $detailUrl = $urlGenerator->fromParameters(
                 [
-                    Application::PARAM_CONTEXT,
-                    Manager::PARAM_ACTION => Manager::ACTION_USER_DETAIL,
+                    Application::PARAM_CONTEXT => Manager::CONTEXT,
+                    Application::PARAM_ACTION => Manager::ACTION_USER_DETAIL,
                     Manager::PARAM_USER_USER_ID => $user->getId()
                 ]
             );
@@ -227,8 +224,8 @@ class AdminUserTableRenderer extends DataClassListTableRenderer implements Table
 
             $reportUrl = $urlGenerator->fromParameters(
                 [
-                    Application::PARAM_CONTEXT,
-                    Manager::PARAM_ACTION => Manager::ACTION_REPORTING,
+                    Application::PARAM_CONTEXT => Manager::CONTEXT,
+                    Application::PARAM_ACTION => Manager::ACTION_REPORTING,
                     \Chamilo\Core\User\Integration\Chamilo\Core\Reporting\Manager::PARAM_ACTION => \Chamilo\Core\User\Integration\Chamilo\Core\Reporting\Manager::ACTION_VIEW,
                     \Chamilo\Core\User\Integration\Chamilo\Core\Reporting\Manager::PARAM_TEMPLATE_ID => LoginTemplate::TEMPLATE_ID,
                     Manager::PARAM_USER_USER_ID => $user->get_id()
@@ -244,8 +241,8 @@ class AdminUserTableRenderer extends DataClassListTableRenderer implements Table
 
             $viewQuotaUrl = $urlGenerator->fromParameters(
                 [
-                    Application::PARAM_CONTEXT,
-                    Manager::PARAM_ACTION => Manager::ACTION_VIEW_QUOTA,
+                    Application::PARAM_CONTEXT => Manager::CONTEXT,
+                    Application::PARAM_ACTION => Manager::ACTION_VIEW_QUOTA,
                     Manager::PARAM_USER_USER_ID => $user->getId()
                 ]
             );
@@ -261,8 +258,8 @@ class AdminUserTableRenderer extends DataClassListTableRenderer implements Table
             {
                 $emailUrl = $urlGenerator->fromParameters(
                     [
-                        Application::PARAM_CONTEXT,
-                        Manager::PARAM_ACTION => Manager::ACTION_EMAIL,
+                        Application::PARAM_CONTEXT => Manager::CONTEXT,
+                        Application::PARAM_ACTION => Manager::ACTION_EMAIL,
                         Manager::PARAM_USER_USER_ID => $user->getId()
                     ]
                 );
@@ -278,12 +275,12 @@ class AdminUserTableRenderer extends DataClassListTableRenderer implements Table
 
         if ($user->get_id() != $this->getUser()->getId())
         {
-            if ($this->getUser()->is_platform_admin())
+            if ($this->getUser()->isPlatformAdmin())
             {
                 $deleteUrl = $urlGenerator->fromParameters(
                     [
-                        Application::PARAM_CONTEXT,
-                        Manager::PARAM_ACTION => Manager::ACTION_DELETE_USER,
+                        Application::PARAM_CONTEXT => Manager::CONTEXT,
+                        Application::PARAM_ACTION => Manager::ACTION_DELETE_USER,
                         Manager::PARAM_USER_USER_ID => $user->getId()
                     ]
                 );
@@ -305,12 +302,12 @@ class AdminUserTableRenderer extends DataClassListTableRenderer implements Table
                 );
             }
 
-            if ($this->getUser()->is_platform_admin())
+            if ($this->getUser()->isPlatformAdmin())
             {
                 $changeUserUrl = $urlGenerator->fromParameters(
                     [
                         Application::PARAM_CONTEXT => Manager::CONTEXT,
-                        Manager::PARAM_ACTION => Manager::ACTION_CHANGE_USER,
+                        Application::PARAM_ACTION => Manager::ACTION_CHANGE_USER,
                         Manager::PARAM_USER_USER_ID => $user->getId()
                     ]
                 );

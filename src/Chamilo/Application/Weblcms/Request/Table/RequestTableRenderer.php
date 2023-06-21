@@ -181,7 +181,7 @@ class RequestTableRenderer extends DataClassListTableRenderer implements TableRo
             }
         }
 
-        if ($this->getUser()->is_platform_admin() ||
+        if ($this->getUser()->isPlatformAdmin() ||
             ($this->getUser()->getId() == $request->get_user_id() && $request->is_pending()))
         {
             $toolbar->add_item(

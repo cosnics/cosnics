@@ -20,18 +20,12 @@ abstract class Manager extends Application
     public const PARAM_ACTION = 'announcement_action';
     public const PARAM_SYSTEM_ANNOUNCEMENT_ID = 'announcement';
 
-    /**
-     * @return \Chamilo\Core\Admin\Announcement\Service\PublicationService
-     */
-    public function getPublicationService()
+    public function getPublicationService(): PublicationService
     {
         return $this->getService(PublicationService::class);
     }
 
-    /**
-     * @return \Chamilo\Core\Admin\Announcement\Service\RightsService
-     */
-    public function getRightsService()
+    public function getRightsService(): RightsService
     {
         return $this->getService(RightsService::class);
     }

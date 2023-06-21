@@ -84,7 +84,7 @@ class BrowserComponent extends Manager implements DelegateComponent
             $commonActions = new ButtonGroup();
             $toolActions = new ButtonGroup();
 
-            if ($this->getUser()->get_platformadmin())
+            if ($this->getUser()->getPlatformAdmin())
             {
                 $createUrl = $urlGenerator->fromParameters(
                     [
@@ -277,7 +277,7 @@ class BrowserComponent extends Manager implements DelegateComponent
 
         if (!$type)
         {
-            if ($this->getUser()->is_platform_admin())
+            if ($this->getUser()->isPlatformAdmin())
             {
                 $type = self::TYPE_ALL;
             }
@@ -304,7 +304,7 @@ class BrowserComponent extends Manager implements DelegateComponent
 
         $tabs = new TabsCollection();
 
-        if ($this->getUser()->is_platform_admin())
+        if ($this->getUser()->isPlatformAdmin())
         {
             $publicationLinkUrl = $urlGenerator->fromParameters(
                 [

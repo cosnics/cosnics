@@ -70,7 +70,7 @@ class ViewerComponent extends Manager implements NoContextComponent
             $buttonToolbar = new ButtonToolBar();
             $commonActions = new ButtonGroup();
 
-            if ($this->get_user()->is_platform_admin() ||
+            if ($this->get_user()->isPlatformAdmin() ||
                 $publication->get_publisher_id() == $this->get_user()->get_id())
             {
                 $commonActions->addButton(

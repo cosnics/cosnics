@@ -35,6 +35,8 @@ abstract class ItemRenderer
 
     abstract public function render(Item $item, User $user): string;
 
+    abstract public function renderTitle(Item $item): string;
+
     public function getAuthorizationChecker(): AuthorizationCheckerInterface
     {
         return $this->authorizationChecker;

@@ -42,7 +42,7 @@ class BrowserComponent extends Manager
      */
     public function run()
     {
-        if (!$this->getUser()->is_platform_admin())
+        if (!$this->getUser()->isPlatformAdmin())
         {
             throw new NotAllowedException();
         }

@@ -236,7 +236,7 @@ class RightsRepository
     {
         $condition = null;
 
-        if (!$user->is_platform_admin())
+        if (!$user->isPlatformAdmin())
         {
             $conditions = [];
 

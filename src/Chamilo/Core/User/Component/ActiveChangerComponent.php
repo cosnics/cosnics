@@ -27,7 +27,7 @@ abstract class ActiveChangerComponent extends Manager
      */
     public function run()
     {
-        if (! $this->get_user()->is_platform_admin())
+        if (! $this->get_user()->isPlatformAdmin())
         {
             throw new NotAllowedException();
         }
@@ -51,7 +51,7 @@ abstract class ActiveChangerComponent extends Manager
 
             foreach ($ids as $id)
             {
-                if (! $this->get_user()->is_platform_admin())
+                if (! $this->get_user()->isPlatformAdmin())
                 {
                     $failures ++;
                     continue;

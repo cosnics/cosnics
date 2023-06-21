@@ -372,7 +372,7 @@ class RightsService
      */
     public function isAllowedToEditPublication(Publication $publication, User $user)
     {
-        return $user->is_platform_admin() || $publication->get_publisher() == $user->getId();
+        return $user->isPlatformAdmin() || $publication->get_publisher() == $user->getId();
     }
 
     /**
@@ -383,7 +383,7 @@ class RightsService
      */
     public function isAllowedToDeletePublication(Publication $publication, User $user)
     {
-        return $user->is_platform_admin() || $publication->get_publisher() == $user->getId();
+        return $user->isPlatformAdmin() || $publication->get_publisher() == $user->getId();
     }
 
     /**
@@ -394,7 +394,7 @@ class RightsService
      */
     public function isAllowedToViewPublication(Publication $publication, User $user)
     {
-        $isUserPlatformAdmin = $user->is_platform_admin();
+        $isUserPlatformAdmin = $user->isPlatformAdmin();
         $isUserPublisher = $publication->get_publisher() == $user->getId();
 
         if ($isUserPlatformAdmin || $isUserPublisher)

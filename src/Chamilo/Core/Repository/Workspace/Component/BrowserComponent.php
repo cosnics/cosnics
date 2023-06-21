@@ -25,7 +25,7 @@ class BrowserComponent extends TabComponent
      */
     public function build()
     {
-        if (!$this->getUser()->is_platform_admin())
+        if (!$this->getUser()->isPlatformAdmin())
         {
             throw new NotAllowedException();
         }

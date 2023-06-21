@@ -37,7 +37,7 @@ class UserApprovalBrowserComponent extends Manager
         $this->checkAuthorization(Manager::CONTEXT, 'ManageUsers');
 
         $this->buttonToolbarRenderer = $this->getButtonToolbarRenderer();
-        if (!$this->getUser()->is_platform_admin())
+        if (!$this->getUser()->isPlatformAdmin())
         {
             throw new NotAllowedException();
         }

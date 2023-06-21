@@ -7,7 +7,6 @@ use Chamilo\Libraries\Format\Structure\Glyph\FontAwesomeGlyph;
 use Chamilo\Libraries\Format\Tabs\Link\LinkTab;
 use Chamilo\Libraries\Format\Tabs\Link\LinkTabsRenderer;
 use Chamilo\Libraries\Format\Tabs\TabsCollection;
-use Chamilo\Libraries\Translation\Translation;
 
 abstract class Manager extends Application
 {
@@ -27,34 +26,33 @@ abstract class Manager extends Application
         return $this->getService(LinkTabsRenderer::class);
     }
 
-    /**
-     * @return \Chamilo\Core\Repository\Quota\Rights\Service\RightsService
-     */
     public function getRightsService(): RightsService
     {
         return $this->getService(RightsService::class);
     }
 
-    public function get_tabs($current_tab)
+    public function get_tabs($current_tab): TabsCollection
     {
+        $translator = $this->getTranslator();
         $tabs = new TabsCollection();
 
         $tabs->add(
             new LinkTab(
-                self::ACTION_CREATE, Translation::get('Add'), new FontAwesomeGlyph('plus', ['fa-lg'], null, 'fas'),
+                self::ACTION_CREATE, $translator->trans('Add', [], Manager::CONTEXT),
+                new FontAwesomeGlyph('plus', ['fa-lg'], null, 'fas'),
                 $this->get_url([self::PARAM_ACTION => self::ACTION_CREATE]), $current_tab == self::ACTION_CREATE
             )
         );
         $tabs->add(
             new LinkTab(
-                self::ACTION_ACCESS, Translation::get('GeneralAccess'),
+                self::ACTION_ACCESS, $translator->trans('GeneralAccess', [], Manager::CONTEXT),
                 new FontAwesomeGlyph('key', ['fa-lg'], null, 'fas'),
                 $this->get_url([self::PARAM_ACTION => self::ACTION_ACCESS]), $current_tab == self::ACTION_ACCESS
             )
         );
         $tabs->add(
             new LinkTab(
-                self::ACTION_BROWSE, Translation::get('Targets'),
+                self::ACTION_BROWSE, $translator->trans('Targets', [], Manager::CONTEXT),
                 new FontAwesomeGlyph('bullseye', ['fa-lg'], null, 'fas'),
                 $this->get_url([self::PARAM_ACTION => self::ACTION_BROWSE]), $current_tab == self::ACTION_BROWSE
             )

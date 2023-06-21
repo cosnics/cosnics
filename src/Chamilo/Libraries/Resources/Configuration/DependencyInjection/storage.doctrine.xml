@@ -119,5 +119,15 @@
             <tag name="Chamilo\Libraries\Storage\DataManager\Doctrine\Service\ConditionPartTranslatorService"/>
         </service>
 
+        <service id="Chamilo\Libraries\Storage\DataManager\Doctrine\ConditionPart\ContainsConditionTranslator">
+            <tag name="Chamilo\Libraries\Storage\DataManager\Doctrine\Service\ConditionPartTranslatorService"/>
+        </service>
+        <service id="Chamilo\Libraries\Storage\DataManager\Doctrine\ConditionPart\StartsWithConditionTranslator">
+            <tag name="Chamilo\Libraries\Storage\DataManager\Doctrine\Service\ConditionPartTranslatorService"/>
+        </service>
+        <service id="Chamilo\Libraries\Storage\DataManager\Doctrine\ConditionPart\EndsWithConditionTranslator">
+            <tag name="Chamilo\Libraries\Storage\DataManager\Doctrine\Service\ConditionPartTranslatorService"/>
+        </service>
+
     </services>
 </container>

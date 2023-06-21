@@ -907,7 +907,7 @@ class Course extends DataClass
             }
             else
             {
-                if ($user->is_platform_admin())
+                if ($user->isPlatformAdmin())
                 {
                     return true;
                 }
@@ -921,7 +921,7 @@ class Course extends DataClass
         }
         else
         {
-            if ($user->is_platform_admin())
+            if ($user->isPlatformAdmin())
             {
                 return true;
             }

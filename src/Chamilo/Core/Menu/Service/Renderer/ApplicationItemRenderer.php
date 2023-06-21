@@ -4,7 +4,7 @@ namespace Chamilo\Core\Menu\Service\Renderer;
 use Chamilo\Configuration\Service\Consulter\RegistrationConsulter;
 use Chamilo\Core\Menu\Architecture\Interfaces\SelectableItemInterface;
 use Chamilo\Core\Menu\Architecture\Interfaces\TranslatableItemInterface;
-use Chamilo\Core\Menu\Architecture\Interfaces\TranslatableItemTrait;
+use Chamilo\Core\Menu\Architecture\Traits\TranslatableItemTrait;
 use Chamilo\Core\Menu\Service\CachedItemService;
 use Chamilo\Core\Menu\Storage\DataClass\Item;
 use Chamilo\Core\Rights\Structure\Service\Interfaces\AuthorizationCheckerInterface;

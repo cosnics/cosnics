@@ -44,7 +44,7 @@ class QuotaViewerComponent extends Manager
     {
         $this->checkAuthorization(Manager::CONTEXT, 'ManageUsers');
 
-        if (!$this->get_user()->is_platform_admin())
+        if (!$this->get_user()->isPlatformAdmin())
         {
             throw new NotAllowedException();
         }

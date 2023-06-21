@@ -1,8 +1,0 @@
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-; Package = Chamilo\Application\Weblcms\Integration\Chamilo\Core\Repository
-; Language = en
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-
-TypeName = "Repository"
-PublicationFailure = "Publication of <em>%CONTENT_OBJECT%</em> in the <em>%TOOL%</em> tool of <em>%COURSE% (%COURSE_CODE%)</em> has failed"
-PublicationSuccess = "<em>%CONTENT_OBJECT%</em> was successfully published in the <em>%TOOL%</em> tool of <em>%COURSE% (%COURSE_CODE%)</em>"

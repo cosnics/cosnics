@@ -1,6 +1,7 @@
 <?php
 namespace Chamilo\Core\Repository\Service\Menu;
 
+use Chamilo\Core\Menu\Architecture\Interfaces\SelectableItemInterface;
 use Chamilo\Core\Menu\Service\CachedItemService;
 use Chamilo\Core\Menu\Service\Renderer\ItemRenderer;
 use Chamilo\Core\Menu\Storage\DataClass\Item;
@@ -19,7 +20,7 @@ use Symfony\Component\Translation\Translator;
  * @author  Magali Gillard <magali.gillard@ehb.be>
  * @author  Eduard Vossen <eduard.vossen@ehb.be>
  */
-class WorkspaceConfigureItemRenderer extends ItemRenderer
+class WorkspaceConfigureItemRenderer extends ItemRenderer implements SelectableItemInterface
 {
     protected UrlGenerator $urlGenerator;
 
@@ -42,7 +43,7 @@ class WorkspaceConfigureItemRenderer extends ItemRenderer
         $html[] = '<li' . ($selected ? ' class="active"' : '') . '>';
         $html[] = '<a href="' . $url . '">';
 
-        $title = $this->getTranslator()->trans('ConfigureWorkspaces', [], 'Chamilo\Core\Repository\Workspace');
+        $title = $this->renderTitle($item);
 
         if ($item->showIcon())
         {
@@ -73,5 +74,10 @@ class WorkspaceConfigureItemRenderer extends ItemRenderer
     public function isSelected(Item $item, User $user): bool
     {
         return $this->getRequest()->query->get(Application::PARAM_CONTEXT) == Manager::CONTEXT;
+    }
+
+    public function renderTitle(Item $item): string
+    {
+        return $this->getTranslator()->trans('ConfigureWorkspaces', [], Manager::CONTEXT);
     }
 }

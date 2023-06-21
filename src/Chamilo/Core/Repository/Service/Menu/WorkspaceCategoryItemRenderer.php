@@ -1,11 +1,13 @@
 <?php
 namespace Chamilo\Core\Repository\Service\Menu;
 
+use Chamilo\Core\Menu\Architecture\Interfaces\SelectableItemInterface;
 use Chamilo\Core\Menu\Factory\ItemRendererFactory;
 use Chamilo\Core\Menu\Service\CachedItemService;
 use Chamilo\Core\Menu\Service\Renderer\ItemRenderer;
 use Chamilo\Core\Menu\Storage\DataClass\Item;
 use Chamilo\Core\Repository\Manager as RepositoryManager;
+use Chamilo\Core\Repository\Workspace\Manager;
 use Chamilo\Core\Repository\Workspace\Manager as WorkspaceManager;
 use Chamilo\Core\Repository\Workspace\Service\WorkspaceService;
 use Chamilo\Core\Rights\Structure\Service\Interfaces\AuthorizationCheckerInterface;
@@ -22,7 +24,7 @@ use Symfony\Component\Translation\Translator;
  * @author  Magali Gillard <magali.gillard@ehb.be>
  * @author  Eduard Vossen <eduard.vossen@ehb.be>
  */
-class WorkspaceCategoryItemRenderer extends ItemRenderer
+class WorkspaceCategoryItemRenderer extends ItemRenderer implements SelectableItemInterface
 {
 
     protected WorkspaceService $workspaceService;
@@ -58,7 +60,7 @@ class WorkspaceCategoryItemRenderer extends ItemRenderer
         $html[] =
             '<a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">';
 
-        $title = $this->getTranslator()->trans('Workspaces', [], 'Chamilo\Core\Repository');
+        $title = $this->renderTitle($item);
 
         if ($item->showIcon())
         {
@@ -125,6 +127,11 @@ class WorkspaceCategoryItemRenderer extends ItemRenderer
         $currentWorkspace = $request->query->get(RepositoryManager::PARAM_WORKSPACE_ID);
 
         return in_array($currentWorkspace, $userWorkspaces);
+    }
+
+    public function renderTitle(Item $item): string
+    {
+        return $this->getTranslator()->trans('Workspaces', [], Manager::CONTEXT);
     }
 
     /**

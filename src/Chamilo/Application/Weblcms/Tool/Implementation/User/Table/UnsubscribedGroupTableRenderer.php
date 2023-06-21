@@ -189,7 +189,7 @@ class UnsubscribedGroupTableRenderer extends DataClassListTableRenderer
 
         $toolbar = new Toolbar();
 
-        if ($this->getUser()->is_platform_admin() || ($this->application->is_allowed(
+        if ($this->getUser()->isPlatformAdmin() || ($this->application->is_allowed(
                     WeblcmsRights::EDIT_RIGHT
                 ) && CourseManagementRights:: getInstance()->is_allowed_for_platform_group(
                     CourseManagementRights::TEACHER_DIRECT_SUBSCRIBE_RIGHT, $groupWithSubscriptionStatus->get_id(),

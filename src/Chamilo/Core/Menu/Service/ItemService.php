@@ -62,7 +62,7 @@ class ItemService implements ItemServiceInterface
 
     /**
      * @throws \Chamilo\Libraries\Storage\Exception\DisplayOrderException
-     * @throws \Exception
+     * @throws \Chamilo\Libraries\Storage\Exception\DataClassNoResultException
      */
     public function createItem(Item $item): bool
     {

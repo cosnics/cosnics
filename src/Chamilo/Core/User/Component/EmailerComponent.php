@@ -38,7 +38,7 @@ class EmailerComponent extends Manager
 
             foreach ($ids as $id)
             {
-                if (! $this->get_user()->is_platform_admin())
+                if (! $this->get_user()->isPlatformAdmin())
                 {
                     $users[] = DataManager::retrieve_by_id(
                         User::class,

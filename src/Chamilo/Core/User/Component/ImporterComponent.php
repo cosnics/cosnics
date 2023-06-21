@@ -24,7 +24,7 @@ class ImporterComponent extends Manager
     {
         $this->checkAuthorization(Manager::CONTEXT, 'ManageUsers');
 
-        if (!$this->getUser()->is_platform_admin())
+        if (!$this->getUser()->isPlatformAdmin())
         {
             throw new NotAllowedException();
         }

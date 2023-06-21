@@ -281,7 +281,7 @@ class SubscribedUserTableRenderer extends RecordListTableRenderer implements Tab
             $group_id = $this->getChamiloRequest()->query->get(\Chamilo\Application\Weblcms\Manager::PARAM_GROUP);
             if ($user_id != $this->getUser()->getId() && !isset($group_id))
             {
-                if ($this->getUser()->is_platform_admin() ||
+                if ($this->getUser()->isPlatformAdmin() ||
                     CourseManagementRights::getInstance()->is_allowed_management(
                         CourseManagementRights::TEACHER_UNSUBSCRIBE_RIGHT, $this->application->get_course_id(),
                         WeblcmsRights::TYPE_COURSE, $user_id
@@ -371,7 +371,7 @@ class SubscribedUserTableRenderer extends RecordListTableRenderer implements Tab
             ['Chamilo\Application\Weblcms', 'allow_view_as_user']
         );
 
-        if ($userViewAllowed || $this->getUser()->is_platform_admin())
+        if ($userViewAllowed || $this->getUser()->isPlatformAdmin())
         {
             if ($this->application->is_allowed(WeblcmsRights::EDIT_RIGHT)) // get_parent()->is_teacher())
             {

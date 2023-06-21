@@ -22,7 +22,7 @@ class ReportingComponent extends Manager implements DelegateComponent
 
         $this->set_parameter(self::PARAM_USER_USER_ID, $this->getRequest()->query->get(self::PARAM_USER_USER_ID));
 
-        if (! $this->get_user()->is_platform_admin())
+        if (! $this->get_user()->isPlatformAdmin())
         {
             throw new NotAllowedException();
         }

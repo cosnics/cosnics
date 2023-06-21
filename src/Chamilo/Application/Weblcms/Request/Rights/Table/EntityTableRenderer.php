@@ -164,7 +164,7 @@ class EntityTableRenderer extends DataClassListTableRenderer implements TableRow
 
         $toolbar = new Toolbar();
 
-        if ($this->getUser()->is_platform_admin())
+        if ($this->getUser()->isPlatformAdmin())
         {
             $toolbar->add_item(
                 new ToolbarItem(

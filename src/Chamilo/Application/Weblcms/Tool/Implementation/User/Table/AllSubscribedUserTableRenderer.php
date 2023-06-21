@@ -284,7 +284,7 @@ class AllSubscribedUserTableRenderer extends RecordListTableRenderer implements 
             if ($userIdentifier != $this->getUser()->getId() &&
                 $userWithSubscriptionStatusAndType[AllSubscribedUserTableColumnModel::SUBSCRIPTION_TYPE] % 2)
             {
-                if ($this->getUser()->is_platform_admin() ||
+                if ($this->getUser()->isPlatformAdmin() ||
                     CourseManagementRights::getInstance()->is_allowed_management(
                         CourseManagementRights::TEACHER_UNSUBSCRIBE_RIGHT, $this->application->get_course_id(),
                         WeblcmsRights::TYPE_COURSE, $userIdentifier
@@ -377,7 +377,7 @@ class AllSubscribedUserTableRenderer extends RecordListTableRenderer implements 
         );
 
         // add action for view as user
-        if ($userViewAllowed || $this->getUser()->is_platform_admin())
+        if ($userViewAllowed || $this->getUser()->isPlatformAdmin())
         {
             if ($this->application->is_allowed(WeblcmsRights::EDIT_RIGHT)) // ->get_parent()->is_teacher())
             {

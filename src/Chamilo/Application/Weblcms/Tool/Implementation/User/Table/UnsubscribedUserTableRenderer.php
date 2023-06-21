@@ -210,7 +210,7 @@ class UnsubscribedUserTableRenderer extends DataClassListTableRenderer
 
         $toolbar = new Toolbar();
 
-        if ($this->getUser()->is_platform_admin() || ($this->application->is_allowed(
+        if ($this->getUser()->isPlatformAdmin() || ($this->application->is_allowed(
                     WeblcmsRights::EDIT_RIGHT
                 ) && CourseManagementRights::getInstance()->is_allowed_management(
                     CourseManagementRights::TEACHER_DIRECT_SUBSCRIBE_RIGHT, $this->application->get_course_id(),
@@ -244,7 +244,7 @@ class UnsubscribedUserTableRenderer extends DataClassListTableRenderer
                 )
             );
         }
-        elseif ($this->getUser()->is_platform_admin() || ($this->application->is_allowed(
+        elseif ($this->getUser()->isPlatformAdmin() || ($this->application->is_allowed(
                     WeblcmsRights::EDIT_RIGHT
                 ) && CourseManagementRights::getInstance()->is_allowed_management(
                     CourseManagementRights::TEACHER_REQUEST_SUBSCRIBE_RIGHT, $this->application->get_course_id(),

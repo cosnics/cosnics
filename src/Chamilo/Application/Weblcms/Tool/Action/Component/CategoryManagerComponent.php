@@ -75,7 +75,7 @@ class CategoryManagerComponent extends Manager implements DelegateComponent, Cat
 
     public function allowed_to_change_category_visibility($category_id)
     {
-        return $this->get_course()->is_course_admin($this->getUser()) || $this->getUser()->is_platform_admin();
+        return $this->get_course()->is_course_admin($this->getUser()) || $this->getUser()->isPlatformAdmin();
     }
 
     public function allowed_to_delete_category($category_id)

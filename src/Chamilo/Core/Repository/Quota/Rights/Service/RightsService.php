@@ -20,6 +20,7 @@ use Chamilo\Libraries\Rights\Domain\RightsLocationEntityRight as RightsLocationE
 use Chamilo\Libraries\Rights\Form\RightsForm;
 use Chamilo\Libraries\Rights\Interfaces\RightsEntityProvider;
 use Chamilo\Libraries\Storage\Query\OrderBy;
+use Chamilo\Libraries\Storage\Query\Variable\StaticConditionVariable;
 use Doctrine\Common\Collections\ArrayCollection;
 use Symfony\Component\Translation\Translator;
 
@@ -546,29 +547,34 @@ class RightsService
                 $this->getGroupsTreeTraverser()->getGroupPath($group);
         }
 
-        $orderProperty = $orderBy->getFirst();
-        $orderPropertyValue = $orderProperty->getConditionVariable()->getValue();
-        $orderDirection = $orderProperty->getDirection();
-
         $groupRecords = $groupRecordCollection->toArray();
 
-        uasort(
-            $groupRecords, function ($groupRecordOne, $groupRecordTwo) use ($orderPropertyValue, $orderDirection) {
+        $orderProperty = $orderBy->getFirst();
+        $orderPropertyConditionVariable = $orderProperty->getConditionVariable();
 
-            if ($orderDirection == SORT_DESC)
-            {
-                return strcmp(
-                    $groupRecordTwo[$orderPropertyValue], $groupRecordOne[$orderPropertyValue]
-                );
+        if ($orderPropertyConditionVariable instanceof StaticConditionVariable)
+        {
+            $orderPropertyValue = $orderPropertyConditionVariable->getValue();
+            $orderDirection = $orderProperty->getDirection();
+
+            uasort(
+                $groupRecords, function ($groupRecordOne, $groupRecordTwo) use ($orderPropertyValue, $orderDirection) {
+
+                if ($orderDirection == SORT_DESC)
+                {
+                    return strcmp(
+                        $groupRecordTwo[$orderPropertyValue], $groupRecordOne[$orderPropertyValue]
+                    );
+                }
+                else
+                {
+                    return strcmp(
+                        $groupRecordOne[$orderPropertyValue], $groupRecordTwo[$orderPropertyValue]
+                    );
+                }
             }
-            else
-            {
-                return strcmp(
-                    $groupRecordOne[$orderPropertyValue], $groupRecordTwo[$orderPropertyValue]
-                );
-            }
+            );
         }
-        );
 
         return array_slice($groupRecords, $offset, $count);
     }

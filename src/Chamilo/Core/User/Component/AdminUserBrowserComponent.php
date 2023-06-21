@@ -38,7 +38,7 @@ class AdminUserBrowserComponent extends Manager
     {
         $this->checkAuthorization(Manager::CONTEXT, 'ManageUsers');
 
-        if (!$this->getUser()->is_platform_admin())
+        if (!$this->getUser()->isPlatformAdmin())
         {
             throw new NotAllowedException();
         }
@@ -72,7 +72,7 @@ class AdminUserBrowserComponent extends Manager
             $commonActions = new ButtonGroup();
             $translator = $this->getTranslator();
 
-            if ($this->getUser()->is_platform_admin())
+            if ($this->getUser()->isPlatformAdmin())
             {
                 $commonActions->addButton(
                     new Button(

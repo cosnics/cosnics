@@ -3,9 +3,6 @@ namespace Chamilo\Core\Repository\Package;
 
 use Chamilo\Core\Repository\Manager;
 use Chamilo\Core\Repository\Quota\Rights\Service\RightsService;
-use Chamilo\Core\Repository\Quota\Rights\Storage\DataClass\RightsLocation;
-use Chamilo\Libraries\DependencyInjection\DependencyInjectionContainerBuilder;
-use Chamilo\Libraries\Translation\Translation;
 use Chamilo\Libraries\Utilities\StringUtilities;
 
 /**
@@ -17,15 +14,20 @@ class Installer extends \Chamilo\Configuration\Package\Action\Installer
 
     public function extra(): bool
     {
-        if (! $this->getRightsService()->createRoot())
+        $translator = $this->getTranslator();
+
+        if (!$this->getRightsService()->createRoot())
         {
             return false;
         }
         else
         {
             $this->add_message(
-                self::TYPE_NORMAL, Translation::get(
-                'ObjectCreated', ['OBJECT' => Translation::get('RightsTree')], StringUtilities::LIBRARIES
+                self::TYPE_NORMAL, $translator->trans(
+                'ObjectCreated', [
+                    'OBJECT' => $translator->trans('RightsTree', [],
+                        \Chamilo\Core\Repository\Quota\Rights\Manager::CONTEXT)
+                ], StringUtilities::LIBRARIES
             )
             );
         }
@@ -33,13 +35,8 @@ class Installer extends \Chamilo\Configuration\Package\Action\Installer
         return true;
     }
 
-    /**
-     * @return \Chamilo\Core\Repository\Quota\Rights\Service\RightsService
-     */
-    protected function getRightsService()
+    protected function getRightsService(): RightsService
     {
-        $dependencyInjectionContainer = DependencyInjectionContainerBuilder::getInstance()->createContainer();
-
-        return $dependencyInjectionContainer->get(RightsService::class);
+        return $this->getService(RightsService::class);
     }
 }

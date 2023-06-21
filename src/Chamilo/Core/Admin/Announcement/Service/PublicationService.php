@@ -1,13 +1,13 @@
 <?php
 namespace Chamilo\Core\Admin\Announcement\Service;
 
-use Chamilo\Core\Admin\Announcement\Form\PublicationForm;
 use Chamilo\Core\Admin\Announcement\Storage\DataClass\Publication;
 use Chamilo\Core\Admin\Announcement\Storage\Repository\PublicationRepository;
 use Chamilo\Core\Group\Integration\Chamilo\Libraries\Rights\Service\GroupEntityProvider;
 use Chamilo\Core\Repository\Publication\Service\PublicationAggregatorInterface;
 use Chamilo\Core\Repository\Storage\DataClass\ContentObject;
 use Chamilo\Core\User\Integration\Chamilo\Libraries\Rights\Service\UserEntityProvider;
+use Chamilo\Libraries\Format\Form\FormValidator;
 use Chamilo\Libraries\Storage\Query\Condition\Condition;
 use Chamilo\Libraries\Storage\Query\OrderBy;
 use Chamilo\Libraries\Utilities\DatetimeUtilities;
@@ -16,41 +16,23 @@ use Symfony\Component\Translation\Translator;
 
 class PublicationService
 {
-    /**
-     * @var \Chamilo\Core\Group\Integration\Chamilo\Libraries\Rights\Service\GroupEntityProvider
-     */
-    private $groupEntityProvider;
 
-    /**
-     * @var \Chamilo\Core\Admin\Announcement\Storage\Repository\PublicationRepository
-     */
-    private $publicationRepository;
+    protected DatetimeUtilities $datetimeUtilities;
 
-    /**
-     * @var \Chamilo\Core\Admin\Announcement\Service\RightsService
-     */
-    private $rightsService;
+    private GroupEntityProvider $groupEntityProvider;
 
-    /**
-     * @var \Symfony\Component\Translation\Translator
-     */
-    private $translator;
+    private PublicationRepository $publicationRepository;
 
-    /**
-     * @var \Chamilo\Core\User\Integration\Chamilo\Libraries\Rights\Service\UserEntityProvider
-     */
-    private $userEntityProvider;
+    private RightsService $rightsService;
 
-    /**
-     * @param \Chamilo\Core\Admin\Announcement\Storage\Repository\PublicationRepository $publicationRepository
-     * @param \Symfony\Component\Translation\Translator $translator
-     * @param \Chamilo\Core\Admin\Announcement\Service\RightsService $rightsService
-     * @param \Chamilo\Core\User\Integration\Chamilo\Libraries\Rights\Service\UserEntityProvider $userEntityProvider
-     * @param \Chamilo\Core\Group\Integration\Chamilo\Libraries\Rights\Service\GroupEntityProvider $groupEntityProvider
-     */
+    private Translator $translator;
+
+    private UserEntityProvider $userEntityProvider;
+
     public function __construct(
         PublicationRepository $publicationRepository, Translator $translator, RightsService $rightsService,
-        UserEntityProvider $userEntityProvider, GroupEntityProvider $groupEntityProvider
+        UserEntityProvider $userEntityProvider, GroupEntityProvider $groupEntityProvider,
+        DatetimeUtilities $datetimeUtilities
     )
     {
         $this->publicationRepository = $publicationRepository;
@@ -58,48 +40,32 @@ class PublicationService
         $this->rightsService = $rightsService;
         $this->userEntityProvider = $userEntityProvider;
         $this->groupEntityProvider = $groupEntityProvider;
+        $this->datetimeUtilities = $datetimeUtilities;
     }
 
-    /**
-     * @param \Chamilo\Libraries\Storage\Query\Condition\Condition $condition
-     *
-     * @return int
-     */
-    public function countPublications(Condition $condition = null)
+    public function countPublications(?Condition $condition = null): int
     {
         return $this->getPublicationRepository()->countPublications($condition);
     }
 
-    /**
-     * @param $contentObjectIdentifier
-     *
-     * @return int
-     */
-    public function countPublicationsForContentObjectIdentifier(int $contentObjectIdentifier)
+    public function countPublicationsForContentObjectIdentifier(string $contentObjectIdentifier): int
     {
         return $this->countPublicationsForContentObjectIdentifiers([$contentObjectIdentifier]);
     }
 
     /**
-     * @param int $contentObjectIdentifiers
-     *
-     * @return int
+     * @param string[] $contentObjectIdentifiers
      */
-    public function countPublicationsForContentObjectIdentifiers(array $contentObjectIdentifiers)
+    public function countPublicationsForContentObjectIdentifiers(array $contentObjectIdentifiers): int
     {
         return $this->getPublicationRepository()->countPublicationsForContentObjectIdentifiers(
             $contentObjectIdentifiers
         );
     }
 
-    /**
-     * @param int $type
-     * @param int $objectIdentifier
-     * @param \Chamilo\Libraries\Storage\Query\Condition\Condition $condition
-     *
-     * @return int
-     */
-    public function countPublicationsForTypeAndIdentifier(int $type, int $objectIdentifier, Condition $condition = null)
+    public function countPublicationsForTypeAndIdentifier(
+        int $type, string $objectIdentifier, ?Condition $condition = null
+    ): int
     {
         if ($type !== PublicationAggregatorInterface::ATTRIBUTES_TYPE_OBJECT &&
             $type !== PublicationAggregatorInterface::ATTRIBUTES_TYPE_USER)
@@ -114,29 +80,18 @@ class PublicationService
         }
     }
 
-    /**
-     * @param int $userIdentifier
-     * @param \Chamilo\Libraries\Storage\Query\Condition\Condition $condition
-     *
-     * @return int
-     */
-    public function countVisiblePublicationsForUserIdentifier(int $userIdentifier, Condition $condition = null)
+    public function countVisiblePublicationsForUserIdentifier(string $userIdentifier, ?Condition $condition = null): int
     {
         $publicationIdentifiers = $this->getRightsService()->findPublicationIdentifiersWithViewRightForUserIdentifier(
             $userIdentifier
         );
 
         return $this->getPublicationRepository()->countVisiblePublicationsForPublicationIdentifiers(
-            $condition, $publicationIdentifiers
+            $publicationIdentifiers, $condition
         );
     }
 
-    /**
-     * @param \Chamilo\Core\Admin\Announcement\Storage\DataClass\Publication $publication
-     *
-     * @return bool
-     */
-    public function createPublication(Publication $publication)
+    public function createPublication(Publication $publication): bool
     {
         $publication->set_publication_date(time());
         $publication->set_modification_date($publication->get_publication_date());
@@ -150,16 +105,11 @@ class PublicationService
     }
 
     /**
-     * @param int $userIdentifier
-     * @param int $contentObjectIdentifier
      * @param string[] $values
-     *
-     * @return \Chamilo\Core\Admin\Announcement\Storage\DataClass\Publication
-     * @throws \Exception
      */
     public function createPublicationForUserIdentifierAndContentObjectIdentifierFromValues(
-        int $userIdentifier, int $contentObjectIdentifier, array $values
-    )
+        string $userIdentifier, string $contentObjectIdentifier, array $values
+    ): ?Publication
     {
         $publication = new Publication();
         $publication->set_content_object_id($contentObjectIdentifier);
@@ -167,23 +117,19 @@ class PublicationService
 
         if (!$this->savePublicationFromValues($publication, $userIdentifier, $values))
         {
-            return false;
+            return null;
         }
 
         return $publication;
     }
 
     /**
-     * @param int $userIdentifier
-     * @param int $contentObjectIdentifiers
+     * @param string[] $contentObjectIdentifiers
      * @param string[] $values
-     *
-     * @return bool
-     * @throws \Exception
      */
     public function createPublicationsForUserIdentifierAndContentObjectIdentifiersFromValues(
-        int $userIdentifier, array $contentObjectIdentifiers, array $values
-    )
+        string $userIdentifier, array $contentObjectIdentifiers, array $values
+    ): bool
     {
         foreach ($contentObjectIdentifiers as $contentObjectIdentifier)
         {
@@ -200,12 +146,7 @@ class PublicationService
         return true;
     }
 
-    /**
-     * @param \Chamilo\Core\Admin\Announcement\Storage\DataClass\Publication $publication
-     *
-     * @return bool
-     */
-    public function deletePublication(Publication $publication)
+    public function deletePublication(Publication $publication): bool
     {
         if (!$this->getRightsService()->deletePublicationRightsLocation($publication))
         {
@@ -215,12 +156,7 @@ class PublicationService
         return $this->getPublicationRepository()->deletePublication($publication);
     }
 
-    /**
-     * @param int $publicationIdentifier
-     *
-     * @return bool
-     */
-    public function deletePublicationByIdentifier(int $publicationIdentifier)
+    public function deletePublicationByIdentifier(string $publicationIdentifier): bool
     {
         $publication = $this->findPublicationByIdentifier($publicationIdentifier);
 
@@ -235,11 +171,9 @@ class PublicationService
     }
 
     /**
-     * @param \Chamilo\Core\Repository\Storage\DataClass\ContentObject $contentObject
-     *
-     * @return bool
+     * @throws \Chamilo\Libraries\Storage\Exception\DataClassNoResultException
      */
-    public function deletePublicationsForContentObject(ContentObject $contentObject)
+    public function deletePublicationsForContentObject(ContentObject $contentObject): bool
     {
         $publications = $this->findPublicationsForContentObjectIdentifier($contentObject->getId());
 
@@ -254,55 +188,48 @@ class PublicationService
         return true;
     }
 
-    /**
-     * @param int $publicationIdentifier
-     *
-     * @return \Chamilo\Core\Admin\Announcement\Storage\DataClass\Publication
-     */
-    public function findPublicationByIdentifier(int $publicationIdentifier)
+    public function findPublicationByIdentifier(string $publicationIdentifier): ?Publication
     {
         return $this->getPublicationRepository()->findPublicationByIdentifier($publicationIdentifier);
     }
 
     /**
-     * @param int $publicationIdentifier
-     *
      * @return string[]
-     * @throws \Exception
      */
-    public function findPublicationRecordByIdentifier(int $publicationIdentifier)
+    public function findPublicationRecordByIdentifier(string $publicationIdentifier): array
     {
         return $this->getPublicationRepository()->findPublicationRecordByIdentifier($publicationIdentifier);
     }
 
     /**
-     * @param \Chamilo\Libraries\Storage\Query\Condition\Condition $condition
-     * @param int $count
-     * @param int $offset
-     * @param \Chamilo\Libraries\Storage\Query\OrderBy $orderBy
+     * @param ?\Chamilo\Libraries\Storage\Query\Condition\Condition $condition
+     * @param ?int $count
+     * @param ?int $offset
+     * @param ?\Chamilo\Libraries\Storage\Query\OrderBy $orderBy
      *
-     * @return string[]
-     * @throws \Exception
+     * @return \Doctrine\Common\Collections\ArrayCollection<string[]>
+     * @throws \Chamilo\Libraries\Storage\Exception\DataClassNoResultException
      */
     public function findPublicationRecords(
-        Condition $condition = null, int $count = null, int $offset = null, ?OrderBy $orderBy = null
-    )
+        ?Condition $condition = null, ?int $count = null, ?int $offset = null, ?OrderBy $orderBy = null
+    ): ArrayCollection
     {
         return $this->getPublicationRepository()->findPublicationRecords($condition, $count, $offset, $orderBy);
     }
 
     /**
      * @param int $type
-     * @param int $objectIdentifier
+     * @param string $objectIdentifier
      * @param ?\Chamilo\Libraries\Storage\Query\Condition\Condition $condition
      * @param ?int $count
      * @param ?int $offset
      * @param ?\Chamilo\Libraries\Storage\Query\OrderBy $orderProperties
      *
      * @return \Doctrine\Common\Collections\ArrayCollection<\Chamilo\Core\Admin\Announcement\Storage\DataClass\Publication>
+     * @throws \Chamilo\Libraries\Storage\Exception\DataClassNoResultException
      */
     public function findPublicationRecordsForTypeAndIdentifier(
-        int $type, int $objectIdentifier, ?Condition $condition = null, ?int $count = null, ?int $offset = null,
+        int $type, string $objectIdentifier, ?Condition $condition = null, ?int $count = null, ?int $offset = null,
         ?OrderBy $orderProperties = null
     ): ArrayCollection
     {
@@ -320,11 +247,12 @@ class PublicationService
     }
 
     /**
-     * @param int $contentObjectIdentifier
+     * @param string $contentObjectIdentifier
      *
-     * @return \Chamilo\Core\Admin\Announcement\Storage\DataClass\Publication[]
+     * @return \Doctrine\Common\Collections\ArrayCollection<\Chamilo\Core\Admin\Announcement\Storage\DataClass\Publication>
+     * @throws \Chamilo\Libraries\Storage\Exception\DataClassNoResultException
      */
-    public function findPublicationsForContentObjectIdentifier(int $contentObjectIdentifier)
+    public function findPublicationsForContentObjectIdentifier(string $contentObjectIdentifier): ArrayCollection
     {
         return $this->getPublicationRepository()->findPublicationsForContentObjectIdentifier($contentObjectIdentifier);
     }
@@ -343,6 +271,11 @@ class PublicationService
         return $this->getPublicationRepository()->findVisiblePublicationRecordsForPublicationIdentifiers(
             $publicationIdentifiers, $condition, $count, $offset, $orderBy
         );
+    }
+
+    public function getDatetimeUtilities(): DatetimeUtilities
+    {
+        return $this->datetimeUtilities;
     }
 
     /**
@@ -385,12 +318,7 @@ class PublicationService
         return $this->userEntityProvider;
     }
 
-    /**
-     * @param \Chamilo\Core\Admin\Announcement\Storage\DataClass\Publication $publication
-     *
-     * @return bool
-     */
-    public function savePublication(Publication $publication)
+    public function savePublication(Publication $publication): bool
     {
         if ($publication->isIdentified())
         {
@@ -402,24 +330,18 @@ class PublicationService
         }
     }
 
-    /**
-     * @param \Chamilo\Core\Admin\Announcement\Storage\DataClass\Publication $publication
-     * @param int $userIdentifier
-     * @param array $values
-     *
-     * @return bool
-     * @throws \Exception
-     */
-    public function savePublicationFromValues(Publication $publication, int $userIdentifier, array $values)
+    public function savePublicationFromValues(Publication $publication, string $userIdentifier, array $values): bool
     {
-        if ($values[PublicationForm::PROPERTY_TIME_PERIOD_FOREVER] != 0)
+        if ($values[FormValidator::PROPERTY_TIME_PERIOD_FOREVER] != 0)
         {
             $from = $to = 0;
         }
         else
         {
-            $from = DatetimeUtilities::getInstance()->timeFromDatepicker($values[Publication::PROPERTY_FROM_DATE]);
-            $to = DatetimeUtilities::getInstance()->timeFromDatepicker($values[Publication::PROPERTY_TO_DATE]);
+            $datetimeUtilities = $this->getDatetimeUtilities();
+
+            $from = $datetimeUtilities->timeFromDatepicker($values[Publication::PROPERTY_FROM_DATE]);
+            $to = $datetimeUtilities->timeFromDatepicker($values[Publication::PROPERTY_TO_DATE]);
         }
 
         $publication->set_from_date($from);
@@ -434,52 +356,7 @@ class PublicationService
         return $this->getRightsService()->updatePublicationRights($publication, $userIdentifier, $values);
     }
 
-    /**
-     * @param \Chamilo\Core\Group\Integration\Chamilo\Libraries\Rights\Service\GroupEntityProvider $groupEntityProvider
-     */
-    public function setGroupEntityProvider(GroupEntityProvider $groupEntityProvider): void
-    {
-        $this->groupEntityProvider = $groupEntityProvider;
-    }
-
-    /**
-     * @param \Chamilo\Core\Admin\Announcement\Storage\Repository\PublicationRepository $publicationRepository
-     */
-    public function setPublicationRepository(PublicationRepository $publicationRepository): void
-    {
-        $this->publicationRepository = $publicationRepository;
-    }
-
-    /**
-     * @param \Chamilo\Core\Admin\Announcement\Service\RightsService $rightsService
-     */
-    public function setRightsService(RightsService $rightsService): void
-    {
-        $this->rightsService = $rightsService;
-    }
-
-    /**
-     * @param \Symfony\Component\Translation\Translator $translator
-     */
-    public function setTranslator(Translator $translator): void
-    {
-        $this->translator = $translator;
-    }
-
-    /**
-     * @param \Chamilo\Core\User\Integration\Chamilo\Libraries\Rights\Service\UserEntityProvider $userEntityProvider
-     */
-    public function setUserEntityProvider(UserEntityProvider $userEntityProvider): void
-    {
-        $this->userEntityProvider = $userEntityProvider;
-    }
-
-    /**
-     * @param \Chamilo\Core\Admin\Announcement\Storage\DataClass\Publication $publication
-     *
-     * @return bool
-     */
-    public function updatePublication(Publication $publication)
+    public function updatePublication(Publication $publication): bool
     {
         $publication->set_modification_date(time());
 

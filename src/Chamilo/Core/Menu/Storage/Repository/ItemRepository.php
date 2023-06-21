@@ -43,9 +43,6 @@ class ItemRepository
         );
     }
 
-    /**
-     * @throws \Chamilo\Libraries\Storage\Exception\DataClassNoResultException
-     */
     public function createItem(Item $item): bool
     {
         return $this->getDataClassRepository()->create($item);
@@ -131,7 +128,7 @@ class ItemRepository
     {
         $condition = new EqualityCondition(
             new PropertyConditionVariable(Item::class, CompositeDataClass::PROPERTY_TYPE),
-            new StaticConditionVariable(CategoryItemRenderer::class)
+            new StaticConditionVariable($type)
         );
 
         return $this->getDataClassRepository()->retrieves(Item::class, new DataClassRetrievesParameters($condition));
@@ -181,9 +178,6 @@ class ItemRepository
         return $this->getDataClassRepository()->retrieveMaximumValue(Item::class, Item::PROPERTY_SORT, $condition);
     }
 
-    /**
-     * @throws \Chamilo\Libraries\Storage\Exception\DataClassNoResultException
-     */
     public function updateItem(Item $item): bool
     {
         return $this->getDataClassRepository()->update($item);

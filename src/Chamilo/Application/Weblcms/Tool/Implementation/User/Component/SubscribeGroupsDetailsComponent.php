@@ -33,7 +33,7 @@ class SubscribeGroupsDetailsComponent extends SubscribeGroupsTabComponent
             CourseManagementRights::TEACHER_DIRECT_SUBSCRIBE_RIGHT, $group->getId(), $this->get_course_id()
         );
 
-        if (!$this->isGroupSubscribed($group->getId()) && ($this->getUser()->is_platform_admin() || $isAllowed))
+        if (!$this->isGroupSubscribed($group->getId()) && ($this->getUser()->isPlatformAdmin() || $isAllowed))
         {
             $buttonToolbar->addItem(
                 new Button(

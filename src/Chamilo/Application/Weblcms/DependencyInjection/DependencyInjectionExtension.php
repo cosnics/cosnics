@@ -7,7 +7,7 @@ use Symfony\Component\DependencyInjection\Extension\ExtensionInterface;
 
 /**
  * @package Chamilo\Application\Weblcms\DependencyInjection
- * @author Sven Vanpoucke - Hogeschool Gent
+ * @author  Sven Vanpoucke - Hogeschool Gent
  */
 class DependencyInjectionExtension extends AbstractDependencyInjectionExtension implements ExtensionInterface
 {
@@ -20,6 +20,6 @@ class DependencyInjectionExtension extends AbstractDependencyInjectionExtension 
 
     public function getConfigurationFiles(): array
     {
-        return ['Chamilo\Application\Weblcms' => ['services.xml']];
+        return ['Chamilo\Application\Weblcms' => ['publication.xml', 'services.xml']];
     }
 }

@@ -170,4 +170,9 @@ class WidgetItemRenderer extends ItemRenderer
     {
         return $this->getAuthorizationChecker()->isAuthorized($user, 'Chamilo\Core\User', 'ManageAccount');
     }
+
+    public function renderTitle(Item $item): string
+    {
+        return $this->getTranslator()->trans('UserAccountWidget', [], Manager::CONTEXT);
+    }
 }

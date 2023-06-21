@@ -1,6 +1,7 @@
 <?php
 namespace Chamilo\Core\User\Service\Menu;
 
+use Chamilo\Core\Menu\Storage\DataClass\Item;
 use Chamilo\Core\User\Manager;
 use Chamilo\Libraries\Architecture\Application\Application;
 use Chamilo\Libraries\Format\Structure\Glyph\FontAwesomeGlyph;
@@ -25,7 +26,7 @@ class LogoutItemRenderer extends MenuItemRenderer
         );
     }
 
-    public function renderTitle(): string
+    public function renderTitle(Item $item): string
     {
         return $this->getTranslator()->trans('Logout', [], 'Chamilo\Core\User');
     }

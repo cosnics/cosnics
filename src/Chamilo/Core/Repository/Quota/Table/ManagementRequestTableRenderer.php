@@ -58,7 +58,7 @@ class ManagementRequestTableRenderer extends RequestTableRenderer
         $translator = $this->getTranslator();
         $urlGenerator = $this->getUrlGenerator();
 
-        if ($this->getUser()->is_platform_admin())
+        if ($this->getUser()->isPlatformAdmin())
         {
             $tableActions->addAction(
                 new TableAction(
@@ -108,17 +108,17 @@ class ManagementRequestTableRenderer extends RequestTableRenderer
         $storageSpaceCalculator = $this->getStorageSpaceCalculator();
         $user = $request->get_user();
 
-        switch ($column->get_name())
+        return match ($column->get_name())
         {
-            case self::PROPERTY_USER :
-                return $request->get_user()->get_fullname();
-            case self::PROPERTY_CURRENTLY_USED_DISK_SPACE :
-                return Filesystem::format_file_size($storageSpaceCalculator->getUsedStorageSpaceForUser($user));
-            case self::PROPERTY_MAXIMUM_USED_DISK_SPACE:
-                return Filesystem::format_file_size($storageSpaceCalculator->getAllowedStorageSpaceForUser($user));
-        }
-
-        return parent::renderCell($column, $resultPosition, $request);
+            self::PROPERTY_USER => $request->get_user()->get_fullname(),
+            self::PROPERTY_CURRENTLY_USED_DISK_SPACE => Filesystem::format_file_size(
+                $storageSpaceCalculator->getUsedStorageSpaceForUser($user)
+            ),
+            self::PROPERTY_MAXIMUM_USED_DISK_SPACE => Filesystem::format_file_size(
+                $storageSpaceCalculator->getAllowedStorageSpaceForUser($user)
+            ),
+            default => parent::renderCell($column, $resultPosition, $request),
+        };
     }
 
 }

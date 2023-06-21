@@ -3,13 +3,14 @@ namespace Chamilo\Core\Menu\Package;
 
 use Chamilo\Core\Menu\Manager;
 use Chamilo\Core\Menu\Service\ItemService;
+use Chamilo\Core\Menu\Service\Renderer\ApplicationItemRenderer;
+use Chamilo\Core\Menu\Service\Renderer\LanguageItemRenderer;
 use Chamilo\Core\Menu\Service\RightsService;
 use Chamilo\Core\Menu\Storage\DataClass\Item;
-use Chamilo\Core\Menu\Storage\DataClass\ItemTitle;
-use Chamilo\Core\Menu\Storage\DataClass\LanguageCategoryItem;
-use Chamilo\Libraries\DependencyInjection\DependencyInjectionContainerBuilder;
+use Chamilo\Core\Repository\Service\Menu\RepositoryApplicationItemRenderer;
+use Chamilo\Core\Repository\Service\Menu\WorkspaceCategoryItemRenderer;
+use Chamilo\Core\User\Service\Menu\WidgetItemRenderer;
 use Chamilo\Libraries\Utilities\StringUtilities;
-use Symfony\Component\Translation\Translator;
 
 /**
  * @package Chamilo\Core\Menu\Package
@@ -20,6 +21,32 @@ use Symfony\Component\Translation\Translator;
 class Installer extends \Chamilo\Configuration\Package\Action\Installer
 {
     public const CONTEXT = Manager::CONTEXT;
+
+    /**
+     * @throws \Chamilo\Libraries\Storage\Exception\DataClassNoResultException
+     * @throws \Chamilo\Libraries\Storage\Exception\DisplayOrderException
+     */
+    protected function createDefaultItems(): bool
+    {
+        $items = [];
+
+        $items[] = $this->initializeApplicationItem(\Chamilo\Core\Home\Manager::CONTEXT, 1);
+        $items[] = $this->initializeItem(LanguageItemRenderer::class, 2);
+        $items[] = $this->initializeItem(RepositoryApplicationItemRenderer::class, 3);
+        $items[] = $this->initializeItem(WorkspaceCategoryItemRenderer::class, 4);
+        $items[] = $this->initializeApplicationItem(\Chamilo\Core\Admin\Manager::CONTEXT, 5);
+        $items[] = $this->initializeItem(WidgetItemRenderer::class, 6);
+
+        foreach ($items as $item)
+        {
+            if (!$this->getItemService()->createItem($item))
+            {
+                return false;
+            }
+        }
+
+        return true;
+    }
 
     /**
      * @return bool
@@ -42,58 +69,37 @@ class Installer extends \Chamilo\Configuration\Package\Action\Installer
             );
         }
 
-        $languageItem = new LanguageCategoryItem();
-        $languageItem->setDisplay(Item::DISPLAY_BOTH);
-
-        if (!$this->getItemService()->createItem($languageItem))
-        {
-            return false;
-        }
-        else
-        {
-            $itemTitle = new ItemTitle();
-            $itemTitle->setTitle($this->getTranslator()->trans('ChangeLanguage', [], 'Chamilo\Core\Menu'));
-            $itemTitle->setIsocode($this->getTranslator()->getLocale());
-            $itemTitle->setItemId($languageItem->getId());
-
-            if (!$this->getItemService()->createItemTitle($itemTitle))
-            {
-                return false;
-            }
-        }
-
-        return true;
+        return $this->createDefaultItems();
     }
 
-    /**
-     * @return \Symfony\Component\DependencyInjection\ContainerInterface
-     */
-    protected function getContainer()
+    protected function getItemService(): ItemService
     {
-        return DependencyInjectionContainerBuilder::getInstance()->createContainer();
+        return $this->getService(ItemService::class);
     }
 
-    /**
-     * @return \Chamilo\Core\Menu\Service\ItemService
-     */
-    protected function getItemService()
+    protected function getRightsService(): RightsService
     {
-        return $this->getContainer()->get(ItemService::class);
+        return $this->getService(RightsService::class);
     }
 
-    /**
-     * @return \Chamilo\Core\Menu\Service\RightsService
-     */
-    protected function getRightsService()
+    public function initializeApplicationItem(string $applicationContext, int $sort): Item
     {
-        return $this->getContainer()->get(RightsService::class);
+        return $this->initializeItem(ApplicationItemRenderer::class, $sort, [
+            ApplicationItemRenderer::CONFIGURATION_APPLICATION => $applicationContext,
+            ApplicationItemRenderer::CONFIGURATION_USE_TRANSLATION => '1'
+        ]);
     }
 
-    /**
-     * @return \Symfony\Component\Translation\Translator
-     */
-    protected function getTranslator()
+    public function initializeItem(string $type, int $sort, array $settings = []): Item
     {
-        return $this->getContainer()->get(Translator::class);
+        $item = new Item();
+
+        $item->setType($type);
+        $item->setSort($sort);
+        $item->setParentId('0');
+        $item->setDisplay(Item::DISPLAY_BOTH);
+        $item->setConfiguration($settings);
+
+        return $item;
     }
 }

@@ -29,7 +29,7 @@ class SubscriberComponent extends Manager
         $group_id = Request::get(self::PARAM_GROUP_ID);
         $this->set_parameter(self::PARAM_GROUP_ID, $group_id);
 
-        if (! $this->get_user()->is_platform_admin())
+        if (! $this->get_user()->isPlatformAdmin())
         {
             throw new NotAllowedException();
         }

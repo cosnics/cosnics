@@ -115,7 +115,7 @@ class UserApprovalTableRenderer extends DataClassListTableRenderer
 
         $toolbar = new Toolbar();
 
-        if ($this->getUser()->is_platform_admin())
+        if ($this->getUser()->isPlatformAdmin())
         {
             $approveUrl = $urlGenerator->fromParameters(
                 [

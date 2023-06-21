@@ -3,7 +3,7 @@ namespace Chamilo\Core\Menu\Service\Renderer;
 
 use Chamilo\Core\Menu\Architecture\Interfaces\SelectableItemInterface;
 use Chamilo\Core\Menu\Architecture\Interfaces\TranslatableItemInterface;
-use Chamilo\Core\Menu\Architecture\Interfaces\TranslatableItemTrait;
+use Chamilo\Core\Menu\Architecture\Traits\TranslatableItemTrait;
 use Chamilo\Core\Menu\Factory\ItemRendererFactory;
 use Chamilo\Core\Menu\Service\CachedItemService;
 use Chamilo\Core\Menu\Service\RightsCacheService;
@@ -48,7 +48,7 @@ class CategoryItemRenderer extends ItemRenderer implements TranslatableItemInter
 
         $isSelected = $this->isSelected($item, $user);
 
-        $title = $this->determineItemTitleForCurrentLanguage($item);
+        $title = $this->renderTitle($item);
 
         $html[] = '<li class="dropdown' . ($isSelected ? ' active' : '') . '">';
         $html[] =
@@ -155,6 +155,11 @@ class CategoryItemRenderer extends ItemRenderer implements TranslatableItemInter
         $html[] = '</ul>';
 
         return implode(PHP_EOL, $html);
+    }
+
+    public function renderTitle(Item $item): string
+    {
+        return $this->determineItemTitleForCurrentLanguage($item);
     }
 
 }

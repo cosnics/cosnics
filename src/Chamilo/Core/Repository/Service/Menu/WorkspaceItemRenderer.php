@@ -1,6 +1,7 @@
 <?php
 namespace Chamilo\Core\Repository\Service\Menu;
 
+use Chamilo\Core\Menu\Architecture\Interfaces\SelectableItemInterface;
 use Chamilo\Core\Menu\Service\CachedItemService;
 use Chamilo\Core\Menu\Service\Renderer\ItemRenderer;
 use Chamilo\Core\Menu\Storage\DataClass\Item;
@@ -17,7 +18,7 @@ use Symfony\Component\Translation\Translator;
  * @package Chamilo\Core\Repository\Service\Menu
  * @author  Hans De Bisschop <hans.de.bisschop@ehb.be>
  */
-class WorkspaceItemRenderer extends ItemRenderer
+class WorkspaceItemRenderer extends ItemRenderer implements SelectableItemInterface
 {
     public const CONFIGURATION_NAME = 'name';
     public const CONFIGURATION_WORKSPACE_ID = 'workspace_id';
@@ -49,7 +50,7 @@ class WorkspaceItemRenderer extends ItemRenderer
 
         $html[] = '<li' . ($selected ? ' class="active"' : '') . '>';
         $html[] = '<a href="' . $workspaceUrl . '">';
-        $title = $item->getSetting(self::CONFIGURATION_NAME);
+        $title = $this->renderTitle($item);
 
         if ($item->showIcon())
         {
@@ -86,5 +87,10 @@ class WorkspaceItemRenderer extends ItemRenderer
 
         return $currentContext == Manager::CONTEXT &&
             $currentWorkspace == $item->getSetting(self::CONFIGURATION_WORKSPACE_ID);
+    }
+
+    public function renderTitle(Item $item): string
+    {
+        return $item->getSetting(self::CONFIGURATION_NAME);
     }
 }

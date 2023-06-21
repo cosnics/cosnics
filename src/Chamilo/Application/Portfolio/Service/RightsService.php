@@ -611,7 +611,7 @@ class RightsService
      */
     public function isAllowedToSetContentObjectRights(User $currentUser, Publication $publication)
     {
-        return $currentUser->is_platform_admin() || $this->isPublisher($publication, $currentUser);
+        return $currentUser->isPlatformAdmin() || $this->isPublisher($publication, $currentUser);
     }
 
     /**
@@ -718,7 +718,7 @@ class RightsService
 
         $user = $this->getUserService()->findUserByIdentifier($userIdentifier);
 
-        if ($user->is_platform_admin())
+        if ($user->isPlatformAdmin())
         {
             return true;
         }

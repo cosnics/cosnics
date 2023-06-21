@@ -22,7 +22,7 @@ class VisitTeamComponent extends Manager
         $parentComponent = $this->getIntegrationLauncherComponent();
         $courseGroup = $parentComponent->get_course_group();
 
-        if (!$this->getUser()->is_platform_admin() &&
+        if (!$this->getUser()->isPlatformAdmin() &&
             !$parentComponent->get_course()->is_course_admin($this->getUser()) &&
             !$courseGroup->is_member($this->getUser()))
         {

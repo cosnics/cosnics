@@ -31,10 +31,7 @@ abstract class Manager extends Application
         return $this->getService('Chamilo\Libraries\Mail\Mailer\ActiveMailer');
     }
 
-    /**
-     * @return \Chamilo\Core\Repository\Quota\Rights\Service\RightsService
-     */
-    public function getRightsService()
+    public function getRightsService(): RightsService
     {
         return $this->getService(RightsService::class);
     }

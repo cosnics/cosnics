@@ -404,7 +404,7 @@ class RightsService implements RightsServiceInterface
     protected function calculateCanUserViewPublication(User $user, ContentObjectPublication $publication, Course $course
     )
     {
-        if ($this->courseService->isUserTeacherInCourse($user, $course) || $user->is_platform_admin())
+        if ($this->courseService->isUserTeacherInCourse($user, $course) || $user->isPlatformAdmin())
         {
             return true;
         }
@@ -466,7 +466,7 @@ class RightsService implements RightsServiceInterface
         ContentObjectPublicationCategory $publicationCategory, Course $course
     )
     {
-        if ($this->courseService->isUserTeacherInCourse($user, $course) || $user->is_platform_admin())
+        if ($this->courseService->isUserTeacherInCourse($user, $course) || $user->isPlatformAdmin())
         {
             return true;
         }
@@ -542,7 +542,7 @@ class RightsService implements RightsServiceInterface
      */
     protected function calculateCanUserViewTool(User $user, $tool, Course $course)
     {
-        if ($user->is_platform_admin())
+        if ($user->isPlatformAdmin())
         {
             return true;
         }
@@ -669,7 +669,7 @@ class RightsService implements RightsServiceInterface
             return true;
         }
 
-        if ($this->courseService->isUserTeacherInCourse($user, $course) || $user->is_platform_admin())
+        if ($this->courseService->isUserTeacherInCourse($user, $course) || $user->isPlatformAdmin())
         {
             return true;
         }

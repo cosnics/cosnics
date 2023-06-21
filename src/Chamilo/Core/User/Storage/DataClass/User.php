@@ -391,7 +391,7 @@ class User extends DataClass
 
     public function get_status_name()
     {
-        if ($this->get_platformadmin() == '1')
+        if ($this->getPlatformAdmin() == '1')
         {
             return Translation::get('PlatformAdministrator');
         }

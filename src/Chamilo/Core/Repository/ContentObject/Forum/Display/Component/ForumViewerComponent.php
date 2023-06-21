@@ -128,7 +128,7 @@ class ForumViewerComponent extends Manager implements DelegateComponent
                 )
             );
 
-            if ($this->get_user()->is_platform_admin() || $this->get_user_id() == $this->forum->get_owner_id() ||
+            if ($this->get_user()->isPlatformAdmin() || $this->get_user_id() == $this->forum->get_owner_id() ||
                 $this->isForumManager($this->get_user()))
             {
                 $publishParameters = $this->get_parameters();
@@ -356,7 +356,7 @@ class ForumViewerComponent extends Manager implements DelegateComponent
         if (!$this->isLocked())
         {
             $hasEditRights =
-                $this->get_user()->get_id() == $forum->get_user_id() || $this->get_user()->is_platform_admin() ||
+                $this->get_user()->get_id() == $forum->get_user_id() || $this->get_user()->isPlatformAdmin() ||
                 $this->isForumManager($this->get_user());
 
             if ($hasEditRights)
@@ -382,7 +382,7 @@ class ForumViewerComponent extends Manager implements DelegateComponent
                     )
                 );
 
-                if ($this->get_user()->is_platform_admin() || $this->isForumManager($this->get_user()))
+                if ($this->get_user()->isPlatformAdmin() || $this->isForumManager($this->get_user()))
                 {
                     if (!$this->isLocked())
                     {
@@ -515,7 +515,7 @@ class ForumViewerComponent extends Manager implements DelegateComponent
         $lastPost = DataManager::retrieve_by_id(ForumPost::class, $subforum->get_ref()->get_last_post());
 
         $isLocked = ($subforum->get_ref()->is_locked() &&
-            (!$this->isForumManager($this->get_user()) || !$this->get_user()->is_platform_admin() ||
+            (!$this->isForumManager($this->get_user()) || !$this->get_user()->isPlatformAdmin() ||
                 !($this->get_user_id() == $subforum->get_ref()->get_owner_id())));
 
         if ($lastPost instanceof ForumPost)
@@ -546,7 +546,7 @@ class ForumViewerComponent extends Manager implements DelegateComponent
      */
     public function renderSubforumTitle(ComplexForum $subforum)
     {
-        $isNotAllowedToView = ($subforum->get_ref()->is_locked() && (!$this->get_user()->is_platform_admin() ||
+        $isNotAllowedToView = ($subforum->get_ref()->is_locked() && (!$this->get_user()->isPlatformAdmin() ||
                 !($this->get_user_id() == $subforum->get_ref()->get_owner_id()) || !$this->isForumManager(
                     $this->get_user()
                 )));
@@ -658,7 +658,7 @@ class ForumViewerComponent extends Manager implements DelegateComponent
 
         if (!$this->isLocked())
         {
-            if ($this->get_user()->get_id() == $topic->get_user_id() || $this->get_user()->is_platform_admin() ||
+            if ($this->get_user()->get_id() == $topic->get_user_id() || $this->get_user()->isPlatformAdmin() ||
                 $this->isForumManager(
                     $this->get_user()
                 ))
@@ -686,7 +686,7 @@ class ForumViewerComponent extends Manager implements DelegateComponent
 
                 $parameters[self::PARAM_CURRENT_SESSION_PARENT_CLOI] = null;
 
-                if ($topic->get_forum_type() == 1 && $this->get_user()->is_platform_admin())
+                if ($topic->get_forum_type() == 1 && $this->get_user()->isPlatformAdmin())
                 {
                     $parameters[self::PARAM_ACTION] = self::ACTION_MAKE_STICKY;
 
@@ -700,7 +700,7 @@ class ForumViewerComponent extends Manager implements DelegateComponent
                 else
                 {
                     if ($topic->get_forum_type() == 2 &&
-                        ($this->get_user()->is_platform_admin() || $this->isForumManager(
+                        ($this->get_user()->isPlatformAdmin() || $this->isForumManager(
                                 $this->get_user()
                             )))
                     {
@@ -715,7 +715,7 @@ class ForumViewerComponent extends Manager implements DelegateComponent
                     }
                     else
                     {
-                        if ($this->get_user()->is_platform_admin() || $this->isForumManager($this->get_user()))
+                        if ($this->get_user()->isPlatformAdmin() || $this->isForumManager($this->get_user()))
                         {
                             $parameters[self::PARAM_ACTION] = self::ACTION_MAKE_STICKY;
                             $buttonToolBar->addItem(
@@ -735,7 +735,7 @@ class ForumViewerComponent extends Manager implements DelegateComponent
                         }
                     }
                 }
-                if ($this->get_user()->is_platform_admin() || $this->isForumManager($this->get_user()))
+                if ($this->get_user()->isPlatformAdmin() || $this->isForumManager($this->get_user()))
                 {
                     if (!$this->isLocked())
                     {
@@ -837,7 +837,7 @@ class ForumViewerComponent extends Manager implements DelegateComponent
         $lastPost = DataManager::retrieve_by_id(ForumPost::class, $topic->get_ref()->get_last_post());
 
         $isLocked = $topic->get_ref()->is_locked() &&
-            (!$this->get_user()->is_platform_admin() || !($this->get_user_id() == $topic->get_ref()->get_owner_id()));
+            (!$this->get_user()->isPlatformAdmin() || !($this->get_user_id() == $topic->get_ref()->get_owner_id()));
 
         if ($lastPost instanceof ForumPost)
         {

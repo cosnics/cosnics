@@ -79,7 +79,7 @@ class WhoIsOnlineTableRenderer extends DataClassListTableRenderer
         switch ($column->get_name())
         {
             case User::PROPERTY_STATUS :
-                if ($user->get_platformadmin() == '1')
+                if ($user->getPlatformAdmin() == '1')
                 {
                     return $translator->trans('PlatformAdministrator', [], Manager::CONTEXT);
                 }
@@ -92,7 +92,7 @@ class WhoIsOnlineTableRenderer extends DataClassListTableRenderer
                     return $translator->trans('Student', [], Manager::CONTEXT);
                 }
             case User::PROPERTY_PLATFORMADMIN :
-                if ($user->get_platformadmin() == '1')
+                if ($user->getPlatformAdmin() == '1')
                 {
                     return $translator->trans('PlatformAdministrator', [], Manager::CONTEXT);
                 }
@@ -101,7 +101,7 @@ class WhoIsOnlineTableRenderer extends DataClassListTableRenderer
                     return '';
                 }
             case User::PROPERTY_PICTURE_URI :
-                if ($this->getUser()->is_platform_admin())
+                if ($this->getUser()->isPlatformAdmin())
                 {
                     $profilePhotoUrl = $urlGenerator->fromParameters(
                         [

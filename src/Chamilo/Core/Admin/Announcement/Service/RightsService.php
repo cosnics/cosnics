@@ -171,7 +171,7 @@ class RightsService
     /**
      * @param string $publicationIdentifier
      *
-     * @return string[]
+     * @return string[][]
      * @throws \Chamilo\Libraries\Rights\Exception\RightsLocationNotFoundException
      * @throws \Chamilo\Libraries\Storage\Exception\DataClassNoResultException
      */

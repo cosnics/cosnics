@@ -239,7 +239,7 @@ class AttemptTrackingService
      */
     public function canDeleteLearningPathAttemptData(User $user, User $targetUser)
     {
-        return $user->is_platform_admin() || $user->getId() == $targetUser->getId();
+        return $user->isPlatformAdmin() || $user->getId() == $targetUser->getId();
     }
 
     /**
