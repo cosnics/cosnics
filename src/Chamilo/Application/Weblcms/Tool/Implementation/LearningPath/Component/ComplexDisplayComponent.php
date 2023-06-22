@@ -12,6 +12,7 @@ use Chamilo\Application\Weblcms\Bridge\LearningPath\Assignment\NotificationServi
 use Chamilo\Application\Weblcms\Bridge\LearningPath\Evaluation\LearningPathEvaluationServiceBridge;
 use Chamilo\Application\Weblcms\Bridge\LearningPath\ExternalTool\ExternalToolServiceBridge;
 use Chamilo\Application\Weblcms\Bridge\LearningPath\GradeBook\LearningPathGradeBookServiceBridge;
+use Chamilo\Application\Weblcms\Bridge\LearningPath\LearningPath\LearningPathServiceBridge;
 use Chamilo\Application\Weblcms\Bridge\LearningPath\Presence\LearningPathPresenceServiceBridge;
 
 use Chamilo\Application\Weblcms\CourseSettingsConnector;
@@ -211,6 +212,15 @@ class ComplexDisplayComponent extends Manager implements LearningPathDisplaySupp
             $learningPathGradeBookServiceBridge->setCanEditGradeBook($hasEditRight);
             $learningPathGradeBookServiceBridge->setCourse($this->get_course());
             $this->getBridgeManager()->addBridge($learningPathGradeBookServiceBridge);
+        }
+
+        if ($this->getRegistrationConsulter()->isContextRegistered('Chamilo\Application\Weblcms\Bridge\LearningPath\LearningPath'))
+        {
+            /** @var LearningPathServiceBridge $learningPathServiceBridge */
+            $learningPathServiceBridge = $this->getService(LearningPathServiceBridge::class);
+            $learningPathServiceBridge->setContentObjectPublication($this->publication);
+            $learningPathServiceBridge->setCourse($this->get_course());
+            $this->getBridgeManager()->addBridge($learningPathServiceBridge);
         }
 
         /** @var AssignmentServiceBridge $assignmentServiceBridge */
