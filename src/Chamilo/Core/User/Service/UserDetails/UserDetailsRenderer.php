@@ -162,4 +162,9 @@ class UserDetailsRenderer implements UserDetailsRendererInterface
 
         return $table->toHtml();
     }
+
+    public function hasContentForUser(User $user, User $requestingUser): bool
+    {
+        return true;
+    }
 }

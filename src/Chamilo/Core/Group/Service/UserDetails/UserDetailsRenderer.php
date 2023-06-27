@@ -49,6 +49,12 @@ class UserDetailsRenderer implements UserDetailsRendererInterface
         return $this->urlGenerator;
     }
 
+    public function hasContentForUser(User $user, User $requestingUser): bool
+    {
+        return $this->getGroupsTreeTraverser()->findAllSubscribedGroupsForUserIdentifier((int) $user->getId())->count(
+            ) > 0;
+    }
+
     public function renderTitle(User $user, User $requestingUser): string
     {
         return $this->getTranslator()->trans('TypeName', [], Manager::CONTEXT);

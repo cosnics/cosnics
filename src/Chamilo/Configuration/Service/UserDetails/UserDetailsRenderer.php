@@ -28,6 +28,22 @@ class UserDetailsRenderer implements UserDetailsRendererInterface
         return new NamespaceIdentGlyph('Chamilo\Configuration', true);
     }
 
+    protected function getViewer(User $user): Viewer
+    {
+        return new Viewer(
+            Manager::CONTEXT, 'account_fields', $user->getId(), null
+        );
+    }
+
+    /**
+     * @throws \ReflectionException
+     * @throws \Chamilo\Libraries\Architecture\Exceptions\UserException
+     */
+    public function hasContentForUser(User $user, User $requestingUser): bool
+    {
+        return $this->getViewer($user)->get_form_values()->count() > 0;
+    }
+
     public function renderTitle(User $user, User $requestingUser): string
     {
         return $this->getTranslator()->trans('AdditionalUserInformation', [], Manager::CONTEXT);
@@ -35,10 +51,6 @@ class UserDetailsRenderer implements UserDetailsRendererInterface
 
     public function renderUserDetails(User $user, User $requestingUser): string
     {
-        $viewer = new Viewer(
-            Manager::CONTEXT, 'account_fields', $user->getId(), null
-        );
-
-        return $viewer->render();
+        return $this->getViewer($user)->render();
     }
 }

@@ -39,6 +39,13 @@ class UserDetailsRenderer implements UserDetailsRendererInterface
         return $this->urlGenerator;
     }
 
+    public function hasContentForUser(User $user, User $requestingUser): bool
+    {
+        $courses = DataManager::retrieve_all_courses_from_user($user);
+
+        return $courses->count() > 0;
+    }
+
     public function renderTitle(User $user, User $requestingUser): string
     {
         return $this->getTranslator()->trans('TypeName', [], \Chamilo\Core\Group\Manager::CONTEXT);

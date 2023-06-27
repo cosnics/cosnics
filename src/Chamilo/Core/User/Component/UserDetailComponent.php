@@ -43,11 +43,10 @@ class UserDetailComponent extends Manager
         }
 
         $userIdentifier = $this->getRequest()->query->get(self::PARAM_USER_USER_ID);
+        $user = $this->getUserService()->findUserByIdentifier($userIdentifier);
 
-        if ($userIdentifier)
+        if ($user instanceof User)
         {
-            $user = $this->getUserService()->findUserByIdentifier($userIdentifier);
-
             $html = [];
 
             $html[] = $this->renderHeader();
@@ -132,12 +131,7 @@ class UserDetailComponent extends Manager
         return $this->buttonToolbarRenderer;
     }
 
-    /**
-     * @param \Chamilo\Core\User\Storage\DataClass\User|null $user
-     *
-     * @return \Chamilo\Libraries\Format\Tabs\TabsCollection
-     */
-    protected function getTabsCollection(?User $user): TabsCollection
+    protected function getTabsCollection(User $user): TabsCollection
     {
         $tabsCollection = new TabsCollection();
 
@@ -153,7 +147,8 @@ class UserDetailComponent extends Manager
             $userDetailsRenderer
         )
         {
-            if ($userDetailsRendererClassName !== UserDetailsRenderer::class)
+            if ($userDetailsRendererClassName !== UserDetailsRenderer::class &&
+                $userDetailsRenderer->hasContentForUser($user, $this->getUser()))
             {
                 $tabsCollection->add(
                     $this->initializeContentTab($userDetailsRendererClassName, $userDetailsRenderer, $user)

@@ -17,4 +17,6 @@ interface UserDetailsRendererInterface
     public function renderUserDetails(User $user, User $requestingUser): string;
 
     public function renderUserDetailsForUserIdentifier(string $userIdentifier, User $requestingUser): string;
+
+    public function hasContentForUser(User $user, User $requestingUser): bool;
 }
