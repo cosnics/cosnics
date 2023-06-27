@@ -3,36 +3,37 @@ namespace Chamilo\Core\Group\Integration\Chamilo\Core\Tracking\Storage\DataClass
 
 use Chamilo\Core\Tracking\Storage\DataClass\ChangesTracker;
 
+/**
+ * @package Chamilo\Core\Group\Integration\Chamilo\Core\Tracking\Storage\DataClass
+ * @author  Hans De Bisschop <hans.de.bisschop@ehb.be>
+ */
 class Change extends ChangesTracker
 {
     public const CONTEXT = 'Chamilo\Core\Group\Integration\Chamilo\Core\Tracking';
-    
+
     public const PROPERTY_TARGET_USER_ID = 'target_user_id';
 
     /**
-     * Get the default properties of all aggregate trackers.
-     *
-     * @return array The property names.
+     * @return string[]
      */
     public static function getDefaultPropertyNames(array $extendedPropertyNames = []): array
     {
         return parent::getDefaultPropertyNames([self::PROPERTY_TARGET_USER_ID]);
     }
 
-    /**
-     * @return string
-     */
     public static function getStorageUnitName(): string
     {
         return 'tracking_group_change';
     }
 
-    /**
-     * @return the $user_id
-     */
     public function get_target_user_id()
     {
         return $this->getDefaultProperty(self::PROPERTY_TARGET_USER_ID);
+    }
+
+    public function set_target_user_id($target_user_id)
+    {
+        $this->setDefaultProperty(self::PROPERTY_TARGET_USER_ID, $target_user_id);
     }
 
     public function is_summary_tracker()
@@ -40,13 +41,7 @@ class Change extends ChangesTracker
         return false;
     }
 
-    /**
-     * @param $user_id the $user_id to set
-     */
-    public function set_target_user_id($target_user_id)
-    {
-        $this->setDefaultProperty(self::PROPERTY_TARGET_USER_ID, $target_user_id);
-    }
+
 
     public function validate_parameters(array $parameters = [])
     {

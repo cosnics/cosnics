@@ -13,20 +13,17 @@ use Chamilo\Libraries\Storage\Service\SearchQueryConditionGenerator;
  * Feed to return users from the user entity
  *
  * @package Chamilo\Core\User\Integration\Chamilo\Libraries\Rights\Component
- *
- * @author Sven Vanpoucke - Hogeschool Gent
- * @author Hans De Bisschop <hans.de.bisschop@ehb.be>
+ * @author  Sven Vanpoucke - Hogeschool Gent
+ * @author  Hans De Bisschop <hans.de.bisschop@ehb.be>
  */
 class UserEntityFeedComponent extends Manager
 {
 
-    const PARAM_OFFSET = 'offset';
+    public const PARAM_OFFSET = 'offset';
+    public const PARAM_SEARCH_QUERY = 'query';
 
-    const PARAM_SEARCH_QUERY = 'query';
-
-    const PROPERTY_ELEMENTS = 'elements';
-
-    const PROPERTY_TOTAL_ELEMENTS = 'total_elements';
+    public const PROPERTY_ELEMENTS = 'elements';
+    public const PROPERTY_TOTAL_ELEMENTS = 'total_elements';
 
     /**
      * Runs this ajax component
@@ -42,7 +39,7 @@ class UserEntityFeedComponent extends Manager
     }
 
     /**
-     * @return integer
+     * @return int
      */
     protected function countUsers()
     {
@@ -104,7 +101,7 @@ class UserEntityFeedComponent extends Manager
     /**
      * Returns the selected offset
      *
-     * @return integer
+     * @return int
      */
     protected function getOffset()
     {

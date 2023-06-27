@@ -18,5 +18,12 @@
         <service id="Chamilo\Core\Group\Service\AdminActionProvider">
             <tag name="Chamilo\Core\Admin\Service\ActionProvider"/>
         </service>
+
+        <service id="Chamilo\Core\Group\Service\GroupActivityService">
+            <tag name="Chamilo\Core\Group\Service\GroupEventListenerInterface"/>
+            <argument key="$currentUser"
+                      type="service"
+                      id="Chamilo\Core\User\CurrentUser"/>
+        </service>
     </services>
 </container>
