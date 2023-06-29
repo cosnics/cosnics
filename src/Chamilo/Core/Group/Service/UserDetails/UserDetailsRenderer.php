@@ -49,10 +49,12 @@ class UserDetailsRenderer implements UserDetailsRendererInterface
         return $this->urlGenerator;
     }
 
+    /**
+     * @throws \Chamilo\Libraries\Storage\Exception\DataClassNoResultException
+     */
     public function hasContentForUser(User $user, User $requestingUser): bool
     {
-        return $this->getGroupsTreeTraverser()->findAllSubscribedGroupsForUserIdentifier((int) $user->getId())->count(
-            ) > 0;
+        return $this->getGroupsTreeTraverser()->findAllSubscribedGroupsForUserIdentifier($user->getId())->count() > 0;
     }
 
     public function renderTitle(User $user, User $requestingUser): string
@@ -62,6 +64,7 @@ class UserDetailsRenderer implements UserDetailsRendererInterface
 
     /**
      * @throws \TableException
+     * @throws \Chamilo\Libraries\Storage\Exception\DataClassNoResultException
      */
     public function renderUserDetails(User $user, User $requestingUser): string
     {
@@ -76,9 +79,9 @@ class UserDetailsRenderer implements UserDetailsRendererInterface
         $table->setCellAttributes(1, 0, ['style' => 'width: 150px;']);
         $table->setHeaderContents(1, 1, $translator->trans('GroupName', [], Manager::CONTEXT));
 
-        $groups = $this->getGroupsTreeTraverser()->findAllSubscribedGroupsForUserIdentifier((int) $user->getId());
+        $groups = $this->getGroupsTreeTraverser()->findAllSubscribedGroupsForUserIdentifier($user->getId());
 
-        if (!$groups || $groups->count() == 0)
+        if ($groups->count() == 0)
         {
             $table->setCellContents(2, 0, $translator->trans('NoGroups', [], Manager::CONTEXT));
             $table->setCellAttributes(2, 0, ['colspan' => 2, 'style' => 'text-align: center;']);

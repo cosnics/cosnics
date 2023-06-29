@@ -46,7 +46,7 @@ class CourseTableRenderer extends RecordListTableRenderer implements TableRowAct
         return $actions;
     }
 
-    protected function initializeColumns()
+    protected function initializeColumns(): void
     {
         $translator = $this->getTranslator();
 

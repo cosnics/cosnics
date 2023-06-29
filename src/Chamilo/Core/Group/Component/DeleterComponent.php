@@ -1,37 +1,32 @@
 <?php
 namespace Chamilo\Core\Group\Component;
 
-use Chamilo\Core\Group\Integration\Chamilo\Core\Tracking\Storage\DataClass\Change;
 use Chamilo\Core\Group\Manager;
-use Chamilo\Core\Tracking\Storage\DataClass\Event;
 use Chamilo\Libraries\Architecture\Application\Application;
 use Chamilo\Libraries\Architecture\ClassnameUtilities;
 use Chamilo\Libraries\Architecture\Exceptions\NotAllowedException;
 use Chamilo\Libraries\Format\Structure\Breadcrumb;
 use Chamilo\Libraries\Format\Structure\BreadcrumbTrail;
 use Chamilo\Libraries\Format\Tabs\GenericTabsRenderer;
-use Chamilo\Libraries\Platform\Session\Request;
-use Chamilo\Libraries\Translation\Translation;
 use Chamilo\Libraries\Utilities\StringUtilities;
 
 /**
- * @package group.lib.group_manager.component
+ * @package Chamilo\Core\Group\Component
  */
 class DeleterComponent extends Manager
 {
 
     /**
-     * Runs this component and displays its output.
+     * @throws \Exception
      */
     public function run()
     {
+        $translator = $this->getTranslator();
         $ids = $this->getRequest()->getFromRequestOrQuery(self::PARAM_GROUP_ID);
 
         $this->set_parameter(self::PARAM_GROUP_ID, $ids);
 
-        $user = $this->get_user();
-
-        if (!$this->get_user()->isPlatformAdmin())
+        if (!$this->getUser()->isPlatformAdmin())
         {
             throw new NotAllowedException();
         }
@@ -41,29 +36,32 @@ class DeleterComponent extends Manager
         $browseUrl = $this->getUrlGenerator()->fromParameters(
             [
                 Application::PARAM_CONTEXT => \Chamilo\Core\Admin\Manager::CONTEXT,
-                \Chamilo\Core\Admin\Manager::PARAM_ACTION => \Chamilo\Core\Admin\Manager::ACTION_ADMIN_BROWSER
+                Application::PARAM_ACTION => \Chamilo\Core\Admin\Manager::ACTION_ADMIN_BROWSER
             ]
         );
-        $trail->add(new Breadcrumb($browseUrl, Translation::get('Administration')));
+        $trail->add(
+            new Breadcrumb($browseUrl, $translator->trans('Administration', [], \Chamilo\Core\Admin\Manager::CONTEXT))
+        );
 
         $browseTabUrl = $this->getUrlGenerator()->fromParameters(
             [
                 Application::PARAM_CONTEXT => \Chamilo\Core\Admin\Manager::CONTEXT,
-                \Chamilo\Core\Admin\Manager::PARAM_ACTION => \Chamilo\Core\Admin\Manager::ACTION_ADMIN_BROWSER,
+                Application::PARAM_ACTION => \Chamilo\Core\Admin\Manager::ACTION_ADMIN_BROWSER,
                 GenericTabsRenderer::PARAM_SELECTED_TAB => ClassnameUtilities::getInstance()->getNamespaceId(
                     Manager::CONTEXT
                 )
             ]
         );
-        $trail->add(new Breadcrumb($browseTabUrl, Translation::get('Group')));
+        $trail->add(new Breadcrumb($browseTabUrl, $translator->trans('Group', [], Manager::CONTEXT)));
 
         $trail->add(
             new Breadcrumb(
-                $this->get_url([Application::PARAM_ACTION => self::ACTION_BROWSE_GROUPS]), Translation::get('GroupList')
+                $this->get_url([Application::PARAM_ACTION => self::ACTION_BROWSE_GROUPS]),
+                $translator->trans('GroupList', [], Manager::CONTEXT)
             )
         );
 
-        $trail->add(new Breadcrumb($this->get_url(), Translation::get('DeleteGroup')));
+        $trail->add(new Breadcrumb($this->get_url(), $translator->trans('DeleteGroup', [], Manager::CONTEXT)));
 
         $failures = 0;
 
@@ -78,18 +76,9 @@ class DeleterComponent extends Manager
             {
                 $group = $this->retrieve_group($id);
 
-                if (!$group->delete())
+                if (!$this->getGroupService()->deleteGroup($group))
                 {
                     $failures ++;
-                }
-                else
-                {
-                    Event::trigger(
-                        'Delete', Manager::CONTEXT, [
-                            Change::PROPERTY_REFERENCE_ID => $group->get_id(),
-                            Change::PROPERTY_USER_ID => $user->get_id()
-                        ]
-                    );
                 }
             }
 
@@ -97,32 +86,32 @@ class DeleterComponent extends Manager
             {
                 if (count($ids) == 1)
                 {
-                    $message = Translation::get(
-                        'ObjectNotDeleted', ['OBJECT' => Translation::get('SelectedGroup')], StringUtilities::LIBRARIES
+                    $message = $translator->trans(
+                        'ObjectNotDeleted', ['OBJECT' => $translator->trans('SelectedGroup', [], Manager::CONTEXT)],
+                        StringUtilities::LIBRARIES
                     );
                 }
                 else
                 {
-                    $message = Translation::get(
-                        'ObjectsNotDeleted', ['OBJECT' => Translation::get('SelectedGroups')],
+                    $message = $translator->trans(
+                        'ObjectsNotDeleted', ['OBJECT' => $translator->trans('SelectedGroups', [], Manager::CONTEXT)],
                         StringUtilities::LIBRARIES
                     );
                 }
             }
+            elseif (count($ids) == 1)
+            {
+                $message = $translator->trans(
+                    'ObjectDeleted', ['OBJECT' => $translator->trans('SelectedGroup', [], Manager::CONTEXT)],
+                    StringUtilities::LIBRARIES
+                );
+            }
             else
             {
-                if (count($ids) == 1)
-                {
-                    $message = Translation::get(
-                        'ObjectDeleted', ['OBJECT' => Translation::get('SelectedGroup')], StringUtilities::LIBRARIES
-                    );
-                }
-                else
-                {
-                    $message = Translation::get(
-                        'ObjectsDeleted', ['OBJECT' => Translation::get('SelectedGroups')], StringUtilities::LIBRARIES
-                    );
-                }
+                $message = $translator->trans(
+                    'ObjectsDeleted', ['OBJECT' => $translator->trans('SelectedGroups', [], Manager::CONTEXT)],
+                    StringUtilities::LIBRARIES
+                );
             }
 
             $this->redirectWithMessage(
@@ -133,27 +122,30 @@ class DeleterComponent extends Manager
         else
         {
             return $this->display_error_page(
-                htmlentities(Translation::get('NoObjectsSelected', null, StringUtilities::LIBRARIES))
+                htmlentities($translator->trans('NoObjectsSelected', [], StringUtilities::LIBRARIES))
             );
         }
     }
 
     public function add_additional_breadcrumbs(BreadcrumbTrail $breadcrumbtrail)
     {
+        $translator = $this->getTranslator();
+
         $breadcrumbtrail->add(
             new Breadcrumb(
                 $this->get_url([Application::PARAM_ACTION => self::ACTION_BROWSE_GROUPS]),
-                Translation::get('BrowserComponent')
+                $translator->trans('BrowserComponent', [], Manager::CONTEXT)
             )
         );
+
         $breadcrumbtrail->add(
             new Breadcrumb(
                 $this->get_url(
                     [
                         Application::PARAM_ACTION => self::ACTION_VIEW_GROUP,
-                        self::PARAM_GROUP_ID => Request::get(self::PARAM_GROUP_ID)
+                        self::PARAM_GROUP_ID => $this->getRequest()->query->get(self::PARAM_GROUP_ID)
                     ]
-                ), Translation::get('ViewerComponent')
+                ), $translator->trans('ViewerComponent', [], Manager::CONTEXT)
             )
         );
     }

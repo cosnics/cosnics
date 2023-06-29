@@ -49,7 +49,7 @@ class WhoIsOnlineTableRenderer extends DataClassListTableRenderer
         return $this->user;
     }
 
-    protected function initializeColumns()
+    protected function initializeColumns(): void
     {
         $this->addColumn($this->getDataClassPropertyTableColumnFactory()->getColumn(User::class, User::PROPERTY_OFFICIAL_CODE));
         $this->addColumn($this->getDataClassPropertyTableColumnFactory()->getColumn(User::class, User::PROPERTY_LASTNAME));

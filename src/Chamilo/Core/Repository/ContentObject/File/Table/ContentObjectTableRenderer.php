@@ -12,7 +12,7 @@ use Chamilo\Libraries\Format\Table\TableResultPosition;
  */
 class ContentObjectTableRenderer extends \Chamilo\Core\Repository\Table\ContentObjectTableRenderer
 {
-    protected function initializeColumns()
+    protected function initializeColumns(): void
     {
         $this->addColumn(
             $this->getDataClassPropertyTableColumnFactory()->getColumn(File::class, File::PROPERTY_EXTENSION)

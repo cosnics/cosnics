@@ -21,7 +21,7 @@ class ItemTableRenderer extends DataClassListTableRenderer implements TableRowAc
 
     public const TABLE_IDENTIFIER = Manager::PARAM_HELP_ITEM;
 
-    protected function initializeColumns()
+    protected function initializeColumns(): void
     {
         $this->addColumn(
             $this->getDataClassPropertyTableColumnFactory()->getColumn(HelpItem::class, HelpItem::PROPERTY_CONTEXT)

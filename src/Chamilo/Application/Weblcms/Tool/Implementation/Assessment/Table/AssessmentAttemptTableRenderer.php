@@ -70,7 +70,7 @@ class AssessmentAttemptTableRenderer extends RecordListTableRenderer implements 
     /**
      * @throws \ReflectionException
      */
-    protected function initializeColumns()
+    protected function initializeColumns(): void
     {
         $this->addColumn(
             $this->getDataClassPropertyTableColumnFactory()->getColumn(User::class, User::PROPERTY_FIRSTNAME)

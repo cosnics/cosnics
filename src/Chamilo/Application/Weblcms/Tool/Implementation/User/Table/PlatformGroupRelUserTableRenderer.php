@@ -31,7 +31,7 @@ class PlatformGroupRelUserTableRenderer extends DataClassListTableRenderer imple
      */
     protected Application $application;
 
-    protected function initializeColumns()
+    protected function initializeColumns(): void
     {
         $this->addColumn(
             $this->getDataClassPropertyTableColumnFactory()->getColumn(

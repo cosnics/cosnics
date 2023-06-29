@@ -24,7 +24,7 @@ class GroupActivityService implements GroupEventListenerInterface
         $this->currentUser = $currentUser;
     }
 
-    public function afterCreate(Group $group)
+    public function afterCreate(Group $group): bool
     {
         return $this->getGroupTrackingRepository()->createGroupActivity(
             $this->initializeGroupActivityFromParameters(
@@ -33,7 +33,7 @@ class GroupActivityService implements GroupEventListenerInterface
         );
     }
 
-    public function afterDelete(Group $group, array $subGroupIds = [], array $impactedUserIds = [])
+    public function afterDelete(Group $group, array $subGroupIds = [], array $impactedUserIds = []): bool
     {
         return $this->getGroupTrackingRepository()->createGroupActivity(
             $this->initializeGroupActivityFromParameters(
@@ -42,7 +42,7 @@ class GroupActivityService implements GroupEventListenerInterface
         );
     }
 
-    public function afterEmptyGroup(Group $group, array $impactedUserIds = [])
+    public function afterEmptyGroup(Group $group, array $impactedUserIds = []): bool
     {
         return $this->getGroupTrackingRepository()->createGroupActivity(
             $this->initializeGroupActivityFromParameters(
@@ -51,7 +51,7 @@ class GroupActivityService implements GroupEventListenerInterface
         );
     }
 
-    public function afterMove(Group $group, Group $oldParentGroup, Group $newParentGroup)
+    public function afterMove(Group $group, Group $oldParentGroup, Group $newParentGroup): bool
     {
         return $this->getGroupTrackingRepository()->createGroupActivity(
             $this->initializeGroupActivityFromParameters(
@@ -60,7 +60,7 @@ class GroupActivityService implements GroupEventListenerInterface
         );
     }
 
-    public function afterSubscribe(Group $group, User $user)
+    public function afterSubscribe(Group $group, User $user): bool
     {
         return $this->getGroupTrackingRepository()->createGroupActivity(
             $this->initializeGroupActivityFromParameters(
@@ -69,11 +69,20 @@ class GroupActivityService implements GroupEventListenerInterface
         );
     }
 
-    public function afterUnsubscribe(Group $group, User $user)
+    public function afterUnsubscribe(Group $group, User $user): bool
     {
         return $this->getGroupTrackingRepository()->createGroupActivity(
             $this->initializeGroupActivityFromParameters(
                 GroupActivity::ACTIVITY_UNSUBSCRIBED, $group->getId(), $user->getId()
+            )
+        );
+    }
+
+    public function afterUpdate(Group $group): bool
+    {
+        return $this->getGroupTrackingRepository()->createGroupActivity(
+            $this->initializeGroupActivityFromParameters(
+                GroupActivity::ACTIVITY_UPDATED, $group->getId()
             )
         );
     }

@@ -33,7 +33,7 @@ class CategoryTableRenderer extends DataClassListTableRenderer implements TableR
      */
     protected CategoryManagerImplementerInterface $categoryManagerImplementer;
 
-    protected function initializeColumns()
+    protected function initializeColumns(): void
     {
         $translator = $this->getTranslator();
         $categoryClassName = $this->categoryManagerImplementer->getCategoryClassName();

@@ -79,7 +79,7 @@ class ObjectTableRenderer extends DataClassListTableRenderer implements TableRow
         return $actions;
     }
 
-    protected function initializeColumns()
+    protected function initializeColumns(): void
     {
         $glyph = new FontAwesomeGlyph('folder', [], $this->getTranslator()->trans('Type', [], Manager::CONTEXT));
         $this->addColumn(

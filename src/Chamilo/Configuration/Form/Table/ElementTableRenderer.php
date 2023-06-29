@@ -23,7 +23,7 @@ class ElementTableRenderer extends DataClassListTableRenderer implements TableRo
 {
     public const TABLE_IDENTIFIER = Manager::PARAM_DYNAMIC_FORM_ID;
 
-    protected function initializeColumns()
+    protected function initializeColumns(): void
     {
         $this->addColumn($this->getDataClassPropertyTableColumnFactory()->getColumn(Element::class, Element::PROPERTY_TYPE));
         $this->addColumn($this->getDataClassPropertyTableColumnFactory()->getColumn(Element::class, Element::PROPERTY_NAME));

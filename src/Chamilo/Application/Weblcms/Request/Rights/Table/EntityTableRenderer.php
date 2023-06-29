@@ -93,7 +93,7 @@ class EntityTableRenderer extends DataClassListTableRenderer implements TableRow
         return $this->userService;
     }
 
-    protected function initializeColumns()
+    protected function initializeColumns(): void
     {
         $translator = $this->getTranslator();
 

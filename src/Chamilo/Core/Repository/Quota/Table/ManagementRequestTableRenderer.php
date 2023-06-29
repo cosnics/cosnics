@@ -80,7 +80,7 @@ class ManagementRequestTableRenderer extends RequestTableRenderer
         return $tableActions;
     }
 
-    protected function initializeColumns()
+    protected function initializeColumns(): void
     {
         parent::initializeColumns();
 

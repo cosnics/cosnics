@@ -110,7 +110,7 @@ class ComplexTableRenderer extends DataClassListTableRenderer implements TableRo
         return $this->application->get_complex_content_object_item_edit_url($complexContentObjectItem->getId());
     }
 
-    protected function initializeColumns()
+    protected function initializeColumns(): void
     {
         $translator = $this->getTranslator();
 

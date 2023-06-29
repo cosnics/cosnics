@@ -56,7 +56,7 @@ class PublicationTableRenderer extends DataClassListTableRenderer implements Tab
         return $this->stringUtilities;
     }
 
-    protected function initializeColumns()
+    protected function initializeColumns(): void
     {
         $this->addColumn(
             $this->getDataClassPropertyTableColumnFactory()->getColumn(Attributes::class, Attributes::PROPERTY_TITLE)

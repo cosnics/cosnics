@@ -123,7 +123,7 @@ class VersionTableRenderer extends DataClassListTableRenderer implements TableRo
         return $this->userService;
     }
 
-    protected function initializeColumns()
+    protected function initializeColumns(): void
     {
         $translator = $this->getTranslator();
 

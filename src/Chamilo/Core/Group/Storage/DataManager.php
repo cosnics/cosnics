@@ -3,7 +3,8 @@ namespace Chamilo\Core\Group\Storage;
 
 use Chamilo\Core\Group\Storage\DataClass\Group;
 use Chamilo\Core\Group\Storage\DataClass\GroupRelUser;
-use Chamilo\Core\User\Storage\DataClass\User;
+use Chamilo\Libraries\Storage\DataClass\DataClass;
+use Chamilo\Libraries\Storage\DataClass\NestedSet;
 use Chamilo\Libraries\Storage\Parameters\DataClassDistinctParameters;
 use Chamilo\Libraries\Storage\Parameters\DataClassRetrieveParameters;
 use Chamilo\Libraries\Storage\Parameters\DataClassRetrievesParameters;
@@ -22,7 +23,6 @@ use Chamilo\Libraries\Storage\Query\Variable\StaticConditionVariable;
 use Doctrine\Common\Collections\ArrayCollection;
 
 /**
- *
  * @package group.lib
  */
 
@@ -31,108 +31,55 @@ use Doctrine\Common\Collections\ArrayCollection;
  * Data managers must extend this class and implement its
  * abstract methods.
  *
- * @author Hans De Bisschop
- * @author Dieter De Neef
+ * @author     Hans De Bisschop
+ * @author     Dieter De Neef
+ * @deprecated Use the GroupService and associated services now
  */
 class DataManager extends \Chamilo\Libraries\Storage\DataManager\DataManager
 {
-    const PREFIX = 'group_';
+    public const PREFIX = 'group_';
 
-    public static $allSubscribedGroupsCache = [];
+    public static mixed $allSubscribedGroupsCache = [];
 
     /**
-     * Cache for the direct subscribed groups
-     *
-     * @var Group[]
+     * @throws \ReflectionException
+     * @deprecated Use the GroupService and associated services now
      */
-    private static $direct_subscribed_groups_cache;
-
-    private static $group_rel_user_cache;
-
     public static function get_root_group()
     {
         return static::retrieve(
             Group::class, new DataClassRetrieveParameters(
                 new EqualityCondition(
-                    new PropertyConditionVariable(Group::class, Group::PROPERTY_PARENT_ID),
+                    new PropertyConditionVariable(Group::class, NestedSet::PROPERTY_PARENT_ID),
                     new StaticConditionVariable(0)
                 )
             )
         );
     }
 
-    public static function is_group_member($group_id, $user_id)
-    {
-        $conditions = [];
-        $conditions[] = new EqualityCondition(
-            new PropertyConditionVariable(GroupRelUser::class, GroupRelUser::PROPERTY_GROUP_ID),
-            new StaticConditionVariable($group_id)
-        );
-        $conditions[] = new EqualityCondition(
-            new PropertyConditionVariable(GroupRelUser::class, GroupRelUser::PROPERTY_USER_ID),
-            new StaticConditionVariable($user_id)
-        );
-        $condition = new AndCondition($conditions);
-
-        return static::count(GroupRelUser::class, $condition) > 0;
-    }
-
-    private static function make_group_rel_user_from_official_code_and_group_code($official_code, $group_code)
-    {
-        if (!self::$group_rel_user_cache[$group_code][$official_code])
-        {
-            $group = self::retrieve_group_by_code($group_code);
-            $user = \Chamilo\Core\User\Storage\DataManager::retrieve_user_by_official_code($official_code);
-
-            if (!$group || !$user)
-            {
-                return false;
-            }
-
-            $group_rel_user = new GroupRelUser();
-            $group_rel_user->set_group_id($group->get_id());
-            $group_rel_user->set_user_id($user->get_id());
-            self::$group_rel_user_cache[$group_code][$official_code] = $group_rel_user;
-        }
-
-        return self::$group_rel_user_cache[$group_code][$official_code];
-    }
-
-    // cache to make subscribing users in batch more performant
-
-    public static function remove_user_from_group_by_official_code_and_group_code($official_code, $group_code)
-    {
-        $group_rel_user = self::make_group_rel_user_from_official_code_and_group_code($official_code, $group_code);
-
-        if ($group_rel_user)
-        {
-            return $group_rel_user->delete();
-        }
-
-        return false;
-    }
-
     /**
      * @param $user_id
      * @param bool $only_retrieve_ids
      *
-     * @return \Doctrine\Common\Collections\ArrayCollection<\Chamilo\Core\Group\Storage\DataClass\Group>|integer[]
+     * @return \Doctrine\Common\Collections\ArrayCollection<\Chamilo\Core\Group\Storage\DataClass\Group>|int
+     * @throws \Chamilo\Libraries\Storage\Exception\DataClassNoResultException
+     * @throws \Exception
      * @deprecated Replaced by GroupService::findAllSubscribedGroupIdentifiersForUserIdentifier() and
-     *     GroupService::findAllSubscribedGroupsForUserIdentifier()
+     *             GroupService::findAllSubscribedGroupsForUserIdentifier()
      */
-    public static function retrieve_all_subscribed_groups_array($user_id, $only_retrieve_ids = false)
+    public static function retrieve_all_subscribed_groups_array($user_id, bool $only_retrieve_ids = false): mixed
     {
-        $cacheId = md5(serialize(array($user_id, $only_retrieve_ids)));
+        $cacheId = md5(serialize([$user_id, $only_retrieve_ids]));
 
         if (!isset(self::$allSubscribedGroupsCache[$cacheId]))
         {
             // First: retrieve the left and right values of groups the user is directly subscribed to.
             $properties = new RetrieveProperties();
 
-            $properties->add(new PropertyConditionVariable(Group::class, Group::PROPERTY_LEFT_VALUE));
-            $properties->add(new PropertyConditionVariable(Group::class, Group::PROPERTY_RIGHT_VALUE));
-            $properties->add(new PropertyConditionVariable(Group::class, Group::PROPERTY_PARENT_ID));
-            $properties->add(new PropertyConditionVariable(Group::class, Group::PROPERTY_ID));
+            $properties->add(new PropertyConditionVariable(Group::class, NestedSet::PROPERTY_LEFT_VALUE));
+            $properties->add(new PropertyConditionVariable(Group::class, NestedSet::PROPERTY_RIGHT_VALUE));
+            $properties->add(new PropertyConditionVariable(Group::class, NestedSet::PROPERTY_PARENT_ID));
+            $properties->add(new PropertyConditionVariable(Group::class, DataClass::PROPERTY_ID));
 
             $join_conditions = [];
 
@@ -143,12 +90,12 @@ class DataManager extends \Chamilo\Libraries\Storage\DataManager\DataManager
 
             $join_conditions[] = new EqualityCondition(
                 new PropertyConditionVariable(GroupRelUser::class, GroupRelUser::PROPERTY_GROUP_ID),
-                new PropertyConditionVariable(Group::class, Group::PROPERTY_ID)
+                new PropertyConditionVariable(Group::class, DataClass::PROPERTY_ID)
             );
 
             $join = new Join(GroupRelUser::class, new AndCondition($join_conditions));
 
-            $parameters = new RecordRetrievesParameters($properties, null, null, null, null, new Joins(array($join)));
+            $parameters = new RecordRetrievesParameters($properties, null, null, null, null, new Joins([$join]));
 
             $directly_subscribed_group_nesting_values = static::records(Group::class, $parameters);
 
@@ -161,33 +108,33 @@ class DataManager extends \Chamilo\Libraries\Storage\DataManager\DataManager
 
                 foreach ($directly_subscribed_group_nesting_values as $descendent)
                 {
-                    if (!in_array($descendent[Group::PROPERTY_PARENT_ID], $alreadyIncludedParents))
+                    if (!in_array($descendent[NestedSet::PROPERTY_PARENT_ID], $alreadyIncludedParents))
                     {
 
                         $treeConditions[] = new AndCondition(
-                            array(
+                            [
                                 new ComparisonCondition(
-                                    new PropertyConditionVariable(Group::class, Group::PROPERTY_LEFT_VALUE),
+                                    new PropertyConditionVariable(Group::class, NestedSet::PROPERTY_LEFT_VALUE),
                                     ComparisonCondition::LESS_THAN_OR_EQUAL,
-                                    new StaticConditionVariable($descendent[Group::PROPERTY_LEFT_VALUE])
+                                    new StaticConditionVariable($descendent[NestedSet::PROPERTY_LEFT_VALUE])
                                 ),
 
                                 new ComparisonCondition(
-                                    new PropertyConditionVariable(Group::class, Group::PROPERTY_RIGHT_VALUE),
+                                    new PropertyConditionVariable(Group::class, NestedSet::PROPERTY_RIGHT_VALUE),
                                     ComparisonCondition::GREATER_THAN_OR_EQUAL,
-                                    new StaticConditionVariable($descendent[Group::PROPERTY_RIGHT_VALUE])
+                                    new StaticConditionVariable($descendent[NestedSet::PROPERTY_RIGHT_VALUE])
                                 )
-                            )
+                            ]
                         );
 
-                        $alreadyIncludedParents[] = $descendent[Group::PROPERTY_PARENT_ID];
+                        $alreadyIncludedParents[] = $descendent[NestedSet::PROPERTY_PARENT_ID];
                     }
 
-                    $directGroupIds[] = $descendent[Group::PROPERTY_ID];
+                    $directGroupIds[] = $descendent[DataClass::PROPERTY_ID];
                 }
 
                 $treeConditions[] = new InCondition(
-                    new PropertyConditionVariable(Group::class, Group::PROPERTY_ID), $directGroupIds
+                    new PropertyConditionVariable(Group::class, DataClass::PROPERTY_ID), $directGroupIds
                 );
 
                 $condition = new OrCondition($treeConditions);
@@ -196,7 +143,7 @@ class DataManager extends \Chamilo\Libraries\Storage\DataManager\DataManager
                 {
                     $parameters = new DataClassDistinctParameters(
                         $condition,
-                        new RetrieveProperties(array(new PropertyConditionVariable(Group::class, Group::PROPERTY_ID)))
+                        new RetrieveProperties([new PropertyConditionVariable(Group::class, DataClass::PROPERTY_ID)])
                     );
                     $group_ids = static::distinct(Group::class, $parameters);
 
@@ -209,17 +156,14 @@ class DataManager extends \Chamilo\Libraries\Storage\DataManager\DataManager
                     self::$allSubscribedGroupsCache[$cacheId] = static::retrieves(Group::class, $parameters);
                 }
             }
+            elseif ($only_retrieve_ids)
+            {
+                self::$allSubscribedGroupsCache[$cacheId] = [];
+            }
             else
             {
-                if ($only_retrieve_ids)
-                {
-                    self::$allSubscribedGroupsCache[$cacheId] = [];
-                }
-                else
-                {
-                    // If the user is not a member of any group
-                    self::$allSubscribedGroupsCache[$cacheId] = new ArrayCollection([]);
-                }
+                // If the user is not a member of any group
+                self::$allSubscribedGroupsCache[$cacheId] = new ArrayCollection([]);
             }
         }
 
@@ -236,11 +180,13 @@ class DataManager extends \Chamilo\Libraries\Storage\DataManager\DataManager
     /**
      * Retrieves the groups a user is linked to Use the condition to limit or exclude certain groups
      *
-     * @param int $user_id
+     * @param string $user_id
      *
      * @return \Doctrine\Common\Collections\ArrayCollection<\Chamilo\Core\Group\Storage\DataClass\Group>
+     * @throws \Chamilo\Libraries\Storage\Exception\DataClassNoResultException
+     * @deprecated Use the GroupService and associated services now
      */
-    public static function retrieve_direct_subscribed_groups($user_id)
+    public static function retrieve_direct_subscribed_groups(string $user_id): ArrayCollection
     {
         $condition = new EqualityCondition(
             new PropertyConditionVariable(GroupRelUser::class, GroupRelUser::PROPERTY_USER_ID),
@@ -251,7 +197,7 @@ class DataManager extends \Chamilo\Libraries\Storage\DataManager\DataManager
         $joins[] = new Join(
             GroupRelUser::class, new EqualityCondition(
                 new PropertyConditionVariable(GroupRelUser::class, GroupRelUser::PROPERTY_GROUP_ID),
-                new PropertyConditionVariable(Group::class, Group::PROPERTY_ID)
+                new PropertyConditionVariable(Group::class, DataClass::PROPERTY_ID)
             )
         );
         $joins = new Joins($joins);
@@ -262,42 +208,9 @@ class DataManager extends \Chamilo\Libraries\Storage\DataManager\DataManager
     }
 
     /**
-     * Retrieves the direct subscribed groups as an array
-     *
-     * @param int $user_id
-     * @param bool $only_retrieve_ids
-     *
-     * @return Group[] | int[]
+     * @throws \ReflectionException
+     * @deprecated Use the GroupService and associated services now
      */
-    public static function retrieve_direct_subscribed_groups_array($user_id, $only_retrieve_ids = false)
-    {
-        $cache_hash = md5($user_id . ':' . (int) $only_retrieve_ids);
-
-        if (is_null(self::$direct_subscribed_groups_cache[$cache_hash]))
-        {
-            $direct_subscribed_groups = self::retrieve_direct_subscribed_groups($user_id);
-            if ($direct_subscribed_groups->count() != 0)
-            {
-                if ($only_retrieve_ids)
-                {
-                    foreach ($direct_subscribed_groups as $direct_subscribed_group)
-                    {
-                        self::$direct_subscribed_groups_cache[$cache_hash][] = $direct_subscribed_group->get_id();
-                    }
-                }
-                else
-                {
-                    foreach ($direct_subscribed_groups as $direct_subscribed_group)
-                    {
-                        self::$direct_subscribed_groups_cache[$cache_hash][] = $direct_subscribed_group;
-                    }
-                }
-            }
-        }
-
-        return self::$direct_subscribed_groups_cache[$cache_hash];
-    }
-
     public static function retrieve_group_by_code($code)
     {
         $condition = new EqualityCondition(
@@ -307,42 +220,13 @@ class DataManager extends \Chamilo\Libraries\Storage\DataManager\DataManager
         return self::retrieve(Group::class, new DataClassRetrieveParameters($condition));
     }
 
-    public static function retrieve_group_by_code_and_parent_id($code, $parent_id)
-    {
-        $conditions = [];
-        $conditions[] = new EqualityCondition(
-            new PropertyConditionVariable(Group::class, Group::PROPERTY_CODE), new StaticConditionVariable($code)
-        );
-        $conditions[] = new EqualityCondition(
-            new PropertyConditionVariable(Group::class, Group::PROPERTY_PARENT_ID),
-            new StaticConditionVariable($parent_id)
-        );
-        $condition = new AndCondition($conditions);
-
-        return self::retrieve(Group::class, new DataClassRetrieveParameters($condition));
-    }
-
-    public static function retrieve_group_rel_users_with_user_join(
-        $condition = null, $offset = null, $count = null, $order_property = null
-    )
-    {
-        $joins = [];
-        $joins[] = new Join(
-            User::class, new EqualityCondition(
-                new PropertyConditionVariable(GroupRelUser::class, GroupRelUser::PROPERTY_USER_ID),
-                new PropertyConditionVariable(User::class, User::PROPERTY_ID)
-            )
-        );
-
-        return DataManager::retrieves(
-            GroupRelUser::class,
-            new DataClassRetrievesParameters($condition, $count, $offset, $order_property, new Joins($joins))
-        );
-    }
-
+    /**
+     * @throws \Chamilo\Libraries\Storage\Exception\DataClassNoResultException
+     * @deprecated Use the GroupService and associated services now
+     */
     public static function retrieve_groups_and_subgroups(
         $group_ids, $additional_condition = null, $count = null, $offset = null, $order_by = null
-    )
+    ): ArrayCollection
     {
         if (count($group_ids) == 0)
         {
@@ -352,10 +236,10 @@ class DataManager extends \Chamilo\Libraries\Storage\DataManager\DataManager
         // First: retrieve the left and right values of the groups provided by the caller.
         $properties = new RetrieveProperties();
 
-        $properties->add(new PropertyConditionVariable(Group::class, Group::PROPERTY_LEFT_VALUE));
-        $properties->add(new PropertyConditionVariable(Group::class, Group::PROPERTY_RIGHT_VALUE));
+        $properties->add(new PropertyConditionVariable(Group::class, NestedSet::PROPERTY_LEFT_VALUE));
+        $properties->add(new PropertyConditionVariable(Group::class, NestedSet::PROPERTY_RIGHT_VALUE));
 
-        $condition = new InCondition(new PropertyConditionVariable(Group::class, Group::PROPERTY_ID), $group_ids);
+        $condition = new InCondition(new PropertyConditionVariable(Group::class, DataClass::PROPERTY_ID), $group_ids);
 
         $parameters = new RecordRetrievesParameters($properties, $condition);
 
@@ -376,19 +260,19 @@ class DataManager extends \Chamilo\Libraries\Storage\DataManager\DataManager
             foreach ($group_nesting_values as $ancestor)
             {
                 $or_conditions[] = new AndCondition(
-                    array(
+                    [
                         new ComparisonCondition(
-                            new PropertyConditionVariable(Group::class, Group::PROPERTY_LEFT_VALUE),
+                            new PropertyConditionVariable(Group::class, NestedSet::PROPERTY_LEFT_VALUE),
                             ComparisonCondition::GREATER_THAN_OR_EQUAL,
-                            new StaticConditionVariable($ancestor[Group::PROPERTY_LEFT_VALUE])
+                            new StaticConditionVariable($ancestor[NestedSet::PROPERTY_LEFT_VALUE])
                         ),
 
                         new ComparisonCondition(
-                            new PropertyConditionVariable(Group::class, Group::PROPERTY_RIGHT_VALUE),
+                            new PropertyConditionVariable(Group::class, NestedSet::PROPERTY_RIGHT_VALUE),
                             ComparisonCondition::LESS_THAN_OR_EQUAL,
-                            new StaticConditionVariable($ancestor[Group::PROPERTY_RIGHT_VALUE])
+                            new StaticConditionVariable($ancestor[NestedSet::PROPERTY_RIGHT_VALUE])
                         )
-                    )
+                    ]
                 );
             }
 
@@ -403,11 +287,15 @@ class DataManager extends \Chamilo\Libraries\Storage\DataManager\DataManager
         return new ArrayCollection([]);
     }
 
-    public static function retrieve_user_groups($user_id)
+    /**
+     * @throws \Chamilo\Libraries\Storage\Exception\DataClassNoResultException
+     * @deprecated Use the GroupService and associated services now
+     */
+    public static function retrieve_user_groups($user_id): ArrayCollection
     {
         $join = new Join(
             GroupRelUser::class, new AndCondition(
-                array(
+                [
                     new EqualityCondition(
                         new PropertyConditionVariable(GroupRelUser::class, GroupRelUser::PROPERTY_USER_ID),
                         new StaticConditionVariable($user_id)
@@ -415,28 +303,16 @@ class DataManager extends \Chamilo\Libraries\Storage\DataManager\DataManager
 
                     new EqualityCondition(
                         new PropertyConditionVariable(GroupRelUser::class, GroupRelUser::PROPERTY_GROUP_ID),
-                        new PropertyConditionVariable(Group::class, Group::PROPERTY_ID)
+                        new PropertyConditionVariable(Group::class, DataClass::PROPERTY_ID)
                     )
-                )
+                ]
             )
         );
 
-        $joins = new Joins(array($join));
+        $joins = new Joins([$join]);
 
         $parameters = new DataClassRetrievesParameters(null, null, null, null, $joins);
 
         return static::retrieves(Group::class, $parameters);
-    }
-
-    public static function subscribe_user_to_group_by_official_code_and_group_code($official_code, $group_code)
-    {
-        $group_rel_user = self::make_group_rel_user_from_official_code_and_group_code($official_code, $group_code);
-
-        if ($group_rel_user)
-        {
-            return $group_rel_user->create();
-        }
-
-        return false;
     }
 }

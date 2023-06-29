@@ -52,7 +52,7 @@ class EntityTableRenderer extends DataClassListTableRenderer implements TableRow
         return $actions;
     }
 
-    protected function initializeColumns()
+    protected function initializeColumns(): void
     {
         $helper_class = $this->application->get_selected_entity_class(true);
 

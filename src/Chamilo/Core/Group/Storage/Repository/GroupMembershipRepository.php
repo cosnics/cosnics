@@ -24,42 +24,26 @@ use Chamilo\Libraries\Storage\Query\Variable\StaticConditionVariable;
 use Doctrine\Common\Collections\ArrayCollection;
 
 /**
- * Dataclass repository for the group application
- *
- * @author Sven Vanpoucke - Hogeschool Gent
+ * @package Chamilo\Core\Group\Storage\Repository
+ * @author  Sven Vanpoucke - Hogeschool Gent
+ * @author  Hans De Bisschop <hans.de.bisschop@ehb.be>
  */
 class GroupMembershipRepository
 {
-    /**
-     * @var \Chamilo\Libraries\Storage\DataManager\Repository\DataClassRepository
-     */
-    private $dataClassRepository;
+    private DataClassRepository $dataClassRepository;
 
-    /**
-     * @param \Chamilo\Libraries\Storage\DataManager\Repository\DataClassRepository $dataClassRepository
-     */
     public function __construct(DataClassRepository $dataClassRepository)
     {
         $this->dataClassRepository = $dataClassRepository;
     }
 
-    /**
-     * @param int $groupIdentifier
-     * @param ?\Chamilo\Libraries\Storage\Query\Condition\Condition $condition
-     *
-     * @return int
-     * @throws \Exception
-     */
-    public function countSubscribedUsersForGroupIdentifier(int $groupIdentifier, ?Condition $condition = null): int
+    public function countSubscribedUsersForGroupIdentifier(string $groupIdentifier, ?Condition $condition = null): int
     {
         return $this->countSubscribedUsersForGroupIdentifiers([$groupIdentifier], $condition);
     }
 
     /**
-     * @param int[] $groupIdentifiers
-     * @param ?\Chamilo\Libraries\Storage\Query\Condition\Condition $condition
-     *
-     * @return int
+     * @param string[] $groupIdentifiers
      */
     public function countSubscribedUsersForGroupIdentifiers(array $groupIdentifiers, ?Condition $condition = null): int
     {
@@ -81,7 +65,7 @@ class GroupMembershipRepository
                 new Join(
                     GroupRelUser::class, new EqualityCondition(
                         new PropertyConditionVariable(GroupRelUser::class, GroupRelUser::PROPERTY_USER_ID),
-                        new PropertyConditionVariable(SubscribedUser::class, SubscribedUser::PROPERTY_ID)
+                        new PropertyConditionVariable(SubscribedUser::class, DataClass::PROPERTY_ID)
                     )
                 )
             ]
@@ -92,33 +76,17 @@ class GroupMembershipRepository
         );
     }
 
-    /**
-     * @param \Chamilo\Core\Group\Storage\DataClass\GroupRelUser $groupUserRelation
-     *
-     * @return bool
-     * @throws \Exception
-     */
-    public function createGroupUserRelation(GroupRelUser $groupUserRelation)
+    public function createGroupUserRelation(GroupRelUser $groupUserRelation): bool
     {
         return $this->dataClassRepository->create($groupUserRelation);
     }
 
-    /**
-     * @param \Chamilo\Core\Group\Storage\DataClass\GroupRelUser $groupUserRelation
-     *
-     * @return bool
-     */
-    public function deleteGroupUserRelation(GroupRelUser $groupUserRelation)
+    public function deleteGroupUserRelation(GroupRelUser $groupUserRelation): bool
     {
         return $this->dataClassRepository->delete($groupUserRelation);
     }
 
-    /**
-     * @param \Chamilo\Core\Group\Storage\DataClass\Group $group
-     *
-     * @return bool
-     */
-    public function emptyGroup(Group $group)
+    public function emptyGroup(Group $group): bool
     {
         $condition = new EqualityCondition(
             new PropertyConditionVariable(GroupRelUser::class, GroupRelUser::PROPERTY_GROUP_ID),
@@ -128,13 +96,7 @@ class GroupMembershipRepository
         return $this->getDataClassRepository()->deletes(GroupRelUser::class, $condition);
     }
 
-    /**
-     * @param int $groupId
-     * @param int $userId
-     *
-     * @return \Chamilo\Libraries\Storage\DataClass\CompositeDataClass|\Chamilo\Libraries\Storage\DataClass\DataClass|GroupRelUser
-     */
-    public function findGroupRelUserByGroupAndUserId($groupId, $userId)
+    public function findGroupRelUserByGroupAndUserId(string $groupId, string $userId): ?GroupRelUser
     {
         $conditions = [];
 
@@ -155,15 +117,7 @@ class GroupMembershipRepository
         );
     }
 
-    /**
-     * Finds a GroupRelUser object by a given group code and user id
-     *
-     * @param string $groupCode
-     * @param int $userId
-     *
-     * @return GroupRelUser | DataClass
-     */
-    public function findGroupRelUserByGroupCodeAndUserId($groupCode, $userId)
+    public function findGroupRelUserByGroupCodeAndUserId(string $groupCode, string $userId): ?GroupRelUser
     {
         $conditions = [];
 
@@ -184,7 +138,7 @@ class GroupMembershipRepository
             new Join(
                 Group::class, new EqualityCondition(
                     new PropertyConditionVariable(GroupRelUser::class, GroupRelUser::PROPERTY_GROUP_ID),
-                    new PropertyConditionVariable(Group::class, Group::PROPERTY_ID)
+                    new PropertyConditionVariable(Group::class, DataClass::PROPERTY_ID)
                 )
             )
         );
@@ -194,24 +148,25 @@ class GroupMembershipRepository
         );
     }
 
+    public function findGroupRelUserByIdentifier(string $groupRelUserIdentifier): ?GroupRelUser
+    {
+        return $this->getDataClassRepository()->retrieveById(GroupRelUser::class, $groupRelUserIdentifier);
+    }
+
     /**
-     * @param int $groupIdentifier
-     *
-     * @return int[]
-     * @throws \Exception
+     * @return string[]
      */
-    public function findSubscribedUserIdentifiersForGroupIdentifier(int $groupIdentifier)
+    public function findSubscribedUserIdentifiersForGroupIdentifier(string $groupIdentifier): array
     {
         return $this->findSubscribedUserIdentifiersForGroupIdentifiers([$groupIdentifier]);
     }
 
     /**
-     * @param int[] $groupIdentifiers
+     * @param string[] $groupIdentifiers
      *
-     * @return int[]
-     * @throws \Exception
+     * @return string[]
      */
-    public function findSubscribedUserIdentifiersForGroupIdentifiers(array $groupIdentifiers)
+    public function findSubscribedUserIdentifiersForGroupIdentifiers(array $groupIdentifiers): array
     {
         $condition = new InCondition(
             new PropertyConditionVariable(GroupRelUser::class, GroupRelUser::PROPERTY_GROUP_ID), $groupIdentifiers
@@ -252,7 +207,7 @@ class GroupMembershipRepository
                 new Join(
                     GroupRelUser::class, new EqualityCondition(
                         new PropertyConditionVariable(GroupRelUser::class, GroupRelUser::PROPERTY_USER_ID),
-                        new PropertyConditionVariable(SubscribedUser::class, SubscribedUser::PROPERTY_ID)
+                        new PropertyConditionVariable(SubscribedUser::class, DataClass::PROPERTY_ID)
                     )
                 )
             ]
@@ -277,28 +232,15 @@ class GroupMembershipRepository
         );
     }
 
-    /**
-     * @return \Chamilo\Libraries\Storage\DataManager\Repository\DataClassRepository
-     */
     public function getDataClassRepository(): DataClassRepository
     {
         return $this->dataClassRepository;
     }
 
     /**
-     * @param \Chamilo\Libraries\Storage\DataManager\Repository\DataClassRepository $dataClassRepository
+     * @param string[] $groupsIdentifiers
      */
-    public function setDataClassRepository(DataClassRepository $dataClassRepository): void
-    {
-        $this->dataClassRepository = $dataClassRepository;
-    }
-
-    /**
-     * @param int $groupsIdentifiers
-     *
-     * @return bool
-     */
-    public function unsubscribeUsersFromGroupIdentifiers(array $groupsIdentifiers)
+    public function unsubscribeUsersFromGroupIdentifiers(array $groupsIdentifiers): bool
     {
         $condition = new InCondition(
             new PropertyConditionVariable(GroupRelUser::class, GroupRelUser::PROPERTY_GROUP_ID), $groupsIdentifiers

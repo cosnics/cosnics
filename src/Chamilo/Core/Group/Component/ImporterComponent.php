@@ -5,12 +5,10 @@ use Chamilo\Core\Group\Form\GroupImportForm;
 use Chamilo\Core\Group\Manager;
 use Chamilo\Libraries\Architecture\Application\Application;
 use Chamilo\Libraries\Architecture\Exceptions\NotAllowedException;
-use Chamilo\Libraries\Format\Structure\BreadcrumbTrail;
 use Chamilo\Libraries\Translation\Translation;
 use Chamilo\Libraries\Utilities\StringUtilities;
 
 /**
- *
  * @package group.lib.group_manager.component
  */
 class ImporterComponent extends Manager
@@ -21,7 +19,7 @@ class ImporterComponent extends Manager
      */
     public function run()
     {
-        if (! $this->get_user()->isPlatformAdmin())
+        if (!$this->get_user()->isPlatformAdmin())
         {
             throw new NotAllowedException();
         }
@@ -33,8 +31,8 @@ class ImporterComponent extends Manager
             $success = $form->import_groups();
             $this->redirectWithMessage(
                 Translation::get($success ? 'GroupXMLProcessed' : 'GroupXMLNotProcessed') . '<br />' .
-                     $form->get_failed_elements(), !$success,
-                    array(Application::PARAM_ACTION => self::ACTION_IMPORT));
+                $form->get_failed_elements(), !$success, [Application::PARAM_ACTION => self::ACTION_IMPORT]
+            );
         }
         else
         {

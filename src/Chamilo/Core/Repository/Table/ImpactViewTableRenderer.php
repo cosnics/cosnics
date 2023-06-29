@@ -63,7 +63,7 @@ class ImpactViewTableRenderer extends DataClassListTableRenderer implements Tabl
         return $this->publicationAggregator;
     }
 
-    protected function initializeColumns()
+    protected function initializeColumns(): void
     {
         $translator = $this->getTranslator();
 

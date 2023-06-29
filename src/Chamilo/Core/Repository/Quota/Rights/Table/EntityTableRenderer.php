@@ -84,7 +84,7 @@ class EntityTableRenderer extends RecordListTableRenderer implements TableRowAct
         return $this->user;
     }
 
-    protected function initializeColumns()
+    protected function initializeColumns(): void
     {
         $translator = $this->getTranslator();
 

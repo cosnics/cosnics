@@ -11,7 +11,7 @@ use Chamilo\Libraries\Format\Table\TableResultPosition;
  */
 class UserRequestTableRenderer extends RequestTableRenderer
 {
-    protected function initializeColumns()
+    protected function initializeColumns(): void
     {
         parent::initializeColumns();
 

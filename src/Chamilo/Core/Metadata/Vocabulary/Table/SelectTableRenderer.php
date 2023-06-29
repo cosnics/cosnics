@@ -43,7 +43,7 @@ class SelectTableRenderer extends DataClassListTableRenderer implements TableRow
         return $actions;
     }
 
-    protected function initializeColumns()
+    protected function initializeColumns(): void
     {
         $translator = $this->getTranslator();
         $glyph = new FontAwesomeGlyph(

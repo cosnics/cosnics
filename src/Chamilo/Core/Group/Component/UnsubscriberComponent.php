@@ -1,78 +1,76 @@
 <?php
 namespace Chamilo\Core\Group\Component;
 
-use Chamilo\Core\Group\Integration\Chamilo\Core\Tracking\Storage\DataClass\Change;
 use Chamilo\Core\Group\Manager;
 use Chamilo\Core\Group\Storage\DataClass\GroupRelUser;
-use Chamilo\Core\Group\Storage\DataManager;
-use Chamilo\Core\Tracking\Storage\DataClass\Event;
 use Chamilo\Libraries\Architecture\Application\Application;
 use Chamilo\Libraries\Architecture\Exceptions\NotAllowedException;
 use Chamilo\Libraries\Format\Structure\Breadcrumb;
 use Chamilo\Libraries\Format\Structure\BreadcrumbTrail;
-use Chamilo\Libraries\Platform\Session\Request;
-use Chamilo\Libraries\Translation\Translation;
 use Chamilo\Libraries\Utilities\StringUtilities;
+use RuntimeException;
 
 /**
- *
- * @package group.lib.group_manager.component
+ * @package Chamilo\Core\Group\Component
  */
 class UnsubscriberComponent extends Manager
 {
 
     /**
-     * Runs this component and displays its output.
+     * @throws \Chamilo\Libraries\Architecture\Exceptions\NotAllowedException
      */
     public function run()
     {
-        $user = $this->get_user();
+        $user = $this->getUser();
 
-        if (! $this->get_user()->isPlatformAdmin())
+        if (!$user->isPlatformAdmin())
         {
             throw new NotAllowedException();
         }
 
-        $ids = $this->getRequest()->getFromRequestOrQuery(self::PARAM_GROUP_REL_USER_ID);
-        $this->set_parameter(self::PARAM_GROUP_ID, $ids);
+        $groupUserRelationIdentifiers = $this->getRequest()->getFromRequestOrQuery(self::PARAM_GROUP_REL_USER_ID);
+        $this->set_parameter(self::PARAM_GROUP_ID, $groupUserRelationIdentifiers);
+
+        $groupMembershipService = $this->getGroupMembershipService();
+        $userService = $this->getUserService();
+        $groupService = $this->getGroupService();
+        $translator = $this->getTranslator();
 
         $failures = 0;
 
-        if (! empty($ids))
+        if (!empty($groupUserRelationIdentifiers))
         {
-            if (! is_array($ids))
+            if (!is_array($groupUserRelationIdentifiers))
             {
-                $ids = array($ids);
+                $groupUserRelationIdentifiers = [$groupUserRelationIdentifiers];
             }
 
-            foreach ($ids as $id)
+            foreach ($groupUserRelationIdentifiers as $groupUserRelationIdentifier)
             {
-                $groupreluser = DataManager::retrieve_by_id(GroupRelUser::class, $id);
+                $groupUserRelation =
+                    $groupMembershipService->findGroupRelUserByIdentifier($groupUserRelationIdentifier);
 
-                if (! $groupreluser)
+                if (!$groupUserRelation instanceof GroupRelUser)
                 {
                     continue;
                 }
 
-                if (! $groupreluser->delete())
+                $group = $groupService->findGroupByIdentifier($groupUserRelation->get_group_id());
+                $user = $userService->findUserByIdentifier($groupUserRelation->get_user_id());
+
+                try
+                {
+                    $groupMembershipService->unsubscribeUserFromGroup($group, $user);
+                }
+                catch (RuntimeException)
                 {
                     $failures ++;
-                }
-                else
-                {
-                    Event::trigger(
-                        'UnsubscribeUser',
-                        Manager::CONTEXT,
-                        array(
-                            Change::PROPERTY_REFERENCE_ID => $groupreluser->get_group_id(),
-                            Change::PROPERTY_TARGET_USER_ID => $groupreluser->get_user_id(),
-                            Change::PROPERTY_USER_ID => $user->get_id()));
                 }
             }
 
             if ($failures)
             {
-                if (count($ids) == 1)
+                if (count($groupUserRelationIdentifiers) == 1)
                 {
                     $message = 'SelectedGroupRelUserNotDeleted';
                 }
@@ -81,43 +79,50 @@ class UnsubscriberComponent extends Manager
                     $message = 'SelectedGroupRelUsersNotDeleted';
                 }
             }
+            elseif (count($groupUserRelationIdentifiers) == 1)
+            {
+                $message = 'SelectedGroupRelUserDeleted';
+            }
             else
             {
-                if (count($ids) == 1)
-                {
-                    $message = 'SelectedGroupRelUserDeleted';
-                }
-                else
-                {
-                    $message = 'SelectedGroupRelUsersDeleted';
-                }
+                $message = 'SelectedGroupRelUsersDeleted';
             }
 
             $this->redirectWithMessage(
-                Translation::get($message), (bool) $failures,
-                array(
+                $translator->trans($message, [], Manager::CONTEXT), (bool) $failures, [
                     Application::PARAM_ACTION => self::ACTION_VIEW_GROUP,
-                    self::PARAM_GROUP_ID => $this->getRequest()->getFromRequestOrQuery(self::PARAM_GROUP_ID)));
+                    self::PARAM_GROUP_ID => $this->getRequest()->getFromRequestOrQuery(self::PARAM_GROUP_ID)
+                ]
+            );
         }
         else
         {
             return $this->display_error_page(
-                htmlentities(Translation::get('NoObjectSelected', null, StringUtilities::LIBRARIES)));
+                htmlentities($translator->trans('NoObjectSelected', [], StringUtilities::LIBRARIES))
+            );
         }
     }
 
     public function add_additional_breadcrumbs(BreadcrumbTrail $breadcrumbtrail)
     {
+        $translator = $this->getTranslator();
+
         $breadcrumbtrail->add(
             new Breadcrumb(
-                $this->get_url(array(Application::PARAM_ACTION => self::ACTION_BROWSE_GROUPS)),
-                Translation::get('BrowserComponent')));
+                $this->get_url([Application::PARAM_ACTION => self::ACTION_BROWSE_GROUPS]),
+                $translator->trans('BrowserComponent', [], Manager::CONTEXT)
+            )
+        );
+
         $breadcrumbtrail->add(
             new Breadcrumb(
                 $this->get_url(
-                    array(
+                    [
                         Application::PARAM_ACTION => self::ACTION_VIEW_GROUP,
-                        self::PARAM_GROUP_ID => Request::get(self::PARAM_GROUP_ID))),
-                Translation::get('ViewerComponent')));
+                        self::PARAM_GROUP_ID => $this->getRequest()->query->get(self::PARAM_GROUP_ID)
+                    ]
+                ), $translator->trans('ViewerComponent', [], Manager::CONTEXT)
+            )
+        );
     }
 }

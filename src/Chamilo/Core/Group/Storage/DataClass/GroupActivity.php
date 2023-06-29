@@ -15,6 +15,7 @@ class GroupActivity extends DataClass
     public const ACTIVITY_SUBSCRIBED = 5;
     public const ACTIVITY_TRUNCATED = 3;
     public const ACTIVITY_UNSUBSCRIBED = 6;
+    public const ACTIVITY_UPDATED = 7;
 
     public const PROPERTY_ACTION = 'action';
     public const PROPERTY_DATE = 'date';
@@ -55,7 +56,7 @@ class GroupActivity extends DataClass
 
     public static function getStorageUnitName(): string
     {
-        return 'tracking_group_change';
+        return 'group_activity';
     }
 
     public function getTargetUserIdentifier(): ?string

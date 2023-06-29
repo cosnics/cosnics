@@ -102,7 +102,7 @@ class PublicationTableRenderer extends RecordListTableRenderer implements TableR
         return $this->userService;
     }
 
-    protected function initializeColumns()
+    protected function initializeColumns(): void
     {
         $translator = $this->getTranslator();
 

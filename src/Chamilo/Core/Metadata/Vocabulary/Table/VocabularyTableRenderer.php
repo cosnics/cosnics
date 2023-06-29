@@ -52,7 +52,7 @@ class VocabularyTableRenderer extends DataClassListTableRenderer implements Tabl
         return $actions;
     }
 
-    protected function initializeColumns()
+    protected function initializeColumns(): void
     {
         $translator = $this->getTranslator();
 

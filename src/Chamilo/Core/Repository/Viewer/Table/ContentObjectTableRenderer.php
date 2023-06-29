@@ -77,7 +77,7 @@ class ContentObjectTableRenderer extends DataClassListTableRenderer implements T
         return $this->user;
     }
 
-    protected function initializeColumns()
+    protected function initializeColumns(): void
     {
         $this->addColumn(
             $this->getDataClassPropertyTableColumnFactory()->getColumn(

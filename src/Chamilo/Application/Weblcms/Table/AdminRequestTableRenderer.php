@@ -83,7 +83,7 @@ class AdminRequestTableRenderer extends DataClassListTableRenderer implements Ta
         return $this->userService;
     }
 
-    protected function initializeColumns()
+    protected function initializeColumns(): void
     {
         $translator = $this->getTranslator();
 

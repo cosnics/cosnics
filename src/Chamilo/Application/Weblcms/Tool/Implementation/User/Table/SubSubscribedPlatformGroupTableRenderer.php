@@ -43,7 +43,7 @@ class SubSubscribedPlatformGroupTableRenderer extends DataClassListTableRenderer
         return $this->groupsTreeTraverser;
     }
 
-    protected function initializeColumns()
+    protected function initializeColumns(): void
     {
         $translator = $this->getTranslator();
 

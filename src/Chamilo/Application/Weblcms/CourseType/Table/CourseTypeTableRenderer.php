@@ -65,7 +65,7 @@ class CourseTypeTableRenderer extends DataClassListTableRenderer implements Tabl
         return $actions;
     }
 
-    protected function initializeColumns()
+    protected function initializeColumns(): void
     {
         $this->addColumn(
             $this->getDataClassPropertyTableColumnFactory()->getColumn(

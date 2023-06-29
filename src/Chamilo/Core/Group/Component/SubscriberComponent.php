@@ -1,127 +1,129 @@
 <?php
 namespace Chamilo\Core\Group\Component;
 
-use Chamilo\Core\Group\Integration\Chamilo\Core\Tracking\Storage\DataClass\Change;
 use Chamilo\Core\Group\Manager;
 use Chamilo\Core\Group\Storage\DataClass\GroupRelUser;
-use Chamilo\Core\Tracking\Storage\DataClass\Event;
 use Chamilo\Libraries\Architecture\Application\Application;
 use Chamilo\Libraries\Architecture\Exceptions\NotAllowedException;
 use Chamilo\Libraries\Format\Structure\Breadcrumb;
 use Chamilo\Libraries\Format\Structure\BreadcrumbTrail;
-use Chamilo\Libraries\Platform\Session\Request;
-use Chamilo\Libraries\Translation\Translation;
 use Chamilo\Libraries\Utilities\StringUtilities;
+use RuntimeException;
 
 /**
- *
- * @package group.lib.group_manager.component
+ * @package Chamilo\Core\Group\Component
  */
 class SubscriberComponent extends Manager
 {
 
     /**
-     * Runs this component and displays its output.
+     * @throws \Chamilo\Libraries\Architecture\Exceptions\NotAllowedException
      */
     public function run()
     {
-        $user = $this->get_user();
-        $group_id = Request::get(self::PARAM_GROUP_ID);
-        $this->set_parameter(self::PARAM_GROUP_ID, $group_id);
+        $groupIdentifier = $this->getRequest()->query->get(self::PARAM_GROUP_ID);
+        $this->set_parameter(self::PARAM_GROUP_ID, $groupIdentifier);
 
-        if (! $this->get_user()->isPlatformAdmin())
+        if (!$this->getUser()->isPlatformAdmin())
         {
             throw new NotAllowedException();
         }
 
-        $users = $this->getRequest()->getFromRequestOrQuery(self::PARAM_USER_ID);
+        $userIdentifiers = $this->getRequest()->getFromRequestOrQuery(self::PARAM_USER_ID);
+
+        $groupMembershipService = $this->getGroupMembershipService();
+        $userService = $this->getUserService();
+        $groupService = $this->getGroupService();
+        $translator = $this->getTranslator();
 
         $failures = 0;
 
-        if (! empty($users))
+        if (!empty($userIdentifiers))
         {
-            if (! is_array($users))
+            if (!is_array($userIdentifiers))
             {
-                $users = array($users);
+                $userIdentifiers = [$userIdentifiers];
             }
 
-            foreach ($users as $user)
+            $group = $groupService->findGroupByIdentifier($groupIdentifier);
+            $containsDuplicates = false;
+
+            foreach ($userIdentifiers as $user)
             {
-                $existing_groupreluser = $this->retrieve_group_rel_user($user, $group_id);
+                $user = $userService->findUserByIdentifier($user);
 
-                if (! is_null($existing_groupreluser))
+                $groupUserRelation = $groupMembershipService->getGroupUserRelationByGroupAndUser($group, $user);
+
+                if (!$groupUserRelation instanceof GroupRelUser)
                 {
-                    $groupreluser = new GroupRelUser();
-                    $groupreluser->set_group_id($group_id);
-                    $groupreluser->set_user_id($user);
-
-                    if (! $groupreluser->create())
+                    try
+                    {
+                        $groupMembershipService->subscribeUserToGroup($group, $user);
+                    }
+                    catch (RuntimeException)
                     {
                         $failures ++;
-                    }
-                    else
-                    {
-                        Event::trigger(
-                            'SubscribeUser',
-                            Manager::CONTEXT,
-                            array(
-                                Change::PROPERTY_REFERENCE_ID => $groupreluser->get_group_id(),
-                                Change::PROPERTY_TARGET_USER_ID => $groupreluser->get_user_id(),
-                                Change::PROPERTY_USER_ID => $this->get_user()->get_id()));
                     }
                 }
                 else
                 {
-                    $contains_dupes = true;
+                    $containsDuplicates = true;
                 }
             }
 
             if ($failures)
             {
-                if (count($users) == 1)
+                if (count($userIdentifiers) == 1)
                 {
-                    $message = 'SelectedUserNotAddedToGroup' . ($contains_dupes ? 'Dupes' : '');
+                    $message = 'SelectedUserNotAddedToGroup' . ($containsDuplicates ? 'Dupes' : '');
                 }
                 else
                 {
-                    $message = 'SelectedUsersNotAddedToGroup' . ($contains_dupes ? 'Dupes' : '');
+                    $message = 'SelectedUsersNotAddedToGroup' . ($containsDuplicates ? 'Dupes' : '');
                 }
+            }
+            elseif (count($userIdentifiers) == 1)
+            {
+                $message = 'SelectedUserAddedToGroup' . ($containsDuplicates ? 'Dupes' : '');
             }
             else
             {
-                if (count($users) == 1)
-                {
-                    $message = 'SelectedUserAddedToGroup' . ($contains_dupes ? 'Dupes' : '');
-                }
-                else
-                {
-                    $message = 'SelectedUsersAddedToGroup' . ($contains_dupes ? 'Dupes' : '');
-                }
+                $message = 'SelectedUsersAddedToGroup' . ($containsDuplicates ? 'Dupes' : '');
             }
 
             $this->redirectWithMessage(
-                Translation::get($message), (bool) $failures,
-                array(Application::PARAM_ACTION => self::ACTION_VIEW_GROUP, self::PARAM_GROUP_ID => $group_id));
+                $translator->trans($message), (bool) $failures,
+                [Application::PARAM_ACTION => self::ACTION_VIEW_GROUP, self::PARAM_GROUP_ID => $groupIdentifier]
+            );
         }
         else
         {
             return $this->display_error_page(
-                htmlentities(Translation::get('NoObjectSelected', null, StringUtilities::LIBRARIES)));
+                htmlentities($translator->trans('NoObjectSelected', [], StringUtilities::LIBRARIES))
+            );
         }
     }
 
     public function add_additional_breadcrumbs(BreadcrumbTrail $breadcrumbtrail)
     {
+        $translator = $this->getTranslator();
+
         $breadcrumbtrail->add(
             new Breadcrumb(
-                $this->get_url(array(Application::PARAM_ACTION => self::ACTION_BROWSE_GROUPS)),
-                Translation::get('BrowserComponent')));
+                $this->get_url([Application::PARAM_ACTION => self::ACTION_BROWSE_GROUPS]),
+                $translator->trans('BrowserComponent', [], Manager::CONTEXT)
+            )
+        );
+
         $breadcrumbtrail->add(
             new Breadcrumb(
                 $this->get_url(
-                    array(
+                    [
                         Application::PARAM_ACTION => self::ACTION_VIEW_GROUP,
-                        self::PARAM_GROUP_ID => Request::get(self::PARAM_GROUP_ID))),
-                Translation::get('ViewerComponent')));
+                        self::PARAM_GROUP_ID => $this->getRequest()->query->get(self::PARAM_GROUP_ID)
+                    ]
+                ), $translator->trans('ViewerComponent', [], Manager::CONTEXT)
+            )
+        );
     }
 }

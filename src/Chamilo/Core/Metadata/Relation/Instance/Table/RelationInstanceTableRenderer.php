@@ -72,7 +72,7 @@ class RelationInstanceTableRenderer extends DataClassListTableRenderer
         return $actions;
     }
 
-    protected function initializeColumns()
+    protected function initializeColumns(): void
     {
         $translator = $this->getTranslator();
 

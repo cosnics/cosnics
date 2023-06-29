@@ -75,7 +75,7 @@ class ElementTableRenderer extends DataClassListTableRenderer implements TableRo
         return $actions;
     }
 
-    protected function initializeColumns()
+    protected function initializeColumns(): void
     {
         $translator = $this->getTranslator();
         $stringUtilities = $this->getStringUtilities();

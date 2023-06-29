@@ -13,7 +13,6 @@ use Chamilo\Libraries\Translation\Translation;
 use Chamilo\Libraries\Utilities\StringUtilities;
 
 /**
- *
  * @package group.lib.group_manager.component
  */
 class CreatorComponent extends Manager
@@ -24,7 +23,7 @@ class CreatorComponent extends Manager
      */
     public function run()
     {
-        if (! $this->get_user()->isPlatformAdmin())
+        if (!$this->get_user()->isPlatformAdmin())
         {
             throw new NotAllowedException();
         }
@@ -32,10 +31,9 @@ class CreatorComponent extends Manager
         $group = new Group();
         $group->set_parent(Request::get(self::PARAM_GROUP_ID));
         $form = new GroupForm(
-            GroupForm::TYPE_CREATE,
-            $group,
-            $this->get_url(array(self::PARAM_GROUP_ID => Request::get(self::PARAM_GROUP_ID))),
-            $this->get_user());
+            GroupForm::TYPE_CREATE, $group,
+            $this->get_url([self::PARAM_GROUP_ID => Request::get(self::PARAM_GROUP_ID)]), $this->get_user()
+        );
 
         if ($form->validate())
         {
@@ -46,23 +44,20 @@ class CreatorComponent extends Manager
                 $group = $form->get_group();
                 $this->redirectWithMessage(
                     Translation::get(
-                        'ObjectCreated',
-                        array('OBJECT' => Translation::get('Group')),
-                        StringUtilities::LIBRARIES),
-                    (false),
-                    array(
+                        'ObjectCreated', ['OBJECT' => Translation::get('Group')], StringUtilities::LIBRARIES
+                    ), (false), [
                         Application::PARAM_ACTION => self::ACTION_VIEW_GROUP,
-                        self::PARAM_GROUP_ID => $group->get_id()));
+                        self::PARAM_GROUP_ID => $group->get_id()
+                    ]
+                );
             }
             else
             {
                 $this->redirectWithMessage(
                     Translation::get(
-                        'ObjectNotCreated',
-                        array('OBJECT' => Translation::get('Group')),
-                        StringUtilities::LIBRARIES),
-                    (true),
-                    array(Application::PARAM_ACTION => self::ACTION_BROWSE_GROUPS));
+                        'ObjectNotCreated', ['OBJECT' => Translation::get('Group')], StringUtilities::LIBRARIES
+                    ), (true), [Application::PARAM_ACTION => self::ACTION_BROWSE_GROUPS]
+                );
             }
         }
         else
@@ -81,7 +76,9 @@ class CreatorComponent extends Manager
     {
         $breadcrumbtrail->add(
             new Breadcrumb(
-                $this->get_url(array(Application::PARAM_ACTION => self::ACTION_BROWSE_GROUPS)),
-                Translation::get('BrowserComponent')));
+                $this->get_url([Application::PARAM_ACTION => self::ACTION_BROWSE_GROUPS]),
+                Translation::get('BrowserComponent')
+            )
+        );
     }
 }

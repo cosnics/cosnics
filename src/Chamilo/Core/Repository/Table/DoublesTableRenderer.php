@@ -25,7 +25,7 @@ class DoublesTableRenderer extends DoublesDetailsTableRenderer implements TableR
 {
     public const PROPERTY_DUPLICATES = 'duplicates';
 
-    protected function initializeColumns()
+    protected function initializeColumns(): void
     {
         parent::initializeColumns();
 

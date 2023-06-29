@@ -120,7 +120,7 @@ class ItemTableRenderer extends DataClassListTableRenderer implements TableRowAc
         return $actions;
     }
 
-    protected function initializeColumns()
+    protected function initializeColumns(): void
     {
         $translator = $this->getTranslator();
 

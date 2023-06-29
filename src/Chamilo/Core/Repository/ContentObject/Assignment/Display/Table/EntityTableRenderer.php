@@ -157,7 +157,7 @@ abstract class EntityTableRenderer extends RecordListTableRenderer
         return $this->user;
     }
 
-    protected function initializeColumns()
+    protected function initializeColumns(): void
     {
         $translator = $this->getTranslator();
 

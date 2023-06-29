@@ -84,7 +84,7 @@ class OpenCourseTableRenderer extends CourseTableRenderer
         return $this->user;
     }
 
-    protected function initializeColumns()
+    protected function initializeColumns(): void
     {
         $translator = $this->getTranslator();
 

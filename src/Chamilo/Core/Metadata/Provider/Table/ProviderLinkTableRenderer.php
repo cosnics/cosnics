@@ -92,7 +92,7 @@ class ProviderLinkTableRenderer extends DataClassListTableRenderer
         return $actions;
     }
 
-    protected function initializeColumns()
+    protected function initializeColumns(): void
     {
         $translator = $this->getTranslator();
 

@@ -41,7 +41,7 @@ class LinkPublicationsTableRenderer extends LinkTableRenderer implements TableRo
         $this->workspace = $workspace;
     }
 
-    protected function initializeColumns()
+    protected function initializeColumns(): void
     {
         $this->addColumn(
             $this->getDataClassPropertyTableColumnFactory()->getColumn(

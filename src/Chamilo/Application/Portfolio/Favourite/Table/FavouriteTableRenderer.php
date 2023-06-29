@@ -46,7 +46,7 @@ class FavouriteTableRenderer extends RecordListTableRenderer implements TableRow
         return $actions;
     }
 
-    protected function initializeColumns()
+    protected function initializeColumns(): void
     {
         $this->addColumn(
             $this->getDataClassPropertyTableColumnFactory()->getColumn(User::class, User::PROPERTY_FIRSTNAME)

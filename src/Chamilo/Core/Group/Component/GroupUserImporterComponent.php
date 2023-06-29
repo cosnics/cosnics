@@ -5,13 +5,11 @@ use Chamilo\Core\Group\Form\GroupUserImportForm;
 use Chamilo\Core\Group\Manager;
 use Chamilo\Libraries\Architecture\Application\Application;
 use Chamilo\Libraries\Architecture\Exceptions\NotAllowedException;
-use Chamilo\Libraries\Format\Structure\BreadcrumbTrail;
 use Chamilo\Libraries\Translation\Translation;
 use Chamilo\Libraries\Utilities\StringUtilities;
 
 /**
- *
- * @author vanpouckesven
+ * @author  vanpouckesven
  * @package group.lib.group_manager.component
  */
 class GroupUserImporterComponent extends Manager
@@ -22,7 +20,7 @@ class GroupUserImporterComponent extends Manager
      */
     public function run()
     {
-        if (! $this->get_user()->isPlatformAdmin())
+        if (!$this->get_user()->isPlatformAdmin())
         {
             throw new NotAllowedException();
         }
@@ -34,8 +32,8 @@ class GroupUserImporterComponent extends Manager
             $success = $form->import_group_users();
             $this->redirectWithMessage(
                 Translation::get($success ? 'GroupUserCSVProcessed' : 'GroupUserCSVNotProcessed') . '<br />' .
-                     $form->get_failed_elements(), !$success,
-                    array(Application::PARAM_ACTION => self::ACTION_IMPORT_GROUP_USERS));
+                $form->get_failed_elements(), !$success, [Application::PARAM_ACTION => self::ACTION_IMPORT_GROUP_USERS]
+            );
         }
         else
         {

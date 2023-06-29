@@ -114,7 +114,7 @@ class UnsubscribedCourseTableRenderer extends RecordListTableRenderer implements
         return $this->userService;
     }
 
-    protected function initializeColumns()
+    protected function initializeColumns(): void
     {
         $translator = $this->getTranslator();
 

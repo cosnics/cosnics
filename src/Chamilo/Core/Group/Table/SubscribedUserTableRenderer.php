@@ -45,7 +45,7 @@ class SubscribedUserTableRenderer extends DataClassListTableRenderer
         return $actions;
     }
 
-    protected function initializeColumns()
+    protected function initializeColumns(): void
     {
         $this->addColumn(
             $this->getDataClassPropertyTableColumnFactory()->getColumn(SubscribedUser::class, User::PROPERTY_FIRSTNAME)

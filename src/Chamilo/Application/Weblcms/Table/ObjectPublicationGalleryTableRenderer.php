@@ -34,7 +34,7 @@ class ObjectPublicationGalleryTableRenderer extends DataClassGalleryTableRendere
         return $this->contentObjectPublicationListRenderer->get_actions();
     }
 
-    protected function initializeColumns()
+    protected function initializeColumns(): void
     {
         $this->addColumn(
             $this->getDataClassPropertyTableColumnFactory()->getColumn(

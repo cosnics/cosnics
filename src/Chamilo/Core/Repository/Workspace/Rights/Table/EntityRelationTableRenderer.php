@@ -144,7 +144,7 @@ class EntityRelationTableRenderer extends DataClassListTableRenderer
         return $this->userService;
     }
 
-    protected function initializeColumns()
+    protected function initializeColumns(): void
     {
         $this->addColumn(
             new StaticTableColumn(

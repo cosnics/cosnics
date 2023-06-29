@@ -10,7 +10,6 @@ use Chamilo\Libraries\Architecture\Application\Routing\UrlGenerator;
 use Chamilo\Libraries\Format\Structure\Glyph\FontAwesomeGlyph;
 use Chamilo\Libraries\Format\Structure\Toolbar;
 use Chamilo\Libraries\Format\Structure\ToolbarItem;
-use Chamilo\Libraries\Format\Table\Column\DataClassPropertyTableColumn;
 use Chamilo\Libraries\Format\Table\Column\DataClassPropertyTableColumnFactory;
 use Chamilo\Libraries\Format\Table\Column\StaticTableColumn;
 use Chamilo\Libraries\Format\Table\Column\TableColumn;
@@ -73,9 +72,6 @@ class GroupTableRenderer extends DataClassListTableRenderer implements TableRowA
         return $this->stringUtilities;
     }
 
-    /**
-     * @throws \ReflectionException
-     */
     public function getTableActions(): TableActions
     {
         $translator = $this->getTranslator();
@@ -108,13 +104,19 @@ class GroupTableRenderer extends DataClassListTableRenderer implements TableRowA
         return $actions;
     }
 
-    protected function initializeColumns()
+    protected function initializeColumns(): void
     {
         $translator = $this->getTranslator();
 
-        $this->addColumn($this->getDataClassPropertyTableColumnFactory()->getColumn(Group::class, Group::PROPERTY_NAME));
-        $this->addColumn($this->getDataClassPropertyTableColumnFactory()->getColumn(Group::class, Group::PROPERTY_CODE));
-        $this->addColumn($this->getDataClassPropertyTableColumnFactory()->getColumn(Group::class, Group::PROPERTY_DESCRIPTION));
+        $this->addColumn(
+            $this->getDataClassPropertyTableColumnFactory()->getColumn(Group::class, Group::PROPERTY_NAME)
+        );
+        $this->addColumn(
+            $this->getDataClassPropertyTableColumnFactory()->getColumn(Group::class, Group::PROPERTY_CODE)
+        );
+        $this->addColumn(
+            $this->getDataClassPropertyTableColumnFactory()->getColumn(Group::class, Group::PROPERTY_DESCRIPTION)
+        );
         $this->addColumn(
             new StaticTableColumn(
                 self::COLUMN_USERS, $translator->trans(self::COLUMN_USERS, [], 'Chamilo\Core\User\Manager')
@@ -142,7 +144,7 @@ class GroupTableRenderer extends DataClassListTableRenderer implements TableRowA
         switch ($column->get_name())
         {
             case Group::PROPERTY_NAME :
-                $title = parent::renderCell($column, $group);
+                $title = parent::renderCell($column, $resultPosition, $group);
                 $title_short = $title;
 
                 if (strlen($title_short) > 53)
@@ -160,7 +162,7 @@ class GroupTableRenderer extends DataClassListTableRenderer implements TableRowA
 
                 return '<a href="' . htmlentities($viewUrl) . '" title="' . $title . '">' . $title_short . '</a>';
             case Group::PROPERTY_DESCRIPTION :
-                $description = strip_tags(parent::renderCell($column, $group));
+                $description = strip_tags(parent::renderCell($column, $resultPosition, $group));
 
                 if (strlen($description) > 175)
                 {
@@ -180,7 +182,6 @@ class GroupTableRenderer extends DataClassListTableRenderer implements TableRowA
     /**
      * @param \Chamilo\Core\Group\Storage\DataClass\Group $group
      *
-     * @throws \ReflectionException
      * @throws \Exception
      */
     public function renderTableRowActions(TableResultPosition $resultPosition, $group): string

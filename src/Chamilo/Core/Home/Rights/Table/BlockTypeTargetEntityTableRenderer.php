@@ -25,7 +25,7 @@ use Chamilo\Libraries\Utilities\StringUtilities;
 class BlockTypeTargetEntityTableRenderer extends RecordListTableRenderer implements TableRowActionsSupport
 {
 
-    protected function initializeColumns()
+    protected function initializeColumns(): void
     {
         $translator = $this->getTranslator();
 

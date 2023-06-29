@@ -109,7 +109,7 @@ class UserTableRenderer extends DataClassListTableRenderer implements TableRowAc
         return $this->user;
     }
 
-    protected function initializeColumns()
+    protected function initializeColumns(): void
     {
         $this->addColumn(
             $this->getDataClassPropertyTableColumnFactory()->getColumn(User::class, User::PROPERTY_FIRSTNAME)

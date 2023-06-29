@@ -80,7 +80,7 @@ class ShareTableRenderer extends DataClassListTableRenderer implements TableRowA
         return $this->userService;
     }
 
-    protected function initializeColumns()
+    protected function initializeColumns(): void
     {
         $this->addColumn(
             $this->getDataClassPropertyTableColumnFactory()->getColumn(Workspace::class, Workspace::PROPERTY_NAME)

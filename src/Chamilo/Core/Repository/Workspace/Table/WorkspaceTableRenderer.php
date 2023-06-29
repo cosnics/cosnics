@@ -130,7 +130,7 @@ class WorkspaceTableRenderer extends DataClassListTableRenderer implements Table
         return $this->getWorkspaceService()->findWorkspaceUserDefaultForUserIdentifier($this->getUser()->getId());
     }
 
-    protected function initializeColumns()
+    protected function initializeColumns(): void
     {
         $this->addColumn(
             $this->getDataClassPropertyTableColumnFactory()->getColumn(Workspace::class, Workspace::PROPERTY_NAME)

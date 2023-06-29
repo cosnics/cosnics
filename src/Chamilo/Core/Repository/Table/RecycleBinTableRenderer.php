@@ -110,7 +110,7 @@ class RecycleBinTableRenderer extends DataClassListTableRenderer implements Tabl
         return $actions;
     }
 
-    protected function initializeColumns()
+    protected function initializeColumns(): void
     {
         $translator = $this->getTranslator();
         $glyph = new FontAwesomeGlyph('folder', [], $translator->trans('Type', [], Manager::CONTEXT));

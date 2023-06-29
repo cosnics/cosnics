@@ -544,7 +544,7 @@ class RightsService
 
             $groupRecord[EntityTableRenderer::PROPERTY_GROUP_NAME] = $group->get_name();
             $groupRecord[EntityTableRenderer::PROPERTY_GROUP_PATH] =
-                $this->getGroupsTreeTraverser()->getGroupPath($group);
+                $this->getGroupsTreeTraverser()->getFullyQualifiedNameForGroup($group);
         }
 
         $groupRecords = $groupRecordCollection->toArray();

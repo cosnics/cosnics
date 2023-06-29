@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<object name="tracking_group_change">
+<object name="group_activity">
     <properties>
         <property name="id"
                   type="integer"
@@ -7,22 +7,21 @@
                   notnull="1"
                   autoincrement="true"/>
         <property name="user_id"
-                  type="integer"
-                  unsigned="1"
-                  notnull="1"/>
-        <property name="reference_id"
-                  type="integer"
-                  unsigned="1"
-                  notnull="1"/>
-        <property name="target_user_id"
-                  type="integer"
-                  unsigned="1"
-                  notnull="1"/>
-        <property name="action"
                   type="text"
-                  length="50"
-                  notnull="1"
-                  default="create"/>
+                  length="36"
+                  notnull="0"/>
+        <property name="reference_id"
+                  type="text"
+                  length="36"
+                  notnull="0"/>
+        <property name="target_user_id"
+                  type="text"
+                  length="36"
+                  notnull="0"/>
+        <property name="action"
+                  type="integer"
+                  unsigned="1"
+                  notnull="1"/>
         <property name="date"
                   type="integer"
                   unsigned="1"

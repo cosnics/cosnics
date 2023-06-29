@@ -29,7 +29,7 @@ trait LinkContentObjectTableRendererTrait
         return $this->stringUtilities;
     }
 
-    protected function initializeColumns()
+    protected function initializeColumns(): void
     {
         $this->addColumn(
             $this->getDataClassPropertyTableColumnFactory()->getColumn(

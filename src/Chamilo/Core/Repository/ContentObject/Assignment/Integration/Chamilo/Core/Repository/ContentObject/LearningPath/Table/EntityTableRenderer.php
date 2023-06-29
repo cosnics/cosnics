@@ -12,7 +12,7 @@ use Chamilo\Libraries\Format\Table\TableResultPosition;
 class EntityTableRenderer extends \Chamilo\Core\Repository\ContentObject\Assignment\Display\Table\EntityTableRenderer
 {
 
-    public function initializeColumns()
+    public function initializeColumns(): void
     {
         $this->addColumn(
             $this->getDataClassPropertyTableColumnFactory()->getColumn(User::class, User::PROPERTY_FIRSTNAME)

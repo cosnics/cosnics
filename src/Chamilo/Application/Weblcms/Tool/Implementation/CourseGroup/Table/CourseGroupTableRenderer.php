@@ -82,7 +82,7 @@ class CourseGroupTableRenderer extends DataClassListTableRenderer implements Tab
         return $this->user;
     }
 
-    protected function initializeColumns()
+    protected function initializeColumns(): void
     {
         $this->addColumn(
             $this->getDataClassPropertyTableColumnFactory()->getColumn(CourseGroup::class, CourseGroup::PROPERTY_NAME)

@@ -48,7 +48,7 @@ class ActivityTableRenderer extends DataClassListTableRenderer
         return $this->datetimeUtilities;
     }
 
-    protected function initializeColumns()
+    protected function initializeColumns(): void
     {
         $translator = $this->getTranslator();
         $glyph = new FontAwesomeGlyph('mouse', [], $translator->trans('ActivityType', [], Manager::CONTEXT), 'fas');

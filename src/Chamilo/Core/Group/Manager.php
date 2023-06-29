@@ -2,6 +2,7 @@
 namespace Chamilo\Core\Group;
 
 use Chamilo\Core\Admin\Core\BreadcrumbGenerator;
+use Chamilo\Core\Group\Service\GroupMembershipService;
 use Chamilo\Core\Group\Storage\DataClass\Group;
 use Chamilo\Core\Group\Storage\DataClass\GroupRelUser;
 use Chamilo\Core\Group\Storage\DataManager;
@@ -290,5 +291,10 @@ abstract class Manager extends Application
         return DataManager::retrieves(
             Group::class, new DataClassRetrievesParameters($condition, $count, $offset, $order_property)
         );
+    }
+
+    protected function getGroupMembershipService(): GroupMembershipService
+    {
+        return $this->getService(GroupMembershipService::class);
     }
 }

@@ -91,7 +91,7 @@ class EntryRequestTableRenderer extends DataClassListTableRenderer
         return $actions;
     }
 
-    protected function initializeColumns()
+    protected function initializeColumns(): void
     {
         $this->addColumn(
             $this->getDataClassPropertyTableColumnFactory()->getColumn(

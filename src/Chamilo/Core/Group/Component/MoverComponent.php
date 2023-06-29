@@ -12,7 +12,6 @@ use Chamilo\Libraries\Translation\Translation;
 use Chamilo\Libraries\Utilities\StringUtilities;
 
 /**
- *
  * @package group.lib.group_manager.component
  */
 class MoverComponent extends Manager
@@ -23,7 +22,7 @@ class MoverComponent extends Manager
      */
     public function run()
     {
-        if (! $this->get_user()->isPlatformAdmin())
+        if (!$this->get_user()->isPlatformAdmin())
         {
             throw new NotAllowedException();
         }
@@ -34,22 +33,21 @@ class MoverComponent extends Manager
         $group = $this->retrieve_group(intval(Request::get(self::PARAM_GROUP_ID)));
 
         // TODO: only show groups you can actually move to (where you have create rights)
-        $form = new GroupMoveForm($group, $this->get_url(array(self::PARAM_GROUP_ID => $group_id)), $this->get_user());
+        $form = new GroupMoveForm($group, $this->get_url([self::PARAM_GROUP_ID => $group_id]), $this->get_user());
 
         if ($form->validate())
         {
             $success = $form->move_group();
             $parent = $form->get_new_parent();
             $message = $success ? Translation::get(
-                'ObjectMoved',
-                array('OBJECT' => Translation::get('Group')),
-                StringUtilities::LIBRARIES) : Translation::get(
-                'ObjectNotMoved',
-                array('OBJECT' => Translation::get('Group')),
-                StringUtilities::LIBRARIES);
+                'ObjectMoved', ['OBJECT' => Translation::get('Group')], StringUtilities::LIBRARIES
+            ) : Translation::get(
+                'ObjectNotMoved', ['OBJECT' => Translation::get('Group')], StringUtilities::LIBRARIES
+            );
             $this->redirectWithMessage(
                 $message, !$success || false,
-                array(Application::PARAM_ACTION => self::ACTION_BROWSE_GROUPS, self::PARAM_GROUP_ID => $parent));
+                [Application::PARAM_ACTION => self::ACTION_BROWSE_GROUPS, self::PARAM_GROUP_ID => $parent]
+            );
         }
         else
         {
@@ -68,14 +66,19 @@ class MoverComponent extends Manager
     {
         $breadcrumbtrail->add(
             new Breadcrumb(
-                $this->get_url(array(Application::PARAM_ACTION => self::ACTION_BROWSE_GROUPS)),
-                Translation::get('BrowserComponent')));
+                $this->get_url([Application::PARAM_ACTION => self::ACTION_BROWSE_GROUPS]),
+                Translation::get('BrowserComponent')
+            )
+        );
         $breadcrumbtrail->add(
             new Breadcrumb(
                 $this->get_url(
-                    array(
+                    [
                         Application::PARAM_ACTION => self::ACTION_VIEW_GROUP,
-                        self::PARAM_GROUP_ID => Request::get(self::PARAM_GROUP_ID))),
-                Translation::get('ViewerComponent')));
+                        self::PARAM_GROUP_ID => Request::get(self::PARAM_GROUP_ID)
+                    ]
+                ), Translation::get('ViewerComponent')
+            )
+        );
     }
 }

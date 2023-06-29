@@ -119,7 +119,7 @@ class DirectSubscribedPlatformGroupTableRenderer extends RecordListTableRenderer
         return $this->user;
     }
 
-    protected function initializeColumns()
+    protected function initializeColumns(): void
     {
         $this->addColumn(
             $this->getDataClassPropertyTableColumnFactory()->getColumn(Group::class, Group::PROPERTY_NAME)

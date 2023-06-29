@@ -280,7 +280,7 @@ abstract class AbstractTableRenderer
             $this->getTableActions()->hasActions();
     }
 
-    abstract protected function initializeColumns();
+    abstract protected function initializeColumns(): void;
 
     abstract protected function processData(ArrayCollection $results, TableParameterValues $parameterValues
     ): ArrayCollection;

@@ -39,7 +39,7 @@ abstract class GroupEntityTableRenderer extends EntityTableRenderer
         return implode(PHP_EOL, $html);
     }
 
-    protected function initializeColumns()
+    protected function initializeColumns(): void
     {
         parent::initializeColumns();
 

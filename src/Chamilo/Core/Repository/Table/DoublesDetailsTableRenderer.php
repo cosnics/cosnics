@@ -46,7 +46,7 @@ class DoublesDetailsTableRenderer extends DataClassListTableRenderer
         return $this->stringUtilities;
     }
 
-    protected function initializeColumns()
+    protected function initializeColumns(): void
     {
         $translator = $this->getTranslator();
         $typeGlyph = new FontAwesomeGlyph('folder', [], $translator->trans('Type', [], Manager::CONTEXT));

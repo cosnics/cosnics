@@ -11,25 +11,21 @@ class Installer extends \Chamilo\Configuration\Package\Action\Installer
 {
     public const CONTEXT = Manager::CONTEXT;
 
-    public function create_root_group()
+    public function createRootGroup(): bool
     {
         $values = $this->get_form_values();
 
         $group = new Group();
         $group->set_name($values['organization_name']);
-        $group->set_parent(0);
+        $group->setParentId('0');
         $group->set_code(strtolower($values['organization_name']));
-        $group->create();
 
-        return true;
+        return $this->getGroupService()->createGroup($group);
     }
 
-    /**
-     * Additional installation steps.
-     */
     public function extra(): bool
     {
-        if (!$this->create_root_group())
+        if (!$this->createRootGroup())
         {
             return false;
         }

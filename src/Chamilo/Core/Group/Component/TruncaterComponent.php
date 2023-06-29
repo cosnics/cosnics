@@ -1,69 +1,63 @@
 <?php
 namespace Chamilo\Core\Group\Component;
 
-use Chamilo\Core\Group\Integration\Chamilo\Core\Tracking\Storage\DataClass\Change;
 use Chamilo\Core\Group\Manager;
-use Chamilo\Core\Tracking\Storage\DataClass\Event;
 use Chamilo\Libraries\Architecture\Application\Application;
 use Chamilo\Libraries\Architecture\Exceptions\NotAllowedException;
 use Chamilo\Libraries\Format\Structure\Breadcrumb;
 use Chamilo\Libraries\Format\Structure\BreadcrumbTrail;
-use Chamilo\Libraries\Platform\Session\Request;
-use Chamilo\Libraries\Translation\Translation;
 use Chamilo\Libraries\Utilities\StringUtilities;
+use RuntimeException;
 
 /**
- *
- * @package group.lib.group_manager.component
+ * @package Chamilo\Core\Group\Component
  */
 class TruncaterComponent extends Manager
 {
 
     /**
-     * Runs this component and displays its output.
+     * @throws \Chamilo\Libraries\Architecture\Exceptions\NotAllowedException
      */
     public function run()
     {
-        $user = $this->get_user();
-
-        if (! $this->get_user()->isPlatformAdmin())
+        if (!$this->getUser()->isPlatformAdmin())
         {
             throw new NotAllowedException();
         }
 
-        $ids = $this->getRequest()->getFromRequestOrQuery(self::PARAM_GROUP_ID);
-        $this->set_parameter(self::PARAM_GROUP_ID, $ids);
+        $groupIdentifiers = $this->getRequest()->getFromRequestOrQuery(self::PARAM_GROUP_ID);
+        $this->set_parameter(self::PARAM_GROUP_ID, $groupIdentifiers);
+
+        $groupMembershipService = $this->getGroupMembershipService();
+        $groupService = $this->getGroupService();
+        $translator = $this->getTranslator();
 
         $failures = 0;
 
-        if (! empty($ids))
+        if (!empty($groupIdentifiers))
         {
-            if (! is_array($ids))
+            if (!is_array($groupIdentifiers))
             {
-                $ids = array($ids);
+                $groupIdentifiers = [$groupIdentifiers];
             }
 
-            foreach ($ids as $id)
+            foreach ($groupIdentifiers as $groupIdentifier)
             {
-                $group = $this->retrieve_group($id);
-                if (! $group->truncate())
+                $group = $groupService->findGroupByIdentifier($groupIdentifier);
+
+                try
+                {
+                    $groupMembershipService->emptyGroup($group);
+                }
+                catch (RuntimeException)
                 {
                     $failures ++;
-                }
-                else
-                {
-                    Event::trigger(
-                        'Truncate',
-                        Manager::CONTEXT,
-                        array(
-                            Change::PROPERTY_REFERENCE_ID => $group->get_id(),
-                            Change::PROPERTY_USER_ID => $user->get_id()));
                 }
             }
 
             if ($failures)
             {
-                if (count($ids) == 1)
+                if (count($groupIdentifiers) == 1)
                 {
                     $message = 'SelectedGroupNotEmptied';
                 }
@@ -72,46 +66,58 @@ class TruncaterComponent extends Manager
                     $message = 'SelectedGroupsNotEmptied';
                 }
             }
+            elseif (count($groupIdentifiers) == 1)
+            {
+                $message = 'SelectedGroupEmptied';
+            }
             else
             {
-                if (count($ids) == 1)
-                {
-                    $message = 'SelectedGroupEmptied';
-                }
-                else
-                {
-                    $message = 'SelectedGroupsEmptied';
-                }
+                $message = 'SelectedGroupsEmptied';
             }
 
-            if (count($ids) == 1)
+            if (count($groupIdentifiers) == 1)
+            {
                 $this->redirectWithMessage(
-                    Translation::get($message), (bool) $failures,
-                    array(Application::PARAM_ACTION => self::ACTION_VIEW_GROUP, self::PARAM_GROUP_ID => $ids[0]));
+                    $translator->trans($message, [], Manager::CONTEXT), (bool) $failures,
+                    [Application::PARAM_ACTION => self::ACTION_VIEW_GROUP, self::PARAM_GROUP_ID => $groupIdentifiers[0]]
+                );
+            }
             else
+            {
                 $this->redirectWithMessage(
-                    Translation::get($message), (bool) $failures,
-                    array(Application::PARAM_ACTION => self::ACTION_BROWSE_GROUPS));
+                    $translator->trans($message, [], Manager::CONTEXT), (bool) $failures,
+                    [Application::PARAM_ACTION => self::ACTION_BROWSE_GROUPS]
+                );
+            }
         }
         else
         {
             return $this->display_error_page(
-                htmlentities(Translation::get('NoObjectSelected', null, StringUtilities::LIBRARIES)));
+                htmlentities($translator->trans('NoObjectSelected', [], StringUtilities::LIBRARIES))
+            );
         }
     }
 
     public function add_additional_breadcrumbs(BreadcrumbTrail $breadcrumbtrail)
     {
+        $translator = $this->getTranslator();
+
         $breadcrumbtrail->add(
             new Breadcrumb(
-                $this->get_url(array(Application::PARAM_ACTION => self::ACTION_BROWSE_GROUPS)),
-                Translation::get('BrowserComponent')));
+                $this->get_url([Application::PARAM_ACTION => self::ACTION_BROWSE_GROUPS]),
+                $translator->trans('BrowserComponent', [], Manager::CONTEXT)
+            )
+        );
+
         $breadcrumbtrail->add(
             new Breadcrumb(
                 $this->get_url(
-                    array(
+                    [
                         Application::PARAM_ACTION => self::ACTION_VIEW_GROUP,
-                        self::PARAM_GROUP_ID => Request::get(self::PARAM_GROUP_ID))),
-                Translation::get('ViewerComponent')));
+                        self::PARAM_GROUP_ID => $this->getRequest()->query->get(self::PARAM_GROUP_ID)
+                    ]
+                ), $translator->trans('ViewerComponent', [], Manager::CONTEXT)
+            )
+        );
     }
 }

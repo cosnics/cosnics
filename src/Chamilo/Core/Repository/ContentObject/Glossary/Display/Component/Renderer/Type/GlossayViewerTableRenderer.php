@@ -33,7 +33,7 @@ class GlossayViewerTableRenderer extends DataClassListTableRenderer implements T
      */
     protected ?GlossaryRenderer $glossaryRenderer = null;
 
-    protected function initializeColumns()
+    protected function initializeColumns(): void
     {
         $this->addColumn(
             $this->getDataClassPropertyTableColumnFactory()->getColumn(

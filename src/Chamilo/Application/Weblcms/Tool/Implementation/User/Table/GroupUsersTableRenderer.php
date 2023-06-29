@@ -36,7 +36,7 @@ class GroupUsersTableRenderer extends DataClassListTableRenderer
         return $this->configurationConsulter;
     }
 
-    protected function initializeColumns()
+    protected function initializeColumns(): void
     {
         $this->addColumn(
             $this->getDataClassPropertyTableColumnFactory()->getColumn(User::class, User::PROPERTY_LASTNAME)

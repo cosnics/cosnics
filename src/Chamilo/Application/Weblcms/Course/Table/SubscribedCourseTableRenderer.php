@@ -60,7 +60,7 @@ class SubscribedCourseTableRenderer extends RecordListTableRenderer implements T
         return $this->userService;
     }
 
-    protected function initializeColumns()
+    protected function initializeColumns(): void
     {
         $translator = $this->getTranslator();
 

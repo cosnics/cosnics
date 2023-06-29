@@ -2,30 +2,31 @@
 namespace Chamilo\Core\Group\Form;
 
 use Chamilo\Core\Group\Integration\Chamilo\Core\Tracking\Storage\DataClass\Change;
-use Chamilo\Core\Group\Manager;
 use Chamilo\Core\Group\Menu\GroupMenu;
 use Chamilo\Core\Group\Storage\DataClass\Group;
-use Chamilo\Core\Tracking\Storage\DataClass\Event;
 use Chamilo\Libraries\Format\Form\FormValidator;
 use Chamilo\Libraries\Format\Menu\OptionsMenuRenderer;
 use Chamilo\Libraries\Format\Structure\Glyph\FontAwesomeGlyph;
+use Chamilo\Libraries\Storage\DataClass\NestedSet;
 use Chamilo\Libraries\Translation\Translation;
 use Chamilo\Libraries\Utilities\StringUtilities;
 
 /**
- *
  * @package groups.lib.forms
  */
 class GroupForm extends FormValidator
 {
-    const TYPE_CREATE = 1;
-    const TYPE_EDIT = 2;
-    const RESULT_SUCCESS = 'GroupUpdated';
-    const RESULT_ERROR = 'GroupUpdateFailed';
+    public const RESULT_ERROR = 'GroupUpdateFailed';
 
-    private $parent;
+    public const RESULT_SUCCESS = 'GroupUpdated';
+
+    public const TYPE_CREATE = 1;
+
+    public const TYPE_EDIT = 2;
 
     private $group;
+
+    private $parent;
 
     private $unencryptedpass;
 
@@ -52,12 +53,12 @@ class GroupForm extends FormValidator
 
     public function build_basic_form()
     {
-        $this->addElement('text', Group::PROPERTY_NAME, Translation::get('Name'), array("size" => "50"));
+        $this->addElement('text', Group::PROPERTY_NAME, Translation::get('Name'), ['size' => '50']);
         $this->addRule(
             Group::PROPERTY_NAME, Translation::get('ThisFieldIsRequired', null, StringUtilities::LIBRARIES), 'required'
         );
 
-        $this->addElement('text', Group::PROPERTY_CODE, Translation::get('Code'), array("size" => "50"));
+        $this->addElement('text', Group::PROPERTY_CODE, Translation::get('Code'), ['size' => '50']);
         $this->addRule(
             Group::PROPERTY_CODE, Translation::get('ThisFieldIsRequired', null, StringUtilities::LIBRARIES), 'required'
         );
@@ -69,14 +70,14 @@ class GroupForm extends FormValidator
         );
 
         // Disk Quota
-        $this->addElement('text', Group::PROPERTY_DISK_QUOTA, Translation::get('DiskQuota'), array("size" => "50"));
+        $this->addElement('text', Group::PROPERTY_DISK_QUOTA, Translation::get('DiskQuota'), ['size' => '50']);
         $this->addRule(
             Group::PROPERTY_DISK_QUOTA, Translation::get('ThisFieldMustBeNumeric', null, StringUtilities::LIBRARIES),
             'numeric'
         );
         // Database Quota
         $this->addElement(
-            'text', Group::PROPERTY_DATABASE_QUOTA, Translation::get('DatabaseQuota'), array("size" => "50")
+            'text', Group::PROPERTY_DATABASE_QUOTA, Translation::get('DatabaseQuota'), ['size' => '50']
         );
         $this->addRule(
             Group::PROPERTY_DATABASE_QUOTA,
@@ -86,6 +87,20 @@ class GroupForm extends FormValidator
         $this->add_html_editor(
             Group::PROPERTY_DESCRIPTION, Translation::get('Description', null, StringUtilities::LIBRARIES), false
         );
+    }
+
+    public function build_creation_form()
+    {
+        $this->build_basic_form();
+
+        $buttons[] = $this->createElement(
+            'style_submit_button', 'submit', Translation::get('Create', null, StringUtilities::LIBRARIES)
+        );
+        $buttons[] = $this->createElement(
+            'style_reset_button', 'reset', Translation::get('Reset', null, StringUtilities::LIBRARIES)
+        );
+
+        $this->addGroup($buttons, 'buttons', null, '&nbsp;', false);
     }
 
     public function build_editing_form()
@@ -108,21 +123,7 @@ class GroupForm extends FormValidator
         $this->addGroup($buttons, 'buttons', null, '&nbsp;', false);
     }
 
-    public function build_creation_form()
-    {
-        $this->build_basic_form();
-
-        $buttons[] = $this->createElement(
-            'style_submit_button', 'submit', Translation::get('Create', null, StringUtilities::LIBRARIES)
-        );
-        $buttons[] = $this->createElement(
-            'style_reset_button', 'reset', Translation::get('Reset', null, StringUtilities::LIBRARIES)
-        );
-
-        $this->addGroup($buttons, 'buttons', null, '&nbsp;', false);
-    }
-
-    public function update_group()
+    public function create_group(): bool
     {
         $group = $this->group;
         $values = $this->exportValues();
@@ -130,40 +131,7 @@ class GroupForm extends FormValidator
         $group->set_name($values[Group::PROPERTY_NAME]);
         $group->set_description($values[Group::PROPERTY_DESCRIPTION]);
         $group->set_code($values[Group::PROPERTY_CODE]);
-        $group->set_database_quota(intval($values[Group::PROPERTY_DATABASE_QUOTA]));
-        $group->set_disk_quota(intval($values[Group::PROPERTY_DISK_QUOTA]));
-        $value = $group->update();
-
-        $new_parent = $values[Group::PROPERTY_PARENT_ID];
-        if ($group->get_parent_id() != $new_parent)
-        {
-            $group->move($new_parent);
-        }
-
-        if ($value)
-        {
-            Event::trigger(
-                'Update', Manager::CONTEXT, array(
-                    Change::PROPERTY_REFERENCE_ID => $group->get_id(
-                    ),
-                    Change::PROPERTY_USER_ID => $this->user->get_id(
-                    )
-                )
-            );
-        }
-
-        return $value;
-    }
-
-    public function create_group()
-    {
-        $group = $this->group;
-        $values = $this->exportValues();
-
-        $group->set_name($values[Group::PROPERTY_NAME]);
-        $group->set_description($values[Group::PROPERTY_DESCRIPTION]);
-        $group->set_code($values[Group::PROPERTY_CODE]);
-        $group->set_parent($values[Group::PROPERTY_PARENT_ID]);
+        $group->set_parent($values[NestedSet::PROPERTY_PARENT_ID]);
         if ($values[Group::PROPERTY_DATABASE_QUOTA] != '')
         {
             $group->set_database_quota(intval($values[Group::PROPERTY_DATABASE_QUOTA]));
@@ -173,21 +141,23 @@ class GroupForm extends FormValidator
             $group->set_disk_quota(intval($values[Group::PROPERTY_DISK_QUOTA]));
         }
 
-        $value = $group->create();
+        return $this->getGroupService()->createGroup($group);
+    }
 
-        if ($value)
-        {
-            Event::trigger(
-                'Create', Manager::CONTEXT, array(
-                    Change::PROPERTY_REFERENCE_ID => $group->get_id(
-                    ),
-                    Change::PROPERTY_USER_ID => $this->user->get_id(
-                    )
-                )
-            );
-        }
+    public function get_group()
+    {
+        return $this->group;
+    }
 
-        return $value;
+    public function get_groups()
+    {
+        $group = $this->group;
+
+        $group_menu = new GroupMenu($group->get_id(), null, true, true, true);
+        $renderer = new OptionsMenuRenderer();
+        $group_menu->render($renderer, 'sitemap');
+
+        return $renderer->toArray();
     }
 
     /**
@@ -208,19 +178,32 @@ class GroupForm extends FormValidator
         parent::setDefaults($defaults);
     }
 
-    public function get_group()
-    {
-        return $this->group;
-    }
-
-    public function get_groups()
+    /**
+     * @throws \QuickformException
+     */
+    public function update_group(): bool
     {
         $group = $this->group;
+        $values = $this->exportValues();
 
-        $group_menu = new GroupMenu($group->get_id(), null, true, true, true);
-        $renderer = new OptionsMenuRenderer();
-        $group_menu->render($renderer, 'sitemap');
+        $group->set_name($values[Group::PROPERTY_NAME]);
+        $group->set_description($values[Group::PROPERTY_DESCRIPTION]);
+        $group->set_code($values[Group::PROPERTY_CODE]);
+        $group->set_database_quota(intval($values[Group::PROPERTY_DATABASE_QUOTA]));
+        $group->set_disk_quota(intval($values[Group::PROPERTY_DISK_QUOTA]));
 
-        return $renderer->toArray();
+        if (!$this->getGroupService()->updateGroup($group))
+        {
+            return false;
+        }
+
+        $newParentGroupIdentifier = $values[NestedSet::PROPERTY_PARENT_ID];
+
+        if ($group->get_parent_id() != $newParentGroupIdentifier)
+        {
+            return $this->getGroupService()->moveGroup($group, $newParentGroupIdentifier);
+        }
+
+        return true;
     }
 }

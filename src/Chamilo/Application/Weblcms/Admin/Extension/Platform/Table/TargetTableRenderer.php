@@ -53,7 +53,7 @@ class TargetTableRenderer extends DataClassListTableRenderer implements TableRow
         return $actions;
     }
 
-    protected function initializeColumns()
+    protected function initializeColumns(): void
     {
         $helper_class = $this->application->get_selected_target_class(true);
 

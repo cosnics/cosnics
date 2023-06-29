@@ -37,7 +37,7 @@ class UserViewTableRenderer extends DataClassListTableRenderer implements TableR
         return $actions;
     }
 
-    protected function initializeColumns()
+    protected function initializeColumns(): void
     {
         $this->addColumn(
             $this->getDataClassPropertyTableColumnFactory()->getColumn(UserView::class, UserView::PROPERTY_NAME)

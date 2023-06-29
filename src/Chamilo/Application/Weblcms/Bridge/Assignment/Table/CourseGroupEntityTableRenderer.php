@@ -11,7 +11,7 @@ use Chamilo\Libraries\Format\Table\TableResultPosition;
  */
 abstract class CourseGroupEntityTableRenderer extends EntityTableRenderer
 {
-    protected function initializeColumns()
+    protected function initializeColumns(): void
     {
         $this->addColumn(
             $this->getDataClassPropertyTableColumnFactory()->getColumn(CourseGroup::class, CourseGroup::PROPERTY_NAME)

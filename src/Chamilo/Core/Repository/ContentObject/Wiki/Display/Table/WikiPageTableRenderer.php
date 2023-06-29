@@ -106,7 +106,7 @@ class WikiPageTableRenderer extends DataClassListTableRenderer implements TableR
         );
     }
 
-    protected function initializeColumns()
+    protected function initializeColumns(): void
     {
         $this->addColumn(
             $this->getDataClassPropertyTableColumnFactory()->getColumn(

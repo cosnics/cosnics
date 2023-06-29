@@ -24,11 +24,11 @@ use Chamilo\Libraries\Storage\Query\Variable\OperationConditionVariable;
 use Chamilo\Libraries\Storage\Query\Variable\PropertyConditionVariable;
 use Chamilo\Libraries\Storage\Query\Variable\StaticConditionVariable;
 use Doctrine\Common\Collections\ArrayCollection;
+use Exception;
 
 /**
  * @package Chamilo\Libraries\Storage\DataManager\Repository
- *
- * @author Hans De Bisschop <hans.de.bisschop@ehb.be>
+ * @author  Hans De Bisschop <hans.de.bisschop@ehb.be>
  */
 class NestedSetDataClassRepository
 {
@@ -81,7 +81,7 @@ class NestedSetDataClassRepository
     /**
      * @see NestedSet::create()
      */
-    public function create(NestedSet $nestedSet, int $previousNestedSetIdentifier = 0): bool
+    public function create(NestedSet $nestedSet, string $previousNestedSetIdentifier = '0'): bool
     {
         if ($previousNestedSetIdentifier)
         {
@@ -176,13 +176,13 @@ class NestedSetDataClassRepository
                 // Delete this node as well as its offspring
                 if (!$this->getDataClassRepository()->deletes(get_class($nestedSet), $deleteCondition))
                 {
-                    throw new \Exception('Nested Set delete failed');
+                    throw new Exception('Nested Set delete failed');
                 }
 
                 // Shift the remaining nodes left to fill the gap created by deleting this node and its offspring.
                 if (!$this->postDelete($nestedSet, $condition))
                 {
-                    throw new \Exception('Nested Set delete failed');
+                    throw new Exception('Nested Set delete failed');
                 }
 
                 return $associatedNestedSets;
@@ -198,6 +198,9 @@ class NestedSetDataClassRepository
         return $this->getDataClassRepository()->distinct($dataClassName, $parameters);
     }
 
+    /**
+     * @return string[]
+     */
     public function findAncestorIdentifiers(NestedSet $nestedSet, bool $includeSelf = true, ?Condition $condition = null
     ): array
     {
@@ -211,10 +214,15 @@ class NestedSetDataClassRepository
     }
 
     /**
-     * @return \Chamilo\Libraries\Storage\DataClass\NestedSet[]|\Doctrine\Common\Collections\ArrayCollection
+     * @param \Chamilo\Libraries\Storage\DataClass\NestedSet $nestedSet
+     * @param bool $includeSelf
+     * @param ?\Chamilo\Libraries\Storage\Query\Condition\Condition $condition
+     *
+     * @return \Doctrine\Common\Collections\ArrayCollection<\Chamilo\Libraries\Storage\DataClass\NestedSet>
      * @throws \Chamilo\Libraries\Storage\Exception\DataClassNoResultException
      */
-    public function findAncestors(NestedSet $nestedSet, bool $includeSelf = true, ?Condition $condition = null)
+    public function findAncestors(NestedSet $nestedSet, bool $includeSelf = true, ?Condition $condition = null
+    ): ArrayCollection
     {
         return $this->getDataClassRepository()->retrieves(
             get_class($nestedSet), new DataClassRetrievesParameters(
@@ -244,17 +252,22 @@ class NestedSetDataClassRepository
         );
     }
 
-    public function findRelatedNestedSetByIdentifier(NestedSet $nestedSet, int $nestedSetIdentifier): NestedSet
+    public function findRelatedNestedSetByIdentifier(NestedSet $nestedSet, string $nestedSetIdentifier): NestedSet
     {
         return $this->getDataClassRepository()->retrieveById(get_class($nestedSet), $nestedSetIdentifier);
     }
 
     /**
-     * @return \Chamilo\Libraries\Storage\DataClass\NestedSet[]|\Doctrine\Common\Collections\ArrayCollection
+     * @param \Chamilo\Libraries\Storage\DataClass\NestedSet $nestedSet
+     * @param bool $includeSelf
+     * @param ?\Chamilo\Libraries\Storage\Query\Condition\Condition $condition
+     *
+     * @return \Doctrine\Common\Collections\ArrayCollection<\Chamilo\Libraries\Storage\DataClass\NestedSet>
      * @throws \Chamilo\Libraries\Storage\Exception\DataClassNoResultException
      * @see NestedSet::get_siblings()
      */
-    public function findSiblings(NestedSet $nestedSet, bool $includeSelf = true, ?Condition $condition = null)
+    public function findSiblings(NestedSet $nestedSet, bool $includeSelf = true, ?Condition $condition = null
+    ): ArrayCollection
     {
         return $this->getDataClassRepository()->retrieves(
             get_class($nestedSet), new DataClassRetrievesParameters(
@@ -499,7 +512,7 @@ class NestedSetDataClassRepository
      * @see NestedSet::move()
      */
     public function move(
-        NestedSet $nestedSet, int $newParentId = 0, int $newPreviousId = 0, ?Condition $condition = null
+        NestedSet $nestedSet, string $newParentId = '0', string $newPreviousId = '0', ?Condition $condition = null
     ): bool
     {
         if ($newPreviousId != 0)
@@ -908,11 +921,11 @@ class NestedSetDataClassRepository
      * @template retrieveById
      *
      * @param class-string<retrieveById> $dataClassName
-     * @param int $identifier
+     * @param string $identifier
      *
      * @return retrieveById
      */
-    public function retrieveById(string $dataClassName, int $identifier)
+    public function retrieveById(string $dataClassName, string $identifier)
     {
         return $this->getDataClassRepository()->retrieveById($dataClassName, $identifier);
     }

@@ -238,7 +238,7 @@ class ContentObjectGalleryTableRenderer extends DataClassGalleryTableRenderer
         return $this->workspace;
     }
 
-    protected function initializeColumns()
+    protected function initializeColumns(): void
     {
         $this->addColumn(
             $this->getDataClassPropertyTableColumnFactory()->getColumn(
