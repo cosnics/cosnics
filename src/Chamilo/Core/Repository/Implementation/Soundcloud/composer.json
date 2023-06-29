@@ -20,15 +20,6 @@
             "email": "hans.de.bisschop@ehb.be"
         }
     ],
-    "require": {
-        "glenscott/soundcloud": "dev-psr-4"
-    },
-    "repositories": [
-        {
-            "type": "git",
-            "url": "https://github.com/mptre/php-soundcloud"
-        }
-    ],
     "extra": {
         "cosnics": {
             "name": "Soundcloud",
