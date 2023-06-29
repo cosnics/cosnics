@@ -211,7 +211,7 @@ abstract class FormProcessor
     public function getFile($fileName = ContentObjectImportForm::IMPORT_FILE_NAME)
     {
         $file = $this->getFileByName($fileName);
-        var_dump($file);
+//        var_dump($file);
         if ($file instanceof UploadedFile)
         {
             return $this->getFileProperties($file);

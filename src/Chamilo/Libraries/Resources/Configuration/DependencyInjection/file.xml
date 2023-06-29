@@ -39,6 +39,10 @@
             <factory class="Chamilo\Libraries\File\Compression\Filecompression" method="factory" />
         </service>
 
+        <service
+                alias="chamilo.libraries.file.compression.file_compression"
+                id="Chamilo\Libraries\File\Compression\Filecompression" />
+
         <service id="chamilo.libraries.file.compression.archive_creator.archive_creator"
                  class="Chamilo\Libraries\File\Compression\ArchiveCreator\ArchiveCreator">
             <argument type="service" id="symfony.component.filesystem.filesystem" />

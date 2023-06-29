@@ -4,6 +4,8 @@
     <services>
         <defaults public="true" autowire="true" />
         <service id="Chamilo\Core\Repository\ContentObject\Rubric\Service\RubricService" autowire="true" />
+        <service id="Chamilo\Core\Repository\ContentObject\Rubric\Service\RubricResultService" autowire="true" />
+        <service id="Chamilo\Core\Repository\ContentObject\Rubric\Service\RubricResultJSONGenerator" autowire="true" />
         <service id="Chamilo\Core\Repository\ContentObject\Rubric\Service\RubricTreeBuilder" autowire="true" />
         <service id="Chamilo\Core\Repository\ContentObject\Rubric\Service\RubricValidator" autowire="true" />
         <service id="Chamilo\Core\Repository\ContentObject\Rubric\Service\RubricAjaxService" autowire="true" />

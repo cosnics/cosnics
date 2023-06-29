@@ -10,6 +10,9 @@
         <service id="Chamilo\Application\Weblcms\Bridge\GradeBook\Service\GradeBookItemService" />
         <service id="Chamilo\Application\Weblcms\Bridge\GradeBook\Service\TrackingServiceBuilderService" />
         <service id="Chamilo\Application\Weblcms\Bridge\GradeBook\Service\GradeBookItemScoreService" />
+        <service
+                id="Chamilo\Core\Repository\ContentObject\GradeBook\Display\Bridge\Interfaces\GradeBookItemScoreServiceInterface"
+                alias="Chamilo\Application\Weblcms\Bridge\GradeBook\Service\GradeBookItemScoreService" />
         <service id="Chamilo\Application\Weblcms\Bridge\GradeBook\Service\Score\AssessmentScoreService" />
         <service id="Chamilo\Application\Weblcms\Bridge\GradeBook\Service\Score\AssignmentScoreService" />
         <service id="Chamilo\Application\Weblcms\Bridge\GradeBook\Service\Score\EvaluationScoreService" />

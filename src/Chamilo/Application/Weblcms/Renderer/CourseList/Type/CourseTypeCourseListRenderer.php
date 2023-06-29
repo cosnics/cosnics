@@ -205,7 +205,11 @@ class CourseTypeCourseListRenderer extends CourseListRenderer
      */
     protected function count_courses_for_course_type($course_type_id)
     {
-        return count($this->courses[$course_type_id]);
+        if (is_array($this->courses[$course_type_id]))
+        {
+            return count($this->courses[$course_type_id]);
+        }
+        return 0;
     }
 
     /**

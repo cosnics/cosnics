@@ -118,6 +118,11 @@
         </service>
 
         <service
+                alias="jms.serializer"
+                id="JMS\Serializer\Serializer">
+        </service>
+
+        <service
             id="jms.serializer.serializer_builder"
             class="JMS\Serializer\SerializerBuilder" />
 

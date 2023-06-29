@@ -156,7 +156,7 @@ class GalleryHTMLTable extends HtmlTable
 
         $html = array();
 
-        if ($propertyModel instanceof GalleryTablePropertyModel && count($propertyModel->get_properties()) > 0)
+        if ($propertyModel instanceof GalleryTablePropertyModel && is_array($propertyModel->get_properties()) && count($propertyModel->get_properties()) > 0)
         {
             $buttonToolBar = new ButtonToolBar();
             $dropDownButton = new DropdownButton();
