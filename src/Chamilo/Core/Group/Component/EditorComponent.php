@@ -7,49 +7,53 @@ use Chamilo\Libraries\Architecture\Application\Application;
 use Chamilo\Libraries\Architecture\Exceptions\NotAllowedException;
 use Chamilo\Libraries\Format\Structure\Breadcrumb;
 use Chamilo\Libraries\Format\Structure\BreadcrumbTrail;
-use Chamilo\Libraries\Platform\Session\Request;
-use Chamilo\Libraries\Translation\Translation;
 use Chamilo\Libraries\Utilities\StringUtilities;
 
 /**
- * @package group.lib.group_manager.component
+ * @package Chamilo\Core\Group\Component
  */
 class EditorComponent extends Manager
 {
 
     /**
-     * Runs this component and displays its output.
+     * @throws \Chamilo\Libraries\Architecture\Exceptions\NotAllowedException
+     * @throws \QuickformException
      */
     public function run()
     {
-        if (!$this->get_user()->isPlatformAdmin())
+        if (!$this->getUser()->isPlatformAdmin())
         {
             throw new NotAllowedException();
         }
-        $id = Request::get(self::PARAM_GROUP_ID);
-        $this->set_parameter(self::PARAM_GROUP_ID, $id);
 
-        if ($id)
+        $translator = $this->getTranslator();
+
+        $groupIdentifier = $this->getRequest()->query->get(self::PARAM_GROUP_ID);
+
+        if ($groupIdentifier)
         {
-            $group = $this->retrieve_group($id);
+            $group = $this->retrieve_group($groupIdentifier);
 
-            if (!$this->get_user()->isPlatformAdmin())
+            if (!$this->getUser()->isPlatformAdmin())
             {
                 throw new NotAllowedException();
             }
 
             $form = new GroupForm(
-                GroupForm::TYPE_EDIT, $group, $this->get_url([self::PARAM_GROUP_ID => $id]), $this->get_user()
+                GroupForm::TYPE_EDIT, $group, $this->get_url([self::PARAM_GROUP_ID => $groupIdentifier]),
+                $this->getUser()
             );
 
             if ($form->validate())
             {
                 $success = $form->update_group();
                 $group = $form->get_group();
-                $message = $success ? Translation::get(
-                    'ObjectUpdated', ['OBJECT' => Translation::get('Group')], StringUtilities::LIBRARIES
-                ) : Translation::get(
-                    'ObjectNotUpdated', ['OBJECT' => Translation::get('Group')], StringUtilities::LIBRARIES
+                $message = $success ? $translator->trans(
+                    'ObjectUpdated', ['OBJECT' => $translator->trans('Group', [], Manager::CONTEXT)],
+                    StringUtilities::LIBRARIES
+                ) : $translator->trans(
+                    'ObjectNotUpdated', ['OBJECT' => $translator->trans('Group', [], Manager::CONTEXT)],
+                    StringUtilities::LIBRARIES
                 );
 
                 $this->redirectWithMessage(
@@ -63,9 +67,9 @@ class EditorComponent extends Manager
             {
                 $html = [];
 
-                $html[] = $this->render_header();
-                $html[] = $form->toHtml();
-                $html[] = $this->render_footer();
+                $html[] = $this->renderHeader();
+                $html[] = $form->render();
+                $html[] = $this->renderFooter();
 
                 return implode(PHP_EOL, $html);
             }
@@ -73,34 +77,31 @@ class EditorComponent extends Manager
         else
         {
             return $this->display_error_page(
-                htmlentities(Translation::get('NoObjectSelected', null, StringUtilities::LIBRARIES))
+                htmlentities($translator->trans('NoObjectSelected', [], StringUtilities::LIBRARIES))
             );
         }
     }
 
     public function add_additional_breadcrumbs(BreadcrumbTrail $breadcrumbtrail)
     {
+        $translator = $this->getTranslator();
+
         $breadcrumbtrail->add(
             new Breadcrumb(
                 $this->get_url([Application::PARAM_ACTION => self::ACTION_BROWSE_GROUPS]),
-                Translation::get('BrowserComponent')
+                $translator->trans('BrowserComponent')
             )
         );
+
         $breadcrumbtrail->add(
             new Breadcrumb(
                 $this->get_url(
                     [
                         Application::PARAM_ACTION => self::ACTION_VIEW_GROUP,
-                        self::PARAM_GROUP_ID => Request::get(self::PARAM_GROUP_ID)
+                        self::PARAM_GROUP_ID => $this->getRequest()->query->get(self::PARAM_GROUP_ID)
                     ]
-                ), Translation::get('ViewerComponent')
+                ), $translator->trans('ViewerComponent')
             )
         );
     }
-
-    // public function getAdditionalParameters(array $additionalParameters = []): array
-    // {
-    // $additionalParameters[] = self::PARAM_GROUP_ID;
-    // return parent::getAdditionalParameters($additionalParameters);
-    // }
 }

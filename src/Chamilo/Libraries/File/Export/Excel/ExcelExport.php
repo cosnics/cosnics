@@ -16,7 +16,7 @@ class ExcelExport extends Export
      * @throws \PhpOffice\PhpSpreadsheet\Exception
      * @throws \PhpOffice\PhpSpreadsheet\Writer\Exception
      */
-    public function render_data($data): string
+    public function serializeData($data): string
     {
         $excel = new Spreadsheet();
 

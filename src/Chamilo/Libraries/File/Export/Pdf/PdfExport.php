@@ -59,7 +59,7 @@ class PdfExport extends Export
     /**
      * @throws \Spipu\Html2Pdf\Exception\Html2PdfException
      */
-    public function render_data($data): string
+    public function serializeData($data): string
     {
         if (is_array($data))
         {

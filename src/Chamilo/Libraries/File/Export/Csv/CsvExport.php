@@ -9,7 +9,7 @@ use Chamilo\Libraries\File\Export\Export;
 class CsvExport extends Export
 {
 
-    public function render_data($data): string
+    public function serializeData($data): string
     {
         $key_array = array_keys($data[0]);
         $all = implode(';', $key_array) . PHP_EOL;

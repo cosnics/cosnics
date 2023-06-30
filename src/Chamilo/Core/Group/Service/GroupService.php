@@ -236,6 +236,18 @@ class GroupService
         );
     }
 
+    public function findRootGroup(): Group
+    {
+        $group = $this->groupRepository->findRootGroup();
+
+        if (!$group instanceof Group)
+        {
+            throw new RuntimeException('Could not find the root group');
+        }
+
+        return $group;
+    }
+
     /**
      * @deprecated Use GroupService::findGroupByIdentifier() now
      */

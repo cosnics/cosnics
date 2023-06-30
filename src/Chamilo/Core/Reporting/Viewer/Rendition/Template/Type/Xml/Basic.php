@@ -97,7 +97,7 @@ class Basic extends Xml
             );
         }
 
-        return $this->getXmlExporter()->write_to_file($file_name, $data);
+        return $this->getXmlExporter()->writeToFile($file_name, $data);
     }
 
     protected function getXmlExporter(): XmlExport

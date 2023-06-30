@@ -8,31 +8,35 @@ use Chamilo\Libraries\Architecture\Application\Application;
 use Chamilo\Libraries\Architecture\Exceptions\NotAllowedException;
 use Chamilo\Libraries\Format\Structure\Breadcrumb;
 use Chamilo\Libraries\Format\Structure\BreadcrumbTrail;
-use Chamilo\Libraries\Platform\Session\Request;
-use Chamilo\Libraries\Translation\Translation;
 use Chamilo\Libraries\Utilities\StringUtilities;
 
 /**
- * @package group.lib.group_manager.component
+ * @package Chamilo\Core\Group\Component
  */
 class CreatorComponent extends Manager
 {
 
     /**
-     * Runs this component and displays its output.
+     * @throws \QuickformException
+     * @throws \Chamilo\Libraries\Architecture\Exceptions\NotAllowedException
      */
     public function run()
     {
-        if (!$this->get_user()->isPlatformAdmin())
+        if (!$this->getUser()->isPlatformAdmin())
         {
             throw new NotAllowedException();
         }
 
+        $translator = $this->getTranslator();
+
+        $parentGroupIdentifier = $this->getRequest()->query->get(self::PARAM_GROUP_ID, '0');
+
         $group = new Group();
-        $group->set_parent(Request::get(self::PARAM_GROUP_ID));
+        $group->setParentId($parentGroupIdentifier);
+
         $form = new GroupForm(
-            GroupForm::TYPE_CREATE, $group,
-            $this->get_url([self::PARAM_GROUP_ID => Request::get(self::PARAM_GROUP_ID)]), $this->get_user()
+            GroupForm::TYPE_CREATE, $group, $this->get_url([self::PARAM_GROUP_ID => $parentGroupIdentifier]),
+            $this->getUser()
         );
 
         if ($form->validate())
@@ -43,8 +47,9 @@ class CreatorComponent extends Manager
             {
                 $group = $form->get_group();
                 $this->redirectWithMessage(
-                    Translation::get(
-                        'ObjectCreated', ['OBJECT' => Translation::get('Group')], StringUtilities::LIBRARIES
+                    $translator->trans(
+                        'ObjectCreated', ['OBJECT' => $translator->trans('Group', [], Manager::CONTEXT)],
+                        StringUtilities::LIBRARIES
                     ), (false), [
                         Application::PARAM_ACTION => self::ACTION_VIEW_GROUP,
                         self::PARAM_GROUP_ID => $group->get_id()
@@ -54,8 +59,9 @@ class CreatorComponent extends Manager
             else
             {
                 $this->redirectWithMessage(
-                    Translation::get(
-                        'ObjectNotCreated', ['OBJECT' => Translation::get('Group')], StringUtilities::LIBRARIES
+                    $translator->trans(
+                        'ObjectNotCreated', ['OBJECT' => $translator->trans('Group', [], Manager::CONTEXT)],
+                        StringUtilities::LIBRARIES
                     ), (true), [Application::PARAM_ACTION => self::ACTION_BROWSE_GROUPS]
                 );
             }
@@ -64,9 +70,9 @@ class CreatorComponent extends Manager
         {
             $html = [];
 
-            $html[] = $this->render_header();
-            $html[] = $form->toHtml();
-            $html[] = $this->render_footer();
+            $html[] = $this->renderHeader();
+            $html[] = $form->render();
+            $html[] = $this->renderFooter();
 
             return implode(PHP_EOL, $html);
         }
@@ -77,7 +83,7 @@ class CreatorComponent extends Manager
         $breadcrumbtrail->add(
             new Breadcrumb(
                 $this->get_url([Application::PARAM_ACTION => self::ACTION_BROWSE_GROUPS]),
-                Translation::get('BrowserComponent')
+                $this->getTranslator()->trans('BrowserComponent', [], Manager::CONTEXT)
             )
         );
     }

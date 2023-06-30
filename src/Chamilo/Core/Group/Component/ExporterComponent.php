@@ -9,19 +9,24 @@ use Chamilo\Libraries\File\Export\Export;
 use Chamilo\Libraries\Storage\Query\Condition\EqualityCondition;
 use Chamilo\Libraries\Storage\Query\Variable\PropertyConditionVariable;
 use Chamilo\Libraries\Storage\Query\Variable\StaticConditionVariable;
+use stdClass;
+use Symfony\Component\Serializer\Encoder\XmlEncoder;
+use Symfony\Component\Serializer\Normalizer\ObjectNormalizer;
+use Symfony\Component\Serializer\Serializer;
 
 /**
- * @package group.lib.group_manager.component
+ * @package Chamilo\Core\Group\Component
  */
 class ExporterComponent extends Manager
 {
 
     /**
-     * Runs this component and displays its output.
+     * @throws \QuickformException
+     * @throws \Chamilo\Libraries\Architecture\Exceptions\NotAllowedException
      */
     public function run()
     {
-        if (!$this->get_user()->isPlatformAdmin())
+        if (!$this->getUser()->isPlatformAdmin())
         {
             throw new NotAllowedException();
         }
@@ -32,48 +37,67 @@ class ExporterComponent extends Manager
         {
             $export = $form->exportValues();
             $file_type = $export['file_type'];
+
+            $serializer = new Serializer([new ObjectNormalizer()],
+                [new XmlEncoder([XmlEncoder::ROOT_NODE_NAME => 'rootItem', XmlEncoder::FORMAT_OUTPUT => true])]);
+
+            header('Content-Type: text/plain; charset=utf-8');
+            echo $serializer->serialize($this->build_group_tree(0), 'xml');
+            exit;
+
             $data['groups'] = $this->build_group_tree(0);
-            $this->export_groups($file_type, $data['groups'][0]);
+
+            $this->exportGroups($file_type, $data['groups'][0]);
         }
         else
         {
             $html = [];
 
-            $html[] = $this->render_header();
-            $html[] = $form->toHtml();
-            $html[] = $this->render_footer();
+            $html[] = $this->renderHeader();
+            $html[] = $form->render();
+            $html[] = $this->renderFooter();
 
             return implode(PHP_EOL, $html);
         }
     }
 
-    public function build_group_tree($parent_group)
+    /**
+     * @throws \Chamilo\Libraries\Storage\Exception\DataClassNoResultException
+     */
+    public function build_group_tree($parent_group): array
     {
         $condition = new EqualityCondition(
             new PropertyConditionVariable(Group::class, Group::PROPERTY_PARENT_ID),
             new StaticConditionVariable($parent_group)
         );
-        $result = $this->retrieve_groups($condition);
-        foreach ($result as $group)
+
+        $groups = $this->getGroupService()->findGroups($condition);
+
+        $data = [];
+
+        foreach ($groups as $group)
         {
-            $group_array[Group::PROPERTY_NAME] = htmlspecialchars($group->get_name());
-            $group_array[Group::PROPERTY_DESCRIPTION] = htmlspecialchars($group->get_description());
-            $group_array['children'] = $this->build_group_tree($group->get_id());
-            $data[] = $group_array;
+            $groupObject = new stdClass();
+
+            $groupObject->name = htmlspecialchars($group->get_name());
+            $groupObject->description = htmlspecialchars($group->get_description());
+            $groupObject->children = $this->build_group_tree($group->getId());
+
+            $data[] = $groupObject;
         }
 
         return $data;
     }
 
-    public function export_groups($file_type, $data)
+    public function exportGroups(string $file_type, array $data): void
     {
         $filename = 'export_groups_' . date('Y-m-d_H-i-s');
 
-        $this->getExporter($file_type)->send_to_browser($filename, $data);
+        $this->getExporter($file_type)->sendtoBrowser($filename, $data);
     }
 
     protected function getExporter($fileType): Export
     {
-        return $this->getService('Chamilo\Libraries\File\Export\'' . $fileType . '\'' . $fileType . 'Export');
+        return $this->getService('Chamilo\Libraries\File\Export\\' . $fileType . '\\' . $fileType . 'Export');
     }
 }

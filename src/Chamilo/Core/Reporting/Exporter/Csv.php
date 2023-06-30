@@ -35,11 +35,11 @@ class Csv extends ReportingExporter
 
     public function export()
     {
-        $this->getExporter('Csv')->send_to_browser($this->get_file_name(), $this->convert_data());
+        $this->getExporter('Csv')->sendtoBrowser($this->get_file_name(), $this->convert_data());
     }
 
     public function save()
     {
-        return $this->getExporter('Csv')->render_data($this->convert_data());
+        return $this->getExporter('Csv')->serializeData($this->convert_data());
     }
 }

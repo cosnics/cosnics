@@ -1,19 +1,17 @@
 <?php
 namespace Chamilo\Core\Group\Form;
 
-use Chamilo\Libraries\File\Export\Export;
 use Chamilo\Libraries\Format\Form\FormValidator;
 use Chamilo\Libraries\Format\Structure\Glyph\FontAwesomeGlyph;
 use Chamilo\Libraries\Translation\Translation;
 use Chamilo\Libraries\Utilities\StringUtilities;
 
 /**
- *
  * @package groups.lib.forms
  */
 class GroupExportForm extends FormValidator
 {
-    const TYPE_EXPORT = 1;
+    public const TYPE_EXPORT = 1;
 
     private $current_tag;
 
@@ -33,6 +31,7 @@ class GroupExportForm extends FormValidator
 
         $this->form_type = $form_type;
         $this->failedcsv = [];
+
         if ($this->form_type == self::TYPE_EXPORT)
         {
             $this->build_exporting_form();
@@ -43,7 +42,7 @@ class GroupExportForm extends FormValidator
     {
         $this->addElement(
             'select', 'file_type', Translation::get('OutputFileType', null, StringUtilities::LIBRARIES),
-            ['Xml']
+            ['Xml' => 'Xml']
         );
 
         $buttons[] = $this->createElement(
@@ -53,6 +52,6 @@ class GroupExportForm extends FormValidator
 
         $this->addGroup($buttons, 'buttons', null, '&nbsp;', false);
 
-        $this->setDefaults(array('file_type' => 'xml'));
+        $this->setDefaults(['file_type' => 'xml']);
     }
 }

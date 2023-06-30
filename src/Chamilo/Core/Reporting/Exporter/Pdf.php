@@ -8,11 +8,11 @@ class Pdf extends ReportingExporter
 
     public function export()
     {
-        $this->getExporter('Pdf')->send_to_browser($this->get_file_name(), $this->get_template());
+        $this->getExporter('Pdf')->sendtoBrowser($this->get_file_name(), $this->get_template());
     }
 
     public function save()
     {
-        return $this->getExporter('Pdf')->render_data($this->get_template());
+        return $this->getExporter('Pdf')->serializeData($this->get_template());
     }
 }

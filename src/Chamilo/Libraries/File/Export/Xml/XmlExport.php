@@ -8,7 +8,7 @@ use Chamilo\Libraries\File\Export\Export;
  */
 class XmlExport extends Export
 {
-    public function render_data($data): string
+    public function serializeData($data): string
     {
         $level = 0;
 

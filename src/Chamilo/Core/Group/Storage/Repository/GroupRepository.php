@@ -268,6 +268,18 @@ class GroupRepository
         return $this->getNestedSetDataClassRepository()->findAncestors($group, $includeSelf);
     }
 
+    public function findRootGroup(): ?Group
+    {
+        return $this->getNestedSetDataClassRepository()->retrieve(
+            Group::class, new DataClassRetrieveParameters(
+            new EqualityCondition(
+                new PropertyConditionVariable(Group::class, NestedSet::PROPERTY_PARENT_ID),
+                new StaticConditionVariable(0)
+            )
+        )
+        );
+    }
+
     /**
      * @return string[]
      * @todo This could be generalized to the NestedSetDataClassRepository

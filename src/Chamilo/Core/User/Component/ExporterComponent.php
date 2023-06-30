@@ -86,7 +86,7 @@ class ExporterComponent extends Manager
             $data = [['key' => 'users', 'data' => $data]];
         }
 
-        $this->getExporter($file_type)->send_to_browser($filename, $data);
+        $this->getExporter($file_type)->sendtoBrowser($filename, $data);
     }
 
     protected function getExporter($fileType): Export

@@ -3,9 +3,7 @@ namespace Chamilo\Core\Group\Component;
 
 use Chamilo\Core\Group\Manager;
 use Chamilo\Core\Group\Menu\GroupMenu;
-use Chamilo\Core\Group\Service\GroupMembershipService;
 use Chamilo\Core\Group\Storage\DataClass\Group;
-use Chamilo\Core\Group\Storage\DataClass\GroupRelUser;
 use Chamilo\Core\Group\Storage\DataClass\SubscribedUser;
 use Chamilo\Core\Group\Table\GroupTableRenderer;
 use Chamilo\Core\Group\Table\SubscribedUserTableRenderer;
@@ -25,6 +23,7 @@ use Chamilo\Libraries\Format\Tabs\TabsCollection;
 use Chamilo\Libraries\Format\Tabs\TabsRenderer;
 use Chamilo\Libraries\Storage\DataClass\NestedSet;
 use Chamilo\Libraries\Storage\Query\Condition\AndCondition;
+use Chamilo\Libraries\Storage\Query\Condition\Condition;
 use Chamilo\Libraries\Storage\Query\Condition\ContainsCondition;
 use Chamilo\Libraries\Storage\Query\Condition\EqualityCondition;
 use Chamilo\Libraries\Storage\Query\Condition\OrCondition;
@@ -44,17 +43,20 @@ class BrowserComponent extends Manager
 
     private ButtonToolBarRenderer $buttonToolbarRenderer;
 
-    private $group;
+    private ?Group $group;
 
-    private $groupIdentifier;
+    private ?string $groupIdentifier;
 
-    private $rootGroup;
+    private ?Group $rootGroup;
 
     /**
      * @throws \Chamilo\Libraries\Architecture\Exceptions\NotAllowedException
-     * @throws \Exception
+     * @throws \Chamilo\Libraries\Format\Table\Exception\InvalidPageNumberException
+     * @throws \Chamilo\Libraries\Storage\Exception\DataClassNoResultException
+     * @throws \QuickformException
+     * @throws \ReflectionException
+     * @throws \TableException
      */
-
     public function run()
     {
         if (!$this->getUser()->isPlatformAdmin())
@@ -82,7 +84,7 @@ class BrowserComponent extends Manager
         return parent::getAdditionalParameters($additionalParameters);
     }
 
-    public function getButtonToolbarRenderer()
+    public function getButtonToolbarRenderer(): ButtonToolBarRenderer
     {
         if (!isset($this->buttonToolbarRenderer))
         {
@@ -119,23 +121,17 @@ class BrowserComponent extends Manager
         return $this->buttonToolbarRenderer;
     }
 
-    /**
-     * @return \Chamilo\Core\Group\Storage\DataClass\Group
-     */
-    public function getGroup()
+    public function getGroup(): Group
     {
         if (!isset($this->group))
         {
-            $this->group = $this->retrieve_group($this->getGroupIdentifier());
+            $this->group = $this->getGroupService()->findGroupByIdentifier($this->getGroupIdentifier());
         }
 
         return $this->group;
     }
 
-    /**
-     * @return int
-     */
-    public function getGroupIdentifier()
+    public function getGroupIdentifier(): string
     {
         if (!$this->groupIdentifier)
         {
@@ -146,12 +142,10 @@ class BrowserComponent extends Manager
         return $this->groupIdentifier;
     }
 
-    protected function getGroupMembershipService(): GroupMembershipService
-    {
-        return $this->getService(GroupMembershipService::class);
-    }
-
-    protected function getGroupTableCondition()
+    /**
+     * @throws \QuickformException
+     */
+    protected function getGroupTableCondition(): ?Condition
     {
         $query = $this->buttonToolbarRenderer->getSearchForm()->getQuery();
 
@@ -170,12 +164,7 @@ class BrowserComponent extends Manager
         return $this->getService(GroupTableRenderer::class);
     }
 
-    /**
-     * @param string $query
-     *
-     * @return \Chamilo\Libraries\Storage\Query\Condition\OrCondition
-     */
-    public function getGroupsCondition($query)
+    public function getGroupsCondition(string $query): OrCondition
     {
         $conditions = [];
 
@@ -197,19 +186,11 @@ class BrowserComponent extends Manager
         return $this->getService(RequestTableParameterValuesCompiler::class);
     }
 
-    /**
-     * @return \Chamilo\Core\Group\Storage\DataClass\Group
-     */
-    public function getRootGroup()
+    public function getRootGroup(): Group
     {
         if (!$this->rootGroup)
         {
-            $this->rootGroup = $this->retrieve_groups(
-                new EqualityCondition(
-                    new PropertyConditionVariable(Group::class, NestedSet::PROPERTY_PARENT_ID),
-                    new StaticConditionVariable(0)
-                )
-            )->current();
+            $this->rootGroup = $this->getGroupService()->findRootGroup();
         }
 
         return $this->rootGroup;
@@ -221,7 +202,7 @@ class BrowserComponent extends Manager
     }
 
     /**
-     * @throws \ReflectionException
+     * @throws \QuickformException
      */
     public function getSubscribedUsersCondition(): ?OrCondition
     {
@@ -253,9 +234,9 @@ class BrowserComponent extends Manager
     }
 
     /**
-     * @return \Chamilo\Libraries\Storage\Query\Condition\OrCondition
+     * @throws \QuickformException
      */
-    public function get_all_groups_condition()
+    public function get_all_groups_condition(): ?OrCondition
     {
         $condition = null;
 
@@ -269,7 +250,7 @@ class BrowserComponent extends Manager
         return $condition;
     }
 
-    public function get_group_info()
+    public function get_group_info(): string
     {
         $group = $this->getGroup();
         $translator = $this->getTranslator();
@@ -302,12 +283,10 @@ class BrowserComponent extends Manager
             )
         );
 
-        $condition = new EqualityCondition(
-            new PropertyConditionVariable(GroupRelUser::class, GroupRelUser::PROPERTY_GROUP_ID),
-            new StaticConditionVariable($group->getId())
-        );
-        $users = $this->retrieve_group_rel_users($condition);
-        $visible = ($users->count() > 0);
+        $subscribedUserCount =
+            $this->getGroupMembershipService()->countSubscribedUsersForGroupIdentifier($group->getId());
+
+        $visible = ($subscribedUserCount > 0);
 
         if ($visible)
         {
@@ -364,9 +343,9 @@ class BrowserComponent extends Manager
     }
 
     /**
-     * @return \Chamilo\Libraries\Storage\Query\Condition\AndCondition
+     * @throws \QuickformException
      */
-    public function get_subgroups_condition()
+    public function get_subgroups_condition(): Condition
     {
         $condition = new EqualityCondition(
             new PropertyConditionVariable(Group::class, NestedSet::PROPERTY_PARENT_ID),
@@ -389,10 +368,13 @@ class BrowserComponent extends Manager
     }
 
     /**
-     * @return string
-     * @throws \Exception
+     * @throws \Chamilo\Libraries\Storage\Exception\DataClassNoResultException
+     * @throws \TableException
+     * @throws \Chamilo\Libraries\Format\Table\Exception\InvalidPageNumberException
+     * @throws \ReflectionException
+     * @throws \QuickformException
      */
-    public function get_user_html()
+    public function get_user_html(): string
     {
         $renderer_name = ClassnameUtilities::getInstance()->getClassnameFromObject($this, true);
         $tabs = new TabsCollection();
@@ -401,7 +383,8 @@ class BrowserComponent extends Manager
         // Subgroups table tab
         $tabs->add(
             new ContentTab(
-                self::TAB_SUBGROUPS, $translator->trans('Subgroups'), $this->renderGroupTable(), new FontAwesomeGlyph(
+                (string) self::TAB_SUBGROUPS, $translator->trans('Subgroups'), $this->renderGroupTable(),
+                new FontAwesomeGlyph(
                     'users', ['fa-lg'], null, 'fas'
                 )
             )
@@ -409,7 +392,7 @@ class BrowserComponent extends Manager
 
         $tabs->add(
             new ContentTab(
-                self::TAB_USERS, $translator->trans('Users', [], \Chamilo\Core\User\Manager::CONTEXT),
+                (string) self::TAB_USERS, $translator->trans('Users', [], \Chamilo\Core\User\Manager::CONTEXT),
                 $this->renderSubscribedUsertable(), new FontAwesomeGlyph('user', ['fa-lg'], null, 'fas')
             )
         );
@@ -417,7 +400,8 @@ class BrowserComponent extends Manager
         // Group info tab
         $tabs->add(
             new ContentTab(
-                self::TAB_DETAILS, $translator->trans('Details'), $this->get_group_info(), new FontAwesomeGlyph(
+                (string) self::TAB_DETAILS, $translator->trans('Details'), $this->get_group_info(),
+                new FontAwesomeGlyph(
                     'info-circle', ['fa-lg'], null, 'fas'
                 )
             )
@@ -436,6 +420,7 @@ class BrowserComponent extends Manager
      * @throws \TableException
      * @throws \Chamilo\Libraries\Format\Table\Exception\InvalidPageNumberException
      * @throws \QuickformException
+     * @throws \Chamilo\Libraries\Storage\Exception\DataClassNoResultException
      */
     protected function renderGroupTable(): string
     {
@@ -462,7 +447,6 @@ class BrowserComponent extends Manager
      * @throws \ReflectionException
      * @throws \Chamilo\Libraries\Format\Table\Exception\InvalidPageNumberException
      * @throws \QuickformException
-     * @throws \Exception
      */
     protected function renderSubscribedUsertable(): string
     {

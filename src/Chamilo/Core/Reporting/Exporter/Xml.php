@@ -40,11 +40,11 @@ class Xml extends Csv
 
     public function export()
     {
-        $this->getExporter('Xml')->send_to_browser($this->get_file_name(), $this->convert_data());
+        $this->getExporter('Xml')->sendtoBrowser($this->get_file_name(), $this->convert_data());
     }
 
     public function save()
     {
-        return $this->getExporter('Xml')->render_data($this->convert_data());
+        return $this->getExporter('Xml')->serializeData($this->convert_data());
     }
 }

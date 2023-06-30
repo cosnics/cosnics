@@ -3,19 +3,23 @@ namespace Chamilo\Libraries\File\Export;
 
 use Chamilo\Libraries\File\ConfigurablePathBuilder;
 use Chamilo\Libraries\File\Filesystem;
-use Exception;
+use Symfony\Component\HttpFoundation\BinaryFileResponse;
 
 /**
  * @package Chamilo\Libraries\File\Export
  */
 abstract class Export
 {
-
     protected ConfigurablePathBuilder $configurablePathBuilder;
 
-    public function __construct(ConfigurablePathBuilder $configurablePathBuilder)
+    protected \Symfony\Component\Filesystem\Filesystem $filesystem;
+
+    public function __construct(
+        ConfigurablePathBuilder $configurablePathBuilder, \Symfony\Component\Filesystem\Filesystem $filesystem
+    )
     {
         $this->configurablePathBuilder = $configurablePathBuilder;
+        $this->filesystem = $filesystem;
     }
 
     public function getConfigurablePathBuilder(): ConfigurablePathBuilder
@@ -23,26 +27,28 @@ abstract class Export
         return $this->configurablePathBuilder;
     }
 
-    abstract public function render_data($data): string;
-
-    /**
-     * @throws \Exception
-     */
-    public function send_to_browser(string $fileName, array $data, ?string $path = null)
+    public function getFilesystem(): \Symfony\Component\Filesystem\Filesystem
     {
-        $file = $this->write_to_file($fileName, $data, $path);
+        return $this->filesystem;
+    }
+
+    public function sendtoBrowser(string $fileName, array $data, ?string $path = null): void
+    {
+        $file = $this->writeToFile($fileName, $data, $path);
 
         if ($file)
         {
-            Filesystem::file_send_for_download($file, true, $fileName);
-            exit();
+            $fileResponse = new BinaryFileResponse($file);
+            $fileResponse->send();
+
+            $this->getFilesystem()->remove($file);
+            exit;
         }
     }
 
-    /**
-     * @throws \Exception
-     */
-    public function write_to_file(string $fileName, array $data, ?string $path = null): string
+    abstract public function serializeData($data): string;
+
+    public function writeToFile(string $fileName, array $data, ?string $path = null): string
     {
         if (!$path)
         {
@@ -50,14 +56,8 @@ abstract class Export
         }
 
         $file = $path . Filesystem::create_unique_name($path, $fileName);
-        $handle = fopen($file, 'a+');
 
-        if (!fwrite($handle, $this->render_data($data)))
-        {
-            throw new Exception('Writing to ' . $file . ' failed');
-        }
-
-        fclose($handle);
+        $this->getFilesystem()->dumpFile($file, $this->serializeData($data));
 
         return $file;
     }
