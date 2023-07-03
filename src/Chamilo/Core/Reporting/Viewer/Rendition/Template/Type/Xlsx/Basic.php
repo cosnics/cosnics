@@ -5,7 +5,6 @@ use Chamilo\Core\Reporting\Viewer\Rendition\Block\BlockRenditionImplementation;
 use Chamilo\Core\Reporting\Viewer\Rendition\Block\Type\Xlsx as XlsxBlockRendition;
 use Chamilo\Core\Reporting\Viewer\Rendition\Template\Type\Xlsx;
 use Chamilo\Libraries\Architecture\ClassnameUtilities;
-use Chamilo\Libraries\File\Filesystem;
 use Chamilo\Libraries\Translation\Translation;
 use PhpOffice\PhpSpreadsheet\IOFactory;
 use PhpOffice\PhpSpreadsheet\Spreadsheet;
@@ -146,7 +145,7 @@ class Basic extends Xlsx
             );
         }
 
-        $file = $this->getArchivePath() . Filesystem::create_unique_name(
+        $file = $this->getArchivePath() . $this->getFilesystemTools()->createUniqueName(
                 $this->getArchivePath(), $file_name
             );
 

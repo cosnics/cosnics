@@ -7,9 +7,9 @@ use Chamilo\Configuration\Package\Properties\Dependencies\DependencyVerifier;
 use Chamilo\Configuration\Package\Storage\DataClass\Package;
 use Chamilo\Configuration\Storage\DataClass\Registration;
 use Chamilo\Configuration\Storage\DataClass\Setting;
-use Chamilo\Libraries\File\Filesystem;
 use Chamilo\Libraries\Translation\Translation;
 use DOMDocument;
+use Symfony\Component\Finder\Iterator\FileTypeFilterIterator;
 
 /**
  * @package Chamilo\Configuration\Package\Action
@@ -209,7 +209,7 @@ abstract class Installer extends Action
     public function install_storage_units()
     {
         $dir = $this->get_path() . 'Resources/Storage/';
-        $files = Filesystem::get_directory_content($dir, Filesystem::LIST_FILES);
+        $files = $this->getFilesystemTools()->getDirectoryContent($dir, FileTypeFilterIterator::ONLY_FILES);
 
         foreach ($files as $file)
         {

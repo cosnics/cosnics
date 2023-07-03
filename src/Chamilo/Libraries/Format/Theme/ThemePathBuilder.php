@@ -3,8 +3,10 @@ namespace Chamilo\Libraries\Format\Theme;
 
 use Chamilo\Libraries\Architecture\ClassnameUtilities;
 use Chamilo\Libraries\File\AbstractPathBuilder;
-use Chamilo\Libraries\File\Filesystem;
+use Chamilo\Libraries\File\FilesystemTools;
 use Chamilo\Libraries\Utilities\StringUtilities;
+use Symfony\Component\Filesystem\Filesystem;
+use Symfony\Component\Finder\Iterator\FileTypeFilterIterator;
 
 /**
  * @package Chamilo\Libraries\Format\Theme
@@ -17,6 +19,8 @@ class ThemePathBuilder
     public const ICON_MINI = 16;
     public const ICON_SMALL = 22;
 
+    protected FilesystemTools $filesystemTools;
+
     private ClassnameUtilities $classnameUtilities;
 
     private AbstractPathBuilder $pathBuilder;
@@ -27,12 +31,13 @@ class ThemePathBuilder
 
     public function __construct(
         StringUtilities $stringUtilities, ClassnameUtilities $classnameUtilities, AbstractPathBuilder $pathBuilder,
-        string $theme
+        FilesystemTools $filesystemTools, string $theme
     )
     {
         $this->stringUtilities = $stringUtilities;
         $this->classnameUtilities = $classnameUtilities;
         $this->pathBuilder = $pathBuilder;
+        $this->filesystemTools = $filesystemTools;
         $this->theme = $theme;
     }
 
@@ -44,7 +49,8 @@ class ThemePathBuilder
         $availableThemes = [];
 
         $path = $this->getCssPath('Chamilo\Configuration', false);
-        $directories = Filesystem::get_directory_content($path, Filesystem::LIST_DIRECTORIES, false);
+        $directories =
+            $this->getFilesystemTools()->getDirectoryContent($path, FileTypeFilterIterator::ONLY_FILES, false);
 
         foreach ($directories as $directory)
         {
@@ -83,6 +89,11 @@ class ThemePathBuilder
     public function getFavouriteIcon(): string
     {
         return $this->getImagePath(StringUtilities::LIBRARIES, 'Favicon', 'ico');
+    }
+
+    public function getFilesystemTools(): FilesystemTools
+    {
+        return $this->filesystemTools;
     }
 
     public function getImagePath(string $context, string $image, string $extension = 'png'): string

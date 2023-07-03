@@ -5,7 +5,6 @@ use Chamilo\Core\Reporting\Viewer\Rendition\Block\BlockRenditionImplementation;
 use Chamilo\Core\Reporting\Viewer\Rendition\Block\Type\Csv as CsvBlockRendition;
 use Chamilo\Core\Reporting\Viewer\Rendition\Template\Type\Csv;
 use Chamilo\Libraries\Architecture\ClassnameUtilities;
-use Chamilo\Libraries\File\Filesystem;
 use Chamilo\Libraries\Translation\Translation;
 
 /**
@@ -113,7 +112,7 @@ class Basic extends Csv
             );
         }
 
-        $file = $this->getArchivePath() . Filesystem::create_unique_name(
+        $file = $this->getArchivePath() . $this->getFilesystemTools()->createUniqueName(
                 $this->getArchivePath(), $file_name
             );
 

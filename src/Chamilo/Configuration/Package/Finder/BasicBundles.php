@@ -3,9 +3,9 @@ namespace Chamilo\Configuration\Package\Finder;
 
 use Chamilo\Configuration\Package\PackageList;
 use Chamilo\Libraries\Architecture\ClassnameUtilities;
-use Chamilo\Libraries\File\Filesystem;
 use Chamilo\Libraries\File\SystemPathBuilder;
 use Chamilo\Libraries\Utilities\StringUtilities;
+use Symfony\Component\Finder\Finder;
 
 /**
  * @package Chamilo\Configuration\Package\Finder
@@ -55,11 +55,12 @@ class BasicBundles
         $pathBuilder = new SystemPathBuilder(new ClassnameUtilities(new StringUtilities('UTF-8')));
         $path = $pathBuilder->namespaceToFullPath($rootNamespace);
 
-        $folders = Filesystem::get_directory_content($path, Filesystem::LIST_DIRECTORIES, false);
+        $finder = new Finder();
+        $finder->depth('== 0')->directories()->in($path);
 
-        foreach ($folders as $folder)
+        foreach ($finder as $folder)
         {
-            if (!in_array($folder, $blacklist) && substr($folder, 0, 1) != '.')
+            if (!in_array($folder, $blacklist) && !str_starts_with($folder, '.'))
             {
                 $folderNamespace = ($rootNamespace ? $rootNamespace . '\\' : '') . $folder;
 

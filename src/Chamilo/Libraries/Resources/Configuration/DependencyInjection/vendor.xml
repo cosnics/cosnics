@@ -104,6 +104,7 @@
 
         <service id="Symfony\Component\Yaml\Parser"/>
         <service id="Symfony\Component\Filesystem\Filesystem"/>
+        <service id="Symfony\Component\Finder\Finder"/>
 
         <service id="Symfony\Component\Serializer\Normalizer\ObjectNormalizer"/>
         <service id="Symfony\Component\Serializer\Encoder\XmlEncoder"/>

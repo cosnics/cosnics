@@ -7,7 +7,6 @@ use Chamilo\Core\Repository\Quota\Manager;
 use Chamilo\Core\Repository\Quota\Storage\DataClass\Request;
 use Chamilo\Core\Repository\Quota\Storage\DataManager;
 use Chamilo\Libraries\Architecture\Exceptions\NotAllowedException;
-use Chamilo\Libraries\File\Filesystem;
 use Chamilo\Libraries\Mail\ValueObject\Mail;
 use Chamilo\Libraries\Translation\Translation;
 use Chamilo\Libraries\Utilities\StringUtilities;
@@ -144,11 +143,12 @@ class GranterComponent extends Manager
         set_time_limit(3600);
 
         $recipient = $request->get_user();
+        $filesystemTools = $this->getFilesystemTools();
 
         $title = Translation::get(
             'RequestGrantedMailTitle', [
                 'PLATFORM' => Configuration::getInstance()->get_setting(['Chamilo\Core\Admin', 'site_name']),
-                'ADDED_QUOTA' => Filesystem::format_file_size($request->get_quota())
+                'ADDED_QUOTA' => $filesystemTools->formatFileSize($request->get_quota())
             ]
         );
 
@@ -156,8 +156,8 @@ class GranterComponent extends Manager
             'RequestGrantedMailBody', [
                 'USER' => $recipient->get_fullname(),
                 'PLATFORM' => $this->getConfigurationConsulter()->getSetting(['Chamilo\Core\Admin', 'site_name']),
-                'ADDED_QUOTA' => Filesystem::format_file_size($request->get_quota()),
-                'QUOTA' => Filesystem::format_file_size($calculator->getMaximumUserDiskQuota())
+                'ADDED_QUOTA' => $filesystemTools->formatFileSize($request->get_quota()),
+                'QUOTA' => $filesystemTools->formatFileSize($calculator->getMaximumUserDiskQuota())
             ]
         );
 

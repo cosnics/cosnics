@@ -13,7 +13,6 @@ use Chamilo\Core\Repository\Workspace\Storage\DataClass\Workspace;
 use Chamilo\Core\User\Storage\DataClass\User;
 use Chamilo\Libraries\Architecture\Application\Application;
 use Chamilo\Libraries\DependencyInjection\DependencyInjectionContainerBuilder;
-use Chamilo\Libraries\File\Filesystem;
 use Chamilo\Libraries\File\Properties\FileProperties;
 use Chamilo\Libraries\Storage\Cache\DataClassRepositoryCache;
 use Chamilo\Libraries\Storage\Parameters\DataClassRetrievesParameters;
@@ -109,6 +108,7 @@ class ContentObjectCopier
         );
 
         $exporter = ContentObjectExportController::factory($exportParameters);
+        $filesystem = $this->getFilesystem();
 
         $path = $exporter->run();
 
@@ -116,12 +116,8 @@ class ContentObjectCopier
         $pathInfo = pathinfo($path);
         $newPath = $pathInfo['dirname'] . DIRECTORY_SEPARATOR . $file->get_name() . '.cpo';
 
-        Filesystem::move_file($path, $newPath);
+        $filesystem->rename($path, $newPath);
         $file = FileProperties::from_path($newPath);
-
-        $targetUser = \Chamilo\Libraries\Storage\DataManager\DataManager::retrieve_by_id(
-            User::class, $this->targetUserIdentifier
-        );
 
         $parameters = ImportParameters::factory(
             ContentObjectImport::FORMAT_CPO, $this->targetUserIdentifier, $this->targetWorkspace, $this->targetCategory,
@@ -137,7 +133,7 @@ class ContentObjectCopier
             $this->changeContentObjectNames($contentObjectIdentifiers);
         }
 
-        Filesystem::remove($newPath);
+        $filesystem->remove($newPath);
 
         return $contentObjectIdentifiers;
     }
@@ -204,6 +200,11 @@ class ContentObjectCopier
         return $this->getService(
             DataClassRepositoryCache::class
         );
+    }
+
+    public function getFilesystem(): \Symfony\Component\Filesystem\Filesystem
+    {
+        return $this->getService(\Symfony\Component\Filesystem\Filesystem::class);
     }
 
     /**

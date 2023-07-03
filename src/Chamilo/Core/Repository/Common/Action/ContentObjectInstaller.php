@@ -9,7 +9,6 @@ use Chamilo\Core\Repository\Service\ContentObjectTemplate\ContentObjectTemplateS
 use Chamilo\Core\User\Manager;
 use Chamilo\Core\User\Storage\DataClass\User;
 use Chamilo\Core\User\Storage\DataManager;
-use Chamilo\Libraries\File\Filesystem;
 use Chamilo\Libraries\File\Properties\FileProperties;
 use Chamilo\Libraries\Storage\Parameters\DataClassRetrievesParameters;
 use Chamilo\Libraries\Storage\Query\Condition\EqualityCondition;
@@ -59,7 +58,7 @@ abstract class ContentObjectInstaller extends Installer
     {
         $exampleFolderPath = $this->getSystemPathBuilder()->getResourcesPath(static::CONTEXT) . 'Example/';
 
-        $examplePaths = Filesystem::get_directory_content($exampleFolderPath);
+        $examplePaths = $this->getFilesystemTools()->getDirectoryContent($exampleFolderPath);
 
         foreach ($examplePaths as $examplePath)
         {

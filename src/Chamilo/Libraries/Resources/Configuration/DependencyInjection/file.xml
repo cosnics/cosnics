@@ -7,6 +7,7 @@
                   autoconfigure="true"
                   public="true"/>
 
+        <service id="Chamilo\Libraries\File\FilesystemTools"/>
         <service id="Chamilo\Libraries\File\SystemPathBuilder"/>
         <service id="Chamilo\Libraries\File\WebPathBuilder"/>
         <service id="Chamilo\Libraries\File\Compression\ArchiveCreator\ArchiveCreator"/>

@@ -10,7 +10,6 @@ use Chamilo\Core\Repository\Storage\DataClass\ContentObject;
 use Chamilo\Core\Repository\Workspace\Storage\DataClass\Workspace;
 use Chamilo\Core\User\Storage\DataClass\User;
 use Chamilo\Core\User\Storage\DataManager;
-use Chamilo\Libraries\File\Filesystem;
 use Chamilo\Libraries\Translation\Translation;
 use Chamilo\Libraries\Utilities\StringUtilities;
 
@@ -126,7 +125,7 @@ class FileForm extends ContentObjectForm
             'current_selected_file', '', Translation::getInstance()->getTranslation(
             'CurrentlySelectedFile', [
                 'FILENAME' => $content_object->get_filename(),
-                'FILESIZE' => Filesystem::format_file_size($content_object->get_filesize())
+                'FILESIZE' => $this->getFilesystemTools()->formatFileSize((int) $content_object->get_filesize())
             ]
         )
         );

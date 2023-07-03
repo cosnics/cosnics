@@ -6,7 +6,7 @@ use Chamilo\Core\User\Storage\DataClass\User;
 use Chamilo\Core\User\Storage\DataManager;
 use Chamilo\Libraries\DependencyInjection\DependencyInjectionContainerBuilder;
 use Chamilo\Libraries\File\ConfigurablePathBuilder;
-use Chamilo\Libraries\File\Filesystem;
+use Chamilo\Libraries\File\FilesystemTools;
 use Chamilo\Libraries\Storage\Parameters\DataClassRetrievesParameters;
 use Chamilo\Libraries\Storage\Query\Condition\EqualityCondition;
 use Chamilo\Libraries\Storage\Query\Variable\PropertyConditionVariable;
@@ -326,20 +326,17 @@ class AssessmentResultsExportController
      */
     protected function export_to_csv()
     {
-        /**
-         * @var \Chamilo\Libraries\File\ConfigurablePathBuilder $configurablePathBuilder
-         */
-        $configurablePathBuilder =
-            DependencyInjectionContainerBuilder::getInstance()->createContainer()->get(ConfigurablePathBuilder::class);
 
-        $path = $configurablePathBuilder->getTemporaryPath();
+        $path = $this->getConfigurablePathBuilder()->getTemporaryPath();
 
         if (!file_exists($path))
         {
-            Filesystem::create_dir($path);
+            $this->getFilesystem()->mkdir($path);
         }
 
-        $path = $path . Filesystem::create_unique_name($path, 'raw_assessment_export' . date('_Y-m-d_H-i-s') . '.csv');
+        $path = $path . $this->getFilesystemTools()->createUniqueName(
+                $path, 'raw_assessment_export' . date('_Y-m-d_H-i-s') . '.csv'
+            );
 
         $fp = fopen($path, 'w');
 
@@ -351,6 +348,25 @@ class AssessmentResultsExportController
         fclose($fp);
 
         return $path;
+    }
+
+    public function getConfigurablePathBuilder(): ConfigurablePathBuilder
+    {
+        return DependencyInjectionContainerBuilder::getInstance()->createContainer()->get(
+            ConfigurablePathBuilder::class
+        );
+    }
+
+    public function getFilesystem(): \Symfony\Component\Filesystem\Filesystem
+    {
+        return DependencyInjectionContainerBuilder::getInstance()->createContainer()->get(
+            \Symfony\Component\Filesystem\Filesystem::class
+        );
+    }
+
+    public function getFilesystemTools(): FilesystemTools
+    {
+        return DependencyInjectionContainerBuilder::getInstance()->createContainer()->get(FilesystemTools::class);
     }
 
     /**

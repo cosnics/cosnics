@@ -6,7 +6,6 @@ use Chamilo\Core\Repository\Storage\DataClass\ContentObject;
 use Chamilo\Core\Repository\Storage\DataManager;
 use Chamilo\Core\Repository\Workspace\Storage\DataClass\Workspace;
 use Chamilo\Libraries\File\Compression\ZipArchive\ZipArchiveFilecompression;
-use Chamilo\Libraries\File\Filesystem;
 use Chamilo\Libraries\File\Properties\FileProperties;
 use Chamilo\Libraries\File\Properties\WebpageProperties;
 use Chamilo\Libraries\Translation\Translation;
@@ -30,20 +29,22 @@ class HotpotatoesContentObjectImportController extends ContentObjectImportContro
             {
                 if (in_array($file->get_extension(), ['htm', 'html']))
                 {
+                    $filesystem = $this->getFilesystem();
+
                     $filename_hash = md5($file->get_path());
                     $relative_folder_path = Text::char_at($filename_hash, 0);
                     $full_folder_path = $this->getSystemPathBuilder()->getPublicStoragePath(
                             'Chamilo\Core\Repository\ContentObject\Hotpotatoes'
                         ) . $this->get_parameters()->get_user() . '/' . $relative_folder_path;
 
-                    Filesystem::create_dir($full_folder_path);
-                    $unique_hash = Filesystem::create_unique_name($full_folder_path, $filename_hash);
-                    Filesystem::create_dir($full_folder_path . '/' . $unique_hash);
+                    $filesystem->mkdir($full_folder_path);
+                    $unique_hash = $this->getFilesystemTools()->createUniqueName($full_folder_path, $filename_hash);
+                    $filesystem->mkdir($full_folder_path . '/' . $unique_hash);
 
                     $relative_path = $relative_folder_path . '/' . $unique_hash . '/index.htm';
                     $path_to_save = $full_folder_path . '/' . $unique_hash . '/index.htm';
 
-                    Filesystem::move_file($file->get_path(), $path_to_save);
+                    $filesystem->rename($file->get_path(), $path_to_save);
 
                     $this->process_content_object($relative_path, $path_to_save);
                 }
@@ -110,7 +111,7 @@ class HotpotatoesContentObjectImportController extends ContentObjectImportContro
     {
         $extracted_files_dir = $this->getZipArchiveFilecompression()->extractFile($archive_path, false);
         $this->process_folder($extracted_files_dir);
-        Filesystem::remove($extracted_files_dir);
+        $this->getFilesystem()->remove($extracted_files_dir);
     }
 
     /**
@@ -169,11 +170,10 @@ class HotpotatoesContentObjectImportController extends ContentObjectImportContro
 
     public function process_folder($folder_path)
     {
-        $hotpotatoes_path = $this->getSystemPathBuilder()->getPublicStoragePath(
-                'Chamilo\Core\Repository\ContentObject\Hotpotatoes'
-            ) . $this->get_parameters()->get_user() . '/';
+        $filesystem = $this->getFilesystem();
+        $filesystemTools = $this->getFilesystemTools();
 
-        $entries = Filesystem::get_directory_content($folder_path, Filesystem::LIST_FILES_AND_DIRECTORIES, false);
+        $entries = $filesystemTools->getDirectoryContent($folder_path, null, false);
         if (count($entries) == 0)
         {
             $this->add_message(Translation::get('EmptyHotpotatoes'), self::TYPE_WARNING);
@@ -200,16 +200,13 @@ class HotpotatoesContentObjectImportController extends ContentObjectImportContro
                     {
                         $this->process_archive($entry_properties->get_path());
                     }
+                    elseif (in_array($entry_properties->get_extension(), ['htm', 'html']))
+                    {
+                        $htm_files[] = $entry_properties;
+                    }
                     else
                     {
-                        if (in_array($entry_properties->get_extension(), ['htm', 'html']))
-                        {
-                            $htm_files[] = $entry_properties;
-                        }
-                        else
-                        {
-                            $extra_files[] = $entry_properties;
-                        }
+                        $extra_files[] = $entry_properties;
                     }
                 }
             }
@@ -241,8 +238,8 @@ class HotpotatoesContentObjectImportController extends ContentObjectImportContro
                         'Chamilo\Core\Repository\ContentObject\Hotpotatoes'
                     ) . $this->get_parameters()->get_user() . '/' . $relative_folder_path;
 
-                Filesystem::create_dir($full_folder_path);
-                $unique_hash = Filesystem::create_unique_name($full_folder_path, $masher_hash);
+                $filesystem->mkdir($full_folder_path);
+                $unique_hash = $filesystemTools->createUniqueName($full_folder_path, $masher_hash);
 
                 foreach ($htm_files as $masher_file_properties)
                 {
@@ -250,7 +247,7 @@ class HotpotatoesContentObjectImportController extends ContentObjectImportContro
                         $masher_file_properties->get_name_extension();
                     $path_to_save =
                         $full_folder_path . '/' . $unique_hash . '/' . $masher_file_properties->get_name_extension();
-                    Filesystem::move_file($masher_file_properties->get_path(), $path_to_save);
+                    $filesystem->rename($masher_file_properties->get_path(), $path_to_save);
                 }
 
                 foreach ($extra_files as $masher_extra_file_properties)
@@ -259,7 +256,7 @@ class HotpotatoesContentObjectImportController extends ContentObjectImportContro
                         $masher_extra_file_properties->get_name_extension();
                     $path_to_save = $full_folder_path . '/' . $unique_hash . '/' .
                         $masher_extra_file_properties->get_name_extension();
-                    Filesystem::move_file($masher_extra_file_properties->get_path(), $path_to_save);
+                    $filesystem->rename($masher_extra_file_properties->get_path(), $path_to_save);
                 }
 
                 $masher_path = $relative_folder_path . '/' . $unique_hash . '/' . $masher->get_name_extension();
@@ -281,13 +278,13 @@ class HotpotatoesContentObjectImportController extends ContentObjectImportContro
                             'Chamilo\Core\Repository\ContentObject\Hotpotatoes'
                         ) . $this->get_parameters()->get_user() . '/' . $relative_folder_path;
 
-                    Filesystem::create_dir($full_folder_path);
-                    $unique_hash = Filesystem::create_unique_name($full_folder_path, $hot_potatoes_hash);
+                    $filesystem->mkdir($full_folder_path);
+                    $unique_hash = $filesystemTools->createUniqueName($full_folder_path, $hot_potatoes_hash);
                     $relative_path = $relative_folder_path . '/' . $unique_hash . '/' .
                         $hot_potatoes_file_properties->get_name_extension();
                     $path_to_save = $full_folder_path . '/' . $unique_hash . '/' .
                         $hot_potatoes_file_properties->get_name_extension();
-                    Filesystem::move_file($hot_potatoes_file_properties->get_path(), $path_to_save);
+                    $filesystem->rename($hot_potatoes_file_properties->get_path(), $path_to_save);
 
                     $this->process_content_object($relative_path, $path_to_save);
                 }

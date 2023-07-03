@@ -5,7 +5,7 @@ use Chamilo\Core\User\Picture\UserPictureProviderInterface;
 use Chamilo\Core\User\Picture\UserPictureUpdateProviderInterface;
 use Chamilo\Core\User\Storage\DataClass\User;
 use Chamilo\Libraries\File\ConfigurablePathBuilder;
-use Chamilo\Libraries\File\Filesystem;
+use Chamilo\Libraries\File\FilesystemTools;
 use Chamilo\Libraries\File\ImageManipulation\ImageManipulation;
 use Chamilo\Libraries\File\WebPathBuilder;
 use Chamilo\Libraries\Format\Theme\ThemePathBuilder;
@@ -20,6 +20,10 @@ use Symfony\Component\HttpFoundation\StreamedResponse;
  */
 class UserPictureProvider implements UserPictureProviderInterface, UserPictureUpdateProviderInterface
 {
+    protected \Symfony\Component\Filesystem\Filesystem $filesystem;
+
+    protected FilesystemTools $filesystemTools;
+
     protected WebPathBuilder $webPathBuilder;
 
     private ConfigurablePathBuilder $configurablePathBuilder;
@@ -28,12 +32,15 @@ class UserPictureProvider implements UserPictureProviderInterface, UserPictureUp
 
     public function __construct(
         ConfigurablePathBuilder $configurablePathBuilder, ThemePathBuilder $themeSystemPathBuilder,
-        WebPathBuilder $webPathBuilder
+        WebPathBuilder $webPathBuilder, \Symfony\Component\Filesystem\Filesystem $filesystem,
+        FilesystemTools $filesystemTools
     )
     {
         $this->configurablePathBuilder = $configurablePathBuilder;
         $this->themeSystemPathBuilder = $themeSystemPathBuilder;
         $this->webPathBuilder = $webPathBuilder;
+        $this->filesystem = $filesystem;
+        $this->filesystemTools = $filesystemTools;
     }
 
     /**
@@ -47,7 +54,7 @@ class UserPictureProvider implements UserPictureProviderInterface, UserPictureUp
         if ($this->doesUserHavePicture($targetUser))
         {
             $path = $this->getUserPicturePath($targetUser);
-            Filesystem::remove($path);
+            $this->getFilesystem()->remove($path);
             $targetUser->set_picture_uri(null);
         }
     }
@@ -114,6 +121,16 @@ class UserPictureProvider implements UserPictureProviderInterface, UserPictureUp
     public function getConfigurablePathBuilder(): ConfigurablePathBuilder
     {
         return $this->configurablePathBuilder;
+    }
+
+    public function getFilesystem(): \Symfony\Component\Filesystem\Filesystem
+    {
+        return $this->filesystem;
+    }
+
+    public function getFilesystemTools(): FilesystemTools
+    {
+        return $this->filesystemTools;
     }
 
     /**
@@ -218,9 +235,10 @@ class UserPictureProvider implements UserPictureProviderInterface, UserPictureUp
         $this->deleteUserPicture($targetUser, $requestUser);
 
         $path = $this->getConfigurablePathBuilder()->getProfilePicturePath();
-        Filesystem::create_dir($path);
+        $this->getFilesystem()->mkdir($path);
 
-        $imageFile = Filesystem::create_unique_name($path, $targetUser->getId() . '-' . $fileInformation['name']);
+        $imageFile =
+            $this->getFilesystemTools()->createUniqueName($path, $targetUser->getId() . '-' . $fileInformation['name']);
         move_uploaded_file($fileInformation['tmp_name'], $path . $imageFile);
 
         $imageManipulation = ImageManipulation::factory($path . $imageFile);

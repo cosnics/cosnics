@@ -18,7 +18,7 @@ use Chamilo\Libraries\Architecture\Interfaces\AttachmentSupport;
 use Chamilo\Libraries\Architecture\Interfaces\ComplexContentObjectSupport;
 use Chamilo\Libraries\Architecture\Interfaces\Versionable;
 use Chamilo\Libraries\DependencyInjection\DependencyInjectionContainerBuilder;
-use Chamilo\Libraries\File\Filesystem;
+use Chamilo\Libraries\File\FilesystemTools;
 use Chamilo\Libraries\File\SystemPathBuilder;
 use Chamilo\Libraries\Format\Structure\Glyph\IdentGlyph;
 use Chamilo\Libraries\Format\Structure\Glyph\NamespaceIdentGlyph;
@@ -781,6 +781,11 @@ class ContentObject extends CompositeDataClass
         );
     }
 
+    protected function getFilesystemTools(): FilesystemTools
+    {
+        return $this->getService(FilesystemTools::class);
+    }
+
     /**
      * @param int $size
      * @param bool $isAvailable
@@ -890,10 +895,10 @@ class ContentObject extends CompositeDataClass
         {
             $category = DataManager::retrieve_by_id(RepositoryCategory::class, $categoryId);
             $categoryId = $category->get_parent();
-            array_unshift($virtual_path, Filesystem::create_safe_name($category->get_name()));
+            array_unshift($virtual_path, $this->getFilesystemTools()->createSafeName($category->get_name()));
         }
 
-        array_unshift($virtual_path, Filesystem::create_safe_name($rootPath));
+        array_unshift($virtual_path, $this->getFilesystemTools()->createSafeName($rootPath));
 
         return implode(DIRECTORY_SEPARATOR, $virtual_path) . DIRECTORY_SEPARATOR;
     }

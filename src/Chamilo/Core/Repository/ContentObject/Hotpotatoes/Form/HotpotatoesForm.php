@@ -4,7 +4,6 @@ namespace Chamilo\Core\Repository\ContentObject\Hotpotatoes\Form;
 use Chamilo\Core\Repository\ContentObject\Assessment\Storage\DataClass\Assessment;
 use Chamilo\Core\Repository\ContentObject\Hotpotatoes\Storage\DataClass\Hotpotatoes;
 use Chamilo\Core\Repository\Form\ContentObjectForm;
-use Chamilo\Libraries\File\Filesystem;
 use Chamilo\Libraries\Translation\Translation;
 use Chamilo\Libraries\Utilities\StringUtilities;
 
@@ -103,8 +102,10 @@ class HotpotatoesForm extends ContentObjectForm
 
     public function upload()
     {
+        $filesystemTools = $this->getFilesystemTools();
+
         $owner = $this->get_owner_id();
-        $filename = Filesystem::create_unique_name(
+        $filename = $filesystemTools->createUniqueName(
             $this->getSystemPathBuilder()->getPublicStoragePath(Hotpotatoes::CONTEXT) . $owner, $_FILES['file']['name']
         );
 
@@ -113,11 +114,11 @@ class HotpotatoesForm extends ContentObjectForm
         $file = implode('.', $filename_split);
 
         $hotpot_path = $this->getSystemPathBuilder()->getPublicStoragePath(Hotpotatoes::CONTEXT) . $owner . '/';
-        $real_path = $hotpot_path . Filesystem::create_unique_name($hotpot_path, $file) . '/';
+        $real_path = $hotpot_path . $filesystemTools->createUniqueName($hotpot_path, $file) . '/';
 
         if (!is_dir($real_path))
         {
-            Filesystem::create_dir($real_path);
+            $this->getFilesystem()->mkdir($real_path);
         }
 
         $full_path = $real_path . $filename;

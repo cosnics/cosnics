@@ -2,7 +2,6 @@
 namespace Chamilo\Libraries\File\Export\Excel;
 
 use Chamilo\Libraries\File\Export\Export;
-use Chamilo\Libraries\File\Filesystem;
 use PhpOffice\PhpSpreadsheet\IOFactory;
 use PhpOffice\PhpSpreadsheet\Spreadsheet;
 
@@ -87,7 +86,7 @@ class ExcelExport extends Export
 
         $content = file_get_contents($temporaryFilePath);
 
-        Filesystem::remove($temporaryFilePath);
+        $this->getFilesystem()->remove($temporaryFilePath);
 
         return $content;
     }

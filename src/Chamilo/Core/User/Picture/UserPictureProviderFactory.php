@@ -112,14 +112,6 @@ class UserPictureProviderFactory
     }
 
     /**
-     * @return \Symfony\Component\Translation\Translator
-     */
-    public function getTranslator(): Translator
-    {
-        return $this->translator;
-    }
-
-    /**
      * @param \Chamilo\Configuration\Service\Consulter\ConfigurationConsulter $configurationConsulter
      *
      * @return UserPictureProviderFactory

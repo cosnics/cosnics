@@ -338,11 +338,6 @@ class ActionSelector
         return $this->typeSelector;
     }
 
-    public function getUrlGenerator(): UrlGenerator
-    {
-        return DependencyInjectionContainerBuilder::getInstance()->createContainer()->get(UrlGenerator::class);
-    }
-
     /**
      * @return int
      */

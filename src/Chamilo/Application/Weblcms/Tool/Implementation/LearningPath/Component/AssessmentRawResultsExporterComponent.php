@@ -83,8 +83,8 @@ class AssessmentRawResultsExporterComponent extends Manager
 
         $path = $controller->run();
 
-        Filesystem::file_send_for_download($path, true);
-        Filesystem::remove($path);
+        $this->getFilesystemTools()->sendFileForDownload($path);
+        $this->getFilesystem()->remove($path);
     }
 
     /**

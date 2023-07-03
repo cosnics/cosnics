@@ -3,8 +3,9 @@ namespace Chamilo\Libraries\Cache;
 
 use Chamilo\Libraries\Cache\Interfaces\CacheDataPreLoaderInterface;
 use Chamilo\Libraries\File\ConfigurablePathBuilder;
-use Chamilo\Libraries\File\Filesystem;
+use Exception;
 use RuntimeException;
+use Symfony\Component\Filesystem\Filesystem;
 
 /**
  * Abstract service class to manage caches that are file based
@@ -17,9 +18,14 @@ abstract class FileBasedCacheService implements CacheDataPreLoaderInterface
 {
     protected ConfigurablePathBuilder $configurablePathBuilder;
 
-    public function __construct(ConfigurablePathBuilder $configurablePathBuilder)
+    protected Filesystem $filesystem;
+
+    public function __construct(
+        ConfigurablePathBuilder $configurablePathBuilder, Filesystem $filesystem
+    )
     {
         $this->configurablePathBuilder = $configurablePathBuilder;
+        $this->filesystem = $filesystem;
     }
 
     public function clearCacheData(): bool
@@ -32,6 +38,11 @@ abstract class FileBasedCacheService implements CacheDataPreLoaderInterface
     public function getConfigurablePathBuilder(): ConfigurablePathBuilder
     {
         return $this->configurablePathBuilder;
+    }
+
+    public function getFilesystem(): Filesystem
+    {
+        return $this->filesystem;
     }
 
     abstract public function initializeCache();
@@ -48,7 +59,11 @@ abstract class FileBasedCacheService implements CacheDataPreLoaderInterface
     {
         if (file_exists($cachePath))
         {
-            if (!Filesystem::remove($cachePath))
+            try
+            {
+                $this->getFilesystem()->remove($cachePath);
+            }
+            catch (Exception)
             {
                 throw new RuntimeException(sprintf('Unable to remove the cache path "%s".', $cachePath));
             }

@@ -10,7 +10,6 @@ use Chamilo\Application\Weblcms\Tool\Implementation\CourseGroup\Storage\DataMana
 use Chamilo\Application\Weblcms\UserExporter\UserExporter;
 use Chamilo\Core\User\Storage\DataClass\User;
 use Chamilo\Libraries\Architecture\Exceptions\NotAllowedException;
-use Chamilo\Libraries\File\Filesystem;
 use Chamilo\Libraries\Platform\Session\Request;
 use Chamilo\Libraries\Storage\DataClass\DataClass;
 use Chamilo\Libraries\Storage\Query\Condition\AndCondition;
@@ -84,7 +83,7 @@ class ExporterComponent extends Manager
         }
 
         $this->send_as_download($file_path);
-        Filesystem::remove($file_path);
+        $this->getFilesystem()->remove($file_path);
     }
 
     /**
@@ -459,13 +458,15 @@ class ExporterComponent extends Manager
             $filename = $course->get_title() . date('Ymd') . '.xlsx';
         }
 
+        $filesystemTools = $this->getFilesystemTools();
+
         // Make safe name
-        $filename = Filesystem::create_safe_name($filename);
+        $filename = $filesystemTools->createSafeName($filename);
         $filename = preg_replace('/[\s]+/', '_', $filename);
 
         $type = 'application/vnd.openxmlformats';
 
         // Send file for download
-        Filesystem::file_send_for_download($file_path, true, $filename, $type);
+        $filesystemTools->sendFileForDownload($file_path, $filename, $type);
     }
 }

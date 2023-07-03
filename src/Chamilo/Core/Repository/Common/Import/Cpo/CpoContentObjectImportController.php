@@ -96,7 +96,7 @@ class CpoContentObjectImportController extends ContentObjectImportController
                 $this->add_message(Translation::get('NoCpoFile'), self::TYPE_WARNING);
             }
 
-            Filesystem::remove($this->temporary_directory);
+            $this->getFilesystem()->remove($this->temporary_directory);
         }
         else
         {

@@ -41,7 +41,7 @@ class RarContentObjectImportController extends ContentObjectImportController
         $this->created_categories = [];
         $this->created_content_object_ids = [];
         $this->temporary_path = $this->getConfigurablePathBuilder()->getTemporaryPath() . uniqid();
-        Filesystem::create_dir($this->temporary_path);
+        $this->getFilesystem()->mkdir($this->temporary_path);
     }
 
     /*
@@ -175,7 +175,7 @@ class RarContentObjectImportController extends ContentObjectImportController
                 {
                     $this->add_message(Translation::get('EmptyRar'), self::TYPE_WARNING);
                 }
-                Filesystem::remove($this->temporary_path);
+                $this->getFilesystem()->remove($this->temporary_path);
             }
             else
             {

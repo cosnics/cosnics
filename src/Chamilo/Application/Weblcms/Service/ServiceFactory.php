@@ -98,13 +98,4 @@ class ServiceFactory
     {
         return $this->getService(CourseSettingsService::class);
     }
-
-    /**
-     *
-     * @return \Chamilo\Core\User\Service\UserService
-     */
-    public function getUserService()
-    {
-        return $this->getUserService();
-    }
 }

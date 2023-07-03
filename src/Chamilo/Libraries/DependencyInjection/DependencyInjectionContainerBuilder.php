@@ -16,7 +16,6 @@ use Chamilo\Libraries\DependencyInjection\Interfaces\ContainerExtensionFinderInt
 use Chamilo\Libraries\DependencyInjection\Interfaces\ICompilerPassExtension;
 use Chamilo\Libraries\DependencyInjection\Interfaces\IConfigurableExtension;
 use Chamilo\Libraries\File\ConfigurablePathBuilder;
-use Chamilo\Libraries\File\Filesystem;
 use Chamilo\Libraries\File\PackagesContentFinder\PackagesClassFinder;
 use Chamilo\Libraries\File\SystemPathBuilder;
 use Chamilo\Libraries\File\WebPathBuilder;
@@ -52,7 +51,6 @@ use Chamilo\Libraries\Storage\DataManager\Doctrine\Service\ParametersProcessor;
 use Chamilo\Libraries\Storage\DataManager\Doctrine\Service\RecordProcessor;
 use Chamilo\Libraries\Storage\DataManager\Repository\DataClassRepository;
 use Chamilo\Libraries\Storage\DataManager\StorageAliasGenerator;
-use Chamilo\Libraries\Storage\Exception\ConnectionException;
 use Chamilo\Libraries\Storage\Service\ParametersHandler;
 use Chamilo\Libraries\Utilities\StringUtilities;
 use Exception;
@@ -61,6 +59,7 @@ use Symfony\Component\Cache\Adapter\PhpFilesAdapter;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 use Symfony\Component\DependencyInjection\Dumper\PhpDumper;
+use Symfony\Component\Filesystem\Filesystem;
 use Symfony\Component\HttpFoundation\Session\Session;
 use Symfony\Component\HttpFoundation\Session\Storage\NativeSessionStorage;
 
@@ -79,6 +78,8 @@ class DependencyInjectionContainerBuilder
     private static ?DependencyInjectionContainerBuilder $instance = null;
 
     protected ConnectionFactory $connectionFactory;
+
+    protected Filesystem $filesystem;
 
     protected ChamiloRequest $request;
 
@@ -127,7 +128,7 @@ class DependencyInjectionContainerBuilder
     {
         if (!is_dir(dirname($cacheFile)))
         {
-            Filesystem::create_dir(dirname($cacheFile));
+            $this->getFilesystem()->mkdir(dirname($cacheFile));
         }
 
         $dumper = new PhpDumper($container);
@@ -240,6 +241,16 @@ class DependencyInjectionContainerBuilder
         }
 
         return $this->fileConfigurationLocator;
+    }
+
+    protected function getFilesystem(): Filesystem
+    {
+        if (!isset($this->filesystem))
+        {
+            $this->filesystem = new Filesystem();
+        }
+
+        return $this->filesystem;
     }
 
     public static function getInstance(): DependencyInjectionContainerBuilder
@@ -514,7 +525,8 @@ class DependencyInjectionContainerBuilder
     {
         if (file_exists($this->cacheFile))
         {
-            Filesystem::remove($this->cacheFile);
+            $filesystem = new Filesystem();
+            $this->getFilesystem()->remove($this->cacheFile);
 
             if (function_exists('opcache_invalidate'))
             {

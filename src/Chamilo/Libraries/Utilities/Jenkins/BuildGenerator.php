@@ -6,9 +6,9 @@ use Chamilo\Configuration\Package\PlatformPackageBundles;
 use Chamilo\Libraries\Architecture\Bootstrap\Bootstrap;
 use Chamilo\Libraries\Architecture\ClassnameUtilities;
 use Chamilo\Libraries\DependencyInjection\DependencyInjectionContainerBuilder;
-use Chamilo\Libraries\File\Filesystem;
 use Chamilo\Libraries\File\SystemPathBuilder;
 use Chamilo\Libraries\Translation\Translation;
+use Symfony\Component\Filesystem\Filesystem;
 
 require_once realpath(__DIR__ . '/../../../../') . '/vendor/autoload.php';
 
@@ -45,6 +45,13 @@ class BuildGenerator
     public function run()
     {
         $this->process($this->package_list);
+    }
+
+    public function getFilesystem(): Filesystem
+    {
+        return DependencyInjectionContainerBuilder::getInstance()->createContainer()->get(
+            Filesystem::class
+        );
     }
 
     /**
@@ -196,7 +203,7 @@ class BuildGenerator
 </project>';
 
         $path = $this->get_folder($context) . 'build.xml';
-        Filesystem::write_to_file($path, $content, false);
+        $this->getFilesystem()->dumpFile($path, $content);
     }
 
     /**
@@ -833,7 +840,7 @@ class BuildGenerator
 </project>';
 
         $path = $this->get_folder($context) . 'config.xml';
-        Filesystem::write_to_file($path, $content, false);
+        $this->getFilesystem()->dumpFile($path, $content);
     }
 
     /**
@@ -861,7 +868,7 @@ class BuildGenerator
 </phpunit>';
 
         $path = $this->get_folder($context) . 'phpunit.xml';
-        Filesystem::write_to_file($path, $content, false);
+        $this->getFilesystem()->dumpFile($path, $content);
     }
 }
 

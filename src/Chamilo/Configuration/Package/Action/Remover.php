@@ -7,9 +7,9 @@ use Chamilo\Configuration\Package\Properties\Dependencies\DependencyVerifier;
 use Chamilo\Configuration\Package\Storage\DataClass\Package;
 use Chamilo\Configuration\Storage\DataClass\Setting;
 use Chamilo\Configuration\Storage\DataManager;
-use Chamilo\Libraries\File\Filesystem;
 use Chamilo\Libraries\Translation\Translation;
 use DOMDocument;
+use Symfony\Component\Finder\Iterator\FileTypeFilterIterator;
 
 /**
  * @package Chamilo\Configuration\Package\Action
@@ -216,7 +216,7 @@ abstract class Remover extends Action
     public function uninstall_storage_units()
     {
         $dir = $this->get_path() . 'php/package/install/';
-        $files = Filesystem::get_directory_content($dir, Filesystem::LIST_FILES);
+        $files = $this->getFilesystemTools()->getDirectoryContent($dir, FileTypeFilterIterator::ONLY_FILES);
 
         foreach ($files as $file)
         {

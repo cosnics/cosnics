@@ -5,7 +5,6 @@ use Chamilo\Core\Reporting\Viewer\Rendition\Block\BlockRenditionImplementation;
 use Chamilo\Core\Reporting\Viewer\Rendition\Block\Type\Pdf as PdfBlockRendition;
 use Chamilo\Core\Reporting\Viewer\Rendition\Template\Type\Pdf;
 use Chamilo\Libraries\Architecture\ClassnameUtilities;
-use Chamilo\Libraries\File\Filesystem;
 use Chamilo\Libraries\Translation\Translation;
 use PDF_MC_Table;
 
@@ -136,7 +135,8 @@ class Basic extends Pdf
             );
         }
 
-        $file = $this->getArchivePath() . Filesystem::create_unique_name($this->getArchivePath(), $file_name);
+        $file = $this->getArchivePath() .
+            $this->getFilesystemTools()->createUniqueName($this->getArchivePath(), $file_name);
 
         $handle = fopen($file, 'a+');
         if (!fwrite($handle, $this->pdf_mc_table->Output('', 'S')))

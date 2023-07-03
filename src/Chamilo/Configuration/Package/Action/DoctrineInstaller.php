@@ -3,7 +3,6 @@ namespace Chamilo\Configuration\Package\Action;
 
 use Chamilo\Libraries\DependencyInjection\DependencyInjectionContainerBuilder;
 use Chamilo\Libraries\DependencyInjection\ExtensionFinder\DirectoryContainerExtensionFinder;
-use Chamilo\Libraries\File\Filesystem;
 use Chamilo\Libraries\Storage\DataManager\Doctrine\ORM\PackagesMappingDriverFactory;
 use Doctrine\ORM\EntityManager;
 use Doctrine\ORM\Tools\SchemaTool;
@@ -39,7 +38,7 @@ abstract class DoctrineInstaller extends Installer
 
         if (!is_dir($cacheDir))
         {
-            Filesystem::create_dir($cacheDir);
+            $this->getFilesystem()->mkdir($cacheDir);
         }
 
         $containerBuilder = new DependencyInjectionContainerBuilder(

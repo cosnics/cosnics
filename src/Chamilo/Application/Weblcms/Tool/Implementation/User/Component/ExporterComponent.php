@@ -12,7 +12,6 @@ use Chamilo\Core\User\Storage\DataClass\User;
 use Chamilo\Core\User\Storage\DataManager;
 use Chamilo\Libraries\Architecture\Exceptions\ObjectNotExistException;
 use Chamilo\Libraries\Architecture\Exceptions\UserException;
-use Chamilo\Libraries\File\Filesystem;
 use Chamilo\Libraries\Storage\DataClass\DataClass;
 use Chamilo\Libraries\Storage\Parameters\DataClassRetrievesParameters;
 use Chamilo\Libraries\Storage\Query\Condition\EqualityCondition;
@@ -38,11 +37,11 @@ class ExporterComponent extends Manager
 
         $file_path = $this->getUserExporter()->export($this->get_course_id(), $userExportParameters->getUsers());
 
-        Filesystem::file_send_for_download(
-            $file_path, true, $userExportParameters->getExportFilename(), 'application/vnd.openxmlformats'
+        $this->getFilesystemTools()->sendFileForDownload(
+            $file_path, $userExportParameters->getExportFilename(), 'application/vnd.openxmlformats'
         );
 
-        Filesystem::remove($file_path);
+        $this->getFilesystem()->remove($file_path);
     }
 
     /**

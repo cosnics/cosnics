@@ -2,7 +2,8 @@
 namespace Chamilo\Libraries\File\Export;
 
 use Chamilo\Libraries\File\ConfigurablePathBuilder;
-use Chamilo\Libraries\File\Filesystem;
+use Chamilo\Libraries\File\FilesystemTools;
+use Symfony\Component\Filesystem\Filesystem;
 use Symfony\Component\HttpFoundation\BinaryFileResponse;
 
 /**
@@ -12,14 +13,17 @@ abstract class Export
 {
     protected ConfigurablePathBuilder $configurablePathBuilder;
 
-    protected \Symfony\Component\Filesystem\Filesystem $filesystem;
+    protected Filesystem $filesystem;
+
+    protected FilesystemTools $filesystemTools;
 
     public function __construct(
-        ConfigurablePathBuilder $configurablePathBuilder, \Symfony\Component\Filesystem\Filesystem $filesystem
+        ConfigurablePathBuilder $configurablePathBuilder, Filesystem $filesystem, FilesystemTools $filesystemTools
     )
     {
         $this->configurablePathBuilder = $configurablePathBuilder;
         $this->filesystem = $filesystem;
+        $this->filesystemTools = $filesystemTools;
     }
 
     public function getConfigurablePathBuilder(): ConfigurablePathBuilder
@@ -27,9 +31,14 @@ abstract class Export
         return $this->configurablePathBuilder;
     }
 
-    public function getFilesystem(): \Symfony\Component\Filesystem\Filesystem
+    public function getFilesystem(): Filesystem
     {
         return $this->filesystem;
+    }
+
+    public function getFilesystemTools(): FilesystemTools
+    {
+        return $this->filesystemTools;
     }
 
     public function sendtoBrowser(string $fileName, array $data, ?string $path = null): void
@@ -55,7 +64,7 @@ abstract class Export
             $path = $this->getConfigurablePathBuilder()->getArchivePath();
         }
 
-        $file = $path . Filesystem::create_unique_name($path, $fileName);
+        $file = $path . $this->getFilesystemTools()->createUniqueName($path, $fileName);
 
         $this->getFilesystem()->dumpFile($file, $this->serializeData($data));
 

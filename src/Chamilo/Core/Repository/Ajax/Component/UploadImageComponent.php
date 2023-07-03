@@ -6,7 +6,6 @@ use Chamilo\Core\Repository\Manager;
 use Chamilo\Core\Repository\Storage\DataClass\ContentObject;
 use Chamilo\Libraries\Architecture\Interfaces\NoAuthenticationSupport;
 use Chamilo\Libraries\Architecture\JsonAjaxResult;
-use Chamilo\Libraries\File\Filesystem;
 use Chamilo\Libraries\Utilities\String\Text;
 use Chamilo\Libraries\Utilities\StringUtilities;
 
@@ -20,7 +19,6 @@ class UploadImageComponent extends \Chamilo\Core\Repository\Ajax\Manager impleme
     {
         if (!empty($_FILES))
         {
-
             $upload_path = $this->getConfigurablePathBuilder()->getRepositoryPath();
             $owner = $this->getPostDataValue(\Chamilo\Core\User\Manager::PARAM_USER_USER_ID);
 
@@ -30,8 +28,10 @@ class UploadImageComponent extends \Chamilo\Core\Repository\Ajax\Manager impleme
             $path = $owner . '/' . Text::char_at($hash, 0);
             $full_path = $upload_path . $path;
 
-            Filesystem::create_dir($full_path);
-            $hash = Filesystem::create_unique_name($full_path, $hash);
+            $filesystemTools = $this->getFilesystemTools();
+
+            $this->getFilesystem()->mkdir($full_path);
+            $hash = $filesystemTools->createUniqueName($full_path, $hash);
 
             $path = $path . '/' . $hash;
             $full_path = $full_path . '/' . $hash;
@@ -46,7 +46,7 @@ class UploadImageComponent extends \Chamilo\Core\Repository\Ajax\Manager impleme
             $document->set_storage_path($upload_path);
             $document->set_path($path);
             $document->set_filename($filename);
-            $document->set_filesize(Filesystem::get_disk_space($full_path));
+            $document->set_filesize($filesystemTools->getDiskSpace($full_path));
             $document->set_hash($hash);
 
             $title_parts = explode('.', $filename);

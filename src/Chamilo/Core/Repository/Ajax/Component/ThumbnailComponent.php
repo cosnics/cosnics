@@ -35,7 +35,7 @@ class ThumbnailComponent extends \Chamilo\Core\Repository\Ajax\Manager
 
             if (!is_file($thumbnail_file_path))
             {
-                Filesystem::create_dir($thumbnail_folder_path);
+                $this->getFilesystem()->mkdir($thumbnail_folder_path);
 
                 $thumbnail_creator = ImageManipulation::factory($contentObject->get_full_path());
                 $thumbnail_creator->scale(

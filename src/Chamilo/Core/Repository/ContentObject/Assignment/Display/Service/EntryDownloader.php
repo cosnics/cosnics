@@ -4,7 +4,6 @@ namespace Chamilo\Core\Repository\ContentObject\Assignment\Display\Service;
 use Chamilo\Core\Repository\ContentObject\Assignment\Display\Domain\EntryDownloadResponse;
 use Chamilo\Core\Repository\ContentObject\Assignment\Display\Interfaces\AssignmentDataProvider;
 use Chamilo\Core\Repository\ContentObject\Assignment\Display\Manager;
-use Chamilo\Core\Repository\ContentObject\Assignment\Display\Bridge\Storage\DataClass\Entry;
 use Chamilo\Core\Repository\ContentObject\Assignment\Storage\DataClass\Assignment;
 use Chamilo\Core\Repository\ContentObject\File\Storage\DataClass\File;
 use Chamilo\Core\User\Storage\DataClass\User;
@@ -13,7 +12,7 @@ use Chamilo\Libraries\File\Compression\ArchiveCreator\Archive;
 use Chamilo\Libraries\File\Compression\ArchiveCreator\ArchiveCreator;
 use Chamilo\Libraries\File\Compression\ArchiveCreator\ArchiveFile;
 use Chamilo\Libraries\File\Compression\ArchiveCreator\ArchiveFolder;
-use Chamilo\Libraries\File\Filesystem;
+use Chamilo\Libraries\File\FilesystemTools;
 use Chamilo\Libraries\Platform\ChamiloRequest;
 use Exception;
 use RuntimeException;
@@ -21,30 +20,13 @@ use Symfony\Component\HttpFoundation\BinaryFileResponse;
 use Symfony\Component\HttpFoundation\ResponseHeaderBag;
 
 /**
- *
  * @package Chamilo\Core\Repository\ContentObject\Assignment\Display\Service
- * @author Hans De Bisschop <hans.de.bisschop@ehb.be>
- * @author Magali Gillard <magali.gillard@ehb.be>
- * @author Eduard Vossen <eduard.vossen@ehb.be>
+ * @author  Hans De Bisschop <hans.de.bisschop@ehb.be>
+ * @author  Magali Gillard <magali.gillard@ehb.be>
+ * @author  Eduard Vossen <eduard.vossen@ehb.be>
  */
 class EntryDownloader
 {
-
-    /**
-     * @var ArchiveFolder[]
-     */
-    protected $entityFoldersCache;
-
-    /**
-     *
-     * @var \Chamilo\Core\Repository\ContentObject\Assignment\Display\Interfaces\AssignmentDataProvider
-     */
-    protected $assignmentDataProvider;
-
-    /**
-     * @var \Chamilo\Core\Repository\ContentObject\Assignment\Display\Service\RightsService
-     */
-    protected $rightsService;
 
     /**
      * @var \Chamilo\Libraries\File\Compression\ArchiveCreator\ArchiveCreator
@@ -52,10 +34,21 @@ class EntryDownloader
     protected $archiveCreator;
 
     /**
-     *
-     * @var \Chamilo\Core\Repository\ContentObject\Assignment\Storage\DataClass\Assignment
+     * @var \Chamilo\Core\Repository\ContentObject\Assignment\Display\Interfaces\AssignmentDataProvider
      */
-    private $assignment;
+    protected $assignmentDataProvider;
+
+    /**
+     * @var ArchiveFolder[]
+     */
+    protected $entityFoldersCache;
+
+    protected FilesystemTools $filesystemTools;
+
+    /**
+     * @var \Chamilo\Core\Repository\ContentObject\Assignment\Display\Service\RightsService
+     */
+    protected $rightsService;
 
     /**
      * @var \Chamilo\Core\User\Storage\DataClass\User
@@ -63,16 +56,13 @@ class EntryDownloader
     protected $user;
 
     /**
-     *
-     * @param \Chamilo\Core\Repository\ContentObject\Assignment\Display\Interfaces\AssignmentDataProvider $assignmentDataProvider
-     * @param \Chamilo\Core\Repository\ContentObject\Assignment\Display\Service\RightsService $rightsService
-     * @param \Chamilo\Libraries\File\Compression\ArchiveCreator\ArchiveCreator $archiveCreator
-     * @param \Chamilo\Core\User\Storage\DataClass\User $user
-     * @param \Chamilo\Core\Repository\ContentObject\Assignment\Storage\DataClass\Assignment $assignment
+     * @var \Chamilo\Core\Repository\ContentObject\Assignment\Storage\DataClass\Assignment
      */
+    private $assignment;
+
     public function __construct(
-        AssignmentDataProvider $assignmentDataProvider, RightsService $rightsService,
-        ArchiveCreator $archiveCreator, User $user, Assignment $assignment
+        AssignmentDataProvider $assignmentDataProvider, RightsService $rightsService, ArchiveCreator $archiveCreator,
+        User $user, Assignment $assignment, FilesystemTools $filesystemTools
     )
     {
         $this->assignmentDataProvider = $assignmentDataProvider;
@@ -80,103 +70,31 @@ class EntryDownloader
         $this->archiveCreator = $archiveCreator;
         $this->assignment = $assignment;
         $this->user = $user;
+        $this->filesystemTools = $filesystemTools;
     }
 
     /**
-     *
-     * @return \Chamilo\Core\Repository\ContentObject\Assignment\Display\Interfaces\AssignmentDataProvider
+     * @return string
      */
-    protected function getAssignmentDataProvider()
+    public function compressAll()
     {
-        return $this->assignmentDataProvider;
+        $entries = $this->getAssignmentDataProvider()->findEntries();
+
+        return $this->compressEntries($this->getAssignmentName(), $entries);
     }
 
     /**
-     *
-     * @param \Chamilo\Core\Repository\ContentObject\Assignment\Display\Interfaces\AssignmentDataProvider $assignmentDataProvider
-     */
-    protected function setAssignmentDataProvider(AssignmentDataProvider $assignmentDataProvider)
-    {
-        $this->assignmentDataProvider = $assignmentDataProvider;
-    }
-
-    /**
-     *
-     * @return \Chamilo\Core\Repository\ContentObject\Assignment\Storage\DataClass\Assignment
-     */
-    protected function getAssignment()
-    {
-        return $this->assignment;
-    }
-
-    /**
-     *
-     * @param \Chamilo\Core\Repository\ContentObject\Assignment\Storage\DataClass\Assignment $assignment
-     */
-    protected function setAssignment(Assignment $assignment)
-    {
-        $this->assignment = $assignment;
-    }
-
-    protected function getAssignmentName()
-    {
-        $safeTitle = stripslashes(//converts two backslashes to one
-            stripslashes(//removes single backslash
-                str_replace('/','',$this->getAssignment()->get_title()) //remove forward slash
-            )
-        );
-
-        return $safeTitle;
-    }
-
-    protected function getEntityArchiveFileName($entityType, $entityIdentifier)
-    {
-        $entityName = $this->getAssignmentDataProvider()->renderEntityNameByEntityTypeAndEntityId(
-            $entityType,
-            $entityIdentifier
-        );
-
-        $archiveFileNameParts = [];
-        $archiveFileNameParts[] = $this->getAssignmentName();
-        $archiveFileNameParts[] = $entityName;
-
-        return implode(' - ', $archiveFileNameParts);
-    }
-
-    /**
-     *
-     * @param \Chamilo\Libraries\Platform\ChamiloRequest $request
-     * @param integer $entryIdentifier
-     */
-    public function downloadByEntryIdentifier(ChamiloRequest $request, $entryIdentifier)
-    {
-        $this->downloadByEntryIdentifiers($request, array($entryIdentifier));
-    }
-
-    /**
-     *
-     * @param integer $entryIdentifier
+     * @param int $entryIdentifier
      *
      * @return string
      */
     public function compressByEntryIdentifier($entryIdentifier)
     {
-        return $this->compressByEntryIdentifiers(array($entryIdentifier));
+        return $this->compressByEntryIdentifiers([$entryIdentifier]);
     }
 
     /**
-     *
-     * @param \Chamilo\Libraries\Platform\ChamiloRequest $request
-     * @param integer[] $entryIdentifier
-     */
-    public function downloadByEntryIdentifiers(ChamiloRequest $request, $entryIdentifiers)
-    {
-        $this->downloadEntries($request, $this->compressByEntryIdentifiers($entryIdentifiers));
-    }
-
-    /**
-     *
-     * @param integer[] $entryIdentifiers
+     * @param int $entryIdentifiers
      *
      * @return string
      */
@@ -186,75 +104,137 @@ class EntryDownloader
         $entry = $entries[0];
 
         return $this->compressEntries(
-            $this->getEntityArchiveFileName($entry->getEntityType(), $entry->getEntityId()),
-            $entries
+            $this->getEntityArchiveFileName($entry->getEntityType(), $entry->getEntityId()), $entries
         );
     }
 
     /**
+     * @param string $fileName
+     * @param \Chamilo\Core\Repository\ContentObject\Assignment\Display\Bridge\Storage\DataClass\Entry[] $entries
      *
-     * @param \Chamilo\Libraries\Platform\ChamiloRequest $request
-     * @param integer $entityType
-     * @param integer $entityIdentifier
+     * @return BinaryFileResponse
      */
-    public function downloadForEntityTypeAndIdentifier(ChamiloRequest $request, $entityType, $entityIdentifier)
+    protected function compressEntries($fileName, $entries)
     {
-        $this->downloadEntries(
-            $request,
-            $this->compressForEntityTypeAndIdentifier($entityType, $entityIdentifier)
-        );
+        if (empty($entries))
+        {
+            return null;
+        }
+
+        if (count($entries) == 1)
+        {
+            $file = $entries[0]->getContentObject();
+            if (!$file instanceof File)
+            {
+                return null;
+            }
+
+            return $this->createEntryDownloadResponse(
+                $file->get_full_path(), $file->get_filename(), $file->get_mime_type(), false
+            );
+        }
+
+        $archive = new Archive();
+        $archive->setName($fileName);
+
+        foreach ($entries as $entry)
+        {
+            $contentObject = $entry->getContentObject();
+            if (!$contentObject instanceof File)
+            {
+                continue;
+            }
+
+            try
+            {
+                $entityName = $this->getAssignmentDataProvider()->renderEntityNameByEntityTypeAndEntityId(
+                    $entry->getEntityType(), $entry->getEntityId()
+                );
+            }
+            catch (Exception $ex)
+            {
+                continue;
+            }
+
+            //            $entityFolder = $this->getOrCreateFolderByEntity(
+            //                $entry->getEntityType(), $entry->getEntityId(), $archive
+            //            );
+            //
+            //            if(!$entityFolder)
+            //            {
+            //                continue;
+            //            }
+
+            $fileName = $this->getFilesystemTools()->createSafeName(
+                $entityName . '_' . $contentObject->get_filename()
+            );
+
+            $archiveFile = new ArchiveFile();
+            $archiveFile->setName($fileName);
+            $archiveFile->setOriginalPath($contentObject->get_full_path());
+
+            $archive->addItem($archiveFile);
+        }
+
+        $archivePath = $this->archiveCreator->createArchive($archive);
+
+        return $this->createEntryDownloadResponse($archivePath, $archive->getName() . '.zip');
     }
 
     /**
-     *
-     * @param integer $entityType
-     * @param integer $entityIdentifier
+     * @param int $entityType
+     * @param int $entityIdentifier
      *
      * @return string
      */
     public function compressForEntityTypeAndIdentifier($entityType, $entityIdentifier)
     {
         $entries = $this->getAssignmentDataProvider()->findEntriesByEntityTypeAndIdentifiers(
-            $entityType,
-            array($entityIdentifier)
+            $entityType, [$entityIdentifier]
         );
 
         return $this->compressEntries($this->getEntityArchiveFileName($entityType, $entityIdentifier), $entries);
     }
 
     /**
-     *
-     * @param \Chamilo\Libraries\Platform\ChamiloRequest $request
-     * @param integer $entityType
-     * @param integer[] $entityIdentifiers
-     */
-    public function downloadForEntityTypeAndIdentifiers(ChamiloRequest $request, $entityType, $entityIdentifiers)
-    {
-        $this->downloadEntries(
-            $request,
-            $this->compressForEntityTypeAndIdentifiers($entityType, $entityIdentifiers)
-        );
-    }
-
-    /**
-     *
-     * @param integer $entityType
-     * @param integer[] $entityIdentifiers
+     * @param int $entityType
+     * @param int $entityIdentifiers
      *
      * @return string
      */
     public function compressForEntityTypeAndIdentifiers($entityType, $entityIdentifiers)
     {
         $entries = $this->getAssignmentDataProvider()->findEntriesByEntityTypeAndIdentifiers(
-            $entityType,
-            $entityIdentifiers
+            $entityType, $entityIdentifiers
         );
 
         return $this->compressEntries($this->getAssignmentName(), $entries);
     }
 
     /**
+     * @param string $downloadPath
+     * @param string $filename
+     * @param string $contentType
+     * @param bool $removeAfterDownload
      *
+     * @return \Chamilo\Core\Repository\ContentObject\Assignment\Display\Domain\EntryDownloadResponse
+     */
+    protected function createEntryDownloadResponse(
+        $downloadPath, $filename, $contentType = 'application/zip', $removeAfterDownload = true
+    )
+    {
+        $response = new EntryDownloadResponse($downloadPath, 200, ['Content-Type' => $contentType]);
+
+        $response->setContentDisposition(
+            ResponseHeaderBag::DISPOSITION_ATTACHMENT, $filename, $this->getFilesystemTools()->createSafeName($filename)
+        );
+
+        $response->setRemoveFileAfterDownload($removeAfterDownload);
+
+        return $response;
+    }
+
+    /**
      * @param \Chamilo\Libraries\Platform\ChamiloRequest $request
      */
     public function downloadAll(ChamiloRequest $request)
@@ -263,7 +243,24 @@ class EntryDownloader
     }
 
     /**
-     *
+     * @param \Chamilo\Libraries\Platform\ChamiloRequest $request
+     * @param int $entryIdentifier
+     */
+    public function downloadByEntryIdentifier(ChamiloRequest $request, $entryIdentifier)
+    {
+        $this->downloadByEntryIdentifiers($request, [$entryIdentifier]);
+    }
+
+    /**
+     * @param \Chamilo\Libraries\Platform\ChamiloRequest $request
+     * @param int $entryIdentifier
+     */
+    public function downloadByEntryIdentifiers(ChamiloRequest $request, $entryIdentifiers)
+    {
+        $this->downloadEntries($request, $this->compressByEntryIdentifiers($entryIdentifiers));
+    }
+
+    /**
      * @param \Chamilo\Libraries\Platform\ChamiloRequest $request
      *
      * @throws \Chamilo\Libraries\Architecture\Exceptions\NotAllowedException
@@ -279,7 +276,7 @@ class EntryDownloader
         {
             if (!is_array($entryIdentifiers))
             {
-                $entryIdentifiers = array($entryIdentifiers);
+                $entryIdentifiers = [$entryIdentifiers];
             }
 
             if (!$this->rightsService->canUserDownloadEntriesFromEntity(
@@ -331,112 +328,92 @@ class EntryDownloader
     }
 
     /**
-     *
-     * @return string
+     * @param \Chamilo\Libraries\Platform\ChamiloRequest $request
+     * @param \Chamilo\Core\Repository\ContentObject\Assignment\Display\Domain\EntryDownloadResponse $downloadResponse
      */
-    public function compressAll()
+    protected function downloadEntries(ChamiloRequest $request, EntryDownloadResponse $downloadResponse = null)
     {
-        $entries = $this->getAssignmentDataProvider()->findEntries();
+        if (empty($downloadResponse))
+        {
+            throw new RuntimeException('No downloadable entries found');
+        }
 
-        return $this->compressEntries($this->getAssignmentName(), $entries);
+        $downloadResponse->prepare($request);
+        $downloadResponse->send();
+
+        if ($downloadResponse->removeFileAfterDownload())
+        {
+            $this->archiveCreator->removeArchiveAfterDownload($downloadResponse);
+        }
     }
 
     /**
-     *
-     * @param string $fileName
-     * @param \Chamilo\Core\Repository\ContentObject\Assignment\Display\Bridge\Storage\DataClass\Entry[] $entries
-     *
-     * @return BinaryFileResponse
+     * @param \Chamilo\Libraries\Platform\ChamiloRequest $request
+     * @param int $entityType
+     * @param int $entityIdentifier
      */
-    protected function compressEntries($fileName, $entries)
+    public function downloadForEntityTypeAndIdentifier(ChamiloRequest $request, $entityType, $entityIdentifier)
     {
-        if (empty($entries))
-        {
-            return null;
-        }
-
-        if (count($entries) == 1)
-        {
-            $file = $entries[0]->getContentObject();
-            if (!$file instanceof File)
-            {
-                return null;
-            }
-
-            return $this->createEntryDownloadResponse(
-                $file->get_full_path(), $file->get_filename(), $file->get_mime_type(), false
-            );
-        }
-
-        $archive = new Archive();
-        $archive->setName($fileName);
-
-        foreach ($entries as $entry)
-        {
-            $contentObject = $entry->getContentObject();
-            if (!$contentObject instanceof File)
-            {
-                continue;
-            }
-
-            try
-            {
-                $entityName = $this->getAssignmentDataProvider()->renderEntityNameByEntityTypeAndEntityId(
-                    $entry->getEntityType(), $entry->getEntityId()
-                );
-            }
-            catch(Exception $ex)
-            {
-                continue;
-            }
-
-//            $entityFolder = $this->getOrCreateFolderByEntity(
-//                $entry->getEntityType(), $entry->getEntityId(), $archive
-//            );
-//
-//            if(!$entityFolder)
-//            {
-//                continue;
-//            }
-
-            $fileName = Filesystem::create_safe_name(
-                $entityName . '_' . $contentObject->get_filename()
-            );
-
-            $archiveFile = new ArchiveFile();
-            $archiveFile->setName($fileName);
-            $archiveFile->setOriginalPath($contentObject->get_full_path());
-
-            $archive->addItem($archiveFile);
-        }
-
-        $archivePath = $this->archiveCreator->createArchive($archive);
-
-        return $this->createEntryDownloadResponse($archivePath, $archive->getName() . '.zip');
+        $this->downloadEntries(
+            $request, $this->compressForEntityTypeAndIdentifier($entityType, $entityIdentifier)
+        );
     }
 
     /**
-     * @param string $downloadPath
-     * @param string $filename
-     * @param string $contentType
-     * @param bool $removeAfterDownload
-     *
-     * @return \Chamilo\Core\Repository\ContentObject\Assignment\Display\Domain\EntryDownloadResponse
+     * @param \Chamilo\Libraries\Platform\ChamiloRequest $request
+     * @param int $entityType
+     * @param int $entityIdentifiers
      */
-    protected function createEntryDownloadResponse(
-        $downloadPath, $filename, $contentType = 'application/zip', $removeAfterDownload = true
-    )
+    public function downloadForEntityTypeAndIdentifiers(ChamiloRequest $request, $entityType, $entityIdentifiers)
     {
-        $response = new EntryDownloadResponse($downloadPath, 200, array('Content-Type' => $contentType));
+        $this->downloadEntries(
+            $request, $this->compressForEntityTypeAndIdentifiers($entityType, $entityIdentifiers)
+        );
+    }
 
-        $response->setContentDisposition(
-            ResponseHeaderBag::DISPOSITION_ATTACHMENT, $filename,
-            Filesystem::create_safe_name($filename)
+    /**
+     * @return \Chamilo\Core\Repository\ContentObject\Assignment\Storage\DataClass\Assignment
+     */
+    protected function getAssignment()
+    {
+        return $this->assignment;
+    }
+
+    /**
+     * @return \Chamilo\Core\Repository\ContentObject\Assignment\Display\Interfaces\AssignmentDataProvider
+     */
+    protected function getAssignmentDataProvider()
+    {
+        return $this->assignmentDataProvider;
+    }
+
+    protected function getAssignmentName()
+    {
+        $safeTitle = stripslashes(//converts two backslashes to one
+            stripslashes(//removes single backslash
+                str_replace('/', '', $this->getAssignment()->get_title()) //remove forward slash
+            )
         );
 
-        $response->setRemoveFileAfterDownload($removeAfterDownload);
+        return $safeTitle;
+    }
 
-        return $response;
+    protected function getEntityArchiveFileName($entityType, $entityIdentifier)
+    {
+        $entityName = $this->getAssignmentDataProvider()->renderEntityNameByEntityTypeAndEntityId(
+            $entityType, $entityIdentifier
+        );
+
+        $archiveFileNameParts = [];
+        $archiveFileNameParts[] = $this->getAssignmentName();
+        $archiveFileNameParts[] = $entityName;
+
+        return implode(' - ', $archiveFileNameParts);
+    }
+
+    public function getFilesystemTools(): FilesystemTools
+    {
+        return $this->filesystemTools;
     }
 
     /**
@@ -464,7 +441,7 @@ class EntryDownloader
 
                 $this->entityFoldersCache[$cacheKey] = $folder;
             }
-            catch(Exception $ex)
+            catch (Exception $ex)
             {
                 $this->entityFoldersCache[$cacheKey] = null;
             }
@@ -474,23 +451,18 @@ class EntryDownloader
     }
 
     /**
-     *
-     * @param \Chamilo\Libraries\Platform\ChamiloRequest $request
-     * @param \Chamilo\Core\Repository\ContentObject\Assignment\Display\Domain\EntryDownloadResponse $downloadResponse
+     * @param \Chamilo\Core\Repository\ContentObject\Assignment\Storage\DataClass\Assignment $assignment
      */
-    protected function downloadEntries(ChamiloRequest $request, EntryDownloadResponse $downloadResponse = null)
+    protected function setAssignment(Assignment $assignment)
     {
-        if (empty($downloadResponse))
-        {
-            throw new RuntimeException('No downloadable entries found');
-        }
+        $this->assignment = $assignment;
+    }
 
-        $downloadResponse->prepare($request);
-        $downloadResponse->send();
-
-        if ($downloadResponse->removeFileAfterDownload())
-        {
-            $this->archiveCreator->removeArchiveAfterDownload($downloadResponse);
-        }
+    /**
+     * @param \Chamilo\Core\Repository\ContentObject\Assignment\Display\Interfaces\AssignmentDataProvider $assignmentDataProvider
+     */
+    protected function setAssignmentDataProvider(AssignmentDataProvider $assignmentDataProvider)
+    {
+        $this->assignmentDataProvider = $assignmentDataProvider;
     }
 }

@@ -4,7 +4,6 @@ namespace Chamilo\Core\Admin\Language\Component;
 use Chamilo\Configuration\Configuration;
 use Chamilo\Configuration\Package\PlatformPackageBundles;
 use Chamilo\Core\Admin\Language\Manager;
-use Chamilo\Libraries\File\Filesystem;
 
 class ExporterComponent extends Manager
 {
@@ -18,7 +17,7 @@ class ExporterComponent extends Manager
         set_time_limit(0);
 
         $translations_file = $this->getConfigurablePathBuilder()->getTemporaryPath(__NAMESPACE__) . 'translations.csv';
-        Filesystem::create_dir(dirname($translations_file));
+        $this->getFilesystem()->mkdir(dirname($translations_file));
 
         $time_start = microtime(true);
 
@@ -85,9 +84,7 @@ class ExporterComponent extends Manager
             }
         }
 
-        $time_end = microtime(true);
-
-        Filesystem::file_send_for_download($translations_file, true);
+        $this->getFilesystemTools()->sendFileForDownload($translations_file);
     }
 
     /**

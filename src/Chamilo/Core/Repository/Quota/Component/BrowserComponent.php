@@ -10,7 +10,6 @@ use Chamilo\Core\Repository\Quota\Table\RequestTableRenderer;
 use Chamilo\Core\Repository\Quota\Table\UserRequestTableRenderer;
 use Chamilo\Core\Repository\Service\ContentObjectUrlGenerator;
 use Chamilo\Core\Repository\Storage\DataClass\ContentObject;
-use Chamilo\Libraries\File\Filesystem;
 use Chamilo\Libraries\Format\Structure\ActionBar\Button;
 use Chamilo\Libraries\Format\Structure\ActionBar\ButtonGroup;
 use Chamilo\Libraries\Format\Structure\ActionBar\ButtonToolBar;
@@ -118,6 +117,8 @@ class BrowserComponent extends Manager
             {
                 if ($this->getUser()->isPlatformAdmin())
                 {
+                    $filesystemTools = $this->getFilesystemTools();
+
                     $progressBarRenderer = $this->getProgressBarRenderer();
 
                     $platform_quota = [];
@@ -126,8 +127,8 @@ class BrowserComponent extends Manager
                         '</h3>';
                     $platform_quota[] = $progressBarRenderer->render(
                         $storageSpaceCalculator->getAggregatedUserStorageSpacePercentage(),
-                        Filesystem::format_file_size($storageSpaceCalculator->getUsedAggregatedUserStorageSpace()) .
-                        ' / ' . Filesystem::format_file_size(
+                        $filesystemTools->formatFileSize($storageSpaceCalculator->getUsedAggregatedUserStorageSpace()) .
+                        ' / ' . $filesystemTools->formatFileSize(
                             $storageSpaceCalculator->getMaximumAggregatedUserStorageSpace()
                         )
                     );
@@ -136,9 +137,9 @@ class BrowserComponent extends Manager
                     $platform_quota[] =
                         '<h3>' . htmlentities($translator->trans('ReservedDiskSpace', [], Manager::CONTEXT)) . '</h3>';
                     $platform_quota[] = $progressBarRenderer->render(
-                        $storageSpaceCalculator->getReservedStorageSpacePercentage(),
-                        Filesystem::format_file_size($storageSpaceCalculator->getMaximumAggregatedUserStorageSpace()) .
-                        ' / ' . Filesystem::format_file_size(
+                        $storageSpaceCalculator->getReservedStorageSpacePercentage(), $filesystemTools->formatFileSize(
+                            $storageSpaceCalculator->getMaximumAggregatedUserStorageSpace()
+                        ) . ' / ' . $filesystemTools->formatFileSize(
                             $storageSpaceCalculator->getMaximumAllocatedStorageSpace()
                         )
                     );
@@ -148,8 +149,8 @@ class BrowserComponent extends Manager
                         '<h3>' . htmlentities($translator->trans('AllocatedDiskSpace', [], Manager::CONTEXT)) . '</h3>';
                     $platform_quota[] = $progressBarRenderer->render(
                         $storageSpaceCalculator->getAllocatedStorageSpacePercentage(),
-                        Filesystem::format_file_size($storageSpaceCalculator->getUsedAggregatedUserStorageSpace()) .
-                        ' / ' . Filesystem::format_file_size(
+                        $filesystemTools->formatFileSize($storageSpaceCalculator->getUsedAggregatedUserStorageSpace()) .
+                        ' / ' . $filesystemTools->formatFileSize(
                             $storageSpaceCalculator->getMaximumAllocatedStorageSpace()
                         )
                     );
@@ -448,6 +449,7 @@ class BrowserComponent extends Manager
     {
         $user_quota = [];
         $storageSpaceCalculator = $this->getStorageSpaceCalculator();
+        $filesystemTools = $this->getFilesystemTools();
 
         if ($storageSpaceCalculator->isStorageQuotumEnabled())
         {
@@ -455,8 +457,9 @@ class BrowserComponent extends Manager
                 '<h3>' . htmlentities($this->getTranslator()->trans('UsedDiskSpace', [], Manager::CONTEXT)) . '</h3>';
             $user_quota[] = $this->getProgressBarRenderer()->render(
                 $storageSpaceCalculator->getStorageSpacePercentageForUser($this->getUser()),
-                Filesystem::format_file_size($storageSpaceCalculator->getUsedStorageSpaceForUser($this->getUser())) .
-                ' / ' . Filesystem::format_file_size(
+                $filesystemTools->formatFileSize(
+                    $storageSpaceCalculator->getUsedStorageSpaceForUser($this->getUser())
+                ) . ' / ' . $filesystemTools->formatFileSize(
                     $storageSpaceCalculator->getAllowedStorageSpaceForUser($this->getUser())
                 )
             );
@@ -587,9 +590,10 @@ class BrowserComponent extends Manager
         $properties[$translator->trans('OtherFrequentlyUsedContentObjectTypes', [], Manager::CONTEXT)] =
             implode('<br />', $frequent);
 
-        $properties[$translator->trans('AvailableDiskSpace', [], Manager::CONTEXT)] = Filesystem::format_file_size(
-            $storageSpaceCalculator->getAvailableStorageSpaceForUser($this->getUser())
-        );
+        $properties[$translator->trans('AvailableDiskSpace', [], Manager::CONTEXT)] =
+            $this->getFilesystemTools()->formatFileSize(
+                $storageSpaceCalculator->getAvailableStorageSpaceForUser($this->getUser())
+            );
 
         $condition = new EqualityCondition(
             new PropertyConditionVariable(ContentObject::class, ContentObject::PROPERTY_OWNER_ID),

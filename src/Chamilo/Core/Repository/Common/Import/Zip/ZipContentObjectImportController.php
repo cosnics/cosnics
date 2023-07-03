@@ -1,6 +1,7 @@
 <?php
 namespace Chamilo\Core\Repository\Common\Import\Zip;
 
+use _PHPStan_8862d57cc\Symfony\Component\Finder\Iterator\FileTypeFilterIterator;
 use Chamilo\Core\Repository\Common\Import\ContentObjectImportController;
 use Chamilo\Core\Repository\ContentObject\File\Storage\DataClass\File;
 use Chamilo\Core\Repository\Quota\Calculator;
@@ -9,7 +10,6 @@ use Chamilo\Core\Repository\Storage\DataClass\RepositoryCategory;
 use Chamilo\Core\Repository\Storage\DataManager;
 use Chamilo\Core\Repository\Workspace\Storage\DataClass\Workspace;
 use Chamilo\Core\User\Storage\DataClass\User;
-use Chamilo\Libraries\File\Filesystem;
 use Chamilo\Libraries\Translation\Translation;
 use ZipArchive;
 
@@ -322,8 +322,10 @@ class ZipContentObjectImportController extends ContentObjectImportController
      */
     protected function handle_files(ZipArchive $zip_archive, array $files_info)
     {
+        $filesystem = $this->getFilesystem();
+
         $extracted_files_dir = $this->getConfigurablePathBuilder()->getTemporaryPath() . uniqid();
-        Filesystem::create_dir($extracted_files_dir);
+        $filesystem->mkdir($extracted_files_dir);
 
         $failures = 0;
 
@@ -341,7 +343,9 @@ class ZipContentObjectImportController extends ContentObjectImportController
             {
                 $zip_archive->extractTo($extracted_files_dir, $file_info['name']);
 
-                $files = Filesystem::get_directory_content($extracted_files_dir, Filesystem::LIST_FILES);
+                $files = $this->getFilesystemTools()->getDirectoryContent(
+                    $extracted_files_dir, FileTypeFilterIterator::ONLY_FILES
+                );
                 if (count($files) == 0)
                 {
                     $failures ++;
@@ -360,7 +364,7 @@ class ZipContentObjectImportController extends ContentObjectImportController
                     $failures ++;
                 }
 
-                Filesystem::remove($first_file);
+                $filesystem->remove($first_file);
             }
             else
             {
@@ -368,7 +372,7 @@ class ZipContentObjectImportController extends ContentObjectImportController
             }
         }
 
-        Filesystem::remove($extracted_files_dir);
+        $filesystem->remove($extracted_files_dir);
 
         return $failures;
     }
@@ -411,7 +415,7 @@ class ZipContentObjectImportController extends ContentObjectImportController
     public function tryout($file)
     {
         $extracted_files_dir = $path = $this->getConfigurablePathBuilder()->getTemporaryPath() . uniqid();
-        Filesystem::create_dir($path);
+        $this->getFilesystem()->mkdir($path);
 
         $zip = new ZipArchive();
         $zip->open($file->get_path());

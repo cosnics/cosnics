@@ -4,7 +4,6 @@ namespace Chamilo\Core\Admin\Component;
 use Chamilo\Configuration\Configuration;
 use Chamilo\Core\Admin\Core\BreadcrumbGenerator;
 use Chamilo\Core\Admin\Manager;
-use Chamilo\Libraries\File\Filesystem;
 use Chamilo\Libraries\Format\Form\FormValidator;
 use Chamilo\Libraries\Format\Structure\BreadcrumbGeneratorInterface;
 use Chamilo\Libraries\Format\Structure\BreadcrumbTrail;
@@ -12,6 +11,7 @@ use Chamilo\Libraries\Format\Utilities\ResourceManager;
 use Chamilo\Libraries\Translation\Translation;
 use Chamilo\Libraries\Utilities\StringUtilities;
 use HTML_Table;
+use Symfony\Component\Finder\Iterator\FileTypeFilterIterator;
 
 /**
  * @package admin.lib.admin_manager.component
@@ -47,7 +47,8 @@ class LogViewerComponent extends Manager
             $type = 'chamilo';
 
             $dir = $this->getConfigurablePathBuilder()->getLogPath();
-            $content = Filesystem::get_directory_content($dir, Filesystem::LIST_FILES, false);
+            $content =
+                $this->getFilesystemTools()->getDirectoryContent($dir, FileTypeFilterIterator::ONLY_FILES, false);
 
             $chamilo_type = $content[0];
             $lines = '10';
@@ -91,7 +92,9 @@ class LogViewerComponent extends Manager
         ];
 
         $dir = $this->getConfigurablePathBuilder()->getLogPath();
-        $content = Filesystem::get_directory_content($dir, Filesystem::LIST_FILES, false);
+
+        $content = $this->getFilesystemTools()->getDirectoryContent($dir, FileTypeFilterIterator::ONLY_FILES, false);
+
         foreach ($content as $file)
         {
             if (substr($file, 0, 1) == '.')

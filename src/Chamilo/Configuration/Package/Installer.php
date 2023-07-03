@@ -2,11 +2,11 @@
 namespace Chamilo\Configuration\Package;
 
 use Chamilo\Configuration\Storage\DataClass\Language;
-use Chamilo\Libraries\File\Filesystem;
 use Chamilo\Libraries\Translation\Translation;
 use Chamilo\Libraries\Utilities\StringUtilities;
 use DOMDocument;
 use DOMXPath;
+use Symfony\Component\Finder\Iterator\FileTypeFilterIterator;
 
 /**
  * @package admin.install
@@ -22,7 +22,8 @@ class Installer extends Action\Installer
     public function create_languages()
     {
         $language_path = $this->getSystemPathBuilder()->getI18nPath();
-        $language_files = Filesystem::get_directory_content($language_path, Filesystem::LIST_FILES, false);
+        $language_files =
+            $this->getFilesystemTools()->getDirectoryContent($language_path, FileTypeFilterIterator::ONLY_FILES, false);
 
         foreach ($language_files as $language_file)
         {

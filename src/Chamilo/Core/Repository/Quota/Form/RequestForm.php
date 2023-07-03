@@ -4,7 +4,6 @@ namespace Chamilo\Core\Repository\Quota\Form;
 use Chamilo\Core\Repository\Quota\Calculator;
 use Chamilo\Core\Repository\Quota\Storage\DataClass\Request;
 use Chamilo\Core\User\UserDetails;
-use Chamilo\Libraries\File\Filesystem;
 use Chamilo\Libraries\Format\Form\FormValidator;
 use Chamilo\Libraries\Format\Structure\Glyph\FontAwesomeGlyph;
 use Chamilo\Libraries\Translation\Translation;
@@ -34,14 +33,16 @@ class RequestForm extends FormValidator
             $this->addElement('static', null, Translation::get('User'), $user_details->toHtml());
         }
 
+        $filesystemTools = $this->getFilesystemTools();
+
         $quota_bar = Calculator::getBar(
             $this->calculator->getUserDiskQuotaPercentage(),
-            Filesystem::format_file_size($this->calculator->getUsedUserDiskQuota()) . ' / ' .
-            Filesystem::format_file_size($this->calculator->getMaximumUserDiskQuota())
+            $filesystemTools->formatFileSize($this->calculator->getUsedUserDiskQuota()) . ' / ' .
+            $filesystemTools->formatFileSize($this->calculator->getMaximumUserDiskQuota())
         );
         $this->addElement('static', null, Translation::get('UsedDiskSpace'), $quota_bar);
 
-        $this->addElement('text', Request::PROPERTY_QUOTA, Translation::get('QuotaStep'), array("size" => "7"));
+        $this->addElement('text', Request::PROPERTY_QUOTA, Translation::get('QuotaStep'), ['size' => '7']);
         $this->addRule(
             Request::PROPERTY_QUOTA, Translation::get('ThisFieldIsRequired', null, StringUtilities::LIBRARIES),
             'required'
@@ -52,7 +53,7 @@ class RequestForm extends FormValidator
         );
 
         $this->addElement(
-            'textarea', Request::PROPERTY_MOTIVATION, Translation::get('Motivation'), array("cols" => 50, "rows" => 6)
+            'textarea', Request::PROPERTY_MOTIVATION, Translation::get('Motivation'), ['cols' => 50, 'rows' => 6]
         );
         $this->addRule(
             Request::PROPERTY_MOTIVATION, Translation::get('ThisFieldIsRequired', null, StringUtilities::LIBRARIES),
@@ -63,7 +64,7 @@ class RequestForm extends FormValidator
         {
             $this->addElement(
                 'textarea', Request::PROPERTY_DECISION_MOTIVATION, Translation::get('DecisionMotivation'),
-                array("cols" => 50, "rows" => 6)
+                ['cols' => 50, 'rows' => 6]
             );
             $this->addRule(
                 Request::PROPERTY_DECISION_MOTIVATION,
@@ -78,8 +79,8 @@ class RequestForm extends FormValidator
         else
         {
             $buttons[] = $this->createElement(
-                'style_submit_button', 'submit', Translation::get('Send', null, StringUtilities::LIBRARIES), null,
-                null, new FontAwesomeGlyph('envelope')
+                'style_submit_button', 'submit', Translation::get('Send', null, StringUtilities::LIBRARIES), null, null,
+                new FontAwesomeGlyph('envelope')
             );
         }
 
@@ -99,7 +100,8 @@ class RequestForm extends FormValidator
     {
         if ($this->request->get_quota())
         {
-            $defaults[Request::PROPERTY_QUOTA] = Filesystem::format_file_size($this->request->get_quota(), false);
+            $defaults[Request::PROPERTY_QUOTA] =
+                $this->getFilesystemTools()->formatFileSize($this->request->get_quota(), false);
         }
 
         $defaults[Request::PROPERTY_MOTIVATION] = $this->request->get_motivation();

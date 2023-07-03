@@ -5,7 +5,6 @@ use Chamilo\Core\Repository\ContentObject\LearningPath\Display\Manager;
 use Chamilo\Core\Repository\ContentObject\LearningPath\Service\ReportingExporter\Exporter;
 use Chamilo\Core\Repository\ContentObject\LearningPath\Service\ReportingExporter\Writer\CsvWriter;
 use Chamilo\Libraries\Architecture\Exceptions\NotAllowedException;
-use Chamilo\Libraries\File\Filesystem;
 use InvalidArgumentException;
 
 /**
@@ -15,20 +14,24 @@ use InvalidArgumentException;
  */
 class ReportingExporterComponent extends BaseReportingComponent
 {
-    const PARAM_EXPORT = 'export';
+    public const EXPORT_TREE_NODE_ATTEMPTS = 'TreeNodeAttempts';
 
-    const EXPORT_USER_PROGRESS = 'UserProgress';
-    const EXPORT_TREE_NODE_ATTEMPTS = 'TreeNodeAttempts';
-    const EXPORT_TREE_NODE_CHILDREN_PROGRESS = 'TreeNodeChildrenProgress';
+    public const EXPORT_TREE_NODE_CHILDREN_PROGRESS = 'TreeNodeChildrenProgress';
+
+    public const EXPORT_USER_PROGRESS = 'UserProgress';
+
+    public const PARAM_EXPORT = 'export';
 
     /**
      * Runs this component
      */
     public function run()
     {
+        $filesystem = $this->getFilesystem();
         $pathBuilder = $this->getConfigurablePathBuilder();
         $temporaryDirectory = $pathBuilder->getTemporaryPath(Manager::CONTEXT);
-        Filesystem::create_dir($temporaryDirectory);
+
+        $filesystem->mkdir($temporaryDirectory);
 
         $exporter = new Exporter($this->getTrackingService());
 
@@ -39,7 +42,7 @@ class ReportingExporterComponent extends BaseReportingComponent
         $filename = '';
         $csvWriter = new CsvWriter($file);
 
-        switch($exportMode)
+        switch ($exportMode)
         {
             case self::EXPORT_USER_PROGRESS:
                 $exporter->exportUserProgress($this->learningPath, $this->getCurrentTreeNode(), $csvWriter);
@@ -59,11 +62,11 @@ class ReportingExporterComponent extends BaseReportingComponent
                 break;
         }
 
-        Filesystem::file_send_for_download($file, false, $filename, 'text/csv');
-        Filesystem::remove($file);
+        $this->getFilesystemTools()->sendFileForDownload($file, $filename, 'text/csv');
+        $filesystem->remove($file);
     }
 
-    function build()
+    public function build()
     {
     }
 
@@ -80,12 +83,12 @@ class ReportingExporterComponent extends BaseReportingComponent
         $exportModes =
             [self::EXPORT_USER_PROGRESS, self::EXPORT_TREE_NODE_ATTEMPTS, self::EXPORT_TREE_NODE_CHILDREN_PROGRESS];
 
-        if(!in_array($exportMode, $exportModes))
+        if (!in_array($exportMode, $exportModes))
         {
             throw new InvalidArgumentException(sprintf('The given export mode %s is not supported', $exportMode));
         }
 
-        if($exportMode == self::EXPORT_USER_PROGRESS && !$this->canEditCurrentTreeNode())
+        if ($exportMode == self::EXPORT_USER_PROGRESS && !$this->canEditCurrentTreeNode())
         {
             throw new NotAllowedException();
         }

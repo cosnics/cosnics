@@ -2,9 +2,10 @@
 namespace Chamilo\Libraries\File\Compression\ZipArchive;
 
 use Chamilo\Libraries\File\ConfigurablePathBuilder;
-use Chamilo\Libraries\File\Filesystem;
+use Chamilo\Libraries\File\FilesystemTools;
 use RecursiveDirectoryIterator;
 use RecursiveIteratorIterator;
+use Symfony\Component\Filesystem\Filesystem;
 use ZipArchive;
 
 /**
@@ -15,30 +16,32 @@ class ZipArchiveFilecompression
 {
     protected ConfigurablePathBuilder $configurablePathBuilder;
 
-    public function __construct(ConfigurablePathBuilder $configurablePathBuilder)
+    protected Filesystem $filesystem;
+
+    protected FilesystemTools $filesystemTools;
+
+    public function __construct(
+        Filesystem $filesystem, FilesystemTools $filesystemTools, ConfigurablePathBuilder $configurablePathBuilder
+    )
     {
+        $this->filesystem = $filesystem;
+        $this->filesystemTools = $filesystemTools;
         $this->configurablePathBuilder = $configurablePathBuilder;
-    }
-
-    protected function createTemporaryDirectory(): string
-    {
-        $path = $this->getConfigurablePathBuilder()->getTemporaryPath(__NAMESPACE__) . uniqid() . DIRECTORY_SEPARATOR;
-        Filesystem::create_dir($path);
-
-        return $path;
     }
 
     public function createArchive(string $path, ?string $fileName = null, string $fileExtension = 'cpo'): string
     {
+        $filesystemTools = $this->getFilesystemTools();
+
         $pathToBeZipped = realpath($path);
         $temporaryPath = $this->createTemporaryDirectory();
 
         if (!isset($fileName))
         {
-            $fileName = Filesystem::create_unique_name($temporaryPath, uniqid());
+            $fileName = $filesystemTools->createUniqueName($temporaryPath, uniqid());
         }
 
-        $archiveFileName = Filesystem::create_safe_name($fileName) . '.' . $fileExtension;
+        $archiveFileName = $filesystemTools->createSafeName($fileName) . '.' . $fileExtension;
 
         $archiveFilePath = $temporaryPath . $archiveFileName;
 
@@ -70,16 +73,24 @@ class ZipArchiveFilecompression
         return $archiveFilePath;
     }
 
+    protected function createTemporaryDirectory(): string
+    {
+        $path = $this->getConfigurablePathBuilder()->getTemporaryPath(__NAMESPACE__) . uniqid() . DIRECTORY_SEPARATOR;
+        $this->getFilesystem()->mkdir($path);
+
+        return $path;
+    }
+
     /**
      * Extracts a compressed file to a given directory.
      * This function will also make sure that all resulting directory-
-     * and filenames are safe using the Filesystem::create_safe_names function.
+     * and filenames are safe using the FilesystemTools::createSafeNames function.
      *
      * @param string $file The full path to the file which should be extracted
      *
      * @return string boolean full path to the directory where the file was extracted or boolean false if extraction
      *         wasn't successfull
-     * @see Filesystem::create_safe_names
+     * @see FilesystemTools::createSafeNames
      */
     public function extractFile(string $file, bool $withSafeNames = true): string
     {
@@ -97,7 +108,7 @@ class ZipArchiveFilecompression
 
         if ($withSafeNames)
         {
-            Filesystem::create_safe_names($extractedFilesDirectory);
+            $this->getFilesystemTools()->createSafeNames($extractedFilesDirectory);
         }
 
         return $extractedFilesDirectory;
@@ -106,6 +117,16 @@ class ZipArchiveFilecompression
     public function getConfigurablePathBuilder(): ConfigurablePathBuilder
     {
         return $this->configurablePathBuilder;
+    }
+
+    public function getFilesystem(): Filesystem
+    {
+        return $this->filesystem;
+    }
+
+    public function getFilesystemTools(): FilesystemTools
+    {
+        return $this->filesystemTools;
     }
 
     /**

@@ -8,7 +8,7 @@ use Chamilo\Core\User\Storage\DataClass\User;
 use Chamilo\Libraries\Architecture\Application\Application;
 use Chamilo\Libraries\Architecture\Application\Routing\UrlGenerator;
 use Chamilo\Libraries\File\ConfigurablePathBuilder;
-use Chamilo\Libraries\File\Filesystem;
+use Chamilo\Libraries\File\FilesystemTools;
 use Chamilo\Libraries\Format\Form\FormValidator;
 use Symfony\Component\Translation\Translator;
 
@@ -24,6 +24,8 @@ class StorageSpaceCalculator implements UserStorageSpaceCalculatorInterface
 
     protected ConfigurationConsulter $configurationConsulter;
 
+    protected FilesystemTools $filesystemTools;
+
     protected Translator $translator;
 
     protected UrlGenerator $urlGenerator;
@@ -34,7 +36,8 @@ class StorageSpaceCalculator implements UserStorageSpaceCalculatorInterface
         ConfigurationConsulter $configurationConsulter, Translator $translator,
         ConfigurablePathBuilder $configurablePathBuilder, UrlGenerator $urlGenerator,
         UserStorageSpaceCalculatorInterface $userStorageSpaceCalculator,
-        AggregatedUserStorageSpaceCalculatorInterface $aggregatedUserStorageSpaceCalculator
+        AggregatedUserStorageSpaceCalculatorInterface $aggregatedUserStorageSpaceCalculator,
+        FilesystemTools $filesystemTools
     )
     {
         $this->configurationConsulter = $configurationConsulter;
@@ -43,15 +46,17 @@ class StorageSpaceCalculator implements UserStorageSpaceCalculatorInterface
         $this->urlGenerator = $urlGenerator;
         $this->userStorageSpaceCalculator = $userStorageSpaceCalculator;
         $this->aggregatedUserStorageSpaceCalculator = $aggregatedUserStorageSpaceCalculator;
+        $this->filesystemTools = $filesystemTools;
     }
 
     public function addUploadWarningToFormForUser(FormValidator $form, User $user)
     {
         $configurationConsulter = $this->getConfigurationConsulter();
         $translator = $this->getTranslator();
+        $filesystemTools = $this->getFilesystemTools();
 
-        $postMaxSize = Filesystem::interpret_file_size(ini_get('post_max_size'));
-        $uploadMaxFilesize = Filesystem::interpret_file_size(ini_get('upload_max_filesize'));
+        $postMaxSize = $filesystemTools->interpretFileSize(ini_get('post_max_size'));
+        $uploadMaxFilesize = $filesystemTools->interpretFileSize(ini_get('upload_max_filesize'));
 
         $maximumServerSize = max($postMaxSize, $uploadMaxFilesize);
         $availableStorageSpaceForUser = $this->getAvailableStorageSpaceForUser($user);
@@ -74,8 +79,8 @@ class StorageSpaceCalculator implements UserStorageSpaceCalculatorInterface
 
             $message = $translator->trans(
                 $translation, [
-                'SERVER' => Filesystem::format_file_size($maximumServerSize),
-                'USER' => Filesystem::format_file_size($availableStorageSpaceForUser),
+                'SERVER' => $filesystemTools->formatFileSize($maximumServerSize),
+                'USER' => $filesystemTools->formatFileSize($availableStorageSpaceForUser),
                 'URL' => $url
             ], 'Chamilo\Core\Repository\Quota'
             );
@@ -94,7 +99,7 @@ class StorageSpaceCalculator implements UserStorageSpaceCalculatorInterface
             $maximumSize = $maximumServerSize;
             $message = $translator->trans(
                 'MaximumFileSizeServer',
-                ['FILESIZE' => Filesystem::format_file_size($maximumSize), 'Chamilo\Core\Repository\Quota']
+                ['FILESIZE' => $filesystemTools->formatFileSize($maximumSize), 'Chamilo\Core\Repository\Quota']
             );
             $form->add_warning_message('max_size', null, $message);
         }
@@ -166,6 +171,11 @@ class StorageSpaceCalculator implements UserStorageSpaceCalculatorInterface
         return $this->configurationConsulter;
     }
 
+    public function getFilesystemTools(): FilesystemTools
+    {
+        return $this->filesystemTools;
+    }
+
     public function getMaximumAggregatedUserStorageSpace(): int
     {
         return $this->getAggregatedUserStorageSpaceCalculator()->getMaximumAggregatedUserStorageSpace();
@@ -178,8 +188,10 @@ class StorageSpaceCalculator implements UserStorageSpaceCalculatorInterface
 
     public function getMaximumUploadSizeForUser(User $user): int
     {
-        $postMaxSize = Filesystem::interpret_file_size(ini_get('post_max_size'));
-        $uploadMaxFilesize = Filesystem::interpret_file_size(ini_get('upload_max_filesize'));
+        $filesystemTools = $this->getFilesystemTools();
+
+        $postMaxSize = $filesystemTools->interpretFileSize(ini_get('post_max_size'));
+        $uploadMaxFilesize = $filesystemTools->interpretFileSize(ini_get('upload_max_filesize'));
 
         $maximumServerSize = max($postMaxSize, $uploadMaxFilesize);
         $availableStorageSpaceForUser = $this->getAvailableStorageSpaceForUser($user);

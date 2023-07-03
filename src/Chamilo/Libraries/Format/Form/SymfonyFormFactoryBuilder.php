@@ -1,11 +1,12 @@
 <?php
 namespace Chamilo\Libraries\Format\Form;
 
-use Chamilo\Libraries\File\Filesystem;
+use Chamilo\Libraries\File\FilesystemTools;
 use Chamilo\Libraries\File\SystemPathBuilder;
 use InvalidArgumentException;
 use Symfony\Bridge\Twig\Extension\FormExtension;
 use Symfony\Bridge\Twig\Form\TwigRendererEngine;
+use Symfony\Component\Finder\Iterator\FileTypeFilterIterator;
 use Symfony\Component\Form\Extension\HttpFoundation\HttpFoundationExtension;
 use Symfony\Component\Form\Extension\Validator\ValidatorExtension;
 use Symfony\Component\Form\FormRenderer;
@@ -32,13 +33,16 @@ class SymfonyFormFactoryBuilder
      */
     protected $chamiloFormTypes;
 
+    protected FilesystemTools $filesystemTools;
+
     protected SystemPathBuilder $systemPathBuilder;
 
     /**
      * SymfonyFormFactoryBuilder constructor.
      */
-    public function __construct(SystemPathBuilder $systemPathBuilder)
+    public function __construct(FilesystemTools $filesystemTools, SystemPathBuilder $systemPathBuilder)
     {
+        $this->filesystemTools = $filesystemTools;
         $this->systemPathBuilder = $systemPathBuilder;
         $this->chamiloFormTypes = [];
     }
@@ -67,8 +71,8 @@ class SymfonyFormFactoryBuilder
         $this->createTwigExtension($twig, $chamiloFormTemplatesPath);
 
         return Forms::createFormFactoryBuilder()->addExtension(new HttpFoundationExtension())->addExtension(
-                new ValidatorExtension($validator)
-            )->addTypes($this->chamiloFormTypes)->getFormFactory();
+            new ValidatorExtension($validator)
+        )->addTypes($this->chamiloFormTypes)->getFormFactory();
     }
 
     /**
@@ -79,7 +83,9 @@ class SymfonyFormFactoryBuilder
      */
     protected function createTwigExtension(Environment $twig, $chamiloFormTemplatesPath)
     {
-        $chamilo_files = Filesystem::get_directory_content($chamiloFormTemplatesPath, Filesystem::LIST_FILES, false);
+        $chamilo_files = $this->getFilesystemTools()->getDirectoryContent(
+            $chamiloFormTemplatesPath, FileTypeFilterIterator::ONLY_FILES, false
+        );
         $twig_rendering_files = array_merge(['form_div_layout.html.twig'], $chamilo_files);
 
         $formEngine = new TwigRendererEngine($twig_rendering_files, $twig);
@@ -118,6 +124,11 @@ class SymfonyFormFactoryBuilder
         }
 
         $loader->addLoader($form_loader);
+    }
+
+    public function getFilesystemTools(): FilesystemTools
+    {
+        return $this->filesystemTools;
     }
 
     public function getSystemPathBuilder(): SystemPathBuilder

@@ -38,6 +38,13 @@ class JobGenerator
         $this->process($this->package_list);
     }
 
+    public function getFilesystem(): \Symfony\Component\Filesystem\Filesystem
+    {
+        return DependencyInjectionContainerBuilder::getInstance()->createContainer()->get(
+            Filesystem::class
+        );
+    }
+
     /**
      * @param string $context
      *
@@ -96,7 +103,7 @@ class JobGenerator
             $package_config_path = $this->get_folder($package_list->getType()) . 'config.xml';
             $job_config_path = $job_folder . 'config.xml';
 
-            Filesystem::copy_file($package_config_path, $job_config_path);
+            $this->getFilesystem()->copy($package_config_path, $job_config_path);
         }
 
         if ($package_list->has_children())

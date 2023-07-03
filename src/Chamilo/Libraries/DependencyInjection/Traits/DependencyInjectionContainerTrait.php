@@ -14,6 +14,7 @@ use Chamilo\Libraries\Architecture\ErrorHandler\ExceptionLogger\ExceptionLoggerI
 use Chamilo\Libraries\Architecture\Factory\ApplicationFactory;
 use Chamilo\Libraries\DependencyInjection\DependencyInjectionContainerBuilder;
 use Chamilo\Libraries\File\ConfigurablePathBuilder;
+use Chamilo\Libraries\File\FilesystemTools;
 use Chamilo\Libraries\File\SystemPathBuilder;
 use Chamilo\Libraries\File\WebPathBuilder;
 use Chamilo\Libraries\Format\NotificationMessage\NotificationMessageManager;
@@ -32,6 +33,7 @@ use Chamilo\Libraries\Utilities\StringUtilities;
 use Doctrine\ORM\EntityManager;
 use Monolog\Logger;
 use Symfony\Component\DependencyInjection\ContainerInterface;
+use Symfony\Component\Filesystem\Filesystem;
 use Symfony\Component\Form\FormFactory;
 use Symfony\Component\HttpFoundation\Session\SessionInterface;
 use Symfony\Component\Serializer\Serializer;
@@ -96,6 +98,16 @@ trait DependencyInjectionContainerTrait
     protected function getExceptionLogger(): ExceptionLoggerInterface
     {
         return $this->getService('Chamilo\Libraries\Architecture\ErrorHandler\ExceptionLogger');
+    }
+
+    public function getFilesystem(): Filesystem
+    {
+        return $this->getService(Filesystem::class);
+    }
+
+    public function getFilesystemTools(): FilesystemTools
+    {
+        return $this->getService(FilesystemTools::class);
     }
 
     public function getFooterRenderer(): FooterRendererInterface
@@ -238,7 +250,7 @@ trait DependencyInjectionContainerTrait
         }
     }
 
-    public function setContainer(ContainerInterface $container)
+    public function setContainer(ContainerInterface $container): static
     {
         $this->container = $container;
 

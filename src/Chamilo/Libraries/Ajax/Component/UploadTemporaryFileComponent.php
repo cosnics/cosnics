@@ -3,17 +3,15 @@ namespace Chamilo\Libraries\Ajax\Component;
 
 use Chamilo\Libraries\Ajax\Manager;
 use Chamilo\Libraries\Architecture\JsonAjaxResult;
-use Chamilo\Libraries\File\Filesystem;
 use Chamilo\Libraries\Utilities\StringUtilities;
 use Exception;
 use Symfony\Component\Uid\Uuid;
 
 /**
- *
  * @package Chamilo\Libraries\Ajax\Component
- * @author Hans De Bisschop <hans.de.bisschop@ehb.be>
- * @author Magali Gillard <magali.gillard@ehb.be>
- * @author Eduard Vossen <eduard.vossen@ehb.be>
+ * @author  Hans De Bisschop <hans.de.bisschop@ehb.be>
+ * @author  Magali Gillard <magali.gillard@ehb.be>
+ * @author  Eduard Vossen <eduard.vossen@ehb.be>
  */
 class UploadTemporaryFileComponent extends Manager
 {
@@ -33,9 +31,9 @@ class UploadTemporaryFileComponent extends Manager
         }
         $temporaryPath = $this->getConfigurablePathBuilder()->getTemporaryPath(__NAMESPACE__);
 
-        Filesystem::create_dir($temporaryPath);
+        $this->getFilesystem()->mkdir($temporaryPath);
 
-        $fileName = md5(Uuid::v4());
+        $fileName = md5(Uuid::v4()->__toString());
         $temporaryFilePath = $temporaryPath . $fileName;
 
         $result = move_uploaded_file($file->getRealPath(), $temporaryFilePath);
@@ -49,13 +47,12 @@ class UploadTemporaryFileComponent extends Manager
         else
         {
             $jsonAjaxResult = new JsonAjaxResult();
-            $jsonAjaxResult->set_properties(array('temporaryFileName' => $fileName));
+            $jsonAjaxResult->set_properties(['temporaryFileName' => $fileName]);
             $jsonAjaxResult->display();
         }
     }
 
     /**
-     *
      * @return \Symfony\Component\HttpFoundation\File\UploadedFile
      * @throws \Exception
      */

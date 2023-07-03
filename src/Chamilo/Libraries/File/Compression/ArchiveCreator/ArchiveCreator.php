@@ -3,6 +3,7 @@ namespace Chamilo\Libraries\File\Compression\ArchiveCreator;
 
 use Chamilo\Libraries\File\Compression\ZipArchive\ZipArchiveFilecompression;
 use Chamilo\Libraries\File\ConfigurablePathBuilder;
+use Chamilo\Libraries\File\FilesystemTools;
 use Symfony\Component\Filesystem\Filesystem;
 use Symfony\Component\HttpFoundation\BinaryFileResponse;
 use Symfony\Component\HttpFoundation\Request;
@@ -19,14 +20,17 @@ class ArchiveCreator
 
     protected ZipArchiveFilecompression $fileCompression;
 
-    protected Filesystem $fileSystem;
+    protected Filesystem $filesystem;
+
+    protected FilesystemTools $filesystemTools;
 
     public function __construct(
-        Filesystem $fileSystem, ZipArchiveFilecompression $fileCompression,
+        Filesystem $filesystem, FilesystemTools $filesystemTools, ZipArchiveFilecompression $fileCompression,
         ConfigurablePathBuilder $configurablePathBuilder
     )
     {
-        $this->fileSystem = $fileSystem;
+        $this->filesystem = $filesystem;
+        $this->filesystemTools = $filesystemTools;
         $this->fileCompression = $fileCompression;
         $this->configurablePathBuilder = $configurablePathBuilder;
     }
@@ -52,7 +56,7 @@ class ArchiveCreator
         $this->handleArchiveItems($archive->getArchiveItems(), $temporaryFolder);
 
         $archivePath = $this->fileCompression->createArchive($temporaryFolder);
-        $this->fileSystem->remove([$temporaryFolder]);
+        $this->filesystem->remove([$temporaryFolder]);
 
         return $archivePath;
     }
@@ -68,33 +72,38 @@ class ArchiveCreator
 
         $response->setContentDisposition(
             ResponseHeaderBag::DISPOSITION_ATTACHMENT, $archive->getName() . '.zip',
-            \Chamilo\Libraries\File\Filesystem::create_safe_name($archive->getName()) . '.zip'
+            $this->getFilesystemTools()->createSafeName($archive->getName()) . '.zip'
         );
 
         return $response;
     }
 
+    public function getFilesystemTools(): FilesystemTools
+    {
+        return $this->filesystemTools;
+    }
+
     protected function handleArchiveFile(ArchiveFile $archiveFile, string $temporaryPath)
     {
-        $fileName = \Chamilo\Libraries\File\Filesystem::create_unique_name($temporaryPath, $archiveFile->getName());
+        $fileName = $this->getFilesystemTools()->createUniqueName($temporaryPath, $archiveFile->getName());
         $filePath = $temporaryPath . DIRECTORY_SEPARATOR . $fileName;
         $originalPath = $archiveFile->getOriginalPath();
 
         if (is_dir($originalPath))
         {
-            $this->fileSystem->mirror($originalPath, $filePath);
+            $this->filesystem->mirror($originalPath, $filePath);
         }
         else
         {
-            $this->fileSystem->copy($originalPath, $filePath);
+            $this->filesystem->copy($originalPath, $filePath);
         }
     }
 
     protected function handleArchiveFolder(ArchiveFolder $archiveFolder, string $temporaryPath)
     {
-        $folderName = \Chamilo\Libraries\File\Filesystem::create_unique_name($temporaryPath, $archiveFolder->getName());
+        $folderName = $this->getFilesystemTools()->createUniqueName($temporaryPath, $archiveFolder->getName());
         $folderPath = $temporaryPath . DIRECTORY_SEPARATOR . $folderName;
-        $this->fileSystem->mkdir($folderPath);
+        $this->filesystem->mkdir($folderPath);
 
         foreach ($archiveFolder->getArchiveItems() as $archiveItem)
         {
@@ -132,6 +141,6 @@ class ArchiveCreator
     public function removeArchiveAfterDownload(BinaryFileResponse $binaryFileResponse)
     {
         $archivePath = $binaryFileResponse->getFile()->getPathname();
-        $this->fileSystem->remove([$archivePath]);
+        $this->filesystem->remove([$archivePath]);
     }
 }

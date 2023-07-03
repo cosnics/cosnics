@@ -2,12 +2,10 @@
 namespace Chamilo\Core\User\Component;
 
 use Chamilo\Core\Repository\Quota\Calculator;
+use Chamilo\Core\Repository\Quota\Service\StorageSpaceCalculator;
 use Chamilo\Core\User\Manager;
-use Chamilo\Core\User\Storage\DataClass\User;
-use Chamilo\Core\User\Storage\DataManager;
 use Chamilo\Libraries\Architecture\Application\Application;
 use Chamilo\Libraries\Architecture\Exceptions\NotAllowedException;
-use Chamilo\Libraries\File\Filesystem;
 use Chamilo\Libraries\Format\Structure\ActionBar\Button;
 use Chamilo\Libraries\Format\Structure\ActionBar\ButtonGroup;
 use Chamilo\Libraries\Format\Structure\ActionBar\ButtonToolBar;
@@ -18,7 +16,6 @@ use Chamilo\Libraries\Platform\Session\Request;
 use Chamilo\Libraries\Translation\Translation;
 
 /**
- *
  * @package user.lib.user_manager.component
  */
 
@@ -44,7 +41,7 @@ class QuotaViewerComponent extends Manager
     {
         $this->checkAuthorization(Manager::CONTEXT, 'ManageUsers');
 
-        if (!$this->get_user()->isPlatformAdmin())
+        if (!$this->getUser()->isPlatformAdmin())
         {
             throw new NotAllowedException();
         }
@@ -52,32 +49,33 @@ class QuotaViewerComponent extends Manager
         $selected_user_id = Request::get(self::PARAM_USER_USER_ID);
         if (!$selected_user_id)
         {
-            $this->selected_user = $this->get_user();
+            $this->selected_user = $this->getUser();
         }
         else
         {
-            $this->selected_user = DataManager::retrieve_by_id(
-                User::class, (int) $selected_user_id
-            );
+            $this->selected_user = $this->getUserService()->findUserByIdentifier($selected_user_id);
         }
-        $this->calculator = new Calculator($this->selected_user);
+
+        $calculator = $this->getStorageSpaceCalculator();
 
         $html = [];
 
-        $html[] = $this->render_header();
+        $html[] = $this->renderHeader();
         $html[] = $this->getButtonToolbarRenderer();
+
+        $filesystemTools = $this->getFilesystemTools();
 
         $html[] = '<h3>' . htmlentities(Translation::get('UsedDiskSpace')) . '</h3>';
         $html[] = Calculator::getBar(
-            $this->calculator->getUserDiskQuotaPercentage(),
-            Filesystem::format_file_size($this->calculator->getUsedUserDiskQuota()) . ' / ' .
-            Filesystem::format_file_size(
-                $this->calculator->getMaximumUserDiskQuota()
+            $calculator->getStorageSpacePercentageForUser($this->selected_user),
+            $filesystemTools->formatFileSize($calculator->getUsedStorageSpaceForUser($this->selected_user)) . ' / ' .
+            $filesystemTools->formatFileSize(
+                $calculator->getAllowedStorageSpaceForUser($this->selected_user)
             )
         );
         $html[] = '<div style="clear: both;">&nbsp;</div>';
 
-        $html[] = $this->render_footer();
+        $html[] = $this->renderFooter();
 
         return implode(PHP_EOL, $html);
     }
@@ -90,10 +88,10 @@ class QuotaViewerComponent extends Manager
         $commonActions->addButton(
             new Button(
                 Translation::get('EditUser'), new FontAwesomeGlyph('pencil-alt'), $this->get_url(
-                array(
+                [
                     Application::PARAM_ACTION => self::ACTION_UPDATE_USER,
                     self::PARAM_USER_USER_ID => $this->selected_user->get_id()
-                )
+                ]
             ), ToolbarItem::DISPLAY_ICON_AND_LABEL
             )
         );
@@ -102,5 +100,10 @@ class QuotaViewerComponent extends Manager
 
         $buttonToolbarRenderer = new ButtonToolBarRenderer($buttonToolbar);
         $buttonToolbarRenderer->render();
+    }
+
+    public function getStorageSpaceCalculator(): StorageSpaceCalculator
+    {
+        return $this->getService(StorageSpaceCalculator::class);
     }
 }

@@ -4,7 +4,6 @@ namespace Chamilo\Libraries\Architecture\Resource;
 use Chamilo\Configuration\Package\PlatformPackageBundles;
 use Chamilo\Configuration\Package\Storage\DataClass\Package;
 use Chamilo\Configuration\Service\PackageContextSequencer;
-use Chamilo\Libraries\File\Filesystem;
 use Chamilo\Libraries\File\SystemPathBuilder;
 use stdClass;
 
@@ -15,6 +14,8 @@ use stdClass;
 class ResourceGenerator
 {
 
+    protected \Symfony\Component\Filesystem\Filesystem $filesystem;
+
     private PackageContextSequencer $packageContextSequencer;
 
     private PlatformPackageBundles $platformPackageBundles;
@@ -23,12 +24,13 @@ class ResourceGenerator
 
     public function __construct(
         PlatformPackageBundles $platformPackageBundles, PackageContextSequencer $packageContextSequencer,
-        SystemPathBuilder $systemPathBuilder
+        SystemPathBuilder $systemPathBuilder, \Symfony\Component\Filesystem\Filesystem $filesystem
     )
     {
         $this->platformPackageBundles = $platformPackageBundles;
         $this->packageContextSequencer = $packageContextSequencer;
         $this->systemPathBuilder = $systemPathBuilder;
+        $this->filesystem = $filesystem;
     }
 
     /**
@@ -90,6 +92,11 @@ class ResourceGenerator
         {
             $this->writeResource($outputPath, $inputPaths);
         }
+    }
+
+    public function getFilesystem(): \Symfony\Component\Filesystem\Filesystem
+    {
+        return $this->filesystem;
     }
 
     public function getPackageContextSequencer(): PackageContextSequencer
@@ -156,7 +163,7 @@ class ResourceGenerator
     {
         if (count($inputPaths) == 1)
         {
-            Filesystem::copy_file($inputPaths[0], $outputPath, true);
+            $this->getFilesystem()->copy($inputPaths[0], $outputPath, true);
         }
         else
         {
@@ -167,7 +174,7 @@ class ResourceGenerator
                 $resourceContent[] = file_get_contents($inputPath);
             }
 
-            Filesystem::write_to_file($outputPath, implode(PHP_EOL, $resourceContent));
+            $this->getFilesystem()->dumpFile($outputPath, implode(PHP_EOL, $resourceContent));
         }
     }
 
@@ -178,7 +185,7 @@ class ResourceGenerator
     {
         foreach ($inputPaths as $inputPath)
         {
-            Filesystem::recurse_copy($inputPath, $outputPath, true);
+            $this->getFilesystem()->mirror($inputPath, $outputPath);
         }
     }
 

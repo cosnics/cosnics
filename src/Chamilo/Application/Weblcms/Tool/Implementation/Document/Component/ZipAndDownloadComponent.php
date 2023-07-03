@@ -48,7 +48,7 @@ class ZipAndDownloadComponent extends Manager
         $response->prepare($this->getRequest());
         $response->send();
 
-        Filesystem::remove($archivePath);
+        $this->getFilesystem()->remove($archivePath);
     }
 
     /**
@@ -61,7 +61,7 @@ class ZipAndDownloadComponent extends Manager
 
     private function create_document_archive()
     {
-        $parent = $this->get_parent();
+        $filesystem = $this->getFilesystem();
         $count = 0;
 
         $course_name = $this->get_course()->get_title();
@@ -189,10 +189,10 @@ class ZipAndDownloadComponent extends Manager
                     }
 
                     $document_path = $document->get_full_path();
-                    $archive_file_location = $dir . '/' . Filesystem::create_unique_name(
+                    $archive_file_location = $dir . '/' . $this->getFilesystemTools()->createUniqueName(
                             $dir, $document->get_filename()
                         );
-                    Filesystem::copy_file($document_path, $archive_file_location);
+                    $filesystem->copy($document_path, $archive_file_location);
                 }
             }
         }
@@ -205,7 +205,7 @@ class ZipAndDownloadComponent extends Manager
         $compression = $this->getZipArchiveFilecompression();
         $archiveFile = $compression->createArchive($target_path);
 
-        Filesystem::remove($target_path);
+        $filesystem->remove($target_path);
 
         return $archiveFile;
     }
@@ -223,12 +223,15 @@ class ZipAndDownloadComponent extends Manager
         $parent_cat, $course_admin = false, &$category_folder_mapping = [], $path = null
     )
     {
+        $filesystem = $this->getFilesystem();
+        $filesystemTools = $this->getFilesystemTools();
+
         if (is_null($path))
         {
             $path = $this->getConfigurablePathBuilder()->getTemporaryPath(__NAMESPACE__);
-            $path = Filesystem::create_unique_name($path . 'weblcms_document_download_' . $this->get_course_id());
+            $path = $filesystemTools->createUniqueName($path . 'weblcms_document_download_' . $this->get_course_id());
             $category_folder_mapping[$parent_cat] = $path;
-            Filesystem::create_dir($path);
+            $filesystem->mkdir($path);
         }
 
         $conditions = [];
@@ -275,11 +278,11 @@ class ZipAndDownloadComponent extends Manager
             );
             $safe_name = preg_replace('/[^0-9a-zA-Z\-\s\(\),]/', '_', $safe_name);
 
-            $category_path = Filesystem::create_unique_name($path . '/' . $safe_name);
-            $category_folder_mapping[$category->get_id()] = $category_path;
-            Filesystem::create_dir($category_path);
+            $category_path = $filesystemTools->createUniqueName($path . '/' . $safe_name);
+            $category_folder_mapping[$category->getId()] = $category_path;
+            $filesystem->mkdir($category_path);
             $this->create_folder_structure(
-                $category->get_id(), $course_admin, $category_folder_mapping, $category_path
+                $category->getId(), $course_admin, $category_folder_mapping, $category_path
             );
         }
 

@@ -5,7 +5,6 @@ use Chamilo\Configuration\Package\PackageList;
 use Chamilo\Configuration\Package\PlatformPackageBundles;
 use Chamilo\Libraries\Architecture\Bootstrap\Bootstrap;
 use Chamilo\Libraries\DependencyInjection\DependencyInjectionContainerBuilder;
-use Chamilo\Libraries\File\Filesystem;
 use Chamilo\Libraries\File\SystemPathBuilder;
 
 require_once realpath(__DIR__ . '/../../../../') . '/vendor/autoload.php';
@@ -33,6 +32,13 @@ class SourceCodeTestGenerator
     public function run()
     {
         $this->process($this->package_list);
+    }
+
+    public function getFilesystem(): \Symfony\Component\Filesystem\Filesystem
+    {
+        return DependencyInjectionContainerBuilder::getInstance()->createContainer()->get(
+            \Symfony\Component\Filesystem\Filesystem::class
+        );
     }
 
     /**
@@ -129,7 +135,7 @@ class CheckSourceCodeTest extends \libraries\architecture\test\source\CheckSourc
         if (!file_exists($path) && is_dir($php_class_path))
         {
             echo $context . PHP_EOL;
-            Filesystem::write_to_file($path, $content, false);
+            $this->getFilesystem()->dumpFile($path, $content);
         }
     }
 }

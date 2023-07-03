@@ -3,7 +3,6 @@ namespace Chamilo\Core\Repository\Common\Export;
 
 use Chamilo\Core\Repository\Workspace\Service\ContentObjectRelationService;
 use Chamilo\Libraries\DependencyInjection\Traits\DependencyInjectionContainerTrait;
-use Chamilo\Libraries\File\Filesystem;
 use Chamilo\Libraries\File\Properties\FileProperties;
 use Chamilo\Libraries\Utilities\StringUtilities;
 
@@ -36,8 +35,8 @@ abstract class ContentObjectExportController
         $path = $this->run();
 
         $file_properties = FileProperties::from_path($path);
-        Filesystem::file_send_for_download($path, true, $this->get_filename(), $file_properties->getType());
-        Filesystem::remove($path);
+        $this->getFilesystemTools()->sendFileForDownload($path, $this->get_filename(), $file_properties->getType());
+        $this->getFilesystem()->remove($path);
     }
 
     /**

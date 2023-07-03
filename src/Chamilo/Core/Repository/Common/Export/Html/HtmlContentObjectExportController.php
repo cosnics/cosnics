@@ -8,7 +8,6 @@ use Chamilo\Core\Repository\Common\Export\ExportParameters;
 use Chamilo\Core\Repository\Storage\DataClass\ContentObject;
 use Chamilo\Core\Repository\Storage\DataManager;
 use Chamilo\Core\User\Manager;
-use Chamilo\Libraries\File\Filesystem;
 use Chamilo\Libraries\Storage\Parameters\DataClassRetrievesParameters;
 use Chamilo\Libraries\Storage\Query\Condition\InCondition;
 use Chamilo\Libraries\Storage\Query\Variable\PropertyConditionVariable;
@@ -67,7 +66,7 @@ class HtmlContentObjectExportController extends ContentObjectExportController
      */
     public function add_files($source, $destination)
     {
-        Filesystem::recurse_copy($source, $this->temporary_directory . $destination, true);
+        $this->getFilesystem()->mirror($source, $this->temporary_directory . $destination);
     }
 
     /**

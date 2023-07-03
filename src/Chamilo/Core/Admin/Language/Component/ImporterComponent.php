@@ -2,7 +2,6 @@
 namespace Chamilo\Core\Admin\Language\Component;
 
 use Chamilo\Core\Admin\Language\Manager;
-use Chamilo\Libraries\File\Filesystem;
 use Chamilo\Libraries\Format\Form\FormValidator;
 use Chamilo\Libraries\Format\Structure\Glyph\FontAwesomeGlyph;
 use Chamilo\Libraries\Format\Table\ArrayCollectionTableRenderer;
@@ -341,7 +340,7 @@ class ImporterComponent extends Manager
                     $translation_content[] = $variable . ' = "' . str_replace('"', '\"', $value) . '"';
                 }
 
-                Filesystem::write_to_file($language_path, implode(PHP_EOL, $translation_content));
+                $this->getFilesystem()->dumpFile($language_path, implode(PHP_EOL, $translation_content));
             }
         }
 

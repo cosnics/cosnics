@@ -7,7 +7,6 @@ use Chamilo\Core\Repository\Form\ContentObjectForm;
 use Chamilo\Core\Repository\Quota\Calculator;
 use Chamilo\Core\User\Storage\DataClass\User;
 use Chamilo\Core\User\Storage\DataManager;
-use Chamilo\Libraries\File\Filesystem;
 use Chamilo\Libraries\Format\Form\FormValidatorHtmlEditorOptions;
 use Chamilo\Libraries\Translation\Translation;
 use Chamilo\Libraries\Utilities\StringUtilities;
@@ -98,7 +97,7 @@ class WebpageForm extends ContentObjectForm
         $calculator = new Calculator($owner);
 
         // Create an HTML-document
-        $file['size'] = Filesystem::guess_disk_space($fields['html_content']);
+        $file['size'] = $this->getFilesystemTools()->guessDiskSpace($fields['html_content']);
 
         if (!$calculator->canUpload($file['size']))
         {

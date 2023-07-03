@@ -10,7 +10,6 @@ use Chamilo\Core\Repository\Storage\DataManager;
 use Chamilo\Core\Repository\Workspace\Storage\DataClass\Workspace;
 use Chamilo\Core\User\Storage\DataClass\User;
 use Chamilo\Libraries\Architecture\Application\Application;
-use Chamilo\Libraries\File\Filesystem;
 use Chamilo\Libraries\File\Properties\FileProperties;
 use Chamilo\Libraries\Storage\Parameters\DataClassRetrievesParameters;
 use Chamilo\Libraries\Storage\Query\Condition\AndCondition;
@@ -18,6 +17,7 @@ use Chamilo\Libraries\Storage\Query\Condition\EqualityCondition;
 use Chamilo\Libraries\Storage\Query\Variable\PropertyConditionVariable;
 use Chamilo\Libraries\Storage\Query\Variable\StaticConditionVariable;
 use Chamilo\Libraries\Translation\Translation;
+use Throwable;
 
 class FileContentObjectImportController extends ContentObjectImportController
 {
@@ -70,8 +70,10 @@ class FileContentObjectImportController extends ContentObjectImportController
                         else
                         {
                             $destination_dir = dirname($temp_path);
-                            if (Filesystem::create_dir($destination_dir))
+
+                            try
                             {
+                                $this->getFilesystem()->mkdir($destination_dir);
                                 if (copy($file->get_path(), $temp_path))
                                 {
                                     $file = FileProperties::from_path($temp_path);
@@ -82,6 +84,10 @@ class FileContentObjectImportController extends ContentObjectImportController
 
                                     return [];
                                 }
+                            }
+                            catch (Throwable)
+                            {
+                                return [];
                             }
                         }
                     }

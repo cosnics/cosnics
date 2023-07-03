@@ -5,6 +5,7 @@ use Chamilo\Core\Reporting\Viewer\NoBlockTabsAllowed;
 use Chamilo\Core\Reporting\Viewer\Rendition\Template\Implementation\AbstractTemplateRenditionImplementation;
 use Chamilo\Libraries\DependencyInjection\DependencyInjectionContainerBuilder;
 use Chamilo\Libraries\File\ConfigurablePathBuilder;
+use Chamilo\Libraries\File\FilesystemTools;
 use Chamilo\Libraries\Utilities\StringUtilities;
 
 /**
@@ -30,17 +31,6 @@ abstract class TemplateRendition
      * @var \core\reporting\viewer\TemplateRenditionImplementation
      */
     private $rendition_implementation;
-
-    public function getArchivePath():string
-    {
-        $container = DependencyInjectionContainerBuilder::getInstance()->createContainer();
-        /**
-         * @var \Chamilo\Libraries\File\ConfigurablePathBuilder $configurablePathBuilder
-         */
-        $configurablePathBuilder = $container->get(ConfigurablePathBuilder::class);
-
-        return $configurablePathBuilder->getArchivePath();
-    }
 
     /**
      * @param \core\reporting\viewer\TemplateRenditionImplementation $rendition_implementation
@@ -70,6 +60,22 @@ abstract class TemplateRendition
             StringUtilities::getInstance()->createString($rendition_implementation->get_view())->upperCamelize();
 
         return new $class($rendition_implementation);
+    }
+
+    public function getArchivePath(): string
+    {
+        $container = DependencyInjectionContainerBuilder::getInstance()->createContainer();
+        /**
+         * @var \Chamilo\Libraries\File\ConfigurablePathBuilder $configurablePathBuilder
+         */
+        $configurablePathBuilder = $container->get(ConfigurablePathBuilder::class);
+
+        return $configurablePathBuilder->getArchivePath();
+    }
+
+    public function getFilesystemTools(): FilesystemTools
+    {
+        return DependencyInjectionContainerBuilder::getInstance()->createContainer()->get(FilesystemTools::class);
     }
 
     /**

@@ -8,7 +8,6 @@ use Chamilo\Core\Repository\Quota\Manager;
 use Chamilo\Core\Repository\Quota\Storage\DataClass\Request;
 use Chamilo\Core\Repository\Quota\Storage\DataManager;
 use Chamilo\Libraries\Architecture\Exceptions\NotAllowedException;
-use Chamilo\Libraries\File\Filesystem;
 use Chamilo\Libraries\Format\Structure\ActionBar\Button;
 use Chamilo\Libraries\Format\Structure\ActionBar\ButtonGroup;
 use Chamilo\Libraries\Format\Structure\ActionBar\ButtonToolBar;
@@ -195,11 +194,12 @@ class DenierComponent extends Manager
         set_time_limit(3600);
 
         $recipient = $request->get_user();
+        $filesystemTools = $this->getFilesystemTools();
 
         $title = Translation::get(
             'RequestDeniedMailTitle', [
                 'PLATFORM' => Configuration::getInstance()->get_setting(['Chamilo\Core\Admin', 'site_name']),
-                'QUOTA' => Filesystem::format_file_size($request->get_quota())
+                'QUOTA' => $filesystemTools->formatFileSize($request->get_quota())
             ]
         );
 
@@ -216,7 +216,7 @@ class DenierComponent extends Manager
             $variable, [
                 'USER' => $recipient->get_fullname(),
                 'PLATFORM' => $this->getConfigurationConsulter()->getSetting(['Chamilo\Core\Admin', 'site_name']),
-                'QUOTA' => Filesystem::format_file_size($request->get_quota()),
+                'QUOTA' => $filesystemTools->formatFileSize($request->get_quota()),
                 'MOTIVATION' => $request->get_decision_motivation()
             ]
         );

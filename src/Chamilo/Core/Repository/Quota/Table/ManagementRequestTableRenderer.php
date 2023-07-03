@@ -7,7 +7,7 @@ use Chamilo\Core\Repository\Quota\Service\StorageSpaceCalculator;
 use Chamilo\Core\User\Storage\DataClass\User;
 use Chamilo\Libraries\Architecture\Application\Application;
 use Chamilo\Libraries\Architecture\Application\Routing\UrlGenerator;
-use Chamilo\Libraries\File\Filesystem;
+use Chamilo\Libraries\File\FilesystemTools;
 use Chamilo\Libraries\Format\Table\Column\DataClassPropertyTableColumnFactory;
 use Chamilo\Libraries\Format\Table\Column\StaticTableColumn;
 use Chamilo\Libraries\Format\Table\Column\TableColumn;
@@ -36,14 +36,15 @@ class ManagementRequestTableRenderer extends RequestTableRenderer
         Translator $translator, UrlGenerator $urlGenerator, ListHtmlTableRenderer $htmlTableRenderer, Pager $pager,
         RightsService $rightsService, DatetimeUtilities $datetimeUtilities, User $user,
         StorageSpaceCalculator $storageSpaceCalculator,
-        DataClassPropertyTableColumnFactory $dataClassPropertyTableColumnFactory
+        DataClassPropertyTableColumnFactory $dataClassPropertyTableColumnFactory, FilesystemTools $filesystemTools
     )
     {
         $this->storageSpaceCalculator = $storageSpaceCalculator;
+        $this->filesystemTools = $filesystemTools;
 
         parent::__construct(
             $translator, $urlGenerator, $htmlTableRenderer, $pager, $rightsService, $datetimeUtilities, $user,
-            $dataClassPropertyTableColumnFactory
+            $dataClassPropertyTableColumnFactory, $filesystemTools
         );
     }
 
@@ -106,15 +107,16 @@ class ManagementRequestTableRenderer extends RequestTableRenderer
     protected function renderCell(TableColumn $column, TableResultPosition $resultPosition, $request): string
     {
         $storageSpaceCalculator = $this->getStorageSpaceCalculator();
+        $filesystemTools = $this->getFilesystemTools();
         $user = $request->get_user();
 
         return match ($column->get_name())
         {
             self::PROPERTY_USER => $request->get_user()->get_fullname(),
-            self::PROPERTY_CURRENTLY_USED_DISK_SPACE => Filesystem::format_file_size(
+            self::PROPERTY_CURRENTLY_USED_DISK_SPACE => $filesystemTools->formatFileSize(
                 $storageSpaceCalculator->getUsedStorageSpaceForUser($user)
             ),
-            self::PROPERTY_MAXIMUM_USED_DISK_SPACE => Filesystem::format_file_size(
+            self::PROPERTY_MAXIMUM_USED_DISK_SPACE => $filesystemTools->formatFileSize(
                 $storageSpaceCalculator->getAllowedStorageSpaceForUser($user)
             ),
             default => parent::renderCell($column, $resultPosition, $request),

@@ -15,7 +15,6 @@ use Chamilo\Core\Repository\Workspace\Storage\DataClass\WorkspaceContentObjectRe
 use Chamilo\Core\User\Manager;
 use Chamilo\Libraries\Architecture\Interfaces\ComplexContentObjectSupport;
 use Chamilo\Libraries\File\Compression\ZipArchive\ZipArchiveFilecompression;
-use Chamilo\Libraries\File\Filesystem;
 use Chamilo\Libraries\Storage\Parameters\DataClassRetrievesParameters;
 use Chamilo\Libraries\Storage\Query\Condition\EqualityCondition;
 use Chamilo\Libraries\Storage\Query\Condition\InCondition;
@@ -158,7 +157,7 @@ class CpoContentObjectExportController extends ContentObjectExportController
      */
     public function add_files($source, $destination)
     {
-        Filesystem::recurse_copy($source, $this->temporary_directory . $destination, true);
+        $this->getFilesystem()->mirror($source, $this->temporary_directory . $destination);
     }
 
     protected function getZipArchiveFilecompression(): ZipArchiveFilecompression
@@ -664,7 +663,7 @@ class CpoContentObjectExportController extends ContentObjectExportController
     {
         $zip = $this->getZipArchiveFilecompression();
         $zip_path = $zip->createArchive($this->temporary_directory);
-        Filesystem::remove($this->temporary_directory);
+        $this->getFilesystem()->remove($this->temporary_directory);
 
         return $zip_path;
     }

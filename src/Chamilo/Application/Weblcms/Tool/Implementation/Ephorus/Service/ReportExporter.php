@@ -5,7 +5,7 @@ use Chamilo\Application\Weblcms\Tool\Implementation\Ephorus\Renderer\ReportRende
 use Chamilo\Application\Weblcms\Tool\Implementation\Ephorus\Storage\DataClass\Request;
 use Chamilo\Core\Repository\Workspace\Repository\ContentObjectRepository;
 use Chamilo\Libraries\File\ConfigurablePathBuilder;
-use Chamilo\Libraries\File\Filesystem;
+use Chamilo\Libraries\File\FilesystemTools;
 use Chamilo\Libraries\Format\Theme\ThemePathBuilder;
 use Twig\Environment;
 
@@ -20,6 +20,10 @@ class ReportExporter
 
     protected ContentObjectRepository $contentObjectRepository;
 
+    protected \Symfony\Component\Filesystem\Filesystem $filesystem;
+
+    protected FilesystemTools $filesystemTools;
+
     protected ReportRenderer $reportRenderer;
 
     protected ThemePathBuilder $themeWebPathBuilder;
@@ -28,7 +32,8 @@ class ReportExporter
 
     public function __construct(
         ReportRenderer $reportRenderer, ContentObjectRepository $contentObjectRepository,
-        ConfigurablePathBuilder $configurablePathBuilder, ThemePathBuilder $themePathBuilder, Environment $twigRenderer
+        ConfigurablePathBuilder $configurablePathBuilder, ThemePathBuilder $themePathBuilder, Environment $twigRenderer,
+        \Symfony\Component\Filesystem\Filesystem $filesystem, FilesystemTools $filesystemTools
     )
     {
         $this->reportRenderer = $reportRenderer;
@@ -36,6 +41,8 @@ class ReportExporter
         $this->configurablePathBuilder = $configurablePathBuilder;
         $this->themeWebPathBuilder = $themePathBuilder;
         $this->twigRenderer = $twigRenderer;
+        $this->filesystem = $filesystem;
+        $this->filesystemTools = $filesystemTools;
     }
 
     /**
@@ -62,14 +69,14 @@ class ReportExporter
             'Chamilo\Application\Weblcms\Tool\Implementation\Ephorus:EphorusReportExport.html.twig', $parameters
         );
 
-        $unique_file_name = Filesystem::create_unique_name(
+        $unique_file_name = $this->filesystemTools->createUniqueName(
             $this->configurablePathBuilder->getTemporaryPath(), $content_object->get_title() . '.html'
         );
 
         $full_file_name = $this->configurablePathBuilder->getTemporaryPath() . $unique_file_name;
-        Filesystem::create_dir(dirname($full_file_name));
-        Filesystem::write_to_file($full_file_name, $exportHTML);
-        Filesystem::file_send_for_download($full_file_name, true);
-        Filesystem::remove($full_file_name);
+        $this->filesystem->mkdir(dirname($full_file_name));
+        $this->filesystem->dumpFile($full_file_name, $exportHTML);
+        $this->filesystemTools->sendFileForDownload($full_file_name);
+        $this->filesystem->remove($full_file_name);
     }
 }

@@ -1,62 +1,85 @@
 <?php
 namespace Chamilo\Libraries\File;
 
+use Chamilo\Libraries\Utilities\StringUtilities;
+use Symfony\Component\Finder\Finder;
+use Symfony\Component\Finder\Iterator\FileTypeFilterIterator;
+use Symfony\Component\HttpFoundation\BinaryFileResponse;
+use Symfony\Component\HttpFoundation\ResponseHeaderBag;
+
 /**
  * @package Chamilo\Libraries\File
  * @author  Hans De Bisschop <hans.de.bisschop@ehb.be>
  */
 class FilesystemTools
 {
-    /**
-     * @param string $fileSize
-     *
-     * @return int
-     */
-    public static function interpret_file_size($fileSize)
+    protected \Symfony\Component\Filesystem\Filesystem $filesystem;
+
+    protected Finder $finder;
+
+    protected StringUtilities $stringUtilities;
+
+    public function __construct(
+        \Symfony\Component\Filesystem\Filesystem $filesystem, Finder $finder, StringUtilities $stringUtilities
+    )
     {
-        $bytesArray = [
-            'B' => 1,
-            'KB' => 1024,
-            'MB' => pow(1024, 2),
-            'GB' => pow(1024, 3),
-            'TB' => pow(1024, 4),
-            'PB' => pow(1024, 5),
-            'K' => 1024,
-            'M' => pow(1024, 2),
-            'G' => pow(1024, 3),
-            'T' => pow(1024, 4),
-            'P' => pow(1024, 5)
-        ];
+        $this->filesystem = $filesystem;
+        $this->finder = $finder;
+        $this->stringUtilities = $stringUtilities;
+    }
 
-        $bytes = floatval($fileSize);
+    /**
+     * Creates a safe name for a file or directory
+     */
+    public function createSafeName(string $desiredName): string
+    {
+        $asciiString = $this->getStringUtilities()->createString($desiredName)->toAscii()->__toString();
 
-        if (preg_match('#([KMGTP]?B?)$#si', $fileSize, $matches) && !empty($bytesArray[$matches[1]]))
+        return preg_replace('/[:;!\x20\x2F\x5C]/', '_', $asciiString);
+    }
+
+    public function createSafeNames(string $path): void
+    {
+        $filesystem = $this->getFilesystem();
+        $list = $this->getDirectoryContent($path);
+
+        // Sort everything, so renaming a file or directory has no impact on
+        // next elements in the array
+        $list->reverseSorting();
+
+        foreach ($list as $entry)
         {
-            $bytes *= $bytesArray[$matches[1]];
+            if (basename($entry) != $this->createSafeName(basename($entry)))
+            {
+                if (is_file($entry))
+                {
+                    $safeName = $this->createUniqueName(dirname($entry), basename($entry));
+                    $destination = dirname($entry) . '/' . $safeName;
+
+                    $filesystem->copy($entry, $destination);
+                    $filesystem->remove($entry);
+                }
+                elseif (is_dir($entry))
+                {
+                    $safeName = $this->createUniqueName($entry);
+                    $filesystem->rename($entry, $safeName);
+                }
+            }
         }
-
-        $bytes = intval(round($bytes, 2));
-
-        return $bytes;
     }
 
     /**
      * Creates a unique name for a file or a directory.
      * This function will also use the function
-     * Filesystem::create_safe_name to make sure the resulting name is safe to use.
-     *
-     * @param string $desiredPath
-     * @param string $desiredFilename
-     *
-     * @return string
+     * FilesystemTools::createSafeName to make sure the resulting name is safe to use.
      */
-    public static function create_unique_name($desiredPath, $desiredFilename = null)
+    public function createUniqueName(string $desiredPath, ?string $desiredFilename = null): string
     {
         $index = 0;
 
         if (!is_null($desiredFilename))
         {
-            $filename = self::create_safe_name($desiredFilename);
+            $filename = $this->createSafeName($desiredFilename);
             $newFilename = $filename;
 
             while (file_exists($desiredPath . '/' . $newFilename))
@@ -76,7 +99,7 @@ class FilesystemTools
             return $newFilename;
         }
 
-        $uniquePath = dirname($desiredPath) . '/' . Filesystem::create_safe_name(basename($desiredPath));
+        $uniquePath = dirname($desiredPath) . '/' . $this->createSafeName(basename($desiredPath));
 
         while (is_dir($uniquePath))
         {
@@ -86,14 +109,79 @@ class FilesystemTools
         return $uniquePath;
     }
 
+    public function sendFileForDownload(
+        string $fullFileName, ?string $name = null, ?string $contentType = null
+    ): void
+    {
+        $filename = $name ? basename($fullFileName) : $name;
+
+        $binaryFileResponse = new BinaryFileResponse($fullFileName);
+        $binaryFileResponse->setContentDisposition(ResponseHeaderBag::DISPOSITION_ATTACHMENT, $filename);
+
+        $binaryFileResponse->headers->set('Content-type', $contentType ?: 'application/octet-stream');
+        $binaryFileResponse->headers->set('Content-Description', $filename);
+        $binaryFileResponse->headers->set('Content-transfer-encoding', 'binary');
+
+        $binaryFileResponse->send();
+    }
+
+    /**
+     * Transform the file size in a human readable format
+     */
+    public function formatFileSize(int $fileSize, bool $postfix = true): string
+    {
+        // Todo: Megabyte vs Mebibyte...
+        $kilobyte = 1024;
+        $megabyte = pow($kilobyte, 2);
+        $gigabyte = pow($kilobyte, 3);
+
+        if ($fileSize >= $gigabyte)
+        {
+            $fileSize = round($fileSize / $gigabyte * 100) / 100 . ($postfix ? ' GB' : '');
+        }
+        elseif ($fileSize >= $megabyte)
+        {
+            $fileSize = round($fileSize / $megabyte * 100) / 100 . ($postfix ? ' MB' : '');
+        }
+        elseif ($fileSize >= $kilobyte)
+        {
+            $fileSize = round($fileSize / $kilobyte * 100) / 100 . ($postfix ? ' kB' : '');
+        }
+        else
+        {
+            $fileSize = $fileSize . ($postfix ? ' B' : '');
+        }
+
+        return $fileSize;
+    }
+
+    public function getDirectoryContent(
+        string $path, ?int $type = null, bool $recursive = true
+    ): Finder
+    {
+        $finder = $this->getFinder();
+
+        if (!$recursive)
+        {
+            $finder->depth('== 0');
+        }
+
+        if ($type == FileTypeFilterIterator::ONLY_FILES)
+        {
+            $finder->files();
+        }
+        elseif ($type == FileTypeFilterIterator::ONLY_DIRECTORIES)
+        {
+            $finder->directories();
+        }
+
+        return $finder->in($path);
+    }
+
     /**
      * Determines the number of bytes taken by a given directory or file
-     *
-     * @param string $path
-     *
-     * @return int
      */
-    public static function get_disk_space($path)
+    public function getDiskSpace(string $path): int
     {
         if (is_file($path))
         {
@@ -103,11 +191,11 @@ class FilesystemTools
         if (is_dir($path))
         {
             $totalDiskSpace = 0;
-            $files = Filesystem::get_directory_content($path, Filesystem::LIST_FILES);
+            $files = $this->getDirectoryContent($path, FileTypeFilterIterator::ONLY_FILES);
 
-            foreach ($files as $index => $file)
+            foreach ($files as $file)
             {
-                $totalDiskSpace += @filesize($file);
+                $totalDiskSpace += filesize($file);
             }
 
             return $totalDiskSpace;
@@ -117,31 +205,27 @@ class FilesystemTools
         return 0;
     }
 
-    /**
-     * Guesses the disk space used when the given content would be written to a file
-     *
-     * @param string $content
-     *
-     * @return int
-     */
-    public static function guess_disk_space($content)
+    public function getFilesystem(): \Symfony\Component\Filesystem\Filesystem
     {
-        $handle = tmpfile();
-        fwrite($handle, $content);
-        $properties = fstat($handle);
-        fclose($handle);
+        return $this->filesystem;
+    }
 
-        return $properties['size'];
+    public function getFinder(): Finder
+    {
+        return $this->finder;
+    }
+
+    public function getStringUtilities(): StringUtilities
+    {
+        return $this->stringUtilities;
     }
 
     /**
      * This function detects every uncreated directory of a given path and returns it as an array of paths
      *
-     * @param string $path
-     *
      * @return string[]
      */
-    public static function get_uncreated_directories($path)
+    public static function getUncreatedDirectories(string $path): array
     {
         $uncreatedDirectories = [];
 
@@ -152,5 +236,44 @@ class FilesystemTools
         }
 
         return $uncreatedDirectories;
+    }
+
+    /**
+     * Guesses the disk space used when the given content would be written to a file
+     */
+    public function guessDiskSpace(string $content): int
+    {
+        $handle = tmpfile();
+        fwrite($handle, $content);
+        $properties = fstat($handle);
+        fclose($handle);
+
+        return $properties['size'];
+    }
+
+    public function interpretFileSize(string $fileSize): int
+    {
+        $bytesArray = [
+            'B' => 1,
+            'KB' => 1024,
+            'MB' => pow(1024, 2),
+            'GB' => pow(1024, 3),
+            'TB' => pow(1024, 4),
+            'PB' => pow(1024, 5),
+            'K' => 1024,
+            'M' => pow(1024, 2),
+            'G' => pow(1024, 3),
+            'T' => pow(1024, 4),
+            'P' => pow(1024, 5)
+        ];
+
+        $bytes = floatval($fileSize);
+
+        if (preg_match('#([KMGTP]?B?)$#i', $fileSize, $matches) && !empty($bytesArray[$matches[1]]))
+        {
+            $bytes *= $bytesArray[$matches[1]];
+        }
+
+        return intval(round($bytes, 2));
     }
 }

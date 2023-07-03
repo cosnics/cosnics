@@ -7,7 +7,7 @@ use Chamilo\Core\Repository\Quota\Storage\DataClass\Request;
 use Chamilo\Core\User\Storage\DataClass\User;
 use Chamilo\Libraries\Architecture\Application\Application;
 use Chamilo\Libraries\Architecture\Application\Routing\UrlGenerator;
-use Chamilo\Libraries\File\Filesystem;
+use Chamilo\Libraries\File\FilesystemTools;
 use Chamilo\Libraries\Format\Structure\Glyph\FontAwesomeGlyph;
 use Chamilo\Libraries\Format\Structure\Toolbar;
 use Chamilo\Libraries\Format\Structure\ToolbarItem;
@@ -40,6 +40,8 @@ class RequestTableRenderer extends DataClassListTableRenderer implements TableRo
 
     protected DatetimeUtilities $datetimeUtilities;
 
+    protected FilesystemTools $filesystemTools;
+
     protected RightsService $rightsService;
 
     protected User $user;
@@ -47,12 +49,13 @@ class RequestTableRenderer extends DataClassListTableRenderer implements TableRo
     public function __construct(
         Translator $translator, UrlGenerator $urlGenerator, ListHtmlTableRenderer $htmlTableRenderer, Pager $pager,
         RightsService $rightsService, DatetimeUtilities $datetimeUtilities, User $user,
-        DataClassPropertyTableColumnFactory $dataClassPropertyTableColumnFactory
+        DataClassPropertyTableColumnFactory $dataClassPropertyTableColumnFactory, FilesystemTools $filesystemTools
     )
     {
         $this->rightsService = $rightsService;
         $this->datetimeUtilities = $datetimeUtilities;
         $this->user = $user;
+        $this->filesystemTools = $filesystemTools;
 
         parent::__construct(
             $translator, $urlGenerator, $htmlTableRenderer, $pager, $dataClassPropertyTableColumnFactory
@@ -62,6 +65,11 @@ class RequestTableRenderer extends DataClassListTableRenderer implements TableRo
     public function getDatetimeUtilities(): DatetimeUtilities
     {
         return $this->datetimeUtilities;
+    }
+
+    public function getFilesystemTools(): FilesystemTools
+    {
+        return $this->filesystemTools;
     }
 
     public function getRightsService(): RightsService
@@ -114,7 +122,7 @@ class RequestTableRenderer extends DataClassListTableRenderer implements TableRo
 
         return match ($column->get_name())
         {
-            Request::PROPERTY_QUOTA => Filesystem::format_file_size($request->get_quota()),
+            Request::PROPERTY_QUOTA => $this->getFilesystemTools()->formatFileSize($request->get_quota()),
             Request::PROPERTY_CREATION_DATE => $datetimeUtilities->formatLocaleDate(
                 null, $request->get_creation_date()
             ),

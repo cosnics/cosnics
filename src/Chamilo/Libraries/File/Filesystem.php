@@ -1,16 +1,15 @@
 <?php
 namespace Chamilo\Libraries\File;
 
-use Chamilo\Libraries\Utilities\StringUtilities;
-use DirectoryIterator;
-use RecursiveDirectoryIterator;
-use RecursiveIteratorIterator;
-use function Fileperms;
+use Chamilo\Libraries\DependencyInjection\DependencyInjectionContainerBuilder;
+use Symfony\Component\Finder\Iterator\FileTypeFilterIterator;
 
 /**
  * This class implements some usefull functions to hanlde the filesystem
  *
- * @package Chamilo\Libraries\File
+ * @package    Chamilo\Libraries\File
+ * @deprecated Use \Symfony\Component\Filesystem\Filesystem or \Chamilo\Libraries\File\FilesystemTools or
+ *             \Symfony\Component\Finder\Finder
  */
 class Filesystem
 {
@@ -37,43 +36,11 @@ class Filesystem
      * was written to facilitate the storage of a chmod value. The PHP chmod value must be called with an octal number,
      * but it is not easy to store a value with a leading 0 that is a number and not a string.
      *
-     * @param string $filePath
-     * @param string $chmodValue
-     * @param bool $recursive
-     *
      * @deprecated Use \Symfony\Component\Filesystem\Filesystem::chmod()
      */
-    public static function chmod($filePath, $chmodValue, $recursive = false)
+    public static function chmod(string $filePath, int $chmodValue, bool $recursive = false): void
     {
-        $newChmodValue = null;
-
-        if (is_integer($chmodValue))
-        {
-            $newChmodValue = (int) $chmodValue;
-        }
-        elseif (is_string($chmodValue))
-        {
-            $newChmodValue = intval($chmodValue);
-        }
-
-        if (isset($newChmodValue) && file_exists($filePath))
-        {
-            $newChmodValue = octdec($newChmodValue);
-
-            if (is_dir($filePath) && $recursive)
-            {
-                $iterator = new RecursiveIteratorIterator(new RecursiveDirectoryIterator($filePath));
-
-                foreach ($iterator as $item)
-                {
-                    chmod($item, $newChmodValue);
-                }
-            }
-            else
-            {
-                chmod($filePath, $newChmodValue);
-            }
-        }
+        self::getFilesystem()->chmod($filePath, $chmodValue, 0000, $recursive);
     }
 
     /**
@@ -81,134 +48,43 @@ class Filesystem
      * If the destination directory doesn't exist, this function tries to create the directory using the
      * Filesystem::create_dir function.
      *
-     * @param string $source
-     * @param string $destination
-     * @param bool $overwrite
-     *
-     * @return bool
      * @deprecated Use \Symfony\Component\Filesystem\Filesystem::copy()
      */
-    public static function copy_file($source, $destination, $overwrite = false)
+    public static function copy_file(string $source, string $destination, bool $overwrite = false): void
     {
-        if (file_exists($destination) && !$overwrite)
-        {
-            return false;
-        }
-
-        $destination_dir = dirname($destination);
-
-        if (file_exists($source) && Filesystem::create_dir($destination_dir))
-        {
-            return copy($source, $destination);
-        }
+        self::getFilesystem()->copy($source, $destination, $overwrite);
     }
 
     /**
      * Creates a directory.
      * This function creates all missing directories in a given path.
      *
-     * @param string $path
-     * @param string $mode
-     *
-     * @return bool
      * @deprecated Use \Symfony\Component\Filesystem\Filesystem::mkdir()
      */
-    public static function create_dir($path, $mode = null)
+    public static function create_dir(string $path, int $mode = 0777): void
     {
-        if (!$mode)
-        {
-            $mode = 06770;
-        }
-
-        // If the given path is a file, return false
-        if (is_file($path))
-        {
-            return false;
-        }
-
-        // If the directory doesn't exist yet, create it using php's mkdir
-        // function
-        if (!is_dir($path))
-        {
-            $uncreated_directories = FilesystemTools::get_uncreated_directories($path);
-
-            if (!mkdir($path, $mode, true))
-            {
-                return false;
-            }
-        }
-        else
-        {
-            $uncreated_directories = [];
-        }
-
-        foreach ($uncreated_directories as $path)
-        {
-            $perms = Fileperms($path);
-            $currentPermString = substr(decoct($perms), - 4);
-            $targetPermString = decoct($mode);
-            // only try to chmod if needed
-            // chmod often needs us to be owner which is sometimes problematic with
-            // mounted filesystem
-            if ($currentPermString != $targetPermString)
-            {
-                if (!chmod($path, $mode))
-                {
-                    return false;
-                }
-            }
-        }
-
-        return true;
+        self::getFilesystem()->mkdir($path, $mode);
     }
 
     /**
      * Creates a safe name for a file or directory
      *
-     * @param string $desiredName
-     *
-     * @return string
+     * @deprecated Use \Chamilo\Libraries\File\FilesystemTools::createSafeName()
      */
-    public static function create_safe_name($desiredName)
+    public static function create_safe_name(string $desiredName): string
     {
-        $asciiString = StringUtilities::getInstance()->createString($desiredName)->toAscii()->__toString();
-
-        return preg_replace('/[:;!\x20\x2F\x5C]/', '_', $asciiString);
+        return self::getFilesystemTools()->createSafeName($desiredName);
     }
 
     /**
      * Scans all files and directories in the given path and subdirectories.
-     * If a file or directory name isn't
-     * considered as safe, it will be renamed to a safe name.
+     * If a file or directory name isn't considered as safe, it will be renamed to a safe name.
      *
-     * @param string $path
+     * @deprecated Use \Chamilo\Libraries\File\FilesystemTools::createSafeNames()
      */
-    public static function create_safe_names($path)
+    public static function create_safe_names(string $path): void
     {
-        $list = Filesystem::get_directory_content($path);
-
-        // Sort everything, so renaming a file or directory has no impact on
-        // next elements in the array
-        rsort($list);
-
-        foreach ($list as $index => $entry)
-        {
-            if (basename($entry) != Filesystem::create_safe_name(basename($entry)))
-            {
-                if (is_file($entry))
-                {
-                    $safeName = Filesystem::create_unique_name(dirname($entry), basename($entry));
-                    $destination = dirname($entry) . '/' . $safeName;
-                    Filesystem::copy_file($entry, $destination);
-                    unlink($entry);
-                }
-                elseif (is_dir($entry))
-                {
-                    $safeName = Filesystem::create_unique_name($entry);
-                    rename($entry, $safeName);
-                }
-            }
-        }
+        self::getFilesystemTools()->createSafeNames($path);
     }
 
     /**
@@ -216,242 +92,100 @@ class Filesystem
      * This function will also use the function
      * Filesystem::create_safe_name to make sure the resulting name is safe to use.
      *
-     * @param string $desiredPath
-     * @param string $desiredFilename
-     *
-     * @return string
+     * @deprecated Use \Chamilo\Libraries\File\FilesystemTools::createUniqueName()
      */
-    public static function create_unique_name($desiredPath, $desiredFilename = null)
+    public static function create_unique_name(string $desiredPath, ?string $desiredFilename = null): string
     {
-        return FilesystemTools::create_unique_name($desiredPath, $desiredFilename);
+        return self::getFilesystemTools()->createUniqueName($desiredPath, $desiredFilename);
     }
 
     /**
      * This function streams a file to the client
      *
-     * @param string $fullFileName
-     * @param bool $forced
-     * @param string $name
-     *
-     * @return bool
-     * @deprecated Use a BinaryFileResponse()
+     * @deprecated Use \Chamilo\Libraries\File\FilesystemTools::fileSendForDownload() or BinaryFileResponse() directly
      */
-    public static function file_send_for_download($fullFileName, $forced = false, $name = '', $contentType = '')
+    public static function file_send_for_download(
+        string $fullFileName, ?string $name = null, ?string $contentType = null
+    ): void
     {
-        if (!is_file($fullFileName))
-        {
-            return false;
-        }
-
-        $filename = ($name == '') ? basename($fullFileName) : $name;
-        $len = filesize($fullFileName);
-
-        if ($forced)
-        {
-            // force the browser to save the file instead of opening it
-            if ($contentType)
-            {
-                header('Content-type: ' . $contentType);
-            }
-            else
-            {
-                header('Content-type: application/octet-stream');
-            }
-
-            header('Content-length: ' . (string) $len);
-
-            if (preg_match('/MSIE 5.5/', $_SERVER['HTTP_USER_AGENT']))
-            {
-                header('Content-Disposition: filename= ' . $filename);
-            }
-            else
-            {
-                header('Content-Disposition: attachment; filename= "' . $filename . '"');
-            }
-
-            if (strpos($_SERVER['HTTP_USER_AGENT'], 'MSIE'))
-            {
-                header('Pragma: ');
-                header('Cache-Control: ');
-                header('Cache-Control: public'); // IE cannot download from sessions without a cache
-            }
-
-            header('Content-Description: ' . $filename);
-            header('Content-transfer-encoding: binary');
-
-            ob_clean();
-            flush();
-            readfile($fullFileName);
-
-            return true;
-        }
-        else
-        {
-            // no forced download, just let the browser decide what to do
-            // according to the mimetype
-            // $content_type = DocumentManager::file_get_mime_type($filename);
-            header('Expires: Wed, 01 Jan 1990 00:00:00 GMT');
-            header('Last-Modified: ' . gmdate('D, d M Y H:i:s') . ' GMT');
-
-            if (strpos($_SERVER['HTTP_USER_AGENT'], 'MSIE'))
-            {
-                header('Pragma: ');
-                header('Cache-Control: ');
-            }
-            else
-            {
-                header('Cache-Control: no-cache, must-revalidate');
-                header('Pragma: no-cache');
-            }
-
-            if ($contentType)
-            {
-                header('Content-type: ' . $contentType);
-            }
-
-            header('Content-Length: ' . $len);
-            $user_agent = strtolower($_SERVER['HTTP_USER_AGENT']);
-
-            if (strpos($user_agent, 'MSIE'))
-            {
-                header('Content-Disposition: ; filename= ' . $filename);
-            }
-            else
-            {
-                header('Content-Disposition: inline; filename= "' . $filename . '"');
-            }
-
-            readfile($fullFileName);
-
-            return true;
-        }
+        self::getFilesystemTools()->sendFileForDownload($fullFileName, $name, $contentType);
     }
 
     /**
      * Transform the file size in a human readable format.
      *
-     * @param int $fileSize
-     * @param bool $postfix
-     *
-     * @return int
+     * @deprecated Use \Chamilo\Libraries\File\FilesystemTools::formatFileSize()
      */
-    public static function format_file_size($fileSize, $postfix = true)
+    public static function format_file_size(int $fileSize, bool $postfix = true): string
     {
-        // Todo: Megabyte vs Mebibyte...
-        $kilobyte = 1024;
-        $megabyte = pow($kilobyte, 2);
-        $gigabyte = pow($kilobyte, 3);
+        return self::getFilesystemTools()->formatFileSize($fileSize, $postfix);
+    }
 
-        if ($fileSize >= $gigabyte)
-        {
-            $fileSize = round($fileSize / $gigabyte * 100) / 100 . ($postfix ? ' GB' : '');
-        }
-        elseif ($fileSize >= $megabyte)
-        {
-            $fileSize = round($fileSize / $megabyte * 100) / 100 . ($postfix ? ' MB' : '');
-        }
-        elseif ($fileSize >= $kilobyte)
-        {
-            $fileSize = round($fileSize / $kilobyte * 100) / 100 . ($postfix ? ' kB' : '');
-        }
-        else
-        {
-            $fileSize = $fileSize . ($postfix ? ' B' : '');
-        }
+    public static function getFilesystem(): \Symfony\Component\Filesystem\Filesystem
+    {
+        return DependencyInjectionContainerBuilder::getInstance()->createContainer()->get(
+            \Symfony\Component\Filesystem\Filesystem::class
+        );
+    }
 
-        return $fileSize;
+    public static function getFilesystemTools(): FilesystemTools
+    {
+        return DependencyInjectionContainerBuilder::getInstance()->createContainer()->get(
+            FilesystemTools::class
+        );
     }
 
     /**
      * Retrieves all contents (files and/or directories) of a directory
      *
-     * @param string $path
-     * @param int $type
-     * @param bool $recursive
-     *
      * @return string[]
-     * @deprecated Use \Symfony\Component\Finder\Finder
+     * @deprecated Use \Chamilo\Libraries\File\FilesystemTools::getDirectoryContent() or
+     *             \Symfony\Component\Finder\Finder directly
      */
     public static function get_directory_content(
-        $path, $type = Filesystem::LIST_FILES_AND_DIRECTORIES, $recursive = true
-    )
+        string $path, int $type = self::LIST_FILES_AND_DIRECTORIES, bool $recursive = true
+    ): array
     {
-        $result = [];
+        $iteratorType = null;
 
-        if (!file_exists($path))
+        switch ($type)
         {
-            return $result;
+            case self::LIST_FILES:
+                $iteratorType = FileTypeFilterIterator::ONLY_FILES;
+                break;
+            case self::LIST_DIRECTORIES:
+                $iteratorType = FileTypeFilterIterator::ONLY_DIRECTORIES;
         }
 
-        if ($recursive)
-        {
-            $it = new RecursiveDirectoryIterator($path);
-            $it = new RecursiveIteratorIterator($it, 1);
-        }
-        else
-        {
-            $it = new DirectoryIterator($path);
-        }
-
-        foreach ($it as $entry)
-        {
-            if ($it->isDot())
-            {
-                continue;
-            }
-
-            if (($type == Filesystem::LIST_FILES_AND_DIRECTORIES || $type == Filesystem::LIST_FILES) &&
-                $entry->isFile())
-            {
-                // getRealPath() results in php-error in older PHP5 versions
-                // $result[] = $entry->getRealPath();
-                $result[] = $entry->__toString();
-            }
-
-            if (($type == Filesystem::LIST_FILES_AND_DIRECTORIES || $type == Filesystem::LIST_DIRECTORIES) &&
-                $entry->isDir())
-            {
-                // getRealPath() results in php-error in older PHP5 versions
-                // $result[] = $entry->getRealPath();
-                $result[] = $entry->__toString();
-            }
-        }
-
-        return $result;
+        return iterator_to_array(self::getFilesystemTools()->getDirectoryContent($path, $iteratorType, $recursive));
     }
 
     /**
      * Determines the number of bytes taken by a given directory or file
      *
-     * @param string $path
-     *
-     * @return int
+     * @deprecated Use \Chamilo\Libraries\File\FilesystemTools::getDiskSpace()
      */
-    public static function get_disk_space($path)
+    public static function get_disk_space(string $path): int
     {
-        return FilesystemTools::get_disk_space($path);
+        return self::getFilesystemTools()->getDiskSpace($path);
     }
 
     /**
      * Guesses the disk space used when the given content would be written to a file
      *
-     * @param string $content
-     *
-     * @return int
+     * @deprecated Use \Chamilo\Libraries\File\FilesystemTools::guessDiskSpace()
      */
-    public static function guess_disk_space($content)
+    public static function guess_disk_space(string $content): int
     {
-        return FilesystemTools::guess_disk_space($content);
+        return self::getFilesystemTools()->guessDiskSpace($content);
     }
 
     /**
-     * @param string $fileSize
-     *
-     * @return int
+     * @deprecated Use \Chamilo\Libraries\File\FilesystemTools::interpretFileSize()
      */
-    public static function interpret_file_size($fileSize)
+    public static function interpret_file_size(string $fileSize): int
     {
-        return FilesystemTools::interpret_file_size($fileSize);
+        return self::getFilesystemTools()->interpretFileSize($fileSize);
     }
 
     /**
@@ -459,181 +193,59 @@ class Filesystem
      * If the destination directory doesn't exist, this function tries to create the directory using the
      * Filesystem::create_dir function. Path cannot have a '/' at the end
      *
-     * @param string $source
-     * @param string $destination
-     * @param bool $overwrite
-     *
-     * @return bool
      * @deprecated Use \Symfony\Component\Filesystem\Filesystem::rename()
      */
-    public static function move_file($source, $destination, $overwrite = false)
+    public static function move_file(string $source, string $destination, bool $overwrite = false): void
     {
-        if (file_exists($destination) && !$overwrite)
-        {
-            return false;
-        }
-
-        $destinationDirectory = dirname($destination);
-
-        if (file_exists($source) && Filesystem::create_dir($destinationDirectory))
-        {
-            return rename($source, $destination);
-        }
-
-        return false;
+        self::getFilesystem()->rename($source, $destination, $overwrite);
     }
 
     /**
      * Made a recursive copy function to copy entire directories
      *
-     * @param string $source
-     * @param string $destination
-     * @param bool $overwrite
-     *
-     * @return bool
      * @deprecated Use \Symfony\Component\Filesystem\Filesystem::mirror()
      */
-    public static function recurse_copy($source, $destination, $overwrite = false)
+    public static function recurse_copy(string $source, string $destination): void
     {
-        if (!is_dir($source))
-        {
-            return self::copy_file($source, $destination, $overwrite);
-        }
-
-        $bool = true;
-
-        $content = self::get_directory_content($source, self::LIST_FILES_AND_DIRECTORIES, false);
-
-        foreach ($content as $file)
-        {
-            $pathToFile = $source . '/' . $file;
-            $pathToNewFile = $destination . '/' . $file;
-
-            if (!is_dir($pathToFile))
-            {
-                $bool &= self::copy_file($pathToFile, $pathToNewFile, $overwrite);
-            }
-            else
-            {
-                self::create_dir($pathToNewFile);
-                $bool &= self::recurse_copy($pathToFile, $pathToNewFile, $overwrite);
-            }
-        }
-
-        return $bool;
+        self::getFilesystem()->mirror($source, $destination);
     }
 
     /**
-     * @param string $source
-     * @param string $destination
-     * @param bool $overwrite
-     *
-     * @return bool
      * @deprecated Use \Symfony\Component\Filesystem\Filesystem::rename()
      */
-    public static function recurse_move($source, $destination, $overwrite = false)
+    public static function recurse_move(string $source, string $destination, bool $overwrite = false): void
     {
-        if (!is_dir($source))
-        {
-            return self::move_file($source, $destination, $overwrite);
-        }
-
-        $bool = true;
-        $content = self::get_directory_content($source, self::LIST_FILES_AND_DIRECTORIES, false);
-
-        foreach ($content as $file)
-        {
-            $pathToFile = $source . '/' . $file;
-            $pathToNewFile = $destination . '/' . $file;
-
-            if (!is_dir($pathToFile))
-            {
-                $bool &= self::move_file($pathToFile, $pathToNewFile, $overwrite);
-            }
-            else
-            {
-                self::create_dir($pathToNewFile);
-                $bool &= self::recurse_move($pathToFile, $pathToNewFile, $overwrite);
-            }
-        }
-
-        $bool &= @rmdir($source);
-
-        return $bool;
+        self::getFilesystem()->rename($source, $destination, $overwrite);
     }
 
     /**
      * Removes a file or a directory (and all its contents).
      *
-     * @param string $path
-     *
-     * @return bool
      * @deprecated Use \Symfony\Component\Filesystem\Filesystem::remove()
      */
-    public static function remove($path)
+    public static function remove(string $path): void
     {
-        if (realpath($path) == '/')
-        {
-            return false;
-        }
-
-        if (is_file($path))
-        {
-            return @unlink($path);
-        }
-        elseif (is_dir($path))
-        {
-            $content = Filesystem::get_directory_content($path);
-            // Reverse sort the content so deepest entries come first.
-            rsort($content);
-            $result = true;
-
-            foreach ($content as $index => $entry)
-            {
-                if (is_file($entry))
-                {
-                    $result &= @unlink($entry);
-                }
-                elseif (is_dir($entry))
-                {
-                    $result &= @rmdir($entry);
-                }
-            }
-
-            return ($result & @rmdir($path));
-        }
-
-        return false;
+        self::getFilesystem()->remove($path);
     }
 
     /**
      * Writes content to a file.
      * This function will try to create the path and the file if they don't exist yet.
      *
-     * @param string $file
-     * @param string $content
-     * @param bool $append
-     *
-     * @return bool
      * @deprecated Use \Symfony\Component\Filesystem\Filesystem::appendToFile() or
      *             \Symfony\Component\Filesystem\Filesystem::dumpFile()
      */
-    public static function write_to_file($file, $content, $append = false)
+    public static function write_to_file(string $file, string $content, bool $append = false): void
     {
-        if (Filesystem::create_dir(dirname($file)))
+        $filesystem = self::getFilesystem();
+
+        if ($append)
         {
-            if ($createFile = fopen($file, $append ? 'a' : 'w'))
-            {
-                fwrite($createFile, $content);
-                fclose($createFile);
-                chmod($file, 0777);
-
-                return true;
-            }
-
-            return false;
+            $filesystem->appendToFile($file, $content);
         }
-
-        return false;
+        else
+        {
+            $filesystem->dumpFile($file, $content);
+        }
     }
 }

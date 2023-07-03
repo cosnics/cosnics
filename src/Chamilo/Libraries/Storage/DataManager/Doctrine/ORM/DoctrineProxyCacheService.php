@@ -3,9 +3,10 @@ namespace Chamilo\Libraries\Storage\DataManager\Doctrine\ORM;
 
 use Chamilo\Libraries\Cache\FileBasedCacheService;
 use Chamilo\Libraries\File\ConfigurablePathBuilder;
-use Chamilo\Libraries\File\Filesystem;
 use Doctrine\ORM\EntityManager;
+use Exception;
 use RuntimeException;
+use Symfony\Component\Filesystem\Filesystem;
 
 /**
  * Manages the cache for the doctrine ORM proxies
@@ -19,9 +20,11 @@ class DoctrineProxyCacheService extends FileBasedCacheService
 
     private EntityManager $entityManager;
 
-    public function __construct(EntityManager $entityManager, ConfigurablePathBuilder $configurablePathBuilder)
+    public function __construct(
+        EntityManager $entityManager, ConfigurablePathBuilder $configurablePathBuilder, Filesystem $filesystem
+    )
     {
-        parent::__construct($configurablePathBuilder);
+        parent::__construct($configurablePathBuilder, $filesystem);
 
         $this->entityManager = $entityManager;
     }
@@ -42,7 +45,11 @@ class DoctrineProxyCacheService extends FileBasedCacheService
 
         if (!is_dir($proxyCacheDir = $entityManager->getConfiguration()->getProxyDir()))
         {
-            if (!Filesystem::create_dir($proxyCacheDir))
+            try
+            {
+                $this->getFilesystem()->mkdir($proxyCacheDir);
+            }
+            catch (Exception)
             {
                 throw new RuntimeException(
                     sprintf('Unable to create the Doctrine Proxy directory "%s".', $proxyCacheDir)

@@ -8,7 +8,6 @@ use Chamilo\Libraries\Architecture\Application\Application;
 use Chamilo\Libraries\Architecture\Application\ApplicationConfigurationInterface;
 use Chamilo\Libraries\Architecture\ClassnameUtilities;
 use Chamilo\Libraries\Architecture\Interfaces\NoContextComponent;
-use Chamilo\Libraries\File\Filesystem;
 use Chamilo\Libraries\Format\Structure\FooterRendererInterface;
 use Chamilo\Libraries\Format\Structure\HeaderRendererInterface;
 use Chamilo\Libraries\Format\Structure\WizardHeader\WizardHeader;
@@ -17,6 +16,7 @@ use Chamilo\Libraries\Translation\Translation;
 use DOMDocument;
 use DOMXPath;
 use Exception;
+use Symfony\Component\Finder\Iterator\FileTypeFilterIterator;
 
 /**
  * @package Chamilo\Core\Install
@@ -108,7 +108,8 @@ abstract class Manager extends Application implements NoContextComponent
     {
         $language_path =
             $this->getSystemPathBuilder()->namespaceToFullPath('Chamilo\Configuration') . 'Resources/I18n/';
-        $language_files = Filesystem::get_directory_content($language_path, Filesystem::LIST_FILES, false);
+        $language_files =
+            $this->getFilesystemTools()->getDirectoryContent($language_path, FileTypeFilterIterator::ONLY_FILES, false);
 
         $language_list = [];
         foreach ($language_files as $language_file)

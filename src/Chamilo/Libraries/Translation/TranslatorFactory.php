@@ -4,9 +4,9 @@ namespace Chamilo\Libraries\Translation;
 use Chamilo\Configuration\Package\Service\InternationalizationBundlesCacheService;
 use Chamilo\Libraries\Architecture\ClassnameUtilities;
 use Chamilo\Libraries\File\ConfigurablePathBuilder;
-use Chamilo\Libraries\File\Filesystem;
 use Chamilo\Libraries\File\PackagesContentFinder\PackagesFilesFinder;
 use Chamilo\Libraries\File\SystemPathBuilder;
+use Symfony\Component\Filesystem\Filesystem;
 use Symfony\Component\Translation\Loader\IniFileLoader;
 use Symfony\Component\Translation\Loader\XliffFileLoader;
 use Symfony\Component\Translation\Translator;
@@ -22,13 +22,16 @@ class TranslatorFactory
 {
     protected ConfigurablePathBuilder $configurablePathBuilder;
 
+    protected Filesystem $filesystem;
+
     protected InternationalizationBundlesCacheService $internationalizationBundlesCacheService;
 
     public function __construct(
-        ConfigurablePathBuilder $configurablePathBuilder,
+        Filesystem $filesystem, ConfigurablePathBuilder $configurablePathBuilder,
         InternationalizationBundlesCacheService $internationalizationBundlesCacheService
     )
     {
+        $this->filesystem = $filesystem;
         $this->configurablePathBuilder = $configurablePathBuilder;
         $this->internationalizationBundlesCacheService = $internationalizationBundlesCacheService;
     }
@@ -44,7 +47,7 @@ class TranslatorFactory
 
         if (!is_dir($translationCachePath))
         {
-            Filesystem::create_dir($translationCachePath);
+            $this->getFilesystem()->mkdir($translationCachePath);
         }
 
         $translationResourcesOptimizer = new TranslationResourcesOptimizer(
@@ -81,6 +84,11 @@ class TranslatorFactory
     public function getConfigurablePathBuilder(): ConfigurablePathBuilder
     {
         return $this->configurablePathBuilder;
+    }
+
+    public function getFilesystem(): Filesystem
+    {
+        return $this->filesystem;
     }
 
     public function getInternationalizationBundlesCacheService(): InternationalizationBundlesCacheService
