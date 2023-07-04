@@ -1,8 +1,7 @@
 <?php
 namespace Chamilo\Libraries\Format\Utilities;
 
-use Chamilo\Configuration\Package\Finder\BasicBundles;
-use Chamilo\Configuration\Package\PackageList;
+use Chamilo\Configuration\Package\Finder\BasicBundlesGenerator;
 use Chamilo\Libraries\Architecture\ClassnameUtilities;
 use Chamilo\Libraries\File\SystemPathBuilder;
 use Chamilo\Libraries\Utilities\StringUtilities;
@@ -17,10 +16,12 @@ use Exception;
 class BuildUtilities
 {
 
-    public static function processComposer(Event $event)
+    public static function processComposer(Event $event): void
     {
-        $packageBundles = new BasicBundles(PackageList::ROOT);
-        $packageNamespaces = $packageBundles->getPackageNamespaces();
+        $systemPathBuilder = new SystemPathBuilder(new ClassnameUtilities(new StringUtilities()));
+
+        $basicBundlesGenerator = new BasicBundlesGenerator($systemPathBuilder);
+        $packageNamespaces = $basicBundlesGenerator->getPackageNamespaces();
 
         $composer = $event->getComposer();
         $package = $event->getComposer()->getPackage();
@@ -31,8 +32,6 @@ class BuildUtilities
         $repositories = $package->getRepositories();
 
         $repositoryManager = $composer->getRepositoryManager();
-
-        $systemPathBuilder = new SystemPathBuilder(new ClassnameUtilities(new StringUtilities()));
 
         foreach ($packageNamespaces as $packageNamespace)
         {
@@ -46,7 +45,7 @@ class BuildUtilities
                 {
                     $completePackage = $jsonLoader->load($packageComposerPath);
                 }
-                catch (Exception $ex)
+                catch (Exception)
                 {
                     continue;
                 }
@@ -86,7 +85,7 @@ class BuildUtilities
                 // Process classmap autoload
                 if (isset($packageAutoloaders['classmap']))
                 {
-                    foreach ($packageAutoloaders['classmap'] as $autoloaderKey => $autoloaderValue)
+                    foreach ($packageAutoloaders['classmap'] as $autoloaderValue)
                     {
                         if (!in_array($autoloaderValue, $autoload['classmap']))
                         {
@@ -99,7 +98,7 @@ class BuildUtilities
 
                 if (isset($packageAutoloaders['exclude-from-classmap']))
                 {
-                    foreach ($packageAutoloaders['exclude-from-classmap'] as $autoloaderKey => $autoloaderValue)
+                    foreach ($packageAutoloaders['exclude-from-classmap'] as $autoloaderValue)
                     {
                         if (!in_array($autoloaderValue, $autoload['exclude-from-classmap']))
                         {
@@ -109,7 +108,7 @@ class BuildUtilities
                 }
 
                 // Process repositories
-                foreach ((array) $completePackage->getRepositories() as $repositoryConfig)
+                foreach ($completePackage->getRepositories() as $repositoryConfig)
                 {
                     $repository = $repositoryManager->createRepository($repositoryConfig['type'], $repositoryConfig);
                     $repositoryManager->addRepository($repository);

@@ -19,11 +19,12 @@
             <tag name="Chamilo\Core\Admin\Service\ActionProvider"/>
         </service>
 
-        <service id="Chamilo\Core\Group\Service\GroupActivityService">
+        <service id="Chamilo\Core\Group\Service\Tracking\GroupActivityService">
             <tag name="Chamilo\Core\Group\Service\GroupEventListenerInterface"/>
             <argument key="$currentUser"
                       type="service"
                       id="Chamilo\Core\User\CurrentUser"/>
         </service>
+        <service id="Chamilo\Core\Group\Storage\Repository\GroupTrackingRepository"/>
     </services>
 </container>

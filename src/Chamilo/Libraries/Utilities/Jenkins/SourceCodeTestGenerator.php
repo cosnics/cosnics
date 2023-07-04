@@ -79,9 +79,9 @@ class SourceCodeTestGenerator
     {
         $this->write_source_code_test($package_list->getType());
 
-        if ($package_list->has_children())
+        if ($package_list->hasPackageLists())
         {
-            foreach ($package_list->get_children() as $child_list)
+            foreach ($package_list->getPackageLists() as $child_list)
             {
                 $this->process($child_list);
             }

@@ -106,9 +106,9 @@ class JobGenerator
             $this->getFilesystem()->copy($package_config_path, $job_config_path);
         }
 
-        if ($package_list->has_children())
+        if ($package_list->hasPackageLists())
         {
-            foreach ($package_list->get_children() as $child_list)
+            foreach ($package_list->getPackageLists() as $child_list)
             {
                 $this->process($child_list);
             }

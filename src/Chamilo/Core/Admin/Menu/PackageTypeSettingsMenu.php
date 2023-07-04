@@ -37,14 +37,14 @@ class PackageTypeSettingsMenu extends HtmlMenu
     {
         $item = [];
 
-        $item['class'] = $package_list->get_type_icon()->getClassNamesString();
+        $item['class'] = $package_list->getTypeInlineGlyph()->getClassNamesString();
         $item['title'] = $package_list->getTypeName();
         $item['url'] = $this->get_url($package_list->getType());
         $item[OptionsMenuRenderer::KEY_ID] = $package_list->getType();
 
         $sub_items = [];
 
-        foreach ($package_list->get_children() as $child)
+        foreach ($package_list->getPackageLists() as $child)
         {
             $children = $this->get_items($child);
             if ($children)
@@ -59,7 +59,7 @@ class PackageTypeSettingsMenu extends HtmlMenu
         }
 
         $has_settings = false;
-        $packages = $package_list->get_packages();
+        $packages = $package_list->getPackages();
         foreach ($packages as $package)
         {
             if (Configuration::getInstance()->has_settings($package->get_context()))

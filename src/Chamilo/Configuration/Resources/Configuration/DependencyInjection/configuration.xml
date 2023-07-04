@@ -76,6 +76,10 @@
         <service id="Chamilo\Configuration\Package\Service\PackageFactory"/>
         <service id="Chamilo\Configuration\Package\PlatformPackageBundles"/>
 
+        <service id="Chamilo\Configuration\Package\Finder\BasicBundlesGenerator"/>
+        <service id="Chamilo\Configuration\Package\Finder\InternationalizationBundlesGenerator"/>
+        <service id="Chamilo\Configuration\Package\Finder\PackageBundlesGenerator"/>
+
         <service id="Chamilo\Configuration\Package\Service\PackageBundlesCacheService">
             <tag name="Chamilo\Libraries\Cache\CacheDataPreLoaderService"/>
             <argument key="$cacheAdapter"

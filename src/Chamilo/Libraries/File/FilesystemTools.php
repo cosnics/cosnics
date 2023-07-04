@@ -2,6 +2,7 @@
 namespace Chamilo\Libraries\File;
 
 use Chamilo\Libraries\Utilities\StringUtilities;
+use Symfony\Component\Filesystem\Filesystem;
 use Symfony\Component\Finder\Finder;
 use Symfony\Component\Finder\Iterator\FileTypeFilterIterator;
 use Symfony\Component\HttpFoundation\BinaryFileResponse;
@@ -13,18 +14,15 @@ use Symfony\Component\HttpFoundation\ResponseHeaderBag;
  */
 class FilesystemTools
 {
-    protected \Symfony\Component\Filesystem\Filesystem $filesystem;
-
-    protected Finder $finder;
+    protected Filesystem $filesystem;
 
     protected StringUtilities $stringUtilities;
 
     public function __construct(
-        \Symfony\Component\Filesystem\Filesystem $filesystem, Finder $finder, StringUtilities $stringUtilities
+        Filesystem $filesystem, StringUtilities $stringUtilities
     )
     {
         $this->filesystem = $filesystem;
-        $this->finder = $finder;
         $this->stringUtilities = $stringUtilities;
     }
 
@@ -109,22 +107,6 @@ class FilesystemTools
         return $uniquePath;
     }
 
-    public function sendFileForDownload(
-        string $fullFileName, ?string $name = null, ?string $contentType = null
-    ): void
-    {
-        $filename = $name ? basename($fullFileName) : $name;
-
-        $binaryFileResponse = new BinaryFileResponse($fullFileName);
-        $binaryFileResponse->setContentDisposition(ResponseHeaderBag::DISPOSITION_ATTACHMENT, $filename);
-
-        $binaryFileResponse->headers->set('Content-type', $contentType ?: 'application/octet-stream');
-        $binaryFileResponse->headers->set('Content-Description', $filename);
-        $binaryFileResponse->headers->set('Content-transfer-encoding', 'binary');
-
-        $binaryFileResponse->send();
-    }
-
     /**
      * Transform the file size in a human readable format
      */
@@ -159,7 +141,7 @@ class FilesystemTools
         string $path, ?int $type = null, bool $recursive = true
     ): Finder
     {
-        $finder = $this->getFinder();
+        $finder = new Finder();
 
         if (!$recursive)
         {
@@ -205,14 +187,9 @@ class FilesystemTools
         return 0;
     }
 
-    public function getFilesystem(): \Symfony\Component\Filesystem\Filesystem
+    public function getFilesystem(): Filesystem
     {
         return $this->filesystem;
-    }
-
-    public function getFinder(): Finder
-    {
-        return $this->finder;
     }
 
     public function getStringUtilities(): StringUtilities
@@ -275,5 +252,21 @@ class FilesystemTools
         }
 
         return intval(round($bytes, 2));
+    }
+
+    public function sendFileForDownload(
+        string $fullFileName, ?string $name = null, ?string $contentType = null
+    ): void
+    {
+        $filename = $name ? basename($fullFileName) : $name;
+
+        $binaryFileResponse = new BinaryFileResponse($fullFileName);
+        $binaryFileResponse->setContentDisposition(ResponseHeaderBag::DISPOSITION_ATTACHMENT, $filename);
+
+        $binaryFileResponse->headers->set('Content-type', $contentType ?: 'application/octet-stream');
+        $binaryFileResponse->headers->set('Content-Description', $filename);
+        $binaryFileResponse->headers->set('Content-transfer-encoding', 'binary');
+
+        $binaryFileResponse->send();
     }
 }

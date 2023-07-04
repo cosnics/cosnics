@@ -6,9 +6,9 @@ use Chamilo\Configuration\Package\Properties\Dependencies\Dependencies;
 use Chamilo\Configuration\Package\Properties\Dependencies\Dependency\Dependency;
 use Chamilo\Configuration\Package\Storage\DataClass\Package;
 use Chamilo\Libraries\File\SystemPathBuilder;
-use Chamilo\Libraries\Translation\Translation;
 use Exception;
 use stdClass;
+use Symfony\Component\Filesystem\Filesystem;
 
 /**
  * @package Chamilo\Configuration\Package\Service
@@ -18,11 +18,19 @@ class PackageFactory
 {
     public const PACKAGE_DESCRIPTOR = 'composer.json';
 
+    protected Filesystem $filesystem;
+
     private SystemPathBuilder $systemPathBuilder;
 
-    public function __construct(SystemPathBuilder $systemPathBuilder)
+    public function __construct(SystemPathBuilder $systemPathBuilder, Filesystem $filesystem)
     {
         $this->systemPathBuilder = $systemPathBuilder;
+        $this->filesystem = $filesystem;
+    }
+
+    public function getFilesystem(): Filesystem
+    {
+        return $this->filesystem;
     }
 
     /**
@@ -32,7 +40,7 @@ class PackageFactory
     {
         if (!$this->packageExists($context))
         {
-            throw new Exception(Translation::get('InvalidPackageContext', ['CONTEXT' => $context]));
+            throw new Exception('Invalid package context: ' . $context);
         }
 
         return $this->parseComposerJsonPath($this->getPackagePath($context));
@@ -50,7 +58,7 @@ class PackageFactory
 
     public function packageExists(string $context): bool
     {
-        return file_exists($this->getPackagePath($context));
+        return $this->getFilesystem()->exists($this->getPackagePath($context));
     }
 
     /**

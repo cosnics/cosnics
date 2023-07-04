@@ -42,14 +42,14 @@ class PackageTypeLinksMenu extends HtmlMenu
     {
         $item = [];
 
-        $item['class'] = $package_list->get_type_icon()->getClassNamesString();
+        $item['class'] = $package_list->getTypeInlineGlyph()->getClassNamesString();
         $item['title'] = $package_list->getTypeName();
         $item['url'] = $this->get_url($package_list->getType());
         $item[OptionsMenuRenderer::KEY_ID] = $package_list->getType();
 
         $sub_items = [];
 
-        foreach ($package_list->get_children() as $child)
+        foreach ($package_list->getPackageLists() as $child)
         {
             $children = $this->get_items($child);
 
@@ -65,7 +65,7 @@ class PackageTypeLinksMenu extends HtmlMenu
         }
 
         $has_links = false;
-        $packages = $package_list->get_packages();
+        $packages = $package_list->getPackages();
 
         foreach ($packages as $package)
         {

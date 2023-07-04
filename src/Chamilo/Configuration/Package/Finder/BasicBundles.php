@@ -19,65 +19,48 @@ class BasicBundles
     /**
      * @var string[]
      */
-    private $packageNamespaces = [];
+    private array $packageNamespaces = [];
 
-    /**
-     * @var string
-     */
-    private $rootNamespace;
+    private string $rootNamespace;
 
-    /**
-     * @param string $namespace
-     * @param int $mode
-     */
-    public function __construct($rootNamespace = PackageList::ROOT)
+    public function __construct(string $rootNamespace = PackageList::ROOT)
     {
         $this->rootNamespace = $rootNamespace;
         $this->setup();
     }
 
-    /**
-     * @param string $packageNamespace
-     */
-    protected function addPackageNamespace($packageNamespace)
+    protected function addPackageNamespace(string $packageNamespace): void
     {
         $this->packageNamespaces[] = $packageNamespace;
     }
 
-    /**
-     * @param string $namespace
-     */
-    private function discoverPackages($rootNamespace)
+    private function discoverPackages(string $rootNamespace): void
     {
-        $blacklist = $this->getBlacklistedFolders();
         $rootNamespace = $rootNamespace == PackageList::ROOT ? '' : $rootNamespace;
 
         $pathBuilder = new SystemPathBuilder(new ClassnameUtilities(new StringUtilities('UTF-8')));
         $path = $pathBuilder->namespaceToFullPath($rootNamespace);
 
         $finder = new Finder();
-        $finder->depth('== 0')->directories()->in($path);
+        $finder->depth('== 0')->directories()->notName($this->getBlacklistedFolders())->notName('.*')->in($path);
 
         foreach ($finder as $folder)
         {
-            if (!in_array($folder, $blacklist) && !str_starts_with($folder, '.'))
+            $folderNamespace = ($rootNamespace ? $rootNamespace . '\\' : '') . $folder->getFilename();
+
+            if ($this->verifyPackage($folderNamespace))
             {
-                $folderNamespace = ($rootNamespace ? $rootNamespace . '\\' : '') . $folder;
-
-                if ($this->verifyPackage($folderNamespace))
-                {
-                    $this->addPackageNamespace($folderNamespace);
-                }
-
-                $this->discoverPackages($folderNamespace);
+                $this->addPackageNamespace($folderNamespace);
             }
+
+            $this->discoverPackages($folderNamespace);
         }
     }
 
     /**
      * @return string[]
      */
-    protected function getBlacklistedFolders()
+    protected function getBlacklistedFolders(): array
     {
         return ['.hg', '.git', 'build', 'Build', 'plugin', 'resources', 'Resources', 'Test'];
     }
@@ -85,15 +68,12 @@ class BasicBundles
     /**
      * @return string[]
      */
-    public function getPackageNamespaces()
+    public function getPackageNamespaces(): array
     {
         return $this->packageNamespaces;
     }
 
-    /**
-     * @return string
-     */
-    public function getRootNamespace()
+    public function getRootNamespace(): string
     {
         return $this->rootNamespace;
     }
@@ -103,12 +83,7 @@ class BasicBundles
         $this->discoverPackages($this->rootNamespace);
     }
 
-    /**
-     * @param string $folderNamespace
-     *
-     * @return bool
-     */
-    protected function verifyPackage($folderNamespace)
+    protected function verifyPackage(string $folderNamespace): bool
     {
         $pathBuilder = new SystemPathBuilder(new ClassnameUtilities(new StringUtilities('UTF-8')));
         $packageInfoPath = $pathBuilder->namespaceToFullPath($folderNamespace) . '/composer.json';

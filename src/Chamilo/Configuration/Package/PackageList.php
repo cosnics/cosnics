@@ -2,12 +2,14 @@
 namespace Chamilo\Configuration\Package;
 
 use Chamilo\Configuration\Package\Storage\DataClass\Package;
+use Chamilo\Libraries\Format\Structure\Glyph\InlineGlyph;
 
 /**
  * Class to store a recursive structure of package types, associated packages and possible subpackages
  *
- * @author Hans De Bisschop
- * @author Magali Gillard
+ * @package Chamilo\Configuration\Package
+ * @author  Hans De Bisschop <hans.de.bisschop@ehb.be>
+ * @author  Magali Gillard
  */
 class PackageList
 {
@@ -17,185 +19,135 @@ class PackageList
 
     public const ROOT = '__ROOT__';
 
-    private $all_packages;
+    private array $allPackages;
+
+    private array $list;
 
     /**
-     * The list of PackageList objects for the sub-types of this type
-     *
      * @var \Chamilo\Configuration\Package\PackageList[]
      */
-    private $children;
-
-    private $list;
+    private array $packageLists;
 
     /**
-     * The packages of this specific type
-     *
-     * @var string[]
+     * @var \Chamilo\Configuration\Package\Storage\DataClass\Package[]
      */
-    private $packages;
+    private array $packages;
 
     /**
      * The type of the PackageList
      *
      * @var string
      */
-    private $type;
+    private string $type;
 
-    /**
-     * The type icon of the PackageList
-     *
-     * @var string
-     */
-    private $type_icon;
+    private ?InlineGlyph $typeInlineGlyph;
 
     /**
      * The type name of the PackageList
      *
      * @var string
      */
-    private $type_name;
+    private string $typeName;
 
     /**
-     * Property to cache the available types
-     *
-     * @var bool:string
+     * @var string[][]
      */
-    private $types;
+    private array $types;
 
     /**
      * @param string $type
-     * @param string $type_name
-     * @param \Chamilo\Libraries\Format\Structure\Glyph\InlineGlyph $type_icon
-     * @param array $packages
-     * @param \Chamilo\Configuration\Package\PackageList[] $children
+     * @param string $typeName
+     * @param ?\Chamilo\Libraries\Format\Structure\Glyph\InlineGlyph $typeInlineGlyph
+     * @param \Chamilo\Configuration\Package\Storage\DataClass\Package[] $packages
+     * @param \Chamilo\Configuration\Package\PackageList[] $packageLists
      */
     public function __construct(
-        $type, $type_name, $type_icon = null, array $packages = [], array $children = []
+        string $type, string $typeName, ?InlineGlyph $typeInlineGlyph = null, array $packages = [],
+        array $packageLists = []
     )
     {
         $this->type = $type;
-        $this->type_name = $type_name;
-        $this->type_icon = $type_icon;
+        $this->typeName = $typeName;
+        $this->typeInlineGlyph = $typeInlineGlyph;
         $this->packages = $packages;
-        $this->children = $children;
+        $this->packageLists = $packageLists;
     }
 
-    /**
-     * Add a child to the list of subtypes
-     *
-     * @param $child PackageList
-     */
-    public function add_child(PackageList $child)
-    {
-        $this->children[$child->getType()] = $child;
-    }
-
-    /**
-     * Add a package to the list of packages
-     *
-     * @param $package string
-     */
-    public function add_package(Package $package)
+    public function addPackage(Package $package): PackageList
     {
         $this->packages[$package->get_context()] = $package;
+
+        return $this;
     }
 
-    /**
-     * Get the type
-     *
-     * @return string
-     */
-    public function getType()
+    public function addPackageList(PackageList $child): PackageList
     {
-        return $this->type;
+        $this->packageLists[$child->getType()] = $child;
+
+        return $this;
     }
 
-    public function getTypeName()
+    public function getAllPackages($recursive = true): array
     {
-        return $this->type_name;
-    }
-
-    public function get_all_packages($recursive = true)
-    {
-        if (!isset($this->all_packages[$recursive]))
+        if (!isset($this->allPackages[$recursive]))
         {
-            $this->all_packages[$recursive] = [];
+            $this->allPackages[$recursive] = [];
+            $this->allPackages[$recursive][$this->getType()] = [];
 
-            if (count($this->get_packages()) > 0)
+            if (count($this->getPackages()) > 0)
             {
-                $this->all_packages[$recursive][$this->getType()] = $this->get_packages();
+                $this->allPackages[$recursive][$this->getType()] = $this->getPackages();
             }
 
-            foreach ($this->get_children() as $child)
+            foreach ($this->getPackageLists() as $child)
             {
                 if ($recursive)
                 {
-                    $child_packages = $child->get_all_packages($recursive);
+                    $child_packages = $child->getAllPackages($recursive);
 
                     if (count($child_packages) > 0)
                     {
-
-                        $this->all_packages[$recursive] = array_merge($this->all_packages[$recursive], $child_packages);
+                        $this->allPackages[$recursive] = array_merge($this->allPackages[$recursive], $child_packages);
                     }
                 }
-                else
+                elseif (count($child->getPackages()) > 0)
                 {
-                    if (count($child->get_packages($recursive)) > 0)
-                    {
-                        $this->all_packages[$recursive][$child->getType()] = $child->get_packages($recursive);
-                    }
+                    $this->allPackages[$recursive][$child->getType()] = $child->getPackages();
                 }
             }
         }
 
-        return $this->all_packages[$recursive];
+        return $this->allPackages[$recursive];
     }
 
     /**
-     * Get the list of PackageList objects for the sub-types of this type
-     *
-     * @return \Chamilo\Configuration\Package\PackageList[]
+     * @return \Chamilo\Configuration\Package\Storage\DataClass\Package[]
      */
-    public function get_children()
-    {
-        return $this->children;
-    }
-
-    /**
-     * @param bool $recursive
-     *
-     * @return Package[]
-     */
-    public function get_list($recursive = true)
+    public function getList(bool $recursive = true): array
     {
         if (!isset($this->list[$recursive]))
         {
             $this->list[$recursive] = [];
 
-            if (count($this->get_packages()) > 0)
+            if (count($this->getPackages()) > 0)
             {
-                $this->list[$recursive] = $this->get_packages();
+                $this->list[$recursive] = $this->getPackages();
             }
 
-            foreach ($this->get_children() as $child)
+            foreach ($this->getPackageLists() as $child)
             {
                 if ($recursive)
                 {
-                    $child_packages = $child->get_list($recursive);
+                    $child_packages = $child->getList($recursive);
 
                     if (count($child_packages) > 0)
                     {
-
                         $this->list[$recursive] = array_merge($this->list[$recursive], $child_packages);
                     }
                 }
-                else
+                elseif (count($child->getPackages()) > 0)
                 {
-                    if (count($child->get_packages($recursive)) > 0)
-                    {
-                        $this->list[$recursive] = $child->get_packages($recursive);
-                    }
+                    $this->list[$recursive] = array_merge($this->list[$recursive], $child->getPackages());
                 }
             }
         }
@@ -204,64 +156,57 @@ class PackageList
     }
 
     /**
-     * Get the type packages
-     *
+     * @return \Chamilo\Configuration\Package\PackageList[]
+     */
+    public function getPackageLists(): array
+    {
+        return $this->packageLists;
+    }
+
+    /**
      * @return string[]
      */
-    public function get_packages()
+    public function getPackages(): array
     {
         return $this->packages;
     }
 
-    /**
-     * Get the type
-     *
-     * @deprecated Use PackageList::getType() now
-     */
-    public function get_type()
+    public function getType(): string
     {
-        return $this->getType();
+        return $this->type;
     }
 
-    /**
-     * Get the type icon
-     *
-     * @return \Chamilo\Libraries\Format\Structure\Glyph\InlineGlyph
-     */
-    public function get_type_icon()
+    public function getTypeInlineGlyph(): InlineGlyph
     {
-        return $this->type_icon;
+        return $this->typeInlineGlyph;
     }
 
-    /**
-     * @deprecated Use PackageList::getTypeName() now
-     */
-    public function get_type_name()
+    public function getTypeName(): string
     {
-        return $this->getTypeName();
+        return $this->typeName;
     }
 
     /**
      * Get all distinct types defined in the PackageList and - if requested - it's children
      *
-     * @param $recursive bool
+     * @return string[]
      */
-    public function get_types($recursive = true)
+    public function getTypes(bool $recursive = true): array
     {
         if (!isset($this->types[$recursive]))
         {
             $this->types[$recursive] = [];
 
-            if (count($this->get_packages()) > 0)
+            if (count($this->getPackages()) > 0)
             {
                 $this->types[$recursive][] = $this->getType();
             }
 
-            foreach ($this->get_children() as $child)
+            foreach ($this->getPackageLists() as $child)
             {
                 if ($recursive)
                 {
-                    $this->types[$recursive] = array_merge($this->types[$recursive], $child->get_types($recursive));
+                    $this->types[$recursive] = array_merge($this->types[$recursive], $child->getTypes($recursive));
                 }
                 else
                 {
@@ -273,93 +218,64 @@ class PackageList
         return $this->types[$recursive];
     }
 
-    /**
-     * @param string $child
-     *
-     * @return bool
-     */
-    public function has_child($child)
+    public function hasPackage(string $packageName): bool
     {
-        return array_key_exists($child, $this->children);
+        return array_key_exists($packageName, $this->packages);
+    }
+
+    public function hasPackageList(string $packageListName): bool
+    {
+        return array_key_exists($packageListName, $this->packageLists);
+    }
+
+    public function hasPackageLists(): bool
+    {
+        return count($this->getPackageLists()) > 0;
+    }
+
+    public function hasPackages(): bool
+    {
+        return count($this->getPackages()) > 0;
     }
 
     /**
-     * Returns whether the type has children
-     *
-     * @return bool
+     * @param \Chamilo\Configuration\Package\PackageList[] $packageLists
      */
-    public function has_children()
+    public function setPackageLists(array $packageLists): PackageList
     {
-        return count($this->get_children()) > 0;
+        $this->packageLists = $packageLists;
+
+        return $this;
     }
 
     /**
-     * @param string $package
-     *
-     * @return bool
+     * @param \Chamilo\Configuration\Package\Storage\DataClass\Package[] $packages
      */
-    public function has_package($package)
-    {
-        return array_key_exists($package, $this->packages);
-    }
-
-    /**
-     * Returns whether the type has packages
-     *
-     * @return bool
-     */
-    public function has_packages()
-    {
-        return count($this->get_packages()) > 0;
-    }
-
-    /**
-     * Set the list of PackageList objects for the sub-types of this type
-     *
-     * @param $children \Chamilo\Configuration\Package\PackageList[]
-     */
-    public function set_children($children)
-    {
-        $this->children = $children;
-    }
-
-    /**
-     * Set the type packages
-     *
-     * @param $packages string[]
-     */
-    public function set_packages($packages)
+    public function setPackages(array $packages): PackageList
     {
         $this->packages = $packages;
+
+        return $this;
     }
 
-    /**
-     * Set the type
-     *
-     * @param $type string
-     */
-    public function set_type($type)
+    public function setType(string $type): PackageList
     {
         $this->type = $type;
+
+        return $this;
     }
 
-    /**
-     * Set the type icon
-     *
-     * @param $type_icon string
-     */
-    public function set_type_icon($type_icon)
+    public function setTypeInlineGlyph(InlineGlyph $typeInlineGlyph): PackageList
     {
-        $this->type_icon = $type_icon;
+        $this->typeInlineGlyph = $typeInlineGlyph;
+
+        return $this;
     }
 
-    /**
-     * Set the type name
-     *
-     * @param $type_name string
-     */
-    public function set_type_name($type_name)
+    public function setTypeName(string $typeName): PackageList
     {
-        $this->type_name = $type_name;
+        $this->typeName = $typeName;
+
+        return $this;
     }
 }

@@ -44,7 +44,7 @@ class PackageTypeMenu extends HtmlMenu
         
         $sub_items = [];
         
-        foreach ($package_list->get_children() as $child)
+        foreach ($package_list->getPackageLists() as $child)
         {
             $sub_items[] = $this->get_items($child);
         }

@@ -1,7 +1,7 @@
 <?php
 namespace Chamilo\Configuration\Package\Service;
 
-use Chamilo\Configuration\Package\Finder\PackageBundles;
+use Chamilo\Configuration\Package\Finder\PackageBundlesGenerator;
 use Chamilo\Configuration\Package\PackageList;
 use Chamilo\Libraries\Cache\Interfaces\CacheDataPreLoaderInterface;
 use Chamilo\Libraries\Cache\Traits\CacheAdapterHandlerTrait;
@@ -18,12 +18,12 @@ class PackageBundlesCacheService implements CacheDataPreLoaderInterface
 {
     use CacheAdapterHandlerTrait;
 
-    protected PackageFactory $packageFactory;
+    protected PackageBundlesGenerator $packageBundlesGenerator;
 
-    public function __construct(AdapterInterface $cacheAdapter, PackageFactory $packageFactory)
+    public function __construct(AdapterInterface $cacheAdapter, PackageBundlesGenerator $packageBundlesGenerator)
     {
         $this->cacheAdapter = $cacheAdapter;
-        $this->packageFactory = $packageFactory;
+        $this->packageBundlesGenerator = $packageBundlesGenerator;
     }
 
     /**
@@ -79,22 +79,24 @@ class PackageBundlesCacheService implements CacheDataPreLoaderInterface
         return $this->readCacheDataForKey($this->getCacheKeyForParts([PackageList::MODE_INSTALLED]));
     }
 
-    public function getPackageFactory(): PackageFactory
+    public function getPackageBundlesGenerator(): PackageBundlesGenerator
     {
-        return $this->packageFactory;
+        return $this->packageBundlesGenerator;
     }
 
+    /**
+     * @throws \Symfony\Component\Cache\Exception\CacheException
+     */
     public function getPackageListForMode(int $mode): PackageList
     {
-        $packageFactory = $this->getPackageFactory();
-        $packageListBuilder = new PackageBundles(PackageList::ROOT, $mode, $packageFactory);
-        $packageList = $packageListBuilder->getPackageList();
+        $packageBundlesGenerator = $this->getPackageBundlesGenerator();
+        $packageList = $packageBundlesGenerator->getPackageListForNamespaceAndMode(PackageList::ROOT, $mode);
 
-        $packageList->get_all_packages(false);
-        $packageList->get_list(false);
+        $packageList->getAllPackages(false);
+        $packageList->getList(false);
 
-        $packageList->get_all_packages();
-        $packageList->get_list();
+        $packageList->getAllPackages();
+        $packageList->getList();
 
         return $packageList;
     }

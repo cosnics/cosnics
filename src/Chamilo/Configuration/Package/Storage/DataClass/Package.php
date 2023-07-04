@@ -7,6 +7,7 @@ use Chamilo\Libraries\Architecture\ClassnameUtilities;
 use Chamilo\Libraries\File\SystemPathBuilder;
 use Chamilo\Libraries\Storage\DataClass\DataClass;
 use Exception;
+use Symfony\Component\Filesystem\Filesystem;
 
 /**
  * @package Chamilo\Configuration\Package\Storage\DataClass
@@ -53,7 +54,7 @@ class Package extends DataClass
     public static function exists($context)
     {
         $packageFactory = new PackageFactory(
-            new SystemPathBuilder(ClassnameUtilities::getInstance())
+            new SystemPathBuilder(ClassnameUtilities::getInstance()), new Filesystem()
         );
 
         return $packageFactory->packageExists($context);
@@ -69,7 +70,7 @@ class Package extends DataClass
     public static function get($context)
     {
         $packageFactory = new PackageFactory(
-            new SystemPathBuilder(ClassnameUtilities::getInstance())
+            new SystemPathBuilder(ClassnameUtilities::getInstance()), new Filesystem()
         );
 
         return $packageFactory->getPackage($context);

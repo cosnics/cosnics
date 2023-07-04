@@ -1,8 +1,7 @@
 <?php
 namespace Chamilo\Configuration\Package\Service;
 
-use Chamilo\Configuration\Package\Finder\InternationalizationBundles;
-use Chamilo\Configuration\Package\PackageList;
+use Chamilo\Configuration\Package\Finder\InternationalizationBundlesGenerator;
 use Chamilo\Libraries\Cache\Interfaces\CacheDataPreLoaderInterface;
 use Chamilo\Libraries\Cache\Traits\SimpleCacheAdapterHandlerTrait;
 use Chamilo\Libraries\Cache\Traits\SimpleCacheDataPreLoaderTrait;
@@ -19,8 +18,13 @@ class InternationalizationBundlesCacheService implements CacheDataPreLoaderInter
     use SimpleCacheAdapterHandlerTrait;
     use SimpleCacheDataPreLoaderTrait;
 
-    public function __construct(AdapterInterface $cacheAdapter)
+    protected InternationalizationBundlesGenerator $internationalizationBundlesGenerator;
+
+    public function __construct(
+        InternationalizationBundlesGenerator $internationalizationBundlesGenerator, AdapterInterface $cacheAdapter
+    )
     {
+        $this->internationalizationBundlesGenerator = $internationalizationBundlesGenerator;
         $this->cacheAdapter = $cacheAdapter;
     }
 
@@ -29,9 +33,12 @@ class InternationalizationBundlesCacheService implements CacheDataPreLoaderInter
      */
     protected function getDataForCache(): array
     {
-        $internationalizationBundles = new InternationalizationBundles(PackageList::ROOT);
+        return $this->getInternationalizationBundlesGenerator()->getPackageNamespaces();
+    }
 
-        return $internationalizationBundles->getPackageNamespaces();
+    public function getInternationalizationBundlesGenerator(): InternationalizationBundlesGenerator
+    {
+        return $this->internationalizationBundlesGenerator;
     }
 
     /**

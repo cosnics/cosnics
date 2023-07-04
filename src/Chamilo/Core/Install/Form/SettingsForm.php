@@ -227,7 +227,7 @@ class SettingsForm extends FormValidator
     {
         $packages = [];
 
-        foreach ($packageList->get_packages() as $namespace => $package)
+        foreach ($packageList->getPackages() as $namespace => $package)
         {
             if (strpos($namespace, '\Integration\Chamilo\\') === false)
             {
@@ -445,7 +445,7 @@ class SettingsForm extends FormValidator
             $this->addElement('html', implode(PHP_EOL, $html));
         }
 
-        foreach ($packageList->get_children() as $child)
+        foreach ($packageList->getPackageLists() as $child)
         {
             $this->renderPackages($child);
         }

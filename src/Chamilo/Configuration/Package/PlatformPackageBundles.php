@@ -113,7 +113,7 @@ class PlatformPackageBundles
     {
         if (!isset($this->packages))
         {
-            $this->packages = $this->package_list->get_list();
+            $this->packages = $this->package_list->getList();
         }
 
         return $this->packages;
@@ -131,7 +131,7 @@ class PlatformPackageBundles
     {
         if (!isset($this->type_packages))
         {
-            $this->type_packages = $this->package_list->get_all_packages();
+            $this->type_packages = $this->package_list->getAllPackages();
         }
 
         return $this->type_packages;
@@ -148,9 +148,6 @@ class PlatformPackageBundles
     }
 
     /**
-     * @param bool $include_installed
-     * @param bool $reset
-     *
      * @return \Chamilo\Configuration\Package\PackageList
      */
     public function initialize()

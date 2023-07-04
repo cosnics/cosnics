@@ -9,46 +9,31 @@ use Chamilo\Libraries\Format\Structure\Glyph\IdentGlyph;
 use Chamilo\Libraries\Format\Structure\Glyph\NamespaceIdentGlyph;
 
 /**
- *
  * @package Chamilo\Configuration\Package\Finder
- * @author Hans De Bisschop <hans.de.bisschop@ehb.be>
- * @author Magali Gillard <magali.gillard@ehb.be>
- * @author Eduard Vossen <eduard.vossen@ehb.be>
+ * @author  Hans De Bisschop <hans.de.bisschop@ehb.be>
+ * @author  Magali Gillard <magali.gillard@ehb.be>
+ * @author  Eduard Vossen <eduard.vossen@ehb.be>
  */
 class PackageBundles extends BasicBundles
 {
 
-    /**
-     * @var \Chamilo\Configuration\Package\Service\PackageFactory
-     */
-    protected $packageFactory;
+    protected PackageFactory $packageFactory;
+
+    private int $mode;
 
     /**
-     *
-     * @var integer
-     */
-    private $mode;
-
-    /**
-     *
      * @var \Chamilo\Configuration\Package\Storage\DataClass\Package[]
      */
-    private $packageDefinitions;
+    private array $packageDefinitions;
 
     /**
-     *
      * @var \Chamilo\Configuration\Package\PackageList[]
      */
-    private $packageLists = [];
+    private array $packageLists = [];
 
-    /**
-     *
-     * @param string $rootNamespace
-     * @param int $mode
-     * @param \Chamilo\Configuration\Package\Service\PackageFactory|null $packageFactory
-     */
     public function __construct(
-        $rootNamespace = PackageList::ROOT, $mode = PackageList::MODE_ALL, PackageFactory $packageFactory = null
+        string $rootNamespace = PackageList::ROOT, int $mode = PackageList::MODE_ALL,
+        PackageFactory $packageFactory = null
     )
     {
         $this->mode = $mode;
@@ -56,15 +41,8 @@ class PackageBundles extends BasicBundles
         parent::__construct($rootNamespace);
     }
 
-    /**
-     *
-     * @param string $packageNamespace
-     *
-     * @return string[]
-     */
-    private function determinePackageNamespaceAncestors($packageNamespace)
+    private function determinePackageNamespaceAncestors(string $packageNamespace): array
     {
-        $packageNamespacePath = [];
         $packageParentNamespace = $this->determinePackageParentNamespace($packageNamespace);
         $packagePath[] = $packageParentNamespace;
 
@@ -77,13 +55,7 @@ class PackageBundles extends BasicBundles
         return $packagePath;
     }
 
-    /**
-     *
-     * @param string $packageNamespace
-     *
-     * @return string
-     */
-    private function determinePackageParentNamespace($packageNamespace)
+    private function determinePackageParentNamespace(string $packageNamespace): string
     {
         if (isset($this->packageDefinitions[$packageNamespace]))
         {
@@ -97,16 +69,12 @@ class PackageBundles extends BasicBundles
         }
     }
 
-    public function getPackageList()
+    public function getPackageList(): PackageList
     {
         return $this->packageLists[$this->getRootNamespace()];
     }
 
-    /**
-     *
-     * @return boolean
-     */
-    protected function isRelevantPackage($packageNamespace)
+    protected function isRelevantPackage(string $packageNamespace): bool
     {
         $isAll = $this->mode == PackageList::MODE_ALL;
         $isInstalled = $this->mode == PackageList::MODE_INSTALLED && Configuration::is_registered($packageNamespace);
@@ -115,7 +83,7 @@ class PackageBundles extends BasicBundles
         return $isAll || $isInstalled || $isAvailable;
     }
 
-    private function processPackageTypes()
+    private function processPackageTypes(): void
     {
         foreach ($this->getPackageNamespaces() as $packageNamespace)
         {
@@ -129,9 +97,9 @@ class PackageBundles extends BasicBundles
             }
 
             if ($this->isRelevantPackage($packageNamespace) &&
-                !$this->packageLists[$packageNamespaceParent]->has_package($packageNamespace))
+                !$this->packageLists[$packageNamespaceParent]->hasPackage($packageNamespace))
             {
-                $this->packageLists[$packageNamespaceParent]->add_package($this->packageDefinitions[$packageNamespace]);
+                $this->packageLists[$packageNamespaceParent]->addPackage($this->packageDefinitions[$packageNamespace]);
             }
 
             $previousPackageList = $this->packageLists[$packageNamespaceParent];
@@ -143,9 +111,9 @@ class PackageBundles extends BasicBundles
                     $this->setPackageList($packageNamespaceAncestor);
                 }
 
-                if (!$this->packageLists[$packageNamespaceAncestor]->has_child($previousPackageList->getType()))
+                if (!$this->packageLists[$packageNamespaceAncestor]->hasPackageList($previousPackageList->getType()))
                 {
-                    $this->packageLists[$packageNamespaceAncestor]->add_child($previousPackageList);
+                    $this->packageLists[$packageNamespaceAncestor]->addPackageList($previousPackageList);
                 }
 
                 $previousPackageList = $this->packageLists[$packageNamespaceAncestor];
@@ -153,7 +121,7 @@ class PackageBundles extends BasicBundles
         }
     }
 
-    private function readPackageDefinitions()
+    private function readPackageDefinitions(): void
     {
         foreach ($this->getPackageNamespaces() as $packageNamespace)
         {
@@ -162,11 +130,7 @@ class PackageBundles extends BasicBundles
         }
     }
 
-    /**
-     *
-     * @param string $packageNamespace
-     */
-    public function setPackageList($packageNamespace)
+    public function setPackageList(string $packageNamespace): void
     {
         if ($packageNamespace === PackageList::ROOT)
         {
@@ -180,8 +144,7 @@ class PackageBundles extends BasicBundles
         }
 
         $glyph = new NamespaceIdentGlyph(
-            $packageImageNamespace, false, false, false,
-            IdentGlyph::SIZE_MINI, array('fa-fw')
+            $packageImageNamespace, false, false, false, IdentGlyph::SIZE_MINI, ['fa-fw']
         );
 
         $this->packageLists[$packageNamespace] = new PackageList($packageNamespace, $typeName, $glyph);
