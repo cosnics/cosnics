@@ -4,10 +4,10 @@ namespace Chamilo\Core\Install\Test\Integration;
 use Chamilo\Libraries\Connection;
 use Chamilo\Libraries\CoreApplication;
 use Chamilo\Libraries\DependencyInjection\DependencyInjectionContainerBuilder;
-use Chamilo\Libraries\File\Filesystem;
 use Chamilo\Libraries\File\SystemPathBuilder;
 use Chamilo\MDB2;
 use PHPUnit_Framework_TestCase;
+use Symfony\Component\Filesystem\Filesystem;
 
 class InstallerTest extends PHPUnit_Framework_TestCase
 {
@@ -110,10 +110,12 @@ class InstallerTest extends PHPUnit_Framework_TestCase
         $systemPathBuilder =
             DependencyInjectionContainerBuilder::getInstance()->createContainer()->get(SystemPathBuilder::class);
 
-        Filesystem::remove($systemPathBuilder->getStoragePath() . 'configuration/configuration.php');
+        $filesystem = new Filesystem();
+
+        $filesystem->remove($systemPathBuilder->getStoragePath() . 'configuration/configuration.php');
         foreach ($this->EXTRA_DIRECTORIES as $directory)
         {
-            Filesystem::remove($systemPathBuilder->getStoragePath() . $directory);
+            $filesystem->remove($systemPathBuilder->getStoragePath() . $directory);
         }
         $this->reset_db();
     }

@@ -3,7 +3,6 @@ namespace Chamilo\Core\Repository\ContentObject\File\Common\Rendition\Html;
 
 use Chamilo\Configuration\Configuration;
 use Chamilo\Core\Repository\ContentObject\File\Storage\DataClass\File;
-use Chamilo\Libraries\File\Filesystem;
 use Chamilo\Libraries\Format\Structure\ActionBar\Button;
 use Chamilo\Libraries\Format\Structure\Glyph\FontAwesomeGlyph;
 use Chamilo\Libraries\Format\Utilities\ResourceManager;
@@ -127,6 +126,8 @@ abstract class HtmlInlineOfficeRenditionImplementation extends HtmlInlineRenditi
      */
     public function getErrorMessage()
     {
+        $filesystemTools = $this->getFilesystemTools();
+
         $html = [];
 
         $html[] = '<div class="alert alert-info">';
@@ -134,8 +135,8 @@ abstract class HtmlInlineOfficeRenditionImplementation extends HtmlInlineRenditi
 
         $html[] = Translation::get(
             'LiveViewNotSupported', [
-                'MAX_FILESIZE' => Filesystem::format_file_size($this->getSizeLimit()),
-                'CURRENT_FILESIZE' => Filesystem::format_file_size($this->get_content_object()->get_filesize())
+                'MAX_FILESIZE' => $filesystemTools->formatFileSize($this->getSizeLimit()),
+                'CURRENT_FILESIZE' => $filesystemTools->formatFileSize($this->get_content_object()->get_filesize())
             ]
         );
 

@@ -6,7 +6,6 @@ use Chamilo\Core\User\Manager;
 use Chamilo\Libraries\Architecture\Interfaces\Versionable;
 use Chamilo\Libraries\DependencyInjection\DependencyInjectionContainerBuilder;
 use Chamilo\Libraries\File\Compression\ZipArchive\ZipArchiveFilecompression;
-use Chamilo\Libraries\File\Filesystem;
 use Chamilo\Libraries\File\SystemPathBuilder;
 use Chamilo\Libraries\File\WebPathBuilder;
 use Chamilo\Libraries\Translation\Translation;
@@ -30,9 +29,8 @@ class Hotpotatoes extends ContentObject implements Versionable
     {
         $content = $this->read_file_content();
         $js_content = $this->replace_javascript($content, $postback_url, $goback_url, $tracker_id);
-        $path = $this->write_file_content($js_content);
 
-        return $path;
+        return $this->write_file_content($js_content);
     }
 
     public function delete($only_version = false): bool
@@ -50,7 +48,7 @@ class Hotpotatoes extends ContentObject implements Versionable
         if (Text::is_valid_path($this->get_path()))
         {
             $dir = dirname($this->get_full_path());
-            Filesystem::remove($dir);
+            $this->getFilesystem()->remove($dir);
         }
     }
 
@@ -146,15 +144,15 @@ class Hotpotatoes extends ContentObject implements Versionable
         /**
          * @var \Chamilo\Libraries\File\SystemPathBuilder $systemPathBuilder
          */
-        $systemPathBuilder =
-            DependencyInjectionContainerBuilder::getInstance()->createContainer()->get(SystemPathBuilder::class);
+        $systemPathBuilder = $this->getService(SystemPathBuilder::class);
+        $filesystem = $this->getFilesystem();
 
         $hotpot_path = $systemPathBuilder->getPublicStoragePath(Hotpotatoes::CONTEXT) .
             $this->getSession()->get(Manager::SESSION_USER_ID) . '/';
         $full_path = $hotpot_path . dirname($path_to_zip) . '/';
 
         $dir = $this->getZipArchiveFilecompression()->extractFile($full_path . $zip_file_name);
-        $entries = Filesystem::get_directory_content($dir);
+        $entries = $this->getFilesystemTools()->getDirectoryContent($dir);
 
         foreach ($entries as $entry)
         {
@@ -162,14 +160,16 @@ class Hotpotatoes extends ContentObject implements Versionable
             $full_new_path = $full_path . $filename;
             $new_path = substr($full_new_path, strlen($hotpot_path));
 
-            Filesystem::move_file($entry, $full_new_path, false);
-            if (substr($filename, - 4) == '.htm' || substr($filename, - 5) == '.html')
+            $filesystem->rename($entry, $full_new_path);
+
+            if (str_ends_with($filename, '.htm') || str_ends_with($filename, '.html'))
             {
                 $this->set_path($new_path);
             }
         }
-        Filesystem::remove($dir);
-        Filesystem::remove($full_path . $zip_file_name);
+
+        $filesystem->remove($dir);
+        $filesystem->remove($full_path . $zip_file_name);
     }
 
     private function read_file_content()
@@ -214,18 +214,13 @@ class Hotpotatoes extends ContentObject implements Versionable
         $posthref = '<!-- BeginTopNavButtons --><!-- edited by Chamilo -->';
         $newcontent = str_replace($prehref, $posthref, $newcontent);
 
-        /**
-         * @var \Chamilo\Libraries\File\WebPathBuilder $webPathBuilder
-         */
-        $webPathBuilder =
-            DependencyInjectionContainerBuilder::getInstance()->createContainer()->get(WebPathBuilder::class);
+        $webPathBuilder = $this->getService(WebPathBuilder::class);
 
         $jquery_content = "<head>\n<script src='" . $webPathBuilder->getJavascriptPath(StringUtilities::LIBRARIES) .
             "Plugin/Jquery/jquery.min.js' type='text/javascript'></script>";
         $add_to = '<head>';
-        $newcontent = str_replace($add_to, $jquery_content, $newcontent);
 
-        return $newcontent;
+        return str_replace($add_to, $jquery_content, $newcontent);
     }
 
     public function set_maximum_attempts($value)
@@ -242,7 +237,7 @@ class Hotpotatoes extends ContentObject implements Versionable
     {
         $full_file_path = $this->get_full_path() . '.t.htm';
         $full_web_path = $this->get_full_url() . '.t.htm';
-        Filesystem::remove($full_file_path);
+        $this->getFilesystem()->remove($full_file_path);
 
         if (($fp = fopen(urldecode($full_file_path), 'w')))
         {

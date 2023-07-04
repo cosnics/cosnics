@@ -2,9 +2,8 @@
 namespace Chamilo\Libraries\Test\Integration\DependencyInjection;
 
 use Chamilo\Libraries\Architecture\Test\TestCases\ChamiloTestCase;
-use Chamilo\Libraries\File\Filesystem;
-
 use Chamilo\Libraries\DependencyInjection\DependencyInjectionContainerBuilder;
+use Symfony\Component\Filesystem\Filesystem;
 
 /**
  * Builds the default dependency injection container for Chamilo
@@ -37,6 +36,7 @@ class DependencyInjectionContainerBuilderTest extends ChamiloTestCase
 
         $this->assertInstanceOf('\Symfony\Component\DependencyInjection\ContainerInterface', $container);
 
-        Filesystem::remove($cacheFile);
+        $filesystem = new Filesystem();
+        $filesystem->remove($cacheFile);
     }
 }

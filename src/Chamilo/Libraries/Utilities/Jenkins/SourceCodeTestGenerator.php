@@ -6,6 +6,7 @@ use Chamilo\Configuration\Package\PlatformPackageBundles;
 use Chamilo\Libraries\Architecture\Bootstrap\Bootstrap;
 use Chamilo\Libraries\DependencyInjection\DependencyInjectionContainerBuilder;
 use Chamilo\Libraries\File\SystemPathBuilder;
+use Symfony\Component\Filesystem\Filesystem;
 
 require_once realpath(__DIR__ . '/../../../../') . '/vendor/autoload.php';
 
@@ -34,10 +35,22 @@ class SourceCodeTestGenerator
         $this->process($this->package_list);
     }
 
-    public function getFilesystem(): \Symfony\Component\Filesystem\Filesystem
+    public function getFilesystem(): Filesystem
+    {
+        return $this->getService(Filesystem::class);
+    }
+
+    /**
+     * @template getService
+     *
+     * @param class-string<getService> $serviceName
+     *
+     * @return getService
+     */
+    protected function getService(string $serviceName)
     {
         return DependencyInjectionContainerBuilder::getInstance()->createContainer()->get(
-            \Symfony\Component\Filesystem\Filesystem::class
+            $serviceName
         );
     }
 
@@ -48,10 +61,7 @@ class SourceCodeTestGenerator
      */
     public function get_folder($context)
     {
-        $systemPathBuilder =
-            DependencyInjectionContainerBuilder::getInstance()->createContainer()->get(SystemPathBuilder::class);
-
-        return $systemPathBuilder->namespaceToFullPath($context) . 'test/php/source/';
+        return $this->getService(SystemPathBuilder::class)->namespaceToFullPath($context) . 'test/php/source/';
     }
 
     /**

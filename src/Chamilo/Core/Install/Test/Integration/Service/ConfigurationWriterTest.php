@@ -6,7 +6,6 @@ use Chamilo\Core\Install\Service\ConfigurationWriter;
 use Chamilo\Core\Install\Service\Interfaces\ConfigurationWriterInterface;
 use Chamilo\Libraries\Architecture\ClassnameUtilities;
 use Chamilo\Libraries\Architecture\Test\TestCases\ChamiloTestCase;
-use Chamilo\Libraries\File\Filesystem;
 use Chamilo\Libraries\File\SystemPathBuilder;
 use Chamilo\Libraries\Utilities\StringUtilities;
 
@@ -19,15 +18,17 @@ use Chamilo\Libraries\Utilities\StringUtilities;
 class ConfigurationWriterTest extends ChamiloTestCase
 {
 
-    /**
-     * @var ConfigurationWriterInterface
-     */
-    protected $configurationWriter;
+    protected ConfigurationWriterInterface $configurationWriter;
+
+    protected \Symfony\Component\Filesystem\Filesystem $filesystem;
 
     public function setUp(): void
     {
         $pathBuilder = new SystemPathBuilder(new ClassnameUtilities(new StringUtilities()));
+
+        $this->filesystem = new \Symfony\Component\Filesystem\Filesystem();
         $this->configurationWriter = new ConfigurationWriter(
+            $this->filesystem,
             $pathBuilder->getResourcesPath('Chamilo\Core\Install') . 'Templates/configuration.xml.tpl'
         );
     }
@@ -50,6 +51,6 @@ class ConfigurationWriterTest extends ChamiloTestCase
 
         $this->assertContains('chamilo_test_database', $configurationContents);
 
-        Filesystem::remove($tempPath);
+        $this->filesystem->remove($tempPath);
     }
 }

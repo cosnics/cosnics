@@ -15,6 +15,7 @@ use Chamilo\Libraries\Translation\Translation;
 use Chamilo\Libraries\Utilities\DatetimeUtilities;
 use Chamilo\Libraries\Utilities\StringUtilities;
 use ReflectionClass;
+use Symfony\Component\Filesystem\Filesystem;
 
 /**
  * Class that exports the results of an assessment
@@ -352,21 +353,31 @@ class AssessmentResultsExportController
 
     public function getConfigurablePathBuilder(): ConfigurablePathBuilder
     {
-        return DependencyInjectionContainerBuilder::getInstance()->createContainer()->get(
-            ConfigurablePathBuilder::class
-        );
+        return $this->getService(ConfigurablePathBuilder::class);
     }
 
-    public function getFilesystem(): \Symfony\Component\Filesystem\Filesystem
+    public function getFilesystem(): Filesystem
     {
-        return DependencyInjectionContainerBuilder::getInstance()->createContainer()->get(
-            \Symfony\Component\Filesystem\Filesystem::class
-        );
+        return $this->getService(Filesystem::class);
     }
 
     public function getFilesystemTools(): FilesystemTools
     {
-        return DependencyInjectionContainerBuilder::getInstance()->createContainer()->get(FilesystemTools::class);
+        return $this->getService(FilesystemTools::class);
+    }
+
+    /**
+     * @template getService
+     *
+     * @param class-string<getService> $serviceName
+     *
+     * @return getService
+     */
+    protected function getService(string $serviceName)
+    {
+        return DependencyInjectionContainerBuilder::getInstance()->createContainer()->get(
+            $serviceName
+        );
     }
 
     /**

@@ -16,7 +16,6 @@ use Chamilo\Core\User\Manager;
 use Chamilo\Libraries\Architecture\ClassnameUtilities;
 use Chamilo\Libraries\Architecture\Exceptions\NoObjectSelectedException;
 use Chamilo\Libraries\File\Compression\ZipArchive\ZipArchiveFilecompression;
-use Chamilo\Libraries\File\Filesystem;
 use Chamilo\Libraries\Translation\Translation;
 use Chamilo\Libraries\Utilities\StringUtilities;
 use DOMDocument;

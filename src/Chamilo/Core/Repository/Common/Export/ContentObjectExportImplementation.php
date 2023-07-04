@@ -2,6 +2,8 @@
 namespace Chamilo\Core\Repository\Common\Export;
 
 use Chamilo\Core\Repository\Storage\DataClass\ContentObject;
+use Chamilo\Libraries\DependencyInjection\DependencyInjectionContainerBuilder;
+use Chamilo\Libraries\File\FilesystemTools;
 use Chamilo\Libraries\Utilities\StringUtilities;
 
 /**
@@ -32,6 +34,11 @@ abstract class ContentObjectExportImplementation extends AbstractContentObjectEx
         {
             return new $class($controller, $content_object);
         }
+    }
+
+    public function getFilesystemTools(): FilesystemTools
+    {
+        return DependencyInjectionContainerBuilder::getInstance()->createContainer()->get(FilesystemTools::class);
     }
 
     public static function get_types(array $types = [])

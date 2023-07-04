@@ -1,11 +1,12 @@
 <?php
 namespace Chamilo\Core\Repository\ContentObject\Blog\Storage\DataClass;
 
+use _PHPStan_8862d57cc\Symfony\Component\Finder\Iterator\FileTypeFilterIterator;
 use Chamilo\Core\Repository\ContentObject\BlogItem\Storage\DataClass\BlogItem;
 use Chamilo\Core\Repository\Storage\DataClass\ContentObject;
 use Chamilo\Libraries\Architecture\Interfaces\ComplexContentObjectSupport;
 use Chamilo\Libraries\DependencyInjection\DependencyInjectionContainerBuilder;
-use Chamilo\Libraries\File\Filesystem;
+use Chamilo\Libraries\File\FilesystemTools;
 use Chamilo\Libraries\File\SystemPathBuilder;
 use Chamilo\Libraries\Translation\Translation;
 
@@ -43,13 +44,20 @@ class Blog extends ContentObject implements ComplexContentObjectSupport
     {
         $blog_layouts = [];
 
+        $dependencyInjectionContainer = DependencyInjectionContainerBuilder::getInstance()->createContainer();
+
         /**
          * @var \Chamilo\Libraries\File\SystemPathBuilder $systemPathBuilder
          */
-        $systemPathBuilder =
-            DependencyInjectionContainerBuilder::getInstance()->createContainer()->get(SystemPathBuilder::class);
+        $systemPathBuilder = $dependencyInjectionContainer->get(SystemPathBuilder::class);
+
+        /**
+         * @var \Chamilo\Libraries\File\FilesystemTools $filesystemTools
+         */
+        $filesystemTools = $dependencyInjectionContainer->get(FilesystemTools::class);
+
         $dir = $systemPathBuilder->namespaceToFullPath(Blog::CONTEXT . '\Display\Component\Viewer\BlogLayout');
-        $files = Filesystem::get_directory_content($dir, Filesystem::LIST_FILES, false);
+        $files = $filesystemTools->getDirectoryContent($dir, FileTypeFilterIterator::ONLY_FILES, false);
 
         foreach ($files as $file)
         {

@@ -4,6 +4,7 @@ namespace Chamilo\Core\Install;
 use Chamilo\Core\Install\Observer\InstallerObserver;
 use Chamilo\Core\Install\Storage\DataManager;
 use Chamilo\Libraries\File\SystemPathBuilder;
+use Symfony\Component\Filesystem\Filesystem;
 
 /**
  * @package Chamilo\Core\Install
@@ -12,11 +13,14 @@ use Chamilo\Libraries\File\SystemPathBuilder;
  */
 class Factory
 {
+    protected Filesystem $filesystem;
+
     protected SystemPathBuilder $systemPathBuilder;
 
-    public function __construct(SystemPathBuilder $systemPathBuilder)
+    public function __construct(SystemPathBuilder $systemPathBuilder, Filesystem $filesystem)
     {
         $this->systemPathBuilder = $systemPathBuilder;
+        $this->filesystem = $filesystem;
     }
 
     public function buildConfigurationFromArray(array $values)
@@ -32,11 +36,16 @@ class Factory
         return new DataManager($configuration);
     }
 
-    public function getInstaller(InstallerObserver $installerObserver, Configuration $configuration)
+    public function getFilesystem(): Filesystem
+    {
+        return $this->filesystem;
+    }
+
+    public function getInstaller(InstallerObserver $installerObserver, Configuration $configuration): PlatformInstaller
     {
         $dataManager = $this->getDataManager($configuration);
 
-        return new PlatformInstaller($installerObserver, $configuration, $dataManager, $this->getSystemPathBuilder());
+        return new PlatformInstaller($installerObserver, $configuration, $dataManager, $this->getSystemPathBuilder(), $this->getFilesystem());
     }
 
     public function getInstallerFromArray(InstallerObserver $installerObserver, array $values)

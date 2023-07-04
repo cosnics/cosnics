@@ -1,14 +1,12 @@
 <?php
 namespace Chamilo\Core\Repository\ContentObject\ExternalCalendar\Storage\DataClass;
 
-use Chamilo\Configuration\Configuration;
 use Chamilo\Core\Repository\ContentObject\ExternalCalendar\Service\ExternalCalendarCacheService;
 use Chamilo\Core\Repository\Storage\DataClass\ContentObject;
 use Chamilo\Libraries\Architecture\Interfaces\FileStorageSupport;
 use Chamilo\Libraries\Architecture\Interfaces\Versionable;
 use Chamilo\Libraries\DependencyInjection\DependencyInjectionContainerBuilder;
 use Chamilo\Libraries\File\ConfigurablePathBuilder;
-use Chamilo\Libraries\File\Filesystem;
 use Chamilo\Libraries\Translation\Translation;
 use Chamilo\Libraries\Utilities\String\Text;
 use Chamilo\Libraries\Utilities\StringUtilities;
@@ -142,18 +140,13 @@ class ExternalCalendar extends ContentObject implements Versionable, FileStorage
 
         if (file_exists($full_current_file_path))
         {
-            /**
-             * @var \Chamilo\Libraries\File\ConfigurablePathBuilder $configurablePathBuilder
-             */
-            $configurablePathBuilder = DependencyInjectionContainerBuilder::getInstance()->createContainer()->get(
-                ConfigurablePathBuilder::class
-            );
+            $configurablePathBuilder = $this->getConfigurablePathBuilder();
 
             $filename_hash = md5($this->get_filename());
             $relative_folder_path = $this->get_owner_id() . '/' . Text::char_at($filename_hash, 0);
             $full_folder_path = $configurablePathBuilder->getRepositoryPath() . $relative_folder_path;
 
-            $unique_filename_hash = Filesystem::create_unique_name($full_folder_path, $filename_hash);
+            $unique_filename_hash = $this->getFilesystemTools()->createUniqueName($full_folder_path, $filename_hash);
 
             $path_to_copied_file = $full_folder_path . '/' . $unique_filename_hash;
 
@@ -373,20 +366,16 @@ class ExternalCalendar extends ContentObject implements Versionable, FileStorage
      */
     private function save_file()
     {
-        $save_success = false;
-
         if ($this->has_file_to_save())
         {
             $filename = $this->get_filename();
 
             if (isset($filename))
             {
-                /**
-                 * @var \Chamilo\Libraries\File\ConfigurablePathBuilder $configurablePathBuilder
-                 */
-                $configurablePathBuilder = DependencyInjectionContainerBuilder::getInstance()->createContainer()->get(
-                    ConfigurablePathBuilder::class
-                );
+                $configurablePathBuilder = $this->getConfigurablePathBuilder();
+                $filesystem = $this->getFilesystem();
+                $filesystemTools = $this->getFilesystemTools();
+                $stringUtilities = $this->getStringUtilities();
 
                 /*
                  * Delete current file before to create it again if the object is not saved as a new version @TODO: This
@@ -399,7 +388,7 @@ class ExternalCalendar extends ContentObject implements Versionable, FileStorage
 
                     if (isset($current_path) && is_file($configurablePathBuilder->getRepositoryPath() . $current_path))
                     {
-                        Filesystem::remove($configurablePathBuilder->getRepositoryPath() . $current_path);
+                        $filesystem->remove($configurablePathBuilder->getRepositoryPath() . $current_path);
                     }
                 }
 
@@ -407,45 +396,50 @@ class ExternalCalendar extends ContentObject implements Versionable, FileStorage
                 $relative_folder_path = $this->get_owner_id() . '/' . Text::char_at($filename_hash, 0);
                 $full_folder_path = $configurablePathBuilder->getRepositoryPath() . $relative_folder_path;
 
-                Filesystem::create_dir($full_folder_path);
-                $unique_hash = Filesystem::create_unique_name($full_folder_path, $filename_hash);
+                $filesystem->mkdir($full_folder_path);
+                $unique_hash = $filesystemTools->createUniqueName($full_folder_path, $filename_hash);
 
                 $relative_path = $relative_folder_path . '/' . $unique_hash;
                 $path_to_save = $full_folder_path . '/' . $unique_hash;
 
-                $save_success = false;
-                if (StringUtilities::getInstance()->hasValue($this->temporary_file_path))
+                if ($stringUtilities->hasValue($this->temporary_file_path))
                 {
-                    if (Filesystem::move_file($this->temporary_file_path, $path_to_save, !$as_new_version))
+                    try
                     {
-                        $save_success = true;
+                        $filesystem->rename($this->temporary_file_path, $path_to_save, !$as_new_version);
+                        $saveSuccess = true;
                     }
-                    else
+                    catch (Exception)
                     {
-                        if (Filesystem::copy_file($this->temporary_file_path, $path_to_save, !$as_new_version))
-                        {
-                            if (Filesystem::remove($this->temporary_file_path))
-                            {
-                                $save_success = true;
-                            }
-                        }
+                        $saveSuccess = false;
                     }
                 }
-                elseif (StringUtilities::getInstance()->hasValue($this->in_memory_file) && Filesystem::write_to_file(
-                        $path_to_save, $this->in_memory_file
-                    ))
+                elseif ($stringUtilities->hasValue($this->in_memory_file))
                 {
-                    $save_success = true;
+                    try
+                    {
+                        $filesystem->dumpFile($path_to_save, $this->in_memory_file);
+                        $saveSuccess = true;
+                    }
+                    catch (Exception)
+                    {
+                        $saveSuccess = false;
+                    }
+                }
+                else
+                {
+                    $saveSuccess = false;
                 }
 
-                if ($save_success)
+                if ($saveSuccess)
                 {
-                    Filesystem::chmod(
-                        $path_to_save,
-                        Configuration::getInstance()->get_setting(['Chamilo\Core\Admin', 'permissions_new_files'])
+                    $filesystem->chmod(
+                        $path_to_save, (int) $this->getConfigurationConsulter()->getSetting(
+                        ['Chamilo\Core\Admin', 'permissions_new_files']
+                    )
                     );
 
-                    $file_bytes = Filesystem::get_disk_space($path_to_save);
+                    $file_bytes = $filesystemTools->getDiskSpace($path_to_save);
 
                     $this->set_filesize($file_bytes);
                     $this->set_storage_path($configurablePathBuilder->getRepositoryPath());
@@ -460,11 +454,16 @@ class ExternalCalendar extends ContentObject implements Versionable, FileStorage
             }
             else
             {
+                $saveSuccess = false;
                 $this->addError(Translation::get('FileFilenameNotSet'));
             }
         }
+        else
+        {
+            $saveSuccess = false;
+        }
 
-        return $save_success;
+        return $saveSuccess;
     }
 
     public function send_as_download()

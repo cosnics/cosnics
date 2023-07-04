@@ -3,8 +3,8 @@ namespace Chamilo\Core\Install\Service;
 
 use Chamilo\Core\Install\Configuration;
 use Chamilo\Core\Install\Service\Interfaces\ConfigurationWriterInterface;
-use Chamilo\Libraries\File\Filesystem;
 use InvalidArgumentException;
+use Symfony\Component\Filesystem\Filesystem;
 
 /**
  * Writes the installer configuration to a configuration file
@@ -13,17 +13,20 @@ use InvalidArgumentException;
  */
 class ConfigurationWriter implements ConfigurationWriterInterface
 {
+
     /**
      * @var string
      */
     protected $configurationTemplatePath;
+
+    protected Filesystem $filesystem;
 
     /**
      * XmlConfigurationWriter constructor.
      *
      * @param string $configurationTemplatePath
      */
-    public function __construct($configurationTemplatePath)
+    public function __construct(Filesystem $filesystem, $configurationTemplatePath)
     {
         if (!file_exists($configurationTemplatePath) || !is_readable($configurationTemplatePath))
         {
@@ -32,32 +35,13 @@ class ConfigurationWriter implements ConfigurationWriterInterface
             );
         }
 
+        $this->filesystem = $filesystem;
         $this->configurationTemplatePath = $configurationTemplatePath;
     }
 
-    /**
-     * Writes the installer configuration to a configuration file
-     *
-     * @param Configuration $configuration
-     * @param $outputFile
-     */
-    public function writeConfiguration(Configuration $configuration, $outputFile)
+    public function getFilesystem(): Filesystem
     {
-        $templateContent = $this->readTemplate();
-        $parameters = $this->initializeTemplateParameters($configuration);
-        $templateContent = $this->substituteParameters($templateContent, $parameters);
-
-
-
-        $this->writeConfigurationFile($templateContent, $outputFile);
-    }
-
-    /**
-     * Reads the content of the configuration template file
-     */
-    protected function readTemplate()
-    {
-        return file_get_contents($this->configurationTemplatePath);
+        return $this->filesystem;
     }
 
     /**
@@ -95,6 +79,14 @@ class ConfigurationWriter implements ConfigurationWriterInterface
     }
 
     /**
+     * Reads the content of the configuration template file
+     */
+    protected function readTemplate()
+    {
+        return file_get_contents($this->configurationTemplatePath);
+    }
+
+    /**
      * Substitutes the given parameters in the given configuration content
      *
      * @param string $configurationContent
@@ -104,12 +96,27 @@ class ConfigurationWriter implements ConfigurationWriterInterface
      */
     protected function substituteParameters($configurationContent, $parameters = [])
     {
-        foreach($parameters as $variable => $value)
+        foreach ($parameters as $variable => $value)
         {
             $configurationContent = str_replace('{' . $variable . '}', $value, $configurationContent);
         }
 
         return $configurationContent;
+    }
+
+    /**
+     * Writes the installer configuration to a configuration file
+     *
+     * @param Configuration $configuration
+     * @param $outputFile
+     */
+    public function writeConfiguration(Configuration $configuration, $outputFile)
+    {
+        $templateContent = $this->readTemplate();
+        $parameters = $this->initializeTemplateParameters($configuration);
+        $templateContent = $this->substituteParameters($templateContent, $parameters);
+
+        $this->writeConfigurationFile($templateContent, $outputFile);
     }
 
     /**
@@ -122,7 +129,7 @@ class ConfigurationWriter implements ConfigurationWriterInterface
     {
         if (!is_dir(dirname($outputFile)))
         {
-            Filesystem::create_dir($outputFile);
+            $this->getFilesystem()->mkdir($outputFile);
         }
 
         if (!is_writable(dirname($outputFile)))
@@ -132,6 +139,6 @@ class ConfigurationWriter implements ConfigurationWriterInterface
             );
         }
 
-        file_put_contents($outputFile, $configurationContent);
+        $this->getFilesystem()->dumpFile($outputFile, $configurationContent);
     }
 }

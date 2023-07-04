@@ -5,8 +5,8 @@ use Chamilo\Configuration\Package\PackageList;
 use Chamilo\Configuration\Package\PlatformPackageBundles;
 use Chamilo\Libraries\Architecture\Bootstrap\Bootstrap;
 use Chamilo\Libraries\DependencyInjection\DependencyInjectionContainerBuilder;
-use Chamilo\Libraries\File\Filesystem;
 use Chamilo\Libraries\File\SystemPathBuilder;
+use Symfony\Component\Filesystem\Filesystem;
 
 require_once realpath(__DIR__ . '/../../../../') . '/vendor/autoload.php';
 
@@ -38,7 +38,7 @@ class JobGenerator
         $this->process($this->package_list);
     }
 
-    public function getFilesystem(): \Symfony\Component\Filesystem\Filesystem
+    public function getFilesystem(): Filesystem
     {
         return DependencyInjectionContainerBuilder::getInstance()->createContainer()->get(
             Filesystem::class

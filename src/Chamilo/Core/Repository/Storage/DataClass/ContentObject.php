@@ -2,6 +2,7 @@
 namespace Chamilo\Core\Repository\Storage\DataClass;
 
 use Chamilo\Configuration\Configuration;
+use Chamilo\Configuration\Service\Consulter\ConfigurationConsulter;
 use Chamilo\Core\Repository\Common\ContentObjectDifference;
 use Chamilo\Core\Repository\Common\Path\ComplexContentObjectPath;
 use Chamilo\Core\Repository\Publication\Service\PublicationAggregator;
@@ -18,6 +19,7 @@ use Chamilo\Libraries\Architecture\Interfaces\AttachmentSupport;
 use Chamilo\Libraries\Architecture\Interfaces\ComplexContentObjectSupport;
 use Chamilo\Libraries\Architecture\Interfaces\Versionable;
 use Chamilo\Libraries\DependencyInjection\DependencyInjectionContainerBuilder;
+use Chamilo\Libraries\File\ConfigurablePathBuilder;
 use Chamilo\Libraries\File\FilesystemTools;
 use Chamilo\Libraries\File\SystemPathBuilder;
 use Chamilo\Libraries\Format\Structure\Glyph\IdentGlyph;
@@ -41,6 +43,7 @@ use Chamilo\Libraries\Storage\Query\Variable\StaticConditionVariable;
 use Chamilo\Libraries\Translation\Translation;
 use Chamilo\Libraries\Utilities\StringUtilities;
 use Exception;
+use Symfony\Component\Filesystem\Filesystem;
 use Symfony\Component\Uid\Uuid;
 
 /**
@@ -732,6 +735,16 @@ class ContentObject extends CompositeDataClass
         }
     }
 
+    protected function getConfigurablePathBuilder(): ConfigurablePathBuilder
+    {
+        return $this->getService(ConfigurablePathBuilder::class);
+    }
+
+    protected function getConfigurationConsulter(): ConfigurationConsulter
+    {
+        return $this->getService(ConfigurationConsulter::class);
+    }
+
     protected function getContentObjectRelationService(): ContentObjectRelationService
     {
         return $this->getService(ContentObjectRelationService::class);
@@ -781,6 +794,11 @@ class ContentObject extends CompositeDataClass
         );
     }
 
+    public function getFilesystem(): Filesystem
+    {
+        return $this->getService(Filesystem::class);
+    }
+
     protected function getFilesystemTools(): FilesystemTools
     {
         return $this->getService(FilesystemTools::class);
@@ -828,20 +846,17 @@ class ContentObject extends CompositeDataClass
         }
     }
 
-    /**
-     * @return \Chamilo\Core\Repository\Publication\Service\PublicationAggregatorInterface
-     * @throws \Exception
-     */
-    public function getPublicationAggregator()
+    public function getPublicationAggregator(): PublicationAggregator
     {
         return $this->getService(PublicationAggregator::class);
     }
 
     /**
-     * @param string $serviceName
+     * @template getService
      *
-     * @return object
-     * @throws \Exception
+     * @param class-string<getService> $serviceName
+     *
+     * @return getService
      */
     protected function getService(string $serviceName)
     {
@@ -866,11 +881,15 @@ class ContentObject extends CompositeDataClass
         return 'repository_content_object';
     }
 
+    protected function getStringUtilities(): StringUtilities
+    {
+        return $this->getService(StringUtilities::class);
+    }
+
     /**
      * @return \Chamilo\Core\Repository\Service\TemplateRegistrationConsulter
-     * @throws \Exception
      */
-    public function getTemplateRegistrationConsulter()
+    public function getTemplateRegistrationConsulter(): TemplateRegistrationConsulter
     {
         return $this->getService(TemplateRegistrationConsulter::class);
     }

@@ -119,19 +119,6 @@ class LearningPath extends ContentObject implements ComplexContentObjectSupport,
         return $this->getService(LearningPathService::class);
     }
 
-    /**
-     * @param string $serviceName
-     *
-     * @return object
-     * @throws \Exception
-     */
-    protected function getService(string $serviceName)
-    {
-        return DependencyInjectionContainerBuilder::getInstance()->createContainer()->get(
-            $serviceName
-        );
-    }
-
     public function getSession(): SessionInterface
     {
         return $this->getService(SessionInterface::class);

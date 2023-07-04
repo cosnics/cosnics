@@ -6,7 +6,6 @@ use Chamilo\Core\Repository\ContentObject\File\Storage\DataClass\File;
 use Chamilo\Core\Repository\Manager;
 use Chamilo\Core\Repository\Storage\DataClass\ContentObject;
 use Chamilo\Libraries\DependencyInjection\Traits\DependencyInjectionContainerTrait;
-use Chamilo\Libraries\File\Filesystem;
 use Chamilo\Libraries\Format\Structure\ActionBar\Button;
 use Chamilo\Libraries\Format\Structure\ActionBar\ButtonToolBar;
 use Chamilo\Libraries\Format\Structure\ActionBar\Renderer\ButtonToolBarRenderer;
@@ -24,7 +23,7 @@ class HtmlRenditionImplementation extends RenditionImplementation
         $object = $this->get_content_object();
         $name = $object->get_filename();
 
-        $label = '<small>(' . Filesystem::format_file_size($object->get_filesize()) . ')</small>';
+        $label = '<small>(' . $this->getFilesystemTools()->formatFileSize($object->get_filesize()) . ')</small>';
 
         $buttonToolBar = new ButtonToolBar();
 

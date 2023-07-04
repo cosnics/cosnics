@@ -5,7 +5,6 @@ use Chamilo\Core\Repository\Storage\DataClass\ComplexContentObjectItem;
 use Chamilo\Core\User\Manager;
 use Chamilo\Libraries\DependencyInjection\DependencyInjectionContainerBuilder;
 use Chamilo\Libraries\File\Compression\ZipArchive\ZipArchiveFilecompression;
-use Chamilo\Libraries\File\Filesystem;
 use Chamilo\Libraries\File\SystemPathBuilder;
 use Chamilo\Libraries\File\WebPathBuilder;
 use Chamilo\Libraries\Translation\Translation;
@@ -39,7 +38,7 @@ class ComplexHotpotatoes extends ComplexContentObjectItem
     public function delete_file()
     {
         $dir = dirname($this->get_full_path());
-        Filesystem::remove($dir);
+        $this->getFilesystem()->remove($dir);
     }
 
     public static function getAdditionalPropertyNames(): array
@@ -49,14 +48,12 @@ class ComplexHotpotatoes extends ComplexContentObjectItem
 
     public function getSession(): SessionInterface
     {
-        return DependencyInjectionContainerBuilder::getInstance()->createContainer()->get(SessionInterface::class);
+        return $this->getService(SessionInterface::class);
     }
 
     protected function getZipArchiveFilecompression(): ZipArchiveFilecompression
     {
-        return DependencyInjectionContainerBuilder::getInstance()->createContainer()->get(
-            ZipArchiveFilecompression::class
-        );
+        return $this->getService(ZipArchiveFilecompression::class);
     }
 
     public function get_assessment_type()
@@ -127,15 +124,15 @@ class ComplexHotpotatoes extends ComplexContentObjectItem
         /**
          * @var \Chamilo\Libraries\File\SystemPathBuilder $systemPathBuilder
          */
-        $systemPathBuilder =
-            DependencyInjectionContainerBuilder::getInstance()->createContainer()->get(SystemPathBuilder::class);
+        $systemPathBuilder = $this->getService(SystemPathBuilder::class);
+        $filesystem = $this->getFilesystem();
 
         $hotpot_path = $systemPathBuilder->getPublicStoragePath(Hotpotatoes::CONTEXT) .
             $this->getSession()->get(Manager::SESSION_USER_ID) . '/';
         $full_path = $hotpot_path . dirname($path_to_zip) . '/';
 
         $dir = $this->getZipArchiveFilecompression()->extractFile($full_path . $zip_file_name);
-        $entries = Filesystem::get_directory_content($dir);
+        $entries = $this->getFilesystemTools()->getDirectoryContent($dir);
 
         foreach ($entries as $entry)
         {
@@ -143,14 +140,16 @@ class ComplexHotpotatoes extends ComplexContentObjectItem
             $full_new_path = $full_path . $filename;
             $new_path = substr($full_new_path, strlen($hotpot_path));
 
-            Filesystem::move_file($entry, $full_new_path, false);
+            $filesystem->rename($entry, $full_new_path, false);
+
             if (substr($filename, - 4) == '.htm' || substr($filename, - 5) == '.html')
             {
                 $this->set_path($new_path);
             }
         }
-        Filesystem::remove($dir);
-        Filesystem::remove($full_path . $zip_file_name);
+
+        $filesystem->remove($dir);
+        $filesystem->remove($full_path . $zip_file_name);
     }
 
     private function read_file_content()
@@ -223,7 +222,7 @@ class ComplexHotpotatoes extends ComplexContentObjectItem
     {
         $full_file_path = $this->get_full_path() . '.t.htm';
         $full_web_path = $this->get_full_url() . '.t.htm';
-        Filesystem::remove($full_file_path);
+        $this->getFilesystem()->remove($full_file_path);
 
         if (($fp = fopen(urldecode($full_file_path), 'w')))
         {

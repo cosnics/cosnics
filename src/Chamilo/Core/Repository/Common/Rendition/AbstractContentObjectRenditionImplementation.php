@@ -4,12 +4,11 @@ namespace Chamilo\Core\Repository\Common\Rendition;
 use Chamilo\Core\Repository\Storage\DataClass\ContentObject;
 use Chamilo\Libraries\DependencyInjection\DependencyInjectionContainerBuilder;
 use Chamilo\Libraries\File\ConfigurablePathBuilder;
-use Chamilo\Libraries\File\SystemPathBuilder;
+use Chamilo\Libraries\File\FilesystemTools;
 use Chamilo\Libraries\File\WebPathBuilder;
 
 /**
- * @package repository.lib
- *          A class to render a ContentObject.
+ * @package Chamilo\Core\Repository\Common\Rendition
  */
 abstract class AbstractContentObjectRenditionImplementation
 {
@@ -21,14 +20,33 @@ abstract class AbstractContentObjectRenditionImplementation
         $this->content_object = $content_object;
     }
 
-    public function getWebPathBuilder(): WebPathBuilder
-    {
-        return DependencyInjectionContainerBuilder::getInstance()->createContainer()->get(WebPathBuilder::class);
-    }
-
     public function getConfigurablePathBuilder(): ConfigurablePathBuilder
     {
-        return DependencyInjectionContainerBuilder::getInstance()->createContainer()->get(ConfigurablePathBuilder::class);
+        return $this->getService(ConfigurablePathBuilder::class);
+    }
+
+    public function getFilesystemTools(): FilesystemTools
+    {
+        return $this->getService(FilesystemTools::class);
+    }
+
+    /**
+     * @template getService
+     *
+     * @param class-string<getService> $serviceName
+     *
+     * @return getService
+     */
+    protected function getService(string $serviceName)
+    {
+        return DependencyInjectionContainerBuilder::getInstance()->createContainer()->get(
+            $serviceName
+        );
+    }
+
+    public function getWebPathBuilder(): WebPathBuilder
+    {
+        return $this->getService(WebPathBuilder::class);
     }
 
     /**

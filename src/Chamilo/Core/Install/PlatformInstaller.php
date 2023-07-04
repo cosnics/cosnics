@@ -10,12 +10,12 @@ use Chamilo\Core\Install\Service\ConfigurationWriter;
 use Chamilo\Libraries\Architecture\ClassnameUtilities;
 use Chamilo\Libraries\DependencyInjection\DependencyInjectionContainerBuilder;
 use Chamilo\Libraries\DependencyInjection\ExtensionFinder\PackagesContainerExtensionFinder;
-use Chamilo\Libraries\File\Filesystem;
 use Chamilo\Libraries\File\PackagesContentFinder\PackagesClassFinder;
 use Chamilo\Libraries\File\SystemPathBuilder;
 use Chamilo\Libraries\Translation\Translation;
 use Chamilo\Libraries\Utilities\StringUtilities;
 use Exception;
+use Symfony\Component\Filesystem\Filesystem;
 
 /**
  * @package Chamilo\Core\Install
@@ -24,6 +24,8 @@ use Exception;
  */
 class PlatformInstaller
 {
+
+    protected Filesystem $filesystem;
 
     protected SystemPathBuilder $systemPathBuilder;
 
@@ -54,13 +56,14 @@ class PlatformInstaller
 
     public function __construct(
         InstallerObserver $installerObserver, Configuration $configuration, $dataManager,
-        SystemPathBuilder $systemPathBuilder
+        SystemPathBuilder $systemPathBuilder, Filesystem $filesystem
     )
     {
         $this->installerObserver = $installerObserver;
         $this->configuration = $configuration;
         $this->dataManager = $dataManager;
         $this->systemPathBuilder = $systemPathBuilder;
+        $this->filesystem = $filesystem;
 
         $this->configurationFilePath = $systemPathBuilder->getStoragePath() . 'configuration/configuration.xml';
         $this->packages = [];
@@ -138,7 +141,11 @@ class PlatformInstaller
         {
             if (!file_exists($directory))
             {
-                if (!Filesystem::create_dir($directory))
+                try
+                {
+                    $this->getFilesystem()->mkdir($directory);
+                }
+                catch (Exception)
                 {
                     throw new Exception(Translation::get('FoldersCreatedFailed'));
                 }
@@ -147,7 +154,11 @@ class PlatformInstaller
 
         $publicFilesPath = $this->getSystemPathBuilder()->getPublicStoragePath();
 
-        if (!Filesystem::create_dir($publicFilesPath))
+        try
+        {
+            $this->getFilesystem()->mkdir($publicFilesPath);
+        }
+        catch (Exception)
         {
             throw new Exception(Translation::get('FoldersCreatedFailed'));
         }
@@ -157,6 +168,11 @@ class PlatformInstaller
         );
 
         return implode(PHP_EOL, $html);
+    }
+
+    public function getFilesystem(): Filesystem
+    {
+        return $this->filesystem;
     }
 
     /**
@@ -306,7 +322,7 @@ class PlatformInstaller
             $configurationTemplatePath =
                 $pathBuilder->getTemplatesPath('Chamilo\Core\Install') . 'configuration.xml.tpl';
 
-            $configurationWriter = new ConfigurationWriter($configurationTemplatePath);
+            $configurationWriter = new ConfigurationWriter($this->getFilesystem(), $configurationTemplatePath);
             $configurationWriter->writeConfiguration($this->configuration, $this->configurationFilePath);
 
             $result = true;

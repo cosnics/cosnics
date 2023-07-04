@@ -81,24 +81,32 @@ class Html extends BlockRendition
         }
     }
 
-    protected function getLinkTabsRenderer(): LinkTabsRenderer
+    protected function getFilesystem(): Filesystem
     {
-        return DependencyInjectionContainerBuilder::getInstance()->createContainer()->get(
-            LinkTabsRenderer::class
-        );
+        return $this->getService(Filesystem::class);
     }
 
     protected function getFilesystemTools(): FilesystemTools
     {
-        return DependencyInjectionContainerBuilder::getInstance()->createContainer()->get(
-            FilesystemTools::class
-        );
+        return $this->getService(FilesystemTools::class);
     }
 
-    protected function getFilesystem(): Filesystem
+    protected function getLinkTabsRenderer(): LinkTabsRenderer
+    {
+        return $this->getService(LinkTabsRenderer::class);
+    }
+
+    /**
+     * @template getService
+     *
+     * @param class-string<getService> $serviceName
+     *
+     * @return getService
+     */
+    protected function getService(string $serviceName)
     {
         return DependencyInjectionContainerBuilder::getInstance()->createContainer()->get(
-            Filesystem::class
+            $serviceName
         );
     }
 }

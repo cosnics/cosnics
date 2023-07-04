@@ -19,6 +19,7 @@ use Chamilo\Libraries\Storage\Parameters\DataClassRetrievesParameters;
 use Chamilo\Libraries\Storage\Query\Condition\InCondition;
 use Chamilo\Libraries\Storage\Query\Variable\PropertyConditionVariable;
 use Chamilo\Libraries\Translation\Translation;
+use Symfony\Component\Filesystem\Filesystem;
 
 /**
  * @package repository
@@ -202,16 +203,17 @@ class ContentObjectCopier
         );
     }
 
-    public function getFilesystem(): \Symfony\Component\Filesystem\Filesystem
+    public function getFilesystem(): Filesystem
     {
-        return $this->getService(\Symfony\Component\Filesystem\Filesystem::class);
+        return $this->getService(Filesystem::class);
     }
 
     /**
-     * @param string $serviceName
+     * @template getService
      *
-     * @return object
-     * @throws \Exception
+     * @param class-string<getService> $serviceName
+     *
+     * @return getService
      */
     protected function getService(string $serviceName)
     {

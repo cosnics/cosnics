@@ -12,14 +12,13 @@ use Chamilo\Core\Repository\ContentObject\Assessment\ResultsExporter\AssessmentR
 use Chamilo\Core\Repository\ContentObject\Assessment\ResultsExporter\AssessmentResultsExportController;
 use Chamilo\Core\Repository\ContentObject\Assessment\ResultsExporter\QuestionResult;
 use Chamilo\Libraries\Architecture\Exceptions\NotAllowedException;
-use Chamilo\Libraries\File\Filesystem;
 use Chamilo\Libraries\Format\Structure\BreadcrumbTrail;
 use Chamilo\Libraries\Platform\Session\Request;
-use Chamilo\Libraries\Translation\Translation;
 use Chamilo\Libraries\Storage\Parameters\DataClassRetrievesParameters;
 use Chamilo\Libraries\Storage\Query\Condition\EqualityCondition;
 use Chamilo\Libraries\Storage\Query\Variable\PropertyConditionVariable;
 use Chamilo\Libraries\Storage\Query\Variable\StaticConditionVariable;
+use Chamilo\Libraries\Translation\Translation;
 
 /**
  * Description of raw_export_results

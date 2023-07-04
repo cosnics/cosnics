@@ -5,12 +5,15 @@ use Chamilo\Core\Repository\Manager;
 use Chamilo\Core\Repository\Storage\DataManager;
 use Chamilo\Libraries\Architecture\ClassnameUtilities;
 use Chamilo\Libraries\Architecture\Exceptions\ClassNotExistException;
+use Chamilo\Libraries\DependencyInjection\DependencyInjectionContainerBuilder;
+use Chamilo\Libraries\File\FilesystemTools;
 use Chamilo\Libraries\Storage\DataClass\CompositeDataClass;
 use Chamilo\Libraries\Storage\DataClass\Listeners\DisplayOrderDataClassListener;
 use Chamilo\Libraries\Storage\DataClass\Listeners\DisplayOrderDataClassListenerSupport;
 use Chamilo\Libraries\Storage\Query\Variable\PropertyConditionVariable;
 use Chamilo\Libraries\Translation\Translation;
 use Chamilo\Libraries\Utilities\StringUtilities;
+use Symfony\Component\Filesystem\Filesystem;
 
 /**
  * @package repository.lib
@@ -138,6 +141,30 @@ class ComplexContentObjectItem extends CompositeDataClass implements DisplayOrde
     public function getDisplayOrderProperty(): PropertyConditionVariable
     {
         return new PropertyConditionVariable(ComplexContentObjectItem::class, self::PROPERTY_DISPLAY_ORDER);
+    }
+
+    public function getFilesystem(): Filesystem
+    {
+        return $this->getService(Filesystem::class);
+    }
+
+    protected function getFilesystemTools(): FilesystemTools
+    {
+        return $this->getService(FilesystemTools::class);
+    }
+
+    /**
+     * @template getService
+     *
+     * @param class-string<getService> $serviceName
+     *
+     * @return getService
+     */
+    protected function getService(string $serviceName)
+    {
+        return DependencyInjectionContainerBuilder::getInstance()->createContainer()->get(
+            $serviceName
+        );
     }
 
     /**

@@ -5,7 +5,6 @@ use Chamilo\Core\Repository\Common\Rendition\ContentObjectRendition;
 use Chamilo\Core\Repository\ContentObject\ExternalCalendar\Common\Rendition\HtmlRenditionImplementation;
 use Chamilo\Core\Repository\ContentObject\ExternalCalendar\Storage\DataClass\ExternalCalendar;
 use Chamilo\Core\Repository\Manager;
-use Chamilo\Libraries\File\Filesystem;
 use Chamilo\Libraries\Platform\Session\Request;
 use Chamilo\Libraries\Translation\Translation;
 use Chamilo\Libraries\Utilities\DatetimeUtilities;
@@ -70,7 +69,7 @@ class HtmlDescriptionRenditionImplementation extends HtmlRenditionImplementation
                     );
 
                 $html[] = '<div><a href="' . htmlentities($url) . '">' . htmlentities($name) . '</a> (' .
-                    Filesystem::format_file_size($object->get_filesize()) . ')</div>';
+                    $this->getFilesystemTools()->formatFileSize($object->get_filesize()) . ')</div>';
             }
 
             try

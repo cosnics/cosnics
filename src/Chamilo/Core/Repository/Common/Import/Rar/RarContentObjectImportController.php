@@ -9,7 +9,6 @@ use Chamilo\Core\Repository\Storage\DataClass\RepositoryCategory;
 use Chamilo\Core\Repository\Storage\DataManager;
 use Chamilo\Core\Repository\Workspace\Storage\DataClass\Workspace;
 use Chamilo\Core\User\Storage\DataClass\User;
-use Chamilo\Libraries\File\Filesystem;
 use Chamilo\Libraries\Translation\Translation;
 use RarArchive;
 

@@ -12,7 +12,6 @@ use Chamilo\Core\Repository\Storage\DataClass\ContentObject;
 use Chamilo\Core\Repository\Storage\DataManager;
 use Chamilo\Libraries\Architecture\Exceptions\UserException;
 use Chamilo\Libraries\File\Compression\ZipArchive\ZipArchiveFilecompression;
-use Chamilo\Libraries\File\Filesystem;
 use Chamilo\Libraries\Format\Structure\BreadcrumbTrail;
 use Chamilo\Libraries\Storage\Parameters\DataClassRetrievesParameters;
 use Chamilo\Libraries\Storage\Query\Condition\AndCondition;
