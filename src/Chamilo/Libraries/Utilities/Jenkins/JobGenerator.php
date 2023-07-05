@@ -2,10 +2,11 @@
 namespace Chamilo\Libraries\Utilities\Jenkins;
 
 use Chamilo\Configuration\Package\PackageList;
-use Chamilo\Configuration\Package\PlatformPackageBundles;
+use Chamilo\Configuration\Package\Service\PackageBundlesCacheService;
 use Chamilo\Libraries\Architecture\Bootstrap\Bootstrap;
 use Chamilo\Libraries\DependencyInjection\DependencyInjectionContainerBuilder;
 use Chamilo\Libraries\File\SystemPathBuilder;
+use Exception;
 use Symfony\Component\Filesystem\Filesystem;
 
 require_once realpath(__DIR__ . '/../../../../') . '/vendor/autoload.php';
@@ -135,8 +136,20 @@ class JobGenerator
 $container = DependencyInjectionContainerBuilder::getInstance()->createContainer();
 $container->get(Bootstrap::class)->setup();
 
-$package_list = PlatformPackageBundles::getInstance()->get_package_list();
-$job_path = 'E:/jenkins/';
+try
+{
+    /**
+     * @var \Chamilo\Configuration\Package\Service\PackageBundlesCacheService $packageBundlesCacheService
+     */
+    $packageBundlesCacheService = $container->get(PackageBundlesCacheService::class);
+    $packageList = $packageBundlesCacheService->getAllPackages();
 
-$generator = new JobGenerator($package_list, $job_path);
-$generator->run();
+    $job_path = 'E:/jenkins/';
+
+    $generator = new JobGenerator($packageList, $job_path);
+    $generator->run();
+}
+catch (Exception)
+{
+
+}

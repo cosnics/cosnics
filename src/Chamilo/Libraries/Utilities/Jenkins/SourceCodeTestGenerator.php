@@ -2,10 +2,11 @@
 namespace Chamilo\Libraries\Utilities\Jenkins;
 
 use Chamilo\Configuration\Package\PackageList;
-use Chamilo\Configuration\Package\PlatformPackageBundles;
+use Chamilo\Configuration\Package\Service\PackageBundlesCacheService;
 use Chamilo\Libraries\Architecture\Bootstrap\Bootstrap;
 use Chamilo\Libraries\DependencyInjection\DependencyInjectionContainerBuilder;
 use Chamilo\Libraries\File\SystemPathBuilder;
+use Exception;
 use Symfony\Component\Filesystem\Filesystem;
 
 require_once realpath(__DIR__ . '/../../../../') . '/vendor/autoload.php';
@@ -153,7 +154,18 @@ class CheckSourceCodeTest extends \libraries\architecture\test\source\CheckSourc
 $container = DependencyInjectionContainerBuilder::getInstance()->createContainer();
 $container->get(Bootstrap::class)->setup();
 
-$package_list = PlatformPackageBundles::getInstance()->get_package_list();
+try
+{
+    /**
+     * @var \Chamilo\Configuration\Package\Service\PackageBundlesCacheService $packageBundlesCacheService
+     */
+    $packageBundlesCacheService = $container->get(PackageBundlesCacheService::class);
+    $packageList = $packageBundlesCacheService->getAllPackages();
 
-$generator = new SourceCodeTestGenerator($package_list);
-$generator->run();
+    $generator = new SourceCodeTestGenerator($packageList);
+    $generator->run();
+}
+catch (Exception)
+{
+
+}

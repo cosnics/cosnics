@@ -2,12 +2,13 @@
 namespace Chamilo\Libraries\Utilities\Jenkins;
 
 use Chamilo\Configuration\Package\PackageList;
-use Chamilo\Configuration\Package\PlatformPackageBundles;
+use Chamilo\Configuration\Package\Service\PackageBundlesCacheService;
 use Chamilo\Libraries\Architecture\Bootstrap\Bootstrap;
 use Chamilo\Libraries\Architecture\ClassnameUtilities;
 use Chamilo\Libraries\DependencyInjection\DependencyInjectionContainerBuilder;
 use Chamilo\Libraries\File\SystemPathBuilder;
 use Chamilo\Libraries\Translation\Translation;
+use Exception;
 use Symfony\Component\Filesystem\Filesystem;
 
 require_once realpath(__DIR__ . '/../../../../') . '/vendor/autoload.php';
@@ -875,10 +876,21 @@ class BuildGenerator
 $container = DependencyInjectionContainerBuilder::getInstance()->createContainer();
 $container->get(Bootstrap::class)->setup();
 
-$package_list = PlatformPackageBundles::getInstance()->get_package_list();
+try
+{
+    /**
+     * @var \Chamilo\Configuration\Package\Service\PackageBundlesCacheService $packageBundlesCacheService
+     */
+    $packageBundlesCacheService = $container->get(PackageBundlesCacheService::class);
+    $packageList = $packageBundlesCacheService->getAllPackages();
 
-$web_url = 'http://10.2.201.104/html/jenkins/dev/';
-$system_url = '/var/www/html/jenkins/dev/';
+    $web_url = 'http://10.2.201.104/html/jenkins/dev/';
+    $system_url = '/var/www/html/jenkins/dev/';
 
-$generator = new BuildGenerator($package_list, $web_url, $system_url);
-$generator->run();
+    $generator = new BuildGenerator($packageList, $web_url, $system_url);
+    $generator->run();
+}
+catch (Exception)
+{
+
+}
