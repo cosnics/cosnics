@@ -92,7 +92,7 @@
             <tag name="Symfony\Component\Cache\Adapter"/>
             <factory service="Chamilo\Libraries\Cache\SymfonyCacheAdapterFactory"
                      method="createFilesystemAdapter"/>
-            <argument key="$namespace">Chamilo\Configuration\Package\PlatformPackageBundles</argument>
+            <argument key="$namespace">Chamilo\Configuration\Package\PackageBundles</argument>
         </service>
 
         <service id="Chamilo\Configuration\Service\PackageContextSequencer"/>

@@ -7,20 +7,13 @@ use Chamilo\Configuration\Package\Service\PackageFactory;
 
 /**
  * @package Chamilo\Configuration\Service
- *
- * @author Hans De Bisschop <hans.de.bisschop@ehb.be>
+ * @author  Hans De Bisschop <hans.de.bisschop@ehb.be>
  */
 class PackageContextSequencer
 {
 
-    /**
-     * @var \Chamilo\Configuration\Package\Service\PackageFactory
-     */
-    private $packageFactory;
+    private PackageFactory $packageFactory;
 
-    /**
-     * @param \Chamilo\Configuration\Package\Service\PackageFactory $packageFactory
-     */
     public function __construct(PackageFactory $packageFactory)
     {
         $this->packageFactory = $packageFactory;
@@ -32,7 +25,7 @@ class PackageContextSequencer
      *
      * @throws \Exception
      */
-    public function checkAdditionalPackageContexts(array &$packageContexts, string $packageContext)
+    public function checkAdditionalPackageContexts(array &$packageContexts, string $packageContext): void
     {
         $package = $this->getPackageFactory()->getPackage($packageContext);
 
@@ -54,7 +47,7 @@ class PackageContextSequencer
      *
      * @throws \Exception
      */
-    protected function checkPackageContextDependencies(array &$packageContexts, string $packageContext)
+    protected function checkPackageContextDependencies(array &$packageContexts, string $packageContext): void
     {
         $package = $this->getPackageFactory()->getPackage($packageContext);
         $this->processDependencies($packageContexts, $package->get_dependencies());
@@ -66,7 +59,7 @@ class PackageContextSequencer
      *
      * @throws \Exception
      */
-    protected function checkPackageContextIntegrations(array &$packageContexts, string $packageTargetContext)
+    protected function checkPackageContextIntegrations(array &$packageContexts, string $packageTargetContext): void
     {
         foreach ($packageContexts as $packageSourceContext)
         {
@@ -90,7 +83,7 @@ class PackageContextSequencer
      *
      * @throws \Exception
      */
-    protected function expandPackageContexts(array &$packageContexts)
+    protected function expandPackageContexts(array &$packageContexts): void
     {
         foreach ($packageContexts as $packageContext)
         {
@@ -109,24 +102,12 @@ class PackageContextSequencer
     }
 
     /**
-     * @param \Chamilo\Configuration\Package\Service\PackageFactory $packageFactory
-     *
-     * @return PackageContextSequencer
-     */
-    public function setPackageFactory(PackageFactory $packageFactory): PackageContextSequencer
-    {
-        $this->packageFactory = $packageFactory;
-
-        return $this;
-    }
-
-    /**
      * @param string[] $packageContexts
      * @param \Chamilo\Configuration\Package\Properties\Dependencies\Dependencies|null $dependencies
      *
      * @throws \Exception
      */
-    public function processDependencies(array &$packageContexts, Dependencies $dependencies = null)
+    public function processDependencies(array &$packageContexts, Dependencies $dependencies = null): void
     {
         if ($dependencies instanceof Dependencies)
         {
@@ -147,10 +128,9 @@ class PackageContextSequencer
      * @param string[] $packageContexts
      *
      * @return string[]
-     *
      * @throws \Exception
      */
-    public function sequencePackageContexts(array $packageContexts)
+    public function sequencePackageContexts(array $packageContexts): array
     {
         $this->expandPackageContexts($packageContexts);
 
@@ -166,11 +146,23 @@ class PackageContextSequencer
             }
             else
             {
-                array_push($packageContexts, $unprocessed_package_context);
+                $packageContexts[] = $unprocessed_package_context;
             }
         }
 
         return $sequence;
+    }
+
+    /**
+     * @param \Chamilo\Configuration\Package\Service\PackageFactory $packageFactory
+     *
+     * @return PackageContextSequencer
+     */
+    public function setPackageFactory(PackageFactory $packageFactory): PackageContextSequencer
+    {
+        $this->packageFactory = $packageFactory;
+
+        return $this;
     }
 
     /**
@@ -179,7 +171,7 @@ class PackageContextSequencer
      *
      * @return bool
      */
-    public function verifyDependency(array &$sequence, $dependency)
+    public function verifyDependency(array &$sequence, Dependencies|Dependency $dependency): bool
     {
         if ($dependency instanceof Dependencies)
         {
@@ -192,16 +184,9 @@ class PackageContextSequencer
 
             return $result;
         }
-        elseif ($dependency instanceof Dependency)
+        elseif (!in_array($dependency->get_id(), $sequence))
         {
-            if (!in_array($dependency->get_id(), $sequence))
-            {
-                return false;
-            }
-            else
-            {
-                return true;
-            }
+            return false;
         }
         else
         {

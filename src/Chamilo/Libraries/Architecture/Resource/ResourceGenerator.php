@@ -1,11 +1,12 @@
 <?php
 namespace Chamilo\Libraries\Architecture\Resource;
 
-use Chamilo\Configuration\Package\PlatformPackageBundles;
+use Chamilo\Configuration\Package\Service\PackageBundlesCacheService;
 use Chamilo\Configuration\Package\Storage\DataClass\Package;
 use Chamilo\Configuration\Service\PackageContextSequencer;
 use Chamilo\Libraries\File\SystemPathBuilder;
 use stdClass;
+use Symfony\Component\Filesystem\Filesystem;
 
 /**
  * @package Chamilo\Libraries\Architecture\Resource
@@ -14,20 +15,20 @@ use stdClass;
 class ResourceGenerator
 {
 
-    protected \Symfony\Component\Filesystem\Filesystem $filesystem;
+    protected Filesystem $filesystem;
+
+    private PackageBundlesCacheService $packageBundlesCacheService;
 
     private PackageContextSequencer $packageContextSequencer;
-
-    private PlatformPackageBundles $platformPackageBundles;
 
     private SystemPathBuilder $systemPathBuilder;
 
     public function __construct(
-        PlatformPackageBundles $platformPackageBundles, PackageContextSequencer $packageContextSequencer,
-        SystemPathBuilder $systemPathBuilder, \Symfony\Component\Filesystem\Filesystem $filesystem
+        PackageBundlesCacheService $packageBundlesCacheService, PackageContextSequencer $packageContextSequencer,
+        SystemPathBuilder $systemPathBuilder, Filesystem $filesystem
     )
     {
-        $this->platformPackageBundles = $platformPackageBundles;
+        $this->packageBundlesCacheService = $packageBundlesCacheService;
         $this->packageContextSequencer = $packageContextSequencer;
         $this->systemPathBuilder = $systemPathBuilder;
         $this->filesystem = $filesystem;
@@ -40,7 +41,7 @@ class ResourceGenerator
      */
     protected function addResourceDefinitiontoResourceFiles(
         stdClass $resourceDefinition, array &$resourceFiles, Package $package
-    )
+    ): void
     {
         $path = $this->getSystemPathBuilder()->namespaceToFullPath($package->get_context());
 
@@ -61,15 +62,15 @@ class ResourceGenerator
 
     /**
      * @return string[][]
+     * @throws \Symfony\Component\Cache\Exception\CacheException
      * @throws \Exception
      */
     protected function aggregateResources(): array
     {
-        $orderedPackageContexts = $this->getPackageContextSequencer()->sequencePackageContexts(
-            $this->getPlatformPackageBundles()->get_packages_contexts()
-        );
+        $packageBundlesCacheService = $this->getPackageBundlesCacheService();
+        $packages = $packageBundlesCacheService->getAllPackages()->getNestedPackages();
 
-        $packages = $this->getPlatformPackageBundles()->get_packages();
+        $orderedPackageContexts = $this->getPackageContextSequencer()->sequencePackageContexts(array_keys($packages));
 
         $resourceFiles = [];
 
@@ -84,7 +85,7 @@ class ResourceGenerator
     /**
      * @throws \Exception
      */
-    public function generateResources()
+    public function generateResources(): void
     {
         $aggregatedResourceFiles = $this->aggregateResources();
 
@@ -94,19 +95,19 @@ class ResourceGenerator
         }
     }
 
-    public function getFilesystem(): \Symfony\Component\Filesystem\Filesystem
+    public function getFilesystem(): Filesystem
     {
         return $this->filesystem;
+    }
+
+    public function getPackageBundlesCacheService(): PackageBundlesCacheService
+    {
+        return $this->packageBundlesCacheService;
     }
 
     public function getPackageContextSequencer(): PackageContextSequencer
     {
         return $this->packageContextSequencer;
-    }
-
-    public function getPlatformPackageBundles(): PlatformPackageBundles
-    {
-        return $this->platformPackageBundles;
     }
 
     public function getSystemPathBuilder(): SystemPathBuilder
@@ -127,7 +128,7 @@ class ResourceGenerator
     /**
      * @param string[][] $resourceFiles
      */
-    protected function processPackageResourceDefiniton(array &$resourceFiles, Package $package)
+    protected function processPackageResourceDefiniton(array &$resourceFiles, Package $package): void
     {
         foreach ($package->getResources() as $resourceDefinition)
         {
@@ -138,7 +139,7 @@ class ResourceGenerator
     /**
      * @param string[] $inputPaths
      */
-    protected function writeResource(string $outputPath, array $inputPaths)
+    protected function writeResource(string $outputPath, array $inputPaths): void
     {
         $basePath = $this->getSystemPathBuilder()->getBasePath();
         $baseWebPath = realpath($basePath . '..') . DIRECTORY_SEPARATOR . 'web' . DIRECTORY_SEPARATOR;
@@ -159,7 +160,7 @@ class ResourceGenerator
     /**
      * @param string[] $inputPaths
      */
-    protected function writeResourcesFile(string $outputPath, array $inputPaths)
+    protected function writeResourcesFile(string $outputPath, array $inputPaths): void
     {
         if (count($inputPaths) == 1)
         {
@@ -181,7 +182,7 @@ class ResourceGenerator
     /**
      * @param string[] $inputPaths
      */
-    protected function writeResourcesFolder(string $outputPath, array $inputPaths)
+    protected function writeResourcesFolder(string $outputPath, array $inputPaths): void
     {
         foreach ($inputPaths as $inputPath)
         {

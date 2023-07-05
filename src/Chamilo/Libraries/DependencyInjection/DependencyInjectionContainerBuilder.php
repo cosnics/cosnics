@@ -280,8 +280,7 @@ class DependencyInjectionContainerBuilder
     {
         $cacheAdapterFactory = new SymfonyCacheAdapterFactory($this->getConfigurablePathBuilder());
 
-        $cacheAdapter =
-            $cacheAdapterFactory->createFilesystemAdapter('Chamilo\Configuration\Package\PlatformPackageBundles');
+        $cacheAdapter = $cacheAdapterFactory->createFilesystemAdapter('Chamilo\Configuration\Package\PackageBundles');
 
         $packageFactory = new PackageFactory($this->getSystemPathBuilder(), $this->getFilesystem());
 
