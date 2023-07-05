@@ -45,7 +45,7 @@ class Html extends BlockRendition
         {
             $tabs = new TabsCollection();
 
-            $context_parameters = $this->get_context()->get_context()->get_parameters();
+            $context_parameters = $this->get_context()->getContext()->get_parameters();
 
             foreach ($this->get_block()->get_views() as $view)
             {
@@ -68,7 +68,7 @@ class Html extends BlockRendition
                         $view, Translation::get(
                         (string) StringUtilities::getInstance()->createString(self::FORMAT . '_' . $view)
                             ->upperCamelize()
-                    ), $glyph, $this->get_context()->get_context()->get_url($view_parameters), $is_current_view
+                    ), $glyph, $this->get_context()->getContext()->get_url($view_parameters), $is_current_view
                     )
                 );
             }

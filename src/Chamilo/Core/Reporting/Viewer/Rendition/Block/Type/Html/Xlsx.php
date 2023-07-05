@@ -16,7 +16,7 @@ class Xlsx extends Html
     public function render()
     {
         $file_path = TemplateRenditionImplementation::launch(
-            $this->get_context()->get_context(), $this->get_context()->get_template(), TemplateRendition::FORMAT_XLSX
+            $this->get_context()->getContext(), $this->get_context()->get_template(), TemplateRendition::FORMAT_XLSX
         );
 
         $file_properties = FileProperties::from_path($file_path);

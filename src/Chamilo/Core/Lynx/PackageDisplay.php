@@ -29,7 +29,7 @@ class PackageDisplay
     public function __construct($application)
     {
         $this->application = $application;
-        $this->package_info = Package::get($application->get_context());
+        $this->package_info = Package::get($application->getContext());
     }
 
     public function render()
@@ -60,7 +60,7 @@ class PackageDisplay
      */
     public function get_context()
     {
-        return $this->get_application()->get_context();
+        return $this->get_application()->getContext();
     }
 
     public function get_dependencies_table()

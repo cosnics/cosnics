@@ -36,7 +36,7 @@ class ActionProvider
         $this->actionProviders = [];
     }
 
-    public function addActionProvider(ActionProviderInterface $actionProvider)
+    public function addActionProvider(ActionProviderInterface $actionProvider): void
     {
         $this->actionProviders[] = $actionProvider;
     }
@@ -54,6 +54,10 @@ class ActionProvider
         return false;
     }
 
+    /**
+     * @throws \Symfony\Component\Cache\Exception\CacheException
+     * @throws \QuickformException
+     */
     public function getTabsCollection(string $typeContext): TabsCollection
     {
         $registrationConsulter = $this->registrationConsulter;

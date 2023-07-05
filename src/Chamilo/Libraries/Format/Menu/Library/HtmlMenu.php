@@ -5,34 +5,61 @@ namespace Chamilo\Libraries\Format\Menu\Library;
  * Originaly a PEAR library
  *
  * @package Chamilo\Libraries\Format\Menu\Library
- * @author Alex Vorobiev <sasha@mathforum.com>
- * @author Ulf Wendel <ulf.wendel@phpdoc.de>
- * @author Alexey Borzov <avb@php.net>
- * @author Hans De Bisschop <hans.de.bisschop@ehb.be>
- * @author Magali Gillard <magali.gillard@ehb.be>
+ * @author  Alex Vorobiev <sasha@mathforum.com>
+ * @author  Ulf Wendel <ulf.wendel@phpdoc.de>
+ * @author  Alexey Borzov <avb@php.net>
+ * @author  Hans De Bisschop <hans.de.bisschop@ehb.be>
+ * @author  Magali Gillard <magali.gillard@ehb.be>
  */
 class HtmlMenu
 {
-    const HTML_MENU_ENTRY_ACTIVE = 1;
+    public const HTML_MENU_ENTRY_ACTIVE = 1;
+    public const HTML_MENU_ENTRY_ACTIVEPATH = 2;
+    public const HTML_MENU_ENTRY_BREADCRUMB = 6;
+    public const HTML_MENU_ENTRY_INACTIVE = 0;
+    public const HTML_MENU_ENTRY_NEXT = 4;
+    public const HTML_MENU_ENTRY_PREVIOUS = 3;
+    public const HTML_MENU_ENTRY_UPPER = 5;
 
-    const HTML_MENU_ENTRY_ACTIVEPATH = 2;
+    /**
+     * URL of the current page.
+     *
+     * @var string
+     */
+    public $_currentUrl = '';
 
-    const HTML_MENU_ENTRY_BREADCRUMB = 6;
-
-    const HTML_MENU_ENTRY_INACTIVE = 0;
-
-    const HTML_MENU_ENTRY_NEXT = 4;
-
-    const HTML_MENU_ENTRY_PREVIOUS = 3;
-
-    const HTML_MENU_ENTRY_UPPER = 5;
+    /**
+     * @var string
+     */
+    public $_forcedUrl = '';
 
     /**
      * Menu structure as a multidimensional hash.
      *
      * @var string[]
      */
-    var $_menu = [];
+    public $_menu = [];
+
+    /**
+     * Menu type: tree, rows, you-are-here.
+     *
+     * @var string
+     */
+    public $_menuType = 'tree';
+
+    /**
+     * Path to the current menu item.
+     *
+     * @var string[]
+     */
+    public $_path = [];
+
+    /**
+     * The renderer being used to output the menu
+     *
+     * @var \Chamilo\Libraries\Format\Menu\Library\Renderer\HtmlMenuRenderer
+     */
+    public $_renderer = null;
 
     /**
      * Mapping from URL to menu path.
@@ -40,48 +67,14 @@ class HtmlMenu
      * @var array
      * @see getPath()
      */
-    var $_urlMap = [];
-
-    /**
-     * Path to the current menu item.
-     *
-     * @var string[]
-     */
-    var $_path = [];
-
-    /**
-     * Menu type: tree, rows, you-are-here.
-     *
-     * @var string
-     */
-    var $_menuType = 'tree';
-
-    /**
-     *
-     * @var string
-     */
-    var $_forcedUrl = '';
-
-    /**
-     * URL of the current page.
-     *
-     * @var string
-     */
-    var $_currentUrl = '';
-
-    /**
-     * The renderer being used to output the menu
-     *
-     * @var \Chamilo\Libraries\Format\Menu\Library\Renderer\HtmlMenuRenderer
-     */
-    var $_renderer = null;
+    public $_urlMap = [];
 
     /**
      * Prefix for menu URLs
      *
      * @var string
      */
-    var $_urlPrefix = '';
+    public $_urlPrefix = '';
 
     /**
      * Initializes the menu, sets the type and menu structure.
@@ -146,7 +139,7 @@ class HtmlMenu
      * @param string[] $menu (sub)menu being processed
      * @param string[] $path path to the (sub)menu
      *
-     * @return boolean true if the path to the current page was found, otherwise false.
+     * @return bool true if the path to the current page was found, otherwise false.
      * @see getPath(), $_urlMap
      */
     private function _buildUrlMap($menu, $path)
@@ -161,7 +154,7 @@ class HtmlMenu
                 return true;
             }
 
-            if (isset($node['sub']) && $this->_buildUrlMap($node['sub'], array_merge($path, array($nodeId))))
+            if (isset($node['sub']) && $this->_buildUrlMap($node['sub'], array_merge($path, [$nodeId])))
             {
                 return true;
             }
@@ -171,12 +164,11 @@ class HtmlMenu
     }
 
     /**
-     *
      * @param mixed $nodeId
      * @param string $nodeUrl Node 'url' attribute
-     * @param integer $level Level in the tree
+     * @param int $level      Level in the tree
      *
-     * @return integer Node type (one of HTML_MENU_ENTRY_* constants)
+     * @return int Node type (one of HTML_MENU_ENTRY_* constants)
      */
     private function _findNodeType($nodeId, $nodeUrl, $level)
     {
@@ -201,9 +193,9 @@ class HtmlMenu
      * Renders the 'prevnext' menu
      *
      * @param string[] $menu (sub)menu being rendered
-     * @param integer $level current depth in the tree structure
-     * @param integer $flagStop flag indicating whether to finish processing
-     *        (0 - continue, 1 - this is "next" node, 2 - stop)
+     * @param int $level     current depth in the tree structure
+     * @param int $flagStop  flag indicating whether to finish processing
+     *                       (0 - continue, 1 - this is "next" node, 2 - stop)
      */
     private function _renderPrevNext($menu, $level = 0, $flagStop = 0)
     {
@@ -245,7 +237,6 @@ class HtmlMenu
                         reset($this->_menu);
                         $node_id = key($this->_menu);
                         $up_node = current($this->_menu);
-
                     }
 
                     $this->_renderer->renderEntry($up_node, $level, self::HTML_MENU_ENTRY_UPPER);
@@ -279,7 +270,7 @@ class HtmlMenu
      * Renders the 'rows' menu
      *
      * @param string[] $menu (sub)menu being rendered
-     * @param integer $level current depth in the tree structure
+     * @param int $level     current depth in the tree structure
      */
     private function _renderRows($menu, $level = 0)
     {
@@ -313,7 +304,7 @@ class HtmlMenu
      * Renders the tree menu ('tree' and 'sitemap')
      *
      * @param string[] $menu (sub)menu being rendered
-     * @param integer $level current depth in the tree structure
+     * @param int $level     current depth in the tree structure
      */
     private function _renderTree($menu, $level = 0)
     {
@@ -346,7 +337,7 @@ class HtmlMenu
      * Renders the 'urhere' menu
      *
      * @param string[] $menu (sub)menu being rendered
-     * @param integer $level current depth in the tree structure
+     * @param int $level     current depth in the tree structure
      */
     private function _renderURHere($menu, $level = 0)
     {
@@ -373,7 +364,6 @@ class HtmlMenu
     }
 
     /**
-     *
      * @param string $url Url to use
      */
     public function forceCurrentUrl($url)
@@ -382,7 +372,6 @@ class HtmlMenu
     }
 
     /**
-     *
      * @return string
      */
     public function getCurrentURL()
@@ -430,7 +419,6 @@ class HtmlMenu
     }
 
     /**
-     *
      * @param string[] $menu
      */
     public function setMenu($menu)
@@ -440,14 +428,13 @@ class HtmlMenu
     }
 
     /**
-     *
      * @param string $menuType
      */
     public function setMenuType($menuType)
     {
         $menuType = strtolower($menuType);
 
-        if (in_array($menuType, array('tree', 'rows', 'urhere', 'prevnext', 'sitemap')))
+        if (in_array($menuType, ['tree', 'rows', 'urhere', 'prevnext', 'sitemap']))
         {
             $this->_menuType = $menuType;
         }

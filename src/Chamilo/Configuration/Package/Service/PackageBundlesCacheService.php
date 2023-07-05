@@ -92,11 +92,11 @@ class PackageBundlesCacheService implements CacheDataPreLoaderInterface
         $packageBundlesGenerator = $this->getPackageBundlesGenerator();
         $packageList = $packageBundlesGenerator->getPackageListForNamespaceAndMode(PackageList::ROOT, $mode);
 
-        $packageList->getAllPackages(false);
-        $packageList->getList(false);
+        $packageList->getNestedTypedPackages();
+        $packageList->getNestedTypedPackages(false);
 
-        $packageList->getAllPackages();
-        $packageList->getList();
+        $packageList->getNestedPackages();
+        $packageList->getNestedPackages(false);
 
         return $packageList;
     }

@@ -45,7 +45,7 @@ class PackagesPHPUnitGeneratorCommand extends Command
      */
     protected function execute(InputInterface $input, OutputInterface $output)
     {
-        $packages = PlatformPackageBundles::getInstance()->get_package_list()->getList();
+        $packages = PlatformPackageBundles::getInstance()->get_package_list()->getNestedPackages();
 
         foreach ($packages as $packageContext => $package)
         {

@@ -1,8 +1,7 @@
 <?php
 namespace Chamilo\Core\Admin\Component;
 
-use Chamilo\Configuration\Configuration;
-use Chamilo\Configuration\Package\PlatformPackageBundles;
+use Chamilo\Configuration\Package\Service\PackageBundlesCacheService;
 use Chamilo\Core\Admin\Form\ConfigurationForm;
 use Chamilo\Core\Admin\Manager;
 use Chamilo\Core\Admin\Menu\PackageTypeSettingsMenu;
@@ -16,17 +15,10 @@ use Chamilo\Libraries\Format\Tabs\GenericTabsRenderer;
 use Chamilo\Libraries\Format\Tabs\Link\LinkTab;
 use Chamilo\Libraries\Format\Tabs\Link\LinkTabsRenderer;
 use Chamilo\Libraries\Format\Tabs\TabsCollection;
-use Chamilo\Libraries\Platform\Session\Request;
-use Chamilo\Libraries\Translation\Translation;
 use Chamilo\Libraries\Utilities\StringUtilities;
 
 /**
- *
- * @package admin.lib.admin_manager.component
- */
-
-/**
- * Admin component
+ * @package Chamilo\Core\Admin\Component
  */
 class ConfigurerComponent extends Manager
 {
@@ -34,51 +26,54 @@ class ConfigurerComponent extends Manager
 
     /**
      * Runs this component and displays its output.
+     *
+     * @throws \Symfony\Component\Cache\Exception\CacheException
+     * @throws \Chamilo\Libraries\Architecture\Exceptions\NotAllowedException
+     * @throws \QuickformException
      */
     public function run()
     {
-        $this->set_parameter(self::PARAM_CONTEXT, $this->get_context());
-
-        $context = $this->get_context();
+        $translator = $this->getTranslator();
+        $this->set_parameter(self::PARAM_CONTEXT, $this->getContext());
 
         $this->checkAuthorization(Manager::CONTEXT, 'ManageChamilo');
 
         $form = new ConfigurationForm(
-            $this->get_context(), 'config', FormValidator::FORM_METHOD_POST,
-            $this->get_url(array(self::PARAM_CONTEXT => $this->get_context(), self::PARAM_TAB => $this->get_tab()))
+            $this->getContext(), 'config', FormValidator::FORM_METHOD_POST,
+            $this->get_url([self::PARAM_CONTEXT => $this->getContext(), self::PARAM_TAB => $this->getTab()])
         );
 
         if ($form->validate())
         {
             $success = $form->update_configuration();
             $this->redirectWithMessage(
-                Translation::get(
-                    $success ? 'ObjectUpdated' : 'ObjectNotUpdated', array('OBJECT' => Translation::get('Setting')),
+                $translator->trans(
+                    $success ? 'ObjectUpdated' : 'ObjectNotUpdated', ['OBJECT' => $translator->trans('Setting')],
                     StringUtilities::LIBRARIES
-                ), !$success, array(
+                ), !$success, [
                     Application::PARAM_ACTION => self::ACTION_CONFIGURE_PLATFORM,
-                    self::PARAM_CONTEXT => $this->get_context(),
-                    GenericTabsRenderer::PARAM_SELECTED_TAB => $this->get_tab()
-                )
+                    self::PARAM_CONTEXT => $this->getContext(),
+                    GenericTabsRenderer::PARAM_SELECTED_TAB => $this->getTab()
+                ]
             );
         }
         else
         {
             BreadcrumbTrail::getInstance()->add(
                 new Breadcrumb(
-                    $this->get_url(array(GenericTabsRenderer::PARAM_SELECTED_TAB => $this->get_context())),
-                    Translation::get('TypeName', null, $this->get_context())
+                    $this->get_url([GenericTabsRenderer::PARAM_SELECTED_TAB => $this->getContext()]),
+                    $translator->trans('TypeName', [], $this->getContext())
                 )
             );
 
-            $packages = PlatformPackageBundles::getInstance()->get_type_packages();
+            $packages = $this->getPackageBundlesCacheService()->getAllPackages()->getNestedTypedPackages();
 
-            foreach ($packages[$this->get_tab()] as $package)
+            foreach ($packages[$this->getTab()] as $package)
             {
-                if (Configuration::getInstance()->has_settings($package->get_context()))
+                if ($this->getConfigurationConsulter()->hasSettingsForContext($package->get_context()))
                 {
-                    $package_names[$package->get_context()] = Translation::get(
-                        'TypeName', null, $package->get_context()
+                    $package_names[$package->get_context()] = $translator->trans(
+                        'TypeName', [], $package->get_context()
                     );
                 }
             }
@@ -89,14 +84,14 @@ class ConfigurerComponent extends Manager
 
             foreach ($package_names as $package => $package_name)
             {
-                if (Configuration::getInstance()->has_settings($package))
+                if ($this->getConfigurationConsulter()->hasSettingsForContext($package))
                 {
                     $tabs->add(
                         new LinkTab(
-                            $package, Translation::get('TypeName', null, $package), new NamespaceIdentGlyph(
+                            $package, $translator->trans('TypeName', [], $package), new NamespaceIdentGlyph(
                             $package, true, false, false, IdentGlyph::SIZE_SMALL
-                        ), $this->get_url(array(self::PARAM_TAB => $this->get_tab(), self::PARAM_CONTEXT => $package)),
-                            $this->get_context() == $package
+                        ), $this->get_url([self::PARAM_TAB => $this->getTab(), self::PARAM_CONTEXT => $package]),
+                            $this->getContext() == $package
                         )
                     );
                 }
@@ -104,11 +99,44 @@ class ConfigurerComponent extends Manager
 
             $html = [];
 
-            $html[] = $this->render_header();
+            $html[] = $this->renderHeader();
             $html[] = $this->getLinkTabsRenderer()->render($tabs, $form->render());
-            $html[] = $this->render_footer();
+            $html[] = $this->renderFooter();
 
             return implode(PHP_EOL, $html);
+        }
+    }
+
+    /**
+     * @throws \Symfony\Component\Cache\Exception\CacheException
+     */
+    public function getContext(): string
+    {
+        $context = $this->getRequest()->query->get(self::PARAM_CONTEXT);
+
+        if (!isset($context))
+        {
+            $packages = $this->getPackageBundlesCacheService()->getAllPackages()->getNestedTypedPackages();
+
+            foreach ($packages[$this->getTab()] as $package)
+            {
+                if ($this->getConfigurationConsulter()->hasSettingsForContext($package->get_context()))
+                {
+                    $packageNames[$package->get_context()] = $this->getTranslator()->trans(
+                        'TypeName', [], $package->get_context()
+                    );
+                }
+            }
+
+            asort($packageNames);
+
+            $packageNames = array_keys($packageNames);
+
+            return $packageNames[0];
+        }
+        else
+        {
+            return $context;
         }
     }
 
@@ -117,60 +145,30 @@ class ConfigurerComponent extends Manager
         return $this->getService(LinkTabsRenderer::class);
     }
 
-    public function get_context()
+    public function getPackageBundlesCacheService(): PackageBundlesCacheService
     {
-        $context = Request::get(self::PARAM_CONTEXT);
-        if (!isset($context))
-        {
-            $packages = PlatformPackageBundles::getInstance()->get_type_packages();
-
-            foreach ($packages[$this->get_tab()] as $package)
-            {
-                if (Configuration::getInstance()->has_settings($package->get_context()))
-                {
-                    $package_names[$package->get_context()] = Translation::get(
-                        'TypeName', null, $package->get_context()
-                    );
-                }
-            }
-
-            asort($package_names);
-
-            $package_names = array_keys($package_names);
-
-            return $package_names[0];
-        }
-        else
-        {
-            return $context;
-        }
+        return $this->getService(PackageBundlesCacheService::class);
     }
 
+    public function getTab(): string
+    {
+        return $this->getRequest()->query->get(self::PARAM_TAB, 'Chamilo\Core');
+    }
+
+    /**
+     * @throws \ReflectionException
+     * @throws \Symfony\Component\Cache\Exception\CacheException
+     */
     public function get_menu(): string
     {
         $menu = new PackageTypeSettingsMenu(
-            $this->get_tab(), $this->get_url(array(self::PARAM_TAB => '__TYPE__', self::PARAM_CONTEXT => null))
+            $this->getClassnameUtilities(), $this->getConfigurationConsulter(), $this->getPackageBundlesCacheService(),
+            $this->getTab(), $this->get_url([self::PARAM_TAB => '__TYPE__', self::PARAM_CONTEXT => null])
         );
 
         return $menu->render_as_tree();
     }
 
-    public function get_tab()
-    {
-        $tab = Request::get(self::PARAM_TAB);
-        if (!isset($tab))
-        {
-            return 'Chamilo\Core';
-        }
-        else
-        {
-            return $tab;
-        }
-    }
-
-    /**
-     * @return bool
-     */
     public function has_menu(): bool
     {
         return true;

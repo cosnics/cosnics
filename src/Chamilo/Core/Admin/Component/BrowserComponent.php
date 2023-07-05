@@ -1,6 +1,7 @@
 <?php
 namespace Chamilo\Core\Admin\Component;
 
+use Chamilo\Configuration\Package\Service\PackageBundlesCacheService;
 use Chamilo\Core\Admin\Manager;
 use Chamilo\Core\Admin\Menu\PackageTypeLinksMenu;
 use Chamilo\Core\Admin\Service\ActionProvider;
@@ -8,15 +9,19 @@ use Chamilo\Libraries\Architecture\ClassnameUtilities;
 use Chamilo\Libraries\Architecture\Interfaces\DelegateComponent;
 use Chamilo\Libraries\Format\Tabs\TabsRenderer;
 
+/**
+ * @package Chamilo\Core\Admin\Component
+ */
 class BrowserComponent extends Manager implements DelegateComponent
 {
     public const PARAM_TAB = 'tab';
 
-    private $currentTab;
+    private string $currentTab;
 
     /**
-     * @return string
      * @throws \Chamilo\Libraries\Architecture\Exceptions\NotAllowedException
+     * @throws \QuickformException
+     * @throws \Symfony\Component\Cache\Exception\CacheException
      */
     public function run()
     {
@@ -24,9 +29,9 @@ class BrowserComponent extends Manager implements DelegateComponent
 
         $html = [];
 
-        $html[] = $this->render_header();
+        $html[] = $this->renderHeader();
         $html[] = $this->renderTabs();
-        $html[] = $this->render_footer();
+        $html[] = $this->renderFooter();
 
         return implode(PHP_EOL, $html);
     }
@@ -39,16 +44,21 @@ class BrowserComponent extends Manager implements DelegateComponent
     /**
      * @return string
      */
-    public function getCurrentTab()
+    public function getCurrentTab(): string
     {
         if (!isset($this->currentTab))
         {
             $this->currentTab = $this->getRequest()->query->get(
-                self::PARAM_TAB, ClassnameUtilities::getInstance()->getNamespaceId('Chamilo\Core')
+                self::PARAM_TAB, $this->getClassnameUtilities()->getNamespaceId('Chamilo\Core')
             );
         }
 
         return $this->currentTab;
+    }
+
+    public function getPackageBundlesCacheService(): PackageBundlesCacheService
+    {
+        return $this->getService(PackageBundlesCacheService::class);
     }
 
     protected function getTabsRenderer(): TabsRenderer
@@ -57,26 +67,29 @@ class BrowserComponent extends Manager implements DelegateComponent
     }
 
     /**
-     * @return string
+     * @throws \ReflectionException
+     * @throws \Symfony\Component\Cache\Exception\CacheException
      */
     public function get_menu(): string
     {
-        $tabNamespace = ClassnameUtilities::getInstance()->getNamespaceFromId($this->getCurrentTab());
+        $tabNamespace = $this->getClassnameUtilities()->getNamespaceFromId($this->getCurrentTab());
         $menu = new PackageTypeLinksMenu(
-            $this->getActionProvider(), $tabNamespace, $this->get_url(array(self::PARAM_TAB => '__TYPE__'))
+            $this->getClassnameUtilities(), $this->getPackageBundlesCacheService(), $this->getRegistrationConsulter(),
+            $this->getActionProvider(), $tabNamespace, $this->get_url([self::PARAM_TAB => '__TYPE__'])
         );
 
         return $menu->render_as_tree();
     }
 
-    /**
-     * @return bool
-     */
     public function has_menu(): bool
     {
         return true;
     }
 
+    /**
+     * @throws \QuickformException
+     * @throws \Symfony\Component\Cache\Exception\CacheException
+     */
     protected function renderTabs(): string
     {
         $tabNamespace = ClassnameUtilities::getInstance()->getNamespaceFromId($this->getCurrentTab());

@@ -113,7 +113,7 @@ class PlatformPackageBundles
     {
         if (!isset($this->packages))
         {
-            $this->packages = $this->package_list->getList();
+            $this->packages = $this->package_list->getNestedPackages();
         }
 
         return $this->packages;
@@ -131,7 +131,7 @@ class PlatformPackageBundles
     {
         if (!isset($this->type_packages))
         {
-            $this->type_packages = $this->package_list->getAllPackages();
+            $this->type_packages = $this->package_list->getNestedTypedPackages();
         }
 
         return $this->type_packages;

@@ -1,11 +1,6 @@
 <?php
 namespace Chamilo\Core\Home\Component;
 
-use Chamilo\Configuration\Package\Finder\BasicBundles;
-use Chamilo\Configuration\Package\Finder\BasicBundlesGenerator;
-use Chamilo\Configuration\Package\Finder\InternationalizationBundlesGenerator;
-use Chamilo\Configuration\Package\Finder\PackageBundlesGenerator;
-use Chamilo\Configuration\Package\PackageList;
 use Chamilo\Core\Home\Manager;
 use Chamilo\Core\Home\Renderer\HomeRenderer;
 use Chamilo\Libraries\Architecture\Interfaces\NoAuthenticationSupport;
@@ -40,11 +35,6 @@ class HomeComponent extends Manager implements NoAuthenticationSupport
         $html = [];
 
         $html[] = $this->renderHeader();
-
-        $generator = $this->getService(PackageBundlesGenerator::class);
-        $packageList = $generator->getPackageListForNamespaceAndMode(PackageList::ROOT, PackageList::MODE_ALL);
-        var_dump($packageList->getAllPackages());
-
         $html[] = $this->getHomeRenderer()->render($currentTabIdentifier, $isGeneralMode, $this->getUser());
         $html[] = $this->renderFooter();
 

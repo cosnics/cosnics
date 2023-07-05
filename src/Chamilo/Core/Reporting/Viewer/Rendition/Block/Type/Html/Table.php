@@ -23,7 +23,7 @@ class Table extends Html
         
         $reporting_data = $block->get_data();
         
-        $parameters = $this->get_context()->get_context()->get_parameters();
+        $parameters = $this->get_context()->getContext()->get_parameters();
         $parameters[Manager::PARAM_BLOCK_ID] = $this->get_block()->get_id();
         $parameters[Manager::PARAM_VIEWS] = $this->get_view();
         

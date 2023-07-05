@@ -16,7 +16,7 @@ class Xml extends Html
     public function render()
     {
         $file_path = TemplateRenditionImplementation::launch(
-            $this->get_context()->get_context(), $this->get_context()->get_template(), TemplateRendition::FORMAT_XML
+            $this->get_context()->getContext(), $this->get_context()->get_template(), TemplateRendition::FORMAT_XML
         );
 
         $file_properties = FileProperties::from_path($file_path);

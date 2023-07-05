@@ -19,45 +19,38 @@ class PackageList
 
     public const ROOT = '__ROOT__';
 
-    private array $allPackages;
+    /**
+     * @var \Chamilo\Configuration\Package\Storage\DataClass\Package[][]
+     */
+    protected array $nestedPackages;
 
-    private array $list;
+    /**
+     * @var \Chamilo\Configuration\Package\Storage\DataClass\Package[][][]
+     */
+    protected array $nestedTypedPackages;
 
     /**
      * @var \Chamilo\Configuration\Package\PackageList[]
      */
-    private array $packageLists;
+    protected array $packageLists;
 
     /**
      * @var \Chamilo\Configuration\Package\Storage\DataClass\Package[]
      */
-    private array $packages;
+    protected array $packages;
 
-    /**
-     * The type of the PackageList
-     *
-     * @var string
-     */
-    private string $type;
+    protected string $type;
 
-    private ?InlineGlyph $typeInlineGlyph;
+    protected ?InlineGlyph $typeInlineGlyph;
 
-    /**
-     * The type name of the PackageList
-     *
-     * @var string
-     */
-    private string $typeName;
+    protected string $typeName;
 
     /**
      * @var string[][]
      */
-    private array $types;
+    private array $nestedPackageListTypes;
 
     /**
-     * @param string $type
-     * @param string $typeName
-     * @param ?\Chamilo\Libraries\Format\Structure\Glyph\InlineGlyph $typeInlineGlyph
      * @param \Chamilo\Configuration\Package\Storage\DataClass\Package[] $packages
      * @param \Chamilo\Configuration\Package\PackageList[] $packageLists
      */
@@ -87,72 +80,130 @@ class PackageList
         return $this;
     }
 
-    public function getAllPackages($recursive = true): array
+    /**
+     * Get all distinct types defined in the PackageList and - if requested - it's children
+     *
+     * @return string[]
+     */
+    public function getNestedPackageListTypes(bool $recursive = true): array
     {
-        if (!isset($this->allPackages[$recursive]))
+        if (!isset($this->nestedPackageListTypes[$recursive]))
         {
-            $this->allPackages[$recursive] = [];
-            $this->allPackages[$recursive][$this->getType()] = [];
+            $this->nestedPackageListTypes[$recursive] = [];
 
             if (count($this->getPackages()) > 0)
             {
-                $this->allPackages[$recursive][$this->getType()] = $this->getPackages();
+                $this->nestedPackageListTypes[$recursive][] = $this->getType();
             }
 
-            foreach ($this->getPackageLists() as $child)
+            foreach ($this->getPackageLists() as $packageList)
             {
                 if ($recursive)
                 {
-                    $child_packages = $child->getAllPackages($recursive);
+                    $packageListTypes = $packageList->getNestedPackageListTypes($recursive);
 
-                    if (count($child_packages) > 0)
+                    foreach ($packageListTypes as $packageListType)
                     {
-                        $this->allPackages[$recursive] = array_merge($this->allPackages[$recursive], $child_packages);
+                        $this->nestedPackageListTypes[$recursive][] = $packageListType;
                     }
                 }
-                elseif (count($child->getPackages()) > 0)
+                else
                 {
-                    $this->allPackages[$recursive][$child->getType()] = $child->getPackages();
+                    $this->nestedPackageListTypes[$recursive][] = $packageList->getType();
                 }
             }
         }
 
-        return $this->allPackages[$recursive];
+        return $this->nestedPackageListTypes[$recursive];
     }
 
     /**
      * @return \Chamilo\Configuration\Package\Storage\DataClass\Package[]
      */
-    public function getList(bool $recursive = true): array
+    public function getNestedPackages(bool $recursive = true): array
     {
-        if (!isset($this->list[$recursive]))
+        if (!isset($this->nestedPackages[$recursive]))
         {
-            $this->list[$recursive] = [];
+            $this->nestedPackages[$recursive] = [];
 
-            if (count($this->getPackages()) > 0)
+            foreach ($this->getPackages() as $package)
             {
-                $this->list[$recursive] = $this->getPackages();
+                $this->nestedPackages[$recursive][$package->get_context()] = $package;
             }
 
-            foreach ($this->getPackageLists() as $child)
+            foreach ($this->getPackageLists() as $packageList)
             {
                 if ($recursive)
                 {
-                    $child_packages = $child->getList($recursive);
+                    $packageListpackages = $packageList->getNestedPackages($recursive);
 
-                    if (count($child_packages) > 0)
+                    foreach ($packageListpackages as $packageListPackage)
                     {
-                        $this->list[$recursive] = array_merge($this->list[$recursive], $child_packages);
+                        $this->nestedPackages[$recursive][$packageListPackage->get_context()] = $packageListPackage;
                     }
                 }
-                elseif (count($child->getPackages()) > 0)
+                elseif (count($packageList->getPackages()) > 0)
                 {
-                    $this->list[$recursive] = array_merge($this->list[$recursive], $child->getPackages());
+                    foreach ($packageList->getPackages() as $packageListPackage)
+                    {
+                        $this->nestedPackages[$recursive][$packageListPackage->get_context()] = $packageListPackage;
+                    }
                 }
             }
         }
 
-        return $this->list[$recursive];
+        return $this->nestedPackages[$recursive];
+    }
+
+    /**
+     * @param bool $recursive
+     *
+     * @return \Chamilo\Configuration\Package\Storage\DataClass\Package[][]
+     */
+    public function getNestedTypedPackages(bool $recursive = true): array
+    {
+        if (!isset($this->nestedTypedPackages[$recursive]))
+        {
+            $this->nestedTypedPackages[$recursive] = [];
+            $this->nestedTypedPackages[$recursive][$this->getType()] = [];
+
+            foreach ($this->getPackages() as $package)
+            {
+                $this->nestedTypedPackages[$recursive][$this->getType()][$package->get_context()] = $package;
+            }
+
+            foreach ($this->getPackageLists() as $packageList)
+            {
+                if ($recursive)
+                {
+                    $typedPackageListPackages = $packageList->getNestedTypedPackages($recursive);
+
+                    foreach ($typedPackageListPackages as $type => $packageListPackages)
+                    {
+                        foreach ($packageListPackages as $packageListPackage)
+                        {
+                            $this->nestedTypedPackages[$recursive][$type][$packageListPackage->get_context()] =
+                                $packageListPackage;
+                        }
+                    }
+                }
+                elseif (count($packageList->getPackages()) > 0)
+                {
+                    if (!isset($this->nestedTypedPackages[$recursive][$packageList->getType()]))
+                    {
+                        $this->nestedTypedPackages[$recursive][$packageList->getType()] = [];
+                    }
+
+                    foreach ($packageList->getPackages() as $packageListPackage)
+                    {
+                        $this->nestedTypedPackages[$recursive][$packageList->getType(
+                        )][$packageListPackage->get_context()] = $packageListPackage;
+                    }
+                }
+            }
+        }
+
+        return $this->nestedTypedPackages[$recursive];
     }
 
     /**
@@ -164,7 +215,7 @@ class PackageList
     }
 
     /**
-     * @return string[]
+     * @return \Chamilo\Configuration\Package\Storage\DataClass\Package[]
      */
     public function getPackages(): array
     {
@@ -184,38 +235,6 @@ class PackageList
     public function getTypeName(): string
     {
         return $this->typeName;
-    }
-
-    /**
-     * Get all distinct types defined in the PackageList and - if requested - it's children
-     *
-     * @return string[]
-     */
-    public function getTypes(bool $recursive = true): array
-    {
-        if (!isset($this->types[$recursive]))
-        {
-            $this->types[$recursive] = [];
-
-            if (count($this->getPackages()) > 0)
-            {
-                $this->types[$recursive][] = $this->getType();
-            }
-
-            foreach ($this->getPackageLists() as $child)
-            {
-                if ($recursive)
-                {
-                    $this->types[$recursive] = array_merge($this->types[$recursive], $child->getTypes($recursive));
-                }
-                else
-                {
-                    $this->types[$recursive][] = $child->getType();
-                }
-            }
-        }
-
-        return $this->types[$recursive];
     }
 
     public function hasPackage(string $packageName): bool

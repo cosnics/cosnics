@@ -1,7 +1,9 @@
 <?php
 namespace Chamilo\Libraries\DependencyInjection;
 
-use Chamilo\Configuration\Package\PlatformPackageBundles;
+use Chamilo\Configuration\Package\Finder\PackageBundlesGenerator;
+use Chamilo\Configuration\Package\Service\PackageBundlesCacheService;
+use Chamilo\Configuration\Package\Service\PackageFactory;
 use Chamilo\Configuration\Service\Consulter\ConfigurationConsulter;
 use Chamilo\Configuration\Service\Consulter\RegistrationConsulter;
 use Chamilo\Configuration\Service\DataLoader\FileConfigurationCacheDataPreLoader;
@@ -11,6 +13,7 @@ use Chamilo\Configuration\Storage\Repository\RegistrationRepository;
 use Chamilo\Libraries\Architecture\Application\Routing\UrlGenerator;
 use Chamilo\Libraries\Architecture\ClassnameUtilities;
 use Chamilo\Libraries\Architecture\ErrorHandler\ExceptionLogger\ExceptionLoggerFactory;
+use Chamilo\Libraries\Cache\SymfonyCacheAdapterFactory;
 use Chamilo\Libraries\DependencyInjection\ExtensionFinder\PackagesContainerExtensionFinder;
 use Chamilo\Libraries\DependencyInjection\Interfaces\ContainerExtensionFinderInterface;
 use Chamilo\Libraries\DependencyInjection\Interfaces\ICompilerPassExtension;
@@ -142,6 +145,9 @@ class DependencyInjectionContainerBuilder
 
     /**
      * Creates and returns the default dependency injection container for Chamilo
+     *
+     * @throws \Symfony\Component\Cache\Exception\CacheException
+     * @throws \Chamilo\Libraries\Storage\Exception\ConnectionException
      */
     public function createContainer(): ContainerInterface
     {
@@ -207,6 +213,10 @@ class DependencyInjectionContainerBuilder
         return $this->connectionFactory;
     }
 
+    /**
+     * @throws \Symfony\Component\Cache\Exception\CacheException
+     * @throws \Chamilo\Libraries\Storage\Exception\ConnectionException
+     */
     public function getContainerExtensionFinder(): ContainerExtensionFinderInterface
     {
         if (!isset($this->containerExtensionFinder))
@@ -264,7 +274,29 @@ class DependencyInjectionContainerBuilder
     }
 
     /**
+     * @throws \Chamilo\Libraries\Storage\Exception\ConnectionException
+     */
+    protected function getPackageBundlesCacheService(): PackageBundlesCacheService
+    {
+        $cacheAdapterFactory = new SymfonyCacheAdapterFactory($this->getConfigurablePathBuilder());
+
+        $cacheAdapter =
+            $cacheAdapterFactory->createFilesystemAdapter('Chamilo\Configuration\Package\PlatformPackageBundles');
+
+        $packageFactory = new PackageFactory($this->getSystemPathBuilder(), $this->getFilesystem());
+
+        $packageBundlesGenerator = new PackageBundlesGenerator(
+            $this->getSystemPathBuilder(), $this->getClassnameUtilities(), $packageFactory,
+            $this->getRegistrationConsulter()
+        );
+
+        return new PackageBundlesCacheService($cacheAdapter, $packageBundlesGenerator);
+    }
+
+    /**
      * @return string[]
+     * @throws \Symfony\Component\Cache\Exception\CacheException
+     * @throws \Chamilo\Libraries\Storage\Exception\ConnectionException
      */
     protected function getPackageNamespaces(): array
     {
@@ -276,7 +308,7 @@ class DependencyInjectionContainerBuilder
             {
                 return $this->getRegistrationConsulter()->getRegistrationContexts();
             }
-            catch (Exception $exception)
+            catch (Exception)
             {
                 return $this->getPackageNamespacesFromFilesystem();
             }
@@ -289,12 +321,14 @@ class DependencyInjectionContainerBuilder
 
     /**
      * @return string[]
+     * @throws \Symfony\Component\Cache\Exception\CacheException
+     * @throws \Chamilo\Libraries\Storage\Exception\ConnectionException
      */
     protected function getPackageNamespacesFromFilesystem(): array
     {
-        $platformPackageBundles = new PlatformPackageBundles();
+        $nestedPackages = $this->getPackageBundlesCacheService()->getAllPackages()->getNestedPackages();
 
-        return array_keys($platformPackageBundles->get_packages());
+        return array_keys($nestedPackages);
     }
 
     /**
@@ -471,6 +505,9 @@ class DependencyInjectionContainerBuilder
      * Loads the extensions for the container
      *
      * @param \Symfony\Component\DependencyInjection\ContainerBuilder $container
+     *
+     * @throws \Symfony\Component\Cache\Exception\CacheException
+     * @throws \Chamilo\Libraries\Storage\Exception\ConnectionException
      */
     protected function loadContainerExtensions(ContainerBuilder $container): void
     {
@@ -525,7 +562,6 @@ class DependencyInjectionContainerBuilder
     {
         if (file_exists($this->cacheFile))
         {
-            $filesystem = new Filesystem();
             $this->getFilesystem()->remove($this->cacheFile);
 
             if (function_exists('opcache_invalidate'))
