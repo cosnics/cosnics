@@ -112,6 +112,7 @@ abstract class Manager extends Application implements NoContextComponent
             $this->getFilesystemTools()->getDirectoryContent($language_path, FileTypeFilterIterator::ONLY_FILES, false);
 
         $language_list = [];
+
         foreach ($language_files as $language_file)
         {
             $file_info = pathinfo($language_file);

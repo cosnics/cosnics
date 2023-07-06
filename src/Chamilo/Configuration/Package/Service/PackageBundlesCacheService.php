@@ -26,6 +26,25 @@ class PackageBundlesCacheService implements CacheDataPreLoaderInterface
         $this->packageBundlesGenerator = $packageBundlesGenerator;
     }
 
+    public function clearCacheDataForIdentifier(int $cacheIdentifier): bool
+    {
+        $cacheKey = $this->getCacheKeyForParts([$cacheIdentifier]);
+
+        if (!$this->hasCacheDataForKey($cacheKey))
+        {
+            try
+            {
+                $this->clearCacheDataForKey($cacheKey);
+            }
+            catch (CacheException)
+            {
+                return false;
+            }
+        }
+
+        return true;
+    }
+
     /**
      * @throws \Symfony\Component\Cache\Exception\CacheException
      */

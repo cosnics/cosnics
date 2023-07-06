@@ -1,7 +1,7 @@
 <?php
 namespace Chamilo\Libraries\Console\Command;
 
-use Chamilo\Configuration\Package\PlatformPackageBundles;
+use Chamilo\Configuration\Package\Service\PackageBundlesCacheService;
 use Chamilo\Libraries\File\SystemPathBuilder;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputInterface;
@@ -17,16 +17,21 @@ use Twig\Environment;
 class PackagesPHPUnitGeneratorCommand extends Command
 {
 
+    protected PackageBundlesCacheService $packageBundlesCacheService;
+
     protected SystemPathBuilder $systemPathBuilder;
 
     protected Environment $twig;
 
-    public function __construct(Environment $twig, SystemPathBuilder $systemPathBuilder)
+    public function __construct(
+        Environment $twig, SystemPathBuilder $systemPathBuilder, PackageBundlesCacheService $packageBundlesCacheService
+    )
     {
         parent::__construct();
 
         $this->twig = $twig;
         $this->systemPathBuilder = $systemPathBuilder;
+        $this->packageBundlesCacheService = $packageBundlesCacheService;
     }
 
     protected function configure()
@@ -42,10 +47,11 @@ class PackagesPHPUnitGeneratorCommand extends Command
      * @throws \Twig\Error\LoaderError
      * @throws \Twig\Error\RuntimeError
      * @throws \Twig\Error\SyntaxError
+     * @throws \Symfony\Component\Cache\Exception\CacheException
      */
     protected function execute(InputInterface $input, OutputInterface $output)
     {
-        $packages = PlatformPackageBundles::getInstance()->get_package_list()->getNestedPackages();
+        $packages = $this->packageBundlesCacheService->getAllPackages()->getNestedPackages();
 
         foreach ($packages as $packageContext => $package)
         {
@@ -56,12 +62,14 @@ class PackagesPHPUnitGeneratorCommand extends Command
             $sourcePathExists = $integrationPathExists = $unitPathExists = false;
 
             $sourcePath = $testPath . DIRECTORY_SEPARATOR . 'Source';
+
             if (is_dir($sourcePath))
             {
                 $sourcePathExists = true;
             }
 
             $integrationPath = $testPath . DIRECTORY_SEPARATOR . 'Integration';
+
             if (is_dir($integrationPath))
             {
                 $output->writeln('[INTEGRATION] ' . $packageContext);
@@ -69,6 +77,7 @@ class PackagesPHPUnitGeneratorCommand extends Command
             }
 
             $unitPath = $testPath . DIRECTORY_SEPARATOR . 'Unit';
+
             if (is_dir($unitPath))
             {
                 $output->writeln('[UNIT] ' . $packageContext);

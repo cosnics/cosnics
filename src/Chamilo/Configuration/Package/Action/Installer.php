@@ -2,11 +2,13 @@
 namespace Chamilo\Configuration\Package\Action;
 
 use Chamilo\Configuration\Package\Action;
-use Chamilo\Configuration\Package\PlatformPackageBundles;
+use Chamilo\Configuration\Package\PackageList;
 use Chamilo\Configuration\Package\Properties\Dependencies\DependencyVerifier;
+use Chamilo\Configuration\Package\Service\PackageBundlesCacheService;
 use Chamilo\Configuration\Package\Storage\DataClass\Package;
 use Chamilo\Configuration\Storage\DataClass\Registration;
 use Chamilo\Configuration\Storage\DataClass\Setting;
+use Chamilo\Libraries\DependencyInjection\DependencyInjectionContainerBuilder;
 use Chamilo\Libraries\Translation\Translation;
 use DOMDocument;
 use Symfony\Component\Finder\Iterator\FileTypeFilterIterator;
@@ -81,8 +83,10 @@ abstract class Installer extends Action
             return false;
         }
 
-        PlatformPackageBundles::getInstance(PlatformPackageBundles::MODE_AVAILABLE)->reset();
-        PlatformPackageBundles::getInstance(PlatformPackageBundles::MODE_INSTALLED)->reset();
+        $packageBundlesCacheService = $this->getPackageBundlesCacheService();
+
+        $packageBundlesCacheService->clearCacheDataForIdentifier(PackageList::MODE_AVAILABLE);
+        $packageBundlesCacheService->clearCacheDataForIdentifier(PackageList::MODE_INSTALLED);
 
         return $this->successful();
     }
@@ -179,6 +183,13 @@ abstract class Installer extends Action
         $class = $context . '\Package\Installer';
 
         return new $class($values);
+    }
+
+    public function getPackageBundlesCacheService(): PackageBundlesCacheService
+    {
+        return DependencyInjectionContainerBuilder::getInstance()->createContainer()->get(
+            PackageBundlesCacheService::class
+        );
     }
 
     /**

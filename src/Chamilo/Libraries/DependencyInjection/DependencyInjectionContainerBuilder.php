@@ -541,7 +541,8 @@ class DependencyInjectionContainerBuilder
     }
 
     /**
-     * @throws \Exception
+     * @throws \Chamilo\Libraries\Storage\Exception\ConnectionException
+     * @throws \Symfony\Component\Cache\Exception\CacheException
      */
     public function rebuildContainer(
         ?ContainerBuilder $builder = null, ?ContainerExtensionFinderInterface $containerExtensionFinder = null,

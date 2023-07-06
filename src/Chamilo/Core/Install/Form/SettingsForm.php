@@ -2,8 +2,10 @@
 namespace Chamilo\Core\Install\Form;
 
 use Chamilo\Configuration\Package\PackageList;
-use Chamilo\Configuration\Package\PlatformPackageBundles;
+use Chamilo\Configuration\Package\Service\PackageBundlesCacheService;
 use Chamilo\Configuration\Package\Storage\DataClass\Package;
+use Chamilo\Configuration\Service\Consulter\LanguageConsulter;
+use Chamilo\Configuration\Storage\DataClass\Language;
 use Chamilo\Core\Install\Manager;
 use Chamilo\Core\Install\ValidateDatabaseConnection;
 use Chamilo\Core\Repository\ContentObject\Hotpotatoes\Storage\DataClass\Hotpotatoes;
@@ -15,7 +17,6 @@ use Chamilo\Libraries\Format\Structure\Glyph\NamespaceIdentGlyph;
 use Chamilo\Libraries\Format\Tabs\Form\FormTab;
 use Chamilo\Libraries\Format\Tabs\TabsCollection;
 use Chamilo\Libraries\Hashing\HashingUtilities;
-use Chamilo\Libraries\Translation\Translation;
 use Chamilo\Libraries\Utilities\StringUtilities;
 
 /**
@@ -25,6 +26,11 @@ use Chamilo\Libraries\Utilities\StringUtilities;
  */
 class SettingsForm extends FormValidator
 {
+
+    /**
+     * @var string[]
+     */
+    protected array $sessionSettings;
 
     private Application $application;
 
@@ -41,18 +47,35 @@ class SettingsForm extends FormValidator
         $this->setDefaults();
     }
 
+    /**
+     * @throws \QuickformException
+     */
     public function addDatabaseSettings()
     {
+        $translator = $this->getTranslator();
+
         $this->addElement(
-            'select', 'database_driver', Translation::get('DatabaseDriver'), $this->get_database_drivers()
+            'select', 'database_driver', $translator->trans('DatabaseDriver', [], Manager::CONTEXT),
+            $this->get_database_drivers()
         );
-        $this->addElement('text', 'database_host', Translation::get('DatabaseHost'), ['size' => '40']);
-        $this->addElement('text', 'database_name', Translation::get('DatabaseName'), ['size' => '40']);
+        $this->addElement(
+            'text', 'database_host', $translator->trans('DatabaseHost', [], Manager::CONTEXT), ['size' => '40']
+        );
+        $this->addElement(
+            'text', 'database_name', $translator->trans('DatabaseName', [], Manager::CONTEXT), ['size' => '40']
+        );
 
-        $this->addElement('text', 'database_username', Translation::get('DatabaseLogin'), ['size' => '40']);
-        $this->addElement('password', 'database_password', Translation::get('DatabasePassword'), ['size' => '40']);
+        $this->addElement(
+            'text', 'database_username', $translator->trans('DatabaseLogin', [], Manager::CONTEXT), ['size' => '40']
+        );
+        $this->addElement(
+            'password', 'database_password', $translator->trans('DatabasePassword', [], Manager::CONTEXT),
+            ['size' => '40']
+        );
 
-        $this->addElement('checkbox', 'database_overwrite', Translation::get('DatabaseOverwrite'));
+        $this->addElement(
+            'checkbox', 'database_overwrite', $translator->trans('DatabaseOverwrite', [], Manager::CONTEXT)
+        );
 
         $this->addRule('database_host', 'ThisFieldIsRequired', 'required');
         $this->addRule('database_driver', 'ThisFieldIsRequired', 'required');
@@ -62,102 +85,149 @@ class SettingsForm extends FormValidator
         $this->addRule('database_name', 'OnlyCharactersNumbersUnderscoresAndDollarSigns', 'regex', $pattern);
         $this->addRule(
             ['database_driver', 'database_host', 'database_username', 'database_password', 'database_name'],
-            Translation::get('CouldNotConnectToDatabase'), new ValidateDatabaseConnection()
+            $translator->trans('CouldNotConnectToDatabase', [], Manager::CONTEXT), 'validate_database_connection'
         );
     }
 
-    public function addGeneralSettings()
+    /**
+     * @throws \QuickformException
+     */
+    public function addGeneralSettings(): void
     {
-        $this->addElement('category', Translation::get('GeneralProperties'));
+        $translator = $this->getTranslator();
+
+        $this->addElement('category', $translator->trans('GeneralProperties', [], Manager::CONTEXT));
         $this->addElement(
-            'select', 'platform_language', Translation::get('MainLang'), $this->getApplication()->getLanguages()
+            'select', 'platform_language', $translator->trans('MainLang', [], Manager::CONTEXT),
+            $this->getLanguageOptions()
         );
 
-        $this->addElement('category', Translation::get('Administrator'));
-        $this->addElement('text', 'admin_email', Translation::get('AdminEmail'), ['size' => '40']);
-        $this->addRule(
-            'admin_email', Translation::get('ThisFieldIsRequired', null, StringUtilities::LIBRARIES), 'required'
+        $this->addElement('category', $translator->trans('Administrator', [], Manager::CONTEXT));
+        $this->addElement(
+            'text', 'admin_email', $translator->trans('AdminEmail', [], Manager::CONTEXT), ['size' => '40']
         );
-        $this->addRule('admin_email', Translation::get('WrongEmail'), 'email');
-        $this->addElement('text', 'admin_surname', Translation::get('AdminLastName'), ['size' => '40']);
         $this->addRule(
-            'admin_surname', Translation::get('ThisFieldIsRequired', null, StringUtilities::LIBRARIES), 'required'
+            'admin_email', $translator->trans('ThisFieldIsRequired', [], StringUtilities::LIBRARIES), 'required'
         );
-        $this->addElement('text', 'admin_firstname', Translation::get('AdminFirstName'), ['size' => '40']);
-        $this->addRule(
-            'admin_firstname', Translation::get('ThisFieldIsRequired', null, StringUtilities::LIBRARIES), 'required'
+        $this->addRule('admin_email', $translator->trans('WrongEmail', [], Manager::CONTEXT), 'email');
+        $this->addElement(
+            'text', 'admin_surname', $translator->trans('AdminLastName', [], Manager::CONTEXT), ['size' => '40']
         );
-        $this->addElement('text', 'admin_phone', Translation::get('AdminPhone'), ['size' => '40']);
-        $this->addElement('text', 'admin_username', Translation::get('AdminLogin'), ['size' => '40']);
         $this->addRule(
-            'admin_username', Translation::get('ThisFieldIsRequired', null, StringUtilities::LIBRARIES), 'required'
+            'admin_surname', $translator->trans('ThisFieldIsRequired', [], StringUtilities::LIBRARIES), 'required'
         );
-        $this->addElement('text', 'admin_password', Translation::get('AdminPass'), ['size' => '40']);
-        $this->addRule(
-            'admin_password', Translation::get('ThisFieldIsRequired', null, StringUtilities::LIBRARIES), 'required'
+        $this->addElement(
+            'text', 'admin_firstname', $translator->trans('AdminFirstName', [], Manager::CONTEXT), ['size' => '40']
         );
-
-        $this->addElement('category', Translation::get('Platform'));
-        $this->addElement('text', 'site_name', Translation::get('CampusName'), ['size' => '40']);
         $this->addRule(
-            'site_name', Translation::get('ThisFieldIsRequired', null, StringUtilities::LIBRARIES), 'required'
+            'admin_firstname', $translator->trans('ThisFieldIsRequired', [], StringUtilities::LIBRARIES), 'required'
         );
-        $this->addElement('text', 'organization_name', Translation::get('InstituteShortName'), ['size' => '40']);
-        $this->addRule(
-            'organization_name', Translation::get('ThisFieldIsRequired', null, StringUtilities::LIBRARIES), 'required'
+        $this->addElement(
+            'text', 'admin_phone', $translator->trans('AdminPhone', [], Manager::CONTEXT), ['size' => '40']
         );
-        $this->addElement('text', 'organization_url', Translation::get('InstituteURL'), ['size' => '40']);
+        $this->addElement(
+            'text', 'admin_username', $translator->trans('AdminLogin', [], Manager::CONTEXT), ['size' => '40']
+        );
         $this->addRule(
-            'organization_url', Translation::get('ThisFieldIsRequired', null, StringUtilities::LIBRARIES), 'required'
+            'admin_username', $translator->trans('ThisFieldIsRequired', [], StringUtilities::LIBRARIES), 'required'
+        );
+        $this->addElement(
+            'text', 'admin_password', $translator->trans('AdminPass', [], Manager::CONTEXT), ['size' => '40']
+        );
+        $this->addRule(
+            'admin_password', $translator->trans('ThisFieldIsRequired', [], StringUtilities::LIBRARIES), 'required'
         );
 
-        $this->addElement('category', Translation::get('Security'));
+        $this->addElement('category', $translator->trans('Platform', [], Manager::CONTEXT));
+        $this->addElement('text', 'site_name', $translator->trans('CampusName', [], Manager::CONTEXT), ['size' => '40']
+        );
+        $this->addRule(
+            'site_name', $translator->trans('ThisFieldIsRequired', [], StringUtilities::LIBRARIES), 'required'
+        );
+        $this->addElement(
+            'text', 'organization_name', $translator->trans('InstituteShortName', [], Manager::CONTEXT),
+            ['size' => '40']
+        );
+        $this->addRule(
+            'organization_name', $translator->trans('ThisFieldIsRequired', [], StringUtilities::LIBRARIES), 'required'
+        );
+        $this->addElement(
+            'text', 'organization_url', $translator->trans('InstituteURL', [], Manager::CONTEXT), ['size' => '40']
+        );
+        $this->addRule(
+            'organization_url', $translator->trans('ThisFieldIsRequired', [], StringUtilities::LIBRARIES), 'required'
+        );
+
+        $this->addElement('category', $translator->trans('Security', [], Manager::CONTEXT));
 
         $selfRegistration = [];
         $selfRegistration[] = $this->createElement(
-            'radio', 'self_reg', null, Translation::get('ConfirmYes', null, StringUtilities::LIBRARIES), 1
+            'radio', 'self_reg', null, $translator->trans('ConfirmYes', [], StringUtilities::LIBRARIES), 1
         );
-        $selfRegistration[] = $this->createElement('radio', 'self_reg', null, Translation::get('AfterApproval'), 2);
         $selfRegistration[] = $this->createElement(
-            'radio', 'self_reg', null, Translation::get('ConfirmNo', null, StringUtilities::LIBRARIES), 0
+            'radio', 'self_reg', null, $translator->trans('AfterApproval', [], Manager::CONTEXT), 2
         );
-        $this->addGroup($selfRegistration, 'self_reg', Translation::get('AllowSelfReg'), '&nbsp;', false);
+        $selfRegistration[] = $this->createElement(
+            'radio', 'self_reg', null, $translator->trans('ConfirmNo', [], StringUtilities::LIBRARIES), 0
+        );
+        $this->addGroup(
+            $selfRegistration, 'self_reg', $translator->trans('AllowSelfReg', [], Manager::CONTEXT), '&nbsp;', false
+        );
 
         $this->addElement(
-            'select', 'hashing_algorithm', Translation::get('HashingAlgorithm'), HashingUtilities::getAvailableTypes()
+            'select', 'hashing_algorithm', $translator->trans('HashingAlgorithm', [], Manager::CONTEXT),
+            HashingUtilities::getAvailableTypes()
         );
 
-        $this->addElement('category', Translation::get('Storage'));
-        $this->addElement('text', 'archive_path', Translation::get('ArchivePath'), ['size' => '40']);
-        $this->addElement('text', 'cache_path', Translation::get('CachePath'), ['size' => '40']);
-        $this->addElement('text', 'garbage_path', Translation::get('GarbagePath'), ['size' => '40']);
-        $this->addElement('text', 'hotpotatoes_path', Translation::get('HotpotatoesPath'), ['size' => '40']);
-        $this->addElement('text', 'logs_path', Translation::get('LogsPath'), ['size' => '40']);
-        $this->addElement('text', 'repository_path', Translation::get('RepositoryPath'), ['size' => '40']);
-        $this->addElement('text', 'scorm_path', Translation::get('ScormPath'), ['size' => '40']);
-        $this->addElement('text', 'temp_path', Translation::get('TempPath'), ['size' => '40']);
-        $this->addElement('text', 'userpictures_path', Translation::get('UserPicturesPath'), ['size' => '40']);
+        $this->addElement('category', $translator->trans('Storage', [], Manager::CONTEXT));
+        $this->addElement(
+            'text', 'archive_path', $translator->trans('ArchivePath', [], Manager::CONTEXT), ['size' => '40']
+        );
+        $this->addElement('text', 'cache_path', $translator->trans('CachePath', [], Manager::CONTEXT), ['size' => '40']
+        );
+        $this->addElement(
+            'text', 'garbage_path', $translator->trans('GarbagePath', [], Manager::CONTEXT), ['size' => '40']
+        );
+        $this->addElement(
+            'text', 'hotpotatoes_path', $translator->trans('HotpotatoesPath', [], Manager::CONTEXT), ['size' => '40']
+        );
+        $this->addElement('text', 'logs_path', $translator->trans('LogsPath', [], Manager::CONTEXT), ['size' => '40']);
+        $this->addElement(
+            'text', 'repository_path', $translator->trans('RepositoryPath', [], Manager::CONTEXT), ['size' => '40']
+        );
+        $this->addElement('text', 'scorm_path', $translator->trans('ScormPath', [], Manager::CONTEXT), ['size' => '40']
+        );
+        $this->addElement('text', 'temp_path', $translator->trans('TempPath', [], Manager::CONTEXT), ['size' => '40']);
+        $this->addElement(
+            'text', 'userpictures_path', $translator->trans('UserPicturesPath', [], Manager::CONTEXT), ['size' => '40']
+        );
     }
 
-    protected function addPackageSelectionToggle()
+    protected function addPackageSelectionToggle(): string
     {
+        $translator = $this->getTranslator();
+
         $html = [];
 
         $html[] = '&nbsp;';
         $html[] = '<small>';
         $html[] = '<a class="label label-success package-list-select-all">';
-        $html[] = Translation::get('SelectAll', null, StringUtilities::LIBRARIES);
+        $html[] = $translator->trans('SelectAll', [], StringUtilities::LIBRARIES);
         $html[] = '</a>';
         $html[] = '&nbsp;';
         $html[] = '<a class="label label-default package-list-select-none">';
-        $html[] = Translation::get('UnselectAll', null, StringUtilities::LIBRARIES);
+        $html[] = $translator->trans('UnselectAll', [], StringUtilities::LIBRARIES);
         $html[] = '</a>';
         $html[] = '</small>';
 
         return implode(PHP_EOL, $html);
     }
 
-    public function addPackageSettings()
+    /**
+     * @throws \QuickformException
+     * @throws \Symfony\Component\Cache\Exception\CacheException
+     */
+    public function addPackageSettings(): void
     {
         $html = [];
 
@@ -165,7 +235,7 @@ class SettingsForm extends FormValidator
         $html[] = '<div class="row">';
         $html[] = '<div class="col-xs-12">';
         $html[] = '<h4>';
-        $html[] = Translation::get('AllPackages');
+        $html[] = $this->getTranslator()->trans('AllPackages');
         $html[] = $this->addPackageSelectionToggle();
         $html[] = '</h4>';
         $html[] = '</div>';
@@ -173,7 +243,7 @@ class SettingsForm extends FormValidator
 
         $this->addElement('html', implode(PHP_EOL, $html));
 
-        $this->renderPackages(PlatformPackageBundles::getInstance()->get_package_list());
+        $this->renderPackages($this->getPackageBundlesCacheService()->getAllPackages());
 
         $html = [];
 
@@ -184,18 +254,31 @@ class SettingsForm extends FormValidator
         $this->addElement('html', implode(PHP_EOL, $html));
     }
 
-    protected function buildForm()
+    /**
+     * @throws \QuickformException
+     */
+    protected function buildForm(): void
     {
+        $translator = $this->getTranslator();
+
         $tabsCollection = new TabsCollection();
 
         $tabsCollection->add(
-            new FormTab('database', Translation::get('DatabaseComponentTitle'), null, 'addDatabaseSettings')
+            new FormTab(
+                'database', $translator->trans('DatabaseComponentTitle', [], Manager::CONTEXT), null,
+                'addDatabaseSettings'
+            )
         );
         $tabsCollection->add(
-            new FormTab('general', Translation::get('SettingsComponentTitle'), null, 'addGeneralSettings')
+            new FormTab(
+                'general', $translator->trans('SettingsComponentTitle', [], Manager::CONTEXT), null,
+                'addGeneralSettings'
+            )
         );
         $tabsCollection->add(
-            new FormTab('package', Translation::get('PackageComponentTitle'), null, 'addPackageSettings')
+            new FormTab(
+                'package', $translator->trans('PackageComponentTitle', [], Manager::CONTEXT), null, 'addPackageSettings'
+            )
         );
 
         $this->getFormTabsGenerator()->generate('settings', $this, $tabsCollection);
@@ -204,15 +287,17 @@ class SettingsForm extends FormValidator
 
         $glyph = new FontAwesomeGlyph('chevron-left', [], null, 'fas');
 
-        $buttons[] = $this->createElement(
-            'static', null, null,
-            '<a href="' . $this->getApplication()->get_url([Manager::PARAM_ACTION => Manager::ACTION_LICENSE]) .
-            '" class="btn btn-default">' . $glyph->render() .
-            Translation::get('Previous', null, StringUtilities::LIBRARIES) . '</a>'
+        $licenseUrl = $this->getUrlGenerator()->fromParameters(
+            [Application::PARAM_CONTEXT => Manager::CONTEXT, Manager::PARAM_ACTION => Manager::ACTION_LICENSE]
         );
 
         $buttons[] = $this->createElement(
-            'style_button', 'next', Translation::get('Next', null, StringUtilities::LIBRARIES),
+            'static', null, null, '<a href="' . $licenseUrl . '" class="btn btn-default">' . $glyph->render() .
+            $translator->trans('Previous', [], StringUtilities::LIBRARIES) . '</a>'
+        );
+
+        $buttons[] = $this->createElement(
+            'style_button', 'next', $translator->trans('Next', [], StringUtilities::LIBRARIES),
             ['class' => 'btn-primary'], null, new FontAwesomeGlyph('chevron-right')
         );
         $this->addGroup($buttons, 'buttons', null, '&nbsp;', false);
@@ -223,13 +308,13 @@ class SettingsForm extends FormValidator
      *
      * @return \Chamilo\Configuration\Package\Storage\DataClass\Package[]
      */
-    public function determinePackages(PackageList $packageList)
+    public function determinePackages(PackageList $packageList): array
     {
         $packages = [];
 
         foreach ($packageList->getPackages() as $namespace => $package)
         {
-            if (strpos($namespace, '\Integration\Chamilo\\') === false)
+            if (!str_contains($namespace, '\Integration\Chamilo\\'))
             {
                 $packages[] = $package;
             }
@@ -240,20 +325,34 @@ class SettingsForm extends FormValidator
         return $packages;
     }
 
-    /**
-     * @return \Chamilo\Libraries\Architecture\Application\Application
-     */
-    public function getApplication()
+    public function getApplication(): Application
     {
         return $this->application;
     }
 
-    /**
-     * @param \Chamilo\Configuration\Package\Storage\DataClass\Package $package
-     *
-     * @return string
-     */
-    private function getPackageClasses(Package $package)
+    public function getLanguageConsulter(): LanguageConsulter
+    {
+        return $this->getService(LanguageConsulter::class);
+    }
+
+    protected function getLanguageOptions(): array
+    {
+        $languageOptions = [];
+
+        foreach ($this->getLanguageConsulter()->getLanguagesFromFilesystem() as $isocode => $language)
+        {
+            $languageOptions[$isocode] = $language[Language::PROPERTY_ORIGINAL_NAME];
+        }
+
+        return $languageOptions;
+    }
+
+    public function getPackageBundlesCacheService(): PackageBundlesCacheService
+    {
+        return $this->getService(PackageBundlesCacheService::class);
+    }
+
+    private function getPackageClasses(Package $package): string
     {
         $classes = ['btn'];
 
@@ -261,32 +360,29 @@ class SettingsForm extends FormValidator
         {
             $classes[] = 'btn-default';
         }
-        else
+        elseif ($package->getDefaultInstall())
         {
-            if ($package->getDefaultInstall())
-            {
-                $sessionSettings = $this->getSessionSettings();
+            $sessionSettings = $this->getSessionSettings();
 
-                if (!empty($sessionSettings))
+            if (!empty($sessionSettings))
+            {
+                if ($sessionSettings['install'][$package->get_context()])
                 {
-                    if ($sessionSettings['install'][$package->get_context()])
-                    {
-                        $classes[] = 'btn-success';
-                    }
-                    else
-                    {
-                        $classes[] = 'btn-default';
-                    }
+                    $classes[] = 'btn-success';
                 }
                 else
                 {
-                    $classes[] = 'btn-success';
+                    $classes[] = 'btn-default';
                 }
             }
             else
             {
-                $classes[] = 'btn-default';
+                $classes[] = 'btn-success';
             }
+        }
+        else
+        {
+            $classes[] = 'btn-default';
         }
 
         return implode(' ', $classes);
@@ -295,7 +391,7 @@ class SettingsForm extends FormValidator
     /**
      * @return string[]
      */
-    protected function getSessionSettings()
+    protected function getSessionSettings(): array
     {
         if (!isset($this->sessionSettings))
         {
@@ -316,7 +412,7 @@ class SettingsForm extends FormValidator
         return $this->sessionSettings;
     }
 
-    protected function get_database_drivers()
+    protected function get_database_drivers(): array
     {
         $drivers = [];
         $drivers['mysqli'] = 'MySQL >= 4.1.3';
@@ -324,7 +420,7 @@ class SettingsForm extends FormValidator
         return $drivers;
     }
 
-    protected function hasSelectablePackages($packages)
+    protected function hasSelectablePackages($packages): bool
     {
         if (count($packages) <= 1)
         {
@@ -351,20 +447,24 @@ class SettingsForm extends FormValidator
         return true;
     }
 
-    public function orderPackages($packageLeft, $packageRight)
+    public function orderPackages($packageLeft, $packageRight): int
     {
-        $packageNameLeft = Translation::get('TypeName', null, $packageLeft->get_context());
-        $packageNameRight = Translation::get('TypeName', null, $packageRight->get_context());
+        $translator = $this->getTranslator();
+
+        $packageNameLeft = $translator->trans('TypeName', [], $packageLeft->get_context());
+        $packageNameRight = $translator->trans('TypeName', [], $packageRight->get_context());
 
         return strcmp($packageNameLeft, $packageNameRight);
     }
 
     /**
      * @param \Chamilo\Configuration\Package\PackageList $packageList
+     *
+     * @throws \QuickformException
      */
-    public function renderPackages(PackageList $packageList)
+    public function renderPackages(PackageList $packageList): void
     {
-        $html = [];
+        $translator = $this->getTranslator();
 
         $renderer = $this->defaultRenderer();
         $packages = $this->determinePackages($packageList);
@@ -372,7 +472,7 @@ class SettingsForm extends FormValidator
         if (count($packages) > 0)
         {
             $firstPackage = current($packages);
-            $packageType = Translation::get('TypeCategory', null, $firstPackage->get_context());
+            $packageType = $translator->trans('TypeCategory', [], $firstPackage->get_context());
 
             $html = [];
 
@@ -398,7 +498,7 @@ class SettingsForm extends FormValidator
 
             foreach ($packages as $package)
             {
-                $title = Translation::get('TypeName', null, $package->get_context());
+                $title = $translator->trans('TypeName', [], $package->get_context());
                 $packageClasses = $this->getPackageClasses($package);
 
                 if ($package->getCoreInstall())
@@ -451,60 +551,60 @@ class SettingsForm extends FormValidator
         }
     }
 
-    /**
-     * @param \Chamilo\Libraries\Architecture\Application\Application $application
-     */
-    public function setApplication($application)
+    public function setApplication(Application $application): void
     {
         $this->application = $application;
     }
 
-    public function setDefaults($defaults = [], $filter = null)
+    public function setDefaults(array $defaultValues = [], $filter = null)
     {
+        $translator = $this->getTranslator();
+
         $sessionSettings = $this->getSessionSettings();
 
         if (!empty($sessionSettings))
         {
-            $defaults = $sessionSettings;
+            $defaultValues = $sessionSettings;
         }
         else
         {
             // Database
-            $defaults['database_driver'] = 'mysqli';
-            $defaults['database_host'] = 'localhost';
-            $defaults['database_name'] = 'cosnics';
+            $defaultValues['database_driver'] = 'mysqli';
+            $defaultValues['database_host'] = 'localhost';
+            $defaultValues['database_name'] = 'cosnics';
 
             // General settings
 
-            $defaults['platform_language'] = Translation::getInstance()->getLanguageIsocode();
-            $defaults['admin_email'] = $_SERVER['SERVER_ADMIN'];
-            $email_parts = explode('@', $defaults['admin_email']);
+            $defaultValues['platform_language'] = $translator->getLocale();
+            $defaultValues['admin_email'] = $_SERVER['SERVER_ADMIN'];
+            $email_parts = explode('@', $defaultValues['admin_email']);
             if ($email_parts[1] == 'localhost')
             {
-                $defaults['admin_email'] .= '.localdomain';
+                $defaultValues['admin_email'] .= '.localdomain';
             }
-            $defaults['admin_surname'] = 'Doe';
-            $defaults['admin_firstname'] = mt_rand(0, 1) ? 'John' : 'Jane';
-            $defaults['admin_username'] = 'admin';
-            $defaults['site_name'] = Translation::get('MyChamilo');
-            $defaults['organization_name'] = Translation::get('Chamilo');
-            $defaults['organization_url'] = 'http://www.cosnics.org';
-            $defaults['self_reg'] = 0;
-            $defaults['encrypt_password'] = 1;
-            $defaults['hashing_algorithm'] = 'Sha1';
+            $defaultValues['admin_surname'] = 'Doe';
+            $defaultValues['admin_firstname'] = mt_rand(0, 1) ? 'John' : 'Jane';
+            $defaultValues['admin_username'] = 'admin';
+            $defaultValues['site_name'] = $translator->trans('MyChamilo', [], Manager::CONTEXT);
+            $defaultValues['organization_name'] = $translator->trans('Chamilo', [], Manager::CONTEXT);
+            $defaultValues['organization_url'] = 'http://www.cosnics.org';
+            $defaultValues['self_reg'] = 0;
+            $defaultValues['encrypt_password'] = 1;
+            $defaultValues['hashing_algorithm'] = 'Sha1';
 
             // Storage paths
-            $defaults['archive_path'] = $this->getConfigurablePathBuilder()->getArchivePath();
-            $defaults['cache_path'] = $this->getConfigurablePathBuilder()->getCachePath();
-            $defaults['garbage_path'] = $this->getConfigurablePathBuilder()->getGarbagePath();
-            $defaults['hotpotatoes_path'] = $this->getSystemPathBuilder()->getPublicStoragePath(Hotpotatoes::CONTEXT);
-            $defaults['logs_path'] = $this->getConfigurablePathBuilder()->getLogPath();
-            $defaults['repository_path'] = $this->getConfigurablePathBuilder()->getRepositoryPath();
-            $defaults['scorm_path'] = $this->getConfigurablePathBuilder()->getScormPath();
-            $defaults['temp_path'] = $this->getConfigurablePathBuilder()->getTemporaryPath();
-            $defaults['userpictures_path'] = $this->getConfigurablePathBuilder()->getUserPicturesPath();
+            $defaultValues['archive_path'] = $this->getConfigurablePathBuilder()->getArchivePath();
+            $defaultValues['cache_path'] = $this->getConfigurablePathBuilder()->getCachePath();
+            $defaultValues['garbage_path'] = $this->getConfigurablePathBuilder()->getGarbagePath();
+            $defaultValues['hotpotatoes_path'] =
+                $this->getSystemPathBuilder()->getPublicStoragePath(Hotpotatoes::CONTEXT);
+            $defaultValues['logs_path'] = $this->getConfigurablePathBuilder()->getLogPath();
+            $defaultValues['repository_path'] = $this->getConfigurablePathBuilder()->getRepositoryPath();
+            $defaultValues['scorm_path'] = $this->getConfigurablePathBuilder()->getScormPath();
+            $defaultValues['temp_path'] = $this->getConfigurablePathBuilder()->getTemporaryPath();
+            $defaultValues['userpictures_path'] = $this->getConfigurablePathBuilder()->getUserPicturesPath();
         }
 
-        parent::setDefaults($defaults);
+        parent::setDefaults($defaultValues);
     }
 }

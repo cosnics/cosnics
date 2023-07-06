@@ -1,13 +1,12 @@
 <?php
 namespace Chamilo\Core\Lynx\Component;
 
-use Chamilo\Configuration\Package\PlatformPackageBundles;
+use Chamilo\Configuration\Package\Service\PackageBundlesCacheService;
 use Chamilo\Configuration\Storage\DataClass\Registration;
 use Chamilo\Configuration\Storage\DataManager;
 use Chamilo\Core\Lynx\Manager;
 use Chamilo\Core\Lynx\Menu\PackageTypeMenu;
 use Chamilo\Libraries\Architecture\Application\Application;
-use Chamilo\Libraries\Architecture\ClassnameUtilities;
 use Chamilo\Libraries\Architecture\Interfaces\DelegateComponent;
 use Chamilo\Libraries\Format\Display;
 use Chamilo\Libraries\Format\Structure\Breadcrumb;
@@ -26,8 +25,8 @@ use Chamilo\Libraries\Storage\Parameters\DataClassRetrievesParameters;
 use Chamilo\Libraries\Storage\Query\Condition\EqualityCondition;
 use Chamilo\Libraries\Storage\Query\Variable\PropertyConditionVariable;
 use Chamilo\Libraries\Storage\Query\Variable\StaticConditionVariable;
-use Chamilo\Libraries\Translation\Translation;
 use Chamilo\Libraries\Utilities\StringUtilities;
+use Doctrine\Common\Collections\ArrayCollection;
 
 class BrowserComponent extends Manager implements DelegateComponent
 {
@@ -35,13 +34,11 @@ class BrowserComponent extends Manager implements DelegateComponent
     public const STATUS_AVAILABLE = 2;
     public const STATUS_INSTALLED = 1;
 
-    /**
-     * @var string
-     */
-    private $current_type;
+    private string $currentType;
 
     /**
-     * Runs this component and displays its output.
+     * @throws \ReflectionException
+     * @throws \Symfony\Component\Cache\Exception\CacheException
      */
     public function run()
     {
@@ -51,41 +48,49 @@ class BrowserComponent extends Manager implements DelegateComponent
 
         $html = [];
 
-        $html[] = $this->render_header();
+        $html[] = $this->renderHeader();
         $html[] = $this->get_content();
-        $html[] = $this->render_footer();
+        $html[] = $this->renderFooter();
 
         return implode(PHP_EOL, $html);
     }
 
-    public function add_admin_breadcrumb()
+    public function add_admin_breadcrumb(): void
     {
         $breadcrumb_trail = BreadcrumbTrail::getInstance();
-        $breadcrumbs = $breadcrumb_trail->get_breadcrumbs();
+        $breadcrumbs = $breadcrumb_trail->getBreadcrumbs();
 
         $adminUrl = $this->getUrlGenerator()->fromParameters(
             [Application::PARAM_CONTEXT => \Chamilo\Core\Admin\Manager::CONTEXT]
         );
 
         array_splice(
-            $breadcrumbs, 1, 0, [new Breadcrumb($adminUrl, Translation::get('Administration'))]
+            $breadcrumbs, 1, 0,
+            [new Breadcrumb($adminUrl, $this->getTranslator()->trans('Administration', [], Manager::CONTEXT))]
         );
 
         $breadcrumb_trail->set($breadcrumbs);
     }
 
-    /**
-     * @return string
-     */
-    public function getCurrentType()
+    public function getArrayCollectionTableRenderer(): ArrayCollectionTableRenderer
     {
-        if (!isset($this->current_type))
+        return $this->getService(ArrayCollectionTableRenderer::class);
+    }
+
+    public function getCurrentType(): string
+    {
+        if (!isset($this->currentType))
         {
-            $this->current_type =
+            $this->currentType =
                 $this->getRequest()->query->get(Manager::PARAM_REGISTRATION_TYPE, 'Chamilo\Application');
         }
 
-        return $this->current_type;
+        return $this->currentType;
+    }
+
+    public function getPackageBundlesCacheService(): PackageBundlesCacheService
+    {
+        return $this->getService(PackageBundlesCacheService::class);
     }
 
     protected function getTabsRenderer(): TabsRenderer
@@ -93,59 +98,71 @@ class BrowserComponent extends Manager implements DelegateComponent
         return $this->getService(TabsRenderer::class);
     }
 
-    public function get_available_packages_table()
+    /**
+     * @return string
+     * @throws \Chamilo\Libraries\Format\Table\Exception\InvalidPageNumberException
+     * @throws \QuickformException
+     * @throws \ReflectionException
+     * @throws \Symfony\Component\Cache\Exception\CacheException
+     * @throws \TableException
+     */
+    public function get_available_packages_table(): string
     {
-        $packages = PlatformPackageBundles::getInstance(
-            PlatformPackageBundles::MODE_AVAILABLE
-        )->get_type_packages();
+        $translator = $this->getTranslator();
+        $packages = $this->getPackageBundlesCacheService()->getAvailablePackages()->getNestedTypedPackages();
 
         $table_data = [];
 
-        foreach ($packages[$this->current_type] as $package_info)
+        foreach ($packages[$this->currentType] as $package_info)
         {
             $toolbar = new Toolbar();
             $toolbar->add_item(
                 new ToolbarItem(
-                    Translation::get('ViewPackageDetails'), new FontAwesomeGlyph('desktop', [], null, 'fas'),
-                    $this->get_url(
-                        [
-                            self::PARAM_ACTION => self::ACTION_VIEW,
-                            self::PARAM_CONTEXT => $package_info->get_context()
-                        ]
-                    ), ToolbarItem::DISPLAY_ICON
-                )
-            );
-            $toolbar->add_item(
-                new ToolbarItem(
-                    Translation::get('Install'), new FontAwesomeGlyph('box', [], null, 'fas'), $this->get_url(
+                    $translator->trans('ViewPackageDetails', [], Manager::CONTEXT),
+                    new FontAwesomeGlyph('desktop', [], null, 'fas'), $this->get_url(
                     [
-                        self::PARAM_ACTION => self::ACTION_INSTALL,
+                        self::PARAM_ACTION => self::ACTION_VIEW,
                         self::PARAM_CONTEXT => $package_info->get_context()
                     ]
                 ), ToolbarItem::DISPLAY_ICON
                 )
             );
+            $toolbar->add_item(
+                new ToolbarItem(
+                    $translator->trans('Install', [], Manager::CONTEXT), new FontAwesomeGlyph('box', [], null, 'fas'),
+                    $this->get_url(
+                        [
+                            self::PARAM_ACTION => self::ACTION_INSTALL,
+                            self::PARAM_CONTEXT => $package_info->get_context()
+                        ]
+                    ), ToolbarItem::DISPLAY_ICON
+                )
+            );
 
             $row = [];
-            $row[] = Translation::get('TypeName', null, $package_info->get_context());
-            $row[] = $toolbar->as_html();
+            $row[] = $translator->trans('TypeName', [], $package_info->get_context());
+            $row[] = $toolbar->render();
 
             $table_data[] = $row;
         }
 
         $headers = [];
-        $headers[] = new SortableStaticTableColumn(Translation::get('Package'));
-        $headers[] = new StaticTableColumn('');
+        $headers[] = new SortableStaticTableColumn('package', $translator->trans('Package', [], Manager::CONTEXT));
+        $headers[] = new StaticTableColumn('', '');
 
-        $table = new ArrayCollectionTableRenderer(
-            $table_data, $headers, $this->get_parameters(), 0, 20, SORT_ASC, 'available_packages'
+        return $this->getArrayCollectionTableRenderer()->render(
+            $headers, new ArrayCollection($table_data), 0, SORT_ASC, 200, 'available_packages'
         );
-
-        return $table->toHtml();
     }
 
-    public function get_content()
+    /**
+     * @throws \ReflectionException
+     * @throws \Symfony\Component\Cache\Exception\CacheException
+     * @throws \Exception
+     */
+    public function get_content(): string
     {
+        $translator = $this->getTranslator();
         $tabs = new TabsCollection();
 
         $count = DataManager::count(
@@ -161,22 +178,20 @@ class BrowserComponent extends Manager implements DelegateComponent
         {
             $tabs->add(
                 new ContentTab(
-                    self::STATUS_INSTALLED, Translation::get('InstalledPackages'),
+                    (string) self::STATUS_INSTALLED, $translator->trans('InstalledPackages', [], Manager::CONTEXT),
                     $this->get_registered_packages_table(),
                     new FontAwesomeGlyph('check-circle', ['fa-lg', 'fas-ci-va', 'text-success'], null, 'fas')
                 )
             );
         }
 
-        $packages = PlatformPackageBundles::getInstance(
-            PlatformPackageBundles::MODE_AVAILABLE
-        )->get_type_packages();
+        $packages = $this->getPackageBundlesCacheService()->getAvailablePackages()->getNestedTypedPackages();
 
         if (count($packages[$this->getCurrentType()]) > 0)
         {
             $tabs->add(
                 new ContentTab(
-                    self::STATUS_AVAILABLE, Translation::get('AvailablePackages'),
+                    (string) self::STATUS_AVAILABLE, $translator->trans('AvailablePackages', [], Manager::CONTEXT),
                     $this->get_available_packages_table(),
                     new FontAwesomeGlyph('box', ['fa-lg', 'fas-ci-va'], null, 'fas')
                 )
@@ -186,32 +201,49 @@ class BrowserComponent extends Manager implements DelegateComponent
         if ($tabs->count() > 0)
         {
             return $this->getTabsRenderer()->render(
-                ClassnameUtilities::getInstance()->getClassnameFromObject($this, true), $tabs
+                $this->getClassnameUtilities()->getClassnameFromObject($this, true), $tabs
             );
         }
         else
         {
-            return Display::normal_message(Translation::get('NoPackagesAvailableInContextGetSomeNow'), true);
+            return Display::normal_message(
+                $translator->trans('NoPackagesAvailableInContextGetSomeNow', [], Manager::CONTEXT)
+            );
         }
     }
 
+    /**
+     * @throws \ReflectionException
+     * @throws \Symfony\Component\Cache\Exception\CacheException
+     */
     public function get_menu(): string
     {
         $menu = new PackageTypeMenu(
-            $this->getCurrentType(), $this->get_url([Manager::PARAM_REGISTRATION_TYPE => '__type__'])
+            $this->getPackageBundlesCacheService(), $this->getClassnameUtilities(), $this->getCurrentType(),
+            $this->get_url([Manager::PARAM_REGISTRATION_TYPE => '__type__'])
         );
 
         return $menu->render_as_tree();
     }
 
-    public function get_registered_packages_table()
+    /**
+     * @throws \Chamilo\Libraries\Storage\Exception\DataClassNoResultException
+     * @throws \TableException
+     * @throws \ReflectionException
+     * @throws \Chamilo\Libraries\Format\Table\Exception\InvalidPageNumberException
+     * @throws \QuickformException
+     */
+    public function get_registered_packages_table(): string
     {
+        $translator = $this->getTranslator();
+
         $parameters = new DataClassRetrievesParameters(
             new EqualityCondition(
                 new PropertyConditionVariable(Registration::class, Registration::PROPERTY_TYPE),
                 new StaticConditionVariable($this->getCurrentType())
             )
         );
+
         $registrations = DataManager::retrieves(Registration::class, $parameters);
 
         $table_data = [];
@@ -222,13 +254,13 @@ class BrowserComponent extends Manager implements DelegateComponent
 
             $toolbar->add_item(
                 new ToolbarItem(
-                    Translation::get('ViewPackageDetails'), new FontAwesomeGlyph('desktop', [], null, 'fas'),
-                    $this->get_url(
-                        [
-                            Manager::PARAM_ACTION => Manager::ACTION_VIEW,
-                            Manager::PARAM_CONTEXT => $registration->get_context()
-                        ]
-                    ), ToolbarItem::DISPLAY_ICON
+                    $translator->trans('ViewPackageDetails', [], Manager::CONTEXT),
+                    new FontAwesomeGlyph('desktop', [], null, 'fas'), $this->get_url(
+                    [
+                        Manager::PARAM_ACTION => Manager::ACTION_VIEW,
+                        Manager::PARAM_CONTEXT => $registration->get_context()
+                    ]
+                ), ToolbarItem::DISPLAY_ICON
                 )
             );
 
@@ -240,7 +272,7 @@ class BrowserComponent extends Manager implements DelegateComponent
                 {
                     $toolbar->add_item(
                         new ToolbarItem(
-                            Translation::get('Deactivate', [], StringUtilities::LIBRARIES),
+                            $translator->trans('Deactivate', [], StringUtilities::LIBRARIES),
                             new FontAwesomeGlyph('pause-circle', [], null, 'fas'), $this->get_url(
                             [
                                 Manager::PARAM_ACTION => Manager::ACTION_DEACTIVATE,
@@ -251,31 +283,28 @@ class BrowserComponent extends Manager implements DelegateComponent
                     );
                 }
             }
-            else
+            elseif (!is_subclass_of(
+                $registration->get_context() . '\Activator', 'Chamilo\Configuration\Package\NotAllowed'
+            ))
             {
-                if (!is_subclass_of(
-                    $registration->get_context() . '\Activator', 'Chamilo\Configuration\Package\NotAllowed'
-                ))
-                {
-                    $toolbar->add_item(
-                        new ToolbarItem(
-                            Translation::get('Activate', [], StringUtilities::LIBRARIES),
-                            new FontAwesomeGlyph('play-circle', [], null, 'fas'), $this->get_url(
-                            [
-                                Manager::PARAM_ACTION => Manager::ACTION_ACTIVATE,
-                                Manager::PARAM_CONTEXT => $registration->get_context()
-                            ]
-                        ), ToolbarItem::DISPLAY_ICON
-                        )
-                    );
-                }
+                $toolbar->add_item(
+                    new ToolbarItem(
+                        $translator->trans('Activate', [], StringUtilities::LIBRARIES),
+                        new FontAwesomeGlyph('play-circle', [], null, 'fas'), $this->get_url(
+                        [
+                            Manager::PARAM_ACTION => Manager::ACTION_ACTIVATE,
+                            Manager::PARAM_CONTEXT => $registration->get_context()
+                        ]
+                    ), ToolbarItem::DISPLAY_ICON
+                    )
+                );
             }
 
             if (!is_subclass_of($registration->get_context() . '\Remover', 'Chamilo\Configuration\Package\NotAllowed'))
             {
                 $toolbar->add_item(
                     new ToolbarItem(
-                        Translation::get('Remove', [], StringUtilities::LIBRARIES),
+                        $translator->trans('Remove', [], StringUtilities::LIBRARIES),
                         new FontAwesomeGlyph('trash-alt', [], null, 'fas'), $this->get_url(
                         [
                             Manager::PARAM_ACTION => Manager::ACTION_REMOVE,
@@ -287,21 +316,19 @@ class BrowserComponent extends Manager implements DelegateComponent
             }
 
             $row = [];
-            $row[] = Translation::get('TypeName', null, $registration->get_context());
-            $row[] = $toolbar->as_html();
+            $row[] = $translator->trans('TypeName', [], $registration->get_context());
+            $row[] = $toolbar->render();
 
             $table_data[] = $row;
         }
 
         $headers = [];
-        $headers[] = new SortableStaticTableColumn(Translation::get('Package'));
-        $headers[] = new StaticTableColumn('');
+        $headers[] = new SortableStaticTableColumn('package', $translator->trans('Package', [], Manager::CONTEXT));
+        $headers[] = new StaticTableColumn('', '');
 
-        $table = new ArrayCollectionTableRenderer(
-            $table_data, $headers, $this->get_parameters(), 0, 20, SORT_ASC, 'registered_packages'
+        return $this->getArrayCollectionTableRenderer()->render(
+            $headers, new ArrayCollection($table_data), 0, SORT_ASC, 200, 'registered_packages'
         );
-
-        return $table->toHtml();
     }
 
     public function has_menu(): bool

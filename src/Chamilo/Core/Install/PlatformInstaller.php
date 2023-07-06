@@ -2,11 +2,12 @@
 namespace Chamilo\Core\Install;
 
 use Chamilo\Configuration\Package\Action\Installer;
-use Chamilo\Configuration\Package\PlatformPackageBundles;
 use Chamilo\Configuration\Package\Sequencer;
+use Chamilo\Configuration\Package\Service\PackageBundlesCacheService;
 use Chamilo\Core\Install\Exception\InstallFailedException;
 use Chamilo\Core\Install\Observer\InstallerObserver;
 use Chamilo\Core\Install\Service\ConfigurationWriter;
+use Chamilo\Core\Install\Storage\DataManager;
 use Chamilo\Libraries\Architecture\ClassnameUtilities;
 use Chamilo\Libraries\DependencyInjection\DependencyInjectionContainerBuilder;
 use Chamilo\Libraries\DependencyInjection\ExtensionFinder\PackagesContainerExtensionFinder;
@@ -27,36 +28,27 @@ class PlatformInstaller
 
     protected Filesystem $filesystem;
 
+    protected PackageBundlesCacheService $packageBundlesCacheService;
+
     protected SystemPathBuilder $systemPathBuilder;
 
-    /**
-     * @var \Chamilo\Core\Install\Configuration
-     */
-    private $configuration;
+    private Configuration $configuration;
 
-    /**
-     * @var string
-     */
-    private $configurationFilePath;
+    private string $configurationFilePath;
 
-    /**
-     * @var install\DataManagerInterface the storage manager used to perform install
-     */
-    private $dataManager;
+    private DataManager $dataManager;
 
-    /**
-     * @var \Chamilo\Core\Install\Observer\InstallerObserver
-     */
-    private $installerObserver;
+    private InstallerObserver $installerObserver;
 
     /**
      * @var string[]
      */
-    private $packages;
+    private array $packages;
 
     public function __construct(
         InstallerObserver $installerObserver, Configuration $configuration, $dataManager,
-        SystemPathBuilder $systemPathBuilder, Filesystem $filesystem
+        SystemPathBuilder $systemPathBuilder, Filesystem $filesystem,
+        PackageBundlesCacheService $packageBundlesCacheService
     )
     {
         $this->installerObserver = $installerObserver;
@@ -64,11 +56,17 @@ class PlatformInstaller
         $this->dataManager = $dataManager;
         $this->systemPathBuilder = $systemPathBuilder;
         $this->filesystem = $filesystem;
+        $this->packageBundlesCacheService = $packageBundlesCacheService;
 
         $this->configurationFilePath = $systemPathBuilder->getStoragePath() . 'configuration/configuration.xml';
         $this->packages = [];
     }
 
+    /**
+     * @throws \Chamilo\Libraries\Storage\Exception\ConnectionException
+     * @throws \Symfony\Component\Cache\Exception\CacheException
+     * @throws \Exception
+     */
     public function run()
     {
         $this->initializeInstallation();
@@ -98,18 +96,15 @@ class PlatformInstaller
         flush();
     }
 
-    /**
-     * @param string $context
-     */
-    public function addPackage($context)
+    public function addPackage(string $context): void
     {
-        array_push($this->packages, $context);
+        $this->packages[] = $context;
     }
 
     /**
      * @param string[] $packages
      */
-    public function addPackages($packages)
+    public function addPackages(array $packages): void
     {
         foreach ($packages as $package)
         {
@@ -117,7 +112,10 @@ class PlatformInstaller
         }
     }
 
-    private function createFolders()
+    /**
+     * @throws \Exception
+     */
+    private function createFolders(): string
     {
         $html = [];
 
@@ -175,18 +173,20 @@ class PlatformInstaller
         return $this->filesystem;
     }
 
-    /**
-     * @return string
-     */
-    public function getNextPackage()
+    public function getNextPackage(): string
     {
         return array_shift($this->packages);
+    }
+
+    public function getPackageBundlesCacheService(): PackageBundlesCacheService
+    {
+        return $this->packageBundlesCacheService;
     }
 
     /**
      * @return string[]
      */
-    public function getPackages()
+    public function getPackages(): array
     {
         return $this->packages;
     }
@@ -196,12 +196,18 @@ class PlatformInstaller
         return $this->systemPathBuilder;
     }
 
-    private function initializeInstallation()
+    /**
+     * @throws \Exception
+     */
+    private function initializeInstallation(): void
     {
         Translation::getInstance()->setLanguageIsocode($this->configuration->get_platform_language());
     }
 
-    private function installPackages()
+    /**
+     * @throws \Chamilo\Core\Install\Exception\InstallFailedException
+     */
+    private function installPackages(): void
     {
         $this->addPackages($this->configuration->get_packages());
         $this->orderPackages();
@@ -224,15 +230,14 @@ class PlatformInstaller
             }
             else
             {
-                $isIntegrationPackage = StringUtilities::getInstance()->createString($package)->contains(
-                    '\Integration\\', true
-                );
+                $isIntegrationPackage =
+                    StringUtilities::getInstance()->createString($package)->contains('\Integration\\');
 
                 if (!$isIntegrationPackage)
                 {
                     echo $this->installerObserver->beforePackageInstallation($package);
                     echo $this->installerObserver->afterPackageInstallation(
-                        new StepResult($success, $installer->get_message(), $package)
+                        new StepResult(true, $installer->get_message(), $package)
                     );
 
                     flush();
@@ -244,10 +249,13 @@ class PlatformInstaller
         flush();
     }
 
-    private function loadConfiguration()
+    /**
+     * @throws \Symfony\Component\Cache\Exception\CacheException
+     * @throws \Chamilo\Libraries\Storage\Exception\ConnectionException
+     */
+    private function loadConfiguration(): void
     {
-        $platformPackageBundles = new PlatformPackageBundles();
-        $packages = array_keys($platformPackageBundles->get_packages());
+        $packages = array_keys($this->packageBundlesCacheService->getAllPackages()->getNestedPackages());
 
         $containerExtensionFinder = new PackagesContainerExtensionFinder(
             new PackagesClassFinder(new SystemPathBuilder(new ClassnameUtilities(new StringUtilities())), $packages)
@@ -257,16 +265,16 @@ class PlatformInstaller
         $dependencyInjectionContainerBuilder->rebuildContainer(null, $containerExtensionFinder);
     }
 
-    public function orderPackages()
+    public function orderPackages(): void
     {
         $sequencer = new Sequencer($this->packages);
         $this->packages = $sequencer->run();
     }
 
     /**
-     * @return string
+     * @throws \Exception
      */
-    private function performPreProduction()
+    private function performPreProduction(): string
     {
         $html = [];
 
@@ -281,26 +289,17 @@ class PlatformInstaller
         return implode(PHP_EOL, $html);
     }
 
-    /**
-     * @param \Chamilo\Core\Install\Configuration $configuration
-     */
-    public function setConfiguration(Configuration $configuration)
+    public function setConfiguration(Configuration $configuration): void
     {
         $this->configuration = $configuration;
     }
 
-    /**
-     * @param string $configurationFilePath
-     */
-    public function setConfigurationFilePath($configurationFilePath)
+    public function setConfigurationFilePath(string $configurationFilePath): void
     {
         $this->configurationFilePath = $configurationFilePath;
     }
 
-    /**
-     * @param unknown $dataManager
-     */
-    public function setDataManager($dataManager)
+    public function setDataManager(DataManager $dataManager): void
     {
         $this->dataManager = $dataManager;
     }
@@ -308,12 +307,12 @@ class PlatformInstaller
     /**
      * @param string[] $packages
      */
-    public function setPackages($packages)
+    public function setPackages(array $packages): void
     {
         $this->packages = $packages;
     }
 
-    private function writeConfigurationFile()
+    private function writeConfigurationFile(): StepResult
     {
         $pathBuilder = new SystemPathBuilder(ClassnameUtilities::getInstance());
 
@@ -327,7 +326,7 @@ class PlatformInstaller
 
             $result = true;
         }
-        catch (Exception $exception)
+        catch (Exception)
         {
             $result = false;
         }

@@ -1,12 +1,10 @@
 <?php
 namespace Chamilo\Configuration\Package;
 
+use Chamilo\Configuration\Service\Consulter\LanguageConsulter;
 use Chamilo\Configuration\Storage\DataClass\Language;
 use Chamilo\Libraries\Translation\Translation;
 use Chamilo\Libraries\Utilities\StringUtilities;
-use DOMDocument;
-use DOMXPath;
-use Symfony\Component\Finder\Iterator\FileTypeFilterIterator;
 
 /**
  * @package admin.install
@@ -19,44 +17,26 @@ class Installer extends Action\Installer
 {
     public const CONTEXT = 'Chamilo\Configuration';
 
-    public function create_languages()
+    public function createLanguages(): bool
     {
-        $language_path = $this->getSystemPathBuilder()->getI18nPath();
-        $language_files =
-            $this->getFilesystemTools()->getDirectoryContent($language_path, FileTypeFilterIterator::ONLY_FILES, false);
+        $languages = $this->getLanguageConsulter()->getLanguagesFromFilesystem();
 
-        foreach ($language_files as $language_file)
+        foreach ($languages as $language)
         {
-            $file_info = pathinfo($language_file);
-            $language_info_file = $language_path . $file_info['filename'] . '.info';
+            $language = new Language($language);
+            $language->set_available('1');
 
-            if (file_exists($language_info_file) && $file_info['extension'] == 'info')
+            if ($language->create())
             {
-                $dom_document = new DOMDocument('1.0', 'UTF-8');
-                $dom_document->load($language_info_file);
-                $dom_xpath = new DOMXPath($dom_document);
-
-                $language_node = $dom_xpath->query('/packages/package')->item(0);
-
-                $language = new Language();
-                $language->set_original_name($dom_xpath->query('name', $language_node)->item(0)->nodeValue);
-                $language->set_english_name($dom_xpath->query('extra/english', $language_node)->item(0)->nodeValue);
-                $language->set_family($dom_xpath->query('category', $language_node)->item(0)->nodeValue);
-                $language->set_isocode($dom_xpath->query('extra/isocode', $language_node)->item(0)->nodeValue);
-                $language->set_available('1');
-
-                if ($language->create())
-                {
-                    $this->add_message(
-                        self::TYPE_NORMAL, Translation::get(
-                            'ObjectAdded', ['OBJECT' => Translation::get('Language')], StringUtilities::LIBRARIES
-                        ) . ' ' . $language->get_english_name()
-                    );
-                }
-                else
-                {
-                    return false;
-                }
+                $this->add_message(
+                    self::TYPE_NORMAL, Translation::get(
+                        'ObjectAdded', ['OBJECT' => Translation::get('Language')], StringUtilities::LIBRARIES
+                    ) . ' ' . $language->get_english_name()
+                );
+            }
+            else
+            {
+                return false;
             }
         }
 
@@ -70,7 +50,7 @@ class Installer extends Action\Installer
     {
 
         // Add the default language entries in the database
-        if (!$this->create_languages())
+        if (!$this->createLanguages())
         {
             return false;
         }
@@ -84,5 +64,10 @@ class Installer extends Action\Installer
         }
 
         return true;
+    }
+
+    public function getLanguageConsulter(): LanguageConsulter
+    {
+        return $this->getService(LanguageConsulter::class);
     }
 }

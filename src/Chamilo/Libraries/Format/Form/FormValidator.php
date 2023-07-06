@@ -19,6 +19,7 @@ use Chamilo\Libraries\Format\Form\Rule\HTML_QuickForm_Rule_Filetype;
 use Chamilo\Libraries\Format\Form\Rule\HTML_QuickForm_Rule_NumberCompare;
 use Chamilo\Libraries\Format\Form\Rule\HTML_QuickForm_Rule_Username;
 use Chamilo\Libraries\Format\Form\Rule\HTML_QuickForm_Rule_UsernameAvailable;
+use Chamilo\Libraries\Format\Form\Rule\HTML_QuickForm_Rule_ValidateDatabaseConnection;
 use Chamilo\Libraries\Format\Structure\Glyph\FontAwesomeGlyph;
 use Chamilo\Libraries\Format\Tabs\Form\FormTabsGenerator;
 use Chamilo\Libraries\Platform\Security;
@@ -428,7 +429,8 @@ EOT;
 
         $this->addElement(
             'html', $this->getResourceManager()->getResourceHtml(
-            $this->getWebPathBuilder()->getJavascriptPath(StringUtilities::LIBRARIES) . 'Jquery/jquery.file.upload.single.js'
+            $this->getWebPathBuilder()->getJavascriptPath(StringUtilities::LIBRARIES) .
+            'Jquery/jquery.file.upload.single.js'
         )
         );
     }
@@ -933,35 +935,38 @@ EOT;
         }
     }
 
-    public function registerAdditionalElements()
+    public function registerAdditionalElements(): void
     {
         // Date and timepicker elements
-        $this->registerElementType('datepicker', HTML_QuickForm_datepicker::class);
+        static::registerElementType('datepicker', HTML_QuickForm_datepicker::class);
 
         // Element finder elements
-        $this->registerElementType('advanced_element_finder', HTML_QuickForm_advanced_element_finder::class);
+        static::registerElementType('advanced_element_finder', HTML_QuickForm_advanced_element_finder::class);
 
         // Button elements
-        $this->registerElementType('style_button', HTML_QuickForm_stylebutton::class);
-        $this->registerElementType('style_submit_button', HTML_QuickForm_stylesubmitbutton::class);
-        $this->registerElementType('style_reset_button', HTML_QuickForm_styleresetbutton::class);
+        static::registerElementType('style_button', HTML_QuickForm_stylebutton::class);
+        static::registerElementType('style_submit_button', HTML_QuickForm_stylesubmitbutton::class);
+        static::registerElementType('style_reset_button', HTML_QuickForm_styleresetbutton::class);
 
         // Replacing some default elements
-        $this->registerElementType('radio', HTML_QuickForm_bootstrap_radio::class);
-        $this->registerElementType('checkbox', HTML_QuickForm_extended_checkbox::class);
-        $this->registerElementType('file', HTML_QuickForm_stylefile::class);
-        $this->registerElementType('toggle', HTML_QuickForm_toggle::class);
-        $this->registerElementType('category', HTML_QuickForm_category::class);
+        static::registerElementType('radio', HTML_QuickForm_bootstrap_radio::class);
+        static::registerElementType('checkbox', HTML_QuickForm_extended_checkbox::class);
+        static::registerElementType('file', HTML_QuickForm_stylefile::class);
+        static::registerElementType('toggle', HTML_QuickForm_toggle::class);
+        static::registerElementType('category', HTML_QuickForm_category::class);
     }
 
-    public function registerAdditionalRules()
+    public function registerAdditionalRules(): void
     {
-        $this->registerRule('date', null, HTML_QuickForm_Rule_Date::class);
-        $this->registerRule('date_compare', null, HTML_QuickForm_Rule_DateCompare::class);
-        $this->registerRule('number_compare', null, HTML_QuickForm_Rule_NumberCompare::class);
-        $this->registerRule('username_available', null, HTML_QuickForm_Rule_UsernameAvailable::class);
-        $this->registerRule('username', null, HTML_QuickForm_Rule_Username::class);
-        $this->registerRule('filetype', null, HTML_QuickForm_Rule_Filetype::class);
+        static::registerRule('date', null, HTML_QuickForm_Rule_Date::class);
+        static::registerRule('date_compare', null, HTML_QuickForm_Rule_DateCompare::class);
+        static::registerRule('number_compare', null, HTML_QuickForm_Rule_NumberCompare::class);
+        static::registerRule('username_available', null, HTML_QuickForm_Rule_UsernameAvailable::class);
+        static::registerRule('username', null, HTML_QuickForm_Rule_Username::class);
+        static::registerRule('filetype', null, HTML_QuickForm_Rule_Filetype::class);
+        static::registerRule(
+            'validate_database_connection', null, HTML_QuickForm_Rule_ValidateDatabaseConnection::class
+        );
     }
 
     /**

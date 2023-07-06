@@ -74,7 +74,6 @@
         <service id="Chamilo\Configuration\Service\FileConfigurationLocator"/>
 
         <service id="Chamilo\Configuration\Package\Service\PackageFactory"/>
-        <service id="Chamilo\Configuration\Package\PlatformPackageBundles"/>
 
         <service id="Chamilo\Configuration\Package\Finder\BasicBundlesGenerator"/>
         <service id="Chamilo\Configuration\Package\Finder\InternationalizationBundlesGenerator"/>
