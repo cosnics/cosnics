@@ -1,22 +1,27 @@
 <?php
 namespace Chamilo\Core\Menu\Service\Renderer;
 
+use Chamilo\Core\Menu\Architecture\Interfaces\ConfigurableItemInterface;
 use Chamilo\Core\Menu\Architecture\Interfaces\TranslatableItemInterface;
 use Chamilo\Core\Menu\Architecture\Traits\TranslatableItemTrait;
+use Chamilo\Core\Menu\Manager;
 use Chamilo\Core\Menu\Service\CachedItemService;
 use Chamilo\Core\Menu\Storage\DataClass\Item;
 use Chamilo\Core\Rights\Structure\Service\Interfaces\AuthorizationCheckerInterface;
 use Chamilo\Core\User\Storage\DataClass\User;
 use Chamilo\Libraries\Architecture\ClassnameUtilities;
+use Chamilo\Libraries\Format\Form\FormValidator;
 use Chamilo\Libraries\Format\Structure\Glyph\FontAwesomeGlyph;
+use Chamilo\Libraries\Format\Structure\Glyph\InlineGlyph;
 use Chamilo\Libraries\Platform\ChamiloRequest;
+use Chamilo\Libraries\Utilities\StringUtilities;
 use Symfony\Component\Translation\Translator;
 
 /**
  * @package Chamilo\Core\Menu\Service\Renderer
  * @author  Hans De Bisschop <hans.de.bisschop@ehb.be>
  */
-class LinkItemRenderer extends ItemRenderer implements TranslatableItemInterface
+class LinkItemRenderer extends ItemRenderer implements TranslatableItemInterface, ConfigurableItemInterface
 {
     use TranslatableItemTrait;
 
@@ -44,7 +49,7 @@ class LinkItemRenderer extends ItemRenderer implements TranslatableItemInterface
 
     public function render(Item $item, User $user): string
     {
-        $title = $this->renderTitle($item);
+        $title = $this->renderTitleForCurrentLanguage($item);
 
         $html = [];
 
@@ -54,9 +59,17 @@ class LinkItemRenderer extends ItemRenderer implements TranslatableItemInterface
 
         if ($item->showIcon())
         {
-            $iconClass = $item->getIconClass() ? $item->getIconClass() : 'link';
+            if (!$item->getIconClass())
+            {
+                $glyph = $this->getRendererTypeGlyph();
+            }
+            else
+            {
+                $glyph = new FontAwesomeGlyph($item->getIconClass(), ['fa-2x']);
+            }
 
-            $glyph = new FontAwesomeGlyph($iconClass, ['fa-2x'], null, 'fas');
+            $glyph->setExtraClasses(['fa-2x']);
+
             $html[] = $glyph->render();
         }
 
@@ -71,13 +84,60 @@ class LinkItemRenderer extends ItemRenderer implements TranslatableItemInterface
         return implode(PHP_EOL, $html);
     }
 
+    /**
+     * @throws \QuickformException
+     */
+    public function addConfigurationToForm(FormValidator $formValidator): void
+    {
+        $formValidator->addElement('category', $this->getTranslator()->trans('Properties', [], Manager::CONTEXT));
+
+        $formValidator->add_textfield(
+            Item::PROPERTY_CONFIGURATION . '[' . self::CONFIGURATION_URL . ']',
+            $this->getTranslator()->trans('URL', [], Manager::CONTEXT), true, ['size' => '100']
+        );
+
+        $formValidator->addElement(
+            'select', Item::PROPERTY_CONFIGURATION . '[' . self::CONFIGURATION_TARGET . ']',
+            $this->getTranslator()->trans('Target', [], Manager::CONTEXT), ['_blank', '_self', '_parent', '_top'],
+            ['class' => 'form-control']
+        );
+
+        $formValidator->addRule(
+            Item::PROPERTY_CONFIGURATION . '[' . self::CONFIGURATION_TARGET . ']',
+            $this->getTranslator()->trans('ThisFieldIsRequired', [], StringUtilities::LIBRARIES), 'required'
+        );
+    }
+
     public function getClassnameUtilities(): ClassnameUtilities
     {
         return $this->classnameUtilities;
     }
 
-    public function renderTitle(Item $item): string
+    /**
+     * @return string[]
+     */
+    public function getConfigurationPropertyNames(): array
+    {
+        return [self::CONFIGURATION_URL, self::CONFIGURATION_TARGET];
+    }
+
+    public function getRendererTypeGlyph(): InlineGlyph
+    {
+        return new FontAwesomeGlyph('link', ['fa-fw']);
+    }
+
+    public function getRendererTypeName(): string
+    {
+        return $this->getTranslator()->trans('LinkItem', [], Manager::CONTEXT);
+    }
+
+    public function renderTitleForCurrentLanguage(Item $item): string
     {
         return $this->determineItemTitleForCurrentLanguage($item);
+    }
+
+    public function renderTitleForIsoCode(Item $item, string $isoCode): string
+    {
+        return $this->determineItemTitleForIsoCode($item, $isoCode);
     }
 }

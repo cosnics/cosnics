@@ -14,9 +14,14 @@ use Chamilo\Libraries\Format\Structure\Glyph\InlineGlyph;
 class LogoutItemRenderer extends MenuItemRenderer
 {
 
-    public function getGlyph(): InlineGlyph
+    public function getRendererTypeGlyph(): InlineGlyph
     {
-        return new FontAwesomeGlyph('sign-out-alt', ['fa-2x'], null, 'fas');
+        return new FontAwesomeGlyph('sign-out-alt');
+    }
+
+    public function getRendererTypeName(): string
+    {
+        return $this->getTranslator()->trans('Logout', [], Manager::CONTEXT);
     }
 
     public function getUrl(): string
@@ -26,8 +31,13 @@ class LogoutItemRenderer extends MenuItemRenderer
         );
     }
 
-    public function renderTitle(Item $item): string
+    public function renderTitleForCurrentLanguage(Item $item): string
     {
-        return $this->getTranslator()->trans('Logout', [], 'Chamilo\Core\User');
+        return $this->getRendererTypeName();
+    }
+
+    public function renderTitleForIsoCode(Item $item, string $isoCode): string
+    {
+        return $this->getTranslator()->trans('Logout', [], \Chamilo\Core\Menu\Manager::CONTEXT, $isoCode);
     }
 }

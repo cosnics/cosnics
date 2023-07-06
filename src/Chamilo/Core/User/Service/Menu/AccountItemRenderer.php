@@ -16,9 +16,14 @@ use Chamilo\Libraries\Format\Structure\Glyph\InlineGlyph;
 class AccountItemRenderer extends MenuItemRenderer implements SelectableItemInterface
 {
 
-    public function getGlyph(): InlineGlyph
+    public function getRendererTypeGlyph(): InlineGlyph
     {
-        return new FontAwesomeGlyph('user', ['fa-2x'], null, 'fas');
+        return new FontAwesomeGlyph('user', ['fa-fw']);
+    }
+
+    public function getRendererTypeName(): string
+    {
+        return $this->getTranslator()->trans('MyAccount', [], Manager::CONTEXT);
     }
 
     public function getUrl(): string
@@ -39,8 +44,13 @@ class AccountItemRenderer extends MenuItemRenderer implements SelectableItemInte
         return $currentContext == Manager::CONTEXT && $currentAction == Manager::ACTION_VIEW_ACCOUNT;
     }
 
-    public function renderTitle(Item $item): string
+    public function renderTitleForCurrentLanguage(Item $item): string
     {
-        return $this->getTranslator()->trans('MyAccount', [], 'Chamilo\Core\User');
+        return $this->getRendererTypeName();
+    }
+
+    public function renderTitleForIsoCode(Item $item, string $isoCode): string
+    {
+        return $this->getTranslator()->trans('MyAccount', [], \Chamilo\Core\Menu\Manager::CONTEXT, $isoCode);
     }
 }

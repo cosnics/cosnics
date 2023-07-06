@@ -4,15 +4,15 @@ namespace Chamilo\Core\Menu\Component;
 use Chamilo\Core\Menu\Factory\ItemRendererFactory;
 use Chamilo\Core\Menu\Manager;
 use Chamilo\Core\Menu\Menu\ItemMenu;
-use Chamilo\Core\Menu\Storage\DataClass\ApplicationItem;
-use Chamilo\Core\Menu\Storage\DataClass\CategoryItem;
-use Chamilo\Core\Menu\Storage\DataClass\LinkItem;
 use Chamilo\Core\Menu\Table\ItemTableRenderer;
+use Chamilo\Libraries\Architecture\Application\Application;
 use Chamilo\Libraries\Architecture\Interfaces\DelegateComponent;
 use Chamilo\Libraries\Format\Structure\ActionBar\Button;
 use Chamilo\Libraries\Format\Structure\ActionBar\ButtonGroup;
 use Chamilo\Libraries\Format\Structure\ActionBar\ButtonToolBar;
+use Chamilo\Libraries\Format\Structure\ActionBar\DropdownButton;
 use Chamilo\Libraries\Format\Structure\ActionBar\Renderer\ButtonToolBarRenderer;
+use Chamilo\Libraries\Format\Structure\ActionBar\SubButton;
 use Chamilo\Libraries\Format\Structure\Glyph\FontAwesomeGlyph;
 use Chamilo\Libraries\Format\Structure\ToolbarItem;
 use Chamilo\Libraries\Format\Table\RequestTableParameterValuesCompiler;
@@ -27,13 +27,11 @@ use Chamilo\Libraries\Utilities\StringUtilities;
 class BrowserComponent extends Manager implements DelegateComponent
 {
 
-    /**
-     * @var ButtonToolBarRenderer
-     */
-    private $buttonToolbarRenderer;
+    protected string $parentIdentifier;
+
+    private ButtonToolBarRenderer $buttonToolbarRenderer;
 
     /**
-     * @return string
      * @throws \Chamilo\Libraries\Architecture\Exceptions\NotAllowedException
      * @throws \Exception
      */
@@ -72,10 +70,7 @@ class BrowserComponent extends Manager implements DelegateComponent
         return parent::getAdditionalParameters($additionalParameters);
     }
 
-    /**
-     * @return \Chamilo\Libraries\Format\Structure\ActionBar\Renderer\ButtonToolBarRenderer
-     */
-    public function getButtonToolbarRenderer()
+    public function getButtonToolbarRenderer(): ButtonToolBarRenderer
     {
         if (!isset($this->buttonToolbarRenderer))
         {
@@ -85,38 +80,23 @@ class BrowserComponent extends Manager implements DelegateComponent
             $commonActions = new ButtonGroup();
             $toolActions = new ButtonGroup();
 
-            $commonActions->addButton(
-                new Button(
-                    $translator->trans('AddApplicationItem', [], 'Chamilo\Core\Menu'),
-                    new FontAwesomeGlyph('desktop', [], null, 'fas'), $this->get_url(
-                    [
-                        self::PARAM_ACTION => self::ACTION_CREATE,
-                        self::PARAM_TYPE => ApplicationItem::class
-                    ]
-                ), ToolbarItem::DISPLAY_ICON_AND_LABEL
-                )
-            );
+            $dropDownButton = new DropdownButton($translator->trans('AddMenuItem', [], Manager::CONTEXT));
 
-            $commonActions->addButton(
-                new Button(
-                    $translator->trans('AddCategoryItem', [], 'Chamilo\Core\Menu'),
-                    new FontAwesomeGlyph('folder', [], null, 'fas'), $this->get_url(
-                    [
-                        self::PARAM_ACTION => self::ACTION_CREATE,
-                        self::PARAM_TYPE => CategoryItem::class
-                    ]
-                ), ToolbarItem::DISPLAY_ICON_AND_LABEL
-                )
-            );
+            foreach ($this->getItemRendererFactory()->getAvailableItemRenderers() as $itemRenderer)
+            {
+                $dropDownButton->addSubButton(
+                    new SubButton(
+                        $itemRenderer->getRendererTypeName(), $itemRenderer->getRendererTypeGlyph(),
+                        $this->getUrlGenerator()->fromParameters([
+                            Application::PARAM_CONTEXT => Manager::CONTEXT,
+                            self::PARAM_ACTION => self::ACTION_CREATE,
+                            self::PARAM_TYPE => $itemRenderer::class
+                        ])
+                    )
+                );
+            }
 
-            $commonActions->addButton(
-                new Button(
-                    $translator->trans('AddLinkItem', [], 'Chamilo\Core\Menu'),
-                    new FontAwesomeGlyph('link', [], null, 'fas'), $this->get_url(
-                    [self::PARAM_ACTION => self::ACTION_CREATE, self::PARAM_TYPE => LinkItem::class]
-                ), ToolbarItem::DISPLAY_ICON_AND_LABEL
-                )
-            );
+            $commonActions->addButton($dropDownButton);
 
             if ($this->getRightsService()->areRightsEnabled())
             {
@@ -138,10 +118,7 @@ class BrowserComponent extends Manager implements DelegateComponent
         return $this->buttonToolbarRenderer;
     }
 
-    /**
-     * @return \Chamilo\Core\Menu\Factory\ItemRendererFactory
-     */
-    public function getItemRendererFactory()
+    public function getItemRendererFactory(): ItemRendererFactory
     {
         return $this->getService(ItemRendererFactory::class);
     }
@@ -151,10 +128,7 @@ class BrowserComponent extends Manager implements DelegateComponent
         return $this->getService(ItemTableRenderer::class);
     }
 
-    /**
-     * @return \Chamilo\Core\Menu\Menu\ItemMenu
-     */
-    public function getMenu()
+    public function getMenu(): ItemMenu
     {
         $urlFormat = $this->getUrlGenerator()->fromParameters(
             [
@@ -165,15 +139,15 @@ class BrowserComponent extends Manager implements DelegateComponent
         );
 
         return new ItemMenu(
-            $this->getItemService(), $this->getTranslator(), $urlFormat, $this->getParentIdentifier()
+            $this->getItemService(), $this->getTranslator(), $urlFormat, (int) $this->getParentIdentifier()
         );
     }
 
-    public function getParentIdentifier(): int
+    public function getParentIdentifier(): string
     {
         if (!isset($this->parentIdentifier))
         {
-            $this->parentIdentifier = $this->getRequest()->query->get(self::PARAM_PARENT, 0);
+            $this->parentIdentifier = $this->getRequest()->query->get(self::PARAM_PARENT, '0');
         }
 
         return $this->parentIdentifier;

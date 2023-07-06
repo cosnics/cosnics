@@ -9,7 +9,7 @@ use Chamilo\Core\Rights\Structure\Service\Interfaces\AuthorizationCheckerInterfa
 use Chamilo\Core\User\Storage\DataClass\User;
 use Chamilo\Libraries\Architecture\Application\Routing\UrlGenerator;
 use Chamilo\Libraries\Architecture\ClassnameUtilities;
-use Chamilo\Libraries\Format\Structure\Glyph\InlineGlyph;
+use Chamilo\Libraries\Format\Form\FormValidator;
 use Chamilo\Libraries\Platform\ChamiloRequest;
 use Symfony\Component\Translation\Translator;
 
@@ -45,11 +45,14 @@ abstract class MenuItemRenderer extends ItemRenderer
         $html[] = '<li' . ($selected ? ' class="active"' : '') . '>';
         $html[] = '<a href="' . $this->getUrl() . '">';
 
-        $title = $this->renderTitle();
+        $title = $this->renderTitleForCurrentLanguage($item);
 
         if ($item->showIcon())
         {
-            $html[] = $this->getGlyph()->render();
+            $glyph = $this->getRendererTypeGlyph();
+            $glyph->setExtraClasses(['fa-2x']);
+
+            $html[] = $glyph->render();
         }
 
         if ($item->showTitle())
@@ -68,8 +71,6 @@ abstract class MenuItemRenderer extends ItemRenderer
         return $this->classnameUtilities;
     }
 
-    abstract public function getGlyph(): InlineGlyph;
-
     abstract public function getUrl(): string;
 
     public function getUrlGenerator(): UrlGenerator
@@ -77,5 +78,5 @@ abstract class MenuItemRenderer extends ItemRenderer
         return $this->urlGenerator;
     }
 
-    abstract public function renderTitle(Item $item): string;
+    abstract public function renderTitleForCurrentLanguage(Item $item): string;
 }

@@ -1,90 +1,58 @@
 <?php
 namespace Chamilo\Core\Menu\Form;
 
-use Chamilo\Configuration\Service\Consulter\ConfigurationConsulter;
 use Chamilo\Configuration\Service\Consulter\LanguageConsulter;
-use Chamilo\Configuration\Service\Consulter\RegistrationConsulter;
+use Chamilo\Core\Menu\Architecture\Interfaces\ConfigurableItemInterface;
+use Chamilo\Core\Menu\Architecture\Interfaces\TranslatableItemInterface;
+use Chamilo\Core\Menu\Factory\ItemRendererFactory;
 use Chamilo\Core\Menu\Service\ItemService;
 use Chamilo\Core\Menu\Storage\DataClass\Item;
-use Chamilo\Core\Menu\Storage\DataClass\ItemTitle;
 use Chamilo\Libraries\Format\Form\FormValidator;
+use Chamilo\Libraries\Storage\DataClass\DataClass;
 use Chamilo\Libraries\Utilities\StringUtilities;
-use Symfony\Component\Translation\Translator;
 
 /**
- *
  * @package Chamilo\Core\Menu\Form
- * @author Hans De Bisschop <hans.de.bisschop@ehb.be>
- * @author Magali Gillard <magali.gillard@ehb.be>
- * @author Eduard Vossen <eduard.vossen@ehb.be>
+ * @author  Hans De Bisschop <hans.de.bisschop@ehb.be>
+ * @author  Magali Gillard <magali.gillard@ehb.be>
+ * @author  Eduard Vossen <eduard.vossen@ehb.be>
  */
 class ItemForm extends FormValidator
 {
-    /**
-     * @var \Chamilo\Configuration\Service\Consulter\ConfigurationConsulter
-     */
-    private $configurationConsulter;
+    protected string $itemType;
 
     /**
-     * @var \Chamilo\Core\Menu\Service\ItemService
+     * @throws \QuickformException
+     * @throws \Chamilo\Libraries\Storage\Exception\DataClassNoResultException
      */
-    private $itemService;
-
-    /**
-     * @var \Chamilo\Configuration\Service\Consulter\LanguageConsulter
-     */
-    private $languageConsulter;
-
-    /**
-     * @var \Chamilo\Configuration\Service\Consulter\RegistrationConsulter
-     */
-    private $registrationConsulter;
-
-    /**
-     * @var \Symfony\Component\Translation\Translator
-     */
-    private $translator;
-
-    /**
-     * @param \Symfony\Component\Translation\Translator $translator
-     * @param \Chamilo\Core\Menu\Service\ItemService $itemService
-     * @param \Chamilo\Configuration\Service\Consulter\LanguageConsulter $languageConsulter
-     * @param \Chamilo\Configuration\Service\Consulter\ConfigurationConsulter $configurationConsulter
-     * @param \Chamilo\Configuration\Service\Consulter\RegistrationConsulter $registrationConsulter
-     * @param string $action
-     *
-     * @throws \Exception
-     */
-    public function __construct(
-        Translator $translator, ItemService $itemService, LanguageConsulter $languageConsulter,
-        ConfigurationConsulter $configurationConsulter, RegistrationConsulter $registrationConsulter, string $action
-    )
+    public function __construct(string $itemType, string $action)
     {
+        $this->itemType = $itemType;
+
         parent::__construct('item-form', self::FORM_METHOD_POST, $action);
 
-        $this->translator = $translator;
-        $this->itemService = $itemService;
-        $this->languageConsulter = $languageConsulter;
-        $this->configurationConsulter = $configurationConsulter;
-        $this->registrationConsulter = $registrationConsulter;
+        $this->buildBasicForm();
+        $this->buildSettingsForm();
 
-        $this->buildForm();
         $this->addSaveResetButtons();
         $this->setDefaults();
     }
 
-    public function buildForm()
+    /**
+     * @throws \QuickformException
+     * @throws \Chamilo\Libraries\Storage\Exception\DataClassNoResultException
+     */
+    protected function buildBasicForm(): void
     {
         $translator = $this->getTranslator();
 
         $this->addElement('category', $translator->trans('General', [], 'Chamilo\Core\Menu'));
         $this->addElement(
             'select', Item::PROPERTY_PARENT, $translator->trans('Parent', [], 'Chamilo\Core\Menu'),
-            $this->getParentItems(), array('class' => 'form-control')
+            $this->getParentItems(), ['class' => 'form-control']
         );
         $this->addRule(
-            Item::PROPERTY_PARENT, $translator->trans('ThisFieldIsRequired', [], StringUtilities::LIBRARIES),
-            'required'
+            Item::PROPERTY_PARENT, $translator->trans('ThisFieldIsRequired', [], StringUtilities::LIBRARIES), 'required'
         );
 
         $this->addElement('checkbox', Item::PROPERTY_HIDDEN, $translator->trans('Hidden', [], 'Chamilo\Core\Menu'));
@@ -93,158 +61,131 @@ class ItemForm extends FormValidator
             ['class' => 'form-control']
         );
 
-        $this->buildFormTitles();
+        $itemRenderer = $this->getItemRendererFactory()->getAvailableItemRenderer($this->getItemType());
+
+        if ($itemRenderer instanceof TranslatableItemInterface)
+        {
+            $this->buildFormTitles();
+        }
     }
 
-    public function buildFormTitles()
+    /**
+     * @throws \QuickformException
+     */
+    protected function buildFormTitles(): void
     {
         $translator = $this->getTranslator();
 
         $this->addElement('category', $translator->trans('Titles', [], 'Chamilo\Core\Menu'));
 
         $activeLanguages = $this->getLanguageConsulter()->getLanguages();
-        $platformLanguage =
-            $this->getConfigurationConsulter()->getSetting(array('Chamilo\Core\Admin', 'platform_language'));
+        $platformLanguage = $this->getConfigurationConsulter()->getSetting(['Chamilo\Core\Admin', 'platform_language']);
 
         foreach ($activeLanguages as $isocode => $language)
         {
             $this->addElement(
-                'text', ItemTitle::PROPERTY_TITLE . '[' . $isocode . ']', $language, array('class' => 'form-control')
+                'text', Item::PROPERTY_TITLES . '[' . $isocode . ']', $language, ['class' => 'form-control']
             );
 
             if ($isocode == $platformLanguage)
             {
                 $this->addRule(
-                    ItemTitle::PROPERTY_TITLE . '[' . $isocode . ']',
+                    Item::PROPERTY_TITLES . '[' . $isocode . ']',
                     $translator->trans('ThisFieldIsRequired', [], StringUtilities::LIBRARIES), 'required'
                 );
             }
         }
     }
 
-    /**
-     * @return \Chamilo\Configuration\Service\Consulter\ConfigurationConsulter
-     */
-    public function getConfigurationConsulter(): ConfigurationConsulter
+    protected function buildSettingsForm(): void
     {
-        return $this->configurationConsulter;
+        $itemRenderer = $this->getItemRendererFactory()->getAvailableItemRenderer($this->getItemType());
+
+        if ($itemRenderer instanceof ConfigurableItemInterface &&
+            count($itemRenderer->getConfigurationPropertyNames()) > 0)
+        {
+            $itemRenderer->addConfigurationToForm($this);
+        }
     }
 
-    /**
-     * @param \Chamilo\Configuration\Service\Consulter\ConfigurationConsulter $configurationConsulter
-     */
-    public function setConfigurationConsulter(ConfigurationConsulter $configurationConsulter): void
+    public function getItemRendererFactory(): ItemRendererFactory
     {
-        $this->configurationConsulter = $configurationConsulter;
+        return $this->getService(ItemRendererFactory::class);
     }
 
-    /**
-     * @return \Chamilo\Core\Menu\Service\ItemService
-     */
     public function getItemService(): ItemService
     {
-        return $this->itemService;
+        return $this->getService(ItemService::class);
     }
 
-    /**
-     * @param \Chamilo\Core\Menu\Service\ItemService $itemService
-     */
-    public function setItemService(ItemService $itemService): void
+    public function getItemType(): string
     {
-        $this->itemService = $itemService;
+        return $this->itemType;
     }
 
-    /**
-     * @return \Chamilo\Configuration\Service\Consulter\LanguageConsulter
-     */
     public function getLanguageConsulter(): LanguageConsulter
     {
-        return $this->languageConsulter;
-    }
-
-    /**
-     * @param \Chamilo\Configuration\Service\Consulter\LanguageConsulter $languageConsulter
-     */
-    public function setLanguageConsulter(LanguageConsulter $languageConsulter): void
-    {
-        $this->languageConsulter = $languageConsulter;
+        return $this->getService(LanguageConsulter::class);
     }
 
     /**
      * @return string[]
+     * @throws \Chamilo\Libraries\Storage\Exception\DataClassNoResultException
      */
-    public function getParentItems()
+    protected function getParentItems(): array
     {
         $itemService = $this->getItemService();
+        $itemRendererFactory = $this->getItemRendererFactory();
+
         $items = $itemService->findRootCategoryItems();
 
-        $itemOptions = $this->getRootParentItem();
+        $itemOptions = [];
+        $itemOptions[0] = $this->getTranslator()->trans('Root', [], StringUtilities::LIBRARIES);
 
         foreach ($items as $item)
         {
-            $itemOptions[$item->getId()] = '-- ' . $itemService->getItemTitleForCurrentLanguage($item);
+            $itemRenderer = $itemRendererFactory->getItemRenderer($item);
+            $itemOptions[$item->getId()] = '-- ' . $itemRenderer->renderTitleForCurrentLanguage($item);
         }
 
         return $itemOptions;
     }
 
     /**
-     * @return \Chamilo\Configuration\Service\Consulter\RegistrationConsulter
-     */
-    public function getRegistrationConsulter(): RegistrationConsulter
-    {
-        return $this->registrationConsulter;
-    }
-
-    /**
-     * @param \Chamilo\Configuration\Service\Consulter\RegistrationConsulter $registrationConsulter
-     */
-    public function setRegistrationConsulter(RegistrationConsulter $registrationConsulter): void
-    {
-        $this->registrationConsulter = $registrationConsulter;
-    }
-
-    /**
-     * @return string[]
-     */
-    public function getRootParentItem()
-    {
-        return array(0 => $this->getTranslator()->trans('Root', [], StringUtilities::LIBRARIES));
-    }
-
-    /**
-     * @param \Chamilo\Core\Menu\Storage\DataClass\Item $item
-     * @param \Chamilo\Core\Menu\Storage\DataClass\ItemTitle[] $itemTitles
      * @param string[] $defaults
      *
-     * @throws \Exception
+     * @throws \QuickformException
      */
-    public function setItemDefaults(Item $item, array $itemTitles, array $defaults = [])
+    public function setItemDefaults(Item $item, array $defaults = []): void
     {
-        $defaults[Item::PROPERTY_ID] = $item->getId();
+        $defaults[DataClass::PROPERTY_ID] = $item->getId();
         $defaults[Item::PROPERTY_PARENT] = $item->getParentId();
         $defaults[Item::PROPERTY_HIDDEN] = $item->getHidden();
         $defaults[Item::PROPERTY_TYPE] = $item->getType();
         $defaults[Item::PROPERTY_ICON_CLASS] = $item->getIconClass();
 
-        $activeLanguages = $this->getLanguageConsulter()->getLanguages();
+        $itemRenderer = $this->getItemRendererFactory()->getItemRenderer($item);
 
-        foreach ($activeLanguages as $isoCode => $language)
+        if ($itemRenderer instanceof TranslatableItemInterface)
         {
-            if (key_exists($isoCode, $itemTitles))
+            $activeLanguages = $this->getLanguageConsulter()->getLanguages();
+
+            foreach ($activeLanguages as $isoCode => $language)
             {
-                $defaults[ItemTitle::PROPERTY_TITLE][$isoCode] = $itemTitles[$isoCode]->getTitle();
+                $defaults[Item::PROPERTY_TITLES][$isoCode] =
+                    $itemRenderer->renderTitleForIsocode($item, $isoCode);
+            }
+        }
+
+        if ($itemRenderer instanceof ConfigurableItemInterface)
+        {
+            foreach ($item->getConfiguration() as $setting => $settingValue)
+            {
+                $defaults[Item::PROPERTY_CONFIGURATION][$setting] = $settingValue;
             }
         }
 
         parent:: setDefaults($defaults);
     }
 
-    /**
-     * @param \Symfony\Component\Translation\Translator $translator
-     */
-    protected function setTranslator(Translator $translator): void
-    {
-        $this->translator = $translator;
-    }
 }

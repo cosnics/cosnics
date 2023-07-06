@@ -10,4 +10,6 @@ use Chamilo\Core\Menu\Storage\DataClass\Item;
 interface TranslatableItemInterface
 {
     public function determineItemTitleForCurrentLanguage(Item $item);
+
+    public function determineItemTitleForIsoCode(Item $item, string $isoCode): string;
 }

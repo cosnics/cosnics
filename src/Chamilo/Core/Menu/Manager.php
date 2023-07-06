@@ -2,6 +2,7 @@
 namespace Chamilo\Core\Menu;
 
 use Chamilo\Core\Admin\Core\BreadcrumbGenerator;
+use Chamilo\Core\Menu\Factory\ItemRendererFactory;
 use Chamilo\Core\Menu\Service\ItemService;
 use Chamilo\Core\Menu\Service\RightsService;
 use Chamilo\Libraries\Architecture\Application\Application;
@@ -49,6 +50,11 @@ abstract class Manager extends Application
     public function getHomeUrl(): string
     {
         return $this->getUrlGenerator()->fromParameters([Application::PARAM_ACTION => Manager::ACTION_BROWSE]);
+    }
+
+    public function getItemRendererFactory(): ItemRendererFactory
+    {
+        return $this->getService(ItemRendererFactory::class);
     }
 
     public function getItemService(): ItemService

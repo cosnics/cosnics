@@ -1,6 +1,7 @@
 <?php
 namespace Chamilo\Core\Repository\Service\Menu;
 
+use Chamilo\Core\Menu\Architecture\Interfaces\ConfigurableItemInterface;
 use Chamilo\Core\Menu\Architecture\Interfaces\SelectableItemInterface;
 use Chamilo\Core\Menu\Service\CachedItemService;
 use Chamilo\Core\Menu\Service\Renderer\ItemRenderer;
@@ -10,7 +11,9 @@ use Chamilo\Core\Rights\Structure\Service\Interfaces\AuthorizationCheckerInterfa
 use Chamilo\Core\User\Storage\DataClass\User;
 use Chamilo\Libraries\Architecture\Application\Application;
 use Chamilo\Libraries\Architecture\Application\Routing\UrlGenerator;
+use Chamilo\Libraries\Format\Form\FormValidator;
 use Chamilo\Libraries\Format\Structure\Glyph\FontAwesomeGlyph;
+use Chamilo\Libraries\Format\Structure\Glyph\InlineGlyph;
 use Chamilo\Libraries\Platform\ChamiloRequest;
 use Symfony\Component\Translation\Translator;
 
@@ -18,7 +21,7 @@ use Symfony\Component\Translation\Translator;
  * @package Chamilo\Core\Repository\Service\Menu
  * @author  Hans De Bisschop <hans.de.bisschop@ehb.be>
  */
-class WorkspaceItemRenderer extends ItemRenderer implements SelectableItemInterface
+class WorkspaceItemRenderer extends ItemRenderer implements SelectableItemInterface, ConfigurableItemInterface
 {
     public const CONFIGURATION_NAME = 'name';
     public const CONFIGURATION_WORKSPACE_ID = 'workspace_id';
@@ -50,11 +53,11 @@ class WorkspaceItemRenderer extends ItemRenderer implements SelectableItemInterf
 
         $html[] = '<li' . ($selected ? ' class="active"' : '') . '>';
         $html[] = '<a href="' . $workspaceUrl . '">';
-        $title = $this->renderTitle($item);
+        $title = $this->renderTitleForCurrentLanguage($item);
 
         if ($item->showIcon())
         {
-            $glyph = new FontAwesomeGlyph('hdd', [], null, 'fas');
+            $glyph = $this->getRendererTypeGlyph();
             $glyph->setExtraClasses(['fa-2x']);
             $glyph->setTitle($title);
 
@@ -73,6 +76,47 @@ class WorkspaceItemRenderer extends ItemRenderer implements SelectableItemInterf
         return implode(PHP_EOL, $html);
     }
 
+    /**
+     * @throws \QuickformException
+     */
+    public function addConfigurationToForm(FormValidator $formValidator): void
+    {
+        $translator = $this->getTranslator();
+
+        $formValidator->addElement(
+            'category', $translator->trans('Properties', [], \Chamilo\Core\Menu\Manager::CONTEXT)
+        );
+
+        //TODO: Make this a selector of some kind, should only list workspaces available for everyone?
+        $formValidator->add_textfield(
+            Item::PROPERTY_CONFIGURATION . '[' . self::CONFIGURATION_WORKSPACE_ID . ']',
+            $translator->trans('WorkspaceId', [], Manager::CONTEXT), false
+        );
+
+        $formValidator->add_textfield(
+            Item::PROPERTY_CONFIGURATION . '[' . self::CONFIGURATION_NAME . ']',
+            $translator->trans('WorkspaceName', [], Manager::CONTEXT), false
+        );
+    }
+
+    /**
+     * @return string[]
+     */
+    public function getConfigurationPropertyNames(): array
+    {
+        return [self::CONFIGURATION_NAME, self::CONFIGURATION_WORKSPACE_ID];
+    }
+
+    public function getRendererTypeGlyph(): InlineGlyph
+    {
+        return new FontAwesomeGlyph('hdd', ['fa-fw']);
+    }
+
+    public function getRendererTypeName(): string
+    {
+        return $this->getTranslator()->trans('WorkspaceItem', [], \Chamilo\Core\Menu\Manager::CONTEXT);
+    }
+
     public function getUrlGenerator(): UrlGenerator
     {
         return $this->urlGenerator;
@@ -89,8 +133,13 @@ class WorkspaceItemRenderer extends ItemRenderer implements SelectableItemInterf
             $currentWorkspace == $item->getSetting(self::CONFIGURATION_WORKSPACE_ID);
     }
 
-    public function renderTitle(Item $item): string
+    public function renderTitleForCurrentLanguage(Item $item): string
     {
         return $item->getSetting(self::CONFIGURATION_NAME);
+    }
+
+    public function renderTitleForIsoCode(Item $item, string $isoCode): string
+    {
+        return $this->renderTitleForCurrentLanguage($item);
     }
 }

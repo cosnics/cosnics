@@ -8,12 +8,12 @@ use Chamilo\Core\Menu\Service\Renderer\ItemRenderer;
 use Chamilo\Core\Menu\Storage\DataClass\Item;
 use Chamilo\Core\Repository\Manager as RepositoryManager;
 use Chamilo\Core\Repository\Workspace\Manager;
-use Chamilo\Core\Repository\Workspace\Manager as WorkspaceManager;
 use Chamilo\Core\Repository\Workspace\Service\WorkspaceService;
 use Chamilo\Core\Rights\Structure\Service\Interfaces\AuthorizationCheckerInterface;
 use Chamilo\Core\User\Storage\DataClass\User;
 use Chamilo\Libraries\Architecture\Application\Application;
 use Chamilo\Libraries\Format\Structure\Glyph\FontAwesomeGlyph;
+use Chamilo\Libraries\Format\Structure\Glyph\InlineGlyph;
 use Chamilo\Libraries\Platform\ChamiloRequest;
 use Doctrine\Common\Collections\ArrayCollection;
 use Symfony\Component\Translation\Translator;
@@ -60,11 +60,11 @@ class WorkspaceCategoryItemRenderer extends ItemRenderer implements SelectableIt
         $html[] =
             '<a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">';
 
-        $title = $this->renderTitle($item);
+        $title = $this->renderTitleForCurrentLanguage($item);
 
         if ($item->showIcon())
         {
-            $glyph = new FontAwesomeGlyph('server', [], null, 'fas');
+            $glyph = $this->getRendererTypeGlyph();
             $glyph->setExtraClasses(['fa-2x']);
             $glyph->setTitle($title);
 
@@ -102,6 +102,16 @@ class WorkspaceCategoryItemRenderer extends ItemRenderer implements SelectableIt
         return $this->itemRendererFactory;
     }
 
+    public function getRendererTypeGlyph(): InlineGlyph
+    {
+        return new FontAwesomeGlyph('server', ['fa-fw']);
+    }
+
+    public function getRendererTypeName(): string
+    {
+        return $this->getTranslator()->trans('Workspaces', [], Manager::CONTEXT);
+    }
+
     public function getWorkspaceService(): WorkspaceService
     {
         return $this->workspaceService;
@@ -118,7 +128,7 @@ class WorkspaceCategoryItemRenderer extends ItemRenderer implements SelectableIt
 
         $currentContext = $request->query->get(Application::PARAM_CONTEXT);
 
-        if ($currentContext == WorkspaceManager::CONTEXT)
+        if ($currentContext == Manager::CONTEXT)
         {
             return true;
         }
@@ -129,9 +139,14 @@ class WorkspaceCategoryItemRenderer extends ItemRenderer implements SelectableIt
         return in_array($currentWorkspace, $userWorkspaces);
     }
 
-    public function renderTitle(Item $item): string
+    public function renderTitleForCurrentLanguage(Item $item): string
     {
-        return $this->getTranslator()->trans('Workspaces', [], Manager::CONTEXT);
+        return $this->getRendererTypeName();
+    }
+
+    public function renderTitleForIsoCode(Item $item, string $isoCode): string
+    {
+        return $this->getTranslator()->trans('Workspaces', [], Manager::CONTEXT, $isoCode);
     }
 
     /**

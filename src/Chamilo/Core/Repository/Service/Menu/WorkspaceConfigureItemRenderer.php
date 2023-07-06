@@ -11,6 +11,7 @@ use Chamilo\Core\User\Storage\DataClass\User;
 use Chamilo\Libraries\Architecture\Application\Application;
 use Chamilo\Libraries\Architecture\Application\Routing\UrlGenerator;
 use Chamilo\Libraries\Format\Structure\Glyph\FontAwesomeGlyph;
+use Chamilo\Libraries\Format\Structure\Glyph\InlineGlyph;
 use Chamilo\Libraries\Platform\ChamiloRequest;
 use Symfony\Component\Translation\Translator;
 
@@ -43,11 +44,11 @@ class WorkspaceConfigureItemRenderer extends ItemRenderer implements SelectableI
         $html[] = '<li' . ($selected ? ' class="active"' : '') . '>';
         $html[] = '<a href="' . $url . '">';
 
-        $title = $this->renderTitle($item);
+        $title = $this->renderTitleForCurrentLanguage($item);
 
         if ($item->showIcon())
         {
-            $glyph = new FontAwesomeGlyph('cog', [], null, 'fas');
+            $glyph = $this->getRendererTypeGlyph();
             $glyph->setExtraClasses(['fa-2x']);
             $glyph->setTitle($title);
 
@@ -66,6 +67,16 @@ class WorkspaceConfigureItemRenderer extends ItemRenderer implements SelectableI
         return implode(PHP_EOL, $html);
     }
 
+    public function getRendererTypeGlyph(): InlineGlyph
+    {
+        return new FontAwesomeGlyph('cog', ['fa-fw']);
+    }
+
+    public function getRendererTypeName(): string
+    {
+        return $this->getTranslator()->trans('ConfigureWorkspaces', [], Manager::CONTEXT);
+    }
+
     public function getUrlGenerator(): UrlGenerator
     {
         return $this->urlGenerator;
@@ -76,8 +87,13 @@ class WorkspaceConfigureItemRenderer extends ItemRenderer implements SelectableI
         return $this->getRequest()->query->get(Application::PARAM_CONTEXT) == Manager::CONTEXT;
     }
 
-    public function renderTitle(Item $item): string
+    public function renderTitleForCurrentLanguage(Item $item): string
     {
-        return $this->getTranslator()->trans('ConfigureWorkspaces', [], Manager::CONTEXT);
+        return $this->getRendererTypeName();
+    }
+
+    public function renderTitleForIsoCode(Item $item, string $isoCode): string
+    {
+        return $this->getTranslator()->trans('ConfigureWorkspaces', [], Manager::CONTEXT, $isoCode);
     }
 }

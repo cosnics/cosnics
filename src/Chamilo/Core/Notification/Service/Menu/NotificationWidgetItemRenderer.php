@@ -10,6 +10,8 @@ use Chamilo\Core\Rights\Structure\Service\Interfaces\AuthorizationCheckerInterfa
 use Chamilo\Core\User\Storage\DataClass\User;
 use Chamilo\Libraries\Architecture\Application\Application;
 use Chamilo\Libraries\Architecture\Application\Routing\UrlGenerator;
+use Chamilo\Libraries\Format\Structure\Glyph\FontAwesomeGlyph;
+use Chamilo\Libraries\Format\Structure\Glyph\InlineGlyph;
 use Chamilo\Libraries\Platform\ChamiloRequest;
 use Symfony\Component\Translation\Translator;
 use Twig\Environment;
@@ -79,6 +81,16 @@ class NotificationWidgetItemRenderer extends ItemRenderer
         return $this->registrationConsulter;
     }
 
+    public function getRendererTypeGlyph(): InlineGlyph
+    {
+        return new FontAwesomeGlyph('bell', ['fa-fw']);
+    }
+
+    public function getRendererTypeName(): string
+    {
+        return $this->getTranslator()->trans('Notifications', [], Manager::CONTEXT);
+    }
+
     public function getTwig(): Environment
     {
         return $this->twig;
@@ -100,9 +112,9 @@ class NotificationWidgetItemRenderer extends ItemRenderer
             $authorizationChecker->isAuthorized($user, 'Chamilo\Core\Notification');
     }
 
-    public function renderTitle(Item $item): string
+    public function renderTitleForCurrentLanguage(Item $item): string
     {
-        return $this->getTranslator()->trans('Notifications', [], Manager::CONTEXT);
+        return $this->getRendererTypeName();
     }
 
     public function setTwig(Environment $twig): void

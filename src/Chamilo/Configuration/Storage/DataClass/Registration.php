@@ -26,7 +26,7 @@ class Registration extends DataClass
 
     public const TYPE_APPLICATION = 'Chamilo\Application';
     public const TYPE_CONTENT_OBJECT = 'content_object';
-    public const TYPE_CORE = 'core';
+    public const TYPE_CORE = 'Chamilo\Core';
     public const TYPE_EXTENSION = 'extension';
     public const TYPE_EXTENSIONS = 'common\extensions';
     public const TYPE_EXTERNAL_REPOSITORY_MANAGER = 'external_repository_manager';

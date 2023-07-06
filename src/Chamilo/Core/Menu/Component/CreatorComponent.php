@@ -2,17 +2,18 @@
 namespace Chamilo\Core\Menu\Component;
 
 use Chamilo\Core\Menu\Factory\ItemFormFactory;
+use Chamilo\Core\Menu\Form\ItemForm;
 use Chamilo\Core\Menu\Manager;
 use Chamilo\Core\Menu\Storage\DataClass\Item;
-use Chamilo\Libraries\Architecture\ClassnameUtilities;
+use Chamilo\Libraries\Architecture\Application\Application;
 use Chamilo\Libraries\Architecture\Exceptions\ParameterNotDefinedException;
 use Chamilo\Libraries\Architecture\Interfaces\DelegateComponent;
 use Chamilo\Libraries\Format\Structure\Breadcrumb;
 use Chamilo\Libraries\Format\Structure\BreadcrumbTrail;
+use Chamilo\Libraries\Translation\Translation;
 use Chamilo\Libraries\Utilities\StringUtilities;
 
 /**
- *
  * @package Chamilo\Core\Menu\Component
  * @author  Hans De Bisschop <hans.de.bisschop@ehb.be>
  * @author  Magali Gillard <magali.gillard@ehb.be>
@@ -39,17 +40,24 @@ class CreatorComponent extends Manager implements DelegateComponent
             throw new ParameterNotDefinedException(self::PARAM_TYPE);
         }
 
+        $itemRenderer = $this->getItemRendererFactory()->getAvailableItemRenderer($itemType);
+
         BreadcrumbTrail::getInstance()->add(
             new Breadcrumb(
                 null, $this->getTranslator()->trans(
-                'Add' . ClassnameUtilities::getInstance()->getPackageNameFromNamespace($itemType), [],
-                Manager::CONTEXT
+                'AddMenuItemComponentTitle', ['{ITEM_TYPE}' => $itemRenderer->getRendererTypeName()], Manager::CONTEXT
             )
             )
         );
 
-        $itemForm = $this->getItemFormFactory()->getItemForm(
-            $itemType, $this->get_url(array(self::PARAM_TYPE => $itemType))
+        $itemForm = new ItemForm(
+            $itemType, $this->getUrlGenerator()->fromParameters(
+            [
+                Application::PARAM_CONTEXT => Manager::CONTEXT,
+                Application::PARAM_ACTION => Manager::ACTION_CREATE,
+                self::PARAM_TYPE => $itemType
+            ]
+        )
         );
 
         if ($itemForm->validate())
@@ -63,8 +71,7 @@ class CreatorComponent extends Manager implements DelegateComponent
             if ($success)
             {
                 $message = $this->getTranslator()->trans(
-                    'ObjectCreated',
-                    array('OBJECT' => $this->getTranslator()->trans('ManagerItem', [], Manager::CONTEXT)),
+                    'ObjectCreated', ['OBJECT' => $this->getTranslator()->trans('ManagerItem', [], Manager::CONTEXT)],
                     StringUtilities::LIBRARIES
                 );
             }
@@ -72,32 +79,25 @@ class CreatorComponent extends Manager implements DelegateComponent
             {
                 $message = $this->getTranslator()->trans(
                     'ObjectNotCreated',
-                    array('OBJECT' => $this->getTranslator()->trans('ManagerItem', [], Manager::CONTEXT)),
+                    ['OBJECT' => $this->getTranslator()->trans('ManagerItem', [], Manager::CONTEXT)],
                     StringUtilities::LIBRARIES
                 );
             }
 
             $this->redirectWithMessage(
-                $message, !$success, array(
-                    Manager::PARAM_ACTION => Manager::ACTION_BROWSE, Manager::PARAM_PARENT => $item->getParentId()
-                )
+                $message, !$success, [
+                    Manager::PARAM_ACTION => Manager::ACTION_BROWSE,
+                    Manager::PARAM_PARENT => $item->getParentId()
+                ]
             );
         }
 
         $html = [];
 
-        $html[] = $this->render_header();
+        $html[] = $this->renderHeader();
         $html[] = $itemForm->render();
-        $html[] = $this->render_footer();
+        $html[] = $this->renderFooter();
 
         return implode(PHP_EOL, $html);
-    }
-
-    /**
-     * @return \Chamilo\Core\Menu\Factory\ItemFormFactory
-     */
-    public function getItemFormFactory()
-    {
-        return $this->getService(ItemFormFactory::class);
     }
 }

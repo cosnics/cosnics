@@ -18,10 +18,6 @@
         <service id="Chamilo\Core\Menu\Service\Renderer\LanguageItemRenderer">
             <tag name="Chamilo\Core\Menu\Service\Renderer\ItemRenderer"/>
         </service>
-        <service id="Chamilo\Core\Menu\Service\Renderer\LinkApplicationItemRenderer">
-            <tag name="Chamilo\Core\Menu\Service\Renderer\ItemRenderer"/>
-            <argument key="$fallbackIsoCodes">%chamilo.configuration.general.language.fallback%</argument>
-        </service>
         <service id="Chamilo\Core\Menu\Service\Renderer\LinkItemRenderer">
             <tag name="Chamilo\Core\Menu\Service\Renderer\ItemRenderer"/>
             <argument key="$fallbackIsoCodes">%chamilo.configuration.general.language.fallback%</argument>

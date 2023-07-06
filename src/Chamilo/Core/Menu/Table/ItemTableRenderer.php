@@ -144,10 +144,12 @@ class ItemTableRenderer extends DataClassListTableRenderer implements TableRowAc
      */
     protected function renderCell(TableColumn $column, TableResultPosition $resultPosition, $item): string
     {
+        $itemRendererFactory = $this->getItemRendererFactory();
+
         return match ($column->get_name())
         {
-            Item::PROPERTY_TITLES => $this->getItemRendererFactory()->getItemRenderer($item)->renderTitle($item),
-            self::PROPERTY_TYPE => $item->getGlyph()->render(),
+            Item::PROPERTY_TITLES => $itemRendererFactory->getItemRenderer($item)->renderTitleForCurrentLanguage($item),
+            self::PROPERTY_TYPE => $itemRendererFactory->getItemRenderer($item)->getRendererTypeGlyph()->render(),
             default => parent::renderCell($column, $resultPosition, $item),
         };
     }

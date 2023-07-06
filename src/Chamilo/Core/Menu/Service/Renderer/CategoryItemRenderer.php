@@ -5,12 +5,14 @@ use Chamilo\Core\Menu\Architecture\Interfaces\SelectableItemInterface;
 use Chamilo\Core\Menu\Architecture\Interfaces\TranslatableItemInterface;
 use Chamilo\Core\Menu\Architecture\Traits\TranslatableItemTrait;
 use Chamilo\Core\Menu\Factory\ItemRendererFactory;
+use Chamilo\Core\Menu\Manager;
 use Chamilo\Core\Menu\Service\CachedItemService;
 use Chamilo\Core\Menu\Service\RightsCacheService;
 use Chamilo\Core\Menu\Storage\DataClass\Item;
 use Chamilo\Core\Rights\Structure\Service\Interfaces\AuthorizationCheckerInterface;
 use Chamilo\Core\User\Storage\DataClass\User;
 use Chamilo\Libraries\Format\Structure\Glyph\FontAwesomeGlyph;
+use Chamilo\Libraries\Format\Structure\Glyph\InlineGlyph;
 use Chamilo\Libraries\Platform\ChamiloRequest;
 use Symfony\Component\Translation\Translator;
 
@@ -48,7 +50,7 @@ class CategoryItemRenderer extends ItemRenderer implements TranslatableItemInter
 
         $isSelected = $this->isSelected($item, $user);
 
-        $title = $this->renderTitle($item);
+        $title = $this->renderTitleForCurrentLanguage($item);
 
         $html[] = '<li class="dropdown' . ($isSelected ? ' active' : '') . '">';
         $html[] =
@@ -66,9 +68,8 @@ class CategoryItemRenderer extends ItemRenderer implements TranslatableItemInter
             }
             else
             {
-                $glyph = new FontAwesomeGlyph(
-                    'folder', ['fa-2x', 'fa-fw'], $title, 'fas'
-                );
+                $glyph = $this->getRendererTypeGlyph();
+                $glyph->setExtraClasses(['fa-2x', 'fa-fw']);
             }
 
             $html[] = $glyph->render();
@@ -101,6 +102,16 @@ class CategoryItemRenderer extends ItemRenderer implements TranslatableItemInter
     public function getItemRendererFactory(): ItemRendererFactory
     {
         return $this->itemRendererFactory;
+    }
+
+    public function getRendererTypeGlyph(): InlineGlyph
+    {
+        return new FontAwesomeGlyph('folder', ['fa-fw']);
+    }
+
+    public function getRendererTypeName(): string
+    {
+        return $this->getTranslator()->trans('CategoryItem', [], Manager::CONTEXT);
     }
 
     public function getRightsCacheService(): RightsCacheService
@@ -157,9 +168,14 @@ class CategoryItemRenderer extends ItemRenderer implements TranslatableItemInter
         return implode(PHP_EOL, $html);
     }
 
-    public function renderTitle(Item $item): string
+    public function renderTitleForCurrentLanguage(Item $item): string
     {
         return $this->determineItemTitleForCurrentLanguage($item);
+    }
+
+    public function renderTitleForIsoCode(Item $item, string $isoCode): string
+    {
+        return $this->determineItemTitleForIsoCode($item, $isoCode);
     }
 
 }

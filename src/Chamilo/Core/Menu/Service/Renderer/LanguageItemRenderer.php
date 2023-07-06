@@ -11,6 +11,7 @@ use Chamilo\Core\User\Storage\DataClass\User;
 use Chamilo\Libraries\Architecture\Application\Application;
 use Chamilo\Libraries\Architecture\Application\Routing\UrlGenerator;
 use Chamilo\Libraries\Format\Structure\Glyph\FontAwesomeGlyph;
+use Chamilo\Libraries\Format\Structure\Glyph\InlineGlyph;
 use Chamilo\Libraries\Platform\ChamiloRequest;
 use Symfony\Component\Translation\Translator;
 
@@ -109,7 +110,8 @@ class LanguageItemRenderer extends ItemRenderer
 
     public function getRenderedGlyph(bool $showCaret = false): string
     {
-        $glyph = new FontAwesomeGlyph('language', ['fa-2x', 'fa-fw'], null, 'fas');
+        $glyph = $this->getRendererTypeGlyph();
+        $glyph->setExtraClasses(['fa-2x', 'fa-fw']);
 
         $html = [];
 
@@ -125,6 +127,16 @@ class LanguageItemRenderer extends ItemRenderer
         $html[] = '</div>';
 
         return implode(PHP_EOL, $html);
+    }
+
+    public function getRendererTypeGlyph(): InlineGlyph
+    {
+        return new FontAwesomeGlyph('language', ['fa-fw']);
+    }
+
+    public function getRendererTypeName(): string
+    {
+        return $this->getTranslator()->trans('LanguageItem', [], \Chamilo\Core\Menu\Manager::CONTEXT);
     }
 
     public function getUrlGenerator(): UrlGenerator
@@ -208,8 +220,13 @@ class LanguageItemRenderer extends ItemRenderer
         return implode(PHP_EOL, $html);
     }
 
-    public function renderTitle(Item $item): string
+    public function renderTitleForCurrentLanguage(Item $item): string
     {
         return $this->getTranslator()->trans('LanguageItem', [], \Chamilo\Core\Menu\Manager::CONTEXT);
+    }
+
+    public function renderTitleForIsoCode(Item $item, string $isoCode): string
+    {
+        return $this->getTranslator()->trans('LanguageItem', [], \Chamilo\Core\Menu\Manager::CONTEXT, $isoCode);
     }
 }

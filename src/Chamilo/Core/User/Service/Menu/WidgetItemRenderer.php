@@ -11,6 +11,8 @@ use Chamilo\Core\User\Picture\UserPictureProviderInterface;
 use Chamilo\Core\User\Storage\DataClass\User;
 use Chamilo\Libraries\Architecture\Application\Application;
 use Chamilo\Libraries\Architecture\Application\Routing\UrlGenerator;
+use Chamilo\Libraries\Format\Structure\Glyph\FontAwesomeGlyph;
+use Chamilo\Libraries\Format\Structure\Glyph\InlineGlyph;
 use Chamilo\Libraries\Platform\ChamiloRequest;
 use Symfony\Component\Translation\Translator;
 
@@ -144,6 +146,16 @@ class WidgetItemRenderer extends ItemRenderer
         return $this->getUserUrl(Manager::ACTION_CHANGE_PICTURE);
     }
 
+    public function getRendererTypeGlyph(): InlineGlyph
+    {
+        return new FontAwesomeGlyph('address-card');
+    }
+
+    public function getRendererTypeName(): string
+    {
+        return $this->getTranslator()->trans('UserAccountWidget', [], Manager::CONTEXT);
+    }
+
     public function getSettingsUrl(): string
     {
         return $this->getUserUrl(Manager::ACTION_USER_SETTINGS);
@@ -171,8 +183,13 @@ class WidgetItemRenderer extends ItemRenderer
         return $this->getAuthorizationChecker()->isAuthorized($user, 'Chamilo\Core\User', 'ManageAccount');
     }
 
-    public function renderTitle(Item $item): string
+    public function renderTitleForCurrentLanguage(Item $item): string
     {
-        return $this->getTranslator()->trans('UserAccountWidget', [], Manager::CONTEXT);
+        return $this->getRendererTypeName();
+    }
+
+    public function renderTitleForIsoCode(Item $item, string $isoCode): string
+    {
+        return $this->getTranslator()->trans('UserAccountWidget', [], \Chamilo\Core\Menu\Manager::CONTEXT, $isoCode);
     }
 }
