@@ -117,6 +117,11 @@ class NotificationWidgetItemRenderer extends ItemRenderer
         return $this->getRendererTypeName();
     }
 
+    public function renderTitleForIsocode(Item $item, string $isoCode): string
+    {
+        return $this->getTranslator()->trans('Notifications', [], Manager::CONTEXT, $isoCode);
+    }
+
     public function setTwig(Environment $twig): void
     {
         $this->twig = $twig;

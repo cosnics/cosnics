@@ -28,6 +28,7 @@ class Installer extends \Chamilo\Configuration\Package\Action\Installer
      */
     protected function createDefaultItems(): bool
     {
+        // TODO: Fix this;
         $items = [];
 
         $items[] = $this->initializeApplicationItem(\Chamilo\Core\Home\Manager::CONTEXT, 1);

@@ -8,11 +8,10 @@ use Chamilo\Libraries\Format\Structure\BreadcrumbTrail;
 use Chamilo\Libraries\Utilities\StringUtilities;
 
 /**
- *
  * @package Chamilo\Core\Menu\Component
- * @author Hans De Bisschop <hans.de.bisschop@ehb.be>
- * @author Magali Gillard <magali.gillard@ehb.be>
- * @author Eduard Vossen <eduard.vossen@ehb.be>
+ * @author  Hans De Bisschop <hans.de.bisschop@ehb.be>
+ * @author  Magali Gillard <magali.gillard@ehb.be>
+ * @author  Eduard Vossen <eduard.vossen@ehb.be>
  */
 class MoverComponent extends Manager
 {
@@ -43,18 +42,19 @@ class MoverComponent extends Manager
 
         $item = $this->getItemService()->findItemByIdentifier($itemIdentifier);
 
-        $success = $this->getItemService()->moveItemInDirection($item, $moveDirection);
+        $success = $this->getCachedItemService()->moveItemInDirection($item, $moveDirection);
 
         $message = $this->getTranslator()->trans(
             $success ? 'ObjectMoved' : 'ObjectNotMoved',
-            array('{OBJECT}' => $this->getTranslator()->trans('ManagerItem', [], 'Chamilo\Core\Menu')),
+            ['{OBJECT}' => $this->getTranslator()->trans('ManagerItem', [], 'Chamilo\Core\Menu')],
             StringUtilities::LIBRARIES
         );
 
         $this->redirectWithMessage(
-            $message, !$success, array(
-                Manager::PARAM_ACTION => Manager::ACTION_BROWSE, Manager::PARAM_PARENT => $item->getParentId()
-            )
+            $message, !$success, [
+                Manager::PARAM_ACTION => Manager::ACTION_BROWSE,
+                Manager::PARAM_PARENT => $item->getParentId()
+            ]
         );
     }
 

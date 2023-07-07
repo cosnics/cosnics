@@ -20,19 +20,22 @@ class CachedItemService implements CacheDataPreLoaderInterface, ItemServiceInter
     use CacheAdapterHandlerTrait;
 
     public const KEY_ITEMS = 'items';
-    public const KEY_ITEM_TITLES = 'titles';
+
+    protected RightsCacheService $rightsCacheService;
 
     private ItemService $itemService;
 
     private PropertyMapper $propertyMapper;
 
     public function __construct(
-        ItemService $itemService, AdapterInterface $cacheAdapter, PropertyMapper $propertyMapper
+        ItemService $itemService, AdapterInterface $cacheAdapter, PropertyMapper $propertyMapper,
+        RightsCacheService $rightsCacheService
     )
     {
         $this->itemService = $itemService;
         $this->cacheAdapter = $cacheAdapter;
         $this->propertyMapper = $propertyMapper;
+        $this->rightsCacheService = $rightsCacheService;
     }
 
     /**
@@ -56,6 +59,11 @@ class CachedItemService implements CacheDataPreLoaderInterface, ItemServiceInter
             return false;
         }
 
+        if (!$this->getRightsCacheService()->clear())
+        {
+            return false;
+        }
+
         return $this->clearCacheDataForKeyParts([__CLASS__, self::KEY_ITEMS]);
     }
 
@@ -63,7 +71,17 @@ class CachedItemService implements CacheDataPreLoaderInterface, ItemServiceInter
     {
         $item = $this->getItemService()->createItemForTypeFromValues($itemType, $values);
 
-        if (!$item || !$this->clearCacheDataForKeyParts([__CLASS__, self::KEY_ITEMS]))
+        if (!$item)
+        {
+            return null;
+        }
+
+        if (!$this->getRightsCacheService()->clear())
+        {
+            return null;
+        }
+
+        if (!$this->clearCacheDataForKeyParts([__CLASS__, self::KEY_ITEMS]))
         {
             return null;
         }
@@ -74,6 +92,11 @@ class CachedItemService implements CacheDataPreLoaderInterface, ItemServiceInter
     public function deleteItem(Item $item): bool
     {
         if (!$this->getItemService()->deleteItem($item))
+        {
+            return false;
+        }
+
+        if (!$this->getRightsCacheService()->clear())
         {
             return false;
         }
@@ -90,6 +113,11 @@ class CachedItemService implements CacheDataPreLoaderInterface, ItemServiceInter
     public function deleteItemChildren(Item $item): bool
     {
         if (!$this->getItemService()->deleteItemChildren($item))
+        {
+            return false;
+        }
+
+        if (!$this->getRightsCacheService()->clear())
         {
             return false;
         }
@@ -188,6 +216,11 @@ class CachedItemService implements CacheDataPreLoaderInterface, ItemServiceInter
         return $this->propertyMapper;
     }
 
+    public function getRightsCacheService(): RightsCacheService
+    {
+        return $this->rightsCacheService;
+    }
+
     /**
      * @throws \Chamilo\Libraries\Storage\Exception\DataClassNoResultException
      * @throws \Symfony\Component\Cache\Exception\CacheException
@@ -195,7 +228,7 @@ class CachedItemService implements CacheDataPreLoaderInterface, ItemServiceInter
      */
     public function moveItemInDirection(Item $item, int $moveDirection): bool
     {
-        if (!$this->getItemService() - $this->moveItemInDirection($item, $moveDirection))
+        if (!$this->getItemService()->moveItemInDirection($item, $moveDirection))
         {
             return false;
         }
@@ -220,6 +253,11 @@ class CachedItemService implements CacheDataPreLoaderInterface, ItemServiceInter
             return false;
         }
 
+        if (!$this->getRightsCacheService()->clear())
+        {
+            return false;
+        }
+
         return $this->clearCacheDataForKeyParts([__CLASS__, self::KEY_ITEMS]);
     }
 
@@ -231,6 +269,11 @@ class CachedItemService implements CacheDataPreLoaderInterface, ItemServiceInter
     public function updateItem(Item $item): bool
     {
         if (!$this->getItemService() - $this->updateItem($item))
+        {
+            return false;
+        }
+
+        if (!$this->getRightsCacheService()->clear())
         {
             return false;
         }

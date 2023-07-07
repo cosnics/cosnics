@@ -85,34 +85,30 @@ class ItemService implements ItemServiceInterface
     }
 
     /**
-     * @param string[][] $values
+     * @param string[]|string[][] $values
      *
      * @throws \Chamilo\Libraries\Storage\Exception\DisplayOrderException
      * @throws \Exception
      */
     public function createItemForTypeFromValues(string $itemType, array $values): ?Item
     {
-        $item = $this->getItemTypeInstance($itemType);
+        $item = new Item();
 
-        foreach ($item::getDefaultPropertyNames() as $property)
-        {
-            if (isset($values[$property]))
-            {
-                $item->setDefaultProperty($property, $values[$property]);
-            }
-        }
-
-        foreach ($item::getAdditionalPropertyNames() as $property)
-        {
-            if (isset($values[$property]))
-            {
-                $item->setAdditionalProperty($property, $values[$property]);
-            }
-        }
-
-        $item->setType($itemType);
         $item->setDisplay(Item::DISPLAY_BOTH);
-        $item->setHidden();
+        $item->setType($itemType);
+        $item->setHidden(isset($values[Item::PROPERTY_HIDDEN]) ? 1 : 0);
+        $item->setIconClass($values[Item::PROPERTY_ICON_CLASS]);
+        $item->setParentId($values[Item::PROPERTY_PARENT]);
+
+        foreach ($values[Item::PROPERTY_TITLES] as $isoCode => $title)
+        {
+            $item->setTitleForIsoCode($isoCode, $title);
+        }
+
+        foreach ($values[Item::PROPERTY_CONFIGURATION] as $configurationVariable => $configurationValue)
+        {
+            $item->setSetting($configurationVariable, $configurationValue);
+        }
 
         if (!$this->createItem($item))
         {
@@ -294,18 +290,6 @@ class ItemService implements ItemServiceInterface
     }
 
     /**
-     * @template getItemTypeInstance
-     *
-     * @param class-string<getItemTypeInstance> $itemType
-     *
-     * @return ?getItemTypeInstance
-     */
-    protected function getItemTypeInstance(string $itemType)
-    {
-        return new $itemType();
-    }
-
-    /**
      * @throws \Chamilo\Libraries\Storage\Exception\DataClassNoResultException
      */
     public function getNextItemSortValueByParentIdentifier(string $parentIdentifier): int
@@ -346,7 +330,7 @@ class ItemService implements ItemServiceInterface
     }
 
     /**
-     * @param string[][] $values
+     * @param string[]|string[][] $values
      *
      * @throws \Chamilo\Libraries\Storage\Exception\DisplayOrderException
      * @throws \Chamilo\Libraries\Storage\Exception\DataClassNoResultException
@@ -360,12 +344,19 @@ class ItemService implements ItemServiceInterface
             $item->setSort(null);
         }
 
-        foreach ($item::getDefaultPropertyNames() as $property)
+        $item->setDisplay(Item::DISPLAY_BOTH);
+        $item->setHidden(isset($values[Item::PROPERTY_HIDDEN]) ? 1 : 0);
+        $item->setIconClass($values[Item::PROPERTY_ICON_CLASS]);
+        $item->setParentId($values[Item::PROPERTY_PARENT]);
+
+        foreach ($values[Item::PROPERTY_TITLES] as $isoCode => $title)
         {
-            if (isset($values[$property]))
-            {
-                $item->setDefaultProperty($property, $values[$property]);
-            }
+            $item->setTitleForIsoCode($isoCode, $title);
+        }
+
+        foreach ($values[Item::PROPERTY_CONFIGURATION] as $configurationVariable => $configurationValue)
+        {
+            $item->setSetting($configurationVariable, $configurationValue);
         }
 
         if (!$this->updateItem($item))

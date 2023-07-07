@@ -20,7 +20,11 @@
             <argument key="$configuredSessionHandler">%chamilo.configuration.session.session_handler%</argument>
         </service>
 
-        <service id="Chamilo\Libraries\Platform\Session\PdoSessionHandlerFactory"/>
+        <service id="Chamilo\Libraries\Platform\Session\PdoSessionHandlerFactory">
+            <argument key="$connection"
+                      type="service"
+                      id="Doctrine\DBAL\Connection\Session"/>
+        </service>
 
         <service id="Chamilo\Libraries\Translation\Translation">
             <factory class="Chamilo\Libraries\Translation\Translation"

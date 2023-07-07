@@ -33,6 +33,7 @@ class ItemForm extends FormValidator
 
         $this->buildBasicForm();
         $this->buildSettingsForm();
+        $this->buildTitlesForm();
 
         $this->addSaveResetButtons();
         $this->setDefaults();
@@ -60,13 +61,6 @@ class ItemForm extends FormValidator
             'text', Item::PROPERTY_ICON_CLASS, $translator->trans('IconClass', [], 'Chamilo\Core\Menu'),
             ['class' => 'form-control']
         );
-
-        $itemRenderer = $this->getItemRendererFactory()->getAvailableItemRenderer($this->getItemType());
-
-        if ($itemRenderer instanceof TranslatableItemInterface)
-        {
-            $this->buildFormTitles();
-        }
     }
 
     /**
@@ -105,6 +99,19 @@ class ItemForm extends FormValidator
             count($itemRenderer->getConfigurationPropertyNames()) > 0)
         {
             $itemRenderer->addConfigurationToForm($this);
+        }
+    }
+
+    /**
+     * @throws \QuickformException
+     */
+    protected function buildTitlesForm(): void
+    {
+        $itemRenderer = $this->getItemRendererFactory()->getAvailableItemRenderer($this->getItemType());
+
+        if ($itemRenderer instanceof TranslatableItemInterface)
+        {
+            $this->buildFormTitles();
         }
     }
 
@@ -172,8 +179,7 @@ class ItemForm extends FormValidator
 
             foreach ($activeLanguages as $isoCode => $language)
             {
-                $defaults[Item::PROPERTY_TITLES][$isoCode] =
-                    $itemRenderer->renderTitleForIsocode($item, $isoCode);
+                $defaults[Item::PROPERTY_TITLES][$isoCode] = $itemRenderer->renderTitleForIsocode($item, $isoCode);
             }
         }
 

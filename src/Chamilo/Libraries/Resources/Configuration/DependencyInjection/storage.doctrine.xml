@@ -19,6 +19,11 @@
                      method="getConnection"/>
         </service>
 
+        <service id="Doctrine\DBAL\Connection\Session">
+            <factory service="Chamilo\Libraries\Storage\DataManager\Doctrine\Factory\ConnectionFactory"
+                     method="getConnection"/>
+        </service>
+
         <!-- Database Layer -->
         <service id="Chamilo\Libraries\Storage\DataManager\Doctrine\Database\DataClassDatabase"/>
         <service id="Chamilo\Libraries\Storage\DataManager\Doctrine\Database\StorageUnitDatabase"/>

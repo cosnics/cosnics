@@ -21,6 +21,7 @@ class DeleterComponent extends Manager
      * @throws \Chamilo\Libraries\Architecture\Exceptions\ParameterNotDefinedException
      * @throws \Exception
      * @throws \Psr\SimpleCache\InvalidArgumentException
+     * @throws \Psr\Cache\InvalidArgumentException
      */
     public function run()
     {
@@ -32,7 +33,7 @@ class DeleterComponent extends Manager
 
         foreach ($items as $item)
         {
-            if (!$this->getItemService()->deleteItem($item))
+            if (!$this->getCachedItemService()->deleteItem($item))
             {
                 $failures ++;
             }

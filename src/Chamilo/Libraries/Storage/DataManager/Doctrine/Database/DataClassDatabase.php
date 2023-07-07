@@ -425,6 +425,7 @@ class DataClassDatabase implements DataClassDatabaseInterface
             // This mediates between Chamilo's convention of returning #f to signal failure
             // versus Doctrine's use of Exceptions.
             $throwOnFalse = function ($connection) use ($function) {
+
                 $result = call_user_func($function, $connection);
                 if (!$result)
                 {
@@ -438,7 +439,7 @@ class DataClassDatabase implements DataClassDatabaseInterface
 
             return $this->getConnection()->transactional($throwOnFalse);
         }
-        catch (Exception $e)
+        catch (Exception)
         {
             return false;
         }

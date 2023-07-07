@@ -3,6 +3,7 @@ namespace Chamilo\Core\Menu;
 
 use Chamilo\Core\Admin\Core\BreadcrumbGenerator;
 use Chamilo\Core\Menu\Factory\ItemRendererFactory;
+use Chamilo\Core\Menu\Service\CachedItemService;
 use Chamilo\Core\Menu\Service\ItemService;
 use Chamilo\Core\Menu\Service\RightsService;
 use Chamilo\Libraries\Architecture\Application\Application;
@@ -45,6 +46,11 @@ abstract class Manager extends Application
         parent::__construct($applicationConfiguration);
 
         $this->checkAuthorization(Manager::CONTEXT);
+    }
+
+    public function getCachedItemService(): CachedItemService
+    {
+        return $this->getService(CachedItemService::class);
     }
 
     public function getHomeUrl(): string

@@ -58,7 +58,7 @@ class EditorComponent extends Manager implements DelegateComponent
 
         if ($itemForm->validate())
         {
-            $success = $this->getItemService()->saveItemFromValues($item, $itemForm->exportValues());
+            $success = $this->getCachedItemService()->saveItemFromValues($item, $itemForm->exportValues());
 
             $message = $this->getTranslator()->trans(
                 $success ? 'ObjectCreated' : 'ObjectNotCreated',
