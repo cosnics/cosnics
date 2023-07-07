@@ -2,6 +2,7 @@
 namespace Chamilo\Core\Menu\Component;
 
 use Chamilo\Core\Menu\Manager;
+use Chamilo\Libraries\Architecture\Application\Application;
 use Chamilo\Libraries\Architecture\Exceptions\ParameterNotDefinedException;
 use Chamilo\Libraries\Format\Structure\Breadcrumb;
 use Chamilo\Libraries\Format\Structure\BreadcrumbTrail;
@@ -17,10 +18,11 @@ class MoverComponent extends Manager
 {
 
     /**
-     * @return string|void
      * @throws \Chamilo\Libraries\Architecture\Exceptions\NotAllowedException
      * @throws \Chamilo\Libraries\Architecture\Exceptions\ParameterNotDefinedException
+     * @throws \Chamilo\Libraries\Storage\Exception\DataClassNoResultException
      * @throws \Chamilo\Libraries\Storage\Exception\DisplayOrderException
+     * @throws \Symfony\Component\Cache\Exception\CacheException
      */
     public function run()
     {
@@ -52,7 +54,7 @@ class MoverComponent extends Manager
 
         $this->redirectWithMessage(
             $message, !$success, [
-                Manager::PARAM_ACTION => Manager::ACTION_BROWSE,
+                Application::PARAM_ACTION => Manager::ACTION_BROWSE,
                 Manager::PARAM_PARENT => $item->getParentId()
             ]
         );
@@ -61,7 +63,7 @@ class MoverComponent extends Manager
     /**
      * @param \Chamilo\Libraries\Format\Structure\BreadcrumbTrail $breadcrumbtrail
      */
-    public function add_additional_breadcrumbs(BreadcrumbTrail $breadcrumbtrail)
+    public function add_additional_breadcrumbs(BreadcrumbTrail $breadcrumbtrail): void
     {
         $breadcrumbtrail->add(
             new Breadcrumb(

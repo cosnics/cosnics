@@ -1,7 +1,6 @@
 <?php
 namespace Chamilo\Core\Menu\Component;
 
-use Chamilo\Core\Menu\Factory\ItemFormFactory;
 use Chamilo\Core\Menu\Form\ItemForm;
 use Chamilo\Core\Menu\Manager;
 use Chamilo\Core\Menu\Storage\DataClass\Item;
@@ -10,7 +9,6 @@ use Chamilo\Libraries\Architecture\Exceptions\ParameterNotDefinedException;
 use Chamilo\Libraries\Architecture\Interfaces\DelegateComponent;
 use Chamilo\Libraries\Format\Structure\Breadcrumb;
 use Chamilo\Libraries\Format\Structure\BreadcrumbTrail;
-use Chamilo\Libraries\Translation\Translation;
 use Chamilo\Libraries\Utilities\StringUtilities;
 
 /**
@@ -23,11 +21,11 @@ class CreatorComponent extends Manager implements DelegateComponent
 {
 
     /**
-     * @return string
      * @throws \Chamilo\Libraries\Architecture\Exceptions\NotAllowedException
      * @throws \Chamilo\Libraries\Architecture\Exceptions\ParameterNotDefinedException
      * @throws \Chamilo\Libraries\Storage\Exception\DisplayOrderException
-     * @throws \Exception
+     * @throws \QuickformException
+     * @throws \Chamilo\Libraries\Storage\Exception\DataClassNoResultException
      */
     public function run()
     {
@@ -86,7 +84,7 @@ class CreatorComponent extends Manager implements DelegateComponent
 
             $this->redirectWithMessage(
                 $message, !$success, [
-                    Manager::PARAM_ACTION => Manager::ACTION_BROWSE,
+                    Application::PARAM_ACTION => Manager::ACTION_BROWSE,
                     Manager::PARAM_PARENT => $item->getParentId()
                 ]
             );

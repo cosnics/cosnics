@@ -5,7 +5,6 @@ use Chamilo\Core\Menu\Service\CachedItemService;
 use Chamilo\Core\Menu\Storage\DataClass\Item;
 use Chamilo\Core\Rights\Structure\Service\Interfaces\AuthorizationCheckerInterface;
 use Chamilo\Core\User\Storage\DataClass\User;
-use Chamilo\Libraries\Format\Form\FormValidator;
 use Chamilo\Libraries\Format\Structure\Glyph\InlineGlyph;
 use Chamilo\Libraries\Platform\ChamiloRequest;
 use Symfony\Component\Translation\Translator;
@@ -37,8 +36,6 @@ abstract class ItemRenderer
 
     abstract public function render(Item $item, User $user): string;
 
-
-
     public function getAuthorizationChecker(): AuthorizationCheckerInterface
     {
         return $this->authorizationChecker;
@@ -58,8 +55,6 @@ abstract class ItemRenderer
 
         return $existingClasses;
     }
-
-
 
     public function getItemCacheService(): CachedItemService
     {

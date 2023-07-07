@@ -1,7 +1,6 @@
 <?php
 namespace Chamilo\Core\Menu\Component;
 
-use Chamilo\Core\Menu\Factory\ItemRendererFactory;
 use Chamilo\Core\Menu\Form\ItemForm;
 use Chamilo\Core\Menu\Manager;
 use Chamilo\Core\Menu\Storage\DataClass\Item;
@@ -38,7 +37,8 @@ class EditorComponent extends Manager implements DelegateComponent
         BreadcrumbTrail::getInstance()->add(
             new Breadcrumb(
                 null, $this->getTranslator()->trans(
-                'EditMenuItemComponentTitle', ['{ITEM_NAME}' => $itemRenderer->renderTitleForCurrentLanguage($item)], Manager::CONTEXT
+                'EditMenuItemComponentTitle', ['{ITEM_NAME}' => $itemRenderer->renderTitleForCurrentLanguage($item)],
+                Manager::CONTEXT
             )
             )
         );
@@ -47,7 +47,7 @@ class EditorComponent extends Manager implements DelegateComponent
             $item->getType(), $this->getUrlGenerator()->fromParameters(
             [
                 Application::PARAM_CONTEXT => Manager::CONTEXT,
-                Application::PARAM_ACTION => Manager::ACTION_CREATE,
+                Application::PARAM_ACTION => Manager::ACTION_EDIT,
                 self::PARAM_TYPE => $item->getType(),
                 self::PARAM_ITEM => $item->getId()
             ]
@@ -68,7 +68,7 @@ class EditorComponent extends Manager implements DelegateComponent
 
             $this->redirectWithMessage(
                 $message, !$success,
-                [Manager::PARAM_ACTION => Manager::ACTION_BROWSE, Manager::PARAM_ITEM => $item->getParentId()]
+                [Application::PARAM_ACTION => Manager::ACTION_BROWSE, Manager::PARAM_ITEM => $item->getParentId()]
             );
         }
 
@@ -103,10 +103,5 @@ class EditorComponent extends Manager implements DelegateComponent
         }
 
         return $item;
-    }
-
-    public function getItemRendererFactory(): ItemRendererFactory
-    {
-        return $this->getService(ItemRendererFactory::class);
     }
 }

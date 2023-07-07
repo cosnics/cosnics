@@ -28,15 +28,14 @@ class Installer extends \Chamilo\Configuration\Package\Action\Installer
      */
     protected function createDefaultItems(): bool
     {
-        // TODO: Fix this;
         $items = [];
 
-        $items[] = $this->initializeApplicationItem(\Chamilo\Core\Home\Manager::CONTEXT, 1);
-        $items[] = $this->initializeItem(LanguageItemRenderer::class, 2);
-        $items[] = $this->initializeItem(RepositoryApplicationItemRenderer::class, 3);
-        $items[] = $this->initializeItem(WorkspaceCategoryItemRenderer::class, 4);
-        $items[] = $this->initializeApplicationItem(\Chamilo\Core\Admin\Manager::CONTEXT, 5);
-        $items[] = $this->initializeItem(WidgetItemRenderer::class, 6);
+        $items[] = $this->initializeApplicationItem(\Chamilo\Core\Home\Manager::CONTEXT);
+        $items[] = $this->initializeItem(LanguageItemRenderer::class);
+        $items[] = $this->initializeItem(RepositoryApplicationItemRenderer::class);
+        $items[] = $this->initializeItem(WorkspaceCategoryItemRenderer::class);
+        $items[] = $this->initializeApplicationItem(\Chamilo\Core\Admin\Manager::CONTEXT);
+        $items[] = $this->initializeItem(WidgetItemRenderer::class);
 
         foreach ($items as $item)
         {
@@ -45,6 +44,10 @@ class Installer extends \Chamilo\Configuration\Package\Action\Installer
                 return false;
             }
         }
+
+        $this->add_message(
+            self::TYPE_NORMAL, $this->getTranslator()->trans('DefaultMenuItemsCreated', [], Manager::CONTEXT)
+        );
 
         return true;
     }
@@ -64,7 +67,7 @@ class Installer extends \Chamilo\Configuration\Package\Action\Installer
         {
             $this->add_message(
                 self::TYPE_NORMAL, $this->getTranslator()->trans(
-                'ObjectCreated', ['OBJECT' => $this->getTranslator()->trans('RightsTree', [], 'Chamilo\Core\Menu')],
+                'ObjectCreated', ['OBJECT' => $this->getTranslator()->trans('RightsTree', [], Manager::CONTEXT)],
                 StringUtilities::LIBRARIES
             )
             );
@@ -83,20 +86,19 @@ class Installer extends \Chamilo\Configuration\Package\Action\Installer
         return $this->getService(RightsService::class);
     }
 
-    public function initializeApplicationItem(string $applicationContext, int $sort): Item
+    public function initializeApplicationItem(string $applicationContext): Item
     {
-        return $this->initializeItem(ApplicationItemRenderer::class, $sort, [
+        return $this->initializeItem(ApplicationItemRenderer::class, [
             ApplicationItemRenderer::CONFIGURATION_APPLICATION => $applicationContext,
             ApplicationItemRenderer::CONFIGURATION_USE_TRANSLATION => '1'
         ]);
     }
 
-    public function initializeItem(string $type, int $sort, array $settings = []): Item
+    public function initializeItem(string $type, array $settings = []): Item
     {
         $item = new Item();
 
         $item->setType($type);
-        $item->setSort($sort);
         $item->setParentId('0');
         $item->setDisplay(Item::DISPLAY_BOTH);
         $item->setConfiguration($settings);

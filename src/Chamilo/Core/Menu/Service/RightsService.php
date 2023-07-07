@@ -140,15 +140,14 @@ class RightsService
         }
     }
 
-    public function findRightsLocationForItem(Item $item): ?\Chamilo\Libraries\Rights\Domain\RightsLocation
+    public function findRightsLocationForItem(Item $item): ?RightsLocation
     {
         return $this->getRightsService()->findRightsLocationByParameters(
             RightsLocation::class, $item->getId(), self::TYPE_ITEM
         );
     }
 
-    public function findRightsLocationForItemIdentifier(string $itemIdentifier
-    ): ?\Chamilo\Libraries\Rights\Domain\RightsLocation
+    public function findRightsLocationForItemIdentifier(string $itemIdentifier): ?RightsLocation
     {
         if ($itemIdentifier != 0)
         {

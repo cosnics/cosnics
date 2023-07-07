@@ -1,6 +1,8 @@
 <?php
 namespace Chamilo\Core\Menu\Menu;
 
+use Chamilo\Core\Menu\Factory\ItemRendererFactory;
+use Chamilo\Core\Menu\Manager;
 use Chamilo\Core\Menu\Service\ItemService;
 use Chamilo\Libraries\Format\Menu\Library\HtmlMenu;
 use Chamilo\Libraries\Format\Menu\Library\Renderer\HtmlMenuArrayRenderer;
@@ -10,42 +12,32 @@ use Chamilo\Libraries\Format\Structure\Glyph\FontAwesomeGlyph;
 use Symfony\Component\Translation\Translator;
 
 /**
- *
  * @package Chamilo\Core\Menu\Menu
- * @author Hans De Bisschop <hans.de.bisschop@ehb.be>
- * @author Magali Gillard <magali.gillard@ehb.be>
- * @author Eduard Vossen <eduard.vossen@ehb.be>
+ * @author  Hans De Bisschop <hans.de.bisschop@ehb.be>
+ * @author  Magali Gillard <magali.gillard@ehb.be>
+ * @author  Eduard Vossen <eduard.vossen@ehb.be>
  */
 class ItemMenu extends HtmlMenu
 {
     public const TREE_NAME = __CLASS__;
 
-    /**
-     * @var \Chamilo\Core\Menu\Service\ItemService
-     */
-    private $itemService;
+    protected ItemRendererFactory $itemRendererFactory;
+
+    private ItemService $itemService;
+
+    private Translator $translator;
+
+    private string $urlFormat;
 
     /**
-     * @var \Symfony\Component\Translation\Translator
-     */
-    private $translator;
-
-    /**
-     * The string passed to sprintf() to format category URLs
-     * @var string
-     */
-    private $urlFormat;
-
-    /**
-     * @param \Chamilo\Core\Menu\Service\ItemService $itemService
-     * @param \Symfony\Component\Translation\Translator $translator
-     * @param string $urlFormat
-     * @param int $currentParentIdentifier
+     * @throws \Chamilo\Libraries\Storage\Exception\DataClassNoResultException
      */
     public function __construct(
-        ItemService $itemService, Translator $translator, string $urlFormat, int $currentParentIdentifier = 0
+        ItemRendererFactory $itemRendererFactory, ItemService $itemService, Translator $translator, string $urlFormat,
+        string $currentParentIdentifier = '0'
     )
     {
+        $this->itemRendererFactory = $itemRendererFactory;
         $this->itemService = $itemService;
         $this->translator = $translator;
         $this->urlFormat = $urlFormat;
@@ -56,11 +48,9 @@ class ItemMenu extends HtmlMenu
     }
 
     /**
-     * Get the breadcrumbs which lead to the current category.
-     *
      * @return string[]
      */
-    public function getBreadcrumbs()
+    public function getBreadcrumbs(): array
     {
         $arrayRenderer = new HtmlMenuArrayRenderer();
 
@@ -75,38 +65,26 @@ class ItemMenu extends HtmlMenu
         return $breadcrumbs;
     }
 
-    /**
-     * Gets the URL of a given category
-     *
-     * @param int $itemIdentifier The id of the category
-     *
-     * @return string The requested URL
-     */
-    private function getCategoryUrl($itemIdentifier)
+    private function getCategoryUrl(string $itemIdentifier): string
     {
         return str_replace('__ITEM__', $itemIdentifier, $this->getUrlFormat());
     }
 
-    /**
-     * @return \Chamilo\Core\Menu\Service\ItemService
-     */
+    public function getItemRendererFactory(): ItemRendererFactory
+    {
+        return $this->itemRendererFactory;
+    }
+
     public function getItemService(): ItemService
     {
         return $this->itemService;
     }
 
     /**
-     * @param \Chamilo\Core\Menu\Service\ItemService $itemService
-     */
-    public function setItemService(ItemService $itemService): void
-    {
-        $this->itemService = $itemService;
-    }
-
-    /**
      * @return string[][]
+     * @throws \Chamilo\Libraries\Storage\Exception\DataClassNoResultException
      */
-    private function getItems()
+    private function getItems(): array
     {
         $itemService = $this->getItemService();
         $items = $itemService->findRootCategoryItems();
@@ -115,9 +93,11 @@ class ItemMenu extends HtmlMenu
 
         foreach ($items as $item)
         {
+            $itemRenderer = $this->getItemRendererFactory()->getItemRenderer($item);
+
             $subMenuItem = [];
 
-            $subMenuItem['title'] = $itemService->getItemTitleForCurrentLanguage($item);
+            $subMenuItem['title'] = $itemRenderer->renderTitleForCurrentLanguage($item);
             $subMenuItem['url'] = $this->getCategoryUrl($item->getId());
 
             $glyph = new FontAwesomeGlyph('folder', [], null, 'fas');
@@ -130,8 +110,8 @@ class ItemMenu extends HtmlMenu
 
         $menuItem = [];
 
-        $menuItem['title'] = $this->getTranslator()->trans('Home');
-        $menuItem['url'] = $this->getCategoryUrl(0);
+        $menuItem['title'] = $this->getTranslator()->trans('Home', [], Manager::CONTEXT);
+        $menuItem['url'] = $this->getCategoryUrl('0');
 
         $glyph = new FontAwesomeGlyph('home', [], null, 'fas');
         $menuItem['class'] = $glyph->getClassNamesString();
@@ -139,60 +119,33 @@ class ItemMenu extends HtmlMenu
         $menuItem[OptionsMenuRenderer::KEY_ID] = 0;
         $menuItem['sub'] = $subMenuItems;
 
-        return array($menuItem);
+        return [$menuItem];
     }
 
-    /**
-     * @return \Symfony\Component\Translation\Translator
-     */
     public function getTranslator(): Translator
     {
         return $this->translator;
     }
 
-    /**
-     * @param \Symfony\Component\Translation\Translator $translator
-     */
-    public function setTranslator(Translator $translator): void
-    {
-        $this->translator = $translator;
-    }
-
-    /**
-     * @return string
-     */
     public function getUrlFormat(): string
     {
         return $this->urlFormat;
     }
 
     /**
-     * @param string $urlFormat
-     */
-    public function setUrlFormat(string $urlFormat): void
-    {
-        $this->urlFormat = $urlFormat;
-    }
-
-    /**
      * @return string[]
      */
-    public function renderAsList()
+    public function renderAsList(): array
     {
         $renderer = new OptionsMenuRenderer();
         $this->render($renderer, 'sitemap');
 
         $rootName = $this->getTranslator()->trans('RootCategory', [], 'Chamilo\Core\Menu');
 
-        return array('0' => $rootName) + $renderer->toArray();
+        return ['0' => $rootName] + $renderer->toArray();
     }
 
-    /**
-     * Renders the menu as a tree
-     *
-     * @return string The HTML formatted tree
-     */
-    public function renderAsTree()
+    public function renderAsTree(): string
     {
         $renderer = new TreeMenuRenderer('item-menu', '', '#', false);
         $this->render($renderer, 'sitemap');

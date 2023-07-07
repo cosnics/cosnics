@@ -3,6 +3,7 @@ namespace Chamilo\Core\Menu\Component;
 
 use Chamilo\Core\Menu\Manager;
 use Chamilo\Core\Menu\Storage\DataClass\Item;
+use Chamilo\Libraries\Architecture\Application\Application;
 use Chamilo\Libraries\Architecture\Exceptions\ObjectNotExistException;
 use Chamilo\Libraries\Architecture\Interfaces\DelegateComponent;
 use Chamilo\Libraries\Rights\Form\RightsForm;
@@ -15,15 +16,9 @@ use Chamilo\Libraries\Rights\Form\RightsForm;
  */
 class RightsComponent extends Manager implements DelegateComponent
 {
-    /**
-     * @var \Chamilo\Core\Menu\Storage\DataClass\Item
-     */
-    private $item;
+    private Item $item;
 
-    /**
-     * @var int
-     */
-    private $itemIdentifier;
+    private string $itemIdentifier;
 
     /**
      * @return string
@@ -73,7 +68,7 @@ class RightsComponent extends Manager implements DelegateComponent
 
             $this->redirectWithMessage(
                 $message, !$success, [
-                    Manager::PARAM_ACTION => Manager::ACTION_BROWSE,
+                    Application::PARAM_ACTION => Manager::ACTION_BROWSE,
                     Manager::PARAM_PARENT => $this->getItemParentIdentifier()
                 ]
             );
@@ -81,18 +76,17 @@ class RightsComponent extends Manager implements DelegateComponent
 
         $html = [];
 
-        $html[] = $this->render_header();
+        $html[] = $this->renderHeader();
         $html[] = $rightsForm->render();
-        $html[] = $this->render_footer();
+        $html[] = $this->renderFooter();
 
         return implode(PHP_EOL, $html);
     }
 
     /**
-     * @return \Chamilo\Core\Menu\Storage\DataClass\Item
      * @throws \Chamilo\Libraries\Architecture\Exceptions\ObjectNotExistException
      */
-    protected function getItem()
+    protected function getItem(): Item
     {
         if (!isset($this->item))
         {
@@ -100,45 +94,35 @@ class RightsComponent extends Manager implements DelegateComponent
 
             if ($itemIdentifier != 0)
             {
-                $this->item = $this->getItemService()->findItemByIdentifier($itemIdentifier);
+                $item = $this->getItemService()->findItemByIdentifier($itemIdentifier);
 
-                if (!$this->item instanceof Item)
+                if (!$item instanceof Item)
                 {
                     throw new ObjectNotExistException($this->getTranslator()->trans('MenuItem'), $itemIdentifier);
                 }
+
+                $this->item = $item;
             }
         }
 
         return $this->item;
     }
 
-    /**
-     * @return int
-     * @throws \Chamilo\Libraries\Architecture\Exceptions\ObjectNotExistException
-     */
-    protected function getItemIdentifier()
+    protected function getItemIdentifier(): string
     {
         if (!isset($this->itemIdentifier))
         {
-            $this->itemIdentifier = $this->getRequest()->query->get(self::PARAM_ITEM, 0);
-
-            if ($this->itemIdentifier != 0)
-            {
-                $this->getItem();
-            }
+            $this->itemIdentifier = $this->getRequest()->query->get(self::PARAM_ITEM, '0');
         }
 
         return $this->itemIdentifier;
     }
 
     /**
-     * @return int
      * @throws \Chamilo\Libraries\Architecture\Exceptions\ObjectNotExistException
      */
-    protected function getItemParentIdentifier()
+    protected function getItemParentIdentifier(): string
     {
-        $item = $this->getItem();
-
-        return $item instanceof Item ? $item->getParentId() : 0;
+        return $this->getItem()->getParentId();
     }
 }

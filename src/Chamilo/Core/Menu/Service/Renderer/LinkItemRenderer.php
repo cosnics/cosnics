@@ -2,6 +2,7 @@
 namespace Chamilo\Core\Menu\Service\Renderer;
 
 use Chamilo\Core\Menu\Architecture\Interfaces\ConfigurableItemInterface;
+use Chamilo\Core\Menu\Architecture\Interfaces\SelectableItemInterface;
 use Chamilo\Core\Menu\Architecture\Interfaces\TranslatableItemInterface;
 use Chamilo\Core\Menu\Architecture\Traits\TranslatableItemTrait;
 use Chamilo\Core\Menu\Manager;
@@ -10,6 +11,7 @@ use Chamilo\Core\Menu\Storage\DataClass\Item;
 use Chamilo\Core\Rights\Structure\Service\Interfaces\AuthorizationCheckerInterface;
 use Chamilo\Core\User\Storage\DataClass\User;
 use Chamilo\Libraries\Architecture\ClassnameUtilities;
+use Chamilo\Libraries\File\WebPathBuilder;
 use Chamilo\Libraries\Format\Form\FormValidator;
 use Chamilo\Libraries\Format\Structure\Glyph\FontAwesomeGlyph;
 use Chamilo\Libraries\Format\Structure\Glyph\InlineGlyph;
@@ -21,7 +23,8 @@ use Symfony\Component\Translation\Translator;
  * @package Chamilo\Core\Menu\Service\Renderer
  * @author  Hans De Bisschop <hans.de.bisschop@ehb.be>
  */
-class LinkItemRenderer extends ItemRenderer implements TranslatableItemInterface, ConfigurableItemInterface
+class LinkItemRenderer extends ItemRenderer
+    implements TranslatableItemInterface, ConfigurableItemInterface, SelectableItemInterface
 {
     use TranslatableItemTrait;
 
@@ -33,18 +36,21 @@ class LinkItemRenderer extends ItemRenderer implements TranslatableItemInterface
     public const TARGET_SELF = '_self';
     public const TARGET_TOP = '_top';
 
+    protected WebPathBuilder $webPathBuilder;
+
     private ClassnameUtilities $classnameUtilities;
 
     public function __construct(
         AuthorizationCheckerInterface $authorizationChecker, Translator $translator,
         CachedItemService $itemCacheService, ChamiloRequest $request, ClassnameUtilities $classnameUtilities,
-        array $fallbackIsoCodes
+        WebPathBuilder $webPathBuilder, array $fallbackIsoCodes
     )
     {
         parent::__construct($authorizationChecker, $translator, $itemCacheService, $request);
 
         $this->classnameUtilities = $classnameUtilities;
         $this->fallbackIsoCodes = $fallbackIsoCodes;
+        $this->webPathBuilder = $webPathBuilder;
     }
 
     public function render(Item $item, User $user): string
@@ -53,7 +59,7 @@ class LinkItemRenderer extends ItemRenderer implements TranslatableItemInterface
 
         $html = [];
 
-        $html[] = '<li>';
+        $html[] = '<li class="' . ($this->isSelected($item, $user) ? 'active' : '') . '">';
         $html[] = '<a href="' . $item->getSetting(self::CONFIGURATION_URL) . '" target="' .
             $item->getSetting(self::CONFIGURATION_TARGET) . '">';
 
@@ -129,6 +135,39 @@ class LinkItemRenderer extends ItemRenderer implements TranslatableItemInterface
     public function getRendererTypeName(): string
     {
         return $this->getTranslator()->trans('LinkItem', [], Manager::CONTEXT);
+    }
+
+    public function getWebPathBuilder(): WebPathBuilder
+    {
+        return $this->webPathBuilder;
+    }
+
+    public function isSelected(Item $item, User $user): bool
+    {
+        $urlParts = parse_url($item->getSetting(self::CONFIGURATION_URL));
+
+        $basePath = $this->getWebPathBuilder()->getBasePath();
+        $urlBasePath = $urlParts['scheme'] . '://' . $urlParts['host'] . $urlParts['path'];
+
+        if ($basePath == $urlBasePath)
+        {
+            parse_str($urlParts['query'], $queryParts);
+
+            foreach ($queryParts as $queryPartVariable => $queryPartValue)
+            {
+                if (!$this->getRequest()->query->has($queryPartVariable) ||
+                    $this->getRequest()->query->get($queryPartVariable) !== $queryPartValue)
+                {
+                    return false;
+                }
+            }
+        }
+        else
+        {
+            return false;
+        }
+
+        return true;
     }
 
     public function renderTitleForCurrentLanguage(Item $item): string

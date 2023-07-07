@@ -139,7 +139,8 @@ class BrowserComponent extends Manager implements DelegateComponent
         );
 
         return new ItemMenu(
-            $this->getItemService(), $this->getTranslator(), $urlFormat, (int) $this->getParentIdentifier()
+            $this->getItemRendererFactory(), $this->getItemService(), $this->getTranslator(), $urlFormat,
+            $this->getParentIdentifier()
         );
     }
 

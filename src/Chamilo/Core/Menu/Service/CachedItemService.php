@@ -185,7 +185,7 @@ class CachedItemService implements CacheDataPreLoaderInterface, ItemServiceInter
             return $this->loadCacheDataForKeyParts([__CLASS__, self::KEY_ITEMS],
                 [$this, '__findItemsGroupedByParentIdentifier']);
         }
-        catch (CacheException $e)
+        catch (CacheException)
         {
             return [];
         }
@@ -248,7 +248,7 @@ class CachedItemService implements CacheDataPreLoaderInterface, ItemServiceInter
      */
     public function saveItemFromValues(Item $item, array $values): bool
     {
-        if (!$this->getItemService() - $this->saveItemFromValues($item, $values))
+        if (!$this->getItemService()->saveItemFromValues($item, $values))
         {
             return false;
         }
