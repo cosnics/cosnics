@@ -78,7 +78,7 @@ class UnsubscribeComponent extends Manager
      * 
      * @param $breadcrumbtrail \libraries\format\BreadcrumbTrail
      */
-    public function add_additional_breadcrumbs(BreadcrumbTrail $breadcrumbtrail)
+    public function add_additional_breadcrumbs(BreadcrumbTrail $breadcrumbtrail): void
     {
         $breadcrumbtrail->add(
             new Breadcrumb(

@@ -25,14 +25,6 @@ class BrowserComponent extends Manager
 
     const PARAM_FILTER = 'filter';
 
-    /**
-     *
-     * @param BreadcrumbTrail $breadcrumbtrail
-     */
-    public function add_additional_breadcrumbs(BreadcrumbTrail $breadcrumbtrail)
-    {
-    }
-
     protected function getFilter()
     {
         return $this->getRequest()->query->get(self::PARAM_FILTER);

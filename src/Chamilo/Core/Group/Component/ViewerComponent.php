@@ -124,7 +124,7 @@ class ViewerComponent extends Manager
         }
     }
 
-    public function add_additional_breadcrumbs(BreadcrumbTrail $breadcrumbtrail)
+    public function add_additional_breadcrumbs(BreadcrumbTrail $breadcrumbtrail): void
     {
         $breadcrumbtrail->add(
             new Breadcrumb(

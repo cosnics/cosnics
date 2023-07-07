@@ -122,7 +122,7 @@ class CreateComponent extends CourseFormActionComponent
      * 
      * @param \libraries\format\BreadcrumbTrail $breadcrumbtrail
      */
-    public function add_additional_breadcrumbs(BreadcrumbTrail $breadcrumbtrail)
+    public function add_additional_breadcrumbs(BreadcrumbTrail $breadcrumbtrail): void
     {
         $breadcrumbtrail->add(
             new Breadcrumb($this->get_browse_course_url(), Translation::get('CourseManagerBrowseComponent')));

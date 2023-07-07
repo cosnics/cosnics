@@ -55,7 +55,7 @@ abstract class Application
      */
     abstract public function run();
 
-    public function add_additional_breadcrumbs(BreadcrumbTrail $breadcrumbtrail)
+    public function add_additional_breadcrumbs(BreadcrumbTrail $breadcrumbtrail): void
     {
     }
 

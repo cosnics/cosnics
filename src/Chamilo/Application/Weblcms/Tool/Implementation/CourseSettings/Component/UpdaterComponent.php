@@ -54,12 +54,4 @@ class UpdaterComponent extends Manager implements CourseSubManagerSupport
     {
         $this->redirect_after_quick_create($succes, $message);
     }
-
-    /**
-     *
-     * @param BreadcrumbTrail $breadcrumbtrail
-     */
-    public function add_additional_breadcrumbs(BreadcrumbTrail $breadcrumbtrail)
-    {
-    }
 }

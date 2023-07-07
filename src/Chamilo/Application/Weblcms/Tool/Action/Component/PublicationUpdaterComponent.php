@@ -114,8 +114,4 @@ class PublicationUpdaterComponent extends Manager implements DelegateComponent
             );
         }
     }
-
-    public function add_additional_breadcrumbs(BreadcrumbTrail $breadcrumbtrail)
-    {
-    }
 }

@@ -128,12 +128,4 @@ class BrowserComponent extends Manager
             return implode(PHP_EOL, $html);
         }
     }
-
-    /**
-     *
-     * @param BreadcrumbTrail $breadcrumbtrail
-     */
-    public function add_additional_breadcrumbs(BreadcrumbTrail $breadcrumbtrail)
-    {
-    }
 }

@@ -63,7 +63,7 @@ class ReportingViewerComponent extends Manager implements DelegateComponent
         }
     }
 
-    public function add_additional_breadcrumbs(BreadcrumbTrail $breadcrumbtrail)
+    public function add_additional_breadcrumbs(BreadcrumbTrail $breadcrumbtrail): void
     {
         if (Request::get('pcattree') != null && Request::get('pcattree') > 0)
         {

@@ -29,13 +29,6 @@ class BrowserComponent extends Manager
 
     const PARAM_FILTER = 'filter';
 
-    /**
-     *
-     * @param BreadcrumbTrail $breadcrumbtrail
-     */
-    public function add_additional_breadcrumbs(BreadcrumbTrail $breadcrumbtrail)
-    {
-    }
 
     public function convert_content_object_publication_to_calendar_event($publication, $from_time, $to_time)
     {

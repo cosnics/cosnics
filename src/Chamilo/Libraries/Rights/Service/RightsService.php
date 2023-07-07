@@ -532,10 +532,17 @@ class RightsService
         );
     }
 
+    /**
+     * @template findRightsLocationByParameters
+     *
+     * @param class-string<findRightsLocationByParameters> $rightsLocationClassName
+     *
+     * @return ?findRightsLocationByParameters
+     */
     public function findRightsLocationByParameters(
         string $rightsLocationClassName, string $identifier = '0', int $type = RightsService::TYPE_ROOT,
         string $treeIdentifier = '0', int $treeType = RightsService::TREE_TYPE_ROOT
-    ): ?RightsLocation
+    )
     {
         return $this->getRightsRepository()->findRightsLocationByParameters(
             $rightsLocationClassName, $identifier, $type, $treeIdentifier, $treeType
@@ -832,11 +839,16 @@ class RightsService
     }
 
     /**
-     * @see RightsUtil::get_root()
+     * @template getRootLocation
+     *
+     * @param class-string<getRootLocation> $rightsLocationClassName
+     *
+     * @return ?getRootLocation
+     * @see      RightsUtil::get_root()
      */
     public function getRootLocation(
         string $rightsLocationClassName, int $treeType = self::TREE_TYPE_ROOT, string $treeIdentifier = '0'
-    ): ?RightsLocation
+    )
     {
         $rootLocation =
             $this->getRightsRepository()->findRootLocation($rightsLocationClassName, $treeType, $treeIdentifier);

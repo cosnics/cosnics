@@ -28,7 +28,7 @@ class UpdaterComponent extends Manager implements DelegateComponent
         )->run();
     }
 
-    public function add_additional_breadcrumbs(BreadcrumbTrail $breadcrumbtrail)
+    public function add_additional_breadcrumbs(BreadcrumbTrail $breadcrumbtrail): void
     {
         $breadcrumbtrail = $this->get_breadcrumbtrail();
     }
