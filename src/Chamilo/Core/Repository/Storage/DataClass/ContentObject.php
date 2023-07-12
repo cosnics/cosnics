@@ -1,8 +1,8 @@
 <?php
 namespace Chamilo\Core\Repository\Storage\DataClass;
 
-use Chamilo\Configuration\Configuration;
 use Chamilo\Configuration\Service\Consulter\ConfigurationConsulter;
+use Chamilo\Configuration\Service\Consulter\RegistrationConsulter;
 use Chamilo\Core\Repository\Common\ContentObjectDifference;
 use Chamilo\Core\Repository\Common\Path\ComplexContentObjectPath;
 use Chamilo\Core\Repository\Publication\Service\PublicationAggregator;
@@ -849,6 +849,16 @@ class ContentObject extends CompositeDataClass
     public function getPublicationAggregator(): PublicationAggregator
     {
         return $this->getService(PublicationAggregator::class);
+    }
+
+    protected function getRegistrationConsulter(): RegistrationConsulter
+    {
+        return $this->getService(RegistrationConsulter::class);
+    }
+
+    protected function getClassnameUtilities(): ClassnameUtilities
+    {
+        return $this->getService(ClassnameUtilities::class);
     }
 
     /**
@@ -1700,26 +1710,6 @@ class ContentObject extends CompositeDataClass
         }
 
         return false;
-    }
-
-    public static function is_available($type)
-    {
-        $namespace = ClassnameUtilities::getInstance()->getNamespaceParent(
-            ClassnameUtilities::getInstance()->getNamespaceFromClassname($type), 2
-        );
-
-        // Type should be registered to be available
-        if (!Configuration::getInstance()->isRegisteredAndActive($namespace))
-        {
-            return false;
-        }
-
-        if (!$type::is_type_available())
-        {
-            return false;
-        }
-
-        return true;
     }
 
     /**

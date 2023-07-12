@@ -11,7 +11,7 @@ use Chamilo\Application\Weblcms\Storage\DataClass\CourseTypeUserCategory;
 use Chamilo\Application\Weblcms\Storage\DataClass\CourseTypeUserCategoryRelCourse;
 use Chamilo\Application\Weblcms\Storage\DataClass\CourseUserCategory;
 use Chamilo\Application\Weblcms\Storage\DataManager;
-use Chamilo\Configuration\Configuration;
+use Chamilo\Configuration\Service\Consulter\LanguageConsulter;
 use Chamilo\Libraries\DependencyInjection\DependencyInjectionContainerBuilder;
 use Chamilo\Libraries\Format\Structure\Glyph\FontAwesomeGlyph;
 use Chamilo\Libraries\Platform\Session\Request;
@@ -402,9 +402,7 @@ class CourseTypeCourseListRenderer extends CourseListRenderer
 
                         if ($language != 'platform_language')
                         {
-                            $languageName = Configuration::getInstance()->getLanguageNameFromIsocode(
-                                $language
-                            );
+                            $languageName = $this->getLanguageConsulter()->getLanguageNameFromIsocode($language);
 
                             $text[] = $languageName;
                         }
@@ -435,6 +433,11 @@ class CourseTypeCourseListRenderer extends CourseListRenderer
 
             return implode(PHP_EOL, $html);
         }
+    }
+
+    public function getLanguageConsulter(): LanguageConsulter
+    {
+        return DependencyInjectionContainerBuilder::getInstance()->createContainer()->get(LanguageConsulter::class);
     }
 
     public function getSession(): SessionInterface

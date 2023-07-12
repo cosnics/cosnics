@@ -1,12 +1,10 @@
 <?php
 namespace Chamilo\Core\Repository\Workspace\Component;
 
-use Chamilo\Configuration\Configuration;
 use Chamilo\Configuration\Storage\DataClass\Registration;
 use Chamilo\Core\Repository\Filter\FilterData;
 use Chamilo\Core\Repository\Storage\DataClass\ContentObject;
 use Chamilo\Core\Repository\Workspace\Manager;
-use Chamilo\Core\Repository\Workspace\Repository\ContentObjectRelationRepository;
 use Chamilo\Core\Repository\Workspace\Service\ContentObjectRelationService;
 use Chamilo\Core\Repository\Workspace\Storage\DataClass\Workspace;
 use Chamilo\Core\Repository\Workspace\Storage\DataClass\WorkspaceContentObjectRelation;
@@ -140,7 +138,8 @@ class PublisherComponent extends Manager
      */
     public function get_allowed_content_object_types()
     {
-        $registrations = Configuration::registrations_by_type('Chamilo\Core\Repository\ContentObject');
+        $registrations =
+            $this->getRegistrationConsulter()->getRegistrationsByType('Chamilo\Core\Repository\ContentObject');
 
         foreach ($registrations as $registration)
         {

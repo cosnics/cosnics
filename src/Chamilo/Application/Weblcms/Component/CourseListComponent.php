@@ -6,7 +6,7 @@ use Chamilo\Application\Weblcms\Manager;
 use Chamilo\Application\Weblcms\Renderer\CourseList\Type\CourseTypeCourseListRenderer;
 use Chamilo\Application\Weblcms\Request\Rights\Rights;
 use Chamilo\Application\Weblcms\Rights\CourseManagementRights;
-use Chamilo\Configuration\Configuration;
+use Chamilo\Application\Weblcms\Rights\WeblcmsRights;
 use Chamilo\Libraries\Architecture\Application\Application;
 use Chamilo\Libraries\Architecture\Interfaces\DelegateComponent;
 use Chamilo\Libraries\Format\Structure\ActionBar\Button;
@@ -16,7 +16,6 @@ use Chamilo\Libraries\Format\Structure\ActionBar\DropdownButton;
 use Chamilo\Libraries\Format\Structure\ActionBar\Renderer\ButtonToolBarRenderer;
 use Chamilo\Libraries\Format\Structure\ActionBar\SubButton;
 use Chamilo\Libraries\Format\Structure\Glyph\FontAwesomeGlyph;
-use Chamilo\Libraries\Translation\Translation;
 
 /**
  * @package Chamilo\Application\Weblcms\Component
@@ -28,7 +27,7 @@ class CourseListComponent extends Manager implements DelegateComponent
 {
 
     /**
-     * Runs this component and displays its output.
+     * @throws \Chamilo\Libraries\Architecture\Exceptions\NotAllowedException
      */
     public function run()
     {
@@ -36,7 +35,7 @@ class CourseListComponent extends Manager implements DelegateComponent
 
         $html = [];
 
-        $html[] = $this->render_header();
+        $html[] = $this->renderHeader();
 
         $html[] = '<div class="row">';
 
@@ -50,7 +49,7 @@ class CourseListComponent extends Manager implements DelegateComponent
 
         $html[] = '</div>';
 
-        $html[] = $this->render_footer();
+        $html[] = $this->renderFooter();
 
         return implode(PHP_EOL, $html);
     }
@@ -58,13 +57,14 @@ class CourseListComponent extends Manager implements DelegateComponent
     /**
      * @return \Chamilo\Libraries\Format\Structure\ActionBar\ButtonGroup
      */
-    protected function buildAdminCourseManagementButtonGroup()
+    protected function buildAdminCourseManagementButtonGroup(): ButtonGroup
     {
+        $translator = $this->getTranslator();
         $buttonGroup = new ButtonGroup([], ['btn-group-vertical']);
 
         $buttonGroup->addButton(
             new Button(
-                Translation::get('CourseCreate'), new FontAwesomeGlyph('plus'), $this->get_url(
+                $translator->trans('CourseCreate', [], Manager::CONTEXT), new FontAwesomeGlyph('plus'), $this->get_url(
                 [
                     Application::PARAM_ACTION => self::ACTION_COURSE_MANAGER,
                     \Chamilo\Application\Weblcms\Course\Manager::PARAM_ACTION => \Chamilo\Application\Weblcms\Course\Manager::ACTION_QUICK_CREATE
@@ -75,60 +75,61 @@ class CourseListComponent extends Manager implements DelegateComponent
 
         $buttonGroup->addButton(
             new Button(
-                Translation::get('CourseOverviewCourseList'), new FontAwesomeGlyph('list'),
+                $translator->trans('CourseOverviewCourseList', [], Manager::CONTEXT), new FontAwesomeGlyph('list'),
                 $this->get_url([Application::PARAM_ACTION => self::ACTION_COURSE_MANAGER])
             )
         );
 
         $manageDropDownButton = new DropdownButton(
-            Translation::get('CourseOverviewManagement'), new FontAwesomeGlyph('list-alt')
+            $translator->trans('CourseOverviewManagement', [], Manager::CONTEXT), new FontAwesomeGlyph('list-alt')
         );
         $buttonGroup->addButton($manageDropDownButton);
 
         $manageDropDownButton->addSubButton(
             new SubButton(
-                Translation::get('RequestList'), new FontAwesomeGlyph('list-alt'),
+                $translator->trans('RequestList', [], Manager::CONTEXT), new FontAwesomeGlyph('list-alt'),
                 $this->get_url([Application::PARAM_ACTION => self::ACTION_REQUEST]), Button::DISPLAY_LABEL
             )
         );
 
         $manageDropDownButton->addSubButton(
             new SubButton(
-                Translation::get('UserRequestList'), new FontAwesomeGlyph('list'),
+                $translator->trans('UserRequestList', [], Manager::CONTEXT), new FontAwesomeGlyph('list'),
                 $this->get_url([Application::PARAM_ACTION => self::ACTION_ADMIN_REQUEST_BROWSER]), Button::DISPLAY_LABEL
             )
         );
 
         $manageDropDownButton->addSubButton(
             new SubButton(
-                Translation::get('CourseCategoryManagement'), new FontAwesomeGlyph('arrows-alt'),
+                $translator->trans('CourseCategoryManagement', [], Manager::CONTEXT),
+                new FontAwesomeGlyph('arrows-alt'),
                 $this->get_url([Application::PARAM_ACTION => self::ACTION_COURSE_CATEGORY_MANAGER]),
                 Button::DISPLAY_LABEL
             )
         );
 
         $importDropDownButton = new DropdownButton(
-            Translation::get('CourseOverviewImport'), new FontAwesomeGlyph('download')
+            $translator->trans('CourseOverviewImport', [], Manager::CONTEXT), new FontAwesomeGlyph('download')
         );
         $buttonGroup->addButton($importDropDownButton);
 
         $importDropDownButton->addSubButton(
             new SubButton(
-                Translation::get('ImportCourseCSV'), new FontAwesomeGlyph('download'),
+                $translator->trans('ImportCourseCSV', [], Manager::CONTEXT), new FontAwesomeGlyph('download'),
                 $this->get_url([Application::PARAM_ACTION => self::ACTION_IMPORT_COURSES]), Button::DISPLAY_LABEL
             )
         );
 
         $importDropDownButton->addSubButton(
             new SubButton(
-                Translation::get('ImportUsersForCourseCSV'), new FontAwesomeGlyph('download'),
+                $translator->trans('ImportUsersForCourseCSV', [], Manager::CONTEXT), new FontAwesomeGlyph('download'),
                 $this->get_url([Application::PARAM_ACTION => self::ACTION_IMPORT_COURSE_USERS]), Button::DISPLAY_LABEL
             )
         );
 
         $buttonGroup->addButton(
             new Button(
-                Translation::get('Reporting'), new FontAwesomeGlyph('chart-bar'),
+                $translator->trans('Reporting', [], Manager::CONTEXT), new FontAwesomeGlyph('chart-bar'),
                 $this->get_url([Application::PARAM_ACTION => self::ACTION_REPORTING])
             )
         );
@@ -136,11 +137,9 @@ class CourseListComponent extends Manager implements DelegateComponent
         return $buttonGroup;
     }
 
-    /**
-     * @return \Chamilo\Libraries\Format\Structure\ActionBar\ButtonGroup
-     */
-    protected function buildTeacherManagementButtonGroup()
+    protected function buildTeacherManagementButtonGroup(): ButtonGroup
     {
+        $translator = $this->getTranslator();
         $buttonGroup = new ButtonGroup([], ['btn-group-vertical']);
 
         $courseManagementRights = CourseManagementRights::getInstance();
@@ -152,22 +151,20 @@ class CourseListComponent extends Manager implements DelegateComponent
         foreach ($courseTypes as $courseType)
         {
             if ($courseManagementRights->is_allowed_management(
-                CourseManagementRights::CREATE_COURSE_RIGHT, $courseType->get_id(),
-                CourseManagementRights::TYPE_COURSE_TYPE
+                CourseManagementRights::CREATE_COURSE_RIGHT, $courseType->get_id(), WeblcmsRights::TYPE_COURSE_TYPE
             ))
             {
                 $countDirect ++;
             }
             elseif ($courseManagementRights->is_allowed_management(
-                CourseManagementRights::REQUEST_COURSE_RIGHT, $courseType->get_id(),
-                CourseManagementRights::TYPE_COURSE_TYPE
+                CourseManagementRights::REQUEST_COURSE_RIGHT, $courseType->get_id(), WeblcmsRights::TYPE_COURSE_TYPE
             ))
             {
                 $countRequest ++;
             }
         }
 
-        $allowCourseCreationWithoutCoursetype = Configuration::getInstance()->get_setting(
+        $allowCourseCreationWithoutCoursetype = $this->getConfigurationConsulter()->getSetting(
             ['Chamilo\Application\Weblcms', 'allow_course_creation_without_coursetype']
         );
 
@@ -180,12 +177,13 @@ class CourseListComponent extends Manager implements DelegateComponent
         {
             $buttonGroup->addButton(
                 new Button(
-                    Translation::get('CourseCreate'), new FontAwesomeGlyph('plus'), $this->get_url(
-                    [
-                        Application::PARAM_ACTION => self::ACTION_COURSE_MANAGER,
-                        \Chamilo\Application\Weblcms\Course\Manager::PARAM_ACTION => \Chamilo\Application\Weblcms\Course\Manager::ACTION_QUICK_CREATE
-                    ]
-                )
+                    $translator->trans('CourseCreate', [], Manager::CONTEXT), new FontAwesomeGlyph('plus'),
+                    $this->get_url(
+                        [
+                            Application::PARAM_ACTION => self::ACTION_COURSE_MANAGER,
+                            \Chamilo\Application\Weblcms\Course\Manager::PARAM_ACTION => \Chamilo\Application\Weblcms\Course\Manager::ACTION_QUICK_CREATE
+                        ]
+                    )
                 )
             );
         }
@@ -194,12 +192,13 @@ class CourseListComponent extends Manager implements DelegateComponent
         {
             $buttonGroup->addButton(
                 new Button(
-                    Translation::get('CourseRequest'), new FontAwesomeGlyph('plus'), $this->get_url(
-                    [
-                        Application::PARAM_ACTION => self::ACTION_REQUEST,
-                        \Chamilo\Application\Weblcms\Request\Manager::PARAM_ACTION => \Chamilo\Application\Weblcms\Request\Manager::ACTION_CREATE
-                    ]
-                )
+                    $translator->trans('CourseRequest', [], Manager::CONTEXT), new FontAwesomeGlyph('plus'),
+                    $this->get_url(
+                        [
+                            Application::PARAM_ACTION => self::ACTION_REQUEST,
+                            \Chamilo\Application\Weblcms\Request\Manager::PARAM_ACTION => \Chamilo\Application\Weblcms\Request\Manager::ACTION_CREATE
+                        ]
+                    )
                 )
             );
         }
@@ -208,7 +207,7 @@ class CourseListComponent extends Manager implements DelegateComponent
         {
             $buttonGroup->addButton(
                 new Button(
-                    Translation::get('RequestList'), new FontAwesomeGlyph('list-alt'),
+                    $translator->trans('RequestList', [], Manager::CONTEXT), new FontAwesomeGlyph('list-alt'),
                     $this->get_url([Application::PARAM_ACTION => self::ACTION_REQUEST])
                 )
             );
@@ -218,8 +217,8 @@ class CourseListComponent extends Manager implements DelegateComponent
         {
             $buttonGroup->addButton(
                 new Button(
-                    Translation::get(
-                        'TypeName', null, \Chamilo\Application\Weblcms\Admin\Extension\Platform\Manager::CONTEXT
+                    $translator->trans(
+                        'TypeName', [], \Chamilo\Application\Weblcms\Admin\Extension\Platform\Manager::CONTEXT
                     ), new FontAwesomeGlyph('search'), $this->get_url(
                     [
                         Application::PARAM_CONTEXT => \Chamilo\Application\Weblcms\Admin\Extension\Platform\Manager::CONTEXT,
@@ -242,19 +241,19 @@ class CourseListComponent extends Manager implements DelegateComponent
 
         $buttonGroup->addButton(
             new Button(
-                Translation::get('BrowseOpenCourses'), new FontAwesomeGlyph('list'),
+                $translator->trans('BrowseOpenCourses'), new FontAwesomeGlyph('list'),
                 $this->get_url([Application::PARAM_ACTION => self::ACTION_BROWSE_OPEN_COURSES])
             )
         );
 
         $buttonGroup->addButton(
             new Button(
-                Translation::get('SortMyCourses'), new FontAwesomeGlyph('sync'),
+                $translator->trans('SortMyCourses'), new FontAwesomeGlyph('sync'),
                 $this->get_url([Application::PARAM_ACTION => self::ACTION_MANAGER_SORT])
             )
         );
 
-        $showSubscribeButtonOnCourseHome = Configuration::getInstance()->get_setting(
+        $showSubscribeButtonOnCourseHome = $this->getConfigurationConsulter()->getSetting(
             ['Chamilo\Application\Weblcms', 'show_subscribe_button_on_course_home']
         );
 
@@ -262,7 +261,7 @@ class CourseListComponent extends Manager implements DelegateComponent
         {
             $buttonGroup->addButton(
                 new Button(
-                    Translation::get('CourseSubscribe'), new FontAwesomeGlyph('plus-circle'), $this->get_url(
+                    $translator->trans('CourseSubscribe'), new FontAwesomeGlyph('plus-circle'), $this->get_url(
                     [
                         Application::PARAM_ACTION => self::ACTION_COURSE_MANAGER,
                         \Chamilo\Application\Weblcms\Course\Manager::PARAM_ACTION => \Chamilo\Application\Weblcms\Course\Manager::ACTION_BROWSE_UNSUBSCRIBED_COURSES
@@ -273,7 +272,7 @@ class CourseListComponent extends Manager implements DelegateComponent
 
             $buttonGroup->addButton(
                 new Button(
-                    Translation::get('CourseUnsubscribe'), new FontAwesomeGlyph('minus-square'), $this->get_url(
+                    $translator->trans('CourseUnsubscribe'), new FontAwesomeGlyph('minus-square'), $this->get_url(
                     [
                         Application::PARAM_ACTION => self::ACTION_COURSE_MANAGER,
                         \Chamilo\Application\Weblcms\Course\Manager::PARAM_ACTION => \Chamilo\Application\Weblcms\Course\Manager::ACTION_BROWSE_SUBSCRIBED_COURSES

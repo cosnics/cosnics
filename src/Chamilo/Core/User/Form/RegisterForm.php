@@ -1,9 +1,9 @@
 <?php
 namespace Chamilo\Core\User\Form;
 
-use Chamilo\Configuration\Configuration;
 use Chamilo\Core\Tracking\Storage\DataClass\Event;
 use Chamilo\Core\User\Manager;
+use Chamilo\Core\User\Picture\UserPictureProviderInterface;
 use Chamilo\Core\User\Picture\UserPictureUpdateProviderInterface;
 use Chamilo\Core\User\Storage\DataClass\User;
 use Chamilo\Core\User\Storage\DataManager;
@@ -54,10 +54,12 @@ class RegisterForm extends FormValidator
     }
 
     /**
-     * Creates a new basic form
+     * @throws \QuickformException
      */
     public function build_basic_form()
     {
+        $configurationConsulter = $this->getConfigurationConsulter();
+
         $this->addElement('category', Translation::get('Basic'));
         // Lastname
         $this->addElement('text', User::PROPERTY_LASTNAME, Translation::get('LastName'), ['size' => '50']);
@@ -74,7 +76,7 @@ class RegisterForm extends FormValidator
         // Email
         $this->addElement('text', User::PROPERTY_EMAIL, Translation::get('Email'), ['size' => '50']);
 
-        if (Configuration::getInstance()->get_setting([Manager::CONTEXT, 'require_email']))
+        if ($this->getConfigurationConsulter()->getSetting([Manager::CONTEXT, 'require_email']))
         {
             $this->addRule(
                 User::PROPERTY_EMAIL, Translation::get('ThisFieldIsRequired', null, StringUtilities::LIBRARIES),
@@ -91,9 +93,9 @@ class RegisterForm extends FormValidator
         );
         // pw
         $group = [];
-        $group[] = &$this->createElement('radio', 'pass', null, Translation::get('AutoGeneratePassword') . '<br />', 1);
-        $group[] = &$this->createElement('radio', 'pass', null, null, 0);
-        $group[] = &$this->createElement('password', User::PROPERTY_PASSWORD, null, null);
+        $group[] = $this->createElement('radio', 'pass', null, Translation::get('AutoGeneratePassword') . '<br />', 1);
+        $group[] = $this->createElement('radio', 'pass', null, null, 0);
+        $group[] = $this->createElement('password', User::PROPERTY_PASSWORD, null, null);
         $this->addGroup($group, 'pw', Translation::get('Password'), '');
 
         $this->addElement('category', Translation::get('Additional'));
@@ -103,7 +105,7 @@ class RegisterForm extends FormValidator
             'text', User::PROPERTY_OFFICIAL_CODE, Translation::get('OfficialCode'), ['size' => '50']
         );
 
-        if (Configuration::getInstance()->get_setting([Manager::CONTEXT, 'require_official_code']))
+        if ($configurationConsulter->getSetting([Manager::CONTEXT, 'require_official_code']))
         {
             $this->addRule(
                 User::PROPERTY_OFFICIAL_CODE, Translation::get('ThisFieldIsRequired', null, StringUtilities::LIBRARIES),
@@ -112,7 +114,7 @@ class RegisterForm extends FormValidator
         }
 
         // Picture URI
-        if (Configuration::getInstance()->get_setting([Manager::CONTEXT, 'allow_change_user_picture']))
+        if ($configurationConsulter->getSetting([Manager::CONTEXT, 'allow_change_user_picture']))
         {
             $this->addElement('file', User::PROPERTY_PICTURE_URI, Translation::get('AddPicture'));
         }
@@ -124,7 +126,7 @@ class RegisterForm extends FormValidator
         $this->addElement('text', User::PROPERTY_PHONE, Translation::get('PhoneNumber'), ['size' => '50']);
 
         // Status
-        if (Configuration::getInstance()->get_setting([Manager::CONTEXT, 'allow_teacher_registration']))
+        if ($configurationConsulter->getSetting([Manager::CONTEXT, 'allow_teacher_registration']))
         {
             $status = [];
             $status[5] = Translation::get('Student');
@@ -143,7 +145,7 @@ class RegisterForm extends FormValidator
         // Submit button
         // $this->addElement('submit', 'user_settings', 'OK');
 
-        if (Configuration::getInstance()->get_setting([Manager::CONTEXT, 'enable_terms_and_conditions']))
+        if ($configurationConsulter->getSetting([Manager::CONTEXT, 'enable_terms_and_conditions']))
         {
             $this->addElement('category', Translation::get('Information'));
             $this->addElement(
@@ -199,14 +201,16 @@ class RegisterForm extends FormValidator
             $user->set_official_code($values[User::PROPERTY_OFFICIAL_CODE]);
             $user->set_phone($values[User::PROPERTY_PHONE]);
 
-            if (!Configuration::getInstance()->get_setting([Manager::CONTEXT, 'allow_teacher_registration']))
+            $configurationConsulter = $this->getConfigurationConsulter();
+
+            if (!$configurationConsulter->getSetting([Manager::CONTEXT, 'allow_teacher_registration']))
             {
                 $values[User::PROPERTY_STATUS] = User::STATUS_STUDENT;
             }
 
             $user->set_status(intval($values[User::PROPERTY_STATUS]));
 
-            $code = Configuration::getInstance()->get_setting(['Chamilo\Core\Admin', 'days_valid']);
+            $code = $configurationConsulter->getSetting(['Chamilo\Core\Admin', 'days_valid']);
 
             if ($code == 0)
             {
@@ -226,7 +230,7 @@ class RegisterForm extends FormValidator
                 $this->send_email($user);
             }
 
-            if (Configuration::getInstance()->get_setting([Manager::CONTEXT, 'allow_registration']) == 2)
+            if ($configurationConsulter->getSetting([Manager::CONTEXT, 'allow_registration']) == 2)
             {
                 $user->set_approved(0);
                 $user->set_active(0);
@@ -276,18 +280,12 @@ class RegisterForm extends FormValidator
         return $this->getService('Chamilo\Libraries\Mail\Mailer\ActiveMailer');
     }
 
-    /**
-     * @return \Chamilo\Libraries\Hashing\HashingUtilities
-     */
-    public function getHashingUtilities()
+    public function getHashingUtilities(): HashingUtilities
     {
         return $this->getService(HashingUtilities::class);
     }
 
-    /**
-     * @return \Chamilo\Core\User\Picture\UserPictureProviderInterface
-     */
-    public function getUserPictureProvider()
+    public function getUserPictureProvider(): UserPictureProviderInterface
     {
         return $this->getService('Chamilo\Core\User\Picture\UserPictureProvider');
     }
@@ -297,29 +295,31 @@ class RegisterForm extends FormValidator
      */
     public function send_email($user)
     {
+        $configurationConsulter = $this->getConfigurationConsulter();
+
         $options = [];
         $options['firstname'] = $user->get_firstname();
         $options['lastname'] = $user->get_lastname();
         $options['username'] = $user->get_username();
         $options['password'] = $this->unencryptedpass;
-        $options['site_name'] = Configuration::getInstance()->get_setting(['Chamilo\Core\Admin', 'site_name']);
+        $options['site_name'] = $configurationConsulter->getSetting(['Chamilo\Core\Admin', 'site_name']);
         $options['site_url'] = $this->getWebPathBuilder()->getBasePath();
-        $options['admin_firstname'] = Configuration::getInstance()->get_setting(
+        $options['admin_firstname'] = $configurationConsulter->getSetting(
             ['Chamilo\Core\Admin', 'administrator_firstname']
         );
-        $options['admin_surname'] = Configuration::getInstance()->get_setting(
+        $options['admin_surname'] = $configurationConsulter->getSetting(
             ['Chamilo\Core\Admin', 'administrator_surname']
         );
-        $options['admin_telephone'] = Configuration::getInstance()->get_setting(
+        $options['admin_telephone'] = $configurationConsulter->getSetting(
             ['Chamilo\Core\Admin', 'administrator_telephone']
         );
-        $options['admin_email'] = Configuration::getInstance()->get_setting(
+        $options['admin_email'] = $configurationConsulter->getSetting(
             ['Chamilo\Core\Admin', 'administrator_email']
         );
 
         $subject = Translation::get('YourRegistrationOn') . ' ' . $options['site_name'];
 
-        $body = Configuration::getInstance()->get_setting([Manager::CONTEXT, 'email_template']);
+        $body = $configurationConsulter->getSetting([Manager::CONTEXT, 'email_template']);
         foreach ($options as $option => $value)
         {
             $body = str_replace('[' . $option . ']', $value, $body);
@@ -349,6 +349,7 @@ class RegisterForm extends FormValidator
     public function setDefaults($defaults = [], $filter = null)
     {
         $user = $this->user;
+
         if ($this->form_type == self::TYPE_EDIT)
         {
             $defaults['pw']['pass'] = 2;

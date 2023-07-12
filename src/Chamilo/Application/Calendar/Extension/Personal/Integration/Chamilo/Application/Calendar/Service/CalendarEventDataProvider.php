@@ -8,7 +8,6 @@ use Chamilo\Application\Calendar\Extension\Personal\Integration\Chamilo\Librarie
 use Chamilo\Application\Calendar\Extension\Personal\Manager;
 use Chamilo\Application\Calendar\Service\AvailabilityService;
 use Chamilo\Application\Calendar\Storage\DataClass\AvailableCalendar;
-use Chamilo\Configuration\Configuration;
 use Chamilo\Configuration\Storage\DataClass\Registration;
 use Chamilo\Core\Repository\Publication\Storage\Repository\PublicationRepository;
 use Chamilo\Core\User\Storage\DataClass\User;
@@ -16,7 +15,6 @@ use Chamilo\Libraries\Architecture\ClassnameUtilities;
 use Chamilo\Libraries\Calendar\Service\CalendarRendererProvider;
 use Chamilo\Libraries\DependencyInjection\Traits\DependencyInjectionContainerTrait;
 use Chamilo\Libraries\Storage\Parameters\RecordRetrievesParameters;
-use Chamilo\Libraries\Translation\Translation;
 
 /**
  * @package Chamilo\Application\Calendar\Extension\Personal\Integration\Chamilo\Application\Calendar
@@ -33,10 +31,7 @@ class CalendarEventDataProvider extends MixedCalendar
         $this->initializeContainer();
     }
 
-    /**
-     * @return \Chamilo\Application\Calendar\Service\AvailabilityService
-     */
-    protected function getAvailabilityService()
+    protected function getAvailabilityService(): AvailabilityService
     {
         return $this->getService(AvailabilityService::class);
     }
@@ -49,21 +44,23 @@ class CalendarEventDataProvider extends MixedCalendar
      */
     public function getCalendars(User $user = null): array
     {
+        $translator = $this->getTranslator();
+
         $calendars = [];
 
         $personalCalendar = new AvailableCalendar();
         $personalCalendar->setType(ClassnameUtilities::getInstance()->getNamespaceParent(__NAMESPACE__, 4));
         $personalCalendar->setIdentifier('personal');
-        $personalCalendar->setName(Translation::get('PersonalCalendarName'));
-        $personalCalendar->setDescription(Translation::get('PersonalCalendarDescription'));
+        $personalCalendar->setName($translator->trans('PersonalCalendarName', [], Manager::CONTEXT));
+        $personalCalendar->setDescription($translator->trans('PersonalCalendarDescription', [], Manager::CONTEXT));
 
         $calendars[] = $personalCalendar;
 
         $personalCalendar = new AvailableCalendar();
         $personalCalendar->setType(ClassnameUtilities::getInstance()->getNamespaceParent(__NAMESPACE__, 4));
         $personalCalendar->setIdentifier('shared');
-        $personalCalendar->setName(Translation::get('SharedCalendarName'));
-        $personalCalendar->setDescription(Translation::get('SharedCalendarDescription'));
+        $personalCalendar->setName($translator->trans('SharedCalendarName', [], Manager::CONTEXT));
+        $personalCalendar->setDescription($translator->trans('SharedCalendarDescription', [], Manager::CONTEXT));
 
         $calendars[] = $personalCalendar;
 
@@ -71,7 +68,7 @@ class CalendarEventDataProvider extends MixedCalendar
     }
 
     /**
-     * @see \Chamilo\Application\Calendar\CalendarInterface::getEvents()
+     * @throws \Symfony\Component\Cache\Exception\CacheException
      */
     public function getEvents(CalendarRendererProvider $calendarRendererProvider, $fromDate, $toDate): array
     {
@@ -110,15 +107,16 @@ class CalendarEventDataProvider extends MixedCalendar
      * @param int $toDate
      *
      * @return array
+     * @throws \Symfony\Component\Cache\Exception\CacheException
      */
     protected function getEventsByParameters(
         CalendarRendererProvider $calendarRendererProvider, RecordRetrievesParameters $recordRetrievesParameters,
-        $fromDate, $toDate
-    )
+        int $fromDate, int $toDate
+    ): array
     {
         $publications = [];
 
-        $registrations = Configuration::getInstance()->getIntegrationRegistrations(
+        $registrations = $this->getRegistrationConsulter()->getIntegrationRegistrations(
             Manager::CONTEXT
         );
 
@@ -154,15 +152,11 @@ class CalendarEventDataProvider extends MixedCalendar
     }
 
     /**
-     * @param \Chamilo\Libraries\Calendar\Service\CalendarRendererProvider $calendarRendererProvider
-     * @param int $fromDate
-     * @param int $toDate
-     *
-     * @return array
+     * @throws \Symfony\Component\Cache\Exception\CacheException
      */
     public function getSharedEvents(
-        CalendarRendererProvider $calendarRendererProvider, $fromDate, $toDate
-    )
+        CalendarRendererProvider $calendarRendererProvider, int $fromDate, int $toDate
+    ): array
     {
         $repository = new CalendarEventDataProviderRepository();
         $recordRetrievesParameters = $repository->getSharedPublicationsRecordRetrievesParameters(
@@ -173,15 +167,11 @@ class CalendarEventDataProvider extends MixedCalendar
     }
 
     /**
-     * @param \Chamilo\Libraries\Calendar\Service\CalendarRendererProvider $calendarRendererProvider
-     * @param int $fromDate
-     * @param int $toDate
-     *
-     * @return array
+     * @throws \Symfony\Component\Cache\Exception\CacheException
      */
     public function getUserEvents(
-        CalendarRendererProvider $calendarRendererProvider, $fromDate, $toDate
-    )
+        CalendarRendererProvider $calendarRendererProvider, int $fromDate, int $toDate
+    ): array
     {
         $repository = new CalendarEventDataProviderRepository();
         $dataClassRetrievesParameters = $repository->getPublicationsRecordRetrievesParameters(
@@ -193,17 +183,9 @@ class CalendarEventDataProvider extends MixedCalendar
         );
     }
 
-    /**
-     * @param \Chamilo\Libraries\Calendar\Service\CalendarRendererProvider $calendarRendererProvider
-     * @param \Chamilo\Application\Calendar\Extension\Personal\Storage\DataClass\Publication[] $publications
-     * @param int $fromDate
-     * @param int $toDate
-     *
-     * @return array
-     */
     private function renderEvents(
-        CalendarRendererProvider $calendarRendererProvider, $publications, $fromDate, $toDate
-    )
+        CalendarRendererProvider $calendarRendererProvider, array $publications, int $fromDate, int $toDate
+    ): array
     {
         $events = [];
 

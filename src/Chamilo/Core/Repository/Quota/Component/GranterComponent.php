@@ -1,7 +1,6 @@
 <?php
 namespace Chamilo\Core\Repository\Quota\Component;
 
-use Chamilo\Configuration\Configuration;
 use Chamilo\Core\Repository\Quota\Calculator;
 use Chamilo\Core\Repository\Quota\Manager;
 use Chamilo\Core\Repository\Quota\Storage\DataClass\Request;
@@ -147,7 +146,7 @@ class GranterComponent extends Manager
 
         $title = Translation::get(
             'RequestGrantedMailTitle', [
-                'PLATFORM' => Configuration::getInstance()->get_setting(['Chamilo\Core\Admin', 'site_name']),
+                'PLATFORM' => $this->getConfigurationConsulter()->getSetting(['Chamilo\Core\Admin', 'site_name']),
                 'ADDED_QUOTA' => $filesystemTools->formatFileSize($request->get_quota())
             ]
         );

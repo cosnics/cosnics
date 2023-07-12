@@ -4,7 +4,6 @@ namespace Chamilo\Application\Weblcms\Tool\Implementation\User\Component;
 use Chamilo\Application\Weblcms\CourseSettingsConnector;
 use Chamilo\Application\Weblcms\CourseSettingsController;
 use Chamilo\Application\Weblcms\Tool\Implementation\User\Manager;
-use Chamilo\Configuration\Configuration;
 use Chamilo\Libraries\Architecture\Exceptions\NotAllowedException;
 use Chamilo\Libraries\Platform\Session\Request;
 use Chamilo\Libraries\Translation\Translation;
@@ -19,7 +18,7 @@ class ViewAsComponent extends Manager
 
     public function run()
     {
-        $userViewAllowed = Configuration::getInstance()->get_setting(
+        $userViewAllowed = $this->getConfigurationConsulter()->getSetting(
             ['Chamilo\Application\Weblcms', 'allow_view_as_user']
         );
 

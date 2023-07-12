@@ -1,7 +1,6 @@
 <?php
 namespace Chamilo\Core\Repository\ContentObject\LearningPath\Display\Component;
 
-use Chamilo\Configuration\Configuration;
 use Chamilo\Core\Repository\ContentObject\LearningPath\Display\Manager;
 use Chamilo\Core\Repository\ContentObject\LearningPath\Domain\TreeNode;
 use Chamilo\Core\Repository\ContentObject\LearningPath\Service\ActionGenerator\NodeActionGeneratorFactory;
@@ -63,7 +62,7 @@ abstract class BaseHtmlTreeComponent extends Manager implements DelegateComponen
         $tree = $this->getTree();
 
         $nodeActionGeneratorFactory = new NodeActionGeneratorFactory(
-            Translation::getInstance(), Configuration::getInstance(), ClassnameUtilities::getInstance(),
+            Translation::getInstance(), $this->getRegistrationConsulter(), ClassnameUtilities::getInstance(),
             $this->get_application()->get_parameters()
         );
 

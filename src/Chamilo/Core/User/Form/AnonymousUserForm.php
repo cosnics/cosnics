@@ -1,7 +1,6 @@
 <?php
 namespace Chamilo\Core\User\Form;
 
-use Chamilo\Configuration\Configuration;
 use Chamilo\Core\User\Manager;
 use Chamilo\Libraries\Format\Form\FormValidator;
 use Chamilo\Libraries\Format\Structure\Glyph\FontAwesomeGlyph;
@@ -39,7 +38,7 @@ class AnonymousUserForm extends FormValidator
     protected function addCaptchaElement()
     {
         $recaptchaSiteKey =
-            Configuration::getInstance()->get_setting(array('Chamilo\Core\Admin', 'recaptcha_site_key'));
+            $this->getConfigurationConsulter()->getSetting(['Chamilo\Core\Admin', 'recaptcha_site_key']);
 
         $html = [];
 
@@ -59,7 +58,7 @@ class AnonymousUserForm extends FormValidator
         $this->addElement(
             'style_submit_button', 'submit',
             Translation::getInstance()->getTranslation('ViewAnonymously', null, Manager::CONTEXT),
-            array('class' => 'anonymous-view-button'), null, new FontAwesomeGlyph('user')
+            ['class' => 'anonymous-view-button'], null, new FontAwesomeGlyph('user')
         );
 
         $this->defaultRenderer()->setElementTemplate(

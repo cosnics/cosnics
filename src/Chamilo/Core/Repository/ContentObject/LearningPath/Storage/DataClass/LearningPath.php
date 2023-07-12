@@ -1,7 +1,6 @@
 <?php
 namespace Chamilo\Core\Repository\ContentObject\LearningPath\Storage\DataClass;
 
-use Chamilo\Configuration\Configuration;
 use Chamilo\Configuration\Storage\DataClass\Registration;
 use Chamilo\Core\Repository\Architecture\DisplayAndBuildSupport;
 use Chamilo\Core\Repository\ContentObject\LearningPath\Service\LearningPathService;
@@ -9,9 +8,7 @@ use Chamilo\Core\Repository\ContentObject\LearningPath\Service\TreeNodeDataServi
 use Chamilo\Core\Repository\Manager;
 use Chamilo\Core\Repository\Storage\DataClass\ContentObject;
 use Chamilo\Core\User\Storage\DataClass\User;
-use Chamilo\Libraries\Architecture\ClassnameUtilities;
 use Chamilo\Libraries\Architecture\Interfaces\ComplexContentObjectSupport;
-use Chamilo\Libraries\DependencyInjection\DependencyInjectionContainerBuilder;
 use InvalidArgumentException;
 use Symfony\Component\HttpFoundation\Session\SessionInterface;
 
@@ -143,13 +140,14 @@ class LearningPath extends ContentObject implements ComplexContentObjectSupport,
 
     /**
      * @return array
+     * @throws \Symfony\Component\Cache\Exception\CacheException
      */
     public function get_allowed_types(): array
     {
-        $classNameUtilities = ClassnameUtilities::getInstance();
-        $configuration = Configuration::getInstance();
+        $classNameUtilities = $this->getClassnameUtilities();
+        $registrationConsulter = $this->getRegistrationConsulter();
 
-        $registrations = $configuration->getIntegrationRegistrations(LearningPath::CONTEXT);
+        $registrations = $registrationConsulter->getIntegrationRegistrations(LearningPath::CONTEXT);
         $types = [];
 
         usort(
@@ -162,7 +160,7 @@ class LearningPath extends ContentObject implements ComplexContentObjectSupport,
         {
             $type = $registration[Registration::PROPERTY_TYPE];
             $parentContext = $classNameUtilities->getNamespaceParent($type);
-            $parentRegistration = $configuration->get_registration($parentContext);
+            $parentRegistration = $registrationConsulter->getRegistrationForContext($parentContext);
 
             if ($parentContext == 'Chamilo\Core\Repository\ContentObject\Section')
             {
@@ -171,11 +169,11 @@ class LearningPath extends ContentObject implements ComplexContentObjectSupport,
 
             if ($parentRegistration[Registration::PROPERTY_TYPE] == Manager::CONTEXT . '\ContentObject')
             {
-                $namespace = ClassnameUtilities::getInstance()->getNamespaceParent(
+                $namespace = $classNameUtilities->getNamespaceParent(
                     $registration[Registration::PROPERTY_CONTEXT], 6
                 );
-                $types[] = $namespace . '\Storage\DataClass\\' .
-                    ClassnameUtilities::getInstance()->getPackageNameFromNamespace($namespace);
+                $types[] =
+                    $namespace . '\Storage\DataClass\\' . $classNameUtilities->getPackageNameFromNamespace($namespace);
             }
         }
 

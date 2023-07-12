@@ -95,7 +95,7 @@ class TypeSelectorFactory
                     $templateRegistration->get_content_object_type()
                 );
 
-            if (ContentObject::is_available($type))
+            if ($this->getRegistrationConsulter()->isContextRegisteredAndActive($templateRegistration->get_content_object_type()))
             {
                 if (in_array($type, $helperTypes))
                 {

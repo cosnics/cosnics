@@ -1,7 +1,6 @@
 <?php
 namespace Chamilo\Core\Install;
 
-use Chamilo\Configuration\Configuration;
 use Chamilo\Configuration\Service\FileConfigurationLocator;
 use Chamilo\Core\Install\Format\Structure\FooterRenderer;
 use Chamilo\Libraries\Architecture\Application\Application;
@@ -63,7 +62,7 @@ abstract class Manager extends Application implements NoContextComponent
         }
         else
         {
-            $installationBlocked = (bool) Configuration::getInstance()->get_setting(
+            $installationBlocked = (bool) $this->getConfigurationConsulter()->getSetting(
                 ['Chamilo\Core\Admin', 'installation_blocked']
             );
 

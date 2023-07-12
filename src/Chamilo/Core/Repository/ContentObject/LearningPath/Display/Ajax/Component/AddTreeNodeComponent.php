@@ -1,10 +1,9 @@
 <?php
 namespace Chamilo\Core\Repository\ContentObject\LearningPath\Display\Ajax\Component;
 
-use Chamilo\Configuration\Configuration;
 use Chamilo\Core\Repository\ContentObject\LearningPath\Display\Ajax\Manager;
-use Chamilo\Core\Repository\ContentObject\LearningPath\Service\TreeJSONMapper;
 use Chamilo\Core\Repository\ContentObject\LearningPath\Service\ActionGenerator\NodeActionGeneratorFactory;
+use Chamilo\Core\Repository\ContentObject\LearningPath\Service\TreeJSONMapper;
 use Chamilo\Libraries\Architecture\ClassnameUtilities;
 use Chamilo\Libraries\Translation\Translation;
 use Exception;
@@ -18,14 +17,16 @@ use Symfony\Component\HttpFoundation\JsonResponse;
  */
 class AddTreeNodeComponent extends Manager
 {
-    const PARAM_PARENT_NODE_ID = 'parent_node_id';
-    const PARAM_NODE_TYPE = 'node_type'; //content object type.
-    const PARAM_DISPLAY_ORDER = 'display_order'; //optional
+    public const PARAM_DISPLAY_ORDER = 'display_order';
+
+    public const PARAM_NODE_TYPE = 'node_type'; //content object type.
+
+    public const PARAM_PARENT_NODE_ID = 'parent_node_id'; //optional
 
     /**
      * Runs this component and returns it's response
      */
-    function run()
+    public function run()
     {
         try
         {
@@ -37,8 +38,7 @@ class AddTreeNodeComponent extends Manager
 
             $learningPathService = $this->get_application()->getLearningPathService();
             $treeNodeData = $learningPathService->createAndAddContentObjectToLearningPath(
-                $nodeType, $this->get_application()->get_root_content_object(),
-                $parentNode, $this->getUser()
+                $nodeType, $this->get_application()->get_root_content_object(), $parentNode, $this->getUser()
             );
 
             $displayOrder = $this->getRequest()->request->get(self::PARAM_DISPLAY_ORDER);
@@ -49,18 +49,15 @@ class AddTreeNodeComponent extends Manager
             }
 
             $learningPathService = $this->get_application()->getLearningPathService();
-            $tree =
-                $learningPathService->buildTree($this->get_application()->get_root_content_object());
+            $tree = $learningPathService->buildTree($this->get_application()->get_root_content_object());
 
-            $nodeActionGeneratorFactory =
-                new NodeActionGeneratorFactory(
-                    Translation::getInstance(), Configuration::getInstance(), ClassnameUtilities::getInstance(),
-                    $this->get_application()->get_parameters()
-                );
+            $nodeActionGeneratorFactory = new NodeActionGeneratorFactory(
+                Translation::getInstance(), $this->getRegistrationConsulter(), ClassnameUtilities::getInstance(),
+                $this->get_application()->get_parameters()
+            );
 
             $treeJSONMapper = new TreeJSONMapper(
-                $tree, $this->getUser(),
-                $this->get_application()->getTrackingService(),
+                $tree, $this->getUser(), $this->get_application()->getTrackingService(),
                 $this->get_application()->getAutomaticNumberingService(),
                 $nodeActionGeneratorFactory->createNodeActionGenerator(),
                 $this->get_application()->get_application()->get_tree_menu_url(),
@@ -73,7 +70,7 @@ class AddTreeNodeComponent extends Manager
 
             $treeData = $treeJSONMapper->getNodes();
 
-            return new JsonResponse(array('treeData' => $treeData, 'nodeId' => $treeNodeData->getId()));
+            return new JsonResponse(['treeData' => $treeData, 'nodeId' => $treeNodeData->getId()]);
         }
         catch (Exception $ex)
         {
@@ -88,6 +85,6 @@ class AddTreeNodeComponent extends Manager
      */
     public function getRequiredPostParameters(array $postParameters = []): array
     {
-        return array(self::PARAM_PARENT_NODE_ID, self::PARAM_NODE_TYPE);
+        return [self::PARAM_PARENT_NODE_ID, self::PARAM_NODE_TYPE];
     }
 }

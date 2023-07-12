@@ -4,7 +4,7 @@ namespace Chamilo\Application\Calendar\Service;
 use Chamilo\Application\Calendar\Manager;
 use Chamilo\Application\Calendar\Repository\AvailabilityRepository;
 use Chamilo\Application\Calendar\Storage\DataClass\Availability;
-use Chamilo\Configuration\Configuration;
+use Chamilo\Configuration\Service\Consulter\RegistrationConsulter;
 use Chamilo\Configuration\Storage\DataClass\Registration;
 use Chamilo\Core\User\Storage\DataClass\User;
 use Chamilo\Libraries\Architecture\ActionResult;
@@ -20,36 +20,24 @@ use ReflectionClass;
 class AvailabilityService
 {
     public const PROPERTY_AVAILABLE = 'available';
-
     public const PROPERTY_CALENDAR = 'calendar';
-
     public const PROPERTY_COLOUR = 'colour';
 
-    /**
-     * @var \Chamilo\Application\Calendar\Repository\AvailabilityRepository
-     */
-    private $availabilityRepository;
+    protected RegistrationConsulter $registrationConsulter;
 
-    /**
-     * @param \Chamilo\Application\Calendar\Repository\AvailabilityRepository $availabilityRepository
-     */
-    public function __construct(AvailabilityRepository $availabilityRepository)
+    private AvailabilityRepository $availabilityRepository;
+
+    public function __construct(
+        AvailabilityRepository $availabilityRepository, RegistrationConsulter $registrationConsulter
+    )
     {
         $this->availabilityRepository = $availabilityRepository;
+        $this->registrationConsulter = $registrationConsulter;
     }
 
-    /**
-     * @param \Chamilo\Core\User\Storage\DataClass\User $user
-     * @param string $calendarType
-     * @param string $calendarIdentifier
-     * @param bool $isAvailable
-     * @param string $colour
-     *
-     * @return \Chamilo\Application\Calendar\Storage\DataClass\Availability
-     */
     public function createAvailability(
-        User $user, $calendarType, $calendarIdentifier, $isAvailable = true, $colour = null
-    )
+        User $user, string $calendarType, string $calendarIdentifier, bool $isAvailable = true, ?string $colour = null
+    ): Availability
     {
         $availability = new Availability();
         $this->setAvailabilityProperties(
@@ -138,12 +126,13 @@ class AvailabilityService
      * @param \Chamilo\Core\User\Storage\DataClass\User $user
      *
      * @return \Chamilo\Application\Calendar\Storage\DataClass\AvailableCalendar[]
+     * @throws \Symfony\Component\Cache\Exception\CacheException
      */
     public function getAvailableCalendars(User $user)
     {
         $availableCalendars = [];
 
-        $registrations = Configuration::getInstance()->getIntegrationRegistrations(
+        $registrations = $this->getRegistrationConsulter()->getIntegrationRegistrations(
             Manager::CONTEXT
         );
 
@@ -178,6 +167,11 @@ class AvailabilityService
     public function getInactiveAvailabilitiesForUserAndCalendarType(User $user, $calendarType)
     {
         return $this->getAvailabilitiesForUserAndCalendarType($user, $calendarType, false);
+    }
+
+    public function getRegistrationConsulter(): RegistrationConsulter
+    {
+        return $this->registrationConsulter;
     }
 
     /**

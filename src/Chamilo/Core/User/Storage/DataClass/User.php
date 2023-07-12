@@ -1,10 +1,11 @@
 <?php
 namespace Chamilo\Core\User\Storage\DataClass;
 
-use Chamilo\Configuration\Configuration;
+use Chamilo\Configuration\Service\Consulter\ConfigurationConsulter;
 use Chamilo\Core\Group\Storage\DataClass\GroupRelUser;
 use Chamilo\Core\Group\Storage\DataManager;
 use Chamilo\Core\User\Manager;
+use Chamilo\Libraries\DependencyInjection\DependencyInjectionContainerBuilder;
 use Chamilo\Libraries\Storage\DataClass\DataClass;
 use Chamilo\Libraries\Storage\Query\Condition\EqualityCondition;
 use Chamilo\Libraries\Storage\Query\Variable\PropertyConditionVariable;
@@ -99,16 +100,18 @@ class User extends DataClass
      */
     public static function fullname($first_name, $last_name)
     {
-        $format = Configuration::getInstance()->get_setting([Manager::CONTEXT, 'fullname_format']);
+        /**
+         * @var \Chamilo\Configuration\Service\Consulter\ConfigurationConsulter $configurationConsulter
+         */
+        $configurationConsulter =
+            DependencyInjectionContainerBuilder::getInstance()->createContainer()->get(ConfigurationConsulter::class);
+
+        $format = $configurationConsulter->getSetting([Manager::CONTEXT, 'fullname_format']);
 
         switch ($format)
         {
-            case self::NAME_FORMAT_FIRST :
-                return $first_name . ' ' . $last_name;
-                break;
             case self::NAME_FORMAT_LAST :
                 return $last_name . ' ' . $first_name;
-                break;
             default :
                 return $first_name . ' ' . $last_name;
         }

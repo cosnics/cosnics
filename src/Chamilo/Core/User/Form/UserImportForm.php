@@ -1,15 +1,12 @@
 <?php
 namespace Chamilo\Core\User\Form;
 
-use Chamilo\Configuration\Configuration;
 use Chamilo\Core\Tracking\Storage\DataClass\Event;
 use Chamilo\Core\User\Manager;
 use Chamilo\Core\User\Storage\DataClass\User;
 use Chamilo\Core\User\Storage\DataManager;
 use Chamilo\Libraries\Architecture\Exceptions\UserException;
-use Chamilo\Libraries\DependencyInjection\DependencyInjectionContainerBuilder;
 use Chamilo\Libraries\DependencyInjection\Traits\DependencyInjectionContainerTrait;
-use Chamilo\Libraries\File\ConfigurablePathBuilder;
 use Chamilo\Libraries\File\Import;
 use Chamilo\Libraries\Format\Form\FormValidator;
 use Chamilo\Libraries\Format\Structure\Glyph\FontAwesomeGlyph;
@@ -170,17 +167,6 @@ class UserImportForm extends FormValidator
     protected function getActiveMailer(): MailerInterface
     {
         return $this->getService('Chamilo\Libraries\Mail\Mailer\ActiveMailer');
-    }
-
-    /**
-     * @return \Chamilo\Libraries\File\ConfigurablePathBuilder
-     * @throws \Exception
-     */
-    protected function getConfigurablePathBuilder()
-    {
-        return DependencyInjectionContainerBuilder::getInstance()->createContainer()->get(
-            ConfigurablePathBuilder::class
-        );
     }
 
     /**
@@ -435,29 +421,31 @@ class UserImportForm extends FormValidator
      */
     public function send_email($user, $unencrypted_password)
     {
+        $configurationConsulter = $this->getConfigurationConsulter();
+
         $options = [];
         $options['firstname'] = $user->get_firstname();
         $options['lastname'] = $user->get_lastname();
         $options['username'] = $user->get_username();
         $options['password'] = $unencrypted_password;
-        $options['site_name'] = Configuration::getInstance()->get_setting(['Chamilo\Core\Admin', 'site_name']);
+        $options['site_name'] = $configurationConsulter->getSetting(['Chamilo\Core\Admin', 'site_name']);
         $options['site_url'] = $this->getWebPathBuilder()->getBasePath();
-        $options['admin_firstname'] = Configuration::getInstance()->get_setting(
+        $options['admin_firstname'] = $configurationConsulter->getSetting(
             ['Chamilo\Core\Admin', 'administrator_firstname']
         );
-        $options['admin_surname'] = Configuration::getInstance()->get_setting(
+        $options['admin_surname'] = $configurationConsulter->getSetting(
             ['Chamilo\Core\Admin', 'administrator_surname']
         );
-        $options['admin_telephone'] = Configuration::getInstance()->get_setting(
+        $options['admin_telephone'] = $configurationConsulter->getSetting(
             ['Chamilo\Core\Admin', 'administrator_telephone']
         );
-        $options['admin_email'] = Configuration::getInstance()->get_setting(
+        $options['admin_email'] = $configurationConsulter->getSetting(
             ['Chamilo\Core\Admin', 'administrator_email']
         );
 
         $subject = Translation::get('YourRegistrationOn') . ' ' . $options['site_name'];
 
-        $body = Configuration::getInstance()->get_setting([Manager::CONTEXT, 'email_template']);
+        $body = $configurationConsulter->getSetting([Manager::CONTEXT, 'email_template']);
         foreach ($options as $option => $value)
         {
             $body = str_replace('[' . $option . ']', $value, $body);
@@ -560,14 +548,16 @@ class UserImportForm extends FormValidator
             $csvuser[User::PROPERTY_AUTH_SOURCE] = 'Platform';
         }
 
+        $configurationConsulter = $this->getConfigurationConsulter();
+
         if (!$csvuser['language'])
         {
-            $csvuser['language'] = Configuration::getInstance()->get_setting(
+            $csvuser['language'] = $configurationConsulter->getSetting(
                 ['Chamilo\Core\Admin', 'platform_language']
             );
         }
 
-        if ($action == 'C' && Configuration::getInstance()->get_setting([Manager::CONTEXT, 'require_email']) &&
+        if ($action == 'C' && $configurationConsulter->getSetting([Manager::CONTEXT, 'require_email']) &&
             (!$email || $email == ''))
         {
             $failures ++;

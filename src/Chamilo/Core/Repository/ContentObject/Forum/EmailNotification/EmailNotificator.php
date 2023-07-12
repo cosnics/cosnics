@@ -5,11 +5,22 @@ use Chamilo\Core\User\Storage\DataClass\User;
 
 /**
  * this class contains a list of subscribed users and notificates the users
- * 
+ *
  * @author Mattias De Pauw - Hogeschool Gent
  */
 abstract class EmailNotificator
 {
+
+    public $action_body;
+
+    public $action_title;
+
+    /**
+     * @var User
+     */
+    public $action_user;
+
+    public $topic;
 
     /**
      * **************************************************************************************************************
@@ -18,47 +29,32 @@ abstract class EmailNotificator
      */
     public $users = [];
 
-    public $topic;
-
-    public $action_title;
-
-    public $action_body;
-
-    /**
-     * @var User
-     */
-    public $action_user;
-
     /**
      * **************************************************************************************************************
      * Setters *
      * **************************************************************************************************************
      */
-    
+
     /**
-     * Set the topic which is changed.
-     * 
-     * @param ForumTopic $topic
+     * Add a unique list of users who must be notificated by email.
      *
+     * @param List $users
      */
-    public function set_topic($topic)
+    public function add_users($users)
     {
-        $this->topic = $topic;
+        $merge = (array) $this->users + (array) $users;
+
+        $this->users = $merge;
     }
 
     /**
-     * Set the action what is done (title)
-     * 
-     * @param $action
+     * Send to all users a email
      */
-    public function set_action_title($action)
-    {
-        $this->action_title = $action;
-    }
+    abstract public function send_emails();
 
     /**
      * set the action what is done(body)
-     * 
+     *
      * @param $action
      */
     public function set_action_body($action)
@@ -67,8 +63,18 @@ abstract class EmailNotificator
     }
 
     /**
+     * Set the action what is done (title)
+     *
+     * @param $action
+     */
+    public function set_action_title($action)
+    {
+        $this->action_title = $action;
+    }
+
+    /**
      * set the user who did the action
-     * 
+     *
      * @param $action_user
      */
     public function set_action_user($action_user)
@@ -77,19 +83,12 @@ abstract class EmailNotificator
     }
 
     /**
-     * Add a unique list of users who must be notificated by email.
-     * 
-     * @param List $users
+     * Set the topic which is changed.
+     *
+     * @param ForumTopic $topic
      */
-    public function add_users($users)
+    public function set_topic($topic)
     {
-        $merge = (array) $this->users + (array) $users;
-        
-        $this->users = $merge;
+        $this->topic = $topic;
     }
-
-    /**
-     * Send to all users a email
-     */
-    abstract public function send_emails();
 }

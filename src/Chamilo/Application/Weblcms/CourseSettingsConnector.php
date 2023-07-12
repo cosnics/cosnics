@@ -5,6 +5,7 @@ use Chamilo\Application\Weblcms\Course\Storage\DataClass\Course;
 use Chamilo\Application\Weblcms\Storage\DataClass\CourseSetting;
 use Chamilo\Application\Weblcms\Storage\DataManager;
 use Chamilo\Configuration\Configuration;
+use Chamilo\Configuration\Service\Consulter\ConfigurationConsulter;
 use Chamilo\Core\User\Storage\DataClass\User;
 use Chamilo\Libraries\DependencyInjection\DependencyInjectionContainerBuilder;
 use Chamilo\Libraries\Format\Theme\ThemePathBuilder;
@@ -86,7 +87,7 @@ class CourseSettingsConnector
      * **************************************************************************************************************
      */
     public const VISIBILITY = 'visibility';
-    
+
     public static function getThemeSystemPathBuilder(): ThemePathBuilder
     {
         return DependencyInjectionContainerBuilder::getInstance()->createContainer()->get(
@@ -221,7 +222,13 @@ class CourseSettingsConnector
             new OrderProperty(new PropertyConditionVariable(User::class, User::PROPERTY_LASTNAME))
         ];
 
-        $format = Configuration::getInstance()->get_setting(['Chamilo\Core\User', 'fullname_format']);
+        /**
+         * @var \Chamilo\Configuration\Service\Consulter\ConfigurationConsulter $configurationConsulter
+         */
+        $configurationConsulter =
+            DependencyInjectionContainerBuilder::getInstance()->createContainer()->get(ConfigurationConsulter::class);
+
+        $format = $configurationConsulter->getSetting(['Chamilo\Core\User', 'fullname_format']);
         if ($format == User::NAME_FORMAT_LAST)
         {
             $order = array_reverse($order);

@@ -26,12 +26,12 @@ use Chamilo\Libraries\Storage\Query\Variable\StaticConditionVariable;
 /**
  * Feed to return the platform groups of this course
  *
- * @author Sven Vanpoucke
+ * @author  Sven Vanpoucke
  * @package application.weblcms
  */
 class PlatformGroupsFeedComponent extends GroupsFeedComponent
 {
-    const PARAM_COURSE_ID = 'course_id';
+    public const PARAM_COURSE_ID = 'course_id';
 
     /**
      * Returns the required parameters
@@ -40,7 +40,7 @@ class PlatformGroupsFeedComponent extends GroupsFeedComponent
      */
     public function getRequiredPostParameters(array $postParameters = []): array
     {
-        return array(self::PARAM_COURSE_ID);
+        return [self::PARAM_COURSE_ID];
     }
 
     /**
@@ -151,11 +151,11 @@ class PlatformGroupsFeedComponent extends GroupsFeedComponent
             $subscribed_group_ids = \Chamilo\Application\Weblcms\Course\Storage\DataManager::distinct(
                 CourseEntityRelation::class, new DataClassDistinctParameters(
                     new AndCondition($groupConditions), new RetrieveProperties(
-                        array(
+                        [
                             new PropertyConditionVariable(
                                 CourseEntityRelation::class, CourseEntityRelation::PROPERTY_ENTITY_ID
                             )
-                        )
+                        ]
                     )
                 )
             );
@@ -185,7 +185,7 @@ class PlatformGroupsFeedComponent extends GroupsFeedComponent
         return DataManager::retrieves(
             Group::class, new DataClassRetrievesParameters(
                 $condition, null, null,
-                new OrderBy(array(new OrderProperty(new PropertyConditionVariable(Group::class, Group::PROPERTY_NAME))))
+                new OrderBy([new OrderProperty(new PropertyConditionVariable(Group::class, Group::PROPERTY_NAME))])
             )
         );
     }

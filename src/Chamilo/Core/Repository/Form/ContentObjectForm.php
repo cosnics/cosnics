@@ -1,7 +1,6 @@
 <?php
 namespace Chamilo\Core\Repository\Form;
 
-use Chamilo\Configuration\Configuration;
 use Chamilo\Core\Metadata\Entity\DataClassEntityFactory;
 use Chamilo\Core\Metadata\Service\EntityFormService;
 use Chamilo\Core\Metadata\Service\EntityService;
@@ -315,7 +314,7 @@ abstract class ContentObjectForm extends FormValidator
         )
         );
 
-        $omitContentObjectTitleCheck = Configuration::getInstance()->get_setting(
+        $omitContentObjectTitleCheck = $this->getConfigurationConsulter()->getSetting(
             ['Chamilo\Core\Repository', 'omit_content_object_title_check']
         );
 
@@ -426,7 +425,7 @@ abstract class ContentObjectForm extends FormValidator
             $this->addGroup($category_group, 'category_form_group', null, ' ', false);
         }
 
-        $value = Configuration::getInstance()->get_setting([Manager::CONTEXT, 'description_required']);
+        $value = $this->getConfigurationConsulter()->getSetting([Manager::CONTEXT, 'description_required']);
         $required = $value == 1;
         $name = Translation::get('Description', [], ClassnameUtilities::getInstance()->getNamespaceFromObject($this));
         $this->add_html_editor(ContentObject::PROPERTY_DESCRIPTION, $name, $required, $htmleditor_options);

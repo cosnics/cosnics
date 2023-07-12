@@ -1,10 +1,9 @@
 <?php
 namespace Chamilo\Core\Repository\ContentObject\LearningPath\Display\Ajax\Component;
 
-use Chamilo\Configuration\Configuration;
 use Chamilo\Core\Repository\ContentObject\LearningPath\Display\Ajax\Manager;
-use Chamilo\Core\Repository\ContentObject\LearningPath\Service\TreeJSONMapper;
 use Chamilo\Core\Repository\ContentObject\LearningPath\Service\ActionGenerator\NodeActionGeneratorFactory;
+use Chamilo\Core\Repository\ContentObject\LearningPath\Service\TreeJSONMapper;
 use Chamilo\Libraries\Architecture\ClassnameUtilities;
 use Chamilo\Libraries\Translation\Translation;
 use Exception;
@@ -17,7 +16,8 @@ use Symfony\Component\HttpFoundation\JsonResponse;
  */
 class GetTreeNodesComponent extends Manager
 {
-    const PARAM_ACTIVE_CHILD_ID = 'active_child_id';
+    public const PARAM_ACTIVE_CHILD_ID = 'active_child_id';
+
     /**
      * Executes this component and returns its output
      */
@@ -30,16 +30,16 @@ class GetTreeNodesComponent extends Manager
             $tree = $this->get_application()->getTree();
             $activeChildNode = $tree->getTreeNodeById((int) $activeChildId);
 
-            $nodeActionGeneratorFactory =
-                new NodeActionGeneratorFactory(Translation::getInstance(), Configuration::getInstance(), ClassnameUtilities::getInstance(), $this->get_application()->get_parameters());
+            $nodeActionGeneratorFactory = new NodeActionGeneratorFactory(
+                Translation::getInstance(), $this->getRegistrationConsulter(), ClassnameUtilities::getInstance(),
+                $this->get_application()->get_parameters()
+            );
 
             $treeJSONMapper = new TreeJSONMapper(
-                $tree, $this->getUser(),
-                $this->get_application()->getTrackingService(),
+                $tree, $this->getUser(), $this->get_application()->getTrackingService(),
                 $this->get_application()->getAutomaticNumberingService(),
                 $nodeActionGeneratorFactory->createNodeActionGenerator(),
-                $this->get_application()->get_application()->get_tree_menu_url(),
-                $activeChildNode,
+                $this->get_application()->get_application()->get_tree_menu_url(), $activeChildNode,
                 $this->get_application()->get_application()->is_allowed_to_view_content_object(),
                 $this->get_application()->canEditTreeNode(
                     $this->get_application()->getCurrentTreeNode()
@@ -63,6 +63,6 @@ class GetTreeNodesComponent extends Manager
      */
     public function getRequiredPostParameters(array $postParameters = []): array
     {
-        return array(self::PARAM_ACTIVE_CHILD_ID);
+        return [self::PARAM_ACTIVE_CHILD_ID];
     }
 }

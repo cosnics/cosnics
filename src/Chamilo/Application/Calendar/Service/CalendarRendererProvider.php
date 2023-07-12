@@ -3,7 +3,7 @@ namespace Chamilo\Application\Calendar\Service;
 
 use Chamilo\Application\Calendar\Manager;
 use Chamilo\Application\Calendar\Repository\CalendarRendererProviderRepository;
-use Chamilo\Configuration\Configuration;
+use Chamilo\Configuration\Service\Consulter\RegistrationConsulter;
 use Chamilo\Configuration\Storage\DataClass\Registration;
 use Chamilo\Core\User\Storage\DataClass\User;
 use Chamilo\Libraries\Architecture\Application\Application;
@@ -157,13 +157,18 @@ class CalendarRendererProvider extends \Chamilo\Libraries\Calendar\Service\Calen
 
     /**
      * @return \Chamilo\Application\Calendar\Architecture\CalendarInterface[][]
-     * @throws \ReflectionException
+     * @throws \Symfony\Component\Cache\Exception\CacheException
+     * @throws \Chamilo\Libraries\Storage\Exception\ConnectionException
      */
     public function getSources()
     {
-        $registrations = Configuration::getInstance()->getIntegrationRegistrations(
-            Manager::CONTEXT
-        );
+        /**
+         * @var \Chamilo\Configuration\Service\Consulter\RegistrationConsulter $registrationConsulter
+         */
+        $registrationConsulter =
+            DependencyInjectionContainerBuilder::getInstance()->createContainer()->get(RegistrationConsulter::class);
+
+        $registrations = $registrationConsulter->getIntegrationRegistrations(Manager::CONTEXT);
 
         $sources = [];
 

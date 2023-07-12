@@ -1,7 +1,6 @@
 <?php
 namespace Chamilo\Core\Repository\Component;
 
-use Chamilo\Configuration\Configuration;
 use Chamilo\Configuration\Storage\DataClass\Registration;
 use Chamilo\Core\Metadata\Entity\DataClassEntity;
 use Chamilo\Core\Metadata\Relation\Service\RelationService;
@@ -14,11 +13,10 @@ use Chamilo\Libraries\Translation\Translation;
 use Exception;
 
 /**
- *
  * @package Chamilo\Core\Repository\Component
- * @author Hans De Bisschop <hans.de.bisschop@ehb.be>
- * @author Magali Gillard <magali.gillard@ehb.be>
- * @author Eduard Vossen <eduard.vossen@ehb.be>
+ * @author  Hans De Bisschop <hans.de.bisschop@ehb.be>
+ * @author  Magali Gillard <magali.gillard@ehb.be>
+ * @author  Eduard Vossen <eduard.vossen@ehb.be>
  */
 class SchemaLinkerComponent extends Manager implements ApplicationSupport
 {
@@ -43,7 +41,6 @@ class SchemaLinkerComponent extends Manager implements ApplicationSupport
     }
 
     /**
-     *
      * @return \Chamilo\Core\Metadata\Storage\DataClass\Relation[]
      * @throws \Exception
      */
@@ -55,12 +52,12 @@ class SchemaLinkerComponent extends Manager implements ApplicationSupport
         {
             throw new Exception(
                 Translation::get(
-                    'RelationNotAvailable', array('TYPE' => 'isAvailableFor'), 'Chamilo\Core\Metadata\Relation'
+                    'RelationNotAvailable', ['TYPE' => 'isAvailableFor'], 'Chamilo\Core\Metadata\Relation'
                 )
             );
         }
 
-        return array($relation);
+        return [$relation];
     }
 
     /**
@@ -72,7 +69,6 @@ class SchemaLinkerComponent extends Manager implements ApplicationSupport
     }
 
     /**
-     *
      * @return \Chamilo\Core\Metadata\Entity\EntityInterface[]
      */
     public function getSourceEntities()
@@ -84,12 +80,12 @@ class SchemaLinkerComponent extends Manager implements ApplicationSupport
     }
 
     /**
-     *
      * @return \Chamilo\Core\Metadata\Entity\EntityInterface[]
+     * @throws \Symfony\Component\Cache\Exception\CacheException
      */
     public function getTargetEntities()
     {
-        $registrations = Configuration::registrations_by_type(
+        $registrations = $this->getRegistrationConsulter()->getRegistrationsByType(
             'Chamilo\Core\Repository\ContentObject'
         );
 

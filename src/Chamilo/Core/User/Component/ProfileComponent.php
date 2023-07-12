@@ -1,7 +1,6 @@
 <?php
 namespace Chamilo\Core\User\Component;
 
-use Chamilo\Configuration\Configuration;
 use Chamilo\Configuration\Form\Storage\DataClass\Instance;
 use Chamilo\Configuration\Form\Storage\DataManager;
 use Chamilo\Core\User\Manager;
@@ -41,7 +40,7 @@ abstract class ProfileComponent extends Manager implements NoContextComponent
             self::ACTION_VIEW_ACCOUNT == $this->get_action()
         );
 
-        if (Configuration::get(Manager::CONTEXT, 'allow_change_user_picture'))
+        if ($this->getConfigurationConsulter()->getSetting([Manager::CONTEXT, 'allow_change_user_picture']))
         {
             $tabs[] = new LinkTab(
                 self::ACTION_CHANGE_PICTURE, htmlentities(Translation::get(self::ACTION_CHANGE_PICTURE . 'Title')),
@@ -61,8 +60,8 @@ abstract class ProfileComponent extends Manager implements NoContextComponent
         $conditions = [];
         $conditions[] = new EqualityCondition(
             new PropertyConditionVariable(Instance::class, Instance::PROPERTY_APPLICATION), new StaticConditionVariable(
-            Manager::CONTEXT
-        )
+                Manager::CONTEXT
+            )
         );
         $conditions[] = new EqualityCondition(
             new PropertyConditionVariable(Instance::class, Instance::PROPERTY_NAME),

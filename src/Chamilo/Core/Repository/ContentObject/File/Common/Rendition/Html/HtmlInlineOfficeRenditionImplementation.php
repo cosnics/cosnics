@@ -1,7 +1,6 @@
 <?php
 namespace Chamilo\Core\Repository\ContentObject\File\Common\Rendition\Html;
 
-use Chamilo\Configuration\Configuration;
 use Chamilo\Core\Repository\ContentObject\File\Storage\DataClass\File;
 use Chamilo\Libraries\Format\Structure\ActionBar\Button;
 use Chamilo\Libraries\Format\Structure\Glyph\FontAwesomeGlyph;
@@ -196,7 +195,7 @@ abstract class HtmlInlineOfficeRenditionImplementation extends HtmlInlineRenditi
      */
     public function getViewerType()
     {
-        $viewerType = Configuration::getInstance()->get_setting([File::CONTEXT, 'office_viewer_type']);
+        $viewerType = $this->getConfigurationConsulter()->getSetting([File::CONTEXT, 'office_viewer_type']);
 
         if (is_null($viewerType))
         {

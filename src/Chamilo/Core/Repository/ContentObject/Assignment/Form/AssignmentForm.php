@@ -1,7 +1,6 @@
 <?php
 namespace Chamilo\Core\Repository\ContentObject\Assignment\Form;
 
-use Chamilo\Configuration\Configuration;
 use Chamilo\Configuration\Storage\DataClass\Registration;
 use Chamilo\Core\Repository\ContentObject\Assignment\Storage\DataClass\Assignment;
 use Chamilo\Core\Repository\ContentObject\File\Storage\DataClass\File;
@@ -215,12 +214,12 @@ class AssignmentForm extends ContentObjectForm
      *
      * @param \Chamilo\Core\Repository\ContentObject\Assignment\Storage\DataClass\Assignment $assignment
      * @param $allowedTypeIdentifiers
+     *
+     * @throws \Symfony\Component\Cache\Exception\CacheException
      */
     protected function setAllowedTypes(Assignment $assignment, $allowedTypeIdentifiers)
     {
-        $configuration = Configuration::getInstance();
-
-        $integrationPackages = $configuration->getIntegrationRegistrations(
+        $integrationPackages = $this->getRegistrationConsulter()->getIntegrationRegistrations(
             'Chamilo\Core\Repository\ContentObject\Assignment'
         );
 
@@ -244,6 +243,7 @@ class AssignmentForm extends ContentObjectForm
      * @param \Chamilo\Core\Repository\ContentObject\Assignment\Storage\DataClass\Assignment $assignment
      *
      * @throws \HTML_QuickForm_Error
+     * @throws \Symfony\Component\Cache\Exception\CacheException
      */
     protected function setDefaultAllowedContentObjects(Assignment $assignment)
     {
@@ -253,9 +253,7 @@ class AssignmentForm extends ContentObjectForm
             empty($allowedTypes) ? ['Chamilo\Core\Repository\ContentObject\File\Storage\DataClass\File'] :
                 explode(',', $allowedTypes);
 
-        $configuration = Configuration::getInstance();
-
-        $integrationPackages = $configuration->getIntegrationRegistrations(
+        $integrationPackages = $this->getRegistrationConsulter()->getIntegrationRegistrations(
             'Chamilo\Core\Repository\ContentObject\Assignment'
         );
 

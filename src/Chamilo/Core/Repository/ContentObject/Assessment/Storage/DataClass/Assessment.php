@@ -1,7 +1,6 @@
 <?php
 namespace Chamilo\Core\Repository\ContentObject\Assessment\Storage\DataClass;
 
-use Chamilo\Configuration\Configuration;
 use Chamilo\Configuration\Storage\DataClass\Registration;
 use Chamilo\Core\Repository\Architecture\BuildSupport;
 use Chamilo\Core\Repository\Manager;
@@ -80,20 +79,25 @@ class Assessment extends ContentObject implements ComplexContentObjectSupport, B
         return 'repository_assessment';
     }
 
+    /**
+     * @throws \Symfony\Component\Cache\Exception\CacheException
+     */
     public function get_allowed_types(): array
     {
-        $registrations = Configuration::getInstance()->getIntegrationRegistrations(
+        $registrations = $this->getRegistrationConsulter()->getIntegrationRegistrations(
             Assessment::CONTEXT, Manager::CONTEXT . '\ContentObject'
         );
         $types = [];
 
+        $classnameUtilities = ClassnameUtilities::getInstance();
+
         foreach ($registrations as $registration)
         {
-            $namespace = ClassnameUtilities::getInstance()->getNamespaceParent(
+            $namespace = $classnameUtilities->getNamespaceParent(
                 $registration[Registration::PROPERTY_CONTEXT], 6
             );
-            $types[] = $namespace . '\Storage\DataClass\\' .
-                ClassnameUtilities::getInstance()->getPackageNameFromNamespace($namespace);
+            $types[] =
+                $namespace . '\Storage\DataClass\\' . $classnameUtilities->getPackageNameFromNamespace($namespace);
         }
 
         return $types;

@@ -6,7 +6,6 @@ use Chamilo\Application\Weblcms\Request\Manager;
 use Chamilo\Application\Weblcms\Request\Rights\Rights;
 use Chamilo\Application\Weblcms\Request\Storage\DataClass\Request;
 use Chamilo\Application\Weblcms\Request\Storage\DataManager;
-use Chamilo\Configuration\Configuration;
 use Chamilo\Libraries\Architecture\Exceptions\NotAllowedException;
 use Chamilo\Libraries\Mail\ValueObject\Mail;
 use Chamilo\Libraries\Translation\Translation;
@@ -140,7 +139,7 @@ class DenierComponent extends Manager
 
         $recipient = $request->get_user();
 
-        $siteName = Configuration::getInstance()->get_setting(['Chamilo\Core\Admin', 'site_name']);
+        $siteName = $this->getConfigurationConsulter()->getSetting(['Chamilo\Core\Admin', 'site_name']);
 
         $title = Translation::get(
             'RequestDeniedMailTitle', ['PLATFORM' => $siteName, 'NAME' => $request->get_name()]

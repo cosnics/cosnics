@@ -11,7 +11,6 @@ use Chamilo\Application\Weblcms\Service\ServiceFactory;
 use Chamilo\Application\Weblcms\Storage\DataClass\ContentObjectPublication;
 use Chamilo\Application\Weblcms\Storage\DataClass\ContentObjectPublicationCategory;
 use Chamilo\Application\Weblcms\Storage\DataManager;
-use Chamilo\Configuration\Configuration;
 use Chamilo\Core\Repository\Publication\Publisher\Form\BasePublicationForm;
 use Chamilo\Core\Repository\Storage\DataClass\ContentObject;
 use Chamilo\Core\Repository\Workspace\Service\RightsService;
@@ -264,7 +263,8 @@ class ContentObjectPublicationForm extends BasePublicationForm
             Translation::get('Hidden', null, StringUtilities::LIBRARIES), null, ['class' => 'hidden_publication']
         );
 
-        $force_collaborate = Configuration::getInstance()->get_setting([Manager::CONTEXT, 'force_collaborate']) === 1;
+        $force_collaborate =
+            $this->getConfigurationConsulter()->getSetting([Manager::CONTEXT, 'force_collaborate']) === 1;
 
         // collaborate right for course admins if we are owner of each content
         // object to share
@@ -775,7 +775,7 @@ class ContentObjectPublicationForm extends BasePublicationForm
             $log .= " (unsuccessfull)\n";
         }
 
-        $logMails = Configuration::getInstance()->get_setting([Manager::CONTEXT, 'log_mails']);
+        $logMails = $this->getConfigurationConsulter()->getSetting([Manager::CONTEXT, 'log_mails']);
 
         if ($logMails)
         {
@@ -835,7 +835,7 @@ class ContentObjectPublicationForm extends BasePublicationForm
                 $defaults = array_merge($defaults, $right_defaults);
             }
 
-            $force_collaborate = Configuration::getInstance()->get_setting(
+            $force_collaborate = $this->getConfigurationConsulter()->getSetting(
                     [Manager::CONTEXT, 'force_collaborate']
                 ) === 1;
 

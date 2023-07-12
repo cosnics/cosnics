@@ -12,12 +12,11 @@ use Chamilo\Libraries\Utilities\StringUtilities;
 use Exception;
 
 /**
- *
  * @package Chamilo\Core\Metadata\Service
- * @author Sven Vanpoucke - Hogeschool Gent
- * @author Hans De Bisschop <hans.de.bisschop@ehb.be>
- * @author Magali Gillard <magali.gillard@ehb.be>
- * @author Eduard Vossen <eduard.vossen@ehb.be>
+ * @author  Sven Vanpoucke - Hogeschool Gent
+ * @author  Hans De Bisschop <hans.de.bisschop@ehb.be>
+ * @author  Magali Gillard <magali.gillard@ehb.be>
+ * @author  Eduard Vossen <eduard.vossen@ehb.be>
  */
 class EntityTranslationFormService
 {
@@ -40,7 +39,7 @@ class EntityTranslationFormService
         );
         $platformLanguage = Configuration::get('Chamilo\Core\Admin', 'platform_language');
 
-        foreach($languages as $language)
+        foreach ($languages as $language)
         {
             $fieldName = EntityTranslationService::PROPERTY_TRANSLATION . '[' . $language->get_isocode() . ']';
             $formValidator->addElement('text', $fieldName, $language->get_original_name());

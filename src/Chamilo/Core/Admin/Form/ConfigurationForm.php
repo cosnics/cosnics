@@ -1,7 +1,6 @@
 <?php
 namespace Chamilo\Core\Admin\Form;
 
-use Chamilo\Configuration\Configuration;
 use Chamilo\Configuration\Storage\DataClass\Setting;
 use Chamilo\Core\User\Manager;
 use Chamilo\Core\User\Storage\DataClass\User;
@@ -411,7 +410,7 @@ class ConfigurationForm extends FormValidator
                 }
                 else
                 {
-                    $configuration_value = Configuration::getInstance()->get_setting([$this->context, $name]);
+                    $configuration_value = $this->getConfigurationConsulter()->getSetting([$this->context, $name]);
                 }
 
                 if (isset($configuration_value) && ($configuration_value == 0 || !empty($configuration_value)))

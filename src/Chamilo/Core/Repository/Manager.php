@@ -1,7 +1,6 @@
 <?php
 namespace Chamilo\Core\Repository;
 
-use Chamilo\Configuration\Configuration;
 use Chamilo\Core\Metadata\Entity\DataClassEntityFactory;
 use Chamilo\Core\Repository\Filter\FilterData;
 use Chamilo\Core\Repository\Filter\Renderer\FormFilterRenderer;
@@ -254,7 +253,7 @@ abstract class Manager extends Application
         {
             $context = ClassnameUtilities::getInstance()->getNamespaceParent($type, 3);
 
-            if (!Configuration::getInstance()->isRegisteredAndActive($context))
+            if (!$this->getRegistrationConsulter()->isContextRegisteredAndActive($context))
             {
                 unset($types[$index]);
             }
@@ -676,7 +675,7 @@ abstract class Manager extends Application
 
         $html[] = $html_filter_renderer->render();
 
-        $repositoryMenu = new RepositoryMenu($this, $this->getWorkspaceRightsService());
+        $repositoryMenu = new RepositoryMenu($this, $this->getWorkspaceRightsService(), $this->getRegistrationConsulter());
         $html[] = $repositoryMenu->render();
 
         return implode(PHP_EOL, $html);

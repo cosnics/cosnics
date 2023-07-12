@@ -4,31 +4,24 @@ namespace Chamilo\Application\Calendar\Extension\Personal\Component;
 use Chamilo\Application\Calendar\Extension\Personal\Form\PublicationForm;
 use Chamilo\Application\Calendar\Extension\Personal\Manager;
 use Chamilo\Application\Calendar\Extension\Personal\Publisher\PublicationHandler;
-use Chamilo\Configuration\Configuration;
 use Chamilo\Configuration\Storage\DataClass\Registration;
 use Chamilo\Core\Repository\Publication\Publisher\Interfaces\PublisherSupport;
 use Chamilo\Libraries\Architecture\Application\ApplicationConfiguration;
 use Chamilo\Libraries\Architecture\ClassnameUtilities;
 use Chamilo\Libraries\Architecture\Interfaces\DelegateComponent;
-use Chamilo\Libraries\Format\Structure\BreadcrumbTrail;
 
 /**
- *
- * @package application\calendar
- * @author Hans De Bisschop <hans.de.bisschop@ehb.be>
+ * @package Chamilo\Application\Calendar\Extension\Personal\Component
+ * @author  Hans De Bisschop <hans.de.bisschop@ehb.be>
  */
 class PublisherComponent extends Manager implements PublisherSupport, DelegateComponent
 {
 
-    /**
-     * The publication form
-     *
-     * @var \Chamilo\Application\Calendar\Extension\Personal\Form\PublicationForm
-     */
-    protected $publicationForm;
+    protected PublicationForm $publicationForm;
 
     /**
-     * Runs this component and displays its output.
+     * @throws \Chamilo\Libraries\Architecture\Exceptions\ClassNotExistException
+     * @throws \Chamilo\Libraries\Architecture\Exceptions\UserException
      */
     public function run()
     {
@@ -37,33 +30,6 @@ class PublisherComponent extends Manager implements PublisherSupport, DelegateCo
         return $this->getApplicationFactory()->getApplication(
             \Chamilo\Core\Repository\Publication\Publisher\Manager::CONTEXT, $applicationConfiguration
         )->run();
-    }
-
-    /**
-     *
-     * @param \Chamilo\Core\Repository\Storage\DataClass\ContentObject[] $selectedContentObjects
-     *
-     * @return \Chamilo\Application\Calendar\Extension\Personal\Form\PublicationForm
-     * @throws \Exception
-     */
-    public function getPublicationForm($selectedContentObjects = [])
-    {
-        if (!isset($this->publicationForm))
-        {
-            $this->publicationForm = new PublicationForm(
-                $this->getUser(), $this->get_url(), $selectedContentObjects
-            );
-        }
-
-        return $this->publicationForm;
-    }
-
-    /**
-     * @return \Chamilo\Application\Calendar\Extension\Personal\Publisher\PublicationHandler
-     */
-    public function getPublicationHandler()
-    {
-        return new PublicationHandler($this->publicationForm, $this, $this->getPublicationService());
     }
 
     /**
@@ -78,14 +44,38 @@ class PublisherComponent extends Manager implements PublisherSupport, DelegateCo
     }
 
     /**
+     * @param \Chamilo\Core\Repository\Storage\DataClass\ContentObject[] $selectedContentObjects
      *
+     * @return \Chamilo\Application\Calendar\Extension\Personal\Form\PublicationForm
+     * @throws \Exception
+     */
+    public function getPublicationForm($selectedContentObjects = []): PublicationForm
+    {
+        if (!isset($this->publicationForm))
+        {
+            $this->publicationForm = new PublicationForm(
+                $this->getUser(), $this->get_url(), $selectedContentObjects
+            );
+        }
+
+        return $this->publicationForm;
+    }
+
+    public function getPublicationHandler(): PublicationHandler
+    {
+        return new PublicationHandler($this->publicationForm, $this, $this->getPublicationService());
+    }
+
+    /**
      * @return string[]
+     * @throws \Symfony\Component\Cache\Exception\CacheException
      */
     public function get_allowed_content_object_types()
     {
-        $registrations = Configuration::getInstance()->getIntegrationRegistrations(
+        $registrations = $this->getRegistrationConsulter()->getIntegrationRegistrations(
             Manager::CONTEXT, \Chamilo\Core\Repository\Manager::CONTEXT . '\ContentObject'
         );
+
         $types = [];
 
         foreach ($registrations as $registration)

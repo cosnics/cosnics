@@ -1,7 +1,6 @@
 <?php
 namespace Chamilo\Core\User\Component;
 
-use Chamilo\Configuration\Configuration;
 use Chamilo\Core\User\Manager;
 use Chamilo\Libraries\Architecture\Application\Application;
 use Chamilo\Libraries\Architecture\Exceptions\NotAllowedException;
@@ -42,7 +41,8 @@ class ChangeUserComponent extends Manager
             $session->set('_as_admin', $this->getUser()->getId());
             $session->set('checkChamiloURL', $checkurl);
 
-            $loginApplication = Configuration::get('Chamilo\Core\Admin', 'page_after_login');
+            $loginApplication =
+                $this->getConfigurationConsulter()->getSetting(['Chamilo\Core\Admin', 'page_after_login']);
 
             return new RedirectResponse(
                 $this->getUrlGenerator()->fromParameters([Application::PARAM_CONTEXT => $loginApplication])

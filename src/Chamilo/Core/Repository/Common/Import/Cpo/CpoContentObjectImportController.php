@@ -1,7 +1,6 @@
 <?php
 namespace Chamilo\Core\Repository\Common\Import\Cpo;
 
-use Chamilo\Configuration\Configuration;
 use Chamilo\Configuration\Storage\DataClass\Registration;
 use Chamilo\Core\Repository\Common\Import\ContentObjectImportController;
 use Chamilo\Core\Repository\Common\Import\ContentObjectImportImplementation;
@@ -13,7 +12,6 @@ use Chamilo\Core\Repository\Storage\DataClass\RepositoryCategory;
 use Chamilo\Core\Repository\Storage\DataManager;
 use Chamilo\Core\Repository\Workspace\Storage\DataClass\Workspace;
 use Chamilo\Core\User\Manager;
-use Chamilo\Libraries\Architecture\ClassnameUtilities;
 use Chamilo\Libraries\Architecture\Exceptions\NoObjectSelectedException;
 use Chamilo\Libraries\File\Compression\ZipArchive\ZipArchiveFilecompression;
 use Chamilo\Libraries\Translation\Translation;
@@ -205,25 +203,27 @@ class CpoContentObjectImportController extends ContentObjectImportController
      * @param string $xpath_value
      *
      * @return string
+     * @throws \Symfony\Component\Cache\Exception\CacheException
      */
     public function determine_content_object_type($xpath_value)
     {
-        $configuration = Configuration::getInstance();
+        $registrationConsulter = $this->getRegistrationConsulter();
+        $classnameUtilities = $this->getClassnameUtilities();
 
         /**
          * Backwards Compatibility
          */
-        if (strpos($xpath_value, '\\') === false)
+        if (!str_contains($xpath_value, '\\'))
         {
             $context = 'Chamilo\Core\Repository\ContentObject\\' .
-                (string) StringUtilities::getInstance()->createString($xpath_value)->upperCamelize();
+                $this->getStringUtilities()->createString($xpath_value)->upperCamelize();
         }
         else
         {
-            $context = ClassnameUtilities::getInstance()->getNamespaceParent($xpath_value, 3);
+            $context = $classnameUtilities->getNamespaceParent($xpath_value, 3);
         }
 
-        $registration = $configuration->get_registration($context);
+        $registration = $registrationConsulter->getRegistrationForContext($context);
 
         if ($registration[Registration::PROPERTY_TYPE] != 'Chamilo\Core\Repository\ContentObject')
         {
@@ -233,7 +233,7 @@ class CpoContentObjectImportController extends ContentObjectImportController
         }
 
         return $registration[Registration::PROPERTY_CONTEXT] . '\Storage\DataClass\\' .
-            ClassnameUtilities::getInstance()->getPackageNameFromNamespace(
+            $classnameUtilities->getPackageNameFromNamespace(
                 $registration[Registration::PROPERTY_CONTEXT]
             );
     }
@@ -395,8 +395,6 @@ class CpoContentObjectImportController extends ContentObjectImportController
 
     public function process_content_object($content_object_node)
     {
-        $configuration = Configuration::getInstance();
-
         $content_object_parameter = new CpoContentObjectImportParameters($content_object_node);
 
         $this->process_attachments($content_object_node);
@@ -412,8 +410,8 @@ class CpoContentObjectImportController extends ContentObjectImportController
 
         $this->update_helpers($content_object_node, $content_object);
 
-        if (($configuration->get_setting(['Chamilo\Core\Repository', 'description_required']) == '1') &&
-            $content_object->get_description() == '')
+        if (($this->getConfigurationConsulter()->getSetting(['Chamilo\Core\Repository', 'description_required']) ==
+                '1') && $content_object->get_description() == '')
         {
             $content_object->set_description($content_object->get_title());
         }

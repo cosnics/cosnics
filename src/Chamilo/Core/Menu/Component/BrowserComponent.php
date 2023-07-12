@@ -128,6 +128,9 @@ class BrowserComponent extends Manager implements DelegateComponent
         return $this->getService(ItemTableRenderer::class);
     }
 
+    /**
+     * @throws \Chamilo\Libraries\Storage\Exception\DataClassNoResultException
+     */
     public function getMenu(): ItemMenu
     {
         $urlFormat = $this->getUrlGenerator()->fromParameters(

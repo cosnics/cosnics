@@ -1,11 +1,9 @@
 <?php
 namespace Chamilo\Core\Repository\ContentObject\Portfolio\Storage\DataClass;
 
-use Chamilo\Configuration\Configuration;
 use Chamilo\Configuration\Storage\DataClass\Registration;
 use Chamilo\Core\Repository\Manager;
 use Chamilo\Core\Repository\Storage\DataClass\ContentObject;
-use Chamilo\Libraries\Architecture\ClassnameUtilities;
 use Chamilo\Libraries\Architecture\Interfaces\ComplexContentObjectDisclosure;
 use Chamilo\Libraries\Architecture\Interfaces\ComplexContentObjectSupport;
 
@@ -17,22 +15,22 @@ class Portfolio extends ContentObject implements ComplexContentObjectSupport, Co
 {
     public const CONTEXT = 'Chamilo\Core\Repository\ContentObject\Portfolio';
 
-    /**
-     * @see \libraries\architecture\ComplexContentObjectSupport::get_allowed_types()
-     */
     public function get_allowed_types(): array
     {
-        $registrations = Configuration::getInstance()->getIntegrationRegistrations(
+        $classnameUtilities = $this->getClassnameUtilities();
+
+        $registrations = $this->getRegistrationConsulter()->getIntegrationRegistrations(
             'Chamilo\Core\Repository\ContentObject\Portfolio', Manager::CONTEXT . '\ContentObject'
         );
+
         $types = [];
 
         foreach ($registrations as $registration)
         {
-            $namespace = ClassnameUtilities::getInstance()->getNamespaceParent(
+            $namespace = $classnameUtilities->getNamespaceParent(
                 $registration[Registration::PROPERTY_CONTEXT], 6
             );
-            $classname = ClassnameUtilities::getInstance()->getPackageNameFromNamespace($namespace);
+            $classname = $classnameUtilities->getPackageNameFromNamespace($namespace);
             $types[] = $namespace . '\Storage\DataClass\\' . $classname;
         }
 

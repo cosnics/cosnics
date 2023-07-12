@@ -1,7 +1,6 @@
 <?php
 namespace Chamilo\Core\Repository\Quota\Component;
 
-use Chamilo\Configuration\Configuration;
 use Chamilo\Core\Repository\Quota\Calculator;
 use Chamilo\Core\Repository\Quota\Form\RequestForm;
 use Chamilo\Core\Repository\Quota\Manager;
@@ -123,13 +122,6 @@ class CreatorComponent extends Manager
             $buttonToolbar = new ButtonToolBar();
             $commonActions = new ButtonGroup();
             $toolActions = new ButtonGroup();
-
-            $allow_upgrade = Configuration::getInstance()->get_setting(
-                ['Chamilo\Core\Repository', 'allow_upgrade']
-            );
-            $maximum_user_disk_space = Configuration::getInstance()->get_setting(
-                ['Chamilo\Core\Repository', 'maximum_user']
-            );
 
             if ($this->calculator->upgradeAllowed())
             {

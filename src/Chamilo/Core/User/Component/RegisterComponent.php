@@ -1,7 +1,6 @@
 <?php
 namespace Chamilo\Core\User\Component;
 
-use Chamilo\Configuration\Configuration;
 use Chamilo\Core\User\Form\RegisterForm;
 use Chamilo\Core\User\Manager;
 use Chamilo\Core\User\Storage\DataClass\User;
@@ -26,7 +25,10 @@ class RegisterComponent extends Manager implements NoAuthenticationSupport
      */
     public function run()
     {
-        $allow_registration = Configuration::getInstance()->get_setting([Manager::CONTEXT, 'allow_registration']);
+        $configurationConsulter = $this->getConfigurationConsulter();
+
+        $allow_registration = $configurationConsulter->getSetting([Manager::CONTEXT, 'allow_registration']);
+
         if (!$allow_registration)
         {
             throw new NotAllowedException();
@@ -46,7 +48,7 @@ class RegisterComponent extends Manager implements NoAuthenticationSupport
             {
                 $parameters = [];
 
-                if (Configuration::getInstance()->get_setting([Manager::CONTEXT, 'allow_registration']) == 2)
+                if ($configurationConsulter->getSetting([Manager::CONTEXT, 'allow_registration']) == 2)
                 {
                     $parameters['message'] = Translation::get('UserAwaitingApproval');
                 }

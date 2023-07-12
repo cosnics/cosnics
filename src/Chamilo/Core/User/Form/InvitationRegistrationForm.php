@@ -1,7 +1,6 @@
 <?php
 namespace Chamilo\Core\User\Form;
 
-use Chamilo\Configuration\Configuration;
 use Chamilo\Core\Tracking\Storage\DataClass\Event;
 use Chamilo\Core\User\Manager;
 use Chamilo\Core\User\Storage\DataClass\User;
@@ -100,7 +99,7 @@ class InvitationRegistrationForm extends FormValidator
         // $this->addRule(User::PROPERTY_EMAIL, Translation::get('WrongEmail'), 'email');
         $this->freeze(User::PROPERTY_EMAIL);
 
-        if (Configuration::getInstance()->get_setting([Manager::CONTEXT, 'enable_terms_and_conditions']))
+        if ($this->getConfigurationConsulter()->getSetting([Manager::CONTEXT, 'enable_terms_and_conditions']))
         {
             $this->addElement('category', Translation::get('Information'));
             $this->addElement(
@@ -180,29 +179,31 @@ class InvitationRegistrationForm extends FormValidator
      */
     public function send_mail($user)
     {
+        $configurationConsulter = $this->getConfigurationConsulter();
+
         $options = [];
         $options['firstname'] = $user->get_firstname();
         $options['lastname'] = $user->get_lastname();
         $options['username'] = $user->get_username();
         $options['password'] = $this->exportValue(self::PASSWORD);
-        $options['site_name'] = Configuration::getInstance()->get_setting(['Chamilo\Core\Admin', 'site_name']);
+        $options['site_name'] = $configurationConsulter->getSetting(['Chamilo\Core\Admin', 'site_name']);
         $options['site_url'] = $this->getWebPathBuilder()->getBasePath();
-        $options['admin_firstname'] = Configuration::getInstance()->get_setting(
+        $options['admin_firstname'] = $configurationConsulter->getSetting(
             ['Chamilo\Core\Admin', 'administrator_firstname']
         );
-        $options['admin_surname'] = Configuration::getInstance()->get_setting(
+        $options['admin_surname'] = $configurationConsulter->getSetting(
             ['Chamilo\Core\Admin', 'administrator_surname']
         );
-        $options['admin_telephone'] = Configuration::getInstance()->get_setting(
+        $options['admin_telephone'] = $configurationConsulter->getSetting(
             ['Chamilo\Core\Admin', 'administrator_telephone']
         );
-        $options['admin_email'] = Configuration::getInstance()->get_setting(
+        $options['admin_email'] = $configurationConsulter->getSetting(
             ['Chamilo\Core\Admin', 'administrator_email']
         );
 
         $subject = Translation::get('YourRegistrationOn') . ' ' . $options['site_name'];
 
-        $body = Configuration::getInstance()->get_setting([Manager::CONTEXT, 'email_template']);
+        $body = $configurationConsulter->getSetting([Manager::CONTEXT, 'email_template']);
         foreach ($options as $option => $value)
         {
             $body = str_replace('[' . $option . ']', $value, $body);
@@ -216,7 +217,7 @@ class InvitationRegistrationForm extends FormValidator
         {
             $mailer->sendMail($mail);
         }
-        catch (Exception $ex)
+        catch (Exception)
         {
         }
     }

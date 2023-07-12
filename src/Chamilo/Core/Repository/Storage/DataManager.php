@@ -1,7 +1,7 @@
 <?php
 namespace Chamilo\Core\Repository\Storage;
 
-use Chamilo\Configuration\Configuration;
+use Chamilo\Configuration\Service\Consulter\RegistrationConsulter;
 use Chamilo\Configuration\Storage\DataClass\Registration;
 use Chamilo\Core\Repository\ContentObject\PortfolioItem\Storage\DataClass\PortfolioItem;
 use Chamilo\Core\Repository\Manager;
@@ -682,6 +682,11 @@ class DataManager extends \Chamilo\Libraries\Storage\DataManager\DataManager
         return $dependencyInjectionContainer->get(PublicationAggregator::class);
     }
 
+    public static function getRegistrationConsulter(): RegistrationConsulter
+    {
+        return DependencyInjectionContainerBuilder::getInstance()->createContainer()->get(RegistrationConsulter::class);
+    }
+
     public static function get_active_helper_types()
     {
         if (!isset(self::$helper_types))
@@ -694,13 +699,15 @@ class DataManager extends \Chamilo\Libraries\Storage\DataManager\DataManager
         return self::$helper_types;
     }
 
+    /**
+     * @throws \Symfony\Component\Cache\Exception\CacheException
+     */
     public static function get_registered_types($show_active_only = true)
     {
         if (!(self::$registered_types))
         {
-            $registrations = Configuration::registrations_by_type(
-                Manager::CONTEXT . '\\ContentObject'
-            );
+            $registrations =
+                self::getRegistrationConsulter()->getRegistrationsByType(Manager::CONTEXT . '\\ContentObject');
             $types = [];
 
             foreach ($registrations as $registration)

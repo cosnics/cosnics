@@ -1,22 +1,45 @@
 <?php
 namespace Chamilo\Core\Admin\Language;
 
-use Chamilo\Configuration\Configuration;
+use Chamilo\Configuration\Service\Consulter\ConfigurationConsulter;
+use Chamilo\Configuration\Service\Consulter\LanguageConsulter;
+use Chamilo\Configuration\Service\Consulter\RegistrationConsulter;
 use Chamilo\Configuration\Storage\DataClass\Registration;
 use Chamilo\Libraries\DependencyInjection\DependencyInjectionContainerBuilder;
 use Chamilo\Libraries\Format\Theme\ThemePathBuilder;
-use Chamilo\Libraries\Translation\Translation;
+use Symfony\Component\Translation\Translator;
 
 /**
  * Simple connector class to facilitate rendering settings forms by preprocessing data from the datamanagers to a simple
  * array format.
  *
- * @author  Hans De Bisschop
- * @package admin.settings
+ * @package Chamilo\Core\Admin\Language
+ * @author  Hans De Bisschop <hans.de.bisschop@ehb.be>
  */
 class SettingsConnector
 {
-    
+
+    public static function getConfigurationConsulter(): ConfigurationConsulter
+    {
+        return DependencyInjectionContainerBuilder::getInstance()->createContainer()->get(
+            ConfigurationConsulter::class
+        );
+    }
+
+    public static function getLanguageConsulter(): LanguageConsulter
+    {
+        return DependencyInjectionContainerBuilder::getInstance()->createContainer()->get(
+            LanguageConsulter::class
+        );
+    }
+
+    public static function getRegistrationConsulter(): RegistrationConsulter
+    {
+        return DependencyInjectionContainerBuilder::getInstance()->createContainer()->get(
+            RegistrationConsulter::class
+        );
+    }
+
     public static function getThemeSystemPathBuilder(): ThemePathBuilder
     {
         return DependencyInjectionContainerBuilder::getInstance()->createContainer()->get(
@@ -24,19 +47,30 @@ class SettingsConnector
         );
     }
 
-    public static function get_active_applications()
+    public static function getTranslator(): Translator
     {
-        $registrations = Configuration::registrations_by_type(Registration::TYPE_APPLICATION);
+        return DependencyInjectionContainerBuilder::getInstance()->createContainer()->get(
+            Translator::class
+        );
+    }
+
+    /**
+     * @throws \Symfony\Component\Cache\Exception\CacheException
+     */
+    public static function get_active_applications(): array
+    {
+        $registrations = self::getRegistrationConsulter()->getRegistrationsByType(Registration::TYPE_APPLICATION);
+        $translator = self::getTranslator();
 
         $options = [];
-        $options['home'] = Translation::get('Homepage', [], 'home');
+        $options['Home'] = $translator->trans('Homepage', [], 'Chamilo\Core\Home');
 
         foreach ($registrations as $registration)
         {
             if ($registration[Registration::PROPERTY_STATUS])
             {
-                $options[$registration[Registration::PROPERTY_NAME]] = Translation::get(
-                    'TypeName', null, $registration[Registration::PROPERTY_CONTEXT]
+                $options[$registration[Registration::PROPERTY_NAME]] = $translator->trans(
+                    'TypeName', [], $registration[Registration::PROPERTY_CONTEXT]
                 );
             }
         }
@@ -46,17 +80,26 @@ class SettingsConnector
         return $options;
     }
 
-    public static function get_languages()
+    /**
+     * @return string[]
+     */
+    public static function get_languages(): array
     {
-        return Configuration::getInstance()->getLanguages();
+        return self::getLanguageConsulter()->getLanguages();
     }
 
-    public static function get_themes()
+    /**
+     * @return string[]
+     */
+    public static function get_themes(): array
     {
         return self::getThemeSystemPathBuilder()->getAvailableThemes();
     }
 
-    public static function get_working_hours()
+    /**
+     * @return int[]
+     */
+    public static function get_working_hours(): array
     {
         $start = 0;
         $end = 24;
@@ -70,32 +113,30 @@ class SettingsConnector
         return $working_hours;
     }
 
-    public static function is_allowed_quick_change_platform_language()
+    public static function is_allowed_quick_change_platform_language(): bool
     {
-        return self::is_allowed_to_change_platform_language() && Configuration::getInstance()->get_setting(
+        return self::is_allowed_to_change_platform_language() && self::getConfigurationConsulter()->getSetting(
                 [\Chamilo\Core\User\Manager::CONTEXT, 'allow_user_quick_change_platform_language']
             ) == 1;
     }
 
-    // support for quick language change
-
-    public static function is_allowed_to_change_platform_language()
+    public static function is_allowed_to_change_platform_language(): bool
     {
-        return Configuration::getInstance()->get_setting(
+        return self::getConfigurationConsulter()->getSetting(
                 [\Chamilo\Core\User\Manager::CONTEXT, 'allow_user_change_platform_language']
             ) == 1;
     }
 
-    public static function is_allowed_to_change_platform_timezone()
+    public static function is_allowed_to_change_platform_timezone(): bool
     {
-        return Configuration::getInstance()->get_setting(
+        return self::getConfigurationConsulter()->getSetting(
                 [\Chamilo\Core\User\Manager::CONTEXT, 'allow_user_change_platform_timezone']
             ) == 1;
     }
 
-    public static function is_allowed_to_change_theme()
+    public static function is_allowed_to_change_theme(): bool
     {
-        return Configuration::getInstance()->get_setting(
+        return self::getConfigurationConsulter()->getSetting(
                 [\Chamilo\Core\User\Manager::CONTEXT, 'allow_user_theme_selection']
             ) == 1;
     }

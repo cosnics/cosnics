@@ -7,7 +7,6 @@ use Chamilo\Application\Weblcms\CourseSettingsController;
 use Chamilo\Application\Weblcms\CourseType\Storage\DataManager;
 use Chamilo\Application\Weblcms\Form\CommonCourseForm;
 use Chamilo\Application\Weblcms\Rights\CourseManagementRights;
-use Chamilo\Configuration\Configuration;
 use Chamilo\Core\User\Manager;
 use Chamilo\Libraries\Architecture\ClassnameUtilities;
 use Chamilo\Libraries\Platform\Session\Request;
@@ -71,7 +70,7 @@ class CourseForm extends CommonCourseForm
 
         $course_type_options[- 1] = '-- ' . Translation::get('SelectCourseType') . ' --';
 
-        $allowCourseCreationWithoutCoursetype = Configuration::getInstance()->get_setting(
+        $allowCourseCreationWithoutCoursetype = $this->getConfigurationConsulter()->getSetting(
             ['Chamilo\Application\Weblcms', 'allow_course_creation_without_coursetype']
         );
 

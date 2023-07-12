@@ -1,7 +1,6 @@
 <?php
 namespace Chamilo\Core\Repository\ContentObject\Webpage\Storage\DataClass;
 
-use Chamilo\Configuration\Configuration;
 use Chamilo\Core\Repository\ContentObject\Webpage\Storage\DataManager;
 use Chamilo\Core\Repository\Manager;
 use Chamilo\Core\Repository\Storage\DataClass\ContentObject;
@@ -69,18 +68,20 @@ class Webpage extends ContentObject implements Versionable, Includeable, FileSto
      */
     protected function checkBeforeSave(): bool
     {
+        $stringUtilities = $this->getStringUtilities();
+
         // Title
-        if (StringUtilities::getInstance()->isNullOrEmpty($this->get_title()))
+        if ($stringUtilities->isNullOrEmpty($this->get_title()))
         {
             $this->addError(Translation::get('WebpageTitleIsRequired'));
         }
 
-        $descriptionRequired = Configuration::getInstance()->get_setting(
+        $descriptionRequired = $this->getConfigurationConsulter()->getSetting(
             [Manager::CONTEXT, 'description_required']
         );
 
         // Description
-        if ($descriptionRequired && StringUtilities::getInstance()->isNullOrEmpty($this->get_description()))
+        if ($descriptionRequired && $stringUtilities->isNullOrEmpty($this->get_description()))
         {
             $this->addError(Translation::get('WebpageDescriptionIsRequired'));
         }
@@ -122,19 +123,19 @@ class Webpage extends ContentObject implements Versionable, Includeable, FileSto
         }
 
         // Filename
-        if (StringUtilities::getInstance()->isNullOrEmpty($this->get_filename()))
+        if ($stringUtilities->isNullOrEmpty($this->get_filename()))
         {
             $this->addError(Translation::get('WebpageFilenameIsRequired'));
         }
 
         // Path
-        if (StringUtilities::getInstance()->isNullOrEmpty($this->get_path()))
+        if ($stringUtilities->isNullOrEmpty($this->get_path()))
         {
             $this->addError(Translation::get('WebpagePathToFileNotSet'));
         }
 
         // Hash
-        if (StringUtilities::getInstance()->isNullOrEmpty($this->get_hash()))
+        if ($stringUtilities->isNullOrEmpty($this->get_hash()))
         {
             $this->addError(Translation::get('WebpageHashNotSet'));
         }

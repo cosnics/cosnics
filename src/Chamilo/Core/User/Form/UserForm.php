@@ -1,10 +1,10 @@
 <?php
 namespace Chamilo\Core\User\Form;
 
-use Chamilo\Configuration\Configuration;
 use Chamilo\Core\Tracking\Storage\DataClass\ChangesTracker;
 use Chamilo\Core\Tracking\Storage\DataClass\Event;
 use Chamilo\Core\User\Manager;
+use Chamilo\Core\User\Picture\UserPictureProviderInterface;
 use Chamilo\Core\User\Picture\UserPictureUpdateProviderInterface;
 use Chamilo\Core\User\Storage\DataClass\User;
 use Chamilo\Core\User\Storage\DataManager;
@@ -14,6 +14,7 @@ use Chamilo\Libraries\Format\Structure\Glyph\FontAwesomeGlyph;
 use Chamilo\Libraries\Hashing\HashingUtilities;
 use Chamilo\Libraries\Mail\Mailer\MailerInterface;
 use Chamilo\Libraries\Mail\ValueObject\Mail;
+use Chamilo\Libraries\Storage\DataClass\DataClass;
 use Chamilo\Libraries\Translation\Translation;
 use Chamilo\Libraries\Utilities\DatetimeUtilities;
 use Chamilo\Libraries\Utilities\String\Text;
@@ -70,10 +71,13 @@ class UserForm extends FormValidator
     }
 
     /**
-     * Creates a basic form
+     * @throws \QuickformException
+     * @throws \ReflectionException
      */
     public function build_basic_form()
     {
+        $configurationConsulter = $this->getConfigurationConsulter();
+
         // Lastname
         $this->addElement('text', User::PROPERTY_LASTNAME, Translation::get('LastName'), ['size' => '50']);
         $this->addRule(
@@ -88,7 +92,7 @@ class UserForm extends FormValidator
         );
         // Email
         $this->addElement('text', User::PROPERTY_EMAIL, Translation::get('Email'), ['size' => '50']);
-        if (Configuration::getInstance()->get_setting([Manager::CONTEXT, 'require_email']))
+        if ($configurationConsulter->getSetting([Manager::CONTEXT, 'require_email']))
         {
             $this->addRule(
                 User::PROPERTY_EMAIL, Translation::get('ThisFieldIsRequired', null, StringUtilities::LIBRARIES),
@@ -104,10 +108,10 @@ class UserForm extends FormValidator
         );
 
         $group = [];
-        $group[] = &$this->createElement(
+        $group[] = $this->createElement(
             'radio', User::PROPERTY_ACTIVE, null, Translation::get('ConfirmYes', null, StringUtilities::LIBRARIES), 1
         );
-        $group[] = &$this->createElement(
+        $group[] = $this->createElement(
             'radio', User::PROPERTY_ACTIVE, null, Translation::get('ConfirmNo', null, StringUtilities::LIBRARIES), 0
         );
         $this->addGroup($group, 'active', Translation::get('Active'), '&nbsp;');
@@ -117,12 +121,12 @@ class UserForm extends FormValidator
 
         if ($this->form_type == self::TYPE_EDIT)
         {
-            $group[] = &$this->createElement('radio', 'pass', null, Translation::get('KeepPassword') . '<br />', 2);
+            $group[] = $this->createElement('radio', 'pass', null, Translation::get('KeepPassword') . '<br />', 2);
         }
 
-        $group[] = &$this->createElement('radio', 'pass', null, Translation::get('AutoGeneratePassword') . '<br />', 1);
-        $group[] = &$this->createElement('radio', 'pass', null, null, 0);
-        $group[] = &$this->createElement('password', User::PROPERTY_PASSWORD, null, ['autocomplete' => 'off']);
+        $group[] = $this->createElement('radio', 'pass', null, Translation::get('AutoGeneratePassword') . '<br />', 1);
+        $group[] = $this->createElement('radio', 'pass', null, null, 0);
+        $group[] = $this->createElement('password', User::PROPERTY_PASSWORD, null, ['autocomplete' => 'off']);
         $this->addGroup($group, 'pw', Translation::get('Password'), '');
 
         $this->registerRule('checkPasswordRequirements', 'function', 'checkPasswordRequirements', $this);
@@ -145,8 +149,8 @@ class UserForm extends FormValidator
             'text', User::PROPERTY_OFFICIAL_CODE, Translation::get('OfficialCode'), ['size' => '50']
         );
         // put restrictions on the official code
-        if (Configuration::getInstance()->get_setting([Manager::CONTEXT, 'require_official_code']) &&
-            Configuration::getInstance()->get_setting([Manager::CONTEXT, 'allow_change_official_code']) == 1)
+        if ($configurationConsulter->getSetting([Manager::CONTEXT, 'require_official_code']) &&
+            $configurationConsulter->getSetting([Manager::CONTEXT, 'allow_change_official_code']) == 1)
         {
             $this->addRule(
                 User::PROPERTY_OFFICIAL_CODE, Translation::get('ThisFieldIsRequired', null, StringUtilities::LIBRARIES),
@@ -386,18 +390,12 @@ class UserForm extends FormValidator
         return $this->getService('Chamilo\Libraries\Mail\Mailer\ActiveMailer');
     }
 
-    /**
-     * @return \Chamilo\Libraries\Hashing\HashingUtilities
-     */
-    public function getHashingUtilities()
+    public function getHashingUtilities(): HashingUtilities
     {
         return $this->getService(HashingUtilities::class);
     }
 
-    /**
-     * @return \Chamilo\Core\User\Picture\UserPictureProviderInterface
-     */
-    public function getUserPictureProvider()
+    public function getUserPictureProvider(): UserPictureProviderInterface
     {
         return $this->getService('Chamilo\Core\User\Picture\UserPictureProvider');
     }
@@ -407,29 +405,31 @@ class UserForm extends FormValidator
      */
     public function send_email($user)
     {
+        $configurationConsulter = $this->getConfigurationConsulter();
+
         $options = [];
         $options['firstname'] = $user->get_firstname();
         $options['lastname'] = $user->get_lastname();
         $options['username'] = $user->get_username();
         $options['password'] = $this->unencryptedpass;
-        $options['site_name'] = Configuration::getInstance()->get_setting(['Chamilo\Core\Admin', 'site_name']);
+        $options['site_name'] = $configurationConsulter->getSetting(['Chamilo\Core\Admin', 'site_name']);
         $options['site_url'] = $this->getWebPathBuilder()->getBasePath();
-        $options['admin_firstname'] = Configuration::getInstance()->get_setting(
+        $options['admin_firstname'] = $configurationConsulter->getSetting(
             ['Chamilo\Core\Admin', 'administrator_firstname']
         );
-        $options['admin_surname'] = Configuration::getInstance()->get_setting(
+        $options['admin_surname'] = $configurationConsulter->getSetting(
             ['Chamilo\Core\Admin', 'administrator_surname']
         );
-        $options['admin_telephone'] = Configuration::getInstance()->get_setting(
+        $options['admin_telephone'] = $configurationConsulter->getSetting(
             ['Chamilo\Core\Admin', 'administrator_telephone']
         );
-        $options['admin_email'] = Configuration::getInstance()->get_setting(
+        $options['admin_email'] = $configurationConsulter->getSetting(
             ['Chamilo\Core\Admin', 'administrator_email']
         );
 
         $subject = Translation::get('YourRegistrationOn') . ' ' . $options['site_name'];
 
-        $body = Configuration::getInstance()->get_setting([Manager::CONTEXT, 'email_template']);
+        $body = $configurationConsulter->getSetting([Manager::CONTEXT, 'email_template']);
         foreach ($options as $option => $value)
         {
             $body = str_replace('[' . $option . ']', $value, $body);
@@ -446,7 +446,7 @@ class UserForm extends FormValidator
         {
             $mailer->sendMail($mail);
         }
-        catch (Exception $ex)
+        catch (Exception)
         {
         }
     }
@@ -483,8 +483,8 @@ class UserForm extends FormValidator
             $defaults[self::PROPERTY_TIME_PERIOD_FOREVER] = 1;
 
             $defaults[User::PROPERTY_EXPIRATION_DATE] = strtotime(
-                '+ ' . intval(Configuration::getInstance()->get_setting([Manager::CONTEXT, 'days_valid'])) . 'Days',
-                time()
+                '+ ' . intval($this->getConfigurationConsulter()->getSetting([Manager::CONTEXT, 'days_valid'])) .
+                'Days', time()
             );
             $defaults['pw']['pass'] = $user->get_password();
 
@@ -494,13 +494,11 @@ class UserForm extends FormValidator
 
         $defaults['admin'][User::PROPERTY_PLATFORMADMIN] = $user->getPlatformAdmin();
         $defaults['mail']['send_mail'] = 0;
-        $defaults[User::PROPERTY_ID] = $user->get_id();
+        $defaults[DataClass::PROPERTY_ID] = $user->get_id();
         $defaults[User::PROPERTY_LASTNAME] = $user->get_lastname();
         $defaults[User::PROPERTY_FIRSTNAME] = $user->get_firstname();
         $defaults[User::PROPERTY_EMAIL] = $user->get_email();
         $defaults[User::PROPERTY_USERNAME] = $user->get_username();
-        $defaults[User::PROPERTY_EXPIRATION_DATE] = $user->get_expiration_date();
-        $defaults[User::PROPERTY_ACTIVATION_DATE] = $user->get_activation_date();
         $defaults[User::PROPERTY_OFFICIAL_CODE] = $user->get_official_code();
         $defaults[User::PROPERTY_PICTURE_URI] = $user->get_picture_uri();
         $defaults[User::PROPERTY_PHONE] = $user->get_phone();

@@ -53,10 +53,6 @@ class BrowserComponent extends Manager
         return implode(PHP_EOL, $html);
     }
 
-    public function add_additional_breadcrumbs(BreadcrumbTrail $breadcrumbtrail): void
-    {
-    }
-
     /**
      * @throws \ReflectionException
      * @throws \TableException

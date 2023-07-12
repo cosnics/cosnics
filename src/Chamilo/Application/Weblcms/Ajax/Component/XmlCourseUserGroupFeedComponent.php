@@ -6,7 +6,6 @@ use Chamilo\Application\Weblcms\Course\Storage\DataClass\Course;
 use Chamilo\Application\Weblcms\Storage\DataClass\CourseEntityRelation;
 use Chamilo\Application\Weblcms\Storage\DataManager;
 use Chamilo\Application\Weblcms\Tool\Implementation\CourseGroup\Storage\DataClass\CourseGroup;
-use Chamilo\Configuration\Configuration;
 use Chamilo\Core\Group\Storage\DataClass\Group;
 use Chamilo\Core\User\Storage\DataClass\User;
 use Chamilo\Libraries\Format\Structure\Glyph\FontAwesomeGlyph;
@@ -77,7 +76,7 @@ class XmlCourseUserGroupFeedComponent extends Manager
             {
                 if (!is_array($exclude))
                 {
-                    $exclude = array($exclude);
+                    $exclude = [$exclude];
                 }
 
                 $exclude_conditions = [];
@@ -149,11 +148,11 @@ class XmlCourseUserGroupFeedComponent extends Manager
 
             $parameters = new DataClassDistinctParameters(
                 new AndCondition($userConditions), new RetrieveProperties(
-                    array(
+                    [
                         new PropertyConditionVariable(
                             CourseEntityRelation::class, CourseEntityRelation::PROPERTY_ENTITY_ID
                         )
-                    )
+                    ]
                 )
             );
 
@@ -206,17 +205,10 @@ class XmlCourseUserGroupFeedComponent extends Manager
             }
 
             // Order the users alphabetically
-            $format = Configuration::getInstance()->get_setting(array('Chamilo\Core\User', 'fullname_format'));
-            $order = array(
+            $order = [
                 new OrderProperty(new PropertyConditionVariable(User::class, User::PROPERTY_LASTNAME), SORT_ASC),
                 new OrderProperty(new PropertyConditionVariable(User::class, User::PROPERTY_FIRSTNAME), SORT_ASC)
-            );
-
-            // Users want to see their students ordered by last name, always, even if the last name is shown first.
-            //            if ($format == User::NAME_FORMAT_LAST)
-            //            {
-            //                $order = array_reverse($order);
-            //            }
+            ];
 
             $user_result_set = \Chamilo\Core\User\Storage\DataManager::retrieves(
                 User::class, new DataClassRetrievesParameters($user_condition, null, null, new OrderBy($order))
@@ -234,11 +226,11 @@ class XmlCourseUserGroupFeedComponent extends Manager
 
                 $group_result_set = DataManager::retrieves(
                     CourseGroup::class, new DataClassRetrievesParameters(
-                        $group_condition, null, null, new OrderBy(array(
-                                new OrderProperty(
-                                    new PropertyConditionVariable(CourseGroup::class, CourseGroup::PROPERTY_NAME)
-                                )
-                            ))
+                        $group_condition, null, null, new OrderBy([
+                            new OrderProperty(
+                                new PropertyConditionVariable(CourseGroup::class, CourseGroup::PROPERTY_NAME)
+                            )
+                        ])
                     )
                 );
 
@@ -303,7 +295,7 @@ class XmlCourseUserGroupFeedComponent extends Manager
         echo '</tree>';
     }
 
-    function contains_results($objects)
+    public function contains_results($objects)
     {
         if (count($objects))
         {
@@ -313,7 +305,7 @@ class XmlCourseUserGroupFeedComponent extends Manager
         return false;
     }
 
-    function dump_groups_tree($groups)
+    public function dump_groups_tree($groups)
     {
         $glyph = new FontAwesomeGlyph('users', [], null, 'fas');
 
@@ -338,7 +330,7 @@ class XmlCourseUserGroupFeedComponent extends Manager
         }
     }
 
-    function dump_platform_group($group)
+    public function dump_platform_group($group)
     {
         $children = $group->get_subgroups();
         $glyph = new FontAwesomeGlyph('users', [], null, 'fas');
@@ -364,13 +356,13 @@ class XmlCourseUserGroupFeedComponent extends Manager
         }
     }
 
-    function dump_platform_groups_tree()
+    public function dump_platform_groups_tree()
     {
         $group_relations = $this->course->get_subscribed_groups();
 
         if (count($group_relations) > 0)
         {
-            $glyph = new FontAwesomeGlyph('folder', array('unlinked'), null, 'fas');
+            $glyph = new FontAwesomeGlyph('folder', ['unlinked'], null, 'fas');
             echo '<node id="platform" classes="' . $glyph->getClassNamesString() . '" title="';
             echo Translation::get('LinkedPlatformGroups') . '">', PHP_EOL;
 
@@ -390,13 +382,13 @@ class XmlCourseUserGroupFeedComponent extends Manager
         }
     }
 
-    function dump_tree($users, $groups_tree)
+    public function dump_tree($users, $groups_tree)
     {
         if ($this->contains_results($users) || $this->contains_results($groups_tree))
         {
             if ($this->contains_results($users))
             {
-                $glyph = new FontAwesomeGlyph('folder', array('unlinked'), null, 'fas');
+                $glyph = new FontAwesomeGlyph('folder', ['unlinked'], null, 'fas');
                 echo '<node id="user" classes="' . $glyph->getClassNamesString() . '" title="';
                 echo Translation::get('Users', null, 'user') . '">', PHP_EOL;
 
@@ -422,7 +414,7 @@ class XmlCourseUserGroupFeedComponent extends Manager
 
                 if ($this->contains_results($groups_tree))
                 {
-                    $glyph = new FontAwesomeGlyph('folder', array('unlinked'), null, 'fas');
+                    $glyph = new FontAwesomeGlyph('folder', ['unlinked'], null, 'fas');
                     echo '<node id="group" classes="' . $glyph->getClassNamesString() . '" title="' .
                         htmlspecialchars($this->course->get_title()) . '">', PHP_EOL;
 
@@ -433,12 +425,12 @@ class XmlCourseUserGroupFeedComponent extends Manager
         }
     }
 
-    function get_group_tree($index, $groups)
+    public function get_group_tree($index, $groups)
     {
         $tree = [];
         foreach ($groups[$index] as $child)
         {
-            $tree[] = array('group' => $child, 'children' => $this->get_group_tree($child->get_id(), $groups));
+            $tree[] = ['group' => $child, 'children' => $this->get_group_tree($child->get_id(), $groups)];
         }
 
         return $tree;

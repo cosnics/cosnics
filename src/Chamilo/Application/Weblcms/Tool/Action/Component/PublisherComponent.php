@@ -8,7 +8,6 @@ use Chamilo\Application\Weblcms\Storage\DataClass\ContentObjectPublication;
 use Chamilo\Application\Weblcms\Tool\Action\Manager;
 use Chamilo\Application\Weblcms\Tool\Interfaces\PublisherCustomPublicationFormHandler;
 use Chamilo\Application\Weblcms\Tool\Interfaces\PublisherCustomPublicationFormInterface;
-use Chamilo\Configuration\Configuration;
 use Chamilo\Core\Repository\Publication\Publisher\Interfaces\PublicationHandlerInterface;
 use Chamilo\Core\Repository\Publication\Publisher\Interfaces\PublisherSupport;
 use Chamilo\Libraries\Architecture\Application\ApplicationConfiguration;
@@ -87,7 +86,7 @@ class PublisherComponent extends Manager implements PublisherSupport, DelegateCo
         $mode = Request::get(\Chamilo\Application\Weblcms\Tool\Manager::PARAM_PUBLISH_MODE);
 
         $this->set_parameter(\Chamilo\Application\Weblcms\Tool\Manager::PARAM_PUBLISH_MODE, $mode);
-        $publish_type = Configuration::getInstance()->get_setting(
+        $publish_type = $this->getConfigurationConsulter()->getSetting(
             ['Chamilo\Application\Weblcms', 'display_publication_screen']
         );
 

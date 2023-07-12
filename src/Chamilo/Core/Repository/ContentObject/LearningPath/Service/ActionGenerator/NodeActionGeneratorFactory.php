@@ -1,7 +1,7 @@
 <?php
 namespace Chamilo\Core\Repository\ContentObject\LearningPath\Service\ActionGenerator;
 
-use Chamilo\Configuration\Configuration;
+use Chamilo\Configuration\Service\Consulter\RegistrationConsulter;
 use Chamilo\Configuration\Storage\DataClass\Registration;
 use Chamilo\Core\Repository\ContentObject\LearningPath\Storage\DataClass\LearningPath;
 use Chamilo\Libraries\Architecture\ClassnameUtilities;
@@ -15,14 +15,9 @@ use Chamilo\Libraries\Translation\Translation;
 class NodeActionGeneratorFactory
 {
     /**
-     * @var Translation
+     * @var array
      */
-    protected $translator;
-
-    /**
-     * @var Configuration
-     */
-    protected $configuration;
+    protected $baseParameters;
 
     /**
      * @var ClassnameUtilities
@@ -30,25 +25,30 @@ class NodeActionGeneratorFactory
     protected $classNameUtilities;
 
     /**
-     * @var array
+     * @var RegistrationConsulter
      */
-    protected $baseParameters;
+    protected $registrationConsulter;
+
+    /**
+     * @var Translation
+     */
+    protected $translator;
 
     /**
      * NodeActionGeneratorFactory constructor.
      *
      * @param Translation $translator
-     * @param Configuration $configuration
+     * @param RegistrationConsulter $registrationConsulter
      * @param ClassnameUtilities $classnameUtilities
      * @param array $baseParameters
      */
     public function __construct(
-        Translation $translator, Configuration $configuration, ClassnameUtilities $classnameUtilities,
+        Translation $translator, RegistrationConsulter $registrationConsulter, ClassnameUtilities $classnameUtilities,
         array $baseParameters
     )
     {
         $this->translator = $translator;
-        $this->configuration = $configuration;
+        $this->registrationConsulter = $registrationConsulter;
         $this->classNameUtilities = $classnameUtilities;
         $this->baseParameters = $baseParameters;
     }
@@ -71,25 +71,25 @@ class NodeActionGeneratorFactory
      * Returns the action generators for specific content object types
      *
      * @return array
+     * @throws \Symfony\Component\Cache\Exception\CacheException
      */
     protected function getContentObjectTypeNodeActionGenerators()
     {
         $nodeActionGenerators = [];
 
-        $integrationPackages = $this->configuration->getIntegrationRegistrations(LearningPath::CONTEXT);
+        $integrationPackages = $this->registrationConsulter->getIntegrationRegistrations(LearningPath::CONTEXT);
 
         foreach ($integrationPackages as $integrationPackage)
         {
             $namespace = ClassnameUtilities::getInstance()->getNamespaceParent(
-                $integrationPackage[Registration::PROPERTY_CONTEXT],
-                6
+                $integrationPackage[Registration::PROPERTY_CONTEXT], 6
             );
 
             $contentObjectType = $namespace . '\Storage\DataClass\\' .
                 ClassnameUtilities::getInstance()->getPackageNameFromNamespace($namespace);
 
-            $contentObjectNodeActionGenerator = $integrationPackage[Registration::PROPERTY_CONTEXT]
-                . '\Display\Service\NodeActionGenerator';
+            $contentObjectNodeActionGenerator =
+                $integrationPackage[Registration::PROPERTY_CONTEXT] . '\Display\Service\NodeActionGenerator';
 
             if (class_exists($contentObjectNodeActionGenerator))
             {

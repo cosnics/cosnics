@@ -1,7 +1,6 @@
 <?php
 namespace Chamilo\Core\User\Form;
 
-use Chamilo\Configuration\Configuration;
 use Chamilo\Core\Tracking\Storage\DataClass\ChangesTracker;
 use Chamilo\Core\Tracking\Storage\DataClass\Event;
 use Chamilo\Core\User\Manager;
@@ -62,31 +61,32 @@ class AccountForm extends FormValidator
     }
 
     /**
-     * Creates a new basic form
+     * @throws \QuickformException
+     * @throws \ReflectionException
      */
     public function build_basic_form()
     {
-        $configurationConsulter = Configuration::getInstance();
+        $configurationConsulter = $this->getConfigurationConsulter();
 
         $this->addElement('category', Translation::get('PersonalDetails'));
         // Name
         $this->addElement('text', User::PROPERTY_LASTNAME, Translation::get('LastName'), ['size' => '50']);
         $this->addElement('text', User::PROPERTY_FIRSTNAME, Translation::get('FirstName'), ['size' => '50']);
 
-        if ($configurationConsulter->get_setting([Manager::CONTEXT, 'allow_change_firstname']) == 0)
+        if ($configurationConsulter->getSetting([Manager::CONTEXT, 'allow_change_firstname']) == 0)
         {
-            if (!(($configurationConsulter->get_setting([Manager::CONTEXT, 'allow_change_placeholder_data']) == 1) &&
+            if (!(($configurationConsulter->getSetting([Manager::CONTEXT, 'allow_change_placeholder_data']) == 1) &&
                 ($this->user->get_firstname() ==
-                    $configurationConsulter->get_setting([Manager::CONTEXT, 'personal_data_placeholder']))))
+                    $configurationConsulter->getSetting([Manager::CONTEXT, 'personal_data_placeholder']))))
             {
                 $this->freeze([User::PROPERTY_FIRSTNAME]);
             }
         }
-        if ($configurationConsulter->get_setting([Manager::CONTEXT, 'allow_change_lastname']) == 0)
+        if ($configurationConsulter->getSetting([Manager::CONTEXT, 'allow_change_lastname']) == 0)
         {
-            if (!(($configurationConsulter->get_setting([Manager::CONTEXT, 'allow_change_placeholder_data']) == 1) &&
+            if (!(($configurationConsulter->getSetting([Manager::CONTEXT, 'allow_change_placeholder_data']) == 1) &&
                 ($this->user->get_lastname() ==
-                    $configurationConsulter->get_setting([Manager::CONTEXT, 'personal_data_placeholder']))))
+                    $configurationConsulter->getSetting([Manager::CONTEXT, 'personal_data_placeholder']))))
             {
                 $this->freeze([User::PROPERTY_LASTNAME]);
             }
@@ -95,22 +95,22 @@ class AccountForm extends FormValidator
         $this->applyFilter([User::PROPERTY_LASTNAME, User::PROPERTY_FIRSTNAME], 'stripslashes');
         $this->applyFilter([User::PROPERTY_LASTNAME, User::PROPERTY_FIRSTNAME], 'trim');
 
-        if (($configurationConsulter->get_setting([Manager::CONTEXT, 'allow_change_lastname']) == 1) ||
-            (($configurationConsulter->get_setting(
+        if (($configurationConsulter->getSetting([Manager::CONTEXT, 'allow_change_lastname']) == 1) ||
+            (($configurationConsulter->getSetting(
                         [Manager::CONTEXT, 'allow_change_placeholder_data']
                     ) == 1) && ($this->user->get_lastname() ==
-                    $configurationConsulter->get_setting([Manager::CONTEXT, 'personal_data_placeholder']))))
+                    $configurationConsulter->getSetting([Manager::CONTEXT, 'personal_data_placeholder']))))
         {
             $this->addRule(
                 User::PROPERTY_LASTNAME, Translation::get('ThisFieldIsRequired', null, StringUtilities::LIBRARIES),
                 'required'
             );
         }
-        if (($configurationConsulter->get_setting([Manager::CONTEXT, 'allow_change_firstname']) == 1) ||
-            (($configurationConsulter->get_setting(
+        if (($configurationConsulter->getSetting([Manager::CONTEXT, 'allow_change_firstname']) == 1) ||
+            (($configurationConsulter->getSetting(
                         [Manager::CONTEXT, 'allow_change_placeholder_data']
                     ) == 1) && ($this->user->get_firstname() ==
-                    $configurationConsulter->get_setting([Manager::CONTEXT, 'personal_data_placeholder']))))
+                    $configurationConsulter->getSetting([Manager::CONTEXT, 'personal_data_placeholder']))))
         {
             $this->addRule(
                 User::PROPERTY_FIRSTNAME, Translation::get('ThisFieldIsRequired', null, StringUtilities::LIBRARIES),
@@ -122,7 +122,7 @@ class AccountForm extends FormValidator
             'text', User::PROPERTY_OFFICIAL_CODE, Translation::get('OfficialCode'), ['size' => '50']
         );
 
-        if ($configurationConsulter->get_setting([Manager::CONTEXT, 'allow_change_official_code']) == 0)
+        if ($configurationConsulter->getSetting([Manager::CONTEXT, 'allow_change_official_code']) == 0)
         {
             $this->freeze(User::PROPERTY_OFFICIAL_CODE);
         }
@@ -130,8 +130,8 @@ class AccountForm extends FormValidator
         $this->applyFilter(User::PROPERTY_OFFICIAL_CODE, 'stripslashes');
         $this->applyFilter(User::PROPERTY_OFFICIAL_CODE, 'trim');
 
-        if ($configurationConsulter->get_setting([Manager::CONTEXT, 'require_official_code']) &&
-            $configurationConsulter->get_setting([Manager::CONTEXT, 'allow_change_official_code']) == 1)
+        if ($configurationConsulter->getSetting([Manager::CONTEXT, 'require_official_code']) &&
+            $configurationConsulter->getSetting([Manager::CONTEXT, 'allow_change_official_code']) == 1)
         {
             $this->addRule(
                 User::PROPERTY_OFFICIAL_CODE, Translation::get('ThisFieldIsRequired', null, StringUtilities::LIBRARIES),
@@ -142,29 +142,26 @@ class AccountForm extends FormValidator
         // Email
         $this->addElement('text', User::PROPERTY_EMAIL, Translation::get('Email'), ['size' => '50']);
 
-        if ($configurationConsulter->get_setting([Manager::CONTEXT, 'allow_change_email']) == 0)
+        if ($configurationConsulter->getSetting([Manager::CONTEXT, 'allow_change_email']) == 0)
         {
-            if (!(($configurationConsulter->get_setting([Manager::CONTEXT, 'allow_change_placeholder_data']) == 1) &&
+            if (!(($configurationConsulter->getSetting([Manager::CONTEXT, 'allow_change_placeholder_data']) == 1) &&
                 ($this->user->get_email() ==
-                    $configurationConsulter->get_setting([Manager::CONTEXT, 'personal_data_placeholder']))))
+                    $configurationConsulter->getSetting([Manager::CONTEXT, 'personal_data_placeholder']))))
             {
                 $this->freeze(User::PROPERTY_EMAIL);
             }
         }
-        else
+        elseif ($configurationConsulter->getSetting([Manager::CONTEXT, 'require_email']) ||
+            (($configurationConsulter->getSetting(
+                        [Manager::CONTEXT, 'allow_change_placeholder_data']
+                    ) == 1) && ($this->user->get_email() ==
+                    $configurationConsulter->getSetting([Manager::CONTEXT, 'personal_data_placeholder']))))
         {
-            if ($configurationConsulter->get_setting([Manager::CONTEXT, 'require_email']) ||
-                (($configurationConsulter->get_setting(
-                            [Manager::CONTEXT, 'allow_change_placeholder_data']
-                        ) == 1) && ($this->user->get_email() ==
-                        $configurationConsulter->get_setting([Manager::CONTEXT, 'personal_data_placeholder']))))
-            {
-                $this->addRule(
-                    User::PROPERTY_EMAIL, Translation::get('ThisFieldIsRequired', null, StringUtilities::LIBRARIES),
-                    'required'
-                );
-                $this->addRule(User::PROPERTY_EMAIL, Translation::get('EmailWrong'), 'email');
-            }
+            $this->addRule(
+                User::PROPERTY_EMAIL, Translation::get('ThisFieldIsRequired', null, StringUtilities::LIBRARIES),
+                'required'
+            );
+            $this->addRule(User::PROPERTY_EMAIL, Translation::get('EmailWrong'), 'email');
         }
 
         $this->applyFilter(User::PROPERTY_EMAIL, 'stripslashes');
@@ -173,14 +170,14 @@ class AccountForm extends FormValidator
         // Username
         $this->addElement('text', User::PROPERTY_USERNAME, Translation::get('Username'), ['size' => '50']);
 
-        if ($configurationConsulter->get_setting([Manager::CONTEXT, 'allow_change_username']) == 0 ||
+        if ($configurationConsulter->getSetting([Manager::CONTEXT, 'allow_change_username']) == 0 ||
             !$this->authenticationValidator->getAuthenticationByType($this->user->get_auth_source()) instanceof
                 ChangeableUsername)
         {
             $this->freeze(User::PROPERTY_USERNAME);
         }
 
-        if ($configurationConsulter->get_setting([Manager::CONTEXT, 'allow_change_username']) == 1)
+        if ($configurationConsulter->getSetting([Manager::CONTEXT, 'allow_change_username']) == 1)
         {
             $this->applyFilter(User::PROPERTY_USERNAME, 'stripslashes');
             $this->applyFilter(User::PROPERTY_USERNAME, 'trim');
@@ -192,7 +189,7 @@ class AccountForm extends FormValidator
         }
 
         // Password
-        if ($configurationConsulter->get_setting([Manager::CONTEXT, 'allow_change_password']) == 1 &&
+        if ($configurationConsulter->getSetting([Manager::CONTEXT, 'allow_change_password']) == 1 &&
             $this->authenticationValidator->getAuthenticationByType($this->user->get_auth_source()) instanceof
             ChangeablePassword)
         {
@@ -243,7 +240,7 @@ class AccountForm extends FormValidator
             );
         }
 
-        if ($configurationConsulter->get_setting([Manager::CONTEXT, 'show_personal_token']))
+        if ($configurationConsulter->getSetting([Manager::CONTEXT, 'show_personal_token']))
         {
             $this->addElement('category', Translation::get('Other'));
             $this->addElement('static', User::PROPERTY_SECURITY_TOKEN, Translation::get('SecurityToken'));
@@ -279,7 +276,7 @@ class AccountForm extends FormValidator
      */
     protected function canUserChangeAnything()
     {
-        $configurationConsulter = Configuration::getInstance();
+        $configurationConsulter = $this->getConfigurationConsulter();
 
         $settings = [
             'allow_change_firstname',
@@ -293,7 +290,7 @@ class AccountForm extends FormValidator
 
         foreach ($settings as $setting)
         {
-            if ($configurationConsulter->get_setting([Manager::CONTEXT, $setting]))
+            if ($configurationConsulter->getSetting([Manager::CONTEXT, $setting]))
             {
                 return true;
             }
@@ -376,38 +373,38 @@ class AccountForm extends FormValidator
      */
     public function update_account()
     {
-        $configurationConsulter = Configuration::getInstance();
+        $configurationConsulter = $this->getConfigurationConsulter();
         $user = $this->user;
         $values = $this->exportValues();
 
-        if ($configurationConsulter->get_setting([Manager::CONTEXT, 'allow_change_firstname']))
+        if ($configurationConsulter->getSetting([Manager::CONTEXT, 'allow_change_firstname']))
         {
             $user->set_firstname($values[User::PROPERTY_FIRSTNAME]);
         }
 
-        if ($configurationConsulter->get_setting([Manager::CONTEXT, 'allow_change_lastname']))
+        if ($configurationConsulter->getSetting([Manager::CONTEXT, 'allow_change_lastname']))
         {
             $user->set_lastname($values[User::PROPERTY_LASTNAME]);
         }
 
-        if ($configurationConsulter->get_setting([Manager::CONTEXT, 'allow_change_official_code']))
+        if ($configurationConsulter->getSetting([Manager::CONTEXT, 'allow_change_official_code']))
         {
             $user->set_official_code($values[User::PROPERTY_OFFICIAL_CODE]);
         }
 
-        if ($configurationConsulter->get_setting([Manager::CONTEXT, 'allow_change_email']))
+        if ($configurationConsulter->getSetting([Manager::CONTEXT, 'allow_change_email']))
         {
             $user->set_email($values[User::PROPERTY_EMAIL]);
         }
 
-        if ($configurationConsulter->get_setting([Manager::CONTEXT, 'allow_change_username']) &&
+        if ($configurationConsulter->getSetting([Manager::CONTEXT, 'allow_change_username']) &&
             $this->authenticationValidator->getAuthenticationByType($this->user->get_auth_source()) instanceof
             ChangeableUsername)
         {
             $user->set_username($values[User::PROPERTY_USERNAME]);
         }
 
-        if ($configurationConsulter->get_setting([Manager::CONTEXT, 'allow_change_password']) &&
+        if ($configurationConsulter->getSetting([Manager::CONTEXT, 'allow_change_password']) &&
             strlen($values[User::PROPERTY_PASSWORD]) &&
             $this->authenticationValidator->getAuthenticationByType($this->user->get_auth_source()) instanceof
             ChangeablePassword)

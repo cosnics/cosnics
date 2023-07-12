@@ -5,7 +5,6 @@ use Chamilo\Application\Calendar\ActionsInterface;
 use Chamilo\Application\Calendar\Manager;
 use Chamilo\Application\Calendar\Repository\CalendarRendererProviderRepository;
 use Chamilo\Application\Calendar\Service\CalendarRendererProvider;
-use Chamilo\Configuration\Configuration;
 use Chamilo\Configuration\Storage\DataClass\Registration;
 use Chamilo\Core\User\Component\UserSettingsComponent;
 use Chamilo\Core\User\Storage\DataClass\User;
@@ -13,14 +12,13 @@ use Chamilo\Libraries\Architecture\Application\Application;
 use Chamilo\Libraries\Architecture\Exceptions\NotAllowedException;
 use Chamilo\Libraries\Architecture\Interfaces\DelegateComponent;
 use Chamilo\Libraries\Calendar\Architecture\Factory\HtmlCalendarRendererFactory;
-use Chamilo\Libraries\Calendar\Form\JumpForm;
 use Chamilo\Libraries\Calendar\Service\View\HtmlCalendarRenderer;
+use Chamilo\Libraries\Format\Structure\ActionBar\AbstractButton;
 use Chamilo\Libraries\Format\Structure\ActionBar\Button;
 use Chamilo\Libraries\Format\Structure\ActionBar\ButtonGroup;
 use Chamilo\Libraries\Format\Structure\ActionBar\SplitDropdownButton;
 use Chamilo\Libraries\Format\Structure\ActionBar\SubButton;
 use Chamilo\Libraries\Format\Structure\Glyph\FontAwesomeGlyph;
-use Chamilo\Libraries\Translation\Translation;
 
 /**
  * @package Chamilo\Application\Calendar\Component
@@ -31,13 +29,11 @@ use Chamilo\Libraries\Translation\Translation;
 class BrowserComponent extends Manager implements DelegateComponent
 {
 
-    /**
-     * @var JumpForm
-     */
-    private $form;
+    protected CalendarRendererProvider $calendarDataProvider;
 
     /**
-     * Runs this component and displays its output.
+     * @throws \Chamilo\Libraries\Architecture\Exceptions\NotAllowedException
+     * @throws \Symfony\Component\Cache\Exception\CacheException
      */
     public function run()
     {
@@ -54,11 +50,11 @@ class BrowserComponent extends Manager implements DelegateComponent
 
         $html = [];
 
-        $html[] = $this->render_header();
+        $html[] = $this->renderHeader();
         $html[] = '<div class="row">';
         $html[] = $this->renderNormalCalendar();
         $html[] = '</div>';
-        $html[] = $this->render_footer();
+        $html[] = $this->renderFooter();
 
         return implode(PHP_EOL, $html);
     }
@@ -66,7 +62,7 @@ class BrowserComponent extends Manager implements DelegateComponent
     /**
      * @throws \Chamilo\Libraries\Architecture\Exceptions\NotAllowedException
      */
-    protected function checkLoggedInAs()
+    protected function checkLoggedInAs(): void
     {
         $asAdmin = $this->getSession()->get('_as_admin');
 
@@ -86,7 +82,7 @@ class BrowserComponent extends Manager implements DelegateComponent
         return $this->getService($context . '\Actions');
     }
 
-    protected function getCalendarDataProvider()
+    protected function getCalendarDataProvider(): CalendarRendererProvider
     {
         if (!isset($this->calendarDataProvider))
         {
@@ -98,7 +94,7 @@ class BrowserComponent extends Manager implements DelegateComponent
             ];
 
             $this->calendarDataProvider = new CalendarRendererProvider(
-                new CalendarRendererProviderRepository(), $this->get_user(), $displayParameters,
+                new CalendarRendererProviderRepository(), $this->getUser(), $displayParameters,
                 \Chamilo\Application\Calendar\Ajax\Manager::CONTEXT
             );
         }
@@ -111,8 +107,9 @@ class BrowserComponent extends Manager implements DelegateComponent
         return $this->getService(HtmlCalendarRendererFactory::class);
     }
 
-    protected function getGeneralActions()
+    protected function getGeneralActions(): ButtonGroup
     {
+        $translator = $this->getTranslator();
         $buttonGroup = new ButtonGroup();
 
         $printUrl = $this->getUrlGenerator()->fromParameters(
@@ -126,7 +123,7 @@ class BrowserComponent extends Manager implements DelegateComponent
 
         $buttonGroup->addButton(
             new Button(
-                Translation::get(self::ACTION_PRINT . 'Component'), new FontAwesomeGlyph('print'), $printUrl
+                $translator->trans('PrinterComponent', [], Manager::CONTEXT), new FontAwesomeGlyph('print'), $printUrl
             )
         );
 
@@ -135,7 +132,9 @@ class BrowserComponent extends Manager implements DelegateComponent
         );
 
         $buttonGroup->addButton(
-            new Button(Translation::get('ICalExternal'), new FontAwesomeGlyph('globe'), $iCalUrl)
+            new Button(
+                $translator->trans('ICalExternal', [], Manager::CONTEXT), new FontAwesomeGlyph('globe'), $iCalUrl
+            )
         );
 
         $settingsUrl = $this->getUrlGenerator()->fromParameters(
@@ -147,8 +146,8 @@ class BrowserComponent extends Manager implements DelegateComponent
         );
 
         $splitDropdownButton = new SplitDropdownButton(
-            Translation::get('ConfigComponent'), new FontAwesomeGlyph('cog'), $settingsUrl,
-            SplitDropdownButton::DISPLAY_ICON_AND_LABEL, null, [], null, ['dropdown-menu-right']
+            $translator->trans('ConfigComponent', [], Manager::CONTEXT), new FontAwesomeGlyph('cog'), $settingsUrl,
+            AbstractButton::DISPLAY_ICON_AND_LABEL, null, [], null, ['dropdown-menu-right']
         );
 
         $availabilityUrl = $this->getUrlGenerator()->fromParameters(
@@ -157,7 +156,8 @@ class BrowserComponent extends Manager implements DelegateComponent
 
         $splitDropdownButton->addSubButton(
             new SubButton(
-                Translation::get('AvailabilityComponent'), new FontAwesomeGlyph('check-circle'), $availabilityUrl
+                $translator->trans('AvailabilityComponent', [], Manager::CONTEXT), new FontAwesomeGlyph('check-circle'),
+                $availabilityUrl
             )
         );
 
@@ -166,13 +166,15 @@ class BrowserComponent extends Manager implements DelegateComponent
         return $buttonGroup;
     }
 
+    /**
+     * @throws \Symfony\Component\Cache\Exception\CacheException
+     */
     protected function getViewActions()
     {
         $actions = [];
 
-        $extensionRegistrations = Configuration::registrations_by_type(
-            Manager::CONTEXT . '\Extension'
-        );
+        $extensionRegistrations =
+            $this->getRegistrationConsulter()->getRegistrationsByType(Manager::CONTEXT . '\Extension');
 
         $primaryExtensionActions = [];
         $additionalExtensionActions = [];
@@ -198,7 +200,11 @@ class BrowserComponent extends Manager implements DelegateComponent
         return $actions;
     }
 
-    protected function renderNormalCalendar()
+    /**
+     * @throws \Symfony\Component\Cache\Exception\CacheException
+     * @throws \Exception
+     */
+    protected function renderNormalCalendar(): string
     {
         $renderer = $this->getCalendarRendererFactory()->getRenderer($this->getCurrentRendererType());
 

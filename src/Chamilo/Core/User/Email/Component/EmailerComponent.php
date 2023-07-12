@@ -1,7 +1,6 @@
 <?php
 namespace Chamilo\Core\User\Email\Component;
 
-use Chamilo\Configuration\Configuration;
 use Chamilo\Core\User\Email\Form\EmailForm;
 use Chamilo\Core\User\Email\Manager;
 use Chamilo\Core\User\Storage\DataClass\User;
@@ -10,7 +9,6 @@ use Chamilo\Libraries\Format\Structure\Glyph\FontAwesomeGlyph;
 use Chamilo\Libraries\Translation\Translation;
 
 /**
- *
  * @package application.common.email_manager.component
  */
 class EmailerComponent extends Manager
@@ -21,7 +19,7 @@ class EmailerComponent extends Manager
      */
     public function run()
     {
-        if (Configuration::getInstance()->get_setting(array('Chamilo\Core\Admin', 'active_online_email_editor')) == 0)
+        if ($this->getConfigurationConsulter()->getSetting(['Chamilo\Core\Admin', 'active_online_email_editor']) == 0)
         {
             throw new NotAllowedException();
         }

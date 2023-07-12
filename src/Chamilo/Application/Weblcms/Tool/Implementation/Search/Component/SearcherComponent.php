@@ -8,7 +8,6 @@ use Chamilo\Application\Weblcms\Tool\Implementation\Search\Form\SearchForm;
 use Chamilo\Application\Weblcms\Tool\Implementation\Search\Manager;
 use Chamilo\Core\Repository\ContentObject\Introduction\Storage\DataClass\Introduction;
 use Chamilo\Core\Repository\Storage\DataClass\ContentObject;
-use Chamilo\Libraries\Format\Structure\BreadcrumbTrail;
 use Chamilo\Libraries\Format\Tabs\ContentTab;
 use Chamilo\Libraries\Format\Tabs\TabsCollection;
 use Chamilo\Libraries\Format\Tabs\TabsRenderer;
@@ -26,10 +25,9 @@ use Chamilo\Libraries\Translation\Translation;
 use Chamilo\Libraries\Utilities\String\Text;
 
 /**
- *
  * @package Chamilo\Application\Weblcms\Tool\Implementation\Search\Component
- * @author Hans De Bisschop <hans.de.bisschop@ehb.be>
- * @author Magali Gillard <magali.gillard@ehb.be>
+ * @author  Hans De Bisschop <hans.de.bisschop@ehb.be>
+ * @author  Magali Gillard <magali.gillard@ehb.be>
  */
 class SearcherComponent extends Manager
 {
@@ -39,7 +37,6 @@ class SearcherComponent extends Manager
     public const RESULTS_PER_PAGE = 10;
 
     /**
-     *
      * @var \Chamilo\Application\Weblcms\Tool\Implementation\Search\Form\SearchForm
      */
     private $searchForm;
@@ -130,11 +127,11 @@ class SearcherComponent extends Manager
                         if ($object->getType() != Introduction::class)
                         {
                             $url = $this->get_url(
-                                array(
+                                [
                                     \Chamilo\Application\Weblcms\Manager::PARAM_TOOL => $pub->get_tool(),
                                     \Chamilo\Application\Weblcms\Tool\Manager::PARAM_PUBLICATION_ID => $pub->get_id(),
                                     \Chamilo\Application\Weblcms\Tool\Manager::PARAM_ACTION => \Chamilo\Application\Weblcms\Tool\Manager::ACTION_VIEW
-                                )
+                                ]
                             );
                         }
                         else
@@ -167,7 +164,7 @@ class SearcherComponent extends Manager
             $variable = ($results > 1 ? 'ResultsFoundFor' : 'ResultFoundFor');
 
             $html[] = '<div class="alert alert-info">';
-            $html[] = Translation::get($variable, array('COUNT' => $results, 'QUERY' => $query));
+            $html[] = Translation::get($variable, ['COUNT' => $results, 'QUERY' => $query]);
             $html[] = '</div>';
 
             if ($results > 0)
@@ -181,18 +178,9 @@ class SearcherComponent extends Manager
         return implode(PHP_EOL, $html);
     }
 
-    /**
-     *
-     * @param BreadcrumbTrail $breadcrumbtrail
-     */
-    public function add_additional_breadcrumbs(BreadcrumbTrail $breadcrumbtrail): void
-    {
-    }
-
     // Inherited
 
     /**
-     *
      * @return \Chamilo\Application\Weblcms\Tool\Implementation\Search\Form\SearchForm
      */
     public function getSearchForm()
@@ -201,7 +189,7 @@ class SearcherComponent extends Manager
         {
             $this->searchForm = new SearchForm(
                 $this->get_url(
-                    array(\Chamilo\Application\Weblcms\Tool\Manager::PARAM_ACTION => self::ACTION_SEARCH)
+                    [\Chamilo\Application\Weblcms\Tool\Manager::PARAM_ACTION => self::ACTION_SEARCH]
                 )
             );
         }
@@ -249,7 +237,6 @@ class SearcherComponent extends Manager
     }
 
     /**
-     *
      * @return AndCondition
      */
     protected function get_retrieve_publications_condition()
@@ -307,7 +294,7 @@ class SearcherComponent extends Manager
 
             $between_condition = new AndCondition($between_conditions);
 
-            $time_conditions[] = new OrCondition(array($forever_condition, $between_condition));
+            $time_conditions[] = new OrCondition([$forever_condition, $between_condition]);
 
             $conditions[] = new AndCondition($time_conditions);
         }

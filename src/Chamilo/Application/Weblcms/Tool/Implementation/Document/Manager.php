@@ -4,11 +4,13 @@ namespace Chamilo\Application\Weblcms\Tool\Implementation\Document;
 use Chamilo\Application\Weblcms\Renderer\PublicationList\ContentObjectPublicationListRenderer;
 use Chamilo\Application\Weblcms\Storage\DataClass\ContentObjectPublication;
 use Chamilo\Application\Weblcms\Tool\Interfaces\IntroductionTextSupportInterface;
+use Chamilo\Configuration\Service\Consulter\RegistrationConsulter;
 use Chamilo\Core\Repository\ContentObject\File\Storage\DataClass\File;
 use Chamilo\Core\Repository\ContentObject\Page\Storage\DataClass\Page;
 use Chamilo\Core\Repository\ContentObject\Webpage\Storage\DataClass\Webpage;
 use Chamilo\Core\Repository\Storage\DataClass\ContentObject;
 use Chamilo\Libraries\Architecture\Interfaces\Categorizable;
+use Chamilo\Libraries\DependencyInjection\DependencyInjectionContainerBuilder;
 use Chamilo\Libraries\Format\Structure\ActionBar\Button;
 use Chamilo\Libraries\Format\Structure\ActionBar\ButtonGroup;
 use Chamilo\Libraries\Format\Structure\ActionBar\DropdownButton;
@@ -78,17 +80,27 @@ abstract class Manager extends \Chamilo\Application\Weblcms\Tool\Manager
         }
     }
 
+    /**
+     * @throws \Chamilo\Libraries\Storage\Exception\ConnectionException
+     * @throws \Symfony\Component\Cache\Exception\CacheException
+     */
     public static function get_allowed_types()
     {
-        $allowed_types = [];
+        $allowedTypes = [];
 
-        $optional_types = [File::class, Webpage::class, Page::class];
+        $optionalTypes = [File::class, Webpage::class, Page::class];
 
-        foreach ($optional_types as $optional_type)
+        /**
+         * @var \Chamilo\Configuration\Service\Consulter\RegistrationConsulter $registrationConsulter
+         */
+        $registrationConsulter =
+            DependencyInjectionContainerBuilder::getInstance()->createContainer()->get(RegistrationConsulter::class);
+
+        foreach ($optionalTypes as $optionalType)
         {
-            if (ContentObject::is_available($optional_type))
+            if ($registrationConsulter->isContextRegisteredAndActive($optionalType::CONTEXT))
             {
-                $allowed_types[] = $optional_type;
+                $allowedTypes[] = $optionalType;
             }
         }
 
@@ -98,11 +110,11 @@ abstract class Manager extends \Chamilo\Application\Weblcms\Tool\Manager
         {
             if (class_exists($hogentType))
             {
-                $allowed_types[] = $hogentType;
+                $allowedTypes[] = $hogentType;
             }
         }
 
-        return $allowed_types;
+        return $allowedTypes;
     }
 
     public function get_available_browser_types()

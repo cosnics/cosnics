@@ -1,7 +1,6 @@
 <?php
 namespace Chamilo\Core\Repository\Component;
 
-use Chamilo\Configuration\Configuration;
 use Chamilo\Core\Metadata\Service\InstanceService;
 use Chamilo\Core\Repository\Filter\FilterData;
 use Chamilo\Core\Repository\Form\ContentObjectForm;
@@ -210,6 +209,7 @@ class CreatorComponent extends Manager
     /**
      * @return string[]
      * @throws \ReflectionException
+     * @throws \Symfony\Component\Cache\Exception\CacheException
      */
     public function get_allowed_content_object_types()
     {
@@ -221,7 +221,7 @@ class CreatorComponent extends Manager
             $namespace = $classnameUtilities->getNamespaceFromClassname($type);
 
             $context = $classnameUtilities->getNamespaceParent($namespace, 2);
-            if (!Configuration::getInstance()->isRegisteredAndActive($context))
+            if (!$this->getRegistrationConsulter()->isContextRegisteredAndActive($context))
             {
                 unset($types[$index]);
             }

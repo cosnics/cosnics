@@ -1,7 +1,6 @@
 <?php
 namespace Chamilo\Core\Repository\ContentObject\File\Storage\DataClass;
 
-use Chamilo\Configuration\Configuration;
 use Chamilo\Core\Repository\Architecture\DownloadSupport;
 use Chamilo\Core\Repository\ContentObject\File\Storage\DataManager;
 use Chamilo\Core\Repository\Manager;
@@ -82,18 +81,20 @@ class File extends ContentObject implements Versionable, Includeable, FileStorag
      */
     protected function checkBeforeSave(): bool
     {
+        $stringUtilities = $this->getStringUtilities();
+
         // Title
-        if (StringUtilities::getInstance()->isNullOrEmpty($this->get_title()))
+        if ($stringUtilities->isNullOrEmpty($this->get_title()))
         {
             $this->addError(Translation::get('FileTitleIsRequired'));
         }
 
-        $descriptionRequired = Configuration::getInstance()->get_setting(
+        $descriptionRequired = $this->getConfigurationConsulter()->getSetting(
             [Manager::CONTEXT, 'description_required']
         );
 
         // Description
-        if ($descriptionRequired && StringUtilities::getInstance()->isNullOrEmpty($this->get_description()))
+        if ($descriptionRequired && $stringUtilities->isNullOrEmpty($this->get_description()))
         {
             $this->addError(Translation::get('FileDescriptionIsRequired'));
         }
@@ -134,19 +135,19 @@ class File extends ContentObject implements Versionable, Includeable, FileStorag
         }
 
         // Filename
-        if (StringUtilities::getInstance()->isNullOrEmpty($this->get_filename()))
+        if ($stringUtilities->isNullOrEmpty($this->get_filename()))
         {
             $this->addError(Translation::get('FileFilenameIsRequired'));
         }
 
         // Path
-        if (StringUtilities::getInstance()->isNullOrEmpty($this->get_path()))
+        if ($stringUtilities->isNullOrEmpty($this->get_path()))
         {
             $this->addError(Translation::get('FilePathToFileNotSet'));
         }
 
         // Hash
-        if (StringUtilities::getInstance()->isNullOrEmpty($this->get_hash()))
+        if ($stringUtilities->isNullOrEmpty($this->get_hash()))
         {
             $this->addError(Translation::get('FileHashNotSet'));
         }

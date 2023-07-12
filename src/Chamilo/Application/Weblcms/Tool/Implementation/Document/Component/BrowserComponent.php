@@ -124,6 +124,9 @@ class BrowserComponent extends Manager
         return $toolActions;
     }
 
+    /**
+     * @throws \Symfony\Component\Cache\Exception\CacheException
+     */
     public function get_tool_conditions()
     {
         $conditions = [];
@@ -157,7 +160,7 @@ class BrowserComponent extends Manager
         {
             $classes = [];
 
-            if (ContentObject::is_available('Chamilo\Core\Repository\ContentObject\File\Storage\DataClass\File'))
+            if ($this->getRegistrationConsulter()->isContextRegisteredAndActive('Chamilo\Core\Repository\ContentObject\File'))
             {
                 $classes[] = File::class;
             }

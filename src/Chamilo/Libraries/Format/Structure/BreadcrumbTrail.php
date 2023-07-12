@@ -1,7 +1,7 @@
 <?php
 namespace Chamilo\Libraries\Format\Structure;
 
-use Chamilo\Configuration\Configuration;
+use Chamilo\Configuration\Service\Consulter\ConfigurationConsulter;
 use Chamilo\Configuration\Service\FileConfigurationLocator;
 use Chamilo\Libraries\Architecture\ClassnameUtilities;
 use Chamilo\Libraries\DependencyInjection\DependencyInjectionContainerBuilder;
@@ -46,12 +46,19 @@ class BreadcrumbTrail
             $webPathBuilder = new WebPathBuilder($classnameUtilities, ChamiloRequest::createFromGlobals());
             $systemPathBuilder = new SystemPathBuilder($classnameUtilities);
 
+            /**
+             * @var \Chamilo\Configuration\Service\Consulter\ConfigurationConsulter $configurationConsulter
+             */
+            $configurationConsulter = DependencyInjectionContainerBuilder::getInstance()->createContainer()->get(
+                ConfigurationConsulter::class
+            );
+
             $fileConfigurationLocator = new FileConfigurationLocator($systemPathBuilder);
 
             // TODO: Can this be fixed more elegantly?
             if ($fileConfigurationLocator->isAvailable())
             {
-                $siteName = $this->get_setting('site_name', 'Chamilo\Core\Admin');
+                $siteName = $configurationConsulter->getSetting(['Chamilo\Core\Admin', 'site_name']);
             }
             else
             {
@@ -73,6 +80,13 @@ class BreadcrumbTrail
     public function getBreadcrumbs(): array
     {
         return $this->breadcrumbs;
+    }
+
+    public function getConfigurationConsulter(): ConfigurationConsulter
+    {
+        return DependencyInjectionContainerBuilder::getInstance()->createContainer()->get(
+            ConfigurationConsulter::class
+        );
     }
 
     /**
@@ -121,11 +135,6 @@ class BreadcrumbTrail
         $last_key = count($breadcrumbtrail) - 1;
 
         return $breadcrumbtrail[$last_key];
-    }
-
-    public function get_setting(string $variable, string $application): string
-    {
-        return Configuration::getInstance()->get_setting([$application, $variable]);
     }
 
     public function merge(BreadcrumbTrail $trail)
@@ -184,17 +193,19 @@ class BreadcrumbTrail
     {
         $this->breadcrumbs = [];
 
+        $container = DependencyInjectionContainerBuilder::getInstance()->createContainer();
+
         /**
          * @var \Chamilo\Libraries\File\WebPathBuilder $webPathBuilder
          */
-        $webPathBuilder =
-            DependencyInjectionContainerBuilder::getInstance()->createContainer()->get(WebPathBuilder::class);
+        $webPathBuilder = $container->get(WebPathBuilder::class);
 
         if ($keepMainIndex)
         {
             $this->add(
                 new Breadcrumb(
-                    $webPathBuilder->getBasePath() . 'index.php', $this->get_setting('site_name', 'Chamilo\Core\Admin')
+                    $webPathBuilder->getBasePath() . 'index.php',
+                    $this->getConfigurationConsulter()->getSetting(['Chamilo\Core\Admin', 'site_name'])
                 )
             );
         }

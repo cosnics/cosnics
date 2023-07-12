@@ -1,7 +1,6 @@
 <?php
 namespace Chamilo\Core\User\Component;
 
-use Chamilo\Configuration\Configuration;
 use Chamilo\Core\Tracking\Storage\DataClass\Event;
 use Chamilo\Core\User\Manager;
 use Chamilo\Core\User\Storage\DataClass\User;
@@ -42,7 +41,7 @@ class ResetPasswordComponent extends Manager implements NoAuthenticationSupport
     public function run()
     {
         $user_id = $this->getSession()->get(Manager::SESSION_USER_ID);
-        $allow_password_retrieval = Configuration::getInstance()->get_setting(
+        $allow_password_retrieval = $this->getConfigurationConsulter()->getSetting(
             [Manager::CONTEXT, 'allow_password_retrieval']
         );
 
@@ -143,20 +142,16 @@ class ResetPasswordComponent extends Manager implements NoAuthenticationSupport
                             );
                             $failures ++;
                         }
+                        elseif (!$this->send_reset_link($user))
+                        {
+                            $failures ++;
+                        }
                         else
                         {
-                            if (!$this->send_reset_link($user))
-                            {
-                                $failures ++;
-                            }
-                            else
-                            {
-                                $html[] =
-                                    '<div class="alert alert-success">' . Translation::getInstance()->getTranslation(
-                                        'ResetLinkSendForUser',
-                                        ['USER' => $user->get_fullname() . ' (' . $user->get_username() . ')']
-                                    ) . '</div>';
-                            }
+                            $html[] = '<div class="alert alert-success">' . Translation::getInstance()->getTranslation(
+                                    'ResetLinkSendForUser',
+                                    ['USER' => $user->get_fullname() . ' (' . $user->get_username() . ')']
+                                ) . '</div>';
                         }
                     }
                 }
@@ -181,6 +176,8 @@ class ResetPasswordComponent extends Manager implements NoAuthenticationSupport
      */
     private function create_new_password($user)
     {
+        $configurationConsulter = $this->getConfigurationConsulter();
+
         $password = Text::generate_password();
         $user->set_password($this->getHashingUtilities()->hashString($password));
         $user->update();
@@ -199,10 +196,10 @@ class ResetPasswordComponent extends Manager implements NoAuthenticationSupport
         $mail_body[] = '<p>' . Translation::get('MailResetPasswordCloser') . '<br/>';
         $mail_body[] = Translation::get(
                 'MailResetPasswordSender', [
-                    'ADMINFIRSTNAME' => Configuration::getInstance()->get_setting(
+                    'ADMINFIRSTNAME' => $configurationConsulter->getSetting(
                         ['Chamilo\Core\Admin', 'administrator_firstname']
                     ),
-                    'ADMINLASTNAME' => Configuration::getInstance()->get_setting(
+                    'ADMINLASTNAME' => $configurationConsulter->getSetting(
                         ['Chamilo\Core\Admin', 'administrator_surname']
                     )
                 ]
@@ -226,10 +223,7 @@ class ResetPasswordComponent extends Manager implements NoAuthenticationSupport
         }
     }
 
-    /**
-     * @return \Chamilo\Libraries\Hashing\HashingUtilities
-     */
-    public function getHashingUtilities()
+    public function getHashingUtilities(): HashingUtilities
     {
         return $this->getService(HashingUtilities::class);
     }
@@ -262,8 +256,11 @@ class ResetPasswordComponent extends Manager implements NoAuthenticationSupport
      */
     private function send_reset_link($user)
     {
+        $configurationConsulter = $this->getConfigurationConsulter();
+
         $url_params[self::PARAM_RESET_KEY] = $this->get_user_key($user);
         $url_params[User::PROPERTY_ID] = $user->get_id();
+
         $reset_link = $this->get_url($url_params);
 
         $mail_subject = Translation::get('LoginRequest');
@@ -276,10 +273,10 @@ class ResetPasswordComponent extends Manager implements NoAuthenticationSupport
         $mail_body[] = '<p>' . Translation::get('MailResetPasswordCloser') . '<br/>';
         $mail_body[] = Translation::get(
                 'MailResetPasswordSender', [
-                    'ADMINFIRSTNAME' => Configuration::getInstance()->get_setting(
+                    'ADMINFIRSTNAME' => $configurationConsulter->getSetting(
                         ['Chamilo\Core\Admin', 'administrator_firstname']
                     ),
-                    'ADMINLASTNAME' => Configuration::getInstance()->get_setting(
+                    'ADMINLASTNAME' => $configurationConsulter->getSetting(
                         ['Chamilo\Core\Admin', 'administrator_surname']
                     )
                 ]

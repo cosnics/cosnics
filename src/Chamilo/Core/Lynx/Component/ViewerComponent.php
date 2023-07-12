@@ -1,7 +1,6 @@
 <?php
 namespace Chamilo\Core\Lynx\Component;
 
-use Chamilo\Configuration\Configuration;
 use Chamilo\Configuration\Storage\DataClass\Registration;
 use Chamilo\Core\Lynx\Manager;
 use Chamilo\Core\Lynx\PackageDisplay;
@@ -22,7 +21,6 @@ class ViewerComponent extends Manager implements DelegateComponent
 {
 
     /**
-     *
      * @var ButtonToolBarRenderer
      */
     private $buttonToolbarRenderer;
@@ -32,17 +30,18 @@ class ViewerComponent extends Manager implements DelegateComponent
     private $registration;
 
     /**
-     * Runs this component and displays its output.
+     * @throws \QuickformException
+     * @throws \Symfony\Component\Cache\Exception\CacheException
      */
     public function run()
     {
         $this->context = Request::get(self::PARAM_CONTEXT);
-        $this->registration = Configuration::registration($this->context);
+        $this->registration = $this->getRegistrationConsulter()->getRegistrationForContext($this->context);
 
         BreadcrumbTrail::getInstance()->add(
             new Breadcrumb(
                 null, Translation::get(
-                'ViewingPackage', array('PACKAGE' => Translation::get('TypeName', null, $this->context))
+                'ViewingPackage', ['PACKAGE' => Translation::get('TypeName', null, $this->context)]
             )
             )
         );
@@ -81,10 +80,10 @@ class ViewerComponent extends Manager implements DelegateComponent
                             new Button(
                                 Translation::get('Deactivate', [], StringUtilities::LIBRARIES),
                                 new FontAwesomeGlyph('pause-circle', [], null, 'fas'), $this->get_url(
-                                array(
+                                [
                                     self::PARAM_ACTION => self::ACTION_DEACTIVATE,
                                     self::PARAM_CONTEXT => $this->context
-                                )
+                                ]
                             )
                             )
                         );
@@ -101,10 +100,10 @@ class ViewerComponent extends Manager implements DelegateComponent
                             new Button(
                                 Translation::get('Activate', [], StringUtilities::LIBRARIES),
                                 new FontAwesomeGlyph('play-circle', [], null, 'fas'), $this->get_url(
-                                array(
+                                [
                                     self::PARAM_ACTION => self::ACTION_ACTIVATE,
                                     self::PARAM_CONTEXT => $this->context
-                                )
+                                ]
                             )
                             )
                         );
@@ -117,7 +116,7 @@ class ViewerComponent extends Manager implements DelegateComponent
                     new Button(
                         Translation::get('Install', [], StringUtilities::LIBRARIES),
                         new FontAwesomeGlyph('box', [], null, 'fas'), $this->get_url(
-                        array(self::PARAM_ACTION => self::ACTION_INSTALL, self::PARAM_CONTEXT => $this->context)
+                        [self::PARAM_ACTION => self::ACTION_INSTALL, self::PARAM_CONTEXT => $this->context]
                     ), ToolbarItem::DISPLAY_ICON_AND_LABEL,
                         Translation::get('ConfirmChosenAction', [], StringUtilities::LIBRARIES)
                     )

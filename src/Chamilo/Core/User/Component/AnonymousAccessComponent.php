@@ -1,7 +1,6 @@
 <?php
 namespace Chamilo\Core\User\Component;
 
-use Chamilo\Configuration\Configuration;
 use Chamilo\Configuration\Service\Consulter\ConfigurationConsulter;
 use Chamilo\Core\User\Form\AnonymousUserForm;
 use Chamilo\Core\User\Manager;
@@ -119,7 +118,9 @@ class AnonymousAccessComponent extends Manager implements NoAuthenticationSuppor
             return false;
         }
 
-        $anonymousAuthentication = Configuration::getInstance()->get_setting(
+        $configurationConsulter = $this->getConfigurationConsulter();
+
+        $anonymousAuthentication = $configurationConsulter->getSetting(
             ['Chamilo\Core\Admin', 'enableAnonymousAuthentication']
         );
 
@@ -128,13 +129,13 @@ class AnonymousAccessComponent extends Manager implements NoAuthenticationSuppor
             return false;
         }
 
-        $allowedAnonymousAuthenticationUrl = Configuration::getInstance()->get_setting(
+        $allowedAnonymousAuthenticationUrl = $configurationConsulter->getSetting(
             ['Chamilo\Core\Admin', 'anonymous_authentication_url']
         );
 
         $baseUrl = $this->getRequest()->server->get('SERVER_NAME');
 
-        return strpos($allowedAnonymousAuthenticationUrl, $baseUrl) !== false;
+        return str_contains($allowedAnonymousAuthenticationUrl, $baseUrl);
     }
 
     /**
@@ -189,7 +190,7 @@ class AnonymousAccessComponent extends Manager implements NoAuthenticationSuppor
             $parameters[self::PARAM_CONTEXT] == 'Chamilo\Core\Home')
         {
             $parameters = [
-                self::PARAM_CONTEXT => Configuration::getInstance()->get_setting(
+                self::PARAM_CONTEXT => $this->getConfigurationConsulter()->getSetting(
                     ['Chamilo\Core\Admin', 'page_after_anonymous_access']
                 )
             ];
@@ -212,7 +213,7 @@ class AnonymousAccessComponent extends Manager implements NoAuthenticationSuppor
      */
     protected function validateCaptcha($captchaResponseValue)
     {
-        $recaptchaSecretKey = Configuration::getInstance()->get_setting(
+        $recaptchaSecretKey = $this->getConfigurationConsulter()->getSetting(
             ['Chamilo\Core\Admin', 'recaptcha_secret_key']
         );
 

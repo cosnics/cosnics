@@ -5,7 +5,7 @@ use Chamilo\Application\Weblcms\Manager;
 use Chamilo\Application\Weblcms\Storage\DataClass\ContentObjectPublication;
 use Chamilo\Application\Weblcms\Storage\Repository\Interfaces\CourseRepositoryInterface;
 use Chamilo\Application\Weblcms\Storage\Repository\Interfaces\PublicationRepositoryInterface;
-use Chamilo\Configuration\Configuration;
+use Chamilo\Configuration\Service\Consulter\ConfigurationConsulter;
 use Chamilo\Core\Repository\ContentObject\File\Storage\DataClass\File;
 use Chamilo\Core\Repository\Workspace\Repository\ContentObjectRepository;
 use Chamilo\Core\User\Service\UserService;
@@ -33,6 +33,8 @@ class ContentObjectPublicationMailer
 
     protected ConfigurablePathBuilder $configurablePathBuilder;
 
+    protected ConfigurationConsulter $configurationConsulter;
+
     protected ContentObjectRepository $contentObjectRepository;
 
     protected CourseRepositoryInterface $courseRepository;
@@ -53,7 +55,8 @@ class ContentObjectPublicationMailer
         MailerInterface $mailer, Translator $translator, CourseRepositoryInterface $courseRepository,
         PublicationRepositoryInterface $publicationRepository, ContentObjectRepository $contentObjectRepository,
         UserService $userService, ThemePathBuilder $themeWebPathBuilder,
-        ConfigurablePathBuilder $configurablePathBuilder, UrlGenerator $urlGenerator
+        ConfigurablePathBuilder $configurablePathBuilder, UrlGenerator $urlGenerator,
+        ConfigurationConsulter $configurationConsulter
     )
     {
         $this->mailer = $mailer;
@@ -65,11 +68,17 @@ class ContentObjectPublicationMailer
         $this->themeWebPathBuilder = $themeWebPathBuilder;
         $this->configurablePathBuilder = $configurablePathBuilder;
         $this->urlGenerator = $urlGenerator;
+        $this->configurationConsulter = $configurationConsulter;
     }
 
     public function getConfigurablePathBuilder(): ConfigurablePathBuilder
     {
         return $this->configurablePathBuilder;
+    }
+
+    public function getConfigurationConsulter(): ConfigurationConsulter
+    {
+        return $this->configurationConsulter;
     }
 
     /**
@@ -166,7 +175,7 @@ class ContentObjectPublicationMailer
      */
     protected function logMailProgress($logMessage)
     {
-        if (Configuration::getInstance()->get_setting(['Chamilo\Application\Weblcms', 'log_mails']))
+        if ($this->getConfigurationConsulter()->getSetting(['Chamilo\Application\Weblcms', 'log_mails']))
         {
             $dir = $this->getConfigurablePathBuilder()->getLogPath() . 'mail';
 

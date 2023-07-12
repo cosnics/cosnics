@@ -1,7 +1,6 @@
 <?php
 namespace Chamilo\Core\Repository\ContentObject\File\Form;
 
-use Chamilo\Configuration\Configuration;
 use Chamilo\Core\Repository\ContentObject\File\Storage\DataClass\File;
 use Chamilo\Core\Repository\Form\ContentObjectForm;
 use Chamilo\Core\Repository\Quota\Calculator;
@@ -39,11 +38,13 @@ class FileForm extends ContentObjectForm
 
     private function allow_file_type($type)
     {
-        $filtering_type = Configuration::getInstance()->get_setting(['Chamilo\Core\Admin', 'type_of_filtering']);
+        $configurationConsulter = $this->getConfigurationConsulter();
+
+        $filtering_type = $configurationConsulter->getSetting(['Chamilo\Core\Admin', 'type_of_filtering']);
 
         if ($filtering_type == 'blacklist')
         {
-            $blacklist = Configuration::getInstance()->get_setting(['Chamilo\Core\Admin', 'blacklist']);
+            $blacklist = $configurationConsulter->getSetting(['Chamilo\Core\Admin', 'blacklist']);
             $items = explode(',', $blacklist);
 
             if (in_array($type, $items))
@@ -55,7 +56,7 @@ class FileForm extends ContentObjectForm
         }
         else
         {
-            $whitelist = Configuration::getInstance()->get_setting(['Chamilo\Core\Admin', 'whitelist']);
+            $whitelist = $configurationConsulter->getSetting(['Chamilo\Core\Admin', 'whitelist']);
             $items = explode(',', $whitelist);
 
             if (in_array($type, $items))
@@ -209,13 +210,15 @@ class FileForm extends ContentObjectForm
 
             if (!$fields['uncompress'] && !$this->allow_file_type($type))
             {
-                if (Configuration::getInstance()->get_setting(
+                $configurationConsulter = $this->getConfigurationConsulter();
+
+                if ($configurationConsulter->getSetting(
                         ['Chamilo\Core\Admin', 'rename_instead_of_disallow']
                     ) == 1)
                 {
                     $name = $_FILES['file']['name'];
                     $_FILES['file']['name'] = $name . '.' .
-                        Configuration::getInstance()->get_setting(['Chamilo\Core\Admin', 'replacement_extension']);
+                        $configurationConsulter->getSetting(['Chamilo\Core\Admin', 'replacement_extension']);
                 }
                 else
                 {

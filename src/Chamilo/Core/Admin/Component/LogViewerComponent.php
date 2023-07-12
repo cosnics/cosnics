@@ -1,7 +1,6 @@
 <?php
 namespace Chamilo\Core\Admin\Component;
 
-use Chamilo\Configuration\Configuration;
 use Chamilo\Core\Admin\Core\BreadcrumbGenerator;
 use Chamilo\Core\Admin\Manager;
 use Chamilo\Libraries\Format\Form\FormValidator;
@@ -138,7 +137,7 @@ class LogViewerComponent extends Manager
         }
         else
         {
-            $file = Configuration::getInstance()->get_setting(
+            $file = $this->getConfigurationConsulter()->getSetting(
                 ['Chamilo\Core\Admin', $server_type . '_error_location']
             );
             $message = Translation::get('ServerLogfileLocationNotDefined');
