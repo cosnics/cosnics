@@ -1,7 +1,9 @@
 <?php
 namespace Chamilo\Core\Reporting;
 
+use Chamilo\Configuration\Service\Consulter\ConfigurationConsulter;
 use Chamilo\Libraries\Architecture\ClassnameUtilities;
+use Chamilo\Libraries\DependencyInjection\DependencyInjectionContainerBuilder;
 use Chamilo\Libraries\DependencyInjection\Traits\DependencyInjectionContainerTrait;
 use Chamilo\Libraries\Translation\Translation;
 
@@ -35,6 +37,13 @@ abstract class ReportingBlock
     }
 
     abstract public function count_data();
+
+    public function getConfigurationConsulter(): ConfigurationConsulter
+    {
+        return DependencyInjectionContainerBuilder::getInstance()->createContainer()->get(
+            ConfigurationConsulter::class
+        );
+    }
 
     /**
      * @brief Return block style containing properties such as title font size or title color.

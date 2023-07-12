@@ -24,7 +24,7 @@ class CourseAdminValidator implements CourseAdminValidatorInterface
      *
      * @return bool
      */
-    public function isUserAdminOfCourse(User $user, Course $course)
+    public function isUserAdminOfCourse(User $user, Course $course): bool
     {
         return DataManager::entity_is_admin_for_target(
             UserEntity::ENTITY_TYPE,

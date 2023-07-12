@@ -1,8 +1,9 @@
 <?php
 namespace Chamilo\Configuration\Storage\DataClass;
 
-use Chamilo\Configuration\Configuration;
 use Chamilo\Configuration\Package\Storage\DataClass\Package;
+use Chamilo\Configuration\Service\Consulter\RegistrationConsulter;
+use Chamilo\Libraries\DependencyInjection\DependencyInjectionContainerBuilder;
 use Chamilo\Libraries\Storage\DataClass\DataClass;
 
 /**
@@ -222,6 +223,10 @@ class Registration extends DataClass
         return $this->get_status();
     }
 
+    /**
+     * @throws \Chamilo\Libraries\Storage\Exception\ConnectionException
+     * @throws \Symfony\Component\Cache\Exception\CacheException
+     */
     protected function on_change($success = true)
     {
         if (!$success)
@@ -229,7 +234,14 @@ class Registration extends DataClass
             return $success;
         }
 
-        Configuration::getInstance()->reset();
+        /**
+         * @var \Chamilo\Configuration\Service\Consulter\RegistrationConsulter $registrationConsulter
+         */
+        $registrationConsulter = DependencyInjectionContainerBuilder::getInstance()->createContainer()->get(
+            RegistrationConsulter::class
+        );
+
+        $registrationConsulter->getRegistrationCacheDataPreLoader()->clearCacheData();
 
         return $success;
     }

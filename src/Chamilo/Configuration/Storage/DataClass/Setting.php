@@ -1,8 +1,10 @@
 <?php
 namespace Chamilo\Configuration\Storage\DataClass;
 
-use Chamilo\Configuration\Configuration;
+use Chamilo\Configuration\Service\Consulter\ConfigurationConsulter;
 use Chamilo\Core\User\Storage\DataClass\UserSetting;
+use Chamilo\Core\User\Storage\DataManager;
+use Chamilo\Libraries\DependencyInjection\DependencyInjectionContainerBuilder;
 use Chamilo\Libraries\Storage\DataClass\DataClass;
 use Chamilo\Libraries\Storage\Query\Condition\EqualityCondition;
 use Chamilo\Libraries\Storage\Query\Variable\PropertyConditionVariable;
@@ -41,7 +43,7 @@ class Setting extends DataClass
                     new PropertyConditionVariable(UserSetting::class, UserSetting::PROPERTY_SETTING_ID),
                     new StaticConditionVariable($this->get_id())
                 );
-                if (!\Chamilo\Core\User\Storage\DataManager::deletes(UserSetting::class, $condition))
+                if (!DataManager::deletes(UserSetting::class, $condition))
                 {
                     return false;
                 }
@@ -127,6 +129,10 @@ class Setting extends DataClass
         return $this->getDefaultProperty(self::PROPERTY_VARIABLE);
     }
 
+    /**
+     * @throws \Chamilo\Libraries\Storage\Exception\ConnectionException
+     * @throws \Symfony\Component\Cache\Exception\CacheException
+     */
     protected function on_change($success = true)
     {
         if (!$success)
@@ -134,7 +140,14 @@ class Setting extends DataClass
             return $success;
         }
 
-        Configuration::getInstance()->reset();
+        /**
+         * @var \Chamilo\Configuration\Service\Consulter\ConfigurationConsulter $configurationConsulter
+         */
+        $configurationConsulter = DependencyInjectionContainerBuilder::getInstance()->createContainer()->get(
+            ConfigurationConsulter::class
+        );
+
+        $configurationConsulter->getDataPreLoader()->clearCacheData();
 
         return $success;
     }

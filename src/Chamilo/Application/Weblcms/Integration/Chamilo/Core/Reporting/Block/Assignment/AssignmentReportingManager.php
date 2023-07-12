@@ -10,7 +10,6 @@ use Chamilo\Application\Weblcms\Storage\DataManager;
 use Chamilo\Application\Weblcms\Tool\Implementation\Assignment\Storage\DataClass\Publication;
 use Chamilo\Application\Weblcms\Tool\Implementation\Assignment\Storage\Repository\PublicationRepository;
 use Chamilo\Application\Weblcms\Tool\Manager;
-use Chamilo\Configuration\Configuration;
 use Chamilo\Core\Repository\ContentObject\Assignment\Storage\DataClass\Assignment;
 use Chamilo\Core\Repository\Storage\DataClass\ContentObject;
 use Chamilo\Libraries\Architecture\Application\Application;
@@ -130,7 +129,7 @@ abstract class AssignmentReportingManager extends ToolBlock
         {
             $colour = null;
 
-            $passingPercentage = Configuration::getInstance()->get_setting(
+            $passingPercentage = $this->getConfigurationConsulter()->getSetting(
                 ['Chamilo\Core\Admin', 'passing_percentage']
             );
 

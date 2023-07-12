@@ -2,6 +2,7 @@
 namespace Chamilo\Core\Lynx\Action;
 
 use Chamilo\Configuration\Package\Storage\DataClass\Package;
+use Chamilo\Libraries\DependencyInjection\Traits\DependencyInjectionContainerTrait;
 use Chamilo\Libraries\Format\MessageLogger;
 use Chamilo\Libraries\Format\Structure\Glyph\InlineGlyph;
 
@@ -13,6 +14,7 @@ use Chamilo\Libraries\Format\Structure\Glyph\InlineGlyph;
  */
 abstract class AbstractAction extends MessageLogger
 {
+    use DependencyInjectionContainerTrait;
 
     private Package $package;
 
@@ -24,6 +26,9 @@ abstract class AbstractAction extends MessageLogger
     public function __construct(string $context)
     {
         parent::__construct();
+
+        $this->initializeContainer();
+
         $this->package = Package::get($context);
     }
 

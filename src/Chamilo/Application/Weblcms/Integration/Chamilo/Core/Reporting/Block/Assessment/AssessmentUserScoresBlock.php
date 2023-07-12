@@ -6,7 +6,6 @@ use Chamilo\Application\Weblcms\Integration\Chamilo\Core\Reporting\Block\ToolBlo
 use Chamilo\Application\Weblcms\Integration\Chamilo\Core\Tracking\Storage\DataClass\AssessmentAttempt;
 use Chamilo\Application\Weblcms\Storage\DataClass\ContentObjectPublication;
 use Chamilo\Application\Weblcms\Storage\DataManager;
-use Chamilo\Configuration\Configuration;
 use Chamilo\Core\Reporting\ReportingData;
 use Chamilo\Core\Reporting\Viewer\Rendition\Block\Type\Html;
 use Chamilo\Core\Repository\ContentObject\Assessment\Storage\DataClass\Assessment;
@@ -24,11 +23,10 @@ use Chamilo\Libraries\Storage\Query\Variable\StaticConditionVariable;
 use Chamilo\Libraries\Translation\Translation;
 
 /**
- *
  * @package application.weblcms.php.reporting.blocks Reporting block with an overview of scores of each assessment per
  *          user
- * @author Joris Willems <joris.willems@gmail.com>
- * @author Alexander Van Paemel
+ * @author  Joris Willems <joris.willems@gmail.com>
+ * @author  Alexander Van Paemel
  */
 class AssessmentUserScoresBlock extends ToolBlock
 {
@@ -55,13 +53,13 @@ class AssessmentUserScoresBlock extends ToolBlock
         );
         $condition = new AndCondition($conditions);
 
-        $order_by = array(
+        $order_by = [
             new OrderProperty(
                 new PropertyConditionVariable(
                     ContentObjectPublication::class, ContentObjectPublication::PROPERTY_MODIFIED_DATE
                 )
             )
-        );
+        ];
 
         $publication_resultset = DataManager::retrieves(
             ContentObjectPublication::class,
@@ -88,8 +86,8 @@ class AssessmentUserScoresBlock extends ToolBlock
             }
         }
 
-        $passingPercentage = Configuration::getInstance()->get_setting(
-            array('Chamilo\Core\Admin', 'passing_percentage')
+        $passingPercentage = $this->getConfigurationConsulter()->getSetting(
+            ['Chamilo\Core\Admin', 'passing_percentage']
         );
 
         $reporting_data->set_rows($headings);
@@ -244,7 +242,7 @@ class AssessmentUserScoresBlock extends ToolBlock
 
     public function get_views()
     {
-        return array(Html::VIEW_TABLE);
+        return [Html::VIEW_TABLE];
     }
 
     public function retrieve_data()

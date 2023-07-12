@@ -20,5 +20,5 @@ interface CourseAdminValidatorInterface
      *
      * @return bool
      */
-    public function isUserAdminOfCourse(User $user, Course $course);
+    public function isUserAdminOfCourse(User $user, Course $course): bool;
 }

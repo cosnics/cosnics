@@ -1,8 +1,9 @@
 <?php
 namespace Chamilo\Configuration\Package\Properties\Dependencies\Dependency;
 
-use Chamilo\Configuration\Configuration;
+use Chamilo\Configuration\Service\Consulter\RegistrationConsulter;
 use Chamilo\Configuration\Storage\DataClass\Registration;
+use Chamilo\Libraries\DependencyInjection\DependencyInjectionContainerBuilder;
 use Chamilo\Libraries\Format\MessageLogger;
 use Chamilo\Libraries\Translation\Translation;
 use Chamilo\Libraries\Utilities\StringUtilities;
@@ -10,30 +11,28 @@ use Composer\Semver\Semver;
 use Exception;
 
 /**
- *
  * @package Chamilo\Configuration\Package\Properties\Dependencies\Dependency
- * @author Hans De Bisschop <hans.de.bisschop@ehb.be>
- * @author Magali Gillard <magali.gillard@ehb.be>
- * @author Eduard Vossen <eduard.vossen@ehb.be>
+ * @author  Hans De Bisschop <hans.de.bisschop@ehb.be>
+ * @author  Magali Gillard <magali.gillard@ehb.be>
+ * @author  Eduard Vossen <eduard.vossen@ehb.be>
  */
 class Dependency
 {
-    const PROPERTY_ID = 'id';
-    const PROPERTY_VERSION = 'version';
+    public const PROPERTY_ID = 'id';
+    public const PROPERTY_VERSION = 'version';
 
-    const TYPE_EXTENSIONS = 'extensions';
+    public const TYPE_EXTENSIONS = 'extensions';
 
-    const TYPE_PACKAGE = 'package';
+    public const TYPE_PACKAGE = 'package';
 
-    const TYPE_SERVER = 'server';
-    const TYPE_SETTINGS = 'settings';
+    public const TYPE_SERVER = 'server';
+    public const TYPE_SETTINGS = 'settings';
 
     protected $logger;
 
     private $id;
 
     /**
-     *
      * @var string
      */
     private $version;
@@ -60,17 +59,21 @@ class Dependency
     /**
      * Checks the dependency in the registration table of the administration
      *
-     * @return boolean
+     * @return bool
      */
     public function check()
     {
         $parameters = [];
         $parameters['REQUIREMENT'] = $this->as_html();
 
-        $message = Translation::get('DependencyCheckRegistration') . ': ' . $this->as_html() . ' ' . Translation::get(
-                'Found', [], StringUtilities::LIBRARIES
-            ) . ': ';
-        $registration = Configuration::registration($this->get_id());
+        /**
+         * @var \Chamilo\Configuration\Service\Consulter\RegistrationConsulter $registrationConsulter
+         */
+        $registrationConsulter = DependencyInjectionContainerBuilder::getInstance()->createContainer()->get(
+            RegistrationConsulter::class
+        );
+
+        $registration = $registrationConsulter->getRegistrationForContext($this->get_id());
 
         if (empty($registration))
         {
@@ -129,7 +132,6 @@ class Dependency
     }
 
     /**
-     *
      * @param string $type
      *
      * @return Dependency
@@ -142,7 +144,7 @@ class Dependency
 
         if (!class_exists($class))
         {
-            throw new Exception(Translation::get('TypeDoesNotExist', array('type' => $type)));
+            throw new Exception(Translation::get('TypeDoesNotExist', ['type' => $type]));
         }
 
         return new $class();
@@ -160,22 +162,12 @@ class Dependency
         return $this->id;
     }
 
-    /**
-     *
-     * @param string $id
-     */
-    public function set_id($id)
-    {
-        $this->id = $id;
-    }
-
     public function get_logger()
     {
         return $this->logger;
     }
 
     /**
-     *
      * @return string
      */
     public function get_version()
@@ -184,23 +176,29 @@ class Dependency
     }
 
     /**
+     * @param string $context
      *
+     * @return bool
+     */
+    public function needs($context)
+    {
+        return $this->get_id() == $context;
+    }
+
+    /**
+     * @param string $id
+     */
+    public function set_id($id)
+    {
+        $this->id = $id;
+    }
+
+    /**
      * @param string $version
      */
     public function set_version($version)
     {
         $this->version = $version;
-    }
-
-    /**
-     *
-     * @param string $context
-     *
-     * @return boolean
-     */
-    public function needs($context)
-    {
-        return $this->get_id() == $context;
     }
 
     public static function type($type)

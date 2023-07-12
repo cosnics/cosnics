@@ -6,7 +6,6 @@ use Chamilo\Application\Weblcms\Integration\Chamilo\Core\Tracking\Storage\DataCl
 use Chamilo\Application\Weblcms\Integration\Chamilo\Core\Tracking\Storage\DataClass\QuestionAttempt;
 use Chamilo\Application\Weblcms\Storage\DataClass\ContentObjectPublication;
 use Chamilo\Application\Weblcms\Storage\DataManager;
-use Chamilo\Configuration\Configuration;
 use Chamilo\Core\Reporting\ReportingData;
 use Chamilo\Core\Reporting\Viewer\Rendition\Block\Type\Html;
 use Chamilo\Core\Repository\Storage\DataClass\ComplexContentObjectItem;
@@ -20,12 +19,11 @@ use Chamilo\Libraries\Storage\Query\Variable\StaticConditionVariable;
 use Chamilo\Libraries\Translation\Translation;
 
 /**
- *
  * @package application.weblcms.php.reporting.blocks Reporting block with an overview of scores of each assessment
  *          question per user
- * @author Joris Willems <joris.willems@gmail.com>
- * @author Alexander Van Paemel
- * @author Anthony Hurst (Hogeschool Gent)
+ * @author  Joris Willems <joris.willems@gmail.com>
+ * @author  Alexander Van Paemel
+ * @author  Anthony Hurst (Hogeschool Gent)
  */
 class AssessmentQuestionsUsersBlock extends ToolBlock
 {
@@ -43,7 +41,7 @@ class AssessmentQuestionsUsersBlock extends ToolBlock
      * Instatiates the column headers.
      *
      * @param type $parent Pass-through variable. Please refer to parent class(es) for more details. &param type
-     *        $vertical Pass-through variable. Please refer to parent class(es) for more details.
+     *                     $vertical Pass-through variable. Please refer to parent class(es) for more details.
      */
     public function __construct($parent, $vertical)
     {
@@ -55,7 +53,7 @@ class AssessmentQuestionsUsersBlock extends ToolBlock
      * Obtains the score for each question.
      *
      * @param array $assessment_attempts_tracker_ids The ids of the assessment attempts trackers whose question attempts
-     *        trackers are to be retrieved
+     *                                               trackers are to be retrieved
      *
      * @return array Format $question_id => $question_score.
      * @author Anthony Hurst (Hogeschool Gent)
@@ -170,7 +168,7 @@ class AssessmentQuestionsUsersBlock extends ToolBlock
 
     public function get_views()
     {
-        return array(Html::VIEW_TABLE);
+        return [Html::VIEW_TABLE];
     }
 
     /**
@@ -201,7 +199,6 @@ class AssessmentQuestionsUsersBlock extends ToolBlock
         );
 
         /**
-         *
          * @var $questions Defines column headers against the question id.
          */
         $question_headers = [];
@@ -282,8 +279,8 @@ class AssessmentQuestionsUsersBlock extends ToolBlock
             );
         }
 
-        $passingPercentage = Configuration::getInstance()->get_setting(
-            array('Chamilo\Core\Admin', 'passing_percentage')
+        $passingPercentage = $this->getConfigurationConsulter()->getSetting(
+            ['Chamilo\Core\Admin', 'passing_percentage']
         );
 
         foreach ($user_question_statistics as $user_id => $question_statistics)
