@@ -25,8 +25,8 @@ class MoverComponent extends Manager
             throw new NotAllowedException();
         }
 
-        $id = Request::get(self::PARAM_COURSE_SECTION_ID);
-        $direction = Request::get(self::PARAM_DIRECTION);
+        $id = $this->getRequest()->query->get(self::PARAM_COURSE_SECTION_ID);
+        $direction = $this->getRequest()->query->get(self::PARAM_DIRECTION);
 
         if (! empty($id))
         {

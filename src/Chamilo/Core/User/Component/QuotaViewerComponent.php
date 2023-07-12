@@ -46,7 +46,7 @@ class QuotaViewerComponent extends Manager
             throw new NotAllowedException();
         }
 
-        $selected_user_id = Request::get(self::PARAM_USER_USER_ID);
+        $selected_user_id = $this->getRequest()->query->get(self::PARAM_USER_USER_ID);
         if (!$selected_user_id)
         {
             $this->selected_user = $this->getUser();

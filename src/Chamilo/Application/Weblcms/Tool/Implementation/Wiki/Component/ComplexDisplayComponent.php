@@ -26,7 +26,7 @@ class ComplexDisplayComponent extends Manager implements DelegateComponent, Wiki
 
     public function run()
     {
-        $publication_id = Request::get(\Chamilo\Application\Weblcms\Tool\Manager::PARAM_PUBLICATION_ID);
+        $publication_id = $this->getRequest()->query->get(\Chamilo\Application\Weblcms\Tool\Manager::PARAM_PUBLICATION_ID);
         $this->set_parameter(\Chamilo\Application\Weblcms\Tool\Manager::PARAM_PUBLICATION_ID, $publication_id);
 
         $this->publication = DataManager::retrieve_by_id(

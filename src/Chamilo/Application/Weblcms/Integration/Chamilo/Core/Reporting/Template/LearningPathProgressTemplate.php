@@ -33,7 +33,7 @@ class LearningPathProgressTemplate extends ReportingTemplate
     {
         parent::__construct($parent);
 
-        $this->course_id = Request::get(Manager::PARAM_COURSE);
+        $this->course_id = $this->getRequest()->query->get(Manager::PARAM_COURSE);
         $this->set_parameter(Manager::PARAM_COURSE, $this->course_id);
 
         $custom_breadcrumbs = [];

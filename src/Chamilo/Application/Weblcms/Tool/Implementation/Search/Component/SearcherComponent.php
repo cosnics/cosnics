@@ -207,7 +207,7 @@ class SearcherComponent extends Manager
         $query = $this->get_query();
         if (!$query)
         {
-            $query = Request::post('query');
+            $query = $this->getRequest()->request->get('query');
         }
 
         if (isset($query) && $query != '')

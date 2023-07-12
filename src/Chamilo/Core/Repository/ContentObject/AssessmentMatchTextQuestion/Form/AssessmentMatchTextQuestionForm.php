@@ -319,8 +319,8 @@ class AssessmentMatchTextQuestionForm extends ContentObjectForm
             $session->set('match_skip_options', []);
         }
 
-        $extraOptionRequested = Request::post('add');
-        $removedOptions = Request::post('remove');
+        $extraOptionRequested = $this->getRequest()->request->get('add');
+        $removedOptions = $this->getRequest()->request->get('remove');
 
         if (isset($extraOptionRequested))
         {
@@ -353,10 +353,10 @@ class AssessmentMatchTextQuestionForm extends ContentObjectForm
         return parent::update_content_object();
     }
 
-    public function validate()
+    public function validate(): bool
     {
-        $extraOptionRequested = Request::post('add');
-        $removedOptions = Request::post('remove');
+        $extraOptionRequested = $this->getRequest()->request->get('add');
+        $removedOptions = $this->getRequest()->request->get('remove');
 
         if (isset($extraOptionRequested) || isset($removedOptions))
         {

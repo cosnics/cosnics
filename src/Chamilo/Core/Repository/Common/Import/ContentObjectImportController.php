@@ -32,8 +32,6 @@ abstract class ContentObjectImportController
      */
     public function __construct($parameters)
     {
-        $this->initializeContainer();
-
         $this->parameters = $parameters;
     }
 

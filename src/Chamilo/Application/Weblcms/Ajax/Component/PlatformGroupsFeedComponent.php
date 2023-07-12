@@ -78,7 +78,7 @@ class PlatformGroupsFeedComponent extends GroupsFeedComponent
      */
     public function get_user_ids()
     {
-        $filter = Request::post(self::PARAM_FILTER);
+        $filter = $this->getRequest()->request->get(self::PARAM_FILTER);
         $filter_id = substr($filter, 2);
 
         if (!$filter_id)
@@ -112,7 +112,7 @@ class PlatformGroupsFeedComponent extends GroupsFeedComponent
     public function retrieve_groups()
     {
         // Set the conditions for the search query
-        $search_query = Request::post(self::PARAM_SEARCH_QUERY);
+        $search_query = $this->getRequest()->request->get(self::PARAM_SEARCH_QUERY);
         if ($search_query && $search_query != '')
         {
             $conditions[] = new ContainsCondition(
@@ -121,7 +121,7 @@ class PlatformGroupsFeedComponent extends GroupsFeedComponent
         }
 
         // Set the filter conditions
-        $filter = Request::post(self::PARAM_FILTER);
+        $filter = $this->getRequest()->request->get(self::PARAM_FILTER);
 
         // Javascript filter
         if (!is_null($filter))
@@ -134,7 +134,7 @@ class PlatformGroupsFeedComponent extends GroupsFeedComponent
         }
         else
         {
-            $course_id = Request::post(self::PARAM_COURSE_ID);
+            $course_id = $this->getRequest()->request->get(self::PARAM_COURSE_ID);
 
             $groupConditions = [];
             $groupConditions[] = new EqualityCondition(

@@ -156,7 +156,7 @@ class CreatorComponent extends Manager
 
     public function is_shared_object_browser()
     {
-        return (Request::get(\Chamilo\Core\Repository\Viewer\Component\BrowserComponent::SHARED_BROWSER) == 1);
+        return ($this->getRequest()->query->get(\Chamilo\Core\Repository\Viewer\Component\BrowserComponent::SHARED_BROWSER) == 1);
     }
 
     public function render_header(string $pageTitle = ''): string

@@ -14,19 +14,17 @@ use Chamilo\Core\Repository\Storage\DataClass\ComplexContentObjectItem;
 use Chamilo\Libraries\Architecture\Exceptions\ObjectNotExistException;
 use Chamilo\Libraries\Format\Structure\Breadcrumb;
 use Chamilo\Libraries\Format\Structure\BreadcrumbTrail;
-use Chamilo\Libraries\Platform\Session\Request;
-use Chamilo\Libraries\Translation\Translation;
 use Chamilo\Libraries\Storage\Parameters\DataClassRetrievesParameters;
 use Chamilo\Libraries\Storage\Query\Condition\EqualityCondition;
 use Chamilo\Libraries\Storage\Query\Variable\PropertyConditionVariable;
 use Chamilo\Libraries\Storage\Query\Variable\StaticConditionVariable;
+use Chamilo\Libraries\Translation\Translation;
 
 /**
- *
  * @package application.weblcms.php.reporting.templates Reporting template with information about the assessment, the
  *          attempts per user and questions score stats
- * @author Joris Willems <joris.willems@gmail.com>
- * @author Alexander Van Paemel
+ * @author  Joris Willems <joris.willems@gmail.com>
+ * @author  Alexander Van Paemel
  */
 class AssessmentAttemptsTemplate extends ReportingTemplate
 {
@@ -35,19 +33,19 @@ class AssessmentAttemptsTemplate extends ReportingTemplate
     {
         parent::__construct($parent);
 
-        $this->course_id = Request::get(Manager::PARAM_COURSE);
+        $this->course_id = $this->getRequest()->query->get(Manager::PARAM_COURSE);
         if ($this->course_id)
         {
             $this->set_parameter(Manager::PARAM_COURSE, $this->course_id);
         }
 
-        $this->publication_id = Request::get(Manager::PARAM_PUBLICATION);
+        $this->publication_id = $this->getRequest()->query->get(Manager::PARAM_PUBLICATION);
         if ($this->publication_id)
         {
             $this->set_parameter(Manager::PARAM_PUBLICATION, $this->publication_id);
         }
 
-        $sel = (Request::post('sel')) ? Request::post('sel') : Request::get('sel');
+        $sel = $this->getRequest()->request->get('sel', $this->getRequest()->query->get('sel'));
         if ($sel)
         {
             $this->set_parameter('sel', $sel);
@@ -55,8 +53,7 @@ class AssessmentAttemptsTemplate extends ReportingTemplate
 
         // Retrieve the questions of the assessment
         $publication = DataManager::retrieve_by_id(
-            ContentObjectPublication::class,
-            $this->publication_id
+            ContentObjectPublication::class, $this->publication_id
         );
 
         if (!$publication instanceof ContentObjectPublication)
@@ -70,17 +67,14 @@ class AssessmentAttemptsTemplate extends ReportingTemplate
 
         $condition = new EqualityCondition(
             new PropertyConditionVariable(
-                ComplexContentObjectItem::class,
-                ComplexContentObjectItem::PROPERTY_PARENT
-            ),
-            new StaticConditionVariable($publication->get_content_object_id())
+                ComplexContentObjectItem::class, ComplexContentObjectItem::PROPERTY_PARENT
+            ), new StaticConditionVariable($publication->get_content_object_id())
         );
         $questions_resultset = \Chamilo\Core\Repository\Storage\DataManager::retrieve_complex_content_object_items(
-            ComplexContentObjectItem::class,
-            new DataClassRetrievesParameters($condition)
+            ComplexContentObjectItem::class, new DataClassRetrievesParameters($condition)
         );
 
-        foreach($questions_resultset as $question)
+        foreach ($questions_resultset as $question)
         {
             $this->th_titles[] = $question->get_ref_object()->get_title();
         }
@@ -100,8 +94,7 @@ class AssessmentAttemptsTemplate extends ReportingTemplate
     protected function add_breadcrumbs()
     {
         $assessment = DataManager::retrieve_by_id(
-            ContentObjectPublication::class,
-            $this->publication_id
+            ContentObjectPublication::class, $this->publication_id
         )->get_content_object();
 
         $trail = BreadcrumbTrail::getInstance();
@@ -109,10 +102,8 @@ class AssessmentAttemptsTemplate extends ReportingTemplate
         $trail->add(
             new Breadcrumb(
                 $this->get_url(
-                    array(\Chamilo\Core\Reporting\Viewer\Manager::PARAM_BLOCK_ID => 2),
-                    array(Manager::PARAM_TEMPLATE_ID)
-                ),
-                Translation::get('Assessments')
+                    [\Chamilo\Core\Reporting\Viewer\Manager::PARAM_BLOCK_ID => 2], [Manager::PARAM_TEMPLATE_ID]
+                ), Translation::get('Assessments')
             )
         );
 

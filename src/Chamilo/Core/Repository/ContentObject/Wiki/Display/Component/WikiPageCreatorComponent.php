@@ -70,15 +70,12 @@ class WikiPageCreatorComponent extends Manager implements ViewerInterface, Deleg
 
         $html[] = parent::render_header($pageTitle, $complex_wiki_page);
 
-        $repository_viewer_action = Request::get(\Chamilo\Core\Repository\Viewer\Manager::PARAM_ACTION);
+        $repository_viewer_action = $this->getRequest()->query->get(\Chamilo\Core\Repository\Viewer\Manager::PARAM_ACTION);
 
         switch ($repository_viewer_action)
         {
             case \Chamilo\Core\Repository\Viewer\Manager::ACTION_BROWSER :
                 $title = 'BrowseAvailableWikiPages';
-                break;
-            case \Chamilo\Core\Repository\Viewer\Manager::ACTION_CREATOR :
-                $title = 'CreateWikiPage';
                 break;
             case \Chamilo\Core\Repository\Viewer\Manager::ACTION_VIEWER :
                 $title = 'PreviewWikiPage';

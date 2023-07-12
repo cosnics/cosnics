@@ -7,23 +7,22 @@ use Chamilo\Libraries\Platform\Session\Request;
 use Chamilo\Libraries\Translation\Translation;
 
 /**
- *
  * @package Chamilo\Libraries\Format\Structure\ActionBar
- * @author Hans De Bisschop <hans.de.bisschop@ehb.be>
- * @author Magali Gillard <magali.gillard@ehb.be>
- * @author Eduard Vossen <eduard.vossen@ehb.be>
+ * @author  Hans De Bisschop <hans.de.bisschop@ehb.be>
+ * @author  Magali Gillard <magali.gillard@ehb.be>
+ * @author  Eduard Vossen <eduard.vossen@ehb.be>
  */
 class SearchForm extends FormValidator
 {
     /**
-     * #@+ Search parameter
-     */
-    const PARAM_SIMPLE_SEARCH_QUERY = 'query';
-
-    /**
      * Name of the search form
      */
-    const FORM_NAME = 'search';
+    public const FORM_NAME = 'search';
+
+    /**
+     * #@+ Search parameter
+     */
+    public const PARAM_SIMPLE_SEARCH_QUERY = 'query';
 
     /**
      * Creates a new search form
@@ -38,7 +37,7 @@ class SearchForm extends FormValidator
 
         if ($query)
         {
-            $this->setDefaults(array(self::PARAM_SIMPLE_SEARCH_QUERY => $query));
+            $this->setDefaults([self::PARAM_SIMPLE_SEARCH_QUERY => $query]);
         }
 
         $this->buildForm();
@@ -50,11 +49,11 @@ class SearchForm extends FormValidator
     private function buildForm()
     {
         $this->addElement(
-            'text', self::PARAM_SIMPLE_SEARCH_QUERY, Translation::get('SearchFor'), array('class' => 'form-control')
+            'text', self::PARAM_SIMPLE_SEARCH_QUERY, Translation::get('SearchFor'), ['class' => 'form-control']
         );
 
         $this->addElement(
-            'style_button', 'submit', Translation::get('Search'), array('class' => 'btn-primary'), 'submit',
+            'style_button', 'submit', Translation::get('Search'), ['class' => 'btn-primary'], 'submit',
             new FontAwesomeGlyph('search')
         );
 
@@ -65,6 +64,11 @@ class SearchForm extends FormValidator
         $renderer->setElementTemplate('{element}', 'submit');
     }
 
+    public function clearFormSubmitted()
+    {
+        return !is_null($this->getRequest()->request->get('clear'));
+    }
+
     /**
      * Gets the conditions that this form introduces.
      *
@@ -72,18 +76,13 @@ class SearchForm extends FormValidator
      */
     public function getQuery()
     {
-        $query = Request::post(self::PARAM_SIMPLE_SEARCH_QUERY);
+        $query = $this->getRequest()->request->get(self::PARAM_SIMPLE_SEARCH_QUERY);
 
         if (!$query)
         {
-            $query = Request::get(self::PARAM_SIMPLE_SEARCH_QUERY);
+            $query = $this->getRequest()->query->get(self::PARAM_SIMPLE_SEARCH_QUERY);
         }
 
         return $query;
-    }
-
-    public function clearFormSubmitted()
-    {
-        return !is_null(Request::post('clear'));
     }
 }

@@ -15,7 +15,6 @@ class ObjectNotExistException extends UserException
 
     public function __construct(string $objectTranslation, ?string $id = null)
     {
-        $this->initializeContainer();
         parent::__construct(
             $this->getTranslator()->trans('ObjectNotExist', array('OBJECT' => $objectTranslation, 'OBJECT_ID' => $id),
                 StringUtilities::LIBRARIES)

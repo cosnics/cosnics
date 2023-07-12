@@ -10,7 +10,6 @@ use Chamilo\Core\Repository\Workspace\Storage\DataClass\Workspace;
 use Chamilo\Libraries\Architecture\Application\Application;
 use Chamilo\Libraries\Format\Form\FormValidator;
 use Chamilo\Libraries\Format\Structure\PageConfiguration;
-use Chamilo\Libraries\Platform\Session\Request;
 use Chamilo\Libraries\Translation\Translation;
 
 /**
@@ -30,7 +29,7 @@ class CourseBookmarkCreatorComponent extends Manager
     {
         $this->checkAuthorization(Manager::CONTEXT, 'ManagePersonalCourses');
 
-        $course_id = Request::get(self::PARAM_COURSE);
+        $course_id = $this->getRequest()->query->get(self::PARAM_COURSE);
 
         $content_object = new Bookmark();
 

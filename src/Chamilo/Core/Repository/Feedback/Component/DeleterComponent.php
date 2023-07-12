@@ -20,7 +20,7 @@ class DeleterComponent extends Manager
      */
     public function run()
     {
-        $feedback_ids = Request::get(self::PARAM_FEEDBACK_ID);
+        $feedback_ids = $this->getRequest()->query->get(self::PARAM_FEEDBACK_ID);
         
         try
         {

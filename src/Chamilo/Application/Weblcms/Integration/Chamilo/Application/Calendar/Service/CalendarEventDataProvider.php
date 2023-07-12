@@ -22,11 +22,6 @@ abstract class CalendarEventDataProvider extends InternalCalendar
 {
     use DependencyInjectionContainerTrait;
 
-    public function __construct()
-    {
-        $this->initializeContainer();
-    }
-
     /**
      * @return \Chamilo\Application\Calendar\Service\AvailabilityService
      */

@@ -20,7 +20,7 @@ class InstallerComponent extends Manager implements DelegateComponent
      */
     public function run()
     {
-        $context = Request::get(self::PARAM_CONTEXT);
+        $context = $this->getRequest()->query->get(self::PARAM_CONTEXT);
         $installer = new PackageInstaller($context);
         $installer->run();
 

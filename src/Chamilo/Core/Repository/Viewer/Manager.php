@@ -84,8 +84,7 @@ abstract class Manager extends Application
         $this->excluded_objects = [];
 
         $this->set_parameter(
-            self::PARAM_ACTION,
-            (Request::get(self::PARAM_ACTION) ? Request::get(self::PARAM_ACTION) : self::ACTION_CREATOR)
+            self::PARAM_ACTION, $this->getRequest()->query->get(self::PARAM_ACTION, self::ACTION_CREATOR)
         );
     }
 

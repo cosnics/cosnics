@@ -22,13 +22,6 @@ class SettingsConnector
     use DependencyInjectionContainerTrait;
 
     /**
-     */
-    public function __construct()
-    {
-        $this->initializeContainer();
-    }
-
-    /**
      * Returns the available user picture providers
      *
      * @return array

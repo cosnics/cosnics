@@ -2,110 +2,49 @@
 namespace Chamilo\Libraries\Platform\Session;
 
 use Chamilo\Libraries\DependencyInjection\DependencyInjectionContainerBuilder;
-use Chamilo\Libraries\Platform\Security;
+use Chamilo\Libraries\Platform\ChamiloRequest;
 
 /**
- * @package Chamilo\Libraries\Platform\Session
- *
- * @deprecated Use \Chamilo\Libraries\Platform\ChamiloRequest service now
+ * @package    Chamilo\Libraries\Platform\Session
+ * @deprecated Use \Chamilo\Libraries\Platform\ChamiloRequest
  */
 class Request
 {
 
-    public static ?Security $security = null;
+    public static ?ChamiloRequest $chamiloRequest = null;
 
     /**
-     * @param string $variable
-     *
-     * @return mixed
+     * @throws \Chamilo\Libraries\Storage\Exception\ConnectionException
+     * @throws \Symfony\Component\Cache\Exception\CacheException
+     * @deprecated Use \Chamilo\Libraries\Platform\ChamiloRequest->query->get()
      */
-    public static function environment($variable)
+    public static function get(string $variable, mixed $default = null): mixed
     {
-        // TODO: Add the necessary security filters if and where necessary
-        return $_ENV[$variable];
+        return self::getRequest()->query->get($variable, $default);
     }
 
     /**
-     * @param string $variable
-     *
-     * @return mixed
+     * @throws \Chamilo\Libraries\Storage\Exception\ConnectionException
+     * @throws \Symfony\Component\Cache\Exception\CacheException
      */
-    public static function file($variable)
+    public static function getRequest(): ChamiloRequest
     {
-        // TODO: Add the necessary security filters if and where necessary
-        return $_FILES[$variable];
-    }
-
-    /**
-     * @param string $variable
-     * @param mixed $default
-     *
-     * @return mixed
-     */
-    public static function get($variable, $default = null)
-    {
-        if (isset($_GET[$variable]))
+        if (self::$chamiloRequest === null)
         {
-            // TODO: Add the necessary security filters if and where necessary
-            return self::getSecurity()->removeXSS($_GET[$variable]);
+            self::$chamiloRequest =
+                DependencyInjectionContainerBuilder::getInstance()->createContainer()->get(ChamiloRequest::class);
         }
 
-        return $default;
+        return self::$chamiloRequest;
     }
 
     /**
-     * @throws \Exception
+     * @throws \Chamilo\Libraries\Storage\Exception\ConnectionException
+     * @throws \Symfony\Component\Cache\Exception\CacheException
+     * @deprecated Use \Chamilo\Libraries\Platform\ChamiloRequest->request->get()
      */
-    public static function getSecurity(): Security
+    public static function post(string $variable): mixed
     {
-        if (self::$security === null)
-        {
-            self::$security =
-                DependencyInjectionContainerBuilder::getInstance()->createContainer()->get(Security::class);
-        }
-
-        return self::$security;
-    }
-
-    /**
-     * @param string $variable
-     *
-     * @return mixed
-     */
-    public static function post($variable)
-    {
-        if (isset($_POST[$variable]))
-        {
-            // TODO: Add the necessary security filters if and where necessary
-            return self::getSecurity()->removeXSS($_POST[$variable]);
-        }
-
-        return null;
-    }
-
-    /**
-     * @param string $variable
-     * @param mixed $default
-     *
-     * @return mixed
-     */
-    public static function server($variable, $default = null)
-    {
-        if (isset($_SERVER[$variable]))
-        {
-            // TODO: Add the necessary security filters if and where necessary
-            return $_SERVER[$variable];
-        }
-
-        return $default;
-    }
-
-    /**
-     * @param string $variable
-     * @param mixed $value
-     */
-    public static function set_get($variable, $value)
-    {
-        $_GET[$variable] = $value;
+        return self::getRequest()->request->get($variable);
     }
 }

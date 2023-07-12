@@ -10,7 +10,6 @@ use Chamilo\Application\Weblcms\Tool\Implementation\LearningPath\Storage\DataMan
 use Chamilo\Core\Repository\ContentObject\Assignment\Storage\DataClass\Assignment;
 use Chamilo\Core\Repository\ContentObject\LearningPath\Storage\DataClass\LearningPath;
 use Chamilo\Libraries\Architecture\Exceptions\NotAllowedException;
-use Chamilo\Libraries\Platform\Session\Request;
 use Chamilo\Libraries\Storage\Parameters\DataClassRetrievesParameters;
 use Chamilo\Libraries\Storage\Query\Condition\EqualityCondition;
 use Chamilo\Libraries\Storage\Query\Variable\PropertyConditionVariable;
@@ -19,7 +18,6 @@ use Chamilo\Libraries\Translation\Translation;
 use Chamilo\Libraries\Utilities\StringUtilities;
 
 /**
- *
  * @package application.lib.weblcms.tool.learning_path.component
  */
 class DeleterComponent extends Manager
@@ -27,9 +25,10 @@ class DeleterComponent extends Manager
 
     public function run()
     {
-        if (Request::get(\Chamilo\Application\Weblcms\Tool\Manager::PARAM_PUBLICATION_ID))
+        if ($this->getRequest()->query->get(\Chamilo\Application\Weblcms\Tool\Manager::PARAM_PUBLICATION_ID))
         {
-            $publication_ids = Request::get(\Chamilo\Application\Weblcms\Tool\Manager::PARAM_PUBLICATION_ID);
+            $publication_ids =
+                $this->getRequest()->query->get(\Chamilo\Application\Weblcms\Tool\Manager::PARAM_PUBLICATION_ID);
         }
         else
         {
@@ -38,7 +37,7 @@ class DeleterComponent extends Manager
 
         if (!is_array($publication_ids))
         {
-            $publication_ids = array($publication_ids);
+            $publication_ids = [$publication_ids];
         }
 
         foreach ($publication_ids as $pid)
@@ -61,7 +60,7 @@ class DeleterComponent extends Manager
                     LearningPathTreeNodeAttempt::class, new DataClassRetrievesParameters($condition)
                 );
 
-                foreach($attempts as $attempt)
+                foreach ($attempts as $attempt)
                 {
                     $attempt->delete();
                 }
@@ -94,7 +93,7 @@ class DeleterComponent extends Manager
         {
             $message = htmlentities(
                 Translation::get(
-                    'ObjectsDeleted', array('OBJECT' => Translation::get('LearningPath')), StringUtilities::LIBRARIES
+                    'ObjectsDeleted', ['OBJECT' => Translation::get('LearningPath')], StringUtilities::LIBRARIES
                 )
             );
         }
@@ -102,14 +101,14 @@ class DeleterComponent extends Manager
         {
             $message = htmlentities(
                 Translation::get(
-                    'ObjectDeleted', array('OBJECT' => Translation::get('LearningPath')), StringUtilities::LIBRARIES
+                    'ObjectDeleted', ['OBJECT' => Translation::get('LearningPath')], StringUtilities::LIBRARIES
                 )
             );
         }
 
         $this->redirectWithMessage(
             $message, '',
-            array('tool_action' => null, \Chamilo\Application\Weblcms\Tool\Manager::PARAM_PUBLICATION_ID => null)
+            ['tool_action' => null, \Chamilo\Application\Weblcms\Tool\Manager::PARAM_PUBLICATION_ID => null]
         );
     }
 

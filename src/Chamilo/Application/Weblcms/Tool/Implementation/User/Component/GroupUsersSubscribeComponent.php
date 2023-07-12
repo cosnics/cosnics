@@ -5,17 +5,16 @@ use Chamilo\Application\Weblcms\Tool\Implementation\User\Manager;
 use Chamilo\Core\Group\Storage\DataClass\Group;
 use Chamilo\Core\Group\Storage\DataClass\GroupRelUser;
 use Chamilo\Core\Group\Storage\DataManager;
-use Chamilo\Libraries\Platform\Session\Request;
-use Chamilo\Libraries\Translation\Translation;
 use Chamilo\Libraries\Storage\Parameters\DataClassRetrievesParameters;
 use Chamilo\Libraries\Storage\Query\Condition\EqualityCondition;
 use Chamilo\Libraries\Storage\Query\Variable\PropertyConditionVariable;
 use Chamilo\Libraries\Storage\Query\Variable\StaticConditionVariable;
+use Chamilo\Libraries\Translation\Translation;
 
 /**
- *
  * @package application.lib.weblcms.weblcms_manager.component
  */
+
 /**
  * Weblcms component which allows the user to manage his or her course subscriptions
  */
@@ -28,11 +27,11 @@ class GroupUsersSubscribeComponent extends Manager
     public function run()
     {
         $course = $this->get_course();
-        $groups = Request::get(self::PARAM_OBJECTS);
+        $groups = $this->getRequest()->query->get(self::PARAM_OBJECTS);
 
-        if (! is_array($groups))
+        if (!is_array($groups))
         {
-            $groups = array($groups);
+            $groups = [$groups];
         }
         if (isset($course))
         {
@@ -55,9 +54,10 @@ class GroupUsersSubscribeComponent extends Manager
                 }
 
                 $this->redirectWithMessage(
-                    Translation::get($message), !$success,
-                    array(
-                        \Chamilo\Application\Weblcms\Tool\Manager::PARAM_ACTION => self::ACTION_SUBSCRIBE_GROUP_DETAILS));
+                    Translation::get($message), !$success, [
+                        \Chamilo\Application\Weblcms\Tool\Manager::PARAM_ACTION => self::ACTION_SUBSCRIBE_GROUP_DETAILS
+                    ]
+                );
             }
         }
     }
@@ -65,34 +65,39 @@ class GroupUsersSubscribeComponent extends Manager
     public function subscribe_group($group_id, $course)
     {
         $group_users = DataManager::retrieves(
-            GroupRelUser::class,
-            new DataClassRetrievesParameters(
+            GroupRelUser::class, new DataClassRetrievesParameters(
                 new EqualityCondition(
                     new PropertyConditionVariable(GroupRelUser::class, GroupRelUser::PROPERTY_GROUP_ID),
-                    new StaticConditionVariable($group_id))));
+                    new StaticConditionVariable($group_id)
+                )
+            )
+        );
 
-        foreach($group_users as $user)
+        foreach ($group_users as $user)
         {
             $user_id = $user->get_user_id();
             if ($user_id != $this->get_user_id())
             {
-                $status = Request::get(\Chamilo\Application\Weblcms\Manager::PARAM_STATUS) ? Request::get(
-                    \Chamilo\Application\Weblcms\Manager::PARAM_STATUS) : 5;
+                $status = $this->getRequest()->query->get(\Chamilo\Application\Weblcms\Manager::PARAM_STATUS) ?
+                    $this->getRequest()->query->get(
+                        \Chamilo\Application\Weblcms\Manager::PARAM_STATUS
+                    ) : 5;
                 \Chamilo\Application\Weblcms\Course\Storage\DataManager::subscribe_user_to_course(
-                    $course->get_id(),
-                    $status,
-                    $user_id);
+                    $course->get_id(), $status, $user_id
+                );
             }
         }
 
         $groups = DataManager::retrieves(
-            Group::class,
-            new DataClassRetrievesParameters(
+            Group::class, new DataClassRetrievesParameters(
                 new EqualityCondition(
                     new PropertyConditionVariable(Group::class, Group::PROPERTY_PARENT_ID),
-                    new StaticConditionVariable($group_id))));
+                    new StaticConditionVariable($group_id)
+                )
+            )
+        );
 
-        foreach($groups as $group)
+        foreach ($groups as $group)
         {
             $this->subscribe_group($group->get_id(), $course);
         }

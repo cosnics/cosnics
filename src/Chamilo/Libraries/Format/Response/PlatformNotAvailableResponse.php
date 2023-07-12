@@ -16,13 +16,10 @@ class PlatformNotAvailableResponse extends Response
     use DependencyInjectionContainerTrait;
 
     /**
-     * @throws \ReflectionException
      * @throws \Exception
      */
     public function __construct(string $message, ?Application $application = null)
     {
-        $this->initializeContainer();
-
         $this->getPageConfiguration()->setApplication($application);
 
         $html = [];

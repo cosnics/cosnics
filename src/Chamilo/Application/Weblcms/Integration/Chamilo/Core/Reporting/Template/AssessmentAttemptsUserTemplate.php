@@ -14,11 +14,10 @@ use Chamilo\Libraries\Platform\Session\Request;
 use Chamilo\Libraries\Translation\Translation;
 
 /**
- *
  * @package application.weblcms.php.reporting.templates Reporting template with an overview of the assessment attempts
  *          of one user
- * @author Joris Willems <joris.willems@gmail.com>
- * @author Alexander Van Paemel
+ * @author  Joris Willems <joris.willems@gmail.com>
+ * @author  Alexander Van Paemel
  */
 class AssessmentAttemptsUserTemplate extends ReportingTemplate
 {
@@ -34,36 +33,13 @@ class AssessmentAttemptsUserTemplate extends ReportingTemplate
         $this->add_breadcrumbs();
     }
 
-    public function initialize_parameters()
-    {
-        $this->publication_id = Request::get(\Chamilo\Application\Weblcms\Manager::PARAM_PUBLICATION);
-        $this->user_id = Request::get(\Chamilo\Application\Weblcms\Manager::PARAM_USERS);
-
-        if ($this->publication_id)
-        {
-            $this->set_parameter(\Chamilo\Application\Weblcms\Manager::PARAM_PUBLICATION, $this->publication_id);
-        }
-
-        if ($this->user_id)
-        {
-            $this->set_parameter(\Chamilo\Application\Weblcms\Manager::PARAM_USERS, $this->user_id);
-        }
-
-        $course_id = Request::get(\Chamilo\Application\Weblcms\Manager::PARAM_COURSE);
-        if ($course_id)
-        {
-            $this->set_parameter(\Chamilo\Application\Weblcms\Manager::PARAM_COURSE, $course_id);
-        }
-    }
-
     /**
      * Adds the breadcrumbs to the breadcrumbtrail
      */
     protected function add_breadcrumbs()
     {
         $publication = \Chamilo\Application\Weblcms\Storage\DataManager::retrieve_by_id(
-            ContentObjectPublication::class,
-            $this->publication_id
+            ContentObjectPublication::class, $this->publication_id
         );
 
         if (!$publication instanceof ContentObjectPublication)
@@ -82,14 +58,12 @@ class AssessmentAttemptsUserTemplate extends ReportingTemplate
         $trail->add(
             new Breadcrumb(
                 $this->get_url(
-                    array(Manager::PARAM_BLOCK_ID => 2),
-                    array(\Chamilo\Application\Weblcms\Manager::PARAM_TEMPLATE_ID)
-                ),
-                Translation::get('Assessments')
+                    [Manager::PARAM_BLOCK_ID => 2], [\Chamilo\Application\Weblcms\Manager::PARAM_TEMPLATE_ID]
+                ), Translation::get('Assessments')
             )
         );
 
-        $filters = array(\Chamilo\Application\Weblcms\Manager::PARAM_USERS);
+        $filters = [\Chamilo\Application\Weblcms\Manager::PARAM_USERS];
 
         $params = [];
         $params[\Chamilo\Application\Weblcms\Manager::PARAM_TEMPLATE_ID] = AssessmentAttemptsTemplate::class;
@@ -103,9 +77,31 @@ class AssessmentAttemptsUserTemplate extends ReportingTemplate
 
         $trail->add(
             new Breadcrumb(
-                $this->get_url(),
-                DataManager::get_fullname_from_user($this->user_id)
+                $this->get_url(), DataManager::get_fullname_from_user($this->user_id)
             )
         );
+    }
+
+    public function initialize_parameters()
+    {
+        $this->publication_id =
+            $this->getRequest()->query->get(\Chamilo\Application\Weblcms\Manager::PARAM_PUBLICATION);
+        $this->user_id = $this->getRequest()->query->get(\Chamilo\Application\Weblcms\Manager::PARAM_USERS);
+
+        if ($this->publication_id)
+        {
+            $this->set_parameter(\Chamilo\Application\Weblcms\Manager::PARAM_PUBLICATION, $this->publication_id);
+        }
+
+        if ($this->user_id)
+        {
+            $this->set_parameter(\Chamilo\Application\Weblcms\Manager::PARAM_USERS, $this->user_id);
+        }
+
+        $course_id = $this->getRequest()->query->get(\Chamilo\Application\Weblcms\Manager::PARAM_COURSE);
+        if ($course_id)
+        {
+            $this->set_parameter(\Chamilo\Application\Weblcms\Manager::PARAM_COURSE, $course_id);
+        }
     }
 }

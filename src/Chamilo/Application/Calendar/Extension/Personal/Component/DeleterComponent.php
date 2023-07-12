@@ -5,7 +5,6 @@ use Chamilo\Application\Calendar\Extension\Personal\Manager;
 use Chamilo\Application\Calendar\Extension\Personal\Storage\DataClass\Publication;
 use Chamilo\Application\Calendar\Extension\Personal\Storage\DataManager;
 use Chamilo\Libraries\Architecture\Exceptions\NotAllowedException;
-use Chamilo\Libraries\Platform\Session\Request;
 use Chamilo\Libraries\Translation\Translation;
 use Chamilo\Libraries\Utilities\StringUtilities;
 
@@ -21,7 +20,7 @@ class DeleterComponent extends Manager
      */
     public function run()
     {
-        $ids = Request::get(self::PARAM_PUBLICATION_ID);
+        $ids = $this->getRequest()->query->get(self::PARAM_PUBLICATION_ID);
         $failures = 0;
 
         if (!empty($ids))

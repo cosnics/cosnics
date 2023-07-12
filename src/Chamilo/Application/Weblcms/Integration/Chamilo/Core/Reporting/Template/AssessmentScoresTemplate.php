@@ -10,7 +10,6 @@ use Chamilo\Core\Reporting\ReportingTemplate;
 use Chamilo\Core\Repository\ContentObject\Assessment\Storage\DataClass\Assessment;
 use Chamilo\Libraries\Format\Structure\Breadcrumb;
 use Chamilo\Libraries\Format\Structure\BreadcrumbTrail;
-use Chamilo\Libraries\Platform\Session\Request;
 use Chamilo\Libraries\Storage\Query\Condition\AndCondition;
 use Chamilo\Libraries\Storage\Query\Condition\EqualityCondition;
 use Chamilo\Libraries\Storage\Query\OrderBy;
@@ -20,11 +19,10 @@ use Chamilo\Libraries\Storage\Query\Variable\StaticConditionVariable;
 use Chamilo\Libraries\Translation\Translation;
 
 /**
- *
  * @package application.weblcms.php.reporting.templates Reporting template with an overview of scores of each assessment
  *          per user
- * @author Joris Willems <joris.willems@gmail.com>
- * @author Alexander Van Paemel
+ * @author  Joris Willems <joris.willems@gmail.com>
+ * @author  Alexander Van Paemel
  */
 class AssessmentScoresTemplate extends ReportingTemplate
 {
@@ -51,13 +49,13 @@ class AssessmentScoresTemplate extends ReportingTemplate
         );
         $condition = new AndCondition($conditions);
 
-        $order_by = array(
+        $order_by = [
             new OrderProperty(
                 new PropertyConditionVariable(
                     ContentObjectPublication::class, ContentObjectPublication::PROPERTY_MODIFIED_DATE
                 )
             )
-        );
+        ];
 
         $publications = DataManager::retrieve_content_object_publications(
             $condition, new OrderBy($order_by)
@@ -84,8 +82,7 @@ class AssessmentScoresTemplate extends ReportingTemplate
         $trail->add(
             new Breadcrumb(
                 $this->get_url(
-                    array(\Chamilo\Core\Reporting\Viewer\Manager::PARAM_BLOCK_ID => 4),
-                    array(Manager::PARAM_TEMPLATE_ID)
+                    [\Chamilo\Core\Reporting\Viewer\Manager::PARAM_BLOCK_ID => 4], [Manager::PARAM_TEMPLATE_ID]
                 ), Translation::get('LastAccessToToolsBlock')
             )
         );
@@ -95,12 +92,12 @@ class AssessmentScoresTemplate extends ReportingTemplate
 
     private function init_parameters()
     {
-        $this->course_id = Request::get(Manager::PARAM_COURSE);
+        $this->course_id = $this->getRequest()->query->get(Manager::PARAM_COURSE);
         if ($this->course_id)
         {
             $this->set_parameter(Manager::PARAM_COURSE, $this->course_id);
         }
-        $sel = (Request::post('sel')) ? Request::post('sel') : Request::get('sel');
+        $sel = $this->getRequest()->request->get('sel', $this->getRequest()->query->get('sel'));
         if ($sel)
         {
             $this->set_parameter('sel', $sel);

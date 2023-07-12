@@ -22,7 +22,7 @@ class AssessmentQuestionInformationBlock extends AssessmentQuestionsBlock
 
     public function count_data()
     {
-        $question_cid = Request::get(
+        $question_cid = $this->getRequest()->query->get(
             Manager::PARAM_QUESTION);
         $complex_question = \Chamilo\Core\Repository\Storage\DataManager::retrieve_by_id(
             ComplexContentObjectItem::class,

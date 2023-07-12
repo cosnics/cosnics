@@ -25,7 +25,7 @@ class UpdaterComponent extends Manager
      */
     public function run()
     {
-        $category_id = Request::get(self::PARAM_CATEGORY_ID);
+        $category_id = $this->getRequest()->query->get(self::PARAM_CATEGORY_ID);
 
         if (! $this->get_parent()->allowed_to_edit_category($category_id))
         {
@@ -42,7 +42,7 @@ class UpdaterComponent extends Manager
         $category = $categories->current();
 
         $trail = BreadcrumbTrail::getInstance();
-        $this->set_parameter(self::PARAM_CATEGORY_ID, Request::get(self::PARAM_CATEGORY_ID));
+        $this->set_parameter(self::PARAM_CATEGORY_ID, $this->getRequest()->query->get(self::PARAM_CATEGORY_ID));
         $trail->add(
             new Breadcrumb(
                 $this->get_url(),

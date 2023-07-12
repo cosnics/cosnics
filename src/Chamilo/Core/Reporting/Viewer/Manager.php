@@ -34,7 +34,7 @@ abstract class Manager extends Application
      */
     public function get_current_block()
     {
-        return Request::get(self::PARAM_BLOCK_ID);
+        return $this->getRequest()->query->get(self::PARAM_BLOCK_ID);
     }
 
     /**
@@ -42,7 +42,7 @@ abstract class Manager extends Application
      */
     public function get_current_view()
     {
-        return Request::get(self::PARAM_VIEWS);
+        return $this->getRequest()->query->get(self::PARAM_VIEWS);
     }
 
     /**
@@ -74,7 +74,7 @@ abstract class Manager extends Application
      */
     public function show_all()
     {
-        $show_all = Request::get(self::PARAM_SHOW_ALL);
+        $show_all = $this->getRequest()->query->get(self::PARAM_SHOW_ALL);
 
         return $show_all == 1;
     }

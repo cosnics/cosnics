@@ -34,7 +34,7 @@ class UpdaterComponent extends Manager
             throw new NotAllowedException();
         }
 
-        $vocabulary_id = Request::get(self::PARAM_VOCABULARY_ID);
+        $vocabulary_id = $this->getRequest()->query->get(self::PARAM_VOCABULARY_ID);
         $vocabulary = DataManager::retrieve_by_id(Vocabulary::class, $vocabulary_id);
 
         $form = new VocabularyForm(

@@ -40,8 +40,6 @@ class Embedder extends ContentObjectEmbedder
      */
     public function run()
     {
-        $this->initializeContainer();
-
         $configuration = new ApplicationConfiguration(
             $this->get_application()->getRequest(), $this->get_application()->getUser(), $this->get_application()
         );

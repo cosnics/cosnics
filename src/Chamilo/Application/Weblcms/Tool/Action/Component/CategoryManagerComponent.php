@@ -10,7 +10,6 @@ use Chamilo\Configuration\Category\Interfaces\CategorySupport;
 use Chamilo\Libraries\Architecture\Application\ApplicationConfiguration;
 use Chamilo\Libraries\Architecture\Exceptions\NotAllowedException;
 use Chamilo\Libraries\Architecture\Interfaces\DelegateComponent;
-use Chamilo\Libraries\Platform\Session\Request;
 use Chamilo\Libraries\Storage\Parameters\DataClassCountParameters;
 use Chamilo\Libraries\Storage\Parameters\DataClassRetrievesParameters;
 use Chamilo\Libraries\Storage\Query\Condition\AndCondition;
@@ -46,7 +45,7 @@ class CategoryManagerComponent extends Manager implements DelegateComponent, Cat
                 $request->getFromRequestOrQuery(\Chamilo\Application\Weblcms\Manager::PARAM_CATEGORY)
             );
 
-            Request::set_get(
+            $this->getRequest()->request->set(
                 \Chamilo\Configuration\Category\Manager::PARAM_CATEGORY_ID,
                 $request->getFromRequestOrQuery(\Chamilo\Application\Weblcms\Manager::PARAM_CATEGORY)
             );

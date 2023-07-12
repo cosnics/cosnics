@@ -21,15 +21,15 @@ class PublicationUpdaterComponent extends Manager
      */
     public function run()
     {
-        $pid = Request::get(\Chamilo\Application\Weblcms\Tool\Manager::PARAM_PUBLICATION_ID) ? Request::get(
-            \Chamilo\Application\Weblcms\Tool\Manager::PARAM_PUBLICATION_ID
-        ) : $_POST[\Chamilo\Application\Weblcms\Tool\Manager::PARAM_PUBLICATION_ID];
+        $pid = $this->getRequest()->query->get(\Chamilo\Application\Weblcms\Tool\Manager::PARAM_PUBLICATION_ID) ?
+            $this->getRequest()->query->get(
+                \Chamilo\Application\Weblcms\Tool\Manager::PARAM_PUBLICATION_ID
+            ) : $this->getRequest()->request->get(\Chamilo\Application\Weblcms\Tool\Manager::PARAM_PUBLICATION_ID);
 
         $this->set_parameter(\Chamilo\Application\Weblcms\Tool\Manager::PARAM_PUBLICATION_ID, $pid);
 
         $publication = DataManager::retrieve_by_id(
-            ContentObjectPublication::class,
-            $pid
+            ContentObjectPublication::class, $pid
         );
 
         if (!$publication instanceof ContentObjectPublication)
@@ -47,7 +47,7 @@ class PublicationUpdaterComponent extends Manager
             BreadcrumbTrail::getInstance()->add(
                 new Breadcrumb(
                     $this->get_url(),
-                    Translation::get('ToolPublicationUpdaterComponent', array('TITLE' => $content_object->get_title()))
+                    Translation::get('ToolPublicationUpdaterComponent', ['TITLE' => $content_object->get_title()])
                 )
             );
 
@@ -55,11 +55,7 @@ class PublicationUpdaterComponent extends Manager
             $is_course_admin = $course->is_course_admin($this->get_user());
 
             $publication_form = new PublicationForm(
-                $this->getUser(),
-                PublicationForm::TYPE_UPDATE,
-                array($publication),
-                $course,
-                $this->get_url(),
+                $this->getUser(), PublicationForm::TYPE_UPDATE, [$publication], $course, $this->get_url(),
                 $is_course_admin
             );
 
@@ -69,16 +65,13 @@ class PublicationUpdaterComponent extends Manager
 
                 $message = htmlentities(
                     Translation::get(
-                        ($succes ? 'ObjectUpdated' : 'ObjectNotUpdated'),
-                        array('OBJECT' => Translation::get('Publication')),
+                        ($succes ? 'ObjectUpdated' : 'ObjectNotUpdated'), ['OBJECT' => Translation::get('Publication')],
                         StringUtilities::LIBRARIES
-                    ),
-                    ENT_COMPAT | ENT_HTML401,
-                    'UTF-8'
+                    ), ENT_COMPAT | ENT_HTML401, 'UTF-8'
                 );
 
-                $show_details = Request::get('details');
-                $tool = Request::get(\Chamilo\Application\Weblcms\Manager::PARAM_TOOL);
+                $show_details = $this->getRequest()->query->get('details');
+                $tool = $this->getRequest()->query->get(\Chamilo\Application\Weblcms\Manager::PARAM_TOOL);
 
                 $params = [];
                 if ($show_details == 1)
@@ -93,17 +86,17 @@ class PublicationUpdaterComponent extends Manager
                 {
                     $params[\Chamilo\Application\Weblcms\Tool\Manager::PARAM_ACTION] = null;
                     $params['display_action'] = 'view';
-                    $params[\Chamilo\Application\Weblcms\Tool\Manager::PARAM_PUBLICATION_ID] = Request::get(
+                    $params[\Chamilo\Application\Weblcms\Tool\Manager::PARAM_PUBLICATION_ID] = $this->getRequest()->query->get(
                         \Chamilo\Application\Weblcms\Tool\Manager::PARAM_PUBLICATION_ID
                     );
                 }
 
                 if (!isset($show_details) && $tool != 'learning_path')
                 {
-                    $filter = array(
+                    $filter = [
                         \Chamilo\Application\Weblcms\Tool\Manager::PARAM_ACTION,
                         \Chamilo\Application\Weblcms\Tool\Manager::PARAM_PUBLICATION_ID
-                    );
+                    ];
                 }
 
                 $this->redirectWithMessage($message, !$succes, $params, $filter);
@@ -122,19 +115,15 @@ class PublicationUpdaterComponent extends Manager
         else
         {
             $this->redirectWithMessage(
-                Translation::get("NotAllowed"),
-                true,
-                [],
-                array(
+                Translation::get('NotAllowed'), true, [], [
                     \Chamilo\Application\Weblcms\Tool\Manager::PARAM_ACTION,
                     \Chamilo\Application\Weblcms\Tool\Manager::PARAM_PUBLICATION_ID
-                )
+                ]
             );
         }
     }
 
     /**
-     *
      * @param BreadcrumbTrail $breadcrumbtrail
      */
     public function add_additional_breadcrumbs(BreadcrumbTrail $breadcrumbtrail): void

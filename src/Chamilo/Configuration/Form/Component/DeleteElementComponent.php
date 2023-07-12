@@ -26,7 +26,7 @@ class DeleteElementComponent extends Manager
      */
     public function run()
     {
-        $ids = Request::get(self::PARAM_DYNAMIC_FORM_ELEMENT_ID);
+        $ids = $this->getRequest()->query->get(self::PARAM_DYNAMIC_FORM_ELEMENT_ID);
         
         if (! $this->get_user()->isPlatformAdmin())
         {

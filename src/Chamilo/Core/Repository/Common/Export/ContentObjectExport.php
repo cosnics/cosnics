@@ -25,8 +25,6 @@ abstract class ContentObjectExport
 
     public function __construct($export_implementation)
     {
-        $this->initializeContainer();
-
         $this->export_implementation = $export_implementation;
     }
 

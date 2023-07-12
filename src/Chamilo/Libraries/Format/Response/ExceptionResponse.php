@@ -18,13 +18,10 @@ class ExceptionResponse extends Response
     use DependencyInjectionContainerTrait;
 
     /**
-     * @throws \ReflectionException
      * @throws \Exception
      */
     public function __construct(Exception $exception, ?Application $application = null)
     {
-        $this->initializeContainer();
-
         $this->getPageConfiguration()->setApplication($application);
 
         $html = [];

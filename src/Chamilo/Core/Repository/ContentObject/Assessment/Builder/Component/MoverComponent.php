@@ -24,11 +24,11 @@ class MoverComponent extends Manager
      */
     public function run()
     {
-        $id = Request::get(Manager::PARAM_SELECTED_COMPLEX_CONTENT_OBJECT_ITEM_ID);
-        $parent_complex_content_object_item = Request::get(
+        $id = $this->getRequest()->query->get(Manager::PARAM_SELECTED_COMPLEX_CONTENT_OBJECT_ITEM_ID);
+        $parent_complex_content_object_item = $this->getRequest()->query->get(
             Manager::PARAM_COMPLEX_CONTENT_OBJECT_ITEM_ID
         );
-        $direction = Request::get(Manager::PARAM_DIRECTION);
+        $direction = $this->getRequest()->query->get(Manager::PARAM_DIRECTION);
         $succes = true;
 
         if (isset($id))

@@ -90,7 +90,7 @@ class EntityAssignmentEntriesTemplate extends ReportingTemplate
 
     private function init_parameters()
     {
-        $this->publicationId = Request::get(\Chamilo\Application\Weblcms\Manager::PARAM_PUBLICATION);
+        $this->publicationId = $this->getRequest()->query->get(\Chamilo\Application\Weblcms\Manager::PARAM_PUBLICATION);
         if ($this->publicationId)
         {
             $this->set_parameter(\Chamilo\Application\Weblcms\Manager::PARAM_PUBLICATION, $this->publicationId);

@@ -7,11 +7,9 @@ use Chamilo\Configuration\Category\Menu\CategoryMenu;
 use Chamilo\Libraries\Architecture\Exceptions\NotAllowedException;
 use Chamilo\Libraries\Format\Structure\Breadcrumb;
 use Chamilo\Libraries\Format\Structure\BreadcrumbTrail;
-use Chamilo\Libraries\Platform\Session\Request;
 use Chamilo\Libraries\Translation\Translation;
 
 /**
- *
  * @package application.common.category_manager.component
  */
 class CreatorComponent extends Manager
@@ -22,9 +20,9 @@ class CreatorComponent extends Manager
      */
     public function run()
     {
-        $category_id = Request::get(self::PARAM_CATEGORY_ID);
+        $category_id = $this->getRequest()->query->get(self::PARAM_CATEGORY_ID);
 
-        if (! $this->get_parent()->allowed_to_add_category($category_id))
+        if (!$this->get_parent()->allowed_to_add_category($category_id))
         {
             throw new NotAllowedException();
         }
@@ -44,20 +42,19 @@ class CreatorComponent extends Manager
         $category->set_parent(isset($category_id) ? $category_id : 0);
 
         $form = new CategoryForm(
-            CategoryForm::TYPE_CREATE,
-            $this->get_url(array(self::PARAM_CATEGORY_ID => $category_id)),
-            $category,
-            $user,
-            $this);
+            CategoryForm::TYPE_CREATE, $this->get_url([self::PARAM_CATEGORY_ID => $category_id]), $category, $user,
+            $this
+        );
 
         if ($form->validate())
         {
             $success = $form->create_category();
             $this->redirectWithMessage(
-                Translation::get($success ? 'CategoryCreated' : 'CategoryNotCreated'), !$success,
-                array(
+                Translation::get($success ? 'CategoryCreated' : 'CategoryNotCreated'), !$success, [
                     self::PARAM_ACTION => self::ACTION_BROWSE_CATEGORIES,
-                    self::PARAM_CATEGORY_ID => Request::get(self::PARAM_CATEGORY_ID)));
+                    self::PARAM_CATEGORY_ID => $this->getRequest()->query->get(self::PARAM_CATEGORY_ID)
+                ]
+            );
         }
         else
         {

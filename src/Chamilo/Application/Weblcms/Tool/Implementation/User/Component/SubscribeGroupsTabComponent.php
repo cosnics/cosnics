@@ -14,7 +14,6 @@ use Chamilo\Libraries\Format\Structure\Glyph\FontAwesomeGlyph;
 use Chamilo\Libraries\Format\Tabs\Link\LinkTab;
 use Chamilo\Libraries\Format\Tabs\Link\LinkTabsRenderer;
 use Chamilo\Libraries\Format\Tabs\TabsCollection;
-use Chamilo\Libraries\Platform\Session\Request;
 use Chamilo\Libraries\Storage\Parameters\DataClassRetrieveParameters;
 use Chamilo\Libraries\Storage\Query\Condition\EqualityCondition;
 use Chamilo\Libraries\Storage\Query\Variable\PropertyConditionVariable;
@@ -156,7 +155,7 @@ abstract class SubscribeGroupsTabComponent extends Manager
     {
         if (!$this->groupId)
         {
-            $this->groupId = Request::get(\Chamilo\Application\Weblcms\Manager::PARAM_GROUP);
+            $this->groupId = $this->getRequest()->query->get(\Chamilo\Application\Weblcms\Manager::PARAM_GROUP);
 
             if (!$this->groupId)
             {

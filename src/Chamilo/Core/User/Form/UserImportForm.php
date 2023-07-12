@@ -53,7 +53,6 @@ class UserImportForm extends FormValidator
     {
         parent::__construct('user_import', self::FORM_METHOD_POST, $action);
 
-        $this->initializeContainer();
         $this->form_user = $form_user;
         $this->form_type = $form_type;
         $this->failedcsv = [];
@@ -70,10 +69,10 @@ class UserImportForm extends FormValidator
         $this->addRule('file', Translation::get('OnlyCSVAllowed'), 'filetype', $allowed_upload_types);
 
         $group = [];
-        $group[] = &$this->createElement(
+        $group[] = $this->createElement(
             'radio', 'send_mail', null, Translation::get('ConfirmYes', null, StringUtilities::LIBRARIES), 1
         );
-        $group[] = &$this->createElement(
+        $group[] = $this->createElement(
             'radio', 'send_mail', null, Translation::get('ConfirmNo', null, StringUtilities::LIBRARIES), 0
         );
         $this->addGroup($group, 'mail', Translation::get('SendMailToNewUser'), '');

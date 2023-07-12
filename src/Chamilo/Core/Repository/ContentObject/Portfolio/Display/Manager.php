@@ -2,7 +2,6 @@
 namespace Chamilo\Core\Repository\ContentObject\Portfolio\Display;
 
 use Chamilo\Libraries\Architecture\Exceptions\UserException;
-use Chamilo\Libraries\Platform\Session\Request;
 use Chamilo\Libraries\Translation\Translation;
 use Exception;
 
@@ -91,7 +90,8 @@ abstract class Manager extends \Chamilo\Core\Repository\Display\Manager
     {
         if (!isset($this->current_step))
         {
-            $this->current_step = Request::get(self::PARAM_STEP) ? Request::get(self::PARAM_STEP) : 1;
+            $this->current_step = $this->getRequest()->query->get(self::PARAM_STEP, 1);
+
             if (is_array($this->current_step))
             {
                 $this->current_step = $this->current_step[0];

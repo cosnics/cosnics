@@ -22,7 +22,7 @@ class DeactivatorComponent extends Manager implements DelegateComponent
      */
     public function run()
     {
-        $context = Request::get(self::PARAM_CONTEXT);
+        $context = $this->getRequest()->query->get(self::PARAM_CONTEXT);
         $deactivator = new PackageDeactivator($context);
         $deactivator->run();
 

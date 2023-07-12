@@ -2,6 +2,7 @@
 namespace Chamilo\Core\Repository\ContentObject\Forum\EmailNotification;
 
 use Chamilo\Core\User\Storage\DataClass\User;
+use Chamilo\Libraries\DependencyInjection\Traits\DependencyInjectionContainerTrait;
 
 /**
  * this class contains a list of subscribed users and notificates the users
@@ -10,6 +11,7 @@ use Chamilo\Core\User\Storage\DataClass\User;
  */
 abstract class EmailNotificator
 {
+    use DependencyInjectionContainerTrait;
 
     public $action_body;
 

@@ -9,7 +9,6 @@ use Chamilo\Application\Weblcms\Tool\Manager;
 use Chamilo\Libraries\Architecture\Exceptions\NotAllowedException;
 use Chamilo\Libraries\Format\Structure\Breadcrumb;
 use Chamilo\Libraries\Format\Structure\BreadcrumbTrail;
-use Chamilo\Libraries\Platform\Session\Request;
 use Chamilo\Libraries\Translation\Translation;
 use Chamilo\Libraries\Utilities\StringUtilities;
 
@@ -26,7 +25,7 @@ class EditorComponent extends TabComponent
             throw new NotAllowedException();
         }
 
-        $course_group_id = Request::get(self::PARAM_COURSE_GROUP);
+        $course_group_id = $this->getRequest()->query->get(self::PARAM_COURSE_GROUP);
         $this->set_parameter(self::PARAM_COURSE_GROUP, $course_group_id);
 
         /** @var CourseGroup $course_group */

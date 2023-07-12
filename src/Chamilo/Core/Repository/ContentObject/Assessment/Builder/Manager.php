@@ -91,7 +91,7 @@ abstract class Manager extends Application
     {
         parent::__construct($applicationConfiguration);
 
-        $complex_content_object_item_id = Request::get(self::PARAM_COMPLEX_CONTENT_OBJECT_ITEM_ID);
+        $complex_content_object_item_id = $this->getRequest()->query->get(self::PARAM_COMPLEX_CONTENT_OBJECT_ITEM_ID);
         if ($complex_content_object_item_id)
         {
             $this->complex_content_object_item = $this->get_complex_content_object_by_id(
@@ -99,7 +99,7 @@ abstract class Manager extends Application
             );
         }
 
-        $selected_complex_content_object_item_id = Request::get(self::PARAM_SELECTED_COMPLEX_CONTENT_OBJECT_ITEM_ID);
+        $selected_complex_content_object_item_id = $this->getRequest()->query->get(self::PARAM_SELECTED_COMPLEX_CONTENT_OBJECT_ITEM_ID);
 
         if ($selected_complex_content_object_item_id)
         {

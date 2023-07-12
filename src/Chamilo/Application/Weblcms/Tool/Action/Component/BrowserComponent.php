@@ -184,7 +184,7 @@ class BrowserComponent extends Manager implements DelegateComponent
                     $link = $this->get_url(
                         [
                             \Chamilo\Application\Weblcms\Tool\Manager::PARAM_ACTION => \Chamilo\Application\Weblcms\Tool\Manager::ACTION_EDIT_RIGHTS,
-                            \Chamilo\Application\Weblcms\Manager::PARAM_CATEGORY => Request::get(
+                            \Chamilo\Application\Weblcms\Manager::PARAM_CATEGORY => $this->getRequest()->query->get(
                                 \Chamilo\Application\Weblcms\Manager::PARAM_CATEGORY
                             )
                         ]
@@ -406,7 +406,7 @@ class BrowserComponent extends Manager implements DelegateComponent
                     );
                 }
 
-                $category_id = Request::get(\Chamilo\Application\Weblcms\Manager::PARAM_CATEGORY);
+                $category_id = $this->getRequest()->query->get(\Chamilo\Application\Weblcms\Manager::PARAM_CATEGORY);
                 if (!$category_id)
                 {
                     $category_id = 0;
@@ -522,7 +522,7 @@ class BrowserComponent extends Manager implements DelegateComponent
 
     public function get_publication_type()
     {
-        $type = Request::get(\Chamilo\Application\Weblcms\Tool\Manager::PARAM_BROWSE_PUBLICATION_TYPE);
+        $type = $this->getRequest()->query->get(\Chamilo\Application\Weblcms\Tool\Manager::PARAM_BROWSE_PUBLICATION_TYPE);
         if (!$type)
         {
             if ($this->isCourseAdmin())
@@ -654,7 +654,7 @@ class BrowserComponent extends Manager implements DelegateComponent
 
             $html[] = '<div class="col-md-3 col-lg-2 col-sm-12">';
 
-            $categoryId = intval(Request::get(\Chamilo\Application\Weblcms\Manager::PARAM_CATEGORY));
+            $categoryId = intval($this->getRequest()->query->get(\Chamilo\Application\Weblcms\Manager::PARAM_CATEGORY));
 
             if (!$categoryId || $categoryId == 0)
             {

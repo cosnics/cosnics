@@ -27,11 +27,11 @@ class DetailsComponent extends Manager
                 [$this->get_course_id()]
             );
 
-        if (Request::get(\Chamilo\Application\Weblcms\Manager::PARAM_USERS))
+        if ($this->getRequest()->query->get(\Chamilo\Application\Weblcms\Manager::PARAM_USERS))
         {
             /** @var \Chamilo\Core\User\Storage\DataClass\User $user */
             $user = DataManager::retrieve_by_id(
-                User::class, Request::get(\Chamilo\Application\Weblcms\Manager::PARAM_USERS)
+                User::class, $this->getRequest()->query->get(\Chamilo\Application\Weblcms\Manager::PARAM_USERS)
             );
 
             $details = new UserDetails($user);

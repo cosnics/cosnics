@@ -10,10 +10,8 @@ use Chamilo\Libraries\Architecture\Application\ApplicationConfiguration;
 use Chamilo\Libraries\Architecture\Interfaces\DelegateComponent;
 use Chamilo\Libraries\Format\Structure\Breadcrumb;
 use Chamilo\Libraries\Format\Structure\BreadcrumbTrail;
-use Chamilo\Libraries\Platform\Session\Request;
 
 /**
- *
  * @package application.lib.weblcms.tool.component
  */
 
@@ -30,28 +28,65 @@ class ReportingViewerComponent extends Manager implements DelegateComponent
      */
     public function run()
     {
-        $classname = Request::get(\Chamilo\Application\Weblcms\Tool\Manager::PARAM_TEMPLATE_NAME);
+        $classname = $this->getRequest()->query->get(\Chamilo\Application\Weblcms\Tool\Manager::PARAM_TEMPLATE_NAME);
         $this->set_parameter(\Chamilo\Application\Weblcms\Tool\Manager::PARAM_TEMPLATE_NAME, $classname);
 
         $component = $this->getApplicationFactory()->getApplication(
             \Chamilo\Core\Reporting\Viewer\Manager::CONTEXT,
-            new ApplicationConfiguration($this->getRequest(), $this->get_user(), $this));
+            new ApplicationConfiguration($this->getRequest(), $this->get_user(), $this)
+        );
         $component->set_template_by_name($classname);
+
         return $component->run();
+    }
+
+    public function add_additional_breadcrumbs(BreadcrumbTrail $breadcrumbtrail): void
+    {
+        if ($this->getRequest()->query->get('pcattree') != null && $this->getRequest()->query->get('pcattree') > 0)
+        {
+            $this->add_pcattree_breadcrumbs($this->getRequest()->query->get('pcattree'), $breadcrumbtrail);
+        }
+
+        if ($this->getRequest()->query->get('cid') != null)
+        {
+            $cloi = DataManager::retrieve_by_id(
+                ComplexContentObjectItem::class, $this->getRequest()->query->get('cid')
+            );
+            $wp = DataManager::retrieve_by_id(
+                ContentObject::class, $cloi->get_ref()
+            );
+
+            $url = $this->get_url(
+                [
+                    \Chamilo\Application\Weblcms\Tool\Manager::PARAM_ACTION => $this->getRequest()->query->get(
+                        'tool'
+                    ) == 'learning_path' ? 'view_clo' : 'view',
+                    'display_action' => 'view_item',
+                    \Chamilo\Application\Weblcms\Tool\Manager::PARAM_PUBLICATION_ID => $this->getRequest()->query->get(
+                        \Chamilo\Application\Weblcms\Tool\Manager::PARAM_PUBLICATION_ID
+                    ),
+                    \Chamilo\Application\Weblcms\Tool\Manager::PARAM_COMPLEX_ID => $this->getRequest()->query->get(
+                        'cid'
+                    )
+                ]
+            );
+
+            $breadcrumbtrail->add(new Breadcrumb($url, $wp->get_title()));
+        }
     }
 
     private function add_pcattree_breadcrumbs($pcattree, $trail)
     {
         $cat = \Chamilo\Application\Weblcms\Storage\DataManager::retrieve_by_id(
-            ContentObjectPublication::class,
-            $pcattree);
+            ContentObjectPublication::class, $pcattree
+        );
 
         $categories[] = $cat;
         while ($cat->get_parent() != 0)
         {
             $cat = \Chamilo\Application\Weblcms\Storage\DataManager::retrieve_by_id(
-                ContentObjectPublication::class,
-                $cat->get_parent());
+                ContentObjectPublication::class, $cat->get_parent()
+            );
 
             $categories[] = $cat;
         }
@@ -59,35 +94,8 @@ class ReportingViewerComponent extends Manager implements DelegateComponent
         foreach ($categories as $categorie)
         {
             $trail->add(
-                new Breadcrumb($this->get_url(array('pcattree' => $categorie->get_id())), $categorie->get_name()));
-        }
-    }
-
-    public function add_additional_breadcrumbs(BreadcrumbTrail $breadcrumbtrail): void
-    {
-        if (Request::get('pcattree') != null && Request::get('pcattree') > 0)
-        {
-            $this->add_pcattree_breadcrumbs(Request::get('pcattree'), $breadcrumbtrail);
-        }
-
-        if (Request::get('cid') != null)
-        {
-            $cloi = DataManager::retrieve_by_id(
-                ComplexContentObjectItem::class,
-                Request::get('cid'));
-            $wp = DataManager::retrieve_by_id(
-                ContentObject::class,
-                $cloi->get_ref());
-
-            $url = $this->get_url(
-                array(
-                    \Chamilo\Application\Weblcms\Tool\Manager::PARAM_ACTION => Request::get('tool') == 'learning_path' ? 'view_clo' : 'view',
-                    'display_action' => 'view_item',
-                    \Chamilo\Application\Weblcms\Tool\Manager::PARAM_PUBLICATION_ID => Request::get(
-                        \Chamilo\Application\Weblcms\Tool\Manager::PARAM_PUBLICATION_ID),
-                    \Chamilo\Application\Weblcms\Tool\Manager::PARAM_COMPLEX_ID => Request::get('cid')));
-
-            $breadcrumbtrail->add(new Breadcrumb($url, $wp->get_title()));
+                new Breadcrumb($this->get_url(['pcattree' => $categorie->get_id()]), $categorie->get_name())
+            );
         }
     }
 }

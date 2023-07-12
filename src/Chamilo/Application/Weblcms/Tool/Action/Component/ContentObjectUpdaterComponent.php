@@ -25,11 +25,12 @@ class ContentObjectUpdaterComponent extends Manager implements DelegateComponent
 {
     public function run()
     {
-        $pid = Request::get(\Chamilo\Application\Weblcms\Tool\Manager::PARAM_PUBLICATION_ID) ? Request::get(
-            \Chamilo\Application\Weblcms\Tool\Manager::PARAM_PUBLICATION_ID
-        ) : Request::post(
-            \Chamilo\Application\Weblcms\Tool\Manager::PARAM_PUBLICATION_ID
-        );
+        $pid = $this->getRequest()->query->get(\Chamilo\Application\Weblcms\Tool\Manager::PARAM_PUBLICATION_ID) ?
+            $this->getRequest()->query->get(
+                \Chamilo\Application\Weblcms\Tool\Manager::PARAM_PUBLICATION_ID
+            ) : $this->getRequest()->request->get(
+                \Chamilo\Application\Weblcms\Tool\Manager::PARAM_PUBLICATION_ID
+            );
 
         $contentObjectPublicationTranslation = Translation::getInstance()->getTranslation(
             'ContentObjectPublication', null, 'Chamilo\Application\Weblcms'
@@ -98,7 +99,7 @@ class ContentObjectUpdaterComponent extends Manager implements DelegateComponent
                 {
                     $params[\Chamilo\Application\Weblcms\Tool\Manager::PARAM_ACTION] = null;
                     $params['display_action'] = 'view';
-                    $params[\Chamilo\Application\Weblcms\Tool\Manager::PARAM_PUBLICATION_ID] = Request::get(
+                    $params[\Chamilo\Application\Weblcms\Tool\Manager::PARAM_PUBLICATION_ID] = $this->getRequest()->query->get(
                         \Chamilo\Application\Weblcms\Tool\Manager::PARAM_PUBLICATION_ID
                     );
                 }

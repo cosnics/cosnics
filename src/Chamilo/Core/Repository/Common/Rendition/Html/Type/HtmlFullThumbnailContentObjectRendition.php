@@ -16,8 +16,6 @@ class HtmlFullThumbnailContentObjectRendition extends HtmlContentObjectRendition
      */
     public function render($parameters = null)
     {
-        $this->initializeContainer();
-
         $object = $this->get_content_object();
 
         $fullViewHtml = ContentObjectRenditionImplementation::factory(

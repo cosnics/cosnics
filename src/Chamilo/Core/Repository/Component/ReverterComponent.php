@@ -27,7 +27,7 @@ class ReverterComponent extends Manager
      */
     public function run()
     {
-        $ids = Request::get(self::PARAM_CONTENT_OBJECT_ID);
+        $ids = $this->getRequest()->query->get(self::PARAM_CONTENT_OBJECT_ID);
         $this->set_parameter(self::PARAM_CONTENT_OBJECT_ID, $ids);
 
         if (!empty($ids))

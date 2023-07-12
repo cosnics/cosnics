@@ -53,7 +53,6 @@ class UserForm extends FormValidator
     {
         parent::__construct('user_settings', self::FORM_METHOD_POST, $action);
 
-        $this->initializeContainer();
         $this->user = $user;
         $this->form_user = $form_user;
 

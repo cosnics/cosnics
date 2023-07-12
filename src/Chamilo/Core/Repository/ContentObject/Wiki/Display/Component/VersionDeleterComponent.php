@@ -19,11 +19,11 @@ class VersionDeleterComponent extends Manager
 
     public function run()
     {
-        $complex_wiki_page_id = Request::get(self::PARAM_SELECTED_COMPLEX_CONTENT_OBJECT_ITEM_ID);
+        $complex_wiki_page_id = $this->getRequest()->query->get(self::PARAM_SELECTED_COMPLEX_CONTENT_OBJECT_ITEM_ID);
 
         if ($complex_wiki_page_id)
         {
-            $object_id = Request::get(self::PARAM_WIKI_VERSION_ID);
+            $object_id = $this->getRequest()->query->get(self::PARAM_WIKI_VERSION_ID);
             $complex_wiki_page = DataManager::retrieve_by_id(
                 ComplexContentObjectItem::class, $complex_wiki_page_id
             );

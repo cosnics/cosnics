@@ -5,11 +5,8 @@ use Chamilo\Application\Weblcms\Course\Interfaces\CourseSubManagerSupport;
 use Chamilo\Application\Weblcms\Tool\Implementation\CourseSettings\Manager;
 use Chamilo\Libraries\Architecture\Application\ApplicationConfiguration;
 use Chamilo\Libraries\Architecture\Exceptions\NotAllowedException;
-use Chamilo\Libraries\Format\Structure\BreadcrumbTrail;
-use Chamilo\Libraries\Platform\Session\Request;
 
 /**
- *
  * @package application.lib.weblcms.tool.course_settings.component
  */
 class UpdaterComponent extends Manager implements CourseSubManagerSupport
@@ -17,37 +14,42 @@ class UpdaterComponent extends Manager implements CourseSubManagerSupport
 
     public function run()
     {
-        if (! $this->get_course()->is_course_admin($this->get_user()))
+        if (!$this->get_course()->is_course_admin($this->get_user()))
         {
             throw new NotAllowedException();
         }
 
-        Request::set_get(
+        $this->getRequest()->request->set(
             \Chamilo\Application\Weblcms\Course\Manager::PARAM_ACTION,
-            \Chamilo\Application\Weblcms\Course\Manager::ACTION_QUICK_UPDATE);
-        Request::set_get(\Chamilo\Application\Weblcms\Course\Manager::PARAM_COURSE_ID, $this->get_course_id());
+            \Chamilo\Application\Weblcms\Course\Manager::ACTION_QUICK_UPDATE
+        );
+        $this->getRequest()->request->set(
+            \Chamilo\Application\Weblcms\Course\Manager::PARAM_COURSE_ID, $this->get_course_id()
+        );
 
         $this->getRequest()->query->set(
             \Chamilo\Application\Weblcms\Course\Manager::PARAM_ACTION,
-            \Chamilo\Application\Weblcms\Course\Manager::ACTION_QUICK_UPDATE);
+            \Chamilo\Application\Weblcms\Course\Manager::ACTION_QUICK_UPDATE
+        );
         $this->getRequest()->query->set(
-            \Chamilo\Application\Weblcms\Course\Manager::PARAM_COURSE_ID,
-            $this->get_course_id());
+            \Chamilo\Application\Weblcms\Course\Manager::PARAM_COURSE_ID, $this->get_course_id()
+        );
 
         return $this->getApplicationFactory()->getApplication(
             \Chamilo\Application\Weblcms\Course\Manager::CONTEXT,
-            new ApplicationConfiguration($this->getRequest(), $this->get_user(), $this))->run();
+            new ApplicationConfiguration($this->getRequest(), $this->get_user(), $this)
+        )->run();
     }
 
     public function redirect_after_quick_create($succes, $message)
     {
-        $this->redirectWithMessage($message, ! $succes, [], array(self::PARAM_ACTION, self::ACTION_UPDATE));
+        $this->redirectWithMessage($message, !$succes, [], [self::PARAM_ACTION, self::ACTION_UPDATE]);
     }
 
     /**
      * Redirects the submanager to another component after a quick update
      *
-     * @param boolean $succes
+     * @param bool $succes
      * @param String $message
      */
     public function redirect_after_quick_update($succes, $message)

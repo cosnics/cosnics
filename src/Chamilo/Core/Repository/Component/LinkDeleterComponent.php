@@ -28,9 +28,9 @@ class LinkDeleterComponent extends Manager
      */
     public function run()
     {
-        $linkType = Request::get(self::PARAM_LINK_TYPE);
-        $contentObjectIdentifier = Request::get(self::PARAM_CONTENT_OBJECT_ID);
-        $linkIdentifiers = Request::get(self::PARAM_LINK_ID);
+        $linkType = $this->getRequest()->query->get(self::PARAM_LINK_TYPE);
+        $contentObjectIdentifier = $this->getRequest()->query->get(self::PARAM_CONTENT_OBJECT_ID);
+        $linkIdentifiers = $this->getRequest()->query->get(self::PARAM_LINK_ID);
 
         $this->set_parameter(self::PARAM_LINK_TYPE, $linkType);
         $this->set_parameter(self::PARAM_CONTENT_OBJECT_ID, $contentObjectIdentifier);
@@ -112,7 +112,7 @@ class LinkDeleterComponent extends Manager
                 $this->get_url(
                     [
                         self::PARAM_ACTION => self::ACTION_VIEW_CONTENT_OBJECTS,
-                        self::PARAM_CONTENT_OBJECT_ID => Request::get(self::PARAM_CONTENT_OBJECT_ID)
+                        self::PARAM_CONTENT_OBJECT_ID => $this->getRequest()->query->get(self::PARAM_CONTENT_OBJECT_ID)
                     ]
                 ), Translation::get('RepositoryManagerViewerComponent')
             )

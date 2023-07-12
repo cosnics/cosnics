@@ -26,11 +26,6 @@ class CalendarEventDataProvider extends MixedCalendar
 {
     use DependencyInjectionContainerTrait;
 
-    public function __construct()
-    {
-        $this->initializeContainer();
-    }
-
     protected function getAvailabilityService(): AvailabilityService
     {
         return $this->getService(AvailabilityService::class);

@@ -12,7 +12,6 @@ use Chamilo\Core\Repository\ContentObject\Assessment\Storage\DataClass\Assessmen
 use Chamilo\Core\User\Manager;
 use Chamilo\Core\User\Storage\DataClass\User;
 use Chamilo\Libraries\Architecture\ClassnameUtilities;
-use Chamilo\Libraries\Platform\Session\Request;
 use Chamilo\Libraries\Storage\Parameters\DataClassRetrievesParameters;
 use Chamilo\Libraries\Storage\Query\Condition\AndCondition;
 use Chamilo\Libraries\Storage\Query\Condition\EqualityCondition;
@@ -170,10 +169,11 @@ class AssessmentUserScoresBlock extends ToolBlock
 
     private function get_score($attempts)
     {
-        $score_type = (Request::post('sel')) ? Request::post('sel') : Request::get('sel');
+        $score_type = $this->getRequest()->request->get('sel', $this->getRequest()->query->get('sel'));
+
         if (is_null($score_type))
         {
-            $score_type = Request::get('sel');
+            $score_type = $this->getRequest()->query->get('sel');
         }
         $score = null;
 

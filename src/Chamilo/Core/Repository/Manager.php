@@ -31,7 +31,6 @@ use Chamilo\Libraries\Format\Tabs\ContentTab;
 use Chamilo\Libraries\Format\Tabs\GenericTabsRenderer;
 use Chamilo\Libraries\Format\Tabs\TabsCollection;
 use Chamilo\Libraries\Format\Tabs\TabsRenderer;
-use Chamilo\Libraries\Platform\Session\Request;
 use Chamilo\Libraries\Storage\Parameters\DataClassCountParameters;
 use Chamilo\Libraries\Translation\Translation;
 
@@ -675,7 +674,8 @@ abstract class Manager extends Application
 
         $html[] = $html_filter_renderer->render();
 
-        $repositoryMenu = new RepositoryMenu($this, $this->getWorkspaceRightsService(), $this->getRegistrationConsulter());
+        $repositoryMenu =
+            new RepositoryMenu($this, $this->getWorkspaceRightsService(), $this->getRegistrationConsulter());
         $html[] = $repositoryMenu->render();
 
         return implode(PHP_EOL, $html);
@@ -773,7 +773,8 @@ abstract class Manager extends Application
     public function set_optional_parameters()
     {
         $this->set_parameter(
-            GenericTabsRenderer::PARAM_SELECTED_TAB, Request::get(GenericTabsRenderer::PARAM_SELECTED_TAB)
+            GenericTabsRenderer::PARAM_SELECTED_TAB,
+            $this->getRequest()->query->get(GenericTabsRenderer::PARAM_SELECTED_TAB)
         );
     }
 }

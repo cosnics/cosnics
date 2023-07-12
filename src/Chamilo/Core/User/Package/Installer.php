@@ -23,15 +23,6 @@ class Installer extends \Chamilo\Configuration\Package\Action\Installer
 
     public const CONTEXT = Manager::CONTEXT;
 
-    /**
-     * Constructor
-     */
-    public function __construct($formValues)
-    {
-        parent::__construct($formValues);
-        $this->initializeContainer();
-    }
-
     public function create_admin_account()
     {
         $values = $this->get_form_values();

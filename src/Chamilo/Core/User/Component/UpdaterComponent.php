@@ -32,7 +32,7 @@ class UpdaterComponent extends Manager
             throw new NotAllowedException();
         }
 
-        $id = Request::get(self::PARAM_USER_USER_ID);
+        $id = $this->getRequest()->query->get(self::PARAM_USER_USER_ID);
         $this->set_parameter(self::PARAM_USER_USER_ID, $id);
 
         if ($id)

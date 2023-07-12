@@ -327,8 +327,6 @@ class CourseVisit extends Tracker
      */
     public function track_visit($course_visit)
     {
-        $this->initializeContainer();
-
         if (!$course_visit)
         {
             $course_visit = $this;

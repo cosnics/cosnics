@@ -31,8 +31,6 @@ class UserDetails
     {
         $this->user = $user;
         $this->border = $border;
-
-        $this->initializeContainer();
     }
 
     /**

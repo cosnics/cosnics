@@ -81,7 +81,7 @@ class DeleterComponent extends Manager
                 new Breadcrumb(
                     $this->get_url(array(self::PARAM_ACTION => self::ACTION_BROWSE_CATEGORIES)),
                     Translation::get('BrowserComponent')));
-            $this->set_parameter(self::PARAM_CATEGORY_ID, Request::get(self::PARAM_CATEGORY_ID));
+            $this->set_parameter(self::PARAM_CATEGORY_ID, $this->getRequest()->query->get(self::PARAM_CATEGORY_ID));
             $trail->add(new Breadcrumb($this->get_url(), Translation::get('DeleterComponent')));
 
             $html = [];

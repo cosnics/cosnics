@@ -128,7 +128,7 @@ abstract class Manager extends Application
         }
         $this->set_parameter(
             \Chamilo\Application\Weblcms\Manager::PARAM_CATEGORY,
-            Request::get(\Chamilo\Application\Weblcms\Manager::PARAM_CATEGORY)
+            $this->getRequest()->query->get(\Chamilo\Application\Weblcms\Manager::PARAM_CATEGORY)
         );
         $this->set_parameter(self::PARAM_BROWSER_TYPE, $this->get_browser_type());
     }
@@ -307,12 +307,12 @@ abstract class Manager extends Application
 
     public function get_access_details_toolbar_item($parent)
     {
-        if (Request::get(self::PARAM_PUBLICATION_ID))
+        if ($this->getRequest()->query->get(self::PARAM_PUBLICATION_ID))
         {
             $url = $this->get_parent()->get_url(
                 [
                     self::PARAM_ACTION => self::ACTION_VIEW_REPORTING_TEMPLATE,
-                    self::PARAM_PUBLICATION_ID => Request::get(self::PARAM_PUBLICATION_ID),
+                    self::PARAM_PUBLICATION_ID => $this->getRequest()->query->get(self::PARAM_PUBLICATION_ID),
                     self::PARAM_TEMPLATE_NAME => PublicationDetailTemplate::class
                 ]
             );
@@ -348,7 +348,7 @@ abstract class Manager extends Application
      */
     public function get_browser_type()
     {
-        $browser_type = Request::get(self::PARAM_BROWSER_TYPE);
+        $browser_type = $this->getRequest()->query->get(self::PARAM_BROWSER_TYPE);
 
         if ($browser_type && in_array($browser_type, $this->get_available_browser_types()))
         {
@@ -487,10 +487,10 @@ abstract class Manager extends Application
 
         if (!isset($category_id))
         {
-            $category_id = Request::get(\Chamilo\Application\Weblcms\Manager::PARAM_CATEGORY);
+            $category_id = $this->getRequest()->query->get(\Chamilo\Application\Weblcms\Manager::PARAM_CATEGORY);
         }
 
-        $publications = Request::get(\Chamilo\Application\Weblcms\Manager::PARAM_PUBLICATION);
+        $publications = $this->getRequest()->query->get(\Chamilo\Application\Weblcms\Manager::PARAM_PUBLICATION);
 
         $rights_util = WeblcmsRights::getInstance();
 
@@ -772,7 +772,7 @@ abstract class Manager extends Application
             {
                 if (is_null($category_id))
                 {
-                    $category_id = Request::get(\Chamilo\Application\Weblcms\Manager::PARAM_CATEGORY);
+                    $category_id = $this->getRequest()->query->get(\Chamilo\Application\Weblcms\Manager::PARAM_CATEGORY);
                 }
 
                 if ($category_id && $category_id !== 0)

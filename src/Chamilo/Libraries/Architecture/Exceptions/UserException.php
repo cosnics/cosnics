@@ -21,7 +21,6 @@ class UserException extends Exception
      */
     public function __construct($message)
     {
-        $this->initializeContainer();
         parent::__construct($this->getSecurity()->removeXSS($message));
     }
 

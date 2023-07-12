@@ -21,7 +21,7 @@ class CreatorComponent extends Manager implements DelegateComponent
 {
     public function run($params = [])
     {
-        $content_object_id = Request::get(self::PARAM_EDIT_ID);
+        $content_object_id = $this->getRequest()->query->get(self::PARAM_EDIT_ID);
 
         if ($content_object_id)
         {

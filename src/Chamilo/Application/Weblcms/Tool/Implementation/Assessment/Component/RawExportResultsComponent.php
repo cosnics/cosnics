@@ -123,7 +123,7 @@ class RawExportResultsComponent extends Manager
      */
     protected function get_publication_id()
     {
-        return Request::get(self::PARAM_ASSESSMENT);
+        return $this->getRequest()->query->get(self::PARAM_ASSESSMENT);
     }
 
     /**

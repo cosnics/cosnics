@@ -43,7 +43,7 @@ class CourseFeedComponent extends Manager
     {
         $result = new JsonAjaxResult();
 
-        $search_query = Request::post(self::PARAM_SEARCH_QUERY);
+        $search_query = $this->getRequest()->request->get(self::PARAM_SEARCH_QUERY);
 
         $elements = $this->get_elements();
 
@@ -116,7 +116,7 @@ class CourseFeedComponent extends Manager
      */
     protected function get_offset()
     {
-        $offset = Request::post(self::PARAM_OFFSET);
+        $offset = $this->getRequest()->request->get(self::PARAM_OFFSET);
         if (!isset($offset) || is_null($offset))
         {
             $offset = 0;
@@ -142,7 +142,7 @@ class CourseFeedComponent extends Manager
      */
     public function retrieve_courses()
     {
-        $search_query = Request::post(self::PARAM_SEARCH_QUERY);
+        $search_query = $this->getRequest()->request->get(self::PARAM_SEARCH_QUERY);
 
         // Set the conditions for the search query
         if ($search_query && $search_query != '')

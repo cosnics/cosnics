@@ -21,7 +21,7 @@ class ComplexBuilderComponent extends Manager implements DelegateComponent
 
     public function run()
     {
-        $pid = Request::get(\Chamilo\Application\Weblcms\Tool\Manager::PARAM_PUBLICATION_ID);
+        $pid = $this->getRequest()->query->get(\Chamilo\Application\Weblcms\Tool\Manager::PARAM_PUBLICATION_ID);
 
         $publication = DataManager::retrieve_by_id(
             ContentObjectPublication::class, $pid

@@ -24,7 +24,7 @@ class MoverComponent extends Manager implements DelegateComponent
      */
     public function run()
     {
-        $publication_id = Request::get(\Chamilo\Application\Weblcms\Tool\Manager::PARAM_PUBLICATION_ID);
+        $publication_id = $this->getRequest()->query->get(\Chamilo\Application\Weblcms\Tool\Manager::PARAM_PUBLICATION_ID);
         $publication = DataManager::retrieve_by_id(
             ContentObjectPublication::class,
             $publication_id);
@@ -46,9 +46,9 @@ class MoverComponent extends Manager implements DelegateComponent
             false,
             array(
                 \Chamilo\Application\Weblcms\Tool\Manager::PARAM_ACTION => null,
-                \Chamilo\Application\Weblcms\Tool\Manager::PARAM_BROWSER_TYPE => Request::get(
+                \Chamilo\Application\Weblcms\Tool\Manager::PARAM_BROWSER_TYPE => $this->getRequest()->query->get(
                     \Chamilo\Application\Weblcms\Tool\Manager::PARAM_BROWSER_TYPE),
-                \Chamilo\Application\Weblcms\Tool\Manager::PARAM_BROWSE_PUBLICATION_TYPE => Request::get(
+                \Chamilo\Application\Weblcms\Tool\Manager::PARAM_BROWSE_PUBLICATION_TYPE => $this->getRequest()->query->get(
                     \Chamilo\Application\Weblcms\Tool\Manager::PARAM_BROWSE_PUBLICATION_TYPE)));
     }
 }

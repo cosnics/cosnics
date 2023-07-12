@@ -30,7 +30,7 @@ class AttachmentViewerComponent extends Manager
         $error_message = '';
 
         // retrieve the parent content object
-        $parent_id = Request::get(self::PARAM_PARENT_ID);
+        $parent_id = $this->getRequest()->query->get(self::PARAM_PARENT_ID);
 
         if (is_null($parent_id))
         {
@@ -44,7 +44,7 @@ class AttachmentViewerComponent extends Manager
         }
 
         // retrieve the attachment
-        $object_id = Request::get(self::PARAM_OBJECT_ID);
+        $object_id = $this->getRequest()->query->get(self::PARAM_OBJECT_ID);
 
         if (is_null($object_id))
         {
@@ -109,7 +109,7 @@ class AttachmentViewerComponent extends Manager
      */
     public function get_content_object_display_attachment_url($attachment)
     {
-        $object_id = Request::get(self::PARAM_OBJECT_ID);
+        $object_id = $this->getRequest()->query->get(self::PARAM_OBJECT_ID);
         $object = DataManager::retrieve_by_id(ContentObject::class, $object_id);
 
         if (!$this->is_view_attachment_allowed($object))

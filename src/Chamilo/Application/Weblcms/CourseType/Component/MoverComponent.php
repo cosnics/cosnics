@@ -32,7 +32,7 @@ class MoverComponent extends Manager
         $course_types = $this->get_selected_course_types();
         $this->set_parameter(self::PARAM_COURSE_TYPE_ID, $course_types);
         
-        $direction = Request::get(self::PARAM_MOVE_DIRECTION);
+        $direction = $this->getRequest()->query->get(self::PARAM_MOVE_DIRECTION);
         
         $move_counter = ($direction == self::MOVE_DIRECTION_UP) ? - 1 : 1;
         

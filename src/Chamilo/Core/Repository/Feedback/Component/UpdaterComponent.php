@@ -25,7 +25,7 @@ class UpdaterComponent extends Manager
      */
     public function run()
     {
-        $feedback_id = Request::get(self::PARAM_FEEDBACK_ID);
+        $feedback_id = $this->getRequest()->query->get(self::PARAM_FEEDBACK_ID);
         $this->set_parameter(self::PARAM_FEEDBACK_ID, $feedback_id);
 
         $feedback = $this->feedbackServiceBridge->getFeedbackById($feedback_id);

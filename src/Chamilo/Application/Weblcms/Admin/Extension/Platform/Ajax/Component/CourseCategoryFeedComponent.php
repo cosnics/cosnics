@@ -166,14 +166,14 @@ class CourseCategoryFeedComponent extends Manager
      */
     protected function get_filter()
     {
-        $filter = Request::post(self::PARAM_FILTER);
+        $filter = $this->getRequest()->request->get(self::PARAM_FILTER);
 
         return substr($filter, static::FILTER_PREFIX_LENGTH);
     }
 
     protected function get_offset()
     {
-        $offset = Request::post(self::PARAM_OFFSET);
+        $offset = $this->getRequest()->request->get(self::PARAM_OFFSET);
         if (!isset($offset) || is_null($offset))
         {
             $offset = 0;
@@ -195,7 +195,7 @@ class CourseCategoryFeedComponent extends Manager
     public function retrieve_course_categories()
     {
         // Set the conditions for the search query
-        $search_query = Request::post(self::PARAM_SEARCH_QUERY);
+        $search_query = $this->getRequest()->request->get(self::PARAM_SEARCH_QUERY);
         if ($search_query && $search_query != '')
         {
             $name_conditions[] = new ContainsCondition(
@@ -268,7 +268,7 @@ class CourseCategoryFeedComponent extends Manager
             new StaticConditionVariable($filter_id)
         );
 
-        $search_query = Request::post(self::PARAM_SEARCH_QUERY);
+        $search_query = $this->getRequest()->request->get(self::PARAM_SEARCH_QUERY);
 
         // Set the conditions for the search query
         if ($search_query && $search_query != '')

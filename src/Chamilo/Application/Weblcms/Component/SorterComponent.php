@@ -32,7 +32,6 @@ use Chamilo\Libraries\Translation\Translation;
 use Chamilo\Libraries\Utilities\StringUtilities;
 
 /**
- *
  * @package application.lib.weblcms.weblcms_manager.component
  */
 
@@ -43,7 +42,6 @@ class SorterComponent extends Manager
 {
 
     /**
-     *
      * @var ButtonToolBarRenderer
      */
     private $buttonToolbarRenderer;
@@ -57,7 +55,7 @@ class SorterComponent extends Manager
 
         $this->set_parameter(
             CourseTypeCourseListRenderer::PARAM_SELECTED_COURSE_TYPE,
-            Request::get(CourseTypeCourseListRenderer::PARAM_SELECTED_COURSE_TYPE)
+            $this->getRequest()->query->get(CourseTypeCourseListRenderer::PARAM_SELECTED_COURSE_TYPE)
         );
 
         \Chamilo\Application\Weblcms\CourseType\Storage\DataManager::fix_course_tab_user_orders_for_user(
@@ -66,7 +64,7 @@ class SorterComponent extends Manager
         DataManager::fix_course_type_user_category_rel_course_for_user($this->get_user_id());
 
         // $this->buttonToolbarRenderer = $this->getButtonToolbarRenderer();
-        $component_action = Request::get(self::PARAM_COMPONENT_ACTION);
+        $component_action = $this->getRequest()->query->get(self::PARAM_COMPONENT_ACTION);
         $this->set_parameter(self::PARAM_COMPONENT_ACTION, $component_action);
 
         switch ($component_action)
@@ -115,8 +113,8 @@ class SorterComponent extends Manager
         {
             $success = $form->create_course_user_category();
             $this->redirectWithMessage(
-                Translation::get($success ? 'CourseUserCategoryAdded' : 'CourseUserCategoryNotAdded'),
-                !$success, array(self::PARAM_COMPONENT_ACTION => 'view')
+                Translation::get($success ? 'CourseUserCategoryAdded' : 'CourseUserCategoryNotAdded'), !$success,
+                [self::PARAM_COMPONENT_ACTION => 'view']
             );
         }
         else
@@ -133,8 +131,8 @@ class SorterComponent extends Manager
 
     public function assign_course_category()
     {
-        $course_id = Request::get(self::PARAM_COURSE);
-        $course_type_user_category_id = Request::get(self::PARAM_COURSE_TYPE_USER_CATEGORY_ID);
+        $course_id = $this->getRequest()->query->get(self::PARAM_COURSE);
+        $course_type_user_category_id = $this->getRequest()->query->get(self::PARAM_COURSE_TYPE_USER_CATEGORY_ID);
 
         if (!$course_type_user_category_id)
         {
@@ -174,10 +172,10 @@ class SorterComponent extends Manager
 
         $form = new CourseTypeUserCategoryRelCourseForm(
             $course_type_user_category_rel_course, $this->get_user(), $this->get_url(
-            array(
+            [
                 self::PARAM_COURSE => $course_id,
                 self::PARAM_COURSE_TYPE_USER_CATEGORY_ID => $course_type_user_category_id
-            )
+            ]
         )
         );
 
@@ -185,7 +183,8 @@ class SorterComponent extends Manager
         {
             $success = $form->update_course_type_user_category_rel_course();
             $this->redirectWithMessage(
-                Translation::get($success ? 'CourseUserCategoryUpdated' : 'CourseUserCategoryNotUpdated'), !$success, array(self::PARAM_COMPONENT_ACTION => self::ACTION_MANAGER_SORT)
+                Translation::get($success ? 'CourseUserCategoryUpdated' : 'CourseUserCategoryNotUpdated'), !$success,
+                [self::PARAM_COMPONENT_ACTION => self::ACTION_MANAGER_SORT]
             );
         }
         else
@@ -202,7 +201,7 @@ class SorterComponent extends Manager
 
     public function delete_course_type_user_category()
     {
-        $course_type_user_category_id = Request::get(self::PARAM_COURSE_TYPE_USER_CATEGORY_ID);
+        $course_type_user_category_id = $this->getRequest()->query->get(self::PARAM_COURSE_TYPE_USER_CATEGORY_ID);
 
         $course_type_user_category = DataManager::retrieve_by_id(
             CourseTypeUserCategory::class, $course_type_user_category_id
@@ -210,8 +209,8 @@ class SorterComponent extends Manager
 
         $success = $course_type_user_category->delete();
         $this->redirectWithMessage(
-            Translation::get($success ? 'CourseUserCategoryDeleted' : 'CourseUserCategoryNotDeleted'),
-            !$success, array(self::PARAM_COMPONENT_ACTION => 'view')
+            Translation::get($success ? 'CourseUserCategoryDeleted' : 'CourseUserCategoryNotDeleted'), !$success,
+            [self::PARAM_COMPONENT_ACTION => 'view']
         );
     }
 
@@ -227,7 +226,7 @@ class SorterComponent extends Manager
 
     public function edit_course_user_category()
     {
-        $course_type_user_category_id = Request::get(self::PARAM_COURSE_TYPE_USER_CATEGORY_ID);
+        $course_type_user_category_id = $this->getRequest()->query->get(self::PARAM_COURSE_TYPE_USER_CATEGORY_ID);
         $course_type_user_category = DataManager::retrieve_by_id(
             CourseTypeUserCategory::class, $course_type_user_category_id
         );
@@ -238,14 +237,15 @@ class SorterComponent extends Manager
 
         $form = new CourseUserCategoryForm(
             CourseUserCategoryForm::TYPE_EDIT, $course_user_category, $this->get_user(),
-            $this->get_url(array(self::PARAM_COURSE_TYPE_USER_CATEGORY_ID => $course_type_user_category_id)), $this
+            $this->get_url([self::PARAM_COURSE_TYPE_USER_CATEGORY_ID => $course_type_user_category_id]), $this
         );
 
         if ($form->validate())
         {
             $success = $form->update_course_user_category();
             $this->redirectWithMessage(
-                Translation::get($success ? 'CourseUserCategoryUpdated' : 'CourseUserCategoryNotUpdated'), !$success, array(self::PARAM_COMPONENT_ACTION => 'view')
+                Translation::get($success ? 'CourseUserCategoryUpdated' : 'CourseUserCategoryNotUpdated'), !$success,
+                [self::PARAM_COMPONENT_ACTION => 'view']
             );
         }
         else
@@ -322,10 +322,10 @@ class SorterComponent extends Manager
                 $toolActions->addButton(
                     new Button(
                         Translation::get('MoveCourseType'), new FontAwesomeGlyph('arrow-left'), $this->get_url(
-                        array(
+                        [
                             self::PARAM_COMPONENT_ACTION => 'move_course_type_up',
                             CourseTypeCourseListRenderer::PARAM_SELECTED_COURSE_TYPE => $course_type_id
-                        )
+                        ]
                     ), ToolbarItem::DISPLAY_ICON_AND_LABEL
                     )
                 );
@@ -334,8 +334,8 @@ class SorterComponent extends Manager
             {
                 $toolActions->addButton(
                     new Button(
-                        Translation::get('MoveCourseTypeNA'), new FontAwesomeGlyph('arrow-left', array('text-muted')),
-                        null, ToolbarItem::DISPLAY_ICON_AND_LABEL
+                        Translation::get('MoveCourseTypeNA'), new FontAwesomeGlyph('arrow-left', ['text-muted']), null,
+                        ToolbarItem::DISPLAY_ICON_AND_LABEL
                     )
                 );
             }
@@ -345,10 +345,10 @@ class SorterComponent extends Manager
                 $toolActions->addButton(
                     new Button(
                         Translation::get('MoveCourseType'), new FontAwesomeGlyph('arrow-right'), $this->get_url(
-                        array(
+                        [
                             self::PARAM_COMPONENT_ACTION => 'move_course_type_down',
                             CourseTypeCourseListRenderer::PARAM_SELECTED_COURSE_TYPE => $course_type_id
-                        )
+                        ]
                     ), ToolbarItem::DISPLAY_ICON_AND_LABEL
                     )
                 );
@@ -357,8 +357,8 @@ class SorterComponent extends Manager
             {
                 $toolActions->addButton(
                     new Button(
-                        Translation::get('MoveCourseTypeNA'), new FontAwesomeGlyph('arrow-right', array('text-muted')),
-                        null, ToolbarItem::DISPLAY_ICON_AND_LABEL
+                        Translation::get('MoveCourseTypeNA'), new FontAwesomeGlyph('arrow-right', ['text-muted']), null,
+                        ToolbarItem::DISPLAY_ICON_AND_LABEL
                     )
                 );
             }
@@ -401,7 +401,7 @@ class SorterComponent extends Manager
                 $toolbar->add_item(
                     new ToolbarItem(
                         Translation::get('MoveUpNA', null, StringUtilities::LIBRARIES),
-                        new FontAwesomeGlyph('sort-up', array('text-muted')), null, ToolbarItem::DISPLAY_ICON
+                        new FontAwesomeGlyph('sort-up', ['text-muted']), null, ToolbarItem::DISPLAY_ICON
                     )
                 );
             }
@@ -422,7 +422,7 @@ class SorterComponent extends Manager
                 $toolbar->add_item(
                     new ToolbarItem(
                         Translation::get('MoveDownNA', null, StringUtilities::LIBRARIES),
-                        new FontAwesomeGlyph('sort-down', array('text-muted')), null, ToolbarItem::DISPLAY_ICON
+                        new FontAwesomeGlyph('sort-down', ['text-muted']), null, ToolbarItem::DISPLAY_ICON
                     )
                 );
             }
@@ -430,7 +430,7 @@ class SorterComponent extends Manager
         $toolbar->add_item(
             new ToolbarItem(
                 Translation::get('Move', null, StringUtilities::LIBRARIES),
-                new FontAwesomeGlyph('window-restore', array('fa-flip-horizontal'), null, 'fas'),
+                new FontAwesomeGlyph('window-restore', ['fa-flip-horizontal'], null, 'fas'),
                 $this->get_course_user_edit_url($course_type_user_category, $course), ToolbarItem::DISPLAY_ICON
             )
         );
@@ -462,7 +462,7 @@ class SorterComponent extends Manager
             $toolbar->add_item(
                 new ToolbarItem(
                     Translation::get('MoveUpNA', null, StringUtilities::LIBRARIES),
-                    new FontAwesomeGlyph('sort-up', array('text-muted')), null, ToolbarItem::DISPLAY_ICON
+                    new FontAwesomeGlyph('sort-up', ['text-muted']), null, ToolbarItem::DISPLAY_ICON
                 )
             );
         }
@@ -482,7 +482,7 @@ class SorterComponent extends Manager
             $toolbar->add_item(
                 new ToolbarItem(
                     Translation::get('MoveDownNA', null, StringUtilities::LIBRARIES),
-                    new FontAwesomeGlyph('sort-down', array('text-muted')), null, ToolbarItem::DISPLAY_ICON
+                    new FontAwesomeGlyph('sort-down', ['text-muted']), null, ToolbarItem::DISPLAY_ICON
                 )
             );
         }
@@ -537,15 +537,15 @@ class SorterComponent extends Manager
 
     public function move_category_list()
     {
-        $direction = Request::get(self::PARAM_DIRECTION);
-        $course_type_user_category_id = Request::get(self::PARAM_COURSE_TYPE_USER_CATEGORY_ID);
+        $direction = $this->getRequest()->query->get(self::PARAM_DIRECTION);
+        $course_type_user_category_id = $this->getRequest()->query->get(self::PARAM_COURSE_TYPE_USER_CATEGORY_ID);
 
         if (isset($direction) && isset($course_type_user_category_id))
         {
             $success = $this->move_category($course_type_user_category_id, $direction);
             $this->redirectWithMessage(
-                Translation::get($success ? 'CourseUserCategoryMoved' : 'CourseUserCategoryNotMoved'),
-                !$success, array(self::PARAM_COMPONENT_ACTION => self::ACTION_MANAGER_SORT)
+                Translation::get($success ? 'CourseUserCategoryMoved' : 'CourseUserCategoryNotMoved'), !$success,
+                [self::PARAM_COMPONENT_ACTION => self::ACTION_MANAGER_SORT]
             );
         }
         else
@@ -588,16 +588,16 @@ class SorterComponent extends Manager
 
     public function move_course_list()
     {
-        $direction = Request::get(self::PARAM_DIRECTION);
-        $course = Request::get(self::PARAM_COURSE);
-        $course_type_user_category_id = Request::get(self::PARAM_COURSE_TYPE_USER_CATEGORY_ID);
+        $direction = $this->getRequest()->query->get(self::PARAM_DIRECTION);
+        $course = $this->getRequest()->query->get(self::PARAM_COURSE);
+        $course_type_user_category_id = $this->getRequest()->query->get(self::PARAM_COURSE_TYPE_USER_CATEGORY_ID);
 
         if (isset($direction) && isset($course))
         {
             $success = $this->move_course($course, $course_type_user_category_id, $direction);
             $this->redirectWithMessage(
                 Translation::get($success ? 'CourseUserMoved' : 'CourseUserNotMoved'), !$success,
-                array(self::PARAM_COMPONENT_ACTION => self::ACTION_MANAGER_SORT)
+                [self::PARAM_COMPONENT_ACTION => self::ACTION_MANAGER_SORT]
             );
         }
         else
@@ -613,7 +613,7 @@ class SorterComponent extends Manager
      */
     public function move_course_type($direction)
     {
-        $selected_course_type_id = Request::get(CourseTypeCourseListRenderer::PARAM_SELECTED_COURSE_TYPE);
+        $selected_course_type_id = $this->getRequest()->query->get(CourseTypeCourseListRenderer::PARAM_SELECTED_COURSE_TYPE);
 
         $course_type_translation = Translation::get('CourseType');
 
@@ -652,8 +652,8 @@ class SorterComponent extends Manager
 
             $this->redirectWithMessage(
                 Translation::get($succes ? 'CourseTypeMoved' : 'CourseTypeNotMoved'), !$succes,
-                array(CourseTypeCourseListRenderer::PARAM_SELECTED_COURSE_TYPE => $selected_course_type_id),
-                array(self::PARAM_COMPONENT_ACTION)
+                [CourseTypeCourseListRenderer::PARAM_SELECTED_COURSE_TYPE => $selected_course_type_id],
+                [self::PARAM_COMPONENT_ACTION]
             );
         }
         else

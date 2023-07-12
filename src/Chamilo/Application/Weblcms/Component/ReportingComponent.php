@@ -21,7 +21,7 @@ class ReportingComponent extends Manager implements DelegateComponent
     {
         $this->checkAuthorization(Manager::CONTEXT, 'ManageCourses');
 
-        $template_id = Request::get(self::PARAM_TEMPLATE_ID);
+        $template_id = $this->getRequest()->query->get(self::PARAM_TEMPLATE_ID);
 
         if (! isset($template_id))
         {

@@ -335,7 +335,7 @@ class FillInBlanksQuestionForm extends ContentObjectForm
         return parent::update_content_object();
     }
 
-    public function validate()
+    public function validate(): bool
     {
         if (isset($_POST['add']))
         {

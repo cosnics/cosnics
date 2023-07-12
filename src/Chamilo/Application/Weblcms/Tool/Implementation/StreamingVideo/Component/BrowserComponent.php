@@ -7,8 +7,6 @@ use Chamilo\Libraries\Format\Structure\ActionBar\Button;
 use Chamilo\Libraries\Format\Structure\ActionBar\SubButton;
 use Chamilo\Libraries\Format\Structure\ActionBar\SubButtonDivider;
 use Chamilo\Libraries\Format\Structure\ActionBar\SubButtonHeader;
-use Chamilo\Libraries\Format\Structure\BreadcrumbTrail;
-use Chamilo\Libraries\Platform\Session\Request;
 use Chamilo\Libraries\Storage\Query\Condition\ComparisonCondition;
 use Chamilo\Libraries\Storage\Query\Variable\PropertyConditionVariable;
 use Chamilo\Libraries\Storage\Query\Variable\StaticConditionVariable;
@@ -17,13 +15,20 @@ use Chamilo\Libraries\Utilities\StringUtilities;
 
 class BrowserComponent extends Manager
 {
-    const FILTER_THIS_MONTH = 'month';
+    public const FILTER_THIS_MONTH = 'month';
 
-    const FILTER_THIS_WEEK = 'week';
+    public const FILTER_THIS_WEEK = 'week';
 
-    const FILTER_TODAY = 'today';
+    public const FILTER_TODAY = 'today';
 
-    const PARAM_FILTER = 'filter';
+    public const PARAM_FILTER = 'filter';
+
+    public function getAdditionalParameters(array $additionalParameters = []): array
+    {
+        $additionalParameters[] = self::PARAM_BROWSE_PUBLICATION_TYPE;
+
+        return parent::getAdditionalParameters($additionalParameters);
+    }
 
     protected function getFilter()
     {
@@ -39,34 +44,34 @@ class BrowserComponent extends Manager
 
         $showActions[] = new SubButton(
             Translation::get('PeriodAll', null, StringUtilities::LIBRARIES), null,
-            $this->get_url(array(\Chamilo\Application\Weblcms\Tool\Manager::PARAM_ACTION => null)),
-            Button::DISPLAY_LABEL, null, [], null, $filter == ''
+            $this->get_url([\Chamilo\Application\Weblcms\Tool\Manager::PARAM_ACTION => null]), Button::DISPLAY_LABEL,
+            null, [], null, $filter == ''
         );
 
         $showActions[] = new SubButton(
             Translation::get('PeriodToday', null, StringUtilities::LIBRARIES), null, $this->get_url(
-            array(
+            [
                 \Chamilo\Application\Weblcms\Tool\Manager::PARAM_ACTION => null,
                 self::PARAM_FILTER => self::FILTER_TODAY
-            )
+            ]
         ), Button::DISPLAY_LABEL, null, [], null, $filter == self::FILTER_TODAY
         );
 
         $showActions[] = new SubButton(
             Translation::get('PeriodWeek', null, StringUtilities::LIBRARIES), null, $this->get_url(
-            array(
+            [
                 \Chamilo\Application\Weblcms\Tool\Manager::PARAM_ACTION => null,
                 self::PARAM_FILTER => self::FILTER_THIS_WEEK
-            )
+            ]
         ), Button::DISPLAY_LABEL, null, [], null, $filter == self::FILTER_THIS_WEEK
         );
 
         $showActions[] = new SubButton(
             Translation::get('PeriodMonth', null, StringUtilities::LIBRARIES), null, $this->get_url(
-            array(
+            [
                 \Chamilo\Application\Weblcms\Tool\Manager::PARAM_ACTION => null,
                 self::PARAM_FILTER => self::FILTER_THIS_MONTH
-            )
+            ]
         ), Button::DISPLAY_LABEL, null, [], null, $filter == self::FILTER_THIS_MONTH
         );
 
@@ -75,17 +80,10 @@ class BrowserComponent extends Manager
         return $showActions;
     }
 
-    public function getAdditionalParameters(array $additionalParameters = []): array
-    {
-        $additionalParameters[] = self::PARAM_BROWSE_PUBLICATION_TYPE;
-
-        return parent::getAdditionalParameters($additionalParameters);
-    }
-
     public function get_tool_conditions()
     {
         $conditions = [];
-        $filter = Request::get(self::PARAM_FILTER);
+        $filter = $this->getRequest()->query->get(self::PARAM_FILTER);
 
         switch ($filter)
         {

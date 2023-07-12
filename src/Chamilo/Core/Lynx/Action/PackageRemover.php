@@ -1,7 +1,6 @@
 <?php
 namespace Chamilo\Core\Lynx\Action;
 
-use Chamilo\Configuration\Configuration;
 use Chamilo\Configuration\Package\Action\Remover;
 use Chamilo\Configuration\Package\Storage\DataClass\Package;
 use Chamilo\Libraries\Architecture\ClassnameUtilities;
@@ -11,9 +10,9 @@ use Chamilo\Libraries\Translation\Translation;
 /**
  * Package installation
  *
- * @author Hans De Bisschop - Erasmus Hogeschool Brussel
- * @author Magali Gillard - Erasmus Hogeschool Brussel
- * @author Sven Vanpoucke - Hogeschool Gent - Cleanup, code refactoring and bugfixes, comments
+ * @author  Hans De Bisschop - Erasmus Hogeschool Brussel
+ * @author  Magali Gillard - Erasmus Hogeschool Brussel
+ * @author  Sven Vanpoucke - Hogeschool Gent - Cleanup, code refactoring and bugfixes, comments
  * @package admin.lib.package_installer
  */
 class PackageRemover extends AbstractAction
@@ -74,7 +73,7 @@ class PackageRemover extends AbstractAction
 
     public function isPackageRegistered(): bool
     {
-        return Configuration::is_registered($this->getPackage()->get_context());
+        return $this->getRegistrationConsulter()->isContextRegistered($this->getPackage()->get_context());
     }
 
     public function process(): bool

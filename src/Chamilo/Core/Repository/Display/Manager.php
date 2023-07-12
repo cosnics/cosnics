@@ -57,12 +57,12 @@ abstract class Manager extends Application
     {
         parent::__construct($applicationConfiguration);
 
-        $action = Request::get(self::PARAM_ACTION);
+        $action = $this->getRequest()->query->get(self::PARAM_ACTION);
         $this->set_action($action);
 
-        $this->set_parameter(self::PARAM_TYPE, Request::get(self::PARAM_TYPE));
+        $this->set_parameter(self::PARAM_TYPE, $this->getRequest()->query->get(self::PARAM_TYPE));
 
-        $complex_content_object_item_id = Request::get(self::PARAM_COMPLEX_CONTENT_OBJECT_ITEM_ID);
+        $complex_content_object_item_id = $this->getRequest()->query->get(self::PARAM_COMPLEX_CONTENT_OBJECT_ITEM_ID);
         if ($complex_content_object_item_id)
         {
             $this->set_parameter(self::PARAM_COMPLEX_CONTENT_OBJECT_ITEM_ID, $complex_content_object_item_id);
@@ -71,7 +71,7 @@ abstract class Manager extends Application
             );
         }
 
-        $selected_complex_content_object_item_id = Request::get(self::PARAM_SELECTED_COMPLEX_CONTENT_OBJECT_ITEM_ID);
+        $selected_complex_content_object_item_id = $this->getRequest()->query->get(self::PARAM_SELECTED_COMPLEX_CONTENT_OBJECT_ITEM_ID);
 
         if ($selected_complex_content_object_item_id && !is_array($selected_complex_content_object_item_id))
         {

@@ -30,13 +30,6 @@ class CalendarEventDataProvider extends ExternalCalendar
 
     private FilesystemAdapter $filesystemAdapter;
 
-    /**
-     * @throws \Exception
-     */
-    public function __construct()
-    {
-        $this->initializeContainer();
-    }
 
     protected function getAvailabilityService(): AvailabilityService
     {

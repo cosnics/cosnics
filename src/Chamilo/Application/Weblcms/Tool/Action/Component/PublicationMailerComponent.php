@@ -17,24 +17,24 @@ class PublicationMailerComponent extends Manager implements DelegateComponent
 
     public function run()
     {
-        if (Request::get(\Chamilo\Application\Weblcms\Tool\Manager::PARAM_PUBLICATION_ID))
+        if ($this->getRequest()->query->get(\Chamilo\Application\Weblcms\Tool\Manager::PARAM_PUBLICATION_ID))
         {
-            $publication_id = Request::get(\Chamilo\Application\Weblcms\Tool\Manager::PARAM_PUBLICATION_ID);
+            $publication_id =
+                $this->getRequest()->query->get(\Chamilo\Application\Weblcms\Tool\Manager::PARAM_PUBLICATION_ID);
         }
-        
+
         if (isset($publication_id))
         {
-            
+
             $failure = false;
-            
+
             /**
-             *
              * @var ContentObjectPublication $publication
              */
             $publication = DataManager::retrieve_by_id(
-                ContentObjectPublication::class,
-                $publication_id);
-            
+                ContentObjectPublication::class, $publication_id
+            );
+
             // currently: publications only sent once! Maybe this is not necessary...
             if ($publication->is_email_sent())
             {
@@ -46,25 +46,25 @@ class PublicationMailerComponent extends Manager implements DelegateComponent
                 $publication->mail_publication(true);
                 $message = Translation::get('EmailSent');
             }
-            
+
             $params = [];
             $params['tool_action'] = null;
-            if (Request::get('details') == 1)
+            if ($this->getRequest()->query->get('details') == 1)
             {
                 $params[\Chamilo\Application\Weblcms\Tool\Manager::PARAM_PUBLICATION_ID] = $publication_id;
                 $params['tool_action'] = 'view';
             }
-            
+
             $this->redirectWithMessage($message, $failure, $params);
         }
         else
         {
             $html = [];
-            
+
             $html[] = $this->render_header();
             $html[] = $this->display_error_message(Translation::get('NoObjectsSelected'));
             $html[] = $this->render_footer();
-            
+
             return implode(PHP_EOL, $html);
         }
     }

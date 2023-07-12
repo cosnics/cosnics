@@ -16,7 +16,6 @@ use Chamilo\Libraries\Format\Structure\Glyph\FontAwesomeGlyph;
 use Chamilo\Libraries\Format\Tabs\Link\LinkTab;
 use Chamilo\Libraries\Format\Tabs\Link\LinkTabsRenderer;
 use Chamilo\Libraries\Format\Tabs\TabsCollection;
-use Chamilo\Libraries\Platform\Session\Request;
 use Chamilo\Libraries\Storage\Parameters\DataClassCountParameters;
 use Chamilo\Libraries\Storage\Query\Condition\AndCondition;
 use Chamilo\Libraries\Storage\Query\Condition\EqualityCondition;
@@ -108,7 +107,7 @@ abstract class Manager extends Application
 
     public function get_selected_entity_type()
     {
-        $selected_type = Request::get(self::PARAM_ENTITY_TYPE, UserEntity::ENTITY_TYPE);
+        $selected_type = $this->getRequest()->query->get(self::PARAM_ENTITY_TYPE, UserEntity::ENTITY_TYPE);
 
         $condition = new EqualityCondition(
             new PropertyConditionVariable(Admin::class, Admin::PROPERTY_ENTITY_TYPE),
@@ -133,7 +132,7 @@ abstract class Manager extends Application
 
     public function get_selected_target_type()
     {
-        $selected_type = Request::get(self::PARAM_TARGET_TYPE, CourseEntity::ENTITY_TYPE);
+        $selected_type = $this->getRequest()->query->get(self::PARAM_TARGET_TYPE, CourseEntity::ENTITY_TYPE);
 
         $conditions = [];
 

@@ -27,9 +27,9 @@ class AttachmentViewerComponent extends Manager
         /*
          * Retrieve data and check if it is a valid attachment
          */
-        $post_id = Request::get(self::PARAM_SELECTED_FORUM_POST);
-        $attachment_id = Request::get(self::PARAM_ATTACHMENT_ID);
-        $topic_id = Request::get(self::PARAM_FORUM_TOPIC_ID);
+        $post_id = $this->getRequest()->query->get(self::PARAM_SELECTED_FORUM_POST);
+        $attachment_id = $this->getRequest()->query->get(self::PARAM_ATTACHMENT_ID);
+        $topic_id = $this->getRequest()->query->get(self::PARAM_FORUM_TOPIC_ID);
 
         if (is_null($attachment_id))
         {

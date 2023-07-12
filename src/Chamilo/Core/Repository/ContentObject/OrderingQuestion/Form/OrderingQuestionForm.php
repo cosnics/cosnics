@@ -288,7 +288,7 @@ class OrderingQuestionForm extends ContentObjectForm
         return parent::update_content_object();
     }
 
-    public function validate()
+    public function validate(): bool
     {
         if (isset($_POST['add']) || isset($_POST['remove']) || isset($_POST['change_answer_type']))
         {

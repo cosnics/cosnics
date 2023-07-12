@@ -41,8 +41,6 @@ class ImpactViewRenderer
         $this->co_ids = $co_ids;
         $this->has_impact = $has_impact;
 
-        $this->initializeContainer();
-
         $this->form = new ImpactViewForm(
             $this->parent->get_url(
                 [Manager::PARAM_CONTENT_OBJECT_ID => $co_ids]

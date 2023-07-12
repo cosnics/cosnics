@@ -78,8 +78,6 @@ abstract class ContentObjectPublicationListRenderer
      */
     public function __construct($tool_browser, $parameters = [])
     {
-        $this->initializeContainer();
-
         $this->parameters = $parameters;
         $this->tool_browser = $tool_browser;
     }

@@ -32,7 +32,7 @@ class UpdaterComponent extends Manager
             throw new NotAllowedException();
         }
         
-        $element_id = Request::get(self::PARAM_ELEMENT_ID);
+        $element_id = $this->getRequest()->query->get(self::PARAM_ELEMENT_ID);
         $this->set_parameter(self::PARAM_ELEMENT_ID, $element_id);
         
         $element = DataManager::retrieve_by_id(Element::class, $element_id);

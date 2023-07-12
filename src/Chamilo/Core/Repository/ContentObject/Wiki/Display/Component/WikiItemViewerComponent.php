@@ -10,16 +10,15 @@ use Chamilo\Core\Repository\Storage\DataManager;
 use Chamilo\Libraries\Architecture\Interfaces\DelegateComponent;
 use Chamilo\Libraries\Format\Structure\Breadcrumb;
 use Chamilo\Libraries\Format\Structure\BreadcrumbTrail;
-use Chamilo\Libraries\Platform\Session\Request;
 use Chamilo\Libraries\Translation\Translation;
 use MediawikiParser;
 use MediawikiParserContext;
 
 /**
  * @package Chamilo\Core\Repository\ContentObject\Wiki\Display\Component
- * @author Stefan Billiet
- * @author Nick De Feyter
- * @author Hans De Bisschop <hans.de.bisschop@ehb.be>
+ * @author  Stefan Billiet
+ * @author  Nick De Feyter
+ * @author  Hans De Bisschop <hans.de.bisschop@ehb.be>
  */
 class WikiItemViewerComponent extends Manager implements DelegateComponent
 {
@@ -28,11 +27,11 @@ class WikiItemViewerComponent extends Manager implements DelegateComponent
     {
         BreadcrumbTrail::getInstance()->add(new Breadcrumb(null, $this->get_root_content_object()->get_title()));
 
-        $complex_wiki_page_id = Request::get(self::PARAM_SELECTED_COMPLEX_CONTENT_OBJECT_ITEM_ID);
+        $complex_wiki_page_id = $this->getRequest()->query->get(self::PARAM_SELECTED_COMPLEX_CONTENT_OBJECT_ITEM_ID);
 
         if ($complex_wiki_page_id)
         {
-            $version_object_id = Request::get(self::PARAM_WIKI_VERSION_ID);
+            $version_object_id = $this->getRequest()->query->get(self::PARAM_WIKI_VERSION_ID);
             $complex_wiki_page = DataManager::retrieve_by_id(
                 ComplexContentObjectItem::class, $complex_wiki_page_id
             );
@@ -56,7 +55,7 @@ class WikiItemViewerComponent extends Manager implements DelegateComponent
 
                 if ($wiki_page->get_id() == $version_object_id)
                 {
-                    Request::set_get(self::PARAM_WIKI_VERSION_ID, null);
+                    $this->getRequest()->request->set(self::PARAM_WIKI_VERSION_ID, null);
                 }
             }
             else
@@ -111,7 +110,7 @@ class WikiItemViewerComponent extends Manager implements DelegateComponent
         }
         else
         {
-            $this->redirectWithMessage(null, false, array(self::PARAM_ACTION => self::ACTION_VIEW_WIKI));
+            $this->redirectWithMessage(null, false, [self::PARAM_ACTION => self::ACTION_VIEW_WIKI]);
         }
     }
 }

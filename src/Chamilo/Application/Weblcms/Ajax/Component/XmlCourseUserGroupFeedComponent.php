@@ -9,7 +9,6 @@ use Chamilo\Application\Weblcms\Tool\Implementation\CourseGroup\Storage\DataClas
 use Chamilo\Core\Group\Storage\DataClass\Group;
 use Chamilo\Core\User\Storage\DataClass\User;
 use Chamilo\Libraries\Format\Structure\Glyph\FontAwesomeGlyph;
-use Chamilo\Libraries\Platform\Session\Request;
 use Chamilo\Libraries\Storage\Parameters\DataClassDistinctParameters;
 use Chamilo\Libraries\Storage\Parameters\DataClassRetrievesParameters;
 use Chamilo\Libraries\Storage\Query\Condition\AndCondition;
@@ -38,8 +37,8 @@ class XmlCourseUserGroupFeedComponent extends Manager
 
     public function run()
     {
-        $this->courseIdentifier = Request::get('course');
-        $this->show_groups = Request::get('show_groups');
+        $this->courseIdentifier = $this->getRequest()->query->get('course');
+        $this->show_groups = $this->getRequest()->query->get('show_groups');
 
         if ($this->courseIdentifier)
         {
@@ -47,8 +46,8 @@ class XmlCourseUserGroupFeedComponent extends Manager
                 Course::class, $this->courseIdentifier
             );
 
-            $query = Request::get('query');
-            $exclude = Request::get('exclude');
+            $query = $this->getRequest()->query->get('query');
+            $exclude = $this->getRequest()->query->get('exclude');
 
             $user_conditions = [];
             $group_conditions = [];

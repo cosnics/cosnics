@@ -25,7 +25,7 @@ class ViewerComponent extends Manager implements DelegateComponent
      */
     public function run()
     {
-        $id = Request::get(Manager::PARAM_SELECTED_COMPLEX_CONTENT_OBJECT_ITEM_ID);
+        $id = $this->getRequest()->query->get(Manager::PARAM_SELECTED_COMPLEX_CONTENT_OBJECT_ITEM_ID);
 
         if ($id)
         {

@@ -17,7 +17,6 @@ use Chamilo\Core\Repository\ContentObject\LearningPath\Storage\DataClass\Learnin
 use Chamilo\Core\Repository\ContentObject\LearningPath\Storage\Repository\TrackingRepository;
 use Chamilo\Libraries\Architecture\Exceptions\NotAllowedException;
 use Chamilo\Libraries\Architecture\Exceptions\ObjectNotExistException;
-use Chamilo\Libraries\Platform\Session\Request;
 use Chamilo\Libraries\Translation\Translation;
 
 /**
@@ -189,6 +188,6 @@ class AssessmentRawResultsExporterComponent extends Manager
      */
     protected function get_publication_id()
     {
-        return Request::get(self::PARAM_PUBLICATION_ID);
+        return $this->getRequest()->query->get(self::PARAM_PUBLICATION_ID);
     }
 }

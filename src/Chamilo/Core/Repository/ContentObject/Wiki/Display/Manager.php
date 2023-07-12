@@ -90,7 +90,7 @@ abstract class Manager extends \Chamilo\Core\Repository\Display\Manager
             $discuss_url = $this->get_url(
                 [
                     self::PARAM_ACTION => self::ACTION_DISCUSS,
-                    'wiki_publication' => Request::get('wiki_publication'),
+                    'wiki_publication' => $this->getRequest()->query->get('wiki_publication'),
                     self::PARAM_SELECTED_COMPLEX_CONTENT_OBJECT_ITEM_ID => $complex_wiki_page->get_id()
                 ]
             );
@@ -139,7 +139,7 @@ abstract class Manager extends \Chamilo\Core\Repository\Display\Manager
             );
 
             $classes = (($displayAction == self::ACTION_HISTORY) ||
-            ($displayAction == self::ACTION_VIEW_WIKI_PAGE && Request::get(self::PARAM_WIKI_VERSION_ID)) ?
+            ($displayAction == self::ACTION_VIEW_WIKI_PAGE && $this->getRequest()->query->get(self::PARAM_WIKI_VERSION_ID)) ?
                 ['btn-primary disabled'] : []);
             $history_url = $this->get_url(
                 [
@@ -239,7 +239,7 @@ abstract class Manager extends \Chamilo\Core\Repository\Display\Manager
                 $this->get_root_content_object()->get_title()
             )
         );
-        switch (Request::get(self::PARAM_ACTION))
+        switch ($this->getRequest()->query->get(self::PARAM_ACTION))
         {
             case self::ACTION_VIEW_COMPLEX_CONTENT_OBJECT :
                 break;
@@ -260,7 +260,7 @@ abstract class Manager extends \Chamilo\Core\Repository\Display\Manager
                 );
                 break;
             case self::ACTION_PAGE_STATISTICS :
-                $complex_wiki_page_id = Request::get(self::PARAM_SELECTED_COMPLEX_CONTENT_OBJECT_ITEM_ID);
+                $complex_wiki_page_id = $this->getRequest()->query->get(self::PARAM_SELECTED_COMPLEX_CONTENT_OBJECT_ITEM_ID);
                 $complex_wiki_page = DataManager::retrieve_by_id(
                     ComplexContentObjectItem::class, $complex_wiki_page_id
                 );
@@ -271,7 +271,7 @@ abstract class Manager extends \Chamilo\Core\Repository\Display\Manager
                         $this->get_url(
                             [
                                 self::PARAM_ACTION => self::ACTION_PAGE_STATISTICS,
-                                self::PARAM_SELECTED_COMPLEX_CONTENT_OBJECT_ITEM_ID => Request::get(
+                                self::PARAM_SELECTED_COMPLEX_CONTENT_OBJECT_ITEM_ID => $this->getRequest()->query->get(
                                     self::PARAM_SELECTED_COMPLEX_CONTENT_OBJECT_ITEM_ID
                                 )
                             ]
@@ -285,7 +285,7 @@ abstract class Manager extends \Chamilo\Core\Repository\Display\Manager
                         $this->get_url(
                             [
                                 self::PARAM_ACTION => self::ACTION_ACCESS_DETAILS,
-                                self::PARAM_SELECTED_COMPLEX_CONTENT_OBJECT_ITEM_ID => Request::get(
+                                self::PARAM_SELECTED_COMPLEX_CONTENT_OBJECT_ITEM_ID => $this->getRequest()->query->get(
                                     self::PARAM_SELECTED_COMPLEX_CONTENT_OBJECT_ITEM_ID
                                 )
                             ]
@@ -301,12 +301,12 @@ abstract class Manager extends \Chamilo\Core\Repository\Display\Manager
                         $this->get_url(
                             [
                                 self::PARAM_ACTION => self::ACTION_VIEW_WIKI_PAGE,
-                                self::PARAM_SELECTED_COMPLEX_CONTENT_OBJECT_ITEM_ID => Request::get(
+                                self::PARAM_SELECTED_COMPLEX_CONTENT_OBJECT_ITEM_ID => $this->getRequest()->query->get(
                                     self::PARAM_SELECTED_COMPLEX_CONTENT_OBJECT_ITEM_ID
                                 )
                             ]
                         ), $this->get_content_object_from_complex_id(
-                        Request::get(self::PARAM_SELECTED_COMPLEX_CONTENT_OBJECT_ITEM_ID)
+                        $this->getRequest()->query->get(self::PARAM_SELECTED_COMPLEX_CONTENT_OBJECT_ITEM_ID)
                     )->get_title()
                     )
                 );
@@ -317,12 +317,12 @@ abstract class Manager extends \Chamilo\Core\Repository\Display\Manager
                         $this->get_url(
                             [
                                 self::PARAM_ACTION => self::ACTION_VIEW_WIKI_PAGE,
-                                self::PARAM_SELECTED_COMPLEX_CONTENT_OBJECT_ITEM_ID => Request::get(
+                                self::PARAM_SELECTED_COMPLEX_CONTENT_OBJECT_ITEM_ID => $this->getRequest()->query->get(
                                     self::PARAM_SELECTED_COMPLEX_CONTENT_OBJECT_ITEM_ID
                                 )
                             ]
                         ), $this->get_content_object_from_complex_id(
-                        Request::get(self::PARAM_SELECTED_COMPLEX_CONTENT_OBJECT_ITEM_ID)
+                        $this->getRequest()->query->get(self::PARAM_SELECTED_COMPLEX_CONTENT_OBJECT_ITEM_ID)
                     )->get_title()
                     )
                 );
@@ -330,8 +330,8 @@ abstract class Manager extends \Chamilo\Core\Repository\Display\Manager
                     new Breadcrumb(
                         $this->get_url(
                             [
-                                self::PARAM_ACTION => Request::get(self::PARAM_ACTION),
-                                self::PARAM_SELECTED_COMPLEX_CONTENT_OBJECT_ITEM_ID => Request::get(
+                                self::PARAM_ACTION => $this->getRequest()->query->get(self::PARAM_ACTION),
+                                self::PARAM_SELECTED_COMPLEX_CONTENT_OBJECT_ITEM_ID => $this->getRequest()->query->get(
                                     self::PARAM_SELECTED_COMPLEX_CONTENT_OBJECT_ITEM_ID
                                 )
                             ]

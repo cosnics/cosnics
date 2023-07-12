@@ -86,8 +86,6 @@ class FormValidator extends HTML_QuickForm
         $this->registerAdditionalElements();
         $this->registerAdditionalRules();
 
-        $this->initializeContainer();
-
         $this->addElement(
             'html', $this->getResourceManager()->getResourceHtml(
             $this->getWebPathBuilder()->getJavascriptPath(StringUtilities::LIBRARIES) . 'Reset.js'

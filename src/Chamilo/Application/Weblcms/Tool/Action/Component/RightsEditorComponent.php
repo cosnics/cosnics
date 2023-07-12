@@ -74,7 +74,7 @@ class RightsEditorComponent extends Manager
 
     public function get_additional_information()
     {
-        $publication_ids = Request::get(\Chamilo\Application\Weblcms\Manager::PARAM_PUBLICATION);
+        $publication_ids = $this->getRequest()->query->get(\Chamilo\Application\Weblcms\Manager::PARAM_PUBLICATION);
         if (!is_array($publication_ids))
         {
             $publication_ids = array($publication_ids);
@@ -103,7 +103,7 @@ class RightsEditorComponent extends Manager
         switch ($type)
         {
             case self::LOCATION_TYPE_OBJECT :
-                $publication_ids = Request::get(\Chamilo\Application\Weblcms\Manager::PARAM_PUBLICATION);
+                $publication_ids = $this->getRequest()->query->get(\Chamilo\Application\Weblcms\Manager::PARAM_PUBLICATION);
                 if (!is_array($publication_ids))
                 {
                     $publication_ids = array($publication_ids);
@@ -131,7 +131,7 @@ class RightsEditorComponent extends Manager
             case self::LOCATION_TYPE_LOCATIONS :
 
                 $course = \Chamilo\Application\Weblcms\Course\Storage\DataManager::retrieve_by_id(
-                    Course::class, Request::get(\Chamilo\Application\Weblcms\Manager::PARAM_COURSE)
+                    Course::class, $this->getRequest()->query->get(\Chamilo\Application\Weblcms\Manager::PARAM_COURSE)
                 );
 
                 if ($course)
@@ -142,7 +142,7 @@ class RightsEditorComponent extends Manager
                     $info[] .= ' > ';
                 }
 
-                $selectedTool = Request::get(\Chamilo\Application\Weblcms\Manager::PARAM_TOOL);
+                $selectedTool = $this->getRequest()->query->get(\Chamilo\Application\Weblcms\Manager::PARAM_TOOL);
 
                 $context = 'Chamilo\Application\Weblcms\Tool\Implementation\\' . $selectedTool;
                 $tool = Translation::getInstance()->getTranslation('TypeName', null, $context);
@@ -155,7 +155,7 @@ class RightsEditorComponent extends Manager
                     $info[] .= ' > ';
 
                     // categories
-                    $category_id = Request::get(\Chamilo\Application\Weblcms\Manager::PARAM_CATEGORY);
+                    $category_id = $this->getRequest()->query->get(\Chamilo\Application\Weblcms\Manager::PARAM_CATEGORY);
                     if ($category_id)
                     {
                         // get the given category

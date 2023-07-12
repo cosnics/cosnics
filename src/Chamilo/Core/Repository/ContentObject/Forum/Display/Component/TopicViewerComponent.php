@@ -185,7 +185,7 @@ class TopicViewerComponent extends Manager implements DelegateComponent
     {
         if (!isset($this->pageNumber))
         {
-            $requestedLastPost = Request::get('last_post');
+            $requestedLastPost = $this->getRequest()->query->get('last_post');
 
             if ($requestedLastPost)
             {
@@ -196,7 +196,7 @@ class TopicViewerComponent extends Manager implements DelegateComponent
                 $pageNumber = 1;
             }
 
-            $requestedPageNumber = Request::get(ForumTopic::getStorageUnitName() . '_' . 'page_nr');
+            $requestedPageNumber = $this->getRequest()->query->get(ForumTopic::getStorageUnitName() . '_' . 'page_nr');
 
             $this->pageNumber = $requestedPageNumber ?: $pageNumber;
         }

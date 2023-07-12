@@ -117,7 +117,7 @@ class ViewerComponent extends Manager implements DelegateComponent
      */
     public function get_view()
     {
-        $view = Request::get(self::PARAM_VIEW);
+        $view = $this->getRequest()->query->get(self::PARAM_VIEW);
 
         if (!$view)
         {

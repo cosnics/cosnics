@@ -47,7 +47,6 @@ class RegisterForm extends FormValidator
     {
         parent::__construct('user_settings', self::FORM_METHOD_POST, $action);
 
-        $this->initializeContainer();
         $this->user = $user;
         $this->build_creation_form();
         $this->setDefaults();

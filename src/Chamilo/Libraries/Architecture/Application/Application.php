@@ -46,8 +46,6 @@ abstract class Application
     public function __construct(ApplicationConfigurationInterface $applicationConfiguration)
     {
         $this->applicationConfiguration = $applicationConfiguration;
-
-        $this->initializeContainer();
     }
 
     /**

@@ -20,7 +20,7 @@ class WikiHomepageSetterComponent extends Manager
     public function run()
     {
         $page = DataManager::retrieve_by_id(
-            ComplexContentObjectItem::class, Request::get(self::PARAM_SELECTED_COMPLEX_CONTENT_OBJECT_ITEM_ID)
+            ComplexContentObjectItem::class, $this->getRequest()->query->get(self::PARAM_SELECTED_COMPLEX_CONTENT_OBJECT_ITEM_ID)
         );
 
         if (!empty($page))
@@ -29,7 +29,7 @@ class WikiHomepageSetterComponent extends Manager
             $page->update();
             $this->redirectWithMessage(
                 Translation::get('HomepageSelected'), false,
-                array(self::PARAM_ACTION => self::ACTION_VIEW_WIKI, 'pid' => Request::get('pid'))
+                array(self::PARAM_ACTION => self::ACTION_VIEW_WIKI, 'pid' => $this->getRequest()->query->get('pid'))
             );
         }
         else

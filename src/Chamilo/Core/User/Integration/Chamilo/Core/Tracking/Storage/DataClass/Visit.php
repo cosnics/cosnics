@@ -154,7 +154,6 @@ class Visit extends SimpleTracker
 
     private function track_enter()
     {
-        $this->initializeContainer();
         $this->init_enter();
         $success = $this->create();
         if ($success)

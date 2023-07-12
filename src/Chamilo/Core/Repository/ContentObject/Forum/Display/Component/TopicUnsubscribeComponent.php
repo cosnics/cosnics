@@ -19,7 +19,7 @@ class TopicUnsubscribeComponent extends Manager
     public function run()
     {
         $success = false;
-        $subscribe_id = Request::get(self::PARAM_SUBSCRIBE_ID);
+        $subscribe_id = $this->getRequest()->query->get(self::PARAM_SUBSCRIBE_ID);
         
         if ($subscribe_id)
         {

@@ -52,7 +52,7 @@ class WikiDiscussComponent extends Manager implements DelegateComponent, Feedbac
             self::PARAM_SELECTED_COMPLEX_CONTENT_OBJECT_ITEM_ID, $this->get_selected_complex_content_object_item_id()
         );
 
-        $complex_wiki_page_id = Request::get(self::PARAM_SELECTED_COMPLEX_CONTENT_OBJECT_ITEM_ID);
+        $complex_wiki_page_id = $this->getRequest()->query->get(self::PARAM_SELECTED_COMPLEX_CONTENT_OBJECT_ITEM_ID);
         $this->complexWikiPage = \Chamilo\Core\Repository\Storage\DataManager::retrieve_by_id(
             ComplexContentObjectItem::class, $complex_wiki_page_id
         );

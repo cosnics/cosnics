@@ -23,8 +23,8 @@ class MoverComponent extends Manager
      */
     public function run()
     {
-        $category_id = Request::get(self::PARAM_CATEGORY_ID);
-        $direction = Request::get(self::PARAM_DIRECTION);
+        $category_id = $this->getRequest()->query->get(self::PARAM_CATEGORY_ID);
+        $direction = $this->getRequest()->query->get(self::PARAM_DIRECTION);
         $user = $this->get_user();
 
         if (! isset($user) || ! isset($category_id) || ! $this->get_parent()->allowed_to_edit_category($category_id))

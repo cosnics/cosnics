@@ -66,6 +66,6 @@ class RepositoryViewerComponent extends Manager
 
     public function get_element_name()
     {
-        return Request::get(self::PARAM_ELEMENT_NAME);
+        return $this->getRequest()->query->get(self::PARAM_ELEMENT_NAME);
     }
 }

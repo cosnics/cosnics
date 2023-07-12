@@ -110,8 +110,6 @@ class HtmlRenditionImplementation extends RenditionImplementation
 
         if (!$object->getShowInline())
         {
-            $this->initializeContainer();
-
             return $this->getTwig()->render(
                 'Chamilo\Core\Repository\ContentObject\File:full_thumbnail.html.twig', [
                     'icon' => $object->getGlyph(IdentGlyph::SIZE_BIG)->render(),

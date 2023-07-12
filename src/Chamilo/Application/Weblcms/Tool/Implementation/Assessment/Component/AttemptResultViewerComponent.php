@@ -70,7 +70,7 @@ class AttemptResultViewerComponent extends Manager
      */
     public function run()
     {
-        $assessment_attempt_id = Request::get(self::PARAM_USER_ASSESSMENT);
+        $assessment_attempt_id = $this->getRequest()->query->get(self::PARAM_USER_ASSESSMENT);
 
         $condition = new EqualityCondition(
             new PropertyConditionVariable(AssessmentAttempt::class, AssessmentAttempt::PROPERTY_ID),
@@ -173,7 +173,7 @@ class AttemptResultViewerComponent extends Manager
      */
     public function can_change_answer_data()
     {
-        if (Request::get(self::PARAM_SHOW_FULL))
+        if ($this->getRequest()->query->get(self::PARAM_SHOW_FULL))
         {
             return $this->assessment_attempt->get_status() == AssessmentAttempt::STATUS_COMPLETED &&
                 $this->is_allowed(WeblcmsRights::EDIT_RIGHT);
@@ -312,7 +312,7 @@ class AttemptResultViewerComponent extends Manager
     {
         $html = [];
 
-        if (!Request::get(self::PARAM_SHOW_FULL))
+        if (!$this->getRequest()->query->get(self::PARAM_SHOW_FULL))
         {
             $this->getPageConfiguration()->setViewMode(PageConfiguration::VIEW_MODE_HEADERLESS);
             $html[] = Application::render_header($pageTitle);
@@ -337,7 +337,7 @@ class AttemptResultViewerComponent extends Manager
      */
     public function retrieve_assessment_results()
     {
-        $question_attempt_id = Request::get(self::PARAM_QUESTION_ATTEMPT);
+        $question_attempt_id = $this->getRequest()->query->get(self::PARAM_QUESTION_ATTEMPT);
         if ($question_attempt_id)
         {
             $condition = new EqualityCondition(

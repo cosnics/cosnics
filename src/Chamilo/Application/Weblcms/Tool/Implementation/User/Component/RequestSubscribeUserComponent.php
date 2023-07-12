@@ -8,11 +8,9 @@ use Chamilo\Application\Weblcms\Tool\Implementation\User\Manager;
 use Chamilo\Libraries\Architecture\Exceptions\NotAllowedException;
 use Chamilo\Libraries\Format\Structure\Breadcrumb;
 use Chamilo\Libraries\Format\Structure\BreadcrumbTrail;
-use Chamilo\Libraries\Platform\Session\Request;
 use Chamilo\Libraries\Translation\Translation;
 
 /**
- *
  * @package applicatie.lib.weblcms.weblcms_manager.component
  */
 class RequestSubscribeUserComponent extends Manager
@@ -30,7 +28,7 @@ class RequestSubscribeUserComponent extends Manager
 
         if (!$this->get_user()->isPlatformAdmin() && !$course_management_rights->is_allowed_management(
                 CourseManagementRights::TEACHER_REQUEST_SUBSCRIBE_RIGHT, $this->get_course_id(),
-                CourseManagementRights::TYPE_COURSE, Request::get(self::PARAM_OBJECTS)
+                CourseManagementRights::TYPE_COURSE, $this->getRequest()->query->get(self::PARAM_OBJECTS)
             ))
         {
             throw new NotAllowedException();
@@ -38,7 +36,7 @@ class RequestSubscribeUserComponent extends Manager
 
         $form = new CourseRequestForm(
             CourseRequestForm::TYPE_CREATE, $this->get_url(), $course, $this, $request, false,
-            Request::get(self::PARAM_OBJECTS)
+            $this->getRequest()->query->get(self::PARAM_OBJECTS)
         );
 
         if ($form->validate())
@@ -47,7 +45,7 @@ class RequestSubscribeUserComponent extends Manager
 
             $this->redirectWithMessage(
                 Translation::get($success_request ? 'RequestSent' : 'RequestNotSent'), !$success_request,
-                array(\Chamilo\Application\Weblcms\Tool\Manager::PARAM_ACTION => self::ACTION_SUBSCRIBE_USER_BROWSER)
+                [\Chamilo\Application\Weblcms\Tool\Manager::PARAM_ACTION => self::ACTION_SUBSCRIBE_USER_BROWSER]
             );
         }
         else
@@ -67,10 +65,10 @@ class RequestSubscribeUserComponent extends Manager
         $breadcrumbtrail->add(
             new Breadcrumb(
                 $this->get_url(
-                    array(
+                    [
                         \Chamilo\Application\Weblcms\Tool\Manager::PARAM_ACTION => self::ACTION_UNSUBSCRIBE_BROWSER,
-                        self::PARAM_TAB => Request::get(self::PARAM_TAB)
-                    )
+                        self::PARAM_TAB => $this->getRequest()->query->get(self::PARAM_TAB)
+                    ]
                 ), Translation::get('UserToolUnsubscribeBrowserComponent')
             )
         );
@@ -78,9 +76,9 @@ class RequestSubscribeUserComponent extends Manager
         $breadcrumbtrail->add(
             new Breadcrumb(
                 $this->get_url(
-                    array(
+                    [
                         \Chamilo\Application\Weblcms\Tool\Manager::PARAM_ACTION => self::ACTION_SUBSCRIBE_USER_BROWSER
-                    )
+                    ]
                 ), Translation::get('UserToolSubscribeBrowserComponent')
             )
         );

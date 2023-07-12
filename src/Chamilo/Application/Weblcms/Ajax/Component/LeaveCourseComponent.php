@@ -21,7 +21,7 @@ class LeaveCourseComponent extends \Chamilo\Application\Weblcms\Ajax\Manager
      */
     public function run()
     {
-        $courseVisitTrackerId = Request::post(self::PARAM_COURSE_VISIT_TRACKER_ID);
+        $courseVisitTrackerId = $this->getRequest()->request->get(self::PARAM_COURSE_VISIT_TRACKER_ID);
         
         Event::trigger('LeaveCourse', Manager::CONTEXT, array(CourseVisit::PROPERTY_ID => $courseVisitTrackerId));
     }

@@ -11,19 +11,16 @@ use Chamilo\Libraries\Architecture\Exceptions\NotAllowedException;
 use Chamilo\Libraries\Architecture\Exceptions\ObjectNotExistException;
 use Chamilo\Libraries\Architecture\Exceptions\ParameterNotDefinedException;
 use Chamilo\Libraries\Format\Structure\PageConfiguration;
-use Chamilo\Libraries\Platform\Session\Request;
 use Chamilo\Libraries\Translation\Translation;
 
 /**
- *
  * @package application\calendar
- * @author Hans De Bisschop <hans.de.bisschop@ehb.be>
+ * @author  Hans De Bisschop <hans.de.bisschop@ehb.be>
  */
 class AttachmentViewerComponent extends Manager
 {
 
     /**
-     *
      * @throws ParameterNotDefinedException
      * @throws ObjectNotExistException
      * @throws NotAllowedException
@@ -31,7 +28,7 @@ class AttachmentViewerComponent extends Manager
     public function run()
     {
         // retrieve the attachment id
-        $attachment_id = Request::get(self::PARAM_OBJECT);
+        $attachment_id = $this->getRequest()->query->get(self::PARAM_OBJECT);
         if (is_null($attachment_id))
         {
             throw new ParameterNotDefinedException(self::PARAM_OBJECT);
@@ -82,7 +79,6 @@ class AttachmentViewerComponent extends Manager
     }
 
     /**
-     *
      * @param ContentObject $attachment
      *
      * @return string>
@@ -90,7 +86,7 @@ class AttachmentViewerComponent extends Manager
     public function get_content_object_display_attachment_url($attachment)
     {
         return $this->get_url(
-            array(Application::PARAM_ACTION => Manager::ACTION_VIEW_ATTACHMENT, 'object' => $attachment->get_id())
+            [Application::PARAM_ACTION => Manager::ACTION_VIEW_ATTACHMENT, 'object' => $attachment->get_id()]
         );
     }
 }

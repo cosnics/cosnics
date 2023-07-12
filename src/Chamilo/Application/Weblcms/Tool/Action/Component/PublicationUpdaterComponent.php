@@ -24,9 +24,10 @@ class PublicationUpdaterComponent extends Manager implements DelegateComponent
 
     public function run()
     {
-        $pid = Request::get(\Chamilo\Application\Weblcms\Tool\Manager::PARAM_PUBLICATION_ID) ? Request::get(
-            \Chamilo\Application\Weblcms\Tool\Manager::PARAM_PUBLICATION_ID
-        ) : $_POST[\Chamilo\Application\Weblcms\Tool\Manager::PARAM_PUBLICATION_ID];
+        $pid = $this->getRequest()->query->get(\Chamilo\Application\Weblcms\Tool\Manager::PARAM_PUBLICATION_ID) ?
+            $this->getRequest()->query->get(
+                \Chamilo\Application\Weblcms\Tool\Manager::PARAM_PUBLICATION_ID
+            ) : $this->getRequest()->request->get(\Chamilo\Application\Weblcms\Tool\Manager::PARAM_PUBLICATION_ID);
 
         $publication = DataManager::retrieve_by_id(
             ContentObjectPublication::class, $pid
@@ -62,8 +63,8 @@ class PublicationUpdaterComponent extends Manager implements DelegateComponent
                     ), ENT_COMPAT | ENT_HTML401, 'UTF-8'
                 );
 
-                $show_details = Request::get('details');
-                $tool = Request::get(\Chamilo\Application\Weblcms\Manager::PARAM_TOOL);
+                $show_details = $this->getRequest()->query->get('details');
+                $tool = $this->getRequest()->query->get(\Chamilo\Application\Weblcms\Manager::PARAM_TOOL);
 
                 $params = [];
                 if ($show_details == 1)
@@ -78,7 +79,7 @@ class PublicationUpdaterComponent extends Manager implements DelegateComponent
                 {
                     $params[\Chamilo\Application\Weblcms\Tool\Manager::PARAM_ACTION] = null;
                     $params['display_action'] = 'view';
-                    $params[\Chamilo\Application\Weblcms\Tool\Manager::PARAM_PUBLICATION_ID] = Request::get(
+                    $params[\Chamilo\Application\Weblcms\Tool\Manager::PARAM_PUBLICATION_ID] = $this->getRequest()->query->get(
                         \Chamilo\Application\Weblcms\Tool\Manager::PARAM_PUBLICATION_ID
                     );
                 }

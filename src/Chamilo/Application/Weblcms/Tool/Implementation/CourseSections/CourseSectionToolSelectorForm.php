@@ -81,7 +81,7 @@ class CourseSectionToolSelectorForm extends FormValidator
         foreach($tools as $tool)
         {
             $course_settings_controller = CourseSettingsController::getInstance();
-            $course = DataManager::retrieve_by_id(Course::class, Request::get('course'));
+            $course = DataManager::retrieve_by_id(Course::class, $this->getRequest()->query->get('course'));
 
             if ($course_settings_controller->get_course_setting(
                 $course,
@@ -122,7 +122,7 @@ class CourseSectionToolSelectorForm extends FormValidator
         // retrieve the sections for this course
         $condition = new EqualityCondition(
             new PropertyConditionVariable(CourseSection::class, CourseSection::PROPERTY_COURSE_ID),
-            new StaticConditionVariable(Request::get('course')));
+            new StaticConditionVariable($this->getRequest()->query->get('course')));
         $course_sections = \Chamilo\Application\Weblcms\Storage\DataManager::retrieves(
             CourseSection::class,
             new DataClassRetrievesParameters($condition));

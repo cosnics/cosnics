@@ -12,7 +12,6 @@ use Chamilo\Libraries\Architecture\Interfaces\DelegateComponent;
 use Chamilo\Libraries\Format\Form\FormValidator;
 use Chamilo\Libraries\Format\Structure\Breadcrumb;
 use Chamilo\Libraries\Format\Structure\BreadcrumbTrail;
-use Chamilo\Libraries\Platform\Session\Request;
 use Chamilo\Libraries\Translation\Translation;
 use Chamilo\Libraries\Utilities\StringUtilities;
 
@@ -29,7 +28,7 @@ class EditorComponent extends Manager implements DelegateComponent
     {
         $user = $this->getUser();
 
-        $id = Request::get(self::PARAM_PUBLICATION_ID);
+        $id = $this->getRequest()->query->get(self::PARAM_PUBLICATION_ID);
         if ($id)
         {
             $calendarEventPublication = $this->getPublicationService()->findPublicationByIdentifier($id);
@@ -54,9 +53,9 @@ class EditorComponent extends Manager implements DelegateComponent
             )
             );
 
-            if ($form->validate() || Request::get('validated'))
+            if ($form->validate() || $this->getRequest()->query->get('validated'))
             {
-                if (!Request::get('validated'))
+                if ($this->getRequest()->query->get('validated'))
                 {
                     $success = $form->update_content_object();
                 }

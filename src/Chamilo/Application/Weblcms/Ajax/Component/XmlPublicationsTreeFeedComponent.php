@@ -7,7 +7,6 @@ use Chamilo\Application\Weblcms\Course\Storage\DataManager as CourseDataManager;
 use Chamilo\Application\Weblcms\Storage\DataClass\ContentObjectPublicationCategory;
 use Chamilo\Application\Weblcms\Storage\DataManager;
 use Chamilo\Libraries\Format\Structure\Glyph\FontAwesomeGlyph;
-use Chamilo\Libraries\Platform\Session\Request;
 use Chamilo\Libraries\Storage\Parameters\DataClassCountParameters;
 use Chamilo\Libraries\Storage\Parameters\DataClassRetrievesParameters;
 use Chamilo\Libraries\Storage\Query\Condition\EqualityCondition;
@@ -25,7 +24,7 @@ class XmlPublicationsTreeFeedComponent extends Manager
         $course = null;
         $user = null;
 
-        $category_id = Request::get('parent_id');
+        $category_id = $this->getRequest()->query->get('parent_id');
 
         $condition = new EqualityCondition(
             new PropertyConditionVariable(
@@ -35,14 +34,14 @@ class XmlPublicationsTreeFeedComponent extends Manager
 
         $categories_tree = DataManager::retrieves(
             ContentObjectPublicationCategory::class, new DataClassRetrievesParameters(
-                $condition, null, null, new OrderBy(array(
-                        new OrderProperty(
-                            new PropertyConditionVariable(
-                                ContentObjectPublicationCategory::class,
-                                ContentObjectPublicationCategory::PROPERTY_DISPLAY_ORDER
-                            )
+                $condition, null, null, new OrderBy([
+                    new OrderProperty(
+                        new PropertyConditionVariable(
+                            ContentObjectPublicationCategory::class,
+                            ContentObjectPublicationCategory::PROPERTY_DISPLAY_ORDER
                         )
-                    ))
+                    )
+                ])
             )
         );
 
@@ -52,7 +51,7 @@ class XmlPublicationsTreeFeedComponent extends Manager
         echo '</tree>';
     }
 
-    function contains_results($objects)
+    public function contains_results($objects)
     {
         if (count($objects))
         {
@@ -62,7 +61,7 @@ class XmlPublicationsTreeFeedComponent extends Manager
         return false;
     }
 
-    function dump_categories_tree($categories)
+    public function dump_categories_tree($categories)
     {
         foreach ($categories as $category)
         {
@@ -75,7 +74,7 @@ class XmlPublicationsTreeFeedComponent extends Manager
         }
     }
 
-    function dump_tree($categories)
+    public function dump_tree($categories)
     {
         if ($this->contains_results($categories))
         {
@@ -83,7 +82,7 @@ class XmlPublicationsTreeFeedComponent extends Manager
         }
     }
 
-    function get_category_class(ContentObjectPublicationCategory $category)
+    public function get_category_class(ContentObjectPublicationCategory $category)
     {
         global $course, $user;
 
@@ -103,7 +102,7 @@ class XmlPublicationsTreeFeedComponent extends Manager
                 $category->get_tool(), $user, $course, $category->get_id()
             ))
             {
-                $glyph = new FontAwesomeGlyph('folder', array('fas-ci-new'), null, 'fas');
+                $glyph = new FontAwesomeGlyph('folder', ['fas-ci-new'], null, 'fas');
 
                 return $glyph->getClassNamesString();
             }
@@ -116,13 +115,13 @@ class XmlPublicationsTreeFeedComponent extends Manager
         }
         else
         {
-            $glyph = new FontAwesomeGlyph('folder', array('text-muted'), null, 'fas');
+            $glyph = new FontAwesomeGlyph('folder', ['text-muted'], null, 'fas');
 
             return $glyph->getClassNamesString();
         }
     }
 
-    function has_sub_categories($category_id)
+    public function has_sub_categories($category_id)
     {
         $condition = new EqualityCondition(
             new PropertyConditionVariable(

@@ -37,7 +37,7 @@ class ForumTopicDeleterComponent extends Manager
             else
             {
                 $params[self::PARAM_ACTION] = self::ACTION_VIEW_FORUM;
-                $params[self::PARAM_COMPLEX_CONTENT_OBJECT_ITEM_ID] = Request::get('parent_cloi');
+                $params[self::PARAM_COMPLEX_CONTENT_OBJECT_ITEM_ID] = $this->getRequest()->query->get('parent_cloi');
                 $params[self::PARAM_SELECTED_COMPLEX_CONTENT_OBJECT_ITEM_ID] = null;
             }
 

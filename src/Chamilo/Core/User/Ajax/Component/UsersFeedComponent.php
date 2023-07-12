@@ -62,7 +62,7 @@ class UsersFeedComponent extends Manager
      */
     protected function getCondition()
     {
-        $searchQuery = Request::post(self::PARAM_SEARCH_QUERY);
+        $searchQuery = $this->getRequest()->request->get(self::PARAM_SEARCH_QUERY);
 
         $conditions = [];
 
@@ -140,7 +140,7 @@ class UsersFeedComponent extends Manager
      */
     protected function getOffset()
     {
-        $offset = Request::post(self::PARAM_OFFSET);
+        $offset = $this->getRequest()->request->get(self::PARAM_OFFSET);
 
         if (!isset($offset) || is_null($offset))
         {

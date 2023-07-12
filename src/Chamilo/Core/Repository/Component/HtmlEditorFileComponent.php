@@ -17,9 +17,9 @@ class HtmlEditorFileComponent extends Manager
     {
         parent::__construct($applicationConfiguration);
 
-        $this->set_parameter('CKEditor', Request::get('CKEditor'));
-        $this->set_parameter('CKEditorFuncNum', Request::get('CKEditorFuncNum'));
-        $this->set_parameter('langCode', Request::get('langCode'));
+        $this->set_parameter('CKEditor', $this->getRequest()->query->get('CKEditor'));
+        $this->set_parameter('CKEditorFuncNum', $this->getRequest()->query->get('CKEditorFuncNum'));
+        $this->set_parameter('langCode', $this->getRequest()->query->get('langCode'));
     }
 
     public function run()
@@ -74,6 +74,6 @@ class HtmlEditorFileComponent extends Manager
 
     public function get_plugin()
     {
-        return Request::get(self::PARAM_PLUGIN);
+        return $this->getRequest()->query->get(self::PARAM_PLUGIN);
     }
 }

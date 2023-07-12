@@ -59,7 +59,7 @@ class AssessmentMergerComponent extends Manager implements ViewerInterface
             $component->set_maximum_select(\Chamilo\Core\Repository\Viewer\Manager::SELECT_SINGLE);
             $component->set_parameter(
                 \Chamilo\Core\Repository\Viewer\Manager::PARAM_ID,
-                Request::get(\Chamilo\Core\Repository\Viewer\Manager::PARAM_ID)
+                $this->getRequest()->query->get(\Chamilo\Core\Repository\Viewer\Manager::PARAM_ID)
             );
 
             return $component->run();
@@ -158,7 +158,7 @@ class AssessmentMergerComponent extends Manager implements ViewerInterface
                 self::PARAM_ACTION => self::ACTION_SELECT_QUESTIONS,
                 self::PARAM_QUESTION_ID => $question_id,
                 self::PARAM_ASSESSMENT_ID => $assessment_id,
-                \Chamilo\Core\Repository\Viewer\Manager::PARAM_ID => Request::get(
+                \Chamilo\Core\Repository\Viewer\Manager::PARAM_ID => $this->getRequest()->query->get(
                     \Chamilo\Core\Repository\Viewer\Manager::PARAM_ID
                 )
             ]

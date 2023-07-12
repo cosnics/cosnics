@@ -1,7 +1,6 @@
 <?php
 namespace Chamilo\Core\Repository\ContentObject\Forum\EmailNotification;
 
-use Chamilo\Configuration\Configuration;
 use Chamilo\Libraries\DependencyInjection\DependencyInjectionContainerBuilder;
 use Chamilo\Libraries\Mail\Mailer\MailerInterface;
 use Chamilo\Libraries\Mail\ValueObject\Mail;
@@ -53,7 +52,7 @@ class TopicEmailNotificator extends EmailNotificator
             $targetUsers[] = $user->get_email();
         }
 
-        $site_name = Configuration::getInstance()->get_setting(['Chamilo\Core\Admin', 'site_name']);
+        $site_name = $this->getConfigurationConsulter()->getSetting(['Chamilo\Core\Admin', 'site_name']);
 
         if ($this->is_topic_edited)
         {

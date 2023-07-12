@@ -29,7 +29,7 @@ class SearchCompleteComponent extends Manager
     {
         $response = [];
 
-        $query = Request::get('term');
+        $query = $this->getRequest()->query->get('term');
 
         $conditions = [];
         $conditions[] = new EqualityCondition(

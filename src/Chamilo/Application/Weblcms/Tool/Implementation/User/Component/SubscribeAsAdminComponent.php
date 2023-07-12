@@ -1,10 +1,7 @@
 <?php
 namespace Chamilo\Application\Weblcms\Tool\Implementation\User\Component;
 
-use Chamilo\Libraries\Platform\Session\Request;
-
 /**
- *
  * @package application.lib.weblcms.weblcms_manager.component
  */
 class SubscribeAsAdminComponent extends SubscribeComponent
@@ -15,7 +12,7 @@ class SubscribeAsAdminComponent extends SubscribeComponent
      */
     public function run()
     {
-        Request::set_get(self::PARAM_STATUS, 1);
+        $this->getRequest()->request->set(self::PARAM_STATUS, 1);
         parent::run();
     }
 }

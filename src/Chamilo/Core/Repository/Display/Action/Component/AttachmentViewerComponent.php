@@ -35,7 +35,7 @@ class AttachmentViewerComponent extends Manager
          * Retrieve data and check if it is a valid attachment
          */
 
-        $attachment_id = Request::get(\Chamilo\Core\Repository\Display\Manager::PARAM_ATTACHMENT_ID);
+        $attachment_id = $this->getRequest()->query->get(\Chamilo\Core\Repository\Display\Manager::PARAM_ATTACHMENT_ID);
         if (is_null($attachment_id))
         {
             throw new ParameterNotDefinedException(\Chamilo\Core\Repository\Display\Manager::PARAM_ATTACHMENT_ID);

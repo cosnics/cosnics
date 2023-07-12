@@ -38,9 +38,9 @@ class DeleterComponent extends Manager
             }
 
             $failures = 0;
-            $delete_version = Request::get(self::PARAM_DELETE_VERSION);
-            $permanent = Request::get(self::PARAM_DELETE_PERMANENTLY);
-            $recycled = Request::get(self::PARAM_DELETE_RECYCLED);
+            $delete_version = $this->getRequest()->query->get(self::PARAM_DELETE_VERSION);
+            $permanent = $this->getRequest()->query->get(self::PARAM_DELETE_PERMANENTLY);
+            $recycled = $this->getRequest()->query->get(self::PARAM_DELETE_RECYCLED);
 
             foreach ($ids as $object_id)
             {

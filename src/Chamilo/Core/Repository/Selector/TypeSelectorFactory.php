@@ -62,8 +62,6 @@ class TypeSelectorFactory
         $this->userIdentifier = $userIdentifier;
         $this->mode = $mode;
         $this->defaultSorting = $defaultSorting;
-
-        $this->initializeContainer();
     }
 
     /**

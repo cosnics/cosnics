@@ -27,8 +27,6 @@ abstract class AbstractAction extends MessageLogger
     {
         parent::__construct();
 
-        $this->initializeContainer();
-
         $this->package = Package::get($context);
     }
 

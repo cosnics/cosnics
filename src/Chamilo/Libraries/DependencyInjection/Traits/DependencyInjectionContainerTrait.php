@@ -82,6 +82,11 @@ trait DependencyInjectionContainerTrait
 
     public function getContainer(): ContainerInterface
     {
+        if (!isset($this->container))
+        {
+            $this->container = DependencyInjectionContainerBuilder::getInstance()->createContainer();
+        }
+
         return $this->container;
     }
 
@@ -240,14 +245,6 @@ trait DependencyInjectionContainerTrait
     public function getWebPathBuilder(): WebPathBuilder
     {
         return $this->getService(WebPathBuilder::class);
-    }
-
-    public function initializeContainer(): void
-    {
-        if (!isset($this->container))
-        {
-            $this->container = DependencyInjectionContainerBuilder::getInstance()->createContainer();
-        }
     }
 
     public function setContainer(ContainerInterface $container): static

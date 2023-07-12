@@ -10,7 +10,6 @@ use Chamilo\Libraries\Architecture\Exceptions\NoObjectSelectedException;
 use Chamilo\Libraries\Architecture\Exceptions\NotAllowedException;
 use Chamilo\Libraries\Format\Structure\Breadcrumb;
 use Chamilo\Libraries\Format\Structure\BreadcrumbTrail;
-use Chamilo\Libraries\Platform\Session\Request;
 use Chamilo\Libraries\Translation\Translation;
 
 abstract class StatusChangerComponent extends Manager
@@ -36,7 +35,7 @@ abstract class StatusChangerComponent extends Manager
 
         if (!is_array($objects))
         {
-            $objects = array($objects);
+            $objects = [$objects];
         }
 
         $failed = 0;
@@ -60,7 +59,7 @@ abstract class StatusChangerComponent extends Manager
             $parameters[UserStatusChange::PROPERTY_USER_ID] = $this->get_user_id();
             $parameters[UserStatusChange::PROPERTY_SUBJECT_ID] = $this->object;
             $parameters[UserStatusChange::PROPERTY_NEW_STATUS] = $this->get_status();
-            $parameters[UserStatusChange::PROPERTY_COURSE_ID] = Request::get(
+            $parameters[UserStatusChange::PROPERTY_COURSE_ID] = $this->getRequest()->query->get(
                 \Chamilo\Application\Weblcms\Manager::PARAM_COURSE
             );
             $parameters[UserStatusChange::PROPERTY_DATE] = time();
@@ -73,10 +72,10 @@ abstract class StatusChangerComponent extends Manager
         );
 
         $this->redirectWithMessage(
-            $message, $failed > 0, array(
+            $message, $failed > 0, [
                 \Chamilo\Application\Weblcms\Tool\Manager::PARAM_ACTION => self::ACTION_UNSUBSCRIBE_BROWSER,
-                self::PARAM_TAB => Request::get(self::PARAM_TAB)
-            )
+                self::PARAM_TAB => $this->getRequest()->query->get(self::PARAM_TAB)
+            ]
         );
     }
 
@@ -85,10 +84,10 @@ abstract class StatusChangerComponent extends Manager
         $breadcrumbtrail->add(
             new Breadcrumb(
                 $this->get_url(
-                    array(
+                    [
                         \Chamilo\Application\Weblcms\Tool\Manager::PARAM_ACTION => self::ACTION_UNSUBSCRIBE_BROWSER,
-                        self::PARAM_TAB => Request::get(self::PARAM_TAB)
-                    )
+                        self::PARAM_TAB => $this->getRequest()->query->get(self::PARAM_TAB)
+                    ]
                 ), Translation::get('UserToolUnsubscribeUserBrowserComponent')
             )
         );
@@ -97,7 +96,7 @@ abstract class StatusChangerComponent extends Manager
     public function getAdditionalParameters(array $additionalParameters = []): array
     {
         $additionalParameters[] = self::PARAM_TAB;
-        if (Request::get(\Chamilo\Application\Weblcms\Manager::PARAM_GROUP))
+        if ($this->getRequest()->query->get(\Chamilo\Application\Weblcms\Manager::PARAM_GROUP))
         {
             $additionalParameters[] = \Chamilo\Application\Weblcms\Manager::PARAM_GROUP;
         }

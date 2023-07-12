@@ -1,6 +1,8 @@
 <?php
 namespace Chamilo\Core\Reporting;
 
+use Chamilo\Configuration\Service\Consulter\ConfigurationConsulter;
+use Chamilo\Libraries\DependencyInjection\DependencyInjectionContainerBuilder;
 use Chamilo\Libraries\DependencyInjection\Traits\DependencyInjectionContainerTrait;
 use Chamilo\Libraries\Format\Structure\Breadcrumb;
 use Chamilo\Libraries\Format\Structure\BreadcrumbTrail;
@@ -23,7 +25,6 @@ abstract class ReportingTemplate
     public function __construct($parent)
     {
         $this->set_parent($parent);
-        $this->initializeContainer();
     }
 
     public function addCurrentBlockBreadcrumb()
@@ -75,6 +76,13 @@ abstract class ReportingTemplate
         return $block;
     }
 
+    public function getConfigurationConsulter(): ConfigurationConsulter
+    {
+        return DependencyInjectionContainerBuilder::getInstance()->createContainer()->get(
+            ConfigurationConsulter::class
+        );
+    }
+
     /**
      * @brief Return template style containing properties such as title font size or paper orientation.
      * Default implementation retrieves values from the cental configuration. See
@@ -83,7 +91,7 @@ abstract class ReportingTemplate
      */
     public function getStyle()
     {
-        return new ReportingTemplateStyle();
+        return new ReportingTemplateStyle($this->getConfigurationConsulter());
     }
 
     /**

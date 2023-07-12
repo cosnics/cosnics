@@ -22,8 +22,8 @@ class UpdaterComponent extends Manager
      */
     public function run()
     {
-        $application = Request::get(self::PARAM_PUBLICATION_APPLICATION);
-        $publication_id = Request::get(self::PARAM_PUBLICATION_ID);
+        $application = $this->getRequest()->query->get(self::PARAM_PUBLICATION_APPLICATION);
+        $publication_id = $this->getRequest()->query->get(self::PARAM_PUBLICATION_ID);
         $publicationContext = $this->getRequest()->getFromRequestOrQuery(self::PARAM_PUBLICATION_CONTEXT);
 
         $this->set_parameter(self::PARAM_PUBLICATION_ID, $publication_id);

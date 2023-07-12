@@ -53,8 +53,6 @@ class Publisher
 
     public function __construct($parent, $content_object_ids, $show_form = true)
     {
-        $this->initializeContainer();
-
         $this->parent = $parent;
         $this->show_form = $show_form;
 

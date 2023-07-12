@@ -22,7 +22,7 @@ class ActivatorComponent extends Manager implements DelegateComponent
      */
     public function run()
     {
-        $context = Request::get(self::PARAM_CONTEXT);
+        $context = $this->getRequest()->query->get(self::PARAM_CONTEXT);
 
         $activator = new PackageActivator($context);
         $activator->run();

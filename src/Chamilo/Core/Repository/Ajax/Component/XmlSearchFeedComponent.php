@@ -21,7 +21,7 @@ class XmlSearchFeedComponent extends Manager
         $conditions = [];
 
         $query_condition = $this->getSearchQueryConditionGenerator()->getSearchConditions(
-            Request::post('queryString'),
+            $this->getRequest()->request->get('queryString'),
             new PropertyConditionVariable(ContentObject::class, ContentObject::PROPERTY_TITLE)
         );
 

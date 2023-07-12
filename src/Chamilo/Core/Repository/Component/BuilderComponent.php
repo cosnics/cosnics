@@ -10,7 +10,6 @@ use Chamilo\Libraries\Architecture\Interfaces\ApplicationSupport;
 use Chamilo\Libraries\Format\Structure\Breadcrumb;
 use Chamilo\Libraries\Format\Structure\BreadcrumbTrail;
 use Chamilo\Libraries\Format\Structure\PageConfiguration;
-use Chamilo\Libraries\Platform\Session\Request;
 use Chamilo\Libraries\Storage\DataManager\DataManager;
 use Chamilo\Libraries\Translation\Translation;
 use Chamilo\Libraries\Utilities\StringUtilities;
@@ -36,8 +35,8 @@ class BuilderComponent extends Manager implements ApplicationSupport
      */
     public function run()
     {
-        $this->set_parameter(self::PARAM_POPUP, Request::get(self::PARAM_POPUP));
-        $content_object_id = Request::get(self::PARAM_CONTENT_OBJECT_ID);
+        $this->set_parameter(self::PARAM_POPUP, $this->getRequest()->query->get(self::PARAM_POPUP));
+        $content_object_id = $this->getRequest()->query->get(self::PARAM_CONTENT_OBJECT_ID);
         try
         {
             $this->content_object = DataManager::retrieve_by_id(ContentObject::class, $content_object_id);
@@ -88,7 +87,7 @@ class BuilderComponent extends Manager implements ApplicationSupport
 
     public function render_header(string $pageTitle = ''): string
     {
-        $is_popup = Request::get(self::PARAM_POPUP);
+        $is_popup = $this->getRequest()->query->get(self::PARAM_POPUP);
 
         if ($is_popup)
         {

@@ -30,7 +30,7 @@ class ForumPostQuoterComponent extends ForumPostFormActionCreate
      */
     public function run()
     {
-        $this->selected_forum_post_id = Request::get(self::PARAM_SELECTED_FORUM_POST);
+        $this->selected_forum_post_id = $this->getRequest()->query->get(self::PARAM_SELECTED_FORUM_POST);
         
         $quote_lo = DataManager::retrieve_by_id(ForumPost::class, $this->selected_forum_post_id);
         

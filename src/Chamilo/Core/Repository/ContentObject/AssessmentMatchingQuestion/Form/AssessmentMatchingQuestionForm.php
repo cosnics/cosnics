@@ -471,7 +471,7 @@ class AssessmentMatchingQuestionForm extends ContentObjectForm
         }
     }
 
-    public function validate()
+    public function validate(): bool
     {
         if (isset($_POST[self::PROPERTY_ADD_MATCH]) || isset($_POST[self::PROPERTY_REMOVE_MATCH]) ||
             isset($_POST[self::PROPERTY_REMOVE_OPTION]) || isset($_POST[self::PROPERTY_ADD_OPTION]))

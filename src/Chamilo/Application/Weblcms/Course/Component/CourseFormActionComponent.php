@@ -35,7 +35,7 @@ abstract class CourseFormActionComponent extends Manager
         
         $course = $this->get_course();
         
-        $possible_course_type_id = Request::post(Course::PROPERTY_COURSE_TYPE_ID);
+        $possible_course_type_id = $this->getRequest()->request->get(Course::PROPERTY_COURSE_TYPE_ID);
         
         if (isset($possible_course_type_id) && $possible_course_type_id != - 1)
         {
@@ -46,7 +46,7 @@ abstract class CourseFormActionComponent extends Manager
         
         $form = new CourseForm($this->get_url(), $course);
         
-        $submit_request = Request::post('submit');
+        $submit_request = $this->getRequest()->request->get('submit');
         
         if (! is_null($submit_request) && $form->validate())
         {

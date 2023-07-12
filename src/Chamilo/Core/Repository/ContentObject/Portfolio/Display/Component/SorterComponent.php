@@ -27,7 +27,7 @@ class SorterComponent extends Manager implements DelegateComponent
     {
         if ($this->canEditComplexContentObjectPathNode($this->get_current_node()))
         {
-            $direction = Request::get(self::PARAM_SORT, self::SORT_UP);
+            $direction = $this->getRequest()->query->get(self::PARAM_SORT, self::SORT_UP);
             $selected_complex_content_object_item = $this->get_current_complex_content_object_item();
             $content_object = $this->get_current_content_object();
             

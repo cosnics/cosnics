@@ -40,8 +40,6 @@ abstract class ToolListRenderer
     {
         $this->parent = $parent;
         $this->visible_tools = $visible_tools;
-
-        $this->initializeContainer();
     }
 
     /**

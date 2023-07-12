@@ -70,7 +70,8 @@ class ComplexDisplayComponent extends Manager
             'ContentObjectPublication', null, 'Chamilo\Application\Weblcms'
         );
 
-        $publication_id = Request::get(\Chamilo\Application\Weblcms\Tool\Manager::PARAM_PUBLICATION_ID);
+        $publication_id =
+            $this->getRequest()->query->get(\Chamilo\Application\Weblcms\Tool\Manager::PARAM_PUBLICATION_ID);
 
         if (empty($publication_id))
         {
@@ -385,13 +386,15 @@ class ComplexDisplayComponent extends Manager
         {
             $this->set_parameter(
                 \Chamilo\Core\Repository\ContentObject\LearningPath\Display\Manager::PARAM_LEARNING_PATH_ITEM_ID,
-                Request::get(
+                $this->getRequest()->query->get(
                     \Chamilo\Core\Repository\ContentObject\LearningPath\Display\Manager::PARAM_LEARNING_PATH_ITEM_ID
                 )
             );
             $this->set_parameter(
                 \Chamilo\Core\Repository\Display\Manager::PARAM_COMPLEX_CONTENT_OBJECT_ITEM_ID,
-                Request::get(\Chamilo\Core\Repository\Display\Manager::PARAM_COMPLEX_CONTENT_OBJECT_ITEM_ID)
+                $this->getRequest()->query->get(
+                    \Chamilo\Core\Repository\Display\Manager::PARAM_COMPLEX_CONTENT_OBJECT_ITEM_ID
+                )
             );
 
             return $this->getSelectedLearningPath();
@@ -404,7 +407,7 @@ class ComplexDisplayComponent extends Manager
 
         $parameters[Application::PARAM_CONTEXT] = \Chamilo\Application\Weblcms\Manager::CONTEXT;
         $parameters[Application::PARAM_ACTION] = \Chamilo\Application\Weblcms\Manager::ACTION_VIEW_COURSE;
-        $parameters[\Chamilo\Application\Weblcms\Manager::PARAM_COURSE] = Request::get('course');
+        $parameters[\Chamilo\Application\Weblcms\Manager::PARAM_COURSE] = $this->getRequest()->query->get('course');
         $parameters[\Chamilo\Application\Weblcms\Manager::PARAM_TOOL] =
             ClassnameUtilities::getInstance()->getPackageNameFromNamespace(
                 Manager::CONTEXT

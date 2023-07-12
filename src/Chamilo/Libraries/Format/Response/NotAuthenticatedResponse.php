@@ -18,13 +18,10 @@ class NotAuthenticatedResponse extends Response
     use DependencyInjectionContainerTrait;
 
     /**
-     * @throws \ReflectionException
      * @throws \Exception
      */
     public function __construct()
     {
-        $this->initializeContainer();
-
         $html = [];
 
         $html[] = $this->getHeaderRenderer()->render();

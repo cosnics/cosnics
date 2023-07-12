@@ -59,8 +59,6 @@ abstract class GlossaryRenderer
         $this->component = $component;
         $this->glossary = $glossary;
         $this->search_query = $search_query;
-
-        $this->initializeContainer();
     }
 
     /**

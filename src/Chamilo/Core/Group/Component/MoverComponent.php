@@ -27,10 +27,10 @@ class MoverComponent extends Manager
             throw new NotAllowedException();
         }
 
-        $group_id = Request::get(self::PARAM_GROUP_ID);
+        $group_id = $this->getRequest()->query->get(self::PARAM_GROUP_ID);
         $this->set_parameter(self::PARAM_GROUP_ID, $group_id);
 
-        $group = $this->retrieve_group(intval(Request::get(self::PARAM_GROUP_ID)));
+        $group = $this->retrieve_group(intval($this->getRequest()->query->get(self::PARAM_GROUP_ID)));
 
         // TODO: only show groups you can actually move to (where you have create rights)
         $form = new GroupMoveForm($group, $this->get_url([self::PARAM_GROUP_ID => $group_id]), $this->get_user());
@@ -75,7 +75,7 @@ class MoverComponent extends Manager
                 $this->get_url(
                     [
                         Application::PARAM_ACTION => self::ACTION_VIEW_GROUP,
-                        self::PARAM_GROUP_ID => Request::get(self::PARAM_GROUP_ID)
+                        self::PARAM_GROUP_ID => $this->getRequest()->query->get(self::PARAM_GROUP_ID)
                     ]
                 ), Translation::get('ViewerComponent')
             )

@@ -3,7 +3,6 @@ namespace Chamilo\Core\User\Email;
 
 use Chamilo\Libraries\Architecture\Application\Application;
 use Chamilo\Libraries\Architecture\Application\ApplicationConfigurationInterface;
-use Chamilo\Libraries\Platform\Session\Request;
 
 /**
  * @package application.common.email_manager
@@ -25,7 +24,8 @@ abstract class Manager extends Application
 
         $this->target_users = [];
 
-        $email_action = Request::get(self::PARAM_ACTION);
+        $email_action = $this->getRequest()->query->get(self::PARAM_ACTION);
+
         if ($email_action)
         {
             $this->set_parameter(self::PARAM_ACTION, $email_action);

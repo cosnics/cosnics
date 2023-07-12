@@ -6,15 +6,13 @@ use Chamilo\Core\Repository\Common\Rendition\ContentObjectRenditionImplementatio
 use Chamilo\Core\Repository\ContentObject\Wiki\Display\Manager;
 use Chamilo\Libraries\Architecture\Interfaces\DelegateComponent;
 use Chamilo\Libraries\Format\Structure\BreadcrumbTrail;
-use Chamilo\Libraries\Platform\Session\Request;
 use Chamilo\Libraries\Translation\Translation;
 use MediawikiParser;
 use MediawikiParserContext;
 
 /**
  * @package Chamilo\Core\Repository\ContentObject\Wiki\Display\Component
- *
- * @author Hans De Bisschop <hans.de.bisschop@ehb.be>
+ * @author  Hans De Bisschop <hans.de.bisschop@ehb.be>
  */
 class ViewerComponent extends Manager implements DelegateComponent
 {
@@ -27,7 +25,9 @@ class ViewerComponent extends Manager implements DelegateComponent
 
             if (!is_null($complex_wiki_homepage))
             {
-                Request::set_get(self::PARAM_SELECTED_COMPLEX_CONTENT_OBJECT_ITEM_ID, $complex_wiki_homepage->get_id());
+                $this->getRequest()->request->set(
+                    self::PARAM_SELECTED_COMPLEX_CONTENT_OBJECT_ITEM_ID, $complex_wiki_homepage->get_id()
+                );
 
                 $wiki_homepage = $complex_wiki_homepage->get_ref_object();
 
@@ -77,7 +77,7 @@ class ViewerComponent extends Manager implements DelegateComponent
             {
                 $this->redirectWithMessage(
                     Translation::get('PleaseConfigureWikiHomepage'), false,
-                    array(self::PARAM_ACTION => self::ACTION_BROWSE_WIKI)
+                    [self::PARAM_ACTION => self::ACTION_BROWSE_WIKI]
                 );
             }
         }

@@ -51,8 +51,6 @@ abstract class BlogLayout
     {
         $this->parent = $parent;
         $this->blog = $blog;
-
-        $this->initializeContainer();
     }
 
     /**

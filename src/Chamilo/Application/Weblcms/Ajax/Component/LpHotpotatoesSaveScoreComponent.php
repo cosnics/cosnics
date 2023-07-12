@@ -12,8 +12,8 @@ class LpHotpotatoesSaveScoreComponent extends Manager
 
     public function run()
     {
-        $id = Request::post('id');
-        $score = Request::post('score');
+        $id = $this->getRequest()->request->get('id');
+        $score = $this->getRequest()->request->get('score');
 
         $attempt = DataManager::retrieve_by_id(
             LearningPathTreeNodeAttempt::class,

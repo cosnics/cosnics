@@ -20,7 +20,7 @@ class CopierComponent extends Manager
      */
     public function run()
     {
-        $selected_content_object_ids = (array) Request::get(self::PARAM_CONTENT_OBJECT_ID);
+        $selected_content_object_ids = (array) $this->getRequest()->query->get(self::PARAM_CONTENT_OBJECT_ID);
 
         if (!$selected_content_object_ids)
         {

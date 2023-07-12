@@ -24,7 +24,7 @@ class ViewerComponent extends Manager
             throw new NotAllowedException();
         }
 
-        $template_id = Request::get(\Chamilo\Application\Weblcms\Manager::PARAM_TEMPLATE_ID);
+        $template_id = $this->getRequest()->query->get(\Chamilo\Application\Weblcms\Manager::PARAM_TEMPLATE_ID);
 
         $this->registerParameters();
 
@@ -39,7 +39,7 @@ class ViewerComponent extends Manager
         }
         else
         {
-            if ($view = Request::get(\Chamilo\Core\Reporting\Viewer\Manager::PARAM_VIEW))
+            if ($view = $this->getRequest()->query->get(\Chamilo\Core\Reporting\Viewer\Manager::PARAM_VIEW))
             {
                 $this->set_parameter(\Chamilo\Core\Reporting\Viewer\Manager::PARAM_VIEW, $view);
             }

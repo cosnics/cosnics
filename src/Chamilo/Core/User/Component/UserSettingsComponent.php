@@ -45,7 +45,7 @@ class UserSettingsComponent extends ProfileComponent
     public function run()
     {
         $this->checkAuthorization(Manager::CONTEXT, 'ManageAccount');
-        $this->context = Request::get(self::PARAM_CONTEXT);
+        $this->context = $this->getRequest()->query->get(self::PARAM_CONTEXT);
 
         if (!$this->context)
         {

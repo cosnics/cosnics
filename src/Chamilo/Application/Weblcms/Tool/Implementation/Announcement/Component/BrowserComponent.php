@@ -119,7 +119,7 @@ class BrowserComponent extends Manager
     public function get_tool_conditions()
     {
         $conditions = [];
-        $filter = Request::get(self::PARAM_FILTER);
+        $filter = $this->getRequest()->query->get(self::PARAM_FILTER);
 
         switch ($filter)
         {

@@ -22,7 +22,8 @@ class ContentObjectUpdaterComponent extends Manager
     {
         if ($this->get_parent()->get_parent()->is_allowed_to_edit_content_object())
         {
-            $pid = Request::get('pid') ? Request::get('pid') : $_POST['pid'];
+            $pid = $this->getRequest()->query->get('pid') ? $this->getRequest()->query->get('pid') :
+                $this->getRequest()->request->get('pid');
 
             $content_object = DataManager::retrieve_by_id(
                 ContentObject::class, $pid
@@ -40,7 +41,7 @@ class ContentObjectUpdaterComponent extends Manager
             )
             );
 
-            if ($form->validate() || Request::get('validated'))
+            if ($form->validate() || $this->getRequest()->query->get('validated'))
             {
                 $succes = $form->update_content_object();
 
@@ -52,8 +53,8 @@ class ContentObjectUpdaterComponent extends Manager
                 );
 
                 $params = [];
-                $params['pid'] = Request::get('pid');
-                $params['tool_action'] = Request::get('tool_action');
+                $params['pid'] = $this->getRequest()->query->get('pid');
+                $params['tool_action'] = $this->getRequest()->query->get('tool_action');
                 $params[\Chamilo\Core\Repository\Display\Manager::PARAM_ACTION] = Manager::ACTION_VIEW_CLO;
 
                 $this->redirectWithMessage($message, (!$succes), $params);

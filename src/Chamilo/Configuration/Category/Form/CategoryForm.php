@@ -261,7 +261,7 @@ class CategoryForm extends FormValidator
         return $category->update();
     }
 
-    public function validate()
+    public function validate(): bool
     {
         if (isset($_POST['add']) || isset($_POST['remove']))
         {

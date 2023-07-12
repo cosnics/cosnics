@@ -5,14 +5,13 @@ use Chamilo\Application\Weblcms\Rights\CourseManagementRights;
 use Chamilo\Application\Weblcms\Rights\WeblcmsRights;
 use Chamilo\Application\Weblcms\Tool\Implementation\User\Manager;
 use Chamilo\Libraries\Architecture\Exceptions\NotAllowedException;
-use Chamilo\Libraries\Platform\Session\Request;
 use Chamilo\Libraries\Translation\Translation;
 use Chamilo\Libraries\Utilities\StringUtilities;
 
 /**
- *
  * @package application.lib.weblcms.weblcms_manager.component
  */
+
 /**
  * Weblcms component which allows the user to manage his or her course subscriptions
  */
@@ -24,16 +23,16 @@ class GroupUnsubscribeComponent extends Manager
      */
     public function run()
     {
-        if (! $this->is_allowed(WeblcmsRights::EDIT_RIGHT))
+        if (!$this->is_allowed(WeblcmsRights::EDIT_RIGHT))
         {
             throw new NotAllowedException();
         }
 
         $course = $this->get_course();
         $group_ids = $this->getRequest()->getFromRequestOrQuery(self::PARAM_OBJECTS);
-        if (! is_array($group_ids))
+        if (!is_array($group_ids))
         {
-            $group_ids = array($group_ids);
+            $group_ids = [$group_ids];
         }
         if (isset($course))
         {
@@ -45,16 +44,16 @@ class GroupUnsubscribeComponent extends Manager
 
                 foreach ($group_ids as $group_id)
                 {
-                    if (! $this->get_user()->isPlatformAdmin() && ! $course_management_rights->is_allowed_for_platform_group(
-                        CourseManagementRights::TEACHER_UNSUBSCRIBE_RIGHT,
-                        $group_id,
-                        $course->get_id()))
+                    if (!$this->get_user()->isPlatformAdmin() &&
+                        !$course_management_rights->is_allowed_for_platform_group(
+                            CourseManagementRights::TEACHER_UNSUBSCRIBE_RIGHT, $group_id, $course->get_id()
+                        ))
                     {
                         $failures ++;
                         continue;
                     }
 
-                    if (! $this->get_parent()->unsubscribe_group_from_course($course, $group_id))
+                    if (!$this->get_parent()->unsubscribe_group_from_course($course, $group_id))
                     {
                         $failures ++;
                     }
@@ -93,19 +92,21 @@ class GroupUnsubscribeComponent extends Manager
                 }
 
                 $this->redirectWithMessage(
-                    Translation::get($message), !$success,
-                    array(
+                    Translation::get($message), !$success, [
                         \Chamilo\Application\Weblcms\Tool\Manager::PARAM_ACTION => self::ACTION_UNSUBSCRIBE_BROWSER,
-                        self::PARAM_TAB => Request::get(self::PARAM_TAB)));
+                        self::PARAM_TAB => $this->getRequest()->query->get(self::PARAM_TAB)
+                    ]
+                );
             }
             else
             {
                 return $this->display_error_page(
                     htmlentities(
                         Translation::get(
-                            'NoObjectsSelected',
-                            array('OBJECT' => Translation::get('Group')),
-                            StringUtilities::LIBRARIES)));
+                            'NoObjectsSelected', ['OBJECT' => Translation::get('Group')], StringUtilities::LIBRARIES
+                        )
+                    )
+                );
             }
         }
         else
@@ -113,9 +114,10 @@ class GroupUnsubscribeComponent extends Manager
             return $this->display_error_page(
                 htmlentities(
                     Translation::get(
-                        'NoObjectSelected',
-                        array('OBJECT' => Translation::get('Course')),
-                        StringUtilities::LIBRARIES)));
+                        'NoObjectSelected', ['OBJECT' => Translation::get('Course')], StringUtilities::LIBRARIES
+                    )
+                )
+            );
         }
     }
 }

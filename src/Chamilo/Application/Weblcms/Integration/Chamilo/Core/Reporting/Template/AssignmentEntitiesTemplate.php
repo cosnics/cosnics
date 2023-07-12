@@ -1,24 +1,22 @@
 <?php
 namespace Chamilo\Application\Weblcms\Integration\Chamilo\Core\Reporting\Template;
 
-use Chamilo\Application\Weblcms\Integration\Chamilo\Core\Reporting\Block\Assignment\AssignmentInformationBlock;
 use Chamilo\Application\Weblcms\Integration\Chamilo\Core\Reporting\Block\Assignment\AssignmentEntitiesBlock;
+use Chamilo\Application\Weblcms\Integration\Chamilo\Core\Reporting\Block\Assignment\AssignmentInformationBlock;
 use Chamilo\Application\Weblcms\Manager;
 use Chamilo\Application\Weblcms\Storage\DataClass\ContentObjectPublication;
 use Chamilo\Application\Weblcms\Storage\DataManager;
 use Chamilo\Core\Reporting\ReportingTemplate;
 use Chamilo\Libraries\Format\Structure\Breadcrumb;
 use Chamilo\Libraries\Format\Structure\BreadcrumbTrail;
-use Chamilo\Libraries\Platform\Session\Request;
 use Chamilo\Libraries\Translation\Translation;
 
 /**
- *
  * @package application.weblcms.php.reporting.templates Reporting template with information about the assignment and the
  *          users, course groups and platform groups the assignment is published for
- * @author Joris Willems <joris.willems@gmail.com>
- * @author Alexander Van Paemel
- * @author Anthony Hurst (Hogeschool Gent)
+ * @author  Joris Willems <joris.willems@gmail.com>
+ * @author  Alexander Van Paemel
+ * @author  Anthony Hurst (Hogeschool Gent)
  */
 class AssignmentEntitiesTemplate extends ReportingTemplate
 {
@@ -32,11 +30,10 @@ class AssignmentEntitiesTemplate extends ReportingTemplate
     {
         parent::__construct($parent);
 
-        $this->publicationId = Request::get(Manager::PARAM_PUBLICATION);
+        $this->publicationId = $this->getRequest()->query->get(Manager::PARAM_PUBLICATION);
 
         $assignment = DataManager::retrieve_by_id(
-            ContentObjectPublication::class,
-            $this->publicationId
+            ContentObjectPublication::class, $this->publicationId
         )->get_content_object();
 
         $this->init_parameters();
@@ -46,8 +43,7 @@ class AssignmentEntitiesTemplate extends ReportingTemplate
         $breadcrumbTrail = BreadcrumbTrail::getInstance();
 
         $params = [];
-        $params[Manager::PARAM_TEMPLATE_ID] =
-            CourseStudentTrackerTemplate::class;
+        $params[Manager::PARAM_TEMPLATE_ID] = CourseStudentTrackerTemplate::class;
         $params[\Chamilo\Core\Reporting\Viewer\Manager::PARAM_BLOCK_ID] = 1;
 
         $breadcrumbTrail->add(

@@ -28,7 +28,7 @@ class CheckTitleComponent extends Manager
     {
         $title = $this->getPostDataValue(self::PARAM_TITLE);
         $parent_id = $this->getPostDataValue(self::PARAM_PARENT_ID);
-        $content_object_id = Request::post(self::PARAM_CONTENT_OBJECT_ID);
+        $content_object_id = $this->getRequest()->request->get(self::PARAM_CONTENT_OBJECT_ID);
         
         if (! DataManager::content_object_title_exists($title, $parent_id, $content_object_id))
         {

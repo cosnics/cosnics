@@ -3,7 +3,6 @@ namespace Chamilo\Core\Repository\ContentObject\Portfolio\Display\Preview;
 
 use Chamilo\Core\Repository\Common\Path\ComplexContentObjectPathNode;
 use Chamilo\Core\Repository\Display\Preview;
-use Chamilo\Libraries\Platform\Session\Request;
 
 /**
  * Container to enable previews of a portfolio in the context of the repository
@@ -23,11 +22,15 @@ abstract class Manager extends Preview
     {
         $this->set_parameter(
             \Chamilo\Core\Repository\ContentObject\Portfolio\Display\Manager::PARAM_PORTFOLIO_ITEM_ID,
-            Request::get(\Chamilo\Core\Repository\ContentObject\Portfolio\Display\Manager::PARAM_PORTFOLIO_ITEM_ID)
+            $this->getRequest()->query->get(
+                \Chamilo\Core\Repository\ContentObject\Portfolio\Display\Manager::PARAM_PORTFOLIO_ITEM_ID
+            )
         );
         $this->set_parameter(
             \Chamilo\Core\Repository\Display\Manager::PARAM_COMPLEX_CONTENT_OBJECT_ITEM_ID,
-            Request::get(\Chamilo\Core\Repository\Display\Manager::PARAM_COMPLEX_CONTENT_OBJECT_ITEM_ID)
+            $this->getRequest()->query->get(
+                \Chamilo\Core\Repository\Display\Manager::PARAM_COMPLEX_CONTENT_OBJECT_ITEM_ID
+            )
         );
 
         return parent::get_root_content_object();

@@ -43,7 +43,7 @@ class UpdaterComponent extends TabComponent
      */
     public function build()
     {
-        $workspaceId = Request::get(self::PARAM_WORKSPACE_ID);
+        $workspaceId = $this->getRequest()->query->get(self::PARAM_WORKSPACE_ID);
 
         /** @var Workspace $workspace */
         $workspace = DataManager::retrieve_by_id(Workspace::class, $workspaceId);

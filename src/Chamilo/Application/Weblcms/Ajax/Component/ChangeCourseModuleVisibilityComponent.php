@@ -18,9 +18,9 @@ class ChangeCourseModuleVisibilityComponent extends Manager
 
     public function run()
     {
-        $module_id = Request::post('tool');
-        $visible = Request::post('visible');
-        $course = Request::post('course');
+        $module_id = $this->getRequest()->request->get('tool');
+        $visible = $this->getRequest()->request->get('visible');
+        $course = $this->getRequest()->request->get('course');
         
         DataManager::set_tool_visibility_by_tool_id(
             $course, 

@@ -38,13 +38,13 @@ class DocumentSaverComponent extends Manager
             throw new NotAllowedException();
         }
 
-        if (Request::get(self::PARAM_USER_ASSESSMENT))
+        if ($this->getRequest()->query->get(self::PARAM_USER_ASSESSMENT))
         {
-            $this->retrieve_assessment_attempt_documents(Request::get(self::PARAM_USER_ASSESSMENT));
+            $this->retrieve_assessment_attempt_documents($this->getRequest()->query->get(self::PARAM_USER_ASSESSMENT));
         }
-        elseif (Request::get(self::PARAM_ASSESSMENT))
+        elseif ($this->getRequest()->query->get(self::PARAM_ASSESSMENT))
         {
-            $this->retrieve_assessment_documents(Request::get(self::PARAM_ASSESSMENT));
+            $this->retrieve_assessment_documents($this->getRequest()->query->get(self::PARAM_ASSESSMENT));
         }
     }
 
@@ -77,8 +77,8 @@ class DocumentSaverComponent extends Manager
     {
         $params = [];
         $params[\Chamilo\Application\Weblcms\Tool\Manager::PARAM_ACTION] = self::ACTION_VIEW_RESULTS;
-        $params[self::PARAM_ASSESSMENT] = Request::get(self::PARAM_ASSESSMENT);
-        $params[self::PARAM_USER_ASSESSMENT] = Request::get(self::PARAM_USER_ASSESSMENT);
+        $params[self::PARAM_ASSESSMENT] = $this->getRequest()->query->get(self::PARAM_ASSESSMENT);
+        $params[self::PARAM_USER_ASSESSMENT] = $this->getRequest()->query->get(self::PARAM_USER_ASSESSMENT);
         $this->redirectWithMessage(Translation::get($message), false, $params);
     }
 

@@ -38,7 +38,7 @@ class UpdaterComponent extends Manager
             throw new NotAllowedException();
         }
 
-        $relation_id = Request::get(self::PARAM_RELATION_ID);
+        $relation_id = $this->getRequest()->query->get(self::PARAM_RELATION_ID);
         $this->set_parameter(self::PARAM_RELATION_ID, $relation_id);
 
         $relation = DataManager::retrieve_by_id(Relation::class, $relation_id);

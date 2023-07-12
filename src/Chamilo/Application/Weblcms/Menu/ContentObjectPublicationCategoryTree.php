@@ -24,7 +24,6 @@ use Chamilo\Libraries\Translation\Translation;
 use Chamilo\Libraries\Utilities\StringUtilities;
 
 /**
- *
  * @package application.lib.weblcms.browser
  */
 
@@ -33,7 +32,7 @@ use Chamilo\Libraries\Utilities\StringUtilities;
  */
 class ContentObjectPublicationCategoryTree extends HtmlMenu
 {
-    const TREE_NAME = __CLASS__;
+    public const TREE_NAME = __CLASS__;
 
     /**
      * The browser to which this category tree is associated
@@ -191,8 +190,7 @@ class ContentObjectPublicationCategoryTree extends HtmlMenu
         $conditions[] = new SubselectCondition(
             new PropertyConditionVariable(
                 ContentObjectPublication::class, ContentObjectPublication::PROPERTY_CONTENT_OBJECT_ID
-            ), new PropertyConditionVariable(ContentObject::class, ContentObject::PROPERTY_ID),
-            $subselect_condition
+            ), new PropertyConditionVariable(ContentObject::class, ContentObject::PROPERTY_ID), $subselect_condition
         );
 
         $condition = new AndCondition($conditions);
@@ -226,7 +224,7 @@ class ContentObjectPublicationCategoryTree extends HtmlMenu
         );
 
         $categories = [];
-        foreach($objects as $category)
+        foreach ($objects as $category)
         {
             $menu_item = [];
             $menu_item['title'] = $category->get_name() . $this->get_category_count($category->get_id());

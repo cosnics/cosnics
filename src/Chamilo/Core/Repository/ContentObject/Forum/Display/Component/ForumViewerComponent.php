@@ -367,7 +367,7 @@ class ForumViewerComponent extends Manager implements DelegateComponent
                 }
                 else
                 {
-                    $parent_cloi = Request::get('cloi');
+                    $parent_cloi = $this->getRequest()->query->get('cloi');
                 }
 
                 $parameters = [];
@@ -464,7 +464,7 @@ class ForumViewerComponent extends Manager implements DelegateComponent
                 }
                 else
                 {
-                    $parent_cloi = Request::get('cloi');
+                    $parent_cloi = $this->getRequest()->query->get('cloi');
                 }
 
                 $parameters = [];
@@ -671,7 +671,7 @@ class ForumViewerComponent extends Manager implements DelegateComponent
                 }
                 else
                 {
-                    $parent_cloi = Request::get('cloi');
+                    $parent_cloi = $this->getRequest()->query->get('cloi');
                 }
 
                 $parameters[self::PARAM_CURRENT_SESSION_PARENT_CLOI] = $parent_cloi;

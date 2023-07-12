@@ -22,7 +22,7 @@ class QuestionSelecterComponent extends Manager
 
     public function run()
     {
-        $assessment_id = Request::get(self::PARAM_ASSESSMENT_ID);
+        $assessment_id = $this->getRequest()->query->get(self::PARAM_ASSESSMENT_ID);
 
         if ($assessment_id)
         {
@@ -62,7 +62,7 @@ class QuestionSelecterComponent extends Manager
                     $this->get_url(
                         [
                             self::PARAM_ACTION => self::ACTION_MERGE_ASSESSMENT,
-                            \Chamilo\Core\Repository\Viewer\Manager::PARAM_ID => Request::get(
+                            \Chamilo\Core\Repository\Viewer\Manager::PARAM_ID => $this->getRequest()->query->get(
                                 \Chamilo\Core\Repository\Viewer\Manager::PARAM_ID
                             )
                         ]
@@ -101,7 +101,7 @@ class QuestionSelecterComponent extends Manager
         $this->redirectWithMessage(
             $message, !$succes, [
                 self::PARAM_ACTION => self::ACTION_BROWSE,
-                \Chamilo\Core\Repository\Viewer\Manager::PARAM_ID => Request::get(
+                \Chamilo\Core\Repository\Viewer\Manager::PARAM_ID => $this->getRequest()->query->get(
                     \Chamilo\Core\Repository\Viewer\Manager::PARAM_ID
                 )
             ]

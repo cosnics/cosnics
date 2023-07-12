@@ -78,8 +78,6 @@ class ActionSelector
         $extraActions = [], array $classes = []
     )
     {
-        $this->initializeContainer();
-
         $this->application = $application;
         $this->userIdentifier = $userIdentifier;
         $this->allowedContentObjectTypes = $allowedContentObjectTypes;

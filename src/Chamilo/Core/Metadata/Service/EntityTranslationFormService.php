@@ -1,7 +1,7 @@
 <?php
 namespace Chamilo\Core\Metadata\Service;
 
-use Chamilo\Configuration\Configuration;
+use Chamilo\Configuration\Service\Consulter\ConfigurationConsulter;
 use Chamilo\Configuration\Storage\DataClass\Language;
 use Chamilo\Core\Metadata\Interfaces\EntityTranslationInterface;
 use Chamilo\Libraries\Format\Form\FormValidator;
@@ -20,6 +20,13 @@ use Exception;
  */
 class EntityTranslationFormService
 {
+    protected ConfigurationConsulter $configurationConsulter;
+
+    public function __construct(ConfigurationConsulter $configurationConsulter)
+    {
+        $this->configurationConsulter = $configurationConsulter;
+    }
+
     /**
      * @param \Chamilo\Libraries\Format\Form\FormValidator $formValidator
      *
@@ -27,17 +34,12 @@ class EntityTranslationFormService
      */
     public function addFieldsToForm(FormValidator $formValidator)
     {
-        if (!$formValidator instanceof FormValidator)
-        {
-            throw new Exception(Translation::get('NoFormValidatorSet'));
-        }
-
         $formValidator->addElement('category', Translation::get('Translations'));
 
         $languages = DataManager::retrieves(
             Language::class, new DataClassRetrievesParameters()
         );
-        $platformLanguage = Configuration::get('Chamilo\Core\Admin', 'platform_language');
+        $platformLanguage = $this->getConfigurationConsulter()->getSetting(['Chamilo\Core\Admin', 'platform_language']);
 
         foreach ($languages as $language)
         {
@@ -53,6 +55,11 @@ class EntityTranslationFormService
         }
 
         $formValidator->addElement('category');
+    }
+
+    public function getConfigurationConsulter(): ConfigurationConsulter
+    {
+        return $this->configurationConsulter;
     }
 
     /**

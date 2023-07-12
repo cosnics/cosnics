@@ -9,7 +9,6 @@ use Chamilo\Core\Reporting\ReportingData;
 use Chamilo\Core\Reporting\Viewer\Rendition\Block\Type\Html;
 use Chamilo\Core\User\Manager;
 use Chamilo\Core\User\Storage\DataClass\User;
-use Chamilo\Libraries\Platform\Session\Request;
 use Chamilo\Libraries\Storage\Parameters\DataClassRetrievesParameters;
 use Chamilo\Libraries\Storage\Query\Condition\EqualityCondition;
 use Chamilo\Libraries\Storage\Query\Variable\PropertyConditionVariable;
@@ -120,7 +119,7 @@ class AssessmentOverviewBlock extends ToolBlock
 
     private function get_score($attempts)
     {
-        $score_type = (Request::post('sel')) ? Request::post('sel') : Request::get('sel');
+        $score_type = $this->getRequest()->request->get('sel', $this->getRequest()->query->get('sel'));
         $score = [];
 
         switch ($score_type)

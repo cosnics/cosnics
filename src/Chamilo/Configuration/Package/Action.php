@@ -19,8 +19,6 @@ abstract class Action
     public function __construct()
     {
         $this->message = [];
-
-        $this->initializeContainer();
     }
 
     public function add_message($type = self::TYPE_NORMAL, $message)

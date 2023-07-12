@@ -4,7 +4,6 @@ namespace Chamilo\Application\Weblcms\Tool\Implementation\User\Component;
 use Chamilo\Application\Weblcms\Tool\Implementation\User\Manager;
 use Chamilo\Libraries\Format\Structure\Breadcrumb;
 use Chamilo\Libraries\Format\Structure\BreadcrumbTrail;
-use Chamilo\Libraries\Platform\Session\Request;
 use Chamilo\Libraries\Translation\Translation;
 
 class IntroductionPublisherComponent extends Manager
@@ -15,9 +14,12 @@ class IntroductionPublisherComponent extends Manager
         $breadcrumbtrail->add(
             new Breadcrumb(
                 $this->get_url(
-                    array(
-                        \Chamilo\Application\Weblcms\Tool\Manager::PARAM_ACTION => self::ACTION_UNSUBSCRIBE_BROWSER, 
-                        self::PARAM_TAB => Request::get(self::PARAM_TAB))), 
-                Translation::get('UserToolUnsubscribeUserBrowserComponent')));
+                    [
+                        \Chamilo\Application\Weblcms\Tool\Manager::PARAM_ACTION => self::ACTION_UNSUBSCRIBE_BROWSER,
+                        self::PARAM_TAB => $this->getRequest()->query->get(self::PARAM_TAB)
+                    ]
+                ), Translation::get('UserToolUnsubscribeUserBrowserComponent')
+            )
+        );
     }
 }

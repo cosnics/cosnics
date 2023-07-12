@@ -16,14 +16,6 @@ class HtmlCalendarRendererFactory
     /**
      * @throws \Exception
      */
-    public function __construct()
-    {
-        $this->initializeContainer();
-    }
-
-    /**
-     * @throws \Exception
-     */
     public function getRenderer(string $rendererType): HtmlCalendarRenderer
     {
         $className = 'Chamilo\Libraries\Calendar\Service\View\\' . $rendererType . 'CalendarRenderer';

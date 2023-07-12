@@ -35,7 +35,7 @@ class EditorComponent extends Manager implements DelegateComponent
      */
     public function run()
     {
-        $id = Request::get(self::PARAM_CONTENT_OBJECT_ID);
+        $id = $this->getRequest()->query->get(self::PARAM_CONTENT_OBJECT_ID);
         $this->set_parameter(self::PARAM_CONTENT_OBJECT_ID, $id);
 
         if ($id)

@@ -20,11 +20,6 @@ class DeleterComponent extends Manager
     {
         if ($this->get_parent()->get_parent()->is_allowed_to_delete_child())
         {
-            /*
-             * if (Request::get('selected_cloi')) { $cloi_ids = Request::get('selected_cloi'); } else { $cloi_ids =
-             * $_POST['selected_cloi']; }
-             */
-            
             $complex_content_object_item_ids = $this->getRequest()->getFromRequestOrQuery(
                 \Chamilo\Core\Repository\Display\Manager::PARAM_SELECTED_COMPLEX_CONTENT_OBJECT_ITEM_ID);
             

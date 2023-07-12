@@ -31,10 +31,10 @@ class UpdaterComponent extends Manager implements DelegateComponent
     {
         $trail = BreadcrumbTrail::getInstance();
 
-        $complex_content_object_item_id = Request::get(
+        $complex_content_object_item_id = $this->getRequest()->query->get(
             Manager::PARAM_SELECTED_COMPLEX_CONTENT_OBJECT_ITEM_ID
         );
-        $parent_complex_content_object_item = Request::get(
+        $parent_complex_content_object_item = $this->getRequest()->query->get(
             Manager::PARAM_COMPLEX_CONTENT_OBJECT_ITEM_ID
         );
 

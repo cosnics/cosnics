@@ -18,7 +18,7 @@ class LeaveComponent extends \Chamilo\Core\User\Ajax\Manager
 
     public function run()
     {
-        $tracker = Request::post('tracker');
+        $tracker = $this->getRequest()->request->get('tracker');
         $user_id = $this->getSession()->get(Manager::SESSION_USER_ID);
 
         Event::trigger(

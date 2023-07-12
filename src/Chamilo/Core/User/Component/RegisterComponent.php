@@ -10,7 +10,6 @@ use Chamilo\Libraries\Architecture\Interfaces\NoAuthenticationSupport;
 use Chamilo\Libraries\Format\Structure\BreadcrumbGenerator;
 use Chamilo\Libraries\Format\Structure\BreadcrumbGeneratorInterface;
 use Chamilo\Libraries\Format\Structure\BreadcrumbTrail;
-use Chamilo\Libraries\Platform\Session\Request;
 use Chamilo\Libraries\Translation\Translation;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 
@@ -59,7 +58,7 @@ class RegisterComponent extends Manager implements NoAuthenticationSupport
             }
             else
             {
-                Request::set_get('error_message', Translation::get('UsernameNotAvailable'));
+                $this->getRequest()->request->set('error_message', Translation::get('UsernameNotAvailable'));
 
                 $html = [];
 

@@ -8,15 +8,12 @@ use Chamilo\Application\Weblcms\Integration\Chamilo\Core\Reporting\Block\Tool\La
 use Chamilo\Application\Weblcms\Integration\Chamilo\Core\Reporting\Block\User\UsersTrackingBlock;
 use Chamilo\Application\Weblcms\Manager;
 use Chamilo\Core\Reporting\ReportingTemplate;
-use Chamilo\Libraries\Platform\Session\Request;
 
 /**
- *
  * @package application.lib.weblcms.reporting.templates
  */
 
 /**
- *
  * @author Michael Kyndt
  */
 class CourseStudentTrackerTemplate extends ReportingTemplate
@@ -38,7 +35,7 @@ class CourseStudentTrackerTemplate extends ReportingTemplate
 
     private function init_parameters()
     {
-        $course_id = Request::get(Manager::PARAM_COURSE);
+        $course_id = $this->getRequest()->query->get(Manager::PARAM_COURSE);
         if ($course_id)
         {
             $this->set_parameter(Manager::PARAM_COURSE, $course_id);

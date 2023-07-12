@@ -361,9 +361,9 @@ class AssessmentSelectQuestionForm extends ContentObjectForm
             $session->set('select_answer_type', AssessmentSelectQuestion::ANSWER_TYPE_RADIO);
         }
 
-        $extraOptionRequested = Request::post('add');
-        $removedOptions = Request::post('remove');
-        $answerTypeChanged = Request::post('change_answer_type');
+        $extraOptionRequested = $this->getRequest()->request->get('add');
+        $removedOptions = $this->getRequest()->request->get('remove');
+        $answerTypeChanged = $this->getRequest()->request->get('change_answer_type');
 
         if (isset($extraOptionRequested))
         {
@@ -413,11 +413,11 @@ class AssessmentSelectQuestionForm extends ContentObjectForm
         return parent::update_content_object();
     }
 
-    public function validate()
+    public function validate(): bool
     {
-        $extraOptionRequested = Request::post('add');
-        $removedOptions = Request::post('remove');
-        $answerTypeChanged = Request::post('change_answer_type');
+        $extraOptionRequested = $this->getRequest()->request->get('add');
+        $removedOptions = $this->getRequest()->request->get('remove');
+        $answerTypeChanged = $this->getRequest()->request->get('change_answer_type');
 
         if (isset($extraOptionRequested) || isset($removedOptions) || isset($answerTypeChanged))
         {

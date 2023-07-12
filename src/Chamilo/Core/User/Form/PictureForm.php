@@ -36,7 +36,6 @@ class PictureForm extends FormValidator
 
         $this->user = $user;
 
-        $this->initializeContainer();
         $this->build_form();
         $this->setDefaults();
     }

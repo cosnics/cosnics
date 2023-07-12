@@ -1,7 +1,6 @@
 <?php
 namespace Chamilo\Core\Lynx\Action;
 
-use Chamilo\Configuration\Configuration;
 use Chamilo\Configuration\Package\Action\Installer;
 use Chamilo\Configuration\Package\Storage\DataClass\Package;
 use Chamilo\Libraries\Architecture\ClassnameUtilities;
@@ -136,9 +135,12 @@ class PackageInstaller extends AbstractAction
         return true;
     }
 
+    /**
+     * @throws \Symfony\Component\Cache\Exception\CacheException
+     */
     public function isPackageRegistered(): bool
     {
-        return Configuration::is_registered($this->getPackage()->get_context());
+        return $this->getRegistrationConsulter()->isContextRegistered($this->getPackage()->get_context());
     }
 
     public function process(): bool

@@ -172,7 +172,7 @@ class ViewerComponent extends Manager implements DelegateComponent, FeedbackSupp
 
     public function get_publication_id()
     {
-        return Request::get(\Chamilo\Application\Weblcms\Tool\Manager::PARAM_PUBLICATION_ID);
+        return $this->getRequest()->query->get(\Chamilo\Application\Weblcms\Tool\Manager::PARAM_PUBLICATION_ID);
     }
 
     /*

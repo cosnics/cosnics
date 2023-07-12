@@ -7,12 +7,10 @@ use Chamilo\Application\Weblcms\Tool\Implementation\CourseGroup\Manager;
 use Chamilo\Application\Weblcms\Tool\Implementation\CourseGroup\Storage\DataClass\CourseGroup;
 use Chamilo\Application\Weblcms\Tool\Implementation\CourseGroup\Storage\DataManager;
 use Chamilo\Libraries\Architecture\Exceptions\NotAllowedException;
-use Chamilo\Libraries\Platform\Session\Request;
 use Chamilo\Libraries\Translation\Translation;
 use Chamilo\Libraries\Utilities\StringUtilities;
 
 /**
- *
  * @package application.lib.weblcms.tool.course_group.component
  */
 class DeleterComponent extends Manager
@@ -25,25 +23,26 @@ class DeleterComponent extends Manager
             throw new NotAllowedException();
         }
 
-        if (Request::get(\Chamilo\Application\Weblcms\Tool\Manager::PARAM_PUBLICATION_ID))
+        if ($this->getRequest()->query->get(\Chamilo\Application\Weblcms\Tool\Manager::PARAM_PUBLICATION_ID))
         {
-            $publication_ids = Request::get(\Chamilo\Application\Weblcms\Tool\Manager::PARAM_PUBLICATION_ID);
+            $publication_ids =
+                $this->getRequest()->query->get(\Chamilo\Application\Weblcms\Tool\Manager::PARAM_PUBLICATION_ID);
         }
         else
         {
-            $publication_ids = $_POST[\Chamilo\Application\Weblcms\Tool\Manager::PARAM_PUBLICATION_ID];
+            $publication_ids =
+                $this->getRequest()->request->get(\Chamilo\Application\Weblcms\Tool\Manager::PARAM_PUBLICATION_ID);
         }
 
         if (!is_array($publication_ids))
         {
-            $publication_ids = array($publication_ids);
+            $publication_ids = [$publication_ids];
         }
 
         foreach ($publication_ids as $pid)
         {
             if ($publication = \Chamilo\Application\Weblcms\Storage\DataManager::retrieve_by_id(
-                ContentObjectPublication::class,
-                $pid
+                ContentObjectPublication::class, $pid
             ))
             {
                 $publication->delete();
@@ -56,7 +55,7 @@ class DeleterComponent extends Manager
         {
             if (!is_array($ids))
             {
-                $ids = array($ids);
+                $ids = [$ids];
             }
 
             // Make the course group deletable
@@ -75,14 +74,12 @@ class DeleterComponent extends Manager
             }
 
             $message = Translation::get(
-                'ObjectDeleted',
-                array('OBJECT' => Translation::get('CourseGroup')),
-                StringUtilities::LIBRARIES
+                'ObjectDeleted', ['OBJECT' => Translation::get('CourseGroup')], StringUtilities::LIBRARIES
             );
-            $this->redirectWithMessage($message, '', array('course_group' => null, self::PARAM_ACTION => null));
+            $this->redirectWithMessage($message, '', ['course_group' => null, self::PARAM_ACTION => null]);
         }
 
-        $this->redirectWithMessage($message, '', array('course_group' => null, self::PARAM_ACTION => null));
+        $this->redirectWithMessage($message, '', ['course_group' => null, self::PARAM_ACTION => null]);
     }
 
     /**

@@ -28,7 +28,6 @@ abstract class ReportingBlock
     {
         $this->parent = $parent;
         $this->vertical = $vertical;
-        $this->initializeContainer();
     }
 
     public function add_function_parameter($key, $value)
@@ -53,7 +52,7 @@ abstract class ReportingBlock
      */
     public function getStyle()
     {
-        return new ReportingBlockStyle();
+        return new ReportingBlockStyle($this->getConfigurationConsulter());
     }
 
     /**

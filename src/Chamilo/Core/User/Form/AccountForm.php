@@ -55,7 +55,6 @@ class AccountForm extends FormValidator
         $this->user = $user;
         $this->authenticationValidator = $authenticationValidator;
 
-        $this->initializeContainer();
         $this->build_editing_form();
         $this->setDefaults();
     }

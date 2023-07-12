@@ -41,7 +41,7 @@ class CourseForm extends CommonCourseForm
      */
     public function __construct($action, DataClass $base_object)
     {
-        $change_course_type_request = Request::post(self::PROPERTY_SELECT_COURSE_TYPE);
+        $change_course_type_request = $this->getRequest()->request->get(self::PROPERTY_SELECT_COURSE_TYPE);
         if (!is_null($change_course_type_request))
         {
             unset($_REQUEST['_qf__' . ClassnameUtilities::getInstance()->getClassNameFromNamespace(__CLASS__, true)]);

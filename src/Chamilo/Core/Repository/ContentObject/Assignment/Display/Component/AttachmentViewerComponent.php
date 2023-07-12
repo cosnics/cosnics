@@ -27,7 +27,7 @@ class AttachmentViewerComponent extends Manager
 
     public function run()
     {
-        $attachment_id = Request::get(\Chamilo\Core\Repository\Display\Manager::PARAM_ATTACHMENT_ID);
+        $attachment_id = $this->getRequest()->query->get(\Chamilo\Core\Repository\Display\Manager::PARAM_ATTACHMENT_ID);
         if (is_null($attachment_id))
         {
             throw new ParameterNotDefinedException(\Chamilo\Core\Repository\Display\Manager::PARAM_ATTACHMENT_ID);

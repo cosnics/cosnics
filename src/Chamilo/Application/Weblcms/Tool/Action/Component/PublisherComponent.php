@@ -83,7 +83,7 @@ class PublisherComponent extends Manager implements PublisherSupport, DelegateCo
      */
     public function getPublicationForm($selectedContentObjects = [])
     {
-        $mode = Request::get(\Chamilo\Application\Weblcms\Tool\Manager::PARAM_PUBLISH_MODE);
+        $mode = $this->getRequest()->query->get(\Chamilo\Application\Weblcms\Tool\Manager::PARAM_PUBLISH_MODE);
 
         $this->set_parameter(\Chamilo\Application\Weblcms\Tool\Manager::PARAM_PUBLISH_MODE, $mode);
         $publish_type = $this->getConfigurationConsulter()->getSetting(

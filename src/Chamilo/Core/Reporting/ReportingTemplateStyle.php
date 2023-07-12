@@ -1,14 +1,14 @@
 <?php
 namespace Chamilo\Core\Reporting;
 
-use Chamilo\Configuration\Configuration;
+use Chamilo\Configuration\Service\Consulter\ConfigurationConsulter;
 use Exception;
 
 /**
  * Class stores style of a reporting template.
  *
  * @package reporting.lib
- * @author Andras Zolnay
+ * @author  Andras Zolnay
  *         Configuration (PDF) Reports: Administrators can configure PDF reports centrally via Administration ->
  *         Settings -> Reporting. @see
  *         src/Chamilo/Core/Reporting/Resources/Settings/settings.xml. Individual reporing templates and blocks can
@@ -42,20 +42,6 @@ class ReportingTemplateStyle
 {
 
     /**
-     * Paper orientation of template
-     *
-     * @var 'L' or 'P'.
-     */
-    private $paperOrientation;
-
-    /**
-     * Title text color
-     *
-     * @var array(r [0..255], g [0..255], b [0..255])
-     */
-    private $headerTextColor = array(0, 0, 0);
-
-    /**
      * Template header font specification
      *
      * @var array(family, style, size)
@@ -63,78 +49,66 @@ class ReportingTemplateStyle
      *      - style: either empty or combination of 'B', 'I', 'U' or empty string.
      *      - size: font size, e.g. 10.
      */
-    private $headerFont = array('Arial', 'B', 11);
+    private $headerFont = ['Arial', 'B', 11];
 
     /**
      * Header seprator line color
      *
      * @var array(r [0..255], g [0..255], b [0..255])
      */
-    private $headerLineColor = array(0, 0, 0);
+    private $headerLineColor = [0, 0, 0];
 
-    function __construct()
+    /**
+     * Title text color
+     *
+     * @var array(r [0..255], g [0..255], b [0..255])
+     */
+    private $headerTextColor = [0, 0, 0];
+
+    /**
+     * Paper orientation of template
+     *
+     * @var 'L' or 'P'.
+     */
+    private $paperOrientation;
+
+    public function __construct(ConfigurationConsulter $configurationConsulter)
     {
         $this->setPaperOrientation(
-            Configuration::get('Chamilo\Core\Reporting', 'paper_orientation'));
+            $configurationConsulter->getSetting(['Chamilo\Core\Reporting', 'paper_orientation'])
+        );
 
         $this->setHeaderTextColor(
-            Configuration::get('Chamilo\Core\Reporting', 'template_header_text_color'));
+            $configurationConsulter->getSetting(['Chamilo\Core\Reporting', 'template_header_text_color'])
+        );
         $this->setHeaderFont(
             [
-                Configuration::get('Chamilo\Core\Reporting', 'template_header_font_family'),
-                Configuration::get('Chamilo\Core\Reporting', 'template_header_font_style'),
-                Configuration::get('Chamilo\Core\Reporting', 'template_header_font_size')]);
+                $configurationConsulter->getSetting(['Chamilo\Core\Reporting', 'template_header_font_family']),
+                $configurationConsulter->getSetting(['Chamilo\Core\Reporting', 'template_header_font_style']),
+                $configurationConsulter->getSetting(['Chamilo\Core\Reporting', 'template_header_font_size'])
+            ]
+        );
         $this->setHeaderLineColor(
-            Configuration::get('Chamilo\Core\Reporting', 'template_header_line_color'));
+            $configurationConsulter->getSetting(['Chamilo\Core\Reporting', 'template_header_line_color'])
+        );
 
         $this->setFooterTextColor(
-            Configuration::get('Chamilo\Core\Reporting', 'template_footer_text_color'));
+            $configurationConsulter->getSetting(['Chamilo\Core\Reporting', 'template_footer_text_color'])
+        );
         $this->setFooterFont(
             [
-                Configuration::get('Chamilo\Core\Reporting', 'template_footer_font_family'),
-                Configuration::get('Chamilo\Core\Reporting', 'template_footer_font_style'),
-                Configuration::get('Chamilo\Core\Reporting', 'template_footer_font_size')]);
+                $configurationConsulter->getSetting(['Chamilo\Core\Reporting', 'template_footer_font_family']),
+                $configurationConsulter->getSetting(['Chamilo\Core\Reporting', 'template_footer_font_style']),
+                $configurationConsulter->getSetting(['Chamilo\Core\Reporting', 'template_footer_font_size'])
+            ]
+        );
     }
 
     // setter and getter functions
-    public function getPaperOrientation()
-    {
-        return $this->paperOrientation;
-    }
 
-    public function setPaperOrientation($paperOrientation)
+    public function getFooterFont($font = null)
     {
-        $this->paperOrientation = $paperOrientation;
-    }
-
-    public function getHeaderTextColor($color = null)
-    {
-        return $this->headerTextColor;
-    }
-
-    public function setHeaderTextColor($color)
-    {
-        $this->headerTextColor = ReportingTemplateStyle::parseColor($color);
-    }
-
-    public function getHeaderFont($font = null)
-    {
-        return $this->headerFont;
-    }
-
-    public function setHeaderFont($font)
-    {
-        $this->headerFont = ReportingTemplateStyle::parseFont($font);
-    }
-
-    public function getHeaderLineColor($color = null)
-    {
-        return $this->headerLineColor;
-    }
-
-    public function setHeaderLineColor($color)
-    {
-        $this->headerLineColor = ReportingTemplateStyle::parseColor($color);
+        return $this->footerFont;
     }
 
     public function getFooterTextColor($color = null)
@@ -142,25 +116,55 @@ class ReportingTemplateStyle
         return $this->footerTextColor;
     }
 
-    public function setFooterTextColor($color)
+    public function getHeaderFont($font = null)
     {
-        $this->footerTextColor = ReportingTemplateStyle::parseColor($color);
+        return $this->headerFont;
     }
 
-    public function getFooterFont($font = null)
+    public function getHeaderLineColor($color = null)
     {
-        return $this->footerFont;
+        return $this->headerLineColor;
     }
 
-    public function setFooterFont($font)
+    public function getHeaderTextColor($color = null)
     {
-        $this->footerFont = ReportingTemplateStyle::parseFont($font);
+        return $this->headerTextColor;
+    }
+
+    public function getPaperOrientation()
+    {
+        return $this->paperOrientation;
+    }
+
+    /**
+     * \brief Parses R, G, B values.
+     *
+     * @param $color - Can be a string: e.g. '255, 255, 255'
+     *               - Can be an array: e.g. [255, 255, 255]
+     *
+     * @return array: e.g. [255, 255, 255].
+     */
+    public static function parseColor($color)
+    {
+        $color_array = $color;
+        if (!is_array($color_array))
+        {
+            $color_array = explode(',', $color_array);
+        }
+
+        if (count($color_array) != 3)
+        {
+            throw new Exception('Invalid color: "' . implode(', ', $color_array) . '".');
+        }
+
+        return array_map('intval', $color_array);
     }
 
     /**
      * \brief Parses font Family, Style, Size values.
      *
      * @param $font - Can be an array of strings: e.g. ['Arial', 'B', '10']
+     *
      * @return array: e.g. ['Arial', 'B', 10]
      */
     public static function parseFont($font)
@@ -179,26 +183,33 @@ class ReportingTemplateStyle
         return $result;
     }
 
-    /**
-     * \brief Parses R, G, B values.
-     *
-     * @param $color - Can be a string: e.g. '255, 255, 255'
-     *        - Can be an array: e.g. [255, 255, 255]
-     * @return array: e.g. [255, 255, 255].
-     */
-    public static function parseColor($color)
+    public function setFooterFont($font)
     {
-        $color_array = $color;
-        if (! is_array($color_array))
-        {
-            $color_array = explode(',', $color_array);
-        }
+        $this->footerFont = ReportingTemplateStyle::parseFont($font);
+    }
 
-        if (count($color_array) != 3)
-        {
-            throw new Exception('Invalid color: "' . implode(', ', $color_array) . '".');
-        }
+    public function setFooterTextColor($color)
+    {
+        $this->footerTextColor = ReportingTemplateStyle::parseColor($color);
+    }
 
-        return array_map('intval', $color_array);
+    public function setHeaderFont($font)
+    {
+        $this->headerFont = ReportingTemplateStyle::parseFont($font);
+    }
+
+    public function setHeaderLineColor($color)
+    {
+        $this->headerLineColor = ReportingTemplateStyle::parseColor($color);
+    }
+
+    public function setHeaderTextColor($color)
+    {
+        $this->headerTextColor = ReportingTemplateStyle::parseColor($color);
+    }
+
+    public function setPaperOrientation($paperOrientation)
+    {
+        $this->paperOrientation = $paperOrientation;
     }
 }

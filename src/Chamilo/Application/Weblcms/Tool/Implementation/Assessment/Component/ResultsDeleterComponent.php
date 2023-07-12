@@ -7,17 +7,15 @@ use Chamilo\Application\Weblcms\Rights\WeblcmsRights;
 use Chamilo\Application\Weblcms\Tool\Implementation\Assessment\Manager;
 use Chamilo\Libraries\Architecture\Exceptions\NotAllowedException;
 use Chamilo\Libraries\Format\Structure\BreadcrumbTrail;
-use Chamilo\Libraries\Platform\Session\Request;
-use Chamilo\Libraries\Translation\Translation;
 use Chamilo\Libraries\Storage\DataManager\DataManager;
 use Chamilo\Libraries\Storage\Parameters\DataClassRetrieveParameters;
 use Chamilo\Libraries\Storage\Parameters\DataClassRetrievesParameters;
 use Chamilo\Libraries\Storage\Query\Condition\EqualityCondition;
 use Chamilo\Libraries\Storage\Query\Variable\PropertyConditionVariable;
 use Chamilo\Libraries\Storage\Query\Variable\StaticConditionVariable;
+use Chamilo\Libraries\Translation\Translation;
 
 /**
- *
  * @package application.lib.weblcms.tool.assessment.component
  */
 class ResultsDeleterComponent extends Manager
@@ -25,24 +23,24 @@ class ResultsDeleterComponent extends Manager
 
     public function run()
     {
-        if (! $this->is_allowed(WeblcmsRights::DELETE_RIGHT))
+        if (!$this->is_allowed(WeblcmsRights::DELETE_RIGHT))
         {
             throw new NotAllowedException();
         }
 
-        if (Request::get(self::PARAM_USER_ASSESSMENT))
+        if ($this->getRequest()->query->get(self::PARAM_USER_ASSESSMENT))
         {
-            $uaid = Request::get(self::PARAM_USER_ASSESSMENT);
+            $uaid = $this->getRequest()->query->get(self::PARAM_USER_ASSESSMENT);
 
             $condition = new EqualityCondition(
                 new PropertyConditionVariable(
-                    AssessmentAttempt::class,
-                    AssessmentAttempt::PROPERTY_ID),
-                new StaticConditionVariable($uaid));
+                    AssessmentAttempt::class, AssessmentAttempt::PROPERTY_ID
+                ), new StaticConditionVariable($uaid)
+            );
 
             $item = DataManager::retrieve(
-                AssessmentAttempt::class,
-                new DataClassRetrieveParameters($condition));
+                AssessmentAttempt::class, new DataClassRetrieveParameters($condition)
+            );
 
             if ($item)
             {
@@ -51,14 +49,14 @@ class ResultsDeleterComponent extends Manager
 
             $this->delete_user_assessment_results($item);
         }
-        elseif (Request::get(self::PARAM_ASSESSMENT))
+        elseif ($this->getRequest()->query->get(self::PARAM_ASSESSMENT))
         {
-            $aid = Request::get(self::PARAM_ASSESSMENT);
+            $aid = $this->getRequest()->query->get(self::PARAM_ASSESSMENT);
             $redirect_aid = $aid;
             $this->delete_assessment_results($aid);
         }
 
-        $params = array(\Chamilo\Application\Weblcms\Tool\Manager::PARAM_ACTION => self::ACTION_VIEW_RESULTS);
+        $params = [\Chamilo\Application\Weblcms\Tool\Manager::PARAM_ACTION => self::ACTION_VIEW_RESULTS];
 
         if (isset($redirect_aid))
         {
@@ -68,53 +66,52 @@ class ResultsDeleterComponent extends Manager
         $this->redirectWithMessage(Translation::get('ResultsDeleted'), false, $params);
     }
 
-    public function delete_user_assessment_results($user_assessment)
+    /**
+     * @param BreadcrumbTrail $breadcrumbtrail
+     */
+    public function add_additional_breadcrumbs(BreadcrumbTrail $breadcrumbtrail): void
     {
-        if ($user_assessment != null)
-        {
-            $condition = new EqualityCondition(
-                new PropertyConditionVariable(
-                    QuestionAttempt::class,
-                    QuestionAttempt::PROPERTY_ASSESSMENT_ATTEMPT_ID),
-                new StaticConditionVariable($user_assessment->get_id()));
-
-            $items = DataManager::retrieves(
-                QuestionAttempt::class,
-                new DataClassRetrievesParameters($condition));
-
-            foreach($items as $question_attempt)
-            {
-                $question_attempt->delete();
-            }
-
-            $user_assessment->delete();
-        }
+        $this->addBrowserBreadcrumb($breadcrumbtrail);
     }
 
     public function delete_assessment_results($aid)
     {
         $condition = new EqualityCondition(
             new PropertyConditionVariable(
-                AssessmentAttempt::class,
-                AssessmentAttempt::PROPERTY_ASSESSMENT_ID),
-            new StaticConditionVariable($aid));
+                AssessmentAttempt::class, AssessmentAttempt::PROPERTY_ASSESSMENT_ID
+            ), new StaticConditionVariable($aid)
+        );
 
         $items = DataManager::retrieves(
-            AssessmentAttempt::class,
-            new DataClassRetrievesParameters($condition));
+            AssessmentAttempt::class, new DataClassRetrievesParameters($condition)
+        );
 
-        foreach($items as $assessment_attempt)
+        foreach ($items as $assessment_attempt)
         {
             $this->delete_user_assessment_results($assessment_attempt);
         }
     }
 
-    /**
-     *
-     * @param BreadcrumbTrail $breadcrumbtrail
-     */
-    public function add_additional_breadcrumbs(BreadcrumbTrail $breadcrumbtrail): void
+    public function delete_user_assessment_results($user_assessment)
     {
-        $this->addBrowserBreadcrumb($breadcrumbtrail);
+        if ($user_assessment != null)
+        {
+            $condition = new EqualityCondition(
+                new PropertyConditionVariable(
+                    QuestionAttempt::class, QuestionAttempt::PROPERTY_ASSESSMENT_ATTEMPT_ID
+                ), new StaticConditionVariable($user_assessment->get_id())
+            );
+
+            $items = DataManager::retrieves(
+                QuestionAttempt::class, new DataClassRetrievesParameters($condition)
+            );
+
+            foreach ($items as $question_attempt)
+            {
+                $question_attempt->delete();
+            }
+
+            $user_assessment->delete();
+        }
     }
 }

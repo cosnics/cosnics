@@ -12,16 +12,13 @@ use Chamilo\Core\User\Storage\DataClass\User;
 use Chamilo\Core\User\Storage\DataManager;
 use Chamilo\Libraries\Format\Structure\Breadcrumb;
 use Chamilo\Libraries\Format\Structure\BreadcrumbTrail;
-use Chamilo\Libraries\Platform\Session\Request;
 use Chamilo\Libraries\Translation\Translation;
 
 /**
- *
  * @package application.lib.weblcms.reporting.templates
  */
 
 /**
- *
  * @author Michael Kyndt
  */
 class CourseStudentTrackerDetailTemplate extends ReportingTemplate
@@ -38,8 +35,7 @@ class CourseStudentTrackerDetailTemplate extends ReportingTemplate
         $this->add_reporting_block(new LastAccessToToolsUserBlock($this));
 
         $params = [];
-        $params[\Chamilo\Application\Weblcms\Manager::PARAM_TEMPLATE_ID] =
-            CourseStudentTrackerTemplate::class;
+        $params[\Chamilo\Application\Weblcms\Manager::PARAM_TEMPLATE_ID] = CourseStudentTrackerTemplate::class;
         $params[Manager::PARAM_BLOCK_ID] = 0;
 
         $breadcrumbTrail = BreadcrumbTrail::getInstance();
@@ -50,12 +46,11 @@ class CourseStudentTrackerDetailTemplate extends ReportingTemplate
             )
         );
 
-        $user_id = Request::get(\Chamilo\Application\Weblcms\Manager::PARAM_USERS);
+        $user_id = $this->getRequest()->query->get(\Chamilo\Application\Weblcms\Manager::PARAM_USERS);
         $this->set_parameter(\Chamilo\Application\Weblcms\Manager::PARAM_USERS, $user_id);
 
         $user = DataManager::retrieve_by_id(
-            User::class,
-            (int) $user_id
+            User::class, (int) $user_id
         );
 
         if ($user)

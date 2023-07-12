@@ -35,9 +35,6 @@ class ShowInlineComponent extends Manager
         $showInline = (boolean) $this->getPostDataValue(self::PARAM_SHOW_INLINE);
         $fileId = $this->getPostDataValue(self::PARAM_FILE_ID);
 
-        $this->initializeContainer();
-
-
         try{
             /**
              * @var File $file

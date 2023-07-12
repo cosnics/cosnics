@@ -21,8 +21,8 @@ class PublicationDetailBlock extends ToolBlock
         $reporting_data = new ReportingData();
 
         $course_id = $this->getCourseId();
-        $tool = Request::get(\Chamilo\Application\Weblcms\Tool\Implementation\Reporting\Manager::PARAM_REPORTING_TOOL);
-        $pid = Request::get(Manager::PARAM_PUBLICATION_ID);
+        $tool = $this->getRequest()->query->get(\Chamilo\Application\Weblcms\Tool\Implementation\Reporting\Manager::PARAM_REPORTING_TOOL);
+        $pid = $this->getRequest()->query->get(Manager::PARAM_PUBLICATION_ID);
 
         $content_object_publication = \Chamilo\Application\Weblcms\Storage\DataManager::retrieve_by_id(
             ContentObjectPublication::class, $pid

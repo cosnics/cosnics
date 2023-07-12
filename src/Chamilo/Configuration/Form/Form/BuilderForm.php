@@ -238,7 +238,7 @@ class BuilderForm extends FormValidator
         return $succes;
     }
 
-    public function validate()
+    public function validate(): bool
     {
         if (isset($_POST['add']) || isset($_POST['remove']))
         {

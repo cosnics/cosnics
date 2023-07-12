@@ -85,7 +85,7 @@ abstract class Manager extends \Chamilo\Application\Weblcms\Tool\Manager
                     [
                         self::PARAM_ACTION => self::ACTION_CHANGE_PLATFORMGROUP_STATUS_TEACHER,
                         self::PARAM_OBJECTS => $group,
-                        self::PARAM_TAB => Request::get(self::PARAM_TAB)
+                        self::PARAM_TAB => $this->getRequest()->query->get(self::PARAM_TAB)
                     ]
                 );
                 break;
@@ -94,7 +94,7 @@ abstract class Manager extends \Chamilo\Application\Weblcms\Tool\Manager
                     [
                         self::PARAM_ACTION => self::ACTION_CHANGE_PLATFORMGROUP_STATUS_STUDENT,
                         self::PARAM_OBJECTS => $group,
-                        self::PARAM_TAB => Request::get(self::PARAM_TAB)
+                        self::PARAM_TAB => $this->getRequest()->query->get(self::PARAM_TAB)
                     ]
                 );
                 break;
@@ -105,10 +105,6 @@ abstract class Manager extends \Chamilo\Application\Weblcms\Tool\Manager
 
     public function get_status_changer_url($user, $status)
     {
-        // return $this->get_url(array(self::PARAM_ACTION => self ::
-        // ACTION_CHANGE_STATUS, self::PARAM_OBJECTS => $user, self ::
-        // PARAM_STATUS => $status, self::PARAM_TAB => Request::get(self ::
-        // PARAM_TAB)));
         switch ($status)
         {
             case 1 :
@@ -116,7 +112,7 @@ abstract class Manager extends \Chamilo\Application\Weblcms\Tool\Manager
                     [
                         self::PARAM_ACTION => self::ACTION_CHANGE_USER_STATUS_TEACHER,
                         self::PARAM_OBJECTS => $user,
-                        self::PARAM_TAB => Request::get(self::PARAM_TAB)
+                        self::PARAM_TAB => $this->getRequest()->query->get(self::PARAM_TAB)
                     ]
                 );
                 break;
@@ -125,7 +121,7 @@ abstract class Manager extends \Chamilo\Application\Weblcms\Tool\Manager
                     [
                         self::PARAM_ACTION => self::ACTION_CHANGE_USER_STATUS_STUDENT,
                         self::PARAM_OBJECTS => $user,
-                        self::PARAM_TAB => Request::get(self::PARAM_TAB)
+                        self::PARAM_TAB => $this->getRequest()->query->get(self::PARAM_TAB)
                     ]
                 );
                 break;

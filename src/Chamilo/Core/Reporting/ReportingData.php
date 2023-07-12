@@ -1,7 +1,8 @@
 <?php
 namespace Chamilo\Core\Reporting;
 
-use Chamilo\Configuration\Configuration;
+use Chamilo\Configuration\Service\Consulter\ConfigurationConsulter;
+use Chamilo\Libraries\DependencyInjection\DependencyInjectionContainerBuilder;
 
 /**
  * For details on (PDF) formatting @see ReportingDataStyle
@@ -9,31 +10,29 @@ use Chamilo\Configuration\Configuration;
 class ReportingData
 {
 
-    private $title;
+    private $categories = [];
 
-    private $description;
+    /**
+     * @var null or ReportingDataStyle objects.
+     */
+    private $category_style;
 
     private $data = [];
 
-    private $rows = [];
+    private $description;
 
-    private $categories = [];
+    /**
+     * @var array mapping row ID's onto ReportingDataStyle objects.
+     */
+    private $row_style = [];
+
+    private $rows = [];
 
     private $show_categories = true;
 
     private $show_row_heading = true;
 
-    /**
-     *
-     * @var array mapping row ID's onto ReportingDataStyle objects.
-     */
-    private $row_style = [];
-
-    /**
-     *
-     * @var null or ReportingDataStyle objects.
-     */
-    private $category_style;
+    private $title;
 
     public function add_category($value)
     {
@@ -71,8 +70,7 @@ class ReportingData
     }
 
     /**
-     *
-     * @param $value string Id of added row.
+     * @param $value                         string Id of added row.
      * @param ReportingDataStyle|null $style Null or style of given row.
      */
     public function add_row($value, $style = null)
@@ -83,6 +81,13 @@ class ReportingData
         {
             $this->set_row_style($value, $style);
         }
+    }
+
+    public function getConfigurationConsulter(): ConfigurationConsulter
+    {
+        return DependencyInjectionContainerBuilder::getInstance()->createContainer()->get(
+            ConfigurationConsulter::class
+        );
     }
 
     /**
@@ -108,7 +113,7 @@ class ReportingData
                 $max_length = max($max_length, strlen($category_name));
             }
 
-            $max_row_lengths["#CATEGORY#"] = $max_length;
+            $max_row_lengths['#CATEGORY#'] = $max_length;
         }
 
         foreach ($this->get_rows() as $row_index => $row_name)
@@ -136,33 +141,17 @@ class ReportingData
         return $this->categories;
     }
 
-    public function set_categories($categories)
-    {
-        $this->categories = $categories;
-    }
-
     public function get_category($id)
     {
         return $this->categories[$id];
     }
 
     /**
-     *
      * @return ReportingDataStyle.
      */
     public function get_category_style()
     {
         return $this->category_style;
-    }
-
-    /**
-     * Sets style of category.
-     *
-     * @param $style ReportingDataStyle Style of category.
-     */
-    public function set_category_style($style)
-    {
-        $this->category_style = clone $style;
     }
 
     public function get_data()
@@ -213,21 +202,11 @@ class ReportingData
     }
 
     /**
-     *
      * @return string
      */
     public function get_description()
     {
         return $this->description;
-    }
-
-    /**
-     *
-     * @param $description
-     */
-    public function set_description($description)
-    {
-        $this->description = $description;
     }
 
     public function get_row($id)
@@ -236,7 +215,6 @@ class ReportingData
     }
 
     /**
-     *
      * @param $row string Row ID.
      *
      * @return ReportingDataStyle.
@@ -246,31 +224,12 @@ class ReportingData
         return $this->row_style[$row];
     }
 
-    /**
-     * Set style of given row.
-     *
-     * @param $row
-     * @param $style \Chamilo\Core\Reporting\ReportingDataStyle  or style of given row.
-     * @note $style is cloned before storing it, so that any change to $style will not influence the stored
-     *            values.
-     */
-    public function set_row_style($row, $style)
-    {
-        $this->row_style[$row] = clone $style;
-    }
-
     public function get_rows()
     {
         return $this->rows;
     }
 
-    public function set_rows($rows)
-    {
-        $this->rows = $rows;
-    }
-
     /**
-     *
      * @return string
      */
     public function get_title()
@@ -279,17 +238,7 @@ class ReportingData
     }
 
     /**
-     *
-     * @param $title
-     */
-    public function set_title($title)
-    {
-        $this->title = $title;
-    }
-
-    /**
-     *
-     * @return boolean either category or any of the row styles is not null..
+     * @return bool either category or any of the row styles is not null..
      */
     public function hasStyle()
     {
@@ -363,7 +312,7 @@ class ReportingData
         );
         // Avoid zero widths by clipping relative widths to a minimum.
         $min_relative_width = floatval(
-            Configuration::get('Chamilo\Core\Reporting', 'min_relative_width')
+            $this->getConfigurationConsulter()->getSetting(['Chamilo\Core\Reporting', 'min_relative_width'])
         );
         $relative_widths = array_map(
             function ($item) use ($min_relative_width) {
@@ -381,10 +330,10 @@ class ReportingData
         // Set relative width per row.
         foreach ($relative_widths as $row_name => $relative_width)
         {
-            $style = new ReportingDataStyle();
+            $style = new ReportingDataStyle($this->getConfigurationConsulter());
             $style->setRelativeWidth($relative_width);
 
-            if ($row_name == "#CATEGORY#")
+            if ($row_name == '#CATEGORY#')
             {
                 $this->set_category_style($style);
             }
@@ -395,9 +344,58 @@ class ReportingData
         }
     }
 
+    public function set_categories($categories)
+    {
+        $this->categories = $categories;
+    }
+
     public function set_category($id, $value)
     {
         $this->categories[$id] = $value;
+    }
+
+    /**
+     * Sets style of category.
+     *
+     * @param $style ReportingDataStyle Style of category.
+     */
+    public function set_category_style($style)
+    {
+        $this->category_style = clone $style;
+    }
+
+    /**
+     * @param $description
+     */
+    public function set_description($description)
+    {
+        $this->description = $description;
+    }
+
+    /**
+     * Set style of given row.
+     *
+     * @param $row
+     * @param $style \Chamilo\Core\Reporting\ReportingDataStyle  or style of given row.
+     * @note $style is cloned before storing it, so that any change to $style will not influence the stored
+     *               values.
+     */
+    public function set_row_style($row, $style)
+    {
+        $this->row_style[$row] = clone $style;
+    }
+
+    public function set_rows($rows)
+    {
+        $this->rows = $rows;
+    }
+
+    /**
+     * @param $title
+     */
+    public function set_title($title)
+    {
+        $this->title = $title;
     }
 
     public function show_categories()

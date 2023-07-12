@@ -19,7 +19,7 @@ class XmlRepositoryCategoryMenuFeedComponent extends Manager
     {
         $groups_tree = [];
 
-        $parent_id = Request::get('parent_id');
+        $parent_id = $this->getRequest()->query->get('parent_id');
         $condition = new EqualityCondition(
             new PropertyConditionVariable(RepositoryCategory::class, RepositoryCategory::PROPERTY_PARENT),
             new StaticConditionVariable($parent_id)

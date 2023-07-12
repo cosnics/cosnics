@@ -43,7 +43,7 @@ class PlatformGroupsFeedComponent extends GroupsFeedComponent
      */
     protected function get_filter()
     {
-        $filter = Request::post(self::PARAM_FILTER);
+        $filter = $this->getRequest()->request->get(self::PARAM_FILTER);
 
         return substr($filter, static::FILTER_PREFIX_LENGTH);
     }
@@ -119,7 +119,7 @@ class PlatformGroupsFeedComponent extends GroupsFeedComponent
     public function retrieve_groups()
     {
         // Set the conditions for the search query
-        $search_query = Request::post(self::PARAM_SEARCH_QUERY);
+        $search_query = $this->getRequest()->request->get(self::PARAM_SEARCH_QUERY);
         if ($search_query && $search_query != '')
         {
             $name_conditions[] = new ContainsCondition(

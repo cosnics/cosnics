@@ -8,11 +8,9 @@ use Chamilo\Libraries\Architecture\Application\ApplicationConfiguration;
 use Chamilo\Libraries\Architecture\Exceptions\NoObjectSelectedException;
 use Chamilo\Libraries\Format\Structure\Breadcrumb;
 use Chamilo\Libraries\Format\Structure\BreadcrumbTrail;
-use Chamilo\Libraries\Platform\Session\Request;
 use Chamilo\Libraries\Translation\Translation;
 
 /**
- *
  * @package application.lib.weblcms.tool.user.component
  */
 class EmailerComponent extends Manager
@@ -20,11 +18,11 @@ class EmailerComponent extends Manager
 
     public function run()
     {
-        $ids = Request::get(\Chamilo\Application\Weblcms\Manager::PARAM_USERS);
+        $ids = $this->getRequest()->query->get(\Chamilo\Application\Weblcms\Manager::PARAM_USERS);
 
-        if (! is_array($ids))
+        if (!is_array($ids))
         {
-            $ids = array($ids);
+            $ids = [$ids];
         }
 
         if (count($ids) > 0)
@@ -32,15 +30,17 @@ class EmailerComponent extends Manager
             foreach ($ids as $id)
             {
                 $users[] = DataManager::retrieve_by_id(
-                    User::class,
-                    $id);
+                    User::class, $id
+                );
             }
 
             $component = $this->getApplicationFactory()->getApplication(
                 \Chamilo\Core\User\Email\Manager::CONTEXT,
-                new ApplicationConfiguration($this->getRequest(), $this->get_user(), $this));
+                new ApplicationConfiguration($this->getRequest(), $this->get_user(), $this)
+            );
             $component->set_target_users($users);
             $component->set_parameter(\Chamilo\Application\Weblcms\Manager::PARAM_USERS, $ids);
+
             return $component->run();
         }
         else
@@ -51,7 +51,7 @@ class EmailerComponent extends Manager
 
     public function render_header(string $pageTitle = ''): string
     {
-        $ids = Request::get(\Chamilo\Application\Weblcms\Manager::PARAM_USERS);
+        $ids = $this->getRequest()->query->get(\Chamilo\Application\Weblcms\Manager::PARAM_USERS);
 
         $this->set_parameter(\Chamilo\Application\Weblcms\Manager::PARAM_USERS, null);
 
@@ -59,8 +59,10 @@ class EmailerComponent extends Manager
 
         $trail->add(
             new Breadcrumb(
-                $this->get_url(array(\Chamilo\Application\Weblcms\Manager::PARAM_USERS => $ids)),
-                Translation::get('EmailUsers')));
+                $this->get_url([\Chamilo\Application\Weblcms\Manager::PARAM_USERS => $ids]),
+                Translation::get('EmailUsers')
+            )
+        );
 
         return parent::render_header();
     }

@@ -33,7 +33,7 @@ abstract class Manager extends Application
 
     public function getAdditionalParameters(array $additionalParameters = []): array
     {
-        if (!is_null(Request::get(Manager::PARAM_CATEGORY_ID)))
+        if (!is_null($this->getRequest()->query->get(Manager::PARAM_CATEGORY_ID)))
         {
             $additionalParameters[] = Manager::PARAM_CATEGORY_ID;
         }

@@ -21,7 +21,6 @@ use Chamilo\Libraries\Format\Structure\Breadcrumb;
 use Chamilo\Libraries\Format\Structure\BreadcrumbTrail;
 use Chamilo\Libraries\Format\Structure\Glyph\FontAwesomeGlyph;
 use Chamilo\Libraries\Format\Utilities\ResourceManager;
-use Chamilo\Libraries\Platform\Session\Request;
 use Chamilo\Libraries\Storage\Parameters\DataClassDistinctParameters;
 use Chamilo\Libraries\Storage\Query\Condition\AndCondition;
 use Chamilo\Libraries\Storage\Query\Condition\InCondition;
@@ -46,7 +45,7 @@ class ImporterComponent extends Manager implements DelegateComponent
             throw new NotAllowedException();
         }
 
-        $type = Request::get(self::PARAM_IMPORT_TYPE);
+        $type = $this->getRequest()->query->get(self::PARAM_IMPORT_TYPE);
 
         if ($type)
         {

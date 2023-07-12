@@ -10,7 +10,6 @@ use Chamilo\Application\Weblcms\Tool\Implementation\CourseGroup\Storage\DataMana
 use Chamilo\Application\Weblcms\UserExporter\UserExporter;
 use Chamilo\Core\User\Storage\DataClass\User;
 use Chamilo\Libraries\Architecture\Exceptions\NotAllowedException;
-use Chamilo\Libraries\Platform\Session\Request;
 use Chamilo\Libraries\Storage\DataClass\DataClass;
 use Chamilo\Libraries\Storage\Query\Condition\AndCondition;
 use Chamilo\Libraries\Storage\Query\Condition\EqualityCondition;
@@ -53,9 +52,9 @@ class ExporterComponent extends Manager
             throw new NotAllowedException();
         }
 
-        if (Request::get(self::PARAM_COURSE_GROUP))
+        if ($this->getRequest()->query->get(self::PARAM_COURSE_GROUP))
         {
-            $course_group_id = Request::get(self::PARAM_COURSE_GROUP);
+            $course_group_id = $this->getRequest()->query->get(self::PARAM_COURSE_GROUP);
 
             $course_group = DataManager::retrieve_by_id(CourseGroup::class, $course_group_id);
 
@@ -63,9 +62,10 @@ class ExporterComponent extends Manager
         }
 
         $this->current_tab = SubscriptionsOverviewerComponent::TAB_USERS;
-        if (Request::get(SubscriptionsOverviewerComponent::PARAM_TAB))
+
+        if ($this->getRequest()->query->get(SubscriptionsOverviewerComponent::PARAM_TAB))
         {
-            $this->current_tab = Request::get(SubscriptionsOverviewerComponent::PARAM_TAB);
+            $this->current_tab = $this->getRequest()->query->get(SubscriptionsOverviewerComponent::PARAM_TAB);
         }
         elseif (!is_null($this->course_group))
         {

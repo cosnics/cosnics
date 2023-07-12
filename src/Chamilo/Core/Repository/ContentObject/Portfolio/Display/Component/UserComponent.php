@@ -81,7 +81,7 @@ class UserComponent extends ItemComponent
         );
 
         // Handle a virtual user selection
-        $selected_virtual_user_id = Request::get(self::PARAM_VIRTUAL_USER_ID);
+        $selected_virtual_user_id = $this->getRequest()->query->get(self::PARAM_VIRTUAL_USER_ID);
 
         if ($selected_virtual_user_id)
         {

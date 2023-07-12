@@ -59,8 +59,8 @@ class ResetPasswordComponent extends Manager implements NoAuthenticationSupport
 
         $html[] = $this->render_header();
 
-        $request_key = Request::get(self::PARAM_RESET_KEY);
-        $request_user_id = Request::get(User::PROPERTY_ID);
+        $request_key = $this->getRequest()->query->get(self::PARAM_RESET_KEY);
+        $request_user_id = $this->getRequest()->query->get(User::PROPERTY_ID);
         if (!is_null($request_key) && !is_null($request_user_id))
         {
 

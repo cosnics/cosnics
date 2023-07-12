@@ -30,7 +30,7 @@ class ForumPostCreatorComponent extends ForumPostFormActionCreate
     {
         $this->forumpost = new ForumPost();
         $first_post = DataManager::retrieve_first_post($this->get_complex_content_object_item()->get_ref());
-        $post_id = Request::get(self::PARAM_SELECTED_FORUM_POST);
+        $post_id = $this->getRequest()->query->get(self::PARAM_SELECTED_FORUM_POST);
         
         if ($post_id != null)
         {

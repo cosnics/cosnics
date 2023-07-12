@@ -24,7 +24,7 @@ class DefaultComponent extends Manager
             throw new NotAllowedException();
         }
         
-        $vocabulary_ids = Request::get(self::PARAM_VOCABULARY_ID);
+        $vocabulary_ids = $this->getRequest()->query->get(self::PARAM_VOCABULARY_ID);
         
         try
         {

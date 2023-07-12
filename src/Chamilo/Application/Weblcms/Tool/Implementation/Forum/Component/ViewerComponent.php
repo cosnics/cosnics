@@ -15,7 +15,6 @@ use Chamilo\Libraries\Architecture\Exceptions\NoObjectSelectedException;
 use Chamilo\Libraries\Architecture\Exceptions\NotAllowedException;
 use Chamilo\Libraries\Architecture\Exceptions\ObjectNotExistException;
 use Chamilo\Libraries\Architecture\Interfaces\DelegateComponent;
-use Chamilo\Libraries\Platform\Session\Request;
 use Chamilo\Libraries\Storage\DataManager\DataManager;
 use Chamilo\Libraries\Storage\Parameters\DataClassCountParameters;
 use Chamilo\Libraries\Storage\Query\Condition\AndCondition;
@@ -25,14 +24,12 @@ use Chamilo\Libraries\Storage\Query\Variable\StaticConditionVariable;
 use Chamilo\Libraries\Translation\Translation;
 
 /**
- *
  * @package application.lib.weblcms.tool.forum.component
  */
 class ViewerComponent extends Manager implements ForumDisplaySupport, DelegateComponent
 {
 
     /**
-     *
      * @var ContentObjectPublication
      */
     protected $publication;
@@ -43,7 +40,8 @@ class ViewerComponent extends Manager implements ForumDisplaySupport, DelegateCo
 
     public function run()
     {
-        $this->publication_id = Request::get(\Chamilo\Application\Weblcms\Tool\Manager::PARAM_PUBLICATION_ID);
+        $this->publication_id =
+            $this->getRequest()->query->get(\Chamilo\Application\Weblcms\Tool\Manager::PARAM_PUBLICATION_ID);
         $this->set_parameter(\Chamilo\Application\Weblcms\Tool\Manager::PARAM_PUBLICATION_ID, $this->publication_id);
 
         $publicationTranslation = Translation::getInstance()->getTranslation('ContentObjectPublication');
@@ -70,9 +68,9 @@ class ViewerComponent extends Manager implements ForumDisplaySupport, DelegateCo
 
         $this->set_parameter(\Chamilo\Application\Weblcms\Tool\Manager::PARAM_PUBLICATION_ID, $this->publication_id);
 
-        if (is_null(Request::get(\Chamilo\Core\Repository\Display\Manager::PARAM_ACTION)))
+        if (is_null($this->getRequest()->query->get(\Chamilo\Core\Repository\Display\Manager::PARAM_ACTION)))
         {
-            Request::set_get(
+            $this->getRequest()->request->set(
                 \Chamilo\Core\Repository\Display\Manager::PARAM_ACTION,
                 \Chamilo\Core\Repository\ContentObject\Forum\Display\Manager::ACTION_VIEW_FORUM
             );

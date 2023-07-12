@@ -20,8 +20,6 @@ abstract class ContentObjectExportController
      */
     public function __construct(ExportParameters $parameters)
     {
-        $this->initializeContainer();
-
         $this->parameters = $parameters;
     }
 

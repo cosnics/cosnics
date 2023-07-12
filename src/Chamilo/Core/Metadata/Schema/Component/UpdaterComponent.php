@@ -40,7 +40,7 @@ class UpdaterComponent extends Manager
             throw new NotAllowedException();
         }
 
-        $schema_id = Request::get(self::PARAM_SCHEMA_ID);
+        $schema_id = $this->getRequest()->query->get(self::PARAM_SCHEMA_ID);
         $this->set_parameter(self::PARAM_SCHEMA_ID, $schema_id);
 
         $schema = DataManager::retrieve_by_id(Schema::class, $schema_id);

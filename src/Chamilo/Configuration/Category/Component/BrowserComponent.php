@@ -13,7 +13,6 @@ use Chamilo\Libraries\Format\Structure\ActionBar\Renderer\ButtonToolBarRenderer;
 use Chamilo\Libraries\Format\Structure\Glyph\FontAwesomeGlyph;
 use Chamilo\Libraries\Format\Structure\ToolbarItem;
 use Chamilo\Libraries\Format\Table\RequestTableParameterValuesCompiler;
-use Chamilo\Libraries\Platform\Session\Request;
 use Chamilo\Libraries\Storage\Query\Condition\AndCondition;
 use Chamilo\Libraries\Storage\Query\Condition\ContainsCondition;
 use Chamilo\Libraries\Storage\Query\Condition\EqualityCondition;
@@ -114,7 +113,7 @@ class BrowserComponent extends Manager
 
     public function get_category_id()
     {
-        $category_id = (Request::get(self::PARAM_CATEGORY_ID) ? Request::get(self::PARAM_CATEGORY_ID) : 0);
+        $category_id = $this->getRequest()->query->get(self::PARAM_CATEGORY_ID, 0);
         if (is_array($category_id) && !empty($category_id))
         {
             $category_id = $category_id[0];

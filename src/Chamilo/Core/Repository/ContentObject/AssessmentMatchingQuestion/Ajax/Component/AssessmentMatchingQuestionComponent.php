@@ -17,8 +17,8 @@ class AssessmentMatchingQuestionComponent extends Manager
 
     public function run()
     {
-        $value = Request::post('value');
-        $action = Request::post('action');
+        $value = $this->getRequest()->request->get('value');
+        $action = $this->getRequest()->request->get('action');
         
         switch ($action)
         {

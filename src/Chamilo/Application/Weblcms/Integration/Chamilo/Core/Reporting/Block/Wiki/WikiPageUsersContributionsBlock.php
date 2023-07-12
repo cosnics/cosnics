@@ -9,7 +9,6 @@ use Chamilo\Core\Repository\Storage\DataClass\ComplexContentObjectItem;
 use Chamilo\Core\Repository\Storage\DataClass\ContentObject;
 use Chamilo\Core\User\Storage\DataClass\User;
 use Chamilo\Core\User\Storage\DataManager;
-use Chamilo\Libraries\Platform\Session\Request;
 use Chamilo\Libraries\Translation\Translation;
 
 class WikiPageUsersContributionsBlock extends ToolBlock
@@ -19,37 +18,41 @@ class WikiPageUsersContributionsBlock extends ToolBlock
     {
         $reporting_data = new ReportingData();
         $reporting_data->set_rows(
-            array(
-                Translation::get('Fullname'), 
-                Translation::get('Username'), 
-                Translation::get('NumberOfContributions')));
-        
+            [
+                Translation::get('Fullname'),
+                Translation::get('Username'),
+                Translation::get('NumberOfContributions')
+            ]
+        );
+
         $complex_content_object_item = \Chamilo\Core\Repository\Storage\DataManager::retrieve_by_id(
             ComplexContentObjectItem::class,
-            Request::get(Manager::PARAM_SELECTED_COMPLEX_CONTENT_OBJECT_ITEM_ID));
-        
+            $this->getRequest()->query->get(Manager::PARAM_SELECTED_COMPLEX_CONTENT_OBJECT_ITEM_ID)
+        );
+
         $wiki_page = \Chamilo\Core\Repository\Storage\DataManager::retrieve_by_id(
-            ContentObject::class,
-            $complex_content_object_item->get_ref());
+            ContentObject::class, $complex_content_object_item->get_ref()
+        );
         $versions = \Chamilo\Core\Repository\Storage\DataManager::retrieve_content_object_versions($wiki_page);
-        
+
         $users = [];
-        
-        foreach($versions as $version)
+
+        foreach ($versions as $version)
         {
-            $users[$version->get_owner_id()] = isset($users[$version->get_owner_id()]) ? $users[$version->get_owner_id()] ++ : 1;
+            $users[$version->get_owner_id()] =
+                isset($users[$version->get_owner_id()]) ? $users[$version->get_owner_id()] ++ : 1;
         }
-        
+
         arsort($users);
         $count = 0;
-        
+
         foreach ($users as $user => $number)
         {
             if ($count < 5)
             {
                 $user = DataManager::retrieve_by_id(
-                    User::class,
-                    (int) $user);
+                    User::class, (int) $user
+                );
                 $reporting_data->add_category(0);
                 $reporting_data->add_data_category_row(0, Translation::get('Fullname'), $user->get_fullname());
                 $reporting_data->add_data_category_row(0, Translation::get('Username'), $user->get_username());
@@ -58,17 +61,17 @@ class WikiPageUsersContributionsBlock extends ToolBlock
                 $count ++;
             }
         }
-        
+
         return $reporting_data;
+    }
+
+    public function get_views()
+    {
+        return [Html::VIEW_TABLE];
     }
 
     public function retrieve_data()
     {
         return $this->count_data();
-    }
-
-    public function get_views()
-    {
-        return array(Html::VIEW_TABLE);
     }
 }

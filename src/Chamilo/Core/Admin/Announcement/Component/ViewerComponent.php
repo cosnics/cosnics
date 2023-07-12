@@ -26,7 +26,7 @@ class ViewerComponent extends Manager implements NoContextComponent
      */
     public function run()
     {
-        $id = Request::get(self::PARAM_SYSTEM_ANNOUNCEMENT_ID);
+        $id = $this->getRequest()->query->get(self::PARAM_SYSTEM_ANNOUNCEMENT_ID);
         $this->set_parameter(self::PARAM_SYSTEM_ANNOUNCEMENT_ID, $id);
 
         if (!$this->getRightsService()->canUserIdentifierViewPublication($this->getUser()->getId(), $id))

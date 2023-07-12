@@ -21,11 +21,6 @@ class CalendarEventDataProvider extends ExternalCalendar
 {
     use DependencyInjectionContainerTrait;
 
-    public function __construct()
-    {
-        $this->initializeContainer();
-    }
-
     /**
      * @return \Chamilo\Application\Calendar\Service\AvailabilityService
      */

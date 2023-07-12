@@ -5,7 +5,6 @@ use Chamilo\Core\Reporting\Viewer\Manager;
 use Chamilo\Core\Reporting\Viewer\Rendition\Template\TemplateRendition;
 use Chamilo\Core\Reporting\Viewer\Rendition\Template\TemplateRenditionImplementation;
 use Chamilo\Libraries\File\Properties\FileProperties;
-use Chamilo\Libraries\Platform\Session\Request;
 
 /**
  * @author  Hans De Bisschop & Magali Gillard
@@ -16,8 +15,8 @@ class SaverComponent extends Manager
 
     public function run()
     {
-        $format = Request::get(self::PARAM_FORMAT) ? Request::get(self::PARAM_FORMAT) : TemplateRendition::FORMAT_HTML;
-        $view = Request::get(self::PARAM_VIEW) ? Request::get(self::PARAM_VIEW) : TemplateRendition::VIEW_BASIC;
+        $format = $this->getRequest()->query->get(self::PARAM_FORMAT, TemplateRendition::FORMAT_HTML);
+        $view = $this->getRequest()->query->get(self::PARAM_VIEW, TemplateRendition::VIEW_BASIC);
 
         $file_path = TemplateRenditionImplementation::launch($this, $this->get_template(), $format, $view);
 

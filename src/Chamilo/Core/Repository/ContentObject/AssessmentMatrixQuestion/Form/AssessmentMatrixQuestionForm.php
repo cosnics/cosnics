@@ -467,7 +467,7 @@ class AssessmentMatrixQuestionForm extends ContentObjectForm
         $this->addElement('hidden', 'mq_matrix_type', $_SESSION['mq_matrix_type'], ['id' => 'mq_matrix_type']);
     }
 
-    public function validate()
+    public function validate(): bool
     {
         if (isset($_POST['add_match']) || isset($_POST['remove_match']) || isset($_POST['remove_option']) ||
             isset($_POST['add_option']) || isset($_POST['change_matrix_type']))

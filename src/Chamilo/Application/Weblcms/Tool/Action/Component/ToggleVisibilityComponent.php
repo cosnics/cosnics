@@ -69,7 +69,7 @@ class ToggleVisibilityComponent extends Manager implements DelegateComponent
 
             $params = [];
             $params['tool_action'] = null;
-            if (Request::get('details') == 1)
+            if ($this->getRequest()->query->get('details') == 1)
             {
                 $params[\Chamilo\Application\Weblcms\Tool\Manager::PARAM_PUBLICATION_ID] = $pid;
                 $params['tool_action'] = 'view';

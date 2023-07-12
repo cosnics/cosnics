@@ -5,11 +5,9 @@ use Chamilo\Application\Weblcms\Storage\DataClass\CourseSection;
 use Chamilo\Application\Weblcms\Storage\DataManager;
 use Chamilo\Application\Weblcms\Tool\Implementation\CourseSections\Manager;
 use Chamilo\Libraries\Architecture\Exceptions\NotAllowedException;
-use Chamilo\Libraries\Platform\Session\Request;
 use Chamilo\Libraries\Translation\Translation;
 
 /**
- *
  * @package application.lib.weblcms.tool.course_sections.component
  */
 class VisibilityChangerComponent extends Manager
@@ -20,30 +18,30 @@ class VisibilityChangerComponent extends Manager
      */
     public function run()
     {
-        if (! $this->get_course()->is_course_admin($this->get_parent()->get_user()))
+        if (!$this->get_course()->is_course_admin($this->get_parent()->get_user()))
         {
             throw new NotAllowedException();
         }
 
-        $ids = Request::get(self::PARAM_COURSE_SECTION_ID);
+        $ids = $this->getRequest()->query->get(self::PARAM_COURSE_SECTION_ID);
         $failures = 0;
 
-        if (! empty($ids))
+        if (!empty($ids))
         {
-            if (! is_array($ids))
+            if (!is_array($ids))
             {
-                $ids = array($ids);
+                $ids = [$ids];
             }
 
             foreach ($ids as $id)
             {
                 $course_section = DataManager::retrieve_by_id(
-                    CourseSection::class,
-                    (int) $id);
+                    CourseSection::class, (int) $id
+                );
 
-                $course_section->set_visible(! $course_section->is_visible());
+                $course_section->set_visible(!$course_section->is_visible());
 
-                if (! $course_section->update())
+                if (!$course_section->update())
                 {
                     $failures ++;
                 }
@@ -73,8 +71,8 @@ class VisibilityChangerComponent extends Manager
             }
 
             $this->redirectWithMessage(
-                Translation::get($message), $failures != 0,
-                array(self::PARAM_ACTION => self::ACTION_VIEW_COURSE_SECTIONS));
+                Translation::get($message), $failures != 0, [self::PARAM_ACTION => self::ACTION_VIEW_COURSE_SECTIONS]
+            );
         }
         else
         {

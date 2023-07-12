@@ -25,9 +25,7 @@ class UpdaterComponent extends Manager
      */
     public function run()
     {
-        $trail = BreadcrumbTrail::getInstance();
-        
-        $id = Request::get(self::PARAM_USER_VIEW_ID);
+        $id = $this->getRequest()->query->get(self::PARAM_USER_VIEW_ID);
         $this->set_parameter(self::PARAM_USER_VIEW_ID, $id);
         if ($id)
         {

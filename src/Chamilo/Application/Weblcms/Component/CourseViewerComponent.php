@@ -62,7 +62,7 @@ class CourseViewerComponent extends Manager implements DelegateComponent
         /**
          * Make sure the tool parameter is backwards compatible by upper camelizing the tool
          */
-        $tool = Request::get(self::PARAM_TOOL);
+        $tool = $this->getRequest()->query->get(self::PARAM_TOOL);
         $tool = StringUtilities::getInstance()->createString($tool)->upperCamelize()->__toString();
 
         $this->set_parameter(self::PARAM_COURSE, $this->get_course()->get_id());
@@ -96,7 +96,7 @@ class CourseViewerComponent extends Manager implements DelegateComponent
             $tool = 'Home';
         }
 
-        $category = Request::get(self::PARAM_CATEGORY, 0);
+        $category = $this->getRequest()->query->get(self::PARAM_CATEGORY, 0);
 
         $this->course_tool_registration = DataManager::retrieve_course_tool_by_name($tool);
 
@@ -155,8 +155,8 @@ class CourseViewerComponent extends Manager implements DelegateComponent
      */
     public function access_allowed()
     {
-        $tool = Request::get(self::PARAM_TOOL);
-        $tool_action = Request::get(self::PARAM_TOOL_ACTION);
+        $tool = $this->getRequest()->query->get(self::PARAM_TOOL);
+        $tool_action = $this->getRequest()->query->get(self::PARAM_TOOL_ACTION);
 
         if ($this->is_teacher() || ($tool == 'User' &&
                 $tool_action == \Chamilo\Application\Weblcms\Tool\Implementation\User\Manager::ACTION_VIEW_AS))
@@ -214,7 +214,7 @@ class CourseViewerComponent extends Manager implements DelegateComponent
     {
         if (is_null($this->course))
         {
-            $course_id = Request::get(self::PARAM_COURSE);
+            $course_id = $this->getRequest()->query->get(self::PARAM_COURSE);
 
             if (!$course_id)
             {

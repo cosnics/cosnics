@@ -52,7 +52,7 @@ class ViewerComponent extends Manager
      */
     public function run()
     {
-        $id = Request::get(self::PARAM_GROUP_ID);
+        $id = $this->getRequest()->query->get(self::PARAM_GROUP_ID);
         $this->set_parameter(self::PARAM_GROUP_ID, $id);
         if ($id)
         {
@@ -267,7 +267,7 @@ class ViewerComponent extends Manager
 
         $conditions[] = new EqualityCondition(
             new PropertyConditionVariable(GroupRelUser::class, GroupRelUser::PROPERTY_GROUP_ID),
-            new StaticConditionVariable(Request::get(self::PARAM_GROUP_ID))
+            new StaticConditionVariable($this->getRequest()->query->get(self::PARAM_GROUP_ID))
         );
 
         $query = $this->buttonToolbarRenderer->getSearchForm()->getQuery();

@@ -43,8 +43,8 @@ class ComparerComponent extends Manager
         }
         else
         {
-            $object_id = Request::get(self::PARAM_COMPARE_OBJECT);
-            $version_id = Request::get(self::PARAM_COMPARE_VERSION);
+            $object_id = $this->getRequest()->query->get(self::PARAM_COMPARE_OBJECT);
+            $version_id = $this->getRequest()->query->get(self::PARAM_COMPARE_VERSION);
         }
 
         $contentObjectTranslation = Translation::getInstance()->getTranslation('ContentObject');

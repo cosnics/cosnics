@@ -77,7 +77,7 @@ abstract class Manager extends \Chamilo\Core\Repository\Display\Manager
     {
         foreach ($this->get_parent()->get_assessment_parameters() as $parameter)
         {
-            $this->set_parameter($parameter, Request::get($parameter));
+            $this->set_parameter($parameter, $this->getRequest()->query->get($parameter));
         }
     }
 

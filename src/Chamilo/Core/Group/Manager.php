@@ -226,7 +226,7 @@ abstract class Manager extends Application
     {
         if (!isset($this->selected_group))
         {
-            $group_id = Request::get(self::PARAM_GROUP_ID);
+            $group_id = $this->getRequest()->query->get(self::PARAM_GROUP_ID);
             if (!$group_id)
             {
                 throw new NoObjectSelectedException(Translation::get('Group'));

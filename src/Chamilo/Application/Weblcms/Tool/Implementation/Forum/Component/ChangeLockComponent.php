@@ -6,11 +6,9 @@ use Chamilo\Application\Weblcms\Storage\DataClass\ContentObjectPublication;
 use Chamilo\Application\Weblcms\Storage\DataManager;
 use Chamilo\Application\Weblcms\Tool\Implementation\Forum\Manager;
 use Chamilo\Libraries\Architecture\Exceptions\NotAllowedException;
-use Chamilo\Libraries\Platform\Session\Request;
 use Chamilo\Libraries\Translation\Translation;
 
 /**
- *
  * @package repository.lib.complex_builder.forum.component
  */
 class ChangeLockComponent extends Manager
@@ -18,13 +16,14 @@ class ChangeLockComponent extends Manager
 
     public function run()
     {
-        $this->publication_id = Request::get(\Chamilo\Application\Weblcms\Tool\Manager::PARAM_PUBLICATION_ID);
+        $this->publication_id =
+            $this->getRequest()->query->get(\Chamilo\Application\Weblcms\Tool\Manager::PARAM_PUBLICATION_ID);
 
         $publication = DataManager::retrieve_by_id(
-            ContentObjectPublication::class,
-            $this->publication_id);
+            ContentObjectPublication::class, $this->publication_id
+        );
 
-        if (! $this->is_allowed(WeblcmsRights::EDIT_RIGHT, $publication))
+        if (!$this->is_allowed(WeblcmsRights::EDIT_RIGHT, $publication))
         {
             throw new NotAllowedException();
         }
@@ -43,6 +42,6 @@ class ChangeLockComponent extends Manager
         $params = [];
         $params[self::PARAM_ACTION] = self::ACTION_BROWSE_FORUMS;
 
-        $this->redirectWithMessage($message, ! $succes, $params);
+        $this->redirectWithMessage($message, !$succes, $params);
     }
 }

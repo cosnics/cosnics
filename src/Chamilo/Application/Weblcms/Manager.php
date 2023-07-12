@@ -179,7 +179,7 @@ abstract class Manager extends Application
      */
     public function get_course_id()
     {
-        return Request::get(self::PARAM_COURSE);
+        return $this->getRequest()->query->get(self::PARAM_COURSE);
     }
 
     /**
@@ -426,7 +426,7 @@ abstract class Manager extends Application
         {
             $condition = new EqualityCondition(
                 new PropertyConditionVariable(CourseSection::class, CourseSection::PROPERTY_COURSE_ID),
-                new StaticConditionVariable(Request::get(self::PARAM_COURSE))
+                new StaticConditionVariable($this->getRequest()->query->get(self::PARAM_COURSE))
             );
             $sections = DataManager::retrieves(
                 CourseSection::class, new DataClassRetrievesParameters($condition)

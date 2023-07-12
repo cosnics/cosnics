@@ -9,15 +9,13 @@ use Chamilo\Core\Reporting\ReportingData;
 use Chamilo\Core\Reporting\Viewer\Rendition\Block\Type\Html;
 use Chamilo\Core\Repository\Storage\DataClass\ComplexContentObjectItem;
 use Chamilo\Libraries\Format\Structure\Glyph\FontAwesomeGlyph;
-use Chamilo\Libraries\Platform\Session\Request;
 use Chamilo\Libraries\Translation\Translation;
 
 /**
- *
  * @package application.weblcms.php.reporting.blocks Reporting block with an overview of the scores of an assessment
  *          question per user
- * @author Joris Willems <joris.willems@gmail.com>
- * @author Alexander Van Paemel
+ * @author  Joris Willems <joris.willems@gmail.com>
+ * @author  Alexander Van Paemel
  */
 class AssessmentQuestionUsersBlock extends AssessmentBlock
 {
@@ -32,7 +30,7 @@ class AssessmentQuestionUsersBlock extends AssessmentBlock
         $publication_id = $this->getPublicationId();
         $course_id = $this->getCourseId();
 
-        $question_id = Request::get(
+        $question_id = $this->getRequest()->query->get(
             \Chamilo\Application\Weblcms\Tool\Implementation\Reporting\Manager::PARAM_QUESTION
         );
         $question = \Chamilo\Core\Repository\Storage\DataManager::retrieve_by_id(
@@ -46,7 +44,7 @@ class AssessmentQuestionUsersBlock extends AssessmentBlock
         $user_question_attempts = [];
 
         $question_attempts = $this->get_question_attempts_from_publication_and_question($publication_id, $question_id);
-        foreach($question_attempts as $question_attempt)
+        foreach ($question_attempts as $question_attempt)
         {
             $user_question_attempts[$question_attempt->getOptionalProperty(self::PROPERTY_ASSESSMENT_ATTEMPT)
                 ->get_user_id()][] = $question_attempt;
@@ -55,7 +53,7 @@ class AssessmentQuestionUsersBlock extends AssessmentBlock
         $count = 0;
         $glyph = new FontAwesomeGlyph('chart-pie');
 
-        foreach($users_resultset as $user)
+        foreach ($users_resultset as $user)
         {
             $user_attempts = $user_question_attempts[$user->get_id()];
 
@@ -68,8 +66,7 @@ class AssessmentQuestionUsersBlock extends AssessmentBlock
             if (count($user_attempts) > 0)
             {
                 $params = $this->get_parent()->get_parameters();
-                $params[Manager::PARAM_TEMPLATE_ID] =
-                    AssessmentQuestionAttemptsUserTemplate::class;
+                $params[Manager::PARAM_TEMPLATE_ID] = AssessmentQuestionAttemptsUserTemplate::class;
                 $params[Manager::PARAM_USERS] = $user->get_id();
                 $link = '<a href="' . $this->get_parent()->get_url($params) . '">' . $glyph->render() . '</a>';
             }
@@ -159,19 +156,19 @@ class AssessmentQuestionUsersBlock extends AssessmentBlock
      */
     public function get_question_user_reporting_info_headers()
     {
-        return array(
+        return [
             Translation::get('Name'),
             Translation::get('OfficialCode'),
             Translation::get('NumberOfAttempts'),
             Translation::get('AverageScore'),
             Translation::get('MinScoreAchieved'),
             Translation::get('MaxScoreAchieved')
-        );
+        ];
     }
 
     public function get_views()
     {
-        return array(Html::VIEW_TABLE);
+        return [Html::VIEW_TABLE];
     }
 
     public function retrieve_data()

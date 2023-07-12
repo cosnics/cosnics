@@ -24,7 +24,7 @@ class DocumentDownloaderComponent extends Manager implements NoAuthenticationSup
      */
     public function run()
     {
-        $object_id = Request::get(self::PARAM_CONTENT_OBJECT_ID);
+        $object_id = $this->getRequest()->query->get(self::PARAM_CONTENT_OBJECT_ID);
         $this->set_parameter(self::PARAM_CONTENT_OBJECT_ID, $object_id);
 
         if (! $object_id)
@@ -48,13 +48,13 @@ class DocumentDownloaderComponent extends Manager implements NoAuthenticationSup
             throw new UserException(Translation::get('ContentObjectMustBeDocument'));
         }
 
-        $security_code = Request::get(ContentObject::PARAM_SECURITY_CODE);
+        $security_code = $this->getRequest()->query->get(ContentObject::PARAM_SECURITY_CODE);
         if ($security_code != $object->calculate_security_code())
         {
             throw new UserException(Translation::get('SecurityCodeNotValid', null, StringUtilities::LIBRARIES));
         }
 
-        if (Request::get('display') == 1)
+        if ($this->getRequest()->query->get('display') == 1)
         {
             $object->open_in_browser();
         }

@@ -44,8 +44,6 @@ class UserPictureProviderFactory
         $this->configurationConsulter = $configurationConsulter;
         $this->registrationConsulter = $registrationConsulter;
         $this->translator = $translator;
-
-        $this->initializeContainer();
     }
 
     /**

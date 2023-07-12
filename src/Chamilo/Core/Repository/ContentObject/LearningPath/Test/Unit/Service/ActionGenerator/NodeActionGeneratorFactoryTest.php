@@ -1,6 +1,7 @@
 <?php
 namespace Chamilo\Core\Repository\ContentObject\LearningPath\Test\Unit\Service\ActionGenerator;
 
+use Chamilo\Configuration\Service\Consulter\RegistrationConsulter;
 use Chamilo\Configuration\Storage\DataClass\Registration;
 use Chamilo\Core\Repository\ContentObject\LearningPath\Service\ActionGenerator\NodeActionGeneratorFactory;
 use Chamilo\Core\Repository\ContentObject\LearningPath\Service\ActionGenerator\NodeBaseActionGenerator;
@@ -8,7 +9,6 @@ use Chamilo\Core\Repository\ContentObject\LearningPath\Storage\DataClass\Learnin
 use Chamilo\Libraries\Architecture\ClassnameUtilities;
 use Chamilo\Libraries\Architecture\Test\TestCases\ChamiloTestCase;
 use Chamilo\Libraries\Translation\Translation;
-use Chamilo\Configuration\Configuration;
 
 /**
  * Tests the NodeActionGeneratorFactory class
@@ -18,19 +18,9 @@ use Chamilo\Configuration\Configuration;
 class NodeActionGeneratorFactoryTest extends ChamiloTestCase
 {
     /**
-     * @var NodeActionGeneratorFactory
+     * @var array
      */
-    protected $nodeActionGeneratorFactory;
-
-    /**
-     * @var Translation | \PHPUnit_Framework_MockObject_MockObject
-     */
-    protected $translatorMock;
-
-    /**
-     * @var Configuration | \PHPUnit_Framework_MockObject_MockObject
-     */
-    protected $configurationMock;
+    protected $baseParameters;
 
     /**
      * @var ClassnameUtilities
@@ -38,9 +28,19 @@ class NodeActionGeneratorFactoryTest extends ChamiloTestCase
     protected $classNameUtilities;
 
     /**
-     * @var array
+     * @var NodeActionGeneratorFactory
      */
-    protected $baseParameters;
+    protected $nodeActionGeneratorFactory;
+
+    /**
+     * @var \Chamilo\Configuration\Service\Consulter\RegistrationConsulter | \PHPUnit_Framework_MockObject_MockObject
+     */
+    protected $registrationConsulterMock;
+
+    /**
+     * @var Translation | \PHPUnit_Framework_MockObject_MockObject
+     */
+    protected $translatorMock;
 
     /**
      * Setup before each test
@@ -48,12 +48,13 @@ class NodeActionGeneratorFactoryTest extends ChamiloTestCase
     public function setUp(): void
     {
         $this->translatorMock = $this->getMockBuilder(Translation::class)->disableOriginalConstructor()->getMock();
-        $this->configurationMock = $this->getMockBuilder(Configuration::class)->disableOriginalConstructor()->getMock();
+        $this->registrationConsulterMock =
+            $this->getMockBuilder(RegistrationConsulter::class)->disableOriginalConstructor()->getMock();
         $this->classNameUtilities = ClassnameUtilities::getInstance();
         $this->baseParameters = ['testParameter1' => 'testValue1'];
 
         $this->nodeActionGeneratorFactory = new NodeActionGeneratorFactory(
-            $this->translatorMock, $this->configurationMock, $this->classNameUtilities, $this->baseParameters
+            $this->translatorMock, $this->registrationConsulterMock, $this->classNameUtilities, $this->baseParameters
         );
     }
 
@@ -62,7 +63,7 @@ class NodeActionGeneratorFactoryTest extends ChamiloTestCase
         unset($this->nodeActionGeneratorFactory);
         unset($this->baseParameters);
         unset($this->classNameUtilities);
-        unset($this->configurationMock);
+        unset($this->registrationConsulterMock);
         unset($this->translatorMock);
     }
 
@@ -73,10 +74,22 @@ class NodeActionGeneratorFactoryTest extends ChamiloTestCase
         );
     }
 
-    public function testCreateNodeActionGeneratorSetsTranslator()
+    public function testCreateNodeActionGeneratorAddsContentObjectTypeNodeActionGenerators()
     {
+        $integrationPackages = [
+            [Registration::PROPERTY_CONTEXT => 'Chamilo\Core\Repository\ContentObject\Assessment\Integration\Chamilo\Core\Repository\ContentObject\LearningPath']
+        ];
+
+        $this->registrationConsulterMock->expects($this->once())->method('getIntegrationRegistrations')->with(
+            LearningPath::CONTEXT
+        )->will($this->returnValue($integrationPackages));
+
         $nodeActionGenerator = $this->nodeActionGeneratorFactory->createNodeActionGenerator();
-        $this->assertEquals($this->translatorMock, $this->get_property_value($nodeActionGenerator, 'translator'));
+
+        $this->assertArrayHasKey(
+            'Chamilo\Core\Repository\ContentObject\Assessment\Storage\DataClass\Assessment',
+            $this->get_property_value($nodeActionGenerator, 'contentObjectTypeNodeActionGenerators')
+        );
     }
 
     public function testCreateNodeActionGeneratorSetsBaseParameters()
@@ -85,23 +98,10 @@ class NodeActionGeneratorFactoryTest extends ChamiloTestCase
         $this->assertEquals($this->baseParameters, $this->get_property_value($nodeActionGenerator, 'baseParameters'));
     }
 
-    public function testCreateNodeActionGeneratorAddsContentObjectTypeNodeActionGenerators()
+    public function testCreateNodeActionGeneratorSetsTranslator()
     {
-        $integrationPackages = [
-            [Registration::PROPERTY_CONTEXT => 'Chamilo\Core\Repository\ContentObject\Assessment\Integration\Chamilo\Core\Repository\ContentObject\LearningPath']
-        ];
-
-        $this->configurationMock->expects($this->once())
-            ->method('getIntegrationRegistrations')
-            ->with(LearningPath::CONTEXT)
-            ->will($this->returnValue($integrationPackages));
-
         $nodeActionGenerator = $this->nodeActionGeneratorFactory->createNodeActionGenerator();
-
-        $this->assertArrayHasKey(
-            'Chamilo\Core\Repository\ContentObject\Assessment\Storage\DataClass\Assessment',
-            $this->get_property_value($nodeActionGenerator, 'contentObjectTypeNodeActionGenerators')
-        );
+        $this->assertEquals($this->translatorMock, $this->get_property_value($nodeActionGenerator, 'translator'));
     }
 
 }

@@ -8,11 +8,9 @@ use Chamilo\Libraries\Architecture\Application\Application;
 use Chamilo\Libraries\Architecture\Exceptions\NotAllowedException;
 use Chamilo\Libraries\Format\Structure\Breadcrumb;
 use Chamilo\Libraries\Format\Structure\BreadcrumbTrail;
-use Chamilo\Libraries\Platform\Session\Request;
 use Chamilo\Libraries\Translation\Translation;
 
 /**
- *
  * @package user.lib.user_manager.component
  */
 class CreatorComponent extends Manager
@@ -28,7 +26,7 @@ class CreatorComponent extends Manager
         $user = $this->get_user();
         $user_id = $user->get_id();
 
-        if (! $user->isPlatformAdmin())
+        if (!$user->isPlatformAdmin())
         {
             throw new NotAllowedException();
         }
@@ -49,11 +47,12 @@ class CreatorComponent extends Manager
             {
                 $this->redirectWithMessage(
                     Translation::get($success ? 'UserCreated' : 'UserNotCreated'), !$success,
-                    array(Application::PARAM_ACTION => self::ACTION_BROWSE_USERS));
+                    [Application::PARAM_ACTION => self::ACTION_BROWSE_USERS]
+                );
             }
             else
             {
-                Request::set_get('error_message', Translation::get('UsernameNotAvailable'));
+                $this->getRequest()->request->set('error_message', Translation::get('UsernameNotAvailable'));
 
                 $html = [];
 
@@ -80,7 +79,9 @@ class CreatorComponent extends Manager
     {
         $breadcrumbtrail->add(
             new Breadcrumb(
-                $this->get_url(array(self::PARAM_ACTION => self::ACTION_BROWSE_USERS)),
-                Translation::get('AdminUserBrowserComponent')));
+                $this->get_url([self::PARAM_ACTION => self::ACTION_BROWSE_USERS]),
+                Translation::get('AdminUserBrowserComponent')
+            )
+        );
     }
 }

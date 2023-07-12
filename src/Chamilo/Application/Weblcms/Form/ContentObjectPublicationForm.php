@@ -557,7 +557,7 @@ class ContentObjectPublicationForm extends BasePublicationForm
      */
     public function get_course_id()
     {
-        return Request::get(Manager::PARAM_COURSE);
+        return $this->getRequest()->query->get(Manager::PARAM_COURSE);
     }
 
     private function get_course_viewer_link($publication)
@@ -602,7 +602,7 @@ class ContentObjectPublicationForm extends BasePublicationForm
      */
     public function get_tool()
     {
-        return Request::get(Manager::PARAM_TOOL);
+        return $this->getRequest()->query->get(Manager::PARAM_TOOL);
     }
 
     /**
@@ -805,7 +805,7 @@ class ContentObjectPublicationForm extends BasePublicationForm
     {
         $publications = $this->publications;
 
-        $defaults[ContentObjectPublication::PROPERTY_CATEGORY_ID] = Request::get(Manager::PARAM_CATEGORY);
+        $defaults[ContentObjectPublication::PROPERTY_CATEGORY_ID] = $this->getRequest()->query->get(Manager::PARAM_CATEGORY);
         $defaults[self::PROPERTY_TIME_PERIOD_FOREVER] = 1;
         $defaults[self::PROPERTY_RIGHTS_SELECTOR] = self::RIGHTS_INHERIT;
 

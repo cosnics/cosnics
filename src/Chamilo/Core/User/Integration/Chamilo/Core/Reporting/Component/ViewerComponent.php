@@ -29,7 +29,7 @@ class ViewerComponent extends Manager
             throw new NotAllowedException();
         }
 
-        $template_id = Request::get(self::PARAM_TEMPLATE_ID, 1);
+        $template_id = $this->getRequest()->query->get(self::PARAM_TEMPLATE_ID, 1);
         $this->set_parameter(self::PARAM_TEMPLATE_ID, $template_id);
 
         switch ($template_id)

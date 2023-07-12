@@ -35,7 +35,7 @@ class ViewerComponent extends Manager implements DelegateComponent
      */
     public function run()
     {
-        $this->context = Request::get(self::PARAM_CONTEXT);
+        $this->context = $this->getRequest()->query->get(self::PARAM_CONTEXT);
         $this->registration = $this->getRegistrationConsulter()->getRegistrationForContext($this->context);
 
         BreadcrumbTrail::getInstance()->add(

@@ -27,7 +27,7 @@ class ReportingViewerComponent extends Manager
                 $this->get_url(
                     array(
                         \Chamilo\Application\Weblcms\Tool\Manager::PARAM_ACTION => \Chamilo\Application\Weblcms\Tool\Manager::ACTION_VIEW,
-                        \Chamilo\Application\Weblcms\Tool\Manager::PARAM_PUBLICATION_ID => Request::get(
+                        \Chamilo\Application\Weblcms\Tool\Manager::PARAM_PUBLICATION_ID => $this->getRequest()->query->get(
                             \Chamilo\Application\Weblcms\Tool\Manager::PARAM_PUBLICATION_ID
                         )
                     )

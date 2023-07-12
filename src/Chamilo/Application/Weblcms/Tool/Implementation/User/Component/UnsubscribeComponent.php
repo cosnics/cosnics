@@ -7,11 +7,9 @@ use Chamilo\Application\Weblcms\Rights\WeblcmsRights;
 use Chamilo\Application\Weblcms\Tool\Implementation\User\Manager;
 use Chamilo\Core\Tracking\Storage\DataClass\Event;
 use Chamilo\Libraries\Architecture\Exceptions\NotAllowedException;
-use Chamilo\Libraries\Platform\Session\Request;
 use Chamilo\Libraries\Translation\Translation;
 
 /**
- *
  * @package application.lib.weblcms.weblcms_manager.component
  */
 
@@ -26,16 +24,16 @@ class UnsubscribeComponent extends Manager
      */
     public function run()
     {
-        if (! $this->is_allowed(WeblcmsRights::EDIT_RIGHT))
+        if (!$this->is_allowed(WeblcmsRights::EDIT_RIGHT))
         {
             throw new NotAllowedException();
         }
 
         $course = $this->get_course();
         $users = $this->getRequest()->getFromRequestOrQuery(self::PARAM_OBJECTS);
-        if (! is_array($users))
+        if (!is_array($users))
         {
-            $users = array($users);
+            $users = [$users];
         }
         if (isset($course))
         {
@@ -47,13 +45,12 @@ class UnsubscribeComponent extends Manager
 
                 foreach ($users as $user_id)
                 {
-                    if (! is_null($user_id) && $user_id != $this->get_user_id())
+                    if (!is_null($user_id) && $user_id != $this->get_user_id())
                     {
-                        if (! $this->get_user()->isPlatformAdmin() && (! $course_management_rights->is_allowed_management(
-                            CourseManagementRights::TEACHER_UNSUBSCRIBE_RIGHT,
-                            $course->get_id(),
-                            CourseManagementRights::TYPE_COURSE,
-                            $user_id) || ! $course->is_course_admin($this->get_user())))
+                        if (!$this->get_user()->isPlatformAdmin() && (!$course_management_rights->is_allowed_management(
+                                    CourseManagementRights::TEACHER_UNSUBSCRIBE_RIGHT, $course->get_id(),
+                                    CourseManagementRights::TYPE_COURSE, $user_id
+                                ) || !$course->is_course_admin($this->get_user())))
                         {
 
                             $failures ++;
@@ -61,7 +58,7 @@ class UnsubscribeComponent extends Manager
                         }
                         else
                         {
-                            if (! $this->get_parent()->unsubscribe_user_from_course($course, $user_id))
+                            if (!$this->get_parent()->unsubscribe_user_from_course($course, $user_id))
                             {
                                 $failures ++;
                             }
@@ -108,10 +105,11 @@ class UnsubscribeComponent extends Manager
                     }
                 }
                 $this->redirectWithMessage(
-                    Translation::get($message), !$success,
-                    array(
+                    Translation::get($message), !$success, [
                         self::PARAM_ACTION => self::ACTION_UNSUBSCRIBE_BROWSER,
-                        self::PARAM_TAB => Request::get(self::PARAM_TAB)));
+                        self::PARAM_TAB => $this->getRequest()->query->get(self::PARAM_TAB)
+                    ]
+                );
             }
         }
     }

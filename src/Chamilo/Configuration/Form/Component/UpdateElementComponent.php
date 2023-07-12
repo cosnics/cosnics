@@ -24,7 +24,7 @@ class UpdateElementComponent extends Manager
 
     public function run()
     {
-        $element_id = Request::get(self::PARAM_DYNAMIC_FORM_ELEMENT_ID);
+        $element_id = $this->getRequest()->query->get(self::PARAM_DYNAMIC_FORM_ELEMENT_ID);
         $parameters = array(self::PARAM_DYNAMIC_FORM_ELEMENT_ID => $element_id);
         
         $trail = BreadcrumbTrail::getInstance();

@@ -19,7 +19,7 @@ class CodeComponent extends Manager
 
     public function run()
     {
-        $officialCode = Request::get(self::PARAM_USER_ID);
+        $officialCode = $this->getRequest()->query->get(self::PARAM_USER_ID);
 
         if (is_numeric($officialCode))
         {

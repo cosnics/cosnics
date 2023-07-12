@@ -22,7 +22,7 @@ class ForumUnsubscribeComponent extends Manager
     public function run()
     {
         $succes = false;
-        $subscribe_id = Request::get(self::PARAM_SUBSCRIBE_ID);
+        $subscribe_id = $this->getRequest()->query->get(self::PARAM_SUBSCRIBE_ID);
         
         $params = [];
         $params[self::PARAM_ACTION] = self::ACTION_VIEW_FORUM;

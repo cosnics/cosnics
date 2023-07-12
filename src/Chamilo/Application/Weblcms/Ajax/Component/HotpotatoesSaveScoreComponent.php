@@ -16,8 +16,8 @@ class HotpotatoesSaveScoreComponent extends Manager
 
     public function run()
     {
-        $id = Request::post('id');
-        $score = Request::post('score');
+        $id = $this->getRequest()->request->get('id');
+        $score = $this->getRequest()->request->get('score');
         
         $condition = new EqualityCondition(
             new PropertyConditionVariable(
