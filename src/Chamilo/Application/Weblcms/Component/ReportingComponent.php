@@ -5,10 +5,8 @@ use Chamilo\Application\Weblcms\Integration\Chamilo\Core\Reporting\Template\Cour
 use Chamilo\Application\Weblcms\Manager;
 use Chamilo\Libraries\Architecture\Application\ApplicationConfiguration;
 use Chamilo\Libraries\Architecture\Interfaces\DelegateComponent;
-use Chamilo\Libraries\Platform\Session\Request;
 
 /**
- *
  * @package application.lib.weblcms.weblcms_manager.component
  */
 class ReportingComponent extends Manager implements DelegateComponent
@@ -23,17 +21,20 @@ class ReportingComponent extends Manager implements DelegateComponent
 
         $template_id = $this->getRequest()->query->get(self::PARAM_TEMPLATE_ID);
 
-        if (! isset($template_id))
+        if (!isset($template_id))
         {
             $this->set_parameter(
-                self::PARAM_TEMPLATE_ID,
-                CourseDataTemplate::class);
+                self::PARAM_TEMPLATE_ID, CourseDataTemplate::class
+            );
 
             $application = $this->getApplicationFactory()->getApplication(
                 \Chamilo\Core\Reporting\Viewer\Manager::CONTEXT,
-                new ApplicationConfiguration($this->getRequest(), $this->get_user(), $this));
+                new ApplicationConfiguration($this->getRequest(), $this->get_user(), $this)
+            );
             $application->set_template_by_name(
-                CourseDataTemplate::class);
+                CourseDataTemplate::class
+            );
+
             return $application->run();
         }
         else
@@ -42,8 +43,10 @@ class ReportingComponent extends Manager implements DelegateComponent
 
             $application = $this->getApplicationFactory()->getApplication(
                 \Chamilo\Core\Reporting\Viewer\Manager::CONTEXT,
-                new ApplicationConfiguration($this->getRequest(), $this->get_user(), $this));
+                new ApplicationConfiguration($this->getRequest(), $this->get_user(), $this)
+            );
             $application->set_template_by_name($template_id);
+
             return $application->run();
         }
     }

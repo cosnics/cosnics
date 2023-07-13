@@ -1,13 +1,13 @@
 <?php
 namespace Chamilo\Core\Repository\Viewer;
 
+use Chamilo\Core\Repository\Viewer\Architecture\Traits\ViewerTrait;
 use Chamilo\Core\Repository\Workspace\Storage\DataClass\Workspace;
 use Chamilo\Libraries\Architecture\Application\Application;
 use Chamilo\Libraries\Architecture\Application\ApplicationConfigurationInterface;
 use Chamilo\Libraries\Format\Structure\BreadcrumbGeneratorInterface;
 use Chamilo\Libraries\Format\Structure\BreadcrumbTrail;
 use Chamilo\Libraries\Format\Structure\Glyph\FontAwesomeGlyph;
-use Chamilo\Libraries\Platform\Session\Request;
 
 /**
  * @package Chamilo\Core\Repository\Viewer
@@ -17,6 +17,8 @@ use Chamilo\Libraries\Platform\Session\Request;
  */
 abstract class Manager extends Application
 {
+    use ViewerTrait;
+
     public const ACTION_BROWSER = 'Browser';
     public const ACTION_CREATOR = 'Creator';
     public const ACTION_IMPORTER = 'Importer';
@@ -86,14 +88,6 @@ abstract class Manager extends Application
         $this->set_parameter(
             self::PARAM_ACTION, $this->getRequest()->query->get(self::PARAM_ACTION, self::ACTION_CREATOR)
         );
-    }
-
-    /**
-     * @return bool
-     */
-    public static function any_object_selected()
-    {
-        return !is_null(self::get_selected_objects());
     }
 
     public function getCurrentWorkspace(): Workspace
@@ -196,21 +190,6 @@ abstract class Manager extends Application
     }
 
     /**
-     * @return int
-     */
-    public static function get_selected_objects()
-    {
-        $requestedObjects = Request::get(self::PARAM_ID);
-
-        if (!$requestedObjects)
-        {
-            $requestedObjects = Request::post(self::PARAM_ID);
-        }
-
-        return $requestedObjects;
-    }
-
-    /**
      * Returns the types of content object that the viewer can use.
      *
      * @return string[]
@@ -218,20 +197,6 @@ abstract class Manager extends Application
     public function get_types()
     {
         return $this->get_application()->get_allowed_content_object_types();
-    }
-
-    public function isReadyToBePublished()
-    {
-        return $this->getRequest()->getFromRequestOrQuery(self::PARAM_ID);
-    }
-
-    /**
-     * @return bool
-     * @deprecated any_object_selected()
-     */
-    public static function is_ready_to_be_published()
-    {
-        return (self::any_object_selected());
     }
 
     /**

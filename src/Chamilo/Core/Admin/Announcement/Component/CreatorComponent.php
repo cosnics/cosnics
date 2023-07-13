@@ -7,6 +7,7 @@ use Chamilo\Core\Admin\Announcement\Publisher;
 use Chamilo\Core\Repository\ContentObject\SystemAnnouncement\Storage\DataClass\SystemAnnouncement;
 use Chamilo\Core\Repository\Storage\DataClass\ContentObject;
 use Chamilo\Core\Repository\Storage\DataManager;
+use Chamilo\Core\Repository\Viewer\Architecture\Traits\ViewerTrait;
 use Chamilo\Core\Repository\Viewer\ViewerInterface;
 use Chamilo\Core\Repository\Workspace\Service\RightsService;
 use Chamilo\Libraries\Architecture\Application\ApplicationConfiguration;
@@ -23,6 +24,7 @@ use Chamilo\Libraries\Utilities\StringUtilities;
  */
 class CreatorComponent extends Manager implements ViewerInterface
 {
+    use ViewerTrait;
 
     /**
      * @return string
@@ -32,7 +34,7 @@ class CreatorComponent extends Manager implements ViewerInterface
     {
         $this->checkAuthorization(Manager::CONTEXT, 'ManageChamilo');
 
-        if (!\Chamilo\Core\Repository\Viewer\Manager::is_ready_to_be_published())
+        if (!$this->isAnyObjectSelectedInViewer())
         {
             return $this->getApplicationFactory()->getApplication(
                 \Chamilo\Core\Repository\Viewer\Manager::CONTEXT,
@@ -41,7 +43,7 @@ class CreatorComponent extends Manager implements ViewerInterface
         }
         else
         {
-            $contentObjectIdentifiers = \Chamilo\Core\Repository\Viewer\Manager::get_selected_objects();
+            $contentObjectIdentifiers = $this->getObjectsSelectedInviewer();
 
             if (!is_array($contentObjectIdentifiers))
             {

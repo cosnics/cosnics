@@ -12,7 +12,6 @@ use Chamilo\Libraries\Format\Structure\ActionBar\ButtonToolBar;
 use Chamilo\Libraries\Format\Structure\ActionBar\Renderer\ButtonToolBarRenderer;
 use Chamilo\Libraries\Format\Structure\Glyph\FontAwesomeGlyph;
 use Chamilo\Libraries\Format\Structure\ToolbarItem;
-use Chamilo\Libraries\Platform\Session\Request;
 use Chamilo\Libraries\Translation\Translation;
 use Chamilo\Libraries\Utilities\StringUtilities;
 
@@ -55,7 +54,7 @@ class ViewerComponent extends Manager implements NoContextComponent
             return $this->display_error_page(
                 htmlentities(
                     Translation::get(
-                        'NoObjectSelected', array('OBJECT' => Translation::get('SystemAnnouncement')),
+                        'NoObjectSelected', ['OBJECT' => Translation::get('SystemAnnouncement')],
                         StringUtilities::LIBRARIES
                     )
                 )
@@ -70,17 +69,16 @@ class ViewerComponent extends Manager implements NoContextComponent
             $buttonToolbar = new ButtonToolBar();
             $commonActions = new ButtonGroup();
 
-            if ($this->get_user()->isPlatformAdmin() ||
-                $publication->get_publisher_id() == $this->get_user()->get_id())
+            if ($this->get_user()->isPlatformAdmin() || $publication->get_publisher_id() == $this->get_user()->get_id())
             {
                 $commonActions->addButton(
                     new Button(
                         Translation::get('Edit', [], StringUtilities::LIBRARIES), new FontAwesomeGlyph('pencil-alt'),
                         $this->get_url(
-                            array(
+                            [
                                 self::PARAM_ACTION => self::ACTION_EDIT,
                                 self::PARAM_SYSTEM_ANNOUNCEMENT_ID => $publication->get_id()
-                            )
+                            ]
                         ), ToolbarItem::DISPLAY_ICON_AND_LABEL
                     )
                 );
@@ -89,17 +87,17 @@ class ViewerComponent extends Manager implements NoContextComponent
                     new Button(
                         Translation::get('Delete', [], StringUtilities::LIBRARIES), new FontAwesomeGlyph('times'),
                         $this->get_url(
-                            array(
+                            [
                                 self::PARAM_ACTION => self::ACTION_DELETE,
                                 self::PARAM_SYSTEM_ANNOUNCEMENT_ID => $publication->get_id()
-                            )
+                            ]
                         ), ToolbarItem::DISPLAY_ICON_AND_LABEL
                     )
                 );
 
                 if ($publication->is_hidden())
                 {
-                    $glyph = new FontAwesomeGlyph('eye', array('text-muted'));
+                    $glyph = new FontAwesomeGlyph('eye', ['text-muted']);
                 }
                 elseif ($publication->is_forever())
                 {
@@ -113,10 +111,10 @@ class ViewerComponent extends Manager implements NoContextComponent
                 $commonActions->addButton(
                     new Button(
                         Translation::get('Hide', [], StringUtilities::LIBRARIES), $glyph, $this->get_url(
-                        array(
+                        [
                             self::PARAM_ACTION => self::ACTION_HIDE,
                             self::PARAM_SYSTEM_ANNOUNCEMENT_ID => $publication->get_id()
-                        )
+                        ]
                     ), ToolbarItem::DISPLAY_ICON_AND_LABEL
                     )
                 );

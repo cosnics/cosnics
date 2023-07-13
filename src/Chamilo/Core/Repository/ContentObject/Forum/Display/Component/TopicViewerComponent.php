@@ -18,7 +18,6 @@ use Chamilo\Libraries\Format\Structure\BreadcrumbTrail;
 use Chamilo\Libraries\Format\Structure\Glyph\FontAwesomeGlyph;
 use Chamilo\Libraries\Format\Table\Pager;
 use Chamilo\Libraries\Format\Table\PagerRenderer;
-use Chamilo\Libraries\Platform\Session\Request;
 use Chamilo\Libraries\Storage\Query\Condition\ContainsCondition;
 use Chamilo\Libraries\Storage\Query\Condition\OrCondition;
 use Chamilo\Libraries\Storage\Query\Variable\PropertyConditionVariable;
@@ -28,47 +27,40 @@ use Chamilo\Libraries\Utilities\StringUtilities;
 use Exception;
 
 /**
- *
  * @package Chamilo\Core\Repository\ContentObject\Forum\Display\Component
- * @author Hans De Bisschop <hans.de.bisschop@ehb.be>
- * @author Magali Gillard <magali.gillard@ehb.be>
+ * @author  Hans De Bisschop <hans.de.bisschop@ehb.be>
+ * @author  Magali Gillard <magali.gillard@ehb.be>
  */
 class TopicViewerComponent extends Manager implements DelegateComponent
 {
-    const DEFAULT_PER_PAGE = 5;
+    public const DEFAULT_PER_PAGE = 5;
 
     /**
-     *
      * @var ButtonToolBarRenderer
      */
     private $buttonToolbarRenderer;
 
     /**
-     *
      * @var \Chamilo\Core\Repository\ContentObject\ForumTopic\Storage\DataClass\ForumTopic
      */
     private $forumTopic;
 
     /**
-     *
      * @var \Chamilo\Core\Repository\ContentObject\ForumTopic\Storage\DataClass\ForumPost[]
      */
     private $forumTopicPosts;
 
     /**
-     *
-     * @var boolean
+     * @var bool
      */
     private $isLocked;
 
     /**
-     *
-     * @var integer
+     * @var int
      */
     private $pageNumber;
 
     /**
-     *
      * @var \Chamilo\Libraries\Format\Table\Pager
      */
     private $pager;
@@ -148,7 +140,6 @@ class TopicViewerComponent extends Manager implements DelegateComponent
     }
 
     /**
-     *
      * @return \Chamilo\Core\Repository\ContentObject\ForumTopic\Storage\DataClass\ForumPost[]
      */
     public function getForumTopicPosts()
@@ -169,8 +160,7 @@ class TopicViewerComponent extends Manager implements DelegateComponent
     }
 
     /**
-     *
-     * @return integer
+     * @return int
      */
     public function getItemsPerPage()
     {
@@ -178,8 +168,7 @@ class TopicViewerComponent extends Manager implements DelegateComponent
     }
 
     /**
-     *
-     * @return integer
+     * @return int
      */
     public function getPageNumber()
     {
@@ -232,7 +221,6 @@ class TopicViewerComponent extends Manager implements DelegateComponent
     }
 
     /**
-     *
      * @return \Chamilo\Core\Repository\ContentObject\ForumTopic\Storage\DataClass\ForumPost[]
      */
     public function getVisibleForumTopicPosts()
@@ -280,8 +268,7 @@ class TopicViewerComponent extends Manager implements DelegateComponent
     }
 
     /**
-     *
-     * @return boolean
+     * @return bool
      */
     public function isLocked()
     {
@@ -294,7 +281,6 @@ class TopicViewerComponent extends Manager implements DelegateComponent
     }
 
     /**
-     *
      * @return string
      */
     public function renderPager()
@@ -387,7 +373,6 @@ class TopicViewerComponent extends Manager implements DelegateComponent
     }
 
     /**
-     *
      * @param ForumPost $forumPost
      *
      * @return string
@@ -423,7 +408,6 @@ class TopicViewerComponent extends Manager implements DelegateComponent
     }
 
     /**
-     *
      * @param ForumPost $forumTopicPost
      *
      * @return string
@@ -461,7 +445,6 @@ class TopicViewerComponent extends Manager implements DelegateComponent
     }
 
     /**
-     *
      * @param ForumPost $forumTopicPost
      *
      * @return string
@@ -533,10 +516,10 @@ class TopicViewerComponent extends Manager implements DelegateComponent
         $trail->add(
             new Breadcrumb(
                 $this->get_url(
-                    array(
+                    [
                         self::PARAM_ACTION => self::ACTION_VIEW_FORUM,
                         self::PARAM_COMPLEX_CONTENT_OBJECT_ITEM_ID => null
-                    )
+                    ]
                 ), $this->get_root_content_object()->get_title()
             )
         );
@@ -554,10 +537,10 @@ class TopicViewerComponent extends Manager implements DelegateComponent
                     $trail->add(
                         new Breadcrumb(
                             $this->get_url(
-                                array(
+                                [
                                     self::PARAM_COMPLEX_CONTENT_OBJECT_ITEM_ID => $key,
                                     self::PARAM_ACTION => self::ACTION_VIEW_TOPIC
-                                )
+                                ]
                             ), $value->get_title()
                         )
                     );
@@ -567,10 +550,10 @@ class TopicViewerComponent extends Manager implements DelegateComponent
                     $trail->add(
                         new Breadcrumb(
                             $this->get_url(
-                                array(
+                                [
                                     self::PARAM_ACTION => self::ACTION_VIEW_FORUM,
                                     self::PARAM_COMPLEX_CONTENT_OBJECT_ITEM_ID => $key
-                                )
+                                ]
                             ), $value->get_title()
                         )
                     );

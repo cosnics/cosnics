@@ -25,8 +25,8 @@ class GetNotificationsComponent extends Manager
         $notificationServiceBridge = $this->getNotificationServiceBridge();
 
         $notifications = $notificationServiceBridge->getNotificationsForUser(
-            $this->getUser(), $this->getRequest()->getFromRequest(self::PARAM_OFFSET),
-            $this->getRequest()->getFromRequest(self::PARAM_NOTIFICATIONS_PER_PAGE)
+            $this->getUser(), $this->getRequest()->request->get(self::PARAM_OFFSET),
+            $this->getRequest()->request->get(self::PARAM_NOTIFICATIONS_PER_PAGE)
         );
 
         return new JsonResponse($this->getSerializer()->serialize($notifications, 'json'), 200, [], true);

@@ -7,7 +7,6 @@ use Chamilo\Core\Metadata\Relation\Storage\DataManager;
 use Chamilo\Core\Metadata\Service\EntityTranslationService;
 use Chamilo\Core\Metadata\Storage\DataClass\Relation;
 use Chamilo\Libraries\Architecture\Exceptions\NotAllowedException;
-use Chamilo\Libraries\Platform\Session\Request;
 use Chamilo\Libraries\Translation\Translation;
 use Chamilo\Libraries\Utilities\StringUtilities;
 use Exception;
@@ -16,10 +15,10 @@ use Exception;
  * Controller to update the schema
  *
  * @package Chamilo\Core\Metadata\Relation\Component
- * @author Sven Vanpoucke - Hogeschool Gent
- * @author Hans De Bisschop <hans.de.bisschop@ehb.be>
- * @author Magali Gillard <magali.gillard@ehb.be>
- * @author Eduard Vossen <eduard.vossen@ehb.be>
+ * @author  Sven Vanpoucke - Hogeschool Gent
+ * @author  Hans De Bisschop <hans.de.bisschop@ehb.be>
+ * @author  Magali Gillard <magali.gillard@ehb.be>
+ * @author  Eduard Vossen <eduard.vossen@ehb.be>
  */
 class UpdaterComponent extends Manager
 {
@@ -65,7 +64,7 @@ class UpdaterComponent extends Manager
                 $translation = $success ? 'ObjectUpdated' : 'ObjectNotUpdated';
 
                 $message = Translation::get(
-                    $translation, array('OBJECT' => Translation::get('Relation')), StringUtilities::LIBRARIES
+                    $translation, ['OBJECT' => Translation::get('Relation')], StringUtilities::LIBRARIES
                 );
             }
             catch (Exception $ex)
@@ -74,7 +73,7 @@ class UpdaterComponent extends Manager
                 $message = $ex->getMessage();
             }
 
-            $this->redirectWithMessage($message, !$success, array(self::PARAM_ACTION => self::ACTION_BROWSE));
+            $this->redirectWithMessage($message, !$success, [self::PARAM_ACTION => self::ACTION_BROWSE]);
         }
         else
         {

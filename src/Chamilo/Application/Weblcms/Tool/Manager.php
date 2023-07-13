@@ -43,7 +43,6 @@ use Chamilo\Libraries\Format\Structure\BreadcrumbTrail;
 use Chamilo\Libraries\Format\Structure\Glyph\FontAwesomeGlyph;
 use Chamilo\Libraries\Format\Structure\Page;
 use Chamilo\Libraries\Format\Structure\ToolbarItem;
-use Chamilo\Libraries\Platform\Session\Request;
 use Chamilo\Libraries\Storage\Parameters\DataClassRetrievesParameters;
 use Chamilo\Libraries\Translation\Translation;
 use Chamilo\Libraries\Utilities\StringUtilities;
@@ -307,7 +306,7 @@ abstract class Manager extends Application
 
     public function get_access_details_toolbar_item($parent)
     {
-        if ($this->getRequest()->query->get(self::PARAM_PUBLICATION_ID))
+        if ($this->getRequest()->query->has(self::PARAM_PUBLICATION_ID))
         {
             $url = $this->get_parent()->get_url(
                 [
@@ -772,7 +771,8 @@ abstract class Manager extends Application
             {
                 if (is_null($category_id))
                 {
-                    $category_id = $this->getRequest()->query->get(\Chamilo\Application\Weblcms\Manager::PARAM_CATEGORY);
+                    $category_id =
+                        $this->getRequest()->query->get(\Chamilo\Application\Weblcms\Manager::PARAM_CATEGORY);
                 }
 
                 if ($category_id && $category_id !== 0)

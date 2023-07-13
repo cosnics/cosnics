@@ -7,13 +7,12 @@ use Chamilo\Core\Metadata\Storage\DataClass\Element;
 use Chamilo\Libraries\Architecture\Exceptions\NoObjectSelectedException;
 use Chamilo\Libraries\Format\Structure\Breadcrumb;
 use Chamilo\Libraries\Format\Structure\BreadcrumbTrail;
-use Chamilo\Libraries\Platform\Session\Request;
 use Chamilo\Libraries\Translation\Translation;
 use Exception;
 
 /**
  * Component to move metadata_element object
- * 
+ *
  * @author Sven Vanpoucke
  */
 class MoverComponent extends Manager
@@ -27,21 +26,20 @@ class MoverComponent extends Manager
         if ($metadata_element_id = $this->getRequest()->query->get(Manager::PARAM_ELEMENT_ID))
         {
             $this->set_parameter(self::PARAM_ELEMENT_ID, $metadata_element_id);
-            
+
             $metadata_element = DataManager::retrieve_by_id(Element::class, $metadata_element_id);
             if ($move = $this->getRequest()->query->get(Manager::PARAM_MOVE))
             {
                 $this->set_parameter(self::PARAM_MOVE, $move);
-                
+
                 $metadata_element->move($move);
-                
+
                 $this->redirectWithMessage(
-                    '', 
-                    false, 
-                    array(
-                        Manager::PARAM_ACTION => Manager::ACTION_BROWSE, 
-                        \Chamilo\Core\Metadata\Schema\Manager::PARAM_SCHEMA_ID => $metadata_element->get_schema_id()), 
-                    $this->getAdditionalParameters());
+                    '', false, [
+                        Manager::PARAM_ACTION => Manager::ACTION_BROWSE,
+                        \Chamilo\Core\Metadata\Schema\Manager::PARAM_SCHEMA_ID => $metadata_element->get_schema_id()
+                    ], $this->getAdditionalParameters()
+                );
             }
             else
             {
@@ -56,7 +54,7 @@ class MoverComponent extends Manager
 
     /**
      * Adds additional breadcrumbs
-     * 
+     *
      * @param \libraries\format\BreadcrumbTrail $breadcrumb_trail
      * @param BreadcrumbTrail $breadcrumb_trail
      */
@@ -65,8 +63,9 @@ class MoverComponent extends Manager
         $breadcrumb_trail->add(
             new Breadcrumb(
                 $this->get_url(
-                    array(Manager::PARAM_ACTION => Manager::ACTION_BROWSE), 
-                    $this->getAdditionalParameters()),
-                Translation::get('BrowserComponent')));
+                    [Manager::PARAM_ACTION => Manager::ACTION_BROWSE], $this->getAdditionalParameters()
+                ), Translation::get('BrowserComponent')
+            )
+        );
     }
 }

@@ -4,6 +4,7 @@ namespace Chamilo\Core\Repository\ContentObject\Assignment\Display\Component;
 use Chamilo\Core\Repository\ContentObject\Assignment\Display\Manager;
 use Chamilo\Core\Repository\ContentObject\Assignment\Display\Bridge\Storage\DataClass\Entry;
 use Chamilo\Core\Repository\ContentObject\Assignment\Storage\DataClass\Assignment;
+use Chamilo\Core\Repository\Viewer\Architecture\Traits\ViewerTrait;
 use Chamilo\Libraries\Architecture\Application\ApplicationConfiguration;
 use Chamilo\Libraries\Architecture\Exceptions\NotAllowedException;
 use Chamilo\Libraries\Architecture\Exceptions\UserException;
@@ -20,6 +21,8 @@ use Chamilo\Libraries\Utilities\StringUtilities;
  */
 class CreatorComponent extends Manager
 {
+    use ViewerTrait;
+
     /**
      * @return string
      * @throws \Chamilo\Libraries\Architecture\Exceptions\NotAllowedException
@@ -39,9 +42,10 @@ class CreatorComponent extends Manager
         $this->set_parameter(self::PARAM_ENTITY_TYPE, $this->getEntityType());
         $this->set_parameter(self::PARAM_ENTITY_ID, $this->getEntityIdentifier());
 
-        if (\Chamilo\Core\Repository\Viewer\Manager::is_ready_to_be_published())
+        if ($this->isAnyObjectSelectedInViewer())
         {
-            $objects = \Chamilo\Core\Repository\Viewer\Manager::get_selected_objects();
+            $objects = $this->getObjectsSelectedInviewer();
+
             if(is_array($objects))
             {
                 $objects = $objects[0];

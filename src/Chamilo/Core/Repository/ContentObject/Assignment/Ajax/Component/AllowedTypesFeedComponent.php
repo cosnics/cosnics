@@ -25,7 +25,7 @@ class AllowedTypesFeedComponent extends Manager
     function run()
     {
         $allowedTypes = $this->getAllowedContentObjectTypes();
-        $search = $this->getRequest()->getFromRequest(self::PARAM_SEARCH_QUERY);
+        $search = $this->getRequest()->request->get(self::PARAM_SEARCH_QUERY);
 
         $elements = new AdvancedElementFinderElements();
 

@@ -8,7 +8,6 @@ use Chamilo\Core\Repository\ContentObject\ForumTopic\Storage\DataClass\ForumTopi
 use Chamilo\Core\Repository\ContentObject\ForumTopic\Storage\DataManager;
 use Chamilo\Libraries\Format\Table\Pager;
 use Chamilo\Libraries\Format\Table\PagerRenderer;
-use Chamilo\Libraries\Platform\Session\Request;
 use Chamilo\Libraries\Translation\Translation;
 use Chamilo\Libraries\Utilities\DatetimeUtilities;
 use HTML_Table;
@@ -24,7 +23,7 @@ class HtmlDescriptionRenditionImplementation extends HtmlRenditionImplementation
     /**
      * The default number of objects per page.
      */
-    const DEFAULT_PER_PAGE = 5;
+    public const DEFAULT_PER_PAGE = 5;
 
     /**
      * Variable that represents the content object that will be displayed.
@@ -39,11 +38,6 @@ class HtmlDescriptionRenditionImplementation extends HtmlRenditionImplementation
     private $page_nr;
 
     /**
-     * Number of items to display per page
-     */
-    private $per_page;
-
-    /**
      * The pager object to split the data in several pages
      */
     private $pager;
@@ -52,6 +46,11 @@ class HtmlDescriptionRenditionImplementation extends HtmlRenditionImplementation
      * A prefix for the URL-parameters, can be used on pages with multiple Pagers
      */
     private $param_prefix;
+
+    /**
+     * Number of items to display per page
+     */
+    private $per_page;
 
     /**
      * The total number of items in the list
@@ -102,7 +101,7 @@ class HtmlDescriptionRenditionImplementation extends HtmlRenditionImplementation
         // Set the starting position for the data retrievement
         $from = $pager->getCurrentRangeOffset();
 
-        $table = new HTML_Table(array('class' => 'forum', 'cellspacing' => 2));
+        $table = new HTML_Table(['class' => 'forum', 'cellspacing' => 2]);
         $html = [];
 
         if (DataManager::count_forum_topic_posts($this->object->get_id()) > 0)
@@ -166,8 +165,9 @@ class HtmlDescriptionRenditionImplementation extends HtmlRenditionImplementation
      * This function generates the posts table of a topic.
      *
      * @param \Doctrine\Common\Collections\ArrayCollection $posts A Resultset of posts.
-     * @param HTML_Table $table A HTML_Table object in which the posts will be added.
-     * @param int $row The row number where this function will start adding content.
+     * @param HTML_Table $table                                   A HTML_Table object in which the posts will be added.
+     * @param int $row                                            The row number where this function will start adding
+     *                                                            content.
      */
     public function make_table($posts, $table, &$row)
     {
@@ -185,7 +185,7 @@ class HtmlDescriptionRenditionImplementation extends HtmlRenditionImplementation
                     '</div>'
                 );
                 $table->setCellAttributes(
-                    $row, 0, array('class' => $class, 'height' => 25, 'style' => 'padding-left: 10px;')
+                    $row, 0, ['class' => $class, 'height' => 25, 'style' => 'padding-left: 10px;']
                 );
 
                 $row ++;
@@ -212,7 +212,7 @@ class HtmlDescriptionRenditionImplementation extends HtmlRenditionImplementation
 
                 $table->setCellContents($row, 0, $message);
                 $table->setCellAttributes(
-                    $row, 0, array('class' => $class, 'valign' => 'top', 'style' => 'padding: 10px; padding-top: 10px;')
+                    $row, 0, ['class' => $class, 'valign' => 'top', 'style' => 'padding: 10px; padding-top: 10px;']
                 );
 
                 $row ++;
@@ -222,13 +222,13 @@ class HtmlDescriptionRenditionImplementation extends HtmlRenditionImplementation
                     Translation::get('On') . ' <b> ' . $info . '</b></div>';
                 $table->setCellContents($row, 0, $bottom_bar);
                 $table->setCellAttributes(
-                    $row, 0, array('class' => $class, 'style' => 'padding: 10px;', 'width' => 500)
+                    $row, 0, ['class' => $class, 'style' => 'padding: 10px;', 'width' => 500]
                 );
 
                 $row ++;
 
                 $table->setCellContents($row, 0, ' ');
-                $table->setCellAttributes($row, 0, array('colspan' => '1', 'class' => 'spacer'));
+                $table->setCellAttributes($row, 0, ['colspan' => '1', 'class' => 'spacer']);
 
                 $row ++;
             }
@@ -248,10 +248,8 @@ class HtmlDescriptionRenditionImplementation extends HtmlRenditionImplementation
         $this->total_number_of_items = DataManager::count_forum_topic_posts($this->object->get_id());
 
         // set the page number
-        $this->page_nr =
-            isset($_SESSION[$this->param_prefix . 'page_nr']) ? $_SESSION[$this->param_prefix . 'page_nr'] : 1;
-        $this->page_nr = Request::get($this->param_prefix . 'page_nr') ? Request::get($this->param_prefix . 'page_nr') :
-            $this->page_nr;
+        $this->page_nr = $_SESSION[$this->param_prefix . 'page_nr'] ?? 1;
+        $this->page_nr = $this->getRequest()->query->get($this->param_prefix . 'page_nr', $this->page_nr);
         $_SESSION[$this->param_prefix . 'page_nr'] = $this->page_nr;
 
         // set the number of objects per page

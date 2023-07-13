@@ -22,6 +22,7 @@ use Chamilo\Core\Repository\ContentObject\Blog\Display\BlogDisplaySupport;
 use Chamilo\Core\Repository\ContentObject\Forum\Display\ForumDisplaySupport;
 use Chamilo\Core\Repository\ContentObject\Glossary\Display\GlossaryDisplaySupport;
 use Chamilo\Core\Repository\ContentObject\LearningPath\Display\Embedder\Embedder;
+use Chamilo\Core\Repository\ContentObject\LearningPath\Display\Embedder\LearningPathEmbedderTrait;
 use Chamilo\Core\Repository\ContentObject\LearningPath\Display\LearningPathDisplaySupport;
 use Chamilo\Core\Repository\ContentObject\LearningPath\Exception\TreeNodeNotFoundException;
 use Chamilo\Core\Repository\ContentObject\LearningPath\Service\Tracking\TrackingService;
@@ -39,7 +40,6 @@ use Chamilo\Libraries\Architecture\Exceptions\UserException;
 use Chamilo\Libraries\Architecture\Interfaces\DelegateComponent;
 use Chamilo\Libraries\Format\Structure\BreadcrumbTrail;
 use Chamilo\Libraries\Format\Structure\PageConfiguration;
-use Chamilo\Libraries\Platform\Session\Request;
 use Chamilo\Libraries\Storage\Parameters\DataClassCountParameters;
 use Chamilo\Libraries\Storage\Query\Condition\AndCondition;
 use Chamilo\Libraries\Storage\Query\Condition\EqualityCondition;
@@ -53,6 +53,7 @@ class ComplexDisplayComponent extends Manager
     implements LearningPathDisplaySupport, AssessmentDisplaySupport, ForumDisplaySupport, GlossaryDisplaySupport,
     BlogDisplaySupport, WikiDisplaySupport, DelegateComponent
 {
+    use LearningPathEmbedderTrait;
 
     /**
      * @var TrackingService
@@ -340,7 +341,7 @@ class ComplexDisplayComponent extends Manager
      */
     public function get_embedded_content_object_id()
     {
-        return Embedder::get_embedded_content_object_id();
+        return $this->getEmbeddedContentObjectIdentifier();
     }
 
     public function get_learning_path_content_object_assessment_result_url($complex_content_object_id, $details)
@@ -375,7 +376,7 @@ class ComplexDisplayComponent extends Manager
     {
         if ($this->is_embedded())
         {
-            $embedded_content_object_id = $this->get_embedded_content_object_id();
+            $embedded_content_object_id = $this->getEmbeddedContentObjectIdentifier();
             $this->set_parameter(Embedder::PARAM_EMBEDDED_CONTENT_OBJECT_ID, $embedded_content_object_id);
 
             return \Chamilo\Core\Repository\Storage\DataManager::retrieve_by_id(
@@ -537,7 +538,7 @@ class ComplexDisplayComponent extends Manager
      */
     public function is_embedded()
     {
-        $embedded_content_object_id = $this->get_embedded_content_object_id();
+        $embedded_content_object_id = $this->getEmbeddedContentObjectIdentifier();
 
         return isset($embedded_content_object_id);
     }

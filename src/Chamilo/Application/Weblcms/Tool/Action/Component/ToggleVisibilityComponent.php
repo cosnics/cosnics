@@ -6,11 +6,9 @@ use Chamilo\Application\Weblcms\Storage\DataClass\ContentObjectPublication;
 use Chamilo\Application\Weblcms\Storage\DataManager;
 use Chamilo\Application\Weblcms\Tool\Action\Manager;
 use Chamilo\Libraries\Architecture\Interfaces\DelegateComponent;
-use Chamilo\Libraries\Platform\Session\Request;
 use Chamilo\Libraries\Translation\Translation;
 
 /**
- *
  * @package application.lib.weblcms.tool.component
  */
 class ToggleVisibilityComponent extends Manager implements DelegateComponent
@@ -18,13 +16,14 @@ class ToggleVisibilityComponent extends Manager implements DelegateComponent
 
     public function run()
     {
-        $publication_ids = $this->getRequest()->getFromRequestOrQuery(\Chamilo\Application\Weblcms\Tool\Manager::PARAM_PUBLICATION_ID);
+        $publication_ids =
+            $this->getRequest()->getFromRequestOrQuery(\Chamilo\Application\Weblcms\Tool\Manager::PARAM_PUBLICATION_ID);
 
         if (isset($publication_ids))
         {
-            if (! is_array($publication_ids))
+            if (!is_array($publication_ids))
             {
-                $publication_ids = array($publication_ids);
+                $publication_ids = [$publication_ids];
             }
 
             $failures = 0;
@@ -32,13 +31,13 @@ class ToggleVisibilityComponent extends Manager implements DelegateComponent
             foreach ($publication_ids as $pid)
             {
                 $publication = DataManager::retrieve_by_id(
-                    ContentObjectPublication::class,
-                    $pid);
+                    ContentObjectPublication::class, $pid
+                );
 
                 if ($this->is_allowed(WeblcmsRights::EDIT_RIGHT, $publication))
                 {
 
-                    if (! $this instanceof ToggleVisibilityComponent)
+                    if (!$this instanceof ToggleVisibilityComponent)
                     {
                         $publication->set_hidden($this->get_hidden());
                     }

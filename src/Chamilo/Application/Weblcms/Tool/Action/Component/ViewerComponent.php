@@ -19,7 +19,6 @@ use Chamilo\Libraries\Format\Structure\ActionBar\ButtonToolBar;
 use Chamilo\Libraries\Format\Structure\ActionBar\Renderer\ButtonToolBarRenderer;
 use Chamilo\Libraries\Format\Structure\Breadcrumb;
 use Chamilo\Libraries\Format\Structure\BreadcrumbTrail;
-use Chamilo\Libraries\Platform\Session\Request;
 use Chamilo\Libraries\Storage\Parameters\DataClassCountParameters;
 use Chamilo\Libraries\Storage\Parameters\DataClassRetrievesParameters;
 use Chamilo\Libraries\Storage\Query\Condition\AndCondition;
@@ -31,14 +30,12 @@ use Chamilo\Libraries\Storage\Query\Variable\StaticConditionVariable;
 use Chamilo\Libraries\Translation\Translation;
 
 /**
- *
  * @package repository.lib.complex_display.assessment.component
  */
 class ViewerComponent extends Manager implements DelegateComponent, FeedbackSupport
 {
 
     /**
-     *
      * @var ButtonToolBarRenderer
      */
     private $buttonToolbarRenderer;
@@ -74,7 +71,7 @@ class ViewerComponent extends Manager implements DelegateComponent, FeedbackSupp
 
         BreadcrumbTrail::getInstance()->add(
             new Breadcrumb(
-                $this->get_url(), Translation::get('ToolViewerComponent', array('TITLE' => $object->get_title()))
+                $this->get_url(), Translation::get('ToolViewerComponent', ['TITLE' => $object->get_title()])
             )
         );
 
@@ -180,8 +177,7 @@ class ViewerComponent extends Manager implements DelegateComponent, FeedbackSupp
      */
 
     /**
-     *
-     * @return boolean
+     * @return bool
      */
     public function hasCategories()
     {
@@ -271,19 +267,18 @@ class ViewerComponent extends Manager implements DelegateComponent, FeedbackSupp
     }
 
     /**
-     *
      * @see \Chamilo\Core\Repository\Feedback\FeedbackSupport::retrieve_feedbacks()
      */
     public function retrieve_feedbacks($count, $offset)
     {
         $parameters = new DataClassRetrievesParameters(
-            $this->get_feedback_conditions(), $count, $offset, new OrderBy(array(
-                    new OrderProperty(
-                        new PropertyConditionVariable(
-                            Feedback::class, Feedback::PROPERTY_MODIFICATION_DATE
-                        )
+            $this->get_feedback_conditions(), $count, $offset, new OrderBy([
+                new OrderProperty(
+                    new PropertyConditionVariable(
+                        Feedback::class, Feedback::PROPERTY_MODIFICATION_DATE
                     )
-                ))
+                )
+            ])
         );
 
         return DataManager::retrieves(

@@ -10,7 +10,6 @@ use Chamilo\Libraries\Format\Structure\ActionBar\ButtonToolBar;
 use Chamilo\Libraries\Format\Structure\ActionBar\Renderer\ButtonToolBarRenderer;
 use Chamilo\Libraries\Format\Structure\Glyph\FontAwesomeGlyph;
 use Chamilo\Libraries\Format\Tabs\Form\FormTab;
-use Chamilo\Libraries\Platform\Session\Request;
 use Chamilo\Libraries\Translation\Translation;
 use Chamilo\Libraries\Utilities\StringUtilities;
 
@@ -374,7 +373,7 @@ class AssessmentMultipleChoiceQuestionForm extends ContentObjectForm
 
         $extraOptionRequested = $this->getRequest()->request->get('add');
         $removedOptions = $this->getRequest()->request->get('remove');
-        $answerTypeChanged =$this->getRequest()->request->get('change_answer_type');
+        $answerTypeChanged = $this->getRequest()->request->get('change_answer_type');
 
         if (isset($extraOptionRequested))
         {

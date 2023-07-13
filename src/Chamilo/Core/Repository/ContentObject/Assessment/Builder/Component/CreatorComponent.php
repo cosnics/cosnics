@@ -3,13 +3,14 @@ namespace Chamilo\Core\Repository\ContentObject\Assessment\Builder\Component;
 
 use Chamilo\Core\Repository\ContentObject\Assessment\Builder\Manager;
 use Chamilo\Core\Repository\Selector\TypeSelector;
+use Chamilo\Core\Repository\Selector\TypeSelectorTrait;
 use Chamilo\Core\Repository\Service\TemplateRegistrationConsulter;
 use Chamilo\Core\Repository\Storage\DataClass\ComplexContentObjectItem;
 use Chamilo\Core\Repository\Storage\DataClass\ContentObject;
 use Chamilo\Core\Repository\Storage\DataManager;
+use Chamilo\Core\Repository\Viewer\Architecture\Traits\ViewerTrait;
 use Chamilo\Libraries\Architecture\Application\ApplicationConfiguration;
 use Chamilo\Libraries\Architecture\ClassnameUtilities;
-use Chamilo\Libraries\Platform\Session\Request;
 use Chamilo\Libraries\Storage\Query\Condition\EqualityCondition;
 use Chamilo\Libraries\Storage\Query\Variable\PropertyConditionVariable;
 use Chamilo\Libraries\Storage\Query\Variable\StaticConditionVariable;
@@ -21,6 +22,8 @@ use Chamilo\Libraries\Utilities\StringUtilities;
  */
 class CreatorComponent extends Manager
 {
+    use ViewerTrait;
+    use TypeSelectorTrait;
 
     /**
      * @var string[]
@@ -31,12 +34,12 @@ class CreatorComponent extends Manager
     {
         $this->get_complex_content_object_breadcrumbs();
 
-        $this->type_selection = TypeSelector::get_selection();
+        $this->type_selection = $this->getSelectedTypes();
 
         $exclude = $this->retrieve_used_items($this->get_root_content_object()->get_id());
         $exclude[] = $this->get_root_content_object()->get_id();
 
-        if (!\Chamilo\Core\Repository\Viewer\Manager::is_ready_to_be_published())
+        if (!$this->isAnyObjectSelectedInViewer())
         {
             $applicationConfiguration = new ApplicationConfiguration($this->getRequest(), $this->get_user(), $this);
 
@@ -56,7 +59,7 @@ class CreatorComponent extends Manager
         }
         else
         {
-            $objects = \Chamilo\Core\Repository\Viewer\Manager::get_selected_objects();
+            $objects = $this->getObjectsSelectedInviewer();
 
             if (!is_array($objects))
             {
@@ -148,7 +151,7 @@ class CreatorComponent extends Manager
     {
         if (!isset($this->type_selection))
         {
-            $this->type_selection = TypeSelector::get_selection();
+            $this->type_selection = $this->getSelectedTypes();
         }
 
         return $this->type_selection;
@@ -156,7 +159,9 @@ class CreatorComponent extends Manager
 
     public function is_shared_object_browser()
     {
-        return ($this->getRequest()->query->get(\Chamilo\Core\Repository\Viewer\Component\BrowserComponent::SHARED_BROWSER) == 1);
+        return ($this->getRequest()->query->get(
+                \Chamilo\Core\Repository\Viewer\Component\BrowserComponent::SHARED_BROWSER
+            ) == 1);
     }
 
     public function render_header(string $pageTitle = ''): string

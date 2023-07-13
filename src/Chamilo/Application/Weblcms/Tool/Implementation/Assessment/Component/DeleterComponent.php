@@ -22,7 +22,7 @@ class DeleterComponent extends Manager
      */
     public function run()
     {
-        if ($this->getRequest()->query->get(\Chamilo\Application\Weblcms\Tool\Manager::PARAM_PUBLICATION_ID))
+        if ($this->getRequest()->query->has(\Chamilo\Application\Weblcms\Tool\Manager::PARAM_PUBLICATION_ID))
         {
             $publication_ids =
                 $this->getRequest()->query->get(\Chamilo\Application\Weblcms\Tool\Manager::PARAM_PUBLICATION_ID);

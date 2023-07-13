@@ -3,6 +3,7 @@ namespace Chamilo\Application\Weblcms\Tool\Implementation\Ephorus\Component;
 
 use Chamilo\Application\Weblcms\Tool\Implementation\Ephorus\Manager;
 use Chamilo\Core\Repository\ContentObject\File\Storage\DataClass\File;
+use Chamilo\Core\Repository\Viewer\Architecture\Traits\ViewerTrait;
 use Chamilo\Core\Repository\Viewer\ViewerInterface;
 use Chamilo\Libraries\Architecture\Application\ApplicationConfiguration;
 use Chamilo\Libraries\Translation\Translation;
@@ -15,6 +16,7 @@ use Chamilo\Libraries\Translation\Translation;
  */
 class DocumentPublisherComponent extends Manager implements ViewerInterface
 {
+    use ViewerTrait;
 
     /**
      * Runs this component
@@ -23,7 +25,7 @@ class DocumentPublisherComponent extends Manager implements ViewerInterface
     {
         $this->validateAccess();
 
-        if (!\Chamilo\Core\Repository\Viewer\Manager::is_ready_to_be_published())
+        if (!$this->isAnyObjectSelectedInViewer())
         {
             $component = $this->getApplicationFactory()->getApplication(
                 \Chamilo\Core\Repository\Viewer\Manager::CONTEXT,
@@ -35,12 +37,12 @@ class DocumentPublisherComponent extends Manager implements ViewerInterface
         }
         else
         {
-            $objects = \Chamilo\Core\Repository\Viewer\Manager::get_selected_objects();
+            $objects = $this->getObjectsSelectedInviewer();
 
-            $parameters = array(
+            $parameters = [
                 \Chamilo\Application\Weblcms\Tool\Manager::PARAM_ACTION => Manager::ACTION_CREATE,
                 Manager::PARAM_CONTENT_OBJECT_IDS => $objects
-            );
+            ];
 
             $this->redirectWithMessage('', false, $parameters);
         }
@@ -53,16 +55,15 @@ class DocumentPublisherComponent extends Manager implements ViewerInterface
      */
     public function get_allowed_content_object_types()
     {
-        return array(File::class);
+        return [File::class];
     }
-
 
     public function render_header(string $pageTitle = ''): string
     {
         $html = [];
 
         $html[] = parent::render_header($pageTitle);
-        $html[] = $this->display_warning_message(Translation::get("EphorusMaxUploadSize"));
+        $html[] = $this->display_warning_message(Translation::get('EphorusMaxUploadSize'));
 
         return implode(PHP_EOL, $html);
     }

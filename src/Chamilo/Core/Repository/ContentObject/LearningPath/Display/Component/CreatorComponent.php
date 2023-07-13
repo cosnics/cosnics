@@ -6,6 +6,7 @@ use Chamilo\Core\Repository\Integration\Chamilo\Core\Tracking\Storage\DataClass\
 use Chamilo\Core\Repository\Manager;
 use Chamilo\Core\Repository\Storage\DataClass\ContentObject;
 use Chamilo\Core\Repository\Storage\DataManager;
+use Chamilo\Core\Repository\Viewer\Architecture\Traits\ViewerTrait;
 use Chamilo\Core\Repository\Viewer\ViewerInterface;
 use Chamilo\Core\Tracking\Storage\DataClass\Event;
 use Chamilo\Libraries\Architecture\Application\ApplicationConfiguration;
@@ -21,13 +22,15 @@ use Exception;
  * Component that allows the user to add content to the learning_path
  *
  * @package repository\content_object\learning_path\display
- * @author Hans De Bisschop <hans.de.bisschop@ehb.be>
+ * @author  Hans De Bisschop <hans.de.bisschop@ehb.be>
  */
 class CreatorComponent extends BaseHtmlTreeComponent implements ViewerInterface, DelegateComponent
 {
-    const CREATE_MODE_FOLDER = 'Folder';
+    use ViewerTrait;
 
-    const PARAM_CREATE_MODE = 'CreateMode';
+    public const CREATE_MODE_FOLDER = 'Folder';
+
+    public const PARAM_CREATE_MODE = 'CreateMode';
 
     /**
      * Executes this component
@@ -52,7 +55,7 @@ class CreatorComponent extends BaseHtmlTreeComponent implements ViewerInterface,
 
         BreadcrumbTrail::getInstance()->add(new Breadcrumb($this->get_url(), Translation::get($variable)));
 
-        if (!\Chamilo\Core\Repository\Viewer\Manager::is_ready_to_be_published())
+        if (!$this->isAnyObjectSelectedInViewer())
         {
             $exclude = $this->determine_excluded_content_object_ids();
 
@@ -67,10 +70,11 @@ class CreatorComponent extends BaseHtmlTreeComponent implements ViewerInterface,
         }
         else
         {
-            $object_ids = \Chamilo\Core\Repository\Viewer\Manager::get_selected_objects();
+            $object_ids = $this->getObjectsSelectedInviewer();
+
             if (!is_array($object_ids))
             {
-                $object_ids = array($object_ids);
+                $object_ids = [$object_ids];
             }
 
             $failures = 0;
@@ -95,14 +99,14 @@ class CreatorComponent extends BaseHtmlTreeComponent implements ViewerInterface,
                     $nextStep = $treeNodeData->getId();
 
                     Event::trigger(
-                        'Activity', Manager::CONTEXT, array(
+                        'Activity', Manager::CONTEXT, [
                             Activity::PROPERTY_TYPE => Activity::ACTIVITY_ADD_ITEM,
                             Activity::PROPERTY_USER_ID => $this->get_user_id(),
                             Activity::PROPERTY_DATE => time(),
                             Activity::PROPERTY_CONTENT_OBJECT_ID => $this->getCurrentContentObject()->getId(),
                             Activity::PROPERTY_CONTENT => $this->getCurrentContentObject()->get_title() . ' > ' .
                                 $object->get_title()
-                        )
+                        ]
                     );
                 }
                 catch (Exception $ex)
@@ -141,10 +145,10 @@ class CreatorComponent extends BaseHtmlTreeComponent implements ViewerInterface,
 
             $this->redirectWithMessage(
                 Translation::get(
-                    $message, array('OBJECT' => Translation::get('Item'), 'OBJECTS' => Translation::get('Items')),
+                    $message, ['OBJECT' => Translation::get('Item'), 'OBJECTS' => Translation::get('Items')],
                     StringUtilities::LIBRARIES
                 ), (bool) $failures,
-                array(self::PARAM_ACTION => self::ACTION_VIEW_COMPLEX_CONTENT_OBJECT, self::PARAM_CHILD_ID => $nextStep)
+                [self::PARAM_ACTION => self::ACTION_VIEW_COMPLEX_CONTENT_OBJECT, self::PARAM_CHILD_ID => $nextStep]
             );
         }
     }
@@ -167,21 +171,19 @@ class CreatorComponent extends BaseHtmlTreeComponent implements ViewerInterface,
     }
 
     /**
-     *
      * @return array
      */
     public function get_allowed_content_object_types()
     {
         if ($this->isFolderCreateMode())
         {
-            return array(Section::class);
+            return [Section::class];
         }
 
         return $this->learningPath->get_allowed_types();
     }
 
     /**
-     *
      * @return bool
      */
     public function isFolderCreateMode()
@@ -190,7 +192,6 @@ class CreatorComponent extends BaseHtmlTreeComponent implements ViewerInterface,
     }
 
     /**
-     *
      * @return string
      */
     public function render_header(string $pageTitle = ''): string

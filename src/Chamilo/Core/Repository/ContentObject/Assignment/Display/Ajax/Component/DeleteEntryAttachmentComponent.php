@@ -26,7 +26,7 @@ class DeleteEntryAttachmentComponent extends Manager
                 throw new NotAllowedException();
             }
 
-            $entryAttachmentId = $this->getRequest()->getFromRequest(self::PARAM_ENTRY_ATTACHMENT_ID);
+            $entryAttachmentId = $this->getRequest()->request->get(self::PARAM_ENTRY_ATTACHMENT_ID);
             $entryAttachment = $this->getDataProvider()->findEntryAttachmentById($entryAttachmentId);
             if (!$entryAttachment instanceof EntryAttachment)
             {

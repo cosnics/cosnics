@@ -3,14 +3,12 @@ namespace Chamilo\Core\Repository\ContentObject\AssessmentMatrixQuestion\Ajax\Co
 
 use Chamilo\Core\Repository\ContentObject\AssessmentMatrixQuestion\Ajax\Manager;
 use Chamilo\Libraries\Architecture\JsonAjaxResult;
-use Chamilo\Libraries\Platform\Session\Request;
 
 /**
- *
  * @package Chamilo\Core\Repository\ContentObject\AssessmentMatrixQuestion\Ajax\Component
- * @author Hans De Bisschop <hans.de.bisschop@ehb.be>
- * @author Magali Gillard <magali.gillard@ehb.be>
- * @author Eduard Vossen <eduard.vossen@ehb.be>
+ * @author  Hans De Bisschop <hans.de.bisschop@ehb.be>
+ * @author  Magali Gillard <magali.gillard@ehb.be>
+ * @author  Eduard Vossen <eduard.vossen@ehb.be>
  */
 class AssessmentMatrixQuestionComponent extends Manager
 {
@@ -19,7 +17,7 @@ class AssessmentMatrixQuestionComponent extends Manager
     {
         $value = $this->getRequest()->request->get('value');
         $action = $this->getRequest()->request->get('action');
-        
+
         switch ($action)
         {
             case 'skip_option' :
@@ -29,7 +27,7 @@ class AssessmentMatrixQuestionComponent extends Manager
                 $_SESSION['mq_skip_matches'][] = $value;
                 break;
         }
-        
+
         JsonAjaxResult::success();
     }
 }

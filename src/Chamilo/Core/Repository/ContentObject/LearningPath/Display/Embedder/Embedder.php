@@ -10,7 +10,6 @@ use Chamilo\Libraries\Architecture\Application\Application;
 use Chamilo\Libraries\DependencyInjection\DependencyInjectionContainerBuilder;
 use Chamilo\Libraries\File\WebPathBuilder;
 use Chamilo\Libraries\Format\Utilities\ResourceManager;
-use Chamilo\Libraries\Platform\Session\Request;
 
 /**
  * @package core\repository\content_object\learning_path\display
@@ -112,14 +111,6 @@ abstract class Embedder
     public function get_application()
     {
         return $this->application;
-    }
-
-    /**
-     * @return int
-     */
-    public static function get_embedded_content_object_id()
-    {
-        return Request::get(self::PARAM_EMBEDDED_CONTENT_OBJECT_ID);
     }
 
     /**

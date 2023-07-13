@@ -15,7 +15,6 @@ use Chamilo\Libraries\Format\Structure\Breadcrumb;
 use Chamilo\Libraries\Format\Structure\BreadcrumbTrail;
 use Chamilo\Libraries\Format\Structure\Page;
 use Chamilo\Libraries\Format\Structure\PageConfiguration;
-use Chamilo\Libraries\Platform\Session\Request;
 use Chamilo\Libraries\Storage\Parameters\DataClassRetrieveParameters;
 use Chamilo\Libraries\Storage\Parameters\DataClassRetrievesParameters;
 use Chamilo\Libraries\Storage\Query\Condition\AndCondition;
@@ -173,7 +172,7 @@ class AttemptResultViewerComponent extends Manager
      */
     public function can_change_answer_data()
     {
-        if ($this->getRequest()->query->get(self::PARAM_SHOW_FULL))
+        if ($this->getRequest()->query->has(self::PARAM_SHOW_FULL))
         {
             return $this->assessment_attempt->get_status() == AssessmentAttempt::STATUS_COMPLETED &&
                 $this->is_allowed(WeblcmsRights::EDIT_RIGHT);

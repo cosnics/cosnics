@@ -3,7 +3,6 @@ namespace Chamilo\Core\Reporting\Viewer;
 
 use Chamilo\Core\Reporting\ReportingTemplate;
 use Chamilo\Libraries\Architecture\Application\Application;
-use Chamilo\Libraries\Platform\Session\Request;
 
 /**
  * @author  Hans De Bisschop & Magali Gillard

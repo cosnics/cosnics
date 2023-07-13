@@ -12,7 +12,6 @@ use Chamilo\Libraries\Architecture\Exceptions\NoObjectSelectedException;
 use Chamilo\Libraries\Architecture\Exceptions\ObjectNotExistException;
 use Chamilo\Libraries\Format\Structure\BreadcrumbGeneratorInterface;
 use Chamilo\Libraries\Format\Structure\BreadcrumbTrail;
-use Chamilo\Libraries\Platform\Session\Request;
 use Chamilo\Libraries\Storage\Parameters\DataClassCountParameters;
 use Chamilo\Libraries\Storage\Parameters\DataClassRetrieveParameters;
 use Chamilo\Libraries\Storage\Parameters\DataClassRetrievesParameters;
@@ -104,6 +103,11 @@ abstract class Manager extends Application
         $parameters = new DataClassCountParameters($condition);
 
         return DataManager::count(Group::class, $parameters);
+    }
+
+    protected function getGroupMembershipService(): GroupMembershipService
+    {
+        return $this->getService(GroupMembershipService::class);
     }
 
     public function get_breadcrumb_generator(): BreadcrumbGeneratorInterface
@@ -291,10 +295,5 @@ abstract class Manager extends Application
         return DataManager::retrieves(
             Group::class, new DataClassRetrievesParameters($condition, $count, $offset, $order_property)
         );
-    }
-
-    protected function getGroupMembershipService(): GroupMembershipService
-    {
-        return $this->getService(GroupMembershipService::class);
     }
 }

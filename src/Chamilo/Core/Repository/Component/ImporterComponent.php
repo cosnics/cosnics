@@ -25,7 +25,7 @@ class ImporterComponent extends Manager
             throw new NotAllowedException();
         }
 
-        $type = $this->getRequest()->getFromQuery(self::PARAM_IMPORT_TYPE, 'cpo');
+        $type = $this->getRequest()->query->get(self::PARAM_IMPORT_TYPE, 'cpo');
         $contentObjectImportService = new ContentObjectImportService($type, $this->getWorkspace(), $this);
 
         if ($contentObjectImportService->hasFinished())

@@ -27,7 +27,6 @@
         "doctrine/collections": "1.8.*",
         "doctrine/dbal": "3.6.*",
         "doctrine/orm": "2.11.*",
-        "adodb/adodb-php": "5.*",
         "google/apiclient": "1.*",
         "guzzlehttp/guzzle": "7.*",
         "monolog/monolog": "2.*",

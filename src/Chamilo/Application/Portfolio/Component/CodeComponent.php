@@ -3,7 +3,6 @@ namespace Chamilo\Application\Portfolio\Component;
 
 use Chamilo\Application\Portfolio\Manager;
 use Chamilo\Core\User\Storage\DataClass\User;
-use Chamilo\Libraries\Platform\Session\Request;
 use Chamilo\Libraries\Translation\Translation;
 use Exception;
 use Symfony\Component\HttpFoundation\RedirectResponse;

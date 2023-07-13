@@ -10,7 +10,7 @@ use Chamilo\Libraries\Architecture\ClassnameUtilities;
 use Chamilo\Libraries\DependencyInjection\DependencyInjectionContainerBuilder;
 use Chamilo\Libraries\Format\Menu\TreeMenu\GenericTree;
 use Chamilo\Libraries\Format\Structure\Glyph\FontAwesomeGlyph;
-use Chamilo\Libraries\Platform\Session\Request;
+use Chamilo\Libraries\Platform\ChamiloRequest;
 use Chamilo\Libraries\Storage\Parameters\DataClassCountParameters;
 use Chamilo\Libraries\Storage\Parameters\DataClassRetrievesParameters;
 use Chamilo\Libraries\Storage\Query\Condition\AndCondition;
@@ -51,14 +51,9 @@ class PublicationCategoriesTree extends GenericTree
         parent::__construct();
     }
 
-    public function getUrlGenerator(): UrlGenerator
-    {
-        return DependencyInjectionContainerBuilder::getInstance()->createContainer()->get(UrlGenerator::class);
-    }
-
     public function get_current_node_id()
     {
-        return intval(Request::get(Manager::PARAM_CATEGORY));
+        return intval($this->getRequest()->query->get(Manager::PARAM_CATEGORY));
     }
 
     public function get_node($node_id)
@@ -198,16 +193,16 @@ class PublicationCategoriesTree extends GenericTree
     public function get_url_format()
     {
         $course_id = $this->browser->get_parent()->get_course_id();
-        $tool = Request::get(Manager::PARAM_TOOL);
+        $tool = $this->getRequest()->query->get(Manager::PARAM_TOOL);
 
         $url_format = '?application=weblcms&course=' . $course_id . '&go=course_viewer&tool=' . $tool;
 
-        $tool_action = Request::get(Manager::PARAM_TOOL_ACTION);
+        $tool_action = $this->getRequest()->query->get(Manager::PARAM_TOOL_ACTION);
         if (!is_null($tool_action))
         {
             $url_format .= '&tool_action=' . $tool_action;
         }
-        $browser_type = Request::get(\Chamilo\Application\Weblcms\Tool\Manager::PARAM_BROWSER_TYPE);
+        $browser_type = $this->getRequest()->query->get(\Chamilo\Application\Weblcms\Tool\Manager::PARAM_BROWSER_TYPE);
         if (!is_null($browser_type))
         {
             $url_format .= '&browser=' . $browser_type;

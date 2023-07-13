@@ -8,7 +8,6 @@ use Chamilo\Libraries\Architecture\JsonAjaxResult;
 use Chamilo\Libraries\Format\Form\Element\AdvancedElementFinder\AdvancedElementFinderElement;
 use Chamilo\Libraries\Format\Form\Element\AdvancedElementFinder\AdvancedElementFinderElements;
 use Chamilo\Libraries\Format\Structure\Glyph\FontAwesomeGlyph;
-use Chamilo\Libraries\Platform\Session\Request;
 use Chamilo\Libraries\Storage\Parameters\DataClassCountParameters;
 use Chamilo\Libraries\Storage\Parameters\DataClassRetrievesParameters;
 use Chamilo\Libraries\Storage\Query\Condition\AndCondition;
@@ -24,8 +23,8 @@ use Chamilo\Libraries\Translation\Translation;
  * Feed to return users
  *
  * @package Chamilo\Core\User\Ajax
- * @author Sven Vanpoucke
- * @author Hans De Bisschop <hans.de.bisschop@ehb.be>
+ * @author  Sven Vanpoucke
+ * @author  Hans De Bisschop <hans.de.bisschop@ehb.be>
  */
 class UsersFeedComponent extends Manager
 {
@@ -38,7 +37,6 @@ class UsersFeedComponent extends Manager
     public const PROPERTY_TOTAL_ELEMENTS = 'total_elements';
 
     /**
-     *
      * @var int
      */
     private $userCount = 0;
@@ -57,7 +55,6 @@ class UsersFeedComponent extends Manager
     }
 
     /**
-     *
      * @return \Chamilo\Libraries\Storage\Query\Condition\AndCondition
      */
     protected function getCondition()
@@ -70,12 +67,12 @@ class UsersFeedComponent extends Manager
         if ($searchQuery && $searchQuery != '')
         {
             $conditions[] = $this->getSearchQueryConditionGenerator()->getSearchConditions(
-                $searchQuery, array(
+                $searchQuery, [
                     new PropertyConditionVariable(User::class, User::PROPERTY_USERNAME),
                     new PropertyConditionVariable(User::class, User::PROPERTY_FIRSTNAME),
                     new PropertyConditionVariable(User::class, User::PROPERTY_LASTNAME),
                     new PropertyConditionVariable(User::class, User::PROPERTY_OFFICIAL_CODE)
-                )
+                ]
             );
         }
 
@@ -170,10 +167,10 @@ class UsersFeedComponent extends Manager
         $this->userCount = DataManager::count(User::class, new DataClassCountParameters($condition));
 
         $parameters = new DataClassRetrievesParameters(
-            $condition, 100, $this->getOffset(), new OrderBy(array(
+            $condition, 100, $this->getOffset(), new OrderBy([
                 new OrderProperty(new PropertyConditionVariable(User::class, User::PROPERTY_LASTNAME)),
                 new OrderProperty(new PropertyConditionVariable(User::class, User::PROPERTY_FIRSTNAME)),
-            ))
+            ])
         );
 
         return DataManager::retrieves(User::class, $parameters);

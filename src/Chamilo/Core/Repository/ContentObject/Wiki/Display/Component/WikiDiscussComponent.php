@@ -11,7 +11,6 @@ use Chamilo\Core\Repository\Storage\DataClass\ComplexContentObjectItem;
 use Chamilo\Libraries\Architecture\Application\ApplicationConfiguration;
 use Chamilo\Libraries\Architecture\Interfaces\DelegateComponent;
 use Chamilo\Libraries\Format\Structure\BreadcrumbTrail;
-use Chamilo\Libraries\Platform\Session\Request;
 use Chamilo\Libraries\Storage\Parameters\DataClassCountParameters;
 use Chamilo\Libraries\Storage\Parameters\DataClassRetrievesParameters;
 use Chamilo\Libraries\Storage\Query\Condition\EqualityCondition;
@@ -23,14 +22,13 @@ use MediawikiParserContext;
 
 /**
  * @package Chamilo\Core\Repository\ContentObject\Wiki\Display\Component
- *
- * @author Hans De Bisschop <hans.de.bisschop@ehb.be>
+ * @author  Hans De Bisschop <hans.de.bisschop@ehb.be>
  */
 class WikiDiscussComponent extends Manager implements DelegateComponent, FeedbackSupport
 {
-    const DESCRIPTION_MARKER = '<!-- /description -->';
+    public const DESCRIPTION_MARKER = '<!-- /description -->';
 
-    const TITLE_MARKER = '<!-- /title -->';
+    public const TITLE_MARKER = '<!-- /title -->';
 
     /**
      * The Wiki Page Wrapper
@@ -77,7 +75,6 @@ class WikiDiscussComponent extends Manager implements DelegateComponent, Feedbac
     }
 
     /**
-     *
      * @see \core\repository\feedback\FeedbackSupport::count_feedbacks()
      */
     public function count_feedbacks()
@@ -101,7 +98,6 @@ class WikiDiscussComponent extends Manager implements DelegateComponent, Feedbac
     }
 
     /**
-     *
      * @see \core\repository\feedback\FeedbackSupport::get_feedback()
      */
     public function get_feedback()
@@ -113,7 +109,6 @@ class WikiDiscussComponent extends Manager implements DelegateComponent, Feedbac
     }
 
     /**
-     *
      * @see \core\repository\feedback\FeedbackSupport::is_allowed_to_create_feedback()
      */
     public function is_allowed_to_create_feedback()
@@ -122,7 +117,6 @@ class WikiDiscussComponent extends Manager implements DelegateComponent, Feedbac
     }
 
     /**
-     *
      * @see \core\repository\feedback\FeedbackSupport::is_allowed_to_delete_feedback()
      */
     public function is_allowed_to_delete_feedback($feedback)
@@ -131,7 +125,6 @@ class WikiDiscussComponent extends Manager implements DelegateComponent, Feedbac
     }
 
     /**
-     *
      * @see \core\repository\feedback\FeedbackSupport::is_allowed_to_update_feedback()
      */
     public function is_allowed_to_update_feedback($feedback)
@@ -140,7 +133,6 @@ class WikiDiscussComponent extends Manager implements DelegateComponent, Feedbac
     }
 
     /**
-     *
      * @see \core\repository\feedback\FeedbackSupport::is_allowed_to_view_feedback()
      */
     public function is_allowed_to_view_feedback()
@@ -149,7 +141,6 @@ class WikiDiscussComponent extends Manager implements DelegateComponent, Feedbac
     }
 
     /**
-     *
      * @return string
      * @throws \Chamilo\Libraries\Architecture\Exceptions\ObjectNotExistException
      */

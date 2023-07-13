@@ -9,8 +9,6 @@ use Chamilo\Libraries\Format\Structure\ActionBar\Button;
 use Chamilo\Libraries\Format\Structure\ActionBar\SubButton;
 use Chamilo\Libraries\Format\Structure\ActionBar\SubButtonDivider;
 use Chamilo\Libraries\Format\Structure\ActionBar\SubButtonHeader;
-use Chamilo\Libraries\Format\Structure\BreadcrumbTrail;
-use Chamilo\Libraries\Platform\Session\Request;
 use Chamilo\Libraries\Storage\Query\Condition\ComparisonCondition;
 use Chamilo\Libraries\Storage\Query\OrderBy;
 use Chamilo\Libraries\Storage\Query\OrderProperty;
@@ -21,14 +19,13 @@ use Chamilo\Libraries\Utilities\StringUtilities;
 
 class BrowserComponent extends Manager
 {
-    const FILTER_THIS_MONTH = 'month';
+    public const FILTER_THIS_MONTH = 'month';
 
-    const FILTER_THIS_WEEK = 'week';
+    public const FILTER_THIS_WEEK = 'week';
 
-    const FILTER_TODAY = 'today';
+    public const FILTER_TODAY = 'today';
 
-    const PARAM_FILTER = 'filter';
-
+    public const PARAM_FILTER = 'filter';
 
     public function convert_content_object_publication_to_calendar_event($publication, $from_time, $to_time)
     {
@@ -80,34 +77,34 @@ class BrowserComponent extends Manager
 
         $showActions[] = new SubButton(
             Translation::get('PeriodAll', null, StringUtilities::LIBRARIES), null,
-            $this->get_url(array(\Chamilo\Application\Weblcms\Tool\Manager::PARAM_ACTION => null)),
-            Button::DISPLAY_LABEL, null, [], null, $filter == ''
+            $this->get_url([\Chamilo\Application\Weblcms\Tool\Manager::PARAM_ACTION => null]), Button::DISPLAY_LABEL,
+            null, [], null, $filter == ''
         );
 
         $showActions[] = new SubButton(
             Translation::get('PeriodToday', null, StringUtilities::LIBRARIES), null, $this->get_url(
-            array(
+            [
                 \Chamilo\Application\Weblcms\Tool\Manager::PARAM_ACTION => null,
                 self::PARAM_FILTER => self::FILTER_TODAY
-            )
+            ]
         ), Button::DISPLAY_LABEL, null, [], null, $filter == self::FILTER_TODAY
         );
 
         $showActions[] = new SubButton(
             Translation::get('PeriodWeek', null, StringUtilities::LIBRARIES), null, $this->get_url(
-            array(
+            [
                 \Chamilo\Application\Weblcms\Tool\Manager::PARAM_ACTION => null,
                 self::PARAM_FILTER => self::FILTER_THIS_WEEK
-            )
+            ]
         ), Button::DISPLAY_LABEL, null, [], null, $filter == self::FILTER_THIS_WEEK
         );
 
         $showActions[] = new SubButton(
             Translation::get('PeriodMonth', null, StringUtilities::LIBRARIES), null, $this->get_url(
-            array(
+            [
                 \Chamilo\Application\Weblcms\Tool\Manager::PARAM_ACTION => null,
                 self::PARAM_FILTER => self::FILTER_THIS_MONTH
-            )
+            ]
         ), Button::DISPLAY_LABEL, null, [], null, $filter == self::FILTER_THIS_MONTH
         );
 

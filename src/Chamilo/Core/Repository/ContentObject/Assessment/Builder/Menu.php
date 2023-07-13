@@ -17,7 +17,7 @@ use Chamilo\Libraries\Format\Menu\TreeMenuRenderer;
 use Chamilo\Libraries\Format\Structure\Breadcrumb;
 use Chamilo\Libraries\Format\Structure\BreadcrumbTrail;
 use Chamilo\Libraries\Format\Structure\Glyph\NamespaceIdentGlyph;
-use Chamilo\Libraries\Platform\Session\Request;
+use Chamilo\Libraries\Platform\ChamiloRequest;
 use Chamilo\Libraries\Storage\Parameters\DataClassRetrievesParameters;
 use Chamilo\Libraries\Storage\Query\Condition\EqualityCondition;
 use Chamilo\Libraries\Storage\Query\Variable\PropertyConditionVariable;
@@ -79,11 +79,16 @@ class Menu extends HtmlMenu
         $this->view_entire_structure = $view_entire_structure;
         $extra = ['publish'];
 
+        /**
+         * @var \Chamilo\Libraries\Platform\ChamiloRequest $request
+         */
+        $request = DependencyInjectionContainerBuilder::getInstance()->createContainer()->get(ChamiloRequest::class);
+
         foreach ($extra as $item)
         {
-            if (Request::get($item))
+            if ($request->query->has($item))
             {
-                $url_format .= '&' . $item . '=' . Request::get($item);
+                $url_format .= '&' . $item . '=' . $request->query->get($item);
             }
         }
 

@@ -51,7 +51,7 @@ abstract class Authentication implements AuthenticationInterface
      */
     protected function getUserFromCredentialsRequest(): ?User
     {
-        $username = $this->request->getFromRequest(self::PARAM_LOGIN);
+        $username = $this->getRequest()->request->get(self::PARAM_LOGIN);
 
         if (empty($username))
         {

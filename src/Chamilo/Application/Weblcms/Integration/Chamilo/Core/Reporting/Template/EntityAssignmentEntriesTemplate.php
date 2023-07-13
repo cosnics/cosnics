@@ -1,33 +1,25 @@
 <?php
 namespace Chamilo\Application\Weblcms\Integration\Chamilo\Core\Reporting\Template;
 
+use Chamilo\Application\Weblcms\Bridge\Assignment\Storage\DataClass\Entry;
 use Chamilo\Application\Weblcms\Integration\Chamilo\Core\Reporting\Block\Assignment\AssignmentEntityInformationBlock;
 use Chamilo\Application\Weblcms\Integration\Chamilo\Core\Reporting\Block\Assignment\AssignmentEntriesBlock;
-use Chamilo\Application\Weblcms\Bridge\Assignment\Storage\DataClass\Entry;
 use Chamilo\Application\Weblcms\Storage\DataClass\ContentObjectPublication;
 use Chamilo\Application\Weblcms\Storage\DataManager;
-use Chamilo\Core\Group\Storage\DataClass\Group;
 use Chamilo\Core\Reporting\ReportingTemplate;
 use Chamilo\Core\Repository\ContentObject\Assignment\Display\Manager;
 use Chamilo\Libraries\Format\Structure\Breadcrumb;
 use Chamilo\Libraries\Format\Structure\BreadcrumbTrail;
-use Chamilo\Libraries\Platform\Session\Request;
 use Chamilo\Libraries\Translation\Translation;
 
 /**
- *
  * @package application.weblcms.php.reporting.templates Reporting template with an overview of the assignment
  *          submissions from a user/group
- * @author Joris Willems <joris.willems@gmail.com>
- * @author Alexander Van Paemel
+ * @author  Joris Willems <joris.willems@gmail.com>
+ * @author  Alexander Van Paemel
  */
 class EntityAssignmentEntriesTemplate extends ReportingTemplate
 {
-    /**
-     * @var int
-     */
-    protected $publicationId;
-
     /**
      * @var int
      */
@@ -37,6 +29,11 @@ class EntityAssignmentEntriesTemplate extends ReportingTemplate
      * @var int
      */
     protected $entityType;
+
+    /**
+     * @var int
+     */
+    protected $publicationId;
 
     public function __construct($parent)
     {
@@ -48,13 +45,11 @@ class EntityAssignmentEntriesTemplate extends ReportingTemplate
 
         /** @var \Chamilo\Core\Repository\ContentObject\Assignment\Storage\DataClass\Assignment $assignment */
         $assignment = DataManager::retrieve_by_id(
-            ContentObjectPublication::class,
-            $this->publicationId
+            ContentObjectPublication::class, $this->publicationId
         )->get_content_object();
 
         $params = [];
-        $params[\Chamilo\Application\Weblcms\Manager::PARAM_TEMPLATE_ID] =
-            CourseStudentTrackerTemplate::class;
+        $params[\Chamilo\Application\Weblcms\Manager::PARAM_TEMPLATE_ID] = CourseStudentTrackerTemplate::class;
         $params[\Chamilo\Core\Reporting\Viewer\Manager::PARAM_BLOCK_ID] = 1;
 
         $breadcrumbTrail = BreadcrumbTrail::getInstance();
@@ -88,16 +83,16 @@ class EntityAssignmentEntriesTemplate extends ReportingTemplate
         $this->addCurrentBlockBreadcrumb();
     }
 
-    private function init_parameters()
+    /**
+     * Retrieves the target id from the url.
+     *
+     * @return int the target id.
+     */
+    public function getEntityId()
     {
-        $this->publicationId = $this->getRequest()->query->get(\Chamilo\Application\Weblcms\Manager::PARAM_PUBLICATION);
-        if ($this->publicationId)
-        {
-            $this->set_parameter(\Chamilo\Application\Weblcms\Manager::PARAM_PUBLICATION, $this->publicationId);
-        }
-
-        $this->entityId = $this->getEntityId();
-        $this->entityType = $this->getEntityType();
+        return $this->getRequest()->query->get(
+            Manager::PARAM_ENTITY_ID
+        );
     }
 
     /**
@@ -117,22 +112,21 @@ class EntityAssignmentEntriesTemplate extends ReportingTemplate
      */
     public function getEntityType()
     {
-        return $this->getRequest()->getFromQuery(
-            Manager::PARAM_ENTITY_TYPE,
-            Entry::ENTITY_TYPE_USER
+        return $this->getRequest()->query->get(
+            Manager::PARAM_ENTITY_TYPE, Entry::ENTITY_TYPE_USER
         );
     }
 
-    /**
-     * Retrieves the target id from the url.
-     *
-     * @return int the target id.
-     */
-    public function getEntityId()
+    private function init_parameters()
     {
-        return $this->getRequest()->getFromQuery(
-            Manager::PARAM_ENTITY_ID
-        );
+        $this->publicationId = $this->getRequest()->query->get(\Chamilo\Application\Weblcms\Manager::PARAM_PUBLICATION);
+        if ($this->publicationId)
+        {
+            $this->set_parameter(\Chamilo\Application\Weblcms\Manager::PARAM_PUBLICATION, $this->publicationId);
+        }
+
+        $this->entityId = $this->getEntityId();
+        $this->entityType = $this->getEntityType();
     }
 
     protected function registerParameters()

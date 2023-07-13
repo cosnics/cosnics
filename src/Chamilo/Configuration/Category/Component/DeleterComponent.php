@@ -6,16 +6,15 @@ use Chamilo\Configuration\Category\Storage\DataClass\PlatformCategory;
 use Chamilo\Libraries\Architecture\Exceptions\NotAllowedException;
 use Chamilo\Libraries\Format\Structure\Breadcrumb;
 use Chamilo\Libraries\Format\Structure\BreadcrumbTrail;
-use Chamilo\Libraries\Platform\Session\Request;
-use Chamilo\Libraries\Translation\Translation;
 use Chamilo\Libraries\Storage\Query\Condition\EqualityCondition;
 use Chamilo\Libraries\Storage\Query\Variable\PropertyConditionVariable;
 use Chamilo\Libraries\Storage\Query\Variable\StaticConditionVariable;
+use Chamilo\Libraries\Translation\Translation;
 
 /**
- *
  * @package application.common.category_manager.component
  */
+
 /**
  * Component to delete a category
  *
@@ -37,16 +36,16 @@ class DeleterComponent extends Manager
     {
         $ids = $this->getRequest()->getFromRequestOrQuery(self::PARAM_CATEGORY_ID);
 
-        if (! $this->get_user())
+        if (!$this->get_user())
         {
             throw new NotAllowedException();
         }
 
         if ($ids)
         {
-            if (! is_array($ids))
+            if (!is_array($ids))
             {
-                $ids = array($ids);
+                $ids = [$ids];
             }
 
             $bool = true;
@@ -69,25 +68,28 @@ class DeleterComponent extends Manager
             }
 
             $this->redirectWithMessage(
-                Translation::get($message), !$bool,
-                array(
+                Translation::get($message), !$bool, [
                     self::PARAM_ACTION => self::ACTION_BROWSE_CATEGORIES,
-                    self::PARAM_CATEGORY_ID => $this->redirect_to_parent));
+                    self::PARAM_CATEGORY_ID => $this->redirect_to_parent
+                ]
+            );
         }
         else
         {
             $trail = BreadcrumbTrail::getInstance();
             $trail->add(
                 new Breadcrumb(
-                    $this->get_url(array(self::PARAM_ACTION => self::ACTION_BROWSE_CATEGORIES)),
-                    Translation::get('BrowserComponent')));
+                    $this->get_url([self::PARAM_ACTION => self::ACTION_BROWSE_CATEGORIES]),
+                    Translation::get('BrowserComponent')
+                )
+            );
             $this->set_parameter(self::PARAM_CATEGORY_ID, $this->getRequest()->query->get(self::PARAM_CATEGORY_ID));
             $trail->add(new Breadcrumb($this->get_url(), Translation::get('DeleterComponent')));
 
             $html = [];
 
             $html[] = $this->render_header();
-            $html[] = Translation::get("NoObjectSelected");
+            $html[] = Translation::get('NoObjectSelected');
             $html[] = $this->render_footer();
 
             return implode(PHP_EOL, $html);
@@ -102,7 +104,9 @@ class DeleterComponent extends Manager
         $children = $this->get_parent()->retrieve_categories(
             new EqualityCondition(
                 new PropertyConditionVariable($category_class_name, PlatformCategory::PROPERTY_PARENT),
-                new StaticConditionVariable($id)));
+                new StaticConditionVariable($id)
+            )
+        );
         foreach ($children as $child)
         {
             $continue = $this->delete_categories_recursive($child);
@@ -115,10 +119,12 @@ class DeleterComponent extends Manager
                 $categories = $this->get_parent()->retrieve_categories(
                     new EqualityCondition(
                         new PropertyConditionVariable($category_class_name, PlatformCategory::PROPERTY_ID),
-                        new StaticConditionVariable($id)));
+                        new StaticConditionVariable($id)
+                    )
+                );
                 $category = $categories->current();
 
-                if (! $category instanceof PlatformCategory)
+                if (!$category instanceof PlatformCategory)
                 {
                     return false;
                 }

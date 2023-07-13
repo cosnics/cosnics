@@ -10,6 +10,7 @@ use Chamilo\Core\Repository\Filter\FilterDataButtonSearchForm;
 use Chamilo\Core\Repository\Filter\Renderer\ConditionFilterRenderer;
 use Chamilo\Core\Repository\Manager;
 use Chamilo\Core\Repository\Selector\TypeSelector;
+use Chamilo\Core\Repository\Selector\TypeSelectorTrait;
 use Chamilo\Core\Repository\Service\TemplateRegistrationConsulter;
 use Chamilo\Core\Repository\Storage\DataClass\ContentObject;
 use Chamilo\Core\Repository\Storage\DataManager;
@@ -39,6 +40,7 @@ use Chamilo\Libraries\Utilities\StringUtilities;
  */
 class BrowserComponent extends Manager implements DelegateComponent
 {
+    use TypeSelectorTrait;
 
     private ButtonToolBarRenderer $buttonToolbarRenderer;
 
@@ -268,7 +270,7 @@ class BrowserComponent extends Manager implements DelegateComponent
 
     public function getFilterType(): ?int
     {
-        return TypeSelector::get_selection();
+        return $this->getSelectedTypes();
     }
 
     protected function getGalleryTableContentObjectRenderer(): GalleryTableContentObjectRenderer

@@ -12,7 +12,6 @@ use Chamilo\Libraries\Format\Menu\Library\Renderer\HtmlMenuArrayRenderer;
 use Chamilo\Libraries\Format\Menu\OptionsMenuRenderer;
 use Chamilo\Libraries\Format\Menu\TreeMenuRenderer;
 use Chamilo\Libraries\Format\Structure\Glyph\FontAwesomeGlyph;
-use Chamilo\Libraries\Platform\Session\Request;
 use Chamilo\Libraries\Storage\Parameters\DataClassRetrievesParameters;
 use Chamilo\Libraries\Storage\Query\Condition\AndCondition;
 use Chamilo\Libraries\Storage\Query\Condition\EqualityCondition;
@@ -111,6 +110,7 @@ class ContentObjectPublicationCategoryTree extends HtmlMenu
         {
             $category = $this->get_current_category_id();
         }
+
         $tool_cond = new EqualityCondition(
             new PropertyConditionVariable(
                 ContentObjectPublication::class, ContentObjectPublication::PROPERTY_TOOL
@@ -132,7 +132,7 @@ class ContentObjectPublicationCategoryTree extends HtmlMenu
      */
     public function get_current_category_id()
     {
-        return intval(Request::get(Manager::PARAM_CATEGORY));
+        return intval($this->getRequest()->query->get(Manager::PARAM_CATEGORY));
     }
 
     private function get_menu_items($extra_items = null)

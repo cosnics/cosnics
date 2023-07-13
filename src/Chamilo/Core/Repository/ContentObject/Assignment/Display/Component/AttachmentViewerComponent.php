@@ -12,15 +12,13 @@ use Chamilo\Libraries\Architecture\Exceptions\ParameterNotDefinedException;
 use Chamilo\Libraries\Format\Structure\Breadcrumb;
 use Chamilo\Libraries\Format\Structure\BreadcrumbTrail;
 use Chamilo\Libraries\Format\Structure\PageConfiguration;
-use Chamilo\Libraries\Platform\Session\Request;
 use Chamilo\Libraries\Translation\Translation;
 
 /**
- *
  * @package Chamilo\Core\Repository\ContentObject\Assignment\Display\Component
- * @author Hans De Bisschop <hans.de.bisschop@ehb.be>
- * @author Magali Gillard <magali.gillard@ehb.be>
- * @author Eduard Vossen <eduard.vossen@ehb.be>
+ * @author  Hans De Bisschop <hans.de.bisschop@ehb.be>
+ * @author  Magali Gillard <magali.gillard@ehb.be>
+ * @author  Eduard Vossen <eduard.vossen@ehb.be>
  */
 class AttachmentViewerComponent extends Manager
 {
@@ -55,7 +53,7 @@ class AttachmentViewerComponent extends Manager
         $trail = BreadcrumbTrail::getInstance();
         $trail->add(
             new Breadcrumb(
-                $this->get_url(array(\Chamilo\Core\Repository\Display\Manager::PARAM_ATTACHMENT_ID => $attachment_id)),
+                $this->get_url([\Chamilo\Core\Repository\Display\Manager::PARAM_ATTACHMENT_ID => $attachment_id]),
                 Translation::get('ViewAttachment')
             )
         );
@@ -72,12 +70,12 @@ class AttachmentViewerComponent extends Manager
 
         return implode(PHP_EOL, $html);
     }
-    
+
     public function render_footer(): string
     {
         return $this->getFooterRenderer()->render();
     }
-    
+
     public function render_header(string $pageTitle = ''): string
     {
         return $this->getHeaderRenderer()->render();

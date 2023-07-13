@@ -6,14 +6,11 @@ use Chamilo\Core\Repository\Storage\DataClass\ContentObject;
 use Chamilo\Core\Repository\Storage\DataManager;
 use Chamilo\Libraries\Architecture\Exceptions\UserException;
 use Chamilo\Libraries\Architecture\Interfaces\NoAuthenticationSupport;
-use Chamilo\Libraries\Format\Structure\BreadcrumbTrail;
-use Chamilo\Libraries\Platform\Session\Request;
 use Chamilo\Libraries\Translation\Translation;
 use Chamilo\Libraries\Utilities\StringUtilities;
 use Exception;
 
 /**
- *
  * @package repository.lib.repository_manager.component
  */
 class DocumentDownloaderComponent extends Manager implements NoAuthenticationSupport
@@ -27,23 +24,23 @@ class DocumentDownloaderComponent extends Manager implements NoAuthenticationSup
         $object_id = $this->getRequest()->query->get(self::PARAM_CONTENT_OBJECT_ID);
         $this->set_parameter(self::PARAM_CONTENT_OBJECT_ID, $object_id);
 
-        if (! $object_id)
+        if (!$object_id)
         {
             throw new Exception(
                 Translation::get(
-                    'NoObjectSelected',
-                    array('OBJECT' => Translation::get('ContentObject')),
-                    StringUtilities::LIBRARIES));
+                    'NoObjectSelected', ['OBJECT' => Translation::get('ContentObject')], StringUtilities::LIBRARIES
+                )
+            );
         }
 
         $object = DataManager::retrieve_by_id(ContentObject::class, $object_id);
-        $valid_types = array(
+        $valid_types = [
             'Chamilo\Core\Repository\ContentObject\File\Storage\DataClass\File',
             'Chamilo\Core\Repository\ContentObject\Webpage\Storage\DataClass\Webpage',
             'Chamilo\Core\Repository\ContentObject\ExternalCalendar\Storage\DataClass\ExternalCalendar'
-        );
+        ];
 
-        if (! $object || ! in_array($object->getType(), $valid_types))
+        if (!$object || !in_array($object->getType(), $valid_types))
         {
             throw new UserException(Translation::get('ContentObjectMustBeDocument'));
         }

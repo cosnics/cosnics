@@ -14,7 +14,7 @@ use Chamilo\Application\Weblcms\Storage\DataManager;
 use Chamilo\Configuration\Service\Consulter\LanguageConsulter;
 use Chamilo\Libraries\DependencyInjection\DependencyInjectionContainerBuilder;
 use Chamilo\Libraries\Format\Structure\Glyph\FontAwesomeGlyph;
-use Chamilo\Libraries\Platform\Session\Request;
+use Chamilo\Libraries\Platform\ChamiloRequest;
 use Chamilo\Libraries\Storage\DataClass\DataClass;
 use Chamilo\Libraries\Translation\Translation;
 use Exception;
@@ -437,12 +437,31 @@ class CourseTypeCourseListRenderer extends CourseListRenderer
 
     public function getLanguageConsulter(): LanguageConsulter
     {
-        return DependencyInjectionContainerBuilder::getInstance()->createContainer()->get(LanguageConsulter::class);
+        return $this->getService(LanguageConsulter::class);
+    }
+
+    public function getRequest(): ChamiloRequest
+    {
+        return $this->getService(ChamiloRequest::class);
+    }
+
+    /**
+     * @template getService
+     *
+     * @param class-string<getService> $serviceName
+     *
+     * @return getService
+     */
+    protected function getService(string $serviceName)
+    {
+        return DependencyInjectionContainerBuilder::getInstance()->createContainer()->get(
+            $serviceName
+        );
     }
 
     public function getSession(): SessionInterface
     {
-        return DependencyInjectionContainerBuilder::getInstance()->createContainer()->get(SessionInterface::class);
+        return $this->getService(SessionInterface::class);
     }
 
     /**
@@ -602,7 +621,7 @@ class CourseTypeCourseListRenderer extends CourseListRenderer
      */
     protected function get_selected_course_type_parameter_value()
     {
-        $selected_course_type = Request::get(self::PARAM_SELECTED_COURSE_TYPE);
+        $selected_course_type = $this->getRequest()->query->get(self::PARAM_SELECTED_COURSE_TYPE);
 
         if (!isset($selected_course_type))
         {

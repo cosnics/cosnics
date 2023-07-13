@@ -5,6 +5,7 @@ use Chamilo\Application\Weblcms\Rights\WeblcmsRights;
 use Chamilo\Application\Weblcms\Storage\DataClass\ContentObjectPublication;
 use Chamilo\Application\Weblcms\Tool\Action\Manager;
 use Chamilo\Core\Repository\ContentObject\Introduction\Storage\DataClass\Introduction;
+use Chamilo\Core\Repository\Viewer\Architecture\Traits\ViewerTrait;
 use Chamilo\Core\Repository\Viewer\ViewerInterface;
 use Chamilo\Libraries\Architecture\Application\ApplicationConfiguration;
 use Chamilo\Libraries\Architecture\Exceptions\NotAllowedException;
@@ -17,6 +18,7 @@ use Chamilo\Libraries\Utilities\StringUtilities;
  */
 class IntroductionPublisherComponent extends Manager implements ViewerInterface, DelegateComponent
 {
+    use ViewerTrait;
 
     public function run()
     {
@@ -25,7 +27,7 @@ class IntroductionPublisherComponent extends Manager implements ViewerInterface,
             throw new NotAllowedException();
         }
 
-        if (!\Chamilo\Core\Repository\Viewer\Manager::is_ready_to_be_published())
+        if (!$this->isAnyObjectSelectedInViewer())
         {
             $applicationConfiguration = new ApplicationConfiguration($this->getRequest(), $this->get_user(), $this);
 
@@ -43,7 +45,8 @@ class IntroductionPublisherComponent extends Manager implements ViewerInterface,
         else
         {
             $pub = new ContentObjectPublication();
-            $pub->set_content_object_id(\Chamilo\Core\Repository\Viewer\Manager::get_selected_objects());
+
+            $pub->set_content_object_id($this->getObjectsSelectedInviewer());
             $pub->set_course_id($this->get_course_id());
             $pub->set_tool($this->get_tool_id());
             $pub->set_category_id(0);

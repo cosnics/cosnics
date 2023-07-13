@@ -5,16 +5,17 @@ use Chamilo\Core\Repository\Publication\Publisher\Interfaces\PublisherSupport;
 use Chamilo\Core\Repository\Publication\Publisher\Manager;
 use Chamilo\Core\Repository\Storage\DataClass\ContentObject;
 use Chamilo\Core\Repository\Storage\DataManager;
+use Chamilo\Core\Repository\Viewer\Architecture\Traits\ViewerTrait;
 use Chamilo\Core\Repository\Viewer\ViewerInterface;
 use Chamilo\Libraries\Architecture\Application\ApplicationConfiguration;
 use Chamilo\Libraries\Architecture\Interfaces\DelegateComponent;
 use Chamilo\Libraries\Format\Form\FormValidator;
 use Chamilo\Libraries\Format\Structure\WizardHeader\WizardHeader;
 use Chamilo\Libraries\Format\Structure\WizardHeader\WizardHeaderRenderer;
-use Chamilo\Libraries\Translation\Translation;
 use Chamilo\Libraries\Storage\Parameters\DataClassRetrievesParameters;
 use Chamilo\Libraries\Storage\Query\Condition\InCondition;
 use Chamilo\Libraries\Storage\Query\Variable\PropertyConditionVariable;
+use Chamilo\Libraries\Translation\Translation;
 use RuntimeException;
 
 /**
@@ -24,6 +25,7 @@ use RuntimeException;
  */
 class PublisherComponent extends Manager implements ViewerInterface, DelegateComponent
 {
+    use ViewerTrait;
 
     /**
      * Runs this component and displays its output.
@@ -38,7 +40,7 @@ class PublisherComponent extends Manager implements ViewerInterface, DelegateCom
             );
         }
 
-        if (!\Chamilo\Core\Repository\Viewer\Manager::any_object_selected())
+        if (!$this->isAnyObjectSelectedInViewer())
         {
             $applicationConfiguration = new ApplicationConfiguration($this->getRequest(), $this->get_user(), $this);
 
@@ -80,11 +82,11 @@ class PublisherComponent extends Manager implements ViewerInterface, DelegateCom
      */
     protected function getSelectedContentObjects()
     {
-        $selectedContentObjectIds = \Chamilo\Core\Repository\Viewer\Manager::get_selected_objects();
+        $selectedContentObjectIds = $this->getObjectsSelectedInviewer();
 
         if (!empty($selectedContentObjectIds) && !is_array($selectedContentObjectIds))
         {
-            $selectedContentObjectIds = array($selectedContentObjectIds);
+            $selectedContentObjectIds = [$selectedContentObjectIds];
         }
 
         if (count($selectedContentObjectIds) > 0)
@@ -104,28 +106,16 @@ class PublisherComponent extends Manager implements ViewerInterface, DelegateCom
     }
 
     /**
-     * Overwrite render header to add the wizard
+     * Helper functionality
+     *
+     * @param string $variable
+     * @param array $parameters
      *
      * @return string
      */
-    public function render_header(string $pageTitle = ''): string
+    protected function getTranslation($variable, $parameters = [])
     {
-        $html = [];
-        $html[] = parent::render_header($pageTitle);
-
-        $wizardHeader = new WizardHeader();
-        $wizardHeader->setStepTitles(
-            array($this->getWizardFirstStepTitle(), $this->getTranslation('SecondStepPublish'))
-        );
-
-        $selectedStepIndex = \Chamilo\Core\Repository\Viewer\Manager::any_object_selected() ? 1 : 0;
-        $wizardHeader->setSelectedStepIndex($selectedStepIndex);
-
-        $wizardHeaderRenderer = new WizardHeaderRenderer($wizardHeader);
-
-        $html[] = $wizardHeaderRenderer->render();
-
-        return implode(PHP_EOL, $html);
+        return Translation::getInstance()->get($variable, $parameters, Manager::CONTEXT);
     }
 
     /**
@@ -150,15 +140,28 @@ class PublisherComponent extends Manager implements ViewerInterface, DelegateCom
     }
 
     /**
-     * Helper functionality
-     *
-     * @param string $variable
-     * @param array $parameters
+     * Overwrite render header to add the wizard
      *
      * @return string
      */
-    protected function getTranslation($variable, $parameters = [])
+    public function render_header(string $pageTitle = ''): string
     {
-        return Translation::getInstance()->get($variable, $parameters, Manager::CONTEXT);
+        $html = [];
+        $html[] = parent::render_header($pageTitle);
+
+        $wizardHeader = new WizardHeader();
+        $wizardHeader->setStepTitles(
+            [$this->getWizardFirstStepTitle(), $this->getTranslation('SecondStepPublish')]
+        );
+
+        $selectedStepIndex = $this->isAnyObjectSelected() ? 1 : 0;
+        $wizardHeader->setSelectedStepIndex($selectedStepIndex);
+
+        $wizardHeaderRenderer = new WizardHeaderRenderer($wizardHeader);
+
+        $html[] = $wizardHeaderRenderer->render();
+
+        return implode(PHP_EOL, $html);
     }
+
 }

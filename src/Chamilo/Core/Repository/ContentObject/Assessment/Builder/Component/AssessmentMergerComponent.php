@@ -9,6 +9,7 @@ use Chamilo\Core\Repository\ContentObject\Assessment\Storage\DataClass\Assessmen
 use Chamilo\Core\Repository\Storage\DataClass\ComplexContentObjectItem;
 use Chamilo\Core\Repository\Storage\DataClass\ContentObject;
 use Chamilo\Core\Repository\Storage\DataManager;
+use Chamilo\Core\Repository\Viewer\Architecture\Traits\ViewerTrait;
 use Chamilo\Core\Repository\Viewer\ViewerInterface;
 use Chamilo\Libraries\Architecture\Application\ApplicationConfiguration;
 use Chamilo\Libraries\Format\Structure\ActionBar\Button;
@@ -19,7 +20,6 @@ use Chamilo\Libraries\Format\Structure\Breadcrumb;
 use Chamilo\Libraries\Format\Structure\BreadcrumbTrail;
 use Chamilo\Libraries\Format\Structure\Glyph\FontAwesomeGlyph;
 use Chamilo\Libraries\Format\Table\RequestTableParameterValuesCompiler;
-use Chamilo\Libraries\Platform\Session\Request;
 use Chamilo\Libraries\Storage\Parameters\DataClassCountParameters;
 use Chamilo\Libraries\Storage\Parameters\DataClassRetrievesParameters;
 use Chamilo\Libraries\Storage\Query\Condition\EqualityCondition;
@@ -33,6 +33,7 @@ use Chamilo\Libraries\Translation\Translation;
  */
 class AssessmentMergerComponent extends Manager implements ViewerInterface
 {
+    use ViewerTrait;
 
     /**
      * @var ButtonToolBarRenderer
@@ -50,7 +51,7 @@ class AssessmentMergerComponent extends Manager implements ViewerInterface
         );
         $trail->add(new Breadcrumb($this->get_url([]), Translation::get('MergeAssessment')));
 
-        if (!\Chamilo\Core\Repository\Viewer\Manager::any_object_selected())
+        if (!$this->isAnyObjectSelectedInViewer())
         {
             $component = $this->getApplicationFactory()->getApplication(
                 \Chamilo\Core\Repository\Viewer\Manager::CONTEXT,
@@ -67,7 +68,7 @@ class AssessmentMergerComponent extends Manager implements ViewerInterface
         else
         {
             $selected_assessment = DataManager::retrieve_by_id(
-                Assessment::class, \Chamilo\Core\Repository\Viewer\Manager::get_selected_objects()
+                Assessment::class, $this->getObjectsSelectedInviewer()
             );
             $display = ContentObjectRenditionImplementation::launch(
                 $selected_assessment, ContentObjectRendition::FORMAT_HTML, ContentObjectRendition::VIEW_FULL, $this
@@ -113,7 +114,8 @@ class AssessmentMergerComponent extends Manager implements ViewerInterface
     public function getObjectCondition()
     {
         $selected_assessment = DataManager::retrieve_by_id(
-            Assessment::class, \Chamilo\Core\Repository\Viewer\Manager::get_selected_objects()
+            Assessment::class,
+            $this->getObjectsSelectedInviewer()
         );
 
         return $this->get_condition($selected_assessment);

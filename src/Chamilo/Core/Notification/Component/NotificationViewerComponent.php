@@ -22,7 +22,7 @@ class NotificationViewerComponent extends Manager
     {
         try
         {
-            $notificationId = $this->getRequest()->getFromQuery(self::PROPERTY_NOTIFICATION_ID);
+            $notificationId = $this->getRequest()->query->get(self::PROPERTY_NOTIFICATION_ID);
             $notification = $this->getNotificationManager()->getNotificationById($notificationId);
             if (!$this->getNotificationManager()->canUserViewNotification($notification, $this->getUser()))
             {

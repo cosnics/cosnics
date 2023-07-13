@@ -26,27 +26,16 @@ class ChamiloRequest extends Request
         return $this->attributes->get('containerMode', 'container-fluid');
     }
 
-    /**
-     * Returns a parameter from the url (query) or fallback to the default value
-     */
-    public function getFromQuery(string $key, $default = null)
+    public function getFromQueryOrRequest(string $key, $default = null)
     {
-        if ($this !== $result = $this->query->get($key, $this))
+        if ($this->query->has($key))
         {
-            return $result;
+            return $this->query->get($key);
         }
 
-        return $default;
-    }
-
-    /**
-     * Returns a parameter from the post body (request) or fallback to the default value
-     */
-    public function getFromRequest(string $key, $default = null)
-    {
-        if ($this !== $result = $this->request->get($key, $this))
+        if ($this->request->has($key))
         {
-            return $result;
+            return $this->request->get($key);
         }
 
         return $default;
@@ -57,17 +46,22 @@ class ChamiloRequest extends Request
      */
     public function getFromRequestOrQuery(string $key, $default = null)
     {
-        if (null !== $result = $this->getFromRequest($key))
+        if ($this->request->has($key))
         {
-            return $result;
+            return $this->request->get($key);
         }
 
-        if (null != $result = $this->getFromQuery($key))
+        if ($this->query->has($key))
         {
-            return $result;
+            return $this->query->get($key);
         }
 
         return $default;
+    }
+
+    public function hasRequestOrQuery(string $key): bool
+    {
+        return $this->request->has($key) || $this->query->has($key);
     }
 
 }

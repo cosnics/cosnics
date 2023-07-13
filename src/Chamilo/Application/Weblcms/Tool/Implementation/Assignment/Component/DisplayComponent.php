@@ -126,7 +126,7 @@ class DisplayComponent extends Manager implements DelegateComponent
     protected function getContentObjectPublication()
     {
         $contentObjectPublicationId =
-            $this->getRequest()->getFromQuery(\Chamilo\Application\Weblcms\Tool\Manager::PARAM_PUBLICATION_ID);
+            $this->getRequest()->query->get(\Chamilo\Application\Weblcms\Tool\Manager::PARAM_PUBLICATION_ID);
 
         $contentObjectPublicationTranslation =
             $this->getTranslator()->trans('ContentObjectPublication', [], Manager::CONTEXT);

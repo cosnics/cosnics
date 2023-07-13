@@ -11,7 +11,6 @@ use Chamilo\Libraries\Architecture\Exceptions\ParameterNotDefinedException;
 use Chamilo\Libraries\Format\Structure\Breadcrumb;
 use Chamilo\Libraries\Format\Structure\BreadcrumbTrail;
 use Chamilo\Libraries\Format\Structure\PageConfiguration;
-use Chamilo\Libraries\Platform\Session\Request;
 use Chamilo\Libraries\Translation\Translation;
 
 /**
@@ -65,7 +64,7 @@ class AttachmentViewerComponent extends Manager
         $trail = BreadcrumbTrail::getInstance();
         $trail->add(
             new Breadcrumb(
-                $this->get_url(array(self::PARAM_ATTACHMENT_ID => $attachment_id)), Translation::get('ViewAttachment')
+                $this->get_url([self::PARAM_ATTACHMENT_ID => $attachment_id]), Translation::get('ViewAttachment')
             )
         );
 

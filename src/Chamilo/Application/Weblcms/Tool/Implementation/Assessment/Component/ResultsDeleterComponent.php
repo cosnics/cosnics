@@ -28,7 +28,7 @@ class ResultsDeleterComponent extends Manager
             throw new NotAllowedException();
         }
 
-        if ($this->getRequest()->query->get(self::PARAM_USER_ASSESSMENT))
+        if ($this->getRequest()->query->has(self::PARAM_USER_ASSESSMENT))
         {
             $uaid = $this->getRequest()->query->get(self::PARAM_USER_ASSESSMENT);
 
@@ -49,7 +49,7 @@ class ResultsDeleterComponent extends Manager
 
             $this->delete_user_assessment_results($item);
         }
-        elseif ($this->getRequest()->query->get(self::PARAM_ASSESSMENT))
+        elseif ($this->getRequest()->query->has(self::PARAM_ASSESSMENT))
         {
             $aid = $this->getRequest()->query->get(self::PARAM_ASSESSMENT);
             $redirect_aid = $aid;

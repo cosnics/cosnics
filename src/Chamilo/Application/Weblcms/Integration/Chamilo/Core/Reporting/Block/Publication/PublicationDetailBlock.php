@@ -9,7 +9,6 @@ use Chamilo\Core\Reporting\Viewer\Rendition\Block\Type\Html;
 use Chamilo\Core\Repository\Storage\DataClass\ContentObject;
 use Chamilo\Core\Repository\Storage\DataManager;
 use Chamilo\Libraries\Architecture\Application\Application;
-use Chamilo\Libraries\Platform\Session\Request;
 use Chamilo\Libraries\Translation\Translation;
 use Chamilo\Libraries\Utilities\StringUtilities;
 
@@ -21,7 +20,9 @@ class PublicationDetailBlock extends ToolBlock
         $reporting_data = new ReportingData();
 
         $course_id = $this->getCourseId();
-        $tool = $this->getRequest()->query->get(\Chamilo\Application\Weblcms\Tool\Implementation\Reporting\Manager::PARAM_REPORTING_TOOL);
+        $tool = $this->getRequest()->query->get(
+            \Chamilo\Application\Weblcms\Tool\Implementation\Reporting\Manager::PARAM_REPORTING_TOOL
+        );
         $pid = $this->getRequest()->query->get(Manager::PARAM_PUBLICATION_ID);
 
         $content_object_publication = \Chamilo\Application\Weblcms\Storage\DataManager::retrieve_by_id(

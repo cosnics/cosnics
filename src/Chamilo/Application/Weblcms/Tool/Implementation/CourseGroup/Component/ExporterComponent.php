@@ -52,7 +52,7 @@ class ExporterComponent extends Manager
             throw new NotAllowedException();
         }
 
-        if ($this->getRequest()->query->get(self::PARAM_COURSE_GROUP))
+        if ($this->getRequest()->query->has(self::PARAM_COURSE_GROUP))
         {
             $course_group_id = $this->getRequest()->query->get(self::PARAM_COURSE_GROUP);
 
@@ -63,7 +63,7 @@ class ExporterComponent extends Manager
 
         $this->current_tab = SubscriptionsOverviewerComponent::TAB_USERS;
 
-        if ($this->getRequest()->query->get(SubscriptionsOverviewerComponent::PARAM_TAB))
+        if ($this->getRequest()->query->has(SubscriptionsOverviewerComponent::PARAM_TAB))
         {
             $this->current_tab = $this->getRequest()->query->get(SubscriptionsOverviewerComponent::PARAM_TAB);
         }

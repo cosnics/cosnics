@@ -7,7 +7,7 @@ use Chamilo\Core\Repository\Storage\DataClass\ContentObject;
 use Chamilo\Core\Repository\Workspace\Storage\DataClass\Workspace;
 use Chamilo\Libraries\Architecture\ClassnameUtilities;
 use Chamilo\Libraries\DependencyInjection\DependencyInjectionContainerBuilder;
-use Chamilo\Libraries\Platform\Session\Request;
+use Chamilo\Libraries\Platform\ChamiloRequest;
 use Symfony\Component\HttpFoundation\Session\SessionInterface;
 
 /**
@@ -133,21 +133,7 @@ class FilterData
      */
     protected function getFromRequest($filterProperty)
     {
-        $postValue = Request::post($filterProperty);
-
-        if (isset($postValue))
-        {
-            return $postValue;
-        }
-
-        $getValue = Request::get($filterProperty);
-
-        if (isset($getValue))
-        {
-            return $getValue;
-        }
-
-        return null;
+        return $this->getRequest()->getFromRequestOrQuery($filterProperty);
     }
 
     /**
@@ -183,9 +169,28 @@ class FilterData
         return self::$instance;
     }
 
+    public function getRequest(): ChamiloRequest
+    {
+        return $this->getService(ChamiloRequest::class);
+    }
+
+    /**
+     * @template getService
+     *
+     * @param class-string<getService> $serviceName
+     *
+     * @return getService
+     */
+    protected function getService(string $serviceName)
+    {
+        return DependencyInjectionContainerBuilder::getInstance()->createContainer()->get(
+            $serviceName
+        );
+    }
+
     public function getSession(): SessionInterface
     {
-        return DependencyInjectionContainerBuilder::getInstance()->createContainer()->get(SessionInterface::class);
+        return $this->getService(SessionInterface::class);
     }
 
     /**
@@ -196,15 +201,9 @@ class FilterData
         return static::STORAGE . '_' . $this->workspaceImplementation->getHash();
     }
 
-    /**
-     * @return \Chamilo\Core\Repository\Service\TemplateRegistrationConsulter
-     * @throws \Exception
-     */
-    public function getTemplateRegistrationConsulter()
+    public function getTemplateRegistrationConsulter(): TemplateRegistrationConsulter
     {
-        return DependencyInjectionContainerBuilder::getInstance()->createContainer()->get(
-            TemplateRegistrationConsulter::class
-        );
+        return $this->getService(TemplateRegistrationConsulter::class);
     }
 
     public function getType()

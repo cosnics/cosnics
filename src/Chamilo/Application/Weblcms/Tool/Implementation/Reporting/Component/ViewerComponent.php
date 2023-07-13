@@ -7,19 +7,17 @@ use Chamilo\Application\Weblcms\Tool\Implementation\Reporting\Manager;
 use Chamilo\Libraries\Architecture\Application\ApplicationConfiguration;
 use Chamilo\Libraries\Architecture\Exceptions\NotAllowedException;
 use Chamilo\Libraries\Format\Structure\BreadcrumbTrail;
-use Chamilo\Libraries\Platform\Session\Request;
 
 /**
- *
  * @package application.lib.weblcms.tool.reporting.component
- * @author Michael Kyndt
+ * @author  Michael Kyndt
  */
 class ViewerComponent extends Manager
 {
 
     public function run()
     {
-        if (! $this->is_allowed(WeblcmsRights::EDIT_RIGHT))
+        if (!$this->is_allowed(WeblcmsRights::EDIT_RIGHT))
         {
             throw new NotAllowedException();
         }
@@ -28,13 +26,16 @@ class ViewerComponent extends Manager
 
         $this->registerParameters();
 
-        if (! isset($template_id))
+        if (!isset($template_id))
         {
             $component = $this->getApplicationFactory()->getApplication(
                 \Chamilo\Core\Reporting\Viewer\Manager::CONTEXT,
-                new ApplicationConfiguration($this->getRequest(), $this->get_user(), $this));
+                new ApplicationConfiguration($this->getRequest(), $this->get_user(), $this)
+            );
             $component->set_template_by_name(
-                CourseStudentTrackerTemplate::class);
+                CourseStudentTrackerTemplate::class
+            );
+
             return $component->run();
         }
         else
@@ -48,14 +49,15 @@ class ViewerComponent extends Manager
 
             $component = $this->getApplicationFactory()->getApplication(
                 \Chamilo\Core\Reporting\Viewer\Manager::CONTEXT,
-                new ApplicationConfiguration($this->getRequest(), $this->get_user(), $this));
+                new ApplicationConfiguration($this->getRequest(), $this->get_user(), $this)
+            );
             $component->set_template_by_name($template_id);
+
             return $component->run();
         }
     }
 
     /**
-     *
      * @param BreadcrumbTrail $breadcrumbtrail
      */
     public function add_additional_breadcrumbs(BreadcrumbTrail $breadcrumbtrail): void
@@ -70,9 +72,9 @@ class ViewerComponent extends Manager
             \Chamilo\Core\Reporting\Viewer\Manager::PARAM_BLOCK_ID
         ];
 
-        foreach($parameters as $parameter)
+        foreach ($parameters as $parameter)
         {
-            $this->set_parameter($parameter, $this->getRequest()->getFromQuery($parameter));
+            $this->set_parameter($parameter, $this->getRequest()->query->get($parameter));
         }
     }
 }

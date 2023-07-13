@@ -79,7 +79,7 @@ class PublicationUpdaterComponent extends Manager
                 ), ENT_COMPAT | ENT_HTML401, 'UTF-8'
             );
 
-            $show_details = $this->getRequest()->getFromQuery('details');
+            $show_details = $this->getRequest()->query->get('details');
 
             $params = [];
             if ($show_details == 1)

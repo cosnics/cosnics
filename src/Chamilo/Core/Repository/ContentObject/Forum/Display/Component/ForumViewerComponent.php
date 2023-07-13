@@ -23,7 +23,6 @@ use Chamilo\Libraries\Format\Structure\ActionBar\Renderer\ButtonToolBarRenderer;
 use Chamilo\Libraries\Format\Structure\Breadcrumb;
 use Chamilo\Libraries\Format\Structure\BreadcrumbTrail;
 use Chamilo\Libraries\Format\Structure\Glyph\FontAwesomeGlyph;
-use Chamilo\Libraries\Platform\Session\Request;
 use Chamilo\Libraries\Storage\Parameters\DataClassRetrievesParameters;
 use Chamilo\Libraries\Storage\Query\Condition\EqualityCondition;
 use Chamilo\Libraries\Storage\Query\OrderBy;
@@ -36,46 +35,39 @@ use Exception;
 use HTML_Table;
 
 /**
- *
  * @package Chamilo\Core\Repository\ContentObject\Forum\Display\Component
- * @author Hans De Bisschop <hans.de.bisschop@ehb.be>
- * @author Magali Gillard <magali.gillard@ehb.be>
+ * @author  Hans De Bisschop <hans.de.bisschop@ehb.be>
+ * @author  Magali Gillard <magali.gillard@ehb.be>
  */
 class ForumViewerComponent extends Manager implements DelegateComponent
 {
 
     /**
-     *
      * @var \Chamilo\Core\Repository\ContentObject\Forum\Storage\DataClass\Forum
      */
     protected $forum;
 
     /**
-     *
      * @var ButtonToolBarRenderer
      */
     private $buttonToolbarRenderer;
 
     /**
-     *
-     * @var boolean
+     * @var bool
      */
     private $isLocked;
 
     /**
-     *
      * @var \Chamilo\Core\Repository\ContentObject\Forum\Storage\DataClass\ComplexForum[]
      */
     private $subforums;
 
     /**
-     *
      * @var \Chamilo\Core\Repository\ContentObject\ForumTopic\Storage\DataClass\ComplexForumTopic[]
      */
     private $topics;
 
     /**
-     *
      * @see \Chamilo\Libraries\Architecture\Application\Application::run()
      */
     public function run()
@@ -106,7 +98,6 @@ class ForumViewerComponent extends Manager implements DelegateComponent
     }
 
     /**
-     *
      * @return \Chamilo\Libraries\Format\Structure\ActionBar\Renderer\ButtonToolBarRenderer
      */
     public function getButtonToolbarRenderer()
@@ -123,8 +114,8 @@ class ForumViewerComponent extends Manager implements DelegateComponent
 
             $commonActions->addButton(
                 $this->getPublicationButton(
-                    Translation::get('NewTopic'), new FontAwesomeGlyph('plus'), array(ForumTopic::class),
-                    $publishParameters, [], ['btn-primary']
+                    Translation::get('NewTopic'), new FontAwesomeGlyph('plus'), [ForumTopic::class], $publishParameters,
+                    [], ['btn-primary']
                 )
             );
 
@@ -138,7 +129,7 @@ class ForumViewerComponent extends Manager implements DelegateComponent
 
                 $commonActions->addButton(
                     $this->getPublicationButton(
-                        Translation::get('NewSubForum'), new FontAwesomeGlyph('plus'), array(Forum::class),
+                        Translation::get('NewSubForum'), new FontAwesomeGlyph('plus'), [Forum::class],
                         $publishParameters
                     )
                 );
@@ -152,7 +143,6 @@ class ForumViewerComponent extends Manager implements DelegateComponent
     }
 
     /**
-     *
      * @param string $label
      * @param \Chamilo\Libraries\Format\Structure\ActionBar\InlineGlyph $glyph
      * @param string[] $allowedContentObjectTypes
@@ -174,7 +164,6 @@ class ForumViewerComponent extends Manager implements DelegateComponent
     }
 
     /**
-     *
      * @return \Chamilo\Core\Repository\ContentObject\Forum\Storage\DataClass\ComplexForum[]
      */
     public function getSubforums()
@@ -188,7 +177,6 @@ class ForumViewerComponent extends Manager implements DelegateComponent
     }
 
     /**
-     *
      * @return \Chamilo\Core\Repository\ContentObject\ForumTopic\Storage\DataClass\ComplexForumTopic[]
      */
     public function getTopics()
@@ -202,8 +190,7 @@ class ForumViewerComponent extends Manager implements DelegateComponent
     }
 
     /**
-     *
-     * @return boolean
+     * @return bool
      */
     public function isLocked()
     {
@@ -255,7 +242,6 @@ class ForumViewerComponent extends Manager implements DelegateComponent
     }
 
     /**
-     *
      * @param ComplexForumTopic $topic
      *
      * @return string
@@ -263,7 +249,7 @@ class ForumViewerComponent extends Manager implements DelegateComponent
     public function renderAuthor(ComplexForumTopic $topic)
     {
         $user = \Chamilo\Core\User\Storage\DataManager::retrieve_by_id(User::class, (int) $topic->get_user_id());
-        $name = "";
+        $name = '';
 
         if (!$user)
         {
@@ -298,9 +284,8 @@ class ForumViewerComponent extends Manager implements DelegateComponent
     }
 
     /**
-     *
      * @param ForumPost $lastPost
-     * @param boolean $isViewable
+     * @param bool $isViewable
      * @param string $viewUrl
      *
      * @return string
@@ -344,7 +329,6 @@ class ForumViewerComponent extends Manager implements DelegateComponent
     }
 
     /**
-     *
      * @param ComplexForum $forum
      *
      * @return string
@@ -489,7 +473,6 @@ class ForumViewerComponent extends Manager implements DelegateComponent
     }
 
     /**
-     *
      * @param ComplexForum $subforum
      *
      * @return string
@@ -499,13 +482,12 @@ class ForumViewerComponent extends Manager implements DelegateComponent
         $isLocked = $this->isLocked() || $subforum->get_ref()->get_locked();
 
         $subforumGlyphType = $isLocked ? 'lock' : 'folder-open';
-        $subforumGlyph = new FontAwesomeGlyph($subforumGlyphType, array('text-muted'), Translation::get('NoNewPosts'));
+        $subforumGlyph = new FontAwesomeGlyph($subforumGlyphType, ['text-muted'], Translation::get('NoNewPosts'));
 
         return $subforumGlyph->render();
     }
 
     /**
-     *
      * @param ComplexForum $subforum
      *
      * @return string
@@ -521,12 +503,12 @@ class ForumViewerComponent extends Manager implements DelegateComponent
         if ($lastPost instanceof ForumPost)
         {
             $viewUrl = $this->get_url(
-                array(
+                [
                     self::PARAM_ACTION => self::ACTION_VIEW_TOPIC,
                     'pid' => $subforum->get_ref(),
                     self::PARAM_COMPLEX_CONTENT_OBJECT_ITEM_ID => $subforum->get_ref()->get_last_topic_changed_cloi(),
                     self::PARAM_LAST_POST => $lastPost->get_id()
-                )
+                ]
             );
         }
         else
@@ -539,15 +521,15 @@ class ForumViewerComponent extends Manager implements DelegateComponent
     }
 
     /**
-     *
      * @param ComplexForum $subforum
      *
      * @return string
      */
     public function renderSubforumTitle(ComplexForum $subforum)
     {
-        $isNotAllowedToView = ($subforum->get_ref()->is_locked() && (!$this->get_user()->isPlatformAdmin() ||
-                !($this->get_user_id() == $subforum->get_ref()->get_owner_id()) || !$this->isForumManager(
+        $isNotAllowedToView = ($subforum->get_ref()->is_locked() &&
+            (!$this->get_user()->isPlatformAdmin() || !($this->get_user_id() == $subforum->get_ref()->get_owner_id()) ||
+                !$this->isForumManager(
                     $this->get_user()
                 )));
 
@@ -556,10 +538,10 @@ class ForumViewerComponent extends Manager implements DelegateComponent
         if (!$isNotAllowedToView)
         {
             $viewUrl = $this->get_url(
-                array(
+                [
                     self::PARAM_ACTION => self::ACTION_VIEW_FORUM,
                     self::PARAM_COMPLEX_CONTENT_OBJECT_ITEM_ID => $subforum->get_id()
-                )
+                ]
             );
 
             $titleParts = [];
@@ -588,7 +570,6 @@ class ForumViewerComponent extends Manager implements DelegateComponent
     }
 
     /**
-     *
      * @return string
      */
     public function renderSubforums()
@@ -597,42 +578,42 @@ class ForumViewerComponent extends Manager implements DelegateComponent
 
         if (count($subforums) > 0)
         {
-            $table = new HTML_Table(array('class' => 'table forum table-striped'));
+            $table = new HTML_Table(['class' => 'table forum table-striped']);
 
             $header = $table->getHeader();
 
             $header->setHeaderContents(0, 0, '');
-            $header->setCellAttributes(0, 0, array('class' => 'cell-stat'));
+            $header->setCellAttributes(0, 0, ['class' => 'cell-stat']);
             $header->setHeaderContents(0, 1, '<h3>' . Translation::get('Subforums') . '</h3>');
 
-            $bootstrapGlyph = new FontAwesomeGlyph('comments', [], Translation::get("Topics", null, Forum::CONTEXT));
+            $bootstrapGlyph = new FontAwesomeGlyph('comments', [], Translation::get('Topics', null, Forum::CONTEXT));
             $header->setHeaderContents(0, 2, $bootstrapGlyph->render());
-            $header->setCellAttributes(0, 2, array('class' => 'cell-stat text-center hidden-xs hidden-sm'));
+            $header->setCellAttributes(0, 2, ['class' => 'cell-stat text-center hidden-xs hidden-sm']);
 
-            $bootstrapGlyph = new FontAwesomeGlyph('comment', [], Translation::get("Posts", null, Forum::CONTEXT));
+            $bootstrapGlyph = new FontAwesomeGlyph('comment', [], Translation::get('Posts', null, Forum::CONTEXT));
             $header->setHeaderContents(0, 3, $bootstrapGlyph->render());
-            $header->setCellAttributes(0, 3, array('class' => 'cell-stat text-center hidden-xs hidden-sm'));
+            $header->setCellAttributes(0, 3, ['class' => 'cell-stat text-center hidden-xs hidden-sm']);
 
-            $header->setHeaderContents(0, 4, Translation::get("LastPostForum", null, Forum::CONTEXT));
-            $header->setCellAttributes(0, 4, array('class' => 'cell-stat-2x hidden-xs hidden-sm'));
+            $header->setHeaderContents(0, 4, Translation::get('LastPostForum', null, Forum::CONTEXT));
+            $header->setCellAttributes(0, 4, ['class' => 'cell-stat-2x hidden-xs hidden-sm']);
             $header->setHeaderContents(0, 5, '');
-            $header->setCellAttributes(0, 5, array('class' => 'cell-stat-2x'));
+            $header->setCellAttributes(0, 5, ['class' => 'cell-stat-2x']);
 
             $row = 0;
 
             foreach ($subforums as $subforum)
             {
                 $table->setCellContents($row, 0, $this->renderSubforumGlyph($subforum));
-                $table->setCellAttributes($row, 0, array('class' => 'text-center forum-row-icon'));
+                $table->setCellAttributes($row, 0, ['class' => 'text-center forum-row-icon']);
                 $table->setCellContents($row, 1, $this->renderSubforumTitle($subforum));
                 $table->setCellContents($row, 2, $subforum->get_ref()->get_total_topics());
-                $table->setCellAttributes($row, 2, array('class' => 'text-primary text-center hidden-xs hidden-sm'));
+                $table->setCellAttributes($row, 2, ['class' => 'text-primary text-center hidden-xs hidden-sm']);
                 $table->setCellContents($row, 3, $subforum->get_ref()->get_total_posts());
-                $table->setCellAttributes($row, 3, array('class' => 'text-primary text-center hidden-xs hidden-sm'));
+                $table->setCellAttributes($row, 3, ['class' => 'text-primary text-center hidden-xs hidden-sm']);
                 $table->setCellContents($row, 4, $this->renderSubforumLastPost($subforum));
-                $table->setCellAttributes($row, 4, array('class' => 'hidden-xs hidden-sm'));
+                $table->setCellAttributes($row, 4, ['class' => 'hidden-xs hidden-sm']);
                 $table->setCellContents($row, 5, $this->renderSubforumActions($subforum));
-                $table->setCellAttributes($row, 5, array('class' => 'text-center'));
+                $table->setCellAttributes($row, 5, ['class' => 'text-center']);
 
                 $row ++;
             }
@@ -642,7 +623,6 @@ class ForumViewerComponent extends Manager implements DelegateComponent
     }
 
     /**
-     *
      * @param ComplexForumTopic $topic
      *
      * @return string
@@ -699,8 +679,7 @@ class ForumViewerComponent extends Manager implements DelegateComponent
                 }
                 else
                 {
-                    if ($topic->get_forum_type() == 2 &&
-                        ($this->get_user()->isPlatformAdmin() || $this->isForumManager(
+                    if ($topic->get_forum_type() == 2 && ($this->get_user()->isPlatformAdmin() || $this->isForumManager(
                                 $this->get_user()
                             )))
                     {
@@ -797,23 +776,22 @@ class ForumViewerComponent extends Manager implements DelegateComponent
     }
 
     /**
-     *
      * @param ComplexForumTopic $topic
      *
      * @return \Chamilo\Libraries\Format\Structure\Glyph\FontAwesomeGlyph
      */
     public function renderTopicGlyph(ComplexForumTopic $topic)
     {
-        $forumGlyph = new FontAwesomeGlyph('file', array('text-muted'), Translation::get('NoNewPosts'));
+        $forumGlyph = new FontAwesomeGlyph('file', ['text-muted'], Translation::get('NoNewPosts'));
 
         switch ($topic->get_forum_type())
         {
             case 1 :
-                $forumGlyph = new FontAwesomeGlyph('star', array('text-danger'), Translation::get('Sticky'));
+                $forumGlyph = new FontAwesomeGlyph('star', ['text-danger'], Translation::get('Sticky'));
                 break;
             case 2 :
                 $forumGlyph = new FontAwesomeGlyph(
-                    'exclamation-circle', array('text-danger'), Translation::get('Important')
+                    'exclamation-circle', ['text-danger'], Translation::get('Important')
                 );
                 break;
         }
@@ -827,7 +805,6 @@ class ForumViewerComponent extends Manager implements DelegateComponent
     }
 
     /**
-     *
      * @param ComplexForumTopic $topic
      *
      * @return string
@@ -842,12 +819,12 @@ class ForumViewerComponent extends Manager implements DelegateComponent
         if ($lastPost instanceof ForumPost)
         {
             $viewUrl = $this->get_url(
-                array(
+                [
                     self::PARAM_ACTION => self::ACTION_VIEW_TOPIC,
                     'pid' => $this->pid,
                     self::PARAM_COMPLEX_CONTENT_OBJECT_ITEM_ID => $topic->get_id(),
                     self::PARAM_LAST_POST => $lastPost->get_id()
-                )
+                ]
             );
         }
         else
@@ -860,35 +837,34 @@ class ForumViewerComponent extends Manager implements DelegateComponent
     }
 
     /**
-     *
      * @return string
      */
     public function renderTopics()
     {
-        $table = new HTML_Table(array('class' => 'table forum table-striped'));
+        $table = new HTML_Table(['class' => 'table forum table-striped']);
 
         $header = $table->getHeader();
 
         $header->setHeaderContents(0, 0, '');
-        $header->setCellAttributes(0, 0, array('class' => 'cell-stat'));
+        $header->setCellAttributes(0, 0, ['class' => 'cell-stat']);
         $header->setHeaderContents(0, 1, '<h3>' . Translation::get('Topics') . '</h3>');
 
-        $bootstrapGlyph = new FontAwesomeGlyph('user', [], Translation::get("Author", null, Forum::CONTEXT));
+        $bootstrapGlyph = new FontAwesomeGlyph('user', [], Translation::get('Author', null, Forum::CONTEXT));
         $header->setHeaderContents(0, 2, $bootstrapGlyph->render());
-        $header->setCellAttributes(0, 2, array('class' => 'cell-stat-2x text-center'));
+        $header->setCellAttributes(0, 2, ['class' => 'cell-stat-2x text-center']);
 
-        $bootstrapGlyph = new FontAwesomeGlyph('comment', [], Translation::get("Replies", null, Forum::CONTEXT));
+        $bootstrapGlyph = new FontAwesomeGlyph('comment', [], Translation::get('Replies', null, Forum::CONTEXT));
         $header->setHeaderContents(0, 3, $bootstrapGlyph->render());
-        $header->setCellAttributes(0, 3, array('class' => 'cell-stat text-center'));
+        $header->setCellAttributes(0, 3, ['class' => 'cell-stat text-center']);
 
-        $bootstrapGlyph = new FontAwesomeGlyph('eye', [], Translation::get("Views", null, Forum::CONTEXT));
+        $bootstrapGlyph = new FontAwesomeGlyph('eye', [], Translation::get('Views', null, Forum::CONTEXT));
         $header->setHeaderContents(0, 4, $bootstrapGlyph->render());
 
-        $header->setCellAttributes(0, 4, array('class' => 'cell-stat text-center hidden-xs hidden-sm'));
-        $header->setHeaderContents(0, 5, Translation::get("LastPostForum", null, Forum::CONTEXT));
-        $header->setCellAttributes(0, 5, array('class' => 'cell-stat-2x hidden-xs hidden-sm'));
+        $header->setCellAttributes(0, 4, ['class' => 'cell-stat text-center hidden-xs hidden-sm']);
+        $header->setHeaderContents(0, 5, Translation::get('LastPostForum', null, Forum::CONTEXT));
+        $header->setCellAttributes(0, 5, ['class' => 'cell-stat-2x hidden-xs hidden-sm']);
         $header->setHeaderContents(0, 6, '');
-        $header->setCellAttributes(0, 6, array('class' => 'cell-stat-2x'));
+        $header->setCellAttributes(0, 6, ['class' => 'cell-stat-2x']);
 
         $row = 0;
 
@@ -897,28 +873,28 @@ class ForumViewerComponent extends Manager implements DelegateComponent
             foreach ($this->getTopics() as $topic)
             {
                 $title = '<h4><a href="' . $this->get_url(
-                        array(
+                        [
                             self::PARAM_ACTION => self::ACTION_VIEW_TOPIC,
                             self::PARAM_COMPLEX_CONTENT_OBJECT_ITEM_ID => $topic->get_id()
-                        )
+                        ]
                     ) . '">' . $topic->get_ref()->get_title() . '</a></h4>';
 
                 $count = $topic->get_ref()->get_total_posts();
 
                 $table->setCellContents($row, 0, $this->renderTopicGlyph($topic));
-                $table->setCellAttributes($row, 0, array('class' => 'text-center'));
+                $table->setCellAttributes($row, 0, ['class' => 'text-center']);
                 $table->setCellContents($row, 1, $title);
 
                 $table->setCellContents($row, 2, $this->renderAuthor($topic));
-                $table->setCellAttributes($row, 2, array('class' => 'text-primary text-center'));
+                $table->setCellAttributes($row, 2, ['class' => 'text-primary text-center']);
                 $table->setCellContents($row, 3, ($count > 0) ? $count - 1 : $count);
-                $table->setCellAttributes($row, 3, array('class' => 'text-primary text-center'));
+                $table->setCellAttributes($row, 3, ['class' => 'text-primary text-center']);
                 $table->setCellContents($row, 4, $this->forum_count_topic_views($topic->get_id()));
-                $table->setCellAttributes($row, 4, array('class' => 'text-primary text-center hidden-xs hidden-sm'));
+                $table->setCellAttributes($row, 4, ['class' => 'text-primary text-center hidden-xs hidden-sm']);
                 $table->setCellContents($row, 5, $this->renderTopicLastPost($topic));
-                $table->setCellAttributes($row, 5, array('class' => 'hidden-xs hidden-sm'));
+                $table->setCellAttributes($row, 5, ['class' => 'hidden-xs hidden-sm']);
                 $table->setCellContents($row, 6, $this->renderTopicActions($topic));
-                $table->setCellAttributes($row, 6, array('class' => 'text-center'));
+                $table->setCellAttributes($row, 6, ['class' => 'text-center']);
 
                 $row ++;
             }
@@ -938,10 +914,10 @@ class ForumViewerComponent extends Manager implements DelegateComponent
         $trail->add(
             new Breadcrumb(
                 $this->get_url(
-                    array(
+                    [
                         self::PARAM_ACTION => self::ACTION_VIEW_FORUM,
                         self::PARAM_COMPLEX_CONTENT_OBJECT_ITEM_ID => null
-                    )
+                    ]
                 ), $this->get_root_content_object()->get_title()
             )
         );
@@ -961,10 +937,10 @@ class ForumViewerComponent extends Manager implements DelegateComponent
                     $trail->add(
                         new Breadcrumb(
                             $this->get_url(
-                                array(
+                                [
                                     self::PARAM_ACTION => self::ACTION_VIEW_FORUM,
                                     self::PARAM_COMPLEX_CONTENT_OBJECT_ITEM_ID => $key
-                                )
+                                ]
                             ), $value->get_title()
                         )
                     );
@@ -978,7 +954,6 @@ class ForumViewerComponent extends Manager implements DelegateComponent
     }
 
     /**
-     *
      * @param ForumTopic[] $topics
      *
      * @return ForumTopic[]

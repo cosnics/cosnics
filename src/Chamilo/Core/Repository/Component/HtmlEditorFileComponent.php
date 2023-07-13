@@ -4,13 +4,15 @@ namespace Chamilo\Core\Repository\Component;
 use Chamilo\Core\Repository\Manager;
 use Chamilo\Core\Repository\Processor\Ckeditor\Processor;
 use Chamilo\Core\Repository\Storage\DataManager;
+use Chamilo\Core\Repository\Viewer\Architecture\Traits\ViewerTrait;
 use Chamilo\Libraries\Architecture\Application\ApplicationConfiguration;
 use Chamilo\Libraries\Architecture\Application\ApplicationConfigurationInterface;
 use Chamilo\Libraries\Format\Structure\PageConfiguration;
-use Chamilo\Libraries\Platform\Session\Request;
 
 class HtmlEditorFileComponent extends Manager
 {
+    use ViewerTrait;
+
     public const PARAM_PLUGIN = 'plugin';
 
     public function __construct(ApplicationConfigurationInterface $applicationConfiguration)
@@ -29,7 +31,7 @@ class HtmlEditorFileComponent extends Manager
 
         $this->getPageConfiguration()->setViewMode(PageConfiguration::VIEW_MODE_HEADERLESS);
 
-        if (!\Chamilo\Core\Repository\Viewer\Manager::is_ready_to_be_published())
+        if (!$this->isAnyObjectSelectedInViewer())
         {
             $component = $this->getApplicationFactory()->getApplication(
                 \Chamilo\Core\Repository\Viewer\Manager::CONTEXT,
@@ -41,7 +43,7 @@ class HtmlEditorFileComponent extends Manager
         }
         else
         {
-            $processor = new Processor($this, \Chamilo\Core\Repository\Viewer\Manager::get_selected_objects());
+            $processor = new Processor($this, $this->getObjectsSelectedInviewer());
 
             $html = [];
 

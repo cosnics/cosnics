@@ -9,7 +9,6 @@ use Chamilo\Application\Weblcms\Form\CommonCourseForm;
 use Chamilo\Application\Weblcms\Rights\CourseManagementRights;
 use Chamilo\Core\User\Manager;
 use Chamilo\Libraries\Architecture\ClassnameUtilities;
-use Chamilo\Libraries\Platform\Session\Request;
 use Chamilo\Libraries\Storage\DataClass\DataClass;
 use Chamilo\Libraries\Translation\Translation;
 

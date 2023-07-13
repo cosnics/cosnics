@@ -23,8 +23,8 @@ class GetAssignmentNotificationsComponent extends Manager
         $contextPaths = $this->buildContextPaths();
 
         $notifications = $this->getNotificationManager()->getNotificationsByContextPathsForUser(
-            $contextPaths, $this->getUser(), $this->getRequest()->getFromRequest(self::PARAM_OFFSET),
-            $this->getRequest()->getFromRequest(self::PARAM_NOTIFICATIONS_PER_PAGE)
+            $contextPaths, $this->getUser(), $this->getRequest()->request->get(self::PARAM_OFFSET),
+            $this->getRequest()->request->get(self::PARAM_NOTIFICATIONS_PER_PAGE)
         );
 
         $this->getNotificationManager()->setNotificationsViewedForUser($notifications, $this->getUser());
@@ -39,13 +39,13 @@ class GetAssignmentNotificationsComponent extends Manager
      */
     protected function buildContextPaths()
     {
-        $courseTypeId = $this->getRequest()->getFromQuery(self::PARAM_COURSE_TYPE_ID);
+        $courseTypeId = $this->getRequest()->query->get(self::PARAM_COURSE_TYPE_ID);
         if ($courseTypeId > - 1)
         {
             $courseType = new CourseType();
             $courseType->setId($courseTypeId);
 
-            $courseCategoryId = $this->getRequest()->getFromQuery(self::PARAM_USER_COURSE_CATEGORY_ID);
+            $courseCategoryId = $this->getRequest()->query->get(self::PARAM_USER_COURSE_CATEGORY_ID);
             if ($courseCategoryId > 0)
             {
                 $courseUserCategory = new CourseUserCategory();

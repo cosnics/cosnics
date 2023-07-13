@@ -12,7 +12,6 @@ use Chamilo\Application\Weblcms\Storage\DataManager;
 use Chamilo\Application\Weblcms\Tool\Implementation\CourseGroup\Storage\DataManager as CourseGroupDataManager;
 use Chamilo\Core\User\Storage\DataClass\User;
 use Chamilo\Libraries\Architecture\Application\Application;
-use Chamilo\Libraries\Platform\Session\Request;
 use Chamilo\Libraries\Storage\Parameters\DataClassCountParameters;
 use Chamilo\Libraries\Storage\Parameters\DataClassRetrievesParameters;
 use Chamilo\Libraries\Storage\Query\Condition\EqualityCondition;
@@ -29,25 +28,41 @@ use Chamilo\Libraries\Storage\Query\Variable\StaticConditionVariable;
  */
 abstract class Manager extends Application
 {
-    public const CONTEXT = __NAMESPACE__;
-
     public const ACTION_ADMIN = 'Admin';
+
     public const ACTION_ADMIN_COURSE_MANAGER = 'AdminCourseManager';
+
     public const ACTION_ADMIN_REQUEST_BROWSER = 'AdminRequestBrowser';
+
     public const ACTION_ANNOUNCEMENT = 'Announcement';
+
     public const ACTION_BROWSE_OPEN_COURSES = 'OpenCoursesBrowser';
+
     public const ACTION_COURSE_CATEGORY_MANAGER = 'CourseCategoryManager';
+
     public const ACTION_COURSE_MANAGER = 'CourseManager';
+
     public const ACTION_COURSE_TYPE_MANAGER = 'CourseTypeManager';
+
     public const ACTION_COURSE_USER_SUBSCRIPTION_REQUEST_GRANT = 'course_user_subscription_request_granter';
+
     public const ACTION_CREATE_BOOKMARK = 'CourseBookmarkCreator';
+
     public const ACTION_IMPORT_COURSES = 'CourseImporter';
+
     public const ACTION_IMPORT_COURSE_USERS = 'CourseUserImporter';
+
     public const ACTION_MANAGER_SORT = 'Sorter';
+
     public const ACTION_REPORTING = 'Reporting';
+
     public const ACTION_REQUEST = 'Request';
+
     public const ACTION_VIEW_COURSE = 'CourseViewer';
+
     public const ACTION_VIEW_WEBLCMS_HOME = 'Home';
+
+    public const CONTEXT = __NAMESPACE__;
 
     public const DEFAULT_ACTION = self::ACTION_VIEW_WEBLCMS_HOME;
 
@@ -122,7 +137,7 @@ abstract class Manager extends Application
     public function get_course_category_add_url()
     {
         return $this->get_url(
-            array(self::PARAM_ACTION => self::ACTION_COURSE_CATEGORY_MANAGER, self::PARAM_COMPONENT_ACTION => 'add')
+            [self::PARAM_ACTION => self::ACTION_COURSE_CATEGORY_MANAGER, self::PARAM_COMPONENT_ACTION => 'add']
         );
     }
 
@@ -136,11 +151,11 @@ abstract class Manager extends Application
     public function get_course_category_delete_url($coursecategory)
     {
         return $this->get_url(
-            array(
+            [
                 self::PARAM_ACTION => self::ACTION_COURSE_CATEGORY_MANAGER,
                 self::PARAM_COMPONENT_ACTION => 'delete',
                 self::PARAM_COURSE_CATEGORY_ID => $coursecategory->get_code()
-            )
+            ]
         );
     }
 
@@ -152,16 +167,6 @@ abstract class Manager extends Application
     public function get_course_group()
     {
         return $this->course_group;
-    }
-
-    /**
-     * Sets the course_group
-     *
-     * @param $course_group CourseGroup
-     */
-    public function set_course_group($course_group)
-    {
-        $this->course_group = $course_group;
     }
 
     /**
@@ -192,11 +197,11 @@ abstract class Manager extends Application
     public function get_course_maintenance_url($course)
     {
         return $this->get_url(
-            array(
+            [
                 self::PARAM_ACTION => self::ACTION_VIEW_COURSE,
                 self::PARAM_COURSE => $course->get_id(),
                 self::PARAM_TOOL => 'maintenance'
-            )
+            ]
         );
     }
 
@@ -208,7 +213,7 @@ abstract class Manager extends Application
     public function get_course_user_category_add_url()
     {
         return $this->get_url(
-            array(self::PARAM_ACTION => self::ACTION_MANAGER_SORT, self::PARAM_COMPONENT_ACTION => 'add')
+            [self::PARAM_ACTION => self::ACTION_MANAGER_SORT, self::PARAM_COMPONENT_ACTION => 'add']
         );
     }
 
@@ -222,11 +227,11 @@ abstract class Manager extends Application
     public function get_course_user_category_delete_url($course_type_user_category)
     {
         return $this->get_url(
-            array(
+            [
                 self::PARAM_ACTION => self::ACTION_MANAGER_SORT,
                 self::PARAM_COMPONENT_ACTION => 'delete',
                 self::PARAM_COURSE_TYPE_USER_CATEGORY_ID => $course_type_user_category[CourseTypeUserCategory::PROPERTY_ID]
-            )
+            ]
         );
     }
 
@@ -240,11 +245,11 @@ abstract class Manager extends Application
     public function get_course_user_category_edit_url($course_type_user_category)
     {
         return $this->get_url(
-            array(
+            [
                 self::PARAM_ACTION => self::ACTION_MANAGER_SORT,
                 self::PARAM_COMPONENT_ACTION => 'edit',
                 self::PARAM_COURSE_TYPE_USER_CATEGORY_ID => $course_type_user_category[CourseTypeUserCategory::PROPERTY_ID]
-            )
+            ]
         );
     }
 
@@ -259,12 +264,12 @@ abstract class Manager extends Application
     public function get_course_user_category_move_url($course_type_user_category = [], $direction)
     {
         return $this->get_url(
-            array(
+            [
                 self::PARAM_ACTION => self::ACTION_MANAGER_SORT,
                 self::PARAM_COMPONENT_ACTION => 'movecat',
                 self::PARAM_DIRECTION => $direction,
                 self::PARAM_COURSE_TYPE_USER_CATEGORY_ID => $course_type_user_category[CourseTypeUserCategory::PROPERTY_ID]
-            )
+            ]
         );
     }
 
@@ -284,19 +289,19 @@ abstract class Manager extends Application
         }
 
         return $this->get_url(
-            array(
+            [
                 self::PARAM_ACTION => self::ACTION_MANAGER_SORT,
                 self::PARAM_COMPONENT_ACTION => 'assign',
                 self::PARAM_COURSE => $course->get_id(),
                 self::PARAM_COURSE_TYPE_USER_CATEGORY_ID => $course_type_user_category_id
-            )
+            ]
         );
     }
 
     /**
      * Returns the moving url for the course user relation
      *
-     * @param $course Course
+     * @param $course    Course
      * @param $direction string
      *
      * @return String
@@ -304,23 +309,24 @@ abstract class Manager extends Application
     public function get_course_user_move_url($course_type_user_category, Course $course, $direction)
     {
         return $this->get_url(
-            array(
+            [
                 self::PARAM_ACTION => self::ACTION_MANAGER_SORT,
                 self::PARAM_COMPONENT_ACTION => 'move',
                 self::PARAM_DIRECTION => $direction,
                 self::PARAM_COURSE => $course->get_id(),
                 self::PARAM_COURSE_TYPE_USER_CATEGORY_ID => $course_type_user_category[CourseTypeUserCategory::PROPERTY_ID]
-            )
+            ]
         );
     }
 
     /**
      * Gets the date of the last visit of current user to the current location
      *
-     * @param $tool string If $tool equals null, current active tool will be taken into account. If no tool is given or
-     *        no tool is active the date of last visit to the course homepage will be returned.
-     * @param $category_id int The category in the given tool of which the last visit date is requested. If $category_id
-     *        equals null, the current active category will be used.
+     * @param $tool        string If $tool equals null, current active tool will be taken into account. If no tool is
+     *                     given or no tool is active the date of last visit to the course homepage will be returned.
+     * @param $category_id int The category in the given tool of which the last visit date is requested. If
+     *                     $category_id
+     *                     equals null, the current active category will be used.
      *
      * @return int
      */
@@ -361,11 +367,11 @@ abstract class Manager extends Application
 
     public function get_reporting_url($params)
     {
-        $array = array(
+        $array = [
             Application::PARAM_CONTEXT => Manager::CONTEXT,
             self::PARAM_TOOL => null,
             self::PARAM_ACTION => self::ACTION_REPORTING
-        );
+        ];
         $array = array_merge($array, $params);
 
         return $this->get_url($array);
@@ -374,11 +380,6 @@ abstract class Manager extends Application
     public function get_request()
     {
         return $this->request;
-    }
-
-    public function set_request($request)
-    {
-        $this->request = $request;
     }
 
     /**
@@ -455,8 +456,8 @@ abstract class Manager extends Application
     /**
      * Retrieves a personal course category for the user according to
      *
-     * @param $user_id int
-     * @param $sort int
+     * @param $user_id   int
+     * @param $sort      int
      * @param $direction string
      *
      * @return CourseUserCategory The course user category.
@@ -470,7 +471,7 @@ abstract class Manager extends Application
      * Retrieves a single course user relation from persistent storage.
      *
      * @param $course_code string
-     * @param $user_id int
+     * @param $user_id     int
      *
      * @return CourseCategory The course category.
      */
@@ -480,9 +481,24 @@ abstract class Manager extends Application
     }
 
     /**
+     * Sets the course_group
+     *
+     * @param $course_group CourseGroup
+     */
+    public function set_course_group($course_group)
+    {
+        $this->course_group = $course_group;
+    }
+
+    public function set_request($request)
+    {
+        $this->request = $request;
+    }
+
+    /**
      * Subscribe a group to a course.
      *
-     * @param $course Course
+     * @param $course   Course
      * @param $group_id int
      *
      * @return bool
@@ -495,7 +511,7 @@ abstract class Manager extends Application
     /**
      * Determines if a tool has new publications since the last time the current user visited the tool.
      *
-     * @param $tool string
+     * @param $tool   string
      * @param $course Course
      */
     public function tool_has_new_publications($tool, Course $course = null)
@@ -512,10 +528,10 @@ abstract class Manager extends Application
      * Makes a category tree ready for displaying by adding a prefix to the category title based on the level of that
      * category in the tree structure.
      *
-     * @param $tree array The category tree
+     * @param $tree       array The category tree
      * @param $categories array In this array the new category titles (with prefix) will be stored. The keys in this
-     *        array are the category ids, the values are the new titles
-     * @param $level int The current level in the tree structure
+     *                    array are the category ids, the values are the new titles
+     * @param $level      int The current level in the tree structure
      */
     private static function translate_category_tree($tree, $categories, $level = 0)
     {
@@ -535,7 +551,7 @@ abstract class Manager extends Application
     /**
      * Unsubscribe a group from a course.
      *
-     * @param $course Course
+     * @param $course  Course
      * @param $user_id int
      *
      * @return bool
@@ -548,7 +564,7 @@ abstract class Manager extends Application
     /**
      * Unsubscribe a user from a course.
      *
-     * @param $course Course
+     * @param $course  Course
      * @param $user_id int
      *
      * @return bool

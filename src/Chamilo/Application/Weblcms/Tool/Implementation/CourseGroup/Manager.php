@@ -5,7 +5,6 @@ use Chamilo\Application\Weblcms\Storage\DataManager;
 use Chamilo\Application\Weblcms\Tool\Implementation\CourseGroup\Infrastructure\Service\CourseGroupDecorator\CourseGroupDecoratorsManager;
 use Chamilo\Application\Weblcms\Tool\Implementation\CourseGroup\Storage\DataClass\CourseGroup;
 use Chamilo\Application\Weblcms\Tool\Interfaces\IntroductionTextSupportInterface;
-use Chamilo\Libraries\Platform\Session\Request;
 
 /**
  * @package application.lib.weblcms.tool.course_group

@@ -9,18 +9,16 @@ use Chamilo\Application\Weblcms\Storage\DataClass\CourseTool;
 use Chamilo\Application\Weblcms\Storage\DataClass\CourseToolRelCourseSection;
 use Chamilo\Application\Weblcms\Tool\Implementation\CourseSections\Storage\DataManager;
 use Chamilo\Libraries\Format\Form\FormValidator;
-use Chamilo\Libraries\Platform\Session\Request;
-use Chamilo\Libraries\Translation\Translation;
 use Chamilo\Libraries\Storage\Parameters\DataClassRetrievesParameters;
 use Chamilo\Libraries\Storage\Query\Condition\AndCondition;
 use Chamilo\Libraries\Storage\Query\Condition\EqualityCondition;
 use Chamilo\Libraries\Storage\Query\Condition\InCondition;
 use Chamilo\Libraries\Storage\Query\Variable\PropertyConditionVariable;
 use Chamilo\Libraries\Storage\Query\Variable\StaticConditionVariable;
+use Chamilo\Libraries\Translation\Translation;
 use Chamilo\Libraries\Utilities\StringUtilities;
 
 /**
- *
  * @package application.lib.weblcms.tool.course_sections
  */
 class CourseSectionToolSelectorForm extends FormValidator
@@ -43,22 +41,36 @@ class CourseSectionToolSelectorForm extends FormValidator
 
         // $sel = &
         $this->addElement(
-            'select',
-            'tools',
-            Translation::get('SelectTools'),
-            $tools,
-            array('multiple' => 'true', 'size' => (count($tools) > 10 ? 10 : count($tools))));
+            'select', 'tools', Translation::get('SelectTools'), $tools,
+            ['multiple' => 'true', 'size' => (count($tools) > 10 ? 10 : count($tools))]
+        );
 
         $buttons[] = $this->createElement(
-            'style_submit_button',
-            'submit',
-            Translation::get('Save', null, StringUtilities::LIBRARIES));
+            'style_submit_button', 'submit', Translation::get('Save', null, StringUtilities::LIBRARIES)
+        );
         $buttons[] = $this->createElement(
-            'style_reset_button',
-            'reset',
-            Translation::get('Reset', null, StringUtilities::LIBRARIES));
+            'style_reset_button', 'reset', Translation::get('Reset', null, StringUtilities::LIBRARIES)
+        );
 
         $this->addGroup($buttons, 'buttons', null, '&nbsp;', false);
+    }
+
+    /**
+     * Retrieve the tools already registered
+     *
+     * @return type
+     */
+    public function get_registered_tools()
+    {
+        $condition = new EqualityCondition(
+            new PropertyConditionVariable(
+                CourseToolRelCourseSection::class, CourseToolRelCourseSection::PROPERTY_SECTION_ID
+            ), new StaticConditionVariable($this->course_section->get_id())
+        );
+
+        return $registered_tools_resultset = DataManager::retrieves(
+            CourseToolRelCourseSection::class, new DataClassRetrievesParameters($condition)
+        );
     }
 
     /**
@@ -72,21 +84,21 @@ class CourseSectionToolSelectorForm extends FormValidator
         // retrieve the tools
         $condition = new EqualityCondition(
             new PropertyConditionVariable(CourseTool::class, CourseTool::PROPERTY_SECTION_TYPE),
-            new StaticConditionVariable(CourseSection::TYPE_TOOL));
+            new StaticConditionVariable(CourseSection::TYPE_TOOL)
+        );
 
         $tools = DataManager::retrieves(CourseTool::class, new DataClassRetrievesParameters($condition));
 
         $active_tools = [];
 
-        foreach($tools as $tool)
+        foreach ($tools as $tool)
         {
             $course_settings_controller = CourseSettingsController::getInstance();
             $course = DataManager::retrieve_by_id(Course::class, $this->getRequest()->query->get('course'));
 
             if ($course_settings_controller->get_course_setting(
-                $course,
-                CourseSetting::COURSE_SETTING_TOOL_ACTIVE,
-                $tool->get_id()))
+                $course, CourseSetting::COURSE_SETTING_TOOL_ACTIVE, $tool->get_id()
+            ))
             {
                 $active_tools[$tool->get_id()] = $tool->get_name();
             }
@@ -96,21 +108,21 @@ class CourseSectionToolSelectorForm extends FormValidator
     }
 
     /**
-     * Retrieve the tools already registered
+     * Sets default values.
      *
-     * @return type
+     * @param $defaults array Default values for this form's parameters.
      */
-    public function get_registered_tools()
+    public function setDefaults($defaults = [], $filter = null)
     {
-        $condition = new EqualityCondition(
-            new PropertyConditionVariable(
-                CourseToolRelCourseSection::class,
-                CourseToolRelCourseSection::PROPERTY_SECTION_ID),
-            new StaticConditionVariable($this->course_section->get_id()));
+        $registered_tools = $this->get_registered_tools();
+        $registered_tools_array = [];
+        foreach ($registered_tools as $registered_tool)
+        {
+            $registered_tools_array[] = $registered_tool->get_tool_id();
+        }
+        $defaults['tools'] = $registered_tools_array;
 
-        return $registered_tools_resultset = DataManager::retrieves(
-            CourseToolRelCourseSection::class,
-            new DataClassRetrievesParameters($condition));
+        parent::setDefaults($defaults);
     }
 
     public function update_course_modules()
@@ -122,25 +134,26 @@ class CourseSectionToolSelectorForm extends FormValidator
         // retrieve the sections for this course
         $condition = new EqualityCondition(
             new PropertyConditionVariable(CourseSection::class, CourseSection::PROPERTY_COURSE_ID),
-            new StaticConditionVariable($this->getRequest()->query->get('course')));
+            new StaticConditionVariable($this->getRequest()->query->get('course'))
+        );
         $course_sections = \Chamilo\Application\Weblcms\Storage\DataManager::retrieves(
-            CourseSection::class,
-            new DataClassRetrievesParameters($condition));
+            CourseSection::class, new DataClassRetrievesParameters($condition)
+        );
 
         $course_section_ids = [];
-        foreach($course_sections as $course_section)
+        foreach ($course_sections as $course_section)
         {
             $course_section_ids[] = $course_section->get_id();
         }
 
         $registered_tools = $this->get_registered_tools();
-        foreach($registered_tools as $registered_tool)
+        foreach ($registered_tools as $registered_tool)
         {
             if (in_array($registered_tool->get_tool_id(), $selected_tools))
             {
                 // remove from selected tools because it's already assigned to
                 // this course section
-                $selected_tools = array_diff($selected_tools, array($registered_tool->get_tool_id()));
+                $selected_tools = array_diff($selected_tools, [$registered_tool->get_tool_id()]);
             }
             else
             {
@@ -158,25 +171,25 @@ class CourseSectionToolSelectorForm extends FormValidator
             $conditions = [];
             $conditions[] = new EqualityCondition(
                 new PropertyConditionVariable(
-                    CourseToolRelCourseSection::class,
-                    CourseToolRelCourseSection::PROPERTY_TOOL_ID),
-                new StaticConditionVariable($selected_tool_id));
+                    CourseToolRelCourseSection::class, CourseToolRelCourseSection::PROPERTY_TOOL_ID
+                ), new StaticConditionVariable($selected_tool_id)
+            );
             $conditions[] = new InCondition(
                 new PropertyConditionVariable(
-                    CourseToolRelCourseSection::class,
-                    CourseToolRelCourseSection::PROPERTY_SECTION_ID),
-                $course_section_ids);
+                    CourseToolRelCourseSection::class, CourseToolRelCourseSection::PROPERTY_SECTION_ID
+                ), $course_section_ids
+            );
             $condition = new AndCondition($conditions);
 
             $course_tool_rel_course_sections = DataManager::retrieves(
-                CourseToolRelCourseSection::class,
-                new DataClassRetrievesParameters($condition));
+                CourseToolRelCourseSection::class, new DataClassRetrievesParameters($condition)
+            );
 
             if ($course_tool_rel_course_sections->count() > 0)
             {
                 $course_tool_rel_course_section = $course_tool_rel_course_sections->current();
                 $course_tool_rel_course_section->set_section_id($this->course_section->get_id());
-                if (! $course_tool_rel_course_section->update())
+                if (!$course_tool_rel_course_section->update())
                 {
                     return false;
                 }
@@ -186,7 +199,7 @@ class CourseSectionToolSelectorForm extends FormValidator
                 $course_tool_rel_course_section = new CourseToolRelCourseSection();
                 $course_tool_rel_course_section->set_tool_id($selected_tool_id);
                 $course_tool_rel_course_section->set_section_id($this->course_section->get_id());
-                if (! $course_tool_rel_course_section->create())
+                if (!$course_tool_rel_course_section->create())
                 {
                     return false;
                 }
@@ -194,23 +207,5 @@ class CourseSectionToolSelectorForm extends FormValidator
         }
 
         return true;
-    }
-
-    /**
-     * Sets default values.
-     *
-     * @param $defaults array Default values for this form's parameters.
-     */
-    public function setDefaults($defaults = [], $filter = null)
-    {
-        $registered_tools = $this->get_registered_tools();
-        $registered_tools_array = [];
-        foreach($registered_tools as $registered_tool)
-        {
-            $registered_tools_array[] = $registered_tool->get_tool_id();
-        }
-        $defaults['tools'] = $registered_tools_array;
-
-        parent::setDefaults($defaults);
     }
 }

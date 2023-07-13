@@ -5,6 +5,7 @@ use Chamilo\Core\Repository\Common\Renderer\ContentObjectRenderer;
 use Chamilo\Core\Repository\Filter\FilterData;
 use Chamilo\Core\Repository\Filter\Renderer\ConditionFilterRenderer;
 use Chamilo\Core\Repository\Selector\TypeSelector;
+use Chamilo\Core\Repository\Selector\TypeSelectorTrait;
 use Chamilo\Core\Repository\Service\ContentObjectActionRenderer;
 use Chamilo\Core\Repository\Workspace\Service\WorkspaceContentObjectService;
 use Chamilo\Core\Repository\Workspace\Storage\DataClass\Workspace;
@@ -20,6 +21,8 @@ use Chamilo\Libraries\Platform\ChamiloRequest;
  */
 class SlideshowContentObjectRenderer extends ContentObjectRenderer
 {
+    use TypeSelectorTrait;
+
     protected ContentObjectActionRenderer $contentObjectActionRenderer;
 
     protected ChamiloRequest $request;
@@ -103,7 +106,7 @@ class SlideshowContentObjectRenderer extends ContentObjectRenderer
     {
         $parameters = $application->get_parameters();
 
-        $selected_types = TypeSelector::get_selection();
+        $selected_types = $this->getSelectedTypes();
 
         if (is_array($selected_types) && count($selected_types))
         {

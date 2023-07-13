@@ -96,7 +96,7 @@ abstract class StatusChangerComponent extends Manager
     public function getAdditionalParameters(array $additionalParameters = []): array
     {
         $additionalParameters[] = self::PARAM_TAB;
-        if ($this->getRequest()->query->get(\Chamilo\Application\Weblcms\Manager::PARAM_GROUP))
+        if ($this->getRequest()->query->has(\Chamilo\Application\Weblcms\Manager::PARAM_GROUP))
         {
             $additionalParameters[] = \Chamilo\Application\Weblcms\Manager::PARAM_GROUP;
         }

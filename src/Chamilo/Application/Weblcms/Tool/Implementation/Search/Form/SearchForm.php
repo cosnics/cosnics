@@ -3,7 +3,6 @@ namespace Chamilo\Application\Weblcms\Tool\Implementation\Search\Form;
 
 use Chamilo\Libraries\Format\Form\FormValidator;
 use Chamilo\Libraries\Format\Structure\Glyph\FontAwesomeGlyph;
-use Chamilo\Libraries\Platform\Session\Request;
 use Chamilo\Libraries\Translation\Translation;
 
 /**

@@ -29,7 +29,7 @@ abstract class ReportingTemplate
 
     public function addCurrentBlockBreadcrumb()
     {
-        if ($this->getRequest()->getFromQuery(\Chamilo\Core\Reporting\Viewer\Manager::PARAM_SHOW_ALL))
+        if ($this->getRequest()->query->get(\Chamilo\Core\Reporting\Viewer\Manager::PARAM_SHOW_ALL))
         {
             return;
         }
@@ -60,7 +60,7 @@ abstract class ReportingTemplate
      */
     public function getCurrentBlock()
     {
-        $blockId = $this->getRequest()->getFromQuery(\Chamilo\Core\Reporting\Viewer\Manager::PARAM_BLOCK_ID);
+        $blockId = $this->getRequest()->query->get(\Chamilo\Core\Reporting\Viewer\Manager::PARAM_BLOCK_ID);
         $block = null;
 
         if ($blockId >= 0)

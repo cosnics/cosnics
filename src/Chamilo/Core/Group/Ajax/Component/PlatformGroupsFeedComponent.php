@@ -7,7 +7,6 @@ use Chamilo\Core\Group\Storage\DataManager;
 use Chamilo\Libraries\Ajax\Component\GroupsFeedComponent;
 use Chamilo\Libraries\Format\Form\Element\AdvancedElementFinder\AdvancedElementFinderElement;
 use Chamilo\Libraries\Format\Structure\Glyph\FontAwesomeGlyph;
-use Chamilo\Libraries\Platform\Session\Request;
 use Chamilo\Libraries\Storage\Parameters\DataClassRetrievesParameters;
 use Chamilo\Libraries\Storage\Query\Condition\AndCondition;
 use Chamilo\Libraries\Storage\Query\Condition\ContainsCondition;
@@ -21,7 +20,7 @@ use Chamilo\Libraries\Storage\Query\Variable\StaticConditionVariable;
 /**
  * Feed to return the platform groups
  *
- * @author Sven Vanpoucke
+ * @author  Sven Vanpoucke
  * @package application.weblcms
  */
 class PlatformGroupsFeedComponent extends GroupsFeedComponent
@@ -29,9 +28,9 @@ class PlatformGroupsFeedComponent extends GroupsFeedComponent
     /**
      * The length for the filter prefix to remove
      */
-    const FILTER_PREFIX_LENGTH = 2;
-    const PARAM_GROUP = 'group';
-    const PARAM_USER = 'user';
+    public const FILTER_PREFIX_LENGTH = 2;
+    public const PARAM_GROUP = 'group';
+    public const PARAM_USER = 'user';
 
     public function getRequiredPostParameters(array $postParameters = []): array
     {
@@ -162,7 +161,7 @@ class PlatformGroupsFeedComponent extends GroupsFeedComponent
         return DataManager::retrieves(
             Group::class, new DataClassRetrievesParameters(
                 $condition, null, null,
-                new OrderBy(array(new OrderProperty(new PropertyConditionVariable(Group::class, Group::PROPERTY_NAME))))
+                new OrderBy([new OrderProperty(new PropertyConditionVariable(Group::class, Group::PROPERTY_NAME))])
             )
         );
     }

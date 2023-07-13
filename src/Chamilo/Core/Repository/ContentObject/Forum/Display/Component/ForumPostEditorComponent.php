@@ -8,12 +8,10 @@ use Chamilo\Core\Repository\ContentObject\ForumTopic\Storage\DataManager;
 use Chamilo\Core\Repository\Storage\DataClass\ContentObject;
 use Chamilo\Libraries\Architecture\Exceptions\NotAllowedException;
 use Chamilo\Libraries\Format\Structure\Breadcrumb;
-use Chamilo\Libraries\Platform\Session\Request;
 use Chamilo\Libraries\Translation\Translation;
 use Chamilo\Libraries\Utilities\StringUtilities;
 
 /**
- *
  * @author Mattias De Pauw - Hogeschool Gent
  * @author Maarten Volckaert - Hogeschool Gent
  */
@@ -37,11 +35,11 @@ class ForumPostEditorComponent extends ForumPostFormAction
 
             $form = new ForumPostForm(
                 ForumPostForm::TYPE_EDIT, $this->get_url(
-                array(
+                [
                     self::PARAM_ACTION => self::ACTION_EDIT_FORUM_POST,
                     self::PARAM_COMPLEX_CONTENT_OBJECT_ITEM_ID => $this->get_complex_content_object_item_id(),
                     self::PARAM_SELECTED_FORUM_POST => $this->selected_forum_post_id
-                )
+                ]
             ), $this->forumpost, $this->selected_forum_post_id
             );
 
@@ -122,7 +120,7 @@ class ForumPostEditorComponent extends ForumPostFormAction
         $trail = parent::add_common_breadcrumbtrails();
         $trail->add(
             new Breadcrumb(
-                $this->get_url(array(self::PARAM_SELECTED_FORUM_POST => $this->selected_forum_post_id)),
+                $this->get_url([self::PARAM_SELECTED_FORUM_POST => $this->selected_forum_post_id]),
                 Translation::get('EditPost', null, 'Chamilo\Core\Repository\ContentObject\ForumTopic')
             )
         );
@@ -135,7 +133,7 @@ class ForumPostEditorComponent extends ForumPostFormAction
     {
         $message = htmlentities(
             Translation::get(
-                ($success ? 'ObjectUpdated' : 'ObjectNotUpdated'), array('OBJECT' => Translation::get('ForumPost')),
+                ($success ? 'ObjectUpdated' : 'ObjectNotUpdated'), ['OBJECT' => Translation::get('ForumPost')],
                 StringUtilities::LIBRARIES
             )
         );

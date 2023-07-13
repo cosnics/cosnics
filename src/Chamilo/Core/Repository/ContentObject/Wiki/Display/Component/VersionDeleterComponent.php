@@ -5,14 +5,12 @@ use Chamilo\Core\Repository\ContentObject\Wiki\Display\Manager;
 use Chamilo\Core\Repository\Storage\DataClass\ComplexContentObjectItem;
 use Chamilo\Core\Repository\Storage\DataClass\ContentObject;
 use Chamilo\Core\Repository\Storage\DataManager;
-use Chamilo\Libraries\Platform\Session\Request;
 use Chamilo\Libraries\Translation\Translation;
 use Chamilo\Libraries\Utilities\StringUtilities;
 
 /**
  * @package Chamilo\Core\Repository\ContentObject\Wiki\Display\Component
- *
- * @author Hans De Bisschop <hans.de.bisschop@ehb.be>
+ * @author  Hans De Bisschop <hans.de.bisschop@ehb.be>
  */
 class VersionDeleterComponent extends Manager
 {
@@ -44,24 +42,24 @@ class VersionDeleterComponent extends Manager
                     {
                         $this->redirectWithMessage(
                             Translation::get(
-                                'ObjectDeleted', array('OBJECT' => Translation::get('WikiPageVersion')),
+                                'ObjectDeleted', ['OBJECT' => Translation::get('WikiPageVersion')],
                                 StringUtilities::LIBRARIES
-                            ), false, array(
+                            ), false, [
                                 self::PARAM_ACTION => self::ACTION_HISTORY,
                                 self::PARAM_SELECTED_COMPLEX_CONTENT_OBJECT_ITEM_ID => $complex_wiki_page_id
-                            )
+                            ]
                         );
                     }
                     else
                     {
                         $this->redirectWithMessage(
                             Translation::get(
-                                'ObjectNotDeleted', array('OBJECT' => Translation::get('WikiPageVersion')),
+                                'ObjectNotDeleted', ['OBJECT' => Translation::get('WikiPageVersion')],
                                 StringUtilities::LIBRARIES
-                            ), true, array(
+                            ), true, [
                                 self::PARAM_ACTION => self::ACTION_HISTORY,
                                 self::PARAM_SELECTED_COMPLEX_CONTENT_OBJECT_ITEM_ID => $complex_wiki_page_id
-                            )
+                            ]
                         );
                     }
                 }
@@ -69,12 +67,12 @@ class VersionDeleterComponent extends Manager
                 {
                     $this->redirectWithMessage(
                         Translation::get(
-                            'ObjectNotDeleted', array('OBJECT' => Translation::get('WikiPageVersion')),
+                            'ObjectNotDeleted', ['OBJECT' => Translation::get('WikiPageVersion')],
                             StringUtilities::LIBRARIES
-                        ), true, array(
+                        ), true, [
                             self::PARAM_ACTION => self::ACTION_HISTORY,
                             self::PARAM_SELECTED_COMPLEX_CONTENT_OBJECT_ITEM_ID => $complex_wiki_page_id
-                        )
+                        ]
                     );
                 }
             }
@@ -82,18 +80,18 @@ class VersionDeleterComponent extends Manager
             {
                 $this->redirectWithMessage(
                     Translation::get(
-                        'ObjectNotDeleted', array('OBJECT' => Translation::get('WikiPageVersion')),
+                        'ObjectNotDeleted', ['OBJECT' => Translation::get('WikiPageVersion')],
                         StringUtilities::LIBRARIES
-                    ), true, array(
+                    ), true, [
                         self::PARAM_ACTION => self::ACTION_HISTORY,
                         self::PARAM_SELECTED_COMPLEX_CONTENT_OBJECT_ITEM_ID => $complex_wiki_page_id
-                    )
+                    ]
                 );
             }
         }
         else
         {
-            $this->redirectWithMessage(null, false, array(self::PARAM_ACTION => self::ACTION_VIEW_WIKI));
+            $this->redirectWithMessage(null, false, [self::PARAM_ACTION => self::ACTION_VIEW_WIKI]);
         }
     }
 }

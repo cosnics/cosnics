@@ -4,7 +4,6 @@ namespace Chamilo\Application\Weblcms\Ajax\Component;
 use Chamilo\Application\Weblcms\Ajax\Manager;
 use Chamilo\Application\Weblcms\Integration\Chamilo\Core\Tracking\Storage\DataClass\AssessmentAttempt;
 use Chamilo\Libraries\Architecture\JsonAjaxResult;
-use Chamilo\Libraries\Platform\Session\Request;
 use Chamilo\Libraries\Storage\DataManager\DataManager;
 use Chamilo\Libraries\Storage\Parameters\DataClassRetrieveParameters;
 use Chamilo\Libraries\Storage\Query\Condition\EqualityCondition;
@@ -18,29 +17,29 @@ class HotpotatoesSaveScoreComponent extends Manager
     {
         $id = $this->getRequest()->request->get('id');
         $score = $this->getRequest()->request->get('score');
-        
+
         $condition = new EqualityCondition(
             new PropertyConditionVariable(
-                AssessmentAttempt::class,
-                AssessmentAttempt::PROPERTY_ID),
-            new StaticConditionVariable($id));
-        
+                AssessmentAttempt::class, AssessmentAttempt::PROPERTY_ID
+            ), new StaticConditionVariable($id)
+        );
+
         $tracker = DataManager::retrieve(
-            AssessmentAttempt::class,
-            new DataClassRetrieveParameters($condition));
-        
+            AssessmentAttempt::class, new DataClassRetrieveParameters($condition)
+        );
+
         if ($tracker)
         {
             $end_time = time();
-            
+
             $tracker->set_total_score($score);
             $tracker->set_status(AssessmentAttempt::STATUS_COMPLETED);
             $tracker->set_end_time($end_time);
             $tracker->set_total_time($tracker->get_total_time() + ($end_time - $tracker->get_start_time()));
-            
+
             $tracker->update();
         }
-        
+
         JsonAjaxResult::success();
     }
 }

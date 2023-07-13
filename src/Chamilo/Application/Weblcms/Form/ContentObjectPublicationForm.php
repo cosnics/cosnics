@@ -27,7 +27,6 @@ use Chamilo\Libraries\Format\Utilities\ResourceManager;
 use Chamilo\Libraries\Mail\Mailer\MailerInterface;
 use Chamilo\Libraries\Mail\ValueObject\Mail;
 use Chamilo\Libraries\Mail\ValueObject\MailFile;
-use Chamilo\Libraries\Platform\Session\Request;
 use Chamilo\Libraries\Storage\Parameters\DataClassRetrievesParameters;
 use Chamilo\Libraries\Storage\Query\Condition\AndCondition;
 use Chamilo\Libraries\Storage\Query\Condition\EqualityCondition;
@@ -805,7 +804,8 @@ class ContentObjectPublicationForm extends BasePublicationForm
     {
         $publications = $this->publications;
 
-        $defaults[ContentObjectPublication::PROPERTY_CATEGORY_ID] = $this->getRequest()->query->get(Manager::PARAM_CATEGORY);
+        $defaults[ContentObjectPublication::PROPERTY_CATEGORY_ID] =
+            $this->getRequest()->query->get(Manager::PARAM_CATEGORY);
         $defaults[self::PROPERTY_TIME_PERIOD_FOREVER] = 1;
         $defaults[self::PROPERTY_RIGHTS_SELECTOR] = self::RIGHTS_INHERIT;
 

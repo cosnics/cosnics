@@ -20,7 +20,6 @@ use Chamilo\Libraries\Format\Structure\ActionBar\Renderer\ButtonToolBarRenderer;
 use Chamilo\Libraries\Format\Structure\Glyph\FontAwesomeGlyph;
 use Chamilo\Libraries\Format\Structure\Toolbar;
 use Chamilo\Libraries\Format\Structure\ToolbarItem;
-use Chamilo\Libraries\Platform\Session\Request;
 use Chamilo\Libraries\Storage\Cache\DataClassRepositoryCache;
 use Chamilo\Libraries\Storage\Parameters\DataClassRetrieveParameters;
 use Chamilo\Libraries\Storage\Parameters\DataClassRetrievesParameters;
@@ -613,7 +612,8 @@ class SorterComponent extends Manager
      */
     public function move_course_type($direction)
     {
-        $selected_course_type_id = $this->getRequest()->query->get(CourseTypeCourseListRenderer::PARAM_SELECTED_COURSE_TYPE);
+        $selected_course_type_id =
+            $this->getRequest()->query->get(CourseTypeCourseListRenderer::PARAM_SELECTED_COURSE_TYPE);
 
         $course_type_translation = Translation::get('CourseType');
 

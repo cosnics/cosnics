@@ -15,7 +15,6 @@ use Chamilo\Libraries\Architecture\Interfaces\DelegateComponent;
 use Chamilo\Libraries\Format\Form\FormValidator;
 use Chamilo\Libraries\Format\Structure\Breadcrumb;
 use Chamilo\Libraries\Format\Structure\BreadcrumbTrail;
-use Chamilo\Libraries\Platform\Session\Request;
 use Chamilo\Libraries\Translation\Translation;
 
 /**
@@ -99,9 +98,10 @@ class ContentObjectUpdaterComponent extends Manager implements DelegateComponent
                 {
                     $params[\Chamilo\Application\Weblcms\Tool\Manager::PARAM_ACTION] = null;
                     $params['display_action'] = 'view';
-                    $params[\Chamilo\Application\Weblcms\Tool\Manager::PARAM_PUBLICATION_ID] = $this->getRequest()->query->get(
-                        \Chamilo\Application\Weblcms\Tool\Manager::PARAM_PUBLICATION_ID
-                    );
+                    $params[\Chamilo\Application\Weblcms\Tool\Manager::PARAM_PUBLICATION_ID] =
+                        $this->getRequest()->query->get(
+                            \Chamilo\Application\Weblcms\Tool\Manager::PARAM_PUBLICATION_ID
+                        );
                 }
 
                 if ($tool != 'learning_path')

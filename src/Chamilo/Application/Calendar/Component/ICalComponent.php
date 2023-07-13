@@ -68,7 +68,7 @@ class ICalComponent extends Manager implements NoAuthenticationSupport
                 return $response;
             }
 
-            if ($this->getRequest()->query->get(self::PARAM_DOWNLOAD))
+            if ($this->getRequest()->query->has(self::PARAM_DOWNLOAD))
             {
                 $this->renderCalendar($this->getUser());
             }

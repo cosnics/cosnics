@@ -77,49 +77,46 @@ class ICalComponent extends Manager implements NoAuthenticationSupport
                 $response->send();
             }
         }
+        elseif ($this->getRequest()->query->has(self::PARAM_DOWNLOAD))
+        {
+            $this->renderCalendar($this->getUser());
+        }
         else
         {
-            if ($this->getRequest()->query->get(self::PARAM_DOWNLOAD))
+            if (!$this->get_application() instanceof CourseViewerComponent)
             {
-                $this->renderCalendar($this->getUser());
+                throw new NotAllowedException();
             }
-            else
-            {
-                if (!$this->get_application() instanceof CourseViewerComponent)
-                {
-                    throw new NotAllowedException();
-                }
 
-                $downloadParameters = $this->get_parameters();
-                $downloadParameters[self::PARAM_DOWNLOAD] = 1;
+            $downloadParameters = $this->get_parameters();
+            $downloadParameters[self::PARAM_DOWNLOAD] = 1;
 
-                $icalDownloadUrl = $this->getUrlGenerator()->fromParameters($downloadParameters);
+            $icalDownloadUrl = $this->getUrlGenerator()->fromParameters($downloadParameters);
 
-                $externalParameters = $this->get_parameters();
-                $externalParameters[Application::PARAM_CONTEXT] =
-                    'Chamilo\Application\Weblcms\Tool\Implementation\Calendar';
-                $externalParameters[User::PROPERTY_SECURITY_TOKEN] = $this->getUser()->get_security_token();
+            $externalParameters = $this->get_parameters();
+            $externalParameters[Application::PARAM_CONTEXT] =
+                'Chamilo\Application\Weblcms\Tool\Implementation\Calendar';
+            $externalParameters[User::PROPERTY_SECURITY_TOKEN] = $this->getUser()->get_security_token();
 
-                $icalExternalUrl = $this->getUrlGenerator()->fromParameters(
-                    $externalParameters, [Application::PARAM_ACTION, \Chamilo\Application\Weblcms\Manager::PARAM_TOOL]
-                );
+            $icalExternalUrl = $this->getUrlGenerator()->fromParameters(
+                $externalParameters, [Application::PARAM_ACTION, \Chamilo\Application\Weblcms\Manager::PARAM_TOOL]
+            );
 
-                $html = [];
+            $html = [];
 
-                $html[] = $this->render_header();
+            $html[] = $this->render_header();
 
-                $html[] = Display::normal_message(
-                    Translation::get('ICalExternalMessage', ['URL' => $icalExternalUrl])
-                );
+            $html[] = Display::normal_message(
+                Translation::get('ICalExternalMessage', ['URL' => $icalExternalUrl])
+            );
 
-                $html[] = Display::normal_message(
-                    Translation::get('ICalDownloadMessage', ['URL' => $icalDownloadUrl])
-                );
+            $html[] = Display::normal_message(
+                Translation::get('ICalDownloadMessage', ['URL' => $icalDownloadUrl])
+            );
 
-                $html[] = $this->render_footer();
+            $html[] = $this->render_footer();
 
-                return implode(PHP_EOL, $html);
-            }
+            return implode(PHP_EOL, $html);
         }
     }
 

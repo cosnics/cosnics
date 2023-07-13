@@ -200,7 +200,7 @@ abstract class Manager extends \Chamilo\Application\Weblcms\Tool\Manager
         if (empty($publicationId))
         {
             $publicationId =
-                $this->getRequest()->getFromQuery(\Chamilo\Application\Weblcms\Tool\Manager::PARAM_PUBLICATION_ID);
+                $this->getRequest()->query->get(\Chamilo\Application\Weblcms\Tool\Manager::PARAM_PUBLICATION_ID);
         }
 
         return new TrackingParameters((int) $publicationId);

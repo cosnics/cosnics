@@ -7,10 +7,8 @@ use Chamilo\Core\User\Storage\DataClass\User;
 use Chamilo\Core\User\Storage\DataManager;
 use Chamilo\Core\User\UserDetails;
 use Chamilo\Core\User\UserGroups;
-use Chamilo\Libraries\Platform\Session\Request;
 
 /**
- *
  * @package application.lib.weblcms.tool.user.component
  */
 class DetailsComponent extends Manager
@@ -27,7 +25,7 @@ class DetailsComponent extends Manager
                 [$this->get_course_id()]
             );
 
-        if ($this->getRequest()->query->get(\Chamilo\Application\Weblcms\Manager::PARAM_USERS))
+        if ($this->getRequest()->query->has(\Chamilo\Application\Weblcms\Manager::PARAM_USERS))
         {
             /** @var \Chamilo\Core\User\Storage\DataClass\User $user */
             $user = DataManager::retrieve_by_id(

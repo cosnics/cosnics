@@ -12,7 +12,6 @@ use Chamilo\Libraries\Architecture\Interfaces\DelegateComponent;
 use Chamilo\Libraries\Format\Form\FormValidator;
 use Chamilo\Libraries\Format\Structure\Breadcrumb;
 use Chamilo\Libraries\Format\Structure\BreadcrumbTrail;
-use Chamilo\Libraries\Platform\Session\Request;
 use Chamilo\Libraries\Storage\Parameters\DataClassRetrievesParameters;
 use Chamilo\Libraries\Storage\Query\Condition\InCondition;
 use Chamilo\Libraries\Storage\Query\OrderBy;
@@ -22,7 +21,6 @@ use Chamilo\Libraries\Translation\Translation;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 
 /**
- *
  * @package repository.lib.complex_display.assessment.component
  */
 class AssessmentViewerComponent extends Manager implements DelegateComponent
@@ -60,7 +58,7 @@ class AssessmentViewerComponent extends Manager implements DelegateComponent
         BreadcrumbTrail::getInstance()->add(
             new Breadcrumb(
                 $this->get_url(), Translation:: get(
-                'AssessmentToolViewerComponent', array('TITLE' => $this->get_root_content_object()->get_title())
+                'AssessmentToolViewerComponent', ['TITLE' => $this->get_root_content_object()->get_title()]
             )
             )
         );
@@ -135,11 +133,11 @@ class AssessmentViewerComponent extends Manager implements DelegateComponent
 
     public function get_action(): ?string
     {
-        $actions = array(self::FORM_NEXT, self::FORM_SUBMIT, self::FORM_BACK);
+        $actions = [self::FORM_NEXT, self::FORM_SUBMIT, self::FORM_BACK];
 
         foreach ($actions as $action)
         {
-            if (!is_null(Request:: post($action)))
+            if ($this->getRequest()->request->has($action))
             {
                 return $action;
             }
@@ -228,7 +226,7 @@ class AssessmentViewerComponent extends Manager implements DelegateComponent
 
         if (!is_array($random_question_keys))
         {
-            $random_question_keys = array($random_question_keys);
+            $random_question_keys = [$random_question_keys];
         }
 
         $random_question_ids = [];
@@ -399,12 +397,12 @@ class AssessmentViewerComponent extends Manager implements DelegateComponent
 
     public function question_form_submitted()
     {
-        return !is_null(Request:: post('_qf__' . AssessmentViewerForm::FORM_NAME));
+        return !is_null($this->getRequest()->request->get('_qf__' . AssessmentViewerForm::FORM_NAME));
     }
 
     public function result_form_submitted()
     {
-        return !is_null(Request:: post('_qf__' . AssessmentResultViewerForm::FORM_NAME));
+        return !is_null($this->getRequest()->request->get('_qf__' . AssessmentResultViewerForm::FORM_NAME));
     }
 
     public function showFeedbackAfterEveryPage()

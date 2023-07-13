@@ -16,7 +16,6 @@ use Chamilo\Core\Repository\Storage\DataManager;
 use Chamilo\Core\Repository\Workspace\Storage\DataClass\Workspace;
 use Chamilo\Libraries\Architecture\Exceptions\NotAllowedException;
 use Chamilo\Libraries\Format\Structure\BreadcrumbTrail;
-use Chamilo\Libraries\Platform\Session\Request;
 use Chamilo\Libraries\Storage\Parameters\DataClassRetrievesParameters;
 use Chamilo\Libraries\Storage\Query\Condition\AndCondition;
 use Chamilo\Libraries\Storage\Query\Condition\EqualityCondition;
@@ -38,11 +37,11 @@ class DocumentSaverComponent extends Manager
             throw new NotAllowedException();
         }
 
-        if ($this->getRequest()->query->get(self::PARAM_USER_ASSESSMENT))
+        if ($this->getRequest()->query->has(self::PARAM_USER_ASSESSMENT))
         {
             $this->retrieve_assessment_attempt_documents($this->getRequest()->query->get(self::PARAM_USER_ASSESSMENT));
         }
-        elseif ($this->getRequest()->query->get(self::PARAM_ASSESSMENT))
+        elseif ($this->getRequest()->query->has(self::PARAM_ASSESSMENT))
         {
             $this->retrieve_assessment_documents($this->getRequest()->query->get(self::PARAM_ASSESSMENT));
         }

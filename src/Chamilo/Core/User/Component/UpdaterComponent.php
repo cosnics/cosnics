@@ -9,12 +9,10 @@ use Chamilo\Libraries\Architecture\Application\Application;
 use Chamilo\Libraries\Architecture\Exceptions\NotAllowedException;
 use Chamilo\Libraries\Format\Structure\Breadcrumb;
 use Chamilo\Libraries\Format\Structure\BreadcrumbTrail;
-use Chamilo\Libraries\Platform\Session\Request;
 use Chamilo\Libraries\Translation\Translation;
 use Chamilo\Libraries\Utilities\StringUtilities;
 
 /**
- *
  * @package user.lib.user_manager.component
  */
 class UpdaterComponent extends Manager
@@ -27,7 +25,7 @@ class UpdaterComponent extends Manager
     {
         $this->checkAuthorization(Manager::CONTEXT, 'ManageUsers');
 
-        if (! $this->get_user()->isPlatformAdmin())
+        if (!$this->get_user()->isPlatformAdmin())
         {
             throw new NotAllowedException();
         }
@@ -38,21 +36,20 @@ class UpdaterComponent extends Manager
         if ($id)
         {
             $user = DataManager::retrieve_by_id(
-                User::class,
-                (int) $id);
+                User::class, (int) $id
+            );
 
             $form = new UserForm(
-                UserForm::TYPE_EDIT,
-                $user,
-                $this->get_user(),
-                $this->get_url(array(self::PARAM_USER_USER_ID => $id)));
+                UserForm::TYPE_EDIT, $user, $this->get_user(), $this->get_url([self::PARAM_USER_USER_ID => $id])
+            );
 
             if ($form->validate())
             {
                 $success = $form->update_user();
                 $this->redirectWithMessage(
                     Translation::get($success ? 'UserUpdated' : 'UserNotUpdated'), !$success,
-                    array(Application::PARAM_ACTION => self::ACTION_BROWSE_USERS));
+                    [Application::PARAM_ACTION => self::ACTION_BROWSE_USERS]
+                );
             }
             else
             {
@@ -70,9 +67,10 @@ class UpdaterComponent extends Manager
             return $this->display_error_page(
                 htmlentities(
                     Translation::get(
-                        'NoObjectSelected',
-                        array('OBJECT' => Translation::get('User')),
-                        StringUtilities::LIBRARIES)));
+                        'NoObjectSelected', ['OBJECT' => Translation::get('User')], StringUtilities::LIBRARIES
+                    )
+                )
+            );
         }
     }
 
@@ -80,7 +78,9 @@ class UpdaterComponent extends Manager
     {
         $breadcrumbtrail->add(
             new Breadcrumb(
-                $this->get_url(array(self::PARAM_ACTION => self::ACTION_BROWSE_USERS)),
-                Translation::get('AdminUserBrowserComponent')));
+                $this->get_url([self::PARAM_ACTION => self::ACTION_BROWSE_USERS]),
+                Translation::get('AdminUserBrowserComponent')
+            )
+        );
     }
 }

@@ -12,12 +12,10 @@ use Chamilo\Libraries\Format\Structure\Breadcrumb;
 use Chamilo\Libraries\Format\Structure\BreadcrumbTrail;
 use Chamilo\Libraries\Format\Structure\Glyph\FontAwesomeGlyph;
 use Chamilo\Libraries\Format\Structure\ToolbarItem;
-use Chamilo\Libraries\Platform\Session\Request;
 use Chamilo\Libraries\Translation\Translation;
 use Chamilo\Libraries\Utilities\StringUtilities;
 
 /**
- *
  * @package repository.lib.complex_display.glossary.component
  */
 
@@ -26,10 +24,9 @@ use Chamilo\Libraries\Utilities\StringUtilities;
  */
 class ViewerComponent extends Manager implements DelegateComponent
 {
-    const PARAM_VIEW = 'view';
+    public const PARAM_VIEW = 'view';
 
     /**
-     *
      * @var ButtonToolBarRenderer
      */
     private $buttonToolbarRenderer;
@@ -50,6 +47,18 @@ class ViewerComponent extends Manager implements DelegateComponent
     }
 
     /**
+     * Returns the additional parameters for registration
+     *
+     * @return array
+     */
+    public function getAdditionalParameters(array $additionalParameters = []): array
+    {
+        $additionalParameters[] = self::PARAM_VIEW;
+
+        return parent::getAdditionalParameters($additionalParameters);
+    }
+
+    /**
      * Builds and returns the actionbar
      *
      * @return ButtonToolBarRenderer
@@ -66,10 +75,10 @@ class ViewerComponent extends Manager implements DelegateComponent
                 $commonActions->addButton(
                     new Button(
                         Translation::get('CreateItem'), new FontAwesomeGlyph('plus'), $this->get_url(
-                        array(
+                        [
                             self::PARAM_COMPLEX_CONTENT_OBJECT_ITEM_ID => $this->get_complex_content_object_item_id(),
                             self::PARAM_ACTION => self::ACTION_CREATE_COMPLEX_CONTENT_OBJECT_ITEM
-                        )
+                        ]
                     ), ToolbarItem::DISPLAY_ICON_AND_LABEL
                     )
                 );
@@ -78,14 +87,14 @@ class ViewerComponent extends Manager implements DelegateComponent
             $commonActions->addButton(
                 new Button(
                     Translation::get('TableView', null, StringUtilities::LIBRARIES), new FontAwesomeGlyph('table'),
-                    $this->get_url(array(self::PARAM_VIEW => GlossaryRendererFactory::TYPE_TABLE)),
+                    $this->get_url([self::PARAM_VIEW => GlossaryRendererFactory::TYPE_TABLE]),
                     ToolbarItem::DISPLAY_ICON_AND_LABEL
                 )
             );
             $commonActions->addButton(
                 new Button(
                     Translation::get('ListView', null, StringUtilities::LIBRARIES), new FontAwesomeGlyph('list'),
-                    $this->get_url(array(self::PARAM_VIEW => GlossaryRendererFactory::TYPE_LIST)),
+                    $this->get_url([self::PARAM_VIEW => GlossaryRendererFactory::TYPE_LIST]),
                     ToolbarItem::DISPLAY_ICON_AND_LABEL
                 )
             );
@@ -96,18 +105,6 @@ class ViewerComponent extends Manager implements DelegateComponent
         }
 
         return $this->buttonToolbarRenderer;
-    }
-
-    /**
-     * Returns the additional parameters for registration
-     *
-     * @return array
-     */
-    public function getAdditionalParameters(array $additionalParameters = []): array
-    {
-        $additionalParameters[] = self::PARAM_VIEW;
-
-        return parent::getAdditionalParameters($additionalParameters);
     }
 
     /**
@@ -130,7 +127,7 @@ class ViewerComponent extends Manager implements DelegateComponent
     /**
      * Checks whether or not a child can be deleted
      *
-     * @return boolean
+     * @return bool
      */
     public function is_allowed_to_delete_child()
     {
@@ -140,7 +137,7 @@ class ViewerComponent extends Manager implements DelegateComponent
     /**
      * Checks whether or not the content object can be edited
      *
-     * @return boolean
+     * @return bool
      */
     public function is_allowed_to_edit_content_object()
     {

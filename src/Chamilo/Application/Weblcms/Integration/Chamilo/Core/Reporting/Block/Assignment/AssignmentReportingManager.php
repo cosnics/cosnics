@@ -209,7 +209,7 @@ abstract class AssignmentReportingManager extends ToolBlock
      */
     public function getCourseId()
     {
-        return $this->getRequest()->getFromQuery(\Chamilo\Application\Weblcms\Manager::PARAM_COURSE);
+        return $this->getRequest()->query->get(\Chamilo\Application\Weblcms\Manager::PARAM_COURSE);
     }
 
     /**
@@ -219,7 +219,7 @@ abstract class AssignmentReportingManager extends ToolBlock
      */
     public function getEntityId()
     {
-        return $this->getRequest()->getFromQuery(
+        return $this->getRequest()->query->get(
             \Chamilo\Core\Repository\ContentObject\Assignment\Display\Manager::PARAM_ENTITY_ID
         );
     }
@@ -249,7 +249,7 @@ abstract class AssignmentReportingManager extends ToolBlock
      */
     public function getEntityType()
     {
-        return $this->getRequest()->getFromQuery(
+        return $this->getRequest()->query->get(
             \Chamilo\Core\Repository\ContentObject\Assignment\Display\Manager::PARAM_ENTITY_TYPE,
             Entry::ENTITY_TYPE_USER
         );
@@ -330,7 +330,7 @@ abstract class AssignmentReportingManager extends ToolBlock
      */
     public function getPublicationId()
     {
-        return $this->getRequest()->getFromQuery(Manager::PARAM_PUBLICATION_ID);
+        return $this->getRequest()->query->get(Manager::PARAM_PUBLICATION_ID);
     }
 
     /**

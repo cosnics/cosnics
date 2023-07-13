@@ -10,7 +10,6 @@ use Chamilo\Libraries\Architecture\JsonAjaxResult;
 use Chamilo\Libraries\Format\Form\Element\AdvancedElementFinder\AdvancedElementFinderElement;
 use Chamilo\Libraries\Format\Form\Element\AdvancedElementFinder\AdvancedElementFinderElements;
 use Chamilo\Libraries\Format\Structure\Glyph\FontAwesomeGlyph;
-use Chamilo\Libraries\Platform\Session\Request;
 use Chamilo\Libraries\Storage\DataManager\DataManager;
 use Chamilo\Libraries\Storage\Parameters\DataClassCountParameters;
 use Chamilo\Libraries\Storage\Parameters\DataClassDistinctParameters;
@@ -30,19 +29,19 @@ use Chamilo\Libraries\Storage\Service\SearchQueryConditionGenerator;
 /**
  * Feed to return users of this course
  *
- * @author Sven Vanpoucke
+ * @author  Sven Vanpoucke
  * @package application.weblcms
  */
 class CourseUsersFeedComponent extends Manager
 {
-    const PARAM_COURSE_ID = 'course_id';
+    public const PARAM_COURSE_ID = 'course_id';
 
-    const PARAM_OFFSET = 'offset';
+    public const PARAM_OFFSET = 'offset';
 
-    const PARAM_SEARCH_QUERY = 'query';
+    public const PARAM_SEARCH_QUERY = 'query';
 
-    const PROPERTY_ELEMENTS = 'elements';
-    const PROPERTY_TOTAL_ELEMENTS = 'total_elements';
+    public const PROPERTY_ELEMENTS = 'elements';
+    public const PROPERTY_TOTAL_ELEMENTS = 'total_elements';
 
     private $user_count = 0;
 
@@ -64,7 +63,7 @@ class CourseUsersFeedComponent extends Manager
 
     public function getRequiredPostParameters(array $postParameters = []): array
     {
-        return array(self::PARAM_COURSE_ID);
+        return [self::PARAM_COURSE_ID];
     }
 
     /**
@@ -143,9 +142,9 @@ class CourseUsersFeedComponent extends Manager
 
         $parameters = new DataClassDistinctParameters(
             new AndCondition($userConditions), new RetrieveProperties(
-                array(
+                [
                     new PropertyConditionVariable(CourseEntityRelation::class, CourseEntityRelation::PROPERTY_ENTITY_ID)
-                )
+                ]
             )
         );
 
@@ -182,9 +181,9 @@ class CourseUsersFeedComponent extends Manager
 
         $parameters = new DataClassDistinctParameters(
             new AndCondition($userConditions), new RetrieveProperties(
-                array(
+                [
                     new PropertyConditionVariable(CourseEntityRelation::class, CourseEntityRelation::PROPERTY_ENTITY_ID)
-                )
+                ]
             )
         );
 
@@ -210,11 +209,11 @@ class CourseUsersFeedComponent extends Manager
         if ($search_query && $search_query != '')
         {
             $conditions[] = $this->getSearchQueryConditionGenerator()->getSearchConditions(
-                $search_query, array(
+                $search_query, [
                     new PropertyConditionVariable(User::class, User::PROPERTY_USERNAME),
                     new PropertyConditionVariable(User::class, User::PROPERTY_FIRSTNAME),
                     new PropertyConditionVariable(User::class, User::PROPERTY_LASTNAME)
-                )
+                ]
             );
         }
 
@@ -235,10 +234,10 @@ class CourseUsersFeedComponent extends Manager
             \Chamilo\Core\User\Storage\DataManager::count(User::class, new DataClassCountParameters($condition));
 
         $parameters = new DataClassRetrievesParameters(
-            $condition, 100, $this->get_offset(), new OrderBy(array(
+            $condition, 100, $this->get_offset(), new OrderBy([
                 new OrderProperty(new PropertyConditionVariable(User::class, User::PROPERTY_LASTNAME)),
                 new OrderProperty(new PropertyConditionVariable(User::class, User::PROPERTY_FIRSTNAME))
-            ))
+            ])
         );
 
         return \Chamilo\Core\User\Storage\DataManager::retrieves(User::class, $parameters);

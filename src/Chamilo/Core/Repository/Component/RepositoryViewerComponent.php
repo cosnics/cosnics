@@ -4,12 +4,11 @@ namespace Chamilo\Core\Repository\Component;
 use Chamilo\Core\Repository\ContentObject\File\Storage\DataClass\File;
 use Chamilo\Core\Repository\Manager;
 use Chamilo\Core\Repository\Storage\DataManager;
+use Chamilo\Core\Repository\Viewer\Architecture\Traits\ViewerTrait;
 use Chamilo\Libraries\Architecture\Application\ApplicationConfiguration;
 use Chamilo\Libraries\Format\Structure\PageConfiguration;
-use Chamilo\Libraries\Platform\Session\Request;
 
 /**
- *
  * @package repository.lib.repository_manager.component
  */
 
@@ -20,6 +19,8 @@ use Chamilo\Libraries\Platform\Session\Request;
  */
 class RepositoryViewerComponent extends Manager
 {
+    use ViewerTrait;
+
     public const PARAM_ELEMENT_NAME = 'element_name';
 
     public function run()
@@ -28,7 +29,7 @@ class RepositoryViewerComponent extends Manager
         $this->set_parameter(self::PARAM_ELEMENT_NAME, $element_name);
         $this->getPageConfiguration()->setViewMode(PageConfiguration::VIEW_MODE_HEADERLESS);
 
-        if (!\Chamilo\Core\Repository\Viewer\Manager::is_ready_to_be_published())
+        if (!$this->isAnyObjectSelectedInViewer())
         {
             return $this->getApplicationFactory()->getApplication(
                 \Chamilo\Core\Repository\Viewer\Manager::CONTEXT,
@@ -40,9 +41,8 @@ class RepositoryViewerComponent extends Manager
             $html = [];
 
             $html[] = $this->render_header();
-
-            $object_id = \Chamilo\Core\Repository\Viewer\Manager::get_selected_objects();
-            $object = DataManager::retrieve_by_id(File::class, $object_id);
+            
+            $object = DataManager::retrieve_by_id(File::class, $this->getObjectsSelectedInviewer());
 
             $html[] = '<script>';
             $html[] = 'window.opener.$("input[name=' . $element_name . '_title]").val("' . addslashes(
@@ -61,7 +61,7 @@ class RepositoryViewerComponent extends Manager
 
     public function get_allowed_content_object_types()
     {
-        return array(File::class);
+        return [File::class];
     }
 
     public function get_element_name()

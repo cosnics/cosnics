@@ -7,11 +7,9 @@ use Chamilo\Application\Weblcms\Storage\DataManager;
 use Chamilo\Application\Weblcms\Tool\Action\Manager;
 use Chamilo\Libraries\Architecture\Exceptions\NotAllowedException;
 use Chamilo\Libraries\Architecture\Interfaces\DelegateComponent;
-use Chamilo\Libraries\Platform\Session\Request;
 use Chamilo\Libraries\Translation\Translation;
 
 /**
- *
  * @package application.lib.weblcms.tool.component
  */
 class MoverComponent extends Manager implements DelegateComponent
@@ -24,12 +22,13 @@ class MoverComponent extends Manager implements DelegateComponent
      */
     public function run()
     {
-        $publication_id = $this->getRequest()->query->get(\Chamilo\Application\Weblcms\Tool\Manager::PARAM_PUBLICATION_ID);
+        $publication_id =
+            $this->getRequest()->query->get(\Chamilo\Application\Weblcms\Tool\Manager::PARAM_PUBLICATION_ID);
         $publication = DataManager::retrieve_by_id(
-            ContentObjectPublication::class,
-            $publication_id);
+            ContentObjectPublication::class, $publication_id
+        );
 
-        if (! $this->is_allowed(WeblcmsRights::EDIT_RIGHT, $publication))
+        if (!$this->is_allowed(WeblcmsRights::EDIT_RIGHT, $publication))
         {
             throw new NotAllowedException();
         }
@@ -42,13 +41,16 @@ class MoverComponent extends Manager implements DelegateComponent
         }
 
         $this->redirectWithMessage(
-            $message,
-            false,
-            array(
+            $message, false, [
                 \Chamilo\Application\Weblcms\Tool\Manager::PARAM_ACTION => null,
                 \Chamilo\Application\Weblcms\Tool\Manager::PARAM_BROWSER_TYPE => $this->getRequest()->query->get(
-                    \Chamilo\Application\Weblcms\Tool\Manager::PARAM_BROWSER_TYPE),
-                \Chamilo\Application\Weblcms\Tool\Manager::PARAM_BROWSE_PUBLICATION_TYPE => $this->getRequest()->query->get(
-                    \Chamilo\Application\Weblcms\Tool\Manager::PARAM_BROWSE_PUBLICATION_TYPE)));
+                    \Chamilo\Application\Weblcms\Tool\Manager::PARAM_BROWSER_TYPE
+                ),
+                \Chamilo\Application\Weblcms\Tool\Manager::PARAM_BROWSE_PUBLICATION_TYPE => $this->getRequest(
+                )->query->get(
+                    \Chamilo\Application\Weblcms\Tool\Manager::PARAM_BROWSE_PUBLICATION_TYPE
+                )
+            ]
+        );
     }
 }

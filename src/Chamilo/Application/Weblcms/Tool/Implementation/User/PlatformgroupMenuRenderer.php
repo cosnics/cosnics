@@ -9,7 +9,7 @@ use Chamilo\Libraries\Architecture\Application\Routing\UrlGenerator;
 use Chamilo\Libraries\DependencyInjection\DependencyInjectionContainerBuilder;
 use Chamilo\Libraries\Format\Menu\TreeMenu\GenericTree;
 use Chamilo\Libraries\Format\Structure\Glyph\FontAwesomeGlyph;
-use Chamilo\Libraries\Platform\Session\Request;
+use Chamilo\Libraries\Platform\ChamiloRequest;
 use Chamilo\Libraries\Storage\Parameters\DataClassCountParameters;
 use Chamilo\Libraries\Storage\Parameters\DataClassRetrievesParameters;
 use Chamilo\Libraries\Storage\Query\Condition\EqualityCondition;
@@ -49,9 +49,28 @@ class PlatformgroupMenuRenderer extends GenericTree
         return $this->root_ids[0];
     }
 
+    public function getRequest(): ChamiloRequest
+    {
+        return $this->getService(ChamiloRequest::class);
+    }
+
+    /**
+     * @template getService
+     *
+     * @param class-string<getService> $serviceName
+     *
+     * @return getService
+     */
+    protected function getService(string $serviceName)
+    {
+        return DependencyInjectionContainerBuilder::getInstance()->createContainer()->get(
+            $serviceName
+        );
+    }
+
     public function getUrlGenerator(): UrlGenerator
     {
-        return DependencyInjectionContainerBuilder::getInstance()->createContainer()->get(UrlGenerator::class);
+        return $this->getService(UrlGenerator::class);
     }
 
     /**
@@ -61,7 +80,7 @@ class PlatformgroupMenuRenderer extends GenericTree
      */
     public function get_current_node_id()
     {
-        $currentNodeId = Request::get(\Chamilo\Application\Weblcms\Manager::PARAM_GROUP);
+        $currentNodeId = $this->getRequest()->query->get(\Chamilo\Application\Weblcms\Manager::PARAM_GROUP);
         $currentNodeId = !is_null($currentNodeId) ? $currentNodeId : $this->getDefaultNodeId();
 
         return $currentNodeId;
@@ -172,16 +191,17 @@ class PlatformgroupMenuRenderer extends GenericTree
 
     public function get_url_format()
     {
+        $request = $this->getRequest();
+
         $url_format = '?application=weblcms';
         $url_format .= '&' . \Chamilo\Application\Weblcms\Manager::PARAM_COURSE . '=' .
-            Request::get(\Chamilo\Application\Weblcms\Manager::PARAM_COURSE);
-        $url_format .= '&' . \Chamilo\Application\Weblcms\Manager::PARAM_ACTION . '=' .
-            Request::get(\Chamilo\Application\Weblcms\Manager::PARAM_ACTION);
+            $request->query->get(\Chamilo\Application\Weblcms\Manager::PARAM_COURSE);
+        $url_format .= '&' . Application::PARAM_ACTION . '=' . $request->query->get(Application::PARAM_ACTION);
         $url_format .= '&' . \Chamilo\Application\Weblcms\Manager::PARAM_TOOL . '=' .
-            Request::get(\Chamilo\Application\Weblcms\Manager::PARAM_TOOL);
+            $request->query->get(\Chamilo\Application\Weblcms\Manager::PARAM_TOOL);
         $url_format .= '&' . \Chamilo\Application\Weblcms\Manager::PARAM_TOOL_ACTION . '=' .
-            Request::get(\Chamilo\Application\Weblcms\Manager::PARAM_TOOL_ACTION);
-        $url_format .= '&' . Manager::PARAM_BROWSER_TYPE . '=' . Request::get(Manager::PARAM_BROWSER_TYPE);
+            $request->query->get(\Chamilo\Application\Weblcms\Manager::PARAM_TOOL_ACTION);
+        $url_format .= '&' . Manager::PARAM_BROWSER_TYPE . '=' . $request->query->get(Manager::PARAM_BROWSER_TYPE);
         $url_format .= '&' . Manager::PARAM_TAB . '=' . UnsubscribeBrowserComponent::TAB_PLATFORM_GROUPS_USERS;
         $url_format .= '&' . \Chamilo\Application\Weblcms\Manager::PARAM_GROUP . '=%s';
 

@@ -10,21 +10,19 @@ use Chamilo\Core\Repository\Storage\DataClass\ContentObject;
 use Chamilo\Core\Repository\Storage\DataManager;
 use Chamilo\Libraries\Architecture\ClassnameUtilities;
 use Chamilo\Libraries\Format\Structure\Breadcrumb;
-use Chamilo\Libraries\Platform\Session\Request;
-use Chamilo\Libraries\Storage\Query\OrderBy;
-use Chamilo\Libraries\Translation\Translation;
 use Chamilo\Libraries\Storage\Query\Condition\AndCondition;
 use Chamilo\Libraries\Storage\Query\Condition\EqualityCondition;
+use Chamilo\Libraries\Storage\Query\OrderBy;
 use Chamilo\Libraries\Storage\Query\OrderProperty;
 use Chamilo\Libraries\Storage\Query\Variable\PropertyConditionVariable;
 use Chamilo\Libraries\Storage\Query\Variable\StaticConditionVariable;
+use Chamilo\Libraries\Translation\Translation;
 
 /**
- *
  * @package application.weblcms.php.reporting.templates Reporting template with an overview of the progress of each
  *          learning path per user
- * @author Joris Willems <joris.willems@gmail.com>
- * @author Alexander Van Paemel
+ * @author  Joris Willems <joris.willems@gmail.com>
+ * @author  Alexander Van Paemel
  */
 class LearningPathProgressTemplate extends ReportingTemplate
 {
@@ -56,13 +54,13 @@ class LearningPathProgressTemplate extends ReportingTemplate
         );
 
         $condition = new AndCondition($conditions);
-        $order_by = array(
+        $order_by = [
             new OrderProperty(
                 new PropertyConditionVariable(
                     ContentObjectPublication::class, ContentObjectPublication::PROPERTY_MODIFIED_DATE
                 )
             )
-        );
+        ];
         $publications = \Chamilo\Application\Weblcms\Storage\DataManager::retrieve_content_object_publications(
             $condition, new OrderBy($order_by)
         );

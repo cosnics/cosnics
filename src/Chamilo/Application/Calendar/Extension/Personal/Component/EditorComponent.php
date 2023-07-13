@@ -55,7 +55,7 @@ class EditorComponent extends Manager implements DelegateComponent
 
             if ($form->validate() || $this->getRequest()->query->get('validated'))
             {
-                if ($this->getRequest()->query->get('validated'))
+                if ($this->getRequest()->query->has('validated'))
                 {
                     $success = $form->update_content_object();
                 }

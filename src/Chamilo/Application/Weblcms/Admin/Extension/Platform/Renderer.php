@@ -8,16 +8,13 @@ use Chamilo\Application\Weblcms\CourseSettingsController;
 use Chamilo\Application\Weblcms\CourseType\Storage\DataClass\CourseType;
 use Chamilo\Application\Weblcms\Renderer\CourseList\CourseListRenderer;
 use Chamilo\Libraries\Architecture\ClassnameUtilities;
-use Chamilo\Libraries\DependencyInjection\DependencyInjectionContainerBuilder;
 use Chamilo\Libraries\Format\Structure\Glyph\FontAwesomeGlyph;
 use Chamilo\Libraries\Format\Tabs\Link\LinkTab;
 use Chamilo\Libraries\Format\Tabs\Link\LinkTabsRenderer;
 use Chamilo\Libraries\Format\Tabs\TabsCollection;
-use Chamilo\Libraries\Platform\Session\Request;
 use Chamilo\Libraries\Storage\DataClass\DataClass;
 use Chamilo\Libraries\Translation\Translation;
 use Exception;
-use Symfony\Component\HttpFoundation\Session\SessionInterface;
 
 /**
  * Course list renderer to render the course list with tabs for the course types (used in courses home, courses sorter)
@@ -243,14 +240,7 @@ class Renderer extends CourseListRenderer
 
     public function getLinkTabsRenderer(): LinkTabsRenderer
     {
-        return DependencyInjectionContainerBuilder::getInstance()->createContainer()->get(
-            LinkTabsRenderer::class
-        );
-    }
-
-    public function getSession(): SessionInterface
-    {
-        return DependencyInjectionContainerBuilder::getInstance()->createContainer()->get(SessionInterface::class);
+        return $this->getService(LinkTabsRenderer::class);
     }
 
     /**
@@ -366,7 +356,7 @@ class Renderer extends CourseListRenderer
      */
     protected function get_selected_course_type_parameter_value()
     {
-        return Request::get(self::PARAM_SELECTED_COURSE_TYPE);
+        return $this->getRequest()->query->get(self::PARAM_SELECTED_COURSE_TYPE);
     }
 
     /**

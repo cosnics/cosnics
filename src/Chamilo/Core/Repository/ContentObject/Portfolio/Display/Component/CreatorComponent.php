@@ -8,9 +8,11 @@ use Chamilo\Core\Repository\ContentObject\PortfolioItem\Storage\DataClass\Portfo
 use Chamilo\Core\Repository\Integration\Chamilo\Core\Tracking\Storage\DataClass\Activity;
 use Chamilo\Core\Repository\Manager;
 use Chamilo\Core\Repository\Selector\TypeSelector;
+use Chamilo\Core\Repository\Selector\TypeSelectorTrait;
 use Chamilo\Core\Repository\Service\TemplateRegistrationConsulter;
 use Chamilo\Core\Repository\Storage\DataClass\ContentObject;
 use Chamilo\Core\Repository\Storage\DataManager;
+use Chamilo\Core\Repository\Viewer\Architecture\Traits\ViewerTrait;
 use Chamilo\Core\Repository\Viewer\ViewerInterface;
 use Chamilo\Core\Tracking\Storage\DataClass\Event;
 use Chamilo\Libraries\Architecture\Application\ApplicationConfiguration;
@@ -24,10 +26,13 @@ use Chamilo\Libraries\Utilities\StringUtilities;
  * Component that allows the user to add content to the portfolio
  *
  * @package repository\content_object\portfolio\display
- * @author Hans De Bisschop <hans.de.bisschop@ehb.be>
+ * @author  Hans De Bisschop <hans.de.bisschop@ehb.be>
  */
 class CreatorComponent extends ItemComponent implements ViewerInterface
 {
+    use ViewerTrait;
+    use TypeSelectorTrait;
+
     /**
      * Executes this component
      */
@@ -38,10 +43,9 @@ class CreatorComponent extends ItemComponent implements ViewerInterface
             throw new NotAllowedException();
         }
 
-        $template =
-            $this->getTemplateRegistrationConsulter()->getTemplateRegistrationDefaultByType(Portfolio::CONTEXT);
+        $template = $this->getTemplateRegistrationConsulter()->getTemplateRegistrationDefaultByType(Portfolio::CONTEXT);
 
-        $selected_template_id = TypeSelector::get_selection();
+        $selected_template_id = $this->getSelectedTypes();
 
         if ($selected_template_id == $template->get_id())
         {
@@ -53,7 +57,7 @@ class CreatorComponent extends ItemComponent implements ViewerInterface
         }
         BreadcrumbTrail::getInstance()->add(new Breadcrumb($this->get_url(), Translation::get($variable)));
 
-        if (!\Chamilo\Core\Repository\Viewer\Manager::is_ready_to_be_published())
+        if (!$this->isAnyObjectSelectedInViewer())
         {
             $exclude = $this->detemine_excluded_content_object_ids($this->get_current_content_object()->get_id());
 
@@ -68,10 +72,11 @@ class CreatorComponent extends ItemComponent implements ViewerInterface
         }
         else
         {
-            $object_ids = \Chamilo\Core\Repository\Viewer\Manager::get_selected_objects();
+            $object_ids = $this->getObjectsSelectedInviewer();
+
             if (!is_array($object_ids))
             {
-                $object_ids = array($object_ids);
+                $object_ids = [$object_ids];
             }
 
             $failures = 0;
@@ -128,7 +133,7 @@ class CreatorComponent extends ItemComponent implements ViewerInterface
                 else
                 {
                     Event::trigger(
-                        'Activity', Manager::CONTEXT, array(
+                        'Activity', Manager::CONTEXT, [
                             Activity::PROPERTY_TYPE => Activity::ACTIVITY_ADD_ITEM,
                             Activity::PROPERTY_USER_ID => $this->get_user_id(),
                             Activity::PROPERTY_DATE => time(),
@@ -136,7 +141,7 @@ class CreatorComponent extends ItemComponent implements ViewerInterface
                                 ->get_id(),
                             Activity::PROPERTY_CONTENT => $this->get_current_node()->get_content_object()->get_title() .
                                 ' > ' . $object->get_title()
-                        )
+                        ]
                     );
                 }
             }
@@ -190,10 +195,10 @@ class CreatorComponent extends ItemComponent implements ViewerInterface
 
             $this->redirectWithMessage(
                 Translation::get(
-                    $message, array('OBJECT' => Translation::get('Item'), 'OBJECTS' => Translation::get('Items')),
+                    $message, ['OBJECT' => Translation::get('Item'), 'OBJECTS' => Translation::get('Items')],
                     StringUtilities::LIBRARIES
                 ), (bool) $failures,
-                array(self::PARAM_ACTION => self::ACTION_VIEW_COMPLEX_CONTENT_OBJECT, self::PARAM_STEP => $next_step)
+                [self::PARAM_ACTION => self::ACTION_VIEW_COMPLEX_CONTENT_OBJECT, self::PARAM_STEP => $next_step]
             );
         }
     }
@@ -223,15 +228,6 @@ class CreatorComponent extends ItemComponent implements ViewerInterface
     }
 
     /**
-     * @return \Chamilo\Core\Repository\Service\TemplateRegistrationConsulter
-     */
-    public function getTemplateRegistrationConsulter()
-    {
-        return $this->getService(TemplateRegistrationConsulter::class);
-    }
-
-    /**
-     *
      * @see \Chamilo\Libraries\Architecture\Application\Application::getAdditionalParameters()
      */
     public function getAdditionalParameters(array $additionalParameters = []): array
@@ -242,7 +238,14 @@ class CreatorComponent extends ItemComponent implements ViewerInterface
     }
 
     /**
-     *
+     * @return \Chamilo\Core\Repository\Service\TemplateRegistrationConsulter
+     */
+    public function getTemplateRegistrationConsulter()
+    {
+        return $this->getService(TemplateRegistrationConsulter::class);
+    }
+
+    /**
      * @see \core\repository\viewer\ViewerInterface::get_allowed_content_object_types()
      */
     public function get_allowed_content_object_types()

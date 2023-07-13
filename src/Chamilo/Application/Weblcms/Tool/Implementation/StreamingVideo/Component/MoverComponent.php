@@ -2,7 +2,6 @@
 namespace Chamilo\Application\Weblcms\Tool\Implementation\StreamingVideo\Component;
 
 use Chamilo\Application\Weblcms\Tool\Implementation\StreamingVideo\Manager;
-use Chamilo\Libraries\Platform\Session\Request;
 
 class MoverComponent extends Manager
 {

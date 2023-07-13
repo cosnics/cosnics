@@ -106,7 +106,7 @@ class LdapAuthentication extends Authentication implements AuthenticationInterfa
             throw new Exception($this->translator->trans('CheckLDAPConfiguration', [], StringUtilities::LIBRARIES));
         }
 
-        $password = $this->request->getFromRequest(self::PARAM_PASSWORD);
+        $password = $this->getRequest()->request->get(self::PARAM_PASSWORD);
 
         $settings = $this->getConfiguration();
 
@@ -134,7 +134,9 @@ class LdapAuthentication extends Authentication implements AuthenticationInterfa
 
         if (!$dn)
         {
-            throw new AuthenticationException($this->translator->trans('UserNotFoundInLDAP', [], StringUtilities::LIBRARIES));
+            throw new AuthenticationException(
+                $this->translator->trans('UserNotFoundInLDAP', [], StringUtilities::LIBRARIES)
+            );
         }
 
         if (!$password)
@@ -150,12 +152,16 @@ class LdapAuthentication extends Authentication implements AuthenticationInterfa
          */
         if ($info[0]['useraccountcontrol'][0] & 2) // account is disabled
         {
-            throw new AuthenticationException($this->translator->trans('AccountDisabled', [], StringUtilities::LIBRARIES));
+            throw new AuthenticationException(
+                $this->translator->trans('AccountDisabled', [], StringUtilities::LIBRARIES)
+            );
         }
 
         if ($info[0]['useraccountcontrol'][0] & 16) // account is locked out
         {
-            throw new AuthenticationException($this->translator->trans('AccountLocked', [], StringUtilities::LIBRARIES));
+            throw new AuthenticationException(
+                $this->translator->trans('AccountLocked', [], StringUtilities::LIBRARIES)
+            );
         }
 
         $ldapConnect = ldap_connect($settings['host'], $settings['port']);

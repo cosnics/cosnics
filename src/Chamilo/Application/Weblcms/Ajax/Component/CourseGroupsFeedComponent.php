@@ -9,7 +9,6 @@ use Chamilo\Application\Weblcms\Tool\Implementation\CourseGroup\Storage\DataClas
 use Chamilo\Libraries\Ajax\Component\GroupsFeedComponent;
 use Chamilo\Libraries\Format\Form\Element\AdvancedElementFinder\AdvancedElementFinderElement;
 use Chamilo\Libraries\Format\Structure\Glyph\FontAwesomeGlyph;
-use Chamilo\Libraries\Platform\Session\Request;
 use Chamilo\Libraries\Storage\Parameters\DataClassRetrievesParameters;
 use Chamilo\Libraries\Storage\Query\Condition\AndCondition;
 use Chamilo\Libraries\Storage\Query\Condition\ContainsCondition;
@@ -22,12 +21,12 @@ use Chamilo\Libraries\Storage\Query\Variable\StaticConditionVariable;
 /**
  * Feed to return the course groups of this course
  *
- * @author Sven Vanpoucke
+ * @author  Sven Vanpoucke
  * @package Chamilo\Application\Weblcms\Ajax\Component
  */
 class CourseGroupsFeedComponent extends GroupsFeedComponent
 {
-    const PARAM_COURSE_ID = 'course_id';
+    public const PARAM_COURSE_ID = 'course_id';
 
     /**
      * Returns the required parameters
@@ -36,7 +35,7 @@ class CourseGroupsFeedComponent extends GroupsFeedComponent
      */
     public function getRequiredPostParameters(array $postParameters = []): array
     {
-        return array(self::PARAM_COURSE_ID);
+        return [self::PARAM_COURSE_ID];
     }
 
     /**
@@ -167,9 +166,9 @@ class CourseGroupsFeedComponent extends GroupsFeedComponent
 
         return DataManager::retrieves(
             CourseGroup::class, new DataClassRetrievesParameters(
-                $condition, null, null, new OrderBy(array(
+                $condition, null, null, new OrderBy([
                     new OrderProperty(new PropertyConditionVariable(CourseGroup::class, CourseGroup::PROPERTY_NAME))
-                ))
+                ])
             )
         );
     }

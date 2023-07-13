@@ -1,6 +1,8 @@
 <?php
 namespace Chamilo\Libraries\Format\Menu\Library;
 
+use Chamilo\Libraries\DependencyInjection\Traits\DependencyInjectionContainerTrait;
+
 /**
  * Originaly a PEAR library
  *
@@ -13,6 +15,8 @@ namespace Chamilo\Libraries\Format\Menu\Library;
  */
 class HtmlMenu
 {
+     use DependencyInjectionContainerTrait;
+
     public const HTML_MENU_ENTRY_ACTIVE = 1;
     public const HTML_MENU_ENTRY_ACTIVEPATH = 2;
     public const HTML_MENU_ENTRY_BREADCRUMB = 6;

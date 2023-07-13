@@ -2,7 +2,6 @@
 namespace Chamilo\Core\Repository\ContentObject\Assessment\Display;
 
 use Chamilo\Libraries\Architecture\Application\ApplicationConfigurationInterface;
-use Chamilo\Libraries\Platform\Session\Request;
 
 /**
  * @package repository.lib.complex_display.assessment

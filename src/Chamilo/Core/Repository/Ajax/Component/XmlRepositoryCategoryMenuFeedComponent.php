@@ -5,7 +5,6 @@ use Chamilo\Core\Repository\Ajax\Manager;
 use Chamilo\Core\Repository\Storage\DataClass\RepositoryCategory;
 use Chamilo\Core\Repository\Storage\DataManager;
 use Chamilo\Libraries\Format\Structure\Glyph\FontAwesomeGlyph;
-use Chamilo\Libraries\Platform\Session\Request;
 use Chamilo\Libraries\Storage\Query\Condition\EqualityCondition;
 use Chamilo\Libraries\Storage\Query\OrderBy;
 use Chamilo\Libraries\Storage\Query\OrderProperty;
@@ -15,7 +14,7 @@ use Chamilo\Libraries\Storage\Query\Variable\StaticConditionVariable;
 class XmlRepositoryCategoryMenuFeedComponent extends Manager
 {
 
-    function run()
+    public function run()
     {
         $groups_tree = [];
 
@@ -25,11 +24,11 @@ class XmlRepositoryCategoryMenuFeedComponent extends Manager
             new StaticConditionVariable($parent_id)
         );
         $categories_tree = DataManager::retrieve_categories(
-            $condition, null, null,  new OrderBy(array(
+            $condition, null, null, new OrderBy([
                 new OrderProperty(
                     new PropertyConditionVariable(RepositoryCategory::class, RepositoryCategory::PROPERTY_NAME)
-                ))
-            )
+                )
+            ])
         );
 
         header('Content-Type: text/xml');

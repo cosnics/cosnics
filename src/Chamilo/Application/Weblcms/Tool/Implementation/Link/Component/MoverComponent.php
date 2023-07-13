@@ -2,7 +2,6 @@
 namespace Chamilo\Application\Weblcms\Tool\Implementation\Link\Component;
 
 use Chamilo\Application\Weblcms\Tool\Implementation\Link\Manager;
-use Chamilo\Libraries\Platform\Session\Request;
 
 class MoverComponent extends Manager
 {

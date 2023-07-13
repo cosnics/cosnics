@@ -6,6 +6,7 @@ use Chamilo\Libraries\DependencyInjection\DependencyInjectionContainerBuilder;
 use Chamilo\Libraries\File\ConfigurablePathBuilder;
 use Chamilo\Libraries\File\FilesystemTools;
 use Chamilo\Libraries\File\WebPathBuilder;
+use Chamilo\Libraries\Platform\ChamiloRequest;
 
 /**
  * @package Chamilo\Core\Repository\Common\Rendition
@@ -28,6 +29,11 @@ abstract class AbstractContentObjectRenditionImplementation
     public function getFilesystemTools(): FilesystemTools
     {
         return $this->getService(FilesystemTools::class);
+    }
+
+    public function getRequest(): ChamiloRequest
+    {
+        return $this->getService(ChamiloRequest::class);
     }
 
     /**

@@ -30,7 +30,7 @@ class AssessmentQuestionUsersTemplate extends ReportingTemplate
         $this->initialize_parameters();
 
         $this->add_reporting_block(new AssessmentQuestionInformationBlock($this));
-        $this->add_reporting_block(AssessmentQuestionOptionsBlock::factory($this));
+        $this->add_reporting_block(AssessmentQuestionOptionsBlock::factory($this->getRequest(), $this));
         $this->add_reporting_block(new AssessmentQuestionUsersBlock($this));
         $this->add_reporting_block(new AssessmentQuestionAttemptsBlock($this));
 

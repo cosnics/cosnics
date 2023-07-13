@@ -3,6 +3,7 @@ namespace Chamilo\Core\Repository\Viewer\Component;
 
 use Chamilo\Core\Repository\Selector\TypeSelector;
 use Chamilo\Core\Repository\Selector\TypeSelectorFactory;
+use Chamilo\Core\Repository\Selector\TypeSelectorTrait;
 use Chamilo\Core\Repository\Viewer\Filter\FilterData;
 use Chamilo\Core\Repository\Viewer\Filter\Renderer\ConditionFilterRenderer;
 use Chamilo\Core\Repository\Viewer\Manager;
@@ -24,6 +25,8 @@ use Chamilo\Libraries\Translation\Translation;
 
 class BrowserComponent extends Manager
 {
+    use TypeSelectorTrait;
+
     public const PROPERTY_CATEGORY = 'category';
 
     public const SHARED_BROWSER = 'shared';
@@ -310,7 +313,7 @@ class BrowserComponent extends Manager
 
         $all_types = $type_selector->get_unique_content_object_template_ids();
 
-        $type_selection = TypeSelector::get_selection();
+        $type_selection = $this->getSelectedTypes();
 
         if ($type_selection)
         {

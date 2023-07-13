@@ -5,18 +5,19 @@ use Chamilo\Core\Repository\ContentObject\Wiki\Display\Manager;
 use Chamilo\Core\Repository\ContentObject\WikiPage\Storage\DataClass\ComplexWikiPage;
 use Chamilo\Core\Repository\Storage\DataClass\ComplexContentObjectItem;
 use Chamilo\Core\Repository\Storage\DataManager;
+use Chamilo\Core\Repository\Viewer\Architecture\Traits\ViewerTrait;
 use Chamilo\Core\Repository\Viewer\ViewerInterface;
 use Chamilo\Libraries\Architecture\Application\ApplicationConfiguration;
 use Chamilo\Libraries\Architecture\Interfaces\DelegateComponent;
-use Chamilo\Libraries\Platform\Session\Request;
 use Chamilo\Libraries\Translation\Translation;
 
 class WikiPageCreatorComponent extends Manager implements ViewerInterface, DelegateComponent
 {
+    use ViewerTrait;
 
     public function run()
     {
-        if (!\Chamilo\Core\Repository\Viewer\Manager::is_ready_to_be_published())
+        if (!$this->isAnyObjectSelectedInViewer())
         {
             $component = $this->getApplicationFactory()->getApplication(
                 \Chamilo\Core\Repository\Viewer\Manager::CONTEXT,
@@ -28,11 +29,11 @@ class WikiPageCreatorComponent extends Manager implements ViewerInterface, Deleg
         }
         else
         {
-            $objects = \Chamilo\Core\Repository\Viewer\Manager::get_selected_objects();
+            $objects = $this->getObjectsSelectedInviewer();
 
             if (!is_array($objects))
             {
-                $objects = array($objects);
+                $objects = [$objects];
             }
 
             foreach ($objects as $object)
@@ -51,10 +52,10 @@ class WikiPageCreatorComponent extends Manager implements ViewerInterface, Deleg
             }
 
             $this->redirectWithMessage(
-                Translation::get('WikiItemCreated'), '', array(
+                Translation::get('WikiItemCreated'), '', [
                     self::PARAM_ACTION => self::ACTION_VIEW_WIKI_PAGE,
                     self::PARAM_SELECTED_COMPLEX_CONTENT_OBJECT_ITEM_ID => $complex_content_object_item->get_id()
-                )
+                ]
             );
         }
     }
@@ -70,7 +71,8 @@ class WikiPageCreatorComponent extends Manager implements ViewerInterface, Deleg
 
         $html[] = parent::render_header($pageTitle, $complex_wiki_page);
 
-        $repository_viewer_action = $this->getRequest()->query->get(\Chamilo\Core\Repository\Viewer\Manager::PARAM_ACTION);
+        $repository_viewer_action =
+            $this->getRequest()->query->get(\Chamilo\Core\Repository\Viewer\Manager::PARAM_ACTION);
 
         switch ($repository_viewer_action)
         {

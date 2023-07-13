@@ -5,6 +5,7 @@ use Chamilo\Core\Repository\Form\ContentObjectForm;
 use Chamilo\Core\Repository\Selector\Renderer\BasicTypeSelectorRenderer;
 use Chamilo\Core\Repository\Selector\TypeSelector;
 use Chamilo\Core\Repository\Selector\TypeSelectorFactory;
+use Chamilo\Core\Repository\Selector\TypeSelectorTrait;
 use Chamilo\Core\Repository\Service\TemplateRegistrationConsulter;
 use Chamilo\Core\Repository\Storage\DataClass\ContentObject;
 use Chamilo\Core\Repository\Storage\DataManager;
@@ -14,11 +15,12 @@ use Chamilo\Libraries\Architecture\Interfaces\DelegateComponent;
 use Chamilo\Libraries\Format\Form\FormValidator;
 use Chamilo\Libraries\Format\Structure\Breadcrumb;
 use Chamilo\Libraries\Format\Structure\BreadcrumbTrail;
-use Chamilo\Libraries\Platform\Session\Request;
 use Chamilo\Libraries\Translation\Translation;
 
 class CreatorComponent extends Manager implements DelegateComponent
 {
+    use TypeSelectorTrait;
+
     public function run($params = [])
     {
         $content_object_id = $this->getRequest()->query->get(self::PARAM_EDIT_ID);
@@ -29,7 +31,7 @@ class CreatorComponent extends Manager implements DelegateComponent
         }
         else
         {
-            $type_selection = TypeSelector::get_selection();
+            $type_selection = $this->getSelectedTypes();
 
             if ($type_selection)
             {

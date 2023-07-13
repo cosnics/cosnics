@@ -15,7 +15,6 @@ use Chamilo\Libraries\Format\Structure\BreadcrumbTrail;
 use Chamilo\Libraries\Format\Structure\Glyph\FontAwesomeGlyph;
 use Chamilo\Libraries\Format\Structure\Glyph\IdentGlyph;
 use Chamilo\Libraries\Format\Structure\ToolbarItem;
-use Chamilo\Libraries\Platform\Session\Request;
 use Chamilo\Libraries\Storage\Parameters\DataClassRetrievesParameters;
 use Chamilo\Libraries\Storage\Query\Condition\AndCondition;
 use Chamilo\Libraries\Storage\Query\Condition\EqualityCondition;
@@ -138,9 +137,8 @@ abstract class Manager extends \Chamilo\Core\Repository\Display\Manager
                 )
             );
 
-            $classes = (($displayAction == self::ACTION_HISTORY) ||
-            ($displayAction == self::ACTION_VIEW_WIKI_PAGE && $this->getRequest()->query->get(self::PARAM_WIKI_VERSION_ID)) ?
-                ['btn-primary disabled'] : []);
+            $classes = (($displayAction == self::ACTION_HISTORY) || ($displayAction == self::ACTION_VIEW_WIKI_PAGE &&
+                $this->getRequest()->query->get(self::PARAM_WIKI_VERSION_ID)) ? ['btn-primary disabled'] : []);
             $history_url = $this->get_url(
                 [
                     self::PARAM_ACTION => self::ACTION_HISTORY,
@@ -260,7 +258,8 @@ abstract class Manager extends \Chamilo\Core\Repository\Display\Manager
                 );
                 break;
             case self::ACTION_PAGE_STATISTICS :
-                $complex_wiki_page_id = $this->getRequest()->query->get(self::PARAM_SELECTED_COMPLEX_CONTENT_OBJECT_ITEM_ID);
+                $complex_wiki_page_id =
+                    $this->getRequest()->query->get(self::PARAM_SELECTED_COMPLEX_CONTENT_OBJECT_ITEM_ID);
                 $complex_wiki_page = DataManager::retrieve_by_id(
                     ComplexContentObjectItem::class, $complex_wiki_page_id
                 );

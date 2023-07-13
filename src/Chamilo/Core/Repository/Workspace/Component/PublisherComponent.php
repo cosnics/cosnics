@@ -4,6 +4,7 @@ namespace Chamilo\Core\Repository\Workspace\Component;
 use Chamilo\Configuration\Storage\DataClass\Registration;
 use Chamilo\Core\Repository\Filter\FilterData;
 use Chamilo\Core\Repository\Storage\DataClass\ContentObject;
+use Chamilo\Core\Repository\Viewer\Architecture\Traits\ViewerTrait;
 use Chamilo\Core\Repository\Workspace\Manager;
 use Chamilo\Core\Repository\Workspace\Service\ContentObjectRelationService;
 use Chamilo\Core\Repository\Workspace\Storage\DataClass\Workspace;
@@ -29,6 +30,7 @@ use Exception;
  */
 class PublisherComponent extends Manager
 {
+    use ViewerTrait;
 
     public function run()
     {
@@ -42,7 +44,7 @@ class PublisherComponent extends Manager
             throw new NotAllowedException();
         }
 
-        if (!\Chamilo\Core\Repository\Viewer\Manager::is_ready_to_be_published())
+        if (!$this->isAnyObjectSelectedInViewer())
         {
             $this->getRequest()->query->set(
                 \Chamilo\Core\Repository\Viewer\Manager::PARAM_ACTION,
@@ -61,7 +63,7 @@ class PublisherComponent extends Manager
         }
         else
         {
-            $selectedContentObjectIdentifiers = (array) \Chamilo\Core\Repository\Viewer\Manager::get_selected_objects();
+            $selectedContentObjectIdentifiers = (array) $this->getObjectsSelectedInviewer();
 
             $parentId = $this->getRequest()->getFromRequestOrQuery(FilterData::FILTER_CATEGORY);
             $parentId = $parentId ?: 0;

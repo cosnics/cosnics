@@ -7,14 +7,12 @@ use Chamilo\Configuration\Category\Storage\DataClass\PlatformCategory;
 use Chamilo\Libraries\Architecture\Exceptions\NotAllowedException;
 use Chamilo\Libraries\Format\Structure\Breadcrumb;
 use Chamilo\Libraries\Format\Structure\BreadcrumbTrail;
-use Chamilo\Libraries\Platform\Session\Request;
-use Chamilo\Libraries\Translation\Translation;
 use Chamilo\Libraries\Storage\Query\Condition\EqualityCondition;
 use Chamilo\Libraries\Storage\Query\Variable\PropertyConditionVariable;
 use Chamilo\Libraries\Storage\Query\Variable\StaticConditionVariable;
+use Chamilo\Libraries\Translation\Translation;
 
 /**
- *
  * @package application.common.category_manager.component
  */
 class UpdaterComponent extends Manager
@@ -27,7 +25,7 @@ class UpdaterComponent extends Manager
     {
         $category_id = $this->getRequest()->query->get(self::PARAM_CATEGORY_ID);
 
-        if (! $this->get_parent()->allowed_to_edit_category($category_id))
+        if (!$this->get_parent()->allowed_to_edit_category($category_id))
         {
             throw new NotAllowedException();
         }
@@ -38,32 +36,34 @@ class UpdaterComponent extends Manager
         $categories = $this->get_parent()->retrieve_categories(
             new EqualityCondition(
                 new PropertyConditionVariable($category_class_name, PlatformCategory::PROPERTY_ID),
-                new StaticConditionVariable($category_id)));
+                new StaticConditionVariable($category_id)
+            )
+        );
         $category = $categories->current();
 
         $trail = BreadcrumbTrail::getInstance();
         $this->set_parameter(self::PARAM_CATEGORY_ID, $this->getRequest()->query->get(self::PARAM_CATEGORY_ID));
         $trail->add(
             new Breadcrumb(
-                $this->get_url(),
-                Translation::get('UpdaterComponent', array('TITLE' => $category->get_name()))));
+                $this->get_url(), Translation::get('UpdaterComponent', ['TITLE' => $category->get_name()])
+            )
+        );
 
         $form = new CategoryForm(
-            CategoryForm::TYPE_EDIT,
-            $this->get_url(array(self::PARAM_CATEGORY_ID => $category->get_id())),
-            $category,
-            $user,
-            $this);
+            CategoryForm::TYPE_EDIT, $this->get_url([self::PARAM_CATEGORY_ID => $category->get_id()]), $category, $user,
+            $this
+        );
 
         if ($form->validate())
         {
             $success = $form->update_category();
 
             $this->redirectWithMessage(
-                Translation::get($success ? 'CategoryUpdated' : 'CategoryNotUpdated'), !$success,
-                array(
+                Translation::get($success ? 'CategoryUpdated' : 'CategoryNotUpdated'), !$success, [
                     self::PARAM_ACTION => self::ACTION_BROWSE_CATEGORIES,
-                    self::PARAM_CATEGORY_ID => $category->get_parent()));
+                    self::PARAM_CATEGORY_ID => $category->get_parent()
+                ]
+            );
         }
         else
         {

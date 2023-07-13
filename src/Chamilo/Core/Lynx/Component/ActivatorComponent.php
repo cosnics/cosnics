@@ -11,7 +11,6 @@ use Chamilo\Libraries\Format\Structure\BreadcrumbTrail;
 use Chamilo\Libraries\Format\Structure\Glyph\FontAwesomeGlyph;
 use Chamilo\Libraries\Format\Structure\Toolbar;
 use Chamilo\Libraries\Format\Structure\ToolbarItem;
-use Chamilo\Libraries\Platform\Session\Request;
 use Chamilo\Libraries\Translation\Translation;
 
 class ActivatorComponent extends Manager implements DelegateComponent
@@ -30,7 +29,7 @@ class ActivatorComponent extends Manager implements DelegateComponent
         BreadcrumbTrail::getInstance()->add(
             new Breadcrumb(
                 null, Translation::get(
-                'ActivatingPackage', array('PACKAGE' => Translation::get('TypeName', null, $context))
+                'ActivatingPackage', ['PACKAGE' => Translation::get('TypeName', null, $context)]
             )
             )
         );
@@ -49,7 +48,7 @@ class ActivatorComponent extends Manager implements DelegateComponent
         $toolbar->add_item(
             new ToolbarItem(
                 Translation::get('BackToPackageOVerview'), new FontAwesomeGlyph('backward'),
-                $this->get_url(array(self::PARAM_ACTION => self::ACTION_BROWSE))
+                $this->get_url([self::PARAM_ACTION => self::ACTION_BROWSE])
             )
         );
 

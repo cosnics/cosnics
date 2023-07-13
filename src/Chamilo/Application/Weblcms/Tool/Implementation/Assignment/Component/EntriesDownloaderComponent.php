@@ -36,7 +36,7 @@ class EntriesDownloaderComponent extends Manager
 
         $factory = $this->getEntriesDownloaderFactory();
 
-        $strategy = $this->getRequest()->getFromQuery(
+        $strategy = $this->getRequest()->query->get(
             self::PARAM_ENTRIES_DOWNLOAD_STRATEGY, EntriesDownloaderFactory::ENTRIES_DOWNLOADER_DEFAULT
         );
 

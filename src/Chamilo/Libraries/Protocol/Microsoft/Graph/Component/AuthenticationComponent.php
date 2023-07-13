@@ -21,8 +21,8 @@ class AuthenticationComponent extends Manager
      */
     public function run()
     {
-        $authorizationCode = $this->getRequest()->getFromQuery(self::PARAM_AUTHORIZATION_CODE);
-        $state = $this->getRequest()->getFromQuery(self::PARAM_AUTHORIZATION_STATE);
+        $authorizationCode = $this->getRequest()->query->get(self::PARAM_AUTHORIZATION_CODE);
+        $state = $this->getRequest()->query->get(self::PARAM_AUTHORIZATION_STATE);
 
         $this->getGraphService()->authorizeUserByAuthorizationCode($authorizationCode);
 

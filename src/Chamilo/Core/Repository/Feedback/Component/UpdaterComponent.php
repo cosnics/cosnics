@@ -6,7 +6,6 @@ use Chamilo\Core\Repository\Feedback\Manager;
 use Chamilo\Core\Repository\Feedback\Storage\DataClass\Feedback;
 use Chamilo\Libraries\Architecture\Exceptions\NotAllowedException;
 use Chamilo\Libraries\Architecture\Exceptions\ObjectNotExistException;
-use Chamilo\Libraries\Platform\Session\Request;
 use Chamilo\Libraries\Translation\Translation;
 use Chamilo\Libraries\Utilities\StringUtilities;
 use Exception;
@@ -15,7 +14,7 @@ use Exception;
  * Controller to update the controlled vocabulary
  *
  * @package core\metadata
- * @author Sven Vanpoucke - Hogeschool Gent
+ * @author  Sven Vanpoucke - Hogeschool Gent
  */
 class UpdaterComponent extends Manager
 {
@@ -52,9 +51,7 @@ class UpdaterComponent extends Manager
                 $this->feedbackServiceBridge->updateFeedback($feedback);
 
                 $message = Translation::get(
-                    'ObjectUpdated',
-                    array('OBJECT' => Translation::get('Feedback')),
-                    StringUtilities::LIBRARIES
+                    'ObjectUpdated', ['OBJECT' => Translation::get('Feedback')], StringUtilities::LIBRARIES
                 );
 
                 $success = true;
@@ -65,7 +62,7 @@ class UpdaterComponent extends Manager
                 $message = $ex->getMessage();
             }
 
-            $this->redirectWithMessage($message, !$success, array(self::PARAM_ACTION => self::ACTION_BROWSE));
+            $this->redirectWithMessage($message, !$success, [self::PARAM_ACTION => self::ACTION_BROWSE]);
         }
         else
         {

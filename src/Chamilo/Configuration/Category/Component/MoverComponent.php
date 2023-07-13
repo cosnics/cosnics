@@ -4,15 +4,13 @@ namespace Chamilo\Configuration\Category\Component;
 use Chamilo\Configuration\Category\Manager;
 use Chamilo\Configuration\Category\Storage\DataClass\PlatformCategory;
 use Chamilo\Libraries\Architecture\Exceptions\NotAllowedException;
-use Chamilo\Libraries\Platform\Session\Request;
-use Chamilo\Libraries\Translation\Translation;
 use Chamilo\Libraries\Storage\Query\Condition\AndCondition;
 use Chamilo\Libraries\Storage\Query\Condition\EqualityCondition;
 use Chamilo\Libraries\Storage\Query\Variable\PropertyConditionVariable;
 use Chamilo\Libraries\Storage\Query\Variable\StaticConditionVariable;
+use Chamilo\Libraries\Translation\Translation;
 
 /**
- *
  * @package application.common.category_manager.component
  */
 class MoverComponent extends Manager
@@ -27,7 +25,7 @@ class MoverComponent extends Manager
         $direction = $this->getRequest()->query->get(self::PARAM_DIRECTION);
         $user = $this->get_user();
 
-        if (! isset($user) || ! isset($category_id) || ! $this->get_parent()->allowed_to_edit_category($category_id))
+        if (!isset($user) || !isset($category_id) || !$this->get_parent()->allowed_to_edit_category($category_id))
         {
             throw new NotAllowedException();
         }
@@ -37,14 +35,18 @@ class MoverComponent extends Manager
         $categories = $this->get_parent()->retrieve_categories(
             new EqualityCondition(
                 new PropertyConditionVariable($category_class_name, PlatformCategory::PROPERTY_ID),
-                new StaticConditionVariable($category_id)));
+                new StaticConditionVariable($category_id)
+            )
+        );
         $category = $categories->current();
         $parent = $category->get_parent();
 
         $max = $this->get_parent()->count_categories(
             new EqualityCondition(
                 new PropertyConditionVariable($category_class_name, PlatformCategory::PROPERTY_PARENT),
-                new StaticConditionVariable($parent)));
+                new StaticConditionVariable($parent)
+            )
+        );
 
         $display_order = $category->get_display_order();
         $new_place = $display_order + $direction;
@@ -57,10 +59,12 @@ class MoverComponent extends Manager
 
             $conditions[] = new EqualityCondition(
                 new PropertyConditionVariable($category_class_name, PlatformCategory::PROPERTY_DISPLAY_ORDER),
-                new StaticConditionVariable($new_place));
+                new StaticConditionVariable($new_place)
+            );
             $conditions[] = new EqualityCondition(
                 new PropertyConditionVariable($category_class_name, PlatformCategory::PROPERTY_PARENT),
-                new StaticConditionVariable($parent));
+                new StaticConditionVariable($parent)
+            );
             $condition = new AndCondition($conditions);
             $categories = $this->get_parent()->retrieve_categories($condition);
             $newcategory = $categories->current();
@@ -77,9 +81,10 @@ class MoverComponent extends Manager
         }
 
         $this->redirectWithMessage(
-            Translation::get($sucess ? 'CategoryMoved' : 'CategoryNotMoved'), !$sucess,
-            array(
+            Translation::get($sucess ? 'CategoryMoved' : 'CategoryNotMoved'), !$sucess, [
                 self::PARAM_ACTION => self::ACTION_BROWSE_CATEGORIES,
-                self::PARAM_CATEGORY_ID => $category->get_parent()));
+                self::PARAM_CATEGORY_ID => $category->get_parent()
+            ]
+        );
     }
 }

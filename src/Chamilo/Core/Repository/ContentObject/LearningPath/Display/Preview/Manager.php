@@ -3,6 +3,7 @@ namespace Chamilo\Core\Repository\ContentObject\LearningPath\Display\Preview;
 
 use Chamilo\Core\Repository\Common\Path\ComplexContentObjectPathNode;
 use Chamilo\Core\Repository\ContentObject\LearningPath\Display\Embedder\Embedder;
+use Chamilo\Core\Repository\ContentObject\LearningPath\Display\Embedder\LearningPathEmbedderTrait;
 use Chamilo\Core\Repository\ContentObject\LearningPath\Display\Preview\Domain\TrackingParameters;
 use Chamilo\Core\Repository\ContentObject\LearningPath\Display\Preview\Service\TrackingServiceBuilder;
 use Chamilo\Core\Repository\ContentObject\LearningPath\Display\Preview\Storage\Repository\TrackingRepository;
@@ -23,6 +24,7 @@ use Chamilo\Libraries\Translation\Translation;
  */
 abstract class Manager extends Preview implements PreviewResetSupport
 {
+    use LearningPathEmbedderTrait;
 
     public const CONTEXT = __NAMESPACE__;
 
@@ -103,7 +105,7 @@ abstract class Manager extends Preview implements PreviewResetSupport
      */
     public function get_embedded_content_object_id()
     {
-        return Embedder::get_embedded_content_object_id();
+        return $this->getEmbeddedContentObjectIdentifier();
     }
 
     // FUNCTIONS FOR COMPLEX DISPLAY SUPPORT
@@ -120,7 +122,7 @@ abstract class Manager extends Preview implements PreviewResetSupport
     {
         if ($this->is_embedded())
         {
-            $embedded_content_object_id = $this->get_embedded_content_object_id();
+            $embedded_content_object_id = $this->getEmbeddedContentObjectIdentifier();
             $this->set_parameter(Embedder::PARAM_EMBEDDED_CONTENT_OBJECT_ID, $embedded_content_object_id);
             $this->set_parameter(
                 \Chamilo\Core\Repository\ContentObject\LearningPath\Display\Manager::PARAM_CHILD_ID,
@@ -204,7 +206,7 @@ abstract class Manager extends Preview implements PreviewResetSupport
      */
     public function is_embedded()
     {
-        $embedded_content_object_id = $this->get_embedded_content_object_id();
+        $embedded_content_object_id = $this->getEmbeddedContentObjectIdentifier();
 
         return isset($embedded_content_object_id);
     }

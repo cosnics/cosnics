@@ -5,7 +5,6 @@ use Chamilo\Core\Repository\Common\Rendition\ContentObjectRendition;
 use Chamilo\Core\Repository\ContentObject\ExternalCalendar\Common\Rendition\HtmlRenditionImplementation;
 use Chamilo\Core\Repository\ContentObject\ExternalCalendar\Storage\DataClass\ExternalCalendar;
 use Chamilo\Core\Repository\Manager;
-use Chamilo\Libraries\Platform\Session\Request;
 use Chamilo\Libraries\Translation\Translation;
 use Chamilo\Libraries\Utilities\DatetimeUtilities;
 use Chamilo\Libraries\Utilities\StringUtilities;
@@ -22,7 +21,8 @@ class HtmlDescriptionRenditionImplementation extends HtmlRenditionImplementation
     public function get_description()
     {
         $object = $this->get_content_object();
-        $event_id = Request::get(ExternalCalendar::PARAM_EVENT_ID);
+        $event_id = $this->getRequest()->query->get(ExternalCalendar::PARAM_EVENT_ID);
+
         if (isset($event_id))
         {
             $event = $object->get_event($event_id);

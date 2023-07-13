@@ -5,7 +5,6 @@ use Chamilo\Configuration\Category\Interfaces\CategoryManagerSupport;
 use Chamilo\Configuration\Category\Interfaces\ImpactViewSupport;
 use Chamilo\Configuration\Category\Service\CategoryManagerImplementerInterface;
 use Chamilo\Libraries\Architecture\Application\Application;
-use Chamilo\Libraries\Platform\Session\Request;
 use Exception;
 
 abstract class Manager extends Application

@@ -4,6 +4,7 @@ namespace Chamilo\Core\Repository\Display\Action\Component;
 use Chamilo\Core\Repository\Display\Action\Manager;
 use Chamilo\Core\Repository\Storage\DataClass\ComplexContentObjectItem;
 use Chamilo\Core\Repository\Storage\DataManager;
+use Chamilo\Core\Repository\Viewer\Architecture\Traits\ViewerTrait;
 use Chamilo\Core\Repository\Viewer\ViewerInterface;
 use Chamilo\Libraries\Architecture\Application\ApplicationConfiguration;
 use Chamilo\Libraries\Architecture\Exceptions\NotAllowedException;
@@ -16,6 +17,7 @@ use Chamilo\Libraries\Utilities\StringUtilities;
  */
 class CreatorComponent extends Manager implements ViewerInterface
 {
+    use ViewerTrait;
 
     public function run()
     {
@@ -30,7 +32,7 @@ class CreatorComponent extends Manager implements ViewerInterface
 
             $type = $this->getRequest()->query->get('type');
 
-            if (!\Chamilo\Core\Repository\Viewer\Manager::is_ready_to_be_published())
+            if (!$this->isAnyObjectSelectedInViewer())
             {
                 $component = $this->getApplicationFactory()->getApplication(
                     \Chamilo\Core\Repository\Viewer\Manager::CONTEXT,
@@ -50,7 +52,7 @@ class CreatorComponent extends Manager implements ViewerInterface
             {
                 $cloi = ComplexContentObjectItem::factory($type);
 
-                $cloi->set_ref(\Chamilo\Core\Repository\Viewer\Manager::get_selected_objects());
+                $cloi->set_ref($this->getObjectsSelectedInviewer());
                 $cloi->set_user_id($this->get_user_id());
 
                 if ($complex_content_object_item_id)

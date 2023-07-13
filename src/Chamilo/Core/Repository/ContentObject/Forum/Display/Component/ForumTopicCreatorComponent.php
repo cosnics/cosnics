@@ -5,6 +5,7 @@ use Chamilo\Core\Repository\ContentObject\Forum\Display\Manager;
 use Chamilo\Core\Repository\ContentObject\ForumTopic\Storage\DataClass\ForumTopic;
 use Chamilo\Core\Repository\Storage\DataClass\ComplexContentObjectItem;
 use Chamilo\Core\Repository\Storage\DataManager;
+use Chamilo\Core\Repository\Viewer\Architecture\Traits\ViewerTrait;
 use Chamilo\Core\Repository\Viewer\ViewerInterface;
 use Chamilo\Libraries\Architecture\Application\ApplicationConfiguration;
 use Chamilo\Libraries\Architecture\Interfaces\DelegateComponent;
@@ -15,31 +16,33 @@ use Chamilo\Libraries\Utilities\StringUtilities;
 use Exception;
 
 /**
- *
  * @package repository.lib.complex_display.forum.component
  */
-class ForumTopicCreatorComponent extends Manager implements ViewerInterface,
-    DelegateComponent
+class ForumTopicCreatorComponent extends Manager implements ViewerInterface, DelegateComponent
 {
+    use ViewerTrait;
 
     public function run()
     {
-        if (! \Chamilo\Core\Repository\Viewer\Manager::is_ready_to_be_published())
+        if (!$this->isAnyObjectSelectedInViewer())
         {
             BreadcrumbTrail::getInstance()->add(
                 new Breadcrumb(
                     $this->get_url(
-                        array(
+                        [
                             self::PARAM_ACTION => self::ACTION_VIEW_FORUM,
-                            self::PARAM_COMPLEX_CONTENT_OBJECT_ITEM_ID => null)),
-                    $this->get_root_content_object()->get_title()));
+                            self::PARAM_COMPLEX_CONTENT_OBJECT_ITEM_ID => null
+                        ]
+                    ), $this->get_root_content_object()->get_title()
+                )
+            );
 
             if ($this->get_complex_content_object_item())
             {
 
                 $forums_with_key_cloi = $this->retrieve_children_from_root_to_cloi(
-                    $this->get_root_content_object()->get_id(),
-                    $this->get_complex_content_object_item()->get_id());
+                    $this->get_root_content_object()->get_id(), $this->get_complex_content_object_item()->get_id()
+                );
 
                 if ($forums_with_key_cloi)
                 {
@@ -50,10 +53,13 @@ class ForumTopicCreatorComponent extends Manager implements ViewerInterface,
                         BreadcrumbTrail::getInstance()->add(
                             new Breadcrumb(
                                 $this->get_url(
-                                    array(
+                                    [
                                         self::PARAM_ACTION => self::ACTION_VIEW_FORUM,
-                                        self::PARAM_COMPLEX_CONTENT_OBJECT_ITEM_ID => $key)),
-                                $value->get_title()));
+                                        self::PARAM_COMPLEX_CONTENT_OBJECT_ITEM_ID => $key
+                                    ]
+                                ), $value->get_title()
+                            )
+                        );
                     }
                 }
                 else
@@ -65,22 +71,22 @@ class ForumTopicCreatorComponent extends Manager implements ViewerInterface,
             $applicationConfiguration = new ApplicationConfiguration($this->getRequest(), $this->get_user(), $this);
 
             $component = $this->getApplicationFactory()->getApplication(
-                \Chamilo\Core\Repository\Viewer\Manager::CONTEXT,
-                $applicationConfiguration);
+                \Chamilo\Core\Repository\Viewer\Manager::CONTEXT, $applicationConfiguration
+            );
             $component->set_parameter(self::PARAM_ACTION, self::ACTION_CREATE_TOPIC);
             $component->set_parameter(
-                self::PARAM_COMPLEX_CONTENT_OBJECT_ITEM_ID,
-                $this->get_complex_content_object_item_id());
+                self::PARAM_COMPLEX_CONTENT_OBJECT_ITEM_ID, $this->get_complex_content_object_item_id()
+            );
 
             return $component->run();
         }
         else
         {
-            $object_id = \Chamilo\Core\Repository\Viewer\Manager::get_selected_objects();
+            $object_id = $this->getObjectsSelectedInviewer();
 
-            if (! is_array($object_id))
+            if (!is_array($object_id))
             {
-                $object_id = array($object_id);
+                $object_id = [$object_id];
             }
 
             $failures = 0;
@@ -102,10 +108,11 @@ class ForumTopicCreatorComponent extends Manager implements ViewerInterface,
 
                 $cloi->set_display_order(
                     DataManager::select_next_display_order(
-                        $cloi->get_parent(),
-                        ForumTopic::class));
+                        $cloi->get_parent(), ForumTopic::class
+                    )
+                );
 
-                if (! $cloi->create())
+                if (!$cloi->create())
                 {
                     $failures ++;
                 }
@@ -115,23 +122,24 @@ class ForumTopicCreatorComponent extends Manager implements ViewerInterface,
         }
     }
 
+    public function get_allowed_content_object_types()
+    {
+        return [ForumTopic::class];
+    }
+
     private function my_redirect($success)
     {
         $message = htmlentities(
             Translation::get(
-                ($success ? 'ObjectCreated' : 'ObjectNotCreated'),
-                array('OBJECT' => Translation::get('ForumTopic')),
-                StringUtilities::LIBRARIES));
+                ($success ? 'ObjectCreated' : 'ObjectNotCreated'), ['OBJECT' => Translation::get('ForumTopic')],
+                StringUtilities::LIBRARIES
+            )
+        );
 
         $params = [];
         $params[self::PARAM_ACTION] = self::ACTION_VIEW_FORUM;
         $params[self::PARAM_COMPLEX_CONTENT_OBJECT_ITEM_ID] = $this->get_complex_content_object_item_id();
 
         $this->redirectWithMessage($message, !$success, $params);
-    }
-
-    public function get_allowed_content_object_types()
-    {
-        return array(ForumTopic::class);
     }
 }

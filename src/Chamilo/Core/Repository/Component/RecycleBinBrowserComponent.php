@@ -45,7 +45,7 @@ class RecycleBinBrowserComponent extends Manager
 
         $html[] = $this->render_header();
 
-        if ($this->getRequest()->query->get(self::PARAM_EMPTY_RECYCLE_BIN))
+        if ($this->getRequest()->query->has(self::PARAM_EMPTY_RECYCLE_BIN))
         {
             $this->emptyRecycleBin();
             $html[] = $this->display_message(

@@ -11,7 +11,7 @@ use Chamilo\Core\Repository\Storage\DataClass\ContentObject;
 use Chamilo\Core\Repository\Storage\DataManager;
 use Chamilo\Libraries\Architecture\ClassnameUtilities;
 use Chamilo\Libraries\Format\Structure\Glyph\FontAwesomeGlyph;
-use Chamilo\Libraries\Platform\Session\Request;
+use Chamilo\Libraries\Platform\ChamiloRequest;
 use Chamilo\Libraries\Translation\Translation;
 
 /**
@@ -122,17 +122,10 @@ abstract class AssessmentQuestionOptionsBlock extends AssessmentBlock
 
     /**
      * Retrieves the question from the parameters and instantiates the correct subclass
-     *
-     * @param mixed $parent
-     *
-     * @return self
-     * @throws \ReflectionException
      */
-    public static function factory($parent)
+    public static function factory(ChamiloRequest $request, $parent)
     {
-        $question_complex_content_object_item_id = Request::get(
-            Manager::PARAM_QUESTION
-        );
+        $question_complex_content_object_item_id = $request->query->get(Manager::PARAM_QUESTION);
         $question_complex_content_object_item = DataManager::retrieve_by_id(
             ComplexContentObjectItem::class, $question_complex_content_object_item_id
         );

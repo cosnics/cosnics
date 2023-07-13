@@ -9,6 +9,7 @@ use Chamilo\Core\Repository\Manager;
 use Chamilo\Core\Repository\Selector\Renderer\BasicTypeSelectorRenderer;
 use Chamilo\Core\Repository\Selector\TypeSelector;
 use Chamilo\Core\Repository\Selector\TypeSelectorFactory;
+use Chamilo\Core\Repository\Selector\TypeSelectorTrait;
 use Chamilo\Core\Repository\Service\ContentObjectSaver;
 use Chamilo\Core\Repository\Service\TemplateRegistrationConsulter;
 use Chamilo\Core\Repository\Storage\DataManager;
@@ -35,6 +36,8 @@ use Chamilo\Libraries\Utilities\StringUtilities;
 class CreatorComponent extends Manager
 {
 
+    use TypeSelectorTrait;
+
     /**
      * @return string
      * @throws \Chamilo\Libraries\Architecture\Exceptions\NotAllowedException
@@ -52,7 +55,7 @@ class CreatorComponent extends Manager
 
         $type_selector_renderer = new BasicTypeSelectorRenderer($this, $type_selector);
 
-        $templateIdentifier = TypeSelector::get_selection();
+        $templateIdentifier = $this->getSelectedTypes();
 
         if ($templateIdentifier)
         {

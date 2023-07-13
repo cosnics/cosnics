@@ -3,22 +3,21 @@ namespace Chamilo\Core\Repository\ContentObject\Assessment\Display\Component\Vie
 
 use Chamilo\Libraries\Format\Form\FormValidator;
 use Chamilo\Libraries\Format\Structure\Glyph\FontAwesomeGlyph;
-use Chamilo\Libraries\Platform\Session\Request;
 use Chamilo\Libraries\Translation\Translation;
 use Chamilo\Libraries\Utilities\StringUtilities;
 
 class AssessmentResultViewerForm extends FormValidator
 {
-    const FORM_NAME = 'assessment_result_viewer_form';
-    const PAGE_NUMBER = 'assessment_result_page_number';
+    public const FORM_NAME = 'assessment_result_viewer_form';
+    public const PAGE_NUMBER = 'assessment_result_page_number';
 
     /**
-     *
      * @var AssessmentResultProcessor
      */
     private $assessment_result_processor;
 
-    public function __construct(AssessmentResultProcessor $assessment_result_processor, $method = self::FORM_METHOD_POST, $action = null
+    public function __construct(
+        AssessmentResultProcessor $assessment_result_processor, $method = self::FORM_METHOD_POST, $action = null
     )
     {
         parent::__construct('assessment_result_viewer_form', $method, $action);
@@ -81,7 +80,7 @@ class AssessmentResultViewerForm extends FormValidator
             else
             {
                 $buttons[] = $this->createElement(
-                    'style_submit_button', 'submit', Translation:: get('Finish'), array('class' => 'btn-danger'), null,
+                    'style_submit_button', 'submit', Translation:: get('Finish'), ['class' => 'btn-danger'], null,
                     new FontAwesomeGlyph('stop')
                 );
             }
@@ -142,7 +141,7 @@ class AssessmentResultViewerForm extends FormValidator
         $start_time = $this->getRequest()->request->get('start_time');
         $start_time = $start_time ?: 0;
 
-        $this->addElement('hidden', 'start_time', $start_time, array('id' => 'start_time'));
+        $this->addElement('hidden', 'start_time', $start_time, ['id' => 'start_time']);
     }
 
     public function add_results()
