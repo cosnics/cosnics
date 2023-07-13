@@ -14,9 +14,9 @@ use Chamilo\Libraries\Hashing\HashingUtilities;
 use Chamilo\Libraries\Mail\Mailer\MailerInterface;
 use Chamilo\Libraries\Mail\ValueObject\Mail;
 use Chamilo\Libraries\Translation\Translation;
-use Chamilo\Libraries\Utilities\String\Text;
 use Chamilo\Libraries\Utilities\StringUtilities;
 use Exception;
+use Hackzilla\PasswordGenerator\Generator\PasswordGeneratorInterface;
 
 /**
  * @package user.lib.forms
@@ -184,7 +184,8 @@ class RegisterForm extends FormValidator
         $user = $this->user;
         $values = $this->exportValues();
 
-        $password = $values['pw']['pass'] == '1' ? Text::generate_password() : $values['pw'][User::PROPERTY_PASSWORD];
+        $password = $values['pw']['pass'] == '1' ? $this->getPasswordGenerator()->generatePassword() :
+            $values['pw'][User::PROPERTY_PASSWORD];
 
         if (DataManager::is_username_available(
             $values[User::PROPERTY_USERNAME], $values[User::PROPERTY_ID]
@@ -282,6 +283,11 @@ class RegisterForm extends FormValidator
     public function getHashingUtilities(): HashingUtilities
     {
         return $this->getService(HashingUtilities::class);
+    }
+
+    public function getPasswordGenerator(): PasswordGeneratorInterface
+    {
+        return $this->getService(PasswordGeneratorInterface::class);
     }
 
     public function getUserPictureProvider(): UserPictureProviderInterface

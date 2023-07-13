@@ -13,7 +13,6 @@ use Chamilo\Libraries\Format\Table\Column\TableColumn;
 use Chamilo\Libraries\Format\Table\FormAction\TableActions;
 use Chamilo\Libraries\Format\Table\TableResultPosition;
 use Chamilo\Libraries\Storage\DataClass\DataClass;
-use Chamilo\Libraries\Utilities\String\Text;
 
 /**
  * @package Chamilo\Application\Weblcms\Tool\Implementation\Assessment\Table
@@ -68,7 +67,7 @@ class ObjectPublicationTableRenderer extends \Chamilo\Application\Weblcms\Table\
             ]
         );
 
-        return Text::create_link($url, $bar);
+        return '<a href="' . $url . '">' . $bar . '</a>';
     }
 
     protected function initializeColumns(): void

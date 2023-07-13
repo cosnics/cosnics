@@ -13,9 +13,9 @@ use Chamilo\Libraries\Format\Structure\BreadcrumbTrail;
 use Chamilo\Libraries\Hashing\HashingUtilities;
 use Chamilo\Libraries\Mail\ValueObject\Mail;
 use Chamilo\Libraries\Translation\Translation;
-use Chamilo\Libraries\Utilities\String\Text;
 use Chamilo\Libraries\Utilities\StringUtilities;
 use Exception;
+use Hackzilla\PasswordGenerator\Generator\PasswordGeneratorInterface;
 
 /**
  * @package user.lib.user_manager.component
@@ -51,7 +51,7 @@ class MultiPasswordResetterComponent extends Manager
                     User::class, (int) $id
                 );
 
-                $password = Text::generate_password();
+                $password = $this->getPasswordGenerator()->generatePassword();
                 $user->set_password($this->getHashingUtilities()->hashString($password));
 
                 if ($user->update())
@@ -129,5 +129,10 @@ class MultiPasswordResetterComponent extends Manager
     public function getHashingUtilities()
     {
         return $this->getService(HashingUtilities::class);
+    }
+
+    public function getPasswordGenerator(): PasswordGeneratorInterface
+    {
+        return $this->getService(PasswordGeneratorInterface::class);
     }
 }

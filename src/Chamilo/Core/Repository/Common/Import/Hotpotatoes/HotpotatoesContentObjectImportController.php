@@ -9,7 +9,6 @@ use Chamilo\Libraries\File\Compression\ZipArchive\ZipArchiveFilecompression;
 use Chamilo\Libraries\File\Properties\FileProperties;
 use Chamilo\Libraries\File\Properties\WebpageProperties;
 use Chamilo\Libraries\Translation\Translation;
-use Chamilo\Libraries\Utilities\String\Text;
 
 class HotpotatoesContentObjectImportController extends ContentObjectImportController
 {
@@ -32,7 +31,8 @@ class HotpotatoesContentObjectImportController extends ContentObjectImportContro
                     $filesystem = $this->getFilesystem();
 
                     $filename_hash = md5($file->get_path());
-                    $relative_folder_path = Text::char_at($filename_hash, 0);
+                    $relative_folder_path =
+                        $this->getStringUtilities()->createString($filename_hash)->at(0)->toString();
                     $full_folder_path = $this->getSystemPathBuilder()->getPublicStoragePath(
                             'Chamilo\Core\Repository\ContentObject\Hotpotatoes'
                         ) . $this->get_parameters()->get_user() . '/' . $relative_folder_path;
@@ -233,7 +233,7 @@ class HotpotatoesContentObjectImportController extends ContentObjectImportContro
             if ($masher instanceof FileProperties)
             {
                 $masher_hash = md5($masher->get_path());
-                $relative_folder_path = Text::char_at($masher_hash, 0);
+                $relative_folder_path = $this->getStringUtilities()->createString($masher_hash)->at(0)->toString();
                 $full_folder_path = $this->getSystemPathBuilder()->getPublicStoragePath(
                         'Chamilo\Core\Repository\ContentObject\Hotpotatoes'
                     ) . $this->get_parameters()->get_user() . '/' . $relative_folder_path;
@@ -273,7 +273,8 @@ class HotpotatoesContentObjectImportController extends ContentObjectImportContro
                 foreach ($htm_files as $hot_potatoes_file_properties)
                 {
                     $hot_potatoes_hash = md5($hot_potatoes_file_properties->get_path());
-                    $relative_folder_path = Text::char_at($hot_potatoes_hash, 0);
+                    $relative_folder_path =
+                        $this->getStringUtilities()->createString($hot_potatoes_hash)->at(0)->toString();
                     $full_folder_path = $this->getSystemPathBuilder()->getPublicStoragePath(
                             'Chamilo\Core\Repository\ContentObject\Hotpotatoes'
                         ) . $this->get_parameters()->get_user() . '/' . $relative_folder_path;

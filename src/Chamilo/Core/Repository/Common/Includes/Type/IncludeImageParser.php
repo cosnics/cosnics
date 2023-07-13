@@ -7,10 +7,9 @@ use Chamilo\Core\Repository\Processor\Ckeditor\Processor;
 use Chamilo\Core\Repository\Storage\DataClass\ContentObject;
 use Chamilo\Core\Repository\Storage\DataManager;
 use Chamilo\Libraries\Format\Form\FormValidator;
-use Chamilo\Libraries\Utilities\String\Text;
+use DOMDocument;
 
 /**
- *
  * @package repository.lib.includes
  */
 class IncludeImageParser extends ContentObjectIncludeParser
@@ -27,7 +26,10 @@ class IncludeImageParser extends ContentObjectIncludeParser
         {
             if (isset($values[$htmlEditor]))
             {
-                $tags = Text::parse_html_file($values[$htmlEditor]);
+                $document = new DOMDocument();
+                $document->loadHTML($values[$htmlEditor]);
+
+                $tags = $document->getElementsByTagname('img');
 
                 foreach ($tags as $tag)
                 {
@@ -37,7 +39,7 @@ class IncludeImageParser extends ContentObjectIncludeParser
                     if ($matches === 1)
                     {
                         $source_components = parse_url($source);
-                        $source_query_components = Text::parse_query_string($source_components['query']);
+                        parse_str($source_components['query'], $source_query_components);
                         $contentObjectIdentifier = $source_query_components[Manager::PARAM_CONTENT_OBJECT_ID];
 
                         if ($contentObjectIdentifier)

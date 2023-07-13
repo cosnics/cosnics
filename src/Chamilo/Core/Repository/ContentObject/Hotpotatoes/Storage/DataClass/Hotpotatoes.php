@@ -9,7 +9,6 @@ use Chamilo\Libraries\File\Compression\ZipArchive\ZipArchiveFilecompression;
 use Chamilo\Libraries\File\SystemPathBuilder;
 use Chamilo\Libraries\File\WebPathBuilder;
 use Chamilo\Libraries\Translation\Translation;
-use Chamilo\Libraries\Utilities\String\Text;
 use Chamilo\Libraries\Utilities\StringUtilities;
 use Symfony\Component\HttpFoundation\Session\SessionInterface;
 
@@ -45,7 +44,7 @@ class Hotpotatoes extends ContentObject implements Versionable
 
     public function delete_file()
     {
-        if (Text::is_valid_path($this->get_path()))
+        if ($this->getStringUtilities()->isValidPath($this->get_path()))
         {
             $dir = dirname($this->get_full_path());
             $this->getFilesystem()->remove($dir);

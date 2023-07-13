@@ -4,11 +4,10 @@ namespace Chamilo\Libraries\Utilities;
 use Stringy\Stringy;
 
 /**
- *
  * @package Chamilo\Libraries\Utilities
- * @author Hans De Bisschop <hans.de.bisschop@ehb.be>
- * @author Magali Gillard <magali.gillard@ehb.be>
- * @author Eduard Vossen <eduard.vossen@ehb.be>
+ * @author  Hans De Bisschop <hans.de.bisschop@ehb.be>
+ * @author  Magali Gillard <magali.gillard@ehb.be>
+ * @author  Eduard Vossen <eduard.vossen@ehb.be>
  */
 class StringUtilities
 {
@@ -100,7 +99,6 @@ class StringUtilities
     }
 
     /**
-     *
      * @param ?mixed $string
      */
     public function hasValue($string, bool $forHumans = false): bool
@@ -108,8 +106,36 @@ class StringUtilities
         return !$this->isNullOrEmpty($string, $forHumans);
     }
 
+    public function highlight(string $haystack, string $needle): string
+    {
+        if (strlen($haystack) < 1 || strlen($needle) < 1)
+        {
+            return $haystack;
+        }
+
+        $matches = [];
+        $matches_done = [];
+
+        preg_match_all("/$needle+/i", $haystack, $matches);
+
+        if (is_array($matches[0]) && count($matches[0]) >= 1)
+        {
+            foreach ($matches[0] as $match)
+            {
+                if (in_array($match, $matches_done))
+                {
+                    continue;
+                }
+
+                $matches_done[] = $match;
+                $haystack = str_replace($match, '<mark>' . $match . '</mark>', $haystack);
+            }
+        }
+
+        return $haystack;
+    }
+
     /**
-     *
      * @param ?mixed $string
      */
     public function isNullOrEmpty($string, bool $forHumans = false): bool
@@ -135,6 +161,21 @@ class StringUtilities
         }
 
         return false;
+    }
+
+    public function isValidPath(string $path): bool
+    {
+        $path = str_replace(' ', '', $path);
+        $path = preg_replace('/[^a-zA-Z0-9\s]/', '', $path);
+
+        $filteredPath = $this->createString($path)->underscored()->toString();
+
+        if (!$path || !$filteredPath)
+        {
+            return false;
+        }
+
+        return true;
     }
 
     public function truncate(

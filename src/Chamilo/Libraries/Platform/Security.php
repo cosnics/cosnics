@@ -73,22 +73,6 @@ class Security
         return false;
     }
 
-    /**
-     * @deprecated Use Security::checkToken() now
-     */
-    public function check_token(string $tokenType = 'post'): bool
-    {
-        return self::checkToken($tokenType);
-    }
-
-    /**
-     * @deprecated Use Security::checkUa() now
-     */
-    public function check_ua(): bool
-    {
-        return self::checkUa();
-    }
-
     public function getChamiloRequest(): ChamiloRequest
     {
         return $this->chamiloRequest;
@@ -112,7 +96,7 @@ class Security
      */
     public function getToken(): string
     {
-        $token = $this->getHashingUtilities()->hashString(uniqid(rand(), true));
+        $token = $this->getHashingUtilities()->hashString(uniqid((string) rand(), true));
         $this->getSession()->set('sec_token', $token);
 
         return $token;
@@ -121,10 +105,10 @@ class Security
     /**
      * Gets the user agent in the session to later check it with check_ua() to prevent most cases of session hijacking.
      */
-    public function getUa()
+    public function getUa(): void
     {
         $session = $this->getSession();
-        $session->set('sec_ua_seed', uniqid(rand(), true));
+        $session->set('sec_ua_seed', uniqid((string) rand(), true));
         $session->set(
             'sec_ua', $this->getChamiloRequest()->server->get('HTTP_USER_AGENT') . $session->get('sec_ua_seed')
         );
@@ -136,14 +120,6 @@ class Security
     public function get_token(): string
     {
         return $this->getToken();
-    }
-
-    /**
-     * @deprecated Use Security::getUa() now
-     */
-    public function get_ua()
-    {
-        self::getUa();
     }
 
     /**

@@ -21,7 +21,6 @@ use Chamilo\Libraries\Storage\Query\Condition\OrCondition;
 use Chamilo\Libraries\Storage\Query\Variable\PropertyConditionVariable;
 use Chamilo\Libraries\Storage\Query\Variable\StaticConditionVariable;
 use Chamilo\Libraries\Translation\Translation;
-use Chamilo\Libraries\Utilities\String\Text;
 
 /**
  * @package Chamilo\Application\Weblcms\Tool\Implementation\Search\Component
@@ -143,12 +142,13 @@ class SearcherComponent extends Manager
                         $resultsHtml[] = '<div class="panel-heading">';
                         $resultsHtml[] = '<h4 class="panel-title">';
                         $resultsHtml[] = '<a href="' . $url . '">' . $object->get_icon_image() . '' .
-                            Text::highlight($object->get_title(), $query) . '</a>';
+                            $this->getStringUtilities()->highlight($object->get_title(), $query) . '</a>';
                         $resultsHtml[] = '</h4>';
                         $resultsHtml[] = '</div>';
 
                         $resultsHtml[] = '<div class="panel-body">';
-                        $resultsHtml[] = Text::highlight(strip_tags($object->get_description()), $query);
+                        $resultsHtml[] =
+                            $this->getStringUtilities()->highlight(strip_tags($object->get_description()), $query);
                         $resultsHtml[] = '</div>';
 
                         $resultsHtml[] = '</div>';

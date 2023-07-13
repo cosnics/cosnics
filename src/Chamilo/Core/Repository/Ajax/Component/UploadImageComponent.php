@@ -6,7 +6,6 @@ use Chamilo\Core\Repository\Manager;
 use Chamilo\Core\Repository\Storage\DataClass\ContentObject;
 use Chamilo\Libraries\Architecture\Interfaces\NoAuthenticationSupport;
 use Chamilo\Libraries\Architecture\JsonAjaxResult;
-use Chamilo\Libraries\Utilities\String\Text;
 use Chamilo\Libraries\Utilities\StringUtilities;
 
 class UploadImageComponent extends \Chamilo\Core\Repository\Ajax\Manager implements NoAuthenticationSupport
@@ -25,7 +24,7 @@ class UploadImageComponent extends \Chamilo\Core\Repository\Ajax\Manager impleme
             $filename = $_FILES['Filedata']['name'];
             $hash = md5($_FILES['Filedata']['name']);
 
-            $path = $owner . '/' . Text::char_at($hash, 0);
+            $path = $owner . '/' . $this->getStringUtilities()->createString($hash)->at(0)->toString();
             $full_path = $upload_path . $path;
 
             $filesystemTools = $this->getFilesystemTools();

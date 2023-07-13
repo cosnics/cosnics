@@ -13,7 +13,6 @@ use Chamilo\Libraries\File\ConfigurablePathBuilder;
 use Chamilo\Libraries\File\FileType;
 use Chamilo\Libraries\Format\Structure\Glyph\IdentGlyph;
 use Chamilo\Libraries\Translation\Translation;
-use Chamilo\Libraries\Utilities\String\Text;
 use Chamilo\Libraries\Utilities\StringUtilities;
 use Exception;
 use Symfony\Component\HttpFoundation\ResponseHeaderBag;
@@ -178,7 +177,7 @@ class File extends ContentObject implements Versionable, Includeable, FileStorag
                 $filesystem->remove($this->get_full_path());
             }
         }
-        elseif (Text::is_valid_path($this->get_full_path()))
+        elseif ($this->getStringUtilities()->isValidPath($this->get_full_path()))
         {
             $filesystem->remove($this->get_full_path());
         }
@@ -236,7 +235,8 @@ class File extends ContentObject implements Versionable, Includeable, FileStorag
             );
 
             $filename_hash = md5($this->get_filename());
-            $relative_folder_path = $this->get_owner_id() . '/' . Text::char_at($filename_hash, 0);
+            $relative_folder_path = $this->get_owner_id() . '/' .
+                $this->getStringUtilities()->createString($filename_hash)->at(0)->toString();
             $full_folder_path = $configurablePathBuilder->getRepositoryPath() . $relative_folder_path;
 
             $unique_filename_hash = $this->getFilesystemTools()->createUniqueName($full_folder_path, $filename_hash);
@@ -623,7 +623,8 @@ class File extends ContentObject implements Versionable, Includeable, FileStorag
                 }
 
                 $filename_hash = md5($filename);
-                $relative_folder_path = $this->get_owner_id() . '/' . Text::char_at($filename_hash, 0);
+                $relative_folder_path = $this->get_owner_id() . '/' .
+                    $this->getStringUtilities()->createString($filename_hash)->at(0)->toString();
                 $full_folder_path = $configurablePathBuilder->getRepositoryPath() . $relative_folder_path;
 
                 $filesystem->mkdir($full_folder_path);

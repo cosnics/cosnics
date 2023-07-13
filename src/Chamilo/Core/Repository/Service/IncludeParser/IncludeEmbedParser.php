@@ -4,10 +4,9 @@ namespace Chamilo\Core\Repository\Service\IncludeParser;
 use Chamilo\Core\Repository\ContentObject\File\Storage\DataClass\File;
 use Chamilo\Core\Repository\Processor\Ckeditor\Processor;
 use Chamilo\Core\Repository\Storage\DataClass\ContentObject;
-use Chamilo\Libraries\Utilities\String\Text;
+use DOMDocument;
 
 /**
- *
  * @package repository.lib.includes
  */
 class IncludeEmbedParser extends IncludeTagParser
@@ -20,13 +19,16 @@ class IncludeEmbedParser extends IncludeTagParser
      */
     protected function findTags($htmlEditorValue)
     {
-        return Text::parse_html_file($htmlEditorValue, 'embed');
+        $document = new DOMDocument();
+        $document->loadHTML($htmlEditorValue);
+
+        return $document->getElementsByTagname('embed');
     }
 
     /**
      * @param \Chamilo\Core\Repository\Storage\DataClass\ContentObject $contentObject
      *
-     * @return boolean
+     * @return bool
      */
     protected function isValidContentObject(ContentObject $contentObject)
     {
@@ -37,7 +39,7 @@ class IncludeEmbedParser extends IncludeTagParser
     /**
      * @param string $source
      *
-     * @return boolean
+     * @return bool
      */
     protected function isValidSource($source)
     {

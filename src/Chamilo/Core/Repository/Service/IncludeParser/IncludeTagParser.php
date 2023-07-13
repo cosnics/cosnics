@@ -5,7 +5,6 @@ use Chamilo\Core\Repository\Manager;
 use Chamilo\Core\Repository\Service\ContentObjectIncludeParser;
 use Chamilo\Core\Repository\Storage\DataClass\ContentObject;
 use Chamilo\Core\Repository\Storage\DataManager;
-use Chamilo\Libraries\Utilities\String\Text;
 
 /**
  *
@@ -50,7 +49,7 @@ abstract class IncludeTagParser extends ContentObjectIncludeParser
             if ($this->isValidSource($source))
             {
                 $source_components = parse_url($source);
-                $source_query_components = Text::parse_query_string($source_components['query']);
+                parse_str($source_components['query'], $source_query_components);
                 $content_object_id = $source_query_components[Manager::PARAM_CONTENT_OBJECT_ID];
 
                 if ($content_object_id)

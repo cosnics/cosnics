@@ -3,6 +3,7 @@ namespace Chamilo\Core\Repository\Service\Home;
 
 use Chamilo\Core\Repository\Storage\DataClass\ContentObject;
 use Chamilo\Core\Repository\Storage\DataManager;
+use Chamilo\Core\User\Manager;
 use Chamilo\Libraries\DependencyInjection\DependencyInjectionContainerBuilder;
 use Chamilo\Libraries\Storage\Query\Condition\AndCondition;
 use Chamilo\Libraries\Storage\Query\Condition\EqualityCondition;
@@ -33,11 +34,6 @@ class Connector
         $objectTypes[] = 'Chamilo\Core\Repository\ContentObject\Description\Storage\DataClass\Description';
         $objectTypes[] = 'Chamilo\Core\Repository\ContentObject\Note\Storage\DataClass\Note';
         $objectTypes[] = 'Chamilo\Core\Repository\ContentObject\Link\Storage\DataClass\Link';
-        $objectTypes[] = 'Chamilo\Core\Repository\ContentObject\Matterhorn\Storage\DataClass\Matterhorn';
-        $objectTypes[] = 'Chamilo\Core\Repository\ContentObject\Slideshare\Storage\DataClass\Slideshare';
-        $objectTypes[] = 'Chamilo\Core\Repository\ContentObject\Soundcloud\Storage\DataClass\Soundcloud';
-        $objectTypes[] = 'Chamilo\Core\Repository\ContentObject\Vimeo\Storage\DataClass\Vimeo';
-        $objectTypes[] = 'Chamilo\Core\Repository\ContentObject\Youtube\Storage\DataClass\Youtube';
 
         return self::get_objects($objectTypes);
     }
@@ -58,7 +54,7 @@ class Connector
         $conditions = [];
         $conditions[] = new EqualityCondition(
             new PropertyConditionVariable(ContentObject::class, ContentObject::PROPERTY_OWNER_ID),
-            new StaticConditionVariable($session->get(\Chamilo\Core\User\Manager::SESSION_USER_ID))
+            new StaticConditionVariable($session->get(Manager::SESSION_USER_ID))
         );
 
         $types_condition = [];

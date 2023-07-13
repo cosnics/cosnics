@@ -10,17 +10,6 @@ use Symfony\Component\HttpFoundation\Request;
 class ChamiloRequest extends Request
 {
 
-    /**
-     * Returns a parameter from the POST BODY and if it does not exist fallback on the URL QUERY.
-     *
-     * @deprecated Use ChamiloRequest::getFromQuery() or ChamiloRequest::getFromRequest() or
-     *     ChamiloRequest::getFromRequestOrQuery()
-     */
-    public function get(string $key, $default = null)
-    {
-        return $this->getFromRequestOrQuery($key, $default);
-    }
-
     public function getContainerMode(): string
     {
         return $this->attributes->get('containerMode', 'container-fluid');

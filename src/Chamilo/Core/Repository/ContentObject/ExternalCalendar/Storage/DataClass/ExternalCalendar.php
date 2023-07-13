@@ -8,7 +8,6 @@ use Chamilo\Libraries\Architecture\Interfaces\Versionable;
 use Chamilo\Libraries\DependencyInjection\DependencyInjectionContainerBuilder;
 use Chamilo\Libraries\File\ConfigurablePathBuilder;
 use Chamilo\Libraries\Translation\Translation;
-use Chamilo\Libraries\Utilities\String\Text;
 use Chamilo\Libraries\Utilities\StringUtilities;
 use DateTime;
 use Exception;
@@ -143,7 +142,8 @@ class ExternalCalendar extends ContentObject implements Versionable, FileStorage
             $configurablePathBuilder = $this->getConfigurablePathBuilder();
 
             $filename_hash = md5($this->get_filename());
-            $relative_folder_path = $this->get_owner_id() . '/' . Text::char_at($filename_hash, 0);
+            $relative_folder_path = $this->get_owner_id() . '/' .
+                $this->getStringUtilities()->createString($filename_hash)->at(0)->toString();
             $full_folder_path = $configurablePathBuilder->getRepositoryPath() . $relative_folder_path;
 
             $unique_filename_hash = $this->getFilesystemTools()->createUniqueName($full_folder_path, $filename_hash);
@@ -393,7 +393,8 @@ class ExternalCalendar extends ContentObject implements Versionable, FileStorage
                 }
 
                 $filename_hash = md5($filename);
-                $relative_folder_path = $this->get_owner_id() . '/' . Text::char_at($filename_hash, 0);
+                $relative_folder_path = $this->get_owner_id() . '/' .
+                    $this->getStringUtilities()->createString($filename_hash)->at(0)->toString();
                 $full_folder_path = $configurablePathBuilder->getRepositoryPath() . $relative_folder_path;
 
                 $filesystem->mkdir($full_folder_path);

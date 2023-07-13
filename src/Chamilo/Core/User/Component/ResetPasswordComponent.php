@@ -16,9 +16,9 @@ use Chamilo\Libraries\Format\Structure\BreadcrumbTrail;
 use Chamilo\Libraries\Hashing\HashingUtilities;
 use Chamilo\Libraries\Mail\ValueObject\Mail;
 use Chamilo\Libraries\Translation\Translation;
-use Chamilo\Libraries\Utilities\String\Text;
 use Chamilo\Libraries\Utilities\StringUtilities;
 use Exception;
+use Hackzilla\PasswordGenerator\Generator\PasswordGeneratorInterface;
 
 /**
  * @package user.lib.user_manager.component
@@ -177,7 +177,7 @@ class ResetPasswordComponent extends Manager implements NoAuthenticationSupport
     {
         $configurationConsulter = $this->getConfigurationConsulter();
 
-        $password = Text::generate_password();
+        $password = $this->getPasswordGenerator()->generatePassword();
         $user->set_password($this->getHashingUtilities()->hashString($password));
         $user->update();
         $mail_subject = Translation::get('LoginRequest');
@@ -225,6 +225,11 @@ class ResetPasswordComponent extends Manager implements NoAuthenticationSupport
     public function getHashingUtilities(): HashingUtilities
     {
         return $this->getService(HashingUtilities::class);
+    }
+
+    public function getPasswordGenerator(): PasswordGeneratorInterface
+    {
+        return $this->getService(PasswordGeneratorInterface::class);
     }
 
     public function get_breadcrumb_generator(): BreadcrumbGeneratorInterface
