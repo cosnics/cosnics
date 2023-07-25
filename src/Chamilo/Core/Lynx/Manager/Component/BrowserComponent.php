@@ -104,7 +104,7 @@ class BrowserComponent extends Manager implements DelegateComponent
         $packages = \Chamilo\Configuration\Package\PlatformPackageBundles::getInstance(
             \Chamilo\Configuration\Package\PlatformPackageBundles::MODE_AVAILABLE)->get_type_packages();
 
-        if (count($packages[$this->get_type()]) > 0)
+        if (is_array($packages[$this->get_type()]) && count($packages[$this->get_type()]) > 0)
         {
             $tabs->add_tab(
                 new DynamicContentTab(

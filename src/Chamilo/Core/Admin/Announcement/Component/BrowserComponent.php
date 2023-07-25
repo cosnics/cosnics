@@ -110,6 +110,7 @@ class BrowserComponent extends Manager implements TableSupport, DelegateComponen
         if (! isset($this->buttonToolbarRenderer))
         {
             $buttonToolbar = new ButtonToolBar();
+            $buttonToolbar->setSearchUrl($this->get_url());
             $commonActions = new ButtonGroup();
             $toolActions = new ButtonGroup();
             

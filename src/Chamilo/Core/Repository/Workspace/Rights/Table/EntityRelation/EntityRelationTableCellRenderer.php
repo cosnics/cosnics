@@ -37,15 +37,29 @@ class EntityRelationTableCellRenderer extends DataClassTableCellRenderer impleme
             case EntityRelationTableColumnModel::COLUMN_ENTITY :
                 if ($entityRelation->get_entity_type() == UserEntity::ENTITY_TYPE)
                 {
-                    return \Chamilo\Libraries\Storage\DataManager\DataManager::retrieve_by_id(
-                        User::class_name(), 
-                        $entityRelation->get_entity_id())->get_fullname();
+                    $user = \Chamilo\Libraries\Storage\DataManager\DataManager::retrieve_by_id(
+                        User::class_name(),
+                        $entityRelation->get_entity_id());
+
+                    if(!$user)
+                    {
+                        return '';
+                    }
+
+                    return $user->get_fullname();
                 }
                 else
                 {
-                    return \Chamilo\Libraries\Storage\DataManager\DataManager::retrieve_by_id(
-                        Group::class_name(), 
-                        $entityRelation->get_entity_id())->get_name();
+                    $group =  \Chamilo\Libraries\Storage\DataManager\DataManager::retrieve_by_id(
+                        Group::class_name(),
+                        $entityRelation->get_entity_id());
+
+                    if(!$group)
+                    {
+                        return '';
+                    }
+
+                    return $group->get_name();
                 }
             case RightsService::RIGHT_VIEW :
                 return $this->getRightsIcon(RightsService::RIGHT_VIEW, $entityRelation);

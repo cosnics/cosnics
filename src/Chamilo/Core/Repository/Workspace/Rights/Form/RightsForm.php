@@ -86,8 +86,11 @@ class RightsForm extends FormValidator
         else
         {
             $types = new AdvancedElementFinderElementTypes();
-            $types->add_element_type(UserEntity::get_element_finder_type());
-            $types->add_element_type(PlatformGroupEntity::get_element_finder_type());
+            $userEntity = new UserEntity();
+            $platformgroupEntity = new PlatformGroupEntity();
+
+            $types->add_element_type($userEntity->get_element_finder_type());
+            $types->add_element_type($platformgroupEntity->get_element_finder_type());
             $this->addElement('advanced_element_finder', self::PROPERTY_ACCESS, Translation::get('UsersGroups'), $types);
         }
         

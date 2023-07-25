@@ -174,7 +174,7 @@ class WebpageForm extends ContentObjectForm
         }
         else
         {
-            if (! HTML_QuickForm_Rule_Required::validate($fields['html_content']))
+            if ($fields['html_content'] == null || $fields['html_content'] == '')
             {
                 $errors['upload_or_create'] = Translation::get('NoFileCreated');
             }

@@ -46,7 +46,7 @@ class PackageTypeMenu extends HtmlMenu
 
         if (is_array($sub_items) && count($sub_items) > 0)
         {
-            usort($sub_items, array('\Chamilo\Core\Lynx\Manager\PackageTypeMenu', 'compare_items'));
+            usort($sub_items, array('\Chamilo\Core\Lynx\Manager\Menu\PackageTypeMenu', 'compare_items'));
             
             $item['sub'] = $sub_items;
         }

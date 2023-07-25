@@ -183,7 +183,7 @@ class ForumPostForm extends FormValidator
             $attachments);
         $this->addElement('category');
         
-        if (count($this->additional_elements) > 0)
+        if (is_array($this->additional_elements) && count($this->additional_elements) > 0)
         {
             $count = 0;
             foreach ($this->additional_elements as $element)

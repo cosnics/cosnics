@@ -9,6 +9,7 @@ use Chamilo\Core\Repository\ContentObject\LearningPath\Service\AutomaticNumberin
 use Chamilo\Core\Repository\ContentObject\LearningPath\Service\Tracking\TrackingService;
 use Chamilo\Core\Repository\ContentObject\LearningPath\Storage\DataClass\LearningPath;
 use Chamilo\Core\Repository\ContentObject\Section\Storage\DataClass\Section;
+use Chamilo\Core\Repository\Storage\DataClass\ContentObject;
 use Chamilo\Core\User\Storage\DataClass\User;
 use Chamilo\Libraries\Architecture\ClassnameUtilities;
 use Chamilo\Libraries\Utilities\StringUtilities;
@@ -153,7 +154,9 @@ class TreeJSONMapper
     {
         $nodeData = array();
 
-        $nodeData[] = $this->getNodeDataForTreeNode($this->tree->getRoot());
+        $data = $this->getNodeDataForTreeNode($this->tree->getRoot());
+        if($data)
+            $nodeData[] = $data;
 
         return $nodeData;
     }
@@ -166,6 +169,11 @@ class TreeJSONMapper
     protected function getNodeDataForTreeNode(TreeNode $node)
     {
         $number = $this->automaticNumberingService->getAutomaticNumberingForTreeNode($node);
+
+        if($node->getContentObject() instanceof ContentObject)
+        {
+            return null;
+        }
 
         $nodeData = array();
 
@@ -217,7 +225,9 @@ class TreeJSONMapper
             $children = $node->getChildNodes();
             foreach ($children as $child)
             {
-                $nodeData['children'][] = $this->getNodeDataForTreeNode($child);
+                $data = $this->getNodeDataForTreeNode($child);
+                if($data)
+                    $nodeData['children'][] = $data;
             }
         }
 

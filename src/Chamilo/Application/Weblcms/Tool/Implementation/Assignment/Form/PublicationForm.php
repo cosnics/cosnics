@@ -146,6 +146,11 @@ class PublicationForm extends ContentObjectPublicationForm
             ''
         );
 
+        $this->setDefaults(
+            [
+                Publication::PROPERTY_ENTITY_TYPE[Publication::PROPERTY_ENTITY_TYPE] => Entry::ENTITY_TYPE_USER
+            ]);
+
         if($this->registrationConsulter->isContextRegisteredAndActive('Chamilo\Core\Repository\ContentObject\Assignment\Extension\Plagiarism'))
         {
             $redirect = new Redirect(
@@ -221,7 +226,7 @@ class PublicationForm extends ContentObjectPublicationForm
         $publication = new Publication();
 
         $publication->setPublicationId($contentObjectPublication->getId());
-        $publication->setEntityType($exportValues[Publication::PROPERTY_ENTITY_TYPE]);
+        $publication->setEntityType($exportValues[Publication::PROPERTY_ENTITY_TYPE][Publication::PROPERTY_ENTITY_TYPE]);
         $publication->setCheckForPlagiarism($exportValues[Publication::PROPERTY_CHECK_FOR_PLAGIARISM] == 1);
 
         return $publication->create();
@@ -242,7 +247,7 @@ class PublicationForm extends ContentObjectPublicationForm
             $publication =
                 $this->publicationRepository->findPublicationByContentObjectPublication($contentObjectPublication);
 
-            $publication->setEntityType($exportValues[Publication::PROPERTY_ENTITY_TYPE]);
+            $publication->setEntityType($exportValues[Publication::PROPERTY_ENTITY_TYPE][Publication::PROPERTY_ENTITY_TYPE]);
             $publication->setCheckForPlagiarism($exportValues[Publication::PROPERTY_CHECK_FOR_PLAGIARISM] == 1);
 
             return $publication->update();
@@ -261,7 +266,10 @@ class PublicationForm extends ContentObjectPublicationForm
         $publication =
             $this->publicationRepository->findPublicationByContentObjectPublication($contentObjectPublication);
 
-        $this->setDefaults([Publication::PROPERTY_ENTITY_TYPE => $publication->getEntityType()]);
-        $this->setDefaults([Publication::PROPERTY_CHECK_FOR_PLAGIARISM => $publication->getCheckForPlagiarism()]);
+        $this->setDefaults(
+            [
+                Publication::PROPERTY_ENTITY_TYPE[Publication::PROPERTY_ENTITY_TYPE] => $publication->getEntityType(),
+                Publication::PROPERTY_CHECK_FOR_PLAGIARISM => $publication->getCheckForPlagiarism()
+        ]);
     }
 }

@@ -383,7 +383,7 @@ class Filesystem
      */
     public static function guess_disk_space($content)
     {
-        $tmpfname = tempnam();
+        $tmpfname = tempnam('/tmp', 'test');
         $handle = fopen($tmpfname, "w");
         fwrite($handle, $content);
         fclose($handle);
