@@ -22,6 +22,6 @@ class ItemBrowserTableColumnModel extends DataClassTableColumnModel implements T
     {
         $this->add_column(new StaticTableColumn(self::TYPE));
         $this->add_column(
-            new DataClassPropertyTableColumn(ItemTitle::class_name(), ItemTitle::PROPERTY_TITLE, false));
+            new DataClassPropertyTableColumn(ItemTitle::class_name(), ItemTitle::PROPERTY_TITLE,null, false));
     }
 }

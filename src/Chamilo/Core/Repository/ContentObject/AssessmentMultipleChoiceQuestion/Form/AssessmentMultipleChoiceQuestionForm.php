@@ -73,7 +73,8 @@ class AssessmentMultipleChoiceQuestionForm extends ContentObjectForm
 
                 foreach ($options as $index => $option)
                 {
-                    $defaults[AssessmentMultipleChoiceQuestionOption::PROPERTY_VALUE][$index] = $option->get_value() ? $option->get_value() : 0;
+                    $value = $option->get_value() != null && !is_array($option->get_value()) ? $option->get_value() : '';
+                    $defaults[AssessmentMultipleChoiceQuestionOption::PROPERTY_VALUE][$index] = $value;
                     $defaults[AssessmentMultipleChoiceQuestionOption::PROPERTY_SCORE][$index] = $option->get_score() ? $option->get_score() : 0;
                     $defaults[AssessmentMultipleChoiceQuestionOption::PROPERTY_FEEDBACK][$index] = $option->get_feedback();
 

@@ -90,7 +90,7 @@ class InstanceForm extends FormValidator
     {
         $this->addElement(
             'static',
-            null,
+            'external_instance_type',
             Translation::get('ExternalInstanceType', null, Manager::get_namespace()),
             Translation::get('TypeName', null, $this->application->get_implementation()));
         $this->addElement('hidden', Instance::PROPERTY_IMPLEMENTATION, $this->application->get_implementation());
@@ -114,7 +114,7 @@ class InstanceForm extends FormValidator
             {
                 $this->addElement(
                     'static',
-                    null,
+                    'type',
                     Translation::get('Type'),
                     Translation::get(
                         ClassnameUtilities::getInstance()->getClassNameFromNamespace(

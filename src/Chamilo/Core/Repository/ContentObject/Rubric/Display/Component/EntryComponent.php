@@ -84,6 +84,9 @@ class EntryComponent extends Manager implements DelegateComponent
                 }
             }
 
+            if($result === null)
+                $result = [];
+
             return $this->getTwig()->render(
                 'Chamilo\Core\Repository\ContentObject\Rubric:RubricEntry.html.twig',
                 [

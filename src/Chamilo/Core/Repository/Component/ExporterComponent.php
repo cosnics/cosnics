@@ -84,6 +84,11 @@ class ExporterComponent extends Manager
             $category_ids = array($category_ids);
         }
 
+        if (! is_array($content_object_ids) && is_null($content_object_ids))
+        {
+            $content_object_ids = [];
+        }
+
         if (count($content_object_ids) == 0 && count($category_ids) == 0)
         {
             $category_ids[] = 0;

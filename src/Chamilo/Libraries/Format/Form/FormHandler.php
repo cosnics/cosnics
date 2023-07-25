@@ -40,7 +40,7 @@ abstract class FormHandler
 
         $form->handleRequest($request);
 
-        if (!$form->isValid()) {
+        if ($form->isSubmitted() && $form->isValid() === false) {
             $this->rollBackModel($form);
             return false;
         }

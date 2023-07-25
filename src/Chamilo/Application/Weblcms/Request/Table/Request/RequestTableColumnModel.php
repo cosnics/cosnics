@@ -31,7 +31,7 @@ class RequestTableColumnModel extends DataClassTableColumnModel implements Table
         if ($this->get_component()->get_table_type() == RequestTable::TYPE_PERSONAL)
         {
             $this->add_column(
-                new DataClassPropertyTableColumn(Request::class_name(), Request::PROPERTY_DECISION, false));
+                new DataClassPropertyTableColumn(Request::class_name(), Request::PROPERTY_DECISION, null, false));
         }
     }
 }

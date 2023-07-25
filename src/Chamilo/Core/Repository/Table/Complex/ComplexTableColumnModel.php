@@ -45,8 +45,8 @@ class ComplexTableColumnModel extends DataClassTableColumnModel implements Table
                     null,
                     ToolbarItem::DISPLAY_ICON)));
         $this->add_column(
-            new DataClassPropertyTableColumn(ContentObject::class_name(), ContentObject::PROPERTY_TITLE, false));
+            new DataClassPropertyTableColumn(ContentObject::class_name(), ContentObject::PROPERTY_TITLE, null, false));
         $this->add_column(
-            new DataClassPropertyTableColumn(ContentObject::class_name(), ContentObject::PROPERTY_DESCRIPTION, false));
+            new DataClassPropertyTableColumn(ContentObject::class_name(), ContentObject::PROPERTY_DESCRIPTION, null, false));
     }
 }

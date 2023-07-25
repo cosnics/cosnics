@@ -28,7 +28,7 @@ class TableSort
      *
      * @var integer
      */
-    private $direction;
+    private $directions;
 
     /**
      *
@@ -36,11 +36,11 @@ class TableSort
      * @param integer $column
      * @param integer $direction
      */
-    public function __construct($data, $column = 0, $direction = SORT_ASC)
+    public function __construct($data, $column = 0, $directions = SORT_ASC)
     {
         $this->data = $data;
         $this->column = $column;
-        $this->direction = $direction;
+        $this->directions = $directions;
     }
 
     /**
@@ -83,18 +83,18 @@ class TableSort
      *
      * @return integer
      */
-    public function getDirection()
+    public function getDirections()
     {
-        return $this->direction;
+        return $this->directions;
     }
 
     /**
      *
      * @param integer $direction
      */
-    public function setDirection($direction)
+    public function setDirections($directions)
     {
-        $this->direction = $direction;
+        $this->directions = $directions;
     }
 
     /**

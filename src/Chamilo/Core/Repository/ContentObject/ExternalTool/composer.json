@@ -25,7 +25,7 @@
     },
     "extra": {
         "cosnics": {
-            "name": "External tool",
+            "name": "ExternalTool",
             "context": "Chamilo\\Core\\Repository\\ContentObject\\ExternalTool",
             "type": "Chamilo\\Core\\Repository\\ContentObject",
             "category": "Collaboration",

@@ -36,7 +36,7 @@ class AnswerFeedbackTypeTableColumnModel extends DataClassTableColumnModel imple
         
         $this->add_column(new StaticTableColumn(self::PROPERTY_TYPE, $type_image));
         $this->add_column(
-            new DataClassPropertyTableColumn(ContentObject::class_name(), ContentObject::PROPERTY_TITLE, false));
+            new DataClassPropertyTableColumn(ContentObject::class_name(), ContentObject::PROPERTY_TITLE, null, false));
         
         $feedback_type_image = Theme::getInstance()->getImage(
             'AnswerFeedbackType/Logo', 

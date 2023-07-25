@@ -40,15 +40,16 @@ class ExporterComponent extends Manager
         }
         
         $languages = array_merge($target_languages, array($base_language, $source_language));
-        
+
         $this->write_line($file_handle, $language_values);
         
         $package_list = \Chamilo\Configuration\Package\PlatformPackageBundles::getInstance()->get_type_packages();
         
         foreach ($package_list as $packages)
         {
-            foreach ($packages as $package)
+            foreach ($packages as $packageObject)
             {
+                $package = $packageObject->get_context();
                 $translations = array();
                 $language_path = Path::getInstance()->namespaceToFullPath($package) . 'resources/i18n/';
                 
@@ -59,9 +60,12 @@ class ExporterComponent extends Manager
                 }
                 
                 $variables = array();
-                
+
                 foreach ($translations as $language => $translation_values)
                 {
+                    if($translation_values == false)
+                        continue;
+
                     $variables = array_merge($variables, array_keys($translation_values));
                 }
                 

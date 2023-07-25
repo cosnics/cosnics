@@ -7,7 +7,7 @@ use Doctrine\Common\Annotations\AnnotationReader;
 use Doctrine\Common\Annotations\CachedReader;
 use Doctrine\Common\Cache\ArrayCache;
 use Doctrine\Common\Cache\PhpFileCache;
-use Symfony\Component\Translation\TranslatorInterface;
+use Symfony\Contracts\Translation\TranslatorInterface;
 use Symfony\Component\Validator\ValidatorBuilder;
 
 /**
@@ -21,7 +21,7 @@ use Symfony\Component\Validator\ValidatorBuilder;
 class ValidatorFactory
 {
     /**
-     * @var \Symfony\Component\Translation\TranslatorInterface
+     * @var \Symfony\Contracts\Translation\TranslatorInterface
      */
     protected $translator;
 
@@ -43,7 +43,7 @@ class ValidatorFactory
     /**
      * ValidatorFactory constructor.
      *
-     * @param \Symfony\Component\Translation\TranslatorInterface $translator
+     * @param \Symfony\Contracts\Translation\TranslatorInterface $translator
      * @param \Symfony\Component\Validator\ValidatorBuilder $validatorBuilder
      * @param \Chamilo\Libraries\File\ConfigurablePathBuilder $configurablePathBuilder
      * @param bool $devMode

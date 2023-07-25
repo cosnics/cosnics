@@ -11,14 +11,14 @@ class ExternalObjectTableColumnModel extends DefaultExternalObjectTableColumnMod
     public function initialize_columns()
     {
         $this->add_column(
-            new DataClassPropertyTableColumn(ExternalObject::class_name(), ExternalObject::PROPERTY_TYPE, false));
+            new DataClassPropertyTableColumn(ExternalObject::class_name(), ExternalObject::PROPERTY_TYPE, null, false));
         $this->add_column(
-            new DataClassPropertyTableColumn(ExternalObject::class_name(), ExternalObject::PROPERTY_TITLE, false));
+            new DataClassPropertyTableColumn(ExternalObject::class_name(), ExternalObject::PROPERTY_TITLE, null, false));
         $this->add_column(
-            new DataClassPropertyTableColumn(ExternalObject::class_name(), ExternalObject::PROPERTY_DESCRIPTION, false));
+            new DataClassPropertyTableColumn(ExternalObject::class_name(), ExternalObject::PROPERTY_DESCRIPTION, null, false));
         $this->add_column(
             new DataClassPropertyTableColumn(ExternalObject::class_name(), ExternalObject::PROPERTY_CREATED));
         $this->add_column(
-            new DataClassPropertyTableColumn(ExternalObject::class_name(), ExternalObject::PROPERTY_LICENSE, false));
+            new DataClassPropertyTableColumn(ExternalObject::class_name(), ExternalObject::PROPERTY_LICENSE, null, false));
     }
 }

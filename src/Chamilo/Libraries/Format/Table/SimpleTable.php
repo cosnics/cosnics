@@ -83,7 +83,6 @@ class SimpleTable extends HTML_Table
             $this->tableForm = new FormValidator($tablename);
 
         $this->buildTable();
-        $this->altRowAttributes(0, array('class' => 'row_odd'), array('class' => 'row_even'), true);
 
         if ($this->actionHandler && $this->tableForm->validate())
         {
