@@ -127,7 +127,7 @@ class Basic extends Pdf
             
             foreach ($split_row_items as $split_item)
             {
-                if ($i < count($split_item))
+                if (is_array($split_item) && $i < count($split_item))
                 {
                     $rowData[] = $split_item[$i];
                 }

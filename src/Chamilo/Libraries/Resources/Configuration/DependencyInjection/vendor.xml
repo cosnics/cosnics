@@ -146,15 +146,11 @@
 
         <service
             id="symfony.component.event_dispatcher"
-            class="Symfony\Component\EventDispatcher\ContainerAwareEventDispatcher">
+            class="Symfony\Component\EventDispatcher\EventDispatcher">
             <argument
                 type="service"
                 id="service_container" />
         </service>
-
-        <service
-                alias="symfony.component.event_dispatcher"
-                id="Symfony\Component\EventDispatcher\ContainerAwareEventDispatcher" />
 
         <service
                 alias="symfony.component.event_dispatcher"

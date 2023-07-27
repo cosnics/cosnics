@@ -126,7 +126,10 @@ class Basic extends Pdf
                             null, 
                             ClassnameUtilities::getInstance()->getClassnameFromObject($block)));
                     $data[] = array();
-                    $data = array_merge($data, $rendered_block);
+
+                    if(is_array($rendered_block))
+                        $data = array_merge($data, $rendered_block);
+
                     $data[] = array();
                 }
                 

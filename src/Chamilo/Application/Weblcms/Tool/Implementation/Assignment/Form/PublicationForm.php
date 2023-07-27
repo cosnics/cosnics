@@ -148,7 +148,7 @@ class PublicationForm extends ContentObjectPublicationForm
 
         $this->setDefaults(
             [
-                Publication::PROPERTY_ENTITY_TYPE[Publication::PROPERTY_ENTITY_TYPE] => Entry::ENTITY_TYPE_USER
+                Publication::PROPERTY_ENTITY_TYPE => Entry::ENTITY_TYPE_USER
             ]);
 
         if($this->registrationConsulter->isContextRegisteredAndActive('Chamilo\Core\Repository\ContentObject\Assignment\Extension\Plagiarism'))

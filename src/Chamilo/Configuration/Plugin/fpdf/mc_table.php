@@ -5,6 +5,7 @@ class PDF_MC_Table extends FPDF
 {
 	var $columnType;
 	var $heading;
+	var $FontSize = 0;
 	/**
 	 *  @brief array(logoFilename, middleText, rightRext, style)
 	 */

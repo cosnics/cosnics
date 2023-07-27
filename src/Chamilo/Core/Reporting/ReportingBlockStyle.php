@@ -39,7 +39,7 @@ class ReportingBlockStyle
                 \Chamilo\Configuration\Configuration::get('Chamilo\Core\Reporting', 'block_title_font_size')]);
     }
 
-    public function getTitleTextColor($color)
+    public function getTitleTextColor($color = null)
     {
         return $this->titleTextColor;
     }
