@@ -76,6 +76,8 @@ abstract class CacheCommand extends ChamiloCommand
         }
 
         return $this->executeCacheCommand($input, $output);
+
+        return 0;
     }
 
     /**
