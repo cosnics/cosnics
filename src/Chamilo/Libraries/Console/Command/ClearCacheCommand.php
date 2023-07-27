@@ -46,7 +46,5 @@ class ClearCacheCommand extends CacheCommand
         {
             $this->warmUpCache($input, $output);
         }
-
-        return 0;
     }
 }
