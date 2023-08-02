@@ -33,7 +33,7 @@
     },
     "extra": {
         "cosnics": {
-            "name": "Vimeo Video",
+            "name": "Vimeo",
             "context": "Chamilo\\Core\\Repository\\ContentObject\\Vimeo",
             "type": "Chamilo\\Core\\Repository\\ContentObject",
             "category": "Media",

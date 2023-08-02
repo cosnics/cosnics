@@ -73,7 +73,7 @@ class InstanceForm extends FormValidator
                 Theme::getInstance()->getCommonImagePath('Place/Tab/View'),
                 'build_general_form'));
 
-        if (count($configuration['settings']) > 0)
+        if (is_array($configuration['settings']) && count($configuration['settings']) > 0)
         {
             $tabs_generator->add_tab(
                 new DynamicFormTab(
@@ -331,11 +331,27 @@ class InstanceForm extends FormValidator
             foreach ($settings as $name => $value)
             {
                 $setting = DataManager::retrieve_setting_from_variable_name($name, $external_instance->get_id());
-                $setting->set_value($value);
 
-                if (! $setting->update())
+                if(!$setting)
                 {
-                    $failures ++;
+                    $external_setting = new Setting();
+                    $external_setting->set_external_id($external_instance->get_id());
+                    $external_setting->set_variable($name);
+                    $external_setting->set_value($value);
+
+                    if (! $external_setting->create())
+                    {
+                        $failures++;
+                    }
+                }
+                else
+                {
+                    $setting->set_value($value);
+
+                    if (!$setting->update())
+                    {
+                        $failures++;
+                    }
                 }
             }
 

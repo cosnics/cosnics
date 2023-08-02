@@ -33,7 +33,7 @@ abstract class Manager extends Application
     const ACTION_UPDATE = 'Updater';
     const ACTION_DELETE = 'Deleter';
     const ACTION_CREATE = 'Creator';
-    const ACTION_RIGHTS = 'RightsEditor';
+    const ACTION_RIGHTS = 'Rights';
     
     // Default action
     const DEFAULT_ACTION = self::ACTION_BROWSE;

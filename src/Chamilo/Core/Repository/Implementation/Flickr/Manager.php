@@ -138,8 +138,9 @@ abstract class Manager extends \Chamilo\Core\Repository\External\Manager
         {
             $actions[] = self::ACTION_CONFIGURE_EXTERNAL_REPOSITORY;
         }
-        
-        if (! $this->get_external_repository()->get_setting('session_token')->get_value())
+
+        $setting = $this->get_external_repository()->get_setting('session_token');
+        if (!$setting || !$setting->get_value())
         {
             $actions[] = self::ACTION_LOGIN;
         }

@@ -311,7 +311,6 @@ class SimpleRightsEditorForm extends FormValidator
     public function handle_form_submit()
     {
         $values = $this->exportValues();
-        
         $succes = true;
         
         foreach ($this->locations as $location)
@@ -322,7 +321,7 @@ class SimpleRightsEditorForm extends FormValidator
                 continue;
             }
             
-            if ($values[self::PROPERTY_INHERIT] == self::INHERIT_TRUE)
+            if ($values[self::PROPERTY_INHERIT][self::PROPERTY_INHERIT] == self::INHERIT_TRUE)
             {
                 if (! $location->inherits())
                 {
@@ -361,7 +360,7 @@ class SimpleRightsEditorForm extends FormValidator
         
         foreach ($this->available_rights as $right_id)
         {
-            $option = $values[self::PROPERTY_RIGHT_OPTION . '_' . $right_id];
+            $option = $values[self::PROPERTY_RIGHT_OPTION . '_' . $right_id][self::PROPERTY_RIGHT_OPTION . '_' . $right_id];
             
             switch ($option)
             {

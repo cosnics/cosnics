@@ -43,9 +43,4 @@ class ExternalObject extends StreamingMediaExternalObject
     {
         return self::OBJECT_TYPE;
     }
-
-    public function is_usable()
-    {
-        return $this->get_right(self::RIGHT_USE);
-    }
 }

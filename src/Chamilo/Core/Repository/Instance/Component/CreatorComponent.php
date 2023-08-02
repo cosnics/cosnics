@@ -132,7 +132,7 @@ class CreatorComponent extends Manager
 
             $extra = $package_info->get_extra();
 
-            if ($extra['multiple'] == 1)
+            if (is_object($extra) && $extra->multiple == 1)
             {
 
                 $multiple = true;

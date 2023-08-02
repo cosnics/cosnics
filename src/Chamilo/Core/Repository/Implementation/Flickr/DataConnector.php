@@ -65,11 +65,14 @@ class DataConnector extends \Chamilo\Core\Repository\External\DataConnector
         $this->secret = \Chamilo\Core\Repository\Instance\Storage\DataClass\Setting::get(
             'secret', 
             $this->get_external_repository_instance_id());
-        
+
         $this->flickr = new phpFlickr($this->key, $this->secret);
         // $this->flickr->enableCache('fs', Path :: getInstance()->getCachePath(__NAMESPACE__));
-        
-        $this->session_token = $external_repository_instance->get_setting('session_token')->get_value();
+
+        $setting = $external_repository_instance->get_setting('session_token');
+
+        if($setting)
+            $this->session_token = $setting->get_value();
         
         $this->flickr->setToken($this->session_token);
     }
@@ -203,7 +206,6 @@ class DataConnector extends \Chamilo\Core\Repository\External\DataConnector
                 $search_parameters['sort'] = $order_direction;
             }
         }
-        
         switch ($feed_type)
         {
             case Manager::FEED_TYPE_GENERAL :
@@ -384,7 +386,8 @@ class DataConnector extends \Chamilo\Core\Repository\External\DataConnector
     public static function get_sort_properties()
     {
         $feed_type = Request::get(Manager::PARAM_FEED_TYPE);
-        $query = ActionBarSearchForm::get_query();
+        $actionbar = new ActionBarSearchForm('');
+        $query = $actionbar->get_query();
         
         if (($feed_type == Manager::FEED_TYPE_GENERAL && $query) || $feed_type == Manager::FEED_TYPE_MY_PHOTOS)
         {

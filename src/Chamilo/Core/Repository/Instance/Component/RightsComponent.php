@@ -49,6 +49,8 @@ class RightsComponent extends Manager
             new ApplicationConfiguration($this->getRequest(), $this->get_user(), $this));
         $component->set_locations($locations);
         $component->set_entities($entities);
+
+        $component->set_context(Manager::context());
         return $component->run();
     }
 

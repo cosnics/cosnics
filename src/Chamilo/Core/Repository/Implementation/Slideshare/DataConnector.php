@@ -189,7 +189,8 @@ class DataConnector extends \Chamilo\Core\Repository\External\DataConnector
     public static function get_sort_properties()
     {
         $feed_type = Request::get(Manager::PARAM_FEED_TYPE);
-        $query = ActionBarSearchForm::get_query();
+        $actionbar = new ActionBarSearchForm('');
+        $query = $actionbar->get_query();
         
         return array();
     }
