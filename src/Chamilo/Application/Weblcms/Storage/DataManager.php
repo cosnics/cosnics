@@ -2384,7 +2384,7 @@ class DataManager extends \Chamilo\Libraries\Storage\DataManager\DataManager
         $user_ids = null;
 
         // check for everybody
-        if (array_key_exists(0, $target_entities[0]))
+        if (is_array($target_entities[0]) && array_key_exists(0, $target_entities[0]))
         {
             // get all course users
             $target_users = \Chamilo\Application\Weblcms\Course\Storage\DataManager::retrieve_all_course_users(
