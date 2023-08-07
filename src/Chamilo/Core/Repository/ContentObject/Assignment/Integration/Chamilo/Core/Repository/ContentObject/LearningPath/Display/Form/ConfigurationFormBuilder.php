@@ -58,7 +58,7 @@ class ConfigurationFormBuilder
     {
         $group[] = $formBuilder->createElement(
             'radio',
-            null,
+            self::FORM_PROPERTY_ENTITY_TYPE,
             null,
             $this->translator->trans('TypeUsersEntity', [], self::TRANSLATION_CONTEXT),
             Entry::ENTITY_TYPE_USER
@@ -66,7 +66,7 @@ class ConfigurationFormBuilder
 
         $group[] = $formBuilder->createElement(
             'radio',
-            null,
+            self::FORM_PROPERTY_ENTITY_TYPE,
             null,
             $this->translator->trans('TypeCourseGroupsEntity', [], self::TRANSLATION_CONTEXT),
             Entry::ENTITY_TYPE_COURSE_GROUP
@@ -74,7 +74,7 @@ class ConfigurationFormBuilder
 
         $group[] = $formBuilder->createElement(
             'radio',
-            null,
+            self::FORM_PROPERTY_ENTITY_TYPE,
             null,
             $this->translator->trans('TypePlatformGroupsEntity', [], self::TRANSLATION_CONTEXT),
             Entry::ENTITY_TYPE_PLATFORM_GROUP
@@ -82,7 +82,7 @@ class ConfigurationFormBuilder
 
         $formBuilder->addGroup(
             $group,
-            self::FORM_PROPERTY_ENTITY_TYPE,
+            null,
             $this->translator->trans('AssignmentEntityType', [], self::TRANSLATION_CONTEXT),
             ''
         );

@@ -117,7 +117,7 @@ class PublicationForm extends ContentObjectPublicationForm
 
         $group[] = $this->createElement(
             'radio',
-            null,
+            Publication::PROPERTY_ENTITY_TYPE,
             null,
             $this->translator->trans('TypeUsersEntity', [], Manager::context()),
             Entry::ENTITY_TYPE_USER
@@ -125,7 +125,7 @@ class PublicationForm extends ContentObjectPublicationForm
 
         $group[] = $this->createElement(
             'radio',
-            null,
+            Publication::PROPERTY_ENTITY_TYPE,
             null,
             $this->translator->trans('TypeCourseGroupsEntity', [], Manager::context()),
             Entry::ENTITY_TYPE_COURSE_GROUP
@@ -133,7 +133,7 @@ class PublicationForm extends ContentObjectPublicationForm
 
         $group[] = $this->createElement(
             'radio',
-            null,
+            Publication::PROPERTY_ENTITY_TYPE,
             null,
             $this->translator->trans('TypePlatformGroupsEntity', [], Manager::context()),
             Entry::ENTITY_TYPE_PLATFORM_GROUP
@@ -141,7 +141,7 @@ class PublicationForm extends ContentObjectPublicationForm
 
         $this->addGroup(
             $group,
-            Publication::PROPERTY_ENTITY_TYPE,
+            null,
             $this->translator->trans('PublishAssignmentForEntity', [], Manager::context()),
             ''
         );
@@ -226,7 +226,7 @@ class PublicationForm extends ContentObjectPublicationForm
         $publication = new Publication();
 
         $publication->setPublicationId($contentObjectPublication->getId());
-        $publication->setEntityType($exportValues[Publication::PROPERTY_ENTITY_TYPE][Publication::PROPERTY_ENTITY_TYPE]);
+        $publication->setEntityType($exportValues[Publication::PROPERTY_ENTITY_TYPE]);
         $publication->setCheckForPlagiarism($exportValues[Publication::PROPERTY_CHECK_FOR_PLAGIARISM] == 1);
 
         return $publication->create();
@@ -247,7 +247,7 @@ class PublicationForm extends ContentObjectPublicationForm
             $publication =
                 $this->publicationRepository->findPublicationByContentObjectPublication($contentObjectPublication);
 
-            $publication->setEntityType($exportValues[Publication::PROPERTY_ENTITY_TYPE][Publication::PROPERTY_ENTITY_TYPE]);
+            $publication->setEntityType($exportValues[Publication::PROPERTY_ENTITY_TYPE]);
             $publication->setCheckForPlagiarism($exportValues[Publication::PROPERTY_CHECK_FOR_PLAGIARISM] == 1);
 
             return $publication->update();
@@ -268,7 +268,7 @@ class PublicationForm extends ContentObjectPublicationForm
 
         $this->setDefaults(
             [
-                Publication::PROPERTY_ENTITY_TYPE[Publication::PROPERTY_ENTITY_TYPE] => $publication->getEntityType(),
+                Publication::PROPERTY_ENTITY_TYPE => $publication->getEntityType(),
                 Publication::PROPERTY_CHECK_FOR_PLAGIARISM => $publication->getCheckForPlagiarism()
         ]);
     }

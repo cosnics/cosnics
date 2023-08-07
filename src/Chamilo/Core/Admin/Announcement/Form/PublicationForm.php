@@ -8,6 +8,7 @@ use Chamilo\Core\Rights\Entity\PlatformGroupEntity;
 use Chamilo\Core\Rights\Entity\UserEntity;
 use Chamilo\Libraries\Architecture\Exceptions\NoObjectSelectedException;
 use Chamilo\Libraries\File\Path;
+use Chamilo\Libraries\Format\Form\Element\AdvancedElementFinder\AdvancedElementFinderElements;
 use Chamilo\Libraries\Format\Form\Element\AdvancedElementFinder\AdvancedElementFinderElementTypes;
 use Chamilo\Libraries\Format\Form\FormValidator;
 use Chamilo\Libraries\Format\Utilities\ResourceManager;
@@ -152,22 +153,22 @@ class PublicationForm extends FormValidator
         $group = array();
         
         $group[] = $this->createElement(
-            'radio', 
-            null, 
+            'radio',
+            self::PROPERTY_RIGHT_OPTION,
             null, 
             Translation::get('Everyone'), 
             self::RIGHT_OPTION_ALL, 
             array('class' => 'other_option_selected'));
         $group[] = $this->createElement(
-            'radio', 
-            null, 
+            'radio',
+            self::PROPERTY_RIGHT_OPTION,
             null, 
             Translation::get('OnlyForMe'), 
             self::RIGHT_OPTION_ME, 
             array('class' => 'other_option_selected'));
         $group[] = $this->createElement(
-            'radio', 
-            null, 
+            'radio',
+            self::PROPERTY_RIGHT_OPTION,
             null, 
             Translation::get('SelectSpecificEntities'), 
             self::RIGHT_OPTION_SELECT, 
@@ -175,7 +176,7 @@ class PublicationForm extends FormValidator
         
         $this->addGroup(
             $group, 
-            self::PROPERTY_RIGHT_OPTION, 
+            null,
             Translation::get('PublishFor', null, Utilities::COMMON_LIBRARIES), 
             '');
         
@@ -226,13 +227,51 @@ class PublicationForm extends FormValidator
                     $defaults[Publication::PROPERTY_FROM_DATE] = $first_publication->get_from_date();
                     $defaults[Publication::PROPERTY_TO_DATE] = $first_publication->get_to_date();
                 }
-                
+
+                $targetUsersAndGroups = Rights::getInstance()->get_target_entities(Rights::VIEW_RIGHT, Manager::context(), $first_publication->getId(), Rights::TYPE_PUBLICATION);
+
+                if (key_exists(0, $targetUsersAndGroups))
+                {
+                    $defaults[self::PROPERTY_RIGHT_OPTION] = self::RIGHT_OPTION_ALL;
+                }
+                else
+                {
+                    $hasUserEntities = key_exists(UserEntity::ENTITY_TYPE, $targetUsersAndGroups);
+                    $hasGroupEntites = key_exists(PlatformGroupEntity::ENTITY_TYPE, $targetUsersAndGroups);
+                    $hasOnlyOneUserEntity = count($targetUsersAndGroups[UserEntity::ENTITY_TYPE]) == 1;
+                    $currentUserIsOnlyUserEntity = $targetUsersAndGroups[UserEntity::ENTITY_TYPE][0] == Session::getUserId();
+
+                    if ($hasUserEntities && !$hasGroupEntites && $hasOnlyOneUserEntity && $currentUserIsOnlyUserEntity)
+                    {
+                        $defaults[self::PROPERTY_RIGHT_OPTION] = self::RIGHT_OPTION_ME;
+                    }
+                    else
+                    {
+                        $defaults[self::PROPERTY_RIGHT_OPTION] = self::RIGHT_OPTION_SELECT;
+                    }
+
+                    $defaultElements = new AdvancedElementFinderElements();
+
+                    foreach ($targetUsersAndGroups as $targetUsersAndGroupType => $targetUsersAndGroupIdentifiers)
+                    {
+                        $entity = $this->entities[$targetUsersAndGroupType];
+
+                        foreach ($targetUsersAndGroupIdentifiers as $targetUsersAndGroupIdentifier)
+                        {
+                            $defaultElements->add_element(
+                                $entity->get_element_finder_element($targetUsersAndGroupIdentifier)
+                            );
+                        }
+                    }
+
+                    $element = $this->getElement(self::PROPERTY_TARGETS);
+                    $element->setDefaultValues($defaultElements);
+                }
+
                 $defaults[Publication::PROPERTY_HIDDEN] = $first_publication->is_hidden();
             }
-            
-            $defaults[self::PROPERTY_RIGHT_OPTION] = self::RIGHT_OPTION_ALL;
         }
-        
+
         parent::setDefaults($defaults);
     }
 

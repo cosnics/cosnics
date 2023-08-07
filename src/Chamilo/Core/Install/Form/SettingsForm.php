@@ -217,7 +217,7 @@ class SettingsForm extends FormValidator
             null,
             Translation::get('ConfirmNo', null, Utilities::COMMON_LIBRARIES),
             0);
-        $this->addGroup($selfRegistration, 'self_reg', Translation::get("AllowSelfReg"), '&nbsp;', false);
+        $this->addGroup($selfRegistration, null, Translation::get("AllowSelfReg"), '&nbsp;', false);
 
         $this->addElement(
             'select',

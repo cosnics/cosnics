@@ -320,6 +320,9 @@ class AttemptSummaryCalculator
     {
         $statistics = $this->getLearningPathStatisticsForTreeNode($learningPath, $treeNode);
 
+        if(!is_array($statistics) || !is_array($statistics[self::STATISTICS_STARTED]))
+            return 0;
+
         return count($statistics[self::STATISTICS_STARTED]);
     }
 

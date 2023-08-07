@@ -115,7 +115,9 @@ class AssessmentResultViewerForm extends FormValidator
         {
             $continue_url = $this->assessment_result_processor->get_assessment_viewer()->get_assessment_continue_url();
             $current_url = $this->assessment_result_processor->get_assessment_viewer()->get_assessment_current_url();
-            
+
+            $buttons = [];
+
             if ($this->assessment_result_processor->get_assessment_viewer()->get_root_content_object()->has_unlimited_attempts())
             {
                 $buttons[] = $this->createElement(

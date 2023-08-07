@@ -186,7 +186,10 @@ class PreviewStorage
     public function retrieve_feedbacks($content_object_id, $complex_content_object_item_id)
     {
         $feedbacks = $this->get_feedbacks();
-        
+
+        if(!is_array($feedbacks) || !array_key_exists($content_object_id, $feedbacks) || !array_key_exists($complex_content_object_item_id, $feedbacks[$content_object_id]))
+            return new ArrayResultSet([]);
+
         return new ArrayResultSet(
             array_reverse(array_values($feedbacks[$content_object_id][$complex_content_object_item_id])));
     }

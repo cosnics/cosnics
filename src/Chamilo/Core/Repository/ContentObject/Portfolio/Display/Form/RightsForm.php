@@ -107,7 +107,7 @@ class RightsForm extends FormValidator
      */
     private function build_locations_form()
     {
-        if (count($this->locations) > 1)
+        if (is_array($this->locations) && count($this->locations) > 1)
         {
             $html = array();
             $html[] = '<ul>';
@@ -149,8 +149,8 @@ class RightsForm extends FormValidator
         if (! $has_root_location)
         {
             $group[] = $this->createElement(
-                'radio', 
-                null, 
+                'radio',
+                self::PROPERTY_INHERIT,
                 null, 
                 Translation::get('InheritRights'), 
                 self::INHERIT_TRUE, 
@@ -159,22 +159,22 @@ class RightsForm extends FormValidator
         else
         {
             $group[] = $this->createElement(
-                'radio', 
-                null, 
+                'radio',
+                self::PROPERTY_INHERIT,
                 null, 
                 Translation::get('InheritRights'), 
                 self::INHERIT_TRUE, 
                 array('class' => 'inherit_rights_selector', 'disabled' => 'disabled'));
         }
         $group[] = $this->createElement(
-            'radio', 
-            null, 
+            'radio',
+            self::PROPERTY_INHERIT,
             null, 
             Translation::get('UseSpecificRights'), 
             self::INHERIT_FALSE, 
             array('class' => 'specific_rights_selector'));
         
-        $this->addGroup($group, self::PROPERTY_INHERIT, null, '');
+        $this->addGroup($group, null, null, '');
         
         $this->addElement('category');
     }
@@ -195,28 +195,28 @@ class RightsForm extends FormValidator
         $group = array();
         
         $group[] = $this->createElement(
-            'radio', 
-            null, 
+            'radio',
+            $name,
             null, 
             Translation::get('Everyone'), 
             self::RIGHT_OPTION_ALL, 
             array('class' => 'other_option_selected'));
         $group[] = $this->createElement(
-            'radio', 
-            null, 
+            'radio',
+            $name,
             null, 
             Translation::get('OnlyForMe'), 
             self::RIGHT_OPTION_ME, 
             array('class' => 'other_option_selected'));
         $group[] = $this->createElement(
-            'radio', 
-            null, 
+            'radio',
+            $name,
             null, 
             Translation::get('SelectSpecificEntities'), 
             self::RIGHT_OPTION_SELECT, 
             array('class' => 'entity_option_selected'));
         
-        $this->addGroup($group, $name, '', '');
+        $this->addGroup($group, null, '', '');
         
         // Add the advanced element finder
         $types = new AdvancedElementFinderElementTypes();
@@ -296,7 +296,7 @@ class RightsForm extends FormValidator
             
             foreach ($this->available_rights as $right_id)
             {
-                if (count($selected_entities_per_right[$right_id]) >= 1)
+                if (is_array($selected_entities_per_right[$right_id]) && count($selected_entities_per_right[$right_id]) >= 1)
                 {
                     $selected_entity = $selected_entities_per_right[$right_id][0];
                     if ($selected_entity->get_entity_type() == 0 && $selected_entity->get_entity_id() == 0)
@@ -306,7 +306,7 @@ class RightsForm extends FormValidator
                     }
                 }
                 
-                if (count($selected_entities_per_right[$right_id]) == 1)
+                if (is_array($selected_entities_per_right[$right_id]) && count($selected_entities_per_right[$right_id]) == 1)
                 {
                     
                     if ($selected_entity->get_entity_type() == 1 &&

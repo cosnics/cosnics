@@ -647,7 +647,7 @@ class ContentObjectPublicationForm extends BasePublicationForm
 
         $group[] = $this->createElement(
             'radio',
-            null,
+            self::PROPERTY_RIGHTS_SELECTOR,
             null,
             Translation::get('InheritRights'),
             self::RIGHTS_INHERIT,
@@ -721,7 +721,7 @@ class ContentObjectPublicationForm extends BasePublicationForm
 
         $group[] = $this->createElement(
             'radio',
-            null,
+            self::PROPERTY_RIGHTS_SELECTOR,
             null,
             Translation::get('EveryoneCanView'),
             self::RIGHTS_FOR_ALL,
@@ -729,7 +729,7 @@ class ContentObjectPublicationForm extends BasePublicationForm
         );
         $group[] = $this->createElement(
             'radio',
-            null,
+            self::PROPERTY_RIGHTS_SELECTOR,
             null,
             Translation::get('OnlyMeCanView'),
             self::RIGHTS_FOR_ME,
@@ -738,7 +738,7 @@ class ContentObjectPublicationForm extends BasePublicationForm
 
         $group[] = $this->createElement(
             'radio',
-            null,
+            self::PROPERTY_RIGHTS_SELECTOR,
             null,
             Translation::get('SelectSpecificEntitiesThatCanView'),
             self::RIGHTS_SELECT_SPECIFIC,
@@ -749,14 +749,13 @@ class ContentObjectPublicationForm extends BasePublicationForm
 
         $this->addGroup(
             $group,
-            self::PROPERTY_RIGHTS_SELECTOR,
+            null,
             $translator->getTranslation('PublishFor', null, Manager::context()),
             ''
         );
 
         // Add the advanced element finder
         $types = new AdvancedElementFinderElementTypes();
-
         foreach ($this->entities as $entity)
         {
             $types->add_element_type($entity->get_element_finder_type());
@@ -921,7 +920,7 @@ class ContentObjectPublicationForm extends BasePublicationForm
         {
             return false;
         }
-        if ($values[self::PROPERTY_RIGHTS_SELECTOR][self::PROPERTY_RIGHTS_SELECTOR] == self::RIGHTS_INHERIT)
+        if ($values[self::PROPERTY_RIGHTS_SELECTOR] == self::RIGHTS_INHERIT)
         {
             if (!$location->inherits())
             {
@@ -943,7 +942,7 @@ class ContentObjectPublicationForm extends BasePublicationForm
                 }
             }
 
-            $option = $values[self::PROPERTY_RIGHTS_SELECTOR][self::PROPERTY_RIGHTS_SELECTOR];
+            $option = $values[self::PROPERTY_RIGHTS_SELECTOR];
             $location_id = $location->get_id();
 
             $weblcms_rights = WeblcmsRights::getInstance();

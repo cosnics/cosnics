@@ -592,35 +592,35 @@ abstract class CommonCourseForm extends FormValidator implements CourseSettingsX
         $group = array();
         
         $group[] = $this->createElement(
-            'radio', 
-            null, 
+            'radio',
+            $name,
             null, 
             Translation::get('Nobody'), 
             CourseManagementRights::RIGHT_OPTION_NOBODY, 
             array('class' => 'rights_selector'));
         $group[] = $this->createElement(
-            'radio', 
-            null, 
+            'radio',
+            $name,
             null, 
             Translation::get('Everyone'), 
             CourseManagementRights::RIGHT_OPTION_ALL, 
             array('class' => 'rights_selector'));
         $group[] = $this->createElement(
-            'radio', 
-            null, 
+            'radio',
+            $name,
             null, 
             Translation::get('OnlyForMe'), 
             CourseManagementRights::RIGHT_OTPION_ME, 
             array('class' => 'rights_selector'));
         $group[] = $this->createElement(
-            'radio', 
-            null, 
+            'radio',
+            $name,
             null, 
             Translation::get('SelectSpecificEntities'), 
             CourseManagementRights::RIGHT_OPTION_SELECT, 
             array('class' => 'rights_selector specific_rights_selector'));
         
-        $this->addGroup($group, $name, Translation::get('Target'), '');
+        $this->addGroup($group, null, Translation::get('Target'), '');
         
         // Add the advanced element finder
         $types = new AdvancedElementFinderElementTypes();

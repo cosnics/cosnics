@@ -170,7 +170,7 @@ class TreeJSONMapper
     {
         $number = $this->automaticNumberingService->getAutomaticNumberingForTreeNode($node);
 
-        if($node->getContentObject() instanceof ContentObject)
+        if(!$node->getContentObject() instanceof ContentObject)
         {
             return null;
         }

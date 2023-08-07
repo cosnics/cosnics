@@ -109,8 +109,8 @@ class ManageForm extends FormValidator
         if (! $has_root_location)
         {
             $group[] = $this->createElement(
-                'radio', 
-                null, 
+                'radio',
+                self::PROPERTY_INHERIT,
                 null, 
                 Translation::get('InheritRights'), 
                 self::INHERIT_TRUE, 
@@ -119,22 +119,22 @@ class ManageForm extends FormValidator
         else
         {
             $group[] = $this->createElement(
-                'radio', 
-                null, 
+                'radio',
+                self::PROPERTY_INHERIT,
                 null, 
                 Translation::get('InheritRights'), 
                 self::INHERIT_TRUE, 
                 array('class' => 'inherit_rights_selector', 'disabled' => 'disabled'));
         }
         $group[] = $this->createElement(
-            'radio', 
-            null, 
+            'radio',
+            self::PROPERTY_INHERIT,
             null, 
             Translation::get('UseSpecificRights'), 
             self::INHERIT_FALSE, 
             array('class' => 'specific_rights_selector'));
         
-        $this->addGroup($group, self::PROPERTY_INHERIT, null, '');
+        $this->addGroup($group, null, null, '');
         
         $this->addElement('category');
     }

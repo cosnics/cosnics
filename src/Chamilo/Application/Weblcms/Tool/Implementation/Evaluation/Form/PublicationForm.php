@@ -69,7 +69,7 @@ class PublicationForm extends ContentObjectPublicationForm
         else
         {
             $defaults = array();
-            $defaults[Publication::PROPERTY_ENTITY_TYPE][Publication::PROPERTY_ENTITY_TYPE] = 0;
+            $defaults[Publication::PROPERTY_ENTITY_TYPE] = 0;
             $this->setDefaults($defaults);
         }
     }
@@ -110,7 +110,7 @@ class PublicationForm extends ContentObjectPublicationForm
 
         $group[] = $this->createElement(
             'radio',
-            null,
+            Publication::PROPERTY_ENTITY_TYPE,
             null,
             $this->translator->trans('TypeUsersEntity', [], Manager::context()),
             EntityTypes::ENTITY_TYPE_USER()->getValue()
@@ -118,7 +118,7 @@ class PublicationForm extends ContentObjectPublicationForm
 
         $group[] = $this->createElement(
             'radio',
-            null,
+            Publication::PROPERTY_ENTITY_TYPE,
             null,
             $this->translator->trans('TypeCourseGroupsEntity', [], Manager::context()),
             EntityTypes::ENTITY_TYPE_COURSE_GROUP()->getValue()
@@ -126,7 +126,7 @@ class PublicationForm extends ContentObjectPublicationForm
 
         $group[] = $this->createElement(
             'radio',
-            null,
+            Publication::PROPERTY_ENTITY_TYPE,
             null,
             $this->translator->trans('TypePlatformGroupsEntity', [], Manager::context()),
             EntityTypes::ENTITY_TYPE_PLATFORM_GROUP()->getValue()
@@ -134,7 +134,7 @@ class PublicationForm extends ContentObjectPublicationForm
 
         $this->addGroup(
             $group,
-            Publication::PROPERTY_ENTITY_TYPE,
+            null,
             $this->translator->trans('PublishEvaluationForEntity', [], Manager::context()),
             ''
         );
@@ -191,7 +191,7 @@ class PublicationForm extends ContentObjectPublicationForm
 
         $publication = new Publication();
         $publication->setPublicationId($contentObjectPublication->getId());
-        $publication->setEntityType($exportValues[Publication::PROPERTY_ENTITY_TYPE][Publication::PROPERTY_ENTITY_TYPE]);
+        $publication->setEntityType($exportValues[Publication::PROPERTY_ENTITY_TYPE]);
         $publication->setOpenForStudents($exportValues[Publication::PROPERTY_OPEN_FOR_STUDENTS] == 1);
 
         return $publication->create();
@@ -232,7 +232,7 @@ class PublicationForm extends ContentObjectPublicationForm
             $this->publicationRepository->findPublicationByContentObjectPublication($contentObjectPublication);
 
         $defaults = array();
-        $defaults[Publication::PROPERTY_ENTITY_TYPE][Publication::PROPERTY_ENTITY_TYPE] = $publication->getEntityType();
+        $defaults[Publication::PROPERTY_ENTITY_TYPE]= $publication->getEntityType();
         $defaults[Publication::PROPERTY_OPEN_FOR_STUDENTS] = $publication->getOpenForStudents();
         $this->setDefaults($defaults);
     }

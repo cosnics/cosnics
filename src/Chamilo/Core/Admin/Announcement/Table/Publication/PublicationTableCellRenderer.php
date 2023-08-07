@@ -167,7 +167,7 @@ class PublicationTableCellRenderer extends RecordTableCellRenderer implements Ta
         
         $target_list = array();
         
-        if (array_key_exists(0, $target_entities[0]))
+        if (is_array($target_entities) && is_array($target_entities[0]) && array_key_exists(0, $target_entities[0]))
         {
             $target_list[] = Translation::get('Everybody', null, Utilities::COMMON_LIBRARIES);
         }

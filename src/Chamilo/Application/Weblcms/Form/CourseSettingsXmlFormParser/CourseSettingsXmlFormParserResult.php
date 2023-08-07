@@ -54,8 +54,8 @@ class CourseSettingsXmlFormParserResult extends XmlFormParserResult
         parent::add_element_fo_form($form, $element);
         
         $element_name = $element->getName();
-        
-        if ($form instanceof FormLockedSettingsSupport && $element->_type != XmlFormParser::ELEMENT_TYPE_HTML &&
+
+        if ($form instanceof FormLockedSettingsSupport && $element->getType() != XmlFormParser::ELEMENT_TYPE_HTML &&
              $element_name != 'course_settings[category]' && $element_name != 'course_settings[titular]')
         {
             $element_label = $element->getLabel();

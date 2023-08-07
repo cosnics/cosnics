@@ -12,6 +12,14 @@ $(function() {
 
 					$('.entity_selector_box').hide();
 				});
+
+				$(document).ready(function(){
+					var entityOptionSelected = document.getElementsByClassName('entity_option_selected');
+					if (entityOptionSelected[0].checked)
+					{
+						$('.entity_selector_box').show();
+					}
+				});
 			});
 
 });
