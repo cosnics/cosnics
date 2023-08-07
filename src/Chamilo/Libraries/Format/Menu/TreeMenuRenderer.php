@@ -97,7 +97,7 @@ class TreeMenuRenderer extends HtmlMenuDirectTreeRenderer
         // Add some extra keys, so they always get replaced in the template.
         foreach (array('children', 'class', 'onclick', 'id') as $key)
         {
-            if (! array_key_exists($key, $node))
+            if (!is_array($node) || ! array_key_exists($key, $node))
             {
                 $node[$key] = '';
             }

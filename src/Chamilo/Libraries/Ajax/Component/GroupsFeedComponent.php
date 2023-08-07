@@ -110,7 +110,7 @@ abstract class GroupsFeedComponent extends \Chamilo\Libraries\Ajax\Manager
         $conditions = array();
 
         $user_ids = $this->get_user_ids();
-        if (count($user_ids) == 0)
+        if (!is_array($user_ids) || count($user_ids) == 0)
         {
             return;
         }

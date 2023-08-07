@@ -232,6 +232,9 @@ class PlatformgroupMenuRenderer extends GenericTree
 
     public function get_node_id($node)
     {
+        if(!$node)
+            return 0;
+
         return $node->get_id();
     }
 
