@@ -87,7 +87,7 @@ interface Column {
     filters: {
         formatNum2: function (v: number|null) {
             if (v === null) { return ''; }
-            return v.toLocaleString(undefined, {maximumFractionDigits: 2});
+            return parseFloat(v.toPrecision(8)).toLocaleString(undefined, {maximumFractionDigits: 2});
         }
     }
 })
