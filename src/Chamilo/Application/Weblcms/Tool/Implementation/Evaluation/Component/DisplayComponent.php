@@ -5,6 +5,7 @@ namespace Chamilo\Application\Weblcms\Tool\Implementation\Evaluation\Component;
 use Chamilo\Application\Weblcms\Bridge\Evaluation\EvaluationServiceBridge;
 use Chamilo\Application\Weblcms\Bridge\Evaluation\Service\Entity\CourseGroupEntityService;
 use Chamilo\Application\Weblcms\Bridge\Evaluation\Service\Entity\PublicationEntityServiceManager;
+use Chamilo\Application\Weblcms\Bridge\PublicationServiceBridge;
 use Chamilo\Application\Weblcms\Rights\WeblcmsRights;
 use Chamilo\Application\Weblcms\Storage\DataClass\ContentObjectPublication;
 use Chamilo\Application\Weblcms\Storage\DataManager;
@@ -85,6 +86,13 @@ class DisplayComponent extends Manager implements DelegateComponent
         $evaluationServiceBridge->setEvaluationPublication($evaluationPublication);
 
         $this->getBridgeManager()->addBridge($evaluationServiceBridge);
+
+        /** @var PublicationServiceBridge $publicationServiceBridge */
+        $publicationServiceBridge = $this->getService(PublicationServiceBridge::class);
+        $publicationServiceBridge->setContentObjectPublication($contentObjectPublication);
+        $publicationServiceBridge->setCourse($this->get_course());
+
+        $this->getBridgeManager()->addBridge($publicationServiceBridge);
     }
 
     /**

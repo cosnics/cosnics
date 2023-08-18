@@ -15,6 +15,7 @@ use Chamilo\Application\Weblcms\Bridge\LearningPath\GradeBook\LearningPathGradeB
 use Chamilo\Application\Weblcms\Bridge\LearningPath\LearningPath\LearningPathServiceBridge;
 use Chamilo\Application\Weblcms\Bridge\LearningPath\Presence\LearningPathPresenceServiceBridge;
 
+use Chamilo\Application\Weblcms\Bridge\PublicationServiceBridge;
 use Chamilo\Application\Weblcms\CourseSettingsConnector;
 use Chamilo\Application\Weblcms\CourseSettingsController;
 use Chamilo\Application\Weblcms\Integration\Chamilo\Core\Reporting\Template\WikiPageTemplate;
@@ -266,6 +267,13 @@ class ComplexDisplayComponent extends Manager implements LearningPathDisplaySupp
             $externalToolServiceBridge->setHasEditRight($hasEditRight);
             $this->getBridgeManager()->addBridge($externalToolServiceBridge);
         }
+
+        /** @var PublicationServiceBridge $publicationServiceBridge */
+        $publicationServiceBridge = $this->getService(PublicationServiceBridge::class);
+        $publicationServiceBridge->setContentObjectPublication($this->publication);
+        $publicationServiceBridge->setCourse($this->get_course());
+
+        $this->getBridgeManager()->addBridge($publicationServiceBridge);
     }
 
     public function get_root_content_object()

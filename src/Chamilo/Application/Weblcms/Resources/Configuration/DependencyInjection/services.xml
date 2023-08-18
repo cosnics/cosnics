@@ -97,5 +97,7 @@
 
         <service id="Chamilo\Application\Weblcms\CourseSettingsController" autowire="true"/>
 
+        <service id="Chamilo\Application\Weblcms\Bridge\PublicationServiceBridge" autowire="true"/>
+
     </services>
 </container>

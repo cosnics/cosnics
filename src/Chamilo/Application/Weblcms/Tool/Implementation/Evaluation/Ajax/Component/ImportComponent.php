@@ -4,7 +4,7 @@ namespace Chamilo\Application\Weblcms\Tool\Implementation\Evaluation\Ajax\Compon
 
 use Chamilo\Application\Weblcms\Tool\Implementation\Evaluation\Ajax\Manager;
 use Chamilo\Application\Weblcms\Storage\DataClass\ContentObjectPublication;
-use Chamilo\Core\Repository\ContentObject\Evaluation\Display\Service\ImportResultsFromCuriosService;
+use Chamilo\Core\Repository\ContentObject\Evaluation\Display\Service\ImportEvaluationResultsService;
 use Chamilo\Core\Repository\ContentObject\Evaluation\Storage\DataClass\Evaluation;
 use Chamilo\Application\Weblcms\Tool\Implementation\Evaluation\Storage\DataClass\Publication as EvaluationPublication;
 use Chamilo\Libraries\Architecture\ContextIdentifier;
@@ -29,8 +29,8 @@ class ImportComponent extends Manager implements CsrfComponentInterface
                 throw new NotAllowedException();
             }
 
-            /** @var ImportResultsFromCuriosService $importService */
-            $importService = $this->getService(ImportResultsFromCuriosService::class);
+            /** @var ImportEvaluationResultsService $importService */
+            $importService = $this->getService(ImportEvaluationResultsService::class);
 
             $title = $this->getRequest()->getFromPost('title');
             $results = $this->getRequest()->getFromPost('results');

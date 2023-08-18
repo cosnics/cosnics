@@ -2,6 +2,7 @@
 
 namespace Chamilo\Core\Repository\ContentObject\Evaluation\Display;
 
+use Chamilo\Application\Weblcms\Storage\DataClass\CourseSetting;
 use Chamilo\Core\Repository\ContentObject\Evaluation\Display\Service\Entity\EvaluationEntityServiceInterface;
 use Chamilo\Core\Repository\ContentObject\Evaluation\Display\Service\Entity\EvaluationEntityServiceManager;
 use Chamilo\Core\Repository\ContentObject\Evaluation\Display\Service\EvaluationEntryService;
@@ -42,6 +43,7 @@ abstract class Manager extends \Chamilo\Core\Repository\Display\Manager
     const ACTION_BUILD_RUBRIC = 'BuildRubric';
     const ACTION_REMOVE_RUBRIC = 'RemoveRubric';
     const ACTION_IMPORT_FROM_CURIOS = 'ImportFromCurios';
+    const ACTION_EXTENSION = 'Extension';
     const ACTION_EXPORT = 'Export';
 
     const ACTION_ENTRY = 'Entry';
@@ -49,6 +51,9 @@ abstract class Manager extends \Chamilo\Core\Repository\Display\Manager
     const ACTION_BROWSER = 'Browser';
 
     const SESSION_RUBRIC_SCORE = 'RUBRIC_SCORE';
+
+    const EVALUATION_URL = 'evaluation_url';
+    const IMPORT_RESULTS_URL = 'import_results_url';
 
     /**
      *
@@ -170,6 +175,25 @@ abstract class Manager extends \Chamilo\Core\Repository\Display\Manager
         return $this->getRegistrationConsulter()->isContextRegistered(
             'Chamilo\\Core\\Repository\\ContentObject\\Rubric'
         );
+    }
+
+    /**
+     * @return bool
+     */
+    protected function supportsAns()
+    {
+        return $this->getRegistrationConsulter()->isContextRegistered(
+            'Hogent\\Extension\\Chamilo\\Core\\Repository\\ContentObject\\Evaluation\\Extension\\Ans'
+        );
+        /*if (empty($this->course))
+        {
+            return false;
+        }
+        $toolRegistrationId = $this->courseService->getToolRegistration('Ans')->getId();
+        return $this->courseSettingsController->get_course_setting(
+            $this->course,
+            CourseSetting::COURSE_SETTING_TOOL_ACTIVE,
+            $toolRegistrationId);*/
     }
 
     /**
