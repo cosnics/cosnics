@@ -649,7 +649,6 @@
                         </div>
                         <button aria-label="" aria-expanded="false" class="btn-check mod-scores-editable" :class="{ 'checked': scoresEditable }" @click="scoresEditable = !scoresEditable"><span tabindex="-1" class="lbl-check"><i aria-hidden="true" class="btn-icon-check fa"></i>{{ 'EditScores'|trans({}, appContext) }}</span></button>
                         <div style="margin-left: auto">
-                            <a v-if="entityType === 0" class="btn btn-default btn-sm" href="{{ IMPORT_URL }}">{{ 'ImportFromCurios'|trans({}, appContext) }}</a>
                             <a v-if="supportsAns && entityType === 0" class="btn btn-default btn-sm" href="{{ ANS_IMPORT_URL }}">{{ 'ImportFromAns'|trans({}, appContext) }}</a>
                             <a class="btn btn-default btn-sm" href="{{ EXPORT_URL }}">{{ 'Export'|trans({}, appContext) }}</a>
                         </div>

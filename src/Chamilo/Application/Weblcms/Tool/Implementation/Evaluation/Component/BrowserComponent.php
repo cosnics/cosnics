@@ -31,13 +31,6 @@ class BrowserComponent extends Manager
     public function get_tool_actions()
     {
         $toolActions = array();
-
-        $toolActions[] = new Button(
-            Translation::get('Import', null, Manager::context()),
-            new FontAwesomeGlyph('download'),
-            $this->get_url(array(self::PARAM_ACTION => self::ACTION_IMPORT_FROM_CURIOS)),
-            Button::DISPLAY_ICON_AND_LABEL);
-
         return $toolActions;
     }
 
