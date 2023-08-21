@@ -92,14 +92,16 @@ class BrowserComponent extends Manager
             )
         );
 
+        $entityType = $this->getEvaluationServiceBridge()->getCurrentEntityType();
+
         return [
             'HEADER' => $this->render_header(),
             'FOOTER' => $this->render_footer(),
             'PHOTO_URL' => $profilePhotoUrl->getUrl(),
-            'ANS_IMPORT_URL' => $this->get_url([self::PARAM_ACTION => self::ACTION_EXTENSION]),
+            'EXTENSION_URL' => $this->get_url([self::PARAM_ACTION => self::ACTION_EXTENSION]),
             'EXPORT_URL' => $this->get_url([self::PARAM_ACTION => self::ACTION_EXPORT]),
             'SUPPORTS_RUBRICS' => $this->supportsRubrics(),
-            'SUPPORTS_ANS' => $this->supportsAns(),
+            'USE_EXTENSION' => $entityType == 0 && $this->canUseAns(),
             'HAS_RUBRIC' => $hasRubric,
             'ADD_RUBRIC_URL' => $this->get_url([self::PARAM_ACTION => self::ACTION_PUBLISH_RUBRIC]),
             'BUILD_RUBRIC_URL' => $this->get_url([self::PARAM_ACTION => self::ACTION_BUILD_RUBRIC]),
@@ -107,7 +109,7 @@ class BrowserComponent extends Manager
             'SELF_EVALUATION_ALLOWED' => $selfEvaluationAllowed,
             'CAN_BUILD_RUBRIC' => $canBuildRubric,
             'RUBRIC_PREVIEW' => $rubricPreview,
-            'ENTITY_TYPE' => $this->getEvaluationServiceBridge()->getCurrentEntityType(),
+            'ENTITY_TYPE' => $entityType,
             'OPEN_FOR_STUDENTS' => $this->getEvaluationServiceBridge()->getOpenForStudents(),
             'CONTEXT_CLASS' => $contextIdentifier->getContextClass(),
             'CONTEXT_ID' => $contextIdentifier->getContextId(),

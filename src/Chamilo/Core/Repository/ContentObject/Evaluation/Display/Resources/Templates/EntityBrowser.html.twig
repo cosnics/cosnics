@@ -649,7 +649,9 @@
                         </div>
                         <button aria-label="" aria-expanded="false" class="btn-check mod-scores-editable" :class="{ 'checked': scoresEditable }" @click="scoresEditable = !scoresEditable"><span tabindex="-1" class="lbl-check"><i aria-hidden="true" class="btn-icon-check fa"></i>{{ 'EditScores'|trans({}, appContext) }}</span></button>
                         <div style="margin-left: auto">
-                            <a v-if="supportsAns && entityType === 0" class="btn btn-default btn-sm" href="{{ ANS_IMPORT_URL }}">{{ 'ImportFromAns'|trans({}, appContext) }}</a>
+                            {% if USE_EXTENSION %}
+                                <a class="btn btn-default btn-sm" href="{{ EXTENSION_URL }}">{{ 'ExtensionLink'|trans({}, appContext) }}</a>
+                            {% endif %}
                             <a class="btn btn-default btn-sm" href="{{ EXPORT_URL }}">{{ 'Export'|trans({}, appContext) }}</a>
                         </div>
                     </div>
@@ -842,7 +844,6 @@
                 requestCount: true,
                 scoresEditable: false,
                 hasRubric: {% if SUPPORTS_RUBRICS and HAS_RUBRIC %}true{% else %}false{% endif %},
-                supportsAns: {% if SUPPORTS_ANS %}true{% else %}false{% endif %},
                 feedback: [],
                 feedbackEntity: null,
                 newFeedback: '',

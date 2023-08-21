@@ -51,6 +51,7 @@ abstract class Manager extends \Chamilo\Core\Repository\Display\Manager
 
     const SESSION_RUBRIC_SCORE = 'RUBRIC_SCORE';
 
+    const EXTENSION_NAMESPACE = '\Hogent\Extension\Chamilo\Core\Repository\ContentObject\Evaluation\Extension\Ans';
     const EVALUATION_URL = 'evaluation_url';
     const IMPORT_RESULTS_URL = 'import_results_url';
 
@@ -356,6 +357,22 @@ abstract class Manager extends \Chamilo\Core\Repository\Display\Manager
             strtolower($this->getEvaluationServiceBridge()->getEntityNameByType($this->getEntityType()));
 
         return $parameters;
+    }
+
+    /**
+     * @return ApplicationConfiguration
+     */
+    protected function getExtensionApplicationConfiguration(): ApplicationConfiguration
+    {
+        $applicationConfiguration = new ApplicationConfiguration($this->getRequest(), $this->getUser(), $this);
+        $applicationConfiguration->set(self::EVALUATION_URL, $this->get_url([self::PARAM_ACTION => null]));
+        $applicationConfiguration->set(self::IMPORT_RESULTS_URL, $this->get_url(
+            [
+                self::PARAM_ACTION => self::ACTION_AJAX,
+                AjaxManager::PARAM_ACTION => AjaxManager::ACTION_IMPORT
+            ]
+        ));
+        return $applicationConfiguration;
     }
 
     /**
