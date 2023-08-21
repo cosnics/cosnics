@@ -116,4 +116,12 @@ class EvaluationServiceBridge implements LearningPathEvaluationServiceBridgeInte
     {
         return 'User';
     }
+
+    /**
+     * @return bool
+     */
+    public function canUseAns(): bool
+    {
+        return false;
+    }
 }

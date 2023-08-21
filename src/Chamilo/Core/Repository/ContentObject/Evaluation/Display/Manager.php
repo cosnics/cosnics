@@ -2,7 +2,7 @@
 
 namespace Chamilo\Core\Repository\ContentObject\Evaluation\Display;
 
-use Chamilo\Application\Weblcms\Storage\DataClass\CourseSetting;
+use Chamilo\Core\Repository\ContentObject\Evaluation\Display\Ajax\Manager as AjaxManager;
 use Chamilo\Core\Repository\ContentObject\Evaluation\Display\Service\Entity\EvaluationEntityServiceInterface;
 use Chamilo\Core\Repository\ContentObject\Evaluation\Display\Service\Entity\EvaluationEntityServiceManager;
 use Chamilo\Core\Repository\ContentObject\Evaluation\Display\Service\EvaluationEntryService;
@@ -179,20 +179,11 @@ abstract class Manager extends \Chamilo\Core\Repository\Display\Manager
     /**
      * @return bool
      */
-    protected function supportsAns()
+    protected function canUseAns(): bool
     {
         return $this->getRegistrationConsulter()->isContextRegistered(
             'Hogent\\Extension\\Chamilo\\Core\\Repository\\ContentObject\\Evaluation\\Extension\\Ans'
-        );
-        /*if (empty($this->course))
-        {
-            return false;
-        }
-        $toolRegistrationId = $this->courseService->getToolRegistration('Ans')->getId();
-        return $this->courseSettingsController->get_course_setting(
-            $this->course,
-            CourseSetting::COURSE_SETTING_TOOL_ACTIVE,
-            $toolRegistrationId);*/
+        ) && $this->getEvaluationServiceBridge()->canUseAns();
     }
 
     /**

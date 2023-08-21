@@ -2,6 +2,8 @@
 
 namespace Chamilo\Application\Weblcms\Bridge\Evaluation;
 
+use Chamilo\Application\Weblcms\Course\Storage\DataClass\Course;
+use Chamilo\Application\Weblcms\Service\CourseToolService;
 use Chamilo\Application\Weblcms\Storage\DataClass\ContentObjectPublication;
 use Chamilo\Application\Weblcms\Tool\Implementation\Evaluation\Storage\DataClass\Publication as EvaluationPublication;
 use Chamilo\Core\Repository\ContentObject\Evaluation\Display\Bridge\Interfaces\EvaluationServiceBridgeInterface;
@@ -11,7 +13,6 @@ use Chamilo\Core\User\Storage\DataClass\User;
 use Chamilo\Libraries\Architecture\ContextIdentifier;
 use Chamilo\Application\Weblcms\Bridge\Evaluation\Service\Entity\PublicationEntityServiceManager;
 use Chamilo\Application\Weblcms\Bridge\Evaluation\Service\Entity\PublicationEntityServiceInterface;
-use Chamilo\Libraries\Storage\DataClass\DataClass;
 
 /**
  * @package Chamilo\Application\Weblcms\Bridge\Evaluation
@@ -36,6 +37,11 @@ class EvaluationServiceBridge implements EvaluationServiceBridgeInterface
     protected $publicationRepository;
 
     /**
+     * @var CourseToolService
+     */
+    protected $courseToolService;
+
+    /**
      * @var ContentObjectPublication
      */
     protected $contentObjectPublication;
@@ -51,14 +57,22 @@ class EvaluationServiceBridge implements EvaluationServiceBridgeInterface
     protected $canEditEvaluation;
 
     /**
+     * @var Course
+     */
+    protected $course;
+
+    /**
      * @param PublicationEntityServiceManager $publicationEntityServiceManager
      * @param EvaluationEntryService $evaluationEntryService
+     * @param PublicationRepository $publicationRepository
+     * @param CourseToolService $courseToolService
      */
-    public function __construct(PublicationEntityServiceManager $publicationEntityServiceManager, EvaluationEntryService $evaluationEntryService, PublicationRepository $publicationRepository)
+    public function __construct(PublicationEntityServiceManager $publicationEntityServiceManager, EvaluationEntryService $evaluationEntryService, PublicationRepository $publicationRepository, CourseToolService $courseToolService)
     {
         $this->publicationEntityServiceManager = $publicationEntityServiceManager;
         $this->evaluationEntryService = $evaluationEntryService;
         $this->publicationRepository = $publicationRepository;
+        $this->courseToolService = $courseToolService;
     }
 
     /**
@@ -67,6 +81,14 @@ class EvaluationServiceBridge implements EvaluationServiceBridgeInterface
     public function setContentObjectPublication(ContentObjectPublication $contentObjectPublication)
     {
         $this->contentObjectPublication = $contentObjectPublication;
+    }
+
+    /**
+     * @param Course $course
+     */
+    public function setCourse(Course $course)
+    {
+        $this->course = $course;
     }
 
     /**
@@ -249,5 +271,13 @@ class EvaluationServiceBridge implements EvaluationServiceBridgeInterface
         $publicationEntityService = $this->publicationEntityServiceManager->getEntityServiceByType($entityType);
 
         return $publicationEntityService->getEntityName();
+    }
+
+    /**
+     * @return bool
+     */
+    public function canUseAns(): bool
+    {
+        return $this->courseToolService->isCourseToolActive($this->course, 'Ans');
     }
 }

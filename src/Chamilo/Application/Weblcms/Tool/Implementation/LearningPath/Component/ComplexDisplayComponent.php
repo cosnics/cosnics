@@ -192,6 +192,7 @@ class ComplexDisplayComponent extends Manager implements LearningPathDisplaySupp
             $learningPathEvaluationServiceBridge = $this->getService(LearningPathEvaluationServiceBridge::class);
             $learningPathEvaluationServiceBridge->setContentObjectPublication($this->publication);
             $learningPathEvaluationServiceBridge->setCanEditEvaluation($hasEditRight);
+            $learningPathEvaluationServiceBridge->setCourse($this->get_course());
             $this->getBridgeManager()->addBridge($learningPathEvaluationServiceBridge);
         }
 

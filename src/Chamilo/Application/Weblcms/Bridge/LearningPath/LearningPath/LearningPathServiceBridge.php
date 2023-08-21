@@ -2,9 +2,7 @@
 
 namespace Chamilo\Application\Weblcms\Bridge\LearningPath\LearningPath;
 
-use Chamilo\Application\Weblcms\CourseSettingsController;
-use Chamilo\Application\Weblcms\Service\CourseService;
-use Chamilo\Application\Weblcms\Storage\DataClass\CourseSetting;
+use Chamilo\Application\Weblcms\Service\CourseToolService;
 use Chamilo\Application\Weblcms\Course\Storage\DataClass\Course;
 use Chamilo\Application\Weblcms\Storage\DataClass\ContentObjectPublication;
 use Chamilo\Core\Repository\ContentObject\LearningPath\Service\LearningPathStepContextService;
@@ -28,14 +26,9 @@ class LearningPathServiceBridge implements LearningPathServiceBridgeInterface
     protected $learningPathStepContextService;
 
     /**
-     * @var CourseService
+     * @var CourseToolService
      */
-    protected $courseService;
-
-    /**
-     * @var CourseSettingsController
-     */
-    protected $courseSettingsController;
+    protected $courseToolService;
 
     /**
      * @var ContentObjectPublication
@@ -59,14 +52,12 @@ class LearningPathServiceBridge implements LearningPathServiceBridgeInterface
 
     /**
      * @param LearningPathStepContextService $learningPathStepContextService
-     * @param CourseService $courseService
-     * @param CourseSettingsController $courseSettingsController
+     * @param CourseToolService $courseToolService
      */
-    public function __construct(LearningPathStepContextService $learningPathStepContextService, CourseService $courseService, CourseSettingsController $courseSettingsController)
+    public function __construct(LearningPathStepContextService $learningPathStepContextService, CourseToolService $courseToolService)
     {
         $this->learningPathStepContextService = $learningPathStepContextService;
-        $this->courseService = $courseService;
-        $this->courseSettingsController = $courseSettingsController;
+        $this->courseToolService = $courseToolService;
     }
 
     /**
@@ -92,15 +83,7 @@ class LearningPathServiceBridge implements LearningPathServiceBridgeInterface
      */
     public function isCourseToolActive(string $toolName): bool
     {
-        if (empty($this->course))
-        {
-            return false;
-        }
-        $toolRegistrationId = $this->courseService->getToolRegistration($toolName)->getId();
-        return $this->courseSettingsController->get_course_setting(
-            $this->course,
-            CourseSetting::COURSE_SETTING_TOOL_ACTIVE,
-            $toolRegistrationId);
+        return $this->courseToolService->isCourseToolActive($this->course, $toolName);
     }
 
     /**

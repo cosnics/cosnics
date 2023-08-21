@@ -3,6 +3,8 @@
 namespace Chamilo\Application\Weblcms\Bridge\LearningPath\Evaluation;
 
 use Chamilo\Application\Weblcms\Bridge\Evaluation\Service\Entity\PublicationEntityServiceManager;
+use Chamilo\Application\Weblcms\Course\Storage\DataClass\Course;
+use Chamilo\Application\Weblcms\Service\CourseToolService;
 use Chamilo\Application\Weblcms\Storage\DataClass\ContentObjectPublication;
 use Chamilo\Core\Repository\ContentObject\Evaluation\Integration\Chamilo\Core\Repository\ContentObject\LearningPath\Bridge\Interfaces\LearningPathEvaluationServiceBridgeInterface;
 use Chamilo\Core\Repository\ContentObject\LearningPath\Service\LearningPathStepContextService;
@@ -27,19 +29,35 @@ class LearningPathEvaluationServiceBridge implements LearningPathEvaluationServi
     protected $publicationEntityServiceManager;
 
     /**
+     * @var CourseToolService
+     */
+    protected $courseToolService;
+
+    /**
      * @var ContentObjectPublication
      */
     protected $contentObjectPublication;
+
+    /**
+     * @var Course
+     */
+    protected $course;
 
     /**
      * @var bool
      */
     protected $canEditEvaluation;
 
-    public function __construct(LearningPathStepContextService $learningPathStepContextService, PublicationEntityServiceManager $publicationEntityServiceManager)
+    /**
+     * @param LearningPathStepContextService $learningPathStepContextService
+     * @param PublicationEntityServiceManager $publicationEntityServiceManager
+     * @param CourseToolService $courseToolService
+     */
+    public function __construct(LearningPathStepContextService $learningPathStepContextService, PublicationEntityServiceManager $publicationEntityServiceManager, CourseToolService $courseToolService)
     {
         $this->learningPathStepContextService = $learningPathStepContextService;
         $this->publicationEntityServiceManager = $publicationEntityServiceManager;
+        $this->courseToolService = $courseToolService;
     }
 
     /**
@@ -178,4 +196,19 @@ class LearningPathEvaluationServiceBridge implements LearningPathEvaluationServi
         return $publicationEntityService->getEntityName();
     }
 
+    /**
+     * @return bool
+     */
+    public function canUseAns(): bool
+    {
+        return $this->courseToolService->isCourseToolActive($this->course, 'Ans');
+    }
+
+    /**
+     * @param Course $course
+     */
+    public function setCourse(Course $course)
+    {
+        $this->course = $course;
+    }
 }

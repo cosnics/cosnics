@@ -83,6 +83,7 @@ class DisplayComponent extends Manager implements DelegateComponent
 
         $evaluationPublication = $this->getEvaluationPublication($contentObjectPublication);
         $evaluationServiceBridge->setContentObjectPublication($contentObjectPublication);
+        $evaluationServiceBridge->setCourse($this->get_course());
         $evaluationServiceBridge->setEvaluationPublication($evaluationPublication);
 
         $this->getBridgeManager()->addBridge($evaluationServiceBridge);
