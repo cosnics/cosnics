@@ -30,6 +30,8 @@ class MonthBlockRenderer extends BlockRenderer implements StaticBlockTitleInterf
 {
     public const CONTEXT = \Chamilo\Application\Calendar\Manager::CONTEXT;
 
+    protected CalendarRendererProviderRepository $calendarRendererProviderRepository;
+
     protected MiniMonthCalendarRenderer $miniMonthCalendarRenderer;
 
     protected ChamiloRequest $request;
@@ -38,7 +40,8 @@ class MonthBlockRenderer extends BlockRenderer implements StaticBlockTitleInterf
         HomeService $homeService, UrlGenerator $urlGenerator, Translator $translator,
         ConfigurationConsulter $configurationConsulter, MiniMonthCalendarRenderer $miniMonthCalendarRenderer,
         ChamiloRequest $request, ElementRightsService $elementRightsService,
-        ConfigurationFormFactory $configurationFormFactory
+        ConfigurationFormFactory $configurationFormFactory,
+        CalendarRendererProviderRepository $calendarRendererProviderRepository
     )
     {
         parent::__construct(
@@ -48,6 +51,7 @@ class MonthBlockRenderer extends BlockRenderer implements StaticBlockTitleInterf
 
         $this->miniMonthCalendarRenderer = $miniMonthCalendarRenderer;
         $this->request = $request;
+        $this->calendarRendererProviderRepository = $calendarRendererProviderRepository;
     }
 
     /**
@@ -56,13 +60,18 @@ class MonthBlockRenderer extends BlockRenderer implements StaticBlockTitleInterf
     public function displayContent(Element $block, ?User $user = null): string
     {
         $dataProvider = new CalendarRendererProvider(
-            new CalendarRendererProviderRepository(), $user, [
+            $this->getCalendarRendererProviderRepository(), $user, [
             Application::PARAM_CONTEXT => \Chamilo\Application\Calendar\Manager::CONTEXT,
             HtmlCalendarRenderer::PARAM_TYPE => HtmlCalendarRenderer::TYPE_DAY
         ], Manager::CONTEXT
         );
 
         return $this->getMiniMonthCalendarRenderer()->renderCalendar($dataProvider, $this->getDisplayTime());
+    }
+
+    public function getCalendarRendererProviderRepository(): CalendarRendererProviderRepository
+    {
+        return $this->calendarRendererProviderRepository;
     }
 
     protected function getDisplayTime(): int

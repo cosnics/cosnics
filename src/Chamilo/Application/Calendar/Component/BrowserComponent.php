@@ -3,7 +3,6 @@ namespace Chamilo\Application\Calendar\Component;
 
 use Chamilo\Application\Calendar\ActionsInterface;
 use Chamilo\Application\Calendar\Manager;
-use Chamilo\Application\Calendar\Repository\CalendarRendererProviderRepository;
 use Chamilo\Application\Calendar\Service\CalendarRendererProvider;
 use Chamilo\Configuration\Storage\DataClass\Registration;
 use Chamilo\Core\User\Component\UserSettingsComponent;
@@ -94,7 +93,7 @@ class BrowserComponent extends Manager implements DelegateComponent
             ];
 
             $this->calendarDataProvider = new CalendarRendererProvider(
-                new CalendarRendererProviderRepository(), $this->getUser(), $displayParameters,
+                $this->getCalendarRendererProviderRepository(), $this->getUser(), $displayParameters,
                 \Chamilo\Application\Calendar\Ajax\Manager::CONTEXT
             );
         }

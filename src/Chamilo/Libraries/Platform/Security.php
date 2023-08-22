@@ -115,14 +115,6 @@ class Security
     }
 
     /**
-     * @deprecated Use Security::getToken() now
-     */
-    public function get_token(): string
-    {
-        return $this->getToken();
-    }
-
-    /**
      * This function tackles the XSS injections.
      * Filtering for XSS is very easily done by using the htmlentities()
      * function. This kind of filtering prevents JavaScript snippets to be understood as such.
@@ -205,24 +197,5 @@ class Security
         }
 
         return $array;
-    }
-
-    /**
-     * @deprecated Use Security::removeXSS() now
-     */
-    public function remove_XSS(string $variable): string
-    {
-        return $this->removeXSS($variable);
-    }
-
-    /**
-     * @param string[] $array
-     *
-     * @return string[]
-     * @deprecated Use Security::removeXSSRecursive() now
-     */
-    public function remove_XSS_recursive(array $array): array
-    {
-        return $this->removeXSSRecursive($array);
     }
 }

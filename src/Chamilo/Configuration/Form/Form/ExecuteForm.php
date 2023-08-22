@@ -1,31 +1,30 @@
 <?php
 namespace Chamilo\Configuration\Form\Form;
 
+use Chamilo\Configuration\Form\Service\FormService;
 use Chamilo\Configuration\Form\Storage\DataClass\Element;
 use Chamilo\Configuration\Form\Storage\DataClass\Value;
-use Chamilo\Configuration\Form\Storage\DataManager;
 use Chamilo\Libraries\Format\Form\FormValidator;
-use Chamilo\Libraries\Translation\Translation;
 use Chamilo\Libraries\Storage\Query\Condition\EqualityCondition;
 use Chamilo\Libraries\Storage\Query\Condition\SubselectCondition;
 use Chamilo\Libraries\Storage\Query\Variable\PropertyConditionVariable;
 use Chamilo\Libraries\Storage\Query\Variable\StaticConditionVariable;
+use Chamilo\Libraries\Translation\Translation;
 use Chamilo\Libraries\Utilities\StringUtilities;
 
 /**
- *
  * @package configuration\form
- * @author Sven Vanpoucke <sven.vanpoucke@hogent.be>
- * @author Hans De Bisschop <hans.de.bisschop@ehb.be>
+ * @author  Sven Vanpoucke <sven.vanpoucke@hogent.be>
+ * @author  Hans De Bisschop <hans.de.bisschop@ehb.be>
  */
 class ExecuteForm extends FormValidator
 {
 
-    private $user;
-
     private $form;
 
     private $title;
+
+    private $user;
 
     public function __construct($form, $action, $user, $title)
     {
@@ -33,7 +32,7 @@ class ExecuteForm extends FormValidator
         $this->user = $user;
         $this->form = $form;
         $this->title = $title;
-        
+
         $this->build_basic_form();
     }
 
@@ -61,45 +60,97 @@ class ExecuteForm extends FormValidator
                     break;
             }
         }
-        
+
         $buttons[] = $this->createElement(
-            'style_submit_button', 
-            'submit', 
-            Translation::get('Save', null, StringUtilities::LIBRARIES));
+            'style_submit_button', 'submit', Translation::get('Save', null, StringUtilities::LIBRARIES)
+        );
         $buttons[] = $this->createElement(
-            'style_reset_button', 
-            'reset', 
-            Translation::get('Reset', null, StringUtilities::LIBRARIES));
-        
+            'style_reset_button', 'reset', Translation::get('Reset', null, StringUtilities::LIBRARIES)
+        );
+
         $this->addGroup($buttons, 'buttons', null, '&nbsp;', false);
-        
+
         $this->setDefaults();
     }
 
-    public function update_values()
+    public function build_checkbox($element)
     {
-        $values = $this->exportValues();
-        $succes = DataManager::delete_dynamic_form_element_values_from_form($this->form->get_id());
-        
-        if (! $succes)
-            return false;
-        
-        foreach ($values['element'] as $element_id => $value)
+        $return = $this->addElement('checkbox', 'element[' . $element->get_id() . ']', $element->get_name());
+
+        if ($element->get_required())
         {
-            $element_value = new Value();
-            $element_value->set_dynamic_form_element_id($element_id);
-            $element_value->set_user_id($this->user->get_id());
-            
-            if (is_array($value))
-            {
-                $value = $value[$element_id];
-            }
-            
-            $element_value->set_value($value);
-            $succes &= $element_value->create();
+            $this->addRule(
+                'element[' . $element->get_id() . ']',
+                Translation::get('ThisFieldIsRequired', null, StringUtilities::LIBRARIES), 'required'
+            );
         }
-        
-        return $succes;
+
+        return $return;
+    }
+
+    public function build_html_editor($element)
+    {
+        return $this->add_html_editor(
+            'element[' . $element->get_id() . ']', $element->get_name(), $element->get_required()
+        );
+    }
+
+    public function build_radio_buttons($element)
+    {
+        $options = $element->get_options();
+
+        $group = [];
+
+        foreach ($options as $index => $option)
+        {
+            if ($index < count($options) - 1)
+            {
+                $extra = '<br />';
+            }
+            else
+            {
+                $extra = '';
+            }
+
+            $group[] = $this->createElement(
+                'radio', $element->get_id(), null, $option->get_name() . $extra, $option->get_id()
+            );
+        }
+
+        $return = $this->addGroup($group, 'element[' . $element->get_id() . ']', $element->get_name(), '');
+
+        if ($element->get_required())
+        {
+            $this->addRule(
+                'element[' . $element->get_id() . ']',
+                Translation::get('ThisFieldIsRequired', null, StringUtilities::LIBRARIES), 'required'
+            );
+        }
+
+        return $return;
+    }
+
+    public function build_select_box($element)
+    {
+        $options = $element->get_options();
+
+        foreach ($options as $option)
+        {
+            $new_options[$option->get_id()] = $option->get_name();
+        }
+
+        $return =
+            $this->addElement('select', 'element[' . $element->get_id() . ']', $element->get_name(), $new_options);
+
+        if ($element->get_required())
+        {
+            $this->addRule(
+                'element[' . $element->get_id() . ']',
+                Translation::get('ThisFieldIsRequired', null, StringUtilities::LIBRARIES), 'required'
+            );
+        }
+
+        return $return;
     }
 
     public function build_text_box($element)
@@ -108,123 +159,80 @@ class ExecuteForm extends FormValidator
         if ($element->get_required())
         {
             $this->addRule(
-                'element[' . $element->get_id() . ']', 
-                Translation::get('ThisFieldIsRequired', null, StringUtilities::LIBRARIES),
-                'required');
+                'element[' . $element->get_id() . ']',
+                Translation::get('ThisFieldIsRequired', null, StringUtilities::LIBRARIES), 'required'
+            );
         }
-        
+
         return $return;
     }
 
-    public function build_html_editor($element)
+    public function getFormService(): FormService
     {
-        return $this->add_html_editor(
-            'element[' . $element->get_id() . ']', 
-            $element->get_name(), 
-            $element->get_required());
-    }
-
-    public function build_checkbox($element)
-    {
-        $return = $this->addElement('checkbox', 'element[' . $element->get_id() . ']', $element->get_name());
-        
-        if ($element->get_required())
-        {
-            $this->addRule(
-                'element[' . $element->get_id() . ']', 
-                Translation::get('ThisFieldIsRequired', null, StringUtilities::LIBRARIES),
-                'required');
-        }
-        
-        return $return;
-    }
-
-    public function build_radio_buttons($element)
-    {
-        $options = $element->get_options();
-        
-        $group = [];
-        
-        foreach ($options as $index => $option)
-        {
-            if ($index < count($options) - 1)
-                $extra = '<br />';
-            else
-                $extra = '';
-            
-            $group[] = $this->createElement(
-                'radio', 
-                $element->get_id(), 
-                null, 
-                $option->get_name() . $extra, 
-                $option->get_id());
-        }
-        
-        $return = $this->addGroup($group, 'element[' . $element->get_id() . ']', $element->get_name(), '');
-        
-        if ($element->get_required())
-        {
-            $this->addRule(
-                'element[' . $element->get_id() . ']', 
-                Translation::get('ThisFieldIsRequired', null, StringUtilities::LIBRARIES),
-                'required');
-        }
-        
-        return $return;
-    }
-
-    public function build_select_box($element)
-    {
-        $options = $element->get_options();
-        
-        foreach ($options as $option)
-        {
-            $new_options[$option->get_id()] = $option->get_name();
-        }
-        
-        $return = $this->addElement('select', 'element[' . $element->get_id() . ']', $element->get_name(), $new_options);
-        
-        if ($element->get_required())
-        {
-            $this->addRule(
-                'element[' . $element->get_id() . ']', 
-                Translation::get('ThisFieldIsRequired', null, StringUtilities::LIBRARIES),
-                'required');
-        }
-        
-        return $return;
+        return $this->getService(FormService::class);
     }
 
     public function setDefaults($parameters = [], $filter = null)
     {
         $subcondition = new EqualityCondition(
             new PropertyConditionVariable(Element::class, Element::PROPERTY_DYNAMIC_FORM_ID),
-            new StaticConditionVariable($this->form->get_id()));
+            new StaticConditionVariable($this->form->get_id())
+        );
         $subselect = new SubselectCondition(
             new PropertyConditionVariable(Value::class, Value::PROPERTY_DYNAMIC_FORM_ELEMENT_ID),
-            new PropertyConditionVariable(Element::class, Element::PROPERTY_ID),
-            $subcondition);
-        
-        $values = DataManager::retrieve_dynamic_form_element_values($subselect);
-        
-        foreach($values as $value)
+            new PropertyConditionVariable(Element::class, Element::PROPERTY_ID), $subcondition
+        );
+
+        $values = $this->getFormService()->retrieveDynamicFormElementValues($subselect);
+
+        foreach ($values as $value)
         {
-            $element = DataManager::retrieve_dynamic_form_elements(
+            $element = $this->getFormService()->retrieveDynamicFormElements(
                 new EqualityCondition(
                     new PropertyConditionVariable(Element::class, Element::PROPERTY_ID),
-                    new StaticConditionVariable($value->get_dynamic_form_element_id())))->current();
-            
+                    new StaticConditionVariable($value->get_dynamic_form_element_id())
+                )
+            )->current();
+
             if ($element->getType() == Element::TYPE_RADIO_BUTTONS)
             {
                 $parameters['element[' . $value->get_dynamic_form_element_id() . '][' .
-                     $value->get_dynamic_form_element_id() . ']'] = $value->get_value();
+                $value->get_dynamic_form_element_id() . ']'] = $value->get_value();
             }
             else
             {
                 $parameters['element[' . $value->get_dynamic_form_element_id() . ']'] = $value->get_value();
             }
         }
-        
+
         parent::setDefaults($parameters);
+    }
+
+    public function update_values()
+    {
+        $values = $this->exportValues();
+        $succes = $this->getFormService()->deleteDynamicFormElementValuesFromForm($this->form->get_id());
+
+        if (!$succes)
+        {
+            return false;
+        }
+
+        foreach ($values['element'] as $element_id => $value)
+        {
+            $element_value = new Value();
+            $element_value->set_dynamic_form_element_id($element_id);
+            $element_value->set_user_id($this->user->get_id());
+
+            if (is_array($value))
+            {
+                $value = $value[$element_id];
+            }
+
+            $element_value->set_value($value);
+            $succes &= $element_value->create();
+        }
+
+        return $succes;
     }
 }

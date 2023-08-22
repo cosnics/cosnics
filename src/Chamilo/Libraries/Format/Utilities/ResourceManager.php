@@ -117,12 +117,4 @@ class ResourceManager
                 die('Unknown resource type: ' . $path);
         }
     }
-
-    /**
-     * @deprecated Use hasResourceAlreadyBeenLoaded() now
-     */
-    public function resource_loaded(string $path): bool
-    {
-        return $this->hasResourceAlreadyBeenLoaded($path);
-    }
 }

@@ -146,7 +146,7 @@ class AttemptResultViewerComponent extends Manager
     protected function add_assessment_title_breadcrumb($assessment)
     {
         $breadcrumb_trail = BreadcrumbTrail::getInstance();
-        $breadcrumbs = $breadcrumb_trail->get_breadcrumbs();
+        $breadcrumbs = $breadcrumb_trail->getBreadcrumbs();
 
         $breadcrumbs[$breadcrumb_trail->size() - 1] = new Breadcrumb(
             $this->get_url(

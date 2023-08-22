@@ -2,7 +2,6 @@
 namespace Chamilo\Application\Calendar\Component;
 
 use Chamilo\Application\Calendar\Manager;
-use Chamilo\Application\Calendar\Repository\CalendarRendererProviderRepository;
 use Chamilo\Application\Calendar\Service\CalendarRendererProvider;
 use Chamilo\Core\User\Storage\DataClass\User;
 use Chamilo\Libraries\Architecture\Application\Application;
@@ -11,7 +10,6 @@ use Chamilo\Libraries\Authentication\AuthenticationValidator;
 use Chamilo\Libraries\Authentication\SecurityToken\SecurityTokenAuthentication;
 use Chamilo\Libraries\Calendar\Service\View\ICalCalendarRenderer;
 use Chamilo\Libraries\Format\Display;
-use Chamilo\Libraries\Translation\Translation;
 use Symfony\Component\HttpFoundation\Response;
 
 /**
@@ -23,18 +21,19 @@ use Symfony\Component\HttpFoundation\Response;
 class ICalComponent extends Manager implements NoAuthenticationSupport
 {
 
-    /**
-     * @var \Chamilo\Application\Calendar\Service\CalendarRendererProvider
-     */
-    private $calendarRendererProvider;
+    private CalendarRendererProvider $calendarRendererProvider;
 
+    /**
+     * @throws \Chamilo\Libraries\Authentication\AuthenticationException
+     * @throws \Exception
+     */
     public function run()
     {
         $authenticationValidator = $this->getAuthenticationValidator();
 
         $alreadyAuthenticated = $authenticationValidator->isAuthenticated();
-
         $securityCode = $this->getRequest()->getFromRequestOrQuery(User::PROPERTY_SECURITY_TOKEN);
+
         if (isset($securityCode))
         {
             $authentication = $this->getSecurityTokenAuthentication();
@@ -45,6 +44,7 @@ class ICalComponent extends Manager implements NoAuthenticationSupport
             if ($user instanceof User)
             {
                 $this->renderCalendar($user);
+
                 if (!$alreadyAuthenticated)
                 {
                     $authentication->logout($user);
@@ -93,48 +93,43 @@ class ICalComponent extends Manager implements NoAuthenticationSupport
                 $includedCalendars =
                     implode(', ', $this->getCalendarRendererProvider($this->getUser())->getSourceNames());
 
+                $translator = $this->getTranslator();
                 $html = [];
 
-                $html[] = $this->render_header();
+                $html[] = $this->renderHeader();
 
                 $html[] = Display::normal_message(
-                    Translation::get('ICalExternalMessage', ['URL' => $icalExternalUrl])
+                    $translator->trans('ICalExternalMessage', ['URL' => $icalExternalUrl], Manager::CONTEXT)
                 );
 
                 $html[] = Display::normal_message(
-                    Translation::get('ICalDownloadMessage', ['URL' => $icalDownloadUrl])
+                    $translator->trans('ICalDownloadMessage', ['URL' => $icalDownloadUrl], Manager::CONTEXT)
                 );
 
                 $html[] = Display::warning_message(
-                    Translation::get('ICalWarningMessage', ['INCLUDED_CALENDARS' => $includedCalendars])
+                    $translator->trans('ICalWarningMessage', ['INCLUDED_CALENDARS' => $includedCalendars],
+                        Manager::CONTEXT)
                 );
 
-                $html[] = $this->render_footer();
+                $html[] = $this->renderFooter();
 
                 return implode(PHP_EOL, $html);
             }
         }
     }
 
-    /**
-     * @return AuthenticationValidator
-     */
-    protected function getAuthenticationValidator()
+    protected function getAuthenticationValidator(): AuthenticationValidator
     {
         return $this->getService(AuthenticationValidator::class);
     }
 
-    /**
-     * @param User $user
-     *
-     * @return CalendarRendererProvider
-     */
-    private function getCalendarRendererProvider(User $user)
+    private function getCalendarRendererProvider(User $user): CalendarRendererProvider
     {
         if (!isset($this->calendarRendererProvider))
         {
             $this->calendarRendererProvider = new CalendarRendererProvider(
-                new CalendarRendererProviderRepository(), $user, [], \Chamilo\Application\Calendar\Ajax\Manager::CONTEXT
+                $this->getCalendarRendererProviderRepository(), $user, [],
+                \Chamilo\Application\Calendar\Ajax\Manager::CONTEXT
             );
         }
 
@@ -146,15 +141,15 @@ class ICalComponent extends Manager implements NoAuthenticationSupport
         return $this->getService(ICalCalendarRenderer::class);
     }
 
-    /**
-     * @return SecurityTokenAuthentication
-     */
-    protected function getSecurityTokenAuthentication()
+    protected function getSecurityTokenAuthentication(): SecurityTokenAuthentication
     {
         return $this->getService(SecurityTokenAuthentication::class);
     }
 
-    private function renderCalendar(User $user)
+    /**
+     * @throws \Exception
+     */
+    private function renderCalendar(User $user): void
     {
         $this->getICalCalendarRenderer()->renderAndSend($this->getCalendarRendererProvider($user));
     }

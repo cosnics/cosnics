@@ -1,79 +1,86 @@
 <?php
 namespace Chamilo\Configuration\Form;
 
+use Chamilo\Configuration\Form\Form\ExecuteForm;
+use Chamilo\Configuration\Form\Service\FormService;
+use Chamilo\Configuration\Form\Storage\DataClass\Instance;
+use Chamilo\Libraries\Architecture\Application\Application;
+use Chamilo\Libraries\Utilities\StringUtilities;
+use Symfony\Component\Translation\Translator;
+
 /**
- * @package configuration\form
+ * @package Chamilo\Configuration\Form
  * @author  Sven Vanpoucke <sven.vanpoucke@hogent.be>
  * @author  Hans De Bisschop <hans.de.bisschop@ehb.be>
  */
-
-use Chamilo\Configuration\Form\Form\ExecuteForm;
-use Chamilo\Configuration\Form\Storage\DataClass\Instance;
-use Chamilo\Configuration\Form\Storage\DataManager;
-use Chamilo\Libraries\Storage\Parameters\DataClassRetrieveParameters;
-use Chamilo\Libraries\Storage\Query\Condition\AndCondition;
-use Chamilo\Libraries\Storage\Query\Condition\EqualityCondition;
-use Chamilo\Libraries\Storage\Query\Variable\PropertyConditionVariable;
-use Chamilo\Libraries\Storage\Query\Variable\StaticConditionVariable;
-use Chamilo\Libraries\Translation\Translation;
-use Chamilo\Libraries\Utilities\StringUtilities;
-
 class Executer
 {
 
-    private $application;
+    protected FormService $formService;
 
-    private $name;
+    protected StringUtilities $stringUtilities;
 
-    private $title;
+    protected Translator $translator;
 
-    public function __construct($application, $name, $title = null)
+    public function __construct(FormService $formService, Translator $translator, StringUtilities $stringUtilities)
     {
-        $this->application = $application;
-        $this->name = $name;
-        $this->title = $title ?: Translation::get(
-            (string) StringUtilities::getInstance()->createString($name)->upperCamelize(), $application::CONTEXT
-        );
+        $this->formService = $formService;
+        $this->translator = $translator;
+        $this->stringUtilities = $stringUtilities;
     }
 
-    public function run()
+    /**
+     * @throws \QuickformException
+     */
+    public function run(Application $application, string $name, ?string $title = null)
     {
+        $translator = $this->getTranslator();
+
+        $title = $title ?: $translator->trans(
+            $this->getStringUtilities()->createString($name)->upperCamelize()->toString(), $application::CONTEXT
+        );
+
         $form = new ExecuteForm(
-            $this->get_form(), $this->application->get_url(), $this->application->get_user(), $this->title
+            $this->getForm($application, $name), $application->get_url(), $application->get_user(), $title
         );
 
         if ($form->validate())
         {
             $success = $form->update_values();
-            $this->application->redirectWithMessage(
-                Translation::get($success ? 'DynamicFormExecuted' : 'DynamicFormNotExecuted'), !$success, []
+            $application->redirectWithMessage(
+                $translator->trans($success ? 'DynamicFormExecuted' : 'DynamicFormNotExecuted', [], Manager::CONTEXT),
+                !$success
             );
         }
         else
         {
             $html = [];
 
-            $html[] = $this->application->render_header();
-            $html[] = $form->toHtml();
-            $html[] = $this->application->render_footer();
+            $html[] = $application->render_header();
+            $html[] = $form->render();
+            $html[] = $application->render_footer();
 
             return implode(PHP_EOL, $html);
         }
     }
 
-    public function get_form()
+    public function getForm(Application $application, string $name): ?Instance
     {
-        $conditions = [];
-        $conditions[] = new EqualityCondition(
-            new PropertyConditionVariable(Instance::class, Instance::PROPERTY_APPLICATION),
-            new StaticConditionVariable($this->application::CONTEXT)
-        );
-        $conditions[] = new EqualityCondition(
-            new PropertyConditionVariable(Instance::class, Instance::PROPERTY_NAME),
-            new StaticConditionVariable($this->name)
-        );
-        $condition = new AndCondition($conditions);
+        return $this->getFormService()->retrieveInstanceForContextAndName($application::CONTEXT, $name);
+    }
 
-        return DataManager::retrieve(Instance::class, new DataClassRetrieveParameters($condition));
+    public function getFormService(): FormService
+    {
+        return $this->formService;
+    }
+
+    public function getStringUtilities(): StringUtilities
+    {
+        return $this->stringUtilities;
+    }
+
+    public function getTranslator(): Translator
+    {
+        return $this->translator;
     }
 }

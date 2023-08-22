@@ -3,15 +3,12 @@ namespace Chamilo\Configuration\Form\Component;
 
 use Chamilo\Configuration\Form\Manager;
 use Chamilo\Configuration\Form\Storage\DataClass\Element;
-use Chamilo\Configuration\Form\Storage\DataManager;
 use Chamilo\Configuration\Form\Table\ElementTableRenderer;
 use Chamilo\Libraries\Format\Structure\ActionBar\AbstractButton;
 use Chamilo\Libraries\Format\Structure\ActionBar\Button;
 use Chamilo\Libraries\Format\Structure\ActionBar\ButtonToolBar;
 use Chamilo\Libraries\Format\Structure\ActionBar\Renderer\ButtonToolBarRenderer;
 use Chamilo\Libraries\Format\Table\RequestTableParameterValuesCompiler;
-use Chamilo\Libraries\Storage\Parameters\DataClassCountParameters;
-use Chamilo\Libraries\Storage\Parameters\DataClassRetrievesParameters;
 use Chamilo\Libraries\Storage\Query\Condition\EqualityCondition;
 use Chamilo\Libraries\Storage\Query\Variable\PropertyConditionVariable;
 use Chamilo\Libraries\Storage\Query\Variable\StaticConditionVariable;
@@ -25,8 +22,11 @@ class BuilderComponent extends Manager
 {
 
     /**
-     * @throws \ReflectionException
+     * @throws \Chamilo\Libraries\Format\Table\Exception\InvalidPageNumberException
+     * @throws \Chamilo\Libraries\Storage\Exception\DataClassNoResultException
      * @throws \QuickformException
+     * @throws \ReflectionException
+     * @throws \TableException
      */
     public function run()
     {
@@ -41,7 +41,6 @@ class BuilderComponent extends Manager
     }
 
     /**
-     * @throws \ReflectionException
      * @throws \QuickformException
      */
     public function display_element_types(): string
@@ -97,8 +96,7 @@ class BuilderComponent extends Manager
      */
     protected function renderTable(): string
     {
-        $totalNumberOfItems =
-            DataManager::count(Element::class, new DataClassCountParameters($this->getElementCondition()));
+        $totalNumberOfItems = $this->getFormService()->countDynamicFormElements($this->getElementCondition());
         $elementTableRenderer = $this->getElementTableRenderer();
 
         $tableParameterValues = $this->getRequestTableParameterValuesCompiler()->determineParameterValues(
@@ -106,11 +104,10 @@ class BuilderComponent extends Manager
             $totalNumberOfItems
         );
 
-        $elements = DataManager::retrieves(
-            Element::class, new DataClassRetrievesParameters(
-                $this->getElementCondition(), $tableParameterValues->getNumberOfItemsPerPage(),
-                $tableParameterValues->getOffset(), $elementTableRenderer->determineOrderBy($tableParameterValues)
-            )
+        $elements = $this->getFormService()->retrieveDynamicFormElements(
+            $this->getElementCondition(), $tableParameterValues->getOffset(),
+            $tableParameterValues->getNumberOfItemsPerPage(),
+            $elementTableRenderer->determineOrderBy($tableParameterValues)
         );
 
         return $elementTableRenderer->render($tableParameterValues, $elements);

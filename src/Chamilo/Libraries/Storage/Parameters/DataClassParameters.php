@@ -99,8 +99,6 @@ abstract class DataClassParameters implements Hashable
 
     /**
      * Get the offset of the result set relative to the first ordered result
-     *
-     * @return int
      */
     public function getOffset(): ?int
     {
@@ -126,67 +124,82 @@ abstract class DataClassParameters implements Hashable
     }
 
     /**
-     * @return \Chamilo\Libraries\Storage\Query\Joins
      * @deprecated Use getJoins() now
      */
     public function get_joins(): ?Joins
     {
-        return $this->joins;
+        return $this->getJoins();
     }
 
-    public function setCondition(?Condition $condition = null)
+    public function setCondition(?Condition $condition = null): static
     {
         $this->condition = $condition;
+
+        return $this;
     }
 
-    public function setCount(?int $count)
+    public function setCount(?int $count): static
     {
         $this->count = (int) $count;
+
+        return $this;
     }
 
-    public function setGroupBy(?GroupBy $groupBy = null)
+    public function setGroupBy(?GroupBy $groupBy = null): static
     {
         $this->groupBy = $groupBy;
+
+        return $this;
     }
 
-    public function setHavingCondition(?Condition $havingCondition = null)
+    public function setHavingCondition(?Condition $havingCondition = null): static
     {
         $this->havingCondition = $havingCondition;
+
+        return $this;
     }
 
-    public function setJoins(?Joins $joins = null)
+    public function setJoins(?Joins $joins = null): static
     {
         $this->joins = $joins;
+
+        return $this;
     }
 
-    public function setOffset(?int $offset)
+    public function setOffset(?int $offset): static
     {
         $this->offset = $offset;
+
+        return $this;
     }
 
-    public function setOrderBy(?OrderBy $orderBy = null)
+    public function setOrderBy(?OrderBy $orderBy = null): static
     {
         $this->orderBy = $orderBy;
+
+        return $this;
     }
 
-    public function setRetrieveProperties(?RetrieveProperties $retrieveProperties = null)
+    public function setRetrieveProperties(?RetrieveProperties $retrieveProperties = null): static
     {
         $this->retrieveProperties = $retrieveProperties;
+
+        return $this;
     }
 
     /**
      * @deprecated User setCondition() now
      */
-    public function set_condition(?Condition $condition = null)
+    public function set_condition(?Condition $condition = null): static
     {
-        $this->setCondition($condition);
+        return $this->setCondition($condition);
     }
 
     /**
      * @deprecated Use setJoins() now
      */
-    public function set_joins(?Joins $joins = null)
+    public function set_joins(?Joins $joins = null): static
     {
-        $this->joins = $joins;
+        return $this->setJoins($joins);
     }
 }

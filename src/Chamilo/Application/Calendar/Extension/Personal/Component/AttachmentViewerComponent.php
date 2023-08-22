@@ -5,7 +5,6 @@ use Chamilo\Application\Calendar\Extension\Personal\Manager;
 use Chamilo\Core\Repository\Common\Rendition\ContentObjectRendition;
 use Chamilo\Core\Repository\Common\Rendition\ContentObjectRenditionImplementation;
 use Chamilo\Core\Repository\Storage\DataClass\ContentObject;
-use Chamilo\Core\Repository\Storage\DataManager;
 use Chamilo\Libraries\Architecture\Application\Application;
 use Chamilo\Libraries\Architecture\Exceptions\NotAllowedException;
 use Chamilo\Libraries\Architecture\Exceptions\ObjectNotExistException;
@@ -58,7 +57,7 @@ class AttachmentViewerComponent extends Manager
             throw new NotAllowedException();
         }
 
-        $contentObject = DataManager::retrieve_by_id(ContentObject::class, $attachment_id);
+        $contentObject = $this->getDataClassRepository()->retrieveById(ContentObject::class, $attachment_id);
 
         if (!$contentObject)
         {

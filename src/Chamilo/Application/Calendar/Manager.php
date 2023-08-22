@@ -1,6 +1,7 @@
 <?php
 namespace Chamilo\Application\Calendar;
 
+use Chamilo\Application\Calendar\Repository\CalendarRendererProviderRepository;
 use Chamilo\Libraries\Architecture\Application\Application;
 use Chamilo\Libraries\Calendar\Service\View\HtmlCalendarRenderer;
 use DateTime;
@@ -35,6 +36,11 @@ abstract class Manager extends Application
      * @var \Chamilo\Libraries\Format\Tabs\Link\LinkTabsRenderer
      */
     private $tabs;
+
+    public function getCalendarRendererProviderRepository(): CalendarRendererProviderRepository
+    {
+        return $this->getService(CalendarRendererProviderRepository::class);
+    }
 
     /**
      * @return int

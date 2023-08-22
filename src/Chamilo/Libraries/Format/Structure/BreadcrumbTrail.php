@@ -109,15 +109,6 @@ class BreadcrumbTrail
 
     /**
      * @return \Chamilo\Libraries\Format\Structure\Breadcrumb[]
-     * @deprecated Use BreadcrumbTrail::getBreadcrumbs() now
-     */
-    public function get_breadcrumbs(): array
-    {
-        return $this->getBreadcrumbs();
-    }
-
-    /**
-     * @return \Chamilo\Libraries\Format\Structure\Breadcrumb[]
      */
     public function get_breadcrumbtrail(): array
     {

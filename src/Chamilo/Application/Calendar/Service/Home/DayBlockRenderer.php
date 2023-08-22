@@ -35,6 +35,8 @@ class DayBlockRenderer extends BlockRenderer implements ConfigurableBlockRendere
 
     public const CONTEXT = \Chamilo\Application\Calendar\Manager::CONTEXT;
 
+    protected CalendarRendererProviderRepository $calendarRendererProviderRepository;
+
     protected DatetimeUtilities $datetimeUtilities;
 
     protected MiniDayCalendarRenderer $miniDayCalendarRenderer;
@@ -45,7 +47,8 @@ class DayBlockRenderer extends BlockRenderer implements ConfigurableBlockRendere
         HomeService $homeService, UrlGenerator $urlGenerator, Translator $translator,
         ConfigurationConsulter $configurationConsulter, DatetimeUtilities $datetimeUtilities,
         MiniDayCalendarRenderer $miniDayCalendarRenderer, ChamiloRequest $request,
-        ElementRightsService $elementRightsService, ConfigurationFormFactory $configurationFormFactory
+        ElementRightsService $elementRightsService, ConfigurationFormFactory $configurationFormFactory,
+        CalendarRendererProviderRepository $calendarRendererProviderRepository
     )
     {
         parent::__construct(
@@ -56,6 +59,7 @@ class DayBlockRenderer extends BlockRenderer implements ConfigurableBlockRendere
         $this->datetimeUtilities = $datetimeUtilities;
         $this->miniDayCalendarRenderer = $miniDayCalendarRenderer;
         $this->request = $request;
+        $this->calendarRendererProviderRepository = $calendarRendererProviderRepository;
     }
 
     /**
@@ -94,11 +98,16 @@ class DayBlockRenderer extends BlockRenderer implements ConfigurableBlockRendere
     public function displayContent(Element $block, ?User $user = null): string
     {
         $dataProvider = new CalendarRendererProvider(
-            new CalendarRendererProviderRepository(), $user, [], Manager::CONTEXT
+            $this->getCalendarRendererProviderRepository(), $user, [], Manager::CONTEXT
         );
 
         return '<div style="max-height: 500px; overflow: auto;">' .
             $this->getMiniDayCalendarRenderer()->renderFullCalendar($dataProvider, $this->getDisplayTime()) . '</div>';
+    }
+
+    public function getCalendarRendererProviderRepository(): CalendarRendererProviderRepository
+    {
+        return $this->calendarRendererProviderRepository;
     }
 
     /**

@@ -10,6 +10,8 @@
         <service id="Chamilo\Application\Calendar\Service\AvailabilityService"/>
         <service id="Chamilo\Application\Calendar\Repository\AvailabilityRepository"/>
 
+        <service id="Chamilo\Application\Calendar\Repository\CalendarRendererProviderRepository"/>
+
         <service id="Chamilo\Application\Calendar\Service\Home\DayBlockRenderer">
             <tag name="Chamilo\Core\Home\Renderer\BlockRenderer"/>
         </service>

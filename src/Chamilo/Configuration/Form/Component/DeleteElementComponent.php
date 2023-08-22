@@ -3,12 +3,11 @@ namespace Chamilo\Configuration\Form\Component;
 
 use Chamilo\Configuration\Form\Manager;
 use Chamilo\Configuration\Form\Storage\DataClass\Element;
-use Chamilo\Configuration\Form\Storage\DataManager;
 use Chamilo\Libraries\Architecture\Exceptions\NotAllowedException;
+use Chamilo\Libraries\Storage\DataClass\DataClass;
 use Chamilo\Libraries\Storage\Query\Condition\EqualityCondition;
 use Chamilo\Libraries\Storage\Query\Variable\PropertyConditionVariable;
 use Chamilo\Libraries\Storage\Query\Variable\StaticConditionVariable;
-use Chamilo\Libraries\Translation\Translation;
 use Chamilo\Libraries\Utilities\StringUtilities;
 
 /**
@@ -20,13 +19,14 @@ class DeleteElementComponent extends Manager
 {
 
     /**
-     * Runs this component and displays its output.
+     * @throws \Chamilo\Libraries\Architecture\Exceptions\NotAllowedException
+     * @throws \Chamilo\Libraries\Storage\Exception\DataClassNoResultException
      */
     public function run()
     {
         $ids = $this->getRequest()->query->get(self::PARAM_DYNAMIC_FORM_ELEMENT_ID);
 
-        if (!$this->get_user()->isPlatformAdmin())
+        if (!$this->getUser()->isPlatformAdmin())
         {
             throw new NotAllowedException();
         }
@@ -42,9 +42,9 @@ class DeleteElementComponent extends Manager
 
             foreach ($ids as $id)
             {
-                $dynamic_form_element = DataManager::retrieve_dynamic_form_elements(
+                $dynamic_form_element = $this->getFormService()->retrieveDynamicFormElements(
                     new EqualityCondition(
-                        new PropertyConditionVariable(Element::class, Element::PROPERTY_ID),
+                        new PropertyConditionVariable(Element::class, DataClass::PROPERTY_ID),
                         new StaticConditionVariable($id)
                     )
                 )->current();
@@ -67,7 +67,7 @@ class DeleteElementComponent extends Manager
         else
         {
             return $this->display_error_page(
-                htmlentities(Translation::get('NoObjectSelected', null, StringUtilities::LIBRARIES))
+                htmlentities($this->getTranslator()->trans('NoObjectSelected', [], StringUtilities::LIBRARIES))
             );
         }
     }

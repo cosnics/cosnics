@@ -7,11 +7,10 @@ use Chamilo\Libraries\Storage\Query\Joins;
 use Chamilo\Libraries\Storage\Query\RetrieveProperties;
 
 /**
- *
  * @package Chamilo\Libraries\Storage\Parameters
- * @author Hans De Bisschop <hans.de.bisschop@ehb.be>
- * @author Magali Gillard <magali.gillard@ehb.be>
- * @author Eduard Vossen <eduard.vossen@ehb.be>
+ * @author  Hans De Bisschop <hans.de.bisschop@ehb.be>
+ * @author  Magali Gillard <magali.gillard@ehb.be>
+ * @author  Eduard Vossen <eduard.vossen@ehb.be>
  */
 class DataClassCountGroupedParameters extends DataClassParameters
 {
@@ -30,7 +29,6 @@ class DataClassCountGroupedParameters extends DataClassParameters
     }
 
     /**
-     *
      * @deprecated Use getRetrieveProperties() now
      */
     public function get_properties(): ?RetrieveProperties
@@ -41,8 +39,8 @@ class DataClassCountGroupedParameters extends DataClassParameters
     /**
      * @deprecated Use setRetrieveProperties() now
      */
-    public function set_properties(?RetrieveProperties $retrieveProperties = null)
+    public function set_properties(?RetrieveProperties $retrieveProperties = null): static
     {
-        $this->setRetrieveProperties($retrieveProperties);
+        return $this->setRetrieveProperties($retrieveProperties);
     }
 }

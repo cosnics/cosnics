@@ -39,14 +39,6 @@ class TableAction
         return $this->confirm;
     }
 
-    /**
-     * @deprecated Use TableFormAction::getConfirmationMessage() now
-     */
-    public function getConfirmation(): ?string
-    {
-        return $this->getConfirmationMessage();
-    }
-
     public function getConfirmationMessage(): ?string
     {
         return $this->confirmationMessage;

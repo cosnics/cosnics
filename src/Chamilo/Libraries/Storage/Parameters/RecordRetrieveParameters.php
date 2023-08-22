@@ -38,8 +38,8 @@ class RecordRetrieveParameters extends DataClassRetrieveParameters
     /**
      * @deprecated Use setRetrieveProperties() now
      */
-    public function set_properties(?RetrieveProperties $retrieveProperties = null)
+    public function set_properties(?RetrieveProperties $retrieveProperties = null): static
     {
-        $this->setRetrieveProperties($retrieveProperties);
+        return $this->setRetrieveProperties($retrieveProperties);
     }
 }

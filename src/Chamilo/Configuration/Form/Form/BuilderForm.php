@@ -1,32 +1,31 @@
 <?php
 namespace Chamilo\Configuration\Form\Form;
 
+use Chamilo\Configuration\Form\Service\FormService;
 use Chamilo\Configuration\Form\Storage\DataClass\Element;
 use Chamilo\Configuration\Form\Storage\DataClass\Option;
-use Chamilo\Configuration\Form\Storage\DataManager;
 use Chamilo\Libraries\Format\Form\FormValidator;
 use Chamilo\Libraries\Format\Structure\Glyph\FontAwesomeGlyph;
 use Chamilo\Libraries\Translation\Translation;
 use Chamilo\Libraries\Utilities\StringUtilities;
 
 /**
- *
  * @package configuration\form
- * @author Sven Vanpoucke <sven.vanpoucke@hogent.be>
- * @author Hans De Bisschop <hans.de.bisschop@ehb.be>
+ * @author  Sven Vanpoucke <sven.vanpoucke@hogent.be>
+ * @author  Hans De Bisschop <hans.de.bisschop@ehb.be>
  */
 class BuilderForm extends FormValidator
 {
 
-    const TYPE_CREATE = 0;
+    public const TYPE_CREATE = 0;
 
-    const TYPE_EDIT = 1;
+    public const TYPE_EDIT = 1;
 
-    private $user;
+    private $element;
 
     private $form_type;
 
-    private $element;
+    private $user;
 
     public function __construct($form_type, $element, $action, $user)
     {
@@ -139,7 +138,7 @@ class BuilderForm extends FormValidator
                 $group = [];
                 $group[] = $this->createElement(
                     'text', 'option_' . Option::PROPERTY_NAME . '[' . $option_number . ']', Translation::get('Name'),
-                    array("size" => "50")
+                    ['size' => '50']
                 );
                 if ($number_of_options - count($_SESSION['mc_skip_options']) > 1)
                 {
@@ -189,6 +188,11 @@ class BuilderForm extends FormValidator
         return $succes;
     }
 
+    public function getFormService(): FormService
+    {
+        return $this->getService(FormService::class);
+    }
+
     public function setDefaults($parameters = [], $filter = null)
     {
         $parameters[Element::PROPERTY_NAME] = $this->element->get_name();
@@ -225,7 +229,7 @@ class BuilderForm extends FormValidator
             return false;
         }
 
-        DataManager::delete_all_options_from_form_element($element->get_id());
+        $this->getFormService()->deleteAllOptionsFromFormElement($element->get_id());
 
         foreach ($values['option_' . Option::PROPERTY_NAME] as $option)
         {

@@ -7,11 +7,10 @@ use Chamilo\Libraries\Storage\Query\OrderBy;
 use Chamilo\Libraries\Storage\Query\RetrieveProperties;
 
 /**
- *
  * @package Chamilo\Libraries\Storage\Parameters
- * @author Hans De Bisschop <hans.de.bisschop@ehb.be>
- * @author Magali Gillard <magali.gillard@ehb.be>
- * @author Eduard Vossen <eduard.vossen@ehb.be>
+ * @author  Hans De Bisschop <hans.de.bisschop@ehb.be>
+ * @author  Magali Gillard <magali.gillard@ehb.be>
+ * @author  Eduard Vossen <eduard.vossen@ehb.be>
  */
 class DataClassDistinctParameters extends DataClassParameters
 {
@@ -35,8 +34,8 @@ class DataClassDistinctParameters extends DataClassParameters
     /**
      * @deprecated Use DataClassProperties and setRetrieveProperties() now
      */
-    public function set_property(?RetrieveProperties $properties = null)
+    public function set_property(?RetrieveProperties $properties = null): static
     {
-        $this->setRetrieveProperties($properties);
+        return $this->setRetrieveProperties($properties);
     }
 }

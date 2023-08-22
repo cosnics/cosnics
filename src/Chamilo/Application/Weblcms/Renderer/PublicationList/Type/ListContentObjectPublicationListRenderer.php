@@ -320,7 +320,7 @@ class ListContentObjectPublicationListRenderer extends ContentObjectPublicationL
 
         $button = new SplitDropdownButton(
             $firstAction->getTitle(), null, $firstAction->getAction(), Button::DISPLAY_LABEL,
-            $firstAction->getConfirmation(), ['btn-sm', 'btn-table-action'], null, ['btn-table-action']
+            $firstAction->getConfirmationMessage(), ['btn-sm', 'btn-table-action'], null, ['btn-table-action']
         );
 
         foreach ($formActions as $formAction)
@@ -328,7 +328,7 @@ class ListContentObjectPublicationListRenderer extends ContentObjectPublicationL
             $button->addSubButton(
                 new SubButton(
                     $formAction->getTitle(), null, $formAction->getAction(), Button::DISPLAY_LABEL,
-                    $formAction->getConfirmation()
+                    $formAction->getConfirmationMessage()
                 )
             );
         }

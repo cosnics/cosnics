@@ -2,24 +2,23 @@
 namespace Chamilo\Application\Calendar\Extension\Personal\Component;
 
 use Chamilo\Application\Calendar\Extension\Personal\Manager;
-use Chamilo\Application\Calendar\Extension\Personal\Storage\DataClass\Publication;
-use Chamilo\Application\Calendar\Extension\Personal\Storage\DataManager;
+use Chamilo\Libraries\Architecture\Application\Application;
 use Chamilo\Libraries\Architecture\Exceptions\NotAllowedException;
-use Chamilo\Libraries\Translation\Translation;
 use Chamilo\Libraries\Utilities\StringUtilities;
 
 /**
- * @package application\calendar
+ * @package Chamilo\Application\Calendar\Extension\Personal\Component
  * @author  Hans De Bisschop <hans.de.bisschop@ehb.be>
  */
 class DeleterComponent extends Manager
 {
 
     /**
-     * Runs this component and displays its output.
+     * @throws \Chamilo\Libraries\Architecture\Exceptions\NotAllowedException
      */
     public function run()
     {
+        $translator = $this->getTranslator();
         $ids = $this->getRequest()->query->get(self::PARAM_PUBLICATION_ID);
         $failures = 0;
 
@@ -32,7 +31,7 @@ class DeleterComponent extends Manager
 
             foreach ($ids as $id)
             {
-                $publication = DataManager::retrieve_by_id(Publication::class, $id);
+                $publication = $this->getPublicationService()->findPublicationByIdentifier($id);
 
                 if (!$this->getRightsService()->isAllowedToDeletePublication($publication, $this->getUser()))
                 {
@@ -49,44 +48,45 @@ class DeleterComponent extends Manager
             {
                 if (count($ids) == 1)
                 {
-                    $message = Translation::get(
-                        'ObjectNotDeleted', ['OBJECT' => Translation::get('Publication')], StringUtilities::LIBRARIES
+                    $message = $translator->trans(
+                        'ObjectNotDeleted', ['OBJECT' => $translator->trans('Publication', [], Manager::CONTEXT)],
+                        StringUtilities::LIBRARIES
                     );
                 }
                 else
                 {
-                    $message = Translation::get(
-                        'ObjectsNotDeleted', ['OBJECT' => Translation::get('Publications')], StringUtilities::LIBRARIES
+                    $message = $translator->trans(
+                        'ObjectsNotDeleted', ['OBJECT' => $translator->trans('Publications', [], Manager::CONTEXT)],
+                        StringUtilities::LIBRARIES
                     );
                 }
             }
+            elseif (count($ids) == 1)
+            {
+                $message = $translator->trans(
+                    'ObjectDeleted', ['OBJECT' => $translator->trans('Publication', [], Manager::CONTEXT)],
+                    StringUtilities::LIBRARIES
+                );
+            }
             else
             {
-                if (count($ids) == 1)
-                {
-                    $message = Translation::get(
-                        'ObjectDeleted', ['OBJECT' => Translation::get('Publication')], StringUtilities::LIBRARIES
-                    );
-                }
-                else
-                {
-                    $message = Translation::get(
-                        'ObjectsDeleted', ['OBJECT' => Translation::get('Publications')], StringUtilities::LIBRARIES
-                    );
-                }
+                $message = $translator->trans(
+                    'ObjectsDeleted', ['OBJECT' => $translator->trans('Publications', [], Manager::CONTEXT)],
+                    StringUtilities::LIBRARIES
+                );
             }
 
             $this->redirectWithMessage(
                 $message, (bool) $failures, [
-                    \Chamilo\Application\Calendar\Manager::PARAM_CONTEXT => \Chamilo\Application\Calendar\Manager::CONTEXT,
-                    \Chamilo\Application\Calendar\Manager::PARAM_ACTION => \Chamilo\Application\Calendar\Manager::ACTION_BROWSE
+                    Application::PARAM_CONTEXT => \Chamilo\Application\Calendar\Manager::CONTEXT,
+                    Application::PARAM_ACTION => \Chamilo\Application\Calendar\Manager::ACTION_BROWSE
                 ]
             );
         }
         else
         {
             return $this->display_error_page(
-                htmlentities(Translation::get('NoObjectsSelected', null, StringUtilities::LIBRARIES))
+                htmlentities($translator->trans('NoObjectsSelected', [], StringUtilities::LIBRARIES))
             );
         }
     }

@@ -43,15 +43,6 @@ class StorageAliasGenerator
         return $this->aliases;
     }
 
-    /**
-     * @return string[][]
-     * @deprecated Use getAliases() now
-     */
-    public function get_aliases(): array
-    {
-        return $this->getAliases();
-    }
-
     public function getClassnameUtilities(): ClassnameUtilities
     {
         return $this->classnameUtilities;
@@ -148,30 +139,6 @@ class StorageAliasGenerator
     public function getTypes(): array
     {
         return [self::TYPE_TABLE, self::TYPE_CONSTRAINT];
-    }
-
-    /**
-     * @deprecated Use getConstraintName() now
-     */
-    public function get_constraint_name(string $table_name, string $column): string
-    {
-        return $this->getConstraintName($table_name, $column);
-    }
-
-    /**
-     * @deprecated Use getDataClassAlias() now
-     */
-    public function get_data_class_alias(string $class): string
-    {
-        return $this->getDataClassAlias($class);
-    }
-
-    /**
-     * @deprecated Use getTableAlias() now
-     */
-    public function get_table_alias(string $tableName): string
-    {
-        return $this->getTableAlias($tableName);
     }
 
     /**

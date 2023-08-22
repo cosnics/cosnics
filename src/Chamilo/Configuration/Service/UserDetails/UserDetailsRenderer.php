@@ -18,9 +18,12 @@ class UserDetailsRenderer implements UserDetailsRendererInterface
 {
     use UserDetailsRendererTrait;
 
-    public function __construct(Translator $translator)
+    protected Viewer $viewer;
+
+    public function __construct(Translator $translator, Viewer $viewer)
     {
         $this->translator = $translator;
+        $this->viewer = $viewer;
     }
 
     public function getGlyph(): InlineGlyph
@@ -28,20 +31,17 @@ class UserDetailsRenderer implements UserDetailsRendererInterface
         return new NamespaceIdentGlyph('Chamilo\Configuration', true);
     }
 
-    protected function getViewer(User $user): Viewer
+    protected function getViewer(): Viewer
     {
-        return new Viewer(
-            Manager::CONTEXT, 'account_fields', $user->getId(), null
-        );
+        return $this->viewer;
     }
 
     /**
-     * @throws \ReflectionException
-     * @throws \Chamilo\Libraries\Architecture\Exceptions\UserException
+     * @throws \Chamilo\Libraries\Storage\Exception\DataClassNoResultException
      */
     public function hasContentForUser(User $user, User $requestingUser): bool
     {
-        return $this->getViewer($user)->get_form_values()->count() > 0;
+        return $this->getViewer()->getFormValues(Manager::CONTEXT, 'account_fields', $user->getId())->count() > 0;
     }
 
     public function renderTitle(User $user, User $requestingUser): string
@@ -49,8 +49,12 @@ class UserDetailsRenderer implements UserDetailsRendererInterface
         return $this->getTranslator()->trans('AdditionalUserInformation', [], Manager::CONTEXT);
     }
 
+    /**
+     * @throws \TableException
+     * @throws \Chamilo\Libraries\Storage\Exception\DataClassNoResultException
+     */
     public function renderUserDetails(User $user, User $requestingUser): string
     {
-        return $this->getViewer($user)->render();
+        return $this->getViewer()->render(Manager::CONTEXT, 'account_fields', $user->getId());
     }
 }

@@ -1,8 +1,8 @@
 <?php
 namespace Chamilo\Configuration\Form;
 
+use Chamilo\Configuration\Form\Service\FormService;
 use Chamilo\Configuration\Form\Storage\DataClass\Instance;
-use Chamilo\Configuration\Form\Storage\DataManager;
 use Chamilo\Libraries\Architecture\Application\Application;
 use Chamilo\Libraries\Storage\Query\Condition\AndCondition;
 use Chamilo\Libraries\Storage\Query\Condition\EqualityCondition;
@@ -37,6 +37,11 @@ abstract class Manager extends Application
     private $form;
 
     private $target_user_id;
+
+    public function getFormService(): FormService
+    {
+        return $this->getService(FormService::class);
+    }
 
     public function get_add_element_url()
     {
@@ -89,7 +94,7 @@ abstract class Manager extends Application
             new PropertyConditionVariable(Instance::class, Instance::PROPERTY_NAME), new StaticConditionVariable($name)
         );
         $condition = new AndCondition($conditions);
-        $form = DataManager::retrieve_dynamic_forms($condition)->current();
+        $form = $this->getFormService()->retrieveDynamicForms($condition)->current();
 
         if (!$form)
         {

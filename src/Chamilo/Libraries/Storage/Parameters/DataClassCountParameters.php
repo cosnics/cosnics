@@ -7,11 +7,10 @@ use Chamilo\Libraries\Storage\Query\RetrieveProperties;
 use Chamilo\Libraries\Storage\Query\Variable\ConditionVariable;
 
 /**
- *
  * @package Chamilo\Libraries\Storage\Parameters
- * @author Hans De Bisschop <hans.de.bisschop@ehb.be>
- * @author Magali Gillard <magali.gillard@ehb.be>
- * @author Eduard Vossen <eduard.vossen@ehb.be>
+ * @author  Hans De Bisschop <hans.de.bisschop@ehb.be>
+ * @author  Magali Gillard <magali.gillard@ehb.be>
+ * @author  Eduard Vossen <eduard.vossen@ehb.be>
  */
 class DataClassCountParameters extends DataClassParameters
 {
@@ -37,7 +36,7 @@ class DataClassCountParameters extends DataClassParameters
     /**
      * @deprecated Use getRetrieveProperties()->add now
      */
-    public function set_property(?ConditionVariable $property)
+    public function set_property(?ConditionVariable $property): void
     {
         $this->getRetrieveProperties()->add($property);
     }
