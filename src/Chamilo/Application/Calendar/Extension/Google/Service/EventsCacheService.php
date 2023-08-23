@@ -4,7 +4,7 @@ namespace Chamilo\Application\Calendar\Extension\Google\Service;
 use Chamilo\Application\Calendar\Extension\Google\Repository\CalendarRepository;
 use Chamilo\Core\User\Service\UserSettingService;
 use Chamilo\Core\User\Storage\DataClass\User;
-use Chamilo\Libraries\Cache\Traits\CacheAdapterHandlerTrait;
+use Chamilo\Libraries\Cache\Traits\SingleCacheAdapterHandlerTrait;
 use Google_Service_Calendar_Events;
 use Symfony\Component\Cache\Adapter\AdapterInterface;
 
@@ -16,7 +16,7 @@ use Symfony\Component\Cache\Adapter\AdapterInterface;
  */
 class EventsCacheService
 {
-    use CacheAdapterHandlerTrait;
+    use SingleCacheAdapterHandlerTrait;
 
     protected User $user;
 

@@ -35,24 +35,15 @@ class Setting extends DataClass
         {
             return false;
         }
-        else
+        elseif ($this->get_user_setting())
         {
-            if ($this->get_user_setting())
+            $condition = new EqualityCondition(
+                new PropertyConditionVariable(UserSetting::class, UserSetting::PROPERTY_SETTING_ID),
+                new StaticConditionVariable($this->get_id())
+            );
+            if (!DataManager::deletes(UserSetting::class, $condition))
             {
-                $condition = new EqualityCondition(
-                    new PropertyConditionVariable(UserSetting::class, UserSetting::PROPERTY_SETTING_ID),
-                    new StaticConditionVariable($this->get_id())
-                );
-                if (!DataManager::deletes(UserSetting::class, $condition))
-                {
-                    return false;
-                }
-                else
-                {
-                    $this->on_change();
-
-                    return true;
-                }
+                return false;
             }
             else
             {
@@ -60,6 +51,12 @@ class Setting extends DataClass
 
                 return true;
             }
+        }
+        else
+        {
+            $this->on_change();
+
+            return true;
         }
     }
 

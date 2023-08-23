@@ -2,7 +2,7 @@
 namespace Chamilo\Core\Repository\Quota\Service;
 
 use Chamilo\Core\User\Storage\DataClass\User;
-use Chamilo\Libraries\Cache\Traits\CacheAdapterHandlerTrait;
+use Chamilo\Libraries\Cache\Traits\SingleCacheAdapterHandlerTrait;
 use Symfony\Component\Cache\Adapter\AdapterInterface;
 use Symfony\Component\Cache\Exception\CacheException;
 
@@ -14,7 +14,7 @@ use Symfony\Component\Cache\Exception\CacheException;
  */
 class CachedUserStorageSpaceCalculator implements UserStorageSpaceCalculatorInterface
 {
-    use CacheAdapterHandlerTrait;
+    use SingleCacheAdapterHandlerTrait;
 
     protected UserStorageSpaceCalculator $userStorageSpaceCalculator;
 

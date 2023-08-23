@@ -4,7 +4,7 @@ namespace Chamilo\Configuration\Package\Service;
 use Chamilo\Configuration\Package\Finder\PackageBundlesGenerator;
 use Chamilo\Configuration\Package\PackageList;
 use Chamilo\Libraries\Cache\Interfaces\CacheDataPreLoaderInterface;
-use Chamilo\Libraries\Cache\Traits\CacheAdapterHandlerTrait;
+use Chamilo\Libraries\Cache\Traits\SingleCacheAdapterHandlerTrait;
 use Symfony\Component\Cache\Adapter\AdapterInterface;
 use Symfony\Component\Cache\Exception\CacheException;
 
@@ -16,7 +16,7 @@ use Symfony\Component\Cache\Exception\CacheException;
  */
 class PackageBundlesCacheService implements CacheDataPreLoaderInterface
 {
-    use CacheAdapterHandlerTrait;
+    use SingleCacheAdapterHandlerTrait;
 
     protected PackageBundlesGenerator $packageBundlesGenerator;
 

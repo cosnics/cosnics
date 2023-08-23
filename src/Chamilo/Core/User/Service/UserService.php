@@ -30,8 +30,6 @@ class UserService
 
     protected Translator $translator;
 
-    private ConfigurationService $configurationService;
-
     private HashingUtilities $hashingUtilities;
 
     private PropertyMapper $propertyMapper;
@@ -39,13 +37,12 @@ class UserService
     private UserRepository $userRepository;
 
     public function __construct(
-        UserRepository $userRepository, HashingUtilities $hashingUtilities, ConfigurationService $configurationService,
+        UserRepository $userRepository, HashingUtilities $hashingUtilities,
         PropertyMapper $propertyMapper, Translator $translator
     )
     {
         $this->userRepository = $userRepository;
         $this->hashingUtilities = $hashingUtilities;
-        $this->configurationService = $configurationService;
         $this->propertyMapper = $propertyMapper;
         $this->translator = $translator;
     }
@@ -150,29 +147,25 @@ class UserService
     /**
      * @throws \Chamilo\Libraries\Storage\Exception\DataClassNoResultException
      */
-    public function createUserSettingForSettingAndUser(
-        string $context, string $variable, User $user, ?string $value = null
+    public function createUserSetting(UserSetting $userSetting): bool
+    {
+        return $this->getUserRepository()->createUserSetting($userSetting);
+    }
+
+    /**
+     * @throws \Chamilo\Libraries\Storage\Exception\DataClassNoResultException
+     */
+    public function createUserSettingFromParameters(
+        string $settingIdentifier, string $userIdentifier, ?string $value = null
     ): bool
     {
-        $userSetting = $this->getUserSettingForSettingContextVariableAndUser($context, $variable, $user);
+        $userSetting = new UserSetting();
 
-        if (!$userSetting instanceof UserSetting)
-        {
-            $setting = $this->getConfigurationService()->findSettingByContextAndVariableName($context, $variable);
+        $userSetting->set_setting_id($settingIdentifier);
+        $userSetting->set_user_id($userIdentifier);
+        $userSetting->set_value($value);
 
-            $userSetting = new UserSetting();
-            $userSetting->set_setting_id($setting->getId());
-            $userSetting->set_user_id($user->getId());
-            $userSetting->set_value($value);
-
-            return $this->getUserRepository()->createUserSetting($userSetting);
-        }
-        else
-        {
-            $userSetting->set_value($value);
-
-            return $this->getUserRepository()->updateUserSetting($userSetting);
-        }
+        return $this->createUserSetting($userSetting);
     }
 
     /**
@@ -279,6 +272,11 @@ class UserService
     public function findUserIdentifiersByOfficialCodes(array $officialCodes): array
     {
         return $this->getUserRepository()->findUserIdentifiersByOfficialCodes($officialCodes);
+    }
+
+    public function findUserSettingForSettingAndUser(Setting $setting, User $user): ?UserSetting
+    {
+        return $this->getUserRepository()->findUserSettingForSettingAndUser($setting, $user);
     }
 
     /**
@@ -392,11 +390,6 @@ class UserService
         return $this->findUsers($condition, $count, $offset, $orderProperty);
     }
 
-    public function getConfigurationService(): ConfigurationService
-    {
-        return $this->configurationService;
-    }
-
     protected function getHashingUtilities(): HashingUtilities
     {
         return $this->hashingUtilities;
@@ -444,44 +437,9 @@ class UserService
         return $this->userRepository;
     }
 
-    /**
-     * @param string $context
-     * @param string $variable
-     * @param \Chamilo\Core\User\Storage\DataClass\User $user
-     *
-     * @return \Chamilo\Core\User\Storage\DataClass\UserSetting
-     */
-    public function getUserSettingForSettingContextVariableAndUser(string $context, string $variable, User $user
-    ): ?UserSetting
-    {
-        return $this->getUserRepository()->getUserSettingForSettingAndUser(
-            $this->getConfigurationService()->findSettingByContextAndVariableName($context, $variable), $user
-        );
-    }
-
     public function isUsernameAvailable(string $username): bool
     {
         return !$this->findUserByUsername($username) instanceof User;
-    }
-
-    public function setConfigurationService(ConfigurationService $configurationService)
-    {
-        $this->configurationService = $configurationService;
-    }
-
-    protected function setHashingUtilities(HashingUtilities $hashingUtilities)
-    {
-        $this->hashingUtilities = $hashingUtilities;
-    }
-
-    public function setPropertyMapper(PropertyMapper $propertyMapper): void
-    {
-        $this->propertyMapper = $propertyMapper;
-    }
-
-    protected function setUserRepository(UserRepository $userRepository)
-    {
-        $this->userRepository = $userRepository;
     }
 
     public function triggerImportEvent(User $actionUser, User $targetUser)
@@ -498,6 +456,14 @@ class UserService
     public function updateUser(User $user): bool
     {
         return $this->getUserRepository()->updateUser($user);
+    }
+
+    /**
+     * @throws \Chamilo\Libraries\Storage\Exception\DataClassNoResultException
+     */
+    public function updateUserSetting(UserSetting $userSetting): bool
+    {
+        return $this->getUserRepository()->updateUserSetting($userSetting);
     }
 }
 

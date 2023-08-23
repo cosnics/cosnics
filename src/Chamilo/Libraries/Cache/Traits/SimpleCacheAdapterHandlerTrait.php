@@ -7,7 +7,7 @@ namespace Chamilo\Libraries\Cache\Traits;
  */
 trait SimpleCacheAdapterHandlerTrait
 {
-    use CacheAdapterHandlerTrait;
+    use SingleCacheAdapterHandlerTrait;
 
     /**
      * @throws \Symfony\Component\Cache\Exception\CacheException

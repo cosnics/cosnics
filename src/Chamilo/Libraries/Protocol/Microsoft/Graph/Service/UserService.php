@@ -15,17 +15,13 @@ class UserService
 
     protected UserRepository $userRepository;
 
-    protected \Chamilo\Core\User\Service\UserService $userService;
-
     protected UserSettingService $userSettingService;
 
     public function __construct(
-        UserRepository $userRepository, \Chamilo\Core\User\Service\UserService $userService,
-        UserSettingService $userSettingService
+        UserRepository $userRepository, UserSettingService $userSettingService
     )
     {
         $this->userRepository = $userRepository;
-        $this->userService = $userService;
         $this->userSettingService = $userSettingService;
     }
 
@@ -62,7 +58,7 @@ class UserService
                 $azureActiveDirectoryUserIdentifier = $azureUser->getId();
             }
 
-            $this->getUserService()->createUserSettingForSettingAndUser(
+            $this->getUserSettingService()->createUserSettingForSettingAndUser(
                 'Chamilo\Libraries\Protocol\Microsoft\Graph', 'external_user_id', $user,
                 $azureActiveDirectoryUserIdentifier
             );
@@ -74,11 +70,6 @@ class UserService
     public function getUserRepository(): UserRepository
     {
         return $this->userRepository;
-    }
-
-    public function getUserService(): \Chamilo\Core\User\Service\UserService
-    {
-        return $this->userService;
     }
 
     public function getUserSettingService(): UserSettingService

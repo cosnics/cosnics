@@ -1,8 +1,9 @@
 <?php
 namespace Chamilo\Configuration\Package;
 
-use Chamilo\Libraries\Architecture\ClassnameUtilities;
+use Chamilo\Configuration\Service\ConfigurationService;
 use Chamilo\Libraries\DependencyInjection\Traits\DependencyInjectionContainerTrait;
+use Chamilo\Libraries\Storage\DataManager\Repository\StorageUnitRepository;
 use Chamilo\Libraries\Translation\Translation;
 
 abstract class Action
@@ -48,9 +49,22 @@ abstract class Action
         return false;
     }
 
+    public function getStorageUnitRepository(): StorageUnitRepository
+    {
+        return $this->getService(StorageUnitRepository::class);
+    }
+
+    public function getConfigurationService(): ConfigurationService
+    {
+        return $this->getService(ConfigurationService::class);
+    }
+
+    /**
+     * @throws \ReflectionException
+     */
     public function getType()
     {
-        return ClassnameUtilities::getInstance()->getClassnameFromObject($this);
+        return $this->getClassnameUtilities()->getClassnameFromObject($this);
     }
 
     /**

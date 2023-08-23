@@ -29,7 +29,7 @@ class QuickLanguageComponent extends Manager
 
             if ($choice && in_array($choice, $languages))
             {
-                $this->getUserService()->createUserSettingForSettingAndUser(
+                $this->getUserSettingService()->createUserSettingForSettingAndUser(
                     'Chamilo\Core\Admin', 'platform_language', $this->getUser(), $choice
                 );
             }

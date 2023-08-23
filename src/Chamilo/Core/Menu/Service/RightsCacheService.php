@@ -3,7 +3,7 @@ namespace Chamilo\Core\Menu\Service;
 
 use Chamilo\Core\Menu\Storage\DataClass\Item;
 use Chamilo\Core\User\Storage\DataClass\User;
-use Chamilo\Libraries\Cache\Traits\CacheAdapterHandlerTrait;
+use Chamilo\Libraries\Cache\Traits\SingleCacheAdapterHandlerTrait;
 use Symfony\Component\Cache\Adapter\AdapterInterface;
 
 /**
@@ -12,7 +12,7 @@ use Symfony\Component\Cache\Adapter\AdapterInterface;
  */
 class RightsCacheService
 {
-    use CacheAdapterHandlerTrait;
+    use SingleCacheAdapterHandlerTrait;
 
     private ItemService $itemService;
 

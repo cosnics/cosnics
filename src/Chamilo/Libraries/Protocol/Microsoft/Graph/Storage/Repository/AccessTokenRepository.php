@@ -1,7 +1,6 @@
 <?php
 namespace Chamilo\Libraries\Protocol\Microsoft\Graph\Storage\Repository;
 
-use Chamilo\Core\User\Service\UserService;
 use Chamilo\Core\User\Service\UserSettingService;
 use Chamilo\Core\User\Storage\DataClass\User;
 use League\OAuth2\Client\Token\AccessToken;
@@ -23,14 +22,11 @@ class AccessTokenRepository implements AccessTokenRepositoryInterface
 
     protected UserSettingService $userSettingService;
 
-    protected UserService $userservice;
-
     public function __construct(
-        User $user, UserService $userservice, UserSettingService $userSettingService, SessionInterface $session
+        User $user, UserSettingService $userSettingService, SessionInterface $session
     )
     {
         $this->user = $user;
-        $this->userservice = $userservice;
         $this->userSettingService = $userSettingService;
         $this->session = $session;
     }
@@ -76,17 +72,12 @@ class AccessTokenRepository implements AccessTokenRepositoryInterface
         return $this->userSettingService;
     }
 
-    public function getUserservice(): UserService
-    {
-        return $this->userservice;
-    }
-
     /**
      * @throws \Chamilo\Libraries\Storage\Exception\DataClassNoResultException
      */
     public function storeApplicationAccessToken(AccessToken $accessToken)
     {
-        $this->getUserservice()->createUserSettingForSettingAndUser(
+        $this->getUserSettingService()->createUserSettingForSettingAndUser(
             'Chamilo\Libraries\Protocol\Microsoft\Graph', 'access_token', $this->getUser(),
             json_encode($accessToken->jsonSerialize())
         );

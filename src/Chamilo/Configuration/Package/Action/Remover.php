@@ -86,9 +86,7 @@ abstract class Remover extends Action
 
             foreach ($xml as $name => $parameters)
             {
-                $setting = DataManager::retrieve_setting_from_variable_name(
-                    $name, static::CONTEXT
-                );
+                $setting = $this->getConfigurationService()->findSettingByContextAndVariableName(static::CONTEXT, $name);
 
                 if (!$setting instanceof Setting || !$setting->delete())
                 {
@@ -121,9 +119,7 @@ abstract class Remover extends Action
             $storage_unit_name . '</em>'
         );
 
-        $data_manager = static::CONTEXT . '\DataManager';
-
-        if (!$data_manager::drop_storage_unit($storage_unit_name))
+        if (!$this->getStorageUnitRepository()->drop($storage_unit_name))
         {
             return $this->failed(
                 Translation::getInstance()->getTranslation('StorageUnitRemovalFailed', null, 'Chamilo\Core\Install') .
@@ -164,9 +160,7 @@ abstract class Remover extends Action
 
     public function getPackageBundlesCacheService(): PackageBundlesCacheService
     {
-        return DependencyInjectionContainerBuilder::getInstance()->createContainer()->get(
-            PackageBundlesCacheService::class
-        );
+        return $this->getService(PackageBundlesCacheService::class);
     }
 
     /**

@@ -1,7 +1,7 @@
 <?php
 namespace Chamilo\Core\Repository\ContentObject\ExternalCalendar\Service;
 
-use Chamilo\Libraries\Cache\Traits\CacheAdapterHandlerTrait;
+use Chamilo\Libraries\Cache\Traits\SingleCacheAdapterHandlerTrait;
 use Sabre\VObject;
 use Symfony\Component\Cache\Adapter\AdapterInterface;
 
@@ -13,7 +13,7 @@ use Symfony\Component\Cache\Adapter\AdapterInterface;
  */
 class ExternalCalendarCacheService
 {
-    use CacheAdapterHandlerTrait;
+    use SingleCacheAdapterHandlerTrait;
 
     public const PARAM_LIFETIME = 'lifetime';
     public const PARAM_PATH = 'path';

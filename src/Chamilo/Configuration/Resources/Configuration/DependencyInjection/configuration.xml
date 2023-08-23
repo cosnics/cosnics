@@ -49,7 +49,11 @@
             <argument key="$namespace">Chamilo\Configuration\Service\Configuration\Storage</argument>
         </service>
 
-        <service id="Chamilo\Configuration\Service\ConfigurationService"/>
+        <service id="Chamilo\Configuration\Service\ConfigurationService">
+            <argument key="$cacheAdapter"
+                      type="service"
+                      id="Chamilo\Configuration\Service\DataLoader\StorageConfigurationCacheAdapter"/>
+        </service>
         <service id="Chamilo\Configuration\Storage\Repository\ConfigurationRepository"/>
 
         <service id="Chamilo\Configuration\Service\Consulter\FileConfigurationConsulter"

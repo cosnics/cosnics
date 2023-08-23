@@ -65,7 +65,7 @@ interface UserRepositoryInterface
      */
     public function findUsersByIdentifiersOrderedByName(array $userIdentifiers): ArrayCollection;
 
-    public function getUserSettingForSettingAndUser(Setting $setting, User $user): ?UserSetting;
+    public function findUserSettingForSettingAndUser(Setting $setting, User $user): ?UserSetting;
 
     public function updateUser(User $user): bool;
 

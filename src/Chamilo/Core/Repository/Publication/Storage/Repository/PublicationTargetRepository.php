@@ -2,7 +2,7 @@
 namespace Chamilo\Core\Repository\Publication\Storage\Repository;
 
 use Chamilo\Core\Repository\Publication\Domain\PublicationTarget;
-use Chamilo\Libraries\Cache\Traits\CacheAdapterHandlerTrait;
+use Chamilo\Libraries\Cache\Traits\SingleCacheAdapterHandlerTrait;
 use Symfony\Component\Cache\Adapter\AdapterInterface;
 use Symfony\Component\Cache\Exception\CacheException;
 
@@ -12,7 +12,7 @@ use Symfony\Component\Cache\Exception\CacheException;
  */
 class PublicationTargetRepository
 {
-    use CacheAdapterHandlerTrait;
+    use SingleCacheAdapterHandlerTrait;
 
     public function __construct(AdapterInterface $cacheAdapter)
     {

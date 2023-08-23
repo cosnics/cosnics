@@ -1,7 +1,9 @@
 <?php
 namespace Chamilo\Core\User\Service;
 
+use Chamilo\Configuration\Service\ConfigurationService;
 use Chamilo\Core\User\Storage\DataClass\User;
+use Chamilo\Core\User\Storage\DataClass\UserSetting;
 use Chamilo\Libraries\Utilities\DatetimeUtilities;
 use Exception;
 use Symfony\Component\Cache\Adapter\FilesystemAdapter;
@@ -13,6 +15,8 @@ use Symfony\Component\Cache\Adapter\FilesystemAdapter;
  */
 class UserSettingService
 {
+    protected ConfigurationService $configurationService;
+
     protected DatetimeUtilities $datetimeUtilities;
 
     protected UserService $userService;
@@ -20,12 +24,14 @@ class UserSettingService
     protected FilesystemAdapter $userSettingsCache;
 
     public function __construct(
-        UserService $userService, FilesystemAdapter $userSettingsCache, DatetimeUtilities $datetimeUtilities
+        UserService $userService, FilesystemAdapter $userSettingsCache, DatetimeUtilities $datetimeUtilities,
+        ConfigurationService $configurationService
     )
     {
         $this->userService = $userService;
         $this->userSettingsCache = $userSettingsCache;
         $this->datetimeUtilities = $datetimeUtilities;
+        $this->configurationService = $configurationService;
     }
 
     /**
@@ -44,6 +50,34 @@ class UserSettingService
         $userTimezone = $this->getSettingForUser($user, 'Chamilo\Core\Admin', 'platform_timezone');
 
         return $this->getDatetimeUtilities()->convertDateToTimezone($date, $format, $userTimezone);
+    }
+
+    /**
+     * @throws \Chamilo\Libraries\Storage\Exception\DataClassNoResultException
+     */
+    public function createUserSettingForSettingAndUser(
+        string $context, string $variable, User $user, ?string $value = null
+    ): bool
+    {
+        $userSetting = $this->getUserSettingForSettingContextVariableAndUser($context, $variable, $user);
+
+        if (!$userSetting instanceof UserSetting)
+        {
+            $setting = $this->getConfigurationService()->findSettingByContextAndVariableName($context, $variable);
+
+            return $this->getUserService()->createUserSettingFromParameters($setting->getId(), $user->getId(), $value);
+        }
+        else
+        {
+            $userSetting->set_value($value);
+
+            return $this->getUserService()->updateUserSetting($userSetting);
+        }
+    }
+
+    public function getConfigurationService(): ConfigurationService
+    {
+        return $this->configurationService;
     }
 
     public function getDatetimeUtilities(): DatetimeUtilities
@@ -91,6 +125,14 @@ class UserSettingService
     public function getUserService(): UserService
     {
         return $this->userService;
+    }
+
+    public function getUserSettingForSettingContextVariableAndUser(string $context, string $variable, User $user
+    ): ?UserSetting
+    {
+        return $this->getUserService()->findUserSettingForSettingAndUser(
+            $this->getConfigurationService()->findSettingByContextAndVariableName($context, $variable), $user
+        );
     }
 
     public function getUserSettingsCache(): FilesystemAdapter

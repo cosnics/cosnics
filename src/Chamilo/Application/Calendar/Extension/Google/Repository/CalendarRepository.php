@@ -40,8 +40,6 @@ class CalendarRepository
 
     protected UrlGenerator $urlGenerator;
 
-    protected UserService $userService;
-
     protected UserSettingService $userSettingService;
 
     private ?Google_Service_Calendar $calendarClient = null;
@@ -50,11 +48,9 @@ class CalendarRepository
 
     public function __construct(
         ConfigurablePathBuilder $configurablePathBuilder, UrlGenerator $urlGenerator,
-        ConfigurationConsulter $configurationConsulter, UserService $userService,
-        UserSettingService $userSettingService, User $currentUser
+        ConfigurationConsulter $configurationConsulter, UserSettingService $userSettingService, User $currentUser
     )
     {
-        $this->userService = $userService;
         $this->urlGenerator = $urlGenerator;
         $this->configurablePathBuilder = $configurablePathBuilder;
         $this->configurationConsulter = $configurationConsulter;
@@ -67,7 +63,7 @@ class CalendarRepository
      */
     public function clearAccessToken(): bool
     {
-        return $this->getUserService()->createUserSettingForSettingAndUser(
+        return $this->getUserSettingService()->createUserSettingForSettingAndUser(
             Manager::CONTEXT, 'token', $this->getCurrentUser()
         );
     }
@@ -96,7 +92,7 @@ class CalendarRepository
                 ]
             );
         }
-        catch (Exception $ex)
+        catch (Exception)
         {
             $this->clearAccessToken();
 
@@ -268,11 +264,6 @@ class CalendarRepository
         return $this->urlGenerator;
     }
 
-    public function getUserService(): UserService
-    {
-        return $this->userService;
-    }
-
     protected function getUserSettingService(): UserSettingService
     {
         return $this->userSettingService;
@@ -348,7 +339,7 @@ class CalendarRepository
      */
     public function saveAccessToken(string $accessToken): bool
     {
-        return $this->getUserService()->createUserSettingForSettingAndUser(
+        return $this->getUserSettingService()->createUserSettingForSettingAndUser(
             Manager::CONTEXT, 'token', $this->getCurrentUser(), $accessToken
         );
     }

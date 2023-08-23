@@ -269,7 +269,7 @@ class UserImportForm extends FormValidator
                 }
                 else
                 {
-                    $this->getUserService()->createUserSettingForSettingAndUser(
+                    $this->getUserSettingService()->createUserSettingForSettingAndUser(
                         'Chamilo\Core\Admin', 'platform_language', $user, $csvuser['language']
                     );
 
@@ -354,7 +354,7 @@ class UserImportForm extends FormValidator
                 }
                 else
                 {
-                    $this->getUserService()->createUserSettingForSettingAndUser(
+                    $this->getUserSettingService()->createUserSettingForSettingAndUser(
                         'Chamilo\Core\Admin', 'platform_language', $user, $csvuser['language']
                     );
                 }

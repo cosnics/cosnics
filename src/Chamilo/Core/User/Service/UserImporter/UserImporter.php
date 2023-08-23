@@ -7,6 +7,7 @@ use Chamilo\Core\User\Domain\UserImporter\ImportUserResult;
 use Chamilo\Core\User\Domain\UserImporter\UserImporterResult;
 use Chamilo\Core\User\Service\UserImporter\ImportParser\ImportParserFactory;
 use Chamilo\Core\User\Service\UserService;
+use Chamilo\Core\User\Service\UserSettingService;
 use Chamilo\Core\User\Storage\DataClass\User;
 use Chamilo\Libraries\File\WebPathBuilder;
 use Chamilo\Libraries\Hashing\HashingUtilities;
@@ -39,12 +40,14 @@ class UserImporter
 
     protected UserService $userService;
 
+    protected UserSettingService $userSettingService;
+
     protected WebPathBuilder $webPathBuilder;
 
     public function __construct(
         ImportParserFactory $userImportParserFactory, UserService $userService,
         ConfigurationConsulter $configurationConsulter, HashingUtilities $hashingUtilities, MailerInterface $mailer,
-        Translator $translator, WebPathBuilder $webPathBuilder
+        Translator $translator, WebPathBuilder $webPathBuilder, UserSettingService $userSettingService
     )
     {
         $this->userImportParserFactory = $userImportParserFactory;
@@ -54,6 +57,7 @@ class UserImporter
         $this->mailer = $mailer;
         $this->translator = $translator;
         $this->webPathBuilder = $webPathBuilder;
+        $this->userSettingService = $userSettingService;
     }
 
     /**
@@ -145,6 +149,11 @@ class UserImporter
     public function getUserService(): UserService
     {
         return $this->userService;
+    }
+
+    public function getUserSettingService(): UserSettingService
+    {
+        return $this->userSettingService;
     }
 
     public function getWebPathBuilder(): WebPathBuilder
@@ -254,7 +263,7 @@ class UserImporter
             return;
         }
 
-        if (!$this->getUserService()->createUserSettingForSettingAndUser(
+        if (!$this->getUserSettingService()->createUserSettingForSettingAndUser(
             'Chamilo\Core\Admin', 'platform_language', $importUserData->getUser(), $importUserData->getLanguage()
         ))
         {

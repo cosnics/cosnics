@@ -3,9 +3,7 @@ namespace Chamilo\Core\User\Package;
 
 use Chamilo\Configuration\Storage\DataManager;
 use Chamilo\Core\User\Manager;
-use Chamilo\Core\User\Service\UserService;
 use Chamilo\Core\User\Storage\DataClass\User;
-use Chamilo\Libraries\DependencyInjection\DependencyInjectionContainerBuilder;
 use Chamilo\Libraries\DependencyInjection\Traits\DependencyInjectionContainerTrait;
 use Chamilo\Libraries\Hashing\HashingUtilities;
 use Chamilo\Libraries\Translation\Translation;
@@ -101,11 +99,7 @@ class Installer extends \Chamilo\Configuration\Package\Action\Installer
         }
         else
         {
-            $userService = DependencyInjectionContainerBuilder::getInstance()->createContainer()->get(
-                UserService::class
-            );
-
-            return $userService->createUserSettingForSettingAndUser(
+            return $this->getUserSettingService()->createUserSettingForSettingAndUser(
                 'Chamilo\Core\Admin', 'platform_language', $user, 'nl'
             );
         }

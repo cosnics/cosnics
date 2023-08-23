@@ -464,7 +464,7 @@ class UserRepository implements UserRepositoryInterface
         return new AndCondition($conditions);
     }
 
-    public function getUserSettingForSettingAndUser(Setting $setting, User $user): ?UserSetting
+    public function findUserSettingForSettingAndUser(Setting $setting, User $user): ?UserSetting
     {
         $conditions = [];
 

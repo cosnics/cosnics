@@ -4,7 +4,7 @@ namespace Chamilo\Core\Menu\Service;
 use Chamilo\Core\Menu\Architecture\Interfaces\ItemServiceInterface;
 use Chamilo\Core\Menu\Storage\DataClass\Item;
 use Chamilo\Libraries\Cache\Interfaces\CacheDataPreLoaderInterface;
-use Chamilo\Libraries\Cache\Traits\CacheAdapterHandlerTrait;
+use Chamilo\Libraries\Cache\Traits\SingleCacheAdapterHandlerTrait;
 use Chamilo\Libraries\Storage\DataClass\PropertyMapper;
 use Chamilo\Libraries\Storage\Query\OrderBy;
 use Doctrine\Common\Collections\ArrayCollection;
@@ -17,7 +17,7 @@ use Symfony\Component\Cache\Exception\CacheException;
  */
 class CachedItemService implements CacheDataPreLoaderInterface, ItemServiceInterface
 {
-    use CacheAdapterHandlerTrait;
+    use SingleCacheAdapterHandlerTrait;
 
     public const KEY_ITEMS = 'items';
 

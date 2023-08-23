@@ -33,6 +33,16 @@ class ConfigurationRepository
         return $this->getDataClassRepository()->getDataClassRepositoryCache()->truncate(Setting::class);
     }
 
+    public function createSetting(Setting $setting): bool
+    {
+        return $this->getDataClassRepository()->create($setting);
+    }
+
+    public function deleteSetting(Setting $setting): bool
+    {
+        return $this->getDataClassRepository()->delete($setting);
+    }
+
     public function findSettingByContextAndVariableName(string $context, string $variable): ?Setting
     {
         $conditions = [];
@@ -66,5 +76,10 @@ class ConfigurationRepository
     protected function getDataClassRepository(): DataClassRepository
     {
         return $this->dataClassRepository;
+    }
+
+    public function updateSetting(Setting $setting): bool
+    {
+        return $this->getDataClassRepository()->update($setting);
     }
 }

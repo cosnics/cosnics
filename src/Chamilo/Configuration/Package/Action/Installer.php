@@ -7,7 +7,6 @@ use Chamilo\Configuration\Package\Properties\Dependencies\DependencyVerifier;
 use Chamilo\Configuration\Package\Service\PackageBundlesCacheService;
 use Chamilo\Configuration\Package\Storage\DataClass\Package;
 use Chamilo\Configuration\Storage\DataClass\Registration;
-use Chamilo\Configuration\Storage\DataClass\Setting;
 use Chamilo\Libraries\DependencyInjection\DependencyInjectionContainerBuilder;
 use Chamilo\Libraries\Translation\Translation;
 use DOMDocument;
@@ -91,8 +90,12 @@ abstract class Installer extends Action
         return $this->successful();
     }
 
+    /**
+     * @throws \Symfony\Component\Cache\Exception\CacheException
+     */
     public function configure_package()
     {
+        $translator = $this->getTranslator();
         $settings_file = $this->get_path() . 'Resources/Settings/settings.xml';
 
         if (file_exists($settings_file))
@@ -101,31 +104,18 @@ abstract class Installer extends Action
 
             foreach ($xml as $name => $parameters)
             {
-                $setting = new Setting();
-                $setting->set_context(static::CONTEXT);
-                $setting->set_variable($name);
-                $setting->set_value($parameters['default']);
-
-                $user_setting = $parameters['user_setting'];
-                if ($user_setting)
+                if (!$this->getConfigurationService()->createSettingFromParameters(
+                    static::CONTEXT, $name, $parameters['default'], (bool) $parameters['user_setting']
+                ))
                 {
-                    $setting->set_user_setting($user_setting);
-                }
-                else
-                {
-                    $setting->set_user_setting(0);
-                }
-
-                if (!$setting->create())
-                {
-                    $message = Translation::get('PackageConfigurationFailed', null, 'Chamilo\Core\Install');
+                    $message = $translator->trans('PackageConfigurationFailed', [], 'Chamilo\Core\Install');
 
                     return $this->failed($message);
                 }
             }
 
             $this->add_message(
-                self::TYPE_NORMAL, Translation::get('PackageSettingsAdded', null, 'Chamilo\Core\Install')
+                self::TYPE_NORMAL, $translator->trans('PackageSettingsAdded', [], 'Chamilo\Core\Install')
             );
         }
 
@@ -139,31 +129,23 @@ abstract class Installer extends Action
      */
     public function create_storage_unit($path)
     {
+        $translator = $this->getTranslator();
         $storage_unit_info = self::parse_xml_file($path);
 
         $this->add_message(
-            self::TYPE_NORMAL,
-            Translation::getInstance()->getTranslation('StorageUnitCreation', null, 'Chamilo\Core\Install') . ': <em>' .
+            self::TYPE_NORMAL, $translator->trans('StorageUnitCreation', [], 'Chamilo\Core\Install') . ': <em>' .
             $storage_unit_info['name'] . '</em>'
         );
 
-        $data_manager = static::CONTEXT . '\Storage\DataManager';
-
-        $prefix = $data_manager::PREFIX;
         $table_name = $storage_unit_info['name'];
 
-        if (strpos($table_name, $prefix) !== 0)
-        {
-            $table_name = $prefix . $table_name;
-        }
-
-        if (!$data_manager::create_storage_unit(
+        if (!$this->getStorageUnitRepository()->create(
             $table_name, $storage_unit_info['properties'], $storage_unit_info['indexes']
         ))
         {
             return $this->failed(
-                Translation::getInstance()->getTranslation('StorageUnitCreationFailed', null, 'Chamilo\Core\Install') .
-                ': <em>' . $storage_unit_info['name'] . '</em>'
+                $translator->trans('StorageUnitCreationFailed', [], 'Chamilo\Core\Install') . ': <em>' .
+                $storage_unit_info['name'] . '</em>'
             );
         }
         else
