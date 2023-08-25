@@ -11,8 +11,10 @@ class Installer extends \Chamilo\Configuration\Package\Action\Installer
 {
     public const CONTEXT = Manager::CONTEXT;
 
-    public static function get_additional_packages()
+    public static function getAdditionalPackages($packagesList = []): array
     {
-        return ['Chamilo\Application\Calendar\Extension\Personal'];
+        $packagesList[] = 'Chamilo\Application\Calendar\Extension\Personal';
+
+        return parent::getAdditionalPackages($packagesList);
     }
 }

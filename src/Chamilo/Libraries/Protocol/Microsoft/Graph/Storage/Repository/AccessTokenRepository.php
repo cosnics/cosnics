@@ -77,7 +77,7 @@ class AccessTokenRepository implements AccessTokenRepositoryInterface
      */
     public function storeApplicationAccessToken(AccessToken $accessToken)
     {
-        $this->getUserSettingService()->createUserSettingForSettingAndUser(
+        $this->getUserSettingService()->saveUserSettingForSettingContextVariableAndUser(
             'Chamilo\Libraries\Protocol\Microsoft\Graph', 'access_token', $this->getUser(),
             json_encode($accessToken->jsonSerialize())
         );

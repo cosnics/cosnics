@@ -1,12 +1,12 @@
 <?php
 namespace Chamilo\Core\User\Service;
 
-use Chamilo\Configuration\Service\ConfigurationService;
 use Chamilo\Configuration\Storage\DataClass\Setting;
 use Chamilo\Core\Tracking\Storage\DataClass\Event;
 use Chamilo\Core\User\Storage\DataClass\User;
 use Chamilo\Core\User\Storage\DataClass\UserSetting;
 use Chamilo\Core\User\Storage\Repository\UserRepository;
+use Chamilo\Libraries\Cache\Traits\CacheAdapterHandlerTrait;
 use Chamilo\Libraries\Hashing\HashingUtilities;
 use Chamilo\Libraries\Storage\DataClass\PropertyMapper;
 use Chamilo\Libraries\Storage\Query\Condition\AndCondition;
@@ -18,6 +18,7 @@ use Chamilo\Libraries\Storage\Query\Variable\StaticConditionVariable;
 use Doctrine\Common\Collections\ArrayCollection;
 use InvalidArgumentException;
 use RuntimeException;
+use Symfony\Component\Cache\Adapter\FilesystemAdapter;
 use Symfony\Component\Translation\Translator;
 
 /**
@@ -27,8 +28,11 @@ use Symfony\Component\Translation\Translator;
  */
 class UserService
 {
+    use CacheAdapterHandlerTrait;
 
     protected Translator $translator;
+
+    protected FilesystemAdapter $userSettingsCacheAdapter;
 
     private HashingUtilities $hashingUtilities;
 
@@ -37,14 +41,15 @@ class UserService
     private UserRepository $userRepository;
 
     public function __construct(
-        UserRepository $userRepository, HashingUtilities $hashingUtilities,
-        PropertyMapper $propertyMapper, Translator $translator
+        UserRepository $userRepository, HashingUtilities $hashingUtilities, PropertyMapper $propertyMapper,
+        Translator $translator, FilesystemAdapter $userSettingsCacheAdapter
     )
     {
         $this->userRepository = $userRepository;
         $this->hashingUtilities = $hashingUtilities;
         $this->propertyMapper = $propertyMapper;
         $this->translator = $translator;
+        $this->userSettingsCacheAdapter = $userSettingsCacheAdapter;
     }
 
     public function countUsers(?Condition $condition = null): int
@@ -145,15 +150,27 @@ class UserService
     }
 
     /**
-     * @throws \Chamilo\Libraries\Storage\Exception\DataClassNoResultException
+     * @throws \Symfony\Component\Cache\Exception\CacheException
      */
     public function createUserSetting(UserSetting $userSetting): bool
     {
-        return $this->getUserRepository()->createUserSetting($userSetting);
+        if (!$this->getUserRepository()->createUserSetting($userSetting))
+        {
+            return false;
+        }
+
+        if (!$this->clearCacheDataForAdapterAndKeyParts(
+            $this->getUserSettingsCacheAdapter(), [User::class, $userSetting->get_user_id()]
+        ))
+        {
+            return false;
+        }
+
+        return true;
     }
 
     /**
-     * @throws \Chamilo\Libraries\Storage\Exception\DataClassNoResultException
+     * @throws \Symfony\Component\Cache\Exception\CacheException
      */
     public function createUserSettingFromParameters(
         string $settingIdentifier, string $userIdentifier, ?string $value = null
@@ -166,6 +183,11 @@ class UserService
         $userSetting->set_value($value);
 
         return $this->createUserSetting($userSetting);
+    }
+
+    public function deleteUserSettingsForSettingIdentifier(string $settingIdentifier): bool
+    {
+        return $this->getUserRepository()->deleteUserSettingsForSettingIdentifier($settingIdentifier);
     }
 
     /**
@@ -437,6 +459,11 @@ class UserService
         return $this->userRepository;
     }
 
+    public function getUserSettingsCacheAdapter(): FilesystemAdapter
+    {
+        return $this->userSettingsCacheAdapter;
+    }
+
     public function isUsernameAvailable(string $username): bool
     {
         return !$this->findUserByUsername($username) instanceof User;
@@ -450,20 +477,21 @@ class UserService
         );
     }
 
-    /**
-     * @throws \Chamilo\Libraries\Storage\Exception\DataClassNoResultException
-     */
     public function updateUser(User $user): bool
     {
         return $this->getUserRepository()->updateUser($user);
     }
 
-    /**
-     * @throws \Chamilo\Libraries\Storage\Exception\DataClassNoResultException
-     */
     public function updateUserSetting(UserSetting $userSetting): bool
     {
         return $this->getUserRepository()->updateUserSetting($userSetting);
+    }
+
+    public function updateUserSettingValue(UserSetting $userSetting, ?string $value = null): bool
+    {
+        $userSetting->set_value($value);
+
+        return $this->updateUserSetting($userSetting);
     }
 }
 

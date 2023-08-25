@@ -23,7 +23,7 @@ class Installer extends \Chamilo\Configuration\Package\Action\Installer
 
     public function create_admin_account()
     {
-        $values = $this->get_form_values();
+        $values = $this->getFormValues();
 
         $user = new User();
         $user->set_lastname($values['admin_surname']);
@@ -52,7 +52,7 @@ class Installer extends \Chamilo\Configuration\Package\Action\Installer
 
     public function create_anonymous_user()
     {
-        $values = $this->get_form_values();
+        $values = $this->getFormValues();
 
         $user = new User();
         $user->set_lastname(Translation::get('Anonymous'));
@@ -99,7 +99,7 @@ class Installer extends \Chamilo\Configuration\Package\Action\Installer
         }
         else
         {
-            return $this->getUserSettingService()->createUserSettingForSettingAndUser(
+            return $this->getUserSettingService()->saveUserSettingForSettingContextVariableAndUser(
                 'Chamilo\Core\Admin', 'platform_language', $user, 'nl'
             );
         }
@@ -110,7 +110,7 @@ class Installer extends \Chamilo\Configuration\Package\Action\Installer
      */
     public function extra(): bool
     {
-        $values = $this->get_form_values();
+        $values = $this->getFormValues();
 
         $settings[] = [Manager::CONTEXT, 'allow_registration', $values['self_reg']];
 

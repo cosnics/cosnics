@@ -263,7 +263,7 @@ class UserImporter
             return;
         }
 
-        if (!$this->getUserSettingService()->createUserSettingForSettingAndUser(
+        if (!$this->getUserSettingService()->saveUserSettingForSettingContextVariableAndUser(
             'Chamilo\Core\Admin', 'platform_language', $importUserData->getUser(), $importUserData->getLanguage()
         ))
         {

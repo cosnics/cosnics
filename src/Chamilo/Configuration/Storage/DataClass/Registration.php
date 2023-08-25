@@ -1,14 +1,13 @@
 <?php
 namespace Chamilo\Configuration\Storage\DataClass;
 
-use Chamilo\Configuration\Package\Storage\DataClass\Package;
 use Chamilo\Configuration\Service\Consulter\RegistrationConsulter;
 use Chamilo\Libraries\DependencyInjection\DependencyInjectionContainerBuilder;
 use Chamilo\Libraries\Storage\DataClass\DataClass;
 
 /**
- * @package admin.lib
- * @author  Hans De Bisschop
+ * @package Chamilo\Configuration\Storage\DataClass
+ * @author  Hans De Bisschop <hans.de.bisschop@ehb.be>
  */
 class Registration extends DataClass
 {
@@ -54,7 +53,7 @@ class Registration extends DataClass
             return $this->update();
         }
 
-        true;
+        return true;
     }
 
     public function can_be_activated()
@@ -92,9 +91,7 @@ class Registration extends DataClass
     }
 
     /**
-     * Get the default properties of registrations.
-     *
-     * @return array The property names.
+     * @return string[]
      */
     public static function getDefaultPropertyNames(array $extendedPropertyNames = []): array
     {
@@ -151,16 +148,6 @@ class Registration extends DataClass
     public function get_name()
     {
         return $this->getDefaultProperty(self::PROPERTY_NAME);
-    }
-
-    public function get_package()
-    {
-        if (!isset($this->package))
-        {
-            $this->package = Package::get($this->get_context());
-        }
-
-        return $this->package;
     }
 
     /**

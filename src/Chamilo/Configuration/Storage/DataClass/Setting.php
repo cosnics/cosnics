@@ -24,11 +24,25 @@ class Setting extends DataClass
     public const PROPERTY_VALUE = 'value';
     public const PROPERTY_VARIABLE = 'variable';
 
+    /**
+     * @return bool
+     * @throws \Chamilo\Libraries\Storage\Exception\ConnectionException
+     * @throws \Symfony\Component\Cache\Exception\CacheException
+     * @deprecated Use ConfigurationService::createSetting
+     */
     public function create(): bool
     {
         return $this->on_change(parent::create());
     }
 
+    /**
+     * @return bool
+     * @throws \Chamilo\Libraries\Storage\Exception\ConnectionException
+     * @throws \Chamilo\Libraries\Storage\Exception\DataClassNoResultException
+     * @throws \ReflectionException
+     * @throws \Symfony\Component\Cache\Exception\CacheException
+     * @deprecated Use ConfigurationService::deleteSetting
+     */
     public function delete(): bool
     {
         if (!parent::delete())
@@ -196,6 +210,12 @@ class Setting extends DataClass
         $this->setDefaultProperty(self::PROPERTY_VARIABLE, $variable);
     }
 
+    /**
+     * @return bool
+     * @throws \Chamilo\Libraries\Storage\Exception\ConnectionException
+     * @throws \Symfony\Component\Cache\Exception\CacheException
+     * @deprecated Use ConfigurationService::updateSetting
+     */
     public function update(): bool
     {
         return $this->on_change(parent::update());

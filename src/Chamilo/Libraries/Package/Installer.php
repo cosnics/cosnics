@@ -8,17 +8,11 @@ class Installer extends \Chamilo\Configuration\Package\Action\Installer
 {
     public const CONTEXT = 'Chamilo\Libraries';
 
-    /**
-     * Returns the list with extra installable packages that are connected to this package
-     *
-     * @return string[]
-     */
-    public static function get_additional_packages()
+    public static function getAdditionalPackages($packagesList = []): array
     {
-        $packages = [];
-        $packages[] = 'Chamilo\Libraries\Calendar';
-        $packages[] = 'Chamilo\Libraries\Rights';
+        $packagesList[] = 'Chamilo\Libraries\Calendar';
+        $packagesList[] = 'Chamilo\Libraries\Rights';
 
-        return $packages;
+        return parent::getAdditionalPackages($packagesList);
     }
 }

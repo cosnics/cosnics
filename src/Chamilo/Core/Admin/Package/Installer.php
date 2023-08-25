@@ -71,7 +71,7 @@ class Installer extends \Chamilo\Configuration\Package\Action\Installer
      */
     public function update_settings()
     {
-        $values = $this->get_form_values();
+        $values = $this->getFormValues();
 
         $settings = [];
         $settings[] = ['Chamilo\Core\Admin', 'site_name', $values['site_name']];

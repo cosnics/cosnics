@@ -58,7 +58,7 @@ class UserService
                 $azureActiveDirectoryUserIdentifier = $azureUser->getId();
             }
 
-            $this->getUserSettingService()->createUserSettingForSettingAndUser(
+            $this->getUserSettingService()->saveUserSettingForSettingContextVariableAndUser(
                 'Chamilo\Libraries\Protocol\Microsoft\Graph', 'external_user_id', $user,
                 $azureActiveDirectoryUserIdentifier
             );

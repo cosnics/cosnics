@@ -1,18 +1,10 @@
 <?php
 namespace Chamilo\Core\Admin\Form;
 
+use Chamilo\Configuration\Service\ConfigurationService;
 use Chamilo\Configuration\Storage\DataClass\Setting;
-use Chamilo\Core\User\Manager;
 use Chamilo\Core\User\Storage\DataClass\User;
-use Chamilo\Core\User\Storage\DataClass\UserSetting;
-use Chamilo\Core\User\Storage\DataManager;
 use Chamilo\Libraries\Format\Form\FormValidator;
-use Chamilo\Libraries\Storage\Parameters\DataClassRetrieveParameters;
-use Chamilo\Libraries\Storage\Query\Condition\AndCondition;
-use Chamilo\Libraries\Storage\Query\Condition\EqualityCondition;
-use Chamilo\Libraries\Storage\Query\Variable\PropertyConditionVariable;
-use Chamilo\Libraries\Storage\Query\Variable\StaticConditionVariable;
-use Chamilo\Libraries\Translation\Translation;
 use Chamilo\Libraries\Utilities\StringUtilities;
 use DOMDocument;
 
@@ -27,22 +19,18 @@ use DOMDocument;
 class ConfigurationForm extends FormValidator
 {
 
-    private $configuration;
+    private array $configuration;
 
-    private $context;
+    private string $context;
 
-    private $is_user_setting_form;
+    private bool $is_user_setting_form;
 
     /**
-     * Constructor.
-     *
-     * @param $application string The name of the application.
-     * @param $form_name   string The name to use in the form tag.
-     * @param $method      string The method to use (self::FORM_METHOD_POST or self::FORM_METHOD_GET).
-     * @param $action      string The URL to which the form should be submitted.
+     * @throws \QuickformException
      */
     public function __construct(
-        $context, $form_name, $method = self::FORM_METHOD_POST, $action = null, $is_user_setting_form = false
+        string $context, string $form_name, string $method = self::FORM_METHOD_POST, ?string $action = null,
+        bool $is_user_setting_form = false
     )
     {
         parent::__construct($form_name, $method, $action);
@@ -61,11 +49,16 @@ class ConfigurationForm extends FormValidator
      * Builds a form to create or edit a learning object.
      * Creates fields for default learning object properties. The
      * result of this function is equal to build_creation_form()'s, but that one may be overridden to extend the form.
+     *
+     * @throws \QuickformException
      */
-    private function build_form()
+    private function build_form(): void
     {
         $context = $this->context;
         $configuration = $this->configuration;
+
+        $translator = $this->getTranslator();
+        $stringUtilities = $this->getStringUtilities();
 
         if (is_array($configuration['settings']) && count($configuration['settings']) > 0)
         {
@@ -86,9 +79,8 @@ class ConfigurationForm extends FormValidator
                     {
                         $this->addElement('html', '<fieldset>');
                         $this->addElement(
-                            'html', '<legend>' . Translation::get(
-                                (string) StringUtilities::getInstance()->createString($category_name)->upperCamelize(),
-                                null, $context
+                            'html', '<legend>' . $translator->trans(
+                                (string) $stringUtilities->createString($category_name)->upperCamelize(), [], $context
                             ) . '</legend>'
                         );
                         $has_settings = true;
@@ -97,18 +89,16 @@ class ConfigurationForm extends FormValidator
                     if ($this->isLocked($setting))
                     {
                         $this->addElement(
-                            'static', $name, Translation::get(
-                            (string) StringUtilities::getInstance()->createString($name)->upperCamelize(), null,
-                            $context
+                            'static', $name, $translator->trans(
+                            (string) $stringUtilities->createString($name)->upperCamelize(), [], $context
                         )
                         );
                     }
                     elseif ($setting['field'] == 'text')
                     {
                         $this->add_textfield(
-                            $name, Translation::get(
-                            (string) StringUtilities::getInstance()->createString($name)->upperCamelize(), null,
-                            $context
+                            $name, $translator->trans(
+                            (string) $stringUtilities->createString($name)->upperCamelize(), [], $context
                         ), ($setting['required'] == 'true')
                         );
 
@@ -125,7 +115,7 @@ class ConfigurationForm extends FormValidator
                                     }
 
                                     $this->addRule(
-                                        $name, Translation::get($validation['message'], null, $context),
+                                        $name, $translator->trans($validation['message'], [], $context),
                                         $validation['rule'], $validation['format']
                                     );
                                 }
@@ -135,27 +125,24 @@ class ConfigurationForm extends FormValidator
                     elseif ($setting['field'] == 'html_editor')
                     {
                         $this->add_html_editor(
-                            $name, Translation::get(
-                            (string) StringUtilities::getInstance()->createString($name)->upperCamelize(), null,
-                            $context
+                            $name, $translator->trans(
+                            (string) $stringUtilities->createString($name)->upperCamelize(), [], $context
                         ), ($setting['required'] == 'true')
                         );
                     }
                     elseif ($setting['field'] == 'image_uploader')
                     {
                         $this->addImageUploader(
-                            $name, Translation::get(
-                            (string) StringUtilities::getInstance()->createString($name)->upperCamelize(), null,
-                            $context
-                        ), ($setting['required'] == 'true')
+                            $name, $translator->trans(
+                            (string) $stringUtilities->createString($name)->upperCamelize(), [], $context
+                        )
                         );
                     }
                     elseif ($setting['field'] == 'password')
                     {
                         $this->add_password(
-                            $name, Translation::get(
-                            (string) StringUtilities::getInstance()->createString($name)->upperCamelize(), null,
-                            $context
+                            $name, $translator->trans(
+                            (string) $stringUtilities->createString($name)->upperCamelize(), [], $context
                         ), ($setting['required'] == 'true')
                         );
                     }
@@ -182,34 +169,32 @@ class ConfigurationForm extends FormValidator
                             {
                                 if ($setting['field'] == 'checkbox' || $setting['field'] == 'toggle')
                                 {
-                                    $group[] = &$this->createElement(
+                                    $group[] = $this->createElement(
                                         $setting['field'], $name, null, null, $option_value
                                     );
                                 }
                                 else
                                 {
-                                    $group[] = &$this->createElement(
-                                        $setting['field'], $name, null, Translation::get(
-                                        (string) StringUtilities::getInstance()->createString($option_name)
-                                            ->upperCamelize(), null, $context
+                                    $group[] = $this->createElement(
+                                        $setting['field'], $name, null, $translator->trans(
+                                        (string) $stringUtilities->createString($option_name)->upperCamelize(), [],
+                                        $context
                                     ), $option_value
                                     );
                                 }
                             }
 
                             $this->addGroup(
-                                $group, $name, Translation::get(
-                                (string) StringUtilities::getInstance()->createString($name)->upperCamelize(), null,
-                                $context
+                                $group, $name, $translator->trans(
+                                (string) $stringUtilities->createString($name)->upperCamelize(), [], $context
                             ), '', false
                             );
                         }
                         elseif ($setting['field'] == 'select')
                         {
                             $this->addElement(
-                                'select', $name, Translation::get(
-                                (string) StringUtilities::getInstance()->createString($name)->upperCamelize(), null,
-                                $context
+                                'select', $name, $translator->trans(
+                                (string) $stringUtilities->createString($name)->upperCamelize(), [], $context
                             ), $options, ['class' => 'form-control']
                             );
                         }
@@ -224,10 +209,10 @@ class ConfigurationForm extends FormValidator
 
             $buttons = [];
             $buttons[] = $this->createElement(
-                'style_submit_button', 'submit', Translation::get('Save', [], StringUtilities::LIBRARIES)
+                'style_submit_button', 'submit', $translator->trans('Save', [], StringUtilities::LIBRARIES)
             );
             $buttons[] = $this->createElement(
-                'style_reset_button', 'reset', Translation::get('Reset', [], StringUtilities::LIBRARIES)
+                'style_reset_button', 'reset', $translator->trans('Reset', [], StringUtilities::LIBRARIES)
             );
             $this->addGroup($buttons, 'buttons', null, '&nbsp;', false);
         }
@@ -235,9 +220,14 @@ class ConfigurationForm extends FormValidator
         {
             $this->addElement(
                 'html', '<div class="warning-message">' .
-                Translation::get('NoConfigurableSettings', [], StringUtilities::LIBRARIES) . '</div>'
+                $translator->trans('NoConfigurableSettings', [], StringUtilities::LIBRARIES) . '</div>'
             );
         }
+    }
+
+    public function getConfigurationService(): ConfigurationService
+    {
+        return $this->getService(ConfigurationService::class);
     }
 
     protected function getUser(): ?User
@@ -245,29 +235,29 @@ class ConfigurationForm extends FormValidator
         return $this->getService(User::class);
     }
 
-    protected function isHidden($setting)
+    protected function isHidden($setting): bool
     {
         return isset($setting['hidden']) && ($setting['hidden'] == 1 || $setting['hidden'] == 'true');
     }
 
-    protected function isLocked($setting)
+    protected function isLocked($setting): bool
     {
         return isset($setting['locked']) && ($setting['locked'] == 1 || $setting['locked'] == 'true');
     }
 
-    protected function isUserSetting($setting)
+    protected function isUserSetting($setting): bool
     {
         return isset($setting['user_setting']) && ($setting['user_setting'] == 1 || $setting['user_setting'] == 'true');
     }
 
-    private function is_valid_validation_method($validation_method)
+    private function is_valid_validation_method($validation_method): bool
     {
         $available_validation_methods = ['regex', 'email', 'lettersonly', 'alphanumeric', 'numeric'];
 
         return in_array($validation_method, $available_validation_methods);
     }
 
-    public function parse_application_settings()
+    public function parse_application_settings(): array
     {
         $context = $this->context;
 
@@ -278,14 +268,12 @@ class ConfigurationForm extends FormValidator
         {
             $doc = new DOMDocument();
             $doc->load($file);
-            $object = $doc->getElementsByTagname('package')->item(0);
-            $name = $object->getAttribute('context');
 
             // Get categories
-            $categories = $doc->getElementsByTagname('category');
+            $categories = $doc->getElementsByTagName('category');
             $settings = [];
 
-            foreach ($categories as $index => $category)
+            foreach ($categories as $category)
             {
                 $category_name = $category->getAttribute('name');
                 $category_properties = [];
@@ -294,11 +282,11 @@ class ConfigurationForm extends FormValidator
                 $properties = $category->getElementsByTagname('setting');
                 $attributes = ['field', 'default', 'locked', 'user_setting', 'hidden'];
 
-                foreach ($properties as $index => $property)
+                foreach ($properties as $property)
                 {
                     $property_info = [];
 
-                    foreach ($attributes as $index => $attribute)
+                    foreach ($attributes as $attribute)
                     {
                         if ($property->hasAttribute($attribute))
                         {
@@ -314,7 +302,7 @@ class ConfigurationForm extends FormValidator
                         {
                             $property_options_attributes = ['type', 'source'];
 
-                            foreach ($property_options_attributes as $index => $options_attribute)
+                            foreach ($property_options_attributes as $options_attribute)
                             {
                                 if ($property_options->hasAttribute($options_attribute))
                                 {
@@ -363,7 +351,7 @@ class ConfigurationForm extends FormValidator
                         {
                             $property_availability_attributes = ['source'];
 
-                            foreach ($property_availability_attributes as $index => $availability_attribute)
+                            foreach ($property_availability_attributes as $availability_attribute)
                             {
                                 if ($property_availability->hasAttribute($availability_attribute))
                                 {
@@ -393,13 +381,15 @@ class ConfigurationForm extends FormValidator
      * Traditionally, you will want to extend this method so it sets default for your learning
      * object type's additional properties.
      *
-     * @param $defaults array Default values for this form's parameters.
+     * @param $defaultValues array Default values for this form's parameters.
+     *
+     * @throws \QuickformException
      */
-    public function setDefaults($defaults = [], $filter = null)
+    public function setDefaults(array $defaultValues = [], $filter = null): void
     {
         $configuration = $this->configuration;
 
-        foreach ($configuration['settings'] as $category_name => $settings)
+        foreach ($configuration['settings'] as $settings)
         {
             foreach ($settings as $name => $setting)
             {
@@ -415,21 +405,18 @@ class ConfigurationForm extends FormValidator
 
                 if (isset($configuration_value) && ($configuration_value == 0 || !empty($configuration_value)))
                 {
-                    $defaults[$name] = $configuration_value;
+                    $defaultValues[$name] = $configuration_value;
                 }
                 else
                 {
-                    $defaults[$name] = $setting['default'];
+                    $defaultValues[$name] = $setting['default'];
                 }
             }
         }
 
-        parent::setDefaults($defaults);
+        parent::setDefaults($defaultValues);
     }
 
-    /**
-     * @param $setting array
-     */
     public function setting_is_available(array $setting)
     {
         $connector_class = $this->context . '\SettingsConnector';
@@ -438,7 +425,7 @@ class ConfigurationForm extends FormValidator
         $isHidden = $this->isHidden($setting);
 
         $has_availability_method = isset($setting['availability']) && isset($setting['availability']['source']) &&
-            StringUtilities::getInstance()->hasValue($setting['availability']['source']);
+            $this->getStringUtilities()->hasValue($setting['availability']['source']);
 
         if ($this->is_user_setting_form)
         {
@@ -446,9 +433,9 @@ class ConfigurationForm extends FormValidator
             {
                 if ($has_availability_method)
                 {
-                    $availability_method_exists = ($has_availability_method && method_exists(
-                            $connector_class, $setting['availability']['source']
-                        ));
+                    $availability_method_exists = method_exists(
+                        $connector_class, $setting['availability']['source']
+                    );
                     if ($availability_method_exists)
                     {
                         return call_user_func([$connector_class, $setting['availability']['source']]);
@@ -478,56 +465,40 @@ class ConfigurationForm extends FormValidator
      * Updates the configuration.
      *
      * @return bool True if the update succeeded, false otherwise.
+     * @throws \Symfony\Component\Cache\Exception\CacheException
+     * @throws \QuickformException
      */
-    public function update_configuration()
+    public function update_configuration(): bool
     {
         $values = $this->exportValues();
+
+        $configurationService = $this->getConfigurationService();
         $configuration = $this->configuration;
         $context = $this->context;
         $problems = 0;
 
-        foreach ($configuration['settings'] as $category_name => $settings)
+        foreach ($configuration['settings'] as $settings)
         {
             foreach ($settings as $name => $setting)
             {
                 if (!$this->isLocked($setting) && !$this->isHidden($setting))
                 {
-                    $platform_setting = \Chamilo\Configuration\Storage\DataManager::retrieve_setting_from_variable_name(
-                        $name, $context
-                    );
+                    $platformSetting = $configurationService->findSettingByContextAndVariableName($context, $name);
 
-                    if (!$platform_setting instanceof Setting)
+                    if (!$platformSetting instanceof Setting)
                     {
-                        $platform_setting = new Setting();
-                        $platform_setting->set_context($context);
-                        $platform_setting->set_variable($name);
-                        $platform_setting->set_user_setting($setting['locked'] ? 1 : 0);
-
-                        if (isset($values[$name]))
-                        {
-                            $platform_setting->set_value($values[$name]);
-                        }
-                        else
-                        {
-                            $platform_setting->set_value(0);
-                        }
-                        if (!$platform_setting->create())
+                        if (!$configurationService->createSettingFromParameters(
+                            $context, $name, $values[$name] ?: 0, (bool) $setting['locked']
+                        ))
                         {
                             $problems ++;
                         }
                     }
                     else
                     {
+                        $platformSetting->set_value($values[$name] ?: 0);
 
-                        if (isset($values[$name]))
-                        {
-                            $platform_setting->set_value($values[$name]);
-                        }
-                        else
-                        {
-                            $platform_setting->set_value(0);
-                        }
-                        if (!$platform_setting->update())
+                        if (!$configurationService->updateSetting($platformSetting))
                         {
                             $problems ++;
                         }
@@ -546,12 +517,16 @@ class ConfigurationForm extends FormValidator
         }
     }
 
-    public function update_user_settings()
+    /**
+     * @throws \QuickformException
+     * @throws \Symfony\Component\Cache\Exception\CacheException
+     */
+    public function update_user_settings(): bool
     {
         $values = $this->exportValues();
         $problems = 0;
 
-        foreach ($this->configuration['settings'] as $category_name => $settings)
+        foreach ($this->configuration['settings'] as $settings)
         {
             foreach ($settings as $name => $setting)
             {
@@ -562,57 +537,15 @@ class ConfigurationForm extends FormValidator
 
                 if ($setting['locked'] != 'true' && $setting['user_setting'])
                 {
-                    if (isset($values[$name]))
+                    if (!$this->getUserSettingService()->saveUserSettingForSettingContextVariableAndUser(
+                        $this->context, $name, $this->getUser(), $values[$name] ?? 0
+                    ))
                     {
-                        $value = $values[$name];
-                    }
-                    else
-                    {
-                        $value = 0;
-                    }
-
-                    $setting = \Chamilo\Configuration\Storage\DataManager::retrieve_setting_from_variable_name(
-                        $name, $this->context
-                    );
-
-                    $conditions = [];
-                    $conditions[] = new EqualityCondition(
-                        new PropertyConditionVariable(UserSetting::class, UserSetting::PROPERTY_SETTING_ID),
-                        new StaticConditionVariable($setting->get_id())
-                    );
-                    $conditions[] = new EqualityCondition(
-                        new PropertyConditionVariable(UserSetting::class, UserSetting::PROPERTY_USER_ID),
-                        new StaticConditionVariable($this->getSession()->get(Manager::SESSION_USER_ID))
-                    );
-                    $condition = new AndCondition($conditions);
-                    $user_setting = DataManager::retrieve(
-                        UserSetting::class, new DataClassRetrieveParameters($condition)
-                    );
-
-                    if ($user_setting)
-                    {
-                        $user_setting->set_value($value);
-                        if (!$user_setting->update())
-                        {
-                            $problems ++;
-                        }
-                    }
-                    else
-                    {
-                        $user_setting = new UserSetting();
-                        $user_setting->set_setting_id($setting->get_id());
-                        $user_setting->set_value($value);
-                        $user_setting->set_user_id($this->getSession()->get(Manager::SESSION_USER_ID));
-                        if (!$user_setting->create())
-                        {
-                            $problems ++;
-                        }
+                        $problems ++;
                     }
                 }
             }
         }
-
-        $this->getUserSettingService()->clearSettingsCacheforUser($this->getUser());
 
         if ($problems > 0)
         {

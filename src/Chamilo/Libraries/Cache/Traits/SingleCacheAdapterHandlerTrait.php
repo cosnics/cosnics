@@ -49,6 +49,11 @@ trait SingleCacheAdapterHandlerTrait
         return $this->hasCacheDataForAdapterAndKey($this->getCacheAdapter(), $cacheKey);
     }
 
+    public function hasCacheDataForKeyParts(string $cacheKey): bool
+    {
+        return $this->hasCacheDataForAdapterAndKeyParts($this->getCacheAdapter(), $cacheKey);
+    }
+
     /**
      * @param string $cacheKey
      * @param callable $dataSource
@@ -117,5 +122,15 @@ trait SingleCacheAdapterHandlerTrait
     public function saveCacheDataForKey(string $cacheKey, $cacheData, ?int $lifetime = null): bool
     {
         return $this->saveCacheDataForAdapterAndKey($this->getCacheAdapter(), $cacheKey, $cacheData, $lifetime);
+    }
+
+    /**
+     * @param string[] $cacheKeyParts
+     *
+     * @throws \Symfony\Component\Cache\Exception\CacheException
+     */
+    public function saveCacheDataForKeyParts(array $cacheKeyParts, $cacheData, ?int $lifetime = null): bool
+    {
+        return $this->saveCacheDataForAdapterAndKeyParts($this->getCacheAdapter(), $cacheKeyParts, $cacheData, $lifetime);
     }
 }

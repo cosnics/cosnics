@@ -2,9 +2,7 @@
 namespace Chamilo\Configuration\Package\Action;
 
 use Chamilo\Configuration\Package\Action;
-use Chamilo\Configuration\Storage\DataClass\Registration;
-use Chamilo\Configuration\Storage\DataManager;
-use Chamilo\Libraries\Translation\Translation;
+use Chamilo\Configuration\Service\RegistrationService;
 
 /**
  * @package Chamilo\Configuration\Package\Action
@@ -14,42 +12,31 @@ use Chamilo\Libraries\Translation\Translation;
  */
 abstract class Deactivator extends Action
 {
-
-    public function run()
+    public function run(): bool
     {
-        $registration = DataManager::retrieveRegistrationByContext(static::CONTEXT);
+        $translator = $this->getTranslator();
 
-        if ($registration->is_active())
+        if (!$this->getRegistrationService()->deactivateRegistrationForContext(static::CONTEXT))
         {
-            $registration->set_status(Registration::STATUS_INACTIVE);
-
-            if (!$registration->update())
-            {
-                return $this->failed(Translation::get('DeactivationFailed'));
-            }
-            else
-            {
-                $this->add_message(self::TYPE_NORMAL, Translation::get('DeactivationSuccessful'));
-            }
-
-            return $this->successful();
+            return $this->failed($translator->trans('DeactivationFailed', [], 'Chamilo\Configuration\Package'));
         }
         else
         {
-            return $this->failed(Translation::get('PackageAlreadyInactive'));
+            $this->add_message(
+                self::TYPE_NORMAL, $translator->trans('DeactivationSuccessful', [], 'Chamilo\Configuration\Package')
+            );
         }
     }
 
-    /**
-     * Creates an application-specific installer.
-     *
-     * @param $context string The namespace of the package for which we want to start the installer.
-     * @param $values  string The form values passed on by the wizard.
-     */
-    public static function factory($context)
+    public static function factory(string $context): Deactivator
     {
         $class = $context . '\Package\Deactivator';
 
         return new $class();
+    }
+
+    public function getRegistrationService(): RegistrationService
+    {
+        return $this->getService(RegistrationService::class);
     }
 }

@@ -60,6 +60,14 @@ trait CacheAdapterHandlerTrait
     }
 
     /**
+     * @param string[] $cacheKeyParts
+     */
+    public function hasCacheDataForAdapterAndKeyParts(AdapterInterface $cacheAdapter, array $cacheKeyParts): bool
+    {
+        return $this->hasCacheDataForAdapterAndKey($cacheAdapter, $this->getCacheKeyForParts($cacheKeyParts));
+    }
+
+    /**
      * @param string $cacheKey
      * @param callable $dataSource
      *
@@ -180,5 +188,17 @@ trait CacheAdapterHandlerTrait
         {
             throw new CacheException('Could not save cache in ' . static::class . 'for key ' . $cacheKey);
         }
+    }
+
+    /**
+     * @throws \Symfony\Component\Cache\Exception\CacheException
+     */
+    public function saveCacheDataForAdapterAndKeyParts(
+        AdapterInterface $cacheAdapter, array $cacheKeyParts, $cacheData, ?int $lifetime = null
+    ): bool
+    {
+        return $this->saveCacheDataForAdapterAndKey(
+            $cacheAdapter, $this->getCacheKeyForParts($cacheKeyParts), $cacheData, $lifetime
+        );
     }
 }

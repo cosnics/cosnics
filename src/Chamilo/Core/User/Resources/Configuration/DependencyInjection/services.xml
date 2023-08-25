@@ -30,7 +30,7 @@
         <service id="Chamilo\Core\User\Service\UserImporter\ImportParser\ImportParserFactory"/>
         <service id="Chamilo\Core\User\Service\UserService"/>
         <service id="Chamilo\Core\User\Service\UserSettingService">
-            <argument key="$userSettingsCache"
+            <argument key="$userSettingsCacheAdapter"
                       type="service"
                       id="Chamilo\Core\User\Service\UserSettingCacheService"/>
         </service>

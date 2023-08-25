@@ -87,7 +87,7 @@ class PackageRemover extends AbstractAction
     {
         $remover = Remover::factory($context);
 
-        $additionalPackages = $remover->get_additional_packages();
+        $additionalPackages = $remover->getAdditionalPackages();
 
         foreach ($additionalPackages as $additionalPackage)
         {

@@ -13,7 +13,7 @@ class Installer extends \Chamilo\Configuration\Package\Action\Installer
 
     public function createRootGroup(): bool
     {
-        $values = $this->get_form_values();
+        $values = $this->getFormValues();
 
         $group = new Group();
         $group->set_name($values['organization_name']);

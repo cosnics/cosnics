@@ -50,9 +50,15 @@
         </service>
 
         <service id="Chamilo\Configuration\Service\ConfigurationService">
-            <argument key="$cacheAdapter"
+            <argument key="$configurationCacheAdapter"
+                      type="service"
+                      id="Chamilo\Configuration\Service\ConfigurationCacheAdapter"/>
+            <argument key="$storageConfigurationCacheAdapter"
                       type="service"
                       id="Chamilo\Configuration\Service\DataLoader\StorageConfigurationCacheAdapter"/>
+            <argument key="$userSettingsCacheAdapter"
+                      type="service"
+                      id="Chamilo\Core\User\Service\UserSettingCacheService"/>
         </service>
         <service id="Chamilo\Configuration\Storage\Repository\ConfigurationRepository"/>
 

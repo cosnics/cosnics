@@ -1,8 +1,8 @@
 <?php
 namespace Chamilo\Configuration\Service\DataLoader;
 
+use Chamilo\Configuration\Service\RegistrationService;
 use Chamilo\Configuration\Storage\DataClass\Registration;
-use Chamilo\Configuration\Storage\Repository\RegistrationRepository;
 use Chamilo\Libraries\Cache\Interfaces\CacheDataPreLoaderInterface;
 use Chamilo\Libraries\Cache\Traits\SimpleCacheAdapterHandlerTrait;
 use Chamilo\Libraries\Cache\Traits\SimpleCacheDataPreLoaderTrait;
@@ -23,17 +23,17 @@ class RegistrationCacheDataPreLoader implements CacheDataPreLoaderInterface
     public const REGISTRATION_INTEGRATION = 3;
     public const REGISTRATION_TYPE = 2;
 
-    private RegistrationRepository $registrationRepository;
+    private RegistrationService $registrationService;
 
     private StringUtilities $stringUtilities;
 
     public function __construct(
-        AdapterInterface $cacheAdapter, StringUtilities $stringUtilities, RegistrationRepository $registrationRepository
+        AdapterInterface $cacheAdapter, StringUtilities $stringUtilities, RegistrationService $registrationService
     )
     {
         $this->cacheAdapter = $cacheAdapter;
         $this->stringUtilities = $stringUtilities;
-        $this->registrationRepository = $registrationRepository;
+        $this->registrationService = $registrationService;
     }
 
     /**
@@ -44,7 +44,7 @@ class RegistrationCacheDataPreLoader implements CacheDataPreLoaderInterface
     {
         $registrations = [];
 
-        $registrationRecords = $this->getRegistrationRepository()->findRegistrationsAsRecords();
+        $registrationRecords = $this->getRegistrationService()->findRegistrationsAsRecords();
 
         foreach ($registrationRecords as $registrationRecord)
         {
@@ -75,9 +75,9 @@ class RegistrationCacheDataPreLoader implements CacheDataPreLoaderInterface
         return $registrations;
     }
 
-    public function getRegistrationRepository(): RegistrationRepository
+    public function getRegistrationService(): RegistrationService
     {
-        return $this->registrationRepository;
+        return $this->registrationService;
     }
 
     /**

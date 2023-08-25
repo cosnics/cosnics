@@ -63,7 +63,7 @@ class CalendarRepository
      */
     public function clearAccessToken(): bool
     {
-        return $this->getUserSettingService()->createUserSettingForSettingAndUser(
+        return $this->getUserSettingService()->saveUserSettingForSettingContextVariableAndUser(
             Manager::CONTEXT, 'token', $this->getCurrentUser()
         );
     }
@@ -339,7 +339,7 @@ class CalendarRepository
      */
     public function saveAccessToken(string $accessToken): bool
     {
-        return $this->getUserSettingService()->createUserSettingForSettingAndUser(
+        return $this->getUserSettingService()->saveUserSettingForSettingContextVariableAndUser(
             Manager::CONTEXT, 'token', $this->getCurrentUser(), $accessToken
         );
     }

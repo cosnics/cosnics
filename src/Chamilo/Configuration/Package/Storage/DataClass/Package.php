@@ -227,7 +227,6 @@ class Package extends DataClass
 
     /**
      * @return bool
-     * @throws \Exception
      */
     public function has_dependencies()
     {
@@ -236,8 +235,6 @@ class Package extends DataClass
 
     /**
      * @param string[] $additional
-     *
-     * @throws \Exception
      */
     public function setAdditional($additional)
     {
@@ -246,8 +243,6 @@ class Package extends DataClass
 
     /**
      * @param int $coreInstall
-     *
-     * @throws \Exception
      */
     public function setCoreInstall($coreInstall)
     {
@@ -256,8 +251,6 @@ class Package extends DataClass
 
     /**
      * @param int $defaultInstall
-     *
-     * @throws \Exception
      */
     public function setDefaultInstall($defaultInstall)
     {
@@ -268,8 +261,6 @@ class Package extends DataClass
      * Sets the extra of this Package.
      *
      * @param string[][] $resources
-     *
-     * @throws \Exception
      */
     public function setResources($resources)
     {
@@ -278,8 +269,6 @@ class Package extends DataClass
 
     /**
      * @param string $type
-     *
-     * @throws \Exception
      */
     public function setType($type)
     {
@@ -288,8 +277,6 @@ class Package extends DataClass
 
     /**
      * @param \Chamilo\Configuration\Package\Properties\Authors\Author[] $authors
-     *
-     * @throws \Exception
      */
     public function set_authors($authors)
     {
@@ -298,8 +285,6 @@ class Package extends DataClass
 
     /**
      * @param string $category
-     *
-     * @throws \Exception
      */
     public function set_category($category)
     {
@@ -308,8 +293,6 @@ class Package extends DataClass
 
     /**
      * @param string $context
-     *
-     * @throws \Exception
      */
     public function set_context($context)
     {
@@ -318,8 +301,6 @@ class Package extends DataClass
 
     /**
      * @param $dependencies
-     *
-     * @throws \Exception
      */
     public function set_dependencies($dependencies)
     {
@@ -328,8 +309,6 @@ class Package extends DataClass
 
     /**
      * @param string $description
-     *
-     * @throws \Exception
      */
     public function set_description($description)
     {
@@ -338,8 +317,6 @@ class Package extends DataClass
 
     /**
      * @param string[] $extra
-     *
-     * @throws \Exception
      */
     public function set_extra($extra)
     {
@@ -348,8 +325,6 @@ class Package extends DataClass
 
     /**
      * @param string $name
-     *
-     * @throws \Exception
      */
     public function set_name($name)
     {
@@ -366,8 +341,6 @@ class Package extends DataClass
 
     /**
      * @param string $version
-     *
-     * @throws \Exception
      */
     public function set_version($version)
     {

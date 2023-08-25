@@ -5,12 +5,12 @@ use Chamilo\Configuration\Package\Action;
 use Chamilo\Configuration\Package\PackageList;
 use Chamilo\Configuration\Package\Properties\Dependencies\DependencyVerifier;
 use Chamilo\Configuration\Package\Service\PackageBundlesCacheService;
-use Chamilo\Configuration\Package\Storage\DataClass\Package;
+use Chamilo\Configuration\Package\Service\PackageFactory;
+use Chamilo\Configuration\Service\RegistrationService;
 use Chamilo\Configuration\Storage\DataClass\Setting;
-use Chamilo\Configuration\Storage\DataManager;
-use Chamilo\Libraries\DependencyInjection\DependencyInjectionContainerBuilder;
-use Chamilo\Libraries\Translation\Translation;
 use DOMDocument;
+use DOMElement;
+use Exception;
 use Symfony\Component\Finder\Iterator\FileTypeFilterIterator;
 
 /**
@@ -26,44 +26,48 @@ abstract class Remover extends Action
      * Removes the package
      *
      * @return bool
+     * @throws \Symfony\Component\Cache\Exception\CacheException
+     * @throws \Exception
      */
-    public function run()
+    public function run(): bool
     {
-        if (!$this->verify_dependencies())
+        if (!$this->verifyDependencies())
         {
             return false;
         }
 
-        if (!$this->deregister_package())
+        if (!$this->deregisterPackage())
         {
             return false;
         }
 
         if (method_exists($this, 'extra'))
         {
+            $translator = $this->getTranslator();
+
             $this->add_message(
                 self::TYPE_NORMAL,
-                '<small class="text-muted">' . Translation::get('Various', null, 'Chamilo\Core\Install') . '<small>'
+                '<small class="text-muted">' . $translator->trans('Various', [], 'Chamilo\Core\Install') . '<small>'
             );
             if (!$this->extra())
             {
-                return $this->failed(Translation::get('VariousFailed', null, 'Chamilo\Core\Install'));
+                return $this->failed($translator->trans('VariousFailed', [], 'Chamilo\Core\Install'));
             }
             else
             {
                 $this->add_message(
-                    self::TYPE_NORMAL, Translation::get('VariousFinished', null, 'Chamilo\Core\Install')
+                    self::TYPE_NORMAL, $translator->trans('VariousFinished', [], 'Chamilo\Core\Install')
                 );
             }
             $this->add_message(self::TYPE_NORMAL, '');
         }
 
-        if (!$this->deconfigure_package())
+        if (!$this->deconfigurePackage())
         {
             return false;
         }
 
-        if (!$this->uninstall_storage_units())
+        if (!$this->uninstallStorageUnits())
         {
             return false;
         }
@@ -76,28 +80,33 @@ abstract class Remover extends Action
         return $this->successful();
     }
 
-    public function deconfigure_package()
+    /**
+     * @throws \Symfony\Component\Cache\Exception\CacheException
+     */
+    public function deconfigurePackage(): bool
     {
-        $settings_file = $this->get_path() . 'php/settings/settings.xml';
+        $settings_file = $this->getPath() . 'php/settings/settings.xml';
 
         if (file_exists($settings_file))
         {
-            $xml = $this->parse_application_settings($settings_file);
+            $xml = $this->parseApplicationSettings($settings_file);
+            $translator = $this->getTranslator();
 
             foreach ($xml as $name => $parameters)
             {
-                $setting = $this->getConfigurationService()->findSettingByContextAndVariableName(static::CONTEXT, $name);
+                $setting =
+                    $this->getConfigurationService()->findSettingByContextAndVariableName(static::CONTEXT, $name);
 
-                if (!$setting instanceof Setting || !$setting->delete())
+                if (!$setting instanceof Setting || !$this->getConfigurationService()->deleteSetting($setting))
                 {
-                    $message = Translation::get('PackageDeconfigurationFailed', null, 'Chamilo\Core\Install');
+                    $message = $translator->trans('PackageDeconfigurationFailed', [], 'Chamilo\Core\Install');
 
                     return $this->failed($message);
                 }
             }
 
             $this->add_message(
-                self::TYPE_NORMAL, Translation::get('PackageSettingsRemoved', null, 'Chamilo\Core\Install')
+                self::TYPE_NORMAL, $translator->trans('PackageSettingsRemoved', [], 'Chamilo\Core\Install')
             );
         }
 
@@ -105,25 +114,24 @@ abstract class Remover extends Action
     }
 
     /**
-     * Parses an XML file and sends the request to the database manager
-     *
-     * @param $path String
+     * @throws \Exception
      */
-    public function delete_storage_unit($path)
+    public function deleteStorageUnit(string $path): bool
     {
-        $storage_unit_name = self::parse_xml_file($path);
+        $storage_unit_name = $this->parseXmlFile($path);
+        $translator = $this->getTranslator();
 
         $this->add_message(
             self::TYPE_NORMAL,
-            Translation::getInstance()->getTranslation('StorageUnitRemoval', null, 'Chamilo\Core\Install') . ': <em>' .
-            $storage_unit_name . '</em>'
+            $translator->trans('StorageUnitRemoval', [], 'Chamilo\Core\Install') . ': <em>' . $storage_unit_name .
+            '</em>'
         );
 
         if (!$this->getStorageUnitRepository()->drop($storage_unit_name))
         {
             return $this->failed(
-                Translation::getInstance()->getTranslation('StorageUnitRemovalFailed', null, 'Chamilo\Core\Install') .
-                ': <em>' . $storage_unit_name . '</em>'
+                $translator->trans('StorageUnitRemovalFailed', [], 'Chamilo\Core\Install') . ': <em>' .
+                $storage_unit_name . '</em>'
             );
         }
         else
@@ -132,13 +140,13 @@ abstract class Remover extends Action
         }
     }
 
-    public function deregister_package()
+    public function deregisterPackage(): bool
     {
-        $registration = DataManager::retrieveRegistrationByContext(static::CONTEXT);
-
-        if (!$registration->delete())
+        if (!$this->getRegistrationService()->deleteRegistrationForContext(static::CONTEXT))
         {
-            return $this->failed(Translation::get('PackageDeregistrationFailed', null, 'Chamilo\Core\Install'));
+            return $this->failed(
+                $this->getTranslator()->trans('PackageDeregistrationFailed', [], 'Chamilo\Core\Install')
+            );
         }
         else
         {
@@ -146,21 +154,11 @@ abstract class Remover extends Action
         }
     }
 
-    /**
-     * @param string $context
-     *
-     * @return \configuration\package\action\Remover
-     */
-    public static function factory($context)
+    public static function factory(string $context): Remover
     {
         $class = $context . '\Package\Remover';
 
         return new $class();
-    }
-
-    public function getPackageBundlesCacheService(): PackageBundlesCacheService
-    {
-        return $this->getService(PackageBundlesCacheService::class);
     }
 
     /**
@@ -168,27 +166,40 @@ abstract class Remover extends Action
      *
      * @return string[]
      */
-    public function get_additional_packages()
+    public function getAdditionalPackages($packagesList = []): array
     {
-        return [];
+        return $packagesList;
     }
 
-    public function get_path()
+    public function getPackageBundlesCacheService(): PackageBundlesCacheService
+    {
+        return $this->getService(PackageBundlesCacheService::class);
+    }
+
+    public function getPackageFactory(): PackageFactory
+    {
+        return $this->getService(PackageFactory::class);
+    }
+
+    public function getPath(): string
     {
         return $this->getSystemPathBuilder()->namespaceToFullPath(static::CONTEXT);
     }
 
-    public function parse_application_settings($file)
+    public function getRegistrationService(): RegistrationService
+    {
+        return $this->getService(RegistrationService::class);
+    }
+
+    public function parseApplicationSettings(string $file): array
     {
         $doc = new DOMDocument();
-
         $doc->load($file);
-        $object = $doc->getElementsByTagname('package')->item(0);
 
-        $setting_elements = $doc->getElementsByTagname('setting');
+        $setting_elements = $doc->getElementsByTagName('setting');
         $settings = [];
 
-        foreach ($setting_elements as $index => $setting_element)
+        foreach ($setting_elements as $setting_element)
         {
             $settings[$setting_element->getAttribute('name')] = [
                 'default' => $setting_element->getAttribute('default'),
@@ -200,15 +211,18 @@ abstract class Remover extends Action
     }
 
     /**
-     * @param string $file
-     *
-     * @return string
+     * @throws \Exception
      */
-    public static function parse_xml_file($file)
+    public function parseXmlFile(string $file): string
     {
         $doc = new DOMDocument();
         $doc->load($file);
-        $object = $doc->getElementsByTagname('object')->item(0);
+        $object = $doc->getElementsByTagName('object')->item(0);
+
+        if (!$object instanceof DOMElement)
+        {
+            throw new Exception('Invalid storage info file: ' . $file);
+        }
 
         return $object->getAttribute('name');
     }
@@ -216,18 +230,18 @@ abstract class Remover extends Action
     /**
      * Scans for the available storage units and removes them
      *
-     * @return bool
+     * @throws \Exception
      */
-    public function uninstall_storage_units()
+    public function uninstallStorageUnits(): bool
     {
-        $dir = $this->get_path() . 'php/package/install/';
+        $dir = $this->getPath() . 'Resources/Storage/';
         $files = $this->getFilesystemTools()->getDirectoryContent($dir, FileTypeFilterIterator::ONLY_FILES);
 
         foreach ($files as $file)
         {
-            if ((substr($file, - 3) == 'xml'))
+            if ((str_ends_with($file, 'xml')))
             {
-                if (!$this->delete_storage_unit($file))
+                if (!$this->deleteStorageUnit($file))
                 {
                     return false;
                 }
@@ -238,26 +252,24 @@ abstract class Remover extends Action
     }
 
     /**
-     * Verifies the package dependencies
-     *
-     * @param $package_attributes
-     *
-     * @return bool
+     * @throws \Exception
      */
-    public function verify_dependencies()
+    public function verifyDependencies(): bool
     {
-        $verifier = new DependencyVerifier(Package::get(static::CONTEXT));
+        $translator = $this->getTranslator();
+
+        $verifier = new DependencyVerifier($this->getPackageFactory()->getPackage(static::CONTEXT));
         $success = $verifier->is_removable();
 
         $this->add_message(self::TYPE_NORMAL, $verifier->get_logger()->render());
 
         if (!$success)
         {
-            return $this->failed(Translation::get('PackageDependenciesFailed'));
+            return $this->failed($translator->trans('PackageDependenciesFailed'));
         }
         else
         {
-            $this->add_message(self::TYPE_NORMAL, Translation::get('PackageDependenciesVerified'));
+            $this->add_message(self::TYPE_NORMAL, $translator->trans('PackageDependenciesVerified'));
 
             return true;
         }

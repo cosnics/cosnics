@@ -4,6 +4,7 @@ namespace Chamilo\Core\User\Service;
 use Chamilo\Configuration\Service\ConfigurationService;
 use Chamilo\Core\User\Storage\DataClass\User;
 use Chamilo\Core\User\Storage\DataClass\UserSetting;
+use Chamilo\Libraries\Cache\Traits\CacheAdapterHandlerTrait;
 use Chamilo\Libraries\Utilities\DatetimeUtilities;
 use Exception;
 use Symfony\Component\Cache\Adapter\FilesystemAdapter;
@@ -15,13 +16,15 @@ use Symfony\Component\Cache\Adapter\FilesystemAdapter;
  */
 class UserSettingService
 {
+    use CacheAdapterHandlerTrait;
+
     protected ConfigurationService $configurationService;
 
     protected DatetimeUtilities $datetimeUtilities;
 
     protected UserService $userService;
 
-    protected FilesystemAdapter $userSettingsCache;
+    protected FilesystemAdapter $userSettingsCacheAdapter;
 
     public function __construct(
         UserService $userService, FilesystemAdapter $userSettingsCache, DatetimeUtilities $datetimeUtilities,
@@ -29,17 +32,19 @@ class UserSettingService
     )
     {
         $this->userService = $userService;
-        $this->userSettingsCache = $userSettingsCache;
+        $this->userSettingsCacheAdapter = $userSettingsCache;
         $this->datetimeUtilities = $datetimeUtilities;
         $this->configurationService = $configurationService;
     }
 
     /**
-     * @throws \Psr\Cache\InvalidArgumentException
+     * @throws \Symfony\Component\Cache\Exception\CacheException
      */
     public function clearSettingsCacheforUser(User $user): bool
     {
-        return $this->getUserSettingsCache()->deleteItem('user.' . $user->getId());
+        return $this->clearCacheDataForAdapterAndKeyParts(
+            $this->getUserSettingsCacheAdapter(), [User::class, $user->getId()]
+        );
     }
 
     /**
@@ -53,26 +58,20 @@ class UserSettingService
     }
 
     /**
-     * @throws \Chamilo\Libraries\Storage\Exception\DataClassNoResultException
+     * @throws \Symfony\Component\Cache\Exception\CacheException
      */
-    public function createUserSettingForSettingAndUser(
+    public function createUserSettingForSettingContextVariableAndUser(
         string $context, string $variable, User $user, ?string $value = null
     ): bool
     {
-        $userSetting = $this->getUserSettingForSettingContextVariableAndUser($context, $variable, $user);
+        $setting = $this->getConfigurationService()->findSettingByContextAndVariableName($context, $variable);
 
-        if (!$userSetting instanceof UserSetting)
+        if (!$this->getUserService()->createUserSettingFromParameters($setting->getId(), $user->getId(), $value))
         {
-            $setting = $this->getConfigurationService()->findSettingByContextAndVariableName($context, $variable);
-
-            return $this->getUserService()->createUserSettingFromParameters($setting->getId(), $user->getId(), $value);
+            return false;
         }
-        else
-        {
-            $userSetting->set_value($value);
 
-            return $this->getUserService()->updateUserSetting($userSetting);
-        }
+        return $this->clearSettingsCacheforUser($user);
     }
 
     public function getConfigurationService(): ConfigurationService
@@ -96,27 +95,28 @@ class UserSettingService
     {
         try
         {
-            $userSettingsCache = $this->getUserSettingsCache();
+            $userSettingsCacheAdapter = $this->getUserSettingsCacheAdapter();
             $userService = $this->getUserService();
 
             if ($useCache)
             {
-                $userSettings = $userSettingsCache->getItem('user.' . $user->getId());
+                $cacheKeyParts = [User::class, $user->getId()];
 
-                if (!$userSettings->isHit())
+                if (!$this->hasCacheDataForAdapterAndKeyParts($userSettingsCacheAdapter, $cacheKeyParts))
                 {
-                    $userSettings->set($userService->findSettingsForUser($user));
-                    $userSettingsCache->save($userSettings);
+                    $this->saveCacheDataForAdapterAndKeyParts(
+                        $userSettingsCacheAdapter, $cacheKeyParts, $userService->findSettingsForUser($user)
+                    );
                 }
 
-                return $userSettings->get();
+                return $this->readCacheDataForAdapterAndKeyParts($userSettingsCacheAdapter, $cacheKeyParts);
             }
             else
             {
                 return $userService->findSettingsForUser($user);
             }
         }
-        catch (Exception $exception)
+        catch (Exception)
         {
             return [];
         }
@@ -135,10 +135,57 @@ class UserSettingService
         );
     }
 
-    public function getUserSettingsCache(): FilesystemAdapter
+    public function getUserSettingsCacheAdapter(): FilesystemAdapter
     {
-        return $this->userSettingsCache;
+        return $this->userSettingsCacheAdapter;
     }
 
+    /**
+     * @throws \Symfony\Component\Cache\Exception\CacheException
+     */
+    public function saveUserSettingForSettingContextVariableAndUser(
+        string $context, string $variable, User $user, ?string $value = null
+    ): bool
+    {
+        $userSetting = $this->getUserSettingForSettingContextVariableAndUser($context, $variable, $user);
+
+        if (!$userSetting instanceof UserSetting)
+        {
+            $setting = $this->getConfigurationService()->findSettingByContextAndVariableName($context, $variable);
+
+            if (!$this->getUserService()->createUserSettingFromParameters($setting->getId(), $user->getId(), $value))
+            {
+                return false;
+            }
+        }
+        elseif (!$this->getUserService()->updateUserSettingValue($userSetting, $value))
+        {
+            return false;
+        }
+
+        return $this->clearSettingsCacheforUser($user);
+    }
+
+    /**
+     * @throws \Symfony\Component\Cache\Exception\CacheException
+     */
+    public function updateUserSettingForSettingContextVariableAndUser(
+        string $context, string $variable, User $user, ?string $value = null
+    ): bool
+    {
+        $userSetting = $this->getUserSettingForSettingContextVariableAndUser($context, $variable, $user);
+
+        if (!$userSetting instanceof UserSetting)
+        {
+            return false;
+        }
+
+        if (!$this->getUserService()->updateUserSettingValue($userSetting, $value))
+        {
+            return false;
+        }
+
+        return $this->clearSettingsCacheforUser($user);
+    }
 }
 

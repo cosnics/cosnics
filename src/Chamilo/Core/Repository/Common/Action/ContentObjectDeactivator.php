@@ -3,25 +3,24 @@ namespace Chamilo\Core\Repository\Common\Action;
 
 use Chamilo\Configuration\Package\Action\Deactivator;
 use Chamilo\Core\Repository\Storage\DataManager;
-use Chamilo\Libraries\Translation\Translation;
 
 abstract class ContentObjectDeactivator extends Deactivator
 {
 
-    public function run()
+    public function run(): bool
     {
         $success = parent::run();
-        
-        if (! $success)
+
+        if (!$success)
         {
             return false;
         }
-        
+
         $success = DataManager::deactivate_content_object_type(static::CONTEXT);
-        
-        if (! $success)
+
+        if (!$success)
         {
-            $this->failed(Translation::get('ContentObjectStatusUpdateFailed'));
+            $this->failed($this->getTranslator()->trans('ContentObjectStatusUpdateFailed'));
         }
         else
         {

@@ -28,11 +28,6 @@ class ConfigurationRepository
         $this->dataClassRepository = $dataClassRepository;
     }
 
-    public function clearSettingCache(): bool
-    {
-        return $this->getDataClassRepository()->getDataClassRepositoryCache()->truncate(Setting::class);
-    }
-
     public function createSetting(Setting $setting): bool
     {
         return $this->getDataClassRepository()->create($setting);

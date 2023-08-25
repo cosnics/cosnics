@@ -7,8 +7,10 @@ class Remover extends WebApplicationRemover
 {
     public const CONTEXT = Installer::CONTEXT;
 
-    public function get_additional_packages()
+    public function getAdditionalPackages($packagesList = []): array
     {
-        return ['Chamilo\Application\Calendar\Extension\Personal'];
+        $packagesList[] = 'Chamilo\Application\Calendar\Extension\Personal';
+
+        return parent::getAdditionalPackages($packagesList);
     }
 }

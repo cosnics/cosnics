@@ -85,17 +85,11 @@ class UserRepository implements UserRepositoryInterface
         return $dataClass->create();
     }
 
-    /**
-     * @throws \Chamilo\Libraries\Storage\Exception\DataClassNoResultException
-     */
     public function createUser(User $user): bool
     {
         return $this->getDataClassRepository()->create($user);
     }
 
-    /**
-     * @throws \Chamilo\Libraries\Storage\Exception\DataClassNoResultException
-     */
     public function createUserSetting(UserSetting $userSetting): bool
     {
         return $this->getDataClassRepository()->create($userSetting);
@@ -125,6 +119,16 @@ class UserRepository implements UserRepositoryInterface
     public function deleteUserSetting(UserSetting $userSetting): bool
     {
         return $this->getDataClassRepository()->delete($userSetting);
+    }
+
+    public function deleteUserSettingsForSettingIdentifier(string $settingIdentifier): bool
+    {
+        $condition = new EqualityCondition(
+            new PropertyConditionVariable(UserSetting::class, UserSetting::PROPERTY_SETTING_ID),
+            new StaticConditionVariable($settingIdentifier)
+        );
+
+        return $this->getDataClassRepository()->deletes(UserSetting::class, $condition);
     }
 
     /**
@@ -325,6 +329,27 @@ class UserRepository implements UserRepositoryInterface
         );
     }
 
+    public function findUserSettingForSettingAndUser(Setting $setting, User $user): ?UserSetting
+    {
+        $conditions = [];
+
+        $conditions[] = new EqualityCondition(
+            new PropertyConditionVariable(UserSetting::class, UserSetting::PROPERTY_USER_ID),
+            new StaticConditionVariable($user->getId())
+        );
+
+        $conditions[] = new EqualityCondition(
+            new PropertyConditionVariable(UserSetting::class, UserSetting::PROPERTY_SETTING_ID),
+            new StaticConditionVariable($setting->getId())
+        );
+
+        $condition = new AndCondition($conditions);
+
+        return $this->getDataClassRepository()->retrieve(
+            UserSetting::class, new DataClassRetrieveParameters($condition)
+        );
+    }
+
     /**
      * @param ?\Chamilo\Libraries\Storage\Query\Condition\Condition $condition
      * @param ?int $count
@@ -464,32 +489,6 @@ class UserRepository implements UserRepositoryInterface
         return new AndCondition($conditions);
     }
 
-    public function findUserSettingForSettingAndUser(Setting $setting, User $user): ?UserSetting
-    {
-        $conditions = [];
-
-        $conditions[] = new EqualityCondition(
-            new PropertyConditionVariable(UserSetting::class, UserSetting::PROPERTY_USER_ID),
-            new StaticConditionVariable($user->getId())
-        );
-
-        $conditions[] = new EqualityCondition(
-            new PropertyConditionVariable(UserSetting::class, UserSetting::PROPERTY_SETTING_ID),
-            new StaticConditionVariable($setting->getId())
-        );
-
-        $condition = new AndCondition($conditions);
-
-        return $this->getDataClassRepository()->retrieve(
-            UserSetting::class, new DataClassRetrieveParameters($condition)
-        );
-    }
-
-    protected function setDataClassRepository(DataClassRepository $dataClassRepository)
-    {
-        $this->dataClassRepository = $dataClassRepository;
-    }
-
     public function setSearchQueryConditionGenerator(SearchQueryConditionGenerator $searchQueryConditionGenerator): void
     {
         $this->searchQueryConditionGenerator = $searchQueryConditionGenerator;
@@ -504,17 +503,11 @@ class UserRepository implements UserRepositoryInterface
         return $dataClass->update();
     }
 
-    /**
-     * @throws \Chamilo\Libraries\Storage\Exception\DataClassNoResultException
-     */
     public function updateUser(User $user): bool
     {
         return $this->getDataClassRepository()->update($user);
     }
 
-    /**
-     * @throws \Chamilo\Libraries\Storage\Exception\DataClassNoResultException
-     */
     public function updateUserSetting(UserSetting $userSetting): bool
     {
         return $this->getDataClassRepository()->update($userSetting);

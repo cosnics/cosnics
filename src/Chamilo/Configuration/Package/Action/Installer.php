@@ -5,11 +5,12 @@ use Chamilo\Configuration\Package\Action;
 use Chamilo\Configuration\Package\PackageList;
 use Chamilo\Configuration\Package\Properties\Dependencies\DependencyVerifier;
 use Chamilo\Configuration\Package\Service\PackageBundlesCacheService;
-use Chamilo\Configuration\Package\Storage\DataClass\Package;
+use Chamilo\Configuration\Package\Service\PackageFactory;
+use Chamilo\Configuration\Service\RegistrationService;
 use Chamilo\Configuration\Storage\DataClass\Registration;
-use Chamilo\Libraries\DependencyInjection\DependencyInjectionContainerBuilder;
-use Chamilo\Libraries\Translation\Translation;
 use DOMDocument;
+use DOMElement;
+use Exception;
 use Symfony\Component\Finder\Iterator\FileTypeFilterIterator;
 
 /**
@@ -24,60 +25,64 @@ abstract class Installer extends Action
     /**
      * Form values passed on from the installation wizard
      */
-    private $form_values;
+    private array $formValues;
 
     /**
      * Constructor
      */
-    public function __construct($form_values)
+    public function __construct(array $formValues)
     {
         parent::__construct();
 
-        $this->form_values = $form_values;
+        $this->formValues = $formValues;
     }
 
     /**
      * Installs and configures the package
      *
-     * @return bool
+     * @throws \Exception
      */
-    public function run()
+    public function run(): bool
     {
-        if (!$this->verify_dependencies())
+        if (!$this->verifyDependencies())
         {
             return false;
         }
 
-        if (!$this->install_storage_units())
+        if (!$this->installStorageUnits())
         {
             return false;
         }
 
-        if (!$this->configure_package())
+        if (!$this->configurePackage())
         {
             return false;
         }
 
         if (method_exists($this, 'extra'))
         {
+            $translator = $this->getTranslator();
+
             $this->add_message(
                 self::TYPE_NORMAL,
-                '<small class="text-muted">' . Translation::get('Various', null, 'Chamilo\Core\Install') . '<small>'
+                '<small class="text-muted">' . $translator->trans('Various', [], 'Chamilo\Core\Install') . '<small>'
             );
+
             if (!$this->extra())
             {
-                return $this->failed(Translation::get('VariousFailed', null, 'Chamilo\Core\Install'));
+                return $this->failed($translator->trans('VariousFailed', [], 'Chamilo\Core\Install'));
             }
             else
             {
                 $this->add_message(
-                    self::TYPE_NORMAL, Translation::get('VariousFinished', null, 'Chamilo\Core\Install')
+                    self::TYPE_NORMAL, $translator->trans('VariousFinished', [], 'Chamilo\Core\Install')
                 );
             }
+
             $this->add_message(self::TYPE_NORMAL, '');
         }
 
-        if (!$this->register_package())
+        if (!$this->registerPackage())
         {
             return false;
         }
@@ -93,14 +98,14 @@ abstract class Installer extends Action
     /**
      * @throws \Symfony\Component\Cache\Exception\CacheException
      */
-    public function configure_package()
+    public function configurePackage(): bool
     {
         $translator = $this->getTranslator();
-        $settings_file = $this->get_path() . 'Resources/Settings/settings.xml';
+        $settings_file = $this->getPath() . 'Resources/Settings/settings.xml';
 
         if (file_exists($settings_file))
         {
-            $xml = $this->parse_application_settings($settings_file);
+            $xml = $this->parseApplicationSettings($settings_file);
 
             foreach ($xml as $name => $parameters)
             {
@@ -125,12 +130,12 @@ abstract class Installer extends Action
     /**
      * Parses an XML file and sends the request to the database manager
      *
-     * @param $path String
+     * @throws \Exception
      */
-    public function create_storage_unit($path)
+    public function createStorageUnit(string $path): bool
     {
         $translator = $this->getTranslator();
-        $storage_unit_info = self::parse_xml_file($path);
+        $storage_unit_info = $this->parseXmlFile($path);
 
         $this->add_message(
             self::TYPE_NORMAL, $translator->trans('StorageUnitCreation', [], 'Chamilo\Core\Install') . ': <em>' .
@@ -157,21 +162,14 @@ abstract class Installer extends Action
     /**
      * Creates an application-specific installer.
      *
-     * @param $context string The namespace of the package for which we want to start the installer.
-     * @param $values  string The form values passed on by the wizard.
+     * @param string $context The namespace of the package for which we want to start the installer.
+     * @param array $values   The form values passed on by the wizard.
      */
-    public static function factory($context, $values)
+    public static function factory(string $context, array $values): Installer
     {
         $class = $context . '\Package\Installer';
 
         return new $class($values);
-    }
-
-    public function getPackageBundlesCacheService(): PackageBundlesCacheService
-    {
-        return DependencyInjectionContainerBuilder::getInstance()->createContainer()->get(
-            PackageBundlesCacheService::class
-        );
     }
 
     /**
@@ -179,36 +177,49 @@ abstract class Installer extends Action
      *
      * @return string[]
      */
-    public static function get_additional_packages()
+    public static function getAdditionalPackages($packagesList = []): array
     {
-        return [];
+        return $packagesList;
     }
 
-    public function get_form_values()
+    public function getFormValues(): array
     {
-        return $this->form_values;
+        return $this->formValues;
     }
 
-    public function get_path()
+    public function getPackageBundlesCacheService(): PackageBundlesCacheService
+    {
+        return $this->getService(PackageBundlesCacheService::class);
+    }
+
+    public function getPackageFactory(): PackageFactory
+    {
+        return $this->getService(PackageFactory::class);
+    }
+
+    public function getPath(): string
     {
         return $this->getSystemPathBuilder()->namespaceToFullPath(static::CONTEXT);
     }
 
-    /**
-     * Scans for the available storage units and creates them
-     *
-     * @return bool
-     */
-    public function install_storage_units()
+    public function getRegistrationService(): RegistrationService
     {
-        $dir = $this->get_path() . 'Resources/Storage/';
+        return $this->getService(RegistrationService::class);
+    }
+
+    /**
+     * @throws \Exception
+     */
+    public function installStorageUnits(): bool
+    {
+        $dir = $this->getPath() . 'Resources/Storage/';
         $files = $this->getFilesystemTools()->getDirectoryContent($dir, FileTypeFilterIterator::ONLY_FILES);
 
         foreach ($files as $file)
         {
-            if ((substr($file, - 3) == 'xml'))
+            if ((str_ends_with($file, 'xml')))
             {
-                if (!$this->create_storage_unit($file))
+                if (!$this->createStorageUnit($file))
                 {
                     return false;
                 }
@@ -218,13 +229,13 @@ abstract class Installer extends Action
         return true;
     }
 
-    public function parse_application_settings($file)
+    public function parseApplicationSettings(string $file): array
     {
         $doc = new DOMDocument();
 
         $doc->load($file);
 
-        $setting_elements = $doc->getElementsByTagname('setting');
+        $setting_elements = $doc->getElementsByTagName('setting');
         $settings = [];
 
         foreach ($setting_elements as $setting_element)
@@ -243,48 +254,62 @@ abstract class Installer extends Action
      * For defining the 'type' of the field, the same definition is used
      * as the PEAR::MDB2 package. See http://pear.php.net/manual/en/package.database. mdb2.datatypes.php
      *
-     * @param $file string The complete path to the XML-file from which the storage unit definition should be read.
+     * @param string $file The complete path to the XML-file from which the storage unit definition should be read.
      *
      * @return array An with values for the keys 'name','properties' and 'indexes'
+     * @throws \Exception
      */
-    public static function parse_xml_file($file)
+    public function parseXmlFile(string $file): array
     {
-        $name = '';
         $properties = [];
         $indexes = [];
 
         $doc = new DOMDocument();
         $doc->load($file);
-        $object = $doc->getElementsByTagname('object')->item(0);
+        $object = $doc->getElementsByTagName('object')->item(0);
+
+        if (!$object instanceof DOMElement)
+        {
+            throw new Exception('Invalid storage info file: ' . $file);
+        }
+
         $name = $object->getAttribute('name');
-        $xml_properties = $doc->getElementsByTagname('property');
+        $xml_properties = $doc->getElementsByTagName('property');
         $attributes = ['type', 'length', 'unsigned', 'notnull', 'default', 'autoincrement', 'fixed'];
-        foreach ($xml_properties as $index => $property)
+
+        foreach ($xml_properties as $property)
         {
             $property_info = [];
-            foreach ($attributes as $index => $attribute)
+
+            foreach ($attributes as $attribute)
             {
                 if ($property->hasAttribute($attribute))
                 {
                     $property_info[$attribute] = $property->getAttribute($attribute);
                 }
             }
+
             $properties[$property->getAttribute('name')] = $property_info;
         }
-        $xml_indexes = $doc->getElementsByTagname('index');
-        foreach ($xml_indexes as $key => $index)
+
+        $xml_indexes = $doc->getElementsByTagName('index');
+
+        foreach ($xml_indexes as $index)
         {
             $index_info = [];
             $index_info['type'] = $index->getAttribute('type');
-            $index_properties = $index->getElementsByTagname('indexproperty');
-            foreach ($index_properties as $subkey => $index_property)
+            $index_properties = $index->getElementsByTagName('indexproperty');
+
+            foreach ($index_properties as $index_property)
             {
                 $index_info['fields'][$index_property->getAttribute('name')] = [
                     'length' => $index_property->getAttribute('length')
                 ];
             }
+
             $indexes[$index->getAttribute('name')] = $index_info;
         }
+
         $result = [];
         $result['name'] = $name;
         $result['properties'] = $properties;
@@ -293,26 +318,23 @@ abstract class Installer extends Action
         return $result;
     }
 
-    public function register_package()
+    /**
+     * @throws \Exception
+     */
+    public function registerPackage(): bool
     {
-        $namespace = static::CONTEXT;
+        $translator = $this->getTranslator();
 
-        $this->add_message(self::TYPE_NORMAL, Translation::get('RegisteringPackage', null, 'Chamilo\Core\Install'));
+        $this->add_message(self::TYPE_NORMAL, $translator->trans('RegisteringPackage', [], 'Chamilo\Core\Install'));
 
-        $package_info = Package::get($namespace);
+        $package = $this->getPackageFactory()->getPackage(static::CONTEXT);
 
-        $application_registration = new Registration();
-
-        $application_registration->set_context($namespace);
-        $application_registration->setType(($package_info->getType()));
-        $application_registration->set_category(($package_info->get_category()));
-        $application_registration->set_name($package_info->get_name());
-        $application_registration->set_version($package_info->get_version());
-        $application_registration->set_status(Registration::STATUS_ACTIVE);
-
-        if (!$application_registration->create())
+        if (!$this->getRegistrationService()->createRegistrationFromParameters(
+            static::CONTEXT, $package->getType(), $package->get_category(), $package->get_name(),
+            $package->get_version(), Registration::STATUS_ACTIVE
+        ))
         {
-            return $this->failed(Translation::get('PackageRegistrationFailed', null, 'Chamilo\Core\Install'));
+            return $this->failed($translator->trans('PackageRegistrationFailed', [], 'Chamilo\Core\Install'));
         }
         else
         {
@@ -320,32 +342,28 @@ abstract class Installer extends Action
         }
     }
 
-    public function set_form_values($form_values)
-    {
-        $this->form_values = $form_values;
-    }
-
     /**
-     * Verifies the package dependencies
-     *
-     * @param $package_attributes
-     *
-     * @return bool
+     * @throws \Exception
      */
-    public function verify_dependencies()
+    public function verifyDependencies(): bool
     {
-        $verifier = new DependencyVerifier(Package::get(static::CONTEXT));
+        $translator = $this->getTranslator();
+
+        $verifier = new DependencyVerifier($this->getPackageFactory()->getPackage(static::CONTEXT));
         $success = $verifier->is_installable();
 
         $this->add_message(self::TYPE_NORMAL, $verifier->get_logger()->render());
 
         if (!$success)
         {
-            return $this->failed(Translation::get('PackageDependenciesFailed'));
+            return $this->failed($translator->trans('PackageDependenciesFailed', [], 'Chamilo\Configuration\Package'));
         }
         else
         {
-            $this->add_message(self::TYPE_NORMAL, Translation::get('PackageDependenciesVerified'));
+            $this->add_message(
+                self::TYPE_NORMAL,
+                $translator->trans('PackageDependenciesVerified', [], 'Chamilo\Configuration\Package')
+            );
 
             return true;
         }

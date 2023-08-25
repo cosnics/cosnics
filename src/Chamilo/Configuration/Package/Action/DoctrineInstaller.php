@@ -31,7 +31,7 @@ abstract class DoctrineInstaller extends Installer
      *
      * @return bool
      */
-    public function install_storage_units()
+    public function installStorageUnits()
     {
         $cacheDir = $this->getConfigurablePathBuilder()->getCachePath('Hogent\Libraries\DependencyInjection');
         $cacheFile = $cacheDir . 'InstallDependencyInjection.php';

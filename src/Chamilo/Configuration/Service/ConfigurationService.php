@@ -5,8 +5,10 @@ use Chamilo\Configuration\Service\DataLoader\AggregatedCacheDataPreLoader;
 use Chamilo\Configuration\Service\DataLoader\StorageConfigurationCacheDataPreLoader;
 use Chamilo\Configuration\Storage\DataClass\Setting;
 use Chamilo\Configuration\Storage\Repository\ConfigurationRepository;
+use Chamilo\Core\User\Service\UserService;
 use Chamilo\Libraries\Cache\Traits\CacheAdapterHandlerTrait;
 use Symfony\Component\Cache\Adapter\AdapterInterface;
+use Symfony\Component\Cache\Adapter\FilesystemAdapter;
 
 /**
  * @package Chamilo\Configuration\Service
@@ -20,16 +22,23 @@ class ConfigurationService
 
     protected AdapterInterface $storageConfigurationCacheAdapter;
 
+    protected UserService $userService;
+
+    protected FilesystemAdapter $userSettingsCacheAdapter;
+
     private ConfigurationRepository $configurationRepository;
 
     public function __construct(
         ConfigurationRepository $configurationRepository, AdapterInterface $configurationCacheAdapter,
-        AdapterInterface $storageConfigurationCacheAdapter
+        AdapterInterface $storageConfigurationCacheAdapter, FilesystemAdapter $userSettingsCacheAdapter,
+        UserService $userService
     )
     {
         $this->configurationRepository = $configurationRepository;
         $this->configurationCacheAdapter = $configurationCacheAdapter;
         $this->storageConfigurationCacheAdapter = $storageConfigurationCacheAdapter;
+        $this->userSettingsCacheAdapter = $userSettingsCacheAdapter;
+        $this->userService = $userService;
     }
 
     /**
@@ -37,14 +46,21 @@ class ConfigurationService
      */
     public function clearCache(): bool
     {
-        $this->clearCacheDataForAdapterAndKeyParts(
+        if (!$this->clearCacheDataForAdapterAndKeyParts(
             $this->getStorageConfigurationCacheAdapter(), [StorageConfigurationCacheDataPreLoader::class]
-        );
-        $this->clearCacheDataForAdapterAndKeyParts(
-            $this->getConfigurationCacheAdapter(), [AggregatedCacheDataPreLoader::class]
-        );
+        ))
+        {
+            return false;
+        }
 
-        return $this->getConfigurationRepository()->clearSettingCache();
+        if (!$this->clearCacheDataForAdapterAndKeyParts(
+            $this->getConfigurationCacheAdapter(), [AggregatedCacheDataPreLoader::class]
+        ))
+        {
+            return false;
+        }
+
+        return true;
     }
 
     /**
@@ -89,13 +105,29 @@ class ConfigurationService
             return false;
         }
 
-        //TODO: Need to do something about user settings here @see Setting::delete()
+        if (!$this->clearCache())
+        {
+            return false;
+        }
 
-        $this->clearCache();
+        if ($setting->get_user_setting())
+        {
+            if (!$this->getUserService()->deleteUserSettingsForSettingIdentifier($setting->getId()))
+            {
+                return false;
+            }
+            else
+            {
+                return $this->clearAllCacheDataForAdapter($this->getUserSettingsCacheAdapter());
+            }
+        }
 
         return true;
     }
 
+    /**
+     * @throws \Symfony\Component\Cache\Exception\CacheException
+     */
     public function deleteSettingForContextAndVariableName(string $context, string $variableName): bool
     {
         $setting = $this->findSettingByContextAndVariableName($context, $variableName);
@@ -128,6 +160,16 @@ class ConfigurationService
     public function getStorageConfigurationCacheAdapter(): AdapterInterface
     {
         return $this->storageConfigurationCacheAdapter;
+    }
+
+    public function getUserService(): UserService
+    {
+        return $this->userService;
+    }
+
+    public function getUserSettingsCacheAdapter(): FilesystemAdapter
+    {
+        return $this->userSettingsCacheAdapter;
     }
 
     /**

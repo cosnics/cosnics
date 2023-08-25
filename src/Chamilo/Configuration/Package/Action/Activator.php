@@ -2,10 +2,7 @@
 namespace Chamilo\Configuration\Package\Action;
 
 use Chamilo\Configuration\Package\Action;
-use Chamilo\Configuration\Storage\DataClass\Registration;
-use Chamilo\Configuration\Storage\DataManager;
-use Chamilo\Libraries\Architecture\ClassnameUtilities;
-use Chamilo\Libraries\Translation\Translation;
+use Chamilo\Configuration\Service\RegistrationService;
 
 /**
  * @package Chamilo\Configuration\Package\Action
@@ -15,45 +12,33 @@ use Chamilo\Libraries\Translation\Translation;
  */
 abstract class Activator extends Action
 {
-
-    public function run()
+    public function run(): bool
     {
-        $classNameUtilities = ClassnameUtilities::getInstance();
+        $translator = $this->getTranslator();
 
-        $registration = DataManager::retrieveRegistrationByContext(static::CONTEXT);
-
-        if (!$registration->is_active())
+        if (!$this->getRegistrationService()->activateRegistrationForContext(static::CONTEXT))
         {
-
-            $registration->set_status(Registration::STATUS_ACTIVE);
-
-            if (!$registration->update())
-            {
-                return $this->failed(Translation::get('ActivationFailed'));
-            }
-            else
-            {
-                $this->add_message(self::TYPE_NORMAL, Translation::get('ActivationSuccessful'));
-            }
-
-            return $this->successful();
+            return $this->failed($translator->trans('ActivationFailed', [], 'Chamilo\Configuration\Package'));
         }
         else
         {
-            return $this->failed(Translation::get('PackageAlreadyActive'));
+            $this->add_message(
+                self::TYPE_NORMAL, $translator->trans('ActivationSuccessful', [], 'Chamilo\Configuration\Package')
+            );
         }
+
+        return $this->successful();
     }
 
-    /**
-     * Creates an application-specific installer.
-     *
-     * @param $context string The namespace of the package for which we want to start the installer.
-     * @param $values  string The form values passed on by the wizard.
-     */
-    public static function factory($context)
+    public static function factory(string $context): Activator
     {
         $class = $context . '\Package\Activator';
 
         return new $class();
+    }
+
+    public function getRegistrationService(): RegistrationService
+    {
+        return $this->getService(RegistrationService::class);
     }
 }
