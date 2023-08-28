@@ -163,16 +163,6 @@ class CalendarEventDataProvider extends ExternalCalendar
         }
     }
 
-    protected function getConfigurablePathBuilder(): ConfigurablePathBuilder
-    {
-        return $this->getService(ConfigurablePathBuilder::class);
-    }
-
-    protected function getConfigurationConsulter(): ConfigurationConsulter
-    {
-        return $this->getService(ConfigurationConsulter::class);
-    }
-
     /**
      * @return \Chamilo\Libraries\Calendar\Event\Event[]
      */

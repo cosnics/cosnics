@@ -7,7 +7,6 @@ use Chamilo\Core\Metadata\Service\EntityTranslationService;
 use Chamilo\Core\Metadata\Storage\DataClass\Element;
 use Chamilo\Core\Metadata\Storage\DataClass\Relation;
 use Chamilo\Core\Metadata\Storage\DataClass\Schema;
-use Chamilo\Libraries\Translation\Translation;
 
 /**
  * @package Chamilo\Core\Metadata\Package
@@ -19,8 +18,13 @@ class Installer extends \Chamilo\Configuration\Package\Action\Installer
 {
     public const CONTEXT = Manager::CONTEXT;
 
-    public function extra(): bool
+    /**
+     * @throws \Exception
+     */
+    public function extra(array $formValues): bool
     {
+        $translator = $this->getTranslator();
+
         if (!$this->installDefaultSchemas())
         {
             return false;
@@ -32,7 +36,7 @@ class Installer extends \Chamilo\Configuration\Package\Action\Installer
         if ($relation->create())
         {
             $entityTranslations = [];
-            $entityTranslations[Translation::getInstance()->getLanguageIsocode()] = Translation::get('IsAvailableFor');
+            $entityTranslations[$translator->getLocale()] = $translator->trans('IsAvailableFor', [], Manager::CONTEXT);
 
             $entity = DataClassEntityFactory::getInstance()->getEntityFromDataClass($relation);
 
@@ -46,7 +50,7 @@ class Installer extends \Chamilo\Configuration\Package\Action\Installer
         return true;
     }
 
-    public function installDefaultSchemas()
+    public function installDefaultSchemas(): bool
     {
         $schemaDefinition = [];
         $schemaDefinition[Schema::class] = [
@@ -159,6 +163,7 @@ class Installer extends \Chamilo\Configuration\Package\Action\Installer
         ];
 
         $schemaInstaller = new \Chamilo\Core\Metadata\Schema\Action\Installer($schemaDefinition);
+
         if (!$schemaInstaller->run())
         {
             return false;

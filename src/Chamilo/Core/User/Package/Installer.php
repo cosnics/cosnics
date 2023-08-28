@@ -1,31 +1,47 @@
 <?php
 namespace Chamilo\Core\User\Package;
 
-use Chamilo\Configuration\Storage\DataManager;
+use Chamilo\Configuration\Package\Service\PackageBundlesCacheService;
+use Chamilo\Configuration\Package\Service\PackageFactory;
+use Chamilo\Configuration\Service\ConfigurationService;
+use Chamilo\Configuration\Service\RegistrationService;
 use Chamilo\Core\User\Manager;
 use Chamilo\Core\User\Storage\DataClass\User;
-use Chamilo\Libraries\DependencyInjection\Traits\DependencyInjectionContainerTrait;
+use Chamilo\Libraries\Architecture\ClassnameUtilities;
+use Chamilo\Libraries\File\SystemPathBuilder;
 use Chamilo\Libraries\Hashing\HashingUtilities;
-use Chamilo\Libraries\Translation\Translation;
+use Chamilo\Libraries\Storage\DataManager\Repository\StorageUnitRepository;
+use Symfony\Component\Translation\Translator;
 
 /**
- * @package user.install
- */
-
-/**
- * This installer can be used to create the storage structure for the users application.
+ * @package Chamilo\Core\User\Package
  */
 class Installer extends \Chamilo\Configuration\Package\Action\Installer
 {
-    use DependencyInjectionContainerTrait;
-
     public const CONTEXT = Manager::CONTEXT;
 
-    public function create_admin_account()
-    {
-        $values = $this->getFormValues();
+    protected HashingUtilities $hashingUtilities;
 
+    public function __construct(
+        ClassnameUtilities $classnameUtilities, ConfigurationService $configurationService,
+        StorageUnitRepository $storageUnitRepository, Translator $translator,
+        PackageBundlesCacheService $packageBundlesCacheService, PackageFactory $packageFactory,
+        RegistrationService $registrationService, SystemPathBuilder $systemPathBuilder, string $context,
+        HashingUtilities $hashingUtilities
+    )
+    {
+        parent::__construct(
+            $classnameUtilities, $configurationService, $storageUnitRepository, $translator,
+            $packageBundlesCacheService, $packageFactory, $registrationService, $systemPathBuilder, $context
+        );
+
+        $this->hashingUtilities = $hashingUtilities;
+    }
+
+    public function create_admin_account(array $values): bool
+    {
         $user = new User();
+
         $user->set_lastname($values['admin_surname']);
         $user->set_firstname($values['admin_firstname']);
         $user->set_username($values['admin_username']);
@@ -50,13 +66,13 @@ class Installer extends \Chamilo\Configuration\Package\Action\Installer
         }
     }
 
-    public function create_anonymous_user()
+    public function create_anonymous_user(array $values): bool
     {
-        $values = $this->getFormValues();
-
+        $translator = $this->getTranslator();
         $user = new User();
-        $user->set_lastname(Translation::get('Anonymous'));
-        $user->set_firstname(Translation::get('Mr'));
+
+        $user->set_lastname($translator->trans('Anonymous', [], Manager::class));
+        $user->set_firstname($translator->trans('Mr', [], Manager::class));
         $user->set_username('anonymous');
         $user->set_password($this->getHashingUtilities()->hashString($values['admin_password']));
         $user->set_auth_source('Platform');
@@ -77,9 +93,10 @@ class Installer extends \Chamilo\Configuration\Package\Action\Installer
         return true;
     }
 
-    public function create_test_user_account()
+    public function create_test_user_account(): bool
     {
         $user = new User();
+
         $user->set_lastname('Doe');
         $user->set_firstname('John');
         $user->set_username('JohnDoe');
@@ -97,52 +114,45 @@ class Installer extends \Chamilo\Configuration\Package\Action\Installer
         {
             return false;
         }
-        else
-        {
-            return $this->getUserSettingService()->saveUserSettingForSettingContextVariableAndUser(
-                'Chamilo\Core\Admin', 'platform_language', $user, 'nl'
-            );
-        }
+
+        return true;
     }
 
     /**
      * Runs the install-script.
+     *
+     * @throws \Symfony\Component\Cache\Exception\CacheException
      */
-    public function extra(): bool
+    public function extra(array $formValues): bool
     {
-        $values = $this->getFormValues();
+        $translator = $this->getTranslator();
 
-        $settings[] = [Manager::CONTEXT, 'allow_registration', $values['self_reg']];
+        $settings[] = [Manager::CONTEXT, 'allow_registration', $formValues['self_reg']];
 
         foreach ($settings as $setting)
         {
-            $setting_object = DataManager::retrieve_setting_from_variable_name(
-                $setting[1], $setting[0]
-            );
-            $setting_object->set_value($setting[2]);
-
-            if (!$setting_object->update())
+            if (!$this->getConfigurationService()->updateSettingFromParameters($setting[0], $setting[1], $setting[2]))
             {
                 return false;
             }
         }
 
-        if (!$this->create_anonymous_user())
+        if (!$this->create_anonymous_user($formValues))
         {
             return false;
         }
         else
         {
-            $this->add_message(self::TYPE_NORMAL, Translation::get('AnonymousAccountCreated'));
+            $this->add_message(self::TYPE_NORMAL, $translator->trans('AnonymousAccountCreated'));
         }
 
-        if (!$this->create_admin_account())
+        if (!$this->create_admin_account($formValues))
         {
             return false;
         }
         else
         {
-            $this->add_message(self::TYPE_NORMAL, Translation::get('AdminAccountCreated'));
+            $this->add_message(self::TYPE_NORMAL, $translator->trans('AdminAccountCreated'));
         }
 
         if (!$this->create_test_user_account())
@@ -151,17 +161,14 @@ class Installer extends \Chamilo\Configuration\Package\Action\Installer
         }
         else
         {
-            $this->add_message(self::TYPE_NORMAL, Translation::get('TestUserAccountCreated'));
+            $this->add_message(self::TYPE_NORMAL, $translator->trans('TestUserAccountCreated'));
         }
 
         return true;
     }
 
-    /**
-     * @return \Chamilo\Libraries\Hashing\HashingUtilities
-     */
-    public function getHashingUtilities()
+    public function getHashingUtilities(): HashingUtilities
     {
-        return $this->getService(HashingUtilities::class);
+        return $this->hashingUtilities;
     }
 }

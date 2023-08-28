@@ -8,6 +8,7 @@
                   public="true"/>
 
         <service id="Chamilo\Core\User\Picture\Provider\Platform\UserPictureProvider">
+            <tag name="Chamilo\Core\User\Picture\UserPictureProviderInterface"/>
             <argument key="$themeSystemPathBuilder"
                       type="service"
                       id="Chamilo\Libraries\Format\Theme\ThemeSystemPathBuilder"/>

@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<container xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+           xmlns="http://symfony.com/schema/dic/services"
+           xsi:schemaLocation="http://symfony.com/schema/dic/services http://symfony.com/schema/dic/services/services-1.0.xsd">
+    <services>
+        <defaults autowire="true"
+                  autoconfigure="true"
+                  public="true"/>
+
+        <service id="Chamilo\Core\Repository\ContentObject\ForumTopic\Package\Activator"
+                 class="Chamilo\Core\Repository\Common\Action\ContentObjectActivator">
+            <tag name="Chamilo\Configuration\Package\Action\Activator"/>
+            <argument key="$context">Chamilo\Core\Repository\ContentObject\ForumTopic</argument>
+        </service>
+        <service id="Chamilo\Core\Repository\ContentObject\ForumTopic\Package\Deactivator"
+                 class="Chamilo\Core\Repository\Common\Action\ContentObjectDeactivator">
+            <tag name="Chamilo\Configuration\Package\Action\Deactivator"/>
+            <argument key="$context">Chamilo\Core\Repository\ContentObject\ForumTopic</argument>
+        </service>
+        <service id="Chamilo\Core\Repository\ContentObject\ForumTopic\Package\Installer"
+                 class="Chamilo\Core\Repository\Common\Action\ContentObjectInstaller">
+            <tag name="Chamilo\Configuration\Package\Action\Installer"/>
+            <argument key="$context">Chamilo\Core\Repository\ContentObject\ForumTopic</argument>
+        </service>
+        <service id="Chamilo\Core\Repository\ContentObject\ForumTopic\Package\Remover"
+                 class="Chamilo\Core\Repository\Common\Action\ContentObjectRemover">
+            <tag name="Chamilo\Configuration\Package\Action\Remover"/>
+            <argument key="$context">Chamilo\Core\Repository\ContentObject\ForumTopic</argument>
+        </service>
+    </services>
+</container>

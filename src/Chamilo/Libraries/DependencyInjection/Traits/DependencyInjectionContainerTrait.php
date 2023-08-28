@@ -177,7 +177,6 @@ trait DependencyInjectionContainerTrait
 
     /**
      * @template getService
-     *
      * @param class-string<getService> $serviceId
      *
      * @return getService

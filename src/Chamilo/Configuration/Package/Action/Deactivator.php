@@ -2,7 +2,6 @@
 namespace Chamilo\Configuration\Package\Action;
 
 use Chamilo\Configuration\Package\Action;
-use Chamilo\Configuration\Service\RegistrationService;
 
 /**
  * @package Chamilo\Configuration\Package\Action
@@ -12,11 +11,14 @@ use Chamilo\Configuration\Service\RegistrationService;
  */
 abstract class Deactivator extends Action
 {
+    /**
+     * @throws \ReflectionException
+     */
     public function run(): bool
     {
         $translator = $this->getTranslator();
 
-        if (!$this->getRegistrationService()->deactivateRegistrationForContext(static::CONTEXT))
+        if (!$this->getRegistrationService()->deactivateRegistrationForContext($this->getContext()))
         {
             return $this->failed($translator->trans('DeactivationFailed', [], 'Chamilo\Configuration\Package'));
         }
@@ -26,6 +28,8 @@ abstract class Deactivator extends Action
                 self::TYPE_NORMAL, $translator->trans('DeactivationSuccessful', [], 'Chamilo\Configuration\Package')
             );
         }
+
+        return $this->successful();
     }
 
     public static function factory(string $context): Deactivator
@@ -33,10 +37,5 @@ abstract class Deactivator extends Action
         $class = $context . '\Package\Deactivator';
 
         return new $class();
-    }
-
-    public function getRegistrationService(): RegistrationService
-    {
-        return $this->getService(RegistrationService::class);
     }
 }

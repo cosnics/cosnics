@@ -15,13 +15,11 @@ class Installer
 {
 
     /**
-     *
      * @var string[]
      */
     private $schemaDefinition;
 
     /**
-     *
      * @param string[] $schemaDefinition
      */
     public function __construct($schemaDefinition)
@@ -57,21 +55,11 @@ class Installer
     }
 
     /**
-     *
      * @return string[]
      */
     public function getSchemaDefinition()
     {
         return $this->schemaDefinition;
-    }
-
-    /**
-     *
-     * @param string[] $schemaDefinition
-     */
-    public function setSchemaDefinition($schemaDefinition)
-    {
-        $this->schemaDefinition = $schemaDefinition;
     }
 
     /**
@@ -92,7 +80,7 @@ class Installer
      *
      * @param Schema $schema
      *
-     * @return boolean
+     * @return bool
      */
     protected function installElements(Schema $schema)
     {
@@ -171,5 +159,13 @@ class Installer
         }
 
         return $schema;
+    }
+
+    /**
+     * @param string[] $schemaDefinition
+     */
+    public function setSchemaDefinition($schemaDefinition)
+    {
+        $this->schemaDefinition = $schemaDefinition;
     }
 }

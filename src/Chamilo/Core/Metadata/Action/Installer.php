@@ -1,9 +1,16 @@
 <?php
 namespace Chamilo\Core\Metadata\Action;
 
+use Chamilo\Configuration\Package\Service\PackageBundlesCacheService;
+use Chamilo\Configuration\Package\Service\PackageFactory;
+use Chamilo\Configuration\Service\ConfigurationService;
+use Chamilo\Configuration\Service\RegistrationService;
 use Chamilo\Core\Metadata\Manager;
 use Chamilo\Core\Metadata\Storage\DataClass\ProviderRegistration;
-use Chamilo\Libraries\Translation\Translation;
+use Chamilo\Libraries\Architecture\ClassnameUtilities;
+use Chamilo\Libraries\File\SystemPathBuilder;
+use Chamilo\Libraries\Storage\DataManager\Repository\StorageUnitRepository;
+use Symfony\Component\Translation\Translator;
 
 /**
  * Extension of the generic installer for metadata integrations
@@ -13,19 +20,40 @@ use Chamilo\Libraries\Translation\Translation;
  * @author  Magali Gillard <magali.gillard@ehb.be>
  * @author  Eduard Vossen <eduard.vossen@ehb.be>
  */
-abstract class Installer extends \Chamilo\Configuration\Package\Action\Installer
+class Installer extends \Chamilo\Configuration\Package\Action\Installer
 {
 
     /**
-     * Perform additional installation steps
-     *
-     * @return bool
+     * @var string[]
      */
-    public function extra(): bool
+    protected array $propertyProviderTypes;
+
+    public function __construct(
+        ClassnameUtilities $classnameUtilities, ConfigurationService $configurationService,
+        StorageUnitRepository $storageUnitRepository, Translator $translator,
+        PackageBundlesCacheService $packageBundlesCacheService, PackageFactory $packageFactory,
+        RegistrationService $registrationService, SystemPathBuilder $systemPathBuilder, string $context,
+        array $propertyProviderTypes
+    )
+    {
+        parent::__construct(
+            $classnameUtilities, $configurationService, $storageUnitRepository, $translator,
+            $packageBundlesCacheService, $packageFactory, $registrationService, $systemPathBuilder, $context
+        );
+
+        $this->propertyProviderTypes = $propertyProviderTypes;
+    }
+
+    /**
+     * @throws \ReflectionException
+     */
+    public function extra(array $formValues): bool
     {
         if (!$this->registerPropertyProviders())
         {
-            return $this->failed(Translation::get('PropertyProviderRegistrationFailed', null, Manager::CONTEXT));
+            return $this->failed(
+                $this->getTranslator()->trans('PropertyProviderRegistrationFailed', [], Manager::CONTEXT)
+            );
         }
 
         return true;
@@ -34,16 +62,15 @@ abstract class Installer extends \Chamilo\Configuration\Package\Action\Installer
     /**
      * @return string[]
      */
-    public function getPropertyProviderTypes()
+    public function getPropertyProviderTypes(): array
     {
-        return [];
+        return $this->propertyProviderTypes;
     }
 
-    /**
-     * @return bool
-     */
-    public function registerPropertyProviders()
+    public function registerPropertyProviders(): bool
     {
+        $translator = $this->getTranslator();
+
         foreach ($this->getPropertyProviderTypes() as $propertyProviderType)
         {
             $propertyProvider = new $propertyProviderType();
@@ -61,12 +88,12 @@ abstract class Installer extends \Chamilo\Configuration\Package\Action\Installer
                 if (!$propertyRegistration->create())
                 {
                     $this->add_message(
-                        self::TYPE_ERROR, Translation::get(
+                        self::TYPE_ERROR, $translator->trans(
                         'EntityPropertyRegistrationFailed', [
-                            'ENTITY' => $entityType,
-                            'PROVIDER_CLASS' => $propertyProviderType,
-                            'PROPERTY_NAME' => $entityProperty
-                        ]
+                        'ENTITY' => $entityType,
+                        'PROVIDER_CLASS' => $propertyProviderType,
+                        'PROPERTY_NAME' => $entityProperty
+                    ], Manager::CONTEXT
                     )
                     );
 
@@ -75,12 +102,12 @@ abstract class Installer extends \Chamilo\Configuration\Package\Action\Installer
                 else
                 {
                     $this->add_message(
-                        self::TYPE_NORMAL, Translation::get(
+                        self::TYPE_NORMAL, $translator->trans(
                         'EntityPropertyRegistrationAdded', [
-                            'ENTITY' => $entityType,
-                            'PROVIDER_CLASS' => $propertyProviderType,
-                            'PROPERTY_NAME' => $entityProperty
-                        ]
+                        'ENTITY' => $entityType,
+                        'PROVIDER_CLASS' => $propertyProviderType,
+                        'PROPERTY_NAME' => $entityProperty
+                    ], Manager::CONTEXT
                     )
                     );
                 }

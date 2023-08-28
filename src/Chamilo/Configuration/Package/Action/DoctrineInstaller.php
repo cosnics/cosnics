@@ -21,17 +21,16 @@ abstract class DoctrineInstaller extends Installer
      *
      * @return string[]
      */
-    protected function getExcludedEntityClasses()
+    protected function getExcludedEntityClasses(): array
     {
         return [];
     }
 
     /**
-     * Scans for the available storage units and creates them
-     *
-     * @return bool
+     * @throws \Chamilo\Libraries\Storage\Exception\ConnectionException
+     * @throws \Symfony\Component\Cache\Exception\CacheException
      */
-    public function installStorageUnits()
+    public function installStorageUnits(): bool
     {
         $cacheDir = $this->getConfigurablePathBuilder()->getCachePath('Hogent\Libraries\DependencyInjection');
         $cacheFile = $cacheDir . 'InstallDependencyInjection.php';
@@ -60,8 +59,10 @@ abstract class DoctrineInstaller extends Installer
 
         try
         {
+            $context = $this->getContext();
+
             $packages = [
-                static::CONTEXT => $this->getSystemPathBuilder()->namespaceToFullPath(static::CONTEXT) .
+                $context => $this->getSystemPathBuilder()->namespaceToFullPath($context) .
                     'Resources/Configuration/Config.yml'
             ];
 

@@ -2,7 +2,6 @@
 namespace Chamilo\Configuration\Package\Action;
 
 use Chamilo\Configuration\Package\Action;
-use Chamilo\Configuration\Service\RegistrationService;
 
 /**
  * @package Chamilo\Configuration\Package\Action
@@ -12,11 +11,14 @@ use Chamilo\Configuration\Service\RegistrationService;
  */
 abstract class Activator extends Action
 {
+    /**
+     * @throws \ReflectionException
+     */
     public function run(): bool
     {
         $translator = $this->getTranslator();
 
-        if (!$this->getRegistrationService()->activateRegistrationForContext(static::CONTEXT))
+        if (!$this->getRegistrationService()->activateRegistrationForContext($this->getContext()))
         {
             return $this->failed($translator->trans('ActivationFailed', [], 'Chamilo\Configuration\Package'));
         }
@@ -35,10 +37,5 @@ abstract class Activator extends Action
         $class = $context . '\Package\Activator';
 
         return new $class();
-    }
-
-    public function getRegistrationService(): RegistrationService
-    {
-        return $this->getService(RegistrationService::class);
     }
 }

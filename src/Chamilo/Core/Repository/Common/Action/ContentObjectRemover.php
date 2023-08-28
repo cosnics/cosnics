@@ -3,7 +3,6 @@ namespace Chamilo\Core\Repository\Common\Action;
 
 use Chamilo\Configuration\Package\Action\Remover;
 use Chamilo\Core\Repository\Storage\DataManager;
-use Chamilo\Libraries\Architecture\ClassnameUtilities;
 
 /**
  * Extension of the generic remover for content objects
@@ -12,15 +11,10 @@ use Chamilo\Libraries\Architecture\ClassnameUtilities;
  */
 abstract class ContentObjectRemover extends Remover
 {
-    /**
-     * Perform additional installation steps
-     *
-     * @return bool
-     */
-    public function extra(): bool
+    public function extra(array $formValues): bool
     {
-        $context = static::CONTEXT;
-        $class = $context . '\\' . ClassnameUtilities::getInstance()->getPackageNameFromNamespace($context, true);
+        $context = $this->getContext();
+        $class = $context . '\\' . $this->getClassnameUtilities()->getPackageNameFromNamespace($context, true);
 
         $content_objects = DataManager::retrieve_content_objects($class);
 

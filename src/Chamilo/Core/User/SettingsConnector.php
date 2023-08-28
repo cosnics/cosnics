@@ -28,7 +28,7 @@ class SettingsConnector
      */
     public function getUserPictureProviders()
     {
-        return $this->getService(UserPictureProviderFactory::class)->getAvailablePictureProviders();
+        return $this->getService(UserPictureProviderFactory::class)->getAvailablePictureProviderTypes();
     }
 
     public function get_date_terms_and_conditions_update()

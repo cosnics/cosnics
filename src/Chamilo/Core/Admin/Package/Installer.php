@@ -1,12 +1,19 @@
 <?php
 namespace Chamilo\Core\Admin\Package;
 
+use Chamilo\Configuration\Package\Service\PackageBundlesCacheService;
+use Chamilo\Configuration\Package\Service\PackageFactory;
+use Chamilo\Configuration\Service\ConfigurationService;
+use Chamilo\Configuration\Service\RegistrationService;
 use Chamilo\Configuration\Storage\DataClass\Setting;
-use Chamilo\Configuration\Storage\DataManager;
 use Chamilo\Core\Admin\Announcement\Service\RightsService;
 use Chamilo\Core\Admin\Manager;
+use Chamilo\Libraries\Architecture\ClassnameUtilities;
+use Chamilo\Libraries\File\SystemPathBuilder;
 use Chamilo\Libraries\Storage\Cache\DataClassRepositoryCache;
+use Chamilo\Libraries\Storage\DataManager\Repository\StorageUnitRepository;
 use Chamilo\Libraries\Utilities\StringUtilities;
+use Symfony\Component\Translation\Translator;
 
 /**
  * @package Chamilo\Core\Admin\Package
@@ -15,15 +22,36 @@ class Installer extends \Chamilo\Configuration\Package\Action\Installer
 {
     public const CONTEXT = Manager::CONTEXT;
 
+    protected DataClassRepositoryCache $dataClassRepositoryCache;
+
+    protected RightsService $rightsService;
+
+    public function __construct(
+        ClassnameUtilities $classnameUtilities, ConfigurationService $configurationService,
+        StorageUnitRepository $storageUnitRepository, Translator $translator,
+        PackageBundlesCacheService $packageBundlesCacheService, PackageFactory $packageFactory,
+        RegistrationService $registrationService, SystemPathBuilder $systemPathBuilder, string $context,
+        DataClassRepositoryCache $dataClassRepositoryCache, RightsService $rightsService
+    )
+    {
+        parent::__construct(
+            $classnameUtilities, $configurationService, $storageUnitRepository, $translator,
+            $packageBundlesCacheService, $packageFactory, $registrationService, $systemPathBuilder, $context
+        );
+
+        $this->dataClassRepositoryCache = $dataClassRepositoryCache;
+        $this->rightsService = $rightsService;
+    }
+
     /**
      * @throws \Exception
      */
-    public function extra(): bool
+    public function extra(array $formValues): bool
     {
         $translator = $this->getTranslator();
 
         // Update the default settings to the database
-        if (!$this->update_settings())
+        if (!$this->update_settings($formValues))
         {
             return false;
         }
@@ -56,23 +84,19 @@ class Installer extends \Chamilo\Configuration\Package\Action\Installer
 
     protected function getDataClassRepositoryCache(): DataClassRepositoryCache
     {
-        return $this->getService(
-            DataClassRepositoryCache::class
-        );
+        return $this->dataClassRepositoryCache;
     }
 
     protected function getRightsService(): RightsService
     {
-        return $this->getService(RightsService::class);
+        return $this->rightsService;
     }
 
     /**
      * @throws \Exception
      */
-    public function update_settings()
+    public function update_settings(array $values): bool
     {
-        $values = $this->getFormValues();
-
         $settings = [];
         $settings[] = ['Chamilo\Core\Admin', 'site_name', $values['site_name']];
         $settings[] = ['Chamilo\Core\Admin', 'platform_language', $values['platform_language']];
@@ -92,12 +116,7 @@ class Installer extends \Chamilo\Configuration\Package\Action\Installer
 
         foreach ($settings as $setting)
         {
-            $setting_object = DataManager::retrieve_setting_from_variable_name($setting[1], $setting[0]);
-            $setting_object->set_context($setting[0]);
-            $setting_object->set_variable($setting[1]);
-            $setting_object->set_value($setting[2]);
-
-            if (!$setting_object->update())
+            if (!$this->getConfigurationService()->updateSettingFromParameters($setting[0], $setting[1], $setting[2]))
             {
                 return false;
             }

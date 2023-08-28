@@ -143,27 +143,11 @@ class TypeSelectorFactory
     }
 
     /**
-     * @return \Chamilo\Libraries\File\ConfigurablePathBuilder
-     * @throws \Exception
-     */
-    public function getConfigurablePathBuilder()
-    {
-        return $this->getService(
-            ConfigurablePathBuilder::class
-        );
-    }
-
-    /**
      * @return string[]
      */
     public function getContentObjectTypes()
     {
         return $this->contentObjectTypes;
-    }
-    
-    public function getRegistrationConsulter(): RegistrationConsulter
-    {
-        return $this->getService(RegistrationConsulter::class);
     }
 
     public function getTemplateRegistrationConsulter(): TemplateRegistrationConsulter

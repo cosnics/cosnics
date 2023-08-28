@@ -5,7 +5,6 @@ use Chamilo\Application\Weblcms\Integration\Chamilo\Core\Tracking\Service\Learni
 use Chamilo\Application\Weblcms\Integration\Chamilo\Core\Tracking\Storage\Repository\LearningPathAssignmentEphorusRepository;
 use Chamilo\Application\Weblcms\Integration\Chamilo\Core\Tracking\Storage\Repository\LearningPathAssignmentRepository;
 use Chamilo\Core\Queue\Service\JobProducer;
-use Chamilo\Core\Repository\ContentObject\Assignment\Display\ApplicationFactory;
 use Chamilo\Core\Repository\ContentObject\Assignment\Integration\Chamilo\Core\Repository\ContentObject\LearningPath\Bridge\AssignmentServiceBridge;
 use Chamilo\Core\Repository\ContentObject\Assignment\Integration\Chamilo\Core\Repository\ContentObject\LearningPath\Bridge\EphorusServiceBridge;
 use Chamilo\Core\Repository\ContentObject\Assignment\Integration\Chamilo\Core\Repository\ContentObject\LearningPath\Bridge\FeedbackServiceBridge;
@@ -19,23 +18,18 @@ use Chamilo\Core\Repository\ContentObject\LearningPath\Display\Attempt\TreeNodeA
 use Chamilo\Core\Repository\ContentObject\LearningPath\Display\Embedder\Type\ContentObjectEmbedder;
 use Chamilo\Libraries\Architecture\Application\ApplicationConfiguration;
 use Chamilo\Libraries\DependencyInjection\Traits\DependencyInjectionContainerTrait;
-use Chamilo\Libraries\Storage\DataManager\Repository\DataClassRepository;
-use Chamilo\Libraries\Translation\Translation;
-use Chamilo\Libraries\Utilities\StringUtilities;
 
 /**
- *
  * @package core\repository\content_object\assignment\integration\core\repository\content_object\learning_path\display
- * @author Hans De Bisschop <hans.de.bisschop@ehb.be>
- * @author Magali Gillard <magali.gillard@ehb.be>
- * @author Eduard Vossen <eduard.vossen@ehb.be>
+ * @author  Hans De Bisschop <hans.de.bisschop@ehb.be>
+ * @author  Magali Gillard <magali.gillard@ehb.be>
+ * @author  Eduard Vossen <eduard.vossen@ehb.be>
  */
 class Embedder extends ContentObjectEmbedder
 {
     use DependencyInjectionContainerTrait;
 
     /**
-     *
      * @see \core\repository\content_object\learning_path\display\Embedder::run()
      */
     public function run()
@@ -123,22 +117,6 @@ class Embedder extends ContentObjectEmbedder
         $this->getBridgeManager()->addBridge($feedbackServiceBridge);
         $this->getBridgeManager()->addBridge($ephorusServiceBridge);
         $this->getBridgeManager()->addBridge($notificationServiceBridge);
-    }
-
-    /**
-     * @return \Chamilo\Core\Repository\ContentObject\Assignment\Display\ApplicationFactory
-     */
-    protected function getApplicationFactory()
-    {
-        return new ApplicationFactory($this->getRequest(), StringUtilities::getInstance(), Translation::getInstance());
-    }
-
-    /**
-     * @return \Chamilo\Libraries\Storage\DataManager\Repository\DataClassRepository
-     */
-    protected function getDataClassRepository()
-    {
-        return $this->get_application()->getService(DataClassRepository::class);
     }
 
 }

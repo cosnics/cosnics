@@ -16,11 +16,11 @@ abstract class ContentObjectDeactivator extends Deactivator
             return false;
         }
 
-        $success = DataManager::deactivate_content_object_type(static::CONTEXT);
+        $success = DataManager::deactivate_content_object_type($this->getContext());
 
         if (!$success)
         {
-            $this->failed($this->getTranslator()->trans('ContentObjectStatusUpdateFailed'));
+            return $this->failed($this->getTranslator()->trans('ContentObjectStatusUpdateFailed'));
         }
         else
         {

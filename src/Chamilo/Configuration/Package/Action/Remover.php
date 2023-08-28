@@ -4,9 +4,6 @@ namespace Chamilo\Configuration\Package\Action;
 use Chamilo\Configuration\Package\Action;
 use Chamilo\Configuration\Package\PackageList;
 use Chamilo\Configuration\Package\Properties\Dependencies\DependencyVerifier;
-use Chamilo\Configuration\Package\Service\PackageBundlesCacheService;
-use Chamilo\Configuration\Package\Service\PackageFactory;
-use Chamilo\Configuration\Service\RegistrationService;
 use Chamilo\Configuration\Storage\DataClass\Setting;
 use DOMDocument;
 use DOMElement;
@@ -82,6 +79,7 @@ abstract class Remover extends Action
 
     /**
      * @throws \Symfony\Component\Cache\Exception\CacheException
+     * @throws \ReflectionException
      */
     public function deconfigurePackage(): bool
     {
@@ -95,7 +93,7 @@ abstract class Remover extends Action
             foreach ($xml as $name => $parameters)
             {
                 $setting =
-                    $this->getConfigurationService()->findSettingByContextAndVariableName(static::CONTEXT, $name);
+                    $this->getConfigurationService()->findSettingByContextAndVariableName($this->getContext(), $name);
 
                 if (!$setting instanceof Setting || !$this->getConfigurationService()->deleteSetting($setting))
                 {
@@ -140,9 +138,12 @@ abstract class Remover extends Action
         }
     }
 
+    /**
+     * @throws \ReflectionException
+     */
     public function deregisterPackage(): bool
     {
-        if (!$this->getRegistrationService()->deleteRegistrationForContext(static::CONTEXT))
+        if (!$this->getRegistrationService()->deleteRegistrationForContext($this->getContext()))
         {
             return $this->failed(
                 $this->getTranslator()->trans('PackageDeregistrationFailed', [], 'Chamilo\Core\Install')
@@ -169,26 +170,6 @@ abstract class Remover extends Action
     public function getAdditionalPackages($packagesList = []): array
     {
         return $packagesList;
-    }
-
-    public function getPackageBundlesCacheService(): PackageBundlesCacheService
-    {
-        return $this->getService(PackageBundlesCacheService::class);
-    }
-
-    public function getPackageFactory(): PackageFactory
-    {
-        return $this->getService(PackageFactory::class);
-    }
-
-    public function getPath(): string
-    {
-        return $this->getSystemPathBuilder()->namespaceToFullPath(static::CONTEXT);
-    }
-
-    public function getRegistrationService(): RegistrationService
-    {
-        return $this->getService(RegistrationService::class);
     }
 
     public function parseApplicationSettings(string $file): array
@@ -258,7 +239,7 @@ abstract class Remover extends Action
     {
         $translator = $this->getTranslator();
 
-        $verifier = new DependencyVerifier($this->getPackageFactory()->getPackage(static::CONTEXT));
+        $verifier = new DependencyVerifier($this->getPackageFactory()->getPackage($this->getContext()));
         $success = $verifier->is_removable();
 
         $this->add_message(self::TYPE_NORMAL, $verifier->get_logger()->render());
@@ -274,4 +255,5 @@ abstract class Remover extends Action
             return true;
         }
     }
+
 }

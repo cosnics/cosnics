@@ -27,12 +27,12 @@ class UserSettingService
     protected FilesystemAdapter $userSettingsCacheAdapter;
 
     public function __construct(
-        UserService $userService, FilesystemAdapter $userSettingsCache, DatetimeUtilities $datetimeUtilities,
+        UserService $userService, FilesystemAdapter $userSettingsCacheAdapter, DatetimeUtilities $datetimeUtilities,
         ConfigurationService $configurationService
     )
     {
         $this->userService = $userService;
-        $this->userSettingsCacheAdapter = $userSettingsCache;
+        $this->userSettingsCacheAdapter = $userSettingsCacheAdapter;
         $this->datetimeUtilities = $datetimeUtilities;
         $this->configurationService = $configurationService;
     }

@@ -186,4 +186,31 @@ class ConfigurationService
 
         return true;
     }
+
+    /**
+     * @throws \Symfony\Component\Cache\Exception\CacheException
+     */
+    public function updateSettingFromParameters(
+        string $context, string $variable, ?string $value = null, ?bool $isUserSetting = null
+    ): bool
+    {
+        $setting = $this->findSettingByContextAndVariableName($context, $variable);
+
+        if (!$setting instanceof Setting)
+        {
+            return false;
+        }
+
+        if (!is_null($value))
+        {
+            $setting->set_value($value);
+        }
+
+        if (!is_null($isUserSetting))
+        {
+            $setting->set_user_setting((int) $isUserSetting);
+        }
+
+        return $this->updateSetting($setting);
+    }
 }

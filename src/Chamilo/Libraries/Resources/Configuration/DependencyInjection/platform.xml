@@ -36,7 +36,7 @@
 
         <service id="Chamilo\Libraries\Platform\TranslationCacheService"/>
 
-        <service id="Symfony\Component\HttpFoundation\Session\PasswordGeneratorInterface"
+        <service id="Hackzilla\PasswordGenerator\Generator\PasswordGeneratorInterface"
                  alias="Chamilo\Libraries\Platform\PasswordGenerator"/>
 
         <service id="Chamilo\Libraries\Platform\PasswordGenerator">
@@ -44,10 +44,6 @@
                      method="createPasswordGenerator"/>
         </service>
 
-        <service id="Chamilo\Libraries\Platform\PasswordGeneratorFactory">
-            <argument key="$passwordGeneratorImplementation"
-                      type="service"
-                      id="Hackzilla\PasswordGenerator\Generator\ComputerPasswordGenerator"/>
-        </service>
+        <service id="Chamilo\Libraries\Platform\PasswordGeneratorFactory" />
     </services>
 </container>

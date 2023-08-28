@@ -2,6 +2,7 @@
 namespace Chamilo\Core\User\DependencyInjection;
 
 use Chamilo\Core\User\DependencyInjection\CompilerPass\UserDetailsRendererCompilerPass;
+use Chamilo\Core\User\DependencyInjection\CompilerPass\UserPictureProviderCompilerPass;
 use Chamilo\Libraries\DependencyInjection\AbstractDependencyInjectionExtension;
 use Chamilo\Libraries\DependencyInjection\Interfaces\ICompilerPassExtension;
 use Chamilo\Libraries\DependencyInjection\Traits\ExtensionTrait;
@@ -30,5 +31,6 @@ class DependencyInjectionExtension extends AbstractDependencyInjectionExtension
     public function registerCompilerPasses(ContainerBuilder $container)
     {
         $container->addCompilerPass(new UserDetailsRendererCompilerPass());
+        $container->addCompilerPass(new UserPictureProviderCompilerPass());
     }
 }

@@ -4,9 +4,6 @@ namespace Chamilo\Configuration\Package\Action;
 use Chamilo\Configuration\Package\Action;
 use Chamilo\Configuration\Package\PackageList;
 use Chamilo\Configuration\Package\Properties\Dependencies\DependencyVerifier;
-use Chamilo\Configuration\Package\Service\PackageBundlesCacheService;
-use Chamilo\Configuration\Package\Service\PackageFactory;
-use Chamilo\Configuration\Service\RegistrationService;
 use Chamilo\Configuration\Storage\DataClass\Registration;
 use DOMDocument;
 use DOMElement;
@@ -19,30 +16,17 @@ use Symfony\Component\Finder\Iterator\FileTypeFilterIterator;
  * @author  Magali Gillard <magali.gillard@ehb.be>
  * @author  Eduard Vossen <eduard.vossen@ehb.be>
  */
-abstract class Installer extends Action
+class Installer extends Action
 {
-
-    /**
-     * Form values passed on from the installation wizard
-     */
-    private array $formValues;
-
-    /**
-     * Constructor
-     */
-    public function __construct(array $formValues)
-    {
-        parent::__construct();
-
-        $this->formValues = $formValues;
-    }
 
     /**
      * Installs and configures the package
      *
+     * @param string[] $formValues
+     *
      * @throws \Exception
      */
-    public function run(): bool
+    public function run(array $formValues): bool
     {
         if (!$this->verifyDependencies())
         {
@@ -68,7 +52,7 @@ abstract class Installer extends Action
                 '<small class="text-muted">' . $translator->trans('Various', [], 'Chamilo\Core\Install') . '<small>'
             );
 
-            if (!$this->extra())
+            if (!$this->extra($formValues))
             {
                 return $this->failed($translator->trans('VariousFailed', [], 'Chamilo\Core\Install'));
             }
@@ -97,6 +81,7 @@ abstract class Installer extends Action
 
     /**
      * @throws \Symfony\Component\Cache\Exception\CacheException
+     * @throws \ReflectionException
      */
     public function configurePackage(): bool
     {
@@ -170,41 +155,6 @@ abstract class Installer extends Action
         $class = $context . '\Package\Installer';
 
         return new $class($values);
-    }
-
-    /**
-     * Returns the list with extra installable packages that are connected to this package
-     *
-     * @return string[]
-     */
-    public static function getAdditionalPackages($packagesList = []): array
-    {
-        return $packagesList;
-    }
-
-    public function getFormValues(): array
-    {
-        return $this->formValues;
-    }
-
-    public function getPackageBundlesCacheService(): PackageBundlesCacheService
-    {
-        return $this->getService(PackageBundlesCacheService::class);
-    }
-
-    public function getPackageFactory(): PackageFactory
-    {
-        return $this->getService(PackageFactory::class);
-    }
-
-    public function getPath(): string
-    {
-        return $this->getSystemPathBuilder()->namespaceToFullPath(static::CONTEXT);
-    }
-
-    public function getRegistrationService(): RegistrationService
-    {
-        return $this->getService(RegistrationService::class);
     }
 
     /**

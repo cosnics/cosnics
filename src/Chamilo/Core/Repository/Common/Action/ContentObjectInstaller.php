@@ -2,6 +2,10 @@
 namespace Chamilo\Core\Repository\Common\Action;
 
 use Chamilo\Configuration\Package\Action\Installer;
+use Chamilo\Configuration\Package\Service\PackageBundlesCacheService;
+use Chamilo\Configuration\Package\Service\PackageFactory;
+use Chamilo\Configuration\Service\ConfigurationService;
+use Chamilo\Configuration\Service\RegistrationService;
 use Chamilo\Core\Repository\Common\Import\ContentObjectImport;
 use Chamilo\Core\Repository\Common\Import\ContentObjectImportController;
 use Chamilo\Core\Repository\Common\Import\ImportParameters;
@@ -9,27 +13,51 @@ use Chamilo\Core\Repository\Service\ContentObjectTemplate\ContentObjectTemplateS
 use Chamilo\Core\User\Manager;
 use Chamilo\Core\User\Storage\DataClass\User;
 use Chamilo\Core\User\Storage\DataManager;
+use Chamilo\Libraries\Architecture\ClassnameUtilities;
 use Chamilo\Libraries\File\Properties\FileProperties;
+use Chamilo\Libraries\File\SystemPathBuilder;
+use Chamilo\Libraries\Storage\DataManager\Repository\StorageUnitRepository;
 use Chamilo\Libraries\Storage\Parameters\DataClassRetrievesParameters;
 use Chamilo\Libraries\Storage\Query\Condition\EqualityCondition;
 use Chamilo\Libraries\Storage\Query\Variable\PropertyConditionVariable;
 use Chamilo\Libraries\Storage\Query\Variable\StaticConditionVariable;
-use Chamilo\Libraries\Translation\Translation;
 use Exception;
+use Symfony\Component\HttpFoundation\Session\SessionInterface;
+use Symfony\Component\Translation\Translator;
 
 /**
  * @package Chamilo\Core\Repository\Common\Action
  * @author  Hans De Bisschop <hans.de.bisschop@ehb.be>
  */
-abstract class ContentObjectInstaller extends Installer
+class ContentObjectInstaller extends Installer
 {
 
+    protected ContentObjectTemplateSynchronizer $contentObjectTemplateSynchronizer;
+
+    protected SessionInterface $session;
+
+    public function __construct(
+        ClassnameUtilities $classnameUtilities, ConfigurationService $configurationService,
+        StorageUnitRepository $storageUnitRepository, Translator $translator,
+        PackageBundlesCacheService $packageBundlesCacheService, PackageFactory $packageFactory,
+        RegistrationService $registrationService, SystemPathBuilder $systemPathBuilder, string $context,
+        ContentObjectTemplateSynchronizer $contentObjectTemplateSynchronizer, SessionInterface $session
+    )
+    {
+        parent::__construct(
+            $classnameUtilities, $configurationService, $storageUnitRepository, $translator,
+            $packageBundlesCacheService, $packageFactory, $registrationService, $systemPathBuilder, $context
+        );
+
+        $this->contentObjectTemplateSynchronizer = $contentObjectTemplateSynchronizer;
+        $this->session = $session;
+    }
+
     /**
-     * Perform additional installation steps
-     *
-     * @return bool
+     * @throws \Chamilo\Libraries\Storage\Exception\DataClassNoResultException
+     * @throws \ReflectionException
      */
-    public function extra(): bool
+    public function extra(array $formValues): bool
     {
         if (!$this->register_templates())
         {
@@ -46,18 +74,25 @@ abstract class ContentObjectInstaller extends Installer
 
     public function getContentObjectTemplateSynchronizer(): ContentObjectTemplateSynchronizer
     {
-        return $this->getService(ContentObjectTemplateSynchronizer::class);
+        return $this->contentObjectTemplateSynchronizer;
+    }
+
+    public function getSession(): SessionInterface
+    {
+        return $this->session;
     }
 
     /**
      * Import a sample content object (if available)
      *
-     * @return bool
+     * @throws \ReflectionException
+     * @throws \Chamilo\Libraries\Storage\Exception\DataClassNoResultException
+     * @throws \Exception
      */
-    public function import_content_object()
+    public function import_content_object(): bool
     {
-        $exampleFolderPath = $this->getSystemPathBuilder()->getResourcesPath(static::CONTEXT) . 'Example/';
-
+        $translator = $this->getTranslator();
+        $exampleFolderPath = $this->getSystemPathBuilder()->getResourcesPath($this->getContext()) . 'Example/';
         $examplePaths = $this->getFilesystemTools()->getDirectoryContent($exampleFolderPath);
 
         foreach ($examplePaths as $examplePath)
@@ -81,31 +116,35 @@ abstract class ContentObjectInstaller extends Installer
 
             if ($import->has_messages(ContentObjectImportController::TYPE_ERROR))
             {
-                $message = Translation::get('ContentObjectImportFailed');
+                $message =
+                    $translator->trans('ContentObjectImportFailed', [], \Chamilo\Core\Repository\Manager::CONTEXT);
                 $this->failed($message);
 
                 return false;
             }
             else
             {
-                $this->add_message(self::TYPE_NORMAL, Translation::get('ImportSuccessfull'));
+                $this->add_message(
+                    self::TYPE_NORMAL,
+                    $translator->trans('ImportSuccessfull', [], \Chamilo\Core\Repository\Manager::CONTEXT)
+                );
             }
         }
 
         return true;
     }
 
-    public function register_templates()
+    public function register_templates(): bool
     {
         try
         {
-            $this->getContentObjectTemplateSynchronizer()->synchronize(static::CONTEXT);
+            $this->getContentObjectTemplateSynchronizer()->synchronize($this->getContext());
 
             return true;
         }
-        catch (Exception $exception)
+        catch (Exception)
         {
-            return true;
+            return false;
         }
     }
 }

@@ -16,11 +16,11 @@ abstract class ContentObjectActivator extends Activator
             return false;
         }
 
-        $success = DataManager::activate_content_object_type(static::CONTEXT);
+        $success = DataManager::activate_content_object_type($this->getContext());
 
         if (!$success)
         {
-            $this->failed(
+            return $this->failed(
                 $this->getTranslator()->trans('ContentObjectStatusUpdateFailed', [], 'Chamilo\Core\Repository')
             );
         }

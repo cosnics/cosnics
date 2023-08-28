@@ -28,7 +28,11 @@
             <argument key="$namespace">Chamilo\Configuration\Service\Registration</argument>
         </service>
 
-        <service id="Chamilo\Configuration\Storage\Repository\RegistrationService"/>
+        <service id="Chamilo\Configuration\Service\RegistrationService">
+            <argument key="$registrationCacheAdapter"
+                      type="service"
+                      id="Chamilo\Configuration\Service\DataLoader\RegistrationCacheAdapter"/>
+        </service>
         <service id="Chamilo\Configuration\Storage\Repository\RegistrationRepository"/>
     </services>
 </container>

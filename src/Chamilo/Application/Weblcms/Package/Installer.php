@@ -7,7 +7,6 @@ use Chamilo\Application\Weblcms\Request\Rights\Rights;
 use Chamilo\Application\Weblcms\Rights\CourseManagementRights;
 use Chamilo\Application\Weblcms\Rights\WeblcmsRights;
 use Chamilo\Application\Weblcms\Storage\DataClass\CourseCategory;
-use Chamilo\Libraries\Translation\Translation;
 use Chamilo\Libraries\Utilities\StringUtilities;
 
 /**
@@ -18,18 +17,10 @@ class Installer extends \Chamilo\Configuration\Package\Action\Installer
     public const CONTEXT = Manager::CONTEXT;
 
     /**
-     * **************************************************************************************************************
-     * Inherited Functionality *
-     * **************************************************************************************************************
-     */
-
-    /**
      * Installs the root location of the courses subtree and sets the default rights for everyone on root location so
      * the rights are no issue when using no course type
-     *
-     * @return bool
      */
-    private function create_courses_subtree()
+    private function create_courses_subtree(): bool
     {
         $rights_utilities = CourseManagementRights::getInstance();
 
@@ -57,18 +48,7 @@ class Installer extends \Chamilo\Configuration\Package\Action\Installer
         return true;
     }
 
-    /**
-     * **************************************************************************************************************
-     * Helper Functionality *
-     * **************************************************************************************************************
-     */
-
-    /**
-     * Installs example course categories
-     *
-     * @return bool
-     */
-    private function create_default_categories_in_weblcms()
+    private function create_default_categories_in_weblcms(): bool
     {
         // Creating Language Skills
         $cat = new CourseCategory();
@@ -86,6 +66,7 @@ class Installer extends \Chamilo\Configuration\Package\Action\Installer
         $cat->set_name('PC skills');
         $cat->set_parent('0');
         $cat->set_display_order(1);
+
         if (!$cat->create())
         {
             return false;
@@ -96,6 +77,7 @@ class Installer extends \Chamilo\Configuration\Package\Action\Installer
         $cat->set_name('Projects');
         $cat->set_parent('0');
         $cat->set_display_order(1);
+
         if (!$cat->create())
         {
             return false;
@@ -104,11 +86,10 @@ class Installer extends \Chamilo\Configuration\Package\Action\Installer
         return true;
     }
 
-    /**
-     * Runs the install-script.
-     */
-    public function extra(): bool
+    public function extra(array $formValues): bool
     {
+        $translator = $this->getTranslator();
+
         if (!$this->create_courses_subtree())
         {
             return false;
@@ -116,8 +97,9 @@ class Installer extends \Chamilo\Configuration\Package\Action\Installer
         else
         {
             $this->add_message(
-                self::TYPE_NORMAL, Translation::get(
-                'ObjectCreated', ['OBJECT' => Translation::get('CoursesTree')], StringUtilities::LIBRARIES
+                self::TYPE_NORMAL, $translator->trans(
+                'ObjectCreated', ['OBJECT' => $translator->trans('CoursesTree', [], Manager::CONTEXT)],
+                StringUtilities::LIBRARIES
             )
             );
         }
@@ -137,7 +119,7 @@ class Installer extends \Chamilo\Configuration\Package\Action\Installer
         }
         else
         {
-            $this->add_message(self::TYPE_NORMAL, Translation::get('QuotaLocationCreated'));
+            $this->add_message(self::TYPE_NORMAL, $translator->trans('QuotaLocationCreated', [], Manager::CONTEXT));
         }
 
         return true;

@@ -1,28 +1,66 @@
 <?php
 namespace Chamilo\Configuration\Package;
 
+use Chamilo\Configuration\Package\Service\PackageBundlesCacheService;
+use Chamilo\Configuration\Package\Service\PackageFactory;
 use Chamilo\Configuration\Service\ConfigurationService;
-use Chamilo\Libraries\DependencyInjection\Traits\DependencyInjectionContainerTrait;
+use Chamilo\Configuration\Service\RegistrationService;
+use Chamilo\Libraries\Architecture\ClassnameUtilities;
+use Chamilo\Libraries\File\FilesystemTools;
+use Chamilo\Libraries\File\SystemPathBuilder;
 use Chamilo\Libraries\Storage\DataManager\Repository\StorageUnitRepository;
-use Chamilo\Libraries\Translation\Translation;
+use Symfony\Component\Translation\Translator;
 
 abstract class Action
 {
-    use DependencyInjectionContainerTrait;
-
     public const TYPE_CONFIRM = '2';
     public const TYPE_ERROR = '4';
     public const TYPE_NORMAL = '1';
     public const TYPE_WARNING = '3';
 
-    private $message;
+    protected ClassnameUtilities $classnameUtilities;
 
-    public function __construct()
+    protected ConfigurationService $configurationService;
+
+    protected string $context;
+
+    protected FilesystemTools $filesystemTools;
+
+    protected PackageBundlesCacheService $packageBundlesCacheService;
+
+    protected PackageFactory $packageFactory;
+
+    protected RegistrationService $registrationService;
+
+    protected StorageUnitRepository $storageUnitRepository;
+
+    protected SystemPathBuilder $systemPathBuilder;
+
+    protected Translator $translator;
+
+    private array $message;
+
+    public function __construct(
+        ClassnameUtilities $classnameUtilities, ConfigurationService $configurationService,
+        StorageUnitRepository $storageUnitRepository, Translator $translator,
+        PackageBundlesCacheService $packageBundlesCacheService, PackageFactory $packageFactory,
+        RegistrationService $registrationService, SystemPathBuilder $systemPathBuilder, string $context
+    )
     {
+        $this->classnameUtilities = $classnameUtilities;
+        $this->configurationService = $configurationService;
+        $this->storageUnitRepository = $storageUnitRepository;
+        $this->translator = $translator;
+        $this->context = $context;
+        $this->packageBundlesCacheService = $packageBundlesCacheService;
+        $this->packageFactory = $packageFactory;
+        $this->registrationService = $registrationService;
+        $this->systemPathBuilder = $systemPathBuilder;
+
         $this->message = [];
     }
 
-    public function add_message($type = self::TYPE_NORMAL, $message)
+    public function add_message($type = self::TYPE_NORMAL, $message): void
     {
         switch ($type)
         {
@@ -41,28 +79,78 @@ abstract class Action
         }
     }
 
-    public function failed($error_message)
+    /**
+     * @throws \ReflectionException
+     */
+    public function failed($error_message): bool
     {
         $this->add_message(self::TYPE_ERROR, $error_message);
-        $this->add_message(self::TYPE_ERROR, Translation::get($this->getType() . 'Failed'));
+        $this->add_message(
+            self::TYPE_ERROR, $this->getTranslator()->trans($this->getType() . 'Failed', [], 'Chamilo\Core\Install')
+        );
 
         return false;
     }
 
-    public function getStorageUnitRepository(): StorageUnitRepository
+    public function getClassnameUtilities(): ClassnameUtilities
     {
-        return $this->getService(StorageUnitRepository::class);
+        return $this->classnameUtilities;
     }
 
     public function getConfigurationService(): ConfigurationService
     {
-        return $this->getService(ConfigurationService::class);
+        return $this->configurationService;
+    }
+
+    public function getContext(): string
+    {
+        return $this->context;
+    }
+
+    protected function getFilesystemTools(): FilesystemTools
+    {
+        return $this->filesystemTools;
+    }
+
+    public function getPackageBundlesCacheService(): PackageBundlesCacheService
+    {
+        return $this->packageBundlesCacheService;
+    }
+
+    public function getPackageFactory(): PackageFactory
+    {
+        return $this->packageFactory;
+    }
+
+    public function getPath(): string
+    {
+        return $this->getSystemPathBuilder()->namespaceToFullPath(static::CONTEXT);
+    }
+
+    public function getRegistrationService(): RegistrationService
+    {
+        return $this->registrationService;
+    }
+
+    public function getStorageUnitRepository(): StorageUnitRepository
+    {
+        return $this->storageUnitRepository;
+    }
+
+    public function getSystemPathBuilder(): SystemPathBuilder
+    {
+        return $this->systemPathBuilder;
+    }
+
+    public function getTranslator(): Translator
+    {
+        return $this->translator;
     }
 
     /**
      * @throws \ReflectionException
      */
-    public function getType()
+    public function getType(): string
     {
         return $this->getClassnameUtilities()->getClassnameFromObject($this);
     }
@@ -70,15 +158,16 @@ abstract class Action
     /**
      * @return string[]
      */
-    public function get_message()
+    public function get_message(): array
     {
         return $this->message;
     }
 
     /**
+     * @throws \ReflectionException
      * @deprecated Use Action::getType() now
      */
-    public function get_type()
+    public function get_type(): string
     {
         return $this->getType();
     }
@@ -86,19 +175,20 @@ abstract class Action
     /**
      * @return string
      */
-    public function retrieve_message()
+    public function retrieve_message(): string
     {
         return implode('<br />' . PHP_EOL, $this->get_message());
     }
 
-    public function set_message($message)
+    /**
+     * @throws \ReflectionException
+     */
+    public function successful(): bool
     {
-        $this->message = $message;
-    }
-
-    public function successful()
-    {
-        $this->add_message(self::TYPE_CONFIRM, Translation::get($this->getType() . 'Successful'));
+        $this->add_message(
+            self::TYPE_CONFIRM,
+            $this->getTranslator()->trans($this->getType() . 'Successful', [], 'Chamilo\Core\Install')
+        );
 
         return true;
     }

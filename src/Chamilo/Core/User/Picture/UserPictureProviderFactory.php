@@ -3,7 +3,6 @@ namespace Chamilo\Core\User\Picture;
 
 use Chamilo\Configuration\Service\Consulter\ConfigurationConsulter;
 use Chamilo\Configuration\Service\Consulter\RegistrationConsulter;
-use Chamilo\Libraries\DependencyInjection\Traits\DependencyInjectionContainerTrait;
 use Exception;
 use Symfony\Component\Translation\Translator;
 
@@ -14,28 +13,17 @@ use Symfony\Component\Translation\Translator;
  */
 class UserPictureProviderFactory
 {
-    use DependencyInjectionContainerTrait;
-
     /**
-     * @var \Chamilo\Configuration\Service\Consulter\ConfigurationConsulter
+     * @var \Chamilo\Core\User\Picture\UserPictureProviderInterface[]
      */
-    protected $configurationConsulter;
+    protected array $availablePictureProviders = [];
 
-    /**
-     * @var \Chamilo\Configuration\Service\Consulter\RegistrationConsulter
-     */
-    protected $registrationConsulter;
+    protected ConfigurationConsulter $configurationConsulter;
 
-    /**
-     * @var \Symfony\Component\Translation\Translator
-     */
-    protected $translator;
+    protected RegistrationConsulter $registrationConsulter;
 
-    /**
-     * @param \Chamilo\Configuration\Service\Consulter\ConfigurationConsulter $configurationConsulter
-     * @param \Chamilo\Configuration\Service\Consulter\RegistrationConsulter $registrationConsulter
-     * @param \Symfony\Component\Translation\Translator $translator
-     */
+    protected Translator $translator;
+
     public function __construct(
         ConfigurationConsulter $configurationConsulter, RegistrationConsulter $registrationConsulter,
         Translator $translator
@@ -46,13 +34,18 @@ class UserPictureProviderFactory
         $this->translator = $translator;
     }
 
+    public function addAvailablePictureProvider(UserPictureProviderInterface $userPictureProvider): void
+    {
+        $this->availablePictureProviders[get_class($userPictureProvider)] = $userPictureProvider;
+    }
+
     /**
      * Returns the active picture provider
      *
      * @return UserPictureProviderInterface
      * @throws \Exception
      */
-    public function getActivePictureProvider()
+    public function getActivePictureProvider(): UserPictureProviderInterface
     {
         $pictureProvider =
             $this->getConfigurationConsulter()->getSetting(['Chamilo\Core\User', 'user_picture_provider']);
@@ -62,35 +55,25 @@ class UserPictureProviderFactory
             throw new Exception($this->getTranslator()->trans('InvalidUserPictureProvider'));
         }
 
-        return $this->getService($pictureProvider);
+        return $this->availablePictureProviders[$pictureProvider];
+    }
+
+    /**
+     * @return string[]
+     */
+    public function getAvailablePictureProviderTypes(): array
+    {
+        return array_keys($this->availablePictureProviders);
     }
 
     /**
      * Returns a list of available picture providers
      *
-     * @return string[]
+     * @return \Chamilo\Core\User\Picture\UserPictureProviderInterface[]
      */
-    public function getAvailablePictureProviders()
+    public function getAvailablePictureProviders(): array
     {
-        $pictureProviders = [];
-
-        $pictureProvidersPackages =
-            $this->getRegistrationConsulter()->getRegistrationsByType(__NAMESPACE__ . '\\Provider');
-
-        foreach ($pictureProvidersPackages as $package)
-        {
-            /** @var UserPictureProviderInterface|string $pictureProviderClass */
-            $pictureProviderClass = $package['context'] . '\UserPictureProvider';
-
-            if (class_exists($pictureProviderClass))
-            {
-                $pictureProviders[$pictureProviderClass] = $this->getTranslator()->trans(
-                    'TypeName', [], $package['context']
-                );
-            }
-        }
-
-        return $pictureProviders;
+        return $this->availablePictureProviders;
     }
 
     /**
@@ -107,6 +90,11 @@ class UserPictureProviderFactory
     public function getRegistrationConsulter(): RegistrationConsulter
     {
         return $this->registrationConsulter;
+    }
+
+    public function getTranslator(): Translator
+    {
+        return $this->translator;
     }
 
     /**

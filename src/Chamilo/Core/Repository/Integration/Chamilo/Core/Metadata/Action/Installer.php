@@ -1,15 +1,20 @@
 <?php
 namespace Chamilo\Core\Repository\Integration\Chamilo\Core\Metadata\Action;
 
+use Chamilo\Configuration\Package\Service\PackageBundlesCacheService;
+use Chamilo\Configuration\Package\Service\PackageFactory;
+use Chamilo\Configuration\Service\ConfigurationService;
+use Chamilo\Configuration\Service\RegistrationService;
 use Chamilo\Core\Metadata\Manager;
 use Chamilo\Core\Metadata\Relation\Service\RelationService;
 use Chamilo\Core\Metadata\Schema\Storage\DataManager;
 use Chamilo\Core\Metadata\Storage\DataClass\RelationInstance;
 use Chamilo\Core\Metadata\Storage\DataClass\Schema;
 use Chamilo\Libraries\Architecture\ClassnameUtilities;
-use Chamilo\Libraries\DependencyInjection\DependencyInjectionContainerBuilder;
+use Chamilo\Libraries\File\SystemPathBuilder;
 use Chamilo\Libraries\Storage\Cache\DataClassRepositoryCache;
-use Chamilo\Libraries\Translation\Translation;
+use Chamilo\Libraries\Storage\DataManager\Repository\StorageUnitRepository;
+use Symfony\Component\Translation\Translator;
 
 /**
  * @package Chamilo\Core\Repository\Integration\Chamilo\Core\Metadata\Action
@@ -17,25 +22,47 @@ use Chamilo\Libraries\Translation\Translation;
  * @author  Magali Gillard <magali.gillard@ehb.be>
  * @author  Eduard Vossen <eduard.vossen@ehb.be>
  */
-abstract class Installer extends \Chamilo\Core\Metadata\Action\Installer
+class Installer extends \Chamilo\Core\Metadata\Action\Installer
 {
+    protected DataClassRepositoryCache $dataClassRepositoryCache;
 
-    public function extra(): bool
+    public function __construct(
+        ClassnameUtilities $classnameUtilities, ConfigurationService $configurationService,
+        StorageUnitRepository $storageUnitRepository, Translator $translator,
+        PackageBundlesCacheService $packageBundlesCacheService, PackageFactory $packageFactory,
+        RegistrationService $registrationService, SystemPathBuilder $systemPathBuilder, string $context,
+        array $propertyProviderTypes, DataClassRepositoryCache $dataClassRepositoryCache
+    )
     {
-        if (!parent::extra())
+        parent::__construct(
+            $classnameUtilities, $configurationService, $storageUnitRepository, $translator,
+            $packageBundlesCacheService, $packageFactory, $registrationService, $systemPathBuilder, $context,
+            $propertyProviderTypes
+        );
+
+        $this->dataClassRepositoryCache = $dataClassRepositoryCache;
+    }
+
+    /**
+     * @throws \ReflectionException
+     * @throws \Chamilo\Libraries\Architecture\Exceptions\UserException
+     */
+    public function extra(array $formValues): bool
+    {
+        if (!parent::extra($formValues))
         {
             return false;
         }
 
         if (!$this->linkToSchemas())
         {
-            return $this->failed(Translation::get('ContentObjectSchemaLinkFailed', null, Manager::CONTEXT));
+            return $this->failed($this->getTranslator()->trans('ContentObjectSchemaLinkFailed', [], Manager::CONTEXT));
         }
 
         return true;
     }
 
-    public function getContentObjectType()
+    public function getContentObjectType(): string
     {
         $namespace = static::CONTEXT;
         $classNameUtilities = ClassnameUtilities::getInstance();
@@ -45,33 +72,16 @@ abstract class Installer extends \Chamilo\Core\Metadata\Action\Installer
         return $packageNamespace . '\Storage\DataClass\\' . $packageName;
     }
 
-    /**
-     * @return \Chamilo\Libraries\Storage\Cache\DataClassRepositoryCache
-     */
-    protected function getDataClassRepositoryCache()
+    protected function getDataClassRepositoryCache(): DataClassRepositoryCache
     {
-        return $this->getService(
-            DataClassRepositoryCache::class
-        );
+        return $this->dataClassRepositoryCache;
     }
 
     /**
-     * @param string $serviceName
-     *
-     * @return object
-     * @throws \Exception
+     * @throws \ReflectionException
+     * @throws \Chamilo\Libraries\Architecture\Exceptions\UserException
      */
-    protected function getService(string $serviceName)
-    {
-        return DependencyInjectionContainerBuilder::getInstance()->createContainer()->get(
-            $serviceName
-        );
-    }
-
-    /**
-     * @return bool
-     */
-    public function linkToSchemas()
+    public function linkToSchemas(): bool
     {
         $schemaNamespaces = ['dc', 'ct'];
         $this->getDataClassRepositoryCache()->truncate(Schema::class);

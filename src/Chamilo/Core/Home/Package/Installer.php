@@ -13,7 +13,7 @@ class Installer extends \Chamilo\Configuration\Package\Action\Installer
 {
     public const CONTEXT = Manager::CONTEXT;
 
-    public function create_basic_home()
+    public function create_basic_home(): bool
     {
         $tab = new Tab();
         $tab->setTitle(Translation::get('Home'));
@@ -49,13 +49,7 @@ class Installer extends \Chamilo\Configuration\Package\Action\Installer
         return true;
     }
 
-    /**
-     * Runs the install-script.
-     *
-     * @todo This function now uses the function of the RepositoryInstaller class. These shared functions should be
-     *       available in a common base class.
-     */
-    public function extra(): bool
+    public function extra(array $formValues): bool
     {
         if (!$this->create_basic_home())
         {
@@ -63,7 +57,7 @@ class Installer extends \Chamilo\Configuration\Package\Action\Installer
         }
         else
         {
-            $this->add_message(self::TYPE_NORMAL, Translation::get('HomeCreated'));
+            $this->add_message(self::TYPE_NORMAL, $this->getTranslator()->trans('HomeCreated', [], Manager::CONTEXT));
         }
 
         return true;

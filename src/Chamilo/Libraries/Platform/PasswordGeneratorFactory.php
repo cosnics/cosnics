@@ -10,6 +10,10 @@ use Hackzilla\PasswordGenerator\Generator\ComputerPasswordGenerator;
 class PasswordGeneratorFactory
 {
 
+    public function __construct()
+    {
+    }
+
     public function createPasswordGenerator(): ComputerPasswordGenerator
     {
         $passwordGenerator = new ComputerPasswordGenerator();

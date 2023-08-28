@@ -37,13 +37,6 @@ abstract class ReportingBlock
 
     abstract public function count_data();
 
-    public function getConfigurationConsulter(): ConfigurationConsulter
-    {
-        return DependencyInjectionContainerBuilder::getInstance()->createContainer()->get(
-            ConfigurationConsulter::class
-        );
-    }
-
     /**
      * @brief Return block style containing properties such as title font size or title color.
      * Default implementation
