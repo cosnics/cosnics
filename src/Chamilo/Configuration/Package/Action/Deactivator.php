@@ -9,7 +9,7 @@ use Chamilo\Configuration\Package\Action;
  * @author  Magali Gillard <magali.gillard@ehb.be>
  * @author  Eduard Vossen <eduard.vossen@ehb.be>
  */
-abstract class Deactivator extends Action
+class Deactivator extends Action
 {
     /**
      * @throws \ReflectionException
@@ -30,12 +30,5 @@ abstract class Deactivator extends Action
         }
 
         return $this->successful();
-    }
-
-    public static function factory(string $context): Deactivator
-    {
-        $class = $context . '\Package\Deactivator';
-
-        return new $class();
     }
 }

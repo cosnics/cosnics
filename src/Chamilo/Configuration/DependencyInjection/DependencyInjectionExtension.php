@@ -1,8 +1,10 @@
 <?php
 namespace Chamilo\Configuration\DependencyInjection;
 
+use Chamilo\Configuration\DependencyInjection\CompilerPass\PackageActionCompilerPass;
 use Chamilo\Configuration\Service\FileConfigurationLocator;
 use Chamilo\Libraries\DependencyInjection\AbstractDependencyInjectionExtension;
+use Chamilo\Libraries\DependencyInjection\Interfaces\ICompilerPassExtension;
 use Chamilo\Libraries\DependencyInjection\Traits\ExtensionTrait;
 use Symfony\Component\Config\FileLocator;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
@@ -14,7 +16,8 @@ use Symfony\Component\DependencyInjection\Loader\XmlFileLoader;
  * @author  Hans De Bisschop <hans.de.bisschop@ehb.be>
  * @author  Magali Gillard <magali.gillard@ehb.be>
  */
-class DependencyInjectionExtension extends AbstractDependencyInjectionExtension implements ExtensionInterface
+class DependencyInjectionExtension extends AbstractDependencyInjectionExtension
+    implements ExtensionInterface, ICompilerPassExtension
 {
     use ExtensionTrait
     {
@@ -59,5 +62,10 @@ class DependencyInjectionExtension extends AbstractDependencyInjectionExtension 
 
         $configurationXmlFileLoader = new XmlFileLoader($container, new FileLocator($configurationFilePath));
         $configurationXmlFileLoader->load($configurationFileName);
+    }
+
+    public function registerCompilerPasses(ContainerBuilder $container)
+    {
+        $container->addCompilerPass(new PackageActionCompilerPass());
     }
 }

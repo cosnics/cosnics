@@ -6,6 +6,7 @@ use Chamilo\Application\Weblcms\Storage\DataClass\CourseSetting;
 use Chamilo\Application\Weblcms\Storage\DataClass\CourseSettingDefaultValue;
 use Chamilo\Application\Weblcms\Storage\DataClass\CourseSettingRelation;
 use Chamilo\Application\Weblcms\Storage\DataManager;
+use Chamilo\Configuration\Package\Action;
 use Chamilo\Configuration\Package\Action\Installer;
 use Chamilo\Libraries\Architecture\Exceptions\ObjectNotExistException;
 use Chamilo\Libraries\DependencyInjection\DependencyInjectionContainerBuilder;
@@ -642,14 +643,14 @@ class CourseSettingsController
         if (self::create_course_settings_from_xml($settings_file, $tool_registration_id))
         {
             $installer->add_message(
-                Installer::TYPE_NORMAL, Translation::get('RegisteredCourseSettings')
+                Action::TYPE_NORMAL, Translation::get('RegisteredCourseSettings')
             );
 
             return true;
         }
 
         return $installer->failed(
-            Installer::TYPE_NORMAL, Translation::get('CouldNotRegisterCourseSettings')
+            Translation::get('CouldNotRegisterCourseSettings')
         );
     }
 

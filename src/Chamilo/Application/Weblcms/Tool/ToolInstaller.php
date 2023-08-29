@@ -7,17 +7,18 @@ use Chamilo\Application\Weblcms\CourseSettingsController;
 use Chamilo\Application\Weblcms\CourseType\Storage\DataClass\CourseType;
 use Chamilo\Application\Weblcms\CourseType\Storage\DataManager as CourseTypeDataManager;
 use Chamilo\Application\Weblcms\Rights\CourseManagementRights;
+use Chamilo\Application\Weblcms\Rights\WeblcmsRights;
 use Chamilo\Application\Weblcms\Storage\DataClass\CourseSection;
 use Chamilo\Application\Weblcms\Storage\DataClass\CourseSetting;
 use Chamilo\Application\Weblcms\Storage\DataClass\CourseSettingDefaultValue;
 use Chamilo\Application\Weblcms\Storage\DataClass\CourseTool;
+use Chamilo\Configuration\Package\Action;
 use Chamilo\Configuration\Package\Action\Installer;
 use Chamilo\Configuration\Package\Service\PackageFactory;
 use Chamilo\Libraries\Architecture\ClassnameUtilities;
 use Chamilo\Libraries\DependencyInjection\DependencyInjectionContainerBuilder;
 use Chamilo\Libraries\Storage\DataClass\DataClass;
 use Chamilo\Libraries\Storage\Parameters\DataClassRetrievesParameters;
-use Chamilo\Libraries\Translation\Translation;
 
 /**
  * Abstract class to define the installation of a tool
@@ -25,41 +26,26 @@ use Chamilo\Libraries\Translation\Translation;
  * @package application\weblcms;
  * @author  Sven Vanpoucke - Hogeschool Gent
  */
-abstract class ToolInstaller extends Installer
+class ToolInstaller extends Installer
 {
-
-    /**
-     * **************************************************************************************************************
-     * Caching variables *
-     * **************************************************************************************************************
-     */
-
     /**
      * The static tool settings with their created setting object for faster retrieval
      *
-     * @var CourseSetting[string]
+     * @var \Chamilo\Application\Weblcms\Storage\DataClass\CourseSetting[]
      */
-    private $static_tool_settings;
+    private array $static_tool_settings;
 
     /**
      * The registration of the tool This registration is needed to register the settings
-     *
-     * @var ToolRegistration
      */
-    private $tool_registration;
+    private CourseTool $tool_registration;
 
     /**
-     * **************************************************************************************************************
-     * Main functionality *
-     * **************************************************************************************************************
+     * @throws \ReflectionException
+     * @throws \Chamilo\Libraries\Storage\Exception\DataClassNoResultException
+     * @throws \Exception
      */
-
-    /**
-     * Installs the tool
-     *
-     * @return bool
-     */
-    public function extra(): bool
+    public function extra(array $formValues): bool
     {
         // Set time and memory limit very low because this could be a lengthy process
         ini_set('memory_limit', - 1);
@@ -70,8 +56,8 @@ abstract class ToolInstaller extends Installer
             return false;
         }
 
-        if (!CourseSettingsController::getInstance()->install_course_settings(
-            $this, $this->tool_registration->get_id()
+        if (!CourseSettingsController::getInstance()::install_course_settings(
+            $this, $this->tool_registration->getId()
         ))
         {
             return false;
@@ -96,40 +82,38 @@ abstract class ToolInstaller extends Installer
     }
 
     /**
-     * **************************************************************************************************************
-     * Helper functionality *
-     * **************************************************************************************************************
-     */
-
-    /**
      * Installs the settings that are required for each tool (active, visible)
      *
-     * @return bool
+     * @throws \ReflectionException
      */
-    private function install_static_settings()
+    private function install_static_settings(): bool
     {
+        $translator = $this->getTranslator();
+
         foreach (CourseSetting::get_static_tool_settings() as $static_tool_setting)
         {
             $course_setting = new CourseSetting();
-            $course_setting->set_tool_id($this->tool_registration->get_id());
+            $course_setting->set_tool_id($this->tool_registration->getId());
             $course_setting->set_name($static_tool_setting);
             $course_setting->set_global_setting(0);
 
             if (!$course_setting->create())
             {
                 return $this->failed(
-                    Installer::TYPE_NORMAL, Translation::get('CouldNotInstallStaticSettings')
+                    $translator->trans('CouldNotInstallStaticSettings', [],
+                        \Chamilo\Application\Weblcms\Manager::CONTEXT)
                 );
             }
 
             $course_setting_default_value = new CourseSettingDefaultValue();
-            $course_setting_default_value->set_course_setting_id($course_setting->get_id());
+            $course_setting_default_value->set_course_setting_id($course_setting->getId());
             $course_setting_default_value->set_value(1);
 
             if (!$course_setting_default_value->create())
             {
                 return $this->failed(
-                    Installer::TYPE_NORMAL, Translation::get('CouldNotInstallStaticSettings')
+                    $translator->trans('CouldNotInstallStaticSettings', [],
+                        \Chamilo\Application\Weblcms\Manager::CONTEXT)
                 );
             }
 
@@ -137,7 +121,8 @@ abstract class ToolInstaller extends Installer
         }
 
         $this->add_message(
-            Installer::TYPE_NORMAL, Translation::get('InstalledStaticSettings')
+            Action::TYPE_NORMAL,
+            $translator->trans('InstalledStaticSettings', [], \Chamilo\Application\Weblcms\Manager::CONTEXT)
         );
 
         return true;
@@ -145,23 +130,17 @@ abstract class ToolInstaller extends Installer
 
     /**
      * Installs the static tool setting relation and values for a given object
-     *
-     * @param DataClass $object
-     * @param string $course_setting_relation_class_name
-     * @param string $set_object_function
-     *
-     * @return bool
      */
     protected function install_static_tool_setting_relations_for_object(
-        $object, $course_setting_relation_class_name, $set_object_function = null
-    )
+        DataClass $object, string $course_setting_relation_class_name, ?string $set_object_function = null
+    ): bool
     {
         foreach ($this->static_tool_settings as $static_tool_setting)
         {
             $course_setting_relation = new $course_setting_relation_class_name();
-            $course_setting_relation->set_course_setting_id($static_tool_setting->get_id());
+            $course_setting_relation->set_course_setting_id($static_tool_setting->getId());
 
-            call_user_func([$course_setting_relation, $set_object_function], $object->get_id());
+            call_user_func([$course_setting_relation, $set_object_function], $object->getId());
 
             $course_setting_relation->set_value(0);
 
@@ -177,11 +156,14 @@ abstract class ToolInstaller extends Installer
     /**
      * Installs the tool in the existing course types Adds the static tool settings with a default disabled value
      *
-     * @return bool
+     * @throws \Chamilo\Libraries\Storage\Exception\DataClassNoResultException
+     * @throws \ReflectionException
      */
-    protected function install_tool_for_existing_course_types()
+    protected function install_tool_for_existing_course_types(): bool
     {
+        $translator = $this->getTranslator();
         $course_types = CourseTypeDataManager::retrieves(CourseType::class, new DataClassRetrievesParameters());
+
         foreach ($course_types as $course_type)
         {
             if (!$this->install_static_tool_setting_relations_for_object(
@@ -190,13 +172,15 @@ abstract class ToolInstaller extends Installer
             ))
             {
                 return $this->failed(
-                    Installer::TYPE_NORMAL, Translation::get('CouldNotInstallStaticSettingsForExistingCourseTypes')
+                    $translator->trans('CouldNotInstallStaticSettingsForExistingCourseTypes', [],
+                        \Chamilo\Application\Weblcms\Manager::CONTEXT)
                 );
             }
         }
 
         $this->add_message(
-            Installer::TYPE_NORMAL, Translation::get('InstalledStaticSettingsForExistingCourseTypes')
+            Action::TYPE_NORMAL, $translator->trans('InstalledStaticSettingsForExistingCourseTypes', [],
+            \Chamilo\Application\Weblcms\Manager::CONTEXT)
         );
 
         return true;
@@ -206,13 +190,15 @@ abstract class ToolInstaller extends Installer
      * Installs the tool in the existing courses Adds the static tool settings with a default disabled value Adds a
      * rights location for the tool in each course
      *
-     * @return bool
+     * @throws \ReflectionException
+     * @throws \Chamilo\Libraries\Storage\Exception\DataClassNoResultException
      */
-    protected function install_tool_for_existing_courses()
+    protected function install_tool_for_existing_courses(): bool
     {
+        $translator = $this->getTranslator();
         $course_management_rights = CourseManagementRights::getInstance();
-
         $courses = CourseDataManager::retrieves(Course::class, new DataClassRetrievesParameters());
+
         foreach ($courses as $course)
         {
             if (!$this->install_static_tool_setting_relations_for_object(
@@ -220,30 +206,33 @@ abstract class ToolInstaller extends Installer
             ))
             {
                 return $this->failed(
-                    Installer::TYPE_NORMAL, Translation::get('CouldNotInstallStaticSettingsForExistingCourses')
+                    $translator->trans('CouldNotInstallStaticSettingsForExistingCourses', [],
+                        \Chamilo\Application\Weblcms\Manager::CONTEXT)
                 );
             }
 
-            $course_subtree_root_location_id =
-                $course_management_rights->get_courses_subtree_root_id($course->get_id());
+            $course_subtree_root_location_id = $course_management_rights->get_courses_subtree_root_id($course->getId());
 
             $this->add_message(
-                Installer::TYPE_NORMAL, Translation::get('InstalledStaticSettingsForExistingCourses')
+                Action::TYPE_NORMAL, $translator->trans('InstalledStaticSettingsForExistingCourses', [],
+                \Chamilo\Application\Weblcms\Manager::CONTEXT)
             );
 
             if (!$course_management_rights->create_location_in_courses_subtree(
-                CourseManagementRights::TYPE_COURSE_MODULE, $this->tool_registration->get_id(),
-                $course_subtree_root_location_id, $course->get_id()
+                WeblcmsRights::TYPE_COURSE_MODULE, $this->tool_registration->getId(), $course_subtree_root_location_id,
+                $course->getId()
             ))
             {
                 return $this->failed(
-                    Installer::TYPE_NORMAL, Translation::get('CouldNotInstallRightsLocationForExistingCourseTypes')
+                    $translator->trans('CouldNotInstallRightsLocationForExistingCourseTypes', [],
+                        \Chamilo\Application\Weblcms\Manager::CONTEXT)
                 );
             }
         }
 
         $this->add_message(
-            Installer::TYPE_NORMAL, Translation::get('InstalledRightsLocationForExistingCourses')
+            Action::TYPE_NORMAL, $translator->trans('InstalledRightsLocationForExistingCourses', [],
+            \Chamilo\Application\Weblcms\Manager::CONTEXT)
         );
 
         return true;
@@ -252,11 +241,13 @@ abstract class ToolInstaller extends Installer
     /**
      * Registers the tool in the tool table
      *
-     * @return bool
+     * @throws \Exception
      */
-    private function register_tool()
+    private function register_tool(): bool
     {
-        $toolNamespace = static::CONTEXT;
+        $translator = $this->getTranslator();
+
+        $toolNamespace = $this->getContext();
         $tool_name = ClassnameUtilities::getInstance()->getPackageNameFromNamespace($toolNamespace);
 
         $tool_object = new CourseTool();
@@ -268,7 +259,7 @@ abstract class ToolInstaller extends Installer
         if ($tool_object->create())
         {
             $this->add_message(
-                Installer::TYPE_NORMAL, Translation::get('RegisteredTool')
+                Action::TYPE_NORMAL, $translator->trans('RegisteredTool')
             );
             $this->tool_registration = $tool_object;
 
@@ -277,7 +268,7 @@ abstract class ToolInstaller extends Installer
         else
         {
             return $this->failed(
-                Installer::TYPE_NORMAL, Translation::get('CouldNotRegisterTool')
+                $translator->trans('CouldNotRegisterTool')
             );
         }
     }
@@ -287,16 +278,16 @@ abstract class ToolInstaller extends Installer
      * If no package info or course section definition is found
      * the default section "tool" is selected.
      *
-     * @return int
+     * @throws \Exception
      */
-    private function retrieve_course_section_type_from_package_info()
+    private function retrieve_course_section_type_from_package_info(): int
     {
         $section_type = CourseSection::TYPE_TOOL;
 
         $container = DependencyInjectionContainerBuilder::getInstance()->createContainer();
         $packageFactory = $container->get(PackageFactory::class);
 
-        $packageInformation = $packageFactory->getPackage(static::CONTEXT);
+        $packageInformation = $packageFactory->getPackage($this->getContext());
 
         $extra = (array) $packageInformation->get_extra();
 

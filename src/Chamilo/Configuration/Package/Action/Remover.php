@@ -16,7 +16,7 @@ use Symfony\Component\Finder\Iterator\FileTypeFilterIterator;
  * @author  Magali Gillard <magali.gillard@ehb.be>
  * @author  Eduard Vossen <eduard.vossen@ehb.be>
  */
-abstract class Remover extends Action
+class Remover extends Action
 {
 
     /**
@@ -153,13 +153,6 @@ abstract class Remover extends Action
         {
             return true;
         }
-    }
-
-    public static function factory(string $context): Remover
-    {
-        $class = $context . '\Package\Remover';
-
-        return new $class();
     }
 
     /**

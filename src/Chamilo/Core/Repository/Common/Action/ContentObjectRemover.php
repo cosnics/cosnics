@@ -9,7 +9,7 @@ use Chamilo\Core\Repository\Storage\DataManager;
  *
  * @author Hans De Bisschop
  */
-abstract class ContentObjectRemover extends Remover
+class ContentObjectRemover extends Remover
 {
     public function extra(array $formValues): bool
     {

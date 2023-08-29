@@ -9,7 +9,7 @@ use Chamilo\Configuration\Package\Action;
  * @author  Magali Gillard <magali.gillard@ehb.be>
  * @author  Eduard Vossen <eduard.vossen@ehb.be>
  */
-abstract class Activator extends Action
+class Activator extends Action
 {
     /**
      * @throws \ReflectionException
@@ -30,12 +30,5 @@ abstract class Activator extends Action
         }
 
         return $this->successful();
-    }
-
-    public static function factory(string $context): Activator
-    {
-        $class = $context . '\Package\Activator';
-
-        return new $class();
     }
 }

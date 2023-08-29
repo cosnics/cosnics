@@ -145,19 +145,6 @@ class Installer extends Action
     }
 
     /**
-     * Creates an application-specific installer.
-     *
-     * @param string $context The namespace of the package for which we want to start the installer.
-     * @param array $values   The form values passed on by the wizard.
-     */
-    public static function factory(string $context, array $values): Installer
-    {
-        $class = $context . '\Package\Installer';
-
-        return new $class($values);
-    }
-
-    /**
      * @throws \Exception
      */
     public function installStorageUnits(): bool

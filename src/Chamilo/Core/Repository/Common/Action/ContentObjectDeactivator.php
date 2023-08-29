@@ -4,7 +4,7 @@ namespace Chamilo\Core\Repository\Common\Action;
 use Chamilo\Configuration\Package\Action\Deactivator;
 use Chamilo\Core\Repository\Storage\DataManager;
 
-abstract class ContentObjectDeactivator extends Deactivator
+class ContentObjectDeactivator extends Deactivator
 {
 
     public function run(): bool

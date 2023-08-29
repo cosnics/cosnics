@@ -4,7 +4,7 @@ namespace Chamilo\Core\Repository\Common\Action;
 use Chamilo\Configuration\Package\Action\Activator;
 use Chamilo\Core\Repository\Storage\DataManager;
 
-abstract class ContentObjectActivator extends Activator
+class ContentObjectActivator extends Activator
 {
 
     public function run(): bool
