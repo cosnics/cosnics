@@ -317,8 +317,10 @@ export default class ImporterApp extends Vue {
     border: 0;
     border-radius: 0;
     color: #999;
+    line-height: 20px;
+    margin-bottom: 3px;
     outline-style: none;
-    padding: 10px 10px 10px 50px;
+    padding: 10px 25px 10px 30px;
     position: relative;
     text-decoration: none;
 }
@@ -326,31 +328,29 @@ export default class ImporterApp extends Vue {
     padding-left: 20px;
 }
 .nav.nav-tabs.mod-steps > li > a:before {
-    border-bottom: 50px solid transparent;
-    border-left: 30px solid #fff;
-    border-top: 50px solid transparent;
+    border-bottom: 20px inset transparent;
+    border-left: 13px solid #fff;
+    border-top: 20px inset transparent;
     content: '';
     display: block;
     height: 0;
     left: 100%;
-    margin-left: 3px;
-    margin-top: -50px;
+    margin-left: 2px;
     position: absolute;
-    top: 50%;
+    top: 0;
     width: 0;
     z-index: 1;
 }
 .nav.nav-tabs.mod-steps > li > a:after {
-    border-bottom: 50px solid transparent;
-    border-left: 30px solid #f3f3f3;
-    border-top: 50px solid transparent;
+    border-bottom: 20px solid transparent;
+    border-left: 12px solid #f3f3f3;
+    border-top: 20px solid transparent;
     content: '';
     display: block;
     height: 0;
-    left: 100%;
-    margin-top: -50px;
     position: absolute;
-    top: 50%;
+    right: -12px;
+    top: 0;
     width: 0;
     z-index: 2;
 }
@@ -359,14 +359,14 @@ export default class ImporterApp extends Vue {
     color: #1c303f;
 }
 .nav.nav-tabs.mod-steps > li.done > a:after {
-    border-left: 30px solid #e8edf3;
+    border-left-color: #e8edf3;
 }
 .nav.nav-tabs.mod-steps > li.active > a {
     color: #fff;
     background: #6192b8;
 }
 .nav.nav-tabs.mod-steps > li.active > a:after {
-    border-left: 30px solid #6192b8;
+    border-left-color: #6192b8;
 }
 .nav.nav-tabs.mod-steps > li .step {
     background-color: hsla(0, 0%, 100%, .75);
