@@ -6,69 +6,69 @@ use Exception;
 class Configuration
 {
 
-    private $storage_type = 'mdb2';
+    private string $storage_type = 'mdb2';
 
-    private $db_driver = 'mysql';
+    private string $db_driver = 'mysql';
 
-    private $db_host = 'localhost';
+    private string $db_host = 'localhost';
 
-    private $db_name = 'chamilo';
+    private string $db_name = 'chamilo';
 
-    private $db_overwrite = true;
+    private bool $db_overwrite = true;
 
-    private $db_username = '';
+    private string $db_username = '';
 
-    private $db_password = '';
+    private string $db_password = '';
 
-    private $packages = [];
+    private array $packages = [];
 
-    private $content_objects = [];
+    private array $content_objects = [];
 
-    private $external_instances = [];
+    private array $external_instances = [];
 
-    private $platform_language = 'english';
+    private string $platform_language = 'english';
 
-    private $archive_path;
+    private string $archive_path;
 
-    private $cache_path;
+    private string $cache_path;
 
-    private $garbage_path;
+    private string $garbage_path;
 
-    private $hotpotatoes_path;
+    private string $hotpotatoes_path;
 
-    private $logs_path;
+    private string $logs_path;
 
-    private $repository_path;
+    private string $repository_path;
 
-    private $scorm_path;
+    private string $scorm_path;
 
-    private $temp_path;
+    private string $temp_path;
 
-    private $userpictures_path;
+    private string $userpictures_path;
 
-    private $url_append = '/chamilo/web';
+    private string $url_append = '/chamilo/web';
 
-    private $admin_email = '';
+    private string $admin_email = '';
 
-    private $admin_lastname = '';
+    private string $admin_lastname = '';
 
-    private $admin_firstname = '';
+    private string $admin_firstname = '';
 
-    private $admin_phone = '';
+    private string $admin_phone = '';
 
-    private $admin_login = 'admin';
+    private string $admin_login = 'admin';
 
-    private $admin_password = 'admin';
+    private string $admin_password = 'admin';
 
-    private $institution_name = '';
+    private string $institution_name = '';
 
-    private $campus_name = 'Chamilo Campus';
+    private string $campus_name = 'Chamilo Campus';
 
-    private $institution_webpage = 'http://www.chamilo.org';
+    private string $institution_webpage = 'http://www.chamilo.org';
 
-    private $self_register = false;
+    private bool $self_register = false;
 
-    private $crypt_algorithm = 'sha1';
+    private string $crypt_algorithm = 'sha1';
 
     public function __construct()
     {
@@ -133,10 +133,11 @@ class Configuration
         return $values;
     }
 
-    public function load_config_file($file)
+    public function load_config_file($file): void
     {
         if (! (is_file($file)))
             throw new Exception("Install config file {$file} not found !");
+
         if (! (is_readable($file)))
             throw new Exception("Install config file {$file} not readable !");
 

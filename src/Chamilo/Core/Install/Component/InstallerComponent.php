@@ -187,6 +187,7 @@ class InstallerComponent extends Manager implements NoAuthenticationSupport, Ins
         if (!isset($this->installer))
         {
             $values = unserialize($this->getSession()->get(self::PARAM_SETTINGS));
+
             if (!is_array($values))
             {
                 $values = [];
