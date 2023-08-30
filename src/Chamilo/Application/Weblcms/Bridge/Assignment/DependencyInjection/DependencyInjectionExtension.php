@@ -21,6 +21,6 @@ class DependencyInjectionExtension extends AbstractDependencyInjectionExtension 
 
     public function getConfigurationFiles(): array
     {
-        return ['Chamilo\Application\Weblcms\Bridge\Assignment' => ['services.xml']];
+        return ['Chamilo\Application\Weblcms\Bridge\Assignment' => ['package.xml', 'services.xml']];
     }
 }

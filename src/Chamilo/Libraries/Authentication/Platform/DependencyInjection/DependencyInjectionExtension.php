@@ -21,6 +21,6 @@ class DependencyInjectionExtension extends AbstractDependencyInjectionExtension 
 
     public function getConfigurationFiles(): array
     {
-        return ['Chamilo\Libraries\Authentication\Platform' => ['authentication.xml']];
+        return ['Chamilo\Libraries\Authentication\Platform' => ['package.xml', 'authentication.xml']];
     }
 }

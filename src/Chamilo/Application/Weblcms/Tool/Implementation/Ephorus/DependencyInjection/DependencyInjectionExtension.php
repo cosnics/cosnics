@@ -22,6 +22,6 @@ class DependencyInjectionExtension extends AbstractDependencyInjectionExtension 
 
     public function getConfigurationFiles(): array
     {
-        return ['Chamilo\Application\Weblcms\Tool\Implementation\Ephorus' => ['services.xml', 'tables.xml']];
+        return ['Chamilo\Application\Weblcms\Tool\Implementation\Ephorus' => ['package.xml', 'services.xml', 'tables.xml']];
     }
 }

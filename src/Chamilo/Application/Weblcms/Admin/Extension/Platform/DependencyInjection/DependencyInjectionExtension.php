@@ -20,6 +20,6 @@ class DependencyInjectionExtension extends AbstractDependencyInjectionExtension 
 
     public function getConfigurationFiles(): array
     {
-        return ['Chamilo\Application\Weblcms\Admin\Extension\Platform' => ['tables.xml']];
+        return ['Chamilo\Application\Weblcms\Admin\Extension\Platform' => ['package.xml', 'tables.xml']];
     }
 }

@@ -26,7 +26,7 @@ class DependencyInjectionExtension extends AbstractDependencyInjectionExtension 
     public function getConfigurationFiles(): array
     {
         return [
-            'Chamilo\Core\Repository\ContentObject\Portfolio' => [
+            'Chamilo\Core\Repository\ContentObject\Portfolio' => ['package.xml', 
                 'tables.xml'
             ]
         ];

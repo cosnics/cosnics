@@ -21,6 +21,6 @@ class DependencyInjectionExtension extends AbstractDependencyInjectionExtension 
 
     public function getConfigurationFiles(): array
     {
-        return ['Chamilo\Application\Calendar' => ['services.xml']];
+        return ['Chamilo\Application\Calendar' => ['package.xml', 'services.xml']];
     }
 }

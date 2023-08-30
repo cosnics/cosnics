@@ -21,6 +21,6 @@ class DependencyInjectionExtension extends AbstractDependencyInjectionExtension 
 
     public function getConfigurationFiles(): array
     {
-        return ['Chamilo\Core\Lynx' => ['services.xml']];
+        return ['Chamilo\Core\Lynx' => ['package.xml', 'services.xml']];
     }
 }

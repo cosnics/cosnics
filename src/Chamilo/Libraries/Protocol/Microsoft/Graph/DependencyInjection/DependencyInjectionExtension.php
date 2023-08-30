@@ -21,6 +21,6 @@ class DependencyInjectionExtension extends AbstractDependencyInjectionExtension 
 
     public function getConfigurationFiles(): array
     {
-        return ['Chamilo\Libraries\Protocol\Microsoft\Graph' => ['services.xml']];
+        return ['Chamilo\Libraries\Protocol\Microsoft\Graph' => ['package.xml', 'services.xml']];
     }
 }
