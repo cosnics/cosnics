@@ -37,7 +37,8 @@ class DependencyInjectionExtension extends AbstractDependencyInjectionExtension
                 'registration.xml',
                 'language.xml',
                 'tables.xml',
-                'user_details.xml'
+                'user_details.xml',
+                'package.xml'
             ],
             'Chamilo\Configuration\Form' => ['service.xml']
         ];

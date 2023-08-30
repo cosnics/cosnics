@@ -11,5 +11,7 @@
             <tag name="Chamilo\Configuration\Package\Action\Installer"/>
             <argument key="$context">Chamilo\Configuration</argument>
         </service>
+
+        <service id="Chamilo\Configuration\Package\Action\PackageActionFactory"/>
     </services>
 </container>
