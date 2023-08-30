@@ -7,8 +7,8 @@ use Symfony\Component\DependencyInjection\Extension\ExtensionInterface;
 
 /**
  * @package Chamilo\Core\Repository\Integration\Chamilo\Core\Tracking\DependencyInjection
- * @author Sven Vanpoucke - Hogeschool Gent
- * @author Hans De Bisschop <hans.de.bisschop@ehb.be>
+ * @author  Sven Vanpoucke - Hogeschool Gent
+ * @author  Hans De Bisschop <hans.de.bisschop@ehb.be>
  */
 class DependencyInjectionExtension extends AbstractDependencyInjectionExtension implements ExtensionInterface
 {

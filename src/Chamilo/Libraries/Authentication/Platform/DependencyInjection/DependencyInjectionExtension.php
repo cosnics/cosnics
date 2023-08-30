@@ -7,8 +7,8 @@ use Symfony\Component\DependencyInjection\Extension\ExtensionInterface;
 
 /**
  * @package Chamilo\Libraries\Authentication\Platform\DependencyInjection
- * @author Sven Vanpoucke - Hogeschool Gent
- * @author Hans De Bisschop <hans.de.bisschop@ehb.be>
+ * @author  Sven Vanpoucke - Hogeschool Gent
+ * @author  Hans De Bisschop <hans.de.bisschop@ehb.be>
  */
 class DependencyInjectionExtension extends AbstractDependencyInjectionExtension implements ExtensionInterface
 {

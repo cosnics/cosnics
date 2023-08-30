@@ -6,9 +6,8 @@ use Chamilo\Libraries\DependencyInjection\Traits\ExtensionTrait;
 use Symfony\Component\DependencyInjection\Extension\ExtensionInterface;
 
 /**
- *
  * @package Chamilo\Application\Calendar\DependencyInjection
- * @author Hans De Bisschop <hans.de.bisschop@ehb.be>
+ * @author  Hans De Bisschop <hans.de.bisschop@ehb.be>
  */
 class DependencyInjectionExtension extends AbstractDependencyInjectionExtension implements ExtensionInterface
 {

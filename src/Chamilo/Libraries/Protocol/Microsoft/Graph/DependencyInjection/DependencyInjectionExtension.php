@@ -7,8 +7,8 @@ use Symfony\Component\DependencyInjection\Extension\ExtensionInterface;
 
 /**
  * @package Chamilo\Libraries\Protocol\Microsoft\Graph\DependencyInjection
- * @author Hans De Bisschop <hans.de.bisschop@ehb.be>
- * @author - Sven Vanpoucke - Hogeschool Gent
+ * @author  Hans De Bisschop <hans.de.bisschop@ehb.be>
+ * @author  - Sven Vanpoucke - Hogeschool Gent
  */
 class DependencyInjectionExtension extends AbstractDependencyInjectionExtension implements ExtensionInterface
 {

@@ -10,8 +10,8 @@ use Symfony\Component\DependencyInjection\Extension\ExtensionInterface;
 
 /**
  * @package Chamilo\Core\Install\DependencyInjection
- * @author Sven Vanpoucke - Hogeschool Gent
- * @author Hans De Bisschop <hans.de.bisschop@ehb.be>
+ * @author  Sven Vanpoucke - Hogeschool Gent
+ * @author  Hans De Bisschop <hans.de.bisschop@ehb.be>
  */
 class DependencyInjectionExtension extends AbstractDependencyInjectionExtension
     implements ExtensionInterface, ICompilerPassExtension

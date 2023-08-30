@@ -7,8 +7,8 @@ use Symfony\Component\DependencyInjection\Extension\ExtensionInterface;
 
 /**
  * @package Chamilo\Core\Repository\ContentObject\LearningPath\DependencyInjection
- * @author Sven Vanpoucke - Hogeschool Gent
- * @author Hans De Bisschop <hans.de.bisschop@ehb.be>
+ * @author  Sven Vanpoucke - Hogeschool Gent
+ * @author  Hans De Bisschop <hans.de.bisschop@ehb.be>
  */
 class DependencyInjectionExtension extends AbstractDependencyInjectionExtension implements ExtensionInterface
 {
@@ -21,6 +21,12 @@ class DependencyInjectionExtension extends AbstractDependencyInjectionExtension 
 
     public function getConfigurationFiles(): array
     {
-        return ['Chamilo\Core\Repository\ContentObject\LearningPath' => ['package.xml', 'repository.xml', 'services.xml']];
+        return [
+            'Chamilo\Core\Repository\ContentObject\LearningPath' => [
+                'package.xml',
+                'repository.xml',
+                'services.xml'
+            ]
+        ];
     }
 }
