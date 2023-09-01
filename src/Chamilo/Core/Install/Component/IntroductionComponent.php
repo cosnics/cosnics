@@ -3,26 +3,27 @@ namespace Chamilo\Core\Install\Component;
 
 use Chamilo\Core\Install\Manager;
 use Chamilo\Libraries\Architecture\Interfaces\NoAuthenticationSupport;
+use Chamilo\Libraries\Format\Structure\ActionBar\AbstractButton;
 use Chamilo\Libraries\Format\Structure\ActionBar\Button;
 use Chamilo\Libraries\Format\Structure\ActionBar\ButtonToolBar;
 use Chamilo\Libraries\Format\Structure\ActionBar\DropdownButton;
 use Chamilo\Libraries\Format\Structure\ActionBar\Renderer\ButtonToolBarRenderer;
 use Chamilo\Libraries\Format\Structure\ActionBar\SubButton;
 use Chamilo\Libraries\Format\Structure\Glyph\FontAwesomeGlyph;
-use Chamilo\Libraries\Translation\Translation;
 
 /**
- *
  * @package Chamilo\Core\Install\Component
- * @author Hans De Bisschop <hans.de.bisschop@ehb.be>
- * @author Magali Gillard <magali.gillard@ehb.be>
- * @author Eduard Vossen <eduard.vossen@ehb.be>
+ * @author  Hans De Bisschop <hans.de.bisschop@ehb.be>
+ * @author  Magali Gillard <magali.gillard@ehb.be>
+ * @author  Eduard Vossen <eduard.vossen@ehb.be>
  */
 class IntroductionComponent extends Manager implements NoAuthenticationSupport
 {
 
     /**
-     * Runs this component and displays its output.
+     * @throws \QuickformException
+     * @throws \ReflectionException
+     * @throws \Exception
      */
     public function run()
     {
@@ -32,17 +33,16 @@ class IntroductionComponent extends Manager implements NoAuthenticationSupport
 
         $html = [];
 
-        $html[] = $this->render_header();
+        $html[] = $this->renderHeader();
 
         if ($phpVersion >= 5.4)
         {
             $buttonToolBar = new ButtonToolBar();
 
             $dropDownButton = new DropdownButton(
-                Translation::get('Install'),
-                new FontAwesomeGlyph('check'),
-                Button::DISPLAY_ICON_AND_LABEL,
-                ['btn-primary']);
+                $this->getTranslator()->trans('Install', [], Manager::CONTEXT), new FontAwesomeGlyph('check'),
+                AbstractButton::DISPLAY_ICON_AND_LABEL, ['btn-primary']
+            );
 
             $buttonToolBar->addItem($dropDownButton);
 
@@ -50,30 +50,34 @@ class IntroductionComponent extends Manager implements NoAuthenticationSupport
             {
                 $dropDownButton->addSubButton(
                     new SubButton(
-                        $languageValue,
-                        null,
-                        $this->get_url(
-                            array(self::PARAM_ACTION => self::ACTION_REQUIREMENTS, self::PARAM_LANGUAGE => $languageKey))));
+                        $languageValue, null, $this->get_url(
+                        [self::PARAM_ACTION => self::ACTION_REQUIREMENTS, self::PARAM_LANGUAGE => $languageKey]
+                    )
+                    )
+                );
             }
 
             $buttonToolBar->addItem(
-                new Button('Read the installation guide', new FontAwesomeGlyph('book'), 'documentation/install.txt'));
+                new Button('Read the installation guide', new FontAwesomeGlyph('book'), 'documentation/install.txt')
+            );
             $buttonToolBar->addItem(
-                new Button('Visit cosnics.org', new FontAwesomeGlyph('globe'), 'http://www.cosnics.org/'));
+                new Button('Visit cosnics.org', new FontAwesomeGlyph('globe'), 'http://www.cosnics.org/')
+            );
             $buttonToolBar->addItem(
-                new Button('Get support', new FontAwesomeGlyph('question-circle'), 'http://www.cosnics.org/'));
+                new Button('Get support', new FontAwesomeGlyph('question-circle'), 'http://www.cosnics.org/')
+            );
 
             $buttonToolbarRenderer = new ButtonToolBarRenderer($buttonToolBar);
 
             $html[] = $buttonToolbarRenderer->render();
         }
 
-        $html[] = $this->render_footer();
+        $html[] = $this->renderFooter();
 
         return implode(PHP_EOL, $html);
     }
 
-    protected function getInfo()
+    protected function getInfo(): string
     {
         $phpVersion = phpversion();
 
@@ -84,10 +88,12 @@ class IntroductionComponent extends Manager implements NoAuthenticationSupport
             $html[] = 'From the looks of it, Cosnics is currently not installed on your system.';
             $html[] = '<br />';
             $html[] = '<br />';
-            $html[] = 'Please check your database and/or configuration files if you are certain the platform was installed correctly.';
+            $html[] =
+                'Please check your database and/or configuration files if you are certain the platform was installed correctly.';
             $html[] = '<br />';
             $html[] = '<br />';
-            $html[] = 'If you\'re starting Cosnics for the first time, you may want to install the platform first by clicking the button below. Alternatively, you can read the installation guide, visit chamilo.org for more information or go to the community forum if you need support.';
+            $html[] =
+                'If you\'re starting Cosnics for the first time, you may want to install the platform first by clicking the button below. Alternatively, you can read the installation guide, visit chamilo.org for more information or go to the community forum if you need support.';
         }
         else
         {

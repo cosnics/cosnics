@@ -7,10 +7,8 @@ use Chamilo\Configuration\Package\Storage\DataClass\Package;
 use Chamilo\Configuration\Service\Consulter\LanguageConsulter;
 use Chamilo\Configuration\Storage\DataClass\Language;
 use Chamilo\Core\Install\Manager;
-use Chamilo\Core\Install\ValidateDatabaseConnection;
 use Chamilo\Core\Repository\ContentObject\Hotpotatoes\Storage\DataClass\Hotpotatoes;
 use Chamilo\Libraries\Architecture\Application\Application;
-use Chamilo\Libraries\Architecture\ClassnameUtilities;
 use Chamilo\Libraries\Format\Form\FormValidator;
 use Chamilo\Libraries\Format\Structure\Glyph\FontAwesomeGlyph;
 use Chamilo\Libraries\Format\Structure\Glyph\NamespaceIdentGlyph;
@@ -37,6 +35,8 @@ class SettingsForm extends FormValidator
     /**
      * @param Application $application
      * @param string $action
+     *
+     * @throws \QuickformException
      */
     public function __construct(Application $application, $action)
     {
@@ -50,7 +50,7 @@ class SettingsForm extends FormValidator
     /**
      * @throws \QuickformException
      */
-    public function addDatabaseSettings()
+    public function addDatabaseSettings(): void
     {
         $translator = $this->getTranslator();
 
@@ -288,7 +288,7 @@ class SettingsForm extends FormValidator
         $glyph = new FontAwesomeGlyph('chevron-left', [], null, 'fas');
 
         $licenseUrl = $this->getUrlGenerator()->fromParameters(
-            [Application::PARAM_CONTEXT => Manager::CONTEXT, Manager::PARAM_ACTION => Manager::ACTION_LICENSE]
+            [Application::PARAM_CONTEXT => Manager::CONTEXT, Application::PARAM_ACTION => Manager::ACTION_LICENSE]
         );
 
         $buttons[] = $this->createElement(
@@ -415,7 +415,11 @@ class SettingsForm extends FormValidator
     protected function get_database_drivers(): array
     {
         $drivers = [];
-        $drivers['mysqli'] = 'MySQL >= 4.1.3';
+        $drivers['mysql'] = 'MySQL >= 5.0';
+        $drivers['mssql'] = 'SQL Server >= 2012';
+        $drivers['pgsql'] = 'PostgreSQL >= 9.4';
+        $drivers['sqlite'] = 'SQLite';
+        $drivers['ibm_db2'] = 'IBM DB2';
 
         return $drivers;
     }
@@ -496,6 +500,8 @@ class SettingsForm extends FormValidator
 
             $this->addElement('html', implode(PHP_EOL, $html));
 
+            $defaults = [];
+
             foreach ($packages as $package)
             {
                 $title = $translator->trans('TypeName', [], $package->get_context());
@@ -517,8 +523,6 @@ class SettingsForm extends FormValidator
                 $html[] = '<a class="' . $packageClasses . '"' . $disabled . '>' . $glyph->render() . ' ';
                 $this->addElement('html', implode(PHP_EOL, $html));
 
-                $checkbox_name =
-                    'install_' . ClassnameUtilities::getInstance()->getNamespaceId($package->get_context());
                 $this->addElement('checkbox', 'install[' . $package->get_context() . ']');
                 $renderer->setElementTemplate('{element}', 'install[' . $package->get_context() . ']');
 
@@ -527,8 +531,6 @@ class SettingsForm extends FormValidator
                 $html[] = '</a>';
                 $html[] = '</div>';
                 $this->addElement('html', implode(PHP_EOL, $html));
-
-                $extra = $package->get_extra();
 
                 if ($package->getCoreInstall() || $package->getDefaultInstall())
                 {

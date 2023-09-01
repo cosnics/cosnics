@@ -32,8 +32,10 @@ class HTML_QuickForm_Rule_ValidateDatabaseConnection extends HTML_QuickForm_Rule
 
             return true;
         }
-        catch (Exception)
+        catch (Exception $exception)
         {
+            var_dump($exception);
+
             return false;
         }
     }

@@ -52,10 +52,9 @@ class SimpleTableRenderer
      */
     public function buildTableData(
         HTML_Table $htmlTable, array $dataArray, array $defaultProperties
-    )
+    ): void
     {
         $cellRenderer = $this->getCellRenderer();
-        $i = 0;
 
         if (count($dataArray) > 0)
         {
@@ -74,8 +73,6 @@ class SimpleTableRenderer
                 }
 
                 $htmlTable->addRow($contents);
-
-                $i ++;
             }
         }
         else
@@ -93,7 +90,7 @@ class SimpleTableRenderer
     /**
      * @throws \TableException
      */
-    public function buildTableHeader(HTML_Table $htmlTable, array $defaultProperties)
+    public function buildTableHeader(HTML_Table $htmlTable, array $defaultProperties): void
     {
         $cellrenderer = $this->getCellRenderer();
         $prefix = $cellrenderer->getPrefix();

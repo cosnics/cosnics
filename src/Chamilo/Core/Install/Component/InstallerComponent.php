@@ -25,7 +25,7 @@ class InstallerComponent extends Manager implements NoAuthenticationSupport, Ins
     private $installer;
 
     /**
-     * Runs this component and displays its output.
+     * @throws \Exception
      */
     public function run()
     {
@@ -33,20 +33,18 @@ class InstallerComponent extends Manager implements NoAuthenticationSupport, Ins
 
         $this->installer = $this->getInstaller($this);
 
-        $wizardProcess = $this;
-
         session_write_close();
 
         $response = new StreamedResponse();
         $response->setCallback(
-            function () use ($wizardProcess) {
-                echo $wizardProcess->render_header();
+            function () {
+                echo $this->renderHeader();
                 flush();
 
-                $wizardProcess->getInstaller($this)->run();
+                $this->getInstaller($this)->run();
                 flush();
 
-                echo $wizardProcess->render_footer();
+                echo $this->renderFooter();
                 flush();
 
                 session_start();
@@ -177,6 +175,11 @@ class InstallerComponent extends Manager implements NoAuthenticationSupport, Ins
     public function beforePreProduction()
     {
         return '<h3>' . Translation::get('PreProduction') . '</h3>';
+    }
+
+    protected function getInfo(): string
+    {
+        return $this->getTranslator()->trans('InstallerComponentInformation', [], self::CONTEXT);
     }
 
     /**

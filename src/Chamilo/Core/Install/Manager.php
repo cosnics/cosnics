@@ -5,13 +5,11 @@ use Chamilo\Configuration\Service\FileConfigurationLocator;
 use Chamilo\Core\Install\Format\Structure\FooterRenderer;
 use Chamilo\Libraries\Architecture\Application\Application;
 use Chamilo\Libraries\Architecture\Application\ApplicationConfigurationInterface;
-use Chamilo\Libraries\Architecture\ClassnameUtilities;
 use Chamilo\Libraries\Architecture\Interfaces\NoContextComponent;
 use Chamilo\Libraries\Format\Structure\FooterRendererInterface;
 use Chamilo\Libraries\Format\Structure\HeaderRendererInterface;
 use Chamilo\Libraries\Format\Structure\WizardHeader\WizardHeader;
 use Chamilo\Libraries\Format\Structure\WizardHeader\WizardHeaderRenderer;
-use Chamilo\Libraries\Translation\Translation;
 use DOMDocument;
 use DOMXPath;
 use Exception;
@@ -49,12 +47,9 @@ abstract class Manager extends Application implements NoContextComponent
     }
 
     /**
-     * Checks if the installation is allowed
-     *
-     * @return bool
-     * @throws \ReflectionException
+     * @throws \Exception
      */
-    protected function checkInstallationAllowed()
+    protected function checkInstallationAllowed(): bool
     {
         if (!$this->getFileConfigurationLocator()->isAvailable())
         {
@@ -69,18 +64,17 @@ abstract class Manager extends Application implements NoContextComponent
             if ($installationBlocked)
             {
                 throw new Exception(
-                    Translation::getInstance()->getTranslation(
-                        'InstallationBlockedByAdministrator', null, Manager::CONTEXT
+                    $this->getTranslator()->trans(
+                        'InstallationBlockedByAdministrator', [], Manager::CONTEXT
                     )
                 );
             }
+
+            return false;
         }
     }
 
-    /**
-     * @return \Chamilo\Configuration\Service\FileConfigurationLocator
-     */
-    public function getFileConfigurationLocator()
+    public function getFileConfigurationLocator(): FileConfigurationLocator
     {
         return $this->getService(FileConfigurationLocator::class);
     }
@@ -95,65 +89,62 @@ abstract class Manager extends Application implements NoContextComponent
         return $this->getService('Chamilo\Core\Install\Format\Structure\HeaderRenderer');
     }
 
+    abstract protected function getInfo(): string;
+
     /**
-     * @return string
+     * @return string[]
      */
-    protected function getInfo()
+    public function getLanguages(): array
     {
-        return Translation::get(ClassnameUtilities::getInstance()->getClassnameFromObject($this) . 'Information');
-    }
+        $languagePath = $this->getSystemPathBuilder()->namespaceToFullPath('Chamilo\Configuration') . 'Resources/I18n/';
+        $languageFiles =
+            $this->getFilesystemTools()->getDirectoryContent($languagePath, FileTypeFilterIterator::ONLY_FILES, false);
 
-    public function getLanguages()
-    {
-        $language_path =
-            $this->getSystemPathBuilder()->namespaceToFullPath('Chamilo\Configuration') . 'Resources/I18n/';
-        $language_files =
-            $this->getFilesystemTools()->getDirectoryContent($language_path, FileTypeFilterIterator::ONLY_FILES, false);
+        $languageList = [];
 
-        $language_list = [];
-
-        foreach ($language_files as $language_file)
+        foreach ($languageFiles as $language_file)
         {
-            $file_info = pathinfo($language_file);
-            $language_info_file = $language_path . $file_info['filename'] . '.info';
+            $fileInfo = pathinfo($language_file);
+            $languageInfoFile = $languagePath . $fileInfo['filename'] . '.info';
 
-            if (file_exists($language_info_file))
+            if (file_exists($languageInfoFile))
             {
-                $dom_document = new DOMDocument('1.0', 'UTF-8');
-                $dom_document->load($language_info_file);
-                $dom_xpath = new DOMXPath($dom_document);
+                $domDocument = new DOMDocument('1.0', 'UTF-8');
+                $domDocument->load($languageInfoFile);
+                $domXpath = new DOMXPath($domDocument);
 
-                $language_node = $dom_xpath->query('/packages/package')->item(0);
+                $language_node = $domXpath->query('/packages/package')->item(0);
 
-                $language_list[$dom_xpath->query('extra/isocode', $language_node)->item(0)->nodeValue] =
-                    $dom_xpath->query(
-                        'name', $language_node
-                    )->item(0)->nodeValue;
+                $languageList[$domXpath->query('extra/isocode', $language_node)->item(0)->nodeValue] = $domXpath->query(
+                    'name', $language_node
+                )->item(0)->nodeValue;
             }
         }
 
-        return $language_list;
+        return $languageList;
     }
 
     /**
      * @return \Chamilo\Libraries\Format\Structure\WizardHeader\WizardHeader
      */
-    protected function getWizardHeader()
+    protected function getWizardHeader(): WizardHeader
     {
         if (!isset($this->wizardHeader))
         {
+            $translator = $this->getTranslator();
+
             $currentAction = $this->get_action();
             $wizardActions = $this->getWizardHeaderActions();
 
             $this->wizardHeader = new WizardHeader();
             $this->wizardHeader->setStepTitles(
                 [
-                    Translation::get('IntroductionComponentTitle'),
-                    Translation::get('RequirementsComponentTitle'),
-                    Translation::get('LicenseComponentTitle'),
-                    Translation::get('SettingsComponentTitle'),
-                    Translation::get('OverviewComponentTitle'),
-                    Translation::get('InstallerComponentTitle')
+                    $translator->trans('IntroductionComponentTitle', [], self::CONTEXT),
+                    $translator->trans('RequirementsComponentTitle', [], self::CONTEXT),
+                    $translator->trans('LicenseComponentTitle', [], self::CONTEXT),
+                    $translator->trans('SettingsComponentTitle', [], self::CONTEXT),
+                    $translator->trans('OverviewComponentTitle', [], self::CONTEXT),
+                    $translator->trans('InstallerComponentTitle', [], self::CONTEXT)
                 ]
             );
 
@@ -166,7 +157,7 @@ abstract class Manager extends Application implements NoContextComponent
     /**
      * @return string[]
      */
-    protected function getWizardHeaderActions()
+    protected function getWizardHeaderActions(): array
     {
         return [
             self::ACTION_INTRODUCTION,
@@ -178,7 +169,7 @@ abstract class Manager extends Application implements NoContextComponent
         ];
     }
 
-    protected function initialize()
+    protected function initialize(): void
     {
         ini_set('memory_limit', '-1');
         ini_set('max_execution_time', '7200');
@@ -186,26 +177,7 @@ abstract class Manager extends Application implements NoContextComponent
         $this->setLanguage();
     }
 
-    /**
-     * @return string
-     */
-    protected function renderWizardHeader()
-    {
-        $wizardHeaderRenderer = new WizardHeaderRenderer($this->getWizardHeader());
-
-        $html = [];
-
-        $html[] = '<div class="container-install-wizard">';
-        $html[] = $wizardHeaderRenderer->render();
-        $html[] = '</div>';
-
-        return implode(PHP_EOL, $html);
-    }
-
-    /**
-     * @see \Chamilo\Libraries\Architecture\Application\Application::render_footer()
-     */
-    public function render_footer(): string
+    public function renderFooter(): string
     {
         $html = [];
 
@@ -217,9 +189,9 @@ abstract class Manager extends Application implements NoContextComponent
     }
 
     /**
-     * @see \Chamilo\Libraries\Architecture\Application\Application::render_header()
+     * @throws \ReflectionException
      */
-    public function render_header(string $pageTitle = ''): string
+    public function renderHeader(string $pageTitle = ''): string
     {
         $page = $this->getPageConfiguration();
 
@@ -244,7 +216,20 @@ abstract class Manager extends Application implements NoContextComponent
         return implode(PHP_EOL, $html);
     }
 
-    protected function setLanguage()
+    protected function renderWizardHeader(): string
+    {
+        $wizardHeaderRenderer = new WizardHeaderRenderer($this->getWizardHeader());
+
+        $html = [];
+
+        $html[] = '<div class="container-install-wizard">';
+        $html[] = $wizardHeaderRenderer->render();
+        $html[] = '</div>';
+
+        return implode(PHP_EOL, $html);
+    }
+
+    protected function setLanguage(): void
     {
         $language = $this->getRequest()->query->get(self::PARAM_LANGUAGE, 'en');
 
@@ -253,6 +238,6 @@ abstract class Manager extends Application implements NoContextComponent
             $this->getSession()->set(self::PARAM_LANGUAGE, $language);
         }
 
-        Translation::getInstance()->setLanguageIsocode($this->getSession()->get(self::PARAM_LANGUAGE));
+        $this->getTranslator()->setLocale($this->getSession()->get(self::PARAM_LANGUAGE));
     }
 }

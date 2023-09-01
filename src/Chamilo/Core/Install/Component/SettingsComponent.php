@@ -5,12 +5,12 @@ use Chamilo\Core\Install\Form\SettingsForm;
 use Chamilo\Core\Install\Manager;
 use Chamilo\Core\Install\SettingsOverview;
 use Chamilo\Libraries\Architecture\Interfaces\NoAuthenticationSupport;
+use Chamilo\Libraries\Format\Structure\ActionBar\AbstractButton;
 use Chamilo\Libraries\Format\Structure\ActionBar\Button;
 use Chamilo\Libraries\Format\Structure\ActionBar\ButtonToolBar;
 use Chamilo\Libraries\Format\Structure\ActionBar\Renderer\ButtonToolBarRenderer;
 use Chamilo\Libraries\Format\Structure\Glyph\FontAwesomeGlyph;
 use Chamilo\Libraries\Format\Structure\Glyph\NamespaceIdentGlyph;
-use Chamilo\Libraries\Translation\Translation;
 use Chamilo\Libraries\Utilities\StringUtilities;
 
 /**
@@ -22,13 +22,14 @@ use Chamilo\Libraries\Utilities\StringUtilities;
 class SettingsComponent extends Manager implements NoAuthenticationSupport
 {
 
-    /**
-     * @var \Chamilo\Core\Install\Form\SettingsForm
-     */
-    private $settingsForm;
+    private SettingsForm $settingsForm;
 
     /**
      * Runs this component and displays its output.
+     *
+     * @throws \QuickformException
+     * @throws \ReflectionException
+     * @throws \Exception
      */
     public function run()
     {
@@ -54,40 +55,41 @@ class SettingsComponent extends Manager implements NoAuthenticationSupport
         }
         else
         {
-            $content = $form->toHtml();
+            $content = $form->render();
         }
 
         $html = [];
 
-        $html[] = $this->render_header();
+        $html[] = $this->renderHeader();
         $html[] = $content;
-        $html[] = $this->render_footer();
+        $html[] = $this->renderFooter();
 
         return implode(PHP_EOL, $html);
     }
 
     /**
-     * @return string
+     * @throws \QuickformException
      */
-    public function getButtons()
+    public function getButtons(): string
     {
+        $translator = $this->getTranslator();
         $buttonToolBar = new ButtonToolBar();
 
         $buttonToolBar->addItem(
             new Button(
-                Translation::get('Previous', null, StringUtilities::LIBRARIES), new FontAwesomeGlyph('chevron-left'),
+                $translator->trans('Previous', [], StringUtilities::LIBRARIES), new FontAwesomeGlyph('chevron-left'),
                 $this->get_url([self::PARAM_ACTION => self::ACTION_SETTINGS])
             )
         );
 
         $buttonToolBar->addItem(
             new Button(
-                Translation::get('Install'), new FontAwesomeGlyph('check'), $this->get_url(
+                $translator->trans('Install', [], Manager::CONTEXT), new FontAwesomeGlyph('check'), $this->get_url(
                 [
                     self::PARAM_ACTION => self::ACTION_INSTALL_PLATFORM,
                     self::PARAM_LANGUAGE => $this->getSession()->get(self::PARAM_LANGUAGE)
                 ]
-            ), Button::DISPLAY_ICON_AND_LABEL, null, ['btn-success']
+            ), AbstractButton::DISPLAY_ICON_AND_LABEL, null, ['btn-success']
             )
         );
 
@@ -96,36 +98,40 @@ class SettingsComponent extends Manager implements NoAuthenticationSupport
         return $buttonToolbarRenderer->render();
     }
 
-    public function getInfo()
+    /**
+     * @throws \QuickformException
+     */
+    protected function getInfo(): string
     {
+        $translator = $this->getTranslator();
         $html = [];
 
         if ($this->getSettingsForm()->validate())
         {
-            $html[] = Translation::get('SettingsOverviewInformation');
+            $html[] = $translator->trans('SettingsOverviewInformation', [], Manager::CONTEXT);
         }
         else
         {
-            $html[] = Translation::get('SettingsComponentInformation');
+            $html[] = $translator->trans('SettingsComponentInformation', [], Manager::CONTEXT);
             $html[] = '<br /><br />';
 
             $glyph = new NamespaceIdentGlyph('Chamilo\Configuration', true, false, true);
 
             $html[] = '<a class="btn btn-default" disabled="disabled">';
             $html[] = $glyph->render();
-            $html[] = Translation::get('CorePackage');
+            $html[] = $translator->trans('CorePackage', [], Manager::CONTEXT);
             $html[] = '</a>';
 
             $glyph = new NamespaceIdentGlyph('Chamilo\Configuration', true, false, false);
 
             $html[] = '<a class="btn btn-default">';
             $html[] = $glyph->render();
-            $html[] = Translation::get('AvailablePackage');
+            $html[] = $translator->trans('AvailablePackage', [], Manager::CONTEXT);
             $html[] = '</a>';
 
             $html[] = '<a class="btn btn-success">';
             $html[] = $glyph->render();
-            $html[] = Translation::get('SelectedPackage');
+            $html[] = $translator->trans('SelectedPackage', [], Manager::CONTEXT);
             $html[] = '</a>';
         }
 
@@ -133,9 +139,9 @@ class SettingsComponent extends Manager implements NoAuthenticationSupport
     }
 
     /**
-     * @return \Chamilo\Core\Install\Form\SettingsForm
+     * @throws \QuickformException
      */
-    public function getSettingsForm()
+    public function getSettingsForm(): SettingsForm
     {
         if (!isset($this->settingsForm))
         {

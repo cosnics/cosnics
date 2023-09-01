@@ -12,80 +12,27 @@ use Chamilo\Core\Install\StepResult;
 interface InstallerObserver
 {
 
-    /**
-     *
-     * @return string
-     */
-    public function beforeInstallation();
+    public function beforeInstallation(): string;
 
-    /**
-     *
-     * @return string
-     */
-    public function beforePreProduction();
+    public function beforePreProduction(): string;
 
-    /**
-     *
-     * @param \Chamilo\Core\Install\StepResult $result
-     * @return string
-     */
-    public function afterPreProductionDatabaseCreated(StepResult $result);
+    public function afterPreProductionDatabaseCreated(StepResult $result): string;
 
-    /**
-     *
-     * @param \Chamilo\Core\Install\StepResult $result
-     * @return string
-     */
-    public function afterPreProductionConfigurationFileWritten(StepResult $result);
+    public function afterPreProductionConfigurationFileWritten(StepResult $result): string;
 
-    /**
-     *
-     * @return string
-     */
-    public function afterPreProduction();
+    public function afterPreProduction(): string;
 
-    /**
-     *
-     * @return string
-     */
-    public function beforePackagesInstallation();
+    public function beforePackagesInstallation(): string;
 
-    /**
-     *
-     * @return string
-     */
-    public function afterPackagesInstallation();
+    public function afterPackagesInstallation(): string;
 
-    /**
-     *
-     * @param string $context
-     * @return string
-     */
-    public function beforePackageInstallation($context);
+    public function beforePackageInstallation(string $context): string;
 
-    /**
-     *
-     * @param \Chamilo\Core\Install\StepResult $result
-     * @return string
-     */
-    public function afterPackageInstallation(StepResult $result);
+    public function afterPackageInstallation(StepResult $result): string;
 
-    /**
-     *
-     * @return string
-     */
-    public function beforeFilesystemPrepared();
+    public function beforeFilesystemPrepared(): string;
 
-    /**
-     *
-     * @param \Chamilo\Core\Install\StepResult $result
-     * @return string
-     */
-    public function afterFilesystemPrepared(StepResult $result);
+    public function afterFilesystemPrepared(StepResult $result): string;
 
-    /**
-     *
-     * @return string
-     */
-    public function afterInstallation();
+    public function afterInstallation(): string;
 }
