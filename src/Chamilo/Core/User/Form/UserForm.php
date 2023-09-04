@@ -146,15 +146,15 @@ class UserForm extends FormValidator
         $group[] = $this->createElement('password', User::PROPERTY_PASSWORD, null, array('autocomplete' => 'off'));
         $this->addGroup($group, 'pw', Translation::get('Password'), '');
 
-        $this->registerRule('checkPasswordRequirements', 'function', 'checkPasswordRequirements', $this);
+        $this->addFormRule(array($this, 'checkPasswordRequirements'));
 
-        $this->addGroupRule(
+        /*$this->addGroupRule(
             'pw',
             array(
                 User::PROPERTY_PASSWORD => array(
                     array(
                         Translation::getInstance()->getTranslation('PasswordRequirements', null, 'Chamilo\Core\User'),
-                        'checkPasswordRequirements'))));
+                        'checkPasswordRequirements'))));*/
 
         // $this->add_forever_or_expiration_date_window(User::PROPERTY_EXPIRATION_DATE, 'ExpirationDate');
         $this->add_forever_or_timewindow(User::PROPERTY_EXPIRATION_DATE, 'ExpirationDate');
@@ -179,7 +179,7 @@ class UserForm extends FormValidator
             Translation::get('OnlyImagesAllowed'),
             'filetype',
             $allowed_picture_types);
-        $this->addElement('static', null, null, Translation::get('AllowedProfileImageFormats'));
+        $this->addElement('static', '', null, Translation::get('AllowedProfileImageFormats'));
         // Phone Number
         $this->addElement('text', User::PROPERTY_PHONE, Translation::get('PhoneNumber'), array("size" => "50"));
 
@@ -253,9 +253,8 @@ class UserForm extends FormValidator
      *
      * @return bool
      */
-    public function checkPasswordRequirements()
+    public function checkPasswordRequirements($exportValues)
     {
-        $exportValues = $this->exportValues();
         $customPassword = $exportValues['pw']['pass'] == 0;
 
         if (! $customPassword)
@@ -267,7 +266,7 @@ class UserForm extends FormValidator
 
         if (strlen($newPassword) < 6)
         {
-            return false;
+            return array('pw' =>  Translation::getInstance()->getTranslation('PasswordRequirements', null, 'Chamilo\Core\User'));
         }
 
         return true;

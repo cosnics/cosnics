@@ -72,7 +72,7 @@ abstract class CacheCommand extends ChamiloCommand
     {
         if ($this->listCacheServices($input, $output))
         {
-            return null;
+            return 0;
         }
 
         $this->executeCacheCommand($input, $output);
