@@ -60,7 +60,9 @@
                   notnull="0"
                   default="0"/>
     </properties>
-    <index name="course_id">
-        <indexproperty name="course_id"/>
-    </index>
+    <indexes>
+        <index name="idx_course_id">
+            <property name="course_id"/>
+        </index>
+    </indexes>
 </object>

@@ -22,11 +22,13 @@
                   notnull="1"
                   default="0"/>
     </properties>
-    <index name="element_id">
-        <indexproperty name="element_id"/>
-    </index>
-    <index name="entity">
-        <indexproperty name="entity_type"/>
-        <indexproperty name="entity_id"/>
-    </index>
+    <indexes>
+        <index name="idx_element_id">
+            <property name="element_id"/>
+        </index>
+        <index name="idx_entity">
+            <property name="entity_type"/>
+            <property name="entity_id"/>
+        </index>
+    </indexes>
 </object>

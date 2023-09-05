@@ -35,7 +35,9 @@
         <property name="diff"
                   type="text"/>
     </properties>
-    <index name="request_id">
-        <indexproperty name="request_id"/>
-    </index>
+    <indexes>
+        <index name="idx_request_id">
+            <property name="request_id"/>
+        </index>
+    </indexes>
 </object>

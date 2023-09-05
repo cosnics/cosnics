@@ -10,11 +10,13 @@
                   unsigned="1"
                   notnull="1"/>
     </properties>
-    <index name="id"
-           type="primary">
-        <indexproperty name="id"/>
-    </index>
-    <index name="reference_id">
-        <indexproperty name="reference_id"/>
-    </index>
+    <indexes>
+        <index name="prm_id"
+               type="primary">
+            <property name="id"/>
+        </index>
+        <index name="idx_reference_id">
+            <property name="reference_id"/>
+        </index>
+    </indexes>
 </object>

@@ -22,13 +22,15 @@
                   unsigned="1"
                   default="0"/>
     </properties>
-    <index name="course_id">
-        <indexproperty name="course_id"/>
-    </index>
-    <index name="entity_type">
-        <indexproperty name="entity_type"/>
-    </index>
-    <index name="entity_id">
-        <indexproperty name="entity_id"/>
-    </index>
+    <indexes>
+        <index name="idx_course_id">
+            <property name="course_id"/>
+        </index>
+        <index name="idx_entity_type">
+            <property name="entity_type"/>
+        </index>
+        <index name="idx_entity_id">
+            <property name="entity_id"/>
+        </index>
+    </indexes>
 </object>

@@ -24,10 +24,12 @@
         <property name="content"
                   type="text"/>
     </properties>
-    <index name="content_object_id">
-        <indexproperty name="content_object_id"/>
-    </index>
-    <index name="user_id">
-        <indexproperty name="user_id"/>
-    </index>
+    <indexes>
+        <index name="idx_content_object_id">
+            <property name="content_object_id"/>
+        </index>
+        <index name="idx_user_id">
+            <property name="user_id"/>
+        </index>
+    </indexes>
 </object>

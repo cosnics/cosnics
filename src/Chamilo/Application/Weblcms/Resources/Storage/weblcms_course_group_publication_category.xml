@@ -15,10 +15,12 @@
                   unsigned="1"
                   notnull="1"/>
     </properties>
-    <index name="publication_category_id">
-        <indexproperty name="publication_category_id"/>
-    </index>
-    <index name="course_group_id">
-        <indexproperty name="course_group_id"/>
-    </index>
+    <indexes>
+        <index name="idx_publication_category_id">
+            <property name="publication_category_id"/>
+        </index>
+        <index name="idx_course_group_id">
+            <property name="course_group_id"/>
+        </index>
+    </indexes>
 </object>

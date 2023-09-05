@@ -45,17 +45,19 @@
                   unsigned="1"
                   notnull="1"/>
     </properties>
-    <index name="parent_id">
-        <indexproperty name="parent_id"/>
-    </index>
-    <index name="tree">
-        <indexproperty name="tree_type"/>
-        <indexproperty name="tree_identifier"/>
-        <indexproperty name="left_value"/>
-        <indexproperty name="right_value"/>
-    </index>
-    <index name="identifier_type">
-        <indexproperty name="identifier"/>
-        <indexproperty name="type"/>
-    </index>
+    <indexes>
+        <index name="idx_parent_id">
+            <property name="parent_id"/>
+        </index>
+        <index name="idx_tree">
+            <property name="tree_type"/>
+            <property name="tree_identifier"/>
+            <property name="left_value"/>
+            <property name="right_value"/>
+        </index>
+        <index name="idx_identifier_type">
+            <property name="identifier"/>
+            <property name="type"/>
+        </index>
+    </indexes>
 </object>

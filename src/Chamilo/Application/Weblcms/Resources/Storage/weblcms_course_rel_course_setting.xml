@@ -16,10 +16,12 @@
                   length="20"
                   notnull="1"/>
     </properties>
-    <index name="course_setting_id">
-        <indexproperty name="course_setting_id"/>
-    </index>
-    <index name="course_id">
-        <indexproperty name="course_id"/>
-    </index>
+    <indexes>
+        <index name="idx_course_setting_id">
+            <property name="course_setting_id"/>
+        </index>
+        <index name="idx_course_id">
+            <property name="course_id"/>
+        </index>
+    </indexes>
 </object>

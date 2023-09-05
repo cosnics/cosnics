@@ -67,16 +67,18 @@
                   notnull="1"
                   default="0"/>
     </properties>
-    <index name="course_id">
-        <indexproperty name="course_id"/>
-    </index>
-    <index name="content_object_id">
-        <indexproperty name="content_object_id"/>
-    </index>
-    <index name="status">
-        <indexproperty name="status"/>
-    </index>
-    <index name="guid">
-        <indexproperty name="guid"/>
-    </index>
+    <indexes>
+        <index name="idx_course_id">
+            <property name="course_id"/>
+        </index>
+        <index name="idx_content_object_id">
+            <property name="content_object_id"/>
+        </index>
+        <index name="idx_status">
+            <property name="status"/>
+        </index>
+        <index name="idx_guid">
+            <property name="guid"/>
+        </index>
+    </indexes>
 </object>

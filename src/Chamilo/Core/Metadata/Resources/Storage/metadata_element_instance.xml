@@ -19,13 +19,15 @@
                   type="integer"
                   notnull="1"/>
     </properties>
-    <index name="schema_instance_id">
-        <indexproperty name="schema_instance_id"/>
-    </index>
-    <index name="element_id">
-        <indexproperty name="element_id"/>
-    </index>
-    <index name="vocabulary_id">
-        <indexproperty name="vocabulary_id"/>
-    </index>
+    <indexes>
+        <index name="idx_schema_instance_id">
+            <property name="schema_instance_id"/>
+        </index>
+        <index name="idx_element_id">
+            <property name="element_id"/>
+        </index>
+        <index name="idx_vocabulary_id">
+            <property name="vocabulary_id"/>
+        </index>
+    </indexes>
 </object>

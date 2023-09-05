@@ -13,11 +13,12 @@
                   type="integer"
                   notnull="1"/>
     </properties>
-
-    <index name="user_view_id">
-        <indexproperty name="user_view_id"/>
-    </index>
-    <index name="content_object_template_id">
-        <indexproperty name="content_object_template_id"/>
-    </index>
+    <indexes>
+        <index name="idx_user_view_id">
+            <property name="user_view_id"/>
+        </index>
+        <index name="idx_content_object_template_id">
+            <property name="content_object_template_id"/>
+        </index>
+    </indexes>
 </object>

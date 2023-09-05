@@ -11,8 +11,10 @@
                   notnull="1"
                   default=""/>
     </properties>
-    <index name="role"
-           type="unique">
-        <indexproperty name="role"/>
-    </index>
+    <indexes>
+        <index name="unq_role"
+               type="unique">
+            <property name="role"/>
+        </index>
+    </indexes>
 </object>

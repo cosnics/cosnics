@@ -33,14 +33,16 @@
                   notnull="1"
                   default="1"/>
     </properties>
-    <index name="type">
-        <indexproperty name="type"/>
-    </index>
-    <index name="status">
-        <indexproperty name="status"/>
-    </index>
-    <index name="context"
-           type="unique">
-        <indexproperty name="context"/>
-    </index>
+    <indexes>
+        <index name="idx_type">
+            <property name="type"/>
+        </index>
+        <index name="idx_status">
+            <property name="status"/>
+        </index>
+        <index name="unq_context"
+               type="unique">
+            <property name="context"/>
+        </index>
+    </indexes>
 </object>

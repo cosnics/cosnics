@@ -60,29 +60,31 @@
                   notnull="1"
                   default="0"/>
     </properties>
-    <index name="date">
-        <indexproperty name="from_date"/>
-        <indexproperty name="to_date"/>
-    </index>
-    <index name="hidden">
-        <indexproperty name="hidden"/>
-    </index>
-    <index name="course_id">
-        <indexproperty name="course_id"/>
-    </index>
-    <index name="category_id">
-        <indexproperty name="category_id"/>
-    </index>
-    <index name="tool">
-        <indexproperty name="tool"/>
-    </index>
-    <index name="publisher_id">
-        <indexproperty name="publisher_id"/>
-    </index>
-    <index name="content_object_id">
-        <indexproperty name="content_object_id"/>
-    </index>
-    <index name="display_order">
-        <indexproperty name="display_order"/>
-    </index>
+    <indexes>
+        <index name="idx_date">
+            <property name="from_date"/>
+            <property name="to_date"/>
+        </index>
+        <index name="idx_hidden">
+            <property name="hidden"/>
+        </index>
+        <index name="idx_course_id">
+            <property name="course_id"/>
+        </index>
+        <index name="idx_category_id">
+            <property name="category_id"/>
+        </index>
+        <index name="idx_tool">
+            <property name="tool"/>
+        </index>
+        <index name="idx_publisher_id">
+            <property name="publisher_id"/>
+        </index>
+        <index name="idx_content_object_id">
+            <property name="content_object_id"/>
+        </index>
+        <index name="idx_display_order">
+            <property name="display_order"/>
+        </index>
+    </indexes>
 </object>

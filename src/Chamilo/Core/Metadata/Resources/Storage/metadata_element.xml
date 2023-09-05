@@ -32,12 +32,14 @@
                   type="integer"
                   notnull="1"/>
     </properties>
-    <index name="unique_element_name"
-           type="unique">
-        <indexproperty name="name"/>
-        <indexproperty name="schema_id"/>
-    </index>
-    <index name="schema_id">
-        <indexproperty name="schema_id"/>
-    </index>
+    <indexes>
+        <index name="unq_element_name"
+               type="unique">
+            <property name="name"/>
+            <property name="schema_id"/>
+        </index>
+        <index name="idx_schema_id">
+            <property name="schema_id"/>
+        </index>
+    </indexes>
 </object>

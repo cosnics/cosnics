@@ -39,16 +39,18 @@
                   type="boolean"
                   default="1"/>
     </properties>
-    <index name="tree_node_data_id">
-        <indexproperty name="tree_node_data_id"/>
-    </index>
-    <index name="publication_id">
-        <indexproperty name="publication_id"/>
-    </index>
-    <index name="user_id">
-        <indexproperty name="user_id"/>
-    </index>
-    <index name="learning_path_id">
-        <indexproperty name="learning_path_id"/>
-    </index>
+    <indexes>
+        <index name="idx_tree_node_data_id">
+            <property name="tree_node_data_id"/>
+        </index>
+        <index name="idx_publication_id">
+            <property name="publication_id"/>
+        </index>
+        <index name="idx_user_id">
+            <property name="user_id"/>
+        </index>
+        <index name="idx_learning_path_id">
+            <property name="learning_path_id"/>
+        </index>
+    </indexes>
 </object>

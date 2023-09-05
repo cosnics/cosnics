@@ -26,11 +26,13 @@
                   unsigned="1"
                   notnull="1"/>
     </properties>
-    <index name="course_module"
-           type="unique">
-        <indexproperty name="course_id"/>
-        <indexproperty name="module_name"/>
-        <indexproperty name="user_id"/>
-        <indexproperty name="category_id"/>
-    </index>
+    <indexes>
+        <index name="unq_course_module"
+               type="unique">
+            <property name="course_id"/>
+            <property name="module_name"/>
+            <property name="user_id"/>
+            <property name="category_id"/>
+        </index>
+    </indexes>
 </object>

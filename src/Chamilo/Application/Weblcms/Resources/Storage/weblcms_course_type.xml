@@ -19,7 +19,9 @@
         <property name="description"
                   type="text"/>
     </properties>
-    <index name="display_order">
-        <indexproperty name="display_order"/>
-    </index>
+    <indexes>
+        <index name="idx_display_order">
+            <property name="display_order"/>
+        </index>
+    </indexes>
 </object>

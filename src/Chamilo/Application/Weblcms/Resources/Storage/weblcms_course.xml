@@ -50,13 +50,15 @@
                   fixed="true"
                   notnull="1"/>
     </properties>
-    <index name="course_type_id">
-        <indexproperty name="course_type_id"/>
-    </index>
-    <index name="titular_id">
-        <indexproperty name="titular_id"/>
-    </index>
-    <index name="category_id">
-        <indexproperty name="category_id"/>
-    </index>
+    <indexes>
+        <index name="idx_course_type_id">
+            <property name="course_type_id"/>
+        </index>
+        <index name="idx_titular_id">
+            <property name="titular_id"/>
+        </index>
+        <index name="idx_category_id">
+            <property name="category_id"/>
+        </index>
+    </indexes>
 </object>

@@ -30,13 +30,15 @@
                   unsigned="1"
                   notnull="1"/>
     </properties>
-    <index name="name">
-        <indexproperty name="name"/>
-    </index>
-    <index name="type">
-        <indexproperty name="type"/>
-    </index>
-    <index name="dynamic_form_id">
-        <indexproperty name="dynamic_form_id"/>
-    </index>
+    <indexes>
+        <index name="idx_name">
+            <property name="name"/>
+        </index>
+        <index name="idx_type">
+            <property name="type"/>
+        </index>
+        <index name="idx_dynamic_form_id">
+            <property name="dynamic_form_id"/>
+        </index>
+    </indexes>
 </object>

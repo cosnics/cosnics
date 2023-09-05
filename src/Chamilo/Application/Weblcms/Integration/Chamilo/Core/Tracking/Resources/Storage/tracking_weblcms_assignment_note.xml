@@ -25,13 +25,12 @@
         <property name="note"
                   type="text"/>
     </properties>
-    <index name="id">
-        <indexproperty name="id"/>
-    </index>
-    <index name="entry_id">
-        <indexproperty name="entry_id"/>
-    </index>
-    <index name="user_id">
-        <indexproperty name="user_id"/>
-    </index>
+    <indexes>
+        <index name="idx_entry_id">
+            <property name="entry_id"/>
+        </index>
+        <index name="idx_user_id">
+            <property name="user_id"/>
+        </index>
+    </indexes>
 </object>

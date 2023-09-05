@@ -16,8 +16,10 @@
                   fixed="1"
                   notnull="1"/>
     </properties>
-    <index name="id"
-           type="primary">
-        <indexproperty name="id"/>
-    </index>
+    <indexes>
+        <index name="prm_id"
+               type="primary">
+            <property name="id"/>
+        </index>
+    </indexes>
 </object>

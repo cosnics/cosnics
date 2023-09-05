@@ -28,10 +28,12 @@
                   unsigned="1"
                   notnull="1"/>
     </properties>
-    <index name="lpi_view_id">
-        <indexproperty name="lpi_view_id"/>
-    </index>
-    <index name="objective_id">
-        <indexproperty name="objective_id"/>
-    </index>
+    <indexes>
+        <index name="idx_lpi_view_id">
+            <property name="lpi_view_id"/>
+        </index>
+        <index name="idx_objective_id">
+            <property name="objective_id"/>
+        </index>
+    </indexes>
 </object>

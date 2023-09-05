@@ -23,14 +23,16 @@
                   unsigned="1"
                   notnull="1"/>
     </properties>
-    <index name="right_id">
-        <indexproperty name="right_id"/>
-    </index>
-    <index name="location_id">
-        <indexproperty name="location_id"/>
-    </index>
-    <index name="entity">
-        <indexproperty name="entity_id"/>
-        <indexproperty name="entity_type"/>
-    </index>
+    <indexes>
+        <index name="idx_right_id">
+            <property name="right_id"/>
+        </index>
+        <index name="idx_location_id">
+            <property name="location_id"/>
+        </index>
+        <index name="idx_entity">
+            <property name="entity_id"/>
+            <property name="entity_type"/>
+        </index>
+    </indexes>
 </object>

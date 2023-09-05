@@ -26,22 +26,24 @@
                   type="text"
                   length="10"/>
     </properties>
-    <index name="user_id">
-        <indexproperty name="user_id"/>
-    </index>
-    <index name="calendar_type">
-        <indexproperty name="calendar_type"/>
-    </index>
-    <index name="calendar_id">
-        <indexproperty name="calendar_id"/>
-    </index>
-    <index name="availability">
-        <indexproperty name="availability"/>
-    </index>
-    <index name="entry"
-           type="unique">
-        <indexproperty name="user_id"/>
-        <indexproperty name="calendar_type"/>
-        <indexproperty name="calendar_id"/>
-    </index>
+    <indexes>
+        <index name="idx_user_id">
+            <property name="user_id"/>
+        </index>
+        <index name="idx_calendar_type">
+            <property name="calendar_type"/>
+        </index>
+        <index name="idx_calendar_id">
+            <property name="calendar_id"/>
+        </index>
+        <index name="idx_availability">
+            <property name="availability"/>
+        </index>
+        <index name="unq_entry"
+               type="unique">
+            <property name="user_id"/>
+            <property name="calendar_type"/>
+            <property name="calendar_id"/>
+        </index>
+    </indexes>
 </object>

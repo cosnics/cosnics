@@ -19,13 +19,15 @@
                   type="integer"
                   notnull="1"/>
     </properties>
-    <index name="entity_type">
-        <indexproperty name="entity_type"/>
-    </index>
-    <index name="element_id">
-        <indexproperty name="element_id"/>
-    </index>
-    <index name="provider_registration_id">
-        <indexproperty name="provider_registration_id"/>
-    </index>
+    <indexes>
+        <index name="idx_entity_type">
+            <property name="entity_type"/>
+        </index>
+        <index name="idx_element_id">
+            <property name="element_id"/>
+        </index>
+        <index name="idx_rovider_registration_id">
+            <property name="provider_registration_id"/>
+        </index>
+    </indexes>
 </object>

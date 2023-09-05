@@ -23,17 +23,19 @@
                   unsigned="1"
                   notnull="1"/>
     </properties>
-    <index name="forum">
-        <indexproperty name="publication_id"/>
-        <indexproperty name="forum_topic_id"/>
-    </index>
-    <index name="publication_id">
-        <indexproperty name="publication_id"/>
-    </index>
-    <index name="forum_topic_id">
-        <indexproperty name="forum_topic_id"/>
-    </index>
-    <index name="user_id">
-        <indexproperty name="user_id"/>
-    </index>
+    <indexes>
+        <index name="idx_forum">
+            <property name="publication_id"/>
+            <property name="forum_topic_id"/>
+        </index>
+        <index name="idx_publication_id">
+            <property name="publication_id"/>
+        </index>
+        <index name="idx_forum_topic_id">
+            <property name="forum_topic_id"/>
+        </index>
+        <index name="idx_user_id">
+            <property name="user_id"/>
+        </index>
+    </indexes>
 </object>

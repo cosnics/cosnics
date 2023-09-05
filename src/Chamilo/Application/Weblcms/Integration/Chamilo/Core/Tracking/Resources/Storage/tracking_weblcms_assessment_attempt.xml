@@ -38,13 +38,15 @@
                   unsigned="1"
                   notnull="1"/>
     </properties>
-    <index name="assessment_id">
-        <indexproperty name="assessment_id"/>
-    </index>
-    <index name="user_id">
-        <indexproperty name="user_id"/>
-    </index>
-    <index name="course_id">
-        <indexproperty name="course_id"/>
-    </index>
+    <indexes>
+        <index name="idx_assessment_id">
+            <property name="assessment_id"/>
+        </index>
+        <index name="idx_user_id">
+            <property name="user_id"/>
+        </index>
+        <index name="idx_course_id">
+            <property name="course_id"/>
+        </index>
+    </indexes>
 </object>

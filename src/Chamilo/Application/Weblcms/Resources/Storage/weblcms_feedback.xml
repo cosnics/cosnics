@@ -25,8 +25,9 @@
         <property name="comment"
                   type="text"/>
     </properties>
-
-    <index name="publication_id">
-        <indexproperty name="publication_id"/>
-    </index>
+    <indexes>
+        <index name="idx_publication_id">
+            <property name="publication_id"/>
+        </index>
+    </indexes>
 </object>

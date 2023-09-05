@@ -17,8 +17,10 @@
                   notnull="1"
                   default=""/>
     </properties>
-    <index name="name">
-        <indexproperty name="name"/>
-        <indexproperty name="application"/>
-    </index>
+    <indexes>
+        <index name="idx_name">
+            <property name="name"/>
+            <property name="application"/>
+        </index>
+    </indexes>
 </object>

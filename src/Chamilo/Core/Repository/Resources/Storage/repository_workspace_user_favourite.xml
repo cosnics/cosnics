@@ -14,9 +14,11 @@
                   notnull="1"
                   default="0"/>
     </properties>
-    <index name="user_favourite"
-           type="unique">
-        <indexproperty name="workspace_id"/>
-        <indexproperty name="user_id"/>
-    </index>
+    <indexes>
+        <index name="unq_user_favourite"
+               type="unique">
+            <property name="workspace_id"/>
+            <property name="user_id"/>
+        </index>
+    </indexes>
 </object>

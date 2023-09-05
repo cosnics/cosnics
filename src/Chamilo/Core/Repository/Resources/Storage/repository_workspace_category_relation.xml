@@ -14,9 +14,11 @@
                   notnull="1"
                   default="0"/>
     </properties>
-    <index name="relation"
-           type="unique">
-        <indexproperty name="workspace_id"/>
-        <indexproperty name="category_id"/>
-    </index>
+    <indexes>
+        <index name="unq_relation"
+               type="unique">
+            <property name="workspace_id"/>
+            <property name="category_id"/>
+        </index>
+    </indexes>
 </object>

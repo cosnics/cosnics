@@ -12,7 +12,9 @@
                   type="text"
                   notnull="1"/>
     </properties>
-    <index name="course_setting_id">
-        <indexproperty name="course_setting_id"/>
-    </index>
+    <indexes>
+        <index name="idx_course_setting_id">
+            <property name="course_setting_id"/>
+        </index>
+    </indexes>
 </object>

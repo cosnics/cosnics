@@ -15,15 +15,17 @@
                   unsigned="1"
                   notnull="1"/>
     </properties>
-    <index name="user_group"
-           type="unique">
-        <indexproperty name="user_id"/>
-        <indexproperty name="group_id"/>
-    </index>
-    <index name="group_id">
-        <indexproperty name="group_id"/>
-    </index>
-    <index name="user_id">
-        <indexproperty name="user_id"/>
-    </index>
+    <indexes>
+        <index name="unq_user_group"
+               type="unique">
+            <property name="user_id"/>
+            <property name="group_id"/>
+        </index>
+        <index name="idx_group_id">
+            <property name="group_id"/>
+        </index>
+        <index name="idx_user_id">
+            <property name="user_id"/>
+        </index>
+    </indexes>
 </object>

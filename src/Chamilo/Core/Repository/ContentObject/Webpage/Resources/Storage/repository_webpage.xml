@@ -26,11 +26,13 @@
                   length="50"
                   notnull="1"/>
     </properties>
-    <index name="id"
-           type="primary">
-        <indexproperty name="id"/>
-    </index>
-    <index name="hash">
-        <indexproperty name="hash"/>
-    </index>
+    <indexes>
+        <index name="prm_id"
+               type="primary">
+            <property name="id"/>
+        </index>
+        <index name="idx_hash">
+            <property name="hash"/>
+        </index>
+    </indexes>
 </object>

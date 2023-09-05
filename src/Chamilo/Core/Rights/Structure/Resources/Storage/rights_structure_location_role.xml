@@ -13,10 +13,11 @@
                   type="integer"
                   notnull="1"/>
     </properties>
-
-    <index name="structure_location_role"
-           type="unique">
-        <indexproperty name="structure_location_id"/>
-        <indexproperty name="role_id"/>
-    </index>
+    <indexes>
+        <index name="unq_structure_location_role"
+               type="unique">
+            <property name="structure_location_id"/>
+            <property name="role_id"/>
+        </index>
+    </indexes>
 </object>

@@ -21,11 +21,13 @@
                   length="255"
                   notnull="1"/>
     </properties>
-    <index name="block_type">
-        <indexproperty name="block_type"/>
-    </index>
-    <index name="entity">
-        <indexproperty name="entity_type"/>
-        <indexproperty name="entity_id"/>
-    </index>
+    <indexes>
+        <index name="idx_block_type">
+            <property name="block_type"/>
+        </index>
+        <index name="idx_entity">
+            <property name="entity_type"/>
+            <property name="entity_id"/>
+        </index>
+    </indexes>
 </object>

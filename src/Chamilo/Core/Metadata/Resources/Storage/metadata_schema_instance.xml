@@ -27,13 +27,15 @@
                   type="integer"
                   notnull="1"/>
     </properties>
-    <index name="entity_type">
-        <indexproperty name="entity_type"/>
-    </index>
-    <index name="entity_id">
-        <indexproperty name="entity_id"/>
-    </index>
-    <index name="schema_id">
-        <indexproperty name="schema_id"/>
-    </index>
+    <indexes>
+        <index name="idx_entity_type">
+            <property name="entity_type"/>
+        </index>
+        <index name="idx_entity_id">
+            <property name="entity_id"/>
+        </index>
+        <index name="idx_schema_id">
+            <property name="schema_id"/>
+        </index>
+    </indexes>
 </object>

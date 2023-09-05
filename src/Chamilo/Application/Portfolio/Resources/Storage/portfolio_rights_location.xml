@@ -23,10 +23,12 @@
                   unsigned="1"
                   default="1"/>
     </properties>
-    <index name="publication_id">
-        <indexproperty name="publication_id"/>
-    </index>
-    <index name="node_id">
-        <indexproperty name="node_id"/>
-    </index>
+    <indexes>
+        <index name="idx_publication_id">
+            <property name="publication_id"/>
+        </index>
+        <index name="idx_node_id">
+            <property name="node_id"/>
+        </index>
+    </indexes>
 </object>

@@ -32,10 +32,12 @@
                   type="text"
                   notnull="1"/>
     </properties>
-    <index name="template_registration"
-           type="unique">
-        <indexproperty name="content_object_type"/>
-        <indexproperty name="name"/>
-        <indexproperty name="user_id"/>
-    </index>
+    <indexes>
+        <index name="unq_template_registration"
+               type="unique">
+            <property name="content_object_type"/>
+            <property name="name"/>
+            <property name="user_id"/>
+        </index>
+    </indexes>
 </object>

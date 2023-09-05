@@ -25,12 +25,14 @@
                   unsigned="1"
                   notnull="1"/>
     </properties>
-    <index name="id"
-           type="unique">
-        <indexproperty name="course_id"/>
-        <indexproperty name="name"/>
-    </index>
-    <index name="course_id">
-        <indexproperty name="course_id"/>
-    </index>
+    <indexes>
+        <index name="prm_id"
+               type="unique">
+            <property name="course_id"/>
+            <property name="name"/>
+        </index>
+        <index name="idx_course_id">
+            <property name="course_id"/>
+        </index>
+    </indexes>
 </object>

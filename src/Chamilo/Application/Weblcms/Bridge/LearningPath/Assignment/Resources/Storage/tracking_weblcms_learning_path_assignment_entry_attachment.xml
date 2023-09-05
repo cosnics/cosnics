@@ -15,10 +15,12 @@
                   unsigned="1"
                   notnull="1"/>
     </properties>
-    <index name="entry_id">
-        <indexproperty name="entry_id"/>
-    </index>
-    <index name="attachment_id">
-        <indexproperty name="attachment_id"/>
-    </index>
+    <indexes>
+        <index name="idx_entry_id">
+            <property name="entry_id"/>
+        </index>
+        <index name="idx_attachment_id">
+            <property name="attachment_id"/>
+        </index>
+    </indexes>
 </object>

@@ -13,10 +13,11 @@
                   type="integer"
                   notnull="1"/>
     </properties>
-
-    <index name="user_role"
-           type="unique">
-        <indexproperty name="user_id"/>
-        <indexproperty name="role_id"/>
-    </index>
+    <indexes>
+        <index name="unq_user_role"
+               type="unique">
+            <property name="user_id"/>
+            <property name="role_id"/>
+        </index>
+    </indexes>
 </object>

@@ -24,7 +24,9 @@
                   notnull="1"
                   default="login"/>
     </properties>
-    <index name="user_id">
-        <indexproperty name="user_id"/>
-    </index>
+    <indexes>
+        <index name="idx_user_id">
+            <property name="user_id"/>
+        </index>
+    </indexes>
 </object>

@@ -29,10 +29,12 @@
         <property name="comment"
                   type="text"/>
     </properties>
-    <index name="complex_content_object_id">
-        <indexproperty name="complex_content_object_id"/>
-    </index>
-    <index name="publication_id">
-        <indexproperty name="publication_id"/>
-    </index>
+    <indexes>
+        <index name="idx_complex_content_object_id">
+            <property name="complex_content_object_id"/>
+        </index>
+        <index name="idx_publication_id">
+            <property name="publication_id"/>
+        </index>
+    </indexes>
 </object>

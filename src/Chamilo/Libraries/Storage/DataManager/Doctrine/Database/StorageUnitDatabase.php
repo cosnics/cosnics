@@ -201,30 +201,22 @@ class StorageUnitDatabase implements StorageUnitDatabaseInterface
 
                 if ($options['autoincrement'])
                 {
-                    $primaryKeyName = $this->getStorageAliasGenerator()->getConstraintName(
-                        $storageUnitName, $storageUnitName
-                    );
-
-                    $table->setPrimaryKey([$property], $primaryKeyName);
+                    $table->setPrimaryKey([$property], 'prm_' . $property);
                 }
             }
 
             foreach ($indexes as $index => $attributes)
             {
-                $indexName = $this->getStorageAliasGenerator()->getConstraintName(
-                    $storageUnitName, $index
-                );
-
                 switch ($attributes['type'])
                 {
                     case 'primary' :
-                        $table->setPrimaryKey(array_keys($attributes['fields']), $indexName);
+                        $table->setPrimaryKey(array_keys($attributes['fields']), 'prm_' . $index);
                         break;
                     case 'unique' :
-                        $table->addUniqueIndex(array_keys($attributes['fields']), $indexName);
+                        $table->addUniqueIndex(array_keys($attributes['fields']), 'unq_' . $index);
                         break;
                     default :
-                        $table->addIndex(array_keys($attributes['fields']), $indexName);
+                        $table->addIndex(array_keys($attributes['fields']), 'idx_' . $index);
                         break;
                 }
             }

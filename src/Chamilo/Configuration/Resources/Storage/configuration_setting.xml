@@ -21,7 +21,9 @@
                   notnull="1"
                   default="0"/>
     </properties>
-    <index name="user_setting">
-        <indexproperty name="user_setting"/>
-    </index>
+    <indexes>
+        <index name="idx_user_setting">
+            <property name="user_setting"/>
+        </index>
+    </indexes>
 </object>

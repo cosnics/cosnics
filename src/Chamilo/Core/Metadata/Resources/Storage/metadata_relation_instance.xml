@@ -35,19 +35,21 @@
                   type="integer"
                   notnull="1"/>
     </properties>
-    <index name="source_type">
-        <indexproperty name="source_type"/>
-    </index>
-    <index name="source_id">
-        <indexproperty name="source_id"/>
-    </index>
-    <index name="target_type">
-        <indexproperty name="target_type"/>
-    </index>
-    <index name="target_id">
-        <indexproperty name="target_id"/>
-    </index>
-    <index name="relation_id">
-        <indexproperty name="relation_id"/>
-    </index>
+    <indexes>
+        <index name="idx_source_type">
+            <property name="source_type"/>
+        </index>
+        <index name="idx_source_id">
+            <property name="source_id"/>
+        </index>
+        <index name="idx_target_type">
+            <property name="target_type"/>
+        </index>
+        <index name="idx_target_id">
+            <property name="target_id"/>
+        </index>
+        <index name="idx_relation_id">
+            <property name="relation_id"/>
+        </index>
+    </indexes>
 </object>

@@ -16,11 +16,13 @@
         <property name="hint"
                   type="text"/>
     </properties>
-    <index name="id"
-           type="primary">
-        <indexproperty name="id"/>
-    </index>
-    <index name="answer_type">
-        <indexproperty name="answer_type"/>
-    </index>
+    <indexes>
+        <index name="prm_id"
+               type="primary">
+            <property name="id"/>
+        </index>
+        <index name="idx_answer_type">
+            <property name="answer_type"/>
+        </index>
+    </indexes>
 </object>

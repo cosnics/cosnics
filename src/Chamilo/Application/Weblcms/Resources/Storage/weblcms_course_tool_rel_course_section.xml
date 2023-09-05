@@ -12,7 +12,4 @@
                   type="integer"
                   notnull="1"/>
     </properties>
-    <index name="course_tool_rel_course_section">
-        <indexproperty name="id"/>
-    </index>
 </object>

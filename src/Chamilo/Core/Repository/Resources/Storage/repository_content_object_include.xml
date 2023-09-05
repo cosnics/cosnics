@@ -15,15 +15,17 @@
                   unsigned="1"
                   notnull="1"/>
     </properties>
-    <index name="content_object_id"
-           type="unique">
-        <indexproperty name="content_object_id"/>
-        <indexproperty name="include_id"/>
-    </index>
-    <index name="content_object_id">
-        <indexproperty name="content_object_id"/>
-    </index>
-    <index name="include_id">
-        <indexproperty name="include_id"/>
-    </index>
+    <indexes>
+        <index name="unq_content_object_id"
+               type="unique">
+            <property name="content_object_id"/>
+            <property name="include_id"/>
+        </index>
+        <index name="idx_content_object_id">
+            <property name="content_object_id"/>
+        </index>
+        <index name="idx_include_id">
+            <property name="include_id"/>
+        </index>
+    </indexes>
 </object>

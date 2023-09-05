@@ -32,13 +32,15 @@
         <property name="configuration"
                   type="text"/>
     </properties>
-    <index name="type">
-        <indexproperty name="type"/>
-    </index>
-    <index name="parent_id">
-        <indexproperty name="parent_id"/>
-    </index>
-    <index name="user_id">
-        <indexproperty name="user_id"/>
-    </index>
+    <indexes>
+        <index name="idx_type">
+            <property name="type"/>
+        </index>
+        <index name="idx_parent_id">
+            <property name="parent_id"/>
+        </index>
+        <index name="idx_user_id">
+            <property name="user_id"/>
+        </index>
+    </indexes>
 </object>

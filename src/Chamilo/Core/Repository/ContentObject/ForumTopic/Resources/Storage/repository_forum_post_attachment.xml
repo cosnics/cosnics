@@ -15,11 +15,12 @@
                   notnull="1"
                   default="0"/>
     </properties>
-
-    <index name="forum_post_id">
-        <indexproperty name="forum_post_id"/>
-    </index>
-    <index name="attachment_id">
-        <indexproperty name="attachment_id"/>
-    </index>
+    <indexes>
+        <index name="idx_forum_post_id">
+            <property name="forum_post_id"/>
+        </index>
+        <index name="idx_attachment_id">
+            <property name="attachment_id"/>
+        </index>
+    </indexes>
 </object>

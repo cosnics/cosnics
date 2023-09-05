@@ -28,12 +28,14 @@
                   notnull="1"
                   default="0"/>
     </properties>
-    <index name="key"
-           type="unique">
-        <indexproperty name="course_id"/>
-        <indexproperty name="name"/>
-    </index>
-    <index name="course_id">
-        <indexproperty name="course_id"/>
-    </index>
+    <indexes>
+        <index name="unq_key"
+               type="unique">
+            <property name="course_id"/>
+            <property name="name"/>
+        </index>
+        <index name="idx_course_id">
+            <property name="course_id"/>
+        </index>
+    </indexes>
 </object>

@@ -14,9 +14,11 @@
                   notnull="1"
                   default="0"/>
     </properties>
-    <index name="user_favourite"
-           type="unique">
-        <indexproperty name="source_user_id"/>
-        <indexproperty name="favourite_user_id"/>
-    </index>
+    <indexes>
+        <index name="unq_user_favourite"
+               type="unique">
+            <property name="source_user_id"/>
+            <property name="favourite_user_id"/>
+        </index>
+    </indexes>
 </object>

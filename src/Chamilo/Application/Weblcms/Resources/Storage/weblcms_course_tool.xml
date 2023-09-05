@@ -17,7 +17,9 @@
                   type="text"
                   length="250"/>
     </properties>
-    <index name="section_type">
-        <indexproperty name="section_type"/>
-    </index>
+    <indexes>
+        <index name="idx_section_type">
+            <property name="section_type"/>
+        </index>
+    </indexes>
 </object>

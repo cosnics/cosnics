@@ -14,9 +14,11 @@
                   length="255"
                   notnull="1"/>
     </properties>
-    <index name="user_id_source"
-           type="unique">
-        <indexproperty name="user_id"/>
-        <indexproperty name="source"/>
-    </index>
+    <indexes>
+        <index name="unq_user_id_source"
+               type="unique">
+            <property name="user_id"/>
+            <property name="source"/>
+        </index>
+    </indexes>
 </object>

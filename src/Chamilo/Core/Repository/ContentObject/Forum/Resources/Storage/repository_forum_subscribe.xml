@@ -13,14 +13,13 @@
                   type="integer"
                   notnull="1"
                   default="0"/>
-
     </properties>
-
-    <index name="user_id">
-        <indexproperty name="user_id"/>
-    </index>
-
-    <index name="forum_id">
-        <indexproperty name="forum_id"/>
-    </index>
+    <indexes>
+        <index name="idx_user_id">
+            <property name="user_id"/>
+        </index>
+        <index name="idx_forum_id">
+            <property name="forum_id"/>
+        </index>
+    </indexes>
 </object>

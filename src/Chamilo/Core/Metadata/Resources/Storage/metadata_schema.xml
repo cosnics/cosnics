@@ -26,8 +26,10 @@
                   type="text"
                   notnull="1"/>
     </properties>
-    <index name="namespace"
-           type="unique">
-        <indexproperty name="namespace"/>
-    </index>
+    <indexes>
+        <index name="unq_namespace"
+               type="unique">
+            <property name="namespace"/>
+        </index>
+    </indexes>
 </object>

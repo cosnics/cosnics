@@ -26,7 +26,9 @@
                   notnull="1"
                   default="1"/>
     </properties>
-    <index name="course_group_id">
-        <indexproperty name="course_group_id"/>
-    </index>
+    <indexes>
+        <index name="idx_course_group_id">
+            <property name="course_group_id"/>
+        </index>
+    </indexes>
 </object>

@@ -17,15 +17,17 @@
                   length="3"
                   unsigned="1"/>
     </properties>
-    <index name="primary_key"
-           type="primary">
-        <indexproperty name="course_type_user_category_id"/>
-        <indexproperty name="course_id"/>
-    </index>
-    <index name="course_type_user_category_id">
-        <indexproperty name="course_type_user_category_id"/>
-    </index>
-    <index name="user_id">
-        <indexproperty name="user_id"/>
-    </index>
+    <indexes>
+        <index name="prm_key"
+               type="primary">
+            <property name="course_type_user_category_id"/>
+            <property name="course_id"/>
+        </index>
+        <index name="idx_course_type_user_category_id">
+            <property name="course_type_user_category_id"/>
+        </index>
+        <index name="idx_user_id">
+            <property name="user_id"/>
+        </index>
+    </indexes>
 </object>

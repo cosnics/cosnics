@@ -22,10 +22,12 @@
                   notnull="1"
                   default="0"/>
     </properties>
-    <index name="relation"
-           type="unique">
-        <indexproperty name="workspace_id"/>
-        <indexproperty name="entity_type"/>
-        <indexproperty name="entity_id"/>
-    </index>
+    <indexes>
+        <index name="unq_relation"
+               type="unique">
+            <property name="workspace_id"/>
+            <property name="entity_type"/>
+            <property name="entity_id"/>
+        </index>
+    </indexes>
 </object>

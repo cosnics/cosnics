@@ -37,12 +37,14 @@
         <property name="total_time"
                   type="integer"/>
     </properties>
-    <index name="access"
-           type="unique">
-        <indexproperty name="user_id"/>
-        <indexproperty name="course_id"/>
-        <indexproperty name="tool_id"/>
-        <indexproperty name="category_id"/>
-        <indexproperty name="publication_id"/>
-    </index>
+    <indexes>
+        <index name="unq_access"
+               type="unique">
+            <property name="user_id"/>
+            <property name="course_id"/>
+            <property name="tool_id"/>
+            <property name="category_id"/>
+            <property name="publication_id"/>
+        </index>
+    </indexes>
 </object>

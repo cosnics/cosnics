@@ -17,8 +17,10 @@
                   length="1"
                   default="6"/>
     </properties>
-    <index name="publication_id"
-           type="unique">
-        <indexproperty name="publication_id"/>
-    </index>
+    <indexes>
+        <index name="unq_publication_id"
+               type="unique">
+            <property name="publication_id"/>
+        </index>
+    </indexes>
 </object>

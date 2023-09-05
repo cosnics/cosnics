@@ -24,10 +24,12 @@
                   type="integer"
                   default="0"/>
     </properties>
-    <index name="tree_node_attempt_id">
-        <indexproperty name="tree_node_attempt_id"/>
-    </index>
-    <index name="question_complex_id">
-        <indexproperty name="question_complex_id"/>
-    </index>
+    <indexes>
+        <index name="idx_tree_node_attempt_id">
+            <property name="tree_node_attempt_id"/>
+        </index>
+        <index name="idx_question_complex_id">
+            <property name="question_complex_id"/>
+        </index>
+    </indexes>
 </object>

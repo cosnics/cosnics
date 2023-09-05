@@ -44,23 +44,22 @@
                   fixed="true"
                   notnull="1"/>
     </properties>
-    <index name="id">
-        <indexproperty name="id"/>
-    </index>
-    <index name="tree_node_attempt_id">
-        <indexproperty name="tree_node_attempt_id"/>
-    </index>
-    <index name="tree_node_data_id">
-        <indexproperty name="tree_node_data_id"/>
-    </index>
-    <index name="entity_id">
-        <indexproperty name="entity_id"/>
-    </index>
-    <index name="entity">
-        <indexproperty name="entity_id"/>
-        <indexproperty name="entity_type"/>
-    </index>
-    <index name="content_object_publication_id">
-        <indexproperty name="content_object_publication_id"/>
-    </index>
+    <indexes>
+        <index name="idx_tree_node_attempt_id">
+            <property name="tree_node_attempt_id"/>
+        </index>
+        <index name="idx_tree_node_data_id">
+            <property name="tree_node_data_id"/>
+        </index>
+        <index name="idx_entity_id">
+            <property name="entity_id"/>
+        </index>
+        <index name="idx_entity">
+            <property name="entity_id"/>
+            <property name="entity_type"/>
+        </index>
+        <index name="idx_content_object_publication_id">
+            <property name="content_object_publication_id"/>
+        </index>
+    </indexes>
 </object>

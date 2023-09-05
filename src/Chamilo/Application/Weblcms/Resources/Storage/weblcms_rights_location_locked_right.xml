@@ -15,10 +15,12 @@
                   unsigned="1"
                   notnull="1"/>
     </properties>
-    <index name="right_id">
-        <indexproperty name="right_id"/>
-    </index>
-    <index name="location_id">
-        <indexproperty name="location_id"/>
-    </index>
+    <indexes>
+        <index name="idx_right_id">
+            <property name="right_id"/>
+        </index>
+        <index name="idx_location_id">
+            <property name="location_id"/>
+        </index>
+    </indexes>
 </object>

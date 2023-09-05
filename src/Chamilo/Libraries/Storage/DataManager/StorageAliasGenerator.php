@@ -55,35 +55,6 @@ class StorageAliasGenerator
         return $this;
     }
 
-    public function getConstraintName(string $tableName, string $column): string
-    {
-        $possibleName = '';
-        $parts = explode('_', $tableName);
-
-        foreach ($parts as $part)
-        {
-            $possibleName .= $part[0];
-        }
-
-        $possibleName = $possibleName . '_' . $column;
-
-        if (array_key_exists($possibleName, $this->aliases[self::TYPE_CONSTRAINT]))
-        {
-            $originalName = $possibleName;
-            $index = 'a';
-
-            while (array_key_exists($possibleName, $this->aliases[self::TYPE_CONSTRAINT]))
-            {
-                $possibleName = $originalName . '_' . $index;
-                $index ++;
-            }
-        }
-
-        $this->aliases[self::TYPE_CONSTRAINT][$possibleName] = serialize([$tableName, $column]);
-
-        return $possibleName;
-    }
-
     public function getDataClassAlias(string $class): string
     {
         return $this->getTableAlias($class::getStorageUnitName());

@@ -19,13 +19,15 @@
                   length="255"
                   notnull="1"/>
     </properties>
-    <index name="entity_type">
-        <indexproperty name="entity_type"/>
-    </index>
-    <index name="provider_class">
-        <indexproperty name="provider_class"/>
-    </index>
-    <index name="property_name">
-        <indexproperty name="property_name"/>
-    </index>
+    <indexes>
+        <index name="idx_entity_type">
+            <property name="entity_type"/>
+        </index>
+        <index name="idx_provider_class">
+            <property name="provider_class"/>
+        </index>
+        <index name="idx_property_name">
+            <property name="property_name"/>
+        </index>
+    </indexes>
 </object>

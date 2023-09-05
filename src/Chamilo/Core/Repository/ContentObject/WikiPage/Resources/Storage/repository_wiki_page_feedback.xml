@@ -25,8 +25,9 @@
         <property name="comment"
                   type="text"/>
     </properties>
-
-    <index name="wiki_page_id">
-        <indexproperty name="wiki_page_id"/>
-    </index>
+    <indexes>
+        <index name="idx_wiki_page_id">
+            <property name="wiki_page_id"/>
+        </index>
+    </indexes>
 </object>

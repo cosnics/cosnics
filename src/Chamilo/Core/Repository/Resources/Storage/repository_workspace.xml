@@ -21,9 +21,9 @@
                   notnull="1"
                   default="0"/>
     </properties>
-    <index name="name"
+    <indexes><index name="unq_name"
            type="unique">
-        <indexproperty name="name"/>
-        <indexproperty name="creator_id"/>
-    </index>
+        <property name="name"/>
+        <property name="creator_id"/>
+    </index></indexes>
 </object>

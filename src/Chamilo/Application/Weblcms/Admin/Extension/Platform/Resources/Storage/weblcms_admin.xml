@@ -29,17 +29,19 @@
                   unsigned="1"
                   notnull="1"/>
     </properties>
-    <index name="entity_type">
-        <indexproperty name="entity_type"/>
-    </index>
-    <index name="entity_id">
-        <indexproperty name="entity_id"/>
-    </index>
-    <index name="entity_id"
-           type="unique">
-        <indexproperty name="entity_type"/>
-        <indexproperty name="entity_id"/>
-        <indexproperty name="target_type"/>
-        <indexproperty name="target_id"/>
-    </index>
+    <indexes>
+        <index name="idx_entity_type">
+            <property name="entity_type"/>
+        </index>
+        <index name="idx_entity_id">
+            <property name="entity_id"/>
+        </index>
+        <index name="unq_entity_id"
+               type="unique">
+            <property name="entity_type"/>
+            <property name="entity_id"/>
+            <property name="target_type"/>
+            <property name="target_id"/>
+        </index>
+    </indexes>
 </object>

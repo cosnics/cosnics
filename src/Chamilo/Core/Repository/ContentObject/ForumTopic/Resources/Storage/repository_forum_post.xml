@@ -32,12 +32,11 @@
                   notnull="1"
                   default="0"/>
     </properties>
-
-    <index name="forum_topic_id">
-        <indexproperty name="forum_topic_id"/>
+    <indexes>
+    <index name="idx_forum_topic_id">
+        <property name="forum_topic_id"/>
     </index>
-    <index name="reply_on_post_id">
-        <indexproperty name="reply_on_post_id"/>
+    <index name="idx_reply_on_post_id">
+        <property name="reply_on_post_id"/>
     </index>
-
 </object>

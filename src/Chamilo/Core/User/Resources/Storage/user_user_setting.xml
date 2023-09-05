@@ -17,8 +17,10 @@
         <property name="value"
                   type="text"/>
     </properties>
-    <index name="user_setting">
-        <indexproperty name="user_id"/>
-        <indexproperty name="setting_id"/>
-    </index>
+    <indexes>
+        <index name="idx_user_setting">
+            <property name="user_id"/>
+            <property name="setting_id"/>
+        </index>
+    </indexes>
 </object>

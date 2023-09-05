@@ -29,16 +29,18 @@
                   unsigned="1"
                   notnull="1"/>
     </properties>
-    <index name="parent_id">
-        <indexproperty name="parent_id"/>
-    </index>
-    <index name="display_order">
-        <indexproperty name="display_order"/>
-    </index>
-    <index name="type_id">
-        <indexproperty name="type_id"/>
-    </index>
-    <index name="type">
-        <indexproperty name="type"/>
-    </index>
+    <indexes>
+        <index name="idx_parent_id">
+            <property name="parent_id"/>
+        </index>
+        <index name="idx_display_order">
+            <property name="display_order"/>
+        </index>
+        <index name="idx_type_id">
+            <property name="type_id"/>
+        </index>
+        <index name="idx_type">
+            <property name="type"/>
+        </index>
+    </indexes>
 </object>

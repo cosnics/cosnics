@@ -15,9 +15,11 @@
                   notnull="1"
                   default="0"/>
     </properties>
-    <index name="course_group_id"
-           type="primary">
-        <indexproperty name="course_group_id"/>
-        <indexproperty name="user_id"/>
-    </index>
+    <indexes>
+        <index name="prm_course_group_id"
+               type="primary">
+            <property name="course_group_id"/>
+            <property name="user_id"/>
+        </index>
+    </indexes>
 </object>

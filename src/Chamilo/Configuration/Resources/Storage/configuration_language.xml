@@ -22,10 +22,12 @@
                   type="boolean"
                   default="1"/>
     </properties>
-    <index name="english_name">
-        <indexproperty name="english_name"/>
-    </index>
-    <index name="isocode">
-        <indexproperty name="isocode"/>
-    </index>
+    <indexes>
+        <index name="idx_english_name">
+            <property name="english_name"/>
+        </index>
+        <index name="idx_isocode">
+            <property name="isocode"/>
+        </index>
+    </indexes>
 </object>

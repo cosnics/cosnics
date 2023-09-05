@@ -15,8 +15,10 @@
                   unsigned="1"
                   notnull="1"/>
     </properties>
-    <index name="right">
-        <indexproperty name="location_entity_right_id"/>
-        <indexproperty name="group_id"/>
-    </index>
+    <indexes>
+        <index name="idx_right">
+            <property name="location_entity_right_id"/>
+            <property name="group_id"/>
+        </index>
+    </indexes>
 </object>

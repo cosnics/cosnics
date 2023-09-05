@@ -59,24 +59,25 @@
                   type="text"
                   length="32"/>
     </properties>
-    <index name="owner_id">
-        <indexproperty name="owner_id"/>
-    </index>
-    <index name="object_number">
-        <indexproperty name="object_number"/>
-    </index>
-    <index name="type">
-        <indexproperty name="type"/>
-    </index>
-    <index name="parent_id">
-        <indexproperty name="parent_id"/>
-    </index>
-    <index name="state">
-        <indexproperty name="state"/>
-    </index>
-    <index name="category">
-        <indexproperty name="owner_id"/>
-        <indexproperty name="type"/>
-
-    </index>
+    <indexes>
+        <index name="idx_owner_id">
+            <property name="owner_id"/>
+        </index>
+        <index name="idx_object_number">
+            <property name="object_number"/>
+        </index>
+        <index name="idx_type">
+            <property name="type"/>
+        </index>
+        <index name="idx_parent_id">
+            <property name="parent_id"/>
+        </index>
+        <index name="idx_state">
+            <property name="state"/>
+        </index>
+        <index name="idx_category">
+            <property name="owner_id"/>
+            <property name="type"/>
+        </index>
+    </indexes>
 </object>

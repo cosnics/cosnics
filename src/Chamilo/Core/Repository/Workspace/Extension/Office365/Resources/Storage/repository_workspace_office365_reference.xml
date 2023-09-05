@@ -22,7 +22,9 @@
                   notnull="1"
                   default="1"/>
     </properties>
-    <index name="workspace_id">
-        <indexproperty name="workspace_id"/>
-    </index>
+    <indexes>
+        <index name="idx_workspace_id">
+            <property name="workspace_id"/>
+        </index>
+    </indexes>
 </object>

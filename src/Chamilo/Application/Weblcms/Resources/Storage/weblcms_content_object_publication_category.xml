@@ -33,16 +33,18 @@
                   type="boolean"
                   default="1"/>
     </properties>
-    <index name="course_id">
-        <indexproperty name="course_id"/>
-    </index>
-    <index name="tool">
-        <indexproperty name="tool"/>
-    </index>
-    <index name="parent_id">
-        <indexproperty name="parent_id"/>
-    </index>
-    <index name="display_order">
-        <indexproperty name="display_order"/>
-    </index>
+    <indexes>
+        <index name="idx_course_id">
+            <property name="course_id"/>
+        </index>
+        <index name="idx_tool">
+            <property name="tool"/>
+        </index>
+        <index name="idx_parent_id">
+            <property name="parent_id"/>
+        </index>
+        <index name="idx_display_order">
+            <property name="display_order"/>
+        </index>
+    </indexes>
 </object>

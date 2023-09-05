@@ -18,10 +18,12 @@
                   unsigned="1"
                   notnull="1"/>
     </properties>
-    <index name="publisher">
-        <indexproperty name="publisher_id"/>
-    </index>
-    <index name="content_object_id">
-        <indexproperty name="content_object_id"/>
-    </index>
+    <indexes>
+        <index name="idx_publisher">
+            <property name="publisher_id"/>
+        </index>
+        <index name="idx_content_object_id">
+            <property name="content_object_id"/>
+        </index>
+    </indexes>
 </object>

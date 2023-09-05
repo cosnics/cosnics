@@ -16,10 +16,12 @@
                   type="text"
                   length="255"/>
     </properties>
-    <index name="tool_id">
-        <indexproperty name="tool_id"/>
-    </index>
-    <index name="global_setting">
-        <indexproperty name="global_setting"/>
-    </index>
+    <indexes>
+        <index name="idx_tool_id">
+            <property name="tool_id"/>
+        </index>
+        <index name="idx_global_setting">
+            <property name="global_setting"/>
+        </index>
+    </indexes>
 </object>

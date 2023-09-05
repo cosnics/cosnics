@@ -93,11 +93,13 @@
                   notnull="0"
                   default="0"/>
     </properties>
-    <index name="username"
-           type="unique">
-        <indexproperty name="username"/>
-    </index>
-    <index name="official_code">
-        <indexproperty name="official_code"/>
-    </index>
+    <indexes>
+        <index name="unq_username"
+               type="unique">
+            <property name="username"/>
+        </index>
+        <index name="idx_official_code">
+            <property name="official_code"/>
+        </index>
+    </indexes>
 </object>

@@ -16,9 +16,11 @@
                   notnull="0"
                   default=""/>
     </properties>
-    <index name="location"
-           type="unique">
-        <indexproperty name="context"/>
-        <indexproperty name="action"/>
-    </index>
+    <indexes>
+        <index name="unq_location"
+               type="unique">
+            <property name="context"/>
+            <property name="action"/>
+        </index>
+    </indexes>
 </object>

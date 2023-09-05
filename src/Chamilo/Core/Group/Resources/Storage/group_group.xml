@@ -46,24 +46,26 @@
                   notnull="1"
                   default="10000"/>
     </properties>
-    <index name="parent_id">
-        <indexproperty name="parent_id"/>
-    </index>
-    <index name="code">
-        <indexproperty name="code"/>
-    </index>
-    <index name="sort">
-        <indexproperty name="sort"/>
-    </index>
-    <index name="position">
-        <indexproperty name="parent_id"/>
-        <indexproperty name="left_value"/>
-        <indexproperty name="right_value"/>
-    </index>
-    <index name="left_value">
-        <indexproperty name="left_value"/>
-    </index>
-    <index name="right_value">
-        <indexproperty name="right_value"/>
-    </index>
+    <indexes>
+        <index name="idx_parent_id">
+            <property name="parent_id"/>
+        </index>
+        <index name="idx_code">
+            <property name="code"/>
+        </index>
+        <index name="idx_sort">
+            <property name="sort"/>
+        </index>
+        <index name="idx_position">
+            <property name="parent_id"/>
+            <property name="left_value"/>
+            <property name="right_value"/>
+        </index>
+        <index name="idx_left_value">
+            <property name="left_value"/>
+        </index>
+        <index name="idx_right_value">
+            <property name="right_value"/>
+        </index>
+    </indexes>
 </object>
