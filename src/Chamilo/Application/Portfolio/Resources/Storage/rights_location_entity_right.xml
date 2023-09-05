@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<object name="rights_location_entity_right">
+<object name="portfolio_rights_location_entity_right">
     <properties>
         <property name="id"
                   type="integer"

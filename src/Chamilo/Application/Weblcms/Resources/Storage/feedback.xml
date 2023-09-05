@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<object name="feedback">
+<object name="weblcms_feedback">
     <properties>
         <property name="id"
                   type="integer"

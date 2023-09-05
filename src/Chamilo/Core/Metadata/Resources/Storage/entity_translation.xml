@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<object name="entity_translation">
+<object name="metadata_entity_translation">
     <properties>
         <property name="id"
                   type="integer"

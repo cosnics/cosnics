@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<object name="hotspot_question">
+<object name="repository_hotspot_question">
     <properties>
         <property name="id"
                   type="integer"

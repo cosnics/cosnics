@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<object name="forum_topic_subscribe">
+<object name="repository_forum_topic_subscribe">
     <properties>
         <property name="id"
                   type="integer"

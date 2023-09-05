@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<object name="complex_ordering_question">
+<object name="repository_complex_ordering_question">
     <properties>
         <property name="id"
                   type="integer"

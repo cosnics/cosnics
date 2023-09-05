@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<object name="course_type_user_order">
+<object name="weblcms_course_type_user_order">
     <properties>
         <property name="id"
                   type="integer"

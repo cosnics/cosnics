@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<object name="content_object_publication">
+<object name="home_content_object_publication">
     <properties>
         <property name="id"
                   type="integer"

@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<object name="course_module_last_access">
+<object name="weblcms_course_module_last_access">
     <properties>
         <property name="id"
                   type="integer"

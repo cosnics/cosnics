@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<object name="portfolio_item">
+<object name="repository_portfolio_item">
     <properties>
         <property name="id"
                   type="integer"

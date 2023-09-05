@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<object name="block_type_target_entity">
+<object name="home_block_type_target_entity">
     <properties>
         <property name="id"
                   type="integer"

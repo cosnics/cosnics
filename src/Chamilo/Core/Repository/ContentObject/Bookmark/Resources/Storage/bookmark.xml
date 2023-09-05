@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<object name="bookmark">
+<object name="repository_bookmark">
     <properties>
         <property name="id"
                   type="integer"

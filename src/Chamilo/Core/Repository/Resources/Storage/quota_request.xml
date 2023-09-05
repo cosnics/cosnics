@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<object name="quota_request">
+<object name="repository_quota_request">
     <properties>
         <property name="id"
                   type="integer"

@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<object name="complex_learning_path_item">
+<object name="repository_complex_learning_path_item">
     <properties>
         <property name="id"
                   type="integer"

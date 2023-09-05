@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<object name="user_view">
+<object name="repository_user_view">
     <properties>
         <property name="id"
                   type="integer"

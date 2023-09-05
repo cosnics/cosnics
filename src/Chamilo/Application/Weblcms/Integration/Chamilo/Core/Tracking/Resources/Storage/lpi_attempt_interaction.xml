@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<object name="lpi_attempt_interaction">
+<object name="tracking_weblcms_lpi_attempt_interaction">
     <properties>
         <property name="id"
                   type="integer"

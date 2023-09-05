@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<object name="form_option">
+<object name="configuration_form_option">
     <properties>
         <property name="id"
                   type="integer"

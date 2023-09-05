@@ -1,7 +1,6 @@
 <?php
 namespace Chamilo\Libraries\Platform\Session;
 
-use Chamilo\Core\User\Storage\DataClass\Session;
 use Doctrine\DBAL\Connection;
 use Symfony\Component\HttpFoundation\Session\Storage\Handler\PdoSessionHandler;
 
@@ -28,11 +27,11 @@ class PdoSessionHandlerFactory
     public function getPdoSessionHandler(): PdoSessionHandler
     {
         return new PdoSessionHandler($this->getConnection()->getNativeConnection(), [
-            'db_table' => Session::getStorageUnitName(),
-            'db_id_col' => Session::PROPERTY_SESSION_ID,
-            'db_data_col' => Session::PROPERTY_DATA,
-            'db_lifetime_col' => Session::PROPERTY_LIFETIME,
-            'db_time_col' => Session::PROPERTY_MODIFIED
+            'db_table' => 'user_session',
+            'db_id_col' => 'session_id',
+            'db_data_col' => 'data',
+            'db_lifetime_col' => 'lifetime',
+            'db_time_col' => 'modified'
         ]);
     }
 }

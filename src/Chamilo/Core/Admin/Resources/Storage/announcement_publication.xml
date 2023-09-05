@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<object name="announcement_publication">
+<object name="admin_announcement_publication">
     <properties>
         <property name="id"
                   type="integer"

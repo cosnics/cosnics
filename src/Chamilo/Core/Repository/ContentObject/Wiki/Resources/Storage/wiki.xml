@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<object name="wiki">
+<object name="repository_wiki">
     <properties>
         <property name="id"
                   type="integer"

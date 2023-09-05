@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<object name="visit">
+<object name="tracking_user_visit">
     <properties>
         <property name="id"
                   type="integer"

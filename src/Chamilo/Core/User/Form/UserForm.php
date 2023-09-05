@@ -128,18 +128,7 @@ class UserForm extends FormValidator
         $group[] = $this->createElement('password', User::PROPERTY_PASSWORD, null, ['autocomplete' => 'off']);
         $this->addGroup($group, 'pw', Translation::get('Password'), '');
 
-        $this->registerRule('checkPasswordRequirements', 'function', 'checkPasswordRequirements', $this);
-
-        $this->addGroupRule(
-            'pw', [
-                User::PROPERTY_PASSWORD => [
-                    [
-                        Translation::getInstance()->getTranslation('PasswordRequirements', null, 'Chamilo\Core\User'),
-                        'checkPasswordRequirements'
-                    ]
-                ]
-            ]
-        );
+        $this->addFormRule([$this, 'checkPasswordRequirements']);
 
         $this->addTimePeriodSelection('ExpirationDate', User::PROPERTY_ACTIVATION_DATE, User::PROPERTY_EXPIRATION_DATE);
 
@@ -204,11 +193,11 @@ class UserForm extends FormValidator
             $this->add_warning_message('admin_lockout_message', null, Translation::get('LockOutWarningMessage'));
         }
         $group = [];
-        $group[] = &$this->createElement(
+        $group[] = $this->createElement(
             'radio', User::PROPERTY_PLATFORMADMIN, null,
             Translation::get('ConfirmYes', null, StringUtilities::LIBRARIES), 1
         );
-        $group[] = &$this->createElement(
+        $group[] = $this->createElement(
             'radio', User::PROPERTY_PLATFORMADMIN, null,
             Translation::get('ConfirmNo', null, StringUtilities::LIBRARIES), 0
         );
@@ -216,10 +205,10 @@ class UserForm extends FormValidator
 
         // Send email
         $group = [];
-        $group[] = &$this->createElement(
+        $group[] = $this->createElement(
             'radio', 'send_mail', null, Translation::get('ConfirmYes', null, StringUtilities::LIBRARIES), 1
         );
-        $group[] = &$this->createElement(
+        $group[] = $this->createElement(
             'radio', 'send_mail', null, Translation::get('ConfirmNo', null, StringUtilities::LIBRARIES), 0
         );
         $this->addGroup($group, 'mail', Translation::get('SendMailToNewUser'), '&nbsp;');
