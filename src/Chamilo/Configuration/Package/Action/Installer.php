@@ -7,7 +7,7 @@ use Chamilo\Configuration\Package\Properties\Dependencies\DependencyVerifier;
 use Chamilo\Configuration\Storage\DataClass\Registration;
 use DOMDocument;
 use DOMElement;
-use Exception;
+use RuntimeException;
 use Symfony\Component\Finder\Iterator\FileTypeFilterIterator;
 
 /**
@@ -207,44 +207,62 @@ class Installer extends Action
 
         if (!$object instanceof DOMElement)
         {
-            throw new Exception('Invalid storage info file: ' . $file);
+            throw new RuntimeException($file . 'does not contain a valid storage unit description');
         }
 
         $name = $object->getAttribute('name');
-        $xml_properties = $doc->getElementsByTagName('property');
         $attributes = ['type', 'length', 'unsigned', 'notnull', 'default', 'autoincrement', 'fixed'];
 
-        foreach ($xml_properties as $property)
+        $xmlPropertiesElement = $doc->getElementsByTagName('properties')->item(0);
+
+        if (!$xmlPropertiesElement instanceof DOMElement)
         {
-            $property_info = [];
+            throw new RuntimeException($file . 'does not contain a valid storage unit description');
+        }
+
+        $xmlProperties = $xmlPropertiesElement->getElementsByTagName('property');
+
+        if (count($xmlProperties) == 0)
+        {
+            throw new RuntimeException($file . 'does not contain a valid storage unit description');
+        }
+
+        foreach ($xmlProperties as $property)
+        {
+            $propertyInfo = [];
 
             foreach ($attributes as $attribute)
             {
                 if ($property->hasAttribute($attribute))
                 {
-                    $property_info[$attribute] = $property->getAttribute($attribute);
+                    $propertyInfo[$attribute] = $property->getAttribute($attribute);
                 }
             }
 
-            $properties[$property->getAttribute('name')] = $property_info;
+            $properties[$property->getAttribute('name')] = $propertyInfo;
         }
 
-        $xml_indexes = $doc->getElementsByTagName('index');
+        $xmlIndexesElement = $doc->getElementsByTagName('indexes')->item(0);
 
-        foreach ($xml_indexes as $index)
+        if ($xmlIndexesElement instanceof DOMElement)
         {
-            $index_info = [];
-            $index_info['type'] = $index->getAttribute('type');
-            $index_properties = $index->getElementsByTagName('indexproperty');
+            $xmlIndexes = $xmlIndexesElement->getElementsByTagName('index');
 
-            foreach ($index_properties as $index_property)
+            foreach ($xmlIndexes as $index)
             {
-                $index_info['fields'][$index_property->getAttribute('name')] = [
-                    'length' => $index_property->getAttribute('length')
-                ];
-            }
+                $indexInfo = [];
+                $indexInfo['type'] = $index->getAttribute('type');
+                $indexProperties = $index->getElementsByTagName('property');
 
-            $indexes[$index->getAttribute('name')] = $index_info;
+                foreach ($indexProperties as $indexProperty)
+                {
+                    $indexInfo['fields'][$indexProperty->getAttribute('name')] = [
+                        'length' => $indexProperty->getAttribute('length')
+                    ];
+                }
+
+                $indexes[$index->getAttribute('name')] = $indexInfo;
+            }
         }
 
         $result = [];

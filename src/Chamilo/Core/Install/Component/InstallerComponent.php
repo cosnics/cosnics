@@ -4,14 +4,13 @@ namespace Chamilo\Core\Install\Component;
 use Chamilo\Core\Install\Factory;
 use Chamilo\Core\Install\Manager;
 use Chamilo\Core\Install\Observer\InstallerObserver;
+use Chamilo\Core\Install\PlatformInstaller;
 use Chamilo\Core\Install\StepResult;
 use Chamilo\Libraries\Architecture\Interfaces\NoAuthenticationSupport;
 use Chamilo\Libraries\Format\Structure\Glyph\FontAwesomeGlyph;
 use Chamilo\Libraries\Format\Structure\Glyph\IdentGlyph;
 use Chamilo\Libraries\Format\Structure\Glyph\InlineGlyph;
 use Chamilo\Libraries\Format\Structure\Glyph\NamespaceIdentGlyph;
-use Chamilo\Libraries\Format\Utilities\ResourceManager;
-use Chamilo\Libraries\Translation\Translation;
 use Symfony\Component\HttpFoundation\StreamedResponse;
 
 /**
@@ -22,7 +21,7 @@ use Symfony\Component\HttpFoundation\StreamedResponse;
 class InstallerComponent extends Manager implements NoAuthenticationSupport, InstallerObserver
 {
 
-    private $installer;
+    protected PlatformInstaller $installer;
 
     /**
      * @throws \Exception
@@ -30,8 +29,6 @@ class InstallerComponent extends Manager implements NoAuthenticationSupport, Ins
     public function run()
     {
         $this->checkInstallationAllowed();
-
-        $this->installer = $this->getInstaller($this);
 
         session_write_close();
 
@@ -57,37 +54,33 @@ class InstallerComponent extends Manager implements NoAuthenticationSupport, Ins
         $response->send();
     }
 
-    /**
-     * @see \Chamilo\Core\Install\Observer\InstallerObserver::afterFilesystemPrepared()
-     */
-    public function afterFilesystemPrepared(StepResult $result)
+    public function afterFilesystemPrepared(StepResult $result): string
     {
         $glyph = new FontAwesomeGlyph('folder', ['fa-lg', 'fa-fw'], null, 'fas');
 
         return $this->renderResult(
-            Translation::get('Folders'), $result->get_success(), implode('<br />' . PHP_EOL, $result->get_messages()),
-            $glyph
+            $this->getTranslator()->trans('Folders', [], Manager::CONTEXT), $result->get_success(),
+            implode('<br />' . PHP_EOL, $result->get_messages()), $glyph
         );
     }
 
-    /**
-     * @see \Chamilo\Core\Install\Observer\InstallerObserver::afterInstallation()
-     */
-    public function afterInstallation()
+    public function afterInstallation(): string
     {
+        $translator = $this->getTranslator();
+
         $message = '<a href="' . $this->getWebPathBuilder()->getBasePath() . '">' .
-            Translation::get('GoToYourNewlyCreatedPortal') . '</a>';
+            $translator->trans('GoToYourNewlyCreatedPortal', [], Manager::CONTEXT) . '</a>';
         $glyph = new FontAwesomeGlyph('grin-beam', ['fa-lg', 'fa-fw'], null, 'fas');
 
-        return $this->renderResult(Translation::get('InstallationFinished'), true, $message, $glyph);
+        return $this->renderResult(
+            $translator->trans('InstallationFinished', [], Manager::CONTEXT), true, $message, $glyph
+        );
     }
 
-    /**
-     * @see \Chamilo\Core\Install\Observer\InstallerObserver::afterPackageInstallation()
-     */
-    public function afterPackageInstallation(StepResult $result)
+    public function afterPackageInstallation(StepResult $result): string
     {
-        $title = Translation::get('TypeName', null, $result->get_context()) . ' (' . $result->get_context() . ')';
+        $title =
+            $this->getTranslator()->trans('TypeName', [], $result->get_context()) . ' (' . $result->get_context() . ')';
 
         $glyph = new NamespaceIdentGlyph(
             $result->get_context(), true, false, false, IdentGlyph::SIZE_SMALL, ['fa-fw']
@@ -98,83 +91,59 @@ class InstallerComponent extends Manager implements NoAuthenticationSupport, Ins
         );
     }
 
-    /**
-     * @see \Chamilo\Core\Install\Observer\InstallerObserver::afterPackagesInstallation()
-     */
-    public function afterPackagesInstallation()
+    public function afterPackagesInstallation(): string
     {
         return '<div class="clearfix"></div>';
     }
 
-    /**
-     * @see \Chamilo\Core\Install\Observer\InstallerObserver::afterPreProduction()
-     */
-    public function afterPreProduction()
+    public function afterPreProduction(): string
     {
         return '<div class="clearfix"></div>';
     }
 
-    /**
-     * @see \Chamilo\Core\Install\Observer\InstallerObserver::afterPreProductionConfigurationFileWritten()
-     */
-    public function afterPreProductionConfigurationFileWritten(StepResult $result)
+    public function afterPreProductionConfigurationFileWritten(StepResult $result): string
     {
         $glyph = new FontAwesomeGlyph('cog', ['fa-lg', 'fa-fw'], null, 'fas');
 
         return $this->renderResult(
-            Translation::get('Configuration'), $result->get_success(),
+            $this->getTranslator()->trans('Configuration', [], Manager::CONTEXT), $result->get_success(),
             implode('<br />' . PHP_EOL, $result->get_messages()), $glyph
         );
     }
 
-    /**
-     * @see \Chamilo\Core\Install\Observer\InstallerObserver::afterPreProductionDatabaseCreated()
-     */
-    public function afterPreProductionDatabaseCreated(StepResult $result)
+    public function afterPreProductionDatabaseCreated(StepResult $result): string
     {
         $glyph = new FontAwesomeGlyph('database', ['fa-lg', 'fa-fw'], null, 'fas');
 
         return $this->renderResult(
-            Translation::get('Database'), $result->get_success(), implode('<br />' . PHP_EOL, $result->get_messages()),
-            $glyph
+            $this->getTranslator()->trans('Database', [], Manager::CONTEXT), $result->get_success(),
+            implode('<br />' . PHP_EOL, $result->get_messages()), $glyph
         );
     }
 
-    /**
-     * @see \Chamilo\Core\Install\Observer\InstallerObserver::beforeFilesystemPrepared()
-     */
-    public function beforeFilesystemPrepared()
+    public function beforeFilesystemPrepared(): string
     {
+        return '';
     }
 
-    /**
-     * @see \Chamilo\Core\Install\Observer\InstallerObserver::beforeInstallation()
-     */
-    public function beforeInstallation()
+    public function beforeInstallation(): string
     {
+        return '';
     }
 
-    /**
-     * @see \Chamilo\Core\Install\Observer\InstallerObserver::beforePackageInstallation()
-     */
-    public function beforePackageInstallation($context)
+    public function beforePackageInstallation($context): string
     {
+        return '';
     }
 
-    /**
-     * @see \Chamilo\Core\Install\Observer\InstallerObserver::beforePackagesInstallation()
-     */
-    public function beforePackagesInstallation()
+    public function beforePackagesInstallation(): string
     {
-        return '<h3>' . Translation::get('Packages') . '</h3>';
+        return '<h3>' . $this->getTranslator()->trans('Packages', [], Manager::CONTEXT) . '</h3>';
     }
 
-    /**
-     * @see \Chamilo\Core\Install\Observer\InstallerObserver::beforePreProduction()
-     */
-    public function beforePreProduction()
+    public function beforePreProduction(): string
     {
-        return '<h3>' . Translation::get('PreProduction') . '</h3>';
+        return '<h3>' . $this->getTranslator()->trans('PreProduction', [], Manager::CONTEXT) . '</h3>';
     }
 
     protected function getInfo(): string
@@ -182,10 +151,7 @@ class InstallerComponent extends Manager implements NoAuthenticationSupport, Ins
         return $this->getTranslator()->trans('InstallerComponentInformation', [], self::CONTEXT);
     }
 
-    /**
-     * @return \Chamilo\Core\Install\PlatformInstaller
-     */
-    public function getInstaller(InstallerObserver $installerObserver)
+    public function getInstaller(InstallerObserver $installerObserver): PlatformInstaller
     {
         if (!isset($this->installer))
         {
@@ -208,15 +174,20 @@ class InstallerComponent extends Manager implements NoAuthenticationSupport, Ins
         return $this->getService(Factory::class);
     }
 
-    /**
-     * @param string $title
-     * @param string $result
-     * @param string $message
-     * @param string $image
-     *
-     * @return string
-     */
-    public function renderResult($title, $result, $message, $image)
+    public function renderHeader(string $pageTitle = ''): string
+    {
+        $html = [];
+
+        $html[] = parent::renderHeader($pageTitle);
+
+        $html[] = $this->getResourceManager()->getResourceHtml(
+            $this->getWebPathBuilder()->getJavascriptPath('Chamilo\Core\Install') . 'InstallProcess.js'
+        );
+
+        return implode(PHP_EOL, $html);
+    }
+
+    public function renderResult(string $title, bool $result, string $message, InlineGlyph $image): string
     {
         $html = [];
 
@@ -227,10 +198,7 @@ class InstallerComponent extends Manager implements NoAuthenticationSupport, Ins
         return implode(PHP_EOL, $html);
     }
 
-    /**
-     * @return string
-     */
-    public function renderResultFooter()
+    public function renderResultFooter(): string
     {
         $html = [];
 
@@ -240,48 +208,15 @@ class InstallerComponent extends Manager implements NoAuthenticationSupport, Ins
         return implode(PHP_EOL, $html);
     }
 
-    /**
-     * @param string $title
-     * @param string $result
-     * @param string $image
-     *
-     * @return string
-     */
-    public function renderResultHeader($title, $result, $image)
+    public function renderResultHeader(string $title, bool $result, InlineGlyph $image): string
     {
         $result_class = ($result ? 'installation-step-successful' : 'installation-step-failed');
 
         $html = [];
 
-        if ($image instanceof InlineGlyph)
-        {
-            $html[] = '<div class="installation-step installation-step-collapsed ' . $result_class . '">';
-            $html[] = '<div class="title">' . $image->render() . $title . '</div>';
-        }
-        else
-        {
-            $html[] = '<div class="installation-step installation-step-collapsed ' . $result_class .
-                '" style="background-image: url(' . $image . ');">';
-            $html[] = '<div class="title">' . $title . '</div>';
-        }
-
+        $html[] = '<div class="installation-step installation-step-collapsed ' . $result_class . '">';
+        $html[] = '<div class="title">' . $image->render() . $title . '</div>';
         $html[] = '<div class="description">';
-
-        return implode(PHP_EOL, $html);
-    }
-
-    /**
-     * @see \Chamilo\Core\Install\Manager::render_header()
-     */
-    public function render_header(string $pageTitle = ''): string
-    {
-        $html = [];
-
-        $html[] = parent::render_header($pageTitle);
-
-        $html[] = ResourceManager::getInstance()->getResourceHtml(
-            $this->getWebPathBuilder()->getJavascriptPath('Chamilo\Core\Install') . 'InstallProcess.js'
-        );
 
         return implode(PHP_EOL, $html);
     }

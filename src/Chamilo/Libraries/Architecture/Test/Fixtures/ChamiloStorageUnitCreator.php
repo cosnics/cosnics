@@ -4,6 +4,7 @@ namespace Chamilo\Libraries\Architecture\Test\Fixtures;
 use Chamilo\Libraries\File\SystemPathBuilder;
 use Chamilo\Libraries\Storage\DataManager\Repository\StorageUnitRepository;
 use DOMDocument;
+use DOMElement;
 use InvalidArgumentException;
 use RuntimeException;
 use Symfony\Component\Finder\Finder;
@@ -37,7 +38,7 @@ class ChamiloStorageUnitCreator
      *
      * @param $file string The complete path to the XML-file from which the storage unit definition should be read.
      */
-    public function createStorageUnitFromXMLFile($file)
+    public function createStorageUnitFromXMLFile(string $file)
     {
         $properties = [];
         $indexes = [];
@@ -45,16 +46,34 @@ class ChamiloStorageUnitCreator
         $doc = new DOMDocument();
         $doc->load($file);
 
-        $object = $doc->getElementsByTagname('object')->item(0);
+        $object = $doc->getElementsByTagName('object')->item(0);
+
+        if (!$object instanceof DOMElement)
+        {
+            throw new RuntimeException($file . 'does not contain a valid storage unit description');
+        }
+
         $name = $object->getAttribute('name');
         $attributes = ['type', 'length', 'unsigned', 'notnull', 'default', 'autoincrement', 'fixed'];
 
-        $xmlProperties = $doc->getElementsByTagname('property');
-        foreach ($xmlProperties as $index => $property)
-        {
-            /** @var \DOMElement $property */
+        $xmlPropertiesElement = $doc->getElementsByTagName('properties')->item(0);
 
+        if (!$xmlPropertiesElement instanceof DOMElement)
+        {
+            throw new RuntimeException($file . 'does not contain a valid storage unit description');
+        }
+
+        $xmlProperties = $xmlPropertiesElement->getElementsByTagName('property');
+
+        if (count($xmlProperties) == 0)
+        {
+            throw new RuntimeException($file . 'does not contain a valid storage unit description');
+        }
+
+        foreach ($xmlProperties as $property)
+        {
             $propertyInfo = [];
+
             foreach ($attributes as $attribute)
             {
                 if ($property->hasAttribute($attribute))
@@ -62,27 +81,32 @@ class ChamiloStorageUnitCreator
                     $propertyInfo[$attribute] = $property->getAttribute($attribute);
                 }
             }
+
             $properties[$property->getAttribute('name')] = $propertyInfo;
         }
 
-        $xmlIndexes = $doc->getElementsByTagname('index');
-        foreach ($xmlIndexes as $key => $index)
+        $xmlIndexesElement = $doc->getElementsByTagName('indexes')->item(0);
+
+        if ($xmlIndexesElement instanceof DOMElement)
         {
-            /** @var \DOMElement $index */
+            $xmlIndexes = $xmlIndexesElement->getElementsByTagName('index');
 
-            $indexInfo = [];
-            $indexInfo['type'] = $index->getAttribute('type');
-
-            $indexProperties = $index->getElementsByTagname('indexproperty');
-            foreach ($indexProperties as $subkey => $indexProperty)
+            foreach ($xmlIndexes as $index)
             {
-                /** @var \DOMElement $indexProperty */
+                $indexInfo = [];
+                $indexInfo['type'] = $index->getAttribute('type');
 
-                $indexInfo['fields'][$indexProperty->getAttribute('name')] = [
-                    'length' => $indexProperty->getAttribute('length')
-                ];
+                $indexProperties = $index->getElementsByTagName('property');
+
+                foreach ($indexProperties as $indexProperty)
+                {
+                    $indexInfo['fields'][$indexProperty->getAttribute('name')] = [
+                        'length' => $indexProperty->getAttribute('length')
+                    ];
+                }
+
+                $indexes[$index->getAttribute('name')] = $indexInfo;
             }
-            $indexes[$index->getAttribute('name')] = $indexInfo;
         }
 
         if (!$this->storageUnitRepository->create($name, $properties, $indexes))
