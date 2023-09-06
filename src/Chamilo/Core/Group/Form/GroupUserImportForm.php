@@ -56,7 +56,9 @@ class GroupUserImportForm extends FormValidator
     public function import_group_users()
     {
         $values = $this->exportValues();
-        $group_users = Import::csv_to_array($_FILES['file']['tmp_name']);
+
+        $import = new Import();
+        $group_users = $import->csv_to_array($_FILES['file']['tmp_name']);
 
         $validated_groups = array();
 

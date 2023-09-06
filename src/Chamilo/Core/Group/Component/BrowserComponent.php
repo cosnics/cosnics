@@ -104,7 +104,7 @@ class BrowserComponent extends Manager implements TableSupport
                 $table->as_html()));
 
         $table = new GroupRelUserTable($this);
-        $table->setSearchForm($this->buttonToolbarRenderer->getSearchForm());
+        //$table->setSearchForm($this->buttonToolbarRenderer->getSearchForm());
         $tabs->add_tab(
             new DynamicContentTab(
                 self::TAB_USERS,
@@ -246,6 +246,9 @@ class BrowserComponent extends Manager implements TableSupport
             $users = \Chamilo\Core\User\Storage\DataManager::retrieves(
                 \Chamilo\Core\User\Storage\DataClass\User::class_name(),
                 new DataClassRetrievesParameters($condition));
+
+            $userconditions = [];
+
             while ($user = $users->next_result())
             {
                 $userconditions[] = new EqualityCondition(
@@ -253,7 +256,7 @@ class BrowserComponent extends Manager implements TableSupport
                     new StaticConditionVariable($user->get_id()));
             }
 
-            if (count($userconditions))
+            if (is_array($userconditions) && count($userconditions) > 0)
             {
                 $conditions[] = new OrCondition($userconditions);
             }

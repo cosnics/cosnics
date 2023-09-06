@@ -42,7 +42,7 @@ class ElementForm extends FormValidator
             $this->element->get_schema_id());
         $schemaName = $schema->get_namespace() . ' - ' . $schema->get_name();
         
-        $this->addElement('static', null, Translation::get('Prefix', null, 'Chamilo\Core\Metadata'), $schemaName);
+        $this->addElement('static', '', Translation::get('Prefix', null, 'Chamilo\Core\Metadata'), $schemaName);
 
         //$this->addRule(
           //  Element::PROPERTY_SCHEMA_ID,

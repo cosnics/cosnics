@@ -60,9 +60,9 @@ class Executer
         {
             $html = array();
             
-            $html[] = $this->application->render_header();
+            //$html[] = $this->application->render_header();
             $html[] = $form->toHtml();
-            $html[] = $this->application->render_footer();
+            //$html[] = $this->application->render_footer();
             
             return implode(PHP_EOL, $html);
         }

@@ -191,7 +191,7 @@ class EntityFormService
                     
                     $html[] = '</div>';
                     
-                    $this->formValidator->addElement('static', null, $displayName, implode(PHP_EOL, $html));
+                    $this->formValidator->addElement('static', '', $displayName, implode(PHP_EOL, $html));
                 }
                 else
                 {
@@ -207,7 +207,7 @@ class EntityFormService
                     $html[] = $providedValue;
                     $html[] = '</div>';
                     
-                    $this->formValidator->addElement('static', null, $displayName, implode(PHP_EOL, $html));
+                    $this->formValidator->addElement('static', '', $displayName, implode(PHP_EOL, $html));
                 }
             }
             catch (NoProviderAvailableException $exception)
@@ -272,8 +272,8 @@ class EntityFormService
                     
                     $tagElementGroup[] = $this->formValidator->createElement(
                         'static', 
-                        null, 
-                        null, 
+                        '',
+                        '',
                         $vocabularyAction->as_html());
                     
                     $this->formValidator->addGroup($tagElementGroup, null, $element->get_display_name(), null, false);

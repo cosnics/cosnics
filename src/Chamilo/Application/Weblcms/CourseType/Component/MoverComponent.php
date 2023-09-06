@@ -49,7 +49,7 @@ class MoverComponent extends Manager
         
         $message = $this->get_result(
             $failures, 
-            count($course_types), 
+            $course_types->size(),
             'CourseTypeNotMoved', 
             'CourseTypesNotMoved', 
             'CourseTypeMoved', 

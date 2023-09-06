@@ -108,7 +108,7 @@ class PackageDisplay
             array('VERSION' => $this->get_package_info()->get_version())) . '</h3>';
         $html[] = '<div class="content_object" style="padding: 15px 15px 15px 76px; background-image: url(' .
              Theme::getInstance()->getImagePath(__NAMESPACE__, 'Place/' . $type) . ');">';
-        $html[] = '<div class="title">' . Translation::get(DependenciesResultVerification) . '</div>';
+        $html[] = '<div class="title">' . Translation::get('DependenciesResultVerification') . '</div>';
         $html[] = '<div class="description">';
         $html[] = $package_dependency->get_logger()->render();
         $html[] = '</div>';

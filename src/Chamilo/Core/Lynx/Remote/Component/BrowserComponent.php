@@ -159,7 +159,7 @@ class BrowserComponent extends Manager implements TableSupport
 
     public function get_table_condition($object_table_class_name)
     {
-        $query = $this->buttonToolbarRenderer->getSearchForm()->getQuery();
+        $query = $this->getButtonToolbarRenderer()->getSearchForm()->getQuery();
         $conditions = array();
         $conditions[] = new EqualityCondition(
             new PropertyConditionVariable(Package::class_name(), Package::PROPERTY_SOURCE_ID),

@@ -177,7 +177,12 @@ class PackageFactory
      */
     public function parseComposerJsonPath($path)
     {
-        return $this->parseComposerJson(json_decode(file_get_contents($path)));
+        $jsonData = json_decode(file_get_contents($path));
+
+        if(empty($jsonData))
+            return null;
+
+        return $this->parseComposerJson($jsonData);
     }
 
     /**

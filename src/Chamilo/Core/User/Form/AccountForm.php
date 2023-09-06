@@ -236,14 +236,14 @@ class AccountForm extends FormValidator
             // $this->add_warning_message('password_requirements', null, $password_requirements);
             // }
 
-            $this->addElement('static', null, null, '<em>' . Translation::get('EnterCurrentPassword') . '</em>');
+            $this->addElement('static', '', null, '<em>' . Translation::get('EnterCurrentPassword') . '</em>');
             $this->addElement(
                 'password',
                 User::PROPERTY_PASSWORD,
                 Translation::get('CurrentPassword'),
                 array('size' => 40, 'autocomplete' => 'off')
             );
-            $this->addElement('static', null, null, '<em>' . Translation::get('EnterNewPasswordTwice') . '</em>');
+            $this->addElement('static', '', null, '<em>' . Translation::get('EnterNewPasswordTwice') . '</em>');
             $this->addElement(
                 'password',
                 self::NEW_PASSWORD,
@@ -259,13 +259,16 @@ class AccountForm extends FormValidator
             $this->addRule(
                 array(self::NEW_PASSWORD, self::NEW_PASSWORD_CONFIRMATION),
                 Translation::get('PassTwo'),
-                'compare'
+                'compare', 'eq'
             );
 
-            $this->registerRule('checkPasswordRequirements', 'function', 'checkPasswordRequirements', $this);
-            $this->registerRule('checkAllowedToChangePassword', 'function', 'checkAllowedToChangePassword', $this);
+            /*$this->registerRule('checkPasswordRequirements', 'function', 'checkPasswordRequirements', $this);
+            $this->registerRule('checkAllowedToChangePassword', 'function', 'checkAllowedToChangePassword', $this);*/
 
-            $this->addRule(
+            $this->addFormRule(array($this, 'checkPasswordRequirements'));
+            $this->addFormRule(array($this, 'checkAllowedToChangePassword'));
+
+            /*$this->addRule(
                 self::NEW_PASSWORD,
                 Translation::getInstance()->getTranslation('PasswordRequirements', null, 'Chamilo\Core\User'),
                 'checkPasswordRequirements'
@@ -275,7 +278,7 @@ class AccountForm extends FormValidator
                 self::NEW_PASSWORD,
                 Translation::getInstance()->getTranslation('EnterCurrentPassword', null, 'Chamilo\Core\User'),
                 'checkAllowedToChangePassword'
-            );
+            );*/
 
             $this->addElement(
                 'html',
@@ -302,22 +305,25 @@ class AccountForm extends FormValidator
     }
 
     /**
-     * Makes sure that users can't change their password to an unsafe value. Password must contain at least 8 characters
-     *
-     * @param string $newPassword
+     * Makes sure that users can't change their password to an unsafe value.
+     * Password must contain at least 8 characters
      *
      * @return bool
      */
-    public function checkPasswordRequirements($newPassword = null)
+    public function checkPasswordRequirements($exportValues)
     {
-        if(empty($newPassword))
+        $customPassword = $exportValues['pw']['pass'] == 0;
+
+        if (! $customPassword)
         {
             return true;
         }
 
-        if(strlen($newPassword) < 6)
+        $newPassword = $exportValues['pw'][User::PROPERTY_PASSWORD];
+
+        if (strlen($newPassword) < 6)
         {
-            return false;
+            return array('pw' =>  Translation::getInstance()->getTranslation('PasswordRequirements', null, 'Chamilo\Core\User'));
         }
 
         return true;
@@ -330,8 +336,10 @@ class AccountForm extends FormValidator
      *
      * @return bool
      */
-    public function checkAllowedToChangePassword($newPassword = null)
+    public function checkAllowedToChangePassword($exportValues)
     {
+        $newPassword = $exportValues[self::NEW_PASSWORD];
+
         if(empty($newPassword))
         {
             return true;
@@ -339,7 +347,7 @@ class AccountForm extends FormValidator
 
         if(empty($this->exportValue(User::PROPERTY_PASSWORD)))
         {
-            return false;
+            return [self::NEW_PASSWORD => Translation::getInstance()->getTranslation('EnterCurrentPassword', null, 'Chamilo\Core\User')];
         }
 
         return true;

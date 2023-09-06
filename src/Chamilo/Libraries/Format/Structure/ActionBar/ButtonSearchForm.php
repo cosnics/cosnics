@@ -140,10 +140,7 @@ class ButtonSearchForm extends FormValidator implements TableSupportedSearchForm
      */
     public function registerTableParametersInSearchForm(array $tableParameters = array())
     {
-        foreach ($tableParameters as $tableParameter => $value)
-        {
-            $this->actionURL .= '&' . $tableParameter . '=' . $value;
-        }
+        $this->actionURL .= '&' . http_build_query($tableParameters);
 
         $this->updateAttributes(array('action' => $this->actionURL));
     }

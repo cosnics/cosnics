@@ -61,7 +61,7 @@ class UserComponent extends Manager implements TableSupport
         $table = new UserTable($this);
         
         $html = array();
-        $html[] = $this->buttonToolbarRenderer->render();
+        $html[] = $this->getButtonToolbarRenderer()->render();
         $html[] = $table->as_html();
         return implode(PHP_EOL, $html);
     }

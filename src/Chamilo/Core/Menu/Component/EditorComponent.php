@@ -30,6 +30,7 @@ class EditorComponent extends Manager implements DelegateComponent
     public function run()
     {
         $this->check_allowed();
+        /** @var Item $item */
         $item = DataManager::retrieve_by_id(Item::class_name(), (int) Request::get(Manager::PARAM_ITEM));
         
         BreadcrumbTrail::getInstance()->add(
@@ -58,6 +59,8 @@ class EditorComponent extends Manager implements DelegateComponent
             {
                 $item->set_additional_property($property, $values[$property]);
             }
+
+            $item->set_hidden(boolval($values[Item::PROPERTY_HIDDEN]));
             
             $titles = $item->get_titles();
             $item_titles = new ItemTitles();

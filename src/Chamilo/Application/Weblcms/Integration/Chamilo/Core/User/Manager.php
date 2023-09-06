@@ -50,8 +50,7 @@ class Manager implements UserInterface
             $index ++;
         }
         
-        $table->altRowAttributes(1, array('class' => 'row_odd'), array('class' => 'row_even'), true);
-        
+
         $html[] = $table->toHtml();
         
         return implode(PHP_EOL, $html);

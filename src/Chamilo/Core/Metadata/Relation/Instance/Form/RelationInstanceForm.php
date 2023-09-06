@@ -167,7 +167,7 @@ class RelationInstanceForm extends FormValidator
             $onlyOptionValue = array_pop($options);
             
             $this->addElement('hidden', $name . '[]', $onlyOptionKey);
-            $this->addElement('static', null, $label, $onlyOptionValue);
+            $this->addElement('static', '', $label, $onlyOptionValue);
         }
         else
         {

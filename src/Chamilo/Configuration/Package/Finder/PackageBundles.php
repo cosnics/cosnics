@@ -63,6 +63,9 @@ class PackageBundles extends BasicBundles
         foreach ($this->getPackageNamespaces() as $packageNamespace)
         {
             $packageDefinition = $this->packageFactory->getPackage($packageNamespace);
+            if(empty($packageDefinition))
+                continue;
+
             $this->packageDefinitions[$packageNamespace] = $packageDefinition;
         }
     }
@@ -71,6 +74,8 @@ class PackageBundles extends BasicBundles
     {
         foreach ($this->getPackageNamespaces() as $packageNamespace)
         {
+            if(!array_key_exists($packageNamespace, $this->packageDefinitions))
+                continue;
 
             $packageNamespaceAncestors = $this->determinePackageNamespaceAncestors($packageNamespace);
             $packageNamespaceParent = array_shift($packageNamespaceAncestors);

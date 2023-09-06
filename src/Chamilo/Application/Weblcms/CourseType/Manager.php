@@ -6,6 +6,7 @@ use Chamilo\Application\Weblcms\CourseType\Storage\DataManager;
 use Chamilo\Libraries\Architecture\Application\Application;
 use Chamilo\Libraries\Architecture\Exceptions\NoObjectSelectedException;
 use Chamilo\Libraries\Architecture\Exceptions\ObjectNotExistException;
+use Chamilo\Libraries\Storage\DataManager\Doctrine\ResultSet\DataClassResultSet;
 use Chamilo\Libraries\Translation\Translation;
 use Chamilo\Libraries\Storage\Parameters\DataClassRetrievesParameters;
 use Chamilo\Libraries\Storage\Query\Condition\InCondition;
@@ -72,7 +73,7 @@ abstract class Manager extends Application
      * Retrieves the selected course types Use this function if you want to retrieve the selected course types as a
      * resultset
      * 
-     * @return \libraries\storage\ResultSet <CourseType>
+     * @return DataClassResultSet <CourseType>
      */
     protected function get_selected_course_types()
     {

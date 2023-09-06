@@ -177,7 +177,6 @@ class UserDetailComponent extends Manager
             $i++;
         }
 
-        $table->altRowAttributes(0, array('class' => 'row_odd'), array('class' => 'row_even'), true);
 
         return $table->toHtml();
     }
@@ -251,7 +250,6 @@ class UserDetailComponent extends Manager
             }
         }
 
-        $table->altRowAttributes(1, array('class' => 'row_odd'), array('class' => 'row_even'), true);
 
         return $table->toHtml();
     }

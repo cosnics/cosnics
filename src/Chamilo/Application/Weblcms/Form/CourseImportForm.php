@@ -58,7 +58,8 @@ class CourseImportForm extends FormValidator
 
     public function import_courses()
     {
-        $csvcourses = Import::csv_to_array($_FILES['file']['tmp_name']);
+        $import = new Import();
+        $csvcourses = $import->csv_to_array($_FILES['file']['tmp_name']);
         $failures = 0;
 
         foreach ($csvcourses as $csvcourse)

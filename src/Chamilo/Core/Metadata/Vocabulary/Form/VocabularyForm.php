@@ -58,7 +58,7 @@ class VocabularyForm extends FormValidator
         $this->addElement('category', Translation::get('General'));
         $this->addElement(
             'static', 
-            null, 
+            '',
             Translation::get('Element', null, 'Chamilo\Core\Metadata'), 
             $element->render_name());
         
@@ -80,7 +80,7 @@ class VocabularyForm extends FormValidator
             }
         }
         
-        $this->addElement('static', null, Translation::get('User', null, 'Chamilo\Core\Metadata'), $displayUser);
+        $this->addElement('static', '', Translation::get('User', null, 'Chamilo\Core\Metadata'), $displayUser);
         
         $this->addElement(
             'text', 

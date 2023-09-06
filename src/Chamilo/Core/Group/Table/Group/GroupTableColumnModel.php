@@ -27,7 +27,7 @@ class GroupTableColumnModel extends DataClassTableColumnModel implements TableCo
         $this->add_column(new DataClassPropertyTableColumn(Group::class_name(), Group::PROPERTY_CODE));
         $this->add_column(new DataClassPropertyTableColumn(Group::class_name(), Group::PROPERTY_DESCRIPTION));
         $this->add_column(
-            new StaticTableColumn(Translation::get(self::USERS, null, \Chamilo\Core\User\Manager::context())));
-        $this->add_column(new StaticTableColumn(Translation::get(self::SUBGROUPS)));
+            new StaticTableColumn(self::USERS, Translation::get(self::USERS, null, \Chamilo\Core\User\Manager::context())));
+        $this->add_column(new StaticTableColumn(self::SUBGROUPS, Translation::get(self::SUBGROUPS)));
     }
 }
