@@ -6,7 +6,27 @@ use Exception;
 class Configuration
 {
 
-    private string $storage_type = 'mdb2';
+    private string $admin_email = '';
+
+    private string $admin_firstname = '';
+
+    private string $admin_lastname = '';
+
+    private string $admin_login = 'admin';
+
+    private string $admin_password = 'admin';
+
+    private string $admin_phone = '';
+
+    private string $archive_path;
+
+    private string $cache_path;
+
+    private string $campus_name = 'Chamilo Campus';
+
+    private array $content_objects = [];
+
+    private string $crypt_algorithm = 'sha1';
 
     private string $db_driver = 'mysql';
 
@@ -16,66 +36,45 @@ class Configuration
 
     private bool $db_overwrite = true;
 
-    private string $db_username = '';
-
     private string $db_password = '';
 
-    private array $packages = [];
-
-    private array $content_objects = [];
+    private string $db_username = '';
 
     private array $external_instances = [];
-
-    private string $platform_language = 'english';
-
-    private string $archive_path;
-
-    private string $cache_path;
 
     private string $garbage_path;
 
     private string $hotpotatoes_path;
 
+    private string $institution_name = '';
+
+    private string $institution_webpage = 'http://www.chamilo.org';
+
     private string $logs_path;
+
+    private array $packages = [];
+
+    private string $platform_language = 'english';
 
     private string $repository_path;
 
     private string $scorm_path;
 
-    private string $temp_path;
+    private bool $self_register = false;
 
-    private string $userpictures_path;
+    private string $storage_type = 'mdb2';
+
+    private string $temp_path;
 
     private string $url_append = '/chamilo/web';
 
-    private string $admin_email = '';
-
-    private string $admin_lastname = '';
-
-    private string $admin_firstname = '';
-
-    private string $admin_phone = '';
-
-    private string $admin_login = 'admin';
-
-    private string $admin_password = 'admin';
-
-    private string $institution_name = '';
-
-    private string $campus_name = 'Chamilo Campus';
-
-    private string $institution_webpage = 'http://www.chamilo.org';
-
-    private bool $self_register = false;
-
-    private string $crypt_algorithm = 'sha1';
+    private string $userpictures_path;
 
     public function __construct()
     {
     }
 
     /**
-     *
      * @deprecated , used for retrocompatibility with application installer
      */
     public function as_values_array()
@@ -130,16 +129,299 @@ class Configuration
         {
             $values['external_instance'][$external_instance] = '1';
         }
+
         return $values;
+    }
+
+    public function get_admin_email()
+    {
+        return $this->admin_email;
+    }
+
+    public function get_admin_firstname()
+    {
+        return $this->admin_firstname;
+    }
+
+    public function get_admin_lastname()
+    {
+        return $this->admin_lastname;
+    }
+
+    public function get_admin_login()
+    {
+        return $this->admin_login;
+    }
+
+    public function get_admin_password()
+    {
+        return $this->admin_password;
+    }
+
+    public function get_admin_phone()
+    {
+        return $this->admin_phone;
+    }
+
+    public function get_archive_path()
+    {
+        return $this->archive_path;
+    }
+
+    public function get_cache_path()
+    {
+        return $this->cache_path;
+    }
+
+    public function get_campus_name()
+    {
+        return $this->campus_name;
+    }
+
+    public function get_crypt_algorithm()
+    {
+        return $this->crypt_algorithm;
+    }
+
+    public function get_db_driver()
+    {
+        return $this->db_driver;
+    }
+
+    public function get_db_host()
+    {
+        return $this->db_host;
+    }
+
+    public function get_db_name()
+    {
+        return $this->db_name;
+    }
+
+    public function get_db_overwrite()
+    {
+        return $this->db_overwrite;
+    }
+
+    public function get_db_password()
+    {
+        return $this->db_password;
+    }
+
+    public function get_db_username()
+    {
+        return $this->db_username;
+    }
+
+    public function get_garbage_path()
+    {
+        return $this->garbage_path;
+    }
+
+    public function get_hotpotatoes_path()
+    {
+        return $this->hotpotatoes_path;
+    }
+
+    public function get_institution_name()
+    {
+        return $this->institution_name;
+    }
+
+    public function get_institution_webpage()
+    {
+        return $this->institution_webpage;
+    }
+
+    public function get_logs_path()
+    {
+        return $this->logs_path;
+    }
+
+    public function get_packages()
+    {
+        return $this->packages;
+    }
+
+    public function get_platform_language()
+    {
+        return $this->platform_language;
+    }
+
+    public function get_properties()
+    {
+        array_keys(get_object_vars($this));
+    }
+
+    public function get_repository_path()
+    {
+        return $this->repository_path;
+    }
+
+    public function get_scorm_path()
+    {
+        return $this->scorm_path;
+    }
+
+    public function get_self_register()
+    {
+        return $this->self_register;
+    }
+
+    public function get_storage_type()
+    {
+        return $this->storage_type;
+    }
+
+    public function get_temp_path()
+    {
+        return $this->temp_path;
+    }
+
+    public function get_url_append()
+    {
+        return $this->url_append;
+    }
+
+    public function get_userpictures_path()
+    {
+        return $this->userpictures_path;
+    }
+
+    public function load_array($values)
+    {
+        if (isset($values['storage_type']))
+        {
+            $this->set_storage_type($values['storage_type']);
+        }
+        if (isset($values['database_driver']))
+        {
+            $this->set_db_driver($values['database_driver']);
+        }
+        if (isset($values['database_host']))
+        {
+            $this->set_db_host($values['database_host']);
+        }
+        if (isset($values['database_name']))
+        {
+            $this->set_db_name($values['database_name']);
+        }
+        if (isset($values['database_overwrite']))
+        {
+            $this->set_db_overwrite($values['database_overwrite']);
+        }
+        if (isset($values['database_username']))
+        {
+            $this->set_db_username($values['database_username']);
+        }
+        if (isset($values['database_password']))
+        {
+            $this->set_db_password($values['database_password']);
+        }
+
+        if (isset($values['platform_language']))
+        {
+            $this->set_platform_language($values['platform_language']);
+        }
+
+        if (isset($values['archive_path']))
+        {
+            $this->set_archive_path($values['archive_path']);
+        }
+        if (isset($values['cache_path']))
+        {
+            $this->set_cache_path($values['cache_path']);
+        }
+        if (isset($values['garbage_path']))
+        {
+            $this->set_garbage_path($values['garbage_path']);
+        }
+        if (isset($values['hotpotatoes_path']))
+        {
+            $this->set_hotpotatoes_path($values['hotpotatoes_path']);
+        }
+        if (isset($values['logs_path']))
+        {
+            $this->set_logs_path($values['logs_path']);
+        }
+        if (isset($values['repository_path']))
+        {
+            $this->set_repository_path($values['repository_path']);
+        }
+        if (isset($values['scorm_path']))
+        {
+            $this->set_scorm_path($values['scorm_path']);
+        }
+        if (isset($values['temp_path']))
+        {
+            $this->set_temp_path($values['temp_path']);
+        }
+        if (isset($values['userpictures_path']))
+        {
+            $this->set_userpictures_path($values['userpictures_path']);
+        }
+
+        if (isset($values['admin_email']))
+        {
+            $this->set_admin_email($values['admin_email']);
+        }
+        if (isset($values['admin_surname']))
+        {
+            $this->set_admin_lastname($values['admin_surname']);
+        }
+        if (isset($values['admin_firstname']))
+        {
+            $this->set_admin_firstname($values['admin_firstname']);
+        }
+        if (isset($values['admin_phone']))
+        {
+            $this->set_admin_phone($values['admin_phone']);
+        }
+        if (isset($values['admin_username']))
+        {
+            $this->set_admin_login($values['admin_username']);
+        }
+        if (isset($values['admin_password']))
+        {
+            $this->set_admin_password($values['admin_password']);
+        }
+
+        if (isset($values['site_name']))
+        {
+            $this->set_campus_name($values['site_name']);
+        }
+        if (isset($values['organization_name']))
+        {
+            $this->set_institution_name($values['organization_name']);
+        }
+        if (isset($values['organization_url']))
+        {
+            $this->set_institution_webpage($values['organization_url']);
+        }
+
+        if (isset($values['self_reg']))
+        {
+            $this->set_self_register($values['self_reg']);
+        }
+        if (isset($values['hashing_algorithm']))
+        {
+            $this->set_crypt_algorithm($values['hashing_algorithm']);
+        }
+
+        $this->set_packages(array_keys((array) $values['install']));
     }
 
     public function load_config_file($file): void
     {
-        if (! (is_file($file)))
+        if (!(is_file($file)))
+        {
             throw new Exception("Install config file {$file} not found !");
+        }
 
-        if (! (is_readable($file)))
+        if (!(is_readable($file)))
+        {
             throw new Exception("Install config file {$file} not readable !");
+        }
 
         global $values;
         unset($values);
@@ -149,281 +431,9 @@ class Configuration
         unset($values);
     }
 
-    public function load_array($values)
-    {
-        if (isset($values['storage_type']))
-            $this->set_storage_type($values['storage_type']);
-        if (isset($values['database_driver']))
-            $this->set_db_driver($values['database_driver']);
-        if (isset($values['database_host']))
-            $this->set_db_host($values['database_host']);
-        if (isset($values['database_name']))
-            $this->set_db_name($values['database_name']);
-        if (isset($values['database_overwrite']))
-            $this->set_db_overwrite($values['database_overwrite']);
-        if (isset($values['database_username']))
-            $this->set_db_username($values['database_username']);
-        if (isset($values['database_password']))
-            $this->set_db_password($values['database_password']);
-
-        if (isset($values['platform_language']))
-            $this->set_platform_language($values['platform_language']);
-
-        if (isset($values['archive_path']))
-            $this->set_archive_path($values['archive_path']);
-        if (isset($values['cache_path']))
-            $this->set_cache_path($values['cache_path']);
-        if (isset($values['garbage_path']))
-            $this->set_garbage_path($values['garbage_path']);
-        if (isset($values['hotpotatoes_path']))
-            $this->set_hotpotatoes_path($values['hotpotatoes_path']);
-        if (isset($values['logs_path']))
-            $this->set_logs_path($values['logs_path']);
-        if (isset($values['repository_path']))
-            $this->set_repository_path($values['repository_path']);
-        if (isset($values['scorm_path']))
-            $this->set_scorm_path($values['scorm_path']);
-        if (isset($values['temp_path']))
-            $this->set_temp_path($values['temp_path']);
-        if (isset($values['userpictures_path']))
-            $this->set_userpictures_path($values['userpictures_path']);
-
-        if (isset($values['admin_email']))
-            $this->set_admin_email($values['admin_email']);
-        if (isset($values['admin_surname']))
-            $this->set_admin_lastname($values['admin_surname']);
-        if (isset($values['admin_firstname']))
-            $this->set_admin_firstname($values['admin_firstname']);
-        if (isset($values['admin_phone']))
-            $this->set_admin_phone($values['admin_phone']);
-        if (isset($values['admin_username']))
-            $this->set_admin_login($values['admin_username']);
-        if (isset($values['admin_password']))
-            $this->set_admin_password($values['admin_password']);
-
-        if (isset($values['site_name']))
-            $this->set_campus_name($values['site_name']);
-        if (isset($values['organization_name']))
-            $this->set_institution_name($values['organization_name']);
-        if (isset($values['organization_url']))
-            $this->set_institution_webpage($values['organization_url']);
-
-        if (isset($values['self_reg']))
-            $this->set_self_register($values['self_reg']);
-        if (isset($values['hashing_algorithm']))
-            $this->set_crypt_algorithm($values['hashing_algorithm']);
-
-        $this->set_packages(array_keys((array) $values['install']));
-    }
-
-    public function get_properties()
-    {
-        array_keys(get_object_vars($this));
-    }
-
-    public function get_storage_type()
-    {
-        return $this->storage_type;
-    }
-
-    public function set_storage_type($storage_type)
-    {
-        $this->storage_type = $storage_type;
-    }
-
-    public function get_db_driver()
-    {
-        return $this->db_driver;
-    }
-
-    public function set_db_driver($db_driver)
-    {
-        $this->db_driver = $db_driver;
-    }
-
-    public function get_db_host()
-    {
-        return $this->db_host;
-    }
-
-    public function set_db_host($db_host)
-    {
-        $this->db_host = $db_host;
-    }
-
-    public function get_db_name()
-    {
-        return $this->db_name;
-    }
-
-    public function set_db_name($db_name)
-    {
-        $this->db_name = $db_name;
-    }
-
-    public function get_db_overwrite()
-    {
-        return $this->db_overwrite;
-    }
-
-    public function set_db_overwrite($db_overwrite)
-    {
-        $this->db_overwrite = $db_overwrite;
-    }
-
-    public function get_db_username()
-    {
-        return $this->db_username;
-    }
-
-    public function set_db_username($db_username)
-    {
-        $this->db_username = $db_username;
-    }
-
-    public function get_db_password()
-    {
-        return $this->db_password;
-    }
-
-    public function set_db_password($db_password)
-    {
-        $this->db_password = $db_password;
-    }
-
-    public function get_packages()
-    {
-        return $this->packages;
-    }
-
-    public function set_packages($package_list)
-    {
-        $this->packages = $package_list;
-    }
-
-    public function get_platform_language()
-    {
-        return $this->platform_language;
-    }
-
-    public function set_platform_language($platform_language)
-    {
-        $this->platform_language = $platform_language;
-    }
-
-    public function get_archive_path()
-    {
-        return $this->archive_path;
-    }
-
-    public function set_archive_path($archive_path)
-    {
-        $this->archive_path = $archive_path;
-    }
-
-    public function get_cache_path()
-    {
-        return $this->cache_path;
-    }
-
-    public function set_cache_path($cache_path)
-    {
-        $this->cache_path = $cache_path;
-    }
-
-    public function get_garbage_path()
-    {
-        return $this->garbage_path;
-    }
-
-    public function set_garbage_path($garbage_path)
-    {
-        $this->garbage_path = $garbage_path;
-    }
-
-    public function get_hotpotatoes_path()
-    {
-        return $this->hotpotatoes_path;
-    }
-
-    public function set_hotpotatoes_path($hotpotatoes_path)
-    {
-        $this->hotpotatoes_path = $hotpotatoes_path;
-    }
-
-    public function get_logs_path()
-    {
-        return $this->logs_path;
-    }
-
-    public function set_logs_path($logs_path)
-    {
-        $this->logs_path = $logs_path;
-    }
-
-    public function get_repository_path()
-    {
-        return $this->repository_path;
-    }
-
-    public function set_repository_path($repository_path)
-    {
-        $this->repository_path = $repository_path;
-    }
-
-    public function get_scorm_path()
-    {
-        return $this->scorm_path;
-    }
-
-    public function set_scorm_path($scorm_path)
-    {
-        $this->scorm_path = $scorm_path;
-    }
-
-    public function get_temp_path()
-    {
-        return $this->temp_path;
-    }
-
-    public function set_temp_path($temp_path)
-    {
-        $this->temp_path = $temp_path;
-    }
-
-    public function get_userpictures_path()
-    {
-        return $this->userpictures_path;
-    }
-
-    public function set_userpictures_path($userpictures_path)
-    {
-        $this->userpictures_path = $userpictures_path;
-    }
-
-    public function get_admin_email()
-    {
-        return $this->admin_email;
-    }
-
     public function set_admin_email($admin_email)
     {
         $this->admin_email = $admin_email;
-    }
-
-    public function get_admin_lastname()
-    {
-        return $this->admin_lastname;
-    }
-
-    public function set_admin_lastname($admin_lastname)
-    {
-        $this->admin_lastname = $admin_lastname;
-    }
-
-    public function get_admin_firstname()
-    {
-        return $this->admin_firstname;
     }
 
     public function set_admin_firstname($admin_firstname)
@@ -431,19 +441,9 @@ class Configuration
         $this->admin_firstname = $admin_firstname;
     }
 
-    public function get_admin_phone()
+    public function set_admin_lastname($admin_lastname)
     {
-        return $this->admin_phone;
-    }
-
-    public function set_admin_phone($admin_phone)
-    {
-        $this->admin_phone = $admin_phone;
-    }
-
-    public function get_admin_login()
-    {
-        return $this->admin_login;
+        $this->admin_lastname = $admin_lastname;
     }
 
     public function set_admin_login($admin_login)
@@ -451,29 +451,24 @@ class Configuration
         $this->admin_login = $admin_login;
     }
 
-    public function get_admin_password()
-    {
-        return $this->admin_password;
-    }
-
     public function set_admin_password($admin_password)
     {
         $this->admin_password = $admin_password;
     }
 
-    public function get_institution_name()
+    public function set_admin_phone($admin_phone)
     {
-        return $this->institution_name;
+        $this->admin_phone = $admin_phone;
     }
 
-    public function set_institution_name($institution_name)
+    public function set_archive_path($archive_path)
     {
-        $this->institution_name = $institution_name;
+        $this->archive_path = $archive_path;
     }
 
-    public function get_campus_name()
+    public function set_cache_path($cache_path)
     {
-        return $this->campus_name;
+        $this->cache_path = $cache_path;
     }
 
     public function set_campus_name($campus_name)
@@ -481,9 +476,54 @@ class Configuration
         $this->campus_name = $campus_name;
     }
 
-    public function get_institution_webpage()
+    public function set_crypt_algorithm($crypt_algorithm)
     {
-        return $this->institution_webpage;
+        $this->crypt_algorithm = $crypt_algorithm;
+    }
+
+    public function set_db_driver($db_driver)
+    {
+        $this->db_driver = $db_driver;
+    }
+
+    public function set_db_host($db_host)
+    {
+        $this->db_host = $db_host;
+    }
+
+    public function set_db_name($db_name)
+    {
+        $this->db_name = $db_name;
+    }
+
+    public function set_db_overwrite($db_overwrite)
+    {
+        $this->db_overwrite = $db_overwrite;
+    }
+
+    public function set_db_password($db_password)
+    {
+        $this->db_password = $db_password;
+    }
+
+    public function set_db_username($db_username)
+    {
+        $this->db_username = $db_username;
+    }
+
+    public function set_garbage_path($garbage_path)
+    {
+        $this->garbage_path = $garbage_path;
+    }
+
+    public function set_hotpotatoes_path($hotpotatoes_path)
+    {
+        $this->hotpotatoes_path = $hotpotatoes_path;
+    }
+
+    public function set_institution_name($institution_name)
+    {
+        $this->institution_name = $institution_name;
     }
 
     public function set_institution_webpage($institution_webpage)
@@ -491,9 +531,29 @@ class Configuration
         $this->institution_webpage = $institution_webpage;
     }
 
-    public function get_self_register()
+    public function set_logs_path($logs_path)
     {
-        return $this->self_register;
+        $this->logs_path = $logs_path;
+    }
+
+    public function set_packages($package_list)
+    {
+        $this->packages = $package_list;
+    }
+
+    public function set_platform_language($platform_language)
+    {
+        $this->platform_language = $platform_language;
+    }
+
+    public function set_repository_path($repository_path)
+    {
+        $this->repository_path = $repository_path;
+    }
+
+    public function set_scorm_path($scorm_path)
+    {
+        $this->scorm_path = $scorm_path;
     }
 
     public function set_self_register($self_register)
@@ -501,23 +561,23 @@ class Configuration
         $this->self_register = $self_register;
     }
 
-    public function get_crypt_algorithm()
+    public function set_storage_type($storage_type)
     {
-        return $this->crypt_algorithm;
+        $this->storage_type = $storage_type;
     }
 
-    public function set_crypt_algorithm($crypt_algorithm)
+    public function set_temp_path($temp_path)
     {
-        $this->crypt_algorithm = $crypt_algorithm;
-    }
-
-    public function get_url_append()
-    {
-        return $this->url_append;
+        $this->temp_path = $temp_path;
     }
 
     public function set_url_append($url_append)
     {
         $this->url_append = $url_append;
+    }
+
+    public function set_userpictures_path($userpictures_path)
+    {
+        $this->userpictures_path = $userpictures_path;
     }
 }
