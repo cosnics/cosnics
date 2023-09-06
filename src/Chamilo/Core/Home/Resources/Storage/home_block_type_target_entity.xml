@@ -3,21 +3,18 @@
     <properties>
         <property name="id"
                   type="integer"
-                  unsigned="1"
                   notnull="1"
                   autoincrement="true"/>
         <property name="entity_type"
                   type="integer"
                   unsigned="1"
-                  notnull="1"
-                  default="0"/>
+                  notnull="1"/>
         <property name="entity_id"
                   type="integer"
                   unsigned="1"
-                  notnull="1"
-                  default="0"/>
+                  notnull="1"/>
         <property name="block_type"
-                  type="text"
+                  type="string"
                   length="255"
                   notnull="1"/>
     </properties>

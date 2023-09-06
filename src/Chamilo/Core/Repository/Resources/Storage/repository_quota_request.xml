@@ -9,8 +9,7 @@
                   type="integer"
                   notnull="1"/>
         <property name="quota"
-                  type="integer"
-                  length="1"/>
+                  type="integer"/>
         <property name="motivation"
                   type="text"
                   notnull="1"/>
@@ -23,7 +22,6 @@
                   unsigned="1"/>
         <property name="decision"
                   type="integer"
-                  length="1"
                   notnull="1"/>
         <property name="decision_motivation"
                   type="text"/>

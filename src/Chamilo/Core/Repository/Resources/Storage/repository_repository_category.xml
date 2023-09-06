@@ -7,10 +7,9 @@
                   notnull="1"
                   autoincrement="true"/>
         <property name="name"
-                  type="text"
+                  type="string"
                   length="200"
-                  notnull="1"
-                  default=""/>
+                  notnull="1"/>
         <property name="parent_id"
                   type="integer"
                   notnull="1"
@@ -25,7 +24,6 @@
                   notnull="1"/>
         <property name="type"
                   type="integer"
-                  length="3"
                   unsigned="1"
                   notnull="1"/>
     </properties>

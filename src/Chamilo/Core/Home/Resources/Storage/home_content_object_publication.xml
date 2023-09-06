@@ -9,13 +9,11 @@
         <property name="element_id"
                   type="integer"
                   unsigned="1"
-                  notnull="1"
-                  default="0"/>
+                  notnull="1"/>
         <property name="content_object_id"
                   type="integer"
                   unsigned="1"
-                  notnull="1"
-                  default="0"/>
+                  notnull="1"/>
     </properties>
     <indexes>
         <index name="idx_element_id">

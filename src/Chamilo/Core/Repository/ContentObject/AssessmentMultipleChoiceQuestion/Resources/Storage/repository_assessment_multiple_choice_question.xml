@@ -6,10 +6,9 @@
                   unsigned="1"
                   notnull="1"/>
         <property name="answer_type"
-                  type="integer"
+                  type="smallint"
                   unsigned="1"
-                  notnull="1"
-                  length="1"/>
+                  notnull="1"/>
         <property name="options"
                   type="text"
                   notnull="1"/>

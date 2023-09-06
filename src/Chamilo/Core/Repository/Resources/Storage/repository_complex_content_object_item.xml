@@ -7,7 +7,7 @@
                   notnull="1"
                   autoincrement="true"/>
         <property name="type"
-                  type="text"
+                  type="string"
                   length="200"
                   notnull="1"/>
         <property name="ref_id"

@@ -6,9 +6,9 @@
                   unsigned="1"
                   notnull="1"/>
         <property name="automatic_numbering"
-                  type="text"
-                  notnull="1"
+                  type="string"
                   length="15"
+                  notnull="1"
                   default="none"/>
         <property name="enforce_default_traversing_order"
                   type="boolean"

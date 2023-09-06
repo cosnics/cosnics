@@ -7,20 +7,20 @@
                   notnull="1"
                   autoincrement="true"/>
         <property name="entity_type"
-                  type="text"
+                  type="string"
                   length="255"
                   notnull="1"/>
         <property name="entity_id"
-                  unsigned="1"
                   type="integer"
+                  unsigned="1"
                   notnull="1"/>
         <property name="isocode"
-                  type="text"
+                  type="string"
                   length="10"
                   notnull="1"/>
         <property name="value"
                   type="text"
-                  length="1000"
+                  length="65535"
                   notnull="1"/>
     </properties>
     <indexes>

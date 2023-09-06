@@ -7,22 +7,27 @@
                   notnull="1"
                   autoincrement="true"/>
         <property name="context"
-                  type="text"
+                  type="string"
                   length="255"/>
         <property name="variable"
-                  type="text"
+                  type="string"
                   length="255"/>
         <property name="value"
                   type="text"/>
         <property name="user_setting"
-                  type="integer"
+                  type="smallint"
                   unsigned="1"
-                  length="1"
                   notnull="1"
                   default="0"/>
     </properties>
     <indexes>
         <index name="idx_user_setting">
+            <property name="user_setting"/>
+        </index>
+        <index name="unq_context_variable_user_setting"
+               type="unique">
+            <property name="context"/>
+            <property name="variable"/>
             <property name="user_setting"/>
         </index>
     </indexes>

@@ -20,7 +20,7 @@
                   notnull="1"/>
         <property name="location"
                   type="text"
-                  length="500"
+                  length="65535"
                   notnull="1"/>
     </properties>
 </object>

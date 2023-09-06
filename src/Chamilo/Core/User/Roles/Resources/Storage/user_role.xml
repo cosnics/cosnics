@@ -6,10 +6,9 @@
                   notnull="1"
                   autoincrement="true"/>
         <property name="role"
-                  type="text"
+                  type="string"
                   length="255"
-                  notnull="1"
-                  default=""/>
+                  notnull="1"/>
     </properties>
     <indexes>
         <index name="unq_role"

@@ -15,9 +15,8 @@
                   unsigned="1"
                   notnull="1"/>
         <property name="action"
-                  type="text"
+                  type="string"
                   length="50"
-                  notnull="1"
                   default="create"/>
         <property name="date"
                   type="integer"

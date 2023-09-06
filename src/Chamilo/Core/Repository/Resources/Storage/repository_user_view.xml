@@ -10,10 +10,9 @@
                   notnull="1"
                   default="0"/>
         <property name="name"
-                  type="text"
+                  type="string"
                   length="100"
-                  notnull="1"
-                  default=""/>
+                  notnull="1"/>
         <property name="description"
                   type="text"/>
     </properties>

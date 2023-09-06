@@ -9,7 +9,7 @@
                   type="text"
                   notnull="1"/>
         <property name="tolerance_type"
-                  type="text"
+                  type="string"
                   length="10"
                   notnull="1"/>
         <property name="hint"

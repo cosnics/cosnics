@@ -9,28 +9,25 @@
         <property name="parent_id"
                   type="integer"
                   unsigned="1"
-                  notnull="1"
-                  default="0"/>
+                  notnull="1"/>
         <property name="sort"
                   type="integer"
                   unsigned="1"
                   notnull="1"/>
         <property name="user_id"
                   type="integer"
-                  unsigned="1"
-                  notnull="0"/>
+                  unsigned="1"/>
         <property name="type"
-                  type="text"
+                  type="string"
                   length="255"
                   notnull="1"/>
         <property name="title"
-                  type="text"
+                  type="string"
                   length="255"
-                  unsigned="1"
-                  notnull="1"
-                  fixed="true"/>
+                  notnull="1"/>
         <property name="configuration"
-                  type="text"/>
+                  type="text"
+                  length="65535"/>
     </properties>
     <indexes>
         <index name="idx_type">

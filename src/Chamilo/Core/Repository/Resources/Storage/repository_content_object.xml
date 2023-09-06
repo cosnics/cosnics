@@ -11,7 +11,7 @@
                   unsigned="1"
                   notnull="1"/>
         <property name="object_number"
-                  type="text"
+                  type="string"
                   length="36"
                   notnull="1"/>
         <property name="parent_id"
@@ -21,8 +21,7 @@
                   default="0"/>
         <property name="template_registration_id"
                   type="integer"
-                  unsigned="1"
-                  default="NULL"/>
+                  unsigned="1"/>
         <property name="created"
                   type="integer"
                   unsigned="1"
@@ -33,21 +32,19 @@
                   notnull="1"/>
         <property name="state"
                   type="integer"
-                  length="1"
                   unsigned="1"
                   notnull="1"
                   default="2"/>
         <property name="current"
                   type="integer"
-                  length="3"
                   unsigned="1"
                   notnull="1"
                   default="1"/>
         <property name="comment"
-                  type="text"
+                  type="string"
                   length="60"/>
         <property name="type"
-                  type="text"
+                  type="string"
                   length="255"
                   notnull="1"/>
         <property name="title"
@@ -56,7 +53,7 @@
         <property name="description"
                   type="text"/>
         <property name="content_hash"
-                  type="text"
+                  type="string"
                   length="32"/>
     </properties>
     <indexes>
@@ -78,6 +75,11 @@
         <index name="idx_category">
             <property name="owner_id"/>
             <property name="type"/>
+        </index>
+        <index name="idx_category_title">
+            <property name="owner_id"/>
+            <property name="type"/>
+            <property name="title"/>
         </index>
     </indexes>
 </object>

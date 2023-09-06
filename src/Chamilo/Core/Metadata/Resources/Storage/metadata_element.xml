@@ -10,15 +10,14 @@
                   type="integer"
                   notnull="1"/>
         <property name="name"
-                  type="text"
+                  type="string"
                   length="255"
                   notnull="1"/>
         <property name="display_name"
-                  type="text"
+                  type="string"
                   length="255"
                   notnull="1"/>
         <property name="fixed"
-                  length="1"
                   type="integer"
                   notnull="1"/>
         <property name="display_order"
@@ -28,8 +27,8 @@
                   type="integer"
                   notnull="1"/>
         <property name="value_limit"
-                  unsigned="1"
                   type="integer"
+                  unsigned="1"
                   notnull="1"/>
     </properties>
     <indexes>

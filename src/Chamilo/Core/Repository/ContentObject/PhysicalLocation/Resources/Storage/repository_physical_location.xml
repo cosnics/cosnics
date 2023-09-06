@@ -6,7 +6,7 @@
                   unsigned="1"
                   notnull="1"/>
         <property name="location"
-                  type="text"
+                  type="string"
                   length="255"
                   notnull="1"/>
     </properties>

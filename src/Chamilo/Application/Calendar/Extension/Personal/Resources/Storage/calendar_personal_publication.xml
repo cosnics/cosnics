@@ -19,7 +19,7 @@
                   notnull="1"/>
     </properties>
     <indexes>
-        <index name="idx_publisher">
+        <index name="idx_publisher_id">
             <property name="publisher_id"/>
         </index>
         <index name="idx_content_object_id">

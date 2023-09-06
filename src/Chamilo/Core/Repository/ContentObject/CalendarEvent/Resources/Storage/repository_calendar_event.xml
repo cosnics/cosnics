@@ -2,7 +2,7 @@
 <object name="repository_calendar_event">
     <properties>
         <property name="location"
-                  type="text"
+                  type="string"
                   length="250"/>
         <property name="id"
                   type="integer"
@@ -21,7 +21,6 @@
                   unsigned="1"/>
         <property name="frequency"
                   type="integer"
-                  length="1"
                   unsigned="1"
                   notnull="1"/>
         <property name="frequency_count"
@@ -31,15 +30,13 @@
                   type="integer"
                   unsigned="1"/>
         <property name="byday"
-                  type="text"
+                  type="string"
                   length="50"/>
         <property name="bymonthday"
-                  type="text"
-                  unsigned="1"
+                  type="string"
                   length="100"/>
         <property name="bymonth"
-                  type="text"
-                  unsigned="1"
+                  type="string"
                   length="50"/>
     </properties>
     <indexes>

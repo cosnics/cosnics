@@ -15,7 +15,7 @@
                   unsigned="1"
                   notnull="1"/>
         <property name="type"
-                  type="text"
+                  type="string"
                   length="20"
                   notnull="1"
                   default="normal"/>

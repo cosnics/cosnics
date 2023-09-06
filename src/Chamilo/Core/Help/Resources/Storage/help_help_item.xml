@@ -7,16 +7,16 @@
                   notnull="1"
                   autoincrement="true"/>
         <property name="language"
-                  type="text"
+                  type="string"
                   length="255"/>
         <property name="context"
-                  type="text"
+                  type="string"
                   length="255"/>
         <property name="identifier"
-                  type="text"
+                  type="string"
                   length="255"/>
         <property name="url"
-                  type="text"
+                  type="string"
                   length="255"/>
     </properties>
 </object>

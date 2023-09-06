@@ -12,10 +12,9 @@
                   type="text"
                   notnull="1"/>
         <property name="matrix_type"
-                  type="integer"
+                  type="smallint"
                   unsigned="1"
-                  notnull="1"
-                  length="1"/>
+                  notnull="1"/>
     </properties>
     <indexes>
         <index name="prm_id"

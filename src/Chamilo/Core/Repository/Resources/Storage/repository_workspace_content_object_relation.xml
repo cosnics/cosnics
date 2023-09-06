@@ -14,9 +14,9 @@
                   notnull="1"
                   default="0"/>
         <property name="content_object_id"
-                  type="text"
-                  notnull="1"
-                  length="36"/>
+                  type="string"
+                  length="36"
+                  notnull="1"/>
     </properties>
     <indexes>
         <index name="unq_relation"

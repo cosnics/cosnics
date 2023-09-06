@@ -9,9 +9,8 @@
                   type="text"
                   notnull="1"/>
         <property name="image"
-                  type="text"
+                  type="string"
                   length="255"
-                  fixed="1"
                   notnull="1"/>
     </properties>
     <indexes>

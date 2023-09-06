@@ -7,16 +7,16 @@
                   notnull="1"
                   autoincrement="true"/>
         <property name="entity_type"
-                  type="text"
+                  type="string"
                   length="255"
                   notnull="1"/>
         <property name="element_id"
-                  unsigned="1"
                   type="integer"
+                  unsigned="1"
                   notnull="1"/>
         <property name="provider_registration_id"
-                  unsigned="1"
                   type="integer"
+                  unsigned="1"
                   notnull="1"/>
     </properties>
     <indexes>
@@ -26,7 +26,7 @@
         <index name="idx_element_id">
             <property name="element_id"/>
         </index>
-        <index name="idx_rovider_registration_id">
+        <index name="idx_provider_registration_id">
             <property name="provider_registration_id"/>
         </index>
     </indexes>

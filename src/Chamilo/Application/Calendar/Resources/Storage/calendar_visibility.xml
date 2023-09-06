@@ -10,7 +10,7 @@
                   type="integer"
                   notnull="1"/>
         <property name="source"
-                  type="text"
+                  type="string"
                   length="255"
                   notnull="1"/>
     </properties>

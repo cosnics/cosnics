@@ -9,17 +9,18 @@
                   type="integer"
                   length="1"
                   unsigned="1"
+                  default="2"
                   notnull="1"/>
         <property name="storage_path"
-                  type="text"
+                  type="string"
                   length="255"
                   notnull="1"/>
         <property name="path"
-                  type="text"
+                  type="string"
                   length="255"
                   notnull="1"/>
         <property name="filename"
-                  type="text"
+                  type="string"
                   length="255"
                   notnull="1"/>
         <property name="filesize"
@@ -27,7 +28,7 @@
                   unsigned="1"
                   notnull="1"/>
         <property name="hash"
-                  type="text"
+                  type="string"
                   length="50"
                   notnull="1"/>
     </properties>

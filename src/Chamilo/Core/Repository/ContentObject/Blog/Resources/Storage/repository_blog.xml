@@ -6,7 +6,7 @@
                   unsigned="1"
                   notnull="1"/>
         <property name="blog_layout"
-                  type="text"
+                  type="string"
                   length="20"/>
     </properties>
     <indexes>

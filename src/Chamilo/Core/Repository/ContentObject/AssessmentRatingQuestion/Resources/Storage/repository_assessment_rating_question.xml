@@ -12,8 +12,7 @@
                   type="integer"
                   notnull="1"/>
         <property name="correct"
-                  type="integer"
-                  notnull="0"/>
+                  type="integer"/>
         <property name="feedback"
                   type="text"/>
         <property name="hint"

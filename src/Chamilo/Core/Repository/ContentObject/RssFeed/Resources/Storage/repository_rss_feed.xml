@@ -6,14 +6,13 @@
                   unsigned="1"
                   notnull="1"/>
         <property name="url"
-                  type="text"
+                  type="string"
                   length="255"
                   notnull="1"/>
         <property name="number_of_entries"
                   type="integer"
-                  unsigned="true"
                   notnull="1"
-                  default="5"/>
+                  default="0"/>
     </properties>
     <indexes>
         <index name="prm_id"

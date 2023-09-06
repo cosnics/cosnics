@@ -3,7 +3,6 @@
     <properties>
         <property name="id"
                   type="integer"
-                  unsigned="1"
                   notnull="1"
                   autoincrement="true"/>
         <property name="user_id"

@@ -6,10 +6,9 @@
                   unsigned="1"
                   notnull="1"/>
         <property name="answer_type"
-                  type="text"
-                  notnull="1"
+                  type="string"
                   length="8"
-                  fixed="1"/>
+                  notnull="1"/>
         <property name="options"
                   type="text"
                   notnull="1"/>

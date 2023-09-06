@@ -6,14 +6,12 @@
                   unsigned="1"
                   notnull="1"/>
         <property name="application"
-                  type="text"
+                  type="string"
                   length="255"
-                  fixed="1"
                   notnull="1"/>
         <property name="url"
-                  type="text"
+                  type="string"
                   length="255"
-                  fixed="1"
                   notnull="1"/>
     </properties>
     <indexes>

@@ -17,13 +17,9 @@
         <property name="parent_id"
                   type="integer"
                   unsigned="1"
-                  notnull="1"
-                  default=""/>
+                  notnull="1"/>
         <property name="inherit"
-                  type="integer"
-                  length="1"
-                  notnull="1"
-                  unsigned="1"
+                  type="boolean"
                   default="1"/>
         <property name="locked"
                   type="boolean"

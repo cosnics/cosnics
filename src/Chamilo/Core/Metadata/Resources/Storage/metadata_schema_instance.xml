@@ -7,24 +7,24 @@
                   notnull="1"
                   autoincrement="true"/>
         <property name="entity_type"
-                  type="text"
+                  type="string"
                   length="255"
                   notnull="1"/>
         <property name="entity_id"
-                  unsigned="1"
                   type="integer"
+                  unsigned="1"
                   notnull="1"/>
         <property name="schema_id"
-                  unsigned="1"
                   type="integer"
+                  unsigned="1"
                   notnull="1"/>
         <property name="user_id"
-                  unsigned="1"
                   type="integer"
+                  unsigned="1"
                   notnull="1"/>
         <property name="creation_date"
-                  unsigned="1"
                   type="integer"
+                  unsigned="1"
                   notnull="1"/>
     </properties>
     <indexes>

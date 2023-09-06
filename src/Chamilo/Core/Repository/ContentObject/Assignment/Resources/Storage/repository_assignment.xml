@@ -24,9 +24,7 @@
         <property name="automatic_feedback_co_ids"
                   type="text"/>
         <property name="visibility_feedback"
-                  type="integer"
-                  length="1"
-                  unsigned="1"/>
+                  type="bigint"/>
         <property name="allowed_types"
                   type="text"
                   notnull="1"/>

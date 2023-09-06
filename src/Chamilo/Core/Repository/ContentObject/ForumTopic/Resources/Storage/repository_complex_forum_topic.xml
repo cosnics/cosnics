@@ -6,8 +6,7 @@
                   unsigned="1"
                   notnull="1"/>
         <property name="forum_type"
-                  type="integer"
-                  length="1"/>
+                  type="bigint"/>
     </properties>
     <indexes>
         <index name="prm_id"

@@ -21,11 +21,11 @@
                   notnull="1"
                   default="0"/>
         <property name="content_object_type"
-                  type="text"
+                  type="string"
                   length="255"
                   notnull="1"/>
         <property name="name"
-                  type="text"
+                  type="string"
                   length="255"
                   notnull="1"/>
         <property name="template"

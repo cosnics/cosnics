@@ -11,11 +11,11 @@
                   unsigned="1"
                   notnull="1"/>
         <property name="office365_group_id"
-                  type="text"
-                  notnull="1"
-                  length="50"/>
+                  type="string"
+                  length="50"
+                  notnull="1"/>
         <property name="office365_plan_id"
-                  type="text"
+                  type="string"
                   length="50"/>
         <property name="linked"
                   type="boolean"

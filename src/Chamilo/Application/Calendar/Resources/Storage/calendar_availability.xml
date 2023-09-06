@@ -11,11 +11,11 @@
                   unsigned="1"
                   notnull="1"/>
         <property name="calendar_type"
-                  type="text"
+                  type="string"
                   length="255"
                   notnull="1"/>
         <property name="calendar_id"
-                  type="text"
+                  type="string"
                   length="255"
                   notnull="1"/>
         <property name="availability"
@@ -23,7 +23,7 @@
                   notnull="1"
                   default="1"/>
         <property name="colour"
-                  type="text"
+                  type="string"
                   length="10"/>
     </properties>
     <indexes>

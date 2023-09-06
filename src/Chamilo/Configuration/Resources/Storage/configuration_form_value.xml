@@ -19,7 +19,7 @@
                   unsigned="1"
                   notnull="1"/>
         <property name="value"
-                  type="text"
+                  type="string"
                   length="500"
                   notnull="1"
                   default=""/>

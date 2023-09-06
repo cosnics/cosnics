@@ -18,7 +18,6 @@
                   type="integer"
                   unsigned="1"
                   notnull="1"
-                  length="1"
                   default="7"/>
     </properties>
     <indexes>

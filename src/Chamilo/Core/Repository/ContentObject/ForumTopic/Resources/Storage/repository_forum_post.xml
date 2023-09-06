@@ -10,11 +10,9 @@
                   type="integer"
                   notnull="1"/>
         <property name="title"
-                  type="text"
-                  notnull="1"/>
+                  type="text"/>
         <property name="content"
-                  type="text"
-                  notnull="0"/>
+                  type="text"/>
         <property name="forum_topic_id"
                   type="integer"
                   notnull="1"
@@ -33,10 +31,11 @@
                   default="0"/>
     </properties>
     <indexes>
-    <index name="idx_forum_topic_id">
-        <property name="forum_topic_id"/>
-    </index>
-    <index name="idx_reply_on_post_id">
-        <property name="reply_on_post_id"/>
-    </index>
+        <index name="idx_forum_topic_id">
+            <property name="forum_topic_id"/>
+        </index>
+        <index name="idx_reply_on_post_id">
+            <property name="reply_on_post_id"/>
+        </index>
+    </indexes>
 </object>

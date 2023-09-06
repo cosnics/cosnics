@@ -6,11 +6,9 @@
                   unsigned="1"
                   notnull="1"/>
         <property name="path"
-                  type="text"
+                  type="string"
                   length="255"
-                  fixed="1"
-                  notnull="1"
-                  default=""/>
+                  notnull="1"/>
         <property name="max_attempts"
                   type="integer"
                   unsigned="1"

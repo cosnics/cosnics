@@ -7,10 +7,9 @@
                   notnull="1"
                   autoincrement="true"/>
         <property name="name"
-                  type="text"
+                  type="string"
                   length="255"
-                  notnull="1"
-                  default=""/>
+                  notnull="1"/>
         <property name="description"
                   type="text"/>
         <property name="parent_id"
@@ -28,13 +27,12 @@
         <property name="sort"
                   type="integer"
                   unsigned="1"
-                  notnull="1"/>
-        <property name="code"
-                  type="text"
-                  length="50"
-                  fixed="1"
                   notnull="1"
-                  default=""/>
+                  default="0"/>
+        <property name="code"
+                  type="string"
+                  length="50"
+                  notnull="1"/>
         <property name="disk_quota"
                   type="integer"
                   unsigned="1"
@@ -45,6 +43,11 @@
                   unsigned="1"
                   notnull="1"
                   default="10000"/>
+        <property name="state"
+                  type="integer"
+                  unsigned="1"
+                  notnull="1"
+                  default="1"/>
     </properties>
     <indexes>
         <index name="idx_parent_id">
