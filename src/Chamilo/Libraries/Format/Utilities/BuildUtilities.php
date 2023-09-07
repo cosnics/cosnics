@@ -120,6 +120,7 @@ class BuildUtilities
         $devRequires = $package->getDevRequires();
         $autoload = $package->getAutoload();
         $repositories = $package->getRepositories();
+        $config = $package->getConfig();
 
         $repositoryManager = $composer->getRepositoryManager();
 
@@ -178,6 +179,8 @@ class BuildUtilities
                     }
                 }
 
+                $config = array_merge_recursive($config, $package->getConfig());
+
                 // Process repositories
                 foreach ((array) $completePackage->getRepositories() as $repositoryConfig)
                 {
@@ -187,7 +190,7 @@ class BuildUtilities
                 }
             }
         }
-
+        $package->setConfig($config);
         $package->setRequires($requires);
         $package->setDevRequires($devRequires);
         $package->setAutoload($autoload);
