@@ -19,7 +19,7 @@
             <factory service="Chamilo\Core\Queue\Service\Producer\ProducerFactory" method="createProducer" />
         </service>
 
-        <service id="Interop\Queue\PsrContext" class="Interop\Queue\PsrContext">
+        <service id="Interop\Queue\Context" class="Interop\Queue\Context">
             <factory service="Chamilo\Core\Queue\Service\PsrContextFactory" method="createContext" />
         </service>
 
