@@ -195,5 +195,7 @@ class BuildUtilities
         $package->setDevRequires($devRequires);
         $package->setAutoload($autoload);
         $package->setRepositories($repositories);
+
+        var_dump($package->getConfig());
     }
 }
