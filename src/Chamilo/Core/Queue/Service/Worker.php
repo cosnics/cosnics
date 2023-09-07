@@ -4,8 +4,8 @@ namespace Chamilo\Core\Queue\Service;
 
 use Chamilo\Core\Queue\Exceptions\JobNoLongerValidException;
 use Chamilo\Core\Queue\Storage\Entity\Job;
-use Interop\Queue\PsrContext;
-use Interop\Queue\PsrMessage;
+use Interop\Queue\Context;
+use Interop\Queue\Message;
 
 /**
  * @package Chamilo\Core\Queue\Service
@@ -15,9 +15,9 @@ use Interop\Queue\PsrMessage;
 class Worker
 {
     /**
-     * @var PsrContext
+     * @var Context
      */
-    protected $psrContext;
+    protected $context;
 
     /**
      * @var JobProcessorFactory
@@ -32,15 +32,15 @@ class Worker
     /**
      * Worker constructor.
      *
-     * @param PsrContext $psrContext
+     * @param Context $context
      * @param JobProcessorFactory $jobProcessorFactory
      * @param \Chamilo\Core\Queue\Service\JobEntityManager $jobEntityManager
      */
     public function __construct(
-        PsrContext $psrContext, JobProcessorFactory $jobProcessorFactory, JobEntityManager $jobEntityManager
+        Context $context, JobProcessorFactory $jobProcessorFactory, JobEntityManager $jobEntityManager
     )
     {
-        $this->psrContext = $psrContext;
+        $this->context = $context;
         $this->jobProcessorFactory = $jobProcessorFactory;
         $this->jobEntityManager = $jobEntityManager;
     }
@@ -54,10 +54,10 @@ class Worker
     {
         $timeout = 10 * (60 * 1000); // x minutes * 60 seconds * 1000 milliseconds
 
-        $destination = $this->psrContext->createQueue($queueName);
-        $consumer = $this->psrContext->createConsumer($destination);
+        $destination = $this->context->createQueue($queueName);
+        $consumer = $this->context->createConsumer($destination);
         $message = $consumer->receive($timeout);
-        if(!$message instanceof PsrMessage)
+        if(!$message instanceof Message)
         {
             return;
         }

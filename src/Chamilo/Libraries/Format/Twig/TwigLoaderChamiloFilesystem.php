@@ -25,7 +25,7 @@ class TwigLoaderChamiloFilesystem implements LoaderInterface
      * @return string
      * @throws LoaderError
      */
-    public function getCacheKey($name)
+    public function getCacheKey($name): string
     {
         return $this->findTemplate($name);
     }
@@ -37,7 +37,7 @@ class TwigLoaderChamiloFilesystem implements LoaderInterface
      * @return bool
      * @throws LoaderError
      */
-    public function isFresh($name, $time)
+    public function isFresh($name, $time): bool
     {
         return filemtime($this->findTemplate($name)) <= $time;
     }
@@ -118,7 +118,7 @@ class TwigLoaderChamiloFilesystem implements LoaderInterface
      *
      * @throws LoaderError When $name is not found
      */
-    public function getSourceContext($name)
+    public function getSourceContext($name): Source
     {
         $path = $this->findTemplate($name);
 
