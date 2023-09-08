@@ -293,12 +293,36 @@ class StorageUnitDatabase implements StorageUnitDatabaseInterface
         return $this->storageAliasGenerator;
     }
 
-    public function handleError(Exception $exception)
+    public function handleError(Exception $exception): void
     {
         $this->getExceptionLogger()->logException(
             new Exception('[Message: ' . $exception->getMessage() . '] [Information: {USER INFO GOES HERE}]'),
             ExceptionLoggerInterface::EXCEPTION_LEVEL_FATAL_ERROR
         );
+    }
+
+    public function initializeStorage(string $databaseName, bool $overwriteIfDatabaseAlreadyExists): bool
+    {
+        try
+        {
+            $storageStructureExists = $this->storageStructureExists($databaseName);
+
+            if (!$storageStructureExists)
+            {
+                $this->getConnection()->createSchemaManager()->createDatabase($databaseName);
+            }
+            elseif ($overwriteIfDatabaseAlreadyExists)
+            {
+                $this->getConnection()->createSchemaManager()->dropDatabase($databaseName);
+                $this->getConnection()->createSchemaManager()->createDatabase($databaseName);
+            }
+
+            return true;
+        }
+        catch (Exception)
+        {
+            return false;
+        }
     }
 
     public function optimize(string $storageUnitName): bool
@@ -403,6 +427,16 @@ class StorageUnitDatabase implements StorageUnitDatabaseInterface
 
             return false;
         }
+    }
+
+    /**
+     * @throws \Doctrine\DBAL\Exception
+     */
+    protected function storageStructureExists(string $databaseName): bool
+    {
+        return in_array(
+            $databaseName, array_map('strtolower', $this->getConnection()->createSchemaManager()->listDatabases())
+        );
     }
 
     public function truncate(string $storageUnitName, ?bool $optimize = true): bool

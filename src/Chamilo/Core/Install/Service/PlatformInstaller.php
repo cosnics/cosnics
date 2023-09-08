@@ -1,19 +1,19 @@
 <?php
-namespace Chamilo\Core\Install;
+namespace Chamilo\Core\Install\Service;
 
-use Chamilo\Configuration\Package\Action\Installer;
 use Chamilo\Configuration\Package\Action\PackageActionFactory;
 use Chamilo\Configuration\Package\Sequencer;
 use Chamilo\Configuration\Package\Service\PackageBundlesCacheService;
+use Chamilo\Core\Install\Architecture\Domain\StepResult;
+use Chamilo\Core\Install\Architecture\Interfaces\InstallerObserverInterface;
 use Chamilo\Core\Install\Exception\InstallFailedException;
-use Chamilo\Core\Install\Observer\InstallerObserver;
-use Chamilo\Core\Install\Service\ConfigurationWriter;
-use Chamilo\Core\Install\Storage\DataManager;
+use Chamilo\Core\Install\Manager;
 use Chamilo\Libraries\Architecture\ClassnameUtilities;
 use Chamilo\Libraries\DependencyInjection\DependencyInjectionContainerBuilder;
 use Chamilo\Libraries\DependencyInjection\ExtensionFinder\PackagesContainerExtensionFinder;
 use Chamilo\Libraries\File\PackagesContentFinder\PackagesClassFinder;
 use Chamilo\Libraries\File\SystemPathBuilder;
+use Chamilo\Libraries\Storage\DataManager\Repository\StorageUnitRepository;
 use Chamilo\Libraries\Utilities\StringUtilities;
 use Exception;
 use Symfony\Component\Filesystem\Filesystem;
@@ -29,7 +29,7 @@ class PlatformInstaller
 
     protected Filesystem $filesystem;
 
-    protected PackageActionFactory $installerFactory;
+    protected PackageActionFactory $packageActionFactory;
 
     protected PackageBundlesCacheService $packageBundlesCacheService;
 
@@ -37,33 +37,36 @@ class PlatformInstaller
 
     protected Translator $translator;
 
-    private Configuration $configuration;
-
     private string $configurationFilePath;
 
-    private DataManager $dataManager;
+    /**
+     * @var string[][] $configurationValues
+     */
+    private array $configurationValues;
 
-    private InstallerObserver $installerObserver;
+    private InstallerObserverInterface $installerObserver;
 
     /**
      * @var string[]
      */
     private array $packages;
 
+    private StorageUnitRepository $storageUnitRepository;
+
     public function __construct(
-        InstallerObserver $installerObserver, Configuration $configuration, $dataManager,
+        InstallerObserverInterface $installerObserver, array $configurationValues, StorageUnitRepository $storageUnitRepository,
         SystemPathBuilder $systemPathBuilder, Filesystem $filesystem,
         PackageBundlesCacheService $packageBundlesCacheService, PackageActionFactory $installerFactory,
         Translator $translator
     )
     {
         $this->installerObserver = $installerObserver;
-        $this->configuration = $configuration;
-        $this->dataManager = $dataManager;
+        $this->configurationValues = $configurationValues;
+        $this->storageUnitRepository = $storageUnitRepository;
         $this->systemPathBuilder = $systemPathBuilder;
         $this->filesystem = $filesystem;
         $this->packageBundlesCacheService = $packageBundlesCacheService;
-        $this->installerFactory = $installerFactory;
+        $this->packageActionFactory = $installerFactory;
         $this->translator = $translator;
 
         $this->configurationFilePath = $systemPathBuilder->getStoragePath() . 'configuration/configuration.xml';
@@ -92,7 +95,7 @@ class PlatformInstaller
         }
         catch (InstallFailedException $exception)
         {
-            $stepResult = new StepResult(false, $exception->getMessage(), $exception->getPackage());
+            $stepResult = new StepResult(false, [$exception->getMessage()], $exception->getPackage());
 
             echo $this->installerObserver->beforePackageInstallation($exception->getPackage());
             echo $this->installerObserver->afterPackageInstallation($stepResult);
@@ -126,23 +129,13 @@ class PlatformInstaller
     private function createFolders(): string
     {
         $translator = $this->getTranslator();
-        $values = $this->configuration->as_values_array();
+        $values = $this->configurationValues;
 
         $html = [];
 
         $html[] = $this->installerObserver->beforeFilesystemPrepared();
 
-        $directories = [
-            $values['archive_path'],
-            $values['cache_path'],
-            $values['garbage_path'],
-            $values['repository_path'],
-            $values['temp_path'],
-            $values['userpictures_path'],
-            $values['scorm_path'],
-            $values['logs_path'],
-            $values['hotpotatoes_path']
-        ];
+        $directories = $values['path'];
 
         foreach ($directories as $directory)
         {
@@ -171,7 +164,7 @@ class PlatformInstaller
         }
 
         $html[] = $this->installerObserver->afterFilesystemPrepared(
-            new StepResult(true, $translator->trans('FoldersCreatedSuccess', [], Manager::CONTEXT))
+            new StepResult(true, [$translator->trans('FoldersCreatedSuccess', [], Manager::CONTEXT)])
         );
 
         return implode(PHP_EOL, $html);
@@ -185,6 +178,11 @@ class PlatformInstaller
     public function getNextPackage(): string
     {
         return array_shift($this->packages);
+    }
+
+    public function getPackageActionFactory(): PackageActionFactory
+    {
+        return $this->packageActionFactory;
     }
 
     public function getPackageBundlesCacheService(): PackageBundlesCacheService
@@ -215,7 +213,7 @@ class PlatformInstaller
      */
     private function initializeInstallation(): void
     {
-        $this->getTranslator()->setLocale($this->configuration->get_platform_language());
+        $this->getTranslator()->setLocale($this->configurationValues['platform_language']);
     }
 
     /**
@@ -223,7 +221,7 @@ class PlatformInstaller
      */
     private function installPackages(): void
     {
-        $this->addPackages($this->configuration->get_packages());
+        $this->addPackages($this->configurationValues['packages']);
         $this->orderPackages();
         $html = [];
 
@@ -232,11 +230,9 @@ class PlatformInstaller
 
         while (($package = $this->getNextPackage()) != null)
         {
+            $installer = $this->getPackageActionFactory()->getPackageInstaller($package);
 
-            $values = $this->configuration->as_values_array();
-            $installer = Installer::factory($package, $values);
-
-            $success = $installer->run();
+            $success = $installer->run($this->configurationValues);
 
             if ($success !== true)
             {
@@ -295,8 +291,10 @@ class PlatformInstaller
         $html[] = $this->installerObserver->beforePreProduction();
         $html[] = $this->installerObserver->afterPreProductionDatabaseCreated(
             new StepResult(
-                $this->dataManager->initializeStorage(),
-                $this->getTranslator()->trans('DatabaseCreated', [], Manager::CONTEXT)
+                $this->storageUnitRepository->initializeStorage(
+                    $this->configurationValues['database']['name'],
+                    (bool) $this->configurationValues['database']['overwrite']
+                ), [$this->getTranslator()->trans('DatabaseCreated', [], Manager::CONTEXT)]
             )
         );
         $html[] = $this->createFolders();
@@ -306,19 +304,19 @@ class PlatformInstaller
         return implode(PHP_EOL, $html);
     }
 
-    public function setConfiguration(Configuration $configuration): void
-    {
-        $this->configuration = $configuration;
-    }
-
     public function setConfigurationFilePath(string $configurationFilePath): void
     {
         $this->configurationFilePath = $configurationFilePath;
     }
 
-    public function setDataManager(DataManager $dataManager): void
+    /**
+     * @param string[][] $configurationValues
+     *
+     * @return void
+     */
+    public function setConfigurationValues(array $configurationValues): void
     {
-        $this->dataManager = $dataManager;
+        $this->configurationValues = $configurationValues;
     }
 
     /**
@@ -339,7 +337,7 @@ class PlatformInstaller
                 $pathBuilder->getTemplatesPath('Chamilo\Core\Install') . 'configuration.xml.tpl';
 
             $configurationWriter = new ConfigurationWriter($this->getFilesystem(), $configurationTemplatePath);
-            $configurationWriter->writeConfiguration($this->configuration, $this->configurationFilePath);
+            $configurationWriter->writeConfiguration($this->configurationValues, $this->configurationFilePath);
 
             $result = true;
         }
@@ -350,7 +348,7 @@ class PlatformInstaller
 
         return new StepResult(
             $result,
-            $this->getTranslator()->trans($result ? 'ConfigWriteSuccess' : 'ConfigWriteFailed', [], Manager::CONTEXT)
+            [$this->getTranslator()->trans($result ? 'ConfigWriteSuccess' : 'ConfigWriteFailed', [], Manager::CONTEXT)]
         );
     }
 }

@@ -2,10 +2,9 @@
 namespace Chamilo\Libraries\Storage\DataManager\Interfaces;
 
 /**
- *
  * @package Chamilo\Libraries\Storage\DataManager\Interfaces
- * @author Hans De Bisschop <hans.de.bisschop@ehb.be>
- * @author Magali Gillard <magali.gillard@ehb.be>
+ * @author  Hans De Bisschop <hans.de.bisschop@ehb.be>
+ * @author  Magali Gillard <magali.gillard@ehb.be>
  */
 interface StorageUnitDatabaseInterface
 {
@@ -27,6 +26,8 @@ interface StorageUnitDatabaseInterface
     public function drop(string $storageUnitName): bool;
 
     public function exists(string $storageUnitName): bool;
+
+    public function initializeStorage(string $databaseName, bool $overwriteIfDatabaseAlreadyExists);
 
     public function optimize(string $storageUnitName): bool;
 

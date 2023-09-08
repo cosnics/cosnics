@@ -1,0 +1,147 @@
+<?xml version="1.0" encoding="utf-8"?>
+<container xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+           xmlns="http://symfony.com/schema/dic/services"
+           xsi:schemaLocation="http://symfony.com/schema/dic/services http://symfony.com/schema/dic/services/services-1.0.xsd">
+    <parameters>
+        <parameter key="database"
+                   type="collection">
+            <parameter key="driver">mysqli</parameter>
+            <parameter key="host">localhost</parameter>
+            <parameter key="name">chamilo</parameter>
+            <parameter key="overwrite">1</parameter>
+            <parameter key="username">root</parameter>
+            <parameter key="password"></parameter>
+            <parameter key="charset">utf8</parameter>
+        </parameter>
+
+        <parameter key="platform_language">en</parameter>
+
+        <parameter key="admin_email"></parameter>
+        <parameter key="admin_surname"></parameter>
+        <parameter key="admin_firstname"></parameter>
+        <parameter key="admin_phone"></parameter>
+        <parameter key="admin_username">admin</parameter>
+        <parameter key="admin_password">admin</parameter>
+
+        <parameter key="site_name">Chamilo LCMS Connect</parameter>
+        <parameter key="organization_name"></parameter>
+        <parameter key="organization_url">www.chamilo.org</parameter>
+
+        <parameter key="self_reg">0</parameter>
+
+        <parameter key="hashing_algorithm">sha1</parameter>
+
+        <parameter key="install"
+                   type="collection">
+            <parameter key="Chamilo\Libraries">1</parameter>
+            <parameter key="Chamilo\Libraries\Authentication\Anonymous">1</parameter>
+            <parameter key="Chamilo\Libraries\Authentication\Cas">1</parameter>
+            <parameter key="Chamilo\Libraries\Authentication\Ldap">1</parameter>
+            <parameter key="Chamilo\Libraries\Authentication\Platform">1</parameter>
+            <parameter key="Chamilo\Libraries\Authentication\SecurityToken">1</parameter>
+            <parameter key="Chamilo\Libraries\Calendar">1</parameter>
+            <parameter key="Chamilo\Libraries\Mail\Mailer\PhpMailer">1</parameter>
+            <parameter key="Chamilo\Libraries\Mail\Mailer\Platform">1</parameter>
+            <parameter key="Chamilo\Libraries\Protocol\Microsoft\Graph">1</parameter>
+            <parameter key="Chamilo\Libraries\Rights">1</parameter>
+            <parameter key="Chamilo\Configuration">1</parameter>
+
+            <parameter key="Chamilo\Core\Admin">1</parameter>
+            <parameter key="Chamilo\Core\Admin\Announcement">1</parameter>
+            <parameter key="Chamilo\Core\Group">1</parameter>
+            <parameter key="Chamilo\Core\Help">1</parameter>
+            <parameter key="Chamilo\Core\Home">1</parameter>
+            <parameter key="Chamilo\Core\Install">1</parameter>
+            <parameter key="Chamilo\Core\Lynx">1</parameter>
+            <parameter key="Chamilo\Core\Menu">1</parameter>
+            <parameter key="Chamilo\Core\Metadata">1</parameter>
+            <parameter key="Chamilo\Core\Notification">1</parameter>
+            <parameter key="Chamilo\Core\Queue">1</parameter>
+            <parameter key="Chamilo\Core\Reporting">1</parameter>
+            <parameter key="Chamilo\Core\Repository">1</parameter>
+            <parameter key="Chamilo\Core\Rights">1</parameter>
+            <parameter key="Chamilo\Core\Rights\Structure">1</parameter>
+            <parameter key="Chamilo\Core\Tracking">1</parameter>
+            <parameter key="Chamilo\Core\User">1</parameter>
+            <parameter key="Chamilo\Core\User\Picture\Provider\Platform">1</parameter>
+            <parameter key="Chamilo\Core\User\Roles">1</parameter>
+
+            <parameter key="Chamilo\Core\Repository\ContentObject\Announcement">1</parameter>
+            <parameter key="Chamilo\Core\Repository\ContentObject\Assessment">1</parameter>
+            <parameter key="Chamilo\Core\Repository\ContentObject\AssessmentMatchingQuestion">1</parameter>
+            <parameter key="Chamilo\Core\Repository\ContentObject\AssessmentMatchNumericQuestion">1</parameter>
+            <parameter key="Chamilo\Core\Repository\ContentObject\AssessmentMatchTextQuestion">1</parameter>
+            <parameter key="Chamilo\Core\Repository\ContentObject\AssessmentMatrixQuestion">1</parameter>
+            <parameter key="Chamilo\Core\Repository\ContentObject\AssessmentMultipleChoiceQuestion">1</parameter>
+            <parameter key="Chamilo\Core\Repository\ContentObject\AssessmentOpenQuestion">1</parameter>
+            <parameter key="Chamilo\Core\Repository\ContentObject\AssessmentRatingQuestion">1</parameter>
+            <parameter key="Chamilo\Core\Repository\ContentObject\AssessmentSelectQuestion">1</parameter>
+            <parameter key="Chamilo\Core\Repository\ContentObject\Assignment">1</parameter>
+            <parameter key="Chamilo\Core\Repository\ContentObject\Blog">1</parameter>
+            <parameter key="Chamilo\Core\Repository\ContentObject\BlogItem">1</parameter>
+            <parameter key="Chamilo\Core\Repository\ContentObject\CalendarEvent">1</parameter>
+            <parameter key="Chamilo\Core\Repository\ContentObject\Description">1</parameter>
+            <parameter key="Chamilo\Core\Repository\ContentObject\ExternalCalendar">1</parameter>
+            <parameter key="Chamilo\Core\Repository\ContentObject\File">1</parameter>
+            <parameter key="Chamilo\Core\Repository\ContentObject\File\HtmlEditor">1</parameter>
+            <parameter key="Chamilo\Core\Repository\ContentObject\FillInBlanksQuestion">1</parameter>
+            <parameter key="Chamilo\Core\Repository\ContentObject\Forum">1</parameter>
+            <parameter key="Chamilo\Core\Repository\ContentObject\ForumTopic">1</parameter>
+            <parameter key="Chamilo\Core\Repository\ContentObject\Glossary">1</parameter>
+            <parameter key="Chamilo\Core\Repository\ContentObject\GlossaryItem">1</parameter>
+            <parameter key="Chamilo\Core\Repository\ContentObject\Hotpotatoes">1</parameter>
+            <parameter key="Chamilo\Core\Repository\ContentObject\HotspotQuestion">1</parameter>
+            <parameter key="Chamilo\Core\Repository\ContentObject\Introduction">1</parameter>
+            <parameter key="Chamilo\Core\Repository\ContentObject\LearningPath">1</parameter>
+            <parameter key="Chamilo\Core\Repository\ContentObject\LearningPathItem">1</parameter>
+            <parameter key="Chamilo\Core\Repository\ContentObject\Link">1</parameter>
+            <parameter key="Chamilo\Core\Repository\ContentObject\Note">1</parameter>
+            <parameter key="Chamilo\Core\Repository\ContentObject\OrderingQuestion">1</parameter>
+            <parameter key="Chamilo\Core\Repository\ContentObject\Page">1</parameter>
+            <parameter key="Chamilo\Core\Repository\ContentObject\Portfolio">1</parameter>
+            <parameter key="Chamilo\Core\Repository\ContentObject\PortfolioItem">1</parameter>
+            <parameter key="Chamilo\Core\Repository\ContentObject\RssFeed">1</parameter>
+            <parameter key="Chamilo\Core\Repository\ContentObject\Section">1</parameter>
+            <parameter key="Chamilo\Core\Repository\ContentObject\SystemAnnouncement">1</parameter>
+            <parameter key="Chamilo\Core\Repository\ContentObject\Task">1</parameter>
+            <parameter key="Chamilo\Core\Repository\ContentObject\Webpage">1</parameter>
+            <parameter key="Chamilo\Core\Repository\ContentObject\Wiki">1</parameter>
+            <parameter key="Chamilo\Core\Repository\ContentObject\WikiPage">1</parameter>
+
+            <parameter key="Chamilo\Application\Calendar">1</parameter>
+            <parameter key="Chamilo\Application\Calendar\Extension\Personal">1</parameter>
+            <parameter key="Chamilo\Application\Portfolio">1</parameter>
+
+            <parameter key="Chamilo\Application\Weblcms">1</parameter>
+            <parameter key="Chamilo\Application\Weblcms\Admin\Extension\Platform">1</parameter>
+            <parameter key="Chamilo\Application\Weblcms\Bridge\Assignment">1</parameter>
+            <parameter key="Chamilo\Application\Weblcms\Bridge\LearningPath\Assignment">1</parameter>
+            <parameter key="Chamilo\Application\Weblcms\Course\OpenCourse">1</parameter>
+            <parameter key="Chamilo\Application\Weblcms\Tool\Implementation\Announcement">1</parameter>
+            <parameter key="Chamilo\Application\Weblcms\Tool\Implementation\Assessment">1</parameter>
+            <parameter key="Chamilo\Application\Weblcms\Tool\Implementation\Assignment">1</parameter>
+            <parameter key="Chamilo\Application\Weblcms\Tool\Implementation\Blog">1</parameter>
+            <parameter key="Chamilo\Application\Weblcms\Tool\Implementation\Calendar">1</parameter>
+            <parameter key="Chamilo\Application\Weblcms\Tool\Implementation\CourseCopier">1</parameter>
+            <parameter key="Chamilo\Application\Weblcms\Tool\Implementation\CourseDeleter">1</parameter>
+            <parameter key="Chamilo\Application\Weblcms\Tool\Implementation\CourseGroup">1</parameter>
+            <parameter key="Chamilo\Application\Weblcms\Tool\Implementation\CourseSections">1</parameter>
+            <parameter key="Chamilo\Application\Weblcms\Tool\Implementation\CourseSettings">1</parameter>
+            <parameter key="Chamilo\Application\Weblcms\Tool\Implementation\CourseTruncater">1</parameter>
+            <parameter key="Chamilo\Application\Weblcms\Tool\Implementation\Description">1</parameter>
+            <parameter key="Chamilo\Application\Weblcms\Tool\Implementation\Document">1</parameter>
+            <parameter key="Chamilo\Application\Weblcms\Tool\Implementation\Forum">1</parameter>
+            <parameter key="Chamilo\Application\Weblcms\Tool\Implementation\Glossary">1</parameter>
+            <parameter key="Chamilo\Application\Weblcms\Tool\Implementation\Home">1</parameter>
+            <parameter key="Chamilo\Application\Weblcms\Tool\Implementation\LearningPath">1</parameter>
+            <parameter key="Chamilo\Application\Weblcms\Tool\Implementation\Link">1</parameter>
+            <parameter key="Chamilo\Application\Weblcms\Tool\Implementation\Note">1</parameter>
+            <parameter key="Chamilo\Application\Weblcms\Tool\Implementation\Reporting">1</parameter>
+            <parameter key="Chamilo\Application\Weblcms\Tool\Implementation\Rights">1</parameter>
+            <parameter key="Chamilo\Application\Weblcms\Tool\Implementation\Search">1</parameter>
+            <parameter key="Chamilo\Application\Weblcms\Tool\Implementation\User">1</parameter>
+            <parameter key="Chamilo\Application\Weblcms\Tool\Implementation\Wiki">1</parameter>
+        </parameter>
+
+    </parameters>
+</container>

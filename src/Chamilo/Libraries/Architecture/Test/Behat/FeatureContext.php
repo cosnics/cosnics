@@ -2,7 +2,7 @@
 namespace Chamilo\Libraries\Architecture\Test\Behat;
 
 use Behat\MinkExtension\Context\MinkContext;
-use Chamilo\Core\Install\Observer\CommandLineInstaller;
+use Chamilo\Core\Install\Service\CommandLineInstaller;
 use Chamilo\Libraries\Architecture\Application\Application;
 use Chamilo\Libraries\Architecture\Application\Routing\UrlGenerator;
 use Chamilo\Libraries\DependencyInjection\DependencyInjectionContainerBuilder;

@@ -188,9 +188,6 @@ abstract class Manager extends Application implements NoContextComponent
         return implode(PHP_EOL, $html);
     }
 
-    /**
-     * @throws \ReflectionException
-     */
     public function renderHeader(string $pageTitle = ''): string
     {
         $page = $this->getPageConfiguration();

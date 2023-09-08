@@ -1,7 +1,7 @@
 <?php
-namespace Chamilo\Core\Install\Observer;
+namespace Chamilo\Core\Install\Architecture\Interfaces;
 
-use Chamilo\Core\Install\StepResult;
+use Chamilo\Core\Install\Architecture\Domain\StepResult;
 
 /**
  *
@@ -9,7 +9,7 @@ use Chamilo\Core\Install\StepResult;
  * @author Hans De Bisschop <hans.de.bisschop@ehb.be>
  * @author Magali Gillard <magali.gillard@ehb.be>
  */
-interface InstallerObserver
+interface InstallerObserverInterface
 {
 
     public function beforeInstallation(): string;

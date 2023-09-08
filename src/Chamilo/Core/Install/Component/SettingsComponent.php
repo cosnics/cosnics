@@ -3,7 +3,7 @@ namespace Chamilo\Core\Install\Component;
 
 use Chamilo\Core\Install\Form\SettingsForm;
 use Chamilo\Core\Install\Manager;
-use Chamilo\Core\Install\SettingsOverview;
+use Chamilo\Core\Install\Service\SettingsOverviewRenderer;
 use Chamilo\Libraries\Architecture\Interfaces\NoAuthenticationSupport;
 use Chamilo\Libraries\Format\Structure\ActionBar\AbstractButton;
 use Chamilo\Libraries\Format\Structure\ActionBar\Button;
@@ -28,7 +28,6 @@ class SettingsComponent extends Manager implements NoAuthenticationSupport
      * Runs this component and displays its output.
      *
      * @throws \QuickformException
-     * @throws \ReflectionException
      * @throws \Exception
      */
     public function run()
@@ -42,13 +41,12 @@ class SettingsComponent extends Manager implements NoAuthenticationSupport
             $settingsValues = $form->exportValues();
             $this->getSession()->set(self::PARAM_SETTINGS, serialize($settingsValues));
 
-            $settingsDisplayer = new SettingsOverview($settingsValues);
             $wizardHeader = $this->getWizardHeader();
             $wizardHeader->setSelectedStepIndex(array_search(self::ACTION_OVERVIEW, $this->getWizardHeaderActions()));
 
             $content = [];
 
-            $content[] = $settingsDisplayer->render();
+            $content[] = $this->getSettingsOverviewRenderer()->render($settingsValues);
             $content[] = $this->getButtons();
 
             $content = implode(PHP_EOL, $content);
@@ -151,5 +149,10 @@ class SettingsComponent extends Manager implements NoAuthenticationSupport
         }
 
         return $this->settingsForm;
+    }
+
+    public function getSettingsOverviewRenderer(): SettingsOverviewRenderer
+    {
+        return $this->getService(SettingsOverviewRenderer::class);
     }
 }

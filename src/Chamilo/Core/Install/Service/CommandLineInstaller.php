@@ -1,12 +1,14 @@
 <?php
-namespace Chamilo\Core\Install\Observer;
+namespace Chamilo\Core\Install\Service;
 
-use Chamilo\Core\Install\Configuration;
-use Chamilo\Core\Install\Factory;
-use Chamilo\Core\Install\StepResult;
+use Chamilo\Core\Install\Architecture\Domain\StepResult;
+use Chamilo\Core\Install\Architecture\Interfaces\InstallerObserverInterface;
 use Chamilo\Libraries\DependencyInjection\Traits\DependencyInjectionContainerTrait;
+use Symfony\Component\Config\FileLocator;
+use Symfony\Component\DependencyInjection\ContainerBuilder;
+use Symfony\Component\DependencyInjection\Loader\XmlFileLoader;
 
-class CommandLineInstaller implements InstallerObserver
+class CommandLineInstaller implements InstallerObserverInterface
 {
     use DependencyInjectionContainerTrait;
 
@@ -24,10 +26,9 @@ class CommandLineInstaller implements InstallerObserver
      */
     public function run(): void
     {
-        $installer_config = new Configuration();
-        $installer_config->load_config_file($this->configurationFile);
-
-        $installer = $this->getInstallerFactory()->getInstallerFromArray($this, $installer_config->as_values_array());
+        $installer = $this->getInstallerFactory()->getInstallerFromArray(
+            $this, $this->getConfigurationValuesFromFile($this->configurationFile)
+        );
         $installer->run();
     }
 
@@ -93,18 +94,33 @@ class CommandLineInstaller implements InstallerObserver
 
     private function checkResult(StepResult $result): string
     {
-        if ($result->get_success())
+        if ($result->isSuccessful())
         {
             return 'Ok';
         }
 
-        $reason = implode(', ', $result->get_messages());
+        $reason = implode(', ', $result->getMessages());
 
         return "Ko ($reason)";
     }
 
-    protected function getInstallerFactory(): Factory
+    /**
+     * @throws \Exception
+     */
+    protected function getConfigurationValuesFromFile(string $configurationFile): array
     {
-        return $this->getService(Factory::class);
+        $fileContainer = new ContainerBuilder();
+        $xmlFileLoader = new XmlFileLoader(
+            $fileContainer, new FileLocator($configurationFile)
+        );
+
+        $xmlFileLoader->load($configurationFile);
+
+        return $fileContainer->getParameterBag()->all();
+    }
+
+    protected function getInstallerFactory(): PlatformInstallerFactory
+    {
+        return $this->getService(PlatformInstallerFactory::class);
     }
 }

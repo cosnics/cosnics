@@ -63,6 +63,11 @@ class StorageUnitRepository
         return $this->storageUnitDatabase;
     }
 
+    public function initializeStorage(string $databaseName, bool $overwriteIfDatabaseAlreadyExists): bool
+    {
+        return $this->getStorageUnitDatabase()->initializeStorage($databaseName, $overwriteIfDatabaseAlreadyExists);
+    }
+
     public function optimize(string $storageUnitName): bool
     {
         return $this->getStorageUnitDatabase()->optimize($storageUnitName);

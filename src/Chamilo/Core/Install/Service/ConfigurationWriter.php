@@ -1,32 +1,23 @@
 <?php
 namespace Chamilo\Core\Install\Service;
 
-use Chamilo\Core\Install\Configuration;
-use Chamilo\Core\Install\Service\Interfaces\ConfigurationWriterInterface;
+use Chamilo\Core\Install\Architecture\Interfaces\ConfigurationWriterInterface;
 use InvalidArgumentException;
 use Symfony\Component\Filesystem\Filesystem;
 
 /**
  * Writes the installer configuration to a configuration file
  *
- * @author Sven Vanpoucke - Hogeschool Gent
+ * @author  Sven Vanpoucke - Hogeschool Gent
+ * @author  Hans De Bisschop <hans.de.bisschop@ehb.be>
  */
 class ConfigurationWriter implements ConfigurationWriterInterface
 {
-
-    /**
-     * @var string
-     */
-    protected $configurationTemplatePath;
+    protected string $configurationTemplatePath;
 
     protected Filesystem $filesystem;
 
-    /**
-     * XmlConfigurationWriter constructor.
-     *
-     * @param string $configurationTemplatePath
-     */
-    public function __construct(Filesystem $filesystem, $configurationTemplatePath)
+    public function __construct(Filesystem $filesystem, string $configurationTemplatePath)
     {
         if (!file_exists($configurationTemplatePath) || !is_readable($configurationTemplatePath))
         {
@@ -47,33 +38,32 @@ class ConfigurationWriter implements ConfigurationWriterInterface
     /**
      * Initializes the template parameters based on the given configuration
      *
-     * @param Configuration $configuration
-     *
-     * @return array
+     * @param string[][] $configuration
      */
-    protected function initializeTemplateParameters(Configuration $configuration)
+    protected function initializeTemplateParameters(array $configuration): array
     {
         $parameters = [];
 
         $parameters['chamilo.configuration.general.security_key'] = md5(uniqid(rand() . time()));
-        $parameters['chamilo.configuration.general.hashing_algorithm'] = $configuration->get_crypt_algorithm();
+        $parameters['chamilo.configuration.general.hashing_algorithm'] = $configuration['hashing_algorithm'];
         $parameters['chamilo.configuration.general.install_date'] = time();
-        $parameters['chamilo.configuration.database.driver'] = $configuration->get_db_driver();
-        $parameters['chamilo.configuration.database.username'] = $configuration->get_db_username();
-        $parameters['chamilo.configuration.database.password'] = $configuration->get_db_password();
-        $parameters['chamilo.configuration.database.host'] = $configuration->get_db_host();
-        $parameters['chamilo.configuration.database.name'] = $configuration->get_db_name();
+        $parameters['chamilo.configuration.database.driver'] = $configuration['database']['driver'];
+        $parameters['chamilo.configuration.database.username'] = $configuration['database']['username'];
+        $parameters['chamilo.configuration.database.password'] = $configuration['database']['password'];
+        $parameters['chamilo.configuration.database.host'] = $configuration['database']['host'];
+        $parameters['chamilo.configuration.database.name'] = $configuration['database']['name'];
+        $parameters['chamilo.configuration.database.charset'] = $configuration['database']['charset'];
         $parameters['chamilo.configuration.debug.show_errors'] = false;
         $parameters['chamilo.configuration.debug.enable_query_cache'] = true;
-        $parameters['chamilo.configuration.storage.archive_path'] = $configuration->get_archive_path();
-        $parameters['chamilo.configuration.storage.cache_path'] = $configuration->get_cache_path();
-        $parameters['chamilo.configuration.storage.garbage_path'] = $configuration->get_garbage_path();
-        $parameters['chamilo.configuration.storage.hotpotatoes_path'] = $configuration->get_hotpotatoes_path();
-        $parameters['chamilo.configuration.storage.logs_path'] = $configuration->get_logs_path();
-        $parameters['chamilo.configuration.storage.repository_path'] = $configuration->get_repository_path();
-        $parameters['chamilo.configuration.storage.scorm_path'] = $configuration->get_scorm_path();
-        $parameters['chamilo.configuration.storage.temp_path'] = $configuration->get_temp_path();
-        $parameters['chamilo.configuration.storage.userpictures_path'] = $configuration->get_userpictures_path();
+        $parameters['chamilo.configuration.storage.archive_path'] = $configuration['path']['archive_path'];
+        $parameters['chamilo.configuration.storage.cache_path'] = $configuration['path']['cache_path'];
+        $parameters['chamilo.configuration.storage.garbage_path'] = $configuration['path']['garbage_path'];
+        $parameters['chamilo.configuration.storage.hotpotatoes_path'] = $configuration['path']['hotpotatoes_path'];
+        $parameters['chamilo.configuration.storage.logs_path'] = $configuration['path']['logs_path'];
+        $parameters['chamilo.configuration.storage.repository_path'] = $configuration['path']['repository_path'];
+        $parameters['chamilo.configuration.storage.scorm_path'] = $configuration['path']['scorm_path'];
+        $parameters['chamilo.configuration.storage.temp_path'] = $configuration['path']['temp_path'];
+        $parameters['chamilo.configuration.storage.userpictures_path'] = $configuration['path']['userpictures_path'];
 
         return $parameters;
     }
@@ -81,20 +71,15 @@ class ConfigurationWriter implements ConfigurationWriterInterface
     /**
      * Reads the content of the configuration template file
      */
-    protected function readTemplate()
+    protected function readTemplate(): string
     {
         return file_get_contents($this->configurationTemplatePath);
     }
 
     /**
      * Substitutes the given parameters in the given configuration content
-     *
-     * @param string $configurationContent
-     * @param array $parameters
-     *
-     * @return string
      */
-    protected function substituteParameters($configurationContent, $parameters = [])
+    protected function substituteParameters(string $configurationContent, array $parameters = []): string
     {
         foreach ($parameters as $variable => $value)
         {
@@ -106,14 +91,11 @@ class ConfigurationWriter implements ConfigurationWriterInterface
 
     /**
      * Writes the installer configuration to a configuration file
-     *
-     * @param Configuration $configuration
-     * @param $outputFile
      */
-    public function writeConfiguration(Configuration $configuration, $outputFile)
+    public function writeConfiguration(array $configurationValues, string $outputFile): void
     {
         $templateContent = $this->readTemplate();
-        $parameters = $this->initializeTemplateParameters($configuration);
+        $parameters = $this->initializeTemplateParameters($configurationValues);
         $templateContent = $this->substituteParameters($templateContent, $parameters);
 
         $this->writeConfigurationFile($templateContent, $outputFile);
@@ -121,11 +103,8 @@ class ConfigurationWriter implements ConfigurationWriterInterface
 
     /**
      * Writes the content of the configuration to the given output file
-     *
-     * @param string $configurationContent
-     * @param string $outputFile
      */
-    protected function writeConfigurationFile($configurationContent, $outputFile)
+    protected function writeConfigurationFile(string $configurationContent, string $outputFile): void
     {
         if (!is_dir(dirname($outputFile)))
         {

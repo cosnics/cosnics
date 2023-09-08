@@ -1,11 +1,11 @@
 <?php
 namespace Chamilo\Core\Install\Component;
 
-use Chamilo\Core\Install\Factory;
+use Chamilo\Core\Install\Architecture\Domain\StepResult;
+use Chamilo\Core\Install\Architecture\Interfaces\InstallerObserverInterface;
 use Chamilo\Core\Install\Manager;
-use Chamilo\Core\Install\Observer\InstallerObserver;
-use Chamilo\Core\Install\PlatformInstaller;
-use Chamilo\Core\Install\StepResult;
+use Chamilo\Core\Install\Service\PlatformInstaller;
+use Chamilo\Core\Install\Service\PlatformInstallerFactory;
 use Chamilo\Libraries\Architecture\Interfaces\NoAuthenticationSupport;
 use Chamilo\Libraries\Format\Structure\Glyph\FontAwesomeGlyph;
 use Chamilo\Libraries\Format\Structure\Glyph\IdentGlyph;
@@ -18,7 +18,7 @@ use Symfony\Component\HttpFoundation\StreamedResponse;
  * @author  Hans De Bisschop <hans.de.bisschop@ehb.be>
  * @author  Magali Gillard <magali.gillard@ehb.be>
  */
-class InstallerComponent extends Manager implements NoAuthenticationSupport, InstallerObserver
+class InstallerComponent extends Manager implements NoAuthenticationSupport, InstallerObserverInterface
 {
 
     protected PlatformInstaller $installer;
@@ -59,8 +59,8 @@ class InstallerComponent extends Manager implements NoAuthenticationSupport, Ins
         $glyph = new FontAwesomeGlyph('folder', ['fa-lg', 'fa-fw'], null, 'fas');
 
         return $this->renderResult(
-            $this->getTranslator()->trans('Folders', [], Manager::CONTEXT), $result->get_success(),
-            implode('<br />' . PHP_EOL, $result->get_messages()), $glyph
+            $this->getTranslator()->trans('Folders', [], Manager::CONTEXT), $result->isSuccessful(),
+            implode('<br />' . PHP_EOL, $result->getMessages()), $glyph
         );
     }
 
@@ -80,14 +80,14 @@ class InstallerComponent extends Manager implements NoAuthenticationSupport, Ins
     public function afterPackageInstallation(StepResult $result): string
     {
         $title =
-            $this->getTranslator()->trans('TypeName', [], $result->get_context()) . ' (' . $result->get_context() . ')';
+            $this->getTranslator()->trans('TypeName', [], $result->getContext()) . ' (' . $result->getContext() . ')';
 
         $glyph = new NamespaceIdentGlyph(
-            $result->get_context(), true, false, false, IdentGlyph::SIZE_SMALL, ['fa-fw']
+            $result->getContext(), true, false, false, IdentGlyph::SIZE_SMALL, ['fa-fw']
         );
 
         return $this->renderResult(
-            $title, $result->get_success(), implode('<br />' . PHP_EOL, $result->get_messages()), $glyph
+            $title, $result->isSuccessful(), implode('<br />' . PHP_EOL, $result->getMessages()), $glyph
         );
     }
 
@@ -106,8 +106,8 @@ class InstallerComponent extends Manager implements NoAuthenticationSupport, Ins
         $glyph = new FontAwesomeGlyph('cog', ['fa-lg', 'fa-fw'], null, 'fas');
 
         return $this->renderResult(
-            $this->getTranslator()->trans('Configuration', [], Manager::CONTEXT), $result->get_success(),
-            implode('<br />' . PHP_EOL, $result->get_messages()), $glyph
+            $this->getTranslator()->trans('Configuration', [], Manager::CONTEXT), $result->isSuccessful(),
+            implode('<br />' . PHP_EOL, $result->getMessages()), $glyph
         );
     }
 
@@ -116,8 +116,8 @@ class InstallerComponent extends Manager implements NoAuthenticationSupport, Ins
         $glyph = new FontAwesomeGlyph('database', ['fa-lg', 'fa-fw'], null, 'fas');
 
         return $this->renderResult(
-            $this->getTranslator()->trans('Database', [], Manager::CONTEXT), $result->get_success(),
-            implode('<br />' . PHP_EOL, $result->get_messages()), $glyph
+            $this->getTranslator()->trans('Database', [], Manager::CONTEXT), $result->isSuccessful(),
+            implode('<br />' . PHP_EOL, $result->getMessages()), $glyph
         );
     }
 
@@ -151,7 +151,10 @@ class InstallerComponent extends Manager implements NoAuthenticationSupport, Ins
         return $this->getTranslator()->trans('InstallerComponentInformation', [], self::CONTEXT);
     }
 
-    public function getInstaller(InstallerObserver $installerObserver): PlatformInstaller
+    /**
+     * @throws \Chamilo\Libraries\Storage\Exception\ConnectionException
+     */
+    public function getInstaller(InstallerObserverInterface $installerObserver): PlatformInstaller
     {
         if (!isset($this->installer))
         {
@@ -169,9 +172,9 @@ class InstallerComponent extends Manager implements NoAuthenticationSupport, Ins
         return $this->installer;
     }
 
-    protected function getInstallerFactory(): Factory
+    protected function getInstallerFactory(): PlatformInstallerFactory
     {
-        return $this->getService(Factory::class);
+        return $this->getService(PlatformInstallerFactory::class);
     }
 
     public function renderHeader(string $pageTitle = ''): string

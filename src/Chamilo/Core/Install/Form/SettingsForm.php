@@ -55,36 +55,40 @@ class SettingsForm extends FormValidator
         $translator = $this->getTranslator();
 
         $this->addElement(
-            'select', 'database_driver', $translator->trans('DatabaseDriver', [], Manager::CONTEXT),
+            'select', 'database[driver]', $translator->trans('DatabaseDriver', [], Manager::CONTEXT),
             $this->get_database_drivers()
         );
         $this->addElement(
-            'text', 'database_host', $translator->trans('DatabaseHost', [], Manager::CONTEXT), ['size' => '40']
+            'text', 'database[host]', $translator->trans('DatabaseHost', [], Manager::CONTEXT), ['size' => '40']
         );
         $this->addElement(
-            'text', 'database_name', $translator->trans('DatabaseName', [], Manager::CONTEXT), ['size' => '40']
+            'text', 'database[name]', $translator->trans('DatabaseName', [], Manager::CONTEXT), ['size' => '40']
         );
 
         $this->addElement(
-            'text', 'database_username', $translator->trans('DatabaseLogin', [], Manager::CONTEXT), ['size' => '40']
+            'text', 'database[username]', $translator->trans('DatabaseLogin', [], Manager::CONTEXT), ['size' => '40']
         );
         $this->addElement(
-            'password', 'database_password', $translator->trans('DatabasePassword', [], Manager::CONTEXT),
+            'password', 'database[password]', $translator->trans('DatabasePassword', [], Manager::CONTEXT),
             ['size' => '40']
         );
 
         $this->addElement(
-            'checkbox', 'database_overwrite', $translator->trans('DatabaseOverwrite', [], Manager::CONTEXT)
+            'text', 'database[charset]', $translator->trans('DatabaseCharset', [], Manager::CONTEXT), ['size' => '40']
         );
 
-        $this->addRule('database_host', 'ThisFieldIsRequired', 'required');
-        $this->addRule('database_driver', 'ThisFieldIsRequired', 'required');
-        $this->addRule('database_name', 'ThisFieldIsRequired', 'required');
+        $this->addElement(
+            'checkbox', 'database[overwrite]', $translator->trans('DatabaseOverwrite', [], Manager::CONTEXT)
+        );
+
+        $this->addRule('database[host]', 'ThisFieldIsRequired', 'required');
+        $this->addRule('database[driver]', 'ThisFieldIsRequired', 'required');
+        $this->addRule('database[name]', 'ThisFieldIsRequired', 'required');
 
         $pattern = '/(^[a-zA-Z$_][0-9a-zA-Z$_]*$)|(^[0-9][0-9a-zA-Z$_]*[a-zA-Z$_][0-9a-zA-Z$_]*$)/';
-        $this->addRule('database_name', 'OnlyCharactersNumbersUnderscoresAndDollarSigns', 'regex', $pattern);
+        $this->addRule('database[name]', 'OnlyCharactersNumbersUnderscoresAndDollarSigns', 'regex', $pattern);
         $this->addRule(
-            ['database_driver', 'database_host', 'database_username', 'database_password', 'database_name'],
+            ['database[driver]', 'database[host]', 'database[username]', 'database[password]', 'database[name]'],
             $translator->trans('CouldNotConnectToDatabase', [], Manager::CONTEXT), 'validate_database_connection'
         );
     }
@@ -181,25 +185,34 @@ class SettingsForm extends FormValidator
 
         $this->addElement('category', $translator->trans('Storage', [], Manager::CONTEXT));
         $this->addElement(
-            'text', 'archive_path', $translator->trans('ArchivePath', [], Manager::CONTEXT), ['size' => '40']
-        );
-        $this->addElement('text', 'cache_path', $translator->trans('CachePath', [], Manager::CONTEXT), ['size' => '40']
+            'text', 'path[archive_path]', $translator->trans('ArchivePath', [], Manager::CONTEXT), ['size' => '40']
         );
         $this->addElement(
-            'text', 'garbage_path', $translator->trans('GarbagePath', [], Manager::CONTEXT), ['size' => '40']
+            'text', 'path[cache_path]', $translator->trans('CachePath', [], Manager::CONTEXT), ['size' => '40']
         );
         $this->addElement(
-            'text', 'hotpotatoes_path', $translator->trans('HotpotatoesPath', [], Manager::CONTEXT), ['size' => '40']
+            'text', 'path[garbage_path]', $translator->trans('GarbagePath', [], Manager::CONTEXT), ['size' => '40']
         );
-        $this->addElement('text', 'logs_path', $translator->trans('LogsPath', [], Manager::CONTEXT), ['size' => '40']);
         $this->addElement(
-            'text', 'repository_path', $translator->trans('RepositoryPath', [], Manager::CONTEXT), ['size' => '40']
+            'text', 'path[hotpotatoes_path]', $translator->trans('HotpotatoesPath', [], Manager::CONTEXT),
+            ['size' => '40']
         );
-        $this->addElement('text', 'scorm_path', $translator->trans('ScormPath', [], Manager::CONTEXT), ['size' => '40']
-        );
-        $this->addElement('text', 'temp_path', $translator->trans('TempPath', [], Manager::CONTEXT), ['size' => '40']);
         $this->addElement(
-            'text', 'userpictures_path', $translator->trans('UserPicturesPath', [], Manager::CONTEXT), ['size' => '40']
+            'text', 'path[logs_path]', $translator->trans('LogsPath', [], Manager::CONTEXT), ['size' => '40']
+        );
+        $this->addElement(
+            'text', 'path[repository_path]', $translator->trans('RepositoryPath', [], Manager::CONTEXT),
+            ['size' => '40']
+        );
+        $this->addElement(
+            'text', 'path[scorm_path]', $translator->trans('ScormPath', [], Manager::CONTEXT), ['size' => '40']
+        );
+        $this->addElement(
+            'text', 'path[temp_path]', $translator->trans('TempPath', [], Manager::CONTEXT), ['size' => '40']
+        );
+        $this->addElement(
+            'text', 'path[userpictures_path]', $translator->trans('UserPicturesPath', [], Manager::CONTEXT),
+            ['size' => '40']
         );
     }
 
@@ -571,9 +584,10 @@ class SettingsForm extends FormValidator
         else
         {
             // Database
-            $defaultValues['database_driver'] = 'mysqli';
-            $defaultValues['database_host'] = 'localhost';
-            $defaultValues['database_name'] = 'cosnics';
+            $defaultValues['database']['driver'] = 'mysqli';
+            $defaultValues['database']['host'] = 'localhost';
+            $defaultValues['database']['name'] = 'cosnics';
+            $defaultValues['database']['charset'] = 'utf8';
 
             // General settings
 
@@ -595,16 +609,16 @@ class SettingsForm extends FormValidator
             $defaultValues['hashing_algorithm'] = 'Sha1';
 
             // Storage paths
-            $defaultValues['archive_path'] = $this->getConfigurablePathBuilder()->getArchivePath();
-            $defaultValues['cache_path'] = $this->getConfigurablePathBuilder()->getCachePath();
-            $defaultValues['garbage_path'] = $this->getConfigurablePathBuilder()->getGarbagePath();
-            $defaultValues['hotpotatoes_path'] =
+            $defaultValues['path']['archive_path'] = $this->getConfigurablePathBuilder()->getArchivePath();
+            $defaultValues['path']['cache_path'] = $this->getConfigurablePathBuilder()->getConfiguredCachePath();
+            $defaultValues['path']['garbage_path'] = $this->getConfigurablePathBuilder()->getGarbagePath();
+            $defaultValues['path']['hotpotatoes_path'] =
                 $this->getSystemPathBuilder()->getPublicStoragePath(Hotpotatoes::CONTEXT);
-            $defaultValues['logs_path'] = $this->getConfigurablePathBuilder()->getLogPath();
-            $defaultValues['repository_path'] = $this->getConfigurablePathBuilder()->getRepositoryPath();
-            $defaultValues['scorm_path'] = $this->getConfigurablePathBuilder()->getScormPath();
-            $defaultValues['temp_path'] = $this->getConfigurablePathBuilder()->getTemporaryPath();
-            $defaultValues['userpictures_path'] = $this->getConfigurablePathBuilder()->getUserPicturesPath();
+            $defaultValues['path']['logs_path'] = $this->getConfigurablePathBuilder()->getLogPath();
+            $defaultValues['path']['repository_path'] = $this->getConfigurablePathBuilder()->getRepositoryPath();
+            $defaultValues['path']['scorm_path'] = $this->getConfigurablePathBuilder()->getScormPath();
+            $defaultValues['path']['temp_path'] = $this->getConfigurablePathBuilder()->getConfiguredTempPath();
+            $defaultValues['path']['userpictures_path'] = $this->getConfigurablePathBuilder()->getUserPicturesPath();
         }
 
         parent::setDefaults($defaultValues);

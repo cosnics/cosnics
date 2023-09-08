@@ -1,13 +1,13 @@
 <?php
 namespace Chamilo\Core\Install\Test\Integration\Service;
 
-use Chamilo\Core\Install\Configuration;
+use Chamilo\Core\Install\Architecture\Interfaces\ConfigurationWriterInterface;
 use Chamilo\Core\Install\Service\ConfigurationWriter;
-use Chamilo\Core\Install\Service\Interfaces\ConfigurationWriterInterface;
 use Chamilo\Libraries\Architecture\ClassnameUtilities;
 use Chamilo\Libraries\Architecture\Test\TestCases\ChamiloTestCase;
 use Chamilo\Libraries\File\SystemPathBuilder;
 use Chamilo\Libraries\Utilities\StringUtilities;
+use Symfony\Component\Filesystem\Filesystem;
 
 /**
  * Test the class
@@ -20,13 +20,13 @@ class ConfigurationWriterTest extends ChamiloTestCase
 
     protected ConfigurationWriterInterface $configurationWriter;
 
-    protected \Symfony\Component\Filesystem\Filesystem $filesystem;
+    protected Filesystem $filesystem;
 
     public function setUp(): void
     {
         $pathBuilder = new SystemPathBuilder(new ClassnameUtilities(new StringUtilities()));
 
-        $this->filesystem = new \Symfony\Component\Filesystem\Filesystem();
+        $this->filesystem = new Filesystem();
         $this->configurationWriter = new ConfigurationWriter(
             $this->filesystem,
             $pathBuilder->getResourcesPath('Chamilo\Core\Install') . 'Templates/configuration.xml.tpl'
@@ -40,12 +40,11 @@ class ConfigurationWriterTest extends ChamiloTestCase
 
     public function testWriteConfiguration()
     {
-        $configuration = new Configuration();
-        $configuration->set_db_name('chamilo_test_database');
+        $configurationValues = ['database' => ['name' => 'chamilo_test_database']];
 
         $tempPath = sys_get_temp_dir() . '/configuration.xml';
 
-        $this->configurationWriter->writeConfiguration($configuration, $tempPath);
+        $this->configurationWriter->writeConfiguration($configurationValues, $tempPath);
 
         $configurationContents = file_get_contents($tempPath);
 
