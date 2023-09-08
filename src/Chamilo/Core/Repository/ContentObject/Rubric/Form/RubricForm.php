@@ -13,7 +13,6 @@ use Chamilo\Core\Repository\Workspace\Architecture\WorkspaceInterface;
 use Chamilo\Libraries\DependencyInjection\DependencyInjectionContainerBuilder;
 use Chamilo\Libraries\Translation\Translation;
 use Symfony\Component\DependencyInjection\ContainerInterface;
-use Twig_Environment;
 
 /**
  *

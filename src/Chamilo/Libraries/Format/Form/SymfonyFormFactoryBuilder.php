@@ -18,8 +18,6 @@ use Symfony\Component\Validator\Validator\ValidatorInterface;
 use Twig\Loader\ChainLoader;
 use Twig\Loader\FilesystemLoader;
 use Twig\RuntimeLoader\FactoryRuntimeLoader;
-use Twig_Environment;
-use Twig_Loader_Filesystem;
 
 /**
  * Builds the SymfonyFormFactory
