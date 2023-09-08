@@ -15,9 +15,9 @@ interface PublicationModifierInterface
 {
     public function addContentObjectPublicationAttributesElementsToForm(FormValidator $formValidator);
 
-    public function deleteContentObjectPublication(int $publicationIdentifier): bool;
+    public function deleteContentObjectPublication(string $publicationIdentifier): bool;
 
-    public function getContentObjectPublicationAttributes(int $publicationIdentifier): Attributes;
+    public function getContentObjectPublicationAttributes(string $publicationIdentifier): Attributes;
 
     public function publishContentObject(
         ContentObject $contentObject, PublicationTarget $publicationTarget, array $options = []

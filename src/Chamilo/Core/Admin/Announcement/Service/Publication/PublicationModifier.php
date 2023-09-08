@@ -43,7 +43,7 @@ class PublicationModifier implements PublicationModifierInterface
     {
     }
 
-    public function deleteContentObjectPublication(int $publicationIdentifier): bool
+    public function deleteContentObjectPublication(string $publicationIdentifier): bool
     {
         return $this->getPublicationService()->deletePublicationByIdentifier($publicationIdentifier);
     }
@@ -51,7 +51,7 @@ class PublicationModifier implements PublicationModifierInterface
     /**
      * @throws \Exception
      */
-    public function getContentObjectPublicationAttributes(int $publicationIdentifier): Attributes
+    public function getContentObjectPublicationAttributes(string $publicationIdentifier): Attributes
     {
         return $this->getPublicationAttributesGenerator()->createAttributesFromRecord(
             $this->getPublicationService()->findPublicationRecordByIdentifier($publicationIdentifier)
@@ -79,7 +79,6 @@ class PublicationModifier implements PublicationModifierInterface
     }
 
     /**
-     * @throws \ReflectionException
      * @throws \Exception
      */
     public function publishContentObject(
@@ -88,7 +87,7 @@ class PublicationModifier implements PublicationModifierInterface
     {
         $publication =
             $this->getPublicationService()->createPublicationForUserIdentifierAndContentObjectIdentifierFromValues(
-                $publicationTarget->getUserIdentifier(), (int) $contentObject->getId(), []
+                $publicationTarget->getUserIdentifier(), $contentObject->getId(), []
             );
 
         if (!$publication instanceof Publication)
@@ -142,8 +141,7 @@ class PublicationModifier implements PublicationModifierInterface
 
     public function updateContentObjectPublicationContentObjectIdentifier(Attributes $publicationAttributes): bool
     {
-        $publication =
-            $this->getPublicationService()->findPublicationByIdentifier((int) $publicationAttributes->getId());
+        $publication = $this->getPublicationService()->findPublicationByIdentifier($publicationAttributes->getId());
 
         if ($publication instanceof Publication)
         {

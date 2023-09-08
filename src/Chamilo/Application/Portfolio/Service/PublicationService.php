@@ -173,7 +173,7 @@ class PublicationService
      *
      * @return bool
      */
-    public function deletePublicationByIdentifier(int $publicationIdentifier)
+    public function deletePublicationByIdentifier(string $publicationIdentifier)
     {
         $publication = $this->findPublicationByIdentifier($publicationIdentifier);
 
@@ -243,7 +243,7 @@ class PublicationService
      * @return string[]
      * @throws \Exception
      */
-    public function findPublicationRecordByIdentifier(int $publicationIdentifier)
+    public function findPublicationRecordByIdentifier(string $publicationIdentifier)
     {
         return $this->getPublicationRepository()->findPublicationRecordByIdentifier($publicationIdentifier);
     }
@@ -281,7 +281,7 @@ class PublicationService
      *
      * @return \Chamilo\Application\Portfolio\Storage\DataClass\Publication[]
      */
-    public function findPublicationsForContentObjectIdentifier(int $contentObjectIdentifier)
+    public function findPublicationsForContentObjectIdentifier(string $contentObjectIdentifier)
     {
         return $this->getPublicationRepository()->findPublicationsForContentObjectIdentifier($contentObjectIdentifier);
     }

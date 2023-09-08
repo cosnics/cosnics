@@ -3,6 +3,7 @@ namespace Chamilo\Core\Home\Repository;
 
 use Chamilo\Configuration\Service\Consulter\RegistrationConsulter;
 use Chamilo\Core\Home\Storage\DataClass\Element;
+use Chamilo\Libraries\Storage\DataClass\DataClass;
 use Chamilo\Libraries\Storage\DataManager\Repository\DataClassRepository;
 use Chamilo\Libraries\Storage\Parameters\DataClassCountParameters;
 use Chamilo\Libraries\Storage\Parameters\DataClassDistinctParameters;
@@ -46,9 +47,6 @@ class HomeRepository
         return $this->getDataClassRepository()->count(Element::class, $parameters);
     }
 
-    /**
-     * @throws \Chamilo\Libraries\Storage\Exception\DataClassNoResultException
-     */
     public function createElement(Element $element): bool
     {
         return $this->getDataClassRepository()->create($element);
@@ -131,7 +129,7 @@ class HomeRepository
         return $this->getDataClassRepository()->distinct(
             Element::class, new DataClassDistinctParameters(
                 new AndCondition($conditions),
-                new RetrieveProperties([new PropertyConditionVariable(Element::class, Element::PROPERTY_ID)])
+                new RetrieveProperties([new PropertyConditionVariable(Element::class, DataClass::PROPERTY_ID)])
             )
         );
     }
@@ -228,9 +226,6 @@ class HomeRepository
         return $this->registrationConsulter;
     }
 
-    /**
-     * @throws \Chamilo\Libraries\Storage\Exception\DataClassNoResultException
-     */
     public function updateElement(Element $element): bool
     {
         return $this->getDataClassRepository()->update($element);

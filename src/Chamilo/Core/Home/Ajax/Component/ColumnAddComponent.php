@@ -50,7 +50,7 @@ class ColumnAddComponent extends Manager
                 {
                     $newColumnWidth = $this->determineNewColumnWidth($columns);
                 }
-                catch (Exception $exception)
+                catch (Exception)
                 {
                     $newColumnWidth = 1;
                     $newWidths = $this->recalculateColumnWidths($columns);

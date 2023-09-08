@@ -51,14 +51,14 @@ class PublicationModifier implements PublicationModifierInterface
         return $attributes;
     }
 
-    public function deleteContentObjectPublication(int $publicationIdentifier): bool
+    public function deleteContentObjectPublication(string $publicationIdentifier): bool
     {
         $this->getContentObjectPublicationService()->deleteContentObjectPublicationById($publicationIdentifier);
 
         return true;
     }
 
-    public function getContentObjectPublicationAttributes(int $publicationIdentifier): Attributes
+    public function getContentObjectPublicationAttributes(string $publicationIdentifier): Attributes
     {
         $publication =
             $this->getContentObjectPublicationService()->getContentObjectPublicationById($publicationIdentifier);
@@ -105,7 +105,7 @@ class PublicationModifier implements PublicationModifierInterface
         {
             $publication->set_content_object_id($publicationAttributes->get_content_object_id());
 
-            return $publication->update();
+            return $this->getContentObjectPublicationService()->updateContentObjectPublication($publication);
         }
         else
         {

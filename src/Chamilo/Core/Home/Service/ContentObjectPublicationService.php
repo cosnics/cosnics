@@ -47,10 +47,13 @@ class ContentObjectPublicationService
         );
     }
 
-    /**
-     * @throws \ReflectionException
-     * @throws \Chamilo\Libraries\Storage\Exception\DataClassNoResultException
-     */
+    public function deleteContentObjectPublication(ContentObjectPublication $contentObjectPublication): bool
+    {
+        return $this->getContentObjectPublicationRepository()->deleteContentObjectPublication(
+            $contentObjectPublication
+        );
+    }
+
     public function deleteContentObjectPublicationById(string $publicationId): bool
     {
         $contentObjectPublication = $this->getContentObjectPublicationById($publicationId);
@@ -60,7 +63,7 @@ class ContentObjectPublicationService
             return false;
         }
 
-        return $contentObjectPublication->delete();
+        return $this->deleteContentObjectPublication($contentObjectPublication);
     }
 
     public function deleteContentObjectPublicationsByContentObjectId(string $contentObjectId): void
@@ -120,9 +123,6 @@ class ContentObjectPublicationService
         );
     }
 
-    /**
-     * @throws \Chamilo\Libraries\Storage\Exception\DataClassNoResultException
-     */
     public function publishContentObject(Element $element, string $contentObjectId): void
     {
         if ($contentObjectId == 0)
@@ -142,9 +142,6 @@ class ContentObjectPublicationService
         }
     }
 
-    /**
-     * @throws \Chamilo\Libraries\Storage\Exception\DataClassNoResultException
-     */
     public function setOnlyContentObjectForElement(Element $element, string $contentObjectId): void
     {
         if (!$this->getContentObjectPublicationRepository()->deleteContentObjectPublicationsForElement(
@@ -155,5 +152,12 @@ class ContentObjectPublicationService
         }
 
         $this->publishContentObject($element, $contentObjectId);
+    }
+
+    public function updateContentObjectPublication(ContentObjectPublication $contentObjectPublication): bool
+    {
+        return $this->getContentObjectPublicationRepository()->updateContentObjectPublication(
+            $contentObjectPublication
+        );
     }
 }

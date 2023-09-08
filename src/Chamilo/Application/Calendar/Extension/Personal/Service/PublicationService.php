@@ -137,11 +137,9 @@ class PublicationService
     }
 
     /**
-     * @param int $publicationIdentifier
-     *
      * @return bool
      */
-    public function deletePublicationByIdentifier(int $publicationIdentifier)
+    public function deletePublicationByIdentifier(string $publicationIdentifier)
     {
         $publication = $this->findPublicationByIdentifier($publicationIdentifier);
 
@@ -176,22 +174,18 @@ class PublicationService
     }
 
     /**
-     * @param int $publicationIdentifier
-     *
      * @return \Chamilo\Application\Calendar\Extension\Personal\Storage\DataClass\Publication
      */
-    public function findPublicationByIdentifier(int $publicationIdentifier)
+    public function findPublicationByIdentifier(string $publicationIdentifier)
     {
         return $this->getPublicationRepository()->findPublicationByIdentifier($publicationIdentifier);
     }
 
     /**
-     * @param int $publicationIdentifier
-     *
      * @return string[]
      * @throws \Exception
      */
-    public function findPublicationRecordByIdentifier(int $publicationIdentifier)
+    public function findPublicationRecordByIdentifier(string $publicationIdentifier)
     {
         return $this->getPublicationRepository()->findPublicationRecordByIdentifier($publicationIdentifier);
     }

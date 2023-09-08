@@ -55,12 +55,14 @@ class ContentObjectPublicationRepository
         );
     }
 
-    /**
-     * @throws \Chamilo\Libraries\Storage\Exception\DataClassNoResultException
-     */
     public function createContentObjectPublication(ContentObjectPublication $contentObjectPublication): bool
     {
         return $this->getDataClassRepository()->create($contentObjectPublication);
+    }
+
+    public function deleteContentObjectPublication(ContentObjectPublication $contentObjectPublication): bool
+    {
+        return $this->getDataClassRepository()->delete($contentObjectPublication);
     }
 
     public function deleteContentObjectPublicationsByContentObjectId(string $contentObjectId): bool
@@ -168,5 +170,10 @@ class ContentObjectPublicationRepository
     public function getPublicationRepository(): PublicationRepository
     {
         return $this->publicationRepository;
+    }
+
+    public function updateContentObjectPublication(ContentObjectPublication $contentObjectPublication): bool
+    {
+        return $this->getDataClassRepository()->update($contentObjectPublication);
     }
 }

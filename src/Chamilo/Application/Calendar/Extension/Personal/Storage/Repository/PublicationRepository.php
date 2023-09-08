@@ -129,7 +129,7 @@ class PublicationRepository
      *
      * @return \Chamilo\Application\Calendar\Extension\Personal\Storage\DataClass\Publication
      */
-    public function findPublicationByIdentifier(int $publicationIdentifier)
+    public function findPublicationByIdentifier(string $publicationIdentifier)
     {
         return $this->getDataClassRepository()->retrieveById(Publication::class, $publicationIdentifier);
     }
@@ -140,7 +140,7 @@ class PublicationRepository
      * @return string[]
      * @throws \Exception
      */
-    public function findPublicationRecordByIdentifier(int $publicationIdentifier)
+    public function findPublicationRecordByIdentifier(string $publicationIdentifier)
     {
         $condition = new EqualityCondition(
             new PropertyConditionVariable(Publication::class, Publication::PROPERTY_ID),

@@ -130,7 +130,7 @@ class PublicationModifier implements PublicationModifierInterface
      * @throws \ReflectionException
      * @throws \Chamilo\Libraries\Storage\Exception\DataClassNoResultException
      */
-    public function deleteContentObjectPublication(int $publicationIdentifier): bool
+    public function deleteContentObjectPublication(string $publicationIdentifier): bool
     {
         if (empty($context) || $context == ContentObjectPublication::class)
         {
@@ -196,7 +196,7 @@ class PublicationModifier implements PublicationModifierInterface
         return $this->configurablePathBuilder;
     }
 
-    public function getContentObjectPublicationAttributes(int $publicationIdentifier): Attributes
+    public function getContentObjectPublicationAttributes(string $publicationIdentifier): Attributes
     {
         return DataManager::get_content_object_publication_attribute($publicationIdentifier);
 
