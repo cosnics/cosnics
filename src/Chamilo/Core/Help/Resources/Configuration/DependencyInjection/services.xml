@@ -11,5 +11,7 @@
             <tag name="Chamilo\Core\Admin\Service\ActionProvider"/>
         </service>
 
+        <service id="Chamilo\Core\Help\Service\HelpService"/>
+        <service id="Chamilo\Core\Help\Storage\Repository\HelpRepository"/>
     </services>
 </container>

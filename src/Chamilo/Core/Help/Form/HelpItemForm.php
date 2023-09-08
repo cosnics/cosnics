@@ -3,76 +3,62 @@ namespace Chamilo\Core\Help\Form;
 
 use Chamilo\Core\Help\Storage\DataClass\HelpItem;
 use Chamilo\Libraries\Format\Form\FormValidator;
-use Chamilo\Libraries\Translation\Translation;
 use Chamilo\Libraries\Utilities\StringUtilities;
 
 /**
- *
- * @package help.lib.forms
+ * @package Chamilo\Core\Help\Form
  */
 class HelpItemForm extends FormValidator
 {
 
-    private $help_item;
+    private HelpItem $helpItem;
 
-    public function __construct($help_item, $action)
+    /**
+     * @throws \QuickformException
+     */
+    public function __construct(HelpItem $helpItem, $action)
     {
         parent::__construct('help_item', self::FORM_METHOD_POST, $action);
 
-        $this->help_item = $help_item;
-        $this->build_basic_form();
+        $this->helpItem = $helpItem;
+        $this->buildBasicForm();
 
         $this->setDefaults();
     }
 
-    public function build_basic_form()
+    /**
+     * @throws \QuickformException
+     */
+    public function buildBasicForm(): void
     {
+        $translator = $this->getTranslator();
+
         $this->addElement(
-            'text',
-            HelpItem::PROPERTY_URL,
-            Translation::get('URL', null, StringUtilities::LIBRARIES),
-            array('size' => '100'));
+            'text', HelpItem::PROPERTY_URL, $translator->trans('URL', [], StringUtilities::LIBRARIES), ['size' => '100']
+        );
         $this->addRule(
-            HelpItem::PROPERTY_URL,
-            Translation::get('Required', null, StringUtilities::LIBRARIES),
-            'required');
+            HelpItem::PROPERTY_URL, $translator->trans('Required', [], StringUtilities::LIBRARIES), 'required'
+        );
 
         $buttons[] = $this->createElement(
-            'style_submit_button',
-            'submit',
-            Translation::get('Save', null, StringUtilities::LIBRARIES));
+            'style_submit_button', 'submit', $translator->trans('Save', [], StringUtilities::LIBRARIES)
+        );
         $buttons[] = $this->createElement(
-            'style_reset_button',
-            'reset',
-            Translation::get('Reset', null, StringUtilities::LIBRARIES));
+            'style_reset_button', 'reset', $translator->trans('Reset', [], StringUtilities::LIBRARIES)
+        );
 
         $this->addGroup($buttons, 'buttons', null, '&nbsp;', false);
     }
 
-    public function update_help_item()
+    public function getHelpItem(): HelpItem
     {
-        $help_item = $this->help_item;
-        $values = $this->exportValues();
-
-        $help_item->set_url($values[HelpItem::PROPERTY_URL]);
-
-        return $help_item->update();
+        return $this->helpItem;
     }
 
-    /**
-     * Sets default values.
-     *
-     * @param array $defaults Default values for this form's parameters.
-     */
-    public function setDefaults($defaults = [], $filter = null)
+    public function setDefaults(array $defaultValues = [], $filter = null)
     {
-        $help_item = $this->help_item;
-        $defaults[HelpItem::PROPERTY_URL] = $help_item->get_url();
+        $defaults[HelpItem::PROPERTY_URL] = $this->getHelpItem()->get_url();
+
         parent::setDefaults($defaults);
-    }
-
-    public function get_help_item()
-    {
-        return $this->help_item;
     }
 }

@@ -2,23 +2,15 @@
 namespace Chamilo\Core\Help;
 
 use Chamilo\Core\Admin\Core\BreadcrumbGenerator;
-use Chamilo\Core\Help\Storage\DataClass\HelpItem;
-use Chamilo\Core\Help\Storage\DataManager;
+use Chamilo\Core\Help\Service\HelpService;
 use Chamilo\Libraries\Architecture\Application\Application;
 use Chamilo\Libraries\Architecture\Application\ApplicationConfigurationInterface;
 use Chamilo\Libraries\Format\Structure\BreadcrumbGeneratorInterface;
 use Chamilo\Libraries\Format\Structure\BreadcrumbTrail;
-use Chamilo\Libraries\Storage\Parameters\DataClassCountParameters;
-use Chamilo\Libraries\Storage\Parameters\DataClassRetrievesParameters;
 
 /**
- * @package help.lib.help_manager
- */
-
-/**
- * A user manager provides some functionalities to the admin to manage his users.
- * For each functionality a component is
- * available.
+ * @package Chamilo\Core\Help
+ * @author  Hans De Bisschop <hans.de.bisschop@ehb.be>
  */
 abstract class Manager extends Application
 {
@@ -30,6 +22,9 @@ abstract class Manager extends Application
 
     public const PARAM_HELP_ITEM = 'help_item';
 
+    /**
+     * @throws \Chamilo\Libraries\Architecture\Exceptions\NotAllowedException
+     */
     public function __construct(ApplicationConfigurationInterface $applicationConfiguration)
     {
         parent::__construct($applicationConfiguration);
@@ -37,20 +32,13 @@ abstract class Manager extends Application
         $this->checkAuthorization(Manager::CONTEXT);
     }
 
-    public function count_help_items($condition)
+    protected function getHelpService(): HelpService
     {
-        return DataManager::count(HelpItem::class, new DataClassCountParameters($condition));
+        return $this->getService(HelpService::class);
     }
 
     public function get_breadcrumb_generator(): BreadcrumbGeneratorInterface
     {
         return new BreadcrumbGenerator($this, BreadcrumbTrail::getInstance());
-    }
-
-    public function retrieve_help_items($condition = null, $offset = null, $count = null, $order_property = null)
-    {
-        return DataManager::retrieves(
-            HelpItem::class, new DataClassRetrievesParameters($condition, $count, $offset, $order_property)
-        );
     }
 }

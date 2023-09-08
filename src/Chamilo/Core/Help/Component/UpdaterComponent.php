@@ -4,63 +4,67 @@ namespace Chamilo\Core\Help\Component;
 use Chamilo\Core\Help\Form\HelpItemForm;
 use Chamilo\Core\Help\Manager;
 use Chamilo\Core\Help\Storage\DataClass\HelpItem;
-use Chamilo\Core\Help\Storage\DataManager;
 use Chamilo\Libraries\Architecture\Application\Application;
 use Chamilo\Libraries\Architecture\Exceptions\NotAllowedException;
 use Chamilo\Libraries\Format\Structure\Breadcrumb;
 use Chamilo\Libraries\Format\Structure\BreadcrumbTrail;
-use Chamilo\Libraries\Translation\Translation;
 
 /**
- * @package help.lib.help_manager.component
+ * @package Chamilo\Core\Help\Component
+ * @author  Hans De Bisschop <hans.de.bisschop@ehb.be>
  */
 class UpdaterComponent extends Manager
 {
 
     /**
-     * Runs this component and displays its output.
+     * @throws \QuickformException
+     * @throws \Chamilo\Libraries\Architecture\Exceptions\NotAllowedException
      */
     public function run()
     {
-        if (!$this->get_user()->isPlatformAdmin())
+        if (!$this->getUser()->isPlatformAdmin())
         {
             throw new NotAllowedException();
         }
 
-        $id = $this->getRequest()->query->get(Manager::PARAM_HELP_ITEM);
-        $this->set_parameter(Manager::PARAM_HELP_ITEM, $id);
+        $helpService = $this->getHelpService();
+        $translator = $this->getTranslator();
 
-        if ($id)
+        $helpItemIdentifier = $this->getRequest()->query->get(Manager::PARAM_HELP_ITEM);
+        $helpItem = $helpService->retrieveHelpItemByIdentifier($helpItemIdentifier);
+
+        if ($helpItemIdentifier && $helpItem instanceof HelpItem)
         {
-            $help_item = DataManager::retrieve_by_id(HelpItem::class, $id);
-
-            $form = new HelpItemForm($help_item, $this->get_url([Manager::PARAM_HELP_ITEM => $id]));
+            $form = new HelpItemForm($helpItem, $this->get_url([Manager::PARAM_HELP_ITEM => $helpItemIdentifier]));
 
             if ($form->validate())
             {
-                $success = $form->update_help_item();
-                $help_item = $form->get_help_item();
+                $result = $helpService->updateHelpItemFromValues($helpItem, $form->exportValues());
+
                 $this->redirectWithMessage(
-                    Translation::get($success ? 'HelpItemUpdated' : 'HelpItemNotUpdated'), !$success,
-                    [Application::PARAM_ACTION => Manager::ACTION_BROWSE_HELP_ITEMS]
+                    $translator->trans($result ? 'HelpItemUpdated' : 'HelpItemNotUpdated', [], Manager::CONTEXT),
+                    !$result, [Application::PARAM_ACTION => Manager::ACTION_BROWSE_HELP_ITEMS]
                 );
             }
             else
             {
                 $html = [];
 
-                $html[] = $this->render_header();
-                $html[] = '<h4>' . Translation::get('UpdateItem') . ': ' . $help_item->get_context() . ' - ' .
-                    $help_item->get_identifier() . '</h4>';
-                $html[] = $form->toHtml();
-                $html[] = $this->render_footer();
+                $html[] = $this->renderHeader();
+                $html[] =
+                    '<h4>' . $translator->trans('UpdateItem', [], Manager::CONTEXT) . ': ' . $helpItem->get_context() .
+                    ' - ' . $helpItem->get_identifier() . '</h4>';
+                $html[] = $form->render();
+                $html[] = $this->renderFooter();
 
                 return implode(PHP_EOL, $html);
             }
         }
         else
         {
-            return $this->display_error_page(htmlentities(Translation::get('NoHelpItemSelected')));
+            return $this->display_error_page(
+                htmlentities($translator->trans('NoHelpItemSelected', [], Manager::CONTEXT))
+            );
         }
     }
 
@@ -69,7 +73,7 @@ class UpdaterComponent extends Manager
         $breadcrumbtrail->add(
             new Breadcrumb(
                 $this->get_url([Application::PARAM_ACTION => Manager::ACTION_BROWSE_HELP_ITEMS]),
-                Translation::get('HelpManagerBrowserComponent')
+                $this->getTranslator()->trans('HelpManagerBrowserComponent', [], Manager::CONTEXT)
             )
         );
     }

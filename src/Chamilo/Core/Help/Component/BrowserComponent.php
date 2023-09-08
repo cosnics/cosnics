@@ -7,7 +7,6 @@ use Chamilo\Core\Help\Table\ItemTableRenderer;
 use Chamilo\Libraries\Architecture\Exceptions\NotAllowedException;
 use Chamilo\Libraries\Format\Structure\ActionBar\Button;
 use Chamilo\Libraries\Format\Structure\ActionBar\ButtonGroup;
-use Chamilo\Libraries\Format\Structure\ActionBar\ButtonSearchForm;
 use Chamilo\Libraries\Format\Structure\ActionBar\ButtonToolBar;
 use Chamilo\Libraries\Format\Structure\ActionBar\Renderer\ButtonToolBarRenderer;
 use Chamilo\Libraries\Format\Structure\Glyph\FontAwesomeGlyph;
@@ -15,7 +14,6 @@ use Chamilo\Libraries\Format\Structure\ToolbarItem;
 use Chamilo\Libraries\Format\Table\RequestTableParameterValuesCompiler;
 use Chamilo\Libraries\Storage\Query\Condition\ContainsCondition;
 use Chamilo\Libraries\Storage\Query\Variable\PropertyConditionVariable;
-use Chamilo\Libraries\Translation\Translation;
 use Chamilo\Libraries\Utilities\StringUtilities;
 
 /**
@@ -28,8 +26,11 @@ class BrowserComponent extends Manager
 
     /**
      * @throws \Chamilo\Libraries\Architecture\Exceptions\NotAllowedException
+     * @throws \Chamilo\Libraries\Format\Table\Exception\InvalidPageNumberException
+     * @throws \Chamilo\Libraries\Storage\Exception\DataClassNoResultException
      * @throws \QuickformException
      * @throws \ReflectionException
+     * @throws \TableException
      */
     public function run()
     {
@@ -55,16 +56,17 @@ class BrowserComponent extends Manager
     {
         if (!isset($this->buttonToolbarRenderer))
         {
+            $browserUrl = $this->getUrlGenerator()->forContext(Manager::CONTEXT, Manager::ACTION_BROWSE_HELP_ITEMS);
+
             $buttonToolbar = new ButtonToolBar(
-                $this->get_url([Manager::PARAM_HELP_ITEM => $this->get_help_item()])
+                $browserUrl
             );
             $commonActions = new ButtonGroup();
 
             $commonActions->addButton(
                 new Button(
-                    Translation::get('ShowAll', null, StringUtilities::LIBRARIES), new FontAwesomeGlyph('folder'),
-                    $this->get_url([Manager::PARAM_HELP_ITEM => $this->get_help_item()]),
-                    ToolbarItem::DISPLAY_ICON_AND_LABEL
+                    $this->getTranslator()->trans('ShowAll', [], StringUtilities::LIBRARIES),
+                    new FontAwesomeGlyph('folder'), $browserUrl, ToolbarItem::DISPLAY_ICON_AND_LABEL
                 )
             );
 
@@ -76,6 +78,9 @@ class BrowserComponent extends Manager
         return $this->buttonToolbarRenderer;
     }
 
+    /**
+     * @throws \QuickformException
+     */
     public function getItemCondition(): ?ContainsCondition
     {
         $query = $this->buttonToolbarRenderer->getSearchForm()->getQuery();
@@ -100,17 +105,15 @@ class BrowserComponent extends Manager
         return $this->getService(RequestTableParameterValuesCompiler::class);
     }
 
-    public function get_help_item()
-    {
-        return $this->getRequest()->query->get(Manager::PARAM_HELP_ITEM, 0);
-    }
-
+    /**
+     * @throws \Chamilo\Libraries\Storage\Exception\DataClassNoResultException
+     * @throws \ReflectionException
+     * @throws \TableException
+     * @throws \Chamilo\Libraries\Format\Table\Exception\InvalidPageNumberException
+     * @throws \QuickformException
+     */
     public function get_user_html(): string
     {
-        $parameters = $this->get_parameters();
-        $parameters[ButtonSearchForm::PARAM_SIMPLE_SEARCH_QUERY] =
-            $this->buttonToolbarRenderer->getSearchForm()->getQuery();
-
         $html = [];
         $html[] = '<div style="float: right; width: 100%;">';
         $html[] = $this->renderItemTable();
@@ -119,9 +122,16 @@ class BrowserComponent extends Manager
         return implode(PHP_EOL, $html);
     }
 
+    /**
+     * @throws \TableException
+     * @throws \ReflectionException
+     * @throws \Chamilo\Libraries\Format\Table\Exception\InvalidPageNumberException
+     * @throws \QuickformException
+     * @throws \Chamilo\Libraries\Storage\Exception\DataClassNoResultException
+     */
     protected function renderItemTable(): string
     {
-        $totalNumberOfItems = $this->count_help_items($this->getItemCondition());
+        $totalNumberOfItems = $this->getHelpService()->countHelpItemsForCondition($this->getItemCondition());
         $itemTableRenderer = $this->getItemTableRenderer();
 
         $tableParameterValues = $this->getRequestTableParameterValuesCompiler()->determineParameterValues(
@@ -129,7 +139,7 @@ class BrowserComponent extends Manager
             $totalNumberOfItems
         );
 
-        $items = $this->retrieve_help_items(
+        $items = $this->getHelpService()->retrieveHelpItems(
             $this->getItemCondition(), $tableParameterValues->getOffset(),
             $tableParameterValues->getNumberOfItemsPerPage(),
             $itemTableRenderer->determineOrderBy($tableParameterValues)

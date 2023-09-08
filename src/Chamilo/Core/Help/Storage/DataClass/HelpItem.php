@@ -6,6 +6,7 @@ use Chamilo\Libraries\Storage\DataClass\DataClass;
 
 /**
  * @package Chamilo\Core\Help\Storage\DataClass
+ * @author  Hans De Bisschop <hans.de.bisschop@ehb.be>
  */
 class HelpItem extends DataClass
 {
@@ -17,9 +18,9 @@ class HelpItem extends DataClass
     public const PROPERTY_URL = 'url';
 
     /**
-     * Get the default properties of all groups.
+     * @param string[] $extendedPropertyNames
      *
-     * @return array The property names.
+     * @return string[]
      */
     public static function getDefaultPropertyNames(array $extendedPropertyNames = []): array
     {
@@ -28,76 +29,61 @@ class HelpItem extends DataClass
         );
     }
 
-    /**
-     * @return string
-     */
     public static function getStorageUnitName(): string
     {
         return 'help_help_item';
     }
 
-    /**
-     * Returns the name of this group.
-     *
-     * @return String The name
-     */
-    public function get_context()
+    public function get_context(): string
     {
         return $this->getDefaultProperty(self::PROPERTY_CONTEXT);
     }
 
-    public function get_identifier()
+    public function get_identifier(): string
     {
         return $this->getDefaultProperty(self::PROPERTY_IDENTIFIER);
     }
 
-    public function get_language()
+    public function get_language(): string
     {
         return $this->getDefaultProperty(self::PROPERTY_LANGUAGE);
     }
 
-    /**
-     * Returns the url of this group.
-     *
-     * @return String The url
-     */
-    public function get_url()
+    public function get_url(): string
     {
         return $this->getDefaultProperty(self::PROPERTY_URL);
     }
 
-    public function has_url()
+    public function has_url(): bool
     {
         return (bool) $this->get_url();
     }
 
-    /**
-     * Sets the name of this group.
-     *
-     * @param String $name the name.
-     */
-    public function set_context($context)
+    public function set_context(string $context): HelpItem
     {
         $this->setDefaultProperty(self::PROPERTY_CONTEXT, $context);
+
+        return $this;
     }
 
-    public function set_identifier($identifier)
+    public function set_identifier(string $identifier): HelpItem
     {
         $this->setDefaultProperty(self::PROPERTY_IDENTIFIER, $identifier);
+
+        return $this;
     }
 
-    public function set_language($language)
+    public function set_language(string $language): HelpItem
     {
         $this->setDefaultProperty(self::PROPERTY_LANGUAGE, $language);
+
+        return $this;
     }
 
-    /**
-     * Sets the url of this group.
-     *
-     * @param String $url the url.
-     */
-    public function set_url($url)
+    public function set_url(string $url): HelpItem
     {
         $this->setDefaultProperty(self::PROPERTY_URL, $url);
+
+        return $this;
     }
 }

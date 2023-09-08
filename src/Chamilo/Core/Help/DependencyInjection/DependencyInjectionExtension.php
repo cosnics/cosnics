@@ -6,7 +6,7 @@ use Chamilo\Libraries\DependencyInjection\Traits\ExtensionTrait;
 use Symfony\Component\DependencyInjection\Extension\ExtensionInterface;
 
 /**
- * @package Chamilo\Core\Help\Integration\Chamilo\Core\Admin\DependencyInjection
+ * @package Chamilo\Core\Help\DependencyInjection
  * @author  Hans De Bisschop <hans.de.bisschop@ehb.be>
  */
 class DependencyInjectionExtension extends AbstractDependencyInjectionExtension implements ExtensionInterface
