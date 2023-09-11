@@ -76,7 +76,7 @@ class BrowserComponent extends Manager
 
         $html[] = '<div class="row">';
         $html[] = '<div class="col-xs-12 col-md-4 col-lg-3">';
-        $html[] = $this->get_menu();
+        $html[] = $this->renderMenu();
         $html[] = '</div>';
 
         $html[] = '<div class="col-xs-12 col-md-8 col-lg-9">';
@@ -225,7 +225,7 @@ class BrowserComponent extends Manager
      *
      * @return \Chamilo\Core\Repository\Viewer\Menu\RepositoryCategoryMenu
      */
-    public function get_menu(bool $allow_shared = true): string
+    public function renderMenu(bool $allow_shared = true): string
     {
         $url = $this->get_url($this->get_parameters(), [self::PARAM_QUERY]) . '&' . self::PROPERTY_CATEGORY . '=%s';
 

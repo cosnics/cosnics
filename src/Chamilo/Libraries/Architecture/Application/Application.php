@@ -3,6 +3,7 @@ namespace Chamilo\Libraries\Architecture\Application;
 
 use Chamilo\Core\User\Storage\DataClass\User;
 use Chamilo\Libraries\Architecture\Exceptions\NotAllowedException;
+use Chamilo\Libraries\Architecture\Interfaces\MenuComponent;
 use Chamilo\Libraries\Architecture\Interfaces\NoAuthenticationSupport;
 use Chamilo\Libraries\DependencyInjection\Traits\DependencyInjectionContainerTrait;
 use Chamilo\Libraries\Format\NotificationMessage\NotificationMessage;
@@ -235,11 +236,6 @@ abstract class Application
         return $level;
     }
 
-    public function get_menu(): string
-    {
-        return '';
-    }
-
     public function get_parameter(string $name)
     {
         return Parameters::getInstance()->get_parameter($this, $name);
@@ -320,11 +316,6 @@ abstract class Application
         }
 
         return 0;
-    }
-
-    public function has_menu(): bool
-    {
-        return false;
     }
 
     public function isAuthorized(string $context, ?string $action = null): bool
@@ -417,10 +408,10 @@ abstract class Application
             $html[] = '<div class="row">';
 
             // If there is an application-wide menu, show it
-            if ($this->has_menu())
+            if ($this instanceof MenuComponent)
             {
                 $html[] = '<div class="col-xs-12 col-md-4 col-lg-3">';
-                $html[] = $this->get_menu();
+                $html[] = $this->renderApplicationMenu();
                 $html[] = '</div>';
                 $html[] = '<div class="col-xs-12 col-md-8 col-lg-9">';
             }

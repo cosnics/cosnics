@@ -15,6 +15,9 @@ trait ExtensionTrait
 
     abstract public function getSystemPathBuilder(): SystemPathBuilder;
 
+    /**
+     * @throws \Exception
+     */
     public function load(array $configs, ContainerBuilder $container)
     {
         foreach ($this->getConfigurationFiles() as $context => $configurationFiles)

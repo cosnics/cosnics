@@ -23,6 +23,7 @@ use Chamilo\Libraries\Architecture\Application\ApplicationConfigurationInterface
 use Chamilo\Libraries\Architecture\Application\Routing\UrlGenerator;
 use Chamilo\Libraries\Architecture\ClassnameUtilities;
 use Chamilo\Libraries\Architecture\Exceptions\ObjectNotExistException;
+use Chamilo\Libraries\Architecture\Interfaces\MenuComponent;
 use Chamilo\Libraries\DependencyInjection\DependencyInjectionContainerBuilder;
 use Chamilo\Libraries\Format\Structure\BreadcrumbGeneratorInterface;
 use Chamilo\Libraries\Format\Structure\BreadcrumbTrail;
@@ -43,7 +44,7 @@ use Chamilo\Libraries\Translation\Translation;
  * @author  Magali Gillard <magali.gillard@ehb.be>
  * @author  Eduard Vossen <eduard.vossen@ehb.be>
  */
-abstract class Manager extends Application
+abstract class Manager extends Application implements MenuComponent
 {
     public const ACTION_BROWSE_CONTENT_OBJECTS = 'Browser';
     public const ACTION_BROWSE_RECYCLED_CONTENT_OBJECTS = 'RecycleBinBrowser';
@@ -586,7 +587,7 @@ abstract class Manager extends Application
         );
     }
 
-    public function get_menu(): string
+    public function renderApplicationMenu(): string
     {
         $translator = Translation::getInstance();
 
@@ -733,11 +734,6 @@ abstract class Manager extends Application
         $params[FilterData::FILTER_TYPE] = $template_registration_id;
 
         return $this->get_url($params);
-    }
-
-    public function has_menu(): bool
-    {
-        return true;
     }
 
     public function render_header(string $pageTitle = ''): string

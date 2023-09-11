@@ -8,6 +8,7 @@ use Chamilo\Core\Lynx\Manager;
 use Chamilo\Core\Lynx\Menu\PackageTypeMenu;
 use Chamilo\Libraries\Architecture\Application\Application;
 use Chamilo\Libraries\Architecture\Interfaces\DelegateComponent;
+use Chamilo\Libraries\Architecture\Interfaces\MenuComponent;
 use Chamilo\Libraries\Format\Display;
 use Chamilo\Libraries\Format\Structure\Breadcrumb;
 use Chamilo\Libraries\Format\Structure\BreadcrumbTrail;
@@ -28,7 +29,7 @@ use Chamilo\Libraries\Storage\Query\Variable\StaticConditionVariable;
 use Chamilo\Libraries\Utilities\StringUtilities;
 use Doctrine\Common\Collections\ArrayCollection;
 
-class BrowserComponent extends Manager implements DelegateComponent
+class BrowserComponent extends Manager implements DelegateComponent, MenuComponent
 {
 
     public const STATUS_AVAILABLE = 2;
@@ -216,7 +217,7 @@ class BrowserComponent extends Manager implements DelegateComponent
      * @throws \ReflectionException
      * @throws \Symfony\Component\Cache\Exception\CacheException
      */
-    public function get_menu(): string
+    public function renderApplicationMenu(): string
     {
         $menu = new PackageTypeMenu(
             $this->getPackageBundlesCacheService(), $this->getClassnameUtilities(), $this->getCurrentType(),
@@ -329,10 +330,5 @@ class BrowserComponent extends Manager implements DelegateComponent
         return $this->getArrayCollectionTableRenderer()->render(
             $headers, new ArrayCollection($table_data), 0, SORT_ASC, 200, 'registered_packages'
         );
-    }
-
-    public function has_menu(): bool
-    {
-        return true;
     }
 }

@@ -11,7 +11,6 @@ use Chamilo\Libraries\Architecture\Exceptions\ParameterNotDefinedException;
 use Chamilo\Libraries\Format\Structure\Breadcrumb;
 use Chamilo\Libraries\Format\Structure\BreadcrumbTrail;
 use Chamilo\Libraries\Format\Structure\PageConfiguration;
-use Chamilo\Libraries\Translation\Translation;
 
 /**
  * @package Chamilo\Core\Home\Component
@@ -20,9 +19,14 @@ use Chamilo\Libraries\Translation\Translation;
 class AttachmentViewerComponent extends Manager
 {
 
+    /**
+     * @throws \Chamilo\Libraries\Architecture\Exceptions\ParameterNotDefinedException
+     * @throws \Chamilo\Libraries\Architecture\Exceptions\ObjectNotExistException
+     */
     public function run()
     {
         $trail = BreadcrumbTrail::getInstance();
+        $translator = $this->getTranslator();
 
         $failed = false;
         $error_message = '';
@@ -38,7 +42,7 @@ class AttachmentViewerComponent extends Manager
 
         if (is_null($parent))
         {
-            throw new ObjectNotExistException(Translation::get('Object'), $parent);
+            throw new ObjectNotExistException($translator->trans('Object', [], 'Chamilo\Core\Repository'), $parent);
         }
 
         // retrieve the attachment
@@ -47,15 +51,14 @@ class AttachmentViewerComponent extends Manager
         if (is_null($object_id))
         {
             $failed = true;
-            $error_message = Translation::get('NoAttachmentSelected');
+            $error_message = $translator->trans('NoAttachmentSelected', [], 'Chamilo\Core\Repository');
         }
 
         $object = DataManager::retrieve_by_id(ContentObject::class, $object_id);
 
         if (is_null($object))
         {
-            $failed = true;
-            throw new ObjectNotExistException(Translation::get('Attachment'), $object);
+            throw new ObjectNotExistException($translator->trans('Attachment'), $object);
         }
 
         // Default the attachment is attached to the content object of the
@@ -64,7 +67,7 @@ class AttachmentViewerComponent extends Manager
 
         {
             $failed = true;
-            $error_message = Translation::get('WrongObjectSelected');
+            $error_message = $translator->trans('WrongObjectSelected', [], 'Chamilo\Core\Repository');
         }
 
         $html = [];
@@ -76,36 +79,28 @@ class AttachmentViewerComponent extends Manager
             $trail->add(
                 new Breadcrumb(
                     $this->get_url(['object' => $parent_id]),
-                    Translation::get('ViewAttachment', null, \Chamilo\Core\Repository\Manager::CONTEXT)
+                    $translator->trans('ViewAttachment', [], \Chamilo\Core\Repository\Manager::CONTEXT)
                 )
             );
 
-            $html[] = $this->render_header();
+            $html[] = $this->renderHeader();
 
             $html[] = ContentObjectRenditionImplementation::launch(
-                $object, ContentObjectRendition::FORMAT_HTML, ContentObjectRendition::VIEW_FULL, $this
+                $object, ContentObjectRendition::FORMAT_HTML, ContentObjectRendition::VIEW_FULL
             );
-
-            $html[] = $this->render_footer();
         }
         else
         {
-            $html[] = $this->render_header();
+            $html[] = $this->renderHeader();
             $html[] = $this->display_error_message($error_message);
-            $html[] = $this->render_footer();
         }
+
+        $html[] = $this->renderFooter();
 
         return implode(PHP_EOL, $html);
     }
 
-    /**
-     * Constructs the attachment url for the given attachment and the current object.
-     *
-     * @param ContentObject $attachment The attachment for which the url is needed.
-     *
-     * @return mixed the url, or null if no view right.
-     */
-    public function get_content_object_display_attachment_url($attachment)
+    public function get_content_object_display_attachment_url(ContentObject $attachment): ?string
     {
         $object_id = $this->getRequest()->query->get(self::PARAM_OBJECT_ID);
         $object = DataManager::retrieve_by_id(ContentObject::class, $object_id);
@@ -116,7 +111,7 @@ class AttachmentViewerComponent extends Manager
         }
 
         return $this->get_url(
-            [self::PARAM_PARENT_ID => $object_id, self::PARAM_OBJECT_ID => $attachment->get_id()]
+            [self::PARAM_PARENT_ID => $object_id, self::PARAM_OBJECT_ID => $attachment->getId()]
         );
     }
 
@@ -127,9 +122,9 @@ class AttachmentViewerComponent extends Manager
      *
      * @return bool Whether the current user may view the content object.
      */
-    public function is_view_attachment_allowed($object)
+    public function is_view_attachment_allowed(ContentObject $object): bool
     {
         // Is the current user the owner?
-        return $object->get_owner_id() == $this->get_user_id();
+        return $object->get_owner_id() == $this->getUser()->getId();
     }
 }

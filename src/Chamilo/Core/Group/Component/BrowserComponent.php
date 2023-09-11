@@ -10,6 +10,7 @@ use Chamilo\Core\Group\Table\SubscribedUserTableRenderer;
 use Chamilo\Core\User\Storage\DataClass\User;
 use Chamilo\Libraries\Architecture\ClassnameUtilities;
 use Chamilo\Libraries\Architecture\Exceptions\NotAllowedException;
+use Chamilo\Libraries\Architecture\Interfaces\MenuComponent;
 use Chamilo\Libraries\Format\Structure\ActionBar\Button;
 use Chamilo\Libraries\Format\Structure\ActionBar\ButtonGroup;
 use Chamilo\Libraries\Format\Structure\ActionBar\ButtonToolBar;
@@ -35,7 +36,7 @@ use Chamilo\Libraries\Utilities\StringUtilities;
  * @package Chamilo\Core\Group\Component
  * @author  Hans De Bisschop <hans.de.bisschop@ehb.be>
  */
-class BrowserComponent extends Manager
+class BrowserComponent extends Manager implements MenuComponent
 {
     public const TAB_DETAILS = 2;
     public const TAB_SUBGROUPS = 0;
@@ -335,7 +336,7 @@ class BrowserComponent extends Manager
      * @return string
      * @throws \Chamilo\Libraries\Architecture\Exceptions\ObjectNotExistException
      */
-    public function get_menu(): string
+    public function renderApplicationMenu(): string
     {
         $group_menu = new GroupMenu($this->getGroupIdentifier());
 
@@ -408,11 +409,6 @@ class BrowserComponent extends Manager
         );
 
         return $this->getTabsRenderer()->render($renderer_name, $tabs);
-    }
-
-    public function has_menu(): bool
-    {
-        return true;
     }
 
     /**
