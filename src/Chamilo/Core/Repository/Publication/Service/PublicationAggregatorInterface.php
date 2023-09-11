@@ -23,24 +23,24 @@ interface PublicationAggregatorInterface
 
     public function addPublicationTargetsToFormForContentObjectAndUser(
         FormValidator $form, ContentObject $contentObject, User $user
-    );
+    ): void;
 
     /**
-     * @param int[] $contentObjectIdentifiers
+     * @param string[] $contentObjectIdentifiers
      */
     public function areContentObjectsPublished(array $contentObjectIdentifiers): bool;
 
-    public function canContentObjectBeEdited(int $contentObjectIdentifier): bool;
+    public function canContentObjectBeEdited(string $contentObjectIdentifier): bool;
 
     public function canContentObjectBeUnlinked(ContentObject $contentObject): bool;
 
-    public function countPublicationAttributes(int $type, int $objectIdentifier, ?Condition $condition = null): int;
+    public function countPublicationAttributes(int $type, string $objectIdentifier, ?Condition $condition = null): int;
 
     public function deleteContentObjectPublications(ContentObject $contentObject): bool;
 
     /**
      * @param int $type
-     * @param int $objectIdentifier
+     * @param string $objectIdentifier
      * @param ?\Chamilo\Libraries\Storage\Query\Condition\Condition $condition
      * @param ?int $count
      * @param ?int $offset
@@ -49,9 +49,9 @@ interface PublicationAggregatorInterface
      * @return \Doctrine\Common\Collections\ArrayCollection<\Chamilo\Core\Repository\Publication\Storage\DataClass\Attributes>
      */
     public function getContentObjectPublicationsAttributes(
-        int $type, int $objectIdentifier, ?Condition $condition = null, ?int $count = null, ?int $offset = null,
+        int $type, string $objectIdentifier, ?Condition $condition = null, ?int $count = null, ?int $offset = null,
         ?OrderBy $orderBy = null
     ): ArrayCollection;
 
-    public function isContentObjectPublished(int $contentObjectIdentifier): bool;
+    public function isContentObjectPublished(string $contentObjectIdentifier): bool;
 }

@@ -84,7 +84,7 @@ class PublicationAggregator implements PublicationAggregatorInterface
      */
     public function addPublicationTargetsToFormForContentObjectAndUser(
         FormValidator $form, ContentObject $contentObject, User $user
-    )
+    ): void
     {
         $type = $contentObject->getType();
 
@@ -234,10 +234,10 @@ class PublicationAggregator implements PublicationAggregatorInterface
         return false;
     }
 
-    public function canContentObjectBeEdited(int $contentObjectIdentifier): bool
+    public function canContentObjectBeEdited(string $contentObjectIdentifier): bool
     {
         $contentObject = new ContentObject();
-        $contentObject->setId((string) $contentObjectIdentifier);
+        $contentObject->setId($contentObjectIdentifier);
 
         if ($this->getAssignmentService()->isContentObjectUsedAsEntry($contentObject))
         {
@@ -274,7 +274,7 @@ class PublicationAggregator implements PublicationAggregatorInterface
         return true;
     }
 
-    public function countPublicationAttributes(int $type, int $objectIdentifier, ?Condition $condition = null): int
+    public function countPublicationAttributes(int $type, string $objectIdentifier, ?Condition $condition = null): int
     {
         $count = DataManager::countPublicationAttributes($type, $objectIdentifier, $condition);
 
@@ -282,20 +282,15 @@ class PublicationAggregator implements PublicationAggregatorInterface
 
         foreach ($assignmentPublicationServices as $assignmentPublicationService)
         {
-            switch ($type)
+            $count += match ($type)
             {
-                case self::ATTRIBUTES_TYPE_USER:
-                    $count += $assignmentPublicationService->countContentObjectPublicationAttributesForUser(
-                        $objectIdentifier
-                    );
-                    break;
-                case self::ATTRIBUTES_TYPE_OBJECT:
-                default:
-                    $count += $assignmentPublicationService->countContentObjectPublicationAttributesForContentObject(
-                        $objectIdentifier
-                    );
-                    break;
-            }
+                self::ATTRIBUTES_TYPE_USER => $assignmentPublicationService->countContentObjectPublicationAttributesForUser(
+                    $objectIdentifier
+                ),
+                default => $assignmentPublicationService->countContentObjectPublicationAttributesForContentObject(
+                    $objectIdentifier
+                ),
+            };
         }
 
         return $count;
@@ -316,7 +311,7 @@ class PublicationAggregator implements PublicationAggregatorInterface
                 $assignmentPublicationService->deleteContentObjectPublicationsByObjectId($contentObject->getId());
             }
         }
-        catch (Exception $ex)
+        catch (Exception)
         {
             return false;
         }
@@ -355,7 +350,7 @@ class PublicationAggregator implements PublicationAggregatorInterface
 
     /**
      * @param int $type
-     * @param int $objectIdentifier
+     * @param string $objectIdentifier
      * @param ?\Chamilo\Libraries\Storage\Query\Condition\Condition $condition
      * @param ?int $count
      * @param ?int $offset
@@ -364,7 +359,7 @@ class PublicationAggregator implements PublicationAggregatorInterface
      * @return  \Doctrine\Common\Collections\ArrayCollection<\Chamilo\Core\Repository\Publication\Storage\DataClass\Attributes>
      */
     public function getContentObjectPublicationsAttributes(
-        int $type, int $objectIdentifier, Condition $condition = null, int $count = null, int $offset = null,
+        int $type, string $objectIdentifier, Condition $condition = null, int $count = null, int $offset = null,
         ?OrderBy $orderBy = null
     ): ArrayCollection
     {
@@ -375,24 +370,19 @@ class PublicationAggregator implements PublicationAggregatorInterface
         $assignmentPublicationServices = $this->getAssignmentPublicationServices();
         foreach ($assignmentPublicationServices as $assignmentPublicationService)
         {
-            switch ($type)
+            $publicationAttributes = match ($type)
             {
-                case self::ATTRIBUTES_TYPE_USER:
-                    $publicationAttributes = array_merge(
-                        $publicationAttributes,
-                        $assignmentPublicationService->getContentObjectPublicationAttributesForUser($objectIdentifier)
-                    );
-                    break;
-                case self::ATTRIBUTES_TYPE_OBJECT:
-                default:
-                    $publicationAttributes = array_merge(
-                        $publicationAttributes,
-                        $assignmentPublicationService->getContentObjectPublicationAttributesForContentObject(
-                            $objectIdentifier
-                        )
-                    );
-                    break;
-            }
+                self::ATTRIBUTES_TYPE_USER => array_merge(
+                    $publicationAttributes,
+                    $assignmentPublicationService->getContentObjectPublicationAttributesForUser($objectIdentifier)
+                ),
+                default => array_merge(
+                    $publicationAttributes,
+                    $assignmentPublicationService->getContentObjectPublicationAttributesForContentObject(
+                        $objectIdentifier
+                    )
+                ),
+            };
         }
 
         return new ArrayCollection($publicationAttributes);
@@ -434,7 +424,7 @@ class PublicationAggregator implements PublicationAggregatorInterface
         return $this->userService;
     }
 
-    public function isContentObjectPublished(int $contentObjectIdentifier): bool
+    public function isContentObjectPublished(string $contentObjectIdentifier): bool
     {
         if (DataManager::isContentObjectPublished($contentObjectIdentifier))
         {

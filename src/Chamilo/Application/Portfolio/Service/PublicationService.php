@@ -59,21 +59,21 @@ class PublicationService
     }
 
     /**
-     * @param $contentObjectIdentifier
+     * @param string $contentObjectIdentifier
      *
      * @return int
      */
-    public function countPublicationsForContentObjectIdentifier(int $contentObjectIdentifier)
+    public function countPublicationsForContentObjectIdentifier(string $contentObjectIdentifier): int
     {
         return $this->countPublicationsForContentObjectIdentifiers([$contentObjectIdentifier]);
     }
 
     /**
-     * @param int $contentObjectIdentifiers
+     * @param string[] $contentObjectIdentifiers
      *
      * @return int
      */
-    public function countPublicationsForContentObjectIdentifiers(array $contentObjectIdentifiers)
+    public function countPublicationsForContentObjectIdentifiers(array $contentObjectIdentifiers): int
     {
         return $this->getPublicationRepository()->countPublicationsForContentObjectIdentifiers(
             $contentObjectIdentifiers
@@ -82,14 +82,14 @@ class PublicationService
 
     /**
      * @param int $type
-     * @param int $objectIdentifier
-     * @param \Chamilo\Libraries\Storage\Query\Condition\Condition $condition
+     * @param string $objectIdentifier
+     * @param ?\Chamilo\Libraries\Storage\Query\Condition\Condition $condition
      *
      * @return int
      */
     public function countPublicationsForTypeAndIdentifier(
-        $type = PublicationAggregatorInterface::ATTRIBUTES_TYPE_OBJECT, int $objectIdentifier,
-        Condition $condition = null
+        $type = PublicationAggregatorInterface::ATTRIBUTES_TYPE_OBJECT, string $objectIdentifier,
+        ?Condition $condition = null
     )
     {
         if ($type !== PublicationAggregatorInterface::ATTRIBUTES_TYPE_OBJECT &&
@@ -208,11 +208,11 @@ class PublicationService
     }
 
     /**
-     * @param int $publicationIdentifier
+     * @param string $publicationIdentifier
      *
      * @return \Chamilo\Application\Portfolio\Storage\DataClass\Publication
      */
-    public function findPublicationByIdentifier(int $publicationIdentifier)
+    public function findPublicationByIdentifier(string $publicationIdentifier)
     {
         return $this->getPublicationRepository()->findPublicationByIdentifier($publicationIdentifier);
     }
@@ -250,7 +250,7 @@ class PublicationService
 
     /**
      * @param int $type
-     * @param int $objectIdentifier
+     * @param string $objectIdentifier
      * @param ?\Chamilo\Libraries\Storage\Query\Condition\Condition $condition
      * @param ?int $count
      * @param ?int $offset
@@ -259,7 +259,7 @@ class PublicationService
      * @return \Doctrine\Common\Collections\ArrayCollection
      */
     public function findPublicationRecordsForTypeAndIdentifier(
-        $type = PublicationAggregatorInterface::ATTRIBUTES_TYPE_OBJECT, int $objectIdentifier,
+        $type = PublicationAggregatorInterface::ATTRIBUTES_TYPE_OBJECT, string $objectIdentifier,
         ?Condition $condition = null, ?int $count = null, ?int $offset = null, ?OrderBy $orderProperties = null
     )
     {

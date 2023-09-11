@@ -29,14 +29,14 @@ class PublicationAggregator implements PublicationAggregatorInterface
         $this->publicationAggregators = [];
     }
 
-    public function addPublicationAggregator(PublicationAggregatorInterface $publicationAggregator)
+    public function addPublicationAggregator(PublicationAggregatorInterface $publicationAggregator): void
     {
         $this->publicationAggregators[] = $publicationAggregator;
     }
 
     public function addPublicationTargetsToFormForContentObjectAndUser(
         FormValidator $form, ContentObject $contentObject, User $user
-    )
+    ): void
     {
         foreach ($this->publicationAggregators as $publicationAggregator)
         {
@@ -45,7 +45,7 @@ class PublicationAggregator implements PublicationAggregatorInterface
     }
 
     /**
-     * @param int[] $contentObjectIdentifiers
+     * @param string[] $contentObjectIdentifiers
      */
     public function areContentObjectsPublished(array $contentObjectIdentifiers): bool
     {
@@ -60,7 +60,7 @@ class PublicationAggregator implements PublicationAggregatorInterface
         return false;
     }
 
-    public function canContentObjectBeEdited(int $contentObjectIdentifier): bool
+    public function canContentObjectBeEdited(string $contentObjectIdentifier): bool
     {
         foreach ($this->publicationAggregators as $publicationAggregator)
         {
@@ -86,7 +86,7 @@ class PublicationAggregator implements PublicationAggregatorInterface
         return true;
     }
 
-    public function countPublicationAttributes(int $type, int $objectIdentifier, ?Condition $condition = null): int
+    public function countPublicationAttributes(int $type, string $objectIdentifier, ?Condition $condition = null): int
     {
         $count = 0;
 
@@ -115,7 +115,7 @@ class PublicationAggregator implements PublicationAggregatorInterface
 
     /**
      * @param int $type
-     * @param int $objectIdentifier
+     * @param string $objectIdentifier
      * @param ?\Chamilo\Libraries\Storage\Query\Condition\Condition $condition
      * @param ?int $count
      * @param ?int $offset
@@ -124,7 +124,7 @@ class PublicationAggregator implements PublicationAggregatorInterface
      * @return \Doctrine\Common\Collections\ArrayCollection<\Chamilo\Core\Repository\Publication\Storage\DataClass\Attributes>
      */
     public function getContentObjectPublicationsAttributes(
-        int $type, int $objectIdentifier, ?Condition $condition = null, ?int $count = null, ?int $offset = null,
+        int $type, string $objectIdentifier, ?Condition $condition = null, ?int $count = null, ?int $offset = null,
         ?OrderBy $orderBy = null
     ): ArrayCollection
     {
@@ -183,7 +183,7 @@ class PublicationAggregator implements PublicationAggregatorInterface
         return new ArrayCollection($publicationAttributes);
     }
 
-    public function isContentObjectPublished(int $contentObjectIdentifier): bool
+    public function isContentObjectPublished(string $contentObjectIdentifier): bool
     {
         foreach ($this->publicationAggregators as $publicationAggregator)
         {

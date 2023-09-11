@@ -206,11 +206,11 @@ class PublicationService
     }
 
     /**
-     * @param int $contentObjectId
+     * @param string $contentObjectId
      *
      * @return \Doctrine\Common\Collections\ArrayCollection<\Chamilo\Core\Repository\Publication\Storage\DataClass\Attributes>
      */
-    public function getContentObjectPublicationAttributesForContentObject(int $contentObjectId): ArrayCollection
+    public function getContentObjectPublicationAttributesForContentObject(string $contentObjectId): ArrayCollection
     {
         $treeNodesData = $this->treeNodeDataService->getTreeNodesDataByContentObjects([$contentObjectId]);
 
@@ -333,7 +333,7 @@ class PublicationService
      * Updates the content object id in the given learning path child (identified by id)
      *
      * @param int $treeNodeDataId
-     * @param int $newContentObjectId
+     * @param string $newContentObjectId
      */
     public function updateContentObjectIdInTreeNodeData($treeNodeDataId, $newContentObjectId)
     {

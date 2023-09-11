@@ -33,12 +33,12 @@ class PublicationAggregator implements PublicationAggregatorInterface
 
     public function addPublicationTargetsToFormForContentObjectAndUser(
         FormValidator $form, ContentObject $contentObject, User $user
-    )
+    ): void
     {
     }
 
     /**
-     * @param int[] $contentObjectIdentifiers
+     * @param string[] $contentObjectIdentifiers
      */
     public function areContentObjectsPublished(array $contentObjectIdentifiers): bool
     {
@@ -47,7 +47,7 @@ class PublicationAggregator implements PublicationAggregatorInterface
             ) > 0;
     }
 
-    public function canContentObjectBeEdited(int $contentObjectIdentifier): bool
+    public function canContentObjectBeEdited(string $contentObjectIdentifier): bool
     {
         return true;
     }
@@ -58,23 +58,21 @@ class PublicationAggregator implements PublicationAggregatorInterface
     }
 
     public function countPublicationAttributes(
-        int $type, int $objectIdentifier, ?Condition $condition = null
+        int $type, string $objectIdentifier, ?Condition $condition = null
     ): int
     {
-        switch ($type)
+        return match ($type)
         {
-            case PublicationAggregatorInterface::ATTRIBUTES_TYPE_OBJECT :
-                return $this->getContentObjectPublicationService()->countContentObjectPublicationsByContentObjectIds(
+            PublicationAggregatorInterface::ATTRIBUTES_TYPE_OBJECT => $this->getContentObjectPublicationService()
+                ->countContentObjectPublicationsByContentObjectIds(
                     [$objectIdentifier]
-                );
-            case PublicationAggregatorInterface::ATTRIBUTES_TYPE_USER :
-                return $this->getContentObjectPublicationService()
-                    ->countContentObjectPublicationsByContentObjectOwnerId(
-                        $objectIdentifier
-                    );
-            default :
-                return 0;
-        }
+                ),
+            PublicationAggregatorInterface::ATTRIBUTES_TYPE_USER => $this->getContentObjectPublicationService()
+                ->countContentObjectPublicationsByContentObjectOwnerId(
+                    $objectIdentifier
+                ),
+            default => 0,
+        };
     }
 
     protected function createPublicationAttributesFromPublication(ContentObjectPublication $publication): Attributes
@@ -111,16 +109,17 @@ class PublicationAggregator implements PublicationAggregatorInterface
 
     /**
      * @param int $type
-     * @param int $objectIdentifier
+     * @param string $objectIdentifier
      * @param ?\Chamilo\Libraries\Storage\Query\Condition\Condition $condition
      * @param ?int $count
      * @param ?int $offset
      * @param ?\Chamilo\Libraries\Storage\Query\OrderBy $orderBy
      *
      * @return \Doctrine\Common\Collections\ArrayCollection<\Chamilo\Core\Repository\Publication\Storage\DataClass\Attributes>
+     * @throws \Chamilo\Libraries\Storage\Exception\DataClassNoResultException
      */
     public function getContentObjectPublicationsAttributes(
-        int $type, int $objectIdentifier, Condition $condition = null, int $count = null, int $offset = null,
+        int $type, string $objectIdentifier, Condition $condition = null, int $count = null, int $offset = null,
         ?OrderBy $orderBy = null
     ): ArrayCollection
     {
@@ -157,7 +156,7 @@ class PublicationAggregator implements PublicationAggregatorInterface
         return $this->translator;
     }
 
-    public function isContentObjectPublished(int $contentObjectIdentifier): bool
+    public function isContentObjectPublished(string $contentObjectIdentifier): bool
     {
         return $this->getContentObjectPublicationService()->countContentObjectPublicationsByContentObjectId(
                 $contentObjectIdentifier
