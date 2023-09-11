@@ -47,10 +47,11 @@ class PublicationAggregator implements PublicationAggregatorInterface
 
     /**
      * @throws \Psr\SimpleCache\InvalidArgumentException
+     * @throws \QuickformException
      */
     public function addPublicationTargetsToFormForContentObjectAndUser(
         FormValidator $form, ContentObject $contentObject, User $user
-    )
+    ): void
     {
         $userPublication = $this->getPublicationService()->findPublicationForUser($user);
 
@@ -84,7 +85,7 @@ class PublicationAggregator implements PublicationAggregatorInterface
         return $publicationCount > 0;
     }
 
-    public function canContentObjectBeEdited(int $contentObjectIdentifier): bool
+    public function canContentObjectBeEdited(string $contentObjectIdentifier): bool
     {
         return true;
     }
@@ -95,7 +96,7 @@ class PublicationAggregator implements PublicationAggregatorInterface
     }
 
     public function countPublicationAttributes(
-        int $type = PublicationAggregatorInterface::ATTRIBUTES_TYPE_OBJECT, int $objectIdentifier,
+        int $type, string $objectIdentifier,
         ?Condition $condition = null
     ): int
     {
@@ -111,7 +112,7 @@ class PublicationAggregator implements PublicationAggregatorInterface
 
     /**
      * @param int $type
-     * @param int $objectIdentifier
+     * @param string $objectIdentifier
      * @param ?\Chamilo\Libraries\Storage\Query\Condition\Condition $condition
      * @param ?int $count
      * @param ?int $offset
@@ -120,7 +121,7 @@ class PublicationAggregator implements PublicationAggregatorInterface
      * @return \Doctrine\Common\Collections\ArrayCollection<\Chamilo\Core\Repository\Publication\Storage\DataClass\Attributes>
      */
     public function getContentObjectPublicationsAttributes(
-        int $type = PublicationAggregatorInterface::ATTRIBUTES_TYPE_OBJECT, int $objectIdentifier,
+        int $type, string $objectIdentifier,
         ?Condition $condition = null, ?int $count = null, ?int $offset = null, ?OrderBy $orderBy = null
     ): ArrayCollection
     {
@@ -164,7 +165,7 @@ class PublicationAggregator implements PublicationAggregatorInterface
         return $this->translator;
     }
 
-    public function isContentObjectPublished(int $contentObjectIdentifier): bool
+    public function isContentObjectPublished(string $contentObjectIdentifier): bool
     {
         $publicationCount =
             $this->getPublicationService()->countPublicationsForContentObjectIdentifier($contentObjectIdentifier);

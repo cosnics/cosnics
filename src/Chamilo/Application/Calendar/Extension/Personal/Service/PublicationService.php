@@ -42,17 +42,17 @@ class PublicationService
     }
 
     /**
-     * @param $contentObjectIdentifier
+     * @param string $contentObjectIdentifier
      *
      * @return int
      */
-    public function countPublicationsForContentObjectIdentifier(int $contentObjectIdentifier)
+    public function countPublicationsForContentObjectIdentifier(string $contentObjectIdentifier)
     {
         return $this->countPublicationsForContentObjectIdentifiers([$contentObjectIdentifier]);
     }
 
     /**
-     * @param int $contentObjectIdentifiers
+     * @param string[] $contentObjectIdentifiers
      *
      * @return int
      */
@@ -65,12 +65,12 @@ class PublicationService
 
     /**
      * @param int $type
-     * @param int $objectIdentifier
-     * @param \Chamilo\Libraries\Storage\Query\Condition\Condition $condition
+     * @param string $objectIdentifier
+     * @param ?\Chamilo\Libraries\Storage\Query\Condition\Condition $condition
      *
      * @return int
      */
-    public function countPublicationsForTypeAndIdentifier(int $type, int $objectIdentifier, Condition $condition = null)
+    public function countPublicationsForTypeAndIdentifier(int $type, string $objectIdentifier, ?Condition $condition = null)
     {
         if ($type !== PublicationAggregatorInterface::ATTRIBUTES_TYPE_OBJECT &&
             $type !== PublicationAggregatorInterface::ATTRIBUTES_TYPE_USER)
@@ -192,7 +192,7 @@ class PublicationService
 
     /**
      * @param int $type
-     * @param int $objectIdentifier
+     * @param string $objectIdentifier
      * @param ?\Chamilo\Libraries\Storage\Query\Condition\Condition $condition
      * @param ?int $count
      * @param ?int $offset
@@ -202,7 +202,7 @@ class PublicationService
      * @throws \Exception
      */
     public function findPublicationRecordsForTypeAndIdentifier(
-        int $type, int $objectIdentifier, ?Condition $condition = null, ?int $count = null, ?int $offset = null,
+        int $type, string $objectIdentifier, ?Condition $condition = null, ?int $count = null, ?int $offset = null,
         ?OrderBy $orderProperties = null
     ): ArrayCollection
     {
@@ -224,7 +224,7 @@ class PublicationService
      *
      * @return \Chamilo\Application\Calendar\Extension\Personal\Storage\DataClass\Publication[]
      */
-    public function findPublicationsForContentObjectIdentifier(int $contentObjectIdentifier)
+    public function findPublicationsForContentObjectIdentifier(string $contentObjectIdentifier)
     {
         return $this->getPublicationRepository()->findPublicationsForContentObjectIdentifier($contentObjectIdentifier);
     }
