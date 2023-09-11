@@ -7,12 +7,13 @@ use Chamilo\Core\Admin\Menu\PackageTypeLinksMenu;
 use Chamilo\Core\Admin\Service\ActionProvider;
 use Chamilo\Libraries\Architecture\ClassnameUtilities;
 use Chamilo\Libraries\Architecture\Interfaces\DelegateComponent;
+use Chamilo\Libraries\Architecture\Interfaces\MenuComponent;
 use Chamilo\Libraries\Format\Tabs\TabsRenderer;
 
 /**
  * @package Chamilo\Core\Admin\Component
  */
-class BrowserComponent extends Manager implements DelegateComponent
+class BrowserComponent extends Manager implements DelegateComponent, MenuComponent
 {
     public const PARAM_TAB = 'tab';
 
@@ -70,7 +71,7 @@ class BrowserComponent extends Manager implements DelegateComponent
      * @throws \ReflectionException
      * @throws \Symfony\Component\Cache\Exception\CacheException
      */
-    public function get_menu(): string
+    public function renderApplicationMenu(): string
     {
         $tabNamespace = $this->getClassnameUtilities()->getNamespaceFromId($this->getCurrentTab());
         $menu = new PackageTypeLinksMenu(
@@ -79,11 +80,6 @@ class BrowserComponent extends Manager implements DelegateComponent
         );
 
         return $menu->render_as_tree();
-    }
-
-    public function has_menu(): bool
-    {
-        return true;
     }
 
     /**

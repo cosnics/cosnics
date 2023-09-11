@@ -29,8 +29,7 @@ class AdminActionProvider extends AbstractActionProvider implements ActionProvid
         );
 
         $parameters = [
-            Application::PARAM_CONTEXT => $context,
-            Application::PARAM_ACTION => Manager::ACTION_SYSTEM_ANNOUNCEMENTS
+            Application::PARAM_CONTEXT => \Chamilo\Core\Admin\Announcement\Manager::CONTEXT
         ];
 
         $links[] = new Action(
@@ -40,9 +39,8 @@ class AdminActionProvider extends AbstractActionProvider implements ActionProvid
         );
 
         $parameters = [
-            Application::PARAM_CONTEXT => $context,
-            Application::PARAM_ACTION => Manager::ACTION_LANGUAGE,
-            \Chamilo\Core\Admin\Language\Manager::PARAM_ACTION => \Chamilo\Core\Admin\Language\Manager::ACTION_IMPORT
+            Application::PARAM_CONTEXT => \Chamilo\Core\Admin\Language\Manager::CONTEXT,
+            Application::PARAM_ACTION => \Chamilo\Core\Admin\Language\Manager::ACTION_IMPORT
         ];
 
         $links[] = new Action(
@@ -53,9 +51,8 @@ class AdminActionProvider extends AbstractActionProvider implements ActionProvid
         );
 
         $parameters = [
-            Application::PARAM_CONTEXT => $context,
-            Application::PARAM_ACTION => Manager::ACTION_LANGUAGE,
-            \Chamilo\Core\Admin\Language\Manager::PARAM_ACTION => \Chamilo\Core\Admin\Language\Manager::ACTION_EXPORT
+            Application::PARAM_CONTEXT => \Chamilo\Core\Admin\Language\Manager::CONTEXT,
+            Application::PARAM_ACTION => \Chamilo\Core\Admin\Language\Manager::ACTION_EXPORT
         ];
 
         $links[] = new Action(

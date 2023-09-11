@@ -6,6 +6,7 @@ use Chamilo\Core\Admin\Form\ConfigurationForm;
 use Chamilo\Core\Admin\Manager;
 use Chamilo\Core\Admin\Menu\PackageTypeSettingsMenu;
 use Chamilo\Libraries\Architecture\Application\Application;
+use Chamilo\Libraries\Architecture\Interfaces\MenuComponent;
 use Chamilo\Libraries\Format\Form\FormValidator;
 use Chamilo\Libraries\Format\Structure\Breadcrumb;
 use Chamilo\Libraries\Format\Structure\BreadcrumbTrail;
@@ -20,7 +21,7 @@ use Chamilo\Libraries\Utilities\StringUtilities;
 /**
  * @package Chamilo\Core\Admin\Component
  */
-class ConfigurerComponent extends Manager
+class ConfigurerComponent extends Manager implements MenuComponent
 {
     public const PARAM_TAB = 'tab';
 
@@ -159,7 +160,7 @@ class ConfigurerComponent extends Manager
      * @throws \ReflectionException
      * @throws \Symfony\Component\Cache\Exception\CacheException
      */
-    public function get_menu(): string
+    public function renderApplicationMenu(): string
     {
         $menu = new PackageTypeSettingsMenu(
             $this->getClassnameUtilities(), $this->getConfigurationConsulter(), $this->getPackageBundlesCacheService(),
@@ -167,10 +168,5 @@ class ConfigurerComponent extends Manager
         );
 
         return $menu->render_as_tree();
-    }
-
-    public function has_menu(): bool
-    {
-        return true;
     }
 }

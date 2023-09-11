@@ -9,6 +9,7 @@ use Chamilo\Core\User\Storage\DataClass\User;
 use Chamilo\Libraries\Architecture\Exceptions\NotAllowedException;
 use Chamilo\Libraries\Format\Table\RequestTableParameterValuesCompiler;
 use Chamilo\Libraries\Storage\DataClass\DataClass;
+use Chamilo\Libraries\Storage\Query\Condition\Condition;
 use Chamilo\Libraries\Storage\Query\Condition\EqualityCondition;
 use Chamilo\Libraries\Storage\Query\Condition\InCondition;
 use Chamilo\Libraries\Storage\Query\Variable\PropertyConditionVariable;
@@ -78,7 +79,7 @@ class WhoisOnlineComponent extends Manager
         return $this->getService(WhoIsOnlineService::class);
     }
 
-    public function getWhoIsOnlineTableCondition()
+    public function getWhoIsOnlineTableCondition(): Condition
     {
         $userIdentifiers = $this->getWhoIsOnlineService()->findDistinctOnlineUserIdentifiers();
 
@@ -101,7 +102,7 @@ class WhoisOnlineComponent extends Manager
         return $this->getService(WhoIsOnlineTableRenderer::class);
     }
 
-    private function renderUserInformation(int $userIdentifier): string
+    private function renderUserInformation(string $userIdentifier): string
     {
         return $this->getUserDetailsRenderer()->renderUserDetailsForUserIdentifier($userIdentifier, $this->getUser());
     }

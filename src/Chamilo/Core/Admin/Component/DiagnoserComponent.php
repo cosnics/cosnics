@@ -8,18 +8,15 @@ use Chamilo\Libraries\Format\Structure\BreadcrumbTrail;
 use Chamilo\Libraries\Support\Diagnoser;
 
 /**
- *
- * @package admin.lib.admin_manager.component
- */
-
-/**
- * Weblcms component displays diagnostics about the system
+ * @package Chamilo\Core\Admin\Component
+ * @author  Hans De Bisschop <hans.de.bisschop@ehb.be>
  */
 class DiagnoserComponent extends Manager
 {
 
     /**
-     * Runs this component and displays its output.
+     * @throws \TableException
+     * @throws \Chamilo\Libraries\Architecture\Exceptions\NotAllowedException
      */
     public function run()
     {
@@ -27,17 +24,14 @@ class DiagnoserComponent extends Manager
 
         $html = [];
 
-        $html[] = $this->render_header();
+        $html[] = $this->renderHeader();
         $html[] = $this->getDiagnoser()->render();
-        $html[] = $this->render_footer();
+        $html[] = $this->renderFooter();
 
         return implode(PHP_EOL, $html);
     }
 
-    /**
-     * @return \Chamilo\Libraries\Support\Diagnoser
-     */
-    protected function getDiagnoser()
+    protected function getDiagnoser(): Diagnoser
     {
         return $this->getService(Diagnoser::class);
     }
