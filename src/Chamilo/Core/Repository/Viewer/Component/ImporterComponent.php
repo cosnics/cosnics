@@ -156,7 +156,7 @@ class ImporterComponent extends Manager implements DelegateComponent
             }
             else
             {
-                BreadcrumbTrail::getInstance()->add(
+                $this->getBreadcrumbTrail()->add(
                     new Breadcrumb(
                         $this->get_url(), Translation::get(
                         'ImportType', [
@@ -180,7 +180,7 @@ class ImporterComponent extends Manager implements DelegateComponent
         }
         else
         {
-            BreadcrumbTrail::getInstance()->add(
+            $this->getBreadcrumbTrail()->add(
                 new Breadcrumb($this->get_url(), Translation::get('ChooseImportFormat'))
             );
 

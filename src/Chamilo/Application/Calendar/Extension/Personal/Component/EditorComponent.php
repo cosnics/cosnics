@@ -39,7 +39,7 @@ class EditorComponent extends Manager implements DelegateComponent
             }
 
             $contentObject = $calendarEventPublication->get_publication_object();
-            BreadcrumbTrail::getInstance()->add(
+            $this->getBreadcrumbTrail()->add(
                 new Breadcrumb(null, Translation::get('Edit', ['TITLE' => $contentObject->get_title()]))
             );
 

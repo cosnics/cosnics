@@ -184,7 +184,7 @@ class Basic extends Html
             {
                 $tabs = new TabsCollection();
                 $context_parameters = $this->get_context()->get_parameters();
-                $trail = BreadcrumbTrail::getInstance();
+                $trail = $this->getBreadcrumbTrail();
 
                 foreach ($this->get_template()->get_blocks() as $key => $block)
                 {

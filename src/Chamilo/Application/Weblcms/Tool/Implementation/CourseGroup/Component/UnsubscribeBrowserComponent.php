@@ -56,7 +56,7 @@ class UnsubscribeBrowserComponent extends Manager implements DelegateComponent
         }
 
         $this->course_group = $course_group;
-        BreadcrumbTrail::getInstance()->add(
+        $this->getBreadcrumbTrail()->add(
             new Breadcrumb(
                 $this->get_url(),
                 $translator->trans('UnsubscribeBrowserComponent', ['GROUPNAME' => $course_group->get_name()],

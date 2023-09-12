@@ -22,7 +22,7 @@ abstract class ForumPostFormAction extends Manager implements DelegateComponent
      */
     public function add_common_breadcrumbtrails()
     {
-        $trail = BreadcrumbTrail::getInstance();
+        $trail = $this->getBreadcrumbTrail();
         
         $trail->add(
             new Breadcrumb(

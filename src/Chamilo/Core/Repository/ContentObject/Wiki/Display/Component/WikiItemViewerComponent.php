@@ -25,7 +25,7 @@ class WikiItemViewerComponent extends Manager implements DelegateComponent
 
     public function run()
     {
-        BreadcrumbTrail::getInstance()->add(new Breadcrumb(null, $this->get_root_content_object()->get_title()));
+        $this->getBreadcrumbTrail()->add(new Breadcrumb(null, $this->get_root_content_object()->get_title()));
 
         $complex_wiki_page_id = $this->getRequest()->query->get(self::PARAM_SELECTED_COMPLEX_CONTENT_OBJECT_ITEM_ID);
 
@@ -37,7 +37,7 @@ class WikiItemViewerComponent extends Manager implements DelegateComponent
             );
             $wiki_page = $complex_wiki_page->get_ref_object();
 
-            BreadcrumbTrail::getInstance()->add(new Breadcrumb(null, $wiki_page->get_title()));
+            $this->getBreadcrumbTrail()->add(new Breadcrumb(null, $wiki_page->get_title()));
 
             if ($version_object_id)
             {

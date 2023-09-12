@@ -109,8 +109,8 @@ class EntryCodePageCorrectorComponent extends Manager
 
         if (!$this->entry instanceof Entry)
         {
-            $breadcrumbTrail = BreadcrumbTrail::getInstance();
-            $breadcrumbTrail->get_last()->set_name(
+            $breadcrumbTrail = $this->getBreadcrumbTrail();
+            $breadcrumbTrail->getLast()->setName(
                 Translation::getInstance()->getTranslation('ViewerComponent', null, Manager::CONTEXT)
             );
         }

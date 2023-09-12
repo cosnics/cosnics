@@ -1,7 +1,7 @@
 <?php
 namespace Chamilo\Core\Menu;
 
-use Chamilo\Core\Admin\Core\BreadcrumbGenerator;
+use Chamilo\Core\Admin\Service\BreadcrumbGenerator;
 use Chamilo\Core\Menu\Factory\ItemRendererFactory;
 use Chamilo\Core\Menu\Service\CachedItemService;
 use Chamilo\Core\Menu\Service\ItemService;
@@ -9,7 +9,6 @@ use Chamilo\Core\Menu\Service\RightsService;
 use Chamilo\Libraries\Architecture\Application\Application;
 use Chamilo\Libraries\Architecture\Application\ApplicationConfigurationInterface;
 use Chamilo\Libraries\Format\Structure\BreadcrumbGeneratorInterface;
-use Chamilo\Libraries\Format\Structure\BreadcrumbTrail;
 
 /**
  * @package Chamilo\Core\Menu
@@ -48,6 +47,11 @@ abstract class Manager extends Application
         $this->checkAuthorization(Manager::CONTEXT);
     }
 
+    public function getBreadcrumbGenerator(): BreadcrumbGeneratorInterface
+    {
+        return $this->getService(BreadcrumbGenerator::class);
+    }
+
     public function getCachedItemService(): CachedItemService
     {
         return $this->getService(CachedItemService::class);
@@ -71,10 +75,5 @@ abstract class Manager extends Application
     public function getRightsService(): RightsService
     {
         return $this->getService(RightsService::class);
-    }
-
-    public function get_breadcrumb_generator(): BreadcrumbGeneratorInterface
-    {
-        return new BreadcrumbGenerator($this, BreadcrumbTrail::getInstance());
     }
 }

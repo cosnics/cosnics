@@ -328,11 +328,11 @@ class Kernel
             $response = $this->checkAuthentication()->checkPlatformAvailability()->buildApplication()->traceVisit()
                 ->runApplication();
         }
-        catch (NotAuthenticatedException $exception)
+        catch (NotAuthenticatedException)
         {
             $response = $this->getNotAuthenticatedResponse();
         }
-        catch (PlatformNotAvailableException $exception)
+        catch (PlatformNotAvailableException)
         {
             $response = $this->getPlatformNotAvailableResponse();
         }

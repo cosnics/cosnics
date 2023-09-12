@@ -42,7 +42,7 @@ class AssessmentMergerComponent extends Manager implements ViewerInterface
 
     public function run()
     {
-        $trail = BreadcrumbTrail::getInstance();
+        $trail = $this->getBreadcrumbTrail();
         $trail->add(
             new Breadcrumb(
                 $this->get_url([self::PARAM_ACTION => self::ACTION_BROWSE]),

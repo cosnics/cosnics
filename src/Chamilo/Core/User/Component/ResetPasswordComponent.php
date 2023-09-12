@@ -10,9 +10,6 @@ use Chamilo\Libraries\Architecture\Interfaces\ChangeablePassword;
 use Chamilo\Libraries\Architecture\Interfaces\NoAuthenticationSupport;
 use Chamilo\Libraries\Format\Display;
 use Chamilo\Libraries\Format\Form\FormValidator;
-use Chamilo\Libraries\Format\Structure\BreadcrumbGenerator;
-use Chamilo\Libraries\Format\Structure\BreadcrumbGeneratorInterface;
-use Chamilo\Libraries\Format\Structure\BreadcrumbTrail;
 use Chamilo\Libraries\Hashing\HashingUtilities;
 use Chamilo\Libraries\Mail\ValueObject\Mail;
 use Chamilo\Libraries\Translation\Translation;
@@ -230,11 +227,6 @@ class ResetPasswordComponent extends Manager implements NoAuthenticationSupport
     public function getPasswordGenerator(): PasswordGeneratorInterface
     {
         return $this->getService(PasswordGeneratorInterface::class);
-    }
-
-    public function get_breadcrumb_generator(): BreadcrumbGeneratorInterface
-    {
-        return new BreadcrumbGenerator($this, BreadcrumbTrail::getInstance());
     }
 
     /**

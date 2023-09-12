@@ -55,7 +55,7 @@ class AssessmentViewerComponent extends Manager implements DelegateComponent
      */
     public function run()
     {
-        BreadcrumbTrail::getInstance()->add(
+        $this->getBreadcrumbTrail()->add(
             new Breadcrumb(
                 $this->get_url(), Translation:: get(
                 'AssessmentToolViewerComponent', ['TITLE' => $this->get_root_content_object()->get_title()]

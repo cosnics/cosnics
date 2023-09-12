@@ -32,7 +32,7 @@ abstract class ReportingTemplate
             return;
         }
 
-        BreadcrumbTrail::getInstance()->add(
+        $this->getBreadcrumbTrail()->add(
             new Breadcrumb(
                 $this->get_url(), $this->getCurrentBlock()->get_title()
             )
@@ -138,7 +138,7 @@ abstract class ReportingTemplate
      */
     public function set_custom_breadcrumb_trail($custom_breadcrumbs)
     {
-        $breadcrumb_trail = BreadcrumbTrail::getInstance();
+        $breadcrumb_trail = $this->getBreadcrumbTrail();
         $breadcrumbs = $breadcrumb_trail->getBreadcrumbs();
         $breadcrumbs[$breadcrumb_trail->size() - 1] = $custom_breadcrumbs[0];
 
@@ -146,7 +146,7 @@ abstract class ReportingTemplate
         {
             $breadcrumbs[$breadcrumb_trail->size() + $i] = $custom_breadcrumbs[$i + 1];
         }
-        $breadcrumb_trail->set_breadcrumbtrail($breadcrumbs);
+        $breadcrumb_trail->set($breadcrumbs);
     }
 
     public function set_parameter($key, $value)

@@ -164,7 +164,7 @@ class MoverComponent extends BaseHtmlTreeComponent
         {
             $variable = $this->getCurrentContentObject() instanceof LearningPath ? 'MoveFolder' : 'MoverComponent';
 
-            $trail = BreadcrumbTrail::getInstance();
+            $trail = $this->getBreadcrumbTrail();
             $trail->add(new Breadcrumb($this->get_url(), Translation::get($variable)));
 
             $html = [];

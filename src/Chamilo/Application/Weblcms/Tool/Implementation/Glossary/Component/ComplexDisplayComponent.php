@@ -48,7 +48,7 @@ class ComplexDisplayComponent extends Manager implements DelegateComponent, Glos
         }
 
         $this->getCategoryBreadcrumbsGenerator()->generateBreadcrumbsForContentObjectPublication(
-            BreadcrumbTrail::getInstance(), $this, $this->publication
+            $this->getBreadcrumbTrail(), $this, $this->publication
         );
 
         return $this->getApplicationFactory()->getApplication(

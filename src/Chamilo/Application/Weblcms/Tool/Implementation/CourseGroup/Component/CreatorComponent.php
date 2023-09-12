@@ -23,8 +23,6 @@ class CreatorComponent extends Manager
         }
         $course_group_id = $this->getRequest()->query->get(self::PARAM_COURSE_GROUP);
 
-        // $trail = BreadcrumbTrail::getInstance();
-
         $course = $this->get_course();
         $course_group = new CourseGroup();
         $course_group->set_course_code($course->get_id());

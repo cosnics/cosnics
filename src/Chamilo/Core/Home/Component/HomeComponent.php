@@ -3,7 +3,9 @@ namespace Chamilo\Core\Home\Component;
 
 use Chamilo\Core\Home\Manager;
 use Chamilo\Core\Home\Renderer\HomeRenderer;
+use Chamilo\Libraries\Architecture\Interfaces\DelegateComponent;
 use Chamilo\Libraries\Architecture\Interfaces\NoAuthenticationSupport;
+use Chamilo\Libraries\Architecture\Interfaces\NoContextComponent;
 use Chamilo\Libraries\Authentication\AuthenticationValidator;
 use Chamilo\Libraries\Format\Structure\BreadcrumbTrail;
 
@@ -13,7 +15,7 @@ use Chamilo\Libraries\Format\Structure\BreadcrumbTrail;
  * @author  Magali Gillard <magali.gillard@ehb.be>
  * @author  Eduard Vossen <eduard.vossen@ehb.be>
  */
-class HomeComponent extends Manager implements NoAuthenticationSupport
+class HomeComponent extends Manager implements NoAuthenticationSupport, NoContextComponent, DelegateComponent
 {
 
     /**
@@ -27,7 +29,7 @@ class HomeComponent extends Manager implements NoAuthenticationSupport
         $authenticationValidator = $this->getAuthenticationValidator();
         $authenticationValidator->validate();
 
-        BreadcrumbTrail::getInstance()->truncate();
+        //$this->getBreadcrumbTrail()->truncate();
 
         $currentTabIdentifier = $this->getRequest()->query->get(self::PARAM_TAB_ID);
         $isGeneralMode = (bool) $this->getSession()->get(Manager::SESSION_GENERAL_MODE, false);

@@ -10,7 +10,6 @@ use Chamilo\Libraries\Format\Structure\ActionBar\ButtonGroup;
 use Chamilo\Libraries\Format\Structure\ActionBar\ButtonToolBar;
 use Chamilo\Libraries\Format\Structure\ActionBar\Renderer\ButtonToolBarRenderer;
 use Chamilo\Libraries\Format\Structure\Breadcrumb;
-use Chamilo\Libraries\Format\Structure\BreadcrumbTrail;
 use Chamilo\Libraries\Format\Structure\Glyph\FontAwesomeGlyph;
 use Chamilo\Libraries\Format\Structure\ToolbarItem;
 use Chamilo\Libraries\Translation\Translation;
@@ -37,7 +36,7 @@ class ViewerComponent extends Manager implements DelegateComponent
         $this->context = $this->getRequest()->query->get(self::PARAM_CONTEXT);
         $this->registration = $this->getRegistrationConsulter()->getRegistrationForContext($this->context);
 
-        BreadcrumbTrail::getInstance()->add(
+        $this->getBreadcrumbTrail()->add(
             new Breadcrumb(
                 null, Translation::get(
                 'ViewingPackage', ['PACKAGE' => Translation::get('TypeName', null, $this->context)]

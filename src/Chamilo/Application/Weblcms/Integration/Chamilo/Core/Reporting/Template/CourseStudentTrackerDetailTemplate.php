@@ -38,7 +38,7 @@ class CourseStudentTrackerDetailTemplate extends ReportingTemplate
         $params[\Chamilo\Application\Weblcms\Manager::PARAM_TEMPLATE_ID] = CourseStudentTrackerTemplate::class;
         $params[Manager::PARAM_BLOCK_ID] = 0;
 
-        $breadcrumbTrail = BreadcrumbTrail::getInstance();
+        $breadcrumbTrail = $this->getBreadcrumbTrail();
 
         $breadcrumbTrail->add(
             new Breadcrumb(
@@ -55,7 +55,7 @@ class CourseStudentTrackerDetailTemplate extends ReportingTemplate
 
         if ($user)
         {
-            BreadcrumbTrail::getInstance()->add(
+            $this->getBreadcrumbTrail()->add(
                 new Breadcrumb(
                     $this->get_url([], [Manager::PARAM_BLOCK_ID]), $user->get_fullname()
                 )

@@ -1,11 +1,10 @@
 <?php
 namespace Chamilo\Core\Metadata;
 
-use Chamilo\Core\Admin\Core\BreadcrumbGenerator;
+use Chamilo\Core\Admin\Service\BreadcrumbGenerator;
 use Chamilo\Libraries\Architecture\Application\Application;
 use Chamilo\Libraries\Architecture\Application\ApplicationConfigurationInterface;
 use Chamilo\Libraries\Format\Structure\BreadcrumbGeneratorInterface;
-use Chamilo\Libraries\Format\Structure\BreadcrumbTrail;
 
 /**
  * @package Chamilo\Core\Metadata
@@ -28,8 +27,8 @@ abstract class Manager extends Application
         $this->checkAuthorization(Manager::CONTEXT);
     }
 
-    public function get_breadcrumb_generator(): BreadcrumbGeneratorInterface
+    public function getBreadcrumbGenerator(): BreadcrumbGeneratorInterface
     {
-        return new BreadcrumbGenerator($this, BreadcrumbTrail::getInstance());
+        return $this->getService(BreadcrumbGenerator::class);
     }
 }

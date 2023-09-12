@@ -47,6 +47,7 @@ abstract class Application
     public function __construct(ApplicationConfigurationInterface $applicationConfiguration)
     {
         $this->applicationConfiguration = $applicationConfiguration;
+        $this->getBreadcrumbGenerator()->generateBreadcrumbs($this);
     }
 
     /**
@@ -54,7 +55,7 @@ abstract class Application
      */
     abstract public function run();
 
-    public function add_additional_breadcrumbs(BreadcrumbTrail $breadcrumbtrail): void
+    public function addAdditionalBreadcrumbs(BreadcrumbTrail $breadcrumbtrail): void
     {
     }
 
@@ -150,6 +151,11 @@ abstract class Application
         return $this->applicationConfiguration;
     }
 
+    public function getBreadcrumbGenerator(): BreadcrumbGeneratorInterface
+    {
+        return $this->getService(BreadcrumbGenerator::class);
+    }
+
     /**
      * @param string[] $parameters
      * @param string[] $filter
@@ -180,11 +186,6 @@ abstract class Application
     public function get_application(): ?Application
     {
         return $this->getApplicationConfiguration()->getApplication();
-    }
-
-    public function get_breadcrumb_generator(): BreadcrumbGeneratorInterface
-    {
-        return new BreadcrumbGenerator($this, BreadcrumbTrail::getInstance());
     }
 
     public function get_general_result(
@@ -465,11 +466,11 @@ abstract class Application
 
     protected function renderPageTitle(): string
     {
-        $breadcrumbTrail = BreadcrumbTrail::getInstance();
+        $breadcrumbTrail = $this->getBreadcrumbTrail();
 
         if ($breadcrumbTrail->size() > 0)
         {
-            $pageTitle = BreadcrumbTrail::getInstance()->get_last()->getName();
+            $pageTitle = $breadcrumbTrail->getLast()->getName();
 
             return '<h3 id="page-title" title="' . htmlentities(strip_tags($pageTitle)) . '">' . $pageTitle . '</h3>';
         }

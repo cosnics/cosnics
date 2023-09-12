@@ -40,7 +40,7 @@ class CreatorComponent extends Manager implements DelegateComponent
 
         $itemRenderer = $this->getItemRendererFactory()->getAvailableItemRenderer($itemType);
 
-        BreadcrumbTrail::getInstance()->add(
+        $this->getBreadcrumbTrail()->add(
             new Breadcrumb(
                 null, $this->getTranslator()->trans(
                 'AddMenuItemComponentTitle', ['{ITEM_TYPE}' => $itemRenderer->getRendererTypeName()], Manager::CONTEXT

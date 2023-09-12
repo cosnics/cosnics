@@ -34,7 +34,7 @@ class AssignmentScoresTemplate extends ReportingTemplate
         $this->add_reporting_block(new AssignmentCourseGroupScoresBlock($this, true));
         $this->add_reporting_block(new AssignmentPlatformGroupScoresBlock($this, true));
 
-        $breadcrumbTrail = BreadcrumbTrail::getInstance();
+        $breadcrumbTrail = $this->getBreadcrumbTrail();
 
         $params = [];
         $params[\Chamilo\Application\Weblcms\Manager::PARAM_TEMPLATE_ID] =

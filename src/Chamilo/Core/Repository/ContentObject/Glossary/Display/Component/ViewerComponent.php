@@ -36,7 +36,7 @@ class ViewerComponent extends Manager implements DelegateComponent
      */
     public function run()
     {
-        BreadcrumbTrail::getInstance()->add(new Breadcrumb(null, $this->get_root_content_object()->get_title()));
+        $this->getBreadcrumbTrail()->add(new Breadcrumb(null, $this->get_root_content_object()->get_title()));
         $html = [];
 
         $html[] = $this->render_header();
@@ -156,7 +156,7 @@ class ViewerComponent extends Manager implements DelegateComponent
         $query = $this->buttonToolbarRenderer->getSearchForm()->getQuery();
 
         $object = $this->get_parent()->get_root_content_object($this);
-        $trail = BreadcrumbTrail::getInstance();
+        $trail = $this->getBreadcrumbTrail();
 
         if (!is_array($object))
         {

@@ -104,7 +104,7 @@ class UpdaterComponent extends Manager
             }
             else
             {
-                $trail = BreadcrumbTrail::getInstance();
+                $trail = $this->getBreadcrumbTrail();
                 $trail->add(
                     new Breadcrumb(
                         $this->get_url(

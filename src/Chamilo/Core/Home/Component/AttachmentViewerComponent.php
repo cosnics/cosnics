@@ -25,7 +25,7 @@ class AttachmentViewerComponent extends Manager
      */
     public function run()
     {
-        $trail = BreadcrumbTrail::getInstance();
+        $trail = $this->getBreadcrumbTrail();
         $translator = $this->getTranslator();
 
         $failed = false;

@@ -1,12 +1,12 @@
 <?php
 namespace Chamilo\Core\Repository\Viewer;
 
+use Chamilo\Core\Admin\Service\BreadcrumbGenerator;
 use Chamilo\Core\Repository\Viewer\Architecture\Traits\ViewerTrait;
 use Chamilo\Core\Repository\Workspace\Storage\DataClass\Workspace;
 use Chamilo\Libraries\Architecture\Application\Application;
 use Chamilo\Libraries\Architecture\Application\ApplicationConfigurationInterface;
 use Chamilo\Libraries\Format\Structure\BreadcrumbGeneratorInterface;
-use Chamilo\Libraries\Format\Structure\BreadcrumbTrail;
 use Chamilo\Libraries\Format\Structure\Glyph\FontAwesomeGlyph;
 
 /**
@@ -90,6 +90,11 @@ abstract class Manager extends Application
         );
     }
 
+    public function getBreadcrumbGenerator(): BreadcrumbGeneratorInterface
+    {
+        return $this->getService(BreadcrumbGenerator::class);
+    }
+
     public function getCurrentWorkspace(): Workspace
     {
         return $this->getService('Chamilo\Core\Repository\CurrentWorkspace');
@@ -166,11 +171,6 @@ abstract class Manager extends Application
     public function get_actions()
     {
         return $this->actions;
-    }
-
-    public function get_breadcrumb_generator(): BreadcrumbGeneratorInterface
-    {
-        return new BreadcrumbGenerator($this, BreadcrumbTrail::getInstance());
     }
 
     /**

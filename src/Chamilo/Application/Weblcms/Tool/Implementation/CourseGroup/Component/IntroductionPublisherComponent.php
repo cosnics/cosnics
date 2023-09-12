@@ -7,7 +7,7 @@ use Chamilo\Libraries\Format\Structure\BreadcrumbTrail;
 class IntroductionPublisherComponent extends Manager
 {
 
-    public function add_additional_breadcrumbs(BreadcrumbTrail $breadcrumbtrail): void
+    public function addAdditionalBreadcrumbs(BreadcrumbTrail $breadcrumbtrail): void
     {
         $this->addBrowserBreadcrumb($breadcrumbtrail);
     }

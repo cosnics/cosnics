@@ -664,7 +664,7 @@ class BrowserComponent extends Manager implements DelegateComponent
             {
                 $category = $this->retrieve_category($categoryId);
                 $this->getCategoryBreadcrumbsGenerator()->generateBreadcrumbsForCategory(
-                    BreadcrumbTrail::getInstance(), $this, $category
+                    $this->getBreadcrumbTrail(), $this, $category
                 );
 
                 if ($category)

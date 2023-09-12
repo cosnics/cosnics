@@ -213,7 +213,7 @@ class MoverComponent extends ItemComponent
         {
             $variable = $this->get_current_content_object() instanceof Portfolio ? 'MoveFolder' : 'MoverComponent';
 
-            $trail = BreadcrumbTrail::getInstance();
+            $trail = $this->getBreadcrumbTrail();
             $trail->add(new Breadcrumb($this->get_url(), Translation::get($variable)));
 
             $html = [];

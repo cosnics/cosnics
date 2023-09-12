@@ -28,7 +28,6 @@ class ComparerComponent extends Manager
      */
     public function run()
     {
-        // $trail = BreadcrumbTrail::getInstance();
         $object_ids = $this->getRequest()->request->get(self::PARAM_CONTENT_OBJECT_ID);
         if (empty($object_ids))
         {
@@ -93,7 +92,7 @@ class ComparerComponent extends Manager
         return implode(PHP_EOL, $html);
     }
 
-    public function add_additional_breadcrumbs(BreadcrumbTrail $breadcrumbtrail): void
+    public function addAdditionalBreadcrumbs(BreadcrumbTrail $breadcrumbtrail): void
     {
         $baseContentObject = $this->getBaseContentObject();
 

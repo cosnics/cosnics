@@ -41,7 +41,7 @@ class UpdaterComponent extends Manager
         );
         $category = $categories->current();
 
-        $trail = BreadcrumbTrail::getInstance();
+        $trail = $this->getBreadcrumbTrail();
         $this->set_parameter(self::PARAM_CATEGORY_ID, $this->getRequest()->query->get(self::PARAM_CATEGORY_ID));
         $trail->add(
             new Breadcrumb(

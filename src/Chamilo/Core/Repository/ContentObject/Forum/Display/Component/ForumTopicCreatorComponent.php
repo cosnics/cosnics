@@ -26,7 +26,7 @@ class ForumTopicCreatorComponent extends Manager implements ViewerInterface, Del
     {
         if (!$this->isAnyObjectSelectedInViewer())
         {
-            BreadcrumbTrail::getInstance()->add(
+            $this->getBreadcrumbTrail()->add(
                 new Breadcrumb(
                     $this->get_url(
                         [
@@ -50,7 +50,7 @@ class ForumTopicCreatorComponent extends Manager implements ViewerInterface, Del
                     foreach ($forums_with_key_cloi as $key => $value)
                     {
 
-                        BreadcrumbTrail::getInstance()->add(
+                        $this->getBreadcrumbTrail()->add(
                             new Breadcrumb(
                                 $this->get_url(
                                     [

@@ -121,7 +121,7 @@ class ContentObjectCategoryMenu extends HtmlMenu
      */
     public function get_breadcrumbs()
     {
-        $trail = BreadcrumbTrail::getInstance();
+        $trail = $this->getBreadcrumbTrail();
         $htmlMenuArrayRenderer = new HtmlMenuArrayRenderer();
 
         $this->render($htmlMenuArrayRenderer, 'urhere');

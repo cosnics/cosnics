@@ -36,7 +36,7 @@ class DoublesViewerComponent extends Manager
     public function run()
     {
         $id = $this->getRequest()->query->get(self::PARAM_CONTENT_OBJECT_ID);
-        $trail = BreadcrumbTrail::getInstance();
+        $trail = $this->getBreadcrumbTrail();
 
         $html = [];
 
@@ -66,7 +66,7 @@ class DoublesViewerComponent extends Manager
         return implode(PHP_EOL, $html);
     }
 
-    public function add_additional_breadcrumbs(BreadcrumbTrail $breadcrumbtrail): void
+    public function addAdditionalBreadcrumbs(BreadcrumbTrail $breadcrumbtrail): void
     {
         $breadcrumbtrail->add(
             new Breadcrumb(

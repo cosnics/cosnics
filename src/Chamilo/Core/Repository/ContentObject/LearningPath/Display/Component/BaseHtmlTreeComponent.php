@@ -25,7 +25,7 @@ abstract class BaseHtmlTreeComponent extends Manager implements DelegateComponen
     {
         $learning_path = $this->learningPath;
 
-        $trail = BreadcrumbTrail::getInstance();
+        $trail = $this->getBreadcrumbTrail();
 
         if (!$learning_path)
         {

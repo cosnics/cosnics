@@ -15,7 +15,7 @@ class AttachmentViewerComponent extends Manager
      *
      * @param BreadcrumbTrail $breadcrumbtrail
      */
-    public function add_additional_breadcrumbs(BreadcrumbTrail $breadcrumbtrail): void
+    public function addAdditionalBreadcrumbs(BreadcrumbTrail $breadcrumbtrail): void
     {
         $this->addBrowserBreadcrumb($breadcrumbtrail);
     }

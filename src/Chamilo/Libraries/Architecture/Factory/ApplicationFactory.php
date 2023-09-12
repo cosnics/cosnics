@@ -129,10 +129,7 @@ class ApplicationFactory
         string $context, ApplicationConfiguration $applicationConfiguration, ?string $fallBackAction = null
     ): Application
     {
-        $application = $this->createApplication($context, $applicationConfiguration, $fallBackAction);
-        $application->get_breadcrumb_generator()->generateBreadcrumbs();
-
-        return $application;
+        return $this->createApplication($context, $applicationConfiguration, $fallBackAction);
     }
 
     /**

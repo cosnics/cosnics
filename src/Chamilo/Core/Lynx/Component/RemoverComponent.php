@@ -23,7 +23,7 @@ class RemoverComponent extends Manager implements DelegateComponent
         $remover = new PackageRemover($context);
         $remover->run();
 
-        BreadcrumbTrail::getInstance()->add(
+        $this->getBreadcrumbTrail()->add(
             new Breadcrumb(
                 null, Translation::get('RemovingPackage', ['PACKAGE' => Translation::get('TypeName', null, $context)])
             )

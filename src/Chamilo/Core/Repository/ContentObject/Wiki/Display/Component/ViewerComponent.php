@@ -83,8 +83,7 @@ class ViewerComponent extends Manager implements DelegateComponent
         }
     }
 
-    public function add_additional_breadcrumbs(BreadcrumbTrail $breadcrumbtrail): void
+    public function addAdditionalBreadcrumbs(BreadcrumbTrail $breadcrumbtrail): void
     {
-        $breadcrumbtrail = $this->get_breadcrumbtrail();
     }
 }

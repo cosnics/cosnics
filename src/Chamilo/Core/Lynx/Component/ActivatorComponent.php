@@ -7,7 +7,6 @@ use Chamilo\Core\Lynx\Manager;
 use Chamilo\Libraries\Architecture\Exceptions\NotAllowedException;
 use Chamilo\Libraries\Architecture\Interfaces\DelegateComponent;
 use Chamilo\Libraries\Format\Structure\Breadcrumb;
-use Chamilo\Libraries\Format\Structure\BreadcrumbTrail;
 use Chamilo\Libraries\Format\Structure\Glyph\FontAwesomeGlyph;
 use Chamilo\Libraries\Format\Structure\Toolbar;
 use Chamilo\Libraries\Format\Structure\ToolbarItem;
@@ -26,7 +25,7 @@ class ActivatorComponent extends Manager implements DelegateComponent
         $activator = new PackageActivator($context);
         $activator->run();
 
-        BreadcrumbTrail::getInstance()->add(
+        $this->getBreadcrumbTrail()->add(
             new Breadcrumb(
                 null, Translation::get(
                 'ActivatingPackage', ['PACKAGE' => Translation::get('TypeName', null, $context)]

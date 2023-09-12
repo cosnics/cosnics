@@ -4,6 +4,7 @@ namespace Chamilo\Core\Reporting\Viewer\Rendition\Template;
 use Chamilo\Core\Reporting\Viewer\NoBlockTabsAllowed;
 use Chamilo\Core\Reporting\Viewer\Rendition\Template\Implementation\AbstractTemplateRenditionImplementation;
 use Chamilo\Libraries\DependencyInjection\DependencyInjectionContainerBuilder;
+use Chamilo\Libraries\DependencyInjection\Traits\DependencyInjectionContainerTrait;
 use Chamilo\Libraries\File\ConfigurablePathBuilder;
 use Chamilo\Libraries\File\FilesystemTools;
 use Chamilo\Libraries\Utilities\StringUtilities;
@@ -14,6 +15,9 @@ use Chamilo\Libraries\Utilities\StringUtilities;
  */
 abstract class TemplateRendition
 {
+
+    use DependencyInjectionContainerTrait;
+
     public const FORMAT_CSV = 'csv';
 
     public const FORMAT_HTML = 'html';

@@ -83,7 +83,7 @@ class DeleterComponent extends Manager
      * @param \libraries\format\BreadcrumbTrail $breadcrumb_trail
      * @param BreadcrumbTrail $breadcrumb_trail
      */
-    public function add_additional_breadcrumbs(BreadcrumbTrail $breadcrumb_trail)
+    public function addAdditionalBreadcrumbs(BreadcrumbTrail $breadcrumb_trail)
     {
         $breadcrumb_trail->add(
             new Breadcrumb(

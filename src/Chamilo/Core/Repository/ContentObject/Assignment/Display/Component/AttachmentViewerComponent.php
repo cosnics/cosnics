@@ -50,7 +50,7 @@ class AttachmentViewerComponent extends Manager
         /*
          * Render the attachment
          */
-        $trail = BreadcrumbTrail::getInstance();
+        $trail = $this->getBreadcrumbTrail();
         $trail->add(
             new Breadcrumb(
                 $this->get_url([\Chamilo\Core\Repository\Display\Manager::PARAM_ATTACHMENT_ID => $attachment_id]),

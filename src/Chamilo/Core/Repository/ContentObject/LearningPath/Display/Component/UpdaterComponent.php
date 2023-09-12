@@ -119,7 +119,7 @@ class UpdaterComponent extends BaseHtmlTreeComponent
                     );
                 }
 
-                $trail = BreadcrumbTrail::getInstance();
+                $trail = $this->getBreadcrumbTrail();
                 $trail->add(
                     new Breadcrumb(
                         $this->get_url(), $title

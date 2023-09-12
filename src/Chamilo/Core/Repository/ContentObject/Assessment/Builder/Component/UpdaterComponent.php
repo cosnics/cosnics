@@ -28,8 +28,6 @@ class UpdaterComponent extends Manager implements DelegateComponent
 
     public function run()
     {
-        $trail = BreadcrumbTrail::getInstance();
-
         $complex_content_object_item_id = $this->getRequest()->query->get(
             Manager::PARAM_SELECTED_COMPLEX_CONTENT_OBJECT_ITEM_ID
         );
@@ -126,9 +124,7 @@ class UpdaterComponent extends Manager implements DelegateComponent
         }
         else
         {
-            $trail = BreadcrumbTrail::getInstance();
-
-            BreadcrumbTrail::getInstance()->add(
+            $this->getBreadcrumbTrail()->add(
                 new Breadcrumb(
                     null, Translation::get(
                     'EditContentObject', ['CONTENT_OBJECT' => $content_object->get_title()],

@@ -55,7 +55,7 @@ class CreatorComponent extends ItemComponent implements ViewerInterface
         {
             $variable = 'CreatorComponent';
         }
-        BreadcrumbTrail::getInstance()->add(new Breadcrumb($this->get_url(), Translation::get($variable)));
+        $this->getBreadcrumbTrail()->add(new Breadcrumb($this->get_url(), Translation::get($variable)));
 
         if (!$this->isAnyObjectSelectedInViewer())
         {

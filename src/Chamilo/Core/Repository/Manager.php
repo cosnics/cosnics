@@ -10,6 +10,7 @@ use Chamilo\Core\Repository\Menu\RepositoryCategoryTreeMenu;
 use Chamilo\Core\Repository\Menu\RepositoryMenu;
 use Chamilo\Core\Repository\Publication\Service\PublicationAggregator;
 use Chamilo\Core\Repository\Selector\TypeSelector;
+use Chamilo\Core\Repository\Service\BreadcrumbGenerator;
 use Chamilo\Core\Repository\Service\WorkspaceExtensionManager;
 use Chamilo\Core\Repository\Storage\DataClass\ContentObject;
 use Chamilo\Core\Repository\Storage\DataClass\RepositoryCategory;
@@ -26,7 +27,6 @@ use Chamilo\Libraries\Architecture\Exceptions\ObjectNotExistException;
 use Chamilo\Libraries\Architecture\Interfaces\MenuComponent;
 use Chamilo\Libraries\DependencyInjection\DependencyInjectionContainerBuilder;
 use Chamilo\Libraries\Format\Structure\BreadcrumbGeneratorInterface;
-use Chamilo\Libraries\Format\Structure\BreadcrumbTrail;
 use Chamilo\Libraries\Format\Structure\Glyph\FontAwesomeGlyph;
 use Chamilo\Libraries\Format\Tabs\ContentTab;
 use Chamilo\Libraries\Format\Tabs\GenericTabsRenderer;
@@ -201,6 +201,11 @@ abstract class Manager extends Application implements MenuComponent
         return parent::getAdditionalParameters($additionalParameters);
     }
 
+    public function getBreadcrumbGenerator(): BreadcrumbGeneratorInterface
+    {
+        return $this->getService(BreadcrumbGenerator::class);
+    }
+
     /**
      * @return \Chamilo\Core\Metadata\Entity\DataClassEntityFactory
      */
@@ -260,11 +265,6 @@ abstract class Manager extends Application implements MenuComponent
         }
 
         return $types;
-    }
-
-    public function get_breadcrumb_generator(): BreadcrumbGeneratorInterface
-    {
-        return new BreadcrumbGenerator($this, BreadcrumbTrail::getInstance());
     }
 
     /**
@@ -587,6 +587,60 @@ abstract class Manager extends Application implements MenuComponent
         );
     }
 
+    public function get_parameters(bool $include_search = false): array
+    {
+        if ($include_search && isset($this->search_parameters))
+        {
+            return array_merge($this->search_parameters, parent::get_parameters());
+        }
+
+        return parent::get_parameters();
+    }
+
+    public static function get_preview_content_object_url($content_object)
+    {
+        return Preview\Manager::get_content_object_default_action_link($content_object);
+    }
+
+    public function get_publish_content_object_url($content_object)
+    {
+        return $this->get_url(
+            [
+                self::PARAM_ACTION => self::ACTION_PUBLICATION,
+                Publication\Manager::PARAM_ACTION => Publication\Manager::ACTION_PUBLISH,
+                self::PARAM_CONTENT_OBJECT_ID => $content_object->get_id()
+            ]
+        );
+    }
+
+    /**
+     * Gets the URL to the recycle bin.
+     *
+     * @return string The URL.
+     */
+    public function get_recycle_bin_url()
+    {
+        return $this->get_url(
+            [self::PARAM_ACTION => self::ACTION_BROWSE_RECYCLED_CONTENT_OBJECTS, self::PARAM_CATEGORY_ID => null]
+        );
+    }
+
+    /**
+     * Gets the url for browsing objects of a given type
+     *
+     * @param int $template_registration_id
+     *
+     * @return string The url
+     */
+    public function get_type_filter_url($template_registration_id)
+    {
+        $params = [];
+        $params[self::PARAM_ACTION] = self::ACTION_BROWSE_CONTENT_OBJECTS;
+        $params[FilterData::FILTER_TYPE] = $template_registration_id;
+
+        return $this->get_url($params);
+    }
+
     public function renderApplicationMenu(): string
     {
         $translator = Translation::getInstance();
@@ -680,60 +734,6 @@ abstract class Manager extends Application implements MenuComponent
         $html[] = $repositoryMenu->render();
 
         return implode(PHP_EOL, $html);
-    }
-
-    public function get_parameters(bool $include_search = false): array
-    {
-        if ($include_search && isset($this->search_parameters))
-        {
-            return array_merge($this->search_parameters, parent::get_parameters());
-        }
-
-        return parent::get_parameters();
-    }
-
-    public static function get_preview_content_object_url($content_object)
-    {
-        return Preview\Manager::get_content_object_default_action_link($content_object);
-    }
-
-    public function get_publish_content_object_url($content_object)
-    {
-        return $this->get_url(
-            [
-                self::PARAM_ACTION => self::ACTION_PUBLICATION,
-                Publication\Manager::PARAM_ACTION => Publication\Manager::ACTION_PUBLISH,
-                self::PARAM_CONTENT_OBJECT_ID => $content_object->get_id()
-            ]
-        );
-    }
-
-    /**
-     * Gets the URL to the recycle bin.
-     *
-     * @return string The URL.
-     */
-    public function get_recycle_bin_url()
-    {
-        return $this->get_url(
-            [self::PARAM_ACTION => self::ACTION_BROWSE_RECYCLED_CONTENT_OBJECTS, self::PARAM_CATEGORY_ID => null]
-        );
-    }
-
-    /**
-     * Gets the url for browsing objects of a given type
-     *
-     * @param int $template_registration_id
-     *
-     * @return string The url
-     */
-    public function get_type_filter_url($template_registration_id)
-    {
-        $params = [];
-        $params[self::PARAM_ACTION] = self::ACTION_BROWSE_CONTENT_OBJECTS;
-        $params[FilterData::FILTER_TYPE] = $template_registration_id;
-
-        return $this->get_url($params);
     }
 
     public function render_header(string $pageTitle = ''): string

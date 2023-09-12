@@ -36,7 +36,7 @@ class PublicationUpdaterComponent extends Manager implements DelegateComponent
         {
             $content_object = $publication->get_content_object();
 
-            BreadcrumbTrail::getInstance()->add(
+            $this->getBreadcrumbTrail()->add(
                 new Breadcrumb(
                     $this->get_url(),
                     Translation::get('ToolPublicationUpdaterComponent', ['TITLE' => $content_object->get_title()])

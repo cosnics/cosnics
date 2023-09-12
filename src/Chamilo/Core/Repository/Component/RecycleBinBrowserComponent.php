@@ -36,7 +36,7 @@ class RecycleBinBrowserComponent extends Manager
     public function run()
     {
         $translator = $this->getTranslator();
-        $trail = BreadcrumbTrail::getInstance();
+        $trail = $this->getBreadcrumbTrail();
         $trail->add(new Breadcrumb($this->get_url(), $translator->trans('RecycleBin', [], Manager::CONTEXT)));
 
         $this->buttonToolbarRenderer = $this->getButtonToolbarRenderer();
@@ -60,7 +60,7 @@ class RecycleBinBrowserComponent extends Manager
         return implode(PHP_EOL, $html);
     }
 
-    public function add_additional_breadcrumbs(BreadcrumbTrail $breadcrumbtrail): void
+    public function addAdditionalBreadcrumbs(BreadcrumbTrail $breadcrumbtrail): void
     {
         $breadcrumbtrail->add(
             new Breadcrumb(

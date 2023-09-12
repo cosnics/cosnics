@@ -129,7 +129,7 @@ class CategoryMoverComponent extends Manager implements DelegateComponent
             else
             {
                 // $message = $form->toHtml();
-                $trail = BreadcrumbTrail::getInstance();
+                $trail = $this->getBreadcrumbTrail();
 
                 if (count($publication_ids) > 1)
                 {

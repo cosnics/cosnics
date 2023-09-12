@@ -58,7 +58,7 @@ class BrowserComponent extends Manager implements DelegateComponent, MenuCompone
 
     public function add_admin_breadcrumb(): void
     {
-        $breadcrumb_trail = BreadcrumbTrail::getInstance();
+        $breadcrumb_trail = $this->getBreadcrumbTrail();
         $breadcrumbs = $breadcrumb_trail->getBreadcrumbs();
 
         $adminUrl = $this->getUrlGenerator()->fromParameters(

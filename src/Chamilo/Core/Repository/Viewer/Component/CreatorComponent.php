@@ -127,7 +127,7 @@ class CreatorComponent extends Manager implements DelegateComponent
         $object->set_template_registration_id($template_id);
         $object->set_owner_id($this->get_user_id());
 
-        BreadcrumbTrail::getInstance()->add(
+        $this->getBreadcrumbTrail()->add(
             new Breadcrumb(
                 $this->get_url(), Translation::get(
                 'CreateContentType', [
@@ -157,7 +157,7 @@ class CreatorComponent extends Manager implements DelegateComponent
     {
         $content_object = DataManager::retrieve_by_id(ContentObject::class, $content_object_id);
 
-        BreadcrumbTrail::getInstance()->add(
+        $this->getBreadcrumbTrail()->add(
             new Breadcrumb(
                 null, Translation::get(
                 'UpdateContentType', [

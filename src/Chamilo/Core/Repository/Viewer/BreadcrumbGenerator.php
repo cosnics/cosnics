@@ -1,37 +1,26 @@
 <?php
 namespace Chamilo\Core\Repository\Viewer;
 
-use Chamilo\Libraries\Architecture\ClassnameUtilities;
-use Chamilo\Libraries\Format\Structure\Breadcrumb;
-use Chamilo\Libraries\Translation\Translation;
+use Chamilo\Libraries\Architecture\Application\Application;
 
 /**
- * Repo Viewer BreadcrumbGenerator
- *
- * @package common\libraries
+ * @package Chamilo\Core\Repository\Viewer
  * @author  Sven Vanpoucke - Hogeschool Gent
+ * @author  Hans De Bisschop <hans.de.bisschop@ehb.be>
  */
 class BreadcrumbGenerator extends \Chamilo\Libraries\Format\Structure\BreadcrumbGenerator
 {
 
     /**
-     * Generates the breadcrumb for the component name
+     * @throws \ReflectionException
      */
-    protected function generateComponentBreadcrumb()
+    protected function generateComponentBreadcrumb(Application $application): void
     {
-        if ($this->getApplication()->areBreadcrumbsDisabled())
+        if ($application->areBreadcrumbsDisabled())
         {
             return;
         }
 
-        $variable = ClassnameUtilities::getInstance()->getClassNameFromNamespace(get_class($this->getApplication()));
-
-        $this->getBreadcrumbTrail()->add(
-            new Breadcrumb(
-                $this->getApplication()->get_url(), Translation::get(
-                $variable, null, $this->getApplication()::CONTEXT
-            )
-            )
-        );
+        parent::generateComponentBreadcrumb($application);
     }
 }

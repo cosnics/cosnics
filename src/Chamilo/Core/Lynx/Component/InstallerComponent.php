@@ -23,7 +23,7 @@ class InstallerComponent extends Manager implements DelegateComponent
         $installer = new PackageInstaller($context);
         $installer->run();
 
-        BreadcrumbTrail::getInstance()->add(
+        $this->getBreadcrumbTrail()->add(
             new Breadcrumb(
                 null, Translation::get(
                 'InstallingPackage', ['PACKAGE' => Translation::get('TypeName', null, $context)]

@@ -909,7 +909,7 @@ class ForumViewerComponent extends Manager implements DelegateComponent
 
     public function setBreadcrumbs()
     {
-        $trail = BreadcrumbTrail::getInstance();
+        $trail = $this->getBreadcrumbTrail();
 
         $trail->add(
             new Breadcrumb(

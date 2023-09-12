@@ -131,7 +131,7 @@ class UpdateComponent extends CourseFormActionComponent
      *
      * @param $breadcrumbtrail \libraries\format\BreadcrumbTrail
      */
-    public function add_additional_breadcrumbs(BreadcrumbTrail $breadcrumbtrail): void
+    public function addAdditionalBreadcrumbs(BreadcrumbTrail $breadcrumbtrail): void
     {
         $breadcrumbtrail->add(
             new Breadcrumb($this->get_browse_course_url(), Translation::get('CourseManagerBrowseComponent'))

@@ -7,6 +7,9 @@
                   autoconfigure="true"
                   public="true"/>
 
+        <service id="Chamilo\Core\Repository\Service\BreadcrumbGenerator"/>
+        <service id="Chamilo\Core\Repository\Viewer\BreadcrumbGenerator"/>
+
         <service id="Chamilo\Core\Repository\Service\ContentObjectActionRenderer">
             <argument key="$user"
                       type="service"

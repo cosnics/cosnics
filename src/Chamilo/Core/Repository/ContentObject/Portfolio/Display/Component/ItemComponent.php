@@ -20,8 +20,6 @@ abstract class ItemComponent extends Manager implements DelegateComponent
     {
         $portfolio = $this->get_parent()->get_root_content_object();
 
-        $trail = BreadcrumbTrail::getInstance();
-
         if (!$portfolio)
         {
             return $this->display_error_page(Translation::get('NoObjectSelected'));
@@ -37,7 +35,8 @@ abstract class ItemComponent extends Manager implements DelegateComponent
         {
             $parameters = $this->get_parameters();
             $parameters[self::PARAM_STEP] = $node_parent->get_id();
-            BreadcrumbTrail::getInstance()->add(
+
+            $this->getBreadcrumbTrail()->add(
                 new Breadcrumb($this->get_url($parameters), $node_parent->get_content_object()->get_title())
             );
         }

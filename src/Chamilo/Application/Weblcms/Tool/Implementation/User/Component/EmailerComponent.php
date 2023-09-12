@@ -55,7 +55,7 @@ class EmailerComponent extends Manager
 
         $this->set_parameter(\Chamilo\Application\Weblcms\Manager::PARAM_USERS, null);
 
-        $trail = BreadcrumbTrail::getInstance();
+        $trail = $this->getBreadcrumbTrail();
 
         $trail->add(
             new Breadcrumb(

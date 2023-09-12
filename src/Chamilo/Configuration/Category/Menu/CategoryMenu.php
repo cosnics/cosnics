@@ -65,7 +65,7 @@ class CategoryMenu extends HtmlMenu
      */
     public function get_breadcrumbs()
     {
-        $trail = BreadcrumbTrail::getInstance();
+        $trail = $this->getBreadcrumbTrail();
         $this->render($this->array_renderer, 'urhere');
         $breadcrumbs = $this->array_renderer->toArray();
         foreach ($breadcrumbs as $crumb)

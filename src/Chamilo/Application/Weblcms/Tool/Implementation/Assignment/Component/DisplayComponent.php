@@ -44,7 +44,7 @@ class DisplayComponent extends Manager implements DelegateComponent
             throw new NotAllowedException();
         }
 
-        $breadcrumbTrail = BreadcrumbTrail::getInstance();
+        $breadcrumbTrail = $this->getBreadcrumbTrail();
         $breadcrumbTrail->add(new Breadcrumb($this->get_url(), $publication->getContentObject()->get_title()));
 
         $this->buildBridges($publication);

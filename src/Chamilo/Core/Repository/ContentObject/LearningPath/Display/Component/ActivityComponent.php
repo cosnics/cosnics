@@ -30,7 +30,7 @@ class ActivityComponent extends BaseHtmlTreeComponent implements DelegateCompone
     {
         $this->validateSelectedTreeNodeData();
 
-        $trail = BreadcrumbTrail::getInstance();
+        $trail = $this->getBreadcrumbTrail();
         $trail->add(
             new Breadcrumb(
                 $this->get_url([self::PARAM_CHILD_ID => $this->getCurrentTreeNodeDataId()]),

@@ -145,7 +145,7 @@ class AttemptResultViewerComponent extends Manager
      */
     protected function add_assessment_title_breadcrumb($assessment)
     {
-        $breadcrumb_trail = BreadcrumbTrail::getInstance();
+        $breadcrumb_trail = $this->getBreadcrumbTrail();
         $breadcrumbs = $breadcrumb_trail->getBreadcrumbs();
 
         $breadcrumbs[$breadcrumb_trail->size() - 1] = new Breadcrumb(
@@ -154,7 +154,7 @@ class AttemptResultViewerComponent extends Manager
             ), Translation::get('ViewResultsForAssessment', ['TITLE' => $assessment->get_title()])
         );
 
-        $breadcrumb_trail->set_breadcrumbtrail($breadcrumbs);
+        $breadcrumb_trail->set($breadcrumbs);
 
         $user_fullname = \Chamilo\Core\User\Storage\DataManager::get_fullname_from_user(
             $this->assessment_attempt->get_user_id()

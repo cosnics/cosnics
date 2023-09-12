@@ -21,7 +21,7 @@ class ToolSelectorComponent extends Manager
      */
     public function run()
     {
-        $trail = BreadcrumbTrail::getInstance();
+        $trail = $this->getBreadcrumbTrail();
 
         if (!$this->get_course()->is_course_admin($this->get_parent()->get_user()))
         {

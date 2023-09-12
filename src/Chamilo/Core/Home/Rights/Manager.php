@@ -1,10 +1,9 @@
 <?php
 namespace Chamilo\Core\Home\Rights;
 
-use Chamilo\Core\Admin\Core\BreadcrumbGenerator;
+use Chamilo\Core\Admin\Service\BreadcrumbGenerator;
 use Chamilo\Libraries\Architecture\Application\Application;
 use Chamilo\Libraries\Format\Structure\BreadcrumbGeneratorInterface;
-use Chamilo\Libraries\Format\Structure\BreadcrumbTrail;
 
 /**
  * Manager for the components
@@ -21,8 +20,8 @@ abstract class Manager extends Application
 
     public const PARAM_BLOCK_TYPE = 'block_type';
 
-    public function get_breadcrumb_generator(): BreadcrumbGeneratorInterface
+    public function getBreadcrumbGenerator(): BreadcrumbGeneratorInterface
     {
-        return new BreadcrumbGenerator($this, BreadcrumbTrail::getInstance());
+        return $this->getService(BreadcrumbGenerator::class);
     }
 }

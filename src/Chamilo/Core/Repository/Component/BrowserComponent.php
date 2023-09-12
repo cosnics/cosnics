@@ -59,7 +59,7 @@ class BrowserComponent extends Manager implements DelegateComponent
             throw new NotAllowedException();
         }
 
-        $trail = BreadcrumbTrail::getInstance();
+        $trail = $this->getBreadcrumbTrail();
 
         $query = $this->buttonToolbarRenderer->getSearchForm()->getQuery();
 

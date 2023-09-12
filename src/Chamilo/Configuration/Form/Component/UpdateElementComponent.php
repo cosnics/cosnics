@@ -29,7 +29,7 @@ class UpdateElementComponent extends Manager
         $parameters = [self::PARAM_DYNAMIC_FORM_ELEMENT_ID => $element_id];
         $translator = $this->getTranslator();
 
-        $trail = BreadcrumbTrail::getInstance();
+        $trail = $this->getBreadcrumbTrail();
         $trail->add(
             new Breadcrumb($this->get_url($parameters), $translator->trans('UpdateElement', [], Manager::CONTEXT))
         );

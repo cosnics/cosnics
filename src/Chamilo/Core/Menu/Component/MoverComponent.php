@@ -63,7 +63,7 @@ class MoverComponent extends Manager
     /**
      * @param \Chamilo\Libraries\Format\Structure\BreadcrumbTrail $breadcrumbtrail
      */
-    public function add_additional_breadcrumbs(BreadcrumbTrail $breadcrumbtrail): void
+    public function addAdditionalBreadcrumbs(BreadcrumbTrail $breadcrumbtrail): void
     {
         $breadcrumbtrail->add(
             new Breadcrumb(

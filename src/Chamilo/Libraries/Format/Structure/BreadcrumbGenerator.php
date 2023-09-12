@@ -1,11 +1,16 @@
 <?php
 namespace Chamilo\Libraries\Format\Structure;
 
+use Chamilo\Configuration\Service\Consulter\ConfigurationConsulter;
+use Chamilo\Configuration\Service\FileConfigurationLocator;
 use Chamilo\Libraries\Architecture\Application\Application;
+use Chamilo\Libraries\Architecture\Application\Routing\UrlGenerator;
 use Chamilo\Libraries\Architecture\ClassnameUtilities;
 use Chamilo\Libraries\Architecture\Interfaces\DelegateComponent;
 use Chamilo\Libraries\Architecture\Interfaces\NoContextComponent;
-use Chamilo\Libraries\Translation\Translation;
+use Chamilo\Libraries\File\WebPathBuilder;
+use Chamilo\Libraries\Format\Structure\Glyph\FontAwesomeGlyph;
+use Symfony\Component\Translation\Translator;
 
 /**
  * Standard breadcrumb generator.
@@ -14,75 +19,107 @@ use Chamilo\Libraries\Translation\Translation;
  *
  * @package Chamilo\Libraries\Format\Structure
  * @author  Sven Vanpoucke - Hogeschool Gent
+ * @author  Hans De Bisschop <hans.de.bisschop@ehb.be>
  */
 class BreadcrumbGenerator implements BreadcrumbGeneratorInterface
 {
 
-    protected Application $application;
-
     protected BreadcrumbTrail $breadcrumbTrail;
 
-    public function __construct(Application $component, BreadcrumbTrail $breadcrumbTrail)
+    protected ClassnameUtilities $classnameUtilities;
+
+    protected ConfigurationConsulter $configurationConsulter;
+
+    protected FileConfigurationLocator $fileConfigurationLocator;
+
+    protected Translator $translator;
+
+    protected UrlGenerator $urlGenerator;
+
+    protected WebPathBuilder $webPathBuilder;
+
+    public function __construct(
+        ClassnameUtilities $classnameUtilities, UrlGenerator $urlGenerator, Translator $translator,
+
+        FileConfigurationLocator $fileConfigurationLocator, ConfigurationConsulter $configurationConsulter,
+        WebPathBuilder $webPathBuilder,
+
+        BreadcrumbTrail $breadcrumbTrail
+    )
     {
+        $this->classnameUtilities = $classnameUtilities;
+        $this->urlGenerator = $urlGenerator;
+        $this->translator = $translator;
+        $this->fileConfigurationLocator = $fileConfigurationLocator;
+        $this->configurationConsulter = $configurationConsulter;
+        $this->webPathBuilder = $webPathBuilder;
         $this->breadcrumbTrail = $breadcrumbTrail;
-        $this->application = $component;
     }
 
     /**
      * @throws \ReflectionException
      */
-    public function generateBreadcrumbs()
+    public function generateBreadcrumbs(Application $application): void
     {
-        $application = $this->getApplication();
-
-        if (!$application instanceof NoContextComponent && !$application->get_application() instanceof Application)
+        if (!$application instanceof NoContextComponent)
         {
-            $this->generatePackageBreadcrumb();
+            $this->generateRootBreadcrumb();
+
+            if (!$application->get_application() instanceof Application)
+            {
+                $this->generatePackageBreadcrumb($application);
+            }
         }
 
-        $application->add_additional_breadcrumbs($this->getBreadcrumbTrail());
+        $application->addAdditionalBreadcrumbs($this->getBreadcrumbTrail());
 
         if (!$application instanceof DelegateComponent)
         {
-            $this->generateComponentBreadcrumb();
+            $this->generateComponentBreadcrumb($application);
         }
     }
 
     /**
      * @throws \ReflectionException
      */
-    protected function generateComponentBreadcrumb()
+    protected function generateComponentBreadcrumb(Application $application): void
     {
-        $application = $this->getApplication();
-        $variable = ClassnameUtilities::getInstance()->getClassNameFromNamespace(get_class($application));
+        $componentUrl = $this->getUrlGenerator()->fromParameters($application->get_parameters());
+        $variable = $this->getClassnameUtilities()->getClassnameFromNamespace($application::class);
 
         $this->getBreadcrumbTrail()->add(
             new Breadcrumb(
-                $application->get_url(), Translation::get($variable, null, $application::CONTEXT)
+                $componentUrl, $this->getTranslator()->trans($variable, [], $application::CONTEXT)
             )
         );
     }
 
-    /**
-     * @throws \ReflectionException
-     */
-    protected function generatePackageBreadcrumb()
+    protected function generatePackageBreadcrumb(Application $application): void
     {
-        $application = $this->getApplication();
-
-        $filter_parameters = $application->getAdditionalParameters();
-        $filter_parameters[] = $application::PARAM_ACTION;
+        $packageUrl = $this->getUrlGenerator()->fromParameters([Application::PARAM_CONTEXT => $application::CONTEXT]);
 
         $this->getBreadcrumbTrail()->add(
             new Breadcrumb(
-                $application->get_url([], $filter_parameters), Translation::get('TypeName', null, $application::CONTEXT)
+                $packageUrl, $this->getTranslator()->trans('TypeName', [], $application::CONTEXT)
             )
         );
     }
 
-    public function getApplication(): Application
+    protected function generateRootBreadcrumb(): void
     {
-        return $this->application;
+        // TODO: Can this be fixed more elegantly?
+        if ($this->getFileConfigurationLocator()->isAvailable())
+        {
+            $siteName = $this->getConfigurationConsulter()->getSetting(['Chamilo\Core\Admin', 'site_name']);
+        }
+        else
+        {
+            $siteName = 'Chamilo';
+        }
+
+        $this->getBreadcrumbTrail()->add(
+            new Breadcrumb($this->getWebPathBuilder()->getBasePath(), $siteName, new FontAwesomeGlyph('home'))
+        );
     }
 
     public function getBreadcrumbTrail(): BreadcrumbTrail
@@ -90,12 +127,37 @@ class BreadcrumbGenerator implements BreadcrumbGeneratorInterface
         return $this->breadcrumbTrail;
     }
 
-    public function setApplication(Application $application)
+    public function getClassnameUtilities(): ClassnameUtilities
     {
-        $this->application = $application;
+        return $this->classnameUtilities;
     }
 
-    public function setBreadcrumbTrail(BreadcrumbTrail $breadcrumbTrail)
+    public function getConfigurationConsulter(): ConfigurationConsulter
+    {
+        return $this->configurationConsulter;
+    }
+
+    public function getFileConfigurationLocator(): FileConfigurationLocator
+    {
+        return $this->fileConfigurationLocator;
+    }
+
+    public function getTranslator(): Translator
+    {
+        return $this->translator;
+    }
+
+    public function getUrlGenerator(): UrlGenerator
+    {
+        return $this->urlGenerator;
+    }
+
+    public function getWebPathBuilder(): WebPathBuilder
+    {
+        return $this->webPathBuilder;
+    }
+
+    public function setBreadcrumbTrail(BreadcrumbTrail $breadcrumbTrail): void
     {
         $this->breadcrumbTrail = $breadcrumbTrail;
     }

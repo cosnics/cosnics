@@ -5,9 +5,8 @@ use Chamilo\Libraries\Format\Structure\Glyph\InlineGlyph;
 use Chamilo\Libraries\Utilities\StringUtilities;
 
 /**
- *
  * @package Chamilo\Libraries\Format\Structure
- * @author Hans De Bisschop <hans.de.bisschop@ehb.be>
+ * @author  Hans De Bisschop <hans.de.bisschop@ehb.be>
  */
 class BreadcrumbTrailRenderer
 {
@@ -40,11 +39,6 @@ class BreadcrumbTrailRenderer
     public function getStringUtilities(): StringUtilities
     {
         return $this->stringUtilities;
-    }
-
-    public function setStringUtilities(StringUtilities $stringUtilities)
-    {
-        $this->stringUtilities = $stringUtilities;
     }
 
     public function renderBreadcrumb(Breadcrumb $breadcrumb): string
@@ -83,6 +77,11 @@ class BreadcrumbTrailRenderer
         $html[] = '</ol>';
 
         return implode(PHP_EOL, $html);
+    }
+
+    public function setStringUtilities(StringUtilities $stringUtilities)
+    {
+        $this->stringUtilities = $stringUtilities;
     }
 }
 

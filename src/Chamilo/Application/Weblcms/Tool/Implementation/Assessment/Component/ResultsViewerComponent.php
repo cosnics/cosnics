@@ -96,14 +96,14 @@ class ResultsViewerComponent extends Manager
         return implode(PHP_EOL, $html);
     }
 
-    public function add_additional_breadcrumbs(BreadcrumbTrail $breadcrumbtrail): void
+    public function addAdditionalBreadcrumbs(BreadcrumbTrail $breadcrumbtrail): void
     {
         $this->addBrowserBreadcrumb($breadcrumbtrail);
     }
 
     protected function add_assessment_title_breadcrumb(Assessment $assessment)
     {
-        $breadcrumb_trail = BreadcrumbTrail::getInstance();
+        $breadcrumb_trail = $this->getBreadcrumbTrail();
         $breadcrumbs = $breadcrumb_trail->getBreadcrumbs();
 
         $breadcrumbs[$breadcrumb_trail->size() - 1] = new Breadcrumb(

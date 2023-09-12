@@ -44,7 +44,7 @@ class PublicationDetailTemplate extends ReportingTemplate
      */
     protected function add_breadcrumbs()
     {
-        $trail = BreadcrumbTrail::getInstance();
+        $trail = $this->getBreadcrumbTrail();
 
         $trail->add(
             new Breadcrumb(

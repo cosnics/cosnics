@@ -86,7 +86,7 @@ class ParentChangerComponent extends Manager
             }
 
             $form = $this->get_move_form($categories, $parent);
-            $trail = BreadcrumbTrail::getInstance();
+            $trail = $this->getBreadcrumbTrail();
 
             if (count($ids) > 1)
             {

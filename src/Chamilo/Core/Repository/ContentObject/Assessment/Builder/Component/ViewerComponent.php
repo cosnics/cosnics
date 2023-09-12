@@ -41,7 +41,7 @@ class ViewerComponent extends Manager implements DelegateComponent
                 );
             }
 
-            $trail = BreadcrumbTrail::getInstance();
+            $trail = $this->getBreadcrumbTrail();
             $this->get_complex_content_object_breadcrumbs();
             $parameters = [
                 Manager::PARAM_COMPLEX_CONTENT_OBJECT_ITEM_ID => $this->get_parent()

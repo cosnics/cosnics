@@ -22,7 +22,7 @@ class CreatorComponent extends Manager
      */
     public function run()
     {
-        $trail = BreadcrumbTrail::getInstance();
+        $trail = $this->getBreadcrumbTrail();
         $trail->add(
             new Breadcrumb(
                 $this->get_url(

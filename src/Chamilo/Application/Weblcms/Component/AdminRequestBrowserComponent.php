@@ -69,7 +69,7 @@ class AdminRequestBrowserComponent extends Manager
         return implode(PHP_EOL, $html);
     }
 
-    public function add_additional_breadcrumbs(BreadcrumbTrail $breadcrumbtrail): void
+    public function addAdditionalBreadcrumbs(BreadcrumbTrail $breadcrumbtrail): void
     {
         if ($this->getUser()->isPlatformAdmin())
         {

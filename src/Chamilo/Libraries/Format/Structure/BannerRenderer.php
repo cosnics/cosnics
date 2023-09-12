@@ -33,9 +33,11 @@ class BannerRenderer
 
     private UrlGenerator $urlGenerator;
 
+    protected BreadcrumbTrail $breadcrumbTrail;
+
     public function __construct(
         PageConfiguration $pageConfiguration, SessionInterface $session, Translator $translator,
-        ConfigurationConsulter $configurationConsulter, UrlGenerator $urlGenerator, MenuRenderer $menuRenderer,
+        ConfigurationConsulter $configurationConsulter, UrlGenerator $urlGenerator, MenuRenderer $menuRenderer, BreadcrumbTrail $breadcrumbTrail,
         BreadcrumbTrailRenderer $breadcrumbTrailRenderer
     )
     {
@@ -45,6 +47,7 @@ class BannerRenderer
         $this->translator = $translator;
         $this->urlGenerator = $urlGenerator;
         $this->menuRenderer = $menuRenderer;
+        $this->breadcrumbTrail = $breadcrumbTrail;
         $this->breadcrumbTrailRenderer = $breadcrumbTrailRenderer;
     }
 
@@ -109,7 +112,7 @@ class BannerRenderer
 
         if ($pageConfiguration->getViewMode() == PageConfiguration::VIEW_MODE_FULL)
         {
-            $breadcrumbtrail = BreadcrumbTrail::getInstance();
+            $breadcrumbtrail = $this->getBreadcrumbTrail();
             $breadcrumbtrail->setContainerMode($pageConfiguration->getContainerMode());
 
             if ($breadcrumbtrail->size() > 0)
@@ -120,6 +123,13 @@ class BannerRenderer
 
         return implode(PHP_EOL, $html);
     }
+
+    public function getBreadcrumbTrail(): BreadcrumbTrail
+    {
+        return $this->breadcrumbTrail;
+    }
+
+
 
     public function getBreadcrumbTrailRenderer(): BreadcrumbTrailRenderer
     {

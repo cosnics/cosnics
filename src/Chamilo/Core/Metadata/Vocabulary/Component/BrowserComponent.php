@@ -118,7 +118,7 @@ class BrowserComponent extends Manager
                 $this->getTranslator()->trans('ValueTypePredefined', [], 'Chamilo\Core\Metadata\Element');
         }
 
-        BreadcrumbTrail::getInstance()->add(
+        $this->getBreadcrumbTrail()->add(
             new Breadcrumb($this->get_url([Manager::PARAM_USER_ID => $userId]), $breadcrumbTitle)
         );
 

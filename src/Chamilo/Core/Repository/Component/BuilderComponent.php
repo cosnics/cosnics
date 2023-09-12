@@ -48,7 +48,7 @@ class BuilderComponent extends Manager implements ApplicationSupport
                 throw new NotAllowedException();
             }
 
-            BreadcrumbTrail::getInstance()->add(
+            $this->getBreadcrumbTrail()->add(
                 new Breadcrumb(
                     $this->get_url([self::PARAM_ACTION => self::ACTION_BUILD_COMPLEX_CONTENT_OBJECT]), Translation::get(
                     'BuildContentObject', ['CONTENT_OBJECT' => $this->content_object->get_title()]

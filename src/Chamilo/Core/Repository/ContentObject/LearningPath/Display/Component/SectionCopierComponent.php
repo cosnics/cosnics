@@ -149,7 +149,7 @@ class SectionCopierComponent extends BaseHtmlTreeComponent
      */
     protected function renderCopyForm(): string
     {
-        $breadcrumbTrail = BreadcrumbTrail::getInstance();
+        $breadcrumbTrail = $this->getBreadcrumbTrail();
         $breadcrumbTrail->add(
             new Breadcrumb($this->get_url(), Translation::getInstance()->getTranslation('SectionCopierComponent'))
         );

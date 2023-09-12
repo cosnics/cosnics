@@ -70,7 +70,7 @@ class ContentObjectUpdaterComponent extends Manager implements DelegateComponent
                 $publication->ignore_display_order();
             }
 
-            BreadcrumbTrail::getInstance()->add(
+            $this->getBreadcrumbTrail()->add(
                 new Breadcrumb(
                     $this->get_url(),
                     Translation::get('ToolContentObjectUpdateComponent', ['TITLE' => $content_object->get_title()])

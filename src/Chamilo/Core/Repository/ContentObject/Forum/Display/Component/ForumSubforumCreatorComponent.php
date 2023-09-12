@@ -41,7 +41,7 @@ class ForumSubforumCreatorComponent extends Manager implements ViewerInterface, 
 
                 $exclude[] = $this->get_root_content_object()->get_id();
 
-                BreadcrumbTrail::getInstance()->add(
+                $this->getBreadcrumbTrail()->add(
                     new Breadcrumb(
                         $this->get_url(
                             [
@@ -66,7 +66,7 @@ class ForumSubforumCreatorComponent extends Manager implements ViewerInterface, 
                         foreach ($forums_with_key_cloi as $key => $value)
                         {
 
-                            BreadcrumbTrail::getInstance()->add(
+                            $this->getBreadcrumbTrail()->add(
                                 new Breadcrumb(
                                     $this->get_url(
                                         [

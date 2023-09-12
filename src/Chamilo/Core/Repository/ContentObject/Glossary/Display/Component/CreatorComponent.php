@@ -33,7 +33,7 @@ class CreatorComponent extends Manager implements ViewerInterface, DelegateCompo
 
         if (!$this->isAnyObjectSelectedInViewer())
         {
-            BreadcrumbTrail::getInstance()->add(
+            $this->getBreadcrumbTrail()->add(
                 new Breadcrumb(
                     $this->get_url(
                         [

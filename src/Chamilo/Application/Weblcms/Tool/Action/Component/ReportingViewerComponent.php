@@ -40,7 +40,7 @@ class ReportingViewerComponent extends Manager implements DelegateComponent
         return $component->run();
     }
 
-    public function add_additional_breadcrumbs(BreadcrumbTrail $breadcrumbtrail): void
+    public function addAdditionalBreadcrumbs(BreadcrumbTrail $breadcrumbtrail): void
     {
         if ($this->getRequest()->query->has('pcattree') && $this->getRequest()->query->get('pcattree') > 0)
         {

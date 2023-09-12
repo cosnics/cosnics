@@ -64,12 +64,12 @@ class ViewerComponent extends Manager implements DelegateComponent, FeedbackSupp
         }
 
         $this->getCategoryBreadcrumbsGenerator()->generateBreadcrumbsForContentObjectPublication(
-            BreadcrumbTrail::getInstance(), $this, $this->publication
+            $this->getBreadcrumbTrail(), $this, $this->publication
         );
 
         $object = $this->publication->get_content_object();
 
-        BreadcrumbTrail::getInstance()->add(
+        $this->getBreadcrumbTrail()->add(
             new Breadcrumb(
                 $this->get_url(), Translation::get('ToolViewerComponent', ['TITLE' => $object->get_title()])
             )

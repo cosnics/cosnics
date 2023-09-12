@@ -113,9 +113,8 @@ class WikiHistoryComponent extends Manager
         }
     }
 
-    public function add_additional_breadcrumbs(BreadcrumbTrail $breadcrumbtrail): void
+    public function addAdditionalBreadcrumbs(BreadcrumbTrail $breadcrumbtrail): void
     {
-        $breadcrumbtrail = $this->get_breadcrumbtrail();
     }
 
     public function count_content_object_versions_resultset($condition = null)

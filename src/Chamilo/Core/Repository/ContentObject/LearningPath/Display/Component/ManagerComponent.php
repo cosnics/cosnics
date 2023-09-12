@@ -35,7 +35,7 @@ class ManagerComponent extends BaseHtmlTreeComponent
             throw new NotAllowedException();
         }
 
-        BreadcrumbTrail::getInstance()->add(
+        $this->getBreadcrumbTrail()->add(
             new Breadcrumb($this->get_url(), $this->getTranslator()->trans('ManagerComponent', [], Manager::CONTEXT))
         );
 

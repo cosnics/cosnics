@@ -53,7 +53,7 @@ class AssignmentStudentEntriesTemplate extends ReportingTemplate
         $params[\Chamilo\Application\Weblcms\Manager::PARAM_TEMPLATE_ID] = CourseStudentTrackerTemplate::class;
         $params[\Chamilo\Core\Reporting\Viewer\Manager::PARAM_BLOCK_ID] = 0;
 
-        $breadcrumbTrail = BreadcrumbTrail::getInstance();
+        $breadcrumbTrail = $this->getBreadcrumbTrail();
 
         $breadcrumbTrail->add(
             new Breadcrumb(
@@ -72,14 +72,14 @@ class AssignmentStudentEntriesTemplate extends ReportingTemplate
                 CourseStudentTrackerDetailTemplate::class;
             $params[\Chamilo\Core\Reporting\Viewer\Manager::PARAM_BLOCK_ID] = 0;
 
-            BreadcrumbTrail::getInstance()->add(new Breadcrumb($this->get_url($params), $user->get_fullname()));
+            $this->getBreadcrumbTrail()->add(new Breadcrumb($this->get_url($params), $user->get_fullname()));
         }
 
         $params = [];
         $params[\Chamilo\Application\Weblcms\Manager::PARAM_TEMPLATE_ID] = CourseStudentTrackerDetailTemplate::class;
         $params[\Chamilo\Core\Reporting\Viewer\Manager::PARAM_BLOCK_ID] = 1;
 
-        BreadcrumbTrail::getInstance()->add(
+        $this->getBreadcrumbTrail()->add(
             new Breadcrumb(
                 $this->get_url($params),
                 Translation::getInstance()->getTranslation('CourseUserAssignmentInformationBlock')
@@ -88,7 +88,7 @@ class AssignmentStudentEntriesTemplate extends ReportingTemplate
 
         $this->registerParameters();
 
-        BreadcrumbTrail::getInstance()->add(
+        $this->getBreadcrumbTrail()->add(
             new Breadcrumb(
                 $this->get_url([], [\Chamilo\Core\Reporting\Viewer\Manager::PARAM_BLOCK_ID]), $assignment->get_title()
             )

@@ -19,6 +19,7 @@ use Chamilo\Libraries\File\SystemPathBuilder;
 use Chamilo\Libraries\File\WebPathBuilder;
 use Chamilo\Libraries\Format\NotificationMessage\NotificationMessageManager;
 use Chamilo\Libraries\Format\NotificationMessage\NotificationMessageRenderer;
+use Chamilo\Libraries\Format\Structure\BreadcrumbTrail;
 use Chamilo\Libraries\Format\Structure\FooterRenderer;
 use Chamilo\Libraries\Format\Structure\FooterRendererInterface;
 use Chamilo\Libraries\Format\Structure\HeaderRenderer;
@@ -58,6 +59,11 @@ trait DependencyInjectionContainerTrait
     public function getAuthorizationChecker(): AuthorizationChecker
     {
         return $this->getService(AuthorizationChecker::class);
+    }
+
+    public function getBreadcrumbTrail(): BreadcrumbTrail
+    {
+        return $this->getService(BreadcrumbTrail::class);
     }
 
     public function getBridgeManager(): BridgeManager

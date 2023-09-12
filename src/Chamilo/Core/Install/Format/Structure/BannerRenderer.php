@@ -5,6 +5,7 @@ use Chamilo\Configuration\Service\Consulter\ConfigurationConsulter;
 use Chamilo\Core\Menu\Service\Renderer\MenuRenderer;
 use Chamilo\Libraries\Architecture\Application\Routing\UrlGenerator;
 use Chamilo\Libraries\File\WebPathBuilder;
+use Chamilo\Libraries\Format\Structure\BreadcrumbTrail;
 use Chamilo\Libraries\Format\Structure\BreadcrumbTrailRenderer;
 use Chamilo\Libraries\Format\Structure\PageConfiguration;
 use Chamilo\Libraries\Format\Theme\ThemePathBuilder;
@@ -27,13 +28,13 @@ class BannerRenderer extends \Chamilo\Libraries\Format\Structure\BannerRenderer
     public function __construct(
         PageConfiguration $pageConfiguration, SessionInterface $session, Translator $translator,
         ConfigurationConsulter $configurationConsulter, UrlGenerator $urlGenerator, MenuRenderer $menuRenderer,
-        BreadcrumbTrailRenderer $breadcrumbTrailRenderer, ThemePathBuilder $themeWebPathBuilder,
-        WebPathBuilder $webPathBuilder
+        BreadcrumbTrail $breadcrumbTrail, BreadcrumbTrailRenderer $breadcrumbTrailRenderer,
+        ThemePathBuilder $themeWebPathBuilder, WebPathBuilder $webPathBuilder
     )
     {
         parent::__construct(
             $pageConfiguration, $session, $translator, $configurationConsulter, $urlGenerator, $menuRenderer,
-            $breadcrumbTrailRenderer
+            $breadcrumbTrail, $breadcrumbTrailRenderer
         );
 
         $this->themeWebPathBuilder = $themeWebPathBuilder;

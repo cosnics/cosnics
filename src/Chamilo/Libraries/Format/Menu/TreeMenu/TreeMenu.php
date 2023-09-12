@@ -56,7 +56,7 @@ class TreeMenu extends HtmlMenu
     {
         $this->render($this->array_renderer, 'urhere');
         $breadcrumbs = $this->array_renderer->toArray();
-        $trail = BreadcrumbTrail::getInstance();
+        $trail = $this->getBreadcrumbTrail();
         $i = 0;
 
         foreach ($breadcrumbs as $crumb)

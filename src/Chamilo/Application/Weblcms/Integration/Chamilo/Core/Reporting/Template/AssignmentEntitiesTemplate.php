@@ -40,7 +40,7 @@ class AssignmentEntitiesTemplate extends ReportingTemplate
         $this->add_reporting_block(new AssignmentInformationBlock($this));
         $this->add_reporting_block(new AssignmentEntitiesBlock($this));
 
-        $breadcrumbTrail = BreadcrumbTrail::getInstance();
+        $breadcrumbTrail = $this->getBreadcrumbTrail();
 
         $params = [];
         $params[Manager::PARAM_TEMPLATE_ID] = CourseStudentTrackerTemplate::class;

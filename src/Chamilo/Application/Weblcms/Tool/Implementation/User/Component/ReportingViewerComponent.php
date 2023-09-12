@@ -18,7 +18,7 @@ class ReportingViewerComponent extends Manager implements DelegateComponent
 
     public function run()
     {
-        BreadcrumbTrail::getInstance()->add(
+        $this->getBreadcrumbTrail()->add(
             new Breadcrumb($this->get_url(), Translation::get('ReportingViewerComponent'))
         );
 

@@ -35,7 +35,7 @@ class ReportingComponent extends BaseReportingComponent
     {
         $translator = $this->getTranslator();
 
-        $trail = BreadcrumbTrail::getInstance();
+        $trail = $this->getBreadcrumbTrail();
         $trail->add(
             new Breadcrumb(
                 $this->get_url(

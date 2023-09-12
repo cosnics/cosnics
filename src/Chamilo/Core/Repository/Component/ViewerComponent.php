@@ -87,9 +87,9 @@ class ViewerComponent extends Manager implements DelegateComponent
         $display = ContentObjectRenditionImplementation::factory(
             $contentObject, ContentObjectRendition::FORMAT_HTML, ContentObjectRendition::VIEW_FULL
         );
-        $trail = BreadcrumbTrail::getInstance();
+        $trail = $this->getBreadcrumbTrail();
 
-        BreadcrumbTrail::getInstance()->add(
+        $trail->add(
             new Breadcrumb(
                 null, $translator->trans(
                 'ViewContentObject', ['{CONTENT_OBJECT}' => $contentObject->get_title()], Manager::CONTEXT

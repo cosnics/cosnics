@@ -2,11 +2,10 @@
 namespace Chamilo\Application\Weblcms\Component;
 
 use Chamilo\Application\Weblcms\Manager;
-use Chamilo\Core\Admin\Core\BreadcrumbGenerator;
+use Chamilo\Core\Admin\Service\BreadcrumbGenerator;
 use Chamilo\Libraries\Architecture\Application\ApplicationConfiguration;
 use Chamilo\Libraries\Architecture\Interfaces\DelegateComponent;
 use Chamilo\Libraries\Format\Structure\BreadcrumbGeneratorInterface;
-use Chamilo\Libraries\Format\Structure\BreadcrumbTrail;
 
 /**
  * This class represents a component that runs the course type submanager
@@ -30,8 +29,8 @@ class CourseTypeManagerComponent extends Manager implements DelegateComponent
         )->run();
     }
 
-    public function get_breadcrumb_generator(): BreadcrumbGeneratorInterface
+    public function getBreadcrumbGenerator(): BreadcrumbGeneratorInterface
     {
-        return new BreadcrumbGenerator($this, BreadcrumbTrail::getInstance());
+        return $this->getService(BreadcrumbGenerator::class);
     }
 }

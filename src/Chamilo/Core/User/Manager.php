@@ -1,13 +1,12 @@
 <?php
 namespace Chamilo\Core\User;
 
-use Chamilo\Core\Admin\Core\BreadcrumbGenerator;
+use Chamilo\Core\Admin\Service\BreadcrumbGenerator;
 use Chamilo\Core\User\Component\UserApproverComponent;
 use Chamilo\Core\User\Storage\DataManager;
 use Chamilo\Libraries\Architecture\Application\Application;
 use Chamilo\Libraries\Authentication\AuthenticationValidator;
 use Chamilo\Libraries\Format\Structure\BreadcrumbGeneratorInterface;
-use Chamilo\Libraries\Format\Structure\BreadcrumbTrail;
 use Chamilo\Libraries\Mail\Mailer\MailerInterface;
 
 /**
@@ -71,6 +70,11 @@ abstract class Manager extends Application
         return $this->getService(AuthenticationValidator::class);
     }
 
+    public function getBreadcrumbGenerator(): BreadcrumbGeneratorInterface
+    {
+        return $this->getService(BreadcrumbGenerator::class);
+    }
+
     public function get_approve_user_url($user)
     {
         return $this->get_url(
@@ -81,11 +85,6 @@ abstract class Manager extends Application
                 self::PARAM_CHOICE => UserApproverComponent::CHOICE_APPROVE
             ]
         );
-    }
-
-    public function get_breadcrumb_generator(): BreadcrumbGeneratorInterface
-    {
-        return new BreadcrumbGenerator($this, BreadcrumbTrail::getInstance());
     }
 
     public function get_change_user_url($user)

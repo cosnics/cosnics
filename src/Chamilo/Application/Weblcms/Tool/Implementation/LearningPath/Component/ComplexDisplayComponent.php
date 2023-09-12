@@ -103,7 +103,7 @@ class ComplexDisplayComponent extends Manager
         }
 
         $this->getCategoryBreadcrumbsGenerator()->generateBreadcrumbsForContentObjectPublication(
-            BreadcrumbTrail::getInstance(), $this, $this->publication
+            $this->getBreadcrumbTrail(), $this, $this->publication
         );
 
         if ($this->get_root_content_object()->getType() == Assessment::class)

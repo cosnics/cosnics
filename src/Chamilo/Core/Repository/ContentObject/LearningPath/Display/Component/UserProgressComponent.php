@@ -37,7 +37,7 @@ class UserProgressComponent extends BaseReportingComponent
 
     protected function addBreadcrumbs()
     {
-        $trail = BreadcrumbTrail::getInstance();
+        $trail = $this->getBreadcrumbTrail();
         $trail->add(
             new Breadcrumb(
                 $this->get_url(), $this->getTranslator()->trans('UserProgressComponent', [], Manager::CONTEXT)

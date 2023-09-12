@@ -31,7 +31,7 @@ class EditorComponent extends TabComponent
         /** @var CourseGroup $course_group */
         $course_group = DataManager::retrieve_by_id(CourseGroup::class, $course_group_id);
 
-        BreadcrumbTrail::getInstance()->add(
+        $this->getBreadcrumbTrail()->add(
             new Breadcrumb(
                 $this->get_url(), Translation::get('EditorComponent', ['GROUPNAME' => $course_group->get_name()])
             )

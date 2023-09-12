@@ -66,7 +66,7 @@ class CourseViewerComponent extends Manager implements DelegateComponent
         $this->set_parameter(self::PARAM_COURSE, $this->get_course()->get_id());
         $this->set_parameter(self::PARAM_TOOL, $tool);
 
-        $breadcrumbtrail = BreadcrumbTrail::getInstance();
+        $breadcrumbtrail = $this->getBreadcrumbTrail();
 
         $breadcrumb_title = CourseSettingsConnector::get_breadcrumb_title_for_course($this->get_course());
 

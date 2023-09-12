@@ -24,7 +24,7 @@ class ActivityComponent extends ItemComponent
      */
     public function build()
     {
-        $trail = BreadcrumbTrail::getInstance();
+        $trail = $this->getBreadcrumbTrail();
         $trail->add(
             new Breadcrumb(
                 $this->get_url([self::PARAM_STEP => $this->get_current_step()]),

@@ -43,7 +43,7 @@ class PublicationUpdaterComponent extends Manager
 
             $content_object = $publication->get_content_object();
 
-            BreadcrumbTrail::getInstance()->add(
+            $this->getBreadcrumbTrail()->add(
                 new Breadcrumb(
                     $this->get_url(),
                     Translation::get('ToolPublicationUpdaterComponent', ['TITLE' => $content_object->get_title()])
@@ -126,7 +126,7 @@ class PublicationUpdaterComponent extends Manager
     /**
      * @param BreadcrumbTrail $breadcrumbtrail
      */
-    public function add_additional_breadcrumbs(BreadcrumbTrail $breadcrumbtrail): void
+    public function addAdditionalBreadcrumbs(BreadcrumbTrail $breadcrumbtrail): void
     {
         $this->addBrowserBreadcrumb($breadcrumbtrail);
     }

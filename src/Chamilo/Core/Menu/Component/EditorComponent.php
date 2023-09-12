@@ -34,7 +34,7 @@ class EditorComponent extends Manager implements DelegateComponent
         $item = $this->getItem();
         $itemRenderer = $this->getItemRendererFactory()->getItemRenderer($item);
 
-        BreadcrumbTrail::getInstance()->add(
+        $this->getBreadcrumbTrail()->add(
             new Breadcrumb(
                 null, $this->getTranslator()->trans(
                 'EditMenuItemComponentTitle', ['{ITEM_NAME}' => $itemRenderer->renderTitleForCurrentLanguage($item)],

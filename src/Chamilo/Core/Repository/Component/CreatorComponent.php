@@ -68,7 +68,7 @@ class CreatorComponent extends Manager
                 $templateIdentifier, $this->get_user_id()
             );
 
-            BreadcrumbTrail::getInstance()->add(
+            $this->getBreadcrumbTrail()->add(
                 new Breadcrumb(
                     $this->get_url([self::PARAM_ACTION => self::ACTION_BROWSE_CONTENT_OBJECTS]), Translation::get(
                     'CreateContentType', [

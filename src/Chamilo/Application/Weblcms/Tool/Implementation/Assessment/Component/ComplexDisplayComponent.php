@@ -84,7 +84,7 @@ class ComplexDisplayComponent extends Manager implements AssessmentDisplaySuppor
             }
 
             $this->getCategoryBreadcrumbsGenerator()->generateBreadcrumbsForContentObjectPublication(
-                BreadcrumbTrail::getInstance(), $this, $this->publication
+                $this->getBreadcrumbTrail(), $this, $this->publication
             );
 
             $this->assessment = $this->publication->get_content_object();
@@ -181,7 +181,7 @@ class ComplexDisplayComponent extends Manager implements AssessmentDisplaySuppor
     /**
      * @param BreadcrumbTrail $breadcrumbtrail
      */
-    public function add_additional_breadcrumbs(BreadcrumbTrail $breadcrumbtrail): void
+    public function addAdditionalBreadcrumbs(BreadcrumbTrail $breadcrumbtrail): void
     {
         $this->addBrowserBreadcrumb($breadcrumbtrail);
     }

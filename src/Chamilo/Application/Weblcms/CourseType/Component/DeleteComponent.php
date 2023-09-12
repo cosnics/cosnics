@@ -79,7 +79,7 @@ class DeleteComponent extends Manager
      * 
      * @param $breadcrumbtrail \libraries\format\BreadcrumbTrail
      */
-    public function add_additional_breadcrumbs(BreadcrumbTrail $breadcrumbtrail): void
+    public function addAdditionalBreadcrumbs(BreadcrumbTrail $breadcrumbtrail): void
     {
         $breadcrumbtrail->add(
             new Breadcrumb($this->get_browse_course_type_url(), Translation::get('CourseTypeManagerBrowseComponent')));

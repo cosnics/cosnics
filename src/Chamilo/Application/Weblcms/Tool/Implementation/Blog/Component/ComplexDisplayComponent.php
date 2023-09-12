@@ -10,7 +10,6 @@ use Chamilo\Core\Repository\ContentObject\Blog\Display\BlogDisplaySupport;
 use Chamilo\Core\Repository\Workspace\Service\RightsService;
 use Chamilo\Libraries\Architecture\Application\ApplicationConfiguration;
 use Chamilo\Libraries\Format\Structure\Breadcrumb;
-use Chamilo\Libraries\Format\Structure\BreadcrumbTrail;
 use Chamilo\Libraries\Translation\Translation;
 use Chamilo\Libraries\Utilities\StringUtilities;
 
@@ -47,10 +46,10 @@ class ComplexDisplayComponent extends Manager implements BlogDisplaySupport
         }
 
         $this->getCategoryBreadcrumbsGenerator()->generateBreadcrumbsForContentObjectPublication(
-            BreadcrumbTrail::getInstance(), $this, $this->publication
+            $this->getBreadcrumbTrail(), $this, $this->publication
         );
 
-        BreadcrumbTrail::getInstance()->add(new Breadcrumb(null, $this->get_root_content_object()->get_title()));
+        $this->getBreadcrumbTrail()->add(new Breadcrumb(null, $this->get_root_content_object()->get_title()));
 
         return $this->getApplicationFactory()->getApplication(
             \Chamilo\Core\Repository\ContentObject\Blog\Display\Manager::CONTEXT,

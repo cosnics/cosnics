@@ -28,7 +28,7 @@ class CreatorComponent extends Manager
         }
 
         $this->set_parameter(self::PARAM_CATEGORY_ID, $category_id);
-        $trail = BreadcrumbTrail::getInstance();
+        $trail = $this->getBreadcrumbTrail();
         $trail->add(new Breadcrumb($this->get_url(), Translation::get('CreatorComponent')));
 
         if ($category_id)

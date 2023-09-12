@@ -60,7 +60,7 @@ class ConfigurerComponent extends Manager implements MenuComponent
         }
         else
         {
-            BreadcrumbTrail::getInstance()->add(
+            $this->getBreadcrumbTrail()->add(
                 new Breadcrumb(
                     $this->get_url([GenericTabsRenderer::PARAM_SELECTED_TAB => $this->getContext()]),
                     $translator->trans('TypeName', [], $this->getContext())

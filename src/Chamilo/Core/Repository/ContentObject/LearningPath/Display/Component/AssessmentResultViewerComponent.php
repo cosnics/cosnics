@@ -22,7 +22,7 @@ class AssessmentResultViewerComponent extends BaseReportingComponent
      */
     protected function addBreadcrumbs(Translation $translator)
     {
-        $trail = BreadcrumbTrail::getInstance();
+        $trail = $this->getBreadcrumbTrail();
 
         $trail->add(
             new Breadcrumb(

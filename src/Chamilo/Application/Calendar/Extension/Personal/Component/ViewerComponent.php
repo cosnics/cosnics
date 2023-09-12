@@ -187,7 +187,7 @@ class ViewerComponent extends Manager implements DelegateComponent
         $content_object = $this->getPublication()->get_publication_object();
         $publisher = $this->getUserService()->findUserByIdentifier($this->getPublication()->get_publisher());
 
-        BreadcrumbTrail::getInstance()->add(
+        $this->getBreadcrumbTrail()->add(
             new Breadcrumb(null, $content_object->get_title())
         );
 
