@@ -5,22 +5,23 @@ use Chamilo\Core\Group\Form\GroupUserImportForm;
 use Chamilo\Core\Group\Manager;
 use Chamilo\Libraries\Architecture\Application\Application;
 use Chamilo\Libraries\Architecture\Exceptions\NotAllowedException;
-use Chamilo\Libraries\Translation\Translation;
 use Chamilo\Libraries\Utilities\StringUtilities;
 
 /**
+ * @package Chamilo\Core\Group\Component
  * @author  vanpouckesven
- * @package group.lib.group_manager.component
+ * @author  Hans De Bisschop <hans.de.bisschop@ehb.be>
  */
 class GroupUserImporterComponent extends Manager
 {
 
     /**
-     * Runs this component and displays its output.
+     * @throws \Chamilo\Libraries\Architecture\Exceptions\NotAllowedException
+     * @throws \QuickformException
      */
     public function run()
     {
-        if (!$this->get_user()->isPlatformAdmin())
+        if (!$this->getUser()->isPlatformAdmin())
         {
             throw new NotAllowedException();
         }
@@ -31,38 +32,43 @@ class GroupUserImporterComponent extends Manager
         {
             $success = $form->import_group_users();
             $this->redirectWithMessage(
-                Translation::get($success ? 'GroupUserCSVProcessed' : 'GroupUserCSVNotProcessed') . '<br />' .
-                $form->get_failed_elements(), !$success, [Application::PARAM_ACTION => self::ACTION_IMPORT_GROUP_USERS]
+                $this->getTranslator()->trans($success ? 'GroupUserCSVProcessed' : 'GroupUserCSVNotProcessed', [],
+                    Manager::CONTEXT) . '<br />' . $form->get_failed_elements(), !$success,
+                [Application::PARAM_ACTION => self::ACTION_IMPORT_GROUP_USERS]
             );
         }
         else
         {
             $html = [];
 
-            $html[] = $this->render_header();
-            $html[] = $form->toHtml();
-            $html[] = $this->display_extra_information();
-            $html[] = $this->render_footer();
+            $html[] = $this->renderHeader();
+            $html[] = $form->render();
+            $html[] = $this->renderCsvFormat();
+            $html[] = $this->renderFooter();
 
             return implode(PHP_EOL, $html);
         }
     }
 
-    public function display_extra_information()
+    public function renderCsvFormat(): string
     {
+        $translator = $this->getTranslator();
+
         $html = [];
-        $html[] = '<p>' . Translation::get('CSVMustLookLike') . ' (' . Translation::get('MandatoryFields') . ')</p>';
+
+        $html[] = '<p>' . $translator->trans('CSVMustLookLike', [], Manager::CONTEXT) . ' (' .
+            $translator->trans('MandatoryFields', [], Manager::CONTEXT) . ')</p>';
         $html[] = '<blockquote>';
         $html[] = '<pre>';
         $html[] = '<b>action</b>;<b>group_code</b>;<b>username</b>';
         $html[] = 'A;Chamilo;admin';
         $html[] = '</pre>';
         $html[] = '</blockquote>';
-        $html[] = '<p>' . Translation::get('Details') . '</p>';
+        $html[] = '<p>' . $translator->trans('Details', [], Manager::CONTEXT) . '</p>';
         $html[] = '<blockquote>';
-        $html[] = '<u><b>' . Translation::get('Action') . '</u></b>';
-        $html[] = '<br />A: ' . Translation::get('Add', null, StringUtilities::LIBRARIES);
-        $html[] = '<br />D: ' . Translation::get('Delete', null, StringUtilities::LIBRARIES);
+        $html[] = '<u><b>' . $translator->trans('Action', [], StringUtilities::LIBRARIES) . '</u></b>';
+        $html[] = '<br />A: ' . $translator->trans('Add', [], StringUtilities::LIBRARIES);
+        $html[] = '<br />D: ' . $translator->trans('Delete', [null], StringUtilities::LIBRARIES);
         $html[] = '</blockquote>';
 
         return implode(PHP_EOL, $html);

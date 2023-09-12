@@ -1,7 +1,7 @@
 <?php
 namespace Chamilo\Core\Group;
 
-use Chamilo\Core\Admin\Core\BreadcrumbGenerator;
+use Chamilo\Core\Admin\Service\BreadcrumbGenerator;
 use Chamilo\Core\Group\Service\GroupMembershipService;
 use Chamilo\Core\Group\Storage\DataClass\Group;
 use Chamilo\Core\Group\Storage\DataClass\GroupRelUser;
@@ -11,7 +11,6 @@ use Chamilo\Libraries\Architecture\Application\ApplicationConfigurationInterface
 use Chamilo\Libraries\Architecture\Exceptions\NoObjectSelectedException;
 use Chamilo\Libraries\Architecture\Exceptions\ObjectNotExistException;
 use Chamilo\Libraries\Format\Structure\BreadcrumbGeneratorInterface;
-use Chamilo\Libraries\Format\Structure\BreadcrumbTrail;
 use Chamilo\Libraries\Storage\Parameters\DataClassCountParameters;
 use Chamilo\Libraries\Storage\Parameters\DataClassRetrieveParameters;
 use Chamilo\Libraries\Storage\Parameters\DataClassRetrievesParameters;
@@ -22,7 +21,7 @@ use Chamilo\Libraries\Storage\Query\Variable\StaticConditionVariable;
 use Chamilo\Libraries\Translation\Translation;
 
 /**
- * @package group.lib.group_manager
+ * @package Chamilo\Core\Group
  */
 abstract class Manager extends Application
 {
@@ -105,14 +104,14 @@ abstract class Manager extends Application
         return DataManager::count(Group::class, $parameters);
     }
 
+    public function getBreadcrumbGenerator(): BreadcrumbGeneratorInterface
+    {
+        return $this->getService(BreadcrumbGenerator::class);
+    }
+
     protected function getGroupMembershipService(): GroupMembershipService
     {
         return $this->getService(GroupMembershipService::class);
-    }
-
-    public function get_breadcrumb_generator(): BreadcrumbGeneratorInterface
-    {
-        return new BreadcrumbGenerator($this, BreadcrumbTrail::getInstance());
     }
 
     public function get_create_group_url($parent_id)

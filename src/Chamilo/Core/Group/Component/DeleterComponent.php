@@ -31,7 +31,7 @@ class DeleterComponent extends Manager
             throw new NotAllowedException();
         }
 
-        $trail = BreadcrumbTrail::getInstance();
+        $trail = $this->getBreadcrumbTrail();
 
         $browseUrl = $this->getUrlGenerator()->fromParameters(
             [
@@ -127,7 +127,7 @@ class DeleterComponent extends Manager
         }
     }
 
-    public function add_additional_breadcrumbs(BreadcrumbTrail $breadcrumbtrail): void
+    public function addAdditionalBreadcrumbs(BreadcrumbTrail $breadcrumbtrail): void
     {
         $translator = $this->getTranslator();
 

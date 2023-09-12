@@ -103,7 +103,7 @@ class UnsubscriberComponent extends Manager
         }
     }
 
-    public function add_additional_breadcrumbs(BreadcrumbTrail $breadcrumbtrail): void
+    public function addAdditionalBreadcrumbs(BreadcrumbTrail $breadcrumbtrail): void
     {
         $translator = $this->getTranslator();
 

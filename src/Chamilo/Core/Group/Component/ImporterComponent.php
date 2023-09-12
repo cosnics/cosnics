@@ -30,7 +30,7 @@ class ImporterComponent extends Manager
         {
             $success = $form->import_groups();
             $this->redirectWithMessage(
-                Translation::get($success ? 'GroupXMLProcessed' : 'GroupXMLNotProcessed') . '<br />' .
+                $this->getTranslator()->trans($success ? 'GroupXMLProcessed' : 'GroupXMLNotProcessed') . '<br />' .
                 $form->get_failed_elements(), !$success, [Application::PARAM_ACTION => self::ACTION_IMPORT]
             );
         }
@@ -38,19 +38,21 @@ class ImporterComponent extends Manager
         {
             $html = [];
 
-            $html[] = $this->render_header();
-            $html[] = $form->toHtml();
-            $html[] = $this->display_extra_information();
-            $html[] = $this->render_footer();
+            $html[] = $this->renderHeader();
+            $html[] = $form->render();
+            $html[] = $this->renderXmlFormat();
+            $html[] = $this->renderFooter();
 
             return implode(PHP_EOL, $html);
         }
     }
 
-    public function display_extra_information()
+    public function renderXmlFormat(): string
     {
+        $translator = $this->getTranslator();
+
         $html = [];
-        $html[] = '<p>' . Translation::get('XMLMustLookLike') . ' (' . Translation::get('MandatoryFields') . ')</p>';
+        $html[] = '<p>' . $translator->trans('XMLMustLookLike', [], Manager::CONTEXT) . ' (' . $translator->trans('MandatoryFields', [], Manager::CONTEXT) . ')</p>';
         $html[] = '<blockquote>';
         $html[] = '<pre>';
         $html[] = '&lt;?xml version=&quot;1.0&quot; encoding=&quot;UTF-8&quot;?&gt;';
@@ -73,12 +75,12 @@ class ImporterComponent extends Manager
         $html[] = '&lt;/groups&gt;';
         $html[] = '</pre>';
         $html[] = '</blockquote>';
-        $html[] = '<p>' . Translation::get('Details') . '</p>';
+        $html[] = '<p>' . $translator->trans('Details') . '</p>';
         $html[] = '<blockquote>';
-        $html[] = '<u><b>' . Translation::get('Action') . '</u></b>';
-        $html[] = '<br />A: ' . Translation::get('Add', null, StringUtilities::LIBRARIES);
-        $html[] = '<br />U: ' . Translation::get('Update', null, StringUtilities::LIBRARIES);
-        $html[] = '<br />D: ' . Translation::get('Delete', null, StringUtilities::LIBRARIES);
+        $html[] = '<u><b>' . $translator->trans('Action', [], StringUtilities::LIBRARIES) . '</u></b>';
+        $html[] = '<br />A: ' . $translator->trans('Add', [], StringUtilities::LIBRARIES);
+        $html[] = '<br />U: ' . $translator->trans('Update', [], StringUtilities::LIBRARIES);
+        $html[] = '<br />D: ' . $translator->trans('Delete', [], StringUtilities::LIBRARIES);
         $html[] = '</blockquote>';
 
         return implode(PHP_EOL, $html);
