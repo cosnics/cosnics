@@ -4,18 +4,19 @@ namespace Chamilo\Core\Admin\Announcement\Component;
 use Chamilo\Core\Admin\Announcement\Manager;
 use Chamilo\Core\Admin\Service\BreadcrumbGenerator;
 use Chamilo\Libraries\Format\Structure\BreadcrumbGeneratorInterface;
-use Chamilo\Libraries\Translation\Translation;
 use Chamilo\Libraries\Utilities\StringUtilities;
 
 class HiderComponent extends Manager
 {
 
     /**
-     * Runs this component and displays its output.
+     * @throws \Chamilo\Libraries\Architecture\Exceptions\NotAllowedException
      */
     public function run()
     {
         $this->checkAuthorization(Manager::CONTEXT, 'ManageChamilo');
+
+        $translator = $this->getTranslator();
 
         $ids = $this->getRequest()->query->get(self::PARAM_SYSTEM_ANNOUNCEMENT_ID);
         $this->set_parameter(self::PARAM_SYSTEM_ANNOUNCEMENT_ID, $ids);
@@ -26,12 +27,12 @@ class HiderComponent extends Manager
         {
             if (!is_array($ids))
             {
-                $ids = array($ids);
+                $ids = [$ids];
             }
 
             foreach ($ids as $id)
             {
-                $publication = $this->getPublicationService()->findPublicationByIdentifier((int) $id);
+                $publication = $this->getPublicationService()->findPublicationByIdentifier($id);
                 $publication->toggle_visibility();
 
                 if (!$this->getPublicationService()->updatePublication($publication))
@@ -45,39 +46,36 @@ class HiderComponent extends Manager
                 if (count($ids) == 1)
                 {
                     $message = 'ContentObjectNotToggled';
-                    $parameter = array('OBJECT' => 'PublicationVisibility');
+                    $parameter = ['OBJECT' => 'PublicationVisibility'];
                 }
                 else
                 {
                     $message = 'ContentObjectsNotToggled';
-                    $parameter = array('OBJECTS' => 'PublicationsVisibility');
+                    $parameter = ['OBJECTS' => 'PublicationsVisibility'];
                 }
+            }
+            elseif (count($ids) == 1)
+            {
+                $message = 'ContentObjectToggled';
+                $parameter = ['OBJECT' => 'PublicationsVisibility'];
             }
             else
             {
-                if (count($ids) == 1)
-                {
-                    $message = 'ContentObjectToggled';
-                    $parameter = array('OBJECT' => 'PublicationsVisibility');
-                }
-                else
-                {
-                    $message = 'ContentObjectsToggled';
-                    $parameter = array('OBJECTS' => 'PublicationsVisibility');
-                }
+                $message = 'ContentObjectsToggled';
+                $parameter = ['OBJECTS' => 'PublicationsVisibility'];
             }
 
             $this->redirectWithMessage(
-                Translation::get($message, $parameter, StringUtilities::LIBRARIES), (bool) $failures,
-                array(self::PARAM_ACTION => self::ACTION_BROWSE)
+                $translator->trans($message, $parameter, StringUtilities::LIBRARIES), (bool) $failures,
+                [self::PARAM_ACTION => self::ACTION_BROWSE]
             );
         }
         else
         {
             return $this->display_error_page(
                 htmlentities(
-                    Translation::get(
-                        'NoObjectSelected', array('OBJECT' => 'Publication'), StringUtilities::LIBRARIES
+                    $translator->trans(
+                        'NoObjectSelected', ['OBJECT' => 'Publication'], StringUtilities::LIBRARIES
                     )
                 )
             );

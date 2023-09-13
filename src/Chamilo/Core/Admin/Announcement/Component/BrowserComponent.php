@@ -43,7 +43,6 @@ class BrowserComponent extends Manager implements DelegateComponent
     private ButtonToolBarRenderer $buttonToolbarRenderer;
 
     /**
-     * @throws \ReflectionException
      * @throws \QuickformException
      * @throws \Exception
      */
@@ -63,9 +62,6 @@ class BrowserComponent extends Manager implements DelegateComponent
         return implode(PHP_EOL, $html);
     }
 
-    /**
-     * @throws \ReflectionException
-     */
     public function getButtonToolbarRenderer(): ButtonToolBarRenderer
     {
         if (!isset($this->buttonToolbarRenderer))
@@ -178,7 +174,7 @@ class BrowserComponent extends Manager implements DelegateComponent
     }
 
     /**
-     * @throws \ReflectionException
+     * @throws \QuickformException
      */
     public function getPublicationCondition(): ?AndCondition
     {
@@ -249,7 +245,7 @@ class BrowserComponent extends Manager implements DelegateComponent
     }
 
     /**
-     * @throws \ReflectionException
+     * @throws \QuickformException
      */
     public function getSearchCondition(): ?OrCondition
     {
@@ -271,7 +267,7 @@ class BrowserComponent extends Manager implements DelegateComponent
         return null;
     }
 
-    public function getType()
+    public function getType(): string
     {
         $type = $this->getRequest()->query->get(self::PARAM_PUBLICATION_TYPE);
 
@@ -370,43 +366,34 @@ class BrowserComponent extends Manager implements DelegateComponent
     {
         $publicationTableRenderer = $this->getPublicationTableRenderer();
 
-        switch ($this->getType())
+        $totalNumberOfItems = match ($this->getType())
         {
-            case BrowserComponent::TYPE_FROM_ME :
-            case BrowserComponent::TYPE_ALL :
-                $totalNumberOfItems =
-                    $this->getPublicationService()->countPublications($this->getPublicationCondition());
-                break;
-            default :
-                $totalNumberOfItems = $this->getPublicationService()->countVisiblePublicationsForUserIdentifier(
-                    (int) $this->getUser()->getId(), $this->getPublicationCondition()
-                );
-                break;
-        }
+            BrowserComponent::TYPE_FROM_ME, BrowserComponent::TYPE_ALL => $this->getPublicationService()
+                ->countPublications($this->getPublicationCondition()),
+            default => $this->getPublicationService()->countVisiblePublicationsForUserIdentifier(
+                $this->getUser()->getId(), $this->getPublicationCondition()
+            ),
+        };
 
         $tableParameterValues = $this->getRequestTableParameterValuesCompiler()->determineParameterValues(
             $publicationTableRenderer->getParameterNames(), $publicationTableRenderer->getDefaultParameterValues(),
             $totalNumberOfItems
         );
 
-        switch ($this->getType())
+        $publications = match ($this->getType())
         {
-            case BrowserComponent::TYPE_FROM_ME :
-            case BrowserComponent::TYPE_ALL :
-                $publications = $this->getPublicationService()->findPublicationRecords(
+            BrowserComponent::TYPE_FROM_ME, BrowserComponent::TYPE_ALL => $this->getPublicationService()
+                ->findPublicationRecords(
                     $this->getPublicationCondition(), $tableParameterValues->getNumberOfItemsPerPage(),
                     $tableParameterValues->getOffset(),
                     $publicationTableRenderer->determineOrderBy($tableParameterValues)
-                );
-                break;
-            default :
-                $publications = $this->getPublicationService()->findVisiblePublicationRecordsForUserIdentifier(
-                    (int) $this->getUser()->getId(), $this->getPublicationCondition(),
-                    $tableParameterValues->getNumberOfItemsPerPage(), $tableParameterValues->getOffset(),
-                    $publicationTableRenderer->determineOrderBy($tableParameterValues)
-                );
-                break;
-        }
+                ),
+            default => $this->getPublicationService()->findVisiblePublicationRecordsForUserIdentifier(
+                $this->getUser()->getId(), $this->getPublicationCondition(),
+                $tableParameterValues->getNumberOfItemsPerPage(), $tableParameterValues->getOffset(),
+                $publicationTableRenderer->determineOrderBy($tableParameterValues)
+            ),
+        };
 
         return $publicationTableRenderer->render($tableParameterValues, $publications);
     }

@@ -6,8 +6,8 @@ use Chamilo\Libraries\Format\Form\FormValidator;
 use Chamilo\Libraries\Format\Structure\Glyph\FontAwesomeGlyph;
 use Chamilo\Libraries\Format\Table\ArrayCollectionTableRenderer;
 use Chamilo\Libraries\Format\Table\Column\SortableStaticTableColumn;
-use Chamilo\Libraries\Translation\Translation;
 use Chamilo\Libraries\Utilities\StringUtilities;
+use Doctrine\Common\Collections\ArrayCollection;
 
 class ImporterComponent extends Manager
 {
@@ -192,44 +192,41 @@ class ImporterComponent extends Manager
     ];
 
     /**
-     * Runs this component and displays its output.
+     * @throws \Chamilo\Libraries\Format\Table\Exception\InvalidPageNumberException
+     * @throws \QuickformException
+     * @throws \ReflectionException
+     * @throws \TableException
      */
     public function run()
     {
+        $translator = $this->getTranslator();
         $form = new FormValidator('translations', FormValidator::FORM_METHOD_POST, $this->get_url());
-        $form->addElement('file', self::PARAM_SOURCE_FILE, Translation::get('SourceFile'));
+
+        $form->addElement('file', self::PARAM_SOURCE_FILE, $translator->trans('SourceFile', [], Manager::CONTEXT));
         $form->addElement(
-            'style_submit_button', 'import_button', Translation::get('Import', null, StringUtilities::LIBRARIES),
+            'style_submit_button', 'import_button', $translator->trans('Import', [], StringUtilities::LIBRARIES),
             ['id' => 'import_button'], null, new FontAwesomeGlyph('import')
         );
 
-        if ($form->validate())
-        {
-            $html = [];
+        $html = [];
 
-            $html[] = $this->render_header();
-            $html[] = $this->process();
-            $html[] = $this->render_footer();
+        $html[] = $this->renderHeader();
+        $html[] = $form->validate() ? $this->process() : $form->render();
+        $html[] = $this->renderFooter();
 
-            return implode(PHP_EOL, $html);
-        }
-        else
-        {
-            $html = [];
-
-            $html[] = $this->render_header();
-            $html[] = $form->toHtml();
-            $html[] = $this->render_footer();
-
-            return implode(PHP_EOL, $html);
-        }
+        return implode(PHP_EOL, $html);
     }
 
-    public function is_repository_based($packages)
+    public function getArrayCollectionTableRenderer(): ArrayCollectionTableRenderer
+    {
+        return $this->getService(ArrayCollectionTableRenderer::class);
+    }
+
+    public function is_repository_based($packages): bool
     {
         foreach ($packages as $package)
         {
-            if (strpos($package, '-') !== false)
+            if (str_contains($package, '-'))
             {
                 return true;
             }
@@ -238,21 +235,20 @@ class ImporterComponent extends Manager
         return false;
     }
 
-    private function parse_file()
+    private function parse_file(): array
     {
         $file = $_FILES[self::PARAM_SOURCE_FILE];
         $file_path = $file['tmp_name'];
 
         $file_handle = fopen($file_path, 'r');
 
-        $information_row = $this->read_csv($file_handle);
         $languages_row = $this->read_csv($file_handle);
 
         $languages = array_slice($languages_row, 4);
 
         $translations = [];
 
-        while (($csv_data = $this->read_csv($file_handle)) !== false)
+        while (($csv_data = $this->read_csv($file_handle)) != false)
         {
             foreach (array_slice($csv_data, 4) as $key => $value)
             {
@@ -263,12 +259,19 @@ class ImporterComponent extends Manager
         return $translations;
     }
 
-    private function process()
+    /**
+     * @throws \Chamilo\Libraries\Format\Table\Exception\InvalidPageNumberException
+     * @throws \QuickformException
+     * @throws \ReflectionException
+     * @throws \TableException
+     */
+    private function process(): string
     {
+        $translator = $this->getTranslator();
         $translations = $this->parse_file();
         $convert_package_names = $this->is_repository_based(array_keys($translations));
 
-        $data = [];
+        $data = new ArrayCollection();
 
         foreach ($translations as $package => $languages)
         {
@@ -323,7 +326,7 @@ class ImporterComponent extends Manager
                 $row[] = count($differences);
                 $row[] = $non_empty_local_translations;
 
-                $data[] = $row;
+                $data->add($row);
 
                 $translation_content = [];
 
@@ -345,38 +348,39 @@ class ImporterComponent extends Manager
         }
 
         $headers = [];
-        $headers[] = new SortableStaticTableColumn(Translation::get('Package'));
+        $headers[] = new SortableStaticTableColumn('package', $translator->trans('Package', [], Manager::CONTEXT));
 
-        $glyph = new FontAwesomeGlyph('language', [], Translation::get('Language'), 'fas');
+        $glyph = new FontAwesomeGlyph('language', [], $translator->trans('Language', [], Manager::CONTEXT), 'fas');
         $headers[] = new SortableStaticTableColumn('language', $glyph->render());
 
-        $glyph = new FontAwesomeGlyph('home', [], Translation::get('LocalVariableCount'), 'fas');
+        $glyph =
+            new FontAwesomeGlyph('home', [], $translator->trans('LocalVariableCount', [], Manager::CONTEXT), 'fas');
         $headers[] = new SortableStaticTableColumn('local', $glyph->render());
 
-        $glyph = new FontAwesomeGlyph('upload', [], Translation::get('ImportVariableCount'), 'fas');
+        $glyph =
+            new FontAwesomeGlyph('upload', [], $translator->trans('ImportVariableCount', [], Manager::CONTEXT), 'fas');
         $headers[] = new SortableStaticTableColumn('upload', $glyph->render());
 
-        $glyph = new FontAwesomeGlyph('exclamation-circle', [], Translation::get('LocalExtraCount'), 'fas');
+        $glyph =
+            new FontAwesomeGlyph('exclamation-circle', [], $translator->trans('LocalExtraCount', [], Manager::CONTEXT),
+                'fas');
         $headers[] = new SortableStaticTableColumn('extra', $glyph->render());
 
-        $glyph = new FontAwesomeGlyph('circle', [], Translation::get('LocalNonEmptyCount'), 'far');
+        $glyph =
+            new FontAwesomeGlyph('circle', [], $translator->trans('LocalNonEmptyCount', [], Manager::CONTEXT), 'far');
         $headers[] = new SortableStaticTableColumn('empty', $glyph->render());
 
-        $table = new ArrayCollectionTableRenderer(
-            $data, $headers, $this->get_parameters(), 0, 20, SORT_ASC, 'language_import_' . time()
+        return $this->getArrayCollectionTableRenderer()->render(
+            $headers, $data, 0, SORT_ASC, 20, 'language_import_' . time()
         );
-
-        return $table->toHtml();
     }
 
     /**
      * Reads a line from a csv file an converts it to an array
      *
      * @param resource $file_handle
-     *
-     * @return string[]
      */
-    private function read_csv($file_handle)
+    private function read_csv($file_handle): array
     {
         return fgetcsv($file_handle, 0, ';');
     }

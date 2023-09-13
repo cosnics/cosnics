@@ -12,16 +12,16 @@ use Chamilo\Libraries\Format\Structure\ActionBar\ButtonToolBar;
 use Chamilo\Libraries\Format\Structure\ActionBar\Renderer\ButtonToolBarRenderer;
 use Chamilo\Libraries\Format\Structure\Glyph\FontAwesomeGlyph;
 use Chamilo\Libraries\Format\Structure\ToolbarItem;
-use Chamilo\Libraries\Translation\Translation;
 use Chamilo\Libraries\Utilities\StringUtilities;
 
 class ViewerComponent extends Manager implements NoContextComponent
 {
 
-    private $buttonToolbarRenderer;
+    protected ButtonToolBarRenderer $buttonToolbarRenderer;
 
     /**
-     * Runs this component and displays its output.
+     * @throws \Chamilo\Libraries\Architecture\Exceptions\NotAllowedException
+     * @throws \QuickformException
      */
     public function run()
     {
@@ -33,19 +33,21 @@ class ViewerComponent extends Manager implements NoContextComponent
             throw new NotAllowedException();
         }
 
+        $translator = $this->getTranslator();
+
         if ($id)
         {
-            $publication = $this->getPublicationService()->findPublicationByIdentifier((int) $id);
+            $publication = $this->getPublicationService()->findPublicationByIdentifier($id);
             $object = $publication->get_content_object();
 
             $html = [];
 
-            $html[] = $this->render_header();
+            $html[] = $this->renderHeader();
             $html[] = $this->getButtonToolbarRenderer($publication)->render();
             $html[] = ContentObjectRenditionImplementation::launch(
-                $object, ContentObjectRendition::FORMAT_HTML, ContentObjectRendition::VIEW_FULL, $this
+                $object, ContentObjectRendition::FORMAT_HTML, ContentObjectRendition::VIEW_FULL
             );
-            $html[] = $this->render_footer();
+            $html[] = $this->renderFooter();
 
             return implode(PHP_EOL, $html);
         }
@@ -53,8 +55,9 @@ class ViewerComponent extends Manager implements NoContextComponent
         {
             return $this->display_error_page(
                 htmlentities(
-                    Translation::get(
-                        'NoObjectSelected', ['OBJECT' => Translation::get('SystemAnnouncement')],
+                    $translator->trans(
+                        'NoObjectSelected',
+                        ['OBJECT' => $translator->trans('SystemAnnouncement', [], Manager::CONTEXT)],
                         StringUtilities::LIBRARIES
                     )
                 )
@@ -62,18 +65,20 @@ class ViewerComponent extends Manager implements NoContextComponent
         }
     }
 
-    public function getButtonToolbarRenderer($publication)
+    public function getButtonToolbarRenderer($publication): ButtonToolBarRenderer
     {
         if (!isset($this->buttonToolbarRenderer))
         {
             $buttonToolbar = new ButtonToolBar();
             $commonActions = new ButtonGroup();
 
-            if ($this->get_user()->isPlatformAdmin() || $publication->get_publisher_id() == $this->get_user()->get_id())
+            $translator = $this->getTranslator();
+
+            if ($this->getUser()->isPlatformAdmin() || $publication->get_publisher_id() == $this->getUser()->getId())
             {
                 $commonActions->addButton(
                     new Button(
-                        Translation::get('Edit', [], StringUtilities::LIBRARIES), new FontAwesomeGlyph('pencil-alt'),
+                        $translator->trans('Edit', [], StringUtilities::LIBRARIES), new FontAwesomeGlyph('pencil-alt'),
                         $this->get_url(
                             [
                                 self::PARAM_ACTION => self::ACTION_EDIT,
@@ -85,7 +90,7 @@ class ViewerComponent extends Manager implements NoContextComponent
 
                 $commonActions->addButton(
                     new Button(
-                        Translation::get('Delete', [], StringUtilities::LIBRARIES), new FontAwesomeGlyph('times'),
+                        $translator->trans('Delete', [], StringUtilities::LIBRARIES), new FontAwesomeGlyph('times'),
                         $this->get_url(
                             [
                                 self::PARAM_ACTION => self::ACTION_DELETE,
@@ -110,7 +115,7 @@ class ViewerComponent extends Manager implements NoContextComponent
 
                 $commonActions->addButton(
                     new Button(
-                        Translation::get('Hide', [], StringUtilities::LIBRARIES), $glyph, $this->get_url(
+                        $translator->trans('Hide', [], StringUtilities::LIBRARIES), $glyph, $this->get_url(
                         [
                             self::PARAM_ACTION => self::ACTION_HIDE,
                             self::PARAM_SYSTEM_ANNOUNCEMENT_ID => $publication->get_id()

@@ -9,7 +9,6 @@ use Chamilo\Libraries\Format\Form\Element\AdvancedElementFinder\AdvancedElementF
 use Chamilo\Libraries\Format\Form\Element\AdvancedElementFinder\AdvancedElementFinderElementTypes;
 use Chamilo\Libraries\Format\Form\FormValidator;
 use Chamilo\Libraries\Format\Structure\Glyph\FontAwesomeGlyph;
-use Chamilo\Libraries\Translation\Translation;
 use Chamilo\Libraries\Utilities\StringUtilities;
 
 /**
@@ -35,25 +34,18 @@ class PublicationForm extends FormValidator
      *
      * @var \Chamilo\Libraries\Rights\Interfaces\RightsEntityProvider[]
      */
-    private $entities;
-
-    /**
-     * The type of the form (create or edit)
-     *
-     * @var int
-     */
-    private $form_type;
+    private array $entities;
 
     /**
      * @param int $formType
      * @param string $action
      * @param \Chamilo\Libraries\Rights\Interfaces\RightsEntityProvider[] $entities
+     *
+     * @throws \QuickformException
      */
     public function __construct($formType, $action, array $entities)
     {
         parent::__construct('publish', self::FORM_METHOD_POST, $action);
-
-        $this->form_type = $formType;
 
         $this->entities = $entities;
 
@@ -71,28 +63,30 @@ class PublicationForm extends FormValidator
     }
 
     /**
-     * Builds the create form with the publish button
+     * @throws \QuickformException
      */
-    public function build_create_form()
+    public function build_create_form(): void
     {
         $this->build_form();
 
+        $translator = $this->getTranslator();
+
         $buttons[] = $this->createElement(
-            'style_submit_button', self::PARAM_SUBMIT, Translation::get('Publish', null, StringUtilities::LIBRARIES),
+            'style_submit_button', self::PARAM_SUBMIT, $translator->trans('Publish', [], StringUtilities::LIBRARIES),
             null, null, new FontAwesomeGlyph('arrow-right')
         );
 
         $buttons[] = $this->createElement(
-            'style_reset_button', self::PARAM_RESET, Translation::get('Reset', null, StringUtilities::LIBRARIES)
+            'style_reset_button', self::PARAM_RESET, $translator->trans('Reset', [], StringUtilities::LIBRARIES)
         );
 
         $this->addGroup($buttons, 'buttons', null, '&nbsp;', false);
     }
 
     /**
-     * Builds the form by adding the necessary form elements.
+     * @throws \QuickformException
      */
-    public function build_form()
+    public function build_form(): void
     {
         $this->build_rights_form();
 
@@ -101,33 +95,36 @@ class PublicationForm extends FormValidator
         );
 
         $this->addElement(
-            'checkbox', Publication::PROPERTY_HIDDEN, Translation::get('Hidden', null, StringUtilities::LIBRARIES)
+            'checkbox', Publication::PROPERTY_HIDDEN,
+            $this->getTranslator()->trans('Hidden', [], StringUtilities::LIBRARIES)
         );
     }
 
     /**
-     * Builds the form to set the view rights
+     * @throws \QuickformException
      */
-    public function build_rights_form()
+    public function build_rights_form(): void
     {
+        $translator = $this->getTranslator();
+
         // Add the rights options
         $group = [];
 
-        $group[] = &$this->createElement(
-            'radio', null, null, Translation::get('Everyone'), self::RIGHT_OPTION_ALL,
+        $group[] = $this->createElement(
+            'radio', null, null, $translator->trans('Everyone', [], 'Chamilo\Libraries\Rights'), self::RIGHT_OPTION_ALL,
             ['class' => 'other_option_selected']
         );
-        $group[] = &$this->createElement(
-            'radio', null, null, Translation::get('OnlyForMe'), self::RIGHT_OPTION_ME,
+        $group[] = $this->createElement(
+            'radio', null, null, $translator->trans('OnlyForMe', [], 'Chamilo\Libraries\Rights'), self::RIGHT_OPTION_ME,
             ['class' => 'other_option_selected']
         );
-        $group[] = &$this->createElement(
-            'radio', null, null, Translation::get('SelectSpecificEntities'), self::RIGHT_OPTION_SELECT,
-            ['class' => 'entity_option_selected']
+        $group[] = $this->createElement(
+            'radio', null, null, $translator->trans('SelectSpecificEntities', [], 'Chamilo\Libraries\Rights'),
+            self::RIGHT_OPTION_SELECT, ['class' => 'entity_option_selected']
         );
 
         $this->addGroup(
-            $group, self::PROPERTY_RIGHT_OPTION, Translation::get('PublishFor', null, StringUtilities::LIBRARIES), ''
+            $group, self::PROPERTY_RIGHT_OPTION, $translator->trans('PublishFor', [], StringUtilities::LIBRARIES), ''
         );
 
         // Add the advanced element finder
@@ -151,18 +148,20 @@ class PublicationForm extends FormValidator
     }
 
     /**
-     * Builds the update form with the update button
+     * @throws \QuickformException
      */
-    public function build_update_form()
+    public function build_update_form(): void
     {
         $this->build_form();
 
+        $translator = $this->getTranslator();
+
         $buttons[] = $this->createElement(
-            'style_submit_button', self::PARAM_SUBMIT, Translation::get('Update', null, StringUtilities::LIBRARIES),
+            'style_submit_button', self::PARAM_SUBMIT, $translator->trans('Update', [], StringUtilities::LIBRARIES),
             null, null, new FontAwesomeGlyph('arrow-right')
         );
         $buttons[] = $this->createElement(
-            'style_reset_button', self::PARAM_RESET, Translation::get('Reset', null, StringUtilities::LIBRARIES)
+            'style_reset_button', self::PARAM_RESET, $translator->trans('Reset', [], StringUtilities::LIBRARIES)
         );
 
         $this->addGroup($buttons, 'buttons', null, '&nbsp;', false);
@@ -172,25 +171,27 @@ class PublicationForm extends FormValidator
      * Sets the default values of the form.
      * By default the publication is for everybody who has access to the tool and
      * the publication will be available forever.
+     *
+     * @throws \QuickformException
      */
-    public function setDefaults($defaults = [], $filter = null)
+    public function setDefaults($defaultValues = [], $filter = null)
     {
-        $defaults = [];
+        $defaultValues = [];
 
-        $defaults[self::PROPERTY_TIME_PERIOD_FOREVER] = 1;
-        $defaults[self::PROPERTY_RIGHT_OPTION] = self::RIGHT_OPTION_ALL;
+        $defaultValues[self::PROPERTY_TIME_PERIOD_FOREVER] = 1;
+        $defaultValues[self::PROPERTY_RIGHT_OPTION] = self::RIGHT_OPTION_ALL;
 
-        parent::setDefaults($defaults, $filter);
+        parent::setDefaults($defaultValues, $filter);
     }
 
     /**
      * @param \Chamilo\Core\User\Storage\DataClass\User $user
      * @param \Chamilo\Core\Admin\Announcement\Storage\DataClass\Publication $publication
-     * @param int $targetUsersAndGroups
+     * @param string[][] $targetUsersAndGroups
      *
      * @throws \Exception
      */
-    public function setPublicationDefaults(User $user, Publication $publication, array $targetUsersAndGroups)
+    public function setPublicationDefaults(User $user, Publication $publication, array $targetUsersAndGroups): void
     {
         $defaults = [];
 

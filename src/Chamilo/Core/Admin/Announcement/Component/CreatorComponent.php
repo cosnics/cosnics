@@ -3,7 +3,6 @@ namespace Chamilo\Core\Admin\Announcement\Component;
 
 use Chamilo\Core\Admin\Announcement\Form\PublicationForm;
 use Chamilo\Core\Admin\Announcement\Manager;
-use Chamilo\Core\Admin\Announcement\Publisher;
 use Chamilo\Core\Repository\ContentObject\SystemAnnouncement\Storage\DataClass\SystemAnnouncement;
 use Chamilo\Core\Repository\Storage\DataClass\ContentObject;
 use Chamilo\Core\Repository\Storage\DataManager;
@@ -12,10 +11,10 @@ use Chamilo\Core\Repository\Viewer\ViewerInterface;
 use Chamilo\Core\Repository\Workspace\Service\RightsService;
 use Chamilo\Libraries\Architecture\Application\ApplicationConfiguration;
 use Chamilo\Libraries\Format\Structure\Glyph\IdentGlyph;
+use Chamilo\Libraries\Storage\DataClass\DataClass;
 use Chamilo\Libraries\Storage\Parameters\DataClassRetrievesParameters;
 use Chamilo\Libraries\Storage\Query\Condition\InCondition;
 use Chamilo\Libraries\Storage\Query\Variable\PropertyConditionVariable;
-use Chamilo\Libraries\Translation\Translation;
 use Chamilo\Libraries\Utilities\StringUtilities;
 
 /**
@@ -27,8 +26,10 @@ class CreatorComponent extends Manager implements ViewerInterface
     use ViewerTrait;
 
     /**
-     * @return string
+     * @throws \Chamilo\Libraries\Architecture\Exceptions\ClassNotExistException
      * @throws \Chamilo\Libraries\Architecture\Exceptions\NotAllowedException
+     * @throws \Chamilo\Libraries\Architecture\Exceptions\UserException
+     * @throws \QuickformException
      */
     public function run()
     {
@@ -38,7 +39,7 @@ class CreatorComponent extends Manager implements ViewerInterface
         {
             return $this->getApplicationFactory()->getApplication(
                 \Chamilo\Core\Repository\Viewer\Manager::CONTEXT,
-                new ApplicationConfiguration($this->getRequest(), $this->get_user(), $this)
+                new ApplicationConfiguration($this->getRequest(), $this->getUser(), $this)
             )->run();
         }
         else
@@ -61,9 +62,11 @@ class CreatorComponent extends Manager implements ViewerInterface
                         $this->getUser()->getId(), $contentObjectIdentifiers, $publicationForm->exportValues()
                     );
 
-                $message = Translation::get(
-                    ($success ? 'ObjectPublished' : 'ObjectNotPublished'), ['OBJECT' => Translation::get('Object')],
-                    StringUtilities::LIBRARIES
+                $translator = $this->getTranslator();
+
+                $message = $translator->trans(
+                    ($success ? 'ObjectPublished' : 'ObjectNotPublished'),
+                    ['OBJECT' => $translator->trans('Object', [], Manager::CONTEXT)], StringUtilities::LIBRARIES
                 );
 
                 $parameters = [self::PARAM_ACTION => self::ACTION_BROWSE];
@@ -74,10 +77,10 @@ class CreatorComponent extends Manager implements ViewerInterface
             {
                 $html = [];
 
-                $html[] = $this->render_header();
+                $html[] = $this->renderHeader();
                 $html[] = $this->renderContentObjects($contentObjectIdentifiers);
                 $html[] = $publicationForm->render();
-                $html[] = $this->render_footer();
+                $html[] = $this->renderFooter();
 
                 return implode(PHP_EOL, $html);
             }
@@ -97,34 +100,31 @@ class CreatorComponent extends Manager implements ViewerInterface
 
     protected function getWorkspaceRightsService(): RightsService
     {
-        return this->getService(RightsService::class);
+        return $this->getService(RightsService::class);
     }
 
     /**
      * @return string[]
      */
-    public function get_allowed_content_object_types()
+    public function get_allowed_content_object_types(): array
     {
         return [SystemAnnouncement::class];
     }
 
     /**
-     * @param int $contentObjectIdentifiers
-     *
-     * @return string
+     * @param string[] $contentObjectIdentifiers
      */
-    private function renderContentObjects(array $contentObjectIdentifiers)
+    private function renderContentObjects(array $contentObjectIdentifiers): string
     {
         $html = [];
 
         $items_to_publish = count($contentObjectIdentifiers);
-        $publications = [];
 
         if ($items_to_publish > 0)
         {
             $parameters = new DataClassRetrievesParameters(
                 new InCondition(
-                    new PropertyConditionVariable(ContentObject::class, ContentObject::PROPERTY_ID),
+                    new PropertyConditionVariable(ContentObject::class, DataClass::PROPERTY_ID),
                     $contentObjectIdentifiers
                 )
             );
@@ -133,17 +133,18 @@ class CreatorComponent extends Manager implements ViewerInterface
                 ContentObject::class, $parameters
             );
 
+            $translator = $this->getTranslator();
+
             $html[] = '<div class="panel panel-default">';
             $html[] = '<div class="panel-heading">';
-            $html[] = '<h3 class="panel-title">' . Translation::get(
-                    'SelectedContentObjects', null, StringUtilities::LIBRARIES
+            $html[] = '<h3 class="panel-title">' . $translator->trans(
+                    'SelectedContentObjects', [], StringUtilities::LIBRARIES
                 ) . '</h3>';
             $html[] = '</div>';
             $html[] = '<ul class="list-group">';
 
             foreach ($contentObjects as $contentObject)
             {
-                $namespace = ContentObject::get_content_object_type_namespace($contentObject->getType());
                 $glyph = $contentObject->getGlyph(IdentGlyph::SIZE_MINI);
 
                 if ($this->getWorkspaceRightsService()->canUseContentObject($this->getUser(), $contentObject))
@@ -154,7 +155,8 @@ class CreatorComponent extends Manager implements ViewerInterface
                 else
                 {
                     $html[] = '<li class="list-group-item">' . $glyph->render() . ' ' . $contentObject->get_title() .
-                        '<em class="text-danger">' . Translation::get('NotAllowed') . '</em>' . '</li>';
+                        '<em class="text-danger">' . $translator->trans('NotAllowed', [], Manager::CONTEXT) . '</em>' .
+                        '</li>';
                 }
             }
 

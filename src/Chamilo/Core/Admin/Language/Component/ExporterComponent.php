@@ -3,12 +3,18 @@ namespace Chamilo\Core\Admin\Language\Component;
 
 use Chamilo\Configuration\Package\Service\PackageBundlesCacheService;
 use Chamilo\Core\Admin\Language\Manager;
+use League\Csv\ColumnConsistency;
+use League\Csv\Writer;
+use Symfony\Component\HttpFoundation\HeaderUtils;
+use Symfony\Component\HttpFoundation\Response;
 
 class ExporterComponent extends Manager
 {
 
     /**
      * @throws \Symfony\Component\Cache\Exception\CacheException
+     * @throws \League\Csv\CannotInsertRecord
+     * @throws \League\Csv\Exception
      */
     public function run()
     {
@@ -17,80 +23,116 @@ class ExporterComponent extends Manager
 
         $configurationConsulter = $this->getConfigurationConsulter();
 
-        $translationsFile = $this->getConfigurablePathBuilder()->getTemporaryPath(__NAMESPACE__) . 'translations.csv';
-        $this->getFilesystem()->mkdir(dirname($translationsFile));
+        $validator = new ColumnConsistency();
 
-        $file_handle = fopen($translationsFile, 'w');
+        $csvWriter = Writer::createFromString();
+        $csvWriter->addValidator($validator, 'column_consistency');
 
-        $base_language = $configurationConsulter->getSetting([__NAMESPACE__, 'base_language']);
-        $source_language = $configurationConsulter->getSetting([__NAMESPACE__, 'source_language']);
-        $target_languages = $configurationConsulter->getSetting([__NAMESPACE__, 'target_languages']);
+        $baseLanguage = $configurationConsulter->getSetting(['Chamilo\Core\Admin', 'base_language']);
+        $sourceLanguage = $configurationConsulter->getSetting(['Chamilo\Core\Admin', 'source_language']);
+        $targetLanguages =
+            explode(',', $configurationConsulter->getSetting(['Chamilo\Core\Admin', 'target_languages']));
 
-        $this->writeLine(
-            $file_handle, ['Package', 'Variable', 'Base language', 'Source language', 'Target Languages']
-        );
+        $headers = ['package', 'variable', 'base_language', 'source_language'];
 
-        $language_values = ['', '', $base_language, $source_language];
-        $target_languages = explode(',', $target_languages);
-
-        foreach ($target_languages as $target_language)
+        foreach ($targetLanguages as $targetLanguage)
         {
-            $language_values[] = $target_language;
+            $headers[] = 'target_language_' . $targetLanguage;
         }
 
-        $languages = array_merge($target_languages, [$base_language, $source_language]);
+        $csvWriter->insertOne($headers);
 
-        $this->writeLine($file_handle, $language_values);
+        $languages = $this->determineLanguages($baseLanguage, $sourceLanguage, $targetLanguages);
 
         $packages = $this->getPackageBundlesCacheService()->getAllPackages()->getNestedPackages();
 
         foreach ($packages as $package)
         {
             $translations = [];
+
             $languagePath = $this->getSystemPathBuilder()->getI18nPath($package->get_context());
 
             foreach (array_unique($languages) as $language)
             {
-                $language_file = $languagePath . $language . '.i18n';
-                $translations[$language] = parse_ini_file($language_file);
+                $languageFilePath = $languagePath . $language . '.i18n';
+
+                if (file_exists($languageFilePath))
+                {
+                    $translations[$language] = parse_ini_file($languageFilePath);
+                }
             }
 
             $variables = [];
 
-            foreach ($translations as $translation_values)
+            foreach ($translations as $languageTranslations)
             {
-                $variables = array_merge($variables, array_keys($translation_values));
-            }
+                $languageVariables = array_keys($languageTranslations);
 
-            $variables = array_unique($variables);
+                foreach ($languageVariables as $languageVariable)
+                {
+                    if (!in_array($languageVariable, $variables))
+                    {
+                        $variables[] = $languageVariable;
+                    }
+                }
+            }
 
             foreach ($variables as $variable)
             {
                 $row = [];
-                $row[] = $package;
-                $row[] = $variable;
-                $row[] = $translations[$base_language][$variable];
-                $row[] = $translations[$source_language][$variable];
 
-                foreach ($target_languages as $target_language)
+                $row[] = $package->get_context();
+                $row[] = $variable;
+                $row[] = $translations[$baseLanguage][$variable];
+                $row[] = $translations[$sourceLanguage][$variable];
+
+                foreach ($targetLanguages as $target_language)
                 {
                     $row[] = $translations[$target_language][$variable];
                 }
 
-                $this->writeLine($file_handle, $row);
+                $csvWriter->insertOne($row);
             }
         }
 
-        $this->getFilesystemTools()->sendFileForDownload($translationsFile);
+        $disposition = HeaderUtils::makeDisposition(
+            HeaderUtils::DISPOSITION_ATTACHMENT, 'translations.csv'
+        );
+
+        $response = new Response(
+            $csvWriter->toString(), 200, ['Content-Type' => 'text/csv', 'Content-Disposition' => $disposition]
+        );
+
+        $response->setCharset('utf-8');
+
+        return $response;
+    }
+
+    /**
+     * @param string[] $targetLanguages
+     */
+    public function determineLanguages(string $baseLanguage, string $sourceLanguage, array $targetLanguages): array
+    {
+        $languages = [$baseLanguage];
+
+        if (!in_array($sourceLanguage, $languages))
+        {
+            $languages[] = $sourceLanguage;
+        }
+
+        foreach ($targetLanguages as $targetLanguage)
+        {
+            if (!in_array($targetLanguage, $languages))
+            {
+                $languages[] = $targetLanguage;
+            }
+        }
+
+        return $languages;
     }
 
     public function getPackageBundlesCacheService(): PackageBundlesCacheService
     {
         return $this->getService(PackageBundlesCacheService::class);
-    }
-
-    private function writeLine($file_handle, array $row = []): void
-    {
-        fputcsv($file_handle, $row, ';');
     }
 }

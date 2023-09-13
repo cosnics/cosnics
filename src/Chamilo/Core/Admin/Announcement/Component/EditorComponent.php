@@ -6,7 +6,6 @@ use Chamilo\Core\Admin\Announcement\Manager;
 use Chamilo\Core\Repository\Form\ContentObjectForm;
 use Chamilo\Core\Repository\Workspace\Storage\DataClass\Workspace;
 use Chamilo\Libraries\Format\Form\FormValidator;
-use Chamilo\Libraries\Translation\Translation;
 use Chamilo\Libraries\Utilities\StringUtilities;
 
 /**
@@ -17,18 +16,24 @@ class EditorComponent extends Manager
 {
 
     /**
-     * Runs this component and displays its output.
+     * @throws \Chamilo\Libraries\Architecture\Exceptions\NotAllowedException
+     * @throws \Chamilo\Libraries\Rights\Exception\RightsLocationNotFoundException
+     * @throws \Chamilo\Libraries\Storage\Exception\DataClassNoResultException
+     * @throws \QuickformException
+     * @throws \Exception
      */
     public function run()
     {
         $this->checkAuthorization(Manager::CONTEXT, 'ManageChamilo');
+
+        $translator = $this->getTranslator();
 
         $id = $this->getRequest()->query->get(self::PARAM_SYSTEM_ANNOUNCEMENT_ID);
         $this->set_parameter(self::PARAM_SYSTEM_ANNOUNCEMENT_ID, $id);
 
         if ($id)
         {
-            $publication = $this->getPublicationService()->findPublicationByIdentifier((int) $id);
+            $publication = $this->getPublicationService()->findPublicationByIdentifier($id);
 
             $content_object = $publication->get_content_object();
 
@@ -37,7 +42,7 @@ class EditorComponent extends Manager
                 FormValidator::FORM_METHOD_POST, $this->get_url(
                 [
                     self::PARAM_ACTION => self::ACTION_EDIT,
-                    self::PARAM_SYSTEM_ANNOUNCEMENT_ID => $publication->get_id()
+                    self::PARAM_SYSTEM_ANNOUNCEMENT_ID => $publication->getId()
                 ]
             )
             );
@@ -71,9 +76,10 @@ class EditorComponent extends Manager
                     );
 
                     $this->redirectWithMessage(
-                        Translation::get(
+                        $translator->trans(
                             $success ? 'ObjectUpdated' : 'ObjectNotUpdated',
-                            ['OBJECT' => Translation::get('SystemAnnouncementPublication')], StringUtilities::LIBRARIES
+                            ['OBJECT' => $translator->trans('SystemAnnouncementPublication', [], Manager::CONTEXT)],
+                            StringUtilities::LIBRARIES
                         ), !$success, [self::PARAM_ACTION => self::ACTION_BROWSE]
                     );
                 }
@@ -81,9 +87,9 @@ class EditorComponent extends Manager
                 {
                     $html = [];
 
-                    $html[] = $this->render_header();
+                    $html[] = $this->renderHeader();
                     $html[] = $publicationForm->render();
-                    $html[] = $this->render_footer();
+                    $html[] = $this->renderFooter();
 
                     return implode(PHP_EOL, $html);
                 }
@@ -92,9 +98,9 @@ class EditorComponent extends Manager
             {
                 $html = [];
 
-                $html[] = $this->render_header();
+                $html[] = $this->renderHeader();
                 $html[] = $form->toHtml();
-                $html[] = $this->render_footer();
+                $html[] = $this->renderFooter();
 
                 return implode(PHP_EOL, $html);
             }
@@ -103,8 +109,9 @@ class EditorComponent extends Manager
         {
             return $this->display_error_page(
                 htmlentities(
-                    Translation::get(
-                        'NoObjectSelected', ['OBJECT' => Translation::get('SystemAnnouncement')],
+                    $translator->trans(
+                        'NoObjectSelected',
+                        ['OBJECT' => $translator->trans('SystemAnnouncement', [], Manager::CONTEXT)],
                         StringUtilities::LIBRARIES
                     )
                 )

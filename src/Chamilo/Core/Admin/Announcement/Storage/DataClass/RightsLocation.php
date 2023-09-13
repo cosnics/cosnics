@@ -11,9 +11,6 @@ class RightsLocation extends \Chamilo\Libraries\Rights\Domain\RightsLocation
 {
     public const CONTEXT = Manager::CONTEXT;
 
-    /**
-     * @return string
-     */
     public static function getStorageUnitName(): string
     {
         return 'admin_announcement_rights_location';

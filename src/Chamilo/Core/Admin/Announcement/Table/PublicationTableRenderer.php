@@ -28,6 +28,7 @@ use Chamilo\Libraries\Format\Table\TableResultPosition;
 use Chamilo\Libraries\Storage\DataClass\DataClass;
 use Chamilo\Libraries\Utilities\DatetimeUtilities;
 use Chamilo\Libraries\Utilities\StringUtilities;
+use Exception;
 use Symfony\Component\Translation\Translator;
 
 /**
@@ -185,8 +186,8 @@ class PublicationTableRenderer extends RecordListTableRenderer implements TableR
                     $date_format, $publication[Publication::PROPERTY_PUBLICATION_DATE]
                 );
 
-                return $publication[Publication::PROPERTY_HIDDEN] ? '<span style="color: gray">' . $data . '</span>' :
-                    $data;
+                return $publication[Publication::PROPERTY_HIDDEN] ?
+                    '<span style="color: rgb(128,128,128)">' . $data . '</span>' : $data;
             case Publication::PROPERTY_PUBLISHER_ID :
                 $user = $this->getUserService()->findUserByIdentifier(
                     $publication[Publication::PROPERTY_PUBLISHER_ID]
@@ -201,8 +202,8 @@ class PublicationTableRenderer extends RecordListTableRenderer implements TableR
                     $data = $user->get_fullname();
                 }
 
-                return $publication[Publication::PROPERTY_HIDDEN] ? '<span style="color: gray">' . $data . '</span>' :
-                    $data;
+                return $publication[Publication::PROPERTY_HIDDEN] ?
+                    '<span style="color: rgb(128,128,128)">' . $data . '</span>' : $data;
             case self::COLUMN_PUBLISHED_FOR :
                 $data = '<div style="float: left;">' . $this->renderPublicationTargets($publication) . '</div>';
 
@@ -215,14 +216,14 @@ class PublicationTableRenderer extends RecordListTableRenderer implements TableR
                     $data .= $email_icon;
                 }
 
-                return $publication[Publication::PROPERTY_HIDDEN] ? '<span style="color: gray">' . $data . '</span>' :
-                    $data;
+                return $publication[Publication::PROPERTY_HIDDEN] ?
+                    '<span style="color: rgb(128,128,128)">' . $data . '</span>' : $data;
             case ContentObject::PROPERTY_DESCRIPTION :
                 $data = $publication[ContentObject::PROPERTY_DESCRIPTION];
                 $data = StringUtilities::getInstance()->truncate($data, 100);
 
-                return $publication[Publication::PROPERTY_HIDDEN] ? '<span style="color: gray">' . $data . '</span>' :
-                    $data;
+                return $publication[Publication::PROPERTY_HIDDEN] ?
+                    '<span style="color: rgb(128,128,128)">' . $data . '</span>' : $data;
         }
 
         return parent::renderCell($column, $resultPosition, $publication);
@@ -258,11 +259,13 @@ class PublicationTableRenderer extends RecordListTableRenderer implements TableR
                     case GroupEntityProvider::ENTITY_TYPE :
                         foreach ($entity_ids as $group_id)
                         {
-                            $group = $this->getGroupService()->findGroupByIdentifier($group_id);
-
-                            if ($group)
+                            try
                             {
+                                $group = $this->getGroupService()->findGroupByIdentifier($group_id);
                                 $target_list[] = '<option>' . $group->get_name() . '</option>';
+                            }
+                            catch (Exception)
+                            {
                             }
                         }
                         break;

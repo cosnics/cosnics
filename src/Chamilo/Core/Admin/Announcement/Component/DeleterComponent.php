@@ -2,18 +2,19 @@
 namespace Chamilo\Core\Admin\Announcement\Component;
 
 use Chamilo\Core\Admin\Announcement\Manager;
-use Chamilo\Libraries\Translation\Translation;
 use Chamilo\Libraries\Utilities\StringUtilities;
 
 class DeleterComponent extends Manager
 {
 
     /**
-     * Runs this component and displays its output.
+     * @throws \Chamilo\Libraries\Architecture\Exceptions\NotAllowedException
      */
     public function run()
     {
         $this->checkAuthorization(Manager::CONTEXT, 'ManageChamilo');
+
+        $translator = $this->getTranslator();
 
         $ids = $this->getRequest()->query->get(self::PARAM_SYSTEM_ANNOUNCEMENT_ID);
         $this->set_parameter(self::PARAM_SYSTEM_ANNOUNCEMENT_ID, $ids);
@@ -23,12 +24,12 @@ class DeleterComponent extends Manager
         {
             if (!is_array($ids))
             {
-                $ids = array($ids);
+                $ids = [$ids];
             }
 
             foreach ($ids as $id)
             {
-                $publication = $this->getPublicationService()->findPublicationByIdentifier((int) $id);
+                $publication = $this->getPublicationService()->findPublicationByIdentifier($id);
 
                 if (!$this->getPublicationService()->deletePublication($publication))
                 {
@@ -41,40 +42,36 @@ class DeleterComponent extends Manager
                 if (count($ids) == 1)
                 {
                     $message = 'ContentObjectNotDeleted';
-                    $parameter = array('OBJECT' => Translation::get('Publication'));
+                    $parameter = ['OBJECT' => $translator->trans('Publication', [], Manager::CONTEXT)];
                 }
                 else
                 {
                     $message = 'ContentObjectsNotDeleted';
-                    $parameter = array('OBJECTS' => Translation::get('Publications'));
+                    $parameter = ['OBJECTS' => $translator->trans('Publications', [], Manager::CONTEXT)];
                 }
+            }
+            elseif (count($ids) == 1)
+            {
+                $message = 'ContentObjectDeleted';
+                $parameter = ['OBJECT' => $translator->trans('Publication', [], Manager::CONTEXT)];
             }
             else
             {
-                if (count($ids) == 1)
-                {
-                    $message = 'ContentObjectDeleted';
-                    $parameter = array('OBJECT' => Translation::get('Publication'));
-                }
-                else
-                {
-                    $message = 'ContentObjectsDeleted';
-                    $parameter = array('OBJECTS' => Translation::get('Publications'));
-                }
+                $message = 'ContentObjectsDeleted';
+                $parameter = ['OBJECTS' => $translator->trans('Publications', [], Manager::CONTEXT)];
             }
 
             $this->redirectWithMessage(
-                Translation::get($message, $parameter, StringUtilities::LIBRARIES), (bool) $failures,
-                array(self::PARAM_ACTION => self::ACTION_BROWSE)
+                $translator->trans($message, $parameter, StringUtilities::LIBRARIES), (bool) $failures,
+                [self::PARAM_ACTION => self::ACTION_BROWSE]
             );
         }
         else
         {
             return $this->display_error_page(
                 htmlentities(
-                    Translation::get(
-                        'NoObjectSelected', array('OBJECTS' => Translation::get('Publication')),
-                        StringUtilities::LIBRARIES
+                    $translator->trans(
+                        'NoObjectSelected', ['OBJECTS' => $translator->trans('Publication')], StringUtilities::LIBRARIES
                     )
                 )
             );

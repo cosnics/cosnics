@@ -14,6 +14,4 @@ abstract class Manager extends Application
 
     public const CONTEXT = __NAMESPACE__;
     public const DEFAULT_ACTION = self::ACTION_IMPORT;
-
-    public const PARAM_ACTION = 'language_action';
 }

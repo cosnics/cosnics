@@ -7,6 +7,7 @@ use Chamilo\Core\Repository\Publication\Storage\DataClass\Attributes;
 use Chamilo\Core\Repository\Storage\DataClass\ContentObject;
 use Chamilo\Libraries\Architecture\Application\Application;
 use Chamilo\Libraries\Architecture\Application\Routing\UrlGenerator;
+use Chamilo\Libraries\Storage\DataClass\DataClass;
 use Symfony\Component\Translation\Translator;
 
 /**
@@ -31,11 +32,11 @@ class PublicationAttributesGenerator
      *
      * @return \Chamilo\Core\Repository\Publication\Storage\DataClass\Attributes
      */
-    public function createAttributesFromRecord($record)
+    public function createAttributesFromRecord(array $record): Attributes
     {
         $attributes = new Attributes();
 
-        $attributes->setId($record[Publication::PROPERTY_ID]);
+        $attributes->setId($record[DataClass::PROPERTY_ID]);
         $attributes->set_publisher_id($record[Publication::PROPERTY_PUBLISHER_ID]);
         $attributes->set_date($record[Publication::PROPERTY_PUBLICATION_DATE]);
         $attributes->set_application(Manager::CONTEXT);
@@ -48,7 +49,7 @@ class PublicationAttributesGenerator
             [
                 Application::PARAM_CONTEXT => Manager::CONTEXT,
                 Application::PARAM_ACTION => Manager::ACTION_VIEW,
-                Manager::PARAM_SYSTEM_ANNOUNCEMENT_ID => $record[Publication::PROPERTY_ID]
+                Manager::PARAM_SYSTEM_ANNOUNCEMENT_ID => $record[DataClass::PROPERTY_ID]
             ]
         );
 
