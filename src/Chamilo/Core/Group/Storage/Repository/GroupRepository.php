@@ -211,6 +211,27 @@ class GroupRepository
     }
 
     /**
+     * @param string $parentIdentifier
+     *
+     * @return \Doctrine\Common\Collections\ArrayCollection<\Chamilo\Core\Group\Storage\DataClass\Group>
+     * @throws \Chamilo\Libraries\Storage\Exception\DataClassNoResultException
+     */
+    public function findGroupsForParentIdentifier(string $parentIdentifier = '0'): ArrayCollection
+    {
+        $condition = new EqualityCondition(
+            new PropertyConditionVariable(Group::class, NestedSet::PROPERTY_PARENT_ID),
+            new StaticConditionVariable($parentIdentifier)
+        );
+
+        return $this->getNestedSetDataClassRepository()->retrieves(
+            Group::class, new DataClassRetrievesParameters(
+                $condition, null, null,
+                new OrderBy([new OrderProperty(new PropertyConditionVariable(Group::class, Group::PROPERTY_NAME))])
+            )
+        );
+    }
+
+    /**
      * @param ?string $searchQuery
      * @param string $parentIdentifier
      *
@@ -272,11 +293,11 @@ class GroupRepository
     {
         return $this->getNestedSetDataClassRepository()->retrieve(
             Group::class, new DataClassRetrieveParameters(
-            new EqualityCondition(
-                new PropertyConditionVariable(Group::class, NestedSet::PROPERTY_PARENT_ID),
-                new StaticConditionVariable(0)
+                new EqualityCondition(
+                    new PropertyConditionVariable(Group::class, NestedSet::PROPERTY_PARENT_ID),
+                    new StaticConditionVariable(0)
+                )
             )
-        )
         );
     }
 

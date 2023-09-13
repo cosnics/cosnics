@@ -5,21 +5,21 @@ use Chamilo\Core\Group\Form\GroupImportForm;
 use Chamilo\Core\Group\Manager;
 use Chamilo\Libraries\Architecture\Application\Application;
 use Chamilo\Libraries\Architecture\Exceptions\NotAllowedException;
-use Chamilo\Libraries\Translation\Translation;
 use Chamilo\Libraries\Utilities\StringUtilities;
 
 /**
- * @package group.lib.group_manager.component
+ * @package Chamilo\Core\Group\Component
  */
 class ImporterComponent extends Manager
 {
 
     /**
-     * Runs this component and displays its output.
+     * @throws \Chamilo\Libraries\Architecture\Exceptions\NotAllowedException
+     * @throws \QuickformException
      */
     public function run()
     {
-        if (!$this->get_user()->isPlatformAdmin())
+        if (!$this->getUser()->isPlatformAdmin())
         {
             throw new NotAllowedException();
         }
@@ -52,7 +52,8 @@ class ImporterComponent extends Manager
         $translator = $this->getTranslator();
 
         $html = [];
-        $html[] = '<p>' . $translator->trans('XMLMustLookLike', [], Manager::CONTEXT) . ' (' . $translator->trans('MandatoryFields', [], Manager::CONTEXT) . ')</p>';
+        $html[] = '<p>' . $translator->trans('XMLMustLookLike', [], Manager::CONTEXT) . ' (' .
+            $translator->trans('MandatoryFields', [], Manager::CONTEXT) . ')</p>';
         $html[] = '<blockquote>';
         $html[] = '<pre>';
         $html[] = '&lt;?xml version=&quot;1.0&quot; encoding=&quot;UTF-8&quot;?&gt;';

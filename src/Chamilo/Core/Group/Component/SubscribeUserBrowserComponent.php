@@ -2,7 +2,6 @@
 namespace Chamilo\Core\Group\Component;
 
 use Chamilo\Core\Group\Manager;
-use Chamilo\Core\Group\Service\GroupMembershipService;
 use Chamilo\Core\Group\Storage\DataClass\Group;
 use Chamilo\Core\Group\Table\NonSubscribedUserTableRenderer;
 use Chamilo\Core\User\Storage\DataClass\User;
@@ -37,8 +36,6 @@ class SubscribeUserBrowserComponent extends Manager
     private ?Group $group;
 
     /**
-     * Runs this component and displays its output.
-     *
      * @throws \Chamilo\Libraries\Architecture\Exceptions\NotAllowedException
      * @throws \Chamilo\Libraries\Storage\Exception\DataClassNoResultException
      * @throws \ReflectionException
@@ -122,19 +119,13 @@ class SubscribeUserBrowserComponent extends Manager
         return $this->group;
     }
 
-    protected function getGroupIdentifier(): int
+    protected function getGroupIdentifier(): string
     {
         return $this->getRequest()->query->get(self::PARAM_GROUP_ID);
     }
 
-    protected function getGroupMembershipService(): GroupMembershipService
-    {
-        return $this->getService(GroupMembershipService::class);
-    }
-
     /**
-     * @throws \ReflectionException
-     * @throws \Exception
+     * @throws \QuickformException
      */
     public function getNonSubscribedUserCondition(): AndCondition
     {

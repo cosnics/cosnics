@@ -236,6 +236,17 @@ class GroupService
         );
     }
 
+    /**
+     * @param string $parentIdentifier
+     *
+     * @return \Doctrine\Common\Collections\ArrayCollection<\Chamilo\Core\Group\Storage\DataClass\Group>
+     * @throws \Chamilo\Libraries\Storage\Exception\DataClassNoResultException
+     */
+    public function findGroupsForParentIdentifier(string $parentIdentifier = '0'): ArrayCollection
+    {
+        return $this->getGroupRepository()->findGroupsForParentIdentifier($parentIdentifier);
+    }
+
     public function findRootGroup(): Group
     {
         $group = $this->groupRepository->findRootGroup();

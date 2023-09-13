@@ -7,24 +7,26 @@ use Chamilo\Libraries\Architecture\Application\Application;
 use Chamilo\Libraries\Architecture\Exceptions\NotAllowedException;
 use Chamilo\Libraries\Format\Structure\Breadcrumb;
 use Chamilo\Libraries\Format\Structure\BreadcrumbTrail;
-use Chamilo\Libraries\Translation\Translation;
 use Chamilo\Libraries\Utilities\StringUtilities;
 
 /**
- * @package group.lib.group_manager.component
+ * @package Chamilo\Core\Group\Component
  */
 class MoverComponent extends Manager
 {
 
     /**
-     * Runs this component and displays its output.
+     * @throws \Chamilo\Libraries\Architecture\Exceptions\NotAllowedException
+     * @throws \QuickformException
      */
     public function run()
     {
-        if (!$this->get_user()->isPlatformAdmin())
+        if (!$this->getUser()->isPlatformAdmin())
         {
             throw new NotAllowedException();
         }
+
+        $translator = $this->getTranslator();
 
         $group_id = $this->getRequest()->query->get(self::PARAM_GROUP_ID);
         $this->set_parameter(self::PARAM_GROUP_ID, $group_id);
@@ -32,16 +34,15 @@ class MoverComponent extends Manager
         $group = $this->retrieve_group(intval($this->getRequest()->query->get(self::PARAM_GROUP_ID)));
 
         // TODO: only show groups you can actually move to (where you have create rights)
-        $form = new GroupMoveForm($group, $this->get_url([self::PARAM_GROUP_ID => $group_id]), $this->get_user());
+        $form = new GroupMoveForm($group, $this->get_url([self::PARAM_GROUP_ID => $group_id]), $this->getUser());
 
         if ($form->validate())
         {
             $success = $form->move_group();
             $parent = $form->get_new_parent();
-            $message = $success ? Translation::get(
-                'ObjectMoved', ['OBJECT' => Translation::get('Group')], StringUtilities::LIBRARIES
-            ) : Translation::get(
-                'ObjectNotMoved', ['OBJECT' => Translation::get('Group')], StringUtilities::LIBRARIES
+            $message = $translator->trans(
+                $success ? 'ObjectMoved' : 'ObjectNotMoved', ['OBJECT' => $translator->trans('Group')],
+                StringUtilities::LIBRARIES
             );
             $this->redirectWithMessage(
                 $message, !$success || false,
@@ -52,10 +53,10 @@ class MoverComponent extends Manager
         {
             $html = [];
 
-            $html[] = $this->render_header();
-            $html[] = Translation::get('Group') . ': ' . $group->get_name();
-            $html[] = $form->toHtml();
-            $html[] = $this->render_footer();
+            $html[] = $this->renderHeader();
+            $html[] = $translator->trans('Group') . ': ' . $group->get_name();
+            $html[] = $form->render();
+            $html[] = $this->renderFooter();
 
             return implode(PHP_EOL, $html);
         }
@@ -63,10 +64,12 @@ class MoverComponent extends Manager
 
     public function addAdditionalBreadcrumbs(BreadcrumbTrail $breadcrumbtrail): void
     {
+        $translator = $this->getTranslator();
+
         $breadcrumbtrail->add(
             new Breadcrumb(
                 $this->get_url([Application::PARAM_ACTION => self::ACTION_BROWSE_GROUPS]),
-                Translation::get('BrowserComponent')
+                $translator->trans('BrowserComponent', [], Manager::CONTEXT)
             )
         );
         $breadcrumbtrail->add(
@@ -76,7 +79,7 @@ class MoverComponent extends Manager
                         Application::PARAM_ACTION => self::ACTION_VIEW_GROUP,
                         self::PARAM_GROUP_ID => $this->getRequest()->query->get(self::PARAM_GROUP_ID)
                     ]
-                ), Translation::get('ViewerComponent')
+                ), $translator->trans('ViewerComponent', [], Manager::CONTEXT)
             )
         );
     }

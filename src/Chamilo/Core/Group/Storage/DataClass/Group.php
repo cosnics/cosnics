@@ -364,7 +364,7 @@ class Group extends NestedSet
      * @param bool $include_self
      *
      * @return string
-     * @deprecated Use GroupService::getFullyQualifiedNameForGroup() now
+     * @deprecated Use GroupsTreeTraverser::getFullyQualifiedNameForGroup() now
      */
     public function get_fully_qualified_name($include_self = true)
     {

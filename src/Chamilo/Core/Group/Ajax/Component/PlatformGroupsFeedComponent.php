@@ -1,13 +1,14 @@
 <?php
 namespace Chamilo\Core\Group\Ajax\Component;
 
+use Chamilo\Core\Group\Service\GroupMembershipService;
+use Chamilo\Core\Group\Service\GroupsTreeTraverser;
 use Chamilo\Core\Group\Storage\DataClass\Group;
-use Chamilo\Core\Group\Storage\DataClass\GroupRelUser;
-use Chamilo\Core\Group\Storage\DataManager;
+use Chamilo\Core\User\Storage\DataClass\User;
 use Chamilo\Libraries\Ajax\Component\GroupsFeedComponent;
 use Chamilo\Libraries\Format\Form\Element\AdvancedElementFinder\AdvancedElementFinderElement;
 use Chamilo\Libraries\Format\Structure\Glyph\FontAwesomeGlyph;
-use Chamilo\Libraries\Storage\Parameters\DataClassRetrievesParameters;
+use Chamilo\Libraries\Storage\DataClass\NestedSet;
 use Chamilo\Libraries\Storage\Query\Condition\AndCondition;
 use Chamilo\Libraries\Storage\Query\Condition\ContainsCondition;
 use Chamilo\Libraries\Storage\Query\Condition\EqualityCondition;
@@ -16,12 +17,12 @@ use Chamilo\Libraries\Storage\Query\OrderBy;
 use Chamilo\Libraries\Storage\Query\OrderProperty;
 use Chamilo\Libraries\Storage\Query\Variable\PropertyConditionVariable;
 use Chamilo\Libraries\Storage\Query\Variable\StaticConditionVariable;
+use Doctrine\Common\Collections\ArrayCollection;
 
 /**
- * Feed to return the platform groups
- *
+ * @package Chamilo\Core\Group\Ajax\Component
  * @author  Sven Vanpoucke
- * @package application.weblcms
+ * @author  Hans De Bisschop <hans.de.bisschop@ehb.be>
  */
 class PlatformGroupsFeedComponent extends GroupsFeedComponent
 {
@@ -32,6 +33,16 @@ class PlatformGroupsFeedComponent extends GroupsFeedComponent
     public const PARAM_GROUP = 'group';
     public const PARAM_USER = 'user';
 
+    public function getGroupMembershipService(): GroupMembershipService
+    {
+        return $this->getService(GroupMembershipService::class);
+    }
+
+    public function getGroupsTreeTraverser(): GroupsTreeTraverser
+    {
+        return $this->getService(GroupsTreeTraverser::class);
+    }
+
     public function getRequiredPostParameters(array $postParameters = []): array
     {
         return [];
@@ -40,7 +51,7 @@ class PlatformGroupsFeedComponent extends GroupsFeedComponent
     /**
      * Returns the id of the selected filter
      */
-    protected function get_filter()
+    protected function get_filter(): string
     {
         $filter = $this->getRequest()->request->get(self::PARAM_FILTER);
 
@@ -48,74 +59,53 @@ class PlatformGroupsFeedComponent extends GroupsFeedComponent
     }
 
     /**
-     * Returns the element for a specific group
-     *
-     * @param \core\group\Group $group
-     *
-     * @return AdvancedElementFinderElement
+     * @throws \Chamilo\Libraries\Storage\Exception\DataClassNoResultException
      */
-    public function get_group_element($group)
+    public function get_group_element(Group $group): AdvancedElementFinderElement
     {
-        $description = strip_tags($group->get_fully_qualified_name() . ' [' . $group->get_code() . ']');
+        $description = strip_tags(
+            $this->getGroupsTreeTraverser()->getFullyQualifiedNameForGroup($group) . ' [' . $group->get_code() . ']'
+        );
         $glyph = new FontAwesomeGlyph('users', [], null, 'fas');
 
         return new AdvancedElementFinderElement(
-            self::PARAM_GROUP . '_' . $group->get_id(), $glyph->getClassNamesString(), $group->get_name(), $description,
+            self::PARAM_GROUP . '_' . $group->getId(), $glyph->getClassNamesString(), $group->get_name(), $description,
             AdvancedElementFinderElement::TYPE_SELECTABLE_AND_FILTER
         );
     }
 
-    /**
-     * Returns the element for a specific user
-     *
-     * @param \core\user\storage\data_class\User $user
-     *
-     * @return AdvancedElementFinderElement
-     */
-    public function get_user_element($user)
+    public function get_user_element(User $user): AdvancedElementFinderElement
     {
         $glyph = new FontAwesomeGlyph('user', [], null, 'fas');
 
         return new AdvancedElementFinderElement(
-            self::PARAM_USER . '_' . $user->get_id(), $glyph->getClassNamesString(), $user->get_fullname(),
+            self::PARAM_USER . '_' . $user->getId(), $glyph->getClassNamesString(), $user->get_fullname(),
             $user->get_official_code()
         );
     }
 
     /**
      * Retrieves all the users for the selected group
+     *
+     * @return string[]
      */
-    public function get_user_ids()
+    public function get_user_ids(): array
     {
         $filter_id = $this->get_filter();
 
         if (!$filter_id)
         {
-            return;
+            return [];
         }
 
-        $condition = new EqualityCondition(
-            new PropertyConditionVariable(GroupRelUser::class, GroupRelUser::PROPERTY_GROUP_ID),
-            new StaticConditionVariable($filter_id)
-        );
-        $relations = DataManager::retrieves(GroupRelUser::class, new DataClassRetrievesParameters($condition));
-
-        $user_ids = [];
-
-        foreach ($relations as $relation)
-        {
-            $user_ids[] = $relation->get_user_id();
-        }
-
-        return $user_ids;
+        return $this->getGroupMembershipService()->findSubscribedUserIdentifiersForGroupIdentifier($filter_id);
     }
 
     /**
-     * Returns all the groups for this feed
-     *
-     * @return \Doctrine\Common\Collections\ArrayCollection
+     * @return \Doctrine\Common\Collections\ArrayCollection<\Chamilo\Core\Group\Storage\DataClass\Group>
+     * @throws \Chamilo\Libraries\Storage\Exception\DataClassNoResultException
      */
-    public function retrieve_groups()
+    public function retrieve_groups(): ArrayCollection
     {
         // Set the conditions for the search query
         $search_query = $this->getRequest()->request->get(self::PARAM_SEARCH_QUERY);
@@ -135,34 +125,23 @@ class PlatformGroupsFeedComponent extends GroupsFeedComponent
         if ($filter_id)
         {
             $conditions[] = new EqualityCondition(
-                new PropertyConditionVariable(Group::class, Group::PROPERTY_PARENT_ID),
+                new PropertyConditionVariable(Group::class, NestedSet::PROPERTY_PARENT_ID),
                 new StaticConditionVariable($filter_id)
             );
         }
         else
         {
             $conditions[] = new EqualityCondition(
-                new PropertyConditionVariable(Group::class, Group::PROPERTY_PARENT_ID), new StaticConditionVariable(0)
+                new PropertyConditionVariable(Group::class, NestedSet::PROPERTY_PARENT_ID),
+                new StaticConditionVariable(0)
             );
         }
 
-        // Combine the conditions
-        $count = count($conditions);
-        if ($count > 1)
-        {
-            $condition = new AndCondition($conditions);
-        }
+        $condition = new AndCondition($conditions);
 
-        if ($count == 1)
-        {
-            $condition = $conditions[0];
-        }
-
-        return DataManager::retrieves(
-            Group::class, new DataClassRetrievesParameters(
-                $condition, null, null,
-                new OrderBy([new OrderProperty(new PropertyConditionVariable(Group::class, Group::PROPERTY_NAME))])
-            )
+        return $this->getGroupService()->findGroups(
+            $condition, null, null,
+            new OrderBy([new OrderProperty(new PropertyConditionVariable(Group::class, Group::PROPERTY_NAME))])
         );
     }
 }

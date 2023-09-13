@@ -105,7 +105,7 @@ class GroupEntityProvider implements RightsEntityProvider
      *
      * @return mixed
      */
-    public function getEntityElementFinderElement(int $entityIdentifier)
+    public function getEntityElementFinderElement(string $entityIdentifier)
     {
         $group = $this->getGroupService()->findGroupByIdentifier($entityIdentifier);
 

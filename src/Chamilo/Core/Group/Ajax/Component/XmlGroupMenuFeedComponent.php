@@ -2,18 +2,13 @@
 namespace Chamilo\Core\Group\Ajax\Component;
 
 use Chamilo\Core\Group\Ajax\Manager;
-use Chamilo\Core\Group\Storage\DataClass\Group;
-use Chamilo\Core\Group\Storage\DataManager;
+use Chamilo\Core\Group\Service\GroupsTreeTraverser;
 use Chamilo\Libraries\Format\Structure\Glyph\FontAwesomeGlyph;
-use Chamilo\Libraries\Storage\Parameters\DataClassRetrievesParameters;
-use Chamilo\Libraries\Storage\Query\Condition\EqualityCondition;
-use Chamilo\Libraries\Storage\Query\OrderBy;
-use Chamilo\Libraries\Storage\Query\OrderProperty;
-use Chamilo\Libraries\Storage\Query\Variable\PropertyConditionVariable;
-use Chamilo\Libraries\Storage\Query\Variable\StaticConditionVariable;
+use Chamilo\Libraries\Storage\DataClass\NestedSet;
+use Doctrine\Common\Collections\ArrayCollection;
 
 /**
- * @package Chamilo\Core\Group\XmlFeeds
+ * @package Chamilo\Core\Group\Ajax\Component
  * @author  Hans De Bisschop <hans.de.bisschop@ehb.be>
  * @author  Magali Gillard <magali.gillard@ehb.be>
  * @author  Eduard Vossen <eduard.vossen@ehb.be>
@@ -21,60 +16,45 @@ use Chamilo\Libraries\Storage\Query\Variable\StaticConditionVariable;
 class XmlGroupMenuFeedComponent extends Manager
 {
 
+    /**
+     * @throws \Chamilo\Libraries\Storage\Exception\DataClassNoResultException
+     */
     public function run()
     {
-        $groups_tree = [];
-
-        $parent_id = $this->getRequest()->query->get('parent_id');
-        $condition = new EqualityCondition(
-            new PropertyConditionVariable(Group::class, Group::PROPERTY_PARENT_ID),
-            new StaticConditionVariable($parent_id)
-        );
-        $groups_tree = DataManager::retrieves(
-            Group::class, new DataClassRetrievesParameters(
-                $condition, null, null,
-                new OrderBy([new OrderProperty(new PropertyConditionVariable(Group::class, Group::PROPERTY_NAME))])
-            )
+        $groups_tree = $this->getGroupService()->findGroupsForParentIdentifier(
+            $this->getRequest()->query->get(NestedSet::PROPERTY_PARENT_ID)
         );
 
         header('Content-Type: text/xml');
         echo '<?xml version="1.0" encoding="UTF-8"?>' . PHP_EOL, '<tree>' . PHP_EOL;
-        echo $this->dump_tree($groups_tree);
+        $this->dump_groups_tree($groups_tree);
         echo '</tree>';
     }
 
-    public function contains_results($objects)
-    {
-        if (count($objects))
-        {
-            return true;
-        }
-
-        return false;
-    }
-
-    public function dump_groups_tree($groups)
+    /**
+     * @param \Doctrine\Common\Collections\ArrayCollection<\Chamilo\Core\Group\Storage\DataClass\Group> $groups
+     *
+     * @throws \Chamilo\Libraries\Storage\Exception\DataClassNoResultException
+     */
+    public function dump_groups_tree(ArrayCollection $groups): void
     {
         $glyph = new FontAwesomeGlyph('folder', [], null, 'fas');
 
         foreach ($groups as $group)
         {
-            $description = strip_tags($group->get_fully_qualified_name() . ' [' . $group->get_code() . ']');
+            $description = strip_tags(
+                $this->getGroupsTreeTraverser()->getFullyQualifiedNameForGroup($group) . ' [' . $group->get_code() . ']'
+            );
 
-            $has_children = $group->has_children() ? 1 : 0;
-            echo '<leaf id="' . $group->get_id() . '" classes="' . $glyph->getClassNamesString() . '" has_children="' .
+            $has_children = $group->hasChildren() ? 1 : 0;
+            echo '<leaf id="' . $group->getId() . '" classes="' . $glyph->getClassNamesString() . '" has_children="' .
                 $has_children . '" title="' . htmlspecialchars($group->get_name()) . '" description="' .
                 htmlspecialchars($description) . '"/>' . PHP_EOL;
         }
     }
 
-    public function dump_tree($groups)
+    public function getGroupsTreeTraverser(): GroupsTreeTraverser
     {
-        $html = [];
-
-        if ($this->contains_results($groups))
-        {
-            $this->dump_groups_tree($groups);
-        }
+        return $this->getService(GroupsTreeTraverser::class);
     }
 }
