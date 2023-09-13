@@ -6,6 +6,8 @@ use Chamilo\Application\Weblcms\Rights\Entities\CourseUserEntity;
 use Chamilo\Application\Weblcms\Storage\DataManager;
 use Chamilo\Application\Weblcms\Tool\Implementation\CourseGroup\Storage\DataClass\CourseGroup;
 use Chamilo\Application\Weblcms\Tool\Implementation\CourseGroup\Storage\DataClass\CourseGroupUserRelation;
+use Chamilo\Core\Group\Storage\DataClass\Group;
+use Chamilo\Core\User\Storage\DataClass\User;
 use Chamilo\Libraries\Ajax\Component\GroupsFeedComponent;
 use Chamilo\Libraries\Format\Form\Element\AdvancedElementFinder\AdvancedElementFinderElement;
 use Chamilo\Libraries\Format\Structure\Glyph\FontAwesomeGlyph;
@@ -45,7 +47,7 @@ class CourseGroupsFeedComponent extends GroupsFeedComponent
      *
      * @return AdvancedElementFinderElement
      */
-    public function get_group_element($group)
+    public function get_group_element(Group $group): AdvancedElementFinderElement
     {
         $glyph = new FontAwesomeGlyph('users', [], null, 'fas');
 
@@ -62,7 +64,7 @@ class CourseGroupsFeedComponent extends GroupsFeedComponent
      *
      * @return AdvancedElementFinderElement
      */
-    public function get_user_element($user)
+    public function get_user_element(User $user): AdvancedElementFinderElement
     {
         $glyph = new FontAwesomeGlyph('user', [], null, 'fas');
 

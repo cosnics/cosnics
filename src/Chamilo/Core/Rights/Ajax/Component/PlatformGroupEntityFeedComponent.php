@@ -2,16 +2,18 @@
 namespace Chamilo\Core\Rights\Ajax\Component;
 
 use Chamilo\Core\Group\Ajax\Component\PlatformGroupsFeedComponent;
+use Chamilo\Core\Group\Storage\DataClass\Group;
 use Chamilo\Core\Rights\Entity\PlatformGroupEntity;
 use Chamilo\Core\Rights\Entity\UserEntity;
+use Chamilo\Core\User\Storage\DataClass\User;
 use Chamilo\Libraries\Format\Form\Element\AdvancedElementFinder\AdvancedElementFinderElement;
 use Chamilo\Libraries\Format\Structure\Glyph\FontAwesomeGlyph;
 
 /**
  * Feed to return the platform groups for the platform group entity
  *
- * @package roup
- * @author Sven Vanpoucke
+ * @package    roup
+ * @author     Sven Vanpoucke
  * @deprecated Should not be needed anymore
  */
 class PlatformGroupEntityFeedComponent extends PlatformGroupsFeedComponent
@@ -19,7 +21,7 @@ class PlatformGroupEntityFeedComponent extends PlatformGroupsFeedComponent
     /**
      * The length for the filter prefix to remove
      */
-    const FILTER_PREFIX_LENGTH = 2;
+    public const FILTER_PREFIX_LENGTH = 2;
 
     /**
      * Returns the element for a specific group
@@ -28,7 +30,7 @@ class PlatformGroupEntityFeedComponent extends PlatformGroupsFeedComponent
      *
      * @return AdvancedElementFinderElement
      */
-    public function get_group_element($group)
+    public function get_group_element(Group $group): AdvancedElementFinderElement
     {
         $description = strip_tags($group->get_fully_qualified_name() . ' [' . $group->get_code() . ']');
         $glyph = new FontAwesomeGlyph('users', [], null, 'fas');
@@ -39,14 +41,7 @@ class PlatformGroupEntityFeedComponent extends PlatformGroupsFeedComponent
         );
     }
 
-    /**
-     * Returns the element for a specific user
-     *
-     * @param \core\user\storage\data_class\User $user
-     *
-     * @return AdvancedElementFinderElement
-     */
-    public function get_user_element($user)
+    public function get_user_element(User $user): AdvancedElementFinderElement
     {
         $glyph = new FontAwesomeGlyph('user', [], null, 'fas');
 

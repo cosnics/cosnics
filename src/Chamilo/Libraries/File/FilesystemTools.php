@@ -258,7 +258,7 @@ class FilesystemTools
         string $fullFileName, ?string $name = null, ?string $contentType = null
     ): void
     {
-        $filename = $name ? basename($fullFileName) : $name;
+        $filename = $name ?: basename($fullFileName);
 
         $binaryFileResponse = new BinaryFileResponse($fullFileName);
         $binaryFileResponse->setContentDisposition(ResponseHeaderBag::DISPOSITION_ATTACHMENT, $filename);

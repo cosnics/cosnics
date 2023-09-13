@@ -1,6 +1,7 @@
 <?php
 namespace Chamilo\Libraries\Ajax\Component;
 
+use Chamilo\Core\Group\Storage\DataClass\Group;
 use Chamilo\Core\User\Storage\DataClass\User;
 use Chamilo\Libraries\Ajax\Manager;
 use Chamilo\Libraries\Architecture\JsonAjaxResult;
@@ -18,21 +19,20 @@ use Chamilo\Libraries\Utilities\StringUtilities;
 /**
  * Feed to return the course groups of this course
  *
- * @author Sven Vanpoucke
+ * @author  Sven Vanpoucke
  * @package Chamilo\Libraries\Ajax\Component
  */
 abstract class GroupsFeedComponent extends Manager
 {
-    const PARAM_FILTER = 'filter';
-    const PARAM_OFFSET = 'offset';
-    const PARAM_SEARCH_QUERY = 'query';
+    public const PARAM_FILTER = 'filter';
+    public const PARAM_OFFSET = 'offset';
+    public const PARAM_SEARCH_QUERY = 'query';
 
-    const PROPERTY_ELEMENTS = 'elements';
-    const PROPERTY_TOTAL_ELEMENTS = 'total_elements';
+    public const PROPERTY_ELEMENTS = 'elements';
+    public const PROPERTY_TOTAL_ELEMENTS = 'total_elements';
 
     /**
-     *
-     * @var integer
+     * @var int
      */
     protected $user_count = 0;
 
@@ -114,16 +114,14 @@ abstract class GroupsFeedComponent extends Manager
     }
 
     /**
-     *
      * @param \Chamilo\Core\Group\Storage\DataClass\Group $group
      *
      * @return \Chamilo\Libraries\Format\Form\Element\AdvancedElementFinder\AdvancedElementFinderElement
      */
-    abstract public function get_group_element($group);
+    abstract public function get_group_element(Group $group): AdvancedElementFinderElement;
 
     /**
-     *
-     * @return integer
+     * @return int
      */
     protected function get_offset()
     {
@@ -137,21 +135,18 @@ abstract class GroupsFeedComponent extends Manager
     }
 
     /**
-     *
      * @param \Chamilo\Core\User\Storage\DataClass\User $user
      *
      * @return \Chamilo\Libraries\Format\Form\Element\AdvancedElementFinder\AdvancedElementFinderElement
      */
-    abstract public function get_user_element($user);
+    abstract public function get_user_element(User $user): AdvancedElementFinderElement;
 
     /**
-     *
-     * @return integer[]
+     * @return int
      */
     abstract public function get_user_ids();
 
     /**
-     *
      * @return \Doctrine\Common\Collections\ArrayCollection<\Chamilo\Core\Group\Storage\DataClass\Group>
      */
     abstract public function retrieve_groups();
@@ -178,11 +173,11 @@ abstract class GroupsFeedComponent extends Manager
         if ($search_query && $search_query != '')
         {
             $conditions[] = $this->getSearchQueryConditionGenerator()->getSearchConditions(
-                $search_query, array(
+                $search_query, [
                     new PropertyConditionVariable(User::class, User::PROPERTY_USERNAME),
                     new PropertyConditionVariable(User::class, User::PROPERTY_FIRSTNAME),
                     new PropertyConditionVariable(User::class, User::PROPERTY_LASTNAME)
-                )
+                ]
             );
         }
 
@@ -191,10 +186,10 @@ abstract class GroupsFeedComponent extends Manager
         $this->user_count = $this->getUserService()->countUsers($condition);
 
         return $this->getUserService()->findUsers(
-            $condition, $this->get_offset(), 100, new OrderBy(array(
+            $condition, $this->get_offset(), 100, new OrderBy([
                 new OrderProperty(new PropertyConditionVariable(User::class, User::PROPERTY_LASTNAME)),
                 new OrderProperty(new PropertyConditionVariable(User::class, User::PROPERTY_FIRSTNAME))
-            ))
+            ])
         );
     }
 }

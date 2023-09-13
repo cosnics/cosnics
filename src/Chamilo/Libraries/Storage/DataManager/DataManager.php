@@ -254,7 +254,7 @@ class DataManager
      *
      * @return retrieveById
      */
-    public static function retrieve_by_id(string $dataClassName, int $identifier)
+    public static function retrieve_by_id(string $dataClassName, string $identifier)
     {
         return self::getDataClassRepository()->retrieveById($dataClassName, $identifier);
     }

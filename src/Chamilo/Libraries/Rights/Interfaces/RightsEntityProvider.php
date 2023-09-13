@@ -43,7 +43,7 @@ interface RightsEntityProvider
      *
      * @return \Chamilo\Libraries\Format\Form\Element\AdvancedElementFinder\AdvancedElementFinderElement
      */
-    public function getEntityElementFinderElement(int $entityIdentifier);
+    public function getEntityElementFinderElement(string $entityIdentifier);
 
     /**
      * @return \Chamilo\Libraries\Format\Form\Element\AdvancedElementFinder\AdvancedElementFinderElementType
