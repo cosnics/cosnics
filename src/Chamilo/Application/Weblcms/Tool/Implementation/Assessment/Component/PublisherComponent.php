@@ -8,7 +8,7 @@ use Chamilo\Application\Weblcms\Tool\Implementation\Assessment\Publication\Conte
 use Chamilo\Application\Weblcms\Tool\Interfaces\PublisherCustomPublicationFormHandler;
 use Chamilo\Application\Weblcms\Tool\Interfaces\PublisherCustomPublicationFormInterface;
 use Chamilo\Core\Repository\Publication\Publisher\Interfaces\PublicationHandlerInterface;
-use Chamilo\Libraries\Format\Structure\BreadcrumbTrail;
+use Chamilo\Libraries\Format\Breadcrumb\BreadcrumbTrail;
 
 /**
  * Assessment Publisher Component

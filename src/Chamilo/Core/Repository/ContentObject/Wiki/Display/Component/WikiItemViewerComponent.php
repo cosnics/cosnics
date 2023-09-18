@@ -7,9 +7,8 @@ use Chamilo\Core\Repository\ContentObject\Wiki\Display\Manager;
 use Chamilo\Core\Repository\Storage\DataClass\ComplexContentObjectItem;
 use Chamilo\Core\Repository\Storage\DataClass\ContentObject;
 use Chamilo\Core\Repository\Storage\DataManager;
-use Chamilo\Libraries\Architecture\Interfaces\DelegateComponent;
+use Chamilo\Libraries\Format\Breadcrumb\BreadcrumbLessComponentInterface;
 use Chamilo\Libraries\Format\Structure\Breadcrumb;
-use Chamilo\Libraries\Format\Structure\BreadcrumbTrail;
 use Chamilo\Libraries\Translation\Translation;
 use MediawikiParser;
 use MediawikiParserContext;
@@ -20,7 +19,7 @@ use MediawikiParserContext;
  * @author  Nick De Feyter
  * @author  Hans De Bisschop <hans.de.bisschop@ehb.be>
  */
-class WikiItemViewerComponent extends Manager implements DelegateComponent
+class WikiItemViewerComponent extends Manager implements BreadcrumbLessComponentInterface
 {
 
     public function run()

@@ -10,7 +10,6 @@ use Chamilo\Libraries\Format\Menu\Library\Renderer\HtmlMenuArrayRenderer;
 use Chamilo\Libraries\Format\Menu\OptionsMenuRenderer;
 use Chamilo\Libraries\Format\Menu\TreeMenuRenderer;
 use Chamilo\Libraries\Format\Structure\Breadcrumb;
-use Chamilo\Libraries\Format\Structure\BreadcrumbTrail;
 use Chamilo\Libraries\Format\Structure\Glyph\FontAwesomeGlyph;
 use Chamilo\Libraries\Storage\Query\Condition\AndCondition;
 use Chamilo\Libraries\Storage\Query\Condition\EqualityCondition;
@@ -117,7 +116,7 @@ class ContentObjectCategoryMenu extends HtmlMenu
     }
 
     /**
-     * @return \Chamilo\Libraries\Format\Structure\BreadcrumbTrail
+     * @return \Chamilo\Libraries\Format\Breadcrumb\BreadcrumbTrail
      */
     public function get_breadcrumbs()
     {

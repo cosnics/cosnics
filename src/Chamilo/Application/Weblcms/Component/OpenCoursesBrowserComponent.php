@@ -3,14 +3,14 @@ namespace Chamilo\Application\Weblcms\Component;
 
 use Chamilo\Application\Weblcms\Manager;
 use Chamilo\Libraries\Architecture\Application\ApplicationConfiguration;
-use Chamilo\Libraries\Architecture\Interfaces\DelegateComponent;
+use Chamilo\Libraries\Format\Breadcrumb\BreadcrumbLessComponentInterface;
 
 /**
  * Browser for the open courses
  *
  * @author Sven Vanpoucke - Hogeschool Gent
  */
-class OpenCoursesBrowserComponent extends Manager implements DelegateComponent
+class OpenCoursesBrowserComponent extends Manager implements BreadcrumbLessComponentInterface
 {
 
     /**

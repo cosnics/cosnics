@@ -4,7 +4,6 @@ namespace Chamilo\Application\Weblcms\Tool\Implementation\Home\Component;
 use Chamilo\Application\Weblcms\CourseSettingsConnector;
 use Chamilo\Application\Weblcms\CourseSettingsController;
 use Chamilo\Application\Weblcms\Tool\Implementation\Home\Manager;
-use Chamilo\Libraries\Format\Structure\BreadcrumbTrail;
 
 class BrowserComponent extends Manager
 {

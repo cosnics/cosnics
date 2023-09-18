@@ -4,8 +4,8 @@ namespace Chamilo\Application\Weblcms\Course\Component;
 use Chamilo\Application\Weblcms\Course\Manager;
 use Chamilo\Application\Weblcms\Course\Storage\DataManager;
 use Chamilo\Application\Weblcms\Rights\CourseManagementRights;
+use Chamilo\Libraries\Format\Breadcrumb\BreadcrumbTrail;
 use Chamilo\Libraries\Format\Structure\Breadcrumb;
-use Chamilo\Libraries\Format\Structure\BreadcrumbTrail;
 use Chamilo\Libraries\Translation\Translation;
 
 /**

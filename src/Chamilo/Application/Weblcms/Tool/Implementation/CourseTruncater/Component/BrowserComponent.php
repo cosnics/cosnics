@@ -8,7 +8,6 @@ use Chamilo\Application\Weblcms\Tool\Service\PublicationSelectorDataMapper;
 use Chamilo\Libraries\Architecture\Exceptions\NotAllowedException;
 use Chamilo\Libraries\Architecture\Exceptions\UserException;
 use Chamilo\Libraries\Format\Display;
-use Chamilo\Libraries\Format\Structure\BreadcrumbTrail;
 use Chamilo\Libraries\Translation\Translation;
 use Exception;
 

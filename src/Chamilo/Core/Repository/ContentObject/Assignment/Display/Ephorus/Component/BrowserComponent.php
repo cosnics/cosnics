@@ -5,7 +5,7 @@ use Chamilo\Application\Weblcms\Tool\Implementation\Ephorus\Storage\DataClass\Re
 use Chamilo\Core\Repository\ContentObject\Assignment\Display\Ephorus\Manager;
 use Chamilo\Core\Repository\ContentObject\Assignment\Display\Ephorus\Table\EntryRequestTableRenderer;
 use Chamilo\Core\Repository\Storage\DataClass\ContentObject;
-use Chamilo\Libraries\Architecture\Interfaces\DelegateComponent;
+use Chamilo\Libraries\Format\Breadcrumb\BreadcrumbLessComponentInterface;
 use Chamilo\Libraries\Format\Structure\ActionBar\ButtonToolBar;
 use Chamilo\Libraries\Format\Structure\ActionBar\Renderer\ButtonToolBarRenderer;
 use Chamilo\Libraries\Format\Table\RequestTableParameterValuesCompiler;
@@ -19,7 +19,7 @@ use Chamilo\Libraries\Storage\Query\Variable\PropertyConditionVariable;
  *
  * @author Tom Goethals - Hogeschool Gent
  */
-class BrowserComponent extends Manager implements DelegateComponent
+class BrowserComponent extends Manager implements BreadcrumbLessComponentInterface
 {
 
     /**

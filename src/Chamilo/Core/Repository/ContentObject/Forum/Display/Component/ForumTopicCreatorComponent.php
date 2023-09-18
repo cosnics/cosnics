@@ -8,9 +8,8 @@ use Chamilo\Core\Repository\Storage\DataManager;
 use Chamilo\Core\Repository\Viewer\Architecture\Traits\ViewerTrait;
 use Chamilo\Core\Repository\Viewer\ViewerInterface;
 use Chamilo\Libraries\Architecture\Application\ApplicationConfiguration;
-use Chamilo\Libraries\Architecture\Interfaces\DelegateComponent;
+use Chamilo\Libraries\Format\Breadcrumb\BreadcrumbLessComponentInterface;
 use Chamilo\Libraries\Format\Structure\Breadcrumb;
-use Chamilo\Libraries\Format\Structure\BreadcrumbTrail;
 use Chamilo\Libraries\Translation\Translation;
 use Chamilo\Libraries\Utilities\StringUtilities;
 use Exception;
@@ -18,7 +17,7 @@ use Exception;
 /**
  * @package repository.lib.complex_display.forum.component
  */
-class ForumTopicCreatorComponent extends Manager implements ViewerInterface, DelegateComponent
+class ForumTopicCreatorComponent extends Manager implements ViewerInterface, BreadcrumbLessComponentInterface
 {
     use ViewerTrait;
 

@@ -6,7 +6,7 @@ use Chamilo\Core\Menu\Manager;
 use Chamilo\Core\Menu\Menu\ItemMenu;
 use Chamilo\Core\Menu\Table\ItemTableRenderer;
 use Chamilo\Libraries\Architecture\Application\Application;
-use Chamilo\Libraries\Architecture\Interfaces\DelegateComponent;
+use Chamilo\Libraries\Format\Breadcrumb\BreadcrumbLessComponentInterface;
 use Chamilo\Libraries\Format\Structure\ActionBar\Button;
 use Chamilo\Libraries\Format\Structure\ActionBar\ButtonGroup;
 use Chamilo\Libraries\Format\Structure\ActionBar\ButtonToolBar;
@@ -24,7 +24,7 @@ use Chamilo\Libraries\Utilities\StringUtilities;
  * @author  Magali Gillard <magali.gillard@ehb.be>
  * @author  Eduard Vossen <eduard.vossen@ehb.be>
  */
-class BrowserComponent extends Manager implements DelegateComponent
+class BrowserComponent extends Manager implements BreadcrumbLessComponentInterface
 {
 
     protected string $parentIdentifier;

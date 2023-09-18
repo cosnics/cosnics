@@ -14,7 +14,7 @@ use Chamilo\Libraries\Architecture\Application\ApplicationConfiguration;
 use Chamilo\Libraries\Architecture\Exceptions\NoObjectSelectedException;
 use Chamilo\Libraries\Architecture\Exceptions\NotAllowedException;
 use Chamilo\Libraries\Architecture\Exceptions\ObjectNotExistException;
-use Chamilo\Libraries\Architecture\Interfaces\DelegateComponent;
+use Chamilo\Libraries\Format\Breadcrumb\BreadcrumbLessComponentInterface;
 use Chamilo\Libraries\Storage\DataManager\DataManager;
 use Chamilo\Libraries\Storage\Parameters\DataClassCountParameters;
 use Chamilo\Libraries\Storage\Query\Condition\AndCondition;
@@ -26,7 +26,7 @@ use Chamilo\Libraries\Translation\Translation;
 /**
  * @package application.lib.weblcms.tool.forum.component
  */
-class ViewerComponent extends Manager implements ForumDisplaySupport, DelegateComponent
+class ViewerComponent extends Manager implements ForumDisplaySupport, BreadcrumbLessComponentInterface
 {
 
     /**

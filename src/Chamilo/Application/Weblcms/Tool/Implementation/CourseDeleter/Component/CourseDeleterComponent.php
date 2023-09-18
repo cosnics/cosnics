@@ -6,8 +6,8 @@ use Chamilo\Application\Weblcms\Course\Storage\DataManager;
 use Chamilo\Application\Weblcms\Tool\Implementation\CourseDeleter\Forms\CourseDeleterForm;
 use Chamilo\Application\Weblcms\Tool\Implementation\CourseDeleter\Manager;
 use Chamilo\Libraries\Architecture\Exceptions\NotAllowedException;
+use Chamilo\Libraries\Format\Breadcrumb\BreadcrumbTrail;
 use Chamilo\Libraries\Format\Display;
-use Chamilo\Libraries\Format\Structure\BreadcrumbTrail;
 use Chamilo\Libraries\Translation\Translation;
 use Exception;
 

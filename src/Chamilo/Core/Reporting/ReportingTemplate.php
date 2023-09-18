@@ -3,7 +3,6 @@ namespace Chamilo\Core\Reporting;
 
 use Chamilo\Libraries\DependencyInjection\Traits\DependencyInjectionContainerTrait;
 use Chamilo\Libraries\Format\Structure\Breadcrumb;
-use Chamilo\Libraries\Format\Structure\BreadcrumbTrail;
 
 /**
  * templates This contains the general shared template properties such as Properties (name, description, etc) Layout

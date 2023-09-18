@@ -6,7 +6,6 @@ use Chamilo\Application\Weblcms\Tool\Implementation\CourseSections\CourseSection
 use Chamilo\Application\Weblcms\Tool\Implementation\CourseSections\Manager;
 use Chamilo\Libraries\Architecture\Exceptions\NotAllowedException;
 use Chamilo\Libraries\Format\Structure\Breadcrumb;
-use Chamilo\Libraries\Format\Structure\BreadcrumbTrail;
 use Chamilo\Libraries\Translation\Translation;
 use Chamilo\Libraries\Utilities\StringUtilities;
 

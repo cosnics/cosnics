@@ -1,14 +1,13 @@
 <?php
-namespace Chamilo\Libraries\Format\Structure;
+namespace Chamilo\Libraries\Format\Breadcrumb;
 
 use Chamilo\Configuration\Service\Consulter\ConfigurationConsulter;
 use Chamilo\Configuration\Service\FileConfigurationLocator;
 use Chamilo\Libraries\Architecture\Application\Application;
 use Chamilo\Libraries\Architecture\Application\Routing\UrlGenerator;
 use Chamilo\Libraries\Architecture\ClassnameUtilities;
-use Chamilo\Libraries\Architecture\Interfaces\DelegateComponent;
-use Chamilo\Libraries\Architecture\Interfaces\NoContextComponent;
 use Chamilo\Libraries\File\WebPathBuilder;
+use Chamilo\Libraries\Format\Structure\Breadcrumb;
 use Chamilo\Libraries\Format\Structure\Glyph\FontAwesomeGlyph;
 use Symfony\Component\Translation\Translator;
 
@@ -61,7 +60,7 @@ class BreadcrumbGenerator implements BreadcrumbGeneratorInterface
      */
     public function generateBreadcrumbs(Application $application): void
     {
-        if (!$application instanceof NoContextComponent)
+        if (!$application instanceof BreadcrumbLessPackageInterface)
         {
             $this->generateRootBreadcrumb();
 
@@ -73,7 +72,7 @@ class BreadcrumbGenerator implements BreadcrumbGeneratorInterface
 
         $application->addAdditionalBreadcrumbs($this->getBreadcrumbTrail());
 
-        if (!$application instanceof DelegateComponent)
+        if (!$application instanceof BreadcrumbLessComponentInterface)
         {
             $this->generateComponentBreadcrumb($application);
         }

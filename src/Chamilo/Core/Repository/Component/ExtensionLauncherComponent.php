@@ -6,14 +6,14 @@ use Chamilo\Core\Repository\Workspace\Interfaces\WorkspaceExtensionSupport;
 use Chamilo\Libraries\Architecture\Application\ApplicationConfiguration;
 use Chamilo\Libraries\Architecture\Exceptions\NoObjectSelectedException;
 use Chamilo\Libraries\Architecture\Exceptions\NotAllowedException;
-use Chamilo\Libraries\Architecture\Interfaces\DelegateComponent;
+use Chamilo\Libraries\Format\Breadcrumb\BreadcrumbLessComponentInterface;
 use Exception;
 
 /**
  * @package Chamilo\Core\Repository\Component
  * @author  Sven Vanpoucke - Hogeschool Gent
  */
-class ExtensionLauncherComponent extends Manager implements DelegateComponent
+class ExtensionLauncherComponent extends Manager implements BreadcrumbLessComponentInterface
 {
     public const PARAM_EXTENSION_CONTEXT = 'ExtensionContext';
 

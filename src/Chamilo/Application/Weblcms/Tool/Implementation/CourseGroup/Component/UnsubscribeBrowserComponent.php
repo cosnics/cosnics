@@ -7,13 +7,12 @@ use Chamilo\Application\Weblcms\Tool\Implementation\CourseGroup\Storage\DataMana
 use Chamilo\Application\Weblcms\Tool\Implementation\CourseGroup\Table\SubscribedUserTableRenderer;
 use Chamilo\Core\User\Storage\DataClass\User;
 use Chamilo\Libraries\Architecture\Exceptions\ObjectNotExistException;
-use Chamilo\Libraries\Architecture\Interfaces\DelegateComponent;
+use Chamilo\Libraries\Format\Breadcrumb\BreadcrumbLessComponentInterface;
 use Chamilo\Libraries\Format\Structure\ActionBar\Button;
 use Chamilo\Libraries\Format\Structure\ActionBar\ButtonGroup;
 use Chamilo\Libraries\Format\Structure\ActionBar\ButtonToolBar;
 use Chamilo\Libraries\Format\Structure\ActionBar\Renderer\ButtonToolBarRenderer;
 use Chamilo\Libraries\Format\Structure\Breadcrumb;
-use Chamilo\Libraries\Format\Structure\BreadcrumbTrail;
 use Chamilo\Libraries\Format\Structure\Glyph\FontAwesomeGlyph;
 use Chamilo\Libraries\Format\Structure\ToolbarItem;
 use Chamilo\Libraries\Format\Table\RequestTableParameterValuesCompiler;
@@ -26,7 +25,7 @@ use Chamilo\Libraries\Utilities\StringUtilities;
  * @package Chamilo\Application\Weblcms\Tool\Implementation\CourseGroup\Component
  * @author  Hans De Bisschop <hans.de.bisschop@ehb.be>
  */
-class UnsubscribeBrowserComponent extends Manager implements DelegateComponent
+class UnsubscribeBrowserComponent extends Manager implements BreadcrumbLessComponentInterface
 {
 
     private ButtonToolBarRenderer $buttonToolbarRenderer;

@@ -2,7 +2,7 @@
 namespace Chamilo\Application\Weblcms\Tool\Implementation\Assessment\Component;
 
 use Chamilo\Application\Weblcms\Tool\Implementation\Assessment\Manager;
-use Chamilo\Libraries\Format\Structure\BreadcrumbTrail;
+use Chamilo\Libraries\Format\Breadcrumb\BreadcrumbTrail;
 
 class ToggleVisibilityComponent extends Manager
 {

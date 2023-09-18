@@ -4,8 +4,8 @@ namespace Chamilo\Core\Repository\ContentObject\Wiki\Display\Component;
 use Chamilo\Core\Repository\Common\Rendition\ContentObjectRendition;
 use Chamilo\Core\Repository\Common\Rendition\ContentObjectRenditionImplementation;
 use Chamilo\Core\Repository\ContentObject\Wiki\Display\Manager;
-use Chamilo\Libraries\Architecture\Interfaces\DelegateComponent;
-use Chamilo\Libraries\Format\Structure\BreadcrumbTrail;
+use Chamilo\Libraries\Format\Breadcrumb\BreadcrumbLessComponentInterface;
+use Chamilo\Libraries\Format\Breadcrumb\BreadcrumbTrail;
 use Chamilo\Libraries\Translation\Translation;
 use MediawikiParser;
 use MediawikiParserContext;
@@ -14,7 +14,7 @@ use MediawikiParserContext;
  * @package Chamilo\Core\Repository\ContentObject\Wiki\Display\Component
  * @author  Hans De Bisschop <hans.de.bisschop@ehb.be>
  */
-class ViewerComponent extends Manager implements DelegateComponent
+class ViewerComponent extends Manager implements BreadcrumbLessComponentInterface
 {
 
     public function run()

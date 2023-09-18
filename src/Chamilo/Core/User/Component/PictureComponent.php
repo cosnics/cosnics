@@ -4,7 +4,7 @@ namespace Chamilo\Core\User\Component;
 use Chamilo\Core\User\Form\PictureForm;
 use Chamilo\Core\User\Manager;
 use Chamilo\Libraries\Architecture\Application\Application;
-use Chamilo\Libraries\Architecture\Interfaces\NoContextComponent;
+use Chamilo\Libraries\Format\Breadcrumb\BreadcrumbLessPackageInterface;
 use Chamilo\Libraries\Translation\Translation;
 
 /**
@@ -14,7 +14,7 @@ use Chamilo\Libraries\Translation\Translation;
  * @author Magali Gillard <magali.gillard@ehb.be>
  * @author Eduard Vossen <eduard.vossen@ehb.be>
  */
-class PictureComponent extends ProfileComponent implements NoContextComponent
+class PictureComponent extends ProfileComponent implements BreadcrumbLessPackageInterface
 {
 
     /**

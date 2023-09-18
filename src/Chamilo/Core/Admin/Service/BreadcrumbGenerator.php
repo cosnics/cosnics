@@ -16,7 +16,7 @@ use Chamilo\Libraries\Format\Structure\Breadcrumb;
  * @author  Sven Vanpoucke - Hogeschool Gent
  * @author  Hans De Bisschop <hans.de.bisschop@ehb.be>
  */
-class BreadcrumbGenerator extends \Chamilo\Libraries\Format\Structure\BreadcrumbGenerator
+class BreadcrumbGenerator extends \Chamilo\Libraries\Format\Breadcrumb\BreadcrumbGenerator
 {
     protected function generatePackageBreadcrumb(Application $application): void
     {

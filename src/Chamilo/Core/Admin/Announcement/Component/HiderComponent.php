@@ -3,7 +3,7 @@ namespace Chamilo\Core\Admin\Announcement\Component;
 
 use Chamilo\Core\Admin\Announcement\Manager;
 use Chamilo\Core\Admin\Service\BreadcrumbGenerator;
-use Chamilo\Libraries\Format\Structure\BreadcrumbGeneratorInterface;
+use Chamilo\Libraries\Format\Breadcrumb\BreadcrumbGeneratorInterface;
 use Chamilo\Libraries\Utilities\StringUtilities;
 
 class HiderComponent extends Manager

@@ -2,7 +2,7 @@
 namespace Chamilo\Application\Weblcms\Tool\Implementation\Assignment\Component;
 
 use Chamilo\Application\Weblcms\Tool\Implementation\Assignment\Manager;
-use Chamilo\Libraries\Architecture\Interfaces\DelegateComponent;
+use Chamilo\Libraries\Format\Breadcrumb\BreadcrumbLessComponentInterface;
 
 /**
  * CategoryManager component for the assignment tool.
@@ -10,7 +10,7 @@ use Chamilo\Libraries\Architecture\Interfaces\DelegateComponent;
  * @author Bert De Clercq (Hogeschool Gent)
  * @author Anthony Hurst (Hogeschool Gent)
  */
-class CategoryManagerComponent extends Manager implements DelegateComponent
+class CategoryManagerComponent extends Manager implements BreadcrumbLessComponentInterface
 {
 
     /**

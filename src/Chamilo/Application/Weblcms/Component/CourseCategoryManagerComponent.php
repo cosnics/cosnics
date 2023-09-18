@@ -9,9 +9,9 @@ use Chamilo\Configuration\Category\Interfaces\CategorySupport;
 use Chamilo\Libraries\Architecture\Application\Application;
 use Chamilo\Libraries\Architecture\Application\ApplicationConfiguration;
 use Chamilo\Libraries\Architecture\ClassnameUtilities;
-use Chamilo\Libraries\Architecture\Interfaces\DelegateComponent;
+use Chamilo\Libraries\Format\Breadcrumb\BreadcrumbLessComponentInterface;
+use Chamilo\Libraries\Format\Breadcrumb\BreadcrumbTrail;
 use Chamilo\Libraries\Format\Structure\Breadcrumb;
-use Chamilo\Libraries\Format\Structure\BreadcrumbTrail;
 use Chamilo\Libraries\Format\Tabs\GenericTabsRenderer;
 use Chamilo\Libraries\Storage\Parameters\DataClassCountParameters;
 use Chamilo\Libraries\Storage\Parameters\DataClassRetrievesParameters;
@@ -20,7 +20,7 @@ use Chamilo\Libraries\Translation\Translation;
 /**
  * Weblcms component allows the user to manage course categories
  */
-class CourseCategoryManagerComponent extends Manager implements DelegateComponent, CategorySupport
+class CourseCategoryManagerComponent extends Manager implements BreadcrumbLessComponentInterface, CategorySupport
 {
 
     /**

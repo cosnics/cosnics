@@ -10,7 +10,7 @@ use Chamilo\Core\Repository\Feedback\Storage\DataClass\Feedback;
 use Chamilo\Core\Repository\Feedback\Storage\DataClass\Notification;
 use Chamilo\Libraries\Architecture\Application\Application;
 use Chamilo\Libraries\Architecture\Exceptions\NotAllowedException;
-use Chamilo\Libraries\Architecture\Interfaces\DelegateComponent;
+use Chamilo\Libraries\Format\Breadcrumb\BreadcrumbLessComponentInterface;
 use Chamilo\Libraries\Format\Structure\ActionBar\ButtonToolBar;
 use Chamilo\Libraries\Format\Structure\ActionBar\Renderer\ButtonToolBarRenderer;
 use Chamilo\Libraries\Format\Structure\Glyph\FontAwesomeGlyph;
@@ -20,7 +20,7 @@ use Chamilo\Libraries\Translation\Translation;
 use Chamilo\Libraries\Utilities\DatetimeUtilities;
 use Chamilo\Libraries\Utilities\StringUtilities;
 
-class BrowserComponent extends Manager implements DelegateComponent
+class BrowserComponent extends Manager implements BreadcrumbLessComponentInterface
 {
     public const PARAM_COUNT = 'feedback_count';
     public const PARAM_PAGE_NUMBER = 'feedback_page_nr';

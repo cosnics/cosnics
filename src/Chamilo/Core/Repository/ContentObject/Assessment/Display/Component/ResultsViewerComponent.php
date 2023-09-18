@@ -7,7 +7,7 @@ use Chamilo\Core\Repository\Storage\DataClass\ComplexContentObjectItem;
 use Chamilo\Core\Repository\Storage\DataClass\ContentObject;
 use Chamilo\Core\Repository\Storage\DataManager;
 use Chamilo\Libraries\Architecture\Exceptions\UserException;
-use Chamilo\Libraries\Architecture\Interfaces\DelegateComponent;
+use Chamilo\Libraries\Format\Breadcrumb\BreadcrumbLessComponentInterface;
 use Chamilo\Libraries\Format\Form\FormValidator;
 use Chamilo\Libraries\Storage\Query\Condition\InCondition;
 use Chamilo\Libraries\Storage\Query\Variable\PropertyConditionVariable;
@@ -18,7 +18,7 @@ use Chamilo\Libraries\Utilities\StringUtilities;
  *
  * @package repository.lib.complex_display.assessment.component
  */
-class ResultsViewerComponent extends Manager implements DelegateComponent
+class ResultsViewerComponent extends Manager implements BreadcrumbLessComponentInterface
 {
 
     /**

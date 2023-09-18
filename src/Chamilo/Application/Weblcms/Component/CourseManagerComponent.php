@@ -4,7 +4,7 @@ namespace Chamilo\Application\Weblcms\Component;
 use Chamilo\Application\Weblcms\Course\Interfaces\CourseSubManagerSupport;
 use Chamilo\Application\Weblcms\Manager;
 use Chamilo\Libraries\Architecture\Application\ApplicationConfiguration;
-use Chamilo\Libraries\Architecture\Interfaces\DelegateComponent;
+use Chamilo\Libraries\Format\Breadcrumb\BreadcrumbLessComponentInterface;
 
 /**
  * This class represents a component that runs the course type submanager
@@ -12,7 +12,7 @@ use Chamilo\Libraries\Architecture\Interfaces\DelegateComponent;
  * @package \application\weblcms\course
  * @author Sven Vanpoucke - Hogeschool Gent - Refactoring
  */
-class CourseManagerComponent extends Manager implements DelegateComponent, CourseSubManagerSupport
+class CourseManagerComponent extends Manager implements BreadcrumbLessComponentInterface, CourseSubManagerSupport
 {
 
     /**

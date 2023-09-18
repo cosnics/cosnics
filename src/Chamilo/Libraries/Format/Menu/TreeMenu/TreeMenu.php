@@ -5,7 +5,6 @@ use Chamilo\Libraries\Format\Menu\Library\HtmlMenu;
 use Chamilo\Libraries\Format\Menu\Library\Renderer\HtmlMenuArrayRenderer;
 use Chamilo\Libraries\Format\Menu\TreeMenuRenderer;
 use Chamilo\Libraries\Format\Structure\Breadcrumb;
-use Chamilo\Libraries\Format\Structure\BreadcrumbTrail;
 
 /**
  *
@@ -50,7 +49,7 @@ class TreeMenu extends HtmlMenu
     /**
      * Get the breadcrumbs which lead to the current category.
      *
-     * @return \Chamilo\Libraries\Format\Structure\BreadcrumbTrail
+     * @return \Chamilo\Libraries\Format\Breadcrumb\BreadcrumbTrail
      */
     public function get_breadcrumbs()
     {

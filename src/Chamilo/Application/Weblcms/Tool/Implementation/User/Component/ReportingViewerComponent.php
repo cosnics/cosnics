@@ -4,16 +4,15 @@ namespace Chamilo\Application\Weblcms\Tool\Implementation\User\Component;
 use Chamilo\Application\Weblcms\Integration\Chamilo\Core\Reporting\Template\CourseStudentTrackerDetailTemplate;
 use Chamilo\Application\Weblcms\Tool\Implementation\User\Manager;
 use Chamilo\Libraries\Architecture\Application\ApplicationConfiguration;
-use Chamilo\Libraries\Architecture\Interfaces\DelegateComponent;
+use Chamilo\Libraries\Format\Breadcrumb\BreadcrumbLessComponentInterface;
 use Chamilo\Libraries\Format\Structure\Breadcrumb;
-use Chamilo\Libraries\Format\Structure\BreadcrumbTrail;
 use Chamilo\Libraries\Translation\Translation;
 
 /**
  *
  * @package application.lib.weblcms.tool.user.component
  */
-class ReportingViewerComponent extends Manager implements DelegateComponent
+class ReportingViewerComponent extends Manager implements BreadcrumbLessComponentInterface
 {
 
     public function run()

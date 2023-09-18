@@ -3,15 +3,14 @@ namespace Chamilo\Core\Lynx\Component;
 
 use Chamilo\Core\Lynx\Action\PackageInstaller;
 use Chamilo\Core\Lynx\Manager;
-use Chamilo\Libraries\Architecture\Interfaces\DelegateComponent;
+use Chamilo\Libraries\Format\Breadcrumb\BreadcrumbLessComponentInterface;
 use Chamilo\Libraries\Format\Structure\Breadcrumb;
-use Chamilo\Libraries\Format\Structure\BreadcrumbTrail;
 use Chamilo\Libraries\Format\Structure\Glyph\FontAwesomeGlyph;
 use Chamilo\Libraries\Format\Structure\Toolbar;
 use Chamilo\Libraries\Format\Structure\ToolbarItem;
 use Chamilo\Libraries\Translation\Translation;
 
-class InstallerComponent extends Manager implements DelegateComponent
+class InstallerComponent extends Manager implements BreadcrumbLessComponentInterface
 {
 
     /**

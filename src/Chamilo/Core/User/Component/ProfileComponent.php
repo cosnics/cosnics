@@ -4,7 +4,7 @@ namespace Chamilo\Core\User\Component;
 use Chamilo\Configuration\Form\Storage\DataClass\Instance;
 use Chamilo\Configuration\Form\Storage\DataManager;
 use Chamilo\Core\User\Manager;
-use Chamilo\Libraries\Architecture\Interfaces\NoContextComponent;
+use Chamilo\Libraries\Format\Breadcrumb\BreadcrumbLessPackageInterface;
 use Chamilo\Libraries\Format\Structure\Glyph\FontAwesomeGlyph;
 use Chamilo\Libraries\Format\Tabs\Link\LinkTab;
 use Chamilo\Libraries\Format\Tabs\Link\LinkTabsRenderer;
@@ -22,7 +22,7 @@ use Chamilo\Libraries\Translation\Translation;
  * @author  Magali Gillard <magali.gillard@ehb.be>
  * @author  Eduard Vossen <eduard.vossen@ehb.be>
  */
-abstract class ProfileComponent extends Manager implements NoContextComponent
+abstract class ProfileComponent extends Manager implements BreadcrumbLessPackageInterface
 {
 
     /**

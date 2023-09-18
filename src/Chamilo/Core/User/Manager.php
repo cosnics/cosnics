@@ -6,7 +6,7 @@ use Chamilo\Core\User\Component\UserApproverComponent;
 use Chamilo\Core\User\Storage\DataManager;
 use Chamilo\Libraries\Architecture\Application\Application;
 use Chamilo\Libraries\Authentication\AuthenticationValidator;
-use Chamilo\Libraries\Format\Structure\BreadcrumbGeneratorInterface;
+use Chamilo\Libraries\Format\Breadcrumb\BreadcrumbGeneratorInterface;
 use Chamilo\Libraries\Mail\Mailer\MailerInterface;
 
 /**

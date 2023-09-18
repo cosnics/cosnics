@@ -9,9 +9,8 @@ use Chamilo\Core\Repository\Viewer\Architecture\Traits\ViewerTrait;
 use Chamilo\Core\Repository\Viewer\ViewerInterface;
 use Chamilo\Libraries\Architecture\Application\ApplicationConfiguration;
 use Chamilo\Libraries\Architecture\Exceptions\NotAllowedException;
-use Chamilo\Libraries\Architecture\Interfaces\DelegateComponent;
+use Chamilo\Libraries\Format\Breadcrumb\BreadcrumbLessComponentInterface;
 use Chamilo\Libraries\Format\Structure\Breadcrumb;
-use Chamilo\Libraries\Format\Structure\BreadcrumbTrail;
 use Chamilo\Libraries\Storage\Query\Condition\EqualityCondition;
 use Chamilo\Libraries\Storage\Query\Variable\PropertyConditionVariable;
 use Chamilo\Libraries\Storage\Query\Variable\StaticConditionVariable;
@@ -22,7 +21,7 @@ use Exception;
 /**
  * @package repository.lib.complex_display.forum.component
  */
-class ForumSubforumCreatorComponent extends Manager implements ViewerInterface, DelegateComponent
+class ForumSubforumCreatorComponent extends Manager implements ViewerInterface, BreadcrumbLessComponentInterface
 {
     use ViewerTrait;
 

@@ -10,8 +10,7 @@ use Chamilo\Core\Repository\Common\Path\ComplexContentObjectPathNode;
 use Chamilo\Core\Repository\ContentObject\Glossary\Display\GlossaryDisplaySupport;
 use Chamilo\Core\Repository\Workspace\Service\RightsService;
 use Chamilo\Libraries\Architecture\Application\ApplicationConfiguration;
-use Chamilo\Libraries\Architecture\Interfaces\DelegateComponent;
-use Chamilo\Libraries\Format\Structure\BreadcrumbTrail;
+use Chamilo\Libraries\Format\Breadcrumb\BreadcrumbLessComponentInterface;
 use Chamilo\Libraries\Translation\Translation;
 use Chamilo\Libraries\Utilities\StringUtilities;
 
@@ -22,7 +21,7 @@ use Chamilo\Libraries\Utilities\StringUtilities;
 /**
  * Represents the view component for the assessment tool.
  */
-class ComplexDisplayComponent extends Manager implements DelegateComponent, GlossaryDisplaySupport
+class ComplexDisplayComponent extends Manager implements BreadcrumbLessComponentInterface, GlossaryDisplaySupport
 {
 
     private $publication;

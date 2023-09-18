@@ -3,7 +3,7 @@ namespace Chamilo\Core\Admin\Component;
 
 use Chamilo\Core\Admin\Manager;
 use Chamilo\Core\Admin\Service\BreadcrumbGenerator;
-use Chamilo\Libraries\Format\Structure\BreadcrumbGeneratorInterface;
+use Chamilo\Libraries\Format\Breadcrumb\BreadcrumbGeneratorInterface;
 use Chamilo\Libraries\Support\Diagnoser;
 
 /**

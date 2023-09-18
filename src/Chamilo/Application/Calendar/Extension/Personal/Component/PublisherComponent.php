@@ -8,13 +8,13 @@ use Chamilo\Configuration\Storage\DataClass\Registration;
 use Chamilo\Core\Repository\Publication\Publisher\Interfaces\PublisherSupport;
 use Chamilo\Libraries\Architecture\Application\ApplicationConfiguration;
 use Chamilo\Libraries\Architecture\ClassnameUtilities;
-use Chamilo\Libraries\Architecture\Interfaces\DelegateComponent;
+use Chamilo\Libraries\Format\Breadcrumb\BreadcrumbLessComponentInterface;
 
 /**
  * @package Chamilo\Application\Calendar\Extension\Personal\Component
  * @author  Hans De Bisschop <hans.de.bisschop@ehb.be>
  */
-class PublisherComponent extends Manager implements PublisherSupport, DelegateComponent
+class PublisherComponent extends Manager implements PublisherSupport, BreadcrumbLessComponentInterface
 {
 
     protected PublicationForm $publicationForm;

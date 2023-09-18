@@ -3,9 +3,9 @@ namespace Chamilo\Application\Weblcms\Tool\Implementation\Wiki\Component;
 
 use Chamilo\Application\Weblcms\Rights\WeblcmsRights;
 use Chamilo\Application\Weblcms\Tool\Implementation\Wiki\Manager;
-use Chamilo\Libraries\Architecture\Interfaces\DelegateComponent;
+use Chamilo\Libraries\Format\Breadcrumb\BreadcrumbLessComponentInterface;
 
-class RightsEditorComponent extends Manager implements DelegateComponent
+class RightsEditorComponent extends Manager implements BreadcrumbLessComponentInterface
 {
 
     public function getAdditionalParameters(array $additionalParameters = []): array

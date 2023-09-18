@@ -6,14 +6,14 @@ use Chamilo\Core\Admin\Manager;
 use Chamilo\Core\Admin\Menu\PackageTypeLinksMenu;
 use Chamilo\Core\Admin\Service\ActionProvider;
 use Chamilo\Libraries\Architecture\ClassnameUtilities;
-use Chamilo\Libraries\Architecture\Interfaces\DelegateComponent;
 use Chamilo\Libraries\Architecture\Interfaces\MenuComponent;
+use Chamilo\Libraries\Format\Breadcrumb\BreadcrumbLessComponentInterface;
 use Chamilo\Libraries\Format\Tabs\TabsRenderer;
 
 /**
  * @package Chamilo\Core\Admin\Component
  */
-class BrowserComponent extends Manager implements DelegateComponent, MenuComponent
+class BrowserComponent extends Manager implements BreadcrumbLessComponentInterface, MenuComponent
 {
     public const PARAM_TAB = 'tab';
 

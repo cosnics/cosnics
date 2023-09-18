@@ -6,8 +6,8 @@ use Chamilo\Core\Repository\ContentObject\Wiki\Display\Table\WikiPageTableRender
 use Chamilo\Core\Repository\ContentObject\Wiki\Storage\DataManager;
 use Chamilo\Core\Repository\Storage\DataClass\ComplexContentObjectItem;
 use Chamilo\Core\Repository\Storage\DataClass\ContentObject;
-use Chamilo\Libraries\Architecture\Interfaces\DelegateComponent;
-use Chamilo\Libraries\Format\Structure\BreadcrumbTrail;
+use Chamilo\Libraries\Format\Breadcrumb\BreadcrumbLessComponentInterface;
+use Chamilo\Libraries\Format\Breadcrumb\BreadcrumbTrail;
 use Chamilo\Libraries\Format\Table\RequestTableParameterValuesCompiler;
 use Chamilo\Libraries\Storage\Parameters\DataClassCountParameters;
 use Chamilo\Libraries\Storage\Parameters\DataClassRetrievesParameters;
@@ -22,7 +22,7 @@ use Chamilo\Libraries\Storage\Query\Variable\StaticConditionVariable;
  * @package Chamilo\Core\Repository\ContentObject\Wiki\Display\Component
  * @author  Hans De Bisschop <hans.de.bisschop@ehb.be>
  */
-class WikiBrowserComponent extends Manager implements DelegateComponent
+class WikiBrowserComponent extends Manager implements BreadcrumbLessComponentInterface
 {
 
     private $owner;

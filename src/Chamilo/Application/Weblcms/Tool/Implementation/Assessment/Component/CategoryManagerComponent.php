@@ -2,9 +2,9 @@
 namespace Chamilo\Application\Weblcms\Tool\Implementation\Assessment\Component;
 
 use Chamilo\Application\Weblcms\Tool\Implementation\Assessment\Manager;
-use Chamilo\Libraries\Architecture\Interfaces\DelegateComponent;
+use Chamilo\Libraries\Format\Breadcrumb\BreadcrumbLessComponentInterface;
 
-class CategoryManagerComponent extends Manager implements DelegateComponent
+class CategoryManagerComponent extends Manager implements BreadcrumbLessComponentInterface
 {
 
     public function getAdditionalParameters(array $additionalParameters = []): array

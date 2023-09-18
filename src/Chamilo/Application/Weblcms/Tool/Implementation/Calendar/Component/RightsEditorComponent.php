@@ -3,9 +3,9 @@ namespace Chamilo\Application\Weblcms\Tool\Implementation\Calendar\Component;
 
 use Chamilo\Application\Weblcms\Rights\WeblcmsRights;
 use Chamilo\Application\Weblcms\Tool\Implementation\Calendar\Manager;
-use Chamilo\Libraries\Architecture\Interfaces\DelegateComponent;
+use Chamilo\Libraries\Format\Breadcrumb\BreadcrumbLessComponentInterface;
 
-class RightsEditorComponent extends Manager implements DelegateComponent
+class RightsEditorComponent extends Manager implements BreadcrumbLessComponentInterface
 {
 
     public function get_available_rights($location)

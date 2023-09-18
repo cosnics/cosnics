@@ -3,14 +3,14 @@ namespace Chamilo\Application\Portfolio\Component;
 
 use Chamilo\Application\Portfolio\Favourite\Manager;
 use Chamilo\Libraries\Architecture\Application\ApplicationConfiguration;
-use Chamilo\Libraries\Architecture\Interfaces\DelegateComponent;
+use Chamilo\Libraries\Format\Breadcrumb\BreadcrumbLessComponentInterface;
 
 /**
  * Shows the favourites for the current user
  *
  * @author Sven Vanpoucke - Hogeschool Gent
  */
-class FavouritesComponent extends TabComponent implements DelegateComponent
+class FavouritesComponent extends TabComponent implements BreadcrumbLessComponentInterface
 {
 
     /**

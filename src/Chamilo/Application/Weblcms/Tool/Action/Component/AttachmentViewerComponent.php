@@ -10,9 +10,8 @@ use Chamilo\Core\Repository\Storage\DataClass\ContentObject;
 use Chamilo\Core\Repository\Storage\DataManager;
 use Chamilo\Libraries\Architecture\Exceptions\ObjectNotExistException;
 use Chamilo\Libraries\Architecture\Exceptions\ParameterNotDefinedException;
-use Chamilo\Libraries\Architecture\Interfaces\DelegateComponent;
+use Chamilo\Libraries\Format\Breadcrumb\BreadcrumbLessComponentInterface;
 use Chamilo\Libraries\Format\Structure\Breadcrumb;
-use Chamilo\Libraries\Format\Structure\BreadcrumbTrail;
 use Chamilo\Libraries\Format\Structure\Page;
 use Chamilo\Libraries\Format\Structure\PageConfiguration;
 use Chamilo\Libraries\Translation\Translation;
@@ -20,7 +19,7 @@ use Chamilo\Libraries\Translation\Translation;
 /**
  * @package application.lib.weblcms.tool.component
  */
-class AttachmentViewerComponent extends Manager implements DelegateComponent
+class AttachmentViewerComponent extends Manager implements BreadcrumbLessComponentInterface
 {
 
     public function run()

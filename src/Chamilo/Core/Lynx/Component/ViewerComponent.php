@@ -4,7 +4,7 @@ namespace Chamilo\Core\Lynx\Component;
 use Chamilo\Configuration\Storage\DataClass\Registration;
 use Chamilo\Core\Lynx\Manager;
 use Chamilo\Core\Lynx\PackageDisplay;
-use Chamilo\Libraries\Architecture\Interfaces\DelegateComponent;
+use Chamilo\Libraries\Format\Breadcrumb\BreadcrumbLessComponentInterface;
 use Chamilo\Libraries\Format\Structure\ActionBar\Button;
 use Chamilo\Libraries\Format\Structure\ActionBar\ButtonGroup;
 use Chamilo\Libraries\Format\Structure\ActionBar\ButtonToolBar;
@@ -15,7 +15,7 @@ use Chamilo\Libraries\Format\Structure\ToolbarItem;
 use Chamilo\Libraries\Translation\Translation;
 use Chamilo\Libraries\Utilities\StringUtilities;
 
-class ViewerComponent extends Manager implements DelegateComponent
+class ViewerComponent extends Manager implements BreadcrumbLessComponentInterface
 {
 
     /**

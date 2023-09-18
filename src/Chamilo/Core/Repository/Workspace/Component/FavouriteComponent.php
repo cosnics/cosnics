@@ -3,7 +3,7 @@ namespace Chamilo\Core\Repository\Workspace\Component;
 
 use Chamilo\Core\Repository\Workspace\Favourite\Manager;
 use Chamilo\Core\Repository\Workspace\Table\WorkspaceTableRenderer;
-use Chamilo\Libraries\Architecture\Interfaces\DelegateComponent;
+use Chamilo\Libraries\Format\Breadcrumb\BreadcrumbLessComponentInterface;
 use Chamilo\Libraries\Format\Table\RequestTableParameterValuesCompiler;
 
 /**
@@ -12,7 +12,7 @@ use Chamilo\Libraries\Format\Table\RequestTableParameterValuesCompiler;
  * @author  Magali Gillard <magali.gillard@ehb.be>
  * @author  Eduard Vossen <eduard.vossen@ehb.be>
  */
-class FavouriteComponent extends TabComponent implements DelegateComponent
+class FavouriteComponent extends TabComponent implements BreadcrumbLessComponentInterface
 {
 
     /**

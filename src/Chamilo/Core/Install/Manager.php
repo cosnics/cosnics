@@ -5,7 +5,7 @@ use Chamilo\Configuration\Service\FileConfigurationLocator;
 use Chamilo\Core\Install\Format\Structure\FooterRenderer;
 use Chamilo\Libraries\Architecture\Application\Application;
 use Chamilo\Libraries\Architecture\Application\ApplicationConfigurationInterface;
-use Chamilo\Libraries\Architecture\Interfaces\NoContextComponent;
+use Chamilo\Libraries\Format\Breadcrumb\BreadcrumbLessPackageInterface;
 use Chamilo\Libraries\Format\Structure\FooterRendererInterface;
 use Chamilo\Libraries\Format\Structure\HeaderRendererInterface;
 use Chamilo\Libraries\Format\Structure\WizardHeader\WizardHeader;
@@ -20,7 +20,7 @@ use Symfony\Component\Finder\Iterator\FileTypeFilterIterator;
  * @author  Hans De Bisschop <hans.de.bisschop@ehb.be>
  * @author  Magali Gillard <magali.gillard@ehb.be>
  */
-abstract class Manager extends Application implements NoContextComponent
+abstract class Manager extends Application implements BreadcrumbLessPackageInterface
 {
     public const ACTION_INSTALL_PLATFORM = 'installer';
     public const ACTION_INTRODUCTION = 'introduction';

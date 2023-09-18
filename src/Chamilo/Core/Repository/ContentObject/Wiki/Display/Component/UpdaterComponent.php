@@ -6,8 +6,8 @@ use Chamilo\Core\Repository\ContentObject\WikiPage\Storage\DataClass\ComplexWiki
 use Chamilo\Core\Repository\Storage\DataClass\ComplexContentObjectItem;
 use Chamilo\Core\Repository\Storage\DataManager;
 use Chamilo\Libraries\Architecture\Application\ApplicationConfiguration;
-use Chamilo\Libraries\Architecture\Interfaces\DelegateComponent;
-use Chamilo\Libraries\Format\Structure\BreadcrumbTrail;
+use Chamilo\Libraries\Format\Breadcrumb\BreadcrumbLessComponentInterface;
+use Chamilo\Libraries\Format\Breadcrumb\BreadcrumbTrail;
 use Chamilo\Libraries\Translation\Translation;
 use Chamilo\Libraries\Utilities\StringUtilities;
 
@@ -15,7 +15,7 @@ use Chamilo\Libraries\Utilities\StringUtilities;
  * @package Chamilo\Core\Repository\ContentObject\Wiki\Display\Component
  * @author  Hans De Bisschop <hans.de.bisschop@ehb.be>
  */
-class UpdaterComponent extends Manager implements DelegateComponent
+class UpdaterComponent extends Manager implements BreadcrumbLessComponentInterface
 {
 
     public function run()

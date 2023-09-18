@@ -8,7 +8,7 @@ use Chamilo\Core\Repository\Storage\DataManager;
 use Chamilo\Core\Repository\Viewer\Architecture\Traits\ViewerTrait;
 use Chamilo\Core\Repository\Viewer\ViewerInterface;
 use Chamilo\Libraries\Architecture\Application\ApplicationConfiguration;
-use Chamilo\Libraries\Architecture\Interfaces\DelegateComponent;
+use Chamilo\Libraries\Format\Breadcrumb\BreadcrumbLessComponentInterface;
 use Chamilo\Libraries\Format\Form\FormValidator;
 use Chamilo\Libraries\Format\Structure\WizardHeader\WizardHeader;
 use Chamilo\Libraries\Format\Structure\WizardHeader\WizardHeaderRenderer;
@@ -23,7 +23,7 @@ use RuntimeException;
  *
  * @author Sven Vanpoucke - Hogeschool Gent
  */
-class PublisherComponent extends Manager implements ViewerInterface, DelegateComponent
+class PublisherComponent extends Manager implements ViewerInterface, BreadcrumbLessComponentInterface
 {
     use ViewerTrait;
 

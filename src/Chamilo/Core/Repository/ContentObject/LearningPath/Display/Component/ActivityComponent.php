@@ -3,9 +3,8 @@ namespace Chamilo\Core\Repository\ContentObject\LearningPath\Display\Component;
 
 use Chamilo\Core\Repository\Integration\Chamilo\Core\Tracking\Service\ActivityService;
 use Chamilo\Core\Repository\Integration\Chamilo\Core\Tracking\Table\ActivityTableRenderer;
-use Chamilo\Libraries\Architecture\Interfaces\DelegateComponent;
+use Chamilo\Libraries\Format\Breadcrumb\BreadcrumbLessComponentInterface;
 use Chamilo\Libraries\Format\Structure\Breadcrumb;
-use Chamilo\Libraries\Format\Structure\BreadcrumbTrail;
 use Chamilo\Libraries\Format\Table\RequestTableParameterValuesCompiler;
 use Chamilo\Libraries\Translation\Translation;
 
@@ -15,7 +14,7 @@ use Chamilo\Libraries\Translation\Translation;
  * @package repository\content_object\portfolio\display
  * @author  Hans De Bisschop <hans.de.bisschop@ehb.be>
  */
-class ActivityComponent extends BaseHtmlTreeComponent implements DelegateComponent
+class ActivityComponent extends BaseHtmlTreeComponent implements BreadcrumbLessComponentInterface
 {
 
     /**

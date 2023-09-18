@@ -10,15 +10,14 @@ use Chamilo\Application\Weblcms\Tool\Implementation\Wiki\Manager;
 use Chamilo\Core\Repository\Common\Path\ComplexContentObjectPathNode;
 use Chamilo\Core\Repository\ContentObject\Wiki\Display\WikiDisplaySupport;
 use Chamilo\Libraries\Architecture\Application\ApplicationConfiguration;
-use Chamilo\Libraries\Architecture\Interfaces\DelegateComponent;
-use Chamilo\Libraries\Format\Structure\BreadcrumbTrail;
+use Chamilo\Libraries\Format\Breadcrumb\BreadcrumbLessComponentInterface;
 use Chamilo\Libraries\Translation\Translation;
 use Chamilo\Libraries\Utilities\StringUtilities;
 
 /**
  * @package application.lib.weblcms.tool.wiki.component
  */
-class ComplexDisplayComponent extends Manager implements DelegateComponent, WikiDisplaySupport
+class ComplexDisplayComponent extends Manager implements BreadcrumbLessComponentInterface, WikiDisplaySupport
 {
 
     private $publication;

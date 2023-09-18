@@ -2,7 +2,7 @@
 namespace Chamilo\Application\Weblcms\Tool\Implementation\Glossary\Component;
 
 use Chamilo\Application\Weblcms\Tool\Implementation\Glossary\Manager;
-use Chamilo\Libraries\Format\Structure\BreadcrumbTrail;
+use Chamilo\Libraries\Format\Breadcrumb\BreadcrumbTrail;
 
 class BrowserComponent extends Manager
 {

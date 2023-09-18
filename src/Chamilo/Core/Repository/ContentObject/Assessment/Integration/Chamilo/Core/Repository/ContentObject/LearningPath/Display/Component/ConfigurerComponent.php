@@ -4,7 +4,7 @@ namespace Chamilo\Core\Repository\ContentObject\Assessment\Integration\Chamilo\C
 use Chamilo\Core\Repository\ContentObject\Assessment\Display\Configuration;
 use Chamilo\Core\Repository\ContentObject\Assessment\Display\Form\ConfigurationForm;
 use Chamilo\Core\Repository\ContentObject\Assessment\Integration\Chamilo\Core\Repository\ContentObject\LearningPath\Display\Manager;
-use Chamilo\Libraries\Architecture\Interfaces\DelegateComponent;
+use Chamilo\Libraries\Format\Breadcrumb\BreadcrumbLessComponentInterface;
 use Chamilo\Libraries\Translation\Translation;
 
 /**
@@ -14,7 +14,7 @@ use Chamilo\Libraries\Translation\Translation;
  * @author Magali Gillard <magali.gillard@ehb.be>
  * @author Eduard Vossen <eduard.vossen@ehb.be>
  */
-class ConfigurerComponent extends Manager implements DelegateComponent
+class ConfigurerComponent extends Manager implements BreadcrumbLessComponentInterface
 {
 
     /**

@@ -6,10 +6,10 @@ use Chamilo\Libraries\Architecture\Exceptions\NotAllowedException;
 use Chamilo\Libraries\Architecture\Interfaces\MenuComponent;
 use Chamilo\Libraries\Architecture\Interfaces\NoAuthenticationSupport;
 use Chamilo\Libraries\DependencyInjection\Traits\DependencyInjectionContainerTrait;
+use Chamilo\Libraries\Format\Breadcrumb\BreadcrumbGenerator;
+use Chamilo\Libraries\Format\Breadcrumb\BreadcrumbGeneratorInterface;
+use Chamilo\Libraries\Format\Breadcrumb\BreadcrumbTrail;
 use Chamilo\Libraries\Format\NotificationMessage\NotificationMessage;
-use Chamilo\Libraries\Format\Structure\BreadcrumbGenerator;
-use Chamilo\Libraries\Format\Structure\BreadcrumbGeneratorInterface;
-use Chamilo\Libraries\Format\Structure\BreadcrumbTrail;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 
 /**

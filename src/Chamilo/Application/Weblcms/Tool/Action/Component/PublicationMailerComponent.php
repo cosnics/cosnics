@@ -4,14 +4,14 @@ namespace Chamilo\Application\Weblcms\Tool\Action\Component;
 use Chamilo\Application\Weblcms\Storage\DataClass\ContentObjectPublication;
 use Chamilo\Application\Weblcms\Storage\DataManager;
 use Chamilo\Application\Weblcms\Tool\Action\Manager;
-use Chamilo\Libraries\Architecture\Interfaces\DelegateComponent;
+use Chamilo\Libraries\Format\Breadcrumb\BreadcrumbLessComponentInterface;
 use Chamilo\Libraries\Translation\Translation;
 
 /**
  * Toolcomponent to sent email of an alredy published publication.
  * Will only send a publication once!
  */
-class PublicationMailerComponent extends Manager implements DelegateComponent
+class PublicationMailerComponent extends Manager implements BreadcrumbLessComponentInterface
 {
 
     public function run()

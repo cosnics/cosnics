@@ -9,7 +9,7 @@ use Chamilo\Application\Weblcms\Request\Table\ManagementRequestTableRenderer;
 use Chamilo\Application\Weblcms\Request\Table\Request\RequestTable;
 use Chamilo\Application\Weblcms\Request\Table\UserRequestTableRenderer;
 use Chamilo\Core\Repository\Quota\Table\RequestTableRenderer;
-use Chamilo\Libraries\Architecture\Interfaces\DelegateComponent;
+use Chamilo\Libraries\Format\Breadcrumb\BreadcrumbLessComponentInterface;
 use Chamilo\Libraries\Format\Structure\ActionBar\Button;
 use Chamilo\Libraries\Format\Structure\ActionBar\ButtonGroup;
 use Chamilo\Libraries\Format\Structure\ActionBar\ButtonToolBar;
@@ -27,7 +27,7 @@ use Chamilo\Libraries\Storage\Query\Condition\InCondition;
 use Chamilo\Libraries\Storage\Query\Variable\PropertyConditionVariable;
 use Chamilo\Libraries\Storage\Query\Variable\StaticConditionVariable;
 
-class BrowserComponent extends Manager implements DelegateComponent
+class BrowserComponent extends Manager implements BreadcrumbLessComponentInterface
 {
 
     private ButtonToolBarRenderer $buttonToolbarRenderer;

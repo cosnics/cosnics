@@ -11,9 +11,8 @@ use Chamilo\Core\Repository\Viewer\ViewerInterface;
 use Chamilo\Core\Tracking\Storage\DataClass\Event;
 use Chamilo\Libraries\Architecture\Application\ApplicationConfiguration;
 use Chamilo\Libraries\Architecture\Exceptions\NotAllowedException;
-use Chamilo\Libraries\Architecture\Interfaces\DelegateComponent;
+use Chamilo\Libraries\Format\Breadcrumb\BreadcrumbLessComponentInterface;
 use Chamilo\Libraries\Format\Structure\Breadcrumb;
-use Chamilo\Libraries\Format\Structure\BreadcrumbTrail;
 use Chamilo\Libraries\Translation\Translation;
 use Chamilo\Libraries\Utilities\StringUtilities;
 use Exception;
@@ -24,7 +23,7 @@ use Exception;
  * @package repository\content_object\learning_path\display
  * @author  Hans De Bisschop <hans.de.bisschop@ehb.be>
  */
-class CreatorComponent extends BaseHtmlTreeComponent implements ViewerInterface, DelegateComponent
+class CreatorComponent extends BaseHtmlTreeComponent implements ViewerInterface, BreadcrumbLessComponentInterface
 {
     use ViewerTrait;
 

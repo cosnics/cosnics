@@ -2,8 +2,8 @@
 namespace Chamilo\Application\Weblcms\Tool\Implementation\Geolocation\Component;
 
 use Chamilo\Application\Weblcms\Tool\Implementation\Geolocation\Manager;
+use Chamilo\Libraries\Format\Breadcrumb\BreadcrumbTrail;
 use Chamilo\Libraries\Format\Structure\Breadcrumb;
-use Chamilo\Libraries\Format\Structure\BreadcrumbTrail;
 use Chamilo\Libraries\Translation\Translation;
 
 class ReportingViewerComponent extends Manager

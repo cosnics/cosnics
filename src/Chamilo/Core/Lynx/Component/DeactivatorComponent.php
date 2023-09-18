@@ -5,15 +5,14 @@ use Chamilo\Configuration\Package\NotAllowed;
 use Chamilo\Core\Lynx\Action\PackageDeactivator;
 use Chamilo\Core\Lynx\Manager;
 use Chamilo\Libraries\Architecture\Exceptions\NotAllowedException;
-use Chamilo\Libraries\Architecture\Interfaces\DelegateComponent;
+use Chamilo\Libraries\Format\Breadcrumb\BreadcrumbLessComponentInterface;
 use Chamilo\Libraries\Format\Structure\Breadcrumb;
-use Chamilo\Libraries\Format\Structure\BreadcrumbTrail;
 use Chamilo\Libraries\Format\Structure\Glyph\FontAwesomeGlyph;
 use Chamilo\Libraries\Format\Structure\Toolbar;
 use Chamilo\Libraries\Format\Structure\ToolbarItem;
 use Chamilo\Libraries\Translation\Translation;
 
-class DeactivatorComponent extends Manager implements DelegateComponent
+class DeactivatorComponent extends Manager implements BreadcrumbLessComponentInterface
 {
 
     /**

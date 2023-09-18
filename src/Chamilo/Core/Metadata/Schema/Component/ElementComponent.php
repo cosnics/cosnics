@@ -3,7 +3,7 @@ namespace Chamilo\Core\Metadata\Schema\Component;
 
 use Chamilo\Core\Metadata\Manager;
 use Chamilo\Libraries\Architecture\Application\ApplicationConfiguration;
-use Chamilo\Libraries\Architecture\Interfaces\DelegateComponent;
+use Chamilo\Libraries\Format\Breadcrumb\BreadcrumbLessComponentInterface;
 
 /**
  *
@@ -13,7 +13,7 @@ use Chamilo\Libraries\Architecture\Interfaces\DelegateComponent;
  * @author Magali Gillard <magali.gillard@ehb.be>
  * @author Eduard Vossen <eduard.vossen@ehb.be>
  */
-class ElementComponent extends Manager implements DelegateComponent
+class ElementComponent extends Manager implements BreadcrumbLessComponentInterface
 {
 
     /**

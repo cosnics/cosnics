@@ -2,9 +2,9 @@
 namespace Chamilo\Core\Rights\Editor\Component;
 
 use Chamilo\Core\Rights\Editor\Form\SimpleRightsEditorForm;
-use Chamilo\Libraries\Architecture\Interfaces\DelegateComponent;
-use Chamilo\Libraries\Translation\Translation;
 use Chamilo\Core\Rights\Editor\Manager;
+use Chamilo\Libraries\Format\Breadcrumb\BreadcrumbLessComponentInterface;
+use Chamilo\Libraries\Translation\Translation;
 
 /**
  * Simple interface to edit rights
@@ -13,7 +13,7 @@ use Chamilo\Core\Rights\Editor\Manager;
  * @package application.common.rights_editor_manager.component
  * @deprecated Should not be needed anymore
  */
-class SimpleRightsEditorComponent extends Manager implements DelegateComponent
+class SimpleRightsEditorComponent extends Manager implements BreadcrumbLessComponentInterface
 {
     public function render_header(string $pageTitle = ''): string
     {

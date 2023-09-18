@@ -8,10 +8,9 @@ use Chamilo\Core\Repository\ContentObject\Assessment\Display\Manager;
 use Chamilo\Core\Repository\ContentObject\Assessment\Storage\DataClass\Assessment;
 use Chamilo\Core\Repository\Storage\DataClass\ComplexContentObjectItem;
 use Chamilo\Core\Repository\Storage\DataManager;
-use Chamilo\Libraries\Architecture\Interfaces\DelegateComponent;
+use Chamilo\Libraries\Format\Breadcrumb\BreadcrumbLessComponentInterface;
 use Chamilo\Libraries\Format\Form\FormValidator;
 use Chamilo\Libraries\Format\Structure\Breadcrumb;
-use Chamilo\Libraries\Format\Structure\BreadcrumbTrail;
 use Chamilo\Libraries\Storage\Parameters\DataClassRetrievesParameters;
 use Chamilo\Libraries\Storage\Query\Condition\InCondition;
 use Chamilo\Libraries\Storage\Query\OrderBy;
@@ -23,7 +22,7 @@ use Symfony\Component\HttpFoundation\RedirectResponse;
 /**
  * @package repository.lib.complex_display.assessment.component
  */
-class AssessmentViewerComponent extends Manager implements DelegateComponent
+class AssessmentViewerComponent extends Manager implements BreadcrumbLessComponentInterface
 {
     public const FORM_BACK = 'back';
     public const FORM_NEXT = 'next';

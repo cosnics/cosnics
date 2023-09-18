@@ -3,8 +3,8 @@ namespace Chamilo\Core\Admin\Component;
 
 use Chamilo\Core\Admin\Manager;
 use Chamilo\Core\Admin\Service\BreadcrumbGenerator;
+use Chamilo\Libraries\Format\Breadcrumb\BreadcrumbGeneratorInterface;
 use Chamilo\Libraries\Format\Form\FormValidator;
-use Chamilo\Libraries\Format\Structure\BreadcrumbGeneratorInterface;
 use Chamilo\Libraries\Utilities\StringUtilities;
 use HTML_Table;
 use Symfony\Component\Finder\Iterator\FileTypeFilterIterator;

@@ -4,7 +4,7 @@ namespace Chamilo\Core\Metadata;
 use Chamilo\Core\Admin\Service\BreadcrumbGenerator;
 use Chamilo\Libraries\Architecture\Application\Application;
 use Chamilo\Libraries\Architecture\Application\ApplicationConfigurationInterface;
-use Chamilo\Libraries\Format\Structure\BreadcrumbGeneratorInterface;
+use Chamilo\Libraries\Format\Breadcrumb\BreadcrumbGeneratorInterface;
 
 /**
  * @package Chamilo\Core\Metadata

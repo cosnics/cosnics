@@ -2,7 +2,6 @@
 namespace Chamilo\Application\Weblcms\Tool\Implementation\Link\Component;
 
 use Chamilo\Application\Weblcms\Tool\Implementation\Link\Manager;
-use Chamilo\Libraries\Format\Structure\BreadcrumbTrail;
 
 class BrowserComponent extends Manager
 {

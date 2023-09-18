@@ -4,7 +4,7 @@ namespace Chamilo\Core\Repository\ContentObject\Assessment\Builder\Component;
 use Chamilo\Core\Repository\ContentObject\Assessment\Builder\Manager;
 use Chamilo\Libraries\Architecture\Application\ApplicationConfiguration;
 use Chamilo\Libraries\Architecture\ClassnameUtilities;
-use Chamilo\Libraries\Architecture\Interfaces\DelegateComponent;
+use Chamilo\Libraries\Format\Breadcrumb\BreadcrumbLessComponentInterface;
 use Chamilo\Libraries\Translation\Translation;
 
 /**
@@ -12,7 +12,7 @@ use Chamilo\Libraries\Translation\Translation;
  *
  * @author Sven Vanpoucke
  */
-class PreviewComponent extends Manager implements DelegateComponent
+class PreviewComponent extends Manager implements BreadcrumbLessComponentInterface
 {
 
     /**

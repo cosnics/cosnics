@@ -9,8 +9,8 @@ use Chamilo\Core\Repository\ContentObject\WikiPage\Storage\DataManager;
 use Chamilo\Core\Repository\Feedback\FeedbackSupport;
 use Chamilo\Core\Repository\Storage\DataClass\ComplexContentObjectItem;
 use Chamilo\Libraries\Architecture\Application\ApplicationConfiguration;
-use Chamilo\Libraries\Architecture\Interfaces\DelegateComponent;
-use Chamilo\Libraries\Format\Structure\BreadcrumbTrail;
+use Chamilo\Libraries\Format\Breadcrumb\BreadcrumbLessComponentInterface;
+use Chamilo\Libraries\Format\Breadcrumb\BreadcrumbTrail;
 use Chamilo\Libraries\Storage\Parameters\DataClassCountParameters;
 use Chamilo\Libraries\Storage\Parameters\DataClassRetrievesParameters;
 use Chamilo\Libraries\Storage\Query\Condition\EqualityCondition;
@@ -24,7 +24,7 @@ use MediawikiParserContext;
  * @package Chamilo\Core\Repository\ContentObject\Wiki\Display\Component
  * @author  Hans De Bisschop <hans.de.bisschop@ehb.be>
  */
-class WikiDiscussComponent extends Manager implements DelegateComponent, FeedbackSupport
+class WikiDiscussComponent extends Manager implements BreadcrumbLessComponentInterface, FeedbackSupport
 {
     public const DESCRIPTION_MARKER = '<!-- /description -->';
 

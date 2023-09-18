@@ -3,15 +3,15 @@ namespace Chamilo\Core\Repository\ContentObject\Blog\Display\Component;
 
 use Chamilo\Core\Repository\ContentObject\Blog\Display\Manager;
 use Chamilo\Libraries\Architecture\Application\ApplicationConfiguration;
-use Chamilo\Libraries\Architecture\Interfaces\DelegateComponent;
+use Chamilo\Libraries\Format\Breadcrumb\BreadcrumbLessComponentInterface;
+use Chamilo\Libraries\Format\Breadcrumb\BreadcrumbTrail;
 use Chamilo\Libraries\Format\Structure\Breadcrumb;
-use Chamilo\Libraries\Format\Structure\BreadcrumbTrail;
 
 /**
  *
  * @package repository.lib.complex_builder.blog.component
  */
-class UpdaterComponent extends Manager implements DelegateComponent
+class UpdaterComponent extends Manager implements BreadcrumbLessComponentInterface
 {
 
     public function run()

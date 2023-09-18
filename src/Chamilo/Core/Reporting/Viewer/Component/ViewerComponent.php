@@ -4,13 +4,13 @@ namespace Chamilo\Core\Reporting\Viewer\Component;
 use Chamilo\Core\Reporting\Viewer\Manager;
 use Chamilo\Core\Reporting\Viewer\Rendition\Template\TemplateRendition;
 use Chamilo\Core\Reporting\Viewer\Rendition\Template\TemplateRenditionImplementation;
-use Chamilo\Libraries\Architecture\Interfaces\DelegateComponent;
+use Chamilo\Libraries\Format\Breadcrumb\BreadcrumbLessComponentInterface;
 
 /**
  * @author  Hans De Bisschop & Magali Gillard
  * @package reporting.viewer
  */
-class ViewerComponent extends Manager implements DelegateComponent
+class ViewerComponent extends Manager implements BreadcrumbLessComponentInterface
 {
 
     public function run()

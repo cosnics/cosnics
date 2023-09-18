@@ -6,8 +6,8 @@ use Chamilo\Core\Help\Manager;
 use Chamilo\Core\Help\Storage\DataClass\HelpItem;
 use Chamilo\Libraries\Architecture\Application\Application;
 use Chamilo\Libraries\Architecture\Exceptions\NotAllowedException;
+use Chamilo\Libraries\Format\Breadcrumb\BreadcrumbTrail;
 use Chamilo\Libraries\Format\Structure\Breadcrumb;
-use Chamilo\Libraries\Format\Structure\BreadcrumbTrail;
 
 /**
  * @package Chamilo\Core\Help\Component

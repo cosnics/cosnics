@@ -6,7 +6,7 @@ use Chamilo\Application\Calendar\Extension\Google\Repository\CalendarRepository;
 use Chamilo\Application\Calendar\Extension\Google\Service\CalendarService;
 use Chamilo\Application\Calendar\Service\AvailabilityService;
 use Chamilo\Libraries\Architecture\Application\Application;
-use Chamilo\Libraries\Architecture\Interfaces\DelegateComponent;
+use Chamilo\Libraries\Format\Breadcrumb\BreadcrumbLessComponentInterface;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 
 /**
@@ -15,7 +15,7 @@ use Symfony\Component\HttpFoundation\RedirectResponse;
  * @author  Magali Gillard <magali.gillard@ehb.be>
  * @author  Eduard Vossen <eduard.vossen@ehb.be>
  */
-class LogoutComponent extends Manager implements DelegateComponent
+class LogoutComponent extends Manager implements BreadcrumbLessComponentInterface
 {
 
     public function run()

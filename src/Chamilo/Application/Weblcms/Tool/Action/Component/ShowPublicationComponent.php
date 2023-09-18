@@ -1,9 +1,9 @@
 <?php
 namespace Chamilo\Application\Weblcms\Tool\Action\Component;
 
-use Chamilo\Libraries\Architecture\Interfaces\DelegateComponent;
+use Chamilo\Libraries\Format\Breadcrumb\BreadcrumbLessComponentInterface;
 
-class ShowPublicationComponent extends ToggleVisibilityComponent implements DelegateComponent
+class ShowPublicationComponent extends ToggleVisibilityComponent implements BreadcrumbLessComponentInterface
 {
 
     public function get_hidden()

@@ -8,10 +8,10 @@ use Chamilo\Core\Repository\Storage\DataManager;
 use Chamilo\Core\Repository\Viewer\Architecture\Traits\ViewerTrait;
 use Chamilo\Core\Repository\Viewer\ViewerInterface;
 use Chamilo\Libraries\Architecture\Application\ApplicationConfiguration;
-use Chamilo\Libraries\Architecture\Interfaces\DelegateComponent;
+use Chamilo\Libraries\Format\Breadcrumb\BreadcrumbLessComponentInterface;
 use Chamilo\Libraries\Translation\Translation;
 
-class WikiPageCreatorComponent extends Manager implements ViewerInterface, DelegateComponent
+class WikiPageCreatorComponent extends Manager implements ViewerInterface, BreadcrumbLessComponentInterface
 {
     use ViewerTrait;
 

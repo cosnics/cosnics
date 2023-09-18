@@ -4,7 +4,7 @@ namespace Chamilo\Application\Weblcms\Tool\Action;
 use Chamilo\Application\Weblcms\Course\Storage\DataClass\Course;
 use Chamilo\Application\Weblcms\Tool\Service\CategoryBreadcrumbsGenerator;
 use Chamilo\Libraries\Architecture\Application\Application;
-use Chamilo\Libraries\Architecture\Interfaces\NoContextComponent;
+use Chamilo\Libraries\Format\Breadcrumb\BreadcrumbLessPackageInterface;
 use Chamilo\Libraries\Translation\Translation;
 use Chamilo\Libraries\Utilities\StringUtilities;
 use Exception;
@@ -19,7 +19,7 @@ use Exception;
  * @author Sven Vanpoucke
  * @author Hans De Bisschop
  */
-abstract class Manager extends Application implements NoContextComponent
+abstract class Manager extends Application implements BreadcrumbLessPackageInterface
 {
     public const ACTION_BROWSE = 'Browser';
     public const ACTION_DELETE = 'Deleter';

@@ -8,14 +8,14 @@ use Chamilo\Application\Weblcms\Tool\Action\Manager;
 use Chamilo\Core\Repository\ContentObject\Introduction\Storage\DataClass\Introduction;
 use Chamilo\Libraries\Architecture\Exceptions\NoObjectSelectedException;
 use Chamilo\Libraries\Architecture\Exceptions\ObjectNotExistException;
-use Chamilo\Libraries\Architecture\Interfaces\DelegateComponent;
+use Chamilo\Libraries\Format\Breadcrumb\BreadcrumbLessComponentInterface;
 use Chamilo\Libraries\Translation\Translation;
 
 /**
  *
  * @package application.lib.weblcms.tool.component
  */
-class DeleterComponent extends Manager implements DelegateComponent
+class DeleterComponent extends Manager implements BreadcrumbLessComponentInterface
 {
 
     public function run()

@@ -6,7 +6,7 @@ use Chamilo\Core\User\Storage\DataClass\User;
 use Chamilo\Libraries\Architecture\Application\Application;
 use Chamilo\Libraries\Format\Structure\Breadcrumb;
 
-class BreadcrumbGenerator extends \Chamilo\Libraries\Format\Structure\BreadcrumbGenerator
+class BreadcrumbGenerator extends \Chamilo\Libraries\Format\Breadcrumb\BreadcrumbGenerator
 {
     protected function generatePackageBreadcrumb(Application $application): void
     {

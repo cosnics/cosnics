@@ -6,8 +6,8 @@ use Chamilo\Core\Metadata\Schema\Storage\DataManager;
 use Chamilo\Core\Metadata\Storage\DataClass\Schema;
 use Chamilo\Libraries\Architecture\Exceptions\NoObjectSelectedException;
 use Chamilo\Libraries\Architecture\Exceptions\NotAllowedException;
+use Chamilo\Libraries\Format\Breadcrumb\BreadcrumbTrail;
 use Chamilo\Libraries\Format\Structure\Breadcrumb;
-use Chamilo\Libraries\Format\Structure\BreadcrumbTrail;
 use Chamilo\Libraries\Translation\Translation;
 use Chamilo\Libraries\Utilities\StringUtilities;
 use Exception;
@@ -86,7 +86,7 @@ class DeleterComponent extends Manager
     /**
      * Adds additional breadcrumbs
      * 
-     * @param \Chamilo\Libraries\Format\Structure\BreadcrumbTrail $breadcrumb_trail
+     * @param \Chamilo\Libraries\Format\Breadcrumb\BreadcrumbTrail $breadcrumb_trail
      */
     public function addAdditionalBreadcrumbs(BreadcrumbTrail $breadcrumb_trail): void
     {

@@ -8,10 +8,9 @@ use Chamilo\Core\Repository\Form\ContentObjectForm;
 use Chamilo\Core\Repository\Workspace\Storage\DataClass\Workspace;
 use Chamilo\Core\User\Integration\Chamilo\Libraries\Rights\Service\UserEntityProvider;
 use Chamilo\Libraries\Architecture\Exceptions\NotAllowedException;
-use Chamilo\Libraries\Architecture\Interfaces\DelegateComponent;
+use Chamilo\Libraries\Format\Breadcrumb\BreadcrumbLessComponentInterface;
 use Chamilo\Libraries\Format\Form\FormValidator;
 use Chamilo\Libraries\Format\Structure\Breadcrumb;
-use Chamilo\Libraries\Format\Structure\BreadcrumbTrail;
 use Chamilo\Libraries\Translation\Translation;
 use Chamilo\Libraries\Utilities\StringUtilities;
 
@@ -19,7 +18,7 @@ use Chamilo\Libraries\Utilities\StringUtilities;
  * @package application\calendar
  * @author  Hans De Bisschop <hans.de.bisschop@ehb.be>
  */
-class EditorComponent extends Manager implements DelegateComponent
+class EditorComponent extends Manager implements BreadcrumbLessComponentInterface
 {
     /**
      * Runs this component and displays its output.

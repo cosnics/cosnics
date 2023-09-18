@@ -4,8 +4,8 @@ namespace Chamilo\Application\Weblcms\Component;
 use Chamilo\Application\Weblcms\Manager;
 use Chamilo\Core\Admin\Service\BreadcrumbGenerator;
 use Chamilo\Libraries\Architecture\Application\ApplicationConfiguration;
-use Chamilo\Libraries\Architecture\Interfaces\DelegateComponent;
-use Chamilo\Libraries\Format\Structure\BreadcrumbGeneratorInterface;
+use Chamilo\Libraries\Format\Breadcrumb\BreadcrumbGeneratorInterface;
+use Chamilo\Libraries\Format\Breadcrumb\BreadcrumbLessComponentInterface;
 
 /**
  * This class represents a component that runs the course type submanager
@@ -13,7 +13,7 @@ use Chamilo\Libraries\Format\Structure\BreadcrumbGeneratorInterface;
  * @package \application\weblcms\course_type
  * @author  Sven Vanpoucke - Hogeschool Gent - Refactoring
  */
-class CourseTypeManagerComponent extends Manager implements DelegateComponent
+class CourseTypeManagerComponent extends Manager implements BreadcrumbLessComponentInterface
 {
 
     /**

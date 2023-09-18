@@ -5,7 +5,6 @@ use Chamilo\Core\Repository\ContentObject\Portfolio\Display\Form\RightsForm;
 use Chamilo\Core\Repository\ContentObject\Portfolio\Display\PortfolioComplexRights;
 use Chamilo\Libraries\Format\Display;
 use Chamilo\Libraries\Format\Structure\Breadcrumb;
-use Chamilo\Libraries\Format\Structure\BreadcrumbTrail;
 use Chamilo\Libraries\Translation\Translation;
 use Chamilo\Libraries\Utilities\StringUtilities;
 

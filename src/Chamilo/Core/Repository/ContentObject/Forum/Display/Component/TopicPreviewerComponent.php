@@ -1,7 +1,7 @@
 <?php
 namespace Chamilo\Core\Repository\ContentObject\Forum\Display\Component;
 
-use Chamilo\Libraries\Architecture\Interfaces\DelegateComponent;
+use Chamilo\Libraries\Format\Breadcrumb\BreadcrumbLessComponentInterface;
 use Chamilo\Libraries\Format\Structure\PageConfiguration;
 
 /**
@@ -10,7 +10,7 @@ use Chamilo\Libraries\Format\Structure\PageConfiguration;
  * @author Hans De Bisschop <hans.de.bisschop@ehb.be>
  * @author Magali Gillard <magali.gillard@ehb.be>
  */
-class TopicPreviewerComponent extends TopicViewerComponent implements DelegateComponent
+class TopicPreviewerComponent extends TopicViewerComponent implements BreadcrumbLessComponentInterface
 {
 
     public function run()

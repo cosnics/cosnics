@@ -2,8 +2,8 @@
 namespace Chamilo\Application\Weblcms\Tool\Implementation\Announcement\Component;
 
 use Chamilo\Application\Weblcms\Tool\Implementation\Announcement\Manager;
-use Chamilo\Libraries\Architecture\Interfaces\DelegateComponent;
+use Chamilo\Libraries\Format\Breadcrumb\BreadcrumbLessComponentInterface;
 
-class CategoryManagerComponent extends Manager implements DelegateComponent
+class CategoryManagerComponent extends Manager implements BreadcrumbLessComponentInterface
 {
 }

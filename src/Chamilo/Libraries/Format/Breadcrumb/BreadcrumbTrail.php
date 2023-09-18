@@ -1,5 +1,7 @@
 <?php
-namespace Chamilo\Libraries\Format\Structure;
+namespace Chamilo\Libraries\Format\Breadcrumb;
+
+use Chamilo\Libraries\Format\Structure\Breadcrumb;
 
 /**
  * @package Chamilo\Libraries\Format\Structure

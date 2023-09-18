@@ -10,9 +10,9 @@ use Chamilo\Application\Weblcms\Tool\Implementation\User\Manager;
 use Chamilo\Core\User\Storage\DataClass\User;
 use Chamilo\Core\User\Storage\DataManager;
 use Chamilo\Libraries\Architecture\Exceptions\NoObjectSelectedException;
-use Chamilo\Libraries\Architecture\Interfaces\DelegateComponent;
+use Chamilo\Libraries\Format\Breadcrumb\BreadcrumbLessComponentInterface;
+use Chamilo\Libraries\Format\Breadcrumb\BreadcrumbTrail;
 use Chamilo\Libraries\Format\Structure\Breadcrumb;
-use Chamilo\Libraries\Format\Structure\BreadcrumbTrail;
 use Chamilo\Libraries\Format\Structure\Glyph\FontAwesomeGlyph;
 use Chamilo\Libraries\Translation\Translation;
 
@@ -22,7 +22,7 @@ use Chamilo\Libraries\Translation\Translation;
  * @author  Minas Zilyas - Hogeschool Gent
  * @package application\weblcms\tool\user
  */
-class RequestSubscribeUsersComponent extends Manager implements DelegateComponent
+class RequestSubscribeUsersComponent extends Manager implements BreadcrumbLessComponentInterface
 {
 
     private $form;

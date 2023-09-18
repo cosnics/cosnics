@@ -4,7 +4,6 @@ namespace Chamilo\Core\Repository\ContentObject\Portfolio\Display\Component;
 use Chamilo\Core\Repository\Integration\Chamilo\Core\Tracking\Service\ActivityService;
 use Chamilo\Core\Repository\Integration\Chamilo\Core\Tracking\Table\ActivityTableRenderer;
 use Chamilo\Libraries\Format\Structure\Breadcrumb;
-use Chamilo\Libraries\Format\Structure\BreadcrumbTrail;
 use Chamilo\Libraries\Format\Table\RequestTableParameterValuesCompiler;
 
 /**

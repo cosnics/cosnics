@@ -2,14 +2,14 @@
 namespace Chamilo\Application\Weblcms\Tool\Implementation\Document\Component;
 
 use Chamilo\Application\Weblcms\Tool\Implementation\Document\Manager;
-use Chamilo\Libraries\Architecture\Interfaces\DelegateComponent;
-use Chamilo\Libraries\Format\Structure\BreadcrumbTrail;
+use Chamilo\Libraries\Format\Breadcrumb\BreadcrumbLessComponentInterface;
+use Chamilo\Libraries\Format\Breadcrumb\BreadcrumbTrail;
 
 /**
  *
  * @package application.lib.weblcms.tool.document.component
  */
-class ViewerComponent extends Manager implements DelegateComponent
+class ViewerComponent extends Manager implements BreadcrumbLessComponentInterface
 {
 
     /**

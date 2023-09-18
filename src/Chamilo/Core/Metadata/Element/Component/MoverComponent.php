@@ -5,8 +5,8 @@ use Chamilo\Core\Metadata\Element\Manager;
 use Chamilo\Core\Metadata\Element\Storage\DataManager;
 use Chamilo\Core\Metadata\Storage\DataClass\Element;
 use Chamilo\Libraries\Architecture\Exceptions\NoObjectSelectedException;
+use Chamilo\Libraries\Format\Breadcrumb\BreadcrumbTrail;
 use Chamilo\Libraries\Format\Structure\Breadcrumb;
-use Chamilo\Libraries\Format\Structure\BreadcrumbTrail;
 use Chamilo\Libraries\Translation\Translation;
 use Exception;
 

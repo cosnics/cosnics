@@ -4,12 +4,12 @@ namespace Chamilo\Application\Weblcms\Component;
 use Chamilo\Application\Weblcms\Integration\Chamilo\Core\Reporting\Template\CourseDataTemplate;
 use Chamilo\Application\Weblcms\Manager;
 use Chamilo\Libraries\Architecture\Application\ApplicationConfiguration;
-use Chamilo\Libraries\Architecture\Interfaces\DelegateComponent;
+use Chamilo\Libraries\Format\Breadcrumb\BreadcrumbLessComponentInterface;
 
 /**
  * @package application.lib.weblcms.weblcms_manager.component
  */
-class ReportingComponent extends Manager implements DelegateComponent
+class ReportingComponent extends Manager implements BreadcrumbLessComponentInterface
 {
 
     /**

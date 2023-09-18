@@ -6,8 +6,8 @@ use Chamilo\Application\Weblcms\Service\PublicationService;
 use Chamilo\Application\Weblcms\Storage\DataClass\ContentObjectPublication;
 use Chamilo\Application\Weblcms\Storage\DataClass\ContentObjectPublicationCategory;
 use Chamilo\Libraries\Architecture\Application\Application;
+use Chamilo\Libraries\Format\Breadcrumb\BreadcrumbTrail;
 use Chamilo\Libraries\Format\Structure\Breadcrumb;
-use Chamilo\Libraries\Format\Structure\BreadcrumbTrail;
 
 /**
  * Service to generate breadcrumbs for the categories (of a publication) or a selected category
@@ -36,7 +36,7 @@ class CategoryBreadcrumbsGenerator
     /**
      * Generates breadcrumbs recursively for a given ContentObjectPublicationCategory
      *
-     * @param \Chamilo\Libraries\Format\Structure\BreadcrumbTrail $breadcrumbTrail
+     * @param \Chamilo\Libraries\Format\Breadcrumb\BreadcrumbTrail $breadcrumbTrail
      * @param Application $urlGenerator
      * @param \Chamilo\Application\Weblcms\Storage\DataClass\ContentObjectPublicationCategory $contentObjectPublicationCategory
      */
@@ -64,7 +64,7 @@ class CategoryBreadcrumbsGenerator
     /**
      * Generates category breadcrumbs recursively for a given ContentObjectPublication
      *
-     * @param \Chamilo\Libraries\Format\Structure\BreadcrumbTrail $breadcrumbTrail
+     * @param \Chamilo\Libraries\Format\Breadcrumb\BreadcrumbTrail $breadcrumbTrail
      * @param \Chamilo\Libraries\Architecture\Application\Application $urlGenerator
      * @param \Chamilo\Application\Weblcms\Storage\DataClass\ContentObjectPublication $contentObjectPublication
      */

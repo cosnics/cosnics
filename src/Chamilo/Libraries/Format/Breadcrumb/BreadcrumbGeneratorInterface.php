@@ -1,5 +1,5 @@
 <?php
-namespace Chamilo\Libraries\Format\Structure;
+namespace Chamilo\Libraries\Format\Breadcrumb;
 
 use Chamilo\Libraries\Architecture\Application\Application;
 

@@ -3,13 +3,12 @@ namespace Chamilo\Core\Repository\ContentObject\Glossary\Display\Component;
 
 use Chamilo\Core\Repository\ContentObject\Glossary\Display\Component\Renderer\GlossaryRendererFactory;
 use Chamilo\Core\Repository\ContentObject\Glossary\Display\Manager;
-use Chamilo\Libraries\Architecture\Interfaces\DelegateComponent;
+use Chamilo\Libraries\Format\Breadcrumb\BreadcrumbLessComponentInterface;
 use Chamilo\Libraries\Format\Structure\ActionBar\Button;
 use Chamilo\Libraries\Format\Structure\ActionBar\ButtonGroup;
 use Chamilo\Libraries\Format\Structure\ActionBar\ButtonToolBar;
 use Chamilo\Libraries\Format\Structure\ActionBar\Renderer\ButtonToolBarRenderer;
 use Chamilo\Libraries\Format\Structure\Breadcrumb;
-use Chamilo\Libraries\Format\Structure\BreadcrumbTrail;
 use Chamilo\Libraries\Format\Structure\Glyph\FontAwesomeGlyph;
 use Chamilo\Libraries\Format\Structure\ToolbarItem;
 use Chamilo\Libraries\Translation\Translation;
@@ -22,7 +21,7 @@ use Chamilo\Libraries\Utilities\StringUtilities;
 /**
  * Represents the view component for the assessment tool.
  */
-class ViewerComponent extends Manager implements DelegateComponent
+class ViewerComponent extends Manager implements BreadcrumbLessComponentInterface
 {
     public const PARAM_VIEW = 'view';
 

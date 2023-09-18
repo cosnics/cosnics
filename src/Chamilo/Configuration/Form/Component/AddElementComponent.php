@@ -5,7 +5,6 @@ use Chamilo\Configuration\Form\Form\BuilderForm;
 use Chamilo\Configuration\Form\Manager;
 use Chamilo\Configuration\Form\Storage\DataClass\Element;
 use Chamilo\Libraries\Format\Structure\Breadcrumb;
-use Chamilo\Libraries\Format\Structure\BreadcrumbTrail;
 use Chamilo\Libraries\Translation\Translation;
 
 /**

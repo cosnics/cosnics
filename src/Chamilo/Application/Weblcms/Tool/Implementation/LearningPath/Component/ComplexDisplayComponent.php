@@ -37,8 +37,7 @@ use Chamilo\Libraries\Architecture\ClassnameUtilities;
 use Chamilo\Libraries\Architecture\Exceptions\NoObjectSelectedException;
 use Chamilo\Libraries\Architecture\Exceptions\ObjectNotExistException;
 use Chamilo\Libraries\Architecture\Exceptions\UserException;
-use Chamilo\Libraries\Architecture\Interfaces\DelegateComponent;
-use Chamilo\Libraries\Format\Structure\BreadcrumbTrail;
+use Chamilo\Libraries\Format\Breadcrumb\BreadcrumbLessComponentInterface;
 use Chamilo\Libraries\Format\Structure\PageConfiguration;
 use Chamilo\Libraries\Storage\Parameters\DataClassCountParameters;
 use Chamilo\Libraries\Storage\Query\Condition\AndCondition;
@@ -51,7 +50,7 @@ use Exception;
 
 class ComplexDisplayComponent extends Manager
     implements LearningPathDisplaySupport, AssessmentDisplaySupport, ForumDisplaySupport, GlossaryDisplaySupport,
-    BlogDisplaySupport, WikiDisplaySupport, DelegateComponent
+    BlogDisplaySupport, WikiDisplaySupport, BreadcrumbLessComponentInterface
 {
     use LearningPathEmbedderTrait;
 

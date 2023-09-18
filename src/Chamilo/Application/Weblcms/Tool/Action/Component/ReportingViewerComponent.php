@@ -7,9 +7,9 @@ use Chamilo\Core\Repository\Storage\DataClass\ComplexContentObjectItem;
 use Chamilo\Core\Repository\Storage\DataClass\ContentObject;
 use Chamilo\Core\Repository\Storage\DataManager;
 use Chamilo\Libraries\Architecture\Application\ApplicationConfiguration;
-use Chamilo\Libraries\Architecture\Interfaces\DelegateComponent;
+use Chamilo\Libraries\Format\Breadcrumb\BreadcrumbLessComponentInterface;
+use Chamilo\Libraries\Format\Breadcrumb\BreadcrumbTrail;
 use Chamilo\Libraries\Format\Structure\Breadcrumb;
-use Chamilo\Libraries\Format\Structure\BreadcrumbTrail;
 
 /**
  * @package application.lib.weblcms.tool.component
@@ -20,7 +20,7 @@ use Chamilo\Libraries\Format\Structure\BreadcrumbTrail;
  *
  * @author Soliber
  */
-class ReportingViewerComponent extends Manager implements DelegateComponent
+class ReportingViewerComponent extends Manager implements BreadcrumbLessComponentInterface
 {
 
     /**

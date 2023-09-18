@@ -6,14 +6,13 @@ use Chamilo\Core\Repository\ContentObject\Portfolio\Display\Manager;
 use Chamilo\Core\Repository\ContentObject\Portfolio\Display\Menu;
 use Chamilo\Core\Repository\ContentObject\Portfolio\Display\PortfolioComplexRights;
 use Chamilo\Core\User\Storage\DataClass\User;
-use Chamilo\Libraries\Architecture\Interfaces\DelegateComponent;
+use Chamilo\Libraries\Format\Breadcrumb\BreadcrumbLessComponentInterface;
 use Chamilo\Libraries\Format\Structure\Breadcrumb;
-use Chamilo\Libraries\Format\Structure\BreadcrumbTrail;
 use Chamilo\Libraries\Format\Structure\Glyph\FontAwesomeGlyph;
 use Chamilo\Libraries\Mail\Mailer\MailerInterface;
 use Chamilo\Libraries\Translation\Translation;
 
-abstract class ItemComponent extends Manager implements DelegateComponent
+abstract class ItemComponent extends Manager implements BreadcrumbLessComponentInterface
 {
 
     public function run()

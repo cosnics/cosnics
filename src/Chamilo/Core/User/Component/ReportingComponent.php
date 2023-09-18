@@ -4,13 +4,13 @@ namespace Chamilo\Core\User\Component;
 use Chamilo\Core\User\Manager;
 use Chamilo\Libraries\Architecture\Application\ApplicationConfiguration;
 use Chamilo\Libraries\Architecture\Exceptions\NotAllowedException;
-use Chamilo\Libraries\Architecture\Interfaces\DelegateComponent;
+use Chamilo\Libraries\Format\Breadcrumb\BreadcrumbLessComponentInterface;
 
 /**
  *
  * @package user.lib.user_manager.component
  */
-class ReportingComponent extends Manager implements DelegateComponent
+class ReportingComponent extends Manager implements BreadcrumbLessComponentInterface
 {
 
     /**

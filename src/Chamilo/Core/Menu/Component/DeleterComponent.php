@@ -4,8 +4,8 @@ namespace Chamilo\Core\Menu\Component;
 use Chamilo\Core\Menu\Manager;
 use Chamilo\Libraries\Architecture\Application\Application;
 use Chamilo\Libraries\Architecture\Exceptions\ParameterNotDefinedException;
+use Chamilo\Libraries\Format\Breadcrumb\BreadcrumbTrail;
 use Chamilo\Libraries\Format\Structure\Breadcrumb;
-use Chamilo\Libraries\Format\Structure\BreadcrumbTrail;
 use Doctrine\Common\Collections\ArrayCollection;
 
 /**

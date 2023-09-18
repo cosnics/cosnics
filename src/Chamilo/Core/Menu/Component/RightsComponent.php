@@ -5,7 +5,7 @@ use Chamilo\Core\Menu\Manager;
 use Chamilo\Core\Menu\Storage\DataClass\Item;
 use Chamilo\Libraries\Architecture\Application\Application;
 use Chamilo\Libraries\Architecture\Exceptions\ObjectNotExistException;
-use Chamilo\Libraries\Architecture\Interfaces\DelegateComponent;
+use Chamilo\Libraries\Format\Breadcrumb\BreadcrumbLessComponentInterface;
 use Chamilo\Libraries\Rights\Form\RightsForm;
 
 /**
@@ -14,7 +14,7 @@ use Chamilo\Libraries\Rights\Form\RightsForm;
  * @author  Magali Gillard <magali.gillard@ehb.be>
  * @author  Eduard Vossen <eduard.vossen@ehb.be>
  */
-class RightsComponent extends Manager implements DelegateComponent
+class RightsComponent extends Manager implements BreadcrumbLessComponentInterface
 {
     private Item $item;
 

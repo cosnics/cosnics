@@ -12,13 +12,13 @@ use Chamilo\Core\Repository\Publication\Publisher\Interfaces\PublicationHandlerI
 use Chamilo\Core\Repository\Publication\Publisher\Interfaces\PublisherSupport;
 use Chamilo\Libraries\Architecture\Application\ApplicationConfiguration;
 use Chamilo\Libraries\Architecture\Exceptions\NotAllowedException;
-use Chamilo\Libraries\Architecture\Interfaces\DelegateComponent;
+use Chamilo\Libraries\Format\Breadcrumb\BreadcrumbLessComponentInterface;
 use Chamilo\Libraries\Format\Form\FormValidator;
 
 /**
  * @package application.lib.weblcms.tool.announcement.component
  */
-class PublisherComponent extends Manager implements PublisherSupport, DelegateComponent
+class PublisherComponent extends Manager implements PublisherSupport, BreadcrumbLessComponentInterface
 {
 
     /**

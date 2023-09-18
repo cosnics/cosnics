@@ -2,7 +2,7 @@
 namespace Chamilo\Application\Weblcms\Component;
 
 use Chamilo\Application\Weblcms\Manager;
-use Chamilo\Libraries\Architecture\Interfaces\DelegateComponent;
+use Chamilo\Libraries\Format\Breadcrumb\BreadcrumbLessComponentInterface;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 
 /**
@@ -12,7 +12,7 @@ use Symfony\Component\HttpFoundation\RedirectResponse;
  * @author Magali Gillard <magali.gillard@ehb.be>
  * @author Eduard Vossen <eduard.vossen@ehb.be>
  */
-class HomeComponent extends Manager implements DelegateComponent
+class HomeComponent extends Manager implements BreadcrumbLessComponentInterface
 {
 
     /**

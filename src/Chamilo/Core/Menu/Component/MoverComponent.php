@@ -4,8 +4,8 @@ namespace Chamilo\Core\Menu\Component;
 use Chamilo\Core\Menu\Manager;
 use Chamilo\Libraries\Architecture\Application\Application;
 use Chamilo\Libraries\Architecture\Exceptions\ParameterNotDefinedException;
+use Chamilo\Libraries\Format\Breadcrumb\BreadcrumbTrail;
 use Chamilo\Libraries\Format\Structure\Breadcrumb;
-use Chamilo\Libraries\Format\Structure\BreadcrumbTrail;
 use Chamilo\Libraries\Utilities\StringUtilities;
 
 /**
@@ -61,7 +61,7 @@ class MoverComponent extends Manager
     }
 
     /**
-     * @param \Chamilo\Libraries\Format\Structure\BreadcrumbTrail $breadcrumbtrail
+     * @param \Chamilo\Libraries\Format\Breadcrumb\BreadcrumbTrail $breadcrumbtrail
      */
     public function addAdditionalBreadcrumbs(BreadcrumbTrail $breadcrumbtrail): void
     {

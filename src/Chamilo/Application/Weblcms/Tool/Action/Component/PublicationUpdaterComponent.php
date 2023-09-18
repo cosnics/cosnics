@@ -6,9 +6,8 @@ use Chamilo\Application\Weblcms\Rights\WeblcmsRights;
 use Chamilo\Application\Weblcms\Storage\DataClass\ContentObjectPublication;
 use Chamilo\Application\Weblcms\Storage\DataManager;
 use Chamilo\Application\Weblcms\Tool\Action\Manager;
-use Chamilo\Libraries\Architecture\Interfaces\DelegateComponent;
+use Chamilo\Libraries\Format\Breadcrumb\BreadcrumbLessComponentInterface;
 use Chamilo\Libraries\Format\Structure\Breadcrumb;
-use Chamilo\Libraries\Format\Structure\BreadcrumbTrail;
 use Chamilo\Libraries\Translation\Translation;
 use Chamilo\Libraries\Utilities\StringUtilities;
 
@@ -18,7 +17,7 @@ use Chamilo\Libraries\Utilities\StringUtilities;
  * @author  Sven Vanpoucke
  * @package application.lib.weblcms.tool.component
  */
-class PublicationUpdaterComponent extends Manager implements DelegateComponent
+class PublicationUpdaterComponent extends Manager implements BreadcrumbLessComponentInterface
 {
 
     public function run()

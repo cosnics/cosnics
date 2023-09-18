@@ -5,7 +5,7 @@ use Chamilo\Core\Repository\Publication\Manager;
 use Chamilo\Core\Repository\Publication\Service\PublicationAggregator;
 use Chamilo\Core\Repository\Publication\Service\PublicationAggregatorInterface;
 use Chamilo\Core\Repository\Publication\Table\PublicationTableRenderer;
-use Chamilo\Libraries\Architecture\Interfaces\DelegateComponent;
+use Chamilo\Libraries\Format\Breadcrumb\BreadcrumbLessComponentInterface;
 use Chamilo\Libraries\Format\Table\RequestTableParameterValuesCompiler;
 
 /**
@@ -14,7 +14,7 @@ use Chamilo\Libraries\Format\Table\RequestTableParameterValuesCompiler;
  * @author Hans De Bisschop
  * @author Dieter De Neef
  */
-class BrowserComponent extends Manager implements DelegateComponent
+class BrowserComponent extends Manager implements BreadcrumbLessComponentInterface
 {
     /**
      * @throws \TableException

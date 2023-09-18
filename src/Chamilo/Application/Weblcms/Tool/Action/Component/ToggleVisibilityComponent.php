@@ -5,13 +5,13 @@ use Chamilo\Application\Weblcms\Rights\WeblcmsRights;
 use Chamilo\Application\Weblcms\Storage\DataClass\ContentObjectPublication;
 use Chamilo\Application\Weblcms\Storage\DataManager;
 use Chamilo\Application\Weblcms\Tool\Action\Manager;
-use Chamilo\Libraries\Architecture\Interfaces\DelegateComponent;
+use Chamilo\Libraries\Format\Breadcrumb\BreadcrumbLessComponentInterface;
 use Chamilo\Libraries\Translation\Translation;
 
 /**
  * @package application.lib.weblcms.tool.component
  */
-class ToggleVisibilityComponent extends Manager implements DelegateComponent
+class ToggleVisibilityComponent extends Manager implements BreadcrumbLessComponentInterface
 {
 
     public function run()

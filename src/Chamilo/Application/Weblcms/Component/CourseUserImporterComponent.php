@@ -9,8 +9,8 @@ use Chamilo\Application\Weblcms\Service\Import\CourseEntity\Format\ImportFormatF
 use Chamilo\Application\Weblcms\Storage\Repository\WeblcmsRepository;
 use Chamilo\Libraries\Architecture\Application\Application;
 use Chamilo\Libraries\File\Import;
+use Chamilo\Libraries\Format\Breadcrumb\BreadcrumbTrail;
 use Chamilo\Libraries\Format\Structure\Breadcrumb;
-use Chamilo\Libraries\Format\Structure\BreadcrumbTrail;
 use Chamilo\Libraries\Translation\Translation;
 use Exception;
 use Symfony\Component\HttpFoundation\File\UploadedFile;

@@ -2,10 +2,10 @@
 namespace Chamilo\Application\Weblcms\Tool\Implementation\Home;
 
 use Chamilo\Application\Weblcms\Tool\Interfaces\IntroductionTextSupportInterface;
-use Chamilo\Libraries\Architecture\Interfaces\DelegateComponent;
+use Chamilo\Libraries\Format\Breadcrumb\BreadcrumbLessComponentInterface;
 
 abstract class Manager extends \Chamilo\Application\Weblcms\Tool\Manager
-    implements DelegateComponent, IntroductionTextSupportInterface
+    implements BreadcrumbLessComponentInterface, IntroductionTextSupportInterface
 {
     public const ACTION_CHANGE_TOOL_VISIBILITY = 'ToolVisibilityChanger';
     public const ACTION_DELETE_LINKS = 'LinksDeleter';

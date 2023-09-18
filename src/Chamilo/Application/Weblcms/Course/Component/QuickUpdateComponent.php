@@ -1,8 +1,8 @@
 <?php
 namespace Chamilo\Application\Weblcms\Course\Component;
 
-use Chamilo\Libraries\Architecture\Interfaces\DelegateComponent;
-use Chamilo\Libraries\Format\Structure\BreadcrumbTrail;
+use Chamilo\Libraries\Format\Breadcrumb\BreadcrumbLessComponentInterface;
+use Chamilo\Libraries\Format\Breadcrumb\BreadcrumbTrail;
 
 /**
  * This class describes an action to update a course quickly without going through the browser.
@@ -12,7 +12,7 @@ use Chamilo\Libraries\Format\Structure\BreadcrumbTrail;
  * @package \application\weblcms\course
  * @author Sven Vanpoucke - Hogeschool Gent - Refactoring
  */
-class QuickUpdateComponent extends UpdateComponent implements DelegateComponent
+class QuickUpdateComponent extends UpdateComponent implements BreadcrumbLessComponentInterface
 {
 
     /**

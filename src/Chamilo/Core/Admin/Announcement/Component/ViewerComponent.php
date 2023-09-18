@@ -5,7 +5,7 @@ use Chamilo\Core\Admin\Announcement\Manager;
 use Chamilo\Core\Repository\Common\Rendition\ContentObjectRendition;
 use Chamilo\Core\Repository\Common\Rendition\ContentObjectRenditionImplementation;
 use Chamilo\Libraries\Architecture\Exceptions\NotAllowedException;
-use Chamilo\Libraries\Architecture\Interfaces\NoContextComponent;
+use Chamilo\Libraries\Format\Breadcrumb\BreadcrumbLessPackageInterface;
 use Chamilo\Libraries\Format\Structure\ActionBar\Button;
 use Chamilo\Libraries\Format\Structure\ActionBar\ButtonGroup;
 use Chamilo\Libraries\Format\Structure\ActionBar\ButtonToolBar;
@@ -14,7 +14,7 @@ use Chamilo\Libraries\Format\Structure\Glyph\FontAwesomeGlyph;
 use Chamilo\Libraries\Format\Structure\ToolbarItem;
 use Chamilo\Libraries\Utilities\StringUtilities;
 
-class ViewerComponent extends Manager implements NoContextComponent
+class ViewerComponent extends Manager implements BreadcrumbLessPackageInterface
 {
 
     protected ButtonToolBarRenderer $buttonToolbarRenderer;

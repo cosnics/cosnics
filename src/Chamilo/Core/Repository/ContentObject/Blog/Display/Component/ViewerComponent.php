@@ -4,7 +4,7 @@ namespace Chamilo\Core\Repository\ContentObject\Blog\Display\Component;
 use Chamilo\Core\Repository\ContentObject\Blog\Display\Component\Viewer\BlogLayout;
 use Chamilo\Core\Repository\ContentObject\Blog\Display\Manager;
 use Chamilo\Core\Repository\ContentObject\BlogItem\Storage\DataClass\BlogItem;
-use Chamilo\Libraries\Architecture\Interfaces\DelegateComponent;
+use Chamilo\Libraries\Format\Breadcrumb\BreadcrumbLessComponentInterface;
 use Chamilo\Libraries\Format\Structure\ActionBar\Button;
 use Chamilo\Libraries\Format\Structure\ActionBar\ButtonGroup;
 use Chamilo\Libraries\Format\Structure\ActionBar\ButtonToolBar;
@@ -18,7 +18,7 @@ use Chamilo\Libraries\Utilities\StringUtilities;
  *
  * @package repository.lib.complex_display.blog.component
  */
-class ViewerComponent extends Manager implements DelegateComponent
+class ViewerComponent extends Manager implements BreadcrumbLessComponentInterface
 {
 
     /**

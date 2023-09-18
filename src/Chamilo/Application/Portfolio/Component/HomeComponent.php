@@ -15,7 +15,7 @@ use Chamilo\Core\Rights\Entity\PlatformGroupEntity;
 use Chamilo\Core\Rights\Entity\UserEntity;
 use Chamilo\Libraries\Architecture\Application\Application;
 use Chamilo\Libraries\Architecture\Application\ApplicationConfiguration;
-use Chamilo\Libraries\Architecture\Interfaces\DelegateComponent;
+use Chamilo\Libraries\Format\Breadcrumb\BreadcrumbLessComponentInterface;
 use Chamilo\Libraries\Format\Menu\BootstrapTreeMenu;
 use Chamilo\Libraries\Format\Structure\ActionBar\Button;
 use Chamilo\Libraries\Format\Structure\Glyph\FontAwesomeGlyph;
@@ -25,7 +25,7 @@ use Chamilo\Libraries\Format\Structure\Glyph\FontAwesomeGlyph;
  * @author  Hans De Bisschop <hans.de.bisschop@ehb.be>
  */
 class HomeComponent extends Manager
-    implements PortfolioDisplaySupport, DelegateComponent, PortfolioComplexRights, PortfolioBookmarkSupport
+    implements PortfolioDisplaySupport, BreadcrumbLessComponentInterface, PortfolioComplexRights, PortfolioBookmarkSupport
 {
 
     /**

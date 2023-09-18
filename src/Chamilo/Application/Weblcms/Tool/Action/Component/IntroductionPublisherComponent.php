@@ -9,14 +9,14 @@ use Chamilo\Core\Repository\Viewer\Architecture\Traits\ViewerTrait;
 use Chamilo\Core\Repository\Viewer\ViewerInterface;
 use Chamilo\Libraries\Architecture\Application\ApplicationConfiguration;
 use Chamilo\Libraries\Architecture\Exceptions\NotAllowedException;
-use Chamilo\Libraries\Architecture\Interfaces\DelegateComponent;
+use Chamilo\Libraries\Format\Breadcrumb\BreadcrumbLessComponentInterface;
 use Chamilo\Libraries\Translation\Translation;
 use Chamilo\Libraries\Utilities\StringUtilities;
 
 /**
  * @package application.lib.weblcms.tool.component
  */
-class IntroductionPublisherComponent extends Manager implements ViewerInterface, DelegateComponent
+class IntroductionPublisherComponent extends Manager implements ViewerInterface, BreadcrumbLessComponentInterface
 {
     use ViewerTrait;
 

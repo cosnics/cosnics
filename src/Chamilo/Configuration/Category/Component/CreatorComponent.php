@@ -6,7 +6,6 @@ use Chamilo\Configuration\Category\Manager;
 use Chamilo\Configuration\Category\Menu\CategoryMenu;
 use Chamilo\Libraries\Architecture\Exceptions\NotAllowedException;
 use Chamilo\Libraries\Format\Structure\Breadcrumb;
-use Chamilo\Libraries\Format\Structure\BreadcrumbTrail;
 use Chamilo\Libraries\Translation\Translation;
 
 /**

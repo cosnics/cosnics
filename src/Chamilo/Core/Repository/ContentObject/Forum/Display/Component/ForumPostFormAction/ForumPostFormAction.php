@@ -2,9 +2,8 @@
 namespace Chamilo\Core\Repository\ContentObject\Forum\Display\Component\ForumPostFormAction;
 
 use Chamilo\Core\Repository\ContentObject\Forum\Display\Manager;
-use Chamilo\Libraries\Architecture\Interfaces\DelegateComponent;
+use Chamilo\Libraries\Format\Breadcrumb\BreadcrumbLessComponentInterface;
 use Chamilo\Libraries\Format\Structure\Breadcrumb;
-use Chamilo\Libraries\Format\Structure\BreadcrumbTrail;
 use Exception;
 
 /**
@@ -12,7 +11,7 @@ use Exception;
  * 
  * @author Mattias De Pauw - Hogeschool Gent
  */
-abstract class ForumPostFormAction extends Manager implements DelegateComponent
+abstract class ForumPostFormAction extends Manager implements BreadcrumbLessComponentInterface
 {
 
     /**
