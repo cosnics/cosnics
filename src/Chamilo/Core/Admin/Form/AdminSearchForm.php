@@ -1,38 +1,36 @@
 <?php
 namespace Chamilo\Core\Admin\Form;
 
+use Chamilo\Core\Admin\Manager;
 use Chamilo\Libraries\Format\Form\FormValidator;
 use Chamilo\Libraries\Format\Structure\Glyph\FontAwesomeGlyph;
-use Chamilo\Libraries\Translation\Translation;
 
 /**
- *
- * @package admin
- * @author Hans De Bisschop
- * @author Dieter De Neef
+ * @package Chamilo\Core\Admin\Form
+ * @author  Hans De Bisschop <hans.de.bisschop@ehb.be>
+ * @author  Dieter De Neef
  */
 class AdminSearchForm extends FormValidator
 {
-    /**
-     * Name of the search form
-     */
-    const FORM_NAME = 'search';
+    public const FORM_NAME = 'search';
 
-    const PARAM_SIMPLE_SEARCH_QUERY = 'query';
+    public const PARAM_SIMPLE_SEARCH_QUERY = 'query';
 
     /**
      * @param string $url
      * @param string $form_id
+     *
+     * @throws \QuickformException
      */
-    public function __construct($url, $form_id = '')
+    public function __construct(string $url, string $form_id = '')
     {
         parent::__construct(self::FORM_NAME . $form_id, self::FORM_METHOD_POST, $url);
-        $this->updateAttributes(array('id' => self::FORM_NAME . $form_id));
+        $this->updateAttributes(['id' => self::FORM_NAME . $form_id]);
         $this->build();
     }
 
     /**
-     * Build the simple search form.
+     * @throws \QuickformException
      */
     private function build()
     {
@@ -52,7 +50,8 @@ class AdminSearchForm extends FormValidator
         $this->addElement('html', '<span class="input-group-btn">');
 
         $this->addElement(
-            'style_submit_button', 'submit', Translation::get('Search'), null, null, new FontAwesomeGlyph('search')
+            'style_submit_button', 'submit', $this->getTranslator()->trans('Search', [], Manager::CONTEXT), null, null,
+            new FontAwesomeGlyph('search')
         );
 
         $this->addElement('html', '</span>');

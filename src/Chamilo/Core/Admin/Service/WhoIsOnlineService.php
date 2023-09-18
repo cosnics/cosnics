@@ -17,10 +17,8 @@ class WhoIsOnlineService
         $this->whoIsOnlineRepository = $whoIsOnlineRepository;
     }
 
-    /**
-     * @throws \Chamilo\Libraries\Storage\Exception\DataClassNoResultException
-     */
-    public function createWhoIsOnlineForUserIdentifierAndLastAccessDate(int $userIdentifier, int $lastAccessDate): bool
+    public function createWhoIsOnlineForUserIdentifierAndLastAccessDate(string $userIdentifier, int $lastAccessDate
+    ): bool
     {
         $online = new Online();
 
@@ -30,12 +28,15 @@ class WhoIsOnlineService
         return $this->getWhoIsOnlineRepository()->createWhoIsOnline($online);
     }
 
-    public function findDistinctOnlineUserIdentifiers()
+    /**
+     * @return string[]
+     */
+    public function findDistinctOnlineUserIdentifiers(): array
     {
         return $this->getWhoIsOnlineRepository()->findDistinctOnlineUserIdentifiers();
     }
 
-    public function findWhoIsOnlineForUserIdentifier(int $userIdentifier): ?Online
+    public function findWhoIsOnlineForUserIdentifier(string $userIdentifier): ?Online
     {
         return $this->getWhoIsOnlineRepository()->findWhoIsOnlineForUserIdentifier($userIdentifier);
     }
@@ -45,18 +46,12 @@ class WhoIsOnlineService
         return $this->whoIsOnlineRepository;
     }
 
-    /**
-     * @throws \Chamilo\Libraries\Storage\Exception\DataClassNoResultException
-     */
     public function updateWhoIsOnline(Online $online): bool
     {
         return $this->getWhoIsOnlineRepository()->updateWhoIsOnline($online);
     }
 
-    /**
-     * @throws \Chamilo\Libraries\Storage\Exception\DataClassNoResultException
-     */
-    public function updateWhoIsOnlineForUserIdentifierWithCurrentTime(?int $userIdentifier): bool
+    public function updateWhoIsOnlineForUserIdentifierWithCurrentTime(?string $userIdentifier): bool
     {
         $time = time();
 

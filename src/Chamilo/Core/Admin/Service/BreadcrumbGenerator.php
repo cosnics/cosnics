@@ -12,8 +12,9 @@ use Chamilo\Libraries\Format\Structure\Breadcrumb;
  * name. Includes the possibility to add additional breadcrumbs between the package breadcrumb and the component
  * breadcrumb
  *
- * @package common\libraries
+ * @package Chamilo\Core\Admin\Service
  * @author  Sven Vanpoucke - Hogeschool Gent
+ * @author  Hans De Bisschop <hans.de.bisschop@ehb.be>
  */
 class BreadcrumbGenerator extends \Chamilo\Libraries\Format\Structure\BreadcrumbGenerator
 {

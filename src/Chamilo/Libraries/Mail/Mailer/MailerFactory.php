@@ -54,6 +54,7 @@ class MailerFactory
     }
 
     /**
+     * @return string[]
      * @throws \Symfony\Component\Cache\Exception\CacheException
      */
     public function getAvailableMailers(): array

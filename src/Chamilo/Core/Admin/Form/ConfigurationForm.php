@@ -3,6 +3,8 @@ namespace Chamilo\Core\Admin\Form;
 
 use Chamilo\Configuration\Service\ConfigurationService;
 use Chamilo\Configuration\Storage\DataClass\Setting;
+use Chamilo\Core\Admin\Service\SettingsConnectorFactory;
+use Chamilo\Core\Admin\Service\SettingsConnectorInterface;
 use Chamilo\Core\User\Storage\DataClass\User;
 use Chamilo\Libraries\Format\Form\FormValidator;
 use Chamilo\Libraries\Utilities\StringUtilities;
@@ -62,7 +64,7 @@ class ConfigurationForm extends FormValidator
 
         if (is_array($configuration['settings']) && count($configuration['settings']) > 0)
         {
-            $connector_class = $context . '\SettingsConnector';
+            $settingsConnector = $this->getSettingsConnectorFactory()->getSettingsConnectorForContext($context);
 
             foreach ($configuration['settings'] as $category_name => $settings)
             {
@@ -149,11 +151,19 @@ class ConfigurationForm extends FormValidator
                     else
                     {
                         $options_type = $setting['options']['type'];
+
                         if ($options_type == 'dynamic')
                         {
                             $options_source = $setting['options']['source'];
-                            $settingsConnector = new $connector_class();
-                            $options = $settingsConnector->$options_source();
+
+                            if ($settingsConnector instanceof SettingsConnectorInterface)
+                            {
+                                $options = $settingsConnector->$options_source();
+                            }
+                            else
+                            {
+                                $options = [];
+                            }
                         }
                         else
                         {
@@ -228,6 +238,11 @@ class ConfigurationForm extends FormValidator
     public function getConfigurationService(): ConfigurationService
     {
         return $this->getService(ConfigurationService::class);
+    }
+
+    public function getSettingsConnectorFactory(): SettingsConnectorFactory
+    {
+        return $this->getService(SettingsConnectorFactory::class);
     }
 
     protected function getUser(): ?User
@@ -419,7 +434,7 @@ class ConfigurationForm extends FormValidator
 
     public function setting_is_available(array $setting)
     {
-        $connector_class = $this->context . '\SettingsConnector';
+        $settingsConnector = $this->getSettingsConnectorFactory()->getSettingsConnectorForContext($this->context);
 
         $is_user_setting = $this->isUserSetting($setting);
         $isHidden = $this->isHidden($setting);
@@ -433,12 +448,10 @@ class ConfigurationForm extends FormValidator
             {
                 if ($has_availability_method)
                 {
-                    $availability_method_exists = method_exists(
-                        $connector_class, $setting['availability']['source']
-                    );
-                    if ($availability_method_exists)
+                    if ($settingsConnector instanceof SettingsConnectorInterface &&
+                        method_exists($settingsConnector, $setting['availability']['source']))
                     {
-                        return call_user_func([$connector_class, $setting['availability']['source']]);
+                        return $settingsConnector->$setting['availability']['source']();
                     }
                     else
                     {

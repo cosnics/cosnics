@@ -38,7 +38,7 @@
                 default="0">
                 <options
                     type="dynamic"
-                    source="get_fullname_formats" />
+                    source="getFullnameFormats" />
             </setting>
         </category>
         <category name="profile">
@@ -210,7 +210,7 @@
                 default=" ">
                 <options
                     type="dynamic"
-                    source="get_date_terms_and_conditions_update" />
+                    source="getDateTermsAndConditionsUpdate" />
             </setting>
             <setting
                 name="enable_terms_and_conditions"

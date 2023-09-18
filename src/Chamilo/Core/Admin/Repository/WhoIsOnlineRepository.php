@@ -29,16 +29,13 @@ class WhoIsOnlineRepository
         $this->configurationConsulter = $configurationConsulter;
     }
 
-    /**
-     * @throws \Chamilo\Libraries\Storage\Exception\DataClassNoResultException
-     */
     public function createWhoIsOnline(Online $online): bool
     {
         return $this->getDataClassRepository()->create($online);
     }
 
     /**
-     * @return int[]
+     * @return string[]
      */
     public function findDistinctOnlineUserIdentifiers(): array
     {
@@ -61,7 +58,7 @@ class WhoIsOnlineRepository
         );
     }
 
-    public function findWhoIsOnlineForUserIdentifier(int $userIdentifier): ?Online
+    public function findWhoIsOnlineForUserIdentifier(string $userIdentifier): ?Online
     {
         $condition = new EqualityCondition(
             new PropertyConditionVariable(Online::class, Online::PROPERTY_USER_ID),
@@ -83,9 +80,6 @@ class WhoIsOnlineRepository
         return $this->dataClassRepository;
     }
 
-    /**
-     * @throws \Chamilo\Libraries\Storage\Exception\DataClassNoResultException
-     */
     public function updateWhoIsOnline(Online $online): bool
     {
         return $this->getDataClassRepository()->update($online);

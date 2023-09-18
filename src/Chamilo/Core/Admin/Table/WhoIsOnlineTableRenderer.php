@@ -6,7 +6,6 @@ use Chamilo\Core\User\Manager;
 use Chamilo\Core\User\Storage\DataClass\User;
 use Chamilo\Libraries\Architecture\Application\Application;
 use Chamilo\Libraries\Architecture\Application\Routing\UrlGenerator;
-use Chamilo\Libraries\Format\Table\Column\DataClassPropertyTableColumn;
 use Chamilo\Libraries\Format\Table\Column\DataClassPropertyTableColumnFactory;
 use Chamilo\Libraries\Format\Table\Column\TableColumn;
 use Chamilo\Libraries\Format\Table\Extension\DataClassListTableRenderer;
@@ -51,25 +50,35 @@ class WhoIsOnlineTableRenderer extends DataClassListTableRenderer
 
     protected function initializeColumns(): void
     {
-        $this->addColumn($this->getDataClassPropertyTableColumnFactory()->getColumn(User::class, User::PROPERTY_OFFICIAL_CODE));
-        $this->addColumn($this->getDataClassPropertyTableColumnFactory()->getColumn(User::class, User::PROPERTY_LASTNAME));
-        $this->addColumn($this->getDataClassPropertyTableColumnFactory()->getColumn(User::class, User::PROPERTY_FIRSTNAME));
+        $this->addColumn(
+            $this->getDataClassPropertyTableColumnFactory()->getColumn(User::class, User::PROPERTY_OFFICIAL_CODE)
+        );
+        $this->addColumn(
+            $this->getDataClassPropertyTableColumnFactory()->getColumn(User::class, User::PROPERTY_LASTNAME)
+        );
+        $this->addColumn(
+            $this->getDataClassPropertyTableColumnFactory()->getColumn(User::class, User::PROPERTY_FIRSTNAME)
+        );
 
         $showEmail = $this->getConfigurationConsulter()->getSetting(['Chamilo\Core\User', 'show_email_addresses']);
 
         if ($showEmail)
         {
-            $this->addColumn($this->getDataClassPropertyTableColumnFactory()->getColumn(User::class, User::PROPERTY_EMAIL));
+            $this->addColumn(
+                $this->getDataClassPropertyTableColumnFactory()->getColumn(User::class, User::PROPERTY_EMAIL)
+            );
         }
 
-        $this->addColumn($this->getDataClassPropertyTableColumnFactory()->getColumn(User::class, User::PROPERTY_STATUS));
-        $this->addColumn($this->getDataClassPropertyTableColumnFactory()->getColumn(User::class, User::PROPERTY_PICTURE_URI));
+        $this->addColumn(
+            $this->getDataClassPropertyTableColumnFactory()->getColumn(User::class, User::PROPERTY_STATUS)
+        );
+        $this->addColumn(
+            $this->getDataClassPropertyTableColumnFactory()->getColumn(User::class, User::PROPERTY_PICTURE_URI)
+        );
     }
 
     /**
      * @param \Chamilo\Core\User\Storage\DataClass\User $user
-     *
-     * @throws \ReflectionException
      */
     protected function renderCell(TableColumn $column, TableResultPosition $resultPosition, $user): string
     {

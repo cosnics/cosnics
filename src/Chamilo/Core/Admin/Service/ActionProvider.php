@@ -13,6 +13,9 @@ use Chamilo\Libraries\Format\Tabs\ActionsTab;
 use Chamilo\Libraries\Format\Tabs\TabsCollection;
 use Symfony\Component\Translation\Translator;
 
+/**
+ * @package Chamilo\Core\Admin\Service
+ */
 class ActionProvider
 {
     /**
@@ -38,20 +41,12 @@ class ActionProvider
 
     public function addActionProvider(ActionProviderInterface $actionProvider): void
     {
-        $this->actionProviders[] = $actionProvider;
+        $this->actionProviders[$actionProvider->getContext()] = $actionProvider;
     }
 
     public function existsForContext(string $context): bool
     {
-        foreach ($this->actionProviders as $actionProvider)
-        {
-            if ($actionProvider->getContext() == $context)
-            {
-                return true;
-            }
-        }
-
-        return false;
+        return array_key_exists($context, $this->actionProviders);
     }
 
     /**
@@ -84,7 +79,7 @@ class ActionProvider
 
                 if ($actions->getSearchUrl())
                 {
-                    $search_form = new AdminSearchForm($actions->getSearchUrl(), $index);
+                    $search_form = new AdminSearchForm($actions->getSearchUrl(), (string) $index);
                     $actionsTab->addAction(
                         new Action(
                             $search_form->render(), null, new FontAwesomeGlyph(

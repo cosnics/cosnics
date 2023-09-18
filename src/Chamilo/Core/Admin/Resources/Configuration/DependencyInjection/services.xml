@@ -17,6 +17,14 @@
             <tag name="Chamilo\Core\Admin\Service\ActionProvider"/>
         </service>
 
+        <service id="Chamilo\Core\Admin\Service\SettingsConnectorFactory"/>
+        <service id="Chamilo\Core\Admin\Service\SettingsConnector">
+            <tag name="Chamilo\Core\Admin\Service\SettingsConnectorInterface"/>
+            <argument key="$themeSystemPathBuilder"
+                      type="service"
+                      id="Chamilo\Libraries\Format\Theme\ThemeSystemPathBuilder"/>
+        </service>
+
         <service id="Chamilo\Core\Admin\Service\Home\PortalHomeBlockRenderer">
             <tag name="Chamilo\Core\Home\Renderer\BlockRenderer"/>
         </service>

@@ -7,6 +7,9 @@ use Chamilo\Libraries\Format\Structure\Glyph\FontAwesomeGlyph;
 use Chamilo\Libraries\Format\Tabs\Action;
 use Chamilo\Libraries\Format\Tabs\Actions;
 
+/**
+ * @package Chamilo\Core\Admin\Service
+ */
 class AdminActionProvider extends AbstractActionProvider implements ActionProviderInterface
 {
 

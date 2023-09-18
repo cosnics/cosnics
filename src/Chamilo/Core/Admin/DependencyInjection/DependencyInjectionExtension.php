@@ -2,6 +2,7 @@
 namespace Chamilo\Core\Admin\DependencyInjection;
 
 use Chamilo\Core\Admin\DependencyInjection\CompilerPass\ActionProviderCompilerPass;
+use Chamilo\Core\Admin\DependencyInjection\CompilerPass\SettingsConnectorsCompilerPass;
 use Chamilo\Libraries\DependencyInjection\AbstractDependencyInjectionExtension;
 use Chamilo\Libraries\DependencyInjection\Interfaces\ICompilerPassExtension;
 use Chamilo\Libraries\DependencyInjection\Traits\ExtensionTrait;
@@ -33,5 +34,6 @@ class DependencyInjectionExtension extends AbstractDependencyInjectionExtension
     public function registerCompilerPasses(ContainerBuilder $container)
     {
         $container->addCompilerPass(new ActionProviderCompilerPass());
+        $container->addCompilerPass(new SettingsConnectorsCompilerPass());
     }
 }

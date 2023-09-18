@@ -8,7 +8,7 @@
                 default="0">
                 <options
                     type="dynamic"
-                    source="retrieve_namespaces" />
+                    source="retrieveNamespaces" />
             </setting>
         </category>
     </settings>

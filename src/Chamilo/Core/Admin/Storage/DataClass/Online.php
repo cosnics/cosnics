@@ -27,17 +27,17 @@ class Online extends DataClass
         return 'admin_online';
     }
 
-    public function getUserId(): ?int
+    public function getUserId(): ?string
     {
         return $this->getDefaultProperty(self::PROPERTY_USER_ID);
     }
 
-    public function setLastAccessDate(int $lastAccessDate)
+    public function setLastAccessDate(?int $lastAccessDate): void
     {
         $this->setDefaultProperty(self::PROPERTY_LAST_ACCESS_DATE, $lastAccessDate);
     }
 
-    public function setUserId(int $userId)
+    public function setUserId(?string $userId): void
     {
         $this->setDefaultProperty(self::PROPERTY_USER_ID, $userId);
     }

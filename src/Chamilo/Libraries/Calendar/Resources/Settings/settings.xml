@@ -2,228 +2,165 @@
 <package context="Chamilo\Libraries\Calendar">
     <settings>
         <category name="working_hours">
-            <setting
-                name="working_hours_start"
-                field="select"
-                default="0"
-                user_setting="1">
+            <setting name="working_hours_start"
+                     field="select"
+                     default="0"
+                     user_setting="1">
                 <options type="static">
-                    <option
-                        value="0"
-                        name="00" />
-                    <option
-                        value="1"
-                        name="01" />
-                    <option
-                        value="2"
-                        name="02" />
-                    <option
-                        value="3"
-                        name="03" />
-                    <option
-                        value="4"
-                        name="04" />
-                    <option
-                        value="5"
-                        name="05" />
-                    <option
-                        value="6"
-                        name="06" />
-                    <option
-                        value="7"
-                        name="07" />
-                    <option
-                        value="8"
-                        name="08" />
-                    <option
-                        value="9"
-                        name="09" />
-                    <option
-                        value="10"
-                        name="10" />
-                    <option
-                        value="11"
-                        name="11" />
-                    <option
-                        value="12"
-                        name="12" />
-                    <option
-                        value="13"
-                        name="13" />
-                    <option
-                        value="14"
-                        name="14" />
-                    <option
-                        value="15"
-                        name="15" />
-                    <option
-                        value="16"
-                        name="16" />
-                    <option
-                        value="17"
-                        name="17" />
-                    <option
-                        value="18"
-                        name="18" />
-                    <option
-                        value="19"
-                        name="19" />
-                    <option
-                        value="20"
-                        name="20" />
-                    <option
-                        value="21"
-                        name="21" />
-                    <option
-                        value="22"
-                        name="22" />
-                    <option
-                        value="23"
-                        name="23" />
+                    <option value="0"
+                            name="00"/>
+                    <option value="1"
+                            name="01"/>
+                    <option value="2"
+                            name="02"/>
+                    <option value="3"
+                            name="03"/>
+                    <option value="4"
+                            name="04"/>
+                    <option value="5"
+                            name="05"/>
+                    <option value="6"
+                            name="06"/>
+                    <option value="7"
+                            name="07"/>
+                    <option value="8"
+                            name="08"/>
+                    <option value="9"
+                            name="09"/>
+                    <option value="10"
+                            name="10"/>
+                    <option value="11"
+                            name="11"/>
+                    <option value="12"
+                            name="12"/>
+                    <option value="13"
+                            name="13"/>
+                    <option value="14"
+                            name="14"/>
+                    <option value="15"
+                            name="15"/>
+                    <option value="16"
+                            name="16"/>
+                    <option value="17"
+                            name="17"/>
+                    <option value="18"
+                            name="18"/>
+                    <option value="19"
+                            name="19"/>
+                    <option value="20"
+                            name="20"/>
+                    <option value="21"
+                            name="21"/>
+                    <option value="22"
+                            name="22"/>
+                    <option value="23"
+                            name="23"/>
                 </options>
             </setting>
-            <setting
-                name="working_hours_end"
-                field="select"
-                default="24"
-                user_setting="1">
+            <setting name="working_hours_end"
+                     field="select"
+                     default="24"
+                     user_setting="1">
                 <options type="static">
-                    <option
-                        value="0"
-                        name="00" />
-                    <option
-                        value="1"
-                        name="01" />
-                    <option
-                        value="2"
-                        name="02" />
-                    <option
-                        value="3"
-                        name="03" />
-                    <option
-                        value="4"
-                        name="04" />
-                    <option
-                        value="5"
-                        name="05" />
-                    <option
-                        value="6"
-                        name="06" />
-                    <option
-                        value="7"
-                        name="07" />
-                    <option
-                        value="8"
-                        name="08" />
-                    <option
-                        value="9"
-                        name="09" />
-                    <option
-                        value="10"
-                        name="10" />
-                    <option
-                        value="11"
-                        name="11" />
-                    <option
-                        value="12"
-                        name="12" />
-                    <option
-                        value="13"
-                        name="13" />
-                    <option
-                        value="14"
-                        name="14" />
-                    <option
-                        value="15"
-                        name="15" />
-                    <option
-                        value="16"
-                        name="16" />
-                    <option
-                        value="17"
-                        name="17" />
-                    <option
-                        value="18"
-                        name="18" />
-                    <option
-                        value="19"
-                        name="19" />
-                    <option
-                        value="20"
-                        name="20" />
-                    <option
-                        value="21"
-                        name="21" />
-                    <option
-                        value="22"
-                        name="22" />
-                    <option
-                        value="23"
-                        name="23" />
+                    <option value="0"
+                            name="00"/>
+                    <option value="1"
+                            name="01"/>
+                    <option value="2"
+                            name="02"/>
+                    <option value="3"
+                            name="03"/>
+                    <option value="4"
+                            name="04"/>
+                    <option value="5"
+                            name="05"/>
+                    <option value="6"
+                            name="06"/>
+                    <option value="7"
+                            name="07"/>
+                    <option value="8"
+                            name="08"/>
+                    <option value="9"
+                            name="09"/>
+                    <option value="10"
+                            name="10"/>
+                    <option value="11"
+                            name="11"/>
+                    <option value="12"
+                            name="12"/>
+                    <option value="13"
+                            name="13"/>
+                    <option value="14"
+                            name="14"/>
+                    <option value="15"
+                            name="15"/>
+                    <option value="16"
+                            name="16"/>
+                    <option value="17"
+                            name="17"/>
+                    <option value="18"
+                            name="18"/>
+                    <option value="19"
+                            name="19"/>
+                    <option value="20"
+                            name="20"/>
+                    <option value="21"
+                            name="21"/>
+                    <option value="22"
+                            name="22"/>
+                    <option value="23"
+                            name="23"/>
                 </options>
             </setting>
-            <setting
-                name="hide_none_working_hours"
-                field="toggle"
-                default="0"
-                user_setting="1">
+            <setting name="hide_none_working_hours"
+                     field="toggle"
+                     default="0"
+                     user_setting="1">
                 <options type="static">
-                    <option
-                        name="hide_none_working_hours"
-                        value="1" />
+                    <option name="hide_none_working_hours"
+                            value="1"/>
                 </options>
             </setting>
-            <setting
-                name="default_view"
-                field="radio"
-                default="Month"
-                user_setting="1">
+            <setting name="default_view"
+                     field="radio"
+                     default="Month"
+                     user_setting="1">
                 <options type="static">
-                    <option
-                        name="Month"
-                        value="Month" />
-                    <option
-                        name="Week"
-                        value="Week" />
-                    <option
-                        name="Day"
-                        value="Day" />
-                    <option
-                        name="List"
-                        value="List" />
+                    <option name="Month"
+                            value="Month"/>
+                    <option name="Week"
+                            value="Week"/>
+                    <option name="Day"
+                            value="Day"/>
+                    <option name="List"
+                            value="List"/>
                 </options>
             </setting>
-            <setting
-                name="first_day_of_week"
-                field="radio"
-                default="monday"
-                user_setting="1">
+            <setting name="first_day_of_week"
+                     field="radio"
+                     default="monday"
+                     user_setting="1">
                 <options type="static">
-                    <option
-                        name="Sunday"
-                        value="sunday" />
-                    <option
-                        name="Monday"
-                        value="monday" />
+                    <option name="Sunday"
+                            value="sunday"/>
+                    <option name="Monday"
+                            value="monday"/>
                 </options>
             </setting>
-            <setting
-                name="platform_timezone"
-                field="select"
-                default="Europe/Brussels"
-                user_setting="1">
-                <options
-                    type="dynamic"
-                    source="get_time_zones" />
-                <availability source="is_allowed_to_change_platform_timezone" />
+            <setting name="platform_timezone"
+                     field="select"
+                     default="Europe/Brussels"
+                     user_setting="1">
+                <options type="dynamic"
+                         source="getTimeZones"/>
+                <availability source="isAllowedToChangePlatformTimezone"/>
             </setting>
         </category>
         <category name="caching">
-            <setting
-                name="refresh_external"
-                field="text"
-                default="60"
-                user_setting="1" />
+            <setting name="refresh_external"
+                     field="text"
+                     default="60"
+                     user_setting="1"/>
         </category>
     </settings>
 </package>
