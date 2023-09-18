@@ -58,7 +58,7 @@ class MoverComponent extends Manager
      * @param \libraries\format\BreadcrumbTrail $breadcrumb_trail
      * @param BreadcrumbTrail $breadcrumb_trail
      */
-    public function addAdditionalBreadcrumbs(BreadcrumbTrail $breadcrumb_trail)
+    public function addAdditionalBreadcrumbs(BreadcrumbTrail $breadcrumb_trail): void
     {
         $breadcrumb_trail->add(
             new Breadcrumb(

@@ -102,7 +102,7 @@ class UpdaterComponent extends Manager
      *
      * @param \Chamilo\Libraries\Format\Structure\BreadcrumbTrail $breadcrumb_trail
      */
-    public function addAdditionalBreadcrumbs(BreadcrumbTrail $breadcrumb_trail)
+    public function addAdditionalBreadcrumbs(BreadcrumbTrail $breadcrumb_trail): void
     {
         $breadcrumb_trail->add(
             new Breadcrumb(

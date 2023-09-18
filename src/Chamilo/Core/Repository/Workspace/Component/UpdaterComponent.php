@@ -25,7 +25,7 @@ class UpdaterComponent extends TabComponent
      *
      * @param BreadcrumbTrail $breadcrumb_trail
      */
-    public function addAdditionalBreadcrumbs(BreadcrumbTrail $breadcrumb_trail)
+    public function addAdditionalBreadcrumbs(BreadcrumbTrail $breadcrumb_trail): void
     {
         $browserSource = $this->get_parameter(self::PARAM_BROWSER_SOURCE);
 

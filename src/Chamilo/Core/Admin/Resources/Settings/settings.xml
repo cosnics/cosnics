@@ -88,7 +88,7 @@
                 default="Chamilo\Core\Home">
                 <options
                     type="dynamic"
-                    source="get_active_applications" />
+                    source="getActiveApplications" />
             </setting>
             <setting
                 name="active_online_email_editor"
@@ -204,8 +204,8 @@
                 user_setting="1">
                 <options
                     type="dynamic"
-                    source="get_languages" />
-                <availability source="is_allowed_to_change_platform_language" />
+                    source="getLanguages" />
+                <availability source="isAllowedToChangePlatformLanguage" />
             </setting>
             <setting
                 name="theme"
@@ -214,8 +214,8 @@
                 user_setting="1">
                 <options
                     type="dynamic"
-                    source="get_themes" />
-                <availability source="is_allowed_to_change_theme" />
+                    source="getThemes" />
+                <availability source="isAllowedToChangeTheme" />
             </setting>
             <setting
                 name="html_editor"
@@ -374,7 +374,7 @@
                 default="Chamilo\Application\Weblcms">
                 <options
                     type="dynamic"
-                    source="get_active_applications" />
+                    source="getActiveApplications" />
             </setting>
         </category>
 
