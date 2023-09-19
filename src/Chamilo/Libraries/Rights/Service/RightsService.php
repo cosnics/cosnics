@@ -429,7 +429,6 @@ class RightsService
 
     /**
      * @return int[]
-     * @see DataManager::retrieve_granted_rights_array()
      */
     protected function findGrantedRightsForLocationAndCondition(
         string $rightsLocationEntityRightClassName, RightsLocation $location, Condition $condition
@@ -464,7 +463,6 @@ class RightsService
      * @param \Chamilo\Libraries\Rights\Interfaces\RightsEntityProvider[] $entities
      *
      * @return int[]
-     * @see DataManager::retrieve_granted_rights_array()
      */
     protected function findGrantedRightsForUserIdentifierLocationAndEntities(
         string $rightsLocationEntityRightClassName, string $userIdentifier, RightsLocation $location, array $entities
@@ -586,7 +584,6 @@ class RightsService
      *
      * @return string[]
      * @throws \Chamilo\Libraries\Storage\Exception\DataClassNoResultException
-     * @see DataManager::retrieve_location_ids_by_identifiers()
      */
     protected function findRightsLocationIdentifiersByIdentifiersAndType(
         string $rightsLocationClassName, array $identifiers, int $type
@@ -753,7 +750,6 @@ class RightsService
      *
      * @return string[]
      * @throws \Chamilo\Libraries\Storage\Exception\DataClassNoResultException
-     * @see DataManager::retrieve_location_parent_ids()
      */
     protected function getLocationParentIdentifiersForLocationIdentifiers(
         string $rightsLocationClassName, array $locationIdentifiers
@@ -916,8 +912,6 @@ class RightsService
     /**
      * @return string[]
      * @throws \Chamilo\Libraries\Storage\Exception\DataClassNoResultException
-     * @see RightsUtil::get_target_entities_for_location()
-     * @see DataManager:: retrieve_target_entities_array()
      */
     protected function getTargetEntitiesForLocation(
         string $rightsLocationEntityRightClassName, int $right, RightsLocation $location

@@ -191,9 +191,7 @@ class GetTargetEntitiesComponent extends \Chamilo\Application\Weblcms\Ajax\Manag
                     case CoursePlatformGroupEntity::ENTITY_TYPE :
                         foreach ($entity_ids as $group_id)
                         {
-                            $group = \Chamilo\Core\Group\Storage\DataManager::retrieve_by_id(
-                                Group::class, $group_id
-                            );
+                            $group = $this->getGroupService()->findGroupByIdentifier($group_id);
                             if ($group)
                             {
                                 $targetEntityNames[self::TARGET_ENTITY_PLATFORM_GROUPS][] = $group->get_name();

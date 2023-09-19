@@ -2,14 +2,11 @@
 namespace Chamilo\Core\User\Storage\DataClass;
 
 use Chamilo\Configuration\Service\Consulter\ConfigurationConsulter;
-use Chamilo\Core\Group\Storage\DataClass\GroupRelUser;
-use Chamilo\Core\Group\Storage\DataManager;
+use Chamilo\Core\Group\Service\GroupMembershipService;
+use Chamilo\Core\Group\Service\GroupsTreeTraverser;
 use Chamilo\Core\User\Manager;
 use Chamilo\Libraries\DependencyInjection\DependencyInjectionContainerBuilder;
 use Chamilo\Libraries\Storage\DataClass\DataClass;
-use Chamilo\Libraries\Storage\Query\Condition\EqualityCondition;
-use Chamilo\Libraries\Storage\Query\Variable\PropertyConditionVariable;
-use Chamilo\Libraries\Storage\Query\Variable\StaticConditionVariable;
 use Chamilo\Libraries\Translation\Translation;
 
 /**
@@ -75,13 +72,7 @@ class User extends DataClass
 
     public function delete(): bool
     {
-        $group_rel_user_condition = new EqualityCondition(
-            new PropertyConditionVariable(GroupRelUser::class, GroupRelUser::PROPERTY_USER_ID),
-            new StaticConditionVariable($this->get_id())
-        );
-        $success = DataManager::deletes(
-            GroupRelUser::class, $group_rel_user_condition
-        );
+        $success = $this->getGroupMembershipService()->unsubscribeUserFromAllGroups($this);
 
         if ($success)
         {
@@ -170,6 +161,18 @@ class User extends DataClass
                 self::PROPERTY_TERMS_DATE
             ]
         );
+    }
+
+    public function getGroupMembershipService(): GroupMembershipService
+    {
+        return DependencyInjectionContainerBuilder::getInstance()->createContainer()->get(
+            GroupMembershipService::class
+        );
+    }
+
+    public function getGroupsTreeTraverser(): GroupsTreeTraverser
+    {
+        return DependencyInjectionContainerBuilder::getInstance()->createContainer()->get(GroupsTreeTraverser::class);
     }
 
     public function getPlatformAdmin(): int
@@ -305,13 +308,22 @@ class User extends DataClass
     /**
      * @param false $only_retrieve_ids
      *
-     * @return \Doctrine\Common\Collections\ArrayCollection<\Chamilo\Core\Group\Storage\DataClass\Group>|int
+     * @return \Doctrine\Common\Collections\ArrayCollection<\Chamilo\Core\Group\Storage\DataClass\Group>|string[]
+     * @throws \Chamilo\Libraries\Storage\Exception\DataClassNoResultException
+     * @deprecated Use GroupsTreeTraverser::findAllSubscribedGroupIdentifiersForUserIdentifier() or
+     *             GroupsTreeTraverser::findAllSubscribedGroupsForUserIdentifier() based ont he value of
+     *             $only_retrieve_ids
      */
     public function get_groups($only_retrieve_ids = false)
     {
-        return DataManager::retrieve_all_subscribed_groups_array(
-            $this->getId(), $only_retrieve_ids
-        );
+        if ($only_retrieve_ids)
+        {
+            return $this->getGroupsTreeTraverser()->findAllSubscribedGroupIdentifiersForUserIdentifier($this->getId());
+        }
+        else
+        {
+            return $this->getGroupsTreeTraverser()->findAllSubscribedGroupsForUserIdentifier($this->getId());
+        }
     }
 
     /**
@@ -427,7 +439,7 @@ class User extends DataClass
 
     public function get_user_groups()
     {
-        return DataManager::retrieve_user_groups($this->get_id());
+        return $this->getGroupsTreeTraverser()->findDirectlySubscribedGroupsForUserIdentifier($this->getId());
     }
 
     /**

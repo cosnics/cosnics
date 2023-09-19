@@ -3,7 +3,6 @@ namespace Chamilo\Application\Weblcms\Rights\Entities;
 
 use Chamilo\Application\Weblcms\Ajax\Manager;
 use Chamilo\Core\Group\Storage\DataClass\Group;
-use Chamilo\Core\Group\Storage\DataManager;
 use Chamilo\Core\Rights\Entity\PlatformGroupEntity;
 use Chamilo\Libraries\Format\Form\Element\AdvancedElementFinder\AdvancedElementFinderElementType;
 use Chamilo\Libraries\Storage\Query\Condition\AndCondition;
@@ -66,7 +65,7 @@ class CoursePlatformGroupEntity extends PlatformGroupEntity
     public function getElementFinderType()
     {
         $elementFinderType = static::getElementFinderTypeInstance();
-        $elementFinderType->set_parameters(array('course_id' => $this->course_id));
+        $elementFinderType->set_parameters(['course_id' => $this->course_id]);
 
         return $elementFinderType;
     }
@@ -155,11 +154,6 @@ class CoursePlatformGroupEntity extends PlatformGroupEntity
         return $this->subscribed_platform_group_ids;
     }
 
-    public function set_subscribed_platform_group_ids($subscribed_platform_group_ids)
-    {
-        $this->subscribed_platform_group_ids = $subscribed_platform_group_ids;
-    }
-
     /**
      * Getters and setters
      */
@@ -182,11 +176,15 @@ class CoursePlatformGroupEntity extends PlatformGroupEntity
     {
         if (is_null($this->platform_group_cache[$user_id]))
         {
-            $this->platform_group_cache[$user_id] = DataManager::retrieve_all_subscribed_groups_array(
-                $user_id, true
-            );
+            $this->platform_group_cache[$user_id] =
+                $this->getGroupsTreeTraverser()->findAllSubscribedGroupIdentifiersForUserIdentifier($user_id);
         }
 
         return $this->platform_group_cache[$user_id];
+    }
+
+    public function set_subscribed_platform_group_ids($subscribed_platform_group_ids)
+    {
+        $this->subscribed_platform_group_ids = $subscribed_platform_group_ids;
     }
 }

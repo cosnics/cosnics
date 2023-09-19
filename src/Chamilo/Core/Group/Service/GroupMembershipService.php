@@ -144,6 +144,26 @@ class GroupMembershipService
         return $this->getGroupMembershipRepository()->findGroupRelUserByGroupCodeAndUserId($groupCode, $user->getId());
     }
 
+    public function getGroupUserRelationByGroupIdentifierAndUserIdentifier(
+        string $groupIdentifier, string $userIdentifier
+    ): ?GroupRelUser
+    {
+        return $this->getGroupMembershipRepository()->findGroupUserRelationByGroupIdentifierAndUserIdentifier(
+            $groupIdentifier, $userIdentifier
+        );
+    }
+
+    /**
+     * @param string $groupIdentifier
+     *
+     * @return \Doctrine\Common\Collections\ArrayCollection<\Chamilo\Core\Group\Storage\DataClass\GroupRelUser>
+     * @throws \Chamilo\Libraries\Storage\Exception\DataClassNoResultException
+     */
+    public function getGroupUserRelationsByGroupIdentifier(string $groupIdentifier): ArrayCollection
+    {
+        return $this->getGroupMembershipRepository()->getGroupUserRelationsByGroupIdentifier($groupIdentifier);
+    }
+
     public function getUserService(): UserService
     {
         return $this->userService;
@@ -210,6 +230,52 @@ class GroupMembershipService
         foreach ($oldUsers as $oldUser)
         {
             $this->unsubscribeUserFromGroup($group, $oldUser);
+        }
+
+        return true;
+    }
+
+    /**
+     * @throws \Chamilo\Libraries\Storage\Exception\DataClassNoResultException
+     */
+    public function unsubscribeAllUsersFromGroup(Group $group): bool
+    {
+        $groupUserRelations =
+            $this->getGroupMembershipRepository()->getGroupUserRelationsByGroupIdentifier($group->getId());
+
+        foreach ($groupUserRelations as $groupUserRelation)
+        {
+            if (!$this->getGroupMembershipRepository()->deleteGroupUserRelation($groupUserRelation))
+            {
+                throw new RuntimeException(
+                    sprintf(
+                        'Could not unsubscribe user %s from group %s', $groupUserRelation->get_user_id(),
+                        $groupUserRelation->get_group_id()
+                    )
+                );
+            }
+
+            if (!$this->groupEventNotifier->afterUnsubscribe(
+                $group, $this->getUserService()->findUserByIdentifier($groupUserRelation->get_user_id())
+            ))
+            {
+                return false;
+            }
+        }
+
+        return true;
+    }
+
+    /**
+     * @throws \Chamilo\Libraries\Storage\Exception\DataClassNoResultException
+     */
+    public function unsubscribeUserFromAllGroups(User $user): bool
+    {
+        $groups = $this->groupsTreeTraverser->findDirectlySubscribedGroupsForUserIdentifier($user->getId());
+
+        foreach ($groups as $group)
+        {
+            $this->unsubscribeUserFromGroup($group, $user);
         }
 
         return true;

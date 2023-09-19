@@ -4,6 +4,7 @@ namespace Chamilo\Application\Weblcms\Admin\Extension\Platform\Entity;
 use Chamilo\Application\Weblcms\Admin\Extension\Platform\Ajax\Manager;
 use Chamilo\Application\Weblcms\Storage\DataClass\CourseCategory;
 use Chamilo\Application\Weblcms\Storage\DataManager;
+use Chamilo\Core\Group\Service\GroupService;
 use Chamilo\Core\Rights\Entity\NestedRightsEntity;
 use Chamilo\Libraries\Architecture\Application\Application;
 use Chamilo\Libraries\Architecture\Application\Routing\UrlGenerator;
@@ -87,6 +88,11 @@ class CourseCategoryEntity implements NestedRightsEntity
         return new AdvancedElementFinderElementType(
             'course_categories', Translation::get('CourseCategories'), __NAMESPACE__, 'course_category_feed', []
         );
+    }
+
+    public function getGroupService(): GroupService
+    {
+        return DependencyInjectionContainerBuilder::getInstance()->createContainer()->get(GroupService::class);
     }
 
     public static function getInstance()
@@ -228,7 +234,7 @@ class CourseCategoryEntity implements NestedRightsEntity
      */
     public function get_root_ids()
     {
-        return [DataManager::get_root_group()->get_id()];
+        return [$this->getGroupService()->findRootGroup()->getId()];
     }
 
     /**

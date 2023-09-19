@@ -5,7 +5,6 @@ use Chamilo\Application\Weblcms\Course\Storage\DataClass\Course;
 use Chamilo\Application\Weblcms\Course\Storage\DataManager;
 use Chamilo\Application\Weblcms\Storage\DataClass\CourseEntityRelation;
 use Chamilo\Application\Weblcms\Storage\Repository\Interfaces\WeblcmsRepositoryInterface;
-use Chamilo\Core\Group\Storage\DataClass\Group;
 use Chamilo\Core\User\Service\UserService;
 use Chamilo\Core\User\Storage\DataClass\User;
 use Chamilo\Libraries\DependencyInjection\DependencyInjectionContainerBuilder;
@@ -43,7 +42,6 @@ class WeblcmsRepository implements WeblcmsRepositoryInterface
     }
 
     /**
-     *
      * @return \Chamilo\Core\User\Service\UserService
      */
     private function getUserService()
@@ -102,18 +100,6 @@ class WeblcmsRepository implements WeblcmsRepositoryInterface
         return DataManager::retrieve(
             CourseEntityRelation::class, new DataClassRetrieveParameters($condition)
         );
-    }
-
-    /**
-     * Retrieves a group by a code
-     *
-     * @param string $groupCode
-     *
-     * @return Group
-     */
-    public function retrieveGroupByCode($groupCode)
-    {
-        return \Chamilo\Core\Group\Storage\DataManager::retrieve_group_by_code($groupCode);
     }
 
     /**

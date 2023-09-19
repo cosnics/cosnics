@@ -1,8 +1,9 @@
 <?php
 namespace Chamilo\Core\Rights\Entity;
 
+use Chamilo\Core\Group\Service\GroupService;
+use Chamilo\Core\Group\Service\GroupsTreeTraverser;
 use Chamilo\Core\Group\Storage\DataClass\Group;
-use Chamilo\Core\Group\Storage\DataManager;
 use Chamilo\Core\Rights\Manager;
 use Chamilo\Libraries\Architecture\Application\Application;
 use Chamilo\Libraries\Architecture\Application\Routing\UrlGenerator;
@@ -10,8 +11,6 @@ use Chamilo\Libraries\DependencyInjection\DependencyInjectionContainerBuilder;
 use Chamilo\Libraries\Format\Form\Element\AdvancedElementFinder\AdvancedElementFinderElement;
 use Chamilo\Libraries\Format\Form\Element\AdvancedElementFinder\AdvancedElementFinderElementType;
 use Chamilo\Libraries\Format\Structure\Glyph\FontAwesomeGlyph;
-use Chamilo\Libraries\Storage\Parameters\DataClassCountParameters;
-use Chamilo\Libraries\Storage\Parameters\DataClassRetrievesParameters;
 use Chamilo\Libraries\Translation\Translation;
 use Chamilo\Libraries\Utilities\StringUtilities;
 
@@ -49,11 +48,7 @@ class PlatformGroupEntity implements NestedRightsEntity
      */
     public function count_entity_items($condition = null)
     {
-        $condition = $this->get_condition($condition);
-
-        return DataManager::count(
-            Group::class, new DataClassCountParameters($condition)
-        );
+        return $this->getGroupService()->countGroups($this->get_condition($condition));
     }
 
     /**
@@ -80,6 +75,16 @@ class PlatformGroupEntity implements NestedRightsEntity
             'platform_groups', Translation::get('PlatformGroups'), Manager::CONTEXT . '\Ajax',
             'platform_group_entity_feed', []
         );
+    }
+
+    public function getGroupService(): GroupService
+    {
+        return DependencyInjectionContainerBuilder::getInstance()->createContainer()->get(GroupService::class);
+    }
+
+    public function getGroupsTreeTraverser(): GroupsTreeTraverser
+    {
+        return DependencyInjectionContainerBuilder::getInstance()->createContainer()->get(GroupsTreeTraverser::class);
     }
 
     public static function getInstance()
@@ -112,7 +117,8 @@ class PlatformGroupEntity implements NestedRightsEntity
      */
     public function get_element_finder_element($id)
     {
-        $group = DataManager::retrieve_by_id(Group::class, $id);
+        $group = $this->getGroupService()->findGroupByIdentifier($id);
+
         if (!$group)
         {
             return null;
@@ -195,7 +201,7 @@ class PlatformGroupEntity implements NestedRightsEntity
      */
     public function get_root_ids()
     {
-        return [DataManager::get_root_group()->get_id()];
+        return [$this->getGroupService()->findRootGroup()->getId()];
     }
 
     /**
@@ -234,7 +240,7 @@ class PlatformGroupEntity implements NestedRightsEntity
     /**
      * Retrieves the entity item ids relevant for a given user (direct subscribed platformgroups and their parents)
      *
-     * @param $user_id int
+     * @param $user_id
      *
      * @return array
      */
@@ -242,9 +248,8 @@ class PlatformGroupEntity implements NestedRightsEntity
     {
         if (is_null($this->platform_group_cache[$user_id]))
         {
-            $this->platform_group_cache[$user_id] = DataManager::retrieve_all_subscribed_groups_array(
-                $user_id, true
-            );
+            $this->platform_group_cache[$user_id] =
+                $this->getGroupsTreeTraverser()->findAllSubscribedGroupIdentifiersForUserIdentifier($user_id);
         }
 
         return $this->platform_group_cache[$user_id];
@@ -262,10 +267,6 @@ class PlatformGroupEntity implements NestedRightsEntity
      */
     public function retrieve_entity_items($condition = null, $offset = null, $count = null, $order_property = null)
     {
-        $condition = $this->get_condition($condition);
-
-        return DataManager::retrieves(
-            Group::class, new DataClassRetrievesParameters($condition, $count, $offset, $order_property)
-        );
+        return $this->getGroupService()->findGroups($this->get_condition($condition), $offset, $count, $order_property);
     }
 }

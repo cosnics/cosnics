@@ -1,23 +1,21 @@
 <?php
 namespace Chamilo\Core\Group\Menu;
 
-use Chamilo\Core\Group\Storage\DataClass\Group;
-use Chamilo\Core\Group\Storage\DataManager;
+use Chamilo\Core\Group\Service\GroupService;
+use Chamilo\Libraries\DependencyInjection\DependencyInjectionContainerBuilder;
 use Chamilo\Libraries\Format\Menu\TreeMenu\TreeMenuDataProvider;
 use Chamilo\Libraries\Format\Menu\TreeMenu\TreeMenuItem;
-use Chamilo\Libraries\Storage\Parameters\DataClassRetrievesParameters;
-use Chamilo\Libraries\Storage\Query\Condition\EqualityCondition;
-use Chamilo\Libraries\Storage\Query\OrderBy;
-use Chamilo\Libraries\Storage\Query\OrderProperty;
-use Chamilo\Libraries\Storage\Query\Variable\PropertyConditionVariable;
-use Chamilo\Libraries\Storage\Query\Variable\StaticConditionVariable;
 
 class GroupTreeMenuDataProvider extends TreeMenuDataProvider
 {
-    const PARAM_ID = 'group_id';
+    public const PARAM_ID = 'group_id';
+
+    public function getGroupService(): GroupService
+    {
+        return DependencyInjectionContainerBuilder::getInstance()->createContainer()->get(GroupService::class);
+    }
 
     /**
-     *
      * @see \Chamilo\Libraries\Format\Menu\TreeMenu\TreeMenuDataProvider::get_id_param()
      */
     public function get_id_param()
@@ -26,35 +24,23 @@ class GroupTreeMenuDataProvider extends TreeMenuDataProvider
     }
 
     /**
-     *
      * @param \Chamilo\Libraries\Format\Menu\TreeMenu\TreeMenuItem $parent_menu_item
-     * @param integer $parentId
+     * @param string $parentId
      */
     private function get_menu_items($parent_menu_item, $parentId = 0)
     {
-        $condition = new EqualityCondition(
-            new PropertyConditionVariable(Group::class, Group::PROPERTY_PARENT_ID),
-            new StaticConditionVariable($parentId)
-        );
-        $groups = DataManager::retrieves(
-            Group::class, new DataClassRetrievesParameters(
-                $condition, null, null,
-                new OrderBy(array(new OrderProperty(new PropertyConditionVariable(Group::class, Group::PROPERTY_NAME))))
-            )
-        );
+        $groups = $this->getGroupService()->findGroupsForParentIdentifier($parentId);
 
         foreach ($groups as $group)
         {
-            $group_id = $group->get_id();
-
             $menu_item = new TreeMenuItem();
             $menu_item->set_title($group->get_name());
-            $menu_item->set_id($group->get_id());
-            $menu_item->set_url($this->format_url($group->get_id()));
+            $menu_item->set_id($group->getId());
+            $menu_item->set_url($this->format_url($group->getId()));
 
-            if ($group->has_children())
+            if ($group->hasChildren())
             {
-                $this->get_menu_items($menu_item, $group->get_id());
+                $this->get_menu_items($menu_item, $group->getId());
             }
 
             $parent_menu_item->add_child($menu_item);
@@ -62,30 +48,20 @@ class GroupTreeMenuDataProvider extends TreeMenuDataProvider
     }
 
     /**
-     *
      * @see \Chamilo\Libraries\Format\Menu\TreeMenu\TreeMenuDataProvider::get_tree_menu_data()
      */
     public function get_tree_menu_data()
     {
-        $condition = new EqualityCondition(
-            new PropertyConditionVariable(Group::class, Group::PROPERTY_PARENT_ID), new StaticConditionVariable(0)
-        );
-        $group = DataManager::retrieves(
-            Group::class, new DataClassRetrievesParameters(
-                $condition, 1, null,
-                new OrderBy(array(new OrderProperty(new PropertyConditionVariable(Group::class, Group::PROPERTY_NAME))))
-            )
-        )->current();
+        $group = $this->getGroupService()->findRootGroup();
 
         $menu_item = new TreeMenuItem();
         $menu_item->set_title($group->get_name());
-        $menu_item->set_id($group->get_id());
-        // $menu_item['url'] = $this->get_url($group->get_id());
+        $menu_item->set_id($group->getId());
         $menu_item->set_url($this->get_url());
 
-        if ($group->has_children())
+        if ($group->hasChildren())
         {
-            $this->get_menu_items($menu_item, $group->get_id());
+            $this->get_menu_items($menu_item, $group->getId());
         }
 
         $menu_item->set_class('home');

@@ -160,7 +160,6 @@ class DataManager
         );
     }
 
-
     public static function getService(string $serviceName)
     {
         return DependencyInjectionContainerBuilder::getInstance()->createContainer()->get(
@@ -234,7 +233,6 @@ class DataManager
 
     /**
      * @template retrieveDataClassName
-     *
      * @param class-string<retrieveDataClassName> $dataClassName
      *
      * @return retrieveDataClassName
@@ -248,7 +246,6 @@ class DataManager
 
     /**
      * @template retrieveById
-     *
      * @param class-string<retrieveById> $dataClassName
      * @param int $identifier
      *
@@ -291,7 +288,6 @@ class DataManager
 
     /**
      * @template tRetrieves
-     *
      * @param class-string<tRetrieves> $dataClassName
      * @param \Chamilo\Libraries\Storage\Parameters\DataClassRetrievesParameters $parameters
      *

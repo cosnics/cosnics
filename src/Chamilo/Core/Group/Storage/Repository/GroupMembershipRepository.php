@@ -153,6 +153,27 @@ class GroupMembershipRepository
         return $this->getDataClassRepository()->retrieveById(GroupRelUser::class, $groupRelUserIdentifier);
     }
 
+    public function findGroupUserRelationByGroupIdentifierAndUserIdentifier(
+        string $groupIdentifier, string $userIdentifier
+    ): ?GroupRelUser
+    {
+        $conditions = [];
+
+        $conditions[] = new EqualityCondition(
+            new PropertyConditionVariable(GroupRelUser::class, GroupRelUser::PROPERTY_GROUP_ID),
+            new StaticConditionVariable($groupIdentifier)
+        );
+        $conditions[] = new EqualityCondition(
+            new PropertyConditionVariable(GroupRelUser::class, GroupRelUser::PROPERTY_USER_ID),
+            new StaticConditionVariable($userIdentifier)
+        );
+        $condition = new AndCondition($conditions);
+
+        return $this->getDataClassRepository()->retrieve(
+            GroupRelUser::class, new DataClassRetrieveParameters($condition)
+        );
+    }
+
     /**
      * @return string[]
      */
@@ -235,6 +256,24 @@ class GroupMembershipRepository
     public function getDataClassRepository(): DataClassRepository
     {
         return $this->dataClassRepository;
+    }
+
+    /**
+     * @param string $groupIdentifier
+     *
+     * @return \Doctrine\Common\Collections\ArrayCollection<\Chamilo\Core\Group\Storage\DataClass\GroupRelUser>
+     * @throws \Chamilo\Libraries\Storage\Exception\DataClassNoResultException
+     */
+    public function getGroupUserRelationsByGroupIdentifier(string $groupIdentifier): ArrayCollection
+    {
+        $condition = new EqualityCondition(
+            new PropertyConditionVariable(GroupRelUser::class, GroupRelUser::PROPERTY_GROUP_ID),
+            new StaticConditionVariable($groupIdentifier)
+        );
+
+        return $this->getDataClassRepository()->retrieves(
+            GroupRelUser::class, new DataClassRetrievesParameters($condition)
+        );
     }
 
     /**

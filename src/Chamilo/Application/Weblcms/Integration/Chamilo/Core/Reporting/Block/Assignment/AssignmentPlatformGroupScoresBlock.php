@@ -3,7 +3,6 @@ namespace Chamilo\Application\Weblcms\Integration\Chamilo\Core\Reporting\Block\A
 
 use Chamilo\Application\Weblcms\Bridge\Assignment\Storage\DataClass\Entry;
 use Chamilo\Application\Weblcms\Storage\DataClass\CourseEntityRelation;
-use Chamilo\Core\Group\Storage\DataManager;
 use Chamilo\Libraries\Storage\Parameters\DataClassDistinctParameters;
 use Chamilo\Libraries\Storage\Query\Condition\AndCondition;
 use Chamilo\Libraries\Storage\Query\Condition\EqualityCondition;
@@ -29,16 +28,6 @@ class AssignmentPlatformGroupScoresBlock extends AssignmentScoresBlock
     /**
      * @param \Chamilo\Core\Group\Storage\DataClass\Group $entity
      *
-     * @return string
-     */
-    protected function renderEntityName($entity)
-    {
-        return $entity->get_name();
-    }
-
-    /**
-     * @param \Chamilo\Core\Group\Storage\DataClass\Group $entity
-     *
      * @return int
      */
     protected function getEntityIdFromEntity($entity)
@@ -47,9 +36,20 @@ class AssignmentPlatformGroupScoresBlock extends AssignmentScoresBlock
     }
 
     /**
+     * @param \Chamilo\Core\Group\Storage\DataClass\Group $entity
+     *
+     * @return string
+     */
+    protected function renderEntityName($entity)
+    {
+        return $entity->get_name();
+    }
+
+    /**
      * @param int $course_id
      *
      * @return mixed | \Chamilo\Core\Group\Storage\DataClass\Group[]
+     * @throws \Chamilo\Libraries\Storage\Exception\DataClassNoResultException
      */
     protected function retrieveEntitiesForCourse($course_id)
     {
@@ -61,25 +61,21 @@ class AssignmentPlatformGroupScoresBlock extends AssignmentScoresBlock
         $conditions[] = new EqualityCondition(
             new PropertyConditionVariable(
                 CourseEntityRelation::class, CourseEntityRelation::PROPERTY_ENTITY_TYPE
-            ),
-            new StaticConditionVariable(CourseEntityRelation::ENTITY_TYPE_GROUP)
+            ), new StaticConditionVariable(CourseEntityRelation::ENTITY_TYPE_GROUP)
         );
 
         $group_ids = \Chamilo\Application\Weblcms\Course\Storage\DataManager::distinct(
-            CourseEntityRelation::class,
-            new DataClassDistinctParameters(
-                new AndCondition($conditions),
-                new RetrieveProperties(
-                    array(
+            CourseEntityRelation::class, new DataClassDistinctParameters(
+                new AndCondition($conditions), new RetrieveProperties(
+                    [
                         new PropertyConditionVariable(
-                            CourseEntityRelation::class,
-                            CourseEntityRelation::PROPERTY_ENTITY_ID
+                            CourseEntityRelation::class, CourseEntityRelation::PROPERTY_ENTITY_ID
                         )
-                    )
+                    ]
                 )
             )
         );
 
-        return DataManager::retrieve_groups_and_subgroups($group_ids);
+        return $this->getGroupService()->findGroupsAndSubgroupsForGroupIdentifiers($group_ids);
     }
 }

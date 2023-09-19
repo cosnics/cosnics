@@ -115,7 +115,7 @@ class GroupService
     /**
      * @return string[]
      * @throws \Chamilo\Libraries\Storage\Exception\DataClassNoResultException
-     * @deprecated (use tree traverser)
+     * @deprecated Use GroupsTreeTraverser::findAllSubscribedGroupIdentifiersForUserIdentifier(string $userIdentifier)
      */
     public function findAllSubscribedGroupIdentifiersForUserIdentifier(string $userIdentifier): array
     {
@@ -127,6 +127,7 @@ class GroupService
      *
      * @return \Doctrine\Common\Collections\ArrayCollection<\Chamilo\Core\Group\Storage\DataClass\Group>
      * @throws \Chamilo\Libraries\Storage\Exception\DataClassNoResultException
+     * @deprecated Use GroupsTreeTraverser::findAllSubscribedGroupsForUserIdentifier(string $userIdentifier)
      */
     public function findAllSubscribedGroupsForUserIdentifier(string $userIdentifier): ArrayCollection
     {
@@ -210,6 +211,33 @@ class GroupService
      * @return \Doctrine\Common\Collections\ArrayCollection<\Chamilo\Core\Group\Storage\DataClass\Group>
      * @throws \Chamilo\Libraries\Storage\Exception\DataClassNoResultException
      */
+    public function findGroupsAndSubgroupsForGroupIdentifiers(array $groupIdentifiers = []): ArrayCollection
+    {
+        $groups = new ArrayCollection();
+
+        foreach ($groupIdentifiers as $groupIdentifier)
+        {
+            $group = $this->findGroupByIdentifier($groupIdentifier);
+
+            $groups->add($group);
+
+            $subgroups = $this->groupsTreeTraverser->findSubGroupsForGroup($group);
+
+            foreach ($subgroups as $subgroup)
+            {
+                $groups->add($subgroup);
+            }
+        }
+
+        return $groups;
+    }
+
+    /**
+     * @param string[] $groupIdentifiers
+     *
+     * @return \Doctrine\Common\Collections\ArrayCollection<\Chamilo\Core\Group\Storage\DataClass\Group>
+     * @throws \Chamilo\Libraries\Storage\Exception\DataClassNoResultException
+     */
     public function findGroupsByIdentifiers(array $groupIdentifiers): ArrayCollection
     {
         if (empty($groupIdentifiers))
@@ -218,6 +246,17 @@ class GroupService
         }
 
         return $this->groupRepository->findGroupsByIdentifiersOrderedByName($groupIdentifiers);
+    }
+
+    /**
+     * @param string $parentIdentifier
+     *
+     * @return \Doctrine\Common\Collections\ArrayCollection<\Chamilo\Core\Group\Storage\DataClass\Group>
+     * @throws \Chamilo\Libraries\Storage\Exception\DataClassNoResultException
+     */
+    public function findGroupsForParentIdentifier(string $parentIdentifier = '0'): ArrayCollection
+    {
+        return $this->getGroupRepository()->findGroupsForParentIdentifier($parentIdentifier);
     }
 
     /**
@@ -234,17 +273,6 @@ class GroupService
         return $this->getGroupRepository()->findGroupsForSearchQueryAndParentIdentifier(
             $searchQuery, $parentIdentifier
         );
-    }
-
-    /**
-     * @param string $parentIdentifier
-     *
-     * @return \Doctrine\Common\Collections\ArrayCollection<\Chamilo\Core\Group\Storage\DataClass\Group>
-     * @throws \Chamilo\Libraries\Storage\Exception\DataClassNoResultException
-     */
-    public function findGroupsForParentIdentifier(string $parentIdentifier = '0'): ArrayCollection
-    {
-        return $this->getGroupRepository()->findGroupsForParentIdentifier($parentIdentifier);
     }
 
     public function findRootGroup(): Group
@@ -327,9 +355,7 @@ class GroupService
 
     public function subscribeUserToGroupByCode(string $groupCode, User $user): GroupRelUser
     {
-        $group = $this->findGroupByCode($groupCode);
-
-        return $this->getGroupMembershipService()->subscribeUserToGroup($group, $user);
+        return $this->getGroupMembershipService()->subscribeUserToGroup($this->findGroupByCode($groupCode), $user);
     }
 
     public function updateGroup(Group $group): bool
@@ -340,5 +366,13 @@ class GroupService
         }
 
         return $this->groupEventNotifier->afterUpdate($group);
+    }
+
+    /**
+     * @throws \Chamilo\Libraries\Storage\Exception\DataClassNoResultException
+     */
+    public function truncateGroup(Group $group): bool
+    {
+        return $this->getGroupMembershipService()->unsubscribeAllUsersFromGroup($group);
     }
 }

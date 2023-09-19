@@ -1,22 +1,28 @@
 <?php
 namespace Chamilo\Core\Home\Rights\Table;
 
-use Chamilo\Core\Group\Storage\DataClass\Group;
+use Chamilo\Core\Group\Service\GroupService;
 use Chamilo\Core\Home\Rights\Manager;
 use Chamilo\Core\Home\Rights\Storage\DataClass\BlockTypeTargetEntity;
 use Chamilo\Core\Rights\Entity\PlatformGroupEntity;
 use Chamilo\Core\Rights\Entity\UserEntity;
 use Chamilo\Core\User\Storage\DataManager;
 use Chamilo\Libraries\Architecture\Application\Application;
+use Chamilo\Libraries\Architecture\Application\Routing\UrlGenerator;
 use Chamilo\Libraries\Format\Structure\Glyph\FontAwesomeGlyph;
 use Chamilo\Libraries\Format\Structure\Toolbar;
 use Chamilo\Libraries\Format\Structure\ToolbarItem;
+use Chamilo\Libraries\Format\Table\Column\DataClassPropertyTableColumnFactory;
 use Chamilo\Libraries\Format\Table\Column\StaticTableColumn;
 use Chamilo\Libraries\Format\Table\Column\TableColumn;
 use Chamilo\Libraries\Format\Table\Extension\RecordListTableRenderer;
 use Chamilo\Libraries\Format\Table\Interfaces\TableRowActionsSupport;
+use Chamilo\Libraries\Format\Table\ListHtmlTableRenderer;
+use Chamilo\Libraries\Format\Table\Pager;
 use Chamilo\Libraries\Format\Table\TableResultPosition;
 use Chamilo\Libraries\Utilities\StringUtilities;
+use Exception;
+use Symfony\Component\Translation\Translator;
 
 /**
  * @package Chamilo\Core\Home\Rights\Table
@@ -24,6 +30,25 @@ use Chamilo\Libraries\Utilities\StringUtilities;
  */
 class BlockTypeTargetEntityTableRenderer extends RecordListTableRenderer implements TableRowActionsSupport
 {
+
+    protected GroupService $groupService;
+
+    public function __construct(
+        Translator $translator, UrlGenerator $urlGenerator, ListHtmlTableRenderer $htmlTableRenderer, Pager $pager,
+        DataClassPropertyTableColumnFactory $dataClassPropertyTableColumnFactory, GroupService $groupService
+    )
+    {
+        parent::__construct(
+            $translator, $urlGenerator, $htmlTableRenderer, $pager, $dataClassPropertyTableColumnFactory
+        );
+
+        $this->groupService = $groupService;
+    }
+
+    public function getGroupService(): GroupService
+    {
+        return $this->groupService;
+    }
 
     protected function initializeColumns(): void
     {
@@ -99,12 +124,16 @@ class BlockTypeTargetEntityTableRenderer extends RecordListTableRenderer impleme
                 case PlatformGroupEntity::ENTITY_TYPE :
                     foreach ($entityIds as $group_id)
                     {
-                        $group = \Chamilo\Core\Group\Storage\DataManager::retrieve_by_id(Group::class, $group_id);
-                        if ($group)
+                        try
                         {
+                            $group = $this->getGroupService()->findGroupByIdentifier($group_id);
+
                             $targetEntitiesHtml[] =
                                 '<option>' . $translator->trans('GroupShort', [], Manager::CONTEXT) . ': ' .
                                 $group->get_name() . '</option>';
+                        }
+                        catch (Exception)
+                        {
                         }
                     }
                     break;

@@ -24,15 +24,6 @@ interface WeblcmsRepositoryInterface
     public function retrieveUserByUsername($username);
 
     /**
-     * Retrieves a group by a code
-     * 
-     * @param string $groupCode
-     *
-     * @return Group
-     */
-    public function retrieveGroupByCode($groupCode);
-
-    /**
      * Retrieves a course by a code
      * 
      * @param string $courseCode

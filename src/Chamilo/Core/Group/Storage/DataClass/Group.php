@@ -242,19 +242,6 @@ class Group extends NestedSet
     }
 
     /**
-     * Deletes all content related to a group: - Users that are part of a group - Meta-data describing the group -
-     * Rights templates tied to a group In principle, these could be deleted implicitly when using foreign keys (the
-     * group id) with cascading deletes.
-     *
-     * @deprecated Part of GroupService::deleteGroup() now
-     */
-    public function delete_related_content(): bool
-    {
-        // First, truncate the group so that users are removed.
-        return $this->truncate();
-    }
-
-    /**
      * Get the default properties of all groups.
      *
      * @return array The property names.
@@ -582,20 +569,5 @@ class Group extends NestedSet
     public function set_sort($sort)
     {
         $this->setDefaultProperty(self::PROPERTY_SORT, $sort);
-    }
-
-    /**
-     * Unsubscribes all users from this group
-     *
-     * @deprecated Part of GroupService::deleteGroup() now
-     */
-    public function truncate()
-    {
-        $condition = new EqualityCondition(
-            new PropertyConditionVariable(GroupRelUser::class, GroupRelUser::PROPERTY_GROUP_ID),
-            new StaticConditionVariable($this->get_id())
-        );
-
-        return DataManager::deletes(GroupRelUser::class, $condition);
     }
 }

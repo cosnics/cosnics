@@ -3,7 +3,6 @@ namespace Chamilo\Core\Group\Menu;
 
 use Chamilo\Core\Group\Ajax\Manager;
 use Chamilo\Core\Group\Storage\DataClass\Group;
-use Chamilo\Core\Group\Storage\DataManager;
 use Chamilo\Libraries\Architecture\Application\Application;
 use Chamilo\Libraries\Architecture\Application\Routing\UrlGenerator;
 use Chamilo\Libraries\Architecture\ClassnameUtilities;
@@ -14,14 +13,6 @@ use Chamilo\Libraries\Format\Menu\Library\Renderer\HtmlMenuArrayRenderer;
 use Chamilo\Libraries\Format\Menu\OptionsMenuRenderer;
 use Chamilo\Libraries\Format\Menu\TreeMenuRenderer;
 use Chamilo\Libraries\Format\Structure\Glyph\FontAwesomeGlyph;
-use Chamilo\Libraries\Storage\Parameters\DataClassRetrieveParameters;
-use Chamilo\Libraries\Storage\Parameters\DataClassRetrievesParameters;
-use Chamilo\Libraries\Storage\Query\Condition\EqualityCondition;
-use Chamilo\Libraries\Storage\Query\OrderBy;
-use Chamilo\Libraries\Storage\Query\OrderProperty;
-use Chamilo\Libraries\Storage\Query\Variable\PropertyConditionVariable;
-use Chamilo\Libraries\Storage\Query\Variable\StaticConditionVariable;
-use Chamilo\Libraries\Translation\Translation;
 
 /**
  * @package group.lib
@@ -62,6 +53,8 @@ class GroupMenu extends HtmlMenu
      * @param string $url_format    The format to use for the URL of a category. Passed to sprintf(). Defaults to the
      *                              string "?category=%s".
      * @param array $extra_items    An array of extra tree items, added to the root.
+     *
+     * @throws \Chamilo\Libraries\Architecture\Exceptions\ObjectNotExistException
      */
     public function __construct(
         $current_category, $url_format = '?application=group&go=browser&group_id=%s', $include_root = true,
@@ -74,34 +67,17 @@ class GroupMenu extends HtmlMenu
 
         if ($current_category == '0' || is_null($current_category))
         {
-            $condition = new EqualityCondition(
-                new PropertyConditionVariable(Group::class, Group::PROPERTY_PARENT_ID), new StaticConditionVariable(0)
-            );
-            $group = DataManager::retrieves(
-                Group::class, new DataClassRetrievesParameters(
-                    $condition, 1, null, new OrderBy(
-                        [new OrderProperty(new PropertyConditionVariable(Group::class, Group::PROPERTY_NAME))]
-                    )
-                )
-            )->current();
-            $this->current_category = $group;
+            $this->current_category = $this->getGroupService()->findRootGroup();
         }
         else
         {
-            $this->current_category = DataManager::retrieve(
-                Group::class, new DataClassRetrieveParameters(
-                    new EqualityCondition(
-                        new PropertyConditionVariable(Group::class, Group::PROPERTY_ID),
-                        new StaticConditionVariable($current_category)
-                    )
-                )
-            );
+            $this->current_category = $this->getGroupService()->findGroupByIdentifier((string) $current_category);
         }
 
         if (!$this->current_category instanceof Group)
         {
             throw new ObjectNotExistException(
-                Translation::getInstance()->getTranslation('Group', null, 'Chamilo\Core\Group')
+                $this->getTranslator()->trans('Group', [], 'Chamilo\Core\Group')
             );
         }
 
@@ -145,18 +121,11 @@ class GroupMenu extends HtmlMenu
     {
         $include_root = $this->include_root;
 
-        $condition = new EqualityCondition(
-            new PropertyConditionVariable(Group::class, Group::PROPERTY_PARENT_ID), new StaticConditionVariable(0)
-        );
-        $group = DataManager::retrieves(
-            Group::class, new DataClassRetrievesParameters(
-                $condition, 1, null,
-                new OrderBy([new OrderProperty(new PropertyConditionVariable(Group::class, Group::PROPERTY_NAME))])
-            )
-        )->current();
+        $group = $this->getGroupService()->findRootGroup();
+
         if (!$include_root)
         {
-            return $this->get_menu_items($group->get_id());
+            return $this->get_menu_items($group->getId());
         }
         else
         {
@@ -167,7 +136,7 @@ class GroupMenu extends HtmlMenu
             // $menu_item['url'] = $this->get_url($group->get_id());
             $menu_item['url'] = $this->get_home_url();
 
-            $sub_menu_items = $this->get_menu_items($group->get_id());
+            $sub_menu_items = $this->get_menu_items($group->getId());
             if (count($sub_menu_items) > 0)
             {
                 $menu_item['sub'] = $sub_menu_items;
@@ -175,8 +144,8 @@ class GroupMenu extends HtmlMenu
 
             $glyph = new FontAwesomeGlyph('home', [], null, 'fas');
             $menu_item['class'] = $glyph->getClassNamesString();
-            $menu_item[OptionsMenuRenderer::KEY_ID] = $group->get_id();
-            $menu[$group->get_id()] = $menu_item;
+            $menu_item[OptionsMenuRenderer::KEY_ID] = $group->getId();
+            $menu[$group->getId()] = $menu_item;
 
             return $menu;
         }
@@ -197,48 +166,37 @@ class GroupMenu extends HtmlMenu
         $show_complete_tree = $this->show_complete_tree;
         $hide_current_category = $this->hide_current_category;
 
-        $condition = new EqualityCondition(
-            new PropertyConditionVariable(Group::class, Group::PROPERTY_PARENT_ID),
-            new StaticConditionVariable($parent_id)
-        );
-        $groups = DataManager::retrieves(
-            Group::class, new DataClassRetrievesParameters(
-                $condition, null, null,
-                new OrderBy([new OrderProperty(new PropertyConditionVariable(Group::class, Group::PROPERTY_NAME))])
-            )
-        );
+        $groups = $this->getGroupService()->findGroupsForParentIdentifier($parent_id);
 
         foreach ($groups as $group)
         {
-            $group_id = $group->get_id();
+            $group_id = $group->getId();
 
-            if (!($group_id == $current_category->get_id() && $hide_current_category))
+            if (!($group_id == $current_category->getId() && $hide_current_category))
             {
                 $menu_item = [];
-                $menu_item['title'] = $group->get_name();
-                $menu_item['url'] = $this->get_url($group->get_id());
 
-                if ($group->is_parent_of($current_category) || $group->get_id() == $current_category->get_id() ||
+                $menu_item['title'] = $group->get_name();
+                $menu_item['url'] = $this->get_url($group->getId());
+
+                if ($group->isAncestorOf($current_category) || $group->getId() == $current_category->getId() ||
                     $show_complete_tree)
                 {
-                    if ($group->has_children())
+                    if ($group->hasChildren())
                     {
-                        $menu_item['sub'] = $this->get_menu_items($group->get_id());
+                        $menu_item['sub'] = $this->get_menu_items($group->getId());
                     }
                 }
-                else
+                elseif ($group->hasChildren())
                 {
-                    if ($group->has_children())
-                    {
-                        $menu_item['children'] = 'expand';
-                    }
+                    $menu_item['children'] = 'expand';
                 }
 
                 $glyph = new FontAwesomeGlyph('folder', [], null, 'fas');
 
                 $menu_item['class'] = $glyph->getClassNamesString();
-                $menu_item[OptionsMenuRenderer::KEY_ID] = $group->get_id();
-                $menu[$group->get_id()] = $menu_item;
+                $menu_item[OptionsMenuRenderer::KEY_ID] = $group->getId();
+                $menu[$group->getId()] = $menu_item;
             }
         }
 

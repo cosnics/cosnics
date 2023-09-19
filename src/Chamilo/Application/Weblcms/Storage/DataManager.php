@@ -25,6 +25,7 @@ use Chamilo\Application\Weblcms\Storage\DataClass\CourseUserCategory;
 use Chamilo\Application\Weblcms\Storage\DataClass\RightsLocationLockedRight;
 use Chamilo\Application\Weblcms\Tool\Implementation\CourseGroup\Storage\DataClass\CourseGroup;
 use Chamilo\Application\Weblcms\Tool\Implementation\CourseGroup\Storage\DataManager as CourseGroupDataManager;
+use Chamilo\Core\Group\Service\GroupService;
 use Chamilo\Core\Group\Storage\DataClass\Group;
 use Chamilo\Core\Group\Storage\DataClass\GroupRelUser;
 use Chamilo\Core\Repository\ContentObject\Introduction\Storage\DataClass\Introduction;
@@ -33,6 +34,7 @@ use Chamilo\Core\Repository\Publication\Storage\DataClass\Attributes;
 use Chamilo\Core\Repository\Storage\DataClass\ContentObject;
 use Chamilo\Core\User\Storage\DataClass\User;
 use Chamilo\Libraries\Architecture\Exceptions\ObjectNotExistException;
+use Chamilo\Libraries\DependencyInjection\DependencyInjectionContainerBuilder;
 use Chamilo\Libraries\Storage\Parameters\DataClassCountParameters;
 use Chamilo\Libraries\Storage\Parameters\DataClassDistinctParameters;
 use Chamilo\Libraries\Storage\Parameters\DataClassRetrieveParameters;
@@ -427,8 +429,7 @@ class DataManager extends \Chamilo\Libraries\Storage\DataManager\DataManager
         $entities[] = CoursePlatformGroupEntity::getInstance(null);
 
         $publication_ids_with_right_view = $weblcms_rights->filter_location_identifiers_by_granted_right(
-            Manager::CONTEXT, $user, $entities, WeblcmsRights::VIEW_RIGHT, $identifiers,
-            WeblcmsRights::TYPE_PUBLICATION
+            Manager::CONTEXT, $user, $entities, WeblcmsRights::VIEW_RIGHT, $identifiers, WeblcmsRights::TYPE_PUBLICATION
         );
 
         $category_ids = [];
@@ -561,6 +562,11 @@ class DataManager extends \Chamilo\Libraries\Storage\DataManager\DataManager
         }
 
         return $publication_attributes;
+    }
+
+    public static function getGroupService(): GroupService
+    {
+        return DependencyInjectionContainerBuilder::getInstance()->createContainer()->get(GroupService::class);
     }
 
     /**
@@ -734,6 +740,12 @@ class DataManager extends \Chamilo\Libraries\Storage\DataManager\DataManager
     }
 
     /**
+     * **************************************************************************************************************
+     * New publications functionality *
+     * **************************************************************************************************************
+     */
+
+    /**
      * Retrieves a course id from a given publication
      *
      * @param int $publication_id
@@ -754,12 +766,6 @@ class DataManager extends \Chamilo\Libraries\Storage\DataManager\DataManager
 
         return $publication->get_course_id();
     }
-
-    /**
-     * **************************************************************************************************************
-     * New publications functionality *
-     * **************************************************************************************************************
-     */
 
     /**
      * Builds the parameters to retrieve course settings with a course setting relation table.
@@ -809,6 +815,8 @@ class DataManager extends \Chamilo\Libraries\Storage\DataManager\DataManager
             new RetrieveProperties($retrieveProperties), $condition, $offset, $count, $order_by, new Joins($joins)
         );
     }
+
+    // PERFORMANCE-TWEAKS-START
 
     /**
      * Returns the last visit date
@@ -880,8 +888,6 @@ class DataManager extends \Chamilo\Libraries\Storage\DataManager\DataManager
             return $course_module_access->get_access_date();
         }
     }
-
-    // PERFORMANCE-TWEAKS-START
 
     /**
      * Returns the last visit date per course (and optional for a module and / or a user)
@@ -1076,6 +1082,8 @@ class DataManager extends \Chamilo\Libraries\Storage\DataManager\DataManager
         return self::get_publication_target_users($publication);
     }
 
+    // PERFORMANCE-TWEAKS-END
+
     /**
      * Builds some conditions based on a few given parameters
      *
@@ -1141,7 +1149,11 @@ class DataManager extends \Chamilo\Libraries\Storage\DataManager\DataManager
         return $condition;
     }
 
-    // PERFORMANCE-TWEAKS-END
+    /**
+     * **************************************************************************************************************
+     * CourseModuleLastAccess Functionality *
+     * **************************************************************************************************************
+     */
 
     /**
      * Creates a condition for the rights location locked right class with a location and right id
@@ -1174,12 +1186,6 @@ class DataManager extends \Chamilo\Libraries\Storage\DataManager\DataManager
 
         return new AndCondition($conditions);
     }
-
-    /**
-     * **************************************************************************************************************
-     * CourseModuleLastAccess Functionality *
-     * **************************************************************************************************************
-     */
 
     /**
      * Checks if a content object is published
@@ -1272,9 +1278,7 @@ class DataManager extends \Chamilo\Libraries\Storage\DataManager\DataManager
                     break;
 
                 case CoursePlatformGroupEntity::ENTITY_TYPE :
-                    $groups_resultset = \Chamilo\Core\Group\Storage\DataManager::retrieve_groups_and_subgroups(
-                        $entity_ids
-                    );
+                    $groups_resultset = self::getGroupService()->findGroupsAndSubgroupsForGroupIdentifiers($entity_ids);
 
                     foreach ($groups_resultset as $group)
                     {
@@ -2406,16 +2410,10 @@ class DataManager extends \Chamilo\Libraries\Storage\DataManager\DataManager
      *
      * @param int $publication_id
      * @param int $course_id
-     * @param int $offset
-     * @param int $count
-     * @param \Chamilo\Libraries\Storage\Query\OrderBy $order_by
-     * @param \Chamilo\Libraries\Storage\Query\Condition\Condition $condition
      *
      * @return \Doctrine\Common\Collections\ArrayCollection<\group\Group>
      */
-    public static function retrieve_publication_target_platform_groups(
-        $publication_id, $course_id, $offset = null, $count = null, $order_by = null, $condition = null
-    )
+    public static function retrieve_publication_target_platform_groups($publication_id, $course_id)
     {
         if (is_null($course_id))
         {
@@ -2460,13 +2458,11 @@ class DataManager extends \Chamilo\Libraries\Storage\DataManager\DataManager
                 )
             );
 
-            return \Chamilo\Core\Group\Storage\DataManager::retrieve_groups_and_subgroups(
-                $group_ids, $condition, $count, $offset, $order_by
-            );
+            return self::getGroupService()->findGroupsAndSubgroupsForGroupIdentifiers($group_ids);
         }
 
-        return \Chamilo\Core\Group\Storage\DataManager::retrieve_groups_and_subgroups(
-            $target_entities[CoursePlatformGroupEntity::ENTITY_TYPE], $condition, $count, $offset, $order_by
+        return self::getGroupService()->findGroupsAndSubgroupsForGroupIdentifiers(
+            $target_entities[CoursePlatformGroupEntity::ENTITY_TYPE]
         );
     }
 

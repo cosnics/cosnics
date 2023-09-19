@@ -124,7 +124,7 @@ class GroupsTreeTraverser
     }
 
     /**
-     * @return int[]
+     * @return string[]
      * @throws \Chamilo\Libraries\Storage\Exception\DataClassNoResultException
      */
     public function findAllSubscribedGroupIdentifiersForUserIdentifier(string $userIdentifier): array
@@ -188,6 +188,17 @@ class GroupsTreeTraverser
     public function findDirectlySubscribedGroupNestingValuesForUserIdentifier(string $userIdentifier): ArrayCollection
     {
         return $this->groupRepository->findDirectlySubscribedGroupNestingValuesForUserIdentifier($userIdentifier);
+    }
+
+    /**
+     * @param string $userIdentifier
+     *
+     * @return ArrayCollection<\Chamilo\Core\Group\Storage\DataClass\Group>
+     * @throws \Chamilo\Libraries\Storage\Exception\DataClassNoResultException
+     */
+    public function findDirectlySubscribedGroupsForUserIdentifier(string $userIdentifier): ArrayCollection
+    {
+        return $this->groupRepository->findDirectlySubscribedGroupsForUserIdentifier($userIdentifier);
     }
 
     /**

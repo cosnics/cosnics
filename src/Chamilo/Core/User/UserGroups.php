@@ -1,8 +1,9 @@
 <?php
 namespace Chamilo\Core\User;
 
+use Chamilo\Core\Group\Service\GroupsTreeTraverser;
 use Chamilo\Core\Group\Storage\DataClass\Group;
-use Chamilo\Core\Group\Storage\DataManager;
+use Chamilo\Libraries\DependencyInjection\DependencyInjectionContainerBuilder;
 use Chamilo\Libraries\Format\Structure\Glyph\FontAwesomeGlyph;
 use Chamilo\Libraries\Translation\Translation;
 use Chamilo\Libraries\Utilities\StringUtilities;
@@ -18,14 +19,14 @@ class UserGroups
     protected $availableGroups;
 
     /**
-     * The user ID
-     */
-    private $user_id;
-
-    /**
      * Indicates if a border should be included
      */
     private $border;
+
+    /**
+     * The user ID
+     */
+    private $user_id;
 
     /**
      * Constructor
@@ -42,6 +43,11 @@ class UserGroups
         {
             $this->availableGroups[$availableGroup->getId()] = $availableGroup;
         }
+    }
+
+    public function getGroupsTreeTraverser(): GroupsTreeTraverser
+    {
+        return DependencyInjectionContainerBuilder::getInstance()->createContainer()->get(GroupsTreeTraverser::class);
     }
 
     protected function isGroupValid(Group $group)
@@ -75,13 +81,14 @@ class UserGroups
 
         $html[] = '<div class="panel-body">';
 
-        $group_relations = DataManager::retrieve_user_groups($this->user_id);
+        $group_relations =
+            $this->getGroupsTreeTraverser()->findDirectlySubscribedGroupsForUserIdentifier($this->user_id);
 
         if ($group_relations->count() > 0)
         {
             $groupElements = [];
 
-            foreach($group_relations as $group)
+            foreach ($group_relations as $group)
             {
                 if (!$this->isGroupValid($group))
                 {

@@ -454,7 +454,6 @@ class RightsRepository
      *
      * @return \Doctrine\Common\Collections\ArrayCollection<string[]>
      * @throws \Chamilo\Libraries\Storage\Exception\DataClassNoResultException
-     * @see DataManager:: retrieve_target_entities_array()
      */
     public function findRightsEntityRecordsForRightAndLocation(
         string $rightsLocationEntityRightClassName, int $right, RightsLocation $location

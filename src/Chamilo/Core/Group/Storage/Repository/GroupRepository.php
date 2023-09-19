@@ -108,6 +108,37 @@ class GroupRepository
         return $this->getNestedSetDataClassRepository()->records(Group::class, $parameters);
     }
 
+    /**
+     * @param string $userIdentifier
+     *
+     * @return ArrayCollection<\Chamilo\Core\Group\Storage\DataClass\Group>
+     * @throws \Chamilo\Libraries\Storage\Exception\DataClassNoResultException
+     */
+    public function findDirectlySubscribedGroupsForUserIdentifier(string $userIdentifier): ArrayCollection
+    {
+        $join = new Join(
+            GroupRelUser::class, new AndCondition(
+                [
+                    new EqualityCondition(
+                        new PropertyConditionVariable(GroupRelUser::class, GroupRelUser::PROPERTY_USER_ID),
+                        new StaticConditionVariable($userIdentifier)
+                    ),
+
+                    new EqualityCondition(
+                        new PropertyConditionVariable(GroupRelUser::class, GroupRelUser::PROPERTY_GROUP_ID),
+                        new PropertyConditionVariable(Group::class, DataClass::PROPERTY_ID)
+                    )
+                ]
+            )
+        );
+
+        $joins = new Joins([$join]);
+
+        $parameters = new DataClassRetrievesParameters(null, null, null, null, $joins);
+
+        return $this->getNestedSetDataClassRepository()->retrieves(Group::class, $parameters);
+    }
+
     public function findGroupByCode(string $groupCode): ?Group
     {
         $condition = new EqualityCondition(

@@ -4,15 +4,13 @@ namespace Chamilo\Application\Weblcms\Ajax\Component;
 use Chamilo\Application\Weblcms\Rights\Entities\CoursePlatformGroupEntity;
 use Chamilo\Application\Weblcms\Rights\Entities\CourseUserEntity;
 use Chamilo\Application\Weblcms\Storage\DataClass\CourseEntityRelation;
+use Chamilo\Core\Group\Service\GroupMembershipService;
 use Chamilo\Core\Group\Storage\DataClass\Group;
-use Chamilo\Core\Group\Storage\DataClass\GroupRelUser;
-use Chamilo\Core\Group\Storage\DataManager;
 use Chamilo\Core\User\Storage\DataClass\User;
 use Chamilo\Libraries\Ajax\Component\GroupsFeedComponent;
 use Chamilo\Libraries\Format\Form\Element\AdvancedElementFinder\AdvancedElementFinderElement;
 use Chamilo\Libraries\Format\Structure\Glyph\FontAwesomeGlyph;
 use Chamilo\Libraries\Storage\Parameters\DataClassDistinctParameters;
-use Chamilo\Libraries\Storage\Parameters\DataClassRetrievesParameters;
 use Chamilo\Libraries\Storage\Query\Condition\AndCondition;
 use Chamilo\Libraries\Storage\Query\Condition\ContainsCondition;
 use Chamilo\Libraries\Storage\Query\Condition\EqualityCondition;
@@ -32,6 +30,11 @@ use Chamilo\Libraries\Storage\Query\Variable\StaticConditionVariable;
 class PlatformGroupsFeedComponent extends GroupsFeedComponent
 {
     public const PARAM_COURSE_ID = 'course_id';
+
+    public function getGroupMembershipService(): GroupMembershipService
+    {
+        return $this->getService(GroupMembershipService::class);
+    }
 
     /**
      * Returns the required parameters
@@ -86,13 +89,7 @@ class PlatformGroupsFeedComponent extends GroupsFeedComponent
             return [];
         }
 
-        $condition = new EqualityCondition(
-            new PropertyConditionVariable(GroupRelUser::class, GroupRelUser::PROPERTY_GROUP_ID),
-            new StaticConditionVariable($filter_id)
-        );
-        $relations = DataManager::retrieves(
-            GroupRelUser::class, new DataClassRetrievesParameters($condition)
-        );
+        $relations = $this->getGroupMembershipService()->getGroupUserRelationsByGroupIdentifier($filter_id);
 
         $user_ids = [];
 
@@ -182,11 +179,9 @@ class PlatformGroupsFeedComponent extends GroupsFeedComponent
             $condition = $conditions[0];
         }
 
-        return DataManager::retrieves(
-            Group::class, new DataClassRetrievesParameters(
-                $condition, null, null,
-                new OrderBy([new OrderProperty(new PropertyConditionVariable(Group::class, Group::PROPERTY_NAME))])
-            )
+        return $this->getGroupService()->findGroups(
+            $condition, null, null,
+            new OrderBy([new OrderProperty(new PropertyConditionVariable(Group::class, Group::PROPERTY_NAME))])
         );
     }
 }

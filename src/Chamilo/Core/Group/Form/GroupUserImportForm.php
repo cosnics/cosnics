@@ -1,24 +1,17 @@
 <?php
 namespace Chamilo\Core\Group\Form;
 
-use Chamilo\Core\Group\Storage\DataClass\Group;
+use Chamilo\Core\Group\Service\GroupMembershipService;
 use Chamilo\Core\Group\Storage\DataClass\GroupRelUser;
-use Chamilo\Core\Group\Storage\DataManager;
 use Chamilo\Libraries\File\Import;
 use Chamilo\Libraries\Format\Form\FormValidator;
 use Chamilo\Libraries\Format\Structure\Glyph\FontAwesomeGlyph;
-use Chamilo\Libraries\Storage\Parameters\DataClassRetrievesParameters;
-use Chamilo\Libraries\Storage\Query\Condition\AndCondition;
-use Chamilo\Libraries\Storage\Query\Condition\EqualityCondition;
-use Chamilo\Libraries\Storage\Query\Variable\PropertyConditionVariable;
-use Chamilo\Libraries\Storage\Query\Variable\StaticConditionVariable;
 use Chamilo\Libraries\Translation\Translation;
 use Chamilo\Libraries\Utilities\StringUtilities;
 
 /**
- *
  * @package Chamilo\Core\Group\Form
- * @author vanpouckesven
+ * @author  vanpouckesven
  */
 class GroupUserImportForm extends FormValidator
 {
@@ -41,7 +34,7 @@ class GroupUserImportForm extends FormValidator
     public function build_importing_form()
     {
         $this->addElement('file', 'file', Translation::get('FileName'));
-        $allowed_upload_types = array('csv');
+        $allowed_upload_types = ['csv'];
         $this->addRule('file', Translation::get('OnlyCSVAllowed'), 'filetype', $allowed_upload_types);
 
         $buttons[] = $this->createElement(
@@ -60,9 +53,14 @@ class GroupUserImportForm extends FormValidator
         return $group_rel_user->create();
     }
 
+    public function getGroupMembershipService(): GroupMembershipService
+    {
+        return $this->getService(GroupMembershipService::class);
+    }
+
     public function get_failed_elements()
     {
-        return implode("<br />", $this->failed_elements);
+        return implode('<br />', $this->failed_elements);
     }
 
     public function import_group_users()
@@ -81,7 +79,7 @@ class GroupUserImportForm extends FormValidator
             else
             {
                 $this->failed_elements[] =
-                    Translation::get('Invalid', null, StringUtilities::LIBRARIES) . ': ' . implode(";", $group_user);
+                    Translation::get('Invalid', null, StringUtilities::LIBRARIES) . ': ' . implode(';', $group_user);
             }
         }
 
@@ -117,41 +115,24 @@ class GroupUserImportForm extends FormValidator
 
             if (!$succes)
             {
-                $this->failed_elements[] = Translation::get('Failed') . ': ' . implode(";", $group_user);
+                $this->failed_elements[] = Translation::get('Failed') . ': ' . implode(';', $group_user);
             }
         }
     }
 
     public function retrieve_group($group_code)
     {
-        $condition = new EqualityCondition(
-            new PropertyConditionVariable(Group::class, Group::PROPERTY_CODE), new StaticConditionVariable($group_code)
-        );
-
-        $groups = DataManager::retrieves(Group::class, new DataClassRetrievesParameters($condition));
-
-        return $groups->current();
+        return $this->getGroupService()->findGroupByCode($group_code);
     }
 
     public function retrieve_group_user($group_id, $user_id)
     {
-        $conditions = [];
-        $conditions[] = new EqualityCondition(
-            new PropertyConditionVariable(GroupRelUser::class, GroupRelUser::PROPERTY_GROUP_ID),
-            new StaticConditionVariable($group_id)
-        );
-        $conditions[] = new EqualityCondition(
-            new PropertyConditionVariable(GroupRelUser::class, GroupRelUser::PROPERTY_USER_ID),
-            new StaticConditionVariable($user_id)
-        );
-        $condition = new AndCondition($conditions);
-
-        return DataManager::retrieves(GroupRelUser::class, new DataClassRetrievesParameters($condition))->current();
+        return $this->getGroupMembershipService()->getGroupUserRelationByGroupCodeAndUser($group_id, $user_id);
     }
 
     public function retrieve_user($username)
     {
-        return \Chamilo\Core\User\Storage\DataManager::retrieve_user_by_username($username);
+        return $this->getUserService()->findUserByUsername($username);
     }
 
     public function validate_group_user($group_user)
