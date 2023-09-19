@@ -6,7 +6,7 @@ use Chamilo\Core\Install\Architecture\Interfaces\InstallerObserverInterface;
 use Chamilo\Core\Install\Manager;
 use Chamilo\Core\Install\Service\PlatformInstaller;
 use Chamilo\Core\Install\Service\PlatformInstallerFactory;
-use Chamilo\Libraries\Architecture\Interfaces\NoAuthenticationSupport;
+use Chamilo\Libraries\Architecture\Interfaces\NoAuthenticationSupportInterface;
 use Chamilo\Libraries\Format\Structure\Glyph\FontAwesomeGlyph;
 use Chamilo\Libraries\Format\Structure\Glyph\IdentGlyph;
 use Chamilo\Libraries\Format\Structure\Glyph\InlineGlyph;
@@ -18,7 +18,7 @@ use Symfony\Component\HttpFoundation\StreamedResponse;
  * @author  Hans De Bisschop <hans.de.bisschop@ehb.be>
  * @author  Magali Gillard <magali.gillard@ehb.be>
  */
-class InstallerComponent extends Manager implements NoAuthenticationSupport, InstallerObserverInterface
+class InstallerComponent extends Manager implements NoAuthenticationSupportInterface, InstallerObserverInterface
 {
 
     protected PlatformInstaller $installer;

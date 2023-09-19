@@ -7,7 +7,7 @@ use Chamilo\Core\User\Storage\DataClass\User;
 use Chamilo\Core\User\Storage\DataManager;
 use Chamilo\Libraries\Architecture\Exceptions\NotAllowedException;
 use Chamilo\Libraries\Architecture\Interfaces\ChangeablePasswordInterface;
-use Chamilo\Libraries\Architecture\Interfaces\NoAuthenticationSupport;
+use Chamilo\Libraries\Architecture\Interfaces\NoAuthenticationSupportInterface;
 use Chamilo\Libraries\Format\Display;
 use Chamilo\Libraries\Format\Form\FormValidator;
 use Chamilo\Libraries\Hashing\HashingUtilities;
@@ -27,7 +27,7 @@ use Hackzilla\PasswordGenerator\Generator\PasswordGeneratorInterface;
  * authentication source of the user allows password resets, an email with further instructions will be send to the
  * user.
  */
-class ResetPasswordComponent extends Manager implements NoAuthenticationSupport
+class ResetPasswordComponent extends Manager implements NoAuthenticationSupportInterface
 {
     public const PARAM_RESET_KEY = 'key';
 

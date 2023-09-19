@@ -64,7 +64,7 @@ class HtmlEditorFileComponent extends Manager
         foreach ($active_types as $active_type)
         {
             if (in_array(
-                'Chamilo\Libraries\Architecture\Interfaces\Includeable', (array) class_implements($active_type)
+                'Chamilo\Libraries\Architecture\Interfaces\IncludeableInterface', (array) class_implements($active_type)
             ))
             {
                 $types[] = $active_type;

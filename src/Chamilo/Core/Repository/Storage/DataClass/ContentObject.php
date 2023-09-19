@@ -17,7 +17,7 @@ use Chamilo\Libraries\Architecture\ClassnameUtilities;
 use Chamilo\Libraries\Architecture\Exceptions\ObjectNotExistException;
 use Chamilo\Libraries\Architecture\Interfaces\AttachmentSupportInterface;
 use Chamilo\Libraries\Architecture\Interfaces\ComplexContentObjectSupportInterface;
-use Chamilo\Libraries\Architecture\Interfaces\Versionable;
+use Chamilo\Libraries\Architecture\Interfaces\VersionableInterface;
 use Chamilo\Libraries\DependencyInjection\DependencyInjectionContainerBuilder;
 use Chamilo\Libraries\File\ConfigurablePathBuilder;
 use Chamilo\Libraries\File\FilesystemTools;
@@ -1774,7 +1774,7 @@ class ContentObject extends CompositeDataClass
      */
     public function is_versionable()
     {
-        return $this instanceof Versionable;
+        return $this instanceof VersionableInterface;
     }
 
     public function move($new_parent_id)

@@ -3,8 +3,8 @@ namespace Chamilo\Libraries\Architecture\Application;
 
 use Chamilo\Core\User\Storage\DataClass\User;
 use Chamilo\Libraries\Architecture\Exceptions\NotAllowedException;
-use Chamilo\Libraries\Architecture\Interfaces\MenuComponent;
-use Chamilo\Libraries\Architecture\Interfaces\NoAuthenticationSupport;
+use Chamilo\Libraries\Architecture\Interfaces\MenuComponentInterface;
+use Chamilo\Libraries\Architecture\Interfaces\NoAuthenticationSupportInterface;
 use Chamilo\Libraries\DependencyInjection\Traits\DependencyInjectionContainerTrait;
 use Chamilo\Libraries\Format\Breadcrumb\BreadcrumbGenerator;
 use Chamilo\Libraries\Format\Breadcrumb\BreadcrumbGeneratorInterface;
@@ -71,7 +71,7 @@ abstract class Application
      */
     public function checkAuthorization(string $context, ?string $action = null)
     {
-        if (!$this instanceof NoAuthenticationSupport)
+        if (!$this instanceof NoAuthenticationSupportInterface)
         {
             if (!$this->getUser() instanceof User)
             {
@@ -409,7 +409,7 @@ abstract class Application
             $html[] = '<div class="row">';
 
             // If there is an application-wide menu, show it
-            if ($this instanceof MenuComponent)
+            if ($this instanceof MenuComponentInterface)
             {
                 $html[] = '<div class="col-xs-12 col-md-4 col-lg-3">';
                 $html[] = $this->renderApplicationMenu();

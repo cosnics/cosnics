@@ -7,7 +7,7 @@ use Chamilo\Configuration\Storage\DataManager;
 use Chamilo\Core\Lynx\Manager;
 use Chamilo\Core\Lynx\Menu\PackageTypeMenu;
 use Chamilo\Libraries\Architecture\Application\Application;
-use Chamilo\Libraries\Architecture\Interfaces\MenuComponent;
+use Chamilo\Libraries\Architecture\Interfaces\MenuComponentInterface;
 use Chamilo\Libraries\Format\Breadcrumb\BreadcrumbLessComponentInterface;
 use Chamilo\Libraries\Format\Display;
 use Chamilo\Libraries\Format\Structure\Breadcrumb;
@@ -28,7 +28,7 @@ use Chamilo\Libraries\Storage\Query\Variable\StaticConditionVariable;
 use Chamilo\Libraries\Utilities\StringUtilities;
 use Doctrine\Common\Collections\ArrayCollection;
 
-class BrowserComponent extends Manager implements BreadcrumbLessComponentInterface, MenuComponent
+class BrowserComponent extends Manager implements BreadcrumbLessComponentInterface, MenuComponentInterface
 {
 
     public const STATUS_AVAILABLE = 2;

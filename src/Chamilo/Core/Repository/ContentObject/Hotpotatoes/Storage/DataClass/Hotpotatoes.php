@@ -3,7 +3,7 @@ namespace Chamilo\Core\Repository\ContentObject\Hotpotatoes\Storage\DataClass;
 
 use Chamilo\Core\Repository\Storage\DataClass\ContentObject;
 use Chamilo\Core\User\Manager;
-use Chamilo\Libraries\Architecture\Interfaces\Versionable;
+use Chamilo\Libraries\Architecture\Interfaces\VersionableInterface;
 use Chamilo\Libraries\DependencyInjection\DependencyInjectionContainerBuilder;
 use Chamilo\Libraries\File\Compression\ZipArchive\ZipArchiveFilecompression;
 use Chamilo\Libraries\File\SystemPathBuilder;
@@ -15,7 +15,7 @@ use Symfony\Component\HttpFoundation\Session\SessionInterface;
 /**
  * @package Chamilo\Core\Repository\ContentObject\Hotpotatoes\Storage\DataClass
  */
-class Hotpotatoes extends ContentObject implements Versionable
+class Hotpotatoes extends ContentObject implements VersionableInterface
 {
     public const CONTEXT = 'Chamilo\Core\Repository\ContentObject\Hotpotatoes';
 

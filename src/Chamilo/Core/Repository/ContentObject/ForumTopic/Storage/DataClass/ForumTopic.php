@@ -8,7 +8,7 @@ use Chamilo\Core\Repository\Storage\DataClass\ContentObject;
 use Chamilo\Core\User\Manager;
 use Chamilo\Core\User\Storage\DataClass\User;
 use Chamilo\Libraries\Architecture\Interfaces\AttachmentSupportInterface;
-use Chamilo\Libraries\Architecture\Interfaces\Versionable;
+use Chamilo\Libraries\Architecture\Interfaces\VersionableInterface;
 use Chamilo\Libraries\DependencyInjection\DependencyInjectionContainerBuilder;
 use Chamilo\Libraries\Storage\Query\Condition\EqualityCondition;
 use Chamilo\Libraries\Storage\Query\Variable\PropertyConditionVariable;
@@ -21,7 +21,7 @@ use Symfony\Component\HttpFoundation\Session\SessionInterface;
  * @author  Mattias De Pauw - Hogeschool Gent
  * @author  Maarten Volckaert - Hogeschool Gent
  */
-class ForumTopic extends ContentObject implements Versionable, AttachmentSupportInterface
+class ForumTopic extends ContentObject implements VersionableInterface, AttachmentSupportInterface
 {
     public const CONTEXT = 'Chamilo\Core\Repository\ContentObject\ForumTopic';
 

@@ -5,8 +5,8 @@ use Chamilo\Core\Repository\ContentObject\Webpage\Storage\DataManager;
 use Chamilo\Core\Repository\Manager;
 use Chamilo\Core\Repository\Storage\DataClass\ContentObject;
 use Chamilo\Libraries\Architecture\Interfaces\FileStorageSupportInterface;
-use Chamilo\Libraries\Architecture\Interfaces\Includeable;
-use Chamilo\Libraries\Architecture\Interfaces\Versionable;
+use Chamilo\Libraries\Architecture\Interfaces\IncludeableInterface;
+use Chamilo\Libraries\Architecture\Interfaces\VersionableInterface;
 use Chamilo\Libraries\DependencyInjection\DependencyInjectionContainerBuilder;
 use Chamilo\Libraries\File\ConfigurablePathBuilder;
 use Chamilo\Libraries\File\FileType;
@@ -17,7 +17,7 @@ use Exception;
 /**
  * @package Chamilo\Core\Repository\ContentObject\Webpage\Storage\DataClass
  */
-class Webpage extends ContentObject implements Versionable, Includeable, FileStorageSupportInterface
+class Webpage extends ContentObject implements VersionableInterface, IncludeableInterface, FileStorageSupportInterface
 {
     public const CONTEXT = 'Chamilo\Core\Repository\ContentObject\Webpage';
 

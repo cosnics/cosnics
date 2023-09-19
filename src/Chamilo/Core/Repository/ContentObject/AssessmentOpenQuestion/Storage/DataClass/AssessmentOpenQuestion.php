@@ -2,14 +2,14 @@
 namespace Chamilo\Core\Repository\ContentObject\AssessmentOpenQuestion\Storage\DataClass;
 
 use Chamilo\Core\Repository\Storage\DataClass\ContentObject;
-use Chamilo\Libraries\Architecture\Interfaces\Versionable;
+use Chamilo\Libraries\Architecture\Interfaces\VersionableInterface;
 use Chamilo\Libraries\Translation\Translation;
 use Chamilo\Libraries\Utilities\StringUtilities;
 
 /**
  * @package Chamilo\Core\Repository\ContentObject\AssessmentOpenQuestion\Storage\DataClass
  */
-class AssessmentOpenQuestion extends ContentObject implements Versionable
+class AssessmentOpenQuestion extends ContentObject implements VersionableInterface
 {
     public const CONTEXT = 'Chamilo\Core\Repository\ContentObject\AssessmentOpenQuestion';
 

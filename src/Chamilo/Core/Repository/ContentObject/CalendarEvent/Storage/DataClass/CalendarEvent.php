@@ -3,8 +3,8 @@ namespace Chamilo\Core\Repository\ContentObject\CalendarEvent\Storage\DataClass;
 
 use Chamilo\Core\Repository\Storage\DataClass\ContentObject;
 use Chamilo\Libraries\Architecture\Interfaces\AttachmentSupportInterface;
-use Chamilo\Libraries\Architecture\Interfaces\Includeable;
-use Chamilo\Libraries\Architecture\Interfaces\Versionable;
+use Chamilo\Libraries\Architecture\Interfaces\IncludeableInterface;
+use Chamilo\Libraries\Architecture\Interfaces\VersionableInterface;
 use Chamilo\Libraries\Calendar\Event\RecurringContentObject;
 use Chamilo\Libraries\Translation\Translation;
 
@@ -13,7 +13,7 @@ use Chamilo\Libraries\Translation\Translation;
  * @author  Hans De Bisschop <hans.de.bisschop@ehb.be>
  * @author  Dieter De Neef
  */
-class CalendarEvent extends RecurringContentObject implements Versionable, AttachmentSupportInterface, Includeable
+class CalendarEvent extends RecurringContentObject implements VersionableInterface, AttachmentSupportInterface, IncludeableInterface
 {
     public const CONTEXT = 'Chamilo\Core\Repository\ContentObject\CalendarEvent';
 

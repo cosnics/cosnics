@@ -3,7 +3,7 @@ namespace Chamilo\Core\Home\Component;
 
 use Chamilo\Core\Home\Manager;
 use Chamilo\Core\Home\Renderer\HomeRenderer;
-use Chamilo\Libraries\Architecture\Interfaces\NoAuthenticationSupport;
+use Chamilo\Libraries\Architecture\Interfaces\NoAuthenticationSupportInterface;
 use Chamilo\Libraries\Authentication\AuthenticationValidator;
 use Chamilo\Libraries\Format\Breadcrumb\BreadcrumbLessComponentInterface;
 use Chamilo\Libraries\Format\Breadcrumb\BreadcrumbLessPackageInterface;
@@ -14,7 +14,7 @@ use Chamilo\Libraries\Format\Breadcrumb\BreadcrumbLessPackageInterface;
  * @author  Magali Gillard <magali.gillard@ehb.be>
  * @author  Eduard Vossen <eduard.vossen@ehb.be>
  */
-class HomeComponent extends Manager implements NoAuthenticationSupport, BreadcrumbLessPackageInterface, BreadcrumbLessComponentInterface
+class HomeComponent extends Manager implements NoAuthenticationSupportInterface, BreadcrumbLessPackageInterface, BreadcrumbLessComponentInterface
 {
 
     /**

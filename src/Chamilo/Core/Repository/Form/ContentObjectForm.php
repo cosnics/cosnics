@@ -26,7 +26,7 @@ use Chamilo\Libraries\Architecture\ClassnameUtilities;
 use Chamilo\Libraries\Architecture\Exceptions\NotAllowedException;
 use Chamilo\Libraries\Architecture\Interfaces\AttachmentSupportInterface;
 use Chamilo\Libraries\Architecture\Interfaces\ForcedVersionSupportInterface;
-use Chamilo\Libraries\Architecture\Interfaces\Versionable;
+use Chamilo\Libraries\Architecture\Interfaces\VersionableInterface;
 use Chamilo\Libraries\Format\Form\Element\AdvancedElementFinder\AdvancedElementFinderElement;
 use Chamilo\Libraries\Format\Form\Element\AdvancedElementFinder\AdvancedElementFinderElements;
 use Chamilo\Libraries\Format\Form\Element\AdvancedElementFinder\AdvancedElementFinderElementType;
@@ -466,7 +466,7 @@ abstract class ContentObjectForm extends FormValidator
 
         $this->build_basic_form($htmleditor_options);
 
-        if ($object instanceof Versionable && $this->allow_new_version)
+        if ($object instanceof VersionableInterface && $this->allow_new_version)
         {
             if ($object instanceof ForcedVersionSupportInterface)
             {

@@ -11,7 +11,7 @@ use Chamilo\Core\User\Service\UserService;
 use Chamilo\Core\User\Storage\DataClass\User;
 use Chamilo\Libraries\Architecture\Application\Application;
 use Chamilo\Libraries\Architecture\Application\Routing\UrlGenerator;
-use Chamilo\Libraries\Architecture\Interfaces\Versionable;
+use Chamilo\Libraries\Architecture\Interfaces\VersionableInterface;
 use Chamilo\Libraries\Format\Structure\Glyph\FontAwesomeGlyph;
 use Chamilo\Libraries\Format\Structure\Glyph\IdentGlyph;
 use Chamilo\Libraries\Format\Table\Column\DataClassPropertyTableColumnFactory;
@@ -330,7 +330,7 @@ class ContentObjectTableRenderer extends DataClassListTableRenderer
                     $contentObject->get_modification_date()
                 );
             case self::PROPERTY_VERSION :
-                if ($contentObject instanceof Versionable)
+                if ($contentObject instanceof VersionableInterface)
                 {
                     if ($contentObject->has_versions())
                     {

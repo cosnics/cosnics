@@ -2,7 +2,7 @@
 namespace Chamilo\Core\Install\Component;
 
 use Chamilo\Core\Install\Manager;
-use Chamilo\Libraries\Architecture\Interfaces\NoAuthenticationSupport;
+use Chamilo\Libraries\Architecture\Interfaces\NoAuthenticationSupportInterface;
 use Chamilo\Libraries\Format\Structure\ActionBar\AbstractButton;
 use Chamilo\Libraries\Format\Structure\ActionBar\Button;
 use Chamilo\Libraries\Format\Structure\ActionBar\ButtonToolBar;
@@ -17,7 +17,7 @@ use Chamilo\Libraries\Format\Structure\Glyph\FontAwesomeGlyph;
  * @author  Magali Gillard <magali.gillard@ehb.be>
  * @author  Eduard Vossen <eduard.vossen@ehb.be>
  */
-class IntroductionComponent extends Manager implements NoAuthenticationSupport
+class IntroductionComponent extends Manager implements NoAuthenticationSupportInterface
 {
 
     /**

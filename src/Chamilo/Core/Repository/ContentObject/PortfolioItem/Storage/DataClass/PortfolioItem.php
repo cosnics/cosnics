@@ -5,12 +5,12 @@ use Chamilo\Core\Repository\ContentObject\Portfolio\Storage\DataClass\Portfolio;
 use Chamilo\Core\Repository\Storage\DataClass\ContentObject;
 use Chamilo\Core\Repository\Storage\DataManager;
 use Chamilo\Libraries\Architecture\Interfaces\HelperContentObjectSupportInterface;
-use Chamilo\Libraries\Architecture\Interfaces\Versionable;
+use Chamilo\Libraries\Architecture\Interfaces\VersionableInterface;
 
 /**
  * @package Chamilo\Core\Repository\ContentObject\PortfolioItem\Storage\DataClass
  */
-class PortfolioItem extends ContentObject implements Versionable, HelperContentObjectSupportInterface
+class PortfolioItem extends ContentObject implements VersionableInterface, HelperContentObjectSupportInterface
 {
     public const CONTEXT = 'Chamilo\Core\Repository\ContentObject\PortfolioItem';
 

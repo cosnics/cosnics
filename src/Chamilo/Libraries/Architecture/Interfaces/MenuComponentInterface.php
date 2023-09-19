@@ -1,7 +1,7 @@
 <?php
 namespace Chamilo\Libraries\Architecture\Interfaces;
 
-interface MenuComponent
+interface MenuComponentInterface
 {
     public function renderApplicationMenu(): string;
 }

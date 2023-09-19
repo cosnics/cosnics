@@ -111,7 +111,7 @@ class Kernel
     {
         $applicationClassName = $this->getApplicationFactory()->getClassName($this->getContext());
         $applicationRequiresAuthentication = !is_subclass_of(
-            $applicationClassName, 'Chamilo\Libraries\Architecture\Interfaces\NoAuthenticationSupport'
+            $applicationClassName, 'Chamilo\Libraries\Architecture\Interfaces\NoAuthenticationSupportInterface'
         );
 
         if ($applicationRequiresAuthentication)

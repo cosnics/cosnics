@@ -2,7 +2,7 @@
 namespace Chamilo\Core\Install\Component;
 
 use Chamilo\Core\Install\Manager;
-use Chamilo\Libraries\Architecture\Interfaces\NoAuthenticationSupport;
+use Chamilo\Libraries\Architecture\Interfaces\NoAuthenticationSupportInterface;
 use Chamilo\Libraries\Format\Structure\ActionBar\AbstractButton;
 use Chamilo\Libraries\Format\Structure\ActionBar\Button;
 use Chamilo\Libraries\Format\Structure\ActionBar\ButtonToolBar;
@@ -18,7 +18,7 @@ use Chamilo\Libraries\Utilities\StringUtilities;
  * @author  Magali Gillard <magali.gillard@ehb.be>
  * @author  Eduard Vossen <eduard.vossen@ehb.be>
  */
-class RequirementsComponent extends Manager implements NoAuthenticationSupport
+class RequirementsComponent extends Manager implements NoAuthenticationSupportInterface
 {
     private bool $fatal = false;
 

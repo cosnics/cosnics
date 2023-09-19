@@ -2,13 +2,13 @@
 namespace Chamilo\Core\Repository\ContentObject\OrderingQuestion\Storage\DataClass;
 
 use Chamilo\Core\Repository\Storage\DataClass\ContentObject;
-use Chamilo\Libraries\Architecture\Interfaces\Versionable;
+use Chamilo\Libraries\Architecture\Interfaces\VersionableInterface;
 use Chamilo\Libraries\Utilities\StringUtilities;
 
 /**
  * @package Chamilo\Core\Repository\ContentObject\OrderingQuestion\Storage\DataClass
  */
-class OrderingQuestion extends ContentObject implements Versionable
+class OrderingQuestion extends ContentObject implements VersionableInterface
 {
     public const CONTEXT = 'Chamilo\Core\Repository\ContentObject\OrderingQuestion';
 

@@ -10,7 +10,7 @@ use Chamilo\Core\Repository\Workspace\Repository\ContentObjectRepository;
 use Chamilo\Core\Repository\Workspace\Service\WorkspaceContentObjectService;
 use Chamilo\Core\Repository\Workspace\Storage\DataClass\Workspace;
 use Chamilo\Libraries\Architecture\ClassnameUtilities;
-use Chamilo\Libraries\Architecture\Interfaces\Includeable;
+use Chamilo\Libraries\Architecture\Interfaces\IncludeableInterface;
 use Symfony\Component\HttpFoundation\JsonResponse;
 
 /**
@@ -119,6 +119,6 @@ class GetContentObjectsComponent extends Manager
      */
     protected function validateContentObject(ContentObject $contentObject)
     {
-        return ($contentObject instanceof Includeable);
+        return ($contentObject instanceof IncludeableInterface);
     }
 }

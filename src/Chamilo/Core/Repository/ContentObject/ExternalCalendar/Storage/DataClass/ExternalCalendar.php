@@ -4,7 +4,7 @@ namespace Chamilo\Core\Repository\ContentObject\ExternalCalendar\Storage\DataCla
 use Chamilo\Core\Repository\ContentObject\ExternalCalendar\Service\ExternalCalendarCacheService;
 use Chamilo\Core\Repository\Storage\DataClass\ContentObject;
 use Chamilo\Libraries\Architecture\Interfaces\FileStorageSupportInterface;
-use Chamilo\Libraries\Architecture\Interfaces\Versionable;
+use Chamilo\Libraries\Architecture\Interfaces\VersionableInterface;
 use Chamilo\Libraries\DependencyInjection\DependencyInjectionContainerBuilder;
 use Chamilo\Libraries\File\ConfigurablePathBuilder;
 use Chamilo\Libraries\Translation\Translation;
@@ -21,7 +21,7 @@ use Symfony\Component\Cache\Adapter\FilesystemAdapter;
  * @author  Magali Gillard <magali.gillard@ehb.be>
  * @author  Eduard Vossen <eduard.vossen@ehb.be>
  */
-class ExternalCalendar extends ContentObject implements Versionable, FileStorageSupportInterface
+class ExternalCalendar extends ContentObject implements VersionableInterface, FileStorageSupportInterface
 {
     public const CACHE_TIME = 3600;
 

@@ -10,7 +10,7 @@ use Chamilo\Core\Group\Table\SubscribedUserTableRenderer;
 use Chamilo\Core\User\Storage\DataClass\User;
 use Chamilo\Libraries\Architecture\ClassnameUtilities;
 use Chamilo\Libraries\Architecture\Exceptions\NotAllowedException;
-use Chamilo\Libraries\Architecture\Interfaces\MenuComponent;
+use Chamilo\Libraries\Architecture\Interfaces\MenuComponentInterface;
 use Chamilo\Libraries\Format\Structure\ActionBar\Button;
 use Chamilo\Libraries\Format\Structure\ActionBar\ButtonGroup;
 use Chamilo\Libraries\Format\Structure\ActionBar\ButtonToolBar;
@@ -36,7 +36,7 @@ use Chamilo\Libraries\Utilities\StringUtilities;
  * @package Chamilo\Core\Group\Component
  * @author  Hans De Bisschop <hans.de.bisschop@ehb.be>
  */
-class BrowserComponent extends Manager implements MenuComponent
+class BrowserComponent extends Manager implements MenuComponentInterface
 {
     public const TAB_DETAILS = 2;
     public const TAB_SUBGROUPS = 0;

@@ -10,7 +10,7 @@ use Chamilo\Core\User\Storage\DataClass\User;
 use Chamilo\Libraries\Architecture\Application\Application;
 use Chamilo\Libraries\Architecture\Application\ApplicationConfigurationInterface;
 use Chamilo\Libraries\Architecture\Exceptions\NotAllowedException;
-use Chamilo\Libraries\Architecture\Interfaces\NoAuthenticationSupport;
+use Chamilo\Libraries\Architecture\Interfaces\NoAuthenticationSupportInterface;
 use Chamilo\Libraries\Authentication\AuthenticationValidator;
 use Chamilo\Libraries\Authentication\SecurityToken\SecurityTokenAuthentication;
 use Chamilo\Libraries\Calendar\Service\View\ICalCalendarRenderer;
@@ -24,7 +24,7 @@ use Symfony\Component\HttpFoundation\Response;
  * @author  Magali Gillard <magali.gillard@ehb.be>
  * @author  Eduard Vossen <eduard.vossen@ehb.be>
  */
-class ICalComponent extends Manager implements NoAuthenticationSupport
+class ICalComponent extends Manager implements NoAuthenticationSupportInterface
 {
     public const PARAM_DOWNLOAD = 'download';
 

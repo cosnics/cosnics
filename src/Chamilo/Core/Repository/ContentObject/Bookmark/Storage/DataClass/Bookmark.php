@@ -2,13 +2,13 @@
 namespace Chamilo\Core\Repository\ContentObject\Bookmark\Storage\DataClass;
 
 use Chamilo\Core\Repository\Storage\DataClass\ContentObject;
-use Chamilo\Libraries\Architecture\Interfaces\Includeable;
-use Chamilo\Libraries\Architecture\Interfaces\Versionable;
+use Chamilo\Libraries\Architecture\Interfaces\IncludeableInterface;
+use Chamilo\Libraries\Architecture\Interfaces\VersionableInterface;
 
 /**
  * @package Chamilo\Core\Repository\ContentObject\Bookmark\Storage\DataClass
  */
-class Bookmark extends ContentObject implements Versionable, Includeable
+class Bookmark extends ContentObject implements VersionableInterface, IncludeableInterface
 {
     public const CONTEXT = 'Chamilo\Core\Repository\ContentObject\Bookmark';
 

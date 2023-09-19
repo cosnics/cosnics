@@ -2,13 +2,13 @@
 namespace Chamilo\Core\Repository\ContentObject\AssessmentMultipleChoiceQuestion\Storage\DataClass;
 
 use Chamilo\Core\Repository\Storage\DataClass\ContentObject;
-use Chamilo\Libraries\Architecture\Interfaces\Versionable;
+use Chamilo\Libraries\Architecture\Interfaces\VersionableInterface;
 use Chamilo\Libraries\Utilities\StringUtilities;
 
 /**
  * @package Chamilo\Core\Repository\ContentObject\AssessmentMultipleChoiceQuestion\Storage\DataClass
  */
-class AssessmentMultipleChoiceQuestion extends ContentObject implements Versionable
+class AssessmentMultipleChoiceQuestion extends ContentObject implements VersionableInterface
 {
     public const ANSWER_TYPE_CHECKBOX = 2;
     public const ANSWER_TYPE_RADIO = 1;

@@ -3,12 +3,12 @@ namespace Chamilo\Core\Repository\ContentObject\HotspotQuestion\Storage\DataClas
 
 use Chamilo\Core\Repository\Storage\DataClass\ContentObject;
 use Chamilo\Core\Repository\Storage\DataManager;
-use Chamilo\Libraries\Architecture\Interfaces\Versionable;
+use Chamilo\Libraries\Architecture\Interfaces\VersionableInterface;
 
 /**
  * @package Chamilo\Core\Repository\ContentObject\HotspotQuestion\Storage\DataClass
  */
-class HotspotQuestion extends ContentObject implements Versionable
+class HotspotQuestion extends ContentObject implements VersionableInterface
 {
     public const CONTEXT = 'Chamilo\Core\Repository\ContentObject\HotspotQuestion';
 

@@ -4,7 +4,7 @@ namespace Chamilo\Core\Install\Component;
 use Chamilo\Core\Install\Form\SettingsForm;
 use Chamilo\Core\Install\Manager;
 use Chamilo\Core\Install\Service\SettingsOverviewRenderer;
-use Chamilo\Libraries\Architecture\Interfaces\NoAuthenticationSupport;
+use Chamilo\Libraries\Architecture\Interfaces\NoAuthenticationSupportInterface;
 use Chamilo\Libraries\Format\Structure\ActionBar\AbstractButton;
 use Chamilo\Libraries\Format\Structure\ActionBar\Button;
 use Chamilo\Libraries\Format\Structure\ActionBar\ButtonToolBar;
@@ -19,7 +19,7 @@ use Chamilo\Libraries\Utilities\StringUtilities;
  * @author  Magali Gillard <magali.gillard@ehb.be>
  * @author  Eduard Vossen <eduard.vossen@ehb.be>
  */
-class SettingsComponent extends Manager implements NoAuthenticationSupport
+class SettingsComponent extends Manager implements NoAuthenticationSupportInterface
 {
 
     private SettingsForm $settingsForm;

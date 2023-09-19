@@ -4,11 +4,11 @@ namespace Chamilo\Core\Repository\Ajax\Component;
 use Chamilo\Core\Repository\ContentObject\File\Storage\DataClass\File;
 use Chamilo\Core\Repository\Manager;
 use Chamilo\Core\Repository\Storage\DataClass\ContentObject;
-use Chamilo\Libraries\Architecture\Interfaces\NoAuthenticationSupport;
+use Chamilo\Libraries\Architecture\Interfaces\NoAuthenticationSupportInterface;
 use Chamilo\Libraries\Architecture\JsonAjaxResult;
 use Chamilo\Libraries\Utilities\StringUtilities;
 
-class UploadImageComponent extends \Chamilo\Core\Repository\Ajax\Manager implements NoAuthenticationSupport
+class UploadImageComponent extends \Chamilo\Core\Repository\Ajax\Manager implements NoAuthenticationSupportInterface
 {
 
     /*

@@ -24,7 +24,7 @@ use Chamilo\Libraries\Architecture\Application\ApplicationConfigurationInterface
 use Chamilo\Libraries\Architecture\Application\Routing\UrlGenerator;
 use Chamilo\Libraries\Architecture\ClassnameUtilities;
 use Chamilo\Libraries\Architecture\Exceptions\ObjectNotExistException;
-use Chamilo\Libraries\Architecture\Interfaces\MenuComponent;
+use Chamilo\Libraries\Architecture\Interfaces\MenuComponentInterface;
 use Chamilo\Libraries\DependencyInjection\DependencyInjectionContainerBuilder;
 use Chamilo\Libraries\Format\Breadcrumb\BreadcrumbGeneratorInterface;
 use Chamilo\Libraries\Format\Structure\Glyph\FontAwesomeGlyph;
@@ -44,7 +44,7 @@ use Chamilo\Libraries\Translation\Translation;
  * @author  Magali Gillard <magali.gillard@ehb.be>
  * @author  Eduard Vossen <eduard.vossen@ehb.be>
  */
-abstract class Manager extends Application implements MenuComponent
+abstract class Manager extends Application implements MenuComponentInterface
 {
     public const ACTION_BROWSE_CONTENT_OBJECTS = 'Browser';
     public const ACTION_BROWSE_RECYCLED_CONTENT_OBJECTS = 'RecycleBinBrowser';

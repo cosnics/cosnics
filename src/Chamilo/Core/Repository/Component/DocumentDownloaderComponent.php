@@ -5,7 +5,7 @@ use Chamilo\Core\Repository\Manager;
 use Chamilo\Core\Repository\Storage\DataClass\ContentObject;
 use Chamilo\Core\Repository\Storage\DataManager;
 use Chamilo\Libraries\Architecture\Exceptions\UserException;
-use Chamilo\Libraries\Architecture\Interfaces\NoAuthenticationSupport;
+use Chamilo\Libraries\Architecture\Interfaces\NoAuthenticationSupportInterface;
 use Chamilo\Libraries\Translation\Translation;
 use Chamilo\Libraries\Utilities\StringUtilities;
 use Exception;
@@ -13,7 +13,7 @@ use Exception;
 /**
  * @package repository.lib.repository_manager.component
  */
-class DocumentDownloaderComponent extends Manager implements NoAuthenticationSupport
+class DocumentDownloaderComponent extends Manager implements NoAuthenticationSupportInterface
 {
 
     /**

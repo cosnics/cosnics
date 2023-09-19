@@ -9,6 +9,6 @@ namespace Chamilo\Libraries\Architecture\Interfaces;
  * @author Hans De Bisschop
  * @author Magali Gillard
  */
-interface NoAuthenticationSupport
+interface NoAuthenticationSupportInterface
 {
 }

@@ -6,7 +6,7 @@ use Chamilo\Core\Admin\Form\ConfigurationForm;
 use Chamilo\Core\Admin\Manager;
 use Chamilo\Core\Admin\Menu\PackageTypeSettingsMenu;
 use Chamilo\Libraries\Architecture\Application\Application;
-use Chamilo\Libraries\Architecture\Interfaces\MenuComponent;
+use Chamilo\Libraries\Architecture\Interfaces\MenuComponentInterface;
 use Chamilo\Libraries\Format\Form\FormValidator;
 use Chamilo\Libraries\Format\Structure\Breadcrumb;
 use Chamilo\Libraries\Format\Structure\Glyph\IdentGlyph;
@@ -20,7 +20,7 @@ use Chamilo\Libraries\Utilities\StringUtilities;
 /**
  * @package Chamilo\Core\Admin\Component
  */
-class ConfigurerComponent extends Manager implements MenuComponent
+class ConfigurerComponent extends Manager implements MenuComponentInterface
 {
     public const PARAM_TAB = 'tab';
 

@@ -6,14 +6,14 @@ use Chamilo\Core\User\Manager;
 use Chamilo\Core\User\Storage\DataClass\User;
 use Chamilo\Libraries\Architecture\Application\Application;
 use Chamilo\Libraries\Architecture\Exceptions\NotAllowedException;
-use Chamilo\Libraries\Architecture\Interfaces\NoAuthenticationSupport;
+use Chamilo\Libraries\Architecture\Interfaces\NoAuthenticationSupportInterface;
 use Chamilo\Libraries\Translation\Translation;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 
 /**
  * @package user.lib.user_manager.component
  */
-class RegisterComponent extends Manager implements NoAuthenticationSupport
+class RegisterComponent extends Manager implements NoAuthenticationSupportInterface
 {
 
     /**

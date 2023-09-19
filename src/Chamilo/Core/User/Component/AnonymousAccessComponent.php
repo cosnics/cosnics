@@ -8,7 +8,7 @@ use Chamilo\Core\User\Roles\Service\Interfaces\UserRoleServiceInterface;
 use Chamilo\Core\User\Roles\Service\UserRoleService;
 use Chamilo\Core\User\Storage\DataClass\User;
 use Chamilo\Libraries\Architecture\Exceptions\NotAllowedException;
-use Chamilo\Libraries\Architecture\Interfaces\NoAuthenticationSupport;
+use Chamilo\Libraries\Architecture\Interfaces\NoAuthenticationSupportInterface;
 use Chamilo\Libraries\Format\Structure\Page;
 use Chamilo\Libraries\Format\Structure\PageConfiguration;
 use Chamilo\Libraries\Translation\Translation;
@@ -20,7 +20,7 @@ use Symfony\Component\HttpFoundation\RedirectResponse;
 /**
  * Landing page for anonymous users to start using Chamilo anonymously, requires an
  */
-class AnonymousAccessComponent extends Manager implements NoAuthenticationSupport
+class AnonymousAccessComponent extends Manager implements NoAuthenticationSupportInterface
 {
 
     /**
