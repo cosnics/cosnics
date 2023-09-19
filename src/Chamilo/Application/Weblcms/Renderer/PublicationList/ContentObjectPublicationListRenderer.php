@@ -11,9 +11,9 @@ use Chamilo\Application\Weblcms\Storage\DataManager;
 use Chamilo\Application\Weblcms\Tool\Action\Component\BrowserComponent;
 use Chamilo\Core\Repository\Storage\DataClass\ContentObject;
 use Chamilo\Core\Repository\Workspace\Service\RightsService;
-use Chamilo\Libraries\Architecture\Interfaces\AttachmentSupport;
-use Chamilo\Libraries\Architecture\Interfaces\Categorizable;
-use Chamilo\Libraries\Architecture\Interfaces\ComplexContentObjectSupport;
+use Chamilo\Libraries\Architecture\Interfaces\AttachmentSupportInterface;
+use Chamilo\Libraries\Architecture\Interfaces\CategorizableInterface;
+use Chamilo\Libraries\Architecture\Interfaces\ComplexContentObjectSupportInterface;
 use Chamilo\Libraries\DependencyInjection\Traits\DependencyInjectionContainerTrait;
 use Chamilo\Libraries\Format\Structure\Glyph\FontAwesomeGlyph;
 use Chamilo\Libraries\Format\Structure\Glyph\IdentGlyph;
@@ -262,7 +262,7 @@ abstract class ContentObjectPublicationListRenderer
             )
         );
 
-        if ($content_object instanceof ComplexContentObjectSupport)
+        if ($content_object instanceof ComplexContentObjectSupportInterface)
         {
             $toolbar->add_item(
                 new ToolbarItem(
@@ -295,7 +295,7 @@ abstract class ContentObjectPublicationListRenderer
                 )
             );
 
-            if ($content_object instanceof ComplexContentObjectSupport)
+            if ($content_object instanceof ComplexContentObjectSupportInterface)
             {
                 if ($content_object::CONTEXT == 'Chamilo\Core\Repository\ContentObject\Assessment')
                 {
@@ -479,7 +479,7 @@ abstract class ContentObjectPublicationListRenderer
             );
 
             // Move the publication
-            if ($this->get_tool_browser()->get_parent() instanceof Categorizable &&
+            if ($this->get_tool_browser()->get_parent() instanceof CategorizableInterface &&
                 $this->get_tool_browser()->hasCategories())
             {
                 $toolbar->add_item(
@@ -662,7 +662,7 @@ abstract class ContentObjectPublicationListRenderer
     public function render_attachments($publication)
     {
         $object = $this->get_content_object_from_publication($publication);
-        if ($object instanceof AttachmentSupport)
+        if ($object instanceof AttachmentSupportInterface)
         {
             $attachments = $object->get_attachments();
             if (count($attachments) > 0)
@@ -739,7 +739,7 @@ abstract class ContentObjectPublicationListRenderer
      */
     public function render_move_to_category_action($publication)
     {
-        if ($this->get_tool_browser() instanceof Categorizable)
+        if ($this->get_tool_browser() instanceof CategorizableInterface)
         {
 
             $conditions[] = new EqualityCondition(

@@ -3,7 +3,7 @@ namespace Chamilo\Core\Repository\ContentObject\Assignment\Storage\DataClass;
 
 use Chamilo\Core\Repository\Storage\DataClass\ContentObject;
 use Chamilo\Core\Repository\Storage\DataManager;
-use Chamilo\Libraries\Architecture\Interfaces\AttachmentSupport;
+use Chamilo\Libraries\Architecture\Interfaces\AttachmentSupportInterface;
 use Chamilo\Libraries\Storage\Query\Condition\InCondition;
 use Chamilo\Libraries\Storage\Query\Variable\PropertyConditionVariable;
 
@@ -12,7 +12,7 @@ use Chamilo\Libraries\Storage\Query\Variable\PropertyConditionVariable;
  * @author  Joris Willems <joris.willems@gmail.com>
  * @author  Alexander Van Paemel
  */
-class Assignment extends ContentObject implements AttachmentSupport
+class Assignment extends ContentObject implements AttachmentSupportInterface
 {
     public const CONTEXT = 'Chamilo\Core\Repository\ContentObject\Assignment';
 

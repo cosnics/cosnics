@@ -3,7 +3,7 @@ namespace Chamilo\Core\Repository\Integration\Chamilo\Core\Tracking\Service;
 
 use Chamilo\Core\Repository\Integration\Chamilo\Core\Tracking\Storage\Repository\ActivityRepository;
 use Chamilo\Core\Repository\Storage\DataClass\ContentObject;
-use Chamilo\Libraries\Architecture\Interfaces\ComplexContentObjectSupport;
+use Chamilo\Libraries\Architecture\Interfaces\ComplexContentObjectSupportInterface;
 use Chamilo\Libraries\Storage\Query\OrderBy;
 use Chamilo\Libraries\Storage\Query\OrderProperty;
 use Doctrine\Common\Collections\ArrayCollection;
@@ -26,7 +26,7 @@ class ActivityService
     {
         $activitiesCount = 0;
 
-        if ($contentObject instanceof ComplexContentObjectSupport)
+        if ($contentObject instanceof ComplexContentObjectSupportInterface)
         {
             $complex_content_object_path = $contentObject->get_complex_content_object_path();
 
@@ -63,7 +63,7 @@ class ActivityService
     {
         $activities = [];
 
-        if ($contentObject instanceof ComplexContentObjectSupport)
+        if ($contentObject instanceof ComplexContentObjectSupportInterface)
         {
             $complex_content_object_path = $contentObject->get_complex_content_object_path();
 

@@ -9,7 +9,7 @@ use Chamilo\Core\Repository\ContentObject\File\Storage\DataClass\File;
 use Chamilo\Core\Repository\ContentObject\Page\Storage\DataClass\Page;
 use Chamilo\Core\Repository\ContentObject\Webpage\Storage\DataClass\Webpage;
 use Chamilo\Core\Repository\Storage\DataClass\ContentObject;
-use Chamilo\Libraries\Architecture\Interfaces\Categorizable;
+use Chamilo\Libraries\Architecture\Interfaces\CategorizableInterface;
 use Chamilo\Libraries\DependencyInjection\DependencyInjectionContainerBuilder;
 use Chamilo\Libraries\Format\Structure\ActionBar\Button;
 use Chamilo\Libraries\Format\Structure\ActionBar\ButtonGroup;
@@ -26,7 +26,7 @@ use Chamilo\Libraries\Translation\Translation;
  * This tool allows a user to publish documents in his or her course.
  */
 abstract class Manager extends \Chamilo\Application\Weblcms\Tool\Manager
-    implements Categorizable, IntroductionTextSupportInterface
+    implements CategorizableInterface, IntroductionTextSupportInterface
 {
     public const ACTION_DOWNLOAD = 'Downloader';
     public const ACTION_SLIDESHOW = 'Slideshow';

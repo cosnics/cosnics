@@ -15,6 +15,7 @@ class UploadedFileHandler
     /**
      * @param UploadedFile $uploadedFile
      * @param User $user
+     *
      * @return File
      * @throws \Exception
      */

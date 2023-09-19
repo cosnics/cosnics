@@ -13,7 +13,7 @@ use Chamilo\Core\Repository\Storage\DataClass\RepositoryCategory;
 use Chamilo\Core\Repository\Storage\DataManager;
 use Chamilo\Core\Repository\Workspace\Storage\DataClass\WorkspaceContentObjectRelation;
 use Chamilo\Core\User\Manager;
-use Chamilo\Libraries\Architecture\Interfaces\ComplexContentObjectSupport;
+use Chamilo\Libraries\Architecture\Interfaces\ComplexContentObjectSupportInterface;
 use Chamilo\Libraries\File\Compression\ZipArchive\ZipArchiveFilecompression;
 use Chamilo\Libraries\Storage\Parameters\DataClassRetrievesParameters;
 use Chamilo\Libraries\Storage\Query\Condition\EqualityCondition;
@@ -558,7 +558,7 @@ class CpoContentObjectExportController extends ContentObjectExportController
      */
     public function process_complex_children(ContentObject $content_object)
     {
-        if ($content_object instanceof ComplexContentObjectSupport)
+        if ($content_object instanceof ComplexContentObjectSupportInterface)
         {
             $condition = new EqualityCondition(
                 new PropertyConditionVariable(

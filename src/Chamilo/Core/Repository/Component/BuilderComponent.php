@@ -6,7 +6,7 @@ use Chamilo\Core\Repository\Storage\DataClass\ContentObject;
 use Chamilo\Libraries\Architecture\Application\ApplicationConfiguration;
 use Chamilo\Libraries\Architecture\ClassnameUtilities;
 use Chamilo\Libraries\Architecture\Exceptions\NotAllowedException;
-use Chamilo\Libraries\Architecture\Interfaces\ApplicationSupport;
+use Chamilo\Libraries\Format\Breadcrumb\BreadcrumbLessComponentInterface;
 use Chamilo\Libraries\Format\Structure\Breadcrumb;
 use Chamilo\Libraries\Format\Structure\PageConfiguration;
 use Chamilo\Libraries\Storage\DataManager\DataManager;
@@ -23,7 +23,7 @@ use Exception;
  *
  * @author vanpouckesven
  */
-class BuilderComponent extends Manager implements ApplicationSupport
+class BuilderComponent extends Manager implements BreadcrumbLessComponentInterface
 {
     public const PARAM_POPUP = 'popup';
 

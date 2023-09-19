@@ -6,7 +6,7 @@ use Chamilo\Core\Repository\ContentObject\ForumTopic\Storage\DataManager;
 use Chamilo\Core\Repository\Storage\DataClass\ContentObject;
 use Chamilo\Core\User\Manager;
 use Chamilo\Core\User\Storage\DataClass\User;
-use Chamilo\Libraries\Architecture\Interfaces\AttachmentSupport;
+use Chamilo\Libraries\Architecture\Interfaces\AttachmentSupportInterface;
 use Chamilo\Libraries\DependencyInjection\DependencyInjectionContainerBuilder;
 use Chamilo\Libraries\Storage\DataClass\DataClass;
 use Chamilo\Libraries\Translation\Translation;
@@ -19,7 +19,7 @@ use Symfony\Component\HttpFoundation\Session\SessionInterface;
  * @author  Mattias De Pauw - Hogeschool Gent
  * @author  Maarten Volckaert - Hogeschool Gent
  */
-class ForumPost extends DataClass implements AttachmentSupport
+class ForumPost extends DataClass implements AttachmentSupportInterface
 {
     public const ATTACHMENT_ALL = 'all';
     public const ATTACHMENT_NORMAL = 'normal';

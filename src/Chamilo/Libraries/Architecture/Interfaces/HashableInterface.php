@@ -9,7 +9,7 @@ namespace Chamilo\Libraries\Architecture\Interfaces;
  * @author Magali Gillard <magali.gillard@ehb.be>
  * @author Eduard Vossen <eduard.vossen@ehb.be>
  */
-interface Hashable
+interface HashableInterface
 {
 
     public function getHash(): ?string;

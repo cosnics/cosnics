@@ -1,7 +1,7 @@
 <?php
 namespace Chamilo\Libraries\Storage\Query;
 
-use Chamilo\Libraries\Architecture\Interfaces\Hashable;
+use Chamilo\Libraries\Architecture\Interfaces\HashableInterface;
 use Chamilo\Libraries\Architecture\Traits\HashableTrait;
 use Chamilo\Libraries\Storage\Query\Variable\ConditionVariable;
 
@@ -14,7 +14,7 @@ use Chamilo\Libraries\Storage\Query\Variable\ConditionVariable;
  * @author Magali Gillard <magali.gillard@ehb.be>
  * @author Eduard Vossen <eduard.vossen@ehb.be>
  */
-class OrderProperty implements Hashable
+class OrderProperty implements HashableInterface
 {
     use HashableTrait;
 

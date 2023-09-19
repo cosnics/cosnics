@@ -8,7 +8,7 @@ use Chamilo\Core\Metadata\Storage\DataClass\Relation;
 use Chamilo\Core\Metadata\Storage\DataClass\Schema;
 use Chamilo\Core\Repository\Manager;
 use Chamilo\Libraries\Architecture\Application\ApplicationConfiguration;
-use Chamilo\Libraries\Architecture\Interfaces\ApplicationSupport;
+use Chamilo\Libraries\Format\Breadcrumb\BreadcrumbLessComponentInterface;
 use Chamilo\Libraries\Translation\Translation;
 use Exception;
 
@@ -18,7 +18,7 @@ use Exception;
  * @author  Magali Gillard <magali.gillard@ehb.be>
  * @author  Eduard Vossen <eduard.vossen@ehb.be>
  */
-class SchemaLinkerComponent extends Manager implements ApplicationSupport
+class SchemaLinkerComponent extends Manager implements BreadcrumbLessComponentInterface
 {
 
     /**

@@ -12,7 +12,7 @@ use Chamilo\Core\User\Storage\DataClass\User;
  * @author Magali Gillard <magali.gillard@ehb.be>
  * @author Eduard Vossen <eduard.vossen@ehb.be>
  */
-interface ChangeablePassword
+interface ChangeablePasswordInterface
 {
     
     public function changePassword(User $user, string $oldPassword, string $newPassword): bool;

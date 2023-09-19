@@ -274,7 +274,8 @@ abstract class EntryTableRenderer extends RecordListTableRenderer implements Tab
         }
 
         $usesFileStorage = is_subclass_of(
-            $entry[ContentObject::PROPERTY_TYPE], '\Chamilo\Libraries\Architecture\Interfaces\FileStorageSupport'
+            $entry[ContentObject::PROPERTY_TYPE],
+            '\Chamilo\Libraries\Architecture\Interfaces\FileStorageSupportInterface'
         );
 
         if ($usesFileStorage)

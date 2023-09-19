@@ -4,14 +4,14 @@ namespace Chamilo\Core\Repository\ContentObject\Portfolio\Storage\DataClass;
 use Chamilo\Configuration\Storage\DataClass\Registration;
 use Chamilo\Core\Repository\Manager;
 use Chamilo\Core\Repository\Storage\DataClass\ContentObject;
-use Chamilo\Libraries\Architecture\Interfaces\ComplexContentObjectDisclosure;
-use Chamilo\Libraries\Architecture\Interfaces\ComplexContentObjectSupport;
+use Chamilo\Libraries\Architecture\Interfaces\ComplexContentObjectDisclosureInterface;
+use Chamilo\Libraries\Architecture\Interfaces\ComplexContentObjectSupportInterface;
 
 /**
  * @package Chamilo\Core\Repository\ContentObject\Portfolio\Storage\DataClass
  * @author  Hans De Bisschop <hans.de.bisschop@ehb.be>
  */
-class Portfolio extends ContentObject implements ComplexContentObjectSupport, ComplexContentObjectDisclosure
+class Portfolio extends ContentObject implements ComplexContentObjectSupportInterface, ComplexContentObjectDisclosureInterface
 {
     public const CONTEXT = 'Chamilo\Core\Repository\ContentObject\Portfolio';
 

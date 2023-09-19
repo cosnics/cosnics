@@ -8,7 +8,7 @@ use Chamilo\Application\Weblcms\Tool\Interfaces\IntroductionTextSupportInterface
 use Chamilo\Core\Repository\ContentObject\Assessment\Storage\DataClass\Assessment;
 use Chamilo\Core\Repository\ContentObject\Hotpotatoes\Storage\DataClass\Hotpotatoes;
 use Chamilo\Core\Repository\Storage\DataClass\ContentObject;
-use Chamilo\Libraries\Architecture\Interfaces\Categorizable;
+use Chamilo\Libraries\Architecture\Interfaces\CategorizableInterface;
 use Chamilo\Libraries\Format\Structure\ActionBar\Button;
 use Chamilo\Libraries\Format\Structure\ActionBar\ButtonGroup;
 use Chamilo\Libraries\Format\Structure\ActionBar\DropdownButton;
@@ -31,7 +31,7 @@ use Chamilo\Libraries\Translation\Translation;
  * This tool allows a user to publish assessments in his or her course.
  */
 abstract class Manager extends \Chamilo\Application\Weblcms\Tool\Manager
-    implements Categorizable, IntroductionTextSupportInterface
+    implements CategorizableInterface, IntroductionTextSupportInterface
 {
     public const ACTION_ATTEMPT_RESULT_VIEWER = 'AttemptResultViewer';
     public const ACTION_DELETE_RESULTS = 'ResultsDeleter';

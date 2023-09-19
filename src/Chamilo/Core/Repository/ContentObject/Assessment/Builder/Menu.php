@@ -7,7 +7,7 @@ use Chamilo\Core\Repository\Storage\DataClass\ContentObject;
 use Chamilo\Core\Repository\Storage\DataManager;
 use Chamilo\Libraries\Architecture\Application\Application;
 use Chamilo\Libraries\Architecture\ClassnameUtilities;
-use Chamilo\Libraries\Architecture\Interfaces\ComplexContentObjectSupport;
+use Chamilo\Libraries\Architecture\Interfaces\ComplexContentObjectSupportInterface;
 use Chamilo\Libraries\DependencyInjection\DependencyInjectionContainerBuilder;
 use Chamilo\Libraries\File\WebPathBuilder;
 use Chamilo\Libraries\Format\Menu\Library\HtmlMenu;
@@ -208,7 +208,7 @@ class Menu extends HtmlMenu
                 $url = $this->get_build_complex_url($lo);
             }
 
-            if ($lo instanceof ComplexContentObjectSupport || $this->view_entire_structure)
+            if ($lo instanceof ComplexContentObjectSupportInterface || $this->view_entire_structure)
             {
                 $menu_item = [];
                 $menu_item['title'] = $lo->get_title();

@@ -14,7 +14,7 @@ use Chamilo\Libraries\Translation\Translation;
  * @author Magali Gillard <magali.gillard@ehb.be>
  * @author Eduard Vossen <eduard.vossen@ehb.be>
  */
-class PictureComponent extends ProfileComponent implements BreadcrumbLessPackageInterface
+class PictureComponent extends ProfileComponent
 {
 
     /**

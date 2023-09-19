@@ -6,8 +6,8 @@ use Chamilo\Core\User\Service\UserService;
 use Chamilo\Core\User\Storage\DataClass\User;
 use Chamilo\Libraries\Architecture\Application\Application;
 use Chamilo\Libraries\Architecture\Application\Routing\UrlGenerator;
-use Chamilo\Libraries\Architecture\Interfaces\ChangeablePassword;
-use Chamilo\Libraries\Architecture\Interfaces\ChangeableUsername;
+use Chamilo\Libraries\Architecture\Interfaces\ChangeablePasswordInterface;
+use Chamilo\Libraries\Architecture\Interfaces\ChangeableUsernameInterface;
 use Chamilo\Libraries\Authentication\Authentication;
 use Chamilo\Libraries\Authentication\AuthenticationException;
 use Chamilo\Libraries\Authentication\AuthenticationInterface;
@@ -25,7 +25,7 @@ use Symfony\Component\Translation\Translator;
  * @author Eduard Vossen <eduard.vossen@ehb.be>
  */
 class PlatformAuthentication extends Authentication
-    implements AuthenticationInterface, ChangeablePassword, ChangeableUsername
+    implements AuthenticationInterface, ChangeablePasswordInterface, ChangeableUsernameInterface
 {
 
     /**

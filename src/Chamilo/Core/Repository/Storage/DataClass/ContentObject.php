@@ -15,8 +15,8 @@ use Chamilo\Core\User\Manager;
 use Chamilo\Core\User\Storage\DataClass\User;
 use Chamilo\Libraries\Architecture\ClassnameUtilities;
 use Chamilo\Libraries\Architecture\Exceptions\ObjectNotExistException;
-use Chamilo\Libraries\Architecture\Interfaces\AttachmentSupport;
-use Chamilo\Libraries\Architecture\Interfaces\ComplexContentObjectSupport;
+use Chamilo\Libraries\Architecture\Interfaces\AttachmentSupportInterface;
+use Chamilo\Libraries\Architecture\Interfaces\ComplexContentObjectSupportInterface;
 use Chamilo\Libraries\Architecture\Interfaces\Versionable;
 use Chamilo\Libraries\DependencyInjection\DependencyInjectionContainerBuilder;
 use Chamilo\Libraries\File\ConfigurablePathBuilder;
@@ -1720,7 +1720,7 @@ class ContentObject extends CompositeDataClass
      */
     public function is_complex_content_object()
     {
-        return $this instanceof ComplexContentObjectSupport;
+        return $this instanceof ComplexContentObjectSupportInterface;
     }
 
     public function is_current()
@@ -1922,7 +1922,7 @@ class ContentObject extends CompositeDataClass
      */
     public function supports_attachments()
     {
-        return $this instanceof AttachmentSupport;
+        return $this instanceof AttachmentSupportInterface;
     }
 
     /**

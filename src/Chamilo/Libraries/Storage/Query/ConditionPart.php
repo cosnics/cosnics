@@ -1,7 +1,7 @@
 <?php
 namespace Chamilo\Libraries\Storage\Query;
 
-use Chamilo\Libraries\Architecture\Interfaces\Hashable;
+use Chamilo\Libraries\Architecture\Interfaces\HashableInterface;
 use Chamilo\Libraries\Architecture\Traits\HashableTrait;
 
 /**
@@ -9,7 +9,7 @@ use Chamilo\Libraries\Architecture\Traits\HashableTrait;
  * @author  Hans De Bisschop <hans.de.bisschop@ehb.be>
  * @author  Magali Gillard <magali.gillard@ehb.be>
  */
-abstract class ConditionPart implements Hashable
+abstract class ConditionPart implements HashableInterface
 {
     use HashableTrait;
 

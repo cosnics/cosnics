@@ -3,16 +3,15 @@ namespace Chamilo\Core\Repository\Component;
 
 use Chamilo\Core\Repository\Manager;
 use Chamilo\Libraries\Architecture\Application\ApplicationConfiguration;
-use Chamilo\Libraries\Architecture\Interfaces\ApplicationSupport;
+use Chamilo\Libraries\Format\Breadcrumb\BreadcrumbLessComponentInterface;
 
 /**
- *
  * @package core\repository
- * @author Hans De Bisschop <hans.de.bisschop@ehb.be>
- * @author Magali Gillard <magali.gillard@ehb.be>
- * @author Eduard Vossen <eduard.vossen@ehb.be>
+ * @author  Hans De Bisschop <hans.de.bisschop@ehb.be>
+ * @author  Magali Gillard <magali.gillard@ehb.be>
+ * @author  Eduard Vossen <eduard.vossen@ehb.be>
  */
-class UserViewComponent extends Manager implements ApplicationSupport
+class UserViewComponent extends Manager implements BreadcrumbLessComponentInterface
 {
 
     /**
@@ -22,6 +21,7 @@ class UserViewComponent extends Manager implements ApplicationSupport
     {
         return $this->getApplicationFactory()->getApplication(
             \Chamilo\Core\Repository\UserView\Manager::CONTEXT,
-            new ApplicationConfiguration($this->getRequest(), $this->get_user(), $this))->run();
+            new ApplicationConfiguration($this->getRequest(), $this->get_user(), $this)
+        )->run();
     }
 }

@@ -8,7 +8,7 @@ namespace Chamilo\Libraries\Architecture\Interfaces;
  * @package Chamilo\Libraries\Architecture\Interfaces
  * @author Hans De Bisschop
  */
-interface ComplexContentObjectSupport
+interface ComplexContentObjectSupportInterface
 {
 
     public function get_allowed_types(): array;

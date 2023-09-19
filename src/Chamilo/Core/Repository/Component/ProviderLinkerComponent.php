@@ -5,7 +5,7 @@ use Chamilo\Configuration\Storage\DataClass\Registration;
 use Chamilo\Core\Metadata\Entity\DataClassEntity;
 use Chamilo\Core\Repository\Manager;
 use Chamilo\Libraries\Architecture\Application\ApplicationConfiguration;
-use Chamilo\Libraries\Architecture\Interfaces\ApplicationSupport;
+use Chamilo\Libraries\Format\Breadcrumb\BreadcrumbLessComponentInterface;
 
 /**
  * @package Chamilo\Core\Repository\Component
@@ -13,7 +13,7 @@ use Chamilo\Libraries\Architecture\Interfaces\ApplicationSupport;
  * @author  Magali Gillard <magali.gillard@ehb.be>
  * @author  Eduard Vossen <eduard.vossen@ehb.be>
  */
-class ProviderLinkerComponent extends Manager implements ApplicationSupport
+class ProviderLinkerComponent extends Manager implements BreadcrumbLessComponentInterface
 {
 
     /**

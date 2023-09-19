@@ -15,7 +15,7 @@ use Chamilo\Core\Group\Service\GroupService;
 use Chamilo\Core\Repository\Storage\DataClass\ContentObject;
 use Chamilo\Core\User\Integration\Chamilo\Libraries\Rights\Service\UserEntityProvider;
 use Chamilo\Core\User\Service\UserService;
-use Chamilo\Libraries\Architecture\Interfaces\ComplexContentObjectSupport;
+use Chamilo\Libraries\Architecture\Interfaces\ComplexContentObjectSupportInterface;
 use Chamilo\Libraries\Format\Structure\Glyph\FontAwesomeGlyph;
 use Chamilo\Libraries\Format\Structure\Glyph\IdentGlyph;
 use Chamilo\Libraries\Format\Table\Column\DataClassPropertyTableColumn;
@@ -212,7 +212,7 @@ class ObjectPublicationTableRenderer extends RecordListTableRenderer
 
                 return $glyph->render();
             case ContentObject::PROPERTY_TITLE :
-                if ($content_object instanceof ComplexContentObjectSupport)
+                if ($content_object instanceof ComplexContentObjectSupportInterface)
                 {
                     $details_url = $urlGenerator->fromRequest(
                         [

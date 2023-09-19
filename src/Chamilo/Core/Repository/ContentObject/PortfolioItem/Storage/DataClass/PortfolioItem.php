@@ -4,13 +4,13 @@ namespace Chamilo\Core\Repository\ContentObject\PortfolioItem\Storage\DataClass;
 use Chamilo\Core\Repository\ContentObject\Portfolio\Storage\DataClass\Portfolio;
 use Chamilo\Core\Repository\Storage\DataClass\ContentObject;
 use Chamilo\Core\Repository\Storage\DataManager;
-use Chamilo\Libraries\Architecture\Interfaces\HelperContentObjectSupport;
+use Chamilo\Libraries\Architecture\Interfaces\HelperContentObjectSupportInterface;
 use Chamilo\Libraries\Architecture\Interfaces\Versionable;
 
 /**
  * @package Chamilo\Core\Repository\ContentObject\PortfolioItem\Storage\DataClass
  */
-class PortfolioItem extends ContentObject implements Versionable, HelperContentObjectSupport
+class PortfolioItem extends ContentObject implements Versionable, HelperContentObjectSupportInterface
 {
     public const CONTEXT = 'Chamilo\Core\Repository\ContentObject\PortfolioItem';
 

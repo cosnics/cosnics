@@ -5,7 +5,7 @@ use Chamilo\Core\Repository\ContentObject\Assessment\Display\Configuration;
 use Chamilo\Core\Repository\ContentObject\LearningPath\Storage\DataClass\LearningPath;
 use Chamilo\Core\Repository\Storage\DataClass\ContentObject;
 use Chamilo\Core\Repository\Storage\DataManager;
-use Chamilo\Libraries\Architecture\Interfaces\HelperContentObjectSupport;
+use Chamilo\Libraries\Architecture\Interfaces\HelperContentObjectSupportInterface;
 use Chamilo\Libraries\Architecture\Interfaces\Versionable;
 
 /**
@@ -14,7 +14,7 @@ use Chamilo\Libraries\Architecture\Interfaces\Versionable;
  * @author  Magali Gillard <magali.gillard@ehb.be>
  * @author  Eduard Vossen <eduard.vossen@ehb.be>
  */
-class LearningPathItem extends ContentObject implements Versionable, HelperContentObjectSupport
+class LearningPathItem extends ContentObject implements Versionable, HelperContentObjectSupportInterface
 {
     public const CONTEXT = 'Chamilo\Core\Repository\ContentObject\LearningPathItem';
 

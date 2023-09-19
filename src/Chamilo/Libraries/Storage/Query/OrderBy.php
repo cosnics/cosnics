@@ -1,7 +1,7 @@
 <?php
 namespace Chamilo\Libraries\Storage\Query;
 
-use Chamilo\Libraries\Architecture\Interfaces\Hashable;
+use Chamilo\Libraries\Architecture\Interfaces\HashableInterface;
 use Chamilo\Libraries\Architecture\Traits\HashableTrait;
 use Chamilo\Libraries\Storage\Query\Variable\PropertyConditionVariable;
 use Countable;
@@ -11,7 +11,7 @@ use Countable;
  * @package Chamilo\Libraries\Storage\Query
  * @author Hans De Bisschop <hans.de.bisschop@ehb.be>
  */
-class OrderBy implements Countable, Hashable
+class OrderBy implements Countable, HashableInterface
 {
     use HashableTrait;
 

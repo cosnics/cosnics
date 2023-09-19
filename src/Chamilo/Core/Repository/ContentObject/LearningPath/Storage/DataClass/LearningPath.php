@@ -8,14 +8,14 @@ use Chamilo\Core\Repository\ContentObject\LearningPath\Service\TreeNodeDataServi
 use Chamilo\Core\Repository\Manager;
 use Chamilo\Core\Repository\Storage\DataClass\ContentObject;
 use Chamilo\Core\User\Storage\DataClass\User;
-use Chamilo\Libraries\Architecture\Interfaces\ComplexContentObjectSupport;
+use Chamilo\Libraries\Architecture\Interfaces\ComplexContentObjectSupportInterface;
 use InvalidArgumentException;
 use Symfony\Component\HttpFoundation\Session\SessionInterface;
 
 /**
  * @package Chamilo\Core\Repository\ContentObject\LearningPath\Storage\DataClass
  */
-class LearningPath extends ContentObject implements ComplexContentObjectSupport, DisplayAndBuildSupport
+class LearningPath extends ContentObject implements ComplexContentObjectSupportInterface, DisplayAndBuildSupport
 {
     public const AUTOMATIC_NUMBERING_DIGITS = 'digits';
 

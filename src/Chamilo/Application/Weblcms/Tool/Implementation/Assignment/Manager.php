@@ -13,7 +13,7 @@ use Chamilo\Application\Weblcms\Tool\Implementation\Assignment\Service\Assignmen
 use Chamilo\Application\Weblcms\Tool\Implementation\Assignment\Storage\Repository\PublicationRepository;
 use Chamilo\Application\Weblcms\Tool\Interfaces\IntroductionTextSupportInterface;
 use Chamilo\Core\Repository\ContentObject\Assignment\Storage\DataClass\Assignment;
-use Chamilo\Libraries\Architecture\Interfaces\Categorizable;
+use Chamilo\Libraries\Architecture\Interfaces\CategorizableInterface;
 use Chamilo\Libraries\Format\Structure\ActionBar\Button;
 use Chamilo\Libraries\Format\Structure\ActionBar\ButtonGroup;
 use Chamilo\Libraries\Format\Structure\ActionBar\DropdownButton;
@@ -32,7 +32,7 @@ use Chamilo\Libraries\Translation\Translation;
  * @author  Anthony Hurst (Hogeschool Gent)
  */
 abstract class Manager extends \Chamilo\Application\Weblcms\Tool\Manager
-    implements Categorizable, IntroductionTextSupportInterface
+    implements CategorizableInterface, IntroductionTextSupportInterface
 {
     public const ACTION_DISPLAY = 'Display';
     public const ACTION_DOWNLOAD_ENTRIES = 'EntriesDownloader';

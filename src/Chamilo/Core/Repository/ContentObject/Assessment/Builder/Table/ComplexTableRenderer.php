@@ -6,7 +6,7 @@ use Chamilo\Core\Repository\Storage\DataClass\ComplexContentObjectItem;
 use Chamilo\Core\Repository\Storage\DataClass\ContentObject;
 use Chamilo\Core\Repository\Storage\DataManager;
 use Chamilo\Libraries\Architecture\Application\Application;
-use Chamilo\Libraries\Architecture\Interfaces\ComplexContentObjectSupport;
+use Chamilo\Libraries\Architecture\Interfaces\ComplexContentObjectSupportInterface;
 use Chamilo\Libraries\Format\Structure\Glyph\FontAwesomeGlyph;
 use Chamilo\Libraries\Format\Structure\Glyph\IdentGlyph;
 use Chamilo\Libraries\Format\Structure\Toolbar;
@@ -172,7 +172,7 @@ class ComplexTableRenderer extends DataClassListTableRenderer implements TableRo
                 $title_short = $title;
                 $title_short = StringUtilities::getInstance()->truncate($title_short, 53, false);
 
-                if ($content_object instanceof ComplexContentObjectSupport)
+                if ($content_object instanceof ComplexContentObjectSupportInterface)
                 {
                     $title_short = '<a href="' . $urlGenerator->fromRequest(
                             [

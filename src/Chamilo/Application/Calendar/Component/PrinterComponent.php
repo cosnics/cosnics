@@ -3,7 +3,6 @@ namespace Chamilo\Application\Calendar\Component;
 
 use Chamilo\Application\Calendar\Manager;
 use Chamilo\Libraries\Calendar\Service\View\HtmlCalendarRenderer;
-use Chamilo\Libraries\Format\Breadcrumb\BreadcrumbLessComponentInterface;
 use Chamilo\Libraries\Format\Structure\PageConfiguration;
 
 /**
@@ -12,7 +11,7 @@ use Chamilo\Libraries\Format\Structure\PageConfiguration;
  * @author  Magali Gillard <magali.gillard@ehb.be>
  * @author  Eduard Vossen <eduard.vossen@ehb.be>
  */
-class PrinterComponent extends BrowserComponent implements BreadcrumbLessComponentInterface
+class PrinterComponent extends BrowserComponent
 {
 
     /**

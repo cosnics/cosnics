@@ -4,9 +4,9 @@ namespace Chamilo\Core\Repository\Common\Path;
 use Chamilo\Core\Repository\Storage\DataClass\ComplexContentObjectItem;
 use Chamilo\Core\Repository\Storage\DataClass\ContentObject;
 use Chamilo\Core\Repository\Storage\DataManager;
-use Chamilo\Libraries\Architecture\Interfaces\ComplexContentObjectDisclosure;
-use Chamilo\Libraries\Architecture\Interfaces\ComplexContentObjectSupport;
-use Chamilo\Libraries\Architecture\Interfaces\HelperContentObjectSupport;
+use Chamilo\Libraries\Architecture\Interfaces\ComplexContentObjectDisclosureInterface;
+use Chamilo\Libraries\Architecture\Interfaces\ComplexContentObjectSupportInterface;
+use Chamilo\Libraries\Architecture\Interfaces\HelperContentObjectSupportInterface;
 use Chamilo\Libraries\DependencyInjection\DependencyInjectionContainerBuilder;
 use Chamilo\Libraries\Storage\Cache\DataClassRepositoryCache;
 use Chamilo\Libraries\Storage\Parameters\DataClassRetrievesParameters;
@@ -80,7 +80,7 @@ abstract class ComplexContentObjectPath
      */
     private function add_items(ComplexContentObjectPathNode $parent_node, ContentObject $root_content_object)
     {
-        if ($root_content_object instanceof ComplexContentObjectSupport)
+        if ($root_content_object instanceof ComplexContentObjectSupportInterface)
         {
             $condition = new EqualityCondition(
                 new PropertyConditionVariable(
@@ -105,26 +105,26 @@ abstract class ComplexContentObjectPath
 
                 $content_object = $complex_content_object_item->get_ref_object();
 
-                if ($content_object instanceof HelperContentObjectSupport)
+                if ($content_object instanceof HelperContentObjectSupportInterface)
                 {
                     $content_object = DataManager::retrieve_by_id(
                         ContentObject::class, $content_object->get_reference()
                     );
                 }
 
-                if ($content_object instanceof ComplexContentObjectSupport)
+                if ($content_object instanceof ComplexContentObjectSupportInterface)
                 {
                     $node = $this->add(
                         $parent_node->get_id(), $previous_sibling_node ? $previous_sibling_node->get_id() : null,
                         $complex_content_object_item, $content_object
                     );
 
-                    if ($content_object instanceof ComplexContentObjectDisclosure)
+                    if ($content_object instanceof ComplexContentObjectDisclosureInterface)
                     {
                         $this->add_items($node, $content_object);
                     }
                 }
-                elseif ($root_content_object instanceof ComplexContentObjectDisclosure)
+                elseif ($root_content_object instanceof ComplexContentObjectDisclosureInterface)
                 {
                     $node = $this->add(
                         $parent_node->get_id(), $previous_sibling_node ? $previous_sibling_node->get_id() : null,

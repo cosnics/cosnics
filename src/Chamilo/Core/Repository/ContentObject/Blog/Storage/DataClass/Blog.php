@@ -4,7 +4,7 @@ namespace Chamilo\Core\Repository\ContentObject\Blog\Storage\DataClass;
 use _PHPStan_8862d57cc\Symfony\Component\Finder\Iterator\FileTypeFilterIterator;
 use Chamilo\Core\Repository\ContentObject\BlogItem\Storage\DataClass\BlogItem;
 use Chamilo\Core\Repository\Storage\DataClass\ContentObject;
-use Chamilo\Libraries\Architecture\Interfaces\ComplexContentObjectSupport;
+use Chamilo\Libraries\Architecture\Interfaces\ComplexContentObjectSupportInterface;
 use Chamilo\Libraries\DependencyInjection\DependencyInjectionContainerBuilder;
 use Chamilo\Libraries\File\FilesystemTools;
 use Chamilo\Libraries\File\SystemPathBuilder;
@@ -13,7 +13,7 @@ use Chamilo\Libraries\Translation\Translation;
 /**
  * @package Chamilo\Core\Repository\ContentObject\Blog\Storage\DataClass
  */
-class Blog extends ContentObject implements ComplexContentObjectSupport
+class Blog extends ContentObject implements ComplexContentObjectSupportInterface
 {
     public const CONTEXT = 'Chamilo\Core\Repository\ContentObject\Blog';
 

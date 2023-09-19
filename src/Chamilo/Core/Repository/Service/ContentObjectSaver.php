@@ -16,7 +16,7 @@ use Chamilo\Core\Repository\Workspace\Storage\DataClass\WorkspaceContentObjectRe
 use Chamilo\Core\User\Manager;
 use Chamilo\Core\User\Service\UserService;
 use Chamilo\Libraries\Architecture\ClassnameUtilities;
-use Chamilo\Libraries\Architecture\Interfaces\AttachmentSupport;
+use Chamilo\Libraries\Architecture\Interfaces\AttachmentSupportInterface;
 use Chamilo\Libraries\Utilities\StringUtilities;
 use Symfony\Component\HttpFoundation\Session\SessionInterface;
 use Symfony\Component\Uid\Uuid;
@@ -290,7 +290,7 @@ class ContentObjectSaver
         $this->getIncludeParserManager()->parseContentObjectValues($contentObject, $values);
 
         // Process attachments
-        if ($contentObject instanceof AttachmentSupport)
+        if ($contentObject instanceof AttachmentSupportInterface)
         {
             $this->attachContentObjectsByIdentifierAndType(
                 $contentObject, $values[ContentObjectForm::PROPERTY_ATTACHMENTS]['content_object']
@@ -830,7 +830,7 @@ class ContentObjectSaver
         $this->getIncludeParserManager()->parseContentObjectValues($contentObject, $values);
 
         // Process attachments
-        if ($contentObject instanceof AttachmentSupport)
+        if ($contentObject instanceof AttachmentSupportInterface)
         {
             /*
              * TODO: Make this faster by providing a function that matches the existing IDs against the ones that need

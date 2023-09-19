@@ -5,7 +5,7 @@ use Chamilo\Core\Repository\Architecture\DownloadSupport;
 use Chamilo\Core\Repository\ContentObject\File\Storage\DataManager;
 use Chamilo\Core\Repository\Manager;
 use Chamilo\Core\Repository\Storage\DataClass\ContentObject;
-use Chamilo\Libraries\Architecture\Interfaces\FileStorageSupport;
+use Chamilo\Libraries\Architecture\Interfaces\FileStorageSupportInterface;
 use Chamilo\Libraries\Architecture\Interfaces\Includeable;
 use Chamilo\Libraries\Architecture\Interfaces\Versionable;
 use Chamilo\Libraries\DependencyInjection\DependencyInjectionContainerBuilder;
@@ -21,7 +21,7 @@ use Symfony\Component\HttpFoundation\StreamedResponse;
 /**
  * @package Chamilo\Core\Repository\ContentObject\File\Storage\DataClass
  */
-class File extends ContentObject implements Versionable, Includeable, FileStorageSupport, DownloadSupport
+class File extends ContentObject implements Versionable, Includeable, FileStorageSupportInterface, DownloadSupport
 {
     public const CONTEXT = 'Chamilo\Core\Repository\ContentObject\File';
 

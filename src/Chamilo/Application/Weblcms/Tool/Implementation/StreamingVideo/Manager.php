@@ -3,7 +3,7 @@ namespace Chamilo\Application\Weblcms\Tool\Implementation\StreamingVideo;
 
 use Chamilo\Application\Weblcms\Renderer\PublicationList\ContentObjectPublicationListRenderer;
 use Chamilo\Application\Weblcms\Tool\Interfaces\IntroductionTextSupportInterface;
-use Chamilo\Libraries\Architecture\Interfaces\Categorizable;
+use Chamilo\Libraries\Architecture\Interfaces\CategorizableInterface;
 
 /**
  * @package application.lib.weblcms.tool.announcement.component
@@ -13,7 +13,7 @@ use Chamilo\Libraries\Architecture\Interfaces\Categorizable;
  * This tool allows a user to publish announcements in his or her course.
  */
 abstract class Manager extends \Chamilo\Application\Weblcms\Tool\Manager
-    implements Categorizable, IntroductionTextSupportInterface
+    implements CategorizableInterface, IntroductionTextSupportInterface
 {
     public const CONTEXT = __NAMESPACE__;
 

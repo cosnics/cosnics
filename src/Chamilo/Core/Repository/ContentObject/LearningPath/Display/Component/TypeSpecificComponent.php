@@ -2,7 +2,7 @@
 namespace Chamilo\Core\Repository\ContentObject\LearningPath\Display\Component;
 
 use Chamilo\Libraries\Architecture\Application\ApplicationConfiguration;
-use Chamilo\Libraries\Architecture\Interfaces\ApplicationSupport;
+use Chamilo\Libraries\Format\Breadcrumb\BreadcrumbLessComponentInterface;
 
 /**
  * @package core\repository\content_object\learning_path\display
@@ -10,7 +10,7 @@ use Chamilo\Libraries\Architecture\Interfaces\ApplicationSupport;
  * @author  Magali Gillard <magali.gillard@ehb.be>
  * @author  Eduard Vossen <eduard.vossen@ehb.be>
  */
-class TypeSpecificComponent extends BaseHtmlTreeComponent implements ApplicationSupport
+class TypeSpecificComponent extends BaseHtmlTreeComponent implements BreadcrumbLessComponentInterface
 {
 
     /**

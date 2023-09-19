@@ -9,6 +9,6 @@ namespace Chamilo\Libraries\Architecture\Interfaces;
  * @package Chamilo\Libraries\Architecture\Interfaces
  * @author Hans De Bisschop
  */
-interface HelperContentObjectSupport
+interface HelperContentObjectSupportInterface
 {
 }

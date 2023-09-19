@@ -1,7 +1,7 @@
 <?php
 namespace Chamilo\Libraries\Storage\Parameters;
 
-use Chamilo\Libraries\Architecture\Interfaces\Hashable;
+use Chamilo\Libraries\Architecture\Interfaces\HashableInterface;
 use Chamilo\Libraries\Architecture\Traits\HashableTrait;
 use Chamilo\Libraries\Storage\Query\Condition\Condition;
 use Chamilo\Libraries\Storage\Query\GroupBy;
@@ -15,7 +15,7 @@ use Chamilo\Libraries\Storage\Query\RetrieveProperties;
  * @author  Magali Gillard <magali.gillard@ehb.be>
  * @author  Eduard Vossen <eduard.vossen@ehb.be>
  */
-abstract class DataClassParameters implements Hashable
+abstract class DataClassParameters implements HashableInterface
 {
     use HashableTrait;
 

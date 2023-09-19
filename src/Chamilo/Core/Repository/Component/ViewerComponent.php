@@ -21,7 +21,7 @@ use Chamilo\Core\Repository\Workspace\Table\SharedInTableRenderer;
 use Chamilo\Libraries\Architecture\Application\Application;
 use Chamilo\Libraries\Architecture\Exceptions\NotAllowedException;
 use Chamilo\Libraries\Architecture\Exceptions\ObjectNotExistException;
-use Chamilo\Libraries\Architecture\Interfaces\ComplexContentObjectSupport;
+use Chamilo\Libraries\Architecture\Interfaces\ComplexContentObjectSupportInterface;
 use Chamilo\Libraries\Format\Breadcrumb\BreadcrumbLessComponentInterface;
 use Chamilo\Libraries\Format\Structure\ActionBar\AbstractButton;
 use Chamilo\Libraries\Format\Structure\ActionBar\Button;
@@ -391,7 +391,7 @@ class ViewerComponent extends Manager implements BreadcrumbLessComponentInterfac
                     }
                     else
                     {
-                        if ($contentObject instanceof ComplexContentObjectSupport)
+                        if ($contentObject instanceof ComplexContentObjectSupportInterface)
                         {
                             $image = new FontAwesomeGlyph('cubes');
                             $variable = 'BuildPreview';

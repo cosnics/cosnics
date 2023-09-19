@@ -15,7 +15,7 @@ use Chamilo\Core\Repository\ContentObject\Introduction\Storage\DataClass\Introdu
 use Chamilo\Core\Repository\Storage\DataClass\ContentObject;
 use Chamilo\Core\Repository\Viewer\ActionSelector;
 use Chamilo\Libraries\Architecture\Exceptions\NotAllowedException;
-use Chamilo\Libraries\Architecture\Interfaces\Categorizable;
+use Chamilo\Libraries\Architecture\Interfaces\CategorizableInterface;
 use Chamilo\Libraries\Format\Breadcrumb\BreadcrumbLessComponentInterface;
 use Chamilo\Libraries\Format\Display;
 use Chamilo\Libraries\Format\Structure\ActionBar\Button;
@@ -75,7 +75,7 @@ class BrowserComponent extends Manager implements BreadcrumbLessComponentInterfa
 
         $publicationsContent = $this->renderPublications();
 
-        if ($this->get_parent() instanceof Categorizable)
+        if ($this->get_parent() instanceof CategorizableInterface)
         {
             $content[] = $this->renderCategories($publicationsContent);
         }
@@ -198,7 +198,7 @@ class BrowserComponent extends Manager implements BreadcrumbLessComponentInterfa
             }
 
             if ($this->is_allowed(WeblcmsRights::MANAGE_CATEGORIES_RIGHT) &&
-                $this->get_parent() instanceof Categorizable)
+                $this->get_parent() instanceof CategorizableInterface)
             {
                 $manageActions->addButton(
                     new Button(
@@ -759,7 +759,7 @@ class BrowserComponent extends Manager implements BreadcrumbLessComponentInterfa
             );
         }
 
-        if ($this->is_allowed(WeblcmsRights::EDIT_RIGHT) && $this->get_parent() instanceof Categorizable)
+        if ($this->is_allowed(WeblcmsRights::EDIT_RIGHT) && $this->get_parent() instanceof CategorizableInterface)
         {
             $actions->addAction(
                 new TableAction(

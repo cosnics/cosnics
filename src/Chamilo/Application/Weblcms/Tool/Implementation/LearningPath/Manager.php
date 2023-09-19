@@ -11,7 +11,7 @@ use Chamilo\Core\Repository\ContentObject\LearningPath\Service\Tracking\Tracking
 use Chamilo\Core\Repository\ContentObject\LearningPath\Service\Tracking\TrackingServiceBuilder;
 use Chamilo\Core\Repository\ContentObject\LearningPath\Service\TreeNodeDataService;
 use Chamilo\Core\Repository\ContentObject\LearningPath\Storage\DataClass\LearningPath;
-use Chamilo\Libraries\Architecture\Interfaces\Categorizable;
+use Chamilo\Libraries\Architecture\Interfaces\CategorizableInterface;
 use Chamilo\Libraries\Format\Structure\ActionBar\ButtonGroup;
 use Chamilo\Libraries\Format\Structure\ActionBar\DropdownButton;
 use Chamilo\Libraries\Format\Structure\ActionBar\SubButton;
@@ -28,7 +28,7 @@ use Chamilo\Libraries\Translation\Translation;
  * This tool allows a user to publish learning paths in his or her course.
  */
 abstract class Manager extends \Chamilo\Application\Weblcms\Tool\Manager
-    implements Categorizable, IntroductionTextSupportInterface
+    implements CategorizableInterface, IntroductionTextSupportInterface
 {
     public const ACTION_EXPORT_RAW_RESULTS = 'AssessmentRawResultsExporter';
     public const CONTEXT = __NAMESPACE__;

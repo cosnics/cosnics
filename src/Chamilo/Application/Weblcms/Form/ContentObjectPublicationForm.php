@@ -18,7 +18,7 @@ use Chamilo\Core\User\Storage\DataClass\User;
 use Chamilo\Libraries\Architecture\Exceptions\NoObjectSelectedException;
 use Chamilo\Libraries\Architecture\Exceptions\ObjectNotExistException;
 use Chamilo\Libraries\Architecture\Exceptions\UserException;
-use Chamilo\Libraries\Architecture\Interfaces\ComplexContentObjectSupport;
+use Chamilo\Libraries\Architecture\Interfaces\ComplexContentObjectSupportInterface;
 use Chamilo\Libraries\File\FileLogger;
 use Chamilo\Libraries\Format\Form\Element\AdvancedElementFinder\AdvancedElementFinderElements;
 use Chamilo\Libraries\Format\Form\Element\AdvancedElementFinder\AdvancedElementFinderElementTypes;
@@ -322,7 +322,7 @@ class ContentObjectPublicationForm extends BasePublicationForm
 
             if ($first_publication)
             {
-                if ($contentObject instanceof ComplexContentObjectSupport && !$first_publication->isIdentified())
+                if ($contentObject instanceof ComplexContentObjectSupportInterface && !$first_publication->isIdentified())
                 {
                     if ($contentObject::CONTEXT == 'Chamilo\Core\Repository\ContentObject\Assessment' &&
                         ($canEditContentObject || $canEditPublicationContentObject))

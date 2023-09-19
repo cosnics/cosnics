@@ -15,7 +15,7 @@ use Chamilo\Core\Repository\Workspace\Service\ContentObjectRelationService;
 use Chamilo\Core\Repository\Workspace\Storage\DataClass\Workspace;
 use Chamilo\Core\Repository\Workspace\Storage\DataClass\WorkspaceContentObjectRelation;
 use Chamilo\Libraries\Architecture\ClassnameUtilities;
-use Chamilo\Libraries\Architecture\Interfaces\ComplexContentObjectSupport;
+use Chamilo\Libraries\Architecture\Interfaces\ComplexContentObjectSupportInterface;
 use Chamilo\Libraries\DependencyInjection\DependencyInjectionContainerBuilder;
 use Chamilo\Libraries\Storage\DataClass\DataClass;
 use Chamilo\Libraries\Storage\Parameters\DataClassCountGroupedParameters;
@@ -349,7 +349,7 @@ class DataManager extends \Chamilo\Libraries\Storage\DataManager\DataManager
 
             $lo = self::retrieve_by_id(ContentObject::class, $item->get_ref());
 
-            if ($lo instanceof ComplexContentObjectSupport)
+            if ($lo instanceof ComplexContentObjectSupportInterface)
             {
                 $lo->create_all();
                 $nitem->set_ref($lo->get_id());

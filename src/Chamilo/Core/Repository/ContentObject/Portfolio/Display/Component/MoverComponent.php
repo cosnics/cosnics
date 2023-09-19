@@ -9,7 +9,7 @@ use Chamilo\Core\Repository\Manager;
 use Chamilo\Core\Tracking\Storage\DataClass\Event;
 use Chamilo\Libraries\Architecture\Exceptions\NoObjectSelectedException;
 use Chamilo\Libraries\Architecture\Exceptions\ObjectNotExistException;
-use Chamilo\Libraries\Architecture\Interfaces\ComplexContentObjectSupport;
+use Chamilo\Libraries\Architecture\Interfaces\ComplexContentObjectSupportInterface;
 use Chamilo\Libraries\Format\Form\FormValidator;
 use Chamilo\Libraries\Format\Structure\Breadcrumb;
 use Chamilo\Libraries\Translation\Translation;
@@ -283,7 +283,7 @@ class MoverComponent extends ItemComponent
         {
             $content_object = $child->get_content_object();
 
-            if (!$content_object instanceof ComplexContentObjectSupport)
+            if (!$content_object instanceof ComplexContentObjectSupportInterface)
             {
                 continue;
             }

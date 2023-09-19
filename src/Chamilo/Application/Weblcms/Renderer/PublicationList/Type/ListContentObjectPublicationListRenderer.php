@@ -10,8 +10,8 @@ use Chamilo\Core\Repository\Storage\DataClass\ContentObject;
 use Chamilo\Core\Repository\Storage\DataManager;
 use Chamilo\Libraries\Architecture\Application\Application;
 use Chamilo\Libraries\Architecture\ClassnameUtilities;
-use Chamilo\Libraries\Architecture\Interfaces\Categorizable;
-use Chamilo\Libraries\Architecture\Interfaces\ComplexContentObjectSupport;
+use Chamilo\Libraries\Architecture\Interfaces\CategorizableInterface;
+use Chamilo\Libraries\Architecture\Interfaces\ComplexContentObjectSupportInterface;
 use Chamilo\Libraries\Format\Display;
 use Chamilo\Libraries\Format\Structure\ActionBar\Button;
 use Chamilo\Libraries\Format\Structure\ActionBar\ButtonGroup;
@@ -204,7 +204,7 @@ class ListContentObjectPublicationListRenderer extends ContentObjectPublicationL
             \Chamilo\Application\Weblcms\Tool\Manager::PARAM_PUBLICATION_ID => $publication[ContentObjectPublication::PROPERTY_ID]
         ];
 
-        if ($this->get_content_object_from_publication($publication) instanceof ComplexContentObjectSupport)
+        if ($this->get_content_object_from_publication($publication) instanceof ComplexContentObjectSupportInterface)
         {
             $titleParameters[\Chamilo\Application\Weblcms\Tool\Manager::PARAM_ACTION] =
                 \Chamilo\Application\Weblcms\Tool\Manager::ACTION_DISPLAY_COMPLEX_CONTENT_OBJECT;
@@ -507,7 +507,7 @@ class ListContentObjectPublicationListRenderer extends ContentObjectPublicationL
             )
         );
 
-        if ($content_object instanceof ComplexContentObjectSupport)
+        if ($content_object instanceof ComplexContentObjectSupportInterface)
         {
             $dropdownButton->addSubButton(
                 new SubButton(
@@ -579,7 +579,7 @@ class ListContentObjectPublicationListRenderer extends ContentObjectPublicationL
                 )
             );
 
-            if ($content_object instanceof ComplexContentObjectSupport &&
+            if ($content_object instanceof ComplexContentObjectSupportInterface &&
                 ($content_object->get_owner_id() == $this->get_tool_browser()->get_user_id()))
             {
                 if ($content_object::CONTEXT == 'Chamilo\Core\Repository\ContentObject\Assessment')
@@ -677,7 +677,7 @@ class ListContentObjectPublicationListRenderer extends ContentObjectPublicationL
             );
 
             // Move the publication
-            if ($this->get_tool_browser()->get_parent() instanceof Categorizable &&
+            if ($this->get_tool_browser()->get_parent() instanceof CategorizableInterface &&
                 $this->get_tool_browser()->hasCategories())
             {
                 $dropdownButton->addSubButton(

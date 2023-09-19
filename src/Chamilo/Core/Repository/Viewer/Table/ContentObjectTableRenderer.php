@@ -6,7 +6,7 @@ use Chamilo\Core\Repository\Viewer\Manager;
 use Chamilo\Core\Repository\Workspace\Service\RightsService;
 use Chamilo\Core\User\Storage\DataClass\User;
 use Chamilo\Libraries\Architecture\Application\Routing\UrlGenerator;
-use Chamilo\Libraries\Architecture\Interfaces\ComplexContentObjectSupport;
+use Chamilo\Libraries\Architecture\Interfaces\ComplexContentObjectSupportInterface;
 use Chamilo\Libraries\Format\Structure\Glyph\FontAwesomeGlyph;
 use Chamilo\Libraries\Format\Structure\Glyph\IdentGlyph;
 use Chamilo\Libraries\Format\Structure\Toolbar;
@@ -180,7 +180,7 @@ class ContentObjectTableRenderer extends DataClassListTableRenderer implements T
             );
         }
 
-        if ($contentObject instanceof ComplexContentObjectSupport &&
+        if ($contentObject instanceof ComplexContentObjectSupportInterface &&
             $rightsService->canViewContentObject($this->getUser(), $contentObject))
         {
 

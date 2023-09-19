@@ -3,7 +3,7 @@ namespace Chamilo\Core\Repository\Common\Rendition\Html\Type;
 
 use Chamilo\Core\Repository\Common\ContentObjectResourceRenderer;
 use Chamilo\Core\Repository\Common\Rendition\Html\HtmlContentObjectRendition;
-use Chamilo\Libraries\Architecture\Interfaces\AttachmentSupport;
+use Chamilo\Libraries\Architecture\Interfaces\AttachmentSupportInterface;
 use Chamilo\Libraries\Format\Structure\Glyph\FontAwesomeGlyph;
 use Chamilo\Libraries\Translation\Translation;
 
@@ -38,7 +38,7 @@ class HtmlDescriptionContentObjectRendition extends HtmlContentObjectRendition
 
         $html = [];
 
-        if ($object instanceof AttachmentSupport)
+        if ($object instanceof AttachmentSupportInterface)
         {
             $attachments = $object->get_attachments();
             if (count($attachments))

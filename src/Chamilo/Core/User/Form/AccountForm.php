@@ -6,8 +6,8 @@ use Chamilo\Core\Tracking\Storage\DataClass\Event;
 use Chamilo\Core\User\Manager;
 use Chamilo\Core\User\Picture\UserPictureUpdateProviderInterface;
 use Chamilo\Core\User\Storage\DataClass\User;
-use Chamilo\Libraries\Architecture\Interfaces\ChangeablePassword;
-use Chamilo\Libraries\Architecture\Interfaces\ChangeableUsername;
+use Chamilo\Libraries\Architecture\Interfaces\ChangeablePasswordInterface;
+use Chamilo\Libraries\Architecture\Interfaces\ChangeableUsernameInterface;
 use Chamilo\Libraries\Authentication\AuthenticationValidator;
 use Chamilo\Libraries\DependencyInjection\Traits\DependencyInjectionContainerTrait;
 use Chamilo\Libraries\Format\Form\FormValidator;
@@ -171,7 +171,7 @@ class AccountForm extends FormValidator
 
         if ($configurationConsulter->getSetting([Manager::CONTEXT, 'allow_change_username']) == 0 ||
             !$this->authenticationValidator->getAuthenticationByType($this->user->get_auth_source()) instanceof
-                ChangeableUsername)
+                ChangeableUsernameInterface)
         {
             $this->freeze(User::PROPERTY_USERNAME);
         }
@@ -190,7 +190,7 @@ class AccountForm extends FormValidator
         // Password
         if ($configurationConsulter->getSetting([Manager::CONTEXT, 'allow_change_password']) == 1 &&
             $this->authenticationValidator->getAuthenticationByType($this->user->get_auth_source()) instanceof
-            ChangeablePassword)
+            ChangeablePasswordInterface)
         {
             $this->addElement('category', Translation::get('ChangePassword'));
 
@@ -398,7 +398,7 @@ class AccountForm extends FormValidator
 
         if ($configurationConsulter->getSetting([Manager::CONTEXT, 'allow_change_username']) &&
             $this->authenticationValidator->getAuthenticationByType($this->user->get_auth_source()) instanceof
-            ChangeableUsername)
+            ChangeableUsernameInterface)
         {
             $user->set_username($values[User::PROPERTY_USERNAME]);
         }
@@ -406,7 +406,7 @@ class AccountForm extends FormValidator
         if ($configurationConsulter->getSetting([Manager::CONTEXT, 'allow_change_password']) &&
             strlen($values[User::PROPERTY_PASSWORD]) &&
             $this->authenticationValidator->getAuthenticationByType($this->user->get_auth_source()) instanceof
-            ChangeablePassword)
+            ChangeablePasswordInterface)
         {
             $result =
                 $this->authenticationValidator->getAuthenticationByType($this->user->get_auth_source())->changePassword(

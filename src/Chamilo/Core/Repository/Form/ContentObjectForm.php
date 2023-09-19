@@ -24,8 +24,8 @@ use Chamilo\Core\User\Storage\DataClass\User;
 use Chamilo\Libraries\Architecture\Application\Application;
 use Chamilo\Libraries\Architecture\ClassnameUtilities;
 use Chamilo\Libraries\Architecture\Exceptions\NotAllowedException;
-use Chamilo\Libraries\Architecture\Interfaces\AttachmentSupport;
-use Chamilo\Libraries\Architecture\Interfaces\ForcedVersionSupport;
+use Chamilo\Libraries\Architecture\Interfaces\AttachmentSupportInterface;
+use Chamilo\Libraries\Architecture\Interfaces\ForcedVersionSupportInterface;
 use Chamilo\Libraries\Architecture\Interfaces\Versionable;
 use Chamilo\Libraries\Format\Form\Element\AdvancedElementFinder\AdvancedElementFinderElement;
 use Chamilo\Libraries\Format\Form\Element\AdvancedElementFinder\AdvancedElementFinderElements;
@@ -252,7 +252,7 @@ abstract class ContentObjectForm extends FormValidator
     {
         $object = $this->content_object;
 
-        if ($object instanceof AttachmentSupport)
+        if ($object instanceof AttachmentSupportInterface)
         {
             $calculator = new Calculator(
                 \Chamilo\Core\User\Storage\DataManager::retrieve_by_id(
@@ -468,7 +468,7 @@ abstract class ContentObjectForm extends FormValidator
 
         if ($object instanceof Versionable && $this->allow_new_version)
         {
-            if ($object instanceof ForcedVersionSupport)
+            if ($object instanceof ForcedVersionSupportInterface)
             {
                 $this->addElement('hidden', self::PROPERTY_VERSION, null, ['class' => 'version']);
             }
@@ -574,7 +574,7 @@ abstract class ContentObjectForm extends FormValidator
         ContentObjectIncludeParser::parse_includes($this->get_content_object(), $this->get_html_editors());
 
         // Process attachments
-        if ($object instanceof AttachmentSupport)
+        if ($object instanceof AttachmentSupportInterface)
         {
             $object->attach_content_objects(
                 $values[self::PROPERTY_ATTACHMENTS]['content_object'], ContentObject::ATTACHMENT_NORMAL
@@ -894,12 +894,12 @@ abstract class ContentObjectForm extends FormValidator
                 $defaults[ContentObject::PROPERTY_TITLE];
         $defaults[ContentObject::PROPERTY_DESCRIPTION] = $content_object->get_description();
 
-        if ($content_object instanceof ForcedVersionSupport && $this->form_type == self::TYPE_EDIT)
+        if ($content_object instanceof ForcedVersionSupportInterface && $this->form_type == self::TYPE_EDIT)
         {
             $defaults[self::PROPERTY_VERSION] = 1;
         }
 
-        if ($content_object instanceof AttachmentSupport)
+        if ($content_object instanceof AttachmentSupportInterface)
         {
             $attachments = $content_object->get_attachments();
 
@@ -1049,7 +1049,7 @@ abstract class ContentObjectForm extends FormValidator
         // $include_parser->parse_editors();
 
         // Process attachments
-        if ($object instanceof AttachmentSupport)
+        if ($object instanceof AttachmentSupportInterface)
         {
             /*
              * TODO: Make this faster by providing a function that matches the existing IDs against the ones that need

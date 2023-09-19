@@ -6,7 +6,7 @@ use Chamilo\Core\User\Manager;
 use Chamilo\Core\User\Storage\DataClass\User;
 use Chamilo\Core\User\Storage\DataManager;
 use Chamilo\Libraries\Architecture\Exceptions\NotAllowedException;
-use Chamilo\Libraries\Architecture\Interfaces\ChangeablePassword;
+use Chamilo\Libraries\Architecture\Interfaces\ChangeablePasswordInterface;
 use Chamilo\Libraries\Architecture\Interfaces\NoAuthenticationSupport;
 use Chamilo\Libraries\Format\Display;
 use Chamilo\Libraries\Format\Form\FormValidator;
@@ -123,7 +123,7 @@ class ResetPasswordComponent extends Manager implements NoAuthenticationSupport
                                 ) . '</div>';
                             $failures ++;
                         }
-                        elseif (!$auth instanceof ChangeablePassword)
+                        elseif (!$auth instanceof ChangeablePasswordInterface)
                         {
                             $html[] = '<div class="alert alert-danger">' . Translation::getInstance()->getTranslation(
                                     'ResetPasswordNotPossibleForThisUser',
