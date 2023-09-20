@@ -5,6 +5,7 @@ use Chamilo\Application\Weblcms\Request\Storage\DataClass\Request;
 use Chamilo\Application\Weblcms\Rights\CourseManagementRights;
 use Chamilo\Application\Weblcms\Storage\DataClass\CourseCategory;
 use Chamilo\Libraries\Format\Form\FormValidator;
+use Chamilo\Libraries\Platform\Session\SessionUtilities;
 use Chamilo\Libraries\Translation\Translation;
 use Chamilo\Libraries\Storage\Query\Condition\EqualityCondition;
 use Chamilo\Libraries\Storage\Query\Condition\NotCondition;
@@ -153,10 +154,9 @@ class RequestForm extends FormValidator
             
             while ($course_type = $course_type_objects->next_result())
             {
-                if ($course_management_rights->is_allowed(
+                if ($course_management_rights->is_allowed_management(
                     CourseManagementRights::REQUEST_COURSE_RIGHT,
-                    \Chamilo\Application\Weblcms\Manager::context(),
-                    $course_type->get_id(), 
+                    $course_type->get_id(),
                     CourseManagementRights::TYPE_COURSE_TYPE))
                 {
                     $this->course_types[$course_type->get_id()] = $course_type->get_title();

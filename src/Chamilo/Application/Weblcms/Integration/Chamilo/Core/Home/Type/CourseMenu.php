@@ -91,14 +91,14 @@ class CourseMenu extends Block
         
         while ($course_type = $course_types->next_result())
         {
-            if ($course_management_rights->is_allowed(
+            if ($course_management_rights->is_allowed_management(
                 \Chamilo\Application\Weblcms\Rights\CourseManagementRights::CREATE_COURSE_RIGHT, 
                 $course_type->get_id(), 
                 \Chamilo\Application\Weblcms\Rights\CourseManagementRights::TYPE_COURSE_TYPE))
             {
                 $count_direct ++;
             }
-            elseif ($course_management_rights->is_allowed(
+            elseif ($course_management_rights->is_allowed_management(
                 \Chamilo\Application\Weblcms\Rights\CourseManagementRights::REQUEST_COURSE_RIGHT, 
                 $course_type->get_id(), 
                 \Chamilo\Application\Weblcms\Rights\CourseManagementRights::TYPE_COURSE_TYPE))
