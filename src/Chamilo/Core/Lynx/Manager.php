@@ -31,6 +31,9 @@ abstract class Manager extends Application
     public const PARAM_REGISTRATION_TYPE = 'type';
     public const PARAM_SECTION = 'section';
 
+    /**
+     * @throws \Chamilo\Libraries\Architecture\Exceptions\NotAllowedException
+     */
     public function __construct(ApplicationConfigurationInterface $applicationConfiguration)
     {
         parent::__construct($applicationConfiguration);

@@ -3,7 +3,8 @@ namespace Chamilo\Core\Lynx\Component;
 
 use Chamilo\Configuration\Storage\DataClass\Registration;
 use Chamilo\Core\Lynx\Manager;
-use Chamilo\Core\Lynx\PackageDisplay;
+use Chamilo\Core\Lynx\Service\PackageInformationRenderer;
+use Chamilo\Libraries\Architecture\Exceptions\NoObjectSelectedException;
 use Chamilo\Libraries\Format\Breadcrumb\BreadcrumbLessComponentInterface;
 use Chamilo\Libraries\Format\Structure\ActionBar\Button;
 use Chamilo\Libraries\Format\Structure\ActionBar\ButtonGroup;
@@ -12,58 +13,61 @@ use Chamilo\Libraries\Format\Structure\ActionBar\Renderer\ButtonToolBarRenderer;
 use Chamilo\Libraries\Format\Structure\Breadcrumb;
 use Chamilo\Libraries\Format\Structure\Glyph\FontAwesomeGlyph;
 use Chamilo\Libraries\Format\Structure\ToolbarItem;
-use Chamilo\Libraries\Translation\Translation;
 use Chamilo\Libraries\Utilities\StringUtilities;
 
 class ViewerComponent extends Manager implements BreadcrumbLessComponentInterface
 {
 
-    /**
-     * @var ButtonToolBarRenderer
-     */
-    private $buttonToolbarRenderer;
+    protected ButtonToolBarRenderer $buttonToolbarRenderer;
 
-    private $context;
-
-    private $registration;
+    protected ?string $currentContext;
 
     /**
+     * @throws \Chamilo\Libraries\Architecture\Exceptions\NoObjectSelectedException
      * @throws \QuickformException
      * @throws \Symfony\Component\Cache\Exception\CacheException
      */
     public function run()
     {
-        $this->context = $this->getRequest()->query->get(self::PARAM_CONTEXT);
-        $this->registration = $this->getRegistrationConsulter()->getRegistrationForContext($this->context);
+        $translator = $this->getTranslator();
+        $currentContext = $this->getCurrentContext();
+
+        if (!$currentContext)
+        {
+            throw new NoObjectSelectedException($translator->trans('Package', [], Manager::CONTEXT));
+        }
 
         $this->getBreadcrumbTrail()->add(
             new Breadcrumb(
-                null, Translation::get(
-                'ViewingPackage', ['PACKAGE' => Translation::get('TypeName', null, $this->context)]
+                null, $translator->trans(
+                'ViewingPackage', ['PACKAGE' => $translator->trans('TypeName', [], $currentContext)], Manager::CONTEXT
             )
             )
         );
-        $this->buttonToolbarRenderer = $this->getButtonToolbarRenderer();
-
-        $display = new PackageDisplay($this);
 
         $html = [];
 
-        $html[] = $this->render_header();
-        $html[] = $this->buttonToolbarRenderer->render();
-        $html[] = $display->render();
-        $html[] = $this->render_footer();
+        $html[] = $this->renderHeader();
+        $html[] = $this->getButtonToolbarRenderer()->render();
+        $html[] = $this->getPackageInformationRenderer()->render($currentContext);
+        $html[] = $this->renderFooter();
 
         return implode(PHP_EOL, $html);
     }
 
-    public function getButtonToolbarRenderer()
+    /**
+     * @throws \Symfony\Component\Cache\Exception\CacheException
+     */
+    public function getButtonToolbarRenderer(): ButtonToolBarRenderer
     {
         if (!isset($this->buttonToolbarRenderer))
         {
             $buttonToolbar = new ButtonToolBar();
             $commonActions = new ButtonGroup();
-            $registration = $this->get_registration();
+
+            $translator = $this->getTranslator();
+            $context = $this->getCurrentContext();
+            $registration = $this->getRegistrationConsulter()->getRegistrationForContext($context);
 
             if (!empty($registration))
             {
@@ -76,47 +80,44 @@ class ViewerComponent extends Manager implements BreadcrumbLessComponentInterfac
                     {
                         $commonActions->addButton(
                             new Button(
-                                Translation::get('Deactivate', [], StringUtilities::LIBRARIES),
+                                $translator->trans('Deactivate', [], StringUtilities::LIBRARIES),
                                 new FontAwesomeGlyph('pause-circle', [], null, 'fas'), $this->get_url(
                                 [
                                     self::PARAM_ACTION => self::ACTION_DEACTIVATE,
-                                    self::PARAM_CONTEXT => $this->context
+                                    self::PARAM_CONTEXT => $context
                                 ]
                             )
                             )
                         );
                     }
                 }
-                else
+                elseif (!is_subclass_of(
+                    $registration[Registration::PROPERTY_CONTEXT] . '\Activator',
+                    'Chamilo\Configuration\Package\NotAllowed'
+                ))
                 {
-                    if (!is_subclass_of(
-                        $registration[Registration::PROPERTY_CONTEXT] . '\Activator',
-                        'Chamilo\Configuration\Package\NotAllowed'
-                    ))
-                    {
-                        $commonActions->addButton(
-                            new Button(
-                                Translation::get('Activate', [], StringUtilities::LIBRARIES),
-                                new FontAwesomeGlyph('play-circle', [], null, 'fas'), $this->get_url(
-                                [
-                                    self::PARAM_ACTION => self::ACTION_ACTIVATE,
-                                    self::PARAM_CONTEXT => $this->context
-                                ]
-                            )
-                            )
-                        );
-                    }
+                    $commonActions->addButton(
+                        new Button(
+                            $translator->trans('Activate', [], StringUtilities::LIBRARIES),
+                            new FontAwesomeGlyph('play-circle', [], null, 'fas'), $this->get_url(
+                            [
+                                self::PARAM_ACTION => self::ACTION_ACTIVATE,
+                                self::PARAM_CONTEXT => $context
+                            ]
+                        )
+                        )
+                    );
                 }
             }
             else
             {
                 $commonActions->addButton(
                     new Button(
-                        Translation::get('Install', [], StringUtilities::LIBRARIES),
+                        $translator->trans('Install', [], StringUtilities::LIBRARIES),
                         new FontAwesomeGlyph('box', [], null, 'fas'), $this->get_url(
-                        [self::PARAM_ACTION => self::ACTION_INSTALL, self::PARAM_CONTEXT => $this->context]
+                        [self::PARAM_ACTION => self::ACTION_INSTALL, self::PARAM_CONTEXT => $context]
                     ), ToolbarItem::DISPLAY_ICON_AND_LABEL,
-                        Translation::get('ConfirmChosenAction', [], StringUtilities::LIBRARIES)
+                        $translator->trans('ConfirmChosenAction', [], StringUtilities::LIBRARIES)
                     )
                 );
             }
@@ -129,13 +130,13 @@ class ViewerComponent extends Manager implements BreadcrumbLessComponentInterfac
         return $this->buttonToolbarRenderer;
     }
 
-    public function get_context()
+    public function getCurrentContext(): string
     {
-        return $this->context;
+        return $this->getRequest()->query->get(self::PARAM_CONTEXT);
     }
 
-    public function get_registration()
+    public function getPackageInformationRenderer(): PackageInformationRenderer
     {
-        return $this->registration;
+        return $this->getService(PackageInformationRenderer::class);
     }
 }
