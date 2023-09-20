@@ -295,7 +295,7 @@ class AssessmentMatchingQuestionForm extends ContentObjectForm
             if (! in_array($option_number, $_SESSION[self::PROPERTY_MQ_SKIP_OPTIONS]))
             {
                 $visual_number ++;
-                $group[] = $this->createElement('static', null, null, $visual_number);
+                $group[] = $this->createElement('static', '', null, $visual_number);
                 $group[] = $this->create_html_editor(
                     AssessmentMatchingQuestionOption::PROPERTY_VALUE . '[' . $option_number . ']',
                     Translation::get('Answer'),

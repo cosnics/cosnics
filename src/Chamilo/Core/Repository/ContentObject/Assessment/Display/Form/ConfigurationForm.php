@@ -139,14 +139,14 @@ class ConfigurationForm extends FormValidator
                 $answer_feedback_type);
         }
         
-        $answer_feedback_fields[] = $form->createElement('static', null, null, '<span id="answer_feedback_enabled">');
+        $answer_feedback_fields[] = $form->createElement('static', '', null, '<span id="answer_feedback_enabled">');
         $answer_feedback_fields[] = $form->createElement(
             'static', 
             null, 
             null, 
             self::getContextTranslation('ShowAnswerFeedbackDetail'));
         
-        $answer_feedback_fields[] = $form->createElement('static', null, null, '&nbsp;');
+        $answer_feedback_fields[] = $form->createElement('static', '', null, '&nbsp;');
         
         $answer_feedback_fields[] = $form->createElement(
             'select', 
@@ -154,7 +154,7 @@ class ConfigurationForm extends FormValidator
             null, 
             $answer_feedback_options);
         
-        $answer_feedback_fields[] = $form->createElement('static', null, null, '</span>');
+        $answer_feedback_fields[] = $form->createElement('static', '', null, '</span>');
         
         return $form->createGroup(
             $answer_feedback_fields, 

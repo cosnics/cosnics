@@ -202,7 +202,7 @@ class Display extends QuestionDisplay
         $group = array();
         if ($multiple_answers)
         {
-            $group[] = $formvalidator->createElement('static', null, null, ($index + 1) . '.');
+            $group[] = $formvalidator->createElement('static', '', null, ($index + 1) . '.');
         }
 
         if ($question_type == FillInBlanksQuestion::TYPE_SELECT)
@@ -260,7 +260,7 @@ class Display extends QuestionDisplay
             $hint_buttons = implode(" ", $html);
             $hint_buttons = strlen($hint_buttons) > 0 ? ' ' . $hint_buttons : '';
 
-            $group[] = $formvalidator->createElement('static', null, null, $hint_buttons);
+            $group[] = $formvalidator->createElement('static', '', null, $hint_buttons);
         }
 
         $formvalidator->addGroup($group, 'option_' . $id . '_' . $index, null, '', false);

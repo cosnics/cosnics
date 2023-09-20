@@ -23,7 +23,7 @@ class MatterhornForm extends ContentObjectForm
         
         if ($external_repositories)
         {
-            $this->addElement('static', null, null, $external_repositories);
+            $this->addElement('static', '', null, $external_repositories);
         }
         
         $this->addElement('hidden', SynchronizationData::PROPERTY_EXTERNAL_ID);

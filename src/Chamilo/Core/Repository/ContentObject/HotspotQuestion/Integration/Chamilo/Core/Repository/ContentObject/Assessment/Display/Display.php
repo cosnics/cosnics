@@ -132,7 +132,7 @@ class Display extends QuestionDisplay
                 $answer->get_answer()
             );
 
-            $group[] = $formvalidator->createElement('static', null, null, $object_renderer->run());
+            $group[] = $formvalidator->createElement('static', '', null, $object_renderer->run());
             $group[] = $formvalidator->createElement(
                 'static',
                 null,

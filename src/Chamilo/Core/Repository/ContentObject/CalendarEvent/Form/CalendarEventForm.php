@@ -292,7 +292,7 @@ class CalendarEventForm extends ContentObjectForm
             CalendarEvent::PROPERTY_FREQUENCY_COUNT,
             '',
             array('style' => 'width:50px', 'maxlength' => 2));
-        $interval_elements[] = $this->createElement('static', null, null, Translation::get('Appointments'));
+        $interval_elements[] = $this->createElement('static', '', null, Translation::get('Appointments'));
         $this->addGroup($interval_elements, '', '', null, false);
 
         $until_elements = array();

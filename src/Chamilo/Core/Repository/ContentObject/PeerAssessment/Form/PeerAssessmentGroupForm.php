@@ -143,7 +143,7 @@ class PeerAssessmentGroupForm extends FormValidator
             $element_finder->excludeElements($attributes['exclude']);
             $this->addElement($element_finder);
             
-            $this->addElement('static', null, null, $legend->as_html());
+            $this->addElement('static', '', null, $legend->as_html());
         }
         else
         {

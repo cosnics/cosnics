@@ -60,7 +60,7 @@ class Display extends QuestionDisplay
             {
                 $answer_name = $question_id . '_0';
                 $group[] = $formvalidator->createElement('radio', $answer_name, null, null, $i);
-                $group[] = $formvalidator->createElement('static', null, null, $object_renderer->run());
+                $group[] = $formvalidator->createElement('static', '', null, $object_renderer->run());
 
                 $defaults[$answer_name] = -1;
             }
@@ -68,7 +68,7 @@ class Display extends QuestionDisplay
             {
                 $answer_name = $question_id . '_' . ($i + 1);
                 $group[] = $formvalidator->createElement('checkbox', $answer_name);
-                $group[] = $formvalidator->createElement('static', null, null, $object_renderer->run());
+                $group[] = $formvalidator->createElement('static', '', null, $object_renderer->run());
             }
 
             // $formvalidator->addGroup($group, 'option_' . $i, null, '', false);

@@ -215,7 +215,7 @@ class AssessmentMatrixQuestionForm extends ContentObjectForm
             if (! in_array($option_number, $_SESSION['mq_skip_options']))
             {
                 $visual_number ++;
-                $group[] = $this->createElement('static', null, null, $visual_number);
+                $group[] = $this->createElement('static', '', null, $visual_number);
                 $group[] = $this->create_html_editor(
                     AssessmentMatrixQuestionOption::PROPERTY_VALUE . '[' . $option_number . ']',
                     Translation::get('Answer'),

@@ -55,7 +55,7 @@ class Display extends QuestionDisplay
                 $this->get_formvalidator()->get_assessment_viewer(),
                 $answer->get_value());
 
-            $group[] = $formvalidator->createElement('static', null, null, $object_renderer->run());
+            $group[] = $formvalidator->createElement('static', '', null, $object_renderer->run());
 
             // $formvalidator->addGroup($group, 'option_' . $i, null, '', false);
             $formvalidator->addGroup($group, 'option_' . $question_id . '_' . $i, null, '', false);

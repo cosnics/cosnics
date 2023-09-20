@@ -39,7 +39,7 @@ class HotpotatoesForm extends ContentObjectForm
         parent::build_creation_form();
         $this->addElement('category', Translation::get('Properties'));
         $this->add_textfield(Assessment::PROPERTY_MAXIMUM_ATTEMPTS, Translation::get('MaximumAttempts'));
-        $this->addElement('static', null, null, Translation::get('NoMaximumAttemptsFillIn0'));
+        $this->addElement('static', '', null, Translation::get('NoMaximumAttemptsFillIn0'));
         $this->addElement('file', 'file', Translation::get('UploadHotpotatoes'));
         $this->addRule('file', Translation::get('ThisFieldIsRequired', null, Utilities::COMMON_LIBRARIES), 'required');
         $this->addElement('category');
@@ -51,7 +51,7 @@ class HotpotatoesForm extends ContentObjectForm
         parent::build_editing_form();
         $this->addElement('category', Translation::get('Properties'));
         $this->add_textfield(Hotpotatoes::PROPERTY_MAXIMUM_ATTEMPTS, Translation::get('MaximumAttempts'));
-        $this->addElement('static', null, null, Translation::get('NoMaximumAttemptsFillIn0'));
+        $this->addElement('static', '', null, Translation::get('NoMaximumAttemptsFillIn0'));
         $this->addElement('file', 'file', Translation::get('ChangeHotpotatoes'));
         $this->addRule('file', Translation::get('ThisFieldIsRequired', null, Utilities::COMMON_LIBRARIES), 'required');
         $this->addElement('category');
