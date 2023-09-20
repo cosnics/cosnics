@@ -154,8 +154,8 @@ class RequestForm extends FormValidator
             while ($course_type = $course_type_objects->next_result())
             {
                 if ($course_management_rights->is_allowed(
+                    CourseManagementRights::REQUEST_COURSE_RIGHT,
                     \Chamilo\Application\Weblcms\Manager::context(),
-                    CourseManagementRights::REQUEST_COURSE_RIGHT, 
                     $course_type->get_id(), 
                     CourseManagementRights::TYPE_COURSE_TYPE))
                 {
