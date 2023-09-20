@@ -214,7 +214,7 @@ class CategoryMoverComponent extends Manager implements DelegateComponent
                 }
                 $form->addElement(
                     'static',
-                    null,
+                    '',
                     Translation::get(
                         'ObjectSelected',
                         array(
