@@ -2,30 +2,15 @@
 namespace Chamilo\Core\Group\Storage\DataClass;
 
 use Chamilo\Core\Group\Manager;
-use Chamilo\Core\Group\Storage\DataManager;
+use Chamilo\Core\Group\Service\GroupsTreeTraverser;
+use Chamilo\Libraries\DependencyInjection\DependencyInjectionContainerBuilder;
 use Chamilo\Libraries\Storage\DataClass\NestedSet;
-use Chamilo\Libraries\Storage\Parameters\DataClassCountParameters;
-use Chamilo\Libraries\Storage\Parameters\DataClassDistinctParameters;
-use Chamilo\Libraries\Storage\Query\Condition\AndCondition;
-use Chamilo\Libraries\Storage\Query\Condition\ComparisonCondition;
-use Chamilo\Libraries\Storage\Query\Condition\EqualityCondition;
-use Chamilo\Libraries\Storage\Query\Condition\InCondition;
-use Chamilo\Libraries\Storage\Query\Condition\OrCondition;
-use Chamilo\Libraries\Storage\Query\Join;
-use Chamilo\Libraries\Storage\Query\Joins;
-use Chamilo\Libraries\Storage\Query\RetrieveProperties;
-use Chamilo\Libraries\Storage\Query\Variable\FunctionConditionVariable;
-use Chamilo\Libraries\Storage\Query\Variable\PropertyConditionVariable;
-use Chamilo\Libraries\Storage\Query\Variable\StaticConditionVariable;
 
 /**
- * @package group.lib
- */
-
-/**
- * @author Hans de Bisschop
- * @author Dieter De Neef
- * @author Sven Vanpoucke
+ * @package Chamilo\Core\Group\Storage\DataClass
+ * @author  Hans De Bisschop <hans.de.bisschop@ehb.be>
+ * @author  Dieter De Neef
+ * @author  Sven Vanpoucke
  */
 class Group extends NestedSet
 {
@@ -39,184 +24,34 @@ class Group extends NestedSet
     public const PROPERTY_SORT = 'sort';
 
     /**
-     * Cache of the siblings of a group, depending on request (recursive or not)
-     *
-     * @var array
-     */
-    private $siblings;
-
-    private $subgroupIdentifiers;
-
-    /**
-     * Array used to cache subgroup counts, depending on request (recursive or not)
-     *
-     * @var array
-     */
-    private $subgroup_count;
-
-    /**
-     * Array used to cache subgroups, depending on request (recursive or not)
-     *
-     * @var array
-     */
-    private $subgroups;
-
-    /**
-     * Array used to cache user counts in this group, depending on request (include subgroups, recursive subgroups)
-     *
-     * @var array
-     */
-    private $user_count;
-
-    /**
-     * Array used to cache users in this group, depending on request (include subgroups, recursive subgroups)
-     *
-     * @var array
-     */
-    private $users;
-
-    /**
      * @param bool $recursive
      *
-     * @return mixed
+     * @return int
      * @deprecated Use GroupsTreeTraverser::countSubGroupsForGroup() now
      */
-    public function count_subgroups($recursive = false)
+    public function count_subgroups(bool $recursive = false): int
     {
-        if (!isset($this->subgroup_count[(int) $recursive]))
-        {
-            if ($recursive)
-            {
-                $this->subgroup_count[(int) $recursive] = ($this->get_right_value() - $this->get_left_value() - 1) / 2;
-            }
-            else
-            {
-                $children_condition = new EqualityCondition(
-                    new PropertyConditionVariable(Group::class, Group::PROPERTY_PARENT_ID),
-                    new StaticConditionVariable($this->get_id())
-                );
-                $this->subgroup_count[(int) $recursive] = DataManager::count(
-                    Group::class, new DataClassCountParameters($children_condition)
-                );
-            }
-        }
-
-        return $this->subgroup_count[(int) $recursive];
+        return $this->getGroupsTreeTraverser()->countSubGroupsForGroup($this, $recursive);
     }
 
     /**
-     * @param bool $include_subgroups
-     * @param bool $recursive_subgroups
-     *
-     * @return mixed
      * @deprecated Use GroupsTreeTraverser::countUsersForGroup() now
      */
-    public function count_users($include_subgroups = false, $recursive_subgroups = false)
+    public function count_users(bool $include_subgroups = false, bool $recursive_subgroups = false): int
     {
-        if (!isset($this->user_count[(int) $include_subgroups][(int) $recursive_subgroups]))
-        {
-            if (!$include_subgroups)
-            {
-                $condition = new EqualityCondition(
-                    new PropertyConditionVariable(GroupRelUser::class, GroupRelUser::PROPERTY_GROUP_ID),
-                    new StaticConditionVariable($this->get_id())
-                );
-                $parameters = new DataClassCountParameters(
-                    $condition, null, new RetrieveProperties(
-                        [
-                            new FunctionConditionVariable(
-                                FunctionConditionVariable::DISTINCT, new PropertyConditionVariable(
-                                    GroupRelUser::class, GroupRelUser::PROPERTY_USER_ID
-                                )
-                            )
-                        ]
-                    )
-                );
-            }
-            elseif ($include_subgroups && $recursive_subgroups)
-            {
-                $join = new Join(
-                    Group::class, new EqualityCondition(
-                        new PropertyConditionVariable(Group::class, Group::PROPERTY_ID),
-                        new PropertyConditionVariable(GroupRelUser::class, GroupRelUser::PROPERTY_GROUP_ID)
-                    )
-                );
-                $joins = new Joins([$join]);
-
-                $conditions = [];
-                $conditions[] = new ComparisonCondition(
-                    new PropertyConditionVariable(Group::class, Group::PROPERTY_LEFT_VALUE),
-                    ComparisonCondition::GREATER_THAN_OR_EQUAL, new StaticConditionVariable($this->get_left_value())
-                );
-                $conditions[] = new ComparisonCondition(
-                    new PropertyConditionVariable(Group::class, Group::PROPERTY_RIGHT_VALUE),
-                    ComparisonCondition::LESS_THAN_OR_EQUAL, new StaticConditionVariable($this->get_right_value())
-                );
-                $condition = new AndCondition($conditions);
-
-                $parameters = new DataClassCountParameters(
-                    $condition, $joins, new RetrieveProperties(
-                        [
-                            new FunctionConditionVariable(
-                                FunctionConditionVariable::DISTINCT, new PropertyConditionVariable(
-                                    GroupRelUser::class, GroupRelUser::PROPERTY_USER_ID
-                                )
-                            )
-                        ]
-                    )
-                );
-            }
-            else
-            {
-                $join = new Join(
-                    Group::class, new EqualityCondition(
-                        new PropertyConditionVariable(Group::class, Group::PROPERTY_ID),
-                        new PropertyConditionVariable(GroupRelUser::class, GroupRelUser::PROPERTY_GROUP_ID)
-                    )
-                );
-                $joins = new Joins([$join]);
-
-                $conditions = [];
-                $conditions[] = new EqualityCondition(
-                    new PropertyConditionVariable(Group::class, Group::PROPERTY_PARENT_ID),
-                    new StaticConditionVariable($this->get_id())
-                );
-                $conditions[] = new EqualityCondition(
-                    new PropertyConditionVariable(Group::class, Group::PROPERTY_ID),
-                    new StaticConditionVariable($this->get_id())
-                );
-                $condition = new OrCondition($conditions);
-
-                $parameters = new DataClassCountParameters(
-                    $condition, $joins, new RetrieveProperties(
-                        [
-                            new FunctionConditionVariable(
-                                FunctionConditionVariable::DISTINCT, new PropertyConditionVariable(
-                                    GroupRelUser::class, GroupRelUser::PROPERTY_USER_ID
-                                )
-                            )
-                        ]
-                    )
-                );
-            }
-
-            $this->user_count[(int) $include_subgroups][(int) $recursive_subgroups] = DataManager::count(
-                GroupRelUser::class, $parameters
-            );
-        }
-
-        return $this->user_count[(int) $include_subgroups][(int) $recursive_subgroups];
+        return $this->getGroupsTreeTraverser()->countUsersForGroup($this, $include_subgroups, $recursive_subgroups);
     }
 
     /**
      * @param int $previous_id
      *
      * @return bool
+     * @throws \Throwable
      * @deprecated Use GroupService::createGroup() now
      */
     public function create($previous_id = 0, $reference_node = null): bool
     {
-        $parent_id = $this->get_parent_id();
+        $parent_id = $this->getParentId();
 
         if ($previous_id)
         {
@@ -234,17 +69,16 @@ class Group extends NestedSet
      * @param $in_batch - delete groups in batch and fix nested values later
      *
      * @return bool True if success, false otherwise.
+     * @throws \Throwable
      * @deprecated should use $this->delete() of self::deletes( $array ) instead
      */
-    public function delete_group($in_batch = false)
+    public function delete_group($in_batch = false): bool
     {
         return self::delete();
     }
 
     /**
-     * Get the default properties of all groups.
-     *
-     * @return array The property names.
+     * @return string[]
      */
     public static function getDefaultPropertyNames(array $extendedPropertyNames = []): array
     {
@@ -260,118 +94,46 @@ class Group extends NestedSet
         );
     }
 
-    /**
-     * @return string
-     */
+    public function getGroupsTreeTraverser(): GroupsTreeTraverser
+    {
+        return DependencyInjectionContainerBuilder::getInstance()->createContainer()->get(GroupsTreeTraverser::class);
+    }
+
     public static function getStorageUnitName(): string
     {
         return 'group_group';
     }
 
-    /**
-     * @param bool $recursive
-     *
-     * @return mixed
-     * @deprecated Use GroupService::findSubGroupIdentifiersForGroup() now
-     */
-    private function getSubgroupIdentifiers($recursive = false)
-    {
-        if (!isset($this->subgroupIdentifiers[(int) $recursive]))
-        {
-            if ($recursive)
-            {
-                $childrenCondition = [];
-                $childrenCondition[] = new ComparisonCondition(
-                    new PropertyConditionVariable(Group::class, Group::PROPERTY_LEFT_VALUE),
-                    ComparisonCondition::GREATER_THAN, new StaticConditionVariable($this->get_left_value())
-                );
-                $childrenCondition[] = new ComparisonCondition(
-                    new PropertyConditionVariable(Group::class, Group::PROPERTY_RIGHT_VALUE),
-                    ComparisonCondition::LESS_THAN, new StaticConditionVariable($this->get_right_value())
-                );
-                $childrenCondition = new AndCondition($childrenCondition);
-            }
-            else
-            {
-                $childrenCondition = new EqualityCondition(
-                    new PropertyConditionVariable(Group::class, Group::PROPERTY_PARENT_ID),
-                    new StaticConditionVariable($this->get_id())
-                );
-            }
-
-            $subgroupIdentifiers = DataManager::distinct(
-                Group::class, new DataClassDistinctParameters(
-                    $childrenCondition,
-                    new RetrieveProperties([new PropertyConditionVariable(Group::class, Group::PROPERTY_ID)])
-                )
-            );
-
-            $this->subgroupIdentifiers[(int) $recursive] = $subgroupIdentifiers;
-        }
-
-        return $this->subgroupIdentifiers[(int) $recursive];
-    }
-
-    public function get_code()
+    public function get_code(): ?string
     {
         return $this->getDefaultProperty(self::PROPERTY_CODE);
     }
 
-    /**
-     * Returns the database quota for users in this group.
-     *
-     * @return Int the database quota
-     */
-    public function get_database_quota()
+    public function get_database_quota(): int
     {
         return $this->getDefaultProperty(self::PROPERTY_DATABASE_QUOTA);
     }
 
-    /**
-     * Returns the description of this group.
-     *
-     * @return String The description
-     */
-    public function get_description()
+    public function get_description(): ?string
     {
         return $this->getDefaultProperty(self::PROPERTY_DESCRIPTION);
     }
 
-    /**
-     * Returns the disk quota for users in this group.
-     *
-     * @return Int the disk quota
-     */
-    public function get_disk_quota()
+    public function get_disk_quota(): int
     {
         return $this->getDefaultProperty(self::PROPERTY_DISK_QUOTA);
     }
 
     /**
-     * @param bool $include_self
-     *
-     * @return string
+     * @throws \Chamilo\Libraries\Storage\Exception\DataClassNoResultException
      * @deprecated Use GroupsTreeTraverser::getFullyQualifiedNameForGroup() now
      */
-    public function get_fully_qualified_name($include_self = true)
+    public function get_fully_qualified_name(bool $include_self = true): string
     {
-        $parents = $this->get_parents($include_self);
-        $names = [];
-
-        foreach ($parents as $node)
-        {
-            $names[] = $node->get_name();
-        }
-
-        return implode(' <span class="text-primary">></span> ', array_reverse($names));
+        return $this->getGroupsTreeTraverser()->getFullyQualifiedNameForGroup($this, $include_self);
     }
 
-    /**
-     * Returns the name of this group.
-     *
-     * @return String The name
-     */
-    public function get_name()
+    public function get_name(): ?string
     {
         return $this->getDefaultProperty(self::PROPERTY_NAME);
     }
@@ -386,134 +148,54 @@ class Group extends NestedSet
         return $this->get_ancestors($include_self);
     }
 
-    public function get_sort()
+    public function get_sort(): int
     {
         return $this->getDefaultProperty(self::PROPERTY_SORT);
     }
 
     /**
-     * @param bool $recursive
-     *
-     * @return mixed
-     * @deprecated Use GroupService::findSubGroupsForGroup() now
+     * @return \Chamilo\Core\Group\Storage\DataClass\Group[]
+     * @throws \Chamilo\Libraries\Storage\Exception\DataClassNoResultException
+     * @deprecated Use GroupsTreeTraverser::findSubGroupsForGroup() now
      */
-    public function get_subgroups($recursive = false)
+    public function get_subgroups(bool $recursive = false): array
     {
-        if (!isset($this->subgroups[(int) $recursive]))
-        {
-            if ($recursive)
-            {
-                $children_conditions = [];
-                $children_conditions[] = new ComparisonCondition(
-                    new PropertyConditionVariable(Group::class, Group::PROPERTY_LEFT_VALUE),
-                    ComparisonCondition::GREATER_THAN, new StaticConditionVariable($this->get_left_value())
-                );
-                $children_conditions[] = new ComparisonCondition(
-                    new PropertyConditionVariable(Group::class, Group::PROPERTY_RIGHT_VALUE),
-                    ComparisonCondition::LESS_THAN, new StaticConditionVariable($this->get_right_value())
-                );
-                $children_condition = new AndCondition($children_conditions);
-            }
-            else
-            {
-                $children_condition = new EqualityCondition(
-                    new PropertyConditionVariable(Group::class, Group::PROPERTY_PARENT_ID),
-                    new StaticConditionVariable($this->get_id())
-                );
-            }
-
-            $groups = DataManager::retrieves(Group::class, $children_condition);
-
-            $subgroups = [];
-
-            foreach ($groups as $group)
-            {
-                $subgroups[$group->get_id()] = $group;
-            }
-
-            $this->subgroups[(int) $recursive] = $subgroups;
-        }
-
-        return $this->subgroups[(int) $recursive];
+        return $this->getGroupsTreeTraverser()->findSubGroupsForGroup($this, $recursive);
     }
 
     /**
      * @param bool $include_subgroups
      * @param bool $recursive_subgroups
      *
-     * @return \Chamilo\Libraries\Storage\Query\Condition\InCondition
-     * @deprecated Should not be used anymore
+     * @return string[]
+     * @deprecated Use GroupsTreeTraverser::findUserIdentifiersForGroup() now
      */
-    private function get_user_condition($include_subgroups = false, $recursive_subgroups = false)
+    public function get_users(bool $include_subgroups = false, bool $recursive_subgroups = false): array
     {
-        if ($include_subgroups)
-        {
-            $groups = $this->getSubgroupIdentifiers($recursive_subgroups);
-
-            if (!is_array($groups))
-            {
-                $groups = [];
-            }
-        }
-        else
-        {
-            $groups = [];
-        }
-
-        $groups[] = $this->get_id();
-
-        return new InCondition(
-            new PropertyConditionVariable(GroupRelUser::class, GroupRelUser::PROPERTY_GROUP_ID), $groups
+        return $this->getGroupsTreeTraverser()->findUserIdentifiersForGroup(
+            $this, $include_subgroups, $recursive_subgroups
         );
-    }
-
-    /**
-     * @param bool $include_subgroups
-     * @param bool $recursive_subgroups
-     *
-     * @return mixed
-     * @deprecated Use GroupService::findUserIdentifiersForGroup() now
-     */
-    public function get_users($include_subgroups = false, $recursive_subgroups = false)
-    {
-        if (!isset($this->users[(int) $include_subgroups][(int) $recursive_subgroups]))
-        {
-            $condition = $this->get_user_condition($include_subgroups, $recursive_subgroups);
-            $users = DataManager::distinct(
-                GroupRelUser::class, new DataClassDistinctParameters(
-                    $condition, new RetrieveProperties(
-                        [new PropertyConditionVariable(GroupRelUser::class, GroupRelUser::PROPERTY_USER_ID)]
-                    )
-                )
-            );
-
-            $this->users[(int) $include_subgroups][(int) $recursive_subgroups] = $users;
-        }
-
-        return $this->users[(int) $include_subgroups][(int) $recursive_subgroups];
     }
 
     /**
      * @deprecated should use is_descendant_of
      */
-    public function is_child_of($parent)
+    public function is_child_of(Group $parent): bool
     {
-        return $this->is_descendant_of($parent);
+        return $this->isDescendantOf($parent);
     }
 
     /**
      * @deprecated Use Group::isAncestorOf()
      */
-    public function is_parent_of($child)
+    public function is_parent_of(Group $child): bool
     {
-        return $this->is_ancestor_of($child);
+        return $this->isAncestorOf($child);
     }
 
     /**
-     * @param int $new_parent_id
-     * @param int $new_previous_id
-     *
      * @return bool
+     * @throws \Throwable
      * @deprecated Use GroupService::moveGroup() now
      */
     public function move($new_parent_id = 0, $new_previous_id = null, $condition = null): bool
@@ -528,45 +210,40 @@ class Group extends NestedSet
         }
     }
 
-    public function set_code($code)
+    public function set_code(?string $code): void
     {
         $this->setDefaultProperty(self::PROPERTY_CODE, $code);
     }
 
-    public function set_database_quota($database_quota)
+    public function set_database_quota(int $database_quota): void
     {
         $this->setDefaultProperty(self::PROPERTY_DATABASE_QUOTA, $database_quota);
     }
 
-    public function set_description($description)
+    public function set_description(?string $description): void
     {
         $this->setDefaultProperty(self::PROPERTY_DESCRIPTION, $description);
     }
 
-    public function set_disk_quota($disk_quota)
+    public function set_disk_quota(int $disk_quota): void
     {
         $this->setDefaultProperty(self::PROPERTY_DISK_QUOTA, $disk_quota);
     }
 
-    /**
-     * Sets the name of this group.
-     *
-     * @param String $name the name.
-     */
-    public function set_name($name)
+    public function set_name(?string $name): void
     {
         $this->setDefaultProperty(self::PROPERTY_NAME, $name);
     }
 
     /**
-     * @deprecated use set_parent_id() || move instead.
+     * @deprecated use setParentId() || move instead.
      */
-    public function set_parent($parent)
+    public function set_parent(string $parent): void
     {
-        $this->set_parent_id($parent);
+        $this->setParentId($parent);
     }
 
-    public function set_sort($sort)
+    public function set_sort(int $sort): void
     {
         $this->setDefaultProperty(self::PROPERTY_SORT, $sort);
     }

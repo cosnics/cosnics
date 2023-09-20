@@ -1,15 +1,9 @@
 <?php
 namespace Chamilo\Application\Weblcms\Tool\Implementation\User\Component;
 
+use Chamilo\Application\Weblcms\Course\Storage\DataManager;
 use Chamilo\Application\Weblcms\Tool\Implementation\User\Manager;
-use Chamilo\Core\Group\Storage\DataClass\Group;
-use Chamilo\Core\Group\Storage\DataClass\GroupRelUser;
-use Chamilo\Core\Group\Storage\DataManager;
-use Chamilo\Libraries\Storage\Parameters\DataClassRetrievesParameters;
-use Chamilo\Libraries\Storage\Query\Condition\EqualityCondition;
-use Chamilo\Libraries\Storage\Query\Variable\PropertyConditionVariable;
-use Chamilo\Libraries\Storage\Query\Variable\StaticConditionVariable;
-use Chamilo\Libraries\Translation\Translation;
+use Chamilo\Core\Group\Service\GroupsTreeTraverser;
 
 /**
  * @package application.lib.weblcms.weblcms_manager.component
@@ -22,7 +16,7 @@ class GroupUsersSubscribeComponent extends Manager
 {
 
     /**
-     * Runs this component and displays its output.
+     * @throws \Chamilo\Libraries\Storage\Exception\DataClassNoResultException
      */
     public function run()
     {
@@ -35,18 +29,16 @@ class GroupUsersSubscribeComponent extends Manager
         }
         if (isset($course))
         {
-            if (isset($groups) && $course->is_course_admin($this->get_user()))
+            if (isset($groups) && $course->is_course_admin($this->getUser()))
             {
                 foreach ($groups as $group_id)
                 {
                     $this->subscribe_group($group_id, $course);
                 }
 
-                $success = true;
-
                 if (count($groups) == 1)
                 {
-                    $message = 'GroupsSubscribedToCourse';
+                    $message = 'GroupSubscribedToCourse';
                 }
                 else
                 {
@@ -54,7 +46,7 @@ class GroupUsersSubscribeComponent extends Manager
                 }
 
                 $this->redirectWithMessage(
-                    Translation::get($message), !$success, [
+                    $this->getTranslator()->trans($message, [], Manager::CONTEXT), false, [
                         \Chamilo\Application\Weblcms\Tool\Manager::PARAM_ACTION => self::ACTION_SUBSCRIBE_GROUP_DETAILS
                     ]
                 );
@@ -62,44 +54,37 @@ class GroupUsersSubscribeComponent extends Manager
         }
     }
 
-    public function subscribe_group($group_id, $course)
+    public function getGroupsTreeTraverser(): GroupsTreeTraverser
     {
-        $group_users = DataManager::retrieves(
-            GroupRelUser::class, new DataClassRetrievesParameters(
-                new EqualityCondition(
-                    new PropertyConditionVariable(GroupRelUser::class, GroupRelUser::PROPERTY_GROUP_ID),
-                    new StaticConditionVariable($group_id)
-                )
-            )
-        );
+        return $this->getService(GroupsTreeTraverser::class);
+    }
 
-        foreach ($group_users as $user)
+    /**
+     * @throws \Chamilo\Libraries\Storage\Exception\DataClassNoResultException
+     */
+    public function subscribe_group($group_id, $course): void
+    {
+        $groupUserIdentifiers = $this->getGroupsTreeTraverser()->findUserIdentifiersForGroup($group_id);
+
+        foreach ($groupUserIdentifiers as $groupUserIdentifier)
         {
-            $user_id = $user->get_user_id();
-            if ($user_id != $this->get_user_id())
+            if ($groupUserIdentifier != $this->get_user_id())
             {
                 $status = $this->getRequest()->query->get(\Chamilo\Application\Weblcms\Manager::PARAM_STATUS) ?
                     $this->getRequest()->query->get(
                         \Chamilo\Application\Weblcms\Manager::PARAM_STATUS
                     ) : 5;
-                \Chamilo\Application\Weblcms\Course\Storage\DataManager::subscribe_user_to_course(
-                    $course->get_id(), $status, $user_id
+                DataManager::subscribe_user_to_course(
+                    $course->get_id(), $status, $groupUserIdentifier
                 );
             }
         }
 
-        $groups = DataManager::retrieves(
-            Group::class, new DataClassRetrievesParameters(
-                new EqualityCondition(
-                    new PropertyConditionVariable(Group::class, Group::PROPERTY_PARENT_ID),
-                    new StaticConditionVariable($group_id)
-                )
-            )
-        );
+        $groups = $this->getGroupService()->findGroupsForParentIdentifier($group_id);
 
         foreach ($groups as $group)
         {
-            $this->subscribe_group($group->get_id(), $course);
+            $this->subscribe_group($group->getId(), $course);
         }
     }
 }

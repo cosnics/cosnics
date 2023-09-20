@@ -5,14 +5,11 @@ use Chamilo\Application\Weblcms\Rights\CourseManagementRights;
 use Chamilo\Application\Weblcms\Rights\WeblcmsRights;
 use Chamilo\Application\Weblcms\Storage\DataClass\CourseEntityRelation;
 use Chamilo\Application\Weblcms\Tool\Implementation\User\Manager;
-use Chamilo\Core\Group\Storage\DataClass\Group;
-use Chamilo\Core\Group\Storage\DataManager;
 use Chamilo\Libraries\Architecture\Exceptions\NotAllowedException;
 use Chamilo\Libraries\Storage\Cache\DataClassRepositoryCache;
 use Chamilo\Libraries\Translation\Translation;
 
 /**
- *
  * @package application.lib.weblcms.weblcms_manager.component
  */
 
@@ -21,7 +18,7 @@ use Chamilo\Libraries\Translation\Translation;
  */
 class GroupSubscribeComponent extends Manager
 {
-    const PARAM_RETURN_TO_COMPONENT = 'return';
+    public const PARAM_RETURN_TO_COMPONENT = 'return';
 
     /**
      * Runs this component and displays its output.
@@ -38,7 +35,7 @@ class GroupSubscribeComponent extends Manager
 
         if (isset($group_ids) && !is_array($group_ids))
         {
-            $group_ids = array($group_ids);
+            $group_ids = [$group_ids];
         }
 
         if (isset($course))
@@ -77,8 +74,8 @@ class GroupSubscribeComponent extends Manager
 
                     if (!$parent_group_id)
                     {
-                        $group = DataManager::retrieve_by_id(
-                            Group::class, $group_id
+                        $group = $this->getGroupService()->findGroupByIdentifier(
+                            $group_id
                         );
                         $parent_group_id = $group->get_parent_id();
                     }
@@ -122,10 +119,10 @@ class GroupSubscribeComponent extends Manager
                 $returnAction = !empty($returnAction) ? $returnAction : self::ACTION_SUBSCRIBE_GROUP_DETAILS;
 
                 $this->redirectWithMessage(
-                    Translation::get($message), !$success, array(
+                    Translation::get($message), !$success, [
                         \Chamilo\Application\Weblcms\Tool\Manager::PARAM_ACTION => $returnAction,
                         \Chamilo\Application\Weblcms\Manager::PARAM_GROUP => $parent_group_id
-                    )
+                    ]
                 );
             }
             else

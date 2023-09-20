@@ -32,7 +32,7 @@ class EditorComponent extends Manager
 
         if ($groupIdentifier)
         {
-            $group = $this->retrieve_group($groupIdentifier);
+            $group = $this->getGroupService()->findGroupByIdentifier($groupIdentifier);
 
             if (!$this->getUser()->isPlatformAdmin())
             {

@@ -88,7 +88,6 @@ class WeblcmsRights extends RightsUtil
 
     /**
      * @template getService
-     *
      * @param class-string<getService> $serviceName
      *
      * @return getService
@@ -239,7 +238,7 @@ class WeblcmsRights extends RightsUtil
                     case CoursePlatformGroupEntity::ENTITY_TYPE :
                         foreach ($entity_ids as $group_id)
                         {
-                            $group = \Chamilo\Core\Group\Storage\DataManager::retrieve_by_id(
+                            $group = \Chamilo\Libraries\Storage\DataManager\DataManager::retrieve_by_id(
                                 Group::class, $group_id
                             );
                             if ($group)

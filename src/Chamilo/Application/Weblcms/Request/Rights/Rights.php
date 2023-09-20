@@ -3,14 +3,14 @@ namespace Chamilo\Application\Weblcms\Request\Rights;
 
 use Chamilo\Application\Weblcms\Request\Rights\Storage\DataClass\RightsLocationEntityRight;
 use Chamilo\Application\Weblcms\Request\Rights\Storage\DataClass\RightsLocationEntityRightGroup;
+use Chamilo\Core\Group\Service\GroupService;
 use Chamilo\Core\Group\Storage\DataClass\Group;
-use Chamilo\Core\Group\Storage\DataManager;
 use Chamilo\Core\Rights\Entity\PlatformGroupEntity;
 use Chamilo\Core\Rights\Entity\UserEntity;
 use Chamilo\Core\Rights\RightsUtil;
 use Chamilo\Core\User\Storage\DataClass\User;
 use Chamilo\Libraries\DependencyInjection\DependencyInjectionContainerBuilder;
-use Chamilo\Libraries\Storage\Cache\DataClassRepositoryCache;
+use Chamilo\Libraries\Storage\DataManager\DataManager;
 use Chamilo\Libraries\Storage\Parameters\DataClassCountParameters;
 use Chamilo\Libraries\Storage\Parameters\DataClassRetrievesParameters;
 use Chamilo\Libraries\Storage\Query\Condition\EqualityCondition;
@@ -18,6 +18,7 @@ use Chamilo\Libraries\Storage\Query\Condition\InCondition;
 use Chamilo\Libraries\Storage\Query\Variable\PropertyConditionVariable;
 use Chamilo\Libraries\Storage\Query\Variable\StaticConditionVariable;
 use Chamilo\Libraries\Translation\Translation;
+use Exception;
 
 class Rights extends RightsUtil
 {
@@ -36,13 +37,10 @@ class Rights extends RightsUtil
         return parent::create_location(Manager::CONTEXT);
     }
 
-    /**
-     * @return \Chamilo\Libraries\Storage\Cache\DataClassRepositoryCache
-     */
-    protected function getDataClassRepositoryCache()
+    protected function getGroupService(): GroupService
     {
         return DependencyInjectionContainerBuilder::getInstance()->createContainer()->get(
-            DataClassRepositoryCache::class
+            GroupService::class
         );
     }
 
@@ -110,11 +108,12 @@ class Rights extends RightsUtil
                             }
                             break;
                         case PlatformGroupEntity::ENTITY_TYPE :
-                            $group =
-                                DataManager::getInstance()->retrieve_group($location_entity_right->get_entity_id());
-
-                            if ($group instanceof Group)
+                            try
                             {
+                                $group = $this->getGroupService()->findGroupByIdentifier(
+                                    (string) $location_entity_right->get_entity_id()
+                                );
+
                                 $group_user_ids = $group->get_users(true, true);
 
                                 foreach ($group_user_ids as $group_user_id)
@@ -124,6 +123,10 @@ class Rights extends RightsUtil
                                         $user_ids[] = $group_user_id;
                                     }
                                 }
+                            }
+                            catch (Exception)
+                            {
+
                             }
                             break;
                     }

@@ -5,7 +5,6 @@ use Chamilo\Application\Weblcms\Rights\WeblcmsRights;
 use Chamilo\Application\Weblcms\Tool\Implementation\User\Manager;
 use Chamilo\Application\Weblcms\Tool\Implementation\User\PlatformgroupMenuRenderer;
 use Chamilo\Core\Group\Storage\DataClass\Group;
-use Chamilo\Core\Group\Storage\DataManager;
 use Chamilo\Libraries\Architecture\Exceptions\NotAllowedException;
 use Chamilo\Libraries\Format\Structure\ActionBar\Button;
 use Chamilo\Libraries\Format\Structure\ActionBar\ButtonToolBar;
@@ -14,10 +13,6 @@ use Chamilo\Libraries\Format\Structure\Glyph\FontAwesomeGlyph;
 use Chamilo\Libraries\Format\Tabs\Link\LinkTab;
 use Chamilo\Libraries\Format\Tabs\Link\LinkTabsRenderer;
 use Chamilo\Libraries\Format\Tabs\TabsCollection;
-use Chamilo\Libraries\Storage\Parameters\DataClassRetrieveParameters;
-use Chamilo\Libraries\Storage\Query\Condition\EqualityCondition;
-use Chamilo\Libraries\Storage\Query\Variable\PropertyConditionVariable;
-use Chamilo\Libraries\Storage\Query\Variable\StaticConditionVariable;
 use Chamilo\Libraries\Translation\Translation;
 
 /**
@@ -125,33 +120,24 @@ abstract class SubscribeGroupsTabComponent extends Manager
         return parent::getAdditionalParameters($additionalParameters);
     }
 
-    /**
-     * Retrieves the currently selected group
-     *
-     * @return Group
-     */
-    protected function getCurrentGroup()
+    protected function getCurrentGroup(): ?Group
     {
         if (!isset($this->currentGroup))
         {
             $groupId = $this->getGroupId();
+
             if (!$groupId)
             {
                 return null;
             }
 
-            $this->currentGroup = DataManager::retrieve_by_id(Group::class, $groupId);
+            $this->currentGroup = $this->getGroupService()->findGroupByIdentifier($groupId);
         }
 
         return $this->currentGroup;
     }
 
-    /**
-     * Returns the id of the currently selected group, or the root group
-     *
-     * @return int
-     */
-    protected function getGroupId()
+    protected function getGroupId(): string
     {
         if (!$this->groupId)
         {
@@ -207,15 +193,7 @@ abstract class SubscribeGroupsTabComponent extends Manager
     {
         if (!$this->rootGroup)
         {
-            $group = DataManager::retrieve(
-                Group::class, new DataClassRetrieveParameters(
-                    new EqualityCondition(
-                        new PropertyConditionVariable(Group::class, Group::PROPERTY_PARENT_ID),
-                        new StaticConditionVariable(0)
-                    )
-                )
-            );
-            $this->rootGroup = $group;
+            $this->rootGroup = $this->getGroupService()->findRootGroup();
         }
 
         return $this->rootGroup;

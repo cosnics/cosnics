@@ -22,6 +22,7 @@ class DeleterComponent extends Manager
     public function run()
     {
         $translator = $this->getTranslator();
+        $groupService = $this->getGroupService();
         $ids = $this->getRequest()->getFromRequestOrQuery(self::PARAM_GROUP_ID);
 
         $this->set_parameter(self::PARAM_GROUP_ID, $ids);
@@ -74,9 +75,9 @@ class DeleterComponent extends Manager
 
             foreach ($ids as $id)
             {
-                $group = $this->retrieve_group($id);
+                $group = $groupService->findGroupByIdentifier($id);
 
-                if (!$this->getGroupService()->deleteGroup($group))
+                if (!$groupService->deleteGroup($group))
                 {
                     $failures ++;
                 }

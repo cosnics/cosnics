@@ -90,7 +90,6 @@ class GroupsTreeTraverser
             }
             else
             {
-
                 $this->subGroupsCount[$cacheKey] = $this->groupRepository->countSubGroupsForGroup($group);
             }
         }

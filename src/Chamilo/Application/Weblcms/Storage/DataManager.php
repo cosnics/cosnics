@@ -383,8 +383,6 @@ class DataManager extends \Chamilo\Libraries\Storage\DataManager\DataManager
      * retrieve_publication_category_visibility(...), and ContentObjectPublicationCategory::
      * is_recursive_visible_on_arrays(...).
      * -# Fill cache $new_publications_cache with the remaining publications.
-     * @see DataManager::
-     * retrieve_new_publication_icon_ids
      * -# Filter out all publications which user has no access right to.
      */
     public static function fill_new_publications_cache($user, $courses)
@@ -1013,9 +1011,10 @@ class DataManager extends \Chamilo\Libraries\Storage\DataManager\DataManager
                     case CoursePlatformGroupEntity::ENTITY_TYPE :
                         foreach ($entity_ids as $group_id)
                         {
-                            $group = \Chamilo\Core\Group\Storage\DataManager::retrieve_by_id(
+                            $group = self::retrieve_by_id(
                                 Group::class, $group_id
                             );
+
                             if ($group)
                             {
                                 $user_ids = array_merge($user_ids, $group->get_users(true, true));
@@ -1287,7 +1286,7 @@ class DataManager extends \Chamilo\Libraries\Storage\DataManager\DataManager
                             new StaticConditionVariable($group->get_id())
                         );
 
-                        $group_user_rels = \Chamilo\Core\Group\Storage\DataManager::retrieves(
+                        $group_user_rels = self::retrieves(
                             GroupRelUser::class, new DataClassRetrievesParameters($condition)
                         );
                         foreach ($group_user_rels as $group_user_rel)

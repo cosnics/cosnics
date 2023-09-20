@@ -192,12 +192,7 @@ class ExporterComponent extends Manager
             return $this->exportAllUsers();
         }
 
-        $group = \Chamilo\Core\Group\Storage\DataManager::retrieve_by_id(Group::class, $groupId);
-
-        if (!$group instanceof Group)
-        {
-            throw new ObjectNotExistException($groupTranslation, $groupId);
-        }
+        $group = $this->getGroupService()->findGroupByIdentifier($groupId);
 
         $groupStatus = $this->determineGroupStatus($group);
 

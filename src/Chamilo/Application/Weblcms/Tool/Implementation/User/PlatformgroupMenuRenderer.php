@@ -2,16 +2,14 @@
 namespace Chamilo\Application\Weblcms\Tool\Implementation\User;
 
 use Chamilo\Application\Weblcms\Tool\Implementation\User\Component\UnsubscribeBrowserComponent;
+use Chamilo\Core\Group\Service\GroupService;
 use Chamilo\Core\Group\Storage\DataClass\Group;
-use Chamilo\Core\Group\Storage\DataManager;
 use Chamilo\Libraries\Architecture\Application\Application;
 use Chamilo\Libraries\Architecture\Application\Routing\UrlGenerator;
 use Chamilo\Libraries\DependencyInjection\DependencyInjectionContainerBuilder;
 use Chamilo\Libraries\Format\Menu\TreeMenu\GenericTree;
 use Chamilo\Libraries\Format\Structure\Glyph\FontAwesomeGlyph;
 use Chamilo\Libraries\Platform\ChamiloRequest;
-use Chamilo\Libraries\Storage\Parameters\DataClassCountParameters;
-use Chamilo\Libraries\Storage\Parameters\DataClassRetrievesParameters;
 use Chamilo\Libraries\Storage\Query\Condition\EqualityCondition;
 use Chamilo\Libraries\Storage\Query\OrderBy;
 use Chamilo\Libraries\Storage\Query\OrderProperty;
@@ -49,6 +47,11 @@ class PlatformgroupMenuRenderer extends GenericTree
         return $this->root_ids[0];
     }
 
+    public function getGroupService(): GroupService
+    {
+        return DependencyInjectionContainerBuilder::getInstance()->createContainer()->get(GroupService::class);
+    }
+
     public function getRequest(): ChamiloRequest
     {
         return $this->getService(ChamiloRequest::class);
@@ -56,7 +59,6 @@ class PlatformgroupMenuRenderer extends GenericTree
 
     /**
      * @template getService
-     *
      * @param class-string<getService> $serviceName
      *
      * @return getService
@@ -93,7 +95,7 @@ class PlatformgroupMenuRenderer extends GenericTree
      */
     public function get_node($node_id)
     {
-        return DataManager::retrieve_by_id(Group::class, $node_id);
+        return $this->getGroupService()->findGroupByIdentifier((string) $node_id);
     }
 
     /**
@@ -102,6 +104,7 @@ class PlatformgroupMenuRenderer extends GenericTree
      * @param $parent_node_id
      *
      * @return  \Chamilo\Core\Group\Storage\DataClass\Group[]
+     * @throws \Chamilo\Libraries\Storage\Exception\DataClassNoResultException
      */
     public function get_node_children($parent_node_id)
     {
@@ -110,13 +113,10 @@ class PlatformgroupMenuRenderer extends GenericTree
             new StaticConditionVariable($parent_node_id)
         );
 
-        // fetch groups
-        $parameters = new DataClassRetrievesParameters(
+        return $this->getGroupService()->findGroups(
             $condition, null, null,
             new OrderBy([new OrderProperty(new PropertyConditionVariable(Group::class, Group::PROPERTY_NAME))])
-        );
-
-        return DataManager::retrieves(Group::class, $parameters);
+        )->toArray();
     }
 
     public function get_node_class($node)
@@ -222,8 +222,6 @@ class PlatformgroupMenuRenderer extends GenericTree
             new StaticConditionVariable($node_id)
         );
 
-        return (DataManager::count(
-                Group::class, new DataClassCountParameters($condition)
-            ) > 0);
+        return $this->getGroupService()->countGroups($condition) > 0;
     }
 }

@@ -8,7 +8,6 @@ use Chamilo\Application\Weblcms\Tool\Implementation\User\PlatformgroupMenuRender
 use Chamilo\Application\Weblcms\Tool\Implementation\User\Table\UnsubscribedGroupTableRenderer;
 use Chamilo\Core\Group\Service\GroupsTreeTraverser;
 use Chamilo\Core\Group\Storage\DataClass\Group;
-use Chamilo\Core\Group\Storage\DataManager;
 use Chamilo\Libraries\Architecture\Exceptions\NotAllowedException;
 use Chamilo\Libraries\Format\Structure\ActionBar\Button;
 use Chamilo\Libraries\Format\Structure\ActionBar\ButtonGroup;
@@ -19,7 +18,6 @@ use Chamilo\Libraries\Format\Structure\ToolbarItem;
 use Chamilo\Libraries\Format\Table\RequestTableParameterValuesCompiler;
 use Chamilo\Libraries\Storage\DataClass\DataClass;
 use Chamilo\Libraries\Storage\DataClass\NestedSet;
-use Chamilo\Libraries\Storage\Parameters\DataClassRetrieveParameters;
 use Chamilo\Libraries\Storage\Query\Condition\AndCondition;
 use Chamilo\Libraries\Storage\Query\Condition\ContainsCondition;
 use Chamilo\Libraries\Storage\Query\Condition\EqualityCondition;
@@ -123,7 +121,7 @@ class GroupSubscribeBrowserComponent extends Manager
 
         if ($groupId)
         {
-            return DataManager::retrieve_by_id(Group::class, (int) $groupId);
+            return $this->getGroupService()->findGroupByIdentifier($groupId);
         }
 
         return null;
@@ -188,14 +186,7 @@ class GroupSubscribeBrowserComponent extends Manager
     {
         if (!$this->rootGroup)
         {
-            $this->rootGroup = DataManager::retrieve(
-                Group::class, new DataClassRetrieveParameters(
-                    new EqualityCondition(
-                        new PropertyConditionVariable(Group::class, NestedSet::PROPERTY_PARENT_ID),
-                        new StaticConditionVariable(0)
-                    )
-                )
-            );
+            $this->rootGroup = $this->getGroupService()->findRootGroup();
         }
 
         return $this->rootGroup;

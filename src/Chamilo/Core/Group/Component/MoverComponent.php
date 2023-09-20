@@ -31,7 +31,7 @@ class MoverComponent extends Manager
         $group_id = $this->getRequest()->query->get(self::PARAM_GROUP_ID);
         $this->set_parameter(self::PARAM_GROUP_ID, $group_id);
 
-        $group = $this->retrieve_group(intval($this->getRequest()->query->get(self::PARAM_GROUP_ID)));
+        $group = $this->getGroupService()->findGroupByIdentifier($this->getRequest()->query->get(self::PARAM_GROUP_ID));
 
         // TODO: only show groups you can actually move to (where you have create rights)
         $form = new GroupMoveForm($group, $this->get_url([self::PARAM_GROUP_ID => $group_id]), $this->getUser());
@@ -45,7 +45,7 @@ class MoverComponent extends Manager
                 StringUtilities::LIBRARIES
             );
             $this->redirectWithMessage(
-                $message, !$success || false,
+                $message, !$success,
                 [Application::PARAM_ACTION => self::ACTION_BROWSE_GROUPS, self::PARAM_GROUP_ID => $parent]
             );
         }

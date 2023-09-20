@@ -2,7 +2,6 @@
 namespace Chamilo\Application\Weblcms\Menu;
 
 use Chamilo\Core\Group\Storage\DataClass\Group;
-use Chamilo\Core\Group\Storage\DataManager;
 use Chamilo\Libraries\Architecture\ClassnameUtilities;
 use Chamilo\Libraries\Format\Menu\Library\HtmlMenu;
 use Chamilo\Libraries\Format\Menu\TreeMenuRenderer;
@@ -13,17 +12,15 @@ use Chamilo\Libraries\Storage\Query\Variable\PropertyConditionVariable;
 use HTML_Menu;
 
 /**
- *
  * @package repository.lib
  */
 class RightsTreeRenderer extends HtmlMenu
 {
-    const TREE_NAME = __CLASS__;
+    public const TREE_NAME = __CLASS__;
 
     private $groups;
 
     /**
-     *
      * @param $extra_items array An array of extra tree items, added to the root.
      */
     public function __construct($groups)
@@ -63,10 +60,10 @@ class RightsTreeRenderer extends HtmlMenu
         $condition = new InCondition(
             new PropertyConditionVariable(Group::class, Group::PROPERTY_ID), $this->groups
         );
-        $sub_groups = DataManager::retrieves(
+        $sub_groups = \Chamilo\Libraries\Storage\DataManager\DataManager::retrieves(
             Group::class, new DataClassRetrievesParameters($condition)
         );
-        foreach($sub_groups as $group)
+        foreach ($sub_groups as $group)
         {
             $sub_menu_item = $this->get_group_array($group);
             $menu[] = $sub_menu_item;

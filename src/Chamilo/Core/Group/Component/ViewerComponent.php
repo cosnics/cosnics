@@ -150,7 +150,7 @@ class ViewerComponent extends Manager
             $toolActions->addButton(
                 new Button(
                     $translator->trans('AddUsers', [], \Chamilo\Core\User\Manager::CONTEXT),
-                    new FontAwesomeGlyph('plus-circle'), $this->get_group_suscribe_user_browser_url($currentGroup),
+                    new FontAwesomeGlyph('plus-circle'), $this->get_group_subscribe_user_browser_url($currentGroup),
                     ToolbarItem::DISPLAY_ICON_AND_LABEL
                 )
             );

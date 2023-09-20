@@ -12,7 +12,6 @@ use Chamilo\Core\Group\Storage\DataClass\Group;
 use Chamilo\Core\Rights\Entity\PlatformGroupEntity;
 use Chamilo\Core\Rights\Entity\UserEntity;
 use Chamilo\Core\Rights\RightsUtil;
-use Chamilo\Libraries\DependencyInjection\DependencyInjectionContainerBuilder;
 use Chamilo\Libraries\Storage\DataClass\DataClass;
 use Chamilo\Libraries\Storage\Query\Condition\AndCondition;
 use Chamilo\Libraries\Storage\Query\Condition\EqualityCondition;
@@ -21,7 +20,6 @@ use Chamilo\Libraries\Storage\Query\Condition\OrCondition;
 use Chamilo\Libraries\Storage\Query\Variable\PropertyConditionVariable;
 use Chamilo\Libraries\Storage\Query\Variable\StaticConditionVariable;
 use Chamilo\Libraries\Translation\Translation;
-use Symfony\Component\HttpFoundation\Session\SessionInterface;
 
 /**
  * Extension on the weblcms rights to define rights utilities for course management (courses / course types)
@@ -357,7 +355,7 @@ class CourseManagementRights extends WeblcmsRights
 
         if (!$this->rights[$entity_type][$group_id])
         {
-            $base_group = \Chamilo\Core\Group\Storage\DataManager::retrieve_by_id(Group::class, $group_id);
+            $base_group = \Chamilo\Libraries\Storage\DataManager\DataManager::retrieve_by_id(Group::class, $group_id);
             $location = CourseDataManager::retrieve_by_id(Course::class, $course_id)->get_rights_location();
 
             if (is_null($base_group))

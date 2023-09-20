@@ -280,7 +280,7 @@ class BrowserComponent extends Manager implements MenuComponentInterface
         $toolbar->add_item(
             new ToolbarItem(
                 $translator->trans('AddUsers'), new FontAwesomeGlyph('plus-circle'),
-                $this->get_group_suscribe_user_browser_url($group), ToolbarItem::DISPLAY_ICON_AND_LABEL
+                $this->get_group_subscribe_user_browser_url($group), ToolbarItem::DISPLAY_ICON_AND_LABEL
             )
         );
 

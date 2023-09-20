@@ -11,6 +11,7 @@ use Chamilo\Application\Weblcms\Tool\Implementation\User\Table\DirectSubscribedP
 use Chamilo\Application\Weblcms\Tool\Implementation\User\Table\PlatformGroupRelUserTableRenderer;
 use Chamilo\Application\Weblcms\Tool\Implementation\User\Table\SubscribedUserTableRenderer;
 use Chamilo\Application\Weblcms\Tool\Implementation\User\Table\SubSubscribedPlatformGroupTableRenderer;
+use Chamilo\Core\Group\Service\GroupMembershipService;
 use Chamilo\Core\Group\Storage\DataClass\Group;
 use Chamilo\Core\Group\Storage\DataClass\GroupRelUser;
 use Chamilo\Core\User\Storage\DataClass\User;
@@ -169,6 +170,11 @@ class UnsubscribeBrowserComponent extends Manager
     public function getDirectSubscribedPlatformGroupTableRenderer(): DirectSubscribedPlatformGroupTableRenderer
     {
         return $this->getService(DirectSubscribedPlatformGroupTableRenderer::class);
+    }
+
+    public function getGroupMembershipService(): GroupMembershipService
+    {
+        return $this->getService(GroupMembershipService::class);
     }
 
     public function getLinkTabsRenderer(): LinkTabsRenderer
@@ -470,7 +476,7 @@ class UnsubscribeBrowserComponent extends Manager
      */
     private function get_platformgroups_users_tab(): string
     {
-        $totalNumberOfItems = \Chamilo\Core\Group\Storage\DataManager::count(
+        $totalNumberOfItems = \Chamilo\Libraries\Storage\DataManager\DataManager::count(
             GroupRelUser::class, new DataClassCountParameters($this->get_condition())
         );
         $platformGroupRelUserTableRenderer = $this->getPlatformGroupRelUserTableRenderer();
@@ -480,7 +486,7 @@ class UnsubscribeBrowserComponent extends Manager
             $platformGroupRelUserTableRenderer->getDefaultParameterValues(), $totalNumberOfItems
         );
 
-        $groupUserRelations = \Chamilo\Core\Group\Storage\DataManager::retrieves(
+        $groupUserRelations = \Chamilo\Libraries\Storage\DataManager\DataManager::retrieves(
             GroupRelUser::class, new DataClassRetrievesParameters(
                 $this->get_condition(), $tableParameterValues->getNumberOfItemsPerPage(),
                 $tableParameterValues->getOffset(),
@@ -670,6 +676,7 @@ class UnsubscribeBrowserComponent extends Manager
      * @throws \QuickformException
      * @throws \ReflectionException
      * @throws \TableException
+     * @throws \Chamilo\Libraries\Storage\Exception\DataClassNoResultException
      */
     protected function renderSubSubscribedPlatformGroupTable(): string
     {
