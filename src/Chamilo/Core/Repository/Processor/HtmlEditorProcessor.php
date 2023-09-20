@@ -80,7 +80,7 @@ abstract class HtmlEditorProcessor
         return $redirect->getUrl();
     }
 
-    public function get_repository_document_display_matching_url()
+    public static function get_repository_document_display_matching_url()
     {
         $matching_url = self::get_repository_document_display_url(
             array(Manager::PARAM_CONTENT_OBJECT_ID => '', ContentObject::PARAM_SECURITY_CODE => ''));
