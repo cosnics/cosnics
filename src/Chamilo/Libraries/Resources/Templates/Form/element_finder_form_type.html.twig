@@ -1,5 +1,5 @@
 {% block element_finder_widget %}
-    {% spaceless %}
+    {% apply spaceless %}
         <button id="{{ id }}_expand_button" class="normal select" {% if not collapsed %}style="display:none;"{% endif %}>{{ translations.show }}</button>
         <div class="element_finder" id="{{ id }}" style="margin-top: 5px;" >
 
@@ -61,5 +61,5 @@
         <script type="text/javascript">
             $("#{{ id }}").advelementfinder({ name: "{{ id }}", elementTypes: {{ element_types|raw }}, {{ default_values_string|raw }}{{ configuration_json|raw }} });
         </script>
-    {% endspaceless %}
+    {% endapply %}
 {% endblock %}

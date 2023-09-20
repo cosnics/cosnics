@@ -1,5 +1,5 @@
 {% block form_row %}
-    {% spaceless %}
+    {% apply spaceless %}
         <div class="row form-row">
             <div class="col-xs-12 col-sm-4 col-md-3 col-lg-2 form-label">
                 {{ form_label(form) }}
@@ -14,11 +14,11 @@
             </div>
             <div class="clear"></div>
         </div>
-    {% endspaceless %}
+    {% endapply %}
 {% endblock form_row %}
 
 {% block form_label %}
-    {% spaceless %}
+    {% apply spaceless %}
         {% if label is not same as(false) %}
             {% if not compound %}
                 {% set label_attr = label_attr|merge({'for': id}) %}
@@ -31,11 +31,11 @@
                 <span title="*" class="required"></span>
             {% endif %}
         {% endif %}
-    {% endspaceless %}
+    {% endapply %}
 {% endblock form_label %}
 
 {% block button_row %}
-    {% spaceless %}
+    {% apply spaceless %}
         <div class="row form-row">
             <div class="col-xs-12 col-sm-4 col-md-3 col-lg-2 form-label">
             </div>
@@ -46,11 +46,11 @@
             </div>
         </div>
         <div class="clear"></div>
-    {% endspaceless %}
+    {% endapply %}
 {% endblock button_row %}
 
 {% block inline_row %}
-    {% spaceless %}
+    {% apply spaceless %}
         <div class="row form-row">
 
             <div class="col-xs-12 col-sm-4 col-md-3 col-lg-2 form-label">
@@ -66,16 +66,16 @@
             </div>
         </div>
         <div class="clear"></div>
-    {% endspaceless %}
+    {% endapply %}
 {% endblock %}
 
 {% block category_widget %}
-    {% spaceless %}
+    {% apply spaceless %}
         <fieldset>
             <legend> {{ category }} </legend>
             {% for child in children %}
                 {{ child|raw }}
             {% endfor %}
         </fieldset>
-    {% endspaceless %}
+    {% endapply %}
 {% endblock %}

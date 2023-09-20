@@ -1,5 +1,5 @@
 {% block start_end_date_picker_row %}
-    {% spaceless %}
+    {% apply spaceless %}
         {% set start_date_id = form.children.start_date.vars.id %}
         {% set end_date_id = form.children.end_date.vars.id %}
 
@@ -67,5 +67,5 @@
             );
         </script>
 
-    {% endspaceless %}
+    {% endapply %}
 {% endblock %}

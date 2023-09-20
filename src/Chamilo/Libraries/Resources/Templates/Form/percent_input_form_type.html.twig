@@ -1,5 +1,5 @@
 {% block percent_input_widget %}
-    {% spaceless %}
+    {% apply spaceless %}
         <input  {{ block('widget_attributes') }} value="{{ value }}" type="text" class="percent-score" maxlength="3" max="100" style="width: 57px" placeholder="100">
-    {% endspaceless %}
+    {% endapply %}
 {% endblock %}

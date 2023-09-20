@@ -1,5 +1,5 @@
 {% block date_picker_widget %}
-    {% spaceless %}
+    {% apply spaceless %}
         {{ block('form_widget_simple') }}
         <script type="text/javascript">
             {% if not additional_options %}{% set additional_options = '{}' %}{% endif %}
@@ -23,5 +23,5 @@
 
             $("#{{ id }}").datetimepicker($.extend(default_options, additional_options)) ;
         </script>
-    {% endspaceless %}
+    {% endapply %}
 {% endblock %}
