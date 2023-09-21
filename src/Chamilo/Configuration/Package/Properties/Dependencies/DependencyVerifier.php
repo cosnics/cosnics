@@ -155,7 +155,7 @@ class DependencyVerifier
      */
     public function verifyDependency(Dependency $dependency): bool
     {
-        if (!$this->dependencyHasRegistration($dependency) || $this->dependencyHasActiveRegistration($dependency) ||
+        if (!$this->dependencyHasRegistration($dependency) || !$this->dependencyHasActiveRegistration($dependency) ||
             !$this->dependencyHasValidRegisteredVersion($dependency))
         {
             return false;
