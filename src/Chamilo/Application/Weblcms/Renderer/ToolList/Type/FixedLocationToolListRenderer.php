@@ -523,7 +523,7 @@ class FixedLocationToolListRenderer extends ToolListRenderer
 
     private function show_section_tools($section, $tools)
     {
-        if (count($tools) == 0)
+        if (is_null($tools) || count($tools) == 0)
         {
             return '<div class="alert alert-info">' . Translation::get('NoToolsAvailable') . '</div>';
         }

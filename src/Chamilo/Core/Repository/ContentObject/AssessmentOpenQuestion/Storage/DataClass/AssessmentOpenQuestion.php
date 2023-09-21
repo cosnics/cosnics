@@ -69,7 +69,7 @@ class AssessmentOpenQuestion extends ContentObject implements Versionable
         return StringUtilities::getInstance()->hasValue($this->get_hint(), true);
     }
 
-    public function get_types()
+    public static function get_types()
     {
         $types = array();
         $types[self::TYPE_OPEN] = Translation::get('OpenQuestion');
