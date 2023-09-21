@@ -66,10 +66,10 @@ class BrowserComponent extends Manager
             if (isset($values['publications']) || isset($values["course_sections"]) ||
                  $values['content_object_categories'] == 1)
             {
-                $publications_ids = array_keys($values['publications']);
+                $publications_ids = array_keys($values['publications'] ?? []);
                 $delete_categories = $values['content_object_categories'];
-                $categories_ids = array_keys($values['categories']);
-                $course_sections_ids = array_keys($values['course_sections']);
+                $categories_ids = array_keys($values['categories'] ?? []);
+                $course_sections_ids = array_keys($values['course_sections'] ?? []);
                 
                 $success = true;
                 if (count($course_sections_ids) > 0)
