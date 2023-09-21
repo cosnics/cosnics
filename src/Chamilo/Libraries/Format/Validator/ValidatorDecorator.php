@@ -89,7 +89,7 @@ class ValidatorDecorator implements ValidatorInterface
         foreach($constraintViolationList as $constraintViolation)
         {
             $payload = $constraintViolation->getConstraint()->payload;
-            if(!array_key_exists('context', $payload))
+            if(!is_array($payload) || !array_key_exists('context', $payload))
             {
                 $decoratedConstraintViolationList->add($constraintViolation);
                 continue;

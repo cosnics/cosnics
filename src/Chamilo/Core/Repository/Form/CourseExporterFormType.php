@@ -63,7 +63,6 @@ class CourseExporterFormType extends \Symfony\Component\Form\AbstractType
         $builder->add(
             self::ELEMENT_COURSE, ChoiceType::class, [
                 'choices' => $courses,
-                'choices_as_values' => true,
                 'choice_label' => $courseLabel,
                 'label' => $this->translator->trans('SelectCourse', [], 'Chamilo\Core\Repository')
             ]
