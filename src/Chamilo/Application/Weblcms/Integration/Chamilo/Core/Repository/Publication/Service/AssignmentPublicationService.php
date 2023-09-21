@@ -94,7 +94,7 @@ abstract class AssignmentPublicationService implements AssignmentPublicationServ
      */
     protected function addLocationForEntry(Entry $entry, Attributes $attributes, string $prefix)
     {
-        $location = $prefix . $entry->getContentObject()->get_title();
+        $location = $prefix . (is_null($entry->getContentObject()) ? '' : $entry->getContentObject()->get_title());
         $url = null;
 
         if($entry instanceof \Chamilo\Application\Weblcms\Bridge\Assignment\Storage\DataClass\Entry)
