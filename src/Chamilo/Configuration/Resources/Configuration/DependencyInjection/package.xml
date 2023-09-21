@@ -13,5 +13,8 @@
         </service>
 
         <service id="Chamilo\Configuration\Package\Action\PackageActionFactory"/>
+        <service id="Chamilo\Configuration\Package\Properties\Dependencies\DependencyRenderer"/>
+        <service id="Chamilo\Configuration\Package\Properties\Dependencies\DependencyVerifier"/>
+        <service id="Chamilo\Configuration\Package\Properties\Dependencies\DependencyVerifierRenderer"/>
     </services>
 </container>

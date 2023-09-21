@@ -1,17 +1,24 @@
 <?php
 namespace Chamilo\Core\Lynx\Service;
 
+use Chamilo\Configuration\Package\Properties\Dependencies\DependencyRenderer;
 use Chamilo\Configuration\Package\Properties\Dependencies\DependencyVerifier;
+use Chamilo\Configuration\Package\Properties\Dependencies\DependencyVerifierRenderer;
 use Chamilo\Configuration\Package\Service\PackageFactory;
 use Chamilo\Configuration\Package\Storage\DataClass\Package;
 use Chamilo\Configuration\Service\Consulter\RegistrationConsulter;
 use Chamilo\Core\Lynx\Manager;
-use Chamilo\Libraries\Translation\Translation;
 use Chamilo\Libraries\Utilities\StringUtilities;
 use Symfony\Component\Translation\Translator;
 
 class PackageInformationRenderer
 {
+    protected DependencyRenderer $dependencyRenderer;
+
+    protected DependencyVerifier $dependencyVerifier;
+
+    protected DependencyVerifierRenderer $dependencyVerifierRenderer;
+
     protected PackageFactory $packageFactory;
 
     protected RegistrationConsulter $registrationConsulter;
@@ -22,13 +29,17 @@ class PackageInformationRenderer
 
     public function __construct(
         PackageFactory $packageFactory, RegistrationConsulter $registrationConsulter, Translator $translator,
-        StringUtilities $stringUtilities
+        StringUtilities $stringUtilities, DependencyVerifier $dependencyVerifier,
+        DependencyVerifierRenderer $dependencyVerifierRenderer, DependencyRenderer $dependencyRenderer
     )
     {
         $this->packageFactory = $packageFactory;
         $this->registrationConsulter = $registrationConsulter;
         $this->translator = $translator;
         $this->stringUtilities = $stringUtilities;
+        $this->dependencyVerifier = $dependencyVerifier;
+        $this->dependencyVerifierRenderer = $dependencyVerifierRenderer;
+        $this->dependencyRenderer = $dependencyRenderer;
     }
 
     /**
@@ -48,29 +59,28 @@ class PackageInformationRenderer
 
         if (!empty($registration))
         {
-            $html[] = $this->verifyDependencies();
+            $html[] = $this->verifyDependencies($package);
         }
 
         return implode(PHP_EOL, $html);
     }
 
-    public function getDependenciesTable()
+    public function getDependenciesTable(Package $package): string
     {
-        $package_info = $this->get_package_info();
-
+        $translator = $this->getTranslator();
         $html = [];
 
-        if ($package_info->has_dependencies())
+        if ($package->has_dependencies())
         {
-            $html[] = '<h3>' . Translation::get('Dependencies') . '</h3>';
+            $html[] = '<h3>' . $translator->trans('Dependencies', [], Manager::CONTEXT) . '</h3>';
 
             $html[] = '<table class="table table-striped table-bordered table-hover table-data">';
 
-            if (!is_null($package_info->get_dependencies()))
+            if (!is_null($package->get_dependencies()))
             {
                 $html[] = '<tr>';
-                $html[] = '<td class="header">' . Translation::get('PreDepends') . '</td>';
-                $html[] = '<td>' . $package_info->get_dependencies()->as_html() . '</td>';
+                $html[] = '<td class="header">' . $translator->trans('PreDepends', [], Manager::CONTEXT) . '</td>';
+                $html[] = '<td>' . $this->getDependencyRenderer()->renderDependencies($package) . '</td>';
                 $html[] = '</tr>';
             }
 
@@ -78,6 +88,21 @@ class PackageInformationRenderer
         }
 
         return implode(PHP_EOL, $html);
+    }
+
+    public function getDependencyRenderer(): DependencyRenderer
+    {
+        return $this->dependencyRenderer;
+    }
+
+    public function getDependencyVerifier(): DependencyVerifier
+    {
+        return $this->dependencyVerifier;
+    }
+
+    public function getDependencyVerifierRenderer(): DependencyVerifierRenderer
+    {
+        return $this->dependencyVerifierRenderer;
     }
 
     public function getPackageFactory(): PackageFactory
@@ -151,23 +176,28 @@ class PackageInformationRenderer
         return $this->translator;
     }
 
-    public function verifyDependencies()
+    /**
+     * @throws \Symfony\Component\Cache\Exception\CacheException
+     */
+    public function verifyDependencies(Package $package): string
     {
-        $package_dependency = new DependencyVerifier($this->get_package_info());
-        $success = $package_dependency->is_installable();
+        $translator = $this->getTranslator();
+        $success = $this->getDependencyVerifier()->isInstallable($package);
 
         $html = [];
 
-        $html[] = '<h3>' . Translation::get(
-                'InstallationDependencies', ['VERSION' => $this->get_package_info()->get_version()]
+        $html[] = '<h3>' . $translator->trans(
+                'InstallationDependencies', ['VERSION' => $package->get_version()], Manager::CONTEXT
             ) . '</h3>';
 
         $html[] = '<div class="panel panel-' . ($success ? 'success' : 'danger') . '">';
         $html[] = '<div class="panel-heading">';
-        $html[] = '<h3 class="panel-title">' . Translation::get('DependenciesResultVerification') . '</h3>';
+        $html[] =
+            '<h3 class="panel-title">' . $translator->trans('DependenciesResultVerification', [], Manager::CONTEXT) .
+            '</h3>';
         $html[] = '</div>';
         $html[] = '<div class="panel-body">';
-        $html[] = $package_dependency->get_logger()->render();
+        $html[] = $this->getDependencyVerifierRenderer()->renderVerifiedDependencies($package);
         $html[] = '</div>';
         $html[] = '</div>';
 

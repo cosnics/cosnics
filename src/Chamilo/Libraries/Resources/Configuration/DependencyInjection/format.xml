@@ -59,9 +59,9 @@
         <service id="Chamilo\Libraries\Format\Tabs\TabRenderer"/>
         <service id="Chamilo\Libraries\Format\Tabs\TabsRenderer"/>
 
-        <service id="Chamilo\Libraries\Format\Structure\BreadcrumbTrail"/>
-        <service id="Chamilo\Libraries\Format\Structure\BreadcrumbGenerator"/>
-        <service id="Chamilo\Libraries\Format\Structure\BreadcrumbTrailRenderer"/>
+        <service id="Chamilo\Libraries\Format\Breadcrumb\BreadcrumbTrail"/>
+        <service id="Chamilo\Libraries\Format\Breadcrumb\BreadcrumbGenerator"/>
+        <service id="Chamilo\Libraries\Format\Breadcrumb\BreadcrumbTrailRenderer"/>
 
         <service id="Chamilo\Libraries\Format\Structure\BannerRenderer"/>
         <service id="Chamilo\Libraries\Format\Structure\PageConfiguration"/>

@@ -11,5 +11,7 @@
             <tag name="Chamilo\Core\Admin\Service\ActionProvider"/>
         </service>
 
+        <service id="Chamilo\Core\Lynx\Service\PackageInformationRenderer"/>
+
     </services>
 </container>

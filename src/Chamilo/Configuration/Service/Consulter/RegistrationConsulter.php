@@ -94,6 +94,17 @@ class RegistrationConsulter
     }
 
     /**
+     * @return string[][]
+     * @throws \Symfony\Component\Cache\Exception\CacheException
+     */
+    public function getRegistrationsMappedByContext(): array
+    {
+        $registrations = $this->getRegistrations();
+
+        return (array) $registrations[RegistrationCacheDataPreLoader::REGISTRATION_CONTEXT];
+    }
+
+    /**
      * @return string[]
      * @throws \Symfony\Component\Cache\Exception\CacheException
      */

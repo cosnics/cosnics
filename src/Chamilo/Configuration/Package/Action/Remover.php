@@ -233,7 +233,7 @@ class Remover extends Action
         $translator = $this->getTranslator();
 
         $verifier = new DependencyVerifier($this->getPackageFactory()->getPackage($this->getContext()));
-        $success = $verifier->is_removable();
+        $success = $verifier->isRemovable();
 
         $this->add_message(self::TYPE_NORMAL, $verifier->get_logger()->render());
 

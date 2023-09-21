@@ -1,6 +1,8 @@
 <?php
 namespace Chamilo\Configuration\Package;
 
+use Chamilo\Configuration\Package\Properties\Dependencies\DependencyVerifier;
+use Chamilo\Configuration\Package\Properties\Dependencies\DependencyVerifierRenderer;
 use Chamilo\Configuration\Package\Service\PackageBundlesCacheService;
 use Chamilo\Configuration\Package\Service\PackageFactory;
 use Chamilo\Configuration\Service\ConfigurationService;
@@ -24,6 +26,10 @@ abstract class Action
 
     protected string $context;
 
+    protected DependencyVerifier $dependencyVerifier;
+
+    protected DependencyVerifierRenderer $dependencyVerifierRenderer;
+
     protected FilesystemTools $filesystemTools;
 
     protected PackageBundlesCacheService $packageBundlesCacheService;
@@ -44,7 +50,8 @@ abstract class Action
         ClassnameUtilities $classnameUtilities, ConfigurationService $configurationService,
         StorageUnitRepository $storageUnitRepository, Translator $translator,
         PackageBundlesCacheService $packageBundlesCacheService, PackageFactory $packageFactory,
-        RegistrationService $registrationService, SystemPathBuilder $systemPathBuilder, string $context
+        RegistrationService $registrationService, SystemPathBuilder $systemPathBuilder,
+        DependencyVerifier $dependencyVerifier, DependencyVerifierRenderer $dependencyVerifierRenderer, string $context
     )
     {
         $this->classnameUtilities = $classnameUtilities;
@@ -56,6 +63,8 @@ abstract class Action
         $this->packageFactory = $packageFactory;
         $this->registrationService = $registrationService;
         $this->systemPathBuilder = $systemPathBuilder;
+        $this->dependencyVerifier = $dependencyVerifier;
+        $this->dependencyVerifierRenderer = $dependencyVerifierRenderer;
 
         $this->message = [];
     }
@@ -105,6 +114,16 @@ abstract class Action
     public function getContext(): string
     {
         return $this->context;
+    }
+
+    public function getDependencyVerifier(): DependencyVerifier
+    {
+        return $this->dependencyVerifier;
+    }
+
+    public function getDependencyVerifierRenderer(): DependencyVerifierRenderer
+    {
+        return $this->dependencyVerifierRenderer;
     }
 
     protected function getFilesystemTools(): FilesystemTools

@@ -1,131 +1,41 @@
 <?php
 namespace Chamilo\Configuration\Package\Properties\Dependencies;
 
-use Chamilo\Libraries\Format\MessageLogger;
-use Chamilo\Libraries\Translation\Translation;
+use Chamilo\Configuration\Package\Properties\Dependencies\Dependency\Dependency;
+use Doctrine\Common\Collections\ArrayCollection;
 
 /**
- *
- * @author Hans De Bisschop
- * @package core.lynx
+ * @package Chamilo\Configuration\Package\Properties\Dependencies
+ * @author  Hans De Bisschop <hans.de.bisschop@ehb.be>
  */
-class Dependencies
+class Dependencies extends ArrayCollection
 {
-    const PROPERTY_DEPENDENCIES = 'dependencies';
-
     /**
-     *
-     * @var \Chamilo\Configuration\Package\Properties\Dependencies\Dependency\Dependency[]
-     */
-    private $dependencies;
-
-    /**
-     *
-     * @var \Chamilo\Libraries\Format\MessageLogger
-     */
-    protected $logger;
-
-    /**
-     *
-     * @param \Chamilo\Configuration\Package\Properties\Dependencies\Dependency\Dependency[] $dependencies
-     */
-    public function __construct($dependencies = [])
-    {
-        $this->set_dependencies($dependencies);
-
-        $this->logger = MessageLogger::getInstance($this);
-    }
-
-    /**
-     *
-     * @return \Chamilo\Libraries\Format\MessageLogger
-     */
-    public function get_logger()
-    {
-        return $this->logger;
-    }
-
-    /**
-     *
-     * @return \Chamilo\Configuration\Package\Properties\Dependencies\Dependency\Dependency[]
-     */
-    public function getDependencies()
-    {
-        return $this->dependencies;
-    }
-
-    /**
-     *
-     * @param \Chamilo\Configuration\Package\Properties\Dependencies\Dependency\Dependency[] $dependencies
-     */
-    public function set_dependencies($dependencies)
-    {
-        $this->dependencies = $dependencies;
-    }
-
-    /**
-     *
      * @param \Chamilo\Configuration\Package\Properties\Dependencies\Dependency\Dependency $dependency
      */
-    public function add_dependency($dependency)
+    public function add_dependency(Dependency $dependency): void
     {
-        $this->dependencies[] = $dependency;
+        $this->add($dependency);
     }
 
     /**
-     *
-     * @return string
+     * @return \Chamilo\Configuration\Package\Properties\Dependencies\Dependency\Dependency[]
      */
-    public function as_html()
+    public function getDependencies(): array
     {
-        $html = [];
-
-        foreach ($this->getDependencies() as $dependency)
-        {
-            $html[] = $dependency->as_html();
-        }
-
-        return implode(' ' . Translation::get('And') . ' ', $html);
+        return $this->toArray();
     }
 
     /**
-     *
-     * @return boolean
+     * @param \Chamilo\Configuration\Package\Properties\Dependencies\Dependency\Dependency[] $dependencies
      */
-    public function check()
+    public function set_dependencies(array $dependencies = []): void
     {
-        $success = 0;
-        $messages = [];
+        $this->clear();
 
-        foreach ($this->getDependencies() as $dependency)
+        foreach ($dependencies as $dependency)
         {
-            if ($dependency->check())
-            {
-                $success ++;
-            }
-
-            $messages[] = $dependency->get_logger()->render();
+            $this->add($dependency);
         }
-
-        $result = ($success == count($this->getDependencies()));
-
-        $operator = Translation::get('And');
-
-        $this->get_logger()->add_message(implode(' ' . $operator . ' ', $messages));
-
-        return $result;
-    }
-
-    public function needs($context)
-    {
-        foreach ($this->getDependencies() as $dependency)
-        {
-            if ($dependency->needs($context))
-            {
-                return true;
-            }
-        }
-
-        return false;
     }
 }

@@ -104,11 +104,7 @@ class PackageFactory
 
             foreach ($cosnicsProperties->dependencies as $cosnicsDependency)
             {
-                $dependency = new Dependency();
-                $dependency->set_id($cosnicsDependency->id);
-                $dependency->set_version($cosnicsDependency->version);
-
-                $dependencies->add_dependency($dependency);
+                $dependencies->add_dependency(new Dependency($cosnicsDependency->id, $cosnicsDependency->version));
             }
 
             $package->set_dependencies($dependencies);

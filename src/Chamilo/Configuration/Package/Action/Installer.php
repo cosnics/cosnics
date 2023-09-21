@@ -3,7 +3,6 @@ namespace Chamilo\Configuration\Package\Action;
 
 use Chamilo\Configuration\Package\Action;
 use Chamilo\Configuration\Package\PackageList;
-use Chamilo\Configuration\Package\Properties\Dependencies\DependencyVerifier;
 use Chamilo\Configuration\Storage\DataClass\Registration;
 use DOMDocument;
 use DOMElement;
@@ -303,11 +302,13 @@ class Installer extends Action
     public function verifyDependencies(): bool
     {
         $translator = $this->getTranslator();
+        $package = $this->getPackageFactory()->getPackage(static::CONTEXT);
 
-        $verifier = new DependencyVerifier($this->getPackageFactory()->getPackage(static::CONTEXT));
-        $success = $verifier->is_installable();
+        $success = $this->getDependencyVerifier()->isInstallable($package);
 
-        $this->add_message(self::TYPE_NORMAL, $verifier->get_logger()->render());
+        $this->add_message(
+            self::TYPE_NORMAL, $this->getDependencyVerifierRenderer()->renderVerifiedDependencies($package)
+        );
 
         if (!$success)
         {

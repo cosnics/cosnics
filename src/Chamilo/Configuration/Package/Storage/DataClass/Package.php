@@ -178,7 +178,6 @@ class Package extends DataClass
      * Returns the dependencies for this dataclass
      *
      * @return ?\Chamilo\Configuration\Package\Properties\Dependencies\Dependencies
-     * @throws \Exception
      */
     public function get_dependencies()
     {

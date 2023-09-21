@@ -1,106 +1,168 @@
 <?php
 namespace Chamilo\Configuration\Package\Properties\Dependencies;
 
+use Chamilo\Configuration\Package\Properties\Dependencies\Dependency\Dependency;
+use Chamilo\Configuration\Package\Service\PackageFactory;
 use Chamilo\Configuration\Package\Storage\DataClass\Package;
+use Chamilo\Configuration\Service\Consulter\RegistrationConsulter;
 use Chamilo\Configuration\Storage\DataClass\Registration;
-use Chamilo\Configuration\Storage\DataManager;
-use Chamilo\Libraries\Format\MessageLogger;
-use Chamilo\Libraries\Storage\Parameters\DataClassRetrievesParameters;
-use Chamilo\Libraries\Storage\Query\Condition\EqualityCondition;
-use Chamilo\Libraries\Storage\Query\Condition\NotCondition;
-use Chamilo\Libraries\Storage\Query\Variable\PropertyConditionVariable;
-use Chamilo\Libraries\Storage\Query\Variable\StaticConditionVariable;
+use Composer\Semver\Semver;
 
 /**
- *
- * @package admin.lib.package_installer
+ * @package Chamilo\Configuration\Package\Properties\Dependencies
+ * @author  Hans De Bisschop <hans.de.bisschop@ehb.be>
  */
 class DependencyVerifier
 {
 
-    public const TYPE_REMOVE = 'remove';
+    protected PackageFactory $packageFactory;
 
-    public const TYPE_UPDATE = 'update';
+    protected RegistrationConsulter $registrationConsulter;
 
-    protected $logger;
-
-    /**
-     *
-     * @var \Chamilo\Configuration\Package\Storage\DataClass\Package
-     */
-    private $package;
-
-    /**
-     *
-     * @param \Chamilo\Configuration\Package\Storage\DataClass\Package $package
-     */
-    public function __construct($package)
+    public function __construct(PackageFactory $packageFactory, RegistrationConsulter $registrationConsulter)
     {
-        $this->package = $package;
-        $this->logger = MessageLogger::getInstance($this);
-    }
-
-    public function get_logger()
-    {
-        return $this->logger;
+        $this->packageFactory = $packageFactory;
+        $this->registrationConsulter = $registrationConsulter;
     }
 
     /**
-     *
-     * @return \Chamilo\Configuration\Package\Storage\DataClass\Package
+     * @throws \Symfony\Component\Cache\Exception\CacheException
      */
-    public function get_package()
+    public function dependencyHasActiveRegistration(Dependency $dependency): bool
     {
-        return $this->package;
-    }
+        $registration = $this->getDependencyRegistration($dependency);
 
-    public function is_installable()
-    {
-        $dependencies = $this->get_package()->get_dependencies();
-
-        if (is_null($dependencies))
+        if (!$registration[Registration::PROPERTY_STATUS])
         {
-            return true;
-        }
-
-        if (!$dependencies->check())
-        {
-            $this->logger->add_message($dependencies->get_logger()->render());
-
             return false;
-        }
-        else
-        {
-            $this->logger->add_message($dependencies->get_logger()->render());
         }
 
         return true;
     }
 
-    public function is_removable()
+    /**
+     * @throws \Symfony\Component\Cache\Exception\CacheException
+     */
+    public function dependencyHasRegistration(Dependency $dependency): bool
     {
-        $condition = new NotCondition(
-            new EqualityCondition(
-                new PropertyConditionVariable(Registration::class, Registration::PROPERTY_CONTEXT),
-                new StaticConditionVariable($this->get_package()->get_context())
-            )
-        );
+        $registration = $this->getDependencyRegistration($dependency);
 
-        $registrations = DataManager::retrieves(
-            Registration::class, new DataClassRetrievesParameters($condition)
-        );
-
-        foreach ($registrations as $registration)
+        if (empty($registration))
         {
-            $package = Package::get($registration->get_context());
-            $dependencies = $package->get_dependencies();
+            return false;
+        }
 
-            if (!is_null($dependencies) && $dependencies->needs($this->get_package()->get_context()))
+        return true;
+    }
+
+    /**
+     * @throws \Symfony\Component\Cache\Exception\CacheException
+     */
+    public function dependencyHasValidRegisteredVersion(Dependency $dependency): bool
+    {
+        $registration = $this->getDependencyRegistration($dependency);
+
+        if (!Semver::satisfies(
+            $registration[Registration::PROPERTY_VERSION], $dependency->get_version()
+        ))
+        {
+            return false;
+        }
+
+        return true;
+    }
+
+    /**
+     * @throws \Symfony\Component\Cache\Exception\CacheException
+     */
+    protected function getDependencyRegistration(Dependency $dependency): array
+    {
+        return $this->getRegistrationConsulter()->getRegistrationForContext($dependency->get_id());
+    }
+
+    public function getPackageFactory(): PackageFactory
+    {
+        return $this->packageFactory;
+    }
+
+    public function getRegistrationConsulter(): RegistrationConsulter
+    {
+        return $this->registrationConsulter;
+    }
+
+    /**
+     * @throws \Symfony\Component\Cache\Exception\CacheException
+     */
+    public function isInstallable(Package $package): bool
+    {
+        $dependencies = $package->get_dependencies();
+
+        if ($dependencies instanceof Dependencies)
+        {
+            foreach ($dependencies as $dependency)
             {
-                return false;
+                if (!$this->verifyDependency($dependency))
+                {
+                    return false;
+                }
             }
         }
 
         return true;
+    }
+
+    /**
+     * @throws \Symfony\Component\Cache\Exception\CacheException
+     * @throws \Exception
+     */
+    public function isNeededByAnotherRegisteredPackage(Package $package): bool
+    {
+        $registrations = $this->getRegistrationConsulter()->getRegistrationsMappedByContext();
+        unset($registrations[$package->get_context()]);
+
+        foreach ($registrations as $registration)
+        {
+            $registrationPackage =
+                $this->getPackageFactory()->getPackage($registration[Registration::PROPERTY_CONTEXT]);
+
+            $dependencies = $registrationPackage->get_dependencies();
+
+            if (!is_null($dependencies))
+            {
+                foreach ($dependencies->getDependencies() as $dependency)
+                {
+                    if ($dependency->get_id() == $package->get_context())
+                    {
+                        return true;
+                    }
+                }
+            }
+        }
+
+        return false;
+    }
+
+    /**
+     * @throws \Symfony\Component\Cache\Exception\CacheException
+     */
+    public function isRemovable(Package $package): bool
+    {
+        return !$this->isNeededByAnotherRegisteredPackage($package);
+    }
+
+    /**
+     * @throws \Symfony\Component\Cache\Exception\CacheException
+     */
+    public function verifyDependency(Dependency $dependency): bool
+    {
+        if (!$this->dependencyHasRegistration($dependency) || $this->dependencyHasActiveRegistration($dependency) ||
+            !$this->dependencyHasValidRegisteredVersion($dependency))
+        {
+            return false;
+        }
+        else
+        {
+            return true;
+        }
     }
 }
