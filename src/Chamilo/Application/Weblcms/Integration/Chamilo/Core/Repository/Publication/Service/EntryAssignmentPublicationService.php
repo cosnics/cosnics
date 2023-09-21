@@ -164,9 +164,11 @@ class EntryAssignmentPublicationService extends AssignmentPublicationService imp
         $attributes->setPublicationContext(\Chamilo\Application\Weblcms\Bridge\Assignment\Storage\DataClass\Entry::class);
         $attributes->set_publisher_id($entry->getUserId());
         $attributes->set_date($entry->getSubmitted());
-        $attributes->set_title($entry->getContentObject()->get_title());
-        $attributes->set_content_object_id($entry->getContentObject()->getId());
-
+        if (!is_null($entry->getContentObject()))
+        {
+            $attributes->set_title($entry->getContentObject()->get_title());
+            $attributes->set_content_object_id($entry->getContentObject()->getId());
+        }
         $this->addLocationForEntry($entry, $attributes, Translation::getInstance()->getTranslation('Entry') . ': ');
 
         return $attributes;
