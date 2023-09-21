@@ -291,7 +291,7 @@ class PublicationService
      */
     protected function getTreeForTreeNodeData(TreeNodeData $treeNodeData)
     {
-        if (!array_key_exists($treeNodeData->getLearningPathId(), $this->treeCache))
+        if (is_null($this->treeCache) || !array_key_exists($treeNodeData->getLearningPathId(), $this->treeCache))
         {
             $learningPath = $this->getLearningPathByTreeNodeData($treeNodeData);
 
