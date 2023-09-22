@@ -143,7 +143,7 @@ abstract class Action
 
     public function getPath(): string
     {
-        return $this->getSystemPathBuilder()->namespaceToFullPath(static::CONTEXT);
+        return $this->getSystemPathBuilder()->namespaceToFullPath($this->getContext());
     }
 
     public function getRegistrationService(): RegistrationService

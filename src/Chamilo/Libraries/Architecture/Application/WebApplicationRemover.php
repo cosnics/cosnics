@@ -2,6 +2,8 @@
 namespace Chamilo\Libraries\Architecture\Application;
 
 use Chamilo\Configuration\Package\Action\Remover;
+use Chamilo\Configuration\Package\Properties\Dependencies\DependencyVerifier;
+use Chamilo\Configuration\Package\Properties\Dependencies\DependencyVerifierRenderer;
 use Chamilo\Configuration\Package\Service\PackageBundlesCacheService;
 use Chamilo\Configuration\Package\Service\PackageFactory;
 use Chamilo\Configuration\Service\ConfigurationService;
@@ -14,8 +16,6 @@ use Chamilo\Libraries\Storage\DataManager\Repository\StorageUnitRepository;
 use Symfony\Component\Translation\Translator;
 
 /**
- * Base class for specific removal extensions of web applications
- *
  * @package Chamilo\Libraries\Architecture\Application
  * @author  Hans De Bisschop <hans.de.bisschop@ehb.be>
  */
@@ -28,13 +28,15 @@ abstract class WebApplicationRemover extends Remover
         ClassnameUtilities $classnameUtilities, ConfigurationService $configurationService,
         StorageUnitRepository $storageUnitRepository, Translator $translator,
         PackageBundlesCacheService $packageBundlesCacheService, PackageFactory $packageFactory,
-        RegistrationService $registrationService, SystemPathBuilder $systemPathBuilder, string $context,
+        RegistrationService $registrationService, SystemPathBuilder $systemPathBuilder,
+        DependencyVerifier $dependencyVerifier, DependencyVerifierRenderer $dependencyVerifierRenderer, string $context,
         CachedItemService $itemService
     )
     {
         parent::__construct(
             $classnameUtilities, $configurationService, $storageUnitRepository, $translator,
-            $packageBundlesCacheService, $packageFactory, $registrationService, $systemPathBuilder, $context
+            $packageBundlesCacheService, $packageFactory, $registrationService, $systemPathBuilder, $dependencyVerifier,
+            $dependencyVerifierRenderer, $context
         );
 
         $this->itemService = $itemService;

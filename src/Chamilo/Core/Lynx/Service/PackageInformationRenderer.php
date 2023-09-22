@@ -119,20 +119,21 @@ class PackageInformationRenderer
 
         $html[] = '<table class="table table-striped table-bordered table-hover table-data data_table_no_header">';
 
-        $properties = $package::getDefaultPropertyNames();
+        $properties = Package::getDefaultPropertyNames();
 
-        $hidden_properties = [
+        $hiddenProperties = [
             Package::PROPERTY_AUTHORS,
             Package::PROPERTY_VERSION,
             Package::PROPERTY_DEPENDENCIES,
-            Package::PROPERTY_EXTRA
+            Package::PROPERTY_EXTRA,
+            Package::PROPERTY_RESOURCES
         ];
 
         foreach ($properties as $property)
         {
             $value = $package->getDefaultProperty($property);
 
-            if (!empty($value) && !in_array($property, $hidden_properties))
+            if (!empty($value) && !in_array($property, $hiddenProperties))
             {
                 $html[] = '<tr><td class="header">' . $translator->trans(
                         $stringUtilities->createString($property)->upperCamelize()->toString()

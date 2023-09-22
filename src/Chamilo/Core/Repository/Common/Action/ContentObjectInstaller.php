@@ -2,6 +2,8 @@
 namespace Chamilo\Core\Repository\Common\Action;
 
 use Chamilo\Configuration\Package\Action\Installer;
+use Chamilo\Configuration\Package\Properties\Dependencies\DependencyVerifier;
+use Chamilo\Configuration\Package\Properties\Dependencies\DependencyVerifierRenderer;
 use Chamilo\Configuration\Package\Service\PackageBundlesCacheService;
 use Chamilo\Configuration\Package\Service\PackageFactory;
 use Chamilo\Configuration\Service\ConfigurationService;
@@ -40,13 +42,15 @@ class ContentObjectInstaller extends Installer
         ClassnameUtilities $classnameUtilities, ConfigurationService $configurationService,
         StorageUnitRepository $storageUnitRepository, Translator $translator,
         PackageBundlesCacheService $packageBundlesCacheService, PackageFactory $packageFactory,
-        RegistrationService $registrationService, SystemPathBuilder $systemPathBuilder, string $context,
+        RegistrationService $registrationService, SystemPathBuilder $systemPathBuilder,
+        DependencyVerifier $dependencyVerifier, DependencyVerifierRenderer $dependencyVerifierRenderer, string $context,
         ContentObjectTemplateSynchronizer $contentObjectTemplateSynchronizer, SessionInterface $session
     )
     {
         parent::__construct(
             $classnameUtilities, $configurationService, $storageUnitRepository, $translator,
-            $packageBundlesCacheService, $packageFactory, $registrationService, $systemPathBuilder, $context
+            $packageBundlesCacheService, $packageFactory, $registrationService, $systemPathBuilder, $dependencyVerifier,
+            $dependencyVerifierRenderer, $context
         );
 
         $this->contentObjectTemplateSynchronizer = $contentObjectTemplateSynchronizer;

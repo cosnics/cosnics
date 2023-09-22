@@ -3,7 +3,6 @@ namespace Chamilo\Configuration\Package\Action;
 
 use Chamilo\Configuration\Package\Action;
 use Chamilo\Configuration\Package\PackageList;
-use Chamilo\Configuration\Package\Properties\Dependencies\DependencyVerifier;
 use Chamilo\Configuration\Storage\DataClass\Setting;
 use DOMDocument;
 use DOMElement;
@@ -231,11 +230,13 @@ class Remover extends Action
     public function verifyDependencies(): bool
     {
         $translator = $this->getTranslator();
+        $package = $this->getPackageFactory()->getPackage($this->getContext());
 
-        $verifier = new DependencyVerifier($this->getPackageFactory()->getPackage($this->getContext()));
-        $success = $verifier->isRemovable();
+        $success = $this->getDependencyVerifier()->isRemovable($package);
 
-        $this->add_message(self::TYPE_NORMAL, $verifier->get_logger()->render());
+        $this->add_message(
+            self::TYPE_NORMAL, $this->getDependencyVerifierRenderer()->renderVerifiedDependencies($package)
+        );
 
         if (!$success)
         {

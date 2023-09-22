@@ -94,7 +94,7 @@ class Installer extends Action
             foreach ($xml as $name => $parameters)
             {
                 if (!$this->getConfigurationService()->createSettingFromParameters(
-                    static::CONTEXT, $name, $parameters['default'], (bool) $parameters['user_setting']
+                    $this->getContext(), $name, $parameters['default'], (bool) $parameters['user_setting']
                 ))
                 {
                     $message = $translator->trans('PackageConfigurationFailed', [], 'Chamilo\Core\Install');
@@ -281,10 +281,10 @@ class Installer extends Action
 
         $this->add_message(self::TYPE_NORMAL, $translator->trans('RegisteringPackage', [], 'Chamilo\Core\Install'));
 
-        $package = $this->getPackageFactory()->getPackage(static::CONTEXT);
+        $package = $this->getPackageFactory()->getPackage($this->getContext());
 
         if (!$this->getRegistrationService()->createRegistrationFromParameters(
-            static::CONTEXT, $package->getType(), $package->get_category(), $package->get_name(),
+            $this->getContext(), $package->getType(), $package->get_category(), $package->get_name(),
             $package->get_version(), Registration::STATUS_ACTIVE
         ))
         {
@@ -302,7 +302,7 @@ class Installer extends Action
     public function verifyDependencies(): bool
     {
         $translator = $this->getTranslator();
-        $package = $this->getPackageFactory()->getPackage(static::CONTEXT);
+        $package = $this->getPackageFactory()->getPackage($this->getContext());
 
         $success = $this->getDependencyVerifier()->isInstallable($package);
 

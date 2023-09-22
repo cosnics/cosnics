@@ -40,7 +40,7 @@ class ViewerComponent extends Manager implements BreadcrumbLessComponentInterfac
         $this->getBreadcrumbTrail()->add(
             new Breadcrumb(
                 null, $translator->trans(
-                'ViewingPackage', ['PACKAGE' => $translator->trans('TypeName', [], $currentContext)], Manager::CONTEXT
+                'ViewingPackage', ['{PACKAGE}' => $translator->trans('TypeName', [], $currentContext)], Manager::CONTEXT
             )
             )
         );

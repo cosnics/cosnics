@@ -1,6 +1,8 @@
 <?php
 namespace Chamilo\Core\Repository\Integration\Chamilo\Core\Metadata\Action;
 
+use Chamilo\Configuration\Package\Properties\Dependencies\DependencyVerifier;
+use Chamilo\Configuration\Package\Properties\Dependencies\DependencyVerifierRenderer;
 use Chamilo\Configuration\Package\Service\PackageBundlesCacheService;
 use Chamilo\Configuration\Package\Service\PackageFactory;
 use Chamilo\Configuration\Service\ConfigurationService;
@@ -30,14 +32,15 @@ class Installer extends \Chamilo\Core\Metadata\Action\Installer
         ClassnameUtilities $classnameUtilities, ConfigurationService $configurationService,
         StorageUnitRepository $storageUnitRepository, Translator $translator,
         PackageBundlesCacheService $packageBundlesCacheService, PackageFactory $packageFactory,
-        RegistrationService $registrationService, SystemPathBuilder $systemPathBuilder, string $context,
+        RegistrationService $registrationService, SystemPathBuilder $systemPathBuilder,
+        DependencyVerifier $dependencyVerifier, DependencyVerifierRenderer $dependencyVerifierRenderer, string $context,
         array $propertyProviderTypes, DataClassRepositoryCache $dataClassRepositoryCache
     )
     {
         parent::__construct(
             $classnameUtilities, $configurationService, $storageUnitRepository, $translator,
-            $packageBundlesCacheService, $packageFactory, $registrationService, $systemPathBuilder, $context,
-            $propertyProviderTypes
+            $packageBundlesCacheService, $packageFactory, $registrationService, $systemPathBuilder, $dependencyVerifier,
+            $dependencyVerifierRenderer, $context, $propertyProviderTypes
         );
 
         $this->dataClassRepositoryCache = $dataClassRepositoryCache;

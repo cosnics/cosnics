@@ -1,6 +1,8 @@
 <?php
 namespace Chamilo\Core\Menu\Package;
 
+use Chamilo\Configuration\Package\Properties\Dependencies\DependencyVerifier;
+use Chamilo\Configuration\Package\Properties\Dependencies\DependencyVerifierRenderer;
 use Chamilo\Configuration\Package\Service\PackageBundlesCacheService;
 use Chamilo\Configuration\Package\Service\PackageFactory;
 use Chamilo\Configuration\Service\ConfigurationService;
@@ -38,13 +40,15 @@ class Installer extends \Chamilo\Configuration\Package\Action\Installer
         ClassnameUtilities $classnameUtilities, ConfigurationService $configurationService,
         StorageUnitRepository $storageUnitRepository, Translator $translator,
         PackageBundlesCacheService $packageBundlesCacheService, PackageFactory $packageFactory,
-        RegistrationService $registrationService, SystemPathBuilder $systemPathBuilder, string $context,
+        RegistrationService $registrationService, SystemPathBuilder $systemPathBuilder,
+        DependencyVerifier $dependencyVerifier, DependencyVerifierRenderer $dependencyVerifierRenderer, string $context,
         ItemService $itemService, RightsService $rightsService
     )
     {
         parent::__construct(
             $classnameUtilities, $configurationService, $storageUnitRepository, $translator,
-            $packageBundlesCacheService, $packageFactory, $registrationService, $systemPathBuilder, $context
+            $packageBundlesCacheService, $packageFactory, $registrationService, $systemPathBuilder, $dependencyVerifier,
+            $dependencyVerifierRenderer, $context
         );
 
         $this->itemService = $itemService;

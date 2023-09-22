@@ -105,7 +105,7 @@ class Package extends DataClass
      *
      * @return mixed
      */
-    public static function getDefaultProperty_names($extendedPropertyNames = [])
+    public static function getDefaultPropertyNames(array $extendedPropertyNames = []): array
     {
         $extendedPropertyNames[] = self::PROPERTY_CONTEXT;
         $extendedPropertyNames[] = self::PROPERTY_NAME;
