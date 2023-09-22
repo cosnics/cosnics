@@ -156,7 +156,6 @@ class ConfigurerComponent extends Manager implements MenuComponentInterface
     }
 
     /**
-     * @throws \ReflectionException
      * @throws \Symfony\Component\Cache\Exception\CacheException
      */
     public function renderApplicationMenu(): string

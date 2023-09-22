@@ -36,9 +36,6 @@ abstract class GroupsFeedComponent extends Manager
      */
     protected $user_count = 0;
 
-    /**
-     * @throws \ReflectionException
-     */
     public function run()
     {
         $result = new JsonAjaxResult();
@@ -68,7 +65,6 @@ abstract class GroupsFeedComponent extends Manager
      * Returns all the elements for this feed
      *
      * @return \Chamilo\Libraries\Format\Form\Element\AdvancedElementFinder\AdvancedElementFinderElements
-     * @throws \ReflectionException
      */
     private function get_elements()
     {

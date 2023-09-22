@@ -12,8 +12,7 @@ use Chamilo\Libraries\Storage\Query\Condition\Condition;
 trait ButtonToolBarSearchFormTrait
 {
     /**
-     * @throws \ReflectionException
-     * @throws \Exception
+     * @throws \QuickformException
      */
     public function getButtonToolBarSearchCondition(): ?Condition
     {
@@ -32,7 +31,6 @@ trait ButtonToolBarSearchFormTrait
     abstract public function getRequest(): ChamiloRequest;
 
     /**
-     * @throws \ReflectionException
      * @throws \QuickformException
      */
     public function setButtonToolBarSearchFormRequestParameter()

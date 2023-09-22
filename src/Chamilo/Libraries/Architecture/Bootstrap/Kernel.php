@@ -232,9 +232,6 @@ class Kernel
         return $this->pageConfiguration;
     }
 
-    /**
-     * @throws \ReflectionException
-     */
     protected function getPlatformNotAvailableResponse(): PlatformNotAvailableResponse
     {
         return new PlatformNotAvailableResponse(

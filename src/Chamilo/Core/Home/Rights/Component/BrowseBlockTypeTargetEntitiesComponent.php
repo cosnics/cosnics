@@ -52,7 +52,6 @@ class BrowseBlockTypeTargetEntitiesComponent extends Manager
     /**
      * @throws \Chamilo\Libraries\Format\Table\Exception\InvalidPageNumberException
      * @throws \QuickformException
-     * @throws \ReflectionException
      * @throws \TableException
      */
     protected function renderTable(): string

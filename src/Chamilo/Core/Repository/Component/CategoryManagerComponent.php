@@ -255,7 +255,6 @@ class CategoryManagerComponent extends Manager implements ImpactViewSupport, Cat
      * @return string
      * @throws \Chamilo\Libraries\Format\Table\Exception\InvalidPageNumberException
      * @throws \QuickformException
-     * @throws \ReflectionException
      * @throws \TableException
      */
     public function render_impact_view($selected_category_ids = [])

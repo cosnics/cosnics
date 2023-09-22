@@ -22,7 +22,6 @@ class GalleryHtmlTableRenderer extends AbstractHtmlTableRenderer
      * @param \Chamilo\Libraries\Format\Table\Column\TableColumn[] $tableColumns
      *
      * @throws \TableException
-     * @throws \ReflectionException
      * @throws \Chamilo\Libraries\Format\Table\Exception\InvalidPageNumberException
      * @throws \QuickformException
      */

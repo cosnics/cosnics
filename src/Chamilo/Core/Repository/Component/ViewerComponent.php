@@ -256,7 +256,6 @@ class ViewerComponent extends Manager implements BreadcrumbLessComponentInterfac
 
     /**
      * @return \Chamilo\Libraries\Format\Structure\ActionBar\Renderer\ButtonToolBarRenderer
-     * @throws \ReflectionException
      */
     private function getButtonToolbarRenderer(): ButtonToolBarRenderer
     {
@@ -505,9 +504,6 @@ class ViewerComponent extends Manager implements BreadcrumbLessComponentInterfac
         return new ButtonToolBarRenderer($buttonToolbar);
     }
 
-    /**
-     * @throws \ReflectionException
-     */
     public function getContentObject(): ?ContentObject
     {
         if (!isset($this->contentObject))
@@ -544,7 +540,6 @@ class ViewerComponent extends Manager implements BreadcrumbLessComponentInterfac
 
     /**
      * @return \Chamilo\Libraries\Format\Structure\ActionBar\Button|\Chamilo\Libraries\Format\Structure\ActionBar\DropdownButton
-     * @throws \ReflectionException
      */
     public function getExportButton()
     {
@@ -581,9 +576,6 @@ class ViewerComponent extends Manager implements BreadcrumbLessComponentInterfac
         }
     }
 
-    /**
-     * @throws \ReflectionException
-     */
     private function getExportTypeLabel(string $type): string
     {
         $translator = $this->getTranslator();
@@ -688,9 +680,6 @@ class ViewerComponent extends Manager implements BreadcrumbLessComponentInterfac
         return $tabs;
     }
 
-    /**
-     * @throws \ReflectionException
-     */
     public function getVersionTableCondition(): EqualityCondition
     {
         return new EqualityCondition(
@@ -706,7 +695,6 @@ class ViewerComponent extends Manager implements BreadcrumbLessComponentInterfac
 
     /**
      * @return bool
-     * @throws \ReflectionException
      */
     public function isAllowedToModify(): bool
     {
@@ -718,7 +706,6 @@ class ViewerComponent extends Manager implements BreadcrumbLessComponentInterfac
     }
 
     /**
-     * @throws \ReflectionException
      * @throws \TableException
      * @throws \Chamilo\Libraries\Format\Table\Exception\InvalidPageNumberException
      * @throws \QuickformException
@@ -743,7 +730,6 @@ class ViewerComponent extends Manager implements BreadcrumbLessComponentInterfac
 
     /**
      * @throws \TableException
-     * @throws \ReflectionException
      * @throws \Chamilo\Libraries\Format\Table\Exception\InvalidPageNumberException
      * @throws \QuickformException
      */
@@ -766,7 +752,6 @@ class ViewerComponent extends Manager implements BreadcrumbLessComponentInterfac
     }
 
     /**
-     * @throws \ReflectionException
      * @throws \TableException
      * @throws \Chamilo\Libraries\Format\Table\Exception\InvalidPageNumberException
      * @throws \QuickformException
@@ -790,7 +775,6 @@ class ViewerComponent extends Manager implements BreadcrumbLessComponentInterfac
     }
 
     /**
-     * @throws \ReflectionException
      * @throws \TableException
      * @throws \Chamilo\Libraries\Format\Table\Exception\InvalidPageNumberException
      * @throws \QuickformException
@@ -815,7 +799,6 @@ class ViewerComponent extends Manager implements BreadcrumbLessComponentInterfac
 
     /**
      * @throws \TableException
-     * @throws \ReflectionException
      * @throws \Chamilo\Libraries\Format\Table\Exception\InvalidPageNumberException
      * @throws \QuickformException
      */
@@ -838,7 +821,6 @@ class ViewerComponent extends Manager implements BreadcrumbLessComponentInterfac
     }
 
     /**
-     * @throws \ReflectionException
      * @throws \TableException
      * @throws \Chamilo\Libraries\Format\Table\Exception\InvalidPageNumberException
      * @throws \QuickformException
@@ -862,7 +844,6 @@ class ViewerComponent extends Manager implements BreadcrumbLessComponentInterfac
     }
 
     /**
-     * @throws \ReflectionException
      * @throws \TableException
      * @throws \Chamilo\Libraries\Format\Table\Exception\InvalidPageNumberException
      * @throws \QuickformException

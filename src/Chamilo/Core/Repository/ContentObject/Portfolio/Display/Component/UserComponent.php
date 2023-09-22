@@ -39,7 +39,6 @@ class UserComponent extends ItemComponent
     /**
      * @throws \Chamilo\Libraries\Format\Table\Exception\InvalidPageNumberException
      * @throws \QuickformException
-     * @throws \ReflectionException
      * @throws \TableException
      */
     public function build()
@@ -197,7 +196,6 @@ class UserComponent extends ItemComponent
     }
 
     /**
-     * @throws \ReflectionException
      * @throws \TableException
      * @throws \Chamilo\Libraries\Format\Table\Exception\InvalidPageNumberException
      * @throws \QuickformException

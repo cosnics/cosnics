@@ -46,6 +46,9 @@ class SlideshowContentObjectRenderer extends ContentObjectRenderer
         $this->workspace = $workspace;
     }
 
+    /**
+     * @throws \QuickformException
+     */
     public function render(Application $application): string
     {
         $workspace = $this->getWorkspace();
@@ -69,8 +72,7 @@ class SlideshowContentObjectRenderer extends ContentObjectRenderer
             $contentObjectActions = $this->getContentObjectActionRenderer()->getActions($contentObject);
 
             return $this->getSlideshowRenderer()->render(
-                $application, $contentObject, $contentObjectCount, $contentObjectActions,
-                $this->get_parameters($application)
+                $contentObject, $contentObjectCount, $contentObjectActions, $this->get_parameters($application)
             );
         }
 

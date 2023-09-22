@@ -119,9 +119,6 @@ class ItemTableRenderer extends DataClassListTableRenderer implements TableRowAc
         return $this->user;
     }
 
-    /**
-     * @throws \ReflectionException
-     */
     private function get_publication_from_complex_content_object_item($clo_item)
     {
         return DataManager::retrieve_by_id(
@@ -151,7 +148,6 @@ class ItemTableRenderer extends DataClassListTableRenderer implements TableRowAc
     /**
      * @throws \Chamilo\Libraries\Format\Table\Exception\InvalidPageNumberException
      * @throws \QuickformException
-     * @throws \ReflectionException
      * @throws \TableException
      * @deprecated Temporary solution to allow rendering of DI-based tables in a non-DI context
      */

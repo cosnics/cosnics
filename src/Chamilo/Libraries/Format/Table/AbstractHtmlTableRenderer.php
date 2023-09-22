@@ -235,7 +235,6 @@ abstract class AbstractHtmlTableRenderer
     }
 
     /**
-     * @throws \ReflectionException
      * @throws \QuickformException
      */
     public function renderActions(string $tableName, TableActions $tableActions): string
@@ -265,7 +264,6 @@ abstract class AbstractHtmlTableRenderer
     }
 
     /**
-     * @throws \ReflectionException
      * @throws \QuickformException
      */
     public function renderNumberOfItemsPerPageSelector(
@@ -325,7 +323,6 @@ abstract class AbstractHtmlTableRenderer
      * @param \Chamilo\Libraries\Format\Table\Column\TableColumn[] $tableColumns
      *
      * @throws \QuickformException
-     * @throws \ReflectionException
      */
     public function renderPropertySorting(
         array $tableColumns, TableParameterValues $parameterValues, array $parameterNames
@@ -422,7 +419,6 @@ abstract class AbstractHtmlTableRenderer
      *
      * @throws \Chamilo\Libraries\Format\Table\Exception\InvalidPageNumberException
      * @throws \QuickformException
-     * @throws \ReflectionException
      * @throws \TableException
      */
     protected function renderTable(
@@ -466,7 +462,6 @@ abstract class AbstractHtmlTableRenderer
     }
 
     /**
-     * @throws \ReflectionException
      * @throws \Chamilo\Libraries\Format\Table\Exception\InvalidPageNumberException
      * @throws \QuickformException
      */
@@ -514,7 +509,6 @@ abstract class AbstractHtmlTableRenderer
     /**
      * @param \Chamilo\Libraries\Format\Table\Column\TableColumn[] $tableColumns
      *
-     * @throws \ReflectionException
      * @throws \QuickformException
      */
     protected function renderTableHeader(
@@ -543,7 +537,6 @@ abstract class AbstractHtmlTableRenderer
     }
 
     /**
-     * @throws \ReflectionException
      * @throws \QuickformException
      */
     protected function renderTableHeaderStart(string $tableName, ?TableActions $tableActions = null): string

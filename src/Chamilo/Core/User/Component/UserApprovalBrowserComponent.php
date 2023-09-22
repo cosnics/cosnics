@@ -29,7 +29,6 @@ class UserApprovalBrowserComponent extends Manager
      * @throws \Chamilo\Libraries\Architecture\Exceptions\NotAllowedException
      * @throws \Chamilo\Libraries\Format\Table\Exception\InvalidPageNumberException
      * @throws \QuickformException
-     * @throws \ReflectionException
      * @throws \TableException
      */
     public function run()
@@ -107,7 +106,6 @@ class UserApprovalBrowserComponent extends Manager
 
     /**
      * @throws \TableException
-     * @throws \ReflectionException
      * @throws \Chamilo\Libraries\Format\Table\Exception\InvalidPageNumberException
      * @throws \QuickformException
      */
@@ -124,7 +122,6 @@ class UserApprovalBrowserComponent extends Manager
     /**
      * @throws \Chamilo\Libraries\Format\Table\Exception\InvalidPageNumberException
      * @throws \QuickformException
-     * @throws \ReflectionException
      * @throws \TableException
      * @throws \Exception
      */

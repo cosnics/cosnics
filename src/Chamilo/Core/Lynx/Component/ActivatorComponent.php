@@ -1,7 +1,6 @@
 <?php
 namespace Chamilo\Core\Lynx\Component;
 
-use Chamilo\Configuration\Package\NotAllowed;
 use Chamilo\Core\Lynx\Action\PackageActivator;
 use Chamilo\Core\Lynx\Manager;
 use Chamilo\Libraries\Architecture\Exceptions\NotAllowedException;
@@ -10,7 +9,7 @@ use Chamilo\Libraries\Format\Structure\Breadcrumb;
 use Chamilo\Libraries\Format\Structure\Glyph\FontAwesomeGlyph;
 use Chamilo\Libraries\Format\Structure\Toolbar;
 use Chamilo\Libraries\Format\Structure\ToolbarItem;
-use Chamilo\Libraries\Translation\Translation;
+use OutOfBoundsException;
 
 class ActivatorComponent extends Manager implements BreadcrumbLessComponentInterface
 {
@@ -20,40 +19,46 @@ class ActivatorComponent extends Manager implements BreadcrumbLessComponentInter
      */
     public function run()
     {
-        $context = $this->getRequest()->query->get(self::PARAM_CONTEXT);
 
-        $activator = new PackageActivator($context);
-        $activator->run();
+        try
+        {
+            $context = $this->getCurrentContext();
+            $activator = $this->getPackageActionFactory()->getPackageActivator($this->getCurrentContext());
+            $translator = $this->getTranslator();
 
-        $this->getBreadcrumbTrail()->add(
-            new Breadcrumb(
-                null, Translation::get(
-                'ActivatingPackage', ['PACKAGE' => Translation::get('TypeName', null, $context)]
-            )
-            )
-        );
+            $this->getBreadcrumbTrail()->add(
+                new Breadcrumb(
+                    null, $translator->trans(
+                    'ActivatingPackage', ['PACKAGE' => $translator->trans('TypeName', [], $context)]
+                )
+                )
+            );
 
-        if ($activator instanceof NotAllowed)
+            $activator->run();
+
+            $html = [];
+
+            $html[] = $this->render_header();
+            $html[] = $activator->getResult(true);
+
+            $toolbar = new Toolbar();
+            $toolbar->add_item(
+                new ToolbarItem(
+                    $translator->trans('BackToPackageOVerview'), new FontAwesomeGlyph('backward'),
+                    $this->get_url([self::PARAM_ACTION => self::ACTION_BROWSE])
+                )
+            );
+
+            $html[] = $toolbar->as_html();
+            $html[] = $this->render_footer();
+
+            return implode(PHP_EOL, $html);
+        }
+        catch (OutOfBoundsException)
         {
             throw new NotAllowedException();
         }
 
-        $html = [];
 
-        $html[] = $this->render_header();
-        $html[] = $activator->getResult(true);
-
-        $toolbar = new Toolbar();
-        $toolbar->add_item(
-            new ToolbarItem(
-                Translation::get('BackToPackageOVerview'), new FontAwesomeGlyph('backward'),
-                $this->get_url([self::PARAM_ACTION => self::ACTION_BROWSE])
-            )
-        );
-
-        $html[] = $toolbar->as_html();
-        $html[] = $this->render_footer();
-
-        return implode(PHP_EOL, $html);
     }
 }

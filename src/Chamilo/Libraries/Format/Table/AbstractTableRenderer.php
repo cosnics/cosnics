@@ -61,7 +61,6 @@ abstract class AbstractTableRenderer
 
     /**
      * @throws \TableException
-     * @throws \ReflectionException
      * @throws \Chamilo\Libraries\Format\Table\Exception\InvalidPageNumberException
      * @throws \QuickformException
      */
@@ -112,7 +111,7 @@ abstract class AbstractTableRenderer
         {
             return ClassnameUtilities::getInstance()->getClassnameFromNamespace(static::class, true);
         }
-        catch (Exception $exception)
+        catch (Exception)
         {
             return 'table';
         }

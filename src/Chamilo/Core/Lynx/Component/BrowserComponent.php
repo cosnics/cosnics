@@ -37,7 +37,6 @@ class BrowserComponent extends Manager implements BreadcrumbLessComponentInterfa
     private string $currentType;
 
     /**
-     * @throws \ReflectionException
      * @throws \Symfony\Component\Cache\Exception\CacheException
      */
     public function run()
@@ -102,7 +101,6 @@ class BrowserComponent extends Manager implements BreadcrumbLessComponentInterfa
      * @return string
      * @throws \Chamilo\Libraries\Format\Table\Exception\InvalidPageNumberException
      * @throws \QuickformException
-     * @throws \ReflectionException
      * @throws \Symfony\Component\Cache\Exception\CacheException
      * @throws \TableException
      */
@@ -156,7 +154,6 @@ class BrowserComponent extends Manager implements BreadcrumbLessComponentInterfa
     }
 
     /**
-     * @throws \ReflectionException
      * @throws \Symfony\Component\Cache\Exception\CacheException
      * @throws \Exception
      */
@@ -213,7 +210,6 @@ class BrowserComponent extends Manager implements BreadcrumbLessComponentInterfa
     }
 
     /**
-     * @throws \ReflectionException
      * @throws \Symfony\Component\Cache\Exception\CacheException
      */
     public function renderApplicationMenu(): string
@@ -229,7 +225,6 @@ class BrowserComponent extends Manager implements BreadcrumbLessComponentInterfa
     /**
      * @throws \Chamilo\Libraries\Storage\Exception\DataClassNoResultException
      * @throws \TableException
-     * @throws \ReflectionException
      * @throws \Chamilo\Libraries\Format\Table\Exception\InvalidPageNumberException
      * @throws \QuickformException
      */

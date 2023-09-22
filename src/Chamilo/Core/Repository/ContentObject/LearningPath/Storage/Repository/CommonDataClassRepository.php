@@ -28,7 +28,6 @@ abstract class CommonDataClassRepository
     }
 
     /**
-     * @throws \ReflectionException
      * @throws \Chamilo\Libraries\Storage\Exception\DataClassNoResultException
      */
     public function delete(DataClass $dataClass): bool

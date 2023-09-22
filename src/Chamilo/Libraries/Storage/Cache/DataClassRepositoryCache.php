@@ -88,8 +88,6 @@ class DataClassRepositoryCache
 
     /**
      * @param int[] $counts
-     *
-     * @throws \Exception
      */
     public function addForDataClassCountGrouped(
         string $className, DataClassCountGroupedParameters $parameters, array $counts

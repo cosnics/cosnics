@@ -98,8 +98,6 @@ abstract class RecurringContentObject extends ContentObject
 
     /**
      * @return string[]
-     * @throws \ReflectionException
-     * @throws \Exception
      */
     public static function get_byday_options(): array
     {
@@ -144,8 +142,6 @@ abstract class RecurringContentObject extends ContentObject
 
     /**
      * @return string[]
-     * @throws \ReflectionException
-     * @throws \Exception
      */
     public static function get_bymonth_options(): array
     {
@@ -167,9 +163,6 @@ abstract class RecurringContentObject extends ContentObject
         ];
     }
 
-    /**
-     * @throws \ReflectionException
-     */
     public static function get_bymonth_string(int $month): string
     {
         $translation = self::get_bymonth_options();
@@ -205,9 +198,6 @@ abstract class RecurringContentObject extends ContentObject
         return self::$days[$day];
     }
 
-    /**
-     * @throws \ReflectionException
-     */
     public static function get_day_string(int $day_number): string
     {
         if (!is_numeric($day_number))
@@ -254,8 +244,6 @@ abstract class RecurringContentObject extends ContentObject
 
     /**
      * @return string[]
-     * @throws \ReflectionException
-     * @throws \Exception
      */
     public static function get_frequency_options(): array
     {
@@ -274,8 +262,6 @@ abstract class RecurringContentObject extends ContentObject
 
     /**
      * @return string[]
-     * @throws \ReflectionException
-     * @throws \Exception
      */
     public static function get_rank_options(): array
     {
@@ -293,9 +279,6 @@ abstract class RecurringContentObject extends ContentObject
         return $ranks;
     }
 
-    /**
-     * @throws \ReflectionException
-     */
     public static function get_rank_string(int $rank): string
     {
         $translation = self::get_rank_options();
@@ -303,10 +286,6 @@ abstract class RecurringContentObject extends ContentObject
         return $translation[$rank];
     }
 
-    /**
-     * @throws \ReflectionException
-     * @throws \Exception
-     */
     public function get_type_string(): string
     {
         if ($this->has_frequency())

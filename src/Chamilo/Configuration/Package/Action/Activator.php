@@ -11,9 +11,6 @@ use Chamilo\Configuration\Package\Action;
  */
 class Activator extends Action
 {
-    /**
-     * @throws \ReflectionException
-     */
     public function run(): bool
     {
         $translator = $this->getTranslator();

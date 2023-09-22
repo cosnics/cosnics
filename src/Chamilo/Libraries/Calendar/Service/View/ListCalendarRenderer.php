@@ -50,9 +50,6 @@ class ListCalendarRenderer extends SidebarCalendarRenderer
         return $this->eventListRenderer;
     }
 
-    /**
-     * @throws \ReflectionException
-     */
     public function renderNavigation(CalendarRendererProviderInterface $dataProvider, int $displayTime): string
     {
         $urlFormat = $this->determineNavigationUrl($dataProvider);

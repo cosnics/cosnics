@@ -86,7 +86,6 @@ abstract class DataClass
     }
 
     /**
-     * @throws \Exception
      * @deprecated Should be handled through services
      */
     public function create(): bool
@@ -105,7 +104,6 @@ abstract class DataClass
 
     /**
      * @throws \Chamilo\Libraries\Storage\Exception\DataClassNoResultException
-     * @throws \ReflectionException
      * @deprecated Should be handled through services
      */
     public function delete(): bool
@@ -128,7 +126,6 @@ abstract class DataClass
 
     /**
      * @throws \Chamilo\Libraries\Storage\Exception\DataClassNoResultException
-     * @throws \ReflectionException
      */
     protected function deleteDependencies(): bool
     {
@@ -240,7 +237,6 @@ abstract class DataClass
 
     /**
      * @return mixed
-     * @throws \Exception
      */
     public function getForeignProperty(string $name, string $classname)
     {
@@ -369,7 +365,6 @@ abstract class DataClass
     }
 
     /**
-     * @throws \Exception
      * @deprecated Should be handled through services
      */
     public function save(): bool
@@ -411,9 +406,6 @@ abstract class DataClass
         return $this;
     }
 
-    /**
-     * @throws \Exception
-     */
     public function setForeignProperty(string $name, DataClass $value): DataClass
     {
         $this->setSpecificProperty(self::PROPERTIES_FOREIGN, $name, $value);
@@ -490,7 +482,6 @@ abstract class DataClass
     }
 
     /**
-     * @throws \Exception
      * @deprecated Use setId($id) now
      */
     public function set_id(?string $id): DataClass
@@ -499,7 +490,6 @@ abstract class DataClass
     }
 
     /**
-     * @throws \Exception
      * @deprecated Should be handled through services
      */
     public function update(): bool

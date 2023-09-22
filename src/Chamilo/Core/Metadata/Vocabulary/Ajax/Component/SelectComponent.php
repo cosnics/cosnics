@@ -46,7 +46,6 @@ class SelectComponent extends Manager
     /**
      * @throws \Chamilo\Libraries\Storage\Exception\DataClassNoResultException
      * @throws \Chamilo\Libraries\Architecture\Exceptions\NoObjectSelectedException
-     * @throws \ReflectionException
      * @throws \TableException
      * @throws \Chamilo\Libraries\Format\Table\Exception\InvalidPageNumberException
      * @throws \QuickformException
@@ -103,7 +102,6 @@ class SelectComponent extends Manager
      * @throws \Chamilo\Libraries\Storage\Exception\DataClassNoResultException
      * @throws \TableException
      * @throws \Chamilo\Libraries\Format\Table\Exception\InvalidPageNumberException
-     * @throws \ReflectionException
      * @throws \QuickformException
      */
     public function getContent(): string
@@ -194,9 +192,6 @@ class SelectComponent extends Manager
         return $this->getService(SelectTableRenderer::class);
     }
 
-    /**
-     * @throws \ReflectionException
-     */
     public function getSelectedElement()
     {
         if (!isset($this->element))
@@ -224,9 +219,6 @@ class SelectComponent extends Manager
         return (array) $this->getRequest()->getFromRequestOrQuery(\Chamilo\Core\Metadata\Vocabulary\Manager::PARAM_VOCABULARY_ID);
     }
 
-    /**
-     * @throws \ReflectionException
-     */
     public function getVocabularyCondition()
     {
         $element = $this->getSelectedElement();
@@ -257,7 +249,6 @@ class SelectComponent extends Manager
      *
      * @return \Doctrine\Common\Collections\ArrayCollection<\Chamilo\Core\Metadata\Storage\DataClass\Vocabulary>
      * @throws \Chamilo\Libraries\Storage\Exception\DataClassNoResultException
-     * @throws \ReflectionException
      */
     public function getVocabularyItems(array $vocabularyIds = []): ArrayCollection
     {
@@ -274,7 +265,6 @@ class SelectComponent extends Manager
 
     /**
      * @throws \Chamilo\Libraries\Storage\Exception\DataClassNoResultException
-     * @throws \ReflectionException
      * @throws \TableException
      * @throws \Chamilo\Libraries\Format\Table\Exception\InvalidPageNumberException
      * @throws \QuickformException

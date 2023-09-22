@@ -80,7 +80,6 @@ class Installer extends Action
 
     /**
      * @throws \Symfony\Component\Cache\Exception\CacheException
-     * @throws \ReflectionException
      */
     public function configurePackage(): bool
     {

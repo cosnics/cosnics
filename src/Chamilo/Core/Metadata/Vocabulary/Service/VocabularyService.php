@@ -102,7 +102,6 @@ class VocabularyService
      * @param \Chamilo\Core\Metadata\Storage\DataClass\Element $element
      *
      * @return \Chamilo\Core\Metadata\Storage\DataClass\Vocabulary[]
-     * @throws \ReflectionException
      */
     public function getDefaultVocabulariesForUserEntitySchemaInstanceElement(
         User $user, SchemaInstance $schemaInstance, Element $element
@@ -176,7 +175,6 @@ class VocabularyService
      * @param \Chamilo\Core\Metadata\Storage\DataClass\Element $element
      *
      * @return string[]
-     * @throws \ReflectionException
      * @throws \Exception
      */
     public function getFallbackVocabulariesForUserEntitySchemaInstanceElement(
@@ -239,7 +237,6 @@ class VocabularyService
      *
      * @return string
      * @throws \Chamilo\Libraries\Architecture\Exceptions\UserException
-     * @throws \ReflectionException
      */
     public function getProvidedValueForUserEntitySchemaInstanceElement(
         User $user, DataClassEntity $entity, SchemaInstance $schemaInstance, Element $element
@@ -271,7 +268,6 @@ class VocabularyService
      *
      * @return \Chamilo\Core\Metadata\Storage\DataClass\Vocabulary[]
      * @throws \Chamilo\Libraries\Architecture\Exceptions\UserException
-     * @throws \ReflectionException
      * @throws \Exception
      */
     public function getProvidedVocabulariesForUserEntitySchemaInstanceElement(
@@ -329,7 +325,6 @@ class VocabularyService
      *
      * @return \Chamilo\Core\Metadata\Storage\DataClass\Vocabulary[]
      * @throws \Chamilo\Libraries\Architecture\Exceptions\UserException
-     * @throws \ReflectionException
      */
     public function getVocabularyByElementUserValue(Element $element, User $user, $providedPropertyValue)
     {

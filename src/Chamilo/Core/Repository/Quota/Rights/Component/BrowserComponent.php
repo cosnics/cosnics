@@ -43,7 +43,6 @@ class BrowserComponent extends Manager
 
     /**
      * @throws \QuickformException
-     * @throws \ReflectionException
      * @throws \TableException
      * @throws \Exception
      */

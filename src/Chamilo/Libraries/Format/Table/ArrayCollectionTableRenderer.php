@@ -28,7 +28,6 @@ class ArrayCollectionTableRenderer
     }
 
     /**
-     * @throws \ReflectionException
      * @throws \TableException
      * @throws \Chamilo\Libraries\Format\Table\Exception\InvalidPageNumberException
      * @throws \QuickformException

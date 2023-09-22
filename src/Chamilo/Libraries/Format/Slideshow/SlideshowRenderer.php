@@ -25,6 +25,10 @@ class SlideshowRenderer
     public const PARAM_AUTOPLAY = 'autoplay';
     public const PARAM_INDEX = 'slideshow';
 
+    protected bool $isFirst;
+
+    protected bool $isLast;
+
     private ChamiloRequest $request;
 
     private Translator $translator;
@@ -39,12 +43,11 @@ class SlideshowRenderer
     }
 
     /**
-     * @throws \ReflectionException
-     * @throws \Exception
+     * @throws \QuickformException
      */
     public function render(
-        $contentObjectRenditionContext, ContentObject $contentObject, int $contentObjectCount,
-        array $contentObjectActions = [], array $actionParameters = []
+        ContentObject $contentObject, int $contentObjectCount, array $contentObjectActions = [],
+        array $actionParameters = []
     ): string
     {
         $slideshowIndex = $this->getSlideshowIndex();
@@ -76,8 +79,7 @@ class SlideshowRenderer
 
         $html[] = '<div class="row">';
         $html[] = '<div class="col-lg-12 text-center">';
-        $html[] =
-            $this->getContentObjectRenditionImplementation($contentObject, $contentObjectRenditionContext)->render();
+        $html[] = $this->getContentObjectRenditionImplementation($contentObject)->render();
         $html[] = '</div>';
         $html[] = '</div>';
 
@@ -115,12 +117,11 @@ class SlideshowRenderer
         return $this->getUrlGenerator()->fromParameters($parameters);
     }
 
-    public function getContentObjectRenditionImplementation(ContentObject $contentObject, $contentObjectRenditionContext
+    public function getContentObjectRenditionImplementation(ContentObject $contentObject
     ): AbstractContentObjectRenditionImplementation
     {
         return ContentObjectRenditionImplementation::factory(
-            $contentObject, ContentObjectRendition::FORMAT_HTML, ContentObjectRendition::VIEW_PREVIEW,
-            $contentObjectRenditionContext
+            $contentObject, ContentObjectRendition::FORMAT_HTML, ContentObjectRendition::VIEW_PREVIEW
         );
     }
 
@@ -170,8 +171,7 @@ class SlideshowRenderer
     }
 
     /**
-     * @throws \ReflectionException
-     * @throws \Exception
+     * @throws \QuickformException
      */
     protected function renderButtonToolbar(array $contentObjectActions, array $parameters): string
     {
@@ -206,9 +206,6 @@ class SlideshowRenderer
         return $actionsToolBarRenderer->render();
     }
 
-    /**
-     * @throws \Exception
-     */
     protected function renderNextNavigation(int $contentobjectCount, array $parameters): string
     {
         $html = [];
@@ -241,9 +238,6 @@ class SlideshowRenderer
         return implode('', $html);
     }
 
-    /**
-     * @throws \Exception
-     */
     protected function renderPreviousNavigation(array $parameters): string
     {
         $html = [];
@@ -273,9 +267,6 @@ class SlideshowRenderer
         return implode('', $html);
     }
 
-    /**
-     * @throws \Exception
-     */
     protected function renderSlidshowAutoplay(int $contentobjectCount, array $parameters): string
     {
         $slideshowAutoplay = $this->getSlideshowAutoPlay();

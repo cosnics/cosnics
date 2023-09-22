@@ -59,7 +59,6 @@ class ContentObjectInstaller extends Installer
 
     /**
      * @throws \Chamilo\Libraries\Storage\Exception\DataClassNoResultException
-     * @throws \ReflectionException
      */
     public function extra(array $formValues): bool
     {
@@ -89,7 +88,6 @@ class ContentObjectInstaller extends Installer
     /**
      * Import a sample content object (if available)
      *
-     * @throws \ReflectionException
      * @throws \Chamilo\Libraries\Storage\Exception\DataClassNoResultException
      * @throws \Exception
      */

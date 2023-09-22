@@ -24,7 +24,6 @@ class RelationService
      *
      * @return \Chamilo\Core\Metadata\Storage\DataClass\Relation
      * @throws \Chamilo\Libraries\Architecture\Exceptions\UserException
-     * @throws \ReflectionException
      */
     public function getRelationByName($relationName)
     {

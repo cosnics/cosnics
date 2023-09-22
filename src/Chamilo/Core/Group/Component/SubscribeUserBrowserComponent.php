@@ -38,7 +38,6 @@ class SubscribeUserBrowserComponent extends Manager
     /**
      * @throws \Chamilo\Libraries\Architecture\Exceptions\NotAllowedException
      * @throws \Chamilo\Libraries\Storage\Exception\DataClassNoResultException
-     * @throws \ReflectionException
      * @throws \TableException
      * @throws \Chamilo\Libraries\Format\Table\Exception\InvalidPageNumberException
      * @throws \QuickformException
@@ -170,7 +169,6 @@ class SubscribeUserBrowserComponent extends Manager
 
     /**
      * @throws \Chamilo\Libraries\Storage\Exception\DataClassNoResultException
-     * @throws \ReflectionException
      * @throws \TableException
      * @throws \Chamilo\Libraries\Format\Table\Exception\InvalidPageNumberException
      * @throws \QuickformException

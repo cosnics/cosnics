@@ -54,7 +54,6 @@ class DisplayOrderDataClassListener extends DataClassListener
     }
 
     /**
-     * @throws \ReflectionException
      * @throws \Exception
      */
     public function onAfterDelete(bool $success): bool
@@ -92,7 +91,6 @@ class DisplayOrderDataClassListener extends DataClassListener
     }
 
     /**
-     * @throws \ReflectionException
      * @throws \Chamilo\Libraries\Storage\Exception\DataClassNoResultException
      * @throws \Exception
      */
@@ -160,7 +158,6 @@ class DisplayOrderDataClassListener extends DataClassListener
 
     /**
      * @throws \Chamilo\Libraries\Storage\Exception\DataClassNoResultException
-     * @throws \ReflectionException
      * @throws \Exception
      */
     public function onBeforeUpdate(): bool

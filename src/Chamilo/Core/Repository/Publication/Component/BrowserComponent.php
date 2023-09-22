@@ -18,7 +18,6 @@ class BrowserComponent extends Manager implements BreadcrumbLessComponentInterfa
 {
     /**
      * @throws \TableException
-     * @throws \ReflectionException
      * @throws \Chamilo\Libraries\Format\Table\Exception\InvalidPageNumberException
      * @throws \QuickformException
      */
@@ -49,7 +48,6 @@ class BrowserComponent extends Manager implements BreadcrumbLessComponentInterfa
     }
 
     /**
-     * @throws \ReflectionException
      * @throws \TableException
      * @throws \Chamilo\Libraries\Format\Table\Exception\InvalidPageNumberException
      * @throws \QuickformException

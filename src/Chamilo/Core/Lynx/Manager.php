@@ -1,6 +1,7 @@
 <?php
 namespace Chamilo\Core\Lynx;
 
+use Chamilo\Configuration\Package\Action\PackageActionFactory;
 use Chamilo\Libraries\Architecture\Application\Application;
 use Chamilo\Libraries\Architecture\Application\ApplicationConfigurationInterface;
 
@@ -31,6 +32,8 @@ abstract class Manager extends Application
     public const PARAM_REGISTRATION_TYPE = 'type';
     public const PARAM_SECTION = 'section';
 
+    protected ?string $currentContext;
+
     /**
      * @throws \Chamilo\Libraries\Architecture\Exceptions\NotAllowedException
      */
@@ -39,5 +42,15 @@ abstract class Manager extends Application
         parent::__construct($applicationConfiguration);
 
         $this->checkAuthorization(Manager::CONTEXT);
+    }
+
+    public function getCurrentContext(): string
+    {
+        return $this->getRequest()->query->get(self::PARAM_CONTEXT);
+    }
+
+    public function getPackageActionFactory(): PackageActionFactory
+    {
+        return $this->getService(PackageActionFactory::class);
     }
 }

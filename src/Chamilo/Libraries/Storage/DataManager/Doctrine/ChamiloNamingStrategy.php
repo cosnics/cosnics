@@ -10,14 +10,11 @@ use ReflectionClass;
  * The chamilo naming strategy, defining table prefixes by the use of a const or the package name
  *
  * @package Chamilo\Libraries\Storage\DataManager\Doctrine
- * @author Sven Vanpoucke - Hogeschool Gent
+ * @author  Sven Vanpoucke - Hogeschool Gent
  */
 class ChamiloNamingStrategy extends DefaultNamingStrategy
 {
 
-    /**
-     * @throws \ReflectionException
-     */
     public function classToTableName($className): string
     {
         $classNameUtilities = ClassnameUtilities::getInstance();
@@ -25,9 +22,9 @@ class ChamiloNamingStrategy extends DefaultNamingStrategy
             $classNameUtilities->getClassnameFromNamespace($className)
         );
 
-        $tableName = $classNameString->underscored();
+        $tableName = $classNameString->underscored()->toString();
 
-        if (strpos($tableName, '_entity') !== false)
+        if (str_contains($tableName, '_entity'))
         {
             $tableName = substr($tableName, 0, - 7);
         }
@@ -47,7 +44,7 @@ class ChamiloNamingStrategy extends DefaultNamingStrategy
         {
             $namespace = $classNameUtilities->getNamespaceFromClassname($className);
 
-            $context = strpos('Domain\Entity', $namespace) === false ? $classNameUtilities->getNamespaceParent(
+            $context = !str_contains('Domain\Entity', $namespace) ? $classNameUtilities->getNamespaceParent(
                 $namespace
             ) : $classNameUtilities->getNamespaceParent(
                 $classNameUtilities->getNamespaceParent($namespace)

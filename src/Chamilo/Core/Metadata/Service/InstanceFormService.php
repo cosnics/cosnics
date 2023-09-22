@@ -40,7 +40,6 @@ class InstanceFormService
      * @param \Chamilo\Core\Metadata\Entity\DataClassEntity $entity
      *
      * @throws \Chamilo\Libraries\Architecture\Exceptions\UserException
-     * @throws \ReflectionException
      */
     public function addElements(FormValidator $formValidator, DataClassEntity $entity)
     {

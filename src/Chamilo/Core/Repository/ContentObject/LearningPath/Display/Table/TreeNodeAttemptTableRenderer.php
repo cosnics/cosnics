@@ -132,7 +132,6 @@ class TreeNodeAttemptTableRenderer extends DataClassListTableRenderer implements
     /**
      * @throws \Chamilo\Libraries\Format\Table\Exception\InvalidPageNumberException
      * @throws \QuickformException
-     * @throws \ReflectionException
      * @throws \TableException
      * @deprecated Temporary solution to allow rendering of DI-based tables in a non-DI context
      */

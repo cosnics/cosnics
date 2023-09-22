@@ -100,7 +100,6 @@ class SchemaInstance extends DataClass
     /**
      * @return \Chamilo\Core\Metadata\Storage\DataClass\Schema
      * @throws \Chamilo\Libraries\Architecture\Exceptions\UserException
-     * @throws \ReflectionException
      */
     public function getSchema()
     {

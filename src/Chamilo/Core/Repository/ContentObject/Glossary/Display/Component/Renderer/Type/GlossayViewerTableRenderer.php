@@ -50,7 +50,6 @@ class GlossayViewerTableRenderer extends DataClassListTableRenderer implements T
     /**
      * @throws \Chamilo\Libraries\Format\Table\Exception\InvalidPageNumberException
      * @throws \QuickformException
-     * @throws \ReflectionException
      * @throws \TableException
      * @deprecated Temporary solution to allow rendering of DI-based tables in a non-DI context
      */
@@ -66,8 +65,6 @@ class GlossayViewerTableRenderer extends DataClassListTableRenderer implements T
 
     /**
      * @param \Chamilo\Core\Repository\ContentObject\Glossary\Storage\DataClass\ComplexGlossary $complexGlossary
-     *
-     * @throws \ReflectionException
      */
     protected function renderCell(TableColumn $column, TableResultPosition $resultPosition, $complexGlossary): string
     {
@@ -90,8 +87,6 @@ class GlossayViewerTableRenderer extends DataClassListTableRenderer implements T
 
     /**
      * @param \Chamilo\Core\Repository\ContentObject\Glossary\Storage\DataClass\ComplexGlossary $complexGlossary
-     *
-     * @throws \ReflectionException
      */
     public function renderTableRowActions(TableResultPosition $resultPosition, $complexGlossary): string
     {

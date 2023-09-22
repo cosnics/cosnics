@@ -47,7 +47,6 @@ class RelationInstanceService
      * @param \Chamilo\Core\Metadata\Entity\DataClassEntity[] $targetEntities
      *
      * @return boolean
-     * @throws \ReflectionException
      * @throws \Exception
      */
     public function createRelationInstances(User $user, $sourceEntities, $relationIds, $targetEntities)
@@ -139,7 +138,6 @@ class RelationInstanceService
      * @param integer $relationId
      *
      * @return boolean
-     * @throws \ReflectionException
      */
     public function relationInstanceExists($sourceType, $sourceIdentifier, $targetType, $targetIdentifier, $relationId)
     {

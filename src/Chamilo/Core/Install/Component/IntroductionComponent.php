@@ -22,7 +22,6 @@ class IntroductionComponent extends Manager implements NoAuthenticationSupportIn
 
     /**
      * @throws \QuickformException
-     * @throws \ReflectionException
      * @throws \Exception
      */
     public function run()

@@ -55,7 +55,6 @@ class BrowserComponent extends Manager implements MenuComponentInterface
      * @throws \Chamilo\Libraries\Format\Table\Exception\InvalidPageNumberException
      * @throws \Chamilo\Libraries\Storage\Exception\DataClassNoResultException
      * @throws \QuickformException
-     * @throws \ReflectionException
      * @throws \TableException
      */
     public function run()
@@ -372,7 +371,6 @@ class BrowserComponent extends Manager implements MenuComponentInterface
      * @throws \Chamilo\Libraries\Storage\Exception\DataClassNoResultException
      * @throws \TableException
      * @throws \Chamilo\Libraries\Format\Table\Exception\InvalidPageNumberException
-     * @throws \ReflectionException
      * @throws \QuickformException
      */
     public function get_user_html(): string
@@ -412,7 +410,6 @@ class BrowserComponent extends Manager implements MenuComponentInterface
     }
 
     /**
-     * @throws \ReflectionException
      * @throws \TableException
      * @throws \Chamilo\Libraries\Format\Table\Exception\InvalidPageNumberException
      * @throws \QuickformException
@@ -440,7 +437,6 @@ class BrowserComponent extends Manager implements MenuComponentInterface
     /**
      * @throws \Chamilo\Libraries\Storage\Exception\DataClassNoResultException
      * @throws \TableException
-     * @throws \ReflectionException
      * @throws \Chamilo\Libraries\Format\Table\Exception\InvalidPageNumberException
      * @throws \QuickformException
      */

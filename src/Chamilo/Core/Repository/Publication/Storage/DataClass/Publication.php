@@ -45,8 +45,7 @@ abstract class Publication extends DataClass
     }
 
     /**
-     * @throws \ReflectionException
-     * @deprecated Use Publciation::getContentObject()
+     * @deprecated Use Publication::getContentObject()
      */
     public function get_content_object(): ?ContentObject
     {

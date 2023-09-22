@@ -55,9 +55,6 @@ class BreadcrumbGenerator implements BreadcrumbGeneratorInterface
         $this->breadcrumbTrail = $breadcrumbTrail;
     }
 
-    /**
-     * @throws \ReflectionException
-     */
     public function generateBreadcrumbs(Application $application): void
     {
         if (!$application instanceof BreadcrumbLessPackageInterface)
@@ -78,9 +75,6 @@ class BreadcrumbGenerator implements BreadcrumbGeneratorInterface
         }
     }
 
-    /**
-     * @throws \ReflectionException
-     */
     protected function generateComponentBreadcrumb(Application $application): void
     {
         $componentUrl = $this->getUrlGenerator()->fromParameters($application->get_parameters());

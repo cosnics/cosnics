@@ -71,7 +71,6 @@ class UserForm extends FormValidator
 
     /**
      * @throws \QuickformException
-     * @throws \ReflectionException
      */
     public function build_basic_form()
     {

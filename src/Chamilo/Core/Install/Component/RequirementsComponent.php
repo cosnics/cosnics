@@ -26,7 +26,6 @@ class RequirementsComponent extends Manager implements NoAuthenticationSupportIn
      * Runs this component and displays its output.
      *
      * @throws \TableException
-     * @throws \ReflectionException
      * @throws \QuickformException
      * @throws \Exception
      */

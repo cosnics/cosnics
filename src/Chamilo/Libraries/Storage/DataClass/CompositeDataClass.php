@@ -32,7 +32,6 @@ abstract class CompositeDataClass extends DataClass
 
     /**
      * @throws \Chamilo\Libraries\Storage\Exception\DataClassNoResultException
-     * @throws \Exception
      */
     public function checkForAdditionalProperties(): CompositeDataClass
     {

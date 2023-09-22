@@ -23,7 +23,6 @@ class InstanceService
      * @param integer[] $selectedSchemaIds
      *
      * @return string
-     * @throws \ReflectionException
      */
     public function updateInstances(User $user, DataClass $entity, $selectedSchemaIds)
     {

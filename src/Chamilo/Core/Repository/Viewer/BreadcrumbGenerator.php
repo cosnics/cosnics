@@ -11,9 +11,6 @@ use Chamilo\Libraries\Architecture\Application\Application;
 class BreadcrumbGenerator extends \Chamilo\Libraries\Format\Breadcrumb\BreadcrumbGenerator
 {
 
-    /**
-     * @throws \ReflectionException
-     */
     protected function generateComponentBreadcrumb(Application $application): void
     {
         if ($application->areBreadcrumbsDisabled())

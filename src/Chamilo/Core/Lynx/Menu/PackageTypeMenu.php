@@ -82,9 +82,6 @@ class PackageTypeMenu extends HtmlMenu
         return (str_replace('__type__', $type, $this->format));
     }
 
-    /**
-     * @throws \ReflectionException
-     */
     public function render_as_tree(): string
     {
         $renderer = new TreeMenuRenderer($this->getClassnameUtilities()->getClassnameFromNamespace(__CLASS__, true));

@@ -37,7 +37,6 @@ class GalleryTableContentObjectRenderer extends ContentObjectRenderer
     /**
      * @throws \Chamilo\Libraries\Format\Table\Exception\InvalidPageNumberException
      * @throws \QuickformException
-     * @throws \ReflectionException
      * @throws \TableException
      */
     public function render(): string

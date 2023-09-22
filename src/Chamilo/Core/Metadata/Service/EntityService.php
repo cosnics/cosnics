@@ -68,7 +68,6 @@ class EntityService
      *
      * @return integer[]
      * @throws \Chamilo\Libraries\Architecture\Exceptions\UserException
-     * @throws \ReflectionException
      * @throws \Exception
      */
     public function getAvailableSchemaIdsForEntityType(DataClassEntity $entity)
@@ -83,7 +82,6 @@ class EntityService
      *
      * @return \Chamilo\Core\Metadata\Storage\DataClass\Schema[]
      * @throws \Chamilo\Libraries\Architecture\Exceptions\UserException
-     * @throws \ReflectionException
      */
     public function getAvailableSchemasForEntityType(DataClassEntity $entity)
     {
@@ -172,7 +170,6 @@ class EntityService
      *
      * @return \Doctrine\Common\Collections\ArrayCollection
      * @throws \Chamilo\Libraries\Architecture\Exceptions\UserException
-     * @throws \ReflectionException
      */
     public function getSchemaInstancesForEntity($entity)
     {
@@ -433,7 +430,6 @@ class EntityService
      *
      * @return boolean
      * @throws \Chamilo\Libraries\Architecture\Exceptions\UserException
-     * @throws \ReflectionException
      * @throws \Exception
      */
     private function processEntityVocabularyElement(
@@ -531,7 +527,6 @@ class EntityService
      *
      * @return boolean
      * @throws \Chamilo\Libraries\Architecture\Exceptions\UserException
-     * @throws \ReflectionException
      * @throws \Exception
      */
     public function updateEntitySchemaValues(

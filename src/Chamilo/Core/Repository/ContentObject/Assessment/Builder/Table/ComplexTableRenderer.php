@@ -135,7 +135,6 @@ class ComplexTableRenderer extends DataClassListTableRenderer implements TableRo
     /**
      * @throws \Chamilo\Libraries\Format\Table\Exception\InvalidPageNumberException
      * @throws \QuickformException
-     * @throws \ReflectionException
      * @throws \TableException
      * @deprecated Temporary solution to allow rendering of DI-based tables in a non-DI context
      */
@@ -198,9 +197,6 @@ class ComplexTableRenderer extends DataClassListTableRenderer implements TableRo
         return parent::renderCell($column, $resultPosition, $complexContentObjectItem);
     }
 
-    /**
-     * @throws \ReflectionException
-     */
     public function renderTableRowActions(TableResultPosition $resultPosition, $complexContentObjectItem): string
     {
         $translator = $this->getTranslator();

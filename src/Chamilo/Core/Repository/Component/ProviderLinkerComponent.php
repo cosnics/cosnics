@@ -19,7 +19,6 @@ class ProviderLinkerComponent extends Manager implements BreadcrumbLessComponent
     /**
      * @return string
      * @throws \Chamilo\Libraries\Architecture\Exceptions\ClassNotExistException
-     * @throws \ReflectionException
      */
     public function run()
     {

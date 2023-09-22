@@ -65,7 +65,6 @@ class DayCalendarRenderer extends SidebarTableCalendarRenderer
     }
 
     /**
-     * @throws \ReflectionException
      * @throws \Exception
      */
     public function renderFullCalendar(CalendarRendererProviderInterface $dataProvider, int $displayTime): string

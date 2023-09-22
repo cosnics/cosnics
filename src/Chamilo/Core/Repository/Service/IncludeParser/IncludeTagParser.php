@@ -38,7 +38,6 @@ abstract class IncludeTagParser extends ContentObjectIncludeParser
      * @param string $htmlEditorValue
      *
      * @throws \Chamilo\Libraries\Architecture\Exceptions\UserException
-     * @throws \ReflectionException
      */
     protected function parseHtmlEditorValue(ContentObject $contentObject, string $htmlEditorValue)
     {

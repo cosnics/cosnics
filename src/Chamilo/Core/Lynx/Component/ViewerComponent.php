@@ -1,6 +1,9 @@
 <?php
 namespace Chamilo\Core\Lynx\Component;
 
+use Chamilo\Configuration\Package\Action\Activator;
+use Chamilo\Configuration\Package\Action\Deactivator;
+use Chamilo\Configuration\Package\Action\Installer;
 use Chamilo\Configuration\Storage\DataClass\Registration;
 use Chamilo\Core\Lynx\Manager;
 use Chamilo\Core\Lynx\Service\PackageInformationRenderer;
@@ -14,13 +17,12 @@ use Chamilo\Libraries\Format\Structure\Breadcrumb;
 use Chamilo\Libraries\Format\Structure\Glyph\FontAwesomeGlyph;
 use Chamilo\Libraries\Format\Structure\ToolbarItem;
 use Chamilo\Libraries\Utilities\StringUtilities;
+use OutOfBoundsException;
 
 class ViewerComponent extends Manager implements BreadcrumbLessComponentInterface
 {
 
     protected ButtonToolBarRenderer $buttonToolbarRenderer;
-
-    protected ?string $currentContext;
 
     /**
      * @throws \Chamilo\Libraries\Architecture\Exceptions\NoObjectSelectedException
@@ -63,20 +65,19 @@ class ViewerComponent extends Manager implements BreadcrumbLessComponentInterfac
         if (!isset($this->buttonToolbarRenderer))
         {
             $buttonToolbar = new ButtonToolBar();
-            $commonActions = new ButtonGroup();
 
-            $translator = $this->getTranslator();
-            $context = $this->getCurrentContext();
-            $registration = $this->getRegistrationConsulter()->getRegistrationForContext($context);
-
-            if (!empty($registration))
+            try
             {
-                if ($registration[Registration::PROPERTY_STATUS])
+                $commonActions = new ButtonGroup();
+
+                $translator = $this->getTranslator();
+                $context = $this->getCurrentContext();
+                $registration = $this->getRegistrationConsulter()->getRegistrationForContext($context);
+
+                if (!empty($registration))
                 {
-                    if (!is_subclass_of(
-                        $registration[Registration::PROPERTY_CONTEXT] . '\Deactivator',
-                        'Chamilo\Configuration\Package\NotAllowed'
-                    ))
+                    if ($registration[Registration::PROPERTY_STATUS] &&
+                        $this->getPackageActionFactory()->getPackageDeactivator($context) instanceof Deactivator)
                     {
                         $commonActions->addButton(
                             new Button(
@@ -90,49 +91,45 @@ class ViewerComponent extends Manager implements BreadcrumbLessComponentInterfac
                             )
                         );
                     }
+                    elseif ($this->getPackageActionFactory()->getPackageActivator($context) instanceof Activator)
+                    {
+                        $commonActions->addButton(
+                            new Button(
+                                $translator->trans('Activate', [], StringUtilities::LIBRARIES),
+                                new FontAwesomeGlyph('play-circle', [], null, 'fas'), $this->get_url(
+                                [
+                                    self::PARAM_ACTION => self::ACTION_ACTIVATE,
+                                    self::PARAM_CONTEXT => $context
+                                ]
+                            )
+                            )
+                        );
+                    }
                 }
-                elseif (!is_subclass_of(
-                    $registration[Registration::PROPERTY_CONTEXT] . '\Activator',
-                    'Chamilo\Configuration\Package\NotAllowed'
-                ))
+                elseif ($this->getPackageActionFactory()->getPackageInstaller($context) instanceof Installer)
                 {
+
                     $commonActions->addButton(
                         new Button(
-                            $translator->trans('Activate', [], StringUtilities::LIBRARIES),
-                            new FontAwesomeGlyph('play-circle', [], null, 'fas'), $this->get_url(
-                            [
-                                self::PARAM_ACTION => self::ACTION_ACTIVATE,
-                                self::PARAM_CONTEXT => $context
-                            ]
-                        )
+                            $translator->trans('Install', [], StringUtilities::LIBRARIES),
+                            new FontAwesomeGlyph('box', [], null, 'fas'), $this->get_url(
+                            [self::PARAM_ACTION => self::ACTION_INSTALL, self::PARAM_CONTEXT => $context]
+                        ), ToolbarItem::DISPLAY_ICON_AND_LABEL,
+                            $translator->trans('ConfirmChosenAction', [], StringUtilities::LIBRARIES)
                         )
                     );
                 }
-            }
-            else
-            {
-                $commonActions->addButton(
-                    new Button(
-                        $translator->trans('Install', [], StringUtilities::LIBRARIES),
-                        new FontAwesomeGlyph('box', [], null, 'fas'), $this->get_url(
-                        [self::PARAM_ACTION => self::ACTION_INSTALL, self::PARAM_CONTEXT => $context]
-                    ), ToolbarItem::DISPLAY_ICON_AND_LABEL,
-                        $translator->trans('ConfirmChosenAction', [], StringUtilities::LIBRARIES)
-                    )
-                );
-            }
 
-            $buttonToolbar->addButtonGroup($commonActions);
+                $buttonToolbar->addButtonGroup($commonActions);
+            }
+            catch (OutOfBoundsException)
+            {
+            }
 
             $this->buttonToolbarRenderer = new ButtonToolBarRenderer($buttonToolbar);
         }
 
         return $this->buttonToolbarRenderer;
-    }
-
-    public function getCurrentContext(): string
-    {
-        return $this->getRequest()->query->get(self::PARAM_CONTEXT);
     }
 
     public function getPackageInformationRenderer(): PackageInformationRenderer

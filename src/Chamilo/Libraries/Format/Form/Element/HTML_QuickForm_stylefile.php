@@ -15,10 +15,6 @@ use HTML_QuickForm_file;
 class HTML_QuickForm_stylefile extends HTML_QuickForm_file
 {
 
-    /**
-     * @throws \ReflectionException
-     * @throws \Exception
-     */
     public function toHtml(): string
     {
         if ($this->_flagFrozen)

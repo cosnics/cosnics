@@ -80,8 +80,6 @@ class LinkPublicationsTableRenderer extends LinkTableRenderer implements TableRo
 
     /**
      * @param \Chamilo\Core\Repository\Publication\Storage\DataClass\Attributes $attributes
-     *
-     * @throws \ReflectionException
      */
     public function renderTableRowActions(TableResultPosition $resultPosition, $attributes): string
     {

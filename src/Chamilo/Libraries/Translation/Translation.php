@@ -6,9 +6,8 @@ use Chamilo\Libraries\DependencyInjection\DependencyInjectionContainerBuilder;
 use Symfony\Component\Translation\Translator;
 
 /**
- *
- * @package Chamilo\Libraries\Translation
- * @author Hans De Bisschop <hans.de.bisschop@ehb.be>
+ * @package    Chamilo\Libraries\Translation
+ * @author     Hans De Bisschop <hans.de.bisschop@ehb.be>
  * @deprecated Try to use the Symfony Translator service whenever possible
  */
 class Translation
@@ -28,7 +27,7 @@ class Translation
         $this->translator = $translator;
     }
 
-    protected function determineDefaultTranslationContext()
+    protected function determineDefaultTranslationContext(): void
     {
         $backtrace = debug_backtrace(DEBUG_BACKTRACE_IGNORE_ARGS);
         $counter = 1;
@@ -84,14 +83,6 @@ class Translation
         return $this->classnameUtilities;
     }
 
-    public function setClassnameUtilities(ClassnameUtilities $classnameUtilities)
-    {
-        $this->classnameUtilities = $classnameUtilities;
-    }
-
-    /**
-     * @throws \Exception
-     */
     public static function getInstance(): Translation
     {
         if (is_null(static::$instance))
@@ -118,9 +109,6 @@ class Translation
         return $this->getTranslator()->getLocale();
     }
 
-    /**
-     * @throws \ReflectionException
-     */
     public function getTranslation(
         string $variable, ?array $parameters = [], ?string $context = null, ?string $isocode = null
     ): string
@@ -155,13 +143,18 @@ class Translation
         return $this->translator;
     }
 
-    public function setTranslator(Translator $translator)
+    public function setClassnameUtilities(ClassnameUtilities $classnameUtilities): void
     {
-        $this->translator = $translator;
+        $this->classnameUtilities = $classnameUtilities;
     }
 
-    public function setLanguageIsocode(string $languageIsoCode)
+    public function setLanguageIsocode(string $languageIsoCode): void
     {
         $this->getTranslator()->setLocale($languageIsoCode);
+    }
+
+    public function setTranslator(Translator $translator): void
+    {
+        $this->translator = $translator;
     }
 }

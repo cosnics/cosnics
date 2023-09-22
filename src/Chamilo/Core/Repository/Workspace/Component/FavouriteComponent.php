@@ -18,7 +18,6 @@ class FavouriteComponent extends TabComponent implements BreadcrumbLessComponent
     /**
      * @throws \Chamilo\Libraries\Storage\Exception\DataClassNoResultException
      * @throws \TableException
-     * @throws \ReflectionException
      * @throws \Chamilo\Libraries\Format\Table\Exception\InvalidPageNumberException
      * @throws \QuickformException
      */
@@ -53,7 +52,6 @@ class FavouriteComponent extends TabComponent implements BreadcrumbLessComponent
 
     /**
      * @throws \Chamilo\Libraries\Storage\Exception\DataClassNoResultException
-     * @throws \ReflectionException
      * @throws \TableException
      * @throws \Chamilo\Libraries\Format\Table\Exception\InvalidPageNumberException
      * @throws \QuickformException

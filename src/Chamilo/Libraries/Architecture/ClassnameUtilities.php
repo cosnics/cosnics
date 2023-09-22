@@ -2,138 +2,92 @@
 namespace Chamilo\Libraries\Architecture;
 
 use Chamilo\Libraries\Utilities\StringUtilities;
-use ReflectionClass;
 
 /**
- *
  * @package Chamilo\Libraries\Architecture
- * @author Hans De Bisschop <hans.de.bisschop@ehb.be>
- * @author Magali Gillard <magali.gillard@ehb.be>
- * @author Eduard Vossen <eduard.vossen@ehb.be>
+ * @author  Hans De Bisschop <hans.de.bisschop@ehb.be>
+ * @author  Magali Gillard <magali.gillard@ehb.be>
+ * @author  Eduard Vossen <eduard.vossen@ehb.be>
  */
 class ClassnameUtilities
 {
 
-    /**
-     *
-     * @var \Chamilo\Libraries\Architecture\ClassnameUtilities
-     */
-    protected static $instance = null;
+    protected static ?ClassnameUtilities $instance = null;
 
     /**
-     *
-     * @var \Chamilo\Libraries\Utilities\StringUtilities
-     */
-    private $stringUtilities;
-
-    /**
-     *
      * @var string[]
      */
-    private $namespaceIdMap = [];
+    private array $classnameMap = [];
 
     /**
-     *
      * @var string[]
      */
-    private $namespaceFromIdMap = [];
+    private array $namespaceChildMap = [];
 
     /**
-     *
      * @var string[]
      */
-    private $namespaceMap = [];
+    private array $namespaceFromIdMap = [];
 
     /**
-     *
      * @var string[]
      */
-    private $classnameMap = [];
+    private array $namespaceIdMap = [];
 
     /**
-     *
      * @var string[]
      */
-    private $packageNamespaceMap = [];
+    private array $namespaceMap = [];
 
     /**
-     *
      * @var string[]
      */
-    private $namespaceParentMap = [];
+    private array $namespaceParentMap = [];
 
     /**
-     *
      * @var string[]
      */
-    private $namespaceChildMap = [];
+    private array $namespacePathMap = [];
 
     /**
-     *
      * @var string[]
      */
-    private $namespacePathMap = [];
+    private array $packageNamespaceMap = [];
 
-    /**
-     * Constructor
-     *
-     * @param \Chamilo\Libraries\Utilities\StringUtilities $stringUtilities
-     */
+    private StringUtilities $stringUtilities;
+
     public function __construct(StringUtilities $stringUtilities)
     {
         $this->stringUtilities = $stringUtilities;
     }
 
-    /**
-     * Get the unqualified classname from the fully qualified classname, excluding the namespace
-     *
-     * @param string $fullyQualifiedClassname
-     * @param boolean $convertToUnderscores
-     *
-     * @return string
-     * @throws \ReflectionException
-     */
-    public function getClassnameFromNamespace($fullyQualifiedClassname, $convertToUnderscores = false)
+    public function getClassnameFromNamespace(string $fullyQualifiedClassname, bool $convertToUnderscores = false
+    ): string
     {
         $convertToUnderscores = (int) $convertToUnderscores;
 
         if (!isset($this->classnameMap[$fullyQualifiedClassname]) ||
             !isset($this->classnameMap[$fullyQualifiedClassname][$convertToUnderscores]))
         {
-            $reflectionClass = new ReflectionClass($fullyQualifiedClassname);
-            $classname = $reflectionClass->getShortName();
+            $classname = $this->stringUtilities->createString($fullyQualifiedClassname)->afterLast('\\');
 
             if ($convertToUnderscores)
             {
-                $classname = $this->stringUtilities->createString($classname)->underscored()->__toString();
+                $classname = $classname->underscored();
             }
 
-            $this->classnameMap[$fullyQualifiedClassname][$convertToUnderscores] = $classname;
+            $this->classnameMap[$fullyQualifiedClassname][$convertToUnderscores] = $classname->toString();
         }
 
         return $this->classnameMap[$fullyQualifiedClassname][$convertToUnderscores];
     }
 
-    /**
-     * Get the unqualified classname from an object instance, excluding the namespace
-     *
-     * @param $object
-     * @param boolean $convertToUnderscores
-     *
-     * @return string
-     * @throws \ReflectionException
-     */
-    public function getClassnameFromObject($object, $convertToUnderscores = false)
+    public function getClassnameFromObject(object $object, bool $convertToUnderscores = false): string
     {
-        return $this->getClassnameFromNamespace(get_class($object), $convertToUnderscores);
+        return $this->getClassnameFromNamespace($object::class, $convertToUnderscores);
     }
 
-    /**
-     * Return 'this' as singleton
-     *
-     * @return \Chamilo\Libraries\Architecture\ClassnameUtilities
-     */
-    static public function getInstance()
+    public static function getInstance(): ClassnameUtilities
     {
         if (is_null(static::$instance))
         {
@@ -144,14 +98,9 @@ class ClassnameUtilities
     }
 
     /**
-     * Get the child namespace, e.g.
-     * Chamilo\Core\Repository > Core\Repository
-     *
-     * @param string $namespace
-     *
-     * @return string
+     * Get the child namespace, e.g.  Chamilo\Core\Repository > Core\Repository
      */
-    public function getNamespaceChild($namespace, $levels = 1)
+    public function getNamespaceChild(string $namespace, $levels = 1): string
     {
         if (!isset($this->namespaceChildMap[$namespace]) || !isset($this->namespaceChildMap[$namespace][$levels]))
         {
@@ -163,70 +112,36 @@ class ClassnameUtilities
         return $this->namespaceChildMap[$namespace][$levels];
     }
 
-    /**
-     * Get the namespace from a fully qualified classname
-     *
-     * @param string $fullyQualifiedClassname
-     *
-     * @return string
-     * @throws \ReflectionException
-     */
-    public function getNamespaceFromClassname($fullyQualifiedClassname)
+    public function getNamespaceFromClassname(string $fullyQualifiedClassname): string
     {
         if (!isset($this->namespaceMap[$fullyQualifiedClassname]))
         {
-            $reflectionClass = new ReflectionClass($fullyQualifiedClassname);
-            $this->namespaceMap[$fullyQualifiedClassname] = $reflectionClass->getNamespaceName();
+            $this->namespaceMap[$fullyQualifiedClassname] =
+                $this->stringUtilities->createString($fullyQualifiedClassname)->beforeLast('\\');
         }
 
         return $this->namespaceMap[$fullyQualifiedClassname];
     }
 
-    /**
-     * Convert the namespace string to an id
-     *
-     * @param string $namespaceIdentifier
-     *
-     * @return string
-     */
-    public function getNamespaceFromId($namespaceIdentifier)
+    public function getNamespaceFromId(string $namespaceIdentifier): string
     {
         return $this->namespaceFromIdMap[$namespaceIdentifier] = strtr($namespaceIdentifier, '-', '\\');
     }
 
-    /**
-     * Get the namespace from an object instance, excluding the unqualified classname
-     *
-     * @param \stdClass $object
-     *
-     * @return string
-     */
-    public function getNamespaceFromObject($object)
+    public function getNamespaceFromObject(object $object): string
     {
-        return $this->getNamespaceFromClassname((string) get_class($object));
+        return $this->getNamespaceFromClassname($object::class);
     }
 
-    /**
-     * Convert the namespace string to an id
-     *
-     * @param string $namespace
-     *
-     * @return string
-     */
-    public function getNamespaceId($namespace)
+    public function getNamespaceId(string $namespace): string
     {
         return $this->namespaceIdMap[$namespace] = strtr($namespace, '\\', '-');
     }
 
     /**
-     * Get the parent namespace, e.g.
-     * Chamilo\Core\Repository > Chamilo\Core
-     *
-     * @param string $namespace
-     *
-     * @return string
+     * @description Get the parent namespace, e.g. Chamilo\Core\Repository > Chamilo\Core
      */
-    public function getNamespaceParent($namespace, $levels = 1)
+    public function getNamespaceParent(string $namespace, $levels = 1): string
     {
         if (!isset($this->namespaceParentMap[$namespace]) || !isset($this->namespaceParentMap[$namespace][$levels]))
         {
@@ -239,12 +154,9 @@ class ClassnameUtilities
     }
 
     /**
-     *
-     * @param string $namespace
-     *
      * @return string[]
      */
-    public function getNamespacePath($namespace, $includeSelf = false, $reverseOrder = false)
+    public function getNamespacePath(string $namespace, bool $includeSelf = false, bool $reverseOrder = false): array
     {
         $namespacePath = [];
         $namespaceParts = explode('\\', $namespace);
@@ -265,15 +177,7 @@ class ClassnameUtilities
         return $reverseOrder ? array_reverse($namespacePath) : $namespacePath;
     }
 
-    /**
-     * Get the package name from a namespace
-     *
-     * @param string $namespace
-     * @param boolean $convertToCamelCase
-     *
-     * @return string
-     */
-    public function getPackageNameFromNamespace($namespace, $convertToCamelCase = false)
+    public function getPackageNameFromNamespace(string $namespace, bool $convertToCamelCase = false): string
     {
         $convertToCamelCase = (int) $convertToCamelCase;
 
@@ -294,27 +198,12 @@ class ClassnameUtilities
         return $this->packageNamespaceMap[$namespace][$convertToCamelCase];
     }
 
-    /**
-     * Get the package name for a given object
-     *
-     * @param \stdClass Object
-     * @param boolean $convertToCamelcase
-     *
-     * @return string
-     */
-    public function getPackageNameFromObject($object, $convertToCamelcase = false)
+    public function getPackageNameFromObject(object $object, bool $convertToCamelcase = false): string
     {
         return $this->getPackageNameFromNamespace($this->getNamespaceFromObject($object), $convertToCamelcase);
     }
 
-    /**
-     *
-     * @param string $namespace
-     * @param boolean $web
-     *
-     * @return string
-     */
-    public function namespaceToPath($namespace, $web = false)
+    public function namespaceToPath(string $namespace, bool $web = false): string
     {
         return $this->namespacePathMap[$namespace][(string) $web] = strtr(
             $namespace, '\\', ($web ? '/' : DIRECTORY_SEPARATOR)

@@ -17,7 +17,6 @@ class SharedBrowserComponent extends TabComponent
     /**
      * @throws \Chamilo\Libraries\Storage\Exception\DataClassNoResultException
      * @throws \TableException
-     * @throws \ReflectionException
      * @throws \Chamilo\Libraries\Format\Table\Exception\InvalidPageNumberException
      * @throws \QuickformException
      */
@@ -44,7 +43,6 @@ class SharedBrowserComponent extends TabComponent
 
     /**
      * @throws \Chamilo\Libraries\Storage\Exception\DataClassNoResultException
-     * @throws \ReflectionException
      * @throws \TableException
      * @throws \Chamilo\Libraries\Format\Table\Exception\InvalidPageNumberException
      * @throws \QuickformException

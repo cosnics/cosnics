@@ -68,7 +68,6 @@ class HtmlRenditionImplementation extends RenditionImplementation
      * @param string[] $classes
      *
      * @return string
-     * @throws \ReflectionException
      */
     public function renderActions(array $classes = [])
     {

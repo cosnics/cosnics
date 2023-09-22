@@ -29,7 +29,6 @@ class UpdaterComponent extends Manager
      * @return string
      * @throws \Chamilo\Libraries\Architecture\Exceptions\NotAllowedException
      * @throws \Chamilo\Libraries\Architecture\Exceptions\UserException
-     * @throws \ReflectionException
      * @throws \Exception
      */
     public function run()

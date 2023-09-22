@@ -44,7 +44,6 @@ class ShareComponent extends Manager
      * @throws \Chamilo\Libraries\Architecture\Exceptions\ObjectNotExistException
      * @throws \Chamilo\Libraries\Format\Table\Exception\InvalidPageNumberException
      * @throws \Chamilo\Libraries\Architecture\Exceptions\NoObjectSelectedException
-     * @throws \ReflectionException
      * @throws \QuickformException
      * @throws \Exception
      */
@@ -233,7 +232,6 @@ class ShareComponent extends Manager
     /**
      * @throws \Chamilo\Libraries\Storage\Exception\DataClassNoResultException
      * @throws \TableException
-     * @throws \ReflectionException
      * @throws \Chamilo\Libraries\Format\Table\Exception\InvalidPageNumberException
      * @throws \QuickformException
      */

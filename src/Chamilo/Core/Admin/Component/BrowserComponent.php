@@ -68,7 +68,6 @@ class BrowserComponent extends Manager implements BreadcrumbLessComponentInterfa
     }
 
     /**
-     * @throws \ReflectionException
      * @throws \Symfony\Component\Cache\Exception\CacheException
      */
     public function renderApplicationMenu(): string

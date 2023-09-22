@@ -46,7 +46,6 @@ class BrowserComponent extends Manager implements BreadcrumbLessComponentInterfa
     /**
      * @throws \Chamilo\Libraries\Architecture\Exceptions\NotAllowedException
      * @throws \QuickformException
-     * @throws \ReflectionException
      * @throws \Exception
      */
     public function run()

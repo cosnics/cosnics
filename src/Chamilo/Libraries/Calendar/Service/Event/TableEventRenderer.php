@@ -12,9 +12,6 @@ use Chamilo\Libraries\Format\Structure\Glyph\FontAwesomeGlyph;
 abstract class TableEventRenderer extends EventRenderer
 {
 
-    /**
-     * @throws \Exception
-     */
     public function render(
         Event $event, int $cellStartDate, int $cellEndDate, bool $isEventSourceVisible = true,
         bool $isFadedEvent = false

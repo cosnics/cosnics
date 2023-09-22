@@ -187,8 +187,6 @@ abstract class NestedSet extends DataClass
     }
 
     /**
-     * @throws \ReflectionException
-     * @throws \Exception
      * @deprecated Migrated to NestedSetDataClassRepository::countAncestors()
      */
     public function count_ancestors(bool $include_self = true, ?Condition $condition = null): int
@@ -199,8 +197,6 @@ abstract class NestedSet extends DataClass
     }
 
     /**
-     * @throws \ReflectionException
-     * @throws \Exception
      * @deprecated Migrated to NestedSetDataClassRepository::countDescendants()
      */
     public function count_children(?Condition $condition = null): int
@@ -211,8 +207,6 @@ abstract class NestedSet extends DataClass
     }
 
     /**
-     * @throws \ReflectionException
-     * @throws \Exception
      * @deprecated Migrated to NestedSetDataClassRepository::countDescendants()
      */
     public function count_descendants(?Condition $condition = null): int
@@ -223,8 +217,6 @@ abstract class NestedSet extends DataClass
     }
 
     /**
-     * @throws \ReflectionException
-     * @throws \Exception
      * @deprecated Migrated to NestedSetDataClassRepository::countSiblings()
      */
     public function count_siblings(bool $include_self = true, ?Condition $condition = null): int
@@ -376,7 +368,6 @@ abstract class NestedSet extends DataClass
     /**
      * @done Not migrated since the inclusion of the identifier makes this a standard
      *     DataClassRepository::retrieveById()
-     * @throws \ReflectionException
      */
     public function find_by_id($object_or_id): NestedSet
     {
@@ -503,7 +494,6 @@ abstract class NestedSet extends DataClass
     }
 
     /**
-     * @throws \ReflectionException
      * @deprecated Migrated to NestedSetDataClassRepository::getParent()
      */
     public function get_parent(): NestedSet
@@ -585,7 +575,6 @@ abstract class NestedSet extends DataClass
     /**
      * @param \Chamilo\Libraries\Storage\DataClass\NestedSet|int $node_or_id
      *
-     * @throws \ReflectionException
      * @deprecated Use NestedSet::isAncestorOf() now
      */
     public function is_ancestor_of($node_or_id): bool
@@ -596,7 +585,6 @@ abstract class NestedSet extends DataClass
     /**
      * @param \Chamilo\Libraries\Storage\DataClass\NestedSet|int $node_or_id
      *
-     * @throws \ReflectionException
      * @deprecated Use NestedSet::isDescendantOf() now
      */
     public function is_descendant_of($node_or_id): bool
@@ -781,8 +769,6 @@ abstract class NestedSet extends DataClass
     }
 
     /**
-     * @throws \ReflectionException
-     * @throws \Exception
      * @deprecated Migrated to NestedSetDataClassRepository::postDelete()
      */
     public function post_delete(?Condition $condition = null): bool
@@ -874,8 +860,6 @@ abstract class NestedSet extends DataClass
     }
 
     /**
-     * @throws \ReflectionException
-     * @throws \Exception
      * @deprecated Migrated to NestedSetDataClassRepository::preInsert()
      */
     public function pre_insert(int $insert_after, int $number_of_elements = 1, ?Condition $condition = null): bool
@@ -996,11 +980,10 @@ abstract class NestedSet extends DataClass
     }
 
     /**
-     * @param \Chamilo\Libraries\Storage\DataClass\NestedSet|int
+     * @param int $position
      * @param mixed $reference_node
      *
      * @return \Chamilo\Libraries\Storage\DataClass\NestedSet|null
-     * @throws \ReflectionException
      * @deprecated Migrated to NestedSetDataClassRepository::validatePosition()
      */
     public function validate_position(int $position = self::AS_LAST_CHILD_OF, &$reference_node = null): ?NestedSet

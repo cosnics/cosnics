@@ -57,9 +57,6 @@ class MessageLogger
         }
     }
 
-    /**
-     * @throws \ReflectionException
-     */
     public static function getInstance(object $object): MessageLogger
     {
         return self::get_instance_by_name(ClassnameUtilities::getInstance()->getClassnameFromObject($object, true));

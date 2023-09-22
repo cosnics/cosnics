@@ -101,7 +101,6 @@ class ObjectTableRenderer extends DataClassListTableRenderer implements TableRow
     /**
      * @throws \Chamilo\Libraries\Format\Table\Exception\InvalidPageNumberException
      * @throws \QuickformException
-     * @throws \ReflectionException
      * @throws \TableException
      * @deprecated Temporary solution to allow rendering of DI-based tables in a non-DI context
      */
@@ -141,8 +140,6 @@ class ObjectTableRenderer extends DataClassListTableRenderer implements TableRow
 
     /**
      * @param \Chamilo\Core\Repository\Storage\DataClass\ContentObject $contentObject
-     *
-     * @throws \ReflectionException
      */
     public function renderTableRowActions(TableResultPosition $resultPosition, $contentObject): string
     {

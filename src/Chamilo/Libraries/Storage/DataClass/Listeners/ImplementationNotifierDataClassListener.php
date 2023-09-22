@@ -13,7 +13,7 @@ use InvalidArgumentException;
  * Dataclass listener which manipulates the crud methods to notify the implementation packages
  *
  * @package Chamilo\Libraries\Storage\DataClass\Listeners
- * @author Sven Vanpoucke - Hogeschool Gent
+ * @author  Sven Vanpoucke - Hogeschool Gent
  */
 class ImplementationNotifierDataClassListener extends DataClassListener
 {
@@ -49,7 +49,6 @@ class ImplementationNotifierDataClassListener extends DataClassListener
 
     /**
      * @return string[]
-     *
      * @throws \Chamilo\Libraries\Storage\Exception\DataClassNoResultException
      */
     protected function getImplementationPackages(): array
@@ -79,7 +78,6 @@ class ImplementationNotifierDataClassListener extends DataClassListener
     }
 
     /**
-     * @throws \ReflectionException
      * @throws \Chamilo\Libraries\Storage\Exception\DataClassNoResultException
      */
     protected function notifyImplementationPackages(string $dataClassListenerMethod, array $parameters = []): bool
@@ -115,7 +113,6 @@ class ImplementationNotifierDataClassListener extends DataClassListener
 
     /**
      * @throws \Chamilo\Libraries\Storage\Exception\DataClassNoResultException
-     * @throws \ReflectionException
      */
     public function onAfterCreate(bool $success): bool
     {
@@ -124,7 +121,6 @@ class ImplementationNotifierDataClassListener extends DataClassListener
 
     /**
      * @throws \Chamilo\Libraries\Storage\Exception\DataClassNoResultException
-     * @throws \ReflectionException
      */
     public function onAfterDelete(bool $success): bool
     {
@@ -133,7 +129,6 @@ class ImplementationNotifierDataClassListener extends DataClassListener
 
     /**
      * @throws \Chamilo\Libraries\Storage\Exception\DataClassNoResultException
-     * @throws \ReflectionException
      */
     public function onAfterSetProperty(string $name, string $value): bool
     {
@@ -142,7 +137,6 @@ class ImplementationNotifierDataClassListener extends DataClassListener
 
     /**
      * @throws \Chamilo\Libraries\Storage\Exception\DataClassNoResultException
-     * @throws \ReflectionException
      */
     public function onAfterUpdate(bool $success): bool
     {
@@ -151,7 +145,6 @@ class ImplementationNotifierDataClassListener extends DataClassListener
 
     /**
      * @throws \Chamilo\Libraries\Storage\Exception\DataClassNoResultException
-     * @throws \ReflectionException
      */
     public function onBeforeCreate(): bool
     {
@@ -160,7 +153,6 @@ class ImplementationNotifierDataClassListener extends DataClassListener
 
     /**
      * @throws \Chamilo\Libraries\Storage\Exception\DataClassNoResultException
-     * @throws \ReflectionException
      */
     public function onBeforeDelete(): bool
     {
@@ -169,7 +161,6 @@ class ImplementationNotifierDataClassListener extends DataClassListener
 
     /**
      * @throws \Chamilo\Libraries\Storage\Exception\DataClassNoResultException
-     * @throws \ReflectionException
      */
     public function onBeforeSetProperty(string $name, string $value): bool
     {
@@ -178,7 +169,6 @@ class ImplementationNotifierDataClassListener extends DataClassListener
 
     /**
      * @throws \Chamilo\Libraries\Storage\Exception\DataClassNoResultException
-     * @throws \ReflectionException
      */
     public function onBeforeUpdate(): bool
     {
@@ -189,7 +179,6 @@ class ImplementationNotifierDataClassListener extends DataClassListener
      * @param string[] $dependencies
      *
      * @throws \Chamilo\Libraries\Storage\Exception\DataClassNoResultException
-     * @throws \ReflectionException
      */
     public function onGetDependencies(array &$dependencies = []): bool
     {
@@ -199,7 +188,7 @@ class ImplementationNotifierDataClassListener extends DataClassListener
     /**
      * @throws \InvalidArgumentException
      */
-    public function setContext(string $context)
+    public function setContext(string $context): void
     {
         if (empty($context))
         {
@@ -209,7 +198,7 @@ class ImplementationNotifierDataClassListener extends DataClassListener
         $this->context = $context;
     }
 
-    public function setDataClass(DataClass $dataClass)
+    public function setDataClass(DataClass $dataClass): void
     {
         $this->dataClass = $dataClass;
     }
@@ -221,7 +210,7 @@ class ImplementationNotifierDataClassListener extends DataClassListener
      *
      * @throws \InvalidArgumentException
      */
-    public function setMethodMapping(array $methodMapping)
+    public function setMethodMapping(array $methodMapping): void
     {
         if (count($methodMapping) == 0)
         {

@@ -78,7 +78,6 @@ class Remover extends Action
 
     /**
      * @throws \Symfony\Component\Cache\Exception\CacheException
-     * @throws \ReflectionException
      */
     public function deconfigurePackage(): bool
     {
@@ -137,9 +136,6 @@ class Remover extends Action
         }
     }
 
-    /**
-     * @throws \ReflectionException
-     */
     public function deregisterPackage(): bool
     {
         if (!$this->getRegistrationService()->deleteRegistrationForContext($this->getContext()))

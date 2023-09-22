@@ -88,9 +88,6 @@ abstract class Action
         }
     }
 
-    /**
-     * @throws \ReflectionException
-     */
     public function failed($error_message): bool
     {
         $this->add_message(self::TYPE_ERROR, $error_message);
@@ -166,9 +163,6 @@ abstract class Action
         return $this->translator;
     }
 
-    /**
-     * @throws \ReflectionException
-     */
     public function getType(): string
     {
         return $this->getClassnameUtilities()->getClassnameFromObject($this);
@@ -183,7 +177,6 @@ abstract class Action
     }
 
     /**
-     * @throws \ReflectionException
      * @deprecated Use Action::getType() now
      */
     public function get_type(): string
@@ -199,9 +192,6 @@ abstract class Action
         return implode('<br />' . PHP_EOL, $this->get_message());
     }
 
-    /**
-     * @throws \ReflectionException
-     */
     public function successful(): bool
     {
         $this->add_message(

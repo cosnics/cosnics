@@ -22,7 +22,6 @@ class ActivityComponent extends BaseHtmlTreeComponent implements BreadcrumbLessC
      * @throws \Chamilo\Libraries\Architecture\Exceptions\ObjectNotExistException
      * @throws \Chamilo\Libraries\Format\Table\Exception\InvalidPageNumberException
      * @throws \QuickformException
-     * @throws \ReflectionException
      * @throws \TableException
      */
     public function build()
@@ -65,7 +64,6 @@ class ActivityComponent extends BaseHtmlTreeComponent implements BreadcrumbLessC
      * @throws \Chamilo\Core\Repository\ContentObject\LearningPath\Exception\TreeNodeNotFoundException
      * @throws \Chamilo\Libraries\Format\Table\Exception\InvalidPageNumberException
      * @throws \QuickformException
-     * @throws \ReflectionException
      * @throws \TableException
      * @throws \Chamilo\Libraries\Storage\Exception\DataClassNoResultException
      */

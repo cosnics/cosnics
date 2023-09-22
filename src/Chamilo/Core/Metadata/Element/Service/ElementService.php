@@ -35,8 +35,6 @@ class ElementService
      * @param string $elementName
      *
      * @return \Chamilo\Core\Metadata\Storage\DataClass\Element
-     * @throws \Chamilo\Libraries\Architecture\Exceptions\UserException
-     * @throws \ReflectionException
      */
     public function getElementBySchemaIdAndName($schemaId, $elementName)
     {
@@ -88,8 +86,6 @@ class ElementService
      * @param \Chamilo\Core\Metadata\Storage\DataClass\Element $element
      *
      * @return \Chamilo\Core\Metadata\Storage\DataClass\ElementInstance
-     * @throws \Chamilo\Libraries\Architecture\Exceptions\UserException
-     * @throws \ReflectionException
      */
     public function getElementInstanceForSchemaInstanceAndElement(SchemaInstance $schemaInstance, Element $element)
     {
@@ -138,8 +134,6 @@ class ElementService
      * @param \Chamilo\Core\Metadata\Storage\DataClass\Element $element
      *
      * @return \Chamilo\Core\Metadata\Storage\DataClass\Vocabulary
-     * @throws \Chamilo\Libraries\Architecture\Exceptions\UserException
-     * @throws \ReflectionException
      */
     public function getElementInstanceVocabularyForSchemaInstanceAndElement(
         SchemaInstance $schemaInstance, Element $element

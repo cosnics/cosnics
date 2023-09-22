@@ -34,7 +34,7 @@ class Installer extends \Chamilo\Core\Metadata\Action\Installer
         PackageBundlesCacheService $packageBundlesCacheService, PackageFactory $packageFactory,
         RegistrationService $registrationService, SystemPathBuilder $systemPathBuilder,
         DependencyVerifier $dependencyVerifier, DependencyVerifierRenderer $dependencyVerifierRenderer, string $context,
-        array $propertyProviderTypes, DataClassRepositoryCache $dataClassRepositoryCache
+        DataClassRepositoryCache $dataClassRepositoryCache, array $propertyProviderTypes = []
     )
     {
         parent::__construct(
@@ -47,7 +47,6 @@ class Installer extends \Chamilo\Core\Metadata\Action\Installer
     }
 
     /**
-     * @throws \ReflectionException
      * @throws \Chamilo\Libraries\Architecture\Exceptions\UserException
      */
     public function extra(array $formValues): bool
@@ -81,7 +80,6 @@ class Installer extends \Chamilo\Core\Metadata\Action\Installer
     }
 
     /**
-     * @throws \ReflectionException
      * @throws \Chamilo\Libraries\Architecture\Exceptions\UserException
      */
     public function linkToSchemas(): bool

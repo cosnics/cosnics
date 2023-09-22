@@ -6,16 +6,14 @@ use Chamilo\Libraries\DependencyInjection\DependencyInjectionContainerBuilder;
 use Chamilo\Libraries\Format\Slideshow\SlideshowRenderer;
 
 /**
- *
  * @package Chamilo\Application\Weblcms\Renderer\PublicationList\Type
- * @author Hans De Bisschop <hans.de.bisschop@ehb.be>
- * @author Magali Gillard <magali.gillard@ehb.be>
+ * @author  Hans De Bisschop <hans.de.bisschop@ehb.be>
+ * @author  Magali Gillard <magali.gillard@ehb.be>
  */
 class SlideshowContentObjectPublicationListRenderer extends ContentObjectPublicationListRenderer
 {
 
     /**
-     *
      * @see \Chamilo\Application\Weblcms\Renderer\PublicationList\ContentObjectPublicationListRenderer::as_html()
      */
     public function as_html()
@@ -36,7 +34,7 @@ class SlideshowContentObjectPublicationListRenderer extends ContentObjectPublica
             if ($contentObject)
             {
                 return $this->getSlideshowRenderer()->render(
-                    $this, $contentObject, $publicationCount, $publicationActions, $toolbrowser->get_parameters()
+                    $contentObject, $publicationCount, $publicationActions, $toolbrowser->get_parameters()
                 );
             }
         }

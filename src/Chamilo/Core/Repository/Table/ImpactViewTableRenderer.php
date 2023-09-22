@@ -96,7 +96,6 @@ class ImpactViewTableRenderer extends DataClassListTableRenderer implements Tabl
      * @param \Chamilo\Core\Repository\Storage\DataClass\ContentObject $contentObject
      *
      * @throws \Chamilo\Libraries\Architecture\Exceptions\ObjectNotExistException
-     * @throws \ReflectionException
      */
     protected function renderCell(TableColumn $column, TableResultPosition $resultPosition, $contentObject): string
     {

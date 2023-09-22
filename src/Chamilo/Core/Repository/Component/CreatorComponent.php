@@ -40,7 +40,6 @@ class CreatorComponent extends Manager
     /**
      * @return string
      * @throws \Chamilo\Libraries\Architecture\Exceptions\NotAllowedException
-     * @throws \ReflectionException
      */
     public function run()
     {
@@ -210,7 +209,6 @@ class CreatorComponent extends Manager
 
     /**
      * @return string[]
-     * @throws \ReflectionException
      * @throws \Symfony\Component\Cache\Exception\CacheException
      */
     public function get_allowed_content_object_types()

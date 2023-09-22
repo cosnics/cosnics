@@ -14,9 +14,6 @@ use Chamilo\Libraries\Storage\DataClass\DataClass;
  */
 interface PropertyProviderInterface
 {
-    /**
-     * @throws \ReflectionException
-     */
     public static function context(): string;
 
     /**

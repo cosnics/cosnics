@@ -150,7 +150,6 @@ abstract class HtmlCalendarRenderer extends CalendarRenderer
     }
 
     /**
-     * @throws \ReflectionException
      * @throws \QuickformException
      */
     public function renderViewActions(CalendarRendererProviderInterface $dataProvider, array $viewActions = []): string

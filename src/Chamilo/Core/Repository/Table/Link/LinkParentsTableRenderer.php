@@ -66,8 +66,6 @@ class LinkParentsTableRenderer extends LinkTableRenderer implements TableRowActi
 
     /**
      * @param \Chamilo\Core\Repository\Storage\DataClass\ComplexContentObjectItem $complexContentObjectItem
-     *
-     * @throws \ReflectionException
      */
     public function renderTableRowActions(TableResultPosition $resultPosition, $complexContentObjectItem): string
     {

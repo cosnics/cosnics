@@ -368,7 +368,6 @@ class HomeService
     }
 
     /**
-     * @throws \ReflectionException
      * @throws \Chamilo\Libraries\Storage\Exception\DataClassNoResultException
      */
     public function getAvailableBlockRenderersForUser(User $user): array

@@ -41,7 +41,6 @@ class BrowserComponent extends Manager
     private ButtonToolBarRenderer $buttonToolbarRenderer;
 
     /**
-     * @throws \ReflectionException
      * @throws \Chamilo\Libraries\Rights\Exception\RightsLocationNotFoundException
      * @throws \QuickformException
      * @throws \Exception
@@ -442,7 +441,6 @@ class BrowserComponent extends Manager
     }
 
     /**
-     * @throws \ReflectionException
      * @throws \TableException
      */
     public function getUserQuota(): string
@@ -497,7 +495,6 @@ class BrowserComponent extends Manager
      * @throws \Chamilo\Libraries\Storage\Exception\DataClassNoResultException
      * @throws \Chamilo\Libraries\Rights\Exception\RightsLocationNotFoundException
      * @throws \TableException
-     * @throws \ReflectionException
      * @throws \Chamilo\Libraries\Format\Table\Exception\InvalidPageNumberException
      * @throws \QuickformException
      * @throws \Exception
@@ -525,7 +522,6 @@ class BrowserComponent extends Manager
     }
 
     /**
-     * @throws \ReflectionException
      * @throws \TableException
      */
     public function renderStatistics(): string

@@ -65,7 +65,6 @@ class TemplateRegistration extends DataClass
     /**
      * @return \Chamilo\Core\User\Storage\DataClass\User
      * @throws \Chamilo\Libraries\Architecture\Exceptions\UserException
-     * @throws \ReflectionException
      */
     public function get_creator()
     {
@@ -114,7 +113,6 @@ class TemplateRegistration extends DataClass
     /**
      * @return \Chamilo\Core\User\Storage\DataClass\User
      * @throws \Chamilo\Libraries\Architecture\Exceptions\UserException
-     * @throws \ReflectionException
      */
     public function get_user()
     {

@@ -131,7 +131,6 @@ class ContentObjectSaver
      * @param string $type
      *
      * @return bool
-     * @throws \ReflectionException
      * @throws \Exception
      */
     public function attachContentObjectByIdentifierAndType(
@@ -156,7 +155,6 @@ class ContentObjectSaver
      * @param string $type
      *
      * @return bool
-     * @throws \ReflectionException
      */
     public function attachContentObjectsByIdentifierAndType(
         ContentObject $contentObject, array $attachmentIdentifiers = [], string $type = ContentObject::ATTACHMENT_NORMAL
@@ -179,7 +177,6 @@ class ContentObjectSaver
      * @param string $type
      *
      * @return int
-     * @throws \ReflectionException
      */
     public function countContentObjectAttachmentsByIdentifierAndType(
         ContentObject $contentObject, int $attachmentIdentifier = null, string $type = ContentObject::ATTACHMENT_NORMAL
@@ -194,7 +191,6 @@ class ContentObjectSaver
      * @param \Chamilo\Core\Repository\Storage\DataClass\ContentObject $contentObject
      *
      * @return bool
-     * @throws \ReflectionException
      * @throws \Exception
      */
     public function createContentObject(ContentObject $contentObject)
@@ -265,7 +261,6 @@ class ContentObjectSaver
      *
      * @return \Chamilo\Core\Repository\Storage\DataClass\ContentObject
      * @throws \Chamilo\Libraries\Architecture\Exceptions\UserException
-     * @throws \ReflectionException
      */
     public function createContentObjectFromInstanceAndValuesInWorkspace(
         Workspace $workspace, ContentObject $contentObject, array $values
@@ -304,7 +299,6 @@ class ContentObjectSaver
      * @param \Chamilo\Core\Repository\Storage\DataClass\ContentObjectAttachment $contentObjectAttachment
      *
      * @return bool
-     * @throws \ReflectionException
      */
     public function deleteContentObjectAttachment(ContentObjectAttachment $contentObjectAttachment)
     {
@@ -387,7 +381,6 @@ class ContentObjectSaver
      * @param bool $includeSelf
      *
      * @return \Chamilo\Core\Repository\Storage\DataClass\ContentObject[]
-     * @throws \ReflectionException
      */
     public function findVersionsForContentObject(
         ContentObject $contentObject, bool $includeLast = true, bool $includeSelf = true
@@ -403,7 +396,6 @@ class ContentObjectSaver
      *
      * @return int
      * @throws \Chamilo\Libraries\Architecture\Exceptions\UserException
-     * @throws \ReflectionException
      */
     public function getCategoryIdentifierFromValuesInWorkspace(Workspace $workspace, array $values)
     {
@@ -584,7 +576,6 @@ class ContentObjectSaver
      * @param string $type
      *
      * @return bool
-     * @throws \ReflectionException
      */
     public function isContentObjectAttachedTo(
         ContentObject $contentObject, int $attachmentIdentifier, string $type = ContentObject::ATTACHMENT_NORMAL
@@ -617,7 +608,6 @@ class ContentObjectSaver
      * @param array $values
      *
      * @throws \Chamilo\Libraries\Architecture\Exceptions\UserException
-     * @throws \ReflectionException
      */
     public function setCategoryFromValuesInWorkspace(Workspace $workspace, ContentObject $contentObject, array $values)
     {
@@ -750,7 +740,6 @@ class ContentObjectSaver
      * @param bool $trueUpdate
      *
      * @return bool
-     * @throws \ReflectionException
      */
     public function updateContentObject(ContentObject $contentObject, bool $trueUpdate = true)
     {
@@ -786,7 +775,6 @@ class ContentObjectSaver
      *
      * @return bool
      * @throws \Chamilo\Libraries\Architecture\Exceptions\UserException
-     * @throws \ReflectionException
      * @throws \Exception
      */
     public function updateContentObjectFromInstanceAndValuesInWorkspace(

@@ -55,20 +55,20 @@ class PackageActionFactory
         return $this->packageActions[$type][$context];
     }
 
-    public function getPackageActivator(string $context): Action
+    public function getPackageActivator(string $context): Activator
     {
         return $this->getPackageAction(Activator::class, $context);
     }
 
     /**
-     * @return \Chamilo\Configuration\Package\Action[]
+     * @return \Chamilo\Configuration\Package\Action\Activator[]
      */
     public function getPackageActivators(): array
     {
         return $this->packageActions[Activator::class];
     }
 
-    public function getPackageDeactivator(string $context): Action
+    public function getPackageDeactivator(string $context): Deactivator
     {
         return $this->getPackageAction(Deactivator::class, $context);
     }
@@ -81,26 +81,26 @@ class PackageActionFactory
         return $this->packageActions[Deactivator::class];
     }
 
-    public function getPackageInstaller(string $context): Action
+    public function getPackageInstaller(string $context): Installer
     {
         return $this->getPackageAction(Installer::class, $context);
     }
 
     /**
-     * @return \Chamilo\Configuration\Package\Action[]
+     * @return \Chamilo\Configuration\Package\Action\Installer[]
      */
     public function getPackageInstallers(): array
     {
         return $this->packageActions[Installer::class];
     }
 
-    public function getPackageRemover(string $context): Action
+    public function getPackageRemover(string $context): Remover
     {
         return $this->getPackageAction(Remover::class, $context);
     }
 
     /**
-     * @return \Chamilo\Configuration\Package\Action[]
+     * @return \Chamilo\Configuration\Package\Action\Remover[]
      */
     public function getPackageRemovers(): array
     {

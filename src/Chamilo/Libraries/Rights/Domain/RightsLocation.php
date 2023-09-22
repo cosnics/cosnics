@@ -232,8 +232,6 @@ abstract class RightsLocation extends NestedSet
 
     /**
      * @param $object
-     *
-     * @throws \ReflectionException
      */
     public function set_type_from_object($object)
     {

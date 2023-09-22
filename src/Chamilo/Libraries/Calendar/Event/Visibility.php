@@ -33,14 +33,11 @@ abstract class Visibility extends DataClass
         return $this->getDefaultProperty(self::PROPERTY_SOURCE);
     }
 
-    /**
-     * @throws \ReflectionException
-     */
     public function getUser(): ?User
     {
         if (isset($this->user))
         {
-            $this->user = DataManager::retrieve_by_id(User::class, (int) $this->getUserId());
+            $this->user = DataManager::retrieve_by_id(User::class, (string) $this->getUserId());
         }
 
         return $this->user;

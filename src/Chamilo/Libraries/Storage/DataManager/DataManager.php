@@ -31,8 +31,6 @@ class DataManager
 
     /**
      * @param string[][] $attributes
-     *
-     * @throws \Exception
      */
     public static function alter_storage_unit(
         int $type, string $storageUnitName, string $property, array $attributes = []
@@ -41,9 +39,6 @@ class DataManager
         return self::getStorageUnitRepository()->alter($type, $storageUnitName, $property, $attributes);
     }
 
-    /**
-     * @throws \Exception
-     */
     public static function alter_storage_unit_index(
         int $type, string $storageUnitName, ?string $indexName = null, array $columns = []
     ): bool
@@ -52,7 +47,6 @@ class DataManager
     }
 
     /**
-     * @throws \Exception
      * @example $displayOrderMapping[$oldDisplayOrder] = $newDisplayOrder;
      */
     public static function change_display_orders_by_mapping_array(
@@ -65,9 +59,7 @@ class DataManager
         );
     }
 
-    /**
-     * @throws \Exception
-     */
+
     public static function count(string $dataClassName, DataClassCountParameters $parameters): int
     {
         return self::getDataClassRepository()->count($dataClassName, $parameters);
@@ -75,24 +67,17 @@ class DataManager
 
     /**
      * @return int[]
-     * @throws \Exception
      */
     public static function count_grouped(string $dataClassName, DataClassCountGroupedParameters $parameters): array
     {
         return self::getDataClassRepository()->countGrouped($dataClassName, $parameters);
     }
 
-    /**
-     * @throws \Exception
-     */
     public static function create(DataClass $dataClass): bool
     {
         return self::getDataClassRepository()->create($dataClass);
     }
 
-    /**
-     * @throws \Exception
-     */
     public static function create_record(string $dataClassName, array $record): bool
     {
         return self::getDataClassRepository()->createRecord($dataClassName, $record);
@@ -101,8 +86,6 @@ class DataManager
     /**
      * @param string[][] $properties
      * @param string[][][] $indexes
-     *
-     * @throws \Exception
      */
     public static function create_storage_unit(string $storageUnitName, array $properties = [], array $indexes = []
     ): bool
@@ -110,18 +93,11 @@ class DataManager
         return self::getStorageUnitRepository()->create($storageUnitName, $properties, $indexes);
     }
 
-    /**
-     * @throws \ReflectionException
-     * @throws \Exception
-     */
     public static function delete(DataClass $dataClass): bool
     {
         return self::getDataClassRepository()->delete($dataClass);
     }
 
-    /**
-     * @throws \Exception
-     */
     public static function deletes(string $dataClassName, Condition $condition): bool
     {
         return self::getDataClassRepository()->deletes($dataClassName, $condition);
@@ -129,7 +105,6 @@ class DataManager
 
     /**
      * @throws \Chamilo\Libraries\Architecture\Exceptions\ObjectNotExistException
-     * @throws Exception
      */
     public static function determineDataClassType(string $dataClassName, int $identifier): string
     {
@@ -138,16 +113,12 @@ class DataManager
 
     /**
      * @return string[]
-     * @throws \Exception
      */
     public static function distinct(string $dataClassName, DataClassDistinctParameters $parameters): array
     {
         return self::getDataClassRepository()->distinct($dataClassName, $parameters);
     }
 
-    /**
-     * @throws \Exception
-     */
     public static function drop_storage_unit(string $storageUnitName): bool
     {
         return self::getStorageUnitRepository()->drop($storageUnitName);
@@ -167,9 +138,6 @@ class DataManager
         );
     }
 
-    /**
-     * @throws \Exception
-     */
     public static function getStorageUnitRepository(): StorageUnitRepository
     {
         return self::getService(
@@ -177,17 +145,11 @@ class DataManager
         );
     }
 
-    /**
-     * @throws \Exception
-     */
     public static function get_alias(string $dataClassStorageUnitName): string
     {
         return self::getDataClassRepository()->getAlias($dataClassStorageUnitName);
     }
 
-    /**
-     * @throws \Exception
-     */
     public static function move_display_orders(
         string $dataClassName, string $displayOrderProperty, ?int $start = 1, ?int $end = null,
         ?Condition $displayOrderCondition = null
@@ -198,17 +160,11 @@ class DataManager
         );
     }
 
-    /**
-     * @throws \Exception
-     */
     public static function optimize_storage_unit(string $storageUnitName): bool
     {
         return self::getStorageUnitRepository()->optimize($storageUnitName);
     }
 
-    /**
-     * @throws \Exception
-     */
     public static function record(string $dataClassName, RecordRetrieveParameters $parameters): array
     {
         return self::getDataClassRepository()->record($dataClassName, $parameters);
@@ -216,16 +172,12 @@ class DataManager
 
     /**
      * @throws \Chamilo\Libraries\Storage\Exception\DataClassNoResultException
-     * @throws \Exception
      */
     public static function records(string $dataClassName, RecordRetrievesParameters $parameters): ArrayCollection
     {
         return self::getDataClassRepository()->records($dataClassName, $parameters);
     }
 
-    /**
-     * @throws \Exception
-     */
     public static function rename_storage_unit(string $oldStorageUnitName, string $newStorageUnitName): bool
     {
         return self::getStorageUnitRepository()->rename($oldStorageUnitName, $newStorageUnitName);
@@ -236,8 +188,6 @@ class DataManager
      * @param class-string<retrieveDataClassName> $dataClassName
      *
      * @return retrieveDataClassName
-     * @throws \ReflectionException
-     * @throws \Exception
      */
     public static function retrieve(string $dataClassName, DataClassRetrieveParameters $parameters)
     {
@@ -247,7 +197,7 @@ class DataManager
     /**
      * @template retrieveById
      * @param class-string<retrieveById> $dataClassName
-     * @param int $identifier
+     * @param string $identifier
      *
      * @return retrieveById
      */
@@ -258,7 +208,6 @@ class DataManager
 
     /**
      * @throws \Chamilo\Libraries\Storage\Exception\DataClassNoResultException
-     * @throws \Exception
      */
     public static function retrieve_composite_data_class_additional_properties(CompositeDataClass $compositeDataClass
     ): array
@@ -268,7 +217,6 @@ class DataManager
 
     /**
      * @throws \Chamilo\Libraries\Storage\Exception\DataClassNoResultException
-     * @throws \Exception
      */
     public static function retrieve_maximum_value(string $dataClassName, string $property, ?Condition $condition = null
     ): int
@@ -278,7 +226,6 @@ class DataManager
 
     /**
      * @throws \Chamilo\Libraries\Storage\Exception\DataClassNoResultException
-     * @throws \Exception
      */
     public static function retrieve_next_value(string $dataClassName, string $property, ?Condition $condition = null
     ): int
@@ -293,16 +240,12 @@ class DataManager
      *
      * @return ArrayCollection<tRetrieves>
      * @throws \Chamilo\Libraries\Storage\Exception\DataClassNoResultException
-     * @throws \Exception
      */
     public static function retrieves(string $dataClassName, DataClassRetrievesParameters $parameters): ArrayCollection
     {
         return self::getDataClassRepository()->retrieves($dataClassName, $parameters);
     }
 
-    /**
-     * @throws \Exception
-     */
     public static function storage_unit_exists(string $storageUnitName): bool
     {
         return self::getStorageUnitRepository()->exists($storageUnitName);
@@ -313,32 +256,22 @@ class DataManager
      *
      * @return mixed
      * @throws \Throwable
-     * @throws \Exception
      */
     public static function transactional(callable $function)
     {
         return self::getDataClassRepository()->transactional($function);
     }
 
-    /**
-     * @throws \Exception
-     */
     public static function truncate_storage_unit(string $storageUnitName, ?bool $optimize = true): bool
     {
         return self::getStorageUnitRepository()->truncate($storageUnitName, $optimize);
     }
 
-    /**
-     * @throws \Exception
-     */
     public static function update(DataClass $dataClass): bool
     {
         return self::getDataClassRepository()->update($dataClass);
     }
 
-    /**
-     * @throws \Exception
-     */
     public static function updates(string $dataClassName, UpdateProperties $properties, Condition $condition): bool
     {
         return self::getDataClassRepository()->updates($dataClassName, $properties, $condition);

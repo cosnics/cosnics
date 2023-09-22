@@ -243,7 +243,6 @@ class DataClassRepository
 
     /**
      * @return int[]
-     * @throws \Exception
      */
     public function countGrouped(string $dataClassName, DataClassCountGroupedParameters $parameters): array
     {
@@ -624,7 +623,7 @@ class DataClassRepository
             {
                 return $this->__record($dataClassName, $parameters);
             }
-            catch (DataClassNoResultException $exception)
+            catch (DataClassNoResultException)
             {
                 return null;
             }
@@ -740,7 +739,7 @@ class DataClassRepository
             {
                 return $this->__retrieve($dataClassName, $parameters);
             }
-            catch (DataClassNoResultException $exception)
+            catch (DataClassNoResultException)
             {
                 return null;
             }

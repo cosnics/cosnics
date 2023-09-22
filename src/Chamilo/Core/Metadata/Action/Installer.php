@@ -36,7 +36,7 @@ class Installer extends \Chamilo\Configuration\Package\Action\Installer
         PackageBundlesCacheService $packageBundlesCacheService, PackageFactory $packageFactory,
         RegistrationService $registrationService, SystemPathBuilder $systemPathBuilder,
         DependencyVerifier $dependencyVerifier, DependencyVerifierRenderer $dependencyVerifierRenderer, string $context,
-        array $propertyProviderTypes
+        array $propertyProviderTypes = []
     )
     {
         parent::__construct(
@@ -48,9 +48,6 @@ class Installer extends \Chamilo\Configuration\Package\Action\Installer
         $this->propertyProviderTypes = $propertyProviderTypes;
     }
 
-    /**
-     * @throws \ReflectionException
-     */
     public function extra(array $formValues): bool
     {
         if (!$this->registerPropertyProviders())

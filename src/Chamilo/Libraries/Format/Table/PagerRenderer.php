@@ -104,7 +104,6 @@ class PagerRenderer
      * @param string[] $translationVariables
      *
      * @throws \QuickformException
-     * @throws \ReflectionException
      */
     public function renderItemsPerPageSelector(
         TableParameterValues $parameterValues, string $itemsPerPageParameterName, array $translationVariables = []
@@ -114,7 +113,6 @@ class PagerRenderer
         $buttonToolBar = new ButtonToolBar();
         $buttonGroup = new ButtonGroup();
         $buttonToolBar->addButtonGroup($buttonGroup);
-        $pager = $this->getPager();
         $translator = $this->getTranslator();
 
         $defaultTranslationVariables[Application::PARAM_CONTEXT] = StringUtilities::LIBRARIES;

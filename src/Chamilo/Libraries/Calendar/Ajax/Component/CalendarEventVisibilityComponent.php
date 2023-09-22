@@ -1,7 +1,6 @@
 <?php
 namespace Chamilo\Libraries\Calendar\Ajax\Component;
 
-use Chamilo\Libraries\Architecture\ClassnameUtilities;
 use Chamilo\Libraries\Architecture\JsonAjaxResult;
 use Chamilo\Libraries\Calendar\Ajax\Manager;
 use Chamilo\Libraries\Calendar\Event\Visibility;
@@ -14,14 +13,13 @@ use Chamilo\Libraries\Utilities\StringUtilities;
 
 /**
  * @package Chamilo\Libraries\Calendar\Event\Ajax\Component
- * @author Hans De Bisschop <hans.de.bisschop@ehb.be>
+ * @author  Hans De Bisschop <hans.de.bisschop@ehb.be>
  */
 abstract class CalendarEventVisibilityComponent extends Manager
 {
     public const PARAM_SOURCE = 'source';
 
     /**
-     * @throws \ReflectionException
      * @throws \Chamilo\Libraries\Storage\Exception\DataClassNoResultException
      */
     public function run()

@@ -357,7 +357,6 @@ class BrowserComponent extends Manager implements BreadcrumbLessComponentInterfa
 
     /**
      * @throws \TableException
-     * @throws \ReflectionException
      * @throws \Chamilo\Libraries\Format\Table\Exception\InvalidPageNumberException
      * @throws \QuickformException
      * @throws \Exception

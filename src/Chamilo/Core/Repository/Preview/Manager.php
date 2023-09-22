@@ -79,7 +79,6 @@ abstract class Manager extends Application
     /**
      * @return \Chamilo\Libraries\Format\Structure\ActionBar\Renderer\ButtonToolBarRenderer
      * @throws \Chamilo\Libraries\Architecture\Exceptions\ClassNotExistException
-     * @throws \ReflectionException
      */
     protected function getButtonToolBarRenderer()
     {

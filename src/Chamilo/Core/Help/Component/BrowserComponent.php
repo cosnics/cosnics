@@ -29,7 +29,6 @@ class BrowserComponent extends Manager
      * @throws \Chamilo\Libraries\Format\Table\Exception\InvalidPageNumberException
      * @throws \Chamilo\Libraries\Storage\Exception\DataClassNoResultException
      * @throws \QuickformException
-     * @throws \ReflectionException
      * @throws \TableException
      */
     public function run()
@@ -107,7 +106,6 @@ class BrowserComponent extends Manager
 
     /**
      * @throws \Chamilo\Libraries\Storage\Exception\DataClassNoResultException
-     * @throws \ReflectionException
      * @throws \TableException
      * @throws \Chamilo\Libraries\Format\Table\Exception\InvalidPageNumberException
      * @throws \QuickformException
@@ -124,7 +122,6 @@ class BrowserComponent extends Manager
 
     /**
      * @throws \TableException
-     * @throws \ReflectionException
      * @throws \Chamilo\Libraries\Format\Table\Exception\InvalidPageNumberException
      * @throws \QuickformException
      * @throws \Chamilo\Libraries\Storage\Exception\DataClassNoResultException

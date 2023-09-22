@@ -23,6 +23,8 @@ class RecurringContentObjectForm extends ContentObjectForm
 
     /**
      * @param string $type
+     *
+     * @throws \QuickformException
      */
     protected function addByDayByMonthDayOptionPropertiesToForm(string $type)
     {
@@ -49,7 +51,7 @@ class RecurringContentObjectForm extends ContentObjectForm
     }
 
     /**
-     * @throws \ReflectionException
+     * @throws \QuickformException
      */
     protected function addByDayPropertiesToForm(
         string $type, string $subElement = self::PARAM_DAY, string $addonLabel = null, bool $multiple = false
@@ -105,7 +107,7 @@ class RecurringContentObjectForm extends ContentObjectForm
     }
 
     /**
-     * @throws \ReflectionException
+     * @throws \QuickformException
      */
     protected function addByDayRankAndByDayPropertiesToForm(string $type)
     {
@@ -118,7 +120,7 @@ class RecurringContentObjectForm extends ContentObjectForm
     }
 
     /**
-     * @throws \ReflectionException
+     * @throws \QuickformException
      */
     protected function addByDayRankPropertiesToForm(string $type)
     {
@@ -133,7 +135,7 @@ class RecurringContentObjectForm extends ContentObjectForm
     }
 
     /**
-     * @param string $type
+     * @throws \QuickformException
      */
     protected function addByMonthDayPropertiesToForm(string $type)
     {
@@ -321,7 +323,7 @@ class RecurringContentObjectForm extends ContentObjectForm
         $this->addElement('html', implode(PHP_EOL, $html));
         $this->addElement(
             'html', $this->getResourceManager()->getResourceHtml(
-            $this->getWebPathBuilder()->getJavascriptPath('Chamilo\Libraries\Calendar',) .
+            $this->getWebPathBuilder()->getJavascriptPath('Chamilo\Libraries\Calendar') .
             'jquery.contentObjectRecurrenceForm.js'
         )
         );
@@ -491,7 +493,7 @@ class RecurringContentObjectForm extends ContentObjectForm
 
     /**
      * @param string[] $defaults
-     * @param mixed filter
+     * @param mixed $filter
      *
      * @throws \Exception
      */

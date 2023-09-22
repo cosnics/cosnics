@@ -23,9 +23,6 @@ abstract class SidebarTableCalendarRenderer extends SidebarCalendarRenderer
 
     abstract public function getPreviousDisplayTime(int $displayTime): int;
 
-    /**
-     * @throws \ReflectionException
-     */
     public function renderNavigation(CalendarRendererProviderInterface $dataProvider, int $displayTime): string
     {
         $urlFormat = $this->determineNavigationUrl($dataProvider);

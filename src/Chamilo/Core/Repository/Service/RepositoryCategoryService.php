@@ -22,7 +22,6 @@ class RepositoryCategoryService
      *
      * @return \Chamilo\Core\Repository\Storage\DataClass\RepositoryCategory|null
      * @throws \Chamilo\Libraries\Architecture\Exceptions\UserException
-     * @throws \ReflectionException
      */
     public function createNewCategoryInWorkspace(
         Workspace $workspace, int $parentIdentifier, string $categoryName
@@ -59,7 +58,6 @@ class RepositoryCategoryService
      *
      * @return \Chamilo\Core\Repository\Storage\DataClass\RepositoryCategory
      * @throws \Chamilo\Libraries\Architecture\Exceptions\UserException
-     * @throws \ReflectionException
      */
     public function findCategoryFromParameters(
         Workspace $workspace, int $parentIdentifier, string $categoryName

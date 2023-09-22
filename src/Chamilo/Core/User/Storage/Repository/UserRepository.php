@@ -96,7 +96,6 @@ class UserRepository implements UserRepositoryInterface
     }
 
     /**
-     * @throws \ReflectionException
      * @throws \Chamilo\Libraries\Storage\Exception\DataClassNoResultException
      * @deprecated Use dedicated delete-methods in the UserRepository instead
      */
@@ -107,7 +106,6 @@ class UserRepository implements UserRepositoryInterface
 
     /**
      * @throws \Chamilo\Libraries\Storage\Exception\DataClassNoResultException
-     * @throws \ReflectionException
      */
     public function deleteUser(User $user): bool
     {

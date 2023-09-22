@@ -5,18 +5,14 @@ use Chamilo\Libraries\Architecture\ClassnameUtilities;
 use Chamilo\Libraries\Format\Structure\ActionBar\ButtonGroup;
 
 /**
- *
  * @package Chamilo\Libraries\Format\Structure\ActionBar\Renderer
- * @author Hans De Bisschop <hans.de.bisschop@ehb.be>
- * @author Magali Gillard <magali.gillard@ehb.be>
- * @author Eduard Vossen <eduard.vossen@ehb.be>
+ * @author  Hans De Bisschop <hans.de.bisschop@ehb.be>
+ * @author  Magali Gillard <magali.gillard@ehb.be>
+ * @author  Eduard Vossen <eduard.vossen@ehb.be>
  */
 class ButtonGroupRenderer extends AbstractButtonToolbarItemRenderer
 {
 
-    /**
-     * @throws \ReflectionException
-     */
     public function render(): string
     {
         $html = [];

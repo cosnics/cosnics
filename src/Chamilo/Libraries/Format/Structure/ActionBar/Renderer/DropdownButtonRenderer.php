@@ -24,9 +24,6 @@ class DropdownButtonRenderer extends AbstractButtonRenderer
         return $classes;
     }
 
-    /**
-     * @throws \ReflectionException
-     */
     public function renderDropdown(): string
     {
         return $this->renderSubButtons();

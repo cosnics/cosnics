@@ -19,7 +19,6 @@ use Chamilo\Libraries\Utilities\StringUtilities;
 class LicenseComponent extends Manager implements NoAuthenticationSupportInterface
 {
     /**
-     * @throws \ReflectionException
      * @throws \QuickformException
      * @throws \Exception
      */

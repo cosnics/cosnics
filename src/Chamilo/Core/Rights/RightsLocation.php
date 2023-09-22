@@ -299,9 +299,6 @@ abstract class RightsLocation extends NestedSet
         return ($parent == 0);
     }
 
-    /**
-     * @throws \Exception
-     */
     public function lock()
     {
         $this->set_locked(true);
@@ -309,8 +306,6 @@ abstract class RightsLocation extends NestedSet
 
     /**
      * @param string $type
-     *
-     * @throws \Exception
      */
     public function setType($type)
     {
@@ -327,8 +322,6 @@ abstract class RightsLocation extends NestedSet
 
     /**
      * @param int $identifier
-     *
-     * @throws \Exception
      */
     public function set_identifier($identifier)
     {
@@ -337,8 +330,6 @@ abstract class RightsLocation extends NestedSet
 
     /**
      * @param int $inherit
-     *
-     * @throws \Exception
      */
     public function set_inherit($inherit)
     {
@@ -347,8 +338,6 @@ abstract class RightsLocation extends NestedSet
 
     /**
      * @param int $locked
-     *
-     * @throws \Exception
      */
     public function set_locked($locked)
     {
@@ -357,8 +346,6 @@ abstract class RightsLocation extends NestedSet
 
     /**
      * @param int $tree_identifier
-     *
-     * @throws \Exception
      */
     public function set_tree_identifier($tree_identifier)
     {
@@ -367,8 +354,6 @@ abstract class RightsLocation extends NestedSet
 
     /**
      * @param int $tree_type
-     *
-     * @throws \Exception
      */
     public function set_tree_type($tree_type)
     {
@@ -386,8 +371,6 @@ abstract class RightsLocation extends NestedSet
     /**
      * @param $object
      *
-     * @throws \ReflectionException
-     * @throws \Exception
      */
     public function set_type_from_object($object)
     {

@@ -44,8 +44,10 @@
                       id="Chamilo\Libraries\Storage\DataManager\Doctrine\DataClassRepository"/>
         </service>
 
-        <service id="Chamilo\Libraries\Storage\DataManager\Doctrine\Repository\StorageUnitRepository">
-            <argument type="service"
+        <service id="Chamilo\Libraries\Storage\DataManager\Doctrine\Repository\StorageUnitRepository"
+                 class="Chamilo\Libraries\Storage\DataManager\Repository\StorageUnitRepository">
+            <argument key="$storageUnitDatabase"
+                      type="service"
                       id="Chamilo\Libraries\Storage\DataManager\Doctrine\Database\StorageUnitDatabase"/>
         </service>
 

@@ -53,10 +53,6 @@ class MiniDayCalendarRenderer extends MiniCalendarRenderer
         return $this->eventDayRenderer;
     }
 
-    /**
-     * @throws \ReflectionException
-     * @throws \Exception
-     */
     public function renderFullCalendar(CalendarRendererProviderInterface $dataProvider, int $displayTime): string
     {
         $calendarTableBuilder = $this->getDayCalendarTableBuilder();

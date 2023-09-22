@@ -16,7 +16,6 @@ class IncludeEmbedParser extends ContentObjectIncludeParser
 {
     /**
      * @throws \Chamilo\Libraries\Architecture\Exceptions\UserException
-     * @throws \ReflectionException
      */
     public function parseHtmlEditorField()
     {

@@ -136,7 +136,6 @@ class UserProgressTableRenderer extends RecordListTableRenderer implements Table
     /**
      * @throws \Chamilo\Libraries\Format\Table\Exception\InvalidPageNumberException
      * @throws \QuickformException
-     * @throws \ReflectionException
      * @throws \TableException
      * @deprecated Temporary solution to allow rendering of DI-based tables in a non-DI context
      */
@@ -205,9 +204,6 @@ class UserProgressTableRenderer extends RecordListTableRenderer implements Table
         return parent::renderCell($column, $resultPosition, $record);
     }
 
-    /**
-     * @throws \ReflectionException
-     */
     public function renderTableRowActions(TableResultPosition $resultPosition, $record): string
     {
         $learningPath = $this->getLearningPath();

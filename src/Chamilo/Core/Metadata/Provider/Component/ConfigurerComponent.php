@@ -102,8 +102,6 @@ class ConfigurerComponent extends Manager
 
     /**
      * @return string
-     * @throws \Chamilo\Libraries\Architecture\Exceptions\UserException
-     * @throws \ReflectionException
      */
     public function handleSelectedEntityType()
     {

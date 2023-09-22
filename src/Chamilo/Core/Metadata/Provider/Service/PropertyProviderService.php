@@ -109,7 +109,6 @@ class PropertyProviderService
      * @return string
      * @throws \Chamilo\Core\Metadata\Provider\Exceptions\NoProviderAvailableException
      * @throws \Chamilo\Libraries\Architecture\Exceptions\UserException
-     * @throws \ReflectionException
      */
     public function getPropertyValues(DataClassEntity $entity, Element $element)
     {
@@ -129,7 +128,6 @@ class PropertyProviderService
      * @return \Chamilo\Core\Metadata\Storage\DataClass\ProviderLink
      * @throws \Chamilo\Core\Metadata\Provider\Exceptions\NoProviderAvailableException
      * @throws \Chamilo\Libraries\Architecture\Exceptions\UserException
-     * @throws \ReflectionException
      */
     public function getProviderLinkForElement(DataClassEntity $entity, Element $element)
     {
@@ -214,9 +212,8 @@ class PropertyProviderService
      * @param \Chamilo\Core\Metadata\Storage\DataClass\Element $element
      * @param $submittedProviderRegistrationId
      *
-     * @return boolean
+     * @return bool
      * @throws \Chamilo\Libraries\Architecture\Exceptions\UserException
-     * @throws \ReflectionException
      * @throws \Exception
      */
     public function updateEntityProviderLinkForElement(
@@ -261,9 +258,8 @@ class PropertyProviderService
      * @param \Chamilo\Core\Metadata\Entity\DataClassEntity $entity
      * @param string[] $submittedProviderLinkValues
      *
-     * @return boolean
+     * @return bool
      * @throws \Chamilo\Libraries\Architecture\Exceptions\UserException
-     * @throws \ReflectionException
      */
     public function updateEntityProviderLinks(DataClassEntity $entity, $submittedProviderLinkValues)
     {
@@ -290,9 +286,8 @@ class PropertyProviderService
      * @param \Chamilo\Core\Metadata\Storage\DataClass\Schema $schema
      * @param $submittedSchemaValues
      *
-     * @return boolean
+     * @return bool
      * @throws \Chamilo\Libraries\Architecture\Exceptions\UserException
-     * @throws \ReflectionException
      * @throws \Exception
      */
     public function updateEntityProviderLinksForSchema(DataClassEntity $entity, Schema $schema, $submittedSchemaValues)

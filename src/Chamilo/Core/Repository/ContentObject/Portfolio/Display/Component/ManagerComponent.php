@@ -22,7 +22,6 @@ class ManagerComponent extends ItemComponent
      * @throws \Chamilo\Libraries\Architecture\Exceptions\UserException
      * @throws \Chamilo\Libraries\Format\Table\Exception\InvalidPageNumberException
      * @throws \QuickformException
-     * @throws \ReflectionException
      * @throws \TableException
      */
     public function build()
@@ -57,7 +56,6 @@ class ManagerComponent extends ItemComponent
 
     /**
      * @throws \Chamilo\Libraries\Architecture\Exceptions\UserException
-     * @throws \ReflectionException
      * @throws \TableException
      * @throws \Chamilo\Libraries\Format\Table\Exception\InvalidPageNumberException
      * @throws \QuickformException

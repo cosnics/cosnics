@@ -98,7 +98,6 @@ class EntityFormService
      * @param \Chamilo\Core\User\Storage\DataClass\User $user
      *
      * @throws \Chamilo\Libraries\Architecture\Exceptions\UserException
-     * @throws \ReflectionException
      * @throws \Exception
      */
     public function addElements(
@@ -273,7 +272,6 @@ class EntityFormService
      * @param \Chamilo\Core\User\Storage\DataClass\User $user
      *
      * @throws \Chamilo\Libraries\Architecture\Exceptions\UserException
-     * @throws \ReflectionException
      * @throws \Exception
      */
     public function setDefaults(

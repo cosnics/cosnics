@@ -13,10 +13,6 @@ use Chamilo\Libraries\Storage\DataManager\Interfaces\DataManagerRepositoryInterf
 abstract class DataManagerRepository implements DataManagerRepositoryInterface
 {
 
-    /**
-     * @throws \ReflectionException
-     * @throws \Exception
-     */
     public function create(DataClass $dataClass): bool
     {
         return $dataClass->create();
@@ -24,17 +20,12 @@ abstract class DataManagerRepository implements DataManagerRepositoryInterface
 
     /**
      * @throws \Chamilo\Libraries\Storage\Exception\DataClassNoResultException
-     * @throws \ReflectionException
      */
     public function delete(DataClass $dataClass): bool
     {
         return $dataClass->delete();
     }
 
-    /**
-     * @throws \ReflectionException
-     * @throws \Exception
-     */
     public function update(DataClass $dataClass): bool
     {
         return $dataClass->update();

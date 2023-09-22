@@ -18,7 +18,6 @@ class UserPictureComponent extends \Chamilo\Core\User\Ajax\Manager
     /**
      * @throws \Chamilo\Libraries\Architecture\Exceptions\NoObjectSelectedException
      * @throws \Chamilo\Libraries\Architecture\Exceptions\ObjectNotExistException
-     * @throws \ReflectionException
      */
     public function run()
     {
@@ -30,7 +29,6 @@ class UserPictureComponent extends \Chamilo\Core\User\Ajax\Manager
     }
 
     /**
-     * @throws \ReflectionException
      * @throws \Chamilo\Libraries\Architecture\Exceptions\NoObjectSelectedException
      * @throws \Chamilo\Libraries\Architecture\Exceptions\ObjectNotExistException
      */

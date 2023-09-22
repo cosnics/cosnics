@@ -100,8 +100,6 @@ class AuthenticationValidator
 
     /**
      * @param \Chamilo\Core\User\Storage\DataClass\User $user
-     *
-     * @throws \ReflectionException
      */
     public function logout(User $user)
     {
@@ -152,8 +150,6 @@ class AuthenticationValidator
 
     /**
      * @param \Chamilo\Core\User\Storage\DataClass\User $user
-     *
-     * @throws \ReflectionException
      */
     protected function trackLogin(User $user)
     {
@@ -163,7 +159,6 @@ class AuthenticationValidator
     /**
      * @return bool
      * @throws \Chamilo\Libraries\Authentication\AuthenticationException
-     * @throws \ReflectionException
      */
     public function validate()
     {
