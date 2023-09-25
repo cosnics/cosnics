@@ -26,6 +26,7 @@ class QuestionSelecterComponent extends Manager
 
         if ($assessment_id)
         {
+            $question_ids = [];
             $clois = \Chamilo\Core\Repository\Storage\DataManager::retrieve_complex_content_object_items(
                 ComplexContentObjectItem::class_name(),
                 new EqualityCondition(

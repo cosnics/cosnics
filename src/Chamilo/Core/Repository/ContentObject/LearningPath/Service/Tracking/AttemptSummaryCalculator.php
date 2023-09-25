@@ -269,6 +269,9 @@ class AttemptSummaryCalculator
     {
         $statistics = $this->getLearningPathStatisticsForTreeNode($learningPath, $treeNode);
 
+        if (!is_array($statistics) || !is_array($statistics[self::STATISTICS_NOT_STARTED]))
+            return 0;
+
         return count($statistics[self::STATISTICS_NOT_STARTED]);
     }
 
@@ -285,6 +288,9 @@ class AttemptSummaryCalculator
     )
     {
         $statistics = $this->getLearningPathStatisticsForTreeNode($learningPath, $treeNode);
+
+        if (!is_array($statistics) || !is_array($statistics[self::STATISTICS_COMPLETED]))
+            return 0;
 
         return count($statistics[self::STATISTICS_COMPLETED]);
     }
@@ -320,7 +326,7 @@ class AttemptSummaryCalculator
     {
         $statistics = $this->getLearningPathStatisticsForTreeNode($learningPath, $treeNode);
 
-        if(!is_array($statistics) || !is_array($statistics[self::STATISTICS_STARTED]))
+        if (!is_array($statistics) || !is_array($statistics[self::STATISTICS_STARTED]))
             return 0;
 
         return count($statistics[self::STATISTICS_STARTED]);

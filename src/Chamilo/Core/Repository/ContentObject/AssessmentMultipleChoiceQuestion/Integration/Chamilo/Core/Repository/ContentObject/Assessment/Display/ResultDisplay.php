@@ -52,8 +52,15 @@ class ResultDisplay extends AssessmentQuestionResultDisplay
             
             if ($type == AssessmentMultipleChoiceQuestion::ANSWER_TYPE_RADIO)
             {
-                $is_given_answer = in_array($i, $answers);
-                
+                if (is_array($answers))
+                {
+                    $is_given_answer = in_array($i, $answers);
+                }
+                else
+                {
+                    $is_given_answer = false;
+                }
+
                 if ($is_given_answer)
                 {
                     $selected = ' checked ';
