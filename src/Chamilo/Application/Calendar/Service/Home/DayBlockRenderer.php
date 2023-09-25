@@ -92,9 +92,6 @@ class DayBlockRenderer extends BlockRenderer implements ConfigurableBlockRendere
         $configurationForm->setDefaults($defaults);
     }
 
-    /**
-     * @throws \ReflectionException
-     */
     public function displayContent(Element $block, ?User $user = null): string
     {
         $dataProvider = new CalendarRendererProvider(

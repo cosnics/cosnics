@@ -6,7 +6,7 @@ use Chamilo\Configuration\Package\Properties\Dependencies\Dependencies;
 use Chamilo\Configuration\Package\Properties\Dependencies\Dependency\Dependency;
 use Chamilo\Configuration\Package\Storage\DataClass\Package;
 use Chamilo\Libraries\File\SystemPathBuilder;
-use Exception;
+use OutOfBoundsException;
 use stdClass;
 use Symfony\Component\Filesystem\Filesystem;
 
@@ -34,13 +34,16 @@ class PackageFactory
     }
 
     /**
-     * @throws \Exception
+     * @param string $context
+     *
+     * @return \Chamilo\Configuration\Package\Storage\DataClass\Package
+     * @throws \OutOfBoundsException
      */
     public function getPackage(string $context): Package
     {
         if (!$this->packageExists($context))
         {
-            throw new Exception('Invalid package context: ' . $context);
+            throw new OutOfBoundsException('Invalid package context: ' . $context);
         }
 
         return $this->parseComposerJsonPath($this->getPackagePath($context));
@@ -61,9 +64,6 @@ class PackageFactory
         return $this->getFilesystem()->exists($this->getPackagePath($context));
     }
 
-    /**
-     * @throws \Exception
-     */
     public function parseComposerJson(stdClass $jsonPackageObject): Package
     {
         $cosnicsProperties = $jsonPackageObject->extra->cosnics;
@@ -117,9 +117,6 @@ class PackageFactory
         return $package;
     }
 
-    /**
-     * @throws \Exception
-     */
     public function parseComposerJsonPath(string $path): Package
     {
         return $this->parseComposerJson(json_decode(file_get_contents($path)));

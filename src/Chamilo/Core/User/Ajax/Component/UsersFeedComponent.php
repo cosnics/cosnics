@@ -3,13 +3,10 @@ namespace Chamilo\Core\User\Ajax\Component;
 
 use Chamilo\Core\User\Ajax\Manager;
 use Chamilo\Core\User\Storage\DataClass\User;
-use Chamilo\Core\User\Storage\DataManager;
 use Chamilo\Libraries\Architecture\JsonAjaxResult;
 use Chamilo\Libraries\Format\Form\Element\AdvancedElementFinder\AdvancedElementFinderElement;
 use Chamilo\Libraries\Format\Form\Element\AdvancedElementFinder\AdvancedElementFinderElements;
 use Chamilo\Libraries\Format\Structure\Glyph\FontAwesomeGlyph;
-use Chamilo\Libraries\Storage\Parameters\DataClassCountParameters;
-use Chamilo\Libraries\Storage\Parameters\DataClassRetrievesParameters;
 use Chamilo\Libraries\Storage\Query\Condition\AndCondition;
 use Chamilo\Libraries\Storage\Query\Condition\EqualityCondition;
 use Chamilo\Libraries\Storage\Query\OrderBy;
@@ -17,11 +14,9 @@ use Chamilo\Libraries\Storage\Query\OrderProperty;
 use Chamilo\Libraries\Storage\Query\Variable\PropertyConditionVariable;
 use Chamilo\Libraries\Storage\Query\Variable\StaticConditionVariable;
 use Chamilo\Libraries\Storage\Service\SearchQueryConditionGenerator;
-use Chamilo\Libraries\Translation\Translation;
+use Doctrine\Common\Collections\ArrayCollection;
 
 /**
- * Feed to return users
- *
  * @package Chamilo\Core\User\Ajax
  * @author  Sven Vanpoucke
  * @author  Hans De Bisschop <hans.de.bisschop@ehb.be>
@@ -29,20 +24,15 @@ use Chamilo\Libraries\Translation\Translation;
 class UsersFeedComponent extends Manager
 {
     public const PARAM_OFFSET = 'offset';
-
     public const PARAM_SEARCH_QUERY = 'query';
 
     public const PROPERTY_ELEMENTS = 'elements';
-
     public const PROPERTY_TOTAL_ELEMENTS = 'total_elements';
 
-    /**
-     * @var int
-     */
-    private $userCount = 0;
+    private int $userCount = 0;
 
     /**
-     * Runs this ajax component
+     * @throws \Chamilo\Libraries\Storage\Exception\DataClassNoResultException
      */
     public function run()
     {
@@ -57,7 +47,7 @@ class UsersFeedComponent extends Manager
     /**
      * @return \Chamilo\Libraries\Storage\Query\Condition\AndCondition
      */
-    protected function getCondition()
+    protected function getCondition(): AndCondition
     {
         $searchQuery = $this->getRequest()->request->get(self::PARAM_SEARCH_QUERY);
 
@@ -84,99 +74,69 @@ class UsersFeedComponent extends Manager
         return new AndCondition($conditions);
     }
 
-    /**
-     * Returns the advanced element finder element for the given user
-     *
-     * @param \Chamilo\Core\User\Storage\DataClass\User $user
-     *
-     * @return \Chamilo\Libraries\Format\Form\Element\AdvancedElementFinder\AdvancedElementFinderElement
-     */
-    protected function getElementForUser(User $user)
+    protected function getElementForUser(User $user): AdvancedElementFinderElement
     {
         $glyph = new FontAwesomeGlyph('user', [], null, 'fas');
 
         return new AdvancedElementFinderElement(
-            'user_' . $user->get_id(), $glyph->getClassNamesString(), $user->get_fullname(), $user->get_official_code()
+            'user_' . $user->getId(), $glyph->getClassNamesString(), $user->get_fullname(), $user->get_official_code()
         );
     }
 
     /**
-     * Returns all the elements for this feed
-     *
-     * @return \Chamilo\Libraries\Format\Form\Element\AdvancedElementFinder\AdvancedElementFinderElements
+     * @throws \Chamilo\Libraries\Storage\Exception\DataClassNoResultException
      */
-    protected function getElements()
+    protected function getElements(): AdvancedElementFinderElements
     {
+        $translator = $this->getTranslator();
         $elements = new AdvancedElementFinderElements();
 
         $glyph = new FontAwesomeGlyph('folder', [], null, 'fas');
 
         // Add user category
         $user_category = new AdvancedElementFinderElement(
-            'users', $glyph->getClassNamesString(), Translation::get('Users'), Translation::get('Users')
+            'users', $glyph->getClassNamesString(), $translator->trans('Users', [], Manager::CONTEXT),
+            $translator->trans('Users', [], Manager::CONTEXT)
         );
         $elements->add_element($user_category);
 
-        $users = $this->retrieveUsers();
-
-        if ($users)
+        foreach ($this->retrieveUsers() as $user)
         {
-            foreach ($users as $user)
-            {
-                $user_category->add_child($this->getElementForUser($user));
-            }
+            $user_category->add_child($this->getElementForUser($user));
         }
 
         return $elements;
     }
 
-    /**
-     * Returns the selected offset
-     *
-     * @return int
-     */
-    protected function getOffset()
+    protected function getOffset(): int
     {
-        $offset = $this->getRequest()->request->get(self::PARAM_OFFSET);
-
-        if (!isset($offset) || is_null($offset))
-        {
-            $offset = 0;
-        }
-
-        return $offset;
+        return $this->getRequest()->request->get(self::PARAM_OFFSET, 0);
     }
 
-    /**
-     * @return \Chamilo\Libraries\Storage\Service\SearchQueryConditionGenerator
-     */
-    protected function getSearchQueryConditionGenerator()
+    protected function getSearchQueryConditionGenerator(): SearchQueryConditionGenerator
     {
         return $this->getService(SearchQueryConditionGenerator::class);
     }
 
     /**
-     * Retrieves the users
-     *
-     * @return \Doctrine\Common\Collections\ArrayCollection
+     * @return \Doctrine\Common\Collections\ArrayCollection<\Chamilo\Core\User\Storage\DataClass\User>
+     * @throws \Chamilo\Libraries\Storage\Exception\DataClassNoResultException
      */
-    public function retrieveUsers()
+    public function retrieveUsers(): ArrayCollection
     {
         $condition = $this->getCondition();
 
-        $this->userCount = DataManager::count(User::class, new DataClassCountParameters($condition));
+        $this->userCount = $this->getUserService()->countUsers($condition);
 
-        $parameters = new DataClassRetrievesParameters(
-            $condition, 100, $this->getOffset(), new OrderBy([
+        return $this->getUserService()->findUsers(
+            $condition, $this->getOffset(), 100, new OrderBy([
                 new OrderProperty(new PropertyConditionVariable(User::class, User::PROPERTY_LASTNAME)),
                 new OrderProperty(new PropertyConditionVariable(User::class, User::PROPERTY_FIRSTNAME)),
             ])
         );
-
-        return DataManager::retrieves(User::class, $parameters);
     }
 
-    public function set_user_count($userCount)
+    public function set_user_count(int $userCount): void
     {
         $this->userCount = $userCount;
     }

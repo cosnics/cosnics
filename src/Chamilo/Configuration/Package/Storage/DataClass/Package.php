@@ -33,8 +33,6 @@ class Package extends DataClass
 
     /**
      * @param \Chamilo\Configuration\Package\Properties\Authors\Author $author
-     *
-     * @throws \Exception
      */
     public function add_author(Author $author)
     {

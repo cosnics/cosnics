@@ -72,19 +72,14 @@ class PackageInformationRenderer
 
         if ($package->has_dependencies())
         {
-            $html[] = '<h3>' . $translator->trans('Dependencies', [], Manager::CONTEXT) . '</h3>';
-
-            $html[] = '<table class="table table-striped table-bordered table-hover table-data">';
-
-            if (!is_null($package->get_dependencies()))
-            {
-                $html[] = '<tr>';
-                $html[] = '<td class="header">' . $translator->trans('PreDepends', [], Manager::CONTEXT) . '</td>';
-                $html[] = '<td>' . $this->getDependencyRenderer()->renderDependencies($package) . '</td>';
-                $html[] = '</tr>';
-            }
-
-            $html[] = '</table><br/>';
+            $html[] = '<div class="panel panel-default">';
+            $html[] = '<div class="panel-heading">';
+            $html[] = '<h4 class="panel-title">' . $translator->trans('Dependencies', [], Manager::CONTEXT) . '</h4>';
+            $html[] = '</div>';
+            $html[] = '<div class="panel-body">';
+            $html[] = $this->getDependencyRenderer()->renderDependencies($package);
+            $html[] = '</div>';
+            $html[] = '</div>';
         }
 
         return implode(PHP_EOL, $html);
@@ -117,7 +112,15 @@ class PackageInformationRenderer
 
         $html = [];
 
-        $html[] = '<table class="table table-striped table-bordered table-hover table-data data_table_no_header">';
+        $html[] = '<div class="panel panel-default">';
+        $html[] = '<div class="panel-heading">';
+        $html[] = '<h4 class="panel-title">' . $translator->trans('Properties', [], Manager::CONTEXT) . '</h4>';
+        $html[] = '</div>';
+        //        $html[] = '<div class="panel-body">';
+        //        $html[] = $this->getDependencyVerifierRenderer()->renderVerifiedDependencies($package);
+        //        $html[] = '</div>';
+
+        $html[] = '<table class="table table-bordered table-hover table-data data_table_no_header">';
 
         $properties = Package::getDefaultPropertyNames();
 
@@ -135,9 +138,10 @@ class PackageInformationRenderer
 
             if (!empty($value) && !in_array($property, $hiddenProperties))
             {
-                $html[] = '<tr><td class="header">' . $translator->trans(
-                        $stringUtilities->createString($property)->upperCamelize()->toString()
-                    ) . '</td><td>' . $value . '</td></tr>';
+                $html[] = '<tr><th class="header cell-stat-2x">' . $translator->trans(
+                        $stringUtilities->createString($property)->upperCamelize()->toString(), [],
+                        'Chamilo\Configuration'
+                    ) . '</th><td>' . $value . '</td></tr>';
             }
         }
 
@@ -146,18 +150,19 @@ class PackageInformationRenderer
         foreach ($authors as $key => $author)
         {
 
-            $html[] = '<tr><td class="header">';
+            $html[] = '<tr><th class="header cell-stat-2x">';
 
             if ($key == 0)
             {
                 $html[] = $translator->trans('Authors', [], Manager::CONTEXT);
             }
 
-            $html[] = '</td><td>' . $stringUtilities->encryptMailLink($author->get_email(), $author->get_name()) .
+            $html[] = '</th><td>' . $stringUtilities->encryptMailLink($author->get_email(), $author->get_name()) .
                 '</td></tr>';
         }
 
-        $html[] = '</table><br/>';
+        $html[] = '</table>';
+        $html[] = '</div>';
 
         return implode(PHP_EOL, $html);
     }
@@ -187,15 +192,10 @@ class PackageInformationRenderer
 
         $html = [];
 
-        $html[] = '<h3>' . $translator->trans(
-                'InstallationDependencies', ['VERSION' => $package->get_version()], Manager::CONTEXT
-            ) . '</h3>';
-
         $html[] = '<div class="panel panel-' . ($success ? 'success' : 'danger') . '">';
         $html[] = '<div class="panel-heading">';
         $html[] =
-            '<h3 class="panel-title">' . $translator->trans('DependenciesResultVerification', [], Manager::CONTEXT) .
-            '</h3>';
+            '<h4 class="panel-title">' . $translator->trans('InstallationDependencies', [], Manager::CONTEXT) . '</h4>';
         $html[] = '</div>';
         $html[] = '<div class="panel-body">';
         $html[] = $this->getDependencyVerifierRenderer()->renderVerifiedDependencies($package);

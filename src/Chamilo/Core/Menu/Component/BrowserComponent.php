@@ -1,7 +1,6 @@
 <?php
 namespace Chamilo\Core\Menu\Component;
 
-use Chamilo\Core\Menu\Factory\ItemRendererFactory;
 use Chamilo\Core\Menu\Manager;
 use Chamilo\Core\Menu\Menu\ItemMenu;
 use Chamilo\Core\Menu\Table\ItemTableRenderer;
@@ -116,11 +115,6 @@ class BrowserComponent extends Manager implements BreadcrumbLessComponentInterfa
         }
 
         return $this->buttonToolbarRenderer;
-    }
-
-    public function getItemRendererFactory(): ItemRendererFactory
-    {
-        return $this->getService(ItemRendererFactory::class);
     }
 
     public function getItemTableRenderer(): ItemTableRenderer

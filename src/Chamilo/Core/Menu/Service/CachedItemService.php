@@ -236,9 +236,9 @@ class CachedItemService implements CacheDataPreLoaderInterface, ItemServiceInter
         return $this->clearCacheDataForKeyParts([__CLASS__, self::KEY_ITEMS]);
     }
 
-    public function preLoadCacheData(): mixed
+    public function preLoadCacheData(): array
     {
-        $this->findItemsGroupedByParentIdentifier();
+        return $this->findItemsGroupedByParentIdentifier();
     }
 
     /**

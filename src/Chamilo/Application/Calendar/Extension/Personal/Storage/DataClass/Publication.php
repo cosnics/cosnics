@@ -31,9 +31,6 @@ class Publication extends \Chamilo\Core\Repository\Publication\Storage\DataClass
         return 'calendar_personal_publication';
     }
 
-    /**
-     * @throws \ReflectionException
-     */
     public function get_publication_object(): ?ContentObject
     {
         return parent::getContentObject();

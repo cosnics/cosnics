@@ -44,11 +44,6 @@ class PackageTypeMenu extends HtmlMenu
         return ($item_one > $item_two) ? + 1 : - 1;
     }
 
-    public function getClassnameUtilities(): ClassnameUtilities
-    {
-        return $this->classnameUtilities;
-    }
-
     private function get_items(PackageList $package_list): array
     {
         $item = [];

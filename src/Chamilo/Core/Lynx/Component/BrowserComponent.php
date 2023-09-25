@@ -210,19 +210,6 @@ class BrowserComponent extends Manager implements BreadcrumbLessComponentInterfa
     }
 
     /**
-     * @throws \Symfony\Component\Cache\Exception\CacheException
-     */
-    public function renderApplicationMenu(): string
-    {
-        $menu = new PackageTypeMenu(
-            $this->getPackageBundlesCacheService(), $this->getClassnameUtilities(), $this->getCurrentType(),
-            $this->get_url([Manager::PARAM_REGISTRATION_TYPE => '__type__'])
-        );
-
-        return $menu->render_as_tree();
-    }
-
-    /**
      * @throws \Chamilo\Libraries\Storage\Exception\DataClassNoResultException
      * @throws \TableException
      * @throws \Chamilo\Libraries\Format\Table\Exception\InvalidPageNumberException
@@ -324,5 +311,18 @@ class BrowserComponent extends Manager implements BreadcrumbLessComponentInterfa
         return $this->getArrayCollectionTableRenderer()->render(
             $headers, new ArrayCollection($table_data), 0, SORT_ASC, 200, 'registered_packages'
         );
+    }
+
+    /**
+     * @throws \Symfony\Component\Cache\Exception\CacheException
+     */
+    public function renderApplicationMenu(): string
+    {
+        $menu = new PackageTypeMenu(
+            $this->getPackageBundlesCacheService(), $this->getClassnameUtilities(), $this->getCurrentType(),
+            $this->get_url([Manager::PARAM_REGISTRATION_TYPE => '__type__'])
+        );
+
+        return $menu->render_as_tree();
     }
 }

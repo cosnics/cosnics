@@ -3,14 +3,15 @@ namespace Chamilo\Core\Rights\Ajax\Component;
 
 use Chamilo\Core\Rights\Entity\UserEntity;
 use Chamilo\Core\User\Ajax\Component\UsersFeedComponent;
+use Chamilo\Core\User\Storage\DataClass\User;
 use Chamilo\Libraries\Format\Form\Element\AdvancedElementFinder\AdvancedElementFinderElement;
 use Chamilo\Libraries\Format\Structure\Glyph\FontAwesomeGlyph;
 
 /**
  * Feed to return users from the user entity
  *
- * @package rights
- * @author Sven Vanpoucke - Hogeschool Gent
+ * @package    rights
+ * @author     Sven Vanpoucke - Hogeschool Gent
  * @deprecated Should not be needed anymore
  */
 class UserEntityFeedComponent extends UsersFeedComponent
@@ -23,7 +24,7 @@ class UserEntityFeedComponent extends UsersFeedComponent
      *
      * @return AdvancedElementFinderElement
      */
-    protected function getElementForUser($user)
+    protected function getElementForUser(User $user): AdvancedElementFinderElement
     {
         $glyph = new FontAwesomeGlyph('user', [], null, 'fas');
 

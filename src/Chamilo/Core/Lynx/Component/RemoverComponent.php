@@ -1,48 +1,89 @@
 <?php
 namespace Chamilo\Core\Lynx\Component;
 
-use Chamilo\Core\Lynx\Action\PackageRemover;
+use Chamilo\Configuration\Package\Action;
 use Chamilo\Core\Lynx\Manager;
-use Chamilo\Libraries\Format\Breadcrumb\BreadcrumbLessComponentInterface;
-use Chamilo\Libraries\Format\Structure\Breadcrumb;
 use Chamilo\Libraries\Format\Structure\Glyph\FontAwesomeGlyph;
-use Chamilo\Libraries\Format\Structure\Toolbar;
-use Chamilo\Libraries\Format\Structure\ToolbarItem;
-use Chamilo\Libraries\Translation\Translation;
+use Chamilo\Libraries\Format\Structure\Glyph\IdentGlyph;
+use Chamilo\Libraries\Format\Structure\Glyph\NamespaceIdentGlyph;
+use OutOfBoundsException;
 
-class RemoverComponent extends Manager implements BreadcrumbLessComponentInterface
+class RemoverComponent extends AdditionalActionComponent
 {
+    protected function getBreadcrumbNameVariable(): string
+    {
+        return 'RemovingPackage';
+    }
+
+    protected function getCurrentPackageAction(): Action
+    {
+        return $this->getPackageActionFactory()->getPackageRemover($this->getCurrentContext());
+    }
 
     /**
-     * Runs this component and displays its output.
+     * @throws \Symfony\Component\Cache\Exception\CacheException
      */
-    public function run()
+    protected function runPackageAction(Action $packageAction): string
     {
-        $context = $this->getRequest()->query->get(self::PARAM_CONTEXT);
-        $remover = new PackageRemover($context);
-        $remover->run();
+        $translator = $this->getTranslator();
 
-        $this->getBreadcrumbTrail()->add(
-            new Breadcrumb(
-                null, Translation::get('RemovingPackage', ['PACKAGE' => Translation::get('TypeName', null, $context)])
-            )
-        );
+        $initializationGlyph = new FontAwesomeGlyph('truck-loading', ['fa-lg'], null, 'fas');
+        $initilizationTitle = $translator->trans('Failed', [], Manager::CONTEXT);
 
         $html = [];
 
-        $html[] = $this->render_header();
-        $html[] = $remover->getResult(true);
+        try
+        {
+            $package = $this->getCurrentPackage();
 
-        $toolbar = new Toolbar();
-        $toolbar->add_item(
-            new ToolbarItem(
-                Translation::get('BackToPackageOVerview'), new FontAwesomeGlyph('backward'),
-                $this->get_url([self::PARAM_ACTION => self::ACTION_BROWSE])
-            )
-        );
+            if (!$this->getRegistrationConsulter()->isContextRegistered($package->get_context()))
+            {
+                $message = $translator->trans('PackageIsNotInstalled', [], Manager::CONTEXT);
 
-        $html[] = $toolbar->as_html();
-        $html[] = $this->render_footer();
+                return $this->renderPanel('panel-danger', $initializationGlyph, $initilizationTitle, $message);
+            }
+            else
+            {
+                $this->addAdditionalPackageContexts($package->getAdditional());
+
+                while (($additionalPackageContext = $this->getNextAdditionalPackageContext()) != null)
+                {
+                    try
+                    {
+                        $additionalPackage = $this->getPackageFactory()->getPackage($additionalPackageContext);
+                        $additionalPackageAction =
+                            $this->getPackageActionFactory()->getPackageInstaller($additionalPackageContext);
+
+                        $html[] = parent::runPackageAction($additionalPackageAction);
+
+                        $this->addAdditionalPackageContexts($additionalPackage->getAdditional());
+                    }
+                    catch (OutOfBoundsException)
+                    {
+                        $contextTitle = $translator->trans(
+                            'Removal', ['PACKAGE' => $translator->trans('TypeName', [], $additionalPackageContext)],
+                            Manager::CONTEXT
+                        );
+
+                        $contextGlyph = new NamespaceIdentGlyph(
+                            $additionalPackageContext, true, false, false, IdentGlyph::SIZE_BIG
+                        );
+
+                        $html[] = $this->renderPanel('panel-danger', $contextGlyph, $initilizationTitle, $contextTitle);
+
+                        return implode(PHP_EOL, $html);
+                    }
+                }
+
+                $html[] = parent::runPackageAction($packageAction);
+            }
+        }
+        catch (OutOfBoundsException)
+        {
+            $message = $translator->trans('PackageAttributesNotFound', [], Manager::CONTEXT);
+
+            return $this->renderPanel('panel-danger', $initializationGlyph, $initilizationTitle, $message);
+        }
 
         return implode(PHP_EOL, $html);
     }

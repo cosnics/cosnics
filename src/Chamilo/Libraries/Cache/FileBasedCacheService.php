@@ -47,7 +47,7 @@ abstract class FileBasedCacheService implements CacheDataPreLoaderInterface
 
     abstract public function initializeCache();
 
-    public function preLoadCacheData(): mixed
+    public function preLoadCacheData(): void
     {
         if ($this->clearCacheData())
         {

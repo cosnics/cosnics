@@ -5,6 +5,7 @@ use Chamilo\Core\Tracking\Storage\DataClass\Event;
 use Chamilo\Core\User\Integration\Chamilo\Core\Tracking\Storage\DataClass\Visit;
 use Chamilo\Core\User\Manager;
 use Chamilo\Libraries\Architecture\JsonAjaxResult;
+use Chamilo\Libraries\Storage\DataClass\DataClass;
 
 /**
  * @package Chamilo\Core\User\Ajax
@@ -22,7 +23,7 @@ class LeaveComponent extends \Chamilo\Core\User\Ajax\Manager
 
         Event::trigger(
             'Leave', Manager::CONTEXT, [
-                Visit::PROPERTY_ID => $tracker,
+                DataClass::PROPERTY_ID => $tracker,
                 Visit::PROPERTY_LOCATION => null,
                 Visit::PROPERTY_USER_ID => $user_id
             ]
