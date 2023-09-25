@@ -97,7 +97,6 @@ class PublicationModifier implements PublicationModifierInterface
     }
 
     /**
-     * @throws \ReflectionException
      * @throws \Exception
      */
     public function publishContentObject(

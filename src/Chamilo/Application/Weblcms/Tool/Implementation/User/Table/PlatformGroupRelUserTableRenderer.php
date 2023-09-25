@@ -41,7 +41,6 @@ class PlatformGroupRelUserTableRenderer extends DataClassListTableRenderer imple
     }
 
     /**
-     * @throws \ReflectionException
      * @throws \TableException
      * @throws \Chamilo\Libraries\Format\Table\Exception\InvalidPageNumberException
      * @throws \QuickformException

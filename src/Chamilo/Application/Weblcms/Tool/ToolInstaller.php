@@ -41,7 +41,6 @@ class ToolInstaller extends Installer
     private CourseTool $tool_registration;
 
     /**
-     * @throws \ReflectionException
      * @throws \Chamilo\Libraries\Storage\Exception\DataClassNoResultException
      * @throws \Exception
      */
@@ -83,8 +82,6 @@ class ToolInstaller extends Installer
 
     /**
      * Installs the settings that are required for each tool (active, visible)
-     *
-     * @throws \ReflectionException
      */
     private function install_static_settings(): bool
     {
@@ -157,7 +154,6 @@ class ToolInstaller extends Installer
      * Installs the tool in the existing course types Adds the static tool settings with a default disabled value
      *
      * @throws \Chamilo\Libraries\Storage\Exception\DataClassNoResultException
-     * @throws \ReflectionException
      */
     protected function install_tool_for_existing_course_types(): bool
     {
@@ -190,7 +186,6 @@ class ToolInstaller extends Installer
      * Installs the tool in the existing courses Adds the static tool settings with a default disabled value Adds a
      * rights location for the tool in each course
      *
-     * @throws \ReflectionException
      * @throws \Chamilo\Libraries\Storage\Exception\DataClassNoResultException
      */
     protected function install_tool_for_existing_courses(): bool

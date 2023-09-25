@@ -36,7 +36,6 @@ class UnsubscribeBrowserComponent extends Manager implements BreadcrumbLessCompo
      * @throws \Chamilo\Libraries\Architecture\Exceptions\ObjectNotExistException
      * @throws \Chamilo\Libraries\Format\Table\Exception\InvalidPageNumberException
      * @throws \QuickformException
-     * @throws \ReflectionException
      * @throws \TableException
      */
     public function run()
@@ -301,7 +300,6 @@ class UnsubscribeBrowserComponent extends Manager implements BreadcrumbLessCompo
     /**
      * @throws \Chamilo\Libraries\Format\Table\Exception\InvalidPageNumberException
      * @throws \QuickformException
-     * @throws \ReflectionException
      * @throws \TableException
      */
     protected function renderTable(): string

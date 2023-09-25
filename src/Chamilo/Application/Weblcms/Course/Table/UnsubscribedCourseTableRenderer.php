@@ -53,9 +53,6 @@ class UnsubscribedCourseTableRenderer extends RecordListTableRenderer implements
         );
     }
 
-    /**
-     * @throws \ReflectionException
-     */
     private function canAccessCourse($course): bool
     {
         $user = $this->getUser();
@@ -197,9 +194,6 @@ class UnsubscribedCourseTableRenderer extends RecordListTableRenderer implements
         return parent::renderCell($column, $resultPosition, $course);
     }
 
-    /**
-     * @throws \ReflectionException
-     */
     public function renderTableRowActions(TableResultPosition $resultPosition, $course): string
     {
         $urlGenerator = $this->getUrlGenerator();

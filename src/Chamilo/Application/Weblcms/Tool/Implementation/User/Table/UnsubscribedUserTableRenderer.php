@@ -148,7 +148,6 @@ class UnsubscribedUserTableRenderer extends DataClassListTableRenderer
     }
 
     /**
-     * @throws \ReflectionException
      * @throws \TableException
      * @throws \Chamilo\Libraries\Format\Table\Exception\InvalidPageNumberException
      * @throws \QuickformException

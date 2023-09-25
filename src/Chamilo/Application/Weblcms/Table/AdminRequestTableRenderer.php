@@ -117,8 +117,6 @@ class AdminRequestTableRenderer extends DataClassListTableRenderer implements Ta
 
     /**
      * @param \Chamilo\Application\Weblcms\Storage\DataClass\CourseRequest $request
-     *
-     * @throws \ReflectionException
      */
     protected function renderCell(TableColumn $column, TableResultPosition $resultPosition, $request): string
     {

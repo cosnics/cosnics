@@ -117,9 +117,9 @@ class DoctrineExtension
      * @param $course_id
      * @param $condition
      *
-     * @return integer[]
+     * @return int[]
      * @throws \Doctrine\DBAL\Exception
-     * @throws \ReflectionException
+     * @throws \Exception
      */
     protected function countSubscribedUsers($course_id, $condition)
     {

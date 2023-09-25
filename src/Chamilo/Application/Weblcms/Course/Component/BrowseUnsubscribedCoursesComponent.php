@@ -98,7 +98,6 @@ class BrowseUnsubscribedCoursesComponent extends BrowseSubscriptionCoursesCompon
     /**
      * @throws \Chamilo\Libraries\Format\Table\Exception\InvalidPageNumberException
      * @throws \QuickformException
-     * @throws \ReflectionException
      * @throws \TableException
      * @throws \Exception
      */

@@ -67,9 +67,6 @@ class AssessmentAttemptTableRenderer extends RecordListTableRenderer implements 
         return $this->datetimeUtilities;
     }
 
-    /**
-     * @throws \ReflectionException
-     */
     protected function initializeColumns(): void
     {
         $this->addColumn(
@@ -129,7 +126,6 @@ class AssessmentAttemptTableRenderer extends RecordListTableRenderer implements 
     /**
      * @throws \Chamilo\Libraries\Format\Table\Exception\InvalidPageNumberException
      * @throws \QuickformException
-     * @throws \ReflectionException
      * @throws \TableException
      * @deprecated Temporary solution to allow rendering of DI-based tables in a non-DI context
      */
@@ -192,9 +188,6 @@ class AssessmentAttemptTableRenderer extends RecordListTableRenderer implements 
         return parent::renderCell($column, $resultPosition, $assessmentAttempt);
     }
 
-    /**
-     * @throws \ReflectionException
-     */
     public function renderTableRowActions(TableResultPosition $resultPosition, $assessmentAttempt): string
     {
         $urlGenerator = $this->getUrlGenerator();

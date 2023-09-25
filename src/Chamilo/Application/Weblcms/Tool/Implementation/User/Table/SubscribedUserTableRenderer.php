@@ -174,7 +174,6 @@ class SubscribedUserTableRenderer extends RecordListTableRenderer implements Tab
     }
 
     /**
-     * @throws \ReflectionException
      * @throws \TableException
      * @throws \Chamilo\Libraries\Format\Table\Exception\InvalidPageNumberException
      * @throws \QuickformException

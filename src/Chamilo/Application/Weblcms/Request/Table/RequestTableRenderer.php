@@ -106,8 +106,6 @@ class RequestTableRenderer extends DataClassListTableRenderer implements TableRo
 
     /**
      * @param \Chamilo\Application\Weblcms\Request\Storage\DataClass\Request $request
-     *
-     * @throws \ReflectionException
      */
     protected function renderCell(TableColumn $column, TableResultPosition $resultPosition, $request): string
     {

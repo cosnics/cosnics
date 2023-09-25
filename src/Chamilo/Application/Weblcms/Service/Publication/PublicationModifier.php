@@ -127,7 +127,6 @@ class PublicationModifier implements PublicationModifierInterface
     }
 
     /**
-     * @throws \ReflectionException
      * @throws \Chamilo\Libraries\Storage\Exception\DataClassNoResultException
      */
     public function deleteContentObjectPublication(string $publicationIdentifier): bool

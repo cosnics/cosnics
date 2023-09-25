@@ -107,9 +107,6 @@ class EntityTableRenderer extends DataClassListTableRenderer implements TableRow
         $this->addColumn(new StaticTableColumn(self::PROPERTY_PATH, $translator->trans('Path', [], Manager::CONTEXT)));
     }
 
-    /**
-     * @throws \ReflectionException
-     */
     protected function renderCell(TableColumn $column, TableResultPosition $resultPosition, $object): string
     {
         switch ($column->get_name())

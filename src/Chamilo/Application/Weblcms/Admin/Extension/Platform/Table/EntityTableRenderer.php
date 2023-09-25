@@ -64,7 +64,6 @@ class EntityTableRenderer extends DataClassListTableRenderer implements TableRow
 
     /**
      * @throws \TableException
-     * @throws \ReflectionException
      * @throws \Chamilo\Libraries\Format\Table\Exception\InvalidPageNumberException
      * @throws \QuickformException
      * @deprecated Temporary solution to allow rendering of DI-based tables in a non-DI context
@@ -95,9 +94,6 @@ class EntityTableRenderer extends DataClassListTableRenderer implements TableRow
         }
     }
 
-    /**
-     * @throws \ReflectionException
-     */
     public function renderTableRowActions(TableResultPosition $resultPosition, $result): string
     {
         $urlGenerator = $this->getUrlGenerator();

@@ -107,7 +107,6 @@ class CourseEntityHelper
     }
 
     /**
-     * @throws \ReflectionException
      * @throws \Exception
      */
     public static function get_table_columns()

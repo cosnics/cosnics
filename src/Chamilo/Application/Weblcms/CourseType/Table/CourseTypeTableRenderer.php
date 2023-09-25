@@ -90,7 +90,6 @@ class CourseTypeTableRenderer extends DataClassListTableRenderer implements Tabl
     }
 
     /**
-     * @throws \ReflectionException
      * @throws \TableException
      * @throws \Chamilo\Libraries\Format\Table\Exception\InvalidPageNumberException
      * @throws \QuickformException
@@ -162,8 +161,6 @@ class CourseTypeTableRenderer extends DataClassListTableRenderer implements Tabl
 
     /**
      * @param \Chamilo\Application\Weblcms\CourseType\Storage\DataClass\CourseType $courseType
-     *
-     * @throws \ReflectionException
      */
     public function renderTableRowActions(TableResultPosition $resultPosition, $courseType): string
     {

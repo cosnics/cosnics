@@ -133,7 +133,6 @@ class RequestTableRenderer extends DataClassListTableRenderer implements TableRo
 
     /**
      * @throws \TableException
-     * @throws \ReflectionException
      * @throws \Chamilo\Libraries\Format\Table\Exception\InvalidPageNumberException
      * @throws \QuickformException
      * @deprecated Temporary solution to allow rendering of DI-based tables in a non-DI context

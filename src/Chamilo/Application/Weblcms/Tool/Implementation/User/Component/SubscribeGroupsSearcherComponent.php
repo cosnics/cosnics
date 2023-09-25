@@ -22,7 +22,6 @@ class SubscribeGroupsSearcherComponent extends Manager
     protected ButtonToolBarRenderer $buttonToolbarRenderer;
 
     /**
-     * @throws \ReflectionException
      * @throws \TableException
      * @throws \Chamilo\Libraries\Format\Table\Exception\InvalidPageNumberException
      * @throws \QuickformException
@@ -88,7 +87,6 @@ class SubscribeGroupsSearcherComponent extends Manager
     /**
      * @throws \Chamilo\Libraries\Format\Table\Exception\InvalidPageNumberException
      * @throws \QuickformException
-     * @throws \ReflectionException
      * @throws \TableException
      * @throws \Exception
      */

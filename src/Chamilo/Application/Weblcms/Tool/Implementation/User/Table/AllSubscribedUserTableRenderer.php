@@ -162,7 +162,6 @@ class AllSubscribedUserTableRenderer extends RecordListTableRenderer implements 
     }
 
     /**
-     * @throws \ReflectionException
      * @throws \TableException
      * @throws \Chamilo\Libraries\Format\Table\Exception\InvalidPageNumberException
      * @throws \QuickformException

@@ -62,7 +62,6 @@ class UnsubscribeBrowserComponent extends Manager
      * @throws \Chamilo\Libraries\Storage\Exception\DataClassNoResultException
      * @throws \Doctrine\DBAL\Exception
      * @throws \QuickformException
-     * @throws \ReflectionException
      * @throws \TableException
      */
     public function run()
@@ -207,7 +206,6 @@ class UnsubscribeBrowserComponent extends Manager
      * @throws \Chamilo\Libraries\Storage\Exception\DataClassNoResultException
      * @throws \Doctrine\DBAL\Exception
      * @throws \QuickformException
-     * @throws \ReflectionException
      * @throws \TableException
      */
     private function get_all_users_tab(): string
@@ -296,7 +294,6 @@ class UnsubscribeBrowserComponent extends Manager
     /**
      * @throws \Chamilo\Libraries\Format\Table\Exception\InvalidPageNumberException
      * @throws \QuickformException
-     * @throws \ReflectionException
      * @throws \TableException
      * @throws \Exception
      */
@@ -342,7 +339,6 @@ class UnsubscribeBrowserComponent extends Manager
 
     /**
      * @throws \Chamilo\Libraries\Storage\Exception\DataClassNoResultException
-     * @throws \ReflectionException
      * @throws \TableException
      * @throws \Chamilo\Libraries\Format\Table\Exception\InvalidPageNumberException
      * @throws \QuickformException
@@ -402,7 +398,6 @@ class UnsubscribeBrowserComponent extends Manager
      * @throws \Chamilo\Libraries\Format\Table\Exception\InvalidPageNumberException
      * @throws \Chamilo\Libraries\Storage\Exception\DataClassNoResultException
      * @throws \QuickformException
-     * @throws \ReflectionException
      * @throws \TableException
      */
     private function get_platformgroup_tabs_content(): string
@@ -421,7 +416,6 @@ class UnsubscribeBrowserComponent extends Manager
     /**
      * @throws \Chamilo\Libraries\Format\Table\Exception\InvalidPageNumberException
      * @throws \QuickformException
-     * @throws \ReflectionException
      * @throws \TableException
      */
     private function get_platformgroups_subgroups_tab(): string
@@ -438,7 +432,6 @@ class UnsubscribeBrowserComponent extends Manager
 
     /**
      * @throws \Chamilo\Libraries\Storage\Exception\DataClassNoResultException
-     * @throws \ReflectionException
      * @throws \TableException
      * @throws \Chamilo\Libraries\Format\Table\Exception\InvalidPageNumberException
      * @throws \QuickformException
@@ -470,7 +463,6 @@ class UnsubscribeBrowserComponent extends Manager
      * @throws \Chamilo\Libraries\Format\Table\Exception\InvalidPageNumberException
      * @throws \Chamilo\Libraries\Storage\Exception\DataClassNoResultException
      * @throws \QuickformException
-     * @throws \ReflectionException
      * @throws \TableException
      * @throws \Exception
      */
@@ -544,7 +536,6 @@ class UnsubscribeBrowserComponent extends Manager
 
     /**
      * @throws \Chamilo\Libraries\Storage\Exception\DataClassNoResultException
-     * @throws \ReflectionException
      * @throws \TableException
      * @throws \Chamilo\Libraries\Format\Table\Exception\InvalidPageNumberException
      * @throws \Doctrine\DBAL\Exception
@@ -565,7 +556,6 @@ class UnsubscribeBrowserComponent extends Manager
      * @throws \Chamilo\Libraries\Storage\Exception\DataClassNoResultException
      * @throws \TableException
      * @throws \Chamilo\Libraries\Format\Table\Exception\InvalidPageNumberException
-     * @throws \ReflectionException
      * @throws \Doctrine\DBAL\Exception
      * @throws \QuickformException
      */
@@ -649,7 +639,6 @@ class UnsubscribeBrowserComponent extends Manager
     /**
      * @throws \Chamilo\Libraries\Format\Table\Exception\InvalidPageNumberException
      * @throws \QuickformException
-     * @throws \ReflectionException
      * @throws \TableException
      */
     protected function renderDirectSubscribedPlatformGroupTable(): string
@@ -674,7 +663,6 @@ class UnsubscribeBrowserComponent extends Manager
     /**
      * @throws \Chamilo\Libraries\Format\Table\Exception\InvalidPageNumberException
      * @throws \QuickformException
-     * @throws \ReflectionException
      * @throws \TableException
      * @throws \Chamilo\Libraries\Storage\Exception\DataClassNoResultException
      */

@@ -109,7 +109,6 @@ class CourseGroupTableRenderer extends DataClassListTableRenderer implements Tab
     /**
      * @throws \Chamilo\Libraries\Format\Table\Exception\InvalidPageNumberException
      * @throws \QuickformException
-     * @throws \ReflectionException
      * @throws \TableException
      * @deprecated Temporary solution to allow rendering of DI-based tables in a non-DI context
      */
@@ -160,8 +159,6 @@ class CourseGroupTableRenderer extends DataClassListTableRenderer implements Tab
 
     /**
      * @param \Chamilo\Application\Weblcms\Tool\Implementation\CourseGroup\Storage\DataClass\CourseGroup $courseGroup
-     *
-     * @throws \ReflectionException
      */
     public function renderTableRowActions(TableResultPosition $resultPosition, $courseGroup): string
     {

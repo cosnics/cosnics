@@ -257,7 +257,6 @@ class CourseGroup extends NestedSet
      *
      * @return InCondition
      * @throws \Chamilo\Libraries\Storage\Exception\DataClassNoResultException
-     * @throws \ReflectionException
      */
     private function get_members_condition($include_subgroups = false, $recursive_subgroups = false)
     {

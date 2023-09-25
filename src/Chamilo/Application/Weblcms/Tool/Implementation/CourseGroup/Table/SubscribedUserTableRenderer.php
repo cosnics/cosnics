@@ -140,7 +140,6 @@ class SubscribedUserTableRenderer extends RecordListTableRenderer implements Tab
     /**
      * @throws \Chamilo\Libraries\Format\Table\Exception\InvalidPageNumberException
      * @throws \QuickformException
-     * @throws \ReflectionException
      * @throws \TableException
      * @deprecated Temporary solution to allow rendering of DI-based tables in a non-DI context
      */
@@ -178,9 +177,6 @@ class SubscribedUserTableRenderer extends RecordListTableRenderer implements Tab
         return parent::renderCell($column, $resultPosition, $user);
     }
 
-    /**
-     * @throws \ReflectionException
-     */
     public function renderTableRowActions(TableResultPosition $resultPosition, $userRecord): string
     {
         $urlGenerator = $this->getUrlGenerator();

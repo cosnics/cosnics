@@ -155,7 +155,6 @@ class ObjectPublicationTableRenderer extends RecordListTableRenderer
     /**
      * @throws \Chamilo\Libraries\Format\Table\Exception\InvalidPageNumberException
      * @throws \QuickformException
-     * @throws \ReflectionException
      * @throws \TableException
      * @deprecated Temporary solution to allow rendering of DI-based tables in a non-DI context
      */
@@ -171,7 +170,6 @@ class ObjectPublicationTableRenderer extends RecordListTableRenderer
 
     /**
      * @throws \Chamilo\Libraries\Architecture\Exceptions\ObjectNotExistException
-     * @throws \ReflectionException
      */
     protected function renderCell(TableColumn $column, TableResultPosition $resultPosition, $publication): string
     {
@@ -296,7 +294,6 @@ class ObjectPublicationTableRenderer extends RecordListTableRenderer
      * @param $publication
      *
      * @return string
-     * @throws \ReflectionException
      */
     public function renderPublicationTargets($publication): string
     {

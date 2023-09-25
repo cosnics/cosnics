@@ -139,7 +139,6 @@ class DirectSubscribedPlatformGroupTableRenderer extends RecordListTableRenderer
     }
 
     /**
-     * @throws \ReflectionException
      * @throws \TableException
      * @throws \Chamilo\Libraries\Format\Table\Exception\InvalidPageNumberException
      * @throws \QuickformException

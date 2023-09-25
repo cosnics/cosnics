@@ -124,7 +124,6 @@ class UnsubscribedGroupTableRenderer extends DataClassListTableRenderer
     }
 
     /**
-     * @throws \ReflectionException
      * @throws \TableException
      * @throws \Chamilo\Libraries\Format\Table\Exception\InvalidPageNumberException
      * @throws \QuickformException
@@ -174,9 +173,6 @@ class UnsubscribedGroupTableRenderer extends DataClassListTableRenderer
         return parent::renderCell($column, $resultPosition, $group);
     }
 
-    /**
-     * @throws \ReflectionException
-     */
     public function renderTableRowActions(TableResultPosition $resultPosition, $groupWithSubscriptionStatus): string
     {
         if ($this->application->isGroupSubscribed($groupWithSubscriptionStatus->getId()))

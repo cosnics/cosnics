@@ -48,7 +48,6 @@ class SubscriptionsOverviewerComponent extends Manager
      * @throws \Chamilo\Libraries\Storage\Exception\DataClassNoResultException
      * @throws \Doctrine\DBAL\Exception
      * @throws \QuickformException
-     * @throws \ReflectionException
      * @throws \TableException
      */
     public function run()
@@ -173,7 +172,6 @@ class SubscriptionsOverviewerComponent extends Manager
      * @throws \Chamilo\Libraries\Format\Table\Exception\InvalidPageNumberException
      * @throws \Chamilo\Libraries\Storage\Exception\DataClassNoResultException
      * @throws \QuickformException
-     * @throws \ReflectionException
      * @throws \TableException
      */
     private function get_course_groups_tab(): string
@@ -237,7 +235,6 @@ class SubscriptionsOverviewerComponent extends Manager
      * @throws \Chamilo\Libraries\Storage\Exception\DataClassNoResultException
      * @throws \Doctrine\DBAL\Exception
      * @throws \QuickformException
-     * @throws \ReflectionException
      * @throws \TableException
      */
     private function get_tabs(): string
@@ -273,7 +270,6 @@ class SubscriptionsOverviewerComponent extends Manager
      * @throws \Chamilo\Libraries\Storage\Exception\DataClassNoResultException
      * @throws \Doctrine\DBAL\Exception
      * @throws \QuickformException
-     * @throws \ReflectionException
      * @throws \TableException
      */
     private function get_tabs_content(): string
@@ -292,7 +288,6 @@ class SubscriptionsOverviewerComponent extends Manager
     /**
      * @throws \Chamilo\Libraries\Storage\Exception\DataClassNoResultException
      * @throws \TableException
-     * @throws \ReflectionException
      * @throws \Chamilo\Libraries\Format\Table\Exception\InvalidPageNumberException
      * @throws \QuickformException
      * @throws \Doctrine\DBAL\Exception
@@ -319,7 +314,6 @@ class SubscriptionsOverviewerComponent extends Manager
     }
 
     /**
-     * @throws \ReflectionException
      * @throws \TableException
      * @throws \Chamilo\Libraries\Format\Table\Exception\InvalidPageNumberException
      * @throws \QuickformException
@@ -342,7 +336,6 @@ class SubscriptionsOverviewerComponent extends Manager
     }
 
     /**
-     * @throws \ReflectionException
      * @throws \TableException
      * @throws \Chamilo\Libraries\Format\Table\Exception\InvalidPageNumberException
      * @throws \QuickformException

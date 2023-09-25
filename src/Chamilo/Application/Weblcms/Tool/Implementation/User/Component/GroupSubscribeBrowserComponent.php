@@ -51,7 +51,6 @@ class GroupSubscribeBrowserComponent extends Manager
      * @throws \Chamilo\Libraries\Architecture\Exceptions\ObjectNotExistException
      * @throws \Chamilo\Libraries\Format\Table\Exception\InvalidPageNumberException
      * @throws \QuickformException
-     * @throws \ReflectionException
      * @throws \TableException
      */
     public function run()
@@ -112,9 +111,6 @@ class GroupSubscribeBrowserComponent extends Manager
         return $this->buttonToolbarRenderer;
     }
 
-    /**
-     * @throws \ReflectionException
-     */
     protected function getCurrentGroup(): ?Group
     {
         $groupId = $this->getGroupId();
@@ -154,9 +150,6 @@ class GroupSubscribeBrowserComponent extends Manager
         return new ButtonToolBarRenderer($buttonToolbar);
     }
 
-    /**
-     * @throws \ReflectionException
-     */
     protected function getGroupId(): string
     {
         if (!$this->groupId)
@@ -179,9 +172,6 @@ class GroupSubscribeBrowserComponent extends Manager
         return $this->getService(RequestTableParameterValuesCompiler::class);
     }
 
-    /**
-     * @throws \ReflectionException
-     */
     public function getRootGroup(): ?Group
     {
         if (!$this->rootGroup)
@@ -194,7 +184,6 @@ class GroupSubscribeBrowserComponent extends Manager
 
     /**
      * @throws \QuickformException
-     * @throws \ReflectionException
      */
     public function getUnsubscribedGroupCondition(): AndCondition
     {
@@ -234,7 +223,6 @@ class GroupSubscribeBrowserComponent extends Manager
     }
 
     /**
-     * @throws \ReflectionException
      * @throws \TableException
      * @throws \Chamilo\Libraries\Format\Table\Exception\InvalidPageNumberException
      * @throws \QuickformException
@@ -253,7 +241,6 @@ class GroupSubscribeBrowserComponent extends Manager
     }
 
     /**
-     * @throws \ReflectionException
      * @throws \QuickformException
      * @throws \Exception
      */
@@ -295,9 +282,6 @@ class GroupSubscribeBrowserComponent extends Manager
         return implode(PHP_EOL, $html);
     }
 
-    /**
-     * @throws \ReflectionException
-     */
     protected function renderGroupMenu(): string
     {
         $tree = new PlatformgroupMenuRenderer($this, [$this->getRootGroup()->getId()]);
@@ -312,7 +296,6 @@ class GroupSubscribeBrowserComponent extends Manager
 
     /**
      * @throws \TableException
-     * @throws \ReflectionException
      * @throws \Chamilo\Libraries\Format\Table\Exception\InvalidPageNumberException
      * @throws \QuickformException
      */
@@ -352,7 +335,6 @@ class GroupSubscribeBrowserComponent extends Manager
     /**
      * @throws \Chamilo\Libraries\Format\Table\Exception\InvalidPageNumberException
      * @throws \QuickformException
-     * @throws \ReflectionException
      * @throws \TableException
      * @throws \Exception
      */

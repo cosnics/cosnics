@@ -21,7 +21,6 @@ class BrowseSubscribedCoursesComponent extends BrowseSubscriptionCoursesComponen
     /**
      * @throws \Chamilo\Libraries\Format\Table\Exception\InvalidPageNumberException
      * @throws \QuickformException
-     * @throws \ReflectionException
      * @throws \TableException
      * @throws \Exception
      */
