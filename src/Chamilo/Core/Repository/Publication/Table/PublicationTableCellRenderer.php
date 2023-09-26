@@ -4,6 +4,7 @@ namespace Chamilo\Core\Repository\Publication\Table;
 
 use Chamilo\Core\Repository\Publication\Manager;
 use Chamilo\Core\Repository\Publication\Storage\DataClass\Attributes;
+use Chamilo\Core\Repository\Storage\DataClass\ContentObject;
 use Chamilo\Libraries\Format\Structure\Toolbar;
 use Chamilo\Libraries\Format\Structure\ToolbarItem;
 use Chamilo\Libraries\Format\Table\Extension\DataClassTable\DataClassTableCellRenderer;
@@ -70,7 +71,7 @@ class PublicationTableCellRenderer extends DataClassTableCellRenderer implements
             )
         );
 
-        if (!$publication_attributes->get_content_object()->is_latest_version())
+        if ($publication_attributes->get_content_object() instanceof ContentObject && !$publication_attributes->get_content_object()->is_current())
         {
             $toolbar->add_item(
                 new ToolbarItem(
