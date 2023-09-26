@@ -34,7 +34,7 @@ class RightsForm extends FormValidator
     {
         $types = new AdvancedElementFinderElementTypes();
         $types->add_element_type(UserEntity::getInstance()->get_element_finder_type());
-        $types->add_element_type(PlatformGroupEntity::getInstance()->::get_element_finder_type());
+        $types->add_element_type(PlatformGroupEntity::getInstance()->get_element_finder_type());
         $this->addElement('advanced_element_finder', self::PROPERTY_ACCESS, null, $types);
         
         $buttons[] = $this->createElement(
