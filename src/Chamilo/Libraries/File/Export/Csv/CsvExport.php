@@ -9,6 +9,16 @@ use Chamilo\Libraries\File\Export\Export;
 class CsvExport extends Export
 {
 
+    protected function getContentType(): string
+    {
+        return 'text/csv';
+    }
+
+    protected function getExtension(): string
+    {
+        return 'csv';
+    }
+
     public function serializeData($data): string
     {
         $key_array = array_keys($data[0]);
@@ -18,8 +28,6 @@ class CsvExport extends Export
         {
             $all .= implode(';', $row) . PHP_EOL;
         }
-
-        echo $all;
 
         return ($all);
     }

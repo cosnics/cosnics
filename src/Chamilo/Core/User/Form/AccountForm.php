@@ -11,6 +11,7 @@ use Chamilo\Libraries\Architecture\Interfaces\ChangeableUsernameInterface;
 use Chamilo\Libraries\Authentication\AuthenticationValidator;
 use Chamilo\Libraries\DependencyInjection\Traits\DependencyInjectionContainerTrait;
 use Chamilo\Libraries\Format\Form\FormValidator;
+use Chamilo\Libraries\Storage\DataClass\DataClass;
 use Chamilo\Libraries\Translation\Translation;
 use Chamilo\Libraries\Utilities\StringUtilities;
 
@@ -45,8 +46,6 @@ class AccountForm extends FormValidator
      * @param \Chamilo\Core\User\Storage\DataClass\User $user
      * @param string $action
      * @param \Chamilo\Libraries\Authentication\AuthenticationValidator $authenticationValidator
-     *
-     * @throws \Exception
      */
     public function __construct($form_type, $user, $action, AuthenticationValidator $authenticationValidator)
     {
@@ -349,21 +348,23 @@ class AccountForm extends FormValidator
     }
 
     /**
-     * @param string[] $defaults
+     * @param string[] $defaultValues
      *
-     * @throws \Exception
+     * @throws \QuickformException
      */
-    public function setDefaults($defaults = [], $filter = null)
+    public function setDefaults(array $defaultValues = [], $filter = null)
     {
         $user = $this->user;
-        $defaults[User::PROPERTY_ID] = $user->get_id();
-        $defaults[User::PROPERTY_LASTNAME] = $user->get_lastname();
-        $defaults[User::PROPERTY_FIRSTNAME] = $user->get_firstname();
-        $defaults[User::PROPERTY_EMAIL] = $user->get_email();
-        $defaults[User::PROPERTY_USERNAME] = $user->get_username();
-        $defaults[User::PROPERTY_OFFICIAL_CODE] = $user->get_official_code();
-        $defaults[User::PROPERTY_SECURITY_TOKEN] = $user->get_security_token();
-        parent::setDefaults($defaults);
+
+        $defaultValues[DataClass::PROPERTY_ID] = $user->getId();
+        $defaultValues[User::PROPERTY_LASTNAME] = $user->get_lastname();
+        $defaultValues[User::PROPERTY_FIRSTNAME] = $user->get_firstname();
+        $defaultValues[User::PROPERTY_EMAIL] = $user->get_email();
+        $defaultValues[User::PROPERTY_USERNAME] = $user->get_username();
+        $defaultValues[User::PROPERTY_OFFICIAL_CODE] = $user->get_official_code();
+        $defaultValues[User::PROPERTY_SECURITY_TOKEN] = $user->get_security_token();
+
+        parent::setDefaults($defaultValues);
     }
 
     /**

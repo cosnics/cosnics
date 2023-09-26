@@ -5,6 +5,7 @@ use Chamilo\Libraries\File\ConfigurablePathBuilder;
 use Chamilo\Libraries\File\FilesystemTools;
 use Symfony\Component\Filesystem\Filesystem;
 use Symfony\Component\HttpFoundation\BinaryFileResponse;
+use Symfony\Component\HttpFoundation\ResponseHeaderBag;
 
 /**
  * @package Chamilo\Libraries\File\Export
@@ -31,6 +32,10 @@ abstract class Export
         return $this->configurablePathBuilder;
     }
 
+    abstract protected function getContentType(): string;
+
+    abstract protected function getExtension(): string;
+
     public function getFilesystem(): Filesystem
     {
         return $this->filesystem;
@@ -43,11 +48,18 @@ abstract class Export
 
     public function sendtoBrowser(string $fileName, array $data, ?string $path = null): void
     {
+        $fileName = $fileName . '.' . $this->getExtension();
+
         $file = $this->writeToFile($fileName, $data, $path);
 
         if ($file)
         {
-            $fileResponse = new BinaryFileResponse($file);
+            $fileResponse = new BinaryFileResponse($file, 200, ['Content-Type' => $this->getContentType()]);
+
+            $fileResponse->setContentDisposition(
+                ResponseHeaderBag::DISPOSITION_ATTACHMENT
+            );
+
             $fileResponse->send();
 
             $this->getFilesystem()->remove($file);

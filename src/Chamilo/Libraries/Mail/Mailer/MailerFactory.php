@@ -4,7 +4,6 @@ namespace Chamilo\Libraries\Mail\Mailer;
 use Chamilo\Configuration\Service\Consulter\ConfigurationConsulter;
 use Chamilo\Configuration\Service\Consulter\RegistrationConsulter;
 use Chamilo\Libraries\DependencyInjection\DependencyInjectionContainerBuilder;
-use Chamilo\Libraries\File\SystemPathBuilder;
 use Chamilo\Libraries\Utilities\StringUtilities;
 use Exception;
 use Symfony\Component\Translation\Translator;
@@ -21,13 +20,11 @@ class MailerFactory
 
     protected RegistrationConsulter $registrationConsulter;
 
-    protected SystemPathBuilder $systemPathBuilder;
-
     protected Translator $translator;
 
     public function __construct(
         ConfigurationConsulter $configurationConsulter, RegistrationConsulter $registrationConsulter,
-        SystemPathBuilder $systemPathBuilder, Translator $translator
+        Translator $translator
     )
     {
         $this->configurationConsulter = $configurationConsulter;

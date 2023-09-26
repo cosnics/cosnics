@@ -8,6 +8,16 @@ use Chamilo\Libraries\File\Export\Export;
  */
 class XmlExport extends Export
 {
+    protected function getContentType(): string
+    {
+        return 'application/xml';
+    }
+
+    protected function getExtension(): string
+    {
+        return 'xml';
+    }
+
     public function serializeData($data): string
     {
         $level = 0;

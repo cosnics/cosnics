@@ -17,13 +17,14 @@ class AdminUserComponent extends Manager
      */
     public function run()
     {
-        $admin_user = $this->getSession()->get('_as_admin');
+        $adminUserIdentifier = $this->getSession()->get('_as_admin');
 
-        if ($admin_user)
+        if ($adminUserIdentifier)
         {
             $checkurl = $this->getSession()->get('checkChamiloURL');
+
             $this->getSession()->clear();
-            $this->getSession()->set(Manager::SESSION_USER_ID, $admin_user);
+            $this->getSession()->set(Manager::SESSION_USER_ID, $adminUserIdentifier);
             $this->getSession()->set('checkChamiloURL', $checkurl);
 
             return new RedirectResponse($this->getUrlGenerator()->fromParameters());

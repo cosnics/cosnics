@@ -17,13 +17,11 @@ class UserRoleService implements UserRoleServiceInterface
 {
 
     /**
-     *
      * @var RoleServiceInterface
      */
     protected $roleService;
 
     /**
-     *
      * @var UserRoleRepositoryInterface
      */
     protected $userRoleRepository;
@@ -107,7 +105,7 @@ class UserRoleService implements UserRoleServiceInterface
 
         if ($userRoles->count() == 0)
         {
-            $userRoles = array($this->roleService->getOrCreateRoleByName('ROLE_DEFAULT_USER'));
+            $userRoles = [$this->roleService->getOrCreateRoleByName('ROLE_DEFAULT_USER')];
         }
 
         if ($user->isPlatformAdmin())

@@ -47,11 +47,6 @@ class ClassnameUtilities
     /**
      * @var string[]
      */
-    private array $namespacePathMap = [];
-
-    /**
-     * @var string[]
-     */
     private array $packageNamespaceMap = [];
 
     private StringUtilities $stringUtilities;
@@ -201,12 +196,5 @@ class ClassnameUtilities
     public function getPackageNameFromObject(object $object, bool $convertToCamelcase = false): string
     {
         return $this->getPackageNameFromNamespace($this->getNamespaceFromObject($object), $convertToCamelcase);
-    }
-
-    public function namespaceToPath(string $namespace, bool $web = false): string
-    {
-        return $this->namespacePathMap[$namespace][(string) $web] = strtr(
-            $namespace, '\\', ($web ? '/' : DIRECTORY_SEPARATOR)
-        );
     }
 }

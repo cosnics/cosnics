@@ -4,33 +4,31 @@ namespace Chamilo\Core\User\Component;
 use Chamilo\Core\Tracking\Storage\DataClass\ChangesTracker;
 use Chamilo\Core\Tracking\Storage\DataClass\Event;
 use Chamilo\Core\User\Manager;
-use Chamilo\Core\User\Storage\DataClass\User;
-use Chamilo\Core\User\Storage\DataManager;
 use Chamilo\Libraries\Architecture\Application\Application;
 use Chamilo\Libraries\Architecture\Exceptions\NotAllowedException;
 use Chamilo\Libraries\Format\Breadcrumb\BreadcrumbTrail;
 use Chamilo\Libraries\Format\Structure\Breadcrumb;
-use Chamilo\Libraries\Translation\Translation;
 use Chamilo\Libraries\Utilities\StringUtilities;
 
 /**
- *
- * @package user.lib.user_manager.component
+ * @package Chamilo\Core\User\Component
+ * @author  Hans De Bisschop <hans.de.bisschop@ehb.be>
  */
 abstract class ActiveChangerComponent extends Manager
 {
 
-    abstract protected function getState();
-
     /**
-     * Runs this component and displays its output.
+     * @throws \Chamilo\Libraries\Architecture\Exceptions\NotAllowedException
      */
     public function run()
     {
-        if (! $this->get_user()->isPlatformAdmin())
+        if (!$this->getUser()->isPlatformAdmin())
         {
             throw new NotAllowedException();
         }
+
+        $userService = $this->getUserService();
+        $translator = $this->getTranslator();
 
         $this->checkAuthorization(Manager::CONTEXT, 'ManageUsers');
 
@@ -40,9 +38,9 @@ abstract class ActiveChangerComponent extends Manager
         $active = $this->getState();
         $this->set_parameter(self::PARAM_ACTIVE, $active);
 
-        if (! is_array($ids))
+        if (!is_array($ids))
         {
-            $ids = array($ids);
+            $ids = [$ids];
         }
 
         if (count($ids) > 0)
@@ -51,25 +49,23 @@ abstract class ActiveChangerComponent extends Manager
 
             foreach ($ids as $id)
             {
-                if (! $this->get_user()->isPlatformAdmin())
+                if (!$this->getUser()->isPlatformAdmin())
                 {
                     $failures ++;
                     continue;
                 }
 
-                $user = DataManager::retrieve_by_id(
-                    User::class,
-                    (int) $id);
+                $user = $userService->findUserByIdentifier($id);
                 $user->set_active($active);
 
-                if ($user->update())
+                if ($userService->updateUser($user))
                 {
                     Event::trigger(
-                        'Update',
-                        Manager::CONTEXT,
-                        array(
-                            ChangesTracker::PROPERTY_REFERENCE_ID => $user->get_id(),
-                            ChangesTracker::PROPERTY_USER_ID => $this->get_user()->get_id()));
+                        'Update', Manager::CONTEXT, [
+                            ChangesTracker::PROPERTY_REFERENCE_ID => $user->getId(),
+                            ChangesTracker::PROPERTY_USER_ID => $this->getUser()->getId()
+                        ]
+                    );
                 }
                 else
                 {
@@ -78,35 +74,33 @@ abstract class ActiveChangerComponent extends Manager
             }
 
             if ($active == 0)
+            {
                 $message = $this->get_result(
-                    $failures,
-                    count($ids),
-                    'UserNotDeactivated',
-                    'UsersNotDeactivated',
-                    'UserDeactivated',
-                    'UsersDeactivated');
+                    $failures, count($ids), 'UserNotDeactivated', 'UsersNotDeactivated', 'UserDeactivated',
+                    'UsersDeactivated'
+                );
+            }
             else
+            {
                 $message = $this->get_result(
-                    $failures,
-                    count($ids),
-                    'UserNotActivated',
-                    'UsersNotActivated',
-                    'UserActivated',
-                    'UsersActivated');
+                    $failures, count($ids), 'UserNotActivated', 'UsersNotActivated', 'UserActivated', 'UsersActivated'
+                );
+            }
 
             $this->redirectWithMessage(
-                $message,
-                ($failures > 0),
-                array(Application::PARAM_ACTION => self::ACTION_BROWSE_USERS));
+                $message, ($failures > 0), [Application::PARAM_ACTION => self::ACTION_BROWSE_USERS]
+            );
         }
         else
         {
             return $this->display_error_page(
                 htmlentities(
-                    Translation::get(
-                        'NoObjectSelected',
-                        array('OBJECT' => Translation::get('User')),
-                        StringUtilities::LIBRARIES)));
+                    $translator->trans(
+                        'NoObjectSelected', ['OBJECT' => $translator->trans('User', [], Manager::CONTEXT)],
+                        StringUtilities::LIBRARIES
+                    )
+                )
+            );
         }
     }
 
@@ -114,7 +108,11 @@ abstract class ActiveChangerComponent extends Manager
     {
         $breadcrumbtrail->add(
             new Breadcrumb(
-                $this->get_url(array(self::PARAM_ACTION => self::ACTION_USER_APPROVAL_BROWSER)),
-                Translation::get('UserApprovalBrowserComponent')));
+                $this->get_url([self::PARAM_ACTION => self::ACTION_USER_APPROVAL_BROWSER]),
+                $this->getTranslator()->trans('UserApprovalBrowserComponent')
+            )
+        );
     }
+
+    abstract protected function getState(): int;
 }

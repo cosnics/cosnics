@@ -6,18 +6,18 @@ use Chamilo\Libraries\Architecture\Application\Application;
 use Chamilo\Libraries\Architecture\Exceptions\NotAllowedException;
 use Chamilo\Libraries\Format\Breadcrumb\BreadcrumbTrail;
 use Chamilo\Libraries\Format\Structure\Breadcrumb;
-use Chamilo\Libraries\Translation\Translation;
 use Chamilo\Libraries\Utilities\StringUtilities;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 
 /**
- * @package user.lib.user_manager.component
+ * @package Chamilo\Core\User\Component
+ * @author  Hans De Bisschop <hans.de.bisschop@ehb.be>
  */
 class ChangeUserComponent extends Manager
 {
 
     /**
-     * Runs this component and displays its output.
+     * @throws \Chamilo\Libraries\Architecture\Exceptions\NotAllowedException
      */
     public function run()
     {
@@ -28,16 +28,17 @@ class ChangeUserComponent extends Manager
             throw new NotAllowedException();
         }
 
-        $id = $this->getRequest()->query->get(self::PARAM_USER_USER_ID);
-        $this->set_parameter(self::PARAM_USER_USER_ID, $id);
+        $translator = $this->getTranslator();
+        $userIdentifier = $this->getRequest()->query->get(self::PARAM_USER_USER_ID);
 
-        if ($id)
+        if ($userIdentifier)
         {
             $session = $this->getSession();
 
             $checkurl = $session->get('checkChamiloURL');
+
             $session->clear();
-            $session->set(Manager::SESSION_USER_ID, $id);
+            $session->set(Manager::SESSION_USER_ID, $userIdentifier);
             $session->set('_as_admin', $this->getUser()->getId());
             $session->set('checkChamiloURL', $checkurl);
 
@@ -52,8 +53,9 @@ class ChangeUserComponent extends Manager
         {
             return $this->display_error_page(
                 htmlentities(
-                    Translation::get(
-                        'NoObjectSelected', ['OBJECT' => Translation::get('User')], StringUtilities::LIBRARIES
+                    $translator->trans(
+                        'NoObjectSelected', ['OBJECT' => $translator->trans('User', [], Manager::CONTEXT)],
+                        StringUtilities::LIBRARIES
                     )
                 )
             );
@@ -65,7 +67,7 @@ class ChangeUserComponent extends Manager
         $breadcrumbtrail->add(
             new Breadcrumb(
                 $this->get_url([self::PARAM_ACTION => self::ACTION_BROWSE_USERS]),
-                Translation::get('AdminUserBrowserComponent')
+                $this->getTranslator()->trans('AdminUserBrowserComponent', [], Manager::CONTEXT)
             )
         );
     }

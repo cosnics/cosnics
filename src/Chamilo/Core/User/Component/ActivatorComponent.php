@@ -2,14 +2,13 @@
 namespace Chamilo\Core\User\Component;
 
 /**
- *
- * @package user.lib.user_manager.component
- * @author Hans De Bisschop
+ * @package Chamilo\Core\User\Component
+ * @author  Hans De Bisschop <hans.de.bisschop@ehb.be>
  */
 class ActivatorComponent extends ActiveChangerComponent
 {
 
-    protected function getState()
+    protected function getState(): int
     {
         return 1;
     }

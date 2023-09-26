@@ -265,25 +265,19 @@ class FormValidatorHtmlEditorOptions
                         $editor_lang = Translation::getInstance()->getLanguageIsocode();
                         $this->set_option($available_option, $editor_lang);
                         break;
-
                     case self::OPTION_TOOLBAR :
                         $this->set_option($available_option, 'Basic');
                         break;
+                    case self::OPTION_FULL_PAGE:
                     case self::OPTION_COLLAPSE_TOOLBAR :
                         $this->set_option($available_option, false);
                         break;
-
                     case self::OPTION_WIDTH :
                         $this->set_option($available_option, '100%');
                         break;
                     case self::OPTION_HEIGHT :
                         $this->set_option($available_option, 200);
                         break;
-
-                    case self::OPTION_FULL_PAGE :
-                        $this->set_option($available_option, false);
-                        break;
-
                     case self::OPTION_RENDER_RESOURCE_INLINE :
                         $this->set_option($available_option, true);
                         break;

@@ -47,6 +47,12 @@
             <argument key="$namespace">Chamilo\Core\User\UserSetting</argument>
         </service>
 
+        <service id="Chamilo\Core\User\Service\EmailService">
+            <argument key="$activeMailer"
+                      type="service"
+                      id="Chamilo\Libraries\Mail\Mailer\ActiveMailer"/>
+        </service>
+
         <service id="Chamilo\Core\User\Service\PasswordGenerator"/>
         <service id="Chamilo\Core\User\Domain\UserDetails\UserDetailsRendererCollection"/>
         <service id="Chamilo\Core\User\Storage\Repository\UserRepository"/>

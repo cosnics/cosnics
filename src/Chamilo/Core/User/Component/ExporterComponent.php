@@ -2,18 +2,22 @@
 namespace Chamilo\Core\User\Component;
 
 use Chamilo\Core\Tracking\Storage\DataClass\Event;
-use Chamilo\Core\User\Form\UserExportForm;
 use Chamilo\Core\User\Manager;
 use Chamilo\Core\User\Storage\DataClass\User;
-use Chamilo\Core\User\Storage\DataManager;
+use Chamilo\Libraries\Architecture\Application\Application;
 use Chamilo\Libraries\Architecture\Exceptions\NotAllowedException;
 use Chamilo\Libraries\File\Export\Export;
-use Chamilo\Libraries\Storage\Parameters\DataClassRetrievesParameters;
-use Chamilo\Libraries\Translation\Translation;
-use Chamilo\Libraries\Utilities\StringUtilities;
+use Chamilo\Libraries\Format\Structure\ActionBar\Button;
+use Chamilo\Libraries\Format\Structure\ActionBar\ButtonGroup;
+use Chamilo\Libraries\Format\Structure\ActionBar\ButtonToolBar;
+use Chamilo\Libraries\Format\Structure\ActionBar\Renderer\ButtonToolBarRenderer;
+use Chamilo\Libraries\Format\Structure\Glyph\FontAwesomeGlyph;
+use Chamilo\Libraries\Format\Structure\Glyph\InlineGlyph;
+use Chamilo\Libraries\Format\Structure\ToolbarItem;
 
 /**
- * @package user.lib.user_manager.component
+ * @package Chamilo\Core\User\Component
+ * @author  Hans De Bisschop <hans.de.bisschop@ehb.be>
  */
 class ExporterComponent extends Manager
 {
@@ -22,76 +26,133 @@ class ExporterComponent extends Manager
     public const EXPORT_ACTION_DELETE = 'D';
     public const EXPORT_ACTION_UPDATE = 'U';
 
+    protected ButtonToolBarRenderer $buttonToolBarRenderer;
+
     /**
-     * Runs this component and displays its output.
+     * @throws \Chamilo\Libraries\Storage\Exception\DataClassNoResultException
+     * @throws \Chamilo\Libraries\Architecture\Exceptions\NotAllowedException
+     * @throws \QuickformException
      */
     public function run()
     {
         $this->checkAuthorization(Manager::CONTEXT, 'ManageUsers');
 
-        if (!$this->get_user()->isPlatformAdmin())
+        if (!$this->getUser()->isPlatformAdmin())
         {
             throw new NotAllowedException();
         }
 
-        $form = new UserExportForm(UserExportForm::TYPE_EXPORT, $this->get_url());
+        $fileType = $this->getRequest()->query->get(self::PARAM_EXPORT_TYPE);
 
-        if ($form->validate())
+        if ($fileType)
         {
-            $export = $form->exportValues();
-            $file_type = $export['file_type'];
-            $result = DataManager::retrieves(
-                User::class, new DataClassRetrievesParameters()
-            );
-            foreach ($result as $user)
+            $users = $this->getUserService()->findUsers(null, null, 10);
+
+            $data = [];
+
+            foreach ($users as $user)
             {
-                if ($file_type == 'pdf')
+                if ($fileType == 'Pdf')
                 {
-                    $user_array = $this->prepare_for_pdf_export($user);
+                    $userRecord = $this->prepareForPdfExport($user);
                 }
                 else
                 {
-                    $user_array = $this->prepare_for_other_export($user);
+                    $userRecord = $this->prepareForOtherExport($user);
                 }
 
                 Event::trigger(
                     'Export', Manager::CONTEXT,
-                    ['target_user_id' => $user->get_id(), 'action_user_id' => $this->get_user()->get_id()]
+                    ['target_user_id' => $user->getId(), 'action_user_id' => $this->getUser()->getId()]
                 );
-                $data[] = $user_array;
+
+                $data[] = $userRecord;
             }
-            $this->export_users($file_type, $data);
+
+            $this->exportUsers($fileType, $data);
         }
         else
         {
             $html = [];
 
-            $html[] = $this->render_header();
-            $html[] = $form->toHtml();
-            $html[] = $this->render_footer();
+            $html[] = $this->renderHeader();
+            $html[] = $this->getButtonToolbarRenderer()->render();
+            $html[] = $this->renderFooter();
 
             return implode(PHP_EOL, $html);
         }
     }
 
-    /**
-     * @throws \Exception
-     */
-    public function export_users($file_type, $data)
+    public function exportUsers(string $fileType, array $data): void
     {
         $filename = 'export_users_' . date('Y-m-d_H-i-s');
 
-        if ($file_type == 'pdf')
+        if ($fileType == 'Pdf')
         {
             $data = [['key' => 'users', 'data' => $data]];
         }
 
-        $this->getExporter($file_type)->sendtoBrowser($filename, $data);
+        $this->getExporter($fileType)->sendtoBrowser($filename, $data);
     }
 
-    protected function getExporter($fileType): Export
+    public function getButtonToolbarRenderer(): ButtonToolBarRenderer
     {
-        return $this->getService('Chamilo\Libraries\File\Export\'' . $fileType . '\'' . $fileType . 'Export');
+        if (!isset($this->buttonToolBarRenderer))
+        {
+            $buttonToolbar = new ButtonToolBar();
+            $commonActions = new ButtonGroup();
+
+            foreach ($this->getExportTypes() as $exportType)
+            {
+                $commonActions->addButton(
+                    new Button(
+                        $exportType, $this->getExportGlyph($exportType), $this->getExportUrl($exportType),
+                        ToolbarItem::DISPLAY_ICON_AND_LABEL
+                    )
+                );
+            }
+
+            $buttonToolbar->addButtonGroup($commonActions);
+
+            $this->buttonToolBarRenderer = new ButtonToolBarRenderer($buttonToolbar);
+        }
+
+        return $this->buttonToolBarRenderer;
+    }
+
+    public function getExportGlyph(string $exportFileType): InlineGlyph
+    {
+        $glyph = match ($exportFileType)
+        {
+            'Csv' => 'file-csv',
+            'Excel' => 'file-excel',
+            'Pdf' => 'file-pdf',
+            'Xml' => 'file-lines',
+            default => 'file',
+        };
+
+        return new FontAwesomeGlyph($glyph);
+    }
+
+    public function getExportTypes(): array
+    {
+        return ['Csv', 'Excel', 'Pdf', 'Xml'];
+    }
+
+    public function getExportUrl(string $exportFileType): string
+    {
+        return $this->getUrlGenerator()->fromParameters(
+            [
+                Application::PARAM_CONTEXT => Manager::CONTEXT,
+                Application::PARAM_ACTION => self::ACTION_EXPORT_USERS,
+                self::PARAM_EXPORT_TYPE => $exportFileType
+            ]
+        );
+    }
+
+    protected function getExporter(string $fileType): Export
+    {
+        return $this->getService('Chamilo\Libraries\File\Export\\' . $fileType . '\\' . $fileType . 'Export');
     }
 
     protected function getPlatformLanguageForUser(User $user): string
@@ -99,12 +160,14 @@ class ExporterComponent extends Manager
         return $this->getUserSettingService()->getSettingForUser($user, 'Chamilo\Core\Admin', 'platform_language');
     }
 
-    public function prepare_for_other_export($user, $action = self::EXPORT_ACTION_DEFAULT)
+    /**
+     * @return string[]
+     */
+    public function prepareForOtherExport(User $user, string $action = self::EXPORT_ACTION_DEFAULT): array
     {
         // action => needed for import back into chamilo
         $user_array['action'] = $action;
 
-        // $user_array[User::PROPERTY_USER_ID] = $user->get_id();
         $user_array[User::PROPERTY_LASTNAME] = $user->get_lastname();
         $user_array[User::PROPERTY_FIRSTNAME] = $user->get_firstname();
         $user_array[User::PROPERTY_USERNAME] = $user->get_username();
@@ -115,79 +178,48 @@ class ExporterComponent extends Manager
         $user_array[User::PROPERTY_ACTIVE] = $user->get_active();
         $user_array[User::PROPERTY_OFFICIAL_CODE] = $user->get_official_code();
         $user_array[User::PROPERTY_PHONE] = $user->get_phone();
-
-        $act_date = $user->get_activation_date();
-
-        $user_array[User::PROPERTY_ACTIVATION_DATE] = $act_date;
-
-        $exp_date = $user->get_expiration_date();
-
-        $user_array[User::PROPERTY_EXPIRATION_DATE] = $exp_date;
-
-        $user_array[User::PROPERTY_AUTH_SOURCE] = $user->get_auth_source();
+        $user_array[User::PROPERTY_ACTIVATION_DATE] = $user->get_activation_date();
+        $user_array[User::PROPERTY_EXPIRATION_DATE] = $user->get_expiration_date();
+        $user_array[User::PROPERTY_AUTH_SOURCE] = $user->getAuthenticationSource();
 
         return $user_array;
     }
 
-    public function prepare_for_pdf_export($user)
+    /**
+     * @return string[]
+     */
+    public function prepareForPdfExport(User $user): array
     {
-        $lastname_title = Translation::get(
-            (string) StringUtilities::getInstance()->createString(User::PROPERTY_LASTNAME)->upperCamelize()
-        );
-        $firstname_title = Translation::get(
-            (string) StringUtilities::getInstance()->createString(User::PROPERTY_FIRSTNAME)->upperCamelize()
-        );
-        $username_title = Translation::get(
-            (string) StringUtilities::getInstance()->createString(User::PROPERTY_USERNAME)->upperCamelize()
-        );
-        $email_title = Translation::get(
-            (string) StringUtilities::getInstance()->createString(User::PROPERTY_EMAIL)->upperCamelize()
-        );
-        $language_title = Translation::get(
-            (string) StringUtilities::getInstance()->createString('language')->upperCamelize()
-        );
-        $status_title = Translation::get(
-            (string) StringUtilities::getInstance()->createString(User::PROPERTY_STATUS)->upperCamelize()
-        );
-        $active_title = Translation::get(
-            (string) StringUtilities::getInstance()->createString(User::PROPERTY_ACTIVE)->upperCamelize()
-        );
-        $official_code_title = Translation::get(
-            (string) StringUtilities::getInstance()->createString(User::PROPERTY_OFFICIAL_CODE)->upperCamelize()
-        );
-        $phone_title = Translation::get(
-            (string) StringUtilities::getInstance()->createString(User::PROPERTY_PHONE)->upperCamelize()
-        );
-        $activation_date_title = Translation::get(
-            (string) StringUtilities::getInstance()->createString(User::PROPERTY_ACTIVATION_DATE)->upperCamelize()
-        );
-        $expiration_date_title = Translation::get(
-            (string) StringUtilities::getInstance()->createString(User::PROPERTY_EXPIRATION_DATE)->upperCamelize()
-        );
-        $auth_source_title = Translation::get(
-            (string) StringUtilities::getInstance()->createString(User::PROPERTY_AUTH_SOURCE)->upperCamelize()
-        );
+        $translator = $this->getTranslator();
 
-        $user_array[$lastname_title] = $user->get_lastname();
-        $user_array[$firstname_title] = $user->get_firstname();
-        $user_array[$username_title] = $user->get_username();
-        $user_array[$email_title] = $user->get_email();
-        $user_array[$language_title] = $this->getPlatformLanguageForUser($user);
-        $user_array[$status_title] = $user->get_status();
-        $user_array[$active_title] = $user->get_active();
-        $user_array[$official_code_title] = $user->get_official_code();
-        $user_array[$phone_title] = $user->get_phone();
+        $lastnameTitle = $translator->trans('Lastname', [], Manager::CONTEXT);
+        $firstnameTitle = $translator->trans('Firstname', [], Manager::CONTEXT);
+        $usernameTitle = $translator->trans('Username', [], Manager::CONTEXT);
+        $emailTitle = $translator->trans('Email', [], Manager::CONTEXT);
+        $languageTitle = $translator->trans('Language', [], Manager::CONTEXT);
+        $statusTitle = $translator->trans('Status', [], Manager::CONTEXT);
+        $activeTitle = $translator->trans('Active', [], Manager::CONTEXT);
+        $officialCodeTitle = $translator->trans('OfficalCode', [], Manager::CONTEXT);
+        $phoneTitle = $translator->trans('Phone', [], Manager::CONTEXT);
+        $activationDateTitle = $translator->trans('ActivationDate', [], Manager::CONTEXT);
+        $expirationDateTitle = $translator->trans('ExpirationDate', [], Manager::CONTEXT);
+        $authSourceTitle = $translator->trans('AuthSource', [], Manager::CONTEXT);
 
-        $act_date = $user->get_activation_date();
+        $userProperties = [];
 
-        $user_array[$activation_date_title] = $act_date;
+        $userProperties[$lastnameTitle] = $user->get_lastname();
+        $userProperties[$firstnameTitle] = $user->get_firstname();
+        $userProperties[$usernameTitle] = $user->get_username();
+        $userProperties[$emailTitle] = $user->get_email();
+        $userProperties[$languageTitle] = $this->getPlatformLanguageForUser($user);
+        $userProperties[$statusTitle] = $user->get_status();
+        $userProperties[$activeTitle] = $user->get_active();
+        $userProperties[$officialCodeTitle] = $user->get_official_code();
+        $userProperties[$phoneTitle] = $user->get_phone();
+        $userProperties[$activationDateTitle] = $user->get_activation_date();
+        $userProperties[$expirationDateTitle] = $user->get_expiration_date();
+        $userProperties[$authSourceTitle] = $user->getAuthenticationSource();
 
-        $exp_date = $user->get_expiration_date();
-
-        $user_array[$expiration_date_title] = $exp_date;
-
-        $user_array[$auth_source_title] = $user->get_auth_source();
-
-        return $user_array;
+        return $userProperties;
     }
 }

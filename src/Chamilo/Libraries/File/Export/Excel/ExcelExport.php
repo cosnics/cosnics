@@ -11,6 +11,16 @@ use PhpOffice\PhpSpreadsheet\Spreadsheet;
 class ExcelExport extends Export
 {
 
+    protected function getContentType(): string
+    {
+        return 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet';
+    }
+
+    protected function getExtension(): string
+    {
+        return 'xlsx';
+    }
+
     /**
      * @throws \PhpOffice\PhpSpreadsheet\Exception
      * @throws \PhpOffice\PhpSpreadsheet\Writer\Exception
@@ -58,6 +68,7 @@ class ExcelExport extends Export
                     $letters[$cell_letter] . $cell_number, $this->transcode_string($row_name)
                 );
             }
+
             foreach ($block_content_data->get_categories() as $category_id => $category_name)
             {
                 $cell_letter = 0;

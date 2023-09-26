@@ -14,7 +14,6 @@ use Chamilo\Libraries\Storage\Query\Condition\AndCondition;
 use Chamilo\Libraries\Storage\Query\Condition\EqualityCondition;
 use Chamilo\Libraries\Storage\Query\Variable\PropertyConditionVariable;
 use Chamilo\Libraries\Storage\Query\Variable\StaticConditionVariable;
-use Chamilo\Libraries\Translation\Translation;
 
 /**
  * @package Chamilo\Core\User\Component
@@ -27,14 +26,15 @@ abstract class ProfileComponent extends Manager implements BreadcrumbLessPackage
 
     /**
      * @return \Chamilo\Libraries\Format\Tabs\Link\LinkTab[]
-     * @throws \Chamilo\Libraries\Architecture\Exceptions\UserException
      */
-    public function getAvailableTabs()
+    public function getAvailableTabs(): array
     {
+        $translator = $this->getTranslator();
         $tabs = [];
 
         $tabs[] = new LinkTab(
-            self::ACTION_VIEW_ACCOUNT, htmlentities(Translation::get(self::ACTION_VIEW_ACCOUNT . 'Title')),
+            self::ACTION_VIEW_ACCOUNT,
+            htmlentities($translator->trans(self::ACTION_VIEW_ACCOUNT . 'Title', [], Manager::CONTEXT)),
             new FontAwesomeGlyph('user', ['fa-lg'], null, 'fas'),
             $this->get_url([self::PARAM_ACTION => self::ACTION_VIEW_ACCOUNT]),
             self::ACTION_VIEW_ACCOUNT == $this->get_action()
@@ -43,7 +43,8 @@ abstract class ProfileComponent extends Manager implements BreadcrumbLessPackage
         if ($this->getConfigurationConsulter()->getSetting([Manager::CONTEXT, 'allow_change_user_picture']))
         {
             $tabs[] = new LinkTab(
-                self::ACTION_CHANGE_PICTURE, htmlentities(Translation::get(self::ACTION_CHANGE_PICTURE . 'Title')),
+                self::ACTION_CHANGE_PICTURE,
+                htmlentities($translator->trans(self::ACTION_CHANGE_PICTURE . 'Title', [], Manager::CONTEXT)),
                 new FontAwesomeGlyph('image', ['fa-lg'], null, 'fas'),
                 $this->get_url([self::PARAM_ACTION => self::ACTION_CHANGE_PICTURE]),
                 self::ACTION_CHANGE_PICTURE == $this->get_action()
@@ -51,7 +52,8 @@ abstract class ProfileComponent extends Manager implements BreadcrumbLessPackage
         }
 
         $tabs[] = new LinkTab(
-            self::ACTION_USER_SETTINGS, htmlentities(Translation::get(self::ACTION_USER_SETTINGS . 'Title')),
+            self::ACTION_USER_SETTINGS,
+            htmlentities($translator->trans(self::ACTION_USER_SETTINGS . 'Title', [], Manager::CONTEXT)),
             new FontAwesomeGlyph('cog', ['fa-lg'], null, 'fas'),
             $this->get_url([self::PARAM_ACTION => self::ACTION_USER_SETTINGS]),
             self::ACTION_USER_SETTINGS == $this->get_action()
@@ -76,9 +78,9 @@ abstract class ProfileComponent extends Manager implements BreadcrumbLessPackage
         if ($extra_form instanceof Instance && count($extra_form->get_elements()) > 0)
         {
             $tabs[] = new LinkTab(
-                self::ACTION_ADDITIONAL_ACCOUNT_INFORMATION,
-                htmlentities(Translation::get(self::ACTION_ADDITIONAL_ACCOUNT_INFORMATION . 'Title')),
-                new FontAwesomeGlyph('lightbulb', ['fa-lg'], null, 'fas'),
+                self::ACTION_ADDITIONAL_ACCOUNT_INFORMATION, htmlentities(
+                $translator->trans(self::ACTION_ADDITIONAL_ACCOUNT_INFORMATION . 'Title', [], Manager::CONTEXT)
+            ), new FontAwesomeGlyph('lightbulb', ['fa-lg'], null, 'fas'),
                 $this->get_url([self::PARAM_ACTION => self::ACTION_ADDITIONAL_ACCOUNT_INFORMATION]),
                 self::ACTION_ADDITIONAL_ACCOUNT_INFORMATION == $this->get_action()
             );
@@ -87,36 +89,20 @@ abstract class ProfileComponent extends Manager implements BreadcrumbLessPackage
         return $tabs;
     }
 
+    abstract public function getContent(): string;
+
     public function getLinkTabsRenderer(): LinkTabsRenderer
     {
         return $this->getService(LinkTabsRenderer::class);
     }
 
-    /**
-     * @return string
-     * @throws \Chamilo\Libraries\Architecture\Exceptions\UserException
-     */
-    public function renderPage()
-    {
-        $html = [];
-
-        $html[] = $this->render_header();
-        $html[] = $this->render_footer();
-
-        return implode(PHP_EOL, $html);
-    }
-
-    /**
-     * @return string
-     * @throws \Chamilo\Libraries\Architecture\Exceptions\UserException
-     */
-    public function render_header(string $pageTitle = ''): string
+    public function renderHeader(string $pageTitle = ''): string
     {
         $availableTabs = $this->getAvailableTabs();
 
         $html = [];
 
-        $html[] = parent::render_header($pageTitle);
+        $html[] = parent::renderHeader($pageTitle);
 
         if (count($availableTabs) > 1)
         {
@@ -133,6 +119,16 @@ abstract class ProfileComponent extends Manager implements BreadcrumbLessPackage
         {
             $html[] = $this->getContent();
         }
+
+        return implode(PHP_EOL, $html);
+    }
+
+    public function renderPage(): string
+    {
+        $html = [];
+
+        $html[] = $this->renderHeader();
+        $html[] = $this->renderFooter();
 
         return implode(PHP_EOL, $html);
     }

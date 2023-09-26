@@ -41,6 +41,11 @@ abstract class AbstractPathBuilder
 
     protected ClassnameUtilities $classnameUtilities;
 
+    /**
+     * @var string[]
+     */
+    protected array $namespacePathMap = [];
+
     public function __construct(ClassnameUtilities $classnameUtilities)
     {
         $this->classnameUtilities = $classnameUtilities;
@@ -96,8 +101,7 @@ abstract class AbstractPathBuilder
     public function getPublicStoragePath(string $namespace = null): string
     {
         return $this->cache[self::PUBLIC_STORAGE][(string) $namespace] = $this->getPublicStorageBasePath() .
-            ($namespace ? $this->getClassnameUtilities()->namespaceToPath($namespace) . $this->getDirectorySeparator() :
-                '');
+            ($namespace ? $this->namespaceToPath($namespace) . $this->getDirectorySeparator() : '');
     }
 
     public function getResourcesPath(string $namespace = 'Chamilo\Configuration'): string
@@ -115,7 +119,13 @@ abstract class AbstractPathBuilder
     public function namespaceToFullPath(?string $namespace = null): string
     {
         return $this->cache[self::FULL][(string) $namespace] = $this->getBasePath() .
-            ($namespace ? $this->getClassnameUtilities()->namespaceToPath($namespace) . $this->getDirectorySeparator() :
-                '');
+            ($namespace ? $this->namespaceToPath($namespace) . $this->getDirectorySeparator() : '');
+    }
+
+    public function namespaceToPath(string $namespace): string
+    {
+        return $this->namespacePathMap[$namespace][$this->getDirectorySeparator()] = strtr(
+            $namespace, '\\', $this->getDirectorySeparator()
+        );
     }
 }

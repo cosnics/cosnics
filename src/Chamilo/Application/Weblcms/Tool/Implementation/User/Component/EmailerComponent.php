@@ -2,67 +2,44 @@
 namespace Chamilo\Application\Weblcms\Tool\Implementation\User\Component;
 
 use Chamilo\Application\Weblcms\Tool\Implementation\User\Manager;
-use Chamilo\Core\User\Storage\DataClass\User;
-use Chamilo\Core\User\Storage\DataManager;
-use Chamilo\Libraries\Architecture\Application\ApplicationConfiguration;
-use Chamilo\Libraries\Architecture\Exceptions\NoObjectSelectedException;
+use Chamilo\Core\User\Service\EmailService;
 use Chamilo\Libraries\Format\Structure\Breadcrumb;
-use Chamilo\Libraries\Translation\Translation;
 
 /**
- * @package application.lib.weblcms.tool.user.component
+ * @package Chamilo\Application\Weblcms\Tool\Implementation\User\Component
+ * @author  Hans De Bisschop <hans.de.bisschop@ehb.be>
  */
 class EmailerComponent extends Manager
 {
 
+    /**
+     * @throws \Chamilo\Libraries\Architecture\Exceptions\NotAllowedException
+     */
     public function run()
     {
-        $ids = $this->getRequest()->query->get(\Chamilo\Application\Weblcms\Manager::PARAM_USERS);
-
-        if (!is_array($ids))
-        {
-            $ids = [$ids];
-        }
-
-        if (count($ids) > 0)
-        {
-            foreach ($ids as $id)
-            {
-                $users[] = DataManager::retrieve_by_id(
-                    User::class, $id
-                );
-            }
-
-            $component = $this->getApplicationFactory()->getApplication(
-                \Chamilo\Core\User\Email\Manager::CONTEXT,
-                new ApplicationConfiguration($this->getRequest(), $this->get_user(), $this)
-            );
-            $component->set_target_users($users);
-            $component->set_parameter(\Chamilo\Application\Weblcms\Manager::PARAM_USERS, $ids);
-
-            return $component->run();
-        }
-        else
-        {
-            throw new NoObjectSelectedException(Translation::get('User'));
-        }
+        return $this->getEmailService()->execute($this, $this->getUser(), $this->getCurrentTargetUserIdentifiers());
     }
 
-    public function render_header(string $pageTitle = ''): string
+    public function getCurrentTargetUserIdentifiers(): array
     {
-        $ids = $this->getRequest()->query->get(\Chamilo\Application\Weblcms\Manager::PARAM_USERS);
+        return (array) $this->getRequest()->query->get(\Chamilo\Application\Weblcms\Manager::PARAM_USERS, []);
+    }
 
-        $this->set_parameter(\Chamilo\Application\Weblcms\Manager::PARAM_USERS, null);
+    public function getEmailService(): EmailService
+    {
+        return $this->getService(EmailService::class);
+    }
 
-        $trail = $this->getBreadcrumbTrail();
-
-        $trail->add(
+    public function renderHeader(string $pageTitle = ''): string
+    {
+        $this->getBreadcrumbTrail()->add(
             new Breadcrumb(
-                $this->get_url([\Chamilo\Application\Weblcms\Manager::PARAM_USERS => $ids]),
-                Translation::get('EmailUsers')
+                $this->get_url(
+                    [\Chamilo\Application\Weblcms\Manager::PARAM_USERS => $this->getCurrentTargetUserIdentifiers()]
+                ), $this->getTranslator()->trans('EmailUsers', [], Manager::CONTEXT)
             )
         );
 
-        return parent::render_header();
+        return parent::renderHeader();
     }
 }

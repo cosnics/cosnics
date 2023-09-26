@@ -4,58 +4,53 @@ namespace Chamilo\Core\User\Component;
 use Chamilo\Core\User\Form\AccountForm;
 use Chamilo\Core\User\Manager;
 use Chamilo\Libraries\Architecture\Application\Application;
-use Chamilo\Libraries\Translation\Translation;
 
 /**
- *
  * @package Chamilo\Core\User\Component
- * @author Hans De Bisschop <hans.de.bisschop@ehb.be>
- * @author Magali Gillard <magali.gillard@ehb.be>
- * @author Eduard Vossen <eduard.vossen@ehb.be>
+ * @author  Hans De Bisschop <hans.de.bisschop@ehb.be>
+ * @author  Magali Gillard <magali.gillard@ehb.be>
+ * @author  Eduard Vossen <eduard.vossen@ehb.be>
  */
 class AccountComponent extends ProfileComponent
 {
 
-    /**
-     *
-     * @var \Chamilo\Core\User\Form\AccountForm
-     */
-    private $form;
+    private AccountForm $accountForm;
 
     /**
-     * Runs this component and displays its output.
+     * @throws \Chamilo\Libraries\Architecture\Exceptions\UserException
+     * @throws \Chamilo\Libraries\Architecture\Exceptions\NotAllowedException
+     * @throws \QuickformException
      */
     public function run()
     {
         $this->checkAuthorization(Manager::CONTEXT, 'ManageAccount');
 
-        $user = $this->get_user();
+        $accountForm = $this->getAccountForm();
 
-        $this->form =
-            new AccountForm(AccountForm::TYPE_EDIT, $user, $this->get_url(), $this->getAuthenticationValidator());
-
-        if ($this->form->validate())
+        if ($accountForm->validate())
         {
-            $success = $this->form->update_account();
+            $success = $accountForm->update_account();
+
             if (!$success)
             {
                 if (isset($_FILES['picture_uri']) && $_FILES['picture_uri']['error'])
                 {
-                    $neg_message = 'FileTooBig';
+                    $errorMessage = 'FileTooBig';
                 }
                 else
                 {
-                    $neg_message = 'UserProfileNotUpdated';
+                    $errorMessage = 'UserProfileNotUpdated';
                 }
             }
             else
             {
-                $neg_message = 'UserProfileNotUpdated';
-                $pos_message = 'UserProfileUpdated';
+                $errorMessage = 'UserProfileNotUpdated';
+                $successMessage = 'UserProfileUpdated';
             }
+
             $this->redirectWithMessage(
-                Translation::get($success ? $pos_message : $neg_message), !$success,
-                array(Application::PARAM_ACTION => self::ACTION_VIEW_ACCOUNT)
+                $this->getTranslator()->trans($success ? $successMessage : $errorMessage), !$success,
+                [Application::PARAM_ACTION => self::ACTION_VIEW_ACCOUNT]
             );
         }
         else
@@ -64,12 +59,23 @@ class AccountComponent extends ProfileComponent
         }
     }
 
-    /**
-     *
-     * @return string
-     */
-    public function getContent()
+    public function getAccountForm(): AccountForm
     {
-        return $this->form->toHtml();
+        if (!isset($this->accountForm))
+        {
+            $this->accountForm = new AccountForm(
+                AccountForm::TYPE_EDIT, $this->getUser(), $this->get_url(), $this->getAuthenticationValidator()
+            );
+        }
+
+        return $this->accountForm;
+    }
+
+    /**
+     * @throws \QuickformException
+     */
+    public function getContent(): string
+    {
+        return $this->getAccountForm()->render();
     }
 }

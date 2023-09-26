@@ -51,6 +51,7 @@ abstract class Manager extends Application
 
     public const PARAM_ACTIVE = 'active';
     public const PARAM_CHOICE = 'choice';
+    public const PARAM_EXPORT_TYPE = 'export_type';
     public const PARAM_FIRSTLETTER = 'firstletter';
     public const PARAM_REFER = 'refer';
     public const PARAM_USER_USER_ID = 'user_id';

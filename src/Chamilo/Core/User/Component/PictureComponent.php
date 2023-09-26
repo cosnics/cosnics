@@ -66,7 +66,7 @@ class PictureComponent extends ProfileComponent
      *
      * @return string
      */
-    public function getContent()
+    public function getContent(): string
     {
         return $this->form->toHtml();
     }

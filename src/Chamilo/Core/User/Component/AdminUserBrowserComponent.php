@@ -32,6 +32,7 @@ class AdminUserBrowserComponent extends Manager
      * @throws \TableException
      * @throws \Chamilo\Libraries\Format\Table\Exception\InvalidPageNumberException
      * @throws \QuickformException
+     * @throws \Chamilo\Libraries\Storage\Exception\DataClassNoResultException
      */
     public function run()
     {
@@ -104,7 +105,7 @@ class AdminUserBrowserComponent extends Manager
     }
 
     /**
-     * @throws \Exception
+     * @throws \QuickformException
      */
     public function getUserTableCondition(): ?Condition
     {
@@ -122,6 +123,7 @@ class AdminUserBrowserComponent extends Manager
      * @throws \TableException
      * @throws \Chamilo\Libraries\Format\Table\Exception\InvalidPageNumberException
      * @throws \QuickformException
+     * @throws \Chamilo\Libraries\Storage\Exception\DataClassNoResultException
      */
     public function get_user_html(): string
     {
@@ -137,7 +139,7 @@ class AdminUserBrowserComponent extends Manager
      * @throws \Chamilo\Libraries\Format\Table\Exception\InvalidPageNumberException
      * @throws \QuickformException
      * @throws \TableException
-     * @throws \Exception
+     * @throws \Chamilo\Libraries\Storage\Exception\DataClassNoResultException
      */
     protected function renderTable(): string
     {

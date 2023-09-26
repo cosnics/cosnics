@@ -2,73 +2,40 @@
 namespace Chamilo\Core\User\Component;
 
 use Chamilo\Core\User\Manager;
-use Chamilo\Core\User\Storage\DataClass\User;
-use Chamilo\Core\User\Storage\DataManager;
-use Chamilo\Libraries\Architecture\Application\ApplicationConfiguration;
+use Chamilo\Core\User\Service\EmailService;
 use Chamilo\Libraries\Format\Breadcrumb\BreadcrumbTrail;
 use Chamilo\Libraries\Format\Structure\Breadcrumb;
-use Chamilo\Libraries\Translation\Translation;
-use Chamilo\Libraries\Utilities\StringUtilities;
 
 /**
- *
- * @package user.lib.user_manager.component
+ * @package Chamilo\Core\User\Component
+ * @author  Hans De Bisschop <hans.de.bisschop@ehb.be>
  */
 class EmailerComponent extends Manager
 {
-
     /**
-     * Runs this component and displays its output.
+     * @throws \Chamilo\Libraries\Architecture\Exceptions\NotAllowedException
      */
     public function run()
     {
         $this->checkAuthorization(Manager::CONTEXT, 'ManageUsers');
 
-        $ids = $this->getRequest()->getFromRequestOrQuery(self::PARAM_USER_USER_ID);
-        $this->set_parameter(self::PARAM_USER_USER_ID, $ids);
+        $targetUserIdentifiers = (array) $this->getRequest()->getFromRequestOrQuery(self::PARAM_USER_USER_ID, []);
 
-        if (! is_array($ids))
-        {
-            $ids = array($ids);
-        }
-
-        if (count($ids) > 0)
-        {
-            $failures = 0;
-
-            foreach ($ids as $id)
-            {
-                if (! $this->get_user()->isPlatformAdmin())
-                {
-                    $users[] = DataManager::retrieve_by_id(
-                        User::class,
-                        (int) $id);
-                }
-            }
-
-            $application = $this->getApplicationFactory()->getApplication(
-                \Chamilo\Core\User\Email\Manager::CONTEXT,
-                new ApplicationConfiguration($this->getRequest(), $this->get_user(), $this));
-            $application->set_target_users($users);
-            $application->set_parameter(self::PARAM_USER_USER_ID, $ids);
-            return $application->run();
-        }
-        else
-        {
-            return $this->display_error_page(
-                htmlentities(
-                    Translation::get(
-                        'NoObjectSelected',
-                        array('OBJECT' => Translation::get('User')),
-                        StringUtilities::LIBRARIES)));
-        }
+        return $this->getEmailService()->execute($this, $this->getUser(), $targetUserIdentifiers);
     }
 
     public function addAdditionalBreadcrumbs(BreadcrumbTrail $breadcrumbtrail): void
     {
         $breadcrumbtrail->add(
             new Breadcrumb(
-                $this->get_url(array(self::PARAM_ACTION => self::ACTION_BROWSE_USERS)),
-                Translation::get('AdminUserBrowserComponent')));
+                $this->get_url([self::PARAM_ACTION => self::ACTION_BROWSE_USERS]),
+                $this->getTranslator()->trans('AdminUserBrowserComponent', [], Manager::CONTEXT)
+            )
+        );
+    }
+
+    public function getEmailService(): EmailService
+    {
+        return $this->getService(EmailService::class);
     }
 }

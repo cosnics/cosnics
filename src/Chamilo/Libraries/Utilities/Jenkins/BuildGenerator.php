@@ -4,9 +4,9 @@ namespace Chamilo\Libraries\Utilities\Jenkins;
 use Chamilo\Configuration\Package\PackageList;
 use Chamilo\Configuration\Package\Service\PackageBundlesCacheService;
 use Chamilo\Libraries\Architecture\Bootstrap\Bootstrap;
-use Chamilo\Libraries\Architecture\ClassnameUtilities;
 use Chamilo\Libraries\DependencyInjection\DependencyInjectionContainerBuilder;
 use Chamilo\Libraries\File\SystemPathBuilder;
+use Chamilo\Libraries\File\WebPathBuilder;
 use Chamilo\Libraries\Translation\Translation;
 use Exception;
 use Symfony\Component\Filesystem\Filesystem;
@@ -214,12 +214,13 @@ class BuildGenerator
      */
     public function write_configuration($context, $sub_jobs, $source_respository)
     {
-        $chart_url =
-            $this->get_web_url() . ClassnameUtilities::getInstance()->namespaceToPath($context) . '/build/chart/';
-        $workspace_url = $this->get_system_url() . ClassnameUtilities::getInstance()->namespaceToPath($context) . '/';
+        $container = DependencyInjectionContainerBuilder::getInstance()->createContainer();
 
-        $systemPathBuilder =
-            DependencyInjectionContainerBuilder::getInstance()->createContainer()->get(SystemPathBuilder::class);
+        $systemPathBuilder = $container->get(SystemPathBuilder::class);
+        $webPathBuilder = $container->get(WebPathBuilder::class);
+
+        $chart_url = $this->get_web_url() . $webPathBuilder->namespaceToPath($context) . '/build/chart/';
+        $workspace_url = $this->get_system_url() . $webPathBuilder->namespaceToPath($context) . '/';
 
         $php_class_path = $systemPathBuilder->namespaceToFullPath($context) . 'php/';
         $has_php_classes = is_dir($php_class_path);

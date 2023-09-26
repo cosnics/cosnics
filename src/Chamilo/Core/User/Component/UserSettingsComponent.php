@@ -78,7 +78,7 @@ class UserSettingsComponent extends ProfileComponent
     /**
      * @return string
      */
-    public function getContent()
+    public function getContent(): string
     {
         $tabs = new TabsCollection();
 

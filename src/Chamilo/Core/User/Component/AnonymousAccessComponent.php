@@ -1,7 +1,6 @@
 <?php
 namespace Chamilo\Core\User\Component;
 
-use Chamilo\Configuration\Service\Consulter\ConfigurationConsulter;
 use Chamilo\Core\User\Form\AnonymousUserForm;
 use Chamilo\Core\User\Manager;
 use Chamilo\Core\User\Roles\Service\Interfaces\UserRoleServiceInterface;
@@ -9,9 +8,7 @@ use Chamilo\Core\User\Roles\Service\UserRoleService;
 use Chamilo\Core\User\Storage\DataClass\User;
 use Chamilo\Libraries\Architecture\Exceptions\NotAllowedException;
 use Chamilo\Libraries\Architecture\Interfaces\NoAuthenticationSupportInterface;
-use Chamilo\Libraries\Format\Structure\Page;
 use Chamilo\Libraries\Format\Structure\PageConfiguration;
-use Chamilo\Libraries\Translation\Translation;
 use Exception;
 use ReCaptcha\ReCaptcha;
 use Symfony\Component\HttpFoundation\Cookie;
@@ -24,7 +21,8 @@ class AnonymousAccessComponent extends Manager implements NoAuthenticationSuppor
 {
 
     /**
-     * Runs this component and returns it's output
+     * @throws \QuickformException
+     * @throws \Chamilo\Libraries\Architecture\Exceptions\NotAllowedException
      */
     public function run()
     {
@@ -33,6 +31,7 @@ class AnonymousAccessComponent extends Manager implements NoAuthenticationSuppor
             throw new NotAllowedException();
         }
 
+        $translator = $this->getTranslator();
         $form = new AnonymousUserForm($this->get_url());
         $errorMessage = null;
 
@@ -43,14 +42,15 @@ class AnonymousAccessComponent extends Manager implements NoAuthenticationSuppor
                 $this->validateCaptcha(
                     $this->getRequest()->getFromRequestOrQuery(AnonymousUserForm::CAPTCHA_RESPONS_VALUE)
                 );
+
                 $anonymousUser = $this->createAnonymousUser();
+
                 $this->addAnonymousRoleToUser($anonymousUser);
                 $this->setAuthenticationCookieAndRedirect($anonymousUser);
             }
-            catch (Exception $ex)
+            catch (Exception)
             {
-                $errorMessage =
-                    Translation::getInstance()->getTranslation('UseCaptchaToProceed', null, Manager::CONTEXT);
+                $errorMessage = $translator->trans('UseCaptchaToProceed', [], Manager::CONTEXT);
             }
         }
 
@@ -58,7 +58,7 @@ class AnonymousAccessComponent extends Manager implements NoAuthenticationSuppor
 
         $html = [];
 
-        $html[] = $this->render_header(' ');
+        $html[] = $this->renderHeader(' ');
 
         $html[] = '<div class="anonymous-page">';
 
@@ -70,7 +70,7 @@ class AnonymousAccessComponent extends Manager implements NoAuthenticationSuppor
         $html[] = '</h1>';
 
         $html[] = '<div class="anonymous-welcome-message">';
-        $html[] = Translation::getInstance()->getTranslation('AnonymousWelcomeMessage', null, Manager::CONTEXT);
+        $html[] = $translator->trans('AnonymousWelcomeMessage', [], Manager::CONTEXT);
         $html[] = '</div>';
 
         $html[] = '<div class="anonymous-form-container">';
@@ -81,7 +81,7 @@ class AnonymousAccessComponent extends Manager implements NoAuthenticationSuppor
         }
 
         $html[] = '<div class="anonymous-captcha-form">';
-        $html[] = $form->toHtml();
+        $html[] = $form->render();
         $html[] = '</div>';
 
         $html[] = '</div>';
@@ -90,28 +90,21 @@ class AnonymousAccessComponent extends Manager implements NoAuthenticationSuppor
         $html[] = '</div>';
         $html[] = '</div>';
 
-        $html[] = $this->render_footer();
+        $html[] = $this->renderFooter();
 
         return implode(PHP_EOL, $html);
     }
 
     /**
-     * Adds the anonymous role to the user
-     *
-     * @param User $user
+     * @throws \Exception
      */
-    protected function addAnonymousRoleToUser(User $user)
+    protected function addAnonymousRoleToUser(User $user): void
     {
         $userRoleService = $this->getUserRoleService();
         $userRoleService->addRoleForUser($user, 'ROLE_ANONYMOUS');
     }
 
-    /**
-     * Checks whether or not the anonymous access is allowed
-     *
-     * @return bool
-     */
-    protected function anonymousAccessAllowed()
+    protected function anonymousAccessAllowed(): bool
     {
         if ($this->getUser() instanceof User)
         {
@@ -139,20 +132,18 @@ class AnonymousAccessComponent extends Manager implements NoAuthenticationSuppor
     }
 
     /**
-     * Creates an anonymous user
-     *
-     * @return User
      * @throws \Exception
      */
-    protected function createAnonymousUser()
+    protected function createAnonymousUser(): User
     {
         $user = new User();
+
         $user->set_firstname('Anonymous');
         $user->set_lastname('User');
         $user->set_username(uniqid());
         $user->set_email('no-reply@chamilo.org');
 
-        if (!$user->create())
+        if (!$this->getUserService()->createUser($user))
         {
             throw new Exception('Could not create a new anonymous user');
         }
@@ -160,26 +151,12 @@ class AnonymousAccessComponent extends Manager implements NoAuthenticationSuppor
         return $user;
     }
 
-    /**
-     * @return ConfigurationConsulter
-     */
-    public function getConfigurationConsulter()
-    {
-        return $this->getService(ConfigurationConsulter::class);
-    }
-
-    /**
-     * @return UserRoleServiceInterface
-     */
-    protected function getUserRoleService()
+    protected function getUserRoleService(): UserRoleServiceInterface
     {
         return $this->getService(UserRoleService::class);
     }
 
-    /**
-     * Sets the anonymous authentication cookie
-     */
-    protected function setAuthenticationCookieAndRedirect(User $user)
+    protected function setAuthenticationCookieAndRedirect(User $user): void
     {
         $cookie = new Cookie(md5('anonymous_authentication'), $user->get_security_token());
 
@@ -200,18 +177,13 @@ class AnonymousAccessComponent extends Manager implements NoAuthenticationSuppor
         $response->headers->setCookie($cookie);
 
         $response->send();
-
         exit();
     }
 
     /**
-     * Validates the given captcha value
-     *
-     * @param string $captchaResponseValue
-     *
      * @throws \Exception
      */
-    protected function validateCaptcha($captchaResponseValue)
+    protected function validateCaptcha(string $captchaResponseValue): void
     {
         $recaptchaSecretKey = $this->getConfigurationConsulter()->getSetting(
             ['Chamilo\Core\Admin', 'recaptcha_secret_key']

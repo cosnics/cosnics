@@ -185,6 +185,14 @@ class UserService
         return $this->createUserSetting($userSetting);
     }
 
+    /**
+     * @throws \Chamilo\Libraries\Storage\Exception\DataClassNoResultException
+     */
+    public function deleteUser(User $user): bool
+    {
+        return $this->getUserRepository()->deleteUser($user);
+    }
+
     public function deleteUserSettingsForSettingIdentifier(string $settingIdentifier): bool
     {
         return $this->getUserRepository()->deleteUserSettingsForSettingIdentifier($settingIdentifier);
@@ -217,6 +225,16 @@ class UserService
     public function findActiveUsersByStatus(int $status): ArrayCollection
     {
         return $this->getUserRepository()->findActiveUsersByStatus($status);
+    }
+
+    /**
+     * @param string[] $userIdentifiers
+     *
+     * @return string[]
+     */
+    public function findEmailAddressesForUserIdentifiers(array $userIdentifiers): array
+    {
+        return $this->getUserRepository()->findEmailAddressesForUserIdentifiers($userIdentifiers);
     }
 
     /**
@@ -296,6 +314,13 @@ class UserService
         return $this->getUserRepository()->findUserIdentifiersByOfficialCodes($officialCodes);
     }
 
+    public function findUserProperties(
+        array $retrieveProperties, ?Condition $condition = null, ?OrderBy $orderProperty = null
+    ): array
+    {
+        return $this->getUserRepository()->findUserProperties($retrieveProperties, $condition, $orderProperty);
+    }
+
     public function findUserSettingForSettingAndUser(Setting $setting, User $user): ?UserSetting
     {
         return $this->getUserRepository()->findUserSettingForSettingAndUser($setting, $user);
@@ -325,7 +350,7 @@ class UserService
      */
     public function findUsersByIdentifiers(array $userIdentifiers = []): ArrayCollection
     {
-        return $this->getUserRepository()->findUsersByIdentifiersOrderedByName($userIdentifiers);
+        return $this->getUserRepository()->findUsersByIdentifiers($userIdentifiers);
     }
 
     /**
@@ -469,7 +494,7 @@ class UserService
         return !$this->findUserByUsername($username) instanceof User;
     }
 
-    public function triggerImportEvent(User $actionUser, User $targetUser)
+    public function triggerImportEvent(User $actionUser, User $targetUser): void
     {
         Event::trigger(
             'Import', 'Chamilo\Core\User',

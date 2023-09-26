@@ -4,8 +4,10 @@ namespace Chamilo\Libraries\File\Export\Pdf;
 use Cezpdf;
 use Chamilo\Libraries\File\ConfigurablePathBuilder;
 use Chamilo\Libraries\File\Export\Export;
+use Chamilo\Libraries\File\FilesystemTools;
 use Chamilo\Libraries\File\SystemPathBuilder;
 use Spipu\Html2Pdf\Html2Pdf;
+use Symfony\Component\Filesystem\Filesystem;
 
 /**
  * @package Chamilo\Libraries\File\Export\Pdf
@@ -15,11 +17,24 @@ class PdfExport extends Export
 {
     protected SystemPathBuilder $systemPathBuilder;
 
-    public function __construct(ConfigurablePathBuilder $configurablePathBuilder, SystemPathBuilder $systemPathBuilder)
+    public function __construct(
+        ConfigurablePathBuilder $configurablePathBuilder, Filesystem $filesystem, FilesystemTools $filesystemTools,
+        SystemPathBuilder $systemPathBuilder
+    )
     {
-        parent::__construct($configurablePathBuilder);
+        parent::__construct($configurablePathBuilder, $filesystem, $filesystemTools);
 
         $this->systemPathBuilder = $systemPathBuilder;
+    }
+
+    protected function getContentType(): string
+    {
+        return 'application/pdf';
+    }
+
+    protected function getExtension(): string
+    {
+        return 'pdf';
     }
 
     public function getHtmlFromPage(string $html): string

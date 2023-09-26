@@ -153,6 +153,22 @@ class UserRepository implements UserRepositoryInterface
     }
 
     /**
+     * @param string[] $userIdentifiers
+     *
+     * @return string[]
+     */
+    public function findEmailAddressesForUserIdentifiers(array $userIdentifiers): array
+    {
+        $condition = new InCondition(
+            new PropertyConditionVariable(User::class, DataClass::PROPERTY_ID), $userIdentifiers
+        );
+
+        $retrieveProperties = [new PropertyConditionVariable(User::class, User::PROPERTY_EMAIL)];
+
+        return $this->findUserProperties($retrieveProperties, $condition);
+    }
+
+    /**
      * @return \Doctrine\Common\Collections\ArrayCollection<\Chamilo\Core\User\Storage\DataClass\User>
      * @throws \Chamilo\Libraries\Storage\Exception\DataClassNoResultException
      */
@@ -327,6 +343,22 @@ class UserRepository implements UserRepositoryInterface
         );
     }
 
+    /**
+     * @param \Chamilo\Libraries\Storage\Query\Variable\ConditionVariable[] $retrieveProperties
+     *
+     * @return string[]
+     */
+    public function findUserProperties(
+        array $retrieveProperties, ?Condition $condition = null, ?OrderBy $orderProperty = null
+    ): array
+    {
+        return $this->getDataClassRepository()->distinct(
+            User::class, new DataClassDistinctParameters(
+                $condition, new RetrieveProperties($retrieveProperties), null, $orderProperty
+            )
+        );
+    }
+
     public function findUserSettingForSettingAndUser(Setting $setting, User $user): ?UserSetting
     {
         $conditions = [];
@@ -372,6 +404,22 @@ class UserRepository implements UserRepositoryInterface
      * @return \Doctrine\Common\Collections\ArrayCollection<\Chamilo\Core\User\Storage\DataClass\User>
      * @throws \Chamilo\Libraries\Storage\Exception\DataClassNoResultException
      */
+    public function findUsersByIdentifiers(array $userIdentifiers, ?OrderBy $orderBy = null): ArrayCollection
+    {
+        $condition =
+            new InCondition(new PropertyConditionVariable(User::class, DataClass::PROPERTY_ID), $userIdentifiers);
+
+        return $this->getDataClassRepository()->retrieves(
+            User::class, new DataClassRetrievesParameters($condition, null, null, $orderBy)
+        );
+    }
+
+    /**
+     * @param string[] $userIdentifiers
+     *
+     * @return \Doctrine\Common\Collections\ArrayCollection<\Chamilo\Core\User\Storage\DataClass\User>
+     * @throws \Chamilo\Libraries\Storage\Exception\DataClassNoResultException
+     */
     public function findUsersByIdentifiersOrderedByName(array $userIdentifiers): ArrayCollection
     {
         $orderBy = new OrderBy();
@@ -379,12 +427,7 @@ class UserRepository implements UserRepositoryInterface
         $orderBy->add(new OrderProperty(new PropertyConditionVariable(User::class, User::PROPERTY_LASTNAME)));
         $orderBy->add(new OrderProperty(new PropertyConditionVariable(User::class, User::PROPERTY_FIRSTNAME)));
 
-        $condition =
-            new InCondition(new PropertyConditionVariable(User::class, DataClass::PROPERTY_ID), $userIdentifiers);
-
-        return $this->getDataClassRepository()->retrieves(
-            User::class, new DataClassRetrievesParameters($condition, null, null, $orderBy)
-        );
+        return $this->findUsersByIdentifiers($userIdentifiers, $orderBy);
     }
 
     /**

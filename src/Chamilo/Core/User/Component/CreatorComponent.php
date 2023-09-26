@@ -8,7 +8,6 @@ use Chamilo\Libraries\Architecture\Application\Application;
 use Chamilo\Libraries\Architecture\Exceptions\NotAllowedException;
 use Chamilo\Libraries\Format\Breadcrumb\BreadcrumbTrail;
 use Chamilo\Libraries\Format\Structure\Breadcrumb;
-use Chamilo\Libraries\Translation\Translation;
 
 /**
  * @package user.lib.user_manager.component
@@ -17,48 +16,51 @@ class CreatorComponent extends Manager
 {
 
     /**
-     * Runs this component and displays its output.
+     * @throws \QuickformException
+     * @throws \Chamilo\Libraries\Architecture\Exceptions\NotAllowedException
      */
     public function run()
     {
         $this->checkAuthorization(Manager::CONTEXT, 'ManageUsers');
 
-        $user = $this->get_user();
-        $user_id = $user->get_id();
+        $currentUser = $this->getUser();
 
-        if (!$user->isPlatformAdmin())
+        if (!$currentUser->isPlatformAdmin())
         {
             throw new NotAllowedException();
         }
 
         $user = new User();
+
         $user->set_platformadmin(0);
         $user->set_password(1);
+        $user->set_creator_id($currentUser->getId());
 
-        $user_info = $this->get_user();
-        $user->set_creator_id($user_info->get_id());
-
-        $form = new UserForm(UserForm::TYPE_CREATE, $user, $this->get_user(), $this->get_url());
+        $translator = $this->getTranslator();
+        $form = new UserForm(UserForm::TYPE_CREATE, $user, $currentUser, $this->get_url());
 
         if ($form->validate())
         {
             $success = $form->create_user();
+
             if ($success == 1)
             {
                 $this->redirectWithMessage(
-                    Translation::get($success ? 'UserCreated' : 'UserNotCreated'), !$success,
+                    $translator->trans('UserCreated', [], Manager::CONTEXT), false,
                     [Application::PARAM_ACTION => self::ACTION_BROWSE_USERS]
                 );
             }
             else
             {
-                $this->getRequest()->request->set('error_message', Translation::get('UsernameNotAvailable'));
+                $this->getRequest()->request->set(
+                    'error_message', $translator->trans('UsernameNotAvailable', [], Manager::CONTEXT)
+                );
 
                 $html = [];
 
-                $html[] = $this->render_header();
-                $html[] = $form->toHtml();
-                $html[] = $this->render_footer();
+                $html[] = $this->renderHeader();
+                $html[] = $form->render();
+                $html[] = $this->renderFooter();
 
                 return implode(PHP_EOL, $html);
             }
@@ -67,9 +69,9 @@ class CreatorComponent extends Manager
         {
             $html = [];
 
-            $html[] = $this->render_header();
-            $html[] = $form->toHtml();
-            $html[] = $this->render_footer();
+            $html[] = $this->renderHeader();
+            $html[] = $form->render();
+            $html[] = $this->renderFooter();
 
             return implode(PHP_EOL, $html);
         }
@@ -80,7 +82,7 @@ class CreatorComponent extends Manager
         $breadcrumbtrail->add(
             new Breadcrumb(
                 $this->get_url([self::PARAM_ACTION => self::ACTION_BROWSE_USERS]),
-                Translation::get('AdminUserBrowserComponent')
+                $this->getTranslator()->trans('AdminUserBrowserComponent', [], Manager::CONTEXT)
             )
         );
     }

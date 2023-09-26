@@ -3,64 +3,61 @@ namespace Chamilo\Core\User\Component;
 
 use Chamilo\Core\Tracking\Storage\DataClass\Event;
 use Chamilo\Core\User\Manager;
-use Chamilo\Core\User\Storage\DataClass\User;
 use Chamilo\Core\User\Storage\DataManager;
 use Chamilo\Libraries\Architecture\Application\Application;
 use Chamilo\Libraries\Architecture\Exceptions\NotAllowedException;
 use Chamilo\Libraries\Format\Breadcrumb\BreadcrumbTrail;
 use Chamilo\Libraries\Format\Structure\Breadcrumb;
-use Chamilo\Libraries\Translation\Translation;
 use Chamilo\Libraries\Utilities\StringUtilities;
 
 /**
- *
- * @package user.lib.user_manager.component
+ * @package Chamilo\Core\User\Component
  */
 class DeleterComponent extends Manager
 {
 
     /**
-     * Runs this component and displays its output.
+     * @throws \Chamilo\Libraries\Architecture\Exceptions\NotAllowedException
      */
     public function run()
     {
         $this->checkAuthorization(Manager::CONTEXT, 'ManageUsers');
 
-        if (! $this->get_user()->isPlatformAdmin())
+        if (!$this->getUser()->isPlatformAdmin())
         {
             throw new NotAllowedException();
         }
 
-        $ids = $this->getRequest()->getFromRequestOrQuery(self::PARAM_USER_USER_ID);
-        $this->set_parameter(self::PARAM_USER_USER_ID, $ids);
+        $userIdentifiers = $this->getRequest()->getFromRequestOrQuery(self::PARAM_USER_USER_ID);
 
-        if (! is_array($ids))
+        $translator = $this->getTranslator();
+        $userService = $this->getUserService();
+
+        if (!is_array($userIdentifiers))
         {
-            $ids = array($ids);
+            $userIdentifiers = [$userIdentifiers];
         }
 
-        if (count($ids) > 0)
+        if (count($userIdentifiers) > 0)
         {
             $failures = 0;
 
-            foreach ($ids as $id)
+            foreach ($userIdentifiers as $userIdentifier)
             {
-                $user = DataManager::retrieve_by_id(
-                    User::class,
-                    (int) $id);
+                $user = $userService->findUserByIdentifier($userIdentifier);
 
-                if (! DataManager::user_deletion_allowed($user))
+                if (!DataManager::user_deletion_allowed($user))
                 {
                     $failures ++;
                     continue;
                 }
 
-                if ($user->delete())
+                if ($userService->deleteUser($user))
                 {
                     Event::trigger(
-                        'Delete',
-                        Manager::CONTEXT,
-                        array('target_user_id' => $user->get_id(), 'action_user_id' => $this->get_user()->get_id()));
+                        'Delete', Manager::CONTEXT,
+                        ['target_user_id' => $user->getId(), 'action_user_id' => $this->getUser()->getId()]
+                    );
                 }
                 else
                 {
@@ -69,26 +66,23 @@ class DeleterComponent extends Manager
             }
 
             $message = $this->get_result(
-                $failures,
-                count($ids),
-                'UserNotDeleted',
-                'UsersNotDeleted',
-                'UserDeleted',
-                'UsersDeleted');
+                $failures, count($userIdentifiers), 'UserNotDeleted', 'UsersNotDeleted', 'UserDeleted', 'UsersDeleted'
+            );
 
             $this->redirectWithMessage(
-                $message,
-                ($failures > 0),
-                array(Application::PARAM_ACTION => self::ACTION_BROWSE_USERS));
+                $message, ($failures > 0), [Application::PARAM_ACTION => self::ACTION_BROWSE_USERS]
+            );
         }
         else
         {
             return $this->display_error_page(
                 htmlentities(
-                    Translation::get(
-                        'NoObjectSelected',
-                        array('OBJECT' => Translation::get('User')),
-                        StringUtilities::LIBRARIES)));
+                    $translator->trans(
+                        'NoObjectSelected', ['OBJECT' => $translator->trans('User', [], Manager::CONTEXT)],
+                        StringUtilities::LIBRARIES
+                    )
+                )
+            );
         }
     }
 
@@ -96,7 +90,9 @@ class DeleterComponent extends Manager
     {
         $breadcrumbtrail->add(
             new Breadcrumb(
-                $this->get_url(array(self::PARAM_ACTION => self::ACTION_BROWSE_USERS)),
-                Translation::get('AdminUserBrowserComponent')));
+                $this->get_url([self::PARAM_ACTION => self::ACTION_BROWSE_USERS]),
+                $this->getTranslator()->trans('AdminUserBrowserComponent')
+            )
+        );
     }
 }
