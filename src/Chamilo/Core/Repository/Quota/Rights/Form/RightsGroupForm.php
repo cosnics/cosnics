@@ -44,15 +44,15 @@ class RightsGroupForm extends FormValidator
         
         $this->addElement('category', Translation::get('RightsGroupAccess'));
         $types = new AdvancedElementFinderElementTypes();
-        $types->add_element_type(UserEntity::get_element_finder_type());
-        $types->add_element_type(PlatformGroupEntity::get_element_finder_type());
+        $types->add_element_type(UserEntity::getInstance()->get_element_finder_type());
+        $types->add_element_type(PlatformGroupEntity::getInstance()->get_element_finder_type());
         $this->addElement('advanced_element_finder', self::PROPERTY_ACCESS, null, $types);
         $this->get_renderer()->setElementTemplate($element_template, self::PROPERTY_ACCESS);
         $this->addElement('category');
         
         $this->addElement('category', Translation::get('RightsGroupTargets'));
         $types = new AdvancedElementFinderElementTypes();
-        $types->add_element_type(PlatformGroupEntity::get_element_finder_type());
+        $types->add_element_type(PlatformGroupEntity::getInstance()->get_element_finder_type());
         $this->addElement('advanced_element_finder', self::PROPERTY_TARGETS, null, $types);
         $this->get_renderer()->setElementTemplate($element_template, self::PROPERTY_TARGETS);
         $this->addElement('category');
