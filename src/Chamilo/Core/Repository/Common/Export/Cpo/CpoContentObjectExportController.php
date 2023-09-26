@@ -141,6 +141,10 @@ class CpoContentObjectExportController extends ContentObjectExportController
 
     public function in_category_id_cache($category_id)
     {
+        if (is_null($this->category_id_cache))
+        {
+            return false;
+        }
         return in_array($category_id, $this->category_id_cache);
     }
 
