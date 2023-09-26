@@ -31,7 +31,8 @@ class AvailabilityComponent extends Manager
         $this->checkAuthorization(Manager::context());
 
         $availabilityService = $this->getAvailabilityService();
-        $form = $this->getForm($availabilityService);
+
+        $form = new AvailabilityForm($this->get_url(), $this->get_user(), $availabilityService);
 
         if ($form->validate())
         {
@@ -54,15 +55,5 @@ class AvailabilityComponent extends Manager
 
             return implode(PHP_EOL, $html);
         }
-    }
-
-    /**
-     *
-     * @param \Chamilo\Application\Calendar\Service\AvailabilityService $availabilityService
-     * @return \Chamilo\Application\Calendar\Form\AvailabilityForm
-     */
-    public function getForm(AvailabilityService $availabilityService)
-    {
-        return new AvailabilityForm($this->get_url(), $this->get_user(), $availabilityService);
     }
 }

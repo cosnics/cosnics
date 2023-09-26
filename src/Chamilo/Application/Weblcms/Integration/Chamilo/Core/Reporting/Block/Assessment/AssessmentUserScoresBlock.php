@@ -10,6 +10,7 @@ use Chamilo\Core\Reporting\ReportingData;
 use Chamilo\Core\Repository\ContentObject\Assessment\Storage\DataClass\Assessment;
 use Chamilo\Libraries\Architecture\ClassnameUtilities;
 use Chamilo\Libraries\Platform\Session\Request;
+use Chamilo\Libraries\Storage\DataManager\Doctrine\ResultSet\DataClassResultSet;
 use Chamilo\Libraries\Translation\Translation;
 use Chamilo\Libraries\Storage\Parameters\DataClassRetrievesParameters;
 use Chamilo\Libraries\Storage\Query\Condition\AndCondition;
@@ -224,7 +225,15 @@ class AssessmentUserScoresBlock extends ToolBlock
                 {
                     $score += $attempt->get_total_score();
                 }
-                return number_format($score / count($attempts), 1);
+                if (is_array($attempts))
+                {
+                    $count = count($attempts);
+                }
+                elseif ($attempts instanceof \Chamilo\Libraries\Storage\DataManager\Doctrine\ResultSet\DataClassResultSet)
+                {
+                    $count = $attempts->size();
+                }
+                return number_format($score / $count, 1);
         }
     }
 

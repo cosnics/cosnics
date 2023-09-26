@@ -342,10 +342,13 @@ class PublicationService
         $attributes->setId($treeNodeData->getId());
         $attributes->set_application('Chamilo\Core\Repository\ContentObject\LearningPath');
         $attributes->set_publisher_id($learningPath->get_owner_id());
-        $attributes->set_date($contentObject->get_creation_date());
+        if ($contentObject instanceof ContentObject)
+        {
+            $attributes->set_date($contentObject->get_creation_date());
+            $attributes->set_title($contentObject->get_title());
+        }
         $attributes->set_location($learningPath->get_title());
         $attributes->set_url(null);
-        $attributes->set_title($contentObject->get_title());
         $attributes->set_content_object_id($treeNodeData->getContentObjectId());
 
         return $attributes;
