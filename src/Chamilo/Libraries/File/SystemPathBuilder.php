@@ -32,7 +32,7 @@ class SystemPathBuilder extends AbstractPathBuilder
     {
         $directorySeparator = $this->getDirectorySeparator();
 
-        return realpath($this->getBasePath() . '..' . $directorySeparator . 'web') . $directorySeparator;
+        return $this->getRootPath() . $directorySeparator . 'web' . $directorySeparator;
     }
 
     protected function getPublicStorageBasePath(): string
@@ -40,21 +40,28 @@ class SystemPathBuilder extends AbstractPathBuilder
         return $this->getPublicPath() . 'Files' . $this->getDirectorySeparator();
     }
 
+    public function getRootPath(): string
+    {
+        $directorySeparator = $this->getDirectorySeparator();
+
+        return $this->cache[self::ROOT] =
+            realpath($this->getBasePath() . '..' . $directorySeparator) . $directorySeparator;
+    }
+
     public function getStoragePath(?string $namespace = null): string
     {
         $directorySeparator = $this->getDirectorySeparator();
 
-        $basePath = realpath($this->getBasePath() . '..' . $directorySeparator . 'files');
+        $basePath = $this->getRootPath() . $directorySeparator . 'files';
 
         return $this->cache[self::STORAGE][(string) $namespace] = $basePath . $directorySeparator .
-            ($namespace ? $this->namespaceToPath($namespace, $directorySeparator) . $directorySeparator : '');
+            ($namespace ? $this->namespaceToPath($namespace) . $directorySeparator : '');
     }
 
     public function getVendorPath(): string
     {
         $directorySeparator = $this->getDirectorySeparator();
 
-        return $this->cache[self::VENDOR] =
-            realpath($this->getBasePath() . '..' . $directorySeparator . 'vendor') . $directorySeparator;
+        return $this->cache[self::VENDOR] = $this->getRootPath() . $directorySeparator . 'vendor' . $directorySeparator;
     }
 }

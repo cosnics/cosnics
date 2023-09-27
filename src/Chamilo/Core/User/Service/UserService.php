@@ -1,13 +1,18 @@
 <?php
 namespace Chamilo\Core\User\Service;
 
+use Chamilo\Configuration\Service\Consulter\ConfigurationConsulter;
 use Chamilo\Configuration\Storage\DataClass\Setting;
 use Chamilo\Core\Tracking\Storage\DataClass\Event;
+use Chamilo\Core\User\Manager;
 use Chamilo\Core\User\Storage\DataClass\User;
 use Chamilo\Core\User\Storage\DataClass\UserSetting;
 use Chamilo\Core\User\Storage\Repository\UserRepository;
 use Chamilo\Libraries\Cache\Traits\CacheAdapterHandlerTrait;
+use Chamilo\Libraries\File\WebPathBuilder;
 use Chamilo\Libraries\Hashing\HashingUtilities;
+use Chamilo\Libraries\Mail\Mailer\MailerInterface;
+use Chamilo\Libraries\Mail\ValueObject\Mail;
 use Chamilo\Libraries\Storage\DataClass\PropertyMapper;
 use Chamilo\Libraries\Storage\Query\Condition\AndCondition;
 use Chamilo\Libraries\Storage\Query\Condition\Condition;
@@ -16,6 +21,7 @@ use Chamilo\Libraries\Storage\Query\OrderBy;
 use Chamilo\Libraries\Storage\Query\Variable\PropertyConditionVariable;
 use Chamilo\Libraries\Storage\Query\Variable\StaticConditionVariable;
 use Doctrine\Common\Collections\ArrayCollection;
+use Exception;
 use InvalidArgumentException;
 use RuntimeException;
 use Symfony\Component\Cache\Adapter\FilesystemAdapter;
@@ -30,9 +36,15 @@ class UserService
 {
     use CacheAdapterHandlerTrait;
 
+    protected MailerInterface $activeMailer;
+
+    protected ConfigurationConsulter $configurationConsulter;
+
     protected Translator $translator;
 
     protected FilesystemAdapter $userSettingsCacheAdapter;
+
+    protected WebPathBuilder $webPathBuilder;
 
     private HashingUtilities $hashingUtilities;
 
@@ -42,7 +54,8 @@ class UserService
 
     public function __construct(
         UserRepository $userRepository, HashingUtilities $hashingUtilities, PropertyMapper $propertyMapper,
-        Translator $translator, FilesystemAdapter $userSettingsCacheAdapter
+        Translator $translator, FilesystemAdapter $userSettingsCacheAdapter,
+        ConfigurationConsulter $configurationConsulter, WebPathBuilder $webPathBuilder, MailerInterface $activeMailer
     )
     {
         $this->userRepository = $userRepository;
@@ -50,6 +63,9 @@ class UserService
         $this->propertyMapper = $propertyMapper;
         $this->translator = $translator;
         $this->userSettingsCacheAdapter = $userSettingsCacheAdapter;
+        $this->configurationConsulter = $configurationConsulter;
+        $this->webPathBuilder = $webPathBuilder;
+        $this->activeMailer = $activeMailer;
     }
 
     public function countUsers(?Condition $condition = null): int
@@ -106,7 +122,7 @@ class UserService
      */
     public function createUserFromParameters(
         ?string $firstName, ?string $lastName, string $username, ?string $officialCode, string $emailAddress,
-        string $password, ?string $authSource = 'Platform', ?int $status = User::STATUS_STUDENT
+        string $password, ?string $authSource = 'Platform', ?int $status = User::STATUS_STUDENT, bool $sendEmail = false
     ): User
     {
         $requiredParameters = [
@@ -144,6 +160,11 @@ class UserService
         if (!$this->createUser($user))
         {
             throw new RuntimeException('Could not create the user');
+        }
+
+        if ($sendEmail && !$this->sendRegistrationEmailToUser($user, $password))
+        {
+            throw new RuntimeException('Could not send an email to the new user');
         }
 
         return $user;
@@ -437,6 +458,16 @@ class UserService
         return $this->findUsers($condition, $count, $offset, $orderProperty);
     }
 
+    public function getActiveMailer(): MailerInterface
+    {
+        return $this->activeMailer;
+    }
+
+    public function getConfigurationConsulter(): ConfigurationConsulter
+    {
+        return $this->configurationConsulter;
+    }
+
     protected function getHashingUtilities(): HashingUtilities
     {
         return $this->hashingUtilities;
@@ -489,9 +520,64 @@ class UserService
         return $this->userSettingsCacheAdapter;
     }
 
+    public function getWebPathBuilder(): WebPathBuilder
+    {
+        return $this->webPathBuilder;
+    }
+
     public function isUsernameAvailable(string $username): bool
     {
         return !$this->findUserByUsername($username) instanceof User;
+    }
+
+    public function sendRegistrationEmailToUser(User $user, string $password): bool
+    {
+        $configurationConsulter = $this->getConfigurationConsulter();
+
+        $options = [];
+        $options['firstname'] = $user->get_firstname();
+        $options['lastname'] = $user->get_lastname();
+        $options['username'] = $user->get_username();
+        $options['password'] = $password;
+        $options['site_name'] = $configurationConsulter->getSetting(['Chamilo\Core\Admin', 'site_name']);
+        $options['site_url'] = $this->getWebPathBuilder()->getBasePath();
+        $options['admin_firstname'] = $configurationConsulter->getSetting(
+            ['Chamilo\Core\Admin', 'administrator_firstname']
+        );
+        $options['admin_surname'] = $configurationConsulter->getSetting(
+            ['Chamilo\Core\Admin', 'administrator_surname']
+        );
+        $options['admin_telephone'] = $configurationConsulter->getSetting(
+            ['Chamilo\Core\Admin', 'administrator_telephone']
+        );
+        $options['admin_email'] = $configurationConsulter->getSetting(
+            ['Chamilo\Core\Admin', 'administrator_email']
+        );
+
+        $subject =
+            $this->getTranslator()->trans('YourRegistrationOn', [], Manager::CONTEXT) . ' ' . $options['site_name'];
+
+        $body = $configurationConsulter->getSetting([Manager::CONTEXT, 'email_template']);
+        foreach ($options as $option => $value)
+        {
+            $body = str_replace('[' . $option . ']', $value, $body);
+        }
+
+        $mail = new Mail(
+            $subject, $body, $user->get_email(), true, [], [],
+            $options['admin_firstname'] . ' ' . $options['admin_surname'], $options['admin_email']
+        );
+
+        try
+        {
+            $this->getActiveMailer()->sendMail($mail);
+        }
+        catch (Exception)
+        {
+            return false;
+        }
+
+        return true;
     }
 
     public function triggerImportEvent(User $actionUser, User $targetUser): void

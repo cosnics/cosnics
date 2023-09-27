@@ -29,6 +29,7 @@ abstract class AbstractPathBuilder
     public const RELATIVE = 3;
     public const REPOSITORY = 9;
     public const RESOURCE = 13;
+    public const ROOT = 21;
     public const STORAGE = 4;
     public const TEMPLATES = 18;
     public const TEMPORARY = 5;
