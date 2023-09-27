@@ -2,24 +2,21 @@
 namespace Chamilo\Core\User\Picture;
 
 use Chamilo\Core\User\Storage\DataClass\User;
+use Symfony\Component\HttpFoundation\File\UploadedFile;
 
 /**
- * Interface UserPictureUpdateProviderInterface
  * @package Chamilo\Core\User\Picture
+ * @author  Sven Vanpoucke - Hogeschool Gent
+ * @author  Hans De Bisschop <hans.de.bisschop@ehb.be>
  */
 interface UserPictureUpdateProviderInterface
 {
 
-    /**
-     * @param \Chamilo\Core\User\Storage\DataClass\User $targetUser
-     * @param \Chamilo\Core\User\Storage\DataClass\User $requestUser
-     */
-    public function deleteUserPicture(User $targetUser, User $requestUser);
+    public function deleteUserPicture(User $targetUser, User $requestUser): bool;
 
-    /**
-     * @param \Chamilo\Core\User\Storage\DataClass\User $targetUser
-     * @param \Chamilo\Core\User\Storage\DataClass\User $requestUser
-     * @param string[] $fileInformation
-     */
-    public function setUserPicture(User $targetUser, User $requestUser, array $fileInformation);
+    public function setUserPicture(User $targetUser, User $requestUser, ?UploadedFile $fileInformation = null): bool;
+
+    public function updateUserPictureFromParameters(
+        User $targetUser, User $requestUser, ?UploadedFile $fileInformation = null, bool $removeExistingPicture = false
+    ): bool;
 }

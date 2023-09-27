@@ -357,7 +357,7 @@ abstract class BaseHtmlTreeComponent extends Manager implements BreadcrumbLessCo
                     [self::PARAM_ACTION => self::ACTION_REPORTING], [self::PARAM_CHILD_ID]
                 ) . '">';
 
-            $html[] = $progressBarRenderer->render($progress, ProgressBarRenderer::MODE_DEFAULT, 0, true);
+            $html[] = $progressBarRenderer->render($progress, null, ProgressBarRenderer::MODE_DEFAULT, 0, true);
             $html[] = '</a>';
         }
 

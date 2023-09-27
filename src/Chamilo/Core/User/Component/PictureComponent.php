@@ -3,71 +3,109 @@ namespace Chamilo\Core\User\Component;
 
 use Chamilo\Core\User\Form\PictureForm;
 use Chamilo\Core\User\Manager;
+use Chamilo\Core\User\Picture\UserPictureProviderInterface;
+use Chamilo\Core\User\Picture\UserPictureUpdateProviderInterface;
 use Chamilo\Libraries\Architecture\Application\Application;
-use Chamilo\Libraries\Format\Breadcrumb\BreadcrumbLessPackageInterface;
-use Chamilo\Libraries\Translation\Translation;
+use Exception;
+use Symfony\Component\HttpFoundation\File\UploadedFile;
 
 /**
- *
  * @package Chamilo\Core\User\Component
- * @author Hans De Bisschop <hans.de.bisschop@ehb.be>
- * @author Magali Gillard <magali.gillard@ehb.be>
- * @author Eduard Vossen <eduard.vossen@ehb.be>
+ * @author  Hans De Bisschop <hans.de.bisschop@ehb.be>
+ * @author  Magali Gillard <magali.gillard@ehb.be>
+ * @author  Eduard Vossen <eduard.vossen@ehb.be>
  */
 class PictureComponent extends ProfileComponent
 {
 
-    /**
-     *
-     * @var \Chamilo\Core\User\Form\PictureForm
-     */
-    private $form;
+    protected PictureForm $pictureForm;
 
     /**
-     * Runs this component and displays its output.
+     * @throws \Chamilo\Libraries\Architecture\Exceptions\NotAllowedException
+     * @throws \QuickformException
      */
     public function run()
     {
         $this->checkAuthorization(Manager::CONTEXT, 'ManageAccount');
-        
-        $this->form = new PictureForm($this->get_user(), $this->get_url());
-        
-        if ($this->form->validate())
+        $translator = $this->getTranslator();
+        $userPictureProvider = $this->getUserPictureProvider();
+
+        if ($userPictureProvider instanceof UserPictureUpdateProviderInterface)
         {
-            $success = $this->form->update();
-            if (! $success)
+            $pictureForm = $this->getPictureForm();
+
+            if ($pictureForm->validate())
             {
-                if (isset($_FILES['picture_uri']) && $_FILES['picture_uri']['error'])
+                try
                 {
-                    $neg_message = 'FileTooBig';
+                    $removeExistingPicture = (bool) $pictureForm->exportValue('remove_picture');
+                }
+                catch (Exception)
+                {
+                    $removeExistingPicture = false;
+                }
+
+                $pictureInformation = $this->getRequest()->files->get('picture_uri');
+
+                $success = $userPictureProvider->updateUserPictureFromParameters(
+                    $this->getUser(), $this->getUser(), $pictureInformation, $removeExistingPicture
+                );
+
+                if (!$success)
+                {
+                    if ($pictureInformation instanceof UploadedFile && !$pictureInformation->isValid())
+                    {
+                        $errorMessage = $pictureInformation->getErrorMessage();
+                    }
+                    else
+                    {
+                        $errorMessage = 'UserProfileNotUpdated';
+                    }
                 }
                 else
                 {
-                    $neg_message = 'UserProfileNotUpdated';
+                    $errorMessage = 'UserProfileNotUpdated';
+                    $successMessage = 'UserProfileUpdated';
                 }
+
+                $this->redirectWithMessage(
+                    $this->getTranslator()->trans($success ? $successMessage : $errorMessage), !$success,
+                    [Application::PARAM_ACTION => self::ACTION_CHANGE_PICTURE]
+                );
             }
             else
             {
-                $neg_message = 'UserProfileNotUpdated';
-                $pos_message = 'UserProfileUpdated';
+                return $this->renderPage();
             }
-            
-            $this->redirectWithMessage(
-                Translation::get($success ? $pos_message : $neg_message), !$success,
-                array(Application::PARAM_ACTION => self::ACTION_CHANGE_PICTURE));
         }
         else
         {
-            return $this->renderPage();
+            return $this->display_error_page(
+                $translator->trans('UserPictureProviderDoesNotSuportUpdates', [], Manager::CONTEXT)
+            );
         }
     }
 
     /**
-     *
-     * @return string
+     * @throws \QuickformException
      */
     public function getContent(): string
     {
-        return $this->form->toHtml();
+        return $this->getPictureForm()->render();
+    }
+
+    public function getPictureForm(): PictureForm
+    {
+        if (!isset($this->pictureForm))
+        {
+            $this->pictureForm = new PictureForm($this->getUser(), $this->get_url());
+        }
+
+        return $this->pictureForm;
+    }
+
+    public function getUserPictureProvider(): UserPictureProviderInterface
+    {
+        return $this->getService('Chamilo\Core\User\Picture\UserPictureProvider');
     }
 }

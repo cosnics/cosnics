@@ -1,8 +1,12 @@
 <?php
 namespace Chamilo\Core\User\Picture\Provider\Platform;
 
+use Chamilo\Core\Tracking\Storage\DataClass\ChangesTracker;
+use Chamilo\Core\Tracking\Storage\DataClass\Event;
+use Chamilo\Core\User\Manager;
 use Chamilo\Core\User\Picture\UserPictureProviderInterface;
 use Chamilo\Core\User\Picture\UserPictureUpdateProviderInterface;
+use Chamilo\Core\User\Service\UserService;
 use Chamilo\Core\User\Storage\DataClass\User;
 use Chamilo\Libraries\File\ConfigurablePathBuilder;
 use Chamilo\Libraries\File\FilesystemTools;
@@ -11,18 +15,21 @@ use Chamilo\Libraries\File\WebPathBuilder;
 use Chamilo\Libraries\Format\Theme\ThemePathBuilder;
 use DateTime;
 use Exception;
+use Symfony\Component\Filesystem\Filesystem;
+use Symfony\Component\HttpFoundation\File\UploadedFile;
 use Symfony\Component\HttpFoundation\StreamedResponse;
 
 /**
- * The default user picture provider
- *
- * @author Sven Vanpoucke - Hogeschool Gent
+ * @author  Sven Vanpoucke - Hogeschool Gent
+ * @author  Hans De Bisschop <hans.de.bisschop@ehb.be>
  */
 class UserPictureProvider implements UserPictureProviderInterface, UserPictureUpdateProviderInterface
 {
-    protected \Symfony\Component\Filesystem\Filesystem $filesystem;
+    protected Filesystem $filesystem;
 
     protected FilesystemTools $filesystemTools;
+
+    protected UserService $userService;
 
     protected WebPathBuilder $webPathBuilder;
 
@@ -32,8 +39,8 @@ class UserPictureProvider implements UserPictureProviderInterface, UserPictureUp
 
     public function __construct(
         ConfigurablePathBuilder $configurablePathBuilder, ThemePathBuilder $themeSystemPathBuilder,
-        WebPathBuilder $webPathBuilder, \Symfony\Component\Filesystem\Filesystem $filesystem,
-        FilesystemTools $filesystemTools
+        WebPathBuilder $webPathBuilder, Filesystem $filesystem, FilesystemTools $filesystemTools,
+        UserService $userService
     )
     {
         $this->configurablePathBuilder = $configurablePathBuilder;
@@ -41,30 +48,32 @@ class UserPictureProvider implements UserPictureProviderInterface, UserPictureUp
         $this->webPathBuilder = $webPathBuilder;
         $this->filesystem = $filesystem;
         $this->filesystemTools = $filesystemTools;
+        $this->userService = $userService;
     }
 
-    /**
-     * @param \Chamilo\Core\User\Storage\DataClass\User $targetUser
-     * @param \Chamilo\Core\User\Storage\DataClass\User $requestUser
-     *
-     * @throws \Exception
-     */
-    public function deleteUserPicture(User $targetUser, User $requestUser)
+    public function deleteUserPicture(User $targetUser, User $requestUser): bool
     {
         if ($this->doesUserHavePicture($targetUser))
         {
-            $path = $this->getUserPicturePath($targetUser);
-            $this->getFilesystem()->remove($path);
+            try
+            {
+                $path = $this->getUserPicturePath($targetUser);
+                $this->getFilesystem()->remove($path);
+            }
+            catch (Exception)
+            {
+                return false;
+            }
+
             $targetUser->set_picture_uri(null);
+
+            return $this->getUserService()->updateUser($targetUser);
         }
+
+        return true;
     }
 
-    /**
-     * @param \Chamilo\Core\User\Storage\DataClass\User $user
-     *
-     * @return bool
-     */
-    public function doesUserHavePicture(User $user)
+    public function doesUserHavePicture(User $user): bool
     {
         $uri = $user->get_picture_uri();
 
@@ -73,15 +82,7 @@ class UserPictureProvider implements UserPictureProviderInterface, UserPictureUp
                 )));
     }
 
-    /**
-     * Downloads the user picture
-     *
-     * @param User $targetUser
-     * @param User $requestUser
-     *
-     * @throws \Exception
-     */
-    public function downloadUserPicture(User $targetUser, User $requestUser)
+    public function downloadUserPicture(User $targetUser, User $requestUser): void
     {
         try
         {
@@ -107,10 +108,9 @@ class UserPictureProvider implements UserPictureProviderInterface, UserPictureUp
             );
 
             $response->send();
-
             exit();
         }
-        catch (Exception $exception)
+        catch (Exception)
         {
         }
     }
@@ -123,7 +123,7 @@ class UserPictureProvider implements UserPictureProviderInterface, UserPictureUp
         return $this->configurablePathBuilder;
     }
 
-    public function getFilesystem(): \Symfony\Component\Filesystem\Filesystem
+    public function getFilesystem(): Filesystem
     {
         return $this->filesystem;
     }
@@ -138,7 +138,7 @@ class UserPictureProvider implements UserPictureProviderInterface, UserPictureUp
      *
      * @return string
      */
-    public function getPictureAsBase64String(string $filePath)
+    public function getPictureAsBase64String(string $filePath): string
     {
         $type = exif_imagetype($filePath);
         $mime = image_type_to_mime_type($type);
@@ -157,52 +157,34 @@ class UserPictureProvider implements UserPictureProviderInterface, UserPictureUp
         return $this->themeSystemPathBuilder;
     }
 
-    /**
-     * @return string
-     */
-    public function getUnknownUserPictureAsBase64String()
+    public function getUnknownUserPictureAsBase64String(): string
     {
         return $this->getPictureAsBase64String($this->getUnknownUserPicturePath());
     }
 
-    /**
-     * @return string
-     */
-    private function getUnknownUserPicturePath()
+    private function getUnknownUserPicturePath(): string
     {
         return $this->getThemeSystemPathBuilder()->getImagePath(
-            'Chamilo\Core\User\Picture\Provider\Platform', 'Unknown', 'png', false
+            'Chamilo\Core\User\Picture\Provider\Platform', 'Unknown'
         );
     }
 
-    /**
-     * Downloads the user picture
-     *
-     * @param User $targetUser
-     * @param User $requestUser
-     *
-     * @return string
-     */
-    public function getUserPictureAsBase64String(User $targetUser, User $requestUser)
+    public function getUserPictureAsBase64String(User $targetUser, User $requestUser): string
     {
         try
         {
             return $this->getPictureAsBase64String($this->getUserPicturePath($targetUser));
         }
-        catch (Exception $exception)
+        catch (Exception)
         {
             return '';
         }
     }
 
     /**
-     * @param \Chamilo\Core\User\Storage\DataClass\User $user
-     * @param bool $useFallback
-     *
-     * @return string
      * @throws \Exception
      */
-    private function getUserPicturePath(User $user, bool $useFallback = true)
+    private function getUserPicturePath(User $user, bool $useFallback = true): string
     {
         if ($this->doesUserHavePicture($user))
         {
@@ -218,33 +200,78 @@ class UserPictureProvider implements UserPictureProviderInterface, UserPictureUp
         }
     }
 
+    public function getUserService(): UserService
+    {
+        return $this->userService;
+    }
+
     public function getWebPathBuilder(): WebPathBuilder
     {
         return $this->webPathBuilder;
     }
 
-    /**
-     * @param \Chamilo\Core\User\Storage\DataClass\User $targetUser
-     * @param \Chamilo\Core\User\Storage\DataClass\User $requestUser
-     * @param string[] $fileInformation
-     *
-     * @throws \Exception
-     */
-    public function setUserPicture(User $targetUser, User $requestUser, array $fileInformation)
+    public function setUserPicture(User $targetUser, User $requestUser, ?UploadedFile $fileInformation = null): bool
     {
-        $this->deleteUserPicture($targetUser, $requestUser);
+        if (!$this->deleteUserPicture($targetUser, $requestUser))
+        {
+            return false;
+        }
 
         $path = $this->getConfigurablePathBuilder()->getProfilePicturePath();
         $this->getFilesystem()->mkdir($path);
 
-        $imageFile =
-            $this->getFilesystemTools()->createUniqueName($path, $targetUser->getId() . '-' . $fileInformation['name']);
-        move_uploaded_file($fileInformation['tmp_name'], $path . $imageFile);
+        $imageFile = $this->getFilesystemTools()->createUniqueName(
+            $path, $targetUser->getId() . '-' . $fileInformation->getClientOriginalName()
+        );
 
-        $imageManipulation = ImageManipulation::factory($path . $imageFile);
-        $imageManipulation->scale(400, 400);
-        $imageManipulation->write_to_file();
+        move_uploaded_file($fileInformation->getPathname(), $path . $imageFile);
+
+        try
+        {
+            $imageManipulation = ImageManipulation::factory($path . $imageFile);
+            $imageManipulation->scale(400, 400);
+
+            if (!$imageManipulation->write_to_file())
+            {
+                return false;
+            }
+        }
+        catch (Exception)
+        {
+            return false;
+        }
 
         $targetUser->set_picture_uri($imageFile);
+
+        return $this->getUserService()->updateUser($targetUser);
+    }
+
+    public function updateUserPictureFromParameters(
+        User $targetUser, User $requestUser, ?UploadedFile $fileInformation = null, bool $removeExistingPicture = false
+    ): bool
+    {
+        if ($removeExistingPicture)
+        {
+            if (!$this->deleteUserPicture($targetUser, $requestUser))
+            {
+                return false;
+            }
+        }
+        elseif (!is_null($fileInformation) && strlen($fileInformation->getClientOriginalName()) > 0)
+        {
+            if (!$fileInformation->isValid() || !$this->setUserPicture($targetUser, $requestUser, $fileInformation))
+            {
+                return false;
+            }
+        }
+
+        Event::trigger(
+            'Update', Manager::CONTEXT, [
+                ChangesTracker::PROPERTY_REFERENCE_ID => $requestUser->getId(),
+                ChangesTracker::PROPERTY_USER_ID => $targetUser->getId()
+            ]
+        );
+
+        return true;
     }
 }

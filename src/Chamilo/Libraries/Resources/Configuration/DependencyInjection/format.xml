@@ -74,5 +74,6 @@
         </service>
 
         <service id="Chamilo\Libraries\Format\Structure\PanelRenderer"/>
+        <service id="Chamilo\Libraries\Format\Structure\ProgressBarRenderer"/>
     </services>
 </container>

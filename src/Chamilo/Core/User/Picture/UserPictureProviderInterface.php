@@ -6,33 +6,16 @@ use Chamilo\Core\User\Storage\DataClass\User;
 /**
  * Describes the necessary functions needed for a user picture provider
  *
- * @author Sven Vanpoucke - Hogeschool Gent
+ * @package Chamilo\Core\User\Picture
+ * @author  Sven Vanpoucke - Hogeschool Gent
+ * @author  Hans De Bisschop <hans.de.bisschop@ehb.be>
  */
 interface UserPictureProviderInterface
 {
 
-    /**
-     * @param \Chamilo\Core\User\Storage\DataClass\User $user
-     *
-     * @return bool
-     */
-    public function doesUserHavePicture(User $user);
+    public function doesUserHavePicture(User $user): bool;
 
-    /**
-     * Downloads the user picture
-     *
-     * @param User $targetUser
-     * @param User $requestUser
-     */
-    public function downloadUserPicture(User $targetUser, User $requestUser);
+    public function downloadUserPicture(User $targetUser, User $requestUser): void;
 
-    /**
-     * Downloads the user picture
-     *
-     * @param User $targetUser
-     * @param User $requestUser
-     *
-     * @return string
-     */
-    public function getUserPictureAsBase64String(User $targetUser, User $requestUser);
+    public function getUserPictureAsBase64String(User $targetUser, User $requestUser): string;
 }

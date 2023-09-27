@@ -15,8 +15,8 @@ class QuickLanguageComponent extends Manager
      * If the allow_user_quick_lang platform
      * setting is set, overwrite the language setting (depending on the request parameters).
      *
-     * @throws \Chamilo\Libraries\Storage\Exception\DataClassNoResultException
      * @throws \Chamilo\Libraries\Architecture\Exceptions\NotAllowedException
+     * @throws \Symfony\Component\Cache\Exception\CacheException
      */
     public function run()
     {

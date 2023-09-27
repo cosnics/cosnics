@@ -4,66 +4,59 @@ namespace Chamilo\Core\User\Component;
 use Chamilo\Core\Tracking\Storage\DataClass\ChangesTracker;
 use Chamilo\Core\Tracking\Storage\DataClass\Event;
 use Chamilo\Core\User\Manager;
-use Chamilo\Core\User\Storage\DataClass\User;
-use Chamilo\Core\User\Storage\DataManager;
 use Chamilo\Libraries\Architecture\Application\Application;
 use Chamilo\Libraries\Architecture\Exceptions\NotAllowedException;
 use Chamilo\Libraries\Format\Breadcrumb\BreadcrumbTrail;
 use Chamilo\Libraries\Format\Structure\Breadcrumb;
 use Chamilo\Libraries\Hashing\HashingUtilities;
 use Chamilo\Libraries\Mail\ValueObject\Mail;
-use Chamilo\Libraries\Translation\Translation;
 use Chamilo\Libraries\Utilities\StringUtilities;
 use Exception;
 use Hackzilla\PasswordGenerator\Generator\PasswordGeneratorInterface;
 
 /**
- * @package user.lib.user_manager.component
+ * @package Chamilo\Core\User\Component
  */
 class MultiPasswordResetterComponent extends Manager
 {
 
     /**
-     * Runs this component and displays its output.
+     * @throws \Chamilo\Libraries\Architecture\Exceptions\NotAllowedException
      */
     public function run()
     {
-        $ids = $this->getRequest()->getFromRequestOrQuery(self::PARAM_USER_USER_ID);
-        $this->set_parameter(self::PARAM_USER_USER_ID, $ids);
+        $userIdentifiers = (array) $this->getRequest()->getFromRequestOrQuery(self::PARAM_USER_USER_ID, []);
+        $translator = $this->getTranslator();
+        $this->set_parameter(self::PARAM_USER_USER_ID, $userIdentifiers);
 
-        if (!$this->get_user()->isPlatformAdmin())
+        if (!$this->getUser()->isPlatformAdmin())
         {
             throw new NotAllowedException();
         }
 
-        if (!is_array($ids))
+        if (count($userIdentifiers) > 0)
         {
-            $ids = [$ids];
-        }
+            $userService = $this->getUserService();
 
-        if (count($ids) > 0)
-        {
             $failures = 0;
 
-            foreach ($ids as $id)
+            foreach ($userIdentifiers as $userIdentifier)
             {
-                $user = DataManager::retrieve_by_id(
-                    User::class, (int) $id
-                );
+                $user = $userService->findUserByIdentifier($userIdentifier);
 
                 $password = $this->getPasswordGenerator()->generatePassword();
                 $user->set_password($this->getHashingUtilities()->hashString($password));
 
-                if ($user->update())
+                if ($userService->updateUser($user))
                 {
-                    $mail_subject = Translation::get('LoginRequest');
+                    $mail_subject = $translator->trans('LoginRequest', [], Manager::CONTEXT);
                     $mail_body = [];
 
                     $mail_body[] = $user->get_fullname() . ',';
-                    $mail_body[] =
-                        Translation::get('YourAccountParam') . ' ' . $this->getWebPathBuilder()->getBasePath();
-                    $mail_body[] = Translation::get('UserName') . ' :' . $user->get_username();
-                    $mail_body[] = Translation::get('Password') . ' :' . $password;
+                    $mail_body[] = $translator->trans('YourAccountParam', [], Manager::CONTEXT) . ' ' .
+                        $this->getWebPathBuilder()->getBasePath();
+                    $mail_body[] = $translator->trans('UserName', [], Manager::CONTEXT) . ' :' . $user->get_username();
+                    $mail_body[] = $translator->trans('Password', [], Manager::CONTEXT) . ' :' . $password;
 
                     $mail_body = implode(PHP_EOL, $mail_body);
 
@@ -75,14 +68,14 @@ class MultiPasswordResetterComponent extends Manager
                     {
                         $mailer->sendMail($mail);
                     }
-                    catch (Exception $ex)
+                    catch (Exception)
                     {
                     }
 
                     Event::trigger(
                         'Update', Manager::CONTEXT, [
-                            ChangesTracker::PROPERTY_REFERENCE_ID => $user->get_id(),
-                            ChangesTracker::PROPERTY_USER_ID => $this->get_user()->get_id()
+                            ChangesTracker::PROPERTY_REFERENCE_ID => $user->getId(),
+                            ChangesTracker::PROPERTY_USER_ID => $this->getUser()->getId()
                         ]
                     );
                 }
@@ -93,8 +86,8 @@ class MultiPasswordResetterComponent extends Manager
             }
 
             $message = $this->get_result(
-                $failures, count($ids), 'UserPasswordNotResetted', 'UserPasswordsNotResetted', 'UserPasswordResetted',
-                'UserPasswordsResetted'
+                $failures, count($userIdentifiers), 'UserPasswordNotResetted', 'UserPasswordsNotResetted',
+                'UserPasswordResetted', 'UserPasswordsResetted'
             );
 
             $this->redirectWithMessage(
@@ -105,8 +98,9 @@ class MultiPasswordResetterComponent extends Manager
         {
             return $this->display_error_page(
                 htmlentities(
-                    Translation::get(
-                        'NoObjectSelected', ['OBJECT' => Translation::get('User')], StringUtilities::LIBRARIES
+                    $translator->trans(
+                        'NoObjectSelected', ['OBJECT' => $translator->trans('User', [], Manager::CONTEXT)],
+                        StringUtilities::LIBRARIES
                     )
                 )
             );
@@ -118,15 +112,12 @@ class MultiPasswordResetterComponent extends Manager
         $breadcrumbtrail->add(
             new Breadcrumb(
                 $this->get_url([self::PARAM_ACTION => self::ACTION_BROWSE_USERS]),
-                Translation::get('AdminUserBrowserComponent')
+                $this->getTranslator()->trans('AdminUserBrowserComponent', [], Manager::CONTEXT)
             )
         );
     }
 
-    /**
-     * @return \Chamilo\Libraries\Hashing\HashingUtilities
-     */
-    public function getHashingUtilities()
+    public function getHashingUtilities(): HashingUtilities
     {
         return $this->getService(HashingUtilities::class);
     }

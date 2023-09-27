@@ -4,10 +4,8 @@ namespace Chamilo\Libraries\Format\Structure;
 use InvalidArgumentException;
 
 /**
- * Renders a progressbar
- *
  * @package Chamilo\Libraries\Format\Structure
- * @author Sven Vanpoucke - Hogeschool Gent
+ * @author  Sven Vanpoucke - Hogeschool Gent
  */
 class ProgressBarRenderer
 {
@@ -17,7 +15,9 @@ class ProgressBarRenderer
     public const MODE_SUCCESS = 'success';
     public const MODE_WARNING = 'warning';
 
-    public function render(int $progress, string $mode = self::MODE_DEFAULT, int $maxWidth = 150, bool $striped = false
+    public function render(
+        int $progress, ?string $status = null, string $mode = self::MODE_DEFAULT, ?int $maxWidth = 150,
+        bool $striped = false
     ): string
     {
         $this->validateProgress($progress);
@@ -37,7 +37,7 @@ class ProgressBarRenderer
         $html[] = '<div class="progress" style="margin-bottom: 0; max-width: ' . $maxWidth . ';">';
         $html[] = '<div class="progress-bar ' . $contextualClass . '" role="progressbar" aria-valuenow="' . $progress;
         $html[] = '" aria-valuemin="0" aria-valuemax="100" style="min-width: 2em; width: ' . $progress . '%;">';
-        $html[] = $progress . '%';
+        $html[] = ($status ? $status . ' &ndash; ' : '') . $progress . '%';
         $html[] = '</div>';
         $html[] = '</div>';
 
@@ -52,10 +52,30 @@ class ProgressBarRenderer
         return [self::MODE_DEFAULT, self::MODE_SUCCESS, self::MODE_INFO, self::MODE_WARNING, self::MODE_DANGER];
     }
 
+    public function renderWithModeBasedOnProgress(
+        int $progress, ?string $status = null, ?int $maxWidth = 150, bool $striped = false
+    ): string
+    {
+        if ($progress >= 90)
+        {
+            $mode = self::MODE_DANGER;
+        }
+        elseif ($progress >= 80)
+        {
+            $mode = self::MODE_WARNING;
+        }
+        else
+        {
+            $mode = self::MODE_SUCCESS;
+        }
+
+        return $this->render($progress, $status, $mode, $maxWidth, $striped);
+    }
+
     /**
      * @throws InvalidArgumentException
      */
-    protected function validateMode(string $mode = self::MODE_DEFAULT)
+    protected function validateMode(string $mode = self::MODE_DEFAULT): void
     {
         if (!in_array($mode, $this->getAllowedModes()))
         {
@@ -71,7 +91,7 @@ class ProgressBarRenderer
     /**
      * @throws InvalidArgumentException
      */
-    protected function validateProgress(int $progress)
+    protected function validateProgress(int $progress): void
     {
         if ($progress < 0 || $progress > 100)
         {
