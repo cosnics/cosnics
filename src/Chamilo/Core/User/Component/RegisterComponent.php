@@ -1,13 +1,19 @@
 <?php
 namespace Chamilo\Core\User\Component;
 
+use Chamilo\Core\Tracking\Storage\DataClass\Event;
 use Chamilo\Core\User\Form\RegisterForm;
 use Chamilo\Core\User\Manager;
+use Chamilo\Core\User\Picture\UserPictureProviderInterface;
+use Chamilo\Core\User\Picture\UserPictureUpdateProviderInterface;
 use Chamilo\Core\User\Storage\DataClass\User;
 use Chamilo\Libraries\Architecture\Application\Application;
+use Chamilo\Libraries\Architecture\Exceptions\NotAllowedException;
 use Chamilo\Libraries\Architecture\Interfaces\NoAuthenticationSupportInterface;
+use Chamilo\Libraries\Format\NotificationMessage\NotificationMessage;
 use Exception;
 use Hackzilla\PasswordGenerator\Generator\PasswordGeneratorInterface;
+use Symfony\Component\HttpFoundation\File\UploadedFile;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 
 /**
@@ -25,12 +31,12 @@ class RegisterComponent extends Manager implements NoAuthenticationSupportInterf
         $configurationConsulter = $this->getConfigurationConsulter();
         $translator = $this->getTranslator();
 
-        $allowRegistration = (bool) $configurationConsulter->getSetting([Manager::CONTEXT, 'allow_registration']);
+        $allowRegistration = $configurationConsulter->getSetting([Manager::CONTEXT, 'allow_registration']);
 
-        //        if (!$allowRegistration)
-        //        {
-        //            throw new NotAllowedException();
-        //        }
+        if (!$allowRegistration == 0)
+        {
+            throw new NotAllowedException();
+        }
 
         $form = new RegisterForm(
             $this->getUrlGenerator()->fromParameters(
@@ -47,78 +53,77 @@ class RegisterComponent extends Manager implements NoAuthenticationSupportInterf
             {
                 $formValues = $form->exportValues();
 
-                $password = $formValues['pw']['pass'] == '1' ? $this->getPasswordGenerator()->generatePassword() :
-                    $formValues['pw'][User::PROPERTY_PASSWORD];
-
-                // TODO: Continue implementing this
-
-                $user = $this->getUserService()->createUserFromParameters(
+                $user = $this->getUserService()->registerUserFromParameters(
                     $formValues[User::PROPERTY_FIRSTNAME], $formValues[User::PROPERTY_LASTNAME],
                     $formValues[User::PROPERTY_USERNAME], $formValues[User::PROPERTY_OFFICIAL_CODE],
-                    $formValues[User::PROPERTY_EMAIL], $password, 'Platform', $formValues[User::PROPERTY_STATUS],
+                    $formValues[User::PROPERTY_EMAIL], $formValues['pw']['pass'] == '1',
+                    $formValues['pw'][User::PROPERTY_PASSWORD], 'Platform', $formValues[User::PROPERTY_STATUS],
                     (bool) $formValues['send_mail']
                 );
 
-                $code = $configurationConsulter->getSetting(['Chamilo\Core\Admin', 'days_valid']);
+                Event::trigger(
+                    'Register', Manager::CONTEXT,
+                    ['target_user_id' => $user->getId(), 'action_user_id' => $this->getUser()->getId()]
+                );
 
-                if ($code == 0)
+                $userPictureProvider = $this->getUserPictureProvider();
+
+                if ($userPictureProvider instanceof UserPictureUpdateProviderInterface)
                 {
-                    $user->set_active(1);
+                    $pictureInformation = $this->getRequest()->files->get(User::PROPERTY_PICTURE_URI);
+
+                    if ($pictureInformation instanceof UploadedFile && $pictureInformation->isValid())
+                    {
+                        if (!$userPictureProvider->updateUserPictureFromParameters(
+                            $user, $this->getUser(), $pictureInformation
+                        ))
+                        {
+                            $this->getNotificationMessageManager()->addMessage(
+                                new NotificationMessage(
+                                    $translator->trans('UserPictureNotUpdated', [], Manager::CONTEXT),
+                                    NotificationMessage::TYPE_WARNING
+                                )
+                            );
+                        }
+                    }
                 }
-                else
+
+                if ($allowRegistration == 2)
                 {
-                    $user->set_activation_date(time());
-                    $user->set_expiration_date(strtotime('+' . $code . ' days', time()));
+                    $this->getNotificationMessageManager()->addMessage(
+                        new NotificationMessage(
+                            $translator->trans('UserAwaitingApproval', [], Manager::CONTEXT),
+                            NotificationMessage::TYPE_SUCCESS
+                        )
+                    );
                 }
 
-                if ($configurationConsulter->getSetting([Manager::CONTEXT, 'allow_registration']) == 2)
-                {
-                    $user->set_approved(0);
-                    $user->set_active(0);
-
-                    return $user->create();
-                }
-
-                $parameters = [];
-
-                if ($configurationConsulter->getSetting([Manager::CONTEXT, 'allow_registration']) == 2)
-                {
-                    $parameters['message'] = $translator->trans('UserAwaitingApproval', [], Manager::CONTEXT);
-                }
-
-                $parameters[Application::PARAM_CONTEXT] = '';
-
-                return new RedirectResponse($this->getUrlGenerator()->fromParameters($parameters));
+                return new RedirectResponse($this->getUrlGenerator()->fromParameters());
             }
             catch (Exception $exception)
             {
-                $this->getRequest()->request->set(
-                    'error_message', $translator->trans('UsernameNotAvailable', [], Manager::CONTEXT)
+                $this->getNotificationMessageManager()->addMessage(
+                    new NotificationMessage($exception->getMessage(), NotificationMessage::TYPE_DANGER)
                 );
-
-                $html = [];
-
-                $html[] = $this->renderHeader();
-                $html[] = $form->render();
-                $html[] = $this->renderFooter();
-
-                return implode(PHP_EOL, $html);
             }
         }
-        else
-        {
-            $html = [];
 
-            $html[] = $this->renderHeader();
-            $html[] = $form->render();
-            $html[] = $this->renderFooter();
+        $html = [];
 
-            return implode(PHP_EOL, $html);
-        }
+        $html[] = $this->renderHeader();
+        $html[] = $form->render();
+        $html[] = $this->renderFooter();
+
+        return implode(PHP_EOL, $html);
     }
 
     public function getPasswordGenerator(): PasswordGeneratorInterface
     {
         return $this->getService(PasswordGeneratorInterface::class);
+    }
+
+    public function getUserPictureProvider(): UserPictureProviderInterface
+    {
+        return $this->getService(UserPictureProviderInterface::class);
     }
 }

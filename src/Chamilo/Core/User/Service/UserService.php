@@ -22,6 +22,7 @@ use Chamilo\Libraries\Storage\Query\Variable\PropertyConditionVariable;
 use Chamilo\Libraries\Storage\Query\Variable\StaticConditionVariable;
 use Doctrine\Common\Collections\ArrayCollection;
 use Exception;
+use Hackzilla\PasswordGenerator\Generator\PasswordGeneratorInterface;
 use InvalidArgumentException;
 use RuntimeException;
 use Symfony\Component\Cache\Adapter\FilesystemAdapter;
@@ -40,6 +41,8 @@ class UserService
 
     protected ConfigurationConsulter $configurationConsulter;
 
+    protected PasswordGeneratorInterface $passwordGenerator;
+
     protected Translator $translator;
 
     protected FilesystemAdapter $userSettingsCacheAdapter;
@@ -55,7 +58,8 @@ class UserService
     public function __construct(
         UserRepository $userRepository, HashingUtilities $hashingUtilities, PropertyMapper $propertyMapper,
         Translator $translator, FilesystemAdapter $userSettingsCacheAdapter,
-        ConfigurationConsulter $configurationConsulter, WebPathBuilder $webPathBuilder, MailerInterface $activeMailer
+        ConfigurationConsulter $configurationConsulter, WebPathBuilder $webPathBuilder, MailerInterface $activeMailer,
+        PasswordGeneratorInterface $passwordGenerator
     )
     {
         $this->userRepository = $userRepository;
@@ -66,6 +70,7 @@ class UserService
         $this->configurationConsulter = $configurationConsulter;
         $this->webPathBuilder = $webPathBuilder;
         $this->activeMailer = $activeMailer;
+        $this->passwordGenerator = $passwordGenerator;
     }
 
     public function countUsers(?Condition $condition = null): int
@@ -122,7 +127,8 @@ class UserService
      */
     public function createUserFromParameters(
         ?string $firstName, ?string $lastName, string $username, ?string $officialCode, string $emailAddress,
-        string $password, ?string $authSource = 'Platform', ?int $status = User::STATUS_STUDENT, bool $sendEmail = false
+        string $password, ?string $authSource = 'Platform', ?int $status = User::STATUS_STUDENT, int $active = 1,
+        int $approved = 1, int $activationDate = 0, int $expirationDate = 0, bool $sendEmail = false
     ): User
     {
         $requiredParameters = [
@@ -154,6 +160,10 @@ class UserService
         $user->set_email($emailAddress);
         $user->set_auth_source($authSource);
         $user->set_status($status);
+        $user->set_active($active);
+        $user->set_approved($approved);
+        $user->set_activation_date($activationDate);
+        $user->set_expiration_date($expirationDate);
 
         $user->set_password($this->getHashingUtilities()->hashString($password));
 
@@ -473,6 +483,11 @@ class UserService
         return $this->hashingUtilities;
     }
 
+    public function getPasswordGenerator(): PasswordGeneratorInterface
+    {
+        return $this->passwordGenerator;
+    }
+
     public function getPropertyMapper(): PropertyMapper
     {
         return $this->propertyMapper;
@@ -528,6 +543,46 @@ class UserService
     public function isUsernameAvailable(string $username): bool
     {
         return !$this->findUserByUsername($username) instanceof User;
+    }
+
+    public function registerUserFromParameters(
+        ?string $firstName, ?string $lastName, string $username, ?string $officialCode, string $emailAddress,
+        bool $generatePassword, ?string $password = null, ?string $authSource = 'Platform',
+        ?int $status = User::STATUS_STUDENT, bool $sendEmail = false
+    ): User
+    {
+        $configurationConsulter = $this->getConfigurationConsulter();
+
+        $code = $configurationConsulter->getSetting(['Chamilo\Core\Admin', 'days_valid']);
+
+        if ($code !== 0)
+        {
+            $activationDate = time();
+            $expirationDate = strtotime('+' . $code . ' days', time());
+        }
+        else
+        {
+            $activationDate = 0;
+            $expirationDate = 0;
+        }
+
+        if ($configurationConsulter->getSetting([Manager::CONTEXT, 'allow_registration']) == 2)
+        {
+            $approved = 0;
+            $active = 0;
+        }
+        else
+        {
+            $approved = 1;
+            $active = 1;
+        }
+
+        $password = $generatePassword ? $this->getPasswordGenerator()->generatePassword() : $password;
+
+        return $this->createUserFromParameters(
+            $firstName, $lastName, $username, $officialCode, $emailAddress, $password, $authSource, $status, $active,
+            $approved, $activationDate, $expirationDate, $sendEmail
+        );
     }
 
     public function sendRegistrationEmailToUser(User $user, string $password): bool

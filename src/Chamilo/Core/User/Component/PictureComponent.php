@@ -5,6 +5,7 @@ use Chamilo\Core\User\Form\PictureForm;
 use Chamilo\Core\User\Manager;
 use Chamilo\Core\User\Picture\UserPictureProviderInterface;
 use Chamilo\Core\User\Picture\UserPictureUpdateProviderInterface;
+use Chamilo\Core\User\Storage\DataClass\User;
 use Chamilo\Libraries\Architecture\Application\Application;
 use Exception;
 use Symfony\Component\HttpFoundation\File\UploadedFile;
@@ -45,7 +46,7 @@ class PictureComponent extends ProfileComponent
                     $removeExistingPicture = false;
                 }
 
-                $pictureInformation = $this->getRequest()->files->get('picture_uri');
+                $pictureInformation = $this->getRequest()->files->get(User::PROPERTY_PICTURE_URI);
 
                 $success = $userPictureProvider->updateUserPictureFromParameters(
                     $this->getUser(), $this->getUser(), $pictureInformation, $removeExistingPicture
