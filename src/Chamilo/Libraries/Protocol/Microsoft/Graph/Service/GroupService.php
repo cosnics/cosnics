@@ -104,9 +104,9 @@ class GroupService
      *
      * @return string
      */
-    protected function getAzureUserIdentifier(User $user)
+    protected function getAzureUserIdentifier(User $user, bool $forceNewRetrieve = false)
     {
-        return $this->getUserService()->getAzureUserIdentifier($user);
+        return $this->getUserService()->getAzureUserIdentifier($user, $forceNewRetrieve);
     }
 
     /**
@@ -170,6 +170,12 @@ class GroupService
         if (!$this->isMemberOfGroup($groupId, $user))
         {
             $azureUserIdentifier = $this->getAzureUserIdentifier($user);
+
+            // Retry once more by forcing the retrieval of the azure user identifier directly from graph
+            if (empty($azureUserIdentifier))
+            {
+                $azureUserIdentifier = $this->getAzureUserIdentifier($user, true);
+            }
 
             if (empty($azureUserIdentifier))
             {
