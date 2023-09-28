@@ -18,6 +18,7 @@ class DeleterComponent extends Manager
 
     /**
      * @throws \Chamilo\Libraries\Architecture\Exceptions\NotAllowedException
+     * @throws \Chamilo\Libraries\Storage\Exception\DataClassNoResultException
      */
     public function run()
     {
@@ -45,12 +46,6 @@ class DeleterComponent extends Manager
             foreach ($userIdentifiers as $userIdentifier)
             {
                 $user = $userService->findUserByIdentifier($userIdentifier);
-
-                if (!DataManager::user_deletion_allowed($user))
-                {
-                    $failures ++;
-                    continue;
-                }
 
                 if ($userService->deleteUser($user))
                 {

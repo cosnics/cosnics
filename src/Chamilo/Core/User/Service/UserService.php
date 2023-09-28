@@ -3,10 +3,12 @@ namespace Chamilo\Core\User\Service;
 
 use Chamilo\Configuration\Service\Consulter\ConfigurationConsulter;
 use Chamilo\Configuration\Storage\DataClass\Setting;
+use Chamilo\Core\Tracking\Storage\DataClass\ChangesTracker;
 use Chamilo\Core\Tracking\Storage\DataClass\Event;
 use Chamilo\Core\User\Manager;
 use Chamilo\Core\User\Storage\DataClass\User;
 use Chamilo\Core\User\Storage\DataClass\UserSetting;
+use Chamilo\Core\User\Storage\DataManager;
 use Chamilo\Core\User\Storage\Repository\UserRepository;
 use Chamilo\Libraries\Architecture\Application\Application;
 use Chamilo\Libraries\Architecture\Application\Routing\UrlGenerator;
@@ -84,6 +86,26 @@ class UserService
         $this->passwordGenerator = $passwordGenerator;
         $this->authenticationValidator = $authenticationValidator;
         $this->urlGenerator = $urlGenerator;
+    }
+
+    public function approveUser(User $executingUser, User $targetUser): bool
+    {
+        $targetUser->set_active(1);
+        $targetUser->set_approved(1);
+
+        if ($this->updateUser($targetUser))
+        {
+            Event::trigger(
+                'Update', Manager::CONTEXT, [
+                    ChangesTracker::PROPERTY_REFERENCE_ID => $targetUser->getId(),
+                    ChangesTracker::PROPERTY_USER_ID => $executingUser->getId()
+                ]
+            );
+
+            return true;
+        }
+
+        return false;
     }
 
     public function countUsers(?Condition $condition = null): int
@@ -294,6 +316,11 @@ class UserService
      */
     public function deleteUser(User $user): bool
     {
+        if (!DataManager::user_deletion_allowed($user))
+        {
+            return false;
+        }
+
         return $this->getUserRepository()->deleteUser($user);
     }
 

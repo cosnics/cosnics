@@ -13,7 +13,7 @@ use Chamilo\Libraries\Translation\Translation;
 use Chamilo\Libraries\Utilities\StringUtilities;
 
 /**
- * @package user.lib.user_manager.component
+ * @package Chamilo\Core\User\Component
  */
 class UpdaterComponent extends Manager
 {

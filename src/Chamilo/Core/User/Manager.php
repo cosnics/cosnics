@@ -18,7 +18,7 @@ abstract class Manager extends Application
     public const ACTION_ACTIVATE = 'Activator';
     public const ACTION_ADDITIONAL_ACCOUNT_INFORMATION = 'AdditionalAccountInformation';
     public const ACTION_ADMIN_USER = 'AdminUser';
-    public const ACTION_APPROVE_USER = 'UserAccepter';
+    public const ACTION_APPROVE_USER = 'UserApprove';
     public const ACTION_BROWSE_USERS = 'AdminUserBrowser';
     public const ACTION_BUILD_USER_FIELDS = 'UserFieldsBuilder';
     public const ACTION_CHANGE_ACTIVATION = 'ActiveChanger';
@@ -27,7 +27,6 @@ abstract class Manager extends Application
     public const ACTION_CREATE_USER = 'Creator';
     public const ACTION_DEACTIVATE = 'Deactivator';
     public const ACTION_DELETE_USER = 'Deleter';
-    public const ACTION_DENY_USER = 'UserDenier';
     public const ACTION_EMAIL = 'Emailer';
     public const ACTION_EXPORT_USERS = 'Exporter';
     public const ACTION_IMPORT_USERS = 'Importer';
@@ -45,6 +44,9 @@ abstract class Manager extends Application
     public const ACTION_USER_SETTINGS = 'UserSettings';
     public const ACTION_VIEW_ACCOUNT = 'Account';
     public const ACTION_VIEW_QUOTA = 'QuotaViewer';
+
+    public const CHOICE_APPROVE = 1;
+    public const CHOICE_DENY = 0;
 
     public const CONTEXT = __NAMESPACE__;
     public const DEFAULT_ACTION = self::ACTION_BROWSE_USERS;

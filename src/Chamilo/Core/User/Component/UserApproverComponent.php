@@ -1,135 +1,95 @@
 <?php
 namespace Chamilo\Core\User\Component;
 
-use Chamilo\Core\Tracking\Storage\DataClass\ChangesTracker;
 use Chamilo\Core\Tracking\Storage\DataClass\Event;
 use Chamilo\Core\User\Manager;
-use Chamilo\Core\User\Storage\DataClass\User;
-use Chamilo\Core\User\Storage\DataManager;
 use Chamilo\Libraries\Architecture\Application\Application;
 use Chamilo\Libraries\Architecture\Exceptions\NotAllowedException;
 use Chamilo\Libraries\Format\Breadcrumb\BreadcrumbTrail;
 use Chamilo\Libraries\Format\Structure\Breadcrumb;
-use Chamilo\Libraries\Translation\Translation;
 use Chamilo\Libraries\Utilities\StringUtilities;
 
 /**
- *
- * @package user.lib.user_manager.component
+ * @package Chamilo\Core\User\Component
  */
-abstract class UserApproverComponent extends Manager
+class UserApproverComponent extends Manager
 {
-    const PARAM_CHOICE = 'choice';
-    const CHOICE_APPROVE = 1;
-    const CHOICE_DENY = 0;
-
-    abstract protected function getChoice();
 
     /**
-     * Runs this component and displays its output.
+     * @throws \Chamilo\Libraries\Architecture\Exceptions\NotAllowedException
+     * @throws \Chamilo\Libraries\Storage\Exception\DataClassNoResultException
      */
     public function run()
     {
         $this->checkAuthorization(Manager::CONTEXT, 'ManageUsers');
 
-        if (! $this->get_user()->isPlatformAdmin())
+        if (!$this->getUser()->isPlatformAdmin())
         {
             throw new NotAllowedException();
         }
-        $ids = $this->getRequest()->getFromRequestOrQuery(self::PARAM_USER_USER_ID);
-        $this->set_parameter(self::PARAM_USER_USER_ID, $ids);
 
-        $choice = $this->getChoice();
-        $this->set_parameter(self::PARAM_USER_USER_ID, $choice);
+        $userService = $this->getUserService();
+        $translator = $this->getTranslator();
 
-        if (! is_array($ids))
-        {
-            $ids = array($ids);
-        }
+        $userIdentifiers = (array) $this->getRequest()->getFromRequestOrQuery(self::PARAM_USER_USER_ID, []);
+        $choice = $this->getRequest()->getFromRequestOrQuery(self::PARAM_CHOICE);
 
-        if (count($ids) > 0)
+        if (count($userIdentifiers) > 0)
         {
             $failures = 0;
 
-            foreach ($ids as $id)
+            foreach ($userIdentifiers as $id)
             {
-                $user = DataManager::retrieve_by_id(
-                    User::class,
-                    (int) $id);
+                $user = $userService->findUserByIdentifier($id);
 
                 if ($choice == self::CHOICE_APPROVE)
                 {
-                    $user->set_active(1);
-                    $user->set_approved(1);
-
-                    if ($user->update())
-                    {
-                        Event::trigger(
-                            'Update',
-                            Manager::CONTEXT,
-                            array(
-                                ChangesTracker::PROPERTY_REFERENCE_ID => $user->get_id(),
-                                ChangesTracker::PROPERTY_USER_ID => $this->get_user()->get_id()));
-                    }
-                    else
+                    if (!$userService->approveUser($this->getUser(), $user))
                     {
                         $failures ++;
                     }
                 }
+                elseif ($userService->deleteUser($user))
+                {
+                    Event::trigger(
+                        'Delete', Manager::CONTEXT,
+                        ['target_user_id' => $user->getId(), 'action_user_id' => $this->getUser()->getId()]
+                    );
+                }
                 else
                 {
-                    if (! DataManager::user_deletion_allowed($user))
-                    {
-                        continue;
-                    }
-
-                    if ($user->delete())
-                    {
-                        Event::trigger(
-                            'Delete',
-                            Manager::CONTEXT,
-                            array('target_user_id' => $user->get_id(), 'action_user_id' => $this->get_user()->get_id()));
-                    }
-                    else
-                    {
-                        $failures ++;
-                    }
+                    $failures ++;
                 }
             }
 
             if ($choice == self::CHOICE_APPROVE)
             {
                 $message = $this->get_result(
-                    $failures,
-                    count($ids),
-                    'UserNotApproved',
-                    'UsersNotApproved',
-                    'UserApproved',
-                    'UsersApproved');
+                    $failures, count($userIdentifiers), 'UserNotApproved', 'UsersNotApproved', 'UserApproved',
+                    'UsersApproved'
+                );
             }
             else
             {
                 $message = $this->get_result(
-                    $failures,
-                    count($ids),
-                    'UserNotDenied',
-                    'UsersNotDenied',
-                    'UserDenied',
-                    'UsersDenied');
+                    $failures, count($userIdentifiers), 'UserNotDenied', 'UsersNotDenied', 'UserDenied', 'UsersDenied'
+                );
             }
 
             $this->redirectWithMessage(
-                $message,
-                ($failures > 0),
-                array(Application::PARAM_ACTION => self::ACTION_USER_APPROVAL_BROWSER));
+                $message, ($failures > 0), [Application::PARAM_ACTION => self::ACTION_USER_APPROVAL_BROWSER]
+            );
         }
         else
         {
             return $this->display_error_page(
                 htmlentities(
-                    Translation::get('NoObjectSelected'),
-                    array('OBJECT' => Translation::get('User')),
-                    StringUtilities::LIBRARIES));
+                    $translator->trans(
+                        'NoObjectSelected', ['OBJECT' => $translator->trans('User', [], Manager::CONTEXT)],
+                        StringUtilities::LIBRARIES
+                    )
+                )
+            );
         }
     }
 
@@ -137,7 +97,9 @@ abstract class UserApproverComponent extends Manager
     {
         $breadcrumbtrail->add(
             new Breadcrumb(
-                $this->get_url(array(self::PARAM_ACTION => self::ACTION_USER_APPROVAL_BROWSER)),
-                Translation::get('UserApprovalBrowserComponent')));
+                $this->get_url([self::PARAM_ACTION => self::ACTION_USER_APPROVAL_BROWSER]),
+                $this->getTranslator()->trans('UserApprovalBrowserComponent', [], Manager::CONTEXT)
+            )
+        );
     }
 }

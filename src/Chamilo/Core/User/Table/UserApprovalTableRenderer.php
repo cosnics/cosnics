@@ -61,7 +61,11 @@ class UserApprovalTableRenderer extends DataClassListTableRenderer
         $actions = new TableActions(__NAMESPACE__, self::TABLE_IDENTIFIER);
 
         $approveUrl = $urlGenerator->fromParameters(
-            [Application::PARAM_CONTEXT => Manager::CONTEXT, Application::PARAM_ACTION => Manager::ACTION_APPROVE_USER]
+            [
+                Application::PARAM_CONTEXT => Manager::CONTEXT,
+                Application::PARAM_ACTION => Manager::ACTION_APPROVE_USER,
+                Manager::PARAM_CHOICE => Manager::CHOICE_APPROVE
+            ]
         );
 
         $actions->addAction(
@@ -71,7 +75,11 @@ class UserApprovalTableRenderer extends DataClassListTableRenderer
         );
 
         $denyUrl = $urlGenerator->fromParameters(
-            [Application::PARAM_CONTEXT => Manager::CONTEXT, Application::PARAM_ACTION => Manager::ACTION_DENY_USER]
+            [
+                Application::PARAM_CONTEXT => Manager::CONTEXT,
+                Application::PARAM_ACTION => Manager::ACTION_APPROVE_USER,
+                Manager::PARAM_CHOICE => Manager::CHOICE_DENY
+            ]
         );
 
         $actions->addAction(
