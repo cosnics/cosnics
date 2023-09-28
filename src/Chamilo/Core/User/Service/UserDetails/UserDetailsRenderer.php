@@ -57,6 +57,11 @@ class UserDetailsRenderer implements UserDetailsRendererInterface
         return $this->userPictureProvider;
     }
 
+    public function hasContentForUser(User $user, User $requestingUser): bool
+    {
+        return true;
+    }
+
     public function renderTitle(User $user, User $requestingUser): string
     {
         return $this->getTranslator()->trans('TypeName', [], Manager::CONTEXT);
@@ -161,10 +166,5 @@ class UserDetailsRenderer implements UserDetailsRendererInterface
         }
 
         return $table->toHtml();
-    }
-
-    public function hasContentForUser(User $user, User $requestingUser): bool
-    {
-        return true;
     }
 }

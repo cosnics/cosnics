@@ -13,9 +13,9 @@ use Symfony\Component\HttpFoundation\File\UploadedFile;
 class ImportParserFactory
 {
     /**
-     * @var ImportParserInterface[]
+     * @var \Chamilo\Core\User\Service\UserImporter\ImportParser\ImportParserInterface[]
      */
-    protected $importParsers;
+    protected array $importParsers;
 
     /**
      * ImportParserFactory constructor.
@@ -29,16 +29,12 @@ class ImportParserFactory
 
     /**
      * Returns the import parser for the given uploaded file
-     *
-     * @param UploadedFile $uploadedFile
-     *
-     * @return ImportParserInterface
      */
-    public function getImportParserForUploadedFile(UploadedFile $uploadedFile)
+    public function getImportParserForUploadedFile(UploadedFile $uploadedFile): ImportParserInterface
     {
-        foreach($this->importParsers as $importParser)
+        foreach ($this->importParsers as $importParser)
         {
-            if($importParser->canParseFile($uploadedFile))
+            if ($importParser->canParseFile($uploadedFile))
             {
                 return $importParser;
             }

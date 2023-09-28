@@ -65,12 +65,12 @@ class UserImporter
      *
      * @param \Chamilo\Core\User\Domain\UserImporter\ImportUserData[] $importUsersData
      *
-     * @throws \Chamilo\Libraries\Storage\Exception\DataClassNoResultException
+     * @throws \Symfony\Component\Cache\Exception\CacheException
      */
     protected function createUsers(
         User $currentUser, array $importUsersData, UserImporterResult $userImporterResult,
         bool $sendMailToNewUsers = false
-    )
+    ): void
     {
         foreach ($importUsersData as $importUserData)
         {
@@ -164,7 +164,7 @@ class UserImporter
     /**
      * Imports users from a given uploaded file
      *
-     * @throws \Chamilo\Libraries\Storage\Exception\DataClassNoResultException
+     * @throws \Symfony\Component\Cache\Exception\CacheException
      */
     public function importUsersFromFile(User $currentUser, UploadedFile $file, bool $sendMailToNewUsers = false
     ): UserImporterResult
@@ -180,12 +180,7 @@ class UserImporter
         return $userImporterResult;
     }
 
-    /**
-     * Sends an email to a new user, identified by his import data
-     *
-     * @param ImportUserData $importUserData
-     */
-    protected function sendEmailToNewUser(ImportUserData $importUserData)
+    protected function sendEmailToNewUser(ImportUserData $importUserData): void
     {
         $user = $importUserData->getUser();
 
@@ -233,7 +228,7 @@ class UserImporter
             $this->mailer->sendMail($mail);
             $importUserResult->addMessage($this->translateMessage('ImportUserMailSent'));
         }
-        catch (Exception $ex)
+        catch (Exception)
         {
             $importUserResult->addMessage($this->translateMessage('ImportUserMailNotSent'));
         }
@@ -254,9 +249,9 @@ class UserImporter
      * If the language is not set
      * then it will not be updated
      *
-     * @throws \Chamilo\Libraries\Storage\Exception\DataClassNoResultException
+     * @throws \Symfony\Component\Cache\Exception\CacheException
      */
-    protected function updateLanguageSettingForUser(ImportUserData $importUserData)
+    protected function updateLanguageSettingForUser(ImportUserData $importUserData): void
     {
         if (empty($importUserData->getLanguage()))
         {
@@ -274,7 +269,7 @@ class UserImporter
         }
     }
 
-    protected function validateAction(ImportUserData $importUserData, ImportUserResult $importUserResult)
+    protected function validateAction(ImportUserData $importUserData, ImportUserResult $importUserResult): void
     {
         $user = $importUserData->getUser();
         $userExists = $user instanceof User;
@@ -328,7 +323,7 @@ class UserImporter
         }
     }
 
-    protected function validateActive(ImportUserData $importUserData, ImportUserResult $importUserResult)
+    protected function validateActive(ImportUserData $importUserData, ImportUserResult $importUserResult): void
     {
         if ($importUserData->isNew() && !$importUserData->isActiveSet())
         {
@@ -342,7 +337,7 @@ class UserImporter
      *
      * @param \Chamilo\Core\User\Domain\UserImporter\ImportUserData[] $importUsersData
      */
-    protected function validateAndCompleteImportedUsers(array $importUsersData)
+    protected function validateAndCompleteImportedUsers(array $importUsersData): void
     {
         $emailRequired = (bool) $this->configurationConsulter->getSetting(['Chamilo\Core\User', 'require_email']);
         $platformLanguage = $this->configurationConsulter->getSetting(['Chamilo\Core\Admin', 'platform_language']);
@@ -361,14 +356,14 @@ class UserImporter
                 $this->validateLanguage($importUserData, $importUserResult, $platformLanguage);
                 $this->validateEmail($importUserData, $importUserResult, $emailRequired);
             }
-            catch (Exception $exception)
+            catch (Exception)
             {
                 continue;
             }
         }
     }
 
-    protected function validateAuthSource(ImportUserData $importUserData, ImportUserResult $importUserResult)
+    protected function validateAuthSource(ImportUserData $importUserData, ImportUserResult $importUserResult): void
     {
         if ($importUserData->isNew() && empty($importUserData->getAuthSource()))
         {
@@ -379,7 +374,7 @@ class UserImporter
 
     protected function validateEmail(
         ImportUserData $importUserData, ImportUserResult $importUserResult, bool $emailRequired
-    )
+    ): void
     {
         if ($importUserData->isNew() && $emailRequired && empty($importUserData->getEmail()))
         {
@@ -392,7 +387,7 @@ class UserImporter
 
     protected function validateLanguage(
         ImportUserData $importUserData, ImportUserResult $importUserResult, string $platformLanguage
-    )
+    ): void
     {
         if ($importUserData->isNew() && !$importUserData->hasValidLanguage())
         {
@@ -401,7 +396,7 @@ class UserImporter
         }
     }
 
-    protected function validateStatus(ImportUserData $importUserData, ImportUserResult $importUserResult)
+    protected function validateStatus(ImportUserData $importUserData, ImportUserResult $importUserResult): void
     {
         if ($importUserData->isNew() && !$importUserData->hasValidStatus())
         {
@@ -410,7 +405,7 @@ class UserImporter
         }
     }
 
-    protected function validateUsername(ImportUserData $importUserData, ImportUserResult $importUserResult)
+    protected function validateUsername(ImportUserData $importUserData, ImportUserResult $importUserResult): void
     {
         if (empty($importUserData->getUsername()))
         {
