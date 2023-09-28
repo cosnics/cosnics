@@ -2,9 +2,13 @@
 namespace Chamilo\Core\User\Service;
 
 use Chamilo\Configuration\Service\ConfigurationService;
+use Chamilo\Configuration\Storage\DataClass\Setting;
 use Chamilo\Core\User\Storage\DataClass\User;
 use Chamilo\Core\User\Storage\DataClass\UserSetting;
 use Chamilo\Libraries\Cache\Traits\CacheAdapterHandlerTrait;
+use Chamilo\Libraries\Storage\Query\Condition\EqualityCondition;
+use Chamilo\Libraries\Storage\Query\Variable\PropertyConditionVariable;
+use Chamilo\Libraries\Storage\Query\Variable\StaticConditionVariable;
 use Chamilo\Libraries\Utilities\DatetimeUtilities;
 use Exception;
 use Symfony\Component\Cache\Adapter\FilesystemAdapter;
@@ -72,6 +76,19 @@ class UserSettingService
         }
 
         return $this->clearSettingsCacheforUser($user);
+    }
+
+    /**
+     * @return string[]
+     */
+    public function findUserSettingContexts(): array
+    {
+        return $this->getConfigurationService()->findSettingContextsForCondition(
+            new EqualityCondition(
+                new PropertyConditionVariable(Setting::class, Setting::PROPERTY_USER_SETTING),
+                new StaticConditionVariable(1)
+            )
+        );
     }
 
     public function getConfigurationService(): ConfigurationService

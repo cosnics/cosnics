@@ -1,9 +1,6 @@
 <?php
 namespace Chamilo\Core\User\Component;
 
-use Chamilo\Configuration\Service\Consulter\RegistrationConsulter;
-use Chamilo\Configuration\Storage\DataClass\Setting;
-use Chamilo\Configuration\Storage\DataManager;
 use Chamilo\Core\Admin\Form\ConfigurationForm;
 use Chamilo\Core\User\Manager;
 use Chamilo\Libraries\Architecture\Application\Application;
@@ -11,12 +8,7 @@ use Chamilo\Libraries\Architecture\Exceptions\NotAllowedException;
 use Chamilo\Libraries\Format\Form\FormValidator;
 use Chamilo\Libraries\Format\Structure\Glyph\NamespaceIdentGlyph;
 use Chamilo\Libraries\Format\Tabs\Link\LinkTab;
-use Chamilo\Libraries\Format\Tabs\Link\LinkTabsRenderer;
 use Chamilo\Libraries\Format\Tabs\TabsCollection;
-use Chamilo\Libraries\Storage\Query\Condition\EqualityCondition;
-use Chamilo\Libraries\Storage\Query\Variable\PropertyConditionVariable;
-use Chamilo\Libraries\Storage\Query\Variable\StaticConditionVariable;
-use Chamilo\Libraries\Translation\Translation;
 
 /**
  * @package Chamilo\Core\User\Component
@@ -28,18 +20,14 @@ class UserSettingsComponent extends ProfileComponent
 {
     public const PARAM_CONTEXT = 'context';
 
-    /**
-     * @var string
-     */
-    private $context;
+    private string $context;
+
+    private ConfigurationForm $form;
 
     /**
-     * @var \Chamilo\Core\User\Form\ConfigurationForm
-     */
-    private $form;
-
-    /**
-     * Runs this component and displays its output.
+     * @throws \Chamilo\Libraries\Architecture\Exceptions\NotAllowedException
+     * @throws \QuickformException
+     * @throws \Symfony\Component\Cache\Exception\CacheException
      */
     public function run()
     {
@@ -65,7 +53,7 @@ class UserSettingsComponent extends ProfileComponent
         {
             $success = $this->form->update_user_settings();
             $this->redirectWithMessage(
-                Translation::get($success ? 'ConfigurationUpdated' : 'ConfigurationNotUpdated'), !$success,
+                $this->getTranslator()->trans($success ? 'ConfigurationUpdated' : 'ConfigurationNotUpdated'), !$success,
                 [Application::PARAM_ACTION => self::ACTION_USER_SETTINGS, self::PARAM_CONTEXT => $this->context]
             );
         }
@@ -76,35 +64,35 @@ class UserSettingsComponent extends ProfileComponent
     }
 
     /**
-     * @return string
+     * @throws \Symfony\Component\Cache\Exception\CacheException
+     * @throws \QuickformException
      */
     public function getContent(): string
     {
+        $translator = $this->getTranslator();
         $tabs = new TabsCollection();
 
-        $setting_contexts = DataManager::retrieve_setting_contexts(
-            new EqualityCondition(
-                new PropertyConditionVariable(Setting::class, Setting::PROPERTY_USER_SETTING),
-                new StaticConditionVariable(1)
-            )
-        );
+        $settingContexts = $this->getUserSettingService()->findUserSettingContexts();
 
-        foreach ($setting_contexts as $setting_context)
+        foreach ($settingContexts as $settingContext)
         {
-            if ($this->getRegistrationConsulter()->isContextRegisteredAndActive($setting_context))
+            if ($this->getRegistrationConsulter()->isContextRegisteredAndActive($settingContext))
             {
                 $package_url = $this->get_url(
                     [
                         Application::PARAM_ACTION => self::ACTION_USER_SETTINGS,
-                        \Chamilo\Core\Admin\Manager::PARAM_CONTEXT => $setting_context
+                        \Chamilo\Core\Admin\Manager::PARAM_CONTEXT => $settingContext
                     ]
                 );
-                $is_current_tab = ($this->context === $setting_context);
+
+                $is_current_tab = ($this->context === $settingContext);
+
                 $tab = new LinkTab(
-                    $setting_context, Translation::get('TypeName', null, $setting_context), new NamespaceIdentGlyph(
-                    $setting_context, true
+                    $settingContext, $translator->trans('TypeName', [], $settingContext), new NamespaceIdentGlyph(
+                    $settingContext, true
                 ), $package_url, $is_current_tab
                 );
+
                 $tabs->add($tab);
             }
         }
@@ -113,25 +101,12 @@ class UserSettingsComponent extends ProfileComponent
 
         if (!$this->context)
         {
-            $html[] =
-                '<div class="normal-message">' . Translation::get('SelectApplicationToConfigure') . '</div><br />';
+            $html[] = '<div class="normal-message">' .
+                $translator->trans('SelectApplicationToConfigure', [], Manager::CONTEXT) . '</div><br />';
         }
 
         $html[] = $this->getLinkTabsRenderer()->render($tabs, $this->form->render());
 
         return implode(PHP_EOL, $html);
-    }
-
-    public function getLinkTabsRenderer(): LinkTabsRenderer
-    {
-        return $this->getService(LinkTabsRenderer::class);
-    }
-
-    /**
-     * @return \Chamilo\Configuration\Service\Consulter\RegistrationConsulter
-     */
-    public function getRegistrationConsulter(): RegistrationConsulter
-    {
-        return $this->getService(RegistrationConsulter::class);
     }
 }

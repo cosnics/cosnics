@@ -7,6 +7,7 @@ use Chamilo\Configuration\Storage\DataClass\Setting;
 use Chamilo\Configuration\Storage\Repository\ConfigurationRepository;
 use Chamilo\Core\User\Service\UserService;
 use Chamilo\Libraries\Cache\Traits\CacheAdapterHandlerTrait;
+use Chamilo\Libraries\Storage\Query\Condition\Condition;
 use Symfony\Component\Cache\Adapter\AdapterInterface;
 use Symfony\Component\Cache\Adapter\FilesystemAdapter;
 
@@ -145,6 +146,14 @@ class ConfigurationService
     public function findSettingByContextAndVariableName(string $context, string $variable): ?Setting
     {
         return $this->getConfigurationRepository()->findSettingByContextAndVariableName($context, $variable);
+    }
+
+    /**
+     * @return string[]
+     */
+    public function findSettingContextsForCondition(?Condition $condition = null): array
+    {
+        return $this->getConfigurationRepository()->findSettingContextsForCondition($condition);
     }
 
     public function getConfigurationCacheAdapter(): AdapterInterface

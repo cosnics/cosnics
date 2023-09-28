@@ -6,26 +6,28 @@ use Chamilo\Libraries\Architecture\Application\ApplicationConfiguration;
 use Chamilo\Libraries\Architecture\Exceptions\NotAllowedException;
 
 /**
- * @package user.lib.user_manager.component
+ * @package Chamilo\Core\User\Component
  */
 class UserFieldsBuilderComponent extends Manager
 {
 
     /**
-     * Runs this component and displays its output.
+     * @throws \Chamilo\Libraries\Architecture\Exceptions\ClassNotExistException
+     * @throws \Chamilo\Libraries\Architecture\Exceptions\NotAllowedException
+     * @throws \Chamilo\Libraries\Architecture\Exceptions\UserException
      */
     public function run()
     {
         $this->checkAuthorization(Manager::CONTEXT, 'ManageUserFields');
 
-        if (!$this->get_user()->isPlatformAdmin())
+        if (!$this->getUser()->isPlatformAdmin())
         {
             throw new NotAllowedException();
         }
 
         $application = $this->getApplicationFactory()->getApplication(
             \Chamilo\Configuration\Form\Manager::CONTEXT,
-            new ApplicationConfiguration($this->getRequest(), $this->get_user(), $this)
+            new ApplicationConfiguration($this->getRequest(), $this->getUser(), $this)
         );
         $application->set_form_by_name('account_fields');
 
