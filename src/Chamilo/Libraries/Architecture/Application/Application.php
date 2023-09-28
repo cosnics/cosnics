@@ -316,7 +316,7 @@ abstract class Application
             return $this->getUser()->getId();
         }
 
-        return 0;
+        return '0';
     }
 
     public function isAuthorized(string $context, ?string $action = null): bool

@@ -7,14 +7,15 @@ use Chamilo\Libraries\Architecture\Exceptions\NotAllowedException;
 use Chamilo\Libraries\Format\Breadcrumb\BreadcrumbLessComponentInterface;
 
 /**
- *
- * @package user.lib.user_manager.component
+ * @package Chamilo\Core\User\Component
  */
 class ReportingComponent extends Manager implements BreadcrumbLessComponentInterface
 {
 
     /**
-     * Runs this component and displays its output.
+     * @throws \Chamilo\Libraries\Architecture\Exceptions\ClassNotExistException
+     * @throws \Chamilo\Libraries\Architecture\Exceptions\NotAllowedException
+     * @throws \Chamilo\Libraries\Architecture\Exceptions\UserException
      */
     public function run()
     {
@@ -22,13 +23,14 @@ class ReportingComponent extends Manager implements BreadcrumbLessComponentInter
 
         $this->set_parameter(self::PARAM_USER_USER_ID, $this->getRequest()->query->get(self::PARAM_USER_USER_ID));
 
-        if (! $this->get_user()->isPlatformAdmin())
+        if (!$this->getUser()->isPlatformAdmin())
         {
             throw new NotAllowedException();
         }
 
         return $this->getApplicationFactory()->getApplication(
             \Chamilo\Core\User\Integration\Chamilo\Core\Reporting\Manager::CONTEXT,
-            new ApplicationConfiguration($this->getRequest(), $this->getUser(), $this))->run();
+            new ApplicationConfiguration($this->getRequest(), $this->getUser(), $this)
+        )->run();
     }
 }

@@ -54,6 +54,7 @@ abstract class Manager extends Application
     public const PARAM_EXPORT_TYPE = 'export_type';
     public const PARAM_FIRSTLETTER = 'firstletter';
     public const PARAM_REFER = 'refer';
+    public const PARAM_RESET_KEY = 'key';
     public const PARAM_USER_USER_ID = 'user_id';
 
     public const SESSION_USER_ID = '_uid';

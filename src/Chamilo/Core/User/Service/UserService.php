@@ -8,11 +8,17 @@ use Chamilo\Core\User\Manager;
 use Chamilo\Core\User\Storage\DataClass\User;
 use Chamilo\Core\User\Storage\DataClass\UserSetting;
 use Chamilo\Core\User\Storage\Repository\UserRepository;
+use Chamilo\Libraries\Architecture\Application\Application;
+use Chamilo\Libraries\Architecture\Application\Routing\UrlGenerator;
+use Chamilo\Libraries\Architecture\Exceptions\UserException;
+use Chamilo\Libraries\Architecture\Interfaces\ChangeablePasswordInterface;
+use Chamilo\Libraries\Authentication\AuthenticationValidator;
 use Chamilo\Libraries\Cache\Traits\CacheAdapterHandlerTrait;
 use Chamilo\Libraries\File\WebPathBuilder;
 use Chamilo\Libraries\Hashing\HashingUtilities;
 use Chamilo\Libraries\Mail\Mailer\MailerInterface;
 use Chamilo\Libraries\Mail\ValueObject\Mail;
+use Chamilo\Libraries\Storage\DataClass\DataClass;
 use Chamilo\Libraries\Storage\DataClass\PropertyMapper;
 use Chamilo\Libraries\Storage\Query\Condition\AndCondition;
 use Chamilo\Libraries\Storage\Query\Condition\Condition;
@@ -39,11 +45,15 @@ class UserService
 
     protected MailerInterface $activeMailer;
 
+    protected AuthenticationValidator $authenticationValidator;
+
     protected ConfigurationConsulter $configurationConsulter;
 
     protected PasswordGeneratorInterface $passwordGenerator;
 
     protected Translator $translator;
+
+    protected UrlGenerator $urlGenerator;
 
     protected FilesystemAdapter $userSettingsCacheAdapter;
 
@@ -59,7 +69,8 @@ class UserService
         UserRepository $userRepository, HashingUtilities $hashingUtilities, PropertyMapper $propertyMapper,
         Translator $translator, FilesystemAdapter $userSettingsCacheAdapter,
         ConfigurationConsulter $configurationConsulter, WebPathBuilder $webPathBuilder, MailerInterface $activeMailer,
-        PasswordGeneratorInterface $passwordGenerator
+        PasswordGeneratorInterface $passwordGenerator, AuthenticationValidator $authenticationValidator,
+        UrlGenerator $urlGenerator
     )
     {
         $this->userRepository = $userRepository;
@@ -71,6 +82,8 @@ class UserService
         $this->webPathBuilder = $webPathBuilder;
         $this->activeMailer = $activeMailer;
         $this->passwordGenerator = $passwordGenerator;
+        $this->authenticationValidator = $authenticationValidator;
+        $this->urlGenerator = $urlGenerator;
     }
 
     public function countUsers(?Condition $condition = null): int
@@ -111,9 +124,68 @@ class UserService
         return $this->countUsers($condition);
     }
 
-    /**
-     * @throws \Exception
-     */
+    public function createNewPasswordForUser(User $user): bool
+    {
+        $configurationConsulter = $this->getConfigurationConsulter();
+        $translator = $this->getTranslator();
+
+        $newPassword = $this->getPasswordGenerator()->generatePassword();
+
+        $user->set_password($this->getHashingUtilities()->hashString($newPassword));
+
+        if (!$this->updateUser($user))
+        {
+            return false;
+        }
+
+        Event::trigger(
+            'ResetPassword', Manager::CONTEXT, ['target_user_id' => $user->getId(), 'action_user_id' => $user->getId()]
+        );
+
+        try
+        {
+            $mailSubject = $translator->trans('LoginRequest', [], Manager::CONTEXT);
+
+            $mailBody = [];
+
+            $mailBody[] = '<div style="font-family:arial, sans-serif">';
+            $mailBody[] = '<p>' .
+                $translator->trans('MailResetPasswordDear', ['USER' => $user->get_fullname()], Manager::CONTEXT) .
+                '</p>';
+            $mailBody[] = '<p>' . $translator->trans('MailResetPasswordDoneBody', [], Manager::CONTEXT) . '</p>';
+            $mailBody[] =
+                '<p>' . $translator->trans('UserName', [], Manager::CONTEXT) . ': ' . $user->get_username() . '<br/>';
+            $mailBody[] =
+                $translator->trans('MailResetPasswordNew', [], Manager::CONTEXT) . ': ' . $newPassword . '</p>';
+            $mailBody[] = '<p>' . $translator->trans(
+                    'MailResetPasswordLogIn', [
+                    'LOGINLINK' => '<a href="' . $this->getWebPathBuilder()->getBasePath() . '">' .
+                        $this->getWebPathBuilder()->getBasePath() . '</a>'
+                ], Manager::CONTEXT
+                ) . '</p>';
+            $mailBody[] = '<p>' . $translator->trans('MailResetPasswordCloser', [], Manager::CONTEXT) . '<br/>';
+            $mailBody[] = $translator->trans(
+                    'MailResetPasswordSender', [
+                    'ADMINFIRSTNAME' => $configurationConsulter->getSetting(
+                        ['Chamilo\Core\Admin', 'administrator_firstname']
+                    ),
+                    'ADMINLASTNAME' => $configurationConsulter->getSetting(
+                        ['Chamilo\Core\Admin', 'administrator_surname']
+                    )
+                ], Manager::CONTEXT
+                ) . '</p>';
+            $mailBody[] = '</div>';
+
+            $this->getActiveMailer()->sendMail(new Mail($mailSubject, implode(PHP_EOL, $mailBody), $user->get_email()));
+
+            return true;
+        }
+        catch (Exception)
+        {
+            return false;
+        }
+    }
+
     public function createUser(User $user): bool
     {
         $user->set_registration_date(time());
@@ -123,7 +195,8 @@ class UserService
     }
 
     /**
-     * @throws \Exception
+     * @throws \InvalidArgumentException
+     * @throws \RuntimeException
      */
     public function createUserFromParameters(
         ?string $firstName, ?string $lastName, string $username, ?string $officialCode, string $emailAddress,
@@ -227,6 +300,14 @@ class UserService
     public function deleteUserSettingsForSettingIdentifier(string $settingIdentifier): bool
     {
         return $this->getUserRepository()->deleteUserSettingsForSettingIdentifier($settingIdentifier);
+    }
+
+    public function determineUserKey(User $user): string
+    {
+        $securityKey =
+            $this->getConfigurationConsulter()->getSetting(['Chamilo\Configuration', 'general', 'security_key']);
+
+        return $this->getHashingUtilities()->hashString($securityKey . $user->get_email());
     }
 
     /**
@@ -473,6 +554,11 @@ class UserService
         return $this->activeMailer;
     }
 
+    public function getAuthenticationValidator(): AuthenticationValidator
+    {
+        return $this->authenticationValidator;
+    }
+
     public function getConfigurationConsulter(): ConfigurationConsulter
     {
         return $this->configurationConsulter;
@@ -496,6 +582,11 @@ class UserService
     public function getTranslator(): Translator
     {
         return $this->translator;
+    }
+
+    public function getUrlGenerator(): UrlGenerator
+    {
+        return $this->urlGenerator;
     }
 
     public function getUserByOfficialCode(string $officialCode): ?User
@@ -545,6 +636,14 @@ class UserService
         return !$this->findUserByUsername($username) instanceof User;
     }
 
+    public function isValidKeyForUser(string $requestKey, User $user): bool
+    {
+        return $this->determineUserKey($user) == $requestKey;
+    }
+
+    /**
+     * @throws \Exception
+     */
     public function registerUserFromParameters(
         ?string $firstName, ?string $lastName, string $username, ?string $officialCode, string $emailAddress,
         bool $generatePassword, ?string $password = null, ?string $authSource = 'Platform',
@@ -583,6 +682,92 @@ class UserService
             $firstName, $lastName, $username, $officialCode, $emailAddress, $password, $authSource, $status, $active,
             $approved, $activationDate, $expirationDate, $sendEmail
         );
+    }
+
+    /**
+     * @throws \Chamilo\Libraries\Architecture\Exceptions\UserException
+     */
+    public function sendPasswordResetLinkforUser(User $user): bool
+    {
+        $translator = $this->getTranslator();
+
+        if (!$user->get_active())
+        {
+            throw new UserException(
+                $translator->trans(
+                    'ResetPasswordNotPossibleForInactiveUser',
+                    ['USER' => $user->get_fullname() . ' (' . $user->get_username() . ')'], Manager::CONTEXT
+                )
+            );
+        }
+
+        $authentication =
+            $this->getAuthenticationValidator()->getAuthenticationByType($user->getAuthenticationSource());
+
+        if (!$authentication instanceof ChangeablePasswordInterface)
+        {
+            throw new UserException(
+                $translator->trans(
+                    'ResetPasswordNotPossibleForThisUser',
+                    ['USER' => $user->get_fullname() . ' (' . $user->get_username() . ')'], Manager::CONTEXT
+                )
+            );
+        }
+
+        try
+        {
+            $configurationConsulter = $this->getConfigurationConsulter();
+
+            $resetLink = $this->getUrlGenerator()->fromParameters(
+                [
+                    Application::PARAM_CONTEXT => Manager::CONTEXT,
+                    Application::PARAM_ACTION => Manager::ACTION_RESET_PASSWORD,
+                    Manager::PARAM_RESET_KEY => $this->determineUserKey($user),
+                    DataClass::PROPERTY_ID => $user->getId()
+                ]
+            );
+
+            $mailSubject = $translator->trans('LoginRequest', [], Manager::CONTEXT);
+
+            $mailBody = [];
+            $mailBody[] = '<div style="font-family:arial, sans-serif">';
+            $mailBody[] = '<p>' .
+                $translator->trans('MailResetPasswordDear', ['USER' => $user->get_fullname()], Manager::CONTEXT) .
+                '</p>';
+            $mailBody[] = '<p>' . $translator->trans('MailResetPasswordAskBody', [], Manager::CONTEXT) . '</p>';
+            $mailBody[] =
+                '<p>' . $translator->trans('UserName', [], Manager::CONTEXT) . ': ' . $user->get_username() . '<br/>';
+            $mailBody[] =
+                $translator->trans('MailResetPasswordLink', [], Manager::CONTEXT) . ': <a href="' . $resetLink . '">' .
+                $resetLink . '</a></p>';
+            $mailBody[] = '<p>' . $translator->trans('MailResetPasswordCloser', [], Manager::CONTEXT) . '<br/>';
+            $mailBody[] = $translator->trans(
+                    'MailResetPasswordSender', [
+                    'ADMINFIRSTNAME' => $configurationConsulter->getSetting(
+                        ['Chamilo\Core\Admin', 'administrator_firstname']
+                    ),
+                    'ADMINLASTNAME' => $configurationConsulter->getSetting(
+                        ['Chamilo\Core\Admin', 'administrator_surname']
+                    )
+                ], Manager::CONTEXT
+                ) . '</p>';
+            $mailBody[] = '</div>';
+
+            $this->getActiveMailer()->sendMail(
+                new Mail($mailSubject, implode(PHP_EOL, $mailBody), $user->get_email())
+            );
+
+            return true;
+        }
+        catch (Exception)
+        {
+            throw new UserException(
+                $translator->trans(
+                    'SendingPasswordResetLinkNotPossibleForThisUser',
+                    ['USER' => $user->get_fullname() . ' (' . $user->get_username() . ')'], Manager::CONTEXT
+                )
+            );
+        }
     }
 
     public function sendRegistrationEmailToUser(User $user, string $password): bool
