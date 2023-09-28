@@ -14,19 +14,9 @@ use Exception;
 class AuthenticationException extends NotAllowedException
 {
 
-    /**
-     * Caches the error message to avoid doubling the login form
-     *
-     * @var string
-     */
-    protected $errorMessage;
+    protected string $errorMessage;
 
-    /**
-     * @param string $message
-     * @param int $code
-     * @param string $previous
-     */
-    public function __construct($message = null, $code = null, $previous = null)
+    public function __construct(?string $message = null, ?int $code = null, ?string $previous = null)
     {
         $this->getSession()->set('request_uri', $_SERVER['REQUEST_URI']);
 
@@ -44,12 +34,7 @@ class AuthenticationException extends NotAllowedException
         Exception::__construct(implode(PHP_EOL, $html), $code, $previous);
     }
 
-    /**
-     * Returns the error message
-     *
-     * @return string
-     */
-    public function getErrorMessage()
+    public function getErrorMessage(): string
     {
         return $this->errorMessage;
     }

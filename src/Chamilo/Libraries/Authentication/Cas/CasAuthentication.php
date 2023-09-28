@@ -30,7 +30,7 @@ class CasAuthentication extends AbstractCasAuthentication implements Authenticat
 
     protected function getUserByCasUserIdentifier(string $userIdentifier): ?User
     {
-        return $this->userService->findUserByUsername($userIdentifier);
+        return $this->getUserService()->findUserByUsername($userIdentifier);
     }
 
     /**

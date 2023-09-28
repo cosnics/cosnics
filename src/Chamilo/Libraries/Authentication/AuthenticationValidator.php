@@ -26,24 +26,15 @@ class AuthenticationValidator
     /**
      * @var \Chamilo\Libraries\Authentication\AuthenticationInterface[]
      */
-    protected $authentications;
+    protected array $authentications;
 
-    /**
-     * @var ConfigurationConsulter
-     */
-    protected $configurationConsulter;
+    protected ConfigurationConsulter $configurationConsulter;
 
-    /**
-     * @var ChamiloRequest
-     */
-    protected $request;
+    protected ChamiloRequest $request;
 
     protected SessionInterface $session;
 
-    /**
-     * @var \Symfony\Component\Translation\Translator
-     */
-    protected $translator;
+    protected Translator $translator;
 
     protected UrlGenerator $urlGenerator;
 
@@ -61,21 +52,13 @@ class AuthenticationValidator
         $this->authentications = [];
     }
 
-    /**
-     * @param \Chamilo\Libraries\Authentication\AuthenticationInterface $authentication
-     */
-    public function addAuthentication(AuthenticationInterface $authentication)
+    public function addAuthentication(AuthenticationInterface $authentication): void
     {
         $this->authentications[$authentication->getPriority()] = $authentication;
         ksort($this->authentications);
     }
 
-    /**
-     * @param string $authenticationType
-     *
-     * @return \Chamilo\Libraries\Authentication\AuthenticationInterface|null
-     */
-    public function getAuthenticationByType($authenticationType)
+    public function getAuthenticationByType(string $authenticationType): ?AuthenticationInterface
     {
         foreach ($this->authentications as $authentication)
         {
@@ -88,20 +71,14 @@ class AuthenticationValidator
         return null;
     }
 
-    /**
-     * @return bool
-     */
-    public function isAuthenticated()
+    public function isAuthenticated(): bool
     {
         $user_id = $this->session->get(Manager::SESSION_USER_ID);
 
         return !empty($user_id);
     }
 
-    /**
-     * @param \Chamilo\Core\User\Storage\DataClass\User $user
-     */
-    public function logout(User $user)
+    public function logout(User $user): void
     {
         Event::trigger('Logout', Manager::CONTEXT, ['server' => $_SERVER, 'user' => $user]);
         $this->session->invalidate();
@@ -115,7 +92,7 @@ class AuthenticationValidator
         }
     }
 
-    protected function redirectAfterLogin()
+    protected function redirectAfterLogin(): void
     {
         $context = $this->request->query->get(Application::PARAM_CONTEXT);
 
@@ -140,27 +117,20 @@ class AuthenticationValidator
         exit;
     }
 
-    /**
-     * @param \Chamilo\Core\User\Storage\DataClass\User $user
-     */
-    protected function setAuthenticatedUser(User $user)
+    protected function setAuthenticatedUser(User $user): void
     {
         $this->session->set(Manager::SESSION_USER_ID, $user->getId());
     }
 
-    /**
-     * @param \Chamilo\Core\User\Storage\DataClass\User $user
-     */
-    protected function trackLogin(User $user)
+    protected function trackLogin(User $user): void
     {
         Event::trigger('Login', Manager::CONTEXT, ['server' => $_SERVER, 'user' => $user]);
     }
 
     /**
-     * @return bool
      * @throws \Chamilo\Libraries\Authentication\AuthenticationException
      */
-    public function validate()
+    public function validate(): bool
     {
         if ($this->isAuthenticated())
         {
@@ -193,11 +163,9 @@ class AuthenticationValidator
     }
 
     /**
-     * @param \Chamilo\Core\User\Storage\DataClass\User $user
-     *
      * @throws \Chamilo\Libraries\Authentication\AuthenticationException
      */
-    protected function validateUser(User $user)
+    protected function validateUser(User $user): void
     {
         $userExpirationDate = $user->get_expiration_date();
         $userActivationDate = $user->get_activation_date();

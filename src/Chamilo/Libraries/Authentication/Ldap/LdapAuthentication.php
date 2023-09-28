@@ -183,7 +183,7 @@ class LdapAuthentication extends Authentication implements AuthenticationInterfa
         }
     }
 
-    public function logout(User $user)
+    public function logout(User $user): void
     {
         $redirect = new RedirectResponse(
             $this->urlGenerator->fromParameters([], [Application::PARAM_ACTION, Application::PARAM_CONTEXT])

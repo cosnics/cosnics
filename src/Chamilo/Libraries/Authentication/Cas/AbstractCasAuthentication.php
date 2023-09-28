@@ -36,6 +36,7 @@ abstract class AbstractCasAuthentication extends Authentication implements Authe
     )
     {
         parent::__construct($configurationConsulter, $translator, $request, $userService);
+
         $this->session = $session;
     }
 
@@ -74,12 +75,17 @@ abstract class AbstractCasAuthentication extends Authentication implements Authe
         return $this->session;
     }
 
+    public function getSettings(): array
+    {
+        return $this->settings;
+    }
+
     abstract protected function getUserByCasUserIdentifier(string $userIdentifier): ?User;
 
     /**
      * @throws \Exception
      */
-    protected function initializeClient()
+    protected function initializeClient(): void
     {
 
         if (!$this->isConfigured())
@@ -97,24 +103,26 @@ abstract class AbstractCasAuthentication extends Authentication implements Authe
                 phpCAS::setDebug($settings['log']);
             }
 
-            $casVersion = $this->configurationConsulter->getSetting(['Chamilo\Core\Admin', 'cas_version']);
+            $configurationConsulter = $this->getConfigurationConsulter();
+
+            $casVersion = $configurationConsulter->getSetting(['Chamilo\Core\Admin', 'cas_version']);
 
             if ($casVersion == 'SAML_VERSION_1_1')
             {
                 phpCAS::client(
-                    SAML_VERSION_1_1, $settings['host'], (int) $settings['port'], (string) $settings['uri'],
+                    SAML_VERSION_1_1, $settings['host'], (int) $settings['port'], $settings['uri'],
                     $request->getSchemeAndHttpHost(), false
                 );
             }
             else
             {
                 phpCAS::client(
-                    CAS_VERSION_2_0, $settings['host'], (int) $settings['port'], (string) $settings['uri'],
+                    CAS_VERSION_2_0, $settings['host'], (int) $settings['port'], $settings['uri'],
                     $request->getSchemeAndHttpHost(), false
                 );
             }
 
-            $casCheckCertificate = $this->configurationConsulter->getSetting(
+            $casCheckCertificate = $configurationConsulter->getSetting(
                 ['Chamilo\Core\Admin', 'cas_check_certificate']
             );
 
@@ -160,12 +168,13 @@ abstract class AbstractCasAuthentication extends Authentication implements Authe
         }
 
         $this->initializeClient();
+        $configurationConsulter = $this->getConfigurationConsulter();
 
-        $externalAuthenticationEnabled = $this->configurationConsulter->getSetting(
+        $externalAuthenticationEnabled = $configurationConsulter->getSetting(
             ['Chamilo\Core\Admin', 'enableExternalAuthentication']
         );
 
-        $bypassExternalAuthentication = (boolean) $this->request->query->get('noExtAuth', false);
+        $bypassExternalAuthentication = (boolean) $this->getRequest()->query->get('noExtAuth', false);
 
         if (!$externalAuthenticationEnabled || $bypassExternalAuthentication)
         {
@@ -173,9 +182,9 @@ abstract class AbstractCasAuthentication extends Authentication implements Authe
         }
 
         $authenticationException = new AuthenticationException(
-            $this->translator->trans(
+            $this->getTranslator()->trans(
                 'CasAuthenticationError', [
-                'PLATFORM' => $this->configurationConsulter->getSetting(
+                'PLATFORM' => $configurationConsulter->getSetting(
                     ['Chamilo\Core\Admin', 'site_name']
                 )
             ], StringUtilities::LIBRARIES
@@ -201,7 +210,7 @@ abstract class AbstractCasAuthentication extends Authentication implements Authe
                 if ($userAttributes && isset($userAttributes['surrogatePrincipal']))
                 {
                     $surrogateUserName = array_pop($userAttributes['surrogatePrincipal']);
-                    $surrogateUser = $this->userService->findUserByUsername($surrogateUserName);
+                    $surrogateUser = $this->getUserService()->findUserByUsername($surrogateUserName);
                     $this->getSession()->set('_as_admin', $surrogateUser->getId());
                 }
 
@@ -212,7 +221,7 @@ abstract class AbstractCasAuthentication extends Authentication implements Authe
                 throw $authenticationException;
             }
         }
-        catch (Exception $exception)
+        catch (Exception)
         {
             throw $authenticationException;
         }
@@ -221,7 +230,7 @@ abstract class AbstractCasAuthentication extends Authentication implements Authe
     /**
      * @throws \Exception
      */
-    public function logout(User $user)
+    public function logout(User $user): void
     {
         $this->initializeClient();
 

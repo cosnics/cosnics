@@ -9,37 +9,37 @@ namespace Chamilo\Libraries\Authentication\Ldap;
 
 use Chamilo\Core\User\Storage\DataClass\User;
 use Chamilo\Libraries\Authentication\AuthenticationException;
-use Chamilo\Libraries\DependencyInjection\Traits\DependencyInjectionContainerTrait;
 use Chamilo\Libraries\Hashing\HashingUtilities;
-use Chamilo\Libraries\Translation\Translation;
+use Symfony\Component\Translation\Translator;
 
 /**
- *
  * @package Chamilo\Libraries\Authentication\Ldap
- * @author Hans De Bisschop <hans.de.bisschop@ehb.be>
+ * @author  Hans De Bisschop <hans.de.bisschop@ehb.be>
  */
 class LdapParser
 {
-    use DependencyInjectionContainerTrait;
+    protected HashingUtilities $hashingUtilities;
 
-    /**
-     *
-     * @return \Chamilo\Libraries\Hashing\HashingUtilities
-     */
-    public function getHashingUtilities()
+    protected Translator $translator;
+
+    public function getHashingUtilities(): HashingUtilities
     {
-        return $this->getService(HashingUtilities::class);
+        return $this->hashingUtilities;
+    }
+
+    public function getTranslator(): Translator
+    {
+        return $this->translator;
     }
 
     /**
-     *
      * @param string[] $info
      * @param string $username
      *
      * @return \Chamilo\Core\User\Storage\DataClass\User
      * @throws \Chamilo\Libraries\Authentication\AuthenticationException
      */
-    public function parse($info = [], $username)
+    public function parse(array $info = [], string $username): User
     {
         $userProperties = [];
 
@@ -50,8 +50,7 @@ class LdapParser
         $userProperties[User::PROPERTY_AUTH_SOURCE] = 'ldap';
         $userProperties[User::PROPERTY_EMAIL] = $info[0]['mail'][0];
 
-        $student = false;
-        $employee = false;
+        $student = $employee = false;
 
         for ($j = 0; $j < $info[0]['objectclass']['count']; $j ++)
         {
@@ -87,7 +86,9 @@ class LdapParser
 
         if (!$user->create())
         {
-            throw new AuthenticationException(Translation::get('UserAccountCreationFailed'));
+            throw new AuthenticationException(
+                $this->getTranslator()->trans('UserAccountCreationFailed', [], 'Chamilo\Libraries\Authentication\Ldap')
+            );
         }
 
         return $user;

@@ -52,6 +52,16 @@ class AnonymousAuthentication extends Authentication implements AuthenticationIn
         return 400;
     }
 
+    public function getSession(): SessionInterface
+    {
+        return $this->session;
+    }
+
+    public function getUrlGenerator(): UrlGenerator
+    {
+        return $this->urlGenerator;
+    }
+
     public function login(): ?User
     {
         if (!$this->isAuthSourceActive())
@@ -59,15 +69,17 @@ class AnonymousAuthentication extends Authentication implements AuthenticationIn
             return null;
         }
 
-        $allowedAnonymousAuthenticationUrl = $this->configurationConsulter->getSetting(
+        $allowedAnonymousAuthenticationUrl = $this->getConfigurationConsulter()->getSetting(
             ['Chamilo\Core\Admin', 'anonymous_authentication_url']
         );
 
         $allowedAnonymousAuthenticationUrl = str_replace('http://', '', $allowedAnonymousAuthenticationUrl);
         $allowedAnonymousAuthenticationUrl = str_replace('https://', '', $allowedAnonymousAuthenticationUrl);
 
-        $baseUrl = $this->request->server->get('SERVER_NAME');
-        if (strpos($allowedAnonymousAuthenticationUrl, $baseUrl) !== 0)
+        $request = $this->getRequest();
+        $baseUrl = $request->server->get('SERVER_NAME');
+
+        if (!str_starts_with($allowedAnonymousAuthenticationUrl, $baseUrl))
         {
             return null;
         }
@@ -79,11 +91,11 @@ class AnonymousAuthentication extends Authentication implements AuthenticationIn
             return $user;
         }
 
-        $requestedUrlParameters = $this->request->query->all();
-        $this->session->set('requested_url_parameters', $requestedUrlParameters);
+        $requestedUrlParameters = $request->query->all();
+        $this->getSession()->set('requested_url_parameters', $requestedUrlParameters);
 
         $redirect = new RedirectResponse(
-            $this->urlGenerator->fromParameters([
+            $this->getUrlGenerator()->fromParameters([
                 Application::PARAM_CONTEXT => Manager::CONTEXT,
                 Application::PARAM_ACTION => Manager::ACTION_ACCESS_ANONYMOUSLY
             ])
@@ -93,19 +105,19 @@ class AnonymousAuthentication extends Authentication implements AuthenticationIn
         exit;
     }
 
-    public function logout(User $user)
+    public function logout(User $user): void
     {
 
     }
 
     protected function retrieveUserFromCookie(): ?User
     {
-        $securityToken = $this->request->cookies->get(md5('anonymous_authentication'));
+        $securityToken = $this->getRequest()->cookies->get(md5('anonymous_authentication'));
         $user = null;
 
         if (!empty($securityToken))
         {
-            $user = $this->userService->getUserBySecurityToken($securityToken);
+            $user = $this->getUserService()->getUserBySecurityToken($securityToken);
         }
 
         return $user;

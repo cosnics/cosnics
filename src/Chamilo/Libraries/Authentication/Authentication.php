@@ -36,6 +36,11 @@ abstract class Authentication implements AuthenticationInterface
         $this->userService = $userService;
     }
 
+    public function getConfigurationConsulter(): ConfigurationConsulter
+    {
+        return $this->configurationConsulter;
+    }
+
     public function getRequest(): ChamiloRequest
     {
         return $this->request;
@@ -58,10 +63,14 @@ abstract class Authentication implements AuthenticationInterface
             return null;
         }
 
-        $user = $this->userService->getUserByUsernameOrEmail($username);
+        $user = $this->getUserService()->getUserByUsernameOrEmail($username);
+        $translator = $this->getTranslator();
+
         if (!$user instanceof User)
         {
-            throw new AuthenticationException($this->translator->trans('InvalidUsername', [], StringUtilities::LIBRARIES));
+            throw new AuthenticationException(
+                $translator->trans('InvalidUsername', [], StringUtilities::LIBRARIES)
+            );
         }
 
         if ($user->getAuthenticationSource() != $this->getAuthenticationType())
@@ -71,22 +80,24 @@ abstract class Authentication implements AuthenticationInterface
 
         if (!$this->isAuthSourceActive())
         {
-            throw new AuthenticationException($this->translator->trans('AuthSourceNotActive', [], StringUtilities::LIBRARIES));
+            throw new AuthenticationException(
+                $translator->trans('AuthSourceNotActive', [], StringUtilities::LIBRARIES)
+            );
         }
 
         return $user;
     }
 
-    protected function isAuthSourceActive(): bool
+    public function getUserService(): UserService
     {
-        return (bool) $this->configurationConsulter->getSetting(
-            ['Chamilo\Core\Admin', 'enable' . str_replace('\\', '', $this->getAuthenticationType())]
-        );
+        return $this->userService;
     }
 
-    public function setTranslator(Translator $translator): void
+    protected function isAuthSourceActive(): bool
     {
-        $this->translator = $translator;
+        return (bool) $this->getConfigurationConsulter()->getSetting(
+            ['Chamilo\Core\Admin', 'enable' . str_replace('\\', '', $this->getAuthenticationType())]
+        );
     }
 
 }

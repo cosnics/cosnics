@@ -17,5 +17,5 @@ interface AuthenticationInterface
 
     public function login(): ?User;
 
-    public function logout(User $user);
+    public function logout(User $user): void;
 }

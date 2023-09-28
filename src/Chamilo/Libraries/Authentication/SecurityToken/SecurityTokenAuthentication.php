@@ -8,11 +8,10 @@ use Chamilo\Libraries\Authentication\AuthenticationInterface;
 use Chamilo\Libraries\Utilities\StringUtilities;
 
 /**
- *
- * @package Chamilo\Libraries\Authentication\SecurityToken$SecurityTokenAuthentication
- * @author Magali Gillard <magali.gillard@ehb.be>
- * @author Hans De Bisschop <hans.de.bisschop@ehb.be>
- * @author Eduard Vossen <eduard.vossen@ehb.be>
+ * @package Chamilo\Libraries\Authentication\SecurityToken
+ * @author  Magali Gillard <magali.gillard@ehb.be>
+ * @author  Hans De Bisschop <hans.de.bisschop@ehb.be>
+ * @author  Eduard Vossen <eduard.vossen@ehb.be>
  */
 class SecurityTokenAuthentication extends Authentication implements AuthenticationInterface
 {
@@ -22,7 +21,7 @@ class SecurityTokenAuthentication extends Authentication implements Authenticati
      * Disables the check if the auth source is active or not (used to make sure that this can run for certain
      * components only)
      */
-    public function disableAuthSourceCheck()
+    public function disableAuthSourceCheck(): void
     {
         $this->disableAuthSourceCheck = true;
     }
@@ -47,16 +46,16 @@ class SecurityTokenAuthentication extends Authentication implements Authenticati
             return null;
         }
 
-        $securityToken = $this->request->query->get(User::PROPERTY_SECURITY_TOKEN);
+        $securityToken = $this->getRequest()->query->get(User::PROPERTY_SECURITY_TOKEN);
 
         if ($securityToken)
         {
-            $user = $this->userService->getUserBySecurityToken($securityToken);
+            $user = $this->getUserService()->getUserBySecurityToken($securityToken);
 
             if (!$user instanceof User)
             {
                 throw new AuthenticationException(
-                    $this->translator->trans('InvalidSecurityToken', [], StringUtilities::LIBRARIES)
+                    $this->getTranslator()->trans('InvalidSecurityToken', [], StringUtilities::LIBRARIES)
                 );
             }
 
@@ -66,7 +65,7 @@ class SecurityTokenAuthentication extends Authentication implements Authenticati
         return null;
     }
 
-    public function logout(User $user)
+    public function logout(User $user): void
     {
 
     }

@@ -18,11 +18,10 @@ use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\Translation\Translator;
 
 /**
- *
  * @package Chamilo\Libraries\Authentication\Platform
- * @author Hans De Bisschop <hans.de.bisschop@ehb.be>
- * @author Magali Gillard <magali.gillard@ehb.be>
- * @author Eduard Vossen <eduard.vossen@ehb.be>
+ * @author  Hans De Bisschop <hans.de.bisschop@ehb.be>
+ * @author  Magali Gillard <magali.gillard@ehb.be>
+ * @author  Eduard Vossen <eduard.vossen@ehb.be>
  */
 class PlatformAuthentication extends Authentication
     implements AuthenticationInterface, ChangeablePasswordInterface, ChangeableUsernameInterface
@@ -56,7 +55,9 @@ class PlatformAuthentication extends Authentication
             return false;
         }
 
-        $oldPasswordHash = $this->hashingUtilities->hashString($oldPassword);
+        $hashingUtilities = $this->getHashingUtilities();
+
+        $oldPasswordHash = $hashingUtilities->hashString($oldPassword);
 
         // Verify that the entered old password matches the stored password
         if ($oldPasswordHash != $user->get_password())
@@ -65,14 +66,19 @@ class PlatformAuthentication extends Authentication
         }
 
         // Set the password
-        $user->set_password($this->hashingUtilities->hashString($newPassword));
+        $user->set_password($hashingUtilities->hashString($newPassword));
 
-        return $user->update();
+        return $this->getUserService()->updateUser($user);
     }
 
     public function getAuthenticationType(): string
     {
         return __NAMESPACE__;
+    }
+
+    public function getHashingUtilities(): HashingUtilities
+    {
+        return $this->hashingUtilities;
     }
 
     public function getPasswordRequirements(): string
@@ -83,6 +89,11 @@ class PlatformAuthentication extends Authentication
     public function getPriority(): int
     {
         return 200;
+    }
+
+    public function getUrlGenerator(): UrlGenerator
+    {
+        return $this->urlGenerator;
     }
 
     /**
@@ -98,7 +109,7 @@ class PlatformAuthentication extends Authentication
 
         $password = $this->getRequest()->request->get(self::PARAM_PASSWORD);
 
-        $passwordHash = $this->hashingUtilities->hashString($password);
+        $passwordHash = $this->getHashingUtilities()->hashString($password);
 
         if ($user->get_password() == $passwordHash)
         {
@@ -106,14 +117,14 @@ class PlatformAuthentication extends Authentication
         }
 
         throw new AuthenticationException(
-            $this->translator->trans('UsernameOrPasswordIncorrect', [], StringUtilities::LIBRARIES)
+            $this->getTranslator()->trans('UsernameOrPasswordIncorrect', [], StringUtilities::LIBRARIES)
         );
     }
 
-    public function logout(User $user)
+    public function logout(User $user): void
     {
         $redirect = new RedirectResponse(
-            $this->urlGenerator->fromParameters([], [Application::PARAM_ACTION, Application::PARAM_CONTEXT])
+            $this->getUrlGenerator()->fromParameters([], [Application::PARAM_ACTION, Application::PARAM_CONTEXT])
         );
 
         $redirect->send();
