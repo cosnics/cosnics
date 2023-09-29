@@ -192,7 +192,7 @@ class GroupsTreeTraverser
     /**
      * @param string $userIdentifier
      *
-     * @return ArrayCollection<\Chamilo\Core\Group\Storage\DataClass\Group>
+     * @return \Doctrine\Common\Collections\ArrayCollection<\Chamilo\Core\Group\Storage\DataClass\Group>
      * @throws \Chamilo\Libraries\Storage\Exception\DataClassNoResultException
      */
     public function findDirectlySubscribedGroupsForUserIdentifier(string $userIdentifier): ArrayCollection

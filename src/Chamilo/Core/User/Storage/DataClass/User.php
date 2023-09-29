@@ -8,6 +8,7 @@ use Chamilo\Core\User\Manager;
 use Chamilo\Libraries\DependencyInjection\DependencyInjectionContainerBuilder;
 use Chamilo\Libraries\Storage\DataClass\DataClass;
 use Chamilo\Libraries\Translation\Translation;
+use Doctrine\Common\Collections\ArrayCollection;
 
 /**
  * @package Chamilo\Core\User\Storage\DataClass
@@ -84,12 +85,7 @@ class User extends DataClass
         }
     }
 
-    /**
-     * Returns the fullname of this user
-     *
-     * @return string The fullname
-     */
-    public static function fullname($first_name, $last_name)
+    public static function fullname(string $first_name, string $last_name): string
     {
         /**
          * @var \Chamilo\Configuration\Service\Consulter\ConfigurationConsulter $configurationConsulter
@@ -108,22 +104,12 @@ class User extends DataClass
         }
     }
 
-    /**
-     * @return string
-     */
-    public function getAuthenticationSource()
+    public function getAuthenticationSource(): string
     {
         return $this->getDefaultProperty(self::PROPERTY_AUTH_SOURCE);
     }
 
-    /**
-     * Returns all (unique) properties by which a DataClass object can be cached
-     *
-     * @param $extendedPropertyNames string[]
-     *
-     * @return string[]
-     */
-    public static function getCacheablePropertyNames(array $extendedPropertyNames = []): array
+    public static function getCacheablePropertyNames(array $cacheablePropertyNames = []): array
     {
         return parent::getCacheablePropertyNames([self::PROPERTY_USERNAME]);
     }
@@ -437,17 +423,16 @@ class User extends DataClass
         return $this->getDefaultProperty(self::PROPERTY_TERMS_DATE);
     }
 
-    public function get_user_groups()
+    /**
+     * @return \Doctrine\Common\Collections\ArrayCollection<\Chamilo\Core\Group\Storage\DataClass\Group>
+     * @throws \Chamilo\Libraries\Storage\Exception\DataClassNoResultException
+     */
+    public function get_user_groups(): ArrayCollection
     {
         return $this->getGroupsTreeTraverser()->findDirectlySubscribedGroupsForUserIdentifier($this->getId());
     }
 
-    /**
-     * Returns the username of this user.
-     *
-     * @return String The username
-     */
-    public function get_username()
+    public function get_username(): string
     {
         return $this->getDefaultProperty(self::PROPERTY_USERNAME);
     }
@@ -457,7 +442,7 @@ class User extends DataClass
         return $this->getPlatformAdmin() == 1;
     }
 
-    public function is_active()
+    public function is_active(): bool
     {
         if ($this->get_active())
         {
@@ -473,7 +458,7 @@ class User extends DataClass
         return false;
     }
 
-    public function is_anonymous_user()
+    public function is_anonymous_user(): bool
     {
         return $this->get_status() == self::STATUS_ANONYMOUS;
     }
@@ -486,214 +471,117 @@ class User extends DataClass
         return $this->isPlatformAdmin();
     }
 
-    /**
-     * Checks if this user is a teacher or not
-     *
-     * @return bool true if the user is a teacher, false otherwise
-     */
-    public function is_teacher()
+    public function is_teacher(): bool
     {
         return $this->get_status() == self::STATUS_TEACHER;
     }
 
-    public function set_activation_date($activation_date)
+    public function set_activation_date(?int $activation_date): void
     {
         $this->setDefaultProperty(self::PROPERTY_ACTIVATION_DATE, $activation_date);
     }
 
-    public function set_active($active)
+    public function set_active(int $active): void
     {
         $this->setDefaultProperty(self::PROPERTY_ACTIVE, $active);
     }
 
-    public function set_approved($approved)
+    public function set_approved(int $approved): void
     {
         $this->setDefaultProperty(self::PROPERTY_APPROVED, $approved);
     }
 
-    /**
-     * Sets the Auth_source for this user.
-     *
-     * @param $auth_source String the auth source.
-     */
-    public function set_auth_source($auth_source)
+    public function set_auth_source(string $auth_source): void
     {
         $this->setDefaultProperty(self::PROPERTY_AUTH_SOURCE, $auth_source);
     }
 
-    /**
-     * Sets the creator ID for this user.
-     *
-     * @param $creator_id String the creator ID.
-     */
-    public function set_creator_id($creator_id)
+    public function set_creator_id(?int $creator_id): void
     {
         $this->setDefaultProperty(self::PROPERTY_CREATOR_ID, $creator_id);
     }
 
-    /**
-     * Sets the database_quota for this user.
-     *
-     * @param $database_quota Int The database quota.
-     */
-    public function set_database_quota($database_quota)
+    public function set_database_quota(int $database_quota): void
     {
         $this->setDefaultProperty(self::PROPERTY_DATABASE_QUOTA, $database_quota);
     }
 
-    /**
-     * Sets the disk quota for this user.
-     *
-     * @param $disk_quota Int The disk quota.
-     */
-    public function set_disk_quota($disk_quota)
+    public function set_disk_quota(int $disk_quota): void
     {
         $this->setDefaultProperty(self::PROPERTY_DISK_QUOTA, $disk_quota);
     }
 
-    /**
-     * Sets the email for this user.
-     *
-     * @param $email String the email.
-     */
-    public function set_email($email)
+    public function set_email(string $email): void
     {
         $this->setDefaultProperty(self::PROPERTY_EMAIL, $email);
     }
 
-    /**
-     * Sets the default theme for this user.
-     *
-     * @param $theme string The theme.
-     */
-    public function set_expiration_date($expiration_date)
+    public function set_expiration_date(int $expiration_date): void
     {
         $this->setDefaultProperty(self::PROPERTY_EXPIRATION_DATE, $expiration_date);
     }
 
-    /**
-     * Sets the external authentication system unique id for this user (useful for instance with : Shibboleth, OpenID,
-     * LDAP, .
-     * ..)
-     *
-     * @param $external_uid String the external unique id
-     */
-    public function set_external_uid($external_uid)
+    public function set_external_uid(?string $external_uid): void
     {
         $this->setDefaultProperty(self::PROPERTY_EXTERNAL_UID, $external_uid);
     }
 
-    /**
-     * Sets the firstname of this user.
-     *
-     * @param $firstname String the firstname.
-     */
-    public function set_firstname($firstname)
+    public function set_firstname(string $firstname): void
     {
         $this->setDefaultProperty(self::PROPERTY_FIRSTNAME, $firstname);
     }
 
-    /*
-     */
-
-    /**
-     * Sets the lastname of this user.
-     *
-     * @param $lastname String the lastname.
-     */
-    public function set_lastname($lastname)
+    public function set_lastname(string $lastname): void
     {
         $this->setDefaultProperty(self::PROPERTY_LASTNAME, $lastname);
     }
 
-    /**
-     * Sets the official code for this user.
-     *
-     * @param $official_code String the official code.
-     */
-    public function set_official_code($official_code)
+    public function set_official_code(?string $official_code): void
     {
         $this->setDefaultProperty(self::PROPERTY_OFFICIAL_CODE, $official_code);
     }
 
-    /**
-     * Sets the password of this user.
-     * If Chamilo configuration is set to encrypt the password, this function will also
-     * take care of that.
-     *
-     * @param $password String the password.
-     */
-    public function set_password($password)
+    public function set_password(?string $password): void
     {
         $this->setDefaultProperty(self::PROPERTY_PASSWORD, $password);
     }
 
-    /**
-     * Sets the phone number for this user.
-     *
-     * @param $phone String the phone number
-     */
-    public function set_phone($phone)
+    public function set_phone(?string $phone): void
     {
         $this->setDefaultProperty(self::PROPERTY_PHONE, $phone);
     }
 
-    /**
-     * Sets the picture uri for this user object
-     *
-     * @param $picture_uri String the picture URI
-     */
-    public function set_picture_uri($picture_uri)
+    public function set_picture_uri(?string $picture_uri): void
     {
         $this->setDefaultProperty(self::PROPERTY_PICTURE_URI, $picture_uri);
     }
 
-    /**
-     * Sets the platformadmin property for this user.
-     *
-     * @param $admin Int the platformadmin status.
-     */
-    public function set_platformadmin($admin)
+    public function set_platformadmin(int $admin): void
     {
         $this->setDefaultProperty(self::PROPERTY_PLATFORMADMIN, $admin);
     }
 
-    public function set_registration_date($registration_date)
+    public function set_registration_date(int $registration_date): void
     {
         $this->setDefaultProperty(self::PROPERTY_REGISTRATION_DATE, $registration_date);
     }
 
-    public function set_security_token($security_token)
+    public function set_security_token(string $security_token): void
     {
         $this->setDefaultProperty(self::PROPERTY_SECURITY_TOKEN, $security_token);
     }
 
-    /**
-     * Sets the status for this user.
-     *
-     * @param $status Int the status.
-     */
-    public function set_status($status)
+    public function set_status(int $status): void
     {
         $this->setDefaultProperty(self::PROPERTY_STATUS, $status);
     }
 
-    /**
-     * Sets the date the user has accepted the terms and conditons
-     *
-     * @param <int> $date
-     */
-    public function set_term_date($terms_date)
+    public function set_term_date(int $terms_date): void
     {
         $this->setDefaultProperty(self::PROPERTY_TERMS_DATE, $terms_date);
     }
 
-    /**
-     * Sets the username of this user.
-     *
-     * @param $username String the username.
-     */
-    public function set_username($username)
+    public function set_username(string $username): void
     {
         $this->setDefaultProperty(self::PROPERTY_USERNAME, $username);
     }
@@ -702,7 +590,7 @@ class User extends DataClass
      * check if user has seen/agreed with the latest terms and conditions return false if user has not seen latest
      * version, true when user has seen latest version
      */
-    public function terms_conditions_uptodate()
+    public function terms_conditions_uptodate(): bool
     {
         $user_date = $this->get_terms_date();
         if ($user_date == null or $user_date === 0)

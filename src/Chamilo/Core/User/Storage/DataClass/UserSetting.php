@@ -5,8 +5,8 @@ use Chamilo\Core\User\Manager;
 use Chamilo\Libraries\Storage\DataClass\DataClass;
 
 /**
+ * @package Chamilo\Core\User\Storage\DataClass
  * @author  Sven Vanpoucke
- * @package user.lib
  */
 class UserSetting extends DataClass
 {
@@ -16,11 +16,6 @@ class UserSetting extends DataClass
     public const PROPERTY_USER_ID = 'user_id';
     public const PROPERTY_VALUE = 'value';
 
-    /**
-     * Get the default properties of all users quota objects.
-     *
-     * @return array The property names.
-     */
     public static function getDefaultPropertyNames(array $extendedPropertyNames = []): array
     {
         return parent::getDefaultPropertyNames(
@@ -28,9 +23,6 @@ class UserSetting extends DataClass
         );
     }
 
-    /**
-     * @return string
-     */
     public static function getStorageUnitName(): string
     {
         return 'user_user_setting';
@@ -51,17 +43,17 @@ class UserSetting extends DataClass
         return $this->getDefaultProperty(self::PROPERTY_VALUE);
     }
 
-    public function set_setting_id($setting_id)
+    public function set_setting_id($setting_id): void
     {
         $this->setDefaultProperty(self::PROPERTY_SETTING_ID, $setting_id);
     }
 
-    public function set_user_id($user_id)
+    public function set_user_id($user_id): void
     {
         $this->setDefaultProperty(self::PROPERTY_USER_ID, $user_id);
     }
 
-    public function set_value($value)
+    public function set_value($value): void
     {
         $this->setDefaultProperty(self::PROPERTY_VALUE, $value);
     }
