@@ -23,6 +23,7 @@
         "ext-pdo": "*",
         "chamilo/pear-libraries": "dev-refactor/database",
         "composer/composer": "2.3.*",
+        "doctrine/annotations": "1.14.*",
         "doctrine/cache": "1.13.*",
         "doctrine/collections": "1.8.*",
         "doctrine/dbal": "3.6.*",

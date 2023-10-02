@@ -14,9 +14,6 @@
         "spipu/html2pdf": "5.2.*",
         "voku/stringy": "6.*"
     },
-    "require-dev": {
-        "friendsofphp/php-cs-fixer": "3.*"
-    },
     "keywords": [
         "Libraries"
     ],
