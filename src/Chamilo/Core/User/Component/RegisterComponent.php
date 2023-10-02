@@ -1,7 +1,6 @@
 <?php
 namespace Chamilo\Core\User\Component;
 
-use Chamilo\Core\Tracking\Storage\DataClass\Event;
 use Chamilo\Core\User\Form\RegisterForm;
 use Chamilo\Core\User\Manager;
 use Chamilo\Core\User\Picture\UserPictureProviderInterface;
@@ -59,11 +58,6 @@ class RegisterComponent extends Manager implements NoAuthenticationSupportInterf
                     $formValues[User::PROPERTY_EMAIL], $formValues['pw']['pass'] == '1',
                     $formValues['pw'][User::PROPERTY_PASSWORD], 'Platform', $formValues[User::PROPERTY_STATUS],
                     (bool) $formValues['send_mail']
-                );
-
-                Event::trigger(
-                    'Register', Manager::CONTEXT,
-                    ['target_user_id' => $user->getId(), 'action_user_id' => $this->getUser()->getId()]
                 );
 
                 $userPictureProvider = $this->getUserPictureProvider();

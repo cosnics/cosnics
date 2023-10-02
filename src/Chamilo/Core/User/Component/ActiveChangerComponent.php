@@ -58,16 +58,7 @@ abstract class ActiveChangerComponent extends Manager
                 $user = $userService->findUserByIdentifier($id);
                 $user->set_active($active);
 
-                if ($userService->updateUser($user))
-                {
-                    Event::trigger(
-                        'Update', Manager::CONTEXT, [
-                            ChangesTracker::PROPERTY_REFERENCE_ID => $user->getId(),
-                            ChangesTracker::PROPERTY_USER_ID => $this->getUser()->getId()
-                        ]
-                    );
-                }
-                else
+                if (!$userService->updateUser($user))
                 {
                     $failures ++;
                 }

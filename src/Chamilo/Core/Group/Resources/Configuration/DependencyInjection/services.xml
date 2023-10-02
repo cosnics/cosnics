@@ -26,5 +26,9 @@
                       id="Chamilo\Core\User\CurrentUser"/>
         </service>
         <service id="Chamilo\Core\Group\Storage\Repository\GroupTrackingRepository"/>
+
+        <service id="Chamilo\Core\Group\Service\User\UserEventListener">
+            <tag name="Chamilo\Core\User\Service\UserEventListenerInterface"/>
+        </service>
     </services>
 </container>

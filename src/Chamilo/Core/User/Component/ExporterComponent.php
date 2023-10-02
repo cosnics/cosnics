@@ -1,8 +1,8 @@
 <?php
 namespace Chamilo\Core\User\Component;
 
-use Chamilo\Core\Tracking\Storage\DataClass\Event;
 use Chamilo\Core\User\Manager;
+use Chamilo\Core\User\Service\UserEventNotifier;
 use Chamilo\Core\User\Storage\DataClass\User;
 use Chamilo\Libraries\Architecture\Application\Application;
 use Chamilo\Libraries\Architecture\Exceptions\NotAllowedException;
@@ -61,10 +61,7 @@ class ExporterComponent extends Manager
                     $userRecord = $this->prepareForOtherExport($user);
                 }
 
-                Event::trigger(
-                    'Export', Manager::CONTEXT,
-                    ['target_user_id' => $user->getId(), 'action_user_id' => $this->getUser()->getId()]
-                );
+                $this->getUserEventNotifier()->afterExport($this->getUser(), $user);
 
                 $data[] = $userRecord;
             }
@@ -158,6 +155,11 @@ class ExporterComponent extends Manager
     protected function getPlatformLanguageForUser(User $user): string
     {
         return $this->getUserSettingService()->getSettingForUser($user, 'Chamilo\Core\Admin', 'platform_language');
+    }
+
+    public function getUserEventNotifier(): UserEventNotifier
+    {
+        return $this->getService(UserEventNotifier::class);
     }
 
     /**

@@ -16,4 +16,14 @@ interface UserEventListenerInterface
     public function afterUpdate(User $user): bool;
 
     public function beforeDelete(User $user): bool;
+
+    public function afterExport(User $actionUser, User $exportedUser): bool;
+
+    public function afterImport(User $actionUser, User $importedUser): bool;
+
+    public function afterPasswordReset(User $user): bool;
+
+    public function afterQuota(User $user): bool;
+
+    public function afterRegistration(User $user): bool;
 }

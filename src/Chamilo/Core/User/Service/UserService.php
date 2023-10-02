@@ -3,8 +3,6 @@ namespace Chamilo\Core\User\Service;
 
 use Chamilo\Configuration\Service\Consulter\ConfigurationConsulter;
 use Chamilo\Configuration\Storage\DataClass\Setting;
-use Chamilo\Core\Tracking\Storage\DataClass\ChangesTracker;
-use Chamilo\Core\Tracking\Storage\DataClass\Event;
 use Chamilo\Core\User\Manager;
 use Chamilo\Core\User\Storage\DataClass\User;
 use Chamilo\Core\User\Storage\DataClass\UserSetting;
@@ -14,6 +12,7 @@ use Chamilo\Libraries\Architecture\Application\Application;
 use Chamilo\Libraries\Architecture\Application\Routing\UrlGenerator;
 use Chamilo\Libraries\Architecture\Exceptions\UserException;
 use Chamilo\Libraries\Architecture\Interfaces\ChangeablePasswordInterface;
+use Chamilo\Libraries\Architecture\Interfaces\ChangeableUsernameInterface;
 use Chamilo\Libraries\Authentication\AuthenticationValidator;
 use Chamilo\Libraries\Cache\Traits\CacheAdapterHandlerTrait;
 use Chamilo\Libraries\File\WebPathBuilder;
@@ -57,6 +56,8 @@ class UserService
 
     protected UrlGenerator $urlGenerator;
 
+    protected UserEventNotifier $userEventNotifier;
+
     protected FilesystemAdapter $userSettingsCacheAdapter;
 
     protected WebPathBuilder $webPathBuilder;
@@ -72,7 +73,7 @@ class UserService
         Translator $translator, FilesystemAdapter $userSettingsCacheAdapter,
         ConfigurationConsulter $configurationConsulter, WebPathBuilder $webPathBuilder, MailerInterface $activeMailer,
         PasswordGeneratorInterface $passwordGenerator, AuthenticationValidator $authenticationValidator,
-        UrlGenerator $urlGenerator
+        UrlGenerator $urlGenerator, UserEventNotifier $userEventNotifier
     )
     {
         $this->userRepository = $userRepository;
@@ -86,6 +87,7 @@ class UserService
         $this->passwordGenerator = $passwordGenerator;
         $this->authenticationValidator = $authenticationValidator;
         $this->urlGenerator = $urlGenerator;
+        $this->userEventNotifier = $userEventNotifier;
     }
 
     public function approveUser(User $executingUser, User $targetUser): bool
@@ -93,19 +95,7 @@ class UserService
         $targetUser->set_active(1);
         $targetUser->set_approved(1);
 
-        if ($this->updateUser($targetUser))
-        {
-            Event::trigger(
-                'Update', Manager::CONTEXT, [
-                    ChangesTracker::PROPERTY_REFERENCE_ID => $targetUser->getId(),
-                    ChangesTracker::PROPERTY_USER_ID => $executingUser->getId()
-                ]
-            );
-
-            return true;
-        }
-
-        return false;
+        return $this->updateUser($targetUser);
     }
 
     public function countUsers(?Condition $condition = null): int
@@ -160,9 +150,7 @@ class UserService
             return false;
         }
 
-        Event::trigger(
-            'ResetPassword', Manager::CONTEXT, ['target_user_id' => $user->getId(), 'action_user_id' => $user->getId()]
-        );
+        $this->getUserEventNotifier()->afterPasswordReset($user);
 
         try
         {
@@ -213,7 +201,12 @@ class UserService
         $user->set_registration_date(time());
         $user->set_security_token(sha1(time() . uniqid()));
 
-        return $this->getUserRepository()->createUser($user);
+        if (!$this->getUserRepository()->createUser($user))
+        {
+            return false;
+        }
+
+        return $this->getUserEventNotifier()->afterCreate($user);
     }
 
     /**
@@ -316,12 +309,22 @@ class UserService
      */
     public function deleteUser(User $user): bool
     {
+        if (!$this->getUserEventNotifier()->beforeDelete($user))
+        {
+            return false;
+        }
+
         if (!DataManager::user_deletion_allowed($user))
         {
             return false;
         }
 
-        return $this->getUserRepository()->deleteUser($user);
+        if (!$this->getUserRepository()->deleteUser($user))
+        {
+            return false;
+        }
+
+        return $this->getUserEventNotifier()->afterDelete($user);
     }
 
     public function deleteUserSettingsForSettingIdentifier(string $settingIdentifier): bool
@@ -631,6 +634,11 @@ class UserService
         return $this->getUserRepository()->findUserByUsernameOrEmail($usernameOrEmail);
     }
 
+    public function getUserEventNotifier(): UserEventNotifier
+    {
+        return $this->userEventNotifier;
+    }
+
     public function getUserFullNameByIdentifier(string $identifier): ?string
     {
         $user = $this->findUserByIdentifier($identifier);
@@ -705,10 +713,14 @@ class UserService
 
         $password = $generatePassword ? $this->getPasswordGenerator()->generatePassword() : $password;
 
-        return $this->createUserFromParameters(
+        $user = $this->createUserFromParameters(
             $firstName, $lastName, $username, $officialCode, $emailAddress, $password, $authSource, $status, $active,
             $approved, $activationDate, $expirationDate, $sendEmail
         );
+
+        $this->getUserEventNotifier()->afterRegistration($user);
+
+        return $user;
     }
 
     /**
@@ -847,17 +859,60 @@ class UserService
         return true;
     }
 
-    public function triggerImportEvent(User $actionUser, User $targetUser): void
+    public function updateAccountFromParameters(
+        User $user, ?string $firstName, ?string $lastName, string $username, ?string $officialCode,
+        string $emailAddress, ?string $oldPassword, ?string $newPassword
+    ): bool
     {
-        Event::trigger(
-            'Import', 'Chamilo\Core\User',
-            ['target_user_id' => $targetUser->getId(), 'action_user_id' => $actionUser->getId()]
-        );
+        $configurationConsulter = $this->getConfigurationConsulter();
+        $authentication = $this->authenticationValidator->getAuthenticationByType($user->getAuthenticationSource());
+
+        if ($configurationConsulter->getSetting([Manager::CONTEXT, 'allow_change_firstname']))
+        {
+            $user->set_firstname($firstName);
+        }
+
+        if ($configurationConsulter->getSetting([Manager::CONTEXT, 'allow_change_lastname']))
+        {
+            $user->set_lastname($lastName);
+        }
+
+        if ($configurationConsulter->getSetting([Manager::CONTEXT, 'allow_change_official_code']))
+        {
+            $user->set_official_code($officialCode);
+        }
+
+        if ($configurationConsulter->getSetting([Manager::CONTEXT, 'allow_change_email']))
+        {
+            $user->set_email($emailAddress);
+        }
+
+        if ($configurationConsulter->getSetting([Manager::CONTEXT, 'allow_change_username']) &&
+            $authentication instanceof ChangeableUsernameInterface)
+        {
+            $user->set_username($username);
+        }
+
+        if ($configurationConsulter->getSetting([Manager::CONTEXT, 'allow_change_password']) && strlen($oldPassword) &&
+            $authentication instanceof ChangeablePasswordInterface)
+        {
+            if (!$authentication->changePassword($user, $oldPassword, $newPassword))
+            {
+                return false;
+            }
+        }
+
+        return $this->updateUser($user);
     }
 
     public function updateUser(User $user): bool
     {
-        return $this->getUserRepository()->updateUser($user);
+        if (!$this->getUserRepository()->updateUser($user))
+        {
+            return false;
+        }
+
+        return $this->getUserEventNotifier()->afterUpdate($user);
     }
 
     public function updateUserSetting(UserSetting $userSetting): bool
@@ -871,5 +926,6 @@ class UserService
 
         return $this->updateUserSetting($userSetting);
     }
+
 }
 

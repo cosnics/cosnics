@@ -1,18 +1,11 @@
 <?php
 namespace Chamilo\Core\User\Form;
 
-use Chamilo\Core\Tracking\Storage\DataClass\Event;
 use Chamilo\Core\User\Manager;
-use Chamilo\Core\User\Picture\UserPictureProviderInterface;
-use Chamilo\Core\User\Picture\UserPictureUpdateProviderInterface;
 use Chamilo\Core\User\Storage\DataClass\User;
-use Chamilo\Core\User\Storage\DataManager;
 use Chamilo\Libraries\Format\Form\FormValidator;
 use Chamilo\Libraries\Format\Structure\Glyph\FontAwesomeGlyph;
-use Chamilo\Libraries\Hashing\HashingUtilities;
-use Chamilo\Libraries\Mail\Mailer\MailerInterface;
 use Chamilo\Libraries\Utilities\StringUtilities;
-use Hackzilla\PasswordGenerator\Generator\PasswordGeneratorInterface;
 
 /**
  * @package Chamilo\Core\User\Form
@@ -128,121 +121,6 @@ class RegisterForm extends FormValidator
         );
 
         $this->addGroup($buttons, 'buttons', null, '&nbsp;', false);
-    }
-
-    public function create_user()
-    {
-        $user = new User();
-        $values = $this->exportValues();
-
-        $password = $values['pw']['pass'] == '1' ? $this->getPasswordGenerator()->generatePassword() :
-            $values['pw'][User::PROPERTY_PASSWORD];
-
-        if (DataManager::is_username_available(
-            $values[User::PROPERTY_USERNAME], $values[User::PROPERTY_ID]
-        ))
-        {
-            $user->set_lastname($values[User::PROPERTY_LASTNAME]);
-            $user->set_firstname($values[User::PROPERTY_FIRSTNAME]);
-            $user->set_email($values[User::PROPERTY_EMAIL]);
-            $user->set_username($values[User::PROPERTY_USERNAME]);
-            $user->set_password($this->getHashingUtilities()->hashString($password));
-            $this->unencryptedpass = $password;
-            $user->set_official_code($values[User::PROPERTY_OFFICIAL_CODE]);
-            $user->set_phone($values[User::PROPERTY_PHONE]);
-
-            $configurationConsulter = $this->getConfigurationConsulter();
-
-            if (!$configurationConsulter->getSetting([Manager::CONTEXT, 'allow_teacher_registration']))
-            {
-                $values[User::PROPERTY_STATUS] = User::STATUS_STUDENT;
-            }
-
-            $user->set_status(intval($values[User::PROPERTY_STATUS]));
-
-            $code = $configurationConsulter->getSetting(['Chamilo\Core\Admin', 'days_valid']);
-
-            if ($code == 0)
-            {
-                $user->set_active(1);
-            }
-            else
-            {
-                $user->set_activation_date(time());
-                $user->set_expiration_date(strtotime('+' . $code . ' days', time()));
-            }
-
-            $user->set_registration_date(time());
-            $send_mail = intval($values['mail']['send_mail']);
-
-            if ($send_mail)
-            {
-                $this->send_email($user);
-            }
-
-            if ($configurationConsulter->getSetting([Manager::CONTEXT, 'allow_registration']) == 2)
-            {
-                $user->set_approved(0);
-                $user->set_active(0);
-
-                return $user->create();
-            }
-
-            if ($user->create())
-            {
-                $this->getSession()->set(Manager::SESSION_USER_ID, intval($user->getId()));
-                Event::trigger(
-                    'Register', Manager::CONTEXT,
-                    ['target_user_id' => $user->getId(), 'action_user_id' => $user->getId()]
-                );
-
-                $userPictureProvider = $this->getUserPictureProvider();
-
-                if ($userPictureProvider instanceof UserPictureUpdateProviderInterface)
-                {
-                    if ($_FILES[User::PROPERTY_PICTURE_URI] &&
-                        file_exists($_FILES[User::PROPERTY_PICTURE_URI]['tmp_name']))
-                    {
-                        $userPictureProvider->setUserPicture($user, $user, $_FILES[User::PROPERTY_PICTURE_URI]);
-
-                        if (!$user->update())
-                        {
-                            return false;
-                        }
-                    }
-                }
-
-                return true;
-            }
-            else
-            {
-                return false;
-            }
-        }
-        else
-        {
-            return - 1;
-        }
-    }
-
-    protected function getActiveMailer(): MailerInterface
-    {
-        return $this->getService('Chamilo\Libraries\Mail\Mailer\ActiveMailer');
-    }
-
-    public function getHashingUtilities(): HashingUtilities
-    {
-        return $this->getService(HashingUtilities::class);
-    }
-
-    public function getPasswordGenerator(): PasswordGeneratorInterface
-    {
-        return $this->getService(PasswordGeneratorInterface::class);
-    }
-
-    public function getUserPictureProvider(): UserPictureProviderInterface
-    {
-        return $this->getService('Chamilo\Core\User\Picture\UserPictureProvider');
     }
 
     /**

@@ -84,5 +84,6 @@
             <tag name="Chamilo\Core\Home\Renderer\BlockRenderer"/>
         </service>
 
+        <service id="Chamilo\Core\User\Service\UserEventNotifier"/>
     </services>
 </container>

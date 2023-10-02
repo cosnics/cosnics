@@ -44,6 +44,56 @@ class UserEventNotifier implements UserEventListenerInterface
         return true;
     }
 
+    public function afterExport(User $actionUser, User $exportedUser): bool
+    {
+        foreach ($this->userEventListeners as $userEventListener)
+        {
+            $userEventListener->afterExport($actionUser, $exportedUser);
+        }
+
+        return true;
+    }
+
+    public function afterImport(User $actionUser, User $importedUser): bool
+    {
+        foreach ($this->userEventListeners as $userEventListener)
+        {
+            $userEventListener->afterImport($importedUser, $actionUser);
+        }
+
+        return true;
+    }
+
+    public function afterPasswordReset(User $user): bool
+    {
+        foreach ($this->userEventListeners as $userEventListener)
+        {
+            $userEventListener->afterPasswordReset($user);
+        }
+
+        return true;
+    }
+
+    public function afterQuota(User $user): bool
+    {
+        foreach ($this->userEventListeners as $userEventListener)
+        {
+            $userEventListener->afterQuota($user);
+        }
+
+        return true;
+    }
+
+    public function afterRegistration(User $user): bool
+    {
+        foreach ($this->userEventListeners as $userEventListener)
+        {
+            $userEventListener->afterRegistration($user);
+        }
+
+        return true;
+    }
+
     public function afterUpdate(User $user): bool
     {
         foreach ($this->userEventListeners as $userEventListener)

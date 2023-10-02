@@ -14,11 +14,11 @@ class ImporterComponent extends Manager
 
     /**
      * @throws \Chamilo\Libraries\Architecture\Exceptions\NotAllowedException
-     * @throws \Chamilo\Libraries\Storage\Exception\DataClassNoResultException
      * @throws \QuickformException
      * @throws \Twig\Error\LoaderError
      * @throws \Twig\Error\RuntimeError
      * @throws \Twig\Error\SyntaxError
+     * @throws \Symfony\Component\Cache\Exception\CacheException
      */
     public function run()
     {
@@ -29,7 +29,7 @@ class ImporterComponent extends Manager
             throw new NotAllowedException();
         }
 
-        $form = new UserImportForm(UserImportForm::TYPE_IMPORT, $this->get_url(), $this->getUser());
+        $form = new UserImportForm($this->get_url());
 
         if ($form->validate())
         {

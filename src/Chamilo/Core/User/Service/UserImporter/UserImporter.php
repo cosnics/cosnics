@@ -5,6 +5,7 @@ use Chamilo\Configuration\Service\Consulter\ConfigurationConsulter;
 use Chamilo\Core\User\Domain\UserImporter\ImportUserData;
 use Chamilo\Core\User\Domain\UserImporter\ImportUserResult;
 use Chamilo\Core\User\Domain\UserImporter\UserImporterResult;
+use Chamilo\Core\User\Service\UserEventNotifier;
 use Chamilo\Core\User\Service\UserImporter\ImportParser\ImportParserFactory;
 use Chamilo\Core\User\Service\UserService;
 use Chamilo\Core\User\Service\UserSettingService;
@@ -27,7 +28,6 @@ use Symfony\Component\Translation\Translator;
  */
 class UserImporter
 {
-
     protected ConfigurationConsulter $configurationConsulter;
 
     protected HashingUtilities $hashingUtilities;
@@ -35,6 +35,8 @@ class UserImporter
     protected MailerInterface $mailer;
 
     protected Translator $translator;
+
+    protected UserEventNotifier $userEventNotifier;
 
     protected ImportParserFactory $userImportParserFactory;
 
@@ -47,7 +49,8 @@ class UserImporter
     public function __construct(
         ImportParserFactory $userImportParserFactory, UserService $userService,
         ConfigurationConsulter $configurationConsulter, HashingUtilities $hashingUtilities, MailerInterface $mailer,
-        Translator $translator, WebPathBuilder $webPathBuilder, UserSettingService $userSettingService
+        Translator $translator, WebPathBuilder $webPathBuilder, UserSettingService $userSettingService,
+        UserEventNotifier $userEventNotifier
     )
     {
         $this->userImportParserFactory = $userImportParserFactory;
@@ -58,6 +61,7 @@ class UserImporter
         $this->translator = $translator;
         $this->webPathBuilder = $webPathBuilder;
         $this->userSettingService = $userSettingService;
+        $this->userEventNotifier = $userEventNotifier;
     }
 
     /**
@@ -99,7 +103,7 @@ class UserImporter
                 {
                     $importUserResult->setSuccessful();
                     $this->updateLanguageSettingForUser($importUserData);
-                    $this->getUserService()->triggerImportEvent($currentUser, $user);
+                    $this->getUserEventNotifier()->afterImport($currentUser, $user);
 
                     if ($sendMailToNewUsers)
                     {
@@ -129,7 +133,7 @@ class UserImporter
 
             if ($importUserData->isDelete())
             {
-                $user->set_active(false);
+                $user->set_active(0);
 
                 if (!$this->getUserService()->updateUser($user))
                 {
@@ -144,6 +148,11 @@ class UserImporter
 
             $userImporterResult->addImportDataResult($importUserResult);
         }
+    }
+
+    public function getUserEventNotifier(): UserEventNotifier
+    {
+        return $this->userEventNotifier;
     }
 
     public function getUserService(): UserService

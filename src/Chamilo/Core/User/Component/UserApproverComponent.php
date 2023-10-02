@@ -49,14 +49,7 @@ class UserApproverComponent extends Manager
                         $failures ++;
                     }
                 }
-                elseif ($userService->deleteUser($user))
-                {
-                    Event::trigger(
-                        'Delete', Manager::CONTEXT,
-                        ['target_user_id' => $user->getId(), 'action_user_id' => $this->getUser()->getId()]
-                    );
-                }
-                else
+                elseif (!$userService->deleteUser($user))
                 {
                     $failures ++;
                 }

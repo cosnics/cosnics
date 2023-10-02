@@ -248,8 +248,6 @@ class UserImporterTest extends ChamiloTestCase
         $this->mockImportUserData($importUsersData);
         $this->mockUserCreate();
 
-        $this->userServiceMock->expects($this->once())->method('triggerImportEvent');
-
         $this->userImporter->importUsersFromFile(new User(), $this->uploadedFile);
     }
 

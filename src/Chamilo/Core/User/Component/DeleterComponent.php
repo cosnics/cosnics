@@ -47,14 +47,7 @@ class DeleterComponent extends Manager
             {
                 $user = $userService->findUserByIdentifier($userIdentifier);
 
-                if ($userService->deleteUser($user))
-                {
-                    Event::trigger(
-                        'Delete', Manager::CONTEXT,
-                        ['target_user_id' => $user->getId(), 'action_user_id' => $this->getUser()->getId()]
-                    );
-                }
-                else
+                if (!$userService->deleteUser($user))
                 {
                     $failures ++;
                 }

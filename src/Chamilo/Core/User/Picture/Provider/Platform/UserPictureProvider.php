@@ -1,9 +1,6 @@
 <?php
 namespace Chamilo\Core\User\Picture\Provider\Platform;
 
-use Chamilo\Core\Tracking\Storage\DataClass\ChangesTracker;
-use Chamilo\Core\Tracking\Storage\DataClass\Event;
-use Chamilo\Core\User\Manager;
 use Chamilo\Core\User\Picture\UserPictureProviderInterface;
 use Chamilo\Core\User\Picture\UserPictureUpdateProviderInterface;
 use Chamilo\Core\User\Service\UserService;
@@ -264,13 +261,6 @@ class UserPictureProvider implements UserPictureProviderInterface, UserPictureUp
                 return false;
             }
         }
-
-        Event::trigger(
-            'Update', Manager::CONTEXT, [
-                ChangesTracker::PROPERTY_REFERENCE_ID => $requestUser->getId(),
-                ChangesTracker::PROPERTY_USER_ID => $targetUser->getId()
-            ]
-        );
 
         return true;
     }
