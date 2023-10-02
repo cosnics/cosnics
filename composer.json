@@ -23,6 +23,7 @@
         "ext-pdo": "*",
         "chamilo/pear-libraries": "dev-refactor/database",
         "composer/composer": "2.3.*",
+        "doctrine/annotations": "1.14.*",
         "doctrine/cache": "1.13.*",
         "doctrine/collections": "1.6.*",
         "doctrine/dbal": "3.3.*",
@@ -71,7 +72,10 @@
         ]
     },
     "config": {
-        "bin-dir": "bin/"
+        "bin-dir": "bin/",
+        "allow-plugins": {
+            "php-http/discovery": true
+        }
     },
     "scripts": {
         "pre-install-cmd": "Chamilo\\Libraries\\Format\\Utilities\\BuildUtilities::processComposer",
