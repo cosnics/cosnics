@@ -1,9 +1,8 @@
 <?php
 namespace Chamilo\Core\User\Component;
 
-use Chamilo\Core\User\Form\UserForm;
+use Chamilo\Core\User\Form\UserCreationForm;
 use Chamilo\Core\User\Manager;
-use Chamilo\Core\User\Storage\DataClass\User;
 use Chamilo\Libraries\Architecture\Application\Application;
 use Chamilo\Libraries\Architecture\Exceptions\NotAllowedException;
 use Chamilo\Libraries\Format\Breadcrumb\BreadcrumbTrail;
@@ -24,24 +23,18 @@ class CreatorComponent extends Manager
         $this->checkAuthorization(Manager::CONTEXT, 'ManageUsers');
 
         $currentUser = $this->getUser();
+        $translator = $this->getTranslator();
 
         if (!$currentUser->isPlatformAdmin())
         {
             throw new NotAllowedException();
         }
 
-        $user = new User();
-
-        $user->set_platformadmin(0);
-        $user->set_password(1);
-        $user->set_creator_id($currentUser->getId());
-
-        $translator = $this->getTranslator();
-        $form = new UserForm(UserForm::TYPE_CREATE, $user, $currentUser, $this->get_url());
+        $form = new UserCreationForm($currentUser, $this->get_url());
 
         if ($form->validate())
         {
-            $success = $form->create_user();
+            //$success = $form->create_user();
 
             if ($success == 1)
             {

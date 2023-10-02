@@ -8,124 +8,108 @@ use Chamilo\Core\User\Picture\UserPictureProviderInterface;
 use Chamilo\Core\User\Picture\UserPictureUpdateProviderInterface;
 use Chamilo\Core\User\Storage\DataClass\User;
 use Chamilo\Core\User\Storage\DataManager;
-use Chamilo\Libraries\DependencyInjection\Traits\DependencyInjectionContainerTrait;
 use Chamilo\Libraries\Format\Form\FormValidator;
-use Chamilo\Libraries\Format\Structure\Glyph\FontAwesomeGlyph;
 use Chamilo\Libraries\Hashing\HashingUtilities;
 use Chamilo\Libraries\Mail\Mailer\MailerInterface;
 use Chamilo\Libraries\Mail\ValueObject\Mail;
 use Chamilo\Libraries\Storage\DataClass\DataClass;
-use Chamilo\Libraries\Translation\Translation;
 use Chamilo\Libraries\Utilities\DatetimeUtilities;
 use Chamilo\Libraries\Utilities\StringUtilities;
 use Exception;
 use Hackzilla\PasswordGenerator\Generator\PasswordGeneratorInterface;
 
-/**
- * @package user.lib.forms
- */
 class UserForm extends FormValidator
 {
-    use DependencyInjectionContainerTrait;
-
     public const RESULT_ERROR = 'UserUpdateFailed';
-
     public const RESULT_SUCCESS = 'UserUpdated';
 
     public const TYPE_CREATE = 1;
-
     public const TYPE_EDIT = 2;
 
-    private $form_type;
+    protected User $actionUser;
 
-    private $form_user;
-
-    private $parent;
-
-    private $unencryptedpass;
-
-    private $user;
+    protected User $user;
 
     /**
-     * Creates a new UserForm Used by the admin to create/update a user
+     * @throws \QuickformException
      */
-    public function __construct($form_type, $user, $form_user, $action)
+    public function __construct(User $actionUser, string $action, ?User $user = null)
     {
         parent::__construct('user_settings', self::FORM_METHOD_POST, $action);
 
+        $this->actionUser = $actionUser;
         $this->user = $user;
-        $this->form_user = $form_user;
 
-        $this->form_type = $form_type;
-        if ($this->form_type == self::TYPE_EDIT)
-        {
-            $this->build_editing_form();
-        }
-        elseif ($this->form_type == self::TYPE_CREATE)
-        {
-            $this->build_creation_form();
-        }
-
+        $this->buildForm();
         $this->setDefaults();
     }
 
     /**
      * @throws \QuickformException
      */
-    public function build_basic_form()
+    public function buildForm(): void
     {
+        $translator = $this->getTranslator();
         $configurationConsulter = $this->getConfigurationConsulter();
 
+        $fieldRequiredMessage = $translator->trans('ThisFieldIsRequired', [], StringUtilities::LIBRARIES);
+
         // Lastname
-        $this->addElement('text', User::PROPERTY_LASTNAME, Translation::get('LastName'), ['size' => '50']);
+        $this->addElement(
+            'text', User::PROPERTY_LASTNAME, $translator->trans('LastName', [], Manager::CONTEXT), ['size' => '50']
+        );
         $this->addRule(
-            User::PROPERTY_LASTNAME, Translation::get('ThisFieldIsRequired', null, StringUtilities::LIBRARIES),
-            'required'
+            User::PROPERTY_LASTNAME, $fieldRequiredMessage, 'required'
         );
         // Firstname
-        $this->addElement('text', User::PROPERTY_FIRSTNAME, Translation::get('FirstName'), ['size' => '50']);
+        $this->addElement(
+            'text', User::PROPERTY_FIRSTNAME, $translator->trans('FirstName', [], Manager::CONTEXT), ['size' => '50']
+        );
         $this->addRule(
-            User::PROPERTY_FIRSTNAME, Translation::get('ThisFieldIsRequired', null, StringUtilities::LIBRARIES),
-            'required'
+            User::PROPERTY_FIRSTNAME, $fieldRequiredMessage, 'required'
         );
         // Email
-        $this->addElement('text', User::PROPERTY_EMAIL, Translation::get('Email'), ['size' => '50']);
+        $this->addElement(
+            'text', User::PROPERTY_EMAIL, $translator->trans('Email', [], Manager::CONTEXT), ['size' => '50']
+        );
         if ($configurationConsulter->getSetting([Manager::CONTEXT, 'require_email']))
         {
             $this->addRule(
-                User::PROPERTY_EMAIL, Translation::get('ThisFieldIsRequired', null, StringUtilities::LIBRARIES),
-                'required'
+                User::PROPERTY_EMAIL, $fieldRequiredMessage, 'required'
             );
         }
-        $this->addRule(User::PROPERTY_EMAIL, Translation::get('WrongEmail'), 'email');
+        $this->addRule(User::PROPERTY_EMAIL, $translator->trans('WrongEmail', [], Manager::CONTEXT), 'email');
         // Username
-        $this->addElement('text', User::PROPERTY_USERNAME, Translation::get('Username'), ['size' => '50']);
-        $this->addRule(
-            User::PROPERTY_USERNAME, Translation::get('ThisFieldIsRequired', null, StringUtilities::LIBRARIES),
-            'required'
+        $this->addElement(
+            'text', User::PROPERTY_USERNAME, $translator->trans('Username', [], Manager::CONTEXT), ['size' => '50']
         );
+        $this->addRule(User::PROPERTY_USERNAME, $fieldRequiredMessage, 'required');
 
         $group = [];
         $group[] = $this->createElement(
-            'radio', User::PROPERTY_ACTIVE, null, Translation::get('ConfirmYes', null, StringUtilities::LIBRARIES), 1
+            'radio', User::PROPERTY_ACTIVE, null, $translator->trans('ConfirmYes', [], StringUtilities::LIBRARIES), 1
         );
         $group[] = $this->createElement(
-            'radio', User::PROPERTY_ACTIVE, null, Translation::get('ConfirmNo', null, StringUtilities::LIBRARIES), 0
+            'radio', User::PROPERTY_ACTIVE, null, $translator->trans('ConfirmNo', [], StringUtilities::LIBRARIES), 0
         );
-        $this->addGroup($group, 'active', Translation::get('Active'), '&nbsp;');
+        $this->addGroup($group, 'active', $translator->trans('Active', [], Manager::CONTEXT), '&nbsp;');
 
         // pw
         $group = [];
 
-        if ($this->form_type == self::TYPE_EDIT)
+        if ($this->formType == self::TYPE_EDIT)
         {
-            $group[] = $this->createElement('radio', 'pass', null, Translation::get('KeepPassword') . '<br />', 2);
+            $group[] = $this->createElement(
+                'radio', 'pass', null, $translator->trans('KeepPassword', [], Manager::CONTEXT) . '<br />', 2
+            );
         }
 
-        $group[] = $this->createElement('radio', 'pass', null, Translation::get('AutoGeneratePassword') . '<br />', 1);
+        $group[] = $this->createElement(
+            'radio', 'pass', null, $translator->trans('AutoGeneratePassword', [], Manager::CONTEXT) . '<br />', 1
+        );
         $group[] = $this->createElement('radio', 'pass', null, null, 0);
         $group[] = $this->createElement('password', User::PROPERTY_PASSWORD, null, ['autocomplete' => 'off']);
-        $this->addGroup($group, 'pw', Translation::get('Password'), '');
+        $this->addGroup($group, 'pw', $translator->trans('Password', [], Manager::CONTEXT), '');
 
         $this->addFormRule([$this, 'checkPasswordRequirements']);
 
@@ -133,15 +117,15 @@ class UserForm extends FormValidator
 
         // Official Code
         $this->addElement(
-            'text', User::PROPERTY_OFFICIAL_CODE, Translation::get('OfficialCode'), ['size' => '50']
+            'text', User::PROPERTY_OFFICIAL_CODE, $translator->trans('OfficialCode', [], Manager::CONTEXT),
+            ['size' => '50']
         );
         // put restrictions on the official code
         if ($configurationConsulter->getSetting([Manager::CONTEXT, 'require_official_code']) &&
             $configurationConsulter->getSetting([Manager::CONTEXT, 'allow_change_official_code']) == 1)
         {
             $this->addRule(
-                User::PROPERTY_OFFICIAL_CODE, Translation::get('ThisFieldIsRequired', null, StringUtilities::LIBRARIES),
-                'required'
+                User::PROPERTY_OFFICIAL_CODE, $fieldRequiredMessage, 'required'
             );
         }
 
@@ -149,103 +133,85 @@ class UserForm extends FormValidator
 
         // Show user picture
         $this->addElement(
-            'static', null, Translation::get('CurrentImage'), '<img class="my-account-photo" src="' .
+            'static', null, $translator->trans('CurrentImage', [], Manager::CONTEXT),
+            '<img class="my-account-photo" src="' .
             $userPictureProvider->getUserPictureAsBase64String($this->user, $this->user) . '" alt="' .
             $this->user->get_fullname() . '" />'
         );
 
         // Picture URI
-        $this->addElement('file', User::PROPERTY_PICTURE_URI, Translation::get('AddPicture'));
+        $this->addElement('file', User::PROPERTY_PICTURE_URI, $translator->trans('AddPicture'));
         $allowed_picture_types = ['jpg', 'jpeg', 'png', 'gif', 'JPG', 'JPEG', 'PNG', 'GIF'];
         $this->addRule(
-            User::PROPERTY_PICTURE_URI, Translation::get('OnlyImagesAllowed'), 'filetype', $allowed_picture_types
+            User::PROPERTY_PICTURE_URI, $translator->trans('OnlyImagesAllowed', [], Manager::CONTEXT), 'filetype',
+            $allowed_picture_types
         );
-        $this->addElement('static', null, null, Translation::get('AllowedProfileImageFormats'));
+        $this->addElement('static', null, null, $translator->trans('AllowedProfileImageFormats', [], Manager::CONTEXT));
 
         // Phone Number
-        $this->addElement('text', User::PROPERTY_PHONE, Translation::get('PhoneNumber'), ['size' => '50']);
+        $this->addElement(
+            'text', User::PROPERTY_PHONE, $translator->trans('PhoneNumber', [], Manager::CONTEXT), ['size' => '50']
+        );
 
         // Disk Quota
-        $this->addElement('text', User::PROPERTY_DISK_QUOTA, Translation::get('DiskQuota'), ['size' => '50']);
+        $this->addElement(
+            'text', User::PROPERTY_DISK_QUOTA, $translator->trans('DiskQuota', [], Manager::CONTEXT), ['size' => '50']
+        );
         $this->addRule(
-            User::PROPERTY_DISK_QUOTA, Translation::get('ThisFieldMustBeNumeric', null, StringUtilities::LIBRARIES),
+            User::PROPERTY_DISK_QUOTA, $translator->trans('ThisFieldMustBeNumeric', [], StringUtilities::LIBRARIES),
             'numeric'
         );
         // Database Quota
         $this->addElement(
-            'text', User::PROPERTY_DATABASE_QUOTA, Translation::get('DatabaseQuota'), ['size' => '50']
+            'text', User::PROPERTY_DATABASE_QUOTA, $translator->trans('DatabaseQuota', [], Manager::CONTEXT),
+            ['size' => '50']
         );
         $this->addRule(
-            User::PROPERTY_DATABASE_QUOTA, Translation::get('ThisFieldMustBeNumeric', null, StringUtilities::LIBRARIES),
+            User::PROPERTY_DATABASE_QUOTA, $translator->trans('ThisFieldMustBeNumeric', [], StringUtilities::LIBRARIES),
             'numeric'
         );
 
         // Status
         $status = [];
-        $status[5] = Translation::get('Student');
-        $status[1] = Translation::get('CourseAdmin');
-        $this->addElement('select', User::PROPERTY_STATUS, Translation::get('Status'), $status);
+        $status[5] = $translator->trans('Student', [], Manager::CONTEXT);
+        $status[1] = $translator->trans('CourseAdmin', [], Manager::CONTEXT);
+        $this->addElement('select', User::PROPERTY_STATUS, $translator->trans('Status', [], Manager::CONTEXT), $status);
         // Platform admin
-        if ($this->user->isPlatformAdmin() && $this->user->get_id() == $this->form_user->get_id() &&
-            $this->form_type == self::TYPE_EDIT)
+        if ($this->user->isPlatformAdmin() && $this->user->get_id() == $this->actionUser->get_id() &&
+            $this->formType == self::TYPE_EDIT)
         {
-            $this->add_warning_message('admin_lockout_message', null, Translation::get('LockOutWarningMessage'));
+            $this->add_warning_message(
+                'admin_lockout_message', null, $translator->trans('LockOutWarningMessage', [], Manager::CONTEXT)
+            );
         }
         $group = [];
         $group[] = $this->createElement(
             'radio', User::PROPERTY_PLATFORMADMIN, null,
-            Translation::get('ConfirmYes', null, StringUtilities::LIBRARIES), 1
+            $translator->trans('ConfirmYes', [], StringUtilities::LIBRARIES), 1
         );
         $group[] = $this->createElement(
             'radio', User::PROPERTY_PLATFORMADMIN, null,
-            Translation::get('ConfirmNo', null, StringUtilities::LIBRARIES), 0
+            $translator->trans('ConfirmNo', [], StringUtilities::LIBRARIES), 0
         );
-        $this->addGroup($group, 'admin', Translation::get('PlatformAdministrator'), '&nbsp;');
+        $this->addGroup($group, 'admin', $translator->trans('PlatformAdministrator', [], Manager::CONTEXT), '&nbsp;');
 
         // Send email
         $group = [];
         $group[] = $this->createElement(
-            'radio', 'send_mail', null, Translation::get('ConfirmYes', null, StringUtilities::LIBRARIES), 1
+            'radio', 'send_mail', null, $translator->trans('ConfirmYes', [], StringUtilities::LIBRARIES), 1
         );
         $group[] = $this->createElement(
-            'radio', 'send_mail', null, Translation::get('ConfirmNo', null, StringUtilities::LIBRARIES), 0
+            'radio', 'send_mail', null, $translator->trans('ConfirmNo', [], StringUtilities::LIBRARIES), 0
         );
-        $this->addGroup($group, 'mail', Translation::get('SendMailToNewUser'), '&nbsp;');
-    }
-
-    /**
-     * Creates a creating form
-     */
-    public function build_creation_form()
-    {
-        $this->build_basic_form();
+        $this->addGroup($group, 'mail', $translator->trans('SendMailToNewUser', [], Manager::CONTEXT), '&nbsp;');
 
         $buttons[] = $this->createElement(
-            'style_submit_button', 'submit', Translation::get('Create', null, StringUtilities::LIBRARIES)
+            'style_submit_button', 'submit', $translator->trans('Save', [], StringUtilities::LIBRARIES)
         );
         $buttons[] = $this->createElement(
-            'style_reset_button', 'reset', Translation::get('Reset', null, StringUtilities::LIBRARIES)
+            'style_reset_button', 'reset', $translator->trans('Reset', [], StringUtilities::LIBRARIES)
         );
 
-        $this->addGroup($buttons, 'buttons', null, '&nbsp;', false);
-    }
-
-    /**
-     * Creates an editing form
-     */
-    public function build_editing_form()
-    {
-        $this->build_basic_form();
-
-        $this->addElement('hidden', User::PROPERTY_ID);
-
-        $buttons[] = $this->createElement(
-            'style_submit_button', 'submit', Translation::get('Update', null, StringUtilities::LIBRARIES), null, null,
-            new FontAwesomeGlyph('arrow-right')
-        );
-        $buttons[] = $this->createElement(
-            'style_reset_button', 'reset', Translation::get('Reset', null, StringUtilities::LIBRARIES)
-        );
         $this->addGroup($buttons, 'buttons', null, '&nbsp;', false);
     }
 
@@ -361,7 +327,7 @@ class UserForm extends FormValidator
             {
                 Event::trigger(
                     'Create', Manager::CONTEXT,
-                    ['target_user_id' => $user->get_id(), 'action_user_id' => $this->form_user->get_id()]
+                    ['target_user_id' => $user->get_id(), 'action_user_id' => $this->actionUser->get_id()]
                 );
             }
 
@@ -371,6 +337,11 @@ class UserForm extends FormValidator
         {
             return - 1; // Username not available
         }
+    }
+
+    public function getActionUser(): User
+    {
+        return $this->actionUser;
     }
 
     protected function getActiveMailer(): MailerInterface
@@ -386,6 +357,11 @@ class UserForm extends FormValidator
     public function getPasswordGenerator(): PasswordGeneratorInterface
     {
         return $this->getService(PasswordGeneratorInterface::class);
+    }
+
+    public function getUser(): User
+    {
+        return $this->user;
     }
 
     public function getUserPictureProvider(): UserPictureProviderInterface
@@ -420,7 +396,7 @@ class UserForm extends FormValidator
             ['Chamilo\Core\Admin', 'administrator_email']
         );
 
-        $subject = Translation::get('YourRegistrationOn') . ' ' . $options['site_name'];
+        $subject = $this->getTranslator()->trans('YourRegistrationOn') . ' ' . $options['site_name'];
 
         $body = $configurationConsulter->getSetting([Manager::CONTEXT, 'email_template']);
         foreach ($options as $option => $value)
@@ -453,7 +429,7 @@ class UserForm extends FormValidator
     {
         $user = $this->user;
 
-        if ($this->form_type == self::TYPE_EDIT)
+        if ($this->formType == self::TYPE_EDIT)
         {
             $expiration_date = $user->get_expiration_date();
             if ($expiration_date != 0)
@@ -567,7 +543,7 @@ class UserForm extends FormValidator
             Event::trigger(
                 'Update', Manager::CONTEXT, [
                     ChangesTracker::PROPERTY_REFERENCE_ID => $user->get_id(),
-                    ChangesTracker::PROPERTY_USER_ID => $this->form_user->get_id()
+                    ChangesTracker::PROPERTY_USER_ID => $this->actionUser->get_id()
                 ]
             );
         }

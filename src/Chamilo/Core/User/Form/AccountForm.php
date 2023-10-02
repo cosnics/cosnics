@@ -273,8 +273,10 @@ class AccountForm extends FormValidator
     /**
      * @throws \QuickformException
      */
-    public function checkAllowedToChangePassword(?string $newPassword = null): bool
+    public function checkAllowedToChangePassword($exportValues): true|array
     {
+        $newPassword = $exportValues[self::NEW_PASSWORD];
+
         if (empty($newPassword))
         {
             return true;
@@ -282,22 +284,26 @@ class AccountForm extends FormValidator
 
         if (empty($this->exportValue(User::PROPERTY_PASSWORD)))
         {
-            return false;
+            return [self::NEW_PASSWORD => $this->getTranslator()->trans('EnterCurrentPassword', [], Manager::CONTEXT)];
         }
 
         return true;
     }
 
-    public function checkPasswordRequirements(?string $newPassword = null): bool
+    public function checkPasswordRequirements($exportValues): true|array
     {
-        if (empty($newPassword))
+        $customPassword = $exportValues['pw']['pass'] == 0;
+
+        if (!$customPassword)
         {
             return true;
         }
 
+        $newPassword = $exportValues['pw'][User::PROPERTY_PASSWORD];
+
         if (strlen($newPassword) < 6)
         {
-            return false;
+            return ['pw' => $this->getTranslator()->trans('PasswordRequirements', [], Manager::CONTEXT)];
         }
 
         return true;
