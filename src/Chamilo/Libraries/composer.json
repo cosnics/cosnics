@@ -13,7 +13,7 @@
         "danielstjules/stringy": "3.1.0",
         "spipu/html2pdf": "=5.2.4",
         "phpoffice/phpspreadsheet": "1.22.0",
-        "kigkonsult/icalcreator": "2.24",
+        "kigkonsult/icalcreator": "2.41.83",
         "simplepie/simplepie": "1.*",
         "ezyang/htmlpurifier": "4.14.0",
         "sentry/sdk": "^3.1.0",

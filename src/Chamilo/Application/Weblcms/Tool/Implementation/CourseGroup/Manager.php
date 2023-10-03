@@ -50,6 +50,11 @@ abstract class Manager extends \Chamilo\Application\Weblcms\Tool\Manager impleme
     {
         $courseGroupId = $this->getRequest()->getFromUrl(self::PARAM_COURSE_GROUP);
 
+        if(empty($courseGroupId))
+        {
+            return null;
+        }
+
         $courseGroup = \Chamilo\Application\Weblcms\Storage\DataManager::retrieve_by_id(
             CourseGroup::class_name(),
             $courseGroupId

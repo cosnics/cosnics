@@ -5,6 +5,8 @@ use Chamilo\Application\Weblcms\Tool\Implementation\CourseGroup\Form\Handler\Imp
 use Chamilo\Application\Weblcms\Tool\Implementation\CourseGroup\Form\Handler\QuickUsersSubscribeFormHandler;
 use Chamilo\Application\Weblcms\Tool\Implementation\CourseGroup\Form\Type\ImportGroupsFormType;
 use Chamilo\Application\Weblcms\Tool\Implementation\CourseGroup\Manager;
+use Chamilo\Application\Weblcms\Tool\Implementation\CourseGroup\Storage\DataClass\CourseGroup;
+use Chamilo\Application\Weblcms\Tool\Implementation\CourseGroup\Storage\DataManager;
 use Chamilo\Libraries\Architecture\Exceptions\NotAllowedException;
 use Chamilo\Libraries\Architecture\Exceptions\UserException;
 
@@ -29,6 +31,10 @@ class ImporterComponent extends Manager
         }
 
         $courseGroup = $this->getCourseGroupFromRequest();
+        if(!$courseGroup instanceof CourseGroup)
+        {
+            $courseGroup = $this->getCourseGroupService()->getRootCourseGroup($this->get_course_id());
+        }
 
         $form = $this->getForm()->create(ImportGroupsFormType::class);
 
@@ -41,7 +47,7 @@ class ImporterComponent extends Manager
             if ($handler->handle($form, $this->getRequest()))
             {
                 $statuses = $handler->getImportGroupStatuses();
-//var_dump($statuses);
+
                 return $this->getTwig()->render(
                     Manager::context() . ':GroupsImportStatus.html.twig',
                     [

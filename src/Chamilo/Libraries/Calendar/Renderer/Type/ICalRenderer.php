@@ -7,7 +7,7 @@ use Chamilo\Libraries\Calendar\Renderer\Interfaces\CalendarRendererProviderInter
 use Chamilo\Libraries\Calendar\Renderer\Renderer;
 use Chamilo\Libraries\Calendar\TimeZone\TimeZoneCalendarWrapper;
 use Chamilo\Libraries\Calendar\TimeZone\TimeZoneGenerator;
-use kigkonsult\iCalcreator\timezoneHandler;
+use Kigkonsult\Icalcreator\timezoneHandler;
 use Sabre\VObject\Component\VCalendar;
 use Symfony\Component\HttpFoundation\Response;
 

@@ -311,6 +311,11 @@ class CourseGroupService
         return $courseGroup;
     }
 
+    public function getRootCourseGroup(int $courseId): CourseGroup
+    {
+        return $this->courseGroupRepository->getRootCourseGroup($courseId);
+    }
+
     /**
      * @param CourseGroup $courseGroup
      *
