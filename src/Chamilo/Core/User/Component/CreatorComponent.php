@@ -7,6 +7,7 @@ use Chamilo\Core\User\Manager;
 use Chamilo\Core\User\Picture\UserPictureProviderInterface;
 use Chamilo\Core\User\Picture\UserPictureUpdateProviderInterface;
 use Chamilo\Core\User\Storage\DataClass\User;
+use Chamilo\Libraries\Architecture\Application\Application;
 use Chamilo\Libraries\Architecture\Exceptions\NotAllowedException;
 use Chamilo\Libraries\Format\Form\FormValidator;
 use Chamilo\Libraries\Format\NotificationMessage\NotificationMessage;
@@ -85,7 +86,14 @@ class CreatorComponent extends Manager
                     )
                 );
 
-                return new RedirectResponse($this->getUrlGenerator()->fromParameters());
+                return new RedirectResponse(
+                    $this->getUrlGenerator()->fromParameters(
+                        [
+                            Application::PARAM_CONTEXT => Manager::CONTEXT,
+                            Application::PARAM_ACTION => Manager::ACTION_BROWSE_USERS
+                        ]
+                    )
+                );
             }
             catch (Exception $exception)
             {

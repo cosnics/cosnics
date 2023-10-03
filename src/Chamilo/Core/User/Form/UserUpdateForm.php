@@ -34,7 +34,7 @@ class UserUpdateForm extends UserForm
         );
 
         $this->buildPersonalDetailsCategoryForm();
-        $this->buildPasswordCategoryForm(true, true, true);
+        $this->buildPasswordCategoryForm();
         $this->buildPictureCategoryForm($encodedUserPicture, $user->get_fullname());
         $this->buildAccountCategoryForm($this->isLockoutRisk());
         $this->buildOtherCategoryForm();
@@ -67,7 +67,6 @@ class UserUpdateForm extends UserForm
 
         $defaultValues[self::PROPERTY_TIME_PERIOD_FOREVER] = $expirationDate != 0 ? 0 : 1;
         $defaultValues[self::PROPERTY_GENERATE_PASSWORD] = 0;
-        $defaultValues[self::PROPERTY_KEEP_PASSWORD] = 1;
         $defaultValues[self::PROPERTY_SEND_MAIL] = 0;
 
         if ($expirationDate != 0)

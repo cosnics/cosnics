@@ -2,6 +2,7 @@
 namespace Chamilo\Core\User\Component;
 
 use Chamilo\Core\User\Form\RegisterForm;
+use Chamilo\Core\User\Form\UserForm;
 use Chamilo\Core\User\Manager;
 use Chamilo\Core\User\Picture\UserPictureProviderInterface;
 use Chamilo\Core\User\Picture\UserPictureUpdateProviderInterface;
@@ -54,9 +55,9 @@ class RegisterComponent extends Manager implements NoAuthenticationSupportInterf
                 $user = $this->getUserService()->registerUserFromParameters(
                     $formValues[User::PROPERTY_FIRSTNAME], $formValues[User::PROPERTY_LASTNAME],
                     $formValues[User::PROPERTY_USERNAME], $formValues[User::PROPERTY_OFFICIAL_CODE],
-                    $formValues[User::PROPERTY_EMAIL], $formValues['pw']['pass'] == '1',
-                    $formValues['pw'][User::PROPERTY_PASSWORD], 'Chamilo\Libraries\Authentication\Platform', $formValues[User::PROPERTY_STATUS],
-                    (bool) $formValues['send_mail']
+                    $formValues[User::PROPERTY_EMAIL], (bool) $formValues[UserForm::PROPERTY_GENERATE_PASSWORD],
+                    $formValues[User::PROPERTY_PASSWORD], 'Chamilo\Libraries\Authentication\Platform', $formValues[User::PROPERTY_STATUS],
+                    (bool) $formValues[UserForm::PROPERTY_SEND_MAIL]
                 );
 
                 $userPictureProvider = $this->getUserPictureProvider();

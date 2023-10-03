@@ -12,7 +12,6 @@ use Chamilo\Libraries\Architecture\Application\Application;
 use Chamilo\Libraries\Architecture\Application\Routing\UrlGenerator;
 use Chamilo\Libraries\Architecture\Exceptions\UserException;
 use Chamilo\Libraries\Architecture\Interfaces\ChangeablePasswordInterface;
-use Chamilo\Libraries\Architecture\Interfaces\ChangeableUsernameInterface;
 use Chamilo\Libraries\Authentication\AuthenticationValidator;
 use Chamilo\Libraries\Cache\Traits\CacheAdapterHandlerTrait;
 use Chamilo\Libraries\File\WebPathBuilder;
@@ -215,7 +214,7 @@ class UserService
      */
     public function createUserFromParameters(
         ?string $firstName, ?string $lastName, string $username, ?string $officialCode, string $emailAddress,
-        bool $generatePassword, string $password, ?string $authSource = 'Chamilo\Libraries\Authentication\Platform',
+        bool $generatePassword, ?string $password, ?string $authSource = 'Chamilo\Libraries\Authentication\Platform',
         bool $isPlatformAdmin = false, int $status = User::STATUS_STUDENT, bool $active = true, bool $approved = true,
         bool $isValidForever = true, int $activationDate = 0, int $expirationDate = 0, int $diskQuota = 209715200,
         bool $sendEmail = false
@@ -873,42 +872,26 @@ class UserService
 
     public function updateAccountFromParameters(
         User $user, ?string $firstName, ?string $lastName, string $username, ?string $officialCode,
-        string $emailAddress, ?string $oldPassword, ?string $newPassword
+        string $emailAddress, ?string $currentPassword, ?string $newPassword
     ): bool
     {
-        $configurationConsulter = $this->getConfigurationConsulter();
         $authentication = $this->authenticationValidator->getAuthenticationByType($user->getAuthenticationSource());
 
-        if ($configurationConsulter->getSetting([Manager::CONTEXT, 'allow_change_firstname']))
+        $user->set_firstname($firstName);
+        $user->set_lastname($lastName);
+        $user->set_official_code($officialCode);
+        $user->set_email($emailAddress);
+
+        if ($user->get_username() != $username && !$this->isUsernameAvailable($username))
         {
-            $user->set_firstname($firstName);
+            throw new RuntimeException('The given username is already taken');
         }
 
-        if ($configurationConsulter->getSetting([Manager::CONTEXT, 'allow_change_lastname']))
-        {
-            $user->set_lastname($lastName);
-        }
+        $user->set_username($username);
 
-        if ($configurationConsulter->getSetting([Manager::CONTEXT, 'allow_change_official_code']))
+        if (strlen($currentPassword) && $authentication instanceof ChangeablePasswordInterface)
         {
-            $user->set_official_code($officialCode);
-        }
-
-        if ($configurationConsulter->getSetting([Manager::CONTEXT, 'allow_change_email']))
-        {
-            $user->set_email($emailAddress);
-        }
-
-        if ($configurationConsulter->getSetting([Manager::CONTEXT, 'allow_change_username']) &&
-            $authentication instanceof ChangeableUsernameInterface)
-        {
-            $user->set_username($username);
-        }
-
-        if ($configurationConsulter->getSetting([Manager::CONTEXT, 'allow_change_password']) && strlen($oldPassword) &&
-            $authentication instanceof ChangeablePasswordInterface)
-        {
-            if (!$authentication->changePassword($user, $oldPassword, $newPassword))
+            if (!$authentication->changePassword($user, $currentPassword, $newPassword))
             {
                 return false;
             }
@@ -925,6 +908,92 @@ class UserService
         }
 
         return $this->getUserEventNotifier()->afterUpdate($user);
+    }
+
+    public function updateUserFromParameters(
+        User $user, ?string $firstName, ?string $lastName, ?string $username, ?string $officialCode,
+        ?string $emailAddress, bool $generatePassword, ?string $password, ?bool $isPlatformAdmin, ?int $status,
+        ?bool $active, ?bool $approved, bool $isValidForever = true, ?int $activationDate = 0, ?int $expirationDate = 0,
+        ?int $diskQuota = 209715200, bool $sendEmail = false
+    ): bool
+    {
+        if(!is_null($firstName))
+        {
+            $user->set_firstname($firstName);
+        }
+
+        if(!is_null($lastName))
+        {
+            $user->set_lastname($lastName);
+        }
+
+        if(!is_null($officialCode))
+        {
+            $user->set_official_code($officialCode);
+        }
+
+        if(!is_null($emailAddress))
+        {
+            $user->set_email($emailAddress);
+        }
+
+        if (!is_null($username) && $user->get_username() != $username && $this->isUsernameAvailable($username))
+        {
+            $user->set_username($username);
+        }
+
+        if(!is_null($status))
+        {
+            $user->set_status($status);
+        }
+
+        if(!is_null($isPlatformAdmin))
+        {
+            $user->set_platformadmin((int) $isPlatformAdmin);
+        }
+
+        if(!is_null($active))
+        {
+            $user->set_active((int) $active);
+        }
+
+        if(!is_null($approved))
+        {
+            $user->set_approved((int) $approved);
+        }
+
+        if(!is_null($diskQuota))
+        {
+            $user->set_disk_quota($diskQuota);
+        }
+
+        if ($isValidForever)
+        {
+            $activationDate = 0;
+            $expirationDate = 0;
+        }
+
+        $user->set_activation_date($activationDate);
+        $user->set_expiration_date($expirationDate);
+
+        $password = $generatePassword ? $this->getPasswordGenerator()->generatePassword() : $password;
+
+        if(!is_null($password))
+        {
+            $user->set_password($this->getHashingUtilities()->hashString($password));
+        }
+
+        if (!$this->updateUser($user))
+        {
+            throw new RuntimeException('Could not update the user');
+        }
+
+        if ($sendEmail && !$this->sendRegistrationEmailToUser($user, $password))
+        {
+            throw new RuntimeException('Could not send an email to the updated user');
+        }
+
+        return $this->updateUser($user);
     }
 
     public function updateUserSetting(UserSetting $userSetting): bool

@@ -37,6 +37,7 @@ class AccountComponent extends ProfileComponent
         if ($accountForm->validate())
         {
             $formValues = $accountForm->exportValues();
+
             $success = $this->getUserService()->updateAccountFromParameters(
                 $this->getUser(), $formValues[User::PROPERTY_FIRSTNAME], $formValues[User::PROPERTY_LASTNAME],
                 $formValues[User::PROPERTY_USERNAME], $formValues[User::PROPERTY_OFFICIAL_CODE],

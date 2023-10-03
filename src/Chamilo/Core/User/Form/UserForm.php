@@ -9,13 +9,8 @@ use Chamilo\Libraries\Utilities\StringUtilities;
 abstract class UserForm extends FormValidator
 {
     public const PROPERTY_CONFIRM_PASSWORD = 'confirm_password';
-
     public const PROPERTY_CURRENT_PASSWORD = 'current_password';
-
     public const PROPERTY_GENERATE_PASSWORD = 'generate_password';
-
-    public const PROPERTY_KEEP_PASSWORD = 'keep_password';
-
     public const PROPERTY_SEND_MAIL = 'send_mail';
 
     /**
@@ -62,9 +57,10 @@ abstract class UserForm extends FormValidator
         );
 
         // Disk Quota
-        $this->addElement(
-            'text', User::PROPERTY_DISK_QUOTA, $translator->trans('DiskQuota', [], Manager::CONTEXT), ['size' => '50']
+        $this->add_textfield(
+            User::PROPERTY_DISK_QUOTA, $translator->trans('DiskQuota', [], Manager::CONTEXT), false
         );
+
         $this->addRule(
             User::PROPERTY_DISK_QUOTA, $translator->trans('ThisFieldMustBeNumeric', [], StringUtilities::LIBRARIES),
             'numeric'
@@ -95,8 +91,8 @@ abstract class UserForm extends FormValidator
      */
     public function buildPasswordCategoryForm(
         bool $allowedToChangePassword = true, bool $allowedToGeneratePassword = true,
-        bool $allowedToKeepPassword = false, bool $requiresCurrentPassword = false,
-        bool $requiresPasswordConfirmation = false, bool $includeCategoryTitle = true
+        bool $requiresCurrentPassword = false, bool $requiresPasswordConfirmation = false,
+        bool $includeCategoryTitle = true
     ): void
     {
         if ($allowedToChangePassword)
@@ -106,13 +102,6 @@ abstract class UserForm extends FormValidator
             if ($includeCategoryTitle)
             {
                 $this->addElement('category', $translator->trans('Password', [], Manager::CONTEXT));
-            }
-
-            if ($allowedToKeepPassword)
-            {
-                $this->addElement(
-                    'toggle', self::PROPERTY_KEEP_PASSWORD, $translator->trans('KeepPassword', [], Manager::CONTEXT)
-                );
             }
 
             if ($allowedToGeneratePassword)
@@ -127,7 +116,8 @@ abstract class UserForm extends FormValidator
             {
                 $this->addElement(
                     'password', self::PROPERTY_CURRENT_PASSWORD,
-                    $translator->trans('CurrentPassword', [], Manager::CONTEXT), ['autocomplete' => 'off']
+                    $translator->trans('CurrentPassword', [], Manager::CONTEXT),
+                    ['autocomplete' => 'off', 'class' => 'form-control']
                 );
 
                 $this->addFormRule([$this, 'checkCurrentPasswordEntered']);
@@ -135,14 +125,15 @@ abstract class UserForm extends FormValidator
 
             $this->addElement(
                 'password', User::PROPERTY_PASSWORD, $translator->trans('Password', [], Manager::CONTEXT),
-                ['autocomplete' => 'off']
+                ['autocomplete' => 'off', 'class' => 'form-control']
             );
 
             if ($requiresPasswordConfirmation)
             {
                 $this->addElement(
                     'password', self::PROPERTY_CONFIRM_PASSWORD,
-                    $translator->trans('PasswordConfirmation', [], Manager::CONTEXT), ['autocomplete' => 'off']
+                    $translator->trans('PasswordConfirmation', [], Manager::CONTEXT),
+                    ['autocomplete' => 'off', 'class' => 'form-control']
                 );
 
                 $this->addRule(
@@ -180,8 +171,8 @@ abstract class UserForm extends FormValidator
         }
 
         // Firstname
-        $this->addElement(
-            'text', User::PROPERTY_FIRSTNAME, $translator->trans('FirstName', [], Manager::CONTEXT), ['size' => '50']
+        $this->add_textfield(
+            User::PROPERTY_FIRSTNAME, $translator->trans('FirstName', [], Manager::CONTEXT), $allowedToChangeFirstName
         );
 
         if (!$allowedToChangeFirstName)
@@ -192,12 +183,11 @@ abstract class UserForm extends FormValidator
         {
             $this->applyFilter(User::PROPERTY_FIRSTNAME, 'stripslashes');
             $this->applyFilter(User::PROPERTY_FIRSTNAME, 'trim');
-            $this->addRule(User::PROPERTY_FIRSTNAME, $fieldRequiredMessage, 'required');
         }
 
         // Lastname
-        $this->addElement(
-            'text', User::PROPERTY_LASTNAME, $translator->trans('LastName', [], Manager::CONTEXT), ['size' => '50']
+        $this->add_textfield(
+            User::PROPERTY_LASTNAME, $translator->trans('LastName', [], Manager::CONTEXT), $allowedToChangeLastName
         );
 
         if (!$allowedToChangeLastName)
@@ -208,12 +198,12 @@ abstract class UserForm extends FormValidator
         {
             $this->applyFilter(User::PROPERTY_FIRSTNAME, 'stripslashes');
             $this->applyFilter(User::PROPERTY_FIRSTNAME, 'trim');
-            $this->addRule(User::PROPERTY_LASTNAME, $fieldRequiredMessage, 'required');
         }
 
         // Email
-        $this->addElement(
-            'text', User::PROPERTY_EMAIL, $translator->trans('Email', [], Manager::CONTEXT), ['size' => '50']
+        $this->add_textfield(
+            User::PROPERTY_EMAIL, $translator->trans('Email', [], Manager::CONTEXT),
+            $allowedToChangeEmailAddress && $requiresEmail
         );
 
         if (!$allowedToChangeEmailAddress)
@@ -222,13 +212,7 @@ abstract class UserForm extends FormValidator
         }
         else
         {
-            if ($requiresEmail)
-            {
-                $this->addRule(User::PROPERTY_EMAIL, $fieldRequiredMessage, 'required');
-            }
-
             $this->addRule(User::PROPERTY_EMAIL, $translator->trans('EmailWrong', [], Manager::CONTEXT), 'email');
-
             $this->applyFilter(User::PROPERTY_EMAIL, 'stripslashes');
             $this->applyFilter(User::PROPERTY_EMAIL, 'trim');
         }
@@ -236,8 +220,8 @@ abstract class UserForm extends FormValidator
         $this->addRule(User::PROPERTY_EMAIL, $translator->trans('WrongEmail', [], Manager::CONTEXT), 'email');
 
         // Username
-        $this->addElement(
-            'text', User::PROPERTY_USERNAME, $translator->trans('Username', [], Manager::CONTEXT), ['size' => '50']
+        $this->add_textfield(
+            User::PROPERTY_USERNAME, $translator->trans('Username', [], Manager::CONTEXT), $allowedToChangeUsername
         );
 
         if (!$allowedToChangeUsername)
@@ -248,16 +232,15 @@ abstract class UserForm extends FormValidator
         {
             $this->applyFilter(User::PROPERTY_USERNAME, 'stripslashes');
             $this->applyFilter(User::PROPERTY_USERNAME, 'trim');
-            $this->addRule(User::PROPERTY_USERNAME, $fieldRequiredMessage, 'required');
             $this->addRule(
                 User::PROPERTY_USERNAME, $translator->trans('UsernameWrong', [], Manager::CONTEXT), 'username'
             );
         }
 
         // Official Code
-        $this->addElement(
-            'text', User::PROPERTY_OFFICIAL_CODE, $translator->trans('OfficialCode', [], Manager::CONTEXT),
-            ['size' => '50']
+        $this->add_textfield(
+            User::PROPERTY_OFFICIAL_CODE, $translator->trans('OfficialCode', [], Manager::CONTEXT),
+            $allowedToChangeOfficialCode && $requiresOfficialCode
         );
 
         if (!$allowedToChangeOfficialCode)
@@ -266,21 +249,14 @@ abstract class UserForm extends FormValidator
         }
         else
         {
-            if ($requiresOfficialCode)
-            {
-                $this->addRule(
-                    User::PROPERTY_OFFICIAL_CODE, $fieldRequiredMessage, 'required'
-                );
-            }
-
             $this->applyFilter(User::PROPERTY_OFFICIAL_CODE, 'stripslashes');
             $this->applyFilter(User::PROPERTY_OFFICIAL_CODE, 'trim');
-
-            // Phone Number
-            $this->addElement(
-                'text', User::PROPERTY_PHONE, $translator->trans('PhoneNumber', [], Manager::CONTEXT), ['size' => '50']
-            );
         }
+
+        // Phone Number
+        $this->add_textfield(
+            User::PROPERTY_PHONE, $translator->trans('PhoneNumber', [], Manager::CONTEXT), false
+        );
     }
 
     /**

@@ -4,7 +4,6 @@ namespace Chamilo\Core\User\Form;
 use Chamilo\Core\Tracking\Storage\DataClass\Event;
 use Chamilo\Core\User\Manager;
 use Chamilo\Core\User\Storage\DataClass\User;
-use Chamilo\Libraries\DependencyInjection\Traits\DependencyInjectionContainerTrait;
 use Chamilo\Libraries\Format\Form\FormValidator;
 use Chamilo\Libraries\Hashing\HashingUtilities;
 use Chamilo\Libraries\Mail\Mailer\MailerInterface;
@@ -14,12 +13,11 @@ use Chamilo\Libraries\Utilities\StringUtilities;
 use Exception;
 
 /**
- * @package user.lib.forms
+ * @package Chamilo\Core\User\Form
+ * @author  Hans De Bisschop <hans.de.bisschop@ehb.be>
  */
 class InvitationRegistrationForm extends FormValidator
 {
-    use DependencyInjectionContainerTrait;
-
     // Constants
     public const PASSWORD = 'password';
     public const PASSWORD_CONFIRMATION = 'password_confirmation';
