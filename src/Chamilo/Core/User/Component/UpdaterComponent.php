@@ -1,15 +1,11 @@
 <?php
 namespace Chamilo\Core\User\Component;
 
-use Chamilo\Core\User\Form\UserForm;
+use Chamilo\Core\User\Form\UserUpdateForm;
 use Chamilo\Core\User\Manager;
-use Chamilo\Core\User\Storage\DataClass\User;
-use Chamilo\Core\User\Storage\DataManager;
-use Chamilo\Libraries\Architecture\Application\Application;
 use Chamilo\Libraries\Architecture\Exceptions\NotAllowedException;
 use Chamilo\Libraries\Format\Breadcrumb\BreadcrumbTrail;
 use Chamilo\Libraries\Format\Structure\Breadcrumb;
-use Chamilo\Libraries\Translation\Translation;
 use Chamilo\Libraries\Utilities\StringUtilities;
 
 /**
@@ -19,45 +15,46 @@ class UpdaterComponent extends Manager
 {
 
     /**
-     * Runs this component and displays its output.
+     * @throws \Chamilo\Libraries\Architecture\Exceptions\NotAllowedException
+     * @throws \QuickformException
      */
     public function run()
     {
         $this->checkAuthorization(Manager::CONTEXT, 'ManageUsers');
 
-        if (!$this->get_user()->isPlatformAdmin())
+        if (!$this->getUser()->isPlatformAdmin())
         {
             throw new NotAllowedException();
         }
 
-        $id = $this->getRequest()->query->get(self::PARAM_USER_USER_ID);
-        $this->set_parameter(self::PARAM_USER_USER_ID, $id);
+        $translator = $this->getTranslator();
 
-        if ($id)
+        $selectedUserIdentifier = $this->getRequest()->query->get(self::PARAM_USER_USER_ID);
+
+        if ($selectedUserIdentifier)
         {
-            $user = DataManager::retrieve_by_id(
-                User::class, (int) $id
-            );
+            $selectedUser = $this->getUserService()->findUserByIdentifier($selectedUserIdentifier);
+            $isLockoutRisk = $this->getUser()->getId() == $selectedUser->getId() && $selectedUser->isPlatformAdmin();
 
-            $form = new UserForm(
-                UserForm::TYPE_EDIT, $user, $this->get_user(), $this->get_url([self::PARAM_USER_USER_ID => $id])
+            $form = new UserUpdateForm(
+                $selectedUser, $isLockoutRisk, $this->get_url([self::PARAM_USER_USER_ID => $id])
             );
 
             if ($form->validate())
             {
-                $success = $form->update_user();
-                $this->redirectWithMessage(
-                    Translation::get($success ? 'UserUpdated' : 'UserNotUpdated'), !$success,
-                    [Application::PARAM_ACTION => self::ACTION_BROWSE_USERS]
-                );
+                //                $success = $form->update_user();
+                //                $this->redirectWithMessage(
+                //                    Translation::get($success ? 'UserUpdated' : 'UserNotUpdated'), !$success,
+                //                    [Application::PARAM_ACTION => self::ACTION_BROWSE_USERS]
+                //                );
             }
             else
             {
                 $html = [];
 
-                $html[] = $this->render_header();
-                $html[] = $form->toHtml();
-                $html[] = $this->render_footer();
+                $html[] = $this->renderHeader();
+                $html[] = $form->render();
+                $html[] = $this->renderFooter();
 
                 return implode(PHP_EOL, $html);
             }
@@ -66,8 +63,9 @@ class UpdaterComponent extends Manager
         {
             return $this->display_error_page(
                 htmlentities(
-                    Translation::get(
-                        'NoObjectSelected', ['OBJECT' => Translation::get('User')], StringUtilities::LIBRARIES
+                    $translator->trans(
+                        'NoObjectSelected', ['OBJECT' => $translator->trans('User', [], Manager::CONTEXT)],
+                        StringUtilities::LIBRARIES
                     )
                 )
             );
@@ -79,7 +77,7 @@ class UpdaterComponent extends Manager
         $breadcrumbtrail->add(
             new Breadcrumb(
                 $this->get_url([self::PARAM_ACTION => self::ACTION_BROWSE_USERS]),
-                Translation::get('AdminUserBrowserComponent')
+                $this->getTranslator()->trans('AdminUserBrowserComponent', [], Manager::CONTEXT)
             )
         );
     }

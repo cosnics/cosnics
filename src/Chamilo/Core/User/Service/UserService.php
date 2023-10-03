@@ -215,8 +215,10 @@ class UserService
      */
     public function createUserFromParameters(
         ?string $firstName, ?string $lastName, string $username, ?string $officialCode, string $emailAddress,
-        string $password, ?string $authSource = 'Platform', ?int $status = User::STATUS_STUDENT, int $active = 1,
-        int $approved = 1, int $activationDate = 0, int $expirationDate = 0, bool $sendEmail = false
+        bool $generatePassword, string $password, ?string $authSource = 'Chamilo\Libraries\Authentication\Platform',
+        bool $isPlatformAdmin = false, int $status = User::STATUS_STUDENT, bool $active = true, bool $approved = true,
+        bool $isValidForever = true, int $activationDate = 0, int $expirationDate = 0, int $diskQuota = 209715200,
+        bool $sendEmail = false
     ): User
     {
         $requiredParameters = [
@@ -248,11 +250,21 @@ class UserService
         $user->set_email($emailAddress);
         $user->set_auth_source($authSource);
         $user->set_status($status);
-        $user->set_active($active);
-        $user->set_approved($approved);
+        $user->set_platformadmin((int) $isPlatformAdmin);
+        $user->set_active((int) $active);
+        $user->set_approved((int) $approved);
+        $user->set_disk_quota($diskQuota);
+
+        if ($isValidForever)
+        {
+            $activationDate = 0;
+            $expirationDate = 0;
+        }
+
         $user->set_activation_date($activationDate);
         $user->set_expiration_date($expirationDate);
 
+        $password = $generatePassword ? $this->getPasswordGenerator()->generatePassword() : $password;
         $user->set_password($this->getHashingUtilities()->hashString($password));
 
         if (!$this->createUser($user))
@@ -691,31 +703,31 @@ class UserService
 
         if ($code !== 0)
         {
+            $isValidForever = false;
             $activationDate = time();
             $expirationDate = strtotime('+' . $code . ' days', time());
         }
         else
         {
+            $isValidForever = true;
             $activationDate = 0;
             $expirationDate = 0;
         }
 
         if ($configurationConsulter->getSetting([Manager::CONTEXT, 'allow_registration']) == 2)
         {
-            $approved = 0;
-            $active = 0;
+            $approved = false;
+            $active = false;
         }
         else
         {
-            $approved = 1;
-            $active = 1;
+            $approved = true;
+            $active = true;
         }
 
-        $password = $generatePassword ? $this->getPasswordGenerator()->generatePassword() : $password;
-
         $user = $this->createUserFromParameters(
-            $firstName, $lastName, $username, $officialCode, $emailAddress, $password, $authSource, $status, $active,
-            $approved, $activationDate, $expirationDate, $sendEmail
+            $firstName, $lastName, $username, $officialCode, $emailAddress, $generatePassword, $password, $authSource,
+            false, $status, $active, $approved, $isValidForever, $activationDate, $expirationDate, 209715200, $sendEmail
         );
 
         $this->getUserEventNotifier()->afterRegistration($user);

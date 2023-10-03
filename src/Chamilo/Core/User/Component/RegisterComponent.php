@@ -11,7 +11,6 @@ use Chamilo\Libraries\Architecture\Exceptions\NotAllowedException;
 use Chamilo\Libraries\Architecture\Interfaces\NoAuthenticationSupportInterface;
 use Chamilo\Libraries\Format\NotificationMessage\NotificationMessage;
 use Exception;
-use Hackzilla\PasswordGenerator\Generator\PasswordGeneratorInterface;
 use Symfony\Component\HttpFoundation\File\UploadedFile;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 
@@ -56,7 +55,7 @@ class RegisterComponent extends Manager implements NoAuthenticationSupportInterf
                     $formValues[User::PROPERTY_FIRSTNAME], $formValues[User::PROPERTY_LASTNAME],
                     $formValues[User::PROPERTY_USERNAME], $formValues[User::PROPERTY_OFFICIAL_CODE],
                     $formValues[User::PROPERTY_EMAIL], $formValues['pw']['pass'] == '1',
-                    $formValues['pw'][User::PROPERTY_PASSWORD], 'Platform', $formValues[User::PROPERTY_STATUS],
+                    $formValues['pw'][User::PROPERTY_PASSWORD], 'Chamilo\Libraries\Authentication\Platform', $formValues[User::PROPERTY_STATUS],
                     (bool) $formValues['send_mail']
                 );
 
@@ -109,11 +108,6 @@ class RegisterComponent extends Manager implements NoAuthenticationSupportInterf
         $html[] = $this->renderFooter();
 
         return implode(PHP_EOL, $html);
-    }
-
-    public function getPasswordGenerator(): PasswordGeneratorInterface
-    {
-        return $this->getService(PasswordGeneratorInterface::class);
     }
 
     public function getUserPictureProvider(): UserPictureProviderInterface

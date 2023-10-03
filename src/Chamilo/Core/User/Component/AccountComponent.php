@@ -2,6 +2,7 @@
 namespace Chamilo\Core\User\Component;
 
 use Chamilo\Core\User\Form\AccountForm;
+use Chamilo\Core\User\Form\UserForm;
 use Chamilo\Core\User\Manager;
 use Chamilo\Core\User\Picture\UserPictureProviderInterface;
 use Chamilo\Core\User\Picture\UserPictureUpdateProviderInterface;
@@ -39,8 +40,8 @@ class AccountComponent extends ProfileComponent
             $success = $this->getUserService()->updateAccountFromParameters(
                 $this->getUser(), $formValues[User::PROPERTY_FIRSTNAME], $formValues[User::PROPERTY_LASTNAME],
                 $formValues[User::PROPERTY_USERNAME], $formValues[User::PROPERTY_OFFICIAL_CODE],
-                $formValues[User::PROPERTY_EMAIL], $formValues[User::PROPERTY_PASSWORD],
-                $formValues[AccountForm::NEW_PASSWORD]
+                $formValues[User::PROPERTY_EMAIL], $formValues[UserForm::PROPERTY_CURRENT_PASSWORD],
+                $formValues[User::PROPERTY_PASSWORD]
             );
 
             $userPictureProvider = $this->getUserPictureProvider();

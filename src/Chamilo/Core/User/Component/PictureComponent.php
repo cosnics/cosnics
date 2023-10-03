@@ -95,6 +95,9 @@ class PictureComponent extends ProfileComponent
         return $this->getPictureForm()->render();
     }
 
+    /**
+     * @throws \QuickformException
+     */
     public function getPictureForm(): PictureForm
     {
         if (!isset($this->pictureForm))

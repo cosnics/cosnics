@@ -2,14 +2,21 @@
 namespace Chamilo\Core\User\Component;
 
 use Chamilo\Core\User\Form\UserCreationForm;
+use Chamilo\Core\User\Form\UserForm;
 use Chamilo\Core\User\Manager;
-use Chamilo\Libraries\Architecture\Application\Application;
+use Chamilo\Core\User\Picture\UserPictureProviderInterface;
+use Chamilo\Core\User\Picture\UserPictureUpdateProviderInterface;
+use Chamilo\Core\User\Storage\DataClass\User;
 use Chamilo\Libraries\Architecture\Exceptions\NotAllowedException;
-use Chamilo\Libraries\Format\Breadcrumb\BreadcrumbTrail;
-use Chamilo\Libraries\Format\Structure\Breadcrumb;
+use Chamilo\Libraries\Format\Form\FormValidator;
+use Chamilo\Libraries\Format\NotificationMessage\NotificationMessage;
+use Exception;
+use Symfony\Component\HttpFoundation\File\UploadedFile;
+use Symfony\Component\HttpFoundation\RedirectResponse;
 
 /**
- * @package user.lib.user_manager.component
+ * @package Chamilo\Core\User\Component
+ * @author  Hans De Bisschop <hans.de.bisschop@ehb.be>
  */
 class CreatorComponent extends Manager
 {
@@ -30,53 +37,75 @@ class CreatorComponent extends Manager
             throw new NotAllowedException();
         }
 
-        $form = new UserCreationForm($currentUser, $this->get_url());
+        $form = new UserCreationForm($this->get_url());
 
         if ($form->validate())
         {
-            //$success = $form->create_user();
-
-            if ($success == 1)
+            try
             {
-                $this->redirectWithMessage(
-                    $translator->trans('UserCreated', [], Manager::CONTEXT), false,
-                    [Application::PARAM_ACTION => self::ACTION_BROWSE_USERS]
+                $formValues = $form->exportValues();
+
+                $user = $this->getUserService()->createUserFromParameters(
+                    $formValues[User::PROPERTY_FIRSTNAME], $formValues[User::PROPERTY_LASTNAME],
+                    $formValues[User::PROPERTY_USERNAME], $formValues[User::PROPERTY_OFFICIAL_CODE],
+                    $formValues[User::PROPERTY_EMAIL], (bool) $formValues[UserForm::PROPERTY_GENERATE_PASSWORD],
+                    $formValues[User::PROPERTY_PASSWORD], 'Chamilo\Libraries\Authentication\Platform',
+                    (bool) $formValues[User::PROPERTY_PLATFORMADMIN], $formValues[User::PROPERTY_STATUS],
+                    (bool) $formValues[User::PROPERTY_ACTIVE], true,
+                    (bool) $formValues[FormValidator::PROPERTY_TIME_PERIOD_FOREVER],
+                    $formValues[User::PROPERTY_ACTIVATION_DATE], $formValues[User::PROPERTY_EXPIRATION_DATE],
+                    $formValues[User::PROPERTY_DISK_QUOTA], (bool) $formValues[UserForm::PROPERTY_SEND_MAIL]
+                );
+
+                $userPictureProvider = $this->getUserPictureProvider();
+
+                if ($userPictureProvider instanceof UserPictureUpdateProviderInterface)
+                {
+                    $pictureInformation = $this->getRequest()->files->get(User::PROPERTY_PICTURE_URI);
+
+                    if ($pictureInformation instanceof UploadedFile && $pictureInformation->isValid())
+                    {
+                        if (!$userPictureProvider->updateUserPictureFromParameters(
+                            $user, $this->getUser(), $pictureInformation
+                        ))
+                        {
+                            $this->getNotificationMessageManager()->addMessage(
+                                new NotificationMessage(
+                                    $translator->trans('UserPictureNotUpdated', [], Manager::CONTEXT),
+                                    NotificationMessage::TYPE_WARNING
+                                )
+                            );
+                        }
+                    }
+                }
+
+                $this->getNotificationMessageManager()->addMessage(
+                    new NotificationMessage(
+                        $translator->trans('UserCreated', [], Manager::CONTEXT), NotificationMessage::TYPE_SUCCESS
+                    )
+                );
+
+                return new RedirectResponse($this->getUrlGenerator()->fromParameters());
+            }
+            catch (Exception $exception)
+            {
+                $this->getNotificationMessageManager()->addMessage(
+                    new NotificationMessage($exception->getMessage(), NotificationMessage::TYPE_DANGER)
                 );
             }
-            else
-            {
-                $this->getRequest()->request->set(
-                    'error_message', $translator->trans('UsernameNotAvailable', [], Manager::CONTEXT)
-                );
-
-                $html = [];
-
-                $html[] = $this->renderHeader();
-                $html[] = $form->render();
-                $html[] = $this->renderFooter();
-
-                return implode(PHP_EOL, $html);
-            }
         }
-        else
-        {
-            $html = [];
 
-            $html[] = $this->renderHeader();
-            $html[] = $form->render();
-            $html[] = $this->renderFooter();
+        $html = [];
 
-            return implode(PHP_EOL, $html);
-        }
+        $html[] = $this->renderHeader();
+        $html[] = $form->render();
+        $html[] = $this->renderFooter();
+
+        return implode(PHP_EOL, $html);
     }
 
-    public function addAdditionalBreadcrumbs(BreadcrumbTrail $breadcrumbtrail): void
+    public function getUserPictureProvider(): UserPictureProviderInterface
     {
-        $breadcrumbtrail->add(
-            new Breadcrumb(
-                $this->get_url([self::PARAM_ACTION => self::ACTION_BROWSE_USERS]),
-                $this->getTranslator()->trans('AdminUserBrowserComponent', [], Manager::CONTEXT)
-            )
-        );
+        return $this->getService(UserPictureProviderInterface::class);
     }
 }
