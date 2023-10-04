@@ -99,6 +99,11 @@ class DoublesViewerComponent extends Manager implements TableSupport
             null
         ));
 
+        $conditions[] = new NotCondition(new EqualityCondition(
+            new PropertyConditionVariable(ContentObject::class_name(), ContentObject::PROPERTY_CONTENT_HASH),
+            new StaticConditionVariable('')
+        ));
+
         $conditions[] = new NotCondition(
             new EqualityCondition(
                 new PropertyConditionVariable(ContentObject::class_name(), ContentObject::PROPERTY_STATE),
