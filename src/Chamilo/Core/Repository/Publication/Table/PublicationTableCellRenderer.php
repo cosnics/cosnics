@@ -71,23 +71,27 @@ class PublicationTableCellRenderer extends DataClassTableCellRenderer implements
             )
         );
 
-        if ($publication_attributes->get_content_object() instanceof ContentObject && !$publication_attributes->get_content_object()->is_current())
+        try
         {
-            $toolbar->add_item(
-                new ToolbarItem(
-                    Translation::get('Update', null, Utilities::COMMON_LIBRARIES),
-                    Theme::getInstance()->getCommonImagePath('Action/Revert'),
-                    $this->get_component()->get_url(
-                        array(
-                            Manager::PARAM_ACTION => Manager::ACTION_UPDATE,
-                            Manager::PARAM_PUBLICATION_APPLICATION => $publication_attributes->get_application(),
-                            Manager::PARAM_PUBLICATION_ID => $publication_attributes->get_id()
-                        )
-                    ),
-                    ToolbarItem::DISPLAY_ICON
-                )
-            );
+            if ($publication_attributes->get_content_object() instanceof ContentObject && !$publication_attributes->get_content_object()->is_current())
+            {
+                $toolbar->add_item(
+                    new ToolbarItem(
+                        Translation::get('Update', null, Utilities::COMMON_LIBRARIES),
+                        Theme::getInstance()->getCommonImagePath('Action/Revert'),
+                        $this->get_component()->get_url(
+                            array(
+                                Manager::PARAM_ACTION => Manager::ACTION_UPDATE,
+                                Manager::PARAM_PUBLICATION_APPLICATION => $publication_attributes->get_application(),
+                                Manager::PARAM_PUBLICATION_ID => $publication_attributes->get_id()
+                            )
+                        ),
+                        ToolbarItem::DISPLAY_ICON
+                    )
+                );
+            }
         }
+        catch(\Exception $ex) {}
 
         return $toolbar->as_html();
     }
