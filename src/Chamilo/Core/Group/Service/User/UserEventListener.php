@@ -29,12 +29,22 @@ class UserEventListener implements UserEventListenerInterface
         return true;
     }
 
+    public function afterEnterPage(User $user, string $pageUri): bool
+    {
+        return true;
+    }
+
     public function afterExport(User $actionUser, User $exportedUser): bool
     {
         return true;
     }
 
     public function afterImport(User $actionUser, User $importedUser): bool
+    {
+        return true;
+    }
+
+    public function afterLogin(User $user, ?string $clientIp): bool
     {
         return true;
     }
@@ -65,6 +75,16 @@ class UserEventListener implements UserEventListenerInterface
     public function beforeDelete(User $user): bool
     {
         return $this->getGroupMembershipService()->unsubscribeUserFromAllGroups($user);
+    }
+
+    public function beforeLeavePage(User $user, string $userVisitIdentifier): bool
+    {
+        return true;
+    }
+
+    public function beforeLogout(User $user, ?string $clientIp): bool
+    {
+        return true;
     }
 
     public function getGroupMembershipService(): GroupMembershipService

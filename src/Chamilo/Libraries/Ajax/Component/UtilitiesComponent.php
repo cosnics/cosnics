@@ -2,6 +2,7 @@
 namespace Chamilo\Libraries\Ajax\Component;
 
 use Chamilo\Libraries\Ajax\Manager;
+use Chamilo\Libraries\Architecture\Interfaces\NoVisitTraceComponentInterface;
 use Chamilo\Libraries\Architecture\JsonAjaxResult;
 use Exception;
 
@@ -11,7 +12,7 @@ use Exception;
  * @author  Magali Gillard <magali.gillard@ehb.be>
  * @author  Eduard Vossen <eduard.vossen@ehb.be>
  */
-class UtilitiesComponent extends Manager
+class UtilitiesComponent extends Manager implements NoVisitTraceComponentInterface
 {
     public const PARAM_ACTION = 'action';
     public const PARAM_CONTEXT = 'context';

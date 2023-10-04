@@ -2,8 +2,8 @@
 namespace Chamilo\Libraries\Authentication;
 
 use Chamilo\Configuration\Service\Consulter\ConfigurationConsulter;
-use Chamilo\Core\Tracking\Storage\DataClass\Event;
 use Chamilo\Core\User\Manager;
+use Chamilo\Core\User\Service\UserEventNotifier;
 use Chamilo\Core\User\Storage\DataClass\User;
 use Chamilo\Libraries\Architecture\Application\Application;
 use Chamilo\Libraries\Architecture\Application\Routing\UrlGenerator;
@@ -38,9 +38,11 @@ class AuthenticationValidator
 
     protected UrlGenerator $urlGenerator;
 
+    protected UserEventNotifier $userEventNotifier;
+
     public function __construct(
         ChamiloRequest $request, ConfigurationConsulter $configurationConsulter, Translator $translator,
-        SessionInterface $session, UrlGenerator $urlGenerator
+        SessionInterface $session, UrlGenerator $urlGenerator, UserEventNotifier $userEventNotifier
     )
     {
         $this->request = $request;
@@ -48,6 +50,7 @@ class AuthenticationValidator
         $this->translator = $translator;
         $this->session = $session;
         $this->urlGenerator = $urlGenerator;
+        $this->userEventNotifier = $userEventNotifier;
 
         $this->authentications = [];
     }
@@ -71,6 +74,11 @@ class AuthenticationValidator
         return null;
     }
 
+    public function getUserEventNotifier(): UserEventNotifier
+    {
+        return $this->userEventNotifier;
+    }
+
     public function isAuthenticated(): bool
     {
         $user_id = $this->session->get(Manager::SESSION_USER_ID);
@@ -80,7 +88,8 @@ class AuthenticationValidator
 
     public function logout(User $user): void
     {
-        Event::trigger('Logout', Manager::CONTEXT, ['server' => $_SERVER, 'user' => $user]);
+        $this->getUserEventNotifier()->beforeLogout($user, $this->request->getClientIp());
+
         $this->session->invalidate();
 
         foreach ($this->authentications as $authentication)
@@ -122,11 +131,6 @@ class AuthenticationValidator
         $this->session->set(Manager::SESSION_USER_ID, $user->getId());
     }
 
-    protected function trackLogin(User $user): void
-    {
-        Event::trigger('Login', Manager::CONTEXT, ['server' => $_SERVER, 'user' => $user]);
-    }
-
     /**
      * @throws \Chamilo\Libraries\Authentication\AuthenticationException
      */
@@ -156,7 +160,7 @@ class AuthenticationValidator
 
         $this->validateUser($user);
         $this->setAuthenticatedUser($user);
-        $this->trackLogin($user);
+        $this->getUserEventNotifier()->afterLogin($user, $this->request->getClientIp());
         $this->redirectAfterLogin();
 
         return true;

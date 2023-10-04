@@ -1,26 +1,34 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<object name="tracking_user_visit">
+<object name="user_activity">
     <properties>
         <property name="id"
                   type="integer"
                   unsigned="1"
                   notnull="1"
                   autoincrement="true"/>
-        <property name="user_id"
+        <property name="source_user_id"
                   type="integer"
                   unsigned="1"
                   notnull="1"/>
-        <property name="enter_date"
+        <property name="target_user_id"
                   type="integer"
                   unsigned="1"
                   notnull="1"/>
-        <property name="leave_date"
+        <property name="action"
                   type="integer"
                   unsigned="1"
                   notnull="1"/>
-        <property name="location"
-                  type="text"
-                  length="65535"
+        <property name="date"
+                  type="integer"
+                  unsigned="1"
                   notnull="1"/>
     </properties>
+    <indexes>
+        <index name="idx_source_user_id">
+            <property name="source_user_id"/>
+        </index>
+        <index name="idx_target_user_id">
+            <property name="target_user_id"/>
+        </index>
+    </indexes>
 </object>

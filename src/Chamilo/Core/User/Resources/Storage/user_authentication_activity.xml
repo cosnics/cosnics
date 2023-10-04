@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<object name="tracking_user_login_logout">
+<object name="user_authentication_activity">
     <properties>
         <property name="id"
                   type="integer"
@@ -18,11 +18,10 @@
                   type="string"
                   length="50"
                   notnull="1"/>
-        <property name="type"
-                  type="string"
-                  length="50"
-                  notnull="1"
-                  default="login"/>
+        <property name="action"
+                  type="integer"
+                  unsigned="1"
+                  notnull="1"/>
     </properties>
     <indexes>
         <index name="idx_user_id">

@@ -1,10 +1,14 @@
 <?php
 namespace Chamilo\Core\User\Service\Tracking;
 
+use Chamilo\Core\Admin\Service\WhoIsOnlineService;
 use Chamilo\Core\User\Service\UserEventListenerInterface;
 use Chamilo\Core\User\Storage\DataClass\User;
 use Chamilo\Core\User\Storage\DataClass\UserActivity;
+use Chamilo\Core\User\Storage\DataClass\UserAuthenticationActivity;
+use Chamilo\Core\User\Storage\DataClass\UserVisit;
 use Chamilo\Core\User\Storage\Repository\UserTrackingRepository;
+use Chamilo\Libraries\Format\Structure\PageConfiguration;
 
 /**
  * @package Chamilo\Core\User\Service\Tracking
@@ -14,12 +18,21 @@ class UserActivityService implements UserEventListenerInterface
 {
     protected ?User $currentUser;
 
+    protected PageConfiguration $pageConfiguration;
+
     protected UserTrackingRepository $userTrackingRepository;
 
-    public function __construct(UserTrackingRepository $userTrackingRepository, ?User $currentUser)
+    protected WhoIsOnlineService $whoIsOnlineService;
+
+    public function __construct(
+        UserTrackingRepository $userTrackingRepository, ?User $currentUser, PageConfiguration $pageConfiguration,
+        WhoIsOnlineService $whoIsOnlineService
+    )
     {
         $this->userTrackingRepository = $userTrackingRepository;
         $this->currentUser = $currentUser;
+        $this->pageConfiguration = $pageConfiguration;
+        $this->whoIsOnlineService = $whoIsOnlineService;
     }
 
     public function afterCreate(User $user): bool
@@ -42,6 +55,30 @@ class UserActivityService implements UserEventListenerInterface
         );
     }
 
+    public function afterEnterPage(User $user, string $pageUri): bool
+    {
+        if (!$this->getWhoIsOnlineService()->updateWhoIsOnlineForUserIdentifierWithCurrentTime(
+            $user->getId()
+        ))
+        {
+            return false;
+        }
+
+        $userVisit = new UserVisit();
+        $userVisit->setUserIdentifier($user->getId());
+        $userVisit->setEnterDate(time());
+        $userVisit->setLocation($pageUri);
+
+        if (!$this->getUserTrackingRepository()->createUserVisit($userVisit))
+        {
+            return false;
+        }
+
+        $this->getPageConfiguration()->addHtmlHeader('<script>var tracker=' . $userVisit->getId() . ';</script>');
+
+        return true;
+    }
+
     public function afterExport(User $actionUser, User $exportedUser): bool
     {
         return $this->getUserTrackingRepository()->createUserActivity(
@@ -57,6 +94,13 @@ class UserActivityService implements UserEventListenerInterface
             $this->initializeUserActivityFromParameters(
                 UserActivity::ACTIVITY_IMPORTED, $importedUser->getId()
             )
+        );
+    }
+
+    public function afterLogin(User $user, ?string $clientIp): bool
+    {
+        return $this->createAuthenticationActivityFormParameters(
+            UserAuthenticationActivity::ACTIVITY_LOGIN, $user, $clientIp
         );
     }
 
@@ -104,14 +148,57 @@ class UserActivityService implements UserEventListenerInterface
         return true;
     }
 
+    public function beforeLeavePage(User $user, string $userVisitIdentifier): bool
+    {
+        $userVisit = $this->getUserTrackingRepository()->findUserVisitByIdentifier($userVisitIdentifier);
+
+        if ($userVisit instanceof UserVisit)
+        {
+            $userVisit->setLeaveDate(time());
+
+            return $this->getUserTrackingRepository()->updateUserVisit($userVisit);
+        }
+
+        return true;
+    }
+
+    public function beforeLogout(User $user, ?string $clientIp): bool
+    {
+        return $this->createAuthenticationActivityFormParameters(
+            UserAuthenticationActivity::ACTIVITY_LOGOUT, $user, $clientIp
+        );
+    }
+
+    protected function createAuthenticationActivityFormParameters(int $action, User $user, ?string $clientIp): bool
+    {
+        $userAuthenticationActivity = new UserAuthenticationActivity();
+
+        $userAuthenticationActivity->setUserIdentifier($user->getId());
+        $userAuthenticationActivity->setDate(time());
+        $userAuthenticationActivity->setIp($clientIp);
+        $userAuthenticationActivity->setAction($action);
+
+        return $this->getUserTrackingRepository()->createUserAuthenticationActivity($userAuthenticationActivity);
+    }
+
     public function getCurrentUser(): ?User
     {
         return $this->currentUser;
     }
 
+    public function getPageConfiguration(): PageConfiguration
+    {
+        return $this->pageConfiguration;
+    }
+
     public function getUserTrackingRepository(): UserTrackingRepository
     {
         return $this->userTrackingRepository;
+    }
+
+    public function getWhoIsOnlineService(): WhoIsOnlineService
+    {
+        return $this->whoIsOnlineService;
     }
 
     protected function initializeUserActivityFromParameters(

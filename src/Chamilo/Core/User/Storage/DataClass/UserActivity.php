@@ -20,9 +20,7 @@ class UserActivity extends DataClass
 
     public const PROPERTY_ACTION = 'action';
     public const PROPERTY_DATE = 'date';
-
     public const PROPERTY_SOURCE_USER_ID = 'source_user_id';
-
     public const PROPERTY_TARGET_USER_ID = 'target_user_id';
 
     public function getAction(): int

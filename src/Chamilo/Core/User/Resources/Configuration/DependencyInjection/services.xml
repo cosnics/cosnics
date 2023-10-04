@@ -85,5 +85,10 @@
         </service>
 
         <service id="Chamilo\Core\User\Service\UserEventNotifier"/>
+
+        <service id="Chamilo\Core\User\Service\Tracking\UserActivityService">
+            <tag name="Chamilo\Core\User\Service\UserEventListenerInterface"/>
+        </service>
+        <service id="Chamilo\Core\User\Storage\Repository\UserTrackingRepository"/>
     </services>
 </container>

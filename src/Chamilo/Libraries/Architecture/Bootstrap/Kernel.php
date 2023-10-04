@@ -4,9 +4,7 @@ namespace Chamilo\Libraries\Architecture\Bootstrap;
 use Chamilo\Configuration\Service\Consulter\ConfigurationConsulter;
 use Chamilo\Core\Admin\Service\WhoIsOnlineService;
 use Chamilo\Core\Home\Manager as HomeManager;
-use Chamilo\Core\Tracking\Storage\DataClass\Event;
-use Chamilo\Core\User\Integration\Chamilo\Core\Tracking\Storage\DataClass\Visit;
-use Chamilo\Core\User\Manager as UserManager;
+use Chamilo\Core\User\Service\UserEventNotifier;
 use Chamilo\Core\User\Storage\DataClass\User;
 use Chamilo\Libraries\Architecture\Application\Application;
 use Chamilo\Libraries\Architecture\Application\ApplicationConfiguration;
@@ -16,6 +14,7 @@ use Chamilo\Libraries\Architecture\Exceptions\NotAuthenticatedException;
 use Chamilo\Libraries\Architecture\Exceptions\PlatformNotAvailableException;
 use Chamilo\Libraries\Architecture\Exceptions\UserException;
 use Chamilo\Libraries\Architecture\Factory\ApplicationFactory;
+use Chamilo\Libraries\Architecture\Interfaces\NoVisitTraceComponentInterface;
 use Chamilo\Libraries\Authentication\AuthenticationValidator;
 use Chamilo\Libraries\Format\Response\ExceptionResponse;
 use Chamilo\Libraries\Format\Response\NotAuthenticatedResponse;
@@ -42,6 +41,8 @@ class Kernel
 
     protected SessionInterface $session;
 
+    protected UserEventNotifier $userEventNotifier;
+
     protected WhoIsOnlineService $whoIsOnlineService;
 
     private ?Application $application = null;
@@ -66,7 +67,7 @@ class Kernel
         ChamiloRequest $request, ConfigurationConsulter $configurationConsulter, ApplicationFactory $applicationFactory,
         SessionInterface $session, ExceptionLoggerInterface $exceptionLogger, WhoIsOnlineService $whoIsOnlineService,
         AuthenticationValidator $authenticationValidator, UrlGenerator $urlGenerator,
-        PageConfiguration $pageConfiguration, User $user = null
+        PageConfiguration $pageConfiguration, UserEventNotifier $userEventNotifier, User $user = null
     )
     {
         $this->request = $request;
@@ -79,6 +80,7 @@ class Kernel
         $this->user = $user;
         $this->authenticationValidator = $authenticationValidator;
         $this->whoIsOnlineService = $whoIsOnlineService;
+        $this->userEventNotifier = $userEventNotifier;
     }
 
     /**
@@ -261,6 +263,11 @@ class Kernel
         return $this->user;
     }
 
+    public function getUserEventNotifier(): UserEventNotifier
+    {
+        return $this->userEventNotifier;
+    }
+
     public function getWhoIsOnlineService(): WhoIsOnlineService
     {
         return $this->whoIsOnlineService;
@@ -316,12 +323,11 @@ class Kernel
     /**
      * @throws \Exception
      */
-    public function launch()
+    public function launch(): void
     {
         try
         {
             $this->configureTimezone()->configureContext()->handleOAuth2();
-
             $response = $this->checkAuthentication()->checkPlatformAvailability()->buildApplication()->traceVisit()
                 ->runApplication();
         }
@@ -346,7 +352,7 @@ class Kernel
     /**
      * @throws \Exception
      */
-    protected function runApplication()
+    protected function runApplication(): Response
     {
         $application = $this->getApplication();
 
@@ -365,17 +371,17 @@ class Kernel
         return $response;
     }
 
-    protected function sendResponse(Response $response)
+    protected function sendResponse(Response $response): void
     {
         $response->send();
     }
 
-    public function setApplication(Application $application)
+    public function setApplication(Application $application): void
     {
         $this->application = $application;
     }
 
-    public function setContext(string $context)
+    public function setContext(string $context): void
     {
         $this->context = $context;
     }
@@ -388,28 +394,12 @@ class Kernel
     {
         $applicationClassName = $this->getApplicationFactory()->getClassName($this->getContext());
         $applicationRequiresTracing = !is_subclass_of(
-            $applicationClassName, 'Chamilo\Libraries\Architecture\Interfaces\NoVisitTraceComponentInterface'
+            $applicationClassName, NoVisitTraceComponentInterface::class
         );
 
-        if ($applicationRequiresTracing)
+        if ($applicationRequiresTracing && $this->getUser() instanceof User)
         {
-            if ($this->getUser() instanceof User)
-            {
-                $this->getWhoIsOnlineService()->updateWhoIsOnlineForUserIdentifierWithCurrentTime(
-                    $this->getUser()->getId()
-                );
-
-                if ($this->getRequest()->query->get(Application::PARAM_CONTEXT) != 'Chamilo\Core\User\Ajax' &&
-                    $this->getRequest()->query->get(Application::PARAM_ACTION) != 'LeaveComponent')
-                {
-                    Event::trigger(
-                        'Enter', UserManager::CONTEXT, [
-                            Visit::PROPERTY_LOCATION => $_SERVER['REQUEST_URI'],
-                            Visit::PROPERTY_USER_ID => $this->getUser()->getId()
-                        ]
-                    );
-                }
-            }
+            $this->getUserEventNotifier()->afterEnterPage($this->getUser(), $this->getRequest()->getRequestUri());
         }
 
         return $this;

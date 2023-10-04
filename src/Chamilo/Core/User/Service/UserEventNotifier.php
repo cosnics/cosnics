@@ -64,6 +64,16 @@ class UserEventNotifier implements UserEventListenerInterface
         return true;
     }
 
+    public function afterLogin(User $user, ?string $clientIp): bool
+    {
+        foreach ($this->userEventListeners as $userEventListener)
+        {
+            $userEventListener->afterLogin($user, $clientIp);
+        }
+
+        return true;
+    }
+
     public function afterPasswordReset(User $user): bool
     {
         foreach ($this->userEventListeners as $userEventListener)
@@ -109,6 +119,36 @@ class UserEventNotifier implements UserEventListenerInterface
         foreach ($this->userEventListeners as $userEventListener)
         {
             $userEventListener->beforeDelete($user);
+        }
+
+        return true;
+    }
+
+    public function beforeLogout(User $user, ?string $clientIp): bool
+    {
+        foreach ($this->userEventListeners as $userEventListener)
+        {
+            $userEventListener->beforeLogout($user, $clientIp);
+        }
+
+        return true;
+    }
+
+    public function afterEnterPage(User $user, string $pageUri): bool
+    {
+        foreach ($this->userEventListeners as $userEventListener)
+        {
+            $userEventListener->afterEnterPage($user, $pageUri);
+        }
+
+        return true;
+    }
+
+    public function beforeLeavePage(User $user, string $userVisitIdentifier): bool
+    {
+        foreach ($this->userEventListeners as $userEventListener)
+        {
+            $userEventListener->beforeLeavePage($user, $userVisitIdentifier);
         }
 
         return true;

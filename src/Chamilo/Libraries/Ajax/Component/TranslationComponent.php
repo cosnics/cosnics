@@ -2,18 +2,17 @@
 namespace Chamilo\Libraries\Ajax\Component;
 
 use Chamilo\Libraries\Ajax\Manager;
+use Chamilo\Libraries\Architecture\Interfaces\NoVisitTraceComponentInterface;
 use Chamilo\Libraries\Utilities\StringUtilities;
 
 /**
- *
  * @package Chamilo\Libraries\Ajax\Component
- * @author Hans De Bisschop <hans.de.bisschop@ehb.be>
+ * @author  Hans De Bisschop <hans.de.bisschop@ehb.be>
  */
-class TranslationComponent extends Manager
+class TranslationComponent extends Manager implements NoVisitTraceComponentInterface
 {
 
     /**
-     *
      * @see \Chamilo\Libraries\Architecture\Application\Application::run()
      */
     public function run()

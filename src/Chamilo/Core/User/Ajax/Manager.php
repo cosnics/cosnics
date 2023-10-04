@@ -11,6 +11,7 @@ use Chamilo\Libraries\Architecture\AjaxManager;
  */
 abstract class Manager extends AjaxManager
 {
+    public const ACTION_LEAVE = 'Leave';
     public const ACTION_USER_PICTURE = 'UserPicture';
 
     public const CONTEXT = __NAMESPACE__;
