@@ -3,11 +3,15 @@ namespace Chamilo\Core\Repository\ContentObject\RssFeed\Common\Rendition;
 
 use Chamilo\Core\Repository\ContentObject\RssFeed\Common\RenditionImplementation;
 use Chamilo\Core\Repository\ContentObject\RssFeed\Storage\DataClass\RssFeed;
+use Chamilo\Libraries\Architecture\Application\Application;
+use Chamilo\Libraries\Architecture\Traits\DependencyInjectionContainerTrait;
 use Chamilo\Libraries\File\Path;
+use Chamilo\Libraries\File\Redirect;
 use Chamilo\Libraries\Format\Utilities\ResourceManager;
 
 class HtmlRenditionImplementation extends RenditionImplementation
 {
+    use DependencyInjectionContainerTrait;
 
     /**
      * Renders RSS Feeds
@@ -16,44 +20,21 @@ class HtmlRenditionImplementation extends RenditionImplementation
      */
     protected function renderRssFeeds()
     {
+        $this->initializeContainer();
+        $twig = $this->getTwig();
+
         $object = $this->get_content_object();
-        $html = array();
-        
-        $html[] = ResourceManager::getInstance()->get_resource_html(
-            Path::getInstance()->namespaceToFullPath('Chamilo\Core\Repository\ContentObject\RssFeed', true) .
-                 'Resources/Javascript/RssFeedRenderer/rssFeedRenderer.js');
-        
-        $html[] = '<ul class="list-group" ng-app="rssFeedRendererApp">';
-        
-        $html[] = '<rss-feed-renderer rss-feed-url="' . $object->get_url() . '" number-of-entries="' .
-             $object->get_number_of_entries() . '">';
-        
-        $html[] = '<li class="list-group-item" ng-repeat="entry in main.feedEntries">';
-        
-        $html[] = '<div class="list-group-item-heading"><h3 class="panel-title">{{ entry.title }}</h3></div>';
-        
-        $html[] = '<span ng-bind-html="entry.content"></span>';
-        $html[] = '<div class="link_url" style="margin-top: 1em;"><a href="{{ entry.link }}">{{ entry.link }}</a></div>';
-        $html[] = '</li>';
-        
-        $html[] = '</rss-feed-renderer>';
-        
-        $html[] = '</ul>';
-        
-        return implode(PHP_EOL, $html);
-    }
 
-    /**
-     * @param $url
-     *
-     * @return string
-     */
-    protected function getSanitizedUrl($url)
-    {
-        if(strpos($url, 'http') !== 0) {
-            $url = 'http://' . $url;
-        }
+        $ajaxUrlBuilder = new Redirect([
+            Application::PARAM_CONTEXT => 'Chamilo\\Libraries\\Ajax',
+            Application::PARAM_ACTION => 'FetchRssEntries'
+        ]);
 
-        return htmlentities($url);
+        $ajaxUrl = $ajaxUrlBuilder->getUrl();
+
+        return $twig->render(
+            'Chamilo\Core\Repository\ContentObject\RssFeed:RssFeedRenderer.html.twig',
+            ['URL' => $object->get_url(), 'NUMBER_OF_ENTRIES' => $object->get_number_of_entries(), 'AJAX_URL' => $ajaxUrl]
+        );
     }
 }

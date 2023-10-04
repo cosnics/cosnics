@@ -1,0 +1,43 @@
+<div id="rssFeedApp">
+
+<ul class="list-group">
+
+    <li class="list-group-item" v-for="entry in entries">
+        <div class="list-group-item-heading"><h3 class="panel-title">{{ '{{ entry.title }}' }}</h3></div>
+
+        <span v-html="entry.content"></span>
+        <div class="link_url" style="margin-top: 1em;"><a href="{{ '{{ entry.link }}' }}">{{ '{{ entry.link }}' }}</a></div>
+    </li>
+</ul>
+
+</div>
+
+<script type="text/javascript">
+    var rssFeedUrl = '{{ URL|raw }}';
+    var ajaxUrl = '{{ AJAX_URL|raw }}';
+    var numberOfEntries = '{{ NUMBER_OF_ENTRIES }}';
+
+    var app = new Vue({
+        el: '#rssFeedApp',
+        data: {
+            entries: []
+        },
+        mounted: function() {
+            var controller = this;
+            var formData = new FormData();
+
+            formData.append('rss_feed_url', rssFeedUrl);
+            formData.append('number_of_entries', numberOfEntries);
+
+            this.$http.post(ajaxUrl, formData).then(function (response) {
+                controller.entries = response.body.properties;
+            }, function (response) {
+            });
+        }
+    })
+</script>
+
+
+
+
+        
