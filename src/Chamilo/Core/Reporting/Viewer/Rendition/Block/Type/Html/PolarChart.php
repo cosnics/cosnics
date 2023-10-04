@@ -3,8 +3,8 @@ namespace Chamilo\Core\Reporting\Viewer\Rendition\Block\Type\Html;
 
 use Chamilo\Core\Reporting\Viewer\Chart\pChamiloImage;
 use Chamilo\Libraries\File\Path;
-use CpChart\Classes\pData;
-use CpChart\Classes\pRadar;
+use CpChart\Data;
+use CpChart\Chart\Radar;
 
 /**
  *
@@ -32,7 +32,7 @@ class PolarChart extends Chart
             $number_of_categories = count($reporting_data->get_categories());
             $number_of_bars = $number_of_rows * $number_of_categories;
             
-            $chart_data = new pData();
+            $chart_data = new Data();
             
             /* Define the absissa serie */
             $abscissa = array();
@@ -93,17 +93,17 @@ class PolarChart extends Chart
             $chart_canvas->drawRectangle(1, 1, 698, $height - 2, $format);
             
             /* Set the default font properties */
-            $chart_canvas->setFontProperties(
+            /*$chart_canvas->setFontProperties(
                 array(
                     'FontName' => Path::getInstance()->getVendorPath() .
                          'szymach/c-pchart/src/Resources/fonts/verdana.ttf', 
                         'FontSize' => 8, 
                         'R' => 0, 
                         'G' => 0, 
-                        'B' => 0));
+                        'B' => 0));*/
             
             /* Create the pRadar object */
-            $polar_chart = new pRadar();
+            $polar_chart = new Radar();
             
             /* Draw a polar chart */
             $chart_canvas->setGraphArea($graph_area_left, 20, 579, $height - 21);

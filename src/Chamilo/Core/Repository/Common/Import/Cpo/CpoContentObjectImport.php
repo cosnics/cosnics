@@ -138,8 +138,11 @@ class CpoContentObjectImport extends ContentObjectImport
 
         $dom_document = new \DOMDocument();
 
-        // LIBXML_HTML_NODEFDTD prevents a default doctype from being added when one is not found.
-        $dom_document->loadHTML($value, LIBXML_HTML_NODEFDTD);
+        if(!empty($value))
+        {
+            // LIBXML_HTML_NODEFDTD prevents a default doctype from being added when one is not found.
+            $dom_document->loadHTML($value, LIBXML_HTML_NODEFDTD);
+        }
 
         if ($dom_document->firstChild instanceof \DOMNode)
         {

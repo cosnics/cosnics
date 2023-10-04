@@ -78,9 +78,9 @@ class HTML_QuickForm_image_selecter extends \HTML_QuickForm_group
      * @param string[] $options
      */
     public function __construct($elementName = null, $elementLabel = null, $search_url = null,
-        $locale = array('Display' => 'Display'), $default = array(), $options = array('rescale_image' => true, 'allow_change' => false))
+        $locale = array('Display' => 'Display'), $default = '', $options = array('rescale_image' => true, 'allow_change' => false))
     {
-        HTML_QuickForm_group::__construct($elementName, $elementLabel);
+        \HTML_QuickForm_group::__construct($elementName, $elementLabel);
         $this->_type = 'image_selecter';
         $this->_persistantFreeze = true;
         $this->_appendName = false;

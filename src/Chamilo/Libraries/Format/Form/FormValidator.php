@@ -5,6 +5,7 @@ namespace Chamilo\Libraries\Format\Form;
 use Chamilo\Libraries\Architecture\Traits\DependencyInjectionContainerTrait;
 use Chamilo\Libraries\File\Path;
 use Chamilo\Libraries\Format\Display;
+use Chamilo\Libraries\Format\Form\Element\HTML_QuickForm_image_selecter;
 use Chamilo\Libraries\Format\Form\Element\HTML_QuickForm_user_group_finder;
 use Chamilo\Libraries\Format\Form\Rule\HTML_QuickForm_Rule_Date;
 use Chamilo\Libraries\Format\Form\Rule\HTML_QuickForm_Rule_DateCompare;
@@ -214,6 +215,7 @@ EOT;
         $this->registerElementType('advanced_element_finder', HTML_QuickForm_advanced_element_finder::class);
         $this->registerElementType('element_finder', HTML_QuickForm_element_finder::class);
         $this->registerElementType('user_group_finder', HTML_QuickForm_user_group_finder::class);
+        $this->registerElementType('image_selecter', HTML_QuickForm_image_selecter::class);
 
         // Button elements
         $this->registerElementType('style_button', HTML_QuickForm_stylebutton::class);

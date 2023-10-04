@@ -96,7 +96,7 @@ class HotspotQuestionForm extends ContentObjectForm
             Translation::get('SelectImage'),
             $redirect->getUrl(),
             $locale,
-            array(),
+            '',
             $image_selecter_options);
         $this->addElement('category');
         $this->addElement('html', '</div>');
