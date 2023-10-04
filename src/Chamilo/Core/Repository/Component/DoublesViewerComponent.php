@@ -93,6 +93,12 @@ class DoublesViewerComponent extends Manager implements TableSupport
         $conditions[] = new EqualityCondition(
             new PropertyConditionVariable(ContentObject::class_name(), ContentObject::PROPERTY_OWNER_ID),
             new StaticConditionVariable($this->getUser()->getId()));
+
+        $conditions[] = new NotCondition(new EqualityCondition(
+            new PropertyConditionVariable(ContentObject::class_name(), ContentObject::PROPERTY_CONTENT_HASH),
+            null
+        ));
+
         $conditions[] = new NotCondition(
             new EqualityCondition(
                 new PropertyConditionVariable(ContentObject::class_name(), ContentObject::PROPERTY_STATE),
