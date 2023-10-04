@@ -4,7 +4,6 @@ namespace Chamilo\Core\User\Form;
 use Chamilo\Core\User\Manager;
 use Chamilo\Libraries\Format\Form\FormValidator;
 use Chamilo\Libraries\Format\Structure\Glyph\FontAwesomeGlyph;
-use Chamilo\Libraries\Translation\Translation;
 
 /**
  * Renders the form for the anonymous users
@@ -16,11 +15,9 @@ class AnonymousUserForm extends FormValidator
     public const CAPTCHA_RESPONS_VALUE = 'g-recaptcha-response';
 
     /**
-     * Constructor
-     *
-     * @param string $action
+     * @throws \QuickformException
      */
-    public function __construct($action)
+    public function __construct(string $action)
     {
         parent::__construct('user_settings', self::FORM_METHOD_POST, $action);
 
@@ -33,9 +30,9 @@ class AnonymousUserForm extends FormValidator
     }
 
     /**
-     * Adds the captcha element
+     * @throws \QuickformException
      */
-    protected function addCaptchaElement()
+    protected function addCaptchaElement(): void
     {
         $recaptchaSiteKey =
             $this->getConfigurationConsulter()->getSetting(['Chamilo\Core\Admin', 'recaptcha_site_key']);
@@ -49,15 +46,14 @@ class AnonymousUserForm extends FormValidator
     }
 
     /**
-     * Builds the form
+     * @throws \QuickformException
      */
-    protected function buildForm()
+    protected function buildForm(): void
     {
         $this->addCaptchaElement();
 
         $this->addElement(
-            'style_submit_button', 'submit',
-            Translation::getInstance()->getTranslation('ViewAnonymously', null, Manager::CONTEXT),
+            'style_submit_button', 'submit', $this->getTranslator()->trans('ViewAnonymously', [], Manager::CONTEXT),
             ['class' => 'anonymous-view-button'], null, new FontAwesomeGlyph('user')
         );
 
