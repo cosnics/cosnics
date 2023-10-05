@@ -119,8 +119,8 @@ class ZipContentObjectImportController extends ContentObjectImportController
         }
 
         $calculator = new Calculator(
-            \Chamilo\Core\User\Storage\DataManager::retrieve_by_id(
-                User::class, (int) $this->get_parameters()->get_user()
+            DataManager::retrieve_by_id(
+                User::class, (string) $this->get_parameters()->get_user()
             )
         );
 
@@ -303,7 +303,7 @@ class ZipContentObjectImportController extends ContentObjectImportController
         else
         {
             $category = DataManager::retrieve_by_id(
-                RepositoryCategory::class, $this->get_parameters()->get_category()
+                RepositoryCategory::class, (string) $this->get_parameters()->get_category()
             );
         }
 

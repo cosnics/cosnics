@@ -5,7 +5,7 @@ use Chamilo\Core\Repository\ContentObject\ForumTopic\Storage\DataClass\ForumPost
 use Chamilo\Core\Repository\Manager;
 use Chamilo\Core\Repository\Quota\Calculator;
 use Chamilo\Core\User\Storage\DataClass\User;
-use Chamilo\Core\User\Storage\DataManager;
+use Chamilo\Libraries\Storage\DataManager\DataManager;
 use Chamilo\Libraries\Architecture\Application\Application;
 use Chamilo\Libraries\Format\Form\Element\AdvancedElementFinder\AdvancedElementFinderElementType;
 use Chamilo\Libraries\Format\Form\Element\AdvancedElementFinder\AdvancedElementFinderElementTypes;

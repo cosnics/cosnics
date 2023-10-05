@@ -2,7 +2,7 @@
 namespace Chamilo\Core\User\Roles\Storage\Repository;
 
 use Chamilo\Core\User\Roles\Storage\DataClass\Role;
-use Chamilo\Core\User\Roles\Storage\DataManager;
+use Chamilo\Libraries\Storage\DataManager\DataManager;
 use Chamilo\Core\User\Roles\Storage\Repository\Interfaces\RoleRepositoryInterface;
 use Chamilo\Libraries\Storage\DataManager\Repository\DataManagerRepository;
 use Chamilo\Libraries\Storage\Parameters\DataClassCountParameters;

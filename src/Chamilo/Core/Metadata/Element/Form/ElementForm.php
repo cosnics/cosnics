@@ -3,7 +3,7 @@ namespace Chamilo\Core\Metadata\Element\Form;
 
 use Chamilo\Core\Metadata\Storage\DataClass\Element;
 use Chamilo\Core\Metadata\Storage\DataClass\Schema;
-use Chamilo\Core\Metadata\Storage\DataManager;
+use Chamilo\Libraries\Storage\DataManager\DataManager;
 use Chamilo\Libraries\Format\Form\FormValidator;
 use Chamilo\Libraries\Translation\Translation;
 use Chamilo\Libraries\Utilities\StringUtilities;

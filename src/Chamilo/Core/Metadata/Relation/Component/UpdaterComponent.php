@@ -3,7 +3,7 @@ namespace Chamilo\Core\Metadata\Relation\Component;
 
 use Chamilo\Core\Metadata\Relation\Form\RelationForm;
 use Chamilo\Core\Metadata\Relation\Manager;
-use Chamilo\Core\Metadata\Relation\Storage\DataManager;
+use Chamilo\Libraries\Storage\DataManager\DataManager;
 use Chamilo\Core\Metadata\Service\EntityTranslationService;
 use Chamilo\Core\Metadata\Storage\DataClass\Relation;
 use Chamilo\Libraries\Architecture\Exceptions\NotAllowedException;

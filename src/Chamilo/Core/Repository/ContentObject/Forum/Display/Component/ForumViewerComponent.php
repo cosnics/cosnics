@@ -247,7 +247,7 @@ class ForumViewerComponent extends Manager implements BreadcrumbLessComponentInt
      */
     public function renderAuthor(ComplexForumTopic $topic)
     {
-        $user = \Chamilo\Core\User\Storage\DataManager::retrieve_by_id(User::class, (int) $topic->get_user_id());
+        $user = DataManager::retrieve_by_id(User::class, (string) $topic->get_user_id());
         $name = '';
 
         if (!$user)
@@ -295,8 +295,8 @@ class ForumViewerComponent extends Manager implements BreadcrumbLessComponentInt
         {
             $html[] = DatetimeUtilities::getInstance()->formatLocaleDate(null, $lastPost->get_creation_date());
 
-            $user = \Chamilo\Core\User\Storage\DataManager::retrieve_by_id(
-                User::class, $lastPost->get_user_id()
+            $user = DataManager::retrieve_by_id(
+                User::class, (string) $lastPost->get_user_id()
             );
 
             if ($user instanceof User)

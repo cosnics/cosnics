@@ -7,7 +7,7 @@ use Chamilo\Application\Weblcms\Manager;
 use Chamilo\Application\Weblcms\Storage\DataClass\ContentObjectPublication;
 use Chamilo\Core\Reporting\ReportingTemplate;
 use Chamilo\Core\Repository\Storage\DataClass\ComplexContentObjectItem;
-use Chamilo\Core\User\Storage\DataManager;
+use Chamilo\Core\Repository\Storage\DataManager;
 use Chamilo\Libraries\Format\Structure\Breadcrumb;
 use Chamilo\Libraries\Translation\Translation;
 
@@ -52,7 +52,7 @@ class AssessmentQuestionAttemptsUserTemplate extends ReportingTemplate
             ContentObjectPublication::class, $this->get_parameter(Manager::PARAM_PUBLICATION)
         )->get_content_object();
 
-        $question = \Chamilo\Core\Repository\Storage\DataManager::retrieve_by_id(
+        $question = DataManager::retrieve_by_id(
             ComplexContentObjectItem::class,
             $this->get_parameter(\Chamilo\Application\Weblcms\Tool\Implementation\Reporting\Manager::PARAM_QUESTION)
         );
@@ -96,7 +96,7 @@ class AssessmentQuestionAttemptsUserTemplate extends ReportingTemplate
 
         $trail->add(
             new Breadcrumb(
-                $this->get_url(), DataManager::get_fullname_from_user(
+                $this->get_url(), $this->getUserService()->getUserFullNameByIdentifier(
                 $this->get_parameter(Manager::PARAM_USERS)
             )
             )

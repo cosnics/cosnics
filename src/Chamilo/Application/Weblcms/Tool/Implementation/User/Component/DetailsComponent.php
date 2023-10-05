@@ -4,9 +4,9 @@ namespace Chamilo\Application\Weblcms\Tool\Implementation\User\Component;
 use Chamilo\Application\Weblcms\Tool\Implementation\User\Manager;
 use Chamilo\Application\Weblcms\Tool\Implementation\User\UserCourseGroups;
 use Chamilo\Core\User\Storage\DataClass\User;
-use Chamilo\Core\User\Storage\DataManager;
 use Chamilo\Core\User\UserDetails;
 use Chamilo\Core\User\UserGroups;
+use Chamilo\Libraries\Storage\DataManager\DataManager;
 
 /**
  * @package application.lib.weblcms.tool.user.component

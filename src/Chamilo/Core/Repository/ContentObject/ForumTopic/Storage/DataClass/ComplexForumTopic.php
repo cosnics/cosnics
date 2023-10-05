@@ -42,8 +42,8 @@ class ComplexForumTopic extends ComplexContentObjectItem
         $text = Translation::get('TopicAddedEmailBody', null, 'Chamilo\Core\Repository\ContentObject\Forum\Display');
         $email_notificator->set_action_body($text);
         $email_notificator->set_action_user(
-            \Chamilo\Core\User\Storage\DataManager::retrieve_by_id(
-                User::class, (int) $this->getSession()->get(Manager::SESSION_USER_ID)
+            DataManager::retrieve_by_id(
+                User::class, (string) $this->getSession()->get(Manager::SESSION_USER_ID)
             )
         );
 

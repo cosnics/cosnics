@@ -11,10 +11,11 @@ use Chamilo\Application\Weblcms\Tool\Implementation\CourseGroup\Storage\DataMana
 use Chamilo\Core\Group\Storage\DataClass\Group;
 use Chamilo\Core\Rights\RightsLocation;
 use Chamilo\Core\Rights\RightsUtil;
+use Chamilo\Core\User\Service\UserService;
 use Chamilo\Core\User\Storage\DataClass\User;
-use Chamilo\Core\User\Storage\DataManager;
 use Chamilo\Libraries\DependencyInjection\DependencyInjectionContainerBuilder;
 use Chamilo\Libraries\Platform\ChamiloRequest;
+use Chamilo\Libraries\Storage\DataManager\DataManager;
 use Chamilo\Libraries\Translation\Translation;
 use Chamilo\Libraries\Utilities\StringUtilities;
 use Symfony\Component\HttpFoundation\Session\SessionInterface;
@@ -102,6 +103,11 @@ class WeblcmsRights extends RightsUtil
     public function getSession(): SessionInterface
     {
         return $this->getService(SessionInterface::class);
+    }
+
+    public function getUserService(): UserService
+    {
+        return $this->getService(UserService::class);
     }
 
     public static function get_available_rights($location)
@@ -238,7 +244,7 @@ class WeblcmsRights extends RightsUtil
                     case CoursePlatformGroupEntity::ENTITY_TYPE :
                         foreach ($entity_ids as $group_id)
                         {
-                            $group = \Chamilo\Libraries\Storage\DataManager\DataManager::retrieve_by_id(
+                            $group = DataManager::retrieve_by_id(
                                 Group::class, $group_id
                             );
                             if ($group)
@@ -250,7 +256,9 @@ class WeblcmsRights extends RightsUtil
                     case CourseUserEntity::ENTITY_TYPE :
                         foreach ($entity_ids as $user_id)
                         {
-                            $target_list[] = '<option>' . DataManager::get_fullname_from_user($user_id) . '</option>';
+                            $target_list[] =
+                                '<option>' . $this->getUserService()->getUserFullNameByIdentifier($user_id) .
+                                '</option>';
                         }
                         break;
                     case CourseGroupEntity::ENTITY_TYPE :

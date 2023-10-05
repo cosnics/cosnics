@@ -6,7 +6,7 @@ use Chamilo\Core\Repository\ContentObject\Webpage\Storage\DataClass\Webpage;
 use Chamilo\Core\Repository\Form\ContentObjectForm;
 use Chamilo\Core\Repository\Quota\Calculator;
 use Chamilo\Core\User\Storage\DataClass\User;
-use Chamilo\Core\User\Storage\DataManager;
+use Chamilo\Libraries\Storage\DataManager\DataManager;
 use Chamilo\Libraries\Format\Form\FormValidatorHtmlEditorOptions;
 use Chamilo\Libraries\Translation\Translation;
 use Chamilo\Libraries\Utilities\StringUtilities;

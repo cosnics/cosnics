@@ -7,7 +7,7 @@ use Chamilo\Core\Repository\ContentObject\Blog\Display\Component\Viewer\BlogLayo
 use Chamilo\Core\Repository\ContentObject\Blog\Display\Manager;
 use Chamilo\Core\Repository\ContentObject\BlogItem\Storage\DataClass\ComplexBlogItem;
 use Chamilo\Core\User\Storage\DataClass\User;
-use Chamilo\Core\User\Storage\DataManager;
+use Chamilo\Libraries\Storage\DataManager\DataManager;
 use Chamilo\Libraries\Format\Structure\Glyph\FontAwesomeGlyph;
 use Chamilo\Libraries\Translation\Translation;
 use Chamilo\Libraries\Utilities\DatetimeUtilities;
@@ -176,7 +176,7 @@ class PersonalBlogLayout extends BlogLayout
 
         $html[] = '<div class="col-xs-12 col-sm-10 panel-publication-header-title">';
 
-        $author = DataManager::retrieve_by_id(User::class, (int) $blogItem->get_owner_id());
+        $author = DataManager::retrieve_by_id(User::class, (string) $blogItem->get_owner_id());
         $userPictureProvider = $this->getUserPictureProvider();
 
         $html[] =

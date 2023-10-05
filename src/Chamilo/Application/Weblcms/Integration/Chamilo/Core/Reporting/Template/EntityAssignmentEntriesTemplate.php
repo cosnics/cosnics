@@ -44,7 +44,7 @@ class EntityAssignmentEntriesTemplate extends ReportingTemplate
 
         /** @var \Chamilo\Core\Repository\ContentObject\Assignment\Storage\DataClass\Assignment $assignment */
         $assignment = DataManager::retrieve_by_id(
-            ContentObjectPublication::class, $this->publicationId
+            ContentObjectPublication::class, (string) $this->publicationId
         )->get_content_object();
 
         $params = [];

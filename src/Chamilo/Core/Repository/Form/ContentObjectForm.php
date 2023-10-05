@@ -255,8 +255,8 @@ abstract class ContentObjectForm extends FormValidator
         if ($object instanceof AttachmentSupportInterface)
         {
             $calculator = new Calculator(
-                \Chamilo\Core\User\Storage\DataManager::retrieve_by_id(
-                    User::class, (int) $this->get_owner_id()
+                DataManager::retrieve_by_id(
+                    User::class, (string) $this->get_owner_id()
                 )
             );
 
@@ -456,8 +456,6 @@ abstract class ContentObjectForm extends FormValidator
     protected function build_editing_form($htmleditor_options = [], $in_tab = false)
     {
         $object = $this->content_object;
-
-        $owner = \Chamilo\Core\User\Storage\DataManager::retrieve_by_id(User::class, (int) $this->get_owner_id());
 
         if (!$in_tab)
         {

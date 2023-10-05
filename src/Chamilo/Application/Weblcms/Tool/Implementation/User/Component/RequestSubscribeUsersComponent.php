@@ -8,12 +8,12 @@ use Chamilo\Application\Weblcms\Storage\DataClass\CommonRequest;
 use Chamilo\Application\Weblcms\Storage\DataClass\CourseRequest;
 use Chamilo\Application\Weblcms\Tool\Implementation\User\Manager;
 use Chamilo\Core\User\Storage\DataClass\User;
-use Chamilo\Core\User\Storage\DataManager;
 use Chamilo\Libraries\Architecture\Exceptions\NoObjectSelectedException;
 use Chamilo\Libraries\Format\Breadcrumb\BreadcrumbLessComponentInterface;
 use Chamilo\Libraries\Format\Breadcrumb\BreadcrumbTrail;
 use Chamilo\Libraries\Format\Structure\Breadcrumb;
 use Chamilo\Libraries\Format\Structure\Glyph\FontAwesomeGlyph;
+use Chamilo\Libraries\Storage\DataManager\DataManager;
 use Chamilo\Libraries\Translation\Translation;
 
 /**

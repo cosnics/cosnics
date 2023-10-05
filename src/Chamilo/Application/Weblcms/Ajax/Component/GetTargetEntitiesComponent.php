@@ -202,9 +202,7 @@ class GetTargetEntitiesComponent extends \Chamilo\Application\Weblcms\Ajax\Manag
                         foreach ($entity_ids as $user_id)
                         {
                             $targetEntityNames[self::TARGET_ENTITY_USERS][] =
-                                \Chamilo\Core\User\Storage\DataManager::get_fullname_from_user(
-                                    $user_id
-                                );
+                                $this->getUserService()->getUserFullNameByIdentifier($user_id);
                         }
                         break;
                     case CourseGroupEntity::ENTITY_TYPE :

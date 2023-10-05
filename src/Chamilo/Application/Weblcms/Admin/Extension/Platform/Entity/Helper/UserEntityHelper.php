@@ -6,7 +6,7 @@ use Chamilo\Application\Weblcms\Admin\Extension\Platform\Entity\UserEntity;
 use Chamilo\Application\Weblcms\Admin\Extension\Platform\Manager;
 use Chamilo\Application\Weblcms\Admin\Extension\Platform\Storage\DataClass\Admin;
 use Chamilo\Core\User\Storage\DataClass\User;
-use Chamilo\Core\User\Storage\DataManager;
+use Chamilo\Libraries\Storage\DataManager\DataManager;
 use Chamilo\Libraries\Format\Table\Column\DataClassPropertyTableColumn;
 use Chamilo\Libraries\Storage\DataClass\DataClass;
 use Chamilo\Libraries\Storage\Parameters\DataClassCountParameters;

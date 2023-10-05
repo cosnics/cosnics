@@ -140,7 +140,7 @@ class Rights extends RightsUtil
                         User::class, User::PROPERTY_ID
                     ), $user_ids
                 );
-                $authorized_user_count = \Chamilo\Core\User\Storage\DataManager::count(
+                $authorized_user_count = DataManager::count(
                     User::class, new DataClassCountParameters($condition)
                 );
 
@@ -161,7 +161,7 @@ class Rights extends RightsUtil
                     ), 1
                 );
             }
-            $authorized_users = \Chamilo\Core\User\Storage\DataManager::retrieves(
+            $authorized_users = DataManager::retrieves(
                 User::class, new DataClassRetrievesParameters($condition)
             );
 

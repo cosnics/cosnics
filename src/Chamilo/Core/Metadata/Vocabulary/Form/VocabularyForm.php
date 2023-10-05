@@ -4,7 +4,7 @@ namespace Chamilo\Core\Metadata\Vocabulary\Form;
 use Chamilo\Core\Metadata\Service\EntityTranslationFormService;
 use Chamilo\Core\Metadata\Storage\DataClass\Element;
 use Chamilo\Core\Metadata\Storage\DataClass\Vocabulary;
-use Chamilo\Core\Metadata\Storage\DataManager;
+use Chamilo\Libraries\Storage\DataManager\DataManager;
 use Chamilo\Core\User\Storage\DataClass\User;
 use Chamilo\Libraries\Format\Form\FormValidator;
 use Chamilo\Libraries\Translation\Translation;

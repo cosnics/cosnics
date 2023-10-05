@@ -11,22 +11,21 @@ use Chamilo\Application\Weblcms\Storage\DataManager;
 use Chamilo\Libraries\File\Import;
 use Chamilo\Libraries\Format\Form\FormValidator;
 use Chamilo\Libraries\Format\Structure\Glyph\FontAwesomeGlyph;
-use Chamilo\Libraries\Translation\Translation;
 use Chamilo\Libraries\Storage\Query\Condition\EqualityCondition;
 use Chamilo\Libraries\Storage\Query\Variable\PropertyConditionVariable;
 use Chamilo\Libraries\Storage\Query\Variable\StaticConditionVariable;
+use Chamilo\Libraries\Translation\Translation;
 use Chamilo\Libraries\Utilities\StringUtilities;
 
 /**
- *
  * @package application.lib.weblcms.course
  */
-ini_set("max_execution_time", - 1);
-ini_set("memory_limit", - 1);
+ini_set('max_execution_time', - 1);
+ini_set('memory_limit', - 1);
 
 class CourseImportForm extends FormValidator
 {
-    const TYPE_IMPORT = 1;
+    public const TYPE_IMPORT = 1;
 
     private $failedcsv;
 
@@ -53,6 +52,32 @@ class CourseImportForm extends FormValidator
         );
 
         $this->addGroup($buttons, 'buttons', null, '&nbsp;', false);
+    }
+
+    private function determine_default_course_language($course)
+    {
+        return CourseSettingsController::getInstance()->get_course_type_setting(
+            $course->get_course_type_id(), Course::PROPERTY_LANGUAGE
+        );
+    }
+
+    // TODO: Temporary solution pending implementation of user object
+
+    public function get_failed_csv()
+    {
+        return implode('<br />', $this->failedcsv);
+    }
+
+    public function get_teacher_info($user_name)
+    {
+        if (!$this->getUserService()->isUsernameAvailable($user_name))
+        {
+            return $this->getUserService()->findUserByUsername($user_name);
+        }
+        else
+        {
+            return null;
+        }
     }
 
     public function import_courses()
@@ -226,22 +251,33 @@ class CourseImportForm extends FormValidator
         }
     }
 
-    // TODO: Temporary solution pending implementation of user object
-    public function get_teacher_info($user_name)
+    private function is_course($course_code)
     {
-        if (!\Chamilo\Core\User\Storage\DataManager::is_username_available($user_name))
-        {
-            return \Chamilo\Core\User\Storage\DataManager::retrieve_user_info($user_name);
-        }
-        else
-        {
-            return null;
-        }
+        $course = CourseDataManager::retrieve_course_by_visual_code($course_code);
+
+        return !empty($course);
     }
 
-    public function get_failed_csv()
+    private function is_course_category($category_name)
     {
-        return implode('<br />', $this->failedcsv);
+        $cat = DataManager::retrieve_course_categories_ordered_by_name(
+            new EqualityCondition(
+                new PropertyConditionVariable(CourseCategory::class, CourseCategory::PROPERTY_NAME),
+                new StaticConditionVariable($category_name)
+            )
+        )->current();
+
+        if ($cat)
+        {
+            return true;
+        }
+
+        return false;
+    }
+
+    private function is_course_type($type_name)
+    {
+        return \Chamilo\Application\Weblcms\CourseType\Storage\DataManager::is_course_type_valid($type_name);
     }
 
     public function validate_data($csvcourse)
@@ -299,41 +335,5 @@ class CourseImportForm extends FormValidator
         {
             return true;
         }
-    }
-
-    private function is_course_type($type_name)
-    {
-        return \Chamilo\Application\Weblcms\CourseType\Storage\DataManager::is_course_type_valid($type_name);
-    }
-
-    private function is_course_category($category_name)
-    {
-        $cat = DataManager::retrieve_course_categories_ordered_by_name(
-            new EqualityCondition(
-                new PropertyConditionVariable(CourseCategory::class, CourseCategory::PROPERTY_NAME),
-                new StaticConditionVariable($category_name)
-            )
-        )->current();
-
-        if ($cat)
-        {
-            return true;
-        }
-
-        return false;
-    }
-
-    private function is_course($course_code)
-    {
-        $course = CourseDataManager::retrieve_course_by_visual_code($course_code);
-
-        return !empty($course);
-    }
-
-    private function determine_default_course_language($course)
-    {
-        return CourseSettingsController::getInstance()->get_course_type_setting(
-            $course->get_course_type_id(), Course::PROPERTY_LANGUAGE
-        );
     }
 }

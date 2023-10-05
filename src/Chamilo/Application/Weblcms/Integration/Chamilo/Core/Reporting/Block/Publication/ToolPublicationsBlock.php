@@ -87,7 +87,7 @@ class ToolPublicationsBlock extends ToolBlock
             $url = $this->getUrlGenerator()->fromParameters($params);
 
             $content_object = DataManager::retrieve_by_id(
-                ContentObject::class, $content_object_publication->get_content_object_id()
+                ContentObject::class, (string) $content_object_publication->get_content_object_id()
             );
 
             $des = $content_object->get_description();

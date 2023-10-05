@@ -45,8 +45,8 @@ class ForumPostQuoterComponent extends ForumPostFormActionCreate
 
         $this->forumpost->set_title($reply);
 
-        $quoteUser = \Chamilo\Core\User\Storage\DataManager::retrieve_by_id(
-            User::class, (int) $quote_lo->get_user_id()
+        $quoteUser = DataManager::retrieve_by_id(
+            User::class, (string) $quote_lo->get_user_id()
         );
 
         $quoteContent = [];

@@ -2,6 +2,7 @@
 namespace Chamilo\Core\Repository\ContentObject\ForumTopic\Storage\DataClass;
 
 use Chamilo\Core\Repository\Storage\DataClass\ContentObject;
+use Chamilo\Core\Repository\Storage\DataManager;
 use Chamilo\Libraries\Architecture\ClassnameUtilities;
 use Chamilo\Libraries\Storage\DataClass\DataClass;
 
@@ -83,7 +84,7 @@ class ForumPostAttachment extends DataClass
     {
         if ($this->content_object == null)
         {
-            $this->content_object = \Chamilo\Core\Repository\Storage\DataManager::retrieve_by_id(
+            $this->content_object = DataManager::retrieve_by_id(
                 ContentObject::class, $this->get_attachment_id()
             );
         }
@@ -126,7 +127,7 @@ class ForumPostAttachment extends DataClass
     {
         return self::class_to_type(
             get_class(
-                \Chamilo\Core\Repository\Storage\DataManager::retrieve_by_id(
+                DataManager::retrieve_by_id(
                     ContentObject::class, $this->get_attachment_id()
                 )
             )

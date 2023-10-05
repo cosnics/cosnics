@@ -3,7 +3,7 @@ namespace Chamilo\Core\Repository\UserView\Menu;
 
 use Chamilo\Core\Repository\UserView\Manager;
 use Chamilo\Core\Repository\UserView\Storage\DataClass\UserView;
-use Chamilo\Core\Repository\UserView\Storage\DataManager;
+use Chamilo\Libraries\Storage\DataManager\DataManager;
 use Chamilo\Libraries\Architecture\Application\Application;
 use Chamilo\Libraries\Architecture\ClassnameUtilities;
 use Chamilo\Libraries\Format\Menu\Library\HtmlMenu;

@@ -92,7 +92,7 @@ class SystemAnnouncementsBlockRenderer extends BlockRenderer implements Configur
         foreach ($publications as $publication)
         {
             $content_object = DataManager::retrieve_by_id(
-                ContentObject::class, (int) $publication[Publication::PROPERTY_CONTENT_OBJECT_ID]
+                ContentObject::class, $publication[Publication::PROPERTY_CONTENT_OBJECT_ID]
             );
 
             $icon = $content_object->get_icon_image(IdentGlyph::SIZE_MINI, !$publication[Publication::PROPERTY_HIDDEN]);

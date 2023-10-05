@@ -6,11 +6,11 @@ use Chamilo\Application\Weblcms\Storage\DataClass\CourseSetting;
 use Chamilo\Application\Weblcms\Storage\DataManager;
 use Chamilo\Configuration\Service\Consulter\ConfigurationConsulter;
 use Chamilo\Configuration\Service\Consulter\LanguageConsulter;
+use Chamilo\Core\User\Service\UserService;
 use Chamilo\Core\User\Storage\DataClass\User;
 use Chamilo\Libraries\DependencyInjection\DependencyInjectionContainerBuilder;
 use Chamilo\Libraries\Format\Theme\ThemePathBuilder;
 use Chamilo\Libraries\Storage\Query\Condition\EqualityCondition;
-use Chamilo\Libraries\Storage\Query\OrderBy;
 use Chamilo\Libraries\Storage\Query\OrderProperty;
 use Chamilo\Libraries\Storage\Query\Variable\PropertyConditionVariable;
 use Chamilo\Libraries\Storage\Query\Variable\StaticConditionVariable;
@@ -61,18 +61,37 @@ class CourseSettingsConnector
 
     public const VISIBILITY = 'visibility';
 
+    public static function getConfigurationConsulter(): ConfigurationConsulter
+    {
+        return self::getService(ConfigurationConsulter::class);
+    }
+
     public static function getLanguageConsulter(): LanguageConsulter
     {
-        return DependencyInjectionContainerBuilder::getInstance()->createContainer()->get(
-            LanguageConsulter::class
-        );
+        return self::getService(LanguageConsulter::class);
+    }
+
+    /**
+     * @template getService
+     * @param class-string<getService> $serviceId
+     *
+     * @return getService
+     * @throws \Chamilo\Libraries\Storage\Exception\ConnectionException
+     * @throws \Symfony\Component\Cache\Exception\CacheException
+     */
+    public static function getService(string $serviceId)
+    {
+        return DependencyInjectionContainerBuilder::getInstance()->createContainer()->get($serviceId);
     }
 
     public static function getThemeSystemPathBuilder(): ThemePathBuilder
     {
-        return DependencyInjectionContainerBuilder::getInstance()->createContainer()->get(
-            'Chamilo\Libraries\Format\Theme\ThemeSystemPathBuilder'
-        );
+        return self::getService('Chamilo\Libraries\Format\Theme\ThemeSystemPathBuilder');
+    }
+
+    public static function getUserService(): UserService
+    {
+        return self::getService(UserService::class);
     }
 
     /**
@@ -117,6 +136,12 @@ class CourseSettingsConnector
     }
 
     /**
+     * **************************************************************************************************************
+     * Setting Helper Functionality *
+     * **************************************************************************************************************
+     */
+
+    /**
      * Returns the settings that need to be copied to the course object
      *
      * @return string[]
@@ -132,7 +157,7 @@ class CourseSettingsConnector
 
     /**
      * **************************************************************************************************************
-     * Setting Helper Functionality *
+     * Special Settings Functionality *
      * **************************************************************************************************************
      */
 
@@ -150,12 +175,6 @@ class CourseSettingsConnector
             return $copied_settings[$course_setting->get_name()];
         }
     }
-
-    /**
-     * **************************************************************************************************************
-     * Special Settings Functionality *
-     * **************************************************************************************************************
-     */
 
     /**
      * Returns the available platform languages
@@ -200,25 +219,17 @@ class CourseSettingsConnector
             new OrderProperty(new PropertyConditionVariable(User::class, User::PROPERTY_LASTNAME))
         ];
 
-        /**
-         * @var \Chamilo\Configuration\Service\Consulter\ConfigurationConsulter $configurationConsulter
-         */
-        $configurationConsulter =
-            DependencyInjectionContainerBuilder::getInstance()->createContainer()->get(ConfigurationConsulter::class);
-
-        $format = $configurationConsulter->getSetting(['Chamilo\Core\User', 'fullname_format']);
+        $format = self::getConfigurationConsulter()->getSetting(['Chamilo\Core\User', 'fullname_format']);
         if ($format == User::NAME_FORMAT_LAST)
         {
             $order = array_reverse($order);
         }
 
-        $users_result_set = \Chamilo\Core\User\Storage\DataManager::retrieve_active_users(
-            $condition, null, null, new OrderBy($order)
-        );
+        $activeUsers = self::getUserService()->findActiveUsers()
 
-        foreach ($users_result_set as $user)
+        foreach ($activeUsers as $user)
         {
-            $users[$user->get_id()] = $user->get_fullname() . ' (' . $user->get_official_code() . ')';
+            $users[$user->getId()] = $user->get_fullname() . ' (' . $user->get_official_code() . ')';
         }
 
         return $users;

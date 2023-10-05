@@ -5,7 +5,7 @@ use Chamilo\Core\Repository\ContentObject\Wiki\Display\Manager;
 use Chamilo\Core\Repository\ContentObject\WikiPage\Storage\DataClass\ComplexWikiPage;
 use Chamilo\Core\Repository\ContentObject\WikiPage\Storage\DataClass\WikiPage;
 use Chamilo\Core\Repository\ContentObject\WikiPage\Storage\DataClass\WikiPageFeedback;
-use Chamilo\Core\Repository\ContentObject\WikiPage\Storage\DataManager;
+use Chamilo\Libraries\Storage\DataManager\DataManager;
 use Chamilo\Core\Repository\Feedback\FeedbackSupport;
 use Chamilo\Core\Repository\Storage\DataClass\ComplexContentObjectItem;
 use Chamilo\Libraries\Architecture\Application\ApplicationConfiguration;

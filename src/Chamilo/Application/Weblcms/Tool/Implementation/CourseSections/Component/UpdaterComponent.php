@@ -32,9 +32,7 @@ class UpdaterComponent extends Manager
 
         if (!empty($id))
         {
-            $course_section = DataManager::retrieve_by_id(
-                CourseSection::class, (int) $id
-            );
+            $course_section = DataManager::retrieve_by_id(CourseSection::class, $id);
 
             $form = new CourseSectionForm(
                 CourseSectionForm::TYPE_EDIT, $course_section, $this->get_url(

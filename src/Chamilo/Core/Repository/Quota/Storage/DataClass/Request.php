@@ -3,7 +3,7 @@ namespace Chamilo\Core\Repository\Quota\Storage\DataClass;
 
 use Chamilo\Core\Repository\Quota\Manager;
 use Chamilo\Core\User\Storage\DataClass\User;
-use Chamilo\Core\User\Storage\DataManager;
+use Chamilo\Libraries\Storage\DataManager\DataManager;
 use Chamilo\Libraries\Format\Structure\Glyph\FontAwesomeGlyph;
 use Chamilo\Libraries\Storage\DataClass\DataClass;
 use Chamilo\Libraries\Translation\Translation;

@@ -45,7 +45,6 @@ class BrowserComponent extends Manager implements BreadcrumbLessComponentInterfa
 {
 
     /**
-     *
      * @var ButtonToolBarRenderer
      */
     private $buttonToolbarRenderer;
@@ -149,7 +148,7 @@ class BrowserComponent extends Manager implements BreadcrumbLessComponentInterfa
                 $publishActions->addButton(
                     $this->getPublicationButton(
                         Translation::get('PublishIntroductionText', null, StringUtilities::LIBRARIES),
-                        new FontAwesomeGlyph('book'), array(Introduction::class), $publishParameters
+                        new FontAwesomeGlyph('book'), [Introduction::class], $publishParameters
                     )
                 );
             }
@@ -160,9 +159,9 @@ class BrowserComponent extends Manager implements BreadcrumbLessComponentInterfa
                     new Button(
                         Translation::get('ManageCategories', null, StringUtilities::LIBRARIES),
                         new FontAwesomeGlyph('folder'), $this->get_url(
-                        array(
+                        [
                             \Chamilo\Application\Weblcms\Tool\Manager::PARAM_ACTION => self::ACTION_MANAGE_CATEGORIES
-                        )
+                        ]
                     ), Button::DISPLAY_ICON_AND_LABEL
                     )
                 );
@@ -174,9 +173,9 @@ class BrowserComponent extends Manager implements BreadcrumbLessComponentInterfa
                     new Button(
                         Translation::get('ManageRights', null, StringUtilities::LIBRARIES),
                         new FontAwesomeGlyph('lock'), $this->get_url(
-                        array(
+                        [
                             \Chamilo\Application\Weblcms\Tool\Manager::PARAM_ACTION => \Chamilo\Application\Weblcms\Tool\Manager::ACTION_EDIT_RIGHTS
-                        )
+                        ]
                     ), Button::DISPLAY_ICON_AND_LABEL
                     )
                 );
@@ -192,10 +191,9 @@ class BrowserComponent extends Manager implements BreadcrumbLessComponentInterfa
     }
 
     /**
-     *
      * @param string[] $publication
-     * @param boolean $first
-     * @param boolean $last
+     * @param bool $first
+     * @param bool $last
      *
      * @return string
      */
@@ -208,7 +206,8 @@ class BrowserComponent extends Manager implements BreadcrumbLessComponentInterfa
         $buttonToolBar = new ButtonToolBar();
 
         $dropdownButton = new DropdownButton(
-            Translation::get('Actions'), new FontAwesomeGlyph('cog'), Button::DISPLAY_ICON, ['btn-link'], ['dropdown-menu-right']
+            Translation::get('Actions'), new FontAwesomeGlyph('cog'), Button::DISPLAY_ICON, ['btn-link'],
+            ['dropdown-menu-right']
         );
 
         if (!$forum->get_locked())
@@ -225,7 +224,8 @@ class BrowserComponent extends Manager implements BreadcrumbLessComponentInterfa
                 $buttonToolBar->addItem(
                     new Button(
                         Translation::get('Subscribe', null, Forum::CONTEXT), new FontAwesomeGlyph('envelope'),
-                        $this->get_url($parameters), Button::DISPLAY_ICON, Translation::get('ConfirmChosenAction', [], StringUtilities::LIBRARIES), ['btn-link']
+                        $this->get_url($parameters), Button::DISPLAY_ICON,
+                        Translation::get('ConfirmChosenAction', [], StringUtilities::LIBRARIES), ['btn-link']
                     )
                 );
             }
@@ -241,7 +241,8 @@ class BrowserComponent extends Manager implements BreadcrumbLessComponentInterfa
                     new Button(
                         Translation::get('UnSubscribe', null, Forum::CONTEXT),
                         new FontAwesomeGlyph('envelope', [], null, 'far'), $this->get_url($parameters),
-                        Button::DISPLAY_ICON, Translation::get('ConfirmChosenAction', [], StringUtilities::LIBRARIES), ['btn-link']
+                        Button::DISPLAY_ICON, Translation::get('ConfirmChosenAction', [], StringUtilities::LIBRARIES),
+                        ['btn-link']
                     )
                 );
             }
@@ -253,10 +254,10 @@ class BrowserComponent extends Manager implements BreadcrumbLessComponentInterfa
                 new Button(
                     Translation::get('EditContentObject', null, StringUtilities::LIBRARIES),
                     new FontAwesomeGlyph('pencil-alt'), $this->get_url(
-                    array(
+                    [
                         \Chamilo\Application\Weblcms\Tool\Manager::PARAM_PUBLICATION_ID => $publication[ContentObjectPublication::PROPERTY_ID],
                         \Chamilo\Application\Weblcms\Tool\Manager::PARAM_ACTION => \Chamilo\Application\Weblcms\Tool\Manager::ACTION_UPDATE_CONTENT_OBJECT
-                    )
+                    ]
                 ), Button::DISPLAY_ICON, null, ['btn-link']
                 )
             );
@@ -265,10 +266,10 @@ class BrowserComponent extends Manager implements BreadcrumbLessComponentInterfa
                 new SubButton(
                     Translation::get('EditPublicationDetails', null, StringUtilities::LIBRARIES),
                     new FontAwesomeGlyph('cog'), $this->get_url(
-                    array(
+                    [
                         \Chamilo\Application\Weblcms\Tool\Manager::PARAM_PUBLICATION_ID => $publication[ContentObjectPublication::PROPERTY_ID],
                         \Chamilo\Application\Weblcms\Tool\Manager::PARAM_ACTION => \Chamilo\Application\Weblcms\Tool\Manager::ACTION_UPDATE_PUBLICATION
-                    )
+                    ]
                 ), SubButton::DISPLAY_LABEL, null, ['btn-link']
                 )
             );
@@ -281,10 +282,10 @@ class BrowserComponent extends Manager implements BreadcrumbLessComponentInterfa
                     new SubButton(
                         Translation::get('Show', null, StringUtilities::LIBRARIES), new FontAwesomeGlyph('eye-slash'),
                         $this->get_url(
-                            array(
+                            [
                                 \Chamilo\Application\Weblcms\Tool\Manager::PARAM_PUBLICATION_ID => $publication[ContentObjectPublication::PROPERTY_ID],
                                 \Chamilo\Application\Weblcms\Tool\Manager::PARAM_ACTION => \Chamilo\Application\Weblcms\Tool\Manager::ACTION_TOGGLE_VISIBILITY
-                            )
+                            ]
                         ), SubButton::DISPLAY_LABEL, null, ['btn-link']
                     )
                 );
@@ -295,10 +296,10 @@ class BrowserComponent extends Manager implements BreadcrumbLessComponentInterfa
                     new SubButton(
                         Translation::get('Hide', null, StringUtilities::LIBRARIES), new FontAwesomeGlyph('eye'),
                         $this->get_url(
-                            array(
+                            [
                                 \Chamilo\Application\Weblcms\Tool\Manager::PARAM_PUBLICATION_ID => $publication[ContentObjectPublication::PROPERTY_ID],
                                 \Chamilo\Application\Weblcms\Tool\Manager::PARAM_ACTION => \Chamilo\Application\Weblcms\Tool\Manager::ACTION_TOGGLE_VISIBILITY
-                            )
+                            ]
                         ), SubButton::DISPLAY_LABEL, null, ['btn-link']
                     )
                 );
@@ -334,11 +335,11 @@ class BrowserComponent extends Manager implements BreadcrumbLessComponentInterfa
             $dropdownButton->addSubButton(
                 new SubButton(
                     Translation::get('Move', null, StringUtilities::LIBRARIES),
-                    new FontAwesomeGlyph('window-restore', array('fa-flip-horizontal'), null, 'fas'), $this->get_url(
-                    array(
+                    new FontAwesomeGlyph('window-restore', ['fa-flip-horizontal'], null, 'fas'), $this->get_url(
+                    [
                         \Chamilo\Application\Weblcms\Tool\Manager::PARAM_PUBLICATION_ID => $publication[ContentObjectPublication::PROPERTY_ID],
                         \Chamilo\Application\Weblcms\Tool\Manager::PARAM_ACTION => \Chamilo\Application\Weblcms\Tool\Manager::ACTION_MOVE_TO_CATEGORY
-                    )
+                    ]
                 ), SubButton::DISPLAY_LABEL, null, ['btn-link']
                 )
             );
@@ -349,11 +350,11 @@ class BrowserComponent extends Manager implements BreadcrumbLessComponentInterfa
                     new SubButton(
                         Translation::get('MoveUp', null, StringUtilities::LIBRARIES),
                         new FontAwesomeGlyph('chevron-up'), $this->get_url(
-                        array(
+                        [
                             \Chamilo\Application\Weblcms\Tool\Manager::PARAM_PUBLICATION_ID => $publication[ContentObjectPublication::PROPERTY_ID],
                             \Chamilo\Application\Weblcms\Tool\Manager::PARAM_ACTION => \Chamilo\Application\Weblcms\Tool\Manager::ACTION_MOVE,
                             \Chamilo\Application\Weblcms\Tool\Manager::PARAM_MOVE_DIRECTION => \Chamilo\Application\Weblcms\Tool\Manager::PARAM_MOVE_DIRECTION_UP
-                        )
+                        ]
                     ), SubButton::DISPLAY_LABEL, null, ['btn-link']
                     )
                 );
@@ -365,11 +366,11 @@ class BrowserComponent extends Manager implements BreadcrumbLessComponentInterfa
                     new SubButton(
                         Translation::get('MoveDown', null, StringUtilities::LIBRARIES),
                         new FontAwesomeGlyph('chevron-down'), $this->get_url(
-                        array(
+                        [
                             \Chamilo\Application\Weblcms\Tool\Manager::PARAM_PUBLICATION_ID => $publication[ContentObjectPublication::PROPERTY_ID],
                             \Chamilo\Application\Weblcms\Tool\Manager::PARAM_ACTION => \Chamilo\Application\Weblcms\Tool\Manager::ACTION_MOVE,
                             \Chamilo\Application\Weblcms\Tool\Manager::PARAM_MOVE_DIRECTION => \Chamilo\Application\Weblcms\Tool\Manager::PARAM_MOVE_DIRECTION_DOWN
-                        )
+                        ]
                     ), SubButton::DISPLAY_LABEL, null, ['btn-link']
                     )
                 );
@@ -382,11 +383,12 @@ class BrowserComponent extends Manager implements BreadcrumbLessComponentInterfa
                 new Button(
                     Translation::get('Delete', null, StringUtilities::LIBRARIES), new FontAwesomeGlyph('times'),
                     $this->get_url(
-                        array(
+                        [
                             \Chamilo\Application\Weblcms\Tool\Manager::PARAM_PUBLICATION_ID => $publication[ContentObjectPublication::PROPERTY_ID],
                             \Chamilo\Application\Weblcms\Tool\Manager::PARAM_ACTION => \Chamilo\Application\Weblcms\Tool\Manager::ACTION_DELETE
-                        )
-                    ), Button::DISPLAY_ICON, Translation::get('ConfirmChosenAction', [], StringUtilities::LIBRARIES), ['btn-link']
+                        ]
+                    ), Button::DISPLAY_ICON, Translation::get('ConfirmChosenAction', [], StringUtilities::LIBRARIES),
+                    ['btn-link']
                 )
             );
         }
@@ -399,7 +401,6 @@ class BrowserComponent extends Manager implements BreadcrumbLessComponentInterfa
     }
 
     /**
-     *
      * @param ContentObjectPublicationCategory $category
      *
      * @return \Doctrine\Common\Collections\ArrayCollection<\Chamilo\Application\Weblcms\Storage\DataClass\ContentObjectPublication>
@@ -468,7 +469,6 @@ class BrowserComponent extends Manager implements BreadcrumbLessComponentInterfa
     }
 
     /**
-     *
      * @param string $label
      * @param \Chamilo\Libraries\Format\Structure\Glyph\InlineGlyph $glyph
      * @param string[] $allowedContentObjectTypes
@@ -490,7 +490,6 @@ class BrowserComponent extends Manager implements BreadcrumbLessComponentInterfa
     }
 
     /**
-     *
      * @return string
      */
     public function renderForum()
@@ -507,7 +506,6 @@ class BrowserComponent extends Manager implements BreadcrumbLessComponentInterfa
     }
 
     /**
-     *
      * @param string[] $publication
      * @param Forum $forum
      *
@@ -523,7 +521,7 @@ class BrowserComponent extends Manager implements BreadcrumbLessComponentInterfa
         if ($lastPost)
         {
             $link = $this->get_url(
-                array(
+                [
                     self::PARAM_ACTION => self::ACTION_VIEW,
                     self::PARAM_PUBLICATION_ID => $publication[ContentObjectPublication::PROPERTY_ID],
                     \Chamilo\Core\Repository\Display\Manager::PARAM_ACTION => \Chamilo\Core\Repository\ContentObject\Forum\Display\Manager::ACTION_VIEW_TOPIC,
@@ -531,13 +529,13 @@ class BrowserComponent extends Manager implements BreadcrumbLessComponentInterfa
                     \Chamilo\Core\Repository\Display\Manager::PARAM_COMPLEX_CONTENT_OBJECT_ITEM_ID => $forum->get_last_topic_changed_cloi(
                     ),
                     \Chamilo\Core\Repository\ContentObject\Forum\Display\Manager::PARAM_LAST_POST => $lastPost->get_id()
-                )
+                ]
             );
 
             $html[] = DatetimeUtilities::getInstance()->formatLocaleDate(null, $lastPost->get_creation_date());
 
-            $user = \Chamilo\Core\User\Storage\DataManager::retrieve_by_id(
-                User::class, $lastPost->get_user_id()
+            $user = DataManager::retrieve_by_id(
+                User::class, (string) $lastPost->get_user_id()
             );
 
             $muteClass = $publication[ContentObjectPublication::PROPERTY_HIDDEN] ? ' text-muted-invisible' : '';
@@ -571,18 +569,17 @@ class BrowserComponent extends Manager implements BreadcrumbLessComponentInterfa
     }
 
     /**
-     *
      * @param ContentObjectPublicationCategory $category
      *
      * @return string
      */
     public function renderTableForCategory(ContentObjectPublicationCategory $category = null)
     {
-        $table = new HTML_Table(array('class' => 'table forum table-striped'));
+        $table = new HTML_Table(['class' => 'table forum table-striped']);
 
         $header = $table->getHeader();
         $header->setHeaderContents(0, 0, '');
-        $header->setCellAttributes(0, 0, array('class' => 'cell-stat'));
+        $header->setCellAttributes(0, 0, ['class' => 'cell-stat']);
 
         if ($category instanceof ContentObjectPublicationCategory)
         {
@@ -601,10 +598,10 @@ class BrowserComponent extends Manager implements BreadcrumbLessComponentInterfa
         if ($category instanceof ContentObjectPublicationCategory && $this->is_allowed(WeblcmsRights::EDIT_RIGHT))
         {
             $rightsUrl = $this->get_url(
-                array(
+                [
                     \Chamilo\Application\Weblcms\Manager::PARAM_CATEGORY => $category->get_id(),
                     \Chamilo\Application\Weblcms\Tool\Manager::PARAM_ACTION => \Chamilo\Application\Weblcms\Tool\Manager::ACTION_EDIT_RIGHTS
-                )
+                ]
             );
 
             $button = new Button(
@@ -621,18 +618,18 @@ class BrowserComponent extends Manager implements BreadcrumbLessComponentInterfa
 
         $header->setHeaderContents(0, 1, implode(' ', $categoryTitle));
 
-        $bootstrapGlyph = new FontAwesomeGlyph('comments', [], Translation::get("Topics", null, Forum::CONTEXT));
+        $bootstrapGlyph = new FontAwesomeGlyph('comments', [], Translation::get('Topics', null, Forum::CONTEXT));
         $header->setHeaderContents(0, 2, $bootstrapGlyph->render());
-        $header->setCellAttributes(0, 2, array('class' => 'cell-stat text-center hidden-xs hidden-sm'));
+        $header->setCellAttributes(0, 2, ['class' => 'cell-stat text-center hidden-xs hidden-sm']);
 
-        $bootstrapGlyph = new FontAwesomeGlyph('comment', [], Translation::get("Posts", null, Forum::CONTEXT));
+        $bootstrapGlyph = new FontAwesomeGlyph('comment', [], Translation::get('Posts', null, Forum::CONTEXT));
         $header->setHeaderContents(0, 3, $bootstrapGlyph->render());
-        $header->setCellAttributes(0, 3, array('class' => 'cell-stat text-center hidden-xs hidden-sm'));
+        $header->setCellAttributes(0, 3, ['class' => 'cell-stat text-center hidden-xs hidden-sm']);
 
-        $header->setHeaderContents(0, 4, Translation::get("LastPostForum", null, Forum::CONTEXT));
-        $header->setCellAttributes(0, 4, array('class' => 'cell-stat-2x hidden-xs hidden-sm'));
+        $header->setHeaderContents(0, 4, Translation::get('LastPostForum', null, Forum::CONTEXT));
+        $header->setCellAttributes(0, 4, ['class' => 'cell-stat-2x hidden-xs hidden-sm']);
         $header->setHeaderContents(0, 5, '');
-        $header->setCellAttributes(0, 5, array('class' => 'cell-stat-2x'));
+        $header->setCellAttributes(0, 5, ['class' => 'cell-stat-2x']);
 
         $this->renderTableForumsForCategory($table, $category);
 
@@ -640,7 +637,6 @@ class BrowserComponent extends Manager implements BreadcrumbLessComponentInterfa
     }
 
     /**
-     *
      * @param string[] $publication
      * @param Forum $forum
      *
@@ -654,11 +650,11 @@ class BrowserComponent extends Manager implements BreadcrumbLessComponentInterfa
         if ($canViewForum)
         {
             $forumUrl = $this->get_url(
-                array(
+                [
                     \Chamilo\Application\Weblcms\Tool\Manager::PARAM_ACTION => self::ACTION_VIEW_FORUM,
                     \Chamilo\Core\Repository\Display\Manager::PARAM_ACTION => \Chamilo\Core\Repository\ContentObject\Forum\Display\Manager::ACTION_VIEW_FORUM,
                     \Chamilo\Application\Weblcms\Tool\Manager::PARAM_PUBLICATION_ID => $publication[ContentObjectPublication::PROPERTY_ID]
-                )
+                ]
             );
 
             if ($publication[ContentObjectPublication::PROPERTY_HIDDEN])
@@ -700,7 +696,6 @@ class BrowserComponent extends Manager implements BreadcrumbLessComponentInterfa
     }
 
     /**
-     *
      * @param HTML_Table $table
      * @param ContentObjectPublicationCategory $category
      */
@@ -724,7 +719,7 @@ class BrowserComponent extends Manager implements BreadcrumbLessComponentInterfa
 
                     $forumGlyphType = $forum->get_locked() ? 'lock' : 'file';
 
-                    $classes = array('text-muted');
+                    $classes = ['text-muted'];
                     $muteClass = '';
 
                     if ($publication[ContentObjectPublication::PROPERTY_HIDDEN])
@@ -735,25 +730,25 @@ class BrowserComponent extends Manager implements BreadcrumbLessComponentInterfa
                     $forumGlyph = new FontAwesomeGlyph($forumGlyphType, $classes);
 
                     $table->setCellContents($row, 0, $forumGlyph->render());
-                    $table->setCellAttributes($row, 0, array('class' => 'text-center forum-row-icon'));
+                    $table->setCellAttributes($row, 0, ['class' => 'text-center forum-row-icon']);
                     $table->setCellContents($row, 1, $this->renderTableForumTitle($publication, $forum));
                     $table->setCellContents($row, 2, $forum->get_total_topics());
                     $table->setCellAttributes(
-                        $row, 2, array('class' => 'text-primary text-center hidden-xs hidden-sm' . $muteClass)
+                        $row, 2, ['class' => 'text-primary text-center hidden-xs hidden-sm' . $muteClass]
                     );
                     $table->setCellContents($row, 3, $forum->get_total_posts());
                     $table->setCellAttributes(
-                        $row, 3, array('class' => 'text-primary text-center hidden-xs hidden-sm' . $muteClass)
+                        $row, 3, ['class' => 'text-primary text-center hidden-xs hidden-sm' . $muteClass]
                     );
                     $table->setCellContents($row, 4, $this->renderLastPost($publication, $forum));
-                    $table->setCellAttributes($row, 4, array('class' => 'hidden-xs hidden-sm' . $muteClass));
+                    $table->setCellAttributes($row, 4, ['class' => 'hidden-xs hidden-sm' . $muteClass]);
 
                     $table->setCellContents(
                         $row, 5, $this->getForumActions(
                         $publication, $publications->key() === 0, $publications->key() === $publications->count() - 1
                     )
                     );
-                    $table->setCellAttributes($row, 5, array('class' => 'text-center'));
+                    $table->setCellAttributes($row, 5, ['class' => 'text-center']);
 
                     $row ++;
                 }
@@ -766,7 +761,6 @@ class BrowserComponent extends Manager implements BreadcrumbLessComponentInterfa
     }
 
     /**
-     *
      * @return string
      */
     public function renderTablesForCategories()
@@ -785,14 +779,13 @@ class BrowserComponent extends Manager implements BreadcrumbLessComponentInterfa
             ), new StaticConditionVariable($this->get_parent()->get_tool_id())
         );
 
-        $order = new OrderBy(array(
-                new OrderProperty(
-                    new PropertyConditionVariable(
-                        ContentObjectPublicationCategory::class,
-                        ContentObjectPublicationCategory::PROPERTY_DISPLAY_ORDER
-                    )
+        $order = new OrderBy([
+            new OrderProperty(
+                new PropertyConditionVariable(
+                    ContentObjectPublicationCategory::class, ContentObjectPublicationCategory::PROPERTY_DISPLAY_ORDER
                 )
-            ));
+            )
+        ]);
 
         $categories = WeblcmsDataManager::retrieves(
             ContentObjectPublicationCategory::class,

@@ -971,9 +971,7 @@ class CourseGroupForm extends FormValidator
         $count = 0;
         while (sizeof($members_to_add) < $qty_members_to_add && $count < count($course_users))
         {
-            $member = \Chamilo\Core\User\Storage\DataManager::retrieve_user_by_username(
-                $course_users[$count]->get_username()
-            );
+            $member = $this->getUserService()->findUserByUsername($course_users[$count]->get_username());
             $members_to_add[] = $member->getId();
 
             $count ++;
@@ -1002,7 +1000,7 @@ class CourseGroupForm extends FormValidator
         {
             foreach ($course_users_drs as $course_user)
             {
-                $course_users[$course_user[User::PROPERTY_ID]] = \Chamilo\Core\User\Storage\DataManager::retrieve_by_id(
+                $course_users[$course_user[User::PROPERTY_ID]] = DataManager::retrieve_by_id(
                     User::class, $course_user[User::PROPERTY_ID]
                 );
             }
@@ -1050,8 +1048,8 @@ class CourseGroupForm extends FormValidator
             {
                 foreach ($subscribed_users_drs as $user_id)
                 {
-                    $subscribed_users[$user_id] = \Chamilo\Core\User\Storage\DataManager::retrieve_by_id(
-                        User::class, $user_id
+                    $subscribed_users[$user_id] = DataManager::retrieve_by_id(
+                        User::class, (string) $user_id
                     );
                 }
             }

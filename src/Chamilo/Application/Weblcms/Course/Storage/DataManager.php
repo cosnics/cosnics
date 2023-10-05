@@ -315,7 +315,7 @@ class DataManager extends \Chamilo\Application\Weblcms\Storage\DataManager
             self::get_users_not_subscribed_to_course_condition($course_id, $condition)
         );
 
-        return \Chamilo\Core\User\Storage\DataManager::count(
+        return DataManager::count(
             User::class, $parameters
         );
     }
@@ -753,11 +753,6 @@ class DataManager extends \Chamilo\Application\Weblcms\Storage\DataManager
         if ($course instanceof Course)
         {
             $course_id = $course->get_id();
-        }
-
-        if (!$user instanceof User)
-        {
-            $user = \Chamilo\Core\User\Storage\DataManager::retrieve_by_id(User::class, $user);
         }
 
         if (is_null(self::$is_subscribed_cache[$course_id][$user->get_id()]))
@@ -1676,7 +1671,7 @@ class DataManager extends \Chamilo\Application\Weblcms\Storage\DataManager
             self::get_users_not_subscribed_to_course_condition($course_id, $condition), $count, $offset, $order_property
         );
 
-        return \Chamilo\Core\User\Storage\DataManager::retrieves(
+        return DataManager::retrieves(
             User::class, $parameters
         );
     }

@@ -103,8 +103,8 @@ class AssignmentForm extends ContentObjectForm
 
         // attachment uploader and selector
         $calculator = new Calculator(
-            \Chamilo\Core\User\Storage\DataManager::retrieve_by_id(
-                User::class, (int) $this->get_owner_id()
+            DataManager::retrieve_by_id(
+                User::class, (string) $this->get_owner_id()
             )
         );
 

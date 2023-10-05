@@ -4,7 +4,7 @@ namespace Chamilo\Core\Repository\Quota\Form\Rule;
 use Chamilo\Core\Repository\Quota\Calculator;
 use Chamilo\Core\User\Manager;
 use Chamilo\Core\User\Storage\DataClass\User;
-use Chamilo\Core\User\Storage\DataManager;
+use Chamilo\Libraries\Storage\DataManager\DataManager;
 use Chamilo\Libraries\DependencyInjection\DependencyInjectionContainerBuilder;
 use HTML_QuickForm_Rule;
 use Symfony\Component\HttpFoundation\Session\SessionInterface;
@@ -33,7 +33,7 @@ class HTML_QuickForm_Rule_DiskQuota extends HTML_QuickForm_Rule
 
         $calculator = new Calculator(
             DataManager::retrieve_by_id(
-                User::class, (int) $this->getSession()->get(Manager::class)
+                User::class, $this->getSession()->get(Manager::class)
             )
         );
 

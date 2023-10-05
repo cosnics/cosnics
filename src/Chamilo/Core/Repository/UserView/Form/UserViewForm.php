@@ -4,7 +4,7 @@ namespace Chamilo\Core\Repository\UserView\Form;
 use Chamilo\Core\Repository\Selector\TypeSelectorFactory;
 use Chamilo\Core\Repository\UserView\Storage\DataClass\UserView;
 use Chamilo\Core\Repository\UserView\Storage\DataClass\UserViewRelContentObject;
-use Chamilo\Core\Repository\UserView\Storage\DataManager;
+use Chamilo\Libraries\Storage\DataManager\DataManager;
 use Chamilo\Libraries\Format\Form\FormValidator;
 use Chamilo\Libraries\Format\Structure\Glyph\FontAwesomeGlyph;
 use Chamilo\Libraries\Translation\Translation;
@@ -112,7 +112,7 @@ class UserViewForm extends FormValidator
             }
         }
 
-        $elem = &$this->addElement(
+        $this->addElement(
             'select', 'types', Translation::get('SelectTypesToShow'), $content_object_template_ids, array(
                 'multiple' => 'true',
                 'size' => (count($content_object_template_ids) > 10 ? 10 : count($content_object_template_ids))

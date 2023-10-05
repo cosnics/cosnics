@@ -30,7 +30,7 @@ use Chamilo\Libraries\Storage\Query\Variable\StaticConditionVariable;
  */
 class DataManager extends \Chamilo\Libraries\Storage\DataManager\DataManager
 {
-    const PREFIX = 'repository_';
+    public const PREFIX = 'repository_';
 
     /**
      * Gets the number of subscribers a forum has
@@ -52,10 +52,10 @@ class DataManager extends \Chamilo\Libraries\Storage\DataManager\DataManager
     /**
      * Creates a new subscribe based on a user id and a forum id.
      *
-     * @param $user_id int
+     * @param $user_id  int
      * @param $forum_id int
      *
-     * @return boolean Returns whether the creation was succesfull.
+     * @return bool Returns whether the creation was succesfull.
      */
     public static function create_subscribe($user_id, $forum_id)
     {
@@ -192,7 +192,6 @@ class DataManager extends \Chamilo\Libraries\Storage\DataManager\DataManager
      * @param int $user_id
      *
      * @return ForumSubscribe
-     *
      */
     public static function retrieve_subscribe($forum_id, $user_id)
     {
@@ -235,8 +234,8 @@ class DataManager extends \Chamilo\Libraries\Storage\DataManager\DataManager
 
         foreach ($subscriptions as $subscription)
         {
-            $user = \Chamilo\Core\User\Storage\DataManager::retrieve_by_id(
-                User::class, (int) $subscription->get_user_id()
+            $user = DataManager::retrieve_by_id(
+                User::class, (string) $subscription->get_user_id()
             );
             $users[$user->get_id()] = $user;
         }

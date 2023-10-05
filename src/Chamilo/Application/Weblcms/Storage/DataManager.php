@@ -1043,7 +1043,7 @@ class DataManager extends \Chamilo\Libraries\Storage\DataManager\DataManager
 
         if (count($user_ids) > 0)
         {
-            $users = \Chamilo\Core\User\Storage\DataManager::records(
+            $users = DataManager::records(
                 User::class, new RecordRetrievesParameters(
                     new RetrieveProperties([new PropertiesConditionVariable(User::class)]),
                     new InCondition(new PropertyConditionVariable(User::class, User::PROPERTY_ID), $user_ids)
@@ -2534,7 +2534,7 @@ class DataManager extends \Chamilo\Libraries\Storage\DataManager\DataManager
 
         $user_condition = new AndCondition($conditions);
 
-        return \Chamilo\Core\User\Storage\DataManager::retrieves(
+        return DataManager::retrieves(
             User::class, new DataClassRetrievesParameters($user_condition, $count, $offset, $order_by)
         );
     }

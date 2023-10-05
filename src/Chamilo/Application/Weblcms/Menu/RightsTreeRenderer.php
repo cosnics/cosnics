@@ -6,6 +6,7 @@ use Chamilo\Libraries\Architecture\ClassnameUtilities;
 use Chamilo\Libraries\Format\Menu\Library\HtmlMenu;
 use Chamilo\Libraries\Format\Menu\TreeMenuRenderer;
 use Chamilo\Libraries\Format\Structure\Glyph\FontAwesomeGlyph;
+use Chamilo\Libraries\Storage\DataManager\DataManager;
 use Chamilo\Libraries\Storage\Parameters\DataClassRetrievesParameters;
 use Chamilo\Libraries\Storage\Query\Condition\InCondition;
 use Chamilo\Libraries\Storage\Query\Variable\PropertyConditionVariable;
@@ -60,7 +61,7 @@ class RightsTreeRenderer extends HtmlMenu
         $condition = new InCondition(
             new PropertyConditionVariable(Group::class, Group::PROPERTY_ID), $this->groups
         );
-        $sub_groups = \Chamilo\Libraries\Storage\DataManager\DataManager::retrieves(
+        $sub_groups = DataManager::retrieves(
             Group::class, new DataClassRetrievesParameters($condition)
         );
         foreach ($sub_groups as $group)

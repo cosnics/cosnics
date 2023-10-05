@@ -5,7 +5,7 @@ use Chamilo\Core\Repository\Quota\Calculator;
 use Chamilo\Core\Repository\Quota\Form\RequestForm;
 use Chamilo\Core\Repository\Quota\Manager;
 use Chamilo\Core\Repository\Quota\Storage\DataClass\Request;
-use Chamilo\Core\Repository\Quota\Storage\DataManager;
+use Chamilo\Libraries\Storage\DataManager\DataManager;
 use Chamilo\Libraries\Architecture\Exceptions\NotAllowedException;
 use Chamilo\Libraries\Format\Structure\ActionBar\Button;
 use Chamilo\Libraries\Format\Structure\ActionBar\ButtonGroup;

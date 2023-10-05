@@ -3,8 +3,8 @@ namespace Chamilo\Application\Weblcms\Tool\Implementation\CourseGroup\Storage\Da
 
 use Chamilo\Application\Weblcms\Tool\Implementation\CourseGroup\Manager;
 use Chamilo\Core\User\Storage\DataClass\User;
-use Chamilo\Core\User\Storage\DataManager;
 use Chamilo\Libraries\Storage\DataClass\DataClass;
+use Chamilo\Libraries\Storage\DataManager\DataManager;
 
 /**
  * @package application.lib.weblcms.course_group
@@ -121,7 +121,7 @@ class CourseGroupUserRelation extends DataClass
     public function get_user_object()
     {
         return DataManager::retrieve_by_id(
-            User::class, $this->get_user()
+            User::class, (string) $this->get_user()
         );
     }
 

@@ -8,7 +8,7 @@ use Chamilo\Core\Repository\Quota\Form\Rule\HTML_QuickForm_Rule_DiskQuota;
 use Chamilo\Core\Repository\Storage\DataClass\ContentObject;
 use Chamilo\Core\Repository\Workspace\Storage\DataClass\Workspace;
 use Chamilo\Core\User\Storage\DataClass\User;
-use Chamilo\Core\User\Storage\DataManager;
+use Chamilo\Libraries\Storage\DataManager\DataManager;
 use Chamilo\Libraries\Translation\Translation;
 use Chamilo\Libraries\Utilities\StringUtilities;
 
@@ -115,7 +115,7 @@ class FileForm extends ContentObjectForm
 
         $calculator = new Calculator(
             DataManager::retrieve_by_id(
-                User::class, (int) $this->get_owner_id()
+                User::class, (string) $this->get_owner_id()
             )
         );
 
@@ -170,7 +170,7 @@ class FileForm extends ContentObjectForm
         $owner_id = $this->get_owner_id();
 
         $owner = DataManager::retrieve_by_id(
-            User::class, (int) $owner_id
+            User::class, (string) $owner_id
         );
 
         $calculator = new Calculator($owner);

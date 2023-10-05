@@ -7,7 +7,7 @@ use Chamilo\Application\Weblcms\Storage\DataClass\CommonRequest;
 use Chamilo\Application\Weblcms\Storage\DataClass\CourseRequest;
 use Chamilo\Core\User\Manager;
 use Chamilo\Core\User\Storage\DataClass\User;
-use Chamilo\Core\User\Storage\DataManager;
+use Chamilo\Libraries\Storage\DataManager\DataManager;
 use Chamilo\Libraries\Architecture\ClassnameUtilities;
 use Chamilo\Libraries\Format\Form\FormValidator;
 use Chamilo\Libraries\Format\Form\FormValidatorHtmlEditorOptions;

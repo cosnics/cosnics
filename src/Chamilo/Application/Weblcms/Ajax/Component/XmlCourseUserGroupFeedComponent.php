@@ -209,7 +209,7 @@ class XmlCourseUserGroupFeedComponent extends Manager
                 new OrderProperty(new PropertyConditionVariable(User::class, User::PROPERTY_FIRSTNAME), SORT_ASC)
             ];
 
-            $user_result_set = \Chamilo\Core\User\Storage\DataManager::retrieves(
+            $user_result_set = DataManager::retrieves(
                 User::class, new DataClassRetrievesParameters($user_condition, null, null, new OrderBy($order))
             );
 

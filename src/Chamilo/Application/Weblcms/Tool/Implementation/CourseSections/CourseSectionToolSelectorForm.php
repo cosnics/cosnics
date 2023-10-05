@@ -7,7 +7,7 @@ use Chamilo\Application\Weblcms\Storage\DataClass\CourseSection;
 use Chamilo\Application\Weblcms\Storage\DataClass\CourseSetting;
 use Chamilo\Application\Weblcms\Storage\DataClass\CourseTool;
 use Chamilo\Application\Weblcms\Storage\DataClass\CourseToolRelCourseSection;
-use Chamilo\Application\Weblcms\Tool\Implementation\CourseSections\Storage\DataManager;
+use Chamilo\Application\Weblcms\Storage\DataManager;
 use Chamilo\Libraries\Format\Form\FormValidator;
 use Chamilo\Libraries\Storage\Parameters\DataClassRetrievesParameters;
 use Chamilo\Libraries\Storage\Query\Condition\AndCondition;
@@ -68,7 +68,7 @@ class CourseSectionToolSelectorForm extends FormValidator
             ), new StaticConditionVariable($this->course_section->get_id())
         );
 
-        return $registered_tools_resultset = DataManager::retrieves(
+        return $registered_tools_resultset = \Chamilo\Libraries\Storage\DataManager\DataManager::retrieves(
             CourseToolRelCourseSection::class, new DataClassRetrievesParameters($condition)
         );
     }
@@ -136,7 +136,7 @@ class CourseSectionToolSelectorForm extends FormValidator
             new PropertyConditionVariable(CourseSection::class, CourseSection::PROPERTY_COURSE_ID),
             new StaticConditionVariable($this->getRequest()->query->get('course'))
         );
-        $course_sections = \Chamilo\Application\Weblcms\Storage\DataManager::retrieves(
+        $course_sections = DataManager::retrieves(
             CourseSection::class, new DataClassRetrievesParameters($condition)
         );
 

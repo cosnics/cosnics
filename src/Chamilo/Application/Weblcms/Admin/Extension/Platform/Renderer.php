@@ -216,7 +216,7 @@ class Renderer extends CourseListRenderer
 
                 $text = [];
                 $text[] = $course->get_visual_code();
-                $text[] = \Chamilo\Core\User\Storage\DataManager::get_fullname_from_user(
+                $text[] = $this->getUserService()->getUserFullNameByIdentifier(
                     $course->get_titular_id(), Translation::get('NoTitular')
                 );
 

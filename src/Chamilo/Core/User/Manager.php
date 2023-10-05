@@ -183,11 +183,17 @@ abstract class Manager extends Application
 
     public function retrieve_user_by_username($username)
     {
-        return DataManager::retrieve_user_by_username($username);
+        return $this->getUserService()->findUserByUsername($username);
     }
 
+    /**
+     * @param $user
+     *
+     * @return false
+     * @todo This needs to be actually implemented someday
+     */
     public function user_deletion_allowed($user)
     {
-        return DataManager::user_deletion_allowed($user);
+        return false;
     }
 }

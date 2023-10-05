@@ -1,6 +1,7 @@
 <?php
 namespace Chamilo\Application\Weblcms\Tool\Implementation\User;
 
+use Chamilo\Application\Weblcms\Course\Storage\DataManager;
 use Chamilo\Application\Weblcms\Storage\DataClass\CourseEntityRelation;
 use Chamilo\Libraries\Format\Breadcrumb\BreadcrumbTrail;
 use Chamilo\Libraries\Format\Structure\Breadcrumb;
@@ -135,7 +136,7 @@ abstract class Manager extends \Chamilo\Application\Weblcms\Tool\Manager
             new StaticConditionVariable(CourseEntityRelation::ENTITY_TYPE_GROUP)
         );
 
-        return \Chamilo\Application\Weblcms\Course\Storage\DataManager::distinct(
+        return DataManager::distinct(
             CourseEntityRelation::class, new DataClassDistinctParameters(
                 new AndCondition($conditions), new RetrieveProperties(
                     [

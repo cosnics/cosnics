@@ -29,9 +29,7 @@ class ToolSelectorComponent extends Manager
         $id = $this->getRequest()->query->get(self::PARAM_COURSE_SECTION_ID);
         if ($id)
         {
-            $course_section = DataManager::retrieve_by_id(
-                CourseSection::class, (int) $id
-            );
+            $course_section = DataManager::retrieve_by_id(CourseSection::class, $id);
 
             $form = new CourseSectionToolSelectorForm(
                 $course_section, $this->get_url(

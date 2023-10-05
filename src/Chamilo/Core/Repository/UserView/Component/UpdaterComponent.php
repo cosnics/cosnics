@@ -4,7 +4,7 @@ namespace Chamilo\Core\Repository\UserView\Component;
 use Chamilo\Core\Repository\UserView\Form\UserViewForm;
 use Chamilo\Core\Repository\UserView\Manager;
 use Chamilo\Core\Repository\UserView\Storage\DataClass\UserView;
-use Chamilo\Core\Repository\UserView\Storage\DataManager;
+use Chamilo\Libraries\Storage\DataManager\DataManager;
 use Chamilo\Libraries\Translation\Translation;
 use Chamilo\Libraries\Utilities\StringUtilities;
 

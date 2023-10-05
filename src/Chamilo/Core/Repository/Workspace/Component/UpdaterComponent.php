@@ -4,7 +4,7 @@ namespace Chamilo\Core\Repository\Workspace\Component;
 use Chamilo\Core\Repository\Workspace\Form\WorkspaceForm;
 use Chamilo\Core\Repository\Workspace\Manager;
 use Chamilo\Core\Repository\Workspace\Storage\DataClass\Workspace;
-use Chamilo\Core\Repository\Workspace\Storage\DataManager;
+use Chamilo\Libraries\Storage\DataManager\DataManager;
 use Chamilo\Libraries\Format\Breadcrumb\BreadcrumbTrail;
 use Chamilo\Libraries\Format\Structure\Breadcrumb;
 use Chamilo\Libraries\Translation\Translation;

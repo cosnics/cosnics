@@ -155,8 +155,8 @@ class AttemptResultViewerComponent extends Manager
 
         $breadcrumb_trail->set($breadcrumbs);
 
-        $user_fullname = \Chamilo\Core\User\Storage\DataManager::get_fullname_from_user(
-            $this->assessment_attempt->get_user_id()
+        $user_fullname = $this->getUserService()->getUserFullNameByIdentifier(
+            (string) $this->assessment_attempt->get_user_id()
         );
 
         $breadcrumb_trail->add(

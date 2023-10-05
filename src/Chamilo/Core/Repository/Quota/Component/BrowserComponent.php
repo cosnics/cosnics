@@ -4,7 +4,7 @@ namespace Chamilo\Core\Repository\Quota\Component;
 use Chamilo\Core\Repository\Quota\Manager;
 use Chamilo\Core\Repository\Quota\Service\StorageSpaceCalculator;
 use Chamilo\Core\Repository\Quota\Storage\DataClass\Request;
-use Chamilo\Core\Repository\Quota\Storage\DataManager;
+use Chamilo\Libraries\Storage\DataManager\DataManager;
 use Chamilo\Core\Repository\Quota\Table\ManagementRequestTableRenderer;
 use Chamilo\Core\Repository\Quota\Table\RequestTableRenderer;
 use Chamilo\Core\Repository\Quota\Table\UserRequestTableRenderer;

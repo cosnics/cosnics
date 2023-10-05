@@ -22,7 +22,7 @@ class NoOfUsersSubscribedCourseBlock extends CourseBlock
     {
         $reporting_data = new ReportingData();
 
-        $users = \Chamilo\Core\User\Storage\DataManager::count(User::class, new DataClassCountParameters());
+        $users = DataManager::count(User::class, new DataClassCountParameters());
 
         $courses = DataManager::count(
             CourseEntityRelation::class,

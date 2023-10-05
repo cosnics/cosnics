@@ -6,7 +6,6 @@ use Chamilo\Application\Weblcms\Tool\Implementation\User\Manager;
 use Chamilo\Application\Weblcms\Tool\Manager as ToolManager;
 use Chamilo\Core\Group\Storage\DataClass\GroupRelUser;
 use Chamilo\Core\User\Storage\DataClass\User;
-use Chamilo\Core\User\Storage\DataManager;
 use Chamilo\Libraries\Architecture\Application\Application;
 use Chamilo\Libraries\Format\Structure\Glyph\FontAwesomeGlyph;
 use Chamilo\Libraries\Format\Structure\Toolbar;
@@ -16,6 +15,7 @@ use Chamilo\Libraries\Format\Table\Extension\DataClassListTableRenderer;
 use Chamilo\Libraries\Format\Table\Interfaces\TableRowActionsSupport;
 use Chamilo\Libraries\Format\Table\TableParameterValues;
 use Chamilo\Libraries\Format\Table\TableResultPosition;
+use Chamilo\Libraries\Storage\DataManager\DataManager;
 use Doctrine\Common\Collections\ArrayCollection;
 
 /**
@@ -66,7 +66,7 @@ class PlatformGroupRelUserTableRenderer extends DataClassListTableRenderer imple
         if ($column->get_name() == GroupRelUser::PROPERTY_USER_ID)
         {
             $userIdentifier = parent::renderCell($column, $resultPosition, $groupRelUser);
-            $user = DataManager::retrieve_by_id(User::class, (int) $userIdentifier);
+            $user = DataManager::retrieve_by_id(User::class, $userIdentifier);
 
             return $user->get_fullname();
         }

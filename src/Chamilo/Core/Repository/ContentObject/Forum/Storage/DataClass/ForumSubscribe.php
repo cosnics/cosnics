@@ -2,7 +2,7 @@
 namespace Chamilo\Core\Repository\ContentObject\Forum\Storage\DataClass;
 
 use Chamilo\Core\User\Storage\DataClass\User;
-use Chamilo\Core\User\Storage\DataManager;
+use Chamilo\Libraries\Storage\DataManager\DataManager;
 use Chamilo\Libraries\Storage\DataClass\DataClass;
 
 /**

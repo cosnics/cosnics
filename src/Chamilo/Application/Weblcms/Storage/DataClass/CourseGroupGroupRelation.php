@@ -61,7 +61,10 @@ class CourseGroupGroupRelation extends DataClass
         $condition = new AndCondition($conditions);
 
         $data_set = [];
-        $data_set = DataManager::retrieve_content_object_publication_categories($condition, null, null, null);
+        $data_set =
+            DataManager::retrieve_content_object_publication_categories(
+                $condition, null, null, null
+            );
 
         foreach ($data_set as $course_groups)
         {
@@ -179,34 +182,6 @@ class CourseGroupGroupRelation extends DataClass
     }
 
     /**
-     * Gets the course code of the course in which this course_group was created
-     *
-     * @return string
-     */
-    public function get_course_code()
-    {
-        return $this->getDefaultProperty(self::PROPERTY_COURSE_CODE);
-    }
-
-    public function get_course_groups_by_group_id()
-    {
-        $conditions[] = new EqualityCondition(
-            new PropertyConditionVariable(CourseGroup::class, CourseGroup::PROPERTY_GROUP_ID),
-            new StaticConditionVariable($this->get_id())
-        );
-        $conditions[] = new EqualityCondition(
-            new PropertyConditionVariable(CourseGroup::class, CourseGroup::PROPERTY_COURSE_CODE),
-            new StaticConditionVariable($this->get_course_code())
-        );
-        $condition = new AndCondition($conditions);
-
-        $data_set = [];
-        $data_set = DataManager::retrieve_course_groups($condition, null, null, null);
-
-        return $data_set;
-    }
-
-    /**
      * Gets the default properties of this course_group group relation object.
      *
      * @return array An associative array containing the properties.
@@ -214,13 +189,6 @@ class CourseGroupGroupRelation extends DataClass
     public function getDefaultProperties(): array
     {
         return $this->defaultProperties;
-    }
-
-    public function setDefaultProperties(array $defaultProperties): CourseGroupGroupRelation
-    {
-        $this->defaultProperties = $defaultProperties;
-
-        return $this;
     }
 
     /**
@@ -248,6 +216,42 @@ class CourseGroupGroupRelation extends DataClass
             self::PROPERTY_DOCUMENT_PUBLICATION_CATEGORY_ID,
             self::PROPERTY_FORUM_PUBLICATION_CATEGORY_ID
         ];
+    }
+
+    /**
+     * @return string
+     */
+    public static function getStorageUnitName(): string
+    {
+        return 'weblcms_course_group_group_relation';
+    }
+
+    /**
+     * Gets the course code of the course in which this course_group was created
+     *
+     * @return string
+     */
+    public function get_course_code()
+    {
+        return $this->getDefaultProperty(self::PROPERTY_COURSE_CODE);
+    }
+
+    public function get_course_groups_by_group_id()
+    {
+        $conditions[] = new EqualityCondition(
+            new PropertyConditionVariable(CourseGroup::class, CourseGroup::PROPERTY_GROUP_ID),
+            new StaticConditionVariable($this->get_id())
+        );
+        $conditions[] = new EqualityCondition(
+            new PropertyConditionVariable(CourseGroup::class, CourseGroup::PROPERTY_COURSE_CODE),
+            new StaticConditionVariable($this->get_course_code())
+        );
+        $condition = new AndCondition($conditions);
+
+        $data_set = [];
+        $data_set = DataManager::retrieve_course_groups($condition, null, null, null);
+
+        return $data_set;
     }
 
     /**
@@ -305,22 +309,16 @@ class CourseGroupGroupRelation extends DataClass
         return $this->get_course_code();
     }
 
-    /**
-     * @return string
-     */
-    public static function getStorageUnitName(): string
-    {
-        return 'weblcms_course_group_group_relation';
-    }
-
     public static function retrieve($id)
     {
         return DataManager::retrieve_course_group_group_relation($id);
     }
 
-    public function set_course_code($code)
+    public function setDefaultProperties(array $defaultProperties): CourseGroupGroupRelation
     {
-        $this->setDefaultProperty(self::PROPERTY_COURSE_CODE, $code);
+        $this->defaultProperties = $defaultProperties;
+
+        return $this;
     }
 
     /**
@@ -332,6 +330,11 @@ class CourseGroupGroupRelation extends DataClass
     public function setDefaultProperty($name, $value)
     {
         $this->defaultProperties[$name] = $value;
+    }
+
+    public function set_course_code($code)
+    {
+        $this->setDefaultProperty(self::PROPERTY_COURSE_CODE, $code);
     }
 
     public function set_document_publication_category_id($id)

@@ -84,17 +84,8 @@ class XmlPublicationsTreeFeedComponent extends Manager
 
     public function get_category_class(ContentObjectPublicationCategory $category)
     {
-        global $course, $user;
-
-        if (!$course)
-        {
-            $course = CourseDataManager::retrieve_by_id(Course::class, $category->get_course());
-        }
-
-        if (!$user)
-        {
-            $user = \Chamilo\Core\User\Storage\DataManager::get_current_user();
-        }
+        $course = CourseDataManager::retrieve_by_id(Course::class, $category->get_course());
+        $user = $this->getUser();
 
         if ($category->get_visibility())
         {

@@ -4,7 +4,7 @@ namespace Chamilo\Application\Weblcms\Request\Component;
 use Chamilo\Application\Weblcms\Request\Manager;
 use Chamilo\Application\Weblcms\Request\Rights\Rights;
 use Chamilo\Application\Weblcms\Request\Storage\DataClass\Request;
-use Chamilo\Application\Weblcms\Request\Storage\DataManager;
+use Chamilo\Libraries\Storage\DataManager\DataManager;
 use Chamilo\Application\Weblcms\Request\Table\ManagementRequestTableRenderer;
 use Chamilo\Application\Weblcms\Request\Table\Request\RequestTable;
 use Chamilo\Application\Weblcms\Request\Table\UserRequestTableRenderer;
@@ -57,7 +57,7 @@ class BrowserComponent extends Manager implements BreadcrumbLessComponentInterfa
 
             if ($user_requests > 0)
             {
-                $totalNumberOfItems = \Chamilo\Core\Repository\Quota\Storage\DataManager::count(
+                $totalNumberOfItems = DataManager::count(
                     \Chamilo\Core\Repository\Quota\Storage\DataClass\Request::class,
                     new DataClassCountParameters($this->getRequestCondition(RequestTableRenderer::TYPE_PERSONAL))
                 );
@@ -323,7 +323,7 @@ class BrowserComponent extends Manager implements BreadcrumbLessComponentInterfa
      */
     protected function renderManagementRequestTable(int $requestType): string
     {
-        $totalNumberOfItems = \Chamilo\Core\Repository\Quota\Storage\DataManager::count(
+        $totalNumberOfItems = DataManager::count(
             \Chamilo\Core\Repository\Quota\Storage\DataClass\Request::class,
             new DataClassCountParameters($this->getRequestCondition($requestType))
         );

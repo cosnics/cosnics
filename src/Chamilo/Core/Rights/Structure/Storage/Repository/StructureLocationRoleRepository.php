@@ -3,7 +3,7 @@ namespace Chamilo\Core\Rights\Structure\Storage\Repository;
 
 use Chamilo\Core\Rights\Structure\Storage\DataClass\StructureLocation;
 use Chamilo\Core\Rights\Structure\Storage\DataClass\StructureLocationRole;
-use Chamilo\Core\Rights\Structure\Storage\DataManager;
+use Chamilo\Libraries\Storage\DataManager\DataManager;
 use Chamilo\Core\Rights\Structure\Storage\Repository\Interfaces\StructureLocationRoleRepositoryInterface;
 use Chamilo\Core\User\Roles\Storage\DataClass\Role;
 use Chamilo\Libraries\Storage\DataManager\Repository\DataManagerRepository;

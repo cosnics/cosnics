@@ -5,7 +5,7 @@ use Chamilo\Application\Weblcms\Request\Form\RequestForm;
 use Chamilo\Application\Weblcms\Request\Manager;
 use Chamilo\Application\Weblcms\Request\Rights\Rights;
 use Chamilo\Application\Weblcms\Request\Storage\DataClass\Request;
-use Chamilo\Application\Weblcms\Request\Storage\DataManager;
+use Chamilo\Libraries\Storage\DataManager\DataManager;
 use Chamilo\Libraries\Architecture\Exceptions\NotAllowedException;
 use Chamilo\Libraries\Mail\ValueObject\Mail;
 use Chamilo\Libraries\Translation\Translation;

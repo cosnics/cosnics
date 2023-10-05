@@ -6,7 +6,7 @@ use Chamilo\Core\Home\Rights\Manager;
 use Chamilo\Core\Home\Rights\Storage\DataClass\BlockTypeTargetEntity;
 use Chamilo\Core\Rights\Entity\PlatformGroupEntity;
 use Chamilo\Core\Rights\Entity\UserEntity;
-use Chamilo\Core\User\Storage\DataManager;
+use Chamilo\Core\User\Service\UserService;
 use Chamilo\Libraries\Architecture\Application\Application;
 use Chamilo\Libraries\Architecture\Application\Routing\UrlGenerator;
 use Chamilo\Libraries\Format\Structure\Glyph\FontAwesomeGlyph;
@@ -33,9 +33,12 @@ class BlockTypeTargetEntityTableRenderer extends RecordListTableRenderer impleme
 
     protected GroupService $groupService;
 
+    protected UserService $userService;
+
     public function __construct(
         Translator $translator, UrlGenerator $urlGenerator, ListHtmlTableRenderer $htmlTableRenderer, Pager $pager,
-        DataClassPropertyTableColumnFactory $dataClassPropertyTableColumnFactory, GroupService $groupService
+        DataClassPropertyTableColumnFactory $dataClassPropertyTableColumnFactory, GroupService $groupService,
+        UserService $userService
     )
     {
         parent::__construct(
@@ -43,11 +46,17 @@ class BlockTypeTargetEntityTableRenderer extends RecordListTableRenderer impleme
         );
 
         $this->groupService = $groupService;
+        $this->userService = $userService;
     }
 
     public function getGroupService(): GroupService
     {
         return $this->groupService;
+    }
+
+    public function getUserService(): UserService
+    {
+        return $this->userService;
     }
 
     protected function initializeColumns(): void
@@ -142,7 +151,7 @@ class BlockTypeTargetEntityTableRenderer extends RecordListTableRenderer impleme
                     {
                         $targetEntitiesHtml[] =
                             '<option>' . $translator->trans('UserShort', [], Manager::CONTEXT) . ': ' .
-                            DataManager::get_fullname_from_user($user_id) . '</option>';
+                            $this->getUserService()->getUserFullNameByIdentifier($user_id) . '</option>';
                     }
                     break;
             }

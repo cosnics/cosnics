@@ -387,7 +387,7 @@ class CourseTypeCourseListRenderer extends CourseListRenderer
                         $course, CourseSettingsConnector::SHOW_COURSE_TITULAR
                     ))
                     {
-                        $text[] = \Chamilo\Core\User\Storage\DataManager::get_fullname_from_user(
+                        $text[] = $this->getUserService()->getUserFullNameByIdentifier(
                             $course->get_titular_id(), Translation::get('NoTitular')
                         );
                     }
@@ -447,7 +447,6 @@ class CourseTypeCourseListRenderer extends CourseListRenderer
 
     /**
      * @template getService
-     *
      * @param class-string<getService> $serviceName
      *
      * @return getService

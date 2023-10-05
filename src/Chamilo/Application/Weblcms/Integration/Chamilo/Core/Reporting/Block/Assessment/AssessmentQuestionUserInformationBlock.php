@@ -7,7 +7,7 @@ use Chamilo\Core\Reporting\ReportingData;
 use Chamilo\Core\Reporting\Viewer\Rendition\Block\Type\Html;
 use Chamilo\Core\Repository\Storage\DataClass\ComplexContentObjectItem;
 use Chamilo\Core\User\Storage\DataClass\User;
-use Chamilo\Core\User\Storage\DataManager;
+use Chamilo\Libraries\Storage\DataManager\DataManager;
 use Chamilo\Libraries\Translation\Translation;
 
 /**

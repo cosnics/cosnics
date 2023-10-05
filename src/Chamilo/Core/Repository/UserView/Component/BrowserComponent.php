@@ -3,7 +3,7 @@ namespace Chamilo\Core\Repository\UserView\Component;
 
 use Chamilo\Core\Repository\UserView\Manager;
 use Chamilo\Core\Repository\UserView\Storage\DataClass\UserView;
-use Chamilo\Core\Repository\UserView\Storage\DataManager;
+use Chamilo\Libraries\Storage\DataManager\DataManager;
 use Chamilo\Core\Repository\UserView\Table\UserViewTableRenderer;
 use Chamilo\Libraries\Format\Breadcrumb\BreadcrumbLessComponentInterface;
 use Chamilo\Libraries\Format\Structure\ActionBar\Button;

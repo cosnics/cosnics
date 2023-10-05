@@ -59,8 +59,8 @@ class AssessmentOverviewBlock extends ToolBlock
         $count = 1;
         foreach ($attempts as $key => $user_attempts)
         {
-            $user = \Chamilo\Core\User\Storage\DataManager::retrieve_by_id(
-                User::class, (int) $key
+            $user = DataManager::retrieve_by_id(
+                User::class,  $key
             );
             foreach ($user_attempts as $key => $pub_attempts)
             {

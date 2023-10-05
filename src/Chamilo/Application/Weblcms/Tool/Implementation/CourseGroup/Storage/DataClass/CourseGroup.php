@@ -229,8 +229,8 @@ class CourseGroup extends NestedSet
             {
                 if ($include_users)
                 {
-                    $users[$relation->get_user()] = \Chamilo\Core\User\Storage\DataManager::retrieve_by_id(
-                        User::class, $relation->get_user()
+                    $users[$relation->get_user()] = DataManager::retrieve_by_id(
+                        User::class, (string) $relation->get_user()
                     );
                 }
                 else

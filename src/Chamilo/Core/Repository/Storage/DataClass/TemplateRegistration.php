@@ -4,7 +4,7 @@ namespace Chamilo\Core\Repository\Storage\DataClass;
 use Chamilo\Core\Repository\Common\Template\Template;
 use Chamilo\Core\Repository\Manager;
 use Chamilo\Core\User\Storage\DataClass\User;
-use Chamilo\Core\User\Storage\DataManager;
+use Chamilo\Libraries\Storage\DataManager\DataManager;
 use Chamilo\Libraries\Storage\DataClass\DataClass;
 use Exception;
 

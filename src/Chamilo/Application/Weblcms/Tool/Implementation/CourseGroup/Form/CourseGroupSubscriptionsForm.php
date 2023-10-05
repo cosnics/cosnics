@@ -21,7 +21,6 @@ use Chamilo\Libraries\Translation\Translation;
 use Chamilo\Libraries\Utilities\StringUtilities;
 
 /**
- *
  * @package application.lib.weblcms.course_group
  */
 class CourseGroupSubscriptionsForm extends FormValidator
@@ -32,12 +31,12 @@ class CourseGroupSubscriptionsForm extends FormValidator
      */
     protected $courseGroupDecoratorsManager;
 
-    private $parent;
-
     /**
      * @var CourseGroup
      */
     private $course_group;
+
+    private $parent;
 
     public function __construct(
         $course_group, $action, $parent, CourseGroupDecoratorsManager $courseGroupDecoratorsManager
@@ -75,7 +74,7 @@ class CourseGroupSubscriptionsForm extends FormValidator
         $types->add_element_type(
             new AdvancedElementFinderElementType(
                 'user_group', Translation::get('UserGroup'), 'Chamilo\Application\Weblcms\Ajax', 'CourseGroupUserFeed',
-                array(Manager::PARAM_COURSE => $this->parent->get_course_id())
+                [Manager::PARAM_COURSE => $this->parent->get_course_id()]
             )
         );
 
@@ -101,7 +100,7 @@ class CourseGroupSubscriptionsForm extends FormValidator
         $this->build_basic_form();
     }
 
-    function setDefaults($defaultValues = [], $filter = null)
+    public function setDefaults($defaultValues = [], $filter = null)
     {
         $courseGroupUsers = DataManager::retrieve_course_group_users($this->course_group->get_id());
 
@@ -172,7 +171,7 @@ class CourseGroupSubscriptionsForm extends FormValidator
         if ($max_group_subscriptions > 0)
         {
             // only when it is another course_group than the current one
-            foreach($course_groups as $course_group)
+            foreach ($course_groups as $course_group)
             {
                 // check for each user how many times is he/she subscribed int
                 // he course_group
@@ -219,7 +218,7 @@ class CourseGroupSubscriptionsForm extends FormValidator
                                         }
                                         else
                                         {
-                                            $user_number_of_subscriptions[$counter] = array($member, 1);
+                                            $user_number_of_subscriptions[$counter] = [$member, 1];
                                         }
                                         $counter ++;
                                     }
@@ -242,7 +241,7 @@ class CourseGroupSubscriptionsForm extends FormValidator
                             }
                             else
                             {
-                                $user_number_of_subscriptions[] = array($member, 1);
+                                $user_number_of_subscriptions[] = [$member, 1];
                             }
                             $counter ++;
                         }
@@ -255,7 +254,7 @@ class CourseGroupSubscriptionsForm extends FormValidator
         {
             foreach ($not_subscribed_users as $user_id)
             {
-                $user_fullname = \Chamilo\Core\User\Storage\DataManager::get_fullname_from_user($user_id);
+                $user_fullname = $this->getUserService()->getUserFullNameByIdentifier($user_id);
                 $this->course_group->addError($user_fullname . ' maximum number of group subscriptions is reached');
             }
             if (count($members_to_add) == 0)
@@ -282,7 +281,7 @@ class CourseGroupSubscriptionsForm extends FormValidator
                 new PropertyConditionVariable(User::class, User::PROPERTY_ID), $members_to_add
             );
             $parameters = new DataClassRetrievesParameters($condition);
-            $users_to_add = \Chamilo\Core\User\Storage\DataManager::retrieves(
+            $users_to_add = DataManager::retrieves(
                 User::class, $parameters
             );
             $succes &= $this->course_group->subscribe_users($users_to_add);

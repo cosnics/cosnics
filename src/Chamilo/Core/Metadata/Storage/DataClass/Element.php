@@ -249,8 +249,8 @@ class Element extends DataClass implements DisplayOrderDataClassListenerSupport
     {
         if (!$this->namespace)
         {
-            $schema = \Chamilo\Core\Metadata\Storage\DataManager::retrieve_by_id(
-                Schema::class, $this->get_schema_id()
+            $schema = DataManager::retrieve_by_id(
+                Schema::class, (string) $this->get_schema_id()
             );
 
             if (!$schema)

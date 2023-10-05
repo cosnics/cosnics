@@ -340,8 +340,8 @@ class ContentObjectPublication extends Publication implements DisplayOrderDataCl
     {
         if (!isset($this->publisher))
         {
-            $this->publisher = \Chamilo\Core\User\Storage\DataManager::retrieve_by_id(
-                User::class, $this->get_publisher_id()
+            $this->publisher = DataManager::retrieve_by_id(
+                User::class, (string) $this->get_publisher_id()
             );
         }
 

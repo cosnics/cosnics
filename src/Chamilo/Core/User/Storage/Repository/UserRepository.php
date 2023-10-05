@@ -130,6 +130,32 @@ class UserRepository implements UserRepositoryInterface
     }
 
     /**
+     * @return \Doctrine\Common\Collections\ArrayCollection<\Chamilo\Core\User\Storage\DataClass\User>
+     * @throws \Chamilo\Libraries\Storage\Exception\DataClassNoResultException
+     */
+    public function findActiveUsers(
+        ?Condition $condition = null, ?int $offset = null, ?int $count = null, ?OrderBy $orderProperty = null
+    ): ArrayCollection
+    {
+        $conditions = [];
+
+        if ($condition)
+        {
+            $conditions[] = $condition;
+        }
+
+        $conditions[] = new ComparisonCondition(
+            new PropertyConditionVariable(User::class, User::PROPERTY_ACTIVE), ComparisonCondition::EQUAL,
+            new StaticConditionVariable(1)
+        );
+
+        return $this->getDataClassRepository()->retrieves(
+            User::class,
+            new DataClassRetrievesParameters(new AndCondition($conditions), $count, $offset, $orderProperty)
+        );
+    }
+
+    /**
      * @param int $status
      *
      * @return \Doctrine\Common\Collections\ArrayCollection<\Chamilo\Core\User\Storage\DataClass\User>

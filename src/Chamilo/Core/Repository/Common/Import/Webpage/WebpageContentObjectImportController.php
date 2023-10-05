@@ -31,8 +31,8 @@ class WebpageContentObjectImportController extends ContentObjectImportController
             {
                 $file = $this->get_parameters()->get_file();
                 $calculator = new Calculator(
-                    \Chamilo\Core\User\Storage\DataManager::retrieve_by_id(
-                        User::class, (int) $this->get_parameters()->get_user()
+                    DataManager::retrieve_by_id(
+                        User::class, (string) $this->get_parameters()->get_user()
                     )
                 );
 
@@ -52,8 +52,8 @@ class WebpageContentObjectImportController extends ContentObjectImportController
                         ) || strpos($file->getType(), 'text/html') !== false))
                 {
                     $calculator = new Calculator(
-                        \Chamilo\Core\User\Storage\DataManager::retrieve_by_id(
-                            User::class, (int) $this->get_parameters()->get_user()
+                        DataManager::retrieve_by_id(
+                            User::class, (string) $this->get_parameters()->get_user()
                         )
                     );
 

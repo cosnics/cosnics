@@ -2,7 +2,7 @@
 namespace Chamilo\Core\Repository\Publication\Storage\DataClass;
 
 use Chamilo\Core\Repository\Publication\Manager;
-use Chamilo\Core\Repository\Publication\Storage\DataManager\DataManager;
+use Chamilo\Libraries\Storage\DataManager\DataManager;
 use Chamilo\Core\Repository\Storage\DataClass\ContentObject;
 use Chamilo\Libraries\Storage\DataClass\DataClass;
 

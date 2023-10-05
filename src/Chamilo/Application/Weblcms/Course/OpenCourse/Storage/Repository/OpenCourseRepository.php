@@ -203,7 +203,7 @@ class OpenCourseRepository extends DataManagerRepository implements OpenCourseRe
                                 CourseEntityRelation::PROPERTY_ENTITY_TYPE),
                             new StaticConditionVariable(CourseEntityRelation::ENTITY_TYPE_ROLE))))));
 
-        return \Chamilo\Core\User\Roles\Storage\DataManager::retrieves(
+        return DataManager::retrieves(
             Role::class,
             new DataClassRetrievesParameters($condition, null, null, null, $joins));
     }

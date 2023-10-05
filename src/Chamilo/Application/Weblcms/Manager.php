@@ -395,14 +395,12 @@ abstract class Manager extends Application
     /**
      * Gets the user object for a given user
      *
-     * @param $user_id int
-     *
      * @return User
      */
     public function get_user_info($user_id)
     {
-        return \Chamilo\Core\User\Storage\DataManager::retrieve_by_id(
-            User::class, (int) $user_id
+        return DataManager::retrieve_by_id(
+            User::class, $user_id
         );
     }
 

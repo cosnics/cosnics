@@ -3,7 +3,7 @@ namespace Chamilo\Core\Rights\Entity;
 
 use Chamilo\Core\Rights\Manager;
 use Chamilo\Core\User\Storage\DataClass\User;
-use Chamilo\Core\User\Storage\DataManager;
+use Chamilo\Libraries\Storage\DataManager\DataManager;
 use Chamilo\Libraries\Format\Form\Element\AdvancedElementFinder\AdvancedElementFinderElement;
 use Chamilo\Libraries\Format\Form\Element\AdvancedElementFinder\AdvancedElementFinderElementType;
 use Chamilo\Libraries\Format\Structure\Glyph\FontAwesomeGlyph;

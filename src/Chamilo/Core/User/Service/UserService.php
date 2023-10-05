@@ -329,12 +329,13 @@ class UserService
      */
     public function deleteUser(User $user): bool
     {
-        $this->getEventDispatcher()->dispatch(new BeforeUserDeleteEvent($user));
-
-        if (!DataManager::user_deletion_allowed($user))
-        {
+        // TODO: This needs to be implemented some day
+        //if (!$this->canUserBeDeleted($user))
+        //{
             return false;
-        }
+        //}
+
+        $this->getEventDispatcher()->dispatch(new BeforeUserDeleteEvent($user));
 
         if (!$this->getUserRepository()->deleteUser($user))
         {
@@ -386,6 +387,15 @@ class UserService
     public function findActiveUsersByStatus(int $status): ArrayCollection
     {
         return $this->getUserRepository()->findActiveUsersByStatus($status);
+    }
+
+    /**
+     * @return \Doctrine\Common\Collections\ArrayCollection<\Chamilo\Core\User\Storage\DataClass\User>
+     * @throws \Chamilo\Libraries\Storage\Exception\DataClassNoResultException
+     */
+    public function findActiveUsers(?Condition $condition = null, ?int $offset = null, ?int $count = null, ?OrderBy $orderProperty = null): ArrayCollection
+    {
+        return $this->getUserRepository()->findActiveUsers($condition, $offset, $count, $orderProperty);
     }
 
     /**
@@ -658,13 +668,13 @@ class UserService
         return $this->getUserRepository()->findUserByUsernameOrEmail($usernameOrEmail);
     }
 
-    public function getUserFullNameByIdentifier(string $identifier): ?string
+    public function getUserFullNameByIdentifier(string $identifier, ?string $unknownUserTranslation = null): ?string
     {
         $user = $this->findUserByIdentifier($identifier);
 
         if (!$user instanceof User)
         {
-            return $this->getTranslator()->trans('UserUnknown', [], 'Chamilo\Core\User');
+            return $unknownUserTranslation ?: $this->getTranslator()->trans('UserUnknown', [], 'Chamilo\Core\User');
         }
 
         return $user->get_fullname();

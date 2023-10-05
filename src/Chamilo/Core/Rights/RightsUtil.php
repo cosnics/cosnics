@@ -836,8 +836,8 @@ class RightsUtil
         // //todo: make inherit optional check
         $user_id = $user_id ?: $this->getSession()->get(\Chamilo\Core\User\Manager::SESSION_USER_ID);
 
-        $user = \Chamilo\Core\User\Storage\DataManager::retrieve_by_id(
-            User::class, (int) $user_id
+        $user = DataManager::retrieve_by_id(
+            User::class, $user_id
         );
 
         if ($user->isPlatformAdmin())

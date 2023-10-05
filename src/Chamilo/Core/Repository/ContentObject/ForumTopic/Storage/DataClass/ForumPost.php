@@ -113,8 +113,8 @@ class ForumPost extends DataClass implements AttachmentSupportInterface
             $email_notificator->set_action_body($text);
 
             $email_notificator->set_action_user(
-                \Chamilo\Core\User\Storage\DataManager::retrieve_by_id(
-                    User::class, (int) $this->getSession()->get(Manager::SESSION_USER_ID)
+                DataManager::retrieve_by_id(
+                    User::class, (string) $this->getSession()->get(Manager::SESSION_USER_ID)
                 )
             );
             $succes = parent::create($this);
@@ -315,8 +315,8 @@ class ForumPost extends DataClass implements AttachmentSupportInterface
     {
         if (!isset($this->user))
         {
-            $this->user = \Chamilo\Core\User\Storage\DataManager::retrieve_by_id(
-                User::class, (int) $this->get_user_id()
+            $this->user = DataManager::retrieve_by_id(
+                User::class, (string) $this->get_user_id()
             );
         }
 
@@ -446,8 +446,8 @@ class ForumPost extends DataClass implements AttachmentSupportInterface
             $email_notificator = new PostEmailNotificator();
             $email_notificator->set_post($this);
             $email_notificator->set_action_user(
-                \Chamilo\Core\User\Storage\DataManager::retrieve_by_id(
-                    User::class, (int) $this->getSession()->get(Manager::SESSION_USER_ID)
+                DataManager::retrieve_by_id(
+                    User::class, (string) $this->getSession()->get(Manager::SESSION_USER_ID)
                 )
             );
 

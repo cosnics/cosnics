@@ -509,7 +509,7 @@ class ViewerComponent extends Manager implements BreadcrumbLessComponentInterfac
         if (!isset($this->contentObject))
         {
             $this->contentObject =
-                DataManager::retrieve_by_id(ContentObject::class, $this->getContentObjectIdentifier());
+                DataManager::retrieve_by_id(ContentObject::class, (string) $this->getContentObjectIdentifier());
         }
 
         return $this->contentObject;

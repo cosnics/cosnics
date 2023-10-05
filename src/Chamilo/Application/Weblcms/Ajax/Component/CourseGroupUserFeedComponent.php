@@ -73,7 +73,7 @@ class CourseGroupUserFeedComponent extends Manager
      */
     protected function countUsers()
     {
-        return \Chamilo\Core\User\Storage\DataManager::count(
+        return DataManager::count(
             User::class, new DataClassCountParameters($this->getUserCondition())
         );
     }
@@ -301,7 +301,6 @@ class CourseGroupUserFeedComponent extends Manager
     }
 
     /**
-     * @return \Chamilo\Core\User\Storage\DataClass\User[]
      * @throws \Exception
      */
     protected function retrieveUsers()
@@ -311,7 +310,7 @@ class CourseGroupUserFeedComponent extends Manager
             new OrderProperty(new PropertyConditionVariable(User::class, User::PROPERTY_FIRSTNAME), SORT_ASC)
         );
 
-        return \Chamilo\Core\User\Storage\DataManager::retrieves(
+        return DataManager::retrieves(
             User::class,
             new DataClassRetrievesParameters($this->getUserCondition(), 100, $this->getOffset(), new OrderBy($order))
         );

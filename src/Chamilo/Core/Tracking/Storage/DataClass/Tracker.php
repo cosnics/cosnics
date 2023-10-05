@@ -2,7 +2,7 @@
 namespace Chamilo\Core\Tracking\Storage\DataClass;
 
 use Chamilo\Core\Tracking\Manager;
-use Chamilo\Core\Tracking\Storage\DataManager;
+use Chamilo\Libraries\Storage\DataManager\DataManager;
 use Chamilo\Libraries\Storage\DataClass\DataClass;
 use Chamilo\Libraries\Storage\Parameters\DataClassCountParameters;
 use Chamilo\Libraries\Storage\Parameters\DataClassRetrieveParameters;

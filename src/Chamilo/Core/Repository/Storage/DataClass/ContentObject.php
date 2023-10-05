@@ -1349,8 +1349,8 @@ class ContentObject extends CompositeDataClass
     {
         if (!isset($this->owner))
         {
-            $this->owner = \Chamilo\Core\User\Storage\DataManager::retrieve_by_id(
-                User::class, (int) $this->get_owner_id()
+            $this->owner = DataManager::retrieve_by_id(
+                User::class, (string) $this->get_owner_id()
             );
         }
 

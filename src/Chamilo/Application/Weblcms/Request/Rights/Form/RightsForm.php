@@ -3,7 +3,7 @@ namespace Chamilo\Application\Weblcms\Request\Rights\Form;
 
 use Chamilo\Application\Weblcms\Request\Rights\Rights;
 use Chamilo\Application\Weblcms\Request\Rights\Storage\DataClass\RightsLocationEntityRightGroup;
-use Chamilo\Application\Weblcms\Request\Rights\Storage\DataManager;
+use Chamilo\Libraries\Storage\DataManager\DataManager;
 use Chamilo\Core\Rights\Entity\PlatformGroupEntity;
 use Chamilo\Core\Rights\Entity\UserEntity;
 use Chamilo\Libraries\Format\Form\Element\AdvancedElementFinder\AdvancedElementFinderElements;

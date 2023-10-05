@@ -31,8 +31,8 @@ class FileContentObjectImportController extends ContentObjectImportController
             {
                 $file = $this->get_parameters()->get_file();
                 $calculator = new Calculator(
-                    \Chamilo\Core\User\Storage\DataManager::retrieve_by_id(
-                        User::class, (int) $this->get_parameters()->get_user()
+                    DataManager::retrieve_by_id(
+                        User::class, (string) $this->get_parameters()->get_user()
                     )
                 );
 
@@ -50,8 +50,8 @@ class FileContentObjectImportController extends ContentObjectImportController
                 if ($file->get_path() && $file->get_name() && $file->get_extension())
                 {
                     $calculator = new Calculator(
-                        \Chamilo\Core\User\Storage\DataManager::retrieve_by_id(
-                            User::class, (int) $this->get_parameters()->get_user()
+                        DataManager::retrieve_by_id(
+                            User::class, (string) $this->get_parameters()->get_user()
                         )
                     );
 

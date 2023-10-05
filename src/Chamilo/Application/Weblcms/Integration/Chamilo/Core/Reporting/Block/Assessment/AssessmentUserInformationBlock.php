@@ -32,7 +32,7 @@ class AssessmentUserInformationBlock extends AssessmentUsersBlock
         $reporting_data->set_categories($categories);
 
         $user_id = $this->getRequest()->query->get('users');
-        $user = \Chamilo\Core\User\Storage\DataManager::retrieve_by_id(User::class, $user_id);
+        $user = DataManager::retrieve_by_id(User::class, $user_id);
 
         $publication = DataManager::retrieve_by_id(
             ContentObjectPublication::class, $this->getPublicationId()

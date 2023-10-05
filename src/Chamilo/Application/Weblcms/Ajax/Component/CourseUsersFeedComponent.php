@@ -231,7 +231,7 @@ class CourseUsersFeedComponent extends Manager
             $condition = $conditions[0];
         }
         $this->user_count =
-            \Chamilo\Core\User\Storage\DataManager::count(User::class, new DataClassCountParameters($condition));
+            DataManager::count(User::class, new DataClassCountParameters($condition));
 
         $parameters = new DataClassRetrievesParameters(
             $condition, 100, $this->get_offset(), new OrderBy([
@@ -240,6 +240,6 @@ class CourseUsersFeedComponent extends Manager
             ])
         );
 
-        return \Chamilo\Core\User\Storage\DataManager::retrieves(User::class, $parameters);
+        return DataManager::retrieves(User::class, $parameters);
     }
 }

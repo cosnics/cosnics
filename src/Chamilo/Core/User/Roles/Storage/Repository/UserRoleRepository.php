@@ -3,7 +3,7 @@ namespace Chamilo\Core\User\Roles\Storage\Repository;
 
 use Chamilo\Core\User\Roles\Storage\DataClass\Role;
 use Chamilo\Core\User\Roles\Storage\DataClass\RoleRelation;
-use Chamilo\Core\User\Roles\Storage\DataManager;
+use Chamilo\Libraries\Storage\DataManager\DataManager;
 use Chamilo\Core\User\Roles\Storage\Repository\Interfaces\UserRoleRepositoryInterface;
 use Chamilo\Core\User\Storage\DataClass\User;
 use Chamilo\Libraries\Storage\DataManager\Repository\DataManagerRepository;
@@ -91,7 +91,7 @@ class UserRoleRepository extends DataManagerRepository implements UserRoleReposi
             )
         );
 
-        return \Chamilo\Core\User\Storage\DataManager::retrieves(
+        return DataManager::retrieves(
             User::class,
             new DataClassRetrievesParameters($this->getConditionForRole($roleId), null, null, null, $joins)
         );

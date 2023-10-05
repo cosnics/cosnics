@@ -2,8 +2,8 @@
 namespace Chamilo\Libraries\Calendar\Event;
 
 use Chamilo\Core\User\Storage\DataClass\User;
-use Chamilo\Core\User\Storage\DataManager;
 use Chamilo\Libraries\Storage\DataClass\DataClass;
+use Chamilo\Libraries\Storage\DataManager\DataManager;
 
 /**
  * @package Chamilo\Libraries\Calendar\Event

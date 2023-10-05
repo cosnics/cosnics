@@ -75,7 +75,7 @@ class AssessmentAttemptsUserTemplate extends ReportingTemplate
 
         $trail->add(
             new Breadcrumb(
-                $this->get_url(), DataManager::get_fullname_from_user($this->user_id)
+                $this->get_url(), $this->getUserService()->getUserFullNameByIdentifier($this->user_id)
             )
         );
     }

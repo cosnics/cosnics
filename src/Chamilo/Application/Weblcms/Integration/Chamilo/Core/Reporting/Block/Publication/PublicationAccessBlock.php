@@ -41,8 +41,8 @@ class PublicationAccessBlock extends ToolBlock
 
         foreach ($course_visits as $course_visit)
         {
-            $user = \Chamilo\Core\User\Storage\DataManager::retrieve_by_id(
-                User::class, $course_visit->get_user_id()
+            $user = DataManager::retrieve_by_id(
+                User::class, (string) $course_visit->get_user_id()
             );
 
             if ($user)

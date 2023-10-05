@@ -3,7 +3,7 @@ namespace Chamilo\Application\Weblcms\Request\Rights\Component;
 
 use Chamilo\Application\Weblcms\Request\Rights\Manager;
 use Chamilo\Application\Weblcms\Request\Rights\Storage\DataClass\RightsLocationEntityRightGroup;
-use Chamilo\Application\Weblcms\Request\Rights\Storage\DataManager;
+use Chamilo\Libraries\Storage\DataManager\DataManager;
 use Chamilo\Application\Weblcms\Request\Rights\Table\EntityTableRenderer;
 use Chamilo\Libraries\Architecture\Exceptions\NotAllowedException;
 use Chamilo\Libraries\Format\Table\RequestTableParameterValuesCompiler;

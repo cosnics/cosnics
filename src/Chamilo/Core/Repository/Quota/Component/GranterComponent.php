@@ -4,7 +4,7 @@ namespace Chamilo\Core\Repository\Quota\Component;
 use Chamilo\Core\Repository\Quota\Calculator;
 use Chamilo\Core\Repository\Quota\Manager;
 use Chamilo\Core\Repository\Quota\Storage\DataClass\Request;
-use Chamilo\Core\Repository\Quota\Storage\DataManager;
+use Chamilo\Libraries\Storage\DataManager\DataManager;
 use Chamilo\Libraries\Architecture\Exceptions\NotAllowedException;
 use Chamilo\Libraries\Mail\ValueObject\Mail;
 use Chamilo\Libraries\Translation\Translation;

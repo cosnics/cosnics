@@ -4,21 +4,26 @@ namespace Chamilo\Application\Weblcms\Course\Table;
 use Chamilo\Application\Weblcms\Course\Manager;
 use Chamilo\Application\Weblcms\Course\Storage\DataClass\Course;
 use Chamilo\Application\Weblcms\CourseType\Storage\DataClass\CourseType;
-use Chamilo\Core\User\Storage\DataManager;
+use Chamilo\Core\User\Service\UserService;
 use Chamilo\Libraries\Architecture\Application\Application;
+use Chamilo\Libraries\Architecture\Application\Routing\UrlGenerator;
 use Chamilo\Libraries\Format\Structure\Glyph\FontAwesomeGlyph;
 use Chamilo\Libraries\Format\Structure\Toolbar;
 use Chamilo\Libraries\Format\Structure\ToolbarItem;
 use Chamilo\Libraries\Format\Table\Column\DataClassPropertyTableColumn;
+use Chamilo\Libraries\Format\Table\Column\DataClassPropertyTableColumnFactory;
 use Chamilo\Libraries\Format\Table\Column\TableColumn;
 use Chamilo\Libraries\Format\Table\Extension\RecordListTableRenderer;
 use Chamilo\Libraries\Format\Table\FormAction\TableAction;
 use Chamilo\Libraries\Format\Table\FormAction\TableActions;
 use Chamilo\Libraries\Format\Table\Interfaces\TableActionsSupport;
 use Chamilo\Libraries\Format\Table\Interfaces\TableRowActionsSupport;
+use Chamilo\Libraries\Format\Table\ListHtmlTableRenderer;
+use Chamilo\Libraries\Format\Table\Pager;
 use Chamilo\Libraries\Format\Table\TableResultPosition;
 use Chamilo\Libraries\Storage\DataClass\DataClass;
 use Chamilo\Libraries\Utilities\StringUtilities;
+use Symfony\Component\Translation\Translator;
 
 /**
  * @package Chamilo\Application\Weblcms\Course\Table
@@ -27,6 +32,20 @@ use Chamilo\Libraries\Utilities\StringUtilities;
 class CourseTableRenderer extends RecordListTableRenderer implements TableRowActionsSupport, TableActionsSupport
 {
     public const TABLE_IDENTIFIER = Manager::PARAM_COURSE_ID;
+
+    protected UserService $userService;
+
+    public function __construct(
+        Translator $translator, UrlGenerator $urlGenerator, ListHtmlTableRenderer $htmlTableRenderer, Pager $pager,
+        DataClassPropertyTableColumnFactory $dataClassPropertyTableColumnFactory, UserService $userService
+    )
+    {
+        parent::__construct(
+            $translator, $urlGenerator, $htmlTableRenderer, $pager, $dataClassPropertyTableColumnFactory
+        );
+
+        $this->userService = $userService;
+    }
 
     public function getTableActions(): TableActions
     {
@@ -44,6 +63,11 @@ class CourseTableRenderer extends RecordListTableRenderer implements TableRowAct
         );
 
         return $actions;
+    }
+
+    public function getUserService(): UserService
+    {
+        return $this->userService;
     }
 
     protected function initializeColumns(): void
@@ -85,7 +109,7 @@ class CourseTableRenderer extends RecordListTableRenderer implements TableRowAct
                         case Course::PROPERTY_TITLE :
                             return parent::renderCell($column, $resultPosition, $course);
                         case Course::PROPERTY_TITULAR_ID :
-                            return DataManager::get_fullname_from_user(
+                            return $this->getUserService()->getUserFullNameByIdentifier(
                                 $course[Course::PROPERTY_TITULAR_ID],
                                 $translator->trans('TitularUnknown', [], Manager::CONTEXT)
                             );
