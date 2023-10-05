@@ -126,6 +126,5 @@
         </service>
 
         <service id="Chamilo\Libraries\Console\Command\Vendor\PHPStan\PHPStanPackages"/>
-
     </services>
 </container>

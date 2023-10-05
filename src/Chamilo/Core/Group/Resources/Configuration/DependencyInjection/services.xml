@@ -27,8 +27,8 @@
         </service>
         <service id="Chamilo\Core\Group\Storage\Repository\GroupTrackingRepository"/>
 
-        <service id="Chamilo\Core\Group\Service\User\UserEventListener">
-            <tag name="Chamilo\Core\User\Service\UserEventListenerInterface"/>
+        <service id="Chamilo\Core\Group\Service\User\UserEventSubscriber">
+            <tag name="Chamilo\Libraries\EventDispatcher\EventSubscriber"/>
         </service>
     </services>
 </container>

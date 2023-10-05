@@ -3,6 +3,12 @@ namespace Chamilo\Core\User\Service;
 
 use Chamilo\Configuration\Service\Consulter\ConfigurationConsulter;
 use Chamilo\Configuration\Storage\DataClass\Setting;
+use Chamilo\Core\User\EventDispatcher\Event\AfterUserCreateEvent;
+use Chamilo\Core\User\EventDispatcher\Event\AfterUserDeleteEvent;
+use Chamilo\Core\User\EventDispatcher\Event\AfterUserPasswordResetEvent;
+use Chamilo\Core\User\EventDispatcher\Event\AfterUserRegistrationEvent;
+use Chamilo\Core\User\EventDispatcher\Event\AfterUserUpdateEvent;
+use Chamilo\Core\User\EventDispatcher\Event\BeforeUserDeleteEvent;
 use Chamilo\Core\User\Manager;
 use Chamilo\Core\User\Storage\DataClass\User;
 use Chamilo\Core\User\Storage\DataClass\UserSetting;
@@ -32,6 +38,7 @@ use Hackzilla\PasswordGenerator\Generator\PasswordGeneratorInterface;
 use InvalidArgumentException;
 use RuntimeException;
 use Symfony\Component\Cache\Adapter\FilesystemAdapter;
+use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 use Symfony\Component\Translation\Translator;
 
 /**
@@ -49,13 +56,13 @@ class UserService
 
     protected ConfigurationConsulter $configurationConsulter;
 
+    protected EventDispatcherInterface $eventDispatcher;
+
     protected PasswordGeneratorInterface $passwordGenerator;
 
     protected Translator $translator;
 
     protected UrlGenerator $urlGenerator;
-
-    protected UserEventNotifier $userEventNotifier;
 
     protected FilesystemAdapter $userSettingsCacheAdapter;
 
@@ -72,7 +79,7 @@ class UserService
         Translator $translator, FilesystemAdapter $userSettingsCacheAdapter,
         ConfigurationConsulter $configurationConsulter, WebPathBuilder $webPathBuilder, MailerInterface $activeMailer,
         PasswordGeneratorInterface $passwordGenerator, AuthenticationValidator $authenticationValidator,
-        UrlGenerator $urlGenerator, UserEventNotifier $userEventNotifier
+        UrlGenerator $urlGenerator, EventDispatcherInterface $eventDispatcher
     )
     {
         $this->userRepository = $userRepository;
@@ -86,7 +93,7 @@ class UserService
         $this->passwordGenerator = $passwordGenerator;
         $this->authenticationValidator = $authenticationValidator;
         $this->urlGenerator = $urlGenerator;
-        $this->userEventNotifier = $userEventNotifier;
+        $this->eventDispatcher = $eventDispatcher;
     }
 
     public function approveUser(User $executingUser, User $targetUser): bool
@@ -149,7 +156,7 @@ class UserService
             return false;
         }
 
-        $this->getUserEventNotifier()->afterPasswordReset($user);
+        $this->getEventDispatcher()->dispatch(new AfterUserPasswordResetEvent($user));
 
         try
         {
@@ -205,7 +212,9 @@ class UserService
             return false;
         }
 
-        return $this->getUserEventNotifier()->afterCreate($user);
+        $this->getEventDispatcher()->dispatch(new AfterUserCreateEvent($user));
+
+        return true;
     }
 
     /**
@@ -320,10 +329,7 @@ class UserService
      */
     public function deleteUser(User $user): bool
     {
-        if (!$this->getUserEventNotifier()->beforeDelete($user))
-        {
-            return false;
-        }
+        $this->getEventDispatcher()->dispatch(new BeforeUserDeleteEvent($user));
 
         if (!DataManager::user_deletion_allowed($user))
         {
@@ -335,7 +341,9 @@ class UserService
             return false;
         }
 
-        return $this->getUserEventNotifier()->afterDelete($user);
+        $this->getEventDispatcher()->dispatch(new AfterUserDeleteEvent($user));
+
+        return true;
     }
 
     public function deleteUserSettingsForSettingIdentifier(string $settingIdentifier): bool
@@ -605,6 +613,11 @@ class UserService
         return $this->configurationConsulter;
     }
 
+    public function getEventDispatcher(): EventDispatcherInterface
+    {
+        return $this->eventDispatcher;
+    }
+
     protected function getHashingUtilities(): HashingUtilities
     {
         return $this->hashingUtilities;
@@ -643,11 +656,6 @@ class UserService
     public function getUserByUsernameOrEmail(string $usernameOrEmail): ?User
     {
         return $this->getUserRepository()->findUserByUsernameOrEmail($usernameOrEmail);
-    }
-
-    public function getUserEventNotifier(): UserEventNotifier
-    {
-        return $this->userEventNotifier;
     }
 
     public function getUserFullNameByIdentifier(string $identifier): ?string
@@ -729,7 +737,7 @@ class UserService
             false, $status, $active, $approved, $isValidForever, $activationDate, $expirationDate, 209715200, $sendEmail
         );
 
-        $this->getUserEventNotifier()->afterRegistration($user);
+        $this->getEventDispatcher()->dispatch(new AfterUserRegistrationEvent($user));
 
         return $user;
     }
@@ -907,7 +915,9 @@ class UserService
             return false;
         }
 
-        return $this->getUserEventNotifier()->afterUpdate($user);
+        $this->getEventDispatcher()->dispatch(new AfterUserUpdateEvent($user));
+
+        return true;
     }
 
     public function updateUserFromParameters(
@@ -917,22 +927,22 @@ class UserService
         ?int $diskQuota = 209715200, bool $sendEmail = false
     ): bool
     {
-        if(!is_null($firstName))
+        if (!is_null($firstName))
         {
             $user->set_firstname($firstName);
         }
 
-        if(!is_null($lastName))
+        if (!is_null($lastName))
         {
             $user->set_lastname($lastName);
         }
 
-        if(!is_null($officialCode))
+        if (!is_null($officialCode))
         {
             $user->set_official_code($officialCode);
         }
 
-        if(!is_null($emailAddress))
+        if (!is_null($emailAddress))
         {
             $user->set_email($emailAddress);
         }
@@ -942,27 +952,27 @@ class UserService
             $user->set_username($username);
         }
 
-        if(!is_null($status))
+        if (!is_null($status))
         {
             $user->set_status($status);
         }
 
-        if(!is_null($isPlatformAdmin))
+        if (!is_null($isPlatformAdmin))
         {
             $user->set_platformadmin((int) $isPlatformAdmin);
         }
 
-        if(!is_null($active))
+        if (!is_null($active))
         {
             $user->set_active((int) $active);
         }
 
-        if(!is_null($approved))
+        if (!is_null($approved))
         {
             $user->set_approved((int) $approved);
         }
 
-        if(!is_null($diskQuota))
+        if (!is_null($diskQuota))
         {
             $user->set_disk_quota($diskQuota);
         }
@@ -978,7 +988,7 @@ class UserService
 
         $password = $generatePassword ? $this->getPasswordGenerator()->generatePassword() : $password;
 
-        if(!is_null($password))
+        if (!is_null($password))
         {
             $user->set_password($this->getHashingUtilities()->hashString($password));
         }

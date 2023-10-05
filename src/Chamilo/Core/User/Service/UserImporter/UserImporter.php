@@ -5,7 +5,7 @@ use Chamilo\Configuration\Service\Consulter\ConfigurationConsulter;
 use Chamilo\Core\User\Domain\UserImporter\ImportUserData;
 use Chamilo\Core\User\Domain\UserImporter\ImportUserResult;
 use Chamilo\Core\User\Domain\UserImporter\UserImporterResult;
-use Chamilo\Core\User\Service\UserEventNotifier;
+use Chamilo\Core\User\EventDispatcher\Event\AfterUserImportEvent;
 use Chamilo\Core\User\Service\UserImporter\ImportParser\ImportParserFactory;
 use Chamilo\Core\User\Service\UserService;
 use Chamilo\Core\User\Service\UserSettingService;
@@ -16,6 +16,7 @@ use Chamilo\Libraries\Mail\Mailer\MailerInterface;
 use Chamilo\Libraries\Mail\ValueObject\Mail;
 use Exception;
 use RuntimeException;
+use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 use Symfony\Component\HttpFoundation\File\UploadedFile;
 use Symfony\Component\Translation\Translator;
 
@@ -30,13 +31,13 @@ class UserImporter
 {
     protected ConfigurationConsulter $configurationConsulter;
 
+    protected EventDispatcherInterface $eventDispatcher;
+
     protected HashingUtilities $hashingUtilities;
 
     protected MailerInterface $mailer;
 
     protected Translator $translator;
-
-    protected UserEventNotifier $userEventNotifier;
 
     protected ImportParserFactory $userImportParserFactory;
 
@@ -50,7 +51,7 @@ class UserImporter
         ImportParserFactory $userImportParserFactory, UserService $userService,
         ConfigurationConsulter $configurationConsulter, HashingUtilities $hashingUtilities, MailerInterface $mailer,
         Translator $translator, WebPathBuilder $webPathBuilder, UserSettingService $userSettingService,
-        UserEventNotifier $userEventNotifier
+        EventDispatcherInterface $eventDispatcher
     )
     {
         $this->userImportParserFactory = $userImportParserFactory;
@@ -61,7 +62,7 @@ class UserImporter
         $this->translator = $translator;
         $this->webPathBuilder = $webPathBuilder;
         $this->userSettingService = $userSettingService;
-        $this->userEventNotifier = $userEventNotifier;
+        $this->eventDispatcher = $eventDispatcher;
     }
 
     /**
@@ -103,7 +104,7 @@ class UserImporter
                 {
                     $importUserResult->setSuccessful();
                     $this->updateLanguageSettingForUser($importUserData);
-                    $this->getUserEventNotifier()->afterImport($currentUser, $user);
+                    $this->getEventDispatcher()->dispatch(new AfterUserImportEvent($currentUser, $user));
 
                     if ($sendMailToNewUsers)
                     {
@@ -150,9 +151,9 @@ class UserImporter
         }
     }
 
-    public function getUserEventNotifier(): UserEventNotifier
+    public function getEventDispatcher(): EventDispatcherInterface
     {
-        return $this->userEventNotifier;
+        return $this->eventDispatcher;
     }
 
     public function getUserService(): UserService

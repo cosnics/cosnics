@@ -2,7 +2,7 @@
 namespace Chamilo\Core\User\Ajax\Component;
 
 use Chamilo\Core\User\Ajax\Manager;
-use Chamilo\Core\User\Service\UserEventNotifier;
+use Chamilo\Core\User\EventDispatcher\Event\BeforeUserLeavePageEvent;
 use Chamilo\Libraries\Architecture\Interfaces\NoVisitTraceComponentInterface;
 use Chamilo\Libraries\Architecture\JsonAjaxResult;
 
@@ -17,13 +17,10 @@ class LeaveComponent extends Manager implements NoVisitTraceComponentInterface
 
     public function run()
     {
-        $this->getUserEventNotifier()->beforeLeavePage($this->getUser(), $this->getRequest()->request->get('tracker'));
+        $this->getEventDispatcher()->dispatch(
+            new BeforeUserLeavePageEvent($this->getUser(), $this->getRequest()->request->get('tracker'))
+        );
 
         JsonAjaxResult::success();
-    }
-
-    public function getUserEventNotifier(): UserEventNotifier
-    {
-        return $this->getService(UserEventNotifier::class);
     }
 }

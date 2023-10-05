@@ -2,19 +2,30 @@
 namespace Chamilo\Core\User\Service\Tracking;
 
 use Chamilo\Core\Admin\Service\WhoIsOnlineService;
-use Chamilo\Core\User\Service\UserEventListenerInterface;
+use Chamilo\Core\User\EventDispatcher\Event\AfterUserCreateEvent;
+use Chamilo\Core\User\EventDispatcher\Event\AfterUserDeleteEvent;
+use Chamilo\Core\User\EventDispatcher\Event\AfterUserEnterPageEvent;
+use Chamilo\Core\User\EventDispatcher\Event\AfterUserExportEvent;
+use Chamilo\Core\User\EventDispatcher\Event\AfterUserImportEvent;
+use Chamilo\Core\User\EventDispatcher\Event\AfterUserLoginEvent;
+use Chamilo\Core\User\EventDispatcher\Event\AfterUserPasswordResetEvent;
+use Chamilo\Core\User\EventDispatcher\Event\AfterUserRegistrationEvent;
+use Chamilo\Core\User\EventDispatcher\Event\AfterUserUpdateEvent;
+use Chamilo\Core\User\EventDispatcher\Event\BeforeUserLeavePageEvent;
+use Chamilo\Core\User\EventDispatcher\Event\BeforeUserLogoutEvent;
 use Chamilo\Core\User\Storage\DataClass\User;
 use Chamilo\Core\User\Storage\DataClass\UserActivity;
 use Chamilo\Core\User\Storage\DataClass\UserAuthenticationActivity;
 use Chamilo\Core\User\Storage\DataClass\UserVisit;
 use Chamilo\Core\User\Storage\Repository\UserTrackingRepository;
 use Chamilo\Libraries\Format\Structure\PageConfiguration;
+use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 
 /**
  * @package Chamilo\Core\User\Service\Tracking
  * @author  Hans De Bisschop <hans.de.bisschop@ehb.be>
  */
-class UserActivityService implements UserEventListenerInterface
+class UserEventSubscriber implements EventSubscriberInterface
 {
     protected ?User $currentUser;
 
@@ -35,39 +46,41 @@ class UserActivityService implements UserEventListenerInterface
         $this->whoIsOnlineService = $whoIsOnlineService;
     }
 
-    public function afterCreate(User $user): bool
+    public function afterCreate(AfterUserCreateEvent $afterUserCreateEvent): bool
     {
         return $this->getUserTrackingRepository()->createUserActivity(
             $this->initializeUserActivityFromParameters(
-                UserActivity::ACTIVITY_CREATED, $user->getId(),
+                UserActivity::ACTIVITY_CREATED, $afterUserCreateEvent->getUser()->getId(),
                 $this->getCurrentUser() instanceof User ? $this->getCurrentUser()->getId() : null
             )
         );
     }
 
-    public function afterDelete(User $user): bool
+    public function afterDelete(AfterUserDeleteEvent $afterUserDeleteEvent): bool
     {
         return $this->getUserTrackingRepository()->createUserActivity(
             $this->initializeUserActivityFromParameters(
-                UserActivity::ACTIVITY_DELETED, $user->getId(),
+                UserActivity::ACTIVITY_DELETED, $afterUserDeleteEvent->getUser()->getId(),
                 $this->getCurrentUser() instanceof User ? $this->getCurrentUser()->getId() : null
             )
         );
     }
 
-    public function afterEnterPage(User $user, string $pageUri): bool
+    public function afterEnterPage(AfterUserEnterPageEvent $afterUserEnterPage): bool
     {
+        $userIdentifier = $afterUserEnterPage->getUser()->getId();
+
         if (!$this->getWhoIsOnlineService()->updateWhoIsOnlineForUserIdentifierWithCurrentTime(
-            $user->getId()
+            $userIdentifier
         ))
         {
             return false;
         }
 
         $userVisit = new UserVisit();
-        $userVisit->setUserIdentifier($user->getId());
+        $userVisit->setUserIdentifier($userIdentifier);
         $userVisit->setEnterDate(time());
-        $userVisit->setLocation($pageUri);
+        $userVisit->setLocation($afterUserEnterPage->getPageUri());
 
         if (!$this->getUserTrackingRepository()->createUserVisit($userVisit))
         {
@@ -79,78 +92,68 @@ class UserActivityService implements UserEventListenerInterface
         return true;
     }
 
-    public function afterExport(User $actionUser, User $exportedUser): bool
+    public function afterExport(AfterUserExportEvent $afterUserExportEvent): bool
     {
         return $this->getUserTrackingRepository()->createUserActivity(
             $this->initializeUserActivityFromParameters(
-                UserActivity::ACTIVITY_EXPORTED, $exportedUser->getId(), $actionUser->getId()
+                UserActivity::ACTIVITY_EXPORTED, $afterUserExportEvent->getTransferUser()->getId(),
+                $afterUserExportEvent->getUser()->getId()
             )
         );
     }
 
-    public function afterImport(User $actionUser, User $importedUser): bool
+    public function afterImport(AfterUserImportEvent $afterUserImportEvent): bool
     {
         return $this->getUserTrackingRepository()->createUserActivity(
             $this->initializeUserActivityFromParameters(
-                UserActivity::ACTIVITY_IMPORTED, $importedUser->getId()
+                UserActivity::ACTIVITY_IMPORTED, $afterUserImportEvent->getTransferUser()->getId(),
+                $afterUserImportEvent->getUser()->getId()
             )
         );
     }
 
-    public function afterLogin(User $user, ?string $clientIp): bool
+    public function afterLogin(AfterUserLoginEvent $afterUserLoginEvent): bool
     {
         return $this->createAuthenticationActivityFormParameters(
-            UserAuthenticationActivity::ACTIVITY_LOGIN, $user, $clientIp
+            UserAuthenticationActivity::ACTIVITY_LOGIN, $afterUserLoginEvent->getUser()->getId(),
+            $afterUserLoginEvent->getClientIpAddress()
         );
     }
 
-    public function afterPasswordReset(User $user): bool
+    public function afterPasswordReset(AfterUserPasswordResetEvent $afterUserPasswordResetEvent): bool
     {
         return $this->getUserTrackingRepository()->createUserActivity(
             $this->initializeUserActivityFromParameters(
-                UserActivity::ACTIVITY_PASSWORD_RESET, $user->getId(),
+                UserActivity::ACTIVITY_PASSWORD_RESET, $afterUserPasswordResetEvent->getUser()->getId(),
                 $this->getCurrentUser() instanceof User ? $this->getCurrentUser()->getId() : null
             )
         );
     }
 
-    public function afterQuota(User $user): bool
+    public function afterRegistration(AfterUserRegistrationEvent $afterUserRegistrationEvent): bool
     {
         return $this->getUserTrackingRepository()->createUserActivity(
             $this->initializeUserActivityFromParameters(
-                UserActivity::ACTIVITY_QUOTA, $user->getId(),
+                UserActivity::ACTIVITY_REGISTERED, $afterUserRegistrationEvent->getUser()->getId()
+            )
+        );
+    }
+
+    public function afterUpdate(AfterUserUpdateEvent $afterUserUpdateEvent): bool
+    {
+        return $this->getUserTrackingRepository()->createUserActivity(
+            $this->initializeUserActivityFromParameters(
+                UserActivity::ACTIVITY_UPDATED, $afterUserUpdateEvent->getUser()->getId(),
                 $this->getCurrentUser() instanceof User ? $this->getCurrentUser()->getId() : null
             )
         );
     }
 
-    public function afterRegistration(User $user): bool
+    public function beforeLeavePage(BeforeUserLeavePageEvent $beforeUserLeavePage): bool
     {
-        return $this->getUserTrackingRepository()->createUserActivity(
-            $this->initializeUserActivityFromParameters(
-                UserActivity::ACTIVITY_REGISTERED, $user->getId()
-            )
+        $userVisit = $this->getUserTrackingRepository()->findUserVisitByIdentifier(
+            $beforeUserLeavePage->getUserVisitIdentifier()
         );
-    }
-
-    public function afterUpdate(User $user): bool
-    {
-        return $this->getUserTrackingRepository()->createUserActivity(
-            $this->initializeUserActivityFromParameters(
-                UserActivity::ACTIVITY_UPDATED, $user->getId(),
-                $this->getCurrentUser() instanceof User ? $this->getCurrentUser()->getId() : null
-            )
-        );
-    }
-
-    public function beforeDelete(User $user): bool
-    {
-        return true;
-    }
-
-    public function beforeLeavePage(User $user, string $userVisitIdentifier): bool
-    {
-        $userVisit = $this->getUserTrackingRepository()->findUserVisitByIdentifier($userVisitIdentifier);
 
         if ($userVisit instanceof UserVisit)
         {
@@ -162,18 +165,20 @@ class UserActivityService implements UserEventListenerInterface
         return true;
     }
 
-    public function beforeLogout(User $user, ?string $clientIp): bool
+    public function beforeLogout(BeforeUserLogoutEvent $beforeUserLogoutEvent): bool
     {
         return $this->createAuthenticationActivityFormParameters(
-            UserAuthenticationActivity::ACTIVITY_LOGOUT, $user, $clientIp
+            UserAuthenticationActivity::ACTIVITY_LOGOUT, $beforeUserLogoutEvent->getUser()->getId(),
+            $beforeUserLogoutEvent->getClientIpAddress()
         );
     }
 
-    protected function createAuthenticationActivityFormParameters(int $action, User $user, ?string $clientIp): bool
+    protected function createAuthenticationActivityFormParameters(int $action, string $userIdentifier, ?string $clientIp
+    ): bool
     {
         $userAuthenticationActivity = new UserAuthenticationActivity();
 
-        $userAuthenticationActivity->setUserIdentifier($user->getId());
+        $userAuthenticationActivity->setUserIdentifier($userIdentifier);
         $userAuthenticationActivity->setDate(time());
         $userAuthenticationActivity->setIp($clientIp);
         $userAuthenticationActivity->setAction($action);
@@ -189,6 +194,23 @@ class UserActivityService implements UserEventListenerInterface
     public function getPageConfiguration(): PageConfiguration
     {
         return $this->pageConfiguration;
+    }
+
+    public static function getSubscribedEvents(): array
+    {
+        return [
+            AfterUserCreateEvent::class => 'afterUserCreate',
+            AfterUserDeleteEvent::class => 'afterUserDelete',
+            AfterUserExportEvent::class => 'afterUserExport',
+            AfterUserImportEvent::class => 'afterUserImport',
+            AfterUserLoginEvent::class => 'afterUserLogin',
+            AfterUserPasswordResetEvent::class => 'afterPasswordReset',
+            AfterUserRegistrationEvent::class => 'afterRegistration',
+            AfterUserUpdateEvent::class => 'afterUpdate',
+            AfterUserEnterPageEvent::class => 'afterEnterPage',
+            BeforeUserLeavePageEvent::class => 'beforeLeavePage',
+            BeforeUserLogoutEvent::class => 'beforeLogout'
+        ];
     }
 
     public function getUserTrackingRepository(): UserTrackingRepository

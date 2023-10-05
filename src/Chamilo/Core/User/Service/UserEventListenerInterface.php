@@ -1,7 +1,18 @@
 <?php
 namespace Chamilo\Core\User\Service;
 
-use Chamilo\Core\User\Storage\DataClass\User;
+use Chamilo\Core\User\EventDispatcher\Event\AfterUserCreateEvent;
+use Chamilo\Core\User\EventDispatcher\Event\AfterUserDeleteEvent;
+use Chamilo\Core\User\EventDispatcher\Event\AfterUserEnterPageEvent;
+use Chamilo\Core\User\EventDispatcher\Event\AfterUserExportEvent;
+use Chamilo\Core\User\EventDispatcher\Event\AfterUserImportEvent;
+use Chamilo\Core\User\EventDispatcher\Event\AfterUserLoginEvent;
+use Chamilo\Core\User\EventDispatcher\Event\AfterUserPasswordResetEvent;
+use Chamilo\Core\User\EventDispatcher\Event\AfterUserRegistrationEvent;
+use Chamilo\Core\User\EventDispatcher\Event\AfterUserUpdateEvent;
+use Chamilo\Core\User\EventDispatcher\Event\BeforeUserDeleteEvent;
+use Chamilo\Core\User\EventDispatcher\Event\BeforeUserLeavePageEvent;
+use Chamilo\Core\User\EventDispatcher\Event\BeforeUserLogoutEvent;
 
 /**
  * @package Chamilo\Core\User\Service
@@ -9,29 +20,27 @@ use Chamilo\Core\User\Storage\DataClass\User;
  */
 interface UserEventListenerInterface
 {
-    public function afterCreate(User $user): bool;
+    public function afterCreate(AfterUserCreateEvent $afterUserCreateEvent): bool;
 
-    public function afterDelete(User $user): bool;
+    public function afterDelete(AfterUserDeleteEvent $afterUserDeleteEvent): bool;
 
-    public function afterEnterPage(User $user, string $pageUri): bool;
+    public function afterEnterPage(AfterUserEnterPageEvent $afterUserEnterPage): bool;
 
-    public function afterExport(User $actionUser, User $exportedUser): bool;
+    public function afterExport(AfterUserExportEvent $afterUserExportEvent): bool;
 
-    public function afterImport(User $actionUser, User $importedUser): bool;
+    public function afterImport(AfterUserImportEvent $afterUserImportEvent): bool;
 
-    public function afterLogin(User $user, ?string $clientIp): bool;
+    public function afterLogin(AfterUserLoginEvent $afterUserLoginEvent): bool;
 
-    public function afterPasswordReset(User $user): bool;
+    public function afterPasswordReset(AfterUserPasswordResetEvent $afterUserPasswordResetEvent): bool;
 
-    public function afterQuota(User $user): bool;
+    public function afterRegistration(AfterUserRegistrationEvent $afterUserRegistrationEvent): bool;
 
-    public function afterRegistration(User $user): bool;
+    public function afterUpdate(AfterUserUpdateEvent $afterUserUpdateEvent): bool;
 
-    public function afterUpdate(User $user): bool;
+    public function beforeDelete(BeforeUserDeleteEvent $beforeUserDeleteEvent): bool;
 
-    public function beforeDelete(User $user): bool;
+    public function beforeLeavePage(BeforeUserLeavePageEvent $beforeUserLeavePage): bool;
 
-    public function beforeLeavePage(User $user, string $userVisitIdentifier): bool;
-
-    public function beforeLogout(User $user, ?string $clientIp): bool;
+    public function beforeLogout(BeforeUserLogoutEvent $beforeUserLogoutEvent): bool;
 }

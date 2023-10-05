@@ -34,6 +34,7 @@ use Chamilo\Libraries\Utilities\StringUtilities;
 use Doctrine\ORM\EntityManager;
 use Monolog\Logger;
 use Symfony\Component\DependencyInjection\ContainerInterface;
+use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 use Symfony\Component\Filesystem\Filesystem;
 use Symfony\Component\Form\FormFactory;
 use Symfony\Component\HttpFoundation\Session\SessionInterface;
@@ -104,6 +105,11 @@ trait DependencyInjectionContainerTrait
     public function getEntityManager(): EntityManager
     {
         return $this->getService(EntityManager::class);
+    }
+
+    public function getEventDispatcher(): EventDispatcherInterface
+    {
+        return $this->getService('Symfony\Component\EventDispatcher');
     }
 
     protected function getExceptionLogger(): ExceptionLoggerInterface

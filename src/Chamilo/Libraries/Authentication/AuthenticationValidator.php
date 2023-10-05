@@ -2,13 +2,15 @@
 namespace Chamilo\Libraries\Authentication;
 
 use Chamilo\Configuration\Service\Consulter\ConfigurationConsulter;
+use Chamilo\Core\User\EventDispatcher\Event\AfterUserLoginEvent;
+use Chamilo\Core\User\EventDispatcher\Event\BeforeUserLogoutEvent;
 use Chamilo\Core\User\Manager;
-use Chamilo\Core\User\Service\UserEventNotifier;
 use Chamilo\Core\User\Storage\DataClass\User;
 use Chamilo\Libraries\Architecture\Application\Application;
 use Chamilo\Libraries\Architecture\Application\Routing\UrlGenerator;
 use Chamilo\Libraries\Platform\ChamiloRequest;
 use Chamilo\Libraries\Utilities\StringUtilities;
+use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Session\SessionInterface;
 use Symfony\Component\Translation\Translator;
@@ -30,6 +32,8 @@ class AuthenticationValidator
 
     protected ConfigurationConsulter $configurationConsulter;
 
+    protected EventDispatcherInterface $eventDispatcher;
+
     protected ChamiloRequest $request;
 
     protected SessionInterface $session;
@@ -38,11 +42,9 @@ class AuthenticationValidator
 
     protected UrlGenerator $urlGenerator;
 
-    protected UserEventNotifier $userEventNotifier;
-
     public function __construct(
         ChamiloRequest $request, ConfigurationConsulter $configurationConsulter, Translator $translator,
-        SessionInterface $session, UrlGenerator $urlGenerator, UserEventNotifier $userEventNotifier
+        SessionInterface $session, UrlGenerator $urlGenerator, EventDispatcherInterface $eventDispatcher
     )
     {
         $this->request = $request;
@@ -50,7 +52,7 @@ class AuthenticationValidator
         $this->translator = $translator;
         $this->session = $session;
         $this->urlGenerator = $urlGenerator;
-        $this->userEventNotifier = $userEventNotifier;
+        $this->eventDispatcher = $eventDispatcher;
 
         $this->authentications = [];
     }
@@ -74,9 +76,9 @@ class AuthenticationValidator
         return null;
     }
 
-    public function getUserEventNotifier(): UserEventNotifier
+    public function getEventDispatcher(): EventDispatcherInterface
     {
-        return $this->userEventNotifier;
+        return $this->eventDispatcher;
     }
 
     public function isAuthenticated(): bool
@@ -88,7 +90,7 @@ class AuthenticationValidator
 
     public function logout(User $user): void
     {
-        $this->getUserEventNotifier()->beforeLogout($user, $this->request->getClientIp());
+        $this->getEventDispatcher()->dispatch(new BeforeUserLogoutEvent($user, $this->request->getClientIp()));
 
         $this->session->invalidate();
 
@@ -160,7 +162,7 @@ class AuthenticationValidator
 
         $this->validateUser($user);
         $this->setAuthenticatedUser($user);
-        $this->getUserEventNotifier()->afterLogin($user, $this->request->getClientIp());
+        $this->getEventDispatcher()->dispatch(new AfterUserLoginEvent($user, $this->request->getClientIp()));
         $this->redirectAfterLogin();
 
         return true;

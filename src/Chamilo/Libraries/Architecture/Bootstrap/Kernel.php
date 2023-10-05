@@ -4,7 +4,7 @@ namespace Chamilo\Libraries\Architecture\Bootstrap;
 use Chamilo\Configuration\Service\Consulter\ConfigurationConsulter;
 use Chamilo\Core\Admin\Service\WhoIsOnlineService;
 use Chamilo\Core\Home\Manager as HomeManager;
-use Chamilo\Core\User\Service\UserEventNotifier;
+use Chamilo\Core\User\EventDispatcher\Event\AfterUserEnterPageEvent;
 use Chamilo\Core\User\Storage\DataClass\User;
 use Chamilo\Libraries\Architecture\Application\Application;
 use Chamilo\Libraries\Architecture\Application\ApplicationConfiguration;
@@ -22,6 +22,7 @@ use Chamilo\Libraries\Format\Response\PlatformNotAvailableResponse;
 use Chamilo\Libraries\Format\Structure\PageConfiguration;
 use Chamilo\Libraries\Platform\ChamiloRequest;
 use Exception;
+use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\Session\SessionInterface;
@@ -39,9 +40,9 @@ class Kernel
 
     protected AuthenticationValidator $authenticationValidator;
 
-    protected SessionInterface $session;
+    protected EventDispatcherInterface $eventDispatcher;
 
-    protected UserEventNotifier $userEventNotifier;
+    protected SessionInterface $session;
 
     protected WhoIsOnlineService $whoIsOnlineService;
 
@@ -67,7 +68,7 @@ class Kernel
         ChamiloRequest $request, ConfigurationConsulter $configurationConsulter, ApplicationFactory $applicationFactory,
         SessionInterface $session, ExceptionLoggerInterface $exceptionLogger, WhoIsOnlineService $whoIsOnlineService,
         AuthenticationValidator $authenticationValidator, UrlGenerator $urlGenerator,
-        PageConfiguration $pageConfiguration, UserEventNotifier $userEventNotifier, User $user = null
+        PageConfiguration $pageConfiguration, EventDispatcherInterface $eventDispatcher, User $user = null
     )
     {
         $this->request = $request;
@@ -80,7 +81,7 @@ class Kernel
         $this->user = $user;
         $this->authenticationValidator = $authenticationValidator;
         $this->whoIsOnlineService = $whoIsOnlineService;
-        $this->userEventNotifier = $userEventNotifier;
+        $this->eventDispatcher = $eventDispatcher;
     }
 
     /**
@@ -219,6 +220,11 @@ class Kernel
         return $this->context;
     }
 
+    public function getEventDispatcher(): EventDispatcherInterface
+    {
+        return $this->eventDispatcher;
+    }
+
     public function getExceptionLogger(): ExceptionLoggerInterface
     {
         return $this->exceptionLogger;
@@ -261,11 +267,6 @@ class Kernel
     public function getUser(): ?User
     {
         return $this->user;
-    }
-
-    public function getUserEventNotifier(): UserEventNotifier
-    {
-        return $this->userEventNotifier;
     }
 
     public function getWhoIsOnlineService(): WhoIsOnlineService
@@ -399,7 +400,9 @@ class Kernel
 
         if ($applicationRequiresTracing && $this->getUser() instanceof User)
         {
-            $this->getUserEventNotifier()->afterEnterPage($this->getUser(), $this->getRequest()->getRequestUri());
+            $this->getEventDispatcher()->dispatch(
+                new AfterUserEnterPageEvent($this->getUser(), $this->getRequest()->getRequestUri())
+            );
         }
 
         return $this;
