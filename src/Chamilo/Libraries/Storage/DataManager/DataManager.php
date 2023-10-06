@@ -16,7 +16,6 @@ use Chamilo\Libraries\Storage\Parameters\RecordRetrievesParameters;
 use Chamilo\Libraries\Storage\Query\Condition\Condition;
 use Chamilo\Libraries\Storage\Query\UpdateProperties;
 use Doctrine\Common\Collections\ArrayCollection;
-use Exception;
 
 /**
  * General and basic DataManager, providing basic functionality for all other DataManager objects
@@ -58,7 +57,6 @@ class DataManager
             $dataClassName, $displayOrderProperty, $displayOrderMapping, $displayOrderCondition
         );
     }
-
 
     public static function count(string $dataClassName, DataClassCountParameters $parameters): int
     {

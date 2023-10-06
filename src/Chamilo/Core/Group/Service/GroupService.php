@@ -1,6 +1,10 @@
 <?php
 namespace Chamilo\Core\Group\Service;
 
+use Chamilo\Core\Group\EventDispatcher\Event\AfterGroupCreateEvent;
+use Chamilo\Core\Group\EventDispatcher\Event\AfterGroupDeleteEvent;
+use Chamilo\Core\Group\EventDispatcher\Event\AfterGroupMoveEvent;
+use Chamilo\Core\Group\EventDispatcher\Event\AfterGroupUpdateEvent;
 use Chamilo\Core\Group\Storage\DataClass\Group;
 use Chamilo\Core\Group\Storage\DataClass\GroupRelUser;
 use Chamilo\Core\Group\Storage\Repository\GroupRepository;
@@ -11,6 +15,7 @@ use Chamilo\Libraries\Storage\Query\OrderBy;
 use Doctrine\Common\Collections\ArrayCollection;
 use InvalidArgumentException;
 use RuntimeException;
+use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 
 /**
  * Service to manage the groups of Chamilo
@@ -21,7 +26,7 @@ use RuntimeException;
  */
 class GroupService
 {
-    protected GroupEventNotifier $groupEventNotifier;
+    protected EventDispatcherInterface $eventDispatcher;
 
     protected GroupMembershipService $groupMembershipService;
 
@@ -65,13 +70,14 @@ class GroupService
 
     public function __construct(
         GroupRepository $groupRepository, GroupMembershipService $groupMembershipService,
-        PropertyMapper $propertyMapper, GroupEventNotifier $groupEventNotifier, GroupsTreeTraverser $groupsTreeTraverser
+        PropertyMapper $propertyMapper, EventDispatcherInterface $eventDispatcher,
+        GroupsTreeTraverser $groupsTreeTraverser
     )
     {
         $this->groupRepository = $groupRepository;
         $this->groupMembershipService = $groupMembershipService;
         $this->propertyMapper = $propertyMapper;
-        $this->groupEventNotifier = $groupEventNotifier;
+        $this->eventDispatcher = $eventDispatcher;
         $this->groupsTreeTraverser = $groupsTreeTraverser;
     }
 
@@ -87,7 +93,9 @@ class GroupService
             return false;
         }
 
-        return $this->groupEventNotifier->afterCreate($group);
+        $this->getEventDispatcher()->dispatch(new AfterGroupCreateEvent($group));
+
+        return true;
     }
 
     public function deleteGroup(Group $group): bool
@@ -107,7 +115,7 @@ class GroupService
             return false;
         }
 
-        $this->groupEventNotifier->afterDelete($group, $subGroupIds, $impactedUserIds);
+        $this->getEventDispatcher()->dispatch(new AfterGroupDeleteEvent($group, $subGroupIds, $impactedUserIds));
 
         return true;
     }
@@ -287,6 +295,11 @@ class GroupService
         return $group;
     }
 
+    public function getEventDispatcher(): EventDispatcherInterface
+    {
+        return $this->eventDispatcher;
+    }
+
     /**
      * @deprecated Use GroupService::findGroupByIdentifier() now
      */
@@ -350,12 +363,22 @@ class GroupService
             return false;
         }
 
-        return $this->groupEventNotifier->afterMove($group, $oldParentGroup, $newParentGroup);
+        $this->getEventDispatcher()->dispatch(new AfterGroupMoveEvent($group, $oldParentGroup, $newParentGroup));
+
+        return true;
     }
 
     public function subscribeUserToGroupByCode(string $groupCode, User $user): GroupRelUser
     {
         return $this->getGroupMembershipService()->subscribeUserToGroup($this->findGroupByCode($groupCode), $user);
+    }
+
+    /**
+     * @throws \Chamilo\Libraries\Storage\Exception\DataClassNoResultException
+     */
+    public function truncateGroup(Group $group): bool
+    {
+        return $this->getGroupMembershipService()->unsubscribeAllUsersFromGroup($group);
     }
 
     public function updateGroup(Group $group): bool
@@ -365,14 +388,8 @@ class GroupService
             return false;
         }
 
-        return $this->groupEventNotifier->afterUpdate($group);
-    }
+        $this->getEventDispatcher()->dispatch(new AfterGroupUpdateEvent($group));
 
-    /**
-     * @throws \Chamilo\Libraries\Storage\Exception\DataClassNoResultException
-     */
-    public function truncateGroup(Group $group): bool
-    {
-        return $this->getGroupMembershipService()->unsubscribeAllUsersFromGroup($group);
+        return true;
     }
 }

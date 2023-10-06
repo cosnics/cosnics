@@ -1,12 +1,12 @@
 <?php
-namespace Chamilo\Core\Group\Service\User;
+namespace Chamilo\Core\Group\EventDispatcher\Subscriber;
 
 use Chamilo\Core\Group\Service\GroupMembershipService;
 use Chamilo\Core\User\EventDispatcher\Event\BeforeUserDeleteEvent;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 
 /**
- * @package Chamilo\Core\Group\Service\User
+ * @package Chamilo\Core\Group\EventDispatcher\Subscriber
  * @author  Hans De Bisschop <hans.de.bisschop@ehb.be>
  */
 class UserEventSubscriber implements EventSubscriberInterface

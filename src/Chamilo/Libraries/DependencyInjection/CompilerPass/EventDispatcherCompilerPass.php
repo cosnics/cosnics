@@ -23,7 +23,7 @@ class EventDispatcherCompilerPass implements CompilerPassInterface
     {
         if ($container->has(EventDispatcherInterface::class))
         {
-            $taggedServices = $container->findTaggedServiceIds('Chamilo\Libraries\EventDispatcher\EventSubscriber');
+            $taggedServices = $container->findTaggedServiceIds('Chamilo\Libraries\EventDispatcher\Subscriber');
 
             $definition = $container->findDefinition(EventDispatcherInterface::class);
 

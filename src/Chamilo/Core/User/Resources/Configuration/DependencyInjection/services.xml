@@ -84,8 +84,8 @@
             <tag name="Chamilo\Core\Home\Renderer\BlockRenderer"/>
         </service>
 
-        <service id="Chamilo\Core\User\Service\Tracking\UserEventSubscriber">
-            <tag name="Chamilo\Libraries\EventDispatcher\EventSubscriber"/>
+        <service id="Chamilo\Core\User\EventDispatcher\Subscriber\ActivityUserEventSubscriber">
+            <tag name="Chamilo\Libraries\EventDispatcher\Subscriber"/>
         </service>
         <service id="Chamilo\Core\User\Storage\Repository\UserTrackingRepository"/>
     </services>

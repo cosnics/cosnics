@@ -1,18 +1,24 @@
 <?php
-namespace Chamilo\Application\Weblcms\Service;
+namespace Chamilo\Application\Weblcms\EventDispatcher\Subscriber;
 
 use Chamilo\Application\Weblcms\Course\Storage\DataClass\Course;
+use Chamilo\Application\Weblcms\Service\CourseService;
+use Chamilo\Application\Weblcms\Service\RightsService;
 use Chamilo\Application\Weblcms\Tool\Implementation\CourseGroup\Infrastructure\Service\CourseGroupService;
-use Chamilo\Core\Group\Service\GroupEventListenerInterface;
+use Chamilo\Core\Group\EventDispatcher\Event\AfterGroupDeleteEvent;
+use Chamilo\Core\Group\EventDispatcher\Event\AfterGroupEmptyEvent;
+use Chamilo\Core\Group\EventDispatcher\Event\AfterGroupMoveEvent;
+use Chamilo\Core\Group\EventDispatcher\Event\AfterGroupUnsubscribeEvent;
 use Chamilo\Core\Group\Service\GroupsTreeTraverser;
 use Chamilo\Core\Group\Storage\DataClass\Group;
-use Chamilo\Core\User\Storage\DataClass\User;
+use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 
 /**
- * @package Chamilo\Application\Weblcms\Service
+ * @package Chamilo\Application\Weblcms\EventDispatcher\Subscriber
  * @author  Sven Vanpoucke - Hogeschool Gent
+ * @author  Hans De Bisschop <hans.de.bisschop@ehb.be>
  */
-class GroupEventListener implements GroupEventListenerInterface
+class GroupEventSubscriber implements EventSubscriberInterface
 {
     protected CourseGroupService $courseGroupService;
 
@@ -33,26 +39,23 @@ class GroupEventListener implements GroupEventListenerInterface
         $this->courseGroupService = $courseGroupService;
     }
 
-    public function afterCreate(Group $group): bool
-    {
-        return true;
-    }
-
     /**
-     * @param int[] $subGroupIds
-     * @param int[] $impactedUserIds
-     *
      * @throws \Exception
      */
-    public function afterDelete(Group $group, array $subGroupIds = [], array $impactedUserIds = []): bool
+    public function afterDelete(AfterGroupDeleteEvent $afterGroupDeleteEvent): bool
     {
-        $parentGroupIds = $this->groupsTreeTraverser->findParentGroupIdentifiersForGroup($group);
-        $allGroupIds = array_merge($parentGroupIds, $subGroupIds);
+        $group = $afterGroupDeleteEvent->getGroup();
+        $subGroupIdentifiers = $afterGroupDeleteEvent->getSubGroupIdentifiers();
 
-        $deleteGroupIds = $subGroupIds;
+        $parentGroupIds = $this->groupsTreeTraverser->findParentGroupIdentifiersForGroup($group);
+        $allGroupIds = array_merge($parentGroupIds, $subGroupIdentifiers);
+
+        $deleteGroupIds = $subGroupIdentifiers;
         $deleteGroupIds[] = $group->getId();
 
-        return $this->handleCoursesForRemovalOfUsers($allGroupIds, $impactedUserIds, $deleteGroupIds);
+        return $this->handleCoursesForRemovalOfUsers(
+            $allGroupIds, $afterGroupDeleteEvent->getImpactUserIdentifiers(), $deleteGroupIds
+        );
     }
 
     /**
@@ -70,16 +73,20 @@ class GroupEventListener implements GroupEventListenerInterface
     /**
      * @throws \Exception
      */
-    public function afterMove(Group $group, Group $oldParentGroup, Group $newParentGroup): bool
+    public function afterMove(AfterGroupMoveEvent $afterGroupMoveEvent): bool
     {
-        $oldParentGroupIds = $this->groupsTreeTraverser->findParentGroupIdentifiersForGroup($oldParentGroup);
+        $group = $afterGroupMoveEvent->getGroup();
+
+        $oldParentGroupIds =
+            $this->groupsTreeTraverser->findParentGroupIdentifiersForGroup($afterGroupMoveEvent->getOldParentGroup());
         $subGroupIds = $this->groupsTreeTraverser->findSubGroupIdentifiersForGroup($group, true);
 
         $deleteGroupIds = $subGroupIds;
         $deleteGroupIds[] = $group->getId();
 
         $impactedUserIds = $this->groupsTreeTraverser->findUserIdentifiersForGroup($group, true, true);
-        $newParentGroupIds = $this->groupsTreeTraverser->findParentGroupIdentifiersForGroup($newParentGroup);
+        $newParentGroupIds =
+            $this->groupsTreeTraverser->findParentGroupIdentifiersForGroup($afterGroupMoveEvent->getNewParentGroup());
 
         $courses = $this->courseService->getCoursesWhereAtLeastOneGroupIsDirectlySubscribed($oldParentGroupIds);
         foreach ($courses as $course)
@@ -98,24 +105,16 @@ class GroupEventListener implements GroupEventListenerInterface
         return true;
     }
 
-    public function afterSubscribe(Group $group, User $user): bool
-    {
-        return true;
-    }
-
     /**
      * @throws \Exception
      */
-    public function afterUnsubscribe(Group $group, User $user): bool
+    public function afterUnsubscribe(AfterGroupUnsubscribeEvent $afterGroupUnsubscribeEvent): bool
     {
-        $parentGroupIds = $this->groupsTreeTraverser->findParentGroupIdentifiersForGroup($group);
+        $parentGroupIds =
+            $this->groupsTreeTraverser->findParentGroupIdentifiersForGroup($afterGroupUnsubscribeEvent->getGroup());
 
-        return $this->handleCoursesForRemovalOfUsers($parentGroupIds, [$user->getId()]);
-    }
-
-    public function afterUpdate(Group $group): bool
-    {
-        return true;
+        return $this->handleCoursesForRemovalOfUsers($parentGroupIds, [$afterGroupUnsubscribeEvent->getUser()->getId()]
+        );
     }
 
     /**
@@ -142,6 +141,16 @@ class GroupEventListener implements GroupEventListenerInterface
         }
 
         return true;
+    }
+
+    public static function getSubscribedEvents(): array
+    {
+        return [
+            AfterGroupDeleteEvent::class => 'afterDelete',
+            AfterGroupEmptyEvent::class => 'afterEmpty',
+            AfterGroupMoveEvent::class => 'afterMove',
+            AfterGroupUnsubscribeEvent::class => 'afterUnsubscribe'
+        ];
     }
 
     /**

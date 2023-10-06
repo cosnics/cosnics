@@ -1,5 +1,5 @@
 <?php
-namespace Chamilo\Core\User\Service\Tracking;
+namespace Chamilo\Core\User\EventDispatcher\Subscriber;
 
 use Chamilo\Core\Admin\Service\WhoIsOnlineService;
 use Chamilo\Core\User\EventDispatcher\Event\AfterUserCreateEvent;
@@ -22,10 +22,10 @@ use Chamilo\Libraries\Format\Structure\PageConfiguration;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 
 /**
- * @package Chamilo\Core\User\Service\Tracking
+ * @package Chamilo\Core\User\EventDispatcher\Subscriber
  * @author  Hans De Bisschop <hans.de.bisschop@ehb.be>
  */
-class UserEventSubscriber implements EventSubscriberInterface
+class ActivityUserEventSubscriber implements EventSubscriberInterface
 {
     protected ?User $currentUser;
 

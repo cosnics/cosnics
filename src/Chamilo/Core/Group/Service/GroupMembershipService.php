@@ -1,6 +1,9 @@
 <?php
 namespace Chamilo\Core\Group\Service;
 
+use Chamilo\Core\Group\EventDispatcher\Event\AfterGroupEmptyEvent;
+use Chamilo\Core\Group\EventDispatcher\Event\AfterGroupSubscribeEvent;
+use Chamilo\Core\Group\EventDispatcher\Event\AfterGroupUnsubscribeEvent;
 use Chamilo\Core\Group\Storage\DataClass\Group;
 use Chamilo\Core\Group\Storage\DataClass\GroupRelUser;
 use Chamilo\Core\Group\Storage\Repository\GroupMembershipRepository;
@@ -10,6 +13,7 @@ use Chamilo\Libraries\Storage\Query\Condition\Condition;
 use Chamilo\Libraries\Storage\Query\OrderBy;
 use Doctrine\Common\Collections\ArrayCollection;
 use RuntimeException;
+use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 
 /**
  * @package Chamilo\Core\Group\Service
@@ -17,7 +21,7 @@ use RuntimeException;
  */
 class GroupMembershipService
 {
-    protected GroupEventNotifier $groupEventNotifier;
+    protected EventDispatcherInterface $eventDispatcher;
 
     protected GroupMembershipRepository $groupMembershipRepository;
 
@@ -26,12 +30,12 @@ class GroupMembershipService
     protected UserService $userService;
 
     public function __construct(
-        GroupMembershipRepository $groupMembershipRepository, GroupEventNotifier $groupEventNotifier,
+        GroupMembershipRepository $groupMembershipRepository, EventDispatcherInterface $eventDispatcher,
         UserService $userService
     )
     {
         $this->groupMembershipRepository = $groupMembershipRepository;
-        $this->groupEventNotifier = $groupEventNotifier;
+        $this->eventDispatcher = $eventDispatcher;
         $this->userService = $userService;
     }
 
@@ -63,7 +67,9 @@ class GroupMembershipService
             throw new RuntimeException('Could not empty the group with id ' . $group->getId());
         }
 
-        return $this->groupEventNotifier->afterEmptyGroup($group, $impactedUserIds);
+        $this->getEventDispatcher()->dispatch(new AfterGroupEmptyEvent($group, $impactedUserIds));
+
+        return true;
     }
 
     public function findGroupRelUserByIdentifier(string $groupRelUserIdentifier): ?GroupRelUser
@@ -129,6 +135,11 @@ class GroupMembershipService
         );
     }
 
+    public function getEventDispatcher(): EventDispatcherInterface
+    {
+        return $this->eventDispatcher;
+    }
+
     public function getGroupMembershipRepository(): GroupMembershipRepository
     {
         return $this->groupMembershipRepository;
@@ -162,6 +173,11 @@ class GroupMembershipService
     public function getGroupUserRelationsByGroupIdentifier(string $groupIdentifier): ArrayCollection
     {
         return $this->getGroupMembershipRepository()->getGroupUserRelationsByGroupIdentifier($groupIdentifier);
+    }
+
+    public function getGroupsTreeTraverser(): GroupsTreeTraverser
+    {
+        return $this->groupsTreeTraverser;
     }
 
     public function getUserService(): UserService
@@ -200,7 +216,7 @@ class GroupMembershipService
                 );
             }
 
-            $this->groupEventNotifier->afterSubscribe($group, $user);
+            $this->getEventDispatcher()->dispatch(new AfterGroupSubscribeEvent($group, $user));
         }
 
         return $groupRelation;
@@ -255,12 +271,11 @@ class GroupMembershipService
                 );
             }
 
-            if (!$this->groupEventNotifier->afterUnsubscribe(
-                $group, $this->getUserService()->findUserByIdentifier($groupUserRelation->get_user_id())
-            ))
-            {
-                return false;
-            }
+            $this->getEventDispatcher()->dispatch(
+                new AfterGroupUnsubscribeEvent(
+                    $group, $this->getUserService()->findUserByIdentifier($groupUserRelation->get_user_id())
+                )
+            );
         }
 
         return true;
@@ -303,6 +318,8 @@ class GroupMembershipService
             );
         }
 
-        return $this->groupEventNotifier->afterUnsubscribe($group, $user);
+        $this->getEventDispatcher()->dispatch(new AfterGroupUnsubscribeEvent($group, $user));
+
+        return true;
     }
 }
