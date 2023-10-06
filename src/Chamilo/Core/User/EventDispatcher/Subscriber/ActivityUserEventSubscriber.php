@@ -203,7 +203,7 @@ class ActivityUserEventSubscriber implements EventSubscriberInterface
             AfterUserDeleteEvent::class => 'afterUserDelete',
             AfterUserExportEvent::class => 'afterUserExport',
             AfterUserImportEvent::class => 'afterUserImport',
-            AfterUserLoginEvent::class => 'afterUserLogin',
+            AfterUserLoginEvent::class => 'afterLogin',
             AfterUserPasswordResetEvent::class => 'afterPasswordReset',
             AfterUserRegistrationEvent::class => 'afterRegistration',
             AfterUserUpdateEvent::class => 'afterUpdate',
