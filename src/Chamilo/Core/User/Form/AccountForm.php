@@ -54,7 +54,7 @@ class AccountForm extends UserForm
             $allowedToChangeEmailAddress, $requireOfficialCode, $allowedToChangeOfficialCode
         );
 
-        $this->buildPasswordCategoryForm($allowedToChangePassword, false, false, true, true);
+        $this->buildPasswordCategoryForm($allowedToChangePassword, false, true, true);
 
         $this->buildSecurityTokenForm();
 
@@ -111,16 +111,18 @@ class AccountForm extends UserForm
      */
     public function checkAllowedToChangePassword($exportValues): true|array
     {
-        $newPassword = $exportValues[self::NEW_PASSWORD];
+        $newPassword = $exportValues[User::PROPERTY_PASSWORD];
 
         if (empty($newPassword))
         {
             return true;
         }
 
-        if (empty($this->exportValue(User::PROPERTY_PASSWORD)))
+        if (empty($this->exportValue(self::PROPERTY_CURRENT_PASSWORD)))
         {
-            return [self::NEW_PASSWORD => $this->getTranslator()->trans('EnterCurrentPassword', [], Manager::CONTEXT)];
+            return [
+                User::PROPERTY_PASSWORD => $this->getTranslator()->trans('EnterCurrentPassword', [], Manager::CONTEXT)
+            ];
         }
 
         return true;

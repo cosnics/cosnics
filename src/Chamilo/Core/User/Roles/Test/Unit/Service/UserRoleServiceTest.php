@@ -109,7 +109,7 @@ class UserRoleServiceTest extends ChamiloTestCase
         $this->assertEquals($expectedRoles, $this->userRoleService->getRolesForUser($user));
     }
 
-    public function testDoesUserHasAtLeastOneRole()
+    public function testDoesUserHaveAtLeastOneRole()
     {
         $user = new User();
         $user->setId(10);
@@ -126,7 +126,7 @@ class UserRoleServiceTest extends ChamiloTestCase
 
         $this->mockFindRolesForUser($user, array($role));
 
-        $this->assertTrue($this->userRoleService->doesUserHasAtLeastOneRole($user, $rolesToMatch));
+        $this->assertTrue($this->userRoleService->doesUserHaveAtLeastOneRole($user, $rolesToMatch));
     }
 
     public function testDoesUserHasAtLeasOneRoleReturnsFalse()
@@ -146,10 +146,10 @@ class UserRoleServiceTest extends ChamiloTestCase
 
         $this->mockFindRolesForUser($user, array($role));
 
-        $this->assertFalse($this->userRoleService->doesUserHasAtLeastOneRole($user, $rolesToMatch));
+        $this->assertFalse($this->userRoleService->doesUserHaveAtLeastOneRole($user, $rolesToMatch));
     }
 
-    public function testDoesUserHasAtLeastOneRoleWithNoRolesToMatch()
+    public function tesDoesUserHaveAtLeastOneRoleWithNoRolesToMatch()
     {
         $user = new User();
         $user->setId(10);
@@ -160,7 +160,7 @@ class UserRoleServiceTest extends ChamiloTestCase
 
         $this->mockFindRolesForUser($user, array($role));
 
-        $this->assertFalse($this->userRoleService->doesUserHasAtLeastOneRole($user, []));
+        $this->assertFalse($this->userRoleService->doesUserHaveAtLeastOneRole($user, []));
     }
 
     public function testGetUsersForRole()

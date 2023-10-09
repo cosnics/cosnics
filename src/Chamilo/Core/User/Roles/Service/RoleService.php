@@ -4,62 +4,41 @@ namespace Chamilo\Core\User\Roles\Service;
 use Chamilo\Core\User\Roles\Service\Interfaces\RoleServiceInterface;
 use Chamilo\Core\User\Roles\Storage\DataClass\Role;
 use Chamilo\Core\User\Roles\Storage\Repository\Interfaces\RoleRepositoryInterface;
-use Chamilo\Libraries\DependencyInjection\DependencyInjectionContainerBuilder;
-use Chamilo\Libraries\Storage\Cache\DataClassRepositoryCache;
 use Chamilo\Libraries\Storage\Query\Condition\Condition;
+use Chamilo\Libraries\Storage\Query\OrderBy;
+use Doctrine\Common\Collections\ArrayCollection;
 use Exception;
 
 /**
  * Manages roles
  *
- * @author Sven Vanpoucke - Hogeschool Gent
+ * @package Chamilo\Core\User\Roles\Service
+ * @author  Sven Vanpoucke - Hogeschool Gent
  */
 class RoleService implements RoleServiceInterface
 {
 
-    /**
-     *
-     * @var RoleRepositoryInterface
-     */
-    protected $roleRepository;
+    protected RoleRepositoryInterface $roleRepository;
 
-    /**
-     * RoleService constructor.
-     *
-     * @param RoleRepositoryInterface $roleRepository
-     */
     public function __construct(RoleRepositoryInterface $roleRepository)
     {
         $this->roleRepository = $roleRepository;
     }
 
-    /**
-     * Counts the roles
-     *
-     * @param Condition $condition
-     *
-     * @return int
-     */
-    public function countRoles(Condition $condition = null)
+    public function countRoles(?Condition $condition = null): int
     {
-        return $this->roleRepository->countRoles($condition);
+        return $this->getRoleRepository()->countRoles($condition);
     }
 
     /**
-     * Creates a role by a given name
-     *
-     * @param string $roleName
-     *
-     * @return Role
-     *
      * @throws \Exception
      */
-    public function createRoleByName($roleName)
+    public function createRoleByName(string $roleName): Role
     {
         $role = new Role();
         $role->setRole($roleName);
 
-        if (!$this->roleRepository->create($role))
+        if (!$this->getRoleRepository()->createRole($role))
         {
             throw new Exception('The role with name ' . $roleName . ' could not be created');
         }
@@ -68,65 +47,40 @@ class RoleService implements RoleServiceInterface
     }
 
     /**
-     * Deletes a given role
-     *
-     * @param Role $role
-     *
      * @throws \Exception
      */
-    public function deleteRole(Role $role)
+    public function deleteRole(Role $role): bool
     {
-        if (!$this->roleRepository->delete($role))
+        if (!$this->getRoleRepository()->deleteRole($role))
         {
-            $roleName = $role->getRole();
-            throw new Exception('The role with name ' . $roleName . ' could not be deleted');
+            throw new Exception('The role with name ' . $role->getRole() . ' could not be deleted');
         }
+
+        return true;
     }
 
     /**
-     * @return \Chamilo\Libraries\Storage\Cache\DataClassRepositoryCache
+     * @throws \Exception
      */
-    protected function getDataClassRepositoryCache()
-    {
-        return $this->getService(
-            DataClassRepositoryCache::class
-        );
-    }
-
-    /**
-     * Either retrieves or creates a new role by a given name
-     *
-     * @param string $roleName
-     *
-     * @return Role
-     */
-    public function getOrCreateRoleByName($roleName)
+    public function getOrCreateRoleByName(string $roleName): Role
     {
         try
         {
             return $this->getRoleByName($roleName);
         }
-        catch (Exception $ex)
+        catch (Exception)
         {
-            $role = $this->createRoleByName($roleName);
-            $this->getDataClassRepositoryCache()->truncate(Role::class);
-
-            return $role;
+            return $this->createRoleByName($roleName);
         }
     }
 
     /**
-     * Returns a role by a given name
-     *
-     * @param string $roleName
-     *
-     * @return Role
-     *
      * @throws \Exception
      */
-    public function getRoleByName($roleName)
+    public function getRoleByName(string $roleName): Role
     {
-        $role = $this->roleRepository->findRoleByName($roleName);
+        $role = $this->getRoleRepository()->findRoleByName($roleName);
+
         if (!$role instanceof Role)
         {
             throw new Exception('Role not found by given name ' . $roleName);
@@ -135,31 +89,18 @@ class RoleService implements RoleServiceInterface
         return $role;
     }
 
-    /**
-     * Retrieves the roles
-     *
-     * @param Condition $condition
-     * @param int $offset
-     * @param int $count
-     * @param array $orderBy
-     *
-     * @return Role[]
-     */
-    public function getRoles(Condition $condition = null, $count = null, $offset = null, $orderBy = null)
+    public function getRoleRepository(): RoleRepositoryInterface
     {
-        return $this->roleRepository->findRoles($condition, $count, $offset, $orderBy);
+        return $this->roleRepository;
     }
 
     /**
-     * @param string $serviceName
-     *
-     * @return object
-     * @throws \Exception
+     * @return \Doctrine\Common\Collections\ArrayCollection<\Chamilo\Core\User\Roles\Storage\DataClass\Role>
      */
-    protected function getService(string $serviceName)
+    public function getRoles(
+        ?Condition $condition = null, ?int $count = null, ?int $offset = null, ?OrderBy $orderBy = null
+    ): ArrayCollection
     {
-        return DependencyInjectionContainerBuilder::getInstance()->createContainer()->get(
-            $serviceName
-        );
+        return $this->getRoleRepository()->findRoles($condition, $count, $offset, $orderBy);
     }
 }

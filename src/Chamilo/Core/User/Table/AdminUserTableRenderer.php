@@ -4,6 +4,7 @@ namespace Chamilo\Core\User\Table;
 use Chamilo\Configuration\Service\Consulter\ConfigurationConsulter;
 use Chamilo\Core\User\Integration\Chamilo\Core\Reporting\Template\LoginTemplate;
 use Chamilo\Core\User\Manager;
+use Chamilo\Core\User\Service\UserUrlGenerator;
 use Chamilo\Core\User\Storage\DataClass\User;
 use Chamilo\Libraries\Architecture\Application\Application;
 use Chamilo\Libraries\Architecture\Application\Routing\UrlGenerator;
@@ -35,14 +36,17 @@ class AdminUserTableRenderer extends DataClassListTableRenderer implements Table
 
     protected User $user;
 
+    protected UserUrlGenerator $userUrlGenerator;
+
     public function __construct(
         ConfigurationConsulter $configurationConsulter, User $user, Translator $translator, UrlGenerator $urlGenerator,
         ListHtmlTableRenderer $htmlTableRenderer, Pager $pager,
-        DataClassPropertyTableColumnFactory $dataClassPropertyTableColumnFactory
+        DataClassPropertyTableColumnFactory $dataClassPropertyTableColumnFactory, UserUrlGenerator $userUrlGenerator
     )
     {
         $this->configurationConsulter = $configurationConsulter;
         $this->user = $user;
+        $this->userUrlGenerator = $userUrlGenerator;
 
         parent::__construct(
             $translator, $urlGenerator, $htmlTableRenderer, $pager, $dataClassPropertyTableColumnFactory
@@ -125,6 +129,11 @@ class AdminUserTableRenderer extends DataClassListTableRenderer implements Table
         return $this->user;
     }
 
+    public function getUserUrlGenerator(): UserUrlGenerator
+    {
+        return $this->userUrlGenerator;
+    }
+
     protected function initializeColumns(): void
     {
         $this->addColumn(
@@ -192,13 +201,7 @@ class AdminUserTableRenderer extends DataClassListTableRenderer implements Table
 
         if ($this->getUser()->isPlatformAdmin())
         {
-            $editUrl = $urlGenerator->fromParameters(
-                [
-                    Application::PARAM_CONTEXT => Manager::CONTEXT,
-                    Application::PARAM_ACTION => Manager::ACTION_UPDATE_USER,
-                    Manager::PARAM_USER_USER_ID => $user->getId()
-                ]
-            );
+            $editUrl = $this->getUserUrlGenerator()->getUpdateUrl($user);
 
             $toolbar->add_item(
                 new ToolbarItem(
@@ -207,13 +210,7 @@ class AdminUserTableRenderer extends DataClassListTableRenderer implements Table
                 )
             );
 
-            $detailUrl = $urlGenerator->fromParameters(
-                [
-                    Application::PARAM_CONTEXT => Manager::CONTEXT,
-                    Application::PARAM_ACTION => Manager::ACTION_USER_DETAIL,
-                    Manager::PARAM_USER_USER_ID => $user->getId()
-                ]
-            );
+            $detailUrl = $this->getUserUrlGenerator()->getDetailUrl($user);
 
             $toolbar->add_item(
                 new ToolBarItem(
@@ -239,13 +236,7 @@ class AdminUserTableRenderer extends DataClassListTableRenderer implements Table
                 )
             );
 
-            $viewQuotaUrl = $urlGenerator->fromParameters(
-                [
-                    Application::PARAM_CONTEXT => Manager::CONTEXT,
-                    Application::PARAM_ACTION => Manager::ACTION_VIEW_QUOTA,
-                    Manager::PARAM_USER_USER_ID => $user->getId()
-                ]
-            );
+            $viewQuotaUrl = $this->getUserUrlGenerator()->getViewQuotaUrl($user);
 
             $toolbar->add_item(
                 new ToolBarItem(
@@ -256,13 +247,7 @@ class AdminUserTableRenderer extends DataClassListTableRenderer implements Table
 
             if ($this->getConfigurationConsulter()->getSetting(['Chamilo\Core\Admin', 'active_online_email_editor']))
             {
-                $emailUrl = $urlGenerator->fromParameters(
-                    [
-                        Application::PARAM_CONTEXT => Manager::CONTEXT,
-                        Application::PARAM_ACTION => Manager::ACTION_EMAIL,
-                        Manager::PARAM_USER_USER_ID => $user->getId()
-                    ]
-                );
+                $emailUrl = $this->getUserUrlGenerator()->getEmailUrl($user);
 
                 $toolbar->add_item(
                     new ToolBarItem(
@@ -277,13 +262,7 @@ class AdminUserTableRenderer extends DataClassListTableRenderer implements Table
         {
             if ($this->getUser()->isPlatformAdmin())
             {
-                $deleteUrl = $urlGenerator->fromParameters(
-                    [
-                        Application::PARAM_CONTEXT => Manager::CONTEXT,
-                        Application::PARAM_ACTION => Manager::ACTION_DELETE_USER,
-                        Manager::PARAM_USER_USER_ID => $user->getId()
-                    ]
-                );
+                $deleteUrl = $this->getUserUrlGenerator()->getDeleteUrl($user);
 
                 $toolbar->add_item(
                     new ToolBarItem(
@@ -304,13 +283,7 @@ class AdminUserTableRenderer extends DataClassListTableRenderer implements Table
 
             if ($this->getUser()->isPlatformAdmin())
             {
-                $changeUserUrl = $urlGenerator->fromParameters(
-                    [
-                        Application::PARAM_CONTEXT => Manager::CONTEXT,
-                        Application::PARAM_ACTION => Manager::ACTION_CHANGE_USER,
-                        Manager::PARAM_USER_USER_ID => $user->getId()
-                    ]
-                );
+                $changeUserUrl = $this->getUserUrlGenerator()->getChangeUserUrl($user);
 
                 $toolbar->add_item(
                     new ToolBarItem(

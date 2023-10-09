@@ -2,8 +2,7 @@
 namespace Chamilo\Core\User;
 
 use Chamilo\Core\Admin\Service\BreadcrumbGenerator;
-use Chamilo\Core\User\Component\UserApproverComponent;
-use Chamilo\Core\User\Storage\DataManager;
+use Chamilo\Core\User\Service\UserUrlGenerator;
 use Chamilo\Libraries\Architecture\Application\Application;
 use Chamilo\Libraries\Authentication\AuthenticationValidator;
 use Chamilo\Libraries\Format\Breadcrumb\BreadcrumbGeneratorInterface;
@@ -66,10 +65,7 @@ abstract class Manager extends Application
         return $this->getService('Chamilo\Libraries\Mail\Mailer\ActiveMailer');
     }
 
-    /**
-     * @return AuthenticationValidator
-     */
-    public function getAuthenticationValidator()
+    public function getAuthenticationValidator(): AuthenticationValidator
     {
         return $this->getService(AuthenticationValidator::class);
     }
@@ -79,121 +75,8 @@ abstract class Manager extends Application
         return $this->getService(BreadcrumbGenerator::class);
     }
 
-    public function get_approve_user_url($user)
+    public function getUserUrlGenerator(): UserUrlGenerator
     {
-        return $this->get_url(
-            [
-                self::PARAM_CONTEXT => Manager::CONTEXT,
-                self::PARAM_ACTION => self::ACTION_USER_APPROVER,
-                self::PARAM_USER_USER_ID => $user->get_id(),
-                self::PARAM_CHOICE => UserApproverComponent::CHOICE_APPROVE
-            ]
-        );
-    }
-
-    public function get_change_user_url($user)
-    {
-        return $this->get_url(
-            [self::PARAM_ACTION => self::ACTION_CHANGE_USER, self::PARAM_USER_USER_ID => $user->get_id()]
-        );
-    }
-
-    /**
-     * Returns the last modification date for the terms and conditions
-     *
-     * @return mixed
-     */
-    public static function get_date_terms_and_conditions_last_modified()
-    {
-        $platform_setting = \Chamilo\Configuration\Storage\DataManager::retrieve_setting_from_variable_name(
-            'date_terms_and_conditions_update', Manager::CONTEXT
-        );
-
-        return $platform_setting->get_value();
-    }
-
-    public function get_deny_user_url($user)
-    {
-        return $this->get_url(
-            [
-                self::PARAM_CONTEXT => Manager::CONTEXT,
-                self::PARAM_ACTION => self::ACTION_USER_APPROVER,
-                self::PARAM_USER_USER_ID => $user->get_id(),
-                self::PARAM_CHOICE => UserApproverComponent::CHOICE_DENY
-            ]
-        );
-    }
-
-    public function get_edit_metadata_url($user)
-    {
-        return $this->get_url(
-            [self::PARAM_ACTION => self::ACTION_MANAGE_METADATA, self::PARAM_USER_USER_ID => $user->get_id()]
-        );
-    }
-
-    public function get_email_user_url($user)
-    {
-        return $this->get_url(
-            [self::PARAM_ACTION => self::ACTION_EMAIL, self::PARAM_USER_USER_ID => $user->get_id()]
-        );
-    }
-
-    public function get_reporting_url()
-    {
-        return $this->get_url([self::PARAM_ACTION => self::ACTION_REPORTING]);
-    }
-
-    /**
-     * gets the user delete url
-     *
-     * @param return the requested url
-     */
-    public function get_user_delete_url($user)
-    {
-        return $this->get_url(
-            [self::PARAM_ACTION => self::ACTION_DELETE_USER, self::PARAM_USER_USER_ID => $user->get_id()]
-        );
-    }
-
-    public function get_user_detail_url($user_id)
-    {
-        return $this->get_url(
-            [self::PARAM_ACTION => self::ACTION_USER_DETAIL, self::PARAM_USER_USER_ID => $user_id]
-        );
-    }
-
-    /**
-     * gets the user editing url
-     *
-     * @param return the requested url
-     */
-    public function get_user_editing_url($user)
-    {
-        return $this->get_url(
-            [self::PARAM_ACTION => self::ACTION_UPDATE_USER, self::PARAM_USER_USER_ID => $user->get_id()]
-        );
-    }
-
-    public function get_user_reporting_url($user_id)
-    {
-        return $this->get_url(
-            [self::PARAM_ACTION => self::ACTION_REPORTING, self::PARAM_USER_USER_ID => $user_id]
-        );
-    }
-
-    public function retrieve_user_by_username($username)
-    {
-        return $this->getUserService()->findUserByUsername($username);
-    }
-
-    /**
-     * @param $user
-     *
-     * @return false
-     * @todo This needs to be actually implemented someday
-     */
-    public function user_deletion_allowed($user)
-    {
-        return false;
+        return $this->getService(UserUrlGenerator::class);
     }
 }

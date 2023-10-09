@@ -14,7 +14,6 @@ use Chamilo\Core\Repository\Common\Import\ImportParameters;
 use Chamilo\Core\Repository\Service\ContentObjectTemplate\ContentObjectTemplateSynchronizer;
 use Chamilo\Core\User\Manager;
 use Chamilo\Core\User\Storage\DataClass\User;
-use Chamilo\Core\User\Storage\DataManager;
 use Chamilo\Libraries\Architecture\ClassnameUtilities;
 use Chamilo\Libraries\File\Properties\FileProperties;
 use Chamilo\Libraries\File\SystemPathBuilder;

@@ -1,15 +1,12 @@
 <?php
 namespace Chamilo\Core\Repository\Selector;
 
-use Chamilo\Configuration\Service\Consulter\RegistrationConsulter;
 use Chamilo\Configuration\Storage\DataClass\Registration;
 use Chamilo\Core\Repository\Selector\Option\ContentObjectTypeSelectorOption;
 use Chamilo\Core\Repository\Service\TemplateRegistrationConsulter;
-use Chamilo\Core\Repository\Storage\DataClass\ContentObject;
 use Chamilo\Core\Repository\Storage\DataManager;
 use Chamilo\Libraries\Architecture\ClassnameUtilities;
 use Chamilo\Libraries\DependencyInjection\Traits\DependencyInjectionContainerTrait;
-use Chamilo\Libraries\File\ConfigurablePathBuilder;
 use Chamilo\Libraries\Translation\Translation;
 use Chamilo\Libraries\Utilities\StringUtilities;
 use Psr\Cache\InvalidArgumentException;
@@ -93,7 +90,9 @@ class TypeSelectorFactory
                     $templateRegistration->get_content_object_type()
                 );
 
-            if ($this->getRegistrationConsulter()->isContextRegisteredAndActive($templateRegistration->get_content_object_type()))
+            if ($this->getRegistrationConsulter()->isContextRegisteredAndActive(
+                $templateRegistration->get_content_object_type()
+            ))
             {
                 if (in_array($type, $helperTypes))
                 {

@@ -190,7 +190,7 @@ class OpenCourseService implements OpenCourseServiceInterface
     {
         $courseRoles = $this->getRolesForOpenCourse($course);
 
-        return $this->userRoleService->doesUserHasAtLeastOneRole($user, $courseRoles);
+        return $this->userRoleService->doesUserHaveAtLeastOneRole($user, $courseRoles);
     }
 
     /**

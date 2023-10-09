@@ -274,7 +274,7 @@ class OpenCourseServiceTest extends ChamiloTestCase
             $this->returnValue($resultSet)
         );
 
-        $this->userRoleServiceMock->expects($this->once())->method('doesUserHasAtLeastOneRole')->with($user, $roles)
+        $this->userRoleServiceMock->expects($this->once())->method('doesUserHaveAtLeastOneRole')->with($user, $roles)
             ->will(
                 $this->returnValue(true)
             );
@@ -290,7 +290,7 @@ class OpenCourseServiceTest extends ChamiloTestCase
             $this->returnValue($resultSet)
         );
 
-        $this->userRoleServiceMock->expects($this->once())->method('doesUserHasAtLeastOneRole')->will(
+        $this->userRoleServiceMock->expects($this->once())->method('doesUserHaveAtLeastOneRole')->will(
             $this->returnValue(false)
         );
 

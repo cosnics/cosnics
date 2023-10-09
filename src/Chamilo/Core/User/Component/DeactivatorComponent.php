@@ -8,8 +8,8 @@ namespace Chamilo\Core\User\Component;
 class DeactivatorComponent extends ActiveChangerComponent
 {
 
-    protected function getState(): int
+    protected function getState(): bool
     {
-        return 0;
+        return false;
     }
 }

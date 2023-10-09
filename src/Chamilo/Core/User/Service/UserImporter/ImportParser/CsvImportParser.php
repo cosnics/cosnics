@@ -71,7 +71,7 @@ class CsvImportParser implements ImportParserInterface
                 $importUsersData[] = new ImportUserData(
                     implode(';', $row_tmp), $rowData['action'], $rowData['username'], $rowData['firstname'],
                     $rowData['lastname'], $rowData['email'], $rowData['official_code'], $rowData['language'],
-                    $rowData['status'], $rowData['active'], $rowData['phone'], $rowData['activation_date'],
+                    (int) $rowData['status'], (bool) $rowData['active'], $rowData['phone'], $rowData['activation_date'],
                     $rowData['expiration_date'], $rowData['auth_source'], $rowData['password']
                 );
             }

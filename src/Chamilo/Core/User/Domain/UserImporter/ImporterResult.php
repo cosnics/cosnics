@@ -13,8 +13,6 @@ use RuntimeException;
 class ImporterResult
 {
     /**
-     * List of import data results that have failed
-     *
      * @var \Chamilo\Core\User\Domain\UserImporter\ImportDataResult[]
      */
     protected array $failedUserResults;
@@ -24,24 +22,16 @@ class ImporterResult
     protected string $rawImportDataHeader;
 
     /**
-     * List of import data results that are successful
-     *
      * @var \Chamilo\Core\User\Domain\UserImporter\ImportDataResult[]
      */
     protected array $successUserResults;
 
-    /**
-     * UserImporterResult constructor.
-     */
     public function __construct()
     {
         $this->failedUserResults = $this->successUserResults = [];
     }
 
-    /**
-     * @param ImportDataResult $importDataResult
-     */
-    public function addFailedImportDataResult(ImportDataResult $importDataResult)
+    public function addFailedImportDataResult(ImportDataResult $importDataResult): void
     {
         if (!$importDataResult->hasFailed())
         {
@@ -51,12 +41,7 @@ class ImporterResult
         $this->failedUserResults[] = $importDataResult;
     }
 
-    /**
-     * Adds the result of a single import.
-     *
-     * @param ImportDataResult $importDataResult
-     */
-    public function addImportDataResult(ImportDataResult $importDataResult)
+    public function addImportDataResult(ImportDataResult $importDataResult): void
     {
         if (!$importDataResult->isCompleted())
         {
@@ -74,10 +59,7 @@ class ImporterResult
         }
     }
 
-    /**
-     * @param ImportDataResult $importDataResult
-     */
-    public function addSuccessImportDataResult(ImportDataResult $importDataResult)
+    public function addSuccessImportDataResult(ImportDataResult $importDataResult): void
     {
         if (!$importDataResult->isSuccessful())
         {

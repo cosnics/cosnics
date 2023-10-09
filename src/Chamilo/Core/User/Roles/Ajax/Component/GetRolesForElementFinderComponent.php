@@ -2,7 +2,6 @@
 namespace Chamilo\Core\User\Roles\Ajax\Component;
 
 use Chamilo\Core\User\Roles\Ajax\Manager;
-use Chamilo\Core\User\Roles\Service\Interfaces\RoleServiceInterface;
 use Chamilo\Core\User\Roles\Service\RoleService;
 use Chamilo\Core\User\Roles\Storage\DataClass\Role;
 use Chamilo\Libraries\Format\Form\Element\AdvancedElementFinder\AdvancedElementFinderElement;
@@ -10,45 +9,29 @@ use Chamilo\Libraries\Format\Form\Element\AdvancedElementFinder\AdvancedElementF
 use Chamilo\Libraries\Format\Form\Element\AdvancedElementFinder\Ajax\AjaxResultDataProviderInterface;
 use Chamilo\Libraries\Format\Form\Element\AdvancedElementFinder\Ajax\AjaxResultGenerator;
 use Chamilo\Libraries\Format\Structure\Glyph\FontAwesomeGlyph;
+use Chamilo\Libraries\Storage\Query\Condition\AndCondition;
 use Chamilo\Libraries\Storage\Query\OrderBy;
 use Chamilo\Libraries\Storage\Query\OrderProperty;
 use Chamilo\Libraries\Storage\Query\Variable\PropertyConditionVariable;
+use Doctrine\Common\Collections\ArrayCollection;
 
 /**
- * Returns the courses formatted for the element finder
- *
- * @author Sven Vanpoucke - Hogeschool Gent
+ * @package Chamilo\Core\User\Roles\Ajax\Component
+ * @author  Sven Vanpoucke - Hogeschool Gent
  */
 class GetRolesForElementFinderComponent extends Manager implements AjaxResultDataProviderInterface
 {
     public const PARAM_OFFSET = 'offset';
-
     public const PARAM_SEARCH_QUERY = 'query';
 
-    /**
-     *
-     * @var AjaxResultGenerator
-     */
-    protected $ajaxResultGenerator;
+    protected AjaxResultGenerator $ajaxResultGenerator;
 
-    /**
-     * Runs this component and returns it's response
-     */
     public function run()
     {
-        $this->ajaxResultGenerator = new AjaxResultGenerator(
-            $this, $this->getRequest()->getFromRequestOrQuery(self::PARAM_SEARCH_QUERY), $this->getRequest()->getFromRequestOrQuery(self::PARAM_OFFSET)
-        );
-
-        $this->ajaxResultGenerator->generateAjaxResult()->display();
+        $this->getAjaxResultGenerator()->generateAjaxResult()->display();
     }
 
-    /**
-     * Generates the elements for the advanced element finder
-     *
-     * @param AdvancedElementFinderElements $advancedElementFinderElements
-     */
-    public function generateElements(AdvancedElementFinderElements $advancedElementFinderElements)
+    public function generateElements(AdvancedElementFinderElements $advancedElementFinderElements): void
     {
         $roles = $this->getRoles();
         $glyph = new FontAwesomeGlyph('mask', [], null, 'fas');
@@ -63,45 +46,43 @@ class GetRolesForElementFinderComponent extends Manager implements AjaxResultDat
         }
     }
 
-    /**
-     *
-     * @return \Chamilo\Libraries\Storage\Query\Condition\Condition
-     */
-    protected function getCondition()
+    protected function getAjaxResultGenerator(): AjaxResultGenerator
     {
-        return $this->ajaxResultGenerator->getSearchCondition(
-            array(new PropertyConditionVariable(Role::class, Role::PROPERTY_ROLE))
+        if (!isset($this->ajaxResultGenerator))
+        {
+            $this->ajaxResultGenerator = new AjaxResultGenerator(
+                $this, $this->getRequest()->getFromRequestOrQuery(self::PARAM_SEARCH_QUERY),
+                $this->getRequest()->getFromRequestOrQuery(self::PARAM_OFFSET)
+            );
+        }
+
+        return $this->ajaxResultGenerator;
+    }
+
+    protected function getCondition(): ?AndCondition
+    {
+        return $this->getAjaxResultGenerator()->getSearchCondition(
+            [new PropertyConditionVariable(Role::class, Role::PROPERTY_ROLE)]
         );
     }
 
-    /**
-     *
-     * @return RoleServiceInterface
-     */
-    protected function getRoleService()
+    protected function getRoleService(): RoleService
     {
         return $this->getService(RoleService::class);
     }
 
     /**
-     * Retrieves the courses for the current request
-     *
-     * @return Role[]
+     * @return \Doctrine\Common\Collections\ArrayCollection<\Chamilo\Core\User\Roles\Storage\DataClass\Role>
      */
-    protected function getRoles()
+    protected function getRoles(): ArrayCollection
     {
         return $this->getRoleService()->getRoles(
             $this->getCondition(), 100, $this->ajaxResultGenerator->getOffset(),
-            new OrderBy(array(new OrderProperty(new PropertyConditionVariable(Role::class, Role::PROPERTY_ROLE))))
+            new OrderBy([new OrderProperty(new PropertyConditionVariable(Role::class, Role::PROPERTY_ROLE))])
         );
     }
 
-    /**
-     * Returns the number of total elements (without the offset)
-     *
-     * @return int
-     */
-    public function getTotalNumberOfElements()
+    public function getTotalNumberOfElements(): int
     {
         return $this->getRoleService()->countRoles($this->getCondition());
     }

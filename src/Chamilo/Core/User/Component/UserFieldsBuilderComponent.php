@@ -25,6 +25,9 @@ class UserFieldsBuilderComponent extends Manager
             throw new NotAllowedException();
         }
 
+        /**
+         * @var \Chamilo\Configuration\Form\Manager $application
+         */
         $application = $this->getApplicationFactory()->getApplication(
             \Chamilo\Configuration\Form\Manager::CONTEXT,
             new ApplicationConfiguration($this->getRequest(), $this->getUser(), $this)

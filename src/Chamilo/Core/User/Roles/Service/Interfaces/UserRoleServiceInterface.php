@@ -2,60 +2,33 @@
 namespace Chamilo\Core\User\Roles\Service\Interfaces;
 
 use Chamilo\Core\User\Storage\DataClass\User;
+use Doctrine\Common\Collections\ArrayCollection;
 
 /**
  * Manages roles
- * 
- * @author Sven Vanpoucke - Hogeschool Gent
+ *
+ * @package Chamilo\Core\User\Roles\Service\Interfaces
+ * @author  Sven Vanpoucke - Hogeschool Gent
  */
 interface UserRoleServiceInterface
 {
 
-    /**
-     * Returns the roles for a given user
-     * 
-     * @param User $user
-     *
-     * @return Role[]
-     */
-    public function getRolesForUser(User $user);
+    public function addRoleForUser(User $user, string $roleName): void;
 
     /**
-     * Returns the users that are attached to a given role
-     * 
-     * @param string $roleName
-     *
-     * @return \Chamilo\Core\User\Storage\DataClass\User[]
+     * @param \Chamilo\Core\User\Roles\Storage\DataClass\Role[] $rolesToMatch
      */
-    public function getUsersForRole($roleName);
+    public function doesUserHaveAtLeastOneRole(User $user, array $rolesToMatch = []): bool;
 
     /**
-     * Adds a role to a given user by a given role name
-     * 
-     * @param User $user
-     * @param string $roleName
-     *
-     * @throws \Exception
+     * @return \Chamilo\Core\User\Roles\Storage\DataClass\Role[]
      */
-    public function addRoleForUser(User $user, $roleName);
+    public function getRolesForUser(User $user): array;
 
     /**
-     * Removes a role by a given name from a given user
-     * 
-     * @param User $user
-     * @param string $roleName
-     *
-     * @throws \Exception
+     * @return \Doctrine\Common\Collections\ArrayCollection<\Chamilo\Core\User\Storage\DataClass\User>
      */
-    public function removeRoleFromUser(User $user, $roleName);
+    public function getUsersForRole(string $roleName): ArrayCollection;
 
-    /**
-     * Checks whether or not a user matches one of the requested roles
-     * 
-     * @param User $user
-     * @param Role[] $rolesToMatch
-     *
-     * @return bool
-     */
-    public function doesUserHasAtLeastOneRole(User $user, $rolesToMatch = []);
+    public function removeRoleFromUser(User $user, string $roleName): void;
 }

@@ -163,8 +163,6 @@ abstract class UserForm extends FormValidator
     {
         $translator = $this->getTranslator();
 
-        $fieldRequiredMessage = $translator->trans('ThisFieldIsRequired', [], StringUtilities::LIBRARIES);
-
         if ($includeCategoryTitle)
         {
             $this->addElement('category', $translator->trans('PersonalDetails', [], Manager::CONTEXT));

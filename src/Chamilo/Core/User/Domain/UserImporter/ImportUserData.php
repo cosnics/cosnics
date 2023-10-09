@@ -9,113 +9,51 @@ use RuntimeException;
 /**
  * Describes the data to import a single user
  *
- * @author Sven Vanpoucke - Hogeschool Gent
+ * @package Chamilo\Core\User\Domain\UserImporter
+ * @author  Sven Vanpoucke - Hogeschool Gent
  */
 class ImportUserData extends ImportData
 {
-    /**
-     * @var string
-     */
-    protected $username;
+    protected ?string $activationDate;
 
-    /**
-     * @var string
-     */
-    protected $firstName;
+    protected bool $active;
 
-    /**
-     * @var string
-     */
-    protected $lastName;
+    protected ?string $authSource;
 
-    /**
-     * @var string
-     */
-    protected $email;
+    protected ?string $email;
 
-    /**
-     * @var string
-     */
-    protected $officialCode;
+    protected ?string $expirationDate;
 
-    /**
-     * @var string
-     */
-    protected $language;
+    protected ?string $firstName;
 
-    /**
-     * @var string
-     */
-    protected $status;
+    protected ImportUserResult $importUserResult;
 
-    /**
-     * @var string
-     */
-    protected $active;
+    protected ?string $language;
 
-    /**
-     * @var string
-     */
-    protected $phone;
+    protected ?string $lastName;
 
-    /**
-     * @var string
-     */
-    protected $activationDate;
+    protected bool $notifyUser;
 
-    /**
-     * @var string
-     */
-    protected $expirationDate;
+    protected ?string $officialCode;
 
-    /**
-     * @var string
-     */
-    protected $authSource;
+    protected ?string $password;
 
-    /**
-     * @var string
-     */
-    protected $password;
+    protected ?string $phone;
+
+    protected int $status;
 
     /**
      * The user object referenced to the imported user
-     *
-     * @var User
      */
-    protected $user;
+    protected ?User $user;
 
-    /**
-     * @var bool
-     */
-    protected $notifyUser;
+    protected string $username;
 
-    /**
-     * @var ImportUserResult
-     */
-    protected $importUserResult;
-
-    /**
-     * @param string $rawImportData
-     * @param string $action
-     * @param string $username
-     * @param string $firstName
-     * @param string $lastName
-     * @param string $email
-     * @param string $officialCode
-     * @param string $language
-     * @param string $status
-     * @param string $active
-     * @param string $phone
-     * @param string $activationDate
-     * @param string $expirationDate
-     * @param string $authSource
-     * @param string $password
-     */
     public function __construct(
-        $rawImportData, $action = null, $username = null, $firstName = null, $lastName = null,
-        $email = null, $officialCode = null, $language = null, $status = null, $active = null, $phone = null,
-        $activationDate = null, $expirationDate = null, $authSource = null, $password = null
+        string $rawImportData, ?string $action = null, ?string $username = null, ?string $firstName = null,
+        ?string $lastName = null, ?string $email = null, ?string $officialCode = null, ?string $language = null,
+        int $status = User::STATUS_STUDENT, bool $active = false, ?string $phone = null, ?string $activationDate = null,
+        ?string $expirationDate = null, ?string $authSource = null, ?string $password = null
     )
     {
         parent::__construct($rawImportData, $action);
@@ -137,228 +75,210 @@ class ImportUserData extends ImportData
         $this->notifyUser = false;
     }
 
-    /**
-     * @return string
-     */
-    public function getUsername()
+    public function getActivationDate(): ?string
+    {
+        return $this->activationDate;
+    }
+
+    public function getActive(): bool
+    {
+        return $this->active;
+    }
+
+    public function getAuthSource(): ?string
+    {
+        return $this->authSource;
+    }
+
+    public function getEmail(): ?string
+    {
+        return $this->email;
+    }
+
+    public function getExpirationDate(): ?string
+    {
+        return $this->expirationDate;
+    }
+
+    public function getFirstName(): ?string
+    {
+        return $this->firstName;
+    }
+
+    public function getImportUserResult(): ImportDataResult
+    {
+        return $this->importDataResult;
+    }
+
+    public function getLanguage(): ?string
+    {
+        return $this->language;
+    }
+
+    public function getLastName(): ?string
+    {
+        return $this->lastName;
+    }
+
+    public function getOfficialCode(): ?string
+    {
+        return $this->officialCode;
+    }
+
+    public function getPassword(): ?string
+    {
+        return $this->password;
+    }
+
+    public function getPhone(): ?string
+    {
+        return $this->phone;
+    }
+
+    public function getStatus(): int
+    {
+        return $this->status;
+    }
+
+    public function getUser(): ?User
+    {
+        return $this->user;
+    }
+
+    public function getUsername(): ?string
     {
         return $this->username;
     }
 
     /**
-     * @return string
+     * @return string[]
      */
-    public function getFirstName()
+    public function getValidActions(): array
     {
-        return $this->firstName;
+        return [self::ACTION_ADD, self::ACTION_ADD_UPDATE, self::ACTION_UPDATE, self::ACTION_DELETE];
     }
 
     /**
-     * @return string
+     * @return string[]
      */
-    public function getLastName()
+    public function getValidLanguages(): array
     {
-        return $this->lastName;
+        return ['nl', 'en'];
     }
 
     /**
-     * @return string
+     * @return int[]
      */
-    public function getEmail()
+    public function getValidStatuses(): array
     {
-        return $this->email;
+        return [User::STATUS_TEACHER, User::STATUS_STUDENT];
     }
 
-    /**
-     * @return string
-     */
-    public function getOfficialCode()
+    public function hasValidLanguage(): bool
     {
-        return $this->officialCode;
+        return in_array($this->getLanguage(), $this->getValidLanguages());
     }
 
-    /**
-     * @return string
-     */
-    public function getLanguage()
+    public function hasValidStatus(): bool
     {
-        return $this->language;
+        return in_array($this->getStatus(), $this->getValidStatuses());
     }
 
-    /**
-     * @return string
-     */
-    public function getStatus()
+    public function isActiveSet(): bool
     {
-        return $this->status;
+        return !is_null($this->getActive());
     }
 
-    /**
-     * @return string
-     */
-    public function getActive()
+    public function mustNotifyUser(): bool
     {
-        return $this->active;
+        return $this->notifyUser;
     }
 
-    /**
-     * @return string
-     */
-    public function getPhone()
+    public function setActivationDate(?string $activationDate): static
     {
-        return $this->phone;
-    }
-
-    /**
-     * @return string
-     */
-    public function getActivationDate()
-    {
-        return $this->activationDate;
-    }
-
-    /**
-     * @return string
-     */
-    public function getExpirationDate()
-    {
-        return $this->expirationDate;
-    }
-
-    /**
-     * @return string
-     */
-    public function getAuthSource()
-    {
-        return $this->authSource;
-    }
-
-    /**
-     * @return string
-     */
-    public function getPassword()
-    {
-        return $this->password;
-    }
-
-    /**
-     * @return User
-     */
-    public function getUser()
-    {
-        return $this->user;
-    }
-
-    /**
-     * @return ImportUserResult | \Chamilo\Core\User\Domain\UserImporter\ImportDataResult
-     */
-    public function getImportUserResult()
-    {
-        return $this->importDataResult;
-    }
-
-    /**
-     * @param string $username
-     *
-     * @return $this
-     */
-    public function setUsername($username)
-    {
-        $this->username = $username;
+        $this->activationDate = $activationDate;
 
         return $this;
     }
 
-    /**
-     * @param string $firstName
-     *
-     * @return $this
-     */
-    public function setFirstName($firstName)
-    {
-        $this->firstName = $firstName;
-
-        return $this;
-    }
-
-    /**
-     * @param string $lastName
-     *
-     * @return $this
-     */
-    public function setLastName($lastName)
-    {
-        $this->lastName = $lastName;
-
-        return $this;
-    }
-
-    /**
-     * @param string $email
-     *
-     * @return $this
-     */
-    public function setEmail($email)
-    {
-        $this->email = $email;
-
-        return $this;
-    }
-
-    /**
-     * @param string $officialCode
-     *
-     * @return $this
-     */
-    public function setOfficialCode($officialCode)
-    {
-        $this->officialCode = $officialCode;
-
-        return $this;
-    }
-
-    /**
-     * @param string $language
-     *
-     * @return $this
-     */
-    public function setLanguage($language)
-    {
-        $this->language = $language;
-
-        return $this;
-    }
-
-    /**
-     * @param string $status
-     *
-     * @return $this
-     */
-    public function setStatus($status)
-    {
-        $this->status = $status;
-
-        return $this;
-    }
-
-    /**
-     * @param string $active
-     *
-     * @return $this
-     */
-    public function setActive($active)
+    public function setActive(bool $active): static
     {
         $this->active = $active;
 
         return $this;
     }
 
-    /**
-     * @param string $phone
-     *
-     * @return $this
-     */
-    public function setPhone($phone)
+    public function setAuthSource(?string $authSource): static
+    {
+        $this->authSource = $authSource;
+
+        return $this;
+    }
+
+    public function setEmail(?string $email): static
+    {
+        $this->email = $email;
+
+        return $this;
+    }
+
+    public function setExpirationDate(?string $expirationDate): static
+    {
+        $this->expirationDate = $expirationDate;
+
+        return $this;
+    }
+
+    public function setFirstName(?string $firstName): static
+    {
+        $this->firstName = $firstName;
+
+        return $this;
+    }
+
+    public function setImportUserResult(ImportUserResult $importUserResult): static
+    {
+        $this->importDataResult = $importUserResult;
+
+        return $this;
+    }
+
+    public function setLanguage(?string $language): static
+    {
+        $this->language = $language;
+
+        return $this;
+    }
+
+    public function setLastName(?string $lastName): static
+    {
+        $this->lastName = $lastName;
+
+        return $this;
+    }
+
+    public function setNotifyUser(bool $notifyUser): static
+    {
+        $this->notifyUser = $notifyUser;
+
+        return $this;
+    }
+
+    public function setOfficialCode(?string $officialCode): static
+    {
+        $this->officialCode = $officialCode;
+
+        return $this;
+    }
+
+    public function setPassword(?string $password): static
+    {
+        $this->password = $password;
+
+        return $this;
+    }
+
+    public function setPhone(?string $phone): static
     {
         $this->phone = $phone;
 
@@ -366,167 +286,14 @@ class ImportUserData extends ImportData
     }
 
     /**
-     * @param string $activationDate
-     *
-     * @return $this
-     */
-    public function setActivationDate($activationDate)
-    {
-        $this->activationDate = $activationDate;
-
-        return $this;
-    }
-
-    /**
-     * @param string $expirationDate
-     *
-     * @return $this
-     */
-    public function setExpirationDate($expirationDate)
-    {
-        $this->expirationDate = $expirationDate;
-
-        return $this;
-    }
-
-    /**
-     * @param string $authSource
-     *
-     * @return $this
-     */
-    public function setAuthSource($authSource)
-    {
-        $this->authSource = $authSource;
-
-        return $this;
-    }
-
-    /**
-     * @param string $password
-     *
-     * @return $this
-     */
-    public function setPassword($password)
-    {
-        $this->password = $password;
-
-        return $this;
-    }
-
-    /**
-     * @param User $user
-     *
-     * @return $this
-     */
-    public function setUser(User $user)
-    {
-        $this->user = $user;
-
-        return $this;
-    }
-
-    /**
-     * @param ImportUserResult $importUserResult
-     *
-     * @return $this
-     */
-    public function setImportUserResult(ImportUserResult $importUserResult)
-    {
-        $this->importDataResult = $importUserResult;
-
-        return $this;
-    }
-
-    /**
-     * Returns the list of valid actions
-     *
-     * @return array
-     */
-    public function getValidActions()
-    {
-        return [self::ACTION_ADD, self::ACTION_ADD_UPDATE, self::ACTION_UPDATE, self::ACTION_DELETE];
-    }
-
-    /**
-     * Returns the valid statuses
-     *
-     * @return int[]
-     */
-    public function getValidStatuses()
-    {
-        return [User::STATUS_TEACHER, User::STATUS_STUDENT];
-    }
-
-    /**
-     * Returns whether or not the status
-     *
-     * @return bool
-     */
-    public function hasValidStatus()
-    {
-        return in_array($this->getStatus(), $this->getValidStatuses());
-    }
-
-    /**
-     * Sets the status for this imported user to student
-     */
-    public function setStatusToStudent()
-    {
-        $this->setStatus(User::STATUS_STUDENT);
-    }
-
-    /**
-     * @return bool
-     */
-    public function isActiveSet()
-    {
-        return !is_null($this->getActive());
-    }
-
-    /**
-     * Returns the valid languages
-     *
-     * @return string[]
-     */
-    public function getValidLanguages()
-    {
-        return ['nl', 'en'];
-    }
-
-    /**
-     * Returns whether or not the status
-     *
-     * @return bool
-     */
-    public function hasValidLanguage()
-    {
-        return in_array($this->getLanguage(), $this->getValidLanguages());
-    }
-
-    /**
-     * @return bool
-     */
-    public function mustNotifyUser(): bool
-    {
-        return $this->notifyUser;
-    }
-
-    /**
-     * @param bool $notifyUser
-     */
-    public function setNotifyUser(bool $notifyUser)
-    {
-        $this->notifyUser = $notifyUser;
-    }
-
-    /**
      * Sets the properties for the user associated with this imported data
      *
-     * @param HashingUtilities $hashingUtilities
+     * @throws \Exception
      */
-    public function setPropertiesForUser(HashingUtilities $hashingUtilities)
+    public function setPropertiesForUser(HashingUtilities $hashingUtilities): void
     {
         $user = $this->getUser();
+
         if (!$user instanceof User)
         {
             throw new RuntimeException(
@@ -535,18 +302,18 @@ class ImportUserData extends ImportData
             );
         }
 
-        if($this->isNew())
+        if ($this->isNew())
         {
             $user->set_username($this->getUsername());
-            $user->set_platformadmin(0);
+            $user->set_platformadmin(false);
         }
 
-        if(!empty($this->getFirstName()))
+        if (!empty($this->getFirstName()))
         {
             $user->set_firstname($this->getFirstName());
         }
 
-        if(!empty($this->getLastName()))
+        if (!empty($this->getLastName()))
         {
             $user->set_lastname($this->getLastName());
         }
@@ -557,50 +324,49 @@ class ImportUserData extends ImportData
             $password = uniqid();
         }
 
-        if(!empty($password))
+        if (!empty($password))
         {
             $this->setNotifyUser(true);
             $user->set_password($hashingUtilities->hashString($password));
         }
 
-        if(!empty($this->getEmail()))
+        if (!empty($this->getEmail()))
         {
             $user->set_email($this->getEmail());
         }
 
-        if(!empty($this->getOfficialCode()))
+        if (!empty($this->getOfficialCode()))
         {
             $user->set_official_code($this->getOfficialCode());
         }
 
-        if(!empty($this->getStatus()))
+        if (!empty($this->getStatus()))
         {
             $user->set_status($this->getStatus());
         }
 
-        if(!is_null($this->getActive()))
+        if (!is_null($this->getActive()))
         {
-            $nowActive = (bool) $this->getActive() != 0;
-
-            if(!$user->get_active() && $nowActive)
+            if (!$user->get_active() && $this->getActive())
             {
                 $this->setNotifyUser(true);
             }
 
-            $user->set_active($nowActive);
+            $user->set_active($this->getActive());
         }
 
-        if(!empty($this->getPhone()))
+        if (!empty($this->getPhone()))
         {
             $user->set_phone($this->getPhone());
         }
 
-        if(!empty($this->getAuthSource()))
+        if (!empty($this->getAuthSource()))
         {
             $user->set_auth_source($this->getAuthSource());
         }
 
         $activationDate = $this->getActivationDate();
+
         if (!empty($activationDate))
         {
             $activationDate = DatetimeUtilities::getInstance()->timeFromDatepicker($activationDate);
@@ -613,5 +379,31 @@ class ImportUserData extends ImportData
             $expirationDate = DatetimeUtilities::getInstance()->timeFromDatepicker($expirationDate);
             $user->set_expiration_date($expirationDate);
         }
+    }
+
+    public function setStatus(int $status): static
+    {
+        $this->status = $status;
+
+        return $this;
+    }
+
+    public function setStatusToStudent(): static
+    {
+        return $this->setStatus(User::STATUS_STUDENT);
+    }
+
+    public function setUser(User $user): static
+    {
+        $this->user = $user;
+
+        return $this;
+    }
+
+    public function setUsername(?string $username): static
+    {
+        $this->username = $username;
+
+        return $this;
     }
 }

@@ -3,6 +3,7 @@ namespace Chamilo\Core\User\Table;
 
 use Chamilo\Configuration\Service\Consulter\ConfigurationConsulter;
 use Chamilo\Core\User\Manager;
+use Chamilo\Core\User\Service\UserUrlGenerator;
 use Chamilo\Core\User\Storage\DataClass\User;
 use Chamilo\Libraries\Architecture\Application\Application;
 use Chamilo\Libraries\Architecture\Application\Routing\UrlGenerator;
@@ -34,14 +35,17 @@ class UserApprovalTableRenderer extends DataClassListTableRenderer
 
     protected User $user;
 
+    protected UserUrlGenerator $userUrlGenerator;
+
     public function __construct(
         ConfigurationConsulter $configurationConsulter, User $user, Translator $translator, UrlGenerator $urlGenerator,
         ListHtmlTableRenderer $htmlTableRenderer, Pager $pager,
-        DataClassPropertyTableColumnFactory $dataClassPropertyTableColumnFactory
+        DataClassPropertyTableColumnFactory $dataClassPropertyTableColumnFactory, UserUrlGenerator $userUrlGenerator
     )
     {
         $this->configurationConsulter = $configurationConsulter;
         $this->user = $user;
+        $this->userUrlGenerator = $userUrlGenerator;
 
         parent::__construct(
             $translator, $urlGenerator, $htmlTableRenderer, $pager, $dataClassPropertyTableColumnFactory
@@ -96,6 +100,11 @@ class UserApprovalTableRenderer extends DataClassListTableRenderer
         return $this->user;
     }
 
+    public function getUserUrlGenerator(): UserUrlGenerator
+    {
+        return $this->userUrlGenerator;
+    }
+
     protected function initializeColumns(): void
     {
         $this->addColumn(
@@ -118,20 +127,13 @@ class UserApprovalTableRenderer extends DataClassListTableRenderer
      */
     public function renderTableRowActions(TableResultPosition $resultPosition, $user): string
     {
-        $urlGenerator = $this->getUrlGenerator();
         $translator = $this->getTranslator();
 
         $toolbar = new Toolbar();
 
         if ($this->getUser()->isPlatformAdmin())
         {
-            $approveUrl = $urlGenerator->fromParameters(
-                [
-                    Application::PARAM_CONTEXT,
-                    Application::PARAM_ACTION => Manager::ACTION_UPDATE_USER,
-                    Manager::PARAM_USER_USER_ID => $user->getId()
-                ]
-            );
+            $approveUrl = $this->getUserUrlGenerator()->getApproveUrl($user);
 
             $toolbar->add_item(
                 new ToolbarItem(
@@ -140,13 +142,7 @@ class UserApprovalTableRenderer extends DataClassListTableRenderer
                 )
             );
 
-            $denyUrl = $urlGenerator->fromParameters(
-                [
-                    Application::PARAM_CONTEXT,
-                    Application::PARAM_ACTION => Manager::ACTION_USER_DETAIL,
-                    Manager::PARAM_USER_USER_ID => $user->getId()
-                ]
-            );
+            $denyUrl = $this->getUserUrlGenerator()->getDenyUrl($user);
 
             $toolbar->add_item(
                 new ToolBarItem(

@@ -4,6 +4,9 @@ namespace Chamilo\Core\User\Form;
 use Chamilo\Core\User\Picture\UserPictureProviderInterface;
 use Chamilo\Core\User\Storage\DataClass\User;
 
+/**
+ * @package Chamilo\Core\User\Form
+ */
 class UserUpdateForm extends UserForm
 {
 

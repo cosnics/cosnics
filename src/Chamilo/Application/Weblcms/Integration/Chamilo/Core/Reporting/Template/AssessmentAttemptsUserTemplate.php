@@ -6,7 +6,6 @@ use Chamilo\Application\Weblcms\Integration\Chamilo\Core\Reporting\Block\Assessm
 use Chamilo\Application\Weblcms\Storage\DataClass\ContentObjectPublication;
 use Chamilo\Core\Reporting\ReportingTemplate;
 use Chamilo\Core\Reporting\Viewer\Manager;
-use Chamilo\Core\User\Storage\DataManager;
 use Chamilo\Libraries\Architecture\Exceptions\ObjectNotExistException;
 use Chamilo\Libraries\Format\Structure\Breadcrumb;
 use Chamilo\Libraries\Translation\Translation;

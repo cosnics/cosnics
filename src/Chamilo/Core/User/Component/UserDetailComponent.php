@@ -92,17 +92,21 @@ class UserDetailComponent extends Manager
             $commonActions = new ButtonGroup();
             $toolActions = new ButtonGroup();
 
+            $editUrl = $this->getUserUrlGenerator()->getUpdateUrl($user);
+
             $commonActions->addButton(
                 new Button(
                     $translator->trans('Edit', [], StringUtilities::LIBRARIES), new FontAwesomeGlyph('pencil-alt'),
-                    $this->get_user_editing_url($user), ToolbarItem::DISPLAY_ICON_AND_LABEL
+                    $editUrl, ToolbarItem::DISPLAY_ICON_AND_LABEL
                 )
             );
+
+            $deleteUrl = $this->getUserUrlGenerator()->getDeleteUrl($user);
 
             $commonActions->addButton(
                 new Button(
                     $translator->trans('Delete', [], StringUtilities::LIBRARIES), new FontAwesomeGlyph('times'),
-                    $this->get_user_delete_url($user), ToolbarItem::DISPLAY_ICON_AND_LABEL
+                    $deleteUrl, ToolbarItem::DISPLAY_ICON_AND_LABEL
                 )
             );
 
@@ -115,10 +119,12 @@ class UserDetailComponent extends Manager
                 )
             );
 
+            $changeUserUrl = $this->getUserUrlGenerator()->getChangeUserUrl($user);
+
             $toolActions->addButton(
                 new Button(
                     $translator->trans('LoginAsUser', [], Manager::CONTEXT), new FontAwesomeGlyph('mask'),
-                    $this->get_change_user_url($user), ToolbarItem::DISPLAY_ICON_AND_LABEL
+                    $changeUserUrl, ToolbarItem::DISPLAY_ICON_AND_LABEL
                 )
             );
 

@@ -5,26 +5,27 @@ use Chamilo\Application\Weblcms\Request\Storage\DataClass\Request;
 use Chamilo\Application\Weblcms\Rights\CourseManagementRights;
 use Chamilo\Application\Weblcms\Storage\DataClass\CourseCategory;
 use Chamilo\Application\Weblcms\Storage\DataManager;
-use Chamilo\Core\User\UserDetails;
+use Chamilo\Core\User\Service\UserDetails\UserDetailsRenderer;
+use Chamilo\Core\User\Storage\DataClass\User;
 use Chamilo\Libraries\Format\Form\FormValidator;
 use Chamilo\Libraries\Format\Structure\Glyph\FontAwesomeGlyph;
-use Chamilo\Libraries\Translation\Translation;
 use Chamilo\Libraries\Storage\Query\Condition\EqualityCondition;
 use Chamilo\Libraries\Storage\Query\Condition\NotCondition;
 use Chamilo\Libraries\Storage\Query\Variable\PropertyConditionVariable;
 use Chamilo\Libraries\Storage\Query\Variable\StaticConditionVariable;
+use Chamilo\Libraries\Translation\Translation;
 use Chamilo\Libraries\Utilities\StringUtilities;
 
 class RequestForm extends FormValidator
 {
 
-    private $request;
+    private $course_categories;
 
     private $course_types;
 
-    private $course_categories;
+    private $request;
 
-    function __construct($request, $action)
+    public function __construct($request, $action)
     {
         parent::__construct('request', self::FORM_METHOD_POST, $action);
 
@@ -34,20 +35,21 @@ class RequestForm extends FormValidator
         $this->setDefaults();
     }
 
-    function build()
+    public function build()
     {
         if ($this->request->get_id())
         {
-            $user_details = new UserDetails($this->request->get_user());
-            $this->addElement('static', null, Translation::get('User'), $user_details->toHtml());
+            $user_details =
+                $this->getUserDetailsRenderer()->renderUserDetails($this->request->get_user(), $this->getCurrentUser())
+            $this->addElement('static', null, Translation::get('User'), $user_details);
         }
 
         $this->addElement(
             'select', Request::PROPERTY_COURSE_TYPE_ID, Translation::get('CourseType'), $this->get_course_types()
         );
         $this->addRule(
-            Request::PROPERTY_COURSE_TYPE_ID,
-            Translation::get('ThisFieldIsRequired', null, StringUtilities::LIBRARIES), 'required'
+            Request::PROPERTY_COURSE_TYPE_ID, Translation::get('ThisFieldIsRequired', null, StringUtilities::LIBRARIES),
+            'required'
         );
 
         $this->addElement(
@@ -71,7 +73,7 @@ class RequestForm extends FormValidator
         );
 
         $this->addElement(
-            'textarea', Request::PROPERTY_MOTIVATION, Translation::get('Motivation'), array("cols" => 50, "rows" => 6)
+            'textarea', Request::PROPERTY_MOTIVATION, Translation::get('Motivation'), ['cols' => 50, 'rows' => 6]
         );
         $this->addRule(
             Request::PROPERTY_MOTIVATION, Translation::get('ThisFieldIsRequired', null, StringUtilities::LIBRARIES),
@@ -82,7 +84,7 @@ class RequestForm extends FormValidator
         {
             $this->addElement(
                 'textarea', Request::PROPERTY_DECISION_MOTIVATION, Translation::get('DecisionMotivation'),
-                array("cols" => 50, "rows" => 6)
+                ['cols' => 50, 'rows' => 6]
             );
             $this->addRule(
                 Request::PROPERTY_DECISION_MOTIVATION,
@@ -97,8 +99,8 @@ class RequestForm extends FormValidator
         else
         {
             $buttons[] = $this->createElement(
-                'style_submit_button', 'submit', Translation::get('Send', null, StringUtilities::LIBRARIES), null,
-                null, new FontAwesomeGlyph('envelope')
+                'style_submit_button', 'submit', Translation::get('Send', null, StringUtilities::LIBRARIES), null, null,
+                new FontAwesomeGlyph('envelope')
             );
         }
 
@@ -109,31 +111,51 @@ class RequestForm extends FormValidator
         $this->addGroup($buttons, 'buttons', null, '&nbsp;', false);
     }
 
-    /**
-     * Sets default values.
-     *
-     * @param $defaults array Default values for this form's parameters.
-     */
-    function setDefaults($defaults = [], $filter = null)
+    public function getCurrentUser(): User
     {
-        $defaults[Request::PROPERTY_COURSE_TYPE_ID] = $this->request->get_course_type_id();
-        $defaults[Request::PROPERTY_NAME] = $this->request->get_name();
-        $defaults[Request::PROPERTY_SUBJECT] = $this->request->get_subject();
-        $defaults[Request::PROPERTY_MOTIVATION] = $this->request->get_motivation();
+        return $this->getService('Chamilo\Core\User\CurrentUser');
+    }
 
-        if ($this->request->get_id())
-        {
-            $defaults[Request::PROPERTY_DECISION_MOTIVATION] = $this->request->get_decision_motivation();
-        }
-
-        parent::setDefaults($defaults, $filter);
+    public function getUserDetailsRenderer(): UserDetailsRenderer
+    {
+        return $this->getService(UserDetailsRenderer::class);
     }
 
     /**
-     *
      * @return string[int]
      */
-    function get_course_types()
+    public function get_course_categories()
+    {
+        if (!isset($this->course_categories))
+        {
+            $condition = new NotCondition(
+                new EqualityCondition(
+                    new PropertyConditionVariable(CourseCategory::class, CourseCategory::PROPERTY_STATE),
+                    new StaticConditionVariable(CourseCategory::STATE_ARCHIVE)
+                )
+            );
+
+            $course_categories = DataManager::retrieve_course_categories_ordered_by_name(
+                $condition
+            );
+
+            $course_categories_array = [];
+
+            foreach ($course_categories as $category)
+            {
+                $course_categories_array[$category->get_id()] = $category->get_name();
+            }
+
+            $this->course_categories = $course_categories_array;
+        }
+
+        return $this->course_categories;
+    }
+
+    /**
+     * @return string[int]
+     */
+    public function get_course_types()
     {
         if (!isset($this->course_types))
         {
@@ -141,7 +163,7 @@ class RequestForm extends FormValidator
                 \Chamilo\Application\Weblcms\CourseType\Storage\DataManager::retrieve_active_course_types();
             $course_management_rights = CourseManagementRights::getInstance();
 
-            foreach($course_type_objects as $course_type)
+            foreach ($course_type_objects as $course_type)
             {
                 if ($course_management_rights->is_allowed(
                     CourseManagementRights::REQUEST_COURSE_RIGHT, $course_type->get_id(),
@@ -157,35 +179,22 @@ class RequestForm extends FormValidator
     }
 
     /**
+     * Sets default values.
      *
-     * @return string[int]
+     * @param $defaults array Default values for this form's parameters.
      */
-    function get_course_categories()
+    public function setDefaults($defaults = [], $filter = null)
     {
-        if (!isset($this->course_categories))
+        $defaults[Request::PROPERTY_COURSE_TYPE_ID] = $this->request->get_course_type_id();
+        $defaults[Request::PROPERTY_NAME] = $this->request->get_name();
+        $defaults[Request::PROPERTY_SUBJECT] = $this->request->get_subject();
+        $defaults[Request::PROPERTY_MOTIVATION] = $this->request->get_motivation();
+
+        if ($this->request->get_id())
         {
-            $condition = new NotCondition(
-                new EqualityCondition(
-                    new PropertyConditionVariable(CourseCategory::class, CourseCategory::PROPERTY_STATE),
-                    new StaticConditionVariable(CourseCategory::STATE_ARCHIVE)
-                )
-            );
-
-            $course_categories =
-                DataManager::retrieve_course_categories_ordered_by_name(
-                    $condition
-                );
-
-            $course_categories_array = [];
-
-            foreach($course_categories as $category)
-            {
-                $course_categories_array[$category->get_id()] = $category->get_name();
-            }
-
-            $this->course_categories = $course_categories_array;
+            $defaults[Request::PROPERTY_DECISION_MOTIVATION] = $this->request->get_decision_motivation();
         }
 
-        return $this->course_categories;
+        parent::setDefaults($defaults, $filter);
     }
 }

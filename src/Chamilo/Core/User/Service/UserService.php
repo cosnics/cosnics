@@ -12,7 +12,6 @@ use Chamilo\Core\User\EventDispatcher\Event\BeforeUserDeleteEvent;
 use Chamilo\Core\User\Manager;
 use Chamilo\Core\User\Storage\DataClass\User;
 use Chamilo\Core\User\Storage\DataClass\UserSetting;
-use Chamilo\Core\User\Storage\DataManager;
 use Chamilo\Core\User\Storage\Repository\UserRepository;
 use Chamilo\Libraries\Architecture\Application\Application;
 use Chamilo\Libraries\Architecture\Application\Routing\UrlGenerator;
@@ -96,12 +95,12 @@ class UserService
         $this->eventDispatcher = $eventDispatcher;
     }
 
-    public function approveUser(User $executingUser, User $targetUser): bool
+    public function approveUser(User $user): bool
     {
-        $targetUser->set_active(1);
-        $targetUser->set_approved(1);
+        $user->set_active(1);
+        $user->set_approved(1);
 
-        return $this->updateUser($targetUser);
+        return $this->updateUser($user);
     }
 
     public function countUsers(?Condition $condition = null): int

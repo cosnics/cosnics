@@ -4,42 +4,29 @@ namespace Chamilo\Core\User\Roles\Storage\Repository\Interfaces;
 use Chamilo\Core\User\Roles\Storage\DataClass\Role;
 use Chamilo\Libraries\Storage\DataManager\Interfaces\DataManagerRepositoryInterface;
 use Chamilo\Libraries\Storage\Query\Condition\Condition;
+use Chamilo\Libraries\Storage\Query\OrderBy;
+use Doctrine\Common\Collections\ArrayCollection;
 
 /**
- * Repository to manage the data of roles
- * 
- * @author Sven Vanpoucke - Hogeschool Gent
+ * @package Chamilo\Core\User\Roles\Storage\Repository\Interfaces
+ * @author  Sven Vanpoucke - Hogeschool Gent
+ * @author  Hans De Bisschop <hans.de.bisschop@ehb.be>
  */
 interface RoleRepositoryInterface extends DataManagerRepositoryInterface
 {
 
-    /**
-     * Returns a role by a given name
-     * 
-     * @param string $roleName
-     *
-     * @return Role
-     */
-    public function findRoleByName($roleName);
+    public function countRoles(?Condition $condition = null): int;
+
+    public function createRole(Role $role): bool;
+
+    public function deleteRole(Role $role);
+
+    public function findRoleByName(string $roleName): ?Role;
 
     /**
-     * Retrieves the roles
-     * 
-     * @param Condition $condition
-     * @param int $offset
-     * @param int $count
-     * @param array $orderBy
-     *
-     * @return Role[]
+     * @return \Doctrine\Common\Collections\ArrayCollection<\Chamilo\Core\User\Roles\Storage\DataClass\Role>
      */
-    public function findRoles(Condition $condition = null, $count = null, $offset = null, $orderBy = null);
-
-    /**
-     * Counts the roles
-     * 
-     * @param Condition $condition
-     *
-     * @return int
-     */
-    public function countRoles(Condition $condition = null);
+    public function findRoles(
+        ?Condition $condition = null, ?int $count = null, ?int $offset = null, ?OrderBy $orderBy = null
+    ): ArrayCollection;
 }

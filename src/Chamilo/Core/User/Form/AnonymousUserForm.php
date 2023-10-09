@@ -8,7 +8,8 @@ use Chamilo\Libraries\Format\Structure\Glyph\FontAwesomeGlyph;
 /**
  * Renders the form for the anonymous users
  *
- * @author Sven Vanpoucke - Hogeschool Gent
+ * @package Chamilo\Core\User\Form
+ * @author  Sven Vanpoucke - Hogeschool Gent
  */
 class AnonymousUserForm extends FormValidator
 {

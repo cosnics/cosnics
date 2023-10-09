@@ -3,9 +3,9 @@ namespace Chamilo\Core\User\Roles\Storage\Repository;
 
 use Chamilo\Core\User\Roles\Storage\DataClass\Role;
 use Chamilo\Core\User\Roles\Storage\DataClass\RoleRelation;
-use Chamilo\Libraries\Storage\DataManager\DataManager;
 use Chamilo\Core\User\Roles\Storage\Repository\Interfaces\UserRoleRepositoryInterface;
 use Chamilo\Core\User\Storage\DataClass\User;
+use Chamilo\Libraries\Storage\DataManager\Repository\DataClassRepository;
 use Chamilo\Libraries\Storage\DataManager\Repository\DataManagerRepository;
 use Chamilo\Libraries\Storage\Parameters\DataClassRetrieveParameters;
 use Chamilo\Libraries\Storage\Parameters\DataClassRetrievesParameters;
@@ -15,24 +15,27 @@ use Chamilo\Libraries\Storage\Query\Join;
 use Chamilo\Libraries\Storage\Query\Joins;
 use Chamilo\Libraries\Storage\Query\Variable\PropertyConditionVariable;
 use Chamilo\Libraries\Storage\Query\Variable\StaticConditionVariable;
+use Doctrine\Common\Collections\ArrayCollection;
 
 /**
- * Repository to manage the data for the relations between users and roles
- *
- * @author Sven Vanpoucke - Hogeschool Gent
+ * @package Chamilo\Core\User\Roles\Storage\Repository
+ * @author  Sven Vanpoucke - Hogeschool Gent
+ * @author  Hans De Bisschop <hans.de.bisschop@ehb.be>
  */
 class UserRoleRepository extends DataManagerRepository implements UserRoleRepositoryInterface
 {
+    protected DataClassRepository $dataClassRepository;
+
+    public function __construct(DataClassRepository $dataClassRepository)
+    {
+        $this->dataClassRepository = $dataClassRepository;
+    }
 
     /**
-     * Returns a list of roles for a user
-     *
-     * @param int $userId
-     *
      * @return \Doctrine\Common\Collections\ArrayCollection<\Chamilo\Core\User\Roles\Storage\DataClass\Role>
-     * @throws \Exception
+     * @throws \Chamilo\Libraries\Storage\Exception\DataClassNoResultException
      */
-    public function findRolesForUser($userId)
+    public function findRolesForUser(string $userId): ArrayCollection
     {
         $joins = new Joins();
         $joins->add(
@@ -44,22 +47,12 @@ class UserRoleRepository extends DataManagerRepository implements UserRoleReposi
             )
         );
 
-        return DataManager::retrieves(
-            Role::class,
-            new DataClassRetrievesParameters($this->getConditionForUser($userId), null, null, null, $joins)
+        return $this->getDataClassRepository()->retrieves(
+            Role::class, new DataClassRetrievesParameters($this->getConditionForUser($userId), null, null, null, $joins)
         );
     }
 
-    /**
-     * Returns a user role relation for a given role id and user id
-     *
-     * @param int $roleId
-     * @param int $userId
-     *
-     * @return \Chamilo\Core\User\Roles\Storage\DataClass\RoleRelation
-     * @throws \Exception
-     */
-    public function findUserRoleRelationByRoleAndUser($roleId, $userId)
+    public function findUserRoleRelationByRoleAndUser(string $roleId, string $userId): ?RoleRelation
     {
         $conditions = [];
 
@@ -68,18 +61,16 @@ class UserRoleRepository extends DataManagerRepository implements UserRoleReposi
 
         $condition = new AndCondition($conditions);
 
-        return DataManager::retrieve(RoleRelation::class, new DataClassRetrieveParameters($condition));
+        return $this->getDataClassRepository()->retrieve(
+            RoleRelation::class, new DataClassRetrieveParameters($condition)
+        );
     }
 
     /**
-     * Returns a list of users by a given role
-     *
-     * @param int $roleId
-     *
      * @return \Doctrine\Common\Collections\ArrayCollection<\Chamilo\Core\User\Storage\DataClass\User>
-     * @throws \Exception
+     * @throws \Chamilo\Libraries\Storage\Exception\DataClassNoResultException
      */
-    public function findUsersForRole($roleId)
+    public function findUsersForRole(string $roleId): ArrayCollection
     {
         $joins = new Joins();
         $joins->add(
@@ -91,20 +82,12 @@ class UserRoleRepository extends DataManagerRepository implements UserRoleReposi
             )
         );
 
-        return DataManager::retrieves(
-            User::class,
-            new DataClassRetrievesParameters($this->getConditionForRole($roleId), null, null, null, $joins)
+        return $this->getDataClassRepository()->retrieves(
+            User::class, new DataClassRetrievesParameters($this->getConditionForRole($roleId), null, null, null, $joins)
         );
     }
 
-    /**
-     * Builds a condition for the role relation with the property role id
-     *
-     * @param int $roleId
-     *
-     * @return EqualityCondition
-     */
-    protected function getConditionForRole($roleId)
+    protected function getConditionForRole(string $roleId): EqualityCondition
     {
         return new EqualityCondition(
             new PropertyConditionVariable(RoleRelation::class, RoleRelation::PROPERTY_ROLE_ID),
@@ -112,18 +95,16 @@ class UserRoleRepository extends DataManagerRepository implements UserRoleReposi
         );
     }
 
-    /**
-     * Builds a condition for the role relation with the property user id
-     *
-     * @param int $userId
-     *
-     * @return EqualityCondition
-     */
-    protected function getConditionForUser($userId)
+    protected function getConditionForUser(string $userId): EqualityCondition
     {
         return new EqualityCondition(
             new PropertyConditionVariable(RoleRelation::class, RoleRelation::PROPERTY_USER_ID),
             new StaticConditionVariable($userId)
         );
+    }
+
+    public function getDataClassRepository(): DataClassRepository
+    {
+        return $this->dataClassRepository;
     }
 }

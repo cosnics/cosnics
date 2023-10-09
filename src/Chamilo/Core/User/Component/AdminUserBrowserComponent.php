@@ -82,10 +82,14 @@ class AdminUserBrowserComponent extends Manager
                     )
                 );
 
+                $reportingUrl = $this->getUrlGenerator()->fromParameters(
+                    [self::PARAM_CONTEXT => self::CONTEXT, self::PARAM_ACTION => self::ACTION_REPORTING]
+                );
+
                 $commonActions->addButton(
                     new Button(
                         $translator->trans('Reporting', [], StringUtilities::LIBRARIES),
-                        new FontAwesomeGlyph('chart-pie', [], null, 'fas'), $this->get_reporting_url(),
+                        new FontAwesomeGlyph('chart-pie', [], null, 'fas'), $reportingUrl,
                         ToolbarItem::DISPLAY_ICON_AND_LABEL
                     )
                 );

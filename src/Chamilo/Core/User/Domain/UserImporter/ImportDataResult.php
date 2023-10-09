@@ -4,37 +4,26 @@ namespace Chamilo\Core\User\Domain\UserImporter;
 /**
  * Describes the result of a single import action
  *
- * @author Sven Vanpoucke - Hogeschool Gent
+ * @package Chamilo\Core\User\Domain\UserImporter
+ * @author  Sven Vanpoucke - Hogeschool Gent
  */
 class ImportDataResult
 {
-    public const STATUS_SUCCESS = 1;
     public const STATUS_FAILED = 2;
 
-    /**
-     * @var int
-     */
-    protected $status;
+    public const STATUS_SUCCESS = 1;
+
+    protected ImportData $importData;
 
     /**
      * Detailed logging / debugging messages.
      *
      * @var string[]
      */
-    protected $messages;
+    protected array $messages;
 
-    /**
-     * Reference to the ImportData
-     *
-     * @var ImportData
-     */
-    protected $importData;
+    protected int $status;
 
-    /**
-     * ImportUserResult constructor.
-     *
-     * @param ImportData $importData
-     */
     public function __construct(ImportData $importData)
     {
         $importData->setImportDataResult($this);
@@ -43,24 +32,14 @@ class ImportDataResult
         $this->messages = [];
     }
 
-    /**
-     * @return int
-     */
-    public function getStatus()
+    public function addMessage(string $message): void
     {
-        return $this->status;
+        $this->messages[] = $message;
     }
 
-    /**
-     * @param int $status
-     *
-     * @return $this
-     */
-    public function setStatus(int $status)
+    public function getImportData(): ImportData
     {
-        $this->status = $status;
-
-        return $this;
+        return $this->importData;
     }
 
     /**
@@ -71,32 +50,32 @@ class ImportDataResult
         return $this->messages;
     }
 
-    /**
-     * @param string[] $messages
-     *
-     * @return $this
-     */
-    public function setMessages(array $messages)
+    public function getStatus(): int
     {
-        $this->messages = $messages;
-
-        return $this;
+        return $this->status;
     }
 
-    /**
-     * @return ImportData
-     */
-    public function getImportData()
+    public function hasFailed(): bool
     {
-        return $this->importData;
+        return $this->getStatus() == self::STATUS_FAILED;
     }
 
-    /**
-     * @param ImportData $importData
-     *
-     * @return $this
-     */
-    public function setImportData(ImportData $importData)
+    public function isCompleted(): bool
+    {
+        return $this->hasFailed() || $this->isSuccessful();
+    }
+
+    public function isSuccessful(): bool
+    {
+        return $this->getStatus() == self::STATUS_SUCCESS;
+    }
+
+    public function setFailed(): void
+    {
+        $this->setStatus(self::STATUS_FAILED);
+    }
+
+    public function setImportData(ImportData $importData): static
     {
         $this->importData = $importData;
 
@@ -104,59 +83,25 @@ class ImportDataResult
     }
 
     /**
-     * Adds a message to the list of messages
-     *
-     * @param string $message
+     * @param string[] $messages
      */
-    public function addMessage($message)
+    public function setMessages(array $messages): static
     {
-        $this->messages[] = $message;
+        $this->messages = $messages;
+
+        return $this;
     }
 
-    /**
-     * Sets the status to failed
-     */
-    public function setFailed()
+    public function setStatus(int $status): static
     {
-        $this->setStatus(self::STATUS_FAILED);
+        $this->status = $status;
+
+        return $this;
     }
 
-    /**
-     * Sets the status to success
-     */
-    public function setSuccessful()
+    public function setSuccessful(): void
     {
         $this->setStatus(self::STATUS_SUCCESS);
-    }
-
-    /**
-     * Returns whether or not the import has failed
-     *
-     * @return bool
-     */
-    public function hasFailed()
-    {
-        return $this->getStatus() == self::STATUS_FAILED;
-    }
-
-    /**
-     * Returns whether or not the import is successful
-     *
-     * @return bool
-     */
-    public function isSuccessful()
-    {
-        return $this->getStatus() == self::STATUS_SUCCESS;
-    }
-
-    /**
-     * Returns whether or not the import is completed
-     *
-     * @return bool
-     */
-    public function isCompleted()
-    {
-        return $this->hasFailed() || $this->isSuccessful();
     }
 
 }

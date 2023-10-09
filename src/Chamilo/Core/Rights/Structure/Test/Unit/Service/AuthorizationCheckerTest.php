@@ -146,7 +146,7 @@ class AuthorizationCheckerTest extends ChamiloTestCase
     protected function mockDoesUserHasAtLeasOneRole($user, $userRoles, $returnValue = true)
     {
         $this->userRoleServiceMock->expects($this->once())
-            ->method('doesUserHasAtLeastOneRole')
+            ->method('doesUserHaveAtLeastOneRole')
             ->with($user, $userRoles)
             ->will($this->returnValue($returnValue));
     }

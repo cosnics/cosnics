@@ -1,7 +1,6 @@
 <?php
 namespace Chamilo\Core\User\Component;
 
-use Chamilo\Core\Tracking\Storage\DataClass\Event;
 use Chamilo\Core\User\Manager;
 use Chamilo\Libraries\Architecture\Application\Application;
 use Chamilo\Libraries\Architecture\Exceptions\NotAllowedException;
@@ -44,7 +43,7 @@ class UserApproverComponent extends Manager
 
                 if ($choice == self::CHOICE_APPROVE)
                 {
-                    if (!$userService->approveUser($this->getUser(), $user))
+                    if (!$userService->approveUser($user))
                     {
                         $failures ++;
                     }

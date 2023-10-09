@@ -110,10 +110,7 @@ class UserDetailsRenderer implements UserDetailsRendererInterface
 
         $html[] = '</div>';
 
-        if ($requestingUser->isPlatformAdmin())
-        {
-            $html[] = $this->renderUserProperties($user, $requestingUser);
-        }
+        $html[] = $this->renderUserProperties($user, $requestingUser);
 
         return implode(PHP_EOL, $html);
     }
@@ -123,6 +120,11 @@ class UserDetailsRenderer implements UserDetailsRendererInterface
      */
     public function renderUserProperties(User $user, User $requestingUser): string
     {
+        if (!$requestingUser->isPlatformAdmin())
+        {
+            return '';
+        }
+
         $translator = $this->getTranslator();
         $datetimeUtilities = $this->getDatetimeUtilities();
 

@@ -6,32 +6,22 @@ use Chamilo\Core\User\Roles\Service\Interfaces\UserRoleServiceInterface;
 use Chamilo\Core\User\Roles\Storage\DataClass\RoleRelation;
 use Chamilo\Core\User\Roles\Storage\Repository\Interfaces\UserRoleRepositoryInterface;
 use Chamilo\Core\User\Storage\DataClass\User;
+use Doctrine\Common\Collections\ArrayCollection;
 use Exception;
 
 /**
  * Manages roles
  *
- * @author Sven Vanpoucke - Hogeschool Gent
+ * @package Chamilo\Core\User\Roles\Service
+ * @author  Sven Vanpoucke - Hogeschool Gent
  */
 class UserRoleService implements UserRoleServiceInterface
 {
 
-    /**
-     * @var RoleServiceInterface
-     */
-    protected $roleService;
+    protected RoleServiceInterface $roleService;
 
-    /**
-     * @var UserRoleRepositoryInterface
-     */
-    protected $userRoleRepository;
+    protected UserRoleRepositoryInterface $userRoleRepository;
 
-    /**
-     * UserRoleService constructor.
-     *
-     * @param RoleServiceInterface $roleService
-     * @param UserRoleRepositoryInterface $userRoleRepository
-     */
     public function __construct(RoleServiceInterface $roleService, UserRoleRepositoryInterface $userRoleRepository)
     {
         $this->roleService = $roleService;
@@ -39,41 +29,30 @@ class UserRoleService implements UserRoleServiceInterface
     }
 
     /**
-     * Adds a role to a given user by a given role name
-     *
-     * @param User $user
-     * @param string $roleName
-     *
      * @throws \Exception
      */
-    public function addRoleForUser(User $user, $roleName)
+    public function addRoleForUser(User $user, string $roleName): void
     {
-        $role = $this->roleService->getOrCreateRoleByName($roleName);
+        $role = $this->getRoleService()->getOrCreateRoleByName($roleName);
 
         $userRoleRelation = new RoleRelation();
 
         $userRoleRelation->setRoleId($role->getId());
         $userRoleRelation->setUserId($user->getId());
 
-        if (!$this->userRoleRepository->create($userRoleRelation))
+        if (!$this->getUserRoleRepository()->create($userRoleRelation))
         {
             throw new Exception('User role not created for user ' . $user->get_fullname() . ' with role ' . $roleName);
         }
     }
 
     /**
-     * Checks whether or not a user matches one of the requested roles
-     *
-     * @param User $user
-     * @param Role[] $rolesToMatch
-     *
-     * @return bool
+     * @param \Chamilo\Core\User\Roles\Storage\DataClass\Role[] $rolesToMatch
      */
-    public function doesUserHasAtLeastOneRole(User $user, $rolesToMatch = [])
+    public function doesUserHaveAtLeastOneRole(User $user, array $rolesToMatch = []): bool
     {
 
         $userRoles = $this->getRolesForUser($user);
-        //        var_dump($user, $rolesToMatch, $userRoles);
         $userRoleIds = [];
 
         foreach ($userRoles as $userRole)
@@ -92,14 +71,15 @@ class UserRoleService implements UserRoleServiceInterface
         return false;
     }
 
+    public function getRoleService(): RoleServiceInterface
+    {
+        return $this->roleService;
+    }
+
     /**
-     * Returns the roles for a given user
-     *
-     * @param User $user
-     *
      * @return \Chamilo\Core\User\Roles\Storage\DataClass\Role[]
      */
-    public function getRolesForUser(User $user)
+    public function getRolesForUser(User $user): array
     {
         $userRoles = $this->userRoleRepository->findRolesForUser($user->getId());
 
@@ -116,49 +96,44 @@ class UserRoleService implements UserRoleServiceInterface
         return $userRoles;
     }
 
-    /**
-     * Returns the users that are attached to a given role
-     *
-     * @param string $roleName
-     *
-     * @return \Doctrine\Common\Collections\ArrayCollection<\Chamilo\Core\User\Storage\DataClass\User>
-     * @throws \Exception
-     */
-    public function getUsersForRole($roleName)
+    public function getUserRoleRepository(): UserRoleRepositoryInterface
     {
-        $role = $this->roleService->getRoleByName($roleName);
-
-        return $this->userRoleRepository->findUsersForRole($role->getId());
+        return $this->userRoleRepository;
     }
 
     /**
-     * Removes a role by a given name from a given user
-     *
-     * @param User $user
-     * @param string $roleName
-     *
+     * @return \Doctrine\Common\Collections\ArrayCollection<\Chamilo\Core\User\Storage\DataClass\User>
+     */
+    public function getUsersForRole(string $roleName): ArrayCollection
+    {
+        $role = $this->getRoleService()->getRoleByName($roleName);
+
+        return $this->getUserRoleRepository()->findUsersForRole($role->getId());
+    }
+
+    /**
      * @throws \Exception
      */
-    public function removeRoleFromUser(User $user, $roleName)
+    public function removeRoleFromUser(User $user, string $roleName): void
     {
         try
         {
-            $role = $this->roleService->getRoleByName($roleName);
+            $role = $this->getRoleService()->getRoleByName($roleName);
         }
-        catch (Exception $ex)
+        catch (Exception)
         {
             return;
         }
 
         $userRoleRelation =
-            $this->userRoleRepository->findUserRoleRelationByRoleAndUser($role->getId(), $user->getId());
+            $this->getUserRoleRepository()->findUserRoleRelationByRoleAndUser($role->getId(), $user->getId());
 
         if (!$userRoleRelation)
         {
             return;
         }
 
-        if (!$this->userRoleRepository->delete($userRoleRelation))
+        if (!$this->getUserRoleRepository()->delete($userRoleRelation))
         {
             throw new Exception('User role not deleted for user ' . $user->get_fullname() . ' with role ' . $roleName);
         }

@@ -3,62 +3,53 @@ namespace Chamilo\Application\Weblcms\Tool\Implementation\User\Component;
 
 use Chamilo\Application\Weblcms\Tool\Implementation\User\Manager;
 use Chamilo\Application\Weblcms\Tool\Implementation\User\UserCourseGroups;
-use Chamilo\Core\User\Storage\DataClass\User;
-use Chamilo\Core\User\UserDetails;
-use Chamilo\Core\User\UserGroups;
-use Chamilo\Libraries\Storage\DataManager\DataManager;
+use Chamilo\Core\User\Service\UserDetails\UserDetailsRenderer;
 
 /**
- * @package application.lib.weblcms.tool.user.component
+ * @package Chamilo\Application\Weblcms\Tool\Implementation\User\Component
  */
 class DetailsComponent extends Manager
 {
 
+    /**
+     * @throws \TableException
+     * @throws \Chamilo\Libraries\Storage\Exception\DataClassNoResultException
+     */
     public function run()
     {
         $html = [];
 
-        $html[] = $this->render_header();
-
-        $availableGroups =
-            \Chamilo\Application\Weblcms\Course\Storage\DataManager::retrieve_all_subscribed_platform_groups(
-                [$this->get_course_id()]
-            );
+        $html[] = $this->renderHeader();
 
         if ($this->getRequest()->query->has(\Chamilo\Application\Weblcms\Manager::PARAM_USERS))
         {
-            /** @var \Chamilo\Core\User\Storage\DataClass\User $user */
-            $user = DataManager::retrieve_by_id(
-                User::class, $this->getRequest()->query->get(\Chamilo\Application\Weblcms\Manager::PARAM_USERS)
+            $user = $this->getUserService()->findUserByIdentifier(
+                $this->getRequest()->query->get(\Chamilo\Application\Weblcms\Manager::PARAM_USERS)
             );
 
-            $details = new UserDetails($user);
-            $groups = new UserGroups($user->get_id(), true, $availableGroups);
-            $course_groups = new UserCourseGroups($user->get_id(), $this->get_course_id());
+            $course_groups = new UserCourseGroups($user->getId(), $this->get_course_id());
 
-            $html[] = $details->toHtml();
-            $html[] = $groups->toHtml();
+            $html[] = $this->getUserDetailsRenderer()->renderUserDetails($user, $this->getUser());
+            $html[] = $this->getUserGroupsDetailsRenderer()->renderUserDetails($user, $this->getUser());
             $html[] = $course_groups->toHtml();
         }
 
-        if (isset($_POST['user_id']))
-        {
-            foreach ($_POST['user_id'] as $user_id)
-            {
-                $user = DataManager::retrieve_by_id(
-                    User::class, $user_id
-                );
-                $details = new UserDetails($user);
-                $groups = new UserGroups($user->get_id(), true, $availableGroups);
-                $course_groups = new UserCourseGroups($user->get_id(), $this->get_course_id());
+        $requestUserIdentifiers = $this->getRequest()->request->get('user_id');
 
-                $html[] = $details->toHtml();
-                $html[] = $groups->toHtml();
+        if ($requestUserIdentifiers)
+        {
+            foreach ($requestUserIdentifiers as $user_id)
+            {
+                $user = $this->getUserService()->findUserByIdentifier($user_id);
+                $course_groups = new UserCourseGroups($user->getId(), $this->get_course_id());
+
+                $html[] = $this->getUserDetailsRenderer()->renderUserDetails($user, $this->getUser());
+                $html[] = $this->getUserGroupsDetailsRenderer()->renderUserDetails($user, $this->getUser());
                 $html[] = $course_groups->toHtml();
             }
         }
 
-        $html[] = $this->render_footer();
+        $html[] = $this->renderFooter();
 
         return implode(PHP_EOL, $html);
     }
@@ -69,5 +60,15 @@ class DetailsComponent extends Manager
         $additionalParameters[] = self::PARAM_TAB;
 
         return parent::getAdditionalParameters($additionalParameters);
+    }
+
+    public function getUserDetailsRenderer(): UserDetailsRenderer
+    {
+        return $this->getService(UserDetailsRenderer::class);
+    }
+
+    public function getUserGroupsDetailsRenderer(): \Chamilo\Core\Group\Service\UserDetails\UserDetailsRenderer
+    {
+        return $this->getService(\Chamilo\Core\Group\Service\UserDetails\UserDetailsRenderer::class);
     }
 }

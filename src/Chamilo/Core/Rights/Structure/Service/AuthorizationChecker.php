@@ -60,7 +60,7 @@ class AuthorizationChecker implements AuthorizationCheckerInterface
             return true;
         }
         
-        return $this->userRoleService->doesUserHasAtLeastOneRole($user, $locationRoles);
+        return $this->userRoleService->doesUserHaveAtLeastOneRole($user, $locationRoles);
     }
 
     /**

@@ -8,6 +8,7 @@ use Chamilo\Configuration\Package\Service\PackageFactory;
 use Chamilo\Configuration\Service\ConfigurationService;
 use Chamilo\Configuration\Service\RegistrationService;
 use Chamilo\Core\User\Manager;
+use Chamilo\Core\User\Service\UserService;
 use Chamilo\Core\User\Storage\DataClass\User;
 use Chamilo\Libraries\Architecture\ClassnameUtilities;
 use Chamilo\Libraries\File\SystemPathBuilder;
@@ -24,13 +25,15 @@ class Installer extends \Chamilo\Configuration\Package\Action\Installer
 
     protected HashingUtilities $hashingUtilities;
 
+    protected UserService $userService;
+
     public function __construct(
         ClassnameUtilities $classnameUtilities, ConfigurationService $configurationService,
         StorageUnitRepository $storageUnitRepository, Translator $translator,
         PackageBundlesCacheService $packageBundlesCacheService, PackageFactory $packageFactory,
         RegistrationService $registrationService, SystemPathBuilder $systemPathBuilder,
         DependencyVerifier $dependencyVerifier, DependencyVerifierRenderer $dependencyVerifierRenderer, string $context,
-        HashingUtilities $hashingUtilities
+        HashingUtilities $hashingUtilities, UserService $userService
     )
     {
         parent::__construct(
@@ -40,6 +43,7 @@ class Installer extends \Chamilo\Configuration\Package\Action\Installer
         );
 
         $this->hashingUtilities = $hashingUtilities;
+        $this->userService = $userService;
     }
 
     public function create_admin_account(array $values): bool
@@ -53,14 +57,14 @@ class Installer extends \Chamilo\Configuration\Package\Action\Installer
         $user->set_auth_source('Platform');
         $user->set_email($values['admin_email']);
         $user->set_status(User::STATUS_TEACHER);
-        $user->set_platformadmin('1');
+        $user->set_platformadmin(true);
         $user->set_official_code('ADMIN');
         $user->set_phone($values['admin_phone']);
-        $user->set_disk_quota('209715200');
-        $user->set_database_quota('300');
+        $user->set_disk_quota(209715200);
+        $user->set_database_quota(300);
         $user->set_expiration_date(0);
 
-        if (!$user->create())
+        if (!$this->getUserService()->createUser($user))
         {
             return false;
         }
@@ -82,14 +86,14 @@ class Installer extends \Chamilo\Configuration\Package\Action\Installer
         $user->set_auth_source('Platform');
         $user->set_email($values['admin_email']);
         $user->set_status(User::STATUS_STUDENT);
-        $user->set_platformadmin('0');
+        $user->set_platformadmin(false);
         $user->set_official_code('ANONYMOUS');
         $user->set_phone($values['admin_phone']);
-        $user->set_disk_quota('0');
-        $user->set_database_quota('0');
+        $user->set_disk_quota(0);
+        $user->set_database_quota(0);
         $user->set_expiration_date(0);
 
-        if (!$user->create())
+        if (!$this->getUserService()->createUser($user))
         {
             return false;
         }
@@ -108,13 +112,13 @@ class Installer extends \Chamilo\Configuration\Package\Action\Installer
         $user->set_auth_source('Platform');
         $user->set_email('john.doe@nowhere.org');
         $user->set_status(User::STATUS_STUDENT);
-        $user->set_platformadmin('0');
+        $user->set_platformadmin(false);
         $user->set_official_code('TEST_USER');
-        $user->set_disk_quota('209715200');
-        $user->set_database_quota('300');
+        $user->set_disk_quota(209715200);
+        $user->set_database_quota(300);
         $user->set_expiration_date(0);
 
-        if (!$user->create())
+        if (!$this->getUserService()->createUser($user))
         {
             return false;
         }
@@ -123,8 +127,6 @@ class Installer extends \Chamilo\Configuration\Package\Action\Installer
     }
 
     /**
-     * Runs the install-script.
-     *
      * @throws \Symfony\Component\Cache\Exception\CacheException
      */
     public function extra(array $formValues): bool
@@ -174,5 +176,10 @@ class Installer extends \Chamilo\Configuration\Package\Action\Installer
     public function getHashingUtilities(): HashingUtilities
     {
         return $this->hashingUtilities;
+    }
+
+    public function getUserService(): UserService
+    {
+        return $this->userService;
     }
 }

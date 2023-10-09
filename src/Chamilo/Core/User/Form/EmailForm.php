@@ -7,7 +7,7 @@ use Chamilo\Libraries\Format\Structure\Glyph\FontAwesomeGlyph;
 use Chamilo\Libraries\Utilities\StringUtilities;
 
 /**
- * @package Chamilo\Core\User\Email\Form
+ * @package Chamilo\Core\User\Form
  * @author  Hans De Bisschop <hans.de.bisschop@ehb.be>
  */
 class EmailForm extends FormValidator

@@ -1,8 +1,6 @@
 <?php
 namespace Chamilo\Core\User\Component;
 
-use Chamilo\Core\Tracking\Storage\DataClass\ChangesTracker;
-use Chamilo\Core\Tracking\Storage\DataClass\Event;
 use Chamilo\Core\User\Manager;
 use Chamilo\Libraries\Architecture\Application\Application;
 use Chamilo\Libraries\Architecture\Exceptions\NotAllowedException;
@@ -105,5 +103,5 @@ abstract class ActiveChangerComponent extends Manager
         );
     }
 
-    abstract protected function getState(): int;
+    abstract protected function getState(): bool;
 }

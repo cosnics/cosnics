@@ -6,55 +6,26 @@ use Chamilo\Libraries\Storage\Query\Condition\Condition;
 
 /**
  * Manages roles
- * 
- * @author Sven Vanpoucke - Hogeschool Gent
+ *
+ * @package Chamilo\Core\User\Roles\Service\Interfaces
+ * @author  Sven Vanpoucke - Hogeschool Gent
  */
 interface RoleServiceInterface
 {
 
-    /**
-     * Creates a role by a given name
-     * 
-     * @param string $roleName
-     *
-     * @return Role
-     *
-     * @throws \Exception
-     */
-    public function createRoleByName($roleName);
+    public function countRoles(?Condition $condition = null): int;
 
-    /**
-     * Deletes a given role
-     * 
-     * @param Role $role
-     *
-     * @throws \Exception
-     */
+    public function createRoleByName(string $roleName): Role;
+
     public function deleteRole(Role $role);
 
-    /**
-     * Returns a role by a given name
-     * 
-     * @param string $roleName
-     *
-     * @return Role
-     *
-     * @throws \Exception
-     */
-    public function getRoleByName($roleName);
+    public function getOrCreateRoleByName(string $roleName): Role;
 
-    /**
-     * Either retrieves or creates a new role by a given name
-     * 
-     * @param string $roleName
-     *
-     * @return Role
-     */
-    public function getOrCreateRoleByName($roleName);
+    public function getRoleByName(string $roleName): Role;
 
     /**
      * Retrieves the roles
-     * 
+     *
      * @param Condition $condition
      * @param int $offset
      * @param int $count
@@ -63,13 +34,4 @@ interface RoleServiceInterface
      * @return Role[]
      */
     public function getRoles(Condition $condition = null, $count = null, $offset = null, $orderBy = null);
-
-    /**
-     * Counts the roles
-     * 
-     * @param Condition $condition
-     *
-     * @return int
-     */
-    public function countRoles(Condition $condition = null);
 }

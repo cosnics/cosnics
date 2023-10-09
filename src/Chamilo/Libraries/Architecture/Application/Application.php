@@ -22,6 +22,11 @@ abstract class Application
 {
     use DependencyInjectionContainerTrait;
 
+    public const ACTION_BROWSER = 'Browser';
+    public const ACTION_CREATOR = 'Creator';
+    public const ACTION_DELETER = 'Deleter';
+    public const ACTION_UPDATER = 'Updater';
+
     public const PARAM_ACTION = 'go';
     public const PARAM_CONTEXT = 'application';
     public const PARAM_ERROR_MESSAGE = 'error_message';

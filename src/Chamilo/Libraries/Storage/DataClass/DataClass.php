@@ -1,6 +1,7 @@
 <?php
 namespace Chamilo\Libraries\Storage\DataClass;
 
+use Chamilo\Libraries\DependencyInjection\Traits\DependencyInjectionContainerTrait;
 use Chamilo\Libraries\Storage\DataClass\Listeners\DataClassListener;
 use Chamilo\Libraries\Storage\DataManager\DataManager;
 use Chamilo\Libraries\Storage\Parameters\DataClassRetrievesParameters;
@@ -15,6 +16,8 @@ use Chamilo\Libraries\Translation\Translation;
  */
 abstract class DataClass
 {
+    use DependencyInjectionContainerTrait;
+
     public const NO_UID = - 1;
 
     public const PROPERTIES_DEFAULT = 'default_properties';

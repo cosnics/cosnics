@@ -7,7 +7,8 @@ use Chamilo\Libraries\Storage\DataClass\DataClass;
 /**
  * Defines a role
  *
- * @author Sven Vanpoucke - Hogeschool Gent
+ * @package Chamilo\Core\User\Roles\Storage\DataClass
+ * @author  Sven Vanpoucke - Hogeschool Gent
  */
 class Role extends DataClass
 {
@@ -16,10 +17,6 @@ class Role extends DataClass
     public const PROPERTY_ROLE = 'role';
 
     /**
-     * Get the default properties of all data classes.
-     *
-     * @param string[] $extendedPropertyNames
-     *
      * @return string[]
      */
     public static function getDefaultPropertyNames(array $extendedPropertyNames = []): array
@@ -29,28 +26,17 @@ class Role extends DataClass
         return parent::getDefaultPropertyNames($extendedPropertyNames);
     }
 
-    /**
-     * @return string
-     */
-    public function getRole()
+    public function getRole(): string
     {
         return $this->getDefaultProperty(self::PROPERTY_ROLE);
     }
 
-    /**
-     * @return string
-     */
     public static function getStorageUnitName(): string
     {
         return 'user_role';
     }
 
-    /**
-     * @param string $role
-     *
-     * @return $this
-     */
-    public function setRole($role)
+    public function setRole(string $role): Role
     {
         $this->setDefaultProperty(self::PROPERTY_ROLE, $role);
 
