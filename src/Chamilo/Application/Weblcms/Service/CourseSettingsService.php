@@ -62,6 +62,16 @@ class CourseSettingsService implements CourseSettingsServiceInterface
     }
 
     /**
+     * @param Course $course
+     *
+     * @return bool
+     */
+    public function isCourseAccessibleForStudents(Course $course)
+    {
+        return !$this->isCourseClosed($course) && $this->isCourseVisible($course);
+    }
+
+    /**
      * Checks if the given course is open for the world
      * 
      * @param \Chamilo\Application\Weblcms\Course\Storage\DataClass\Course $course
