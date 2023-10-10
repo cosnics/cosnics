@@ -102,7 +102,7 @@ class GetTargetEntitiesComponent extends \Chamilo\Application\Weblcms\Ajax\Manag
         {
             if(!is_array($targetEntities))
                 return $targetEntityNames;
-            
+
             foreach ($targetEntities as $entity_type => $entity_ids)
             {
                 switch ($entity_type)
