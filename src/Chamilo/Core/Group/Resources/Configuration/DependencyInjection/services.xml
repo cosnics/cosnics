@@ -11,6 +11,7 @@
         <service id="Chamilo\Core\Group\Service\GroupMembershipService"/>
         <service id="Chamilo\Core\Group\Service\GroupService"/>
         <service id="Chamilo\Core\Group\Service\GroupsTreeTraverser"/>
+        <service id="Chamilo\Core\Group\Service\GroupUrlGenerator"/>
 
         <service id="Chamilo\Core\Group\Storage\Repository\GroupMembershipRepository"/>
         <service id="Chamilo\Core\Group\Storage\Repository\GroupRepository"/>

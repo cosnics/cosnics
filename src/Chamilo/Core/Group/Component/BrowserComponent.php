@@ -96,14 +96,15 @@ class BrowserComponent extends Manager implements MenuComponentInterface
             $commonActions->addButton(
                 new Button(
                     $translator->trans('Add', [], StringUtilities::LIBRARIES), new FontAwesomeGlyph('plus'),
-                    $this->get_create_group_url($this->getGroupIdentifier()), ToolbarItem::DISPLAY_ICON_AND_LABEL
+                    $this->getGroupUrlGenerator()->getCreateUrl($this->getGroup()), ToolbarItem::DISPLAY_ICON_AND_LABEL
                 )
             );
 
             $commonActions->addButton(
                 new Button(
                     $translator->trans('Root', [], StringUtilities::LIBRARIES), new FontAwesomeGlyph('home'),
-                    $this->get_group_viewing_url($this->getRootGroup()), ToolbarItem::DISPLAY_ICON_AND_LABEL
+                    $this->getGroupUrlGenerator()->getViewUrl($this->getRootGroup()),
+                    ToolbarItem::DISPLAY_ICON_AND_LABEL
                 )
             );
 
@@ -262,7 +263,7 @@ class BrowserComponent extends Manager implements MenuComponentInterface
         $toolbar->add_item(
             new ToolbarItem(
                 $translator->trans('Edit', [], StringUtilities::LIBRARIES), new FontAwesomeGlyph('pencil-alt'),
-                $this->get_group_editing_url($group), ToolbarItem::DISPLAY_ICON_AND_LABEL
+                $this->getGroupUrlGenerator()->getUpdateUrl($group), ToolbarItem::DISPLAY_ICON_AND_LABEL
             )
         );
 
@@ -271,7 +272,7 @@ class BrowserComponent extends Manager implements MenuComponentInterface
             $toolbar->add_item(
                 new ToolbarItem(
                     $translator->trans('Delete', [], StringUtilities::LIBRARIES), new FontAwesomeGlyph('times'),
-                    $this->get_group_delete_url($group), ToolbarItem::DISPLAY_ICON_AND_LABEL
+                    $this->getGroupUrlGenerator()->getDeleteUrl($group), ToolbarItem::DISPLAY_ICON_AND_LABEL
                 )
             );
         }
@@ -279,7 +280,7 @@ class BrowserComponent extends Manager implements MenuComponentInterface
         $toolbar->add_item(
             new ToolbarItem(
                 $translator->trans('AddUsers'), new FontAwesomeGlyph('plus-circle'),
-                $this->get_group_subscribe_user_browser_url($group), ToolbarItem::DISPLAY_ICON_AND_LABEL
+                $this->getGroupUrlGenerator()->getSubscribeUrl($group), ToolbarItem::DISPLAY_ICON_AND_LABEL
             )
         );
 
@@ -293,7 +294,7 @@ class BrowserComponent extends Manager implements MenuComponentInterface
             $toolbar->add_item(
                 new ToolbarItem(
                     $translator->trans('Truncate'), new FontAwesomeGlyph('trash-alt'),
-                    $this->get_group_emptying_url($group), ToolbarItem::DISPLAY_ICON_AND_LABEL
+                    $this->getGroupUrlGenerator()->getTruncateUrl($group), ToolbarItem::DISPLAY_ICON_AND_LABEL
                 )
             );
         }
@@ -310,7 +311,7 @@ class BrowserComponent extends Manager implements MenuComponentInterface
         $toolbar->add_item(
             new ToolbarItem(
                 $translator->trans('Metadata', [], StringUtilities::LIBRARIES), new FontAwesomeGlyph('info-circle'),
-                $this->get_group_metadata_url($group), ToolbarItem::DISPLAY_ICON_AND_LABEL
+                $this->getGroupUrlGenerator()->getMetadataUrl($group), ToolbarItem::DISPLAY_ICON_AND_LABEL
             )
         );
 
@@ -329,17 +330,6 @@ class BrowserComponent extends Manager implements MenuComponentInterface
         $html[] = $toolbar->render();
 
         return implode(PHP_EOL, $html);
-    }
-
-    /**
-     * @return string
-     * @throws \Chamilo\Libraries\Architecture\Exceptions\ObjectNotExistException
-     */
-    public function renderApplicationMenu(): string
-    {
-        $group_menu = new GroupMenu($this->getGroupIdentifier());
-
-        return $group_menu->render_as_tree();
     }
 
     /**
@@ -407,6 +397,17 @@ class BrowserComponent extends Manager implements MenuComponentInterface
         );
 
         return $this->getTabsRenderer()->render($renderer_name, $tabs);
+    }
+
+    /**
+     * @return string
+     * @throws \Chamilo\Libraries\Architecture\Exceptions\ObjectNotExistException
+     */
+    public function renderApplicationMenu(): string
+    {
+        $group_menu = new GroupMenu($this->getGroupIdentifier());
+
+        return $group_menu->render_as_tree();
     }
 
     /**

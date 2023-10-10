@@ -4,6 +4,7 @@ namespace Chamilo\Core\Group\Table;
 use Chamilo\Core\Group\Manager;
 use Chamilo\Core\Group\Service\GroupMembershipService;
 use Chamilo\Core\Group\Service\GroupsTreeTraverser;
+use Chamilo\Core\Group\Service\GroupUrlGenerator;
 use Chamilo\Core\Group\Storage\DataClass\Group;
 use Chamilo\Libraries\Architecture\Application\Application;
 use Chamilo\Libraries\Architecture\Application\Routing\UrlGenerator;
@@ -37,6 +38,8 @@ class GroupTableRenderer extends DataClassListTableRenderer implements TableRowA
 
     protected GroupMembershipService $groupMembershipService;
 
+    protected GroupUrlGenerator $groupUrlGenerator;
+
     protected GroupsTreeTraverser $groupsTreeTraverser;
 
     protected StringUtilities $stringUtilities;
@@ -45,12 +48,13 @@ class GroupTableRenderer extends DataClassListTableRenderer implements TableRowA
         GroupsTreeTraverser $groupsTreeTraverser, GroupMembershipService $groupMembershipService,
         StringUtilities $stringUtilities, Translator $translator, UrlGenerator $urlGenerator,
         ListHtmlTableRenderer $htmlTableRenderer, Pager $pager,
-        DataClassPropertyTableColumnFactory $dataClassPropertyTableColumnFactory
+        DataClassPropertyTableColumnFactory $dataClassPropertyTableColumnFactory, GroupUrlGenerator $groupUrlGenerator
     )
     {
         $this->stringUtilities = $stringUtilities;
         $this->groupsTreeTraverser = $groupsTreeTraverser;
         $this->groupMembershipService = $groupMembershipService;
+        $this->groupUrlGenerator = $groupUrlGenerator;
 
         parent::__construct(
             $translator, $urlGenerator, $htmlTableRenderer, $pager, $dataClassPropertyTableColumnFactory
@@ -60,6 +64,11 @@ class GroupTableRenderer extends DataClassListTableRenderer implements TableRowA
     public function getGroupMembershipService(): GroupMembershipService
     {
         return $this->groupMembershipService;
+    }
+
+    public function getGroupUrlGenerator(): GroupUrlGenerator
+    {
+        return $this->groupUrlGenerator;
     }
 
     public function getGroupsTreeTraverser(): GroupsTreeTraverser
@@ -186,17 +195,13 @@ class GroupTableRenderer extends DataClassListTableRenderer implements TableRowA
      */
     public function renderTableRowActions(TableResultPosition $resultPosition, $group): string
     {
-        $urlGenerator = $this->getUrlGenerator();
         $translator = $this->getTranslator();
         $groupMembershipService = $this->getGroupMembershipService();
+        $groupUrlGenerator = $this->getGroupUrlGenerator();
 
         $toolbar = new Toolbar();
 
-        $editUrl = $urlGenerator->fromParameters([
-            Application::PARAM_CONTEXT => Manager::CONTEXT,
-            Application::PARAM_ACTION => Manager::ACTION_EDIT_GROUP,
-            Manager::PARAM_GROUP_ID => $group->getId()
-        ]);
+        $editUrl = $groupUrlGenerator->getUpdateUrl($group);
 
         $toolbar->add_item(
             new ToolbarItem(
@@ -205,11 +210,7 @@ class GroupTableRenderer extends DataClassListTableRenderer implements TableRowA
             )
         );
 
-        $subscribeUrl = $urlGenerator->fromParameters([
-            Application::PARAM_CONTEXT => Manager::CONTEXT,
-            Application::PARAM_ACTION => Manager::ACTION_SUBSCRIBE_USER_BROWSER,
-            Manager::PARAM_GROUP_ID => $group->getId()
-        ]);
+        $subscribeUrl = $groupUrlGenerator->getSubscribeUrl($group);
 
         $toolbar->add_item(
             new ToolbarItem(
@@ -222,11 +223,7 @@ class GroupTableRenderer extends DataClassListTableRenderer implements TableRowA
 
         if ($visible)
         {
-            $truncateUrl = $urlGenerator->fromParameters([
-                Application::PARAM_CONTEXT => Manager::CONTEXT,
-                Application::PARAM_ACTION => Manager::ACTION_TRUNCATE_GROUP,
-                Manager::PARAM_GROUP_ID => $group->getId()
-            ]);
+            $truncateUrl = $groupUrlGenerator->getTruncateUrl($group);
 
             $toolbar->add_item(
                 new ToolbarItem(
@@ -246,11 +243,7 @@ class GroupTableRenderer extends DataClassListTableRenderer implements TableRowA
             );
         }
 
-        $deleteUrl = $urlGenerator->fromParameters([
-            Application::PARAM_CONTEXT => Manager::CONTEXT,
-            Application::PARAM_ACTION => Manager::ACTION_DELETE_GROUP,
-            Manager::PARAM_GROUP_ID => $group->getId()
-        ]);
+        $deleteUrl = $groupUrlGenerator->getDeleteUrl($group);
 
         $toolbar->add_item(
             new ToolbarItem(
@@ -259,11 +252,7 @@ class GroupTableRenderer extends DataClassListTableRenderer implements TableRowA
             )
         );
 
-        $moveUrl = $urlGenerator->fromParameters([
-            Application::PARAM_CONTEXT => Manager::CONTEXT,
-            Application::PARAM_ACTION => Manager::ACTION_MOVE_GROUP,
-            Manager::PARAM_GROUP_ID => $group->getId()
-        ]);
+        $moveUrl = $groupUrlGenerator->getMoveUrl($group);
 
         $toolbar->add_item(
             new ToolbarItem(

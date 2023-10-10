@@ -3,6 +3,7 @@ namespace Chamilo\Core\Group;
 
 use Chamilo\Core\Admin\Service\BreadcrumbGenerator;
 use Chamilo\Core\Group\Service\GroupMembershipService;
+use Chamilo\Core\Group\Service\GroupUrlGenerator;
 use Chamilo\Core\Group\Storage\DataClass\Group;
 use Chamilo\Libraries\Architecture\Application\Application;
 use Chamilo\Libraries\Architecture\Application\ApplicationConfigurationInterface;
@@ -57,80 +58,8 @@ abstract class Manager extends Application
         return $this->getService(GroupMembershipService::class);
     }
 
-    public function get_create_group_url(string $parentGroupIdentifier): string
+    public function getGroupUrlGenerator(): GroupUrlGenerator
     {
-        return $this->getUrlGenerator()->fromParameters(
-            [
-                self::PARAM_CONTEXT => self::CONTEXT,
-                self::PARAM_ACTION => self::ACTION_CREATE_GROUP,
-                self::PARAM_GROUP_ID => $parentGroupIdentifier
-            ]
-        );
-    }
-
-    public function get_group_delete_url(Group $group): string
-    {
-        return $this->getUrlGenerator()->fromParameters(
-            [
-                self::PARAM_CONTEXT => self::CONTEXT,
-                self::PARAM_ACTION => self::ACTION_DELETE_GROUP,
-                self::PARAM_GROUP_ID => $group->getId()
-            ]
-        );
-    }
-
-    public function get_group_editing_url(Group $group): string
-    {
-        return $this->getUrlGenerator()->fromParameters(
-            [
-                self::PARAM_CONTEXT => self::CONTEXT,
-                self::PARAM_ACTION => self::ACTION_EDIT_GROUP,
-                self::PARAM_GROUP_ID => $group->getId()
-            ]
-        );
-    }
-
-    public function get_group_emptying_url(Group $group): string
-    {
-        return $this->getUrlGenerator()->fromParameters(
-            [
-                self::PARAM_CONTEXT => self::CONTEXT,
-                self::PARAM_ACTION => self::ACTION_TRUNCATE_GROUP,
-                self::PARAM_GROUP_ID => $group->getId()
-            ]
-        );
-    }
-
-    public function get_group_metadata_url(Group $group): string
-    {
-        return $this->getUrlGenerator()->fromParameters(
-            [
-                self::PARAM_CONTEXT => self::CONTEXT,
-                self::PARAM_ACTION => self::ACTION_MANAGE_METADATA,
-                self::PARAM_GROUP_ID => $group->getId()
-            ]
-        );
-    }
-
-    public function get_group_subscribe_user_browser_url(Group $group): string
-    {
-        return $this->getUrlGenerator()->fromParameters(
-            [
-                self::PARAM_CONTEXT => self::CONTEXT,
-                self::PARAM_ACTION => self::ACTION_SUBSCRIBE_USER_BROWSER,
-                self::PARAM_GROUP_ID => $group->getId()
-            ]
-        );
-    }
-
-    public function get_group_viewing_url(Group $group): string
-    {
-        return $this->getUrlGenerator()->fromParameters(
-            [
-                self::PARAM_CONTEXT => self::CONTEXT,
-                self::PARAM_ACTION => self::ACTION_VIEW_GROUP,
-                self::PARAM_GROUP_ID => $group->getId()
-            ]
-        );
+        return $this->getService(GroupUrlGenerator::class);
     }
 }

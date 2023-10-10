@@ -5,7 +5,6 @@ use Chamilo\Core\User\Manager;
 use Chamilo\Core\User\Storage\DataClass\User;
 use Chamilo\Libraries\Architecture\Application\Application;
 use Chamilo\Libraries\Architecture\Application\Routing\DataClassUrlGenerator;
-use Chamilo\Libraries\Architecture\Application\Routing\UrlGenerator;
 
 /**
  * @package Chamilo\Core\User\Service
@@ -15,11 +14,8 @@ class UserUrlGenerator
 {
     protected DataClassUrlGenerator $dataClassUrlGenerator;
 
-    protected UrlGenerator $urlGenerator;
-
-    public function __construct(UrlGenerator $urlGenerator, DataClassUrlGenerator $dataClassUrlGenerator)
+    public function __construct(DataClassUrlGenerator $dataClassUrlGenerator)
     {
-        $this->urlGenerator = $urlGenerator;
         $this->dataClassUrlGenerator = $dataClassUrlGenerator;
     }
 
@@ -81,16 +77,6 @@ class UserUrlGenerator
         );
     }
 
-    public function getViewQuotaUrl(User $user): string
-    {
-        return $this->getUserActionUrl(Manager::ACTION_VIEW_QUOTA, $user);
-    }
-
-    public function getUrlGenerator(): UrlGenerator
-    {
-        return $this->urlGenerator;
-    }
-
     /**
      * @param string[] $additionalParameters
      */
@@ -100,5 +86,10 @@ class UserUrlGenerator
             Manager::CONTEXT, Application::PARAM_ACTION, Manager::PARAM_USER_USER_ID, $action, $user,
             $additionalParameters
         );
+    }
+
+    public function getViewQuotaUrl(User $user): string
+    {
+        return $this->getUserActionUrl(Manager::ACTION_VIEW_QUOTA, $user);
     }
 }

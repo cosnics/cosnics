@@ -57,6 +57,7 @@
         </service>
 
         <service id="Chamilo\Core\User\Service\PasswordGenerator"/>
+        <service id="Chamilo\Core\User\Service\UserUrlGenerator"/>
         <service id="Chamilo\Core\User\Domain\UserDetails\UserDetailsRendererCollection"/>
         <service id="Chamilo\Core\User\Storage\Repository\UserRepository"/>
 

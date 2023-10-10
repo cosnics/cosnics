@@ -132,7 +132,7 @@ class ViewerComponent extends Manager
             $commonActions->addButton(
                 new Button(
                     $translator->trans('Edit', [], StringUtilities::LIBRARIES), new FontAwesomeGlyph('pencil-alt'),
-                    $this->get_group_editing_url($currentGroup), ToolbarItem::DISPLAY_ICON_AND_LABEL
+                    $this->getGroupUrlGenerator()->getUpdateUrl($currentGroup), ToolbarItem::DISPLAY_ICON_AND_LABEL
                 )
             );
 
@@ -141,7 +141,7 @@ class ViewerComponent extends Manager
                 $commonActions->addButton(
                     new Button(
                         $translator->trans('Delete', [], StringUtilities::LIBRARIES), new FontAwesomeGlyph('times'),
-                        $this->get_group_delete_url($currentGroup), ToolbarItem::DISPLAY_ICON_AND_LABEL
+                        $this->getGroupUrlGenerator()->getDeleteUrl($currentGroup), ToolbarItem::DISPLAY_ICON_AND_LABEL
                     )
                 );
             }
@@ -149,7 +149,7 @@ class ViewerComponent extends Manager
             $toolActions->addButton(
                 new Button(
                     $translator->trans('AddUsers', [], \Chamilo\Core\User\Manager::CONTEXT),
-                    new FontAwesomeGlyph('plus-circle'), $this->get_group_subscribe_user_browser_url($currentGroup),
+                    new FontAwesomeGlyph('plus-circle'), $this->getGroupUrlGenerator()->getSubscribeUrl($currentGroup),
                     ToolbarItem::DISPLAY_ICON_AND_LABEL
                 )
             );
@@ -162,7 +162,8 @@ class ViewerComponent extends Manager
                 $toolActions->addButton(
                     new Button(
                         $translator->trans('Truncate', [], Manager::CONTEXT), new FontAwesomeGlyph('trash-alt'),
-                        $this->get_group_emptying_url($currentGroup), ToolbarItem::DISPLAY_ICON_AND_LABEL
+                        $this->getGroupUrlGenerator()->getTruncateUrl($currentGroup),
+                        ToolbarItem::DISPLAY_ICON_AND_LABEL
                     )
                 );
             }
@@ -179,7 +180,7 @@ class ViewerComponent extends Manager
             $toolActions->addButton(
                 new Button(
                     $translator->trans('Metadata', [], StringUtilities::LIBRARIES), new FontAwesomeGlyph('info-circle'),
-                    $this->get_group_metadata_url($currentGroup), ToolbarItem::DISPLAY_ICON_AND_LABEL
+                    $this->getGroupUrlGenerator()->getMetadataUrl($currentGroup), ToolbarItem::DISPLAY_ICON_AND_LABEL
                 )
             );
 
