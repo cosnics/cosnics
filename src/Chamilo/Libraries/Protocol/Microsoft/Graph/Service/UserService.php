@@ -83,7 +83,7 @@ class UserService
      *
      * @return string @todo should be value object
      */
-    public function getAzureUserIdentifier(User $user)
+    public function getAzureUserIdentifier(User $user, bool $forceNewRetrieve = false)
     {
         $azureActiveDirectoryUserIdentifier = $this->getLocalSetting()->get(
             'external_user_id',
@@ -91,7 +91,7 @@ class UserService
             $user
         );
 
-        if (empty($azureActiveDirectoryUserIdentifier))
+        if (empty($azureActiveDirectoryUserIdentifier) || $forceNewRetrieve)
         {
             $azureUser = $this->getUserRepository()->getAzureUser($user);
 
