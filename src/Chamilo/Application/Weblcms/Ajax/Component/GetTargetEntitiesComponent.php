@@ -91,7 +91,7 @@ class GetTargetEntitiesComponent extends \Chamilo\Application\Weblcms\Ajax\Manag
         $translator = Translation::getInstance();
         $targetEntityNames = array();
         
-        if (array_key_exists(0, $targetEntities[0]))
+        if (is_array($targetEntities) && is_array($targetEntities[0]) && array_key_exists(0, $targetEntities[0]))
         {
             $targetEntityNames[self::TARGET_ENTITY_EVERYONE] = $translator->getTranslation(
                 'Everybody', 
@@ -100,6 +100,9 @@ class GetTargetEntitiesComponent extends \Chamilo\Application\Weblcms\Ajax\Manag
         }
         else
         {
+            if(!is_array($targetEntities))
+                return $targetEntityNames;
+            
             foreach ($targetEntities as $entity_type => $entity_ids)
             {
                 switch ($entity_type)
