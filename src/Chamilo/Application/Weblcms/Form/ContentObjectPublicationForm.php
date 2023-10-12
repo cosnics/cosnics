@@ -288,7 +288,8 @@ class ContentObjectPublicationForm extends BasePublicationForm
         }
         else
         {
-            $selected_entities = CourseManagementRights::retrieve_rights_location_rights_for_location(
+            $rights = CourseManagementRights::getInstance();
+            $selected_entities = $rights->retrieve_rights_location_rights_for_location(
                 $location,
                 WeblcmsRights::VIEW_RIGHT
             )->as_array();
