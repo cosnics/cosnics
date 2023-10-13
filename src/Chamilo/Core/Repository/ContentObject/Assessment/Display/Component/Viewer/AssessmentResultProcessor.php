@@ -188,7 +188,7 @@ class AssessmentResultProcessor
             $percent = round(($total_score / $total_weight) * 100);
         else
             $percent = 0;
-        
+
         $this->get_assessment_viewer()->save_assessment_result($percent);
         
         if ($this->get_assessment_viewer()->get_configuration()->show_score())
