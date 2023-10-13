@@ -14,6 +14,11 @@ class ScoreCalculator extends \Chamilo\Core\Repository\ContentObject\Assessment\
     {
         $user_answers = $this->get_answer();
 
+        if(!is_array($user_answers))
+        {
+            $user_answers = [];
+        }
+
         $question = $this->get_question();
         if ($question->get_answer_type() == AssessmentMultipleChoiceQuestion::ANSWER_TYPE_RADIO)
         {
