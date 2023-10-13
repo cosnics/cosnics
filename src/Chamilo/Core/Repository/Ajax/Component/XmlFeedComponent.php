@@ -137,10 +137,11 @@ class XmlFeedComponent extends \Chamilo\Core\Repository\Ajax\Manager
 
     public function dump_tree($tree, $objects)
     {
-        if (! count($tree))
+        if (!is_array($tree) || ! count($tree))
         {
             return;
         }
+
         foreach ($tree as $node)
         {
             if (! $this->contains_results($node, $objects))
@@ -175,6 +176,9 @@ class XmlFeedComponent extends \Chamilo\Core\Repository\Ajax\Manager
 
     public function contains_results($node, $objects)
     {
+        if(!is_array($node) || !array_key_exists('obj', $node) || !array_key_exists($node['obj']->get_id(), $objects))
+            return false;
+
         if (count($objects[$node['obj']->get_id()]))
         {
             return true;

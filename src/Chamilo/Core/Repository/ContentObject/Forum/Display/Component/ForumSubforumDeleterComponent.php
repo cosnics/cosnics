@@ -16,7 +16,7 @@ class ForumSubforumDeleterComponent extends Manager
 
     public function run()
     {
-        if ($this->get_parent()->is_allowed(DELETE_RIGHT))
+        if ($this->get_parent()->is_allowed(\Chamilo\Application\Weblcms\Rights\WeblcmsRights::DELETE_RIGHT))
         {
 
             $subforum = $this->get_selected_complex_content_object_item();

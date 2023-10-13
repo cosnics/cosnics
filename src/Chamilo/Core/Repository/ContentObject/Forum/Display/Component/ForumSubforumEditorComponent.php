@@ -25,7 +25,7 @@ class ForumSubforumEditorComponent extends Manager implements DelegateComponent
 
     public function run()
     {
-        if ($this->get_parent()->is_allowed(EDIT_RIGHT))
+        if ($this->get_parent()->is_allowed(\Chamilo\Application\Weblcms\Rights\WeblcmsRights::EDIT_RIGHT))
         {
             $selected_complex_content_object_item = $this->get_selected_complex_content_object_item();
 

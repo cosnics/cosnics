@@ -30,7 +30,7 @@ class ForumPostDeleterComponent extends Manager
         }
 
         if ($delete_post->get_user_id() == $this->get_parent()->get_user_id() ||
-             $this->get_parent()->is_allowed(DELETE_RIGHT))
+             $this->get_parent()->is_allowed(\Chamilo\Application\Weblcms\Rights\WeblcmsRights::DELETE_RIGHT))
         {
             $success = $delete_post->delete();
         }
