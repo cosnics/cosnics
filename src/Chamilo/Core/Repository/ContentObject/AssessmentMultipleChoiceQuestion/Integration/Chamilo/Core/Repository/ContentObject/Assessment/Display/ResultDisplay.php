@@ -113,7 +113,15 @@ class ResultDisplay extends AssessmentQuestionResultDisplay
             }
             else
             {
-                $is_given_answer = array_key_exists($i + 1, $answers);
+                if (is_array($answers))
+                {
+                    $is_given_answer = array_key_exists($i + 1, $answers);
+                }
+                else
+                {
+                    $is_given_answer = false;
+                }
+
                 $is_correct = $option->is_correct();
                 
                 if ($is_given_answer)
