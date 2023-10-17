@@ -43,6 +43,12 @@ class ResultDisplay extends AssessmentQuestionResultDisplay
         $html[] = '<tbody>';
         
         $answers = $this->get_answers();
+
+        if(!is_array($answers))
+        {
+            $answers = [];
+        }
+
         $options = $question->get_options();
         $type = $question->get_answer_type();
         
