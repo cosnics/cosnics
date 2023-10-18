@@ -402,7 +402,7 @@ class CourseSettingsController
     protected function get_setting($setting_type, $setting_name, $tool_id = 0, $object_id = null)
     {
         $setting_type_caching_hash = $this->get_setting_type_caching_hash($setting_type, $object_id);
-        if (!is_array($setting_type_caching_hash) || ! array_key_exists($setting_type_caching_hash, $this->course_settings_values_cache))
+        if (!is_array($this->course_settings_values_cache) || ! array_key_exists($setting_type_caching_hash, $this->course_settings_values_cache))
         {
             $this->load_settings($setting_type, $object_id);
         }
