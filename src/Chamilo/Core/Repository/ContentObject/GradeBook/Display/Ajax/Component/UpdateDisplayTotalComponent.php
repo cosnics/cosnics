@@ -3,7 +3,9 @@
 namespace Chamilo\Core\Repository\ContentObject\GradeBook\Display\Ajax\Component;
 
 use Chamilo\Core\Repository\ContentObject\GradeBook\Display\Ajax\Manager;
+use Chamilo\Libraries\Architecture\Exceptions\UserException;
 use Chamilo\Libraries\Platform\Security\Csrf\CsrfComponentInterface;
+use Doctrine\ORM\ORMException;
 
 /**
  * @package Chamilo\Core\Repository\ContentObject\GradeBook\Display\Ajax
@@ -14,11 +16,11 @@ class UpdateDisplayTotalComponent extends Manager implements CsrfComponentInterf
 {
     /**
      * @return array
-     *
-     * @throws \Doctrine\ORM\ORMException
+     * @throws UserException
+     * @throws ORMException
      */
-    function runAjaxComponent()
+    function runAjaxComponent(): array
     {
-        return $this->getGradeBookAjaxService()->updateDisplayTotal($this->getGradeBookDataId(), $this->getVersion(), $this->getDisplayTotal());
+        return $this->getGradeBookAjaxService()->updateDisplayTotal($this->getGradeBookData(), $this->getDisplayTotal());
     }
 }

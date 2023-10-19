@@ -3,7 +3,10 @@
 namespace Chamilo\Core\Repository\ContentObject\GradeBook\Display\Ajax\Component;
 
 use Chamilo\Core\Repository\ContentObject\GradeBook\Display\Ajax\Manager;
+use Chamilo\Libraries\Architecture\Exceptions\ObjectNotExistException;
+use Chamilo\Libraries\Architecture\Exceptions\UserException;
 use Chamilo\Libraries\Platform\Security\Csrf\CsrfComponentInterface;
+use Doctrine\ORM\ORMException;
 
 /**
  * @package Chamilo\Core\Repository\ContentObject\GradeBook\Display\Ajax
@@ -13,12 +16,13 @@ use Chamilo\Libraries\Platform\Security\Csrf\CsrfComponentInterface;
 class RevertOverwrittenScoreComponent extends Manager implements CsrfComponentInterface
 {
     /**
-     * @return array|array[]
-     *
-     * @throws \Doctrine\ORM\ORMException
+     * @return array
+     * @throws ObjectNotExistException
+     * @throws UserException
+     * @throws ORMException
      */
-    function runAjaxComponent()
+    function runAjaxComponent(): array
     {
-        return $this->getGradeBookAjaxService()->revertOverwrittenGradeBookScore($this->getGradeBookDataId(), $this->getVersion(), $this->getGradeScoreId());
+        return $this->getGradeBookAjaxService()->revertOverwrittenGradeBookScore($this->getGradeBookData(), $this->getGradeScoreId());
     }
 }

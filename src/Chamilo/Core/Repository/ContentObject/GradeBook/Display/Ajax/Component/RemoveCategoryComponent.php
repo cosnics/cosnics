@@ -3,7 +3,10 @@
 namespace Chamilo\Core\Repository\ContentObject\GradeBook\Display\Ajax\Component;
 
 use Chamilo\Core\Repository\ContentObject\GradeBook\Display\Ajax\Manager;
+use Chamilo\Libraries\Architecture\Exceptions\ObjectNotExistException;
+use Chamilo\Libraries\Architecture\Exceptions\UserException;
 use Chamilo\Libraries\Platform\Security\Csrf\CsrfComponentInterface;
+use Doctrine\ORM\ORMException;
 
 /**
  * @package Chamilo\Core\Repository\ContentObject\GradeBook\Display\Ajax
@@ -12,9 +15,15 @@ use Chamilo\Libraries\Platform\Security\Csrf\CsrfComponentInterface;
  */
 class RemoveCategoryComponent extends Manager implements CsrfComponentInterface
 {
-    function runAjaxComponent()
+    /**
+     * @return array
+     *
+     * @throws ObjectNotExistException
+     * @throws UserException
+     * @throws ORMException
+     */
+    function runAjaxComponent(): array
     {
-        return $this->getGradeBookAjaxService()->removeCategory(
-            $this->getGradeBookDataId(), $this->getVersion(), $this->getCategoryData());
+        return $this->getGradeBookAjaxService()->removeCategory($this->getGradeBookData(), $this->getCategoryData());
     }
 }

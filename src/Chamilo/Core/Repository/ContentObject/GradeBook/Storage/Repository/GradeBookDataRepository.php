@@ -7,6 +7,10 @@ use Chamilo\Libraries\Storage\DataManager\Doctrine\ORM\CommonEntityRepository;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\DBAL\LockMode;
 use Doctrine\DBAL\Logging\EchoSQLLogger;
+use Doctrine\ORM\NonUniqueResultException;
+use Doctrine\ORM\NoResultException;
+use Doctrine\ORM\OptimisticLockException;
+use Doctrine\ORM\ORMException;
 use Doctrine\ORM\PersistentCollection;
 use Doctrine\ORM\PessimisticLockException;
 use Doctrine\ORM\Query\Expr\Join;
@@ -24,7 +28,7 @@ class GradeBookDataRepository extends CommonEntityRepository
     /**
      * @param GradeBookData $gradeBookData
      *
-     * @throws \Doctrine\ORM\ORMException
+     * @throws ORMException
      */
     public function saveGradeBookData(GradeBookData $gradeBookData)
     {
@@ -63,7 +67,7 @@ class GradeBookDataRepository extends CommonEntityRepository
     /**
      * @param GradeBookData $gradeBookData
      *
-     * @throws \Doctrine\ORM\ORMException
+     * @throws ORMException
      */
     function deleteGradeBookData(GradeBookData $gradeBookData)
     {
@@ -76,15 +80,75 @@ class GradeBookDataRepository extends CommonEntityRepository
      *
      * @return GradeBookData
      *
-     * @throws \Doctrine\ORM\NoResultException
-     * @throws \Doctrine\ORM\NonUniqueResultException
-     * @throws \Doctrine\ORM\OptimisticLockException
+     * @throws NoResultException
+     * @throws NonUniqueResultException
+     * @throws OptimisticLockException
      */
     public function findGradeBookDataById(int $gradeBookDataId, int $expectedVersion = null)
     {
         $qb = $this->createQueryBuilder('gbd')
             ->where('gbd.id = :id')
             ->setParameter('id', $gradeBookDataId);
+
+        /** @var GradeBookData $gradeBookData */
+        $gradeBookData = $qb->getQuery()->getSingleResult();
+
+        if (!is_null($expectedVersion))
+        {
+            try
+            {
+                $this->getEntityManager()->lock($gradeBookData, LockMode::OPTIMISTIC, $expectedVersion);
+            }
+            catch (PessimisticLockException $ex)
+            {
+                // The doc throws a pessimistic lock exception which is impossible, just catching it here so it doesn't go to the other docblocks
+            }
+        }
+
+        // preload for performance - voodoo magic
+        $gradeBookData->getGradeBookCategories()[0];
+        $gradeBookData->getGradeBookItems()[0];
+        $gradeBookData->getGradeBookColumns()[0];
+        //$gradeBookData->getGradeBookScores()[0];
+
+        foreach ($gradeBookData->getGradeBookColumns() as $column)
+        {
+            $column->getGradeBookColumnSubItems()[0];
+            //$column->getGradeBookScores()[0];
+        }
+
+        foreach ($gradeBookData->getGradeBookCategories() as $category)
+        {
+            $category->getGradeBookColumns()[0];
+        }
+
+        // end preload for performance - thank you doctrine for not caching on foreign keys and not being able to join on a subclass of an inheritance
+        // (maybe we should change the domain model?)
+
+        return $gradeBookData;
+    }
+
+    /**
+     * @param int $contentObjectId
+     * @param string $contextClass
+     * @param int $contextId
+     * @param int|null $expectedVersion
+     *
+     * @return GradeBookData
+     *
+     * @throws NoResultException
+     * @throws NonUniqueResultException
+     * @throws OptimisticLockException
+     */
+    public function findGradeBookDataByContextIdentifier(int $contentObjectId, string $contextClass, int $contextId, int $expectedVersion = null)
+    {
+        $qb = $this->createQueryBuilder('gbd')
+            ->where('gbd.contentObjectId = :contentObjectId')
+            ->andWhere('gbd.contextClass = :contextClass')
+            ->andWhere('gbd.contextId = :contextId')
+            ->setParameter('contentObjectId', $contentObjectId)
+            ->setParameter('contextClass', $contextClass)
+            ->setParameter('contextId', $contextId);
 
         /** @var GradeBookData $gradeBookData */
         $gradeBookData = $qb->getQuery()->getSingleResult();

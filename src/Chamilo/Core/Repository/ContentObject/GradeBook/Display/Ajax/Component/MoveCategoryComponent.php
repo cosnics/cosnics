@@ -3,7 +3,10 @@
 namespace Chamilo\Core\Repository\ContentObject\GradeBook\Display\Ajax\Component;
 
 use Chamilo\Core\Repository\ContentObject\GradeBook\Display\Ajax\Manager;
+use Chamilo\Libraries\Architecture\Exceptions\ObjectNotExistException;
+use Chamilo\Libraries\Architecture\Exceptions\UserException;
 use Chamilo\Libraries\Platform\Security\Csrf\CsrfComponentInterface;
+use Doctrine\ORM\ORMException;
 
 /**
  * @package Chamilo\Core\Repository\ContentObject\GradeBook\Display\Ajax
@@ -14,12 +17,12 @@ class MoveCategoryComponent extends Manager implements CsrfComponentInterface
 {
     /**
      * @return array
-     *
-     * @throws \Chamilo\Libraries\Architecture\Exceptions\ObjectNotExistException
-     * @throws \Doctrine\ORM\ORMException
+     * @throws ObjectNotExistException
+     * @throws UserException
+     * @throws ORMException
      */
-    function runAjaxComponent()
+    function runAjaxComponent(): array
     {
-        return $this->getGradeBookAjaxService()->moveCategory($this->getGradeBookDataId(), $this->getVersion(), $this->getCategoryData(), $this->getRequest()->getFromPost(self::PARAM_NEW_SORT));
+        return $this->getGradeBookAjaxService()->moveCategory($this->getGradeBookData(), $this->getCategoryData(), $this->getRequest()->getFromPost(self::PARAM_NEW_SORT));
     }
 }
