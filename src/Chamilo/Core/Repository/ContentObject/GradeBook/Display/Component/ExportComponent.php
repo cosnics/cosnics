@@ -6,6 +6,8 @@ use Chamilo\Core\Repository\ContentObject\GradeBook\Display\Manager;
 use Chamilo\Core\Repository\ContentObject\GradeBook\Storage\Entity\GradeBookColumn;
 use Chamilo\Core\Repository\ContentObject\GradeBook\Storage\Entity\GradeBookData;
 use Chamilo\Libraries\Architecture\Exceptions\NotAllowedException;
+use Chamilo\Libraries\Architecture\Exceptions\UserException;
+use Doctrine\ORM\ORMException;
 
 /**
  * @package Chamilo\Core\Repository\ContentObject\GradeBook\Display\Component
@@ -16,8 +18,8 @@ class ExportComponent extends Manager
 {
     /**
      * @throws NotAllowedException
-     * @throws \Chamilo\Libraries\Architecture\Exceptions\UserException
-     * @throws \Doctrine\ORM\ORMException
+     * @throws UserException
+     * @throws ORMException
      */
     public function run()
     {
@@ -25,7 +27,11 @@ class ExportComponent extends Manager
 
         $exportService = $this->getExportService();
         $targetUsers = $this->getGradeBookServiceBridge()->getTargetUsers();
-        $gradeBookData = $this->getGradeBookService()->getGradeBookData($this->getGradeBook());
+
+        $gradeBook = $this->getGradeBook();
+        $contextIdentifier = $this->getGradeBookServiceBridge()->getContextIdentifier();
+        $gradeBookData = $this->getGradeBookService()->getGradeBookDataByContextIdentifier($gradeBook, $contextIdentifier);
+
         $gradebookItems = $this->getGradeBookServiceBridge()->findPublicationGradeBookItems();
         $this->getGradeBookService()->completeGradeBookData($gradeBookData, $gradebookItems);
 
