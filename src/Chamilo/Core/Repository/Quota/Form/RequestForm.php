@@ -29,14 +29,14 @@ class RequestForm extends FormValidator
         if ($this->request->get_id())
         {
             $user_details = new \Chamilo\Core\User\UserDetails($this->request->get_user());
-            $this->addElement('static', null, Translation::get('User'), $user_details->toHtml());
+            $this->addElement('static', '', Translation::get('User'), $user_details->toHtml());
         }
         
         $quota_bar = Calculator::getBar(
             $this->calculator->getUserDiskQuotaPercentage(), 
             Filesystem::format_file_size($this->calculator->getUsedUserDiskQuota()) . ' / ' .
                  Filesystem::format_file_size($this->calculator->getMaximumUserDiskQuota()));
-        $this->addElement('static', null, Translation::get('UsedDiskSpace'), $quota_bar);
+        $this->addElement('static', '', Translation::get('UsedDiskSpace'), $quota_bar);
         
         $this->addElement('text', Request::PROPERTY_QUOTA, Translation::get('QuotaStep'), array("size" => "7"));
         $this->addRule(

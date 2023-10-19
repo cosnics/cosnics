@@ -80,7 +80,10 @@ class CourseUserCategoryForm extends FormValidator
             $attributes['search_url'], 
             $attributes['locale'], 
             $attributes['defaults']);
-        $element_finder->excludeElements($attributes['exclude']);
+
+        if(is_array($attributes['exclude']))
+            $element_finder->excludeElements($attributes['exclude']);
+
         $this->addElement($element_finder);
     }
 
