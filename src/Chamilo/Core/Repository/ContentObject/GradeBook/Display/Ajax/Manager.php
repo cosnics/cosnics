@@ -9,6 +9,7 @@ use Chamilo\Core\Repository\ContentObject\GradeBook\Service\GradeBookService;
 use Chamilo\Core\Repository\ContentObject\GradeBook\Service\GradeBookAjaxService;
 use Chamilo\Core\Repository\ContentObject\GradeBook\Service\ImportFromCSVService;
 use Chamilo\Core\Repository\ContentObject\GradeBook\Storage\DataClass\GradeBook;
+use Chamilo\Core\Repository\ContentObject\GradeBook\Storage\Entity\GradeBookData;
 use Chamilo\Libraries\Architecture\AjaxManager;
 use Chamilo\Libraries\Architecture\Application\ApplicationConfigurationInterface;
 use Symfony\Component\HttpFoundation\JsonResponse;
@@ -20,6 +21,7 @@ use JMS\Serializer\Serializer;
 use JMS\Serializer\SerializationContext;
 use JMS\Serializer\SerializerBuilder;
 use JMS\Serializer\Naming\IdenticalPropertyNamingStrategy;
+
 
 /**
  * @package Chamilo\Core\Repository\ContentObject\GradeBook\Display\Ajax
@@ -123,7 +125,31 @@ abstract class Manager extends AjaxManager
     /**
      * @return array
      */
-    abstract function runAjaxComponent();
+    abstract function runAjaxComponent(): array;
+
+    /**
+     * @return GradeBookData
+     *
+     * @throws UserException
+     * @throws \Doctrine\ORM\ORMException
+     */
+    protected function getGradeBookData(): GradeBookData
+    {
+        $gradeBook = $this->getGradeBook();
+        $contextIdentifier = $this->getGradeBookServiceBridge()->getContextIdentifier();
+        $gradeBookData = $this->getGradeBookService()->getGradeBookDataById($this->getGradeBookDataId(), $this->getVersion());
+
+        $isContextValid = ($gradeBookData->getContentObjectId() == $gradeBook->getId()) &&
+            ($gradeBookData->getContextClass() == $contextIdentifier->getContextClass()) &&
+            ($gradeBookData->getContextId() == $contextIdentifier->getContextId());
+
+        if (!$isContextValid)
+        {
+            throw new UserException('Invalid context for gradebook data with id ' . $this->getGradeBookDataId());
+        }
+
+        return $gradeBookData;
+    }
 
     /**
      * @return bool

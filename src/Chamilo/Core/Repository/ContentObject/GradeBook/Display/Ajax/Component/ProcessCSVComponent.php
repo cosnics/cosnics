@@ -49,7 +49,7 @@ class ProcessCSVComponent extends Manager implements CsrfComponentInterface
      * @throws NotAllowedException
      * @throws GradeBookImportException
      */
-    function runAjaxComponent()
+    function runAjaxComponent(): array
     {
         if (!$this->getRequest()->isMethod('POST'))
         {

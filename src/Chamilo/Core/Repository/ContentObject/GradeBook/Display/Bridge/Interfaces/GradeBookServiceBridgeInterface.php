@@ -18,7 +18,7 @@ interface GradeBookServiceBridgeInterface
     /**
      * @return ContextIdentifier
      */
-//    public function getContextIdentifier(): ContextIdentifier;
+    public function getContextIdentifier(): ContextIdentifier;
 
     /**
      * @return boolean

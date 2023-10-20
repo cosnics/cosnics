@@ -2,13 +2,10 @@
 namespace Chamilo\Core\Repository\ContentObject\GradeBook\Integration\Chamilo\Core\Repository\ContentObject\LearningPath\Display;
 
 use Chamilo\Core\Repository\ContentObject\GradeBook\Display\Bridge\Interfaces\GradeBookServiceBridgeInterface;
-//use Chamilo\Core\Repository\ContentObject\Presence\Display\Service\PresenceService;
 use Chamilo\Core\Repository\ContentObject\GradeBook\Integration\Chamilo\Core\Repository\ContentObject\LearningPath\Bridge\GradeBookServiceBridge;
-//use Chamilo\Core\Repository\ContentObject\Presence\Integration\Chamilo\Core\Repository\ContentObject\LearningPath\Bridge\Interfaces\LearningPathPresenceServiceBridgeInterface;
 use Chamilo\Core\Repository\ContentObject\GradeBook\Integration\Chamilo\Core\Repository\ContentObject\LearningPath\Bridge\Interfaces\LearningPathGradeBookServiceBridgeInterface;
 use Chamilo\Core\Repository\ContentObject\LearningPath\Display\Attempt\TreeNodeAttempt;
 use Chamilo\Core\Repository\ContentObject\LearningPath\Display\Embedder\Type\ContentObjectEmbedder;
-use Chamilo\Core\Repository\ContentObject\LearningPath\Service\TreeNodeDataService;
 use Chamilo\Libraries\Architecture\Application\ApplicationConfiguration;
 use Chamilo\Core\Repository\ContentObject\GradeBook\Display\ApplicationFactory;
 use Chamilo\Libraries\Architecture\Traits\DependencyInjectionContainerTrait;
@@ -60,11 +57,8 @@ class Embedder extends ContentObjectEmbedder
         $learningPathGradeBookServiceBridge =
             $this->getBridgeManager()->getBridgeByInterface(LearningPathGradeBookServiceBridgeInterface::class);
 
-
-        $gradeBookServiceBridge = new GradeBookServiceBridge($learningPathGradeBookServiceBridge);//, $this->getService(PresenceService::class), $this->getService(TreeNodeDataService::class));
-        /*$presenceServiceBridge->setTreeNode($this->treeNode);
-        $presenceServiceBridge->setTreeNodeAttempt($activeAttempt);
-        $presenceServiceBridge->setLearningPath($this->learningPath);*/
+        $gradeBookServiceBridge = new GradeBookServiceBridge($learningPathGradeBookServiceBridge);
+        $gradeBookServiceBridge->setTreeNode($this->treeNode);
 
         $this->getBridgeManager()->addBridge($gradeBookServiceBridge);
     }

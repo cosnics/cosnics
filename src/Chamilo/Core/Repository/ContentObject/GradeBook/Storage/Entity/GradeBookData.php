@@ -3,6 +3,7 @@
 namespace Chamilo\Core\Repository\ContentObject\GradeBook\Storage\Entity;
 
 use Chamilo\Core\Repository\ContentObject\GradeBook\Display\Ajax\Model\GradeBookDataJSONModel;
+use Chamilo\Libraries\Architecture\ContextIdentifier;
 use Chamilo\Libraries\Architecture\Exceptions\ObjectNotExistException;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\Mapping as ORM;
@@ -55,6 +56,20 @@ class GradeBookData
      * @ORM\Column(name="content_object_id", type="integer", nullable=true)
      */
     protected $contentObjectId;
+
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="context_class", type="string")
+     */
+    protected $contextClass;
+
+    /**
+     * @var int
+     *
+     * @ORM\Column(name="context_id", type="integer")
+     */
+    protected $contextId;
 
     /**
      * @var string
@@ -204,6 +219,67 @@ class GradeBookData
         $this->contentObjectId = $contentObjectId;
 
         return $this;
+    }
+
+    /**
+     * @return string
+     */
+    public function getContextClass(): ?string
+    {
+        return $this->contextClass;
+    }
+
+    /**
+     * @param string $contextClass
+     *
+     * @return GradeBookData
+     */
+    public function setContextClass(string $contextClass): GradeBookData
+    {
+        $this->contextClass = $contextClass;
+
+        return $this;
+    }
+
+    /**
+     * @return int
+     */
+    public function getContextId(): ?int
+    {
+        return $this->contextId;
+    }
+
+    /**
+     * @param int $contextId
+     *
+     * @return GradeBookData
+     */
+    public function setContextId(int $contextId): GradeBookData
+    {
+        $this->contextId = $contextId;
+
+        return $this;
+    }
+
+    /**
+     * @param ContextIdentifier $contextIdentifier
+     *
+     * @return $this
+     */
+    public function setContextIdentifier(ContextIdentifier $contextIdentifier)
+    {
+        $this->setContextClass($contextIdentifier->getContextClass());
+        $this->setContextId($contextIdentifier->getContextId());
+
+        return $this;
+    }
+
+    /**
+     * @return ContextIdentifier
+     */
+    public function getContextIdentifier(): ContextIdentifier
+    {
+        return new ContextIdentifier($this->getContextClass(), $this->getContextId());
     }
 
     /**

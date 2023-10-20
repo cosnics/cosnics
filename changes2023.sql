@@ -1,0 +1,1 @@
+ALTER TABLE `repository_gradebook_data` ADD context_class VARCHAR(255) NOT NULL, ADD context_id INT NOT NULL;

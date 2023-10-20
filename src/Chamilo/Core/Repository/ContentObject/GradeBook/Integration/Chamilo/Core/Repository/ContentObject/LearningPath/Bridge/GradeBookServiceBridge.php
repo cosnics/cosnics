@@ -2,11 +2,12 @@
 
 namespace Chamilo\Core\Repository\ContentObject\GradeBook\Integration\Chamilo\Core\Repository\ContentObject\LearningPath\Bridge;
 
-use Chamilo\Application\Weblcms\Bridge\GradeBook\Service\GradeBookItemScoreService;
 use Chamilo\Core\Repository\ContentObject\GradeBook\Display\Bridge\Interfaces\GradeBookServiceBridgeInterface;
 use Chamilo\Core\Repository\ContentObject\GradeBook\Domain\GradeScoreInterface;
+use Chamilo\Core\Repository\ContentObject\GradeBook\Storage\DataClass\GradeBook;
 use Chamilo\Core\Repository\ContentObject\GradeBook\Storage\Entity\GradeBookItem;
 use Chamilo\Core\Repository\ContentObject\GradeBook\Integration\Chamilo\Core\Repository\ContentObject\LearningPath\Bridge\Interfaces\LearningPathGradeBookServiceBridgeInterface;
+use Chamilo\Core\Repository\ContentObject\LearningPath\Domain\TreeNode;
 use Chamilo\Core\User\Storage\DataClass\User;
 use Chamilo\Libraries\Architecture\ContextIdentifier;
 use Chamilo\Libraries\Storage\FilterParameters\FilterParameters;
@@ -23,6 +24,11 @@ class GradeBookServiceBridge implements GradeBookServiceBridgeInterface
     protected $learningPathGradeBookServiceBridge;
 
     /**
+     * @var TreeNode
+     */
+    protected $treeNode;
+
+    /**
      * GradeBookServiceBridge constructor.
      *
      * @param LearningPathGradeBookServiceBridgeInterface $learningPathGradeBookServiceBridge
@@ -32,9 +38,25 @@ class GradeBookServiceBridge implements GradeBookServiceBridgeInterface
         $this->learningPathGradeBookServiceBridge = $learningPathGradeBookServiceBridge;
     }
 
-    /*public function getContextIdentifier(): ContextIdentifier
+    /**
+     * @param TreeNode $treeNode
+     */
+    public function setTreeNode(TreeNode $treeNode)
     {
-    }*/
+        if (!$treeNode->getContentObject() instanceof GradeBook)
+        {
+            throw new \RuntimeException(
+                'The given treenode does not reference a valid gradebook and should not be used'
+            );
+        }
+
+        $this->treeNode = $treeNode;
+    }
+
+    public function getContextIdentifier(): ContextIdentifier
+    {
+        return $this->learningPathGradeBookServiceBridge->getContextIdentifier($this->treeNode->getId());
+    }
 
     /**
      * @return bool
