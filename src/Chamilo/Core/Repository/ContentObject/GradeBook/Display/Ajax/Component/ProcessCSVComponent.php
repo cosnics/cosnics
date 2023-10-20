@@ -25,7 +25,7 @@ class ProcessCSVComponent extends Manager implements CsrfComponentInterface
             $result = $this->runAjaxComponent();
             return new JsonResponse($this->serialize($result), 200, [], true);
         }
-        catch (\Exception $ex)
+        catch (GradeBookImportException | \Exception $ex)
         {
             $this->getExceptionLogger()->logException($ex);
             $message = $ex->getMessage();

@@ -14,7 +14,7 @@ use JMS\Serializer\Annotation\Type;
 class GradeBookItemJSONModel
 {
     /**
-     * @var int
+     * @var int|null
      *
      * @Type("integer")
      */
@@ -44,12 +44,12 @@ class GradeBookItemJSONModel
     /**
      * GradeBookItemJSONModel constructor.
      *
-     * @param int $id
+     * @param int|null $id
      * @param string $title
      * @param array $breadcrumb
      * @param bool $removed
      */
-    public function __construct(int $id, string $title, array $breadcrumb, bool $removed)
+    public function __construct(?int $id, string $title, array $breadcrumb, bool $removed)
     {
         $this->id = $id;
         $this->title = $title;
@@ -58,7 +58,7 @@ class GradeBookItemJSONModel
     }
 
     /**
-     * @return int
+     * @return int|null
      */
     public function getId(): ?int
     {
