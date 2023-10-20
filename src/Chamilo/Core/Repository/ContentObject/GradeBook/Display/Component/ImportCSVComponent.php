@@ -5,7 +5,8 @@ namespace Chamilo\Core\Repository\ContentObject\GradeBook\Display\Component;
 use Chamilo\Core\Repository\ContentObject\GradeBook\Display\Manager;
 use Chamilo\Core\Repository\ContentObject\GradeBook\Display\Ajax\Manager as AjaxManager;
 use Chamilo\Libraries\Architecture\Exceptions\NotAllowedException;
-use Chamilo\Libraries\Format\Structure\BreadcrumbTrail;
+use Chamilo\Libraries\Architecture\Exceptions\UserException;
+use Doctrine\ORM\ORMException;
 
 /**
  *
@@ -17,7 +18,7 @@ class ImportCSVComponent extends Manager
     /**
      * @return string
      *
-     * @throws \Chamilo\Libraries\Architecture\Exceptions\NotAllowedException
+     * @throws NotAllowedException
      * @throws \Twig_Error_Loader
      * @throws \Twig_Error_Runtime
      * @throws \Twig_Error_Syntax
@@ -32,7 +33,7 @@ class ImportCSVComponent extends Manager
     }
 
     /**
-     * @throws \Chamilo\Libraries\Architecture\Exceptions\NotAllowedException
+     * @throws NotAllowedException
      */
     protected function checkAccessRights()
     {
@@ -44,12 +45,14 @@ class ImportCSVComponent extends Manager
 
     /**
      * @return array
-     * @throws \Chamilo\Libraries\Architecture\Exceptions\ClassNotExistException
-     * @throws \Chamilo\Libraries\Architecture\Exceptions\UserException
+     * @throws UserException
+     * @throws ORMException
      */
     protected function getTemplateProperties(): array
     {
-        $gradeBookData = $this->getGradeBookService()->getGradeBookData($this->getGradeBook());
+        $gradeBook = $this->getGradeBook();
+        $contextIdentifier = $this->getGradeBookServiceBridge()->getContextIdentifier();
+        $gradeBookData = $this->getGradeBookService()->getGradeBookDataByContextIdentifier($gradeBook, $contextIdentifier);
 
         return [
             'HEADER' => $this->render_header(),

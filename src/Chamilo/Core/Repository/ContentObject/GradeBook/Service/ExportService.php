@@ -53,7 +53,14 @@ class ExportService
 
         if ($gradeBookData->usesDisplayTotal())
         {
-            $results[] = round($finalScore * $gradeBookData->getDisplayTotal()) / 100;
+            if (is_numeric($finalScore))
+            {
+                $results[] = round($finalScore * $gradeBookData->getDisplayTotal()) / 100;
+            }
+            else
+            {
+                $results[] = '';
+            }
         }
 
         return $results;

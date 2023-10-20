@@ -4,7 +4,6 @@ namespace Chamilo\Application\Weblcms\Bridge\GradeBook;
 
 use Chamilo\Application\Weblcms\Course\Storage\DataClass\Course;
 use Chamilo\Application\Weblcms\Storage\DataClass\ContentObjectPublication;
-use Chamilo\Application\Weblcms\Tool\Implementation\GradeBook\Storage\DataClass\Publication as GradeBookPublication;
 use Chamilo\Core\Repository\ContentObject\GradeBook\Display\Bridge\Interfaces\GradeBookServiceBridgeInterface;
 use Chamilo\Application\Weblcms\Tool\Implementation\GradeBook\Service\GradeBookPublicationService;
 use Chamilo\Application\Weblcms\Bridge\GradeBook\Service\GradeBookItemService;
@@ -49,11 +48,6 @@ class GradeBookServiceBridge implements GradeBookServiceBridgeInterface
     protected $course;
 
     /**
-     * @var GradeBookPublication
-     */
-    protected $gradebookPublication;
-
-    /**
      * @var bool
      */
     protected $canEditGradebook;
@@ -91,19 +85,11 @@ class GradeBookServiceBridge implements GradeBookServiceBridgeInterface
     }
 
     /**
-     * @param GradeBookPublication $gradebookPublication
-     */
-    public function setGradeBookPublication(GradeBookPublication $gradebookPublication)
-    {
-        $this->gradebookPublication = $gradebookPublication;
-    }
-
-    /**
      * @return ContextIdentifier
      */
     public function getContextIdentifier(): ContextIdentifier
     {
-        return new ContextIdentifier(get_class($this->gradebookPublication), $this->contentObjectPublication->getId());
+        return new ContextIdentifier(get_class($this->contentObjectPublication), $this->contentObjectPublication->getId());
     }
 
     /**

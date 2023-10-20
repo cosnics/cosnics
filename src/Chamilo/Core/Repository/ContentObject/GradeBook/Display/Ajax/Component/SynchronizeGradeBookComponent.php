@@ -3,7 +3,9 @@
 namespace Chamilo\Core\Repository\ContentObject\GradeBook\Display\Ajax\Component;
 
 use Chamilo\Core\Repository\ContentObject\GradeBook\Display\Ajax\Manager;
+use Chamilo\Libraries\Architecture\Exceptions\UserException;
 use Chamilo\Libraries\Platform\Security\Csrf\CsrfComponentInterface;
+use Doctrine\ORM\ORMException;
 
 /**
  * @package Chamilo\Core\Repository\ContentObject\GradeBook\Display\Ajax
@@ -12,8 +14,13 @@ use Chamilo\Libraries\Platform\Security\Csrf\CsrfComponentInterface;
  */
 class SynchronizeGradeBookComponent extends Manager implements CsrfComponentInterface
 {
-    function runAjaxComponent()
+    /**
+     * @return array
+     * @throws UserException
+     * @throws ORMException
+     */
+    function runAjaxComponent(): array
     {
-        return $this->getGradeBookAjaxService()->synchronizeGradeBook($this->getGradeBookDataId(), $this->getVersion(), $this->getTargetUserIds());
+        return $this->getGradeBookAjaxService()->synchronizeGradeBook($this->getGradeBookData(), $this->getTargetUserIds());
     }
 }

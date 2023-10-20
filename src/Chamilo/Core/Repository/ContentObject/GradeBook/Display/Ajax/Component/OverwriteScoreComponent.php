@@ -3,7 +3,9 @@
 namespace Chamilo\Core\Repository\ContentObject\GradeBook\Display\Ajax\Component;
 
 use Chamilo\Core\Repository\ContentObject\GradeBook\Display\Ajax\Manager;
+use Chamilo\Libraries\Architecture\Exceptions\UserException;
 use Chamilo\Libraries\Platform\Security\Csrf\CsrfComponentInterface;
+use Doctrine\ORM\ORMException;
 
 /**
  * @package Chamilo\Core\Repository\ContentObject\GradeBook\Display\Ajax
@@ -13,12 +15,12 @@ use Chamilo\Libraries\Platform\Security\Csrf\CsrfComponentInterface;
 class OverwriteScoreComponent extends Manager implements CsrfComponentInterface
 {
     /**
-     * @return array|array[]
-     *
-     * @throws \Doctrine\ORM\ORMException
+     * @return array
+     * @throws UserException
+     * @throws ORMException
      */
-    function runAjaxComponent()
+    function runAjaxComponent(): array
     {
-        return $this->getGradeBookAjaxService()->overwriteGradeBookScore($this->getGradeBookDataId(), $this->getVersion(), $this->getGradeScoreId(), $this->getNewScore(), $this->getNewScoreAuthAbsent());
+        return $this->getGradeBookAjaxService()->overwriteGradeBookScore($this->getGradeBookData(), $this->getGradeScoreId(), $this->getNewScore(), $this->getNewScoreAuthAbsent());
     }
 }

@@ -10,9 +10,7 @@ use Chamilo\Application\Weblcms\Storage\DataManager;
 use Chamilo\Application\Weblcms\Tool\Implementation\GradeBook\Manager;
 use Chamilo\Core\Repository\ContentObject\Evaluation\Display\Service\Entity\EvaluationEntityServiceManager;
 use Chamilo\Core\Repository\ContentObject\GradeBook\Display\Bridge\Interfaces\GradeBookServiceBridgeInterface;
-//use Chamilo\Core\Repository\ContentObject\Evaluation\Display\Service\Entity\EvaluationEntityServiceManager;
 use Chamilo\Libraries\Architecture\Application\ApplicationConfiguration;
-use Chamilo\Libraries\Architecture\ContextIdentifier;
 use Chamilo\Libraries\Architecture\Exceptions\NoObjectSelectedException;
 use Chamilo\Libraries\Architecture\Exceptions\NotAllowedException;
 use Chamilo\Libraries\Architecture\Exceptions\ObjectNotExistException;
@@ -70,19 +68,13 @@ class DisplayComponent extends Manager implements DelegateComponent
         $evaluationEntityServiceManager = $this->getService(EvaluationEntityServiceManager::class);
         $evaluationEntityServiceManager->addEntityService(1, $this->getService(CourseGroupEntityService::class));
 
-        // /** @var PublicationUserEntityService $publicationUserEntityService */
-        //$publicationUserEntityService = $this->getService(PublicationUserEntityService::class);
-        //$publicationUserEntityService->setContentObjectPublication($contentObjectPublication);
-
         /** @var GradeBookServiceBridge $gradebookServiceBridge */
         $gradebookServiceBridge = $this->getService(GradeBookServiceBridge::class);
         $gradebookServiceBridge->setCanEditGradebook(
             $this->is_allowed(WeblcmsRights::EDIT_RIGHT, $contentObjectPublication)
         );
 
-        $gradebookPublication = $this->getGradeBookPublication($contentObjectPublication);
         $gradebookServiceBridge->setContentObjectPublication($contentObjectPublication);
-        $gradebookServiceBridge->setGradeBookPublication($gradebookPublication);
         $gradebookServiceBridge->setCourse($this->get_course());
 
         $this->getBridgeManager()->addBridge($gradebookServiceBridge);

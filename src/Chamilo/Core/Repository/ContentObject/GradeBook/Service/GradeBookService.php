@@ -4,7 +4,6 @@ namespace Chamilo\Core\Repository\ContentObject\GradeBook\Service;
 
 use Chamilo\Core\Repository\ContentObject\GradeBook\Storage\DataClass\GradeBook;
 use Chamilo\Core\Repository\ContentObject\GradeBook\Storage\Entity\GradeBookData;
-use Chamilo\Core\Repository\ContentObject\GradeBook\Storage\Entity\GradeBookItem;
 use Chamilo\Core\Repository\ContentObject\GradeBook\Storage\Entity\GradeBookScore;
 use Chamilo\Core\Repository\ContentObject\GradeBook\Storage\Repository\GradeBookDataRepository;
 use Chamilo\Libraries\Architecture\ContextIdentifier;
@@ -38,18 +37,6 @@ class GradeBookService
     }
 
     /**
-     * @param GradeBook $gradeBook
-     * @param int|null $expectedVersion
-     *
-     * @return GradeBookData
-     * @throws ORMException
-     */
-    public function getGradeBookData(GradeBook $gradeBook, ?int $expectedVersion = null)
-    {
-        return $this->getGradeBookDataById($gradeBook->getActiveGradeBookDataId(), $expectedVersion);
-    }
-
-    /**
      * Retrieves a gradebook from the database
      *
      * @param int $gradeBookDataId
@@ -57,11 +44,28 @@ class GradeBookService
      *
      * @return GradeBookData
      *
-     * @throws \Doctrine\ORM\ORMException
+     * @throws ORMException
      */
     public function getGradeBookDataById(int $gradeBookDataId, ?int $expectedVersion = null)
     {
         return $this->gradeBookDataRepository->findGradeBookDataById($gradeBookDataId, $expectedVersion);
+    }
+
+
+    /**
+     * Retrieves a gradebook from the database
+     *
+     * @param GradeBook $gradeBook
+     * @param ContextIdentifier $contextIdentifier
+     * @param int|null $expectedVersion
+     *
+     * @return GradeBookData
+     *
+     * @throws ORMException
+     */
+    public function getGradeBookDataByContextIdentifier(GradeBook $gradeBook, ContextIdentifier $contextIdentifier, ?int $expectedVersion = null)
+    {
+        return $this->gradeBookDataRepository->findGradeBookDataByContextIdentifier($gradeBook->getId(), $contextIdentifier->getContextClass(), $contextIdentifier->getContextId(), $expectedVersion);
     }
 
     /**
@@ -79,7 +83,7 @@ class GradeBookService
     /**
      * @param int $gradeBookDataId
      *
-     * @throws \Doctrine\ORM\ORMException
+     * @throws ORMException
      */
     public function deleteGradeBookData(int $gradeBookDataId)
     {
@@ -155,11 +159,6 @@ class GradeBookService
         }
 
         return $shouldUpdate;
-
-        /*if ($canUpdate && $shouldUpdate)
-        {
-            $this->gradeBookService->saveGradeBookData($gradebookData);
-        }*/
     }
 
     /**
