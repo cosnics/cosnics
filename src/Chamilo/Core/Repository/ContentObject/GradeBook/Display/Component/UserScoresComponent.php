@@ -13,6 +13,9 @@ use Chamilo\Libraries\Architecture\Exceptions\NotAllowedException;
 use Chamilo\Libraries\Architecture\Exceptions\UserException;
 use Chamilo\Libraries\Format\Structure\Breadcrumb;
 use Chamilo\Libraries\Format\Structure\BreadcrumbTrail;
+use Chamilo\Libraries\Translation\Translation;
+use Chamilo\Libraries\Utilities\Utilities;
+use Doctrine\ORM\NoResultException;
 use Doctrine\ORM\ORMException;
 use JMS\Serializer\DeserializationContext;
 use JMS\Serializer\Naming\IdenticalPropertyNamingStrategy;
@@ -111,7 +114,15 @@ class UserScoresComponent extends Manager
     {
         $gradeBook = $this->getGradeBook();
         $contextIdentifier = $this->getGradeBookServiceBridge()->getContextIdentifier();
-        $gradeBookData = $this->getGradeBookService()->getGradeBookDataByContextIdentifier($gradeBook, $contextIdentifier);
+
+        try
+        {
+            $gradeBookData = $this->getGradeBookService()->getGradeBookDataByContextIdentifier($gradeBook, $contextIdentifier);
+        }
+        catch (NoResultException $exeption)
+        {
+            throw new UserException(Translation::get('NoResults', null, Utilities::COMMON_LIBRARIES));
+        }
 
         $gradebookItems = $this->getGradeBookServiceBridge()->findPublicationGradeBookItems();
         $this->getGradeBookService()->completeGradeBookData($gradeBookData, $gradebookItems);
