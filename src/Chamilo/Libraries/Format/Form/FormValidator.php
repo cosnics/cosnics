@@ -13,6 +13,7 @@ use Chamilo\Libraries\Format\Form\Rule\HTML_QuickForm_Rule_Filetype;
 use Chamilo\Libraries\Format\Form\Rule\HTML_QuickForm_Rule_NumberCompare;
 use Chamilo\Libraries\Format\Form\Rule\HTML_QuickForm_Rule_Username;
 use Chamilo\Libraries\Format\Form\Rule\HTML_QuickForm_Rule_UsernameAvailable;
+use Chamilo\Libraries\Format\Form\Rule\HTML_QuickForm_Rule_DiskQuota;
 use Chamilo\Libraries\Format\Theme;
 use Chamilo\Libraries\Format\Utilities\ResourceManager;
 use Chamilo\Libraries\Platform\Security;
@@ -31,7 +32,6 @@ use Chamilo\Libraries\Format\Form\Element\HTML_QuickForm_styleresetbutton;
 use Chamilo\Libraries\Format\Form\Element\HTML_QuickForm_stylesubmitbutton;
 use Chamilo\Libraries\Format\Form\Element\HTML_QuickForm_toggle;
 use HTML_QuickForm_Rule;
-use HTML_QuickForm_Rule_DiskQuota;
 use Symfony\Component\Security\Csrf\CsrfToken;
 use Symfony\Component\Security\Csrf\CsrfTokenManagerInterface;
 
