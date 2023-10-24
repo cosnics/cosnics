@@ -13,6 +13,10 @@ class ScoreCalculator extends \Chamilo\Core\Repository\ContentObject\Assessment\
     public function calculate_score()
     {
         $user_answers = $this->get_answer();
+
+        if(!is_array($user_answers))
+            $user_answers = [];
+
         $user_answers = $user_answers[0];
 
         $question = $this->get_question();
@@ -56,6 +60,7 @@ class ScoreCalculator extends \Chamilo\Core\Repository\ContentObject\Assessment\
         else
         {
             $answers = $question->get_options();
+
             $score = 0;
             $total_weight = 0;
 
