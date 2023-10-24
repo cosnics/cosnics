@@ -2,7 +2,6 @@
 namespace Chamilo\Core\Repository\Storage\DataClass;
 
 use Chamilo\Configuration\Service\Consulter\ConfigurationConsulter;
-use Chamilo\Configuration\Service\Consulter\RegistrationConsulter;
 use Chamilo\Core\Repository\Common\ContentObjectDifference;
 use Chamilo\Core\Repository\Common\Path\ComplexContentObjectPath;
 use Chamilo\Core\Repository\Publication\Service\PublicationAggregator;
@@ -735,16 +734,6 @@ class ContentObject extends CompositeDataClass
         }
     }
 
-    protected function getConfigurablePathBuilder(): ConfigurablePathBuilder
-    {
-        return $this->getService(ConfigurablePathBuilder::class);
-    }
-
-    protected function getConfigurationConsulter(): ConfigurationConsulter
-    {
-        return $this->getService(ConfigurationConsulter::class);
-    }
-
     protected function getContentObjectRelationService(): ContentObjectRelationService
     {
         return $this->getService(ContentObjectRelationService::class);
@@ -794,16 +783,6 @@ class ContentObject extends CompositeDataClass
         );
     }
 
-    public function getFilesystem(): Filesystem
-    {
-        return $this->getService(Filesystem::class);
-    }
-
-    protected function getFilesystemTools(): FilesystemTools
-    {
-        return $this->getService(FilesystemTools::class);
-    }
-
     /**
      * @param int $size
      * @param bool $isAvailable
@@ -851,30 +830,6 @@ class ContentObject extends CompositeDataClass
         return $this->getService(PublicationAggregator::class);
     }
 
-    protected function getRegistrationConsulter(): RegistrationConsulter
-    {
-        return $this->getService(RegistrationConsulter::class);
-    }
-
-    protected function getClassnameUtilities(): ClassnameUtilities
-    {
-        return $this->getService(ClassnameUtilities::class);
-    }
-
-    /**
-     * @template getService
-     *
-     * @param class-string<getService> $serviceName
-     *
-     * @return getService
-     */
-    protected function getService(string $serviceName)
-    {
-        return DependencyInjectionContainerBuilder::getInstance()->createContainer()->get(
-            $serviceName
-        );
-    }
-
     /**
      * @return string
      */
@@ -889,11 +844,6 @@ class ContentObject extends CompositeDataClass
     public static function getStorageUnitName(): string
     {
         return 'repository_content_object';
-    }
-
-    protected function getStringUtilities(): StringUtilities
-    {
-        return $this->getService(StringUtilities::class);
     }
 
     /**

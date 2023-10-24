@@ -42,6 +42,7 @@
         </service>
 
         <service id="Chamilo\Libraries\Architecture\Test\PHPUnitGenerator\PHPUnitGenerator"/>
+        <service id="Chamilo\Libraries\Architecture\Application\Routing\DataClassUrlGenerator"/>
         <service id="Chamilo\Libraries\Architecture\Application\Routing\UrlGenerator"/>
 
         <service id="Chamilo\Libraries\Architecture\Resource\ResourceGenerator"/>

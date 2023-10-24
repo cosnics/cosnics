@@ -3,6 +3,8 @@ namespace Chamilo\Core\User\Roles\Service\Interfaces;
 
 use Chamilo\Core\User\Roles\Storage\DataClass\Role;
 use Chamilo\Libraries\Storage\Query\Condition\Condition;
+use Chamilo\Libraries\Storage\Query\OrderBy;
+use Doctrine\Common\Collections\ArrayCollection;
 
 /**
  * Manages roles
@@ -24,14 +26,9 @@ interface RoleServiceInterface
     public function getRoleByName(string $roleName): Role;
 
     /**
-     * Retrieves the roles
-     *
-     * @param Condition $condition
-     * @param int $offset
-     * @param int $count
-     * @param array $orderBy
-     *
-     * @return Role[]
+     * @return \Doctrine\Common\Collections\ArrayCollection<\Chamilo\Core\User\Roles\Storage\DataClass\Role>
      */
-    public function getRoles(Condition $condition = null, $count = null, $offset = null, $orderBy = null);
+    public function getRoles(
+        ?Condition $condition = null, ?int $count = null, ?int $offset = null, ?OrderBy $orderBy = null
+    ): ArrayCollection;
 }
