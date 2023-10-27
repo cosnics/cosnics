@@ -466,7 +466,7 @@ abstract class ComplexContentObjectPathNode
             
             foreach ($parent_nodes as $parent_node)
             {
-                $parents_content_object_ids[] = $parent_node->get_content_object()->get_id();
+                $parents_content_object_ids[] = (string) $parent_node->get_content_object()->get_id();
             }
             
             $this->parents_content_object_ids[$include_self][$reverse] = $parents_content_object_ids;

@@ -50,6 +50,8 @@ class Display extends QuestionDisplay
 
         $question_id = $clo_question->get_id();
 
+        $defaults = [];
+
         foreach ($options as $i => $option)
         {
             $group = array();

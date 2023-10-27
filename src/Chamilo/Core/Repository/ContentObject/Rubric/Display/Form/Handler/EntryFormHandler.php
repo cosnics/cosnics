@@ -76,6 +76,9 @@ class EntryFormHandler extends FormHandler
 
         $data = $form->getData();
 
+        if(!is_array($data) || !array_key_exists(EntryFormType::ELEMENT_RUBRIC_RESULTS, $data))
+            $data[EntryFormType::ELEMENT_RUBRIC_RESULTS] = '';
+
         $resultJSONModels = $this->serializer->deserialize(
             $data[EntryFormType::ELEMENT_RUBRIC_RESULTS], 'array<' . TreeNodeResultJSONModel::class . '>', 'json'
         );
