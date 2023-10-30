@@ -153,7 +153,7 @@ class CategoryMoverComponent extends Manager implements DelegateComponent
         }
     }
 
-    private $tree;
+    private $tree = [];
 
     public function build_move_to_category_form()
     {
@@ -190,7 +190,7 @@ class CategoryMoverComponent extends Manager implements DelegateComponent
                 }
                 $this->build_category_tree(0, $cat, $is_course_admin);
 
-                if (count($this->tree) < 1)
+                if (!is_array($this->tree) || count($this->tree) < 1)
                 {
                     $this->redirect(
                         Translation::get('NoCategoriesAvailable'),
