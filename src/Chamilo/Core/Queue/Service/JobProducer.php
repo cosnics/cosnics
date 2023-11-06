@@ -3,6 +3,7 @@
 namespace Chamilo\Core\Queue\Service;
 
 use Chamilo\Core\Queue\Storage\Entity\Job;
+use Chamilo\Libraries\Architecture\ErrorHandler\ExceptionLogger\ExceptionLoggerInterface;
 
 /**
  * @package Chamilo\Core\Queue\Service
@@ -21,16 +22,19 @@ class JobProducer
      */
     protected $jobEntityManager;
 
+    private ExceptionLoggerInterface $exceptionLogger;
+
     /**
      * Producer constructor.
      *
      * @param Producer\ProducerInterface $producer
      * @param \Chamilo\Core\Queue\Service\JobEntityManager $jobEntityManager
      */
-    public function __construct(Producer\ProducerInterface $producer, JobEntityManager $jobEntityManager)
+    public function __construct(Producer\ProducerInterface $producer, JobEntityManager $jobEntityManager, ExceptionLoggerInterface $exceptionLogger)
     {
         $this->producer = $producer;
         $this->jobEntityManager = $jobEntityManager;
+        $this->exceptionLogger = $exceptionLogger;
     }
 
     /**
@@ -52,6 +56,7 @@ class JobProducer
         }
         catch(\Exception $ex)
         {
+            $this->exceptionLogger->logException(new Exception(sprintf("Job %s has failed", $job->getId())));
             $this->jobEntityManager->changeJobStatus($job, Job::STATUS_FAILED_RETRY);
         }
     }

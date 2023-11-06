@@ -56,6 +56,8 @@ class RetryFailedJobCommand extends Command
     protected function execute(InputInterface $input, OutputInterface $output)
     {
         $this->failedJobExecutor->retryFirstFailedJob($output);
+
+        return 0;
     }
 
 }

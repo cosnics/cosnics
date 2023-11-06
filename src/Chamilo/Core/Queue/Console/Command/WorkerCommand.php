@@ -62,6 +62,8 @@ class WorkerCommand extends Command
     protected function execute(InputInterface $input, OutputInterface $output)
     {
         $this->worker->waitForJobAndExecute($input->getArgument(self::ARG_QUEUE));
+
+        return 0;
     }
 
 }

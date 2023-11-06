@@ -57,7 +57,7 @@ class PsrContextFactory
                 return $factory->createContext();
             case 'database':
             default:
-                return new DbalContext($this->dbalConnection, ['table_name' => 'queue_queue']);
+                return new DbalContext($this->dbalConnection, ['table_name' => 'queue_queue_php8']);
         }
     }
 }
