@@ -37,7 +37,7 @@ class UpdateProviderComponent extends \Chamilo\Application\Lti\Manager
         $form = $this->getForm()->create(ProviderFormType::class, $provider);
         $form->handleRequest($this->getRequest());
 
-        if ($form->isValid())
+        if ($form->isSubmitted() && $form->isValid())
         {
             try
             {

@@ -101,6 +101,11 @@ class GdImageManipulation extends ImageManipulation
             return FALSE;
         }
 
+        if($extension == 'png') {
+            imagealphablending( $this->gdImage, FALSE );
+            imagesavealpha( $this->gdImage, TRUE );
+        }
+
         return $createFunction($this->gdImage, $file);
     }
 

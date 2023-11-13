@@ -74,7 +74,7 @@ abstract class HtmlInlineOfficeRenditionImplementation extends HtmlInlineRenditi
      *
      * @see \Chamilo\Core\Repository\ContentObject\File\Common\Rendition\Html\HtmlInlineRenditionImplementation::render()
      */
-    public function render($parameters)
+    public function render($parameters = [])
     {
         $html = array();
 

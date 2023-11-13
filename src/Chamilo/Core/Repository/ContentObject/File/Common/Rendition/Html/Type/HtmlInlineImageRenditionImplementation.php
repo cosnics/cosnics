@@ -16,7 +16,7 @@ class HtmlInlineImageRenditionImplementation extends HtmlInlineRenditionImplemen
      *
      * @see \Chamilo\Core\Repository\ContentObject\File\Common\Rendition\Html\HtmlInlineRenditionImplementation::render()
      */
-    public function render($parameters)
+    public function render($parameters = [])
     {
         $html = array();
         $object = $this->get_content_object();

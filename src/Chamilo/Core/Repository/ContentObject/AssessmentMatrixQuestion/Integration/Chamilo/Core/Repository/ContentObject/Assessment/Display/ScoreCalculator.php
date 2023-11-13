@@ -16,6 +16,9 @@ class ScoreCalculator extends \Chamilo\Core\Repository\ContentObject\Assessment\
         $question = $this->get_question();
         $options = $question->get_options();
 
+        if(!is_array($user_answers))
+            $user_answers = [];
+
         $score = 0;
         $total_weight = 0;
 
@@ -35,6 +38,11 @@ class ScoreCalculator extends \Chamilo\Core\Repository\ContentObject\Assessment\
         {
             foreach ($options as $index => $option)
             {
+                if(!is_array($user_answers[$index]))
+                {
+                    $user_answers[$index] = [];
+                }
+
                 $answers = array_keys($user_answers[$index]);
                 $matches = $option->get_matches();
                 if ($matches == null)

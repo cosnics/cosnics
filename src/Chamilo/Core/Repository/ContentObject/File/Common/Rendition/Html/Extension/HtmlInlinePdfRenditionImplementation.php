@@ -19,7 +19,7 @@ class HtmlInlinePdfRenditionImplementation extends HtmlInlineRenditionImplementa
      *
      * @see \Chamilo\Core\Repository\ContentObject\File\Common\Rendition\Html\HtmlInlineRenditionImplementation::render()
      */
-    public function render($parameters)
+    public function render($parameters = [])
     {
         $object = $this->get_content_object();
         $url = \Chamilo\Core\Repository\Manager::get_document_downloader_url(

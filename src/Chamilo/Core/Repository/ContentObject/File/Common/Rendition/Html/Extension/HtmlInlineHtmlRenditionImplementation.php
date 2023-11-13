@@ -23,7 +23,7 @@ class HtmlInlineHtmlRenditionImplementation extends HtmlInlineRenditionImplement
      * @throws \Twig\Error\RuntimeError
      * @throws \Twig\Error\SyntaxError
      */
-    public function render($parameters)
+    public function render($parameters = [])
     {
         /** @var File $object */
         $object = $this->get_content_object();

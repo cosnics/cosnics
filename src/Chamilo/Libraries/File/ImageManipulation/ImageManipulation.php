@@ -91,7 +91,10 @@ abstract class ImageManipulation
      */
     public static function rescale($originalWidth, $originalHeight, $width, $height, $type = self::SCALE_INSIDE)
     {
-        $aspect = $originalHeight / $originalWidth;
+        if($originalWidth > 0)
+            $aspect = $originalHeight / $originalWidth;
+        else
+            $aspect = 1;
 
         if ($type == self::SCALE_OUTSIDE)
         {
@@ -103,7 +106,7 @@ abstract class ImageManipulation
         // don't scale up
         if ($width >= $originalWidth && $height >= $originalHeight)
         {
-            return false;
+            return array(self::DIMENSION_WIDTH => $originalWidth, self::DIMENSION_HEIGHT => $originalHeight);
         }
 
         $new_aspect = $height / $width;

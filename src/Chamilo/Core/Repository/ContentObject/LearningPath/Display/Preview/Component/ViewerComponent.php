@@ -14,6 +14,7 @@ use Chamilo\Core\Repository\ContentObject\Glossary\Display\GlossaryDisplaySuppor
 use Chamilo\Core\Repository\ContentObject\LearningPath\Display\Embedder\Embedder;
 use Chamilo\Core\Repository\ContentObject\LearningPath\Display\LearningPathDisplaySupport;
 use Chamilo\Core\Repository\ContentObject\LearningPath\Display\Preview\Bridge\EvaluationServiceBridge;
+use Chamilo\Core\Repository\ContentObject\LearningPath\Display\Preview\Bridge\ExternalToolServiceBridge;
 use Chamilo\Core\Repository\ContentObject\LearningPath\Display\Preview\Bridge\PresenceServiceBridge;
 use Chamilo\Core\Repository\ContentObject\Wiki\Display\WikiDisplaySupport;
 use Chamilo\Core\User\Storage\DataClass\User;
@@ -61,6 +62,7 @@ class ViewerComponent extends \Chamilo\Core\Repository\ContentObject\LearningPat
         $this->getBridgeManager()->addBridge(new EntryPlagiarismResultServiceBridge());
         $this->getBridgeManager()->addBridge(new EvaluationServiceBridge());
         $this->getBridgeManager()->addBridge(new PresenceServiceBridge());
+        $this->getBridgeManager()->addBridge((new ExternalToolServiceBridge()));
     }
 
     /**

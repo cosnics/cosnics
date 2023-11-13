@@ -28,7 +28,7 @@ class HtmlInlineRenditionImplementation extends HtmlRenditionImplementation
      *
      * @return string
      */
-    public function render($parameters)
+    public function render($parameters = [])
     {
         return $this->renderInline($parameters);
     }
