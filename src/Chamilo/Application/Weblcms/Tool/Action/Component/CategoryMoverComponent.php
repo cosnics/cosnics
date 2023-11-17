@@ -195,7 +195,7 @@ class CategoryMoverComponent extends Manager implements DelegateComponent
                     $this->redirect(
                         Translation::get('NoCategoriesAvailable'),
                         true,
-                        null,
+                        [],
                         array(\Chamilo\Application\Weblcms\Tool\Manager::PARAM_ACTION));
                 }
 
