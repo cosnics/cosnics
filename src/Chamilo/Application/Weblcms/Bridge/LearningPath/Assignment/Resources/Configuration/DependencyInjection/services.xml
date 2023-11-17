@@ -28,6 +28,11 @@
         <service id="Chamilo\Application\Weblcms\Bridge\LearningPath\Assignment\NotificationServiceBridge" />
         <service id="Chamilo\Application\Weblcms\Bridge\LearningPath\Assignment\EntryPlagiarismResultServiceBridge" />
 
+        <service id="Chamilo\Application\Weblcms\Bridge\LearningPath\Assignment\Service\NotificationProcessor\EntryAttachmentNotificationJobProcessor" />
+        <service id="Chamilo\Application\Weblcms\Bridge\LearningPath\Assignment\Service\NotificationProcessor\EntryFeedbackNotificationJobProcessor" />
+        <service id="Chamilo\Application\Weblcms\Bridge\LearningPath\Assignment\Service\NotificationProcessor\EntryNotificationJobProcessor" />
+        <service id="Chamilo\Application\Weblcms\Bridge\LearningPath\Assignment\Service\NotificationProcessor\EntryScoreNotificationJobProcessor" />
+
         <service id="Chamilo\Application\Weblcms\Bridge\LearningPath\Assignment\Service\Plagiarism\PlagiarismEventListener">
             <tag name="Chamilo\Application\Plagiarism\Service\Events\PlagiarismEventListenerInterface" />
         </service>

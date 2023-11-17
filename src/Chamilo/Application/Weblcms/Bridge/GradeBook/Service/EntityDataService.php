@@ -107,7 +107,7 @@ class EntityDataService
             }
         }
 
-        return array_map(array_unique, $userEntities);
+        return array_map('array_unique', $userEntities);
     }
 
     /**
