@@ -76,8 +76,9 @@ class EntryFormHandler extends FormHandler
 
         $data = $form->getData();
 
+        // no rubric data found => don't store it
         if(!is_array($data) || !array_key_exists(EntryFormType::ELEMENT_RUBRIC_RESULTS, $data))
-            $data[EntryFormType::ELEMENT_RUBRIC_RESULTS] = '[]';
+            return true;
 
         $resultJSONModels = $this->serializer->deserialize(
             $data[EntryFormType::ELEMENT_RUBRIC_RESULTS], 'array<' . TreeNodeResultJSONModel::class . '>', 'json'

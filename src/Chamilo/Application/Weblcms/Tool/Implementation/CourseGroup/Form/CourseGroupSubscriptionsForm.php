@@ -163,6 +163,11 @@ class CourseGroupSubscriptionsForm extends FormValidator
         }
         $updated_members = array();
 
+        if(!array_key_exists('users', $values) || !array_key_exists('user', $values['users']))
+        {
+            $values['users']['user'] = [];
+        }
+
         foreach ($values['users']['user'] as $value)
         {
             $updated_members[] = $value;

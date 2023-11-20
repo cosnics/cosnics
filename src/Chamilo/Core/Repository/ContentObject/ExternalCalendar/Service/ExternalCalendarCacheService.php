@@ -35,7 +35,12 @@ class ExternalCalendarCacheService extends DoctrineFilesystemCacheService implem
     {
         $path = $identifier->get(self::PARAM_PATH);
         $lifetime = $identifier->get(self::PARAM_LIFETIME);
-        
+
+        if(empty($path))
+        {
+            return false;
+        }
+
         if (! file_exists($path))
         {
             if ($f = @fopen($path, 'r'))
