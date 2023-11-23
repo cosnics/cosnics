@@ -125,7 +125,7 @@ class UserTableCellRenderer extends DataClassTableCellRenderer implements TableC
             return true;
         }
         
-        $node_id = md5(serialize(array($user_publication->get_content_object_id())));
+        $node_id = md5(serialize(array((string) $user_publication->get_content_object_id())));
         
         $location = new RightsLocation();
         
