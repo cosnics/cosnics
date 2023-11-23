@@ -114,7 +114,7 @@ class ResultDisplay extends AssessmentQuestionResultDisplay
                 }
                 else
                 {
-                    if (array_key_exists($j, $answers[$i]))
+                    if (is_array($answers[$i]) && array_key_exists($j, $answers[$i]))
                     {
                         $selected = " checked ";
                         

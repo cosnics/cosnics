@@ -81,7 +81,7 @@ class RightsForm extends FormValidator
                     $this->entityRelation->get_entity_id())->get_name();
             }
             
-            $this->addElement('static', null, $entityType, $entityName);
+            $this->addElement('static', '', $entityType, $entityName);
         }
         else
         {

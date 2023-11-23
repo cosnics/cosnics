@@ -14,9 +14,6 @@ class ScoreCalculator extends \Chamilo\Core\Repository\ContentObject\Assessment\
     {
         $user_answers = $this->get_answer();
 
-        if(!is_array($user_answers))
-            $user_answers = [];
-
         $user_answers = $user_answers[0];
 
         $question = $this->get_question();
@@ -59,6 +56,9 @@ class ScoreCalculator extends \Chamilo\Core\Repository\ContentObject\Assessment\
         }
         else
         {
+            if(!is_array($user_answers))
+                $user_answers = [];
+
             $answers = $question->get_options();
 
             $score = 0;

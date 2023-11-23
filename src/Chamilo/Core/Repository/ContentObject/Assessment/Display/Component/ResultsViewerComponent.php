@@ -65,7 +65,7 @@ class ResultsViewerComponent extends Manager implements DelegateComponent
         $form->addElement('html', '<br />');
 
         $total_score = 0;
-        $total_weight = 0;
+        $total_weight = 1;
         $question_number = 1;
 
         while ($question_cloi = $questions_cloi->next_result())
