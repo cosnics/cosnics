@@ -156,7 +156,7 @@ class DenierComponent extends Manager
         
         foreach ($ids as $id)
         {
-            $request = DataManager::retrieve(Request::class_name(), (int) $id);
+            $request = DataManager::retrieve_by_id(Request::class_name(), (int) $id);
             
             if (! \Chamilo\Core\Repository\Quota\Rights\Rights::getInstance()->is_target_user(
                 $this->get_user(), 

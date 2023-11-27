@@ -35,7 +35,7 @@ class AssessmentRawResultsExporterComponent extends Manager
      *
      * @var string[]
      */
-    protected $courseGroups;
+    protected $courseGroups = [];
 
     /**
      * Runs this component

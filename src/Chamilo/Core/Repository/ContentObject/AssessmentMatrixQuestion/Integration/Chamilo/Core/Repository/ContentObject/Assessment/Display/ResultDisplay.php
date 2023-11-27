@@ -173,10 +173,12 @@ class ResultDisplay extends AssessmentQuestionResultDisplay
             
             if ($configuration->show_answer_feedback())
             {
+                $answersArray = is_array($answers[$i]) ? $answers[$i] : [];
+
                 $valid_answer = ($type == AssessmentMatrixQuestion::MATRIX_TYPE_RADIO &&
                      $answers[$i] == $option->get_matches()) || ($type ==
                      AssessmentMatrixQuestion::MATRIX_TYPE_CHECKBOX &&
-                     count(array_diff(array_keys($answers[$i]), $option->get_matches())) == 0);
+                     count(array_diff(array_keys($answersArray), $option->get_matches())) == 0);
                 
                 if (AnswerFeedbackDisplay::allowed(
                     $configuration, 
