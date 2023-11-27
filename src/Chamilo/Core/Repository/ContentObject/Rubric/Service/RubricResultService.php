@@ -241,7 +241,7 @@ class RubricResultService
             }
             if (!is_null($score))
             {
-                $totalScore = $totalWeight === 0 ? 0 : ($score / $totalWeight) * 100;
+                $totalScore = empty($totalWeight) || $totalWeight <= 1 ? 0 : ($score / $totalWeight) * 100;
             }
             else
             {
