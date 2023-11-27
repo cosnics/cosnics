@@ -8,6 +8,7 @@ use Chamilo\Libraries\DependencyInjection\CompilerPass\CacheServicesConstructorC
 use Chamilo\Libraries\DependencyInjection\CompilerPass\ConsoleCompilerPass;
 use Chamilo\Libraries\DependencyInjection\CompilerPass\DoctrineEventListenerCompilerPass;
 use Chamilo\Libraries\DependencyInjection\CompilerPass\FormTypeCompilerPass;
+use Chamilo\Libraries\DependencyInjection\CompilerPass\MailerCompilerPass;
 use Chamilo\Libraries\DependencyInjection\Configuration\LibrariesConfiguration;
 use Chamilo\Libraries\DependencyInjection\Interfaces\ICompilerPassExtension;
 use Chamilo\Libraries\File\PathBuilder;
@@ -82,6 +83,7 @@ class DependencyInjectionExtension extends Extension implements ExtensionInterfa
         $container->addCompilerPass(new DoctrineEventListenerCompilerPass());
         $container->addCompilerPass(new FormTypeCompilerPass());
         $container->addCompilerPass(new AuthenticationCompilerPass());
+        $container->addCompilerPass(new MailerCompilerPass());
     }
 
     /**

@@ -273,4 +273,9 @@ class Mailer extends AbstractMailer
 
         $this->phpMailer = $phpMailer;
     }
+
+    public function getMailerName(): string
+    {
+        return 'PHPMailer';
+    }
 }

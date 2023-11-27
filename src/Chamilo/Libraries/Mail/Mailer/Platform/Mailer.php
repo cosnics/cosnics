@@ -73,4 +73,9 @@ class Mailer extends AbstractMailer
 
         $this->logMail($mail);
     }
+
+    public function getMailerName(): string
+    {
+        return 'Platform Mailer';
+    }
 }

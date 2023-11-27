@@ -2,7 +2,9 @@
 namespace Chamilo\Libraries\Mail\Mailer;
 
 use Chamilo\Configuration\Configuration;
+use Chamilo\Libraries\Architecture\Traits\DependencyInjectionContainerTrait;
 use Chamilo\Libraries\Translation\Translation;
+use TusPhp\Config;
 
 /**
  * Factory to instantiate the mailer
@@ -13,13 +15,10 @@ use Chamilo\Libraries\Translation\Translation;
  */
 class MailerFactory
 {
+    use DependencyInjectionContainerTrait;
 
-    /**
-     * The configuration
-     * 
-     * @var \Chamilo\Configuration\Configuration
-     */
-    protected $configuration;
+    protected MailerRegistrar $mailerRegistrar;
+    private Configuration $configuration;
 
     /**
      * Constructor
@@ -28,12 +27,13 @@ class MailerFactory
      */
     public function __construct(Configuration $configuration = null)
     {
-        if (is_null($configuration) || ! $configuration instanceof Configuration)
-        {
+        if(!$configuration instanceof Configuration)
             $configuration = Configuration::getInstance();
-        }
-        
+
         $this->configuration = $configuration;
+
+        $this->initializeContainer();
+        $this->mailerRegistrar = $this->getService(MailerRegistrar::class);
     }
 
     /**
@@ -43,22 +43,7 @@ class MailerFactory
      */
     public function getAvailableMailers()
     {
-        $mailers = array();
-        
-        $mailerPackages = $this->configuration->get_registrations_by_type(__NAMESPACE__);
-        
-        foreach ($mailerPackages as $package)
-        {
-            /** @var MailerInterface|string $mailerClass */
-            $mailerClass = $package['context'] . '\Mailer';
-            
-            if (class_exists($mailerClass))
-            {
-                $mailers[$mailerClass] = Translation::getInstance()->getTranslation('TypeName', array(), $package['context']);
-            }
-        }
-        
-        return $mailers;
+        return $this->mailerRegistrar->getRegisteredMailersByClassname();
     }
 
     /**
@@ -76,6 +61,6 @@ class MailerFactory
             throw new \Exception(Translation::getInstance()->getTranslation('InvalidMailerClass'));
         }
         
-        return new $mailerClass($this->configuration);
+        return $this->mailerRegistrar->getMailerByClass($mailerClass);
     }
 }

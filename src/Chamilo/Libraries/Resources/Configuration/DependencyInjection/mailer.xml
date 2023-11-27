@@ -12,5 +12,13 @@
             <factory service="Chamilo\Libraries\Mail\Mailer\MailerFactory" method="getActiveMailer" />
         </service>
 
+        <service id="Chamilo\Libraries\Mail\Mailer\MailerRegistrar" />
+        <service id="Chamilo\Libraries\Mail\Mailer\Platform\Mailer" autowire="false">
+            <tag name="Chamilo\Libraries\Mail\Mailer\MailerInterface" />
+        </service>
+        <service id="Chamilo\Libraries\Mail\Mailer\PhpMailer\Mailer" autowire="false">
+            <tag name="Chamilo\Libraries\Mail\Mailer\MailerInterface" />
+        </service>
+
     </services>
 </container>
