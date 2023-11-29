@@ -62,7 +62,7 @@ class AssessmentQuestionUsersBlock extends AssessmentBlock
                 $this->get_question_user_reporting_info($question, $user, $user_attempts), 
                 $reporting_data);
             
-            if (count($user_attempts) > 0)
+            if (!is_null($user_attempts) && count($user_attempts) > 0)
             {
                 $params = $this->get_parent()->get_parameters();
                 $params[\Chamilo\Application\Weblcms\Manager::PARAM_TEMPLATE_ID] = AssessmentQuestionAttemptsUserTemplate::class_name();

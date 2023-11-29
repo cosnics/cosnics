@@ -214,6 +214,11 @@ abstract class Manager extends \Chamilo\Core\Repository\Display\Manager
      */
     protected function getRegisterPresenceUrl(bool $qr = false): string
     {
+        if (empty($this->getPublicationId()))
+        {
+            return '';
+        }
+
         $url = $this->getPresenceRegistrationService()->getPresenceRegistrationUrl(
             $this->getPresence(), $this->getPublicationId(), $this->getTreeNodeId(), $this->getPresencePeriodId()
         );
