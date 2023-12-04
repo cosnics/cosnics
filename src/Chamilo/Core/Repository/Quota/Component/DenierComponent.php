@@ -137,7 +137,7 @@ class DenierComponent extends Manager
         }
         else
         {
-            $form->freeze(array('quota_step', Request::PROPERTY_QUOTA, Request::PROPERTY_MOTIVATION));
+            $form->freeze(array(Request::PROPERTY_QUOTA, Request::PROPERTY_MOTIVATION));
             
             $html = array();
             

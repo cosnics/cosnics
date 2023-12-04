@@ -164,14 +164,17 @@ class AssessmentQuestionsUsersBlock extends ToolBlock
             {
                 if (! is_null($score))
                 {
-                    if (($score / $question_weights[$question_id]) >= $passingPercentage / 100)
+                    $weight = $question_weights[$question_id];
+                    $weight = empty($weight) ? 1 : $weight;
+
+                    if (($score / $weight) >= $passingPercentage / 100)
                     {
-                        $score_html = '<span style="color:green">' . $score . '/' . $question_weights[$question_id] .
+                        $score_html = '<span style="color:green">' . $score . '/' . $weight .
                              '</span>';
                     }
                     else
                     {
-                        $score_html = '<span style="color:red">' . $score . '/' . $question_weights[$question_id] .
+                        $score_html = '<span style="color:red">' . $score . '/' . $weight .
                              '</span>';
                     }
                     $this->reporting_data->add_data_category_row($user_id, $question_headers[$question_id], $score_html);

@@ -119,7 +119,7 @@ class PrintableResourceRenderer
      * @param \Chamilo\Core\Repository\Storage\DataClass\ContentObject $contentObject
      * @param \DOMElement $contentObjectElement
      */
-    protected function handleContentObject(\DOMElement $contentObjectElement, ContentObject $contentObject)
+    protected function handleContentObject(\DOMElement $contentObjectElement, ?ContentObject $contentObject = null)
     {
         if (!$contentObject instanceof ContentObject)
         {

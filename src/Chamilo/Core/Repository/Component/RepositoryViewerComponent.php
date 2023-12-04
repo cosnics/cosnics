@@ -42,6 +42,9 @@ class RepositoryViewerComponent extends Manager
             $html[] = $this->render_header();
 
             $object_id = \Chamilo\Core\Repository\Viewer\Manager::get_selected_objects($this->getUser());
+            if(is_array($object_id))
+                $object_id = $object_id[0];
+
             $object = \Chamilo\Core\Repository\Storage\DataManager::retrieve_by_id(File::class_name(), $object_id);
 
             $html[] = '<script type="text/javascript">';
