@@ -115,7 +115,7 @@ class PublicationProcessor
         $html[] = '<div class="alert alert-info" style="margin-top: 15px; margin-bottom: 35px;">' .
              Translation::getInstance()->getTranslation('PublishInformationMessage', null, Manager::context()) . '</div>';
         
-        if (count($values[Manager::WIZARD_LOCATION]) > 0)
+        if (is_array($values[Manager::WIZARD_LOCATION]) && count($values[Manager::WIZARD_LOCATION]) > 0)
         {
             foreach ($values[Manager::WIZARD_LOCATION] as $registration_id => $locations)
             {
