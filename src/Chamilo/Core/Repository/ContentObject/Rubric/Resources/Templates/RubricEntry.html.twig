@@ -67,7 +67,7 @@
             <template v-slot:slot-outer>
                 <div class="save-rubric-area" :class="useScores ? 'mod-scores' : 'mod-grades'">
                     <div class="save-rubric-area-content">
-                        <button class="btn btn-primary" @click="saveRubric" v-html="$t('save')" :disabled="isSaving"></button>
+                        <button class="btn btn-primary" @click="saveRubric" v-html="$t('save')" :disabled="isSaving" type="button"></button>
                         <div v-if="showErrorMessage" class="warning-msg">
                             <i class="fa fa-warning"></i><span v-html="$t(error)"></span>
                             <button @click="showErrorMessage = false" class="btn btn-sm btn-default" style="padding: 2px 4px; margin-left: 2px;"><i class="fa fa-times" aria-hidden="true" style="color: #607d8b"></i><span class="sr-only">OK</span></button>

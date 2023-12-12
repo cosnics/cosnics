@@ -57,7 +57,11 @@ class SetScoreFormHandler extends FormHandler
             throw new \Exception('User must be defined. Use setter');
         }
 
-        if(parent::handle($form, $request)) {
+        if(parent::handle($form, $request))
+        {
+            if(is_null($form->getData()->getScore()))
+                return false;
+
             $this->scoreService->createOrUpdateScoreByUser($form->getData(), $this->user);
 
             return true;
