@@ -238,7 +238,7 @@ class PublicationForm extends FormValidator
                 {
                     $hasUserEntities = key_exists(UserEntity::ENTITY_TYPE, $targetUsersAndGroups);
                     $hasGroupEntites = key_exists(PlatformGroupEntity::ENTITY_TYPE, $targetUsersAndGroups);
-                    $hasOnlyOneUserEntity = count($targetUsersAndGroups[UserEntity::ENTITY_TYPE]) == 1;
+                    $hasOnlyOneUserEntity = is_array($targetUsersAndGroups[UserEntity::ENTITY_TYPE]) && count($targetUsersAndGroups[UserEntity::ENTITY_TYPE]) == 1;
                     $currentUserIsOnlyUserEntity = $targetUsersAndGroups[UserEntity::ENTITY_TYPE][0] == Session::getUserId();
 
                     if ($hasUserEntities && !$hasGroupEntites && $hasOnlyOneUserEntity && $currentUserIsOnlyUserEntity)
