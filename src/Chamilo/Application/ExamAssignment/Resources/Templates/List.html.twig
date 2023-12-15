@@ -121,7 +121,10 @@
                     {% endfor %}
                 </ul>
                 {% endif %}
-                {{ BELOW_LIST_RENDITION|raw }}
+                <!-- {{ BELOW_LIST_RENDITION|raw }} -->
+                <div class="alert alert-info">
+                    {{ 'AnsExamMessage'|trans({}, appContext) }} <strong><a href="https://ans.app">https://ans.app</a></strong>.
+                </div>
             </div>
         </div>
     </main>
