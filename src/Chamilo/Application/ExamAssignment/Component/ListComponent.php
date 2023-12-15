@@ -43,8 +43,8 @@ class ListComponent extends Manager implements NoAuthenticationSupport
                         self::PARAM_CONTENT_OBJECT_PUBLICATION_ID => '__EXAM_ID__'
                     ]
                 ),
-                'LOGOUT_URL' => $this->getLogoutUrl(),
-                'BELOW_LIST_RENDITION' => $this->getExamRendererDecoratorManager()->renderBelowExamList()
+                'LOGOUT_URL' => $this->getLogoutUrl()//,
+                //'BELOW_LIST_RENDITION' => $this->getExamRendererDecoratorManager()->renderBelowExamList()
             ]
         );
     }
