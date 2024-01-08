@@ -323,7 +323,7 @@ class DataManager extends \Chamilo\Libraries\Storage\DataManager\DataManager
     public static function retrieve_groups_and_subgroups($group_ids, $additional_condition = null, $count = null, $offset = null,
         $order_by = array())
     {
-        if (count($group_ids) == 0)
+        if (!is_array($group_ids) || count($group_ids) == 0)
         {
             $group_ids[] = - 1;
         }
