@@ -41,7 +41,7 @@
 const path = require('path');
 const gulp = require('gulp');
 const concat = require('gulp-concat');
-const uglify = require('gulp-uglify');
+const uglify = require('gulp-terser');
 const cleanCSS = require('gulp-clean-css');
 const fs = require('fs');
 

@@ -4,12 +4,13 @@
     {
       "input": [
         "{{ NodeModulesPath }}/vue/dist/vue.min.js",
-        "{{ NodeModulesPath }}/vue-star-rating/dist/star-rating.min.js",
+        "{{ NodeModulesPath }}/vue-star-rating/dist/VueStarRating.umd.min.js",
         "{{ NodeModulesPath }}/vue-resource/dist/vue-resource.min.js",
         "{{ NodeModulesPath }}/vuejs-dialog/dist/vuejs-dialog.min.js",
         "{{ NodeModulesPath }}/bootstrap-vue/dist/bootstrap-vue.min.js",
         "{{ NodeModulesPath }}/vue-i18n/dist/vue-i18n.min.js",
-        "{{ NodeModulesPath }}/vue-select/dist/vue-select.js"
+        "{{ NodeModulesPath }}/vue-select/dist/vue-select.js",
+        "{{ NodeModulesPath }}/vue-swatches/dist/vue-swatches.umd.min.js"
       ],
       "output": {
         "path": "Resources/Javascript",
@@ -60,9 +61,11 @@
         "{{ PackagePath }}/Resources/Javascript/Plugin/Dropzone/dropzone.min.js",
         "{{ PackagePath }}/Resources/Javascript/Plugin/Highlight/highlight.pack.js",
         "{{ PackagePath }}/Resources/Javascript/Plugin/phpjs.js",
+        "{{ PackagePath }}/Resources/Javascript/Plugin/Popper/popper.min.js",
         "{{ PackagePath }}/Resources/Javascript/Plugin/Bootstrap/bootstrap.min.js",
         "{{ PackagePath }}/Resources/Javascript/Plugin/Bootstrap/bootstrap-toggle.min.js",
-        "{{ PackagePath }}/Resources/Javascript/BootstrapConflictFixes.js"
+        "{{ PackagePath }}/Resources/Javascript/BootstrapConflictFixes.js",
+        "{{ NodeModulesPath }}/axios/dist/axios.min.js"
       ],
       "output": {
         "path": "Resources/Javascript",

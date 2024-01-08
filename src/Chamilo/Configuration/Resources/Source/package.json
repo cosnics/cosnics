@@ -3,14 +3,11 @@
   "version": "1.0.0",
   "private": true,
   "scripts": {
-    "build": "build-legacy"
+    "build": "npm run build-legacy --prefix ../../../../.. $INIT_CWD/assets.json"
   },
   "dependencies": {
   },
   "devDependencies": {
     "@cosnics/chamilo-libraries": "*"
-  },
-  "bin": {
-    "build-legacy": "Javascript/JavascriptBuild.js"
   }
 }
