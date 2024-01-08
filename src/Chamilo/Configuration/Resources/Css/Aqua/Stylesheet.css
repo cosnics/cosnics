@@ -1,10 +1,14 @@
 /* Bootstrap */
-@import url('Bootstrap/css/bootstrap.css');
-
+@import url('BootstrapCompat/css/bootstrap.css');
+@import url('BootstrapCompat/css/bootstrap-toggle.min.css');
+@import url('Bootstrap/css/bootstrap-custom.css');
+@import url('BootstrapCheckbox.css');
 @import url('BootstrapCheckbox/awesome-bootstrap-checkbox.css');
 
 /* Font Awesome */
 @import url('FontAwesome/css/font-awesome.css');
+
+@import url('Glyphicon.css');
 
 @import url('ConnectIdentsGeneral.css');
 

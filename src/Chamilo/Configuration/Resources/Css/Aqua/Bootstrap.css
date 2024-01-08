@@ -1,5 +1,12 @@
 body {
+	font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
 	font-size: 13px;
+}
+
+label {
+	max-width: 100%;
+	font-weight: bold;
+	margin-bottom: 5px;
 }
 
 a:focus {
@@ -41,6 +48,22 @@ body.cke_editable {
 	margin: 15px;
 }
 
+.checkbox.no-awesome-style input[type="checkbox"], .checkbox.no-awesome-style input[type="radio"] {
+	opacity: 0;
+	z-index: 1;
+	width: 17px;
+	height: 17px;
+}
+
+.badge {
+	background-color: #777;
+	color: #fff;
+}
+
+.nav-pills > li > a > .badge {
+	margin-left: 3px;
+}
+
 /**************
  * ACTION BAR *
  **************/
@@ -66,14 +89,46 @@ body.cke_editable {
 }
 
 .btn-primary span.glyphicon, .btn-primary span.fa, .btn-success span.glyphicon,
-	.btn-success span.fa, .btn-info span.glyphicon, .btn-info span.fa,
-	.btn-warning span.glyphicon, .btn-warning span.fa, .btn-danger span.glyphicon,
-	.btn-danger span.fa {
-	color: white;
+.btn-success span.fa, .btn-info span.glyphicon, .btn-info span.fa,
+.btn-warning span.glyphicon, .btn-warning span.fa, .btn-danger span.glyphicon,
+.btn-danger span.fa {
+	color: #fff;
+}
+
+.btn-warning {
+	color: #fff;
+}
+
+.btn-link {
+	font-weight: normal;
+	/*color: #337ab7;*/
+	border-radius: 0;
+}
+
+.btn-link.dropdown-toggle {
+	text-decoration: none;
+}
+
+.btn-link.dropdown-toggle::after {
+	margin-left: -3px;
+}
+
+.btn-link, .btn-link:active, .btn-link.active, .btn-link[disabled], fieldset[disabled] .btn-link {
+	background-color: transparent;
+	-webkit-box-shadow: none;
+	box-shadow: none;
+}
+
+.btn-link, .btn-link:hover, .btn-link:focus, .btn-link:active {
+	border-color: transparent;
 }
 
 .dropdown-menu {
 	z-index: 10000;
+}
+
+.btn-group .btn + .btn.dropdown-toggle {
+	padding-left: 0.25rem;
 }
 
 .dropdown-menu>li>a>img+span, .dropdown-menu>li>a>span.inline-glyph+span,
@@ -96,11 +151,11 @@ body.cke_editable {
 	background-repeat: no-repeat;
 }
 
-.dropdown-menu.mod-adjusted {
+/*.dropdown-menu.mod-adjusted {
 	margin-top: 22px;
 	right: 22px;
 	top: initial;
-}
+}*/
 
 .action-bar-search, .action-bar-search:hover, .action-bar-search:active,
 	.action-bar-search:focus {
@@ -119,6 +174,10 @@ body.cke_editable {
 	margin-left: 0px;
 }
 
+.btn-action-toolbar {
+	gap: 5px;
+}
+
 .btn-action-toolbar.btn-action-toolbar-vertical .btn-group-vertical {
 	width: 100%;
 	margin-bottom: 15px;
@@ -128,6 +187,32 @@ body.cke_editable {
 .btn-action-toolbar.btn-action-toolbar-vertical .btn-group-vertical .btn
 	{
 	text-align: left;
+}
+
+.btn-action-toolbar .btn-link:hover, .btn-action-toolbar .btn-link:disabled, .btn-action-toolbar .btn-link.disabled {
+	border-color: transparent;
+	background: transparent;
+}
+
+.btn-action-toolbar form[name="search"] {
+	margin-left: auto;
+}
+
+/*.btn-action-toolbar .btn-group > .btn, .btn-action-toolbar form[name="search"] .btn {
+	padding: 0.375rem 0.75rem;
+	font-size: 0.875rem;
+	line-height: 1.5;
+	border-radius: 0.2rem;
+}
+
+
+.btn-action-toolbar form[name="search"] .action-bar-search {
+	height: initial;
+	line-height: 1;
+}*/
+
+.btn-action-toolbar form[name="search"] .btn {
+	margin-left: -1px;
 }
 
 .btn-group.mod-static, .btn-group.mod-static .btn-group {
@@ -429,6 +514,10 @@ ol.breadcrumb a {
 	font-weight: normal;
 }
 
+.container-breadcrumb .breadcrumb-item + .breadcrumb-item::before {
+	color: #ccc;
+}
+
 /***********************
  * DYNAMIC VISUAL TABS *
  ***********************/
@@ -439,7 +528,7 @@ ol.breadcrumb a {
 }
 
 .nav.nav-tabs.dynamic-visual-tabs li, .nav.nav-tabs.tool-list-tabs li {
-	margin-bottom: -2px;
+	/*margin-bottom: -2px;*/
 	margin-top: -1px;
 }
 
@@ -454,7 +543,7 @@ ol.breadcrumb a {
 	border-radius: 0;
 }
 
-.nav.nav-tabs.dynamic-visual-tabs li.active:first-child a, .nav.nav-tabs.tool-list-tabs li.active:first-child a
+.nav.nav-tabs.dynamic-visual-tabs li:first-child a.active, .nav.nav-tabs.tool-list-tabs li:first-child a.active
 	{
 	border-left: none;
 }
@@ -463,6 +552,11 @@ ol.breadcrumb a {
 	.dynamic-visual-tab-content .list-group-header {
 	background-color: #F5F5F5;
 	color: #555555;
+}
+
+.nav.nav-tabs.dynamic-visual-tabs .nav-link, .nav.nav-tabs.tool-list-tabs .nav-link {
+	border-top-left-radius: 0;
+	border-top-right-radius: 0;
 }
 
 .dynamic-visual-tab-content {
@@ -513,6 +607,12 @@ ol.breadcrumb a {
 /***********************
  * Alert			   *
  ***********************/
+.alert-warning {
+	color: #8a6d3b;
+	background-color: #fcf8e3;
+	border-color: #faebcc;
+}
+
 .alert-message {
 	z-index: 9999;
 	position: relative;
@@ -954,4 +1054,13 @@ table th.sorting,
 .table.b-table>thead>tr>[aria-sort] {
 	color: #337ab7;
 	cursor: pointer;
+}
+
+.popover {
+	font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+	font-size: 13px;
+}
+
+.popover-body {
+	padding: 1px;
 }

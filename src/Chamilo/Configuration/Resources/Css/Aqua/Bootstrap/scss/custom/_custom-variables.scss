@@ -1,0 +1,50 @@
+/* Override Bootstrap variables */
+
+$gray-light: #f7f7f7;
+$blue:    #337ab7;
+$red:     #d9534f;
+$orange:  #f0ad4e;
+$green:   #5cb85c;
+$cyan:    #5bc0de;
+
+$colors: (
+    "blue":       $blue,
+    "red":        $red,
+    "orange":     $orange,
+    "green":      $green,
+    "cyan":       $cyan,
+    "gray-light": $gray-light
+);
+
+$default: $gray-light;
+$primary: $blue;
+$success: $green;
+$info:    $cyan;
+$warning: $orange;
+$danger:  $red;
+
+$theme-colors: (
+    "default":    $default,
+    "primary":    $primary,
+    "success":    $success,
+    "info":       $info,
+    "warning":    $warning,
+    "danger":     $danger
+);
+
+$font-size-base:  .875rem;
+$font-size-lg:    1.125rem;
+$font-size-sm:    .75rem;
+
+$h1-font-size:    2.25rem;
+$h2-font-size:    1.875rem;
+$h3-font-size:    1.5rem;
+$h4-font-size:    1.125rem;
+$h5-font-size:    .875rem;
+$h6-font-size:    .75rem;
+
+$badge-font-size:     .75rem;
+$badge-padding-y:     .1875rem;
+$badge-padding-x:     .4375rem;
+$badge-border-radius: 10rem;
+
