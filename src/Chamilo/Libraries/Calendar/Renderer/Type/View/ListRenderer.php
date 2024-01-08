@@ -112,11 +112,11 @@ class ListRenderer extends FullRenderer
 
                 $html[] = '<div class="row' . ($allEventsAreHidden ? ' event-container-hidden' : '') . '">';
 
-                $html[] = '<div class="col-xs-12 table-calendar-list-date">';
+                $html[] = '<div class="col table-calendar-list-date">';
                 $html[] = date('D, d M', $dateKey);
                 $html[] = '</div>';
 
-                $html[] = '<div class="col-xs-12 table-calendar-list-events">';
+                $html[] = '<div class="col table-calendar-list-events">';
                 $html[] = '<ul class="list-group">';
 
                 foreach ($dateEvents as $dateEvent)

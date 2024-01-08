@@ -166,7 +166,7 @@ class ExternalToolForm extends ContentObjectForm
         $this->addElement('category', Translation::get('CustomParameters'));
 
         $this->addElement(
-            'html', '<div class="col-xs-12 col-sm-8 col-md-9 col-lg-10 col-sm-push-4 col-md-push-3 col-lg-push-2">' .
+            'html', '<div class="col col-sm-8 col-md-9 col-lg-10 col-sm-push-4 col-md-push-3 col-lg-push-2">' .
             $this->getTwig()->render(
                 'Chamilo\Application\Lti:Provider/CustomParameters.html.twig',
                 [

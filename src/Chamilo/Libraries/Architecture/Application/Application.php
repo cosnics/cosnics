@@ -304,14 +304,14 @@ abstract class Application
             // If there is an application-wide menu, show it
             if ($this->has_menu())
             {
-                $html[] = '<div class="col-xs-12 col-md-4 col-lg-3">';
+                $html[] = '<div class="col col-md-4 col-lg-3">';
                 $html[] = $this->get_menu();
                 $html[] = '</div>';
-                $html[] = '<div class="col-xs-12 col-md-8 col-lg-9">';
+                $html[] = '<div class="col col-md-8 col-lg-9">';
             }
             else
             {
-                $html[] = '<div class="col-xs-12">';
+                $html[] = '<div class="col">';
             }
 
             $html[] = $pageTitle;

@@ -390,7 +390,7 @@ abstract class HtmlTable extends \HTML_Table
         }
 
         $html[] = '<div class="row">';
-        $html[] = '<div class="col-xs-12 col-md-6 table-navigation-actions">';
+        $html[] = '<div class="col col-md-6 table-navigation-actions">';
 
         if ($hasFormActions)
         {
@@ -399,7 +399,7 @@ abstract class HtmlTable extends \HTML_Table
 
         $html[] = '</div>';
 
-        $classes = 'col-xs-12';
+        $classes = 'col';
 
         if ($hasFormActions)
         {
@@ -512,7 +512,7 @@ abstract class HtmlTable extends \HTML_Table
 
             if ($hasFormActions)
             {
-                $classes = 'col-xs-12';
+                $classes = 'col';
 
                 if ($allowNavigation)
                 {
@@ -526,7 +526,7 @@ abstract class HtmlTable extends \HTML_Table
 
             if ($allowNavigation)
             {
-                $classes = 'col-xs-12';
+                $classes = 'col';
 
                 if ($hasFormActions)
                 {
@@ -587,7 +587,7 @@ abstract class HtmlTable extends \HTML_Table
         }
 
         $html[] = '<div class="row">';
-        $html[] = '<div class="col-xs-12">';
+        $html[] = '<div class="col">';
 
         $html[] = '<div class="' . $this->getTableContainerClasses() . '">';
         $html[] = $this->getBodyHtml();

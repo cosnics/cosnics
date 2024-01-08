@@ -114,7 +114,7 @@ $(function()
                 var blockName = availableBlocks[i].components[j].name;
                 
                 var column = $('<div />');
-                column.addClass('col-xs-12 col-sm-4 col-md-3 col-lg-2');
+                column.addClass('col col-sm-4 col-md-3 col-lg-2');
                 
                 var availableComponent = $('<a />');
                 column.append(availableComponent);
@@ -201,7 +201,7 @@ $(function()
                     $.each(newWidths, function(index, value)
                     {
                         $('.portal-column[data-element-id="' + index + '"]').prop('class',
-                                'col-xs-12 col-md-' + value + ' portal-column');
+                                'col col-md-' + value + ' portal-column');
                     });
                     
                     tab.append(json.properties.html);

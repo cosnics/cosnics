@@ -245,7 +245,7 @@ class SlideshowRenderer
         $html = array();
 
         $html[] = '<div class="row">';
-        $html[] = '<div class="col-xs-12">';
+        $html[] = '<div class="col">';
 
         $html[] = '<div class="alert alert-info">' . Translation::get('BrowserWarningPreview') . '</div>';
 
@@ -279,7 +279,7 @@ class SlideshowRenderer
         $html[] = '</table>';
 
         $html[] = '<div class="row panel-slideshow-actions">';
-        $html[] = '<div class="col-xs-12">';
+        $html[] = '<div class="col">';
         $html[] = $this->renderButtonToolbar();
         $html[] = '</div>';
         $html[] = '</div>';

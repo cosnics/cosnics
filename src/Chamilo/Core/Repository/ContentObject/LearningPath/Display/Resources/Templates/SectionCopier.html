@@ -6,9 +6,9 @@
             </h4>
 
             <div class="form-row row">
-                <div class="col-xs-12 col-sm-4 col-md-3 col-lg-2 form-label">
+                <div class="col col-sm-4 col-md-3 col-lg-2 form-label">
                 </div>
-                <div class="col-xs-12 col-sm-8 col-md-9 col-lg-10 formw">
+                <div class="col col-sm-8 col-md-9 col-lg-10 formw">
                     <button type="button" id="reset-selected-content-object" class="btn btn-primary"
                             ng-click="main.resetSelectedLearningPath()" ng-show="main.selectedLearningPath !== null">
                         Selecteer een ander leerpad
@@ -19,10 +19,10 @@
 
             <div id="content-object-selector-step" ng-show="main.selectedLearningPath === null">
             <div class="form-row row">
-                <div class="col-xs-12 col-sm-4 col-md-3 col-lg-2 form-label">
+                <div class="col col-sm-4 col-md-3 col-lg-2 form-label">
                     Selecteer uit
                 </div>
-                <div class="col-xs-12 col-sm-8 col-md-9 col-lg-10 formw">
+                <div class="col col-sm-8 col-md-9 col-lg-10 formw">
                     <select id="repository-source" class="form-control" ng-model="main.selectedWorkspace">
                         <option value="0">Mijn repository</option>
                         <option ng-repeat="workspace in main.workspaces" ng-value="workspace.id">{{ workspace.name }}</option>
@@ -31,20 +31,20 @@
             </div>
 
             <div class="form-row row">
-                <div class="col-xs-12 col-sm-4 col-md-3 col-lg-2 form-label">
+                <div class="col col-sm-4 col-md-3 col-lg-2 form-label">
                     Selecteer de categorie
                 </div>
-                <div class="col-xs-12 col-sm-8 col-md-9 col-lg-10 formw">
+                <div class="col col-sm-8 col-md-9 col-lg-10 formw">
                     <select id="category" class="form-control" ng-model="main.selectedCategory" ng-options="category.name for category in main.categories track by category.id">
                     </select>
                 </div>
             </div>
 
             <div class="form-row row" id="content-object-selector-row">
-                <div class="col-xs-12 col-sm-4 col-md-3 col-lg-2 form-label">
+                <div class="col col-sm-4 col-md-3 col-lg-2 form-label">
                     Selecteer het gewenste leerpad
                 </div>
-                <div class="col-xs-12 col-sm-8 col-md-9 col-lg-10 formw">
+                <div class="col col-sm-8 col-md-9 col-lg-10 formw">
                     <div class="content-object-selector-sub-row">
                         <input type="text" id="content-object-selector-search" class="form-control"
                                placeholder="Zoek hier" ng-model="main.searchQuery" ng-model-options="{ debounce: 500 }" ng-change="main.search()"/>
@@ -99,9 +99,9 @@
             <h4 class="form-category">Stap 2: Selecteer één of meerdere secties om te kopiëren</h4>
 
             <div class="form-row row">
-                <div class="col-xs-12 col-sm-4 col-md-3 col-lg-2 form-label">
+                <div class="col col-sm-4 col-md-3 col-lg-2 form-label">
                 </div>
-                <div class="col-xs-12 col-sm-8 col-md-9 col-lg-10 formw">
+                <div class="col col-sm-8 col-md-9 col-lg-10 formw">
                     <div class="learning-path-html-tree" id="sectionSelectorTree" ng-class="{'tree-disabled': isLoading}"></div>
                     <input type="hidden" id="learning-path-selected-nodes" name="learning_path_selected_nodes" value="{{ main.selectedLearningPathNodeIds }}" />
                 </div>
@@ -110,10 +110,10 @@
             <h4 class="form-category">Stap 3: Opties</h4>
 
             <div class="form-row row">
-                <div class="col-xs-12 col-sm-4 col-md-3 col-lg-2 form-label">
+                <div class="col col-sm-4 col-md-3 col-lg-2 form-label">
                     Kopieer de inhoud van de stappen (in plaats van deze te hergebruiken)
                 </div>
-                <div class="col-xs-12 col-sm-8 col-md-9 col-lg-10 formw">
+                <div class="col col-sm-8 col-md-9 col-lg-10 formw">
                     <div class="element">
                         <div class="checkbox no-toggle-style">
                             <input ng-checked="main.isCopyModeSelectedByDefault()" ng-disabled="!main.canChangeCopyMode()" type="checkbox" value="1" id="copy-steps-below" name="copy_instead_of_reuse"/>
@@ -124,10 +124,10 @@
             </div>
 
             <div class="form-row row">
-                <div class="col-xs-12 col-sm-4 col-md-3 col-lg-2 form-label">
+                <div class="col col-sm-4 col-md-3 col-lg-2 form-label">
                     Kopieer naar deze categorie
                 </div>
-                <div class="col-xs-12 col-sm-8 col-md-9 col-lg-10 formw" style="display: flex;">
+                <div class="col col-sm-8 col-md-9 col-lg-10 formw" style="display: flex;">
                     <div style="flex-grow: 2;">
                         <select name="selected_copy_category" class="form-control" ng-model="main.selectedCopyCategory" ng-options="category.name for category in main.userCategories track by category.id">
                         </select>
@@ -140,7 +140,7 @@
 
             <div id="new_category">
                 <div class="form-row row">
-                    <div class="col-xs-12 col-sm-4 col-md-3 col-lg-2 form-label">
+                    <div class="col col-sm-4 col-md-3 col-lg-2 form-label">
                         Nieuwe categorie naam
                     </div>
                     <div class="col-sm-10" style="display: flex;">
@@ -157,9 +157,9 @@
             <h4 class="form-category">Stap 4: Kopieer</h4>
 
             <div class="form-row row">
-                <div class="col-xs-12 col-sm-4 col-md-3 col-lg-2 form-label">
+                <div class="col col-sm-4 col-md-3 col-lg-2 form-label">
                 </div>
-                <div class="col-xs-12 col-sm-8 col-md-9 col-lg-10 formw">
+                <div class="col col-sm-8 col-md-9 col-lg-10 formw">
                     <button type="submit" class="btn btn-primary" ng-disabled="main.selectedLearningPathNodeIds == null">Kopieer de geselecteerde secties</button>
                 </div>
             </div>

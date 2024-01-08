@@ -33,12 +33,12 @@ class SidebarHomeRenderer extends HomeRenderer
         $html[] = '<div class="row course-home">';
         
         // Menu
-        $html[] = '<div class="col-xs-12 col-sm-3 col-lg-2 course-home-sidebar">';
+        $html[] = '<div class="col col-sm-3 col-lg-2 course-home-sidebar">';
         $html[] = $this->renderMenu();
         $html[] = '</div>';
         
         // Introduction
-        $html[] = '<div class="col-xs-12 col-sm-9 col-lg-10 course-home-content">';
+        $html[] = '<div class="col col-sm-9 col-lg-10 course-home-content">';
         $html[] = $this->renderIntroduction();
         $html[] = '</div>';
         

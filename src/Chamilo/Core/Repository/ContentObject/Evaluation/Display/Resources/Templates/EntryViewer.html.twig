@@ -349,7 +349,7 @@
     </div>
     {% endif %}
 {% endif %}
-<div class="col-xs-12">
+<div class="col">
     {% set entityTypes = ['UserEntity', 'CourseGroupEntity', 'PlatformGroupEntity'] %}
     {% set entityTypesPlural = ['UsersEntity', 'CourseGroupsEntity', 'PlatformGroupsEntity'] %}
     {% set allEntitiesTitle = 'BrowseEntities'|trans({'{NAME}': entityTypesPlural[ENTITY_TYPE]|trans({}, appContext)|lower}, appContext) %}
@@ -404,7 +404,7 @@
     </div>
     {% elseif OPEN_FOR_STUDENTS %}
     <div class="row">
-        <div class="col-xs-12" id="score">
+        <div class="col" id="score">
             <div class="title-underline-fw">
                 <div class="u-flex u-align-items-baseline">
                     <h3 class="section-title u-inline-block">Score{% if PRESENCE_STATUS != 'neutral' %}:{% endif %}</h3>
@@ -422,7 +422,7 @@
     {% endif %}
     {% if HAS_RUBRIC and (CAN_EDIT_EVALUATION or OPEN_FOR_STUDENTS) %}
     <div class="row">
-        <div class="col-xs-12" id="rubric">
+        <div class="col" id="rubric">
             <div class="title-underline-fw mod-rubric">
                 <h3 class="section-title u-inline-block">{% if not CAN_EDIT_EVALUATION and OPEN_FOR_STUDENTS and not SELF_EVALUATION_ALLOWED %}{{ 'RubricResults'|trans({}, appContext) }}{% else %}Rubric{% endif %}</h3>
             </div>
@@ -445,7 +445,7 @@
 
     {% if CAN_EDIT_EVALUATION %}
     <div class="row">
-        <div class="col-xs-12" id="score">
+        <div class="col" id="score">
             {% if PRESENCE_STATUS == 'absent' %}
                 <div class="title-underline-fw mod-absent">
                     <h3 class="section-title u-inline-block"><span aria-hidden="true" class="presence-status-icon btn-icon-absent"></span>{{ 'MarkedAsAbsent'|trans({}, appContext)|raw }}</h3>
@@ -491,7 +491,7 @@
     {% endif %}
     {% if CAN_EDIT_EVALUATION or (not CAN_EDIT_EVALUATION and OPEN_FOR_STUDENTS) %}
     <div class="row">
-        <div class="col-xs-12" id="feedback">
+        <div class="col" id="feedback">
             <div class="title-underline-fw mod-feedback">
                 <h3 class="section-title u-inline-block">Feedback</h3>
             </div>

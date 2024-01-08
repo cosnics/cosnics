@@ -99,7 +99,7 @@
     <div role="tabpanel" class="tab-pane active tab-pane-with-border" id="entry">
         <div class="row">
             {% if not SHOW_COMPACT_FEEDBACK %}
-                <div class="col-xs-12">
+                <div class="col">
                     <ul class="nav nav-pills content-nav">
                         <li role="presentation" class="active"><a href="#">{{ 'Content'|trans({}, appContext) }}</a></li>
                         {% if CAN_EDIT_ASSIGNMENT %}
@@ -118,7 +118,7 @@
             {% if SHOW_COMPACT_FEEDBACK %}
             <div class="col-lg-7 content-object-rendition">
                 {% else %}
-                <div class="col-xs-12 content-object-rendition">
+                <div class="col content-object-rendition">
                     {% endif %}
                     <h3 class="entry-title title-underlined">{{ CONTENT_OBJECT_TITLE }}
                         <span class="badge score-badge {% if SCORE is not null %} score-success {% else %}no-score{% endif %}">{% if SCORE is not null %}{{ SCORE }}%{% else %}{{ 'NoScore'|trans({}, appContext) }}{% endif %}</span>
@@ -132,11 +132,11 @@
                 {% if SHOW_COMPACT_FEEDBACK %}
                 <div class="col-lg-5">
                     {% else %}
-                    <div class="col-xs-12">
+                    <div class="col">
                         {% endif %}
                         {{ PARTS_EXTENSION|raw }}
                         <div class="row">
-                            <div class="col-xs-12" id="score">
+                            <div class="col" id="score">
                                 {% if CAN_EDIT_ASSIGNMENT %}
                                     <h3 class="title-underlined">{{ 'ScoreEntry'|trans({}, appContext) }}</h3>
                                     <style> label {
@@ -169,7 +169,7 @@
                     </div>
                     <div class="row">
 
-                            <div class="col-xs-12">
+                            <div class="col">
                                 <div style="display:none">
                                     <div id="template-container">
                                         <div id="attachments-upload" class="file-upload">
@@ -258,13 +258,13 @@
                         {{ getJavascript('Plugin\\Jquery\\jquery.file.upload.js', 'Chamilo\\Libraries') }}
 
                         <div class="row">
-                            <div class="col-xs-12" id="feedback">
+                            <div class="col" id="feedback">
                                 <h3 class="title-underlined">Feedback</h3>
                                 {{ FEEDBACK_MANAGER|raw }}
                             </div>
                         </div>
                         <div class="row">
-                            <div class="col-xs-12" id="feedback">
+                            <div class="col" id="feedback">
                                 <h3 class="title-underlined">{{ 'QRCODE'|trans({}, appContext) }}</h3>
                                 <div class="text-center">
                                     <img src="{{ QR_CODE|raw }}" alt="qr-code">

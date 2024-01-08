@@ -164,8 +164,8 @@ EOT;
         );
         $required_note_template = <<<EOT
 	<div class="form-row row">
-		<div class="col-xs-12 col-sm-4 col-md-3 col-lg-2 form-label"></div>
-		<div class="col-xs-12 col-sm-8 col-md-9 col-lg-10 formw">{requiredNote}</div>
+		<div class="col col-sm-4 col-md-3 col-lg-2 form-label"></div>
+		<div class="col col-sm-8 col-md-9 col-lg-10 formw">{requiredNote}</div>
 	</div>
 EOT;
         $this->renderer->setRequiredNoteTemplate($required_note_template);
@@ -182,12 +182,12 @@ EOT;
         $element_template = array();
 
         $element_template[] = '<div class="form-row row ' . $extraClasses . '">';
-        $element_template[] = '<div class="col-xs-12 col-sm-4 col-md-3 col-lg-2 form-label">';
+        $element_template[] = '<div class="col col-sm-4 col-md-3 col-lg-2 form-label">';
         $element_template[] = '{label}<!-- BEGIN required --><span class="form_required"><img src="' .
             Theme::getInstance()->getCommonImagePath('Action/Required') .
             '" alt="*" title ="*"/></span> <!-- END required -->';
         $element_template[] = '</div>';
-        $element_template[] = '<div class="col-xs-12 col-sm-8 col-md-9 col-lg-10 formw">';
+        $element_template[] = '<div class="col col-sm-8 col-md-9 col-lg-10 formw">';
         $element_template[] =
             '<div class="element"><!-- BEGIN error --><span class="form_error">{error}</span><br /><!-- END error -->	{element}</div>';
         $element_template[] = '<div class="form_feedback"></div></div>';
@@ -1015,13 +1015,13 @@ EOT;
 
         if ($noMargin)
         {
-            $html[] = '<div class="col-xs-12">';
+            $html[] = '<div class="col">';
         }
         else
         {
-            $html[] = '<div class="col-xs-12 col-sm-4 col-md-3 col-lg-2 form-label">';
+            $html[] = '<div class="col col-sm-4 col-md-3 col-lg-2 form-label">';
             $html[] = '</div>';
-            $html[] = '<div class="col-xs-12 col-sm-8 col-md-9 col-lg-10 formw">';
+            $html[] = '<div class="col col-sm-8 col-md-9 col-lg-10 formw">';
         }
 
         $html[] = '<div role="alert" class="alert alert-' . $type . '">';

@@ -144,7 +144,7 @@ class AssignmentForm extends ContentObjectForm
         {
             $this->addElement(
                 'html', '<div class="row form-row" style="margin-top: 20px;">' .
-                '<div class="col-xs-12 col-sm-8 col-md-9 col-lg-10 col-sm-push-4 col-md-push-3 col-lg-push-2">' .
+                '<div class="col col-sm-8 col-md-9 col-lg-10 col-sm-push-4 col-md-push-3 col-lg-push-2">' .
                 '<div class="alert alert-info">' . Translation::get('ExamAssignmentWarning') . '</div></div></div>'
             );
         }

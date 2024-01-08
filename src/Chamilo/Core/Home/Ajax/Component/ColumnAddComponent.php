@@ -81,7 +81,7 @@ class ColumnAddComponent extends \Chamilo\Core\Home\Ajax\Manager
             }
 
             // Render the actual html to be displayed
-            $html[] = '<div class="col-xs-12 col-md-' . $newColumn->getWidth() . ' portal-column" data-tab-id="' . $tabId .
+            $html[] = '<div class="col col-md-' . $newColumn->getWidth() . ' portal-column" data-tab-id="' . $tabId .
                  '" data-element-id="' . $newColumn->get_id() . '">';
 
             $html[] = '<div class="panel panel-warning portal-column-empty show">';

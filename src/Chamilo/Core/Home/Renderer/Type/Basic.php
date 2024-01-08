@@ -152,7 +152,7 @@ class Basic extends Renderer
 
         $html[] = '<div class="row ' . $rowClass . ' hidden">';
 
-        $html[] = '<div class="col-xs-12">';
+        $html[] = '<div class="col">';
         $html[] = '<div class="panel panel-primary">';
 
         $html[] = '<div class="panel-heading">';

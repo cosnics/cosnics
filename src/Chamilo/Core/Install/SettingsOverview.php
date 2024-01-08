@@ -212,7 +212,7 @@ class SettingsOverview
             {
                 $iconSource = Theme::getInstance()->getImagePath($package, 'Logo/22');
 
-                $html[] = '<div class="col-xs-12 col-sm-6 col-md-4 col-lg-3">';
+                $html[] = '<div class="col col-sm-6 col-md-4 col-lg-3">';
                 $html[] = '<a class="btn btn-default"><img src="' . $iconSource . '"> ';
 
                 $html[] = Translation::get('TypeName', null, $package);
@@ -263,8 +263,8 @@ class SettingsOverview
         $html = array();
 
         $html[] = '<div class="form-group">';
-        $html[] = '<label class="col-xs-12 col-sm-4 control-label">' . $label . '</label>';
-        $html[] = '<div class="col-xs-12 col-sm-8">';
+        $html[] = '<label class="col col-sm-4 control-label">' . $label . '</label>';
+        $html[] = '<div class="col col-sm-8">';
         $html[] = '<p class="form-control-static">' . $value . '</p>';
         $html[] = '</div>';
         $html[] = '</div>';

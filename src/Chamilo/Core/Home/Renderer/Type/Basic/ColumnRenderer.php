@@ -111,7 +111,7 @@ class ColumnRenderer
         $column = $this->getColumn();
         $html = array();
         
-        $html[] = '<div class="col-xs-12 col-md-' . $column->getWidth() . ' portal-column" data-tab-id="' .
+        $html[] = '<div class="col col-md-' . $column->getWidth() . ' portal-column" data-tab-id="' .
              $column->getParentId() . '" data-element-id="' . $column->getId() . '" data-element-width="' .
              $column->getWidth() . '">';
         

@@ -94,7 +94,7 @@ class BrowserComponent extends Manager implements DelegateComponent
         }
         else
         {
-            $content[] = '<div class="publication_renderer col-xs-12">';
+            $content[] = '<div class="publication_renderer col">';
             $content[] = $publicationsContent;
             $content[] = '</div>';
         }

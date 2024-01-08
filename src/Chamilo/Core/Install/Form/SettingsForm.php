@@ -270,7 +270,7 @@ class SettingsForm extends FormValidator
 
         $html[] = '<div class="package-selection">';
         $html[] = '<div class="row">';
-        $html[] = '<div class="col-xs-12">';
+        $html[] = '<div class="col">';
         $html[] = '<h4>';
         $html[] = Translation::get('AllPackages');
         $html[] = $this->addPackageSelectionToggle();
@@ -339,7 +339,7 @@ class SettingsForm extends FormValidator
             $html[] = '<div class="package-list">';
 
             $html[] = '<div class="row package-list-header">';
-            $html[] = '<div class="col-xs-12">';
+            $html[] = '<div class="col">';
             $html[] = '<h4>';
             $html[] = $packageType;
 
@@ -373,7 +373,7 @@ class SettingsForm extends FormValidator
                 }
 
                 $html = array();
-                $html[] = '<div class="col-xs-12 col-sm-6 col-md-4 col-lg-3">';
+                $html[] = '<div class="col col-sm-6 col-md-4 col-lg-3">';
                 $html[] = '<a class="' . $packageClasses . '"' . $disabled . '><img src="' . $iconSource . '"> ';
                 $this->addElement('html', implode(PHP_EOL, $html));
 

@@ -94,7 +94,7 @@ abstract class Manager extends Application
         $html = array();
 
         $html[] = '<div class="row">';
-        $html[] = '<div class="col-xs-12">';
+        $html[] = '<div class="col">';
         $html[] = '<div class="alert alert-warning">';
         $html[] = $this->getButtonToolBarRenderer()->render();
         $html[] = $this->getPreviewModeWarning();

@@ -160,7 +160,7 @@ class ListContentObjectPublicationListRenderer extends ContentObjectPublicationL
         $html = array();
 
         $html[] = '<div class="row panel-publication-body">';
-        $html[] = '<div class="col-xs-12">';
+        $html[] = '<div class="col">';
         $html[] = $this->render_description($publication);
         $html[] = '</div>';
         $html[] = '</div>';
@@ -620,7 +620,7 @@ class ListContentObjectPublicationListRenderer extends ContentObjectPublicationL
 
         $html[] = '<div class="row panel-publication-header">';
 
-        $html[] = '<div class="col-xs-12 col-sm-10 panel-publication-header-title">';
+        $html[] = '<div class="col col-sm-10 panel-publication-header-title">';
         $html[] = '<h3>';
         $html[] = '<a class="title" href="' . $this->getTitleUrl($publication) . '">' . $this->render_title(
             $publication) . '</a>';
@@ -630,7 +630,7 @@ class ListContentObjectPublicationListRenderer extends ContentObjectPublicationL
 
         $html[] = '</div>';
 
-        $html[] = '<div class="col-xs-12 col-sm-2 panel-publication-header-actions">';
+        $html[] = '<div class="col col-sm-2 panel-publication-header-actions">';
 
         $html[] = $this->renderPublicationActions($publication);
 
@@ -718,15 +718,15 @@ class ListContentObjectPublicationListRenderer extends ContentObjectPublicationL
 
         $html[] = '<div class="row panel-publication-footer">';
 
-        $html[] = '<div class="col-xs-12 col-sm-3 panel-publication-footer-date">';
+        $html[] = '<div class="col col-sm-3 panel-publication-footer-date">';
         $html[] = $this->renderVisiblePublicationDate($publication);
         $html[] = '</div>';
 
-        $html[] = '<div class="col-xs-12 col-sm-6 panel-publication-footer-visibility">';
+        $html[] = '<div class="col col-sm-6 panel-publication-footer-visibility">';
         $html[] = $this->renderVisibilityData($publication);
         $html[] = '</div>';
 
-        $html[] = '<div class="col-xs-12 col-sm-3 panel-publication-footer-targets">';
+        $html[] = '<div class="col col-sm-3 panel-publication-footer-targets">';
         $html[] = '<span class="glyphicon glyphicon-user"></span>';
         $html[] = $this->render_publication_targets($publication);
         $html[] = '</div>';
@@ -877,7 +877,7 @@ class ListContentObjectPublicationListRenderer extends ContentObjectPublicationL
 
         $html[] = '<div class="row">';
 
-        $html[] = '<div class="col-xs-12 col-md-6 table-navigation-actions">';
+        $html[] = '<div class="col col-md-6 table-navigation-actions">';
 
         if ($this->hasActions())
         {
@@ -886,14 +886,14 @@ class ListContentObjectPublicationListRenderer extends ContentObjectPublicationL
 
         $html[] = '</div>';
 
-        $html[] = '<div class="col-xs-12 col-md-6 table-navigation-search">';
+        $html[] = '<div class="col col-md-6 table-navigation-search">';
         $html[] = $this->renderItemsPerPageSelector();
         $html[] = '</div>';
 
         $html[] = '</div>';
 
         $html[] = '<div class="row">';
-        $html[] = '<div class="col-xs-12">';
+        $html[] = '<div class="col">';
 
         return implode(PHP_EOL, $html);
     }
@@ -911,7 +911,7 @@ class ListContentObjectPublicationListRenderer extends ContentObjectPublicationL
 
         $html[] = '<div class="row">';
 
-        $html[] = '<div class="col-xs-12 col-md-6 table-navigation-actions">';
+        $html[] = '<div class="col col-md-6 table-navigation-actions">';
 
         if ($this->hasActions())
         {
@@ -920,7 +920,7 @@ class ListContentObjectPublicationListRenderer extends ContentObjectPublicationL
 
         $html[] = '</div>';
 
-        $html[] = '<div class="col-xs-12 col-md-6 table-navigation-pagination">';
+        $html[] = '<div class="col col-md-6 table-navigation-pagination">';
         $html[] = $this->renderNavigation();
         $html[] = '</div>';
 

@@ -59,7 +59,7 @@ class TabAddComponent extends \Chamilo\Core\Home\Ajax\Manager
         $content = array();
         
         $content[] = '<div class="row portal-tab show" data-element-id="' . $tab->get_id() . '">';
-        $content[] = '<div class="col-xs-12 col-md-' . $column->get_id() . ' portal-column" data-tab-id="' .
+        $content[] = '<div class="col col-md-' . $column->get_id() . ' portal-column" data-tab-id="' .
              $tab->get_id() . '" data-element-id="' . $column->get_id() . '">';
         $content[] = '<div class="panel panel-warning portal-column-empty show">';
         $content[] = '<div class="panel-heading">';

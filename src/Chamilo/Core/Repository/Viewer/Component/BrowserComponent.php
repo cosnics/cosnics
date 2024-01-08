@@ -94,7 +94,7 @@ class BrowserComponent extends Manager implements TableSupport
             $message = sprintf(Translation::get('SelectMaximumNumberOfContentObjects'), $this->get_maximum_select());
 
             $html[] = '<div class="row">';
-            $html[] = '<div class="col-xs-12">';
+            $html[] = '<div class="col">';
             $html[] = '<div class="alert alert-warning">' . $message . '</div>';
             $html[] = '</div>';
             $html[] = '</div>';
@@ -104,11 +104,11 @@ class BrowserComponent extends Manager implements TableSupport
         $table = $this->get_object_table();
 
         $html[] = '<div class="row">';
-        $html[] = '<div class="col-xs-12 col-md-4 col-lg-3">';
+        $html[] = '<div class="col col-md-4 col-lg-3">';
         $html[] = $menu->render_as_tree();
         $html[] = '</div>';
 
-        $html[] = '<div class="col-xs-12 col-md-8 col-lg-9">';
+        $html[] = '<div class="col col-md-8 col-lg-9">';
         $html[] = $table->as_html();
         $html[] = '</div>';
         $html[] = '</div>';

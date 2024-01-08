@@ -56,7 +56,7 @@ abstract class ItemComponent extends Manager implements DelegateComponent
         $html = array();
         
         $html[] = parent::render_header();
-        $html[] = '<div class="col-xs-12 col-sm-4 col-md-3">';
+        $html[] = '<div class="col col-sm-4 col-md-3">';
         
         if ($this->get_parent() instanceof PortfolioComplexRights &&
              $this->get_parent()->is_allowed_to_set_content_object_rights())
@@ -104,7 +104,7 @@ abstract class ItemComponent extends Manager implements DelegateComponent
         $html[] = '</div>';
         $html[] = '</div>';
         
-        $html[] = '<div class="col-xs-12 col-sm-8 col-md-9">';
+        $html[] = '<div class="col col-sm-8 col-md-9">';
         
         return implode(PHP_EOL, $html);
     }
