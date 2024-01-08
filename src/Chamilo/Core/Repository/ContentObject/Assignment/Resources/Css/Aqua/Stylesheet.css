@@ -90,11 +90,13 @@ ul.tree-menu li div a.assignment.type_completed, ul.tree-menu li div a.type_assi
     color: white;
     background-color: #28a745;
     font-size: 14px;
+    padding: 3px 7px;
 }
 
 .no-score {
     background-color: #dddddd;
-    color: white;
+    color: #666;
+    font-size: 12px;
 }
 
 .score-form {

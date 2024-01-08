@@ -282,6 +282,7 @@ h4 .calendar-event-range {
 
 .table-calendar-mini tbody tr td.table-calendar-highlight span.badge {
     background-color: #337ab7;
+    color: #fff;
 }
 
 .table-calendar .event-container, .table-calendar-legend .event-container, .table-calendar-list .event-container {

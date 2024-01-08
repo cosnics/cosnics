@@ -23,15 +23,24 @@
 	color: #555555;
 }
 
+.portal-nav-tabs .nav-link {
+	border-radius: 0;
+}
+
+.portal-nav-tabs .nav-link.active {
+	border-top-color: transparent;
+}
+
 .portal-nav-tabs .btn-action-toolbar {
 	margin-bottom: 0px;
 }
 
 .portal-nav-tabs .btn-action-toolbar .btn {
-	border: 0px solid #F5F5F5;
+	border: 0 solid #F5F5F5;
 	background-color: transparent;
 	padding: 10px 15px;
 	color: black;
+	line-height: 1.2;
 	text-decoration: none;
 }
 

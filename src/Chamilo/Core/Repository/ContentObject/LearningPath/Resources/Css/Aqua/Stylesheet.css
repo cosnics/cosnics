@@ -135,7 +135,7 @@ ul.tree-menu li div a.type_learning_path_default.type_completed {
 
 /* Repo Drag Panel CSS */
 
-#repo-drag-panel .nav, .pagination, .carousel, .panel-title a {
+#repo-drag-panel .nav, .carousel, .panel-title a {
     cursor: pointer;
 }
 
