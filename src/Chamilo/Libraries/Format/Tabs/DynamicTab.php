@@ -138,7 +138,7 @@ abstract class DynamicTab
     public function header()
     {
         $html = array();
-        $html[] = '<li><a title="' . htmlentities(strip_tags($this->name)) . '" href="' . $this->get_link() . '">';
+        $html[] = '<li><a title="' . htmlentities(strip_tags($this->name)) . '" href="' . $this->get_link() . '" class="nav-link">';
         $html[] = '<span class="category">';
 
         if ($this->get_image() && $this->isIconVisible())

@@ -270,9 +270,9 @@ class CourseTypeCourseListRenderer extends CourseListRenderer
                     $this->addDropdown($html, $activeInOthers);
                 }
 
-                $html[] = '<li role="presentation" class="' . $active . '"><a href="';
+                $html[] = '<li role="presentation"><a href="';
                 $html[] = $this->get_course_type_url($course_type[CourseType::PROPERTY_ID]);
-                $html[] = '">' . $course_type[CourseType::PROPERTY_TITLE] . '</a></li>';
+                $html[] = '" class="nav-link ' . $active . '">' . $course_type[CourseType::PROPERTY_TITLE] . '</a></li>';
 
                 $counter ++;
             }
@@ -298,9 +298,9 @@ class CourseTypeCourseListRenderer extends CourseListRenderer
                 $activeCourseTypeTitle = Translation::get('NoCourseType');
             }
 
-            $html[] = '<li role="presentation" class="' . $active . '"><a href="';
+            $html[] = '<li role="presentation"><a href="';
             $html[] = $this->get_course_type_url(0);
-            $html[] = '">' . Translation::get('NoCourseType') . '</a></li>';
+            $html[] = '" class="nav-link ' . $active . '">' . Translation::get('NoCourseType') . '</a></li>';
 
             $counter ++;
         }

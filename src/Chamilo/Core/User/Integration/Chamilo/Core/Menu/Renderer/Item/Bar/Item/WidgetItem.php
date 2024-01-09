@@ -91,7 +91,7 @@ class WidgetItem extends Bar
             $this->getItem()->get_titles()->get_translation(Translation::getInstance()->getLanguageIsocode()));
         $selected = $this->isSelected();
         
-        $html[] = '<li class="dropdown chamilo-account-menu-item">';
+        $html[] = '<li class="nav-item dropdown chamilo-account-menu-item">';
         $html[] = '<a href="' . $this->getAccountUrl() .
              '" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">';
         

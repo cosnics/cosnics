@@ -80,7 +80,7 @@ class TabAddComponent extends \Chamilo\Core\Home\Ajax\Manager
         $title = array();
         
         $title[] = '<li class="portal-nav-tab active" data-tab-id="' . $tab->getId() . '">';
-        $title[] = '<a class="portal-action-tab-title" href="#">';
+        $title[] = '<a class="portal-action-tab-title nav-link" href="#">';
         $title[] = '<span class="portal-nav-tab-title">' . $tab->getTitle() . '</span>';
         $title[] = '<span class="glyphicon glyphicon-remove portal-action-tab-delete"></span>';
         $title[] = '</a>';

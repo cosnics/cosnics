@@ -66,16 +66,16 @@
 
 <ul class="nav nav-tabs dynamic-visual-tabs" role="tablist">
     <li role="presentation">
-        <a href="#notifications" aria-controls="entities" role="tab" data-toggle="tab" id="notifications-tab">
+        <a href="#notifications" aria-controls="entities" role="tab" data-toggle="tab" id="notifications-tab" class="nav-link">
             {{ 'Notifications'|trans({}, appContext) }}
             {% if NOTIFICATIONS_COUNT > 0 %}<span class="new-notifications-label">{{ NOTIFICATIONS_COUNT }}</span>{% endif %}
         </a>
     </li>
-    <li role="presentation" class="{{ SELECTED_TAB != 'rubric' ? 'active': '' }}"><a href="#entities" aria-controls="entities" role="tab" data-toggle="tab">{{ ENTITY_NAME }}</a></li>
-    <li role="presentation"><a href="#assignment" aria-controls="assignment" role="tab" data-toggle="tab">{{ 'Assignment'|trans({}, appContext) }}</a></li>
-    <li role="presentation"><a href="#properties" aria-controls="properties" role="tab" data-toggle="tab">{{ 'Properties'|trans({}, appContext) }}</a></li>
+    <li role="presentation"><a href="#entities" aria-controls="entities" role="tab" data-toggle="tab" class="nav-link {{ SELECTED_TAB != 'rubric' ? 'active': '' }}">{{ ENTITY_NAME }}</a></li>
+    <li role="presentation"><a href="#assignment" aria-controls="assignment" role="tab" data-toggle="tab" class="nav-link">{{ 'Assignment'|trans({}, appContext) }}</a></li>
+    <li role="presentation"><a href="#properties" aria-controls="properties" role="tab" data-toggle="tab" class="nav-link">{{ 'Properties'|trans({}, appContext) }}</a></li>
     {% if SUPPORTS_RUBRICS %}
-    <li role="presentation" class="{{ SELECTED_TAB == 'rubric' ? 'active': '' }}"><a href="#rubric" aria-controls="properties" role="tab" data-toggle="tab">{{ 'Rubric'|trans({}, appContext) }}</a></li>
+    <li role="presentation"><a href="#rubric" aria-controls="properties" role="tab" data-toggle="tab" class="nav-link {{ SELECTED_TAB == 'rubric' ? 'active': '' }}">{{ 'Rubric'|trans({}, appContext) }}</a></li>
     {% endif %}
 </ul>
 

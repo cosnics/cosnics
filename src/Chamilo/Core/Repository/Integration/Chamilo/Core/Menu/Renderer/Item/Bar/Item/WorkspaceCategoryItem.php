@@ -77,7 +77,7 @@ class WorkspaceCategoryItem extends CategoryItem
         
         $selected = $this->isSelected();
         
-        $html[] = '<li class="dropdown' . ($selected ? ' active' : '') . '">';
+        $html[] = '<li class="nav-item dropdown' . ($selected ? ' active' : '') . '">';
         $html[] = '<a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">';
         
         $title = Translation::get('Workspaces');

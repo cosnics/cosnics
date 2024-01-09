@@ -76,21 +76,21 @@
 
 {% if HAS_ENTRY %}
     <ul class="nav nav-tabs dynamic-visual-tabs" role="tablist">
-        <li role="presentation" class="active"><a href="#entry" aria-controls="entry" role="tab"
-                                                  data-toggle="tab">{{ 'SelectedEntry'|trans({}, appContext) }}</a></li>
+        <li role="presentation"><a href="#entry" aria-controls="entry" role="tab"
+                                                  data-toggle="tab" class="nav-link active">{{ 'SelectedEntry'|trans({}, appContext) }}</a></li>
 
         {% if SHOW_AUTOMATIC_FEEDBACK %}
             <li role="presentation"><a href="#automatic-feedback" aria-controls="entries" role="tab"
-                                       data-toggle="tab">{{ 'AutomaticFeedback'|trans({}, appContext) }}</a></li>
+                                       data-toggle="tab" class="nav-link">{{ 'AutomaticFeedback'|trans({}, appContext) }}</a></li>
         {% endif %}
 
         {% if ENTRY_COUNT > 1 %}
             <li role="presentation"><a href="#entries" aria-controls="entries" role="tab"
-                                       data-toggle="tab">{{ 'OtherEntries'|trans({}, appContext) }}</a></li>
+                                       data-toggle="tab" class="nav-link">{{ 'OtherEntries'|trans({}, appContext) }}</a></li>
         {% endif %}
 
         <li role="presentation"><a href="#assignment" aria-controls="assignment" role="tab"
-                                   data-toggle="tab">{{ 'Assignment'|trans({}, appContext) }}</a></li>
+                                   data-toggle="tab" class="nav-link">{{ 'Assignment'|trans({}, appContext) }}</a></li>
     </ul>
 {% endif %}
 
@@ -101,16 +101,16 @@
             {% if not SHOW_COMPACT_FEEDBACK %}
                 <div class="col">
                     <ul class="nav nav-pills content-nav">
-                        <li role="presentation" class="active"><a href="#">{{ 'Content'|trans({}, appContext) }}</a></li>
+                        <li role="presentation" class="nav-item"><a href="#" class="nav-link active">{{ 'Content'|trans({}, appContext) }}</a></li>
                         {% if CAN_EDIT_ASSIGNMENT %}
-                            <li role="presentation"><a href="#score">{{ 'ScoreEntry'|trans({}, appContext) }}</a></li>
-                            <li role="presentation"><a href="#corrected-versions">{{ 'CorrectedVersions'|trans({}, appContext) }}<span
-                                            class="badge">{{ ATTACHED_CONTENT_OBJECTS|length }}</span></a></li>
+                            <li role="presentation" class="nav-item"><a href="#score" class="nav-link">{{ 'ScoreEntry'|trans({}, appContext) }}</a></li>
+                            <li role="presentation" class="nav-item"><a href="#corrected-versions" class="nav-link">{{ 'CorrectedVersions'|trans({}, appContext) }}<span
+                                            class="badge badge-pill" style="background-color: #777">{{ ATTACHED_CONTENT_OBJECTS|length }}</span></a></li>
                         {% elseif ATTACHED_CONTENT_OBJECTS|length > 0 %}
-                            <li role="presentation"><a href="#corrected-versions">{{ 'CorrectedVersions'|trans({}, appContext) }}<span
-                                            class="badge">{{ ATTACHED_CONTENT_OBJECTS|length }}</span></a></li>
+                            <li role="presentation" class="nav-item"><a href="#corrected-versions" class="nav-link">{{ 'CorrectedVersions'|trans({}, appContext) }}<span
+                                            class="badge badge-pill" style="background-color: #777">{{ ATTACHED_CONTENT_OBJECTS|length }}</span></a></li>
                         {% endif %}
-                        <li role="presentation"><a href="#feedback">{{ 'Feedback'|trans({}, appContext) }} <span class="badge">{{ FEEDBACK_COUNT }}</span></a></li>
+                        <li role="presentation" class="nav-item"><a href="#feedback" class="nav-link">{{ 'Feedback'|trans({}, appContext) }} <span class="badge badge-pill" style="background-color: #777">{{ FEEDBACK_COUNT }}</span></a></li>
                     </ul>
                 </div>
             {% endif %}

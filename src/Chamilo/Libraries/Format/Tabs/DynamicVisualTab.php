@@ -225,14 +225,14 @@ class DynamicVisualTab extends DynamicTab
         $classes[] = 'pull-' . $this->get_position();
 
         $html = array();
-        $html[] = '<li class="' . implode(' ', $classes) . '">';
+        $html[] = '<li>';
 
         $link = array();
         $link[] = '<a';
 
         if ($this->get_link() && $this->get_target() == self::TARGET_WINDOW)
         {
-            $link[] = 'href="' . $this->get_link() . '"';
+            $link[] = 'href="' . $this->get_link() . '" class="nav-link ' . implode(' ', $classes) . '"';
 
             if ($this->needs_confirmation())
             {

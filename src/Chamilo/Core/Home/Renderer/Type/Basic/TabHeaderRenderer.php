@@ -118,22 +118,14 @@ class TabHeaderRenderer
         
         $listItem[] = '<li';
         
-        if ($isActiveTab)
-        {
-            $listItem[] = 'class="portal-nav-tab active"';
-        }
-        else
-        {
-            $listItem[] = 'class="portal-nav-tab"';
-        }
-        
+        $listItem[] = 'class="portal-nav-tab"';
         $listItem[] = ' data-tab-id="' . $tab->get_id() . '"';
         $listItem[] = ' data-tab-title="' . $tab->getTitle() . '"';
         $listItem[] = '>';
         
         $html[] = implode(' ', $listItem);
-        
-        $html[] = '<a class="portal-action-tab-title" href="#">';
+
+        $html[] = '<a class="portal-action-tab-title nav-link' . ($isActiveTab ? ' active' : '') . '" href="#">';
         
         $html[] = '<span class="portal-nav-tab-title">' . htmlspecialchars($tab->getTitle()) . '</span>';
         

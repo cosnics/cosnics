@@ -52,18 +52,18 @@
 </p>
 
 <ul class="nav nav-tabs dynamic-visual-tabs" role="tablist">
-    <li role="presentation" class="active">
-        <a id="success-results-tab" href="#success-results" aria-controls="success-results" role="tab" data-toggle="tab">
+    <li role="presentation">
+        <a id="success-results-tab" href="#success-results" aria-controls="success-results" role="tab" data-toggle="tab" class="nav-link active">
             {{ 'ImportUserSuccessfulResults'|trans({}, appContext) }} ({{ userImporterResult.countSuccessUserResults() }})
         </a>
     </li>
     <li role="presentation">
-        <a id="failed-results-tab" href="#failed-results" aria-controls="failed-results" role="tab" data-toggle="tab">
+        <a id="failed-results-tab" href="#failed-results" aria-controls="failed-results" role="tab" data-toggle="tab" class="nav-link">
             {{ 'ImportUserFailedResults'|trans({}, appContext) }} ({{ userImporterResult.countFailedUserResults() }})
         </a>
     </li>
     <li role="presentation">
-        <a href="#retry-failed-results-data" aria-controls="retry-failed-results-data" role="tab" data-toggle="tab">
+        <a href="#retry-failed-results-data" aria-controls="retry-failed-results-data" role="tab" data-toggle="tab" class="nav-link">
             {{ 'RetryFailedResultsData'|trans({}, appContext) }}
         </a>
     </li>

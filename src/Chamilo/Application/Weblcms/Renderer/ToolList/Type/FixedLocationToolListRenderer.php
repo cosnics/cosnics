@@ -205,7 +205,7 @@ class FixedLocationToolListRenderer extends ToolListRenderer
 
             $url = $this->get_parent()->get_url(array(self::PARAM_SELECTED_TAB => $section->get_id()));
 
-            $html[] = '<li role="presentation" class="' . $active . '"><a href="';
+            $html[] = '<li class="nav-item"><a class="nav-link ' . $active . '" href="';
             $html[] = $url;
             $html[] = '">' . $sec_name . '</a></li>';
 

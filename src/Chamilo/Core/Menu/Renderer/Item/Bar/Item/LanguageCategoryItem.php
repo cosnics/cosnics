@@ -64,8 +64,8 @@ class LanguageCategoryItem extends CategoryItem
             $sub_html[] = '<!--[if lte IE 6]></td></tr></table></a><![endif]-->';
         }
 
-        $html[] = '<li class="dropdown">';
-        $html[] = '<a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">';
+        $html[] = '<li class="nav-item dropdown">';
+        $html[] = '<a href="#" class="nav-link dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">';
 
         $imagePath = Theme::getInstance()->getImagePath('Chamilo\Core\Menu', 'Language');
         $title = $this->getItem()->get_titles()->get_translation(Translation::getInstance()->getLanguageIsocode());

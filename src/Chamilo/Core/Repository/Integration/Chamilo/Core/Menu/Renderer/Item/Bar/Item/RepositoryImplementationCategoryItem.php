@@ -74,7 +74,7 @@ class RepositoryImplementationCategoryItem extends CategoryItem
         
         $selected = $this->isItemSelected();
         
-        $html[] = '<li class="dropdown' . ($selected ? ' active' : '') . '">';
+        $html[] = '<li class="nav-item dropdown' . ($selected ? ' active' : '') . '">';
         $html[] = '<a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">';
         
         $title = Translation::get('Instance', null, 'Chamilo\Core\Repository\Integration\Chamilo\Core\Menu');

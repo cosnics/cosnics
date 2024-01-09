@@ -87,8 +87,8 @@ class PagerRenderer
     {
         $html = array();
 
-        $html[] = '<li' . ($isDisabled ? ' class="disabled"' : '') . '>';
-        $symbolHtml = '<span aria-hidden="true">' . $symbol . '</span>';
+        $html[] = '<li' . ($isDisabled ? ' class="page-item disabled"' : ' class="page-item"') . '>';
+        $symbolHtml = '<span aria-hidden="true"' . ($isDisabled ? ' class="page-link"' : '') . '>' . $symbol . '</span>';
 
         if ($isDisabled)
         {
@@ -97,7 +97,7 @@ class PagerRenderer
         else
         {
             $html[] = '<a href="' . $this->getUrl($queryParameters, $pageNumberParameterName, $targetPage) .
-                 '" aria-label="' . $translation . '">' . $symbolHtml . '</a>';
+                 '" aria-label="' . $translation . '" class="page-link">' . $symbolHtml . '</a>';
         }
 
         $html[] = '</li>';
@@ -145,8 +145,8 @@ class PagerRenderer
 
             for ($i = $start; $i <= $end; $i ++)
             {
-                $html[] = '<li' . ($this->getPager()->getCurrentPageNumber() == $i ? ' class="active"' : '') .
-                     '><a href="' . $this->getUrl($queryParameters, $pageNumberParameterName, $i) . '">' . $i .
+                $html[] = '<li' . ($this->getPager()->getCurrentPageNumber() == $i ? ' class="page-item active"' : ' class="page-item"') .
+                     '><a href="' . $this->getUrl($queryParameters, $pageNumberParameterName, $i) . '" class="page-link">' . $i .
                      '</a></li>';
             }
 
@@ -171,8 +171,8 @@ class PagerRenderer
 
         if ($includeRange)
         {
-            $html[] = '<li class="disabled">';
-            $html[] = '<span>';
+            $html[] = '<li class="page-item disabled text-nowrap">';
+            $html[] = '<span class="page-link">';
             $html[] = $this->renderCurrentRange();
             $html[] = '</span>';
             $html[] = '</li>';

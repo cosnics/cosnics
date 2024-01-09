@@ -53,8 +53,8 @@ abstract class Bar extends Renderer
         $html = array();
         
         $classes = $this->getClasses($this->isItemSelected());
-        
-        $html[] = '<li class="' . implode(' ', $classes) . '">';
+
+        $html[] = '<li class="nav-item ' . implode(' ', $classes) . '">';
         $html[] = $this->getContent();
         
         $html[] = '</li>';
