@@ -18,7 +18,7 @@ class Bar extends Renderer
 {
     const TYPE = 'Bar';
 
-    public function display_menu_header($numberOfItems = 0)
+    /*public function display_menu_header($numberOfItems = 0)
     {
         $html = array();
         
@@ -55,18 +55,38 @@ class Bar extends Renderer
 //        $html[] = $item->render();
         
         return implode(PHP_EOL, $html);
+    }*/
+
+    public function display_menu_header($numberOfItems = 0)
+    {
+        $html = array();
+        $class = 'navbar navbar-chamilo navbar-expand-lg';
+
+        if ($numberOfItems == 0)
+        {
+            $class .= ' navbar-no-items';
+        }
+
+        $html[] = '<nav class="' . $class . '">';
+        $html[] = '<div class="' . $this->getContainerMode() . '">';
+        $html[] = '<div class="navbar-header">';
+        $html[] = $this->renderBrand();
+        $html[] = '</div>';
+        $html[] = '  <button class="navbar-toggler mr-3" type="button" data-toggle="collapse" data-target="#menu-navbar-collapse" aria-controls="menu-navbar-collapse" aria-expanded="false">';
+        $html[] = '    <span class="navbar-toggler-icon"></span>';
+        $html[] = '  </button>';
+        $html[] = '  <div class="collapse navbar-collapse" id="menu-navbar-collapse">';
+        $html[] = '    <ul class="navbar-nav ml-lg-auto">';
+        return implode(PHP_EOL, $html);
     }
 
     public function display_menu_footer()
     {
         $html = array();
-        
-        $html[] = '</ul>';
+        $html[] = '      </ul>';
+        $html[] = '    </div>';
+        $html[] = '  </nav>';
         $html[] = '</div>';
-
-        $html[] = '</div>';
-        $html[] = '</nav>';
-        
         return implode(PHP_EOL, $html);
     }
 
@@ -84,7 +104,7 @@ class Bar extends Renderer
             $brandSource = Theme::getInstance()->getImagePath('Chamilo\Configuration', 'LogoHeader');
         }
         
-        return '<a class="navbar-brand" href="' . Path::getInstance()->getBasePath(true) . '">' . '<img alt="' .
+        return '<a class="navbar-brand ml-3" href="' . Path::getInstance()->getBasePath(true) . '">' . '<img alt="' .
              $siteName . '" src="' . $brandSource . '"></a>';
     }
 
