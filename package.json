@@ -21,6 +21,7 @@
     "vue-select": "^3.20.2",
     "vue-star-rating": "^1.7.0",
     "vue-swatches": "^2.0.3",
+    "vuedraggable": "^2.24.3",
     "vuejs-dialog": "^1.4.2",
     "winston": "^3.10.0"
   },

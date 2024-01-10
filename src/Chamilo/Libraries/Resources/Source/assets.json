@@ -10,7 +10,8 @@
         "{{ NodeModulesPath }}/bootstrap-vue/dist/bootstrap-vue.min.js",
         "{{ NodeModulesPath }}/vue-i18n/dist/vue-i18n.min.js",
         "{{ NodeModulesPath }}/vue-select/dist/vue-select.js",
-        "{{ NodeModulesPath }}/vue-swatches/dist/vue-swatches.umd.min.js"
+        "{{ NodeModulesPath }}/vue-swatches/dist/vue-swatches.umd.min.js",
+        "{{ NodeModulesPath }}/vuedraggable/dist/vuedraggable.umd.min.js"
       ],
       "output": {
         "path": "Resources/Javascript",
