@@ -198,12 +198,12 @@ class FormFilterRenderer extends FilterRenderer
             null);
         
         $this->renderer->setElementTemplate(
-            '<div class="form-group form-inline"><label>{label}</label><div>{element}</div></div>', 
+            '<div><label>{label}</label><div class="form-group form-inline">{element}</div></div>',
             FilterData::FILTER_CREATION_DATE);
         
         $this->renderer->setGroupElementTemplate(
-            '<div class="input-group input-group-date">
-        <span class="input-group-addon input-group-filter-date input-sm">{label}</span></span>{element}</div>', 
+            '<div class="input-group input-group-sm input-group-date">
+            <div class="input-group-prepend"><span class="input-group-text input-group-filter-date">{label}</span></div>{element}</div>',
             FilterData::FILTER_CREATION_DATE);
         
         // modification date
@@ -228,12 +228,12 @@ class FormFilterRenderer extends FilterRenderer
             null);
         
         $this->renderer->setElementTemplate(
-            '<div class="form-group form-inline"><label>{label}</label><div>{element}</div></div>', 
+            '<div><label>{label}</label><div class="form-group form-inline">{element}</div></div>',
             FilterData::FILTER_MODIFICATION_DATE);
         
         $this->renderer->setGroupElementTemplate(
-            '<div class="input-group input-group-date">
-        <span class="input-group-addon input-group-filter-date input-sm">{label}</span></span>{element}</div>', 
+            '<div class="input-group input-group-sm input-group-date">
+            <div class="input-group-prepend"><span class="input-group-text input-group-filter-date">{label}</span></div>{element}</div>',
             FilterData::FILTER_MODIFICATION_DATE);
         
         // type

@@ -94,13 +94,13 @@ class Login extends \Chamilo\Core\Home\Renderer\Type\Basic\BlockRenderer
         
         $form = new FormValidator('formLogin', 'post');
         $renderer = $form->defaultRenderer();
-        $renderer->setElementTemplate('<div class="form-row">{label}<br />{element}</div>');
+        $renderer->setElementTemplate('<div class="form-group">{label} {element}</div>');
         $form->setRequiredNote('');
         $html = '<script type="text/javascript">$(document).ready(function(){document.formLogin.login.focus();});</script>';
         $form->addElement('html', $html);
-        $form->addElement('text', 'login', Translation::get('UserName'), array('style' => 'width: 90%;'));
+        $form->addElement('text', 'login', Translation::get('UserName'), array('class' => 'form-control'));
         $form->addRule('login', Translation::get('ThisFieldIsRequired', null, Utilities::COMMON_LIBRARIES), 'required');
-        $form->addElement('password', 'password', Translation::get('Password'), array('style' => 'width: 90%;'));
+        $form->addElement('password', 'password', Translation::get('Password'), array('class' => 'form-control'));
         $form->addRule(
             'password', 
             Translation::get('ThisFieldIsRequired', null, Utilities::COMMON_LIBRARIES), 
