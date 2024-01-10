@@ -70,10 +70,11 @@ class ProcessResourcesCommand extends ChamiloCommand
 
     /**
      *
-     * @param \Symfony\Component\Console\Input\InputInterface $input
-     * @param \Symfony\Component\Console\Output\OutputInterface $output
+     * @param InputInterface $input
+     * @param OutputInterface $output
+     * @return int
      */
-    protected function execute(InputInterface $input, OutputInterface $output)
+    protected function execute(InputInterface $input, OutputInterface $output): int
     {
         $packages = $input->getArgument(self::ARG_CONTEXT);
         $this->resourceProcessor->processResources($output, $packages);
@@ -82,5 +83,7 @@ class ProcessResourcesCommand extends ChamiloCommand
         {
             $this->cacheManager->clear(['chamilo_stylesheets', 'chamilo_javascript']);
         }
+
+        return 0;
     }
 }
