@@ -105,12 +105,12 @@
                         {% if CAN_EDIT_ASSIGNMENT %}
                             <li role="presentation" class="nav-item"><a href="#score" class="nav-link">{{ 'ScoreEntry'|trans({}, appContext) }}</a></li>
                             <li role="presentation" class="nav-item"><a href="#corrected-versions" class="nav-link">{{ 'CorrectedVersions'|trans({}, appContext) }}<span
-                                            class="badge badge-pill" style="background-color: #777">{{ ATTACHED_CONTENT_OBJECTS|length }}</span></a></li>
+                                            class="badge">{{ ATTACHED_CONTENT_OBJECTS|length }}</span></a></li>
                         {% elseif ATTACHED_CONTENT_OBJECTS|length > 0 %}
                             <li role="presentation" class="nav-item"><a href="#corrected-versions" class="nav-link">{{ 'CorrectedVersions'|trans({}, appContext) }}<span
-                                            class="badge badge-pill" style="background-color: #777">{{ ATTACHED_CONTENT_OBJECTS|length }}</span></a></li>
+                                            class="badge">{{ ATTACHED_CONTENT_OBJECTS|length }}</span></a></li>
                         {% endif %}
-                        <li role="presentation" class="nav-item"><a href="#feedback" class="nav-link">{{ 'Feedback'|trans({}, appContext) }} <span class="badge badge-pill" style="background-color: #777">{{ FEEDBACK_COUNT }}</span></a></li>
+                        <li role="presentation" class="nav-item"><a href="#feedback" class="nav-link">{{ 'Feedback'|trans({}, appContext) }} <span class="badge">{{ FEEDBACK_COUNT }}</span></a></li>
                     </ul>
                 </div>
             {% endif %}
@@ -123,7 +123,7 @@
                     <h3 class="entry-title title-underlined">{{ CONTENT_OBJECT_TITLE }}
                         <span class="badge score-badge {% if SCORE is not null %} score-success {% else %}no-score{% endif %}">{% if SCORE is not null %}{{ SCORE }}%{% else %}{{ 'NoScore'|trans({}, appContext) }}{% endif %}</span>
                         {{ TITLE_EXTENSION|raw }}
-                        {% if IS_LATE_ASSIGNMENT %}<span class="badge badge-late" style="background-color: red;">{{ 'LateSubmission'|trans({}, appContext) }}</span>{% endif %}
+                        {% if IS_LATE_ASSIGNMENT %}<span class="badge badge-failed badge-late">{{ 'LateSubmission'|trans({}, appContext) }}</span>{% endif %}
                     </h3>
                     <div class="submitted-details">{{ SUBMITTED_BY }} {% if SUBMITTED_BY != ENTITY_NAME %}({{ ENTITY_NAME }}) {% endif %}{{ 'At'|trans({}, appContext) }} {{ SUBMITTED_DATE }}</div>
                     {{ CONTENT_OBJECT_RENDITION|raw }}

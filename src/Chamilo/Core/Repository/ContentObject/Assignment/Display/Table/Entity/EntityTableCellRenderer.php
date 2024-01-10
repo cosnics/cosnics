@@ -182,7 +182,7 @@ class EntityTableCellRenderer extends RecordTableCellRenderer implements TableCe
 
         if ($this->getAssignmentServiceBridge()->isDateAfterAssignmentEndTime($date))
         {
-            return $formatted_date . '<br /><div class="badge" style="background-color: red;">' .
+            return $formatted_date . '<br /><div class="badge badge-failed">' .
                 Translation::getInstance()->getTranslation('LateSubmission') . '</div>';
         }
 
