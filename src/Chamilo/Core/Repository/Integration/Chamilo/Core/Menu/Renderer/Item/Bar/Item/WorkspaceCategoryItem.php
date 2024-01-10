@@ -51,7 +51,7 @@ class WorkspaceCategoryItem extends CategoryItem
             $this->getMenuRenderer()->get_user()
         );
         
-        $sub_html[] = '<ul class="dropdown-menu">';
+        $sub_html[] = '<ul class="dropdown-menu dropdown-menu-right">';
         
         if ($workspaces->size())
         {

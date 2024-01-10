@@ -41,7 +41,7 @@ class RepositoryImplementationCategoryItem extends CategoryItem
         
         if ($instances->size())
         {
-            $sub_html[] = '<ul class="dropdown-menu">';
+            $sub_html[] = '<ul class="dropdown-menu dropdown-menu-right">';
             
             while ($instance = $instances->next_result())
             {

@@ -476,16 +476,17 @@ class BrowserComponent extends Manager implements DelegateComponent
                 $parameters[\Chamilo\Application\Weblcms\Tool\Manager::PARAM_ACTION] =
                     \Chamilo\Application\Weblcms\Tool\Manager::ACTION_PUBLISH;
 
-                $publishActions->addButton(
-                    $this->getPublicationButton(
-                        Translation::get('Publish', null, Utilities::COMMON_LIBRARIES),
-                        new FontAwesomeGlyph('plus'),
-                        $this->get_allowed_content_object_types(),
-                        $parameters,
-                        array(),
-                        'btn-primary'
-                    )
+                $publishButton = $this->getPublicationButton(
+                    Translation::get('Publish', null, Utilities::COMMON_LIBRARIES),
+                    new FontAwesomeGlyph('plus'),
+                    $this->get_allowed_content_object_types(),
+                    $parameters,
+                    array(),
+                    'btn-primary'
                 );
+                $publishButton->setDropdownClasses('dropdown-menu-right');
+
+                $publishActions->addButton($publishButton);
 
                 $courseSettingsController = CourseSettingsController::getInstance();
 
@@ -499,14 +500,15 @@ class BrowserComponent extends Manager implements DelegateComponent
                     $parameters[\Chamilo\Application\Weblcms\Tool\Manager::PARAM_ACTION] =
                         \Chamilo\Application\Weblcms\Tool\Manager::ACTION_PUBLISH_INTRODUCTION;
 
-                    $publishActions->addButton(
-                        $this->getPublicationButton(
-                            Translation::get('PublishIntroductionText', null, Utilities::COMMON_LIBRARIES),
-                            new FontAwesomeGlyph('book'),  // new FontAwesomeGlyph('info-circle'),
-                            array(Introduction::class_name()),
-                            $parameters
-                        )
+                    $publishIntroButton = $this->getPublicationButton(
+                        Translation::get('PublishIntroductionText', null, Utilities::COMMON_LIBRARIES),
+                        new FontAwesomeGlyph('book'),  // new FontAwesomeGlyph('info-circle'),
+                        array(Introduction::class_name()),
+                        $parameters
                     );
+                    $publishIntroButton->setDropdownClasses('dropdown-menu-right');
+
+                    $publishActions->addButton($publishIntroButton);
                 }
 
                 if ($this->isCourseAdmin())

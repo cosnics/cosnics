@@ -1229,7 +1229,8 @@ abstract class ContentObjectPublicationListRenderer
             new FontAwesomeGlyph('cog'),
             Button::DISPLAY_ICON,
             'btn-link');
-        $dropdownButton->setDropdownClasses('dropdown-menu-right mod-adjusted');
+        $dropdownButton->setDropdownClasses('dropdown-menu-right');
+//        $dropdownButton->setDropdownClasses('dropdown-menu-right mod-adjusted');
 
         // quick-win: (re)send mail after publication
         // currently only mail button for announcements; this outer check can be removed, but then all

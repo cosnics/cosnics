@@ -38,7 +38,7 @@ class LanguageCategoryItem extends CategoryItem
             $redirect = new Redirect();
             $currentUrl = $redirect->getCurrentUrl();
 
-            $sub_html[] = '<ul class="dropdown-menu language-selector">';
+            $sub_html[] = '<ul class="dropdown-menu dropdown-menu-right language-selector">';
 
             foreach ($languages as $isocode => $language)
             {
@@ -74,7 +74,7 @@ class LanguageCategoryItem extends CategoryItem
             ($this->getItem()->show_title() ? ' chamilo-menu-item-image-with-label' : '') . '" src="' . $imagePath .
             '" title="' . htmlentities($title) . '" alt="' . $title . '" />';
 
-        $html[] = '<div class="chamilo-menu-item-label-with-image">';
+        $html[] = '<div class="chamilo-menu-item-label chamilo-menu-item-label-with-image">';
         $html[] = strtoupper($currentLanguage);
         $html[] = '<span class="caret"></span>';
         $html[] = '</div>';

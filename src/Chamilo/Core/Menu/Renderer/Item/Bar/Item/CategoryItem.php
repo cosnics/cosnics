@@ -65,7 +65,7 @@ class CategoryItem extends Bar
         
         if ($this->getItem()->has_children())
         {
-            $sub_html[] = '<ul class="dropdown-menu">';
+            $sub_html[] = '<ul class="dropdown-menu dropdown-menu-right">';
             
             $entities = array();
             $entities[] = new UserEntity();
@@ -93,7 +93,7 @@ class CategoryItem extends Bar
         
         $title = $this->getItem()->get_titles()->get_translation(Translation::getInstance()->getLanguageIsocode());
         
-        $html[] = '<li class="dropdown' . ($selected ? ' active' : '') . '">';
+        $html[] = '<li class="nav-item dropdown' . ($selected ? ' active' : '') . '">';
         $html[] = '<a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">';
         
         if ($this->getItem()->show_icon())

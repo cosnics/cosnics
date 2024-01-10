@@ -136,7 +136,7 @@ class WidgetItem extends Bar
         
         $profileHtml = array();
         
-        $profileHtml[] = '<ul class="dropdown-menu">';
+        $profileHtml[] = '<ul class="dropdown-menu dropdown-menu-right">';
         $profileHtml[] = '<li>';
         // $profileHtml[] = '<a href="#">';
         

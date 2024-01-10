@@ -144,7 +144,8 @@ abstract class ContentObjectRenderer implements TableSupport
             new FontAwesomeGlyph('cog'),
             Button::DISPLAY_ICON,
             'btn-link');
-        $dropdownButton->setDropdownClasses('dropdown-menu-right mod-adjusted');
+        $dropdownButton->setDropdownClasses('dropdown-menu-right');
+//        $dropdownButton->setDropdownClasses('dropdown-menu-right mod-adjusted');
 
         if ($canEditContentObject)
         {

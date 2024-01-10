@@ -35,6 +35,7 @@ class SubButtonRenderer extends AbstractButtonRenderer
     {
         $classes = array();
 
+        $classes[] = 'dropdown-item';
         $classes[] = $this->getButton()->getClasses();
 
         if (! $this->getButton()->getAction())

@@ -306,7 +306,7 @@ class Basic extends Renderer
                         '#',
                         SubButton::DISPLAY_LABEL,
                         false,
-                        'portal-add-column btn-link'));
+                        'portal-add-column dropdown-item'));
                 $splitDropdownButton->addSubButton(
                     new SubButton(
                         Translation::get('NewTab'),
@@ -314,7 +314,7 @@ class Basic extends Renderer
                         '#',
                         SubButton::DISPLAY_LABEL,
                         false,
-                        'portal-add-tab btn-link'));
+                        'portal-add-tab dropdown-item'));
 
                 $truncateLink = new Redirect(array(Manager::PARAM_ACTION => Manager::ACTION_TRUNCATE));
 
@@ -327,7 +327,7 @@ class Basic extends Renderer
                             $truncateLink->getUrl(),
                             SubButton::DISPLAY_LABEL,
                             true,
-                            'portal-reset btn-link'));
+                            'portal-reset dropdown-item'));
                 }
             }
 
@@ -361,7 +361,7 @@ class Basic extends Renderer
             }
 
             $buttonToolBarRenderer = new ButtonToolBarRenderer($buttonToolBar);
-            $html[] = '<li class="pull-right portal-actions">' . $buttonToolBarRenderer->render() . '</li>';
+            $html[] = '<li class="portal-actions ml-auto">' . $buttonToolBarRenderer->render() . '</li>';
         }
 
         return implode(PHP_EOL, $html);

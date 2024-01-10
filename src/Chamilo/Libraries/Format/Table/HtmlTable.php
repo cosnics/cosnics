@@ -446,7 +446,7 @@ abstract class HtmlTable extends \HTML_Table
                 Button::DISPLAY_LABEL,
                 $firstAction->getConfirmation(),
                 'btn-sm btn-table-action');
-            $button->setDropdownClasses('btn-table-action');
+            $button->setDropdownClasses('btn-table-action dropdown-menu-right');
 
             foreach ($formActions as $formAction)
             {
