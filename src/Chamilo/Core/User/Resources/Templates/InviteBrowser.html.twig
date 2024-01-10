@@ -85,7 +85,7 @@
         <div class="form-group">
             <div class="col-sm-12">
                 <div class="input-group">
-                    <span class="input-group-addon"><span class="fa fa-envelope"></span></span>
+                    <div class="input-group-prepend"><span class="input-group-text"><span class="fa fa-envelope"></span></span></div>
                     {{ form_widget(FORM.email) }}
                 </div>
                 {{ form_errors(FORM.email) }}
@@ -95,7 +95,7 @@
         <div class="form-group">
             <div class="col-sm-12">
                 <div class="input-group">
-                    <span class="input-group-addon"><span class="fa fa-commenting"></span></span>
+                    <div class="input-group-prepend"><span class="input-group-text"><span class="fa fa-commenting"></span></span></div>
                     {{ form_widget(FORM.personal_message) }}
                 </div>
                 {{ form_errors(FORM.personal_message) }}
@@ -127,7 +127,7 @@
                 <div class="input-group">
                     <input type="text" name="search" class="form-control" placeholder="{{ 'Search'|trans({}, 'Chamilo\\Libraries') }}" style="float: right; max-width: 200px;"
                            v-model="filterText">
-                    <span class="input-group-addon"><span class="fa fa-search"></span></span>
+                    <div class="input-group-append"><span class="input-group-text"><span class="fa fa-search"></span></span></div>
                 </div>
             </div>
         </div>

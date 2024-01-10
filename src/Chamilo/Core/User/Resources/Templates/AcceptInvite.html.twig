@@ -135,14 +135,14 @@
         <div class="form-group">
             <div class="col-md-6">
                 <div class="input-group">
-                    <span class="input-group-addon"><span class="fa fa-user"></span></span>
+                    <div class="input-group-prepend"><span class="input-group-text"><span class="fa fa-user"></span></span></div>
                     {{ form_widget(FORM.first_name) }}
                 </div>
                 {{ form_errors(FORM.first_name) }}
             </div>
             <div class="col-md-6">
                 <div class="input-group">
-                    <span class="input-group-addon"><span class="fa fa-user"></span></span>
+                    <div class="input-group-prepend"><span class="input-group-text"><span class="fa fa-user"></span></span></div>
                     {{ form_widget(FORM.last_name) }}
                 </div>
                 {{ form_errors(FORM.last_name) }}
@@ -151,7 +151,7 @@
         <div class="form-group">
             <div class="col-sm-12">
                 <div class="input-group">
-                    <span class="input-group-addon"><span class="fa fa-envelope"></span></span>
+                    <div class="input-group-prepend"><span class="input-group-text"><span class="fa fa-envelope"></span></span></div>
                     {{ form_widget(FORM.email) }}
                 </div>
                 {{ form_errors(FORM.email) }}
@@ -161,7 +161,7 @@
             <div class="form-group">
                 <div class="col-sm-12">
                     <div class="input-group">
-                        <span class="input-group-addon"><span class="fa fa-lock"></span></span>
+                        <div class="input-group-prepend"><span class="input-group-text"><span class="fa fa-lock"></span></span></div>
                         {{ form_widget(FORM.password.first) }}
                     </div>
                     {{ form_errors(FORM.password.first) }}
@@ -170,7 +170,7 @@
             <div class="form-group">
                 <div class="col-sm-12">
                     <div class="input-group">
-                        <span class="input-group-addon"><span class="fa fa-lock"></span></span>
+                        <div class="input-group-prepend"><span class="input-group-text"><span class="fa fa-lock"></span></span></div>
                         {{ form_widget(FORM.password.second) }}
                     </div>
                     {{ form_errors(FORM.password.first) }}

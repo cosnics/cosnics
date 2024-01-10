@@ -206,7 +206,7 @@ class Basic extends Renderer
         $html[] = '<form class="form-inline package-search">';
         $html[] = '<div class="form-group">';
         $html[] = '<div class="input-group">';
-        $html[] = '<div class="input-group-addon"><span class="glyphicon glyphicon-search"></span></div>';
+        $html[] = '<div class="input-group-prepend"><div class="input-group-text"><span class="glyphicon glyphicon-search"></span></div></div>';
         $html[] = '<input type="text" class="form-control" id="portal-package-name" placeholder="' .
              Translation::get('SearchForWidgets') . '">';
         $html[] = '</div>';

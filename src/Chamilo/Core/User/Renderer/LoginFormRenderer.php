@@ -46,7 +46,7 @@ class LoginFormRenderer
 
         $form->addElement(
             'html',
-            '<div class="input-group-addon">' . $this->getTranslation('Username') . '</div>');
+            '<div class="input-group-prepend"><div class="input-group-text">' . $this->getTranslation('Username') . '</div></div>');
 
         $form->addElement(
             'text',
