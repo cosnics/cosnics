@@ -422,7 +422,7 @@ td.publication_table_status_column, td.publication_table_order_column {
 	max-width: 50px;
 	width: 50px;
 	text-align: center;
-	vertical-align: middle;
+	/*vertical-align: middle;*/
 }
 
 /** Tools Table **/
@@ -430,7 +430,7 @@ table th.tools_column_toggle, table tr td.tools_column_toggle {
 	max-width: 150px;
 	width: 150px;
 	text-align: center;
-	vertical-align: middle;
+	/*vertical-align: middle;*/
 }
 
 table th.column_icon, table tr td.column_icon {
@@ -452,7 +452,7 @@ table tr td.column_tool_title {
 }
 
 .nav.nav-tabs.course-list-tabs li, .nav.nav-tabs.tool-list-tabs li {
-	margin-bottom: -2px;
+	/*margin-bottom: -2px;*/
 	margin-top: -1px;
 }
 
@@ -466,7 +466,7 @@ table tr td.column_tool_title {
 	border-radius: 0;
 }
 
-.nav.nav-tabs.course-list-tabs li.active:first-child a, .nav.nav-tabs.tool-list-tabs li.active:first-child a
+.nav.nav-tabs.course-list-tabs li:first-child a.active, .nav.nav-tabs.tool-list-tabs li.active:first-child a.active
 	{
 	border-left: none;
 }
@@ -475,6 +475,11 @@ table tr td.column_tool_title {
 	.course-list-tab-content .list-group-header {
 	background-color: #F5F5F5;
 	color: #555555;
+}
+
+.nav.nav-tabs.course-list-tabs .nav-link, .nav.nav-tabs.tool-list-tabs .nav-link {
+	border-top-left-radius: 0;
+	border-top-right-radius: 0;
 }
 
 .course-list-tab-content .list-group-item:first-child {
