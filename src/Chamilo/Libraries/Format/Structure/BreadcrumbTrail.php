@@ -229,6 +229,7 @@ class BreadcrumbTrail
     public function render_breadcrumbs()
     {
         $html = array();
+        $html[] = '<nav aria-label="breadcrumb">';
         $html[] = '<ol class="breadcrumb">';
 
         $breadcrumbtrail = $this->breadcrumbtrail;
@@ -236,10 +237,16 @@ class BreadcrumbTrail
         {
             foreach ($breadcrumbtrail as $breadcrumb)
             {
+                $isLast = $breadcrumb === end($breadcrumbtrail);
+
                 $breadCrumbHtml = array();
 
-                $breadCrumbHtml[] = '<li>';
-                $breadCrumbHtml[] = '<a href="' . htmlentities($breadcrumb->get_url()) . '" target="_self">';
+                $breadCrumbHtml[] = '<li class="breadcrumb-item' . ($isLast ? ' active' : '') . '">';
+
+                if (!$isLast)
+                {
+                    $breadCrumbHtml[] = '<a href="' . htmlentities($breadcrumb->get_url()) . '" target="_self">';
+                }
 
                 if ($breadcrumb->getImage())
                 {
@@ -255,7 +262,10 @@ class BreadcrumbTrail
                     $breadCrumbHtml[] = StringUtilities::getInstance()->truncate($breadcrumb->get_name(), 50, true);
                 }
 
-                $breadCrumbHtml[] = '</a>';
+                if (!$isLast)
+                {
+                    $breadCrumbHtml[] = '</a>';
+                }
                 $breadCrumbHtml[] = '</li>';
 
                 $html[] = implode('', $breadCrumbHtml);
@@ -263,6 +273,7 @@ class BreadcrumbTrail
         }
 
         $html[] = '</ol>';
+        $html[] = '</nav>';
 
         return implode(PHP_EOL, $html);
     }
