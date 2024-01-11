@@ -137,7 +137,7 @@
             </table>
             <div class="lds-ellipsis" aria-hidden="true"><div></div><div></div><div></div><div></div></div>
         </div>
-        <div class="pagination-container u-flex u-justify-content-end">
+        <div class="pagination-container u-flex u-justify-content-end my-3">
             <b-pagination v-model="pagination.currentPage" :total-rows="sortedUsers.length" :per-page="itemsPerPage" aria-controls="gradebook-table"></b-pagination>
             <ul class="pagination">
                 <li class="page-item active"><a class="page-link">{{ $t('total') }} {{ sortedUsers.length }}</a></li>
@@ -528,7 +528,7 @@ export default class GradesTable extends Vue {
 
         th, &::v-deep td {
             border: 1px solid #ebebeb;
-            font-size: 1.35rem;
+            font-size: .85rem;
             padding: 8px;
             vertical-align: top;
             z-index: 0;
@@ -570,6 +570,10 @@ export default class GradesTable extends Vue {
             &:not(.col-sticky) {
                 background: linear-gradient(to bottom, transparent 0, transparent 1px, #f8fbfb 1px) 0 0 repeat, linear-gradient(to bottom, #ebebeb 0px, #ebebeb 1px, white 1px) 0 0 repeat-x;
                 background-clip: padding-box;
+            }
+
+            button {
+                color: inherit;
             }
         }
 
@@ -624,6 +628,10 @@ export default class GradesTable extends Vue {
     .table-scores-row th {
         background-color: #f8fbfb;
         color: #5885a2;
+
+        button {
+            color: inherit;
+        }
 
         &.uncounted-score-cell {
             background-color: #f0f4fa;
@@ -719,7 +727,7 @@ export default class GradesTable extends Vue {
     }
 
     .fa-group {
-        margin-right: .5rem;
+        margin-right: .3125rem;
     }
 
     .btn-settings {
@@ -740,14 +748,14 @@ export default class GradesTable extends Vue {
     }
 
     .fa-percent {
-        font-size: 1.1rem;
-        margin-left: .15rem;
+        font-size: .6875rem;
+        margin-left: .09375rem;
         opacity: .8;
     }
 
     .weight {
         color: #477b7b;
-        font-size: 1.2rem;
+        font-size: .75rem;
         margin-top: 2px;
         padding: 3px 0 1px 0;
         width: fit-content;
@@ -805,11 +813,11 @@ export default class GradesTable extends Vue {
 
 <style lang="scss" scoped>
 .tbl-sort-option {
-    background-position: right calc(.75rem / 2) center;
+    background-position: right calc(.46875rem / 2) center;
     background-repeat: no-repeat;
     background-size: .65em 1em;
     cursor: pointer;
-    padding-right: calc(.75rem + .85em);
+    padding-right: calc(.46875rem + .85em);
     pointer-events: all;
 }
 

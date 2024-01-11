@@ -59,14 +59,14 @@ export default class WeightInput extends Vue {
 
 <style lang="scss" scoped>
 label {
-    font-size: 1.25rem;
-    margin-bottom: .15rem;
-    margin-left: .15rem;
+    font-size: .78125rem;
+    margin-bottom: .09375rem;
+    margin-left: .09375rem;
 }
 
 .percent-input {
     border: 1px solid #ced4da;
-    border-radius: .2rem;
+    border-radius: .125rem;
     color: #333;
     min-height: 24px;
     padding: 2px 18px 2px 4px;
@@ -92,11 +92,11 @@ label {
     border-left: 1px solid #ced4da;
     color: #5b5f64;
     display: flex;
-    font-size: 1rem;
+    font-size: .625rem;
     font-weight: 400;
     inset: 1px 1px 1px auto;
     line-height: 1.5;
-    padding: 0.375rem 0.75rem;
+    padding: 0.234375rem .46875rem;
     position: absolute;
     text-align: center;
     white-space: nowrap;

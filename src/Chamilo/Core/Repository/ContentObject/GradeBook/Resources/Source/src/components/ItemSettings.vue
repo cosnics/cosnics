@@ -71,11 +71,11 @@
                 <h5 :class="{'standalone': column.type === 'standalone'}">{{ $t('settings') }}</h5>
                 <div class="settings">
                     <div>
-                        <input type="checkbox" id="released" v-model="column.released" @input="onGradeColumnChange" class="mr-5">
+                        <input type="checkbox" id="released" v-model="column.released" @input="onGradeColumnChange" class="mr-05">
                         <label class="settings-label u-font-medium" for="released">{{ $t('make-visible') }}</label>
                     </div>
                     <div>
-                        <input type="checkbox" id="countForEndResult" v-model="column.countForEndResult" @input="onGradeColumnChange" class="mr-5">
+                        <input type="checkbox" id="countForEndResult" v-model="column.countForEndResult" @input="onGradeColumnChange" class="mr-05">
                         <label class="settings-label u-font-medium" for="countForEndResult">{{ $t('count-towards-endresult') }}</label>
                     </div>
                     <div v-if="column.countForEndResult">
@@ -87,32 +87,32 @@
                             </div>
                         </div>
                         <div role="radiogroup" aria-labelledby="setting-aabs" class="mt-20">
-                            <label id="setting-aabs" class="settings-label">{{ $t('authorized-absence') }} <div aria-hidden="true" class="color-code amber-700 mi-3" :title="$t('auth-absent')"><span>{{ $t('aabs') }}</span></div>:</label>
+                            <label id="setting-aabs" class="settings-label">{{ $t('authorized-absence') }} <div aria-hidden="true" class="color-code amber-700 mx-03" :title="$t('auth-absent')"><span>{{ $t('aabs') }}</span></div>:</label>
                             <div>
-                                <input type="radio" name="gafw-option" id="gafw-option1" value="0" v-model.number="column.authPresenceEndResult" @input="onGradeColumnChange" class="mr-5">
+                                <input type="radio" name="gafw-option" id="gafw-option1" value="0" v-model.number="column.authPresenceEndResult" @input="onGradeColumnChange" class="mr-05">
                                 <label class="u-font-normal" for="gafw-option1">{{ $t('count-towards-endresult-not') }}</label>
                             </div>
                             <div>
-                                <input type="radio" name="gafw-option" id="gafw-option2" value="1" v-model.number="column.authPresenceEndResult" @input="onGradeColumnChange" class="mr-5">
+                                <input type="radio" name="gafw-option" id="gafw-option2" value="1" v-model.number="column.authPresenceEndResult" @input="onGradeColumnChange" class="mr-05">
                                 <label class="u-font-normal" for="gafw-option2">{{ $t('maximum-towards-endresult') }}</label>
                             </div>
                             <div>
-                                <input type="radio" name="gafw-option" id="gafw-option3" value="2" v-model.number="column.authPresenceEndResult" @input="onGradeColumnChange" class="mr-5">
+                                <input type="radio" name="gafw-option" id="gafw-option3" value="2" v-model.number="column.authPresenceEndResult" @input="onGradeColumnChange" class="mr-05">
                                 <label class="u-font-normal" for="gafw-option3">{{ $t('minimum-towards-endresult') }}</label>
                             </div>
                         </div>
                         <div role="radiogroup" aria-labelledby="setting-uaabs" class="mt-20">
-                            <label id="setting-uaabs" class="settings-label">{{ $t('unauthorized-absence') }} <div class="color-code mod-none mi-3" :title="$t('no-score-found')"><i class="fa fa-question" aria-hidden="true"></i></div>:</label>
+                            <label id="setting-uaabs" class="settings-label">{{ $t('unauthorized-absence') }} <div class="color-code mod-none mx-03" :title="$t('no-score-found')"><i class="fa fa-question" aria-hidden="true"></i></div>:</label>
                             <div>
-                                <input type="radio" name="nogafw-option" id="nogafw-option1" value="0" v-model.number="column.unauthPresenceEndResult" @input="onGradeColumnChange" class="mr-5">
+                                <input type="radio" name="nogafw-option" id="nogafw-option1" value="0" v-model.number="column.unauthPresenceEndResult" @input="onGradeColumnChange" class="mr-05">
                                 <label class="u-font-normal" for="nogafw-option1">{{ $t('count-towards-endresult-not') }}</label>
                             </div>
                             <div>
-                                <input type="radio" name="nogafw-option" id="nogafw-option2" value="1" v-model.number="column.unauthPresenceEndResult" @input="onGradeColumnChange" class="mr-5">
+                                <input type="radio" name="nogafw-option" id="nogafw-option2" value="1" v-model.number="column.unauthPresenceEndResult" @input="onGradeColumnChange" class="mr-05">
                                 <label class="u-font-normal" for="nogafw-option2">{{ $t('maximum-towards-endresult') }}</label>
                             </div>
                             <div>
-                                <input type="radio" name="nogafw-option" id="nogafw-option3" value="2" v-model.number="column.unauthPresenceEndResult" @input="onGradeColumnChange" class="mr-5">
+                                <input type="radio" name="nogafw-option" id="nogafw-option3" value="2" v-model.number="column.unauthPresenceEndResult" @input="onGradeColumnChange" class="mr-05">
                                 <label class="u-font-normal" for="nogafw-option3">{{ $t('minimum-towards-endresult') }}</label>
                             </div>
                         </div>
@@ -258,17 +258,17 @@ export default class ItemSettings extends Vue {
     margin-left: 20px;
 }
 
-.mr-5 {
+.mr-05 {
     margin-right: 5px;
 }
 
-.mi-3 {
+.mx-03 {
     margin-inline: 3px;
 }
 
 input[type="text"], input[type="number"] {
     border: 1px solid #ced4da;
-    border-radius: .2rem;
+    border-radius: .125rem;
     color: #333;
     min-height: 24px;
     padding: 4px 18px 4px 4px;
@@ -294,7 +294,7 @@ input:focus {
 }
 
 label {
-    font-size: 1.4rem;
+    font-size: .875rem;
 }
 
 h5 {
@@ -302,35 +302,35 @@ h5 {
     color:#487771;
     font-size: 20px;
     font-variant: all-small-caps;
-    padding-bottom: .5rem;
+    padding-bottom: .3125rem;
 
     &:not(.standalone) {
-        margin-top: 2rem;
+        margin-top: 1.25rem;
     }
 }
 
 .btn-close {
     background: none;
     border: none;
-    font-size: 2rem;
+    font-size: 1.25rem;
 }
 
 .grouped-scores {
     margin-bottom: 5px;
-    padding-left: 2rem;
+    padding-left: 1.25rem;
 
     li {
-        margin-bottom: .25rem;
+        margin-bottom: .15625rem;
 
         > span {
-            font-size: 16px;
+            font-size: 1rem;
         }
     }
 }
 
 .settings {
-    margin-bottom: 1.5rem;
-    margin-left: 2rem;
+    margin-bottom: .9375rem;
+    margin-left: 1.25rem;
 }
 
 .settings-label {
@@ -397,11 +397,11 @@ h5 {
     border-left: 1px solid #ced4da;
     color: #5b5f64;
     display: flex;
-    font-size: 1rem;
+    font-size: .625rem;
     font-weight: 400;
     inset: 1px 1px 1px auto;
     line-height: 1.5;
-    padding: 0.375rem 0.75rem;
+    padding: .234375rem .46875rem;
     position: absolute;
     text-align: center;
     white-space: nowrap;

@@ -15,11 +15,11 @@
 }
 </i18n>
 <template>
-    <div :id="id" class="btn-group" :class="{'open': isOpen}" v-clickoutside="close">
+    <div :id="id" class="btn-group" v-clickoutside="close">
         <button aria-haspopup="true" :aria-expanded="isOpen" class="u-flex u-align-items-center u-justify-content-between btn dropdown-toggle" :title="$t('add-remove-scores')" @click="isOpen = !isOpen">
             <span>{{ $t('add-remove-scores') }}</span> <span class="caret" aria-hidden="true"></span>
         </button>
-        <ul class="dropdown-menu">
+        <ul class="dropdown-menu" :class="{'show': isOpen}">
             <li role="presentation" v-for="(item, index) in gradedItems" :key="`item-${index}`" @click.stop="">
                 <a role="menuitem" href="#" target="_self" class="dropdown-item" :class="{'mod-removed': item.removed, 'mod-checked': item.checked}">
                     <b-form-checkbox :id="`${id}-item-${index}`" :checked="item.checked" :disabled="item.disabled || (item.removed && !item.checked)" @change="toggleItem(item, index)" :class="{'is-disabled': item.disabled}">
@@ -139,7 +139,6 @@ export default class GradesDropdown extends Vue {
 .dropdown-item.mod-removed {
     font-style: italic;
     color: #d45e66;
-
 }
 
 .dropdown-item.mod-removed.mod-checked {
@@ -147,7 +146,7 @@ export default class GradesDropdown extends Vue {
 }
 
 .score-breadcrumb-trail {
-    font-size: 1.2rem;
+    font-size: .75rem;
 }
 
 .btn.dropdown-toggle {

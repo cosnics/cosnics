@@ -21,7 +21,7 @@
     <div class="modal-wrapper" role="dialog" aria-modal="true" :aria-label="$t('final-score-settings')">
         <div class="modal-content">
             <div class="u-flex u-align-items-baseline u-justify-content-between modal-header">
-                <h4 style="font-size: 20px;margin-block: 0">{{ $t('final-score') }}</h4>
+                <h4 style="font-size: 1.25rem;margin-block: 0">{{ $t('final-score') }}</h4>
                 <button class="btn-close u-ml-auto" @click="$emit('close')" :title="$t('close')"><i class="fa fa-times" aria-hidden="true"></i><span class="sr-only">{{ $t('close') }}</span></button>
             </div>
             <div class="modal-body mb-5">
@@ -88,20 +88,20 @@ export default class FinalScoreSettings extends Vue {
 .btn-close {
     background: none;
     border: none;
-    font-size: 2rem;
+    font-size: 1.25rem;
 }
 
 h5 {
     border-bottom: 1px dotted #c1d1cf;
-    color:#487771;
-    font-size: 20px;
+    color: #487771;
+    font-size: 1.25rem;
     font-variant: all-small-caps;
-    padding-bottom: .5rem;
+    padding-bottom: .3125rem;
 }
 
 input[type="text"], input[type="number"] {
     border: 1px solid #ced4da;
-    border-radius: .2rem;
+    border-radius: .125rem;
     color: #333;
     min-height: 24px;
     padding: 4px 18px 4px 4px;
@@ -127,7 +127,7 @@ input:focus {
 }
 
 label {
-    font-size: 1.4rem;
+    font-size: .875rem;
 }
 
 .settings-label {

@@ -87,7 +87,7 @@ export default class CategorySettings extends Vue {
 <style lang="scss" scoped>
 input[type="text"] {
     border: 1px solid #ced4da;
-    border-radius: .2rem;
+    border-radius: .125rem;
     color: #333;
     font-size: 20px;
     min-height: 24px;
@@ -103,7 +103,7 @@ input:focus {
 .btn-close {
     background: none;
     border: none;
-    font-size: 2rem;
+    font-size: 1.25rem;
 }
 
 .modal-wrapper {

@@ -46,7 +46,7 @@
             <div class="u-flex u-flex-wrap gradebook-toolbar">
                 <div class="input-group">
                     <input class="form-control" type="text" v-model="searchTerm" :placeholder="$t('find-student')">
-                    <div class="input-group-btn"><button name="clear" value="clear" class="btn btn-default" @click="searchTerm = ''"><span aria-hidden="true" class="glyphicon glyphicon-remove"></span></button></div>
+                    <div class="input-group-append"><button name="clear" value="clear" class="btn btn-default" @click="searchTerm = ''"><span aria-hidden="true" class="glyphicon glyphicon-remove"></span></button></div>
                 </div>
                 <grades-dropdown id="dropdown-main" :graded-items="gradeBook.statusGradedItems" @toggle="toggleGradeItem" />
                 <div class="u-flex u-justify-content-end u-gap-small u-ml-auto gradebook-create-actions">
@@ -56,9 +56,9 @@
                             <i class="fa fa-plus" aria-hidden="true"></i><span>{{ $t('new') }}</span> <span class="caret" aria-hidden="true"></span>
                         </a>
                         <ul role="menu" class="dropdown-menu">
-                            <li role="presentation" class="u-cursor-pointer"><a role="menuitem" @click.prevent="createNewScore">{{ $t('new-score') }}</a></li>
-                            <li role="presentation" class="u-cursor-pointer"><a role="menuitem" @click.prevent="createNewCategory">{{ $t('new-category') }}</a></li>
-                            <li role="presentation" class="u-cursor-pointer"><a role="menuitem" :href="apiConfig.gradeBookImportCsvURL">{{ $t('import') }}&mldr;</a></li>
+                            <li role="presentation" class="u-cursor-pointer"><a role="menuitem" class="dropdown-item" @click.prevent="createNewScore">{{ $t('new-score') }}</a></li>
+                            <li role="presentation" class="u-cursor-pointer"><a role="menuitem" class="dropdown-item" @click.prevent="createNewCategory">{{ $t('new-category') }}</a></li>
+                            <li role="presentation" class="u-cursor-pointer"><a role="menuitem" class="dropdown-item" :href="apiConfig.gradeBookImportCsvURL">{{ $t('import') }}&mldr;</a></li>
                         </ul>
                     </div>
                     <button v-if="gradeBook.totalsNeedUpdating" class="btn btn-update-totals btn-primary btn-sm u-font-medium u-text-upper" @click="updateTotalScores">
@@ -71,7 +71,7 @@
                         </a>
                         <ul role="listbox" class="dropdown-menu dropdown-menu-right">
                             <li v-for="count in [5, 10, 15, 20, 50]" :key="'per-page-' + count" role="presentation" class="u-cursor-pointer">
-                                <a role="option" :aria-selected="itemsPerPage === count ? 'true' : 'false'" :class="itemsPerPage === count ? 'selected' : 'not-selected'" @click="setItemsPerPage(count)">
+                                <a role="option" :aria-selected="itemsPerPage === count ? 'true' : 'false'" class="dropdown-item" :class="itemsPerPage === count ? 'selected' : 'not-selected'" @click="setItemsPerPage(count)">
                                     <span>{{ $t('show') }} {{count}} items</span>
                                 </a>
                             </li>

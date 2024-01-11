@@ -282,7 +282,7 @@ export default class Connector {
             } else {
                 throw { 'type': 'Unknown' };
             }
-        } catch (err) {
+        } catch (err: any) {
             logResponse(err);
             let error: any;
             if (err?.isAxiosError && err.message?.toLowerCase().indexOf('timeout') !== -1) {

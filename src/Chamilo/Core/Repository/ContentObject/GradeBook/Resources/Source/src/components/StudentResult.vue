@@ -90,8 +90,8 @@ a {
 }*/
 
 .fa-percent {
-    font-size: 1.1rem;
-    margin-left: .15rem;
+    font-size: .6875rem;
+    margin-left: .09375rem;
     opacity: .8;
 }
 

@@ -193,8 +193,8 @@ thead {
     border-radius: 3px;
     color: #549292;
     display: inline-block;
-    margin-left: 0.5rem;
-    padding-inline: 0.3rem;
+    margin-left: .3125rem;
+    padding-inline: .1875rem;
 }
 
 .table-cell.mod-comment {

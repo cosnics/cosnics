@@ -126,7 +126,7 @@ export default class UserScores extends Vue {
         border: 1px solid #f0f0f0;
         border-left-color: #ebebeb;
         border-right-color: #ebebeb;
-        font-size: 1.35rem;
+        font-size: .84375rem;
         vertical-align: top;
     }
 
@@ -170,8 +170,8 @@ export default class UserScores extends Vue {
 }
 
 .fa-percent {
-    font-size: 1.1rem;
-    margin-left: .15rem;
+    font-size: .6875rem;
+    margin-left: .09375rem;
     opacity: .8;
 }
 

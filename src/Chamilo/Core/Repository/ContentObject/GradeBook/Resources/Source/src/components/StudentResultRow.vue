@@ -33,7 +33,7 @@
             </template>
             <td class="col-sticky table-student-total u-text-end" :class="{'unreleased-score-cell': gradeBook.hasUnreleasedScores, 'mod-needs-update': totalNeedsUpdate}">
                 <div class="u-flex u-align-items-baseline u-gap-small-3x" :class="gradeBook.getDisplayTotal() === 100 ? 'u-justify-content-end' : 'u-justify-content-between'">
-                    <div v-if="gradeBook.getDisplayTotal() !== 100" style="font-size: 1.1rem;color:#437070;width: 50px;text-align: right">
+                    <div v-if="gradeBook.getDisplayTotal() !== 100" style="font-size: .6875rem;color:#437070;width: 50px;text-align: right">
                         ({{ endResultPct|formatNum2 }}<i class="fa fa-percent" aria-hidden="true"></i><span class="sr-only">%</span>)
                     </div>
                     <div>
@@ -249,8 +249,8 @@ export default class StudentResultRow extends Vue {
 }
 
 .fa-percent {
-    font-size: 1.1rem;
-    margin-left: .15rem;
+    font-size: .6875rem;
+    margin-left: .09375rem;
     opacity: .8;
 }
 </style>
