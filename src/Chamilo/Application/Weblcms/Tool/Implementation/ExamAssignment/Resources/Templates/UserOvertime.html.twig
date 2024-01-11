@@ -54,6 +54,13 @@
     }
     .v-select.mod-extra-time {
         background: white;
+        --vs-controls-size: .8;
+    }
+    .v-select.mod-extra-time .vs__search {
+        font-size: .8125rem;
+    }
+    .v-select.mod-extra-time .vs__actions {
+        cursor: pointer;
     }
     .v-select.mod-selection .vs__clear {
         display: initial!important;
@@ -128,7 +135,7 @@
                     <div><strong>${ option.lastname.toUpperCase() }</strong>, ${ option.firstname }</div>
                     <div class="select-user-email">${ option.email }</div>
                 </template>
-                <div slot="no-options">{{ 'NoMatchingOptions'|trans({}, appContext) }}</div>
+                <template v-slot:no-options><div>{{ 'NoMatchingOptions'|trans({}, appContext) }}</div></template>
             </v-select>
         </div>
     </div>
