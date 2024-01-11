@@ -2,7 +2,7 @@
 namespace Chamilo\Libraries\Cache\Assetic;
 
 use Assetic\Filter\CssImportFilter;
-use Assetic\Filter\CSSMinFilter;
+//use Assetic\Filter\CSSMinFilter;
 use Chamilo\Libraries\File\ConfigurablePathBuilder;
 use Chamilo\Libraries\Format\Theme;
 use Chamilo\Libraries\Format\Utilities\CssFileAsset;
@@ -94,6 +94,7 @@ class StylesheetCacheService extends AsseticCacheService
      */
     protected function getAssetFilters()
     {
-        return array(new CssImportFilter(), new CSSMinFilter());
+        return array(new CssImportFilter());
+        //return array(new CssImportFilter(), new CSSMinFilter());
     }
 }
