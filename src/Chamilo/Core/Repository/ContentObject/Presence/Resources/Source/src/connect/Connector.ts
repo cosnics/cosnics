@@ -184,7 +184,7 @@ export default class Connector {
             } else {
                 throw { 'type': 'Unknown' };
             }
-        } catch (err) {
+        } catch (err: any) {
             let error: any;
             if (err?.isAxiosError && err.message?.toLowerCase().indexOf('timeout') !== -1) {
                 error = { 'type': 'Timeout' };

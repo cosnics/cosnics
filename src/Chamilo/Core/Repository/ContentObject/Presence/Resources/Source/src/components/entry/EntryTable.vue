@@ -376,7 +376,7 @@ export default class EntryTable extends Vue {
     }
 
     created() {
-        this.$parent.$on('refresh', () => {
+        this.$parent?.$on('refresh', () => {
             if (this.isFullyEditable) {
                 (this.$refs.table as any).refresh();
             }

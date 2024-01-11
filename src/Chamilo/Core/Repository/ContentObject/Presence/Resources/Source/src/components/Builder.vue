@@ -482,6 +482,10 @@ export default class Builder extends Vue {
     color: #727879;
 }
 
+.table.mod-presence th, .table.mod-presence td {
+    padding: .5rem;
+}
+
 .table-body-row:first-child td {
     background: linear-gradient(to bottom, #e3eaed 0, rgba(255, 255, 255, 0) 4px);
     border-top: 0;
@@ -1166,11 +1170,11 @@ export default class Builder extends Vue {
 </style>
 <style>
 .tbl-sort-option {
-    background-position: right calc(.75rem / 2) center;
+    background-position: right calc(.46875rem / 2) center;
     background-repeat: no-repeat;
     background-size: .65em 1em;
     cursor: pointer;
-    padding-right: calc(.75rem + .85em);
+    padding-right: calc(.46875rem + .85em);
     pointer-events: all;
 }
 

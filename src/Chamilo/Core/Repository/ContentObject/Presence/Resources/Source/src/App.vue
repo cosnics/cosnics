@@ -222,11 +222,11 @@ button.btn {
 
 .banner-header {
     color: #fff;
-    font-size: 2.2rem;
+    font-size: 1.75rem;
     margin: 0;
 }
 
-.presence-builder {
+.banner + div {
     margin: 25px 20px 20px;
 }
 </style>

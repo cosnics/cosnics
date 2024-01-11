@@ -28,7 +28,7 @@
             <div id="lbl-bulk" class="u-flex u-justify-content-start u-align-items-center msg-text u-cursor-pointer">{{ $t('set-students-without-status') }}
                 <i class="fa fa-chevron-right" aria-hidden="true" style="color: #999; margin-left: 3px"></i></div>
             <b-popover target="lbl-bulk" triggers="hover" placement="rightbottom">
-                <div class="p-8">
+                <div class="p-08">
                     <div class="u-flex u-gap-small u-flex-wrap mb-12" role="radiogroup" aria-labelledby="lbl-bulk">
                         <button v-for="(status, index) in presenceStatuses" :key="`status-${index}`" :title="getPresenceStatusTitle(status)"
                                 class="color-code mod-selectable" :class="[status.color, selectedStatus === status ? 'mod-shadow is-selected' : 'mod-shadow-grey']"
@@ -37,8 +37,8 @@
                             <span>{{ status.code }}</span></button>
                     </div>
                     <div class="u-flex u-gap-small u-justify-content-end">
-                        <button class="btn btn-primary btn-sm px-8 py-2" @click="apply" :disabled="selectedStatus === null">{{ $t('apply') }}</button>
-                        <button class="btn btn-default btn-sm px-8 py-2" @click="cancel">{{ $t('cancel') }}</button>
+                        <button class="btn btn-primary btn-sm px-08 py-02" @click="apply" :disabled="selectedStatus === null">{{ $t('apply') }}</button>
+                        <button class="btn btn-default btn-sm px-08 py-02" @click="cancel">{{ $t('cancel') }}</button>
                     </div>
                 </div>
             </b-popover>
@@ -99,20 +99,20 @@ export default class PeriodMenu extends Vue {
     font-size: 13px;
     line-height: 16px;
 }
-.mb-6 {
+.mb-06 {
     margin-bottom: 6px;
 }
 .mb-12 {
     margin-bottom: 12px;
 }
-.p-8 {
+.p-08 {
     padding: 8px;
 }
-.px-8 {
+.px-08 {
     padding-left: 8px;
     padding-right: 8px;
 }
-.py-2 {
+.py-02 {
     padding-top: 2px;
     padding-bottom: 2px;
 }

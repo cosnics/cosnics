@@ -3,7 +3,7 @@
             @focus="$emit('select')" v-model="status.aliasses">
         <option v-for="(statusDefault, index) in fixedStatusDefaults" :key="`fs-${index}`" :value="statusDefault.id">{{ statusDefault.title }}</option>
     </select>
-    <template v-else>{{ aliasTitle }}</template>
+    <span v-else>{{ aliasTitle }}</span>
 </template>
 
 <script lang="ts">

@@ -85,7 +85,7 @@
                                          :statistics="statistics"></periods-stats-table>
                     <div v-if="!creatingNew" class="lds-ellipsis" aria-hidden="true"><div></div><div></div><div></div><div></div></div>
                 </div>
-                <div v-if="paginationShown" class="pagination-container u-flex u-justify-content-end">
+                <div v-if="paginationShown" class="pagination-container u-flex u-justify-content-end my-3">
                     <b-pagination v-model="pagination.currentPage" :total-rows="pagination.total" :per-page="pagination.perPage"
                                   aria-controls="course-students" :disabled="changeAfterStatusFilters"></b-pagination>
                     <ul class="pagination">
@@ -522,7 +522,7 @@ export default class Entry extends Vue {
 }
 
 .color-code.mod-shadow.is-selected {
-    box-shadow: 0 0 0 .2rem var(--selected-color);
+    box-shadow: 0 0 0 .125rem var(--selected-color);
 }
 
 .color-code.mod-shadow-grey:hover {

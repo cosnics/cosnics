@@ -34,9 +34,9 @@
 </i18n>
 
 <template>
-    <template v-if="errorData.type === 'NoTitleGiven'">
+    <span v-if="errorData.type === 'NoTitleGiven'">
         {{ $t('error-NoTitleGiven') }} <span class="u-block">{{ errorData.status }}</span> {{ $t('changes-not-saved') }}
-    </template>
+    </span>
     <span v-else-if="!!errorData.status">{{ $t('error-' + errorData.type, {title: errorData.status.title}) }} {{ $t('changes-not-saved') }}</span>
     <span v-else>{{ $t('error-' + errorData.type) }}</span>
 </template>

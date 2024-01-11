@@ -30,7 +30,7 @@ export default class SaveControl extends Vue {
 
 <style>
 .btn.mod-presence-save {
-    font-size: 1.7rem;
+    font-size: 1.0625rem;
     line-height: 1.6;
 }
 

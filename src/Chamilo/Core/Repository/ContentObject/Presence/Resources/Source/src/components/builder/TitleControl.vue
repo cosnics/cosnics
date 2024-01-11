@@ -1,7 +1,7 @@
 <template>
     <b-input v-if="isEditable" type="text" required v-model="status.title" autocomplete="off" :disabled="disabled"
              class="mod-input mod-trans mod-pad" @focus="$emit('select')"/>
-    <template v-else>{{ statusTitle }}</template>
+    <span v-else>{{ statusTitle }}</span>
 </template>
 
 <script lang="ts">
