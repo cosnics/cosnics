@@ -44,7 +44,7 @@
 
     .section-title {
         color: #507177;
-        font-size: 2rem;
+        font-size: 1.25rem;
         font-weight: 500;
         margin-right: 15px;
     }
@@ -72,7 +72,7 @@
     #feedback h3:not(.section-title) {
         color: #507177;
         display: inline-block;
-        font-size: 1.75rem;
+        font-size: 1.09375rem;
         margin: 5px 0 15px 15px;
     }
 
@@ -87,7 +87,7 @@
     }
 
     #score_score {
-        font-size: 1.3rem;
+        font-size: .8125rem;
         height: initial;
         line-height: 1.5;
         padding: 5px 10px;
@@ -96,12 +96,12 @@
     .btn.mod-save-score {
         margin-left: 5px;
         margin-right: 5px;
-        font-size: 1.3rem;
+        font-size: .8125rem;
         line-height: 1.5;
         padding: 5px 10px;
     }
     .btn.mod-mark {
-        font-size: 1.3rem;
+        font-size: .8125rem;
         padding-top: 3px;
     }
 
@@ -128,7 +128,7 @@
     }
     .alert-important .fa {
         color: #31708f;
-        font-size: 1.8rem;
+        font-size: 1.125rem;
         margin-right: 5px;
     }
     .alert-important strong {
@@ -243,12 +243,16 @@
         margin-top: -5px;
     }
     #feedback > .form-row.row > .form-label {
+        flex: 1;
         font-weight: 500;
+        max-width: initial;
         padding: 0;
+        text-align: left;
         transform: translateY(2px);
         width: initial;
     }
     #feedback > .form-row.row > .formw {
+        flex: 0;
         padding: 0;
         width: initial;
     }
@@ -408,8 +412,8 @@
             <div class="title-underline-fw">
                 <div class="u-flex u-align-items-baseline">
                     <h3 class="section-title u-inline-block">Score{% if PRESENCE_STATUS != 'neutral' %}:{% endif %}</h3>
-                    {% if PRESENCE_STATUS == 'present' %}<span style="background: #eafbed;color: #027e69;font-size: 2rem;padding: 0 5px 2px;font-weight: 500;border-radius: 3px;margin-left: -5px;">{{ SCORE|raw }}%</span>{% endif %}
-                    {% if PRESENCE_STATUS == 'absent' %}<span style="background: #437f7e;color: #fff;font-size: 1.8rem;padding: 0 5px 2px;font-weight: 500;border-radius: 3px;margin-left: -5px;">{{ 'MarkedAsAbsent'|trans({}, appContext) }}</span>{% endif %}
+                    {% if PRESENCE_STATUS == 'present' %}<span style="background: #eafbed;color: #027e69;font-size: 1.25rem;padding: 0 5px 2px;font-weight: 500;border-radius: 3px;margin-left: -5px;">{{ SCORE|raw }}%</span>{% endif %}
+                    {% if PRESENCE_STATUS == 'absent' %}<span style="background: #437f7e;color: #fff;font-size: 1.125rem;padding: 0 5px 2px;font-weight: 500;border-radius: 3px;margin-left: -5px;">{{ 'MarkedAsAbsent'|trans({}, appContext) }}</span>{% endif %}
                 </div>
             </div>
             {% if PRESENCE_STATUS == 'neutral' %}

@@ -120,11 +120,11 @@
     }
 
     .tbl-sort-option {
-        background-position: right calc(.75rem / 2) center;
+        background-position: right calc(.46875rem / 2) center;
         background-repeat: no-repeat;
         background-size: .65em 1em;
         cursor: pointer;
-        padding-right: calc(.75rem + .85em);
+        padding-right: calc(.46875rem + .85em);
         pointer-events: all;
     }
     .tbl-sort-option[aria-sort=none] {
@@ -144,19 +144,19 @@
     }
     .table.is-scores-editable td.table-score {
         padding: 5px 8px;
-        width: 8rem;
+        width: 6.5rem;
     }
     td.table-rubric {
         text-align: center;
         color: #5a9695;
     }
     input.form-control.mod-score {
-        border-radius: .2rem;
-        font-size: 1.3rem;
-        height: calc(1.5em + .5rem + 2px);
+        border-radius: .125rem;
+        font-size: .8125rem;
+        height: calc(1.5em + .3125rem + 2px);
         line-height: 1.5;
         min-width: 46px;
-        padding: .25rem .5rem;
+        padding: .15625rem .3125rem;
     }
 
     .btn.mod-presence {
@@ -280,7 +280,7 @@
     }
     .panel-feedback h3 {
         color: #507177;
-        font-size: 2rem;
+        font-size: 1.25rem;
     }
     .panel-feedback .list-group-item {
         padding-top: 20px;
@@ -556,7 +556,7 @@
     .save-error-msg {
         background: #cc2424;
         color: #fff;
-        font-size: 1.3rem;
+        font-size: .21667rem;
         font-weight: 700;
         line-height: 1.3em;
         max-width: 70ch;
@@ -639,7 +639,7 @@
                                 <div class="action-bar input-group">
                                     <b-form-input class="form-group action-bar-search" v-model="globalSearchQuery" @input="onFilterChanged"
                                                   type="text" placeholder="{{ 'Search'|trans({}, appContext) }}" debounce="750" autocomplete="off"></b-form-input>
-                                    <div class="input-group-btn">
+                                    <div class="input-group-append">
                                         <button name="clear" class="btn btn-default" value="clear" @click="onFilterCleared">
                                             <span class="glyphicon glyphicon-remove" aria-hidden="true"></span>
                                         </button>
@@ -703,7 +703,7 @@
                         </b-table>
                         <div class="lds-ellipsis" aria-hidden="true"><div></div><div></div><div></div><div></div></div>
                     </div>
-                    <div class="pagination-container u-flex u-justify-content-end">
+                    <div class="pagination-container u-flex u-justify-content-end my-3">
                         <b-pagination v-model="pagination.currentPage" :total-rows="pagination.total" :per-page="pagination.perPage"
                                       aria-controls="data-table"></b-pagination>
                         <ul class="pagination">
@@ -715,14 +715,13 @@
                     <div class="lds-ellipsis" aria-hidden="true"><div></div><div></div><div></div><div></div></div>
                 </div>
                 <div v-if="feedbackEntity" class="panel panel-default panel-feedback u-flex-grow-1">
-                    <div class="u-flex"><h3>Feedback</h3><a class="btn btn-sm" @click.prevent="closeFeedback">{{ 'Close'|trans({}, commonContext) }}</a></div>
+                    <div class="u-flex u-align-items-baseline" style="gap: 5px"><h3>Feedback</h3><a class="btn-sm" @click.prevent="closeFeedback" style="cursor: pointer">{{ 'Close'|trans({}, commonContext) }}</a></div>
                     <div class="list-group">
                         <div v-for="item in feedback" :key="item.id" class="list-group-item">
                             <div class="u-flex">
                                 <img class="panel-feedback-profile" :src="item.photo" />
                                 <h4 class="list-group-item-heading u-flex-grow-2">${item.user}<div class="feedback-date">${item.date}</div>
-                                    <div v-if="item.isPrivate" style="margin-top: -2px;"><i class="glyphicon glyphicon-eye-close" style="color: #d35555;font-size: 1.2rem;"></i><em style="font-size: 11px;margin-left: 4px;color: #777;">{{ 'IsPrivate'|trans({}, 'Chamilo\\Core\\Repository\\Feedback') }}</em></div>
-                                </h4>
+                                    <div v-if="item.isPrivate" style="margin-top: -2px;"><i class="glyphicon glyphicon-eye-close" aria-hidden="true" style="color: #d35555;font-size: .75rem;"></i><em style="font-size: 11px;margin-left: 4px;color: #777;">{{ 'IsPrivate'|trans({}, 'Chamilo\\Core\\Repository\\Feedback') }}</em></div>                                </h4>
                             </div>
                             <div class="list-group-item-text feedback-content" v-html="item.content"></div>
                         </div>
@@ -731,7 +730,7 @@
                             <div class="u-flex-1">
                                 <h4 class="feedback-new-heading">{{ 'AddFeedback'|trans({}, 'Chamilo\\Core\\Repository\\Feedback') }}</h4>
                                 <textarea class="feedback-new-input form-control" name="comment" v-model="newFeedback"></textarea>
-                                <div class="u-flex u-gap-small"><input type="checkbox" v-model="isFeedbackPrivate" id="is_private" name="is_private" /><label for="#is_private">{{ 'IsPrivate'|trans({}, 'Chamilo\\Core\\Repository\\Feedback') }}</label></div>
+                                <div class="u-flex u-gap-small"><input type="checkbox" v-model="isFeedbackPrivate" id="is_private" name="is_private" /><label for="#is_private" class="m-0">{{ 'IsPrivate'|trans({}, 'Chamilo\\Core\\Repository\\Feedback') }}</label></div>
                                 <button class="btn btn-default mod-save-feedback" @click="createFeedback">{{ 'Save'|trans({}, commonContext) }}</button>
                             </div>
                         </div>
