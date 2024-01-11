@@ -56,6 +56,7 @@ abstract class ItemComponent extends Manager implements DelegateComponent
         $html = array();
         
         $html[] = parent::render_header();
+        $html[] = '<div class="row">';
         $html[] = '<div class="col col-sm-4 col-md-3">';
         
         if ($this->get_parent() instanceof PortfolioComplexRights &&
@@ -116,7 +117,8 @@ abstract class ItemComponent extends Manager implements DelegateComponent
     public function render_footer()
     {
         $html = array();
-        
+
+        $html[] = '</div>';
         $html[] = '</div>';
         $html[] = '<div class="clearfix"></div>';
         $html[] = parent::render_footer();
