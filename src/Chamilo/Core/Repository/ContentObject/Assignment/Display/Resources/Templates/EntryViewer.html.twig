@@ -130,25 +130,20 @@
                 </div>
 
                 {% if SHOW_COMPACT_FEEDBACK %}
-                <div class="col-lg-5">
+                <div class="col-lg-5 mt-3">
                     {% else %}
-                    <div class="col">
+                    <div class="col mt-3">
                         {% endif %}
                         {{ PARTS_EXTENSION|raw }}
                         <div class="row">
                             <div class="col" id="score">
                                 {% if CAN_EDIT_ASSIGNMENT %}
-                                    <h3 class="title-underlined">{{ 'ScoreEntry'|trans({}, appContext) }}</h3>
-                                    <style> label {
-                                            margin-bottom: 5px !important;
-                                        }
-                                    </style>
+                                    <h3 class="title-underlined mt-4">{{ 'ScoreEntry'|trans({}, appContext) }}</h3>
                                     {% if SCORE_FORM is defined %}
-                                        {% form_theme SCORE_FORM 'bootstrap_3_layout.html.twig' %}
+                                        {% form_theme SCORE_FORM 'bootstrap_4_layout.html.twig' %}
                                         {{ form_start(SCORE_FORM, { 'attr': {'class': 'form-inline'} }) }}
-                                        {{ form_row(SCORE_FORM.score) }}
-                                        <button type="submit" class="btn btn-default btn-score"
-                                                style="margin-left: 20px;">{{ 'Save'|trans({}, commonContext) }}</button>
+                                        {{ form_row(SCORE_FORM.score, { 'label_attr': {'class': 'mr-2'}, 'attr': {'class': 'form-control', 'autocomplete': 'off'} }) }}
+                                        <button type="submit" class="btn btn-default btn-score ml-2">{{ 'Save'|trans({}, commonContext) }}</button>
                                         {{ form_end(SCORE_FORM) }}
                                     {% endif %}
                             {% endif %}
@@ -217,9 +212,9 @@
                                     </div>
                                     <div class="panel-body"!-->
                                 {% if CAN_EDIT_ASSIGNMENT %}
-                                    <h3 id="corrected-versions" class="title-underlined">{{ 'CorrectedVersions'|trans({}, appContext) }}</h3>
+                                    <h3 id="corrected-versions" class="title-underlined {% if not HAS_RUBRIC %}mt-4{% endif %}">{{ 'CorrectedVersions'|trans({}, appContext) }}</h3>
                                 {% elseif ATTACHED_CONTENT_OBJECTS|length > 0 %}
-                                    <h3 id="corrected-versions" class="title-underlined">{{ 'CorrectedVersions'|trans({}, appContext) }}</h3>
+                                    <h3 id="corrected-versions" class="title-underlined {% if not HAS_RUBRIC %}mt-4{% endif %}">{{ 'CorrectedVersions'|trans({}, appContext) }}</h3>
                                 {% endif %}
 
                                 <div id="droppy" {% if CAN_EDIT_ASSIGNMENT %} class="droppy-upload" {% endif %}>
@@ -259,13 +254,13 @@
 
                         <div class="row">
                             <div class="col" id="feedback">
-                                <h3 class="title-underlined">Feedback</h3>
+                                <h3 class="title-underlined mt-4">Feedback</h3>
                                 {{ FEEDBACK_MANAGER|raw }}
                             </div>
                         </div>
                         <div class="row">
                             <div class="col" id="feedback">
-                                <h3 class="title-underlined">{{ 'QRCODE'|trans({}, appContext) }}</h3>
+                                <h3 class="title-underlined mt-4">{{ 'QRCODE'|trans({}, appContext) }}</h3>
                                 <div class="text-center">
                                     <img src="{{ QR_CODE|raw }}" alt="qr-code">
                                 </div>
