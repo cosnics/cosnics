@@ -18,11 +18,11 @@
         flex-direction: column;
 
         h1 {
-            font-size: 2rem;
+            font-size: 1.25rem;
         }
 
         .rubric-demo-item {
-            font-size: 1.7rem;
+            font-size: 1.0625rem;
             margin: .5em 0;
             background: #e0e0e0;
             width: 10em;
@@ -33,7 +33,7 @@
             text-decoration: none;
 
             .fa {
-                font-size: 1.4rem;
+                font-size: .875rem;
                 margin-right: .4em;
             }
 

@@ -137,12 +137,12 @@
     .formatting-help {
         border-left: 1px solid #ddd;
         flex-basis: 40%;
-        margin-left: 1rem;
-        padding-left: 1rem;
+        margin-left: .625rem;
+        padding-left: .625rem;
 
         hr {
             margin-top: 0;
-            margin-bottom: .5rem;
+            margin-bottom: .3125rem;
             border-color: #ccc;
         }
 
@@ -153,8 +153,8 @@
         }
 
         ul, ol {
-            margin-top: .5rem;
-            padding-left: 2rem;
+            margin-top: .3125rem;
+            padding-left: 1.25rem;
         }
     }
 </style>

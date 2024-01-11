@@ -134,44 +134,44 @@
     border-radius: 3px;
     display: flex;
     flex-direction: column;
-    padding: 1rem 1rem 0;
+    padding: .625rem .625rem 0;
 }
 
 .treenode-evaluator-meta {
     align-items: baseline;
     display: flex;
-    gap: 1rem;
+    gap: .625rem;
     justify-content: space-between;
 
     &.mod-btm {
-        margin-bottom: 1rem;
+        margin-bottom: .625rem;
     }
 }
 
 .treenode-evaluator-name {
     color: #486d84;
     display: block;
-    font-size: 1.6rem;
+    font-size: 1rem;
     font-weight: 700;
     line-height: 1;
-    padding: .2rem 0 0;
+    padding: .125rem 0 0;
 }
 
 .treenode-evaluator-date {
     color: #51788c;
-    font-size: 1.2rem;
+    font-size: .75rem;
     font-weight: 400;
 }
 
 .treenode-evaluator-score {
-    font-size: 1.55rem;
+    font-size: .96875rem;
     white-space: nowrap;
 }
 
 .treenode-evaluator-rel-score {
     border-bottom: 1px dotted #999;
     line-height: 1.2;
-    margin-left: .5rem;
+    margin-left: .3125rem;
     pointer-events: all;
     white-space: nowrap;
 }
@@ -179,7 +179,7 @@
 .treenode-evaluator-level-title {
     font-weight: 700;
     line-height: 1.4;
-    margin-bottom: 1rem;
+    margin-bottom: .625rem;
     pointer-events: all;
 
     &.mod-pointer {
@@ -188,12 +188,12 @@
 }
 
 .treenode-evaluator-score-range {
-    margin-top: -1rem;
-    margin-bottom: 1rem;
+    margin-top: -.625rem;
+    margin-bottom: .625rem;
 
     .fa-caret-right {
         color: #666;
-        margin: 0 -.25rem;
+        margin: 0 -.15625rem;
     }
 }
 
@@ -208,7 +208,7 @@
     border-top: 1px dotted #bdd7db;
     margin-bottom: 10px;
     margin-top: 0;
-    padding: .6rem 1.3rem;
+    padding: .374rem .8125rem;
     position: relative;
 }
 </style>
@@ -221,18 +221,18 @@
 .level-txt {
     color: #808080;
     font-weight: 700;
-    margin-top: .25rem;
+    margin-top: .15625rem;
 }
 
 .fa-percent {
-    font-size: 1.1rem;
+    font-size: .6875rem;
     color: #666;
 }
 
 .fa-comment {
     color: #f6f7f8;
     font-size: 24px;
-    left: -1.7rem;
+    left: -1.0625rem;
     position: absolute;
     top: 4px;
 }
@@ -240,7 +240,7 @@
 .fa-comment-o {
     color: #c9dbde;
     font-size: 24px;
-    left: -1.7rem;
+    left: -1.0625rem;
     position: absolute;
     top: 4px;
 }

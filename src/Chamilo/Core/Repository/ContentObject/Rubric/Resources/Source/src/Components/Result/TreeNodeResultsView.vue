@@ -25,8 +25,8 @@
         <div class="selected-treenode-wrapper">
             <button class="btn-info-close" :aria-label="$t('close')" :title="$t('close')" @click="$emit('close')"><i aria-hidden="true" class="fa fa-close"/></button>
             <div class="selected-treenode-results">
-                <div style="display: flex; flex-direction: row-reverse; gap: .75rem; margin-bottom: 1rem;">
-                    <div style="width: 3.5rem;pointer-events:all">
+                <div style="display: flex; flex-direction: row-reverse; gap: .46875rem; margin-bottom: .625rem;">
+                    <div style="width: 2.1875rem;pointer-events:all">
                         <div class="onoffswitch mod-only-feedback">
                             <input type="checkbox" v-model="showWithFeedbackOnly" @input="showWithFeedbackOnly = !showWithFeedbackOnly" class="onoffswitch-checkbox" id="onoffswitch-feedback-only">
                             <label class="onoffswitch-label" for="onoffswitch-feedback-only">
@@ -189,7 +189,7 @@
 
     .selected-treenode-results-title {
         color: hsla(191, 41%, 38%, 1);
-        font-size: 1.4rem;
+        font-size: .875rem;
         font-weight: 700;
         line-height: 1.3em;
         margin-bottom: .5em;
@@ -207,8 +207,8 @@
     .results-details  {
         display: flex;
         flex-direction: column;
-        gap: 1rem;
-        margin-left: -.5rem;
+        gap: .625rem;
+        margin-left: -.3125rem;
         margin-top: 20px;
         max-width: 500px;
     }
@@ -225,8 +225,8 @@
     }
 
     .fa-percent {
-        font-size: 1.1rem;
+        font-size: .6875rem;
         color: #777;
-        margin-left: .2rem;
+        margin-left: .125rem;
     }
 </style>

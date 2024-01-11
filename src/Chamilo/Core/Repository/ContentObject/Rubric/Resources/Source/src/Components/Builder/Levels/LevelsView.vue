@@ -73,7 +73,7 @@
 <style lang="scss" scoped>
     .title {
         color: #666;
-        font-size: 2.2rem;
+        font-size: 1.375rem;
         margin-left: .25em;
         margin-top: .3em;
     }

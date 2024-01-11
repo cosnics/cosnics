@@ -143,7 +143,7 @@
         background: #fafafa;
         border-bottom: 1px solid #e0e0e0;
         border-radius: $border-radius;
-        margin-bottom: .7rem;
+        margin-bottom: .4375rem;
 
         &.mod-empty-description {
             border-bottom: 1px solid #f0f0f0;
@@ -157,14 +157,14 @@
         border-bottom-color: $score-light;
         border-radius: $border-radius;
         display: flex;
-        gap: 1rem;
+        gap: .625rem;
         justify-content: space-between;
-        padding: .1rem .6rem;
+        padding: .0625rem .375rem;
         transition: 200ms background;
         width: 100%;
 
         .fa-percent {
-            font-size: 1rem;
+            font-size: .625rem;
             margin-left: 0;
             opacity: .6;
         }
@@ -213,19 +213,19 @@
 
     .treenode-level-title {
         display: block;
-        font-size: 1.3rem;
-        line-height: 1.8rem;
-        padding: .25rem 0;
+        font-size: .8125rem;
+        line-height: 1.125rem;
+        padding: .15625rem 0;
     }
 
     .treenode-level-score {
-        font-size: 1.8rem;
+        font-size: 1.125rem;
         white-space: nowrap;
     }
 
     .fa-caret-right {
-        font-size: 1.5rem;
-        margin: 0 -.25rem;
+        font-size: .9375rem;
+        margin: 0 -.15625rem;
     }
 
     .treenode-level:not(.is-selected) .treenode-level-score {
@@ -261,11 +261,11 @@
         border-radius: 3px;
         box-shadow: hsla(204, 38%, 34%, .2) 0 5px 15px;
         display: flex;
-        gap: .75rem;
+        gap: .46875rem;
         height: 44px;
         justify-content: center;
         left: calc(50% - 100px);
-        padding: 1rem;
+        padding: .625rem;
         position: absolute;
         top: 3px;
         width: 200px;
@@ -321,7 +321,7 @@
 
     @media only screen and (min-width: 680px) {
         .treenode-level.mod-fixed-levels {
-            height: 2.7rem;
+            height: 1.6875rem;
             justify-content: center;
         }
 

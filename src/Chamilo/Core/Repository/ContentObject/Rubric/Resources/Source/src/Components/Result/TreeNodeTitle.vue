@@ -79,7 +79,7 @@
     .treenode-title-header-wrap {
         align-items: center;
         display: flex;
-        min-height: 2.7rem;
+        min-height: 1.6875rem;
         position: relative;
 
         @include hover-style();
@@ -99,11 +99,11 @@
     }
 
     .treenode-title {
-        max-width: 22.2rem;
+        max-width: 13.875rem;
         z-index: 1;
     }
 
     .criterium-title.mod-no-category {
-        margin-left: .25rem;
+        margin-left: .15625rem;
     }
 </style>

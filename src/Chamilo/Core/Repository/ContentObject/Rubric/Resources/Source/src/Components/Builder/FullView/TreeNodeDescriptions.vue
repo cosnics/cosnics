@@ -96,13 +96,13 @@
         border: 1px solid transparent;
         border-bottom-color: $score-light;
         border-radius: $border-radius;
-        padding: .1rem .6rem;
+        padding: .0625rem .375rem;
         transition: 200ms background;
         width: 100%;
     }
 
     .fa-percent {
-        font-size: 1rem;
+        font-size: .625rem;
         margin-left: 0;
         opacity: .6;
     }
@@ -116,12 +116,12 @@
     .treenode-level.mod-scores {
         align-items: flex-start;
         display: flex;
-        gap: 1rem;
+        gap: .625rem;
         justify-content: space-between;
 
         .fa-caret-right {
             color: #adadad;
-            font-size: 1.5rem;
+            font-size: .9375rem;
         }
     }
 
@@ -131,13 +131,13 @@
 
     .treenode-level-title {
         display: block;
-        font-size: 1.3rem;
-        line-height: 1.8rem;
-        padding: .25rem 0;
+        font-size: .8125rem;
+        line-height: 1.125rem;
+        padding: .15625rem 0;
     }
 
     .treenode-level-score {
-        font-size: 1.8rem;
+        font-size: 1.125rem;
         white-space: nowrap;
     }
 

@@ -40,7 +40,7 @@
         border-radius: $border-radius;
         padding: 2px 8px;
         align-items: center;
-        height: 2.9rem;
+        height: 1.8125rem;
         /*border-color: transparent;*/
 
         &:focus {
@@ -61,8 +61,8 @@
     }
     .svg.show-split-view {
         outline: none;
-        width: 1.3rem;
-        height: 1.3rem;
+        width: .8125rem;
+        height: .8125rem;
         transform: scale(1.75, 1);
     }
     #path-1, #path-2 {

@@ -250,7 +250,7 @@
 
         &::before {
             font-family: FontAwesome;
-            font-size: 1.4rem;
+            font-size: .875rem;
             content: '\f057'
         }
     }
@@ -408,7 +408,7 @@
         border-color: transparent;
         border-radius: $border-radius;
         color: #777;
-        font-size: 1.8rem;
+        font-size: 1.125rem;
         margin: 1em 0 .2em;
         padding: 4px 6px;
         transition: background-color 200ms, color 200ms;
@@ -503,7 +503,7 @@
 
     .b-cluster-selected-title {
         border-bottom: 2px solid $cluster-color-border-selected;
-        font-size: 2.3rem;
+        font-size: 1.4375rem;
         margin-top: 0.5em;
         padding: 0 0.15em 0.1em;
     }
@@ -524,7 +524,7 @@
     .b-category-title {
         color: hsla(190, 50%, 29%, 1);
         display: inline-block;
-        font-size: 1.4rem;
+        font-size: .875rem;
         line-height: 1.3em;
         margin: 0;
         max-width: 75ch;
@@ -593,7 +593,7 @@
         border-bottom: 1px solid hsla(193, 14%, 85%, 1);
         border-left: 1px solid hsla(193, 14%, 82%, 1);
         border-right: 1px solid hsla(193, 14%, 82%, 1);
-        font-size: 1.3rem;
+        font-size: .8125rem;
         position: relative;
     }
 
@@ -615,7 +615,7 @@
 
     .b-criterium-title {
         color: hsla(204, 45%, 25%, 1);
-        font-size: 1.3rem;
+        font-size: .8125rem;
         font-weight: 400;
         line-height: 1.3em;
         margin: 0;
@@ -634,7 +634,7 @@
         border: 1px solid transparent;
         border-radius: $border-radius;
         color: darken($btn-color, 25%);
-        font-size: 1.25rem;
+        font-size: .78125rem;
         transition: color 200ms;
         white-space: nowrap;
 
@@ -642,7 +642,7 @@
             color: darken($btn-color, 15%);
             content: '\f067';
             font-family: FontAwesome;
-            font-size: 1.1rem;
+            font-size: .6875rem;
             margin-right: .4em;
         }
 
@@ -726,13 +726,13 @@
 
         label {
             border: 1px solid transparent;
-            font-size: 1.3rem;
+            font-size: .8125rem;
             font-weight: 700;
             margin-bottom: 0;
         }
 
         .input-detail {
-            font-size: 1.5rem;
+            font-size: .9375rem;
             height: 1.9em;
             line-height: 1.3em;
             margin-left: -.35em;
@@ -744,17 +744,17 @@
 
     .criterium-path {
         display: none;
-        font-size: 1.2rem;
+        font-size: .75rem;
     }
 
     .criterium-weight {
-        font-size: 1.4rem;
+        font-size: .875rem;
         margin-top: .7em;
 
         label {
-            font-size: 1.3rem;
+            font-size: .8125rem;
             font-weight: 400;
-            margin-right: .75rem;
+            margin-right: .46875rem;
         }
 
         .input-detail {
@@ -797,7 +797,7 @@
         width: 3.8em;
 
         .input-detail {
-            font-size: 2.1rem;
+            font-size: 1.3125rem;
             text-align: right;
             width: 2.7em;
         }
@@ -1003,7 +1003,7 @@
             border-color: transparent;
             border-radius: $border-radius;
             color: #444;
-            font-size: 1.4rem;
+            font-size: .875rem;
             padding: .5em;
             text-align: left;
             transition: background-color 200ms, color 200ms;
@@ -1026,7 +1026,7 @@
 
             &::before {
               color: #666;
-              font-size: 1.2rem;
+              font-size: .75rem;
               margin-right: .35em;
               transition: color 200ms;
             }
@@ -1092,7 +1092,7 @@
             color: #777;
             cursor: pointer;
             display: flex;
-            font-size: 1.1rem;
+            font-size: .6875rem;
             height: 1.8em;
             justify-content: center;
             transition: all 200ms;
@@ -1161,7 +1161,7 @@
         .action-menu-list-item {
             border-radius: 0;
             cursor: pointer;
-            font-size: 1.3rem;
+            font-size: .8125rem;
             margin-right: 0;
             padding: .25em .5em;
             pointer-events: all;
@@ -1402,7 +1402,7 @@
             border: 1px solid hsla(197, 10%, 86%, 1);
             border-radius: $border-radius;
             color: hsla(200, 10%, 38%, 1);
-            font-size: 1.35rem;
+            font-size: 0.84375rem;
             padding: .3em 0 .4em .5em;
             white-space: nowrap;
 
@@ -1445,10 +1445,9 @@
             border-bottom-left-radius: 0;
             border-bottom-right-radius: 0;
 
-
             &.is-selected {
                 border-bottom-color: $bg-color;
-                height: 3.6rem;
+                height: 2.25rem;
                 margin-bottom: 0;
             }
         }
@@ -1551,7 +1550,7 @@
             }
 
             .name-input .name-input-field.mod-textarea {
-                font-size: 1.33rem;
+                font-size: .83125rem;
             }
         }
 
@@ -1575,7 +1574,7 @@
         }
 
         .b-category-title {
-            font-size: 1.35rem;
+            font-size: 0.84375rem;
             flex: 1;
 
             &.mod-null-category-drag {
@@ -1683,7 +1682,7 @@
 
         .b-criterium-title {
             flex: 1;
-            min-height: 3.419rem;
+            min-height: 2.136875rem;
             padding: .7em 0 .7em 1em;
         }
 
@@ -1756,7 +1755,7 @@
         border-radius: 0;
         margin-bottom: 0;
         margin-left: 10px;
-        padding: 0.25rem 15px;
+        padding: .15625rem 15px;
 
         > a {
             display: block;
@@ -1765,8 +1764,8 @@
 
             > .fa-exclamation-circle {
                 color: #ff8f03;
-                font-size: 1.4rem;
-                margin-right: .35rem;
+                font-size: .875rem;
+                margin-right: .21875rem;
             }
         }
     }
@@ -1793,6 +1792,6 @@
     }
 
     .btn-strong.mod-confirm {
-        margin-bottom: .5rem;
+        margin-bottom: .3125rem;
     }
 </style>

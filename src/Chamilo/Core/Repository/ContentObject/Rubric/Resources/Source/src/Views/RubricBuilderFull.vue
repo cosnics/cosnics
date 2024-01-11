@@ -269,29 +269,29 @@
 
         + .fa-percent {
             color: rgb(129, 169, 177);
-            font-size: 1rem;
-            margin: 0 .15rem;
+            font-size: .625rem;
+            margin: 0 .09375rem;
         }
     }
 
     .rubric.mod-bf {
-        grid-template-columns: minmax(max-content, 23rem) minmax(calc(var(--num-cols) * 15rem), calc(var(--num-cols) * 30rem));
+        grid-template-columns: minmax(max-content, 14.375rem) minmax(calc(var(--num-cols) * 9.375rem), calc(var(--num-cols) * 18.75rem));
     }
 
     .rubric.mod-bf.mod-weight {
-        grid-template-columns: minmax(max-content, 16.5rem) 6.7rem minmax(calc(var(--num-cols) * 15rem), calc(var(--num-cols) * 30rem));
+        grid-template-columns: minmax(max-content, 10.3125rem) 4.1875rem minmax(calc(var(--num-cols) * 9.375rem), calc(var(--num-cols) * 18.75rem));
     }
 
     .formatting-help.mod-bf {
         background: #fff;
         border: 1px solid #aaa;
-        margin-right: 1rem;
-        padding-right: 1rem;
-        padding-top: 1rem;
+        margin-right: .625rem;
+        padding-right: .625rem;
+        padding-top: .625rem;
         position: absolute;
         right: 0;
         top: 0;
-        width: 30rem;
+        width: 18.75rem;
         z-index: 1000;
     }
 
@@ -312,7 +312,7 @@
         border: 1px solid #d4d4d4;
         border-radius: $border-radius;
         flex: 1;
-        line-height: 1.8rem;
+        line-height: 1.125rem;
         padding: 0;
 
         &:hover {
@@ -341,7 +341,7 @@
 
     @media only screen and (max-width: 899px) {
         .rubric.mod-bf, .rubric.mod-bf.mod-weight {
-            grid-template-columns: minmax(calc(var(--num-cols) * 5rem), calc(var(--num-cols) * 30rem));
+            grid-template-columns: minmax(calc(var(--num-cols) * 3.125rem), calc(var(--num-cols) * 18.75rem));
         }
     }
 </style>
@@ -354,7 +354,7 @@
 
 <style lang="scss" scoped>
     .treenode-weight-header > span {
-        padding: 0.7rem 0;
+        padding: .4375rem 0;
         text-align: left;
     }
 
@@ -364,12 +364,12 @@
 
     @media only screen and (min-width: 900px) {
         .treenode-title-header {
-            padding-top: .6rem;
+            padding-top: .375rem;
         }
     }
 
     .cluster-sep {
         border-color: #deebee;
-        margin: 1rem 0 1.5rem;
+        margin: .625rem 0 .9375rem;
     }
 </style>

@@ -330,19 +330,19 @@
 <style lang="scss">
     .rubric {
         &.mod-scores {
-            grid-template-columns: minmax(max-content, 23rem) minmax(calc(var(--num-cols) * 15rem), calc(var(--num-cols) * 30rem)) 5.6rem;
+            grid-template-columns: minmax(max-content, 14.375rem) minmax(calc(var(--num-cols) * 9.375rem), calc(var(--num-cols) * 18.75rem)) 3.5rem;
         }
 
         &.mod-scores.mod-abs-weights {
-            grid-template-columns: minmax(max-content, 23rem) 7rem minmax(calc(var(--num-cols) * 15rem), calc(var(--num-cols) * 30rem)) 6.7rem;
+            grid-template-columns: minmax(max-content, 14.375rem) 4.375rem minmax(calc(var(--num-cols) * 9.375rem), calc(var(--num-cols) * 18.75rem)) 4.1875rem;
         }
 
         &.mod-scores.mod-rel-weights {
-            grid-template-columns: minmax(max-content, 23rem) 7rem minmax(calc(var(--num-cols) * 15rem), calc(var(--num-cols) * 30rem)) 8.3rem;
+            grid-template-columns: minmax(max-content, 14.375rem) 4.375rem minmax(calc(var(--num-cols) * 9.375rem), calc(var(--num-cols) * 18.75rem)) 5.1875rem;
         }
 
         &.mod-grades {
-            grid-template-columns: minmax(max-content, 23rem) minmax(calc(var(--num-cols) * 15rem), calc(var(--num-cols) * 30rem));
+            grid-template-columns: minmax(max-content, 14.375rem) minmax(calc(var(--num-cols) * 9.375rem), calc(var(--num-cols) * 18.75rem));
         }
     }
 
@@ -358,7 +358,7 @@
 
     .treenode-weight > .fa-percent {
         color: rgb(129, 169, 177);
-        font-size: 1rem;
+        font-size: .625rem;
     }
 
     .btn-show {
@@ -367,10 +367,10 @@
         color: #b3b3b3;
         cursor: pointer;
         display: flex;
-        height: 1.8rem;
+        height: 1.125rem;
         justify-content: center;
-        margin-left: .5rem;
-        width: 1.8rem;
+        margin-left: .3125rem;
+        width: 1.125rem;
 
         &:hover {
             color: #999;
@@ -413,21 +413,21 @@
     }
 
     .treenode-level-icon-check.fa {
-        font-size: 1.3rem;
+        font-size: .8125rem;
         opacity: 0.2;
         transition: opacity 200ms, font-size 200ms;
 
         &.is-selected {
-            font-size: 1.6rem;
+            font-size: 1rem;
             opacity: 1;
         }
     }
 
     .treenode-level-description {
         display: none;
-        font-size: 1.3rem;
-        line-height: 1.8rem;
-        padding: .35rem .65rem;
+        font-size: .8125rem;
+        line-height: 1.125rem;
+        padding: .21875rem .40625rem;
 
         > p, > em {
             margin: .2em 0;
@@ -447,14 +447,14 @@
         }
 
         ul, ol {
-            margin: 0 0 0 2rem;
+            margin: 0 0 0 1.25rem;
             padding: 0;
         }
     }
 
     .treenode-custom-feedback {
         align-self: center;
-        padding: .2rem;
+        padding: .125rem;
         /*z-index: 10;*/
     }
 
@@ -499,9 +499,9 @@
 
     .treenode-score-calc {
         border-radius: $border-radius;
-        font-size: 1.8rem;
-        line-height: 2.75rem;
-        padding-right: .5rem;
+        font-size: 1.125rem;
+        line-height: 1.71875rem;
+        padding-right: .3125rem;
         text-align: right;
 
         &.mod-criterium {
@@ -531,26 +531,26 @@
         }
 
         .fa-percent {
-            font-size: 1.1rem;
+            font-size: .6875rem;
             opacity: .65;
         }
     }
 
     @media only screen and (max-width: 899px) {
         .rubric.mod-scores {
-            grid-template-columns: minmax(calc(var(--num-cols) * 5rem), calc(var(--num-cols) * 30rem)) 5.6rem;
+            grid-template-columns: minmax(calc(var(--num-cols) * 3.125rem), calc(var(--num-cols) * 18.75rem)) 3.5rem;
         }
 
         .rubric.mod-scores.mod-abs-weights {
-            grid-template-columns: minmax(calc(var(--num-cols) * 5rem), calc(var(--num-cols) * 30rem)) 6.7rem;
+            grid-template-columns: minmax(calc(var(--num-cols) * 3.125rem), calc(var(--num-cols) * 18.75rem)) 4.1875rem;
         }
 
         .rubric.mod-scores.mod-rel-weights {
-            grid-template-columns: minmax(calc(var(--num-cols) * 5rem), calc(var(--num-cols) * 30rem)) 8.3rem;
+            grid-template-columns: minmax(calc(var(--num-cols) * 3.125rem), calc(var(--num-cols) * 18.75rem)) 5.1875rem;
         }
 
         .rubric.mod-grades {
-            grid-template-columns: minmax(calc(var(--num-cols) * 5rem), calc(var(--num-cols) * 30rem));
+            grid-template-columns: minmax(calc(var(--num-cols) * 3.125rem), calc(var(--num-cols) * 18.75rem));
         }
 
         .rubric-tools {
@@ -559,17 +559,17 @@
         }
 
         .rubric-entry-error {
-            padding-left: 1.8rem;
+            padding-left: 1.125rem;
         }
 
         .treenode-custom-feedback {
-            margin-left: 1.8rem;
+            margin-left: 1.125rem;
         }
     }
 
     @media only screen and (min-width: 680px) and (max-width: 899px) {
         .btn-show {
-            margin-left: -.5rem;
+            margin-left: -.3125rem;
             order: -1;
         }
     }
@@ -603,23 +603,23 @@
 
     @media only screen and (min-width: 900px) {
         .treenode-title-header {
-            padding-top: .6rem;
+            padding-top: .375rem;
         }
 
         .treenode-weight {
-            padding-top: .25rem;
+            padding-top: .15625rem;
             text-align: center;
         }
     }
 
     @media only screen and (min-width: 680px) and (max-width: 899px) {
         .treenode-title-header:not(.is-feedback-visible) .criterium-title {
-            margin-left: -.75rem;
+            margin-left: -.46875rem;
         }
 
         .btn-icon-show-feedback {
             background: white;
-            margin-left: .75rem;
+            margin-left: .46875rem;
         }
 
         .btn-show {
@@ -629,6 +629,6 @@
 
     .cluster-sep {
         border-color: #deebee;
-        margin: 1rem 0 1.5rem;
+        margin: .625rem 0 .9375rem;
     }
 </style>

@@ -21,7 +21,7 @@
   .u-markdown-criterium {
     & > ul, & > ol {
       margin: 0;
-      padding: 0 0 0 1.5rem;
+      padding: 0 0 0 .9375rem;
     }
 
     & > ul {
@@ -152,7 +152,7 @@
   .save-error-msg {
     background: hsla(0, 70%, 47%, 1);
     color: #fff;
-    font-size: 1.3rem;
+    font-size: .8125rem;
     font-weight: 700;
     line-height: 1.3em;
     max-width: 70ch;
@@ -165,8 +165,8 @@
     background-color: $bg-color;
     color: $text-color;
     font-family: Helvetica, Arial, sans-serif;
-    font-size: 1.3rem;
-    line-height: 2.3rem;
+    font-size: .8125rem;
+    line-height: 1.4375rem;
     padding-bottom: 1.5em;
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
@@ -188,7 +188,7 @@
       content: '\f06a';
       color: #009c7c;
       font-family: 'FontAwesome';
-      font-size: 1.8rem;
+      font-size: 1.125rem;
       display: inline-block;
       line-height: normal;
     }

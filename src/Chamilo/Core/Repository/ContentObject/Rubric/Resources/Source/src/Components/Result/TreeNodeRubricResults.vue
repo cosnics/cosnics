@@ -95,26 +95,26 @@
             }
 
             &::after {
-                border-right: .5rem solid hsla(215, 45%, 55%, 1);
+                border-right: .3125rem solid hsla(215, 45%, 55%, 1);
             }
         }
 
         &::before, &::after {
-            bottom: -.5rem;
+            bottom: -.3125rem;
             content: '';
             position: absolute;
-            top: -.5rem;
+            top: -.3125rem;
         }
 
         &::before {
-            right: -.7rem;
+            right: -.4375rem;
             left: 0;
             z-index: -1;
         }
 
         &::after {
-            right: -3rem;
-            width: 3rem;
+            right: -1.875rem;
+            width: 1.875rem;
         }
     }
 </style>
@@ -122,13 +122,13 @@
 <style lang="scss">
     .treenode-evaluation {
         &:not(:last-child) {
-            margin-right: .7rem;
+            margin-right: .4375rem;
         }
 
         &.mod-criterium-max.is-selected {
             border: 1px solid #dae1ec;
             background: #e1e7ef;
-            padding: .1rem .6rem;
+            padding: .0625rem .375rem;
         }
     }
 </style>

@@ -1,5 +1,5 @@
 <i18n>
-    {
+{
     "en": {
         "new-criteria-list": "New list of criteria",
         "no-criteria-yet": "No criteria yet",

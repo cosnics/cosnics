@@ -35,18 +35,18 @@
 <style lang="scss" scoped>
     .treenode-weight {
         cursor: default;
-        padding-top: .25rem;
+        padding-top: .15625rem;
         position: relative;
         text-align: center;
         z-index: 0;
 
         &::before {
-            bottom: -.5rem;
+            bottom: -.3125rem;
             content: '';
             left: 0;
             position: absolute;
-            right: -.7rem;
-            top: -.5rem;
+            right: -.4375rem;
+            top: -.3125rem;
             z-index: -1;
         }
 

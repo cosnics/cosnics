@@ -174,7 +174,7 @@
     import debounce from 'debounce';
     import DataConnector from '../../../Connector/DataConnector';
     import DOMPurify from 'dompurify';
-    import * as marked from 'marked';
+    import { marked } from 'marked';
 
     @Component({
         name: 'levels',
@@ -438,7 +438,7 @@
 
         .level-index {
             color: #406e8d;
-            font-size: 1.5rem;
+            font-size: .9375rem;
             text-align: right;
 
             @media only screen and (max-width: 490px) {
@@ -467,7 +467,7 @@
 
         .table-score {
             /*width: 5em;*/
-            width: 6rem;
+            width: 3.75rem;
             /*min-width: 6rem;*/
 
             &.mod-range {
@@ -569,9 +569,9 @@
             padding: 2px 5px;
 
             &.mod-num {
-                font-size: 1.7rem;
+                font-size: 1.0625rem;
                 padding: 0 5px;
-                width: 4.5rem;
+                width: 2.8125rem;
 
                 &:invalid {
                     border: 1px solid #e10505;
@@ -606,7 +606,7 @@
     }
 
     .criterium-level-input-area {
-        margin: -1rem 1rem 0 2.2rem;
+        margin: -.625rem .625rem 0 1.375rem;
     }
 
     .criterium-level-feedback[disabled] {
@@ -646,12 +646,12 @@
 
         .table .range-caret {
             align-self: start;
-            margin-left: .2rem;
-            margin-top: .1rem;
+            margin-left: .125rem;
+            margin-top: .0625rem;
         }
 
         .range-caret + input {
-            margin-left: 1rem;
+            margin-left: .625rem;
         }
     }
 </style>

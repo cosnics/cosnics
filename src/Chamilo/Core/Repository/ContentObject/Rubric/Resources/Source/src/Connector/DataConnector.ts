@@ -252,7 +252,7 @@ export default class DataConnector {
                 } else {
                     throw { 'code': ERROR_UNKNOWN };
                 }
-            } catch (err) {
+            } catch (err: any) {
                 let code: string;
                 if (err.isAxiosError && err.message?.toLowerCase().indexOf('timeout') !== -1) {
                     code = 'timeout';

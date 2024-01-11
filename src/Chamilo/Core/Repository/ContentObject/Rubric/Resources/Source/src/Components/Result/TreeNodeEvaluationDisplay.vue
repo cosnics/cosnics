@@ -100,12 +100,12 @@
 <style lang="scss" scoped>
     .m-not-scored {
         color: hsl(190, 33%, 50%);
-        font-size: 1.2rem;
+        font-size: .75rem;
         font-style: oblique;
     }
 
     >>> .fa-percent {
-        font-size: 1rem;
+        font-size: .625rem;
         opacity: .75;
     }
 
@@ -117,12 +117,12 @@
         border-radius: $border-radius;
         color: #666;
         flex: 1;
-        font-size: 1.6rem;
-        padding: .2rem .7rem;
+        font-size: 1rem;
+        padding: .125rem .4375rem;
         text-align: right;
 
         &.mod-grades {
-            font-size: 1.2rem;
+            font-size: .75rem;
             overflow: hidden;
             text-align: left;
             text-overflow: ellipsis;
@@ -174,7 +174,7 @@
                 background: none;
                 border-color: transparent;
                 border-bottom: 1px dashed hsla(190, 33%, 59%, .47);
-                padding: 0.05rem 0.7rem 0;
+                padding: .03125rem .4375rem 0;
             }
         }
 

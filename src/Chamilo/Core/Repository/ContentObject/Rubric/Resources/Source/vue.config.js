@@ -1,3 +1,9 @@
+function getProdExternals() {
+    return {
+        "vue-swatches": "vue-swatches"
+    };
+}
+
 module.exports = {
     chainWebpack: config => {
         config.module
@@ -5,20 +11,22 @@ module.exports = {
             .resourceQuery(/blockType=i18n/)
             .type('javascript/auto')
             .use('i18n')
-            .loader('@kazupon/vue-i18n-loader');
+            .loader('@intlify/vue-i18n-loader');
             /*.end();*/
     },
     configureWebpack: {
+        externals: process.env.NODE_ENV === 'production' ?
+            getProdExternals() : {}
     },
     devServer: {
-        disableHostCheck: true,
+        allowedHosts: 'all',
         host: 'localhost', //'192.168.56.102',
         port: 8080
     },
     css: {
         loaderOptions: {
             scss: {
-                prependData: `@import "@/scss/all.scss";`
+                additionalData: `@import "@/scss/all.scss";`
             }
         }
     }

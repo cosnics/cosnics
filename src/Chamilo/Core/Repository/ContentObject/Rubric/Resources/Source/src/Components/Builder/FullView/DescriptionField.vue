@@ -90,7 +90,7 @@
 
         ul {
             list-style: disc;
-            margin: 0 0 0 2rem;
+            margin: 0 0 0 1.25rem;
             padding: 0;
         }
 
@@ -109,7 +109,7 @@
             border-left: 1px solid hsl(0 ,0%, 90%);
             color: hsl(190, 30%, 40%);
             display: flex;
-            font-size: 1.5rem;
+            font-size: .9375rem;
             height: 1.75em;
             justify-content: center;
             margin: -3px -3px .5em .5em;
@@ -125,7 +125,7 @@
 
             .fa-caret-right {
                 color: hsla(190, 18%, 59%, .85);
-                font-size: 1.5rem;
+                font-size: .9375rem;
             }
         }
     }

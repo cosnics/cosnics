@@ -56,7 +56,7 @@
                 <li v-if="useAbsoluteScores" class="rubric-header-date mod-max" aria-hidden="true"></li>
             </ul>
             <ul v-if="showRubricHeader && createFromExisting" class="rubric-header" :class="showRelativeScores ? 'rb-col-start-3' : 'rb-col-start-2'"
-                style="margin-top: -1.5rem; margin-bottom: .5rem; position: static; z-index: 29">
+                style="margin-top: -.9375rem; margin-bottom: .3125rem; position: static; z-index: 29">
                 <li v-for="evaluator in evaluators" style="flex:1;" :style="'text-align: ' + (useGradesMode ? 'left': 'right')">
                     <button class="btn btn-sm btn-default" style="padding: 0 4px" @click="copyRubricResults(evaluator.resultId)">{{ $t('select') }}</button>
                 </li>
@@ -260,16 +260,16 @@
 
     .rubric.mod-res {
         align-self: flex-start;
-        grid-template-columns: minmax(max-content, 23rem) minmax(calc(var(--num-cols) * 6rem), calc(var(--num-cols) * 12rem));
+        grid-template-columns: minmax(max-content, 14.375rem) minmax(calc(var(--num-cols) * 3.75rem), calc(var(--num-cols) * 7.5rem));
     }
 
     .rubric.mod-res-w {
         align-self: flex-start;
-        grid-template-columns: minmax(max-content, 23rem) 7rem minmax(calc(var(--num-cols) * 6rem), calc(var(--num-cols) * 12rem));
+        grid-template-columns: minmax(max-content, 14.375rem) 4.375rem minmax(calc(var(--num-cols) * 3.75rem), calc(var(--num-cols) * 7.5rem));
     }
 
     .rubric-header.mod-date {
-        margin-top: -1.5rem;
+        margin-top: -.9375rem;
         z-index: 29;
     }
 
@@ -290,8 +290,8 @@
     .rubric-header-date {
         color: hsla(200, 30%, 40%, 1);
         flex: 1;
-        font-size: 1.2rem;
-        padding: 0 .5rem;
+        font-size: .75rem;
+        padding: 0 .3125rem;
         text-align: right;
 
         &.mod-max {
@@ -299,7 +299,7 @@
         }
 
         &:not(:last-child) {
-            margin-right: .7rem;
+            margin-right: 0.4375rem;
         }
 
         &.mod-grades {
@@ -314,18 +314,18 @@
 
 <style lang="scss" scoped>
     .treenode-feedback-icon.fa-info {
-        margin-right: .5rem;
-        font-size: 1.4rem;
+        margin-right: .3125rem;
+        font-size: .875rem;
     }
 
     .cluster-sep {
         border-color: #deebee;
-        margin: 1rem 0 1.5rem;
+        margin: .625rem 0 .9375rem;
     }
 
     .m-not-scored {
         color: hsl(190, 33%, 50%);
-        font-size: 1.2rem;
+        font-size: .75rem;
         font-style: oblique;
     }
 </style>

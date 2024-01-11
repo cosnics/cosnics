@@ -10,6 +10,10 @@
     </nav>
 </template>
 <style lang="scss">
+    html {
+        font-size: 13px;
+    }
+
     .chamilo-header {
         min-height: 78px;
         display: flex;
@@ -17,13 +21,13 @@
         overflow: hidden;
 
         .start {
-            background-image: url("/images/chamilo-start.png");
+            background-image: url("../../public/images/chamilo-start.png");
             width: 168px;
         }
 
         .middle {
             align-items: center;
-            background-image: url("/images/chamilo-fill.png");
+            background-image: url("../../public/images/chamilo-fill.png");
             display: flex;
             flex: 1;
             padding-left: 9px;
@@ -32,7 +36,7 @@
 
         .end {
             align-items: center;
-            background-image: url("/images/chamilo-fill.png");
+            background-image: url("../../public/images/chamilo-fill.png");
             display: flex;
             flex: 1;
             justify-content: flex-end;
@@ -46,12 +50,12 @@
             min-height: 51px;
 
             .start {
-                background-image: url("/images/chamilo-start-alt.png");
+                background-image: url("../../public/images/chamilo-start-alt.png");
                 width: 176px;
             }
 
             .middle {
-                background-image: url("/images/chamilo-fill-alt.png");
+                background-image: url("../../public/images/chamilo-fill-alt.png");
                 flex: 1;
                 min-width: 120px;
                 padding-left: 1px;
@@ -59,7 +63,7 @@
             }
 
             .end {
-                background-image: url("/images/chamilo-fill-alt.png");
+                background-image: url("../../public/images/chamilo-fill-alt.png");
                 padding-top: 14px;
             }
         }
@@ -116,10 +120,10 @@
 
         .rubrics-demo-header {
             color: #fff;
-            font-size: 2.2rem;
+            font-size: 1.375rem;
             font-weight: 700;
-            letter-spacing: .11rem;
-            line-height: 2.3rem;
+            letter-spacing: .06875rem;
+            line-height: 1.4375rem;
             /*text-shadow: 0 2px 3px hsl(240, 57%, 33%);*/
             word-spacing: 2px;
         }
