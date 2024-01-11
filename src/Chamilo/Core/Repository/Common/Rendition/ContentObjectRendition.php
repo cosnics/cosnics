@@ -100,7 +100,7 @@ abstract class ContentObjectRendition
              (string) StringUtilities::getInstance()->createString($rendition_implementation->get_format())->upperCamelize() .
              (string) StringUtilities::getInstance()->createString($rendition_implementation->get_view())->upperCamelize() .
              'ContentObjectRendition';
-        
+
         return new $class($rendition_implementation);
     }
 }
