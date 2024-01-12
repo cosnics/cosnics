@@ -7,7 +7,7 @@ use Chamilo\Core\Home\Interfaces\StaticBlockTitleInterface;
 use Chamilo\Core\Home\Service\HomeService;
 use Chamilo\Core\Home\Storage\DataClass\Block;
 use Chamilo\Libraries\Architecture\Application\Application;
-use Chamilo\Libraries\Format\Theme;
+use Chamilo\Libraries\File\Redirect;
 use Chamilo\Libraries\Translation\Translation;
 
 class Feeder extends \Chamilo\Core\Repository\Integration\Chamilo\Core\Home\Block implements ConfigurableInterface, 
@@ -54,6 +54,9 @@ class Feeder extends \Chamilo\Core\Repository\Integration\Chamilo\Core\Home\Bloc
      * Returns the html to display when the block is configured.
      * 
      * @return string
+     * @throws \Twig\Error\LoaderError
+     * @throws \Twig\Error\RuntimeError
+     * @throws \Twig\Error\SyntaxError
      */
     public function displayContent()
     {
@@ -66,30 +69,21 @@ class Feeder extends \Chamilo\Core\Repository\Integration\Chamilo\Core\Home\Bloc
         }
         
         $content_object = $this->getObject();
-        
-        $html = array();
-        
-        $target = $this->getLinkTarget();
-        $target = $target ? 'target="' . $target . '"' : 'target="_blank"';
-        $icon = Theme::getInstance()->getImagePath(
-            'Chamilo\Core\Repository\ContentObject\RssFeed', 
-            'Logo/' . Theme::ICON_MINI);
-        
-        $html[] = '<rss-feed-renderer rss-feed-url="' . $content_object->get_url() . '" number-of-entries="' .
-             $content_object->get_number_of_entries() . '">';
-        $html[] = '<ul class="rss_feeds">';
-        
-        $html[] = '<li ng-repeat="entry in main.feedEntries" class="rss_feed_item"' . 'style="background-image: url(' .
-             $icon . ')">';
-        $html[] = '<a href="{{ entry.link }}" ' . $target . '>{{ entry.title }}</a>';
-        $html[] = '</li>';
-        
-        $html[] = '</ul>';
-        
-        $html[] = '<span style="font-weight: bold;" ng-show="main.feedEntries.length == 0">' .
-             Translation::get('NoFeedsFound') . '</span>';
-        $html[] = '</rss-feed-renderer>';
-        
-        return implode(PHP_EOL, $html);
+
+        $ajaxUrlBuilder = new Redirect([
+            Application::PARAM_CONTEXT => 'Chamilo\\Libraries\\Ajax',
+            Application::PARAM_ACTION => 'FetchRssEntries'
+        ]);
+
+        return $this->getTwig()->render(
+            'Chamilo\Core\Repository\ContentObject\RssFeed:RssFeedRenderer.html.twig',
+            [
+                'ELEMENT_ID' => $this->getBlock()->getId(),
+                'URL' => $content_object->get_url(),
+                'NUMBER_OF_ENTRIES' => $content_object->get_number_of_entries(),
+                'TARGET' => $this->getLinkTarget(),
+                'FETCH_RSS_ENTRIES_URL' => $ajaxUrlBuilder->getUrl()
+            ]
+        );
     }
 }

@@ -1,40 +1,68 @@
-<div id="rssFeedApp">
+{% set appContext = 'Chamilo\\Core\\Repository\\ContentObject\\RssFeed' %}
 
-<ul class="list-group">
-
-    <li class="list-group-item" v-for="entry in entries">
-        <div class="list-group-item-heading"><h3 class="panel-title">{{ '{{ entry.title }}' }}</h3></div>
-
-        <span v-html="entry.content"></span>
-        <div class="link_url" style="margin-top: 1em;"><a href="{{ '{{ entry.link }}' }}">{{ '{{ entry.link }}' }}</a></div>
-    </li>
-</ul>
-
+<div id="rss-feed-{{ ELEMENT_ID }}">
+    <img v-if="loadingRssContent" src="{{ getImagePath('Action/LoadingSmall', 'Chamilo\\Configuration', 'gif') }}" />
+    <template v-else-if="entries.length">
+        <ul v-if="showEntriesContent" class="rss_feeds" style="margin-top: -.75rem">
+            <li v-for="entry in entries" style="padding-block: .75rem">
+                <div class="list-group-item-heading"><h3 style="font-size: 1rem">${ entry.title }</h3></div>
+                <div v-html="entry.content"></div>
+                <a :href="entry.link" target="{% if TARGET %}{{ TARGET|raw }}{% else %}_blank{% endif %}">${ entry.link }</a>
+            </li>
+        </ul>
+        <ul v-else class="rss_feeds">
+            <li class="rss_feed_item" v-for="entry in entries">
+                <i class="fa fa-rss" aria-hidden="true"></i>
+                <a :href="entry.link" target="{% if TARGET %}{{ TARGET|raw }}{% else %}_blank{% endif %}">${ entry.title }</a>
+            </li>
+        </ul>
+    </template>
+    <span v-else class="font-weight-bold">
+        {{ 'NoFeedsFound'|trans({}, appContext) }}
+    </span>
 </div>
 
 <script type="text/javascript">
-    var rssFeedUrl = '{{ URL|raw }}';
-    var ajaxUrl = '{{ AJAX_URL|raw }}';
-    var numberOfEntries = '{{ NUMBER_OF_ENTRIES }}';
+    (function () {
+        const fetchRssEntriesUrl = '{{ FETCH_RSS_ENTRIES_URL|raw }}';
+        const rssFeedUrl = '{{ URL|raw }}';
+        const numberOfEntries = {{ NUMBER_OF_ENTRIES }};
+        const showEntriesContent = {% if SHOW_ENTRIES_CONTENT %}true{% else %}false{% endif %};
 
-    var app = new Vue({
-        el: '#rssFeedApp',
-        data: {
-            entries: []
-        },
-        mounted: function() {
-            var controller = this;
-            var formData = new FormData();
+        const TIMEOUT_SEC = 30;
 
-            formData.append('rss_feed_url', rssFeedUrl);
-            formData.append('number_of_entries', numberOfEntries);
+        new Vue({
+            el: '#rss-feed-{{ ELEMENT_ID }}',
+            delimiters: ['${', '}'],
+            data: {
+                hasError: false,
+                loadingRssContent: false,
+                entries: [],
+                showEntriesContent: showEntriesContent
+            },
+            mounted() {
+                this.loadFeed();
+            },
+            methods: {
+                async loadFeed() {
+                    const formData = new FormData();
+                    formData.set('rss_feed_url', rssFeedUrl);
+                    formData.set('number_of_entries', numberOfEntries);
 
-            this.$http.post(ajaxUrl, formData).then(function (response) {
-                controller.entries = response.body.properties;
-            }, function (response) {
-            });
-        }
-    })
+                    try {
+                        this.loadingRssContent = true;
+                        this.hasError = false;
+                        const res = await axios.post(fetchRssEntriesUrl, formData, { timeout: TIMEOUT_SEC * 1000 });
+                        this.entries = res.data.properties;
+                        this.loadingRssContent = false;
+                    } catch (err) {
+                        this.loadingRssContent = false;
+                        this.hasError = true;
+                    }
+                }
+            }
+        });
+    })();
 </script>
 
 

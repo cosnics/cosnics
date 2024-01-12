@@ -1,7 +1,15 @@
 li.rss_feed_item {
 	background-repeat: no-repeat;
-	padding-left: 25px;
 	list-style-type: none;
+}
+
+li.rss_feed_item .fa-rss {
+	background: #fc8a2c;
+	border-radius: 2px;
+	color: #fff;
+	font-size: .75rem;
+	margin-right: 5px;
+	padding: 2px 12px 0 3px;
 }
 
 ul.rss_feeds {
