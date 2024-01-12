@@ -3,10 +3,12 @@
 namespace Chamilo\Core\Repository\Feedback\Component;
 
 use Chamilo\Core\Repository\Feedback\Manager;
+use Chamilo\Core\Repository\Feedback\Storage\DataClass\Feedback;
 use Chamilo\Core\Repository\Storage\DataClass\ContentObject;
 use Chamilo\Core\Repository\Workspace\Repository\ContentObjectRepository;
 use Chamilo\Libraries\Architecture\Exceptions\NoObjectSelectedException;
 use Chamilo\Libraries\Architecture\Exceptions\NotAllowedException;
+use Chamilo\Libraries\Architecture\Exceptions\ObjectNotExistException;
 use Chamilo\Libraries\Platform\Session\Request;
 use Chamilo\Libraries\Translation\Translation;
 use Chamilo\Libraries\Utilities\Utilities;
@@ -39,6 +41,11 @@ class DeleterComponent extends Manager
             foreach ($feedback_ids as $feedback_id)
             {
                 $feedback = $this->feedbackServiceBridge->getFeedbackById($feedback_id);
+
+                if (!$feedback instanceof Feedback)
+                {
+                    throw new ObjectNotExistException(Translation::getInstance()->getTranslation('Feedback'), $feedback_id);
+                }
 
                 if (!$this->feedbackRightsServiceBridge->canDeleteFeedback($feedback))
                 {
