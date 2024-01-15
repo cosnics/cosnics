@@ -95,7 +95,7 @@
             };
 
             this.fetchWorkspaces = function() {
-                RepositoryService.fetchWorkspaces(function(data) {
+                Repo.fetchWorkspaces(function(data) {
                     mainController.workspaces = data;
                 });
             };
@@ -109,9 +109,10 @@
             };
 
             this.fetchCategories = function () {
-                RepositoryService.fetchCategories(this.selectedWorkspace, function(categories) {
+                RepoService.fetchCategories(this.selectedWorkspace, function(categories) {
                     mainController.categories = categories;
                     mainController.selectedCategory = mainController.categories[0];
+                    $scope.$apply();
                 });
             };
 
@@ -200,7 +201,7 @@
 
             var tree = treeSelector.fancytree('getTree');
 
-            RepositoryService.fetchCategories(0, function(categories) {
+            RepoService.fetchCategories(0, function(categories) {
                 mainController.userCategories = categories;
                 mainController.selectedCopyCategory = categories[0];
             });

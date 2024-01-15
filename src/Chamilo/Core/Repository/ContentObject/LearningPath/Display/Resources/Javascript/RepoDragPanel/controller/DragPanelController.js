@@ -55,18 +55,21 @@
             });
 
             $scope.fetchContentObjects = function (categoryId, searchQuery) {
-                RepositoryService.fetchContentObjects(categoryId, searchQuery, function(data) {
+                RepoService.fetchContentObjects(categoryId, searchQuery, function(data) {
                     $scope.contentObjects = data;
                     $scope.filteredContentObjects = $scope.contentObjects.slice(0, 10);
                     $scope.totalItems = data.length;
                     $scope.currentPage = 1;
+                    $scope.$apply();
                 });
             };
 
             $scope.fetchCategories = function () {
-                RepositoryService.fetchCategories(null, function(categories) {
+                RepoService.fetchCategories(null, function(categories) {
                     $scope.categories = categories;
                     $scope.selectedCategory = $scope.categories[0];
+                    $scope.$apply();
+                    console.log('selectedCategory', $scope.selectedCategory );
                 });
             };
 
