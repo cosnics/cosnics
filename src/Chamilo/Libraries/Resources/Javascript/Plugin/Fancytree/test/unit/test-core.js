@@ -71,7 +71,7 @@ QUnit.test("Static members", function(assert) {
 	tools.setup(assert);
 	assert.expect(5);
 
-	assert.ok($.isFunction($.ui.fancytree.debug), "ui.fancytree.debug function is defined");
+	assert.ok(tools.isFunction($.ui.fancytree.debug), "ui.fancytree.debug function is defined");
 	assert.equal($(":ui-fancytree").length, 0, "no tree instance exists");
 	// equal($.ui.fancytree._nextId, 1, "next tree instance counter is 1");
 
@@ -105,6 +105,7 @@ QUnit.test("Create Fancytree", function(assert) {
 	assert.ok(!!widget.tree, "widget.tree is defined");
 //    equal(widget.tree._id, 1, "tree id is 1");
 
+	// Deprecated:
 	assert.ok($("#tree").fancytree("getTree") === tree, "$().fancytree('getTree')");
 	assert.ok($("#tree").fancytree("getActiveNode") === null, "$().fancytree('getActiveNode')");
 
@@ -156,7 +157,7 @@ QUnit.test("Create Fancytree - init", function(assert) {
 		generateIds: true, // for testing
 		create: function(event, data){
 			assert.equal(event.type, "fancytreecreate", "receive `create` callback");
-			assert.ok(insideConstructor, "running synchronously");
+			assert.ok(insideConstructor, "running synchronously (create)");
 			assert.ok(!!data, "event data is empty");
 			assert.equal(this.nodeName, "DIV", "`this` is div#tree");
 			assert.ok($(">ul", this).first().hasClass("fancytree-container"), "div#tree contains ul.fancytree-container");
@@ -169,7 +170,7 @@ QUnit.test("Create Fancytree - init", function(assert) {
 		init: function(event, data){
 			assert.equal(event.type, "fancytreeinit", "receive `init` callback");
 			assert.equal(data.status, true, "`init` status is true");
-			assert.ok(insideConstructor, "running synchronously");
+			assert.ok(insideConstructor, "running synchronously (init)");
 			assert.ok(!!data.tree.rootNode, "`data.tree` is the tree object");
 			assert.equal(data.options.source.length, TESTDATA_TOPNODES, "data.options.contains widget options");
 //            equal($("div#tree").hasClass("ui-widget"), true, "div#tree has ui-widget class");
@@ -364,13 +365,13 @@ QUnit.module("API");
 
 QUnit.test("FancytreeNode class methods", function(assert) {
 	tools.setup(assert);
-	assert.expect(39);
+	assert.expect(48);
 
 	$("#tree").fancytree({
 		source: TEST_DATA
 	});
 	var res, ROOT_NODE_KEY, nodeAdded,
-		tree = $("#tree").fancytree("getTree"),
+		tree = $.ui.fancytree.getTree("#tree"),
 		root = tree.rootNode,
 		node = tools.getNode("10_1_2");
 
@@ -389,9 +390,12 @@ QUnit.test("FancytreeNode class methods", function(assert) {
 //  addChildren: function(children){
 
 	// addNode
+	var prevDebugLevel = $.ui.fancytree.debugLevel;
+	$.ui.fancytree.debugLevel = 0;  // silence error message
 	assert.throws(function(){
 		root.addNode({"title": "my title"}, "undefined mode");
 	}, "Fancytree assertion failed: Invalid mode: undefined mode");
+	$.ui.fancytree.debugLevel = prevDebugLevel;
 
 	nodeAdded = root.addNode({"title": "my title 1", "key": "add-node-1"});
 	assert.equal(root.children.slice(-1)[0].key, "add-node-1", "Node added at the last position");
@@ -477,19 +481,34 @@ QUnit.test("FancytreeNode class methods", function(assert) {
 	assert.deepEqual(tools.getNodeKeyArray(node.getParentList(true, false)),
 			[ROOT_NODE_KEY, "10", "10_1"], "getParentList(true, false)");
 
+	// Class modifiers
+	assert.ok(!node.extraClasses, "No initial extraClasses");
+	node.addClass("test-class-1");
+	assert.equal(node.extraClasses, "test-class-1", "node.addClass()");
+	node.toggleClass("test-class-2");
+	assert.equal(node.extraClasses, "test-class-1 test-class-2", "node.toggleClass()");
+	node.addClass("test-class-2");
+	assert.equal(node.extraClasses, "test-class-1 test-class-2", "node.addClass() existing");
+	node.toggleClass("test-class-2");
+	assert.equal(node.extraClasses, "test-class-1", "node.toggleClass() existing");
+	node.toggleClass("test-class-2");
+	assert.equal(node.extraClasses, "test-class-1 test-class-2", "node.toggleClass() non-existing");
+	node.removeClass("test-class-2");
+	node.removeClass("test-class-3");
+	assert.equal(node.extraClasses, "test-class-1", "node.removeClass()");
+	assert.equal(node.hasClass("test-class-1"), true,  "node.hasClass() existing");
+	assert.equal(node.hasClass("test-class-2"), false,  "node.hasClass() non-existing");
+
 //  getPrevSibling: function() {
 //  hasChildren: function() {
 //  hasFocus: function() {
 //  isActive: function() {
 //  isChildOf: function(otherNode) {
 //  isDescendantOf: function(otherNode) {
-//  isExpanded: function() {
-//  isFolder: function() {
 //  isFirstSibling: function() {
 //  isLastSibling: function() {
 //  isLazy: function() {
 //  isLoaded()
-//  isLoading: function() {
 //  isStatusNode()
 //  isUndefined()
 //  load()
@@ -532,7 +551,7 @@ QUnit.test("Fancytree class methods", function(assert) {
 		source: TEST_DATA
 	});
 	var c, node,
-		tree = $("#tree").fancytree("getTree");
+		tree = $.ui.fancytree.getTree("#tree");
 
   // Properties
 //    tree.widget = widget;
@@ -634,7 +653,7 @@ QUnit.test("trigger async expand", function(assert) {
 		source: TEST_DATA
 	});
 //    var node = $("#tree").fancytree("getActiveNode");
-	var tree = $("#tree").fancytree("getTree"),
+	var tree = $.ui.fancytree.getTree("#tree"),
 		node = tree.getNodeByKey("10");
 
 	node.setExpanded().done(function(){
@@ -698,7 +717,7 @@ QUnit.test(".click() to expand a folder", function(assert) {
 			done();
 		}
 	});
-	$("#tree #ft_10 span.fancytree-expander").click();
+	$("#tree #ft_10 span.fancytree-expander").trigger("click");
 });
 
 
@@ -725,7 +744,7 @@ QUnit.test(".click() to activate a node", function(assert) {
 			done();
 		}
 	});
-	$("#tree #ft_2 span.fancytree-title").click();
+	$("#tree #ft_2 span.fancytree-title").trigger("click");
 });
 
 
@@ -754,7 +773,7 @@ QUnit.test(".click() to activate a folder (clickFolderMode 3 triggers expand)", 
 			done();
 		}
 	});
-	$("#tree #ft_10 span.fancytree-title").click();
+	$("#tree #ft_10 span.fancytree-title").trigger("click");
 });
 
 
@@ -782,7 +801,7 @@ QUnit.test(".click() to select a node", function(assert) {
 			done();
 		}
 	});
-	$("#tree #ft_2 span.fancytree-checkbox").click();
+	$("#tree #ft_2 span.fancytree-checkbox").trigger("click");
 });
 
 
@@ -983,7 +1002,7 @@ QUnit.module("lazy loading");
 
 QUnit.test("Using ajax options for `source`; .click() expands a lazy folder", function(assert) {
 	tools.setup(assert);
-	assert.expect(19);
+	assert.expect(23);
 
 	var done = assert.async(),
 		sequence = 1,
@@ -996,9 +1015,12 @@ QUnit.test("Using ajax options for `source`; .click() expands a lazy folder", fu
 			assert.equal(sequence++, 3, "receive `init` callback");
 			assert.equal(data.tree.count(), TESTDATA_NODES, "lazy tree has 23 nodes");
 			assert.equal($("#tree li").length, TESTDATA_VISIBLENODES, "lazy tree has rendered 13 node elements");
+			assert.equal(data.tree.getRootNode().isLoading(), false, "rootNode.isLoading() return false in init");
+			assert.equal(data.tree.isLoading(), false, "tree.isLoading() return false in init");
+
 			// now expand a lazy folder
 			isClicked = true;
-			$("#tree #ft_30 span.fancytree-expander").click();
+			$("#tree #ft_30 span.fancytree-expander").trigger("click");
 		},
 		beforeExpand: function(event, data){
 			assert.equal(sequence++, 4, "receive `beforeExpand` callback");
@@ -1012,12 +1034,14 @@ QUnit.test("Using ajax options for `source`; .click() expands a lazy folder", fu
 		postProcess: function(event, data){
 			if( !isClicked ) {
 				assert.equal(sequence++, 1, "receive `postProcess` callback for root");
-				assert.equal(data.node.isLoading(), true, "node.isLoading()");
+				assert.equal(data.node.isLoading(), true, "node.isLoading() return true in initial postProcess");
+				assert.equal(data.tree.isLoading(), true, "tree.isLoading() return true in initial postProcess");
 				assert.equal(data.node.children.length, 1, "Dummy status node exists");
 				assert.equal(data.node.children[0].statusNodeType, "loading", "node.statusNodeType === 'loading'");
 			} else {
 				assert.equal(sequence++, 6, "receive `postProcess` callback for node");
-				assert.equal(data.node.isLoading(), true, "node.isLoading()");
+				assert.equal(data.node.isLoading(), true, "node.isLoading() return true in node postProcess");
+				assert.equal(data.tree.isLoading(), true, "tree.isLoading() return true in node postProcess");
 			}
 		},
 		loadChildren: function(event, data){
@@ -1079,7 +1103,7 @@ QUnit.test("Using $.ajax promise for `source`; .click() expands a lazy folder", 
 			assert.equal($("#tree li").length, TESTDATA_VISIBLENODES, "lazy tree has rendered 13 node elements");
 			// now expand a lazy folder
 			isClicked = true;
-			$("#tree #ft_30 span.fancytree-expander").click();
+			$("#tree #ft_30 span.fancytree-expander").trigger("click");
 		},
 		beforeExpand: function(event, data){
 			assert.equal(sequence++, 3, "receive `beforeExpand` callback");

@@ -9,7 +9,7 @@
  *
  * This section is automatically generated from the `skin-common.less` template.
  *
- * Copyright (c) 2008-2019, Martin Wendt (https://wwWendt.de)
+ * Copyright (c) 2008-2023, Martin Wendt (https://wwWendt.de)
  * Released under the MIT license
  * https://github.com/mar10/fancytree/wiki/LicenseInfo
  *
@@ -121,7 +121,6 @@ span.fancytree-drag-helper-img,
   display: inline-block;
   vertical-align: top;
   background-repeat: no-repeat;
-  background-position: left;
   background-position: 0pt 0pt;
 }
 span.fancytree-icon,
@@ -535,6 +534,16 @@ ul.fancytree-ext-wide span.fancytree-node span.fancytree-title {
 ul.fancytree-container ul {
   padding: 0.3em 0 0 1em;
   margin: 0;
+}
+.fancytree-expander,
+.fancytree-checkbox,
+.fancytree-icon {
+  min-width: 10pt;
+  text-align: center;
+}
+svg.fancytree-checkbox,
+svg.fancytree-icon {
+  padding-left: 3px;
 }
 /*******************************************************************************
  * Node titles

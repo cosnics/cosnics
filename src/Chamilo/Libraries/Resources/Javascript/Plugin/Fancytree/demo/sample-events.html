@@ -4,8 +4,8 @@
 	<meta http-equiv="content-type" content="text/html; charset=ISO-8859-1">
 	<title>Fancytree - Example: Events</title>
 
-	<script src="//code.jquery.com/jquery-3.4.1.min.js"></script>
-	<script src="//code.jquery.com/ui/1.12.1/jquery-ui.min.js"></script>
+	<script src="//code.jquery.com/jquery-3.6.0.min.js"></script>
+	<script src="//code.jquery.com/ui/1.13.0/jquery-ui.min.js"></script>
 
 	<link href="../src/skin-win8/ui.fancytree.css" rel="stylesheet">
 	<script src="../src/jquery.fancytree.js"></script>
@@ -21,7 +21,7 @@
 	$.ui.fancytree.debugLevel = 3; // silence debug output
 
 	function logEvent(event, data, msg){
-//        var args = $.isArray(args) ? args.join(", ") :
+//        var args = Array.isArray(args) ? args.join(", ") :
 		msg = msg ? ": " + msg : "";
 		$.ui.fancytree.info("Event('" + event.type + "', node=" + data.node + ")" + msg);
 	}
@@ -177,7 +177,7 @@ $(function(){
 		label: "(De)Select active node",
 		newline: false,
 		code: function(){
-			var node = $("#tree").fancytree("getActiveNode");
+			var node = $.ui.fancytree.getTree("#tree").getActiveNode();
 			node.setSelected( !node.isSelected() );
 		}
 	});
@@ -185,7 +185,7 @@ $(function(){
 		label: "Remove active node",
 		newline: false,
 		code: function(){
-			var node = $("#tree").fancytree("getActiveNode");
+			var node = $.ui.fancytree.getTree("#tree").getActiveNode();
 			node.remove();
 		}
 	});

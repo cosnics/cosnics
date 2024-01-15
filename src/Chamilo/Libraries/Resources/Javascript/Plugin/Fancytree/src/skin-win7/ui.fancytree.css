@@ -9,7 +9,7 @@
  *
  * This section is automatically generated from the `skin-common.less` template.
  *
- * Copyright (c) 2008-2019, Martin Wendt (https://wwWendt.de)
+ * Copyright (c) 2008-2023, Martin Wendt (https://wwWendt.de)
  * Released under the MIT license
  * https://github.com/mar10/fancytree/wiki/LicenseInfo
  *
@@ -121,7 +121,6 @@ span.fancytree-drag-helper-img,
   display: inline-block;
   vertical-align: top;
   background-repeat: no-repeat;
-  background-position: left;
   background-image: url("../skin-win7/icons.gif");
   background-position: 0px 0px;
 }
@@ -279,11 +278,17 @@ span.fancytree-checkbox.fancytree-radio:hover {
 .fancytree-unselectable span.fancytree-checkbox:hover {
   background-position: 0px -32px;
 }
+.fancytree-unselectable span.fancytree-checkbox.fancytree-radio:hover {
+  background-position: 0px -48px;
+}
 .fancytree-unselectable.fancytree-partsel span.fancytree-checkbox:hover {
   background-position: -64px -32px;
 }
 .fancytree-unselectable.fancytree-selected span.fancytree-checkbox:hover {
   background-position: -32px -32px;
+}
+.fancytree-unselectable.fancytree-selected span.fancytree-checkbox.fancytree-radio:hover {
+  background-position: -32px -48px;
 }
 .fancytree-container.fancytree-checkbox-auto-hide span.fancytree-checkbox {
   visibility: hidden;

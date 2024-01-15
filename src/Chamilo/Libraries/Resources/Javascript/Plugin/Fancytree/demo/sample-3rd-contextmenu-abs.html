@@ -4,8 +4,8 @@
 	<meta http-equiv="content-type" content="text/html; charset=ISO-8859-1">
 	<title>Fancytree - Example: Context Menu</title>
 
-	<script src="//code.jquery.com/jquery-3.4.1.min.js"></script>
-	<script src="//code.jquery.com/ui/1.12.1/jquery-ui.min.js"></script>
+	<script src="//code.jquery.com/jquery-3.6.0.min.js"></script>
+	<script src="//code.jquery.com/ui/1.13.0/jquery-ui.min.js"></script>
 
 	<link href="../src/skin-win8/ui.fancytree.css" rel="stylesheet">
 	<script src="../src/jquery.fancytree.js"></script>
@@ -52,7 +52,7 @@
 				clipboardNode.remove();
 			} else {
 				// Copy mode: prevent duplicate keys:
-				var cb = clipboardNode.toDict(true, function(dict){
+				var cb = clipboardNode.toDict(true, function(dict, node){
 					dict.title = "Copy of " + dict.title;
 					delete dict.key; // Remove key, so a new one will be created
 				});
@@ -189,8 +189,8 @@
 		<li>Also [space] key is supported to open the menu.
 		<li>This example also demonstrates, how to copy or move branches and how
 			to implement clipboard functionality.
-		<li>A keyboard handler implements Cut, Copy, and Paste with <code>Ctrl-X</code>,
-			<code>Ctrl-C</code>, <code>Ctrl-V</code>.
+		<li>A keyboard handler implements Cut, Copy, and Paste with <kbd>Ctrl-X</kbd>,
+			<kbd>Ctrl-C</kbd>, <kbd>Ctrl-V</kbd>.
 		</ul>
 		This sample uses the jQuery Context Menu Plugin by Cory S.N. LaViska.
 		Visit  <a href="http://abeautifulsite.net/">A Beautiful Site</a> for usage and more information.

@@ -4,9 +4,9 @@
 	<meta http-equiv="content-type" content="text/html; charset=ISO-8859-1">
 	<title>Fancytree - Example: Theming</title>
 
-	<link href="//code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css" rel="stylesheet">
-	<script src="//code.jquery.com/jquery-3.4.1.min.js"></script>
-	<script src="//code.jquery.com/ui/1.12.1/jquery-ui.min.js"></script>
+	<link href="//code.jquery.com/ui/1.13.0/themes/base/jquery-ui.css" rel="stylesheet">
+	<script src="//code.jquery.com/jquery-3.6.0.min.js"></script>
+	<script src="//code.jquery.com/ui/1.13.0/jquery-ui.min.js"></script>
 
 	<!-- Include the basic stylesheet: -->
 	<link href="../src/skin-win8/ui.fancytree.css" rel="stylesheet">
@@ -64,7 +64,7 @@ span.fancytree-node.custom1 > span.fancytree-icon {
 		addSampleButton({
 			label: "Set icons",
 			code: function(){
-				var tree = $("#tree").fancytree("getTree"),
+				var tree = $.ui.fancytree.getTree("#tree"),
 					node = tree.getNodeByKey("node_4.1");
 				node.extraClasses = "custom1";
 				node.renderTitle();

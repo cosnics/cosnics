@@ -8,7 +8,7 @@
   <script src="../src/jquery-ui-dependencies/jquery.fancytree.ui-deps.js"></script>
 <!--
   <script src="//code.jquery.com/jquery-3.2.1.min.js"></script>
-  <script src="//code.jquery.com/ui/1.12.1/jquery-ui.min.js"></script>
+  <script src="//code.jquery.com/ui/1.13.0/jquery-ui.min.js"></script>
 -->
 
 <style type="text/css">
@@ -243,7 +243,7 @@
       }
 			var n,
 				tree = $.ui.fancytree.getTree(),
-        match = $.trim($(this).val());
+        match = tools.trim($(this).val());
 
       // Pass a string to perform case insensitive matching
       n = tree.filterNodes(match, { mode: "hide" });

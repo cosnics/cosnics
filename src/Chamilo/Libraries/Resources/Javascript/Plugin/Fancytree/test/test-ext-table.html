@@ -4,8 +4,8 @@
 	<meta http-equiv="content-type" content="text/html; charset=ISO-8859-1">
 	<title>Test Table - Fancytree</title>
 
-	<script src="//code.jquery.com/jquery-3.4.1.min.js"></script>
-	<script src="//code.jquery.com/ui/1.12.1/jquery-ui.min.js"></script>
+	<script src="//code.jquery.com/jquery-3.6.0.min.js"></script>
+	<script src="//code.jquery.com/ui/1.13.0/jquery-ui.min.js"></script>
 
 <style type="text/css">
 	/* Set alternating row colors (define BEFORE standard css). */
@@ -112,15 +112,15 @@ SOURCE = [
 			// 	alert("dislike " + $input.val());
 			// }
 		});
-		var tree = $("#tree").fancytree("getTree");
+		var tree = $.ui.fancytree.getTree("#tree");
 
 		/*
 		 * Event handlers for our little demo interface
 		 */
 		$("input[name=search]").on("keyup", function(e){
 			var match = $(this).val();
-			if(e && e.which === $.ui.keyCode.ESCAPE || $.trim(match) === ""){
-				$("#btnResetSearch").click();
+			if(e && e.which === $.ui.keyCode.ESCAPE || tools.trim(match) === ""){
+				$("#btnResetSearch").trigger("click");
 				return;
 			}
 			// Pass text as filter string (will be matched as substring in the node title)

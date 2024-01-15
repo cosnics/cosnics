@@ -4,8 +4,8 @@
 	<meta http-equiv="content-type" content="text/html; charset=ISO-8859-1">
 	<title>Fancytree - Example: Select</title>
 
-	<script src="//code.jquery.com/jquery-3.4.1.min.js"></script>
-	<script src="//code.jquery.com/ui/1.12.1/jquery-ui.min.js"></script>
+	<script src="//code.jquery.com/jquery-3.6.0.min.js"></script>
+	<script src="//code.jquery.com/ui/1.13.0/jquery-ui.min.js"></script>
 
 	<link href="../src/skin-win8/ui.fancytree.css" rel="stylesheet">
 	<script src="../src/jquery.fancytree.js"></script>
@@ -60,15 +60,11 @@
 		// ---------------------------------------------------------------------
 
 		$("#btnDeselectAll2").click(function(){
-			$("#tree2").fancytree("getTree").visit(function(node){
-				node.setSelected(false);
-			});
+			$.ui.fancytree.getTree("#tree2").selectAll(false);
 			return false;
 		});
 		$("#btnSelectAll2").click(function(){
-			$("#tree2").fancytree("getTree").visit(function(node){
-				node.setSelected(true);
-			});
+			$.ui.fancytree.getTree("#tree2").selectAll();
 			return false;
 		});
 
@@ -116,15 +112,19 @@
 		// ---------------------------------------------------------------------
 
 		$("#btnDeselectAll3").click(function(){
-			$("#tree3").fancytree("getTree").visit(function(node){
-				node.setSelected(false);
-			});
+			$.ui.fancytree.getTree("#tree3").selectAll(false);
 			return false;
 		});
 		$("#btnSelectAll3").click(function(){
-			$("#tree3").fancytree("getTree").visit(function(node){
-				node.setSelected(true);
+			$.ui.fancytree.getTree("#tree3").selectAll();
+			return false;
+		});
+		$("#btnGetSelected3").click(function(){
+			var selNodes = $.ui.fancytree.getTree("#tree3").getSelectedNodes();
+			var selData = $.map(selNodes, function(n){
+				return n.toDict();
 			});
+			// alert(JSON.stringify(selData));
 			return false;
 		});
 		$("#tree3").fancytree({
@@ -244,7 +244,8 @@
 	</p>
 	<p>
 		<a href="#" id="btnSelectAll3">Select all</a> -
-		<a href="#" id="btnDeselectAll3">Deselect all</a>
+		<a href="#" id="btnDeselectAll3">Deselect all</a> -
+		<a href="#" id="btnGetSelected3">Get selected</a>
 	</p>
 	<div id="tree3"></div>
 	<div>Selected keys: <span id="echoSelection3">-</span></div>

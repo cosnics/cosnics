@@ -13,7 +13,7 @@
 /* global Handlebars */
 /* eslint-disable no-console */
 
-(function($, window, document) {
+(function ($, window, document) {
 	"use strict";
 
 	/*******************************************************************************
@@ -26,7 +26,7 @@
 		tmplInfoPane,
 		tmplMedia,
 		timerMap = {},
-		USER_AGENT = "Fancytree Taxonomy Browser/1.0",
+		// USER_AGENT = "Fancytree Taxonomy Browser/1.0",
 		GBIF_URL = "//api.gbif.org/v1/",
 		TAXONOMY_KEY = "d7dddbf4-2cf0-4f39-9b2a-bb099caae36c", // GBIF backbone taxonomy
 		SEARCH_PAGE_SIZE = 5,
@@ -42,15 +42,15 @@
 
 	// Load and compile handlebar templates
 
-	$.get("details.tmpl.html", function(data) {
+	$.get("details.tmpl.html", function (data) {
 		tmplDetails = Handlebars.compile(data);
 		Handlebars.registerPartial("tmplDetails", tmplDetails);
 	});
-	$.get("media.tmpl.html", function(data) {
+	$.get("media.tmpl.html", function (data) {
 		tmplMedia = Handlebars.compile(data);
 		Handlebars.registerPartial("tmplMedia", tmplMedia);
 	});
-	$.get("info-pane.tmpl.html", function(data) {
+	$.get("info-pane.tmpl.html", function (data) {
 		tmplInfoPane = Handlebars.compile(data);
 	});
 
@@ -85,7 +85,7 @@
 			return;
 		}
 		// console.log("Start timer '" + tag + "'");
-		timerMap[tag] = setTimeout(function() {
+		timerMap[tag] = setTimeout(function () {
 			// console.log("Execute timer '" + tag + "'");
 			callback.call(self);
 		}, +ms);
@@ -98,8 +98,11 @@
 			url: GBIF_URL + cmd,
 			data: $.extend({}, data),
 			cache: true,
-			headers: { "Api-User-Agent": USER_AGENT },
-			dataType: "jsonp",
+			// 2022-11-10: Datatype 'JSONP' no longer works:
+			// '[Error] Refused to execute http://api.gbif.org/v1/species/... as script because "X-Content-Type-Options: nosniff" was given and its Content-Type is not a script MIME type.
+			// We rely on CORS, but this only works if no additoinal header is set
+			// headers: { "Api-User-Agent": USER_AGENT },
+			dataType: "json",
 		});
 	}
 
@@ -115,7 +118,7 @@
 			_callWebservice("species/" + key + "/synonyms"),
 			_callWebservice("species/" + key + "/descriptions"),
 			_callWebservice("species/" + key + "/media")
-		).done(function(species, profiles, synonyms, descriptions, media) {
+		).done(function (species, profiles, synonyms, descriptions, media) {
 			// Requests are resolved as: [ data, statusText, jqXHR ]
 			species = species[0];
 			profiles = profiles[0];
@@ -134,7 +137,7 @@
 				now: new Date().toString(),
 			});
 
-			$.each(info.descriptions, function(i, o) {
+			$.each(info.descriptions, function (i, o) {
 				if (!info.descriptionsByLang[o.language]) {
 					info.descriptionsByLang[o.language] = [];
 				}
@@ -148,9 +151,7 @@
 			$("#tmplMedia")
 				// .html(tmplMedia(info))
 				.removeClass("busy");
-			$("#tmplInfoPane")
-				.html(tmplInfoPane(info))
-				.removeClass("busy");
+			$("#tmplInfoPane").html(tmplInfoPane(info)).removeClass("busy");
 
 			$("[data-toggle='popover']").popover();
 			$(".carousel").carousel();
@@ -172,7 +173,7 @@
 		$.when(
 			_callWebservice("species/" + key + "/parents"),
 			_callWebservice("species/" + key)
-		).done(function(parents, node) {
+		).done(function (parents, node) {
 			// Both requests resolved (result format: [ data, statusText, jqXHR ])
 			var nodeList = parents[0],
 				keyList = [];
@@ -181,7 +182,7 @@
 
 			// Display as <OL> list (for Bootstrap breadcrumbs)
 			$ol.empty().removeClass("busy");
-			$.each(nodeList, function(i, o) {
+			$.each(nodeList, function (i, o) {
 				var name = o.vernacularName || o.canonicalName;
 				keyList.push(o.key);
 				if ("" + o.key === "" + key) {
@@ -207,21 +208,21 @@
 			});
 			if (loadTreeNodes) {
 				// console.log("updateBreadcrumb - loadKeyPath", keyList);
-				taxonTree.loadKeyPath("/" + keyList.join("/"), function(
-					n,
-					status
-				) {
-					// console.log("... updateBreadcrumb - loadKeyPath " + n.title + ": " + status);
-					switch (status) {
-						case "loaded":
-							n.makeVisible();
-							break;
-						case "ok":
-							n.setActive();
-							// n.makeVisible();
-							break;
+				taxonTree.loadKeyPath(
+					"/" + keyList.join("/"),
+					function (n, status) {
+						// console.log("... updateBreadcrumb - loadKeyPath " + n.title + ": " + status);
+						switch (status) {
+							case "loaded":
+								n.makeVisible();
+								break;
+							case "ok":
+								n.setActive();
+								// n.makeVisible();
+								break;
+						}
 					}
-				});
+				);
 			}
 		});
 	}
@@ -251,7 +252,7 @@
 		$("#searchResultTree").addClass("busy");
 		searchResultTree
 			.reload(searchResultTree.lastSourceOpts)
-			.done(function(result) {
+			.done(function (result) {
 				// console.log("search returned", result);
 				if (result.length < 1) {
 					searchResultTree.getRootNode().setStatus("nodata");
@@ -272,7 +273,7 @@
 	 * Pageload Handler
 	 */
 
-	$(function() {
+	$(function () {
 		$("#taxonTree").fancytree({
 			extensions: ["filter", "glyph", "wide"],
 			filter: {
@@ -288,11 +289,11 @@
 				cache: true,
 				// dataType: "jsonp"
 			},
-			init: function(event, data) {
+			init: function (event, data) {
 				updateControls();
 				$(window).trigger("hashchange"); // trigger on initial page load
 			},
-			lazyLoad: function(event, data) {
+			lazyLoad: function (event, data) {
 				data.result = {
 					url: GBIF_URL + "species/" + data.node.key + "/children",
 					data: {
@@ -304,11 +305,11 @@
 				// store this request options for later paging
 				data.node.lastSourceOpts = data.result;
 			},
-			postProcess: function(event, data) {
+			postProcess: function (event, data) {
 				var response = data.response;
 
 				data.node.info("taxonTree postProcess", response);
-				data.result = $.map(response.results, function(o) {
+				data.result = $.map(response.results, function (o) {
 					return (
 						o && {
 							title: o.vernacularName || o.canonicalName,
@@ -330,16 +331,16 @@
 					delete data.node.lastSourceOpts;
 				}
 			},
-			activate: function(event, data) {
+			activate: function (event, data) {
 				$("#tmplDetails").addClass("busy");
 				$("ol.breadcrumb").addClass("busy");
 				updateControls();
-				_delay("showDetails", 500, function() {
+				_delay("showDetails", 500, function () {
 					updateItemDetails(data.node.key);
 					updateBreadcrumb(data.node.key);
 				});
 			},
-			clickPaging: function(event, data) {
+			clickPaging: function (event, data) {
 				// Load the next page of results
 				var source = $.extend(
 					true,
@@ -359,11 +360,11 @@
 			table: {
 				nodeColumnIdx: 2,
 			},
-			postProcess: function(event, data) {
+			postProcess: function (event, data) {
 				var response = data.response;
 
 				data.node.info("search postProcess", response);
-				data.result = $.map(response.results, function(o) {
+				data.result = $.map(response.results, function (o) {
 					var res = $.extend(
 						{
 							title: o.scientificName,
@@ -395,12 +396,12 @@
 			// 		multiline: true
 			// 	});
 			// },
-			renderColumns: function(event, data) {
+			renderColumns: function (event, data) {
 				var i,
 					node = data.node,
 					$tdList = $(node.tr).find(">td"),
 					cnList = node.data.vernacularNames
-						? $.map(node.data.vernacularNames, function(o) {
+						? $.map(node.data.vernacularNames, function (o) {
 								return o.vernacularName;
 						  })
 						: [];
@@ -429,16 +430,16 @@
 				// $tdList.eq(i++).text(node.data.publishedIn);
 				_setCell($tdList.eq(i++), node.data.publishedIn);
 			},
-			activate: function(event, data) {
+			activate: function (event, data) {
 				if (data.node.isStatusNode()) {
 					return;
 				}
-				_delay("activateNode", 500, function() {
+				_delay("activateNode", 500, function () {
 					updateItemDetails(data.node.key);
 					updateBreadcrumb(data.node.key);
 				});
 			},
-			clickPaging: function(event, data) {
+			clickPaging: function (event, data) {
 				// Load the next page of results
 				var source = $.extend(
 					true,
@@ -450,12 +451,12 @@
 			},
 		});
 
-		taxonTree = $("#taxonTree").fancytree("getTree");
+		taxonTree = $.ui.fancytree.getTree("#taxonTree");
 		searchResultTree = $.ui.fancytree.getTree("#searchResultTree");
 
 		// Bind a callback that executes when document.location.hash changes.
 		// (This code uses bbq: https://github.com/cowboy/jquery-bbq)
-		$(window).on("hashchange", function(e) {
+		$(window).on("hashchange", function (e) {
 			var key = $.bbq.getState("key");
 			console.log("bbq key", key);
 			if (key) {
@@ -464,16 +465,16 @@
 		}); // don't trigger now, since we need the the taxonTree root nodes to be loaded first
 
 		$("input[name=query]")
-			.on("keyup", function(e) {
+			.on("keyup", function (e) {
 				var query = $.trim($(this).val()),
 					lastQuery = $(this).data("lastQuery");
 
 				if ((e && e.which === $.ui.keyCode.ESCAPE) || query === "") {
-					$("#btnResetSearch").click();
+					$("#btnResetSearch").trigger("click");
 					return;
 				}
 				if (e && e.which === $.ui.keyCode.ENTER && query.length >= 2) {
-					$("#btnSearch").click();
+					$("#btnSearch").trigger("click");
 					return;
 				}
 				if (query === lastQuery || query.length < 2) {
@@ -481,15 +482,15 @@
 					return;
 				}
 				$(this).data("lastQuery", query);
-				_delay("search", 1, function() {
-					$("#btnSearch").click();
+				_delay("search", 1, function () {
+					$("#btnSearch").trigger("click");
 				});
 				$("#btnResetSearch").attr("disabled", query.length === 0);
 				$("#btnSearch").attr("disabled", query.length < 2);
 			})
 			.focus();
 
-		$("#btnResetSearch").click(function(e) {
+		$("#btnResetSearch").click(function (e) {
 			$("#searchResultPane").collapse("hide");
 			$("input[name=query]").val("");
 			searchResultTree.clear();
@@ -497,20 +498,20 @@
 		});
 
 		$("#btnSearch")
-			.click(function(event) {
+			.click(function (event) {
 				$("#searchResultPane").collapse("show");
 				search($("input[name=query]").val());
 			})
 			.attr("disabled", true);
 
-		$("#btnPin").click(function(event) {
-			taxonTree.filterBranches(function(n) {
+		$("#btnPin").click(function (event) {
+			taxonTree.filterBranches(function (n) {
 				return n.isActive();
 			});
 			updateControls();
 		});
 
-		$("#btnUnpin").click(function(event) {
+		$("#btnUnpin").click(function (event) {
 			taxonTree.clearFilter();
 			updateControls();
 		});

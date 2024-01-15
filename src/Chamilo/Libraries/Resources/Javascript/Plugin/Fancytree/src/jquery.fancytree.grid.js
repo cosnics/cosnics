@@ -4,7 +4,7 @@
  * Render tree as table (aka 'tree grid', 'table tree').
  * (Extension module for jquery.fancytree.js: https://github.com/mar10/fancytree/)
  *
- * Copyright (c) 2008-2019, Martin Wendt (http://wwWendt.de)
+ * Copyright (c) 2008-2023, Martin Wendt (http://wwWendt.de)
  *
  * Released under the MIT license
  * https://github.com/mar10/fancytree/wiki/LicenseInfo
@@ -13,7 +13,7 @@
  * @date @DATE
  */
 
-(function(factory) {
+(function (factory) {
 	if (typeof define === "function" && define.amd) {
 		// AMD. Register as an anonymous module.
 		define(["jquery", "./jquery.fancytree"], factory);
@@ -25,7 +25,7 @@
 		// Browser globals
 		factory(jQuery);
 	}
-})(function($) {
+})(function ($) {
 	"use strict";
 
 	/******************************************************************************
@@ -75,7 +75,7 @@
 	 * @alias Fancytree#_renumberReset
 	 * @requires jquery.fancytree.grid.js
 	 */
-	$.ui.fancytree._FancytreeClass.prototype._renumberReset = function() {
+	$.ui.fancytree._FancytreeClass.prototype._renumberReset = function () {
 		// this.debug("_renumberReset()");
 		this.visibleNodeList = null;
 	};
@@ -86,7 +86,7 @@
 	 * @alias Fancytree#_fixStart
 	 * @requires jquery.fancytree.grid.js
 	 */
-	$.ui.fancytree._FancytreeClass.prototype._fixStart = function(
+	$.ui.fancytree._FancytreeClass.prototype._fixStart = function (
 		start,
 		apply
 	) {
@@ -116,7 +116,7 @@
 	 * @alias Fancytree#_shiftViewport
 	 * @requires jquery.fancytree.grid.js
 	 */
-	$.ui.fancytree._FancytreeClass.prototype._shiftViewport = function(
+	$.ui.fancytree._FancytreeClass.prototype._shiftViewport = function (
 		mode,
 		ofs
 	) {
@@ -141,7 +141,7 @@
 	 * @alias Fancytree#isViewportBottom
 	 * @requires jquery.fancytree.grid.js
 	 */
-	$.ui.fancytree._FancytreeClass.prototype.isViewportBottom = function() {
+	$.ui.fancytree._FancytreeClass.prototype.isViewportBottom = function () {
 		return (
 			this.viewport.start + this.viewport.count >=
 			this.visibleNodeList.length
@@ -156,7 +156,7 @@
 	 * @alias Fancytree#setViewport
 	 * @requires jquery.fancytree.grid.js
 	 */
-	$.ui.fancytree._FancytreeClass.prototype.setViewport = function(opts) {
+	$.ui.fancytree._FancytreeClass.prototype.setViewport = function (opts) {
 		if (typeof opts === "boolean") {
 			this.debug("setViewport( " + opts + ")");
 			return this.setViewport({ enabled: opts });
@@ -220,9 +220,11 @@
 		var info = {
 			next: newVp,
 			diff: diffVp,
+			reason: redrawReason,
 			scrollOnly: redrawReason === "start",
 		};
 		if (
+			!opts.noEvents &&
 			this._triggerTreeEvent("beforeUpdateViewport", null, info) === false
 		) {
 			return false;
@@ -253,7 +255,9 @@
 		var force = opts.force;
 		this.redrawViewport(force);
 
-		this._triggerTreeEvent("updateViewport", null, info);
+		if (!opts.noEvents) {
+			this._triggerTreeEvent("updateViewport", null, info);
+		}
 
 		this.isVpUpdating = prevPhase;
 		return true;
@@ -265,7 +269,7 @@
 	 * @alias Fancytree#adjustViewportSize
 	 * @requires jquery.fancytree.grid.js
 	 */
-	$.ui.fancytree._FancytreeClass.prototype.adjustViewportSize = function() {
+	$.ui.fancytree._FancytreeClass.prototype.adjustViewportSize = function () {
 		_assert(
 			this.scrollWrapper,
 			"No parent div.fancytree-grid-container found."
@@ -277,15 +281,12 @@
 		// Calculate how many rows fit into current container height
 		var $table = this.$container,
 			wrapper = this.scrollWrapper,
-			trHeight = $table
-				.find(">tbody>tr")
-				.first()
-				.height(),
+			trHeight = $table.find(">tbody>tr").first().height() || 0,
 			tableHeight = $table.height(),
 			headHeight = tableHeight - this.viewport.count * trHeight,
 			wrapperHeight = wrapper.offsetHeight,
 			free = wrapperHeight - headHeight,
-			newCount = Math.floor(free / trHeight);
+			newCount = trHeight ? Math.floor(free / trHeight) : 0;
 
 		// console.info(
 		// 	"set container height",
@@ -310,75 +311,82 @@
 	 * @alias Fancytree#initViewportWrapper
 	 * @requires jquery.fancytree.grid.js
 	 */
-	$.ui.fancytree._FancytreeClass.prototype._initViewportWrapper = function() {
-		var // wrapper = this.scrollWrapper,
-			// $wrapper = $(wrapper),
-			tree = this;
+	$.ui.fancytree._FancytreeClass.prototype._initViewportWrapper =
+		function () {
+			var // wrapper = this.scrollWrapper,
+				// $wrapper = $(wrapper),
+				tree = this;
 
-		// if (SCROLL_MODE === "scroll") {
-		// 	$wrapper.on("scroll", function(e) {
-		// 		var viewport = tree.viewport,
-		// 			curTop = wrapper.scrollTop,
-		// 			homeTop = viewport.start === 0 ? 0 : EPS,
-		// 			dy = viewport.start === 0 ? 1 : curTop - EPS; //homeTop;
+			// if (SCROLL_MODE === "scroll") {
+			// 	$wrapper.on("scroll", function(e) {
+			// 		var viewport = tree.viewport,
+			// 			curTop = wrapper.scrollTop,
+			// 			homeTop = viewport.start === 0 ? 0 : EPS,
+			// 			dy = viewport.start === 0 ? 1 : curTop - EPS; //homeTop;
 
-		// 		tree.debug(
-		// 			"Got 'scroll' event: scrollTop=" +
-		// 				curTop +
-		// 				", homeTop=" +
-		// 				homeTop +
-		// 				", start=" +
-		// 				viewport.start +
-		// 				", dy=" +
-		// 				dy
-		// 		);
-		// 		if (tree.isVpUpdating) {
-		// 			tree.debug("Ignoring scroll during VP update.");
-		// 			return;
-		// 		} else if (curTop === homeTop) {
-		// 			tree.debug("Ignoring scroll to neutral " + homeTop + ".");
-		// 			return;
-		// 		}
-		// 		tree._shiftViewport("vscroll", dy);
-		// 		homeTop = viewport.start === 0 ? 0 : EPS;
-		// 		setTimeout(function() {
-		// 			tree.debug(
-		// 				"scrollTop(" +
-		// 					wrapper.scrollTop +
-		// 					" -> " +
-		// 					homeTop +
-		// 					")..."
-		// 			);
-		// 			wrapper.scrollTop = homeTop;
-		// 		}, 0);
-		// 	});
-		// }
-		if (SCROLL_MODE === "wheel") {
-			this.$container.on("wheel", function(e) {
-				var orgEvent = e.originalEvent,
-					viewport = tree.viewport,
-					dy = orgEvent.deltaY; // * orgEvent.wheelDeltaY;
+			// 		tree.debug(
+			// 			"Got 'scroll' event: scrollTop=" +
+			// 				curTop +
+			// 				", homeTop=" +
+			// 				homeTop +
+			// 				", start=" +
+			// 				viewport.start +
+			// 				", dy=" +
+			// 				dy
+			// 		);
+			// 		if (tree.isVpUpdating) {
+			// 			tree.debug("Ignoring scroll during VP update.");
+			// 			return;
+			// 		} else if (curTop === homeTop) {
+			// 			tree.debug("Ignoring scroll to neutral " + homeTop + ".");
+			// 			return;
+			// 		}
+			// 		tree._shiftViewport("vscroll", dy);
+			// 		homeTop = viewport.start === 0 ? 0 : EPS;
+			// 		setTimeout(function() {
+			// 			tree.debug(
+			// 				"scrollTop(" +
+			// 					wrapper.scrollTop +
+			// 					" -> " +
+			// 					homeTop +
+			// 					")..."
+			// 			);
+			// 			wrapper.scrollTop = homeTop;
+			// 		}, 0);
+			// 	});
+			// }
+			if (SCROLL_MODE === "wheel") {
+				this.$container.on("wheel", function (e) {
+					var orgEvent = e.originalEvent,
+						viewport = tree.viewport,
+						dy = orgEvent.deltaY; // * orgEvent.wheelDeltaY;
 
-				if (!dy || e.altKey || e.ctrlKey || e.metaKey || e.shiftKey) {
-					return true;
-				}
-				if (dy < 0 && viewport.start === 0) {
-					return true;
-				}
-				if (dy > 0 && tree.isViewportBottom()) {
-					return true;
-				}
-				tree.debug(
-					"Got 'wheel' event: dy=" +
-						dy +
-						", mode=" +
-						orgEvent.deltaMode
-				);
-				tree._shiftViewport("vscroll", dy);
-				return false;
-			});
-		}
-	};
+					if (
+						!dy ||
+						e.altKey ||
+						e.ctrlKey ||
+						e.metaKey ||
+						e.shiftKey
+					) {
+						return true;
+					}
+					if (dy < 0 && viewport.start === 0) {
+						return true;
+					}
+					if (dy > 0 && tree.isViewportBottom()) {
+						return true;
+					}
+					tree.debug(
+						"Got 'wheel' event: dy=" +
+							dy +
+							", mode=" +
+							orgEvent.deltaMode
+					);
+					tree._shiftViewport("vscroll", dy);
+					return false;
+				});
+			}
+		};
 
 	/*
 	 * [ext-grid] Renumber and collect all visible rows.
@@ -388,7 +396,7 @@
 	 * @alias Fancytree#_renumberVisibleNodes
 	 * @requires jquery.fancytree.grid.js
 	 */
-	$.ui.fancytree._FancytreeClass.prototype._renumberVisibleNodes = function(
+	$.ui.fancytree._FancytreeClass.prototype._renumberVisibleNodes = function (
 		force,
 		startIdx
 	) {
@@ -399,12 +407,13 @@
 			// this.debug("_renumberVisibleNodes() ignored.");
 			return false;
 		}
-		window.console.time("_renumberVisibleNodes()");
+		this.debugTime("_renumberVisibleNodes()");
 		var i = 0,
+			prevLength = this.visibleNodeList ? this.visibleNodeList.length : 0,
 			visibleNodeList = (this.visibleNodeList = []);
 
 		// Reset previous data
-		this.visit(function(node) {
+		this.visit(function (node) {
 			node._rowIdx = null;
 			// node.span = null;
 			// if (node.tr) {
@@ -413,11 +422,20 @@
 			// }
 		});
 		// Iterate over all *visible* nodes
-		this.visitRows(function(node) {
+		this.visitRows(function (node) {
 			node._rowIdx = i++;
 			visibleNodeList.push(node);
 		});
-		window.console.timeEnd("_renumberVisibleNodes()");
+		this.debugTimeEnd("_renumberVisibleNodes()");
+		if (i !== prevLength) {
+			this._triggerTreeEvent("updateViewport", null, {
+				reason: "renumber",
+				diff: { start: 0, count: 0, enabled: null, force: null },
+				next: $.extend({}, this.viewport),
+				// visibleCount: prevLength,
+				// cur: i,
+			});
+		}
 	};
 
 	/**
@@ -427,12 +445,12 @@
 	 * @alias Fancytree#redrawViewport
 	 * @requires jquery.fancytree.grid.js
 	 */
-	$.ui.fancytree._FancytreeClass.prototype.redrawViewport = function(force) {
+	$.ui.fancytree._FancytreeClass.prototype.redrawViewport = function (force) {
 		if (this._enableUpdate === false) {
 			// tree.debug("no render", tree._enableUpdate);
 			return;
 		}
-		window.console.time("redrawViewport()");
+		this.debugTime("redrawViewport()");
 		this._renumberVisibleNodes(force);
 		// Adjust vp.start value to assure the current content is inside:
 		this._fixStart(null, true);
@@ -449,7 +467,7 @@
 			prevPhase = this.isVpUpdating;
 
 		// Reset previous data
-		this.visit(function(node) {
+		this.visit(function (node) {
 			// node.debug("redrawViewport(): _rowIdx=" + node._rowIdx);
 			node.span = null;
 			if (node.tr) {
@@ -486,7 +504,7 @@
 			trIdx++;
 		}
 		this.isVpUpdating = prevPhase;
-		window.console.timeEnd("redrawViewport()");
+		this.debugTimeEnd("redrawViewport()");
 	};
 
 	$.ui.fancytree.registerExtension({
@@ -502,7 +520,7 @@
 		// Overide virtual methods for this extension.
 		// `this`       : is this extension object
 		// `this._super`: the virtual function that was overriden (member of prev. extension or Fancytree)
-		treeInit: function(ctx) {
+		treeInit: function (ctx) {
 			var i,
 				columnCount,
 				n,
@@ -539,9 +557,7 @@
 
 			// Prepare row templates:
 			// Determine column count from table header if any
-			columnCount = $("thead >tr", $table)
-				.last()
-				.find(">th").length;
+			columnCount = $("thead >tr", $table).last().find(">th").length;
 			// Read TR templates from tbody if any
 			$row = $tbody.children("tr").first();
 			if ($row.length) {
@@ -598,12 +614,12 @@
 			$.ui.fancytree.overrideMethod(
 				$.ui.fancytree._FancytreeNodeClass.prototype,
 				"scrollIntoView",
-				function(effects, options) {
+				function (effects, options) {
 					var node = this,
 						tree = node.tree,
 						topNode = options && options.topNode,
 						vp = tree.viewport,
-						start = vp.start;
+						start = vp ? vp.start : null;
 
 					if (!tree.viewport) {
 						return node._super.apply(this, arguments);
@@ -618,7 +634,7 @@
 					}
 					tree.setViewport({ start: start });
 					// Return a resolved promise
-					return $.Deferred(function() {
+					return $.Deferred(function () {
 						this.resolveWith(node);
 					}).promise();
 				}
@@ -642,6 +658,7 @@
 						left: 0,
 						right: 0,
 						keepEmptyRows: true,
+						noEvents: true,
 					},
 					opts.viewport
 				)
@@ -664,7 +681,7 @@
 					.attr("aria-readonly", true);
 			}
 		},
-		nodeKeydown: function(ctx) {
+		nodeKeydown: function (ctx) {
 			var nextNode = null,
 				nextIdx = null,
 				tree = ctx.tree,
@@ -702,10 +719,10 @@
 			}
 			return this._superApply(arguments);
 		},
-		nodeRemoveChildMarkup: function(ctx) {
+		nodeRemoveChildMarkup: function (ctx) {
 			var node = ctx.node;
 
-			node.visit(function(n) {
+			node.visit(function (n) {
 				if (n.tr) {
 					delete n.tr.ftnode;
 					n.tr = null;
@@ -713,7 +730,7 @@
 				}
 			});
 		},
-		nodeRemoveMarkup: function(ctx) {
+		nodeRemoveMarkup: function (ctx) {
 			var node = ctx.node;
 
 			if (node.tr) {
@@ -724,7 +741,7 @@
 			this.nodeRemoveChildMarkup(ctx);
 		},
 		/* Override standard render. */
-		nodeRender: function(ctx, force, deep, collapsed, _recursive) {
+		nodeRender: function (ctx, force, deep, collapsed, _recursive) {
 			var children,
 				i,
 				l,
@@ -782,7 +799,7 @@
 						// node.warn("nodeRender(): ignoring hidden");
 						return;
 					}
-					node.warn("nodeRender(): creating new TR!");
+					node.debug("nodeRender(): creating new TR.");
 					node.tr = tree.tbody.rows[node._rowIdx - start];
 				}
 				// _assert(
@@ -829,7 +846,7 @@
 				}
 			}
 		},
-		nodeRenderTitle: function(ctx, title) {
+		nodeRenderTitle: function (ctx, title) {
 			var $cb,
 				res,
 				tree = ctx.tree,
@@ -882,7 +899,7 @@
 			}
 			return res;
 		},
-		nodeRenderStatus: function(ctx) {
+		nodeRenderStatus: function (ctx) {
 			var indent,
 				node = ctx.node,
 				opts = ctx.options;
@@ -899,7 +916,7 @@
 			}
 		},
 		/* Expand node, return Deferred.promise. */
-		nodeSetExpanded: function(ctx, flag, callOpts) {
+		nodeSetExpanded: function (ctx, flag, callOpts) {
 			var node = ctx.node,
 				tree = ctx.tree;
 
@@ -932,7 +949,7 @@
 						// Scroll down to last child, but keep current node visible
 						node.getLastChild()
 							.scrollIntoView(true, { topNode: node })
-							.always(function() {
+							.always(function () {
 								if (!callOpts.noEvents) {
 									tree._triggerNodeEvent(
 										flag ? "expand" : "collapse",
@@ -962,28 +979,29 @@
 			}
 			// Call base-expand with disabled events and animation
 			this._super(ctx, flag, subOpts)
-				.done(function() {
+				.done(function () {
 					_afterExpand(true);
 				})
-				.fail(function() {
+				.fail(function () {
 					_afterExpand(false);
 				});
 			return dfd.promise();
 		},
-		treeClear: function(ctx) {
+		treeClear: function (ctx) {
 			// this.nodeRemoveChildMarkup(this._makeHookContext(this.rootNode));
 			// this._renumberReset(); // Invalidate visible row cache
 			return this._superApply(arguments);
 		},
-		treeDestroy: function(ctx) {
+		treeDestroy: function (ctx) {
 			this.$container.find("tbody").empty();
+			this.$container.off("wheel");
 			if (this.$source) {
 				this.$source.removeClass("fancytree-helper-hidden");
 			}
 			this._renumberReset(); // Invalidate visible row cache
 			return this._superApply(arguments);
 		},
-		treeStructureChanged: function(ctx, type) {
+		treeStructureChanged: function (ctx, type) {
 			// debugger;
 			if (type !== "addNode" || ctx.tree.visibleNodeList) {
 				// this.debug("treeStructureChanged(" + type + ")");

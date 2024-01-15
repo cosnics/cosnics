@@ -60,10 +60,10 @@ var EventData = {};
  *     false: Hide icon<br>
  *     Object: Dict of options, e.g. {text: 'check_box', addClass: ''}, useful for
  *     ligature fonts like Material.<br>
- *     String: A string value that contains a '/' or a '.' is used as `src` attribute for a &lt;img> tag.
+ *     String: A string value that contains a '/' or a '.' is used as `src` attribute for a `<img>` tag.
  *     (See also the global `imagePath` option.)<br>
  *     Any other string value is used to generate custom tags, e.g. for "ui-icon ui-icon-heart":<br>
- *     &lt;span class="fancytree-custom-icon ui-icon ui-icon-heart" />.<br>
+ *     `<span class="fancytree-custom-icon ui-icon ui-icon-heart" />`.<br>
  *     See also <a href="https://github.com/mar10/fancytree/wiki#dynamic-options">dynamic options</a>.<br>
  * @property {string} <del>iconclass</del> @deprecated use `icon` instead.
  * @property {string} iconTooltip Will be added as `title` attribute of the node's icon span,
@@ -159,13 +159,16 @@ var TreePatch = {};
  *     Recommended place to store shared data for column rendering.
  *     See also <a href="https://github.com/mar10/fancytree/wiki/ExtTable">table extension</a>.
  *     @since 2.27
+ * @property {boolean} copyFunctionsToData Copy also functions to the node's data property (default: false)
  * @property {Integer} debugLevel 0..4 (null: use global setting $.ui.fancytree.debugLevel)
  * @property {function} defaultKey callback(node) is called for new nodes without a key. Must return a new unique key. (default null: generates default keys like that: "_" + counter)
- * @property {boolean} enableAspx Accept passing ajax data in a property named `d` (default: true).
+ * @property {boolean} <del>enableAspx</del> Accept passing ajax data in a property named `d` (default: true).
+ *     @deprecated Call `data.result = data.response.d` in the `postProcess`event instead
  * @property {boolean} escapeTitles Make sure all HTML tags are escaped (default: false).
  * @property {string[]} extensions List of active extensions (default: [])
  * @property {boolean} focusOnSelect Set focus when node is checked by a mouse click (default: false)
- * @property {boolean} generateIds Add `id="..."` to node markup (default: false).
+ * @property {boolean} generateIds Add `id="..."` to node markup (default: false).<br>
+ *     The id is constructed from `options.idPrefix` + `node.key`, e.g. `id="ft_1234"`.
  * @property {boolean|function} icon Display node icons (default: true)<br>
  *     true: use default icons, depending on `node.folder` and `node.expanded`<br>
  *     false: hide icons<br>
@@ -193,7 +196,7 @@ var TreePatch = {};
  * @property {Integer} selectMode 1:single, 2:multi, 3:multi-hier (default: 2)
  * @property {any} source Used to Initialize the tree.
  * @property {object} strings Translation table<br>
- *     default: <code>{loading: "Loading...", loadError: "Load error!", moreData: "More...", noData: "No data."}</code>
+ *     default: `{loading: "Loading...", loadError: "Load error!", moreData: "More...", noData: "No data."}`
  * @property {boolean} <del>tabbable</del> @deprecated use `tabindex` instead
  * @property {string} tabindex Add tabindex attribute to container, so tree can be reached using TAB (default: "0")<br>
  *     "0": Tree control can be reached using TAB keys<br>
@@ -206,7 +209,7 @@ var TreePatch = {};
  *     thus enabling a tooltip (default: false).<br>
  *     false: No automatic tooltip (but still honor `node.tooltip` attribute)<br>
  *     true:  Use `node.title` as tooltip<br>
- *     function:  A `callback(event, data)<br>
+ *     function:  A `callback(event, data)`<br>
  *     Note: If a node has the `node.tooltip` attribute set, this will take precedence.<br>
  *     See also <a href="https://github.com/mar10/fancytree/wiki#dynamic-options">dynamic options</a>.<br>
  *     Note: If a separate tooltip widget is used, it may be more efficient to use that widget
@@ -264,6 +267,7 @@ var FancytreeOptions = {};
  * @property {function} beforeUpdateViewport ext-grid is about to redraw the tree.viewport.<br>
  *     `data.next`: viewport settings that will be applied.<br>
  *     `data.diff`: changes to the current `tree.viewport`, e.g. start offset.<br>
+ *     `data.reason`: a string describing the type of change.<br>
  *     `data.scrollOnly`: true if only the `start` value has changed.<br>
  *     Modify `next` or return `false` to prevent default processing.
  * @property {function} blur `data.node` lost keyboard focus
@@ -279,9 +283,9 @@ var FancytreeOptions = {};
  * @property {function} dblclick `data.node` was double-clicked. `data.targetType` contains the region ("checkbox", "expander", "icon", "prefix", "title"). Return `false` to prevent default processing, i.e. expanding, etc.
  * @property {function} deactivate `data.node` was deactivated
  * @property {function} defaultGridAction (used by ext-aria) The user hit enter on the active row or cell.<br>
- *     `data.activeTd` contains the currently active &lt;td> element or null<br>
+ *     `data.activeTd` contains the currently active `<td>` element or null<br>
  *     `data.colIdx` contains the 0-based column index or -1
- * @property {function} enhanceTitle Allow extending the `&lt;span class='fancytree-title'>` markup, for example by adding badges, ... (NOTE: this event is only available as callback, but not for bind())
+ * @property {function} enhanceTitle Allow extending the `<span class='fancytree-title'>` markup, for example by adding badges, ... (NOTE: this event is only available as callback, but not for bind())
  * @property {function} expand `data.node` was expanded
  * @property {function} focus `data.node` received keyboard focus
  * @property {function} focusTree `data.tree` received keyboard focus
@@ -290,6 +294,7 @@ var FancytreeOptions = {};
  *     The tree widget was initialized, source data was loaded, visible nodes are rendered,
  *     selection propagation applied, and node activated.<br>
  *     `data.status` is false on load error.<br>
+ *     Note: `preInit` is fired before nodes are loaded.<br>
  *     Note: if ext-persist is used, see also the `restore` event, which is fired later.
  * @property {function} keydown `data.node` received key. `event.which` contains the key. Return `false` to prevent default processing, i.e. navigation. Call `data.result = "preventNav";` to prevent navigation but still allow default handling inside embedded input controls.
  * @property {function} keypress (currently unused)
@@ -302,16 +307,19 @@ var FancytreeOptions = {};
  *     Note that this event is not necessarily fired for each single deleted or added node, when a hierarchy. was modified.<br>
  *     This event is only available as callback, but not for bind().
  * @property {function} postProcess Allows to modify the ajax response
+ * @property {function} preInit Widget markup was created, but no data loaded yet.<br>
+ *     @see init
  * @property {function} <del>removeNode</del> @deprecated use `modifyChild` with operation: 'remove' instead.
  * @property {function} renderColumns (used by table extension)
  * @property {function} renderStatusColumns (used by table extension)
  * @property {function} renderNode Allow tweaking after node state was rendered (NOTE: this event is only available as callback, but not for bind())
- * @property {function} renderTitle Allow replacing the `&lt;span class='fancytree-title'>` markup (NOTE: this event is only available as callback, but not for bind())
+ * @property {function} renderTitle Allow replacing the `<span class='fancytree-title'>` markup (NOTE: this event is only available as callback, but not for bind())
  * @property {function} restore ext-persist has expanded, selected, and activated the previous state
  * @property {function} select `data.node` was (de)selected. Current status is `data.node.isSelected()`
  * @property {function} updateViewport ext-grid has redrawn the tree.viewport.<br>
  *     `data.prev`: viewport settings that were active before this update.<br>
  *     `data.diff`: changes to the current `tree.viewport`, e.g. start offset.<br>
+ *     `data.reason`: a string describing the type of change.<br>
  *     `data.scrollOnly`: true if only the `start` value has changed.
  */
 var FancytreeEvents = {};

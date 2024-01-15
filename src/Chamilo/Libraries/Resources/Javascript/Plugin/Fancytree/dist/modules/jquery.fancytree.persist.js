@@ -6,16 +6,16 @@
  *
  * @depends: js-cookie or jquery-cookie
  *
- * Copyright (c) 2008-2019, Martin Wendt (https://wwWendt.de)
+ * Copyright (c) 2008-2023, Martin Wendt (https://wwWendt.de)
  *
  * Released under the MIT license
  * https://github.com/mar10/fancytree/wiki/LicenseInfo
  *
- * @version 2.31.0
- * @date 2019-05-31T11:32:38Z
+ * @version 2.38.3
+ * @date 2023-02-01T20:52:50Z
  */
 
-(function(factory) {
+(function (factory) {
 	if (typeof define === "function" && define.amd) {
 		// AMD. Register as an anonymous module.
 		define(["jquery", "./jquery.fancytree"], factory);
@@ -27,7 +27,7 @@
 		// Browser globals
 		factory(jQuery);
 	}
-})(function($) {
+})(function ($) {
 	"use strict";
 	/* global Cookies:false */
 
@@ -35,43 +35,54 @@
 	 * Private functions and variables
 	 */
 	var cookieStore = null,
-		localStorageStore = window.localStorage
-			? {
-					get: function(key) {
-						return window.localStorage.getItem(key);
-					},
-					set: function(key, value) {
-						window.localStorage.setItem(key, value);
-					},
-					remove: function(key) {
-						window.localStorage.removeItem(key);
-					},
-			  }
-			: null,
-		sessionStorageStore = window.sessionStorage
-			? {
-					get: function(key) {
-						return window.sessionStorage.getItem(key);
-					},
-					set: function(key, value) {
-						window.sessionStorage.setItem(key, value);
-					},
-					remove: function(key) {
-						window.sessionStorage.removeItem(key);
-					},
-			  }
-			: null,
+		localStorageStore = null,
+		sessionStorageStore = null,
 		_assert = $.ui.fancytree.assert,
 		ACTIVE = "active",
 		EXPANDED = "expanded",
 		FOCUS = "focus",
 		SELECTED = "selected";
 
+	// Accessing window.xxxStorage may raise security exceptions (see #1022)
+	try {
+		_assert(window.localStorage && window.localStorage.getItem);
+		localStorageStore = {
+			get: function (key) {
+				return window.localStorage.getItem(key);
+			},
+			set: function (key, value) {
+				window.localStorage.setItem(key, value);
+			},
+			remove: function (key) {
+				window.localStorage.removeItem(key);
+			},
+		};
+	} catch (e) {
+		$.ui.fancytree.warn("Could not access window.localStorage", e);
+	}
+
+	try {
+		_assert(window.sessionStorage && window.sessionStorage.getItem);
+		sessionStorageStore = {
+			get: function (key) {
+				return window.sessionStorage.getItem(key);
+			},
+			set: function (key, value) {
+				window.sessionStorage.setItem(key, value);
+			},
+			remove: function (key) {
+				window.sessionStorage.removeItem(key);
+			},
+		};
+	} catch (e) {
+		$.ui.fancytree.warn("Could not access window.sessionStorage", e);
+	}
+
 	if (typeof Cookies === "function") {
 		// Assume https://github.com/js-cookie/js-cookie
 		cookieStore = {
 			get: Cookies.get,
-			set: function(key, value) {
+			set: function (key, value) {
 				Cookies.set(key, value, this.options.persist.cookie);
 			},
 			remove: Cookies.remove,
@@ -80,8 +91,8 @@
 		// Fall back to https://github.com/carhartl/jquery-cookie
 		cookieStore = {
 			get: $.cookie,
-			set: function(key, value) {
-				$.cookie.set(key, value, this.options.persist.cookie);
+			set: function (key, value) {
+				$.cookie(key, value, this.options.persist.cookie);
 			},
 			remove: $.removeCookie,
 		};
@@ -127,7 +138,7 @@
 			}
 		}
 
-		$.when.apply($, deferredList).always(function() {
+		$.when.apply($, deferredList).always(function () {
 			// All lazy-expands have finished
 			if (foundOne && missingKeyList.length > 0) {
 				// If we read new nodes from server, try to resolve yet-missing keys
@@ -152,12 +163,12 @@
 	/**
 	 * [ext-persist] Remove persistence data of the given type(s).
 	 * Called like
-	 *     $("#tree").fancytree("getTree").clearCookies("active expanded focus selected");
+	 *     $.ui.fancytree.getTree("#tree").clearCookies("active expanded focus selected");
 	 *
 	 * @alias Fancytree#clearPersistData
 	 * @requires jquery.fancytree.persist.js
 	 */
-	$.ui.fancytree._FancytreeClass.prototype.clearPersistData = function(
+	$.ui.fancytree._FancytreeClass.prototype.clearPersistData = function (
 		types
 	) {
 		var local = this.ext.persist,
@@ -178,7 +189,7 @@
 		}
 	};
 
-	$.ui.fancytree._FancytreeClass.prototype.clearCookies = function(types) {
+	$.ui.fancytree._FancytreeClass.prototype.clearCookies = function (types) {
 		this.warn(
 			"'tree.clearCookies()' is deprecated since v2.27.0: use 'clearPersistData()' instead."
 		);
@@ -189,12 +200,12 @@
 	 * [ext-persist] Return persistence information from cookies
 	 *
 	 * Called like
-	 *     $("#tree").fancytree("getTree").getPersistData();
+	 *     $.ui.fancytree.getTree("#tree").getPersistData();
 	 *
 	 * @alias Fancytree#getPersistData
 	 * @requires jquery.fancytree.persist.js
 	 */
-	$.ui.fancytree._FancytreeClass.prototype.getPersistData = function() {
+	$.ui.fancytree._FancytreeClass.prototype.getPersistData = function () {
 		var local = this.ext.persist,
 			prefix = local.cookiePrefix,
 			delim = local.cookieDelimiter,
@@ -212,7 +223,7 @@
 	 */
 	$.ui.fancytree.registerExtension({
 		name: "persist",
-		version: "2.31.0",
+		version: "2.38.3",
 		// Default options for this extension.
 		options: {
 			cookieDelimiter: "~",
@@ -233,7 +244,7 @@
 		},
 
 		/* Generic read/write string data to cookie, sessionStorage or localStorage. */
-		_data: function(key, value) {
+		_data: function (key, value) {
 			var store = this._local.store;
 
 			if (value === undefined) {
@@ -246,7 +257,7 @@
 		},
 
 		/* Append `key` to a cookie. */
-		_appendKey: function(type, key, flag) {
+		_appendKey: function (type, key, flag) {
 			key = "" + key; // #90
 			var local = this._local,
 				instOpts = this.options.persist,
@@ -266,7 +277,7 @@
 			local._data(cookieName, keyList.join(delim));
 		},
 
-		treeInit: function(ctx) {
+		treeInit: function (ctx) {
 			var tree = ctx.tree,
 				opts = ctx.options,
 				local = this._local,
@@ -305,7 +316,7 @@
 			_assert(local.store, "Need a valid store.");
 
 			// Bind init-handler to apply cookie state
-			tree.$div.on("fancytreeinit", function(event) {
+			tree.$div.on("fancytreeinit", function (event) {
 				if (
 					tree._triggerTreeEvent("beforeRestore", null, {}) === false
 				) {
@@ -340,7 +351,7 @@
 					dfd = new $.Deferred().resolve();
 				}
 
-				dfd.done(function() {
+				dfd.done(function () {
 					if (local.storeSelected) {
 						cookie = local._data(local.cookiePrefix + SELECTED);
 						if (cookie) {
@@ -370,7 +381,7 @@
 						// In selectMode 3 we have to fix the child nodes, since we
 						// only stored the selected *top* nodes
 						if (tree.options.selectMode === 3) {
-							tree.visit(function(n) {
+							tree.visit(function (n) {
 								if (n.selected) {
 									n.fixSelection3AfterClick();
 									return "skip";
@@ -401,9 +412,7 @@
 						if (node) {
 							// node.debug("persist: set focus", cookie);
 							if (tree.options.titlesTabbable) {
-								$(node.span)
-									.find(".fancytree-title")
-									.focus();
+								$(node.span).find(".fancytree-title").focus();
 							} else {
 								$(tree.$container).focus();
 							}
@@ -416,7 +425,7 @@
 			// Init the tree
 			return this._superApply(arguments);
 		},
-		nodeSetActive: function(ctx, flag, callOpts) {
+		nodeSetActive: function (ctx, flag, callOpts) {
 			var res,
 				local = this._local;
 
@@ -431,7 +440,7 @@
 			}
 			return res;
 		},
-		nodeSetExpanded: function(ctx, flag, callOpts) {
+		nodeSetExpanded: function (ctx, flag, callOpts) {
 			var res,
 				node = ctx.node,
 				local = this._local;
@@ -444,7 +453,7 @@
 			}
 			return res;
 		},
-		nodeSetFocus: function(ctx, flag) {
+		nodeSetFocus: function (ctx, flag) {
 			var res,
 				local = this._local;
 
@@ -459,7 +468,7 @@
 			}
 			return res;
 		},
-		nodeSetSelected: function(ctx, flag, callOpts) {
+		nodeSetSelected: function (ctx, flag, callOpts) {
 			var res,
 				selNodes,
 				tree = ctx.tree,
@@ -474,7 +483,7 @@
 					// In selectMode 3 we only store the the selected *top* nodes.
 					// De-selecting a node may also de-select some parents, so we
 					// calculate the current status again
-					selNodes = $.map(tree.getSelectedNodes(true), function(n) {
+					selNodes = $.map(tree.getSelectedNodes(true), function (n) {
 						return n.key;
 					});
 					selNodes = selNodes.join(

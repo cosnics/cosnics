@@ -276,10 +276,10 @@ module.exports = (grunt) ->
         upload:
             # FTP upload the demo files (requires https://github.com/mar10/pyftpsync)
             stdin: true  # Allow interactive console
-            cmd: "pyftpsync upload . ftp://www.wwwendt.de/tech/fancytree --progress --exclude build,node_modules,.*,_* --delete-unmatched"
+            cmd: "pyftpsync upload . sftp://ssh.strato.de/tech/fancytree --progress --exclude build,node_modules,.*,_* --delete-unmatched"
         upload_force:
             # FTP upload the demo files (requires https://github.com/mar10/pyftpsync)
-            cmd: "pyftpsync upload . ftp://www.wwwendt.de/tech/fancytree --progress --exclude build,node_modules,.*,_* --delete-unmatched --resolve=local --force"
+            cmd: "pyftpsync upload . sftp://ssh.strato.de/tech/fancytree --progress --exclude build,node_modules,.*,_* --delete-unmatched --resolve=local --force"
 
     jsdoc:
         build:
@@ -310,7 +310,8 @@ module.exports = (grunt) ->
 
     qunit:
         options:
-            httpBase: "http://127.0.0.1:8080"
+            httpBase: "http://localhost:8080"
+            # httpBase: "http://127.0.0.1:8080"
         build: [
             "test/unit/test-core-build.html"
         ]
@@ -351,35 +352,51 @@ module.exports = (grunt) ->
         options:
             build: process.env.TRAVIS_JOB_ID
             throttled: 5
-            # recordVideo: false
-            # videoUploadOnPass: false
+            framework: "qunit"
+            # Map of extra parameters to be passed to sauce labs. example:
+            #   {'video-upload-on-pass': false, 'idle-timeout': 60}
             sauceConfig:
               "video-upload-on-pass": false
-              "record-video": false
-            framework: "qunit"
+              recordVideo: true
+              # Needed for Edge/Windows (as of 2019-06-02) and Firefox(?)
+              iedriverVersion: "3.141.59"
+              seleniumVersion: "3.141.59"
+            # Array of optional arguments to be passed to the Sauce Connect tunnel.
+            # See https://saucelabs.com/docs/additional-config
+            tunnelArgs: [
+              '-v',
+              '--logfile', 'saucelabs-tunnel.log',
+              '--tunnel-domains', 'localhost,travis.dev'
+              # '--direct-domains', 'google.com'
+              ]
 
         triage:
             options:
                 testname: "Triage"
                 build: "triage"
+                # urls: ["http://wwwendt.de/tech/fancytree/test/unit/test-core.html"]
                 # urls: ["http://127.0.0.1:9999/test/unit/test-jQuery19-ui19.html"]
                 # urls: ["http://127.0.0.1:9999/test/unit/test-jQuery1x-mig-ui1x.html"]
-                urls: ["http://127.0.0.1:9999/test/unit/test-core.html"]
+                urls: ["http://localhost:9999/test/unit/test-core.html"]
+                # urls: ["http://127.0.0.1:9999/test/unit/test-core.html"]
                 # tunneled: false  # Use bin/sc manually
                 browsers: [
                   # Issue #825
                   # { browserName: "chrome", version: "dev", platform: "Windows 10" }
                   # { browserName: "internet explorer", version: "9", platform: "Windows 7" }
                   # { browserName: "internet explorer", version: "8", platform: "Windows 7" }
-                  { browserName: "chrome", version: "latest", platform: "Windows 10" }
-                  { browserName: "microsoftedge", version: "latest", platform: "Windows 10" }
-                  { browserName: "safari", version: "12", platform: "macOS 10.14" }
+                  # { browserName: "chrome", version: "latest", platform: "Windows 10" }
+                  # { browserName: "microsoftedge", version: "latest", platform: "Windows 10" }
+                  # { browserName: "safari", version: "12", platform: "macOS 10.14" }
+                  { browserName: "firefox", version: "latest", platform: "Windows 10" }
                 ]
 
         ui_112:
             options:
                 testname: "Fancytree qunit tests (jQuery 3, jQuery UI 1.12)"
-                urls: ["http://127.0.0.1:9999/test/unit/test-core.html"]
+                # urls: ["http://wwwendt.de/tech/fancytree/test/unit/test-core.html"]
+                urls: ["http://localhost:9999/test/unit/test-core.html"]
+                # urls: ["http://127.0.0.1:9999/test/unit/test-core.html"]
                 # jQuery 3        supports IE 9+ and latest Chrome/Edge/Firefox/Safari (-1)
                 # jQuery UI 1.12  supports IE 11 and latest Chrome/Edge/Firefox/Safari (-1)
                 browsers: [
@@ -388,49 +405,57 @@ module.exports = (grunt) ->
                   { browserName: "firefox", version: "latest", platform: "Windows 10" }
                   { browserName: "firefox", version: "latest-1", platform: "Windows 10" }
                   { browserName: "firefox", version: "latest", platform: "Linux" }
-                  { browserName: "internet explorer", version: "11", platform: "Windows 8.1" }
                   { browserName: "microsoftedge", version: "latest", platform: "Windows 10" }
                   { browserName: "microsoftedge", version: "latest-1", platform: "Windows 10" }
+                  { browserName: "internet explorer", version: "11", platform: "Windows 8.1" }
+                  { browserName: "internet explorer", version: "10", platform: "Windows 8" }
+                  { browserName: "internet explorer", version: "9", platform: "Windows 7" }
                   # Test Saucelabs:
                   # { browserName: "chrome", version: "latest", platform: "macOS 10.14" }
                   # { browserName: "firefox", version: "latest", platform: "macOS 10.14" }
 
-                  { browserName: "safari", version: "9", platform: "OS X 10.11" }
-                  { browserName: "safari", version: "10", platform: "macOS 10.12" }
-                  { browserName: "safari", version: "11", platform: "macOS 10.13" }
-                  { browserName: "safari", version: "12", platform: "macOS 10.14" }
                 ]
-        ui_111:
-            options:
-                testname: "Fancytree qunit tests (jQuery 1.11, jQuery UI 1.11)"
-                urls: ["http://127.0.0.1:9999/test/unit/test-jQuery111-ui111.html"]
-                # jQuery 1.11     supports IE + and latest Chrome/Edge/Firefox/Safari (-1)
-                # jQuery UI 1.11  supports IE 7+ and ?
-                browsers: [
-                  { browserName: "internet explorer", version: "10", platform: "Windows 8" }
-                  # Issue #842:
-                  # { browserName: "safari", version: "7", platform: "OS X 10.9" }
-                  { browserName: "safari", version: "8", platform: "OS X 10.10" }
-                ]
-        ui_110:
-            options:
-                testname: "Fancytree qunit tests (jQuery 1.10, jQuery UI 1.10)"
-                urls: ["http://127.0.0.1:9999/test/unit/test-jQuery110-ui110.html"]
-                # jQuery 1.10    dropped support for IE 6
-                # jQuery UI 1.10 supports IE 7+ and ?
-                browsers: [
-                  # { browserName: "internet explorer", version: "8", platform: "Windows 7" }
-                  { browserName: "internet explorer", version: "9", platform: "Windows 7" }
-                ]
+        # ui_111:
+        #     options:
+        #         testname: "Fancytree qunit tests (jQuery 1.11, jQuery UI 1.11)"
+        #         # urls: ["http://wwwendt.de/tech/fancytree/test/unit/test-jQuery111-ui111.html"]
+        #         urls: ["http://127.0.0.1:9999/test/unit/test-jQuery111-ui111.html"]
+        #         # jQuery 1.11     supports IE + and latest Chrome/Edge/Firefox/Safari (-1)
+        #         # jQuery UI 1.11  supports IE 7+ and ?
+        #         browsers: [
+        #           { browserName: "internet explorer", version: "10", platform: "Windows 8" }
+        #           # Issue #842:
+        #           # { browserName: "safari", version: "7", platform: "OS X 10.9" }
+        #           { browserName: "safari", version: "8", platform: "OS X 10.10" }
+        #         ]
+        # ui_110:
+        #     options:
+        #         testname: "Fancytree qunit tests (jQuery 1.10, jQuery UI 1.10)"
+        #         # urls: ["http://wwwendt.de/tech/fancytree/test/unit/test-jQuery110-ui110.html"]
+        #         urls: ["http://127.0.0.1:9999/test/unit/test-jQuery110-ui110.html"]
+        #         # jQuery 1.10    dropped support for IE 6
+        #         # jQuery UI 1.10 supports IE 7+ and ?
+        #         browsers: [
+        #           # { browserName: "internet explorer", version: "8", platform: "Windows 7" }
+        #           { browserName: "internet explorer", version: "9", platform: "Windows 7" }
+        #         ]
         beta:  # This tests are allowed to fail in the travis matrix
             options:
                 testname: "Fancytree qunit tests ('dev' browser versions)"
-                urls: ["http://127.0.0.1:9999/test/unit/test-core.html"]
+                # urls: ["http://wwwendt.de/tech/fancytree/test/unit/test-core.html"]
+                urls: ["http://localhost:9999/test/unit/test-core.html"]
+                # urls: ["http://127.0.0.1:9999/test/unit/test-core.html"]
                 browsers: [
                   # Issue #825
                   { browserName: "chrome", version: "dev", platform: "Windows 10" }  #, chromedriverVersion: "2.46.0" }
                   # FF.dev is problematic: https://support.saucelabs.com/hc/en-us/articles/225253808-Firefox-Dev-Beta-Browser-Won-t-Start
                   { browserName: "firefox", version: "dev", platform: "Windows 10" }
+                  # 2019-06-02: known problem with Saucelabs using localhost on macOS:
+                  { browserName: "safari", version: "12", platform: "macOS 10.14" }
+                  { browserName: "safari", version: "11", platform: "macOS 10.13" }
+                  { browserName: "safari", version: "10", platform: "macOS 10.12" }
+                  { browserName: "safari", version: "9", platform: "OS X 10.11" }
+                  # { browserName: "safari", version: "8", platform: "OS X 10.10" }
                 ]
 
     uglify:
@@ -532,8 +557,8 @@ module.exports = (grunt) ->
   grunt.registerTask "sauce", [
       "connect:sauce",
       "saucelabs-qunit:ui_112",
-      "saucelabs-qunit:ui_111",
-      "saucelabs-qunit:ui_110",
+    #   "saucelabs-qunit:ui_111",
+    #   "saucelabs-qunit:ui_110",
   ]
   grunt.registerTask "sauce-optional", [
       "connect:sauce",
@@ -541,14 +566,18 @@ module.exports = (grunt) ->
   ]
   grunt.registerTask "sauce-triage", ["connect:sauce", "saucelabs-qunit:triage"]
 
-  if parseInt(process.env.TRAVIS_PULL_REQUEST, 10) > 0
-      # saucelab keys do not work on forks
-      # http://support.saucelabs.com/entries/25614798
-      grunt.registerTask "travis", ["test"]
-      grunt.registerTask "travis-optional", []
-  else
-      grunt.registerTask "travis", ["test", "sauce"]
-      grunt.registerTask "travis-optional", ["sauce-optional"]
+  # 2020-01-26 Saucelabs tests don't work.
+  # Disable them in travis for now:
+  grunt.registerTask "travis", ["test"]
+  grunt.registerTask "travis-optional", []
+  # if parseInt(process.env.TRAVIS_PULL_REQUEST, 10) > 0
+  #     # saucelab keys do not work on forks
+  #     # http://support.saucelabs.com/entries/25614798
+  #     grunt.registerTask "travis", ["test"]
+  #     grunt.registerTask "travis-optional", []
+  # else
+  #     grunt.registerTask "travis", ["test", "sauce"]
+  #     grunt.registerTask "travis-optional", ["sauce-optional"]
 
   grunt.registerTask "default", ["test"]
   grunt.registerTask "ci", ["test"]  # Called by 'npm test'

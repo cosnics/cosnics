@@ -4,7 +4,7 @@
  * Remove or highlight tree nodes, based on a filter.
  * (Extension module for jquery.fancytree.js: https://github.com/mar10/fancytree/)
  *
- * Copyright (c) 2008-2019, Martin Wendt (https://wwWendt.de)
+ * Copyright (c) 2008-2023, Martin Wendt (https://wwWendt.de)
  *
  * Released under the MIT license
  * https://github.com/mar10/fancytree/wiki/LicenseInfo
@@ -13,7 +13,7 @@
  * @date @DATE
  */
 
-(function(factory) {
+(function (factory) {
 	if (typeof define === "function" && define.amd) {
 		// AMD. Register as an anonymous module.
 		define(["jquery", "./jquery.fancytree"], factory);
@@ -25,7 +25,7 @@
 		// Browser globals
 		factory(jQuery);
 	}
-})(function($) {
+})(function ($) {
 	"use strict";
 
 	/*******************************************************************************
@@ -33,22 +33,62 @@
 	 */
 
 	var KeyNoData = "__not_found__",
-		escapeHtml = $.ui.fancytree.escapeHtml;
-
+		escapeHtml = $.ui.fancytree.escapeHtml,
+		exoticStartChar = "\uFFF7",
+		exoticEndChar = "\uFFF8";
 	function _escapeRegex(str) {
 		return (str + "").replace(/([.?*+^$[\]\\(){}|-])/g, "\\$1");
 	}
 
 	function extractHtmlText(s) {
 		if (s.indexOf(">") >= 0) {
-			return $("<div/>")
-				.html(s)
-				.text();
+			return $("<div/>").html(s).text();
 		}
 		return s;
 	}
 
-	$.ui.fancytree._FancytreeClass.prototype._applyFilterImpl = function(
+	/**
+	 * @description Marks the matching charecters of `text` either by `mark` or
+	 * by exotic*Chars (if `escapeTitles` is `true`) based on `regexMatchArray`
+	 * which is an array of matching groups.
+	 * @param {string} text
+	 * @param {RegExpMatchArray} regexMatchArray
+	 */
+	function _markFuzzyMatchedChars(text, regexMatchArray, escapeTitles) {
+		// It is extremely infuriating that we can not use `let` or `const` or arrow functions.
+		// Damn you IE!!!
+		var matchingIndices = [];
+		// get the indices of matched characters (Iterate through `RegExpMatchArray`)
+		for (
+			var _matchingArrIdx = 1;
+			_matchingArrIdx < regexMatchArray.length;
+			_matchingArrIdx++
+		) {
+			var _mIdx =
+				// get matching char index by cumulatively adding
+				// the matched group length
+				regexMatchArray[_matchingArrIdx].length +
+				(_matchingArrIdx === 1 ? 0 : 1) +
+				(matchingIndices[matchingIndices.length - 1] || 0);
+			matchingIndices.push(_mIdx);
+		}
+		// Map each `text` char to its position and store in `textPoses`.
+		var textPoses = text.split("");
+		if (escapeTitles) {
+			// If escaping the title, then wrap the matchng char within exotic chars
+			matchingIndices.forEach(function (v) {
+				textPoses[v] = exoticStartChar + textPoses[v] + exoticEndChar;
+			});
+		} else {
+			// Otherwise, Wrap the matching chars within `mark`.
+			matchingIndices.forEach(function (v) {
+				textPoses[v] = "<mark>" + textPoses[v] + "</mark>";
+			});
+		}
+		// Join back the modified `textPoses` to create final highlight markup.
+		return textPoses.join("");
+	}
+	$.ui.fancytree._FancytreeClass.prototype._applyFilterImpl = function (
 		filter,
 		branchMode,
 		_opts
@@ -57,6 +97,8 @@
 			statusNode,
 			re,
 			reHighlight,
+			reExoticStartChar,
+			reExoticEndChar,
 			temp,
 			prevEnableUpdate,
 			count = 0,
@@ -80,46 +122,76 @@
 				// See https://codereview.stackexchange.com/questions/23899/faster-javascript-fuzzy-string-matching-function/23905#23905
 				// and http://www.quora.com/How-is-the-fuzzy-search-algorithm-in-Sublime-Text-designed
 				// and http://www.dustindiaz.com/autocomplete-fuzzy-matching
-				match = filter.split("").reduce(function(a, b) {
-					return a + "[^" + b + "]*" + b;
-				});
+				match = filter
+					.split("")
+					// Escaping the `filter` will not work because,
+					// it gets further split into individual characters. So,
+					// escape each character after splitting
+					.map(_escapeRegex)
+					.reduce(function (a, b) {
+						// create capture groups for parts that comes before
+						// the character
+						return a + "([^" + b + "]*)" + b;
+					}, "");
 			} else {
 				match = _escapeRegex(filter); // make sure a '.' is treated literally
 			}
-			re = new RegExp(".*" + match + ".*", "i");
+			re = new RegExp(match, "i");
 			reHighlight = new RegExp(_escapeRegex(filter), "gi");
-			filter = function(node) {
+			if (escapeTitles) {
+				reExoticStartChar = new RegExp(
+					_escapeRegex(exoticStartChar),
+					"g"
+				);
+				reExoticEndChar = new RegExp(_escapeRegex(exoticEndChar), "g");
+			}
+			filter = function (node) {
 				if (!node.title) {
 					return false;
 				}
 				var text = escapeTitles
 						? node.title
 						: extractHtmlText(node.title),
-					res = !!re.test(text);
-
+					// `.match` instead of `.test` to get the capture groups
+					res = text.match(re);
 				if (res && opts.highlight) {
 					if (escapeTitles) {
-						// #740: we must not apply the marks to escaped entity names, e.g. `&quot;`
-						// Use some exotic characters to mark matches:
-						temp = text.replace(reHighlight, function(s) {
-							return "\uFFF7" + s + "\uFFF8";
-						});
+						if (opts.fuzzy) {
+							temp = _markFuzzyMatchedChars(
+								text,
+								res,
+								escapeTitles
+							);
+						} else {
+							// #740: we must not apply the marks to escaped entity names, e.g. `&quot;`
+							// Use some exotic characters to mark matches:
+							temp = text.replace(reHighlight, function (s) {
+								return exoticStartChar + s + exoticEndChar;
+							});
+						}
 						// now we can escape the title...
 						node.titleWithHighlight = escapeHtml(temp)
 							// ... and finally insert the desired `<mark>` tags
-							.replace(/\uFFF7/g, "<mark>")
-							.replace(/\uFFF8/g, "</mark>");
+							.replace(reExoticStartChar, "<mark>")
+							.replace(reExoticEndChar, "</mark>");
 					} else {
-						node.titleWithHighlight = text.replace(
-							reHighlight,
-							function(s) {
-								return "<mark>" + s + "</mark>";
-							}
-						);
+						if (opts.fuzzy) {
+							node.titleWithHighlight = _markFuzzyMatchedChars(
+								text,
+								res
+							);
+						} else {
+							node.titleWithHighlight = text.replace(
+								reHighlight,
+								function (s) {
+									return "<mark>" + s + "</mark>";
+								}
+							);
+						}
 					}
 					// node.debug("filter", escapeTitles, text, node.titleWithHighlight);
 				}
-				return res;
+				return !!res;
 			};
 		}
 
@@ -139,7 +211,8 @@
 			!!opts.hideExpanders
 		);
 		// Reset current filter
-		this.visit(function(node) {
+		this.rootNode.subMatchCount = 0;
+		this.visit(function (node) {
 			delete node.match;
 			delete node.titleWithHighlight;
 			node.subMatchCount = 0;
@@ -152,7 +225,7 @@
 		// Adjust node.hide, .match, and .subMatchCount properties
 		treeOpts.autoCollapse = false; // #528
 
-		this.visit(function(node) {
+		this.visit(function (node) {
 			if (leavesOnly && node.children != null) {
 				return;
 			}
@@ -160,7 +233,7 @@
 				matchedByBranch = false;
 
 			if (res === "skip") {
-				node.visit(function(c) {
+				node.visit(function (c) {
 					c.match = false;
 				}, true);
 				return "skip";
@@ -172,8 +245,10 @@
 			if (res) {
 				count++;
 				node.match = true;
-				node.visitParents(function(p) {
-					p.subMatchCount += 1;
+				node.visitParents(function (p) {
+					if (p !== node) {
+						p.subMatchCount += 1;
+					}
 					// Expand match (unless this is no real match, but only a node in a matched branch)
 					if (opts.autoExpand && !matchedByBranch && !p.expanded) {
 						p.setExpanded(true, {
@@ -183,14 +258,14 @@
 						});
 						p._filterAutoExpanded = true;
 					}
-				});
+				}, true);
 			}
 		});
 		treeOpts.autoCollapse = prevAutoCollapse;
 
 		if (count === 0 && opts.nodata && hideMode) {
 			statusNode = opts.nodata;
-			if ($.isFunction(statusNode)) {
+			if (typeof statusNode === "function") {
 				statusNode = statusNode();
 			}
 			if (statusNode === true) {
@@ -225,7 +300,7 @@
 	 * @alias Fancytree#filterNodes
 	 * @requires jquery.fancytree.filter.js
 	 */
-	$.ui.fancytree._FancytreeClass.prototype.filterNodes = function(
+	$.ui.fancytree._FancytreeClass.prototype.filterNodes = function (
 		filter,
 		opts
 	) {
@@ -247,11 +322,31 @@
 	 * @alias Fancytree#filterBranches
 	 * @requires jquery.fancytree.filter.js
 	 */
-	$.ui.fancytree._FancytreeClass.prototype.filterBranches = function(
+	$.ui.fancytree._FancytreeClass.prototype.filterBranches = function (
 		filter,
 		opts
 	) {
 		return this._applyFilterImpl(filter, true, opts);
+	};
+
+	/**
+	 * [ext-filter] Re-apply current filter.
+	 *
+	 * @returns {integer} count
+	 * @alias Fancytree#updateFilter
+	 * @requires jquery.fancytree.filter.js
+	 * @since 2.38
+	 */
+	$.ui.fancytree._FancytreeClass.prototype.updateFilter = function () {
+		if (
+			this.enableFilter &&
+			this.lastFilterArgs &&
+			this.options.filter.autoApply
+		) {
+			this._applyFilterImpl.apply(this, this.lastFilterArgs);
+		} else {
+			this.warn("updateFilter(): no filter active.");
+		}
 	};
 
 	/**
@@ -260,7 +355,7 @@
 	 * @alias Fancytree#clearFilter
 	 * @requires jquery.fancytree.filter.js
 	 */
-	$.ui.fancytree._FancytreeClass.prototype.clearFilter = function() {
+	$.ui.fancytree._FancytreeClass.prototype.clearFilter = function () {
 		var $title,
 			statusNode = this.getRootNode()._findDirectChild(KeyNoData),
 			escapeTitles = this.options.escapeTitles,
@@ -270,7 +365,11 @@
 		if (statusNode) {
 			statusNode.remove();
 		}
-		this.visit(function(node) {
+		// we also counted root node's subMatchCount
+		delete this.rootNode.match;
+		delete this.rootNode.subMatchCount;
+
+		this.visit(function (node) {
 			if (node.match && node.span) {
 				// #491, #601
 				$title = $(node.span).find(">span.fancytree-title");
@@ -320,7 +419,7 @@
 	 * @requires jquery.fancytree.filter.js
 	 * @since 2.13
 	 */
-	$.ui.fancytree._FancytreeClass.prototype.isFilterActive = function() {
+	$.ui.fancytree._FancytreeClass.prototype.isFilterActive = function () {
 		return !!this.enableFilter;
 	};
 
@@ -332,7 +431,7 @@
 	 * @requires jquery.fancytree.filter.js
 	 * @since 2.13
 	 */
-	$.ui.fancytree._FancytreeNodeClass.prototype.isMatched = function() {
+	$.ui.fancytree._FancytreeNodeClass.prototype.isMatched = function () {
 		return !(this.tree.enableFilter && !this.match);
 	};
 
@@ -355,10 +454,10 @@
 			nodata: true, // Display a 'no data' status node if result is empty
 			mode: "dimm", // Grayout unmatched nodes (pass "hide" to remove unmatched node instead)
 		},
-		nodeLoadChildren: function(ctx, source) {
+		nodeLoadChildren: function (ctx, source) {
 			var tree = ctx.tree;
 
-			return this._superApply(arguments).done(function() {
+			return this._superApply(arguments).done(function () {
 				if (
 					tree.enableFilter &&
 					tree.lastFilterArgs &&
@@ -368,7 +467,7 @@
 				}
 			});
 		},
-		nodeSetExpanded: function(ctx, flag, callOpts) {
+		nodeSetExpanded: function (ctx, flag, callOpts) {
 			var node = ctx.node;
 
 			delete node._filterAutoExpanded;
@@ -382,7 +481,7 @@
 			}
 			return this._superApply(arguments);
 		},
-		nodeRenderStatus: function(ctx) {
+		nodeRenderStatus: function (ctx) {
 			// Set classes for current status
 			var res,
 				node = ctx.node,

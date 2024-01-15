@@ -4,13 +4,13 @@
  * Drag-and-drop support (native HTML5).
  * (Extension module for jquery.fancytree.js: https://github.com/mar10/fancytree/)
  *
- * Copyright (c) 2008-2019, Martin Wendt (https://wwWendt.de)
+ * Copyright (c) 2008-2023, Martin Wendt (https://wwWendt.de)
  *
  * Released under the MIT license
  * https://github.com/mar10/fancytree/wiki/LicenseInfo
  *
- * @version 2.31.0
- * @date 2019-05-31T11:32:38Z
+ * @version 2.38.3
+ * @date 2023-02-01T20:52:50Z
  */
 
 /*
@@ -26,7 +26,7 @@
 
  */
 
-(function(factory) {
+(function (factory) {
 	if (typeof define === "function" && define.amd) {
 		// AMD. Register as an anonymous module.
 		define(["jquery", "./jquery.fancytree"], factory);
@@ -38,7 +38,7 @@
 		// Browser globals
 		factory(jQuery);
 	}
-})(function($) {
+})(function ($) {
 	"use strict";
 
 	/******************************************************************************
@@ -115,7 +115,7 @@
 				before: !!r.before,
 				after: !!r.after,
 			};
-		} else if ($.isArray(r)) {
+		} else if (Array.isArray(r)) {
 			res = {
 				over: $.inArray("over", r) >= 0,
 				before: $.inArray("before", r) >= 0,
@@ -346,8 +346,12 @@
 		data.isMove = data.dropEffect === "move";
 		// data.isMove = data.dropEffectSuggested === "move";
 
-		REQUESTED_EFFECT_ALLOWED = data.effectAllowed;
-		REQUESTED_DROP_EFFECT = data.dropEffect;
+		// `effectAllowed` must only be defined in dragstart event, so we
+		// store it in a global variable for reference
+		if (event.type === "dragstart") {
+			REQUESTED_EFFECT_ALLOWED = data.effectAllowed;
+			REQUESTED_DROP_EFFECT = data.dropEffect;
+		}
 
 		// if (REQUESTED_DROP_EFFECT !== dataTransfer.dropEffect) {
 		// 	data.tree.info(
@@ -428,6 +432,9 @@
 		// Calculate hitMode from relative cursor position.
 		nodeOfs = $target.offset();
 		relPosY = (event.pageY - nodeOfs.top) / $target.height();
+		if (event.pageY === undefined) {
+			tree.warn("event.pageY is undefined: see issue #1013.");
+		}
 
 		if (DRAG_ENTER_RESPONSE.after && relPosY > 0.75) {
 			hitMode = "after";
@@ -577,16 +584,17 @@
 				if (dndOpts.multiSource === false) {
 					SOURCE_NODE_LIST = [node];
 				} else if (dndOpts.multiSource === true) {
-					SOURCE_NODE_LIST = tree.getSelectedNodes();
-					if (!node.isSelected()) {
-						SOURCE_NODE_LIST.unshift(node);
+					if (node.isSelected()) {
+						SOURCE_NODE_LIST = tree.getSelectedNodes();
+					} else {
+						SOURCE_NODE_LIST = [node];
 					}
 				} else {
 					SOURCE_NODE_LIST = dndOpts.multiSource(node, data);
 				}
 				// Cache as array of jQuery objects for faster access:
 				$sourceList = $(
-					$.map(SOURCE_NODE_LIST, function(n) {
+					$.map(SOURCE_NODE_LIST, function (n) {
 						return n.span;
 					})
 				);
@@ -600,7 +608,7 @@
 				// data store list of items representing dragged data can be
 				// enumerated, but the data itself is unavailable and no new
 				// data can be added.
-				var nodeData = node.toDict();
+				var nodeData = node.toDict(true, dndOpts.sourceCopyHook);
 				nodeData.treeId = node.tree._id;
 				json = JSON.stringify(nodeData);
 				try {
@@ -704,6 +712,7 @@
 	 */
 	function onDropEvent(event) {
 		var json,
+			allowAutoExpand,
 			nodeData,
 			isSourceFtNode,
 			r,
@@ -794,6 +803,10 @@
 					node.debug("Reject dropping below own ancestor.");
 					DRAG_ENTER_RESPONSE = false;
 					break;
+				} else if (dndOpts.preventLazyParents && !node.isLoaded()) {
+					node.warn("Drop over unloaded target node prevented.");
+					DRAG_ENTER_RESPONSE = false;
+					break;
 				}
 				$dropMarker.show();
 
@@ -802,6 +815,7 @@
 				r = dndOpts.dragEnter(node, data);
 
 				res = normalizeDragEnterResponse(r);
+				// alert("res:" + JSON.stringify(res))
 				DRAG_ENTER_RESPONSE = res;
 
 				allowDrop = res && (res.over || res.before || res.after);
@@ -829,13 +843,16 @@
 				// 		": dropEffect: " +
 				// 		dataTransfer.dropEffect
 				// );
+				prepareDropEffectCallback(event, data);
 				LAST_HIT_MODE = handleDragOver(event, data);
 
 				// The flag controls the preventDefault() below:
 				allowDrop = !!LAST_HIT_MODE;
+				allowAutoExpand =
+					LAST_HIT_MODE === "over" || LAST_HIT_MODE === false;
 
 				if (
-					LAST_HIT_MODE === "over" &&
+					allowAutoExpand &&
 					!node.expanded &&
 					node.hasChildren() !== false
 				) {
@@ -844,6 +861,7 @@
 					} else if (
 						dndOpts.autoExpandMS &&
 						Date.now() - DRAG_OVER_STAMP > dndOpts.autoExpandMS &&
+						!node.isLoading() &&
 						(!dndOpts.dragExpand ||
 							dndOpts.dragExpand(node, data) !== false)
 					) {
@@ -984,7 +1002,7 @@
 	 * @requires jquery.fancytree.dnd5.js
 	 * @since 2.31
 	 */
-	$.ui.fancytree.getDragNodeList = function() {
+	$.ui.fancytree.getDragNodeList = function () {
 		return SOURCE_NODE_LIST || [];
 	};
 
@@ -1000,7 +1018,7 @@
 	 * @requires jquery.fancytree.dnd5.js
 	 * @since 2.31
 	 */
-	$.ui.fancytree.getDragNode = function() {
+	$.ui.fancytree.getDragNode = function () {
 		return SOURCE_NODE;
 	};
 
@@ -1010,17 +1028,20 @@
 
 	$.ui.fancytree.registerExtension({
 		name: "dnd5",
-		version: "2.31.0",
+		version: "2.38.3",
 		// Default options for this extension.
 		options: {
 			autoExpandMS: 1500, // Expand nodes after n milliseconds of hovering
 			dropMarkerInsertOffsetX: -16, // Additional offset for drop-marker with hitMode = "before"/"after"
 			dropMarkerOffsetX: -24, // Absolute position offset for .fancytree-drop-marker relatively to ..fancytree-title (icon/img near a node accepting drop)
+			// #1021 `document.body` is not available yet
+			dropMarkerParent: "body", // Root Container used for drop marker (could be a shadow root)
 			multiSource: false, // true: Drag multiple (i.e. selected) nodes. Also a callback() is allowed
 			effectAllowed: "all", // Restrict the possible cursor shapes and modifier operations (can also be set in the dragStart event)
 			// dropEffect: "auto", // 'copy'|'link'|'move'|'auto'(calculate from `effectAllowed`+modifier keys) or callback(node, data) that returns such string.
 			dropEffectDefault: "move", // Default dropEffect ('copy', 'link', or 'move') when no modifier is pressed (overide in dragDrag, dragOver).
 			preventForeignNodes: false, // Prevent dropping nodes from different Fancytrees
+			preventLazyParents: true, // Prevent dropping items on unloaded lazy Fancytree nodes
 			preventNonNodes: false, // Prevent dropping items other than Fancytree nodes
 			preventRecursion: true, // Prevent dropping nodes on own descendants
 			preventSameParent: false, // Prevent dropping nodes under same direct parent
@@ -1029,6 +1050,7 @@
 			scrollSensitivity: 20, // Active top/bottom margin in pixel
 			scrollSpeed: 5, // Pixel per event
 			setTextTypeJson: false, // Allow dragging of nodes to different IE windows
+			sourceCopyHook: null, // Optional callback passed to `toDict` on dragStart @since 2.38
 			// Events (drag support)
 			dragStart: null, // Callback(sourceNode, data), return true, to enable dnd drag
 			dragDrag: $.noop, // Callback(sourceNode, data)
@@ -1041,7 +1063,7 @@
 			dragLeave: $.noop, // Callback(targetNode, data)
 		},
 
-		treeInit: function(ctx) {
+		treeInit: function (ctx) {
 			var $temp,
 				tree = ctx.tree,
 				opts = ctx.options,
@@ -1065,18 +1087,21 @@
 			// Implement `opts.createNode` event to add the 'draggable' attribute
 			// #680: this must happen before calling super.treeInit()
 			if (dndOpts.dragStart) {
-				FT.overrideMethod(ctx.options, "createNode", function(
-					event,
-					data
-				) {
-					// Default processing if any
-					this._super.apply(this, arguments);
-					if (data.node.span) {
-						data.node.span.draggable = true;
-					} else {
-						data.node.warn("Cannot add `draggable`: no span tag");
+				FT.overrideMethod(
+					ctx.options,
+					"createNode",
+					function (event, data) {
+						// Default processing if any
+						this._super.apply(this, arguments);
+						if (data.node.span) {
+							data.node.span.draggable = true;
+						} else {
+							data.node.warn(
+								"Cannot add `draggable`: no span tag"
+							);
+						}
 					}
-				});
+				);
 			}
 			this._superApply(arguments);
 
@@ -1098,7 +1123,7 @@
 						// Drop marker should not steal dragenter/dragover events:
 						"pointer-events": "none",
 					})
-					.prependTo("body");
+					.prependTo(dndOpts.dropMarkerParent);
 				if (glyph) {
 					FT.setSpanIcon(
 						$dropMarker[0],

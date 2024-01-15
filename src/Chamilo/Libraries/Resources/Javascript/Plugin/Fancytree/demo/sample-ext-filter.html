@@ -4,8 +4,8 @@
 	<meta http-equiv="content-type" content="text/html; charset=ISO-8859-1">
 	<title>Fancytree - Example: Filter</title>
 
-	<script src="//code.jquery.com/jquery-3.4.1.min.js"></script>
-	<script src="//code.jquery.com/ui/1.12.1/jquery-ui.min.js"></script>
+	<script src="//code.jquery.com/jquery-3.6.0.min.js"></script>
+	<script src="//code.jquery.com/ui/1.13.0/jquery-ui.min.js"></script>
 
 	<link href="../src/skin-win8/ui.fancytree.css" rel="stylesheet">
 	<script src="../src/jquery.fancytree.js"></script>
@@ -19,6 +19,10 @@
 	<!-- End_Exclude -->
 
 <style type="text/css">
+ .fancytree-ext-filter span.fancytree-title mark {
+   background-color: #E09090;
+ }
+
 </style>
 
 <!-- Add code to initialize the tree when the document is loaded: -->
@@ -51,7 +55,7 @@
 				data.result = {url: "ajax-sub2.json"}
 			}
 		});
-		var tree = $("#tree").fancytree("getTree");
+		var tree = $.ui.fancytree.getTree("#tree");
 
 		/*
 		 * Event handlers for our little demo interface
@@ -70,7 +74,7 @@
 			opts.mode = $("#hideMode").is(":checked") ? "hide" : "dimm";
 
 			if(e && e.which === $.ui.keyCode.ESCAPE || $.trim(match) === ""){
-				$("button#btnResetSearch").click();
+				$("button#btnResetSearch").trigger("click");
 				return;
 			}
 			if($("#regex").is(":checked")) {

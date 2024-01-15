@@ -4,9 +4,9 @@
 	<meta http-equiv="content-type" content="text/html; charset=utf-8">
 	<title>Fancytree - Example: Forms</title>
 
-	<link href="//code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css" rel="stylesheet">
-	<script src="//code.jquery.com/jquery-3.4.1.min.js"></script>
-	<script src="//code.jquery.com/ui/1.12.1/jquery-ui.min.js"></script>
+	<link href="//code.jquery.com/ui/1.13.0/themes/base/jquery-ui.css" rel="stylesheet">
+	<script src="//code.jquery.com/jquery-3.6.0.min.js"></script>
+	<script src="//code.jquery.com/ui/1.13.0/jquery-ui.min.js"></script>
 
 	<link href="../src/skin-win8/ui.fancytree.css" rel="stylesheet">
 	<script src="../src/jquery.fancytree.js"></script>
@@ -55,8 +55,8 @@
 		});
 		$("form").submit(function() {
 			// Render hidden <input> elements for active and selected nodes
-			$("#tree").fancytree("getTree").generateFormElements();
-			$("#tree2").fancytree("getTree").generateFormElements();
+			$.ui.fancytree.getTree("#tree").generateFormElements();
+			$.ui.fancytree.getTree("#tree2").generateFormElements();
 
 			alert("POST data:\n" + jQuery.param($(this).serializeArray()));
 			// return false to prevent submission of this sample
@@ -72,8 +72,8 @@ $(function(){
 	addSampleButton({
 		label: "Generate <input> elements",
 		code: function(){
-			$("#tree").fancytree("getTree").generateInput();
-			$("#tree2").fancytree("getTree").generateInput();
+			$.ui.fancytree.getTree("#tree").generateInput();
+			$.ui.fancytree.getTree("#tree2").generateInput();
 		}
 	});
 */
