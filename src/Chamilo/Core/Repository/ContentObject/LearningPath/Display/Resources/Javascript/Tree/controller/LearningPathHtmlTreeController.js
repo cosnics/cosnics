@@ -137,8 +137,6 @@
                         });
                     }
 
-                    console.log(importActions);
-
                     items['import'] = {
                         name: translations['Import'],
                         icon: 'fa-upload',
@@ -299,9 +297,7 @@
                 $('.fancytree-edit-input').select();
             };
 
-            var treeSelector = $('#tree');
-
-            treeSelector.fancytree({
+            $('#tree').fancytree({
                 keyboard: false,
                 source: $scope.treeData,
                 glyph: {
@@ -471,7 +467,7 @@
 
             });
 
-            var tree = treeSelector.fancytree('getTree');
+            var tree = $.ui.fancytree.getTree("#tree");
 
             $scope.enableQuickEditStructure = function() {
                 $scope.quickEditStructureEnabled = true;

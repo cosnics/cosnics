@@ -125,8 +125,6 @@
 
             this.fetchWorkspaces();
 
-            var treeSelector = $("#sectionSelectorTree");
-
             this.canChangeCopyMode = function() {
                 var workspace = this.getSelectedWorkspace();
                 return workspace === undefined || (workspace !== undefined && workspace.copy_right === true && workspace.use_right === true);
@@ -150,7 +148,7 @@
                 return selectedWorkspace;
             };
 
-            treeSelector.fancytree({
+            $("#sectionSelectorTree").fancytree({
                 keyboard: false,
                 source: this.treeData,
                 glyph: {
@@ -199,7 +197,7 @@
 
             });
 
-            var tree = treeSelector.fancytree('getTree');
+            var tree = $.ui.fancytree.getTree("#tree");
 
             RepoService.fetchCategories(0, function(categories) {
                 mainController.userCategories = categories;
