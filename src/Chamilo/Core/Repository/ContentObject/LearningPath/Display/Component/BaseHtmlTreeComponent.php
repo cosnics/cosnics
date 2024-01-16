@@ -116,11 +116,8 @@ abstract class BaseHtmlTreeComponent extends Manager implements DelegateComponen
         $html[] = Translation::get('LearningPathNavigationMenu');
         $html[] = '</h3>';
 
-        $html[] = '<div class="learning-path-tree-menu">';
-
-
         $javascriptFiles = array(
-            'Tree/app.js', 'Tree/controller/LearningPathHtmlTreeController.js'
+            'Tree/controller/LearningPathHtmlTreeController.js'
         );
 
         foreach ($javascriptFiles as $javascriptFile)
@@ -164,47 +161,49 @@ abstract class BaseHtmlTreeComponent extends Manager implements DelegateComponen
         }
 
         $parameters = array(
-            'fetchTreeNodesAjaxUrl' => $this->get_application()->get_url(array(self::PARAM_ACTION => self::ACTION_AJAX, self::PARAM_REPORTING_MODE => (int) $inReportingMode)),
-            'moveTreeNodeAjaxUrl' => $this->get_application()->get_url(
-                array(
-                    self::PARAM_ACTION => self::ACTION_AJAX,
-                    \Chamilo\Core\Repository\ContentObject\LearningPath\Display\Ajax\Manager::PARAM_ACTION
-                    => \Chamilo\Core\Repository\ContentObject\LearningPath\Display\Ajax\Manager::ACTION_MOVE_LEARNING_PATH_TREE_NODE
+            'apiConfig' => array(
+                'fetchTreeNodesAjaxUrl' => $this->get_application()->get_url(array(self::PARAM_ACTION => self::ACTION_AJAX, self::PARAM_REPORTING_MODE => (int) $inReportingMode)),
+                'moveTreeNodeAjaxUrl' => $this->get_application()->get_url(
+                    array(
+                        self::PARAM_ACTION => self::ACTION_AJAX,
+                        \Chamilo\Core\Repository\ContentObject\LearningPath\Display\Ajax\Manager::PARAM_ACTION
+                        => \Chamilo\Core\Repository\ContentObject\LearningPath\Display\Ajax\Manager::ACTION_MOVE_LEARNING_PATH_TREE_NODE
+                    )
+                ),
+                'addTreeNodeAjaxUrl' => $this->get_application()->get_url(
+                    array(
+                        self::PARAM_ACTION => self::ACTION_AJAX,
+                        \Chamilo\Core\Repository\ContentObject\LearningPath\Display\Ajax\Manager::PARAM_ACTION
+                        => \Chamilo\Core\Repository\ContentObject\LearningPath\Display\Ajax\Manager::ACTION_ADD_LEARNING_PATH_TREE_NODE
+                    )
+                ),
+                'updateTreeNodeTitleAjaxUrl' => $this->get_application()->get_url(
+                    array(
+                        self::PARAM_ACTION => self::ACTION_AJAX,
+                        \Chamilo\Core\Repository\ContentObject\LearningPath\Display\Ajax\Manager::PARAM_ACTION
+                        => \Chamilo\Core\Repository\ContentObject\LearningPath\Display\Ajax\Manager::ACTION_UPDATE_LEARNING_PATH_TREE_NODE_TITLE
+                    )
+                ),
+                'deleteTreeNodeAjaxUrl' => $this->get_application()->get_url(
+                    array(
+                        self::PARAM_ACTION => self::ACTION_AJAX,
+                        \Chamilo\Core\Repository\ContentObject\LearningPath\Display\Ajax\Manager::PARAM_ACTION
+                        => \Chamilo\Core\Repository\ContentObject\LearningPath\Display\Ajax\Manager::ACTION_DELETE_LEARNING_PATH_TREE_NODE
+                    )
                 )
             ),
-            'addTreeNodeAjaxUrl' => $this->get_application()->get_url(
-                array(
-                    self::PARAM_ACTION => self::ACTION_AJAX,
-                    \Chamilo\Core\Repository\ContentObject\LearningPath\Display\Ajax\Manager::PARAM_ACTION
-                    => \Chamilo\Core\Repository\ContentObject\LearningPath\Display\Ajax\Manager::ACTION_ADD_LEARNING_PATH_TREE_NODE
-                )
-            ),
-            'updateTreeNodeTitleAjaxUrl' => $this->get_application()->get_url(
-                array(
-                    self::PARAM_ACTION => self::ACTION_AJAX,
-                    \Chamilo\Core\Repository\ContentObject\LearningPath\Display\Ajax\Manager::PARAM_ACTION
-                    => \Chamilo\Core\Repository\ContentObject\LearningPath\Display\Ajax\Manager::ACTION_UPDATE_LEARNING_PATH_TREE_NODE_TITLE
-                )
-            ),
-            'deleteTreeNodeAjaxUrl' => $this->get_application()->get_url(
-                array(
-                    self::PARAM_ACTION => self::ACTION_AJAX,
-                    \Chamilo\Core\Repository\ContentObject\LearningPath\Display\Ajax\Manager::PARAM_ACTION
-                    => \Chamilo\Core\Repository\ContentObject\LearningPath\Display\Ajax\Manager::ACTION_DELETE_LEARNING_PATH_TREE_NODE
-                )
-            ),
-            'canEditTree' =>
-                $this->canEditCurrentTreeNode() ? 'true' : 'false',
-            'canViewReporting' => $this->canViewReporting() ? 'true' : 'false',
-            'inReportingMode' => $inReportingMode ? 'true' : 'false',
+            'canEditTree' => $this->canEditCurrentTreeNode(),
+            'canViewReporting' => $this->canViewReporting(),
+            'inReportingMode' => $inReportingMode,
             'treeData' => $this->getBootstrapTreeData(),
-            'translationsJSON' => json_encode($translations)
+            'translations' => $translations
         );
 
-        foreach ($parameters as $parameter => $value)
-        {
-            $learningPathHtmlTree = str_replace('{{ ' . $parameter . ' }}', $value, $learningPathHtmlTree);
-        }
+        $html[] = '<script id="learning-path-tree-menu-app-data" type="application/json">';
+        $html[] = json_encode($parameters);
+        $html[] = '</script>';
+
+        $html[] = '<div class="learning-path-tree-menu">';
 
 //        $html[] = $this->learning_path_menu->render();
         $html[] = $learningPathHtmlTree;
@@ -382,7 +381,7 @@ abstract class BaseHtmlTreeComponent extends Manager implements DelegateComponen
             $this->canViewReporting()
         );
 
-        return json_encode($treeJSONMapper->getNodes());
+        return $treeJSONMapper->getNodes();
     }
 
     /**

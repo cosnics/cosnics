@@ -1,36 +1,39 @@
-<script>
-    var learningPathHtmlTreeApp = angular.module('learningPathHtmlTreeApp');
-
-    learningPathHtmlTreeApp.value('canEditTree', {{ canEditTree }});
-    learningPathHtmlTreeApp.value('canViewReporting', {{ canViewReporting }});
-    learningPathHtmlTreeApp.value('inReportingMode', {{ inReportingMode }});
-    learningPathHtmlTreeApp.value('treeData', {{ treeData }});
-    learningPathHtmlTreeApp.value('addTreeNodeAjaxUrl', '{{ addTreeNodeAjaxUrl }}');
-    learningPathHtmlTreeApp.value('deleteTreeNodeAjaxUrl', '{{ deleteTreeNodeAjaxUrl }}');
-    learningPathHtmlTreeApp.value('fetchTreeNodesAjaxUrl', '{{ fetchTreeNodesAjaxUrl }}');
-    learningPathHtmlTreeApp.value('moveTreeNodeAjaxUrl', '{{ moveTreeNodeAjaxUrl }}');
-    learningPathHtmlTreeApp.value('updateTreeNodeTitleAjaxUrl', '{{ updateTreeNodeTitleAjaxUrl }}');
-    learningPathHtmlTreeApp.value('translationsJSON', '{{ translationsJSON }}');
-</script>
-
-<div class="learning-path-html-tree" ng-app="learningPathHtmlTreeApp" ng-cloak
-     ng-controller="learningPathHtmlTreeController">
-    <div ng-show="quickEditStructureEnabled" class="alert alert-warning alert-drag">
-        <strong>Snel aanpassen: </strong>versleep, maak aan,...
-        <a href="#" ng-click="disableQuickEditStructure()" class="btn btn-default btn-xs pull-right">Stop</a>
+<div id="learning-path-html-tree" class="learning-path-html-tree" v-cloak>
+    <div v-if="quickEditStructureEnabled" class="alert alert-warning alert-drag">
+        <strong>Snel aanpassen:</strong> versleep, maak aan,...
+        <a href="#" @click="disableQuickEditStructure" class="btn btn-default pull-right" style="padding: 1px 5px;font-size: 12px;">Stop</a>
     </div>
-    <div ng-show="showError" class="alert alert-danger alert-drag">
+    <div v-if="showError" class="alert alert-danger alert-drag">
         <strong>Status:</strong> Er ging iets mis, gelieve de pagina te herladen.
     </div>
-    <div class="tree-loading text-center" ng-show="isLoading">
-        <img border="0" src="Chamilo/Configuration/Resources/Images/Aqua/Action/LoadingHuge.gif">
+    <div v-if="isLoading" class="tree-loading text-center">
+        <img border="0" src="Chamilo/Configuration/Resources/Images/Aqua/Action/LoadingHuge.gif" alt="Loading...">
     </div>
-    <div id="tree" ng-class="{'tree-disabled': isLoading}">
-    </div>
-    <div ng-hide="treeData[0].children" class="alert alert-info">
+    <learning-path-html-tree
+            :app-data="appData" :quick-edit-structure-enabled="quickEditStructureEnabled" :class="{'tree-disabled': isLoading}"
+            @quick-edit-enabled="quickEditStructureEnabled = $event" @is-loading="isLoading = $event" @error="showError = $event" ref="learning-path-tree"></learning-path-html-tree>
+    <div v-if="!appData.treeData[0].children" class="alert alert-info">
         Een leerpad bestaat uit verschillende stappen. Voeg bijvoorbeeld een <strong>pagina</strong> als stap toe, of een <strong>sectie</strong> (hoofdstuk) om andere stappen te groeperen.
         <br>
         U kan stappen toevoegen met de knoppen rechts, of via het menu dat verschijnt door rechts te klikken op de eerste stap hierboven.
     </div>
 </div>
 
+<script type="text/javascript">
+    (function () {
+        new Vue({
+            el: '#learning-path-html-tree',
+            data: {
+                appData: JSON.parse(document.querySelector('#learning-path-tree-menu-app-data').textContent),
+                isLoading: false,
+                showError: false,
+                quickEditStructureEnabled: false
+            },
+            methods: {
+                disableQuickEditStructure: function () {
+                    this.$refs['learning-path-tree'].disableQuickEditStructure();
+                }
+            }
+        });
+    })();
+</script>
