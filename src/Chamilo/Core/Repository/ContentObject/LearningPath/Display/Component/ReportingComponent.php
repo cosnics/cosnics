@@ -123,9 +123,9 @@ class ReportingComponent extends BaseReportingComponent implements TableSupport
                 $panelRenderer->render($translator->getTranslation('ScoreOverview'), implode(PHP_EOL, $panelHtml));
         }
 
-        $html[] = ResourceManager::getInstance()->get_resource_html(
+        /*$html[] = ResourceManager::getInstance()->get_resource_html(
             Path::getInstance()->getJavascriptPath(Manager::package(), true) . 'KeyboardNavigation.js'
-        );
+        );*/
 
         $html[] = $this->render_footer();
 

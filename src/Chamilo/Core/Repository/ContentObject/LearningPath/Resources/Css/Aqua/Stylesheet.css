@@ -63,18 +63,6 @@ ul.tree-menu li div a.type_learning_path_default.type_completed {
     }
 }
 
-.learning-path-display .learning-path-content.learning-path-content-full-screen {
-    width: 100%;
-}
-
-.learning-path-display .learning-path-tree-menu-container.learning-path-tree-menu-container-hidden {
-    display: none;
-}
-
-.learning-path-display .learning-path-tree-menu-container.learning-path-tree-menu-container-visible {
-    display: block;
-}
-
 .learning-path-display .learning-path-tree-menu-container .learning-path-tree-menu {
     overflow: auto;
 }
@@ -92,34 +80,37 @@ ul.tree-menu li div a.type_learning_path_default.type_completed {
     border-top: 1px solid #dddddd;
 }
 
-.learning-path-display .navbar-learning-path .navbar-learning-path-actions {
+.navbar-learning-path-actions {
     padding: 15px;
     height: 65px;
 }
 
-.learning-path-display .navbar-learning-path .navbar-learning-path-actions a {
-    height: 32px;
-    margin: 0 10px;
+.learning-path-action-menu {
+    align-items: center;
+    display: flex;
+    gap: 0.75rem;
+    justify-content: center;
 }
 
-.learning-path-display .navbar-learning-path .navbar-learning-path-actions .glyphicon {
+.learning-path-action-btn {
+    background: none;
+    border: none;
+    padding: 0;
+}
+
+.learning-path-action-btn-icon {
+    color: #337ab7;
     font-size: 32px;
     line-height: 32px;
     height: 32px;
-    overflow: hidden;
 }
 
-.learning-path-display .navbar-learning-path .navbar-learning-path-actions .glyphicon.disabled {
+.learning-path-action-btn-icon.disabled {
     opacity: 0.25;
 }
 
-.learning-path-display .navbar-learning-path .navbar-learning-path-actions .learning-path-action-menu {
-    color: #337ab7;
-    cursor: pointer;
-}
-
-.learning-path-display .navbar-learning-path .navbar-learning-path-actions .learning-path-action-menu:hover,
-.learning-path-display .navbar-learning-path .navbar-learning-path-actions .learning-path-action-menu:focus {
+.learning-path-action-menu a:hover .learning-path-action-btn-icon, .learning-path-action-menu a:focus .learning-path-action-btn-icon,
+.learning-path-action-menu button:hover .learning-path-action-btn-icon, .learning-path-action-menu button:focus .learning-path-action-btn-icon {
     color: #23527c;
 }
 
@@ -127,10 +118,6 @@ ul.tree-menu li div a.type_learning_path_default.type_completed {
     margin-bottom: 0px;
     border-radius: 0px;
     height: 10px;
-}
-
-.learning-path-display .navbar-learning-path .navbar-learning-path-actions .learning-path-action-menu .learning-path-action-fullscreen {
-    display: none;
 }
 
 /* Repo Drag Panel CSS */

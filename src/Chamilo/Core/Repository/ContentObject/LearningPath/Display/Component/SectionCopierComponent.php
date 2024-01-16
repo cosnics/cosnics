@@ -143,11 +143,8 @@ class SectionCopierComponent extends BaseHtmlTreeComponent
         $html[] = $this->render_header();
 
         $javascriptFiles = array(
-            'Repository/app.js',
-            'Repository/service/RepositoryService.js',
-            'LearningPathSectionCopier/app.js',
-            'LearningPathSectionCopier/service/LearningPathService.js',
-            'LearningPathSectionCopier/controller/MainController.js'
+            'Service/RepositoryService.js',
+            'Service/LearningPathService.js'
         );
 
         foreach ($javascriptFiles as $javascriptFile)

@@ -126,6 +126,6 @@ class DeleterComponent extends Manager
 
     public function get_additional_parameters()
     {
-        return array(self::PARAM_CHILD_ID, self::PARAM_FULL_SCREEN);
+        return array(self::PARAM_CHILD_ID);
     }
 }

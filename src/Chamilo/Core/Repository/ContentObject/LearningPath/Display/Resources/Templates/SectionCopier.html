@@ -1,31 +1,30 @@
-<div class="learning-path-section-copier" ng-controller="MainController as main">
+<div id="learning-path-section-copier" class="learning-path-section-copier">
 
     <form method="post" action="{{ FORM_URL }}">
-            <h4 class="form-category">
-                Stap 1: Selecteer een leerpad
-            </h4>
+        <h4 class="form-category">
+            Stap 1: Selecteer een leerpad
+        </h4>
 
-            <div class="form-row row">
-                <div class="col col-sm-4 col-md-3 col-lg-2 form-label">
-                </div>
-                <div class="col col-sm-8 col-md-9 col-lg-10 formw">
-                    <button type="button" id="reset-selected-content-object" class="btn btn-primary"
-                            ng-click="main.resetSelectedLearningPath()" ng-show="main.selectedLearningPath !== null">
-                        Selecteer een ander leerpad
-                    </button>
-                </div>
+        <div class="form-row row">
+            <div class="col col-sm-4 col-md-3 col-lg-2 form-label">
             </div>
+            <div class="col col-sm-8 col-md-9 col-lg-10 formw">
+                <button type="button" id="reset-selected-content-object" class="btn btn-primary"
+                        @click="resetSelectedLearningPath" v-if="selectedLearningPath !== null">
+                    Selecteer een ander leerpad
+                </button>
+            </div>
+        </div>
 
-
-            <div id="content-object-selector-step" ng-show="main.selectedLearningPath === null">
+        <div id="content-object-selector-step" v-show="selectedLearningPath === null">
             <div class="form-row row">
                 <div class="col col-sm-4 col-md-3 col-lg-2 form-label">
                     Selecteer uit
                 </div>
                 <div class="col col-sm-8 col-md-9 col-lg-10 formw">
-                    <select id="repository-source" class="form-control" ng-model="main.selectedWorkspace">
+                    <select id="repository-source" class="form-control" v-model="selectedWorkspace">
                         <option value="0">Mijn repository</option>
-                        <option ng-repeat="workspace in main.workspaces" ng-value="workspace.id">{{ workspace.name }}</option>
+                        <option v-for="workspace in workspaces" :value="workspace.id" :key="`workspace-${workspace.id}`">{{ workspace.name }}</option>
                     </select>
                 </div>
             </div>
@@ -35,7 +34,8 @@
                     Selecteer de categorie
                 </div>
                 <div class="col col-sm-8 col-md-9 col-lg-10 formw">
-                    <select id="category" class="form-control" ng-model="main.selectedCategory" ng-options="category.name for category in main.categories track by category.id">
+                    <select id="category" class="form-control" v-model="selectedCategory"> <!-- track by category.id-->
+                        <option v-for="category in categories" :value="category" :key="`category-${category.id}`">{{ category.name }}</option>
                     </select>
                 </div>
             </div>
@@ -46,15 +46,15 @@
                 </div>
                 <div class="col col-sm-8 col-md-9 col-lg-10 formw">
                     <div class="content-object-selector-sub-row">
-                        <input type="text" id="content-object-selector-search" class="form-control"
-                               placeholder="Zoek hier" ng-model="main.searchQuery" ng-model-options="{ debounce: 500 }" ng-change="main.search()"/>
+                        <b-form-input type="text" id="content-object-selector-search" class="form-control"
+                                      placeholder="Zoek hier" v-model="searchQuery" debounce="500" @change="search"></b-form-input>
                     </div>
 
                     <div class="content-object-selector-sub-row">
                         <div class="list-group" id="content-object-selector-list">
-                            <a href="#" class="list-group-item" ng-repeat="learningPath in main.visibleLearningPaths"
-                               ng-click="main.selectLearningPath(learningPath)"
-                               ng-class="{'selected': learningPath.selected}">
+                            <a href="#" class="list-group-item" v-for="learningPath in visibleLearningPaths"
+                               @click="selectLearningPath(learningPath)"
+                               :class="{'selected': learningPath.selected}">
                                 <div class="content-object-selector-title-container">
                                     <span class="fancytree-custom-icon type_learning_path content-object-selector-icon"></span>
                                     <span class="content-object-selector-title">{{ learningPath.title }}</span>
@@ -63,47 +63,32 @@
                         </div>
                     </div>
 
-                    <div class="content-object-selector-sub-row">
+                    <div class="content-object-selector-sub-row d-flex">
                         <div class="content-object-selector-sub-col col-sm-8">
-                            <ul
-                                    uib-pagination
-                                    boundary-links="true"
-                                    total-items="main.pager.totalItems"
-                                    ng-model="main.pager.currentPage"
-                                    items-per-page="main.pager.itemsPerPage"
-                                    num-pages="main.pager.totalPages"
-                                    max-size="5"
-                                    ng-change="main.selectPage()"
-                                    id="content-object-selector-pagination"
-                                    class="pagination-sm"
-                                    previous-text="&lsaquo;"
-                                    next-text="&rsaquo;"
-                                    first-text="&laquo;"
-                                    last-text="&raquo;">
-                            </ul>
+                            <b-pagination v-if="!isLoading" v-model="pagination.currentPage" :total-rows="pagination.total" :per-page="pagination.perPage" limit="5" size="sm"></b-pagination>
                         </div>
                         <div class="content-object-selector-sub-col col-sm-4 pull-right">
-                            <div class="panel panel-default text-center pager-info-panel ng-binding">
-                                Page {{ main.pager.currentPage }} / {{ main.pager.totalPages }}
+                            <div class="panel panel-default text-center pager-info-panel">
+                                Page {{ pagination.currentPage }} / {{ totalPages }}
                             </div>
                         </div>
                     </div>
 
                 </div>
-                <input type="hidden" id="selected-content-object" name="selected_content_object" value="{{ main.selectedLearningPath.id }}" />
-                <input type="hidden" id="selected-workspace" name="selected_workspace" value="{{ main.selectedWorkspace }}" />
+                <input type="hidden" id="selected-content-object" name="selected_content_object" :value="selectedLearningPath !== null ? selectedLearningPath.id : null" />
+                <input type="hidden" id="selected-workspace" name="selected_workspace" :value="selectedWorkspace" />
             </div>
         </div>
 
-        <div class="properties-step" ng-show="main.selectedLearningPath !== null">
+        <div class="properties-step" v-show="selectedLearningPath !== null">
             <h4 class="form-category">Stap 2: Selecteer één of meerdere secties om te kopiëren</h4>
 
             <div class="form-row row">
                 <div class="col col-sm-4 col-md-3 col-lg-2 form-label">
                 </div>
                 <div class="col col-sm-8 col-md-9 col-lg-10 formw">
-                    <div class="learning-path-html-tree" id="sectionSelectorTree" ng-class="{'tree-disabled': isLoading}"></div>
-                    <input type="hidden" id="learning-path-selected-nodes" name="learning_path_selected_nodes" value="{{ main.selectedLearningPathNodeIds }}" />
+                    <div class="learning-path-html-tree" id="sectionSelectorTree" :class="{'tree-disabled': isLoading}"></div>
+                    <input type="hidden" id="learning-path-selected-nodes" name="learning_path_selected_nodes" :value="selectedLearningPathNodeIds" />
                 </div>
             </div>
 
@@ -111,12 +96,12 @@
 
             <div class="form-row row">
                 <div class="col col-sm-4 col-md-3 col-lg-2 form-label">
-                    Kopieer de inhoud van de stappen (in plaats van deze te hergebruiken)
+                    <label for="copy-steps-below">Kopieer de inhoud van de stappen (in plaats van deze te hergebruiken)</label>
                 </div>
                 <div class="col col-sm-8 col-md-9 col-lg-10 formw">
                     <div class="element">
                         <div class="checkbox no-toggle-style">
-                            <input ng-checked="main.isCopyModeSelectedByDefault()" ng-disabled="!main.canChangeCopyMode()" type="checkbox" value="1" id="copy-steps-below" name="copy_instead_of_reuse"/>
+                            <input :checked="isCopyModeSelectedByDefault" :disabled="!canChangeCopyMode" type="checkbox" value="1" id="copy-steps-below" name="copy_instead_of_reuse"/>
                             <label></label>
                         </div>
                     </div>
@@ -127,28 +112,30 @@
                 <div class="col col-sm-4 col-md-3 col-lg-2 form-label">
                     Kopieer naar deze categorie
                 </div>
-                <div class="col col-sm-8 col-md-9 col-lg-10 formw" style="display: flex;">
+                <div class="col col-sm-8 col-md-9 col-lg-10 formw d-flex">
                     <div style="flex-grow: 2;">
-                        <select name="selected_copy_category" class="form-control" ng-model="main.selectedCopyCategory" ng-options="category.name for category in main.userCategories track by category.id">
+                        <select class="form-control" v-model="selectedCopyCategory">
+                            <option v-for="category in userCategories" :value="category" :key="`usercategory-${category.id}`">{{ category.name }}</option>
                         </select>
+                        <input type="hidden" name="selected_copy_category" :value="selectedCopyCategory !== null ? selectedCopyCategory.id : 0" />
                     </div>
-                    <div style="margin-left: 15px;" id="add_category" >
-                        <button type="button" class="btn btn-default"><span class="fa fa-plus"></span> of hierin een nieuwe categorie:</button>
+                    <div class="ml-3" id="add_category" v-if="!showAddCategory">
+                        <button type="button" class="btn btn-default" @click="showNewCategory"><i class="fa fa-plus" aria-hidden="true"></i> of hierin een nieuwe categorie:</button>
                     </div>
                 </div>
             </div>
 
-            <div id="new_category">
+            <div id="new_category" v-show="showAddCategory">
                 <div class="form-row row">
                     <div class="col col-sm-4 col-md-3 col-lg-2 form-label">
                         Nieuwe categorie naam
                     </div>
-                    <div class="col-sm-10" style="display: flex;">
+                    <div class="col-sm-10 d-flex">
                         <div style="flex-grow: 2;">
-                            <input id="new_copy_category" type="text" class="form-control" name="new_copy_category"/>
+                            <input id="new_copy_category" type="text" class="form-control" v-model="newCategoryName" name="new_copy_category"/>
                         </div>
-                        <div style="margin-left: 15px;" id="cancel_category" >
-                            <button type="button" class="btn btn-default"><span class="fa fa-remove"></span> Annuleer</button>
+                        <div class="ml-3" id="cancel_category">
+                            <button type="button" class="btn btn-default" @click="cancelNewCategory"><i class="fa fa-remove" aria-hidden="true"></i> Annuleer</button>
                         </div>
                     </div>
                 </div>
@@ -160,42 +147,210 @@
                 <div class="col col-sm-4 col-md-3 col-lg-2 form-label">
                 </div>
                 <div class="col col-sm-8 col-md-9 col-lg-10 formw">
-                    <button type="submit" class="btn btn-primary" ng-disabled="main.selectedLearningPathNodeIds == null">Kopieer de geselecteerde secties</button>
+                    <button type="submit" class="btn btn-primary" :disabled="selectedLearningPathNodeIds === null">Kopieer de geselecteerde secties</button>
                 </div>
             </div>
         </div>
-
     </form>
 </div>
-
+<style>
+    .fancytree-node.fancytree-statusnode-nodata {
+        display: none;
+    }
+</style>
 
 <script>
     (function () {
-
-        var learningPathSectionCopierApp = angular.module('learningPathSectionCopierApp');
-
-        angular.bootstrap($(".learning-path-section-copier"), ['learningPathSectionCopierApp']);
-
-        function showNewCategory(e, ui) {
-            e.preventDefault();
-            $("div#new_category").show();
-            $("div#add_category").hide();
+        function setupFancyTree(treeEl, context) {
+            $(treeEl).fancytree({
+                aria: true,
+                keyboard: true,
+                source: context.treeData,
+                glyph: {
+                    preset: 'awesome4',
+                    map: {
+                        checkbox: 'glyphicon glyphicon-unchecked',
+                        checkboxSelected: 'glyphicon glyphicon-check',
+                        checkboxUnknown: 'glyphicon glyphicon-share',
+                        dragHelper: 'glyphicon glyphicon-play',
+                        dropMarker: 'glyphicon glyphicon-arrow-right',
+                        error: 'glyphicon glyphicon-warning-sign',
+                        expanderClosed: 'glyphicon glyphicon-chevron-right',
+                        expanderLazy: 'glyphicon glyphicon-plus-sign',
+                        expanderOpen: 'glyphicon glyphicon-chevron-down',
+                        loading: 'glyphicon glyphicon-refresh glyphicon-spin',
+                        nodata: 'glyphicon glyphicon-info-sign',
+                        doc: 'glyphicon glyphicon-file',
+                        docOpen: 'glyphicon glyphicon-file',
+                        folder: 'glyphicon glyphicon-folder-close',
+                        folderOpen: 'glyphicon glyphicon-folder-open'
+                    }
+                },
+                minExpandLevel: 10,
+                selectMode: 3,
+                checkbox: true,
+                extensions: ['glyph', 'persist'],
+                toggleEffect: false,
+                persist: {
+                    store: 'local',
+                    types: 'expanded'
+                },
+                renderTitle: function (event, data) {
+                    return `<span class="fancytree-title">${ data.node.data.number } ${ data.node.title }</span>`;
+                },
+                select: function(event, data) {
+                    const selKeys = data.tree.getSelectedNodes(true).map(node => node.key);
+                    const nodeIds = selKeys.length === 0 ? null : JSON.stringify(selKeys);
+                    context.setSelectedLearningPathNodeIds(nodeIds);
+                }
+            });
+            return $.ui.fancytree.getTree(treeEl);
         }
 
-        function cancelNewCategory(e, ui) {
-            e.preventDefault();
-            $("div#new_category").hide();
-            $("div#add_category").show();
-            $("input#new_copy_category").val('');
-        }
+        Vue.use(VueLearningPathService);
+        Vue.use(VueRepositoryService);
 
-        $(document)
-            .ready(
-                function() {
-                    $("div#new_category").hide();
-                    $("div#add_category").show();
-                    $("div#add_category").on('click', showNewCategory);
-                    $("div#cancel_category").on('click', cancelNewCategory);
-                });
+        new Vue({
+            el: '#learning-path-section-copier',
+            data: {
+                isLoading: false,
+                treeData: [],
+                workspaces: [],
+                selectedWorkspace: 0,
+                originalLearningPaths: [],
+                learningPaths: [],
+                selectedLearningPath: null,
+                selectedLearningPathNodeIds: null,
+                categories: [],
+                selectedCategory: null,
+                searchQuery: null,
+                userCategories: [],
+                selectedCopyCategory: null,
+                showAddCategory: false,
+                newCategoryName: '',
+                tree: null,
+                pagination: {
+                    total: 0,
+                    currentPage: 0,
+                    perPage: 5
+                }
+            },
+            mounted() {
+                this.setupData();
+            },
+            methods: {
+                setupData() {
+                    this.fetchWorkspaces();
+                    const vueInstance = this;
+                    this.tree = setupFancyTree('#sectionSelectorTree', {
+                        get treeData() { return vueInstance.treeData; },
+                        setSelectedLearningPathNodeIds: nodeIds => vueInstance.selectedLearningPathNodeIds = nodeIds
+                    });
+                    this.$repositoryService.fetchCategories(0, categories => {
+                        this.userCategories = categories;
+                        this.selectedCopyCategory = categories[0];
+                    });
+                },
+                getSelectedWorkspace: function() {
+                    return this.workspaces.find(workspace => workspace.id === this.selectedWorkspace);
+                },
+                fetchWorkspaces: function () {
+                    this.$repositoryService.fetchWorkspaces( data => {
+                        this.workspaces = data;
+                    });
+                },
+                fetchCategories: function () {
+                    this.$repositoryService.fetchCategories(this.selectedWorkspace, categories => {
+                        this.categories = categories;
+                        this.selectedCategory = this.categories[0];
+                    });
+                },
+                fetchTree: function (learningPathId) {
+                    this.$learningPathService.fetchTree(learningPathId, data => {
+                        this.treeData = data;
+                        this.tree.reload(this.treeData);
+                    });
+                },
+                fetchLearningPaths: function (categoryId, searchQuery) {
+                    this.$learningPathService.fetchLearningPaths(this.selectedWorkspace, categoryId, searchQuery, data => {
+                        this.originalLearningPaths = this.learningPaths = data;
+                        this.pagination.total = this.learningPaths.length;
+                        this.pagination.currentPage = 1;
+                    });
+                },
+                selectLearningPath: function (learningPath) {
+                    if (this.selectedLearningPath !== null) {
+                        this.selectedLearningPath.selected = false;
+                    }
+
+                    this.selectedLearningPath = learningPath;
+                    learningPath.selected = true;
+
+                    this.fetchTree(this.selectedLearningPath.id);
+                },
+                resetSelectedLearningPath: function () {
+                    this.selectedLearningPath.selected = false;
+                    this.selectedLearningPath = null;
+                    this.selectedLearningPathNodeIds = null;
+                    this.treeData = [];
+                    this.tree.reload(this.treeData);
+                },
+                search: function() {
+                    if (this.searchQuery === null) {
+                        if (this.selectedCategory !== null) {
+                            this.fetchLearningPaths(this.selectedCategory.id);
+                        }
+                    }
+                    else {
+                        this.selectedCategory = null;
+                        this.fetchLearningPaths(null, this.searchQuery);
+                    }
+                },
+                showNewCategory: function () {
+                    this.showAddCategory = true;
+                },
+                cancelNewCategory: function () {
+                    this.showAddCategory = false;
+                    this.newCategoryName = '';
+                }
+            },
+            computed: {
+                canChangeCopyMode: function() {
+                    const workspace = this.getSelectedWorkspace();
+                    return workspace === undefined || (!!workspace.copy_right && !!workspace.use_right);
+                },
+                isCopyModeSelectedByDefault: function() {
+                    const workspace = this.getSelectedWorkspace();
+                    return workspace !== undefined && !!workspace.copy_right && !workspace.use_right;
+                },
+                visibleLearningPaths: function () {
+                    const begin = ((this.pagination.currentPage - 1) * 5),
+                        end = begin + 5;
+
+                    return this.learningPaths.slice(begin, end);
+                },
+                totalPages: function () {
+                    return Math.ceil(this.pagination.total / this.pagination.perPage);
+                }
+            },
+            watch: {
+                selectedWorkspace: {
+                    handler: function () {
+                        this.fetchCategories();
+                    },
+                    immediate: true
+                },
+                selectedCategory: {
+                    handler: function () {
+                        this.searchQuery = null;
+
+                        if (this.selectedCategory !== null) {
+                            this.fetchLearningPaths(this.selectedCategory.id);
+                        }
+                    },
+                    immediate: true
+                }
+            }
+        });
     })();
 </script>

@@ -55,6 +55,8 @@
     (function () {
         const ckDragListeners = new Map();
 
+        Vue.use(VueRepositoryService);
+
         new Vue({
             el: '#repo-drag-panel',
             data: {
@@ -97,7 +99,7 @@
             methods: {
                 fetchContentObjects: function (categoryId, searchQuery) {
                     this.loading = true;
-                    RepoService.fetchContentObjects(categoryId, searchQuery, contentObjects => {
+                    this.$repositoryService.fetchContentObjects(categoryId, searchQuery, contentObjects => {
                         this.contentObjects = contentObjects;
                         this.filteredContentObjects = this.contentObjects.slice(0, 10);
                         this.pagination.totalItems = this.contentObjects.length;
@@ -107,7 +109,7 @@
                 },
                 fetchCategories: function() {
                     this.loading = true;
-                    RepoService.fetchCategories(null, categories => {
+                    this.$repositoryService.fetchCategories(null, categories => {
                         this.categories = categories;
                         this.selectedCategory = this.categories[0];
                         this.loading = false;

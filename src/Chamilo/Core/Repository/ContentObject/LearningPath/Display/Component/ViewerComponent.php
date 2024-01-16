@@ -4,7 +4,7 @@ namespace Chamilo\Core\Repository\ContentObject\LearningPath\Display\Component;
 
 use Chamilo\Core\Repository\ContentObject\Assessment\Storage\DataClass\Assessment;
 use Chamilo\Core\Repository\ContentObject\LearningPath\Display\Embedder\Embedder;
-use Chamilo\Core\Repository\ContentObject\LearningPath\Display\Form\DirectMoverForm;
+use Chamilo\Core\Repository\ContentObject\LearningPath\Display\Form\DirectMoverFormData;
 use Chamilo\Core\Repository\ContentObject\LearningPath\Display\Manager;
 use Chamilo\Core\Repository\ContentObject\LearningPath\Domain\TreeNode;
 use Chamilo\Core\Repository\ContentObject\LearningPath\Storage\DataClass\LearningPath;
@@ -132,7 +132,7 @@ class ViewerComponent extends BaseHtmlTreeComponent
         $html[] = parent::render_header();
         $html[] = $buttonToolbarRenderer->render();
 
-        if ($this->canEditCurrentTreeNode())
+        if ($this->canEditCurrentTreeNode() && !$this->getCurrentTreeNode()->isRootNode())
         {
             $html[] = $this->renderMovePanel();
         }
@@ -170,9 +170,9 @@ class ViewerComponent extends BaseHtmlTreeComponent
 
     public function render_footer()
     {
-        $html[] = ResourceManager::getInstance()->get_resource_html(
+        /*$html[] = ResourceManager::getInstance()->get_resource_html(
             Path::getInstance()->getJavascriptPath(Manager::package(), true) . 'KeyboardNavigation.js'
-        );
+        );*/
 
         $html[] = parent::render_footer();
 
@@ -656,44 +656,28 @@ class ViewerComponent extends BaseHtmlTreeComponent
      * Renders the move panel that will be made visible when the move button is pressed
      *
      * @return string
+     * @throws \Twig\Error\LoaderError
+     * @throws \Twig\Error\RuntimeError
+     * @throws \Twig\Error\SyntaxError
      */
     protected function renderMovePanel()
     {
-        $translator = Translation::getInstance();
+        $form = new DirectMoverFormData(
+            $this->getTree(),
+            $this->getCurrentTreeNode(),
+            $this->getAutomaticNumberingService()
+        );
 
-        $form = new DirectMoverForm(
-            $this->get_url(
+        return $this->getTwig()->render(\Chamilo\Core\Repository\ContentObject\LearningPath\Display\Manager::context() . ':DirectMoverForm.html.twig', [
+            'DIRECT_MOVER_URL' => $this->get_url(
                 array(
                     self::PARAM_ACTION => self::ACTION_MOVE_DIRECTLY,
                     self::PARAM_CHILD_ID => $this->getCurrentTreeNodeDataId(),
                     self::PARAM_CONTENT_OBJECT_ID => $this->getCurrentContentObject()->getId()
                 )
             ),
-            $this->getTree(),
-            $this->getCurrentTreeNode(),
-            $this->getAutomaticNumberingService()
-        );
-
-        $html = array();
-
-        $html[] = '<div class="panel panel-default" id="mover" style="display: none;">';
-        $html[] = '<div class="panel-heading">';
-        $html[] = '<h3 class="panel-title">';
-        $html[] = '<div class="pull-right">';
-        $html[] = '<a href="#" id="mover-close" style="color: black; opacity: 0.5">';
-        $html[] = '<span class="inline-glyph glyphicon glyphicon-remove"></span>';
-        $html[] = '</a>';
-        $html[] = '</div>';
-        $html[] = $translator->getTranslation('Move', null, Manager::context());
-        $html[] = '</h3>';
-        $html[] = '<div class="clearfix"></div>';
-        $html[] = '</div>';
-        $html[] = '<div class="panel-body">';
-        $html[] = $form->toHtml();
-        $html[] = '</div>';
-        $html[] = '</div>';
-
-        return implode(PHP_EOL, $html);
+            'DIRECT_MOVER_JSON' => json_encode($form->buildFormData())
+        ]);
     }
 
     public function get_root_content_object()

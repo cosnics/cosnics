@@ -1,0 +1,86 @@
+{% set appContext = 'Chamilo\\Core\\Repository\\ContentObject\\LearningPath\\Display' %}
+
+<div class="panel panel-default" id="mover" v-cloak v-if="visible">
+    <div class="panel-heading">
+        <h3 class="panel-title">
+            <div class="pull-right">
+                <a href="#" id="mover-close" style="color: black; opacity: 0.5" @click="visible = false">
+                    <span class="inline-glyph glyphicon glyphicon-remove"></span>
+                </a>
+            </div>
+            {{ 'Move'|trans({}, appContext) }}
+        </h3>
+    </div>
+    <div class="panel-body">
+        <form action="{{ DIRECT_MOVER_URL }}" method="post" name="direct_mover_form" id="direct_mover_form">
+            <div class="form-row row mb-2 align-items-baseline">
+                <div class="col col-sm-4 col-md-3 col-lg-2 form-label">{{ 'NewParent'|trans({}, appContext) }}</div>
+                <div class="col col-sm-8 col-md-9 col-lg-10 formw">
+                    <select id="mover-parent-id" class="form-control" name="parent_id" v-model="selectedParentId" @change="selectedPosition = 1">
+                        <option v-for="{id, title} in parents" :value="id" :key="`parent-${id}`">${ title }</option>
+                    </select>
+                </div>
+            </div>
+            <div class="form-row row mb-2 align-items-baseline">
+                <div class="col col-sm-4 col-md-3 col-lg-2 form-label">{{ 'NewPosition'|trans({}, appContext) }}</div>
+                <div class="col col-sm-8 col-md-9 col-lg-10 formw">
+                    <select id="mover-display-order" class="form-control" name="display_order" v-model="selectedPosition">
+                        <option v-for="{title, displayOrder} in positions" :value="displayOrder" :key="`position-${displayOrder}`">${ title }</option>
+                    </select>
+                </div>
+            </div>
+            <div class="form-row row">
+                <div class="col col-sm-4 col-md-3 col-lg-2"></div>
+                <div class="col col-sm-8 col-md-9 col-lg-10 formw">
+                    <input type="hidden" name="_csrf_token" value="{{ csrf_token('ComponentToken') }}">
+                    <button name="submit" class="btn btn-default btn-success" type="submit">
+                        <span class="glyphicon glyphicon-ok" aria-hidden="true"></span>&nbsp;
+                        {{ 'Move'|trans({}, appContext) }}
+                    </button>
+                </div>
+            </div>
+        </form>
+    </div>
+</div>
+
+<script id="direct_mover_json" type="application/json">{{ DIRECT_MOVER_JSON|raw }}</script>
+
+<script type="text/javascript">
+    (function () {
+        const openMoverDropdownItem = new Vue({
+            el: '.dropdown-item.mover-open',
+            template: '<a class="dropdown-item mover-open" href="#" @click="openMover"><span class="inline-glyph fa fa-random" aria-hidden="true"></span><span>{{ 'Move'|trans({}, appContext) }}</span></a>',
+            methods: {
+                openMover() {
+                    this.$emit('open-mover');
+                }
+            }
+        });
+
+        const directMoverData = JSON.parse(document.querySelector('#direct_mover_json').textContent);
+
+        new Vue({
+            el: '#mover',
+            delimiters: ['${', '}'],
+            data: {
+                visible: false,
+                selectedParentId: null,
+                selectedPosition: null,
+                parents: directMoverData.parents,
+                positionsPerParent: directMoverData.positionsPerParent
+            },
+            computed: {
+                positions() {
+                    return this.positionsPerParent[this.selectedParentId];
+                }
+            },
+            created() {
+                openMoverDropdownItem.$on('open-mover', () => this.visible = true);
+            },
+            mounted() {
+                this.selectedParentId = this.parents[0].id;
+                this.selectedPosition = 1;
+            }
+        });
+    })();
+</script>

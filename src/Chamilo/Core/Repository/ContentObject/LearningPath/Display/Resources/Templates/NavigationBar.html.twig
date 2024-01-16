@@ -1,0 +1,75 @@
+{% set appContext = 'Chamilo\\Core\\Repository\\ContentObject\\LearningPath\\Display' %}
+
+<div class="navbar-learning-path">
+    <div class="navbar-learning-path-actions">
+        <div id="learning-path-action-menu" class="learning-path-action-menu" v-cloak>
+            <a v-if="hasPreviousNode" id="learning-path-navigate-left" :href="previousUrl" aria-label="{{ 'Previous'|trans({}, appContext) }}" title="{{ 'Previous'|trans({}, appContext) }}">
+                <i class="learning-path-action-btn-icon glyphicon glyphicon-arrow-left" aria-hidden="true"></i>
+            </a>
+            <i v-else class="learning-path-action-btn-icon glyphicon glyphicon-arrow-left disabled" title="{{ 'PreviousNa'|trans({}, appContext) }}" aria-hidden="true"></i>
+            <button class="learning-path-action-btn" :title="isMenuHidden ? '{{ 'ShowMenu'|trans({}, appContext) }}' : '{{ 'HideMenu'|trans({}, appContext) }}'" @click="toggleMenu">
+                <i class="learning-path-action-btn-icon glyphicon glyphicon-list-alt learning-path-action-menu-display" aria-hidden="true"></i>
+            </button>
+            <a v-if="hasNextNode" id="learning-path-navigate-right" :href="nextUrl" aria-label="{{ 'Next'|trans({}, appContext) }}" title="{{ 'Next'|trans({}, appContext) }}">
+                <i class="learning-path-action-btn-icon glyphicon glyphicon-arrow-right" aria-hidden="true"></i>
+            </a>
+            <i v-else class="learning-path-action-btn-icon glyphicon glyphicon-arrow-right disabled" title="{{ 'NextNa'|trans({}, appContext) }}" aria-hidden="true"></i>
+        </div>
+    </div>
+</div>
+
+<script type="text/javascript">
+    (function () {
+        new Vue({
+            el: '#learning-path-action-menu',
+            data: {
+                hasPreviousNode: {{ HAS_PREVIOUS_NODE }},
+                previousUrl: '{{ PREVIOUS_URL|raw }}',
+                hasNextNode: {{ HAS_NEXT_NODE }},
+                nextUrl: '{{ NEXT_URL|raw }}',
+                isMenuHidden: {{ IS_MENU_HIDDEN }}
+            },
+            methods: {
+                toggleMenu: function () {
+                    this.isMenuHidden = !this.isMenuHidden;
+                    const menuContainer = document.querySelector('.learning-path-tree-menu-container');
+                    const contentContainer = document.querySelector('.learning-path-content');
+
+                    if (this.isMenuHidden) {
+                        menuContainer.classList.add('d-none');
+                        menuContainer.classList.remove('d-block');
+                        contentContainer.classList.remove('col-sm-8');
+                        contentContainer.classList.remove('col-lg-8');
+                        setMemory('learningPathMenuIsHidden', 'true');
+                    } else {
+                        menuContainer.classList.add('d-block');
+                        menuContainer.classList.remove('d-none');
+                        contentContainer.classList.add('col-sm-8');
+                        contentContainer.classList.add('col-lg-8');
+                        setMemory('learningPathMenuIsHidden', 'false');
+                    }
+                }
+            }
+        });
+    })();
+</script>
+
+<style type="text/css">
+    @media all and (display-mode: fullscreen) {
+        body {
+            padding-top: 20px;
+        }
+
+        .navbar-chamilo {
+            display: none;
+        }
+
+        .container-breadcrumb {
+            display: none;
+        }
+
+        .chamilo-footer {
+            display: none;
+        }
+    }
+</style>

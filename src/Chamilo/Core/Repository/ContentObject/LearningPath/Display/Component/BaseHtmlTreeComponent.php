@@ -78,20 +78,13 @@ abstract class BaseHtmlTreeComponent extends Manager implements DelegateComponen
      */
     public function render_header($pageTitle = '')
     {
-        $isFullScreen = $this->getRequest()->query->get(self::PARAM_FULL_SCREEN, false);
         $isMenuHidden = Session::retrieve('learningPathMenuIsHidden');
-
-        if ($isFullScreen)
-        {
-            Page::getInstance()->setViewMode(Page::VIEW_MODE_HEADERLESS);
-        }
 
         $html = array();
 
         $html[] = parent::render_header($pageTitle);
 
         $html[] = '<div class="learning-path-display">';
-        $html[] = '<iframe class="learning-path-display-full-screen" src="about:blank"></iframe>';
 
         $html[] = $this->get_navigation_bar();
 
@@ -103,11 +96,11 @@ abstract class BaseHtmlTreeComponent extends Manager implements DelegateComponen
 
         if ($isMenuHidden == 'true')
         {
-            $classes[] = 'learning-path-tree-menu-container-hidden';
+            $classes[] = 'd-none';
         }
         else
         {
-            $classes[] = 'learning-path-tree-menu-container-visible';
+            $classes[] = 'd-block';
         }
 
         $html[] = '<div class="' . implode(' ', $classes) . '">';
@@ -117,7 +110,7 @@ abstract class BaseHtmlTreeComponent extends Manager implements DelegateComponen
         $html[] = '</h3>';
 
         $javascriptFiles = array(
-            'Tree/controller/LearningPathHtmlTreeController.js'
+            'Controller/LearningPathHtmlTreeController.js'
         );
 
         foreach ($javascriptFiles as $javascriptFile)
@@ -232,12 +225,13 @@ abstract class BaseHtmlTreeComponent extends Manager implements DelegateComponen
 
         // Content
 
-        $classes = array('col', 'col-sm-8', 'col-lg-8', 'learning-path-content');
-
-        if ($isMenuHidden == 'true')
+        $classes = ['col'];
+        if ($isMenuHidden != 'true')
         {
-            $classes[] = 'learning-path-content-full-screen';
+            $classes[] = 'col-sm-8';
+            $classes[] = 'col-lg-8';
         }
+        $classes[] = 'learning-path-content';
 
         $html[] = '<div class="' . implode(' ', $classes) . '">';
 
@@ -272,13 +266,13 @@ abstract class BaseHtmlTreeComponent extends Manager implements DelegateComponen
         $html[] = '</div>';
         $html[] = '<div class="clearfix"></div>';
 
-        $html[] = ResourceManager::getInstance()->get_resource_html(
+        /*$html[] = ResourceManager::getInstance()->get_resource_html(
             Path::getInstance()->getJavascriptPath(Manager::package(), true) . 'LearningPathMenu.js'
         );
         $html[] = ResourceManager::getInstance()->get_resource_html(
             Path::getInstance()->getJavascriptPath(Utilities::COMMON_LIBRARIES, true) .
             'Plugin/Jquery/jquery.fullscreen.min.js'
-        );
+        );*/
 
         $html[] = parent::render_footer();
 
@@ -296,8 +290,22 @@ abstract class BaseHtmlTreeComponent extends Manager implements DelegateComponen
     private function get_navigation_bar()
     {
         $currentTreeNode = $this->getCurrentTreeNode();
+        $previous_node = $currentTreeNode->getPreviousNode();
+        $has_previous_node = $previous_node instanceof TreeNode;
+        $previous_url = $has_previous_node ? $this->getTreeNodeNavigationUrl($previous_node) : null;
+        $next_node = $currentTreeNode->getNextNode();
+        $has_next_node = $next_node instanceof TreeNode;
+        $next_url = $has_next_node ?$this->getTreeNodeNavigationUrl($next_node) : null;
 
-        $html = array();
+        return $this->getTwig()->render(\Chamilo\Core\Repository\ContentObject\LearningPath\Display\Manager::context() . ':NavigationBar.html.twig', [
+            'HAS_PREVIOUS_NODE' => $has_previous_node ? 'true' : 'false',
+            'PREVIOUS_URL' => $previous_url,
+            'IS_MENU_HIDDEN' => Session::retrieve('learningPathMenuIsHidden') == 'true' ? 'true' : 'false',
+            'HAS_NEXT_NODE' => $has_next_node ? 'true' : 'false',
+            'NEXT_URL' => $next_url
+        ]);
+
+        /*$html = array();
 
         $html[] = '<div class="navbar-learning-path">';
 
@@ -357,7 +365,7 @@ abstract class BaseHtmlTreeComponent extends Manager implements DelegateComponen
         $html[] = '</div>';
         $html[] = '</div>';
 
-        return implode(PHP_EOL, $html);
+        return implode(PHP_EOL, $html);*/
     }
 
     protected function getBootstrapTreeData()

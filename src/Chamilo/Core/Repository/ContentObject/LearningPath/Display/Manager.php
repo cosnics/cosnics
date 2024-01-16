@@ -61,7 +61,6 @@ abstract class Manager extends \Chamilo\Core\Repository\Display\Manager
     const PARAM_LEARNING_PATH_ITEM_ID = 'learning_path_item_id';
     const PARAM_SORT = 'sort';
     const PARAM_ITEM_ATTEMPT_ID = 'item_attempt_id';
-    const PARAM_FULL_SCREEN = 'full_screen';
     const PARAM_PARENT_ID = 'parent_id';
     const PARAM_DISPLAY_ORDER = 'display_order';
     const PARAM_CONTENT_OBJECT_ID = 'content_object_id';
@@ -139,15 +138,6 @@ abstract class Manager extends \Chamilo\Core\Repository\Display\Manager
     {
         return $this->canViewReporting() && $this->canEditCurrentTreeNode() &&
             $this->get_application()->is_allowed_to_edit_learning_path_attempt_data();
-    }
-
-    /**
-     *
-     * @see \libraries\architecture\application\Application::get_additional_parameters()
-     */
-    public function get_additional_parameters()
-    {
-        return array(self::PARAM_CHILD_ID, self::PARAM_FULL_SCREEN);
     }
 
     /**
@@ -387,9 +377,7 @@ abstract class Manager extends \Chamilo\Core\Repository\Display\Manager
         $html = array();
 
         $javascriptFiles = array(
-            'Repository/app.js', 'Repository/service/RepositoryService.js',
-            'RepoDragPanel/app.js', 'RepoDragPanel/filter/limitText.js',
-            'RepoDragPanel/directive/ckDraggable.js', 'RepoDragPanel/controller/DragPanelController.js'
+            'Service/RepositoryService.js'
         );
 
         foreach ($javascriptFiles as $javascriptFile)

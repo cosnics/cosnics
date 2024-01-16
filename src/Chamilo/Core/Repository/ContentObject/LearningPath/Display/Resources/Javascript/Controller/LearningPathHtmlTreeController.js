@@ -1,10 +1,11 @@
 (function () {
-    function setupFancyTree(context) {
-        $('#tree').fancytree({
+    function setupFancyTree(treeEl, context) {
+        $(treeEl).fancytree({
             aria: true,
             keyboard: true,
             source: context.treeData,
             glyph: {
+                preset: 'awesome4',
                 map: {
                     checkbox: 'glyphicon glyphicon-unchecked',
                     checkboxSelected: 'glyphicon glyphicon-check',
@@ -111,7 +112,7 @@
                 }
             }
         });
-        return $.ui.fancytree.getTree("#tree");
+        return $.ui.fancytree.getTree(treeEl);
     }
 
     function createFancyTreeContext(vueInstance) {
@@ -193,7 +194,7 @@
                 this.treeData = treeData;
                 this.apiConfig = apiConfig;
                 this.translations = translations;
-                this.tree = setupFancyTree(createFancyTreeContext(this));
+                this.tree = setupFancyTree('#tree', createFancyTreeContext(this));
                 createContextMenu({
                     getContextMenuItems: this.getContextMenuItems.bind(this)
                 });
