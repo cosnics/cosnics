@@ -2,22 +2,31 @@
 
 namespace Chamilo\Application\Plagiarism\API\StrikePlagiarism\Model\Request;
 
+use Symfony\Component\Serializer\Annotation\SerializedName;
+
 class UploadDocumentRequestParameters extends StrikePlagiarismRequestParameters
 {
+    #[SerializedName('languageCode')]
     protected string $languageCode;
     protected string $faculty;
     protected string $action;
     protected string $callback;
+    #[SerializedName('userEmail')]
     protected string $userEmail;
     protected string $id;
     protected string $title;
     protected string $author;
     protected string $coordinator;
     protected string $reviewer;
+    #[SerializedName('documentKind')]
     protected string $documentKind;
+    #[SerializedName('assignmentId')]
     protected string $assignmentId;
+    #[SerializedName('userId')]
     protected string $userId;
+    #[SerializedName('unitName')]
     protected string $unitName;
+    #[SerializedName('aiDetection')]
     protected string $aiDetection;
     protected string $file;
 

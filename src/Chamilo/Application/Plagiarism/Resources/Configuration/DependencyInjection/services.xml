@@ -18,5 +18,12 @@
         <service id="Chamilo\Application\Plagiarism\Service\UserConverter\UserConverterInterface" autowire="true">
             <factory service="Chamilo\Application\Plagiarism\Service\UserConverter\UserConverterFactory" method="createUserConverter" />
         </service>
+
+        <service id="Chamilo\Application\Plagiarism\API\StrikePlagiarism\StrikePlagiarismRestClientFactory" autowire="true" />
+
+        <service id="Chamilo\Application\Plagiarism\API\StrikePlagiarism\StrikePlagiarismRestClient">
+            <factory service="Chamilo\Application\Plagiarism\API\StrikePlagiarism\StrikePlagiarismRestClientFactory" method="createRestClient" />
+        </service>
+
     </services>
 </container>
