@@ -45,6 +45,7 @@ class DependencyInjectionExtension extends Extension implements ExtensionInterfa
 
         $xmlFileLoader->load('services.xml');
         $xmlFileLoader->load('turnitin.xml');
+        $xmlFileLoader->load('strike_plagiarism.xml');
     }
 
     /**

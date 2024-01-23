@@ -6,6 +6,9 @@ use Symfony\Component\Serializer\Annotation\SerializedName;
 
 class UploadDocumentRequestParameters extends StrikePlagiarismRequestParameters
 {
+    const ACTION_CHECK = 'check';
+    const ACTION_INDEX = 'index';
+
     #[SerializedName('languageCode')]
     protected string $languageCode;
     protected string $faculty;
@@ -15,9 +18,21 @@ class UploadDocumentRequestParameters extends StrikePlagiarismRequestParameters
     protected string $userEmail;
     protected string $id;
     protected string $title;
-    protected string $author;
-    protected string $coordinator;
-    protected string $reviewer;
+
+    /**
+     * @var string[]
+     */
+    protected array $author;
+
+    /**
+     * @var string[]
+     */
+    protected array $coordinator;
+
+    /**
+     * @var string[]
+     */
+    protected array $reviewer;
     #[SerializedName('documentKind')]
     protected string $documentKind;
     #[SerializedName('assignmentId')]
@@ -35,7 +50,7 @@ class UploadDocumentRequestParameters extends StrikePlagiarismRequestParameters
         return $this->languageCode;
     }
 
-    public function setLanguageCode(string $languageCode): StrikePlagiarismRequestParameters
+    public function setLanguageCode(string $languageCode): UploadDocumentRequestParameters
     {
         $this->languageCode = $languageCode;
         return $this;
@@ -46,7 +61,7 @@ class UploadDocumentRequestParameters extends StrikePlagiarismRequestParameters
         return $this->faculty;
     }
 
-    public function setFaculty(string $faculty): StrikePlagiarismRequestParameters
+    public function setFaculty(string $faculty): UploadDocumentRequestParameters
     {
         $this->faculty = $faculty;
         return $this;
@@ -57,8 +72,11 @@ class UploadDocumentRequestParameters extends StrikePlagiarismRequestParameters
         return $this->action;
     }
 
-    public function setAction(string $action): StrikePlagiarismRequestParameters
+    public function setAction(string $action): UploadDocumentRequestParameters
     {
+        if($action != self::ACTION_INDEX || $action != self::ACTION_CHECK)
+            throw new \InvalidArgumentException('Invalid action');
+
         $this->action = $action;
         return $this;
     }
@@ -68,7 +86,7 @@ class UploadDocumentRequestParameters extends StrikePlagiarismRequestParameters
         return $this->callback;
     }
 
-    public function setCallback(string $callback): StrikePlagiarismRequestParameters
+    public function setCallback(string $callback): UploadDocumentRequestParameters
     {
         $this->callback = $callback;
         return $this;
@@ -79,7 +97,7 @@ class UploadDocumentRequestParameters extends StrikePlagiarismRequestParameters
         return $this->userEmail;
     }
 
-    public function setUserEmail(string $userEmail): StrikePlagiarismRequestParameters
+    public function setUserEmail(string $userEmail): UploadDocumentRequestParameters
     {
         $this->userEmail = $userEmail;
         return $this;
@@ -90,7 +108,7 @@ class UploadDocumentRequestParameters extends StrikePlagiarismRequestParameters
         return $this->id;
     }
 
-    public function setId(string $id): StrikePlagiarismRequestParameters
+    public function setId(string $id): UploadDocumentRequestParameters
     {
         $this->id = $id;
         return $this;
@@ -101,40 +119,40 @@ class UploadDocumentRequestParameters extends StrikePlagiarismRequestParameters
         return $this->title;
     }
 
-    public function setTitle(string $title): StrikePlagiarismRequestParameters
+    public function setTitle(string $title): UploadDocumentRequestParameters
     {
         $this->title = $title;
         return $this;
     }
 
-    public function getAuthor(): string
+    public function getAuthor(): array
     {
         return $this->author;
     }
 
-    public function setAuthor(string $author): StrikePlagiarismRequestParameters
+    public function setAuthor(array $author): UploadDocumentRequestParameters
     {
         $this->author = $author;
         return $this;
     }
 
-    public function getCoordinator(): string
+    public function getCoordinator(): array
     {
         return $this->coordinator;
     }
 
-    public function setCoordinator(string $coordinator): StrikePlagiarismRequestParameters
+    public function setCoordinator(array $coordinator): UploadDocumentRequestParameters
     {
         $this->coordinator = $coordinator;
         return $this;
     }
 
-    public function getReviewer(): string
+    public function getReviewer(): array
     {
         return $this->reviewer;
     }
 
-    public function setReviewer(string $reviewer): StrikePlagiarismRequestParameters
+    public function setReviewer(array $reviewer): UploadDocumentRequestParameters
     {
         $this->reviewer = $reviewer;
         return $this;
@@ -145,7 +163,7 @@ class UploadDocumentRequestParameters extends StrikePlagiarismRequestParameters
         return $this->documentKind;
     }
 
-    public function setDocumentKind(string $documentKind): StrikePlagiarismRequestParameters
+    public function setDocumentKind(string $documentKind): UploadDocumentRequestParameters
     {
         $this->documentKind = $documentKind;
         return $this;
@@ -156,7 +174,7 @@ class UploadDocumentRequestParameters extends StrikePlagiarismRequestParameters
         return $this->assignmentId;
     }
 
-    public function setAssignmentId(string $assignmentId): StrikePlagiarismRequestParameters
+    public function setAssignmentId(string $assignmentId): UploadDocumentRequestParameters
     {
         $this->assignmentId = $assignmentId;
         return $this;
@@ -167,7 +185,7 @@ class UploadDocumentRequestParameters extends StrikePlagiarismRequestParameters
         return $this->userId;
     }
 
-    public function setUserId(string $userId): StrikePlagiarismRequestParameters
+    public function setUserId(string $userId): UploadDocumentRequestParameters
     {
         $this->userId = $userId;
         return $this;
@@ -178,7 +196,7 @@ class UploadDocumentRequestParameters extends StrikePlagiarismRequestParameters
         return $this->unitName;
     }
 
-    public function setUnitName(string $unitName): StrikePlagiarismRequestParameters
+    public function setUnitName(string $unitName): UploadDocumentRequestParameters
     {
         $this->unitName = $unitName;
         return $this;
@@ -189,7 +207,7 @@ class UploadDocumentRequestParameters extends StrikePlagiarismRequestParameters
         return $this->aiDetection;
     }
 
-    public function setAiDetection(string $aiDetection): StrikePlagiarismRequestParameters
+    public function setAiDetection(string $aiDetection): UploadDocumentRequestParameters
     {
         $this->aiDetection = $aiDetection;
         return $this;
@@ -200,7 +218,7 @@ class UploadDocumentRequestParameters extends StrikePlagiarismRequestParameters
         return $this->file;
     }
 
-    public function setFile(string $file): StrikePlagiarismRequestParameters
+    public function setFile(string $file): UploadDocumentRequestParameters
     {
         $this->file = $file;
         return $this;

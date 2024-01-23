@@ -9,7 +9,7 @@ class AccessReportRequestParameters extends StrikePlagiarismRequestParameters
     #[SerializedName('documentId')]
     protected string $documentId;
     #[SerializedName('viewOnly')]
-    protected string $viewOnly;
+    protected bool $viewOnly;
 
     #[SerializedName('expirationRedirection')]
     protected string $expirationRedirection;
@@ -25,12 +25,12 @@ class AccessReportRequestParameters extends StrikePlagiarismRequestParameters
         return $this;
     }
 
-    public function getViewOnly(): string
+    public function getViewOnly(): bool
     {
         return $this->viewOnly;
     }
 
-    public function setViewOnly(string $viewOnly): AccessReportRequestParameters
+    public function setViewOnly(bool $viewOnly): AccessReportRequestParameters
     {
         $this->viewOnly = $viewOnly;
         return $this;

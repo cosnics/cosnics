@@ -6,6 +6,7 @@ use Chamilo\Libraries\Architecture\Bridge\BridgeManager;
 use Chamilo\Libraries\DependencyInjection\DependencyInjectionContainerBuilder;
 use Chamilo\Libraries\Platform\Security\Csrf\CsrfRequestValidator;
 use Symfony\Component\DependencyInjection\ContainerInterface;
+use Symfony\Component\Serializer\Serializer;
 
 /**
  *
@@ -205,6 +206,11 @@ trait DependencyInjectionContainerTrait
     public function getSerializer()
     {
         return $this->getService('jms.serializer');
+    }
+
+    public function getSymfonySerializer(): Serializer
+    {
+        return $this->getService(Serializer::class);
     }
 
     /**

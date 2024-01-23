@@ -42,7 +42,7 @@ class StrikePlagiarismRepository
         return $this->restClient->executeRequest($restRequest);
     }
 
-    public function getReportUrl(AccessReportRequestParameters $accessReportRequestParameters): string
+    public function getViewReportToken(AccessReportRequestParameters $accessReportRequestParameters): string
     {
         $restRequest = new RestRequest(RestRequest::METHOD_POST, 'report/api/token', bodyObject: $accessReportRequestParameters);
 

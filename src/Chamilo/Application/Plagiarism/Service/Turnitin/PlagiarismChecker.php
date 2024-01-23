@@ -7,6 +7,7 @@ use Chamilo\Application\Plagiarism\Domain\SubmissionStatus;
 use Chamilo\Application\Plagiarism\Domain\Turnitin\Exception\InvalidFileException;
 use Chamilo\Application\Plagiarism\Domain\Turnitin\SimilarityReportSettings;
 use Chamilo\Application\Plagiarism\Domain\Turnitin\ViewerLaunchSettings;
+use Chamilo\Application\Plagiarism\Service\Base\PlagiarismCheckerBase;
 use Chamilo\Application\Plagiarism\Service\PlagiarismCheckerInterface;
 use Chamilo\Configuration\Service\ConfigurationConsulter;
 use Chamilo\Core\User\Service\UserService;
@@ -17,7 +18,7 @@ use Chamilo\Core\User\Storage\DataClass\User;
  *
  * @author Sven Vanpoucke - Hogeschool Gent
  */
-class PlagiarismChecker implements PlagiarismCheckerInterface
+class PlagiarismChecker extends PlagiarismCheckerBase implements PlagiarismCheckerInterface
 {
     /**
      * @var \Chamilo\Application\Plagiarism\Service\Turnitin\SubmissionService
@@ -140,7 +141,7 @@ class PlagiarismChecker implements PlagiarismCheckerInterface
         User $submitter, User $owner, string $title, string $filePath, string $filename
     )
     {
-        if (!$this->submissionService->canUploadFile($filePath, $filename))
+        if (!$this->canUploadFile($filePath, $filename))
         {
             throw new InvalidFileException($filePath, $filename);
         }
@@ -240,7 +241,7 @@ class PlagiarismChecker implements PlagiarismCheckerInterface
             return $currentSubmissionStatus;
         }
 
-        if (!$this->submissionService->canUploadFile($filePath, $filename))
+        if (!$this->canUploadFile($filePath, $filename))
         {
             throw new InvalidFileException($filePath, $filename);
         }
@@ -298,15 +299,7 @@ class PlagiarismChecker implements PlagiarismCheckerInterface
      */
     public function canCheckForPlagiarism(string $filePath, string $filename)
     {
-        return !$this->isInMaintenanceMode() &&
-            $this->submissionService->canUploadFile($filePath, $filename);
-    }
-
-    /**
-     * @return bool
-     */
-    public function isInMaintenanceMode()
-    {
-        return $this->configurationConsulter->getSetting(['Chamilo\Application\Plagiarism', 'maintenance_mode']) == 1;
+        return parent::canCheckForPlagiarism($filePath, $filename) &&
+            $this->submissionService->isPlagiarismCheckerActive();
     }
 }

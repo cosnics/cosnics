@@ -17,7 +17,7 @@ class StrikePlagiarismAuthenticationDecorator implements RestRequestDecoratorInt
         $this->apiConfiguration = $apiConfiguration;
     }
 
-    public function decorateRequest(RestRequest $restRequest, RestClient $restClient)
+    public function decorateRequest(RestRequest $restRequest, RestClient $restClient): void
     {
         $bodyObject = $restRequest->getBodyObject();
 

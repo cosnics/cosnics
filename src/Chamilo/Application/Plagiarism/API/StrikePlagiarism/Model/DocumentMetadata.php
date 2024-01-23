@@ -298,4 +298,9 @@ class DocumentMetadata
         $this->md5sum = $md5sum;
         return $this;
     }
+
+    public function isChecked(): bool
+    {
+        return $this->status == 'checked';
+    }
 }

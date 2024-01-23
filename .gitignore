@@ -20,3 +20,4 @@ vue-cli-service
 /.settings/org.eclipse.wst.validation.prefs
 /composer.phar
 .vscode/settings.json
+*.phpunit.result.cache
