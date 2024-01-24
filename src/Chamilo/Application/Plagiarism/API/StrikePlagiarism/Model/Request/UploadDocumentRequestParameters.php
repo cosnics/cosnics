@@ -18,16 +18,8 @@ class UploadDocumentRequestParameters extends StrikePlagiarismRequestParameters
     protected string $userEmail;
     protected string $id;
     protected string $title;
-
-    /**
-     * @var string[]
-     */
-    protected array $author;
-
-    /**
-     * @var string[]
-     */
-    protected array $coordinator;
+    protected string $author;
+    protected string $coordinator;
 
     /**
      * @var string[]
@@ -43,7 +35,6 @@ class UploadDocumentRequestParameters extends StrikePlagiarismRequestParameters
     protected string $unitName;
     #[SerializedName('aiDetection')]
     protected string $aiDetection;
-    protected string $file;
 
     public function getLanguageCode(): string
     {
@@ -74,7 +65,7 @@ class UploadDocumentRequestParameters extends StrikePlagiarismRequestParameters
 
     public function setAction(string $action): UploadDocumentRequestParameters
     {
-        if($action != self::ACTION_INDEX || $action != self::ACTION_CHECK)
+        if($action != self::ACTION_INDEX && $action != self::ACTION_CHECK)
             throw new \InvalidArgumentException('Invalid action');
 
         $this->action = $action;
@@ -125,23 +116,23 @@ class UploadDocumentRequestParameters extends StrikePlagiarismRequestParameters
         return $this;
     }
 
-    public function getAuthor(): array
+    public function getAuthor(): string
     {
         return $this->author;
     }
 
-    public function setAuthor(array $author): UploadDocumentRequestParameters
+    public function setAuthor(string $author): UploadDocumentRequestParameters
     {
         $this->author = $author;
         return $this;
     }
 
-    public function getCoordinator(): array
+    public function getCoordinator(): string
     {
         return $this->coordinator;
     }
 
-    public function setCoordinator(array $coordinator): UploadDocumentRequestParameters
+    public function setCoordinator(string $coordinator): UploadDocumentRequestParameters
     {
         $this->coordinator = $coordinator;
         return $this;
@@ -210,17 +201,6 @@ class UploadDocumentRequestParameters extends StrikePlagiarismRequestParameters
     public function setAiDetection(string $aiDetection): UploadDocumentRequestParameters
     {
         $this->aiDetection = $aiDetection;
-        return $this;
-    }
-
-    public function getFile(): string
-    {
-        return $this->file;
-    }
-
-    public function setFile(string $file): UploadDocumentRequestParameters
-    {
-        $this->file = $file;
         return $this;
     }
 }

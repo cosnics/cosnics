@@ -19,6 +19,11 @@ class StrikePlagiarismAuthenticationDecorator implements RestRequestDecoratorInt
 
     public function decorateRequest(RestRequest $restRequest, RestClient $restClient): void
     {
+        if($restRequest->getMethod() == 'GET')
+        {
+            $restRequest->addQueryParameter('APIKEY', $this->apiConfiguration->getApiToken());
+        }
+
         $bodyObject = $restRequest->getBodyObject();
 
         if(!$bodyObject instanceof StrikePlagiarismRequestParameters)

@@ -6,6 +6,9 @@ use Symfony\Component\Serializer\Annotation\SerializedName;
 
 class AccessReportRequestParameters extends StrikePlagiarismRequestParameters
 {
+    #[SerializedName('apiKey')]
+    protected string $apiKey;
+
     #[SerializedName('documentId')]
     protected string $documentId;
     #[SerializedName('viewOnly')]

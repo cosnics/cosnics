@@ -25,10 +25,15 @@ class RestRequest
     protected array $headers;
     protected bool $returnsMultipleRecords;
 
+    /**
+     * @var RestRequestFile[]
+     */
+    protected array $files;
+
     public function __construct(
         string $method, string $path, string $modelClassName = null, array $urlParameters = array(),
         bool $returnsMultipleRecords = true, array $bodyParameters = array(), array $queryParameters = array(),
-        array $headers = array(), object $bodyObject = null
+        array $headers = array(), object $bodyObject = null, array $files = array()
     )
     {
         $this->setMethod($method);
@@ -40,6 +45,7 @@ class RestRequest
         $this->setModelClassName($modelClassName);
         $this->setHeaders($headers);
         $this->setBodyObject($bodyObject);
+        $this->setFiles($files);
     }
 
     /**
@@ -308,4 +314,17 @@ class RestRequest
 
         return $path;
     }
+
+    public function getFiles(): array
+    {
+        return $this->files;
+    }
+
+    public function setFiles(array $files): RestRequest
+    {
+        $this->files = $files;
+        return $this;
+    }
+
+
 }

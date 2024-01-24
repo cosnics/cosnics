@@ -148,5 +148,35 @@ class SymfonySerializerTest extends DependencyInjectionBasedTestCase
         $this->assertEquals($data, $object);
     }
 
+    public function testEncode()
+    {
+        $class = new SerializedClass();
+        $class->setMyFirstProperty('hello')
+            ->setMYSECONDPROPERTY('world');
+
+        $subClass = new SerializedSubClass();
+        $subClass->setMyFirstProperty('hello')
+            ->setMYSECONDPROPERTY('world');
+
+        $subClass2 = new SerializedSubClass();
+        $subClass2->setMyFirstProperty('hello2')
+            ->setMYSECONDPROPERTY('world2');
+
+        $class->setMyMultiSubclasses([$subClass, $subClass2]);
+
+        $data = $this->serializer->normalize($class, 'json');
+
+        $expectedData = [
+            'my_first_property' => 'hello',
+            'my_second_property' => 'world',
+            'my_multi_subclasses' => [
+                ['my_first_property' => 'hello', 'my_second_property' => 'world'],
+                ['my_first_property' => 'hello2', 'my_second_property' => 'world2']
+            ]
+        ];
+
+        $this->assertEquals($expectedData, $data);
+    }
+
 
 }

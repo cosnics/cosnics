@@ -36,11 +36,6 @@ class PlagiarismChecker extends PlagiarismCheckerBase implements PlagiarismCheck
     protected $userService;
 
     /**
-     * @var \Chamilo\Configuration\Service\ConfigurationConsulter
-     */
-    protected $configurationConsulter;
-
-    /**
      * PlagiarismChecker constructor.
      *
      * @param \Chamilo\Application\Plagiarism\Service\Turnitin\SubmissionService $submissionService
@@ -58,7 +53,8 @@ class PlagiarismChecker extends PlagiarismCheckerBase implements PlagiarismCheck
         $this->submissionService = $submissionService;
         $this->contentObjectRepository = $contentObjectRepository;
         $this->userService = $userService;
-        $this->configurationConsulter = $configurationConsulter;
+
+        parent::__construct($configurationConsulter);
     }
 
     /**

@@ -14,15 +14,16 @@ class StrikePlagiarismRestClientFactory
     protected ConfigurationConsulter $configurationConsulter;
     protected Serializer $serializer;
 
-    public function __construct(ConfigurationConsulter $configurationConsulter)
+    public function __construct(ConfigurationConsulter $configurationConsulter, Serializer $serializer)
     {
         $this->configurationConsulter = $configurationConsulter;
+        $this->serializer = $serializer;
     }
 
     public function createRestClient(): RestClient
     {
         $apiUrl = $this->configurationConsulter->getSetting(['Chamilo\Application\Plagiarism', 'strike_plagiarism_api_url']);
-        $apiToken = $this->configurationConsulter->getSetting(['Chamilo\Application\Plagiarism', 'strike_plagiarism_api_token']);
+        $apiToken = $this->configurationConsulter->getSetting(['Chamilo\Application\Plagiarism', 'strike_plagiarism_secret_key']);
 
         $configuration = new TokenBasedConfiguration($apiUrl, $apiToken);
 

@@ -13,27 +13,27 @@ class DocumentMetadata
     protected bool $reportReady;
     protected bool $indexed;
     protected string $status;
-    protected double $factor1;
-    protected double $factor2;
-    protected double $factor3;
-    protected double $factor4;
-    protected double $factor5;
+    protected float $factor1;
+    protected float $factor2;
+    protected float $factor3;
+    protected float $factor4;
+    protected float $factor5;
     #[SerializedName('internetSourcesFactor')]
-    protected double $internetSourcesFactor;
+    protected float $internetSourcesFactor;
     #[SerializedName('localSourcesFactor')]
-    protected double $localSourcesFactor;
+    protected float $localSourcesFactor;
     #[SerializedName('otherSourcesFactor')]
-    protected double $otherSourcesFactor;
+    protected float $otherSourcesFactor;
     #[SerializedName('legalSourcesFactor')]
-    protected double $legalSourcesFactor;
+    protected float $legalSourcesFactor;
     #[SerializedName('refbooksSourcesFactor')]
-    protected double $refbooksSourcesFactor;
+    protected float $refbooksSourcesFactor;
     #[SerializedName('reversedFactor1')]
-    protected double $reversedFactor1;
+    protected float $reversedFactor1;
     #[SerializedName('quotationsFactor')]
-    protected double $quotationsFactor;
+    protected float $quotationsFactor;
     #[SerializedName('foreignAlphabetAlert')]
-    protected double $foreignAlphabetAlert;
+    protected float $foreignAlphabetAlert;
 
     /**
      * @var DocumentMetadataCrossCheck[]
@@ -41,7 +41,7 @@ class DocumentMetadata
     #[SerializedName('cross-checks')]
     protected array $crossChecks;
     #[SerializedName('aiDetectionFactor')]
-    protected double $aiDetectionFactor;
+    protected float $aiDetectionFactor;
     #[SerializedName('documentSize')]
     protected int $documentSize;
     protected string $md5sum;
@@ -301,6 +301,6 @@ class DocumentMetadata
 
     public function isChecked(): bool
     {
-        return $this->status == 'checked';
+        return $this->status == 'docu_status_plagiarism_checked';
     }
 }

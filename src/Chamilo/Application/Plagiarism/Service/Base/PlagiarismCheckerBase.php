@@ -4,11 +4,19 @@ namespace Chamilo\Application\Plagiarism\Service\Base;
 
 use Chamilo\Application\Plagiarism\Domain\SubmissionStatus;
 use Chamilo\Application\Plagiarism\Service\PlagiarismCheckerInterface;
+use Chamilo\Configuration\Service\ConfigurationConsulter;
 use Chamilo\Core\User\Storage\DataClass\User;
 
 abstract class PlagiarismCheckerBase implements PlagiarismCheckerInterface
 {
     const MAX_ALLOWED_FILE_SIZE = 100 * 1024 * 1024;
+
+    protected ConfigurationConsulter $configurationConsulter;
+
+    public function __construct(ConfigurationConsulter $configurationConsulter)
+    {
+        $this->configurationConsulter = $configurationConsulter;
+    }
     
     public function canCheckForPlagiarism(string $filePath, string $filename)
     {
@@ -23,11 +31,6 @@ abstract class PlagiarismCheckerBase implements PlagiarismCheckerInterface
 
     public function canUploadFile(string $filePath, string $filename)
     {
-        if (!$this->isPlagiarismCheckerActive())
-        {
-            return false;
-        }
-
         if (!file_exists($filePath))
         {
             return false;

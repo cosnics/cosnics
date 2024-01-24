@@ -47,6 +47,64 @@ class RestClient implements RestClientInterface
         return $this->getResultFromResponseRaw($response, $restRequest);
     }
 
+    public function executeMultipartRequest(RestRequest $restRequest)
+    {
+        try
+        {
+            $this->initializeRestClient();
+
+            $this->restRequestDecoratorManager->decorateRequest($restRequest, $this);
+
+            $headers = $restRequest->getHeaders();
+            //$headers['Content-Type'] = 'multipart/form-data';
+
+            $request = new Request($restRequest->getMethod(), $restRequest->getFullPath(), $headers);
+
+            $bodyArray = $this->serializer->normalize($restRequest->getBodyObject(), 'json');
+
+            $multipartData = [];
+            foreach($bodyArray as $key => $value)
+            {
+                if(is_array($value))
+                {
+                    foreach($value as $subKey => $subvalue)
+                    {
+                        $multipartData[] = [
+                            'name' => $key . '[' . $subKey . ']',
+                            'contents' => $subvalue
+                        ];
+                    }
+                }
+                else
+                {
+                    $multipartData[] = [
+                        'name' => $key,
+                        'contents' => $value
+                    ];
+                }
+            }
+
+            foreach($restRequest->getFiles() as $file)
+            {
+                $multipartData[] = [
+                    'name' => 'file',
+                    'filename' => $file->getFileName(),
+                    'contents' => fopen($file->getFilePath(), 'r'),
+                    'headers' => [
+                        'Content-Type' => null
+                    ]
+                ];
+            }
+            $response = $this->restClient->send($request, ['multipart' => $multipartData]); //, ['debug' => true]);
+
+            return $this->getResultFromResponseRaw($response, $restRequest);
+        }
+        catch(\Exception | \GuzzleHttp\Exception\GuzzleException $ex)
+        {
+            throw new RestException($ex->getMessage(), $ex->getCode(), $ex);
+        }
+    }
+
     /**
      * Only call this directly when creating a decorator, use executeRequest otherwise
      *
@@ -67,7 +125,7 @@ class RestClient implements RestClientInterface
             return $this->restClient->send($request); //, ['debug' => true]);
         }
         catch(\Exception | \GuzzleHttp\Exception\GuzzleException $ex)
-        {
+        { var_dump($ex->getMessage());
             throw new RestException($ex->getMessage(), $ex->getCode(), $ex);
         }
 
@@ -82,15 +140,16 @@ class RestClient implements RestClientInterface
     protected function toGuzzleRequest(RestRequest $request)
     {
         $headers = $request->getHeaders();
+
         $headers['Content-Type'] = 'application/json';
 
         $body = is_object($request->getBodyObject()) ?
             $this->serializer->serialize($request->getBodyObject(), 'json') : null;
 
         $body = !empty($request->getBodyParameters()) ?
-            $this->serializer->serialize($request->getBodyParameters(), 'json') : null;
+            $this->serializer->serialize($request->getBodyParameters(), 'json') : $body;
 
-        return new Request($this->getMethod(), $this->getFullPath(), $headers, $body);
+        return new Request($request->getMethod(), $request->getFullPath(), $headers, $body);
     }
 
     /**
@@ -110,12 +169,19 @@ class RestClient implements RestClientInterface
 
             if(!$restRequest->getModelClassName())
             {
-                $result = $this->serializer->decode($contents, 'json');
+                try
+                {
+                    $result = $this->serializer->decode($contents, 'json');
+                }
+                catch(\Exception $ex)
+                {
+                    return $contents;
+                }
             }
             else
             {
-                $type = $restRequest->getModelClassName() . $restRequest->getReturnsMultipleRecords() ? '[]' : '';
-                $result = $this->serializer->deserialize($response->getBody()->getContents(), $type, 'json');
+                $type = $restRequest->getModelClassName() . ($restRequest->getReturnsMultipleRecords() ? '[]' : '');
+                $result = $this->serializer->deserialize($contents, $type, 'json');
             }
 
             if (empty($result))

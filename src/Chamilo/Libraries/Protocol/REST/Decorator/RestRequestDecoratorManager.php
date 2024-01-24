@@ -20,7 +20,7 @@ class RestRequestDecoratorManager implements RestRequestDecoratorInterface
     {
         foreach($this->restRequestDecorators as $requestDecorator)
         {
-            $requestDecorator->decorateRequest($restRequest, $this);
+            $requestDecorator->decorateRequest($restRequest, $restClient);
         }
     }
 }

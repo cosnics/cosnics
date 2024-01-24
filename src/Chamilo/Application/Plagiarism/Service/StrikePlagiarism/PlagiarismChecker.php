@@ -6,6 +6,7 @@ use Chamilo\Application\Plagiarism\Domain\Exception\PlagiarismException;
 use Chamilo\Application\Plagiarism\Domain\SubmissionStatus;
 use Chamilo\Application\Plagiarism\Service\Base\PlagiarismCheckerBase;
 use Chamilo\Application\Plagiarism\Service\PlagiarismCheckerInterface;
+use Chamilo\Configuration\Service\ConfigurationConsulter;
 use Chamilo\Core\User\Storage\DataClass\User;
 
 class PlagiarismChecker extends PlagiarismCheckerBase implements PlagiarismCheckerInterface
@@ -14,8 +15,9 @@ class PlagiarismChecker extends PlagiarismCheckerBase implements PlagiarismCheck
 
     protected SubmissionService $submissionService;
 
-    public function __construct(SubmissionService $submissionService)
+    public function __construct(SubmissionService $submissionService, ConfigurationConsulter $configurationConsulter)
     {
+        parent::__construct($configurationConsulter);
         $this->submissionService = $submissionService;
     }
 
@@ -45,7 +47,7 @@ class PlagiarismChecker extends PlagiarismCheckerBase implements PlagiarismCheck
 
         if ($currentSubmissionStatus->isFailed() && $currentSubmissionStatus->canRetry())
         {
-            return $this->requestNewPlagiarismCheck($submitter, $owner, $title, $filePath, $filename);
+            return $this->requestReportGenerationStatusUpdate($currentSubmissionStatus);
         }
 
         if($currentSubmissionStatus->isReportGenerated())
@@ -79,12 +81,15 @@ class PlagiarismChecker extends PlagiarismCheckerBase implements PlagiarismCheck
             return $currentSubmissionStatus;
         }
 
-        $documentMetadata = $this->submissionService->getDocumentMetadata($currentSubmissionStatus->getSubmissionId());
+        try {
+            $documentMetadata = $this->submissionService->getDocumentMetadata($currentSubmissionStatus->getSubmissionId());
+        } catch(\Exception $ex) {var_dump($ex->getMessage());}
+
         if($documentMetadata->isChecked())
         {
             return new SubmissionStatus(
                 $currentSubmissionStatus->getSubmissionId(), SubmissionStatus::STATUS_REPORT_GENERATED,
-                $documentMetadata->getFactor1()
+                round($documentMetadata->getFactor1() * 100)
             );
         }
 
@@ -94,7 +99,8 @@ class PlagiarismChecker extends PlagiarismCheckerBase implements PlagiarismCheck
     public function getReportUrlForSubmission(User $user, string $submissionId)
     {
         $token = $this->submissionService->getViewReportToken($submissionId);
-        return str_replace('__TOKEN__', self::REPORT_TEMPLATE_URL);
+
+        return str_replace('__TOKEN__', $token, self::REPORT_TEMPLATE_URL);
     }
 
     public function getRedirectToEULAPageResponse(string $redirectToURL): ?string

@@ -43,13 +43,12 @@ class SubmissionService
             ->setId($documentId)
             ->setAiDetection('false')
             ->setTitle($title)
-            ->setAuthor([$owner->get_fullname()])
-            ->setCoordinator([$submitter->get_fullname()])
+            ->setAuthor($owner->get_fullname())
+            ->setCoordinator($submitter->get_fullname())
             ->setDocumentKind(6)
-            ->setUserId($submitterId)
-            ->setFile(base64_encode(file_get_contents($filePath)));
+            ->setUserId($submitterId);
 
-        $response = $this->strikePlagiarismRepository->uploadDocument($uploadDocumentRequestParameters);
+        $response = $this->strikePlagiarismRepository->uploadDocument($uploadDocumentRequestParameters, $filename, $filePath);
         if($response->hasError())
         {
             throw new PlagiarismException('The document could not be uploaded');

@@ -10,6 +10,7 @@ use Chamilo\Application\Plagiarism\API\StrikePlagiarism\Model\Request\UploadDocu
 use Chamilo\Application\Plagiarism\API\StrikePlagiarism\Model\UploadDocumentResponse;
 use Chamilo\Libraries\Protocol\REST\RestClient;
 use Chamilo\Libraries\Protocol\REST\RestRequest;
+use Chamilo\Libraries\Protocol\REST\RestRequestFile;
 
 class StrikePlagiarismRepository
 {
@@ -20,23 +21,20 @@ class StrikePlagiarismRepository
         $this->restClient = $restClient;
     }
 
-    public function uploadDocument(UploadDocumentRequestParameters $uploadDocumentRequestParameters): UploadDocumentResponse
+    public function uploadDocument(UploadDocumentRequestParameters $uploadDocumentRequestParameters, string $filename, string $filePath): UploadDocumentResponse
     {
         $restRequest = new RestRequest(
             RestRequest::METHOD_POST, 'api/v2/documents/add', UploadDocumentResponse::class,
-            bodyObject: $uploadDocumentRequestParameters
+            bodyObject: $uploadDocumentRequestParameters, files: [new RestRequestFile($filename, $filePath)], returnsMultipleRecords: false
         );
 
-        return $this->restClient->executeRequest($restRequest);
+        return $this->restClient->executeMultipartRequest($restRequest);
     }
 
     public function getDocumentMetadata(string $documentId): DocumentMetadata
     {
-        $documentMetadataRequestParameters = new GetDocumentMetadataRequestParameters();
-        $documentMetadataRequestParameters->setDocumentId($documentId);
-
         $restRequest = new RestRequest(
-            RestRequest::METHOD_POST, 'api/v2/documents', DocumentMetadata::class, bodyObject: $documentMetadataRequestParameters
+            RestRequest::METHOD_GET, 'api/v2/documents', DocumentMetadata::class, queryParameters: ['id' => $documentId], returnsMultipleRecords: false
         );
 
         return $this->restClient->executeRequest($restRequest);
@@ -44,7 +42,7 @@ class StrikePlagiarismRepository
 
     public function getViewReportToken(AccessReportRequestParameters $accessReportRequestParameters): string
     {
-        $restRequest = new RestRequest(RestRequest::METHOD_POST, 'report/api/token', bodyObject: $accessReportRequestParameters);
+        $restRequest = new RestRequest(RestRequest::METHOD_POST, 'report/api/token', bodyObject: $accessReportRequestParameters, returnsMultipleRecords: false);
 
         return $this->restClient->executeRequest($restRequest);
     }

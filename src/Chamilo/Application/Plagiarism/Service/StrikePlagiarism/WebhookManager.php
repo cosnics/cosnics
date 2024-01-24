@@ -60,7 +60,7 @@ class WebhookManager
     protected function getWebhookSecret(): ?string
     {
         return $this->configurationConsulter->getSetting(
-            'Chamilo\Application\Plagiarism', 'strike_plagiarism_webhook_secret'
+            ['Chamilo\Application\Plagiarism', 'strike_plagiarism_webhook_secret']
         );
     }
 
