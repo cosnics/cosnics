@@ -196,7 +196,7 @@ class ContentObjectPlagiarismChecker
         else
         {
             $this->contentObjectPlagiarismResultService->createContentObjectPlagiarismResult(
-                $course, $contentObject, $newStatus->getSubmissionId(), $requestUser
+                $course, $contentObject, $newStatus->getSubmissionId(), $requestUser, $newStatus->getStatus()
             );
         }
     }

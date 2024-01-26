@@ -98,7 +98,7 @@ class ContentObjectPlagiarismResultService
      * @return ContentObjectPlagiarismResult
      */
     public function createContentObjectPlagiarismResult(
-        Course $course, ContentObject $contentObject, string $externalId, User $requestUser
+        Course $course, ContentObject $contentObject, string $externalId, User $requestUser, ?int $newStatus
     )
     {
         $contentObjectPlagiarismResult = new ContentObjectPlagiarismResult();
@@ -106,7 +106,7 @@ class ContentObjectPlagiarismResultService
         $contentObjectPlagiarismResult->setContentObjectId($contentObject->getId());
         $contentObjectPlagiarismResult->setCourseId($course->getId());
         $contentObjectPlagiarismResult->setExternalId($externalId);
-        $contentObjectPlagiarismResult->setStatus(SubmissionStatus::STATUS_UPLOAD_IN_PROGRESS);
+        $contentObjectPlagiarismResult->setStatus($newStatus ?? SubmissionStatus::STATUS_UPLOAD_IN_PROGRESS);
         $contentObjectPlagiarismResult->setRequestUserId($requestUser->getId());
         $contentObjectPlagiarismResult->setRequestDate(new \DateTime());
 

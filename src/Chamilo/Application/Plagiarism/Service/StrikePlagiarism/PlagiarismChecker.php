@@ -76,7 +76,7 @@ class PlagiarismChecker extends PlagiarismCheckerBase implements PlagiarismCheck
 
     protected function requestReportGenerationStatusUpdate(SubmissionStatus $currentSubmissionStatus)
     {
-        if (!$currentSubmissionStatus->isReportGenerationInProgress())
+        if (!$currentSubmissionStatus->isReportGenerationInProgress() && !$currentSubmissionStatus->isFailed() && !$currentSubmissionStatus->canRetry())
         {
             return $currentSubmissionStatus;
         }
