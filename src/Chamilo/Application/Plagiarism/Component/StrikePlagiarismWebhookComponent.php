@@ -2,30 +2,27 @@
 
 namespace Chamilo\Application\Plagiarism\Component;
 
-use Chamilo\Application\Plagiarism\API\StrikePlagiarism\Model\WebhookRequestData;
 use Chamilo\Application\Plagiarism\Manager;
 use Chamilo\Application\Plagiarism\Service\StrikePlagiarism\WebhookHandler;
 use Chamilo\Libraries\Architecture\ErrorHandler\ExceptionLogger\ExceptionLoggerInterface;
+use Chamilo\Libraries\Architecture\Interfaces\NoAuthenticationSupport;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\Serializer\Serializer;
 
-class StrikePlagiarismWebhookComponent extends Manager
+class StrikePlagiarismWebhookComponent extends Manager implements NoAuthenticationSupport
 {
     const SIGNATURE = 'signature';
+    const PARAM_ID = 'id';
 
     public function run()
     {
         try
         {
             $request = $this->getRequest();
-
-            $requestBody = $request->getContent();
-            $requestData = $this->getSymfonySerializer()->deserialize(
-                $requestBody, WebhookRequestData::class,'json'
-            );
+            $documentId = $request->getFromPost(self::PARAM_ID);
 
             $this->getWebhookHandler()->handleWebhookRequest(
-                $requestData, $this->getRequest()->getFromUrl(self::SIGNATURE)
+                $documentId, $this->getRequest()->getFromUrl(self::SIGNATURE)
             );
         }
         catch(\Exception $ex)

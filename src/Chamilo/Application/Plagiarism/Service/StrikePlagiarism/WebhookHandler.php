@@ -2,7 +2,6 @@
 
 namespace Chamilo\Application\Plagiarism\Service\StrikePlagiarism;
 
-use Chamilo\Application\Plagiarism\API\StrikePlagiarism\Model\WebhookRequestData;
 use Chamilo\Application\Plagiarism\Domain\Exception\PlagiarismException;
 use Chamilo\Application\Plagiarism\Domain\SubmissionStatus;
 use Chamilo\Application\Plagiarism\Service\Events\PlagiarismEventNotifier;
@@ -11,31 +10,33 @@ class WebhookHandler
 {
     protected WebhookManager $webhookManager;
     protected PlagiarismEventNotifier $plagiarismEventNotifier;
+    protected SubmissionService $submissionService;
 
-    public function __construct(WebhookManager $webhookManager, PlagiarismEventNotifier $plagiarismEventNotifier)
+    public function __construct(WebhookManager $webhookManager, PlagiarismEventNotifier $plagiarismEventNotifier, SubmissionService $submissionService)
     {
         $this->webhookManager = $webhookManager;
         $this->plagiarismEventNotifier = $plagiarismEventNotifier;
+        $this->submissionService = $submissionService;
     }
 
 
-    public function handleWebhookRequest(WebhookRequestData $webhookRequestData, string $signature): void
+    public function handleWebhookRequest(string $documentId, string $signature): void
     {
-        if (!$this->webhookManager->validateSignature($webhookRequestData->getId(), $signature))
+        if (!$this->webhookManager->validateSignature($documentId, $signature))
         {
             throw new PlagiarismException('The given signature is not correct');
         }
 
         $submissionStatus = new SubmissionStatus(
-            $webhookRequestData->getId(), SubmissionStatus::STATUS_CREATE_REPORT_IN_PROGRESS
+            $documentId, SubmissionStatus::STATUS_CREATE_REPORT_IN_PROGRESS
         );
 
-        $documentMetadata = $this->submissionService->getDocumentMetadata($webhookRequestData->getId());
+        $documentMetadata = $this->submissionService->getDocumentMetadata($documentId);
         if($documentMetadata->isChecked())
         {
             $submissionStatus = new SubmissionStatus(
-                $webhookRequestData->getId(), SubmissionStatus::STATUS_REPORT_GENERATED,
-                $documentMetadata->getFactor1()
+                $documentId, SubmissionStatus::STATUS_REPORT_GENERATED,
+                round($documentMetadata->getFactor1() * 100)
             );
         }
 

@@ -36,11 +36,11 @@ class SubmissionService
         $documentId = UUID::v4();
 
         $submitterId = $this->userConverter->convertUserToId($owner);
-
+        //var_dump($this->webhookManager->getWebhookUrlForDocumentId('839b1a06-20d1-4c5a-a781-3800116612bf')); exit;
         $uploadDocumentRequestParameters->setLanguageCode('nl')
             ->setAction(UploadDocumentRequestParameters::ACTION_CHECK)
-            //->setCallback($this->webhookManager->getWebhookUrlForDocumentId($documentId))
-                ->setCallback('https://typedwebhook.tools/webhook/9ebc9362-c4a5-46bf-a1ed-2c227e2071e7')
+            ->setCallback($this->webhookManager->getWebhookUrlForDocumentId($documentId))
+            //    ->setCallback('https://webhook.site/8fbce4a4-4e39-4bcf-a067-7f234e244eff')
             ->setId($documentId)
             ->setAiDetection('false')
             ->setTitle($title)
