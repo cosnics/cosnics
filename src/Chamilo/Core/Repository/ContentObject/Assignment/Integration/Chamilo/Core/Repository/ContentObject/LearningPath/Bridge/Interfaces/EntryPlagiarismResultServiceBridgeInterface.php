@@ -44,7 +44,7 @@ interface EntryPlagiarismResultServiceBridgeInterface
      *
      * @return \Chamilo\Core\Repository\ContentObject\Assignment\Extension\Plagiarism\Bridge\Storage\DataClass\EntryPlagiarismResult
      */
-    public function createEntryPlagiarismResultForEntry(Entry $entry, string $externalId);
+    public function createEntryPlagiarismResultForEntry(Entry $entry, string $externalId, ?int $status = null);
 
     /**
      * @param \Chamilo\Core\Repository\ContentObject\Assignment\Extension\Plagiarism\Bridge\Storage\DataClass\EntryPlagiarismResult $entryPlagiarismResult

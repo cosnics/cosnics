@@ -39,7 +39,8 @@ class SubmissionService
 
         $uploadDocumentRequestParameters->setLanguageCode('nl')
             ->setAction(UploadDocumentRequestParameters::ACTION_CHECK)
-            ->setCallback($this->webhookManager->getWebhookUrlForDocumentId($documentId))
+            //->setCallback($this->webhookManager->getWebhookUrlForDocumentId($documentId))
+                ->setCallback('https://typedwebhook.tools/webhook/9ebc9362-c4a5-46bf-a1ed-2c227e2071e7')
             ->setId($documentId)
             ->setAiDetection('false')
             ->setTitle($title)

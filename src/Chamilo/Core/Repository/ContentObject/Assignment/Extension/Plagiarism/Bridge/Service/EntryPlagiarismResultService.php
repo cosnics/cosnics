@@ -57,13 +57,13 @@ abstract class EntryPlagiarismResultService
      *
      * @return \Chamilo\Core\Repository\ContentObject\Assignment\Extension\Plagiarism\Bridge\Storage\DataClass\EntryPlagiarismResult
      */
-    public function createEntryPlagiarismResultForEntry(Entry $entry, string $externalId)
+    public function createEntryPlagiarismResultForEntry(Entry $entry, string $externalId, ?int $status = null)
     {
         $entryPlagiarismResult = $this->createEntryPlagiarismResultInstance();
 
         $entryPlagiarismResult->setEntryId($entry->getId());
         $entryPlagiarismResult->setExternalId($externalId);
-        $entryPlagiarismResult->setStatus(SubmissionStatus::STATUS_UPLOAD_IN_PROGRESS);
+        $entryPlagiarismResult->setStatus($status ?? SubmissionStatus::STATUS_UPLOAD_IN_PROGRESS);
 
         if (!$this->entryPlagiarismResultRepository->createEntryPlagiarismResult($entryPlagiarismResult))
         {

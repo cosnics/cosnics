@@ -136,7 +136,7 @@ class PlagiarismChecker
         else
         {
             $entryPlagiarismResultServiceBridge->createEntryPlagiarismResultForEntry(
-                $entry, $newStatus->getSubmissionId()
+                $entry, $newStatus->getSubmissionId(), $newStatus->getStatus()
             );
         }
     }
