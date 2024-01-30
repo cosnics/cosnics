@@ -14808,7 +14808,8 @@ class GradeBook {
     if (typeof total !== 'number') {
       return true;
     }
-    return TwoDigitsFormatter.format(total) !== TwoDigitsFormatter.format(this.getEndResult(user.id, false));
+    // @ts-ignore
+    return TwoDigitsFormatter.format(total) !== TwoDigitsFormatter.format(this.getEndResult(user.id, false).toPrecision(12));
   }
   get totalsNeedUpdating() {
     return this.users.some(user => this.userTotalNeedsUpdating(user));
