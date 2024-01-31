@@ -27,10 +27,6 @@ class WebhookHandler
             throw new PlagiarismException('The given signature is not correct');
         }
 
-        $submissionStatus = new SubmissionStatus(
-            $documentId, SubmissionStatus::STATUS_CREATE_REPORT_IN_PROGRESS
-        );
-
         $documentMetadata = $this->submissionService->getDocumentMetadata($documentId);
 
         $submissionStatus = new SubmissionStatus(
