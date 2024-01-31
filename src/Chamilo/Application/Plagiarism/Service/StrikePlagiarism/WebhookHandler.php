@@ -32,13 +32,11 @@ class WebhookHandler
         );
 
         $documentMetadata = $this->submissionService->getDocumentMetadata($documentId);
-        if($documentMetadata->isChecked())
-        {
-            $submissionStatus = new SubmissionStatus(
-                $documentId, SubmissionStatus::STATUS_REPORT_GENERATED,
-                round($documentMetadata->getFactor1() * 100)
-            );
-        }
+
+        $submissionStatus = new SubmissionStatus(
+            $documentId, SubmissionStatus::STATUS_REPORT_GENERATED,
+            round($documentMetadata->getFactor1() * 100)
+        );
 
         $this->plagiarismEventNotifier->submissionStatusChanged($submissionStatus);
     }
