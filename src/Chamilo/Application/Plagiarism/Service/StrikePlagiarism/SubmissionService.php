@@ -10,6 +10,7 @@ use Chamilo\Application\Plagiarism\API\StrikePlagiarism\Repository\StrikePlagiar
 use Chamilo\Application\Plagiarism\Domain\Exception\PlagiarismException;
 use Chamilo\Application\Plagiarism\Domain\SubmissionStatus;
 use Chamilo\Core\User\Storage\DataClass\User;
+use Chamilo\Libraries\File\Path;
 use Chamilo\Libraries\Utilities\UUID;
 use Hogent\Extension\Chamilo\Application\Plagiarism\Service\UserConverter;
 
@@ -48,6 +49,10 @@ class SubmissionService
             ->setCoordinator($submitter->get_fullname())
             ->setDocumentKind(6)
             ->setUserId($submitterId);
+
+        $file = Path::getInstance()->getLogPath(). 'webhook_request.log';
+        $data = print_r($uploadDocumentRequestParameters, true);
+        file_put_contents($file, $data);
 
         $response = $this->strikePlagiarismRepository->uploadDocument($uploadDocumentRequestParameters, $filename, $filePath);
         if($response->hasError())
