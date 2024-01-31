@@ -301,6 +301,6 @@ class DocumentMetadata
 
     public function isChecked(): bool
     {
-        return $this->status == 'docu_status_plagiarism_checked';
+        return $this->status == 'docu_status_plagiarism_checked' || $this->status == 'docu_status_added_to_database';
     }
 }
