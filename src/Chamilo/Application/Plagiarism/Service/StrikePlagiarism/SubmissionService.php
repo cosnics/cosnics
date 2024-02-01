@@ -9,6 +9,8 @@ use Chamilo\Application\Plagiarism\API\StrikePlagiarism\Model\UploadDocumentResp
 use Chamilo\Application\Plagiarism\API\StrikePlagiarism\Repository\StrikePlagiarismRepository;
 use Chamilo\Application\Plagiarism\Domain\Exception\PlagiarismException;
 use Chamilo\Application\Plagiarism\Domain\SubmissionStatus;
+use Chamilo\Application\Plagiarism\Events\Event\StrikePlagiarismScanRequestedEvent;
+use Chamilo\Application\Plagiarism\Events\PlagiarismEventDispatcher;
 use Chamilo\Core\User\Storage\DataClass\User;
 use Chamilo\Libraries\File\Path;
 use Chamilo\Libraries\Utilities\UUID;
@@ -20,12 +22,14 @@ class SubmissionService
     protected WebhookManager $webhookManager;
 
     protected UserConverter $userConverter;
+    protected PlagiarismEventDispatcher $plagiarismEventDispatcher;
 
-    public function __construct(StrikePlagiarismRepository $strikePlagiarismRepository, WebhookManager $webhookManager, UserConverter $userConverter)
+    public function __construct(StrikePlagiarismRepository $strikePlagiarismRepository, WebhookManager $webhookManager, UserConverter $userConverter, PlagiarismEventDispatcher $plagiarismEventDispatcher)
     {
         $this->strikePlagiarismRepository = $strikePlagiarismRepository;
         $this->webhookManager = $webhookManager;
         $this->userConverter = $userConverter;
+        $this->plagiarismEventDispatcher = $plagiarismEventDispatcher;
     }
 
     public function uploadDocument(
@@ -37,11 +41,9 @@ class SubmissionService
         $documentId = UUID::v4();
 
         $submitterId = $this->userConverter->convertUserToId($owner);
-        //var_dump($this->webhookManager->getWebhookUrlForDocumentId('839b1a06-20d1-4c5a-a781-3800116612bf')); exit;
         $uploadDocumentRequestParameters->setLanguageCode('nl')
             ->setAction(UploadDocumentRequestParameters::ACTION_CHECK)
             ->setCallback($this->webhookManager->getWebhookUrlForDocumentId($documentId))
-            //    ->setCallback('https://webhook.site/8fbce4a4-4e39-4bcf-a067-7f234e244eff')
             ->setId($documentId)
             ->setAiDetection('false')
             ->setTitle($title)
@@ -50,9 +52,7 @@ class SubmissionService
             ->setDocumentKind(6)
             ->setUserId($submitterId);
 
-        $file = Path::getInstance()->getLogPath(). 'webhook_request.log';
-        $data = print_r($uploadDocumentRequestParameters, true);
-        file_put_contents($file, $data);
+        $this->plagiarismEventDispatcher->dispatch(new StrikePlagiarismScanRequestedEvent($uploadDocumentRequestParameters));
 
         $response = $this->strikePlagiarismRepository->uploadDocument($uploadDocumentRequestParameters, $filename, $filePath);
         if($response->hasError())

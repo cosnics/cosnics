@@ -2,6 +2,8 @@
 
 namespace Chamilo\Application\Plagiarism\Component;
 
+use Chamilo\Application\Plagiarism\Events\Event\StrikePlagiarismWebhookCalledEvent;
+use Chamilo\Application\Plagiarism\Events\PlagiarismEventDispatcher;
 use Chamilo\Application\Plagiarism\Manager;
 use Chamilo\Application\Plagiarism\Service\StrikePlagiarism\WebhookHandler;
 use Chamilo\Libraries\Architecture\ErrorHandler\ExceptionLogger\ExceptionLoggerInterface;
@@ -9,7 +11,6 @@ use Chamilo\Libraries\Architecture\Interfaces\NoAuthenticationSupport;
 use Chamilo\Libraries\File\Path;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\Serializer\Serializer;
-use function _PHPStan_22f755c6a\RingCentral\Psr7\build_query;
 
 class StrikePlagiarismWebhookComponent extends Manager implements NoAuthenticationSupport
 {
@@ -18,19 +19,20 @@ class StrikePlagiarismWebhookComponent extends Manager implements NoAuthenticati
 
     public function run()
     {
-        $file = Path::getInstance()->getLogPath(). 'webhook.log';
-        $data = print_r($_POST, true);
-
-        file_put_contents($file, $_SERVER['REQUEST_URI'] . "\n\n" . $data);
-
         try
         {
             $request = $this->getRequest();
             $documentId = $request->getFromPost(self::PARAM_ID);
+            $signature = $this->getRequest()->getFromUrl(self::SIGNATURE);
 
-            $this->getWebhookHandler()->handleWebhookRequest(
-                $documentId, $this->getRequest()->getFromUrl(self::SIGNATURE)
-            );
+            $this->getPlagiarismEventDispatcher()->dispatch(new StrikePlagiarismWebhookCalledEvent($this->getRequest()->getRequestUri(), $signature, $documentId));
+
+            if(empty($documentId) || empty($signature))
+            {
+                throw new \Exception('Both the signature and document id are required and must be a string');
+            }
+
+            $this->getWebhookHandler()->handleWebhookRequest($documentId, $signature);
         }
         catch(\Exception $ex)
         {
@@ -44,5 +46,10 @@ class StrikePlagiarismWebhookComponent extends Manager implements NoAuthenticati
     protected function getWebhookHandler(): WebhookHandler
     {
         return $this->getService(WebhookHandler::class);
+    }
+
+    public function getPlagiarismEventDispatcher(): PlagiarismEventDispatcher
+    {
+        return $this->getService(PlagiarismEventDispatcher::class);
     }
 }

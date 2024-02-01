@@ -19,5 +19,11 @@
             <factory service="Chamilo\Application\Plagiarism\Service\UserConverter\UserConverterFactory" method="createUserConverter" />
         </service>
 
+        <service id="Chamilo\Application\Plagiarism\Events\PlagiarismEventDispatcher" autowire="true" />
+
+        <service id="Chamilo\Application\Plagiarism\Events\Subscriber\LoggerEventSubscriber" autowire="true">
+            <tag name="Chamilo\Application\Plagiarism\Events\PlagiarismEventSubscriber" />
+        </service>
+
     </services>
 </container>
