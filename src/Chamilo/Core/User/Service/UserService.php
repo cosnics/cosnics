@@ -97,8 +97,8 @@ class UserService
 
     public function approveUser(User $user): bool
     {
-        $user->set_active(1);
-        $user->set_approved(1);
+        $user->set_active(true);
+        $user->set_approved(true);
 
         return $this->updateUser($user);
     }
@@ -257,9 +257,9 @@ class UserService
         $user->set_email($emailAddress);
         $user->set_auth_source($authSource);
         $user->set_status($status);
-        $user->set_platformadmin((int) $isPlatformAdmin);
-        $user->set_active((int) $active);
-        $user->set_approved((int) $approved);
+        $user->set_platformadmin($isPlatformAdmin);
+        $user->set_active($active);
+        $user->set_approved($approved);
         $user->set_disk_quota($diskQuota);
 
         if ($isValidForever)
@@ -968,17 +968,17 @@ class UserService
 
         if (!is_null($isPlatformAdmin))
         {
-            $user->set_platformadmin((int) $isPlatformAdmin);
+            $user->set_platformadmin($isPlatformAdmin);
         }
 
         if (!is_null($active))
         {
-            $user->set_active((int) $active);
+            $user->set_active($active);
         }
 
         if (!is_null($approved))
         {
-            $user->set_approved((int) $approved);
+            $user->set_approved($approved);
         }
 
         if (!is_null($diskQuota))
