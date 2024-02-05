@@ -224,7 +224,7 @@ class UserService
         ?string $firstName, ?string $lastName, string $username, ?string $officialCode, string $emailAddress,
         bool $generatePassword, ?string $password, ?string $authSource = 'Chamilo\Libraries\Authentication\Platform',
         bool $isPlatformAdmin = false, int $status = User::STATUS_STUDENT, bool $active = true, bool $approved = true,
-        bool $isValidForever = true, int $activationDate = 0, int $expirationDate = 0, int $diskQuota = 209715200,
+        int $isValidForever = 1, int $activationDate = 0, int $expirationDate = 0, int $diskQuota = 209715200,
         bool $sendEmail = false
     ): User
     {

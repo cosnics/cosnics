@@ -389,12 +389,12 @@ class User extends DataClass
 
     public function set_active(bool $active): void
     {
-        $this->setDefaultProperty(self::PROPERTY_ACTIVE, $active);
+        $this->setDefaultProperty(self::PROPERTY_ACTIVE, (int) $active);
     }
 
     public function set_approved(bool $approved): void
     {
-        $this->setDefaultProperty(self::PROPERTY_APPROVED, $approved);
+        $this->setDefaultProperty(self::PROPERTY_APPROVED, (int) $approved);
     }
 
     public function set_auth_source(string $auth_source): void
@@ -464,7 +464,7 @@ class User extends DataClass
 
     public function set_platformadmin(bool $admin): void
     {
-        $this->setDefaultProperty(self::PROPERTY_PLATFORMADMIN, $admin);
+        $this->setDefaultProperty(self::PROPERTY_PLATFORMADMIN, (int) $admin);
     }
 
     public function set_registration_date(int $registration_date): void

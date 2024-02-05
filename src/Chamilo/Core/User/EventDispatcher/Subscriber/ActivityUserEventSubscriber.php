@@ -46,7 +46,7 @@ class ActivityUserEventSubscriber implements EventSubscriberInterface
         $this->whoIsOnlineService = $whoIsOnlineService;
     }
 
-    public function afterCreate(AfterUserCreateEvent $afterUserCreateEvent): bool
+    public function afterUserCreate(AfterUserCreateEvent $afterUserCreateEvent): bool
     {
         return $this->getUserTrackingRepository()->createUserActivity(
             $this->initializeUserActivityFromParameters(
@@ -56,7 +56,7 @@ class ActivityUserEventSubscriber implements EventSubscriberInterface
         );
     }
 
-    public function afterDelete(AfterUserDeleteEvent $afterUserDeleteEvent): bool
+    public function afterUserDelete(AfterUserDeleteEvent $afterUserDeleteEvent): bool
     {
         return $this->getUserTrackingRepository()->createUserActivity(
             $this->initializeUserActivityFromParameters(
@@ -66,7 +66,7 @@ class ActivityUserEventSubscriber implements EventSubscriberInterface
         );
     }
 
-    public function afterEnterPage(AfterUserEnterPageEvent $afterUserEnterPage): bool
+    public function afterUserEnterPage(AfterUserEnterPageEvent $afterUserEnterPage): bool
     {
         $userIdentifier = $afterUserEnterPage->getUser()->getId();
 
@@ -92,7 +92,7 @@ class ActivityUserEventSubscriber implements EventSubscriberInterface
         return true;
     }
 
-    public function afterExport(AfterUserExportEvent $afterUserExportEvent): bool
+    public function afterUserExport(AfterUserExportEvent $afterUserExportEvent): bool
     {
         return $this->getUserTrackingRepository()->createUserActivity(
             $this->initializeUserActivityFromParameters(
@@ -102,7 +102,7 @@ class ActivityUserEventSubscriber implements EventSubscriberInterface
         );
     }
 
-    public function afterImport(AfterUserImportEvent $afterUserImportEvent): bool
+    public function afterUserImport(AfterUserImportEvent $afterUserImportEvent): bool
     {
         return $this->getUserTrackingRepository()->createUserActivity(
             $this->initializeUserActivityFromParameters(
@@ -112,7 +112,7 @@ class ActivityUserEventSubscriber implements EventSubscriberInterface
         );
     }
 
-    public function afterLogin(AfterUserLoginEvent $afterUserLoginEvent): bool
+    public function afterUserLogin(AfterUserLoginEvent $afterUserLoginEvent): bool
     {
         return $this->createAuthenticationActivityFormParameters(
             UserAuthenticationActivity::ACTIVITY_LOGIN, $afterUserLoginEvent->getUser()->getId(),
@@ -120,7 +120,7 @@ class ActivityUserEventSubscriber implements EventSubscriberInterface
         );
     }
 
-    public function afterPasswordReset(AfterUserPasswordResetEvent $afterUserPasswordResetEvent): bool
+    public function afterUserPasswordReset(AfterUserPasswordResetEvent $afterUserPasswordResetEvent): bool
     {
         return $this->getUserTrackingRepository()->createUserActivity(
             $this->initializeUserActivityFromParameters(
@@ -130,7 +130,7 @@ class ActivityUserEventSubscriber implements EventSubscriberInterface
         );
     }
 
-    public function afterRegistration(AfterUserRegistrationEvent $afterUserRegistrationEvent): bool
+    public function afterUserRegistration(AfterUserRegistrationEvent $afterUserRegistrationEvent): bool
     {
         return $this->getUserTrackingRepository()->createUserActivity(
             $this->initializeUserActivityFromParameters(
@@ -139,7 +139,7 @@ class ActivityUserEventSubscriber implements EventSubscriberInterface
         );
     }
 
-    public function afterUpdate(AfterUserUpdateEvent $afterUserUpdateEvent): bool
+    public function afterUserUpdate(AfterUserUpdateEvent $afterUserUpdateEvent): bool
     {
         return $this->getUserTrackingRepository()->createUserActivity(
             $this->initializeUserActivityFromParameters(
@@ -149,7 +149,7 @@ class ActivityUserEventSubscriber implements EventSubscriberInterface
         );
     }
 
-    public function beforeLeavePage(BeforeUserLeavePageEvent $beforeUserLeavePage): bool
+    public function beforeUserLeavePage(BeforeUserLeavePageEvent $beforeUserLeavePage): bool
     {
         $userVisit = $this->getUserTrackingRepository()->findUserVisitByIdentifier(
             $beforeUserLeavePage->getUserVisitIdentifier()
@@ -165,7 +165,7 @@ class ActivityUserEventSubscriber implements EventSubscriberInterface
         return true;
     }
 
-    public function beforeLogout(BeforeUserLogoutEvent $beforeUserLogoutEvent): bool
+    public function beforeUserLogout(BeforeUserLogoutEvent $beforeUserLogoutEvent): bool
     {
         return $this->createAuthenticationActivityFormParameters(
             UserAuthenticationActivity::ACTIVITY_LOGOUT, $beforeUserLogoutEvent->getUser()->getId(),
@@ -203,13 +203,13 @@ class ActivityUserEventSubscriber implements EventSubscriberInterface
             AfterUserDeleteEvent::class => 'afterUserDelete',
             AfterUserExportEvent::class => 'afterUserExport',
             AfterUserImportEvent::class => 'afterUserImport',
-            AfterUserLoginEvent::class => 'afterLogin',
-            AfterUserPasswordResetEvent::class => 'afterPasswordReset',
-            AfterUserRegistrationEvent::class => 'afterRegistration',
-            AfterUserUpdateEvent::class => 'afterUpdate',
-            AfterUserEnterPageEvent::class => 'afterEnterPage',
-            BeforeUserLeavePageEvent::class => 'beforeLeavePage',
-            BeforeUserLogoutEvent::class => 'beforeLogout'
+            AfterUserLoginEvent::class => 'afterUserLogin',
+            AfterUserPasswordResetEvent::class => 'afterUserPasswordReset',
+            AfterUserRegistrationEvent::class => 'afterUserRegistration',
+            AfterUserUpdateEvent::class => 'afterUserUpdate',
+            AfterUserEnterPageEvent::class => 'afterUserEnterPage',
+            BeforeUserLeavePageEvent::class => 'beforeUserLeavePage',
+            BeforeUserLogoutEvent::class => 'beforeUserLogout'
         ];
     }
 
