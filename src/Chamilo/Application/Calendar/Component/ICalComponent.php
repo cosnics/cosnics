@@ -30,8 +30,6 @@ class ICalComponent extends Manager implements NoAuthenticationSupportInterface
     public function run()
     {
         $authenticationValidator = $this->getAuthenticationValidator();
-
-        $alreadyAuthenticated = $authenticationValidator->isAuthenticated();
         $securityCode = $this->getRequest()->getFromRequestOrQuery(User::PROPERTY_SECURITY_TOKEN);
 
         if (isset($securityCode))
@@ -39,16 +37,14 @@ class ICalComponent extends Manager implements NoAuthenticationSupportInterface
             $authentication = $this->getSecurityTokenAuthentication();
             $authentication->disableAuthSourceCheck();
 
-            $user = $authentication->login();
+            $authenticationValidator->validateForAuthentication($authentication, false);
+
+            $user = $this->getUser();
 
             if ($user instanceof User)
             {
                 $this->renderCalendar($user);
-
-                if (!$alreadyAuthenticated)
-                {
-                    $authentication->logout($user);
-                }
+                $authentication->logout($user);
             }
             else
             {
@@ -99,15 +95,15 @@ class ICalComponent extends Manager implements NoAuthenticationSupportInterface
                 $html[] = $this->renderHeader();
 
                 $html[] = Display::normal_message(
-                    $translator->trans('ICalExternalMessage', ['URL' => $icalExternalUrl], Manager::CONTEXT)
+                    $translator->trans('ICalExternalMessage', ['{URL}' => $icalExternalUrl], Manager::CONTEXT)
                 );
 
                 $html[] = Display::normal_message(
-                    $translator->trans('ICalDownloadMessage', ['URL' => $icalDownloadUrl], Manager::CONTEXT)
+                    $translator->trans('ICalDownloadMessage', ['{URL}' => $icalDownloadUrl], Manager::CONTEXT)
                 );
 
                 $html[] = Display::warning_message(
-                    $translator->trans('ICalWarningMessage', ['INCLUDED_CALENDARS' => $includedCalendars],
+                    $translator->trans('ICalWarningMessage', ['{INCLUDED_CALENDARS}' => $includedCalendars],
                         Manager::CONTEXT)
                 );
 
