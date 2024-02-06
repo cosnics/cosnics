@@ -860,9 +860,11 @@ class RightsRepository
     {
         if (!empty($entities))
         {
-            $entitiesHash = $this->getEntitiesHash($entities);
+            $entitiesConditionHash =
+                md5(serialize([$rightsLocationEntityRightClassName, $userIdentifier, $this->getEntitiesHash($entities)])
+                );
 
-            if (is_null($this->entitiesConditionCache[$userIdentifier][$entitiesHash]))
+            if (is_null($this->entitiesConditionCache[$entitiesConditionHash]))
             {
                 $orConditions = [];
 
@@ -904,10 +906,10 @@ class RightsRepository
 
                 $condition = new OrCondition($orConditions);
 
-                $this->entitiesConditionCache[$userIdentifier][$entitiesHash] = $condition;
+                $this->entitiesConditionCache[$entitiesConditionHash] = $condition;
             }
 
-            return $this->entitiesConditionCache[$userIdentifier][$entitiesHash];
+            return $this->entitiesConditionCache[$entitiesConditionHash];
         }
 
         return null;
