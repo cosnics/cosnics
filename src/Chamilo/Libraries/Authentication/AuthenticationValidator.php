@@ -143,17 +143,20 @@ class AuthenticationValidator
             return true;
         }
 
-        $user = null;
-
         foreach ($this->authentications as $authentication)
         {
-            $user = $authentication->login();
-
-            if ($user instanceof User)
-            {
-                break;
-            }
+            $this->validateForAuthentication($authentication);
         }
+
+        return false;
+    }
+
+    /**
+     * @throws \Chamilo\Libraries\Authentication\AuthenticationException
+     */
+    public function validateForAuthentication(Authentication $authentication, bool $redirectAfterLogin = true): bool
+    {
+        $user = $authentication->login();
 
         if (!$user instanceof User)
         {
@@ -163,7 +166,11 @@ class AuthenticationValidator
         $this->validateUser($user);
         $this->setAuthenticatedUser($user);
         $this->getEventDispatcher()->dispatch(new AfterUserLoginEvent($user, $this->request->getClientIp()));
-        $this->redirectAfterLogin();
+
+        if ($redirectAfterLogin)
+        {
+            $this->redirectAfterLogin();
+        }
 
         return true;
     }
