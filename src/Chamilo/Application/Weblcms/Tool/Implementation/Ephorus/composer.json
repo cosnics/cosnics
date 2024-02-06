@@ -23,7 +23,7 @@
     ],
     "require": {
         "php": ">=7.4.0",
-        "codecasts/nusoap-php7": "*"
+        "econea/nusoap": "*"
     },
     "extra": {
         "cosnics": {
