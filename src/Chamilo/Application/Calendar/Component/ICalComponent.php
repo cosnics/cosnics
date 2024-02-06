@@ -32,7 +32,7 @@ class ICalComponent extends Manager implements NoAuthenticationSupportInterface
         $authenticationValidator = $this->getAuthenticationValidator();
         $securityCode = $this->getRequest()->getFromRequestOrQuery(User::PROPERTY_SECURITY_TOKEN);
 
-        if (isset($securityCode))
+        if (!$authenticationValidator->isAuthenticated() && isset($securityCode))
         {
             $authentication = $this->getSecurityTokenAuthentication();
             $authentication->disableAuthSourceCheck();
