@@ -52,23 +52,21 @@ class ICalComponent extends Manager implements NoAuthenticationSupportInterface
     public function run()
     {
         $authenticationValidator = $this->getAuthenticationValidator();
-
-        $alreadyAuthenticated = $authenticationValidator->isAuthenticated();
-
         $securityCode = $this->getRequest()->getFromRequestOrQuery(User::PROPERTY_SECURITY_TOKEN);
-        if (isset($securityCode))
+
+        if (!$authenticationValidator->isAuthenticated() && isset($securityCode))
         {
             $authentication = $this->getSecurityTokenAuthentication();
             $authentication->disableAuthSourceCheck();
-            $user = $authentication->login();
+
+            $authenticationValidator->validateForAuthentication($authentication, false);
+
+            $user = $this->getUser();
 
             if ($user instanceof User)
             {
                 $this->renderCalendar($user);
-                if (!$alreadyAuthenticated)
-                {
-                    $authentication->logout($user);
-                }
+                $authentication->logout($user);
             }
             else
             {
