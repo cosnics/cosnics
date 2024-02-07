@@ -100,12 +100,14 @@ class ValidatorDecorator implements ValidatorInterface
         return $decoratedConstraintViolationList;
     }
 
-    public function validateProperty(object $object, string $propertyName, $groups = null): ConstraintViolationListInterface
+    public function validateProperty(object $object, string $propertyName, $groups = null
+    ): ConstraintViolationListInterface
     {
         return $this->symfonyValidator->validateProperty($object, $propertyName, $groups);
     }
 
-    public function validatePropertyValue($objectOrClass, string $propertyName, $value, $groups = null): ConstraintViolationListInterface
+    public function validatePropertyValue($objectOrClass, string $propertyName, $value, $groups = null
+    ): ConstraintViolationListInterface
     {
         return $this->symfonyValidator->validatePropertyValue($objectOrClass, $propertyName, $value, $groups);
     }
