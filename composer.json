@@ -25,7 +25,7 @@
         "composer/composer": "2.3.*",
         "doctrine/annotations": "2.*",
         "doctrine/collections": "2.1.*",
-        "doctrine/dbal": "4.0.*",
+        "doctrine/dbal": "3.8.*",
         "doctrine/orm": "3.0.*",
         "google/apiclient": "1.*",
         "guzzlehttp/guzzle": "7.*",
