@@ -6,13 +6,12 @@ use Chamilo\Application\Weblcms\Tool\Implementation\Ephorus\Storage\DataClass\Re
 use Chamilo\Application\Weblcms\Tool\Implementation\Ephorus\Storage\Repository\EphorusWebserviceRepository;
 use Chamilo\Application\Weblcms\Tool\Implementation\Ephorus\Storage\Repository\RequestRepository;
 use Chamilo\Core\Repository\ContentObject\File\Storage\DataClass\File;
-use Chamilo\Core\Repository\Storage\DataClass\ContentObject;
 use Chamilo\Core\Repository\Workspace\Repository\ContentObjectRepository;
 use Chamilo\Core\User\Service\UserService;
 use Chamilo\Core\User\Storage\DataClass\User;
-use Doctrine\Common\Collections\ArrayCollection;
 use Chamilo\Libraries\Storage\Parameters\RecordRetrievesParameters;
 use Chamilo\Libraries\Storage\Query\Condition\Condition;
+use Doctrine\Common\Collections\ArrayCollection;
 use Exception;
 use InvalidArgumentException;
 use RuntimeException;
@@ -24,6 +23,11 @@ use RuntimeException;
  */
 class RequestManager
 {
+    /**
+     * @var \Chamilo\Core\Repository\Workspace\Repository\ContentObjectRepository
+     */
+    protected $contentObjectRepository;
+
     /**
      * @var \Chamilo\Application\Weblcms\Tool\Implementation\Ephorus\Storage\Repository\EphorusWebserviceRepository
      */
@@ -38,11 +42,6 @@ class RequestManager
      * @var \Chamilo\Core\User\Service\UserService
      */
     protected $userService;
-
-    /**
-     * @var \Chamilo\Core\Repository\Workspace\Repository\ContentObjectRepository
-     */
-    protected $contentObjectRepository;
 
     /**
      * RequestManager constructor.
@@ -64,28 +63,42 @@ class RequestManager
     }
 
     /**
-     * @param int[] $contentObjectIds
-     * @param \Chamilo\Core\User\Storage\DataClass\User $user
-     * @param int $courseId
+     * @param \Chamilo\Application\Weblcms\Tool\Implementation\Ephorus\Storage\DataClass\Request $request
+     */
+    public function changeDocumentVisibility(Request $request)
+    {
+        if (!$this->ephorusWebserviceRepository->changeDocumentVisiblity(
+            $request->get_guid(), !$request->is_visible_in_index()
+        ))
+        {
+            throw new RuntimeException('The given document visibility could not be changed');
+        }
+
+        $request->set_visible_on_index(!$request->is_visible_in_index());
+        if (!$this->requestRepository->update($request))
+        {
+            throw new RuntimeException(
+                sprintf(
+                    'The given request with guid %s could not be updated in the database', $request->get_guid()
+                )
+            );
+        }
+    }
+
+    /**
+     * @param Request[] $requests
      *
      * @return int
      */
-    public function handInDocumentsByIds(array $contentObjectIds = [], User $user, $courseId = 0)
+    public function changeDocumentsVisibility(ArrayCollection $requests)
     {
         $failures = 0;
 
-        foreach ($contentObjectIds as $contentObjectId)
+        foreach ($requests as $request)
         {
-            $contentObject = $this->contentObjectRepository->findById($contentObjectId);
-            if (!$contentObject instanceof File)
-            {
-                $failures ++;
-                continue;
-            }
-
             try
             {
-                $this->handInDocumentObject($contentObject, $user, $courseId);
+                $this->changeDocumentVisibility($request);
             }
             catch (Exception $ex)
             {
@@ -94,6 +107,87 @@ class RequestManager
         }
 
         return $failures;
+    }
+
+    /**
+     * @param \Chamilo\Libraries\Storage\Query\Condition\Condition $condition
+     *
+     * @return int
+     */
+    public function countRequestsWithContentObjects(Condition $condition)
+    {
+        return $this->requestRepository->countRequestsWithContentObjects($condition);
+    }
+
+    /**
+     * Retrieves a request by a given guid
+     *
+     * @param string $documentGuid
+     *
+     * @return \Chamilo\Libraries\Storage\DataClass\CompositeDataClass|\Chamilo\Libraries\Storage\DataClass\DataClass |
+     *     Request
+     */
+    public function findRequestByGuid(string $documentGuid)
+    {
+        if (!$documentGuid)
+        {
+            throw new InvalidArgumentException('A valid guid is required to retrieve a request by guid');
+        }
+
+        return $this->requestRepository->findRequestByGuid($documentGuid);
+    }
+
+    /**
+     * Retrieves a request by a given id
+     *
+     * @param int $id
+     *
+     * @return \Chamilo\Libraries\Storage\DataClass\CompositeDataClass|\Chamilo\Libraries\Storage\DataClass\DataClass |
+     *     Request
+     */
+    public function findRequestById(int $id)
+    {
+        if (!$id)
+        {
+            throw new InvalidArgumentException('A valid id is required to retrieve a request by id');
+        }
+
+        return $this->requestRepository->findRequestById($id);
+    }
+
+    /**
+     * @param \Chamilo\Libraries\Storage\Parameters\RecordRetrievesParameters $recordRetrievesParameters
+     *
+     * @return \Doctrine\Common\Collections\ArrayCollection
+     */
+    public function findRequestsWithContentObjects(RecordRetrievesParameters $recordRetrievesParameters)
+    {
+        return $this->requestRepository->findRequestsWithContentObjects($recordRetrievesParameters);
+    }
+
+    /**
+     * @param int|int[] $guids
+     *
+     * @return \Doctrine\Common\Collections\ArrayCollection
+     */
+    public function findRequestsWithContentObjectsByGuids($guids)
+    {
+        if (!is_array($guids))
+        {
+            $guids = [$guids];
+        }
+
+        return $this->requestRepository->findRequestsWithContentObjectsByGuids($guids);
+    }
+
+    /**
+     * @param \Chamilo\Application\Weblcms\Tool\Implementation\Ephorus\Storage\DataClass\Request $request
+     *
+     * @return Result[] | \Doctrine\Common\Collections\ArrayCollection
+     */
+    public function findResultsForRequest(Request $request)
+    {
+        return $this->requestRepository->findResultsForRequest($request);
     }
 
     /**
@@ -141,19 +235,28 @@ class RequestManager
     }
 
     /**
-     * @param Request[] $requests
+     * @param int[] $contentObjectIds
+     * @param \Chamilo\Core\User\Storage\DataClass\User $user
+     * @param int $courseId
      *
      * @return int
      */
-    public function changeDocumentsVisibility(ArrayCollection $requests)
+    public function handInDocumentsByIds(array $contentObjectIds = [], User $user, $courseId = 0)
     {
         $failures = 0;
 
-        foreach ($requests as $request)
+        foreach ($contentObjectIds as $contentObjectId)
         {
+            $contentObject = $this->contentObjectRepository->findById($contentObjectId);
+            if (!$contentObject instanceof File)
+            {
+                $failures ++;
+                continue;
+            }
+
             try
             {
-                $this->changeDocumentVisibility($request);
+                $this->handInDocumentObject($contentObject, $user, $courseId);
             }
             catch (Exception $ex)
             {
@@ -162,109 +265,6 @@ class RequestManager
         }
 
         return $failures;
-    }
-
-    /**
-     * @param \Chamilo\Application\Weblcms\Tool\Implementation\Ephorus\Storage\DataClass\Request $request
-     */
-    public function changeDocumentVisibility(Request $request)
-    {
-        if (!$this->ephorusWebserviceRepository->changeDocumentVisiblity(
-            $request->get_guid(), !$request->is_visible_in_index()
-        ))
-        {
-            throw new RuntimeException('The given document visibility could not be changed');
-        }
-
-        $request->set_visible_on_index(!$request->is_visible_in_index());
-        if (!$this->requestRepository->update($request))
-        {
-            throw new RuntimeException(
-                sprintf(
-                    'The given request with guid %s could not be updated in the database',
-                    $request->get_guid()
-                )
-            );
-        }
-    }
-
-    /**
-     * Retrieves a request by a given guid
-     *
-     * @param string $documentGuid
-     *
-     * @return \Chamilo\Libraries\Storage\DataClass\CompositeDataClass|\Chamilo\Libraries\Storage\DataClass\DataClass | Request
-     */
-    public function findRequestByGuid(string $documentGuid)
-    {
-        if (!$documentGuid)
-        {
-            throw new InvalidArgumentException('A valid guid is required to retrieve a request by guid');
-        }
-
-        return $this->requestRepository->findRequestByGuid($documentGuid);
-    }
-
-    /**
-     * Retrieves a request by a given id
-     *
-     * @param int $id
-     *
-     * @return \Chamilo\Libraries\Storage\DataClass\CompositeDataClass|\Chamilo\Libraries\Storage\DataClass\DataClass | Request
-     */
-    public function findRequestById(int $id)
-    {
-        if (!$id)
-        {
-            throw new InvalidArgumentException('A valid id is required to retrieve a request by id');
-        }
-
-        return $this->requestRepository->findRequestById($id);
-    }
-
-    /**
-     * @param \Chamilo\Libraries\Storage\Query\Condition\Condition $condition
-     *
-     * @return int
-     */
-    public function countRequestsWithContentObjects(Condition $condition)
-    {
-        return $this->requestRepository->countRequestsWithContentObjects($condition);
-    }
-
-    /**
-     * @param \Chamilo\Libraries\Storage\Parameters\RecordRetrievesParameters $recordRetrievesParameters
-     *
-     * @return \Doctrine\Common\Collections\ArrayCollection
-     */
-    public function findRequestsWithContentObjects(RecordRetrievesParameters $recordRetrievesParameters)
-    {
-        return $this->requestRepository->findRequestsWithContentObjects($recordRetrievesParameters);
-    }
-
-    /**
-     * @param int|int[] $guids
-     *
-     * @return \Doctrine\Common\Collections\ArrayCollection
-     */
-    public function findRequestsWithContentObjectsByGuids($guids)
-    {
-        if (!is_array($guids))
-        {
-            $guids = [$guids];
-        }
-
-        return $this->requestRepository->findRequestsWithContentObjectsByGuids($guids);
-    }
-
-    /**
-     * @param \Chamilo\Application\Weblcms\Tool\Implementation\Ephorus\Storage\DataClass\Request $request
-     *
-     * @return Result[] | \Doctrine\Common\Collections\ArrayCollection
-     */
-    public function findResultsForRequest(Request $request)
-    {
-        return $this->requestRepository->findResultsForRequest($request);
     }
 
     /**

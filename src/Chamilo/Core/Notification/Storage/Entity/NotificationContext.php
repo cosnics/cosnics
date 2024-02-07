@@ -1,8 +1,6 @@
 <?php
 namespace Chamilo\Core\Notification\Storage\Entity;
 
-use Doctrine\ORM\Mapping as ORM;
-
 /**
  * @package Chamilo\Core\Notification\Storage\Entity
  *

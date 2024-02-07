@@ -1,15 +1,13 @@
 <?php
 namespace Chamilo\Core\Queue\Storage\Entity;
 
-use Doctrine\ORM\Mapping as ORM;
-
 /**
  * @package Chamilo\Core\Queue\Storage\Entity
  *
  * @author Sven Vanpoucke - Hogeschool Gent
  *
- *  @ORM\Entity(repositoryClass="Chamilo\Core\Queue\Storage\Repository\JobEntityRepository")
- *  @ORM\Table(
+ * @ORM\Entity(repositoryClass="Chamilo\Core\Queue\Storage\Repository\JobEntityRepository")
+ * @ORM\Table(
  *     name="queue_job_parameter",
  *     indexes={
  *          @ORM\Index(name="qjp_name", columns={"name"}),

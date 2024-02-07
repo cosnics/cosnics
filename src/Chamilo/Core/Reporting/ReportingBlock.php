@@ -1,9 +1,7 @@
 <?php
 namespace Chamilo\Core\Reporting;
 
-use Chamilo\Configuration\Service\Consulter\ConfigurationConsulter;
 use Chamilo\Libraries\Architecture\ClassnameUtilities;
-use Chamilo\Libraries\DependencyInjection\DependencyInjectionContainerBuilder;
 use Chamilo\Libraries\DependencyInjection\Traits\DependencyInjectionContainerTrait;
 use Chamilo\Libraries\Translation\Translation;
 
@@ -71,6 +69,11 @@ abstract class ReportingBlock
         return $this->id;
     }
 
+    public function set_id($id)
+    {
+        $this->id = $id;
+    }
+
     public function get_name()
     {
         return ClassnameUtilities::getInstance()->getClassNameFromNamespace(static::class);
@@ -79,6 +82,11 @@ abstract class ReportingBlock
     public function get_parent()
     {
         return $this->parent;
+    }
+
+    public function set_parent($parent)
+    {
+        $this->parent = $parent;
     }
 
     public function get_title()
@@ -104,15 +112,5 @@ abstract class ReportingBlock
     public function set_function_parameters($params)
     {
         $this->params = $params;
-    }
-
-    public function set_id($id)
-    {
-        $this->id = $id;
-    }
-
-    public function set_parent($parent)
-    {
-        $this->parent = $parent;
     }
 }

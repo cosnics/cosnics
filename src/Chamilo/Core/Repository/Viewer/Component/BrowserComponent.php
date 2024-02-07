@@ -1,7 +1,6 @@
 <?php
 namespace Chamilo\Core\Repository\Viewer\Component;
 
-use Chamilo\Core\Repository\Selector\TypeSelector;
 use Chamilo\Core\Repository\Selector\TypeSelectorFactory;
 use Chamilo\Core\Repository\Selector\TypeSelectorTrait;
 use Chamilo\Core\Repository\Viewer\Filter\FilterData;
@@ -221,25 +220,6 @@ class BrowserComponent extends Manager
     }
 
     /**
-     * @param bool $allow_shared
-     *
-     * @return \Chamilo\Core\Repository\Viewer\Menu\RepositoryCategoryMenu
-     */
-    public function renderMenu(bool $allow_shared = true): string
-    {
-        $url = $this->get_url($this->get_parameters(), [self::PARAM_QUERY]) . '&' . self::PROPERTY_CATEGORY . '=%s';
-
-        $extra = [];
-
-        $menu = new RepositoryCategoryMenu(
-            $this, $this->get_user_id(), $this->getCurrentWorkspace(), $this->getCategoryId(), $url, $extra,
-            $this->get_types()
-        );
-
-        return $menu->render_as_tree();
-    }
-
-    /**
      * @return string NULL
      */
     protected function get_query()
@@ -262,6 +242,25 @@ class BrowserComponent extends Manager
     {
         $query = $this->get_query();
         $this->set_parameter(self::PARAM_QUERY, $query);
+    }
+
+    /**
+     * @param bool $allow_shared
+     *
+     * @return \Chamilo\Core\Repository\Viewer\Menu\RepositoryCategoryMenu
+     */
+    public function renderMenu(bool $allow_shared = true): string
+    {
+        $url = $this->get_url($this->get_parameters(), [self::PARAM_QUERY]) . '&' . self::PROPERTY_CATEGORY . '=%s';
+
+        $extra = [];
+
+        $menu = new RepositoryCategoryMenu(
+            $this, $this->get_user_id(), $this->getCurrentWorkspace(), $this->getCategoryId(), $url, $extra,
+            $this->get_types()
+        );
+
+        return $menu->render_as_tree();
     }
 
     /**

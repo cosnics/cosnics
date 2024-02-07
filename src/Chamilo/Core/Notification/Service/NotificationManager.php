@@ -3,7 +3,6 @@ namespace Chamilo\Core\Notification\Service;
 
 use Chamilo\Core\Notification\Domain\FilterDTO;
 use Chamilo\Core\Notification\Domain\NotificationDTO;
-use Chamilo\Core\Notification\Domain\TranslationContext;
 use Chamilo\Core\Notification\Storage\Entity\Filter;
 use Chamilo\Core\Notification\Storage\Entity\Notification;
 use Chamilo\Core\Notification\Storage\Entity\UserNotification;
@@ -22,6 +21,11 @@ use RuntimeException;
 class NotificationManager
 {
     /**
+     * @var \Chamilo\Core\Notification\Service\NotificationContextManager
+     */
+    protected $contextManager;
+
+    /**
      * @var \Chamilo\Core\Notification\Storage\Repository\NotificationRepository
      */
     protected $notificationRepository;
@@ -30,11 +34,6 @@ class NotificationManager
      * @var NotificationTranslator
      */
     protected $notificationTranslator;
-
-    /**
-     * @var \Chamilo\Core\Notification\Service\NotificationContextManager
-     */
-    protected $contextManager;
 
     /**
      * NotificationManager constructor.
@@ -51,6 +50,63 @@ class NotificationManager
         $this->notificationRepository = $notificationRepository;
         $this->notificationTranslator = $notificationTranslator;
         $this->contextManager = $contextManager;
+    }
+
+    /**
+     * @param \Chamilo\Core\Notification\Storage\Entity\Notification $notification
+     * @param \Chamilo\Core\User\Storage\DataClass\User $user
+     *
+     * @return bool
+     * @throws \Doctrine\ORM\NonUniqueResultException
+     */
+    public function canUserViewNotification(Notification $notification, User $user)
+    {
+        return ($this->notificationRepository->countUserNotificationsByNotificationAndUser($notification, $user) > 0);
+    }
+
+    /**
+     * @param string $contextPath
+     * @param \Chamilo\Core\User\Storage\DataClass\User $user
+     *
+     * @return int
+     *
+     * @throws \Doctrine\ORM\NonUniqueResultException
+     */
+    public function countUnseenNotificationsByContextPathForUser($contextPath, User $user)
+    {
+        return $this->countUnseenNotificationsByContextPathsForUser([$contextPath], $user);
+    }
+
+    /**
+     * @param string[] $contextPaths
+     * @param \Chamilo\Core\User\Storage\DataClass\User $user
+     *
+     * @return int
+     *
+     * @throws \Doctrine\ORM\NonUniqueResultException
+     */
+    public function countUnseenNotificationsByContextPathsForUser(array $contextPaths, User $user)
+    {
+        $contexts = [];
+
+        foreach ($contextPaths as $contextPath)
+        {
+            try
+            {
+                $contexts[] = $this->contextManager->getContextByPath($contextPath);
+            }
+            catch (RuntimeException $ex)
+            {
+
+            }
+        }
+
+        if (empty($contexts))
+        {
+            return 0;
+        }
+
+        return $this->notificationRepository->countUnseenNotificationsByContextsForUser($contexts, $user);
     }
 
     /**
@@ -80,12 +136,9 @@ class NotificationManager
             }
         }
 
-        $notification->setUrl($url)
-            ->setDescriptionContext(
+        $notification->setUrl($url)->setDescriptionContext(
                 $this->notificationTranslator->createNotificationDescriptionContext($viewingContexts)
-            )
-            ->setDate($date)
-            ->setFilters($filters);
+            )->setDate($date)->setFilters($filters);
 
         $this->notificationRepository->createNotification($notification);
 
@@ -98,12 +151,8 @@ class NotificationManager
             foreach ($targetUserIds as $targetUserId)
             {
                 $userNotification = new UserNotification();
-                $userNotification->setNotification($notification)
-                    ->setNotificationContext($notificationContext)
-                    ->setUserId($targetUserId)
-                    ->setRead(false)
-                    ->setViewed(false)
-                    ->setDate($date);
+                $userNotification->setNotification($notification)->setNotificationContext($notificationContext)
+                    ->setUserId($targetUserId)->setRead(false)->setViewed(false)->setDate($date);
 
                 $userNotifications[] = $userNotification;
             }
@@ -122,11 +171,11 @@ class NotificationManager
     {
         $notificationsData = [];
 
-        foreach($notifications as $notification)
+        foreach ($notifications as $notification)
         {
             $filters = [];
 
-            foreach($notification->getFilters() as $filter)
+            foreach ($notification->getFilters() as $filter)
             {
                 $filters[] = new FilterDTO(
                     $filter->getId(), $this->notificationTranslator->getTranslationFromFilter($filter)
@@ -137,9 +186,7 @@ class NotificationManager
                 $notification->getId(),
                 $this->notificationTranslator->getTranslationFromNotification($notification, $viewingContext),
                 DatetimeUtilities::getInstance()->formatLocaleDate(null, $notification->getDate()->getTimestamp()),
-                $notification->getUsers()[0]->isRead(),
-                !$notification->getUsers()[0]->isViewed(),
-                $filters
+                $notification->getUsers()[0]->isRead(), !$notification->getUsers()[0]->isViewed(), $filters
             );
         }
 
@@ -199,13 +246,13 @@ class NotificationManager
             {
                 $contexts[] = $this->contextManager->getContextByPath($contextPath);
             }
-            catch(RuntimeException $ex)
+            catch (RuntimeException $ex)
             {
 
             }
         }
 
-        if(empty($contexts))
+        if (empty($contexts))
         {
             return [];
         }
@@ -215,7 +262,7 @@ class NotificationManager
 
         $notifications = [];
 
-        foreach($userNotifications as $userNotification)
+        foreach ($userNotifications as $userNotification)
         {
             $notification = $userNotification->getNotification();
             $notification->setUsers([$userNotification]);
@@ -226,48 +273,21 @@ class NotificationManager
     }
 
     /**
-     * @param string $contextPath
+     * @param \Chamilo\Core\Notification\Storage\Entity\Notification $notification
      * @param \Chamilo\Core\User\Storage\DataClass\User $user
-     *
-     * @return int
-     *
-     * @throws \Doctrine\ORM\NonUniqueResultException
      */
-    public function countUnseenNotificationsByContextPathForUser($contextPath, User $user)
+    public function setNotificationReadForUser(Notification $notification, User $user)
     {
-        return $this->countUnseenNotificationsByContextPathsForUser([$contextPath], $user);
+        $this->notificationRepository->setNotificationReadForUser($notification, $user);
     }
 
     /**
-     * @param string[] $contextPaths
+     * @param Notification[] $notifications
      * @param \Chamilo\Core\User\Storage\DataClass\User $user
-     *
-     * @return int
-     *
-     * @throws \Doctrine\ORM\NonUniqueResultException
      */
-    public function countUnseenNotificationsByContextPathsForUser(array $contextPaths, User $user)
+    public function setNotificationsViewedForUser($notifications, User $user)
     {
-        $contexts = [];
-
-        foreach ($contextPaths as $contextPath)
-        {
-            try
-            {
-                $contexts[] = $this->contextManager->getContextByPath($contextPath);
-            }
-            catch(RuntimeException $ex)
-            {
-
-            }
-        }
-
-        if(empty($contexts))
-        {
-            return 0;
-        }
-
-        return $this->notificationRepository->countUnseenNotificationsByContextsForUser($contexts, $user);
+        $this->notificationRepository->setNotificationsViewedForUser($notifications, $user);
     }
 
     /**
@@ -293,47 +313,17 @@ class NotificationManager
             {
                 $contexts[] = $this->contextManager->getContextByPath($contextPath);
             }
-            catch(RuntimeException $ex)
+            catch (RuntimeException $ex)
             {
 
             }
         }
 
-        if(empty($contextPaths))
+        if (empty($contextPaths))
         {
             return;
         }
 
         $this->notificationRepository->setNotificationsViewedForUserAndContexts($contexts, $user);
-    }
-
-    /**
-     * @param Notification[] $notifications
-     * @param \Chamilo\Core\User\Storage\DataClass\User $user
-     */
-    public function setNotificationsViewedForUser($notifications, User $user)
-    {
-        $this->notificationRepository->setNotificationsViewedForUser($notifications, $user);
-    }
-
-    /**
-     * @param \Chamilo\Core\Notification\Storage\Entity\Notification $notification
-     * @param \Chamilo\Core\User\Storage\DataClass\User $user
-     */
-    public function setNotificationReadForUser(Notification $notification, User $user)
-    {
-        $this->notificationRepository->setNotificationReadForUser($notification, $user);
-    }
-
-    /**
-     * @param \Chamilo\Core\Notification\Storage\Entity\Notification $notification
-     * @param \Chamilo\Core\User\Storage\DataClass\User $user
-     *
-     * @return bool
-     * @throws \Doctrine\ORM\NonUniqueResultException
-     */
-    public function canUserViewNotification(Notification $notification, User $user)
-    {
-        return ($this->notificationRepository->countUserNotificationsByNotificationAndUser($notification, $user) > 0);
     }
 }

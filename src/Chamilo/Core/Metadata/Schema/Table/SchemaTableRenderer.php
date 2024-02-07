@@ -7,7 +7,6 @@ use Chamilo\Libraries\Architecture\Application\Application;
 use Chamilo\Libraries\Format\Structure\Glyph\FontAwesomeGlyph;
 use Chamilo\Libraries\Format\Structure\Toolbar;
 use Chamilo\Libraries\Format\Structure\ToolbarItem;
-use Chamilo\Libraries\Format\Table\Column\DataClassPropertyTableColumn;
 use Chamilo\Libraries\Format\Table\Extension\DataClassListTableRenderer;
 use Chamilo\Libraries\Format\Table\FormAction\TableAction;
 use Chamilo\Libraries\Format\Table\FormAction\TableActions;
@@ -43,9 +42,15 @@ class SchemaTableRenderer extends DataClassListTableRenderer implements TableRow
 
     protected function initializeColumns(): void
     {
-        $this->addColumn($this->getDataClassPropertyTableColumnFactory()->getColumn(Schema::class, Schema::PROPERTY_NAMESPACE));
-        $this->addColumn($this->getDataClassPropertyTableColumnFactory()->getColumn(Schema::class, Schema::PROPERTY_NAME));
-        $this->addColumn($this->getDataClassPropertyTableColumnFactory()->getColumn(Schema::class, Schema::PROPERTY_URL));
+        $this->addColumn(
+            $this->getDataClassPropertyTableColumnFactory()->getColumn(Schema::class, Schema::PROPERTY_NAMESPACE)
+        );
+        $this->addColumn(
+            $this->getDataClassPropertyTableColumnFactory()->getColumn(Schema::class, Schema::PROPERTY_NAME)
+        );
+        $this->addColumn(
+            $this->getDataClassPropertyTableColumnFactory()->getColumn(Schema::class, Schema::PROPERTY_URL)
+        );
     }
 
     /**

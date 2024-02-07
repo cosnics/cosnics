@@ -2,10 +2,7 @@
 namespace Chamilo\Core\Queue\Test\Unit\Service\Producer;
 
 use Chamilo\Core\Queue\Service\Producer\BeanstalkProducer;
-use Chamilo\Core\Queue\Service\Producer\DBALProducer;
 use Chamilo\Libraries\Architecture\Test\TestCases\ChamiloTestCase;
-use Enqueue\Dbal\DbalContext;
-use Enqueue\Dbal\DbalMessage;
 use Enqueue\Pheanstalk\PheanstalkContext;
 use Enqueue\Pheanstalk\PheanstalkMessage;
 use Interop\Queue\Producer;
@@ -33,8 +30,8 @@ class BeanstalkProducerTest extends ChamiloTestCase
      */
     public function setUp(): void
     {
-        $this->pheanstalkContext = $this->getMockBuilder(PheanstalkContext::class)
-            ->disableOriginalConstructor()->getMock();
+        $this->pheanstalkContext =
+            $this->getMockBuilder(PheanstalkContext::class)->disableOriginalConstructor()->getMock();
 
         $this->beanstalkProducer = new BeanstalkProducer($this->pheanstalkContext);
     }
@@ -50,36 +47,27 @@ class BeanstalkProducerTest extends ChamiloTestCase
 
     public function testProduceMessage()
     {
-        $psrQueue = $this->getMockBuilder(Queue::class)
-            ->disableOriginalConstructor()->getMock();
+        $psrQueue = $this->getMockBuilder(Queue::class)->disableOriginalConstructor()->getMock();
 
-        $psrMessage = $this->getMockBuilder(PheanstalkMessage::class)
-            ->disableOriginalConstructor()->getMock();
+        $psrMessage = $this->getMockBuilder(PheanstalkMessage::class)->disableOriginalConstructor()->getMock();
 
-        $psrProducer = $this->getMockBuilder(Producer::class)
-            ->disableOriginalConstructor()->getMock();
+        $psrProducer = $this->getMockBuilder(Producer::class)->disableOriginalConstructor()->getMock();
 
-        $this->pheanstalkContext->expects($this->once())
-            ->method('createQueue')
-            ->with('notifications')
-            ->will($this->returnValue($psrQueue));
+        $this->pheanstalkContext->expects($this->once())->method('createQueue')->with('notifications')->will(
+                $this->returnValue($psrQueue)
+            );
 
-        $this->pheanstalkContext->expects($this->once())
-            ->method('createMessage')
-            ->with('test')
-            ->will($this->returnValue($psrMessage));
+        $this->pheanstalkContext->expects($this->once())->method('createMessage')->with('test')->will(
+                $this->returnValue($psrMessage)
+            );
 
-        $psrMessage->expects($this->once())
-            ->method('setDelay')
-            ->with(500);
+        $psrMessage->expects($this->once())->method('setDelay')->with(500);
 
-        $this->pheanstalkContext->expects($this->once())
-            ->method('createProducer')
-            ->will($this->returnValue($psrProducer));
+        $this->pheanstalkContext->expects($this->once())->method('createProducer')->will(
+                $this->returnValue($psrProducer)
+            );
 
-        $psrProducer->expects($this->once())
-            ->method('send')
-            ->with($psrQueue, $psrMessage);
+        $psrProducer->expects($this->once())->method('send')->with($psrQueue, $psrMessage);
 
         $this->beanstalkProducer->produceMessage('test', 'notifications', 500);
     }

@@ -1,7 +1,6 @@
 <?php
 namespace Chamilo\Core\Metadata\Relation\Component;
 
-use Chamilo\Core\Metadata\Entity\DataClassEntityFactory;
 use Chamilo\Core\Metadata\Relation\Form\RelationForm;
 use Chamilo\Core\Metadata\Relation\Manager;
 use Chamilo\Core\Metadata\Service\EntityTranslationService;

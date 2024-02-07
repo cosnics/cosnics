@@ -1,8 +1,6 @@
 <?php
 namespace Chamilo\Application\Weblcms\Tool\Implementation\CourseGroup\Infrastructure\Service;
 
-use Chamilo\Application\Weblcms\Tool\Implementation\CourseGroup\Storage\DataClass\CourseGroup;
-
 /**
  * Interface for a course group service
  *

@@ -3,7 +3,6 @@ namespace Chamilo\Application\Weblcms\Bridge\Assignment\Service\Entity;
 
 use Chamilo\Application\Weblcms\Storage\DataClass\ContentObjectPublication;
 use Chamilo\Core\Repository\ContentObject\Assignment\Display\Interfaces\AssignmentDataProvider;
-use Chamilo\Core\Repository\Storage\DataClass\ContentObject;
 use Chamilo\Core\User\Storage\DataClass\User;
 use Chamilo\Libraries\Architecture\Application\Application;
 use Chamilo\Libraries\Storage\DataClass\DataClass;
@@ -18,21 +17,6 @@ use Chamilo\Libraries\Storage\Query\Condition\Condition;
  */
 interface EntityServiceInterface
 {
-    /**
-     * @param \Chamilo\Application\Weblcms\Storage\DataClass\ContentObjectPublication $contentObjectPublication
-     *
-     * @param \Chamilo\Libraries\Storage\Query\Condition\Condition|null $condition
-     * @param int $offset
-     * @param int $count
-     * @param array $orderProperty
-     *
-     * @return \Doctrine\Common\Collections\ArrayCollection
-     */
-    public function retrieveEntities(
-        ContentObjectPublication $contentObjectPublication, Condition $condition = null, $offset = null, $count = null,
-        $orderProperty = null
-    );
-
     /**
      * @param \Chamilo\Application\Weblcms\Storage\DataClass\ContentObjectPublication $contentObjectPublication
      * @param \Chamilo\Libraries\Storage\Query\Condition\Condition|null $condition
@@ -50,15 +34,21 @@ interface EntityServiceInterface
 
     /**
      * @param \Chamilo\Application\Weblcms\Storage\DataClass\ContentObjectPublication $contentObjectPublication
+     * @param \Chamilo\Core\User\Storage\DataClass\User $currentUser
      *
-     * @return \Doctrine\Common\Collections\ArrayCollection | DataClass[]
+     * @return int[]
      */
-    public function retrieveEntitiesWithEntries(ContentObjectPublication $contentObjectPublication);
+    public function getAvailableEntityIdentifiersForUser(
+        ContentObjectPublication $contentObjectPublication, User $currentUser
+    );
 
     /**
-     * @return string
+     * @param \Chamilo\Application\Weblcms\Storage\DataClass\ContentObjectPublication $contentObjectPublication
+     * @param \Chamilo\Core\User\Storage\DataClass\User $currentUser
+     *
+     * @return int
      */
-    public function getPluralEntityName();
+    public function getCurrentEntityIdentifier(ContentObjectPublication $contentObjectPublication, User $currentUser);
 
     /**
      * @return string
@@ -78,20 +68,16 @@ interface EntityServiceInterface
     );
 
     /**
-     * @param \Chamilo\Application\Weblcms\Storage\DataClass\ContentObjectPublication $contentObjectPublication
-     * @param \Chamilo\Core\User\Storage\DataClass\User $currentUser
-     *
-     * @return int
+     * @return string
      */
-    public function getCurrentEntityIdentifier(ContentObjectPublication $contentObjectPublication, User $currentUser);
+    public function getPluralEntityName();
 
     /**
-     * @param \Chamilo\Application\Weblcms\Storage\DataClass\ContentObjectPublication $contentObjectPublication
-     * @param \Chamilo\Core\User\Storage\DataClass\User $currentUser
+     * @param int $entityId
      *
-     * @return int[]
+     * @return \Chamilo\Core\User\Storage\DataClass\User[]
      */
-    public function getAvailableEntityIdentifiersForUser(ContentObjectPublication $contentObjectPublication, User $currentUser);
+    public function getUsersForEntity($entityId);
 
     /**
      * @param \Chamilo\Core\User\Storage\DataClass\User $user
@@ -101,13 +87,6 @@ interface EntityServiceInterface
      * @return bool
      */
     public function isUserPartOfEntity(User $user, ContentObjectPublication $contentObjectPublication, $entityId);
-
-    /**
-     * @param int $entityId
-     *
-     * @return \Chamilo\Core\User\Storage\DataClass\User[]
-     */
-    public function getUsersForEntity($entityId);
 
     /**
      * @param \Chamilo\Libraries\Storage\DataClass\DataClass $entity
@@ -129,4 +108,26 @@ interface EntityServiceInterface
      * @return String
      */
     public function renderEntityNameById($entityId);
+
+    /**
+     * @param \Chamilo\Application\Weblcms\Storage\DataClass\ContentObjectPublication $contentObjectPublication
+     *
+     * @param \Chamilo\Libraries\Storage\Query\Condition\Condition|null $condition
+     * @param int $offset
+     * @param int $count
+     * @param array $orderProperty
+     *
+     * @return \Doctrine\Common\Collections\ArrayCollection
+     */
+    public function retrieveEntities(
+        ContentObjectPublication $contentObjectPublication, Condition $condition = null, $offset = null, $count = null,
+        $orderProperty = null
+    );
+
+    /**
+     * @param \Chamilo\Application\Weblcms\Storage\DataClass\ContentObjectPublication $contentObjectPublication
+     *
+     * @return \Doctrine\Common\Collections\ArrayCollection | DataClass[]
+     */
+    public function retrieveEntitiesWithEntries(ContentObjectPublication $contentObjectPublication);
 }

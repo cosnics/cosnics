@@ -15,7 +15,7 @@ class DependencyInjectionExtension extends AbstractDependencyInjectionExtension 
 {
     use ExtensionTrait;
 
-    public function getAlias()
+    public function getAlias(): string
     {
         return 'chamilo.application.weblcms.tool.implementation.forum.integration.chamilo.application.weblcms.tool.implementation.course_group';
     }

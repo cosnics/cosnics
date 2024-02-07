@@ -8,7 +8,6 @@ use Chamilo\Core\Repository\ContentObject\Section\Storage\DataClass\Section;
 use Chamilo\Core\Repository\Service\ContentObjectCopierWrapper;
 use Chamilo\Core\Repository\Storage\DataClass\ContentObject;
 use Chamilo\Core\Repository\Workspace\Repository\ContentObjectRepository;
-use Chamilo\Core\Repository\Workspace\Storage\DataClass\Workspace;
 use Chamilo\Core\User\Storage\DataClass\User;
 
 /**
@@ -73,8 +72,6 @@ class TreeNodeCopier
 
         return $this->contentObjectRepository->findById(array_pop($newContentObjectIdentifiers));
     }
-
-
 
     /**
      * Copies a given node and his children to the given learning path and tree node

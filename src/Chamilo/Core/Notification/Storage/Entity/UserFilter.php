@@ -1,8 +1,6 @@
 <?php
 namespace Chamilo\Core\Notification\Storage\Entity;
 
-use Doctrine\ORM\Mapping as ORM;
-
 /**
  * @package Chamilo\Core\Notification\Storage\Entity
  *
@@ -16,6 +14,14 @@ use Doctrine\ORM\Mapping as ORM;
  */
 class UserFilter
 {
+    /**
+     * @var Filter
+     *
+     * @ORM\ManyToOne(targetEntity="Chamilo\Core\Notification\Storage\Entity\Filter")
+     * @ORM\JoinColumn(name="filter_id", nullable=false)
+     */
+    protected $filter;
+
     /**
      * @var int
      *
@@ -33,12 +39,20 @@ class UserFilter
     protected $userId;
 
     /**
-     * @var Filter
-     *
-     * @ORM\ManyToOne(targetEntity="Chamilo\Core\Notification\Storage\Entity\Filter")
-     * @ORM\JoinColumn(name="filter_id", nullable=false)
+     * @return Filter
      */
-    protected $filter;
+    public function getFilter()
+    {
+        return $this->filter;
+    }
+
+    /**
+     * @param Filter $filter
+     */
+    public function setFilter(Filter $filter)
+    {
+        $this->filter = $filter;
+    }
 
     /**
      * @return int
@@ -63,22 +77,5 @@ class UserFilter
     {
         $this->userId = $userId;
     }
-
-    /**
-     * @return Filter
-     */
-    public function getFilter()
-    {
-        return $this->filter;
-    }
-
-    /**
-     * @param Filter $filter
-     */
-    public function setFilter(Filter $filter)
-    {
-        $this->filter = $filter;
-    }
-
 
 }

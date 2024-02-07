@@ -1,9 +1,7 @@
 <?php
 namespace Chamilo\Core\Repository\ContentObject\Assignment\Display\Ajax\Component;
 
-use Chamilo\Core\Notification\Service\NotificationTranslator;
 use Chamilo\Core\Repository\ContentObject\Assignment\Display\Ajax\Manager;
-use Chamilo\Core\Repository\ContentObject\Assignment\Display\Bridge\Interfaces\NotificationServiceBridgeInterface;
 use Symfony\Component\HttpFoundation\JsonResponse;
 
 /**
@@ -13,14 +11,15 @@ use Symfony\Component\HttpFoundation\JsonResponse;
  */
 class GetNotificationsComponent extends Manager
 {
-    const PARAM_OFFSET = 'offset';
-    const PARAM_NOTIFICATIONS_PER_PAGE = 'notificationsPerPage';
+    public const PARAM_NOTIFICATIONS_PER_PAGE = 'notificationsPerPage';
+
+    public const PARAM_OFFSET = 'offset';
 
     /**
      *
      * @return string
      */
-    function run()
+    public function run()
     {
         $notificationServiceBridge = $this->getNotificationServiceBridge();
 

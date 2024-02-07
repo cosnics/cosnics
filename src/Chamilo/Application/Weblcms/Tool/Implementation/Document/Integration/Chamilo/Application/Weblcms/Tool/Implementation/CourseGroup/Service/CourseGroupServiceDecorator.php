@@ -3,7 +3,6 @@ namespace Chamilo\Application\Weblcms\Tool\Implementation\Document\Integration\C
 
 use Chamilo\Application\Weblcms\Tool\Implementation\CourseGroup\Infrastructure\Service\CourseGroupDecorator\CourseGroupServiceDecoratorInterface;
 use Chamilo\Application\Weblcms\Tool\Implementation\CourseGroup\Infrastructure\Service\CourseGroupDecorator\PublicationCategoryCourseGroupServiceDecorator;
-use Chamilo\Application\Weblcms\Tool\Implementation\CourseGroup\Storage\DataClass\CourseGroup;
 use Chamilo\Application\Weblcms\Tool\Implementation\Document\Integration\Chamilo\Application\Weblcms\Tool\Implementation\CourseGroup\Form\CourseGroupFormDecorator;
 
 /**
@@ -13,24 +12,25 @@ use Chamilo\Application\Weblcms\Tool\Implementation\Document\Integration\Chamilo
  *
  * @author Sven Vanpoucke - Hogeschool Gent
  */
-class CourseGroupServiceDecorator extends PublicationCategoryCourseGroupServiceDecorator implements CourseGroupServiceDecoratorInterface
+class CourseGroupServiceDecorator extends PublicationCategoryCourseGroupServiceDecorator
+    implements CourseGroupServiceDecoratorInterface
 {
+    /**
+     * Returns the name of the property for the
+     * @return mixed
+     */
+    public function getFormProperty()
+    {
+        return CourseGroupFormDecorator::PROPERTY_DOCUMENT_CATEGORY_ID;
+    }
+
     /**
      * Returns the name of the tool to be used in the category
      *
      * @return string
      */
-    function getToolName()
+    public function getToolName()
     {
         return 'Document';
-    }
-
-    /**
-     * Returns the name of the property for the
-     * @return mixed
-     */
-    function getFormProperty()
-    {
-        return CourseGroupFormDecorator::PROPERTY_DOCUMENT_CATEGORY_ID;
     }
 }

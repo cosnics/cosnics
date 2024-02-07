@@ -91,10 +91,7 @@ class RightsLocation extends \Chamilo\Core\Rights\RightsLocation
         return $this->getDefaultProperty(self::PROPERTY_NODE_ID);
     }
 
-    /**
-     * @return string
-     */
-    public function get_parent_id(): int
+    public function get_parent_id(): string
     {
         return $this->parent_id;
     }

@@ -3,7 +3,6 @@ namespace Chamilo\Application\Weblcms\Tool\Implementation\CourseGroup\Infrastruc
 
 use Chamilo\Application\Weblcms\Course\Storage\DataClass\Course;
 use Chamilo\Application\Weblcms\Tool\Implementation\CourseGroup\Infrastructure\Repository\CourseGroupRepository;
-use Chamilo\Application\Weblcms\Tool\Implementation\CourseGroup\Infrastructure\Repository\CourseGroupRepositoryInterface;
 use Chamilo\Application\Weblcms\Tool\Implementation\CourseGroup\Infrastructure\Service\CourseGroupDecorator\CourseGroupDecoratorsManager;
 use Chamilo\Application\Weblcms\Tool\Implementation\CourseGroup\Storage\DataClass\CourseGroup;
 use Chamilo\Application\Weblcms\Tool\Implementation\CourseGroup\Storage\DataClass\CourseGroupUserRelation;
@@ -19,15 +18,15 @@ class CourseGroupService implements CourseGroupServiceInterface
 {
 
     /**
+     * @var \Chamilo\Application\Weblcms\Tool\Implementation\CourseGroup\Infrastructure\Service\CourseGroupDecorator\CourseGroupDecoratorsManager
+     */
+    protected $courseGroupDecoratorsManager;
+
+    /**
      *
      * @var \Chamilo\Application\Weblcms\Tool\Implementation\CourseGroup\Infrastructure\Repository\CourseGroupRepository
      */
     protected $courseGroupRepository;
-
-    /**
-     * @var \Chamilo\Application\Weblcms\Tool\Implementation\CourseGroup\Infrastructure\Service\CourseGroupDecorator\CourseGroupDecoratorsManager
-     */
-    protected $courseGroupDecoratorsManager;
 
     /**
      * CourseGroupService constructor.
@@ -53,6 +52,21 @@ class CourseGroupService implements CourseGroupServiceInterface
     public function countCourseGroupsInCourse($courseId)
     {
         return $this->courseGroupRepository->countCourseGroupsInCourse($courseId);
+    }
+
+    /**
+     * @param \Chamilo\Application\Weblcms\Tool\Implementation\CourseGroup\Storage\DataClass\CourseGroupUserRelation $courseGroupUserRelation
+     */
+    public function removeCourseGroupUserRelation(CourseGroupUserRelation $courseGroupUserRelation)
+    {
+        $courseGroup = new CourseGroup();
+        $courseGroup->setId($courseGroupUserRelation->get_course_group());
+
+        $user = new User();
+        $user->setId($courseGroupUserRelation->get_user());
+
+        $this->courseGroupDecoratorsManager->unsubscribeUser($courseGroup, $user);
+        $this->courseGroupRepository->delete($courseGroupUserRelation);
     }
 
     /**
@@ -87,21 +101,6 @@ class CourseGroupService implements CourseGroupServiceInterface
                 )
             );
         }
-
-        $this->courseGroupDecoratorsManager->unsubscribeUser($courseGroup, $user);
-        $this->courseGroupRepository->delete($courseGroupUserRelation);
-    }
-
-    /**
-     * @param \Chamilo\Application\Weblcms\Tool\Implementation\CourseGroup\Storage\DataClass\CourseGroupUserRelation $courseGroupUserRelation
-     */
-    public function removeCourseGroupUserRelation(CourseGroupUserRelation $courseGroupUserRelation)
-    {
-        $courseGroup = new CourseGroup();
-        $courseGroup->setId($courseGroupUserRelation->get_course_group());
-
-        $user = new User();
-        $user->setId($courseGroupUserRelation->get_user());
 
         $this->courseGroupDecoratorsManager->unsubscribeUser($courseGroup, $user);
         $this->courseGroupRepository->delete($courseGroupUserRelation);

@@ -5,7 +5,6 @@ use Chamilo\Libraries\Architecture\ClassnameUtilities;
 use Chamilo\Libraries\File\AbstractPathBuilder;
 use Chamilo\Libraries\File\FilesystemTools;
 use Chamilo\Libraries\Utilities\StringUtilities;
-use Symfony\Component\Filesystem\Filesystem;
 use Symfony\Component\Finder\Iterator\FileTypeFilterIterator;
 
 /**

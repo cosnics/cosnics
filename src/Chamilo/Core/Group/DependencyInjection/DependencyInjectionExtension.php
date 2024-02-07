@@ -18,7 +18,7 @@ class DependencyInjectionExtension extends AbstractDependencyInjectionExtension
     use ExtensionTrait;
     use IConfigurableExtensionTrait;
 
-    public function getAlias()
+    public function getAlias(): string
     {
         return 'chamilo.core.group';
     }

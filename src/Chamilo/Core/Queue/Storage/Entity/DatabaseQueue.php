@@ -1,8 +1,6 @@
 <?php
 namespace Chamilo\Core\Queue\Storage\Entity;
 
-use Doctrine\ORM\Mapping as ORM;
-
 /**
  * @package Chamilo\Core\Queue\Storage\Entity
  *
@@ -24,21 +22,6 @@ use Doctrine\ORM\Mapping as ORM;
 class DatabaseQueue
 {
     /**
-     * @var string
-     *
-     * @ORM\Column(type="guid")
-     * @ORM\Id
-     */
-    protected $id;
-
-    /**
-     * @var int
-     *
-     * @ORM\Column(type="bigint")
-     */
-    protected $published_at;
-
-    /**
      * @var int
      *
      * @ORM\Column(type="text", nullable=true)
@@ -48,30 +31,24 @@ class DatabaseQueue
     /**
      * @var int
      *
+     * @ORM\Column(type="integer", nullable=true)
+     */
+    protected $delayed_until;
+
+    /**
+     * @var int
+     *
      * @ORM\Column(type="text", nullable=true)
      */
     protected $headers;
 
     /**
-     * @var int
+     * @var string
      *
-     * @ORM\Column(type="text", nullable=true)
+     * @ORM\Column(type="guid")
+     * @ORM\Id
      */
-    protected $properties;
-
-    /**
-     * @var int
-     *
-     * @ORM\Column(type="boolean", nullable=true)
-     */
-    protected $redelivered;
-
-    /**
-     * @var int
-     *
-     * @ORM\Column(type="string")
-     */
-    protected $queue;
+    protected $id;
 
     /**
      * @var int
@@ -83,9 +60,30 @@ class DatabaseQueue
     /**
      * @var int
      *
-     * @ORM\Column(type="integer", nullable=true)
+     * @ORM\Column(type="text", nullable=true)
      */
-    protected $delayed_until;
+    protected $properties;
+
+    /**
+     * @var int
+     *
+     * @ORM\Column(type="bigint")
+     */
+    protected $published_at;
+
+    /**
+     * @var int
+     *
+     * @ORM\Column(type="string")
+     */
+    protected $queue;
+
+    /**
+     * @var int
+     *
+     * @ORM\Column(type="boolean", nullable=true)
+     */
+    protected $redelivered;
 
     /**
      * @var int

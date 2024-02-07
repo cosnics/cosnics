@@ -3,7 +3,6 @@ namespace Chamilo\Core\Repository\ContentObject\Assignment\Display\Ephorus\Compo
 
 use Chamilo\Application\Weblcms\Tool\Implementation\Ephorus\Service\ReportExporter;
 use Chamilo\Core\Repository\ContentObject\Assignment\Display\Ephorus\Manager;
-use Chamilo\Core\Repository\Storage\DataClass\ContentObject;
 use Chamilo\Libraries\Architecture\Exceptions\UserException;
 use Chamilo\Libraries\Translation\Translation;
 

@@ -9,63 +9,36 @@ namespace Chamilo\Core\Repository\Common\Import;
 abstract class AbstractContentObjectImportImplementation
 {
 
-    /**
-     *
-     * @var ContentObjectImportController
-     */
-    private $controller;
+    private ContentObjectImportParameters $content_object_import_parameters;
 
-    /**
-     *
-     * @var ContentObjectImportParameters
-     */
-    private $content_object_import_parameters;
+    private ContentObjectImportController $controller;
 
-    /**
-     *
-     * @param ContentObjectImportController $controller
-     * @param ContentObjectImportParameters $content_object_import_parameters
-     */
-    public function __construct(ContentObjectImportController $controller, 
-        ContentObjectImportParameters $content_object_import_parameters)
+    public function __construct(
+        ContentObjectImportController $controller, ContentObjectImportParameters $content_object_import_parameters
+    )
     {
         $this->controller = $controller;
         $this->content_object_import_parameters = $content_object_import_parameters;
     }
 
-    /**
-     *
-     * @return \Chamilo\Core\Repository\Common\Export\ContentObjectExportController
-     */
-    public function get_controller()
-    {
-        return $this->controller;
-    }
-
-    /**
-     *
-     * @param $controller
-     */
-    public function set_controller($controller)
-    {
-        $this->controller = $controller;
-    }
-
-    /**
-     *
-     * @return ContentObjectImportParameters
-     */
-    public function get_content_object_import_parameters()
+    public function get_content_object_import_parameters(): ContentObjectImportParameters
     {
         return $this->content_object_import_parameters;
     }
 
-    /**
-     *
-     * @param ContentObjectImportParameters $content_object_import_parameters
-     */
-    public function set_content_object_import_parameters($content_object_import_parameters)
+    public function set_content_object_import_parameters(ContentObjectImportParameters $content_object_import_parameters
+    ): void
     {
         $this->content_object_import_parameters = $content_object_import_parameters;
+    }
+
+    public function get_controller(): ContentObjectImportController
+    {
+        return $this->controller;
+    }
+
+    public function set_controller(ContentObjectImportController $controller): void
+    {
+        $this->controller = $controller;
     }
 }

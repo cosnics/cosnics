@@ -1,7 +1,6 @@
 <?php
 namespace Chamilo\Core\Repository\Workspace\Extension\Office365\Service;
 
-use Chamilo\Core\Repository\Workspace\Extension\Office365\Service\WorkspaceOffice365ReferenceService;
 use Chamilo\Core\Repository\Workspace\Service\WorkspaceUserService;
 use Chamilo\Core\Repository\Workspace\Storage\DataClass\Workspace;
 use Chamilo\Core\User\Storage\DataClass\User;
@@ -18,24 +17,24 @@ use RuntimeException;
 class WorkspaceOffice365Connector
 {
     /**
-     * @var \Chamilo\Core\Repository\Workspace\Extension\Office365\Service\WorkspaceOffice365ReferenceService
-     */
-    protected $workspaceOffice365ReferenceService;
-
-    /**
      * @var \Chamilo\Libraries\Protocol\Microsoft\Graph\Service\GroupService
      */
     protected $graphGroupService;
 
     /**
-     * @var \Chamilo\Core\Repository\Workspace\Service\WorkspaceUserService
-     */
-    protected $workspaceUserService;
-
-    /**
      * @var \Chamilo\Libraries\Protocol\Microsoft\Graph\Service\UserService
      */
     protected $graphUserService;
+
+    /**
+     * @var \Chamilo\Core\Repository\Workspace\Extension\Office365\Service\WorkspaceOffice365ReferenceService
+     */
+    protected $workspaceOffice365ReferenceService;
+
+    /**
+     * @var \Chamilo\Core\Repository\Workspace\Service\WorkspaceUserService
+     */
+    protected $workspaceUserService;
 
     /**
      * WorkspaceOffice365Connector constructor.
@@ -45,24 +44,14 @@ class WorkspaceOffice365Connector
      * @param \Chamilo\Core\Repository\Workspace\Service\WorkspaceUserService $workspaceUserService
      */
     public function __construct(
-        WorkspaceOffice365ReferenceService $workspaceOffice365ReferenceService,
-        GroupService $graphGroupService, UserService $graphUserService, WorkspaceUserService $workspaceUserService
+        WorkspaceOffice365ReferenceService $workspaceOffice365ReferenceService, GroupService $graphGroupService,
+        UserService $graphUserService, WorkspaceUserService $workspaceUserService
     )
     {
         $this->workspaceOffice365ReferenceService = $workspaceOffice365ReferenceService;
         $this->graphGroupService = $graphGroupService;
         $this->workspaceUserService = $workspaceUserService;
         $this->graphUserService = $graphUserService;
-    }
-
-    /**
-     * @param \Chamilo\Core\Repository\Workspace\Storage\DataClass\Workspace $workspace
-     *
-     * @return bool
-     */
-    public function isOffice365GroupActiveForWorkspace(Workspace $workspace)
-    {
-        return $this->workspaceOffice365ReferenceService->workspaceHasLinkedReference($workspace);
     }
 
     /**
@@ -110,22 +99,18 @@ class WorkspaceOffice365Connector
         $reference = $this->workspaceOffice365ReferenceService->getWorkspaceReference($workspace);
 
         $this->graphGroupService->addMemberToGroup($reference->getOffice365GroupId(), $user);
+
         return $this->graphGroupService->getGroupUrl($reference->getOffice365GroupId());
     }
 
     /**
      * @param \Chamilo\Core\Repository\Workspace\Storage\DataClass\Workspace $workspace
+     *
+     * @return bool
      */
-    public function updateGroupNameForWorkspace(Workspace $workspace)
+    public function isOffice365GroupActiveForWorkspace(Workspace $workspace)
     {
-        if (!$this->isOffice365GroupActiveForWorkspace($workspace))
-        {
-            return;
-        }
-
-        $reference = $this->workspaceOffice365ReferenceService->getWorkspaceReference($workspace);
-
-        $this->graphGroupService->updateGroupName($reference->getOffice365GroupId(), $workspace->getName());
+        return $this->workspaceOffice365ReferenceService->workspaceHasLinkedReference($workspace);
     }
 
     /**
@@ -134,7 +119,7 @@ class WorkspaceOffice365Connector
      */
     public function syncGroupForWorkspace(Workspace $workspace, User $user)
     {
-        if(!$this->isOffice365GroupActiveForWorkspace($workspace))
+        if (!$this->isOffice365GroupActiveForWorkspace($workspace))
         {
             return;
         }
@@ -171,5 +156,20 @@ class WorkspaceOffice365Connector
         }
 
         $this->workspaceOffice365ReferenceService->unlinkWorkspaceReference($reference);
+    }
+
+    /**
+     * @param \Chamilo\Core\Repository\Workspace\Storage\DataClass\Workspace $workspace
+     */
+    public function updateGroupNameForWorkspace(Workspace $workspace)
+    {
+        if (!$this->isOffice365GroupActiveForWorkspace($workspace))
+        {
+            return;
+        }
+
+        $reference = $this->workspaceOffice365ReferenceService->getWorkspaceReference($workspace);
+
+        $this->graphGroupService->updateGroupName($reference->getOffice365GroupId(), $workspace->getName());
     }
 }

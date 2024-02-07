@@ -5,8 +5,6 @@ use Chamilo\Core\Repository\Common\Export\ContentObjectExport;
 use Chamilo\Core\Repository\Common\Export\ContentObjectExportController;
 use Chamilo\Core\Repository\Common\Export\ExportParameters;
 use Chamilo\Core\Repository\ContentObject\CalendarEvent\Common\Export\ZipExportImplementation;
-use Chamilo\Libraries\DependencyInjection\DependencyInjectionContainerBuilder;
-use Chamilo\Libraries\File\FilesystemTools;
 
 class ZipDefaultExportImplementation extends ZipExportImplementation
 {

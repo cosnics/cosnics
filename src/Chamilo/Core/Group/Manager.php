@@ -4,7 +4,6 @@ namespace Chamilo\Core\Group;
 use Chamilo\Core\Admin\Service\BreadcrumbGenerator;
 use Chamilo\Core\Group\Service\GroupMembershipService;
 use Chamilo\Core\Group\Service\GroupUrlGenerator;
-use Chamilo\Core\Group\Storage\DataClass\Group;
 use Chamilo\Libraries\Architecture\Application\Application;
 use Chamilo\Libraries\Architecture\Application\ApplicationConfigurationInterface;
 use Chamilo\Libraries\Format\Breadcrumb\BreadcrumbGeneratorInterface;

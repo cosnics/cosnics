@@ -44,14 +44,9 @@ Class DisplayOrderDataClassStub implements DataClassDisplayOrderSupport
         return [self::PROPERTY_PARENT_ID];
     }
 
-    /**
-     * @param string $propertyName
-     *
-     * @return string
-     */
-    public function getDefaultProperty($propertyName)
+    public function getDefaultProperty(string $name): mixed
     {
-        switch ($propertyName)
+        switch ($name)
         {
             case self::PROPERTY_SORT:
                 return $this->sort;
@@ -60,30 +55,26 @@ Class DisplayOrderDataClassStub implements DataClassDisplayOrderSupport
         }
 
         throw new InvalidArgumentException(
-            sprintf('The given property with name %s could not be found', $propertyName)
+            sprintf('The given property with name %s could not be found', $name)
         );
     }
 
-    /**
-     * @param string $propertyName
-     * @param string $propertyvalue
-     */
-    public function setDefaultProperty($propertyName, $propertyvalue)
+    public function setDefaultProperty(string $name, mixed $value)
     {
-        switch ($propertyName)
+        switch ($name)
         {
             case self::PROPERTY_SORT:
-                $this->sort = $propertyvalue;
+                $this->sort = $value;
 
                 return;
             case self::PROPERTY_PARENT_ID:
-                $this->parentId = $propertyvalue;
+                $this->parentId = $value;
 
                 return;
         }
 
         throw new InvalidArgumentException(
-            sprintf('The given property with name %s could not be found', $propertyName)
+            sprintf('The given property with name %s could not be found', $name)
         );
     }
 

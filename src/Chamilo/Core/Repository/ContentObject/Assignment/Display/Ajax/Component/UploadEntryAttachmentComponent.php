@@ -1,7 +1,6 @@
 <?php
 namespace Chamilo\Core\Repository\ContentObject\Assignment\Display\Ajax\Component;
 
-use Chamilo\Application\Weblcms\Bridge\Assignment\Storage\DataClass\EntryAttachment;
 use Chamilo\Core\Repository\ContentObject\Assignment\Display\Ajax\Manager;
 use Chamilo\Core\Repository\ContentObject\Assignment\Display\Bridge\Storage\DataClass\Entry;
 use Chamilo\Core\Repository\ContentObject\File\Storage\DataClass\File;
@@ -23,7 +22,7 @@ class UploadEntryAttachmentComponent extends Manager
      * @throws \Chamilo\Libraries\Architecture\Exceptions\NotAllowedException
      * @throws \Exception
      */
-    function run()
+    public function run()
     {
         if (!$this->getDataProvider()->canEditAssignment())
         {

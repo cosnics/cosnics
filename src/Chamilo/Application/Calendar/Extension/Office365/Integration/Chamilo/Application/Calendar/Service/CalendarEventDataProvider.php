@@ -5,11 +5,9 @@ use Chamilo\Application\Calendar\Architecture\ExternalCalendar;
 use Chamilo\Application\Calendar\Extension\Office365\Integration\Chamilo\Libraries\Calendar\Event\EventParser;
 use Chamilo\Application\Calendar\Service\AvailabilityService;
 use Chamilo\Application\Calendar\Storage\DataClass\AvailableCalendar;
-use Chamilo\Configuration\Service\Consulter\ConfigurationConsulter;
 use Chamilo\Core\User\Storage\DataClass\User;
 use Chamilo\Libraries\Calendar\Service\CalendarRendererProvider;
 use Chamilo\Libraries\DependencyInjection\Traits\DependencyInjectionContainerTrait;
-use Chamilo\Libraries\File\ConfigurablePathBuilder;
 use Chamilo\Libraries\Protocol\Microsoft\Graph\Exception\AzureUserNotExistsException;
 use Chamilo\Libraries\Protocol\Microsoft\Graph\Service\CalendarService;
 use Exception;
@@ -29,7 +27,6 @@ class CalendarEventDataProvider extends ExternalCalendar
     use DependencyInjectionContainerTrait;
 
     private FilesystemAdapter $filesystemAdapter;
-
 
     protected function getAvailabilityService(): AvailabilityService
     {

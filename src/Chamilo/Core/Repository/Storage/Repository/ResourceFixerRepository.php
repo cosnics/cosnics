@@ -20,7 +20,6 @@ use Chamilo\Libraries\Storage\Parameters\DataClassCountParameters;
 use Chamilo\Libraries\Storage\Parameters\DataClassRetrievesParameters;
 use Chamilo\Libraries\Storage\Query\Condition\ContainsCondition;
 use Chamilo\Libraries\Storage\Query\Condition\OrCondition;
-use Chamilo\Libraries\Storage\Query\Condition\PatternMatchCondition;
 use Chamilo\Libraries\Storage\Query\Variable\PropertyConditionVariable;
 
 /**
@@ -48,89 +47,12 @@ class ResourceFixerRepository
     }
 
     /**
-     * Returns the list of content objects with a resource tag in their description field
-     *
-     * @param int $offset
-     *
-     * @return ContentObject[] | \Doctrine\Common\Collections\ArrayCollection
-     */
-    public function findContentObjectsWithResourceTags($offset = 0)
-    {
-        $conditions = [
-            new ContainsCondition(
-                new PropertyConditionVariable(ContentObject::class, ContentObject::PROPERTY_DESCRIPTION),
-                '<resource'),
-            new ContainsCondition(
-                new PropertyConditionVariable(ContentObject::class, ContentObject::PROPERTY_DESCRIPTION),
-                'data-co-id')];
-
-        $parameters = new DataClassRetrievesParameters(new OrCondition($conditions), 1000, $offset);
-
-        return $this->dataClassRepository->retrieves(ContentObject::class, $parameters);
-    }
-
-    /**
-     * Counts the number of resource tags with a resource tag in their description field
-     *
-     * @return int
-     */
-    public function countContentObjectsWithResourceTags()
-    {
-        $conditions = [
-            new ContainsCondition(
-                new PropertyConditionVariable(ContentObject::class, ContentObject::PROPERTY_DESCRIPTION),
-                '<resource'),
-            new ContainsCondition(
-                new PropertyConditionVariable(ContentObject::class, ContentObject::PROPERTY_DESCRIPTION),
-                'data-co-id')];
-
-        $parameters = new DataClassCountParameters(new OrCondition($conditions));
-
-        return $this->dataClassRepository->count(ContentObject::class, $parameters);
-    }
-
-    /**
-     *
-     * @return int
-     */
-    public function countAssessmentMatchingQuestions()
-    {
-        return $this->dataClassRepository->count(AssessmentMatchingQuestion::class);
-    }
-
-    /**
-     *
-     * @param int $offset
-     *
-     * @return AssessmentMatchingQuestion[] | ArrayCollection
-     */
-    public function findAssessmentMatchingQuestions($offset = 0)
-    {
-        return $this->dataClassRepository->retrieves(
-            AssessmentMatchingQuestion::class,
-            new DataClassRetrievesParameters(null, 1000, $offset));
-    }
-
-    /**
      *
      * @return int
      */
     public function countAssessmentMatchNumericQuestions()
     {
         return $this->dataClassRepository->count(AssessmentMatchNumericQuestion::class);
-    }
-
-    /**
-     *
-     * @param int $offset
-     *
-     * @return AssessmentMatchNumericQuestion[] | ArrayCollection
-     */
-    public function findAssessmentMatchNumericQuestions($offset = 0)
-    {
-        return $this->dataClassRepository->retrieves(
-            AssessmentMatchNumericQuestion::class,
-            new DataClassRetrievesParameters(null, 1000, $offset));
     }
 
     /**
@@ -144,15 +66,11 @@ class ResourceFixerRepository
 
     /**
      *
-     * @param int $offset
-     *
-     * @return AssessmentMatchTextQuestion[] | ArrayCollection
+     * @return int
      */
-    public function findAssessmentMatchTextQuestions($offset = 0)
+    public function countAssessmentMatchingQuestions()
     {
-        return $this->dataClassRepository->retrieves(
-            AssessmentMatchTextQuestion::class,
-            new DataClassRetrievesParameters(null, 1000, $offset));
+        return $this->dataClassRepository->count(AssessmentMatchingQuestion::class);
     }
 
     /**
@@ -166,37 +84,11 @@ class ResourceFixerRepository
 
     /**
      *
-     * @param int $offset
-     *
-     * @return AssessmentMatrixQuestion[] | ArrayCollection
-     */
-    public function findAssessmentMatrixQuestions($offset = 0)
-    {
-        return $this->dataClassRepository->retrieves(
-            AssessmentMatrixQuestion::class,
-            new DataClassRetrievesParameters(null, 1000, $offset));
-    }
-
-    /**
-     *
      * @return int
      */
     public function countAssessmentMultipleChoiceQuestions()
     {
         return $this->dataClassRepository->count(AssessmentMultipleChoiceQuestion::class);
-    }
-
-    /**
-     *
-     * @param int $offset
-     *
-     * @return AssessmentMultipleChoiceQuestion[] | ArrayCollection
-     */
-    public function findAssessmentMultipleChoiceQuestions($offset = 0)
-    {
-        return $this->dataClassRepository->retrieves(
-            AssessmentMultipleChoiceQuestion::class,
-            new DataClassRetrievesParameters(null, 1000, $offset));
     }
 
     /**
@@ -210,19 +102,6 @@ class ResourceFixerRepository
 
     /**
      *
-     * @param int $offset
-     *
-     * @return AssessmentRatingQuestion[] | ArrayCollection
-     */
-    public function findAssessmentRatingQuestions($offset = 0)
-    {
-        return $this->dataClassRepository->retrieves(
-            AssessmentRatingQuestion::class,
-            new DataClassRetrievesParameters(null, 1000, $offset));
-    }
-
-    /**
-     *
      * @return int
      */
     public function countAssessmentSelectQuestions()
@@ -231,16 +110,24 @@ class ResourceFixerRepository
     }
 
     /**
+     * Counts the number of resource tags with a resource tag in their description field
      *
-     * @param int $offset
-     *
-     * @return AssessmentSelectQuestion[] | ArrayCollection
+     * @return int
      */
-    public function findAssessmentSelectQuestions($offset = 0)
+    public function countContentObjectsWithResourceTags()
     {
-        return $this->dataClassRepository->retrieves(
-            AssessmentSelectQuestion::class,
-            new DataClassRetrievesParameters(null, 1000, $offset));
+        $conditions = [
+            new ContainsCondition(
+                new PropertyConditionVariable(ContentObject::class, ContentObject::PROPERTY_DESCRIPTION), '<resource'
+            ),
+            new ContainsCondition(
+                new PropertyConditionVariable(ContentObject::class, ContentObject::PROPERTY_DESCRIPTION), 'data-co-id'
+            )
+        ];
+
+        $parameters = new DataClassCountParameters(new OrCondition($conditions));
+
+        return $this->dataClassRepository->count(ContentObject::class, $parameters);
     }
 
     /**
@@ -254,37 +141,11 @@ class ResourceFixerRepository
 
     /**
      *
-     * @param int $offset
-     *
-     * @return FillInBlanksQuestion[] | ArrayCollection
-     */
-    public function findFillInBlanksQuestions($offset = 0)
-    {
-        return $this->dataClassRepository->retrieves(
-            FillInBlanksQuestion::class,
-            new DataClassRetrievesParameters(null, 1000, $offset));
-    }
-
-    /**
-     *
      * @return int
      */
     public function countForumPosts()
     {
         return $this->dataClassRepository->count(ForumPost::class);
-    }
-
-    /**
-     *
-     * @param int $offset
-     *
-     * @return ForumPost[] | ArrayCollection
-     */
-    public function findForumPosts($offset = 0)
-    {
-        return $this->dataClassRepository->retrieves(
-            ForumPost::class,
-            new DataClassRetrievesParameters(null, 1000, $offset));
     }
 
     /**
@@ -298,37 +159,11 @@ class ResourceFixerRepository
 
     /**
      *
-     * @param int $offset
-     *
-     * @return HotspotQuestion[] | ArrayCollection
-     */
-    public function findHotspotQuestions($offset = 0)
-    {
-        return $this->dataClassRepository->retrieves(
-            HotspotQuestion::class,
-            new DataClassRetrievesParameters(null, 1000, $offset));
-    }
-
-    /**
-     *
      * @return int
      */
     public function countOrderingQuestions()
     {
         return $this->dataClassRepository->count(OrderingQuestion::class);
-    }
-
-    /**
-     *
-     * @param int $offset
-     *
-     * @return OrderingQuestion[] | ArrayCollection
-     */
-    public function findOrderingQuestions($offset = 0)
-    {
-        return $this->dataClassRepository->retrieves(
-            OrderingQuestion::class,
-            new DataClassRetrievesParameters(null, 1000, $offset));
     }
 
     /**
@@ -344,13 +179,91 @@ class ResourceFixerRepository
      *
      * @param int $offset
      *
-     * @return Workspace[] | ArrayCollection
+     * @return AssessmentMatchNumericQuestion[] | ArrayCollection
      */
-    public function findWorkspaces($offset = 0)
+    public function findAssessmentMatchNumericQuestions($offset = 0)
     {
         return $this->dataClassRepository->retrieves(
-            Workspace::class,
-            new DataClassRetrievesParameters(null, 1000, $offset));
+            AssessmentMatchNumericQuestion::class, new DataClassRetrievesParameters(null, 1000, $offset)
+        );
+    }
+
+    /**
+     *
+     * @param int $offset
+     *
+     * @return AssessmentMatchTextQuestion[] | ArrayCollection
+     */
+    public function findAssessmentMatchTextQuestions($offset = 0)
+    {
+        return $this->dataClassRepository->retrieves(
+            AssessmentMatchTextQuestion::class, new DataClassRetrievesParameters(null, 1000, $offset)
+        );
+    }
+
+    /**
+     *
+     * @param int $offset
+     *
+     * @return AssessmentMatchingQuestion[] | ArrayCollection
+     */
+    public function findAssessmentMatchingQuestions($offset = 0)
+    {
+        return $this->dataClassRepository->retrieves(
+            AssessmentMatchingQuestion::class, new DataClassRetrievesParameters(null, 1000, $offset)
+        );
+    }
+
+    /**
+     *
+     * @param int $offset
+     *
+     * @return AssessmentMatrixQuestion[] | ArrayCollection
+     */
+    public function findAssessmentMatrixQuestions($offset = 0)
+    {
+        return $this->dataClassRepository->retrieves(
+            AssessmentMatrixQuestion::class, new DataClassRetrievesParameters(null, 1000, $offset)
+        );
+    }
+
+    /**
+     *
+     * @param int $offset
+     *
+     * @return AssessmentMultipleChoiceQuestion[] | ArrayCollection
+     */
+    public function findAssessmentMultipleChoiceQuestions($offset = 0)
+    {
+        return $this->dataClassRepository->retrieves(
+            AssessmentMultipleChoiceQuestion::class, new DataClassRetrievesParameters(null, 1000, $offset)
+        );
+    }
+
+    /**
+     *
+     * @param int $offset
+     *
+     * @return AssessmentRatingQuestion[] | ArrayCollection
+     */
+    public function findAssessmentRatingQuestions($offset = 0)
+    {
+        return $this->dataClassRepository->retrieves(
+            AssessmentRatingQuestion::class, new DataClassRetrievesParameters(null, 1000, $offset)
+        );
+    }
+
+    /**
+     *
+     * @param int $offset
+     *
+     * @return AssessmentSelectQuestion[] | ArrayCollection
+     */
+    public function findAssessmentSelectQuestions($offset = 0)
+    {
+        return $this->dataClassRepository->retrieves(
+            AssessmentSelectQuestion::class, new DataClassRetrievesParameters(null, 1000, $offset)
+        );
     }
 
     /**
@@ -363,7 +276,95 @@ class ResourceFixerRepository
     public function findContentObjectById($contentObjectId)
     {
         return DataManager::retrieve_by_id(
-            ContentObject::class,
-            $contentObjectId);
+            ContentObject::class, $contentObjectId
+        );
+    }
+
+    /**
+     * Returns the list of content objects with a resource tag in their description field
+     *
+     * @param int $offset
+     *
+     * @return ContentObject[] | \Doctrine\Common\Collections\ArrayCollection
+     */
+    public function findContentObjectsWithResourceTags($offset = 0)
+    {
+        $conditions = [
+            new ContainsCondition(
+                new PropertyConditionVariable(ContentObject::class, ContentObject::PROPERTY_DESCRIPTION), '<resource'
+            ),
+            new ContainsCondition(
+                new PropertyConditionVariable(ContentObject::class, ContentObject::PROPERTY_DESCRIPTION), 'data-co-id'
+            )
+        ];
+
+        $parameters = new DataClassRetrievesParameters(new OrCondition($conditions), 1000, $offset);
+
+        return $this->dataClassRepository->retrieves(ContentObject::class, $parameters);
+    }
+
+    /**
+     *
+     * @param int $offset
+     *
+     * @return FillInBlanksQuestion[] | ArrayCollection
+     */
+    public function findFillInBlanksQuestions($offset = 0)
+    {
+        return $this->dataClassRepository->retrieves(
+            FillInBlanksQuestion::class, new DataClassRetrievesParameters(null, 1000, $offset)
+        );
+    }
+
+    /**
+     *
+     * @param int $offset
+     *
+     * @return ForumPost[] | ArrayCollection
+     */
+    public function findForumPosts($offset = 0)
+    {
+        return $this->dataClassRepository->retrieves(
+            ForumPost::class, new DataClassRetrievesParameters(null, 1000, $offset)
+        );
+    }
+
+    /**
+     *
+     * @param int $offset
+     *
+     * @return HotspotQuestion[] | ArrayCollection
+     */
+    public function findHotspotQuestions($offset = 0)
+    {
+        return $this->dataClassRepository->retrieves(
+            HotspotQuestion::class, new DataClassRetrievesParameters(null, 1000, $offset)
+        );
+    }
+
+    /**
+     *
+     * @param int $offset
+     *
+     * @return OrderingQuestion[] | ArrayCollection
+     */
+    public function findOrderingQuestions($offset = 0)
+    {
+        return $this->dataClassRepository->retrieves(
+            OrderingQuestion::class, new DataClassRetrievesParameters(null, 1000, $offset)
+        );
+    }
+
+    /**
+     *
+     * @param int $offset
+     *
+     * @return Workspace[] | ArrayCollection
+     */
+    public function findWorkspaces($offset = 0)
+    {
+        return $this->dataClassRepository->retrieves(
+            Workspace::class, new DataClassRetrievesParameters(null, 1000, $offset)
+        );
     }
 }

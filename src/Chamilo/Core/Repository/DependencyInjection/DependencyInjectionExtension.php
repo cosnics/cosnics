@@ -25,7 +25,7 @@ class DependencyInjectionExtension extends AbstractDependencyInjectionExtension
 {
     use ExtensionTrait;
 
-    public function getAlias()
+    public function getAlias(): string
     {
         return 'chamilo.core.repository';
     }

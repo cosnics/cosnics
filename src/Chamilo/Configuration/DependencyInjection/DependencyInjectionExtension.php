@@ -24,7 +24,7 @@ class DependencyInjectionExtension extends AbstractDependencyInjectionExtension
         load as public extentensionLoad;
     }
 
-    public function getAlias()
+    public function getAlias(): string
     {
         return 'chamilo.configuration';
     }

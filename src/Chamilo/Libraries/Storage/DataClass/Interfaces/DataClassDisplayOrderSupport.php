@@ -26,8 +26,5 @@ interface DataClassDisplayOrderSupport
 
     public function isIdentified(): bool;
 
-    /**
-     * @param mixed $value
-     */
     public function setDefaultProperty(string $name, mixed $value);
 }

@@ -4,7 +4,6 @@ namespace Chamilo\Core\Repository\Workspace\Extension\Office365\Component;
 use Chamilo\Core\Repository\Workspace\Extension\Office365\Manager;
 use Chamilo\Core\Repository\Workspace\Storage\DataClass\Workspace;
 use Chamilo\Libraries\Architecture\ErrorHandler\ExceptionLogger\ExceptionLoggerInterface;
-use Chamilo\Libraries\Architecture\Exceptions\NotAllowedException;
 use Exception;
 
 /**
@@ -20,7 +19,7 @@ class SyncGroupComponent extends Manager
      * @throws \Chamilo\Libraries\Architecture\Exceptions\NotAllowedException
      * @throws \Exception
      */
-    function run()
+    public function run()
     {
         $parentComponent = $this->getExtensionLauncherComponent();
         $workspace = $parentComponent->getCurrentWorkspace();
@@ -36,7 +35,6 @@ class SyncGroupComponent extends Manager
             $this->getWorkspaceOffice365Connector()->syncGroupForWorkspace($workspace, $this->getUser());
             $success = true;
             $message = 'GroupSynced';
-
         }
         catch (Exception $ex)
         {
@@ -46,12 +44,9 @@ class SyncGroupComponent extends Manager
         }
 
         $this->redirectWithMessage(
-            $this->getTranslator()->trans($message, [], Manager::CONTEXT), !$success,
-            [
-                \Chamilo\Core\Repository\Manager::PARAM_ACTION =>
-                    \Chamilo\Core\Repository\Manager::ACTION_BROWSE_CONTENT_OBJECTS
-            ],
-            [self::PARAM_ACTION]
+            $this->getTranslator()->trans($message, [], Manager::CONTEXT), !$success, [
+            \Chamilo\Core\Repository\Manager::PARAM_ACTION => \Chamilo\Core\Repository\Manager::ACTION_BROWSE_CONTENT_OBJECTS
+        ], [self::PARAM_ACTION]
         );
     }
 }

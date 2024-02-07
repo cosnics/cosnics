@@ -5,7 +5,6 @@ use Chamilo\Core\Repository\Integration\Chamilo\Core\Tracking\Storage\Repository
 use Chamilo\Core\Repository\Storage\DataClass\ContentObject;
 use Chamilo\Libraries\Architecture\Interfaces\ComplexContentObjectSupportInterface;
 use Chamilo\Libraries\Storage\Query\OrderBy;
-use Chamilo\Libraries\Storage\Query\OrderProperty;
 use Doctrine\Common\Collections\ArrayCollection;
 
 /**

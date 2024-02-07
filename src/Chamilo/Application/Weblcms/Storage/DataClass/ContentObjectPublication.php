@@ -256,7 +256,7 @@ class ContentObjectPublication extends Publication implements DisplayOrderDataCl
      *
      * @param bool $full Whether the content object must have its full complement of properties.
      */
-    public function get_content_object($full = false)
+    public function get_content_object($full = false): ?ContentObject
     {
         if (is_null($this->contentObject) || $full)
         {

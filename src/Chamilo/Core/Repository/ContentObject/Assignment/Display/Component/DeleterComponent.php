@@ -1,9 +1,8 @@
 <?php
 namespace Chamilo\Core\Repository\ContentObject\Assignment\Display\Component;
 
-use Chamilo\Core\Repository\ContentObject\Assignment\Display\Manager;
 use Chamilo\Core\Repository\ContentObject\Assignment\Display\Bridge\Storage\DataClass\Entry;
-use Chamilo\Libraries\Architecture\Application\ApplicationConfiguration;
+use Chamilo\Core\Repository\ContentObject\Assignment\Display\Manager;
 use Chamilo\Libraries\Architecture\Exceptions\NoObjectSelectedException;
 use Chamilo\Libraries\Architecture\Exceptions\NotAllowedException;
 use Chamilo\Libraries\Translation\Translation;
@@ -41,13 +40,42 @@ class DeleterComponent extends Manager
         }
 
         $this->redirectWithMessage(
-            Translation::get($message),
-            !$success,
-            array(
-                self::PARAM_ACTION => self::ACTION_ENTRY, self::PARAM_ENTITY_ID => $this->getEntityIdentifier(),
+            Translation::get($message), !$success, array(
+                self::PARAM_ACTION => self::ACTION_ENTRY,
+                self::PARAM_ENTITY_ID => $this->getEntityIdentifier(),
                 self::PARAM_ENTITY_TYPE => $this->getEntityType()
             )
         );
+    }
+
+    /**
+     * @throws \Chamilo\Libraries\Architecture\Exceptions\NotAllowedException
+     */
+    protected function checkAccessRights()
+    {
+        throw new NotAllowedException();
+
+        //        if (!$this->getRightsService()->canUserDeleteEntries($this->getUser(), $this->getAssignment()))
+        //        {
+        //            throw new NotAllowedException();
+        //        }
+    }
+
+    /**
+     * @param $entryIdentifiers
+     */
+    protected function deleteEntriesByIdentifiers($entryIdentifiers)
+    {
+        foreach ($entryIdentifiers as $entryIdentifier)
+        {
+            $entry = $this->getDataProvider()->findEntryByIdentifier($entryIdentifier);
+            if (!$entry instanceof Entry)
+            {
+                continue;
+            }
+
+            $this->getDataProvider()->deleteEntry($entry);
+        }
     }
 
     /**
@@ -74,35 +102,5 @@ class DeleterComponent extends Manager
         }
 
         return $entryIdentifiers;
-    }
-
-    /**
-     * @throws \Chamilo\Libraries\Architecture\Exceptions\NotAllowedException
-     */
-    protected function checkAccessRights()
-    {
-        throw new NotAllowedException();
-
-//        if (!$this->getRightsService()->canUserDeleteEntries($this->getUser(), $this->getAssignment()))
-//        {
-//            throw new NotAllowedException();
-//        }
-    }
-
-    /**
-     * @param $entryIdentifiers
-     */
-    protected function deleteEntriesByIdentifiers($entryIdentifiers)
-    {
-        foreach ($entryIdentifiers as $entryIdentifier)
-        {
-            $entry = $this->getDataProvider()->findEntryByIdentifier($entryIdentifier);
-            if (!$entry instanceof Entry)
-            {
-                continue;
-            }
-
-            $this->getDataProvider()->deleteEntry($entry);
-        }
     }
 }

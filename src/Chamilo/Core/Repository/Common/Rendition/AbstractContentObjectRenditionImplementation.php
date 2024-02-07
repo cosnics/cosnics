@@ -26,11 +26,6 @@ abstract class AbstractContentObjectRenditionImplementation
         return $this->getService(ConfigurablePathBuilder::class);
     }
 
-    public function getFilesystemTools(): FilesystemTools
-    {
-        return $this->getService(FilesystemTools::class);
-    }
-
     public function getRequest(): ChamiloRequest
     {
         return $this->getService(ChamiloRequest::class);

@@ -1,13 +1,10 @@
 <?php
 namespace Chamilo\Core\Notification\Storage\Repository;
 
-use Chamilo\Core\Notification\Storage\Entity\Filter;
 use Chamilo\Core\Notification\Storage\Entity\Notification;
 use Chamilo\Core\Notification\Storage\Entity\UserNotification;
 use Chamilo\Core\User\Storage\DataClass\User;
 use Doctrine\ORM\EntityRepository;
-use Doctrine\ORM\Query\ResultSetMapping;
-use Doctrine\ORM\Query\ResultSetMappingBuilder;
 
 /**
  * @package Chamilo\Core\Notification\Storage\Repository

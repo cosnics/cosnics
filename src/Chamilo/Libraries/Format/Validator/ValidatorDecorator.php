@@ -51,12 +51,12 @@ class ValidatorDecorator implements ValidatorInterface
         return $this->symfonyValidator->inContext($context);
     }
 
-    public function startContext()
+    public function startContext(): ContextualValidatorInterface
     {
         return $this->symfonyValidator->startContext();
     }
 
-    public function validate($value, $constraints = null, $groups = null)
+    public function validate($value, $constraints = null, $groups = null): ConstraintViolationListInterface
     {
         /** @var ConstraintViolationListInterface|\Symfony\Component\Validator\ConstraintViolation[] $constraintViolationList */
         $constraintViolationList = $this->symfonyValidator->validate($value, $constraints, $groups);
@@ -100,12 +100,12 @@ class ValidatorDecorator implements ValidatorInterface
         return $decoratedConstraintViolationList;
     }
 
-    public function validateProperty(object $object, string $propertyName, $groups = null)
+    public function validateProperty(object $object, string $propertyName, $groups = null): ConstraintViolationListInterface
     {
         return $this->symfonyValidator->validateProperty($object, $propertyName, $groups);
     }
 
-    public function validatePropertyValue($objectOrClass, string $propertyName, $value, $groups = null)
+    public function validatePropertyValue($objectOrClass, string $propertyName, $value, $groups = null): ConstraintViolationListInterface
     {
         return $this->symfonyValidator->validatePropertyValue($objectOrClass, $propertyName, $value, $groups);
     }

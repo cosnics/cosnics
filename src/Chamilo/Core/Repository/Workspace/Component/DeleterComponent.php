@@ -2,9 +2,6 @@
 namespace Chamilo\Core\Repository\Workspace\Component;
 
 use Chamilo\Core\Repository\Workspace\Manager;
-use Chamilo\Core\Repository\Workspace\Repository\WorkspaceRepository;
-use Chamilo\Core\Repository\Workspace\Service\RightsService;
-use Chamilo\Core\Repository\Workspace\Service\WorkspaceService;
 use Chamilo\Libraries\Architecture\Exceptions\NoObjectSelectedException;
 use Chamilo\Libraries\Translation\Translation;
 use Chamilo\Libraries\Utilities\StringUtilities;
@@ -33,7 +30,7 @@ class DeleterComponent extends Manager
                 throw new NoObjectSelectedException(Translation::get('Workspace'));
             }
 
-            if (! is_array($workspaceIdentifiers))
+            if (!is_array($workspaceIdentifiers))
             {
                 $workspaceIdentifiers = array($workspaceIdentifiers);
             }
@@ -47,13 +44,14 @@ class DeleterComponent extends Manager
 
                 if ($rightsService->hasWorkspaceCreatorRights($this->get_user(), $workspace))
                 {
-                    if (! $workspaceService->deleteWorkspace($workspace))
+                    if (!$workspaceService->deleteWorkspace($workspace))
                     {
                         throw new Exception(
                             Translation::get(
-                                'ObjectNotDeleted',
-                                array('OBJECT' => Translation::get('Workspace')),
-                                StringUtilities::LIBRARIES));
+                                'ObjectNotDeleted', array('OBJECT' => Translation::get('Workspace')),
+                                StringUtilities::LIBRARIES
+                            )
+                        );
                     }
                     else
                     {
@@ -64,9 +62,8 @@ class DeleterComponent extends Manager
 
             $success = true;
             $message = Translation::get(
-                'ObjectDeleted',
-                array('OBJECT' => Translation::get('Workspace')),
-                StringUtilities::LIBRARIES);
+                'ObjectDeleted', array('OBJECT' => Translation::get('Workspace')), StringUtilities::LIBRARIES
+            );
         }
         catch (Exception $ex)
         {
@@ -77,6 +74,6 @@ class DeleterComponent extends Manager
         $source = $this->getRequest()->getFromRequestOrQuery(self::PARAM_BROWSER_SOURCE);
         $returnComponent = isset($source) ? $source : self::ACTION_BROWSE;
 
-        $this->redirectWithMessage($message, ! $success, array(self::PARAM_ACTION => $returnComponent));
+        $this->redirectWithMessage($message, !$success, array(self::PARAM_ACTION => $returnComponent));
     }
 }

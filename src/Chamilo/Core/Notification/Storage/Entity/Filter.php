@@ -1,9 +1,6 @@
 <?php
 namespace Chamilo\Core\Notification\Storage\Entity;
 
-use Chamilo\Core\Notification\Storage\Entity\NotificationContext;
-use Doctrine\ORM\Mapping as ORM;
-
 /**
  * @package Chamilo\Core\Notification\Storage\Entity
  *
@@ -16,6 +13,13 @@ use Doctrine\ORM\Mapping as ORM;
  */
 class Filter
 {
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="description_context", type="text", nullable=false)
+     */
+    protected $descriptionContext;
+
     /**
      * @var int
      *
@@ -34,18 +38,39 @@ class Filter
     protected $notificationContext;
 
     /**
-     * @var string
-     *
-     * @ORM\Column(name="description_context", type="text", nullable=false)
-     */
-    protected $descriptionContext;
-
-    /**
      * @var \Chamilo\Core\Notification\Storage\Entity\Notification[]
      *
      * @ORM\ManyToMany(targetEntity="\Chamilo\Core\Notification\Storage\Entity\Notification", mappedBy="filters")
      */
     protected $notifications;
+
+    /**
+     * @param \Chamilo\Core\Notification\Storage\Entity\Notification $notification
+     */
+    public function addNotification(Notification $notification)
+    {
+        $this->notifications[] = $notification;
+    }
+
+    /**
+     * @return string
+     */
+    public function getDescriptionContext()
+    {
+        return $this->descriptionContext;
+    }
+
+    /**
+     * @param string $descriptionContext
+     *
+     * @return \Chamilo\Core\Notification\Storage\Entity\Filter
+     */
+    public function setDescriptionContext(string $descriptionContext)
+    {
+        $this->descriptionContext = $descriptionContext;
+
+        return $this;
+    }
 
     /**
      * @return int
@@ -71,25 +96,6 @@ class Filter
     public function setNotificationContext(NotificationContext $notificationContext)
     {
         $this->notificationContext = $notificationContext;
-        return $this;
-    }
-
-    /**
-     * @return string
-     */
-    public function getDescriptionContext()
-    {
-        return $this->descriptionContext;
-    }
-
-    /**
-     * @param string $descriptionContext
-     *
-     * @return \Chamilo\Core\Notification\Storage\Entity\Filter
-     */
-    public function setDescriptionContext(string $descriptionContext)
-    {
-        $this->descriptionContext = $descriptionContext;
 
         return $this;
     }
@@ -108,14 +114,6 @@ class Filter
     public function setNotifications(array $notifications)
     {
         $this->notifications = $notifications;
-    }
-
-    /**
-     * @param \Chamilo\Core\Notification\Storage\Entity\Notification $notification
-     */
-    public function addNotification(Notification $notification)
-    {
-        $this->notifications[] = $notification;
     }
 
 }

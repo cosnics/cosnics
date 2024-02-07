@@ -5,7 +5,6 @@ use Chamilo\Core\Notification\Domain\TranslationContext;
 use Chamilo\Core\Notification\Domain\ViewingContext;
 use Chamilo\Core\Notification\Storage\Entity\Filter;
 use Chamilo\Core\Notification\Storage\Entity\Notification;
-use Chamilo\Libraries\Translation\Translation;
 use InvalidArgumentException;
 use Symfony\Component\Translation\Translator;
 
@@ -59,42 +58,28 @@ class NotificationTranslator
     }
 
     /**
-     * @param \Chamilo\Core\Notification\Domain\TranslationContext $translationContext
+     * @param \Chamilo\Core\Notification\Storage\Entity\Filter $filter
      *
      * @return string
      */
-    public function translateToAllLanguagesAndEncode(TranslationContext $translationContext)
+    public function getTranslationFromFilter(Filter $filter)
     {
-        $translations = [];
+        $userLocale = $this->translator->getLocale();
+        $descriptions = json_decode($filter->getDescriptionContext(), true);
 
-        foreach ($this->translator->getFallbackLocales() as $locale)
+        if (!array_key_exists($userLocale, $descriptions))
         {
-            $translations[$locale] = $this->translateRecursively($translationContext, $locale);
+            $userLocale = 'en';
         }
 
-        return json_encode($translations);
-    }
-
-    /**
-     * @param TranslationContext $translationContext
-     * @param string $locale
-     *
-     * @return string
-     */
-    protected function translateRecursively(TranslationContext $translationContext, $locale)
-    {
-        $parameters = $translationContext->getParameters();
-        foreach ($parameters as $key => $parameter)
+        if (!array_key_exists($userLocale, $descriptions))
         {
-            if ($parameter instanceof TranslationContext)
-            {
-                $parameters[$key] = lcfirst($this->translateRecursively($parameter, $locale));
-            }
+            throw new InvalidArgumentException(
+                'No valid translation has been found for the given locale nor for the english fallback'
+            );
         }
 
-        return $this->translator->trans(
-            $translationContext->getTranslationVariable(), $parameters, $translationContext->getContext(), $locale
-        );
+        return $descriptions[$userLocale];
     }
 
     /**
@@ -140,28 +125,42 @@ class NotificationTranslator
     }
 
     /**
-     * @param \Chamilo\Core\Notification\Storage\Entity\Filter $filter
+     * @param TranslationContext $translationContext
+     * @param string $locale
      *
      * @return string
      */
-    public function getTranslationFromFilter(Filter $filter)
+    protected function translateRecursively(TranslationContext $translationContext, $locale)
     {
-        $userLocale = $this->translator->getLocale();
-        $descriptions = json_decode($filter->getDescriptionContext(), true);
-
-        if (!array_key_exists($userLocale, $descriptions))
+        $parameters = $translationContext->getParameters();
+        foreach ($parameters as $key => $parameter)
         {
-            $userLocale = 'en';
+            if ($parameter instanceof TranslationContext)
+            {
+                $parameters[$key] = lcfirst($this->translateRecursively($parameter, $locale));
+            }
         }
 
-        if (!array_key_exists($userLocale, $descriptions))
+        return $this->translator->trans(
+            $translationContext->getTranslationVariable(), $parameters, $translationContext->getContext(), $locale
+        );
+    }
+
+    /**
+     * @param \Chamilo\Core\Notification\Domain\TranslationContext $translationContext
+     *
+     * @return string
+     */
+    public function translateToAllLanguagesAndEncode(TranslationContext $translationContext)
+    {
+        $translations = [];
+
+        foreach ($this->translator->getFallbackLocales() as $locale)
         {
-            throw new InvalidArgumentException(
-                'No valid translation has been found for the given locale nor for the english fallback'
-            );
+            $translations[$locale] = $this->translateRecursively($translationContext, $locale);
         }
 
-        return $descriptions[$userLocale];
+        return json_encode($translations);
     }
 
 }

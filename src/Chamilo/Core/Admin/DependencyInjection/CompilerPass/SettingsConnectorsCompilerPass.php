@@ -1,7 +1,6 @@
 <?php
 namespace Chamilo\Core\Admin\DependencyInjection\CompilerPass;
 
-use Chamilo\Core\Admin\Service\ActionProvider;
 use Chamilo\Core\Admin\Service\SettingsConnectorFactory;
 use Symfony\Component\DependencyInjection\Compiler\CompilerPassInterface;
 use Symfony\Component\DependencyInjection\ContainerBuilder;

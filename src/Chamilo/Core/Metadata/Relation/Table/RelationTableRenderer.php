@@ -7,7 +7,6 @@ use Chamilo\Libraries\Architecture\Application\Application;
 use Chamilo\Libraries\Format\Structure\Glyph\FontAwesomeGlyph;
 use Chamilo\Libraries\Format\Structure\Toolbar;
 use Chamilo\Libraries\Format\Structure\ToolbarItem;
-use Chamilo\Libraries\Format\Table\Column\DataClassPropertyTableColumn;
 use Chamilo\Libraries\Format\Table\Extension\DataClassListTableRenderer;
 use Chamilo\Libraries\Format\Table\FormAction\TableAction;
 use Chamilo\Libraries\Format\Table\FormAction\TableActions;
@@ -43,7 +42,9 @@ class RelationTableRenderer extends DataClassListTableRenderer implements TableR
 
     protected function initializeColumns(): void
     {
-        $this->addColumn($this->getDataClassPropertyTableColumnFactory()->getColumn(Relation::class, Relation::PROPERTY_NAME));
+        $this->addColumn(
+            $this->getDataClassPropertyTableColumnFactory()->getColumn(Relation::class, Relation::PROPERTY_NAME)
+        );
     }
 
     /**

@@ -2,7 +2,6 @@
 namespace Chamilo\Core\Notification\Storage\Entity;
 
 use DateTime;
-use Doctrine\ORM\Mapping as ORM;
 
 /**
  * @package Chamilo\Core\Notification\Storage\Entity
@@ -24,6 +23,13 @@ use Doctrine\ORM\Mapping as ORM;
 class UserNotification
 {
     /**
+     * @var \DateTime
+     *
+     * @ORM\Column(name="date", type="datetime", nullable=false)
+     */
+    protected $date;
+
+    /**
      * @var int
      *
      * @ORM\Column(name="id", type="integer", nullable=true)
@@ -31,13 +37,6 @@ class UserNotification
      * @ORM\Id
      */
     protected $id;
-
-    /**
-     * @var int
-     *
-     * @ORM\Column(name="user_id", type="integer", nullable=false)
-     */
-    protected $userId;
 
     /**
      * @var Notification
@@ -63,6 +62,13 @@ class UserNotification
     protected $read;
 
     /**
+     * @var int
+     *
+     * @ORM\Column(name="user_id", type="integer", nullable=false)
+     */
+    protected $userId;
+
+    /**
      * @var bool
      *
      * @ORM\Column(name="is_viewed", type="boolean")
@@ -70,11 +76,24 @@ class UserNotification
     protected $viewed;
 
     /**
-     * @var \DateTime
-     *
-     * @ORM\Column(name="date", type="datetime", nullable=false)
+     * @return \DateTime
      */
-    protected $date;
+    public function getDate(): DateTime
+    {
+        return $this->date;
+    }
+
+    /**
+     * @param \DateTime $date
+     *
+     * @return \Chamilo\Core\Notification\Storage\Entity\UserNotification
+     */
+    public function setDate(DateTime $date)
+    {
+        $this->date = $date;
+
+        return $this;
+    }
 
     /**
      * @return int
@@ -82,26 +101,6 @@ class UserNotification
     public function getId()
     {
         return $this->id;
-    }
-
-    /**
-     * @return int
-     */
-    public function getUserId()
-    {
-        return $this->userId;
-    }
-
-    /**
-     * @param int $userId
-     *
-     * @return \Chamilo\Core\Notification\Storage\Entity\UserNotification
-     */
-    public function setUserId($userId)
-    {
-        $this->userId = $userId;
-
-        return $this;
     }
 
     /**
@@ -120,6 +119,46 @@ class UserNotification
     public function setNotification(Notification $notification)
     {
         $this->notification = $notification;
+
+        return $this;
+    }
+
+    /**
+     * @return NotificationContext
+     */
+    public function getNotificationContext(): NotificationContext
+    {
+        return $this->notificationContext;
+    }
+
+    /**
+     * @param NotificationContext $notificationContext
+     *
+     * @return \Chamilo\Core\Notification\Storage\Entity\UserNotification
+     */
+    public function setNotificationContext(NotificationContext $notificationContext)
+    {
+        $this->notificationContext = $notificationContext;
+
+        return $this;
+    }
+
+    /**
+     * @return int
+     */
+    public function getUserId()
+    {
+        return $this->userId;
+    }
+
+    /**
+     * @param int $userId
+     *
+     * @return \Chamilo\Core\Notification\Storage\Entity\UserNotification
+     */
+    public function setUserId($userId)
+    {
+        $this->userId = $userId;
 
         return $this;
     }
@@ -160,46 +199,6 @@ class UserNotification
     public function setViewed(bool $viewed)
     {
         $this->viewed = $viewed;
-
-        return $this;
-    }
-
-    /**
-     * @return NotificationContext
-     */
-    public function getNotificationContext(): NotificationContext
-    {
-        return $this->notificationContext;
-    }
-
-    /**
-     * @param NotificationContext $notificationContext
-     *
-     * @return \Chamilo\Core\Notification\Storage\Entity\UserNotification
-     */
-    public function setNotificationContext(NotificationContext $notificationContext)
-    {
-        $this->notificationContext = $notificationContext;
-
-        return $this;
-    }
-
-    /**
-     * @return \DateTime
-     */
-    public function getDate(): DateTime
-    {
-        return $this->date;
-    }
-
-    /**
-     * @param \DateTime $date
-     *
-     * @return \Chamilo\Core\Notification\Storage\Entity\UserNotification
-     */
-    public function setDate(DateTime $date)
-    {
-        $this->date = $date;
 
         return $this;
     }

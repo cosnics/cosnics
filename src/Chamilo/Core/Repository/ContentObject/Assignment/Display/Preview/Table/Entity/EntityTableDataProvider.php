@@ -1,10 +1,9 @@
 <?php
 namespace Chamilo\Core\Repository\ContentObject\Assignment\Display\Preview\Table\Entity;
 
-use Chamilo\Core\User\Storage\DataClass\User;
-use Doctrine\Common\Collections\ArrayCollection;
 use Chamilo\Libraries\Storage\Query\Condition\Condition;
 use Chamilo\Libraries\Storage\Query\OrderBy;
+use Doctrine\Common\Collections\ArrayCollection;
 
 /**
  *

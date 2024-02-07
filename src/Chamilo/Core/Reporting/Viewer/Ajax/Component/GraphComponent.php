@@ -2,8 +2,6 @@
 namespace Chamilo\Core\Reporting\Viewer\Ajax\Component;
 
 use Chamilo\Core\Reporting\Viewer\Ajax\Manager;
-use Chamilo\Libraries\DependencyInjection\DependencyInjectionContainerBuilder;
-use Chamilo\Libraries\File\ConfigurablePathBuilder;
 use Symfony\Component\HttpFoundation\StreamedResponse;
 
 /**
@@ -37,16 +35,5 @@ class GraphComponent extends Manager
         );
 
         $response->send();
-    }
-
-    /**
-     *
-     * @return ConfigurablePathBuilder
-     */
-    protected function getConfigurablePathBuilder()
-    {
-        $container = DependencyInjectionContainerBuilder::getInstance()->createContainer();
-
-        return $container->get(ConfigurablePathBuilder::class);
     }
 }

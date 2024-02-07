@@ -3,7 +3,6 @@ namespace Chamilo\Core\Queue\Storage\Entity;
 
 use DateTime;
 use Doctrine\Common\Collections\ArrayCollection;
-use Doctrine\ORM\Mapping as ORM;
 use InvalidArgumentException;
 
 /**
@@ -22,28 +21,17 @@ use InvalidArgumentException;
  */
 class Job
 {
-    const STATUS_CREATED = 1;
-    const STATUS_SENT_TO_QUEUE = 2;
-    const STATUS_IN_PROGRESS = 3;
-    const STATUS_SUCCESS = 4;
-    const STATUS_FAILED_NO_LONGER_VALID = 5;
-    const STATUS_FAILED_RETRY = 6;
+    public const STATUS_CREATED = 1;
 
-    /**
-     * @var int
-     *
-     * @ORM\Column(name="id", type="integer", nullable=true)
-     * @ORM\GeneratedValue(strategy="AUTO")
-     * @ORM\Id
-     */
-    protected $id;
+    public const STATUS_FAILED_NO_LONGER_VALID = 5;
 
-    /**
-     * @var string
-     *
-     * @ORM\Column(name="processor_class", type="string")
-     */
-    protected $processorClass;
+    public const STATUS_FAILED_RETRY = 6;
+
+    public const STATUS_IN_PROGRESS = 3;
+
+    public const STATUS_SENT_TO_QUEUE = 2;
+
+    public const STATUS_SUCCESS = 4;
 
     /**
      * @var \DateTime
@@ -55,9 +43,11 @@ class Job
     /**
      * @var int
      *
-     * @ORM\Column(name="status", type="integer", nullable=false, length=2)
+     * @ORM\Column(name="id", type="integer", nullable=true)
+     * @ORM\GeneratedValue(strategy="AUTO")
+     * @ORM\Id
      */
-    protected $status;
+    protected $id;
 
     /**
      * @var JobParameter[] | \Doctrine\Common\Collections\ArrayCollection
@@ -67,39 +57,25 @@ class Job
     protected $jobParameters;
 
     /**
+     * @var string
+     *
+     * @ORM\Column(name="processor_class", type="string")
+     */
+    protected $processorClass;
+
+    /**
+     * @var int
+     *
+     * @ORM\Column(name="status", type="integer", nullable=false, length=2)
+     */
+    protected $status;
+
+    /**
      * Job constructor.
      */
     public function __construct()
     {
         $this->jobParameters = new ArrayCollection();
-    }
-
-    /**
-     * @return int
-     */
-    public function getId(): int
-    {
-        return $this->id;
-    }
-
-    /**
-     * @return string
-     */
-    public function getProcessorClass(): string
-    {
-        return $this->processorClass;
-    }
-
-    /**
-     * @param string $processorClass
-     *
-     * @return \Chamilo\Core\Queue\Storage\Entity\Job
-     */
-    public function setProcessorClass(string $processorClass)
-    {
-        $this->processorClass = $processorClass;
-
-        return $this;
     }
 
     /**
@@ -125,29 +101,9 @@ class Job
     /**
      * @return int
      */
-    public function getStatus(): int
+    public function getId(): int
     {
-        return $this->status;
-    }
-
-    /**
-     * @param int $status
-     *
-     * @return \Chamilo\Core\Queue\Storage\Entity\Job
-     */
-    public function setStatus(int $status)
-    {
-        $this->status = $status;
-
-        return $this;
-    }
-
-    /**
-     * @return \Chamilo\Core\Queue\Storage\Entity\JobParameter[]|\Doctrine\Common\Collections\ArrayCollection
-     */
-    public function getParameters()
-    {
-        return $this->jobParameters;
+        return $this->id;
     }
 
     /**
@@ -169,6 +125,54 @@ class Job
     }
 
     /**
+     * @return \Chamilo\Core\Queue\Storage\Entity\JobParameter[]|\Doctrine\Common\Collections\ArrayCollection
+     */
+    public function getParameters()
+    {
+        return $this->jobParameters;
+    }
+
+    /**
+     * @return string
+     */
+    public function getProcessorClass(): string
+    {
+        return $this->processorClass;
+    }
+
+    /**
+     * @param string $processorClass
+     *
+     * @return \Chamilo\Core\Queue\Storage\Entity\Job
+     */
+    public function setProcessorClass(string $processorClass)
+    {
+        $this->processorClass = $processorClass;
+
+        return $this;
+    }
+
+    /**
+     * @return int
+     */
+    public function getStatus(): int
+    {
+        return $this->status;
+    }
+
+    /**
+     * @param int $status
+     *
+     * @return \Chamilo\Core\Queue\Storage\Entity\Job
+     */
+    public function setStatus(int $status)
+    {
+        $this->status = $status;
+
+        return $this;
+    }
+
+    /**
      * @param string $parameterName
      * @param string $value
      *
@@ -176,7 +180,7 @@ class Job
      */
     public function setParameter($parameterName, $value)
     {
-        if(empty($parameterName))
+        if (empty($parameterName))
         {
             throw new InvalidArgumentException('The given parameter name can not be empty');
         }
@@ -188,19 +192,18 @@ class Job
             );
         }
 
-        foreach($this->jobParameters as $parameter)
+        foreach ($this->jobParameters as $parameter)
         {
-            if($parameter->getName() == $parameterName)
+            if ($parameter->getName() == $parameterName)
             {
                 $parameter->setValue($value);
+
                 return $this;
             }
         }
 
         $parameter = new JobParameter();
-        $parameter->setName($parameterName)
-            ->setJob($this)
-            ->setValue($value);
+        $parameter->setName($parameterName)->setJob($this)->setValue($value);
 
         $this->jobParameters->add($parameter);
 

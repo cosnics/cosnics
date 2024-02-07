@@ -143,30 +143,6 @@ class ComplexContentObjectItem extends CompositeDataClass implements DisplayOrde
         return new PropertyConditionVariable(ComplexContentObjectItem::class, self::PROPERTY_DISPLAY_ORDER);
     }
 
-    public function getFilesystem(): Filesystem
-    {
-        return $this->getService(Filesystem::class);
-    }
-
-    protected function getFilesystemTools(): FilesystemTools
-    {
-        return $this->getService(FilesystemTools::class);
-    }
-
-    /**
-     * @template getService
-     *
-     * @param class-string<getService> $serviceName
-     *
-     * @return getService
-     */
-    protected function getService(string $serviceName)
-    {
-        return DependencyInjectionContainerBuilder::getInstance()->createContainer()->get(
-            $serviceName
-        );
-    }
-
     /**
      * @return string
      */

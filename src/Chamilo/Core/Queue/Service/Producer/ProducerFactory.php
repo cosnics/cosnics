@@ -1,12 +1,10 @@
 <?php
 namespace Chamilo\Core\Queue\Service\Producer;
 
-use Chamilo\Core\Queue\Service\Producer\BeanstalkProducer;
-use Chamilo\Core\Queue\Service\Producer\DBALProducer;
 use Enqueue\Dbal\DbalContext;
 use Enqueue\Pheanstalk\PheanstalkContext;
-use RuntimeException;
 use Interop\Queue\Context;
+use RuntimeException;
 
 /**
  * @package Chamilo\Core\Queue\Service

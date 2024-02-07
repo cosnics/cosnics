@@ -1,14 +1,13 @@
 <?php
 namespace Chamilo\Application\Weblcms\Tool\Implementation\Assignment\Form;
 
-use Chamilo\Application\Weblcms\Form\ContentObjectPublicationForm;
 use Chamilo\Application\Weblcms\Bridge\Assignment\Storage\DataClass\Entry;
+use Chamilo\Application\Weblcms\Form\ContentObjectPublicationForm;
 use Chamilo\Application\Weblcms\Storage\DataClass\ContentObjectPublication;
 use Chamilo\Application\Weblcms\Tool\Implementation\Assignment\Manager;
 use Chamilo\Application\Weblcms\Tool\Implementation\Assignment\Storage\DataClass\Publication;
 use Chamilo\Application\Weblcms\Tool\Implementation\Assignment\Storage\Repository\PublicationRepository;
 use Chamilo\Core\User\Storage\DataClass\User;
-use Chamilo\Libraries\Translation\Translation;
 use Exception;
 use Symfony\Component\Translation\Translator;
 
@@ -32,11 +31,11 @@ class PublicationForm extends ContentObjectPublicationForm
     /**
      *
      * @param \Chamilo\Core\User\Storage\DataClass\User $user
-     * @param integer $form_type
+     * @param int $form_type
      * @param ContentObjectPublication[] $publications
      * @param \Chamilo\Application\Weblcms\Course\Storage\DataClass\Course $course
      * @param string $action
-     * @param boolean $is_course_admin
+     * @param bool $is_course_admin
      * @param array $selectedContentObjects
      *
      * @param \Symfony\Component\Translation\Translator $translator
@@ -46,28 +45,51 @@ class PublicationForm extends ContentObjectPublicationForm
      * @throws \Chamilo\Libraries\Architecture\Exceptions\UserException
      */
     public function __construct(
-        User $user, $form_type, $publications, $course, $action, $is_course_admin,
-        $selectedContentObjects = [], Translator $translator, PublicationRepository $publicationRepository
+        User $user, $form_type, $publications, $course, $action, $is_course_admin, $selectedContentObjects = [],
+        Translator $translator, PublicationRepository $publicationRepository
     )
     {
         $this->translator = $translator;
         $this->publicationRepository = $publicationRepository;
 
         parent::__construct(
-            'Chamilo\Application\Weblcms\Tool\Implementation\Assignment',
-            $user,
-            $form_type,
-            $publications,
-            $course,
-            $action,
-            $is_course_admin,
-            $selectedContentObjects
+            'Chamilo\Application\Weblcms\Tool\Implementation\Assignment', $user, $form_type, $publications, $course,
+            $action, $is_course_admin, $selectedContentObjects
         );
 
         if ($form_type == self::TYPE_UPDATE)
         {
             $this->setDefaultsForPublication($publications[0]);
         }
+    }
+
+    /**
+     * @throws \HTML_QuickForm_Error
+     * @throws \PEAR_Error
+     */
+    protected function addAssignmentProperties()
+    {
+        $this->addElement('category', $this->translator->trans('AssignmentProperties', [], Manager::CONTEXT));
+
+        $group[] = $this->createElement(
+            'radio', null, null, $this->translator->trans('TypeUsersEntity', [], Manager::CONTEXT),
+            Entry::ENTITY_TYPE_USER
+        );
+
+        $group[] = $this->createElement(
+            'radio', null, null, $this->translator->trans('TypeCourseGroupsEntity', [], Manager::CONTEXT),
+            Entry::ENTITY_TYPE_COURSE_GROUP
+        );
+
+        $group[] = $this->createElement(
+            'radio', null, null, $this->translator->trans('TypePlatformGroupsEntity', [], Manager::CONTEXT),
+            Entry::ENTITY_TYPE_PLATFORM_GROUP
+        );
+
+        $this->addGroup(
+            $group, Publication::PROPERTY_ENTITY_TYPE,
+            $this->translator->trans('PublishAssignmentForEntity', [], Manager::CONTEXT), ''
+        );
     }
 
     /**
@@ -94,78 +116,6 @@ class PublicationForm extends ContentObjectPublicationForm
         $this->addElement('category', $this->translator->trans('DefaultProperties', [], Manager::CONTEXT));
         parent::build_basic_update_form();
         $this->addAssignmentProperties();
-    }
-
-    /**
-     * @throws \HTML_QuickForm_Error
-     * @throws \PEAR_Error
-     */
-    protected function addAssignmentProperties()
-    {
-        $this->addElement('category', $this->translator->trans('AssignmentProperties', [], Manager::CONTEXT));
-
-        $group[] = $this->createElement(
-            'radio',
-            null,
-            null,
-            $this->translator->trans('TypeUsersEntity', [], Manager::CONTEXT),
-            Entry::ENTITY_TYPE_USER
-        );
-
-        $group[] = $this->createElement(
-            'radio',
-            null,
-            null,
-            $this->translator->trans('TypeCourseGroupsEntity', [], Manager::CONTEXT),
-            Entry::ENTITY_TYPE_COURSE_GROUP
-        );
-
-        $group[] = $this->createElement(
-            'radio',
-            null,
-            null,
-            $this->translator->trans('TypePlatformGroupsEntity', [], Manager::CONTEXT),
-            Entry::ENTITY_TYPE_PLATFORM_GROUP
-        );
-
-        $this->addGroup(
-            $group,
-            Publication::PROPERTY_ENTITY_TYPE,
-            $this->translator->trans('PublishAssignmentForEntity', [], Manager::CONTEXT),
-            ''
-        );
-    }
-
-    /**
-     * Handles the submit of the form for both create and edit
-     *
-     * @return boolean
-     *
-     * @throws \HTML_QuickForm_Error
-     */
-    public function handle_form_submit()
-    {
-        if (!parent::handle_form_submit())
-        {
-            return false;
-        }
-
-        $publications = $this->get_publications();
-        $success = true;
-
-        foreach ($publications as $publication)
-        {
-            if ($this->get_form_type() == self::TYPE_CREATE)
-            {
-                $success &= $this->handleCreateAction($publication);
-            }
-            else
-            {
-                $success &= $this->handleUpdateAction($publication);
-            }
-        }
-
-        return $success;
     }
 
     /**
@@ -210,6 +160,38 @@ class PublicationForm extends ContentObjectPublicationForm
         {
             return false;
         }
+    }
+
+    /**
+     * Handles the submit of the form for both create and edit
+     *
+     * @return bool
+     *
+     * @throws \HTML_QuickForm_Error
+     */
+    public function handle_form_submit()
+    {
+        if (!parent::handle_form_submit())
+        {
+            return false;
+        }
+
+        $publications = $this->get_publications();
+        $success = true;
+
+        foreach ($publications as $publication)
+        {
+            if ($this->get_form_type() == self::TYPE_CREATE)
+            {
+                $success &= $this->handleCreateAction($publication);
+            }
+            else
+            {
+                $success &= $this->handleUpdateAction($publication);
+            }
+        }
+
+        return $success;
     }
 
     /**

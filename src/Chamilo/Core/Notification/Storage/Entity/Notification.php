@@ -3,7 +3,6 @@ namespace Chamilo\Core\Notification\Storage\Entity;
 
 use DateTime;
 use Doctrine\Common\Collections\ArrayCollection;
-use Doctrine\ORM\Mapping as ORM;
 
 /**
  * @package Chamilo\Core\Notification\Storage\Entity
@@ -19,13 +18,11 @@ use Doctrine\ORM\Mapping as ORM;
 class Notification
 {
     /**
-     * @var int
+     * @var \DateTime
      *
-     * @ORM\Column(name="id", type="integer", nullable=true)
-     * @ORM\GeneratedValue(strategy="AUTO")
-     * @ORM\Id
+     * @ORM\Column(name="date", type="datetime", nullable=false)
      */
-    protected $id;
+    protected $date;
 
     /**
      * @var string
@@ -33,20 +30,6 @@ class Notification
      * @ORM\Column(name="description_context", type="text", nullable=false)
      */
     protected $descriptionContext;
-
-    /**
-     * @var string
-     *
-     * @ORM\Column(name="url", type="string", nullable=false)
-     */
-    protected $url;
-
-    /**
-     * @var \DateTime
-     *
-     * @ORM\Column(name="date", type="datetime", nullable=false)
-     */
-    protected $date;
 
     /**
      * @var \Chamilo\Core\Notification\Storage\Entity\Filter[]
@@ -58,6 +41,22 @@ class Notification
      *      )
      */
     protected $filters;
+
+    /**
+     * @var int
+     *
+     * @ORM\Column(name="id", type="integer", nullable=true)
+     * @ORM\GeneratedValue(strategy="AUTO")
+     * @ORM\Id
+     */
+    protected $id;
+
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="url", type="string", nullable=false)
+     */
+    protected $url;
 
     /**
      * @var \Chamilo\Core\Notification\Storage\Entity\UserNotification[]
@@ -75,49 +74,13 @@ class Notification
     }
 
     /**
-     * @return int
-     */
-    public function getId()
-    {
-        return $this->id;
-    }
-
-    /**
-     * @return string
-     */
-    public function getDescriptionContext()
-    {
-        return $this->descriptionContext;
-    }
-
-    /**
-     * @param string $descriptionContext
+     * @param \Chamilo\Core\Notification\Storage\Entity\Filter $filter
      *
      * @return \Chamilo\Core\Notification\Storage\Entity\Notification
      */
-    public function setDescriptionContext(string $descriptionContext)
+    public function addFilter(Filter $filter)
     {
-        $this->descriptionContext = $descriptionContext;
-
-        return $this;
-    }
-
-    /**
-     * @return string
-     */
-    public function getUrl()
-    {
-        return $this->url;
-    }
-
-    /**
-     * @param string $url
-     *
-     * @return \Chamilo\Core\Notification\Storage\Entity\Notification
-     */
-    public function setUrl(string $url)
-    {
-        $this->url = $url;
+        $this->filters[] = $filter;
 
         return $this;
     }
@@ -143,6 +106,26 @@ class Notification
     }
 
     /**
+     * @return string
+     */
+    public function getDescriptionContext()
+    {
+        return $this->descriptionContext;
+    }
+
+    /**
+     * @param string $descriptionContext
+     *
+     * @return \Chamilo\Core\Notification\Storage\Entity\Notification
+     */
+    public function setDescriptionContext(string $descriptionContext)
+    {
+        $this->descriptionContext = $descriptionContext;
+
+        return $this;
+    }
+
+    /**
      * @return \Chamilo\Core\Notification\Storage\Entity\Filter[]
      */
     public function getFilters()
@@ -163,13 +146,29 @@ class Notification
     }
 
     /**
-     * @param \Chamilo\Core\Notification\Storage\Entity\Filter $filter
+     * @return int
+     */
+    public function getId()
+    {
+        return $this->id;
+    }
+
+    /**
+     * @return string
+     */
+    public function getUrl()
+    {
+        return $this->url;
+    }
+
+    /**
+     * @param string $url
      *
      * @return \Chamilo\Core\Notification\Storage\Entity\Notification
      */
-    public function addFilter(Filter $filter)
+    public function setUrl(string $url)
     {
-        $this->filters[] = $filter;
+        $this->url = $url;
 
         return $this;
     }
