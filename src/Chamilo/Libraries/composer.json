@@ -3,7 +3,7 @@
     "version": "1.0.0",
     "description": "Libraries",
     "require": {
-        "php": ">=7.4.0",
+        "php": ">=8.2.0",
         "ext-zip": "*",
         "ezyang/htmlpurifier": "4.*",
         "google/recaptcha": "1.2.*",
