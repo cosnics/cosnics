@@ -6,6 +6,7 @@ use Chamilo\Libraries\Cache\FileBasedCacheService;
 use Chamilo\Libraries\File\ConfigurablePathBuilder;
 use Chamilo\Libraries\File\PackagesContentFinder\PackagesFilesFinder;
 use Chamilo\Libraries\File\SystemPathBuilder;
+use Symfony\Component\Filesystem\Filesystem;
 use Twig\Environment;
 use Twig\Loader\FilesystemLoader;
 
@@ -27,10 +28,10 @@ class TwigCacheService extends FileBasedCacheService
 
     public function __construct(
         ConfigurablePathBuilder $configurablePathBuilder, Environment $twig, SystemPathBuilder $systemPathBuilder,
-        RegistrationConsulter $registrationConsulter
+        RegistrationConsulter $registrationConsulter, Filesystem $filesystem
     )
     {
-        parent::__construct($configurablePathBuilder);
+        parent::__construct($configurablePathBuilder, $filesystem);
 
         $this->twig = $twig;
         $this->systemPathBuilder = $systemPathBuilder;

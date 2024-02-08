@@ -31,10 +31,10 @@
                      method="getInstance"/>
         </service>
 
-        <service id="Chamilo\Libraries\Platform\Translator"
-                 class="Chamilo\Libraries\Translation\Translation"/>
+<!--        <service id="Chamilo\Libraries\Platform\Translator"-->
+<!--                 class="Chamilo\Libraries\Translation\Translation"/>-->
 
-        <service id="Chamilo\Libraries\Platform\TranslationCacheService"/>
+<!--        <service id="Chamilo\Libraries\Platform\TranslationCacheService"/>-->
 
         <service id="Hackzilla\PasswordGenerator\Generator\PasswordGeneratorInterface"
                  alias="Chamilo\Libraries\Platform\PasswordGenerator"/>

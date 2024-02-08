@@ -4,6 +4,7 @@ namespace Chamilo\Libraries\DependencyInjection;
 use Chamilo\Configuration\Service\Consulter\ConfigurationConsulter;
 use Chamilo\Libraries\Cache\FileBasedCacheService;
 use Chamilo\Libraries\File\ConfigurablePathBuilder;
+use Symfony\Component\Filesystem\Filesystem;
 
 /**
  * Manages the cache for the symfony dependency injection
@@ -18,10 +19,11 @@ class DependencyInjectionCacheService extends FileBasedCacheService
     protected ConfigurationConsulter $fileConfigurationConsulter;
 
     public function __construct(
-        ConfigurationConsulter $fileConfigurationConsulter, ConfigurablePathBuilder $configurablePathBuilder
+        ConfigurationConsulter $fileConfigurationConsulter, ConfigurablePathBuilder $configurablePathBuilder,
+        Filesystem $filesystem
     )
     {
-        parent::__construct($configurablePathBuilder);
+        parent::__construct($configurablePathBuilder, $filesystem);
 
         $this->fileConfigurationConsulter = $fileConfigurationConsulter;
     }
