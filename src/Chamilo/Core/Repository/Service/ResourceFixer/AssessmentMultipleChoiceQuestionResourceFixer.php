@@ -15,12 +15,12 @@ class AssessmentMultipleChoiceQuestionResourceFixer extends ResourceFixer
      */
     public function fixResources($forceUpdate = false)
     {
-        $this->logger->addInfo('Started fixing AssessmentMultipleChoiceQuestion objects');
+        $this->logger->info('Started fixing AssessmentMultipleChoiceQuestion objects');
 
         $offset = 0;
         $count = $this->contentObjectResourceFixerRepository->countAssessmentMultipleChoiceQuestions();
 
-        $this->logger->addInfo(sprintf('Found %s AssessmentMultipleChoiceQuestion objects', $count));
+        $this->logger->info(sprintf('Found %s AssessmentMultipleChoiceQuestion objects', $count));
 
         while ($offset < $count)
         {
@@ -88,6 +88,6 @@ class AssessmentMultipleChoiceQuestionResourceFixer extends ResourceFixer
             $offset += 1000;
         }
 
-        $this->logger->addInfo('Finished fixing AssessmentMultipleChoiceQuestion objects');
+        $this->logger->info('Finished fixing AssessmentMultipleChoiceQuestion objects');
     }
 }

@@ -15,12 +15,12 @@ class WorkspaceResourceFixer extends ResourceFixer
      */
     public function fixResources($forceUpdate = false)
     {
-        $this->logger->addInfo('Started fixing Workspace objects');
+        $this->logger->info('Started fixing Workspace objects');
 
         $offset = 0;
         $count = $this->contentObjectResourceFixerRepository->countWorkspaces();
 
-        $this->logger->addInfo(sprintf('Found %s Workspace objects', $count));
+        $this->logger->info(sprintf('Found %s Workspace objects', $count));
 
         while ($offset < $count)
         {
@@ -58,6 +58,6 @@ class WorkspaceResourceFixer extends ResourceFixer
             $offset += 1000;
         }
 
-        $this->logger->addInfo('Finished fixing Workspace objects');
+        $this->logger->info('Finished fixing Workspace objects');
     }
 }

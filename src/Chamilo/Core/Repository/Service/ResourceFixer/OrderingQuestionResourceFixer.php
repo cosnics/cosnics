@@ -15,12 +15,12 @@ class OrderingQuestionResourceFixer extends ResourceFixer
      */
     public function fixResources($forceUpdate = false)
     {
-        $this->logger->addInfo('Started fixing OrderingQuestion objects');
+        $this->logger->info('Started fixing OrderingQuestion objects');
         
         $offset = 0;
         $count = $this->contentObjectResourceFixerRepository->countOrderingQuestions();
 
-        $this->logger->addInfo(sprintf('Found %s OrderingQuestion objects', $count));
+        $this->logger->info(sprintf('Found %s OrderingQuestion objects', $count));
 
         while ($offset < $count)
         {
@@ -96,6 +96,6 @@ class OrderingQuestionResourceFixer extends ResourceFixer
             $offset += 1000;
         }
 
-        $this->logger->addInfo('Finished fixing OrderingQuestion objects');
+        $this->logger->info('Finished fixing OrderingQuestion objects');
     }
 }

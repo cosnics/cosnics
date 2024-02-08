@@ -5,7 +5,8 @@ use Chamilo\Application\Calendar\Repository\CalendarRendererProviderRepository;
 use Chamilo\Libraries\Architecture\Application\Application;
 use Chamilo\Libraries\Calendar\Service\View\HtmlCalendarRenderer;
 use DateTime;
-use Mobile_Detect;
+use Detection\MobileDetect;
+use Exception;
 
 /**
  * @package application\calendar
@@ -27,25 +28,14 @@ abstract class Manager extends Application
     public const PARAM_TIME = 'time';
     public const PARAM_VIEW = 'view';
 
-    /**
-     * @var int
-     */
-    private $currentTime;
-
-    /**
-     * @var \Chamilo\Libraries\Format\Tabs\Link\LinkTabsRenderer
-     */
-    private $tabs;
+    private int $currentTime;
 
     public function getCalendarRendererProviderRepository(): CalendarRendererProviderRepository
     {
         return $this->getService(CalendarRendererProviderRepository::class);
     }
 
-    /**
-     * @return int
-     */
-    public function getCurrentRendererTime()
+    public function getCurrentRendererTime(): int
     {
         if (!isset($this->currentTime))
         {
@@ -60,10 +50,7 @@ abstract class Manager extends Application
         return $this->currentTime;
     }
 
-    /**
-     * @return string
-     */
-    public function getCurrentRendererType()
+    public function getCurrentRendererType(): string
     {
         $rendererType = $this->getRequest()->query->get(HtmlCalendarRenderer::PARAM_TYPE);
 
@@ -75,10 +62,18 @@ abstract class Manager extends Application
 
             if ($rendererType == HtmlCalendarRenderer::TYPE_MONTH)
             {
-                $detect = new Mobile_Detect();
-                if ($detect->isMobile() && !$detect->isTablet())
+                $detect = new MobileDetect();
+
+                try
                 {
-                    $rendererType = HtmlCalendarRenderer::TYPE_LIST;
+                    if ($detect->isMobile() && !$detect->isTablet())
+                    {
+                        $rendererType = HtmlCalendarRenderer::TYPE_LIST;
+                    }
+                }
+                catch (Exception)
+                {
+
                 }
             }
         }

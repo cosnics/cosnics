@@ -15,12 +15,12 @@ class ForumPostResourceFixer extends ResourceFixer
      */
     public function fixResources($forceUpdate = false)
     {
-        $this->logger->addInfo('Started fixing ForumPost objects');
+        $this->logger->info('Started fixing ForumPost objects');
 
         $offset = 0;
         $count = $this->contentObjectResourceFixerRepository->countForumPosts();
 
-        $this->logger->addInfo(sprintf('Found %s ForumPost objects', $count));
+        $this->logger->info(sprintf('Found %s ForumPost objects', $count));
 
         while ($offset < $count)
         {
@@ -57,6 +57,6 @@ class ForumPostResourceFixer extends ResourceFixer
             $offset += 1000;
         }
 
-        $this->logger->addInfo('Finished fixing ForumPost objects');
+        $this->logger->info('Finished fixing ForumPost objects');
     }
 }

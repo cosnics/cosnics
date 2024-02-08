@@ -17,12 +17,12 @@ class ContentObjectDescriptionResourceFixer extends ResourceFixer
      */
     public function fixResources($forceUpdate = false)
     {
-        $this->logger->addInfo('Started fixing ContentObject objects');
+        $this->logger->info('Started fixing ContentObject objects');
 
         $offset = 0;
         $count = $this->contentObjectResourceFixerRepository->countContentObjectsWithResourceTags();
 
-        $this->logger->addInfo(sprintf('Found %s ContentObject objects', $count));
+        $this->logger->info(sprintf('Found %s ContentObject objects', $count));
 
         while ($offset < $count)
         {
@@ -66,6 +66,6 @@ class ContentObjectDescriptionResourceFixer extends ResourceFixer
             $offset += 1000;
         }
 
-        $this->logger->addInfo('Finished fixing ContentObject objects');
+        $this->logger->info('Finished fixing ContentObject objects');
     }
 }

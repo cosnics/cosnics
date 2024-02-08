@@ -3,6 +3,7 @@ namespace Chamilo\Application\Weblcms\UserExporter\Renderer;
 
 use Chamilo\Application\Weblcms\UserExporter\UserExportRenderer;
 use Chamilo\Libraries\File\ConfigurablePathBuilder;
+use PhpOffice\PhpSpreadsheet\Cell\CellAddress;
 use PhpOffice\PhpSpreadsheet\IOFactory;
 use PhpOffice\PhpSpreadsheet\Spreadsheet;
 use PhpOffice\PhpSpreadsheet\Style\Color;
@@ -90,8 +91,8 @@ class ExcelUserExportRenderer implements UserExportRenderer
         foreach ($headers as $header)
         {
             $worksheet->getColumnDimensionByColumn($column)->setWidth(50);
-            $worksheet->getStyleByColumnAndRow($column, $row)->applyFromArray($styleArray);
-            $worksheet->setCellValueByColumnAndRow($column, $row, $header);
+            $worksheet->getStyle(CellAddress::fromColumnAndRow($column, $row))->applyFromArray($styleArray);
+            $worksheet->setCellValue(CellAddress::fromColumnAndRow($column, $row), $header);
 
             $column ++;
         }
@@ -116,7 +117,7 @@ class ExcelUserExportRenderer implements UserExportRenderer
 
             foreach ($user as $user_data)
             {
-                $worksheet->setCellValueByColumnAndRow($column, $row, $user_data);
+                $worksheet->setCellValue(CellAddress::fromColumnAndRow($column, $row), $user_data);
                 $column ++;
             }
 

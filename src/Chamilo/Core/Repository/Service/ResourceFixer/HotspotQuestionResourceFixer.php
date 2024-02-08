@@ -15,12 +15,12 @@ class HotspotQuestionResourceFixer extends ResourceFixer
      */
     public function fixResources($forceUpdate = false)
     {
-        $this->logger->addInfo('Started fixing HotspotQuestion objects');
+        $this->logger->info('Started fixing HotspotQuestion objects');
         
         $offset = 0;
         $count = $this->contentObjectResourceFixerRepository->countHotspotQuestions();
 
-        $this->logger->addInfo(sprintf('Found %s HotspotQuestion objects', $count));
+        $this->logger->info(sprintf('Found %s HotspotQuestion objects', $count));
 
         while ($offset < $count)
         {
@@ -86,6 +86,6 @@ class HotspotQuestionResourceFixer extends ResourceFixer
             $offset += 1000;
         }
 
-        $this->logger->addInfo('Finished fixing HotspotQuestion objects');
+        $this->logger->info('Finished fixing HotspotQuestion objects');
     }
 }

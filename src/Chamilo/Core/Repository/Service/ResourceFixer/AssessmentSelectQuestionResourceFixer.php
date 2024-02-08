@@ -15,12 +15,12 @@ class AssessmentSelectQuestionResourceFixer extends ResourceFixer
      */
     public function fixResources($forceUpdate = false)
     {
-        $this->logger->addInfo('Started fixing AssessmentSelectQuestion objects');
+        $this->logger->info('Started fixing AssessmentSelectQuestion objects');
 
         $offset = 0;
         $count = $this->contentObjectResourceFixerRepository->countAssessmentSelectQuestions();
 
-        $this->logger->addInfo(sprintf('Found %s AssessmentSelectQuestion objects', $count));
+        $this->logger->info(sprintf('Found %s AssessmentSelectQuestion objects', $count));
 
         while ($offset < $count)
         {
@@ -75,6 +75,6 @@ class AssessmentSelectQuestionResourceFixer extends ResourceFixer
             $offset += 1000;
         }
 
-        $this->logger->addInfo('Finished fixing AssessmentSelectQuestion objects');
+        $this->logger->info('Finished fixing AssessmentSelectQuestion objects');
     }
 }

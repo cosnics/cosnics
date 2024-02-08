@@ -21,6 +21,7 @@ use Chamilo\Libraries\Storage\Query\Variable\StaticConditionVariable;
 use Chamilo\Libraries\Translation\Translation;
 use Chamilo\Libraries\Utilities\DatetimeUtilities;
 use Doctrine\Common\Collections\ArrayCollection;
+use PhpOffice\PhpSpreadsheet\Cell\CellAddress;
 use PhpOffice\PhpSpreadsheet\IOFactory;
 use PhpOffice\PhpSpreadsheet\Spreadsheet;
 use PhpOffice\PhpSpreadsheet\Style\Alignment;
@@ -348,16 +349,6 @@ class ExporterComponent extends Manager
         return $rowcount;
     }
 
-    /**
-     * Renders the data
-     *
-     * @param $worksheet Worksheet
-     * @param $title     String
-     * @param $table     String[]
-     * @param $block_row Integer
-     *
-     * @return Integer
-     */
     private function render_table($worksheet, $title, $description, $table, $block_row)
     {
         $column = 1;
@@ -372,13 +363,13 @@ class ExporterComponent extends Manager
         $block_row ++;
         $block_row ++;
 
-        $worksheet->setCellValueByColumnAndRow($column, $block_row, $title);
+        $worksheet->setCellValue(CellAddress::fromColumnAndRow($column, $block_row), $title);
         // $this->wrap_text($worksheet, $column, $block_row);
         $worksheet->mergeCells('A' . $block_row . ':G' . $block_row);
-        $worksheet->getStyleByColumnAndRow($column, $block_row)->getAlignment()->setHorizontal(
+        $worksheet->getStyle(CellAddress::fromColumnAndRow($column, $block_row))->getAlignment()->setHorizontal(
             Alignment::HORIZONTAL_CENTER
         );
-        $worksheet->getStyleByColumnAndRow($column, $block_row)->getFont()->setBold(true);
+        $worksheet->getStyle(CellAddress::fromColumnAndRow($column, $block_row))->getFont()->setBold(true);
 
         $block_row ++;
 
@@ -387,11 +378,11 @@ class ExporterComponent extends Manager
             $block_row ++;
 
             $worksheet->mergeCells('A' . $block_row . ':G' . $block_row);
-            $worksheet->getStyleByColumnAndRow($column, $block_row)->getAlignment()->setHorizontal(
+            $worksheet->getStyle(CellAddress::fromColumnAndRow($column, $block_row))->getAlignment()->setHorizontal(
                 Alignment::HORIZONTAL_CENTER
             );
 
-            $worksheet->setCellValueByColumnAndRow($column, $block_row, $description);
+            $worksheet->setCellValue(CellAddress::fromColumnAndRow($column, $block_row), $description);
 
             $block_row ++;
         }
@@ -406,13 +397,21 @@ class ExporterComponent extends Manager
             $worksheet->getColumnDimension('F')->setWidth(50);
             $worksheet->getColumnDimension('G')->setWidth(50);
 
-            $worksheet->getStyleByColumnAndRow($column, $block_row + 1)->applyFromArray($styleArray);
-            $worksheet->getStyleByColumnAndRow($column1, $block_row + 1)->applyFromArray($styleArray);
-            $worksheet->getStyleByColumnAndRow($column2, $block_row + 1)->applyFromArray($styleArray);
-            $worksheet->getStyleByColumnAndRow($column2 + 1, $block_row + 1)->applyFromArray($styleArray);
-            $worksheet->getStyleByColumnAndRow($column2 + 2, $block_row + 1)->applyFromArray($styleArray);
-            $worksheet->getStyleByColumnAndRow($column2 + 3, $block_row + 1)->applyFromArray($styleArray);
-            $worksheet->getStyleByColumnAndRow($column2 + 4, $block_row + 1)->applyFromArray($styleArray);
+            $worksheet->getStyle(CellAddress::fromColumnAndRow($column, $block_row + 1))->applyFromArray($styleArray);
+            $worksheet->getStyle(CellAddress::fromColumnAndRow($column1, $block_row + 1))->applyFromArray($styleArray);
+            $worksheet->getStyle(CellAddress::fromColumnAndRow($column2, $block_row + 1))->applyFromArray($styleArray);
+            $worksheet->getStyle(CellAddress::fromColumnAndRow($column2 + 1, $block_row + 1))->applyFromArray(
+                $styleArray
+            );
+            $worksheet->getStyle(CellAddress::fromColumnAndRow($column2 + 2, $block_row + 1))->applyFromArray(
+                $styleArray
+            );
+            $worksheet->getStyle(CellAddress::fromColumnAndRow($column2 + 3, $block_row + 1))->applyFromArray(
+                $styleArray
+            );
+            $worksheet->getStyle(CellAddress::fromColumnAndRow($column2 + 4, $block_row + 1))->applyFromArray(
+                $styleArray
+            );
         }
 
         // $i = 0;
@@ -421,16 +420,29 @@ class ExporterComponent extends Manager
         {
             // $i++;
             $block_row ++;
-            $worksheet->setCellValueByColumnAndRow($column, $block_row, $entry[User::PROPERTY_OFFICIAL_CODE]);
-            $worksheet->setCellValueByColumnAndRow($column1, $block_row, $entry[User::PROPERTY_USERNAME]);
-            $worksheet->setCellValueByColumnAndRow($column2, $block_row, $entry[User::PROPERTY_LASTNAME]);
-            $worksheet->setCellValueByColumnAndRow($column2 + 1, $block_row, $entry[User::PROPERTY_FIRSTNAME]);
-            $worksheet->setCellValueByColumnAndRow($column2 + 2, $block_row, $entry[self::PROPERTY_SORT_NAME]);
-            $worksheet->setCellValueByColumnAndRow($column2 + 3, $block_row, $entry[User::PROPERTY_EMAIL]);
-            $worksheet->setCellValueByColumnAndRow(
-                $column2 + 4, $block_row, $entry[CourseGroupUserRelation::PROPERTY_SUBSCRIPTION_TIME]
+            $worksheet->setCellValue(
+                CellAddress::fromColumnAndRow($column, $block_row), $entry[User::PROPERTY_OFFICIAL_CODE]
             );
-            $worksheet->setCellValueByColumnAndRow($column2 + 5, $block_row, $entry['Course Groups']);
+            $worksheet->setCellValue(
+                CellAddress::fromColumnAndRow($column1, $block_row), $entry[User::PROPERTY_USERNAME]
+            );
+            $worksheet->setCellValue(
+                CellAddress::fromColumnAndRow($column2, $block_row), $entry[User::PROPERTY_LASTNAME]
+            );
+            $worksheet->setCellValue(
+                CellAddress::fromColumnAndRow($column2 + 1, $block_row), $entry[User::PROPERTY_FIRSTNAME]
+            );
+            $worksheet->setCellValue(
+                CellAddress::fromColumnAndRow($column2 + 2, $block_row), $entry[self::PROPERTY_SORT_NAME]
+            );
+            $worksheet->setCellValue(
+                CellAddress::fromColumnAndRow($column2 + 3, $block_row), $entry[User::PROPERTY_EMAIL]
+            );
+            $worksheet->setCellValue(
+                CellAddress::fromColumnAndRow($column2 + 4, $block_row),
+                $entry[CourseGroupUserRelation::PROPERTY_SUBSCRIPTION_TIME]
+            );
+            $worksheet->setCellValue(CellAddress::fromColumnAndRow($column2 + 5, $block_row), $entry['Course Groups']);
             // if ($i == 1)
         }
 

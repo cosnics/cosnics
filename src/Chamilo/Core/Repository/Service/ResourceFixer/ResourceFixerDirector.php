@@ -50,15 +50,15 @@ class ResourceFixerDirector
     {
         $timer = new Timer();
 
-        $this->logger->addInfo('Starting fixing resources');
+        $this->logger->info('Starting fixing resources');
 
         if ($forceUpdate)
         {
-            $this->logger->addInfo('[WARNING] THIS FIXER IS RUNNING FOR REAL NOW, NO GOING BACK');
+            $this->logger->info('[WARNING] THIS FIXER IS RUNNING FOR REAL NOW, NO GOING BACK');
         }
         else
         {
-            $this->logger->addInfo(
+            $this->logger->info(
                 'This fixer is running in debug mode, everything is logged but the content is not updated. ' .
                 'Use the option --force / -f to force the update of the content'
             );
@@ -72,6 +72,6 @@ class ResourceFixerDirector
         }
 
         $timer->stop();
-        $this->logger->addInfo(sprintf('Finished fixing resources in %s', $timer->getTimeInHours()));
+        $this->logger->info(sprintf('Finished fixing resources in %s', $timer->getTimeInHours()));
     }
 }
