@@ -43,7 +43,7 @@ class RepositoryCategoryTreeMenu extends GenericTree
     /**
      * Creates a new category navigation menu.
      *
-     * @param $parent                 - the parent component
+     * @param $parent - the parent component
      * @param array $additional_items An array of extra tree items, added to the root.
      */
     public function __construct(Workspace $workspaceImplementation, $parent, $additional_items = [])
@@ -99,13 +99,13 @@ class RepositoryCategoryTreeMenu extends GenericTree
     public function get_node_children($parent_node_id)
     {
         return DataManager::retrieve_categories(
-            $this->get_retrieve_condition($parent_node_id), null, null, new OrderBy([
-                new OrderProperty(
-                    new PropertyConditionVariable(
-                        RepositoryCategory::class, RepositoryCategory::PROPERTY_DISPLAY_ORDER
-                    )
+            condition: $this->get_retrieve_condition($parent_node_id), orderBy: new OrderBy([
+            new OrderProperty(
+                new PropertyConditionVariable(
+                    RepositoryCategory::class, RepositoryCategory::PROPERTY_DISPLAY_ORDER
                 )
-            ])
+            )
+        ])
         );
     }
 

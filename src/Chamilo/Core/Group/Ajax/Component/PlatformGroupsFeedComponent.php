@@ -140,8 +140,9 @@ class PlatformGroupsFeedComponent extends GroupsFeedComponent
         $condition = new AndCondition($conditions);
 
         return $this->getGroupService()->findGroups(
-            $condition, null, null,
-            new OrderBy([new OrderProperty(new PropertyConditionVariable(Group::class, Group::PROPERTY_NAME))])
+            condition: $condition, orderBy: new OrderBy(
+            [new OrderProperty(new PropertyConditionVariable(Group::class, Group::PROPERTY_NAME))]
+        )
         );
     }
 }

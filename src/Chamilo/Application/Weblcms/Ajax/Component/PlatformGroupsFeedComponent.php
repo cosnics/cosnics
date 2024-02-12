@@ -1,6 +1,7 @@
 <?php
 namespace Chamilo\Application\Weblcms\Ajax\Component;
 
+use Chamilo\Application\Weblcms\Course\Storage\DataManager;
 use Chamilo\Application\Weblcms\Rights\Entities\CoursePlatformGroupEntity;
 use Chamilo\Application\Weblcms\Rights\Entities\CourseUserEntity;
 use Chamilo\Application\Weblcms\Storage\DataClass\CourseEntityRelation;
@@ -145,7 +146,7 @@ class PlatformGroupsFeedComponent extends GroupsFeedComponent
                 ), new StaticConditionVariable(CourseEntityRelation::ENTITY_TYPE_GROUP)
             );
 
-            $subscribed_group_ids = \Chamilo\Application\Weblcms\Course\Storage\DataManager::distinct(
+            $subscribed_group_ids = DataManager::distinct(
                 CourseEntityRelation::class, new DataClassDistinctParameters(
                     new AndCondition($groupConditions), new RetrieveProperties(
                         [
@@ -180,8 +181,9 @@ class PlatformGroupsFeedComponent extends GroupsFeedComponent
         }
 
         return $this->getGroupService()->findGroups(
-            $condition, null, null,
-            new OrderBy([new OrderProperty(new PropertyConditionVariable(Group::class, Group::PROPERTY_NAME))])
+            condition: $condition, orderBy: new OrderBy(
+            [new OrderProperty(new PropertyConditionVariable(Group::class, Group::PROPERTY_NAME))]
+        )
         );
     }
 }

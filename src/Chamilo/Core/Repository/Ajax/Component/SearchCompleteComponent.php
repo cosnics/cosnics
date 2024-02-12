@@ -45,11 +45,11 @@ class SearchCompleteComponent extends Manager
         $condition = new AndCondition($conditions);
 
         $parameters = new DataClassRetrievesParameters(
-            $condition, null, null, new OrderBy([
-                new OrderProperty(
-                    new PropertyConditionVariable(ContentObject::class, ContentObject::PROPERTY_TITLE)
-                )
-            ])
+            condition: $condition, orderBy: new OrderBy([
+            new OrderProperty(
+                new PropertyConditionVariable(ContentObject::class, ContentObject::PROPERTY_TITLE)
+            )
+        ])
         );
         $objects = DataManager::retrieve_active_content_objects(ContentObject::class, $parameters);
 

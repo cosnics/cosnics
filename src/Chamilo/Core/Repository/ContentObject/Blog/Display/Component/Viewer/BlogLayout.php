@@ -83,7 +83,7 @@ abstract class BlogLayout
 
         if (!class_exists($class))
         {
-            throw new Exception(Translation::get('BlogLayoutNotExists', array('BLOGLAYOUT' => $type)));
+            throw new Exception(Translation::get('BlogLayoutNotExists', ['BLOGLAYOUT' => $type]));
         }
 
         return new $class($parent, $blog);
@@ -124,7 +124,7 @@ abstract class BlogLayout
     /**
      * @param \Chamilo\Core\Repository\ContentObject\BlogItem\Storage\DataClass\ComplexBlogItem $complexBlogItem
      *
-     * @return boolean
+     * @return bool
      */
     public function hasBlogItemActions(ComplexBlogItem $complexBlogItem)
     {
@@ -190,13 +190,13 @@ abstract class BlogLayout
         );
 
         $parameters = new DataClassRetrievesParameters(
-            $condition, null, null, new OrderBy(array(
-                new OrderProperty(
-                    new PropertyConditionVariable(
-                        ComplexContentObjectItem::class, ComplexContentObjectItem::PROPERTY_ADD_DATE
-                    )
+            condition: $condition, orderBy: new OrderBy([
+            new OrderProperty(
+                new PropertyConditionVariable(
+                    ComplexContentObjectItem::class, ComplexContentObjectItem::PROPERTY_ADD_DATE
                 )
-            ))
+            )
+        ])
         );
 
         return DataManager::retrieves(

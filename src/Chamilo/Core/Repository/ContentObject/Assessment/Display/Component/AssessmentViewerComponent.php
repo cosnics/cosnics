@@ -390,7 +390,9 @@ class AssessmentViewerComponent extends Manager implements BreadcrumbLessCompone
         );
 
         $this->questions = DataManager:: retrieve_complex_content_object_items(
-            ComplexContentObjectItem::class, new DataClassRetrievesParameters($condition, null, null, $order_by)
+            ComplexContentObjectItem::class, new DataClassRetrievesParameters(
+                condition: $condition, orderBy: $order_by
+            )
         );
     }
 

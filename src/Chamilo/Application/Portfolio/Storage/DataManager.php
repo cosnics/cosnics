@@ -19,7 +19,7 @@ use Chamilo\Libraries\Storage\Query\Variable\StaticConditionVariable;
  */
 class DataManager extends \Chamilo\Libraries\Storage\DataManager\DataManager
 {
-    const PREFIX = 'portfolio_';
+    public const PREFIX = 'portfolio_';
 
     /**
      * Removes the entity rights linked to a location (and optionally an entity type and entity id)
@@ -134,7 +134,7 @@ class DataManager extends \Chamilo\Libraries\Storage\DataManager\DataManager
     {
         if (!is_array($rights))
         {
-            $rights = array($rights);
+            $rights = [$rights];
         }
 
         $conditions = [];
@@ -163,7 +163,7 @@ class DataManager extends \Chamilo\Libraries\Storage\DataManager\DataManager
 
         return self::retrieves(
             RightsLocationEntityRight::class,
-            new DataClassRetrievesParameters($condition, null, null, new OrderBy(array($order)))
+            new DataClassRetrievesParameters(condition: $condition, orderBy: new OrderBy([$order]))
         );
     }
 }

@@ -178,7 +178,7 @@ class MigrationService
 
         return $this->contentObjectRepository->findAll(
             ComplexContentObjectItem::class, new DataClassRetrievesParameters(
-                $condition, null, null, new OrderBy(array(
+                condition: $condition, count: null, offset: null, orderBy: new OrderBy(array(
                         new OrderProperty(
                             new PropertyConditionVariable(
                                 ComplexContentObjectItem::class, ComplexContentObjectItem::PROPERTY_DISPLAY_ORDER

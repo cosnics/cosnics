@@ -137,8 +137,10 @@ class ImpactViewTableRenderer extends DataClassListTableRenderer implements Tabl
 
         $toolbar->add_item(
             new ToolbarItem(
-                $translator->trans('Preview', [], StringUtilities::LIBRARIES), new FontAwesomeGlyph('desktop'),
-                $this->getContentObjectPreviewUrl($contentObject), ToolbarItem::DISPLAY_ICON, false, null, null, null, [
+                label: $translator->trans('Preview', [], StringUtilities::LIBRARIES), image: new FontAwesomeGlyph(
+                'desktop'
+            ), href: $this->getContentObjectPreviewUrl($contentObject), display: ToolbarItem::DISPLAY_ICON,
+                extraAttributes: [
                     'onclick' => 'javascript:openPopup(\'' .
                         addslashes($this->getContentObjectPreviewUrl($contentObject)) . '\');return false;'
                 ]

@@ -34,14 +34,14 @@ class XmlPublicationsTreeFeedComponent extends Manager
 
         $categories_tree = DataManager::retrieves(
             ContentObjectPublicationCategory::class, new DataClassRetrievesParameters(
-                $condition, null, null, new OrderBy([
-                    new OrderProperty(
-                        new PropertyConditionVariable(
-                            ContentObjectPublicationCategory::class,
-                            ContentObjectPublicationCategory::PROPERTY_DISPLAY_ORDER
-                        )
+                condition: $condition, orderBy: new OrderBy([
+                new OrderProperty(
+                    new PropertyConditionVariable(
+                        ContentObjectPublicationCategory::class,
+                        ContentObjectPublicationCategory::PROPERTY_DISPLAY_ORDER
                     )
-                ])
+                )
+            ])
             )
         );
 

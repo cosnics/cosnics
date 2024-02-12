@@ -199,9 +199,9 @@ class BrowserComponent extends Manager
     protected function getWorkspacesForUser()
     {
         return $this->getWorkspaceService()->getWorkspacesForUser(
-            $this->getUser(), RightsService::RIGHT_USE, null, null, new OrderBy(
-                [new OrderProperty(new PropertyConditionVariable(Workspace::class, Workspace::PROPERTY_NAME))]
-            )
+            user: $this->getUser(), right: RightsService::RIGHT_USE, orderProperty: new OrderBy(
+            [new OrderProperty(new PropertyConditionVariable(Workspace::class, Workspace::PROPERTY_NAME))]
+        )
         );
     }
 

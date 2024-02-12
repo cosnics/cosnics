@@ -27,6 +27,20 @@ use Doctrine\Common\Collections\ArrayCollection;
 abstract class AssignmentEphorusRepository extends CommonDataClassRepository
 {
     /**
+     * @param \Chamilo\Libraries\Storage\Query\Condition\Condition $condition
+     *
+     * @return int
+     */
+    public function countAssignmentEntriesWithRequests(Condition $condition = null)
+    {
+        $entryClassName = $this->getEntryClassName();
+
+        return $this->dataClassRepository->count(
+            $entryClassName, new DataClassCountParameters($condition, $this->getAssignmentRequestJoins())
+        );
+    }
+
+    /**
      * @param \Chamilo\Libraries\Storage\Parameters\RecordRetrievesParameters $recordRetrievesParameters
      *
      * @return ContentObject[] | ArrayCollection
@@ -80,20 +94,6 @@ abstract class AssignmentEphorusRepository extends CommonDataClassRepository
     }
 
     /**
-     * @param \Chamilo\Libraries\Storage\Query\Condition\Condition $condition
-     *
-     * @return int
-     */
-    public function countAssignmentEntriesWithRequests(Condition $condition = null)
-    {
-        $entryClassName = $this->getEntryClassName();
-
-        return $this->dataClassRepository->count(
-            $entryClassName, new DataClassCountParameters($condition, $this->getAssignmentRequestJoins())
-        );
-    }
-
-    /**
      * @param int[] $entryIds
      *
      * @param \Chamilo\Libraries\Storage\Query\Condition\Condition|null $condition
@@ -111,8 +111,7 @@ abstract class AssignmentEphorusRepository extends CommonDataClassRepository
             $conditions[] = $condition;
         }
 
-        $conditions[] =
-            new InCondition(new PropertyConditionVariable($entryClassName, Entry::PROPERTY_ID), $entryIds);
+        $conditions[] = new InCondition(new PropertyConditionVariable($entryClassName, Entry::PROPERTY_ID), $entryIds);
 
         $condition = new AndCondition($conditions);
 
@@ -120,8 +119,7 @@ abstract class AssignmentEphorusRepository extends CommonDataClassRepository
 
         $joins->add(
             new Join(
-                $this->getEntryClassName(),
-                new AndCondition(
+                $this->getEntryClassName(), new AndCondition(
                     [
                         new EqualityCondition(
                             new PropertyConditionVariable(Request::class, Request::PROPERTY_CONTENT_OBJECT_ID),
@@ -137,7 +135,9 @@ abstract class AssignmentEphorusRepository extends CommonDataClassRepository
         );
 
         return $this->dataClassRepository->retrieves(
-            Request::class, new DataClassRetrievesParameters($condition, null, null, null, $joins)
+            Request::class, new DataClassRetrievesParameters(
+                condition: $condition, joins: $joins
+            )
         );
     }
 
@@ -152,8 +152,7 @@ abstract class AssignmentEphorusRepository extends CommonDataClassRepository
 
         $joins->add(
             new Join(
-                ContentObject::class,
-                new EqualityCondition(
+                ContentObject::class, new EqualityCondition(
                     new PropertyConditionVariable(ContentObject::class, ContentObject::PROPERTY_ID),
                     new PropertyConditionVariable($entryClassName, Entry::PROPERTY_CONTENT_OBJECT_ID)
                 )
@@ -162,8 +161,7 @@ abstract class AssignmentEphorusRepository extends CommonDataClassRepository
 
         $joins->add(
             new Join(
-                User::class,
-                new EqualityCondition(
+                User::class, new EqualityCondition(
                     new PropertyConditionVariable(User::class, User::PROPERTY_ID),
                     new PropertyConditionVariable($entryClassName, Entry::PROPERTY_USER_ID)
                 )
@@ -172,8 +170,7 @@ abstract class AssignmentEphorusRepository extends CommonDataClassRepository
 
         $joins->add(
             new Join(
-                Request::class,
-                new AndCondition(
+                Request::class, new AndCondition(
                     [
                         new EqualityCondition(
                             new PropertyConditionVariable(Request::class, Request::PROPERTY_CONTENT_OBJECT_ID),
@@ -184,8 +181,7 @@ abstract class AssignmentEphorusRepository extends CommonDataClassRepository
                             new PropertyConditionVariable($entryClassName, Entry::PROPERTY_USER_ID)
                         )
                     ]
-                ),
-                Join::TYPE_LEFT
+                ), Join::TYPE_LEFT
             )
         );
 

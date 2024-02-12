@@ -48,7 +48,9 @@ class UserRoleRepository extends DataManagerRepository implements UserRoleReposi
         );
 
         return $this->getDataClassRepository()->retrieves(
-            Role::class, new DataClassRetrievesParameters($this->getConditionForUser($userId), null, null, null, $joins)
+            Role::class, new DataClassRetrievesParameters(
+                condition: $this->getConditionForUser($userId), joins: $joins
+            )
         );
     }
 
@@ -83,7 +85,9 @@ class UserRoleRepository extends DataManagerRepository implements UserRoleReposi
         );
 
         return $this->getDataClassRepository()->retrieves(
-            User::class, new DataClassRetrievesParameters($this->getConditionForRole($roleId), null, null, null, $joins)
+            User::class, new DataClassRetrievesParameters(
+                condition: $this->getConditionForRole($roleId), joins: $joins
+            )
         );
     }
 

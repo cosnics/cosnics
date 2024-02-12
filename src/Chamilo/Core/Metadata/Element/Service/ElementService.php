@@ -122,8 +122,8 @@ class ElementService
 
         return DataManager::retrieves(
             Vocabulary::class, new DataClassRetrievesParameters(
-                $this->getElementInstanceConditionForSchemaInstanceAndElement($schemaInstance, $element), null, null,
-                null, $join
+                condition: $this->getElementInstanceConditionForSchemaInstanceAndElement($schemaInstance, $element),
+                joins: $join
             )
         );
     }
@@ -191,11 +191,11 @@ class ElementService
 
         return DataManager::retrieves(
             Element::class, new DataClassRetrievesParameters(
-                $condition, null, null, new OrderBy(array(
-                        new OrderProperty(
-                            new PropertyConditionVariable(Element::class, Element::PROPERTY_DISPLAY_ORDER)
-                        )
-                    ))
+                condition: $condition, orderBy: new OrderBy([
+                new OrderProperty(
+                    new PropertyConditionVariable(Element::class, Element::PROPERTY_DISPLAY_ORDER)
+                )
+            ])
             )
         );
     }

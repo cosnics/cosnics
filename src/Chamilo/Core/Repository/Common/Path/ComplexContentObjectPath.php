@@ -92,7 +92,9 @@ abstract class ComplexContentObjectPath
                     ComplexContentObjectItem::class, ComplexContentObjectItem::PROPERTY_DISPLAY_ORDER
                 ), SORT_ASC
             );
-            $parameters = new DataClassRetrievesParameters($condition, null, null, new OrderBy([$order]));
+            $parameters = new DataClassRetrievesParameters(
+                condition: $condition, orderBy: new OrderBy([$order])
+            );
 
             $complex_content_object_items = DataManager::retrieve_complex_content_object_items(
                 ComplexContentObjectItem::class, $parameters

@@ -27,7 +27,7 @@ use Chamilo\Libraries\Storage\Query\Variable\StaticConditionVariable;
  */
 class DataManager extends \Chamilo\Libraries\Storage\DataManager\DataManager
 {
-    const PREFIX = 'rights_';
+    public const PREFIX = 'rights_';
 
     // TODO: Fix DataManager implementation (retrieve_granted_rights_array)
     // DONE
@@ -53,17 +53,17 @@ class DataManager extends \Chamilo\Libraries\Storage\DataManager\DataManager
 
         $join = new Join($context_entity_right, new AndCondition($join_conditions));
 
-        $joins = new Joins(array($join));
+        $joins = new Joins([$join]);
 
         $parameters = new DataClassCountParameters(
             $condition, $joins, new RetrieveProperties(
-                array(
+                [
                     new FunctionConditionVariable(
                         FunctionConditionVariable::DISTINCT, new PropertyConditionVariable(
                             $context_location, $context_location::PROPERTY_IDENTIFIER
                         )
                     )
-                )
+                ]
             )
         );
 
@@ -175,7 +175,7 @@ class DataManager extends \Chamilo\Libraries\Storage\DataManager\DataManager
 
         $join = new Join(
             $context_entity_right, new AndCondition(
-                array(
+                [
                     new EqualityCondition(
                         new PropertyConditionVariable($context_location, $context_location::PROPERTY_ID),
                         new StaticConditionVariable($location->get_id())
@@ -186,13 +186,15 @@ class DataManager extends \Chamilo\Libraries\Storage\DataManager\DataManager
                             $context_entity_right, $context_entity_right::PROPERTY_LOCATION_ID
                         ), new PropertyConditionVariable($context_location, $context_location::PROPERTY_ID)
                     )
-                )
+                ]
             )
         );
 
-        $joins = new Joins(array($join));
+        $joins = new Joins([$join]);
 
-        $parameters = new RecordRetrievesParameters($properties, $entities_condition, null, null, null, $joins);
+        $parameters = new RecordRetrievesParameters(
+            retrieveProperties: $properties, condition: $entities_condition, joins: $joins
+        );
         $result_set = $context_dm::records($context_location, $parameters);
 
         $granted_rights = [];
@@ -258,7 +260,7 @@ class DataManager extends \Chamilo\Libraries\Storage\DataManager\DataManager
 
             $parameters = new DataClassDistinctParameters(
                 $condition, new RetrieveProperties(
-                array(new PropertyConditionVariable($context_location, $context_location::PROPERTY_IDENTIFIER))
+                [new PropertyConditionVariable($context_location, $context_location::PROPERTY_IDENTIFIER)]
             ), $joins
             );
 
@@ -277,7 +279,7 @@ class DataManager extends \Chamilo\Libraries\Storage\DataManager\DataManager
             ]);
             $parameters = new DataClassDistinctParameters(
                 $inheriting_condition, new RetrieveProperties(
-                    array(new PropertyConditionVariable($context_location, $context_location::PROPERTY_IDENTIFIER))
+                    [new PropertyConditionVariable($context_location, $context_location::PROPERTY_IDENTIFIER)]
                 )
             );
             $inheriting_identifiers = $context_dm::distinct($context_location, $parameters);
@@ -292,7 +294,7 @@ class DataManager extends \Chamilo\Libraries\Storage\DataManager\DataManager
                 )
             );
 
-            $joins = new Joins(array($join));
+            $joins = new Joins([$join]);
 
             $non_inheriting_conditions = [];
             $non_inheriting_conditions[] = $condition;
@@ -309,7 +311,7 @@ class DataManager extends \Chamilo\Libraries\Storage\DataManager\DataManager
 
             $parameters = new DataClassDistinctParameters(
                 new AndCondition($non_inheriting_conditions), new RetrieveProperties(
-                array(new PropertyConditionVariable($context_location, $context_location::PROPERTY_IDENTIFIER))
+                [new PropertyConditionVariable($context_location, $context_location::PROPERTY_IDENTIFIER)]
             ), $joins
             );
 
@@ -394,7 +396,7 @@ class DataManager extends \Chamilo\Libraries\Storage\DataManager\DataManager
 
         $join = new Join($context_entity_right, new AndCondition($join_conditions));
 
-        $joins = new Joins(array($join));
+        $joins = new Joins([$join]);
 
         $parameters = new RecordRetrievesParameters($properties, $condition, $max_objects, $offset, null, $joins);
 
@@ -613,7 +615,7 @@ class DataManager extends \Chamilo\Libraries\Storage\DataManager\DataManager
 
         if (!is_array($rights))
         {
-            $rights = array($rights);
+            $rights = [$rights];
         }
         $conditions[] = new EqualityCondition(
             new PropertyConditionVariable($class_name, RightsLocationEntityRight::PROPERTY_LOCATION_ID),
@@ -626,13 +628,15 @@ class DataManager extends \Chamilo\Libraries\Storage\DataManager\DataManager
         $condition = new AndCondition($conditions);
 
         // order by entity_type to avoid invalid data when looping the rights
-        $order = new OrderBy(array(
+        $order = new OrderBy([
             new OrderProperty(
                 new PropertyConditionVariable($class_name, RightsLocationEntityRight::PROPERTY_ENTITY_TYPE), SORT_ASC
             )
-        ));
+        ]);
 
-        return self::retrieve_rights_location_rights($context, $condition, null, null, $order);
+        return self::retrieve_rights_location_rights(
+            context: $context, condition: $condition, order_by: $order
+        );
     }
 
     // DONE
@@ -685,17 +689,17 @@ class DataManager extends \Chamilo\Libraries\Storage\DataManager\DataManager
 
         $join = new Join(
             $context_entity_right, new AndCondition(
-                array(
+                [
                     new EqualityCondition(
                         new PropertyConditionVariable(
                             $context_entity_right, $context_entity_right::PROPERTY_LOCATION_ID
                         ), new PropertyConditionVariable($context_location, $context_location::PROPERTY_ID)
                     )
-                )
+                ]
             )
         );
 
-        $joins = new Joins(array($join));
+        $joins = new Joins([$join]);
 
         $condition = new EqualityCondition(
             new PropertyConditionVariable($context_location, $context_location::PROPERTY_ID),
@@ -714,7 +718,9 @@ class DataManager extends \Chamilo\Libraries\Storage\DataManager\DataManager
             $condition = new AndCondition($conditions);
         }
 
-        $parameters = new RecordRetrievesParameters($properties, $condition, null, null, null, $joins);
+        $parameters = new RecordRetrievesParameters(
+            retrieveProperties: $properties, condition: $condition, joins: $joins
+        );
         $result_set = $context_dm::records($context_location, $parameters);
 
         $target_entities = [];

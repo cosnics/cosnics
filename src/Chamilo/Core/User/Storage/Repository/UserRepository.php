@@ -267,7 +267,8 @@ class UserRepository implements UserRepositoryInterface
 
         return $this->getDataClassRepository()->records(
             Setting::class, new RecordRetrievesParameters(
-                new RetrieveProperties($retrieveProperties), $condition, null, null, null, new Joins([$join])
+                retrieveProperties: new RetrieveProperties($retrieveProperties), condition: $condition,
+                joins: new Joins([$join])
             )
         );
     }
@@ -436,7 +437,9 @@ class UserRepository implements UserRepositoryInterface
             new InCondition(new PropertyConditionVariable(User::class, DataClass::PROPERTY_ID), $userIdentifiers);
 
         return $this->getDataClassRepository()->retrieves(
-            User::class, new DataClassRetrievesParameters($condition, null, null, $orderBy)
+            User::class, new DataClassRetrievesParameters(
+                condition: $condition, orderBy: $orderBy
+            )
         );
     }
 
@@ -516,6 +519,11 @@ class UserRepository implements UserRepositoryInterface
         return $this->searchQueryConditionGenerator;
     }
 
+    public function setSearchQueryConditionGenerator(SearchQueryConditionGenerator $searchQueryConditionGenerator): void
+    {
+        $this->searchQueryConditionGenerator = $searchQueryConditionGenerator;
+    }
+
     protected function getUserConditionForSearchQuery(string $searchQuery = null): AndCondition
     {
         $conditions = [];
@@ -554,11 +562,6 @@ class UserRepository implements UserRepositoryInterface
             new InCondition(new PropertyConditionVariable(User::class, DataClass::PROPERTY_ID), $userIdentifiers);
 
         return new AndCondition($conditions);
-    }
-
-    public function setSearchQueryConditionGenerator(SearchQueryConditionGenerator $searchQueryConditionGenerator): void
-    {
-        $this->searchQueryConditionGenerator = $searchQueryConditionGenerator;
     }
 
     /**

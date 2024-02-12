@@ -206,11 +206,11 @@ class ForumViewerComponent extends Manager implements BreadcrumbLessComponentInt
         $orderBy = OrderBy::generate(ComplexContentObjectItem::class, ComplexContentObjectItem::PROPERTY_ADD_DATE);
 
         $parameters = new DataClassRetrievesParameters(
-            new EqualityCondition(
+            condition: new EqualityCondition(
                 new PropertyConditionVariable(
                     ComplexContentObjectItem::class, ComplexContentObjectItem::PROPERTY_PARENT
                 ), new StaticConditionVariable($this->getForum()->get_id())
-            ), null, null, $orderBy
+            ), orderBy: $orderBy
         );
 
         $children = \Chamilo\Core\Repository\Storage\DataManager::retrieve_complex_content_object_items(

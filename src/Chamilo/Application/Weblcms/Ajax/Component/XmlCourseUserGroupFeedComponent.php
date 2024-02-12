@@ -210,7 +210,9 @@ class XmlCourseUserGroupFeedComponent extends Manager
             ];
 
             $user_result_set = DataManager::retrieves(
-                User::class, new DataClassRetrievesParameters($user_condition, null, null, new OrderBy($order))
+                User::class, new DataClassRetrievesParameters(
+                    condition: $user_condition, orderBy: new OrderBy($order)
+                )
             );
 
             $users = [];
@@ -225,11 +227,11 @@ class XmlCourseUserGroupFeedComponent extends Manager
 
                 $group_result_set = DataManager::retrieves(
                     CourseGroup::class, new DataClassRetrievesParameters(
-                        $group_condition, null, null, new OrderBy([
-                            new OrderProperty(
-                                new PropertyConditionVariable(CourseGroup::class, CourseGroup::PROPERTY_NAME)
-                            )
-                        ])
+                        condition: $group_condition, orderBy: new OrderBy([
+                        new OrderProperty(
+                            new PropertyConditionVariable(CourseGroup::class, CourseGroup::PROPERTY_NAME)
+                        )
+                    ])
                     )
                 );
 

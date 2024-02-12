@@ -46,7 +46,7 @@ class ExporterComponent extends Manager
 
         if ($fileType)
         {
-            $users = $this->getUserService()->findUsers(null, null, 10);
+            $users = $this->getUserService()->findUsers(count: 10);
 
             $data = [];
 

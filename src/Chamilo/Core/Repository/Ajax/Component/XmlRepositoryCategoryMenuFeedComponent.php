@@ -24,11 +24,11 @@ class XmlRepositoryCategoryMenuFeedComponent extends Manager
             new StaticConditionVariable($parent_id)
         );
         $categories_tree = DataManager::retrieve_categories(
-            $condition, null, null, new OrderBy([
-                new OrderProperty(
-                    new PropertyConditionVariable(RepositoryCategory::class, RepositoryCategory::PROPERTY_NAME)
-                )
-            ])
+            condition: $condition, orderBy: new OrderBy([
+            new OrderProperty(
+                new PropertyConditionVariable(RepositoryCategory::class, RepositoryCategory::PROPERTY_NAME)
+            )
+        ])
         );
 
         header('Content-Type: text/xml');

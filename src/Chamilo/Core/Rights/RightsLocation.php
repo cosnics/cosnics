@@ -43,7 +43,8 @@ abstract class RightsLocation extends NestedSet
      */
     public function clear_right($right_id)
     {
-        return DataManager::delete_rights_location_entity_rights($this, null, null, $right_id);
+        return DataManager::delete_rights_location_entity_rights(
+            location: $this, right_id: $right_id);
     }
 
     /**

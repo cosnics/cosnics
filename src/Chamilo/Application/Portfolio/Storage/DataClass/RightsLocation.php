@@ -40,7 +40,9 @@ class RightsLocation extends \Chamilo\Core\Rights\RightsLocation
      */
     public function clear_right($right_id)
     {
-        return DataManager::delete_rights_location_entity_rights($this, null, null, $right_id);
+        return DataManager::delete_rights_location_entity_rights(
+            location: $this, right_id: $right_id
+        );
     }
 
     /**
@@ -84,6 +86,14 @@ class RightsLocation extends \Chamilo\Core\Rights\RightsLocation
     }
 
     /**
+     * @param ComplexContentObjectPathNode $node
+     */
+    public function set_node(ComplexContentObjectPathNode $node)
+    {
+        $this->node = $node;
+    }
+
+    /**
      * @return string
      */
     public function get_node_id()
@@ -97,6 +107,14 @@ class RightsLocation extends \Chamilo\Core\Rights\RightsLocation
     }
 
     /**
+     * @param string $parent_id
+     */
+    public function set_parent_id($parent_id)
+    {
+        $this->parent_id = $parent_id;
+    }
+
+    /**
      * @return int
      */
     public function get_publication_id()
@@ -105,27 +123,11 @@ class RightsLocation extends \Chamilo\Core\Rights\RightsLocation
     }
 
     /**
-     * @param ComplexContentObjectPathNode $node
-     */
-    public function set_node(ComplexContentObjectPathNode $node)
-    {
-        $this->node = $node;
-    }
-
-    /**
      * @param string $node_id
      */
     public function set_node_id($node_id)
     {
         $this->setDefaultProperty(self::PROPERTY_NODE_ID, $node_id);
-    }
-
-    /**
-     * @param string $parent_id
-     */
-    public function set_parent_id($parent_id)
-    {
-        $this->parent_id = $parent_id;
     }
 
     /**

@@ -40,15 +40,15 @@ use Chamilo\Libraries\Storage\Query\Variable\StaticConditionVariable;
  */
 abstract class AssignmentRepository
 {
-    const AVERAGE_SCORE = 'average_score';
+    public const AVERAGE_SCORE = 'average_score';
 
-    const ENTRIES_COUNT = 'entries_count';
+    public const ENTRIES_COUNT = 'entries_count';
 
-    const LAST_ENTRY_SUBMITTED_DATE = 'last_entry_submitted_date';
+    public const LAST_ENTRY_SUBMITTED_DATE = 'last_entry_submitted_date';
 
-    const MAXIMUM_SCORE = 'maximum_score';
+    public const MAXIMUM_SCORE = 'maximum_score';
 
-    const MINIMUM_SCORE = 'minimum_score';
+    public const MINIMUM_SCORE = 'minimum_score';
 
     /**
      * @var \Chamilo\Libraries\Storage\DataManager\Repository\DataClassRepository
@@ -82,7 +82,7 @@ abstract class AssignmentRepository
 
     /**
      *
-     * @param integer $entityType
+     * @param int $entityType
      *
      * @param \Chamilo\Libraries\Storage\Query\Condition\Condition|null $condition
      *
@@ -105,7 +105,7 @@ abstract class AssignmentRepository
     /**
      *
      * @param \Chamilo\Core\Repository\ContentObject\Assignment\Storage\DataClass\Assignment $assignment
-     * @param integer $entityType
+     * @param int $entityType
      *
      * @param \Chamilo\Libraries\Storage\Query\Condition\Condition|null $condition
      *
@@ -136,8 +136,8 @@ abstract class AssignmentRepository
 
     /**
      *
-     * @param integer $entityType
-     * @param integer $entityId
+     * @param int $entityType
+     * @param int $entityId
      * @param \Chamilo\Libraries\Storage\Query\Condition\Condition|null $condition
      *
      * @return int
@@ -180,7 +180,7 @@ abstract class AssignmentRepository
 
     /**
      *
-     * @param integer $entityType
+     * @param int $entityType
      * @param \Chamilo\Libraries\Storage\Query\Condition\Condition|null $condition
      *
      * @return int
@@ -194,11 +194,11 @@ abstract class AssignmentRepository
 
     /**
      *
-     * @param integer $entityType
-     * @param integer $entityId
+     * @param int $entityType
+     * @param int $entityId
      * @param \Chamilo\Libraries\Storage\Query\Condition\Condition $condition
      *
-     * @return integer
+     * @return int
      */
     protected function countEntriesByEntityTypeAndId($entityType, $entityId, Condition $condition = null)
     {
@@ -282,8 +282,8 @@ abstract class AssignmentRepository
     /**
      *
      * @param \Chamilo\Core\Repository\ContentObject\Assignment\Storage\DataClass\Assignment $assignment
-     * @param integer $entityType
-     * @param integer $entityId
+     * @param int $entityType
+     * @param int $entityId
      *
      * @param \Chamilo\Libraries\Storage\Query\Condition\Condition|null $condition
      *
@@ -441,8 +441,8 @@ abstract class AssignmentRepository
 
     /**
      *
-     * @param integer $entityType
-     * @param integer[] $entityIdentifiers
+     * @param int $entityType
+     * @param int $entityIdentifiers
      *
      * @param \Chamilo\Libraries\Storage\Query\Condition\Condition $condition
      *
@@ -552,7 +552,9 @@ abstract class AssignmentRepository
         );
 
         return $this->dataClassRepository->retrieves(
-            $this->getEntryAttachmentClassName(), new DataClassRetrievesParameters($condition, null, null, null, $joins)
+            $this->getEntryAttachmentClassName(), new DataClassRetrievesParameters(
+                condition: $condition, joins: $joins
+            )
         );
     }
 
@@ -625,8 +627,9 @@ abstract class AssignmentRepository
         );
 
         return $this->dataClassRepository->records(
-            $this->getEntryClassName(),
-            new RecordRetrievesParameters($retrieveProperties, $condition, null, null, null, $joins, $groupBy)
+            $this->getEntryClassName(), new RecordRetrievesParameters(
+                retrieveProperties: $retrieveProperties, condition: $condition, joins: $joins, groupBy: $groupBy
+            )
         );
     }
 
@@ -660,18 +663,18 @@ abstract class AssignmentRepository
         $condition = $this->getEntityTypeAndIdCondition($entityType, $entityIdentifier, $condition);
 
         $retrieveParameters = new DataClassRetrieveParameters(
-            $condition, new OrderBy(array(
+            $condition, new OrderBy([
                 new OrderProperty(
                     new PropertyConditionVariable($this->getEntryClassName(), Entry::PROPERTY_SUBMITTED), SORT_DESC
                 )
-            ))
+            ])
         );
 
         return $this->dataClassRepository->retrieve($this->getEntryClassName(), $retrieveParameters);
     }
 
     /**
-     * @param integer $scoreIdentifier
+     * @param int $scoreIdentifier
      *
      * @return Score|DataClass
      */
@@ -681,11 +684,11 @@ abstract class AssignmentRepository
     }
 
     /**
-     * @param integer $entityType
+     * @param int $entityType
      * @param Condition $condition
      * @param \Chamilo\Libraries\Storage\Query\Condition\Condition $joinCondition
-     * @param integer $offset
-     * @param integer $count
+     * @param int $offset
+     * @param int $count
      * @param \Chamilo\Libraries\Storage\Query\OrderBy $orderBy
      * @param RetrieveProperties $properties
      * @param string $baseClass
@@ -755,11 +758,11 @@ abstract class AssignmentRepository
     }
 
     /**
-     * @param integer $entityType
+     * @param int $entityType
      * @param Condition $condition
      * @param \Chamilo\Libraries\Storage\Query\Condition\Condition $joinCondition
-     * @param integer $offset
-     * @param integer $count
+     * @param int $offset
+     * @param int $count
      * @param \Chamilo\Libraries\Storage\Query\OrderBy $orderBy
      * @param RetrieveProperties $properties
      * @param string $baseClass
@@ -812,7 +815,7 @@ abstract class AssignmentRepository
 
     /**
      *
-     * @param integer $entityType
+     * @param int $entityType
      * @param $entityId
      *
      * @param \Chamilo\Libraries\Storage\Query\Condition\Condition|null $condition
@@ -839,7 +842,7 @@ abstract class AssignmentRepository
 
     /**
      *
-     * @param integer $entityType
+     * @param int $entityType
      * @param \Chamilo\Libraries\Storage\Query\Condition\Condition|null $condition
      *
      * @return \Chamilo\Libraries\Storage\Query\Condition\AndCondition
@@ -906,8 +909,8 @@ abstract class AssignmentRepository
 
     /**
      *
-     * @param integer $entityType
-     * @param integer $entityId
+     * @param int $entityType
+     * @param int $entityId
      *
      * @param \Chamilo\Libraries\Storage\Query\Condition\Condition $condition
      *
@@ -946,7 +949,7 @@ abstract class AssignmentRepository
 
     /**
      *
-     * @param integer[] $entryIdentifiers []
+     * @param int $entryIdentifiers []
      *
      * @return \Doctrine\Common\Collections\ArrayCollection
      */
@@ -963,11 +966,11 @@ abstract class AssignmentRepository
 
     /**
      *
-     * @param integer $entityType
-     * @param integer $entityId
+     * @param int $entityType
+     * @param int $entityId
      * @param \Chamilo\Libraries\Storage\Query\Condition\Condition $condition
-     * @param integer $offset
-     * @param integer $count
+     * @param int $offset
+     * @param int $count
      * @param \Chamilo\Libraries\Storage\Query\OrderBy $orderProperty
      *
      * @return \Doctrine\Common\Collections\ArrayCollection
@@ -1032,7 +1035,7 @@ abstract class AssignmentRepository
 
     /**
      *
-     * @param integer $entryIdentifier
+     * @param int $entryIdentifier
      *
      * @return \Chamilo\Core\Repository\ContentObject\Assignment\Display\Bridge\Storage\DataClass\Entry|\Chamilo\Libraries\Storage\DataClass\DataClass
      */
@@ -1043,8 +1046,8 @@ abstract class AssignmentRepository
 
     /**
      *
-     * @param integer $entityType
-     * @param integer $entityId
+     * @param int $entityType
+     * @param int $entityId
      *
      * @param \Chamilo\Libraries\Storage\Query\Condition\Condition $condition
      *
@@ -1067,11 +1070,11 @@ abstract class AssignmentRepository
         $properties->add(new PropertyConditionVariable($this->getScoreClassName(), Score::PROPERTY_SCORE));
 
         $parameters = new RecordRetrieveParameters(
-            $properties, $this->getEntityTypeAndIdCondition($entityType, $entityId, $condition), new OrderBy(array(
-                new OrderProperty(
-                    new PropertyConditionVariable($this->getEntryClassName(), Entry::PROPERTY_SUBMITTED), SORT_DESC
-                )
-            )), $joins
+            $properties, $this->getEntityTypeAndIdCondition($entityType, $entityId, $condition), new OrderBy([
+            new OrderProperty(
+                new PropertyConditionVariable($this->getEntryClassName(), Entry::PROPERTY_SUBMITTED), SORT_DESC
+            )
+        ]), $joins
         );
 
         $record = $this->dataClassRepository->record($this->getEntryClassName(), $parameters);

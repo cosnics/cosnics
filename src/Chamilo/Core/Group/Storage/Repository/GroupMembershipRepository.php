@@ -248,7 +248,8 @@ class GroupMembershipRepository
 
         return $this->getDataClassRepository()->retrieves(
             SubscribedUser::class, new DataClassRetrievesParameters(
-                $condition, $count, $offset, $orderBy, $joins, null, null, $retrieveProperties
+                condition: $condition, count: $count, offset: $offset, orderBy: $orderBy, joins: $joins,
+                retrieveProperties: $retrieveProperties
             )
         );
     }

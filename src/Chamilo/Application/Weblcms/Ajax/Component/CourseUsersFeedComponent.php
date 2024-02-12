@@ -166,16 +166,15 @@ class CourseUsersFeedComponent extends Manager
 
         $groups = \Chamilo\Application\Weblcms\Course\Storage\DataManager::retrieves(
             Group::class, new DataClassRetrievesParameters(
-                new AndCondition($groupConditions), null, null, null, new Joins(
-                    new Join(
-                        CourseEntityRelation::class, new EqualityCondition(
-                            new PropertyConditionVariable(Group::class, Group::PROPERTY_ID),
-                            new PropertyConditionVariable(
-                                CourseEntityRelation::class, CourseEntityRelation::PROPERTY_ENTITY_ID
-                            )
+                condition: new AndCondition($groupConditions), joins: new Joins(
+                new Join(
+                    CourseEntityRelation::class, new EqualityCondition(
+                        new PropertyConditionVariable(Group::class, Group::PROPERTY_ID), new PropertyConditionVariable(
+                            CourseEntityRelation::class, CourseEntityRelation::PROPERTY_ENTITY_ID
                         )
                     )
                 )
+            )
             )
         );
 
@@ -230,8 +229,7 @@ class CourseUsersFeedComponent extends Manager
         {
             $condition = $conditions[0];
         }
-        $this->user_count =
-            DataManager::count(User::class, new DataClassCountParameters($condition));
+        $this->user_count = DataManager::count(User::class, new DataClassCountParameters($condition));
 
         $parameters = new DataClassRetrievesParameters(
             $condition, 100, $this->get_offset(), new OrderBy([

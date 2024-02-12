@@ -46,7 +46,7 @@ class RightsRepository
      *
      * @param \Chamilo\Application\Portfolio\Storage\DataClass\RightsLocationEntityRight $locationEntityRight
      *
-     * @return boolean
+     * @return bool
      */
     public function createRightsLocationEntityRight(RightsLocationEntityRight $locationEntityRight)
     {
@@ -55,11 +55,11 @@ class RightsRepository
 
     /**
      *
-     * @param integer $right
-     * @param integer $entityId
-     * @param integer $entityType
+     * @param int $right
+     * @param int $entityId
+     * @param int $entityType
      * @param string $locationId
-     * @param integer $publicationId
+     * @param int $publicationId
      *
      * @return \Chamilo\Application\Portfolio\Storage\DataClass\RightsLocationEntityRight
      */
@@ -103,7 +103,7 @@ class RightsRepository
     /**
      *
      * @param \Chamilo\Application\Portfolio\Storage\DataClass\RightsLocation $location
-     * @param integer[] $rights
+     * @param int $rights
      *
      * @return \Chamilo\Application\Portfolio\Storage\DataClass\RightsLocationEntityRight[]
      */
@@ -136,8 +136,9 @@ class RightsRepository
         );
 
         return $this->getDataClassRepository()->retrieves(
-            RightsLocationEntityRight::class,
-            new DataClassRetrievesParameters($condition, null, null, new OrderBy([$order]))
+            RightsLocationEntityRight::class, new DataClassRetrievesParameters(
+                condition: $condition, orderBy: new OrderBy([$order])
+            )
         );
     }
 
@@ -183,8 +184,8 @@ class RightsRepository
 
     /**
      *
-     * @param integer $publicationIdentifier
-     * @param integer $nodeIdentifier
+     * @param int $publicationIdentifier
+     * @param int $nodeIdentifier
      *
      * @return string[]
      */

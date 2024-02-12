@@ -108,7 +108,9 @@ class PublisherComponent extends Manager implements BreadcrumbLessComponentInter
         $orderBy = OrderBy::generate(ContentObject::class, ContentObject::PROPERTY_ID);
 
         return DataManager::retrieve_content_objects(
-            ContentObject::class, new DataClassRetrievesParameters($condition, null, null, $orderBy)
+            ContentObject::class, new DataClassRetrievesParameters(
+                condition: $condition, orderBy: $orderBy
+            )
         );
     }
 }

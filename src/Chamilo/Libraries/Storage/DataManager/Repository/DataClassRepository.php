@@ -136,7 +136,7 @@ class DataClassRepository
      * @template tInternalRetrievesClass
      *
      * @param class-string<tInternalRetrievesClass> $dataClassName
-     * @param ?\Chamilo\Libraries\Storage\Parameters\DataClassRetrievesParameters $parameters
+     * @param \Chamilo\Libraries\Storage\Parameters\DataClassRetrievesParameters $parameters
      *
      * @return ArrayCollection<tInternalRetrievesClass>
      * @throws \Chamilo\Libraries\Storage\Exception\DataClassNoResultException

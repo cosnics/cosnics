@@ -231,7 +231,7 @@ class RightsService
     ): bool
     {
         return $this->getRightsRepository()->deleteRightsLocationEntityRightsForLocationAndParameters(
-            $rightsLocationEntityRightClassName, $location, null, null, $right
+            rightsLocationEntityRightClassName: $rightsLocationEntityRightClassName, location: $location, right: $right
         );
     }
 
@@ -987,9 +987,9 @@ class RightsService
     /**
      * Returns whether given location or any of its ancestors is in array $location_ids_with_granted_right.
      *
-     * @param string $locationIdentifier                     location we check whether user has access rigth to.
-     * @param string[] $locationParentIdentifiers            mapping of child location ID's onto parent location ID's.
-     * @param string[] $locationIdentifiersWithGrantedRight  All location ID's which user has access rigth to. Keys:
+     * @param string $locationIdentifier location we check whether user has access rigth to.
+     * @param string[] $locationParentIdentifiers mapping of child location ID's onto parent location ID's.
+     * @param string[] $locationIdentifiersWithGrantedRight All location ID's which user has access rigth to. Keys:
      *                                                       location ID's Values: True.
      *
      * @see RightsService::filterLocationIdentifiersByGrantedRight()

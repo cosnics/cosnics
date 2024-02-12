@@ -3,9 +3,9 @@ namespace Chamilo\Core\Rights\Structure\Storage\Repository;
 
 use Chamilo\Core\Rights\Structure\Storage\DataClass\StructureLocation;
 use Chamilo\Core\Rights\Structure\Storage\DataClass\StructureLocationRole;
-use Chamilo\Libraries\Storage\DataManager\DataManager;
 use Chamilo\Core\Rights\Structure\Storage\Repository\Interfaces\StructureLocationRoleRepositoryInterface;
 use Chamilo\Core\User\Roles\Storage\DataClass\Role;
+use Chamilo\Libraries\Storage\DataManager\DataManager;
 use Chamilo\Libraries\Storage\DataManager\Repository\DataManagerRepository;
 use Chamilo\Libraries\Storage\Parameters\DataClassRetrieveParameters;
 use Chamilo\Libraries\Storage\Parameters\RecordRetrievesParameters;
@@ -111,7 +111,9 @@ class StructureLocationRoleRepository extends DataManagerRepository implements S
         );
 
         return DataManager::records(
-            StructureLocation::class, new RecordRetrievesParameters($properties, null, null, null, null, $joins)
+            StructureLocation::class, new RecordRetrievesParameters(
+                retrieveProperties: $properties, joins: $joins
+            )
         );
     }
 }

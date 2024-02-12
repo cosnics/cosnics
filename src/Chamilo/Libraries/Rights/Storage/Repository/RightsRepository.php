@@ -408,7 +408,9 @@ class RightsRepository
         );
 
         return $this->getDataClassRepository()->records(
-            $rightsLocationClassName, new RecordRetrievesParameters($properties, $condition, null, null, null, $joins)
+            $rightsLocationClassName, new RecordRetrievesParameters(
+                retrieveProperties: $properties, condition: $condition, joins: $joins
+            )
         );
     }
 
@@ -489,8 +491,9 @@ class RightsRepository
         $condition = new AndCondition($conditions);
 
         $parameters = new RecordRetrievesParameters(
-            $properties, $condition, null, null, null,
-            $this->getRightsLocationEntityRightJoins($rightsLocationClassName, $rightsLocationEntityRightClassName)
+            retrieveProperties: $properties, condition: $condition, joins: $this->getRightsLocationEntityRightJoins(
+            $rightsLocationClassName, $rightsLocationEntityRightClassName
+        )
         );
 
         return $this->getDataClassRepository()->records($rightsLocationClassName, $parameters);
@@ -807,7 +810,8 @@ class RightsRepository
         );
 
         return $this->findRightsLocationEntityRights(
-            $rightsLocationEntityRightClassName, $condition, null, null, new OrderBy([$orderBy])
+            rightsLocationEntityRightClassName: $rightsLocationEntityRightClassName, condition: $condition,
+            orderBy: new OrderBy([$orderBy])
         );
     }
 

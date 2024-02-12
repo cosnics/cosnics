@@ -181,10 +181,10 @@ class HomeRepository
         );
 
         $parameters = new DataClassRetrievesParameters(
-            new AndCondition($conditions), null, null, new OrderBy([
-                new OrderProperty(new PropertyConditionVariable(Element::class, Element::PROPERTY_TYPE)),
-                new OrderProperty(new PropertyConditionVariable(Element::class, Element::PROPERTY_SORT))
-            ])
+            condition: new AndCondition($conditions), orderBy: new OrderBy([
+            new OrderProperty(new PropertyConditionVariable(Element::class, Element::PROPERTY_TYPE)),
+            new OrderProperty(new PropertyConditionVariable(Element::class, Element::PROPERTY_SORT))
+        ])
         );
 
         return $this->getDataClassRepository()->retrieves(Element::class, $parameters);
@@ -199,7 +199,7 @@ class HomeRepository
     public function findElementsByUserIdentifier(string $userIdentifier): ArrayCollection
     {
         $parameters = new DataClassRetrievesParameters(
-            $this->getElementsByUserIdentifierCondition($userIdentifier), null, null, new OrderBy([
+            condition: $this->getElementsByUserIdentifierCondition($userIdentifier), orderBy: new OrderBy([
                 new OrderProperty(new PropertyConditionVariable(Element::class, Element::PROPERTY_TYPE)),
                 new OrderProperty(new PropertyConditionVariable(Element::class, Element::PROPERTY_SORT))
             ])

@@ -348,7 +348,9 @@ class ContentObjectRepository
             )
         ]);
 
-        $parameters = new DataClassRetrievesParameters(new AndCondition($conditions), null, null, $orderBy);
+        $parameters = new DataClassRetrievesParameters(
+            condition: new AndCondition($conditions), orderBy: $orderBy
+        );
 
         return $this->retrieveContentObjects(get_class($contentObject), $parameters);
     }

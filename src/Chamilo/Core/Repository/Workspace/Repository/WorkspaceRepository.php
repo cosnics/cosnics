@@ -195,8 +195,9 @@ class WorkspaceRepository
     {
         return $this->getDataClassRepository()->retrieves(
             Workspace::class, new DataClassRetrievesParameters(
-                $this->getFavouriteWorkspacesByUserCondition($user, $entities, RightsService::RIGHT_VIEW), $limit,
-                $offset, $orderProperty, $this->getFavouriteWorkspacesByUserJoins(), null, null, new RetrieveProperties(
+                condition: $this->getFavouriteWorkspacesByUserCondition($user, $entities, RightsService::RIGHT_VIEW),
+                count: $limit, offset: $offset, orderBy: $orderProperty,
+                joins: $this->getFavouriteWorkspacesByUserJoins(), retrieveProperties: new RetrieveProperties(
                     [
                         new FunctionConditionVariable(
                             FunctionConditionVariable::DISTINCT, new PropertiesConditionVariable(Workspace::class)

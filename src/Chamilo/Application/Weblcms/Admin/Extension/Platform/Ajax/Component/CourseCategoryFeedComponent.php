@@ -239,11 +239,11 @@ class CourseCategoryFeedComponent extends Manager
 
         return DataManager::retrieves(
             CourseCategory::class, new DataClassRetrievesParameters(
-                $condition, null, null, new OrderBy([
-                    new OrderProperty(
-                        new PropertyConditionVariable(CourseCategory::class, CourseCategory::PROPERTY_NAME)
-                    )
-                ])
+                condition: $condition, orderBy: new OrderBy([
+                new OrderProperty(
+                    new PropertyConditionVariable(CourseCategory::class, CourseCategory::PROPERTY_NAME)
+                )
+            ])
             )
         );
     }

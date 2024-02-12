@@ -168,9 +168,9 @@ class CourseGroupsFeedComponent extends GroupsFeedComponent
 
         return DataManager::retrieves(
             CourseGroup::class, new DataClassRetrievesParameters(
-                $condition, null, null, new OrderBy([
-                    new OrderProperty(new PropertyConditionVariable(CourseGroup::class, CourseGroup::PROPERTY_NAME))
-                ])
+                condition: $condition, orderBy: new OrderBy([
+                new OrderProperty(new PropertyConditionVariable(CourseGroup::class, CourseGroup::PROPERTY_NAME))
+            ])
             )
         );
     }

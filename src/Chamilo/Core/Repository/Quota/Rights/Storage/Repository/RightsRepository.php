@@ -205,8 +205,9 @@ class RightsRepository extends \Chamilo\Libraries\Rights\Storage\Repository\Righ
         );
 
         return $this->getDataClassRepository()->records(
-            RightsLocationEntityRightGroup::class,
-            new RecordRetrievesParameters($retrieveProperties, null, null, null, null, $joins)
+            RightsLocationEntityRightGroup::class, new RecordRetrievesParameters(
+                retrieveProperties: $retrieveProperties, joins: $joins
+            )
         );
     }
 
@@ -241,7 +242,9 @@ class RightsRepository extends \Chamilo\Libraries\Rights\Storage\Repository\Righ
         );
 
         return $this->getDataClassRepository()->retrieves(
-            RightsLocationEntityRight::class, new DataClassRetrievesParameters($condition, null, null, null, $joins)
+            RightsLocationEntityRight::class, new DataClassRetrievesParameters(
+                condition: $condition, orderBy: null, joins: $joins
+            )
         );
     }
 }

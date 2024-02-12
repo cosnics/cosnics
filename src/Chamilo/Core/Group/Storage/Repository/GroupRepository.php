@@ -103,7 +103,7 @@ class GroupRepository
 
         $joins = new Joins([new Join(GroupRelUser::class, new AndCondition($joinConditions))]);
 
-        $parameters = new RecordRetrievesParameters($properties, null, null, null, null, $joins);
+        $parameters = new RecordRetrievesParameters(retrieveProperties: $properties, joins: $joins);
 
         return $this->getNestedSetDataClassRepository()->records(Group::class, $parameters);
     }
@@ -134,7 +134,7 @@ class GroupRepository
 
         $joins = new Joins([$join]);
 
-        $parameters = new DataClassRetrievesParameters(null, null, null, null, $joins);
+        $parameters = new DataClassRetrievesParameters(joins: $joins);
 
         return $this->getNestedSetDataClassRepository()->retrieves(Group::class, $parameters);
     }
@@ -220,7 +220,9 @@ class GroupRepository
             new InCondition(new PropertyConditionVariable(Group::class, DataClass::PROPERTY_ID), $groupIdentifiers);
 
         return $this->getNestedSetDataClassRepository()->retrieves(
-            Group::class, new DataClassRetrievesParameters($condition, null, null, $orderBy)
+            Group::class, new DataClassRetrievesParameters(
+                condition: $condition, orderBy: $orderBy
+            )
         );
     }
 
@@ -256,8 +258,9 @@ class GroupRepository
 
         return $this->getNestedSetDataClassRepository()->retrieves(
             Group::class, new DataClassRetrievesParameters(
-                $condition, null, null,
-                new OrderBy([new OrderProperty(new PropertyConditionVariable(Group::class, Group::PROPERTY_NAME))])
+                condition: $condition, orderBy: new OrderBy(
+                [new OrderProperty(new PropertyConditionVariable(Group::class, Group::PROPERTY_NAME))]
+            )
             )
         );
     }
@@ -294,8 +297,9 @@ class GroupRepository
 
         return $this->getNestedSetDataClassRepository()->retrieves(
             Group::class, new DataClassRetrievesParameters(
-                $condition, null, null,
-                new OrderBy([new OrderProperty(new PropertyConditionVariable(Group::class, Group::PROPERTY_NAME))])
+                condition: $condition, orderBy: new OrderBy(
+                [new OrderProperty(new PropertyConditionVariable(Group::class, Group::PROPERTY_NAME))]
+            )
             )
         );
     }

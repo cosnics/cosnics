@@ -435,8 +435,8 @@ abstract class NestedSet extends DataClass
     {
         return DataManager::retrieves(
             get_class($this), new DataClassRetrievesParameters(
-                $this->build_ancestry_condition($include_self, $condition), null, null,
-                $this->build_post_order_ordering()
+                condition: $this->build_ancestry_condition($include_self, $condition),
+                orderBy: $this->build_post_order_ordering()
             )
         );
     }
@@ -529,7 +529,8 @@ abstract class NestedSet extends DataClass
     {
         return DataManager::retrieves(
             get_class($this), new DataClassRetrievesParameters(
-                $this->build_sibling_condition($include_self, $condition), null, null, $this->build_pre_order_ordering()
+                condition: $this->build_sibling_condition($include_self, $condition),
+                orderBy: $this->build_pre_order_ordering()
             )
         );
     }

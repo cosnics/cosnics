@@ -30,7 +30,7 @@ use Doctrine\Common\Collections\ArrayCollection;
  */
 class DataManager extends \Chamilo\Libraries\Storage\DataManager\DataManager
 {
-    const PREFIX = 'weblcms_';
+    public const PREFIX = 'weblcms_';
 
     public static function entity_is_admin($entity_type, $entity_id)
     {
@@ -194,25 +194,25 @@ class DataManager extends \Chamilo\Libraries\Storage\DataManager\DataManager
             }
 
             $properties = new RetrieveProperties(
-                array(
+                [
                     new PropertiesConditionVariable(
                         Course::class
                     )
-                )
+                ]
             );
 
             $parameters = new RecordRetrievesParameters(
-                $properties, new InCondition(
+                retrieveProperties: $properties, condition: new InCondition(
                 new PropertyConditionVariable(
                     Course::class, Course::PROPERTY_ID
                 ), $course_ids
-            ), null, null, new OrderBy(array(
-                        new OrderProperty(
-                            new PropertyConditionVariable(
-                                Course::class, Course::PROPERTY_TITLE
-                            )
-                        )
-                    ))
+            ), orderBy: new OrderBy([
+                new OrderProperty(
+                    new PropertyConditionVariable(
+                        Course::class, Course::PROPERTY_TITLE
+                    )
+                )
+            ])
             );
 
             return DataManager::records(

@@ -226,8 +226,8 @@ class NestedSetDataClassRepository
     {
         return $this->getDataClassRepository()->retrieves(
             get_class($nestedSet), new DataClassRetrievesParameters(
-                $this->getAncestorsCondition($nestedSet, $includeSelf, $condition), null, null,
-                $this->getPostOrderBy($nestedSet)
+                condition: $this->getAncestorsCondition($nestedSet, $includeSelf, $condition),
+                orderBy: $this->getPostOrderBy($nestedSet)
             )
         );
     }
@@ -271,8 +271,8 @@ class NestedSetDataClassRepository
     {
         return $this->getDataClassRepository()->retrieves(
             get_class($nestedSet), new DataClassRetrievesParameters(
-                $this->getSiblingsCondition($nestedSet, $includeSelf, $condition), null, null,
-                $this->getPreOrderBy($nestedSet)
+                condition: $this->getSiblingsCondition($nestedSet, $includeSelf, $condition),
+                orderBy: $this->getPreOrderBy($nestedSet)
             )
         );
     }

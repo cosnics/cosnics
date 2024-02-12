@@ -69,7 +69,7 @@ class ItemRepository
         $orderBy->add(new OrderProperty(new PropertyConditionVariable(Item::class, Item::PROPERTY_SORT)));
 
         return $this->getDataClassRepository()->retrieves(
-            Item::class, new DataClassRetrievesParameters(null, null, null, $orderBy)
+            Item::class, new DataClassRetrievesParameters(orderBy: $orderBy)
         );
     }
 
@@ -155,7 +155,7 @@ class ItemRepository
 
         return $this->getDataClassRepository()->retrieves(
             Item::class, new DataClassRetrievesParameters(
-                new AndCondition($conditions), null, null, $orderBy
+                condition: new AndCondition($conditions), orderBy: $orderBy
             )
         );
     }
