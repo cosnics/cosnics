@@ -13,14 +13,6 @@ use Symfony\Component\HttpFoundation\JsonResponse;
  */
 abstract class AjaxManager extends Application
 {
-
-    /**
-     * An array of parameters as passed by the POST-request
-     *
-     * @var string[]
-     */
-    private $postDataValues = [];
-
     /**
      * @param \Chamilo\Libraries\Architecture\Application\ApplicationConfigurationInterface $applicationConfiguration
      */
@@ -31,56 +23,19 @@ abstract class AjaxManager extends Application
     }
 
     /**
-     * Returns the value of the given parameter.
-     *
-     * @param string $name
-     *
-     * @return string|string[]
+     * @deprecated Use ChamiloRequest::getFromQueryOrRequest()
      */
-    public function getPostDataValue($name)
+    public function getPostDataValue(string $name): mixed
     {
-        if (array_key_exists($name, $this->postDataValues))
-        {
-            return $this->postDataValues[$name];
-        }
+        return $this->getRequest()->getFromQueryOrRequest($name);
     }
 
     /**
-     * Get the postDataValues
-     *
-     * @return string[]
+     * @deprecated Use ChamiloRequest::getFromQueryOrRequest()
      */
-    public function getPostDataValues()
+    public function getRequestedPostDataValue(string $parameter): mixed
     {
-        return $this->postDataValues;
-    }
-
-    /**
-     * @param string $parameter
-     *
-     * @return string
-     */
-    public function getRequestedPostDataValue($parameter)
-    {
-        $getValue = $this->getRequest()->query->get($parameter);
-
-        if (!isset($getValue))
-        {
-            $postValue = $this->getRequest()->request->get($parameter);
-
-            if (!isset($postValue))
-            {
-                return null;
-            }
-            else
-            {
-                return $postValue;
-            }
-        }
-        else
-        {
-            return $getValue;
-        }
+        return $this->getRequest()->getFromQueryOrRequest($parameter);
     }
 
     /**
@@ -93,12 +48,7 @@ abstract class AjaxManager extends Application
         return $postParameters;
     }
 
-    /**
-     * @param $exception
-     *
-     * @return \Symfony\Component\HttpFoundation\JsonResponse
-     */
-    protected function handleException($exception)
+    protected function handleException($exception): JsonResponse
     {
         $this->getExceptionLogger()->logException($exception);
 
@@ -106,39 +56,13 @@ abstract class AjaxManager extends Application
     }
 
     /**
-     * Sets the value of a parameter.
-     *
-     * @param string $name
-     * @param string $value
-     */
-    public function setPostDataValue($name, $value)
-    {
-        $this->postDataValues[$name] = $value;
-    }
-
-    /**
-     * Set the postDataValues
-     *
-     * @param string[] $postDataValues
-     */
-    public function setPostDataValues($postDataValues)
-    {
-        $this->postDataValues = $postDataValues;
-    }
-
-    /**
      * Validate the AJAX call, if not validated, trigger an HTTP 400 (Bad request) error
      */
-    public function validateRequest()
+    public function validateRequest(): void
     {
         foreach ($this->getRequiredPostParameters() as $parameter)
         {
-            $value = $this->getRequestedPostDataValue($parameter);
-            if (!is_null($value))
-            {
-                $this->setPostDataValue($parameter, $value);
-            }
-            else
+            if (!$this->getRequest()->hasRequestOrQuery($parameter))
             {
                 JsonAjaxResult::bad_request('Invalid Post parameters');
             }

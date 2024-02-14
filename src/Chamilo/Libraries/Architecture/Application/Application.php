@@ -74,7 +74,7 @@ abstract class Application
      *
      * @throws \Chamilo\Libraries\Architecture\Exceptions\NotAllowedException
      */
-    public function checkAuthorization(string $context, ?string $action = null)
+    public function checkAuthorization(string $context, ?string $action = null): void
     {
         if (!$this instanceof NoAuthenticationSupportInterface)
         {

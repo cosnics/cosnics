@@ -680,7 +680,7 @@ EOT;
     }
 
     /**
-     * @param \HTML_QuickForm_element $elements
+     * @param \HTML_QuickForm_element[] $elements
      * @param string $name
      * @param string $groupLabel
      * @param string $separator
