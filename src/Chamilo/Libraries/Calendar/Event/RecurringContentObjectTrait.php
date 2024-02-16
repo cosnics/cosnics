@@ -1,7 +1,6 @@
 <?php
 namespace Chamilo\Libraries\Calendar\Event;
 
-use Chamilo\Core\Repository\Storage\DataClass\ContentObject;
 use Chamilo\Libraries\Translation\Translation;
 use Exception;
 
@@ -9,10 +8,8 @@ use Exception;
  * @package Chamilo\Libraries\Calendar\Event\Recurrence
  * @author  Hans De Bisschop <hans.de.bisschop@ehb.be>
  */
-abstract class RecurringContentObject extends ContentObject
+trait RecurringContentObjectTrait
 {
-    public const CONTEXT = 'Chamilo\Libraries\Calendar';
-
     public const FREQUENCY_BIWEEKLY = 4;
     public const FREQUENCY_DAILY = 1;
     public const FREQUENCY_MONTHLY = 5;
@@ -65,9 +62,6 @@ abstract class RecurringContentObject extends ContentObject
         return $string;
     }
 
-    /**
-     * @throws \Chamilo\Libraries\Storage\Exception\DataClassNoResultException
-     */
     public function frequency_is_indefinately(): bool
     {
         $repeat_to = $this->get_until();
@@ -75,9 +69,8 @@ abstract class RecurringContentObject extends ContentObject
         return ($repeat_to == 0);
     }
 
-    /**
-     * @throws \Chamilo\Libraries\Storage\Exception\DataClassNoResultException
-     */
+    abstract public function getAdditionalProperty(string $name);
+
     public function get_byday(): ?string
     {
         return $this->getAdditionalProperty(self::PROPERTY_BYDAY);
@@ -132,9 +125,6 @@ abstract class RecurringContentObject extends ContentObject
         return $parts;
     }
 
-    /**
-     * @throws \Chamilo\Libraries\Storage\Exception\DataClassNoResultException
-     */
     public function get_bymonth(): ?string
     {
         return $this->getAdditionalProperty(self::PROPERTY_BYMONTH);
@@ -170,9 +160,6 @@ abstract class RecurringContentObject extends ContentObject
         return $translation[$month];
     }
 
-    /**
-     * @throws \Chamilo\Libraries\Storage\Exception\DataClassNoResultException
-     */
     public function get_bymonthday(): ?string
     {
         return $this->getAdditionalProperty(self::PROPERTY_BYMONTHDAY);
@@ -209,9 +196,6 @@ abstract class RecurringContentObject extends ContentObject
         return $translation[$day_number];
     }
 
-    /**
-     * @throws \Chamilo\Libraries\Storage\Exception\DataClassNoResultException
-     */
     public function get_frequency(): ?int
     {
         return $this->getAdditionalProperty(self::PROPERTY_FREQUENCY);
@@ -226,17 +210,11 @@ abstract class RecurringContentObject extends ContentObject
         return self::frequency_as_string($this->get_frequency());
     }
 
-    /**
-     * @throws \Chamilo\Libraries\Storage\Exception\DataClassNoResultException
-     */
     public function get_frequency_count(): ?int
     {
         return $this->getAdditionalProperty(self::PROPERTY_FREQUENCY_COUNT);
     }
 
-    /**
-     * @throws \Chamilo\Libraries\Storage\Exception\DataClassNoResultException
-     */
     public function get_frequency_interval(): ?int
     {
         return $this->getAdditionalProperty(self::PROPERTY_FREQUENCY_INTERVAL);
@@ -286,37 +264,19 @@ abstract class RecurringContentObject extends ContentObject
         return $translation[$rank];
     }
 
-    public function get_type_string(): string
-    {
-        if ($this->has_frequency())
-        {
-            return Translation::getInstance()->getTranslation(
-                'RepeatingCalendarEvent', [], 'Chamilo\Libraries\Calendar'
-            );
-        }
-        else
-        {
-            return parent::get_type_string();
-        }
-    }
-
-    /**
-     * @throws \Chamilo\Libraries\Storage\Exception\DataClassNoResultException
-     */
     public function get_until(): ?int
     {
         return $this->getAdditionalProperty(self::PROPERTY_UNTIL);
     }
 
-    /**
-     * @throws \Chamilo\Libraries\Storage\Exception\DataClassNoResultException
-     */
     public function has_frequency(): bool
     {
         $repeat = $this->get_frequency();
 
         return ($repeat != '0');
     }
+
+    abstract public function setAdditionalProperty(string $name, $value);
 
     public function set_byday(?string $byday)
     {

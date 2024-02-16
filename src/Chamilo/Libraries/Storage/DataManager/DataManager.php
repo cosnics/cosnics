@@ -45,19 +45,6 @@ class DataManager
         return self::getStorageUnitRepository()->alterIndex($type, $storageUnitName, $indexName, $columns);
     }
 
-    /**
-     * @example $displayOrderMapping[$oldDisplayOrder] = $newDisplayOrder;
-     */
-    public static function change_display_orders_by_mapping_array(
-        string $dataClassName, string $displayOrderProperty, ?array $displayOrderMapping = [],
-        ?Condition $displayOrderCondition = null
-    ): bool
-    {
-        return self::getDataClassRepository()->changeDisplayOrdersByMappingArray(
-            $dataClassName, $displayOrderProperty, $displayOrderMapping, $displayOrderCondition
-        );
-    }
-
     public static function count(string $dataClassName, DataClassCountParameters $parameters): int
     {
         return self::getDataClassRepository()->count($dataClassName, $parameters);

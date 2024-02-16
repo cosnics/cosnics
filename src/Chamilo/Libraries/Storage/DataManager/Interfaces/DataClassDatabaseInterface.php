@@ -8,7 +8,6 @@ use Chamilo\Libraries\Storage\Parameters\DataClassRetrieveParameters;
 use Chamilo\Libraries\Storage\Parameters\DataClassRetrievesParameters;
 use Chamilo\Libraries\Storage\Query\Condition\Condition;
 use Chamilo\Libraries\Storage\Query\UpdateProperties;
-use Doctrine\DBAL\Types\Type;
 
 /**
  *
@@ -41,34 +40,23 @@ interface DataClassDatabaseInterface
 
     public function getLastInsertedIdentifier(string $dataClassStorageUnitName): int;
 
-    /**
-     *
-     * @param mixed $value
-     * @param int|string|Type|null $type
-     *
-     * @return mixed
-     */
-    public function quote($value, ?string $type = null);
+    public function quote(mixed $value, ?string $type = null): mixed;
 
     /**
-     * @return string[]
-     * @throws \Chamilo\Libraries\Storage\Exception\DataClassNoResultException
+     * @return ?string[]
      */
-    public function retrieve(string $dataClassName, DataClassRetrieveParameters $parameters): array;
+    public function retrieve(string $dataClassName, DataClassRetrieveParameters $parameters): ?array;
 
     /**
      * @return string[][]
-     * @throws \Chamilo\Libraries\Storage\Exception\DataClassNoResultException
      */
     public function retrieves(string $dataClassName, DataClassRetrievesParameters $parameters): array;
 
     /**
      *
      * @param callable $function
-     *
-     * @return mixed
      */
-    public function transactional(callable $function);
+    public function transactional(callable $function): mixed;
 
     /**
      * @param string[] $propertiesToUpdate

@@ -8,7 +8,15 @@ use Chamilo\Libraries\Storage\DataManager\Doctrine\Service\ParametersProcessor;
 use Chamilo\Libraries\Storage\DataManager\Doctrine\Service\RecordProcessor;
 use Chamilo\Libraries\Storage\DataManager\Interfaces\DataClassDatabaseInterface;
 use Chamilo\Libraries\Storage\DataManager\StorageAliasGenerator;
-use Chamilo\Libraries\Storage\Exception\DataClassNoResultException;
+use Chamilo\Libraries\Storage\Exception\Database\DatabaseCountException;
+use Chamilo\Libraries\Storage\Exception\Database\DatabaseCountGroupedException;
+use Chamilo\Libraries\Storage\Exception\Database\DatabaseCreateException;
+use Chamilo\Libraries\Storage\Exception\Database\DatabaseDeleteException;
+use Chamilo\Libraries\Storage\Exception\Database\DatabaseDistinctException;
+use Chamilo\Libraries\Storage\Exception\Database\DatabaseLastInsertedIdentifierException;
+use Chamilo\Libraries\Storage\Exception\Database\DatabaseRetrieveException;
+use Chamilo\Libraries\Storage\Exception\Database\DatabaseRetrievesException;
+use Chamilo\Libraries\Storage\Exception\Database\DatabaseUpdateException;
 use Chamilo\Libraries\Storage\Parameters\DataClassCountGroupedParameters;
 use Chamilo\Libraries\Storage\Parameters\DataClassCountParameters;
 use Chamilo\Libraries\Storage\Parameters\DataClassDistinctParameters;
@@ -18,7 +26,6 @@ use Chamilo\Libraries\Storage\Query\Condition\Condition;
 use Chamilo\Libraries\Storage\Query\UpdateProperties;
 use Doctrine\DBAL\Connection;
 use Doctrine\DBAL\Query\QueryBuilder;
-use Doctrine\DBAL\Types\Type;
 use Exception;
 use Throwable;
 
@@ -60,6 +67,9 @@ class DataClassDatabase implements DataClassDatabaseInterface
         $this->recordProcessor = $recordProcessor;
     }
 
+    /**
+     * @throws \Chamilo\Libraries\Storage\Exception\Database\DatabaseCountException
+     */
     public function count(string $dataClassName, DataClassCountParameters $parameters): int
     {
         try
@@ -78,13 +88,13 @@ class DataClassDatabase implements DataClassDatabaseInterface
         {
             $this->handleError($throwable);
 
-            // TODO: Do something more useful when DataClassDatabase::count() throws an error
-            exit;
+            throw new DatabaseCountException($dataClassName, $parameters, $throwable->getMessage());
         }
     }
 
     /**
      * @return int[]
+     * @throws \Chamilo\Libraries\Storage\Exception\Database\DatabaseCountGroupedException
      */
     public function countGrouped(string $dataClassName, DataClassCountGroupedParameters $parameters): array
     {
@@ -110,11 +120,13 @@ class DataClassDatabase implements DataClassDatabaseInterface
         {
             $this->handleError($throwable);
 
-            // TODO: Do something more useful when DataClassDatabase::countGrouped() throws an error
-            exit;
+            throw new DatabaseCountGroupedException($dataClassName, $parameters, $throwable->getMessage());
         }
     }
 
+    /**
+     * @throws \Chamilo\Libraries\Storage\Exception\Database\DatabaseCreateException
+     */
     public function create(string $dataClassStorageUnitName, array $record): bool
     {
         try
@@ -127,7 +139,7 @@ class DataClassDatabase implements DataClassDatabaseInterface
         {
             $this->handleError($throwable);
 
-            return false;
+            throw new DatabaseCreateException($dataClassStorageUnitName, $record, $throwable->getMessage());
         }
     }
 
@@ -135,6 +147,8 @@ class DataClassDatabase implements DataClassDatabaseInterface
      * @template deleteDataClassName
      *
      * @param class-string<deleteDataClassName> $dataClassName
+     *
+     * @throws \Chamilo\Libraries\Storage\Exception\Database\DatabaseDeleteException
      */
     public function delete(string $dataClassName, ?Condition $condition = null): bool
     {
@@ -159,12 +173,13 @@ class DataClassDatabase implements DataClassDatabaseInterface
         {
             $this->handleError($throwable);
 
-            return false;
+            throw new DatabaseDeleteException($dataClassName, $condition, $throwable->getMessage());
         }
     }
 
     /**
      * @return string[]
+     * @throws \Chamilo\Libraries\Storage\Exception\Database\DatabaseDistinctException
      */
     public function distinct(string $dataClassName, DataClassDistinctParameters $parameters): array
     {
@@ -197,17 +212,11 @@ class DataClassDatabase implements DataClassDatabaseInterface
         {
             $this->handleError($throwable);
 
-            // TODO: Do something more useful when DataClassDatabase::distinct() throws an error
-            exit;
+            throw new DatabaseDistinctException($dataClassName, $parameters, $throwable->getMessage());
         }
     }
 
-    /**
-     * @param mixed $text
-     *
-     * @return mixed
-     */
-    protected function escape($text)
+    protected function escape(mixed $text): mixed
     {
         if (!is_null($text))
         {
@@ -251,6 +260,9 @@ class DataClassDatabase implements DataClassDatabaseInterface
         return $this->exceptionLogger;
     }
 
+    /**
+     * @throws \Chamilo\Libraries\Storage\Exception\Database\DatabaseLastInsertedIdentifierException
+     */
     public function getLastInsertedIdentifier(string $dataClassStorageUnitName): int
     {
         try
@@ -261,8 +273,7 @@ class DataClassDatabase implements DataClassDatabaseInterface
         {
             $this->handleError($throwable);
 
-            // TODO: Do something more useful when DataClassDatabase::getLastInsertedIdentifier() throws an error
-            exit;
+            throw new DatabaseLastInsertedIdentifierException($dataClassStorageUnitName, $throwable->getMessage());
         }
     }
 
@@ -331,22 +342,15 @@ class DataClassDatabase implements DataClassDatabaseInterface
         return $this->getRecordProcessor()->processRecord($record);
     }
 
-    /**
-     * @param mixed $value
-     * @param int|string|Type|null $type
-     *
-     * @return mixed
-     */
-    public function quote($value, ?string $type = null)
+    public function quote(mixed $value, ?string $type = null): mixed
     {
         return $this->getConnection()->quote($value, $type);
     }
 
     /**
-     * @return string[]
-     * @throws \Chamilo\Libraries\Storage\Exception\DataClassNoResultException
+     * @throws \Chamilo\Libraries\Storage\Exception\Database\DatabaseRetrieveException
      */
-    public function retrieve(string $dataClassName, DataClassRetrieveParameters $parameters): array
+    public function retrieve(string $dataClassName, DataClassRetrieveParameters $parameters): ?array
     {
         try
         {
@@ -362,25 +366,22 @@ class DataClassDatabase implements DataClassDatabaseInterface
 
             if (!is_array($record) || empty($record))
             {
-                throw new DataClassNoResultException($dataClassName, $parameters, $sqlQuery);
+                $record = null;
             }
 
             return $record;
         }
         catch (Throwable $throwable)
         {
-            if (!$throwable instanceof DataClassNoResultException)
-            {
-                $this->handleError($throwable);
-            }
+            $this->handleError($throwable);
 
-            throw new DataClassNoResultException($dataClassName, $parameters);
+            throw new DatabaseRetrieveException($dataClassName, $parameters, $throwable->getMessage());
         }
     }
 
     /**
      * @return string[][]
-     * @throws \Chamilo\Libraries\Storage\Exception\DataClassNoResultException
+     * @throws \Chamilo\Libraries\Storage\Exception\Database\DatabaseRetrievesException
      */
     public function retrieves(string $dataClassName, DataClassRetrievesParameters $parameters): array
     {
@@ -405,7 +406,8 @@ class DataClassDatabase implements DataClassDatabaseInterface
         catch (Throwable $throwable)
         {
             $this->handleError($throwable);
-            throw new DataClassNoResultException($dataClassName, $parameters);
+
+            throw new DatabaseRetrievesException($dataClassName, $parameters, $throwable->getMessage());
         }
     }
 
@@ -416,7 +418,7 @@ class DataClassDatabase implements DataClassDatabaseInterface
      * @throws \Exception
      * @throws \Throwable
      */
-    public function transactional(callable $function)
+    public function transactional(callable $function): mixed
     {
         try
         {
@@ -447,6 +449,8 @@ class DataClassDatabase implements DataClassDatabaseInterface
 
     /**
      * @param string[] $propertiesToUpdate
+     *
+     * @throws \Chamilo\Libraries\Storage\Exception\Database\DatabaseUpdateException
      */
     public function update(string $dataClassStorageUnitName, Condition $condition, array $propertiesToUpdate): bool
     {
@@ -470,7 +474,9 @@ class DataClassDatabase implements DataClassDatabaseInterface
         {
             $this->handleError($throwable);
 
-            return false;
+            throw new DatabaseUpdateException(
+                $dataClassStorageUnitName, $condition, $propertiesToUpdate, $throwable->getMessage()
+            );
         }
     }
 

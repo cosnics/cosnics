@@ -1,8 +1,7 @@
 <?php
 namespace Chamilo\Libraries\Calendar\Form;
 
-use Chamilo\Core\Repository\Form\ContentObjectForm;
-use Chamilo\Libraries\Calendar\Event\RecurringContentObject;
+use Chamilo\Libraries\Calendar\Event\RecurringContentObjectInterface;
 use Chamilo\Libraries\Utilities\DatetimeUtilities;
 
 /**
@@ -10,7 +9,7 @@ use Chamilo\Libraries\Utilities\DatetimeUtilities;
  * @author  Hans De Bisschop <hans.de.bisschop@ehb.be>
  * @author  Dieter De Neef
  */
-class RecurringContentObjectForm extends ContentObjectForm
+trait RecurringContentObjectFormTrait
 {
     public const PARAM_DAILY = 'daily';
     public const PARAM_DAY = 'day';
@@ -26,14 +25,16 @@ class RecurringContentObjectForm extends ContentObjectForm
      *
      * @throws \QuickformException
      */
-    protected function addByDayByMonthDayOptionPropertiesToForm(string $type)
+    protected function addByDayByMonthDayOptionPropertiesToForm(string $type): void
     {
+        $contentObjectClassName = $this->getContentObjectType();
+
         $this->addElement('html', '<div class="form-row col-md-12 col-lg-8">');
 
         $this->add_select(
             $type . '[' . self::PARAM_OPTION . ']', null, [
-            RecurringContentObject::PROPERTY_BYDAY => RecurringContentObject::PROPERTY_BYDAY,
-            RecurringContentObject::PROPERTY_BYMONTHDAY => RecurringContentObject::PROPERTY_BYMONTHDAY
+            $contentObjectClassName::PROPERTY_BYDAY => $contentObjectClassName::PROPERTY_BYDAY,
+            $contentObjectClassName::PROPERTY_BYMONTHDAY => $contentObjectClassName::PROPERTY_BYMONTHDAY
         ], false, ['style' => 'display: none;']
         );
 
@@ -55,8 +56,10 @@ class RecurringContentObjectForm extends ContentObjectForm
      */
     protected function addByDayPropertiesToForm(
         string $type, string $subElement = self::PARAM_DAY, string $addonLabel = null, bool $multiple = false
-    )
+    ): void
     {
+        $contentObjectClassName = $this->getContentObjectType();
+
         $this->addElement('html', '<div class="form-row col-md-12 col-lg-8">');
 
         $attributes = [];
@@ -71,7 +74,7 @@ class RecurringContentObjectForm extends ContentObjectForm
         $elementNameParts = [];
 
         $elementNameParts[] = $type;
-        $elementNameParts[] = '[' . RecurringContentObject::PROPERTY_BYDAY . ']';
+        $elementNameParts[] = '[' . $contentObjectClassName::PROPERTY_BYDAY . ']';
 
         if (!empty($subElement))
         {
@@ -80,7 +83,7 @@ class RecurringContentObjectForm extends ContentObjectForm
         }
 
         $this->add_select(
-            implode('', $elementNameParts), null, RecurringContentObject::get_byday_options(), false, $attributes
+            implode('', $elementNameParts), null, $contentObjectClassName::get_byday_options(), false, $attributes
         );
 
         $html = [];
@@ -109,7 +112,7 @@ class RecurringContentObjectForm extends ContentObjectForm
     /**
      * @throws \QuickformException
      */
-    protected function addByDayRankAndByDayPropertiesToForm(string $type)
+    protected function addByDayRankAndByDayPropertiesToForm(string $type): void
     {
         $this->addElement('html', '<div class="row frequency-' . $type . '-byday">');
 
@@ -122,13 +125,15 @@ class RecurringContentObjectForm extends ContentObjectForm
     /**
      * @throws \QuickformException
      */
-    protected function addByDayRankPropertiesToForm(string $type)
+    protected function addByDayRankPropertiesToForm(string $type): void
     {
+        $contentObjectClassName = $this->getContentObjectType();
+
         $this->addElement('html', '<div class="form-row col-md-12 col-lg-4">');
 
         $this->add_select(
-            $type . '[' . RecurringContentObject::PROPERTY_BYDAY . '][' . self::PARAM_RANK . ']', '',
-            RecurringContentObject::get_rank_options(), false
+            $type . '[' . $contentObjectClassName::PROPERTY_BYDAY . '][' . self::PARAM_RANK . ']', '',
+            $contentObjectClassName::get_rank_options(), false
         );
 
         $this->addElement('html', '</div>');
@@ -137,8 +142,10 @@ class RecurringContentObjectForm extends ContentObjectForm
     /**
      * @throws \QuickformException
      */
-    protected function addByMonthDayPropertiesToForm(string $type)
+    protected function addByMonthDayPropertiesToForm(string $type): void
     {
+        $contentObjectClassName = $this->getContentObjectType();
+
         $html = [];
 
         $html[] = '<div class="row frequency-' . $type . '-bymonthday">';
@@ -148,8 +155,8 @@ class RecurringContentObjectForm extends ContentObjectForm
         $this->addElement('html', implode(PHP_EOL, $html));
 
         $this->add_select(
-            $type . '[' . RecurringContentObject::PROPERTY_BYMONTHDAY . ']', null,
-            RecurringContentObject::get_bymonthday_options(), false,
+            $type . '[' . $contentObjectClassName::PROPERTY_BYMONTHDAY . ']', null,
+            $contentObjectClassName::get_bymonthday_options(), false,
             ['multiple' => 'multiple', 'style' => 'display: none;']
         );
 
@@ -209,8 +216,10 @@ class RecurringContentObjectForm extends ContentObjectForm
     /**
      * @throws \Exception
      */
-    protected function addDailyFrequencyPropertiesToForm()
+    protected function addDailyFrequencyPropertiesToForm(): void
     {
+        $contentObjectClassName = $this->getContentObjectType();
+
         $html = [];
 
         $html[] = '<div class="row frequency-option frequency-daily">';
@@ -221,7 +230,7 @@ class RecurringContentObjectForm extends ContentObjectForm
         $this->addElement('html', implode(PHP_EOL, $html));
 
         $this->add_textfield(
-            self::PARAM_DAILY . '[' . RecurringContentObject::PROPERTY_FREQUENCY_INTERVAL . ']', null, false
+            self::PARAM_DAILY . '[' . $contentObjectClassName::PROPERTY_FREQUENCY_INTERVAL . ']', null, false
         );
         $html[] = '<input name="daily[frequency_interval]" type="text" class="form-control">';
 
@@ -241,8 +250,10 @@ class RecurringContentObjectForm extends ContentObjectForm
      *
      * @throws \Exception
      */
-    protected function addFrequencyIntervalPropertiesToForm(string $type, string $addonLabel)
+    protected function addFrequencyIntervalPropertiesToForm(string $type, string $addonLabel): void
     {
+        $contentObjectClassName = $this->getContentObjectType();
+
         $html = [];
 
         $html[] = '<div class="form-row col-md-12 col-lg-4">';
@@ -251,7 +262,7 @@ class RecurringContentObjectForm extends ContentObjectForm
 
         $this->addElement('html', implode(PHP_EOL, $html));
 
-        $this->add_textfield($type . '[' . RecurringContentObject::PROPERTY_FREQUENCY_INTERVAL . ']', null, false);
+        $this->add_textfield($type . '[' . $contentObjectClassName::PROPERTY_FREQUENCY_INTERVAL . ']', null, false);
 
         $html = [];
 
@@ -265,8 +276,10 @@ class RecurringContentObjectForm extends ContentObjectForm
     /**
      * @throws \Exception
      */
-    protected function addFrequencyPropertiesToForm()
+    protected function addFrequencyPropertiesToForm(): void
     {
+        $contentObjectClassName = $this->getContentObjectType();
+
         $html = [];
 
         // Container START
@@ -284,7 +297,7 @@ class RecurringContentObjectForm extends ContentObjectForm
         $this->addElement('html', implode(PHP_EOL, $html));
 
         $this->add_select(
-            RecurringContentObject::PROPERTY_FREQUENCY, null, RecurringContentObject::get_frequency_options(), false
+            $contentObjectClassName::PROPERTY_FREQUENCY, null, $contentObjectClassName::get_frequency_options(), false
         );
 
         $html = [];
@@ -334,8 +347,9 @@ class RecurringContentObjectForm extends ContentObjectForm
     /**
      * @throws \Exception
      */
-    protected function addFrequencyRangePropertiesToForm()
+    protected function addFrequencyRangePropertiesToForm(): void
     {
+        $contentObjectClassName = $this->getContentObjectType();
         $translator = $this->getTranslator();
 
         $html = [];
@@ -375,7 +389,7 @@ class RecurringContentObjectForm extends ContentObjectForm
 
         $this->addElement('html', implode(PHP_EOL, $html));
 
-        $this->add_textfield(RecurringContentObject::PROPERTY_FREQUENCY_COUNT, null, false);
+        $this->add_textfield($contentObjectClassName::PROPERTY_FREQUENCY_COUNT, null, false);
 
         $html = [];
 
@@ -392,8 +406,8 @@ class RecurringContentObjectForm extends ContentObjectForm
         $this->addElement('html', implode(PHP_EOL, $html));
 
         $this->addElement(
-            'datepicker', $this->getAttribute('name'), RecurringContentObject::PROPERTY_UNTIL, '',
-            ['class' => RecurringContentObject::PROPERTY_UNTIL], true
+            'datepicker', $this->getAttribute('name'), $contentObjectClassName::PROPERTY_UNTIL, '',
+            ['class' => $contentObjectClassName::PROPERTY_UNTIL], true
         );
 
         $html = [];
@@ -408,7 +422,7 @@ class RecurringContentObjectForm extends ContentObjectForm
     /**
      * @throws \Exception
      */
-    protected function addMonthlyFrequencyPropertiesToForm()
+    protected function addMonthlyFrequencyPropertiesToForm(): void
     {
         $this->addElement('html', '<div class="frequency-option frequency-monthly">');
 
@@ -428,7 +442,7 @@ class RecurringContentObjectForm extends ContentObjectForm
     /**
      * @throws \Exception
      */
-    protected function addWeeklyFrequencyPropertiesToForm()
+    protected function addWeeklyFrequencyPropertiesToForm(): void
     {
         $html = [];
 
@@ -452,8 +466,10 @@ class RecurringContentObjectForm extends ContentObjectForm
     /**
      * @throws \Exception
      */
-    protected function addYearyFrequencyPropertiesToForm()
+    protected function addYearyFrequencyPropertiesToForm(): void
     {
+        $contentObjectClassName = $this->getContentObjectType();
+
         $this->addElement('html', '<div class="frequency-option frequency-yearly">');
 
         $this->addElement('html', '<div class="row">');
@@ -476,8 +492,8 @@ class RecurringContentObjectForm extends ContentObjectForm
         $this->addElement('html', implode(PHP_EOL, $html));
 
         $this->add_select(
-            self::PARAM_YEARLY . '[' . RecurringContentObject::PROPERTY_BYMONTH . ']', '',
-            RecurringContentObject::get_bymonth_options()
+            self::PARAM_YEARLY . '[' . $contentObjectClassName::PROPERTY_BYMONTH . ']', '',
+            $contentObjectClassName::get_bymonth_options()
         );
 
         $html = [];
@@ -491,6 +507,8 @@ class RecurringContentObjectForm extends ContentObjectForm
         $this->addElement('html', '</div>');
     }
 
+    abstract public function getContentObjectType(): string;
+
     /**
      * @param string[] $defaults
      * @param mixed $filter
@@ -499,103 +517,105 @@ class RecurringContentObjectForm extends ContentObjectForm
      */
     public function setDefaults($defaults = [], $filter = null)
     {
-        /**
-         * @var \Chamilo\Libraries\Calendar\Event\RecurringContentObject $recurringContentObject
-         */
+        $contentObjectClassName = $this->getContentObjectType();
 
+        /**
+         * @var \Chamilo\Libraries\Calendar\Event\RecurringContentObjectInterface $recurringContentObject
+         */
         $recurringContentObject = $this->get_content_object();
 
         if (isset($recurringContentObject) && $this->form_type == self::TYPE_EDIT)
         {
-            $defaults[RecurringContentObject::PROPERTY_FREQUENCY] = $recurringContentObject->get_frequency();
+            $defaults[$contentObjectClassName::PROPERTY_FREQUENCY] = $recurringContentObject->get_frequency();
 
             if ($recurringContentObject->has_frequency())
             {
                 switch ($recurringContentObject->get_frequency())
                 {
                     case 1 :
-                        $defaults[self::PARAM_DAILY][RecurringContentObject::PROPERTY_FREQUENCY_INTERVAL] =
+                        $defaults[self::PARAM_DAILY][$contentObjectClassName::PROPERTY_FREQUENCY_INTERVAL] =
                             $recurringContentObject->get_frequency_interval();
                         break;
                     case 2 :
                         if ($recurringContentObject->get_byday() == 'MO,TU,WE,TH,FR' &&
                             $recurringContentObject->get_frequency_interval() == 1)
                         {
-                            $defaults[RecurringContentObject::PROPERTY_FREQUENCY] = 3;
-                            $defaults[self::PARAM_WEEKLY][RecurringContentObject::PROPERTY_FREQUENCY_INTERVAL] = 1;
-                            $defaults[self::PARAM_WEEKLY][RecurringContentObject::PROPERTY_BYDAY] = [1];
+                            $defaults[$contentObjectClassName::PROPERTY_FREQUENCY] = 3;
+                            $defaults[self::PARAM_WEEKLY][$contentObjectClassName::PROPERTY_FREQUENCY_INTERVAL] = 1;
+                            $defaults[self::PARAM_WEEKLY][$contentObjectClassName::PROPERTY_BYDAY] = [1];
                         }
                         elseif ($recurringContentObject->get_frequency_interval() == 2 &&
                             $recurringContentObject->get_byday() == '')
                         {
-                            $defaults[RecurringContentObject::PROPERTY_FREQUENCY] = 4;
-                            $defaults[self::PARAM_WEEKLY][RecurringContentObject::PROPERTY_FREQUENCY_INTERVAL] = 1;
-                            $defaults[self::PARAM_WEEKLY][RecurringContentObject::PROPERTY_BYDAY] = [1];
+                            $defaults[$contentObjectClassName::PROPERTY_FREQUENCY] = 4;
+                            $defaults[self::PARAM_WEEKLY][$contentObjectClassName::PROPERTY_FREQUENCY_INTERVAL] = 1;
+                            $defaults[self::PARAM_WEEKLY][$contentObjectClassName::PROPERTY_BYDAY] = [1];
                         }
                         else
                         {
-                            $bydays = RecurringContentObject::get_byday_parts($recurringContentObject->get_byday());
+                            $bydays = $contentObjectClassName::get_byday_parts($recurringContentObject->get_byday());
                             foreach ($bydays as $byday)
                             {
-                                $defaults[self::PARAM_WEEKLY][RecurringContentObject::PROPERTY_BYDAY][] =
-                                    RecurringContentObject::get_day_format(
+                                $defaults[self::PARAM_WEEKLY][$contentObjectClassName::PROPERTY_BYDAY][] =
+                                    $contentObjectClassName::get_day_format(
                                         $byday[1]
                                     );
                             }
-                            $defaults[self::PARAM_WEEKLY][RecurringContentObject::PROPERTY_FREQUENCY_INTERVAL] =
+                            $defaults[self::PARAM_WEEKLY][$contentObjectClassName::PROPERTY_FREQUENCY_INTERVAL] =
                                 $recurringContentObject->get_frequency_interval();
                         }
                         break;
                     case 5 :
-                        $defaults[self::PARAM_MONTHLY][RecurringContentObject::PROPERTY_FREQUENCY_INTERVAL] =
+                        $defaults[self::PARAM_MONTHLY][$contentObjectClassName::PROPERTY_FREQUENCY_INTERVAL] =
                             $recurringContentObject->get_frequency_interval();
                         if ($recurringContentObject->get_bymonthday())
                         {
                             $defaults[self::PARAM_MONTHLY][self::PARAM_OPTION] =
-                                RecurringContentObject::PROPERTY_BYMONTHDAY;
-                            $defaults[self::PARAM_MONTHLY][RecurringContentObject::PROPERTY_BYMONTHDAY] =
+                                $contentObjectClassName::PROPERTY_BYMONTHDAY;
+                            $defaults[self::PARAM_MONTHLY][$contentObjectClassName::PROPERTY_BYMONTHDAY] =
                                 $recurringContentObject->get_bymonthday();
                         }
                         else
                         {
-                            $defaults[self::PARAM_MONTHLY][self::PARAM_OPTION] = RecurringContentObject::PROPERTY_BYDAY;
-                            $bydays = RecurringContentObject::get_byday_parts($recurringContentObject->get_byday());
+                            $defaults[self::PARAM_MONTHLY][self::PARAM_OPTION] =
+                                $contentObjectClassName::PROPERTY_BYDAY;
+                            $bydays = $contentObjectClassName::get_byday_parts($recurringContentObject->get_byday());
                             foreach ($bydays as $byday)
                             {
-                                $defaults[self::PARAM_MONTHLY][RecurringContentObject::PROPERTY_BYDAY][self::PARAM_DAY] =
-                                    RecurringContentObject::get_day_format(
+                                $defaults[self::PARAM_MONTHLY][$contentObjectClassName::PROPERTY_BYDAY][self::PARAM_DAY] =
+                                    $contentObjectClassName::get_day_format(
                                         $byday[1]
                                     );
-                                $defaults[self::PARAM_MONTHLY][RecurringContentObject::PROPERTY_BYDAY][self::PARAM_RANK] =
+                                $defaults[self::PARAM_MONTHLY][$contentObjectClassName::PROPERTY_BYDAY][self::PARAM_RANK] =
                                     $byday[0];
                             }
                         }
                         break;
                     case 6 :
-                        $defaults[self::PARAM_YEARLY][RecurringContentObject::PROPERTY_FREQUENCY_INTERVAL] =
+                        $defaults[self::PARAM_YEARLY][$contentObjectClassName::PROPERTY_FREQUENCY_INTERVAL] =
                             $recurringContentObject->get_frequency_interval();
                         if ($recurringContentObject->get_bymonthday())
                         {
                             $defaults[self::PARAM_YEARLY][self::PARAM_OPTION] =
-                                RecurringContentObject::PROPERTY_BYMONTHDAY;
-                            $defaults[self::PARAM_YEARLY][RecurringContentObject::PROPERTY_BYMONTHDAY] =
+                                $contentObjectClassName::PROPERTY_BYMONTHDAY;
+                            $defaults[self::PARAM_YEARLY][$contentObjectClassName::PROPERTY_BYMONTHDAY] =
                                 $recurringContentObject->get_bymonthday();
-                            $defaults[self::PARAM_YEARLY][RecurringContentObject::PROPERTY_BYMONTH] =
+                            $defaults[self::PARAM_YEARLY][$contentObjectClassName::PROPERTY_BYMONTH] =
                                 $recurringContentObject->get_bymonth();
                         }
                         else
                         {
-                            $defaults[self::PARAM_YEARLY][self::PARAM_OPTION] = RecurringContentObject::PROPERTY_BYDAY;
-                            $bydays = RecurringContentObject::get_byday_parts($recurringContentObject->get_byday());
+                            $defaults[self::PARAM_YEARLY][self::PARAM_OPTION] = $contentObjectClassName::PROPERTY_BYDAY;
+                            $bydays = $contentObjectClassName::get_byday_parts($contentObjectClassName->get_byday());
                             foreach ($bydays as $byday)
                             {
-                                $defaults[self::PARAM_YEARLY][RecurringContentObject::PROPERTY_BYDAY][self::PARAM_DAY] =
-                                    RecurringContentObject::get_day_format(
+                                $defaults[self::PARAM_YEARLY][$contentObjectClassName::PROPERTY_BYDAY][self::PARAM_DAY] =
+                                    $contentObjectClassName::get_day_format(
                                         $byday[1]
                                     );
-                                $defaults[self::PARAM_YEARLY][RecurringContentObject::PROPERTY_BYDAY][self::PARAM_RANK] =
+                                $defaults[self::PARAM_YEARLY][$contentObjectClassName::PROPERTY_BYDAY][self::PARAM_RANK] =
                                     $byday[0];
-                                $defaults[self::PARAM_YEARLY][RecurringContentObject::PROPERTY_BYMONTH] =
+                                $defaults[self::PARAM_YEARLY][$contentObjectClassName::PROPERTY_BYMONTH] =
                                     $recurringContentObject->get_bymonth();
                             }
                         }
@@ -606,78 +626,80 @@ class RecurringContentObjectForm extends ContentObjectForm
                 {
                     if ($recurringContentObject->get_frequency_count() > 0)
                     {
-                        $defaults[RecurringContentObject::PROPERTY_FREQUENCY_COUNT] =
+                        $defaults[$contentObjectClassName::PROPERTY_FREQUENCY_COUNT] =
                             $recurringContentObject->get_frequency_count();
                         $defaults[self::PARAM_RANGE] = 2;
                     }
                     else
                     {
                         $defaults[self::PARAM_RANGE] = 1;
-                        $defaults[RecurringContentObject::PROPERTY_UNTIL] = 0;
-                        $defaults[RecurringContentObject::PROPERTY_FREQUENCY_COUNT] = 10;
+                        $defaults[$contentObjectClassName::PROPERTY_UNTIL] = 0;
+                        $defaults[$contentObjectClassName::PROPERTY_FREQUENCY_COUNT] = 10;
                     }
                 }
                 else
                 {
                     $defaults[self::PARAM_RANGE] = 3;
-                    $defaults[RecurringContentObject::PROPERTY_UNTIL] = $recurringContentObject->get_until();
-                    $defaults[RecurringContentObject::PROPERTY_FREQUENCY_COUNT] = 10;
+                    $defaults[$contentObjectClassName::PROPERTY_UNTIL] = $recurringContentObject->get_until();
+                    $defaults[$contentObjectClassName::PROPERTY_FREQUENCY_COUNT] = 10;
                 }
             }
         }
         else
         {
-            $defaults[RecurringContentObject::PROPERTY_FREQUENCY] = 0;
+            $defaults[$contentObjectClassName::PROPERTY_FREQUENCY] = 0;
 
-            $defaults[self::PARAM_DAILY][RecurringContentObject::PROPERTY_FREQUENCY_INTERVAL] = 1;
+            $defaults[self::PARAM_DAILY][$contentObjectClassName::PROPERTY_FREQUENCY_INTERVAL] = 1;
 
-            $defaults[self::PARAM_WEEKLY][RecurringContentObject::PROPERTY_FREQUENCY_INTERVAL] = 1;
-            $defaults[self::PARAM_WEEKLY][RecurringContentObject::PROPERTY_BYDAY] = [1];
+            $defaults[self::PARAM_WEEKLY][$contentObjectClassName::PROPERTY_FREQUENCY_INTERVAL] = 1;
+            $defaults[self::PARAM_WEEKLY][$contentObjectClassName::PROPERTY_BYDAY] = [1];
 
-            $defaults[self::PARAM_MONTHLY][RecurringContentObject::PROPERTY_FREQUENCY_INTERVAL] = 1;
+            $defaults[self::PARAM_MONTHLY][$contentObjectClassName::PROPERTY_FREQUENCY_INTERVAL] = 1;
             $defaults[self::PARAM_MONTHLY][self::PARAM_OPTION] = 0;
-            $defaults[self::PARAM_MONTHLY][RecurringContentObject::PROPERTY_BYDAY][self::PARAM_RANK] = 0;
-            $defaults[self::PARAM_MONTHLY][RecurringContentObject::PROPERTY_BYMONTHDAY] = [1];
+            $defaults[self::PARAM_MONTHLY][$contentObjectClassName::PROPERTY_BYDAY][self::PARAM_RANK] = 0;
+            $defaults[self::PARAM_MONTHLY][$contentObjectClassName::PROPERTY_BYMONTHDAY] = [1];
 
-            $defaults[self::PARAM_YEARLY][RecurringContentObject::PROPERTY_FREQUENCY_INTERVAL] = 1;
+            $defaults[self::PARAM_YEARLY][$contentObjectClassName::PROPERTY_FREQUENCY_INTERVAL] = 1;
             $defaults[self::PARAM_YEARLY][self::PARAM_OPTION] = 0;
-            $defaults[self::PARAM_YEARLY][RecurringContentObject::PROPERTY_BYDAY][self::PARAM_RANK] = 0;
-            $defaults[self::PARAM_YEARLY][RecurringContentObject::PROPERTY_BYMONTHDAY] = [1];
+            $defaults[self::PARAM_YEARLY][$contentObjectClassName::PROPERTY_BYDAY][self::PARAM_RANK] = 0;
+            $defaults[self::PARAM_YEARLY][$contentObjectClassName::PROPERTY_BYMONTHDAY] = [1];
 
             $defaults[self::PARAM_RANGE] = 1;
-            $defaults[RecurringContentObject::PROPERTY_UNTIL] = null;
-            $defaults[RecurringContentObject::PROPERTY_FREQUENCY_COUNT] = 10;
+            $defaults[$contentObjectClassName::PROPERTY_UNTIL] = null;
+            $defaults[$contentObjectClassName::PROPERTY_FREQUENCY_COUNT] = 10;
         }
 
         parent::setDefaults($defaults);
     }
 
-    protected function setFrequencyElementTemplates()
+    protected function setFrequencyElementTemplates(): void
     {
+        $contentObjectClassName = $this->getContentObjectType();
+
         $elementNames = [
-            RecurringContentObject::PROPERTY_FREQUENCY,
+            $contentObjectClassName::PROPERTY_FREQUENCY,
 
-            self::PARAM_DAILY . '[' . RecurringContentObject::PROPERTY_FREQUENCY_INTERVAL . ']',
+            self::PARAM_DAILY . '[' . $contentObjectClassName::PROPERTY_FREQUENCY_INTERVAL . ']',
 
-            self::PARAM_WEEKLY . '[' . RecurringContentObject::PROPERTY_FREQUENCY_INTERVAL . ']',
-            self::PARAM_WEEKLY . '[' . RecurringContentObject::PROPERTY_BYDAY . ']',
+            self::PARAM_WEEKLY . '[' . $contentObjectClassName::PROPERTY_FREQUENCY_INTERVAL . ']',
+            self::PARAM_WEEKLY . '[' . $contentObjectClassName::PROPERTY_BYDAY . ']',
 
-            self::PARAM_MONTHLY . '[' . RecurringContentObject::PROPERTY_FREQUENCY_INTERVAL . ']',
+            self::PARAM_MONTHLY . '[' . $contentObjectClassName::PROPERTY_FREQUENCY_INTERVAL . ']',
             self::PARAM_MONTHLY . '[' . self::PARAM_OPTION . ']',
-            self::PARAM_MONTHLY . '[' . RecurringContentObject::PROPERTY_BYDAY . '][' . self::PARAM_RANK . ']',
-            self::PARAM_MONTHLY . '[' . RecurringContentObject::PROPERTY_BYDAY . '][' . self::PARAM_DAY . ']',
-            self::PARAM_MONTHLY . '[' . RecurringContentObject::PROPERTY_BYMONTHDAY . ']',
+            self::PARAM_MONTHLY . '[' . $contentObjectClassName::PROPERTY_BYDAY . '][' . self::PARAM_RANK . ']',
+            self::PARAM_MONTHLY . '[' . $contentObjectClassName::PROPERTY_BYDAY . '][' . self::PARAM_DAY . ']',
+            self::PARAM_MONTHLY . '[' . $contentObjectClassName::PROPERTY_BYMONTHDAY . ']',
 
-            self::PARAM_YEARLY . '[' . RecurringContentObject::PROPERTY_FREQUENCY_INTERVAL . ']',
+            self::PARAM_YEARLY . '[' . $contentObjectClassName::PROPERTY_FREQUENCY_INTERVAL . ']',
             self::PARAM_YEARLY . '[' . self::PARAM_OPTION . ']',
-            self::PARAM_YEARLY . '[' . RecurringContentObject::PROPERTY_BYMONTHDAY . ']',
-            self::PARAM_YEARLY . '[' . RecurringContentObject::PROPERTY_BYDAY . ']' . '[' . self::PARAM_RANK . ']',
-            self::PARAM_YEARLY . '[' . RecurringContentObject::PROPERTY_BYDAY . ']' . '[' . self::PARAM_DAY . ']',
-            self::PARAM_YEARLY . '[' . RecurringContentObject::PROPERTY_BYMONTH . ']',
+            self::PARAM_YEARLY . '[' . $contentObjectClassName::PROPERTY_BYMONTHDAY . ']',
+            self::PARAM_YEARLY . '[' . $contentObjectClassName::PROPERTY_BYDAY . ']' . '[' . self::PARAM_RANK . ']',
+            self::PARAM_YEARLY . '[' . $contentObjectClassName::PROPERTY_BYDAY . ']' . '[' . self::PARAM_DAY . ']',
+            self::PARAM_YEARLY . '[' . $contentObjectClassName::PROPERTY_BYMONTH . ']',
 
             self::PARAM_RANGE,
-            RecurringContentObject::PROPERTY_FREQUENCY_COUNT,
-            RecurringContentObject::PROPERTY_UNTIL
+            $contentObjectClassName::PROPERTY_FREQUENCY_COUNT,
+            $contentObjectClassName::PROPERTY_UNTIL
 
         ];
 
@@ -690,15 +712,16 @@ class RecurringContentObjectForm extends ContentObjectForm
     /**
      * @throws \Exception
      */
-    public function setRecurrenceProperties(RecurringContentObject $calendarEvent)
+    public function setRecurrenceProperties(RecurringContentObjectInterface $calendarEvent): void
     {
+        $contentObjectClassName = $this->getContentObjectType();
         $values = $this->exportValues();
 
-        $frequency = $values[RecurringContentObject::PROPERTY_FREQUENCY];
+        $frequency = $values[$contentObjectClassName::PROPERTY_FREQUENCY];
 
-        $calendarEvent->set_frequency($values[RecurringContentObject::PROPERTY_FREQUENCY]);
+        $calendarEvent->set_frequency($values[$contentObjectClassName::PROPERTY_FREQUENCY]);
 
-        if ($frequency == RecurringContentObject::FREQUENCY_NONE)
+        if ($frequency == $contentObjectClassName::FREQUENCY_NONE)
         {
             $calendarEvent->set_frequency(0);
             $calendarEvent->set_frequency_interval(null);
@@ -719,15 +742,15 @@ class RecurringContentObjectForm extends ContentObjectForm
                     $calendarEvent->set_bymonth(null);
 
                     $calendarEvent->set_frequency_interval(
-                        $values[$frequencyName][RecurringContentObject::PROPERTY_FREQUENCY_INTERVAL]
+                        $values[$frequencyName][$contentObjectClassName::PROPERTY_FREQUENCY_INTERVAL]
                     );
                     break;
                 case 2 :
                     $frequencyName = self::PARAM_WEEKLY;
                     $bydays = [];
-                    foreach ($values[$frequencyName][RecurringContentObject::PROPERTY_BYDAY] as $byday)
+                    foreach ($values[$frequencyName][$contentObjectClassName::PROPERTY_BYDAY] as $byday)
                     {
-                        $bydays[] = RecurringContentObject::get_day_ical_format($byday);
+                        $bydays[] = $contentObjectClassName::get_day_ical_format($byday);
                     }
                     $calendarEvent->set_byday(implode(',', $bydays));
 
@@ -735,7 +758,7 @@ class RecurringContentObjectForm extends ContentObjectForm
                     $calendarEvent->set_bymonth(null);
 
                     $calendarEvent->set_frequency_interval(
-                        $values[$frequencyName][RecurringContentObject::PROPERTY_FREQUENCY_INTERVAL]
+                        $values[$frequencyName][$contentObjectClassName::PROPERTY_FREQUENCY_INTERVAL]
                     );
                     break;
                 case 3 :
@@ -756,12 +779,12 @@ class RecurringContentObjectForm extends ContentObjectForm
                     break;
                 case 5 :
                     $frequencyName = self::PARAM_MONTHLY;
-                    if ($values[$frequencyName][self::PARAM_OPTION] == RecurringContentObject::PROPERTY_BYDAY)
+                    if ($values[$frequencyName][self::PARAM_OPTION] == $contentObjectClassName::PROPERTY_BYDAY)
                     {
                         $calendarEvent->set_byday(
-                            RecurringContentObject::get_byday_ical_format(
-                                $values[$frequencyName][RecurringContentObject::PROPERTY_BYDAY][self::PARAM_RANK],
-                                $values[$frequencyName][RecurringContentObject::PROPERTY_BYDAY][self::PARAM_DAY]
+                            $contentObjectClassName::get_byday_ical_format(
+                                $values[$frequencyName][$contentObjectClassName::PROPERTY_BYDAY][self::PARAM_RANK],
+                                $values[$frequencyName][$contentObjectClassName::PROPERTY_BYDAY][self::PARAM_DAY]
                             )
                         );
 
@@ -770,13 +793,13 @@ class RecurringContentObjectForm extends ContentObjectForm
                     else
                     {
                         $calendarEvent->set_bymonthday(
-                            implode(',', $values[$frequencyName][RecurringContentObject::PROPERTY_BYMONTHDAY])
+                            implode(',', $values[$frequencyName][$contentObjectClassName::PROPERTY_BYMONTHDAY])
                         );
                         $calendarEvent->set_byday(null);
                     }
 
                     $calendarEvent->set_frequency_interval(
-                        $values[$frequencyName][RecurringContentObject::PROPERTY_FREQUENCY_INTERVAL]
+                        $values[$frequencyName][$contentObjectClassName::PROPERTY_FREQUENCY_INTERVAL]
                     );
 
                     $calendarEvent->set_bymonth(null);
@@ -784,30 +807,30 @@ class RecurringContentObjectForm extends ContentObjectForm
                 case 6 :
                     $frequencyName = self::PARAM_YEARLY;
 
-                    if ($values[$frequencyName][self::PARAM_OPTION] == RecurringContentObject::PROPERTY_BYDAY)
+                    if ($values[$frequencyName][self::PARAM_OPTION] == $contentObjectClassName::PROPERTY_BYDAY)
                     {
                         $calendarEvent->set_byday(
-                            RecurringContentObject::get_byday_ical_format(
-                                $values[$frequencyName][RecurringContentObject::PROPERTY_BYDAY][self::PARAM_RANK],
-                                $values[$frequencyName][RecurringContentObject::PROPERTY_BYDAY][self::PARAM_DAY]
+                            $contentObjectClassName::get_byday_ical_format(
+                                $values[$frequencyName][$contentObjectClassName::PROPERTY_BYDAY][self::PARAM_RANK],
+                                $values[$frequencyName][$contentObjectClassName::PROPERTY_BYDAY][self::PARAM_DAY]
                             )
                         );
 
-                        $calendarEvent->set_bymonth($values[$frequencyName][RecurringContentObject::PROPERTY_BYMONTH]);
+                        $calendarEvent->set_bymonth($values[$frequencyName][$contentObjectClassName::PROPERTY_BYMONTH]);
                         $calendarEvent->set_bymonthday(null);
                     }
                     else
                     {
                         $calendarEvent->set_bymonthday(
-                            implode(',', $values[$frequencyName][RecurringContentObject::PROPERTY_BYMONTHDAY])
+                            implode(',', $values[$frequencyName][$contentObjectClassName::PROPERTY_BYMONTHDAY])
                         );
 
-                        $calendarEvent->set_bymonth($values[$frequencyName][RecurringContentObject::PROPERTY_BYMONTH]);
+                        $calendarEvent->set_bymonth($values[$frequencyName][$contentObjectClassName::PROPERTY_BYMONTH]);
                         $calendarEvent->set_byday(null);
                     }
 
                     $calendarEvent->set_frequency_interval(
-                        $values[$frequencyName][RecurringContentObject::PROPERTY_FREQUENCY_INTERVAL]
+                        $values[$frequencyName][$contentObjectClassName::PROPERTY_FREQUENCY_INTERVAL]
                     );
 
                     break;
@@ -820,14 +843,14 @@ class RecurringContentObjectForm extends ContentObjectForm
                     $calendarEvent->set_frequency_count(0);
                     break;
                 case 2 :
-                    $calendarEvent->set_frequency_count($values[RecurringContentObject::PROPERTY_FREQUENCY_COUNT]);
+                    $calendarEvent->set_frequency_count($values[$contentObjectClassName::PROPERTY_FREQUENCY_COUNT]);
                     $calendarEvent->set_until(0);
                     break;
                 case 3 :
                     $calendarEvent->set_frequency_count(0);
                     $calendarEvent->set_until(
                         DatetimeUtilities::getInstance()->timeFromDatepicker(
-                            $values[RecurringContentObject::PROPERTY_UNTIL]
+                            $values[$contentObjectClassName::PROPERTY_UNTIL]
                         )
                     );
             }

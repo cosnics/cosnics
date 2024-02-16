@@ -1,9 +1,7 @@
 <?php
 namespace Chamilo\Libraries\Storage\Cache;
 
-use Chamilo\Libraries\Storage\DataClass\CompositeDataClass;
 use Chamilo\Libraries\Storage\DataClass\DataClass;
-use Chamilo\Libraries\Storage\Exception\DataClassNoResultException;
 use Chamilo\Libraries\Storage\Parameters\DataClassCountGroupedParameters;
 use Chamilo\Libraries\Storage\Parameters\DataClassCountParameters;
 use Chamilo\Libraries\Storage\Parameters\DataClassDistinctParameters;
@@ -37,10 +35,7 @@ class DataClassRepositoryCache
         $this->cache = [];
     }
 
-    /**
-     * @param mixed $value
-     */
-    private function add(string $className, ?DataClassParameters $parameters, $value): bool
+    private function add(string $className, ?DataClassParameters $parameters, mixed $value): bool
     {
         if (!$this->exists($className, $parameters))
         {
@@ -51,32 +46,36 @@ class DataClassRepositoryCache
     }
 
     public function addForArrayCollection(
-        string $dataClassName, ArrayCollection $arrayCollection, DataClassParameters $parameters
+        string $cacheDataClassName, ArrayCollection $arrayCollection, DataClassParameters $parameters
     ): bool
     {
-        return $this->add($this->getCacheClassName($dataClassName), $parameters, $arrayCollection);
+        return $this->add($cacheDataClassName, $parameters, $arrayCollection);
     }
 
-    public function addForDataClass(DataClass $object, DataClassRetrieveParameters $parameters): bool
+    public function addForDataClass(
+        string $cacheDataClassName, DataClassRetrieveParameters $parameters, ?DataClass $object = null
+    ): bool
     {
-        $className = $this->getDataClassCacheClassName($object);
-
-        foreach ($object::getCacheablePropertyNames() as $cacheableProperty)
+        if ($object instanceof DataClass)
         {
-            $value = $object->getDefaultProperty($cacheableProperty);
-            if (isset($value))
+            foreach ($object::getCacheablePropertyNames() as $cacheableProperty)
             {
-                $cacheablePropertyParameters = new DataClassRetrieveParameters(
-                    new EqualityCondition(
-                        new PropertyConditionVariable($className, $cacheableProperty),
-                        new StaticConditionVariable($value)
-                    )
-                );
-                $this->set($className, $cacheablePropertyParameters->hash(), $object);
+                $value = $object->getDefaultProperty($cacheableProperty);
+
+                if (isset($value))
+                {
+                    $cacheablePropertyParameters = new DataClassRetrieveParameters(
+                        new EqualityCondition(
+                            new PropertyConditionVariable($cacheDataClassName, $cacheableProperty),
+                            new StaticConditionVariable($value)
+                        )
+                    );
+                    $this->set($cacheDataClassName, $cacheablePropertyParameters->hash(), $object);
+                }
             }
         }
 
-        $this->set($className, $parameters->hash(), $object);
+        $this->set($cacheDataClassName, $parameters->hash(), $object);
 
         return true;
     }
@@ -103,34 +102,9 @@ class DataClassRepositoryCache
         return $this->add($className, $parameters, $propertyValues);
     }
 
-    public function addForNoResult(DataClassNoResultException $exception): bool
-    {
-        $this->set($exception->get_class_name(), $exception->get_parameters()->hash(), null);
-
-        return true;
-    }
-
     public function addForRecord(string $className, array $record, RecordRetrieveParameters $parameters): bool
     {
         $this->set($className, $parameters->hash(), $record);
-
-        return true;
-    }
-
-    public function deleteForDataClass(DataClass $object): bool
-    {
-        $className = $this->getDataClassCacheClassName($object);
-
-        foreach ($object::getCacheablePropertyNames() as $cacheableProperty)
-        {
-            $cacheablePropertyParameters = new DataClassRetrieveParameters(
-                new EqualityCondition(
-                    new PropertyConditionVariable($className, $cacheableProperty),
-                    new StaticConditionVariable($object->getDefaultProperty($cacheableProperty))
-                )
-            );
-            $this->set($className, $cacheablePropertyParameters->hash(), null);
-        }
 
         return true;
     }
@@ -162,42 +136,12 @@ class DataClassRepositoryCache
         }
     }
 
-    protected function getCacheClassName(string $dataClassName): string
-    {
-        $isCompositeDataClass = is_subclass_of($dataClassName, CompositeDataClass::class);
-        $isExtensionClass = get_parent_class($dataClassName) !== CompositeDataClass::class;
-
-        if ($isCompositeDataClass && $isExtensionClass)
-        {
-            return $dataClassName::parentClassName();
-        }
-        else
-        {
-            return $dataClassName;
-        }
-    }
-
-    private function getDataClassCacheClassName(DataClass $object): string
-    {
-        if ($object instanceof CompositeDataClass && get_parent_class($object) !== CompositeDataClass::class)
-        {
-            return $object::parentClassName();
-        }
-        else
-        {
-            return get_class($object);
-        }
-    }
-
-    public function reset()
+    public function reset(): void
     {
         $this->cache = [];
     }
 
-    /**
-     * @param mixed $value
-     */
-    private function set(string $class, string $hash, $value)
+    private function set(string $class, string $hash, mixed $value): void
     {
         $this->cache[$class][$hash] = $value;
     }

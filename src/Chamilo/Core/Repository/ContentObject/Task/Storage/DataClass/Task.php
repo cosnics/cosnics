@@ -5,7 +5,8 @@ use Chamilo\Core\Repository\Storage\DataClass\ContentObject;
 use Chamilo\Libraries\Architecture\Interfaces\AttachmentSupportInterface;
 use Chamilo\Libraries\Architecture\Interfaces\IncludeableInterface;
 use Chamilo\Libraries\Architecture\Interfaces\VersionableInterface;
-use Chamilo\Libraries\Calendar\Event\RecurringContentObject;
+use Chamilo\Libraries\Calendar\Event\RecurringContentObjectInterface;
+use Chamilo\Libraries\Calendar\Event\RecurringContentObjectTrait;
 use Chamilo\Libraries\Translation\Translation;
 use Exception;
 
@@ -14,8 +15,11 @@ use Exception;
  * @author  Hans De Bisschop
  * @author  Dieter De Neef
  */
-class Task extends RecurringContentObject implements VersionableInterface, AttachmentSupportInterface, IncludeableInterface
+class Task extends ContentObject
+    implements VersionableInterface, AttachmentSupportInterface, IncludeableInterface, RecurringContentObjectInterface
 {
+    use RecurringContentObjectTrait;
+
     public const CATEGORY_ANNIVERSARY = 'Anniversary';
     public const CATEGORY_BUSINESS = 'Business';
     public const CATEGORY_CALL = 'Call';

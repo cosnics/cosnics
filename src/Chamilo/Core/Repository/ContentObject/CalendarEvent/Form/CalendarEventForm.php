@@ -2,7 +2,8 @@
 namespace Chamilo\Core\Repository\ContentObject\CalendarEvent\Form;
 
 use Chamilo\Core\Repository\ContentObject\CalendarEvent\Storage\DataClass\CalendarEvent;
-use Chamilo\Libraries\Calendar\Form\RecurringContentObjectForm;
+use Chamilo\Core\Repository\Form\ContentObjectForm;
+use Chamilo\Libraries\Calendar\Form\RecurringContentObjectFormTrait;
 use Chamilo\Libraries\Utilities\DatetimeUtilities;
 use Chamilo\Libraries\Utilities\StringUtilities;
 
@@ -12,8 +13,9 @@ use Chamilo\Libraries\Utilities\StringUtilities;
  * @author Hans De Bisschop <hans.de.bisschop@ehb.be>
  * @author Dieter De Neef
  */
-class CalendarEventForm extends RecurringContentObjectForm
+class CalendarEventForm extends ContentObjectForm
 {
+    use RecurringContentObjectFormTrait;
 
     /**
      * @throws \Exception
@@ -41,8 +43,8 @@ class CalendarEventForm extends RecurringContentObjectForm
         );
 
         $this->addRule(
-            CalendarEvent::PROPERTY_END_DATE,
-            $translator->trans('ThisFieldIsRequired', [], StringUtilities::LIBRARIES), 'required'
+            CalendarEvent::PROPERTY_END_DATE, $translator->trans('ThisFieldIsRequired', [], StringUtilities::LIBRARIES),
+            'required'
         );
 
         $this->addFrequencyPropertiesToForm();
@@ -55,7 +57,7 @@ class CalendarEventForm extends RecurringContentObjectForm
 
     /**
      * @param string[] $htmleditorOptions
-     * @param boolean $inTab
+     * @param bool $inTab
      *
      * @throws \Exception
      */
@@ -67,7 +69,7 @@ class CalendarEventForm extends RecurringContentObjectForm
 
     /**
      * @param string[] $htmleditorOptions
-     * @param boolean $inTab
+     * @param bool $inTab
      *
      * @throws \Exception
      */
@@ -138,7 +140,7 @@ class CalendarEventForm extends RecurringContentObjectForm
     }
 
     /**
-     * @return boolean
+     * @return bool
      * @throws \Chamilo\Libraries\Architecture\Exceptions\UserException
      */
     public function update_content_object()
@@ -152,5 +154,10 @@ class CalendarEventForm extends RecurringContentObjectForm
         $this->setRecurrenceProperties($calendarEvent);
 
         return parent::update_content_object();
+    }
+
+    public function getContentObjectType(): string
+    {
+        return CalendarEvent::class;
     }
 }

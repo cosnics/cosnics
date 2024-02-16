@@ -5,7 +5,8 @@ use Chamilo\Core\Repository\Storage\DataClass\ContentObject;
 use Chamilo\Libraries\Architecture\Interfaces\AttachmentSupportInterface;
 use Chamilo\Libraries\Architecture\Interfaces\IncludeableInterface;
 use Chamilo\Libraries\Architecture\Interfaces\VersionableInterface;
-use Chamilo\Libraries\Calendar\Event\RecurringContentObject;
+use Chamilo\Libraries\Calendar\Event\RecurringContentObjectInterface;
+use Chamilo\Libraries\Calendar\Event\RecurringContentObjectTrait;
 use Chamilo\Libraries\Translation\Translation;
 
 /**
@@ -13,8 +14,11 @@ use Chamilo\Libraries\Translation\Translation;
  * @author  Hans De Bisschop <hans.de.bisschop@ehb.be>
  * @author  Dieter De Neef
  */
-class CalendarEvent extends RecurringContentObject implements VersionableInterface, AttachmentSupportInterface, IncludeableInterface
+class CalendarEvent extends ContentObject
+    implements VersionableInterface, AttachmentSupportInterface, IncludeableInterface, RecurringContentObjectInterface
 {
+    use RecurringContentObjectTrait;
+
     public const CONTEXT = 'Chamilo\Core\Repository\ContentObject\CalendarEvent';
 
     public const PROPERTY_END_DATE = 'end_date';

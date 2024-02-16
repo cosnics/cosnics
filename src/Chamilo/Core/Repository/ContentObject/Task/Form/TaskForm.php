@@ -2,7 +2,8 @@
 namespace Chamilo\Core\Repository\ContentObject\Task\Form;
 
 use Chamilo\Core\Repository\ContentObject\Task\Storage\DataClass\Task;
-use Chamilo\Libraries\Calendar\Form\RecurringContentObjectForm;
+use Chamilo\Core\Repository\Form\ContentObjectForm;
+use Chamilo\Libraries\Calendar\Form\RecurringContentObjectFormTrait;
 use Chamilo\Libraries\Utilities\DatetimeUtilities;
 
 /**
@@ -10,8 +11,9 @@ use Chamilo\Libraries\Utilities\DatetimeUtilities;
  *
  * @author Hans De Bisschop <hans.de.bisschop@ehb.be>
  */
-class TaskForm extends RecurringContentObjectForm
+class TaskForm extends ContentObjectForm
 {
+    use RecurringContentObjectFormTrait;
 
     /**
      * @throws \Exception
@@ -27,13 +29,13 @@ class TaskForm extends RecurringContentObjectForm
         $this->addElement(
             'select', Task::PROPERTY_PRIORITY,
             $translator->trans('Priority', [], 'Chamilo\Core\Repository\ContentObject\Task'),
-            Task::get_priority_options(), array('class' => 'form-control')
+            Task::get_priority_options(), ['class' => 'form-control']
         );
 
         $this->addElement(
             'select', Task::PROPERTY_CATEGORY,
-            $translator->trans('TaskType', [], 'Chamilo\Core\Repository\ContentObject\Task'),
-            Task::get_types_options(), array('class' => 'form-control')
+            $translator->trans('TaskType', [], 'Chamilo\Core\Repository\ContentObject\Task'), Task::get_types_options(),
+            ['class' => 'form-control']
         );
 
         $this->add_datepicker(
@@ -41,8 +43,8 @@ class TaskForm extends RecurringContentObjectForm
             $translator->trans('StartDate', [], 'Chamilo\Core\Repository\ContentObject\Task'), true
         );
         $this->add_datepicker(
-            Task::PROPERTY_DUE_DATE,
-            $translator->trans('EndDate', [], 'Chamilo\Core\Repository\ContentObject\Task'), true
+            Task::PROPERTY_DUE_DATE, $translator->trans('EndDate', [], 'Chamilo\Core\Repository\ContentObject\Task'),
+            true
         );
 
         $this->addFrequencyPropertiesToForm();
@@ -50,7 +52,7 @@ class TaskForm extends RecurringContentObjectForm
 
     /**
      * @param string[] $htmleditorOptions
-     * @param boolean $inTab
+     * @param bool $inTab
      *
      * @throws \Exception
      */
@@ -62,7 +64,7 @@ class TaskForm extends RecurringContentObjectForm
 
     /**
      * @param string[] $htmleditorOptions
-     * @param boolean $inTab
+     * @param bool $inTab
      *
      * @throws \Exception
      */
@@ -85,6 +87,11 @@ class TaskForm extends RecurringContentObjectForm
         $this->set_content_object($task);
 
         return parent::create_content_object();
+    }
+
+    public function getContentObjectType(): string
+    {
+        return Task::class;
     }
 
     /**
@@ -132,7 +139,7 @@ class TaskForm extends RecurringContentObjectForm
     }
 
     /**
-     * @return boolean
+     * @return bool
      * @throws \Chamilo\Libraries\Architecture\Exceptions\UserException
      */
     public function update_content_object()
