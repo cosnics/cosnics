@@ -3,6 +3,7 @@ namespace Chamilo\Libraries\Translation;
 
 use Chamilo\Libraries\Cache\FileBasedCacheService;
 use Chamilo\Libraries\File\ConfigurablePathBuilder;
+use Symfony\Component\Filesystem\Filesystem;
 
 /**
  * Manages the cache for the symfony translations
@@ -15,9 +16,11 @@ class TranslationCacheService extends FileBasedCacheService
 {
     protected TranslatorFactory $translatorFactory;
 
-    public function __construct(ConfigurablePathBuilder $configurablePathBuilder, TranslatorFactory $translatorFactory)
+    public function __construct(
+        ConfigurablePathBuilder $configurablePathBuilder, TranslatorFactory $translatorFactory, Filesystem $filesystem
+    )
     {
-        parent::__construct($configurablePathBuilder);
+        parent::__construct($configurablePathBuilder, $filesystem);
 
         $this->translatorFactory = $translatorFactory;
     }
