@@ -77,20 +77,20 @@ class UserRoleService implements UserRoleServiceInterface
     }
 
     /**
-     * @return \Chamilo\Core\User\Roles\Storage\DataClass\Role[]
+     * @return \Doctrine\Common\Collections\ArrayCollection<\Chamilo\Core\User\Roles\Storage\DataClass\Role>
      */
-    public function getRolesForUser(User $user): array
+    public function getRolesForUser(User $user): ArrayCollection
     {
         $userRoles = $this->userRoleRepository->findRolesForUser($user->getId());
 
         if ($userRoles->count() == 0)
         {
-            $userRoles = [$this->roleService->getOrCreateRoleByName('ROLE_DEFAULT_USER')];
+            $userRoles->add($this->roleService->getOrCreateRoleByName('ROLE_DEFAULT_USER'));
         }
 
         if ($user->isPlatformAdmin())
         {
-            $userRoles[] = $this->roleService->getOrCreateRoleByName('ROLE_ADMINISTRATOR');
+            $userRoles->add($this->roleService->getOrCreateRoleByName('ROLE_ADMINISTRATOR'));
         }
 
         return $userRoles;
