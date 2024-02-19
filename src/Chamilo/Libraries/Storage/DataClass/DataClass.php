@@ -95,6 +95,7 @@ abstract class DataClass
     {
         $this->notify(DataClassListener::BEFORE_CREATE);
         $success = false;
+
         if ($this->checkBeforeSave())
         {
             $success = DataManager::create($this);
@@ -230,18 +231,12 @@ abstract class DataClass
         return $this->errors ?? [];
     }
 
-    /**
-     * @return string[]
-     */
     public function getForeignProperties(): array
     {
         return $this->getSpecificProperties(self::PROPERTIES_FOREIGN);
     }
 
-    /**
-     * @return mixed
-     */
-    public function getForeignProperty(string $name, string $classname)
+    public function getForeignProperty(string $name, string $classname): mixed
     {
         $foreignProperty = $this->getSpecificProperty(self::PROPERTIES_FOREIGN, $name);
 
@@ -270,9 +265,6 @@ abstract class DataClass
         return $this->listeners;
     }
 
-    /**
-     * @return string[]
-     */
     public function getOptionalProperties(): array
     {
         return $this->getSpecificProperties(self::PROPERTIES_OPTIONAL);
@@ -281,31 +273,22 @@ abstract class DataClass
     /**
      * @return ?string
      */
-    public function getOptionalProperty(string $name)
+    public function getOptionalProperty(string $name): mixed
     {
         return $this->getSpecificProperty(self::PROPERTIES_OPTIONAL, $name);
     }
 
-    /**
-     * @return string[][]
-     */
     public function getProperties(): array
     {
         return $this->properties;
     }
 
-    /**
-     * @return string[]
-     */
     public function getSpecificProperties(string $propertiesType): array
     {
         return array_key_exists($propertiesType, $this->properties) ? $this->properties[$propertiesType] : [];
     }
 
-    /**
-     * @return ?string
-     */
-    public function getSpecificProperty(string $propertiesType, string $propertyName)
+    public function getSpecificProperty(string $propertiesType, string $propertyName): mixed
     {
         $properties = $this->getSpecificProperties($propertiesType);
 
@@ -330,11 +313,6 @@ abstract class DataClass
     public static function isDefaultPropertyName(string $name): bool
     {
         return in_array($name, static::getDefaultPropertyNames());
-    }
-
-    public static function isExtended(): bool
-    {
-        return false;
     }
 
     public function isIdentified(): bool
@@ -389,14 +367,13 @@ abstract class DataClass
         return $this;
     }
 
-    /**
-     * @param mixed $value
-     */
-    public function setDefaultProperty(string $name, mixed $value)
+    public function setDefaultProperty(string $name, mixed $value): static
     {
         $this->notify(DataClassListener::BEFORE_SET_PROPERTY, [$name, $value]);
         $this->setSpecificProperty(self::PROPERTIES_DEFAULT, $name, $value);
         $this->notify(DataClassListener::AFTER_SET_PROPERTY, [$name, $value]);
+
+        return $this;
     }
 
     /**
@@ -444,10 +421,7 @@ abstract class DataClass
         return $this;
     }
 
-    /**
-     * @param mixed $value The new value for the property.
-     */
-    public function setOptionalProperty(string $name, $value): DataClass
+    public function setOptionalProperty(string $name, mixed $value): DataClass
     {
         $this->setSpecificProperty(self::PROPERTIES_OPTIONAL, $name, $value);
 
@@ -474,10 +448,7 @@ abstract class DataClass
         return $this;
     }
 
-    /**
-     * @param mixed $propertyValue
-     */
-    public function setSpecificProperty(string $propertiesType, string $propertyName, $propertyValue): DataClass
+    public function setSpecificProperty(string $propertiesType, string $propertyName, mixed $propertyValue): DataClass
     {
         $this->properties[$propertiesType][$propertyName] = $propertyValue;
 

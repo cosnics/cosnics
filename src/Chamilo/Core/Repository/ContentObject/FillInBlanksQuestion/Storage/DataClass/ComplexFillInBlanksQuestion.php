@@ -3,6 +3,7 @@ namespace Chamilo\Core\Repository\ContentObject\FillInBlanksQuestion\Storage\Dat
 
 use Chamilo\Core\Repository\ContentObject\Assessment\Display\AnswerFeedbackDisplaySupport;
 use Chamilo\Core\Repository\Storage\DataClass\ComplexContentObjectItem;
+use Chamilo\Libraries\Storage\DataClass\Interfaces\CompositeDataClassExtensionInterface;
 
 /**
  * @package core\repository\content_object\fill_in_blanks_question
@@ -11,7 +12,8 @@ use Chamilo\Core\Repository\Storage\DataClass\ComplexContentObjectItem;
  * @author  Magali Gillard <magali.gillard@ehb.be>
  * @author  Eduard Vossen <eduard.vossen@ehb.be>
  */
-class ComplexFillInBlanksQuestion extends ComplexContentObjectItem implements AnswerFeedbackDisplaySupport
+class ComplexFillInBlanksQuestion extends ComplexContentObjectItem
+    implements AnswerFeedbackDisplaySupport, CompositeDataClassExtensionInterface
 {
     public const CONTEXT = FillInBlanksQuestion::CONTEXT;
 
@@ -24,7 +26,9 @@ class ComplexFillInBlanksQuestion extends ComplexContentObjectItem implements An
      */
     public static function getAdditionalPropertyNames(): array
     {
-        return [self::PROPERTY_WEIGHT, self::PROPERTY_RANDOM, self::PROPERTY_SHOW_ANSWER_FEEDBACK];
+        return parent::getAdditionalPropertyNames(
+            [self::PROPERTY_WEIGHT, self::PROPERTY_RANDOM, self::PROPERTY_SHOW_ANSWER_FEEDBACK]
+        );
     }
 
     /**

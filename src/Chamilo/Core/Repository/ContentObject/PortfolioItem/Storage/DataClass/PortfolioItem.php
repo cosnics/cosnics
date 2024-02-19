@@ -6,11 +6,13 @@ use Chamilo\Core\Repository\Storage\DataClass\ContentObject;
 use Chamilo\Core\Repository\Storage\DataManager;
 use Chamilo\Libraries\Architecture\Interfaces\HelperContentObjectSupportInterface;
 use Chamilo\Libraries\Architecture\Interfaces\VersionableInterface;
+use Chamilo\Libraries\Storage\DataClass\Interfaces\CompositeDataClassExtensionInterface;
 
 /**
  * @package Chamilo\Core\Repository\ContentObject\PortfolioItem\Storage\DataClass
  */
-class PortfolioItem extends ContentObject implements VersionableInterface, HelperContentObjectSupportInterface
+class PortfolioItem extends ContentObject
+    implements VersionableInterface, HelperContentObjectSupportInterface, CompositeDataClassExtensionInterface
 {
     public const CONTEXT = 'Chamilo\Core\Repository\ContentObject\PortfolioItem';
 
@@ -23,7 +25,7 @@ class PortfolioItem extends ContentObject implements VersionableInterface, Helpe
 
     public static function getAdditionalPropertyNames(): array
     {
-        return [self::PROPERTY_REFERENCE];
+        return parent::getAdditionalPropertyNames([self::PROPERTY_REFERENCE]);
     }
 
     /**

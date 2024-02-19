@@ -9,6 +9,7 @@ use Chamilo\Core\Repository\Storage\DataClass\ContentObject;
 use Chamilo\Core\Repository\Storage\DataManager;
 use Chamilo\Libraries\Architecture\ClassnameUtilities;
 use Chamilo\Libraries\Architecture\Interfaces\ComplexContentObjectSupportInterface;
+use Chamilo\Libraries\Storage\DataClass\Interfaces\CompositeDataClassExtensionInterface;
 use Chamilo\Libraries\Storage\Parameters\DataClassCountParameters;
 use Chamilo\Libraries\Storage\Query\Condition\EqualityCondition;
 use Chamilo\Libraries\Storage\Query\Variable\PropertyConditionVariable;
@@ -17,7 +18,8 @@ use Chamilo\Libraries\Storage\Query\Variable\StaticConditionVariable;
 /**
  * @package Chamilo\Core\Repository\ContentObject\Assessment\Storage\DataClass
  */
-class Assessment extends ContentObject implements ComplexContentObjectSupportInterface, BuildSupport
+class Assessment extends ContentObject
+    implements ComplexContentObjectSupportInterface, BuildSupport, CompositeDataClassExtensionInterface
 {
     public const CONTEXT = 'Chamilo\Core\Repository\ContentObject\Assessment';
 
@@ -63,12 +65,12 @@ class Assessment extends ContentObject implements ComplexContentObjectSupportInt
 
     public static function getAdditionalPropertyNames(): array
     {
-        return [
+        return parent::getAdditionalPropertyNames([
             self::PROPERTY_MAXIMUM_ATTEMPTS,
             self::PROPERTY_QUESTIONS_PER_PAGE,
             self::PROPERTY_MAXIMUM_TIME,
             self::PROPERTY_RANDOM_QUESTIONS
-        ];
+        ]);
     }
 
     /**

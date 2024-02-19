@@ -6,6 +6,7 @@ use Chamilo\Libraries\Storage\Cache\DataClassRepositoryCache;
 use Chamilo\Libraries\Storage\DataClass\CompositeDataClass;
 use Chamilo\Libraries\Storage\DataClass\DataClass;
 use Chamilo\Libraries\Storage\DataClass\DataClassFactory;
+use Chamilo\Libraries\Storage\DataClass\Interfaces\CompositeDataClassInterface;
 use Chamilo\Libraries\Storage\DataClass\Interfaces\UuidDataClassInterface;
 use Chamilo\Libraries\Storage\DataManager\Interfaces\DataClassDatabaseInterface;
 use Chamilo\Libraries\Storage\Exception\CompositeDataClassTypeException;
@@ -695,22 +696,24 @@ class DataClassRepository
         return $this->retrieveClass($parentClassName, $dataClassName, $parameters);
     }
 
-    public function retrieveCompositeDataClassAdditionalProperties(CompositeDataClass $compositeDataClass): array
+    public function retrieveCompositeDataClassAdditionalProperties(
+        string $compositeDataClassName, string $compositeDataClassIdentifier
+    ): array
     {
-        if (!$compositeDataClass::isExtended())
+        if (!is_subclass_of($compositeDataClassName, CompositeDataClassInterface::class) ||
+            !$compositeDataClassName::isExtended())
         {
             return [];
         }
 
         $parameters = new RecordRetrieveParameters(
-            new RetrieveProperties([new PropertiesConditionVariable(get_class($compositeDataClass))]),
-            new EqualityCondition(
-                new PropertyConditionVariable(get_class($compositeDataClass), $compositeDataClass::PROPERTY_ID),
-                new StaticConditionVariable($compositeDataClass->getId())
+            new RetrieveProperties([new PropertiesConditionVariable($compositeDataClassName)]), new EqualityCondition(
+                new PropertyConditionVariable($compositeDataClassName, DataClass::PROPERTY_ID),
+                new StaticConditionVariable($compositeDataClassIdentifier)
             )
         );
 
-        return $this->getDataClassDatabase()->retrieve(get_class($compositeDataClass), $parameters);
+        return $this->record($compositeDataClassName, $parameters);
     }
 
     public function retrieveMaximumValue(string $dataClassName, string $property, ?Condition $condition = null): int
@@ -854,9 +857,6 @@ class DataClassRepository
         return $this->getDataClassDatabase()->transactional($function);
     }
 
-    /**
-     * @throws \Chamilo\Libraries\Storage\Exception\DataClassNoResultException
-     */
     public function update(DataClass $dataClass): bool
     {
         if ($dataClass instanceof CompositeDataClass)

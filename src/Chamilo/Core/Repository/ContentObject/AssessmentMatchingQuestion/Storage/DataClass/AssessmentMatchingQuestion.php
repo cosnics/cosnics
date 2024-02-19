@@ -3,11 +3,13 @@ namespace Chamilo\Core\Repository\ContentObject\AssessmentMatchingQuestion\Stora
 
 use Chamilo\Core\Repository\Storage\DataClass\ContentObject;
 use Chamilo\Libraries\Architecture\Interfaces\VersionableInterface;
+use Chamilo\Libraries\Storage\DataClass\Interfaces\CompositeDataClassExtensionInterface;
 
 /**
  * @package Chamilo\Core\Repository\ContentObject\AssessmentMatchingQuestion\Storage\DataClass
  */
-class AssessmentMatchingQuestion extends ContentObject implements VersionableInterface
+class AssessmentMatchingQuestion extends ContentObject
+    implements VersionableInterface, CompositeDataClassExtensionInterface
 {
     public const CONTEXT = 'Chamilo\Core\Repository\ContentObject\AssessmentMatchingQuestion';
 
@@ -36,7 +38,9 @@ class AssessmentMatchingQuestion extends ContentObject implements VersionableInt
 
     public static function getAdditionalPropertyNames(): array
     {
-        return [self::PROPERTY_DISPLAY, self::PROPERTY_MATCHES, self::PROPERTY_OPTIONS];
+        return parent::getAdditionalPropertyNames(
+            [self::PROPERTY_DISPLAY, self::PROPERTY_MATCHES, self::PROPERTY_OPTIONS]
+        );
     }
 
     /**

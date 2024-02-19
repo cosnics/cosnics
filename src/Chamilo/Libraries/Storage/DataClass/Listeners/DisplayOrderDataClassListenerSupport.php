@@ -22,10 +22,5 @@ interface DisplayOrderDataClassListenerSupport
 
     public function getDisplayOrderProperty(): PropertyConditionVariable;
 
-    /**
-     * @param mixed $value
-     *
-     * @throws \Exception
-     */
-    public function setDefaultProperty(string $name, mixed $value);
+    public function setDefaultProperty(string $name, mixed $value): static;
 }

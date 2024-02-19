@@ -3,11 +3,13 @@ namespace Chamilo\Core\Repository\ContentObject\AssessmentMatrixQuestion\Storage
 
 use Chamilo\Core\Repository\Storage\DataClass\ContentObject;
 use Chamilo\Libraries\Architecture\Interfaces\VersionableInterface;
+use Chamilo\Libraries\Storage\DataClass\Interfaces\CompositeDataClassExtensionInterface;
 
 /**
  * @package Chamilo\Core\Repository\ContentObject\AssessmentMatrixQuestion\Storage\DataClass
  */
-class AssessmentMatrixQuestion extends ContentObject implements VersionableInterface
+class AssessmentMatrixQuestion extends ContentObject
+    implements VersionableInterface, CompositeDataClassExtensionInterface
 {
     public const CONTEXT = 'Chamilo\Core\Repository\ContentObject\AssessmentMatrixQuestion';
 
@@ -36,7 +38,9 @@ class AssessmentMatrixQuestion extends ContentObject implements VersionableInter
 
     public static function getAdditionalPropertyNames(): array
     {
-        return [self::PROPERTY_MATCHES, self::PROPERTY_OPTIONS, self::PROPERTY_MATRIX_TYPE];
+        return parent::getAdditionalPropertyNames(
+            [self::PROPERTY_MATCHES, self::PROPERTY_OPTIONS, self::PROPERTY_MATRIX_TYPE]
+        );
     }
 
     /**

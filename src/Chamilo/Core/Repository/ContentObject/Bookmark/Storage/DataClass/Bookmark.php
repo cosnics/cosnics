@@ -4,11 +4,13 @@ namespace Chamilo\Core\Repository\ContentObject\Bookmark\Storage\DataClass;
 use Chamilo\Core\Repository\Storage\DataClass\ContentObject;
 use Chamilo\Libraries\Architecture\Interfaces\IncludeableInterface;
 use Chamilo\Libraries\Architecture\Interfaces\VersionableInterface;
+use Chamilo\Libraries\Storage\DataClass\Interfaces\CompositeDataClassExtensionInterface;
 
 /**
  * @package Chamilo\Core\Repository\ContentObject\Bookmark\Storage\DataClass
  */
-class Bookmark extends ContentObject implements VersionableInterface, IncludeableInterface
+class Bookmark extends ContentObject
+    implements VersionableInterface, IncludeableInterface, CompositeDataClassExtensionInterface
 {
     public const CONTEXT = 'Chamilo\Core\Repository\ContentObject\Bookmark';
 
@@ -45,7 +47,7 @@ class Bookmark extends ContentObject implements VersionableInterface, Includeabl
 
     public static function getAdditionalPropertyNames(): array
     {
-        return [self::PROPERTY_URL, self::PROPERTY_APPLICATION];
+        return parent::getAdditionalPropertyNames([self::PROPERTY_URL, self::PROPERTY_APPLICATION]);
     }
 
     /**

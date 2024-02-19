@@ -3,11 +3,12 @@ namespace Chamilo\Core\Repository\ContentObject\PhysicalLocation\Storage\DataCla
 
 use Chamilo\Core\Repository\Storage\DataClass\ContentObject;
 use Chamilo\Libraries\Architecture\Interfaces\VersionableInterface;
+use Chamilo\Libraries\Storage\DataClass\Interfaces\CompositeDataClassExtensionInterface;
 
 /**
  * @package Chamilo\Core\Repository\ContentObject\PhysicalLocation\Storage\DataClass
  */
-class PhysicalLocation extends ContentObject implements VersionableInterface
+class PhysicalLocation extends ContentObject implements VersionableInterface, CompositeDataClassExtensionInterface
 {
     public const CONTEXT = 'Chamilo\Core\Repository\ContentObject\PhysicalLocation';
 
@@ -15,7 +16,7 @@ class PhysicalLocation extends ContentObject implements VersionableInterface
 
     public static function getAdditionalPropertyNames(): array
     {
-        return [self::PROPERTY_LOCATION];
+        return parent::getAdditionalPropertyNames([self::PROPERTY_LOCATION]);
     }
 
     /**

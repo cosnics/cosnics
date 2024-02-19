@@ -3,6 +3,7 @@ namespace Chamilo\Core\Repository\ContentObject\AssessmentMatchTextQuestion\Stor
 
 use Chamilo\Core\Repository\ContentObject\Assessment\Display\AnswerFeedbackDisplaySupport;
 use Chamilo\Core\Repository\Storage\DataClass\ComplexContentObjectItem;
+use Chamilo\Libraries\Storage\DataClass\Interfaces\CompositeDataClassExtensionInterface;
 
 /**
  * @package core\repository\content_object\assessment_match_text_question
@@ -11,7 +12,8 @@ use Chamilo\Core\Repository\Storage\DataClass\ComplexContentObjectItem;
  * @author  Magali Gillard <magali.gillard@ehb.be>
  * @author  Eduard Vossen <eduard.vossen@ehb.be>
  */
-class ComplexAssessmentMatchTextQuestion extends ComplexContentObjectItem implements AnswerFeedbackDisplaySupport
+class ComplexAssessmentMatchTextQuestion extends ComplexContentObjectItem
+    implements AnswerFeedbackDisplaySupport, CompositeDataClassExtensionInterface
 {
     public const CONTEXT = AssessmentMatchTextQuestion::CONTEXT;
 
@@ -23,7 +25,7 @@ class ComplexAssessmentMatchTextQuestion extends ComplexContentObjectItem implem
      */
     public static function getAdditionalPropertyNames(): array
     {
-        return [self::PROPERTY_WEIGHT, self::PROPERTY_SHOW_ANSWER_FEEDBACK];
+        return parent::getAdditionalPropertyNames([self::PROPERTY_WEIGHT, self::PROPERTY_SHOW_ANSWER_FEEDBACK]);
     }
 
     /**

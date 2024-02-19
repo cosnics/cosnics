@@ -2,12 +2,13 @@
 namespace Chamilo\Core\Repository\ContentObject\LearningPathItem\Storage\DataClass;
 
 use Chamilo\Core\Repository\Storage\DataClass\ComplexContentObjectItem;
+use Chamilo\Libraries\Storage\DataClass\Interfaces\CompositeDataClassExtensionInterface;
 use Chamilo\Libraries\Utilities\StringUtilities;
 
 /**
  * @package repository.lib.content_object.learning_path_item
  */
-class ComplexLearningPathItem extends ComplexContentObjectItem
+class ComplexLearningPathItem extends ComplexContentObjectItem implements CompositeDataClassExtensionInterface
 {
     public const CONTEXT = LearningPathItem::CONTEXT;
 
@@ -15,7 +16,7 @@ class ComplexLearningPathItem extends ComplexContentObjectItem
 
     public static function getAdditionalPropertyNames(): array
     {
-        return [self::PROPERTY_PREREQUISITES];
+        return parent::getAdditionalPropertyNames([self::PROPERTY_PREREQUISITES]);
     }
 
     /**

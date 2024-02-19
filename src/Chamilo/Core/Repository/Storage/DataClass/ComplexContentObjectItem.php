@@ -5,27 +5,26 @@ use Chamilo\Core\Repository\Manager;
 use Chamilo\Core\Repository\Storage\DataManager;
 use Chamilo\Libraries\Architecture\ClassnameUtilities;
 use Chamilo\Libraries\Architecture\Exceptions\ClassNotExistException;
-use Chamilo\Libraries\DependencyInjection\DependencyInjectionContainerBuilder;
-use Chamilo\Libraries\File\FilesystemTools;
-use Chamilo\Libraries\Storage\DataClass\CompositeDataClass;
+use Chamilo\Libraries\Storage\DataClass\DataClass;
+use Chamilo\Libraries\Storage\DataClass\Interfaces\CompositeDataClassInterface;
 use Chamilo\Libraries\Storage\DataClass\Listeners\DisplayOrderDataClassListener;
 use Chamilo\Libraries\Storage\DataClass\Listeners\DisplayOrderDataClassListenerSupport;
+use Chamilo\Libraries\Storage\DataClass\Traits\CompositeDataClassTrait;
 use Chamilo\Libraries\Storage\Query\Variable\PropertyConditionVariable;
-use Chamilo\Libraries\Translation\Translation;
 use Chamilo\Libraries\Utilities\StringUtilities;
-use Symfony\Component\Filesystem\Filesystem;
-
-/**
- * @package repository.lib
- */
 
 /**
  * Instances of this class group generic information about a complex object item
  *
+ * @package Chamilo\Core\Repository\Storage\DataClass
  * @author Sven Vanpoucke
+ * @author Hans De Bisschop <hans.de.bisschop@ehb.be>
  */
-class ComplexContentObjectItem extends CompositeDataClass implements DisplayOrderDataClassListenerSupport
+class ComplexContentObjectItem extends DataClass
+    implements DisplayOrderDataClassListenerSupport, CompositeDataClassInterface
 {
+    use CompositeDataClassTrait;
+
     public const CONTEXT = Manager::CONTEXT;
 
     public const PROPERTY_ADD_DATE = 'add_date';
@@ -34,24 +33,23 @@ class ComplexContentObjectItem extends CompositeDataClass implements DisplayOrde
     public const PROPERTY_REF = 'ref_id';
     public const PROPERTY_USER_ID = 'user_id';
 
-    /**
-     * @var ContentObject
-     */
-    private $reference_object;
+    private ?ContentObject $referenceObject;
 
     public function __construct($default_properties = [], $additionalProperties = [], array $optionalProperties = [])
     {
-        parent::__construct($default_properties, $additionalProperties, $optionalProperties);
+        parent::__construct($default_properties, $optionalProperties);
+        $this->setAdditionalProperties($additionalProperties);
+        $this->setType(static::class);
         $this->addListener(new DisplayOrderDataClassListener($this));
     }
 
     /**
      * Checks this object before saving + adds some default values
-     *
-     * @return bool
      */
-    public function checkBeforeSave(): bool
+    protected function checkBeforeSave(): bool
     {
+        $translator = $this->getTranslator();
+
         if (!$this->get_add_date())
         {
             $this->set_add_date(time());
@@ -64,31 +62,31 @@ class ComplexContentObjectItem extends CompositeDataClass implements DisplayOrde
 
         if (StringUtilities::getInstance()->isNullOrEmpty($this->get_ref()))
         {
-            $this->addError(Translation::get('ReferenceObjectShouldNotBeEmpty'));
+            $this->addError($translator->trans('ReferenceObjectShouldNotBeEmpty', [], Manager::CONTEXT));
         }
         else
         {
             $ref_content_object = DataManager::retrieve_by_id(ContentObject::class, $this->get_ref());
             if (!$ref_content_object)
             {
-                $this->addError(Translation::get('ReferenceObjectDoesNotExist'));
+                $this->addError($translator->trans('ReferenceObjectDoesNotExist', [], Manager::CONTEXT));
             }
         }
 
         if (StringUtilities::getInstance()->isNullOrEmpty($this->get_parent()))
         {
-            $this->addError(Translation::get('ReferenceObjectShouldNotBeEmpty'));
+            $this->addError($translator->trans('ReferenceObjectShouldNotBeEmpty', [], Manager::CONTEXT));
         }
         else
         {
             $parent_content_object = DataManager::retrieve_by_id(ContentObject::class, $this->get_parent());
             if (!$parent_content_object)
             {
-                $this->addError(Translation::get('ParentObjectDoesNotExist'));
+                $this->addError($translator->trans('ParentObjectDoesNotExist', [], Manager::CONTEXT));
             }
         }
 
-        return !$this->hasErrors();
+        return parent::checkBeforeSave();
     }
 
     public static function factory($class, &$record = []): ComplexContentObjectItem
@@ -100,7 +98,7 @@ class ComplexContentObjectItem extends CompositeDataClass implements DisplayOrde
         elseif (is_subclass_of($class, ContentObject::class))
         {
             $class = ClassnameUtilities::getInstance()->getNamespaceFromClassname($class) . '\Complex' .
-                ClassnameUtilities::getInstance()->getClassNameFromNamespace(
+                ClassnameUtilities::getInstance()->getClassnameFromNamespace(
                     $class
                 );
 
@@ -110,6 +108,11 @@ class ComplexContentObjectItem extends CompositeDataClass implements DisplayOrde
         {
             throw new ClassNotExistException($class);
         }
+    }
+
+    public static function getCompositeDataClassName(): string
+    {
+        return ComplexContentObjectItem::class;
     }
 
     /**
@@ -159,7 +162,7 @@ class ComplexContentObjectItem extends CompositeDataClass implements DisplayOrde
     /**
      * Retrieves the allowed types to add to this complex learning object item
      *
-     * @return Array of learning object types
+     * @return string[]
      */
     public function get_allowed_types(): array
     {
@@ -190,14 +193,14 @@ class ComplexContentObjectItem extends CompositeDataClass implements DisplayOrde
 
     public function get_ref_object()
     {
-        if (!isset($this->reference_object))
+        if (!isset($this->referenceObject))
         {
-            $this->reference_object = DataManager::retrieve_by_id(
+            $this->referenceObject = DataManager::retrieve_by_id(
                 ContentObject::class, $this->get_ref()
             );
         }
 
-        return $this->reference_object;
+        return $this->referenceObject;
     }
 
     public function get_user_id()
@@ -205,41 +208,40 @@ class ComplexContentObjectItem extends CompositeDataClass implements DisplayOrde
         return $this->getDefaultProperty(self::PROPERTY_USER_ID);
     }
 
-    public function is_complex()
+    public function is_complex(): bool
     {
         return count($this->get_allowed_types()) > 0;
     }
 
-    public function set_add_date($add_date)
+    public function set_add_date($add_date): static
     {
-        $this->setDefaultProperty(self::PROPERTY_ADD_DATE, $add_date);
+        return $this->setDefaultProperty(self::PROPERTY_ADD_DATE, $add_date);
     }
 
-    public function set_display_order($display_order)
+    public function set_display_order($display_order): static
     {
-        $this->setDefaultProperty(self::PROPERTY_DISPLAY_ORDER, $display_order);
+        return $this->setDefaultProperty(self::PROPERTY_DISPLAY_ORDER, $display_order);
     }
 
-    public function set_parent($parent)
+    public function set_parent($parent): static
     {
-        $this->setDefaultProperty(self::PROPERTY_PARENT, $parent);
+        return $this->setDefaultProperty(self::PROPERTY_PARENT, $parent);
     }
 
-    public function set_ref($ref)
+    public function set_ref($ref): static
     {
-        $this->setDefaultProperty(self::PROPERTY_REF, $ref);
+        return $this->setDefaultProperty(self::PROPERTY_REF, $ref);
     }
 
-    /**
-     * @param ContentObject $reference_object
-     */
-    public function set_ref_object(ContentObject $reference_object)
+    public function set_ref_object(ContentObject $reference_object): static
     {
-        $this->reference_object = $reference_object;
+        $this->referenceObject = $reference_object;
+
+        return $this;
     }
 
-    public function set_user_id($user_id)
+    public function set_user_id($user_id): static
     {
-        $this->setDefaultProperty(self::PROPERTY_USER_ID, $user_id);
+        return $this->setDefaultProperty(self::PROPERTY_USER_ID, $user_id);
     }
 }

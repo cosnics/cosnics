@@ -4,10 +4,10 @@ namespace Chamilo\Core\Menu\Storage\DataClass;
 use Chamilo\Core\Menu\Manager;
 use Chamilo\Libraries\Format\Structure\Glyph\FontAwesomeGlyph;
 use Chamilo\Libraries\Format\Structure\Glyph\InlineGlyph;
-use Chamilo\Libraries\Storage\DataClass\ConfigurableDataClassInterface;
-use Chamilo\Libraries\Storage\DataClass\ConfigurableDataClassTrait;
 use Chamilo\Libraries\Storage\DataClass\DataClass;
+use Chamilo\Libraries\Storage\DataClass\Interfaces\ConfigurableDataClassInterface;
 use Chamilo\Libraries\Storage\DataClass\Interfaces\DataClassDisplayOrderSupport;
+use Chamilo\Libraries\Storage\DataClass\Traits\ConfigurableDataClassTrait;
 
 /**
  * @package Chamilo\Core\Menu\Storage\DataClass

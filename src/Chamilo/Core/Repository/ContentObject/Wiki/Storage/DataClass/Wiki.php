@@ -6,6 +6,7 @@ use Chamilo\Core\Repository\Storage\DataClass\ComplexContentObjectItem;
 use Chamilo\Core\Repository\Storage\DataClass\ContentObject;
 use Chamilo\Core\Repository\Storage\DataManager;
 use Chamilo\Libraries\Architecture\Interfaces\ComplexContentObjectSupportInterface;
+use Chamilo\Libraries\Storage\DataClass\Interfaces\CompositeDataClassExtensionInterface;
 use Chamilo\Libraries\Storage\Query\Condition\AndCondition;
 use Chamilo\Libraries\Storage\Query\Condition\Condition;
 use Chamilo\Libraries\Storage\Query\Condition\EqualityCondition;
@@ -16,7 +17,7 @@ use Chamilo\Libraries\Storage\Query\Variable\StaticConditionVariable;
 /**
  * @package Chamilo\Core\Repository\ContentObject\Wiki\Storage\DataClass
  */
-class Wiki extends ContentObject implements ComplexContentObjectSupportInterface
+class Wiki extends ContentObject implements ComplexContentObjectSupportInterface, CompositeDataClassExtensionInterface
 {
     public const CONTEXT = 'Chamilo\Core\Repository\ContentObject\Wiki';
 
@@ -25,7 +26,7 @@ class Wiki extends ContentObject implements ComplexContentObjectSupportInterface
 
     public static function getAdditionalPropertyNames(): array
     {
-        return [self::PROPERTY_LOCKED, self::PROPERTY_LINKS];
+        return parent::getAdditionalPropertyNames([self::PROPERTY_LOCKED, self::PROPERTY_LINKS]);
     }
 
     /**

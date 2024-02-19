@@ -4,11 +4,13 @@ namespace Chamilo\Core\Repository\ContentObject\RssFeed\Storage\DataClass;
 use Chamilo\Core\Repository\Storage\DataClass\ContentObject;
 use Chamilo\Libraries\Architecture\Interfaces\IncludeableInterface;
 use Chamilo\Libraries\Architecture\Interfaces\VersionableInterface;
+use Chamilo\Libraries\Storage\DataClass\Interfaces\CompositeDataClassExtensionInterface;
 
 /**
  * @package Chamilo\Core\Repository\ContentObject\RssFeed\Storage\DataClass
  */
-class RssFeed extends ContentObject implements VersionableInterface, IncludeableInterface
+class RssFeed extends ContentObject
+    implements VersionableInterface, IncludeableInterface, CompositeDataClassExtensionInterface
 {
     public const CONTEXT = 'Chamilo\Core\Repository\ContentObject\RssFeed';
 
@@ -17,7 +19,7 @@ class RssFeed extends ContentObject implements VersionableInterface, Includeable
 
     public static function getAdditionalPropertyNames(): array
     {
-        return [self::PROPERTY_URL, self::PROPERTY_NUMBER_OF_ENTRIES];
+        return parent::getAdditionalPropertyNames([self::PROPERTY_URL, self::PROPERTY_NUMBER_OF_ENTRIES]);
     }
 
     /**

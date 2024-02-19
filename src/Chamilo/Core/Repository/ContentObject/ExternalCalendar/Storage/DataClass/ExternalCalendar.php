@@ -7,6 +7,7 @@ use Chamilo\Libraries\Architecture\Interfaces\FileStorageSupportInterface;
 use Chamilo\Libraries\Architecture\Interfaces\VersionableInterface;
 use Chamilo\Libraries\DependencyInjection\DependencyInjectionContainerBuilder;
 use Chamilo\Libraries\File\ConfigurablePathBuilder;
+use Chamilo\Libraries\Storage\DataClass\Interfaces\CompositeDataClassExtensionInterface;
 use Chamilo\Libraries\Translation\Translation;
 use Chamilo\Libraries\Utilities\StringUtilities;
 use DateTime;
@@ -21,7 +22,8 @@ use Symfony\Component\Cache\Adapter\FilesystemAdapter;
  * @author  Magali Gillard <magali.gillard@ehb.be>
  * @author  Eduard Vossen <eduard.vossen@ehb.be>
  */
-class ExternalCalendar extends ContentObject implements VersionableInterface, FileStorageSupportInterface
+class ExternalCalendar extends ContentObject
+    implements VersionableInterface, FileStorageSupportInterface, CompositeDataClassExtensionInterface
 {
     public const CACHE_TIME = 3600;
 
@@ -164,14 +166,14 @@ class ExternalCalendar extends ContentObject implements VersionableInterface, Fi
 
     public static function getAdditionalPropertyNames(): array
     {
-        return [
+        return parent::getAdditionalPropertyNames([
             self::PROPERTY_FILENAME,
             self::PROPERTY_FILESIZE,
             self::PROPERTY_PATH,
             self::PROPERTY_HASH,
             self::PROPERTY_PATH_TYPE,
             self::PROPERTY_STORAGE_PATH
-        ];
+        ]);
     }
 
     protected function getFilesystemAdapter(): FilesystemAdapter

@@ -4,11 +4,12 @@ namespace Chamilo\Core\Repository\ContentObject\FillInBlanksQuestion\Storage\Dat
 use Chamilo\Core\Repository\ContentObject\FillInBlanksQuestion\Form\FillInBlanksQuestionForm;
 use Chamilo\Core\Repository\Storage\DataClass\ContentObject;
 use Chamilo\Libraries\Architecture\Interfaces\VersionableInterface;
+use Chamilo\Libraries\Storage\DataClass\Interfaces\CompositeDataClassExtensionInterface;
 
 /**
  * @package Chamilo\Core\Repository\ContentObject\FillInBlanksQuestion\Storage\DataClass
  */
-class FillInBlanksQuestion extends ContentObject implements VersionableInterface
+class FillInBlanksQuestion extends ContentObject implements VersionableInterface, CompositeDataClassExtensionInterface
 {
     public const CONTEXT = 'Chamilo\Core\Repository\ContentObject\FillInBlanksQuestion';
 
@@ -62,7 +63,7 @@ class FillInBlanksQuestion extends ContentObject implements VersionableInterface
 
     public static function getAdditionalPropertyNames(): array
     {
-        return [
+        return parent::getAdditionalPropertyNames([
             self::PROPERTY_ANSWER_TEXT,
             self::PROPERTY_CASE_SENSITIVE,
             self::PROPERTY_QUESTION_TYPE,
@@ -70,7 +71,7 @@ class FillInBlanksQuestion extends ContentObject implements VersionableInterface
             self::PROPERTY_DEFAULT_POSITIVE_SCORE,
             self::PROPERTY_DEFAULT_NEGATIVE_SCORE,
             self::PROPERTY_SHOW_INLINE
-        ];
+        ]);
     }
 
     /*

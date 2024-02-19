@@ -2,11 +2,12 @@
 namespace Chamilo\Core\Repository\ContentObject\Announcement\Storage\DataClass;
 
 use Chamilo\Core\Repository\Storage\DataClass\ComplexContentObjectItem;
+use Chamilo\Libraries\Storage\DataClass\Interfaces\CompositeDataClassVirtualExtensionInterface;
 
 /**
- * @package repository.lib.content_object.announcement
+ * @package Chamilo\Core\Repository\ContentObject\Announcement\Storage\DataClass
  */
-class ComplexAnnouncement extends ComplexContentObjectItem
+class ComplexAnnouncement extends ComplexContentObjectItem implements CompositeDataClassVirtualExtensionInterface
 {
     public const CONTEXT = Announcement::CONTEXT;
 }

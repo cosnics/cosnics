@@ -3,12 +3,14 @@ namespace Chamilo\Core\Repository\ContentObject\AssessmentMultipleChoiceQuestion
 
 use Chamilo\Core\Repository\Storage\DataClass\ContentObject;
 use Chamilo\Libraries\Architecture\Interfaces\VersionableInterface;
+use Chamilo\Libraries\Storage\DataClass\Interfaces\CompositeDataClassExtensionInterface;
 use Chamilo\Libraries\Utilities\StringUtilities;
 
 /**
  * @package Chamilo\Core\Repository\ContentObject\AssessmentMultipleChoiceQuestion\Storage\DataClass
  */
-class AssessmentMultipleChoiceQuestion extends ContentObject implements VersionableInterface
+class AssessmentMultipleChoiceQuestion extends ContentObject
+    implements VersionableInterface, CompositeDataClassExtensionInterface
 {
     public const ANSWER_TYPE_CHECKBOX = 2;
     public const ANSWER_TYPE_RADIO = 1;
@@ -29,7 +31,9 @@ class AssessmentMultipleChoiceQuestion extends ContentObject implements Versiona
 
     public static function getAdditionalPropertyNames(): array
     {
-        return [self::PROPERTY_ANSWER_TYPE, self::PROPERTY_OPTIONS, self::PROPERTY_HINT];
+        return parent::getAdditionalPropertyNames(
+            [self::PROPERTY_ANSWER_TYPE, self::PROPERTY_OPTIONS, self::PROPERTY_HINT]
+        );
     }
 
     /**

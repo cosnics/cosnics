@@ -7,6 +7,7 @@ use Chamilo\Libraries\Architecture\Interfaces\IncludeableInterface;
 use Chamilo\Libraries\Architecture\Interfaces\VersionableInterface;
 use Chamilo\Libraries\Calendar\Event\RecurringContentObjectInterface;
 use Chamilo\Libraries\Calendar\Event\RecurringContentObjectTrait;
+use Chamilo\Libraries\Storage\DataClass\Interfaces\CompositeDataClassExtensionInterface;
 use Chamilo\Libraries\Translation\Translation;
 use Exception;
 
@@ -16,7 +17,8 @@ use Exception;
  * @author  Dieter De Neef
  */
 class Task extends ContentObject
-    implements VersionableInterface, AttachmentSupportInterface, IncludeableInterface, RecurringContentObjectInterface
+    implements VersionableInterface, AttachmentSupportInterface, IncludeableInterface, RecurringContentObjectInterface,
+    CompositeDataClassExtensionInterface
 {
     use RecurringContentObjectTrait;
 
@@ -138,7 +140,7 @@ class Task extends ContentObject
      */
     public static function getAdditionalPropertyNames(): array
     {
-        return [
+        return parent::getAdditionalPropertyNames([
             self::PROPERTY_START_DATE,
             self::PROPERTY_DUE_DATE,
             self::PROPERTY_UNTIL,
@@ -148,7 +150,7 @@ class Task extends ContentObject
             self::PROPERTY_BYDAY,
             self::PROPERTY_BYMONTH,
             self::PROPERTY_BYMONTHDAY
-        ];
+        ]);
     }
 
     /**

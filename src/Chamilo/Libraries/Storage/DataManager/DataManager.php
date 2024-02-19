@@ -2,7 +2,6 @@
 namespace Chamilo\Libraries\Storage\DataManager;
 
 use Chamilo\Libraries\DependencyInjection\DependencyInjectionContainerBuilder;
-use Chamilo\Libraries\Storage\DataClass\CompositeDataClass;
 use Chamilo\Libraries\Storage\DataClass\DataClass;
 use Chamilo\Libraries\Storage\DataManager\Repository\DataClassRepository;
 use Chamilo\Libraries\Storage\DataManager\Repository\StorageUnitRepository;
@@ -191,27 +190,21 @@ class DataManager
         return self::getDataClassRepository()->retrieveById($dataClassName, $identifier);
     }
 
-    /**
-     * @throws \Chamilo\Libraries\Storage\Exception\DataClassNoResultException
-     */
-    public static function retrieve_composite_data_class_additional_properties(CompositeDataClass $compositeDataClass
+    public static function retrieve_composite_data_class_additional_properties(
+        string $compositeDataClassName, string $compositeDataClassIdentifier
     ): array
     {
-        return self::getDataClassRepository()->retrieveCompositeDataClassAdditionalProperties($compositeDataClass);
+        return self::getDataClassRepository()->retrieveCompositeDataClassAdditionalProperties(
+            $compositeDataClassName, $compositeDataClassIdentifier
+        );
     }
 
-    /**
-     * @throws \Chamilo\Libraries\Storage\Exception\DataClassNoResultException
-     */
     public static function retrieve_maximum_value(string $dataClassName, string $property, ?Condition $condition = null
     ): int
     {
         return self::getDataClassRepository()->retrieveMaximumValue($dataClassName, $property, $condition);
     }
 
-    /**
-     * @throws \Chamilo\Libraries\Storage\Exception\DataClassNoResultException
-     */
     public static function retrieve_next_value(string $dataClassName, string $property, ?Condition $condition = null
     ): int
     {

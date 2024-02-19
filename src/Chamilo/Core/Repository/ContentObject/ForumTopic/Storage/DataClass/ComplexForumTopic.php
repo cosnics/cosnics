@@ -8,6 +8,7 @@ use Chamilo\Core\Repository\Storage\DataManager;
 use Chamilo\Core\User\Manager;
 use Chamilo\Core\User\Storage\DataClass\User;
 use Chamilo\Libraries\DependencyInjection\DependencyInjectionContainerBuilder;
+use Chamilo\Libraries\Storage\DataClass\Interfaces\CompositeDataClassExtensionInterface;
 use Chamilo\Libraries\Translation\Translation;
 use Symfony\Component\HttpFoundation\Session\SessionInterface;
 
@@ -15,7 +16,7 @@ use Symfony\Component\HttpFoundation\Session\SessionInterface;
  * @package repository.lib.content_object.forum_topic
  * @author  Mattias De Pauw - Hogeschool Gent
  */
-class ComplexForumTopic extends ComplexContentObjectItem
+class ComplexForumTopic extends ComplexContentObjectItem implements CompositeDataClassExtensionInterface
 {
     public const CONTEXT = ForumTopic::CONTEXT;
 
@@ -77,7 +78,7 @@ class ComplexForumTopic extends ComplexContentObjectItem
 
     public static function getAdditionalPropertyNames(): array
     {
-        return [self::PROPERTY_FORUM_TYPE];
+        return parent::getAdditionalPropertyNames([self::PROPERTY_FORUM_TYPE]);
     }
 
     public function getSession(): SessionInterface

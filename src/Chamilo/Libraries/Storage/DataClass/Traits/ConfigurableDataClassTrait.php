@@ -1,5 +1,5 @@
 <?php
-namespace Chamilo\Libraries\Storage\DataClass;
+namespace Chamilo\Libraries\Storage\DataClass\Traits;
 
 /**
  * @package Chamilo\Libraries\Storage\DataClass
@@ -11,9 +11,6 @@ trait ConfigurableDataClassTrait
 
     public const PROPERTY_CONFIGURATION = 'configuration';
 
-    /**
-     * @return string[]
-     */
     public function getConfiguration(): array
     {
         return $this->getSerializedProperty(self::PROPERTY_CONFIGURATION);
@@ -24,9 +21,6 @@ trait ConfigurableDataClassTrait
         return $this->getSerializedPropertyValue(self::PROPERTY_CONFIGURATION, $variable, $defaultValue);
     }
 
-    /**
-     * @param string[] $configuration
-     */
     public function setConfiguration(array $configuration): static
     {
         return $this->setSerializedProperty(self::PROPERTY_CONFIGURATION, $configuration);

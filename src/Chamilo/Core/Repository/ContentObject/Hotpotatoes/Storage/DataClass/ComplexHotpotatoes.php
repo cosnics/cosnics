@@ -7,11 +7,12 @@ use Chamilo\Libraries\DependencyInjection\DependencyInjectionContainerBuilder;
 use Chamilo\Libraries\File\Compression\ZipArchive\ZipArchiveFilecompression;
 use Chamilo\Libraries\File\SystemPathBuilder;
 use Chamilo\Libraries\File\WebPathBuilder;
+use Chamilo\Libraries\Storage\DataClass\Interfaces\CompositeDataClassExtensionInterface;
 use Chamilo\Libraries\Translation\Translation;
 use Chamilo\Libraries\Utilities\StringUtilities;
 use Symfony\Component\HttpFoundation\Session\SessionInterface;
 
-class ComplexHotpotatoes extends ComplexContentObjectItem
+class ComplexHotpotatoes extends ComplexContentObjectItem implements CompositeDataClassExtensionInterface
 {
     public const CONTEXT = Hotpotatoes::CONTEXT;
 
@@ -43,7 +44,7 @@ class ComplexHotpotatoes extends ComplexContentObjectItem
 
     public static function getAdditionalPropertyNames(): array
     {
-        return [self::PROPERTY_PATH, self::PROPERTY_MAXIMUM_ATTEMPTS];
+        return parent::getAdditionalPropertyNames([self::PROPERTY_PATH, self::PROPERTY_MAXIMUM_ATTEMPTS]);
     }
 
     public function getSession(): SessionInterface

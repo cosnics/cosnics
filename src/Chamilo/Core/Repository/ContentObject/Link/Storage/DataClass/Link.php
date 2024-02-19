@@ -4,11 +4,13 @@ namespace Chamilo\Core\Repository\ContentObject\Link\Storage\DataClass;
 use Chamilo\Core\Repository\Storage\DataClass\ContentObject;
 use Chamilo\Libraries\Architecture\Interfaces\IncludeableInterface;
 use Chamilo\Libraries\Architecture\Interfaces\VersionableInterface;
+use Chamilo\Libraries\Storage\DataClass\Interfaces\CompositeDataClassExtensionInterface;
 
 /**
  * @package Chamilo\Core\Repository\ContentObject\Link\Storage\DataClass
  */
-class Link extends ContentObject implements VersionableInterface, IncludeableInterface
+class Link extends ContentObject
+    implements VersionableInterface, IncludeableInterface, CompositeDataClassExtensionInterface
 {
     public const CONTEXT = 'Chamilo\Core\Repository\ContentObject\Link';
 
@@ -38,7 +40,7 @@ class Link extends ContentObject implements VersionableInterface, IncludeableInt
 
     public static function getAdditionalPropertyNames(): array
     {
-        return [self::PROPERTY_URL, self::PROPERTY_SHOW_IN_IFRAME];
+        return parent::getAdditionalPropertyNames([self::PROPERTY_URL, self::PROPERTY_SHOW_IN_IFRAME]);
     }
 
     /**

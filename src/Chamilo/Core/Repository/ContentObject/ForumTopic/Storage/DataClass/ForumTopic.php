@@ -10,6 +10,7 @@ use Chamilo\Core\User\Storage\DataClass\User;
 use Chamilo\Libraries\Architecture\Interfaces\AttachmentSupportInterface;
 use Chamilo\Libraries\Architecture\Interfaces\VersionableInterface;
 use Chamilo\Libraries\DependencyInjection\DependencyInjectionContainerBuilder;
+use Chamilo\Libraries\Storage\DataClass\Interfaces\CompositeDataClassExtensionInterface;
 use Chamilo\Libraries\Storage\Query\Condition\EqualityCondition;
 use Chamilo\Libraries\Storage\Query\Variable\PropertyConditionVariable;
 use Chamilo\Libraries\Storage\Query\Variable\StaticConditionVariable;
@@ -21,7 +22,8 @@ use Symfony\Component\HttpFoundation\Session\SessionInterface;
  * @author  Mattias De Pauw - Hogeschool Gent
  * @author  Maarten Volckaert - Hogeschool Gent
  */
-class ForumTopic extends ContentObject implements VersionableInterface, AttachmentSupportInterface
+class ForumTopic extends ContentObject
+    implements VersionableInterface, AttachmentSupportInterface, CompositeDataClassExtensionInterface
 {
     public const CONTEXT = 'Chamilo\Core\Repository\ContentObject\ForumTopic';
 
@@ -74,7 +76,7 @@ class ForumTopic extends ContentObject implements VersionableInterface, Attachme
     /**
      * This function adds a number of posts to the property total posts of a topic.
      *
-     * @param int $posts        Number of posts that needs to be added to a topic.
+     * @param int $posts Number of posts that needs to be added to a topic.
      * @param int $last_post_id The id of the new last post.
      */
     public function add_post($posts, $last_post_id, $emailnotificator)
@@ -172,7 +174,9 @@ class ForumTopic extends ContentObject implements VersionableInterface, Attachme
 
     public static function getAdditionalPropertyNames(): array
     {
-        return [self::PROPERTY_LOCKED, self::PROPERTY_TOTAL_POSTS, self::PROPERTY_LAST_POST];
+        return parent::getAdditionalPropertyNames(
+            [self::PROPERTY_LOCKED, self::PROPERTY_TOTAL_POSTS, self::PROPERTY_LAST_POST]
+        );
     }
 
     public function getSession(): SessionInterface
@@ -478,7 +482,7 @@ class ForumTopic extends ContentObject implements VersionableInterface, Attachme
                 $email_notificator->set_action_body($text);
                 $email_notificator->set_action_user(
                     DataManager::retrieve_by_id(
-                        User::class,  $this->getSession()->get(Manager::SESSION_USER_ID)
+                        User::class, $this->getSession()->get(Manager::SESSION_USER_ID)
                     )
                 );
                 $email_notificator->set_is_topic_edited(true);

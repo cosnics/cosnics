@@ -12,6 +12,7 @@ use Chamilo\Libraries\DependencyInjection\DependencyInjectionContainerBuilder;
 use Chamilo\Libraries\File\ConfigurablePathBuilder;
 use Chamilo\Libraries\File\FileType;
 use Chamilo\Libraries\Format\Structure\Glyph\IdentGlyph;
+use Chamilo\Libraries\Storage\DataClass\Interfaces\CompositeDataClassExtensionInterface;
 use Chamilo\Libraries\Translation\Translation;
 use Chamilo\Libraries\Utilities\StringUtilities;
 use Exception;
@@ -21,7 +22,9 @@ use Symfony\Component\HttpFoundation\StreamedResponse;
 /**
  * @package Chamilo\Core\Repository\ContentObject\File\Storage\DataClass
  */
-class File extends ContentObject implements VersionableInterface, IncludeableInterface, FileStorageSupportInterface, DownloadSupport
+class File extends ContentObject
+    implements VersionableInterface, IncludeableInterface, FileStorageSupportInterface, DownloadSupport,
+    CompositeDataClassExtensionInterface
 {
     public const CONTEXT = 'Chamilo\Core\Repository\ContentObject\File';
 
@@ -257,14 +260,14 @@ class File extends ContentObject implements VersionableInterface, IncludeableInt
 
     public static function getAdditionalPropertyNames(): array
     {
-        return [
+        return parent::getAdditionalPropertyNames([
             self::PROPERTY_FILENAME,
             self::PROPERTY_FILESIZE,
             self::PROPERTY_PATH,
             self::PROPERTY_HASH,
             self::PROPERTY_STORAGE_PATH,
             self::PROPERTY_SHOW_INLINE
-        ];
+        ]);
     }
 
     /**

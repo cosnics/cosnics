@@ -69,7 +69,7 @@ trait RecurringContentObjectTrait
         return ($repeat_to == 0);
     }
 
-    abstract public function getAdditionalProperty(string $name);
+    abstract public function getAdditionalProperty(string $name): mixed;
 
     public function get_byday(): ?string
     {
@@ -276,7 +276,7 @@ trait RecurringContentObjectTrait
         return ($repeat != '0');
     }
 
-    abstract public function setAdditionalProperty(string $name, $value);
+    abstract public function setAdditionalProperty(string $name, mixed $value): static;
 
     public function set_byday(?string $byday)
     {

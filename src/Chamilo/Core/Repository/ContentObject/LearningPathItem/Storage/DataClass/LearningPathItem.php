@@ -7,6 +7,7 @@ use Chamilo\Core\Repository\Storage\DataClass\ContentObject;
 use Chamilo\Core\Repository\Storage\DataManager;
 use Chamilo\Libraries\Architecture\Interfaces\HelperContentObjectSupportInterface;
 use Chamilo\Libraries\Architecture\Interfaces\VersionableInterface;
+use Chamilo\Libraries\Storage\DataClass\Interfaces\CompositeDataClassExtensionInterface;
 
 /**
  * @package Chamilo\Core\Repository\ContentObject\LearningPathItem\Storage\DataClass
@@ -14,7 +15,8 @@ use Chamilo\Libraries\Architecture\Interfaces\VersionableInterface;
  * @author  Magali Gillard <magali.gillard@ehb.be>
  * @author  Eduard Vossen <eduard.vossen@ehb.be>
  */
-class LearningPathItem extends ContentObject implements VersionableInterface, HelperContentObjectSupportInterface
+class LearningPathItem extends ContentObject
+    implements VersionableInterface, HelperContentObjectSupportInterface, CompositeDataClassExtensionInterface
 {
     public const CONTEXT = 'Chamilo\Core\Repository\ContentObject\LearningPathItem';
 
@@ -38,7 +40,7 @@ class LearningPathItem extends ContentObject implements VersionableInterface, He
      */
     public static function getAdditionalPropertyNames(): array
     {
-        return [
+        return parent::getAdditionalPropertyNames([
             self::PROPERTY_REFERENCE,
             self::PROPERTY_MAX_ATTEMPTS,
             self::PROPERTY_MASTERY_SCORE,
@@ -48,7 +50,7 @@ class LearningPathItem extends ContentObject implements VersionableInterface, He
             self::PROPERTY_SHOW_SOLUTION,
             self::PROPERTY_SHOW_ANSWER_FEEDBACK,
             self::PROPERTY_FEEDBACK_LOCATION
-        ];
+        ]);
     }
 
     /**

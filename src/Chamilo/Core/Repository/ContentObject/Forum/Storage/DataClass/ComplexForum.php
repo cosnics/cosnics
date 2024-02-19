@@ -9,13 +9,14 @@ use Chamilo\Core\Repository\Storage\DataManager;
 use Chamilo\Core\User\Manager;
 use Chamilo\Core\User\Storage\DataClass\User;
 use Chamilo\Libraries\DependencyInjection\DependencyInjectionContainerBuilder;
+use Chamilo\Libraries\Storage\DataClass\Interfaces\CompositeDataClassVirtualExtensionInterface;
 use Chamilo\Libraries\Translation\Translation;
 use Symfony\Component\HttpFoundation\Session\SessionInterface;
 
 /**
  * @package repository.lib.content_object.forum
  */
-class ComplexForum extends ComplexContentObjectItem
+class ComplexForum extends ComplexContentObjectItem implements CompositeDataClassVirtualExtensionInterface
 {
     public const CONTEXT = Forum::CONTEXT;
 

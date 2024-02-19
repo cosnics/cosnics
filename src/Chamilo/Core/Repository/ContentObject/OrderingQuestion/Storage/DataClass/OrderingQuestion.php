@@ -3,12 +3,13 @@ namespace Chamilo\Core\Repository\ContentObject\OrderingQuestion\Storage\DataCla
 
 use Chamilo\Core\Repository\Storage\DataClass\ContentObject;
 use Chamilo\Libraries\Architecture\Interfaces\VersionableInterface;
+use Chamilo\Libraries\Storage\DataClass\Interfaces\CompositeDataClassExtensionInterface;
 use Chamilo\Libraries\Utilities\StringUtilities;
 
 /**
  * @package Chamilo\Core\Repository\ContentObject\OrderingQuestion\Storage\DataClass
  */
-class OrderingQuestion extends ContentObject implements VersionableInterface
+class OrderingQuestion extends ContentObject implements VersionableInterface, CompositeDataClassExtensionInterface
 {
     public const CONTEXT = 'Chamilo\Core\Repository\ContentObject\OrderingQuestion';
 
@@ -25,7 +26,7 @@ class OrderingQuestion extends ContentObject implements VersionableInterface
 
     public static function getAdditionalPropertyNames(): array
     {
-        return [self::PROPERTY_OPTIONS, self::PROPERTY_HINT];
+        return parent::getAdditionalPropertyNames([self::PROPERTY_OPTIONS, self::PROPERTY_HINT]);
     }
 
     /**

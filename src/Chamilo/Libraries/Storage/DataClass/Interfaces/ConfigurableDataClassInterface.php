@@ -1,5 +1,5 @@
 <?php
-namespace Chamilo\Libraries\Storage\DataClass;
+namespace Chamilo\Libraries\Storage\DataClass\Interfaces;
 
 /**
  * @package Chamilo\Libraries\Storage\DataClass
