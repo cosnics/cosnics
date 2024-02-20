@@ -3,7 +3,6 @@ namespace Chamilo\Core\Menu\Storage\Repository;
 
 use Chamilo\Core\Menu\Service\Renderer\CategoryItemRenderer;
 use Chamilo\Core\Menu\Storage\DataClass\Item;
-use Chamilo\Libraries\Storage\DataClass\CompositeDataClass;
 use Chamilo\Libraries\Storage\DataClass\DataClass;
 use Chamilo\Libraries\Storage\DataManager\Repository\DataClassRepository;
 use Chamilo\Libraries\Storage\Parameters\DataClassCountParameters;
@@ -127,8 +126,7 @@ class ItemRepository
     public function findItemsByType(string $type): ArrayCollection
     {
         $condition = new EqualityCondition(
-            new PropertyConditionVariable(Item::class, CompositeDataClass::PROPERTY_TYPE),
-            new StaticConditionVariable($type)
+            new PropertyConditionVariable(Item::class, Item::PROPERTY_TYPE), new StaticConditionVariable($type)
         );
 
         return $this->getDataClassRepository()->retrieves(Item::class, new DataClassRetrievesParameters($condition));
@@ -147,7 +145,7 @@ class ItemRepository
         );
 
         $conditions[] = new EqualityCondition(
-            new PropertyConditionVariable(Item::class, CompositeDataClass::PROPERTY_TYPE),
+            new PropertyConditionVariable(Item::class, Item::PROPERTY_TYPE),
             new StaticConditionVariable(CategoryItemRenderer::class)
         );
 
@@ -165,9 +163,6 @@ class ItemRepository
         return $this->dataClassRepository;
     }
 
-    /**
-     * @throws \Chamilo\Libraries\Storage\Exception\DataClassNoResultException
-     */
     public function getNextItemSortValueByParentIdentifier(string $parentIdentifier): int
     {
         $condition = new EqualityCondition(

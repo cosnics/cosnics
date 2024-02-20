@@ -129,11 +129,6 @@ class DataManager
         );
     }
 
-    public static function get_alias(string $dataClassStorageUnitName): string
-    {
-        return self::getDataClassRepository()->getAlias($dataClassStorageUnitName);
-    }
-
     public static function move_display_orders(
         string $dataClassName, string $displayOrderProperty, ?int $start = 1, ?int $end = null,
         ?Condition $displayOrderCondition = null

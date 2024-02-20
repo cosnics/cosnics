@@ -2,13 +2,13 @@
 namespace Chamilo\Core\Repository\ContentObject\LearningPathItem\Storage\DataClass;
 
 use Chamilo\Core\Repository\Storage\DataClass\ComplexContentObjectItem;
-use Chamilo\Libraries\Storage\DataClass\Interfaces\CompositeDataClassExtensionInterface;
+use Chamilo\Libraries\Storage\DataClass\Interfaces\DataClassExtensionInterface;
 use Chamilo\Libraries\Utilities\StringUtilities;
 
 /**
  * @package repository.lib.content_object.learning_path_item
  */
-class ComplexLearningPathItem extends ComplexContentObjectItem implements CompositeDataClassExtensionInterface
+class ComplexLearningPathItem extends ComplexContentObjectItem implements DataClassExtensionInterface
 {
     public const CONTEXT = LearningPathItem::CONTEXT;
 

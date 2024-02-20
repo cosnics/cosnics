@@ -3,14 +3,14 @@ namespace Chamilo\Core\Repository\ContentObject\AssessmentMatchNumericQuestion\S
 
 use Chamilo\Core\Repository\Storage\DataClass\ContentObject;
 use Chamilo\Libraries\Architecture\Interfaces\VersionableInterface;
-use Chamilo\Libraries\Storage\DataClass\Interfaces\CompositeDataClassExtensionInterface;
+use Chamilo\Libraries\Storage\DataClass\Interfaces\DataClassExtensionInterface;
 use Chamilo\Libraries\Utilities\StringUtilities;
 
 /**
  * @package repository.lib.content_object.match_numeric_question
  */
 class AssessmentMatchNumericQuestion extends ContentObject
-    implements VersionableInterface, CompositeDataClassExtensionInterface
+    implements VersionableInterface, DataClassExtensionInterface
 {
     public const CONTEXT = 'Chamilo\Core\Repository\ContentObject\AssessmentMatchNumericQuestion';
 

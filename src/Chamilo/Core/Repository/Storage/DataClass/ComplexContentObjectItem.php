@@ -3,8 +3,6 @@ namespace Chamilo\Core\Repository\Storage\DataClass;
 
 use Chamilo\Core\Repository\Manager;
 use Chamilo\Core\Repository\Storage\DataManager;
-use Chamilo\Libraries\Architecture\ClassnameUtilities;
-use Chamilo\Libraries\Architecture\Exceptions\ClassNotExistException;
 use Chamilo\Libraries\Storage\DataClass\DataClass;
 use Chamilo\Libraries\Storage\DataClass\Interfaces\CompositeDataClassInterface;
 use Chamilo\Libraries\Storage\DataClass\Listeners\DisplayOrderDataClassListener;
@@ -87,27 +85,6 @@ class ComplexContentObjectItem extends DataClass
         }
 
         return parent::checkBeforeSave();
-    }
-
-    public static function factory($class, &$record = []): ComplexContentObjectItem
-    {
-        if (is_subclass_of($class, ComplexContentObjectItem::class))
-        {
-            return parent::factory($class, $record);
-        }
-        elseif (is_subclass_of($class, ContentObject::class))
-        {
-            $class = ClassnameUtilities::getInstance()->getNamespaceFromClassname($class) . '\Complex' .
-                ClassnameUtilities::getInstance()->getClassnameFromNamespace(
-                    $class
-                );
-
-            return parent::factory($class, $record);
-        }
-        else
-        {
-            throw new ClassNotExistException($class);
-        }
     }
 
     public static function getCompositeDataClassName(): string

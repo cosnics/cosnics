@@ -10,7 +10,7 @@ use Chamilo\Libraries\Architecture\Interfaces\VersionableInterface;
 use Chamilo\Libraries\DependencyInjection\DependencyInjectionContainerBuilder;
 use Chamilo\Libraries\File\ConfigurablePathBuilder;
 use Chamilo\Libraries\File\FileType;
-use Chamilo\Libraries\Storage\DataClass\Interfaces\CompositeDataClassExtensionInterface;
+use Chamilo\Libraries\Storage\DataClass\Interfaces\DataClassExtensionInterface;
 use Chamilo\Libraries\Translation\Translation;
 use Chamilo\Libraries\Utilities\StringUtilities;
 use Exception;
@@ -19,7 +19,7 @@ use Exception;
  * @package Chamilo\Core\Repository\ContentObject\Webpage\Storage\DataClass
  */
 class Webpage extends ContentObject implements VersionableInterface, IncludeableInterface, FileStorageSupportInterface,
-    CompositeDataClassExtensionInterface
+    DataClassExtensionInterface
 {
     public const CONTEXT = 'Chamilo\Core\Repository\ContentObject\Webpage';
 

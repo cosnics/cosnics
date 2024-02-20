@@ -151,29 +151,6 @@ abstract class DataClass
         return true;
     }
 
-    public static function factory(string $class, array &$record): DataClass
-    {
-        $object = new $class();
-        foreach ($object->getDefaultPropertyNames() as $property)
-        {
-            if (array_key_exists($property, $record))
-            {
-                $object->setDefaultProperty($property, $record[$property]);
-                unset($record[$property]);
-            }
-        }
-
-        if (count($record) > 0 && $object instanceof DataClass && !$object instanceof CompositeDataClass)
-        {
-            foreach ($record as $optional_property_name => $optional_property_value)
-            {
-                $object->setOptionalProperty($optional_property_name, $optional_property_value);
-            }
-        }
-
-        return $object;
-    }
-
     /**
      * @param string[] $cacheablePropertyNames
      *

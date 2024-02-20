@@ -58,10 +58,5 @@ interface DataClassDatabaseInterface
      */
     public function transactional(callable $function): mixed;
 
-    /**
-     * @param string[] $propertiesToUpdate
-     */
-    public function update(string $dataClassStorageUnitName, Condition $condition, array $propertiesToUpdate): bool;
-
-    public function updates(string $dataClassStorageUnitName, UpdateProperties $properties, Condition $condition): bool;
+    public function update(string $dataClassName, UpdateProperties $properties, Condition $condition): bool;
 }

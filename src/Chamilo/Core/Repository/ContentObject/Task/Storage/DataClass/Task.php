@@ -7,7 +7,7 @@ use Chamilo\Libraries\Architecture\Interfaces\IncludeableInterface;
 use Chamilo\Libraries\Architecture\Interfaces\VersionableInterface;
 use Chamilo\Libraries\Calendar\Event\RecurringContentObjectInterface;
 use Chamilo\Libraries\Calendar\Event\RecurringContentObjectTrait;
-use Chamilo\Libraries\Storage\DataClass\Interfaces\CompositeDataClassExtensionInterface;
+use Chamilo\Libraries\Storage\DataClass\Interfaces\DataClassExtensionInterface;
 use Chamilo\Libraries\Translation\Translation;
 use Exception;
 
@@ -18,7 +18,7 @@ use Exception;
  */
 class Task extends ContentObject
     implements VersionableInterface, AttachmentSupportInterface, IncludeableInterface, RecurringContentObjectInterface,
-    CompositeDataClassExtensionInterface
+    DataClassExtensionInterface
 {
     use RecurringContentObjectTrait;
 

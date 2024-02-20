@@ -7,7 +7,7 @@ use Chamilo\Core\Repository\ContentObject\ForumTopic\Storage\DataManager;
 use Chamilo\Core\Repository\Storage\DataClass\ComplexContentObjectItem;
 use Chamilo\Core\Repository\Storage\DataClass\ContentObject;
 use Chamilo\Libraries\Architecture\Interfaces\ComplexContentObjectSupportInterface;
-use Chamilo\Libraries\Storage\DataClass\Interfaces\CompositeDataClassExtensionInterface;
+use Chamilo\Libraries\Storage\DataClass\Interfaces\DataClassExtensionInterface;
 use Chamilo\Libraries\Storage\Query\Condition\EqualityCondition;
 use Chamilo\Libraries\Storage\Query\Variable\PropertyConditionVariable;
 use Chamilo\Libraries\Storage\Query\Variable\StaticConditionVariable;
@@ -15,7 +15,7 @@ use Chamilo\Libraries\Storage\Query\Variable\StaticConditionVariable;
 /**
  * @package Chamilo\Core\Repository\ContentObject\Forum\Storage\DataClass
  */
-class Forum extends ContentObject implements ComplexContentObjectSupportInterface, CompositeDataClassExtensionInterface
+class Forum extends ContentObject implements ComplexContentObjectSupportInterface, DataClassExtensionInterface
 {
     public const CONTEXT = 'Chamilo\Core\Repository\ContentObject\Forum';
 

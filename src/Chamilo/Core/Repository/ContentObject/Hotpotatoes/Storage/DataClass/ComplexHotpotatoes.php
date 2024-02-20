@@ -7,12 +7,12 @@ use Chamilo\Libraries\DependencyInjection\DependencyInjectionContainerBuilder;
 use Chamilo\Libraries\File\Compression\ZipArchive\ZipArchiveFilecompression;
 use Chamilo\Libraries\File\SystemPathBuilder;
 use Chamilo\Libraries\File\WebPathBuilder;
-use Chamilo\Libraries\Storage\DataClass\Interfaces\CompositeDataClassExtensionInterface;
+use Chamilo\Libraries\Storage\DataClass\Interfaces\DataClassExtensionInterface;
 use Chamilo\Libraries\Translation\Translation;
 use Chamilo\Libraries\Utilities\StringUtilities;
 use Symfony\Component\HttpFoundation\Session\SessionInterface;
 
-class ComplexHotpotatoes extends ComplexContentObjectItem implements CompositeDataClassExtensionInterface
+class ComplexHotpotatoes extends ComplexContentObjectItem implements DataClassExtensionInterface
 {
     public const CONTEXT = Hotpotatoes::CONTEXT;
 

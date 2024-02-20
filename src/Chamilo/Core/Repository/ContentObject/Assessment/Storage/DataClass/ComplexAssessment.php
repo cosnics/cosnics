@@ -13,7 +13,7 @@ use Chamilo\Core\Repository\ContentObject\FillInBlanksQuestion\Storage\DataClass
 use Chamilo\Core\Repository\ContentObject\HotspotQuestion\Storage\DataClass\HotspotQuestion;
 use Chamilo\Core\Repository\ContentObject\OrderingQuestion\Storage\DataClass\OrderingQuestion;
 use Chamilo\Core\Repository\Storage\DataClass\ComplexContentObjectItem;
-use Chamilo\Libraries\Storage\DataClass\Interfaces\CompositeDataClassVirtualExtensionInterface;
+use Chamilo\Libraries\Storage\DataClass\Interfaces\DataClassVirtualExtensionInterface;
 
 /**
  * @package repository.lib.content_object.assessment
@@ -22,7 +22,7 @@ use Chamilo\Libraries\Storage\DataClass\Interfaces\CompositeDataClassVirtualExte
 /**
  * This class represents a complex assessment (used to create complex learning objects)
  */
-class ComplexAssessment extends ComplexContentObjectItem implements CompositeDataClassVirtualExtensionInterface
+class ComplexAssessment extends ComplexContentObjectItem implements DataClassVirtualExtensionInterface
 {
     public const CONTEXT = Assessment::CONTEXT;
 

@@ -2,7 +2,6 @@
 namespace Chamilo\Libraries\Storage\DataManager\Doctrine\Database;
 
 use Chamilo\Libraries\Architecture\ErrorHandler\ExceptionLogger\ExceptionLoggerInterface;
-use Chamilo\Libraries\Storage\DataClass\CompositeDataClass;
 use Chamilo\Libraries\Storage\DataManager\Doctrine\Service\ConditionPartTranslatorService;
 use Chamilo\Libraries\Storage\DataManager\Doctrine\Service\ParametersProcessor;
 use Chamilo\Libraries\Storage\DataManager\Doctrine\Service\RecordProcessor;
@@ -144,9 +143,7 @@ class DataClassDatabase implements DataClassDatabaseInterface
     }
 
     /**
-     * @template deleteDataClassName
-     *
-     * @param class-string<deleteDataClassName> $dataClassName
+     * @param class-string<\Chamilo\Libraries\Storage\DataClass\DataClass> $dataClassName
      *
      * @throws \Chamilo\Libraries\Storage\Exception\Database\DatabaseDeleteException
      */
@@ -309,32 +306,11 @@ class DataClassDatabase implements DataClassDatabaseInterface
     }
 
     /**
-     * @template prepareTableNameDataClassName
-     *
-     * @param class-string<prepareTableNameDataClassName> $dataClassName
+     * @param class-string<\Chamilo\Libraries\Storage\DataClass\DataClass> $dataClassName
      */
     protected function prepareTableName(string $dataClassName): string
     {
-        if (is_subclass_of($dataClassName, CompositeDataClass::class) &&
-            get_parent_class($dataClassName) == CompositeDataClass::class)
-        {
-            $tableName = $dataClassName::getStorageUnitName();
-        }
-        elseif (is_subclass_of($dataClassName, CompositeDataClass::class) && $dataClassName::isExtended())
-        {
-            $tableName = $dataClassName::getStorageUnitName();
-        }
-        elseif (is_subclass_of($dataClassName, CompositeDataClass::class) && !$dataClassName::isExtended())
-        {
-            $parent = $dataClassName::parentClassName();
-            $tableName = $parent::getStorageUnitName();
-        }
-        else
-        {
-            $tableName = $dataClassName::getStorageUnitName();
-        }
-
-        return $tableName;
+        return $dataClassName::getStorageUnitName();
     }
 
     protected function processRecord(array $record): array
@@ -448,40 +424,12 @@ class DataClassDatabase implements DataClassDatabaseInterface
     }
 
     /**
-     * @param string[] $propertiesToUpdate
-     *
      * @throws \Chamilo\Libraries\Storage\Exception\Database\DatabaseUpdateException
      */
-    public function update(string $dataClassStorageUnitName, Condition $condition, array $propertiesToUpdate): bool
+    public function update(string $dataClassName, UpdateProperties $properties, Condition $condition): bool
     {
-        try
-        {
-            $queryBuilder = $this->getConnection()->createQueryBuilder();
-            $queryBuilder->update($dataClassStorageUnitName);
+        $dataClassStorageUnitName = $this->prepareTableName($dataClassName);
 
-            foreach ($propertiesToUpdate as $key => $value)
-            {
-                $queryBuilder->set($key, $this->escape($value));
-            }
-
-            $queryBuilder->where($this->getConditionPartTranslatorService()->translate($this, $condition, false));
-
-            $this->getConnection()->executeQuery($queryBuilder->getSQL());
-
-            return true;
-        }
-        catch (Throwable $throwable)
-        {
-            $this->handleError($throwable);
-
-            throw new DatabaseUpdateException(
-                $dataClassStorageUnitName, $condition, $propertiesToUpdate, $throwable->getMessage()
-            );
-        }
-    }
-
-    public function updates(string $dataClassStorageUnitName, UpdateProperties $properties, Condition $condition): bool
-    {
         try
         {
             if (count($properties->get()) > 0)
@@ -512,7 +460,9 @@ class DataClassDatabase implements DataClassDatabaseInterface
         {
             $this->handleError($throwable);
 
-            return false;
+            throw new DatabaseUpdateException(
+                $dataClassStorageUnitName, $condition, $properties->get(), $throwable->getMessage()
+            );
         }
     }
 }

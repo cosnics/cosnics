@@ -1,14 +1,12 @@
 <?php
 namespace Chamilo\Libraries\Storage\Service;
 
-use Chamilo\Libraries\Storage\DataClass\CompositeDataClass;
 use Chamilo\Libraries\Storage\Parameters\DataClassBasicRetrieveParameters;
 use Chamilo\Libraries\Storage\Parameters\DataClassCountGroupedParameters;
 use Chamilo\Libraries\Storage\Parameters\DataClassCountParameters;
 use Chamilo\Libraries\Storage\Parameters\DataClassDistinctParameters;
 use Chamilo\Libraries\Storage\Parameters\DataClassParameters;
 use Chamilo\Libraries\Storage\Parameters\DataClassRetrieveParameters;
-use Chamilo\Libraries\Storage\Query\Joins;
 use Chamilo\Libraries\Storage\Query\RetrieveProperties;
 use Chamilo\Libraries\Storage\Query\Variable\DistinctConditionVariable;
 use Chamilo\Libraries\Storage\Query\Variable\FunctionConditionVariable;
@@ -17,29 +15,6 @@ use Chamilo\Libraries\Storage\Query\Variable\StaticConditionVariable;
 
 class ParametersHandler
 {
-
-    protected function handleCompositeDataClassJoins(string $dataClassName, DataClassParameters $parameters
-    ): ParametersHandler
-    {
-        if ($parameters->getJoins() instanceof Joins)
-        {
-            $retrieveProperties = $parameters->getRetrieveProperties();
-
-            foreach ($parameters->getJoins()->get() as $join)
-            {
-                if (is_subclass_of($join->getDataClassName(), CompositeDataClass::class))
-                {
-                    if (is_subclass_of($dataClassName, $join->getDataClassName()))
-                    {
-                        $retrieveProperties->add(new PropertiesConditionVariable($join->getDataClassName()));
-                    }
-                }
-            }
-        }
-
-        return $this;
-    }
-
     public function handleDataClassCountGroupedParameters(DataClassCountGroupedParameters $parameters
     ): ParametersHandler
     {
@@ -100,7 +75,6 @@ class ParametersHandler
         if (!$parameters->getRetrieveProperties() instanceof RetrieveProperties)
         {
             $this->setDataClassPropertiesClassName($dataClassName, $parameters);
-            $this->handleCompositeDataClassJoins($dataClassName, $parameters);
         }
 
         return $this;
@@ -110,27 +84,9 @@ class ParametersHandler
         string $dataClassName, DataClassParameters $dataClassRetrieveParameters
     ): ParametersHandler
     {
-        if (is_subclass_of($dataClassName, CompositeDataClass::class) &&
-            get_parent_class($dataClassName) == CompositeDataClass::class)
-        {
-            $propertiesClassName = $dataClassName;
-        }
-        elseif (is_subclass_of($dataClassName, CompositeDataClass::class) && $dataClassName::isExtended())
-        {
-            $propertiesClassName = $dataClassName;
-        }
-        elseif (is_subclass_of($dataClassName, CompositeDataClass::class) && !$dataClassName::isExtended())
-        {
-            $propertiesClassName = $dataClassName::parentClassName();
-        }
-        else
-        {
-            $propertiesClassName = $dataClassName;
-        }
-
         $dataClassRetrieveParameters->setRetrieveProperties(
             new RetrieveProperties(
-                [new PropertiesConditionVariable($propertiesClassName)]
+                [new PropertiesConditionVariable($dataClassName)]
             )
         );
 

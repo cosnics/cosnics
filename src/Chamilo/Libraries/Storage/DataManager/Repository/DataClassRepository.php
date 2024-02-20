@@ -1,19 +1,14 @@
 <?php
 namespace Chamilo\Libraries\Storage\DataManager\Repository;
 
-use Chamilo\Libraries\Architecture\Exceptions\ObjectNotExistException;
 use Chamilo\Libraries\Storage\Cache\DataClassRepositoryCache;
-use Chamilo\Libraries\Storage\DataClass\CompositeDataClass;
 use Chamilo\Libraries\Storage\DataClass\DataClass;
 use Chamilo\Libraries\Storage\DataClass\DataClassFactory;
-use Chamilo\Libraries\Storage\DataClass\Interfaces\CompositeDataClassInterface;
 use Chamilo\Libraries\Storage\DataClass\Interfaces\UuidDataClassInterface;
 use Chamilo\Libraries\Storage\DataManager\Interfaces\DataClassDatabaseInterface;
-use Chamilo\Libraries\Storage\Exception\CompositeDataClassTypeException;
 use Chamilo\Libraries\Storage\Parameters\DataClassCountGroupedParameters;
 use Chamilo\Libraries\Storage\Parameters\DataClassCountParameters;
 use Chamilo\Libraries\Storage\Parameters\DataClassDistinctParameters;
-use Chamilo\Libraries\Storage\Parameters\DataClassParameters;
 use Chamilo\Libraries\Storage\Parameters\DataClassRetrieveParameters;
 use Chamilo\Libraries\Storage\Parameters\DataClassRetrievesParameters;
 use Chamilo\Libraries\Storage\Parameters\RecordRetrieveParameters;
@@ -22,19 +17,15 @@ use Chamilo\Libraries\Storage\Query\Condition\AndCondition;
 use Chamilo\Libraries\Storage\Query\Condition\ComparisonCondition;
 use Chamilo\Libraries\Storage\Query\Condition\Condition;
 use Chamilo\Libraries\Storage\Query\Condition\EqualityCondition;
-use Chamilo\Libraries\Storage\Query\Join;
-use Chamilo\Libraries\Storage\Query\Joins;
 use Chamilo\Libraries\Storage\Query\RetrieveProperties;
 use Chamilo\Libraries\Storage\Query\UpdateProperties;
 use Chamilo\Libraries\Storage\Query\UpdateProperty;
 use Chamilo\Libraries\Storage\Query\Variable\FunctionConditionVariable;
 use Chamilo\Libraries\Storage\Query\Variable\OperationConditionVariable;
-use Chamilo\Libraries\Storage\Query\Variable\PropertiesConditionVariable;
 use Chamilo\Libraries\Storage\Query\Variable\PropertyConditionVariable;
 use Chamilo\Libraries\Storage\Query\Variable\StaticConditionVariable;
 use Chamilo\Libraries\Storage\Service\ParametersHandler;
 use Doctrine\Common\Collections\ArrayCollection;
-use Exception;
 use Symfony\Component\Uid\Uuid;
 
 /**
@@ -104,10 +95,7 @@ class DataClassRepository
 
     protected function __records(string $dataClassName, RecordRetrievesParameters $parameters): ArrayCollection
     {
-        if (!$parameters->getRetrieveProperties() instanceof RetrieveProperties)
-        {
-            $this->getParametersHandler()->handleDataClassRetrievesParameters($dataClassName, $parameters);
-        }
+        $this->getParametersHandler()->handleDataClassRetrievesParameters($dataClassName, $parameters);
 
         return new ArrayCollection($this->getDataClassDatabase()->retrieves($dataClassName, $parameters));
     }
@@ -153,45 +141,23 @@ class DataClassRepository
 
     public function count(string $dataClassName, DataClassCountParameters $parameters): int
     {
-        if (is_subclass_of($dataClassName, CompositeDataClass::class))
-        {
-            return $this->countCompositeDataClass($dataClassName, $parameters);
-        }
-        else
-        {
-            return $this->countClass($dataClassName, $dataClassName, $parameters);
-        }
-    }
-
-    protected function countClass(
-        string $cacheDataClassName, string $dataClassName, DataClassCountParameters $parameters
-    ): int
-    {
         if ($this->isQueryCacheEnabled())
         {
             $dataClassRepositoryCache = $this->getDataClassRepositoryCache();
 
-            if (!$dataClassRepositoryCache->exists($cacheDataClassName, $parameters))
+            if (!$dataClassRepositoryCache->exists($dataClassName, $parameters))
             {
                 $dataClassRepositoryCache->addForDataClassCount(
-                    $cacheDataClassName, $parameters, $this->__countClass($dataClassName, $parameters)
+                    $dataClassName, $parameters, $this->__countClass($dataClassName, $parameters)
                 );
             }
 
-            return $dataClassRepositoryCache->get($cacheDataClassName, $parameters);
+            return $dataClassRepositoryCache->get($dataClassName, $parameters);
         }
         else
         {
             return $this->__countClass($dataClassName, $parameters);
         }
-    }
-
-    protected function countCompositeDataClass(string $dataClassName, DataClassCountParameters $parameters): int
-    {
-        $parentDataClassName = $this->determineCompositeDataClassParentClassName($dataClassName);
-        $this->setCompositeDataClassParameters($parentDataClassName, $dataClassName, $parameters);
-
-        return $this->countClass($parentDataClassName, $dataClassName, $parameters);
     }
 
     /**
@@ -220,16 +186,6 @@ class DataClassRepository
 
     public function create(DataClass $dataClass): bool
     {
-        if ($dataClass instanceof CompositeDataClass)
-        {
-            $parentClass = $dataClass::parentClassName();
-            $objectTableName = $parentClass::getStorageUnitName();
-        }
-        else
-        {
-            $objectTableName = $dataClass::getStorageUnitName();
-        }
-
         if ($dataClass instanceof UuidDataClassInterface && !$dataClass->isIdentified())
         {
             $dataClass->setId(Uuid::v4()->__toString());
@@ -242,40 +198,23 @@ class DataClassRepository
             unset($objectProperties[DataClass::PROPERTY_ID]);
         }
 
-        if ($this->getDataClassDatabase()->create($objectTableName, $objectProperties))
+        if ($this->createRecord($dataClass::class, $objectProperties))
         {
             if (!$dataClass instanceof UuidDataClassInterface)
             {
-                $dataClass->setId((string) $this->getDataClassDatabase()->getLastInsertedIdentifier($objectTableName));
-            }
-
-            if ($dataClass instanceof CompositeDataClass && $dataClass::isExtended())
-            {
-                try
-                {
-                    $objectProperties = $dataClass->getAdditionalProperties();
-                }
-                catch (Exception)
-                {
-                    return false;
-                }
-
-                $objectProperties[DataClass::PROPERTY_ID] = $dataClass->getId();
-
-                if (!$this->getDataClassDatabase()->create($dataClass::getStorageUnitName(), $objectProperties))
-                {
-                    return false;
-                }
+                $dataClass->setId(
+                    (string) $this->getDataClassDatabase()->getLastInsertedIdentifier($dataClass::getStorageUnitName())
+                );
             }
 
             if ($this->isQueryCacheEnabled())
             {
-                $parentDataClassName = $this->determineCompositeDataClassParentClassName(get_class($dataClass));
+                $dataClassName = $dataClass::class;
 
                 return $this->getDataClassRepositoryCache()->addForDataClass(
-                    $parentDataClassName, new DataClassRetrieveParameters(
+                    $dataClassName, new DataClassRetrieveParameters(
                     new EqualityCondition(
-                        new PropertyConditionVariable($parentDataClassName, DataClass::PROPERTY_ID),
+                        new PropertyConditionVariable($dataClassName, DataClass::PROPERTY_ID),
                         new StaticConditionVariable($dataClass->getId())
                     )
                 ), $dataClass
@@ -289,9 +228,7 @@ class DataClassRepository
     }
 
     /**
-     * @template createRecordDataClassName
-     *
-     * @param class-string<createRecordDataClassName> $dataClassName
+     * @param class-string<\Chamilo\Libraries\Storage\DataClass\DataClass> $dataClassName
      */
     public function createRecord(string $dataClassName, array $record): bool
     {
@@ -300,8 +237,7 @@ class DataClassRepository
 
     public function delete(DataClass $dataClass): bool
     {
-        $dataClassName =
-            ($dataClass instanceof CompositeDataClass ? $dataClass::parentClassName() : get_class($dataClass));
+        $dataClassName = $dataClass::class;
 
         $condition = new EqualityCondition(
             new PropertyConditionVariable($dataClassName, $dataClassName::PROPERTY_ID),
@@ -311,19 +247,6 @@ class DataClassRepository
         if (!$this->getDataClassDatabase()->delete($dataClassName, $condition))
         {
             return false;
-        }
-
-        if ($dataClass instanceof CompositeDataClass && $dataClass::isExtended())
-        {
-            $condition = new EqualityCondition(
-                new PropertyConditionVariable(get_class($dataClass), DataClass::PROPERTY_ID),
-                new StaticConditionVariable($dataClass->getId())
-            );
-
-            if (!$this->getDataClassDatabase()->delete(get_class($dataClass), $condition))
-            {
-                return false;
-            }
         }
 
         if ($this->isQueryCacheEnabled())
@@ -354,73 +277,6 @@ class DataClassRepository
     }
 
     /**
-     * @param class-string<\Chamilo\Libraries\Storage\DataClass\CompositeDataClass> $dataClassName
-     */
-    protected function determineCompositeDataClassParentClassName(string $dataClassName): string
-    {
-        if ($this->isExtensionClass($dataClassName))
-        {
-            return $dataClassName::parentClassName();
-        }
-        else
-        {
-            return $dataClassName;
-        }
-    }
-
-    /**
-     * @throws \Chamilo\Libraries\Storage\Exception\CompositeDataClassTypeException
-     */
-    protected function determineCompositeDataClassType(string $dataClassName, DataClassRetrieveParameters $parameters
-    ): string
-    {
-        $parameters = new RecordRetrieveParameters(
-            new RetrieveProperties(
-                [new PropertyConditionVariable($dataClassName, CompositeDataClass::PROPERTY_TYPE)]
-            ), $parameters->getCondition(), $parameters->getOrderBy(), $parameters->getJoins()
-        );
-
-        $type = $this->record($dataClassName, $parameters);
-
-        if (!array_key_exists(CompositeDataClass::PROPERTY_TYPE, $type))
-        {
-            throw new CompositeDataClassTypeException($dataClassName, $parameters);
-        }
-
-        return $type[CompositeDataClass::PROPERTY_TYPE];
-    }
-
-    /**
-     * @throws \Chamilo\Libraries\Architecture\Exceptions\ObjectNotExistException
-     */
-    public function determineDataClassType(string $dataClassName, string $identifier): string
-    {
-        $conditionDataClassName = $this->determineCompositeDataClassParentClassName($dataClassName);
-
-        $condition = new EqualityCondition(
-            new PropertyConditionVariable($conditionDataClassName, DataClass::PROPERTY_ID),
-            new StaticConditionVariable($identifier)
-        );
-
-        $parameters = new RecordRetrieveParameters(
-            new RetrieveProperties(
-                [new PropertyConditionVariable($conditionDataClassName, CompositeDataClass::PROPERTY_TYPE)]
-            ), $condition
-        );
-
-        $type = $this->record($conditionDataClassName, $parameters);
-
-        if (isset($type[$conditionDataClassName::PROPERTY_TYPE]))
-        {
-            return $type[$conditionDataClassName::PROPERTY_TYPE];
-        }
-        else
-        {
-            throw new ObjectNotExistException($identifier);
-        }
-    }
-
-    /**
      * @return string[]
      */
     public function distinct(string $dataClassName, DataClassDistinctParameters $parameters): array
@@ -444,11 +300,6 @@ class DataClassRepository
         }
     }
 
-    public function getAlias(string $dataClassStorageUnitName): string
-    {
-        return $this->getDataClassDatabase()->getAlias($dataClassStorageUnitName);
-    }
-
     public function getDataClassDatabase(): DataClassDatabaseInterface
     {
         return $this->dataClassDatabase;
@@ -467,17 +318,6 @@ class DataClassRepository
     public function getParametersHandler(): ParametersHandler
     {
         return $this->parametersHandler;
-    }
-
-    protected function isCompositeDataClass(string $dataClassName): bool
-    {
-        return is_subclass_of($dataClassName, CompositeDataClass::class);
-    }
-
-    protected function isExtensionClass(string $dataClassName): bool
-    {
-        return $this->isCompositeDataClass($dataClassName) &&
-            get_parent_class($dataClassName) !== CompositeDataClass::class;
     }
 
     protected function isQueryCacheEnabled(): bool
@@ -607,17 +447,25 @@ class DataClassRepository
      * @param class-string<retrieveDataClassName> $dataClassName
      *
      * @return ?retrieveDataClassName
-     * @throws \Chamilo\Libraries\Storage\Exception\CompositeDataClassTypeException
      */
     public function retrieve(string $dataClassName, DataClassRetrieveParameters $parameters)
     {
-        if (is_subclass_of($dataClassName, CompositeDataClass::class))
+        if ($this->isQueryCacheEnabled())
         {
-            return $this->retrieveCompositeDataClass($dataClassName, $parameters);
+            $dataClassRepositoryCache = $this->getDataClassRepositoryCache();
+
+            if (!$dataClassRepositoryCache->exists($dataClassName, $parameters))
+            {
+                $dataClassRepositoryCache->addForDataClass(
+                    $dataClassName, $parameters, $this->__retrieve($dataClassName, $parameters)
+                );
+            }
+
+            return $dataClassRepositoryCache->get($dataClassName, $parameters);
         }
         else
         {
-            return $this->retrieveClass($dataClassName, $dataClassName, $parameters);
+            return $this->__retrieve($dataClassName, $parameters);
         }
     }
 
@@ -628,16 +476,13 @@ class DataClassRepository
      * @param string $identifier
      *
      * @return ?retrieveById
-     * @throws \Chamilo\Libraries\Storage\Exception\CompositeDataClassTypeException
      */
     public function retrieveById(string $dataClassName, string $identifier)
     {
-        $parentDataClassName = $this->determineCompositeDataClassParentClassName($dataClassName);
-
         return $this->retrieve(
             $dataClassName, new DataClassRetrieveParameters(
                 new EqualityCondition(
-                    new PropertyConditionVariable($parentDataClassName, DataClass::PROPERTY_ID),
+                    new PropertyConditionVariable($dataClassName, DataClass::PROPERTY_ID),
                     new StaticConditionVariable($identifier)
                 )
             )
@@ -674,48 +519,6 @@ class DataClassRepository
         }
     }
 
-    /**
-     * @template retrieveCompositeDataClass
-     *
-     * @param class-string<retrieveCompositeDataClass> $dataClassName
-     *
-     * @return retrieveCompositeDataClass
-     * @throws \Chamilo\Libraries\Storage\Exception\CompositeDataClassTypeException
-     */
-    protected function retrieveCompositeDataClass(string $dataClassName, DataClassRetrieveParameters $parameters)
-    {
-        $parentClassName = $this->determineCompositeDataClassParentClassName($dataClassName);
-
-        if ($this->isCompositeDataClass($dataClassName) && !$this->isExtensionClass($dataClassName))
-        {
-            $dataClassName = $this->determineCompositeDataClassType($dataClassName, $parameters);
-        }
-
-        $this->setCompositeDataClassParameters($parentClassName, $dataClassName, $parameters);
-
-        return $this->retrieveClass($parentClassName, $dataClassName, $parameters);
-    }
-
-    public function retrieveCompositeDataClassAdditionalProperties(
-        string $compositeDataClassName, string $compositeDataClassIdentifier
-    ): array
-    {
-        if (!is_subclass_of($compositeDataClassName, CompositeDataClassInterface::class) ||
-            !$compositeDataClassName::isExtended())
-        {
-            return [];
-        }
-
-        $parameters = new RecordRetrieveParameters(
-            new RetrieveProperties([new PropertiesConditionVariable($compositeDataClassName)]), new EqualityCondition(
-                new PropertyConditionVariable($compositeDataClassName, DataClass::PROPERTY_ID),
-                new StaticConditionVariable($compositeDataClassIdentifier)
-            )
-        );
-
-        return $this->record($compositeDataClassName, $parameters);
-    }
-
     public function retrieveMaximumValue(string $dataClassName, string $property, ?Condition $condition = null): int
     {
         $parameters = new RecordRetrieveParameters(
@@ -750,35 +553,18 @@ class DataClassRepository
      */
     public function retrieves(string $dataClassName, DataClassRetrievesParameters $parameters): ArrayCollection
     {
-        if (is_subclass_of($dataClassName, CompositeDataClass::class))
-        {
-            return $this->retrievesCompositeDataClass($dataClassName, $parameters);
-        }
-        else
-        {
-            return $this->retrievesClass($dataClassName, $dataClassName, $parameters);
-        }
-    }
-
-    /**
-     * @throws \Chamilo\Libraries\Storage\Exception\DataClassNoResultException
-     */
-    protected function retrievesClass(
-        string $cacheDataClassName, string $dataClassName, DataClassRetrievesParameters $parameters
-    ): ArrayCollection
-    {
         if ($this->isQueryCacheEnabled())
         {
             $dataClassRepositoryCache = $this->getDataClassRepositoryCache();
 
-            if (!$dataClassRepositoryCache->exists($cacheDataClassName, $parameters))
+            if (!$dataClassRepositoryCache->exists($dataClassName, $parameters))
             {
                 $dataClassRepositoryCache->addForArrayCollection(
-                    $cacheDataClassName, $this->__retrieves($dataClassName, $parameters), $parameters
+                    $dataClassName, $this->__retrieves($dataClassName, $parameters), $parameters
                 );
             }
 
-            $arrayCollection = $dataClassRepositoryCache->get($cacheDataClassName, $parameters);
+            $arrayCollection = $dataClassRepositoryCache->get($dataClassName, $parameters);
             $arrayCollection->first();
 
             return $arrayCollection;
@@ -789,69 +575,6 @@ class DataClassRepository
         }
     }
 
-    /**
-     * @throws \Chamilo\Libraries\Storage\Exception\DataClassNoResultException
-     */
-    protected function retrievesCompositeDataClass(string $dataClassName, DataClassRetrievesParameters $parameters
-    ): ArrayCollection
-    {
-        $parentDataClassName = $this->determineCompositeDataClassParentClassName($dataClassName);
-        $this->setCompositeDataClassParameters($parentDataClassName, $dataClassName, $parameters);
-
-        return $this->retrievesClass($parentDataClassName, $dataClassName, $parameters);
-    }
-
-    /**
-     * @template setCompositeDataClassParametersDataClassName
-     *
-     * @param class-string<setCompositeDataClassParametersDataClassName> $dataClassName
-     */
-    protected function setCompositeDataClassParameters(
-        string $parentDataClassName, string $dataClassName, DataClassParameters $parameters
-    ): DataClassRepository
-    {
-        if ($dataClassName::isExtended())
-        {
-            $join = new Join(
-                $parentDataClassName, new EqualityCondition(
-                    new PropertyConditionVariable($parentDataClassName, $parentDataClassName::PROPERTY_ID),
-                    new PropertyConditionVariable($dataClassName, $dataClassName::PROPERTY_ID)
-                )
-            );
-
-            if ($parameters->getJoins() instanceof Joins)
-            {
-                $joins = $parameters->getJoins();
-                $joins->add($join);
-            }
-            else
-            {
-                $joins = new Joins([$join]);
-            }
-
-            $parameters->setJoins($joins);
-        }
-
-        if ($this->isExtensionClass($dataClassName))
-        {
-            $condition = new EqualityCondition(
-                new PropertyConditionVariable($parentDataClassName, $parentDataClassName::PROPERTY_TYPE),
-                new StaticConditionVariable($dataClassName)
-            );
-
-            if ($parameters->getCondition() instanceof Condition)
-            {
-                $parameters->setCondition(new AndCondition([$parameters->getCondition(), $condition]));
-            }
-            else
-            {
-                $parameters->setCondition($condition);
-            }
-        }
-
-        return $this;
-    }
-
     public function transactional(callable $function): mixed
     {
         return $this->getDataClassDatabase()->transactional($function);
@@ -859,16 +582,9 @@ class DataClassRepository
 
     public function update(DataClass $dataClass): bool
     {
-        if ($dataClass instanceof CompositeDataClass)
-        {
-            $propertyConditionClass = $dataClass::parentClassName();
-            $dataClassTableName = $propertyConditionClass::getStorageUnitName();
-        }
-        else
-        {
-            $propertyConditionClass = get_class($dataClass);
-            $dataClassTableName = $dataClass::getStorageUnitName();
-        }
+
+        $propertyConditionClass = get_class($dataClass);
+        $dataClassTableName = $dataClass::getStorageUnitName();
 
         $condition = new EqualityCondition(
             new PropertyConditionVariable($propertyConditionClass, DataClass::PROPERTY_ID),
@@ -890,39 +606,7 @@ class DataClassRepository
             );
         }
 
-        $this->getDataClassDatabase()->updates($dataClassTableName, $updatePropertes, $condition);
-
-        //        $result = $this->getDataClassDatabase()->update(
-        //            $dataClassTableName, $condition, $defaultProperties
-        //        );
-
-        if ($dataClass instanceof CompositeDataClass && $dataClass::isExtended())
-        {
-            $condition = new EqualityCondition(
-                new PropertyConditionVariable(get_class($dataClass), DataClass::PROPERTY_ID),
-                new StaticConditionVariable($dataClass->getId())
-            );
-
-            $additionalProperties = $dataClass->getAdditionalProperties();
-
-            $updatePropertes = new UpdateProperties();
-
-            foreach ($additionalProperties as $propertyName => $propertyValue)
-            {
-                $updatePropertes->add(
-                    new UpdateProperty(
-                        new PropertyConditionVariable($dataClass::class, $propertyName),
-                        new StaticConditionVariable($propertyValue)
-                    )
-                );
-            }
-
-            $this->getDataClassDatabase()->updates($dataClass::getStorageUnitName(), $updatePropertes, $condition);
-
-            //                $result = $this->getDataClassDatabase()->update(
-            //                    $dataClass::getStorageUnitName(), $condition, $dataClass->getAdditionalProperties()
-            //                );
-        }
+        $this->getDataClassDatabase()->update($dataClassTableName, $updatePropertes, $condition);
 
         return true;
     }
@@ -934,7 +618,7 @@ class DataClassRepository
      */
     public function updates(string $dataClassName, UpdateProperties $properties, Condition $condition): bool
     {
-        $this->getDataClassDatabase()->updates($dataClassName::getStorageUnitName(), $properties, $condition);
+        $this->getDataClassDatabase()->update($dataClassName, $properties, $condition);
 
         if ($this->isQueryCacheEnabled())
         {

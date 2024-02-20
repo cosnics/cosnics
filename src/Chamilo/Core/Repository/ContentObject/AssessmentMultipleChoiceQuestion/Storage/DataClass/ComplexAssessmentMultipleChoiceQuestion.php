@@ -3,7 +3,7 @@ namespace Chamilo\Core\Repository\ContentObject\AssessmentMultipleChoiceQuestion
 
 use Chamilo\Core\Repository\ContentObject\Assessment\Display\AnswerFeedbackDisplaySupport;
 use Chamilo\Core\Repository\Storage\DataClass\ComplexContentObjectItem;
-use Chamilo\Libraries\Storage\DataClass\Interfaces\CompositeDataClassExtensionInterface;
+use Chamilo\Libraries\Storage\DataClass\Interfaces\DataClassExtensionInterface;
 
 /**
  * @package core\repository\content_object\assessment_multiple_choice_question
@@ -13,7 +13,7 @@ use Chamilo\Libraries\Storage\DataClass\Interfaces\CompositeDataClassExtensionIn
  * @author  Eduard Vossen <eduard.vossen@ehb.be>
  */
 class ComplexAssessmentMultipleChoiceQuestion extends ComplexContentObjectItem
-    implements AnswerFeedbackDisplaySupport, CompositeDataClassExtensionInterface
+    implements AnswerFeedbackDisplaySupport, DataClassExtensionInterface
 {
     public const CONTEXT = AssessmentMultipleChoiceQuestion::CONTEXT;
 

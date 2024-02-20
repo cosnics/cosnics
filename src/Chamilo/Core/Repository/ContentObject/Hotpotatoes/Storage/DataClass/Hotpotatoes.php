@@ -8,7 +8,7 @@ use Chamilo\Libraries\DependencyInjection\DependencyInjectionContainerBuilder;
 use Chamilo\Libraries\File\Compression\ZipArchive\ZipArchiveFilecompression;
 use Chamilo\Libraries\File\SystemPathBuilder;
 use Chamilo\Libraries\File\WebPathBuilder;
-use Chamilo\Libraries\Storage\DataClass\Interfaces\CompositeDataClassExtensionInterface;
+use Chamilo\Libraries\Storage\DataClass\Interfaces\DataClassExtensionInterface;
 use Chamilo\Libraries\Translation\Translation;
 use Chamilo\Libraries\Utilities\StringUtilities;
 use Symfony\Component\HttpFoundation\Session\SessionInterface;
@@ -16,7 +16,7 @@ use Symfony\Component\HttpFoundation\Session\SessionInterface;
 /**
  * @package Chamilo\Core\Repository\ContentObject\Hotpotatoes\Storage\DataClass
  */
-class Hotpotatoes extends ContentObject implements VersionableInterface, CompositeDataClassExtensionInterface
+class Hotpotatoes extends ContentObject implements VersionableInterface, DataClassExtensionInterface
 {
     public const CONTEXT = 'Chamilo\Core\Repository\ContentObject\Hotpotatoes';
 
