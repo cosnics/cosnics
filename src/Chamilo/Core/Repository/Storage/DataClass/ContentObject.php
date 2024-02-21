@@ -23,8 +23,8 @@ use Chamilo\Libraries\Format\Structure\Glyph\IdentGlyph;
 use Chamilo\Libraries\Format\Structure\Glyph\NamespaceIdentGlyph;
 use Chamilo\Libraries\Storage\Cache\DataClassRepositoryCache;
 use Chamilo\Libraries\Storage\DataClass\DataClass;
-use Chamilo\Libraries\Storage\DataClass\Interfaces\CompositeDataClassInterface;
-use Chamilo\Libraries\Storage\DataClass\Traits\CompositeDataClassTrait;
+use Chamilo\Libraries\Storage\DataClass\Interfaces\DataClassTypeAwareInterface;
+use Chamilo\Libraries\Storage\DataClass\Traits\DataClassTypeAwareTrait;
 use Chamilo\Libraries\Storage\Parameters\DataClassCountParameters;
 use Chamilo\Libraries\Storage\Parameters\DataClassDistinctParameters;
 use Chamilo\Libraries\Storage\Parameters\DataClassRetrieveParameters;
@@ -50,9 +50,9 @@ use Symfony\Component\Uid\Uuid;
  * @author Hans De Bisschop
  * @author Dieter De Neef
  */
-class ContentObject extends DataClass implements CompositeDataClassInterface
+class ContentObject extends DataClass implements DataClassTypeAwareInterface
 {
-    use CompositeDataClassTrait;
+    use DataClassTypeAwareTrait;
 
     public const ATTACHMENT_ALL = 'all';
     public const ATTACHMENT_NORMAL = 'normal';
@@ -121,22 +121,12 @@ class ContentObject extends DataClass implements CompositeDataClassInterface
      * @var TemplateRegistration
      */
     private $template_registration;
-
-    /**
-     * Creates a new object.
-     *
-     * @param $id                   int The numeric ID of the object. May be omitted if creating a new object.
-     * @param $defaultProperties    array The default properties of the object. Associative array.
-     * @param $additionalProperties array The properties specific for this type of object. Associative array. Null if
-     *                              they are unknown at construction of the object; in this case, they will be
-     *                              retrieved when needed.
-     */
+    
     public function __construct(
-        array $default_properties = [], array $additionalProperties = [], array $optionalProperties = []
+        array $default_properties = [], array $optionalProperties = []
     )
     {
         parent::__construct($default_properties, $optionalProperties);
-        $this->setAdditionalProperties($additionalProperties);
         $this->setType(static::class);
         $this->oldState = $default_properties[self::PROPERTY_STATE];
     }
@@ -734,6 +724,11 @@ class ContentObject extends DataClass implements CompositeDataClassInterface
         }
     }
 
+    public static function getCompositeDataClassName(): string
+    {
+        return ContentObject::class;
+    }
+
     protected function getContentObjectRelationService(): ContentObjectRelationService
     {
         return $this->getService(ContentObjectRelationService::class);
@@ -1282,6 +1277,8 @@ class ContentObject extends DataClass implements CompositeDataClassInterface
         return $this->getDefaultProperty(self::PROPERTY_OBJECT_NUMBER);
     }
 
+    // create a version
+
     /**
      * @return User
      */
@@ -1296,8 +1293,6 @@ class ContentObject extends DataClass implements CompositeDataClassInterface
 
         return $this->owner;
     }
-
-    // create a version
 
     public function get_owner_fullname()
     {
@@ -2053,10 +2048,5 @@ class ContentObject extends DataClass implements CompositeDataClassInterface
         }
 
         return parent::delete();
-    }
-
-    public static function getCompositeDataClassName(): string
-    {
-        return ContentObject::class;
     }
 }
