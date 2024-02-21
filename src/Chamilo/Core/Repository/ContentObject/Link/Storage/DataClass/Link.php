@@ -4,13 +4,13 @@ namespace Chamilo\Core\Repository\ContentObject\Link\Storage\DataClass;
 use Chamilo\Core\Repository\Storage\DataClass\ContentObject;
 use Chamilo\Libraries\Architecture\Interfaces\IncludeableInterface;
 use Chamilo\Libraries\Architecture\Interfaces\VersionableInterface;
-use Chamilo\Libraries\Storage\DataClass\Interfaces\DataClassExtensionInterface;
+use Chamilo\Libraries\Storage\DataClass\Interfaces\CompositeDataClassExtensionInterface;
 
 /**
  * @package Chamilo\Core\Repository\ContentObject\Link\Storage\DataClass
  */
 class Link extends ContentObject
-    implements VersionableInterface, IncludeableInterface, DataClassExtensionInterface
+    implements VersionableInterface, IncludeableInterface, CompositeDataClassExtensionInterface
 {
     public const CONTEXT = 'Chamilo\Core\Repository\ContentObject\Link';
 

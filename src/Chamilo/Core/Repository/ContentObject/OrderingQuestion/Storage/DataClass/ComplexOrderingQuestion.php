@@ -3,7 +3,7 @@ namespace Chamilo\Core\Repository\ContentObject\OrderingQuestion\Storage\DataCla
 
 use Chamilo\Core\Repository\ContentObject\Assessment\Display\AnswerFeedbackDisplaySupport;
 use Chamilo\Core\Repository\Storage\DataClass\ComplexContentObjectItem;
-use Chamilo\Libraries\Storage\DataClass\Interfaces\DataClassExtensionInterface;
+use Chamilo\Libraries\Storage\DataClass\Interfaces\CompositeDataClassExtensionInterface;
 
 /**
  * @package core\repository\content_object\ordering_question
@@ -13,7 +13,7 @@ use Chamilo\Libraries\Storage\DataClass\Interfaces\DataClassExtensionInterface;
  * @author  Eduard Vossen <eduard.vossen@ehb.be>
  */
 class ComplexOrderingQuestion extends ComplexContentObjectItem
-    implements AnswerFeedbackDisplaySupport, DataClassExtensionInterface
+    implements AnswerFeedbackDisplaySupport, CompositeDataClassExtensionInterface
 {
     public const CONTEXT = OrderingQuestion::CONTEXT;
 

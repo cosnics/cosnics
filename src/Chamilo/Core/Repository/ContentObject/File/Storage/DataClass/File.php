@@ -12,7 +12,7 @@ use Chamilo\Libraries\DependencyInjection\DependencyInjectionContainerBuilder;
 use Chamilo\Libraries\File\ConfigurablePathBuilder;
 use Chamilo\Libraries\File\FileType;
 use Chamilo\Libraries\Format\Structure\Glyph\IdentGlyph;
-use Chamilo\Libraries\Storage\DataClass\Interfaces\DataClassExtensionInterface;
+use Chamilo\Libraries\Storage\DataClass\Interfaces\CompositeDataClassExtensionInterface;
 use Chamilo\Libraries\Translation\Translation;
 use Chamilo\Libraries\Utilities\StringUtilities;
 use Exception;
@@ -24,7 +24,7 @@ use Symfony\Component\HttpFoundation\StreamedResponse;
  */
 class File extends ContentObject
     implements VersionableInterface, IncludeableInterface, FileStorageSupportInterface, DownloadSupport,
-    DataClassExtensionInterface
+    CompositeDataClassExtensionInterface
 {
     public const CONTEXT = 'Chamilo\Core\Repository\ContentObject\File';
 

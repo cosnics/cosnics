@@ -10,7 +10,7 @@ use Chamilo\Core\User\Storage\DataClass\User;
 use Chamilo\Libraries\Architecture\Interfaces\AttachmentSupportInterface;
 use Chamilo\Libraries\Architecture\Interfaces\VersionableInterface;
 use Chamilo\Libraries\DependencyInjection\DependencyInjectionContainerBuilder;
-use Chamilo\Libraries\Storage\DataClass\Interfaces\DataClassExtensionInterface;
+use Chamilo\Libraries\Storage\DataClass\Interfaces\CompositeDataClassExtensionInterface;
 use Chamilo\Libraries\Storage\Query\Condition\EqualityCondition;
 use Chamilo\Libraries\Storage\Query\Variable\PropertyConditionVariable;
 use Chamilo\Libraries\Storage\Query\Variable\StaticConditionVariable;
@@ -23,7 +23,7 @@ use Symfony\Component\HttpFoundation\Session\SessionInterface;
  * @author  Maarten Volckaert - Hogeschool Gent
  */
 class ForumTopic extends ContentObject
-    implements VersionableInterface, AttachmentSupportInterface, DataClassExtensionInterface
+    implements VersionableInterface, AttachmentSupportInterface, CompositeDataClassExtensionInterface
 {
     public const CONTEXT = 'Chamilo\Core\Repository\ContentObject\ForumTopic';
 

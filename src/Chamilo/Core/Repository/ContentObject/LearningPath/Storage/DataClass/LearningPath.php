@@ -9,7 +9,7 @@ use Chamilo\Core\Repository\Manager;
 use Chamilo\Core\Repository\Storage\DataClass\ContentObject;
 use Chamilo\Core\User\Storage\DataClass\User;
 use Chamilo\Libraries\Architecture\Interfaces\ComplexContentObjectSupportInterface;
-use Chamilo\Libraries\Storage\DataClass\Interfaces\DataClassExtensionInterface;
+use Chamilo\Libraries\Storage\DataClass\Interfaces\CompositeDataClassExtensionInterface;
 use InvalidArgumentException;
 use Symfony\Component\HttpFoundation\Session\SessionInterface;
 
@@ -17,7 +17,7 @@ use Symfony\Component\HttpFoundation\Session\SessionInterface;
  * @package Chamilo\Core\Repository\ContentObject\LearningPath\Storage\DataClass
  */
 class LearningPath extends ContentObject
-    implements ComplexContentObjectSupportInterface, DisplayAndBuildSupport, DataClassExtensionInterface
+    implements ComplexContentObjectSupportInterface, DisplayAndBuildSupport, CompositeDataClassExtensionInterface
 {
     public const AUTOMATIC_NUMBERING_DIGITS = 'digits';
 

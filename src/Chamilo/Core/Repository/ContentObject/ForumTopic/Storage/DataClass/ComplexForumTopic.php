@@ -8,7 +8,7 @@ use Chamilo\Core\Repository\Storage\DataManager;
 use Chamilo\Core\User\Manager;
 use Chamilo\Core\User\Storage\DataClass\User;
 use Chamilo\Libraries\DependencyInjection\DependencyInjectionContainerBuilder;
-use Chamilo\Libraries\Storage\DataClass\Interfaces\DataClassExtensionInterface;
+use Chamilo\Libraries\Storage\DataClass\Interfaces\CompositeDataClassExtensionInterface;
 use Chamilo\Libraries\Translation\Translation;
 use Symfony\Component\HttpFoundation\Session\SessionInterface;
 
@@ -16,7 +16,7 @@ use Symfony\Component\HttpFoundation\Session\SessionInterface;
  * @package repository.lib.content_object.forum_topic
  * @author  Mattias De Pauw - Hogeschool Gent
  */
-class ComplexForumTopic extends ComplexContentObjectItem implements DataClassExtensionInterface
+class ComplexForumTopic extends ComplexContentObjectItem implements CompositeDataClassExtensionInterface
 {
     public const CONTEXT = ForumTopic::CONTEXT;
 

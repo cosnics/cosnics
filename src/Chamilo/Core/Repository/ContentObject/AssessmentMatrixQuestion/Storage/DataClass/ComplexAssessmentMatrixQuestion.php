@@ -3,7 +3,7 @@ namespace Chamilo\Core\Repository\ContentObject\AssessmentMatrixQuestion\Storage
 
 use Chamilo\Core\Repository\ContentObject\Assessment\Display\AnswerFeedbackDisplaySupport;
 use Chamilo\Core\Repository\Storage\DataClass\ComplexContentObjectItem;
-use Chamilo\Libraries\Storage\DataClass\Interfaces\DataClassExtensionInterface;
+use Chamilo\Libraries\Storage\DataClass\Interfaces\CompositeDataClassExtensionInterface;
 
 /**
  * @package core\repository\content_object\assessment_matrix_question
@@ -13,7 +13,7 @@ use Chamilo\Libraries\Storage\DataClass\Interfaces\DataClassExtensionInterface;
  * @author  Eduard Vossen <eduard.vossen@ehb.be>
  */
 class ComplexAssessmentMatrixQuestion extends ComplexContentObjectItem
-    implements AnswerFeedbackDisplaySupport, DataClassExtensionInterface
+    implements AnswerFeedbackDisplaySupport, CompositeDataClassExtensionInterface
 {
     public const CONTEXT = AssessmentMatrixQuestion::CONTEXT;
 

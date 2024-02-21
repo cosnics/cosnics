@@ -3,7 +3,7 @@ namespace Chamilo\Core\Repository\ContentObject\WikiPage\Storage\DataClass;
 
 use Chamilo\Core\Repository\Storage\DataClass\ComplexContentObjectItem;
 use Chamilo\Core\Repository\Storage\DataManager;
-use Chamilo\Libraries\Storage\DataClass\Interfaces\DataClassExtensionInterface;
+use Chamilo\Libraries\Storage\DataClass\Interfaces\CompositeDataClassExtensionInterface;
 use Chamilo\Libraries\Storage\Parameters\DataClassRetrievesParameters;
 use Chamilo\Libraries\Storage\Query\Condition\AndCondition;
 use Chamilo\Libraries\Storage\Query\Condition\EqualityCondition;
@@ -14,7 +14,7 @@ use Chamilo\Libraries\Storage\Query\Variable\StaticConditionVariable;
 /**
  * @package Chamilo\Core\Repository\ContentObject\WikiPage\Storage\DataClass
  */
-class ComplexWikiPage extends ComplexContentObjectItem implements DataClassExtensionInterface
+class ComplexWikiPage extends ComplexContentObjectItem implements CompositeDataClassExtensionInterface
 {
     public const CONTEXT = WikiPage::CONTEXT;
 

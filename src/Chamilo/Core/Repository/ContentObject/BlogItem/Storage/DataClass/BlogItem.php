@@ -4,7 +4,7 @@ namespace Chamilo\Core\Repository\ContentObject\BlogItem\Storage\DataClass;
 use Chamilo\Core\Repository\Storage\DataClass\ContentObject;
 use Chamilo\Libraries\Architecture\Interfaces\AttachmentSupportInterface;
 use Chamilo\Libraries\Architecture\Interfaces\VersionableInterface;
-use Chamilo\Libraries\Storage\DataClass\Interfaces\DataClassVirtualExtensionInterface;
+use Chamilo\Libraries\Storage\DataClass\Interfaces\CompositeDataClassVirtualExtensionInterface;
 
 /**
  * @package Chamilo\Core\Repository\ContentObject\BlogItem\Storage\DataClass
@@ -12,7 +12,7 @@ use Chamilo\Libraries\Storage\DataClass\Interfaces\DataClassVirtualExtensionInte
  * @author  Hans De Bisschop <hans.de.bisschop@ehb.be>
  */
 class BlogItem extends ContentObject
-    implements VersionableInterface, AttachmentSupportInterface, DataClassVirtualExtensionInterface
+    implements VersionableInterface, AttachmentSupportInterface, CompositeDataClassVirtualExtensionInterface
 {
     public const CONTEXT = 'Chamilo\Core\Repository\ContentObject\BlogItem';
 }

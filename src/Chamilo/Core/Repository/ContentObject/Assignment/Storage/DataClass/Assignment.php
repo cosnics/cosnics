@@ -4,7 +4,7 @@ namespace Chamilo\Core\Repository\ContentObject\Assignment\Storage\DataClass;
 use Chamilo\Core\Repository\Storage\DataClass\ContentObject;
 use Chamilo\Core\Repository\Storage\DataManager;
 use Chamilo\Libraries\Architecture\Interfaces\AttachmentSupportInterface;
-use Chamilo\Libraries\Storage\DataClass\Interfaces\DataClassExtensionInterface;
+use Chamilo\Libraries\Storage\DataClass\Interfaces\CompositeDataClassExtensionInterface;
 use Chamilo\Libraries\Storage\Query\Condition\InCondition;
 use Chamilo\Libraries\Storage\Query\Variable\PropertyConditionVariable;
 
@@ -13,7 +13,7 @@ use Chamilo\Libraries\Storage\Query\Variable\PropertyConditionVariable;
  * @author  Joris Willems <joris.willems@gmail.com>
  * @author  Alexander Van Paemel
  */
-class Assignment extends ContentObject implements AttachmentSupportInterface, DataClassExtensionInterface
+class Assignment extends ContentObject implements AttachmentSupportInterface, CompositeDataClassExtensionInterface
 {
     public const CONTEXT = 'Chamilo\Core\Repository\ContentObject\Assignment';
 

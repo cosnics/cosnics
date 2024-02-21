@@ -4,13 +4,13 @@ namespace Chamilo\Core\Repository\ContentObject\SystemAnnouncement\Storage\DataC
 use Chamilo\Core\Repository\Storage\DataClass\ContentObject;
 use Chamilo\Libraries\Architecture\Interfaces\VersionableInterface;
 use Chamilo\Libraries\Format\Structure\Glyph\IdentGlyph;
-use Chamilo\Libraries\Storage\DataClass\Interfaces\DataClassExtensionInterface;
+use Chamilo\Libraries\Storage\DataClass\Interfaces\CompositeDataClassExtensionInterface;
 use Chamilo\Libraries\Translation\Translation;
 
 /**
  * @package Chamilo\Core\Repository\ContentObject\SystemAnnouncement\Storage\DataClass
  */
-class SystemAnnouncement extends ContentObject implements VersionableInterface, DataClassExtensionInterface
+class SystemAnnouncement extends ContentObject implements VersionableInterface, CompositeDataClassExtensionInterface
 {
     public const CONTEXT = 'Chamilo\Core\Repository\ContentObject\SystemAnnouncement';
 

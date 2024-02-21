@@ -4,12 +4,12 @@ namespace Chamilo\Core\Repository\ContentObject\FillInBlanksQuestion\Storage\Dat
 use Chamilo\Core\Repository\ContentObject\FillInBlanksQuestion\Form\FillInBlanksQuestionForm;
 use Chamilo\Core\Repository\Storage\DataClass\ContentObject;
 use Chamilo\Libraries\Architecture\Interfaces\VersionableInterface;
-use Chamilo\Libraries\Storage\DataClass\Interfaces\DataClassExtensionInterface;
+use Chamilo\Libraries\Storage\DataClass\Interfaces\CompositeDataClassExtensionInterface;
 
 /**
  * @package Chamilo\Core\Repository\ContentObject\FillInBlanksQuestion\Storage\DataClass
  */
-class FillInBlanksQuestion extends ContentObject implements VersionableInterface, DataClassExtensionInterface
+class FillInBlanksQuestion extends ContentObject implements VersionableInterface, CompositeDataClassExtensionInterface
 {
     public const CONTEXT = 'Chamilo\Core\Repository\ContentObject\FillInBlanksQuestion';
 

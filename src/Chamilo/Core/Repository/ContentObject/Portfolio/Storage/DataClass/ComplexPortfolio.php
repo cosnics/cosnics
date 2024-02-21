@@ -3,7 +3,7 @@ namespace Chamilo\Core\Repository\ContentObject\Portfolio\Storage\DataClass;
 
 use Chamilo\Core\Repository\ContentObject\PortfolioItem\Storage\DataClass\PortfolioItem;
 use Chamilo\Core\Repository\Storage\DataClass\ComplexContentObjectItem;
-use Chamilo\Libraries\Storage\DataClass\Interfaces\DataClassVirtualExtensionInterface;
+use Chamilo\Libraries\Storage\DataClass\Interfaces\CompositeDataClassVirtualExtensionInterface;
 
 /**
  * Portfolio complex content object item
@@ -11,7 +11,7 @@ use Chamilo\Libraries\Storage\DataClass\Interfaces\DataClassVirtualExtensionInte
  * @package repository\content_object\portfolio$ComplexPortfolio
  * @author  Hans De Bisschop <hans.de.bisschop@ehb.be>
  */
-class ComplexPortfolio extends ComplexContentObjectItem implements DataClassVirtualExtensionInterface
+class ComplexPortfolio extends ComplexContentObjectItem implements CompositeDataClassVirtualExtensionInterface
 {
     public const CONTEXT = Portfolio::CONTEXT;
 

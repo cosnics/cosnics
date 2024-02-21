@@ -6,7 +6,7 @@ use Chamilo\Core\Repository\Manager;
 use Chamilo\Core\Repository\Storage\DataClass\ContentObject;
 use Chamilo\Libraries\Architecture\Interfaces\ComplexContentObjectDisclosureInterface;
 use Chamilo\Libraries\Architecture\Interfaces\ComplexContentObjectSupportInterface;
-use Chamilo\Libraries\Storage\DataClass\Interfaces\DataClassVirtualExtensionInterface;
+use Chamilo\Libraries\Storage\DataClass\Interfaces\CompositeDataClassVirtualExtensionInterface;
 
 /**
  * @package Chamilo\Core\Repository\ContentObject\Portfolio\Storage\DataClass
@@ -14,7 +14,7 @@ use Chamilo\Libraries\Storage\DataClass\Interfaces\DataClassVirtualExtensionInte
  */
 class Portfolio extends ContentObject
     implements ComplexContentObjectSupportInterface, ComplexContentObjectDisclosureInterface,
-    DataClassVirtualExtensionInterface
+    CompositeDataClassVirtualExtensionInterface
 {
     public const CONTEXT = 'Chamilo\Core\Repository\ContentObject\Portfolio';
 

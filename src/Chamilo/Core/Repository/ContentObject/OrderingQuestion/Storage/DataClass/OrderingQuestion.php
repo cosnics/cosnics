@@ -3,13 +3,13 @@ namespace Chamilo\Core\Repository\ContentObject\OrderingQuestion\Storage\DataCla
 
 use Chamilo\Core\Repository\Storage\DataClass\ContentObject;
 use Chamilo\Libraries\Architecture\Interfaces\VersionableInterface;
-use Chamilo\Libraries\Storage\DataClass\Interfaces\DataClassExtensionInterface;
+use Chamilo\Libraries\Storage\DataClass\Interfaces\CompositeDataClassExtensionInterface;
 use Chamilo\Libraries\Utilities\StringUtilities;
 
 /**
  * @package Chamilo\Core\Repository\ContentObject\OrderingQuestion\Storage\DataClass
  */
-class OrderingQuestion extends ContentObject implements VersionableInterface, DataClassExtensionInterface
+class OrderingQuestion extends ContentObject implements VersionableInterface, CompositeDataClassExtensionInterface
 {
     public const CONTEXT = 'Chamilo\Core\Repository\ContentObject\OrderingQuestion';
 

@@ -2,7 +2,7 @@
 namespace Chamilo\Libraries\Storage\DataManager\Repository;
 
 use Chamilo\Libraries\Storage\DataClass\DataClass;
-use Chamilo\Libraries\Storage\DataClass\Interfaces\DataClassExtensionInterface;
+use Chamilo\Libraries\Storage\DataClass\Interfaces\CompositeDataClassExtensionInterface;
 use Chamilo\Libraries\Storage\DataClass\Interfaces\DataClassDisplayOrderSupport;
 use Chamilo\Libraries\Storage\Parameters\DataClassCountParameters;
 use Chamilo\Libraries\Storage\Parameters\RecordRetrieveParameters;
@@ -118,7 +118,7 @@ class DisplayOrderRepository
 
     protected function determinePropertyDataClassName(DataClassDisplayOrderSupport $dataClass): string
     {
-        if ($dataClass instanceof DataClassExtensionInterface)
+        if ($dataClass instanceof CompositeDataClassExtensionInterface)
         {
             return $dataClass::getCompositeDataClassName();
         }

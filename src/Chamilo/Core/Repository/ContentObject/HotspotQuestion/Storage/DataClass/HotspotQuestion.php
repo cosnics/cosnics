@@ -4,12 +4,12 @@ namespace Chamilo\Core\Repository\ContentObject\HotspotQuestion\Storage\DataClas
 use Chamilo\Core\Repository\Storage\DataClass\ContentObject;
 use Chamilo\Core\Repository\Storage\DataManager;
 use Chamilo\Libraries\Architecture\Interfaces\VersionableInterface;
-use Chamilo\Libraries\Storage\DataClass\Interfaces\DataClassExtensionInterface;
+use Chamilo\Libraries\Storage\DataClass\Interfaces\CompositeDataClassExtensionInterface;
 
 /**
  * @package Chamilo\Core\Repository\ContentObject\HotspotQuestion\Storage\DataClass
  */
-class HotspotQuestion extends ContentObject implements VersionableInterface, DataClassExtensionInterface
+class HotspotQuestion extends ContentObject implements VersionableInterface, CompositeDataClassExtensionInterface
 {
     public const CONTEXT = 'Chamilo\Core\Repository\ContentObject\HotspotQuestion';
 

@@ -7,7 +7,7 @@ use Chamilo\Libraries\Architecture\Interfaces\FileStorageSupportInterface;
 use Chamilo\Libraries\Architecture\Interfaces\VersionableInterface;
 use Chamilo\Libraries\DependencyInjection\DependencyInjectionContainerBuilder;
 use Chamilo\Libraries\File\ConfigurablePathBuilder;
-use Chamilo\Libraries\Storage\DataClass\Interfaces\DataClassExtensionInterface;
+use Chamilo\Libraries\Storage\DataClass\Interfaces\CompositeDataClassExtensionInterface;
 use Chamilo\Libraries\Translation\Translation;
 use Chamilo\Libraries\Utilities\StringUtilities;
 use DateTime;
@@ -23,7 +23,7 @@ use Symfony\Component\Cache\Adapter\FilesystemAdapter;
  * @author  Eduard Vossen <eduard.vossen@ehb.be>
  */
 class ExternalCalendar extends ContentObject
-    implements VersionableInterface, FileStorageSupportInterface, DataClassExtensionInterface
+    implements VersionableInterface, FileStorageSupportInterface, CompositeDataClassExtensionInterface
 {
     public const CACHE_TIME = 3600;
 
