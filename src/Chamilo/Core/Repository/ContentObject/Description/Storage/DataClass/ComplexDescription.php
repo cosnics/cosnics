@@ -2,14 +2,13 @@
 namespace Chamilo\Core\Repository\ContentObject\Description\Storage\DataClass;
 
 use Chamilo\Core\Repository\Storage\DataClass\ComplexContentObjectItem;
-use Chamilo\Libraries\Storage\DataClass\Interfaces\CompositeDataClassVirtualExtensionInterface;
 
 /**
- * @package repository.lib.content_object.description
+ * @package Chamilo\Core\Repository\ContentObject\Description\Storage\DataClass
  * @author  Hans De Bisschop
  * @author  Dieter De Neef
  */
-class ComplexDescription extends ComplexContentObjectItem implements CompositeDataClassVirtualExtensionInterface
+class ComplexDescription extends ComplexContentObjectItem
 {
     public const CONTEXT = Description::CONTEXT;
 }

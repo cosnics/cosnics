@@ -10,21 +10,6 @@ use Exception;
  */
 trait RecurringContentObjectTrait
 {
-    public const FREQUENCY_BIWEEKLY = 4;
-    public const FREQUENCY_DAILY = 1;
-    public const FREQUENCY_MONTHLY = 5;
-    public const FREQUENCY_NONE = 0;
-    public const FREQUENCY_WEEKDAYS = 3;
-    public const FREQUENCY_WEEKLY = 2;
-    public const FREQUENCY_YEARLY = 6;
-
-    public const PROPERTY_BYDAY = 'byday';
-    public const PROPERTY_BYMONTH = 'bymonth';
-    public const PROPERTY_BYMONTHDAY = 'bymonthday';
-    public const PROPERTY_FREQUENCY = 'frequency';
-    public const PROPERTY_FREQUENCY_COUNT = 'frequency_count';
-    public const PROPERTY_FREQUENCY_INTERVAL = 'frequency_interval';
-    public const PROPERTY_UNTIL = 'until';
 
     public static array $days = [1 => 'MO', 2 => 'TU', 3 => 'WE', 4 => 'TH', 5 => 'FR', 6 => 'SA', 7 => 'SU'];
 
@@ -37,22 +22,22 @@ trait RecurringContentObjectTrait
 
         switch ($frequency)
         {
-            case self::FREQUENCY_DAILY :
+            case RecurringContentObjectInterface::FREQUENCY_DAILY :
                 $string = $translator->getTranslation('Daily', [], 'Chamilo\Libraries\Calendar');
                 break;
-            case self::FREQUENCY_WEEKLY :
+            case RecurringContentObjectInterface::FREQUENCY_WEEKLY :
                 $string = $translator->getTranslation('Weekly', [], 'Chamilo\Libraries\Calendar');
                 break;
-            case self::FREQUENCY_MONTHLY :
+            case RecurringContentObjectInterface::FREQUENCY_MONTHLY :
                 $string = $translator->getTranslation('Monthly', [], 'Chamilo\Libraries\Calendar');
                 break;
-            case self::FREQUENCY_YEARLY :
+            case RecurringContentObjectInterface::FREQUENCY_YEARLY :
                 $string = $translator->getTranslation('Yearly', [], 'Chamilo\Libraries\Calendar');
                 break;
-            case self::FREQUENCY_WEEKDAYS :
+            case RecurringContentObjectInterface::FREQUENCY_WEEKDAYS :
                 $string = $translator->getTranslation('Weekdays', [], 'Chamilo\Libraries\Calendar');
                 break;
-            case self::FREQUENCY_BIWEEKLY :
+            case RecurringContentObjectInterface::FREQUENCY_BIWEEKLY :
                 $string = $translator->getTranslation('Biweekly', [], 'Chamilo\Libraries\Calendar');
                 break;
             default:
@@ -73,7 +58,7 @@ trait RecurringContentObjectTrait
 
     public function get_byday(): ?string
     {
-        return $this->getAdditionalProperty(self::PROPERTY_BYDAY);
+        return $this->getAdditionalProperty(RecurringContentObjectInterface::PROPERTY_BYDAY);
     }
 
     public static function get_byday_ical_format(int $rank, int $day): string
@@ -127,7 +112,7 @@ trait RecurringContentObjectTrait
 
     public function get_bymonth(): ?string
     {
-        return $this->getAdditionalProperty(self::PROPERTY_BYMONTH);
+        return $this->getAdditionalProperty(RecurringContentObjectInterface::PROPERTY_BYMONTH);
     }
 
     /**
@@ -162,7 +147,7 @@ trait RecurringContentObjectTrait
 
     public function get_bymonthday(): ?string
     {
-        return $this->getAdditionalProperty(self::PROPERTY_BYMONTHDAY);
+        return $this->getAdditionalProperty(RecurringContentObjectInterface::PROPERTY_BYMONTHDAY);
     }
 
     /**
@@ -198,7 +183,7 @@ trait RecurringContentObjectTrait
 
     public function get_frequency(): ?int
     {
-        return $this->getAdditionalProperty(self::PROPERTY_FREQUENCY);
+        return $this->getAdditionalProperty(RecurringContentObjectInterface::PROPERTY_FREQUENCY);
     }
 
     /**
@@ -212,12 +197,12 @@ trait RecurringContentObjectTrait
 
     public function get_frequency_count(): ?int
     {
-        return $this->getAdditionalProperty(self::PROPERTY_FREQUENCY_COUNT);
+        return $this->getAdditionalProperty(RecurringContentObjectInterface::PROPERTY_FREQUENCY_COUNT);
     }
 
     public function get_frequency_interval(): ?int
     {
-        return $this->getAdditionalProperty(self::PROPERTY_FREQUENCY_INTERVAL);
+        return $this->getAdditionalProperty(RecurringContentObjectInterface::PROPERTY_FREQUENCY_INTERVAL);
     }
 
     /**
@@ -266,7 +251,7 @@ trait RecurringContentObjectTrait
 
     public function get_until(): ?int
     {
-        return $this->getAdditionalProperty(self::PROPERTY_UNTIL);
+        return $this->getAdditionalProperty(RecurringContentObjectInterface::PROPERTY_UNTIL);
     }
 
     public function has_frequency(): bool
@@ -280,36 +265,36 @@ trait RecurringContentObjectTrait
 
     public function set_byday(?string $byday)
     {
-        $this->setAdditionalProperty(self::PROPERTY_BYDAY, $byday);
+        $this->setAdditionalProperty(RecurringContentObjectInterface::PROPERTY_BYDAY, $byday);
     }
 
     public function set_bymonth(?string $bymonth)
     {
-        $this->setAdditionalProperty(self::PROPERTY_BYMONTH, $bymonth);
+        $this->setAdditionalProperty(RecurringContentObjectInterface::PROPERTY_BYMONTH, $bymonth);
     }
 
     public function set_bymonthday(?string $bymonthday)
     {
-        $this->setAdditionalProperty(self::PROPERTY_BYMONTHDAY, $bymonthday);
+        $this->setAdditionalProperty(RecurringContentObjectInterface::PROPERTY_BYMONTHDAY, $bymonthday);
     }
 
     public function set_frequency(?int $frequency)
     {
-        $this->setAdditionalProperty(self::PROPERTY_FREQUENCY, $frequency);
+        $this->setAdditionalProperty(RecurringContentObjectInterface::PROPERTY_FREQUENCY, $frequency);
     }
 
     public function set_frequency_count(?int $frequency_count)
     {
-        $this->setAdditionalProperty(self::PROPERTY_FREQUENCY_COUNT, $frequency_count);
+        $this->setAdditionalProperty(RecurringContentObjectInterface::PROPERTY_FREQUENCY_COUNT, $frequency_count);
     }
 
     public function set_frequency_interval(?int $frequency_interval)
     {
-        $this->setAdditionalProperty(self::PROPERTY_FREQUENCY_INTERVAL, $frequency_interval);
+        $this->setAdditionalProperty(RecurringContentObjectInterface::PROPERTY_FREQUENCY_INTERVAL, $frequency_interval);
     }
 
     public function set_until(?int $until)
     {
-        $this->setAdditionalProperty(self::PROPERTY_UNTIL, $until);
+        $this->setAdditionalProperty(RecurringContentObjectInterface::PROPERTY_UNTIL, $until);
     }
 }

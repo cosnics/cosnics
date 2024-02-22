@@ -3,7 +3,8 @@ namespace Chamilo\Core\Repository\ContentObject\WikiPage\Storage\DataClass;
 
 use Chamilo\Core\Repository\Storage\DataClass\ComplexContentObjectItem;
 use Chamilo\Core\Repository\Storage\DataManager;
-use Chamilo\Libraries\Storage\DataClass\Interfaces\CompositeDataClassExtensionInterface;
+use Chamilo\Libraries\Storage\DataClass\Interfaces\DataClassExtensionInterface;
+use Chamilo\Libraries\Storage\DataClass\Traits\DataClassExtensionTrait;
 use Chamilo\Libraries\Storage\Parameters\DataClassRetrievesParameters;
 use Chamilo\Libraries\Storage\Query\Condition\AndCondition;
 use Chamilo\Libraries\Storage\Query\Condition\EqualityCondition;
@@ -14,8 +15,10 @@ use Chamilo\Libraries\Storage\Query\Variable\StaticConditionVariable;
 /**
  * @package Chamilo\Core\Repository\ContentObject\WikiPage\Storage\DataClass
  */
-class ComplexWikiPage extends ComplexContentObjectItem implements CompositeDataClassExtensionInterface
+class ComplexWikiPage extends ComplexContentObjectItem implements DataClassExtensionInterface
 {
+    use DataClassExtensionTrait;
+
     public const CONTEXT = WikiPage::CONTEXT;
 
     public const PROPERTY_IS_HOMEPAGE = 'is_homepage';
@@ -23,7 +26,7 @@ class ComplexWikiPage extends ComplexContentObjectItem implements CompositeDataC
 
     public static function getAdditionalPropertyNames(): array
     {
-        return parent::getAdditionalPropertyNames([self::PROPERTY_IS_HOMEPAGE, self::PROPERTY_IS_LOCKED]);
+        return [self::PROPERTY_IS_HOMEPAGE, self::PROPERTY_IS_LOCKED];
     }
 
     /**

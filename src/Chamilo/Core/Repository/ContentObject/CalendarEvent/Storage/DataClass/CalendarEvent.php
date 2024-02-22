@@ -7,7 +7,8 @@ use Chamilo\Libraries\Architecture\Interfaces\IncludeableInterface;
 use Chamilo\Libraries\Architecture\Interfaces\VersionableInterface;
 use Chamilo\Libraries\Calendar\Event\RecurringContentObjectInterface;
 use Chamilo\Libraries\Calendar\Event\RecurringContentObjectTrait;
-use Chamilo\Libraries\Storage\DataClass\Interfaces\CompositeDataClassExtensionInterface;
+use Chamilo\Libraries\Storage\DataClass\Interfaces\DataClassExtensionInterface;
+use Chamilo\Libraries\Storage\DataClass\Traits\DataClassExtensionTrait;
 use Chamilo\Libraries\Translation\Translation;
 
 /**
@@ -17,8 +18,9 @@ use Chamilo\Libraries\Translation\Translation;
  */
 class CalendarEvent extends ContentObject
     implements VersionableInterface, AttachmentSupportInterface, IncludeableInterface, RecurringContentObjectInterface,
-    CompositeDataClassExtensionInterface
+    DataClassExtensionInterface
 {
+    use DataClassExtensionTrait;
     use RecurringContentObjectTrait;
 
     public const CONTEXT = 'Chamilo\Core\Repository\ContentObject\CalendarEvent';
@@ -32,7 +34,7 @@ class CalendarEvent extends ContentObject
      */
     public static function getAdditionalPropertyNames(): array
     {
-        return parent::getAdditionalPropertyNames([
+        return [
             self::PROPERTY_LOCATION,
             self::PROPERTY_START_DATE,
             self::PROPERTY_END_DATE,
@@ -43,7 +45,7 @@ class CalendarEvent extends ContentObject
             self::PROPERTY_BYDAY,
             self::PROPERTY_BYMONTH,
             self::PROPERTY_BYMONTHDAY
-        ]);
+        ];
     }
 
     /**

@@ -4,24 +4,22 @@ namespace Chamilo\Core\Repository\Storage\DataClass;
 use Chamilo\Core\Repository\Manager;
 use Chamilo\Core\Repository\Storage\DataManager;
 use Chamilo\Libraries\Storage\DataClass\DataClass;
-use Chamilo\Libraries\Storage\DataClass\Interfaces\CompositeDataClassInterface;
+use Chamilo\Libraries\Storage\DataClass\Interfaces\DataClassTypeAwareInterface;
 use Chamilo\Libraries\Storage\DataClass\Listeners\DisplayOrderDataClassListener;
 use Chamilo\Libraries\Storage\DataClass\Listeners\DisplayOrderDataClassListenerSupport;
-use Chamilo\Libraries\Storage\DataClass\Traits\CompositeDataClassTrait;
+use Chamilo\Libraries\Storage\DataClass\Traits\DataClassTypeAwareTrait;
 use Chamilo\Libraries\Storage\Query\Variable\PropertyConditionVariable;
 use Chamilo\Libraries\Utilities\StringUtilities;
 
 /**
- * Instances of this class group generic information about a complex object item
- *
  * @package Chamilo\Core\Repository\Storage\DataClass
  * @author Sven Vanpoucke
  * @author Hans De Bisschop <hans.de.bisschop@ehb.be>
  */
 class ComplexContentObjectItem extends DataClass
-    implements DisplayOrderDataClassListenerSupport, CompositeDataClassInterface
+    implements DisplayOrderDataClassListenerSupport, DataClassTypeAwareInterface
 {
-    use CompositeDataClassTrait;
+    use DataClassTypeAwareTrait;
 
     public const CONTEXT = Manager::CONTEXT;
 
@@ -33,10 +31,9 @@ class ComplexContentObjectItem extends DataClass
 
     private ?ContentObject $referenceObject;
 
-    public function __construct($default_properties = [], $additionalProperties = [], array $optionalProperties = [])
+    public function __construct($default_properties = [], array $optionalProperties = [])
     {
         parent::__construct($default_properties, $optionalProperties);
-        $this->setAdditionalProperties($additionalProperties);
         $this->setType(static::class);
         $this->addListener(new DisplayOrderDataClassListener($this));
     }

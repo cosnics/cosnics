@@ -2,21 +2,24 @@
 namespace Chamilo\Core\Repository\ContentObject\LearningPathItem\Storage\DataClass;
 
 use Chamilo\Core\Repository\Storage\DataClass\ComplexContentObjectItem;
-use Chamilo\Libraries\Storage\DataClass\Interfaces\CompositeDataClassExtensionInterface;
+use Chamilo\Libraries\Storage\DataClass\Interfaces\DataClassExtensionInterface;
+use Chamilo\Libraries\Storage\DataClass\Traits\DataClassExtensionTrait;
 use Chamilo\Libraries\Utilities\StringUtilities;
 
 /**
- * @package repository.lib.content_object.learning_path_item
+ * @package Chamilo\Core\Repository\ContentObject\LearningPathItem\Storage\DataClass
  */
-class ComplexLearningPathItem extends ComplexContentObjectItem implements CompositeDataClassExtensionInterface
+class ComplexLearningPathItem extends ComplexContentObjectItem implements DataClassExtensionInterface
 {
+    use DataClassExtensionTrait;
+
     public const CONTEXT = LearningPathItem::CONTEXT;
 
     public const PROPERTY_PREREQUISITES = 'prerequisites';
 
     public static function getAdditionalPropertyNames(): array
     {
-        return parent::getAdditionalPropertyNames([self::PROPERTY_PREREQUISITES]);
+        return [self::PROPERTY_PREREQUISITES];
     }
 
     /**

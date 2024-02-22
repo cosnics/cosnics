@@ -7,17 +7,18 @@ use Chamilo\Core\Repository\Storage\DataClass\ContentObject;
 use Chamilo\Core\Repository\Storage\DataManager;
 use Chamilo\Core\User\Manager;
 use Chamilo\Core\User\Storage\DataClass\User;
-use Chamilo\Libraries\DependencyInjection\DependencyInjectionContainerBuilder;
-use Chamilo\Libraries\Storage\DataClass\Interfaces\CompositeDataClassExtensionInterface;
+use Chamilo\Libraries\Storage\DataClass\Interfaces\DataClassExtensionInterface;
+use Chamilo\Libraries\Storage\DataClass\Traits\DataClassExtensionTrait;
 use Chamilo\Libraries\Translation\Translation;
-use Symfony\Component\HttpFoundation\Session\SessionInterface;
 
 /**
- * @package repository.lib.content_object.forum_topic
+ * @package Chamilo\Core\Repository\ContentObject\ForumTopic\Storage\DataClass
  * @author  Mattias De Pauw - Hogeschool Gent
  */
-class ComplexForumTopic extends ComplexContentObjectItem implements CompositeDataClassExtensionInterface
+class ComplexForumTopic extends ComplexContentObjectItem implements DataClassExtensionInterface
 {
+    use DataClassExtensionTrait;
+
     public const CONTEXT = ForumTopic::CONTEXT;
 
     public const PROPERTY_FORUM_TYPE = 'forum_type';
@@ -78,12 +79,7 @@ class ComplexForumTopic extends ComplexContentObjectItem implements CompositeDat
 
     public static function getAdditionalPropertyNames(): array
     {
-        return parent::getAdditionalPropertyNames([self::PROPERTY_FORUM_TYPE]);
-    }
-
-    public function getSession(): SessionInterface
-    {
-        return DependencyInjectionContainerBuilder::getInstance()->createContainer()->get(SessionInterface::class);
+        return [self::PROPERTY_FORUM_TYPE];
     }
 
     /**

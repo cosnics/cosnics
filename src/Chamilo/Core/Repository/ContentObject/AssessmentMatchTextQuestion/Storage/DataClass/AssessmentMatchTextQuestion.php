@@ -3,15 +3,17 @@ namespace Chamilo\Core\Repository\ContentObject\AssessmentMatchTextQuestion\Stor
 
 use Chamilo\Core\Repository\Storage\DataClass\ContentObject;
 use Chamilo\Libraries\Architecture\Interfaces\VersionableInterface;
-use Chamilo\Libraries\Storage\DataClass\Interfaces\CompositeDataClassExtensionInterface;
+use Chamilo\Libraries\Storage\DataClass\Interfaces\DataClassExtensionInterface;
+use Chamilo\Libraries\Storage\DataClass\Traits\DataClassExtensionTrait;
 use Chamilo\Libraries\Utilities\StringUtilities;
 
 /**
  * @package Chamilo\Core\Repository\ContentObject\AssessmentMatchTextQuestion\Storage\DataClass
  */
-class AssessmentMatchTextQuestion extends ContentObject
-    implements VersionableInterface, CompositeDataClassExtensionInterface
+class AssessmentMatchTextQuestion extends ContentObject implements VersionableInterface, DataClassExtensionInterface
 {
+    use DataClassExtensionTrait;
+
     public const CONTEXT = 'Chamilo\Core\Repository\ContentObject\AssessmentMatchTextQuestion';
 
     public const PROPERTY_HINT = 'hint';
@@ -29,12 +31,12 @@ class AssessmentMatchTextQuestion extends ContentObject
 
     public static function getAdditionalPropertyNames(): array
     {
-        return parent::getAdditionalPropertyNames([
+        return [
             self::PROPERTY_OPTIONS,
             self::PROPERTY_USE_WILDCARDS,
             self::PROPERTY_IGNORE_CASE,
             self::PROPERTY_HINT
-        ]);
+        ];
     }
 
     public function getBestOptions()

@@ -8,21 +8,24 @@ use Chamilo\Libraries\Architecture\Interfaces\ComplexContentObjectSupportInterfa
 use Chamilo\Libraries\DependencyInjection\DependencyInjectionContainerBuilder;
 use Chamilo\Libraries\File\FilesystemTools;
 use Chamilo\Libraries\File\SystemPathBuilder;
-use Chamilo\Libraries\Storage\DataClass\Interfaces\CompositeDataClassExtensionInterface;
+use Chamilo\Libraries\Storage\DataClass\Interfaces\DataClassExtensionInterface;
+use Chamilo\Libraries\Storage\DataClass\Traits\DataClassExtensionTrait;
 use Chamilo\Libraries\Translation\Translation;
 
 /**
  * @package Chamilo\Core\Repository\ContentObject\Blog\Storage\DataClass
  */
-class Blog extends ContentObject implements ComplexContentObjectSupportInterface, CompositeDataClassExtensionInterface
+class Blog extends ContentObject implements ComplexContentObjectSupportInterface, DataClassExtensionInterface
 {
+    use DataClassExtensionTrait;
+
     public const CONTEXT = 'Chamilo\Core\Repository\ContentObject\Blog';
 
     public const PROPERTY_BLOG_LAYOUT = 'blog_layout';
 
     public static function getAdditionalPropertyNames(): array
     {
-        return parent::getAdditionalPropertyNames([self::PROPERTY_BLOG_LAYOUT]);
+        return [self::PROPERTY_BLOG_LAYOUT];
     }
 
     /**

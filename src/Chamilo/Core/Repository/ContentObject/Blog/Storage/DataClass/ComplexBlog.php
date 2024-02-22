@@ -2,12 +2,11 @@
 namespace Chamilo\Core\Repository\ContentObject\Blog\Storage\DataClass;
 
 use Chamilo\Core\Repository\Storage\DataClass\ComplexContentObjectItem;
-use Chamilo\Libraries\Storage\DataClass\Interfaces\CompositeDataClassVirtualExtensionInterface;
 
 /**
  * @package Chamilo\Core\Repository\ContentObject\Blog\Storage\DataClass
  */
-class ComplexBlog extends ComplexContentObjectItem implements CompositeDataClassVirtualExtensionInterface
+class ComplexBlog extends ComplexContentObjectItem
 {
     public const CONTEXT = Blog::CONTEXT;
 }

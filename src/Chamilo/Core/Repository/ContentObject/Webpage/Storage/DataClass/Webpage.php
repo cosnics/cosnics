@@ -10,7 +10,8 @@ use Chamilo\Libraries\Architecture\Interfaces\VersionableInterface;
 use Chamilo\Libraries\DependencyInjection\DependencyInjectionContainerBuilder;
 use Chamilo\Libraries\File\ConfigurablePathBuilder;
 use Chamilo\Libraries\File\FileType;
-use Chamilo\Libraries\Storage\DataClass\Interfaces\CompositeDataClassExtensionInterface;
+use Chamilo\Libraries\Storage\DataClass\Interfaces\DataClassExtensionInterface;
+use Chamilo\Libraries\Storage\DataClass\Traits\DataClassExtensionTrait;
 use Chamilo\Libraries\Translation\Translation;
 use Chamilo\Libraries\Utilities\StringUtilities;
 use Exception;
@@ -18,9 +19,11 @@ use Exception;
 /**
  * @package Chamilo\Core\Repository\ContentObject\Webpage\Storage\DataClass
  */
-class Webpage extends ContentObject implements VersionableInterface, IncludeableInterface, FileStorageSupportInterface,
-    CompositeDataClassExtensionInterface
+class Webpage extends ContentObject
+    implements VersionableInterface, IncludeableInterface, FileStorageSupportInterface, DataClassExtensionInterface
 {
+    use DataClassExtensionTrait;
+
     public const CONTEXT = 'Chamilo\Core\Repository\ContentObject\Webpage';
 
     public const PROPERTY_EXTENSION = 'extension';
@@ -239,13 +242,13 @@ class Webpage extends ContentObject implements VersionableInterface, Includeable
 
     public static function getAdditionalPropertyNames(): array
     {
-        return parent::getAdditionalPropertyNames([
+        return [
             self::PROPERTY_FILENAME,
             self::PROPERTY_FILESIZE,
             self::PROPERTY_PATH,
             self::PROPERTY_HASH,
             self::PROPERTY_STORAGE_PATH
-        ]);
+        ];
     }
 
     /**

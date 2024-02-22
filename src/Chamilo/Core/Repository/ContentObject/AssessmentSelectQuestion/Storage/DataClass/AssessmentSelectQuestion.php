@@ -2,14 +2,17 @@
 namespace Chamilo\Core\Repository\ContentObject\AssessmentSelectQuestion\Storage\DataClass;
 
 use Chamilo\Core\Repository\Storage\DataClass\ContentObject;
-use Chamilo\Libraries\Storage\DataClass\Interfaces\CompositeDataClassExtensionInterface;
+use Chamilo\Libraries\Storage\DataClass\Interfaces\DataClassExtensionInterface;
+use Chamilo\Libraries\Storage\DataClass\Traits\DataClassExtensionTrait;
 use Chamilo\Libraries\Utilities\StringUtilities;
 
 /**
  * @package Chamilo\Core\Repository\ContentObject\AssessmentSelectQuestion\Storage\DataClass
  */
-class AssessmentSelectQuestion extends ContentObject implements CompositeDataClassExtensionInterface
+class AssessmentSelectQuestion extends ContentObject implements DataClassExtensionInterface
 {
+    use DataClassExtensionTrait;
+
     public const ANSWER_TYPE_CHECKBOX = 'checkbox';
     public const ANSWER_TYPE_RADIO = 'radio';
 
@@ -29,9 +32,7 @@ class AssessmentSelectQuestion extends ContentObject implements CompositeDataCla
 
     public static function getAdditionalPropertyNames(): array
     {
-        return parent::getAdditionalPropertyNames(
-            [self::PROPERTY_ANSWER_TYPE, self::PROPERTY_OPTIONS, self::PROPERTY_HINT]
-        );
+        return [self::PROPERTY_ANSWER_TYPE, self::PROPERTY_OPTIONS, self::PROPERTY_HINT];
     }
 
     /**

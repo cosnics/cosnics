@@ -8,16 +8,18 @@ use Chamilo\Libraries\DependencyInjection\DependencyInjectionContainerBuilder;
 use Chamilo\Libraries\File\Compression\ZipArchive\ZipArchiveFilecompression;
 use Chamilo\Libraries\File\SystemPathBuilder;
 use Chamilo\Libraries\File\WebPathBuilder;
-use Chamilo\Libraries\Storage\DataClass\Interfaces\CompositeDataClassExtensionInterface;
+use Chamilo\Libraries\Storage\DataClass\Interfaces\DataClassExtensionInterface;
+use Chamilo\Libraries\Storage\DataClass\Traits\DataClassExtensionTrait;
 use Chamilo\Libraries\Translation\Translation;
 use Chamilo\Libraries\Utilities\StringUtilities;
-use Symfony\Component\HttpFoundation\Session\SessionInterface;
 
 /**
  * @package Chamilo\Core\Repository\ContentObject\Hotpotatoes\Storage\DataClass
  */
-class Hotpotatoes extends ContentObject implements VersionableInterface, CompositeDataClassExtensionInterface
+class Hotpotatoes extends ContentObject implements VersionableInterface, DataClassExtensionInterface
 {
+    use DataClassExtensionTrait;
+
     public const CONTEXT = 'Chamilo\Core\Repository\ContentObject\Hotpotatoes';
 
     public const PROPERTY_MAXIMUM_ATTEMPTS = 'max_attempts';
@@ -54,12 +56,7 @@ class Hotpotatoes extends ContentObject implements VersionableInterface, Composi
 
     public static function getAdditionalPropertyNames(): array
     {
-        return parent::getAdditionalPropertyNames([self::PROPERTY_PATH, self::PROPERTY_MAXIMUM_ATTEMPTS]);
-    }
-
-    public function getSession(): SessionInterface
-    {
-        return DependencyInjectionContainerBuilder::getInstance()->createContainer()->get(SessionInterface::class);
+        return [self::PROPERTY_PATH, self::PROPERTY_MAXIMUM_ATTEMPTS];
     }
 
     /**

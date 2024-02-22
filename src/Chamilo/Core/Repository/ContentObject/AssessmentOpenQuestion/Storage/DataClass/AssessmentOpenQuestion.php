@@ -3,15 +3,18 @@ namespace Chamilo\Core\Repository\ContentObject\AssessmentOpenQuestion\Storage\D
 
 use Chamilo\Core\Repository\Storage\DataClass\ContentObject;
 use Chamilo\Libraries\Architecture\Interfaces\VersionableInterface;
-use Chamilo\Libraries\Storage\DataClass\Interfaces\CompositeDataClassExtensionInterface;
+use Chamilo\Libraries\Storage\DataClass\Interfaces\DataClassExtensionInterface;
+use Chamilo\Libraries\Storage\DataClass\Traits\DataClassExtensionTrait;
 use Chamilo\Libraries\Translation\Translation;
 use Chamilo\Libraries\Utilities\StringUtilities;
 
 /**
  * @package Chamilo\Core\Repository\ContentObject\AssessmentOpenQuestion\Storage\DataClass
  */
-class AssessmentOpenQuestion extends ContentObject implements VersionableInterface, CompositeDataClassExtensionInterface
+class AssessmentOpenQuestion extends ContentObject implements VersionableInterface, DataClassExtensionInterface
 {
+    use DataClassExtensionTrait;
+
     public const CONTEXT = 'Chamilo\Core\Repository\ContentObject\AssessmentOpenQuestion';
 
     public const PROPERTY_FEEDBACK = 'feedback';
@@ -24,9 +27,7 @@ class AssessmentOpenQuestion extends ContentObject implements VersionableInterfa
 
     public static function getAdditionalPropertyNames(): array
     {
-        return parent::getAdditionalPropertyNames(
-            [self::PROPERTY_QUESTION_TYPE, self::PROPERTY_FEEDBACK, self::PROPERTY_HINT]
-        );
+        return [self::PROPERTY_QUESTION_TYPE, self::PROPERTY_FEEDBACK, self::PROPERTY_HINT];
     }
 
     /**

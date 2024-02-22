@@ -3,15 +3,17 @@ namespace Chamilo\Core\Repository\ContentObject\AssessmentRatingQuestion\Storage
 
 use Chamilo\Core\Repository\Storage\DataClass\ContentObject;
 use Chamilo\Libraries\Architecture\Interfaces\VersionableInterface;
-use Chamilo\Libraries\Storage\DataClass\Interfaces\CompositeDataClassExtensionInterface;
+use Chamilo\Libraries\Storage\DataClass\Interfaces\DataClassExtensionInterface;
+use Chamilo\Libraries\Storage\DataClass\Traits\DataClassExtensionTrait;
 use Chamilo\Libraries\Utilities\StringUtilities;
 
 /**
  * @package Chamilo\Core\Repository\ContentObject\AssessmentRatingQuestion\Storage\DataClass
  */
-class AssessmentRatingQuestion extends ContentObject
-    implements VersionableInterface, CompositeDataClassExtensionInterface
+class AssessmentRatingQuestion extends ContentObject implements VersionableInterface, DataClassExtensionInterface
 {
+    use DataClassExtensionTrait;
+
     public const CONTEXT = 'Chamilo\Core\Repository\ContentObject\AssessmentRatingQuestion';
 
     public const PROPERTY_CORRECT = 'correct';
@@ -22,13 +24,13 @@ class AssessmentRatingQuestion extends ContentObject
 
     public static function getAdditionalPropertyNames(): array
     {
-        return parent::getAdditionalPropertyNames([
+        return [
             self::PROPERTY_LOW,
             self::PROPERTY_HIGH,
             self::PROPERTY_CORRECT,
             self::PROPERTY_FEEDBACK,
             self::PROPERTY_HINT
-        ]);
+        ];
     }
 
     /**

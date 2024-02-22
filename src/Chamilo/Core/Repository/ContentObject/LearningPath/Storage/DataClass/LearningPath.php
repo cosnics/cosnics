@@ -9,7 +9,8 @@ use Chamilo\Core\Repository\Manager;
 use Chamilo\Core\Repository\Storage\DataClass\ContentObject;
 use Chamilo\Core\User\Storage\DataClass\User;
 use Chamilo\Libraries\Architecture\Interfaces\ComplexContentObjectSupportInterface;
-use Chamilo\Libraries\Storage\DataClass\Interfaces\CompositeDataClassExtensionInterface;
+use Chamilo\Libraries\Storage\DataClass\Interfaces\DataClassExtensionInterface;
+use Chamilo\Libraries\Storage\DataClass\Traits\DataClassExtensionTrait;
 use InvalidArgumentException;
 use Symfony\Component\HttpFoundation\Session\SessionInterface;
 
@@ -17,8 +18,10 @@ use Symfony\Component\HttpFoundation\Session\SessionInterface;
  * @package Chamilo\Core\Repository\ContentObject\LearningPath\Storage\DataClass
  */
 class LearningPath extends ContentObject
-    implements ComplexContentObjectSupportInterface, DisplayAndBuildSupport, CompositeDataClassExtensionInterface
+    implements ComplexContentObjectSupportInterface, DisplayAndBuildSupport, DataClassExtensionInterface
 {
+    use DataClassExtensionTrait;
+
     public const AUTOMATIC_NUMBERING_DIGITS = 'digits';
 
     public const AUTOMATIC_NUMBERING_NONE = 'none';
@@ -86,9 +89,7 @@ class LearningPath extends ContentObject
      */
     public static function getAdditionalPropertyNames(): array
     {
-        return parent::getAdditionalPropertyNames(
-            [self::PROPERTY_AUTOMATIC_NUMBERING, self::PROPERTY_ENFORCE_DEFAULT_TRAVERSING_ORDER]
-        );
+        return [self::PROPERTY_AUTOMATIC_NUMBERING, self::PROPERTY_ENFORCE_DEFAULT_TRAVERSING_ORDER];
     }
 
     /**

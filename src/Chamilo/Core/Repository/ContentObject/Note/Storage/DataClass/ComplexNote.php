@@ -2,12 +2,11 @@
 namespace Chamilo\Core\Repository\ContentObject\Note\Storage\DataClass;
 
 use Chamilo\Core\Repository\Storage\DataClass\ComplexContentObjectItem;
-use Chamilo\Libraries\Storage\DataClass\Interfaces\CompositeDataClassVirtualExtensionInterface;
 
 /**
- * @package repository.lib.content_object.note
+ * @package Chamilo\Core\Repository\ContentObject\Note\Storage\DataClass
  */
-class ComplexNote extends ComplexContentObjectItem implements CompositeDataClassVirtualExtensionInterface
+class ComplexNote extends ComplexContentObjectItem
 {
     public const CONTEXT = Note::CONTEXT;
 }

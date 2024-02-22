@@ -2,12 +2,11 @@
 namespace Chamilo\Core\Repository\ContentObject\PortfolioItem\Storage\DataClass;
 
 use Chamilo\Core\Repository\Storage\DataClass\ComplexContentObjectItem;
-use Chamilo\Libraries\Storage\DataClass\Interfaces\CompositeDataClassVirtualExtensionInterface;
 
 /**
- * @package repository.lib.content_object.portfolio_item
+ * @package Chamilo\Core\Repository\ContentObject\PortfolioItem\Storage\DataClass
  */
-class ComplexPortfolioItem extends ComplexContentObjectItem implements CompositeDataClassVirtualExtensionInterface
+class ComplexPortfolioItem extends ComplexContentObjectItem
 {
     public const CONTEXT = PortfolioItem::CONTEXT;
 }

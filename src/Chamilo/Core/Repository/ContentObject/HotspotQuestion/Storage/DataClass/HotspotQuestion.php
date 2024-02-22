@@ -4,13 +4,16 @@ namespace Chamilo\Core\Repository\ContentObject\HotspotQuestion\Storage\DataClas
 use Chamilo\Core\Repository\Storage\DataClass\ContentObject;
 use Chamilo\Core\Repository\Storage\DataManager;
 use Chamilo\Libraries\Architecture\Interfaces\VersionableInterface;
-use Chamilo\Libraries\Storage\DataClass\Interfaces\CompositeDataClassExtensionInterface;
+use Chamilo\Libraries\Storage\DataClass\Interfaces\DataClassExtensionInterface;
+use Chamilo\Libraries\Storage\DataClass\Traits\DataClassExtensionTrait;
 
 /**
  * @package Chamilo\Core\Repository\ContentObject\HotspotQuestion\Storage\DataClass
  */
-class HotspotQuestion extends ContentObject implements VersionableInterface, CompositeDataClassExtensionInterface
+class HotspotQuestion extends ContentObject implements VersionableInterface, DataClassExtensionInterface
 {
+    use DataClassExtensionTrait;
+
     public const CONTEXT = 'Chamilo\Core\Repository\ContentObject\HotspotQuestion';
 
     public const PROPERTY_ANSWERS = 'answers';
@@ -26,7 +29,7 @@ class HotspotQuestion extends ContentObject implements VersionableInterface, Com
 
     public static function getAdditionalPropertyNames(): array
     {
-        return parent::getAdditionalPropertyNames([self::PROPERTY_ANSWERS, self::PROPERTY_IMAGE]);
+        return [self::PROPERTY_ANSWERS, self::PROPERTY_IMAGE];
     }
 
     /**

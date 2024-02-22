@@ -7,6 +7,22 @@ namespace Chamilo\Libraries\Calendar\Event;
  */
 interface RecurringContentObjectInterface
 {
+    public const FREQUENCY_BIWEEKLY = 4;
+    public const FREQUENCY_DAILY = 1;
+    public const FREQUENCY_MONTHLY = 5;
+    public const FREQUENCY_NONE = 0;
+    public const FREQUENCY_WEEKDAYS = 3;
+    public const FREQUENCY_WEEKLY = 2;
+    public const FREQUENCY_YEARLY = 6;
+
+    public const PROPERTY_BYDAY = 'byday';
+    public const PROPERTY_BYMONTH = 'bymonth';
+    public const PROPERTY_BYMONTHDAY = 'bymonthday';
+    public const PROPERTY_FREQUENCY = 'frequency';
+    public const PROPERTY_FREQUENCY_COUNT = 'frequency_count';
+    public const PROPERTY_FREQUENCY_INTERVAL = 'frequency_interval';
+    public const PROPERTY_UNTIL = 'until';
+
     /**
      * @throws \Exception
      */

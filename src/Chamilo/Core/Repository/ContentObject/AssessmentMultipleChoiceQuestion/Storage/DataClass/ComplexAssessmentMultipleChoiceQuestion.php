@@ -3,18 +3,21 @@ namespace Chamilo\Core\Repository\ContentObject\AssessmentMultipleChoiceQuestion
 
 use Chamilo\Core\Repository\ContentObject\Assessment\Display\AnswerFeedbackDisplaySupport;
 use Chamilo\Core\Repository\Storage\DataClass\ComplexContentObjectItem;
-use Chamilo\Libraries\Storage\DataClass\Interfaces\CompositeDataClassExtensionInterface;
+use Chamilo\Libraries\Storage\DataClass\Interfaces\DataClassExtensionInterface;
+use Chamilo\Libraries\Storage\DataClass\Traits\DataClassExtensionTrait;
 
 /**
- * @package core\repository\content_object\assessment_multiple_choice_question
+ * @package Chamilo\Core\Repository\ContentObject\AssessmentMultipleChoiceQuestion\Storage\DataClass
  * @author  Sven Vanpoucke <sven.vanpoucke@hogent.be>
  * @author  Hans De Bisschop <hans.de.bisschop@ehb.be>
  * @author  Magali Gillard <magali.gillard@ehb.be>
  * @author  Eduard Vossen <eduard.vossen@ehb.be>
  */
 class ComplexAssessmentMultipleChoiceQuestion extends ComplexContentObjectItem
-    implements AnswerFeedbackDisplaySupport, CompositeDataClassExtensionInterface
+    implements AnswerFeedbackDisplaySupport, DataClassExtensionInterface
 {
+    use DataClassExtensionTrait;
+
     public const CONTEXT = AssessmentMultipleChoiceQuestion::CONTEXT;
 
     public const PROPERTY_RANDOM = 'random';
@@ -26,9 +29,7 @@ class ComplexAssessmentMultipleChoiceQuestion extends ComplexContentObjectItem
      */
     public static function getAdditionalPropertyNames(): array
     {
-        return parent::getAdditionalPropertyNames(
-            [self::PROPERTY_WEIGHT, self::PROPERTY_RANDOM, self::PROPERTY_SHOW_ANSWER_FEEDBACK]
-        );
+        return [self::PROPERTY_WEIGHT, self::PROPERTY_RANDOM, self::PROPERTY_SHOW_ANSWER_FEEDBACK];
     }
 
     /**

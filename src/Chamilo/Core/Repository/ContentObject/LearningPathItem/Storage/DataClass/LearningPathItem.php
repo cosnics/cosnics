@@ -7,7 +7,8 @@ use Chamilo\Core\Repository\Storage\DataClass\ContentObject;
 use Chamilo\Core\Repository\Storage\DataManager;
 use Chamilo\Libraries\Architecture\Interfaces\HelperContentObjectSupportInterface;
 use Chamilo\Libraries\Architecture\Interfaces\VersionableInterface;
-use Chamilo\Libraries\Storage\DataClass\Interfaces\CompositeDataClassExtensionInterface;
+use Chamilo\Libraries\Storage\DataClass\Interfaces\DataClassExtensionInterface;
+use Chamilo\Libraries\Storage\DataClass\Traits\DataClassExtensionTrait;
 
 /**
  * @package Chamilo\Core\Repository\ContentObject\LearningPathItem\Storage\DataClass
@@ -16,8 +17,10 @@ use Chamilo\Libraries\Storage\DataClass\Interfaces\CompositeDataClassExtensionIn
  * @author  Eduard Vossen <eduard.vossen@ehb.be>
  */
 class LearningPathItem extends ContentObject
-    implements VersionableInterface, HelperContentObjectSupportInterface, CompositeDataClassExtensionInterface
+    implements VersionableInterface, HelperContentObjectSupportInterface, DataClassExtensionInterface
 {
+    use DataClassExtensionTrait;
+
     public const CONTEXT = 'Chamilo\Core\Repository\ContentObject\LearningPathItem';
 
     public const PROPERTY_ALLOW_HINTS = 'allow_hints';
@@ -40,7 +43,7 @@ class LearningPathItem extends ContentObject
      */
     public static function getAdditionalPropertyNames(): array
     {
-        return parent::getAdditionalPropertyNames([
+        return [
             self::PROPERTY_REFERENCE,
             self::PROPERTY_MAX_ATTEMPTS,
             self::PROPERTY_MASTERY_SCORE,
@@ -50,7 +53,7 @@ class LearningPathItem extends ContentObject
             self::PROPERTY_SHOW_SOLUTION,
             self::PROPERTY_SHOW_ANSWER_FEEDBACK,
             self::PROPERTY_FEEDBACK_LOCATION
-        ]);
+        ];
     }
 
     /**
