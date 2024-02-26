@@ -10,19 +10,19 @@ use Exception;
  */
 class DatabaseDistinctException extends Exception
 {
-    protected string $dataClassName;
+    protected string $dataClassStorageUnitName;
 
     protected DataClassDistinctParameters $parameters;
 
     public function __construct(
-        string $dataClassName, DataClassDistinctParameters $parameters, string $exceptionMessage = ''
+        string $dataClassStorageUnitName, DataClassDistinctParameters $parameters, string $exceptionMessage = ''
     )
     {
-        $this->dataClassName = $dataClassName;
+        $this->dataClassStorageUnitName = $dataClassStorageUnitName;
         $this->parameters = $parameters;
 
         parent::__construct(
-            'Distinct for ' . $dataClassName . ' with parameters ' . serialize($parameters) .
+            'Distinct for ' . $dataClassStorageUnitName . ' with parameters ' . serialize($parameters) .
             ', failed with the following message:' . $exceptionMessage
         );
     }

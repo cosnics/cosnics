@@ -45,6 +45,9 @@ class Join implements HashableInterface
         $this->condition = $condition;
     }
 
+    /**
+     * @return class-string<\Chamilo\Libraries\Storage\DataClass\DataClass>
+     */
     public function getDataClassName(): string
     {
         return $this->dataClassName;

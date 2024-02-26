@@ -9,6 +9,7 @@ use Chamilo\Libraries\Storage\DataManager\Interfaces\DataClassDatabaseInterface;
 use Chamilo\Libraries\Storage\Parameters\DataClassCountGroupedParameters;
 use Chamilo\Libraries\Storage\Parameters\DataClassCountParameters;
 use Chamilo\Libraries\Storage\Parameters\DataClassDistinctParameters;
+use Chamilo\Libraries\Storage\Parameters\DataClassParameters;
 use Chamilo\Libraries\Storage\Parameters\DataClassRetrieveParameters;
 use Chamilo\Libraries\Storage\Parameters\DataClassRetrievesParameters;
 use Chamilo\Libraries\Storage\Parameters\RecordRetrieveParameters;
@@ -20,11 +21,12 @@ use Chamilo\Libraries\Storage\Query\Condition\EqualityCondition;
 use Chamilo\Libraries\Storage\Query\RetrieveProperties;
 use Chamilo\Libraries\Storage\Query\UpdateProperties;
 use Chamilo\Libraries\Storage\Query\UpdateProperty;
+use Chamilo\Libraries\Storage\Query\Variable\DistinctConditionVariable;
 use Chamilo\Libraries\Storage\Query\Variable\FunctionConditionVariable;
 use Chamilo\Libraries\Storage\Query\Variable\OperationConditionVariable;
+use Chamilo\Libraries\Storage\Query\Variable\PropertiesConditionVariable;
 use Chamilo\Libraries\Storage\Query\Variable\PropertyConditionVariable;
 use Chamilo\Libraries\Storage\Query\Variable\StaticConditionVariable;
-use Chamilo\Libraries\Storage\Service\ParametersHandler;
 use Doctrine\Common\Collections\ArrayCollection;
 use Symfony\Component\Uid\Uuid;
 
@@ -43,41 +45,62 @@ class DataClassRepository
 
     private DataClassRepositoryCache $dataClassRepositoryCache;
 
-    private ParametersHandler $parametersHandler;
-
     private bool $queryCacheEnabled;
 
     public function __construct(
         DataClassRepositoryCache $dataClassRepositoryCache, DataClassDatabaseInterface $dataClassDatabase,
-        DataClassFactory $dataClassFactory, ParametersHandler $parametersHandler, bool $queryCacheEnabled = true
+        DataClassFactory $dataClassFactory, bool $queryCacheEnabled = true
     )
     {
         $this->dataClassRepositoryCache = $dataClassRepositoryCache;
         $this->dataClassDatabase = $dataClassDatabase;
         $this->dataClassFactory = $dataClassFactory;
-        $this->parametersHandler = $parametersHandler;
         $this->queryCacheEnabled = $queryCacheEnabled;
     }
 
+    /**
+     * @param class-string<\Chamilo\Libraries\Storage\DataClass\DataClass> $dataClassName
+     */
     protected function __countClass(string $dataClassName, DataClassCountParameters $parameters): int
     {
-        $this->getParametersHandler()->handleDataClassCountParameters($parameters);
+        $retrieveProperties = $parameters->getRetrieveProperties();
 
-        return $this->getDataClassDatabase()->count($dataClassName, $parameters);
+        $dataClassPropertyVariable =
+            $retrieveProperties instanceof RetrieveProperties ? $retrieveProperties->getFirst() :
+                new StaticConditionVariable(1);
+
+        $parameters->setRetrieveProperties(
+            new RetrieveProperties(
+                [new FunctionConditionVariable(FunctionConditionVariable::COUNT, $dataClassPropertyVariable)]
+            )
+        );
+
+        return $this->getDataClassDatabase()->count($dataClassName::getStorageUnitName(), $parameters);
     }
 
+    /**
+     * @param class-string<\Chamilo\Libraries\Storage\DataClass\DataClass> $dataClassName
+     */
     protected function __countGrouped(string $dataClassName, DataClassCountGroupedParameters $parameters): array
     {
-        $this->getParametersHandler()->handleDataClassCountGroupedParameters($parameters);
+        $retrieveProperties = $parameters->getRetrieveProperties();
+        $retrieveProperties->add(
+            new FunctionConditionVariable(FunctionConditionVariable::COUNT, new StaticConditionVariable(1))
+        );
 
-        return $this->getDataClassDatabase()->countGrouped($dataClassName, $parameters);
+        return $this->getDataClassDatabase()->countGrouped($dataClassName::getStorageUnitName(), $parameters);
     }
 
+    /**
+     * @param class-string<\Chamilo\Libraries\Storage\DataClass\DataClass> $dataClassName
+     */
     protected function __distinct(string $dataClassName, DataClassDistinctParameters $parameters): array
     {
-        $this->getParametersHandler()->handleDataClassDistinctParameters($parameters);
+        $parameters->setRetrieveProperties(
+            new RetrieveProperties([new DistinctConditionVariable($parameters->getRetrieveProperties()->get())])
+        );
 
-        return $this->getDataClassDatabase()->distinct($dataClassName, $parameters);
+        return $this->getDataClassDatabase()->distinct($dataClassName::getStorageUnitName(), $parameters);
     }
 
     /**
@@ -85,17 +108,17 @@ class DataClassRepository
      */
     protected function __record(string $dataClassName, RecordRetrieveParameters $parameters): ?array
     {
-        if (!$parameters->getRetrieveProperties() instanceof RetrieveProperties)
-        {
-            $this->getParametersHandler()->handleDataClassRetrieveParameters($dataClassName, $parameters);
-        }
+        $this->handleRetrieveProperties($parameters, $dataClassName);
+
+        $parameters->setCount(1);
+        $parameters->setOffset(0);
 
         return $this->getDataClassDatabase()->retrieve($dataClassName, $parameters);
     }
 
     protected function __records(string $dataClassName, RecordRetrievesParameters $parameters): ArrayCollection
     {
-        $this->getParametersHandler()->handleDataClassRetrievesParameters($dataClassName, $parameters);
+        $this->handleRetrieveProperties($parameters, $dataClassName);
 
         return new ArrayCollection($this->getDataClassDatabase()->retrieves($dataClassName, $parameters));
     }
@@ -109,11 +132,14 @@ class DataClassRepository
      */
     protected function __retrieve(string $dataClassName, DataClassRetrieveParameters $parameters)
     {
-        $this->getParametersHandler()->handleDataClassRetrieveParameters($dataClassName, $parameters);
+        $this->handleRetrieveProperties($parameters, $dataClassName);
 
-        $record = $this->getDataClassDatabase()->retrieve($dataClassName, $parameters);
+        $parameters->setCount(1);
+        $parameters->setOffset(0);
 
-        return $this->getDataClassFactory()->getDataClass($dataClassName, $record);
+        return $this->getDataClassFactory()->getDataClass(
+            $dataClassName, $this->getDataClassDatabase()->retrieve($dataClassName::getStorageUnitName(), $parameters)
+        );
     }
 
     /**
@@ -126,7 +152,7 @@ class DataClassRepository
      */
     protected function __retrieves(string $dataClassName, DataClassRetrievesParameters $parameters): ArrayCollection
     {
-        $this->getParametersHandler()->handleDataClassRetrievesParameters($dataClassName, $parameters);
+        $this->handleRetrieveProperties($parameters, $dataClassName);
 
         $records = $this->getDataClassDatabase()->retrieves($dataClassName, $parameters);
         $dataClasses = [];
@@ -244,24 +270,15 @@ class DataClassRepository
             new StaticConditionVariable($dataClass->getId())
         );
 
-        if (!$this->getDataClassDatabase()->delete($dataClassName, $condition))
-        {
-            return false;
-        }
-
-        if ($this->isQueryCacheEnabled())
-        {
-            return $this->getDataClassRepositoryCache()->truncate($dataClassName);
-        }
-        else
-        {
-            return true;
-        }
+        return $this->deletes($dataClassName, $condition);
     }
 
+    /**
+     * @param class-string<\Chamilo\Libraries\Storage\DataClass\DataClass> $dataClassName
+     */
     public function deletes(string $dataClassName, Condition $condition): bool
     {
-        if (!$this->getDataClassDatabase()->delete($dataClassName, $condition))
+        if (!$this->getDataClassDatabase()->delete($dataClassName::getStorageUnitName(), $condition))
         {
             return false;
         }
@@ -315,9 +332,22 @@ class DataClassRepository
         return $this->dataClassRepositoryCache;
     }
 
-    public function getParametersHandler(): ParametersHandler
+    /**
+     * @param \Chamilo\Libraries\Storage\Parameters\DataClassParameters $parameters
+     * @param string $dataClassName
+     *
+     * @return void
+     */
+    protected function handleRetrieveProperties(DataClassParameters $parameters, string $dataClassName): void
     {
-        return $this->parametersHandler;
+        if (!$parameters->getRetrieveProperties() instanceof RetrieveProperties)
+        {
+            $parameters->setRetrieveProperties(
+                new RetrieveProperties(
+                    [new PropertiesConditionVariable($dataClassName)]
+                )
+            );
+        }
     }
 
     protected function isQueryCacheEnabled(): bool
@@ -489,36 +519,6 @@ class DataClassRepository
         );
     }
 
-    /**
-     * @template retrieveClass
-     *
-     * @param class-string<retrieveClass> $dataClassName
-     *
-     * @return ?retrieveClass
-     */
-    protected function retrieveClass(
-        string $cacheDataClassName, string $dataClassName, DataClassRetrieveParameters $parameters
-    )
-    {
-        if ($this->isQueryCacheEnabled())
-        {
-            $dataClassRepositoryCache = $this->getDataClassRepositoryCache();
-
-            if (!$dataClassRepositoryCache->exists($cacheDataClassName, $parameters))
-            {
-                $dataClassRepositoryCache->addForDataClass(
-                    $cacheDataClassName, $parameters, $this->__retrieve($dataClassName, $parameters)
-                );
-            }
-
-            return $dataClassRepositoryCache->get($cacheDataClassName, $parameters);
-        }
-        else
-        {
-            return $this->__retrieve($dataClassName, $parameters);
-        }
-    }
-
     public function retrieveMaximumValue(string $dataClassName, string $property, ?Condition $condition = null): int
     {
         $parameters = new RecordRetrieveParameters(
@@ -582,12 +582,10 @@ class DataClassRepository
 
     public function update(DataClass $dataClass): bool
     {
-
-        $propertyConditionClass = get_class($dataClass);
-        $dataClassTableName = $dataClass::getStorageUnitName();
+        $dataClassName = get_class($dataClass);
 
         $condition = new EqualityCondition(
-            new PropertyConditionVariable($propertyConditionClass, DataClass::PROPERTY_ID),
+            new PropertyConditionVariable($dataClassName, DataClass::PROPERTY_ID),
             new StaticConditionVariable($dataClass->getId())
         );
 
@@ -600,25 +598,21 @@ class DataClassRepository
         {
             $updatePropertes->add(
                 new UpdateProperty(
-                    new PropertyConditionVariable($propertyConditionClass, $propertyName),
+                    new PropertyConditionVariable($dataClassName, $propertyName),
                     new StaticConditionVariable($propertyValue)
                 )
             );
         }
 
-        $this->getDataClassDatabase()->update($dataClassTableName, $updatePropertes, $condition);
-
-        return true;
+        return $this->updates($dataClassName, $updatePropertes, $condition);
     }
 
     /**
-     * @template updatesDataClassName
-     *
-     * @param class-string<updatesDataClassName> $dataClassName
+     * @param class-string<\Chamilo\Libraries\Storage\DataClass\DataClass> $dataClassName
      */
     public function updates(string $dataClassName, UpdateProperties $properties, Condition $condition): bool
     {
-        $this->getDataClassDatabase()->update($dataClassName, $properties, $condition);
+        $this->getDataClassDatabase()->update($dataClassName::getStorageUnitName(), $properties, $condition);
 
         if ($this->isQueryCacheEnabled())
         {

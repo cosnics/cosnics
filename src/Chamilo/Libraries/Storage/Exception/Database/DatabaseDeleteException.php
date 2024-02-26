@@ -12,17 +12,17 @@ class DatabaseDeleteException extends Exception
 {
     protected Condition $condition;
 
-    protected string $dataClassName;
+    protected string $dataClassStorageUnitName;
 
     public function __construct(
-        string $dataClassName, ?Condition $condition, string $exceptionMessage = ''
+        string $dataClassStorageUnitName, ?Condition $condition, string $exceptionMessage = ''
     )
     {
-        $this->dataClassName = $dataClassName;
+        $this->dataClassStorageUnitName = $dataClassStorageUnitName;
         $this->condition = $condition;
 
         parent::__construct(
-            'Delete for ' . $dataClassName . ' with condition ' . serialize($condition) .
+            'Delete for ' . $dataClassStorageUnitName . ' with condition ' . serialize($condition) .
             ', failed with the following message:' . $exceptionMessage
         );
     }

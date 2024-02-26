@@ -23,8 +23,6 @@ abstract class DataClassParameters implements HashableInterface
 
     private ?int $count;
 
-    private bool $distinct;
-
     private ?GroupBy $groupBy;
 
     private ?Condition $havingCondition;

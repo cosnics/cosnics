@@ -51,7 +51,7 @@ use Chamilo\Libraries\Storage\DataManager\Doctrine\Database\DataClassDatabase;
 use Chamilo\Libraries\Storage\DataManager\Doctrine\DataSourceName;
 use Chamilo\Libraries\Storage\DataManager\Doctrine\Factory\ConnectionFactory;
 use Chamilo\Libraries\Storage\DataManager\Doctrine\Service\ConditionPartTranslatorService;
-use Chamilo\Libraries\Storage\DataManager\Doctrine\Service\ParametersProcessor;
+use Chamilo\Libraries\Storage\DataManager\Doctrine\Service\QueryBuilderConfigurator;
 use Chamilo\Libraries\Storage\DataManager\Doctrine\Service\RecordProcessor;
 use Chamilo\Libraries\Storage\DataManager\Repository\DataClassRepository;
 use Chamilo\Libraries\Storage\DataManager\StorageAliasGenerator;
@@ -425,7 +425,7 @@ class DependencyInjectionContainerBuilder
                 $dataClassRepositoryCache, new DataClassDatabase(
                 $connectionFactory->getConnection(), $storageAliasGenerator,
                 $exceptionLoggerFactory->createExceptionLogger(), $conditionPartTranslatorService,
-                new ParametersProcessor($conditionPartTranslatorService, $storageAliasGenerator), new RecordProcessor()
+                new QueryBuilderConfigurator($conditionPartTranslatorService, $storageAliasGenerator), new RecordProcessor()
             ), new DataClassFactory(), new ParametersHandler()
             );
 

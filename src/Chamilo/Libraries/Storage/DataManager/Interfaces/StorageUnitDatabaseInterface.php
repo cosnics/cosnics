@@ -10,7 +10,7 @@ interface StorageUnitDatabaseInterface
 {
 
     /**
-     * @param string[] $attributes
+     * @param string[][]|string[] $attributes
      */
     public function alter(int $type, string $storageUnitName, string $property, array $attributes = []): bool;
 

@@ -47,14 +47,14 @@ class StorageUnitDatabase implements StorageUnitDatabaseInterface
         {
             if ($type == StorageUnitRepository::ALTER_STORAGE_UNIT_DROP)
             {
-                $column = new Column($property, Type::getType($this::parsePropertyType($attributes)));
+                $column = new Column($property, Type::getType(self::parsePropertyType($attributes)));
                 $query = 'ALTER TABLE ' . $storageUnitName . ' DROP COLUMN ' .
                     $column->getQuotedName($this->getConnection()->getDatabasePlatform());
             }
             else
             {
                 $column = new Column(
-                    $property, Type::getType($this::parsePropertyType($attributes)), $this::parseAttributes($attributes)
+                    $property, Type::getType(self::parsePropertyType($attributes)), self::parseAttributes($attributes)
                 );
 
                 // Column declaration translation-code more or less directly from Doctrine since it doesn't support
@@ -195,7 +195,7 @@ class StorageUnitDatabase implements StorageUnitDatabaseInterface
                     }
                 }
 
-                $options = $this::parseAttributes($attributes);
+                $options = self::parseAttributes($attributes);
 
                 $table->addColumn($property, $attributes['type'], $options);
 

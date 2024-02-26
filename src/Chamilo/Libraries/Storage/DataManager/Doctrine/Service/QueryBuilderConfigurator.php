@@ -14,11 +14,10 @@ use Chamilo\Libraries\Storage\Query\RetrieveProperties;
 use Doctrine\DBAL\Query\QueryBuilder;
 
 /**
- *
  * @package Chamilo\Libraries\Storage\DataManager\Doctrine\Service
  * @author Hans De Bisschop <hans.de.bisschop@ehb.be>
  */
-class ParametersProcessor
+class QueryBuilderConfigurator
 {
 
     protected ConditionPartTranslatorService $conditionPartTranslatorService;
@@ -33,22 +32,20 @@ class ParametersProcessor
         $this->storageAliasGenerator = $storageAliasGenerator;
     }
 
-    public function run(
+    public function applyParameters(
         DataClassDatabase $dataClassDatabase, QueryBuilder $queryBuilder, DataClassParameters $parameters,
-        string $dataClassName
-    ): QueryBuilder
+        string $dataClassStorageUnitName
+    ): void
     {
         $this->processCondition($dataClassDatabase, $queryBuilder, $parameters->getCondition());
-        $this->processJoins($dataClassDatabase, $queryBuilder, $dataClassName, $parameters->getJoins());
-        $this->processDataClassProperties(
+        $this->processJoins($dataClassDatabase, $queryBuilder, $dataClassStorageUnitName, $parameters->getJoins());
+        $this->processRetrieveProperties(
             $dataClassDatabase, $queryBuilder, $parameters->getRetrieveProperties()
         );
-        $this->processOrderByCollection($dataClassDatabase, $queryBuilder, $parameters->getOrderBy());
+        $this->processOrderBy($dataClassDatabase, $queryBuilder, $parameters->getOrderBy());
         $this->processGroupBy($dataClassDatabase, $queryBuilder, $parameters->getGroupBy());
         $this->processHavingCondition($dataClassDatabase, $queryBuilder, $parameters->getHavingCondition());
         $this->processLimit($queryBuilder, $parameters->getCount(), $parameters->getOffset());
-
-        return $queryBuilder;
     }
 
     public function getConditionPartTranslatorService(): ConditionPartTranslatorService
@@ -63,34 +60,17 @@ class ParametersProcessor
 
     protected function processCondition(
         DataClassDatabase $dataClassDatabase, QueryBuilder $queryBuilder, ?Condition $condition = null
-    ): QueryBuilder
+    ): void
     {
         if ($condition instanceof Condition)
         {
             $queryBuilder->where($this->translateConditionPart($dataClassDatabase, $condition));
         }
-
-        return $queryBuilder;
-    }
-
-    protected function processDataClassProperties(
-        DataClassDatabase $dataClassDatabase, QueryBuilder $queryBuilder, ?RetrieveProperties $properties = null
-    ): QueryBuilder
-    {
-        if ($properties instanceof RetrieveProperties)
-        {
-            foreach ($properties->get() as $conditionVariable)
-            {
-                $queryBuilder->addSelect($this->translateConditionPart($dataClassDatabase, $conditionVariable));
-            }
-        }
-
-        return $queryBuilder;
     }
 
     protected function processGroupBy(
         DataClassDatabase $dataClassDatabase, QueryBuilder $queryBuilder, GroupBy $groupBy = null
-    ): QueryBuilder
+    ): void
     {
         if ($groupBy instanceof GroupBy)
         {
@@ -99,83 +79,72 @@ class ParametersProcessor
                 $queryBuilder->addGroupBy($this->translateConditionPart($dataClassDatabase, $groupByVariable));
             }
         }
-
-        return $queryBuilder;
     }
 
     protected function processHavingCondition(
         DataClassDatabase $dataClassDatabase, QueryBuilder $queryBuilder, ?Condition $condition = null
-    ): QueryBuilder
+    ): void
     {
         if ($condition instanceof Condition)
         {
             $queryBuilder->having($this->translateConditionPart($dataClassDatabase, $condition));
         }
-
-        return $queryBuilder;
     }
 
     protected function processJoins(
-        DataClassDatabase $dataClassDatabase, QueryBuilder $queryBuilder, string $dataClassName, ?Joins $joins = null
-    ): QueryBuilder
+        DataClassDatabase $dataClassDatabase, QueryBuilder $queryBuilder, string $dataClassStorageUnitName,
+        ?Joins $joins = null
+    ): void
     {
-        $storageAliasGenerator = $this->getStorageAliasGenerator();
-
         if ($joins instanceof Joins)
         {
+            $storageAliasGenerator = $this->getStorageAliasGenerator();
+
             foreach ($joins->get() as $join)
             {
                 $joinCondition = $this->translateConditionPart($dataClassDatabase, $join->getCondition());
+
+                /**
+                 * @var class-string<\Chamilo\Libraries\Storage\DataClass\DataClass> $joinDataClassName
+                 */
                 $joinDataClassName = $join->getDataClassName();
+                $joinDataClassStorageUnitName = $joinDataClassName::getStorageUnitName();
+
+                $fromAlias = $storageAliasGenerator->getTableAlias($dataClassStorageUnitName);
+                $joinAlias = $storageAliasGenerator->getTableAlias($joinDataClassStorageUnitName);
 
                 switch ($join->getType())
                 {
                     case Join::TYPE_NORMAL :
-                        $queryBuilder->join(
-                            $storageAliasGenerator->getTableAlias($dataClassName::getStorageUnitName()),
-                            $joinDataClassName::getStorageUnitName(),
-                            $storageAliasGenerator->getTableAlias($joinDataClassName::getStorageUnitName()), $joinCondition
-                        );
+                        $queryBuilder->join($fromAlias, $joinDataClassStorageUnitName, $joinAlias, $joinCondition);
                         break;
                     case Join::TYPE_RIGHT :
-                        $queryBuilder->rightJoin(
-                            $storageAliasGenerator->getTableAlias($dataClassName::getStorageUnitName()),
-                            $joinDataClassName::getStorageUnitName(),
-                            $storageAliasGenerator->getTableAlias($joinDataClassName::getStorageUnitName()), $joinCondition
-                        );
+                        $queryBuilder->rightJoin($fromAlias, $joinDataClassStorageUnitName, $joinAlias, $joinCondition);
                         break;
                     case Join::TYPE_LEFT :
-                        $queryBuilder->leftJoin(
-                            $storageAliasGenerator->getTableAlias($dataClassName::getStorageUnitName()),
-                            $joinDataClassName::getStorageUnitName(),
-                            $storageAliasGenerator->getTableAlias($joinDataClassName::getStorageUnitName()), $joinCondition
-                        );
+                        $queryBuilder->leftJoin($fromAlias, $joinDataClassStorageUnitName, $joinAlias, $joinCondition);
                         break;
                 }
             }
         }
-
-        return $queryBuilder;
     }
 
-    protected function processLimit(QueryBuilder $queryBuilder, ?int $count = null, ?int $offset = null): QueryBuilder
+    protected function processLimit(QueryBuilder $queryBuilder, ?int $count = null, ?int $offset = null): void
     {
-        if (intval($count) > 0)
+        if ($count > 0)
         {
             $queryBuilder->setMaxResults(intval($count));
         }
 
-        if (intval($offset) > 0)
+        if ($offset > 0)
         {
             $queryBuilder->setFirstResult(intval($offset));
         }
-
-        return $queryBuilder;
     }
 
-    protected function processOrderByCollection(
+    protected function processOrderBy(
         DataClassDatabase $dataClassDatabase, QueryBuilder $queryBuilder, ?OrderBy $orderBy = null
-    ): QueryBuilder
+    ): void
     {
         if (!is_null($orderBy))
         {
@@ -187,8 +156,19 @@ class ParametersProcessor
                 );
             }
         }
+    }
 
-        return $queryBuilder;
+    protected function processRetrieveProperties(
+        DataClassDatabase $dataClassDatabase, QueryBuilder $queryBuilder, ?RetrieveProperties $properties = null
+    ): void
+    {
+        if ($properties instanceof RetrieveProperties)
+        {
+            foreach ($properties->get() as $conditionVariable)
+            {
+                $queryBuilder->addSelect($this->translateConditionPart($dataClassDatabase, $conditionVariable));
+            }
+        }
     }
 
     protected function translateConditionPart(DataClassDatabase $dataClassDatabase, ConditionPart $conditionPart

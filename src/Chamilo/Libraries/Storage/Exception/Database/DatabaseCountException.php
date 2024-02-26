@@ -10,19 +10,19 @@ use Exception;
  */
 class DatabaseCountException extends Exception
 {
-    protected string $dataClassName;
+    protected string $dataClassStorageUnitName;
 
     protected DataClassCountParameters $parameters;
 
     public function __construct(
-        string $dataClassName, DataClassCountParameters $parameters, string $exceptionMessage = ''
+        string $dataClassStorageUnitName, DataClassCountParameters $parameters, string $exceptionMessage = ''
     )
     {
-        $this->dataClassName = $dataClassName;
+        $this->dataClassStorageUnitName = $dataClassStorageUnitName;
         $this->parameters = $parameters;
 
         parent::__construct(
-            'Count for ' . $dataClassName . ' with parameters ' . serialize($parameters) .
+            'Count for ' . $dataClassStorageUnitName . ' with parameters ' . serialize($parameters) .
             ', failed with the following message:' . $exceptionMessage
         );
     }

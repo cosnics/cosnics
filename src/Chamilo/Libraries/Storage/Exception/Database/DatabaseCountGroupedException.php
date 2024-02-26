@@ -10,19 +10,19 @@ use Exception;
  */
 class DatabaseCountGroupedException extends Exception
 {
-    protected string $dataClassName;
+    protected string $dataClassStorageUnitName;
 
     protected DataClassCountGroupedParameters $parameters;
 
     public function __construct(
-        string $dataClassName, DataClassCountGroupedParameters $parameters, string $exceptionMessage = ''
+        string $dataClassStorageUnitName, DataClassCountGroupedParameters $parameters, string $exceptionMessage = ''
     )
     {
-        $this->dataClassName = $dataClassName;
+        $this->dataClassStorageUnitName = $dataClassStorageUnitName;
         $this->parameters = $parameters;
 
         parent::__construct(
-            'Count Grouped for ' . $dataClassName . ' with parameters ' . serialize($parameters) .
+            'Count Grouped for ' . $dataClassStorageUnitName . ' with parameters ' . serialize($parameters) .
             ', failed with the following message:' . $exceptionMessage
         );
     }

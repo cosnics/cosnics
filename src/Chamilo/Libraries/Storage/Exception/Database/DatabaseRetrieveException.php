@@ -11,19 +11,19 @@ use Exception;
 class DatabaseRetrieveException extends Exception
 {
 
-    protected string $dataClassName;
+    protected string $dataClassStorageUnitName;
 
     protected DataClassRetrieveParameters $parameters;
 
     public function __construct(
-        string $dataClassName, DataClassRetrieveParameters $parameters, string $exceptionMessage = ''
+        string $dataClassStorageUnitName, DataClassRetrieveParameters $parameters, string $exceptionMessage = ''
     )
     {
-        $this->dataClassName = $dataClassName;
+        $this->dataClassStorageUnitName = $dataClassStorageUnitName;
         $this->parameters = $parameters;
 
         parent::__construct(
-            'Retrieve for ' . $dataClassName . ' with parameters ' . serialize($parameters) .
+            'Retrieve for ' . $dataClassStorageUnitName . ' with parameters ' . serialize($parameters) .
             ', failed with the following message:' . $exceptionMessage
         );
     }
