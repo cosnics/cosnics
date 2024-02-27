@@ -20,8 +20,8 @@ class PlagiarismCheckerFactory
 
     public function createPlagiarismChecker()
     {
-        return $this->turnitinPlagiarismChecker;
+        //return $this->turnitinPlagiarismChecker;
 
-        //return $this->strikePlagiarismChecker;
+        return $this->strikePlagiarismChecker;
     }
 }
