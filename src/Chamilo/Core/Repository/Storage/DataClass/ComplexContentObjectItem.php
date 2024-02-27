@@ -84,11 +84,6 @@ class ComplexContentObjectItem extends DataClass
         return parent::checkBeforeSave();
     }
 
-    public static function getCompositeDataClassName(): string
-    {
-        return ComplexContentObjectItem::class;
-    }
-
     /**
      * Get the default property names
      *
@@ -126,6 +121,11 @@ class ComplexContentObjectItem extends DataClass
     public static function getStorageUnitName(): string
     {
         return 'repository_complex_content_object_item';
+    }
+
+    public static function getTypeDataClassName(): string
+    {
+        return ComplexContentObjectItem::class;
     }
 
     public function get_add_date()

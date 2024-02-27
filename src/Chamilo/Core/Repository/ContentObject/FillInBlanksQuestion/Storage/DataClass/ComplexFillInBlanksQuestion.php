@@ -3,6 +3,8 @@ namespace Chamilo\Core\Repository\ContentObject\FillInBlanksQuestion\Storage\Dat
 
 use Chamilo\Core\Repository\ContentObject\Assessment\Display\AnswerFeedbackDisplaySupport;
 use Chamilo\Core\Repository\Storage\DataClass\ComplexContentObjectItem;
+use Chamilo\Libraries\Storage\DataClass\Interfaces\DataClassExtensionInterface;
+use Chamilo\Libraries\Storage\DataClass\Traits\DataClassExtensionTrait;
 
 /**
  * @package Chamilo\Core\Repository\ContentObject\FillInBlanksQuestion\Storage\DataClass
@@ -11,8 +13,11 @@ use Chamilo\Core\Repository\Storage\DataClass\ComplexContentObjectItem;
  * @author  Magali Gillard <magali.gillard@ehb.be>
  * @author  Eduard Vossen <eduard.vossen@ehb.be>
  */
-class ComplexFillInBlanksQuestion extends ComplexContentObjectItem implements AnswerFeedbackDisplaySupport
+class ComplexFillInBlanksQuestion extends ComplexContentObjectItem
+    implements AnswerFeedbackDisplaySupport, DataClassExtensionInterface
 {
+    use DataClassExtensionTrait;
+
     public const CONTEXT = FillInBlanksQuestion::CONTEXT;
 
     public const PROPERTY_RANDOM = 'random';

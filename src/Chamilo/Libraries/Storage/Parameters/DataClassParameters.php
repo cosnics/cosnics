@@ -3,8 +3,11 @@ namespace Chamilo\Libraries\Storage\Parameters;
 
 use Chamilo\Libraries\Architecture\Interfaces\HashableInterface;
 use Chamilo\Libraries\Architecture\Traits\HashableTrait;
+use Chamilo\Libraries\Storage\Query\Condition\AndCondition;
 use Chamilo\Libraries\Storage\Query\Condition\Condition;
+use Chamilo\Libraries\Storage\Query\Condition\OrCondition;
 use Chamilo\Libraries\Storage\Query\GroupBy;
+use Chamilo\Libraries\Storage\Query\Join;
 use Chamilo\Libraries\Storage\Query\Joins;
 use Chamilo\Libraries\Storage\Query\OrderBy;
 use Chamilo\Libraries\Storage\Query\RetrieveProperties;
@@ -49,6 +52,58 @@ abstract class DataClassParameters implements HashableInterface
         $this->setHavingCondition($havingCondition);
         $this->setCount($count);
         $this->setOffset($offset);
+    }
+
+    public function addConditionUsingAnd(?Condition $condition = null): static
+    {
+        if ($condition instanceof Condition)
+        {
+            if ($this->getCondition() instanceof Condition)
+            {
+                $this->setCondition(new AndCondition([$this->getCondition(), $condition]));
+            }
+            else
+            {
+                $this->setCondition($condition);
+            }
+        }
+
+        return $this;
+    }
+
+    public function addConditionUsingOr(?Condition $condition = null): static
+    {
+        if ($condition instanceof Condition)
+        {
+            if ($this->getCondition() instanceof Condition)
+            {
+                $this->setCondition(new OrCondition([$this->getCondition(), $condition]));
+            }
+            else
+            {
+                $this->setCondition($condition);
+            }
+        }
+
+        return $this;
+    }
+
+    public function addJoin(?Join $join = null): static
+    {
+        if ($join instanceof Join)
+        {
+            if ($this->getJoins() instanceof Joins)
+            {
+                $joins = $this->getJoins();
+                $joins->add($join);
+            }
+            else
+            {
+                $this->setJoins(new Joins([$join]));
+            }
+        }
+
+        return $this;
     }
 
     public function getCondition(): ?Condition

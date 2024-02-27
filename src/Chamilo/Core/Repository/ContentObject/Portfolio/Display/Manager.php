@@ -14,7 +14,6 @@ use Exception;
 abstract class Manager extends \Chamilo\Core\Repository\Display\Manager
 {
     public const ACTION_ACTIVITY = 'Activity';
-    public const ACTION_BOOKMARK = 'Bookmarker';
     public const ACTION_FEEDBACK = 'Feedback';
     public const ACTION_MANAGE = 'Manager';
     public const ACTION_MOVE = 'Mover';

@@ -4,6 +4,9 @@ namespace Chamilo\Libraries\Storage\DataManager\Repository;
 use Chamilo\Libraries\Storage\Cache\DataClassRepositoryCache;
 use Chamilo\Libraries\Storage\DataClass\DataClass;
 use Chamilo\Libraries\Storage\DataClass\DataClassFactory;
+use Chamilo\Libraries\Storage\DataClass\Interfaces\DataClassBaseExtensionInterface;
+use Chamilo\Libraries\Storage\DataClass\Interfaces\DataClassExtensionInterface;
+use Chamilo\Libraries\Storage\DataClass\Interfaces\DataClassVirtualExtensionInterface;
 use Chamilo\Libraries\Storage\DataClass\Interfaces\UuidDataClassInterface;
 use Chamilo\Libraries\Storage\DataManager\Interfaces\DataClassDatabaseInterface;
 use Chamilo\Libraries\Storage\Parameters\DataClassCountGroupedParameters;
@@ -18,6 +21,7 @@ use Chamilo\Libraries\Storage\Query\Condition\AndCondition;
 use Chamilo\Libraries\Storage\Query\Condition\ComparisonCondition;
 use Chamilo\Libraries\Storage\Query\Condition\Condition;
 use Chamilo\Libraries\Storage\Query\Condition\EqualityCondition;
+use Chamilo\Libraries\Storage\Query\Join;
 use Chamilo\Libraries\Storage\Query\RetrieveProperties;
 use Chamilo\Libraries\Storage\Query\UpdateProperties;
 use Chamilo\Libraries\Storage\Query\UpdateProperty;
@@ -61,7 +65,7 @@ class DataClassRepository
     /**
      * @param class-string<\Chamilo\Libraries\Storage\DataClass\DataClass> $dataClassName
      */
-    protected function __countClass(string $dataClassName, DataClassCountParameters $parameters): int
+    protected function __count(string $dataClassName, DataClassCountParameters $parameters): int
     {
         $retrieveProperties = $parameters->getRetrieveProperties();
 
@@ -75,7 +79,41 @@ class DataClassRepository
             )
         );
 
-        return $this->getDataClassDatabase()->count($dataClassName::getStorageUnitName(), $parameters);
+        if (is_subclass_of($dataClassName, DataClassBaseExtensionInterface::class))
+        {
+            $typeDataClassName = $dataClassName::getTypeDataClassName();
+
+            $condition = new EqualityCondition(
+                new PropertyConditionVariable($typeDataClassName, $typeDataClassName::PROPERTY_TYPE),
+                new StaticConditionVariable($dataClassName)
+            );
+
+            $parameters->addConditionUsingAnd($condition);
+
+            if (is_subclass_of($dataClassName, DataClassExtensionInterface::class))
+            {
+                $join = new Join(
+                    $typeDataClassName, new EqualityCondition(
+                        new PropertyConditionVariable($typeDataClassName, $typeDataClassName::PROPERTY_ID),
+                        new PropertyConditionVariable($dataClassName, $dataClassName::PROPERTY_ID)
+                    )
+                );
+
+                $parameters->addJoin($join);
+            }
+        }
+
+        if (is_subclass_of($dataClassName, DataClassVirtualExtensionInterface::class))
+        {
+            $typeDataClassName = $dataClassName::getTypeDataClassName();
+            $dataClassStorageUnitName = $typeDataClassName::getStorageUnitName();
+        }
+        else
+        {
+            $dataClassStorageUnitName = $dataClassName::getStorageUnitName();
+        }
+
+        return $this->getDataClassDatabase()->count($dataClassStorageUnitName, $parameters);
     }
 
     /**
@@ -181,7 +219,7 @@ class DataClassRepository
             if (!$dataClassRepositoryCache->exists($dataClassName, $parameters))
             {
                 $dataClassRepositoryCache->addForDataClassCount(
-                    $dataClassName, $parameters, $this->__countClass($dataClassName, $parameters)
+                    $dataClassName, $parameters, $this->__count($dataClassName, $parameters)
                 );
             }
 
@@ -189,7 +227,7 @@ class DataClassRepository
         }
         else
         {
-            return $this->__countClass($dataClassName, $parameters);
+            return $this->__count($dataClassName, $parameters);
         }
     }
 

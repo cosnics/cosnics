@@ -3,11 +3,12 @@ namespace Chamilo\Core\Repository\ContentObject\LearningPath\Storage\DataClass;
 
 use Chamilo\Core\Repository\ContentObject\Section\Storage\DataClass\Section;
 use Chamilo\Core\Repository\Storage\DataClass\ComplexContentObjectItem;
+use Chamilo\Libraries\Storage\DataClass\Interfaces\DataClassVirtualExtensionInterface;
 
 /**
  * @package Chamilo\Core\Repository\ContentObject\LearningPath\Storage\DataClass
  */
-class ComplexLearningPath extends ComplexContentObjectItem
+class ComplexLearningPath extends ComplexContentObjectItem implements DataClassVirtualExtensionInterface
 {
     public const CONTEXT = LearningPath::CONTEXT;
 

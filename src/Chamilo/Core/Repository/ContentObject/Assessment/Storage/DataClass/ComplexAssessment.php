@@ -13,11 +13,12 @@ use Chamilo\Core\Repository\ContentObject\FillInBlanksQuestion\Storage\DataClass
 use Chamilo\Core\Repository\ContentObject\HotspotQuestion\Storage\DataClass\HotspotQuestion;
 use Chamilo\Core\Repository\ContentObject\OrderingQuestion\Storage\DataClass\OrderingQuestion;
 use Chamilo\Core\Repository\Storage\DataClass\ComplexContentObjectItem;
+use Chamilo\Libraries\Storage\DataClass\Interfaces\DataClassVirtualExtensionInterface;
 
 /**
  * @package Chamilo\Core\Repository\ContentObject\Assessment\Storage\DataClass
  */
-class ComplexAssessment extends ComplexContentObjectItem
+class ComplexAssessment extends ComplexContentObjectItem implements DataClassVirtualExtensionInterface
 {
     public const CONTEXT = Assessment::CONTEXT;
 

@@ -6,7 +6,7 @@ namespace Chamilo\Libraries\Storage\DataClass\Interfaces;
  * @author  Sven Vanpoucke - Hogeschool Gent
  * @author  Hans De Bisschop <hans.de.bisschop@ehb.be>
  */
-interface DataClassExtensionInterface
+interface DataClassExtensionInterface extends DataClassBaseExtensionInterface
 {
     public const PROPERTIES_ADDITIONAL = 'additional_properties';
 

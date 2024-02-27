@@ -426,24 +426,6 @@ class ViewerComponent extends ItemComponent implements FeedbackSupport, Feedback
             )
         );
 
-        $areBookmarksAllowed =
-            $this->get_parent() instanceof PortfolioBookmarkSupport && !$this->get_parent()->is_own_portfolio();
-
-        if ($areBookmarksAllowed)
-        {
-            $extraButton->addSubButton(
-                new SubButton(
-                    Translation::get('BookmarkerComponent'), new FontAwesomeGlyph('bookmark', ['fa-lg'], null, 'fas'),
-                    $this->get_url(
-                        [
-                            self::PARAM_ACTION => self::ACTION_BOOKMARK,
-                            self::PARAM_STEP => $this->get_current_step()
-                        ]
-                    )
-                )
-            );
-        }
-
         $isManagingAllowed = $this->canEditComplexContentObjectPathNode($this->get_current_node());
 
         if ($isManagingAllowed)

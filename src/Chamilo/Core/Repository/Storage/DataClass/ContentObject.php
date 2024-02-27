@@ -119,7 +119,7 @@ class ContentObject extends DataClass implements DataClassTypeAwareInterface
      * @var TemplateRegistration
      */
     private $template_registration;
-    
+
     public function __construct(
         array $default_properties = [], array $optionalProperties = []
     )
@@ -722,11 +722,6 @@ class ContentObject extends DataClass implements DataClassTypeAwareInterface
         }
     }
 
-    public static function getCompositeDataClassName(): string
-    {
-        return ContentObject::class;
-    }
-
     protected function getContentObjectRelationService(): ContentObjectRelationService
     {
         return $this->getService(ContentObjectRelationService::class);
@@ -845,6 +840,11 @@ class ContentObject extends DataClass implements DataClassTypeAwareInterface
     public function getTemplateRegistrationConsulter(): TemplateRegistrationConsulter
     {
         return $this->getService(TemplateRegistrationConsulter::class);
+    }
+
+    public static function getTypeDataClassName(): string
+    {
+        return ContentObject::class;
     }
 
     /**
@@ -1265,6 +1265,8 @@ class ContentObject extends DataClass implements DataClassTypeAwareInterface
         return $this->getDefaultProperty(self::PROPERTY_MODIFICATION_DATE);
     }
 
+    // create a version
+
     /**
      * Returns the version number.
      *
@@ -1274,8 +1276,6 @@ class ContentObject extends DataClass implements DataClassTypeAwareInterface
     {
         return $this->getDefaultProperty(self::PROPERTY_OBJECT_NUMBER);
     }
-
-    // create a version
 
     /**
      * @return User
