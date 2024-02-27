@@ -29,37 +29,20 @@ use Chamilo\Libraries\Storage\Query\Variable\StaticConditionVariable;
 abstract class Manager extends Application
 {
     public const ACTION_ADMIN = 'Admin';
-
     public const ACTION_ADMIN_COURSE_MANAGER = 'AdminCourseManager';
-
     public const ACTION_ADMIN_REQUEST_BROWSER = 'AdminRequestBrowser';
-
     public const ACTION_ANNOUNCEMENT = 'Announcement';
-
     public const ACTION_BROWSE_OPEN_COURSES = 'OpenCoursesBrowser';
-
     public const ACTION_COURSE_CATEGORY_MANAGER = 'CourseCategoryManager';
-
     public const ACTION_COURSE_MANAGER = 'CourseManager';
-
     public const ACTION_COURSE_TYPE_MANAGER = 'CourseTypeManager';
-
     public const ACTION_COURSE_USER_SUBSCRIPTION_REQUEST_GRANT = 'course_user_subscription_request_granter';
-
-    public const ACTION_CREATE_BOOKMARK = 'CourseBookmarkCreator';
-
     public const ACTION_IMPORT_COURSES = 'CourseImporter';
-
     public const ACTION_IMPORT_COURSE_USERS = 'CourseUserImporter';
-
     public const ACTION_MANAGER_SORT = 'Sorter';
-
     public const ACTION_REPORTING = 'Reporting';
-
     public const ACTION_REQUEST = 'Request';
-
     public const ACTION_VIEW_COURSE = 'CourseViewer';
-
     public const ACTION_VIEW_WEBLCMS_HOME = 'Home';
 
     public const CONTEXT = __NAMESPACE__;

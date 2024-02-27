@@ -59,7 +59,6 @@ abstract class Manager extends Application
 {
     public const ACTION_BROWSE = 'Browser';
     public const ACTION_BUILD_COMPLEX_CONTENT_OBJECT = 'ComplexBuilder';
-    public const ACTION_CREATE_BOOKMARK = 'CourseBookmarkCreator';
     public const ACTION_DELETE = 'Deleter';
     public const ACTION_DISPLAY_COMPLEX_CONTENT_OBJECT = 'ComplexDisplay';
     public const ACTION_EDIT_RIGHTS = 'RightsEditor';
@@ -847,26 +846,6 @@ abstract class Manager extends Application
         $is_subscribed = \Chamilo\Application\Weblcms\Course\Storage\DataManager::is_subscribed(
             $this->get_course(), $this->get_user()
         );
-
-        // if (! $is_subscribed)
-        // {
-        // $params = [];
-        // $params[Application::PARAM_ACTION] = Manager::ACTION_CREATE_BOOKMARK;
-        //
-        // $bookmark_url = $this->get_parent()->get_url($params);
-        //
-        // // $onclick = '" onclick="javascript:openPopup(\'' . $bookmark_url . '\'); return false;';
-        //
-        // $buttonToolbar->addItem(
-        // new Button(
-        // Translation::get('MakeBookmark'),
-        // null,
-        // $bookmark_url,
-        // Button::DISPLAY_ICON_AND_LABEL,
-        // null,
-        // [],
-        // '_blank'));
-        // }
 
         if ($introductionTextAllowed)
         {

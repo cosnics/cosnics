@@ -4,7 +4,6 @@ namespace Chamilo\Application\Portfolio\Component;
 use Chamilo\Application\Portfolio\Manager;
 use Chamilo\Application\Portfolio\Storage\DataClass\Publication;
 use Chamilo\Core\Repository\Common\Path\ComplexContentObjectPathNode;
-use Chamilo\Core\Repository\ContentObject\Bookmark\Storage\DataClass\Bookmark;
 use Chamilo\Core\Repository\ContentObject\Portfolio\Display\Manager as PortfolioDisplayManager;
 use Chamilo\Core\Repository\ContentObject\Portfolio\Display\PortfolioBookmarkSupport;
 use Chamilo\Core\Repository\ContentObject\Portfolio\Display\PortfolioComplexRights;
@@ -25,7 +24,7 @@ use Chamilo\Libraries\Format\Structure\Glyph\FontAwesomeGlyph;
  * @author  Hans De Bisschop <hans.de.bisschop@ehb.be>
  */
 class HomeComponent extends Manager
-    implements PortfolioDisplaySupport, BreadcrumbLessComponentInterface, PortfolioComplexRights, PortfolioBookmarkSupport
+    implements PortfolioDisplaySupport, BreadcrumbLessComponentInterface, PortfolioComplexRights
 {
 
     /**
@@ -144,38 +143,6 @@ class HomeComponent extends Manager
                 )
             )
         ];
-    }
-
-    /**
-     * @see \Chamilo\Core\Repository\ContentObject\Portfolio\Display\PortfolioBookmarkSupport::get_portfolio_bookmark()
-     */
-    public function get_portfolio_bookmark($current_step)
-    {
-        $portfolioOwner = $this->get_root_content_object()->get_owner();
-
-        $content_object = new Bookmark();
-        $content_object->set_title(
-            $this->getTranslator()->trans(
-                'BookmarkTitle', ['NAME' => $portfolioOwner->get_fullname()], Manager::CONTEXT
-            )
-        );
-        $content_object->set_description(
-            $this->getTranslator()->trans(
-                'BookmarkDescription', ['NAME' => $portfolioOwner->get_fullname()], Manager::CONTEXT
-            )
-        );
-        $content_object->set_application(__NAMESPACE__);
-        $content_object->set_url(
-            $this->get_url(
-                [
-                    PortfolioDisplayManager::PARAM_ACTION => PortfolioDisplayManager::ACTION_VIEW_COMPLEX_CONTENT_OBJECT,
-                    PortfolioDisplayManager::PARAM_STEP => $current_step
-                ]
-            )
-        );
-        $content_object->set_owner_id($this->get_user_id());
-
-        return $content_object;
     }
 
     /**
