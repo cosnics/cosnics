@@ -52,10 +52,8 @@ use Chamilo\Libraries\Storage\DataManager\Doctrine\DataSourceName;
 use Chamilo\Libraries\Storage\DataManager\Doctrine\Factory\ConnectionFactory;
 use Chamilo\Libraries\Storage\DataManager\Doctrine\Service\ConditionPartTranslatorService;
 use Chamilo\Libraries\Storage\DataManager\Doctrine\Service\QueryBuilderConfigurator;
-use Chamilo\Libraries\Storage\DataManager\Doctrine\Service\RecordProcessor;
 use Chamilo\Libraries\Storage\DataManager\Repository\DataClassRepository;
 use Chamilo\Libraries\Storage\DataManager\StorageAliasGenerator;
-use Chamilo\Libraries\Storage\Service\ParametersHandler;
 use Chamilo\Libraries\Utilities\StringUtilities;
 use Exception;
 use Symfony\Component\Cache\Adapter\ArrayAdapter;
@@ -425,8 +423,8 @@ class DependencyInjectionContainerBuilder
                 $dataClassRepositoryCache, new DataClassDatabase(
                 $connectionFactory->getConnection(), $storageAliasGenerator,
                 $exceptionLoggerFactory->createExceptionLogger(), $conditionPartTranslatorService,
-                new QueryBuilderConfigurator($conditionPartTranslatorService, $storageAliasGenerator), new RecordProcessor()
-            ), new DataClassFactory(), new ParametersHandler()
+                new QueryBuilderConfigurator($conditionPartTranslatorService, $storageAliasGenerator)
+            ), new DataClassFactory()
             );
 
             $this->registrationConsulter = new RegistrationConsulter(
@@ -436,9 +434,9 @@ class DependencyInjectionContainerBuilder
                         $this->getConfigurablePathBuilder()->getConfiguredCachePath()
                     ), $this->getStringUtilities(), new RegistrationService(
                         new RegistrationRepository($dataClassRepository), new PhpFilesAdapter(
-                        md5('Chamilo\Configuration\Service\Registration'), 0,
-                        $this->getConfigurablePathBuilder()->getConfiguredCachePath()
-                    )
+                            md5('Chamilo\Configuration\Service\Registration'), 0,
+                            $this->getConfigurablePathBuilder()->getConfiguredCachePath()
+                        )
                     )
                 ), $this->getStringUtilities()
             );

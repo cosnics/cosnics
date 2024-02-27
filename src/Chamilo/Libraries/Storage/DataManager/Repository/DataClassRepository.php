@@ -104,6 +104,8 @@ class DataClassRepository
     }
 
     /**
+     * @param class-string<\Chamilo\Libraries\Storage\DataClass\DataClass> $dataClassName
+     *
      * @return ?string[]
      */
     protected function __record(string $dataClassName, RecordRetrieveParameters $parameters): ?array
@@ -113,14 +115,19 @@ class DataClassRepository
         $parameters->setCount(1);
         $parameters->setOffset(0);
 
-        return $this->getDataClassDatabase()->retrieve($dataClassName, $parameters);
+        return $this->getDataClassDatabase()->retrieve($dataClassName::getStorageUnitName(), $parameters);
     }
 
+    /**
+     * @param class-string<\Chamilo\Libraries\Storage\DataClass\DataClass> $dataClassName
+     */
     protected function __records(string $dataClassName, RecordRetrievesParameters $parameters): ArrayCollection
     {
         $this->handleRetrieveProperties($parameters, $dataClassName);
 
-        return new ArrayCollection($this->getDataClassDatabase()->retrieves($dataClassName, $parameters));
+        return new ArrayCollection(
+            $this->getDataClassDatabase()->retrieves($dataClassName::getStorageUnitName(), $parameters)
+        );
     }
 
     /**
@@ -154,7 +161,7 @@ class DataClassRepository
     {
         $this->handleRetrieveProperties($parameters, $dataClassName);
 
-        $records = $this->getDataClassDatabase()->retrieves($dataClassName, $parameters);
+        $records = $this->getDataClassDatabase()->retrieves($dataClassName::getStorageUnitName(), $parameters);
         $dataClasses = [];
 
         foreach ($records as $record)

@@ -73,7 +73,7 @@ class PackageFactory
         $package->set_context($cosnicsProperties->context);
         $package->set_name($cosnicsProperties->name);
         $package->setType($cosnicsProperties->type);
-        $package->set_category($cosnicsProperties->category);
+        $package->set_category($cosnicsProperties->category ?? '');
         $package->set_version($jsonPackageObject->version);
         $package->set_description($jsonPackageObject->description);
 
@@ -86,7 +86,7 @@ class PackageFactory
             $extra = $cosnicsProperties->extra;
         }
 
-        $package->setResources($cosnicsProperties->resources);
+        $package->setResources($cosnicsProperties->resources ?? []);
 
         $package->set_extra($extra);
 

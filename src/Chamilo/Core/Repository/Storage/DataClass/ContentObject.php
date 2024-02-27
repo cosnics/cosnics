@@ -65,7 +65,6 @@ class ContentObject extends DataClass implements DataClassTypeAwareInterface
 
     public const PARAM_SECURITY_CODE = 'security_code';
 
-    public const PROPERTIES_ADDITIONAL = 'additional_properties';
     public const PROPERTY_COMMENT = 'comment';
     public const PROPERTY_CONTENT_HASH = 'content_hash';
     public const PROPERTY_CREATION_DATE = 'created';
@@ -78,7 +77,6 @@ class ContentObject extends DataClass implements DataClassTypeAwareInterface
     public const PROPERTY_STATE = 'state';
     public const PROPERTY_TEMPLATE_REGISTRATION_ID = 'template_registration_id';
     public const PROPERTY_TITLE = 'title';
-    public const PROPERTY_TYPE = 'type';
 
     public const STATE_AUTOSAVE = 8;
     public const STATE_BACKUP = 16;

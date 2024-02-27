@@ -48,7 +48,7 @@ trait DataClassExtensionTrait
      */
     abstract public static function getAdditionalPropertyNames(): array;
 
-    abstract public function getId(): string;
+    abstract public function getId(): ?string;
 
     abstract public function getSpecificProperties(string $propertiesType): array;
 

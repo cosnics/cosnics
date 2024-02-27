@@ -53,7 +53,7 @@ abstract class DataClass
         return Translation::get('ToStringNotImplemented', ['TYPE' => static::class]);
     }
 
-    public function addError(string $errorMsg): DataClass
+    public function addError(string $errorMsg): static
     {
         if (!isset($this->errors))
         {
@@ -65,7 +65,7 @@ abstract class DataClass
         return $this;
     }
 
-    public function addListener(DataClassListener $listener): DataClass
+    public function addListener(DataClassListener $listener): static
     {
         $this->listeners[] = $listener;
 
@@ -81,7 +81,7 @@ abstract class DataClass
         return !$this->hasErrors();
     }
 
-    public function clearErrors(): DataClass
+    public function clearErrors(): static
     {
         unset($this->errors);
 
@@ -315,7 +315,7 @@ abstract class DataClass
         return true;
     }
 
-    public function removeListener(int $index): DataClass
+    public function removeListener(int $index): static
     {
         unset($this->listeners[$index]);
 
@@ -337,7 +337,7 @@ abstract class DataClass
         }
     }
 
-    public function setDefaultProperties(array $defaultProperties): DataClass
+    public function setDefaultProperties(array $defaultProperties): static
     {
         $this->setSpecificProperties(self::PROPERTIES_DEFAULT, $defaultProperties);
 
@@ -356,14 +356,14 @@ abstract class DataClass
     /**
      * @param string[] $foreignProperties
      */
-    public function setForeignProperties(array $foreignProperties): DataClass
+    public function setForeignProperties(array $foreignProperties): static
     {
         $this->setSpecificProperties(self::PROPERTIES_FOREIGN, $foreignProperties);
 
         return $this;
     }
 
-    public function setForeignProperty(string $name, DataClass $value): DataClass
+    public function setForeignProperty(string $name, DataClass $value): static
     {
         $this->setSpecificProperty(self::PROPERTIES_FOREIGN, $name, $value);
         $this->setDefaultProperty($name . '_id', $value->getId());
@@ -371,7 +371,7 @@ abstract class DataClass
         return $this;
     }
 
-    public function setId(?string $id): DataClass
+    public function setId(?string $id): static
     {
         $this->setDefaultProperty(static::PROPERTY_ID, $id);
 
@@ -381,7 +381,7 @@ abstract class DataClass
     /**
      * @param \Chamilo\Libraries\Storage\DataClass\Listeners\DataClassListener[] $listeners
      */
-    public function setListeners(array $listeners): DataClass
+    public function setListeners(array $listeners): static
     {
         $this->listeners = $listeners;
 
@@ -391,14 +391,14 @@ abstract class DataClass
     /**
      * @param string[] $optionalProperties
      */
-    public function setOptionalProperties(array $optionalProperties): DataClass
+    public function setOptionalProperties(array $optionalProperties): static
     {
         $this->setSpecificProperties(self::PROPERTIES_OPTIONAL, $optionalProperties);
 
         return $this;
     }
 
-    public function setOptionalProperty(string $name, mixed $value): DataClass
+    public function setOptionalProperty(string $name, mixed $value): static
     {
         $this->setSpecificProperty(self::PROPERTIES_OPTIONAL, $name, $value);
 
@@ -408,7 +408,7 @@ abstract class DataClass
     /**
      * @param string[][] $properties
      */
-    public function setProperties(array $properties): DataClass
+    public function setProperties(array $properties): static
     {
         $this->properties = $properties;
 
@@ -418,14 +418,14 @@ abstract class DataClass
     /**
      * @param string[] $properties
      */
-    public function setSpecificProperties(string $propertiesType, array $properties): DataClass
+    public function setSpecificProperties(string $propertiesType, array $properties): static
     {
         $this->properties[$propertiesType] = $properties;
 
         return $this;
     }
 
-    public function setSpecificProperty(string $propertiesType, string $propertyName, mixed $propertyValue): DataClass
+    public function setSpecificProperty(string $propertiesType, string $propertyName, mixed $propertyValue): static
     {
         $this->properties[$propertiesType][$propertyName] = $propertyValue;
 
@@ -435,7 +435,7 @@ abstract class DataClass
     /**
      * @deprecated Use setId($id) now
      */
-    public function set_id(?string $id): DataClass
+    public function set_id(?string $id): static
     {
         return $this->setId($id);
     }
