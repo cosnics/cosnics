@@ -6,6 +6,7 @@ use Chamilo\Libraries\Storage\DataClass\DataClass;
 use Chamilo\Libraries\Storage\DataClass\DataClassFactory;
 use Chamilo\Libraries\Storage\DataClass\Interfaces\DataClassBaseExtensionInterface;
 use Chamilo\Libraries\Storage\DataClass\Interfaces\DataClassExtensionInterface;
+use Chamilo\Libraries\Storage\DataClass\Interfaces\DataClassTypeAwareInterface;
 use Chamilo\Libraries\Storage\DataClass\Interfaces\DataClassVirtualExtensionInterface;
 use Chamilo\Libraries\Storage\DataClass\Interfaces\UuidDataClassInterface;
 use Chamilo\Libraries\Storage\DataManager\Interfaces\DataClassDatabaseInterface;
@@ -167,6 +168,19 @@ class DataClassRepository
         );
     }
 
+    protected function determineDataExtensionClassName(string $dataClassName, DataClassRetrieveParameters $parameters): string
+    {
+        $parameters = new RecordRetrieveParameters(
+            new RetrieveProperties(
+                [new PropertyConditionVariable($dataClassName, DataClassTypeAwareInterface::PROPERTY_TYPE)]
+            ), $parameters->getCondition(), $parameters->getOrderBy(), $parameters->getJoins()
+        );
+
+        $type = $this->record($dataClassName, $parameters);
+
+        return $type[DataClassTypeAwareInterface::PROPERTY_TYPE];
+    }
+
     /**
      * @template tInternalRetrieveClass
      *
@@ -176,6 +190,13 @@ class DataClassRepository
      */
     protected function __retrieve(string $dataClassName, DataClassRetrieveParameters $parameters)
     {
+        if (is_subclass_of($dataClassName, DataClassTypeAwareInterface::class))
+        {
+            $dataClassName = $this->determineDataExtensionClassName($dataClassName, $parameters);
+        }
+
+        //TODO: Insert DataClassExtension logic here, same as in __count()
+
         $this->handleRetrieveProperties($parameters, $dataClassName);
 
         $parameters->returnSingleResult();
