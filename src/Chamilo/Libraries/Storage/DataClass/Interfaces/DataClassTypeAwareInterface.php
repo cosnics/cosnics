@@ -12,7 +12,7 @@ interface DataClassTypeAwareInterface
 
     public function getType(): string;
 
-    public static function getTypeDataClassName(): string;
+    //public static function getTypeDataClassName(): string;
 
     public function setType(string $type): static;
 }

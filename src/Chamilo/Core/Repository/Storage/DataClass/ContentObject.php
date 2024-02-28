@@ -842,7 +842,12 @@ class ContentObject extends DataClass implements DataClassTypeAwareInterface
         return $this->getService(TemplateRegistrationConsulter::class);
     }
 
-    public static function getTypeDataClassName(): string
+//    public static function getTypeDataClassName(): string
+//    {
+//        return ContentObject::class;
+//    }
+
+    public static function getExtensionDataClassName(): string
     {
         return ContentObject::class;
     }

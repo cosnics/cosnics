@@ -122,8 +122,13 @@ class ComplexContentObjectItem extends DataClass
     {
         return 'repository_complex_content_object_item';
     }
+//
+//    public static function getTypeDataClassName(): string
+//    {
+//        return ComplexContentObjectItem::class;
+//    }
 
-    public static function getTypeDataClassName(): string
+    public static function getExtensionDataClassName(): string
     {
         return ComplexContentObjectItem::class;
     }

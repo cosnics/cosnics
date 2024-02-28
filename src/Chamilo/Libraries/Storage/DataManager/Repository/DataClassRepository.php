@@ -81,7 +81,7 @@ class DataClassRepository
 
         if (is_subclass_of($dataClassName, DataClassBaseExtensionInterface::class))
         {
-            $typeDataClassName = $dataClassName::getTypeDataClassName();
+            $typeDataClassName = $dataClassName::getExtensionDataClassName();
 
             $condition = new EqualityCondition(
                 new PropertyConditionVariable($typeDataClassName, $typeDataClassName::PROPERTY_TYPE),
@@ -105,7 +105,7 @@ class DataClassRepository
 
         if (is_subclass_of($dataClassName, DataClassVirtualExtensionInterface::class))
         {
-            $typeDataClassName = $dataClassName::getTypeDataClassName();
+            $typeDataClassName = $dataClassName::getExtensionDataClassName();
             $dataClassStorageUnitName = $typeDataClassName::getStorageUnitName();
         }
         else
@@ -150,8 +150,7 @@ class DataClassRepository
     {
         $this->handleRetrieveProperties($parameters, $dataClassName);
 
-        $parameters->setCount(1);
-        $parameters->setOffset(0);
+        $parameters->returnSingleResult();
 
         return $this->getDataClassDatabase()->retrieve($dataClassName::getStorageUnitName(), $parameters);
     }
@@ -179,8 +178,7 @@ class DataClassRepository
     {
         $this->handleRetrieveProperties($parameters, $dataClassName);
 
-        $parameters->setCount(1);
-        $parameters->setOffset(0);
+        $parameters->returnSingleResult();
 
         return $this->getDataClassFactory()->getDataClass(
             $dataClassName, $this->getDataClassDatabase()->retrieve($dataClassName::getStorageUnitName(), $parameters)

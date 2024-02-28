@@ -191,6 +191,14 @@ abstract class DataClassParameters implements HashableInterface
         return $this;
     }
 
+    public function returnSingleResult(): static
+    {
+        $this->setCount(1);
+        $this->setOffset(0);
+
+        return $this;
+    }
+
     public function setCount(?int $count): static
     {
         $this->count = (int) $count;
