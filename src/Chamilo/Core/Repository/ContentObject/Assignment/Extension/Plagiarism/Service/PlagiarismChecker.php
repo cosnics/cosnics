@@ -165,6 +165,11 @@ class PlagiarismChecker
             );
         }
 
+        /*if($entry->getSubmitted() < 1708297200 && $user->is_teacher())
+        {
+            return "https://hogent.sharepoint.com/sites/watson/SitePages/Nieuwe-plagiaatdetectie-software-StrikePlagiarism.aspx";
+        }*/
+
         return $this->plagiarismChecker->getReportUrlForSubmission($user, $entryPlagiarismResult->getExternalId());
     }
 

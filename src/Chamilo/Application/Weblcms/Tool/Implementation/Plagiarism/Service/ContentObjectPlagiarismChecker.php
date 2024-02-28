@@ -225,6 +225,11 @@ class ContentObjectPlagiarismChecker
             );
         }
 
+        /*if($contentObjectPlagiarismResult->getRequestDate() < new \DateTime("2024-02-19"))
+        {
+            return "https://hogent.sharepoint.com/sites/watson/SitePages/Nieuwe-plagiaatdetectie-software-StrikePlagiarism.aspx";
+        }*/
+
         if ($contentObjectPlagiarismResult->getCourseId() != $course->getId())
         {
             throw new PlagiarismException(
