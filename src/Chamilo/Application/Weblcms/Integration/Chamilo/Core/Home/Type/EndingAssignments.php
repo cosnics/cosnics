@@ -5,6 +5,7 @@ namespace Chamilo\Application\Weblcms\Integration\Chamilo\Core\Home\Type;
 use Chamilo\Application\Weblcms\Course\Storage\DataManager as CourseDataManager;
 use Chamilo\Application\Weblcms\Integration\Chamilo\Core\Home\Block;
 use Chamilo\Application\Weblcms\Integration\Chamilo\Core\Home\NewBlock;
+use Chamilo\Application\Weblcms\Service\RightsService;
 use Chamilo\Application\Weblcms\Storage\DataClass\ContentObjectPublication;
 use Chamilo\Core\Home\Interfaces\AsynchronousBlockInterface;
 use Chamilo\Core\Repository\ContentObject\Assignment\Storage\DataClass\Assignment;
@@ -91,8 +92,18 @@ class EndingAssignments extends Block implements AsynchronousBlockInterface
         )->as_array();
 
         $ending_assignments = array();
+
+        /** @var ContentObjectPublication $publication */
         foreach ($publications as $publication)
         {
+            $course = new Course();
+            $course->setId($publication->get_course_id());
+
+            if(!$this->getRightsService()->canUserViewPublication($this->getUser(), $publication, $course))
+            {
+                continue;
+            }
+
             $assignment = $publication->get_content_object();
             if ($assignment->get_end_time() > time() && $assignment->get_end_time() < $deadline)
             {
@@ -125,6 +136,11 @@ class EndingAssignments extends Block implements AsynchronousBlockInterface
         }
 
         return implode(PHP_EOL, $html);
+    }
+
+    public function getRightsService(): RightsService
+    {
+        return $this->getService(RightsService::class);
     }
 
     public function displayNewItems($items)
