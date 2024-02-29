@@ -2,6 +2,7 @@
 
 namespace Chamilo\Application\Weblcms\Integration\Chamilo\Core\Home\Type;
 
+use Chamilo\Application\Weblcms\Course\Storage\DataClass\Course;
 use Chamilo\Application\Weblcms\Course\Storage\DataManager as CourseDataManager;
 use Chamilo\Application\Weblcms\Integration\Chamilo\Core\Home\Block;
 use Chamilo\Application\Weblcms\Integration\Chamilo\Core\Home\NewBlock;
