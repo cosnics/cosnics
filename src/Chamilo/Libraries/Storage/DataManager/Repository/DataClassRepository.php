@@ -179,7 +179,19 @@ class DataClassRepository
 
         foreach ($records as $record)
         {
-            $dataClasses[] = $this->getDataClassFactory()->getDataClass($dataClassName, $record);
+            if (is_subclass_of($dataClassName, DataClassTypeAwareInterface::class) &&
+                !is_subclass_of($dataClassName, DataClassBaseExtensionInterface::class))
+            {
+                $factoryDataClassName = $record[DataClassTypeAwareInterface::PROPERTY_TYPE];
+
+                //TODO: Do something here to expand $record to include the properties of the extension data class
+            }
+            else
+            {
+                $factoryDataClassName = $dataClassName;
+            }
+
+            $dataClasses[] = $this->getDataClassFactory()->getDataClass($factoryDataClassName, $record);
         }
 
         return new ArrayCollection($dataClasses);
