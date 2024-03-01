@@ -16,31 +16,13 @@ class DataClassCountGroupedParameters extends DataClassParameters
 {
 
     public function __construct(
-        ?Condition $condition = null, ?RetrieveProperties $retrieveProperties = null,
-        ?Condition $havingCondition = null, ?Joins $joins = null, ?GroupBy $groupBy = null
+        ?Condition $condition = null, RetrieveProperties $retrieveProperties = new RetrieveProperties(),
+        ?Condition $havingCondition = null, Joins $joins = new Joins(), GroupBy $groupBy = new GroupBy()
     )
     {
-        if (is_null($groupBy))
-        {
-            $groupBy = new GroupBy($retrieveProperties->get());
-        }
-
-        parent::__construct($condition, $joins, $retrieveProperties, null, $groupBy, $havingCondition);
-    }
-
-    /**
-     * @deprecated Use getRetrieveProperties() now
-     */
-    public function get_properties(): ?RetrieveProperties
-    {
-        return $this->getRetrieveProperties();
-    }
-
-    /**
-     * @deprecated Use setRetrieveProperties() now
-     */
-    public function set_properties(?RetrieveProperties $retrieveProperties = null): static
-    {
-        return $this->setRetrieveProperties($retrieveProperties);
+        parent::__construct(
+            condition: $condition, joins: $joins, retrieveProperties: $retrieveProperties, groupBy: $groupBy,
+            havingCondition: $havingCondition
+        );
     }
 }

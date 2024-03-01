@@ -69,15 +69,12 @@ class QueryBuilderConfigurator
     }
 
     protected function processGroupBy(
-        DataClassDatabase $dataClassDatabase, QueryBuilder $queryBuilder, GroupBy $groupBy = null
+        DataClassDatabase $dataClassDatabase, QueryBuilder $queryBuilder, GroupBy $groupBy = new GroupBy()
     ): void
     {
-        if ($groupBy instanceof GroupBy)
+        foreach ($groupBy as $groupByVariable)
         {
-            foreach ($groupBy->get() as $groupByVariable)
-            {
-                $queryBuilder->addGroupBy($this->translateConditionPart($dataClassDatabase, $groupByVariable));
-            }
+            $queryBuilder->addGroupBy($this->translateConditionPart($dataClassDatabase, $groupByVariable));
         }
     }
 
@@ -93,38 +90,35 @@ class QueryBuilderConfigurator
 
     protected function processJoins(
         DataClassDatabase $dataClassDatabase, QueryBuilder $queryBuilder, string $dataClassStorageUnitName,
-        ?Joins $joins = null
+        Joins $joins = new Joins()
     ): void
     {
-        if ($joins instanceof Joins)
+        $storageAliasGenerator = $this->getStorageAliasGenerator();
+
+        foreach ($joins as $join)
         {
-            $storageAliasGenerator = $this->getStorageAliasGenerator();
+            $joinCondition = $this->translateConditionPart($dataClassDatabase, $join->getCondition());
 
-            foreach ($joins->get() as $join)
+            /**
+             * @var class-string<\Chamilo\Libraries\Storage\DataClass\DataClass> $joinDataClassName
+             */
+            $joinDataClassName = $join->getDataClassName();
+            $joinDataClassStorageUnitName = $joinDataClassName::getStorageUnitName();
+
+            $fromAlias = $storageAliasGenerator->getTableAlias($dataClassStorageUnitName);
+            $joinAlias = $storageAliasGenerator->getTableAlias($joinDataClassStorageUnitName);
+
+            switch ($join->getType())
             {
-                $joinCondition = $this->translateConditionPart($dataClassDatabase, $join->getCondition());
-
-                /**
-                 * @var class-string<\Chamilo\Libraries\Storage\DataClass\DataClass> $joinDataClassName
-                 */
-                $joinDataClassName = $join->getDataClassName();
-                $joinDataClassStorageUnitName = $joinDataClassName::getStorageUnitName();
-
-                $fromAlias = $storageAliasGenerator->getTableAlias($dataClassStorageUnitName);
-                $joinAlias = $storageAliasGenerator->getTableAlias($joinDataClassStorageUnitName);
-
-                switch ($join->getType())
-                {
-                    case Join::TYPE_NORMAL :
-                        $queryBuilder->join($fromAlias, $joinDataClassStorageUnitName, $joinAlias, $joinCondition);
-                        break;
-                    case Join::TYPE_RIGHT :
-                        $queryBuilder->rightJoin($fromAlias, $joinDataClassStorageUnitName, $joinAlias, $joinCondition);
-                        break;
-                    case Join::TYPE_LEFT :
-                        $queryBuilder->leftJoin($fromAlias, $joinDataClassStorageUnitName, $joinAlias, $joinCondition);
-                        break;
-                }
+                case Join::TYPE_NORMAL :
+                    $queryBuilder->join($fromAlias, $joinDataClassStorageUnitName, $joinAlias, $joinCondition);
+                    break;
+                case Join::TYPE_RIGHT :
+                    $queryBuilder->rightJoin($fromAlias, $joinDataClassStorageUnitName, $joinAlias, $joinCondition);
+                    break;
+                case Join::TYPE_LEFT :
+                    $queryBuilder->leftJoin($fromAlias, $joinDataClassStorageUnitName, $joinAlias, $joinCondition);
+                    break;
             }
         }
     }
@@ -143,31 +137,26 @@ class QueryBuilderConfigurator
     }
 
     protected function processOrderBy(
-        DataClassDatabase $dataClassDatabase, QueryBuilder $queryBuilder, ?OrderBy $orderBy = null
+        DataClassDatabase $dataClassDatabase, QueryBuilder $queryBuilder, OrderBy $orderBy = new OrderBy()
     ): void
     {
-        if (!is_null($orderBy))
+        foreach ($orderBy as $orderBy)
         {
-            foreach ($orderBy->get() as $orderBy)
-            {
-                $queryBuilder->addOrderBy(
-                    $this->translateConditionPart($dataClassDatabase, $orderBy->getConditionVariable()),
-                    ($orderBy->getDirection() == SORT_DESC ? 'DESC' : 'ASC')
-                );
-            }
+            $queryBuilder->addOrderBy(
+                $this->translateConditionPart($dataClassDatabase, $orderBy->getConditionVariable()),
+                ($orderBy->getDirection() == SORT_DESC ? 'DESC' : 'ASC')
+            );
         }
     }
 
     protected function processRetrieveProperties(
-        DataClassDatabase $dataClassDatabase, QueryBuilder $queryBuilder, ?RetrieveProperties $properties = null
+        DataClassDatabase $dataClassDatabase, QueryBuilder $queryBuilder,
+        RetrieveProperties $properties = new RetrieveProperties()
     ): void
     {
-        if ($properties instanceof RetrieveProperties)
+        foreach ($properties as $conditionVariable)
         {
-            foreach ($properties->get() as $conditionVariable)
-            {
-                $queryBuilder->addSelect($this->translateConditionPart($dataClassDatabase, $conditionVariable));
-            }
+            $queryBuilder->addSelect($this->translateConditionPart($dataClassDatabase, $conditionVariable));
         }
     }
 

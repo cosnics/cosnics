@@ -44,7 +44,9 @@ class DataManager
         return self::getStorageUnitRepository()->alterIndex($type, $storageUnitName, $indexName, $columns);
     }
 
-    public static function count(string $dataClassName, DataClassCountParameters $parameters): int
+    public static function count(
+        string $dataClassName, DataClassCountParameters $parameters = new DataClassCountParameters()
+    ): int
     {
         return self::getDataClassRepository()->count($dataClassName, $parameters);
     }
@@ -52,7 +54,9 @@ class DataManager
     /**
      * @return int[]
      */
-    public static function count_grouped(string $dataClassName, DataClassCountGroupedParameters $parameters): array
+    public static function count_grouped(
+        string $dataClassName, DataClassCountGroupedParameters $parameters = new DataClassCountGroupedParameters()
+    ): array
     {
         return self::getDataClassRepository()->countGrouped($dataClassName, $parameters);
     }
@@ -98,7 +102,9 @@ class DataManager
     /**
      * @return string[]
      */
-    public static function distinct(string $dataClassName, DataClassDistinctParameters $parameters): array
+    public static function distinct(
+        string $dataClassName, DataClassDistinctParameters $parameters = new DataClassDistinctParameters()
+    ): array
     {
         return self::getDataClassRepository()->distinct($dataClassName, $parameters);
     }
@@ -144,7 +150,9 @@ class DataManager
         return self::getStorageUnitRepository()->optimize($storageUnitName);
     }
 
-    public static function record(string $dataClassName, RecordRetrieveParameters $parameters): array
+    public static function record(
+        string $dataClassName, RecordRetrieveParameters $parameters = new RecordRetrieveParameters()
+    ): array
     {
         return self::getDataClassRepository()->record($dataClassName, $parameters);
     }
@@ -168,7 +176,9 @@ class DataManager
      *
      * @return retrieveDataClassName
      */
-    public static function retrieve(string $dataClassName, DataClassRetrieveParameters $parameters)
+    public static function retrieve(
+        string $dataClassName, DataClassRetrieveParameters $parameters = new DataClassRetrieveParameters()
+    )
     {
         return self::getDataClassRepository()->retrieve($dataClassName, $parameters);
     }
@@ -214,7 +224,9 @@ class DataManager
      * @return ArrayCollection<tRetrieves>
      * @throws \Chamilo\Libraries\Storage\Exception\DataClassNoResultException
      */
-    public static function retrieves(string $dataClassName, DataClassRetrievesParameters $parameters): ArrayCollection
+    public static function retrieves(
+        string $dataClassName, DataClassRetrievesParameters $parameters = new DataClassRetrievesParameters()
+    ): ArrayCollection
     {
         return self::getDataClassRepository()->retrieves($dataClassName, $parameters);
     }

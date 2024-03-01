@@ -98,7 +98,8 @@ abstract class AssignmentRepository
         );
 
         $parameters = new DataClassCountParameters(
-            $this->getEntityTypeCondition($entityType, $condition), null, $property
+            condition: $this->getEntityTypeCondition($entityType, $condition),
+            retrieveProperties: new RetrieveProperties([$property])
         );
 
         return $this->dataClassRepository->count($this->getEntryClassName(), $parameters);
@@ -130,7 +131,7 @@ abstract class AssignmentRepository
         );
 
         $parameters = new DataClassCountParameters(
-            $this->getEntityTypeCondition($entityType, $condition), $joins, $property
+            $this->getEntityTypeCondition($entityType, $condition), $joins, new RetrieveProperties([$property])
         );
 
         return $this->dataClassRepository->count($this->getEntryClassName(), $parameters);
@@ -163,7 +164,7 @@ abstract class AssignmentRepository
         );
 
         $parameters = new DataClassCountParameters(
-            $this->getEntityTypeAndIdCondition($entityType, $entityId, $condition), $joins, $property
+            $this->getEntityTypeAndIdCondition($entityType, $entityId, $condition), $joins, new RetrieveProperties([$property])
         );
 
         return $this->dataClassRepository->count($this->getEntryClassName(), $parameters);
@@ -228,7 +229,7 @@ abstract class AssignmentRepository
         );
 
         $parameters = new DataClassCountParameters(
-            $this->getEntityTypeAndIdCondition($entityType, $entityId, $condition), $joins, $property
+            $this->getEntityTypeAndIdCondition($entityType, $entityId, $condition), $joins, new RetrieveProperties([$property])
         );
 
         return $this->dataClassRepository->count($this->getEntryClassName(), $parameters);

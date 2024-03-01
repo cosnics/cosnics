@@ -15,29 +15,11 @@ use Chamilo\Libraries\Storage\Query\Variable\ConditionVariable;
 class DataClassCountParameters extends DataClassParameters
 {
 
-    public function __construct(?Condition $condition = null, ?Joins $joins = null, $retrieveProperties = null)
+    public function __construct(
+        ?Condition $condition = null, Joins $joins = new Joins(),
+        ConditionVariable|RetrieveProperties $retrieveProperties = new RetrieveProperties()
+    )
     {
-        if ($retrieveProperties instanceof ConditionVariable)
-        {
-            $retrieveProperties = new RetrieveProperties([$retrieveProperties]);
-        }
-
         parent::__construct($condition, $joins, $retrieveProperties);
-    }
-
-    /**
-     * @deprecated Use getRetrieveProperties()->getFirst() now
-     */
-    public function get_property(): ?ConditionVariable
-    {
-        return $this->getRetrieveProperties()->getFirst();
-    }
-
-    /**
-     * @deprecated Use getRetrieveProperties()->add now
-     */
-    public function set_property(?ConditionVariable $property): void
-    {
-        $this->getRetrieveProperties()->add($property);
     }
 }

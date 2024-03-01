@@ -11,6 +11,7 @@ use Chamilo\Libraries\Storage\Query\Condition\Condition;
 use Chamilo\Libraries\Storage\Query\Condition\EqualityCondition;
 use Chamilo\Libraries\Storage\Query\Join;
 use Chamilo\Libraries\Storage\Query\Joins;
+use Chamilo\Libraries\Storage\Query\RetrieveProperties;
 use Chamilo\Libraries\Storage\Query\Variable\FunctionConditionVariable;
 use Chamilo\Libraries\Storage\Query\Variable\PropertyConditionVariable;
 use Chamilo\Libraries\Storage\Query\Variable\StaticConditionVariable;
@@ -40,118 +41,75 @@ abstract class FeedbackRepository
     }
 
     /**
-     * @param \Chamilo\Core\Repository\ContentObject\Assignment\Display\Bridge\Storage\DataClass\Entry $entry
      *
-     * @return bool
+     * @param int $entityType
+     * @param \Chamilo\Libraries\Storage\Query\Condition\Condition|null $condition
+     *
+     * @return int
      */
-    public function deleteFeedbackForEntry(Entry $entry)
+    protected function countDistinctFeedbackByEntityType($entityType, Condition $condition = null)
     {
-        $condition = new EqualityCondition(
-            new PropertyConditionVariable($this->getFeedbackClassName(), Feedback::PROPERTY_ENTRY_ID),
-            new StaticConditionVariable($entry->getId())
+        $joins = new Joins();
+
+        $joins->add(
+            new Join(
+                $this->getFeedbackClassName(), new EqualityCondition(
+                    new PropertyConditionVariable($this->getEntryClassName(), Entry::PROPERTY_ID),
+                    new PropertyConditionVariable($this->getFeedbackClassName(), Feedback::PROPERTY_ENTRY_ID)
+                )
+            )
         );
 
-        return $this->dataClassRepository->deletes($this->getFeedbackClassName(), $condition);
-    }
-
-    /**
-     * @param \Chamilo\Core\Repository\ContentObject\Assignment\Display\Bridge\Storage\DataClass\Feedback $feedback
-     *
-     * @return bool
-     */
-    public function createFeedback(Feedback $feedback)
-    {
-        return $this->dataClassRepository->create($feedback);
-    }
-
-    /**
-     * @param \Chamilo\Core\Repository\ContentObject\Assignment\Display\Bridge\Storage\DataClass\Feedback $feedback
-     *
-     * @return bool
-     */
-    public function updateFeedback(Feedback $feedback)
-    {
-        return $this->dataClassRepository->update($feedback);
-    }
-
-    /**
-     * @param \Chamilo\Core\Repository\ContentObject\Assignment\Display\Bridge\Storage\DataClass\Feedback $feedback
-     *
-     * @return bool
-     */
-    public function deleteFeedback(Feedback $feedback)
-    {
-        return $this->dataClassRepository->delete($feedback);
-    }
-
-    /**
-     *
-     * @param integer $entryIdentifier
-     *
-     * @return integer
-     */
-    public function countFeedbackByEntryIdentifier($entryIdentifier)
-    {
-        $condition = new EqualityCondition(
-            new PropertyConditionVariable($this->getFeedbackClassName(), Feedback::PROPERTY_ENTRY_ID),
-            new StaticConditionVariable($entryIdentifier)
+        $property = new FunctionConditionVariable(
+            FunctionConditionVariable::DISTINCT,
+            new PropertyConditionVariable($this->getEntryClassName(), Entry::PROPERTY_ENTITY_ID)
         );
 
-        return $this->dataClassRepository->count(
-            $this->getFeedbackClassName(), new DataClassCountParameters($condition)
+        $parameters = new DataClassCountParameters(
+            $this->getEntityTypeCondition($entityType, $condition), $joins, new RetrieveProperties([$property])
         );
+
+        return $this->dataClassRepository->count($this->getEntryClassName(), $parameters);
     }
 
     /**
      *
-     * @param integer $feedbackIdentifier
+     * @param int $entityType
+     * @param int $entityId
+     * @param \Chamilo\Libraries\Storage\Query\Condition\Condition|null $condition
      *
-     * @return \Chamilo\Core\Repository\ContentObject\Assignment\Display\Bridge\Storage\DataClass\Feedback|\Chamilo\Libraries\Storage\DataClass\DataClass
+     * @return int
      */
-    public function retrieveFeedbackByIdentifier($feedbackIdentifier)
+    protected function countDistinctFeedbackForEntityTypeAndId($entityType, $entityId, Condition $condition = null)
     {
-        return $this->dataClassRepository->retrieveById($this->getFeedbackClassName(), $feedbackIdentifier);
+        $joins = new Joins();
+
+        $joins->add(
+            new Join(
+                $this->getFeedbackClassName(), new EqualityCondition(
+                    new PropertyConditionVariable($this->getEntryClassName(), Entry::PROPERTY_ID),
+                    new PropertyConditionVariable($this->getFeedbackClassName(), Feedback::PROPERTY_ENTRY_ID)
+                )
+            )
+        );
+
+        $property = new FunctionConditionVariable(
+            FunctionConditionVariable::DISTINCT,
+            new PropertyConditionVariable($this->getEntryClassName(), Entry::PROPERTY_ID)
+        );
+
+        $parameters = new DataClassCountParameters(
+            $this->getEntityTypeAndIdCondition($entityType, $entityId, $condition), $joins,
+            new RetrieveProperties([$property])
+        );
+
+        return $this->dataClassRepository->count($this->getEntryClassName(), $parameters);
     }
 
     /**
      *
-     * @param \Chamilo\Core\Repository\ContentObject\Assignment\Display\Bridge\Storage\DataClass\Entry $entry
-     *
-     * @return integer
-     */
-    public function countFeedbackByEntry(Entry $entry)
-    {
-        $condition = new EqualityCondition(
-            new PropertyConditionVariable($this->getFeedbackClassName(), Feedback::PROPERTY_ENTRY_ID),
-            new StaticConditionVariable($entry->getId())
-        );
-
-        return $this->dataClassRepository->count(
-            $this->getFeedbackClassName(), new DataClassCountParameters($condition)
-        );
-    }
-
-    /**
-     * @param \Chamilo\Core\Repository\ContentObject\Assignment\Display\Bridge\Storage\DataClass\Entry $entry
-     *
-     * @return \Doctrine\Common\Collections\ArrayCollection
-     */
-    public function findFeedbackByEntry(Entry $entry)
-    {
-        $condition = new EqualityCondition(
-            new PropertyConditionVariable($this->getFeedbackClassName(), Feedback::PROPERTY_ENTRY_ID),
-            new StaticConditionVariable($entry->getId())
-        );
-
-        return $this->dataClassRepository->retrieves(
-            $this->getFeedbackClassName(), new DataClassRetrievesParameters($condition)
-        );
-    }
-
-    /**
-     *
-     * @param integer $entityType
-     * @param integer $entityId
+     * @param int $entityType
+     * @param int $entityId
      *
      * @param \Chamilo\Libraries\Storage\Query\Condition\Condition|null $condition
      *
@@ -180,8 +138,7 @@ abstract class FeedbackRepository
         $joins = new Joins();
         $joins->add(
             new Join(
-                $this->getFeedbackClassName(),
-                new EqualityCondition(
+                $this->getFeedbackClassName(), new EqualityCondition(
                     new PropertyConditionVariable($this->getEntryClassName(), Entry::PROPERTY_ID),
                     new PropertyConditionVariable($this->getFeedbackClassName(), Feedback::PROPERTY_ENTRY_ID)
                 )
@@ -195,99 +152,95 @@ abstract class FeedbackRepository
 
     /**
      *
-     * @param integer $entityType
-     * @param \Chamilo\Libraries\Storage\Query\Condition\Condition|null $condition
+     * @param \Chamilo\Core\Repository\ContentObject\Assignment\Display\Bridge\Storage\DataClass\Entry $entry
      *
      * @return int
      */
-    protected function countDistinctFeedbackByEntityType($entityType, Condition $condition = null)
+    public function countFeedbackByEntry(Entry $entry)
     {
-        $joins = new Joins();
-
-        $joins->add(
-            new Join(
-                $this->getFeedbackClassName(),
-                new EqualityCondition(
-                    new PropertyConditionVariable($this->getEntryClassName(), Entry::PROPERTY_ID),
-                    new PropertyConditionVariable($this->getFeedbackClassName(), Feedback::PROPERTY_ENTRY_ID)
-                )
-            )
+        $condition = new EqualityCondition(
+            new PropertyConditionVariable($this->getFeedbackClassName(), Feedback::PROPERTY_ENTRY_ID),
+            new StaticConditionVariable($entry->getId())
         );
 
-        $property = new FunctionConditionVariable(
-            FunctionConditionVariable::DISTINCT,
-            new PropertyConditionVariable($this->getEntryClassName(), Entry::PROPERTY_ENTITY_ID)
+        return $this->dataClassRepository->count(
+            $this->getFeedbackClassName(), new DataClassCountParameters($condition)
         );
-
-        $parameters = new DataClassCountParameters(
-            $this->getEntityTypeCondition($entityType, $condition),
-            $joins,
-            $property
-        );
-
-        return $this->dataClassRepository->count($this->getEntryClassName(), $parameters);
     }
 
     /**
      *
-     * @param integer $entityType
-     * @param integer $entityId
-     * @param \Chamilo\Libraries\Storage\Query\Condition\Condition|null $condition
+     * @param int $entryIdentifier
      *
      * @return int
      */
-    protected function countDistinctFeedbackForEntityTypeAndId($entityType, $entityId, Condition $condition = null)
+    public function countFeedbackByEntryIdentifier($entryIdentifier)
     {
-        $joins = new Joins();
-
-        $joins->add(
-            new Join(
-                $this->getFeedbackClassName(),
-                new EqualityCondition(
-                    new PropertyConditionVariable($this->getEntryClassName(), Entry::PROPERTY_ID),
-                    new PropertyConditionVariable($this->getFeedbackClassName(), Feedback::PROPERTY_ENTRY_ID)
-                )
-            )
+        $condition = new EqualityCondition(
+            new PropertyConditionVariable($this->getFeedbackClassName(), Feedback::PROPERTY_ENTRY_ID),
+            new StaticConditionVariable($entryIdentifier)
         );
 
-        $property = new FunctionConditionVariable(
-            FunctionConditionVariable::DISTINCT,
-            new PropertyConditionVariable($this->getEntryClassName(), Entry::PROPERTY_ID)
+        return $this->dataClassRepository->count(
+            $this->getFeedbackClassName(), new DataClassCountParameters($condition)
         );
-
-        $parameters = new DataClassCountParameters(
-            $this->getEntityTypeAndIdCondition($entityType, $entityId, $condition),
-            $joins,
-            $property
-        );
-
-        return $this->dataClassRepository->count($this->getEntryClassName(), $parameters);
     }
 
     /**
+     * @param \Chamilo\Core\Repository\ContentObject\Assignment\Display\Bridge\Storage\DataClass\Feedback $feedback
      *
-     * @param integer $entityType
-     * @param \Chamilo\Libraries\Storage\Query\Condition\Condition|null $condition
-     *
-     * @return \Chamilo\Libraries\Storage\Query\Condition\AndCondition
+     * @return bool
      */
-    protected function getEntityTypeCondition($entityType, Condition $condition = null)
+    public function createFeedback(Feedback $feedback)
     {
-        $conditions = [];
+        return $this->dataClassRepository->create($feedback);
+    }
 
-        ($condition instanceof Condition) ? $conditions[] = $condition : null;
+    /**
+     * @param \Chamilo\Core\Repository\ContentObject\Assignment\Display\Bridge\Storage\DataClass\Feedback $feedback
+     *
+     * @return bool
+     */
+    public function deleteFeedback(Feedback $feedback)
+    {
+        return $this->dataClassRepository->delete($feedback);
+    }
 
-        $conditions[] = new EqualityCondition(
-            new PropertyConditionVariable($this->getEntryClassName(), Entry::PROPERTY_ENTITY_TYPE),
-            new StaticConditionVariable($entityType)
+    /**
+     * @param \Chamilo\Core\Repository\ContentObject\Assignment\Display\Bridge\Storage\DataClass\Entry $entry
+     *
+     * @return bool
+     */
+    public function deleteFeedbackForEntry(Entry $entry)
+    {
+        $condition = new EqualityCondition(
+            new PropertyConditionVariable($this->getFeedbackClassName(), Feedback::PROPERTY_ENTRY_ID),
+            new StaticConditionVariable($entry->getId())
         );
 
-        return new AndCondition($conditions);
+        return $this->dataClassRepository->deletes($this->getFeedbackClassName(), $condition);
+    }
+
+    /**
+     * @param \Chamilo\Core\Repository\ContentObject\Assignment\Display\Bridge\Storage\DataClass\Entry $entry
+     *
+     * @return \Doctrine\Common\Collections\ArrayCollection
+     */
+    public function findFeedbackByEntry(Entry $entry)
+    {
+        $condition = new EqualityCondition(
+            new PropertyConditionVariable($this->getFeedbackClassName(), Feedback::PROPERTY_ENTRY_ID),
+            new StaticConditionVariable($entry->getId())
+        );
+
+        return $this->dataClassRepository->retrieves(
+            $this->getFeedbackClassName(), new DataClassRetrievesParameters($condition)
+        );
     }
 
     /**
      *
-     * @param integer $entityType
+     * @param int $entityType
      * @param $entityId
      *
      * @param \Chamilo\Libraries\Storage\Query\Condition\Condition|null $condition
@@ -313,6 +266,27 @@ abstract class FeedbackRepository
     }
 
     /**
+     *
+     * @param int $entityType
+     * @param \Chamilo\Libraries\Storage\Query\Condition\Condition|null $condition
+     *
+     * @return \Chamilo\Libraries\Storage\Query\Condition\AndCondition
+     */
+    protected function getEntityTypeCondition($entityType, Condition $condition = null)
+    {
+        $conditions = [];
+
+        ($condition instanceof Condition) ? $conditions[] = $condition : null;
+
+        $conditions[] = new EqualityCondition(
+            new PropertyConditionVariable($this->getEntryClassName(), Entry::PROPERTY_ENTITY_TYPE),
+            new StaticConditionVariable($entityType)
+        );
+
+        return new AndCondition($conditions);
+    }
+
+    /**
      * @return string
      */
     abstract protected function getEntryClassName();
@@ -321,4 +295,25 @@ abstract class FeedbackRepository
      * @return string
      */
     abstract protected function getFeedbackClassName();
+
+    /**
+     *
+     * @param int $feedbackIdentifier
+     *
+     * @return \Chamilo\Core\Repository\ContentObject\Assignment\Display\Bridge\Storage\DataClass\Feedback|\Chamilo\Libraries\Storage\DataClass\DataClass
+     */
+    public function retrieveFeedbackByIdentifier($feedbackIdentifier)
+    {
+        return $this->dataClassRepository->retrieveById($this->getFeedbackClassName(), $feedbackIdentifier);
+    }
+
+    /**
+     * @param \Chamilo\Core\Repository\ContentObject\Assignment\Display\Bridge\Storage\DataClass\Feedback $feedback
+     *
+     * @return bool
+     */
+    public function updateFeedback(Feedback $feedback)
+    {
+        return $this->dataClassRepository->update($feedback);
+    }
 }

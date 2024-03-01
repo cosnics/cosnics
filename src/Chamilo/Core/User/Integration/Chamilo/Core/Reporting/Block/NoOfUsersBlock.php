@@ -5,7 +5,6 @@ use Chamilo\Core\Reporting\ReportingData;
 use Chamilo\Core\Reporting\Viewer\Rendition\Block\Type\Html;
 use Chamilo\Core\User\Storage\DataClass\User;
 use Chamilo\Libraries\Storage\DataManager\DataManager;
-use Chamilo\Libraries\Storage\Parameters\DataClassCountParameters;
 use Chamilo\Libraries\Translation\Translation;
 
 class NoOfUsersBlock extends Block
@@ -15,25 +14,19 @@ class NoOfUsersBlock extends Block
     {
         $reporting_data = new ReportingData();
 
-        $reporting_data->set_categories(array(Translation::get('GetNumberOfUsers')));
-        $reporting_data->set_rows(array(Translation::get('Count')));
+        $reporting_data->set_categories([Translation::get('GetNumberOfUsers')]);
+        $reporting_data->set_rows([Translation::get('Count')]);
 
         $reporting_data->add_data_category_row(
-            Translation::get('GetNumberOfUsers'),
-            Translation::get('Count'),
-            DataManager::count(User::class, new DataClassCountParameters()));
+            Translation::get('GetNumberOfUsers'), Translation::get('Count'), DataManager::count(User::class)
+        );
 
         return $reporting_data;
     }
 
-    public function retrieve_data()
-    {
-        return $this->count_data();
-    }
-
     public function get_views()
     {
-        return array(
+        return [
             Html::VIEW_TABLE,
             Html::VIEW_STACKED_AREA,
             Html::VIEW_STACKED_BAR,
@@ -47,6 +40,12 @@ class NoOfUsersBlock extends Block
             Html::VIEW_AREA,
             Html::VIEW_CSV,
             Html::VIEW_XLSX,
-            Html::VIEW_XML);
+            Html::VIEW_XML
+        ];
+    }
+
+    public function retrieve_data()
+    {
+        return $this->count_data();
     }
 }

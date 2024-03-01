@@ -26,22 +26,22 @@ abstract class DataClassParameters implements HashableInterface
 
     private ?int $count;
 
-    private ?GroupBy $groupBy;
+    private GroupBy $groupBy;
 
     private ?Condition $havingCondition;
 
-    private ?Joins $joins;
+    private Joins $joins;
 
     private ?int $offset;
 
-    private ?OrderBy $orderBy;
+    private OrderBy $orderBy;
 
-    private ?RetrieveProperties $retrieveProperties;
+    private RetrieveProperties $retrieveProperties;
 
     public function __construct(
-        ?Condition $condition = null, ?Joins $joins = null, ?RetrieveProperties $retrieveProperties = null,
-        ?OrderBy $orderBy = null, ?GroupBy $groupBy = null, ?Condition $havingCondition = null, ?int $count = null,
-        ?int $offset = null
+        ?Condition $condition = null, Joins $joins = new Joins(),
+        RetrieveProperties $retrieveProperties = new RetrieveProperties(), OrderBy $orderBy = new OrderBy(),
+        GroupBy $groupBy = new GroupBy(), ?Condition $havingCondition = null, ?int $count = null, ?int $offset = null
     )
     {
         $this->setCondition($condition);
@@ -92,15 +92,7 @@ abstract class DataClassParameters implements HashableInterface
     {
         if ($join instanceof Join)
         {
-            if ($this->getJoins() instanceof Joins)
-            {
-                $joins = $this->getJoins();
-                $joins->add($join);
-            }
-            else
-            {
-                $this->setJoins(new Joins([$join]));
-            }
+            $this->getJoins()->add($join);
         }
 
         return $this;
@@ -127,11 +119,10 @@ abstract class DataClassParameters implements HashableInterface
 
         $hashParts[] = static::class;
         $hashParts[] = ($this->getCondition() instanceof Condition ? $this->getCondition()->getHashParts() : null);
-        $hashParts[] = ($this->getJoins() instanceof Joins ? $this->getJoins()->getHashParts() : null);
-        $hashParts[] = ($this->getRetrieveProperties() instanceof RetrieveProperties ?
-            $this->getRetrieveProperties()->getHashParts() : null);
-        $hashParts[] = ($this->getOrderBy() instanceof OrderBy ? $this->getOrderBy()->getHashParts() : null);
-        $hashParts[] = ($this->getGroupBy() instanceof GroupBy ? $this->getGroupBy()->getHashParts() : null);
+        $hashParts[] = $this->getJoins()->getHashParts();
+        $hashParts[] = $this->getRetrieveProperties()->getHashParts();
+        $hashParts[] = $this->getOrderBy()->getHashParts();
+        $hashParts[] = $this->getGroupBy()->getHashParts();
         $hashParts[] =
             ($this->getHavingCondition() instanceof Condition ? $this->getHavingCondition()->getHashParts() : null);
         $hashParts[] = $this->getCount();
@@ -145,56 +136,37 @@ abstract class DataClassParameters implements HashableInterface
         return $this->havingCondition;
     }
 
-    public function getJoins(): ?Joins
+    public function getJoins(): Joins
     {
         return $this->joins;
     }
 
-    /**
-     * Get the offset of the result set relative to the first ordered result
-     */
     public function getOffset(): ?int
     {
         return $this->offset;
     }
 
-    public function getOrderBy(): ?OrderBy
+    public function getOrderBy(): OrderBy
     {
         return $this->orderBy;
     }
 
-    public function getRetrieveProperties(): ?RetrieveProperties
+    public function getRetrieveProperties(): RetrieveProperties
     {
         return $this->retrieveProperties;
-    }
-
-    /**
-     * @deprecated User getCondition() now
-     */
-    public function get_condition(): ?Condition
-    {
-        return $this->getCondition();
-    }
-
-    /**
-     * @deprecated Use getJoins() now
-     */
-    public function get_joins(): ?Joins
-    {
-        return $this->getJoins();
-    }
-
-    public function setCondition(?Condition $condition = null): static
-    {
-        $this->condition = $condition;
-
-        return $this;
     }
 
     public function returnSingleResult(): static
     {
         $this->setCount(1);
         $this->setOffset(0);
+
+        return $this;
+    }
+
+    public function setCondition(?Condition $condition = null): static
+    {
+        $this->condition = $condition;
 
         return $this;
     }
@@ -220,7 +192,7 @@ abstract class DataClassParameters implements HashableInterface
         return $this;
     }
 
-    public function setJoins(?Joins $joins = null): static
+    public function setJoins(Joins $joins = new Joins()): static
     {
         $this->joins = $joins;
 
@@ -234,33 +206,17 @@ abstract class DataClassParameters implements HashableInterface
         return $this;
     }
 
-    public function setOrderBy(?OrderBy $orderBy = null): static
+    public function setOrderBy(OrderBy $orderBy = new OrderBy()): static
     {
         $this->orderBy = $orderBy;
 
         return $this;
     }
 
-    public function setRetrieveProperties(?RetrieveProperties $retrieveProperties = null): static
+    public function setRetrieveProperties(RetrieveProperties $retrieveProperties = new RetrieveProperties()): static
     {
         $this->retrieveProperties = $retrieveProperties;
 
         return $this;
-    }
-
-    /**
-     * @deprecated User setCondition() now
-     */
-    public function set_condition(?Condition $condition = null): static
-    {
-        return $this->setCondition($condition);
-    }
-
-    /**
-     * @deprecated Use setJoins() now
-     */
-    public function set_joins(?Joins $joins = null): static
-    {
-        return $this->setJoins($joins);
     }
 }

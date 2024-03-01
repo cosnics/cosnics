@@ -50,15 +50,15 @@ abstract class PersonalCalendarEventDataProviderRepository implements
         
         if ($condition)
         {
-            $baseCondition = $parameters->get_condition();
+            $baseCondition = $parameters->getCondition();
             
             if ($baseCondition instanceof Condition)
             {
-                $parameters->set_condition(new AndCondition(array($baseCondition, $condition)));
+                $parameters->setCondition(new AndCondition(array($baseCondition, $condition)));
             }
             else
             {
-                $parameters->set_condition($condition);
+                $parameters->setCondition($condition);
             }
         }
         

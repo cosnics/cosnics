@@ -16,26 +16,10 @@ class DataClassDistinctParameters extends DataClassParameters
 {
 
     public function __construct(
-        ?Condition $condition = null, ?RetrieveProperties $retrieveProperties = null, ?Joins $joins = null,
-        ?OrderBy $orderBy = null
+        ?Condition $condition = null, RetrieveProperties $retrieveProperties = new RetrieveProperties(),
+        Joins $joins = new Joins(), OrderBy $orderBy = new OrderBy()
     )
     {
         parent::__construct($condition, $joins, $retrieveProperties, $orderBy);
-    }
-
-    /**
-     * @deprecated Use DataClassProperties and getRetrieveProperties() now
-     */
-    public function get_property(): ?RetrieveProperties
-    {
-        return $this->getRetrieveProperties();
-    }
-
-    /**
-     * @deprecated Use DataClassProperties and setRetrieveProperties() now
-     */
-    public function set_property(?RetrieveProperties $properties = null): static
-    {
-        return $this->setRetrieveProperties($properties);
     }
 }

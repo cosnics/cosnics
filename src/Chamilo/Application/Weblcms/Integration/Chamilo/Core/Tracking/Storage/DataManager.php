@@ -30,7 +30,7 @@ use Chamilo\Libraries\Storage\Query\Variable\StaticConditionVariable;
  */
 class DataManager extends \Chamilo\Libraries\Storage\DataManager\DataManager
 {
-    const PREFIX = 'tracking_weblcms_';
+    public const PREFIX = 'tracking_weblcms_';
 
     /**
      * **************************************************************************************************************
@@ -86,10 +86,11 @@ class DataManager extends \Chamilo\Libraries\Storage\DataManager\DataManager
         );
 
         $parameters = new DataClassCountGroupedParameters(
-            null, new RetrieveProperties(
-                array(new PropertyConditionVariable(CourseVisit::class, CourseVisit::PROPERTY_COURSE_ID))
-            ), $having, null,
-            new GroupBy([new PropertyConditionVariable(CourseVisit::class, CourseVisit::PROPERTY_COURSE_ID)])
+            retrieveProperties: new RetrieveProperties(
+                [new PropertyConditionVariable(CourseVisit::class, CourseVisit::PROPERTY_COURSE_ID)]
+            ), havingCondition: $having, groupBy: new GroupBy(
+            [new PropertyConditionVariable(CourseVisit::class, CourseVisit::PROPERTY_COURSE_ID)]
+        )
         );
 
         return self::count_grouped(CourseVisit::class, $parameters);

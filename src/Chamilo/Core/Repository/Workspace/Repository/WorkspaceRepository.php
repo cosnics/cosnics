@@ -47,7 +47,7 @@ class WorkspaceRepository
 
     public function countAllWorkspaces(): int
     {
-        return $this->getDataClassRepository()->count(Workspace::class, new DataClassCountParameters());
+        return $this->getDataClassRepository()->count(Workspace::class);
     }
 
     /**
@@ -198,12 +198,12 @@ class WorkspaceRepository
                 condition: $this->getFavouriteWorkspacesByUserCondition($user, $entities, RightsService::RIGHT_VIEW),
                 count: $limit, offset: $offset, orderBy: $orderProperty,
                 joins: $this->getFavouriteWorkspacesByUserJoins(), retrieveProperties: new RetrieveProperties(
-                    [
-                        new FunctionConditionVariable(
-                            FunctionConditionVariable::DISTINCT, new PropertiesConditionVariable(Workspace::class)
-                        )
-                    ]
-                )
+                [
+                    new FunctionConditionVariable(
+                        FunctionConditionVariable::DISTINCT, new PropertiesConditionVariable(Workspace::class)
+                    )
+                ]
+            )
             )
         );
     }

@@ -4,6 +4,9 @@ namespace Chamilo\Libraries\Storage\Query;
 use Chamilo\Libraries\Architecture\Interfaces\HashableInterface;
 use Chamilo\Libraries\Architecture\Traits\HashableTrait;
 use Chamilo\Libraries\Storage\Query\Variable\ConditionVariable;
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
+use Doctrine\Common\Collections\Selectable;
 
 /**
  *
@@ -11,43 +14,26 @@ use Chamilo\Libraries\Storage\Query\Variable\ConditionVariable;
  * @author Hans De Bisschop <hans.de.bisschop@ehb.be>
  * @author Magali Gillard <magali.gillard@ehb.be>
  * @author Eduard Vossen <eduard.vossen@ehb.be>
+ *
+ * @psalm-template TKey of array-key
+ * @template-implements Collection<TKey,\Chamilo\Libraries\Storage\Query\Variable\ConditionVariable>
+ * @template-implements Selectable<TKey,\Chamilo\Libraries\Storage\Query\Variable\ConditionVariable>
+ * @psalm-consistent-constructor
  */
-class RetrieveProperties implements HashableInterface
+class RetrieveProperties extends ArrayCollection implements HashableInterface
 {
     use HashableTrait;
 
-    /**
-     *
-     * @var \Chamilo\Libraries\Storage\Query\Variable\ConditionVariable[]
-     */
-    private array $conditionVariables;
-
-    /**
-     * @param \Chamilo\Libraries\Storage\Query\Variable\ConditionVariable[] $conditionVariables
-     */
-    public function __construct(array $conditionVariables = [])
+    public function getFirst(?ConditionVariable $defaultConditionVariable = null): ?ConditionVariable
     {
-        $this->conditionVariables = $conditionVariables;
-    }
+        if (!$this->isEmpty())
+        {
+            $this->first();
 
-    public function add(ConditionVariable $conditionVariable): RetrieveProperties
-    {
-        $this->conditionVariables[] = $conditionVariable;
+            return $this->current();
+        }
 
-        return $this;
-    }
-
-    /**
-     * @return \Chamilo\Libraries\Storage\Query\Variable\ConditionVariable[]
-     */
-    public function get(): array
-    {
-        return $this->conditionVariables;
-    }
-
-    public function getFirst(): ConditionVariable
-    {
-        return $this->conditionVariables[0];
+        return $defaultConditionVariable;
     }
 
     /**
@@ -59,7 +45,7 @@ class RetrieveProperties implements HashableInterface
 
         $hashParts[] = __CLASS__;
 
-        foreach ($this->get() as $property)
+        foreach ($this as $property)
         {
             $hashParts[] = $property->getHashParts();
         }
@@ -69,9 +55,9 @@ class RetrieveProperties implements HashableInterface
         return $hashParts;
     }
 
-    public function merge(RetrieveProperties $retrievePropertiesToMerge)
+    public function merge(RetrieveProperties $retrievePropertiesToMerge): void
     {
-        foreach ($retrievePropertiesToMerge->get() as $conditionVariable)
+        foreach ($retrievePropertiesToMerge as $conditionVariable)
         {
             $this->add($conditionVariable);
         }

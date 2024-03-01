@@ -68,53 +68,22 @@ class DataClassRepository
      */
     protected function __count(string $dataClassName, DataClassCountParameters $parameters): int
     {
-        $retrieveProperties = $parameters->getRetrieveProperties();
-
-        $dataClassPropertyVariable =
-            $retrieveProperties instanceof RetrieveProperties ? $retrieveProperties->getFirst() :
-                new StaticConditionVariable(1);
+        $this->applyDataClassExtensionToParameters($dataClassName, $parameters);
 
         $parameters->setRetrieveProperties(
             new RetrieveProperties(
-                [new FunctionConditionVariable(FunctionConditionVariable::COUNT, $dataClassPropertyVariable)]
+                [
+                    new FunctionConditionVariable(
+                        FunctionConditionVariable::COUNT,
+                        $parameters->getRetrieveProperties()->getFirst(new StaticConditionVariable(1))
+                    )
+                ]
             )
         );
 
-        if (is_subclass_of($dataClassName, DataClassBaseExtensionInterface::class))
-        {
-            $typeDataClassName = $dataClassName::getExtensionDataClassName();
-
-            $condition = new EqualityCondition(
-                new PropertyConditionVariable($typeDataClassName, $typeDataClassName::PROPERTY_TYPE),
-                new StaticConditionVariable($dataClassName)
-            );
-
-            $parameters->addConditionUsingAnd($condition);
-
-            if (is_subclass_of($dataClassName, DataClassExtensionInterface::class))
-            {
-                $join = new Join(
-                    $typeDataClassName, new EqualityCondition(
-                        new PropertyConditionVariable($typeDataClassName, $typeDataClassName::PROPERTY_ID),
-                        new PropertyConditionVariable($dataClassName, $dataClassName::PROPERTY_ID)
-                    )
-                );
-
-                $parameters->addJoin($join);
-            }
-        }
-
-        if (is_subclass_of($dataClassName, DataClassVirtualExtensionInterface::class))
-        {
-            $typeDataClassName = $dataClassName::getExtensionDataClassName();
-            $dataClassStorageUnitName = $typeDataClassName::getStorageUnitName();
-        }
-        else
-        {
-            $dataClassStorageUnitName = $dataClassName::getStorageUnitName();
-        }
-
-        return $this->getDataClassDatabase()->count($dataClassStorageUnitName, $parameters);
+        return $this->getDataClassDatabase()->count(
+            $this->determineDataClassStorageUnitName($dataClassName), $parameters
+        );
     }
 
     /**
@@ -136,7 +105,7 @@ class DataClassRepository
     protected function __distinct(string $dataClassName, DataClassDistinctParameters $parameters): array
     {
         $parameters->setRetrieveProperties(
-            new RetrieveProperties([new DistinctConditionVariable($parameters->getRetrieveProperties()->get())])
+            new RetrieveProperties([new DistinctConditionVariable($parameters->getRetrieveProperties()->toArray())])
         );
 
         return $this->getDataClassDatabase()->distinct($dataClassName::getStorageUnitName(), $parameters);
@@ -147,38 +116,38 @@ class DataClassRepository
      *
      * @return ?string[]
      */
-    protected function __record(string $dataClassName, RecordRetrieveParameters $parameters): ?array
+    protected function __record(string $dataClassName, RecordRetrieveParameters|DataClassRetrieveParameters $parameters
+    ): ?array
     {
-        $this->handleRetrieveProperties($parameters, $dataClassName);
+        if (is_subclass_of($dataClassName, DataClassTypeAwareInterface::class) &&
+            !is_subclass_of($dataClassName, DataClassBaseExtensionInterface::class))
+        {
+            $dataClassName = $this->determineDataExtensionClassName($dataClassName, $parameters);
+        }
+
+        $this->applyDataClassExtensionToParameters($dataClassName, $parameters);
+        $this->applyDataClassPropertiesToParameters($dataClassName, $parameters);
 
         $parameters->returnSingleResult();
 
-        return $this->getDataClassDatabase()->retrieve($dataClassName::getStorageUnitName(), $parameters);
+        return $this->getDataClassDatabase()->retrieve(
+            $this->determineDataClassStorageUnitName($dataClassName), $parameters
+        );
     }
 
     /**
      * @param class-string<\Chamilo\Libraries\Storage\DataClass\DataClass> $dataClassName
      */
-    protected function __records(string $dataClassName, RecordRetrievesParameters $parameters): ArrayCollection
+    protected function __records(
+        string $dataClassName, DataClassRetrievesParameters|RecordRetrievesParameters $parameters
+    ): ArrayCollection
     {
-        $this->handleRetrieveProperties($parameters, $dataClassName);
+        $this->applyDataClassExtensionToParameters($dataClassName, $parameters);
+        $this->applyDataClassPropertiesToParameters($dataClassName, $parameters);
 
         return new ArrayCollection(
             $this->getDataClassDatabase()->retrieves($dataClassName::getStorageUnitName(), $parameters)
         );
-    }
-
-    protected function determineDataExtensionClassName(string $dataClassName, DataClassRetrieveParameters $parameters): string
-    {
-        $parameters = new RecordRetrieveParameters(
-            new RetrieveProperties(
-                [new PropertyConditionVariable($dataClassName, DataClassTypeAwareInterface::PROPERTY_TYPE)]
-            ), $parameters->getCondition(), $parameters->getOrderBy(), $parameters->getJoins()
-        );
-
-        $type = $this->record($dataClassName, $parameters);
-
-        return $type[DataClassTypeAwareInterface::PROPERTY_TYPE];
     }
 
     /**
@@ -190,19 +159,8 @@ class DataClassRepository
      */
     protected function __retrieve(string $dataClassName, DataClassRetrieveParameters $parameters)
     {
-        if (is_subclass_of($dataClassName, DataClassTypeAwareInterface::class))
-        {
-            $dataClassName = $this->determineDataExtensionClassName($dataClassName, $parameters);
-        }
-
-        //TODO: Insert DataClassExtension logic here, same as in __count()
-
-        $this->handleRetrieveProperties($parameters, $dataClassName);
-
-        $parameters->returnSingleResult();
-
         return $this->getDataClassFactory()->getDataClass(
-            $dataClassName, $this->getDataClassDatabase()->retrieve($dataClassName::getStorageUnitName(), $parameters)
+            $dataClassName, $this->__record($dataClassName, $parameters)
         );
     }
 
@@ -216,9 +174,7 @@ class DataClassRepository
      */
     protected function __retrieves(string $dataClassName, DataClassRetrievesParameters $parameters): ArrayCollection
     {
-        $this->handleRetrieveProperties($parameters, $dataClassName);
-
-        $records = $this->getDataClassDatabase()->retrieves($dataClassName::getStorageUnitName(), $parameters);
+        $records = $this->__records($dataClassName, $parameters);
         $dataClasses = [];
 
         foreach ($records as $record)
@@ -229,7 +185,62 @@ class DataClassRepository
         return new ArrayCollection($dataClasses);
     }
 
-    public function count(string $dataClassName, DataClassCountParameters $parameters): int
+    protected function applyDataClassExtensionToParameters(
+        string $dataClassName, DataClassParameters $dataClassParameters
+    ): void
+    {
+        if (is_subclass_of($dataClassName, DataClassBaseExtensionInterface::class))
+        {
+            $typeDataClassName = $dataClassName::getExtensionDataClassName();
+
+            $condition = new EqualityCondition(
+                new PropertyConditionVariable($typeDataClassName, $typeDataClassName::PROPERTY_TYPE),
+                new StaticConditionVariable($dataClassName)
+            );
+
+            $dataClassParameters->addConditionUsingAnd($condition);
+
+            if (is_subclass_of($dataClassName, DataClassExtensionInterface::class))
+            {
+                $join = new Join(
+                    $typeDataClassName, new EqualityCondition(
+                        new PropertyConditionVariable($typeDataClassName, $typeDataClassName::PROPERTY_ID),
+                        new PropertyConditionVariable($dataClassName, $dataClassName::PROPERTY_ID)
+                    )
+                );
+
+                $dataClassParameters->addJoin($join);
+            }
+        }
+    }
+
+    /**
+     * @param \Chamilo\Libraries\Storage\Parameters\DataClassParameters $parameters
+     * @param string $dataClassName
+     *
+     * @return void
+     */
+    protected function applyDataClassPropertiesToParameters(string $dataClassName, DataClassParameters $parameters
+    ): void
+    {
+        if ($parameters->getRetrieveProperties()->isEmpty())
+        {
+            if (!is_subclass_of($dataClassName, DataClassVirtualExtensionInterface::class))
+            {
+                $parameters->getRetrieveProperties()->add(new PropertiesConditionVariable($dataClassName));
+            }
+
+            if (is_subclass_of($dataClassName, DataClassBaseExtensionInterface::class))
+            {
+                $parameters->getRetrieveProperties()->add(
+                    new PropertiesConditionVariable($dataClassName::getExtensionDataClassName())
+                );
+            }
+        }
+    }
+
+    public function count(string $dataClassName, DataClassCountParameters $parameters = new DataClassCountParameters()
+    ): int
     {
         if ($this->isQueryCacheEnabled())
         {
@@ -253,7 +264,9 @@ class DataClassRepository
     /**
      * @return int[]
      */
-    public function countGrouped(string $dataClassName, DataClassCountGroupedParameters $parameters): array
+    public function countGrouped(
+        string $dataClassName, DataClassCountGroupedParameters $parameters = new DataClassCountGroupedParameters()
+    ): array
     {
         if ($this->isQueryCacheEnabled())
         {
@@ -358,9 +371,42 @@ class DataClassRepository
     }
 
     /**
+     * @param class-string<\Chamilo\Libraries\Storage\DataClass\DataClass> $dataClassName
+     */
+    protected function determineDataClassStorageUnitName(string $dataClassName): string
+    {
+        if (is_subclass_of($dataClassName, DataClassVirtualExtensionInterface::class))
+        {
+            $typeDataClassName = $dataClassName::getExtensionDataClassName();
+
+            return $typeDataClassName::getStorageUnitName();
+        }
+        else
+        {
+            return $dataClassName::getStorageUnitName();
+        }
+    }
+
+    protected function determineDataExtensionClassName(string $dataClassName, DataClassRetrieveParameters $parameters
+    ): string
+    {
+        $parameters = new RecordRetrieveParameters(
+            new RetrieveProperties(
+                [new PropertyConditionVariable($dataClassName, DataClassTypeAwareInterface::PROPERTY_TYPE)]
+            ), $parameters->getCondition(), $parameters->getOrderBy(), $parameters->getJoins()
+        );
+
+        $type = $this->__record($dataClassName, $parameters);
+
+        return $type[DataClassTypeAwareInterface::PROPERTY_TYPE];
+    }
+
+    /**
      * @return string[]
      */
-    public function distinct(string $dataClassName, DataClassDistinctParameters $parameters): array
+    public function distinct(
+        string $dataClassName, DataClassDistinctParameters $parameters = new DataClassDistinctParameters()
+    ): array
     {
         if ($this->isQueryCacheEnabled())
         {
@@ -394,24 +440,6 @@ class DataClassRepository
     public function getDataClassRepositoryCache(): DataClassRepositoryCache
     {
         return $this->dataClassRepositoryCache;
-    }
-
-    /**
-     * @param \Chamilo\Libraries\Storage\Parameters\DataClassParameters $parameters
-     * @param string $dataClassName
-     *
-     * @return void
-     */
-    protected function handleRetrieveProperties(DataClassParameters $parameters, string $dataClassName): void
-    {
-        if (!$parameters->getRetrieveProperties() instanceof RetrieveProperties)
-        {
-            $parameters->setRetrieveProperties(
-                new RetrieveProperties(
-                    [new PropertiesConditionVariable($dataClassName)]
-                )
-            );
-        }
     }
 
     protected function isQueryCacheEnabled(): bool
@@ -482,7 +510,8 @@ class DataClassRepository
         return $this->updates($dataClassName, $properties, $condition);
     }
 
-    public function record(string $dataClassName, RecordRetrieveParameters $parameters): ?array
+    public function record(string $dataClassName, RecordRetrieveParameters $parameters = new RecordRetrieveParameters()
+    ): ?array
     {
         if ($this->isQueryCacheEnabled())
         {
@@ -511,7 +540,9 @@ class DataClassRepository
      *
      * @return \Doctrine\Common\Collections\ArrayCollection<string[]>
      */
-    public function records(string $dataClassName, RecordRetrievesParameters $parameters): ArrayCollection
+    public function records(
+        string $dataClassName, RecordRetrievesParameters $parameters = new RecordRetrievesParameters()
+    ): ArrayCollection
     {
         if ($this->isQueryCacheEnabled())
         {
@@ -542,7 +573,9 @@ class DataClassRepository
      *
      * @return ?retrieveDataClassName
      */
-    public function retrieve(string $dataClassName, DataClassRetrieveParameters $parameters)
+    public function retrieve(
+        string $dataClassName, DataClassRetrieveParameters $parameters = new DataClassRetrieveParameters()
+    )
     {
         if ($this->isQueryCacheEnabled())
         {
@@ -615,7 +648,9 @@ class DataClassRepository
      * @return ArrayCollection<tRetrieves>
      * @throws \Chamilo\Libraries\Storage\Exception\DataClassNoResultException
      */
-    public function retrieves(string $dataClassName, DataClassRetrievesParameters $parameters): ArrayCollection
+    public function retrieves(
+        string $dataClassName, DataClassRetrievesParameters $parameters = new DataClassRetrievesParameters()
+    ): ArrayCollection
     {
         if ($this->isQueryCacheEnabled())
         {

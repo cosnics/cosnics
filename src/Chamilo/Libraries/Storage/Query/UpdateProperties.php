@@ -3,6 +3,9 @@ namespace Chamilo\Libraries\Storage\Query;
 
 use Chamilo\Libraries\Architecture\Interfaces\HashableInterface;
 use Chamilo\Libraries\Architecture\Traits\HashableTrait;
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
+use Doctrine\Common\Collections\Selectable;
 
 /**
  *
@@ -10,43 +13,26 @@ use Chamilo\Libraries\Architecture\Traits\HashableTrait;
  * @author Hans De Bisschop <hans.de.bisschop@ehb.be>
  * @author Magali Gillard <magali.gillard@ehb.be>
  * @author Eduard Vossen <eduard.vossen@ehb.be>
+ *
+ * @psalm-template TKey of array-key
+ * @template-implements Collection<TKey,\Chamilo\Libraries\Storage\Query\UpdateProperty>
+ * @template-implements Selectable<TKey,\Chamilo\Libraries\Storage\Query\UpdateProperty>
+ * @psalm-consistent-constructor
  */
-class UpdateProperties implements HashableInterface
+class UpdateProperties extends ArrayCollection implements HashableInterface
 {
     use HashableTrait;
 
-    /**
-     *
-     * @var \Chamilo\Libraries\Storage\Query\UpdateProperty[]
-     */
-    private array $updateProperties;
-
-    /**
-     * @param \Chamilo\Libraries\Storage\Query\UpdateProperty[] $updateProperties
-     */
-    public function __construct(array $updateProperties = [])
+    public function getFirst(?UpdateProperty $defaultUpdateProperty = null): ?UpdateProperty
     {
-        $this->updateProperties = $updateProperties;
-    }
+        if (!$this->isEmpty())
+        {
+            $this->first();
 
-    public function add(UpdateProperty $updateProperty): UpdateProperties
-    {
-        $this->updateProperties[] = $updateProperty;
+            return $this->current();
+        }
 
-        return $this;
-    }
-
-    /**
-     * @return \Chamilo\Libraries\Storage\Query\UpdateProperty[]
-     */
-    public function get(): array
-    {
-        return $this->updateProperties;
-    }
-
-    public function getFirst(): UpdateProperty
-    {
-        return $this->updateProperties[0];
+        return $defaultUpdateProperty;
     }
 
     /**
@@ -58,7 +44,7 @@ class UpdateProperties implements HashableInterface
 
         $hashParts[] = __CLASS__;
 
-        foreach ($this->get() as $updateProperty)
+        foreach ($this as $updateProperty)
         {
             $hashParts[] = $updateProperty->getHashParts();
         }
@@ -70,7 +56,7 @@ class UpdateProperties implements HashableInterface
 
     public function merge(UpdateProperties $updatePropertiesToMerge): UpdateProperties
     {
-        foreach ($updatePropertiesToMerge->get() as $updateProperty)
+        foreach ($updatePropertiesToMerge as $updateProperty)
         {
             $this->add($updateProperty);
         }

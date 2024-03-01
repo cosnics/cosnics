@@ -174,7 +174,7 @@ abstract class Manager extends Application
             )
         );
 
-        $count = DataManager::count(Admin::class, new DataClassCountParameters());
+        $count = DataManager::count(Admin::class);
 
         if ($count > 0)
         {

@@ -22,52 +22,54 @@ class NoOfUsersSubscribedCourseBlock extends CourseBlock
     {
         $reporting_data = new ReportingData();
 
-        $users = DataManager::count(User::class, new DataClassCountParameters());
+        $users = DataManager::count(User::class);
 
         $courses = DataManager::count(
-            CourseEntityRelation::class,
-            new DataClassCountParameters(
+            CourseEntityRelation::class, new DataClassCountParameters(
                 new EqualityCondition(
                     new PropertyConditionVariable(
-                        CourseEntityRelation::class,
-                        CourseEntityRelation::PROPERTY_ENTITY_TYPE),
-                    new StaticConditionVariable(CourseEntityRelation::ENTITY_TYPE_USER)),
-                null,
-                new RetrieveProperties(
-                    array(
+                        CourseEntityRelation::class, CourseEntityRelation::PROPERTY_ENTITY_TYPE
+                    ), new StaticConditionVariable(CourseEntityRelation::ENTITY_TYPE_USER)
+                ), null, new RetrieveProperties(
+                    [
                         new FunctionConditionVariable(
-                            FunctionConditionVariable::DISTINCT,
-                            new PropertyConditionVariable(
-                                CourseEntityRelation::class,
-                                CourseEntityRelation::PROPERTY_ENTITY_ID))))));
+                            FunctionConditionVariable::DISTINCT, new PropertyConditionVariable(
+                                CourseEntityRelation::class, CourseEntityRelation::PROPERTY_ENTITY_ID
+                            )
+                        )
+                    ]
+                )
+            )
+        );
 
         $reporting_data->set_categories(
-            array(Translation::get('UsersSubscribedToCourse'), Translation::get('UsersNotSubscribedToCourse')));
-        $reporting_data->set_rows(array(Translation::get('count')));
+            [Translation::get('UsersSubscribedToCourse'), Translation::get('UsersNotSubscribedToCourse')]
+        );
+        $reporting_data->set_rows([Translation::get('count')]);
 
         $reporting_data->add_data_category_row(
-            Translation::get('UsersSubscribedToCourse'),
-            Translation::get('count'),
-            $courses);
+            Translation::get('UsersSubscribedToCourse'), Translation::get('count'), $courses
+        );
         $reporting_data->add_data_category_row(
-            Translation::get('UsersNotSubscribedToCourse'),
-            Translation::get('count'),
-            $users - $courses);
+            Translation::get('UsersNotSubscribedToCourse'), Translation::get('count'), $users - $courses
+        );
+
         return $reporting_data;
+    }
+
+    public function get_views()
+    {
+        return [
+            Html::VIEW_TABLE,
+            Html::VIEW_PIE,
+            Html::VIEW_BAR,
+            Html::VIEW_LINE,
+            Html::VIEW_STACKED_AREA
+        ];
     }
 
     public function retrieve_data()
     {
         return $this->count_data();
-    }
-
-    public function get_views()
-    {
-        return array(
-            Html::VIEW_TABLE,
-            Html::VIEW_PIE,
-            Html::VIEW_BAR,
-            Html::VIEW_LINE,
-            Html::VIEW_STACKED_AREA);
     }
 }

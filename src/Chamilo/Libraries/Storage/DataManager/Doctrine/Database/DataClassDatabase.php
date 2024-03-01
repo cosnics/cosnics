@@ -402,14 +402,14 @@ class DataClassDatabase implements DataClassDatabaseInterface
     {
         try
         {
-            if (count($properties->get()) > 0)
+            if ($properties->count() > 0)
             {
                 $conditionPartTranslatorService = $this->getConditionPartTranslatorService();
                 $queryBuilder = $this->getConnection()->createQueryBuilder();
 
                 $queryBuilder->update($dataClassStorageUnitName);
 
-                foreach ($properties->get() as $dataClassProperty)
+                foreach ($properties as $dataClassProperty)
                 {
                     $queryBuilder->set(
                         $conditionPartTranslatorService->translate(
@@ -432,7 +432,7 @@ class DataClassDatabase implements DataClassDatabaseInterface
             $this->handleError($throwable);
 
             throw new DatabaseUpdateException(
-                $dataClassStorageUnitName, $condition, $properties->get(), $throwable->getMessage()
+                $dataClassStorageUnitName, $condition, $properties->toArray(), $throwable->getMessage()
             );
         }
     }

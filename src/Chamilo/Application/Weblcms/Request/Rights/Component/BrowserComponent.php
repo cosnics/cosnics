@@ -3,11 +3,10 @@ namespace Chamilo\Application\Weblcms\Request\Rights\Component;
 
 use Chamilo\Application\Weblcms\Request\Rights\Manager;
 use Chamilo\Application\Weblcms\Request\Rights\Storage\DataClass\RightsLocationEntityRightGroup;
-use Chamilo\Libraries\Storage\DataManager\DataManager;
 use Chamilo\Application\Weblcms\Request\Rights\Table\EntityTableRenderer;
 use Chamilo\Libraries\Architecture\Exceptions\NotAllowedException;
 use Chamilo\Libraries\Format\Table\RequestTableParameterValuesCompiler;
-use Chamilo\Libraries\Storage\Parameters\DataClassCountParameters;
+use Chamilo\Libraries\Storage\DataManager\DataManager;
 use Chamilo\Libraries\Storage\Parameters\DataClassRetrievesParameters;
 
 class BrowserComponent extends Manager
@@ -55,7 +54,7 @@ class BrowserComponent extends Manager
      */
     protected function renderTable(): string
     {
-        $totalNumberOfItems = DataManager::count(RightsLocationEntityRightGroup::class, new DataClassCountParameters());
+        $totalNumberOfItems = DataManager::count(RightsLocationEntityRightGroup::class);
         $entityTableRenderer = $this->getEntityTableRenderer();
 
         $tableParameterValues = $this->getRequestTableParameterValuesCompiler()->determineParameterValues(

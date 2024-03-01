@@ -3,7 +3,9 @@ namespace Chamilo\Libraries\Storage\Query;
 
 use Chamilo\Libraries\Architecture\Interfaces\HashableInterface;
 use Chamilo\Libraries\Architecture\Traits\HashableTrait;
-use Chamilo\Libraries\Storage\Query\Variable\ConditionVariable;
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
+use Doctrine\Common\Collections\Selectable;
 
 /**
  * Describes the group by functionality of a query.
@@ -14,38 +16,15 @@ use Chamilo\Libraries\Storage\Query\Variable\ConditionVariable;
  * @author Hans De Bisschop <hans.de.bisschop@ehb.be>
  * @author Magali Gillard <magali.gillard@ehb.be>
  * @author Eduard Vossen <eduard.vossen@ehb.be>
+ *
+ * @psalm-template TKey of array-key
+ * @template-implements Collection<TKey,\Chamilo\Libraries\Storage\Query\Variable\ConditionVariable>
+ * @template-implements Selectable<TKey,\Chamilo\Libraries\Storage\Query\Variable\ConditionVariable>
+ * @psalm-consistent-constructor
  */
-class GroupBy implements HashableInterface
+class GroupBy extends ArrayCollection implements HashableInterface
 {
     use HashableTrait;
-
-    /**
-     * @var \Chamilo\Libraries\Storage\Query\Variable\ConditionVariable[]
-     */
-    private array $conditionVariables;
-
-    /**
-     *
-     * @param \Chamilo\Libraries\Storage\Query\Variable\ConditionVariable[] $conditionVariables
-     */
-    public function __construct(array $conditionVariables = [])
-    {
-        $this->conditionVariables = $conditionVariables;
-    }
-
-    public function add(ConditionVariable $conditionVariable)
-    {
-        $this->conditionVariables[] = $conditionVariable;
-    }
-
-    /**
-     *
-     * @return \Chamilo\Libraries\Storage\Query\Variable\ConditionVariable[]
-     */
-    public function get(): array
-    {
-        return $this->conditionVariables;
-    }
 
     /**
      * @return string[]
@@ -54,7 +33,7 @@ class GroupBy implements HashableInterface
     {
         $hashes = [];
 
-        foreach ($this->get() as $conditionVariable)
+        foreach ($this as $conditionVariable)
         {
             $hashes[] = $conditionVariable->getHashParts();
         }

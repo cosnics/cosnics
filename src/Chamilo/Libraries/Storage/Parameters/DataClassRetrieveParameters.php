@@ -2,8 +2,10 @@
 namespace Chamilo\Libraries\Storage\Parameters;
 
 use Chamilo\Libraries\Storage\Query\Condition\Condition;
+use Chamilo\Libraries\Storage\Query\GroupBy;
 use Chamilo\Libraries\Storage\Query\Joins;
 use Chamilo\Libraries\Storage\Query\OrderBy;
+use Chamilo\Libraries\Storage\Query\RetrieveProperties;
 
 /**
  *
@@ -15,8 +17,14 @@ use Chamilo\Libraries\Storage\Query\OrderBy;
 class DataClassRetrieveParameters extends DataClassBasicRetrieveParameters
 {
 
-    public function __construct(?Condition $condition = null, ?OrderBy $orderBy = null, ?Joins $joins = null)
+    public function __construct(
+        ?Condition $condition = null, OrderBy $orderBy = new OrderBy(), Joins $joins = new Joins(),
+        RetrieveProperties $retrieveProperties = new RetrieveProperties(), GroupBy $groupBy = new GroupBy()
+    )
     {
-        parent::__construct($condition, $joins, null, $orderBy);
+        parent::__construct(
+            condition: $condition, joins: $joins, retrieveProperties: $retrieveProperties, orderBy: $orderBy,
+            groupBy: $groupBy, count: 1, offset: 0
+        );
     }
 }

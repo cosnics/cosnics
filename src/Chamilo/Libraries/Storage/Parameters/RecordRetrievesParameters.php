@@ -18,31 +18,13 @@ class RecordRetrievesParameters extends DataClassRetrievesParameters
 {
 
     public function __construct(
-        ?RetrieveProperties $retrieveProperties = null, ?Condition $condition = null, ?int $count = null,
-        ?int $offset = null, ?OrderBy $orderBy = null, ?Joins $joins = null, ?GroupBy $groupBy = null,
-        ?Condition $havingCondition = null
+        RetrieveProperties $retrieveProperties = new RetrieveProperties(), ?Condition $condition = null,
+        ?int $count = null, ?int $offset = null, OrderBy $orderBy = new OrderBy(), Joins $joins = new Joins(),
+        GroupBy $groupBy = new GroupBy(), ?Condition $havingCondition = null
     )
     {
         parent::__construct(
-            $condition, $count, $offset, $orderBy, $joins, $groupBy, $havingCondition
+            $condition, $count, $offset, $orderBy, $joins, $groupBy, $havingCondition, $retrieveProperties
         );
-
-        $this->setRetrieveProperties($retrieveProperties);
-    }
-
-    /**
-     * @deprecated Use getRetrieveProperties() now
-     */
-    public function get_properties(): ?RetrieveProperties
-    {
-        return $this->getRetrieveProperties();
-    }
-
-    /**
-     * @deprecated Use setRetrieveProperties() now
-     */
-    public function set_properties(?RetrieveProperties $retrieveProperties = null): static
-    {
-        return $this->setRetrieveProperties($retrieveProperties);
     }
 }

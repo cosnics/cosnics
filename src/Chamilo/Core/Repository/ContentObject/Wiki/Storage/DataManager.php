@@ -22,12 +22,12 @@ class DataManager extends \Chamilo\Libraries\Storage\DataManager\DataManager
                     ComplexContentObjectItem::class,
                     ComplexContentObjectItem::PROPERTY_REF)));
 
-        $joins = $parameters->get_joins();
+        $joins = $parameters->getJoins();
 
         if (! $joins instanceof Joins)
         {
             $joins = new Joins();
-            $parameters->set_joins($joins);
+            $parameters->setJoins($joins);
         }
 
         $joins->add($join);
@@ -45,12 +45,12 @@ class DataManager extends \Chamilo\Libraries\Storage\DataManager\DataManager
                     ComplexContentObjectItem::class,
                     ComplexContentObjectItem::PROPERTY_REF)));
 
-        $joins = $parameters->get_joins();
+        $joins = $parameters->getJoins();
 
         if (! $joins instanceof Joins)
         {
             $joins = new Joins();
-            $parameters->set_joins($joins);
+            $parameters->setJoins($joins);
         }
 
         $joins->add($join);

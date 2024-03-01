@@ -3,7 +3,9 @@ namespace Chamilo\Libraries\Storage\Query;
 
 use Chamilo\Libraries\Architecture\Interfaces\HashableInterface;
 use Chamilo\Libraries\Architecture\Traits\HashableTrait;
-use Countable;
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
+use Doctrine\Common\Collections\Selectable;
 
 /**
  *
@@ -11,50 +13,21 @@ use Countable;
  * @author Hans De Bisschop <hans.de.bisschop@ehb.be>
  * @author Magali Gillard <magali.gillard@ehb.be>
  * @author Eduard Vossen <eduard.vossen@ehb.be>
+ *
+ * @psalm-template TKey of array-key
+ * @template-implements Collection<TKey,\Chamilo\Libraries\Storage\Query\Join>
+ * @template-implements Selectable<TKey,\Chamilo\Libraries\Storage\Query\Join>
+ * @psalm-consistent-constructor
  */
-class Joins implements Countable, HashableInterface
+class Joins extends ArrayCollection implements HashableInterface
 {
     use HashableTrait;
-
-    /**
-     *
-     * @var \Chamilo\Libraries\Storage\Query\Join[]
-     */
-    private array $joins;
-
-    /**
-     * @param \Chamilo\Libraries\Storage\Query\Join[] $joins
-     */
-    public function __construct(array $joins = [])
-    {
-        $this->joins = $joins;
-    }
-
-    public function add(Join $join): Joins
-    {
-        $this->joins[] = $join;
-
-        return $this;
-    }
-
-    public function count(): int
-    {
-        return count($this->joins);
-    }
-
-    /**
-     * @return \Chamilo\Libraries\Storage\Query\Join[]
-     */
-    public function get(): array
-    {
-        return $this->joins;
-    }
 
     public function getHashParts(): array
     {
         $hashes = [];
 
-        foreach ($this->joins as $join)
+        foreach ($this as $join)
         {
             $hashes[] = $join->getHashParts();
         }
@@ -64,19 +37,12 @@ class Joins implements Countable, HashableInterface
         return $hashes;
     }
 
-    public function merge(Joins $joinsToMerge): Joins
+    public function merge(Joins $joinsToMerge): static
     {
-        foreach ($joinsToMerge->get() as $join)
+        foreach ($joinsToMerge as $join)
         {
             $this->add($join);
         }
-
-        return $this;
-    }
-
-    public function prepend(Join $join): Joins
-    {
-        array_unshift($this->joins, $join);
 
         return $this;
     }
