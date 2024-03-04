@@ -18,7 +18,7 @@ use Chamilo\Libraries\Storage\Query\RetrieveProperties;
  * @author  Magali Gillard <magali.gillard@ehb.be>
  * @author  Eduard Vossen <eduard.vossen@ehb.be>
  */
-abstract class DataClassParameters implements HashableInterface
+class DataClassParameters implements HashableInterface
 {
     use HashableTrait;
 

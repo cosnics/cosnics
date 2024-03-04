@@ -20,6 +20,8 @@ class DataClassDistinctParameters extends DataClassParameters
         Joins $joins = new Joins(), OrderBy $orderBy = new OrderBy()
     )
     {
-        parent::__construct($condition, $joins, $retrieveProperties, $orderBy);
+        parent::__construct(
+            condition: $condition, joins: $joins, retrieveProperties: $retrieveProperties, orderBy: $orderBy
+        );
     }
 }

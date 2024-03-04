@@ -23,7 +23,8 @@ class DataClassRetrievesParameters extends DataClassBasicRetrieveParameters
     )
     {
         parent::__construct(
-            $condition, $joins, $retrieveProperties, $orderBy, $groupBy, $havingCondition, $count, $offset
+            condition: $condition, joins: $joins, retrieveProperties: $retrieveProperties, orderBy: $orderBy,
+            groupBy: $groupBy, havingCondition: $havingCondition, count: $count, offset: $offset
         );
     }
 }

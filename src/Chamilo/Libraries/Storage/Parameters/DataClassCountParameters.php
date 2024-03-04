@@ -20,6 +20,6 @@ class DataClassCountParameters extends DataClassParameters
         ConditionVariable|RetrieveProperties $retrieveProperties = new RetrieveProperties()
     )
     {
-        parent::__construct($condition, $joins, $retrieveProperties);
+        parent::__construct(condition: $condition, joins: $joins, retrieveProperties: $retrieveProperties);
     }
 }

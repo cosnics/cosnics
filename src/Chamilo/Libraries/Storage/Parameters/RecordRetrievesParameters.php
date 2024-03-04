@@ -24,7 +24,8 @@ class RecordRetrievesParameters extends DataClassRetrievesParameters
     )
     {
         parent::__construct(
-            $condition, $count, $offset, $orderBy, $joins, $groupBy, $havingCondition, $retrieveProperties
+            condition: $condition, count: $count, offset: $offset, orderBy: $orderBy, joins: $joins, groupBy: $groupBy,
+            havingCondition: $havingCondition, retrieveProperties: $retrieveProperties
         );
     }
 }
