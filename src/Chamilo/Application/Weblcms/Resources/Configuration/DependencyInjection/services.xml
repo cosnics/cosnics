@@ -97,9 +97,10 @@
             <tag name="chamilo.libraries.console.command" />
         </service>
 
-
         <service id="Chamilo\Application\Weblcms\Service\CourseService" alias="chamilo.application.weblcms.service.course"/>
         <service id="Chamilo\Application\Weblcms\Service\Interfaces\CourseServiceInterface" alias="chamilo.application.weblcms.service.course"/>
+        <service id="Chamilo\Application\Weblcms\Service\CourseToolService" autowire="true"/>
+
 
         <service id="Chamilo\Application\Weblcms\Service\CourseUserCategoryService" autowire="true"/>
         <service id="Chamilo\Application\Weblcms\Service\CourseSubscriptionService" autowire="true"/>
@@ -112,6 +113,8 @@
         <service id="Chamilo\Application\Weblcms\Repository\CourseUserCategoryRepository" autowire="true"/>
 
         <service id="Chamilo\Application\Weblcms\CourseSettingsController" autowire="true"/>
+
+        <service id="Chamilo\Application\Weblcms\Bridge\PublicationServiceBridge" autowire="true"/>
 
     </services>
 </container>

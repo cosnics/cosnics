@@ -519,6 +519,8 @@ class TreeNode
     {
         $contentObject = $this->getContentObject();
 
+        // todo: maybe make selected cob's implement a ScoreSupport interface?
+
         return is_a(
                 $contentObject, 'Chamilo\Core\Repository\ContentObject\Assessment\Storage\DataClass\Assessment'
             ) || is_a(
@@ -527,6 +529,8 @@ class TreeNode
                 $contentObject, 'Chamilo\Core\Repository\ContentObject\Assignment\Storage\DataClass\Assignment'
             )  || is_a(
                 $contentObject, 'Chamilo\Core\Repository\ContentObject\ExternalTool\Storage\DataClass\ExternalTool'
+            )  || is_a(
+                $contentObject, 'Hogent\Core\Repository\ContentObject\Ans\Storage\DataClass\Ans'
             );
     }
 }

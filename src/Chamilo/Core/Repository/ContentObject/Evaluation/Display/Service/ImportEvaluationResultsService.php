@@ -9,7 +9,7 @@ use Chamilo\Libraries\Architecture\ContextIdentifier;
  *
  * @author Stefan Gabriëls - Hogeschool Gent
  */
-class ImportResultsFromCuriosService
+class ImportEvaluationResultsService
 {
     /**
      * @var EvaluationEntryService

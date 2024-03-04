@@ -102,4 +102,9 @@ interface EvaluationServiceBridgeInterface
      * @return string
      */
     public function getEntityDisplayName(int $entityId): string;
+
+    /**
+     * @return bool
+     */
+    public function canUseAns(): bool;
 }

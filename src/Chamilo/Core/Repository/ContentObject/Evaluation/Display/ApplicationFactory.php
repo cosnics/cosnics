@@ -1,7 +1,7 @@
 <?php
 
 namespace Chamilo\Core\Repository\ContentObject\Evaluation\Display;
-use Chamilo\Core\Repository\ContentObject\Assignment\Display\Manager;
+
 use Chamilo\Core\Repository\ContentObject\Evaluation\Display\Bridge\Interfaces\EvaluationServiceBridgeInterface;
 
 
@@ -38,7 +38,7 @@ class ApplicationFactory extends \Chamilo\Libraries\Architecture\Factory\Applica
         }
 
         if ($this->evaluationServiceBridge->canEditEvaluation()) {
-            return Manager::ACTION_BROWSE;
+            return Manager::ACTION_BROWSER;
         }
 
         return Manager::ACTION_ENTRY;

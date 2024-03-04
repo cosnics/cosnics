@@ -82,4 +82,9 @@ interface LearningPathEvaluationServiceBridgeInterface
      * @return mixed
      */
     public function getEntityNameByType($entityType);
+
+    /**
+     * @return bool
+     */
+    public function canUseAns(): bool;
 }

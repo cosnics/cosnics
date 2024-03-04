@@ -12,8 +12,10 @@ use Chamilo\Application\Weblcms\Bridge\LearningPath\Assignment\NotificationServi
 use Chamilo\Application\Weblcms\Bridge\LearningPath\Evaluation\LearningPathEvaluationServiceBridge;
 use Chamilo\Application\Weblcms\Bridge\LearningPath\ExternalTool\ExternalToolServiceBridge;
 use Chamilo\Application\Weblcms\Bridge\LearningPath\GradeBook\LearningPathGradeBookServiceBridge;
+use Chamilo\Application\Weblcms\Bridge\LearningPath\LearningPath\LearningPathServiceBridge;
 use Chamilo\Application\Weblcms\Bridge\LearningPath\Presence\LearningPathPresenceServiceBridge;
 
+use Chamilo\Application\Weblcms\Bridge\PublicationServiceBridge;
 use Chamilo\Application\Weblcms\CourseSettingsConnector;
 use Chamilo\Application\Weblcms\CourseSettingsController;
 use Chamilo\Application\Weblcms\Integration\Chamilo\Core\Reporting\Template\WikiPageTemplate;
@@ -190,6 +192,7 @@ class ComplexDisplayComponent extends Manager implements LearningPathDisplaySupp
             $learningPathEvaluationServiceBridge = $this->getService(LearningPathEvaluationServiceBridge::class);
             $learningPathEvaluationServiceBridge->setContentObjectPublication($this->publication);
             $learningPathEvaluationServiceBridge->setCanEditEvaluation($hasEditRight);
+            $learningPathEvaluationServiceBridge->setCourse($this->get_course());
             $this->getBridgeManager()->addBridge($learningPathEvaluationServiceBridge);
         }
 
@@ -211,6 +214,15 @@ class ComplexDisplayComponent extends Manager implements LearningPathDisplaySupp
             $learningPathGradeBookServiceBridge->setCanEditGradeBook($hasEditRight);
             $learningPathGradeBookServiceBridge->setCourse($this->get_course());
             $this->getBridgeManager()->addBridge($learningPathGradeBookServiceBridge);
+        }
+
+        if ($this->getRegistrationConsulter()->isContextRegistered('Chamilo\Application\Weblcms\Bridge\LearningPath\LearningPath'))
+        {
+            /** @var LearningPathServiceBridge $learningPathServiceBridge */
+            $learningPathServiceBridge = $this->getService(LearningPathServiceBridge::class);
+            $learningPathServiceBridge->setContentObjectPublication($this->publication);
+            $learningPathServiceBridge->setCourse($this->get_course());
+            $this->getBridgeManager()->addBridge($learningPathServiceBridge);
         }
 
         /** @var AssignmentServiceBridge $assignmentServiceBridge */
@@ -256,6 +268,13 @@ class ComplexDisplayComponent extends Manager implements LearningPathDisplaySupp
             $externalToolServiceBridge->setHasEditRight($hasEditRight);
             $this->getBridgeManager()->addBridge($externalToolServiceBridge);
         }
+
+        /** @var PublicationServiceBridge $publicationServiceBridge */
+        $publicationServiceBridge = $this->getService(PublicationServiceBridge::class);
+        $publicationServiceBridge->setContentObjectPublication($this->publication);
+        $publicationServiceBridge->setCourse($this->get_course());
+
+        $this->getBridgeManager()->addBridge($publicationServiceBridge);
     }
 
     public function get_root_content_object()

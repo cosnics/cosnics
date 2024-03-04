@@ -16,7 +16,6 @@ use Chamilo\Libraries\Storage\Query\Variable\PropertyConditionVariable;
  */
 abstract class Manager extends AjaxManager
 {
-    const ACTION_PROCESS_CURIOS_CSV = 'ProcessCuriosCSV';
     const ACTION_IMPORT = 'Import';
 
     const PARAM_ACTION = 'evaluation_display_ajax_action';
