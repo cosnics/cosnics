@@ -291,9 +291,9 @@ class OpenCourseRepository extends DataManagerRepository implements OpenCourseRe
         $joins->add(
             new Join(
                 CourseType::class, new EqualityCondition(
-                    new PropertyConditionVariable(Course::class, Course::PROPERTY_COURSE_TYPE_ID),
-                    new PropertyConditionVariable(CourseType::class, CourseType::PROPERTY_ID)
-                ), Join::TYPE_LEFT
+                new PropertyConditionVariable(Course::class, Course::PROPERTY_COURSE_TYPE_ID),
+                new PropertyConditionVariable(CourseType::class, CourseType::PROPERTY_ID)
+            ), Join::TYPE_LEFT
             )
         );
 

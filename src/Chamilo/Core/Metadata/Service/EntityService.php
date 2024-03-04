@@ -34,14 +34,9 @@ use Chamilo\Libraries\Storage\Query\Variable\StaticConditionVariable;
  */
 class EntityService
 {
-    const PROPERTY_METADATA_SCHEMA = 'schema';
-    const PROPERTY_METADATA_SCHEMA_EXISTING = 'existing';
-    const PROPERTY_METADATA_SCHEMA_NEW = 'new';
-
-    /**
-     * @var \Chamilo\Core\Metadata\Relation\Service\RelationService
-     */
-    private $relationService;
+    public const PROPERTY_METADATA_SCHEMA = 'schema';
+    public const PROPERTY_METADATA_SCHEMA_EXISTING = 'existing';
+    public const PROPERTY_METADATA_SCHEMA_NEW = 'new';
 
     /**
      * @var \Chamilo\Core\Metadata\Element\Service\ElementService;
@@ -52,6 +47,11 @@ class EntityService
      * @var \Chamilo\Core\Metadata\Provider\Service\PropertyProviderService
      */
     private $propertyProviderService;
+
+    /**
+     * @var \Chamilo\Core\Metadata\Relation\Service\RelationService
+     */
+    private $relationService;
 
     /**
      * @param \Chamilo\Core\Metadata\Relation\Service\RelationService $relationService
@@ -66,7 +66,7 @@ class EntityService
     /**
      * @param \Chamilo\Core\Metadata\Entity\DataClassEntity $entity
      *
-     * @return integer[]
+     * @return int
      * @throws \Chamilo\Libraries\Architecture\Exceptions\UserException
      * @throws \Exception
      */
@@ -103,14 +103,6 @@ class EntityService
     }
 
     /**
-     * @param \Chamilo\Core\Metadata\Element\Service\ElementService $elementService
-     */
-    public function setElementService(ElementService $elementService): void
-    {
-        $this->elementService = $elementService;
-    }
-
-    /**
      *
      * @param \Chamilo\Core\Metadata\Entity\DataClassEntity $entity
      *
@@ -140,29 +132,11 @@ class EntityService
     }
 
     /**
-     * @param \Chamilo\Core\Metadata\Provider\Service\PropertyProviderService $propertyProviderService
-     */
-    public function setPropertyProviderService(
-        PropertyProviderService $propertyProviderService
-    ): void
-    {
-        $this->propertyProviderService = $propertyProviderService;
-    }
-
-    /**
      * @return \Chamilo\Core\Metadata\Relation\Service\RelationService
      */
     public function getRelationService(): RelationService
     {
         return $this->relationService;
-    }
-
-    /**
-     * @param \Chamilo\Core\Metadata\Relation\Service\RelationService $relationService
-     */
-    public function setRelationService(RelationService $relationService): void
-    {
-        $this->relationService = $relationService;
     }
 
     /**
@@ -238,7 +212,7 @@ class EntityService
         return DataManager::distinct(
             RelationInstance::class, new DataClassDistinctParameters(
                 $condition, new RetrieveProperties(
-                    array(new PropertyConditionVariable(RelationInstance::class, RelationInstance::PROPERTY_SOURCE_ID))
+                    [new PropertyConditionVariable(RelationInstance::class, RelationInstance::PROPERTY_SOURCE_ID)]
                 )
             )
         );
@@ -409,7 +383,7 @@ class EntityService
     {
         $elements = $this->getElementService()->getElementsForSchemaInstance($schemaInstance);
 
-        foreach($elements as $element)
+        foreach ($elements as $element)
         {
             if (!$this->processEntityElement(
                 $currentUser, $schemaInstance, $element, $entity, $submittedSchemaInstanceValues[$element->get_id()]
@@ -428,7 +402,7 @@ class EntityService
      * @param \Chamilo\Core\Metadata\Storage\DataClass\Element $element
      * @param $submittedElementValues
      *
-     * @return boolean
+     * @return bool
      * @throws \Chamilo\Libraries\Architecture\Exceptions\UserException
      * @throws \Exception
      */
@@ -521,11 +495,37 @@ class EntityService
     }
 
     /**
+     * @param \Chamilo\Core\Metadata\Element\Service\ElementService $elementService
+     */
+    public function setElementService(ElementService $elementService): void
+    {
+        $this->elementService = $elementService;
+    }
+
+    /**
+     * @param \Chamilo\Core\Metadata\Provider\Service\PropertyProviderService $propertyProviderService
+     */
+    public function setPropertyProviderService(
+        PropertyProviderService $propertyProviderService
+    ): void
+    {
+        $this->propertyProviderService = $propertyProviderService;
+    }
+
+    /**
+     * @param \Chamilo\Core\Metadata\Relation\Service\RelationService $relationService
+     */
+    public function setRelationService(RelationService $relationService): void
+    {
+        $this->relationService = $relationService;
+    }
+
+    /**
      * @param \Chamilo\Core\User\Storage\DataClass\User $currentUser
      * @param \Chamilo\Core\Metadata\Entity\DataClassEntity $entity
      * @param $submittedSchemaValues
      *
-     * @return boolean
+     * @return bool
      * @throws \Chamilo\Libraries\Architecture\Exceptions\UserException
      * @throws \Exception
      */

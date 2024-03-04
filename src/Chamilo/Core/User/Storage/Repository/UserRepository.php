@@ -372,7 +372,8 @@ class UserRepository implements UserRepositoryInterface
     {
         return $this->getDataClassRepository()->distinct(
             User::class, new DataClassDistinctParameters(
-                $condition, new RetrieveProperties($retrieveProperties), null, $orderProperty
+                condition: $condition, retrieveProperties: new RetrieveProperties($retrieveProperties),
+                orderBy: $orderProperty
             )
         );
     }

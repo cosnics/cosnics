@@ -18,10 +18,10 @@ use Chamilo\Libraries\Storage\Query\Variable\StaticConditionVariable;
 class DataManager extends \Chamilo\Libraries\Storage\DataManager\DataManager
 {
 
-    const PREFIX = 'configuration_';
+    public const PREFIX = 'configuration_';
 
-    const REGISTRATION_CONTEXT = 1;
-    const REGISTRATION_TYPE = 2;
+    public const REGISTRATION_CONTEXT = 1;
+    public const REGISTRATION_TYPE = 2;
 
     public static $registrations;
 
@@ -71,7 +71,7 @@ class DataManager extends \Chamilo\Libraries\Storage\DataManager\DataManager
     {
         $parameters = new DataClassDistinctParameters(
             $condition,
-            new RetrieveProperties(array(new PropertyConditionVariable(Setting::class, Setting::PROPERTY_CONTEXT)))
+            new RetrieveProperties([new PropertyConditionVariable(Setting::class, Setting::PROPERTY_CONTEXT)])
         );
 
         return self::distinct(Setting::class, $parameters);

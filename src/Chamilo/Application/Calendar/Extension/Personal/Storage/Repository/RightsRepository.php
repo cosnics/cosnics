@@ -41,7 +41,7 @@ class RightsRepository
     /**
      * @param \Chamilo\Application\Calendar\Extension\Personal\Storage\DataClass\Publication $publication
      *
-     * @return integer
+     * @return int
      */
     public function countPublicationGroupsForPublication(Publication $publication)
     {
@@ -58,7 +58,7 @@ class RightsRepository
     /**
      * @param \Chamilo\Application\Calendar\Extension\Personal\Storage\DataClass\Publication $publication
      *
-     * @return integer
+     * @return int
      */
     public function countPublicationUsersForPublication(Publication $publication)
     {
@@ -75,7 +75,7 @@ class RightsRepository
     /**
      * @param \Chamilo\Application\Calendar\Extension\Personal\Storage\DataClass\PublicationGroup $publicationGroup
      *
-     * @return boolean
+     * @return bool
      */
     public function createPublicationGroup(PublicationGroup $publicationGroup)
     {
@@ -85,7 +85,7 @@ class RightsRepository
     /**
      * @param \Chamilo\Application\Calendar\Extension\Personal\Storage\DataClass\PublicationUser $publicationUser
      *
-     * @return boolean
+     * @return bool
      */
     public function createPublicationUser(PublicationUser $publicationUser)
     {
@@ -95,7 +95,7 @@ class RightsRepository
     /**
      * @param \Chamilo\Application\Calendar\Extension\Personal\Storage\DataClass\Publication $publication
      *
-     * @return boolean
+     * @return bool
      */
     public function deletePublicationGroupsForPublication(Publication $publication)
     {
@@ -109,9 +109,9 @@ class RightsRepository
 
     /**
      * @param \Chamilo\Application\Calendar\Extension\Personal\Storage\DataClass\Publication $publication
-     * @param integer[] $groupIdentifiers
+     * @param int $groupIdentifiers
      *
-     * @return boolean
+     * @return bool
      */
     public function deletePublicationGroupsForPublicationAndGroupIdentifiers(
         Publication $publication, array $groupIdentifiers
@@ -135,7 +135,7 @@ class RightsRepository
     /**
      * @param \Chamilo\Application\Calendar\Extension\Personal\Storage\DataClass\Publication $publication
      *
-     * @return boolean
+     * @return bool
      */
     public function deletePublicationUsersForPublication(Publication $publication)
     {
@@ -149,9 +149,9 @@ class RightsRepository
 
     /**
      * @param \Chamilo\Application\Calendar\Extension\Personal\Storage\DataClass\Publication $publication
-     * @param integer[] $userIdentifiers
+     * @param int $userIdentifiers
      *
-     * @return boolean
+     * @return bool
      */
     public function deletePublicationUsersForPublicationAndUserIdentifiers(
         Publication $publication, array $userIdentifiers
@@ -180,17 +180,9 @@ class RightsRepository
     }
 
     /**
-     * @param \Chamilo\Libraries\Storage\DataManager\Repository\DataClassRepository $dataClassRepository
-     */
-    public function setDataClassRepository(DataClassRepository $dataClassRepository): void
-    {
-        $this->dataClassRepository = $dataClassRepository;
-    }
-
-    /**
      * @param \Chamilo\Application\Calendar\Extension\Personal\Storage\DataClass\Publication $publication
      *
-     * @return integer[]
+     * @return int
      */
     public function getPublicationGroupIdentifiersForPublication(Publication $publication)
     {
@@ -200,7 +192,7 @@ class RightsRepository
         );
 
         $properties = new RetrieveProperties(
-            array(new PropertyConditionVariable(PublicationGroup::class, PublicationGroup::PROPERTY_GROUP_ID))
+            [new PropertyConditionVariable(PublicationGroup::class, PublicationGroup::PROPERTY_GROUP_ID)]
         );
 
         return $this->getDataClassRepository()->distinct(
@@ -228,7 +220,7 @@ class RightsRepository
     /**
      * @param \Chamilo\Application\Calendar\Extension\Personal\Storage\DataClass\Publication $publication
      *
-     * @return integer[]
+     * @return int
      */
     public function getPublicationUserIdentifiersForPublication(Publication $publication)
     {
@@ -238,7 +230,7 @@ class RightsRepository
         );
 
         $properties = new RetrieveProperties(
-            array(new PropertyConditionVariable(PublicationUser::class, PublicationUser::PROPERTY_USER))
+            [new PropertyConditionVariable(PublicationUser::class, PublicationUser::PROPERTY_USER)]
         );
 
         return $this->getDataClassRepository()->distinct(
@@ -261,6 +253,14 @@ class RightsRepository
         return $this->getDataClassRepository()->retrieves(
             PublicationUser::class, new RetrievesParameters($condition)
         );
+    }
+
+    /**
+     * @param \Chamilo\Libraries\Storage\DataManager\Repository\DataClassRepository $dataClassRepository
+     */
+    public function setDataClassRepository(DataClassRepository $dataClassRepository): void
+    {
+        $this->dataClassRepository = $dataClassRepository;
     }
 }
 

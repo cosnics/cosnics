@@ -196,7 +196,7 @@ abstract class AssignmentRepository
         );
 
         $condition = new AndCondition($conditions);
-        $parameters = new DataClassCountParameters($condition, null, $property);
+        $parameters = new DataClassCountParameters(condition: $condition, retrieveProperties: $property);
 
         return $this->dataClassRepository->count($this->getEntryClassName(), $parameters);
     }

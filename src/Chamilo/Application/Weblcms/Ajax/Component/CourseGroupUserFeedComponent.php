@@ -27,12 +27,12 @@ use Chamilo\Libraries\Storage\Service\SearchQueryConditionGenerator;
 
 class CourseGroupUserFeedComponent extends Manager
 {
-    const PARAM_FILTER = 'filter';
-    const PARAM_OFFSET = 'offset';
-    const PARAM_SEARCH_QUERY = 'query';
+    public const PARAM_FILTER = 'filter';
+    public const PARAM_OFFSET = 'offset';
+    public const PARAM_SEARCH_QUERY = 'query';
 
-    const PROPERTY_ELEMENTS = 'elements';
-    const PROPERTY_TOTAL_ELEMENTS = 'total_elements';
+    public const PROPERTY_ELEMENTS = 'elements';
+    public const PROPERTY_TOTAL_ELEMENTS = 'total_elements';
 
     /**
      * @var \Chamilo\Application\Weblcms\Course\Storage\DataClass\Course
@@ -40,17 +40,17 @@ class CourseGroupUserFeedComponent extends Manager
     private $course;
 
     /**
-     * @var integer[]
+     * @var int
      */
     private $coursePlatformGroupUserIdentifiers;
 
     /**
-     * @var integer[]
+     * @var int
      */
     private $courseUserIdentifiers;
 
     /**
-     * @var integer[]
+     * @var int
      */
     private $userIdentifiers;
 
@@ -68,7 +68,7 @@ class CourseGroupUserFeedComponent extends Manager
     }
 
     /**
-     * @return integer
+     * @return int
      * @throws \Exception
      */
     protected function countUsers()
@@ -100,7 +100,7 @@ class CourseGroupUserFeedComponent extends Manager
     }
 
     /**
-     * @return integer[]
+     * @return int
      * @throws \Exception
      */
     protected function getCoursePlatformGroupUserIdentifiers()
@@ -133,7 +133,7 @@ class CourseGroupUserFeedComponent extends Manager
     }
 
     /**
-     * @return integer[]
+     * @return int
      */
     protected function getCourseUserIdentifiers()
     {
@@ -154,11 +154,11 @@ class CourseGroupUserFeedComponent extends Manager
 
             $parameters = new DataClassDistinctParameters(
                 new AndCondition($conditions), new RetrieveProperties(
-                    array(
+                    [
                         new PropertyConditionVariable(
                             CourseEntityRelation::class, CourseEntityRelation::PROPERTY_ENTITY_ID
                         )
-                    )
+                    ]
                 )
             );
 
@@ -216,7 +216,7 @@ class CourseGroupUserFeedComponent extends Manager
     }
 
     /**
-     * @return integer
+     * @return int
      */
     protected function getOffset()
     {
@@ -225,7 +225,7 @@ class CourseGroupUserFeedComponent extends Manager
 
     public function getRequiredPostParameters(array $postParameters = []): array
     {
-        return array(\Chamilo\Application\Weblcms\Manager::PARAM_COURSE);
+        return [\Chamilo\Application\Weblcms\Manager::PARAM_COURSE];
     }
 
     /**
@@ -257,11 +257,11 @@ class CourseGroupUserFeedComponent extends Manager
         if (!empty($searchQuery))
         {
             $conditions[] = $this->getSearchQueryConditionGenerator()->getSearchConditions(
-                $searchQuery, array(
+                $searchQuery, [
                     new PropertyConditionVariable(User::class, User::PROPERTY_USERNAME),
                     new PropertyConditionVariable(User::class, User::PROPERTY_FIRSTNAME),
                     new PropertyConditionVariable(User::class, User::PROPERTY_LASTNAME)
-                )
+                ]
             );
         }
 
@@ -273,7 +273,7 @@ class CourseGroupUserFeedComponent extends Manager
     }
 
     /**
-     * @return integer[]
+     * @return int
      * @throws \Exception
      */
     protected function getUserIdentifiers()
@@ -292,7 +292,7 @@ class CourseGroupUserFeedComponent extends Manager
     /**
      * @param \Chamilo\Core\User\Storage\DataClass\User $user
      *
-     * @return boolean
+     * @return bool
      * @throws \Exception
      */
     protected function isPlatformGroupUser(User $user)
@@ -305,10 +305,10 @@ class CourseGroupUserFeedComponent extends Manager
      */
     protected function retrieveUsers()
     {
-        $order = array(
+        $order = [
             new OrderProperty(new PropertyConditionVariable(User::class, User::PROPERTY_LASTNAME), SORT_ASC),
             new OrderProperty(new PropertyConditionVariable(User::class, User::PROPERTY_FIRSTNAME), SORT_ASC)
-        );
+        ];
 
         return DataManager::retrieves(
             User::class,

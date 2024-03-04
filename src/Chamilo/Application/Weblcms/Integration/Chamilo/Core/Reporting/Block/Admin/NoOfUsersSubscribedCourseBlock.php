@@ -26,19 +26,19 @@ class NoOfUsersSubscribedCourseBlock extends CourseBlock
 
         $courses = DataManager::count(
             CourseEntityRelation::class, new DataClassCountParameters(
-                new EqualityCondition(
+                condition: new EqualityCondition(
                     new PropertyConditionVariable(
                         CourseEntityRelation::class, CourseEntityRelation::PROPERTY_ENTITY_TYPE
                     ), new StaticConditionVariable(CourseEntityRelation::ENTITY_TYPE_USER)
-                ), null, new RetrieveProperties(
-                    [
-                        new FunctionConditionVariable(
-                            FunctionConditionVariable::DISTINCT, new PropertyConditionVariable(
-                                CourseEntityRelation::class, CourseEntityRelation::PROPERTY_ENTITY_ID
-                            )
+                ), retrieveProperties: new RetrieveProperties(
+                [
+                    new FunctionConditionVariable(
+                        FunctionConditionVariable::DISTINCT, new PropertyConditionVariable(
+                            CourseEntityRelation::class, CourseEntityRelation::PROPERTY_ENTITY_ID
                         )
-                    ]
-                )
+                    )
+                ]
+            )
             )
         );
 
