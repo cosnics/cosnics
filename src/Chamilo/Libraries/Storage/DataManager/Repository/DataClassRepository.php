@@ -22,6 +22,7 @@ use Chamilo\Libraries\Storage\Query\Condition\AndCondition;
 use Chamilo\Libraries\Storage\Query\Condition\ComparisonCondition;
 use Chamilo\Libraries\Storage\Query\Condition\Condition;
 use Chamilo\Libraries\Storage\Query\Condition\EqualityCondition;
+use Chamilo\Libraries\Storage\Query\Condition\InCondition;
 use Chamilo\Libraries\Storage\Query\Join;
 use Chamilo\Libraries\Storage\Query\RetrieveProperties;
 use Chamilo\Libraries\Storage\Query\UpdateProperties;
@@ -111,6 +112,71 @@ class DataClassRepository
         return $this->getDataClassDatabase()->distinct($dataClassName::getStorageUnitName(), $parameters);
     }
 
+    protected function __expandRecordsWithAdditionalProperties(string $dataClassName, array $records): array
+    {
+        $isDataTypeAware = is_subclass_of($dataClassName, DataClassTypeAwareInterface::class);
+        $isNotABaseExtension = !is_subclass_of($dataClassName, DataClassBaseExtensionInterface::class);
+
+        if (!$isDataTypeAware || !$isNotABaseExtension)
+        {
+            return $records;
+        }
+
+        $additionalQueries = [];
+
+        foreach ($records as $record)
+        {
+            $dataClassExtensionType = $record[DataClassTypeAwareInterface::PROPERTY_TYPE];
+            $identifier = $record[DataClass::PROPERTY_ID];
+
+            $hasType = isset($dataClassExtensionType);
+            $isExtension = is_subclass_of($dataClassExtensionType, DataClassExtensionInterface::class);
+            $hasIdentifier = isset($identifier);
+
+            if ($hasType && $isExtension && $hasIdentifier)
+            {
+                $additionalQueries[$dataClassExtensionType][] = $identifier;
+            }
+        }
+
+        $additionalRecords = [];
+
+        /**
+         * @var ?class-string<\Chamilo\Libraries\Storage\DataClass\DataClass> $dataClassExtensionType
+         */
+        foreach ($additionalQueries as $dataClassExtensionType => $identifiers)
+        {
+            $additionalRecordsForIdentifiers = $this->getDataClassDatabase()->retrieves(
+                $dataClassExtensionType::getStorageUnitName(), new DataClassRetrievesParameters(
+                    condition: new InCondition(
+                        new PropertyConditionVariable($dataClassExtensionType, DataClass::PROPERTY_ID), $identifiers
+                    ), retrieveProperties: new RetrieveProperties(
+                    [new PropertiesConditionVariable($dataClassExtensionType)]
+                )
+                )
+            );
+
+            foreach ($additionalRecordsForIdentifiers as $additionalRecordsForIdentifier)
+            {
+                $additionalRecords[$additionalRecordsForIdentifier[DataClass::PROPERTY_ID]] =
+                    $additionalRecordsForIdentifier;
+            }
+        }
+
+        if (count($additionalRecords) > 0)
+        {
+            foreach ($records as $recordKey => $record)
+            {
+                if (array_key_exists($record[DataClass::PROPERTY_ID], $additionalRecords))
+                {
+                    $records[$recordKey] = array_merge($record, $additionalRecords[$record[DataClass::PROPERTY_ID]]);
+                }
+            }
+        }
+
+        return $records;
+    }
+
     /**
      * @param class-string<\Chamilo\Libraries\Storage\DataClass\DataClass> $dataClassName
      *
@@ -142,12 +208,19 @@ class DataClassRepository
         string $dataClassName, DataClassRetrievesParameters|RecordRetrievesParameters $parameters
     ): ArrayCollection
     {
+        $expandRecords = $parameters->getRetrieveProperties()->isEmpty();
+
         $this->applyDataClassExtensionToParameters($dataClassName, $parameters);
         $this->applyDataClassPropertiesToParameters($dataClassName, $parameters);
 
-        return new ArrayCollection(
-            $this->getDataClassDatabase()->retrieves($dataClassName::getStorageUnitName(), $parameters)
-        );
+        $records = $this->getDataClassDatabase()->retrieves($dataClassName::getStorageUnitName(), $parameters);
+
+        if ($expandRecords)
+        {
+            $records = $this->__expandRecordsWithAdditionalProperties($dataClassName, $records);
+        }
+
+        return new ArrayCollection($records);
     }
 
     /**
@@ -180,11 +253,13 @@ class DataClassRepository
         foreach ($records as $record)
         {
             if (is_subclass_of($dataClassName, DataClassTypeAwareInterface::class) &&
-                !is_subclass_of($dataClassName, DataClassBaseExtensionInterface::class))
+                !is_subclass_of($dataClassName, DataClassBaseExtensionInterface::class) &&
+                isset($record[DataClassTypeAwareInterface::PROPERTY_TYPE]))
             {
+                /**
+                 * @var class-string<\Chamilo\Libraries\Storage\DataClass\DataClass> $factoryDataClassName
+                 */
                 $factoryDataClassName = $record[DataClassTypeAwareInterface::PROPERTY_TYPE];
-
-                //TODO: Do something here to expand $record to include the properties of the extension data class
             }
             else
             {

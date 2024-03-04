@@ -1,7 +1,6 @@
 <?php
 namespace Chamilo\Core\User\Component;
 
-use Chamilo\Core\Repository\Storage\DataClass\ContentObject;
 use Chamilo\Core\User\Manager;
 use Chamilo\Core\User\Storage\DataClass\User;
 use Chamilo\Core\User\Table\AdminUserTableRenderer;
@@ -37,14 +36,6 @@ class AdminUserBrowserComponent extends Manager
      */
     public function run()
     {
-        dump(
-            $this->getDataClassRepository()->retrieves(
-                ContentObject::class
-
-            )
-        );
-        exit;
-
         $this->checkAuthorization(Manager::CONTEXT, 'ManageUsers');
 
         if (!$this->getUser()->isPlatformAdmin())
