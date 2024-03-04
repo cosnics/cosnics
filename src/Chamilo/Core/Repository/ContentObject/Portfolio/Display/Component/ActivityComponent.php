@@ -18,7 +18,6 @@ class ActivityComponent extends ItemComponent
      * @throws \Chamilo\Libraries\Format\Table\Exception\InvalidPageNumberException
      * @throws \QuickformException
      * @throws \TableException
-     * @throws \Chamilo\Libraries\Storage\Exception\DataClassNoResultException
      */
     public function build()
     {
@@ -58,7 +57,6 @@ class ActivityComponent extends ItemComponent
      * @throws \Chamilo\Libraries\Format\Table\Exception\InvalidPageNumberException
      * @throws \QuickformException
      * @throws \TableException
-     * @throws \Chamilo\Libraries\Storage\Exception\DataClassNoResultException
      */
     protected function renderTable(): string
     {

@@ -17,7 +17,7 @@ use Chamilo\Core\Home\Storage\DataClass\Element;
 use Chamilo\Core\User\Storage\DataClass\User;
 use Chamilo\Libraries\Architecture\Application\Application;
 use Chamilo\Libraries\Architecture\Application\Routing\UrlGenerator;
-use Chamilo\Libraries\Storage\Parameters\DataClassRetrievesParameters;
+use Chamilo\Libraries\Storage\Parameters\RetrievesParameters;
 use Chamilo\Libraries\Storage\Query\Condition\AndCondition;
 use Chamilo\Libraries\Storage\Query\Condition\EqualityCondition;
 use Chamilo\Libraries\Storage\Query\Variable\PropertyConditionVariable;
@@ -54,7 +54,6 @@ class AssignmentSubmissionsBlockRenderer extends BlockRenderer
     }
 
     /**
-     * @throws \Chamilo\Libraries\Storage\Exception\DataClassNoResultException
      * @throws \Chamilo\Libraries\Architecture\Exceptions\UserException
      */
     public function displayContent(Element $block, ?User $user = null): string
@@ -78,7 +77,7 @@ class AssignmentSubmissionsBlockRenderer extends BlockRenderer
         $condition = new AndCondition($conditions);
 
         $assignment_publications_resultset = WeblcmsDataManager::retrieves(
-            ContentObjectPublication::class, new DataClassRetrievesParameters($condition)
+            ContentObjectPublication::class, new RetrievesParameters($condition)
         );
 
         if ($assignment_publications_resultset->count() == 0)

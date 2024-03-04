@@ -15,7 +15,6 @@ class BrowserComponent extends TabComponent
 {
 
     /**
-     * @throws \Chamilo\Libraries\Storage\Exception\DataClassNoResultException
      * @throws \Chamilo\Libraries\Architecture\Exceptions\NotAllowedException
      * @throws \TableException
      * @throws \Chamilo\Libraries\Format\Table\Exception\InvalidPageNumberException
@@ -48,7 +47,6 @@ class BrowserComponent extends TabComponent
     }
 
     /**
-     * @throws \Chamilo\Libraries\Storage\Exception\DataClassNoResultException
      * @throws \TableException
      * @throws \Chamilo\Libraries\Format\Table\Exception\InvalidPageNumberException
      * @throws \QuickformException

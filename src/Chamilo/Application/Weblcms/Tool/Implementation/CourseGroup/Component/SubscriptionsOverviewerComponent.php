@@ -45,8 +45,6 @@ class SubscriptionsOverviewerComponent extends Manager
      * @throws \Chamilo\Libraries\Architecture\Exceptions\NotAllowedException
      * @throws \Chamilo\Libraries\Architecture\Exceptions\ObjectNotExistException
      * @throws \Chamilo\Libraries\Format\Table\Exception\InvalidPageNumberException
-     * @throws \Chamilo\Libraries\Storage\Exception\DataClassNoResultException
-     * @throws \Doctrine\DBAL\Exception
      * @throws \QuickformException
      * @throws \TableException
      */
@@ -170,7 +168,6 @@ class SubscriptionsOverviewerComponent extends Manager
 
     /**
      * @throws \Chamilo\Libraries\Format\Table\Exception\InvalidPageNumberException
-     * @throws \Chamilo\Libraries\Storage\Exception\DataClassNoResultException
      * @throws \QuickformException
      * @throws \TableException
      */
@@ -232,8 +229,6 @@ class SubscriptionsOverviewerComponent extends Manager
 
     /**
      * @throws \Chamilo\Libraries\Format\Table\Exception\InvalidPageNumberException
-     * @throws \Chamilo\Libraries\Storage\Exception\DataClassNoResultException
-     * @throws \Doctrine\DBAL\Exception
      * @throws \QuickformException
      * @throws \TableException
      */
@@ -267,8 +262,6 @@ class SubscriptionsOverviewerComponent extends Manager
 
     /**
      * @throws \Chamilo\Libraries\Format\Table\Exception\InvalidPageNumberException
-     * @throws \Chamilo\Libraries\Storage\Exception\DataClassNoResultException
-     * @throws \Doctrine\DBAL\Exception
      * @throws \QuickformException
      * @throws \TableException
      */
@@ -286,11 +279,9 @@ class SubscriptionsOverviewerComponent extends Manager
     }
 
     /**
-     * @throws \Chamilo\Libraries\Storage\Exception\DataClassNoResultException
      * @throws \TableException
      * @throws \Chamilo\Libraries\Format\Table\Exception\InvalidPageNumberException
      * @throws \QuickformException
-     * @throws \Doctrine\DBAL\Exception
      */
     private function get_users_tab(): string
     {

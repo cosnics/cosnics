@@ -108,9 +108,6 @@ class RegistrationService
         return $this->getRegistrationRepository()->findRegistrationForContext($context);
     }
 
-    /**
-     * @throws \Chamilo\Libraries\Storage\Exception\DataClassNoResultException
-     */
     public function findRegistrationsAsRecords(): ArrayCollection
     {
         return $this->getRegistrationRepository()->findRegistrationsAsRecords();

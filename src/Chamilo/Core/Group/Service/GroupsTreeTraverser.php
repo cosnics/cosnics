@@ -124,7 +124,6 @@ class GroupsTreeTraverser
 
     /**
      * @return string[]
-     * @throws \Chamilo\Libraries\Storage\Exception\DataClassNoResultException
      */
     public function findAllSubscribedGroupIdentifiersForUserIdentifier(string $userIdentifier): array
     {
@@ -153,7 +152,6 @@ class GroupsTreeTraverser
      * @param string $userIdentifier
      *
      * @return \Doctrine\Common\Collections\ArrayCollection<\Chamilo\Core\Group\Storage\DataClass\Group>
-     * @throws \Chamilo\Libraries\Storage\Exception\DataClassNoResultException
      */
     public function findAllSubscribedGroupsForUserIdentifier(string $userIdentifier): ArrayCollection
     {
@@ -182,7 +180,6 @@ class GroupsTreeTraverser
      * @param string $userIdentifier
      *
      * @return ArrayCollection<string[]>
-     * @throws \Chamilo\Libraries\Storage\Exception\DataClassNoResultException
      */
     public function findDirectlySubscribedGroupNestingValuesForUserIdentifier(string $userIdentifier): ArrayCollection
     {
@@ -193,7 +190,6 @@ class GroupsTreeTraverser
      * @param string $userIdentifier
      *
      * @return \Doctrine\Common\Collections\ArrayCollection<\Chamilo\Core\Group\Storage\DataClass\Group>
-     * @throws \Chamilo\Libraries\Storage\Exception\DataClassNoResultException
      */
     public function findDirectlySubscribedGroupsForUserIdentifier(string $userIdentifier): ArrayCollection
     {
@@ -221,7 +217,6 @@ class GroupsTreeTraverser
      * @param bool $includeSelf
      *
      * @return \Doctrine\Common\Collections\ArrayCollection<\Chamilo\Core\Group\Storage\DataClass\Group>
-     * @throws \Chamilo\Libraries\Storage\Exception\DataClassNoResultException
      */
     public function findParentGroupsForGroup(Group $group, bool $includeSelf = true): ArrayCollection
     {
@@ -246,7 +241,6 @@ class GroupsTreeTraverser
 
     /**
      * @return \Chamilo\Core\Group\Storage\DataClass\Group[]
-     * @throws \Chamilo\Libraries\Storage\Exception\DataClassNoResultException
      */
     public function findSubGroupsForGroup(Group $group, bool $recursiveSubgroups = false): array
     {
@@ -292,9 +286,6 @@ class GroupsTreeTraverser
         return $this->groupUserIdentifiers[$cacheKey];
     }
 
-    /**
-     * @throws \Chamilo\Libraries\Storage\Exception\DataClassNoResultException
-     */
     public function getFullyQualifiedNameForGroup(Group $group, bool $includeSelf = true): string
     {
         $parentGroups = $this->findParentGroupsForGroup($group, $includeSelf);
@@ -309,9 +300,6 @@ class GroupsTreeTraverser
         return implode(' <span class="text-primary">></span> ', array_reverse($names));
     }
 
-    /**
-     * @throws \Chamilo\Libraries\Storage\Exception\DataClassNoResultException
-     */
     public function getHighestGroupQuotumForUser(User $user): int
     {
         $userGroupIdentifiers = $this->findAllSubscribedGroupIdentifiersForUserIdentifier($user->getId());
@@ -324,9 +312,6 @@ class GroupsTreeTraverser
         return $this->groupRepository->getHighestGroupQuotumForUserGroupIdentifiers($userGroupIdentifiers);
     }
 
-    /**
-     * @throws \Chamilo\Libraries\Storage\Exception\DataClassNoResultException
-     */
     public function getLowestGroupQuotumForUser(User $user): int
     {
         $userGroupIdentifiers = $this->findAllSubscribedGroupIdentifiersForUserIdentifier($user->getId());

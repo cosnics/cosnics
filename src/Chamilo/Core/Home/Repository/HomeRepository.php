@@ -7,7 +7,7 @@ use Chamilo\Libraries\Storage\DataClass\DataClass;
 use Chamilo\Libraries\Storage\DataManager\Repository\DataClassRepository;
 use Chamilo\Libraries\Storage\Parameters\DataClassCountParameters;
 use Chamilo\Libraries\Storage\Parameters\DataClassDistinctParameters;
-use Chamilo\Libraries\Storage\Parameters\DataClassRetrievesParameters;
+use Chamilo\Libraries\Storage\Parameters\RetrievesParameters;
 use Chamilo\Libraries\Storage\Query\Condition\AndCondition;
 use Chamilo\Libraries\Storage\Query\Condition\EqualityCondition;
 use Chamilo\Libraries\Storage\Query\Condition\InCondition;
@@ -61,7 +61,6 @@ class HomeRepository
      * @param string $userIdentifier
      *
      * @return \Doctrine\Common\Collections\ArrayCollection<\Chamilo\Core\Home\Storage\DataClass\Element>
-     * @throws \Chamilo\Libraries\Storage\Exception\DataClassNoResultException
      */
     public function findBlocksByUserIdentifier(string $userIdentifier): ArrayCollection
     {
@@ -78,7 +77,7 @@ class HomeRepository
         );
 
         return $this->getDataClassRepository()->retrieves(
-            Element::class, new DataClassRetrievesParameters(
+            Element::class, new RetrievesParameters(
                 new AndCondition($conditions)
             )
         );
@@ -88,7 +87,6 @@ class HomeRepository
      * @param string[] $columnIdentifiers
      *
      * @return \Doctrine\Common\Collections\ArrayCollection<\Chamilo\Core\Home\Storage\DataClass\Element>
-     * @throws \Chamilo\Libraries\Storage\Exception\DataClassNoResultException
      */
     public function findBlocksForColumnIdentifiers(array $columnIdentifiers): ArrayCollection
     {
@@ -104,7 +102,7 @@ class HomeRepository
         );
 
         return $this->getDataClassRepository()->retrieves(
-            Element::class, new DataClassRetrievesParameters(new AndCondition($conditions))
+            Element::class, new RetrievesParameters(new AndCondition($conditions))
         );
     }
 
@@ -143,7 +141,6 @@ class HomeRepository
      * @param string $parentIdentifier
      *
      * @return \Doctrine\Common\Collections\ArrayCollection<\Chamilo\Core\Home\Storage\DataClass\Element>
-     * @throws \Chamilo\Libraries\Storage\Exception\DataClassNoResultException
      */
     public function findElementsByParentIdentifier(string $parentIdentifier): ArrayCollection
     {
@@ -152,7 +149,7 @@ class HomeRepository
             new StaticConditionVariable($parentIdentifier)
         );
 
-        return $this->getDataClassRepository()->retrieves(Element::class, new DataClassRetrievesParameters($condition));
+        return $this->getDataClassRepository()->retrieves(Element::class, new RetrievesParameters($condition));
     }
 
     /**
@@ -161,7 +158,6 @@ class HomeRepository
      * @param string $parentIdentifier
      *
      * @return \Doctrine\Common\Collections\ArrayCollection<\Chamilo\Core\Home\Storage\DataClass\Element>
-     * @throws \Chamilo\Libraries\Storage\Exception\DataClassNoResultException
      */
     public function findElementsByTypeUserIdentifierAndParentIdentifier(
         string $type, string $userIdentifier, string $parentIdentifier = '0'
@@ -180,7 +176,7 @@ class HomeRepository
             new StaticConditionVariable($parentIdentifier)
         );
 
-        $parameters = new DataClassRetrievesParameters(
+        $parameters = new RetrievesParameters(
             condition: new AndCondition($conditions), orderBy: new OrderBy([
             new OrderProperty(new PropertyConditionVariable(Element::class, Element::PROPERTY_TYPE)),
             new OrderProperty(new PropertyConditionVariable(Element::class, Element::PROPERTY_SORT))
@@ -194,11 +190,10 @@ class HomeRepository
      * @param string $userIdentifier
      *
      * @return \Doctrine\Common\Collections\ArrayCollection<\Chamilo\Core\Home\Storage\DataClass\Element>
-     * @throws \Chamilo\Libraries\Storage\Exception\DataClassNoResultException
      */
     public function findElementsByUserIdentifier(string $userIdentifier): ArrayCollection
     {
-        $parameters = new DataClassRetrievesParameters(
+        $parameters = new RetrievesParameters(
             condition: $this->getElementsByUserIdentifierCondition($userIdentifier), orderBy: new OrderBy([
                 new OrderProperty(new PropertyConditionVariable(Element::class, Element::PROPERTY_TYPE)),
                 new OrderProperty(new PropertyConditionVariable(Element::class, Element::PROPERTY_SORT))

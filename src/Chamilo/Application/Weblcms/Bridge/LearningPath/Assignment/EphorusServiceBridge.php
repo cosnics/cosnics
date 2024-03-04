@@ -6,7 +6,7 @@ use Chamilo\Application\Weblcms\Storage\DataClass\ContentObjectPublication;
 use Chamilo\Application\Weblcms\Tool\Implementation\Ephorus\Storage\DataClass\Request;
 use Chamilo\Core\Repository\ContentObject\Assignment\Integration\Chamilo\Core\Repository\ContentObject\LearningPath\Bridge\Interfaces\EphorusServiceBridgeInterface;
 use Chamilo\Core\Repository\ContentObject\LearningPath\Storage\DataClass\TreeNodeData;
-use Chamilo\Libraries\Storage\Parameters\RecordRetrievesParameters;
+use Chamilo\Libraries\Storage\Parameters\RetrievesParameters;
 use Chamilo\Libraries\Storage\Query\Condition\Condition;
 
 /**
@@ -17,9 +17,9 @@ use Chamilo\Libraries\Storage\Query\Condition\Condition;
 class EphorusServiceBridge implements EphorusServiceBridgeInterface
 {
     /**
-     * @var \Chamilo\Application\Weblcms\Bridge\LearningPath\Assignment\Service\EphorusService
+     * @var \Chamilo\Application\Weblcms\Storage\DataClass\ContentObjectPublication
      */
-    protected $ephorusService;
+    protected $contentObjectPublication;
 
     /**
      * @var bool
@@ -27,9 +27,9 @@ class EphorusServiceBridge implements EphorusServiceBridgeInterface
     protected $ephorusEnabled;
 
     /**
-     * @var \Chamilo\Application\Weblcms\Storage\DataClass\ContentObjectPublication
+     * @var \Chamilo\Application\Weblcms\Bridge\LearningPath\Assignment\Service\EphorusService
      */
-    protected $contentObjectPublication;
+    protected $ephorusService;
 
     /**
      * EphorusServiceBridge constructor.
@@ -39,22 +39,6 @@ class EphorusServiceBridge implements EphorusServiceBridgeInterface
     public function __construct(EphorusService $ephorusService)
     {
         $this->ephorusService = $ephorusService;
-    }
-
-    /**
-     * @param \Chamilo\Application\Weblcms\Storage\DataClass\ContentObjectPublication $contentObjectPublication
-     */
-    public function setContentObjectPublication(ContentObjectPublication $contentObjectPublication)
-    {
-        $this->contentObjectPublication = $contentObjectPublication;
-    }
-
-    /**
-     * @param bool $ephorusEnabled
-     */
-    public function setEphorusEnabled($ephorusEnabled)
-    {
-        $this->ephorusEnabled = $ephorusEnabled;
     }
 
     /**
@@ -74,16 +58,16 @@ class EphorusServiceBridge implements EphorusServiceBridgeInterface
 
     /**
      * @param \Chamilo\Core\Repository\ContentObject\LearningPath\Storage\DataClass\TreeNodeData $treeNodeData
-     * @param \Chamilo\Libraries\Storage\Parameters\RecordRetrievesParameters $recordRetrievesParameters
+     * @param \Chamilo\Libraries\Storage\Parameters\RetrievesParameters $retrievesParameters
      *
      * @return \Doctrine\Common\Collections\ArrayCollection|\Chamilo\Core\Repository\Storage\DataClass\ContentObject[]
      */
     public function findAssignmentEntriesWithEphorusRequestsByTreeNodeData(
-        TreeNodeData $treeNodeData, RecordRetrievesParameters $recordRetrievesParameters = null
+        TreeNodeData $treeNodeData, RetrievesParameters $retrievesParameters = new RetrievesParameters()
     )
     {
         return $this->ephorusService->findAssignmentEntriesWithEphorusRequestsByTreeNodeData(
-            $this->contentObjectPublication, $treeNodeData, $recordRetrievesParameters
+            $this->contentObjectPublication, $treeNodeData, $retrievesParameters
         );
     }
 
@@ -108,5 +92,21 @@ class EphorusServiceBridge implements EphorusServiceBridgeInterface
     public function isEphorusEnabled()
     {
         return $this->ephorusEnabled;
+    }
+
+    /**
+     * @param \Chamilo\Application\Weblcms\Storage\DataClass\ContentObjectPublication $contentObjectPublication
+     */
+    public function setContentObjectPublication(ContentObjectPublication $contentObjectPublication)
+    {
+        $this->contentObjectPublication = $contentObjectPublication;
+    }
+
+    /**
+     * @param bool $ephorusEnabled
+     */
+    public function setEphorusEnabled($ephorusEnabled)
+    {
+        $this->ephorusEnabled = $ephorusEnabled;
     }
 }

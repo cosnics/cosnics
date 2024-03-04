@@ -6,8 +6,7 @@ use Chamilo\Libraries\Storage\Parameters\DataClassCountGroupedParameters;
 use Chamilo\Libraries\Storage\Parameters\DataClassCountParameters;
 use Chamilo\Libraries\Storage\Parameters\DataClassDistinctParameters;
 use Chamilo\Libraries\Storage\Parameters\DataClassParameters;
-use Chamilo\Libraries\Storage\Parameters\DataClassRetrieveParameters;
-use Chamilo\Libraries\Storage\Parameters\RecordRetrieveParameters;
+use Chamilo\Libraries\Storage\Parameters\RetrieveParameters;
 use Chamilo\Libraries\Storage\Query\Condition\EqualityCondition;
 use Chamilo\Libraries\Storage\Query\Variable\PropertyConditionVariable;
 use Chamilo\Libraries\Storage\Query\Variable\StaticConditionVariable;
@@ -53,7 +52,7 @@ class DataClassRepositoryCache
     }
 
     public function addForDataClass(
-        string $cacheDataClassName, DataClassRetrieveParameters $parameters, ?DataClass $object = null
+        string $cacheDataClassName, RetrieveParameters $parameters, ?DataClass $object = null
     ): bool
     {
         if ($object instanceof DataClass)
@@ -64,7 +63,7 @@ class DataClassRepositoryCache
 
                 if (isset($value))
                 {
-                    $cacheablePropertyParameters = new DataClassRetrieveParameters(
+                    $cacheablePropertyParameters = new RetrieveParameters(
                         new EqualityCondition(
                             new PropertyConditionVariable($cacheDataClassName, $cacheableProperty),
                             new StaticConditionVariable($value)
@@ -102,7 +101,7 @@ class DataClassRepositoryCache
         return $this->add($className, $parameters, $propertyValues);
     }
 
-    public function addForRecord(string $className, array $record, RecordRetrieveParameters $parameters): bool
+    public function addForRecord(string $className, array $record, RetrieveParameters $parameters): bool
     {
         $this->set($className, $parameters->hash(), $record);
 

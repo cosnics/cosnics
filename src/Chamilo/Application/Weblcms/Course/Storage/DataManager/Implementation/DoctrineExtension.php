@@ -7,7 +7,7 @@ use Chamilo\Core\Group\Storage\DataClass\GroupRelUser;
 use Chamilo\Core\User\Storage\DataClass\User;
 use Chamilo\Libraries\DependencyInjection\DependencyInjectionContainerBuilder;
 use Chamilo\Libraries\Storage\Parameters\DataClassDistinctParameters;
-use Chamilo\Libraries\Storage\Parameters\RecordRetrievesParameters;
+use Chamilo\Libraries\Storage\Parameters\RetrievesParameters;
 use Chamilo\Libraries\Storage\Query\Condition\AndCondition;
 use Chamilo\Libraries\Storage\Query\Condition\ComparisonCondition;
 use Chamilo\Libraries\Storage\Query\Condition\EqualityCondition;
@@ -28,8 +28,8 @@ use Doctrine\Common\Collections\ArrayCollection;
  */
 class DoctrineExtension
 {
-    const PARAM_SUBSCRIPTION_STATUS = 'subscription_status';
-    const PARAM_SUBSCRIPTION_TYPE = 'subscription_type';
+    public const PARAM_SUBSCRIPTION_STATUS = 'subscription_status';
+    public const PARAM_SUBSCRIPTION_TYPE = 'subscription_type';
 
     /**
      * **************************************************************************************************************
@@ -43,7 +43,7 @@ class DoctrineExtension
      * @param int $course_id
      * @param \Chamilo\Libraries\Storage\Query\Condition\Condition $condition
      *
-     * @return integer[]
+     * @return int
      */
     protected function countSubscribedGroupUsers($course_id, $condition)
     {
@@ -118,7 +118,6 @@ class DoctrineExtension
      * @param $condition
      *
      * @return int[]
-     * @throws \Doctrine\DBAL\Exception
      * @throws \Exception
      */
     protected function countSubscribedUsers($course_id, $condition)
@@ -169,9 +168,7 @@ class DoctrineExtension
      * @param int $course_id
      * @param \Chamilo\Libraries\Storage\Query\Condition\Condition $condition
      *
-     * @return integer
-     * @throws \Chamilo\Libraries\Storage\Exception\DataClassNoResultException
-     *
+     * @return int
      */
     public function count_all_course_users($course_id, $condition = null)
     {
@@ -464,7 +461,9 @@ class DoctrineExtension
         );
         $condition = new AndCondition($conditions);
 
-        $parameters = new RecordRetrievesParameters($properties, $condition, null, null, null, $joins);
+        $parameters = new RetrievesParameters(
+            condition: $condition, count: null, offset: null, joins: $joins, retrieveProperties: $properties
+        );
 
         return new ArrayCollection(
             $this->getDataClassDatabase()->records(CourseEntityRelation::class, $parameters)

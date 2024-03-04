@@ -22,8 +22,8 @@ use Chamilo\Core\User\Storage\DataClass\User;
 use Chamilo\Libraries\DependencyInjection\DependencyInjectionContainerBuilder;
 use Chamilo\Libraries\Storage\DataClass\DataClass;
 use Chamilo\Libraries\Storage\Parameters\DataClassCountParameters;
-use Chamilo\Libraries\Storage\Parameters\DataClassRetrieveParameters;
-use Chamilo\Libraries\Storage\Parameters\DataClassRetrievesParameters;
+use Chamilo\Libraries\Storage\Parameters\RetrieveParameters;
+use Chamilo\Libraries\Storage\Parameters\RetrievesParameters;
 use Chamilo\Libraries\Storage\Query\Condition\AndCondition;
 use Chamilo\Libraries\Storage\Query\Condition\EqualityCondition;
 use Chamilo\Libraries\Storage\Query\OrderBy;
@@ -271,7 +271,7 @@ class Course extends DataClass
         }
 
         // Create a location for each tool
-        $tools = DataManager::retrieves(CourseTool::class, new DataClassRetrievesParameters());
+        $tools = DataManager::retrieves(CourseTool::class, new RetrievesParameters());
         foreach ($tools as $tool)
         {
             if (!CourseManagementRights::getInstance()->create_location_in_courses_subtree(
@@ -501,7 +501,7 @@ class Course extends DataClass
         );
 
         return DataManager::retrieves(
-            CourseGroup::class, new DataClassRetrievesParameters(
+            CourseGroup::class, new RetrievesParameters(
                 $condition, null, null, new OrderBy([
                     new OrderProperty(new PropertyConditionVariable(CourseGroup::class, CourseGroup::PROPERTY_NAME))
                 ])
@@ -724,7 +724,7 @@ class Course extends DataClass
         );
 
         return DataManager::retrieves(
-            CourseEntityRelation::class, new DataClassRetrievesParameters(new AndCondition($relationConditions))
+            CourseEntityRelation::class, new RetrievesParameters(new AndCondition($relationConditions))
         );
     }
 
@@ -747,7 +747,7 @@ class Course extends DataClass
         );
 
         return DataManager::retrieves(
-            CourseEntityRelation::class, new DataClassRetrievesParameters(new AndCondition($relationConditions))
+            CourseEntityRelation::class, new RetrievesParameters(new AndCondition($relationConditions))
         );
     }
 
@@ -1000,7 +1000,7 @@ class Course extends DataClass
 
         $condition = new AndCondition($conditions);
 
-        return DataManager::retrieve(CourseRelCourseSetting::class, new DataClassRetrieveParameters($condition));
+        return DataManager::retrieve(CourseRelCourseSetting::class, new RetrieveParameters($condition));
     }
 
     /**

@@ -18,8 +18,8 @@ use Chamilo\Libraries\Storage\Exception\Database\DatabaseUpdateException;
 use Chamilo\Libraries\Storage\Parameters\DataClassCountGroupedParameters;
 use Chamilo\Libraries\Storage\Parameters\DataClassCountParameters;
 use Chamilo\Libraries\Storage\Parameters\DataClassDistinctParameters;
-use Chamilo\Libraries\Storage\Parameters\DataClassRetrieveParameters;
-use Chamilo\Libraries\Storage\Parameters\DataClassRetrievesParameters;
+use Chamilo\Libraries\Storage\Parameters\RetrieveParameters;
+use Chamilo\Libraries\Storage\Parameters\RetrievesParameters;
 use Chamilo\Libraries\Storage\Query\Condition\Condition;
 use Chamilo\Libraries\Storage\Query\UpdateProperties;
 use Doctrine\DBAL\Connection;
@@ -294,7 +294,7 @@ class DataClassDatabase implements DataClassDatabaseInterface
     /**
      * @throws \Chamilo\Libraries\Storage\Exception\Database\DatabaseRetrieveException
      */
-    public function retrieve(string $dataClassStorageUnitName, DataClassRetrieveParameters $parameters): ?array
+    public function retrieve(string $dataClassStorageUnitName, RetrieveParameters $parameters): ?array
     {
         try
         {
@@ -329,7 +329,7 @@ class DataClassDatabase implements DataClassDatabaseInterface
      * @return string[][]
      * @throws \Chamilo\Libraries\Storage\Exception\Database\DatabaseRetrievesException
      */
-    public function retrieves(string $dataClassStorageUnitName, DataClassRetrievesParameters $parameters): array
+    public function retrieves(string $dataClassStorageUnitName, RetrievesParameters $parameters): array
     {
         try
         {

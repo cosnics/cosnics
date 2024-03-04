@@ -10,8 +10,8 @@ use Chamilo\Libraries\Architecture\Exceptions\ObjectNotExistException;
 use Chamilo\Libraries\Storage\DataClass as DataClass2;
 use Chamilo\Libraries\Storage\DataClass\DataClass;
 use Chamilo\Libraries\Storage\Parameters\DataClassCountParameters;
-use Chamilo\Libraries\Storage\Parameters\DataClassRetrieveParameters;
-use Chamilo\Libraries\Storage\Parameters\DataClassRetrievesParameters;
+use Chamilo\Libraries\Storage\Parameters\RetrieveParameters;
+use Chamilo\Libraries\Storage\Parameters\RetrievesParameters;
 use Chamilo\Libraries\Storage\Query\Condition\AndCondition;
 use Chamilo\Libraries\Storage\Query\Condition\EqualityCondition;
 use Chamilo\Libraries\Storage\Query\Join;
@@ -163,7 +163,7 @@ class DataManager extends \Chamilo\Libraries\Storage\DataManager\DataManager
 
         $condition = new AndCondition($conditions);
 
-        return self::retrieve(ForumPostAttachment::class, new DataClassRetrieveParameters($condition));
+        return self::retrieve(ForumPostAttachment::class, new RetrieveParameters($condition));
     }
 
     public static function retrieve_attached_object_from_forum_post(
@@ -188,7 +188,7 @@ class DataManager extends \Chamilo\Libraries\Storage\DataManager\DataManager
             )
         );
 
-        $parameters = new DataClassRetrievesParameters($condition, $max_objects, $offset, $order_by, $joins);
+        $parameters = new RetrievesParameters($condition, $max_objects, $offset, $order_by, $joins);
 
         return self::retrieves(ContentObject::class, $parameters);
     }
@@ -200,7 +200,7 @@ class DataManager extends \Chamilo\Libraries\Storage\DataManager\DataManager
             new StaticConditionVariable($forum_post_id)
         );
 
-        return self::retrieves(ForumPostAttachment::class, new DataClassRetrievesParameters($condition));
+        return self::retrieves(ForumPostAttachment::class, new RetrievesParameters($condition));
     }
 
     /**
@@ -260,7 +260,7 @@ class DataManager extends \Chamilo\Libraries\Storage\DataManager\DataManager
             ForumPost::class, ForumPost::PROPERTY_CREATION_DATE, $creation_date_order
         );
 
-        $parameters = new DataClassRetrieveParameters($condition, $orderBy);
+        $parameters = new RetrieveParameters($condition, $orderBy);
 
         return self::retrieve(ForumPost::class, $parameters);
     }
@@ -321,7 +321,7 @@ class DataManager extends \Chamilo\Libraries\Storage\DataManager\DataManager
 
         $condition = new AndCondition($conditions);
 
-        return self::retrieve(ForumPost::class, new DataClassRetrieveParameters($condition));
+        return self::retrieve(ForumPost::class, new RetrieveParameters($condition));
     }
 
     /*
@@ -354,7 +354,7 @@ class DataManager extends \Chamilo\Libraries\Storage\DataManager\DataManager
 
         $condition = new AndCondition($conditions);
 
-        return self::retrieves(ForumPost::class, new DataClassRetrievesParameters($condition));
+        return self::retrieves(ForumPost::class, new RetrievesParameters($condition));
     }
 
     /**
@@ -403,7 +403,7 @@ class DataManager extends \Chamilo\Libraries\Storage\DataManager\DataManager
 
         $condition = new AndCondition($conditions);
 
-        return self::retrieve(ForumTopicSubscribe::class, new DataClassRetrieveParameters($condition));
+        return self::retrieve(ForumTopicSubscribe::class, new RetrieveParameters($condition));
     }
 
     /**
@@ -444,6 +444,6 @@ class DataManager extends \Chamilo\Libraries\Storage\DataManager\DataManager
             ), new StaticConditionVariable($forum_topic_id)
         );
 
-        return self::retrieves(ForumTopicSubscribe::class, new DataClassRetrievesParameters($condition));
+        return self::retrieves(ForumTopicSubscribe::class, new RetrievesParameters($condition));
     }
 }

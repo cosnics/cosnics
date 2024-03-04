@@ -6,7 +6,7 @@ use Chamilo\Core\Reporting\Viewer\Rendition\Block\Type\Html;
 use Chamilo\Core\User\Storage\DataClass\User;
 use Chamilo\Libraries\Storage\DataManager\DataManager;
 use Chamilo\Libraries\Translation\Translation;
-use Chamilo\Libraries\Storage\Parameters\DataClassRetrievesParameters;
+use Chamilo\Libraries\Storage\Parameters\RetrievesParameters;
 
 class NoOfUsersPictureBlock extends Block
 {
@@ -16,7 +16,7 @@ class NoOfUsersPictureBlock extends Block
         $reporting_data = new ReportingData();
         $users = DataManager::retrieves(
             User::class,
-            new DataClassRetrievesParameters());
+            new RetrievesParameters());
         $picturetext = Translation::get('Picture');
         $nopicturetext = Translation::get('NoPicture');
         $picture[$picturetext] = 0;

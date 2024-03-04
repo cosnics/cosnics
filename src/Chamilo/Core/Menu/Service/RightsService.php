@@ -214,7 +214,6 @@ class RightsService
 
     /**
      * @return int[][][]
-     * @throws \Chamilo\Libraries\Storage\Exception\DataClassNoResultException
      */
     public function getTargetUsersAndGroupsForRightsLocationAndAvailableRights(RightsLocation $rightsLocation): array
     {

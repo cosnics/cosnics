@@ -14,7 +14,7 @@ use Chamilo\Libraries\Format\Structure\Glyph\FontAwesomeGlyph;
 use Chamilo\Libraries\Format\Structure\ToolbarItem;
 use Chamilo\Libraries\Format\Table\RequestTableParameterValuesCompiler;
 use Chamilo\Libraries\Storage\Parameters\DataClassCountParameters;
-use Chamilo\Libraries\Storage\Parameters\DataClassRetrievesParameters;
+use Chamilo\Libraries\Storage\Parameters\RetrievesParameters;
 use Chamilo\Libraries\Storage\Query\Condition\AndCondition;
 use Chamilo\Libraries\Storage\Query\Condition\ContainsCondition;
 use Chamilo\Libraries\Storage\Query\Condition\EqualityCondition;
@@ -136,7 +136,7 @@ class BrowserComponent extends Manager implements BreadcrumbLessComponentInterfa
         );
 
         $userViews = DataManager::retrieves(
-            UserView::class, new DataClassRetrievesParameters(
+            UserView::class, new RetrievesParameters(
                 $this->getUserViewTableCondition(), $tableParameterValues->getNumberOfItemsPerPage(),
                 $tableParameterValues->getOffset(), $userViewTableRenderer->determineOrderBy($tableParameterValues)
             )

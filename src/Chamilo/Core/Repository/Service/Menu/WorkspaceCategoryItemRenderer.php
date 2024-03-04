@@ -90,7 +90,6 @@ class WorkspaceCategoryItemRenderer extends ItemRenderer implements SelectableIt
      * @param \Chamilo\Core\User\Storage\DataClass\User $user
      *
      * @return \Doctrine\Common\Collections\ArrayCollection<\Chamilo\Core\Repository\Workspace\Storage\DataClass\Workspace>
-     * @throws \Chamilo\Libraries\Storage\Exception\DataClassNoResultException
      */
     protected function findWorkspaces(User $user): ArrayCollection
     {
@@ -149,9 +148,6 @@ class WorkspaceCategoryItemRenderer extends ItemRenderer implements SelectableIt
         return $this->getTranslator()->trans('Workspaces', [], Manager::CONTEXT, $isoCode);
     }
 
-    /**
-     * @throws \Chamilo\Libraries\Storage\Exception\DataClassNoResultException
-     */
     protected function renderWorkspaces(Item $item, User $user): string
     {
         $itemRendererFactory = $this->getItemRendererFactory();

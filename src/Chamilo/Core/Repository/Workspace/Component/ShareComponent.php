@@ -14,7 +14,7 @@ use Chamilo\Libraries\Format\Table\RequestTableParameterValuesCompiler;
 use Chamilo\Libraries\Storage\DataClass\DataClass;
 use Chamilo\Libraries\Storage\DataManager\DataManager;
 use Chamilo\Libraries\Storage\Parameters\DataClassDistinctParameters;
-use Chamilo\Libraries\Storage\Parameters\DataClassRetrievesParameters;
+use Chamilo\Libraries\Storage\Parameters\RetrievesParameters;
 use Chamilo\Libraries\Storage\Query\Condition\InCondition;
 use Chamilo\Libraries\Storage\Query\RetrieveProperties;
 use Chamilo\Libraries\Storage\Query\Variable\PropertyConditionVariable;
@@ -39,7 +39,6 @@ class ShareComponent extends Manager
     private array $selectedWorkspaceIdentifiers;
 
     /**
-     * @throws \Chamilo\Libraries\Storage\Exception\DataClassNoResultException
      * @throws \TableException
      * @throws \Chamilo\Libraries\Architecture\Exceptions\ObjectNotExistException
      * @throws \Chamilo\Libraries\Format\Table\Exception\InvalidPageNumberException
@@ -101,7 +100,7 @@ class ShareComponent extends Manager
             if (count($contentObjectIdentifiers) >= 1)
             {
                 $contentObjects = DataManager::retrieves(
-                    ContentObject::class, new DataClassRetrievesParameters(
+                    ContentObject::class, new RetrievesParameters(
                         new InCondition(
                             new PropertyConditionVariable(ContentObject::class, DataClass::PROPERTY_ID),
                             $contentObjectIdentifiers
@@ -230,7 +229,6 @@ class ShareComponent extends Manager
     }
 
     /**
-     * @throws \Chamilo\Libraries\Storage\Exception\DataClassNoResultException
      * @throws \TableException
      * @throws \Chamilo\Libraries\Format\Table\Exception\InvalidPageNumberException
      * @throws \QuickformException

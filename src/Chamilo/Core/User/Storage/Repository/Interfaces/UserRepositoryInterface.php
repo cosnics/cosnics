@@ -61,7 +61,6 @@ interface UserRepositoryInterface
      * @param int[] $userIdentifiers
      *
      * @return \Doctrine\Common\Collections\ArrayCollection<\Chamilo\Core\User\Storage\DataClass\User>
-     * @throws \Chamilo\Libraries\Storage\Exception\DataClassNoResultException
      */
     public function findUsersByIdentifiersOrderedByName(array $userIdentifiers): ArrayCollection;
 

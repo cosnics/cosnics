@@ -6,8 +6,8 @@ use Chamilo\Application\Weblcms\Storage\DataClass\ContentObjectPublicationCatego
 use Chamilo\Application\Weblcms\Storage\DataManager;
 use Chamilo\Application\Weblcms\Tool\Implementation\CourseGroup\Storage\DataClass\CourseGroup;
 use Chamilo\Libraries\Storage\DataClass\DataClass;
-use Chamilo\Libraries\Storage\Parameters\DataClassRetrieveParameters;
-use Chamilo\Libraries\Storage\Parameters\DataClassRetrievesParameters;
+use Chamilo\Libraries\Storage\Parameters\RetrieveParameters;
+use Chamilo\Libraries\Storage\Parameters\RetrievesParameters;
 use Chamilo\Libraries\Storage\Query\Condition\EqualityCondition;
 use Chamilo\Libraries\Storage\Query\Condition\InCondition;
 use Chamilo\Libraries\Storage\Query\OrderBy;
@@ -57,7 +57,7 @@ class CourseCopierRepository implements CourseCopierRepositoryInterface
                 '\\Storage\\DataManager';
 
             return $datamanager_class::retrieve(
-                $possible_publication_class, new DataClassRetrieveParameters(
+                $possible_publication_class, new RetrieveParameters(
                     new EqualityCondition(
                         new PropertyConditionVariable(
                             $possible_publication_class, $possible_publication_class::PROPERTY_PUBLICATION_ID
@@ -110,7 +110,7 @@ class CourseCopierRepository implements CourseCopierRepositoryInterface
 
         return DataManager::retrieves(
             ContentObjectPublicationCategory::class,
-            new DataClassRetrievesParameters($condition, null, null, $order_by)
+            new RetrievesParameters($condition, null, null, $order_by)
         );
     }
 

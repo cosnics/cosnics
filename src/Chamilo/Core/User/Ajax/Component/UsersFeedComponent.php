@@ -31,9 +31,6 @@ class UsersFeedComponent extends Manager
 
     private int $userCount = 0;
 
-    /**
-     * @throws \Chamilo\Libraries\Storage\Exception\DataClassNoResultException
-     */
     public function run()
     {
         $result = new JsonAjaxResult();
@@ -83,9 +80,6 @@ class UsersFeedComponent extends Manager
         );
     }
 
-    /**
-     * @throws \Chamilo\Libraries\Storage\Exception\DataClassNoResultException
-     */
     protected function getElements(): AdvancedElementFinderElements
     {
         $translator = $this->getTranslator();
@@ -120,7 +114,6 @@ class UsersFeedComponent extends Manager
 
     /**
      * @return \Doctrine\Common\Collections\ArrayCollection<\Chamilo\Core\User\Storage\DataClass\User>
-     * @throws \Chamilo\Libraries\Storage\Exception\DataClassNoResultException
      */
     public function retrieveUsers(): ArrayCollection
     {

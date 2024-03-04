@@ -6,7 +6,7 @@ use Chamilo\Core\Repository\Storage\DataClass\ContentObject;
 use Chamilo\Libraries\Storage\DataClass\DataClass;
 use Chamilo\Libraries\Storage\DataManager\Repository\DataClassRepository;
 use Chamilo\Libraries\Storage\Parameters\DataClassCountParameters;
-use Chamilo\Libraries\Storage\Parameters\RecordRetrievesParameters;
+use Chamilo\Libraries\Storage\Parameters\RetrievesParameters;
 use Chamilo\Libraries\Storage\Query\Condition\EqualityCondition;
 use Chamilo\Libraries\Storage\Query\Join;
 use Chamilo\Libraries\Storage\Query\Joins;
@@ -121,10 +121,9 @@ class PublicationRepository
      * @param ?class-string<\Chamilo\Core\Repository\Storage\DataClass\ContentObject> $contentObjectTypeClassName
      *
      * @return \Chamilo\Core\Repository\Publication\Storage\DataClass\Publication[]
-     * @throws \Chamilo\Libraries\Storage\Exception\DataClassNoResultException
      */
     public function getPublicationsWithContentObjects(
-        RecordRetrievesParameters $baseRecordRetrievesParameters, string $publicationClassName,
+        RetrievesParameters $baseRetrievesParameters, string $publicationClassName,
         ?string $contentObjectTypeClassName = null
     ): array
     {
@@ -155,18 +154,18 @@ class PublicationRepository
 
         $properties = new RetrieveProperties($propertiesArray);
 
-        $properties->merge($baseRecordRetrievesParameters->getRetrieveProperties());
+        $properties->merge($baseRetrievesParameters->getRetrieveProperties());
 
-        $recordRetrievesParameters = new RecordRetrievesParameters(
-            $properties, $baseRecordRetrievesParameters->getCondition(), $baseRecordRetrievesParameters->getCount(),
-            $baseRecordRetrievesParameters->getOffset(), $baseRecordRetrievesParameters->getOrderBy(),
-            $this->getPublicationJoins(
-                $publicationClassName, $baseRecordRetrievesParameters->getJoins(), $contentObjectTypeClassName
-            ), $baseRecordRetrievesParameters->getGroupBy()
+        $retrievesParameters = new RetrievesParameters(
+            condition: $baseRetrievesParameters->getCondition(), count: $baseRetrievesParameters->getCount(),
+            offset: $baseRetrievesParameters->getOffset(), orderBy: $baseRetrievesParameters->getOrderBy(),
+            joins: $this->getPublicationJoins(
+                $publicationClassName, $baseRetrievesParameters->getJoins(), $contentObjectTypeClassName
+            ), groupBy: $baseRetrievesParameters->getGroupBy(), retrieveProperties: $properties
         );
 
         $records = $this->getDataClassRepository()->records(
-            $publicationClassName, $recordRetrievesParameters
+            $publicationClassName, $retrievesParameters
         );
 
         return $this->hydratePublications($records, $publicationClassName, $contentObjectTypeClassName);

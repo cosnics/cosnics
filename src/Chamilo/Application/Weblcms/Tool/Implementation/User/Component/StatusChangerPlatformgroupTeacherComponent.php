@@ -3,7 +3,7 @@ namespace Chamilo\Application\Weblcms\Tool\Implementation\User\Component;
 
 use Chamilo\Application\Weblcms\Course\Storage\DataManager;
 use Chamilo\Application\Weblcms\Storage\DataClass\CourseEntityRelation;
-use Chamilo\Libraries\Storage\Parameters\DataClassRetrieveParameters;
+use Chamilo\Libraries\Storage\Parameters\RetrieveParameters;
 use Chamilo\Libraries\Storage\Query\Condition\AndCondition;
 use Chamilo\Libraries\Storage\Query\Condition\EqualityCondition;
 use Chamilo\Libraries\Storage\Query\Variable\PropertyConditionVariable;
@@ -35,7 +35,7 @@ class StatusChangerPlatformgroupTeacherComponent extends StatusChangerComponent
         
         return DataManager::retrieve(
             CourseEntityRelation::class,
-            new DataClassRetrieveParameters($condition));
+            new RetrieveParameters($condition));
     }
 
     public function get_status()

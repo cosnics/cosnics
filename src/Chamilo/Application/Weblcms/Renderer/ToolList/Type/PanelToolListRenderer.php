@@ -12,7 +12,7 @@ use Chamilo\Application\Weblcms\Storage\DataClass\CourseTool;
 use Chamilo\Application\Weblcms\Storage\DataClass\CourseToolRelCourseSection;
 use Chamilo\Application\Weblcms\Storage\DataManager;
 use Chamilo\Libraries\Format\Structure\Glyph\FontAwesomeGlyph;
-use Chamilo\Libraries\Storage\Parameters\DataClassRetrievesParameters;
+use Chamilo\Libraries\Storage\Parameters\RetrievesParameters;
 use Chamilo\Libraries\Storage\Query\Condition\AndCondition;
 use Chamilo\Libraries\Storage\Query\Condition\EqualityCondition;
 use Chamilo\Libraries\Storage\Query\Condition\InCondition;
@@ -95,7 +95,7 @@ class PanelToolListRenderer extends ToolListRenderer
             $condition = new AndCondition($conditions);
 
             $this->publicationLinks = DataManager::retrieves(
-                ContentObjectPublication::class, new DataClassRetrievesParameters($condition)
+                ContentObjectPublication::class, new RetrievesParameters($condition)
             );
         }
 
@@ -137,7 +137,7 @@ class PanelToolListRenderer extends ToolListRenderer
             );
 
             $toolSectionRelations = DataManager::retrieves(
-                CourseToolRelCourseSection::class, new DataClassRetrievesParameters($condition)
+                CourseToolRelCourseSection::class, new RetrievesParameters($condition)
             );
 
             foreach ($toolSectionRelations as $toolSectionRelation)
@@ -194,7 +194,7 @@ class PanelToolListRenderer extends ToolListRenderer
 
             $this->sections = DataManager::retrieves(
                 CourseSection::class,
-                new DataClassRetrievesParameters($condition, null, null, new OrderBy($orderProperty))
+                new RetrievesParameters($condition, null, null, new OrderBy($orderProperty))
             );
         }
 

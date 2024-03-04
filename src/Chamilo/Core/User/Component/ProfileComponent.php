@@ -9,7 +9,7 @@ use Chamilo\Libraries\Format\Structure\Glyph\FontAwesomeGlyph;
 use Chamilo\Libraries\Format\Tabs\Link\LinkTab;
 use Chamilo\Libraries\Format\Tabs\Link\LinkTabsRenderer;
 use Chamilo\Libraries\Format\Tabs\TabsCollection;
-use Chamilo\Libraries\Storage\Parameters\DataClassRetrieveParameters;
+use Chamilo\Libraries\Storage\Parameters\RetrieveParameters;
 use Chamilo\Libraries\Storage\Query\Condition\AndCondition;
 use Chamilo\Libraries\Storage\Query\Condition\EqualityCondition;
 use Chamilo\Libraries\Storage\Query\Variable\PropertyConditionVariable;
@@ -72,7 +72,7 @@ abstract class ProfileComponent extends Manager implements BreadcrumbLessPackage
         $condition = new AndCondition($conditions);
 
         $extra_form = DataManager::retrieve(
-            Instance::class, new DataClassRetrieveParameters($condition)
+            Instance::class, new RetrieveParameters($condition)
         );
 
         if ($extra_form instanceof Instance && count($extra_form->get_elements()) > 0)

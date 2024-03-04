@@ -4,8 +4,8 @@ namespace Chamilo\Configuration\Storage;
 use Chamilo\Configuration\Storage\DataClass\Registration;
 use Chamilo\Configuration\Storage\DataClass\Setting;
 use Chamilo\Libraries\Storage\Parameters\DataClassDistinctParameters;
-use Chamilo\Libraries\Storage\Parameters\DataClassRetrieveParameters;
-use Chamilo\Libraries\Storage\Parameters\DataClassRetrievesParameters;
+use Chamilo\Libraries\Storage\Parameters\RetrieveParameters;
+use Chamilo\Libraries\Storage\Parameters\RetrievesParameters;
 use Chamilo\Libraries\Storage\Query\Condition\AndCondition;
 use Chamilo\Libraries\Storage\Query\Condition\Condition;
 use Chamilo\Libraries\Storage\Query\Condition\EndsWithCondition;
@@ -54,7 +54,7 @@ class DataManager extends \Chamilo\Libraries\Storage\DataManager\DataManager
 
         $condition = new AndCondition($conditions);
 
-        return self::retrieves(Registration::class, new DataClassRetrievesParameters($condition));
+        return self::retrieves(Registration::class, new RetrievesParameters($condition));
     }
 
     public static function retrieveRegistrationByContext($context)
@@ -64,7 +64,7 @@ class DataManager extends \Chamilo\Libraries\Storage\DataManager\DataManager
             new StaticConditionVariable($context)
         );
 
-        return self::retrieve(Registration::class, new DataClassRetrieveParameters($condition));
+        return self::retrieve(Registration::class, new RetrieveParameters($condition));
     }
 
     public static function retrieve_setting_contexts(Condition $condition = null)
@@ -97,6 +97,6 @@ class DataManager extends \Chamilo\Libraries\Storage\DataManager\DataManager
         );
         $condition = new AndCondition($conditions);
 
-        return self::retrieve(Setting::class, new DataClassRetrieveParameters($condition));
+        return self::retrieve(Setting::class, new RetrieveParameters($condition));
     }
 }

@@ -10,7 +10,7 @@ use Chamilo\Core\Group\Storage\DataClass\Group;
 use Chamilo\Core\User\Storage\DataClass\User;
 use Chamilo\Libraries\Format\Structure\Glyph\FontAwesomeGlyph;
 use Chamilo\Libraries\Storage\Parameters\DataClassDistinctParameters;
-use Chamilo\Libraries\Storage\Parameters\DataClassRetrievesParameters;
+use Chamilo\Libraries\Storage\Parameters\RetrievesParameters;
 use Chamilo\Libraries\Storage\Query\Condition\AndCondition;
 use Chamilo\Libraries\Storage\Query\Condition\ContainsCondition;
 use Chamilo\Libraries\Storage\Query\Condition\EqualityCondition;
@@ -210,7 +210,7 @@ class XmlCourseUserGroupFeedComponent extends Manager
             ];
 
             $user_result_set = DataManager::retrieves(
-                User::class, new DataClassRetrievesParameters(
+                User::class, new RetrievesParameters(
                     condition: $user_condition, orderBy: new OrderBy($order)
                 )
             );
@@ -226,7 +226,7 @@ class XmlCourseUserGroupFeedComponent extends Manager
                 $groups = [];
 
                 $group_result_set = DataManager::retrieves(
-                    CourseGroup::class, new DataClassRetrievesParameters(
+                    CourseGroup::class, new RetrievesParameters(
                         condition: $group_condition, orderBy: new OrderBy([
                         new OrderProperty(
                             new PropertyConditionVariable(CourseGroup::class, CourseGroup::PROPERTY_NAME)

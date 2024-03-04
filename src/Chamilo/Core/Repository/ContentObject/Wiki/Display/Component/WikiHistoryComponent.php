@@ -12,7 +12,7 @@ use Chamilo\Libraries\Format\Breadcrumb\BreadcrumbTrail;
 use Chamilo\Libraries\Format\Table\RequestTableParameterValuesCompiler;
 use Chamilo\Libraries\Format\Utilities\ResourceManager;
 use Chamilo\Libraries\Storage\Parameters\DataClassCountParameters;
-use Chamilo\Libraries\Storage\Parameters\DataClassRetrievesParameters;
+use Chamilo\Libraries\Storage\Parameters\RetrievesParameters;
 use Chamilo\Libraries\Storage\Query\Condition\EqualityCondition;
 use Chamilo\Libraries\Storage\Query\Variable\PropertyConditionVariable;
 use Chamilo\Libraries\Storage\Query\Variable\StaticConditionVariable;
@@ -87,7 +87,7 @@ class WikiHistoryComponent extends Manager
                 );
 
                 $contentObjects = DataManager::retrieve_content_objects(
-                    ContentObject::class, new DataClassRetrievesParameters(
+                    ContentObject::class, new RetrievesParameters(
                         $this->getVersionTableCondition(), $tableParameterValues->getNumberOfItemsPerPage(),
                         $tableParameterValues->getOffset(),
                         $versionTableRenderer->determineOrderBy($tableParameterValues)

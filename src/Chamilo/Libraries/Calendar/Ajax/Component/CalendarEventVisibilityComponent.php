@@ -19,9 +19,6 @@ abstract class CalendarEventVisibilityComponent extends Manager
 {
     public const PARAM_SOURCE = 'source';
 
-    /**
-     * @throws \Chamilo\Libraries\Storage\Exception\DataClassNoResultException
-     */
     public function run()
     {
         $source = $this->getPostDataValue(self::PARAM_SOURCE);

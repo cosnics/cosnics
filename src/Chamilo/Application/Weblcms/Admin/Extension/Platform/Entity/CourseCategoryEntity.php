@@ -13,7 +13,7 @@ use Chamilo\Libraries\Format\Form\Element\AdvancedElementFinder\AdvancedElementF
 use Chamilo\Libraries\Format\Form\Element\AdvancedElementFinder\AdvancedElementFinderElementType;
 use Chamilo\Libraries\Format\Structure\Glyph\FontAwesomeGlyph;
 use Chamilo\Libraries\Storage\Parameters\DataClassCountParameters;
-use Chamilo\Libraries\Storage\Parameters\DataClassRetrievesParameters;
+use Chamilo\Libraries\Storage\Parameters\RetrievesParameters;
 use Chamilo\Libraries\Translation\Translation;
 use Chamilo\Libraries\Utilities\StringUtilities;
 
@@ -303,7 +303,7 @@ class CourseCategoryEntity implements NestedRightsEntity
         $condition = $this->get_condition($condition);
 
         return \Chamilo\Application\Weblcms\Course\Storage\DataManager::retrieves(
-            CourseCategory::class, new DataClassRetrievesParameters($condition, $count, $offset, $order_property)
+            CourseCategory::class, new RetrievesParameters($condition, $count, $offset, $order_property)
         );
     }
 }

@@ -11,8 +11,8 @@ use Chamilo\Libraries\Storage\DataClass\DataClass;
 use Chamilo\Libraries\Storage\DataManager\Repository\DataClassRepository;
 use Chamilo\Libraries\Storage\Parameters\DataClassCountParameters;
 use Chamilo\Libraries\Storage\Parameters\DataClassDistinctParameters;
-use Chamilo\Libraries\Storage\Parameters\DataClassRetrieveParameters;
-use Chamilo\Libraries\Storage\Parameters\DataClassRetrievesParameters;
+use Chamilo\Libraries\Storage\Parameters\RetrieveParameters;
+use Chamilo\Libraries\Storage\Parameters\RetrievesParameters;
 use Chamilo\Libraries\Storage\Query\Condition\AndCondition;
 use Chamilo\Libraries\Storage\Query\Condition\Condition;
 use Chamilo\Libraries\Storage\Query\Condition\EqualityCondition;
@@ -125,17 +125,11 @@ class WorkspaceRepository
         return $this->countWorkspacesForUserWithCondition($user, $entities, $right, $condition);
     }
 
-    /**
-     * @throws \Chamilo\Libraries\Storage\Exception\DataClassNoResultException
-     */
     public function createWorkspace(Workspace $workspace): bool
     {
         return $this->getDataClassRepository()->create($workspace);
     }
 
-    /**
-     * @throws \Chamilo\Libraries\Storage\Exception\DataClassNoResultException
-     */
     public function createWorkspaceUserDefault(WorkspaceUserDefault $workspaceUserDefault): bool
     {
         return $this->getDataClassRepository()->create($workspaceUserDefault);
@@ -152,13 +146,12 @@ class WorkspaceRepository
      * @param ?\Chamilo\Libraries\Storage\Query\OrderBy $orderProperty
      *
      * @return \Doctrine\Common\Collections\ArrayCollection<\Chamilo\Core\Repository\Workspace\Storage\DataClass\Workspace>
-     * @throws \Chamilo\Libraries\Storage\Exception\DataClassNoResultException
      */
     public function findAllWorkspaces(?int $limit = null, ?int $offset = null, ?OrderBy $orderProperty = null
     ): ArrayCollection
     {
         return $this->getDataClassRepository()->retrieves(
-            Workspace::class, new DataClassRetrievesParameters(null, $limit, $offset, $orderProperty)
+            Workspace::class, new RetrievesParameters(null, $limit, $offset, $orderProperty)
         );
     }
 
@@ -187,14 +180,13 @@ class WorkspaceRepository
      * @param ?\Chamilo\Libraries\Storage\Query\OrderBy $orderProperty
      *
      * @return \Doctrine\Common\Collections\ArrayCollection<\Chamilo\Core\Repository\Workspace\Storage\DataClass\Workspace>
-     * @throws \Chamilo\Libraries\Storage\Exception\DataClassNoResultException
      */
     public function findFavouriteWorkspacesByUser(
         User $user, array $entities, ?int $limit = null, ?int $offset = null, ?OrderBy $orderProperty = null
     ): ArrayCollection
     {
         return $this->getDataClassRepository()->retrieves(
-            Workspace::class, new DataClassRetrievesParameters(
+            Workspace::class, new RetrievesParameters(
                 condition: $this->getFavouriteWorkspacesByUserCondition($user, $entities, RightsService::RIGHT_VIEW),
                 count: $limit, offset: $offset, orderBy: $orderProperty,
                 joins: $this->getFavouriteWorkspacesByUserJoins(), retrieveProperties: new RetrieveProperties(
@@ -215,14 +207,13 @@ class WorkspaceRepository
      * @param ?\Chamilo\Libraries\Storage\Query\OrderBy $orderProperty
      *
      * @return \Doctrine\Common\Collections\ArrayCollection<\Chamilo\Core\Repository\Workspace\Storage\DataClass\Workspace>
-     * @throws \Chamilo\Libraries\Storage\Exception\DataClassNoResultException
      */
     public function findSharedWorkspacesForEntities(
         array $entities, ?int $limit = null, ?int $offset = null, ?OrderBy $orderProperty = null
     ): ArrayCollection
     {
         return $this->getDataClassRepository()->retrieves(
-            Workspace::class, new DataClassRetrievesParameters(
+            Workspace::class, new RetrievesParameters(
                 $this->getSharedWorkspacesForEntitiesWithRightCondition($entities), $limit, $offset, $orderProperty,
                 new Joins([$this->getSharedWorkspacesJoin()])
             )
@@ -241,14 +232,13 @@ class WorkspaceRepository
      * @param ?\Chamilo\Libraries\Storage\Query\OrderBy $orderProperty
      *
      * @return \Doctrine\Common\Collections\ArrayCollection<\Chamilo\Core\Repository\Workspace\Storage\DataClass\Workspace>
-     * @throws \Chamilo\Libraries\Storage\Exception\DataClassNoResultException
      */
     public function findWorkspacesByCreator(
         User $user, ?int $limit = null, ?int $offset = null, ?OrderBy $orderProperty = null
     ): ArrayCollection
     {
         return $this->getDataClassRepository()->retrieves(
-            Workspace::class, new DataClassRetrievesParameters(
+            Workspace::class, new RetrievesParameters(
                 $this->getWorkspacesByCreatorCondition($user), $limit, $offset, $orderProperty
             )
         );
@@ -261,7 +251,6 @@ class WorkspaceRepository
      * @param ?\Chamilo\Libraries\Storage\Query\OrderBy $orderProperty
      *
      * @return \Doctrine\Common\Collections\ArrayCollection<\Chamilo\Core\Repository\Workspace\Storage\DataClass\Workspace>
-     * @throws \Chamilo\Libraries\Storage\Exception\DataClassNoResultException
      */
     public function findWorkspacesByIdentifiers(
         array $identifiers, ?int $limit = null, ?int $offset = null, ?OrderBy $orderProperty = null
@@ -272,7 +261,7 @@ class WorkspaceRepository
         );
 
         return $this->getDataClassRepository()->retrieves(
-            Workspace::class, new DataClassRetrievesParameters($condition, $limit, $offset, $orderProperty)
+            Workspace::class, new RetrievesParameters($condition, $limit, $offset, $orderProperty)
         );
     }
 
@@ -285,7 +274,6 @@ class WorkspaceRepository
      * @param ?\Chamilo\Libraries\Storage\Query\OrderBy $orderProperty
      *
      * @return \Doctrine\Common\Collections\ArrayCollection<\Chamilo\Core\Repository\Workspace\Storage\DataClass\Workspace>
-     * @throws \Chamilo\Libraries\Storage\Exception\DataClassNoResultException
      */
     public function findWorkspacesForUser(
         User $user, array $entities, int $right, ?int $limit = null, ?int $offset = null, ?OrderBy $orderProperty = null
@@ -307,7 +295,6 @@ class WorkspaceRepository
      * @param ?\Chamilo\Libraries\Storage\Query\OrderBy $orderProperty
      *
      * @return \Doctrine\Common\Collections\ArrayCollection<\Chamilo\Core\Repository\Workspace\Storage\DataClass\Workspace>
-     * @throws \Chamilo\Libraries\Storage\Exception\DataClassNoResultException
      */
     public function findWorkspacesForUserWithExcludedWorkspaces(
         User $user, array $entities, int $right, array $excludedWorkspaceIdentifiers = [], ?int $limit = null,
@@ -487,7 +474,7 @@ class WorkspaceRepository
         );
 
         return $this->getDataClassRepository()->retrieve(
-            Workspace::class, new DataClassRetrieveParameters($condition, null, new Joins([$join]))
+            Workspace::class, new RetrieveParameters($condition, null, new Joins([$join]))
         );
     }
 
@@ -499,7 +486,7 @@ class WorkspaceRepository
         );
 
         return $this->getDataClassRepository()->retrieve(
-            WorkspaceUserDefault::class, new DataClassRetrieveParameters($condition)
+            WorkspaceUserDefault::class, new RetrieveParameters($condition)
         );
     }
 
@@ -515,7 +502,6 @@ class WorkspaceRepository
      * @param ?\Chamilo\Libraries\Storage\Query\OrderBy $orderProperty
      *
      * @return \Doctrine\Common\Collections\ArrayCollection<\Chamilo\Core\Repository\Workspace\Storage\DataClass\Workspace>
-     * @throws \Chamilo\Libraries\Storage\Exception\DataClassNoResultException
      */
     protected function retrieveWorkspacesForUser(
         User $user, array $entities, int $right, ?Condition $condition = null, ?int $limit = null, ?int $offset = null,
@@ -523,24 +509,18 @@ class WorkspaceRepository
     ): ArrayCollection
     {
         return $this->getDataClassRepository()->retrieves(
-            Workspace::class, new DataClassRetrievesParameters(
+            Workspace::class, new RetrievesParameters(
                 $this->getWorkspaceByUserCondition($user, $entities, $right, $condition), $limit, $offset,
                 $orderProperty, new Joins([$this->getSharedWorkspacesJoin(Join::TYPE_LEFT)])
             )
         );
     }
 
-    /**
-     * @throws \Chamilo\Libraries\Storage\Exception\DataClassNoResultException
-     */
     public function updateWorkspace(Workspace $workspace): bool
     {
         return $this->getDataClassRepository()->update($workspace);
     }
 
-    /**
-     * @throws \Chamilo\Libraries\Storage\Exception\DataClassNoResultException
-     */
     public function updateWorkspaceUserDefault(WorkspaceUserDefault $workspaceUserDefault): bool
     {
         return $this->getDataClassRepository()->update($workspaceUserDefault);

@@ -12,7 +12,7 @@ use Chamilo\Core\Repository\ContentObject\Assessment\Storage\DataClass\Assessmen
 use Chamilo\Core\User\Manager;
 use Chamilo\Core\User\Storage\DataClass\User;
 use Chamilo\Libraries\Architecture\ClassnameUtilities;
-use Chamilo\Libraries\Storage\Parameters\DataClassRetrievesParameters;
+use Chamilo\Libraries\Storage\Parameters\RetrievesParameters;
 use Chamilo\Libraries\Storage\Query\Condition\AndCondition;
 use Chamilo\Libraries\Storage\Query\Condition\EqualityCondition;
 use Chamilo\Libraries\Storage\Query\OrderBy;
@@ -62,7 +62,7 @@ class AssessmentUserScoresBlock extends ToolBlock
 
         $publication_resultset = DataManager::retrieves(
             ContentObjectPublication::class,
-            new DataClassRetrievesParameters($condition, null, null, new OrderBy($order_by))
+            new RetrievesParameters($condition, null, null, new OrderBy($order_by))
         );
 
         $publications = [];
@@ -133,7 +133,7 @@ class AssessmentUserScoresBlock extends ToolBlock
                 $condition = new AndCondition($conditions);
 
                 $attempts_by_user = \Chamilo\Libraries\Storage\DataManager\DataManager::retrieves(
-                    AssessmentAttempt::class, new DataClassRetrievesParameters($condition)
+                    AssessmentAttempt::class, new RetrievesParameters($condition)
                 );
 
                 if ($attempts_by_user->count() == 0)

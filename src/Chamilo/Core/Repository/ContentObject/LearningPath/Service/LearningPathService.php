@@ -9,7 +9,7 @@ use Chamilo\Core\Repository\ContentObject\Section\Storage\DataClass\Section;
 use Chamilo\Core\Repository\Storage\DataClass\ContentObject;
 use Chamilo\Core\Repository\Workspace\Repository\ContentObjectRepository;
 use Chamilo\Core\User\Storage\DataClass\User;
-use Chamilo\Libraries\Storage\Parameters\DataClassRetrievesParameters;
+use Chamilo\Libraries\Storage\Parameters\RetrievesParameters;
 use InvalidArgumentException;
 use RuntimeException;
 
@@ -66,7 +66,7 @@ class LearningPathService
     {
         /** @var LearningPath[] $learningPaths */
         $learningPaths =
-            $this->contentObjectRepository->findAll(LearningPath::class, new DataClassRetrievesParameters());
+            $this->contentObjectRepository->findAll(LearningPath::class, new RetrievesParameters());
 
         return $learningPaths;
     }

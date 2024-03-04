@@ -5,7 +5,7 @@ use Chamilo\Application\Calendar\Extension\Personal\Storage\DataClass\Publicatio
 use Chamilo\Application\Calendar\Extension\Personal\Storage\DataClass\PublicationGroup;
 use Chamilo\Application\Calendar\Extension\Personal\Storage\DataClass\PublicationUser;
 use Chamilo\Core\User\Storage\DataClass\User;
-use Chamilo\Libraries\Storage\Parameters\RecordRetrievesParameters;
+use Chamilo\Libraries\Storage\Parameters\RetrievesParameters;
 use Chamilo\Libraries\Storage\Query\Condition\AndCondition;
 use Chamilo\Libraries\Storage\Query\Condition\EqualityCondition;
 use Chamilo\Libraries\Storage\Query\Condition\InCondition;
@@ -31,17 +31,20 @@ class CalendarEventDataProviderRepository
      *
      * @param User $user
      *
-     * @return RecordRetrievesParameters
+     * @return RetrievesParameters
      */
-    public function getPublicationsRecordRetrievesParameters(User $user)
+    public function getPublicationsRetrievesParameters(User $user)
     {
         $condition = new EqualityCondition(
             new PropertyConditionVariable(Publication::class, Publication::PROPERTY_PUBLISHER),
-            new StaticConditionVariable($user->getId()));
+            new StaticConditionVariable($user->getId())
+        );
 
-        return new RecordRetrievesParameters(
-            new RetrieveProperties(array(new PropertiesConditionVariable(Publication::class))),
-            $condition);
+        return new RetrievesParameters(
+            condition: $condition, retrieveProperties: new RetrieveProperties(
+            [new PropertiesConditionVariable(Publication::class)]
+        )
+        );
     }
 
     /**
@@ -49,22 +52,24 @@ class CalendarEventDataProviderRepository
      *
      * @param User $user
      *
-     * @return RecordRetrievesParameters
+     * @return RetrievesParameters
      */
-    public function getSharedPublicationsRecordRetrievesParameters(User $user)
+    public function getSharedPublicationsRetrievesParameters(User $user)
     {
         $user_groups = $user->get_groups(true);
 
         $conditions = [];
         $conditions[] = new EqualityCondition(
             new PropertyConditionVariable(PublicationUser::class, PublicationUser::PROPERTY_USER),
-            new StaticConditionVariable($user->getId()));
+            new StaticConditionVariable($user->getId())
+        );
 
         if (count($user_groups) > 0)
         {
             $conditions[] = new InCondition(
                 new PropertyConditionVariable(PublicationGroup::class, PublicationGroup::PROPERTY_GROUP_ID),
-                $user_groups);
+                $user_groups
+            );
         }
 
         $share_condition = new OrCondition($conditions);
@@ -72,30 +77,30 @@ class CalendarEventDataProviderRepository
         $publisher_condition = new NotCondition(
             new EqualityCondition(
                 new PropertyConditionVariable(Publication::class, Publication::PROPERTY_PUBLISHER),
-                new StaticConditionVariable($user->getId())));
+                new StaticConditionVariable($user->getId())
+            )
+        );
 
-        $condition = new AndCondition(array($share_condition, $publisher_condition));
+        $condition = new AndCondition([$share_condition, $publisher_condition]);
 
         $joins = [];
         $joins[] = new Join(
-            PublicationUser::class,
-            new EqualityCondition(
-                new PropertyConditionVariable(Publication::class, Publication::PROPERTY_ID),
-                new PropertyConditionVariable(PublicationUser::class, PublicationUser::PROPERTY_PUBLICATION)),
-            Join::TYPE_LEFT);
+            PublicationUser::class, new EqualityCondition(
+            new PropertyConditionVariable(Publication::class, Publication::PROPERTY_ID),
+            new PropertyConditionVariable(PublicationUser::class, PublicationUser::PROPERTY_PUBLICATION)
+        ), Join::TYPE_LEFT
+        );
         $joins[] = new Join(
-            PublicationGroup::class,
-            new EqualityCondition(
-                new PropertyConditionVariable(Publication::class, Publication::PROPERTY_ID),
-                new PropertyConditionVariable(PublicationGroup::class, PublicationGroup::PROPERTY_PUBLICATION)),
-            Join::TYPE_LEFT);
+            PublicationGroup::class, new EqualityCondition(
+            new PropertyConditionVariable(Publication::class, Publication::PROPERTY_ID),
+            new PropertyConditionVariable(PublicationGroup::class, PublicationGroup::PROPERTY_PUBLICATION)
+        ), Join::TYPE_LEFT
+        );
 
-        return new RecordRetrievesParameters(
-            new RetrieveProperties(array(new PropertiesConditionVariable(Publication::class))),
-            $condition,
-            null,
-            null,
-            null,
-            new Joins($joins));
+        return new RetrievesParameters(
+            condition: $condition, joins: new Joins($joins), retrieveProperties: new RetrieveProperties(
+            [new PropertiesConditionVariable(Publication::class)]
+        )
+        );
     }
 }

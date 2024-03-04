@@ -20,7 +20,7 @@ use Chamilo\Libraries\Format\Structure\ToolbarItem;
 use Chamilo\Libraries\Format\Table\RequestTableParameterValuesCompiler;
 use Chamilo\Libraries\Format\Tabs\GenericTabsRenderer;
 use Chamilo\Libraries\Storage\Parameters\DataClassCountParameters;
-use Chamilo\Libraries\Storage\Parameters\DataClassRetrievesParameters;
+use Chamilo\Libraries\Storage\Parameters\RetrievesParameters;
 use Chamilo\Libraries\Storage\Query\Condition\AndCondition;
 use Chamilo\Libraries\Storage\Query\Condition\ContainsCondition;
 use Chamilo\Libraries\Storage\Query\Condition\EqualityCondition;
@@ -51,7 +51,6 @@ class AdminRequestBrowserComponent extends Manager
     /**
      * @throws \Chamilo\Libraries\Architecture\Exceptions\NotAllowedException
      * @throws \Chamilo\Libraries\Format\Table\Exception\InvalidPageNumberException
-     * @throws \Chamilo\Libraries\Storage\Exception\DataClassNoResultException
      * @throws \QuickformException
      * @throws \TableException
      */
@@ -201,7 +200,6 @@ class AdminRequestBrowserComponent extends Manager
     }
 
     /**
-     * @throws \Chamilo\Libraries\Storage\Exception\DataClassNoResultException
      * @throws \TableException
      * @throws \Chamilo\Libraries\Format\Table\Exception\InvalidPageNumberException
      * @throws \QuickformException
@@ -233,7 +231,6 @@ class AdminRequestBrowserComponent extends Manager
 
     /**
      * @throws \Chamilo\Libraries\Format\Table\Exception\InvalidPageNumberException
-     * @throws \Chamilo\Libraries\Storage\Exception\DataClassNoResultException
      * @throws \QuickformException
      * @throws \TableException
      * @throws \Exception
@@ -250,7 +247,7 @@ class AdminRequestBrowserComponent extends Manager
         );
 
         $requests = DataManager::retrieves(
-            CourseRequest::class, new DataClassRetrievesParameters(
+            CourseRequest::class, new RetrievesParameters(
                 $this->getAdminRequestCondition(), $tableParameterValues->getNumberOfItemsPerPage(),
                 $tableParameterValues->getOffset(), $adminRequestTableRenderer->determineOrderBy($tableParameterValues)
             )

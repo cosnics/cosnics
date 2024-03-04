@@ -10,7 +10,7 @@ use Chamilo\Libraries\Storage\Query\Variable\PropertyConditionVariable;
 use Chamilo\Core\Repository\Storage\DataClass\ContentObject;
 use Chamilo\Core\Repository\Storage\DataManager;
 use Chamilo\Libraries\Storage\Query\Variable\StaticConditionVariable;
-use Chamilo\Libraries\Storage\Parameters\DataClassRetrieveParameters;
+use Chamilo\Libraries\Storage\Parameters\RetrieveParameters;
 use Chamilo\Libraries\Storage\Query\Condition\AndCondition;
 
 class DeleteFileComponent extends Manager
@@ -48,7 +48,7 @@ class DeleteFileComponent extends Manager
             
             $file = DataManager::retrieve(
                 ContentObject::class,
-                new DataClassRetrieveParameters(new AndCondition($conditions)));
+                new RetrieveParameters(new AndCondition($conditions)));
             
             if ($file instanceof File)
             {

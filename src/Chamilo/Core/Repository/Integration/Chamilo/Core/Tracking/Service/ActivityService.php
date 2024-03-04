@@ -54,7 +54,6 @@ class ActivityService
      * @param ?OrderBy $orderBy
      *
      * @return \Doctrine\Common\Collections\ArrayCollection<\Chamilo\Core\Repository\Integration\Chamilo\Core\Tracking\Event\Activity>
-     * @throws \Chamilo\Libraries\Storage\Exception\DataClassNoResultException
      */
     public function retrieveActivitiesForContentObject(
         ContentObject $contentObject, ?int $offset = null, ?int $count = null, ?OrderBy $orderBy = null

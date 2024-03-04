@@ -9,7 +9,7 @@ use Chamilo\Libraries\Architecture\Interfaces\ComplexContentObjectSupportInterfa
 use Chamilo\Libraries\Architecture\Interfaces\HelperContentObjectSupportInterface;
 use Chamilo\Libraries\DependencyInjection\DependencyInjectionContainerBuilder;
 use Chamilo\Libraries\Storage\Cache\DataClassRepositoryCache;
-use Chamilo\Libraries\Storage\Parameters\DataClassRetrievesParameters;
+use Chamilo\Libraries\Storage\Parameters\RetrievesParameters;
 use Chamilo\Libraries\Storage\Query\Condition\EqualityCondition;
 use Chamilo\Libraries\Storage\Query\OrderBy;
 use Chamilo\Libraries\Storage\Query\OrderProperty;
@@ -92,7 +92,7 @@ abstract class ComplexContentObjectPath
                     ComplexContentObjectItem::class, ComplexContentObjectItem::PROPERTY_DISPLAY_ORDER
                 ), SORT_ASC
             );
-            $parameters = new DataClassRetrievesParameters(
+            $parameters = new RetrievesParameters(
                 condition: $condition, orderBy: new OrderBy([$order])
             );
 

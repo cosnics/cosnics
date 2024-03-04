@@ -29,7 +29,6 @@ class ExporterComponent extends Manager
     protected ButtonToolBarRenderer $buttonToolBarRenderer;
 
     /**
-     * @throws \Chamilo\Libraries\Storage\Exception\DataClassNoResultException
      * @throws \Chamilo\Libraries\Architecture\Exceptions\NotAllowedException
      * @throws \QuickformException
      */

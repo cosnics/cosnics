@@ -9,7 +9,7 @@ use Chamilo\Application\Weblcms\Storage\DataManager;
 use Chamilo\Core\Reporting\ReportingData;
 use Chamilo\Core\Reporting\Viewer\Rendition\Block\Type\Html;
 use Chamilo\Core\Repository\Storage\DataClass\ComplexContentObjectItem;
-use Chamilo\Libraries\Storage\Parameters\DataClassRetrievesParameters;
+use Chamilo\Libraries\Storage\Parameters\RetrievesParameters;
 use Chamilo\Libraries\Storage\Query\Condition\EqualityCondition;
 use Chamilo\Libraries\Storage\Query\Condition\InCondition;
 use Chamilo\Libraries\Storage\Query\OrderBy;
@@ -69,7 +69,7 @@ class AssessmentQuestionsUsersBlock extends ToolBlock
         $order_by = OrderBy::generate(QuestionAttempt::class, QuestionAttempt::PROPERTY_QUESTION_COMPLEX_ID);
 
         $question_attempts_trackers = DataManager::retrieves(
-            QuestionAttempt::class, new DataClassRetrievesParameters($condition, null, null, $order_by)
+            QuestionAttempt::class, new RetrievesParameters($condition, null, null, $order_by)
         );
 
         $user_question_statistics = [];
@@ -194,7 +194,7 @@ class AssessmentQuestionsUsersBlock extends ToolBlock
             ), new StaticConditionVariable($publication->get_content_object_id())
         );
         $complex_questions = \Chamilo\Core\Repository\Storage\DataManager::retrieve_complex_content_object_items(
-            ComplexContentObjectItem::class, new DataClassRetrievesParameters($condition)
+            ComplexContentObjectItem::class, new RetrievesParameters($condition)
         );
 
         /**
@@ -241,7 +241,7 @@ class AssessmentQuestionsUsersBlock extends ToolBlock
         $order_by = OrderBy::generate(AssessmentAttempt::class, AssessmentAttempt::PROPERTY_USER_ID);
 
         $assessment_attempts_trackers = \Chamilo\Libraries\Storage\DataManager\DataManager::retrieves(
-            AssessmentAttempt::class, new DataClassRetrievesParameters($condition, null, null, $order_by)
+            AssessmentAttempt::class, new RetrievesParameters($condition, null, null, $order_by)
         );
 
         $user_question_statistics = [];

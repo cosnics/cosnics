@@ -59,9 +59,6 @@ class DisplayOrderHandler
         );
     }
 
-    /**
-     * @throws \Chamilo\Libraries\Storage\Exception\DataClassNoResultException
-     */
     protected function findNextDisplayOrderValue(DataClassDisplayOrderSupport $dataClass): int
     {
         return $this->getDisplayOrderRepository()->findNextDisplayOrderValue($dataClass);
@@ -116,9 +113,6 @@ class DisplayOrderHandler
         return $this->translator;
     }
 
-    /**
-     * @throws \Chamilo\Libraries\Storage\Exception\DataClassNoResultException
-     */
     protected function handleAddedDataClassInContext(DataClassDisplayOrderSupport $dataClass): bool
     {
         if ($this->hasDisplayOrder($dataClass))
@@ -143,7 +137,6 @@ class DisplayOrderHandler
 
     /**
      * @throws \Chamilo\Libraries\Storage\Exception\DisplayOrderException
-     * @throws \Chamilo\Libraries\Storage\Exception\DataClassNoResultException
      */
     public function handleDisplayOrderBeforeCreate(DataClassDisplayOrderSupport $dataClass): bool
     {
@@ -154,7 +147,6 @@ class DisplayOrderHandler
 
     /**
      * @throws \Chamilo\Libraries\Storage\Exception\DisplayOrderException
-     * @throws \Chamilo\Libraries\Storage\Exception\DataClassNoResultException
      */
     public function handleDisplayOrderBeforeUpdate(DataClassDisplayOrderSupport $dataClass): bool
     {
@@ -218,9 +210,6 @@ class DisplayOrderHandler
         return false;
     }
 
-    /**
-     * @throws \Chamilo\Libraries\Storage\Exception\DataClassNoResultException
-     */
     protected function setDisplayOrderToNextValueInContext(DataClassDisplayOrderSupport $dataClass)
     {
         $displayOrderPropertyName = $dataClass->getDisplayOrderPropertyName();

@@ -15,7 +15,7 @@ use Chamilo\Core\Repository\Workspace\Storage\DataClass\WorkspaceContentObjectRe
 use Chamilo\Core\User\Manager;
 use Chamilo\Libraries\Architecture\Interfaces\ComplexContentObjectSupportInterface;
 use Chamilo\Libraries\File\Compression\ZipArchive\ZipArchiveFilecompression;
-use Chamilo\Libraries\Storage\Parameters\DataClassRetrievesParameters;
+use Chamilo\Libraries\Storage\Parameters\RetrievesParameters;
 use Chamilo\Libraries\Storage\Query\Condition\EqualityCondition;
 use Chamilo\Libraries\Storage\Query\Condition\InCondition;
 use Chamilo\Libraries\Storage\Query\Variable\PropertyConditionVariable;
@@ -82,7 +82,7 @@ class CpoContentObjectExportController extends ContentObjectExportController
             $condition = null;
         }
 
-        $parameters = new DataClassRetrievesParameters($condition);
+        $parameters = new RetrievesParameters($condition);
         $content_objects = DataManager::retrieve_active_content_objects(ContentObject::class, $parameters);
 
         foreach ($content_objects as $content_object)
@@ -445,7 +445,7 @@ class CpoContentObjectExportController extends ContentObjectExportController
             ), new StaticConditionVariable($content_object->get_id())
         );
         $content_object_attachments = DataManager::retrieves(
-            ContentObjectAttachment::class, new DataClassRetrievesParameters($condition)
+            ContentObjectAttachment::class, new RetrievesParameters($condition)
         );
 
         if ($content_object_attachments->count() > 0)
@@ -613,7 +613,7 @@ class CpoContentObjectExportController extends ContentObjectExportController
             ), new StaticConditionVariable($content_object->get_id())
         );
         $content_object_includes = DataManager::retrieves(
-            ContentObjectInclude::class, new DataClassRetrievesParameters($condition)
+            ContentObjectInclude::class, new RetrievesParameters($condition)
         );
 
         if ($content_object_includes->count() > 0)

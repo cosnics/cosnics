@@ -25,7 +25,6 @@ class TabRenderer
     }
 
     /**
-     * @throws \Chamilo\Libraries\Storage\Exception\DataClassNoResultException
      * @throws \QuickformException
      */
     public function render(

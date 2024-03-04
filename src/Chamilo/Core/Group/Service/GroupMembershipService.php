@@ -105,7 +105,6 @@ class GroupMembershipService
      * @param ?\Chamilo\Libraries\Storage\Query\OrderBy $orderBy
      *
      * @return \Doctrine\Common\Collections\ArrayCollection<\Chamilo\Core\Group\Storage\DataClass\SubscribedUser>
-     * @throws \Chamilo\Libraries\Storage\Exception\DataClassNoResultException
      */
     public function findSubscribedUsersForGroupIdentifier(
         string $groupIdentifier, ?Condition $condition = null, ?int $offset = null, ?int $count = null,
@@ -123,7 +122,6 @@ class GroupMembershipService
      * @param ?\Chamilo\Libraries\Storage\Query\OrderBy $orderBy
      *
      * @return \Doctrine\Common\Collections\ArrayCollection<\Chamilo\Core\Group\Storage\DataClass\SubscribedUser>
-     * @throws \Chamilo\Libraries\Storage\Exception\DataClassNoResultException
      */
     public function findSubscribedUsersForGroupIdentifiers(
         array $groupIdentifiers, ?Condition $condition = null, ?int $offset = null, ?int $count = null,
@@ -168,7 +166,6 @@ class GroupMembershipService
      * @param string $groupIdentifier
      *
      * @return \Doctrine\Common\Collections\ArrayCollection<\Chamilo\Core\Group\Storage\DataClass\GroupRelUser>
-     * @throws \Chamilo\Libraries\Storage\Exception\DataClassNoResultException
      */
     public function getGroupUserRelationsByGroupIdentifier(string $groupIdentifier): ArrayCollection
     {
@@ -224,8 +221,6 @@ class GroupMembershipService
 
     /**
      * @param string[] $userIdentifiers
-     *
-     * @throws \Chamilo\Libraries\Storage\Exception\DataClassNoResultException
      */
     public function synchronizeGroup(Group $group, array $userIdentifiers): bool
     {
@@ -251,9 +246,6 @@ class GroupMembershipService
         return true;
     }
 
-    /**
-     * @throws \Chamilo\Libraries\Storage\Exception\DataClassNoResultException
-     */
     public function unsubscribeAllUsersFromGroup(Group $group): bool
     {
         $groupUserRelations =
@@ -281,9 +273,6 @@ class GroupMembershipService
         return true;
     }
 
-    /**
-     * @throws \Chamilo\Libraries\Storage\Exception\DataClassNoResultException
-     */
     public function unsubscribeUserFromAllGroups(User $user): bool
     {
         $groups = $this->groupsTreeTraverser->findDirectlySubscribedGroupsForUserIdentifier($user->getId());

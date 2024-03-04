@@ -4,7 +4,7 @@ namespace Chamilo\Core\Metadata\Vocabulary\Storage;
 use Chamilo\Core\Metadata\Storage\DataClass\Vocabulary;
 use Chamilo\Core\User\Storage\DataClass\User;
 use Chamilo\Libraries\Storage\Parameters\DataClassCountParameters;
-use Chamilo\Libraries\Storage\Parameters\RecordRetrievesParameters;
+use Chamilo\Libraries\Storage\Parameters\RetrievesParameters;
 use Chamilo\Libraries\Storage\Query\Condition\ComparisonCondition;
 use Chamilo\Libraries\Storage\Query\Join;
 use Chamilo\Libraries\Storage\Query\Joins;
@@ -23,7 +23,7 @@ use Chamilo\Libraries\Storage\Query\Variable\PropertyConditionVariable;
  */
 class DataManager extends \Chamilo\Libraries\Storage\DataManager\DataManager
 {
-    const PREFIX = 'metadata_';
+    public const PREFIX = 'metadata_';
 
     /**
      *
@@ -34,29 +34,32 @@ class DataManager extends \Chamilo\Libraries\Storage\DataManager\DataManager
         $joins = new Joins();
         $joins->add(
             new Join(
-                Vocabulary::class,
-                new ComparisonCondition(
+                Vocabulary::class, new ComparisonCondition(
                     new PropertyConditionVariable(Vocabulary::class, Vocabulary::PROPERTY_USER_ID),
-                    ComparisonCondition::EQUAL,
-                    new PropertyConditionVariable(User::class, User::PROPERTY_ID))));
+                    ComparisonCondition::EQUAL, new PropertyConditionVariable(User::class, User::PROPERTY_ID)
+                )
+            )
+        );
 
         return self::count(
-            User::class,
-            new DataClassCountParameters(
-                $condition,
-                $joins,
-                new RetrieveProperties(
-                    array(
+            User::class, new DataClassCountParameters(
+                $condition, $joins, new RetrieveProperties(
+                    [
                         new FunctionConditionVariable(
                             FunctionConditionVariable::DISTINCT,
-                            new PropertyConditionVariable(User::class, User::PROPERTY_ID))))));
+                            new PropertyConditionVariable(User::class, User::PROPERTY_ID)
+                        )
+                    ]
+                )
+            )
+        );
     }
 
     /**
      *
      * @param \Chamilo\Libraries\Storage\Query\Condition\Condition $condition
-     * @param integer $count
-     * @param integer $offset
+     * @param int $count
+     * @param int $offset
      * @param \Chamilo\Libraries\Storage\Query\OrderBy $order_property
      */
     public static function retrieve_vocabulary_users($condition, $count, $offset, $order_property)
@@ -64,19 +67,25 @@ class DataManager extends \Chamilo\Libraries\Storage\DataManager\DataManager
         $joins = new Joins();
         $joins->add(
             new Join(
-                Vocabulary::class,
-                new ComparisonCondition(
+                Vocabulary::class, new ComparisonCondition(
                     new PropertyConditionVariable(Vocabulary::class, Vocabulary::PROPERTY_USER_ID),
-                    ComparisonCondition::EQUAL,
-                    new PropertyConditionVariable(User::class, User::PROPERTY_ID))));
+                    ComparisonCondition::EQUAL, new PropertyConditionVariable(User::class, User::PROPERTY_ID)
+                )
+            )
+        );
 
         $properties = new RetrieveProperties(
-            array(
+            [
                 new FunctionConditionVariable(
-                    FunctionConditionVariable::DISTINCT,
-                    new PropertiesConditionVariable(User::class))));
+                    FunctionConditionVariable::DISTINCT, new PropertiesConditionVariable(User::class)
+                )
+            ]
+        );
 
-        $parameters = new RecordRetrievesParameters($properties, $condition, $count, $offset, $order_property, $joins);
+        $parameters = new RetrievesParameters(
+            condition: $condition, count: $count, offset: $offset, orderBy: $order_property, joins: $joins,
+            retrieveProperties: $properties
+        );
 
         return self::records(User::class, $parameters);
     }

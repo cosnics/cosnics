@@ -20,7 +20,7 @@ use Chamilo\Libraries\Format\Tabs\ContentTab;
 use Chamilo\Libraries\Format\Tabs\TabsCollection;
 use Chamilo\Libraries\Format\Tabs\TabsRenderer;
 use Chamilo\Libraries\Storage\Parameters\DataClassCountParameters;
-use Chamilo\Libraries\Storage\Parameters\DataClassRetrievesParameters;
+use Chamilo\Libraries\Storage\Parameters\RetrievesParameters;
 use Chamilo\Libraries\Storage\Query\Condition\AndCondition;
 use Chamilo\Libraries\Storage\Query\Condition\EqualityCondition;
 use Chamilo\Libraries\Storage\Query\Condition\InCondition;
@@ -33,7 +33,6 @@ class BrowserComponent extends Manager implements BreadcrumbLessComponentInterfa
     private ButtonToolBarRenderer $buttonToolbarRenderer;
 
     /**
-     * @throws \Chamilo\Libraries\Storage\Exception\DataClassNoResultException
      * @throws \Chamilo\Libraries\Rights\Exception\RightsLocationNotFoundException
      * @throws \TableException
      * @throws \QuickformException
@@ -69,7 +68,7 @@ class BrowserComponent extends Manager implements BreadcrumbLessComponentInterfa
                 );
 
                 $requests = DataManager::retrieves(
-                    Request::class, new DataClassRetrievesParameters(
+                    Request::class, new RetrievesParameters(
                         $this->getRequestCondition(RequestTableRenderer::TYPE_PERSONAL),
                         $tableParameterValues->getNumberOfItemsPerPage(), $tableParameterValues->getOffset(),
                         $requestTableRenderer->determineOrderBy($tableParameterValues)
@@ -315,7 +314,6 @@ class BrowserComponent extends Manager implements BreadcrumbLessComponentInterfa
     }
 
     /**
-     * @throws \Chamilo\Libraries\Storage\Exception\DataClassNoResultException
      * @throws \TableException
      * @throws \Chamilo\Libraries\Format\Table\Exception\InvalidPageNumberException
      * @throws \QuickformException
@@ -335,7 +333,7 @@ class BrowserComponent extends Manager implements BreadcrumbLessComponentInterfa
         );
 
         $requests = DataManager::retrieves(
-            Request::class, new DataClassRetrievesParameters(
+            Request::class, new RetrievesParameters(
                 $this->getRequestCondition($requestType), $tableParameterValues->getNumberOfItemsPerPage(),
                 $tableParameterValues->getOffset(), $requestTableRenderer->determineOrderBy($tableParameterValues)
             )

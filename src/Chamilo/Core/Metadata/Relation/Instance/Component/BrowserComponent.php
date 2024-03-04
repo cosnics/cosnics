@@ -14,7 +14,7 @@ use Chamilo\Libraries\Format\Structure\ActionBar\Renderer\ButtonToolBarRenderer;
 use Chamilo\Libraries\Format\Structure\Glyph\FontAwesomeGlyph;
 use Chamilo\Libraries\Format\Table\RequestTableParameterValuesCompiler;
 use Chamilo\Libraries\Storage\Parameters\DataClassCountParameters;
-use Chamilo\Libraries\Storage\Parameters\DataClassRetrievesParameters;
+use Chamilo\Libraries\Storage\Parameters\RetrievesParameters;
 use Chamilo\Libraries\Storage\Query\Condition\AndCondition;
 use Chamilo\Libraries\Storage\Query\Condition\InCondition;
 use Chamilo\Libraries\Storage\Query\Variable\PropertyConditionVariable;
@@ -35,7 +35,6 @@ class BrowserComponent extends Manager
     /**
      * @throws \Chamilo\Libraries\Architecture\Exceptions\NotAllowedException
      * @throws \Chamilo\Libraries\Format\Table\Exception\InvalidPageNumberException
-     * @throws \Chamilo\Libraries\Storage\Exception\DataClassNoResultException
      * @throws \QuickformException
      * @throws \TableException
      */
@@ -59,7 +58,6 @@ class BrowserComponent extends Manager
 
     /**
      * @throws \Chamilo\Libraries\Format\Table\Exception\InvalidPageNumberException
-     * @throws \Chamilo\Libraries\Storage\Exception\DataClassNoResultException
      * @throws \QuickformException
      * @throws \TableException
      */
@@ -158,7 +156,6 @@ class BrowserComponent extends Manager
     }
 
     /**
-     * @throws \Chamilo\Libraries\Storage\Exception\DataClassNoResultException
      * @throws \TableException
      * @throws \Chamilo\Libraries\Format\Table\Exception\InvalidPageNumberException
      * @throws \QuickformException
@@ -176,7 +173,7 @@ class BrowserComponent extends Manager
         );
 
         $relations = DataManager::retrieves(
-            RelationInstance::class, new DataClassRetrievesParameters(
+            RelationInstance::class, new RetrievesParameters(
                 $this->getRelationCondition(), $tableParameterValues->getNumberOfItemsPerPage(),
                 $tableParameterValues->getOffset(),
                 $relationInstanceTableRenderer->determineOrderBy($tableParameterValues)

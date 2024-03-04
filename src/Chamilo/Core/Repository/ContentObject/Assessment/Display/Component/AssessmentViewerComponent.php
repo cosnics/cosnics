@@ -11,7 +11,7 @@ use Chamilo\Core\Repository\Storage\DataManager;
 use Chamilo\Libraries\Format\Breadcrumb\BreadcrumbLessComponentInterface;
 use Chamilo\Libraries\Format\Form\FormValidator;
 use Chamilo\Libraries\Format\Structure\Breadcrumb;
-use Chamilo\Libraries\Storage\Parameters\DataClassRetrievesParameters;
+use Chamilo\Libraries\Storage\Parameters\RetrievesParameters;
 use Chamilo\Libraries\Storage\Query\Condition\InCondition;
 use Chamilo\Libraries\Storage\Query\OrderBy;
 use Chamilo\Libraries\Storage\Query\OrderProperty;
@@ -390,7 +390,7 @@ class AssessmentViewerComponent extends Manager implements BreadcrumbLessCompone
         );
 
         $this->questions = DataManager:: retrieve_complex_content_object_items(
-            ComplexContentObjectItem::class, new DataClassRetrievesParameters(
+            ComplexContentObjectItem::class, new RetrievesParameters(
                 condition: $condition, orderBy: $order_by
             )
         );

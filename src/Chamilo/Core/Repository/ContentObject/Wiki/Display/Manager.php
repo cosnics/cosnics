@@ -14,7 +14,7 @@ use Chamilo\Libraries\Format\Structure\Breadcrumb;
 use Chamilo\Libraries\Format\Structure\Glyph\FontAwesomeGlyph;
 use Chamilo\Libraries\Format\Structure\Glyph\IdentGlyph;
 use Chamilo\Libraries\Format\Structure\ToolbarItem;
-use Chamilo\Libraries\Storage\Parameters\DataClassRetrievesParameters;
+use Chamilo\Libraries\Storage\Parameters\RetrievesParameters;
 use Chamilo\Libraries\Storage\Query\Condition\AndCondition;
 use Chamilo\Libraries\Storage\Query\Condition\EqualityCondition;
 use Chamilo\Libraries\Storage\Query\Variable\PropertyConditionVariable;
@@ -369,7 +369,7 @@ abstract class Manager extends \Chamilo\Core\Repository\Display\Manager
             new PropertyConditionVariable(ComplexWikiPage::class, ComplexWikiPage::PROPERTY_IS_HOMEPAGE),
             new StaticConditionVariable(1)
         );
-        $parameters = new DataClassRetrievesParameters(new AndCondition($conditions), 1, 0);
+        $parameters = new RetrievesParameters(new AndCondition($conditions), 1, 0);
         $complex_wiki_homepage = DataManager::retrieve_complex_content_object_items(
             ComplexWikiPage::class, $parameters
         );

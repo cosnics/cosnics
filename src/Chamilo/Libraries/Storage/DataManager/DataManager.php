@@ -8,10 +8,8 @@ use Chamilo\Libraries\Storage\DataManager\Repository\StorageUnitRepository;
 use Chamilo\Libraries\Storage\Parameters\DataClassCountGroupedParameters;
 use Chamilo\Libraries\Storage\Parameters\DataClassCountParameters;
 use Chamilo\Libraries\Storage\Parameters\DataClassDistinctParameters;
-use Chamilo\Libraries\Storage\Parameters\DataClassRetrieveParameters;
-use Chamilo\Libraries\Storage\Parameters\DataClassRetrievesParameters;
-use Chamilo\Libraries\Storage\Parameters\RecordRetrieveParameters;
-use Chamilo\Libraries\Storage\Parameters\RecordRetrievesParameters;
+use Chamilo\Libraries\Storage\Parameters\RetrieveParameters;
+use Chamilo\Libraries\Storage\Parameters\RetrievesParameters;
 use Chamilo\Libraries\Storage\Query\Condition\Condition;
 use Chamilo\Libraries\Storage\Query\UpdateProperties;
 use Doctrine\Common\Collections\ArrayCollection;
@@ -151,16 +149,13 @@ class DataManager
     }
 
     public static function record(
-        string $dataClassName, RecordRetrieveParameters $parameters = new RecordRetrieveParameters()
+        string $dataClassName, RetrieveParameters $parameters = new RetrieveParameters()
     ): array
     {
         return self::getDataClassRepository()->record($dataClassName, $parameters);
     }
 
-    /**
-     * @throws \Chamilo\Libraries\Storage\Exception\DataClassNoResultException
-     */
-    public static function records(string $dataClassName, RecordRetrievesParameters $parameters): ArrayCollection
+    public static function records(string $dataClassName, RetrievesParameters $parameters): ArrayCollection
     {
         return self::getDataClassRepository()->records($dataClassName, $parameters);
     }
@@ -177,7 +172,7 @@ class DataManager
      * @return retrieveDataClassName
      */
     public static function retrieve(
-        string $dataClassName, DataClassRetrieveParameters $parameters = new DataClassRetrieveParameters()
+        string $dataClassName, RetrieveParameters $parameters = new RetrieveParameters()
     )
     {
         return self::getDataClassRepository()->retrieve($dataClassName, $parameters);
@@ -219,13 +214,12 @@ class DataManager
     /**
      * @template tRetrieves
      * @param class-string<tRetrieves> $dataClassName
-     * @param \Chamilo\Libraries\Storage\Parameters\DataClassRetrievesParameters $parameters
+     * @param \Chamilo\Libraries\Storage\Parameters\RetrievesParameters $parameters
      *
      * @return ArrayCollection<tRetrieves>
-     * @throws \Chamilo\Libraries\Storage\Exception\DataClassNoResultException
      */
     public static function retrieves(
-        string $dataClassName, DataClassRetrievesParameters $parameters = new DataClassRetrievesParameters()
+        string $dataClassName, RetrievesParameters $parameters = new RetrievesParameters()
     ): ArrayCollection
     {
         return self::getDataClassRepository()->retrieves($dataClassName, $parameters);

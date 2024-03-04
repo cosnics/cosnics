@@ -104,7 +104,6 @@ class PlatformgroupMenuRenderer extends GenericTree
      * @param $parent_node_id
      *
      * @return  \Chamilo\Core\Group\Storage\DataClass\Group[]
-     * @throws \Chamilo\Libraries\Storage\Exception\DataClassNoResultException
      */
     public function get_node_children($parent_node_id)
     {

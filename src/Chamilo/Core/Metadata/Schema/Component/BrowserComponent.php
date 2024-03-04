@@ -13,7 +13,7 @@ use Chamilo\Libraries\Format\Structure\ActionBar\Renderer\ButtonToolBarRenderer;
 use Chamilo\Libraries\Format\Structure\Glyph\FontAwesomeGlyph;
 use Chamilo\Libraries\Format\Table\RequestTableParameterValuesCompiler;
 use Chamilo\Libraries\Storage\Parameters\DataClassCountParameters;
-use Chamilo\Libraries\Storage\Parameters\DataClassRetrievesParameters;
+use Chamilo\Libraries\Storage\Parameters\RetrievesParameters;
 use Chamilo\Libraries\Storage\Query\Variable\PropertyConditionVariable;
 use Chamilo\Libraries\Translation\Translation;
 use Chamilo\Libraries\Utilities\StringUtilities;
@@ -103,7 +103,6 @@ class BrowserComponent extends Manager
 
     /**
      * @throws \Chamilo\Libraries\Format\Table\Exception\InvalidPageNumberException
-     * @throws \Chamilo\Libraries\Storage\Exception\DataClassNoResultException
      * @throws \QuickformException
      * @throws \TableException
      */
@@ -121,7 +120,7 @@ class BrowserComponent extends Manager
             $totalNumberOfItems
         );
 
-        $parameters = new DataClassRetrievesParameters(
+        $parameters = new RetrievesParameters(
             $condition, $tableParameterValues->getNumberOfItemsPerPage(), $tableParameterValues->getOffset(),
             $schemaTableRenderer->determineOrderBy($tableParameterValues)
         );

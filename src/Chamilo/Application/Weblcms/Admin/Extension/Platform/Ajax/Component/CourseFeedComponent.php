@@ -11,7 +11,7 @@ use Chamilo\Libraries\Format\Form\Element\AdvancedElementFinder\AdvancedElementF
 use Chamilo\Libraries\Format\Form\Element\AdvancedElementFinder\AdvancedElementFinderElements;
 use Chamilo\Libraries\Format\Structure\Glyph\FontAwesomeGlyph;
 use Chamilo\Libraries\Storage\Parameters\DataClassCountParameters;
-use Chamilo\Libraries\Storage\Parameters\DataClassRetrievesParameters;
+use Chamilo\Libraries\Storage\Parameters\RetrievesParameters;
 use Chamilo\Libraries\Storage\Query\Condition\AndCondition;
 use Chamilo\Libraries\Storage\Query\OrderBy;
 use Chamilo\Libraries\Storage\Query\OrderProperty;
@@ -169,7 +169,7 @@ class CourseFeedComponent extends Manager
         $this->course_count = DataManager::count(
             Course::class, new DataClassCountParameters($condition)
         );
-        $parameters = new DataClassRetrievesParameters(
+        $parameters = new RetrievesParameters(
             $condition, 100, $this->get_offset(),
             new OrderBy([new OrderProperty(new PropertyConditionVariable(Course::class, Course::PROPERTY_TITLE))])
         );

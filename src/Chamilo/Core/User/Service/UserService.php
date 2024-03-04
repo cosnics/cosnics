@@ -323,9 +323,6 @@ class UserService
         return $this->createUserSetting($userSetting);
     }
 
-    /**
-     * @throws \Chamilo\Libraries\Storage\Exception\DataClassNoResultException
-     */
     public function deleteUser(User $user): bool
     {
         // TODO: This needs to be implemented some day
@@ -361,7 +358,6 @@ class UserService
 
     /**
      * @return \Doctrine\Common\Collections\ArrayCollection<\Chamilo\Core\User\Storage\DataClass\User>
-     * @throws \Chamilo\Libraries\Storage\Exception\DataClassNoResultException
      */
     public function findActiveStudents(): ArrayCollection
     {
@@ -370,7 +366,6 @@ class UserService
 
     /**
      * @return \Doctrine\Common\Collections\ArrayCollection<\Chamilo\Core\User\Storage\DataClass\User>
-     * @throws \Chamilo\Libraries\Storage\Exception\DataClassNoResultException
      */
     public function findActiveTeachers(): ArrayCollection
     {
@@ -381,7 +376,6 @@ class UserService
      * @param int $status
      *
      * @return \Doctrine\Common\Collections\ArrayCollection<\Chamilo\Core\User\Storage\DataClass\User>
-     * @throws \Chamilo\Libraries\Storage\Exception\DataClassNoResultException
      */
     public function findActiveUsersByStatus(int $status): ArrayCollection
     {
@@ -390,7 +384,6 @@ class UserService
 
     /**
      * @return \Doctrine\Common\Collections\ArrayCollection<\Chamilo\Core\User\Storage\DataClass\User>
-     * @throws \Chamilo\Libraries\Storage\Exception\DataClassNoResultException
      */
     public function findActiveUsers(?Condition $condition = null, ?int $offset = null, ?int $count = null, ?OrderBy $orderProperty = null): ArrayCollection
     {
@@ -409,7 +402,6 @@ class UserService
 
     /**
      * @return \Doctrine\Common\Collections\ArrayCollection<\Chamilo\Core\User\Storage\DataClass\User>
-     * @throws \Chamilo\Libraries\Storage\Exception\DataClassNoResultException
      */
     public function findPlatformAdministrators(): ArrayCollection
     {
@@ -418,7 +410,6 @@ class UserService
 
     /**
      * @return string[]
-     * @throws \Chamilo\Libraries\Storage\Exception\DataClassNoResultException
      */
     public function findSettingsForUser(User $user): array
     {
@@ -503,7 +494,6 @@ class UserService
      * @param ?\Chamilo\Libraries\Storage\Query\OrderBy $orderProperty
      *
      * @return \Doctrine\Common\Collections\ArrayCollection<\Chamilo\Core\User\Storage\DataClass\User>
-     * @throws \Chamilo\Libraries\Storage\Exception\DataClassNoResultException
      */
     public function findUsers(
         ?Condition $condition = null, ?int $offset = null, ?int $count = null, ?OrderBy $orderProperty = null
@@ -516,7 +506,6 @@ class UserService
      * @param string[] $userIdentifiers
      *
      * @return \Doctrine\Common\Collections\ArrayCollection<\Chamilo\Core\User\Storage\DataClass\User>
-     * @throws \Chamilo\Libraries\Storage\Exception\DataClassNoResultException
      */
     public function findUsersByIdentifiers(array $userIdentifiers = []): ArrayCollection
     {
@@ -527,7 +516,6 @@ class UserService
      * @param string[] $userIdentifiers
      *
      * @return \Doctrine\Common\Collections\ArrayCollection<\Chamilo\Core\User\Storage\DataClass\User>
-     * @throws \Chamilo\Libraries\Storage\Exception\DataClassNoResultException
      */
     public function findUsersByIdentifiersOrderedByName(array $userIdentifiers): ArrayCollection
     {
@@ -540,7 +528,6 @@ class UserService
      * @param ?int $count
      *
      * @return \Doctrine\Common\Collections\ArrayCollection<\Chamilo\Core\User\Storage\DataClass\User>
-     * @throws \Chamilo\Libraries\Storage\Exception\DataClassNoResultException
      */
     public function findUsersForSearchQuery(?string $searchQuery = null, ?int $offset = null, ?int $count = null
     ): ArrayCollection
@@ -555,7 +542,6 @@ class UserService
      * @param ?int $count
      *
      * @return \Doctrine\Common\Collections\ArrayCollection<\Chamilo\Core\User\Storage\DataClass\User>
-     * @throws \Chamilo\Libraries\Storage\Exception\DataClassNoResultException
      */
     public function findUsersForSearchQueryAndUserIdentifiers(
         ?string $searchQuery = null, array $userIdentifiers = [], ?int $offset = null, ?int $count = null
@@ -568,7 +554,6 @@ class UserService
 
     /**
      * @return \Chamilo\Core\User\Storage\DataClass\User[]
-     * @throws \Chamilo\Libraries\Storage\Exception\DataClassNoResultException
      */
     public function findUsersMappedByOfficialCode(
         ?Condition $condition = null, ?int $offset = 0, ?int $count = - 1, ?OrderBy $orderProperty = null
@@ -586,7 +571,6 @@ class UserService
      * @param ?\Chamilo\Libraries\Storage\Query\OrderBy $orderProperty
      *
      * @return \Doctrine\Common\Collections\ArrayCollection<\Chamilo\Core\User\Storage\DataClass\User>
-     * @throws \Chamilo\Libraries\Storage\Exception\DataClassNoResultException
      */
     public function findUsersWaitingForApproval(
         ?Condition $condition = null, ?int $offset = null, ?int $count = null, ?OrderBy $orderProperty = null

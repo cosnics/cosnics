@@ -56,7 +56,6 @@ class Installer extends \Chamilo\Configuration\Package\Action\Installer
     }
 
     /**
-     * @throws \Chamilo\Libraries\Storage\Exception\DataClassNoResultException
      * @throws \Chamilo\Libraries\Storage\Exception\DisplayOrderException
      */
     protected function createDefaultItems(): bool

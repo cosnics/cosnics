@@ -13,7 +13,7 @@ use Chamilo\Libraries\Architecture\Exceptions\ObjectNotExistException;
 use Chamilo\Libraries\Architecture\Exceptions\UserException;
 use Chamilo\Libraries\Storage\DataClass\DataClass;
 use Chamilo\Libraries\Storage\DataManager\DataManager;
-use Chamilo\Libraries\Storage\Parameters\DataClassRetrievesParameters;
+use Chamilo\Libraries\Storage\Parameters\RetrievesParameters;
 use Chamilo\Libraries\Storage\Query\Condition\EqualityCondition;
 use Chamilo\Libraries\Storage\Query\Condition\InCondition;
 use Chamilo\Libraries\Storage\Query\OrderBy;
@@ -212,7 +212,7 @@ class ExporterComponent extends Manager
             ];
 
             $groupUsers = DataManager::retrieves(
-                User::class, new DataClassRetrievesParameters(
+                User::class, new RetrievesParameters(
                     $condition, null, null, new OrderBy($orderBy)
                 )
             );

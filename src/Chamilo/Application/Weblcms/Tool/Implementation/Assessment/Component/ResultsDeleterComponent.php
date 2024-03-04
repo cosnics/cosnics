@@ -8,8 +8,8 @@ use Chamilo\Application\Weblcms\Tool\Implementation\Assessment\Manager;
 use Chamilo\Libraries\Architecture\Exceptions\NotAllowedException;
 use Chamilo\Libraries\Format\Breadcrumb\BreadcrumbTrail;
 use Chamilo\Libraries\Storage\DataManager\DataManager;
-use Chamilo\Libraries\Storage\Parameters\DataClassRetrieveParameters;
-use Chamilo\Libraries\Storage\Parameters\DataClassRetrievesParameters;
+use Chamilo\Libraries\Storage\Parameters\RetrieveParameters;
+use Chamilo\Libraries\Storage\Parameters\RetrievesParameters;
 use Chamilo\Libraries\Storage\Query\Condition\EqualityCondition;
 use Chamilo\Libraries\Storage\Query\Variable\PropertyConditionVariable;
 use Chamilo\Libraries\Storage\Query\Variable\StaticConditionVariable;
@@ -39,7 +39,7 @@ class ResultsDeleterComponent extends Manager
             );
 
             $item = DataManager::retrieve(
-                AssessmentAttempt::class, new DataClassRetrieveParameters($condition)
+                AssessmentAttempt::class, new RetrieveParameters($condition)
             );
 
             if ($item)
@@ -83,7 +83,7 @@ class ResultsDeleterComponent extends Manager
         );
 
         $items = DataManager::retrieves(
-            AssessmentAttempt::class, new DataClassRetrievesParameters($condition)
+            AssessmentAttempt::class, new RetrievesParameters($condition)
         );
 
         foreach ($items as $assessment_attempt)
@@ -103,7 +103,7 @@ class ResultsDeleterComponent extends Manager
             );
 
             $items = DataManager::retrieves(
-                QuestionAttempt::class, new DataClassRetrievesParameters($condition)
+                QuestionAttempt::class, new RetrievesParameters($condition)
             );
 
             foreach ($items as $question_attempt)

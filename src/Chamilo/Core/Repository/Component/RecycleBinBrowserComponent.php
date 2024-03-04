@@ -16,7 +16,7 @@ use Chamilo\Libraries\Format\Structure\ToolbarItem;
 use Chamilo\Libraries\Format\Table\RequestTableParameterValuesCompiler;
 use Chamilo\Libraries\Storage\Cache\DataClassRepositoryCache;
 use Chamilo\Libraries\Storage\Parameters\DataClassCountParameters;
-use Chamilo\Libraries\Storage\Parameters\DataClassRetrievesParameters;
+use Chamilo\Libraries\Storage\Parameters\RetrievesParameters;
 use Chamilo\Libraries\Storage\Query\Condition\AndCondition;
 use Chamilo\Libraries\Storage\Query\Condition\EqualityCondition;
 use Chamilo\Libraries\Storage\Query\Variable\PropertyConditionVariable;
@@ -75,7 +75,7 @@ class RecycleBinBrowserComponent extends Manager
      */
     private function emptyRecycleBin()
     {
-        $parameters = new DataClassRetrievesParameters($this->getRecycleBinTableCondition());
+        $parameters = new RetrievesParameters($this->getRecycleBinTableCondition());
         $trashed_objects = DataManager::retrieve_active_content_objects(ContentObject::class, $parameters);
 
         foreach ($trashed_objects as $object)
@@ -159,7 +159,7 @@ class RecycleBinBrowserComponent extends Manager
         );
 
         $contentObjects = DataManager::retrieve_active_content_objects(
-            ContentObject::class, new DataClassRetrievesParameters(
+            ContentObject::class, new RetrievesParameters(
                 $this->getRecycleBinTableCondition(), $tableParameterValues->getNumberOfItemsPerPage(),
                 $tableParameterValues->getOffset(), $recycleBinTableRenderer->determineOrderBy($tableParameterValues)
             )

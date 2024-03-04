@@ -14,7 +14,7 @@ use Chamilo\Libraries\Format\Utilities\ResourceManager;
 use Chamilo\Libraries\Storage\DataClass\DataClass;
 use Chamilo\Libraries\Storage\DataManager\DataManager;
 use Chamilo\Libraries\Storage\Parameters\DataClassCountParameters;
-use Chamilo\Libraries\Storage\Parameters\DataClassRetrievesParameters;
+use Chamilo\Libraries\Storage\Parameters\RetrievesParameters;
 use Chamilo\Libraries\Storage\Query\Condition\AndCondition;
 use Chamilo\Libraries\Storage\Query\Condition\ComparisonCondition;
 use Chamilo\Libraries\Storage\Query\Condition\InCondition;
@@ -44,7 +44,6 @@ class SelectComponent extends Manager
     private $elementId;
 
     /**
-     * @throws \Chamilo\Libraries\Storage\Exception\DataClassNoResultException
      * @throws \Chamilo\Libraries\Architecture\Exceptions\NoObjectSelectedException
      * @throws \TableException
      * @throws \Chamilo\Libraries\Format\Table\Exception\InvalidPageNumberException
@@ -99,7 +98,6 @@ class SelectComponent extends Manager
     }
 
     /**
-     * @throws \Chamilo\Libraries\Storage\Exception\DataClassNoResultException
      * @throws \TableException
      * @throws \Chamilo\Libraries\Format\Table\Exception\InvalidPageNumberException
      * @throws \QuickformException
@@ -248,7 +246,6 @@ class SelectComponent extends Manager
      * @param string[] $vocabularyIds
      *
      * @return \Doctrine\Common\Collections\ArrayCollection<\Chamilo\Core\Metadata\Storage\DataClass\Vocabulary>
-     * @throws \Chamilo\Libraries\Storage\Exception\DataClassNoResultException
      */
     public function getVocabularyItems(array $vocabularyIds = []): ArrayCollection
     {
@@ -260,11 +257,10 @@ class SelectComponent extends Manager
 
         $condition = new AndCondition($conditions);
 
-        return DataManager::retrieves(Vocabulary::class, new DataClassRetrievesParameters($condition));
+        return DataManager::retrieves(Vocabulary::class, new RetrievesParameters($condition));
     }
 
     /**
-     * @throws \Chamilo\Libraries\Storage\Exception\DataClassNoResultException
      * @throws \TableException
      * @throws \Chamilo\Libraries\Format\Table\Exception\InvalidPageNumberException
      * @throws \QuickformException
@@ -283,7 +279,7 @@ class SelectComponent extends Manager
         );
 
         $vocabularies = DataManager::retrieves(
-            Vocabulary::class, new DataClassRetrievesParameters(
+            Vocabulary::class, new RetrievesParameters(
                 $this->getSelectCondition(), $tableParameterValues->getNumberOfItemsPerPage(),
                 $tableParameterValues->getOffset(), $selectTableRenderer->determineOrderBy($tableParameterValues)
             )

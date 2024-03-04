@@ -14,7 +14,7 @@ use Chamilo\Libraries\Storage\Query\RetrieveProperties;
  * @author Magali Gillard <magali.gillard@ehb.be>
  * @author Eduard Vossen <eduard.vossen@ehb.be>
  */
-class DataClassRetrieveParameters extends DataClassBasicRetrieveParameters
+class RetrieveParameters extends DataClassParameters
 {
 
     public function __construct(

@@ -16,7 +16,6 @@ class TableContentObjectPublicationListRenderer extends ContentObjectPublication
 
     /**
      * @throws \Chamilo\Libraries\Format\Table\Exception\InvalidPageNumberException
-     * @throws \Chamilo\Libraries\Storage\Exception\DataClassNoResultException
      * @throws \QuickformException
      * @throws \TableException
      */

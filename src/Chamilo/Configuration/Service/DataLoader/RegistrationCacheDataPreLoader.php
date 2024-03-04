@@ -38,7 +38,6 @@ class RegistrationCacheDataPreLoader implements CacheDataPreLoaderInterface
 
     /**
      * @return string[][][][]
-     * @throws \Chamilo\Libraries\Storage\Exception\DataClassNoResultException
      */
     public function getDataForCache(): array
     {

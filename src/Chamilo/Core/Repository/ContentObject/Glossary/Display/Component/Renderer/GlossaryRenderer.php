@@ -6,7 +6,7 @@ use Chamilo\Core\Repository\Storage\DataClass\ContentObject;
 use Chamilo\Core\Repository\Storage\DataManager;
 use Chamilo\Libraries\DependencyInjection\Traits\DependencyInjectionContainerTrait;
 use Chamilo\Libraries\Storage\Parameters\DataClassCountParameters;
-use Chamilo\Libraries\Storage\Parameters\DataClassRetrievesParameters;
+use Chamilo\Libraries\Storage\Parameters\RetrievesParameters;
 use Chamilo\Libraries\Storage\Query\Condition\AndCondition;
 use Chamilo\Libraries\Storage\Query\Condition\ContainsCondition;
 use Chamilo\Libraries\Storage\Query\Condition\EqualityCondition;
@@ -182,7 +182,7 @@ abstract class GlossaryRenderer
      */
     public function get_objects($offset = null, $count = null, $order_property = null)
     {
-        $parameters = new DataClassRetrievesParameters(
+        $parameters = new RetrievesParameters(
             $this->get_condition(), $count, $offset, $order_property, $this->get_joins()
         );
 

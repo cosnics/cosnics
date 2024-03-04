@@ -33,7 +33,6 @@ class StorageConfigurationCacheDataPreLoader implements CacheDataPreLoaderInterf
 
     /**
      * @return string[][]
-     * @throws \Chamilo\Libraries\Storage\Exception\DataClassNoResultException
      */
     public function getDataForCache(): array
     {

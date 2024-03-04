@@ -29,7 +29,6 @@ trait UserDetailsRendererTrait
 
     /**
      * @throws \TableException
-     * @throws \Chamilo\Libraries\Storage\Exception\DataClassNoResultException
      */
     public function renderUserDetailsForUserIdentifier(string $userIdentifier, User $requestingUser): string
     {

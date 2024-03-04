@@ -117,7 +117,6 @@ class ContentObjectService
      * @param string[] $identifiers
      *
      * @return \Doctrine\Common\Collections\ArrayCollection<\Chamilo\Core\Repository\Storage\DataClass\ContentObject>
-     * @throws \Chamilo\Libraries\Storage\Exception\DataClassNoResultException
      */
     public function retrieveContentObjectsByIdentifiers(array $identifiers): ArrayCollection
     {

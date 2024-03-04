@@ -47,7 +47,6 @@ class WorkspaceFactory
 
     /**
      * @throws \Chamilo\Libraries\Architecture\Exceptions\ObjectNotExistException
-     * @throws \Chamilo\Libraries\Storage\Exception\DataClassNoResultException
      */
     public function getWorkspace(): Workspace
     {

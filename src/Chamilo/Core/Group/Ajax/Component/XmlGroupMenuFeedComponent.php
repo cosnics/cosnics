@@ -16,9 +16,6 @@ use Doctrine\Common\Collections\ArrayCollection;
 class XmlGroupMenuFeedComponent extends Manager
 {
 
-    /**
-     * @throws \Chamilo\Libraries\Storage\Exception\DataClassNoResultException
-     */
     public function run()
     {
         $groups_tree = $this->getGroupService()->findGroupsForParentIdentifier(
@@ -33,8 +30,6 @@ class XmlGroupMenuFeedComponent extends Manager
 
     /**
      * @param \Doctrine\Common\Collections\ArrayCollection<\Chamilo\Core\Group\Storage\DataClass\Group> $groups
-     *
-     * @throws \Chamilo\Libraries\Storage\Exception\DataClassNoResultException
      */
     public function dump_groups_tree(ArrayCollection $groups): void
     {

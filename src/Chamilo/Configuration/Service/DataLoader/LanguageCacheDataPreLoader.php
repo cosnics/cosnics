@@ -28,7 +28,6 @@ class LanguageCacheDataPreLoader implements CacheDataPreLoaderInterface
 
     /**
      * @return string[]
-     * @throws \Chamilo\Libraries\Storage\Exception\DataClassNoResultException
      */
     protected function getDataForCache(): array
     {

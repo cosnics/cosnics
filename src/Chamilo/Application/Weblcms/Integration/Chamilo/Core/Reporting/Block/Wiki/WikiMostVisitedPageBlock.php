@@ -9,7 +9,7 @@ use Chamilo\Core\Reporting\Viewer\Rendition\Block\Type\Html;
 use Chamilo\Core\Repository\Storage\DataClass\ComplexContentObjectItem;
 use Chamilo\Core\User\Integration\Chamilo\Core\Tracking\Storage\DataClass\Visit;
 use Chamilo\Libraries\Storage\DataManager\DataManager;
-use Chamilo\Libraries\Storage\Parameters\DataClassRetrievesParameters;
+use Chamilo\Libraries\Storage\Parameters\RetrievesParameters;
 use Chamilo\Libraries\Storage\Query\Condition\AndCondition;
 use Chamilo\Libraries\Storage\Query\Condition\ContainsCondition;
 use Chamilo\Libraries\Storage\Query\Condition\EqualityCondition;
@@ -32,7 +32,7 @@ class WikiMostVisitedPageBlock extends ToolBlock
 
         $complex_content_object_items =
             \Chamilo\Core\Repository\Storage\DataManager::retrieve_complex_content_object_items(
-                ComplexContentObjectItem::class, new DataClassRetrievesParameters(
+                ComplexContentObjectItem::class, new RetrievesParameters(
                     new EqualityCondition(
                         new PropertyConditionVariable(
                             ComplexContentObjectItem::class, ComplexContentObjectItem::PROPERTY_PARENT
@@ -80,7 +80,7 @@ class WikiMostVisitedPageBlock extends ToolBlock
 
                 $condition = new AndCondition($conditions);
 
-                $items = DataManager::retrieves(Visit::class, new DataClassRetrievesParameters($condition));
+                $items = DataManager::retrieves(Visit::class, new RetrievesParameters($condition));
 
                 if (count($items) >= $most_visits)
                 {

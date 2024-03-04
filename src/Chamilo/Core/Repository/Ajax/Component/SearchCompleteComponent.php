@@ -4,7 +4,7 @@ namespace Chamilo\Core\Repository\Ajax\Component;
 use Chamilo\Core\Repository\Ajax\Manager;
 use Chamilo\Core\Repository\Storage\DataClass\ContentObject;
 use Chamilo\Core\Repository\Storage\DataManager;
-use Chamilo\Libraries\Storage\Parameters\DataClassRetrievesParameters;
+use Chamilo\Libraries\Storage\Parameters\RetrievesParameters;
 use Chamilo\Libraries\Storage\Query\Condition\AndCondition;
 use Chamilo\Libraries\Storage\Query\Condition\ContainsCondition;
 use Chamilo\Libraries\Storage\Query\Condition\EqualityCondition;
@@ -44,7 +44,7 @@ class SearchCompleteComponent extends Manager
         $conditions[] = new OrCondition($or_conditions);
         $condition = new AndCondition($conditions);
 
-        $parameters = new DataClassRetrievesParameters(
+        $parameters = new RetrievesParameters(
             condition: $condition, orderBy: new OrderBy([
             new OrderProperty(
                 new PropertyConditionVariable(ContentObject::class, ContentObject::PROPERTY_TITLE)

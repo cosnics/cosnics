@@ -13,9 +13,6 @@ use Symfony\Component\HttpFoundation\RedirectResponse;
 class TruncaterComponent extends Manager
 {
 
-    /**
-     * @throws \Chamilo\Libraries\Storage\Exception\DataClassNoResultException
-     */
     public function run()
     {
         $this->getHomeService()->deleteElementsForUserIdentifier($this->getUser()->getId());

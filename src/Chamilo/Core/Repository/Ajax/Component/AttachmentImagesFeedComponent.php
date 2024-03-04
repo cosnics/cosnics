@@ -6,7 +6,7 @@ use Chamilo\Core\Repository\Storage\DataClass\ContentObject;
 use Chamilo\Core\Repository\Storage\DataManager;
 use Chamilo\Libraries\File\FileType;
 use Chamilo\Libraries\Storage\Parameters\DataClassCountParameters;
-use Chamilo\Libraries\Storage\Parameters\DataClassRetrievesParameters;
+use Chamilo\Libraries\Storage\Parameters\RetrievesParameters;
 use Chamilo\Libraries\Storage\Query\Condition\AndCondition;
 use Chamilo\Libraries\Storage\Query\Condition\EndsWithCondition;
 use Chamilo\Libraries\Storage\Query\Condition\OrCondition;
@@ -61,7 +61,7 @@ class AttachmentImagesFeedComponent extends AttachmentContentObjectsFeedComponen
      */
     protected function retrieveContentObjects()
     {
-        $parameters = new DataClassRetrievesParameters(
+        $parameters = new RetrievesParameters(
             $this->getContentObjectConditions(), 100, $this->getOffset(), new OrderBy(array(
                     new OrderProperty(
                         new PropertyConditionVariable(ContentObject::class, ContentObject::PROPERTY_TITLE)

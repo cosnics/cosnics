@@ -13,7 +13,7 @@ use Chamilo\Application\Weblcms\Tool\Implementation\CourseGroup\Storage\DataClas
 use Chamilo\Core\Group\Storage\DataClass\Group;
 use Chamilo\Core\Repository\ContentObject\Assignment\Storage\DataClass\Assignment;
 use Chamilo\Core\User\Storage\DataClass\User;
-use Chamilo\Libraries\Storage\Parameters\RecordRetrievesParameters;
+use Chamilo\Libraries\Storage\Parameters\RetrievesParameters;
 use Chamilo\Libraries\Storage\Query\Condition\Condition;
 use Chamilo\Libraries\Storage\Query\OrderBy;
 use Chamilo\Libraries\Storage\Query\OrderProperty;
@@ -72,9 +72,9 @@ class AssignmentService extends \Chamilo\Core\Repository\ContentObject\Assignmen
     /**
      *
      * @param \Chamilo\Application\Weblcms\Storage\DataClass\ContentObjectPublication $contentObjectPublication
-     * @param integer $entityType
+     * @param int $entityType
      *
-     * @return integer
+     * @return int
      */
     public function countDistinctEntriesByContentObjectPublicationAndEntityType(
         ContentObjectPublication $contentObjectPublication, $entityType
@@ -88,9 +88,9 @@ class AssignmentService extends \Chamilo\Core\Repository\ContentObject\Assignmen
     /**
      *
      * @param \Chamilo\Application\Weblcms\Storage\DataClass\ContentObjectPublication $contentObjectPublication
-     * @param integer $entityType
+     * @param int $entityType
      *
-     * @return integer
+     * @return int
      */
     public function countDistinctFeedbackByContentObjectPublicationAndEntityType(
         ContentObjectPublication $contentObjectPublication, $entityType
@@ -104,10 +104,10 @@ class AssignmentService extends \Chamilo\Core\Repository\ContentObject\Assignmen
     /**
      *
      * @param ContentObjectPublication $contentObjectPublication
-     * @param integer $entityType
-     * @param integer $entityId
+     * @param int $entityType
+     * @param int $entityId
      *
-     * @return integer
+     * @return int
      */
     public function countDistinctFeedbackForContentObjectPublicationEntityTypeAndId(
         ContentObjectPublication $contentObjectPublication, $entityType, $entityId
@@ -122,7 +122,7 @@ class AssignmentService extends \Chamilo\Core\Repository\ContentObject\Assignmen
      *
      * @param \Chamilo\Core\Repository\ContentObject\Assignment\Storage\DataClass\Assignment $assignment
      * @param \Chamilo\Application\Weblcms\Storage\DataClass\ContentObjectPublication $contentObjectPublication
-     * @param integer $entityType
+     * @param int $entityType
      *
      * @return int
      */
@@ -138,10 +138,10 @@ class AssignmentService extends \Chamilo\Core\Repository\ContentObject\Assignmen
     /**
      *
      * @param ContentObjectPublication $contentObjectPublication
-     * @param integer $entityType
-     * @param integer $entityId
+     * @param int $entityType
+     * @param int $entityId
      *
-     * @return integer
+     * @return int
      */
     public function countDistinctScoreForContentObjectPublicationEntityTypeAndId(
         ContentObjectPublication $contentObjectPublication, $entityType, $entityId
@@ -187,8 +187,8 @@ class AssignmentService extends \Chamilo\Core\Repository\ContentObject\Assignmen
     /**
      *
      * @param ContentObjectPublication $contentObjectPublication
-     * @param integer $entityType
-     * @param integer $entityId
+     * @param int $entityType
+     * @param int $entityId
      * @param \Chamilo\Libraries\Storage\Query\Condition\Condition|null $condition
      *
      * @return int
@@ -204,9 +204,9 @@ class AssignmentService extends \Chamilo\Core\Repository\ContentObject\Assignmen
 
     /**
      *
-     * @param integer $contentObjectPublicationIdentifier
+     * @param int $contentObjectPublicationIdentifier
      *
-     * @return integer
+     * @return int
      */
     public function countEntriesForContentObjectPublicationIdentifier($contentObjectPublicationIdentifier)
     {
@@ -218,10 +218,10 @@ class AssignmentService extends \Chamilo\Core\Repository\ContentObject\Assignmen
     /**
      *
      * @param ContentObjectPublication $contentObjectPublication
-     * @param integer $entityType
-     * @param integer $entityId
+     * @param int $entityType
+     * @param int $entityId
      *
-     * @return integer
+     * @return int
      */
     public function countFeedbackForContentObjectPublicationByEntityTypeAndEntityId(
         ContentObjectPublication $contentObjectPublication, $entityType, $entityId
@@ -347,10 +347,10 @@ class AssignmentService extends \Chamilo\Core\Repository\ContentObject\Assignmen
     /**
      *
      * @param \Chamilo\Application\Weblcms\Storage\DataClass\ContentObjectPublication $contentObjectPublication
-     * @param integer $entityType
-     * @param integer $entityId
-     * @param integer $userId
-     * @param integer $contentObjectId
+     * @param int $entityType
+     * @param int $entityId
+     * @param int $userId
+     * @param int $contentObjectId
      * @param string $ipAddress
      *
      * @return \Chamilo\Core\Repository\ContentObject\Assignment\Display\Bridge\Storage\DataClass\Entry|\Chamilo\Core\Repository\ContentObject\Assignment\Integration\Chamilo\Core\Repository\ContentObject\LearningPath\Bridge\Storage\DataClass\Entry
@@ -429,16 +429,17 @@ class AssignmentService extends \Chamilo\Core\Repository\ContentObject\Assignmen
 
     /**
      * @param \Chamilo\Application\Weblcms\Storage\DataClass\ContentObjectPublication $contentObjectPublication
-     * @param \Chamilo\Libraries\Storage\Parameters\RecordRetrievesParameters $recordRetrievesParameters
+     * @param \Chamilo\Libraries\Storage\Parameters\RetrievesParameters $retrievesParameters
      *
      * @return \Doctrine\Common\Collections\ArrayCollection|\Chamilo\Core\Repository\Storage\DataClass\ContentObject[]
      */
     public function findAssignmentEntriesWithEphorusRequestsByContentObjectPublication(
-        ContentObjectPublication $contentObjectPublication, RecordRetrievesParameters $recordRetrievesParameters = null
+        ContentObjectPublication $contentObjectPublication,
+        RetrievesParameters $retrievesParameters = new RetrievesParameters()
     )
     {
         return $this->assignmentEphorusRepository->findAssignmentEntriesWithRequestsByContentObjectPublication(
-            $contentObjectPublication, $recordRetrievesParameters
+            $contentObjectPublication, $retrievesParameters
         );
     }
 
@@ -461,8 +462,8 @@ class AssignmentService extends \Chamilo\Core\Repository\ContentObject\Assignmen
     /**
      *
      * @param \Chamilo\Application\Weblcms\Storage\DataClass\ContentObjectPublication $contentObjectPublication
-     * @param integer $entityType
-     * @param integer[] $entityIdentifiers
+     * @param int $entityType
+     * @param int $entityIdentifiers
      *
      * @return \Doctrine\Common\Collections\ArrayCollection
      */
@@ -478,11 +479,11 @@ class AssignmentService extends \Chamilo\Core\Repository\ContentObject\Assignmen
     /**
      *
      * @param ContentObjectPublication $contentObjectPublication
-     * @param integer $entityType
-     * @param integer $entityId
+     * @param int $entityType
+     * @param int $entityId
      * @param \Chamilo\Libraries\Storage\Query\Condition\Condition $condition
-     * @param integer $offset
-     * @param integer $count
+     * @param int $offset
+     * @param int $count
      * @param \Chamilo\Libraries\Storage\Query\OrderBy $orderProperty
      *
      * @return \Doctrine\Common\Collections\ArrayCollection
@@ -561,8 +562,8 @@ class AssignmentService extends \Chamilo\Core\Repository\ContentObject\Assignmen
      * @param ContentObjectPublication $contentObjectPublication
      * @param int[] $courseGroupIds
      * @param Condition $condition
-     * @param integer $offset
-     * @param integer $count
+     * @param int $offset
+     * @param int $count
      * @param \Chamilo\Libraries\Storage\Query\OrderBy $orderProperty
      *
      * @return \Doctrine\Common\Collections\ArrayCollection
@@ -611,8 +612,8 @@ class AssignmentService extends \Chamilo\Core\Repository\ContentObject\Assignmen
      * @param ContentObjectPublication $contentObjectPublication
      * @param int[] $platformGroupIds
      * @param Condition $condition
-     * @param integer $offset
-     * @param integer $count
+     * @param int $offset
+     * @param int $count
      * @param \Chamilo\Libraries\Storage\Query\OrderBy $orderProperty
      *
      * @return \Doctrine\Common\Collections\ArrayCollection
@@ -659,8 +660,8 @@ class AssignmentService extends \Chamilo\Core\Repository\ContentObject\Assignmen
      * @param ContentObjectPublication $contentObjectPublication
      * @param int[] $userIds
      * @param Condition $condition
-     * @param integer $offset
-     * @param integer $count
+     * @param int $offset
+     * @param int $count
      * @param \Chamilo\Libraries\Storage\Query\OrderBy $orderProperty
      *
      * @return \Doctrine\Common\Collections\ArrayCollection
@@ -706,8 +707,8 @@ class AssignmentService extends \Chamilo\Core\Repository\ContentObject\Assignmen
     /**
      *
      * @param ContentObjectPublication $contentObjectPublication
-     * @param integer $entityType
-     * @param integer $entityId
+     * @param int $entityType
+     * @param int $entityId
      *
      * @return int
      */
@@ -723,8 +724,8 @@ class AssignmentService extends \Chamilo\Core\Repository\ContentObject\Assignmen
     /**
      *
      * @param ContentObjectPublication $contentObjectPublication
-     * @param integer $entityType
-     * @param integer $entityId
+     * @param int $entityType
+     * @param int $entityId
      *
      * @return int
      */

@@ -13,7 +13,7 @@ use Chamilo\Core\Repository\ContentObject\Assessment\ResultsExporter\AssessmentR
 use Chamilo\Core\Repository\ContentObject\Assessment\ResultsExporter\QuestionResult;
 use Chamilo\Libraries\Architecture\Exceptions\NotAllowedException;
 use Chamilo\Libraries\Format\Breadcrumb\BreadcrumbTrail;
-use Chamilo\Libraries\Storage\Parameters\DataClassRetrievesParameters;
+use Chamilo\Libraries\Storage\Parameters\RetrievesParameters;
 use Chamilo\Libraries\Storage\Query\Condition\EqualityCondition;
 use Chamilo\Libraries\Storage\Query\Variable\PropertyConditionVariable;
 use Chamilo\Libraries\Storage\Query\Variable\StaticConditionVariable;
@@ -80,7 +80,7 @@ class RawExportResultsComponent extends Manager
         $assessment_results = [];
 
         $assessment_attempts = WeblcmsTrackingDataManager::retrieves(
-            AssessmentAttempt::class, new DataClassRetrievesParameters($condition)
+            AssessmentAttempt::class, new RetrievesParameters($condition)
         );
         foreach ($assessment_attempts as $assessment_attempt)
         {
@@ -151,7 +151,7 @@ class RawExportResultsComponent extends Manager
         $question_results = [];
 
         $question_attempts = DataManager::retrieves(
-            QuestionAttempt::class, new DataClassRetrievesParameters($condition)
+            QuestionAttempt::class, new RetrievesParameters($condition)
         );
         foreach ($question_attempts as $question_attempt)
         {

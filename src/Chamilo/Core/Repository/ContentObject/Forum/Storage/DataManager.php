@@ -7,11 +7,9 @@ use Chamilo\Core\Repository\ContentObject\ForumTopic\Storage\DataClass\ForumPost
 use Chamilo\Core\Repository\ContentObject\ForumTopic\Storage\DataClass\ForumTopic;
 use Chamilo\Core\Repository\Storage\DataClass\ComplexContentObjectItem;
 use Chamilo\Core\User\Storage\DataClass\User;
-use Chamilo\Libraries\Storage\Exception\DataClassNoResultException;
 use Chamilo\Libraries\Storage\Parameters\DataClassCountParameters;
-use Chamilo\Libraries\Storage\Parameters\DataClassRetrieveParameters;
-use Chamilo\Libraries\Storage\Parameters\DataClassRetrievesParameters;
-use Chamilo\Libraries\Storage\Parameters\RecordRetrieveParameters;
+use Chamilo\Libraries\Storage\Parameters\RetrieveParameters;
+use Chamilo\Libraries\Storage\Parameters\RetrievesParameters;
 use Chamilo\Libraries\Storage\Query\Condition\AndCondition;
 use Chamilo\Libraries\Storage\Query\Condition\EqualityCondition;
 use Chamilo\Libraries\Storage\Query\Join;
@@ -114,16 +112,11 @@ class DataManager extends \Chamilo\Libraries\Storage\DataManager\DataManager
             )
         );
 
-        $parameters = new RecordRetrieveParameters($properties, $condition, $order_by, $joins);
+        $parameters = new RetrieveParameters(
+            condition: $condition, orderBy: $order_by, joins: $joins, retrieveProperties: $properties
+        );
 
-        try
-        {
-            return self::record(ComplexContentObjectItem::class, $parameters);
-        }
-        catch (DataClassNoResultException $ex)
-        {
-            return null;
-        }
+        return self::record(ComplexContentObjectItem::class, $parameters);
     }
 
     /**
@@ -178,7 +171,7 @@ class DataManager extends \Chamilo\Libraries\Storage\DataManager\DataManager
             new PropertyConditionVariable(ForumPost::class, ForumPost::PROPERTY_CREATION_DATE), SORT_DESC
         );
 
-        $parameters = new DataClassRetrieveParameters($condition, new OrderBy($order_by), $joins);
+        $parameters = new RetrieveParameters($condition, new OrderBy($order_by), $joins);
 
         return self::retrieve(ForumPost::class, $parameters);
     }
@@ -207,7 +200,7 @@ class DataManager extends \Chamilo\Libraries\Storage\DataManager\DataManager
 
         $condition = new AndCondition($conditions);
 
-        return self::retrieve(ForumSubscribe::class, new DataClassRetrieveParameters($condition));
+        return self::retrieve(ForumSubscribe::class, new RetrieveParameters($condition));
     }
 
     /**
@@ -225,7 +218,7 @@ class DataManager extends \Chamilo\Libraries\Storage\DataManager\DataManager
         );
 
         $subscriptions = DataManager::retrieves(
-            ForumSubscribe::class, new DataClassRetrievesParameters($condition)
+            ForumSubscribe::class, new RetrievesParameters($condition)
         );
 
         $users = [];

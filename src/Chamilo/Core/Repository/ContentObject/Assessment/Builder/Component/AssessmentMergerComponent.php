@@ -20,7 +20,7 @@ use Chamilo\Libraries\Format\Structure\Breadcrumb;
 use Chamilo\Libraries\Format\Structure\Glyph\FontAwesomeGlyph;
 use Chamilo\Libraries\Format\Table\RequestTableParameterValuesCompiler;
 use Chamilo\Libraries\Storage\Parameters\DataClassCountParameters;
-use Chamilo\Libraries\Storage\Parameters\DataClassRetrievesParameters;
+use Chamilo\Libraries\Storage\Parameters\RetrievesParameters;
 use Chamilo\Libraries\Storage\Query\Condition\EqualityCondition;
 use Chamilo\Libraries\Storage\Query\Condition\SubselectCondition;
 use Chamilo\Libraries\Storage\Query\Variable\PropertyConditionVariable;
@@ -185,7 +185,7 @@ class AssessmentMergerComponent extends Manager implements ViewerInterface
         );
 
         $objects = DataManager::retrieve_active_content_objects(
-            ContentObject::class, new DataClassRetrievesParameters(
+            ContentObject::class, new RetrievesParameters(
                 $this->getObjectCondition(), $tableParameterValues->getNumberOfItemsPerPage(),
                 $tableParameterValues->getOffset(), $objectTableRenderer->determineOrderBy($tableParameterValues)
             )

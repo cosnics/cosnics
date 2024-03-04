@@ -3,8 +3,8 @@ namespace Chamilo\Libraries\Storage\DataClass;
 
 use Chamilo\Libraries\Storage\DataManager\DataManager;
 use Chamilo\Libraries\Storage\Parameters\DataClassCountParameters;
-use Chamilo\Libraries\Storage\Parameters\DataClassRetrieveParameters;
-use Chamilo\Libraries\Storage\Parameters\DataClassRetrievesParameters;
+use Chamilo\Libraries\Storage\Parameters\RetrieveParameters;
+use Chamilo\Libraries\Storage\Parameters\RetrievesParameters;
 use Chamilo\Libraries\Storage\Query\Condition\AndCondition;
 use Chamilo\Libraries\Storage\Query\Condition\ComparisonCondition;
 use Chamilo\Libraries\Storage\Query\Condition\Condition;
@@ -382,7 +382,7 @@ abstract class NestedSet extends DataClass
         );
 
         return DataManager::retrieve(
-            get_class($this), new DataClassRetrieveParameters(new AndCondition($conditions))
+            get_class($this), new RetrieveParameters(new AndCondition($conditions))
         );
     }
 
@@ -428,13 +428,12 @@ abstract class NestedSet extends DataClass
      * @param \Chamilo\Libraries\Storage\Query\Condition\Condition|null $condition
      *
      * @return \Doctrine\Common\Collections\ArrayCollection<\Chamilo\Libraries\Storage\DataClass\NestedSet>
-     * @throws \Chamilo\Libraries\Storage\Exception\DataClassNoResultException
      * @deprecated Migrated to NestedSetDataClassRepository::findAncestors()
      */
     public function get_ancestors(bool $include_self = true, ?Condition $condition = null): ArrayCollection
     {
         return DataManager::retrieves(
-            get_class($this), new DataClassRetrievesParameters(
+            get_class($this), new RetrievesParameters(
                 condition: $this->build_ancestry_condition($include_self, $condition),
                 orderBy: $this->build_post_order_ordering()
             )
@@ -445,14 +444,13 @@ abstract class NestedSet extends DataClass
      * @param \Chamilo\Libraries\Storage\Query\Condition\Condition|null $condition
      *
      * @return \Doctrine\Common\Collections\ArrayCollection<\Chamilo\Libraries\Storage\DataClass\NestedSet>
-     * @throws \Chamilo\Libraries\Storage\Exception\DataClassNoResultException
      * @deprecated Migrated to NestedSetDataClassRepository::findDescendants()
      */
     public function get_children(?Condition $condition = null): ArrayCollection
     {
         return DataManager::retrieves(
             get_class($this),
-            new DataClassRetrievesParameters($this->build_offspring_condition(false, false, $condition))
+            new RetrievesParameters($this->build_offspring_condition(false, false, $condition))
         );
     }
 
@@ -460,14 +458,13 @@ abstract class NestedSet extends DataClass
      * @param \Chamilo\Libraries\Storage\Query\Condition\Condition|null $condition
      *
      * @return \Doctrine\Common\Collections\ArrayCollection<\Chamilo\Libraries\Storage\DataClass\NestedSet>
-     * @throws \Chamilo\Libraries\Storage\Exception\DataClassNoResultException
      * @deprecated Migrated to NestedSetDataClassRepository::findDescendants()
      */
     public function get_descendants(?Condition $condition = null): ArrayCollection
     {
         return DataManager::retrieves(
             get_class($this),
-            new DataClassRetrievesParameters($this->build_offspring_condition(true, false, $condition))
+            new RetrievesParameters($this->build_offspring_condition(true, false, $condition))
         );
     }
 
@@ -522,13 +519,12 @@ abstract class NestedSet extends DataClass
      * @param \Chamilo\Libraries\Storage\Query\Condition\Condition|null $condition
      *
      * @return \Doctrine\Common\Collections\ArrayCollection<\Chamilo\Libraries\Storage\DataClass\NestedSet>
-     * @throws \Chamilo\Libraries\Storage\Exception\DataClassNoResultException
      * @deprecated Migrated to NestedSetDataClassRepository::findSiblings()
      */
     public function get_siblings(bool $include_self = true, ?Condition $condition = null): ArrayCollection
     {
         return DataManager::retrieves(
-            get_class($this), new DataClassRetrievesParameters(
+            get_class($this), new RetrievesParameters(
                 condition: $this->build_sibling_condition($include_self, $condition),
                 orderBy: $this->build_pre_order_ordering()
             )

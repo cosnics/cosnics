@@ -13,7 +13,7 @@ use Chamilo\Libraries\Format\Structure\ActionBar\Renderer\ButtonToolBarRenderer;
 use Chamilo\Libraries\Format\Structure\Glyph\FontAwesomeGlyph;
 use Chamilo\Libraries\Format\Table\RequestTableParameterValuesCompiler;
 use Chamilo\Libraries\Storage\Parameters\DataClassCountParameters;
-use Chamilo\Libraries\Storage\Parameters\DataClassRetrievesParameters;
+use Chamilo\Libraries\Storage\Parameters\RetrievesParameters;
 use Chamilo\Libraries\Storage\Query\Condition\AndCondition;
 use Chamilo\Libraries\Utilities\StringUtilities;
 
@@ -119,7 +119,6 @@ class BrowserComponent extends Manager
     }
 
     /**
-     * @throws \Chamilo\Libraries\Storage\Exception\DataClassNoResultException
      * @throws \TableException
      * @throws \Chamilo\Libraries\Format\Table\Exception\InvalidPageNumberException
      * @throws \QuickformException
@@ -137,7 +136,7 @@ class BrowserComponent extends Manager
         );
 
         $providerLinks = DataManager::retrieves(
-            ProviderLink::class, new DataClassRetrievesParameters(
+            ProviderLink::class, new RetrievesParameters(
                 $this->getProviderLinkCondition(),
                 $tableParameterValues->getNumberOfItemsPerPage(),$tableParameterValues->getOffset(),
                 $providerLinkTableRenderer->determineOrderBy($tableParameterValues)

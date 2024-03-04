@@ -6,7 +6,7 @@ use Chamilo\Application\Weblcms\Storage\DataManager;
 use Chamilo\Libraries\Format\Form\FormValidator;
 use Chamilo\Libraries\Format\Structure\Glyph\FontAwesomeGlyph;
 use Chamilo\Libraries\Translation\Translation;
-use Chamilo\Libraries\Storage\Parameters\DataClassRetrievesParameters;
+use Chamilo\Libraries\Storage\Parameters\RetrievesParameters;
 use Chamilo\Libraries\Storage\Query\Condition\AndCondition;
 use Chamilo\Libraries\Storage\Query\Condition\EqualityCondition;
 use Chamilo\Libraries\Storage\Query\Variable\PropertyConditionVariable;
@@ -122,7 +122,7 @@ class CourseSectionForm extends FormValidator
         $condition = new AndCondition($conditions);
 
         $course_sections = DataManager::retrieves(
-            CourseSection::class, new DataClassRetrievesParameters($condition)
+            CourseSection::class, new RetrievesParameters($condition)
         );
 
         if ($course_sections->count() > 0)

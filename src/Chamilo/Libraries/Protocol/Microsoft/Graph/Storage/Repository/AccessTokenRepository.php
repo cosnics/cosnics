@@ -72,9 +72,6 @@ class AccessTokenRepository implements AccessTokenRepositoryInterface
         return $this->userSettingService;
     }
 
-    /**
-     * @throws \Chamilo\Libraries\Storage\Exception\DataClassNoResultException
-     */
     public function storeApplicationAccessToken(AccessToken $accessToken)
     {
         $this->getUserSettingService()->saveUserSettingForSettingContextVariableAndUser(

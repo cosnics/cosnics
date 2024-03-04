@@ -25,7 +25,6 @@ class Viewer
     }
 
     /**
-     * @throws \Chamilo\Libraries\Storage\Exception\DataClassNoResultException
      * @throws \TableException
      */
     public function render(string $context, string $name, string $userIdentifier, ?string $title = null): string
@@ -71,7 +70,6 @@ class Viewer
 
     /**
      * @return \Doctrine\Common\Collections\ArrayCollection<\Chamilo\Configuration\Form\Storage\DataClass\Value>
-     * @throws \Chamilo\Libraries\Storage\Exception\DataClassNoResultException
      */
     public function getFormValues(string $context, string $name, string $userIdentifier): ArrayCollection
     {

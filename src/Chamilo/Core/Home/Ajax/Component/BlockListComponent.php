@@ -12,9 +12,6 @@ class BlockListComponent extends Manager
 {
     public const PROPERTY_BLOCKS = 'blocks';
 
-    /**
-     * @throws \Chamilo\Libraries\Storage\Exception\DataClassNoResultException
-     */
     public function run()
     {
         $result = new JsonAjaxResult(200);

@@ -5,9 +5,8 @@ use Chamilo\Core\Rights\RightsLocationEntityRight;
 use Chamilo\Core\Rights\RightsUtil;
 use Chamilo\Libraries\Storage\Parameters\DataClassCountParameters;
 use Chamilo\Libraries\Storage\Parameters\DataClassDistinctParameters;
-use Chamilo\Libraries\Storage\Parameters\DataClassRetrieveParameters;
-use Chamilo\Libraries\Storage\Parameters\DataClassRetrievesParameters;
-use Chamilo\Libraries\Storage\Parameters\RecordRetrievesParameters;
+use Chamilo\Libraries\Storage\Parameters\RetrieveParameters;
+use Chamilo\Libraries\Storage\Parameters\RetrievesParameters;
 use Chamilo\Libraries\Storage\Query\Condition\AndCondition;
 use Chamilo\Libraries\Storage\Query\Condition\EqualityCondition;
 use Chamilo\Libraries\Storage\Query\Condition\InCondition;
@@ -143,7 +142,7 @@ class DataManager extends \Chamilo\Libraries\Storage\DataManager\DataManager
         );
         $condition = new AndCondition($conditions);
 
-        $parameters = new RecordRetrievesParameters($properties, $condition);
+        $parameters = new RetrievesParameters(condition: $condition, retrieveProperties: $properties);
 
         $rights_location_entity_rights = self::records($context_class, $parameters);
 
@@ -192,8 +191,8 @@ class DataManager extends \Chamilo\Libraries\Storage\DataManager\DataManager
 
         $joins = new Joins([$join]);
 
-        $parameters = new RecordRetrievesParameters(
-            retrieveProperties: $properties, condition: $entities_condition, joins: $joins
+        $parameters = new RetrievesParameters(
+            condition: $entities_condition, joins: $joins, retrieveProperties: $properties
         );
         $result_set = $context_dm::records($context_location, $parameters);
 
@@ -341,7 +340,7 @@ class DataManager extends \Chamilo\Libraries\Storage\DataManager\DataManager
         );
         $condition = new AndCondition($conditions);
 
-        $parameters = new RecordRetrievesParameters($properties, $condition);
+        $parameters = new RetrievesParameters(condition: $condition, retrieveProperties: $properties);
 
         $locations = self::records($context_location, $parameters);
 
@@ -398,7 +397,9 @@ class DataManager extends \Chamilo\Libraries\Storage\DataManager\DataManager
 
         $joins = new Joins([$join]);
 
-        $parameters = new RecordRetrievesParameters($properties, $condition, $max_objects, $offset, null, $joins);
+        $parameters = new RetrievesParameters(
+            condition: $condition, count: $max_objects, offset: $offset, joins: $joins, retrieveProperties: $properties
+        );
 
         return $context_dm::records($context_location, $parameters);
     }
@@ -414,7 +415,7 @@ class DataManager extends \Chamilo\Libraries\Storage\DataManager\DataManager
         $properties->add(new PropertyConditionVariable($context_location, $context_location::PROPERTY_ID));
         $properties->add(new PropertyConditionVariable($context_location, $context_location::PROPERTY_PARENT_ID));
 
-        $parameters = new RecordRetrievesParameters($properties, $condition);
+        $parameters = new RetrievesParameters(condition: $condition, retrieveProperties: $properties);
 
         $locations = self::records($context_location, $parameters);
 
@@ -440,7 +441,7 @@ class DataManager extends \Chamilo\Libraries\Storage\DataManager\DataManager
         $context_dm = ($context . '\Storage\DataManager');
 
         $rights_location = $context_dm::retrieve(
-            $context_class, new DataClassRetrieveParameters($condition)
+            $context_class, new RetrieveParameters($condition)
         );
 
         if ($rights_location)
@@ -504,7 +505,7 @@ class DataManager extends \Chamilo\Libraries\Storage\DataManager\DataManager
         $condition = new AndCondition($conditions);
 
         $location = \Chamilo\Libraries\Storage\DataManager\DataManager::retrieve(
-            $context_class, new DataClassRetrieveParameters($condition)
+            $context_class, new RetrieveParameters($condition)
         );
 
         if (!$location)
@@ -547,7 +548,7 @@ class DataManager extends \Chamilo\Libraries\Storage\DataManager\DataManager
         $condition = new AndCondition($conditions);
 
         $rights_location_entity_right = $context_dm::retrieve(
-            $context_class, new DataClassRetrieveParameters($condition)
+            $context_class, new RetrieveParameters($condition)
         );
 
         if ($rights_location_entity_right)
@@ -603,7 +604,7 @@ class DataManager extends \Chamilo\Libraries\Storage\DataManager\DataManager
         $context_dm = ($context . '\Storage\DataManager');
 
         return $context_dm::retrieves(
-            $context_class, new DataClassRetrievesParameters($condition, $max_objects, $offset, $order_by)
+            $context_class, new RetrievesParameters($condition, $max_objects, $offset, $order_by)
         );
     }
 
@@ -649,7 +650,7 @@ class DataManager extends \Chamilo\Libraries\Storage\DataManager\DataManager
         $context_dm = ($context . '\Storage\DataManager');
 
         return $context_dm::retrieves(
-            $context_class, new DataClassRetrievesParameters($condition, $max_objects, $offset, $order_by)
+            $context_class, new RetrievesParameters($condition, $max_objects, $offset, $order_by)
         );
     }
 
@@ -718,8 +719,8 @@ class DataManager extends \Chamilo\Libraries\Storage\DataManager\DataManager
             $condition = new AndCondition($conditions);
         }
 
-        $parameters = new RecordRetrievesParameters(
-            retrieveProperties: $properties, condition: $condition, joins: $joins
+        $parameters = new RetrievesParameters(
+            condition: $condition, joins: $joins, retrieveProperties: $properties
         );
         $result_set = $context_dm::records($context_location, $parameters);
 

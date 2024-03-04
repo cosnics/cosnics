@@ -6,7 +6,7 @@ use Chamilo\Application\Weblcms\Storage\DataClass\ContentObjectPublication;
 use Chamilo\Application\Weblcms\Tool\Implementation\Ephorus\Storage\DataClass\Request;
 use Chamilo\Core\Repository\ContentObject\Assignment\Display\Bridge\Interfaces\EphorusServiceBridgeInterface;
 use Chamilo\Core\Repository\ContentObject\Assignment\Storage\DataClass\Assignment;
-use Chamilo\Libraries\Storage\Parameters\RecordRetrievesParameters;
+use Chamilo\Libraries\Storage\Parameters\RetrievesParameters;
 use Chamilo\Libraries\Storage\Query\Condition\Condition;
 use RuntimeException;
 
@@ -18,11 +18,6 @@ use RuntimeException;
 class EphorusServiceBridge implements EphorusServiceBridgeInterface
 {
     /**
-     * @var \Chamilo\Application\Weblcms\Bridge\Assignment\Service\EphorusService
-     */
-    protected $ephorusService;
-
-    /**
      * @var ContentObjectPublication
      */
     protected $contentObjectPublication;
@@ -33,6 +28,11 @@ class EphorusServiceBridge implements EphorusServiceBridgeInterface
     protected $ephorusEnabled;
 
     /**
+     * @var \Chamilo\Application\Weblcms\Bridge\Assignment\Service\EphorusService
+     */
+    protected $ephorusService;
+
+    /**
      * AssignmentDataProvider constructor.
      *
      * @param \Chamilo\Application\Weblcms\Bridge\Assignment\Service\EphorusService $ephorusService
@@ -40,6 +40,52 @@ class EphorusServiceBridge implements EphorusServiceBridgeInterface
     public function __construct(EphorusService $ephorusService)
     {
         $this->ephorusService = $ephorusService;
+    }
+
+    /**
+     * @param \Chamilo\Libraries\Storage\Query\Condition\Condition $condition
+     *
+     * @return int
+     */
+    public function countAssignmentEntriesWithEphorusRequests(Condition $condition = null)
+    {
+        return $this->ephorusService->countAssignmentEntriesWithEphorusRequestsByContentObjectPublication(
+            $this->contentObjectPublication, $condition
+        );
+    }
+
+    /**
+     * @param \Chamilo\Libraries\Storage\Parameters\RetrievesParameters $retrievesParameters
+     *
+     * @return \Doctrine\Common\Collections\ArrayCollection
+     */
+    public function findAssignmentEntriesWithEphorusRequests(
+        RetrievesParameters $retrievesParameters = new RetrievesParameters()
+    )
+    {
+        return $this->ephorusService->findAssignmentEntriesWithEphorusRequestsByContentObjectPublication(
+            $this->contentObjectPublication, $retrievesParameters
+        );
+    }
+
+    /**
+     * @param int[] $entryIds
+     *
+     * @return Request[]
+     */
+    public function findEphorusRequestsForAssignmentEntries(array $entryIds = [])
+    {
+        return $this->ephorusService->findEphorusRequestsForAssignmentEntriesByContentObjectPublication(
+            $this->contentObjectPublication, $entryIds
+        );
+    }
+
+    /**
+     * @return bool
+     */
+    public function isEphorusEnabled()
+    {
+        return $this->ephorusEnabled;
     }
 
     /**
@@ -63,50 +109,5 @@ class EphorusServiceBridge implements EphorusServiceBridgeInterface
     public function setEphorusEnabled($ephorusEnabled = true)
     {
         $this->ephorusEnabled = $ephorusEnabled;
-    }
-
-    /**
-     * @param \Chamilo\Libraries\Storage\Query\Condition\Condition $condition
-     *
-     * @return int
-     */
-    public function countAssignmentEntriesWithEphorusRequests(Condition $condition = null)
-    {
-        return $this->ephorusService->countAssignmentEntriesWithEphorusRequestsByContentObjectPublication(
-            $this->contentObjectPublication, $condition
-        );
-    }
-
-    /**
-     * @param \Chamilo\Libraries\Storage\Parameters\RecordRetrievesParameters $recordRetrievesParameters
-     *
-     * @return \Doctrine\Common\Collections\ArrayCollection
-     */
-    public function findAssignmentEntriesWithEphorusRequests(RecordRetrievesParameters $recordRetrievesParameters = null
-    )
-    {
-        return $this->ephorusService->findAssignmentEntriesWithEphorusRequestsByContentObjectPublication(
-            $this->contentObjectPublication, $recordRetrievesParameters
-        );
-    }
-
-    /**
-     * @param int[] $entryIds
-     *
-     * @return Request[]
-     */
-    public function findEphorusRequestsForAssignmentEntries(array $entryIds = [])
-    {
-        return $this->ephorusService->findEphorusRequestsForAssignmentEntriesByContentObjectPublication(
-            $this->contentObjectPublication, $entryIds
-        );
-    }
-
-    /**
-     * @return bool
-     */
-    public function isEphorusEnabled()
-    {
-        return $this->ephorusEnabled;
     }
 }

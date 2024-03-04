@@ -39,7 +39,6 @@ class ViewerComponent extends Manager
     /**
      * @throws \Chamilo\Libraries\Architecture\Exceptions\NotAllowedException
      * @throws \Chamilo\Libraries\Format\Table\Exception\InvalidPageNumberException
-     * @throws \Chamilo\Libraries\Storage\Exception\DataClassNoResultException
      * @throws \QuickformException
      * @throws \TableException
      */
@@ -241,7 +240,6 @@ class ViewerComponent extends Manager
     }
 
     /**
-     * @throws \Chamilo\Libraries\Storage\Exception\DataClassNoResultException
      * @throws \QuickformException
      */
     public function getSubscribedUsersCondition(): AndCondition
@@ -297,7 +295,6 @@ class ViewerComponent extends Manager
 
     /**
      * @throws \Chamilo\Libraries\Format\Table\Exception\InvalidPageNumberException
-     * @throws \Chamilo\Libraries\Storage\Exception\DataClassNoResultException
      * @throws \QuickformException
      * @throws \TableException
      */

@@ -10,7 +10,7 @@ use Chamilo\Libraries\Format\Table\Column\StaticTableColumn;
 use Chamilo\Libraries\Storage\DataClass\DataClass;
 use Chamilo\Libraries\Storage\DataManager\DataManager;
 use Chamilo\Libraries\Storage\Parameters\DataClassCountParameters;
-use Chamilo\Libraries\Storage\Parameters\RecordRetrievesParameters;
+use Chamilo\Libraries\Storage\Parameters\RetrievesParameters;
 use Chamilo\Libraries\Storage\Query\Condition\EqualityCondition;
 use Chamilo\Libraries\Storage\Query\Join;
 use Chamilo\Libraries\Storage\Query\Joins;
@@ -166,7 +166,10 @@ class PlatformGroupEntityHelper
             )
         );
 
-        $parameters = new RecordRetrievesParameters($properties, $condition, $count, $offset, $order_property, $joins);
+        $parameters = new RetrievesParameters(
+            condition: $condition, count: $count, offset: $offset, orderBy: $order_property, joins: $joins,
+            retrieveProperties: $properties
+        );
 
         return DataManager::records(
             Group::class, $parameters

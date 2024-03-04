@@ -12,7 +12,7 @@ use Chamilo\Core\Repository\Storage\DataClass\ContentObject;
 use Chamilo\Core\Repository\Workspace\Repository\ContentObjectRepository;
 use Chamilo\Core\User\Storage\DataClass\User;
 use Chamilo\Libraries\Storage\Parameters\DataClassCountParameters;
-use Chamilo\Libraries\Storage\Parameters\DataClassRetrievesParameters;
+use Chamilo\Libraries\Storage\Parameters\RetrievesParameters;
 use Chamilo\Libraries\Storage\Query\Condition\AndCondition;
 use Chamilo\Libraries\Storage\Query\Condition\EqualityCondition;
 use Chamilo\Libraries\Storage\Query\Condition\InCondition;
@@ -177,7 +177,7 @@ class MigrationService
         );
 
         return $this->contentObjectRepository->findAll(
-            ComplexContentObjectItem::class, new DataClassRetrievesParameters(
+            ComplexContentObjectItem::class, new RetrievesParameters(
                 condition: $condition, count: null, offset: null, orderBy: new OrderBy(array(
                         new OrderProperty(
                             new PropertyConditionVariable(

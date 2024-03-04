@@ -11,7 +11,7 @@ use Chamilo\Core\Repository\Workspace\Storage\DataClass\Workspace;
 use Chamilo\Core\User\Storage\DataClass\User;
 use Chamilo\Libraries\Architecture\Application\Application;
 use Chamilo\Libraries\File\Properties\FileProperties;
-use Chamilo\Libraries\Storage\Parameters\DataClassRetrievesParameters;
+use Chamilo\Libraries\Storage\Parameters\RetrievesParameters;
 use Chamilo\Libraries\Storage\Query\Condition\AndCondition;
 use Chamilo\Libraries\Storage\Query\Condition\EqualityCondition;
 use Chamilo\Libraries\Storage\Query\Variable\PropertyConditionVariable;
@@ -124,7 +124,7 @@ class FileContentObjectImportController extends ContentObjectImportController
                 new StaticConditionVariable($hash)
             );
             $condition = new AndCondition($conditions);
-            $parameters = new DataClassRetrievesParameters($condition);
+            $parameters = new RetrievesParameters($condition);
 
             $content_objects = DataManager::retrieve_active_content_objects(File::class, $parameters);
 

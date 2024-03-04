@@ -7,7 +7,7 @@ use Chamilo\Application\Weblcms\Storage\DataClass\CourseTypeUserCategory;
 use Chamilo\Application\Weblcms\Storage\DataClass\CourseTypeUserCategoryRelCourse;
 use Chamilo\Application\Weblcms\Storage\DataClass\CourseUserCategory;
 use Chamilo\Core\Repository\ContentObject\LearningPath\Storage\Repository\CommonDataClassRepository;
-use Chamilo\Libraries\Storage\Parameters\DataClassRetrievesParameters;
+use Chamilo\Libraries\Storage\Parameters\RetrievesParameters;
 use Chamilo\Libraries\Storage\Query\Condition\AndCondition;
 use Chamilo\Libraries\Storage\Query\Condition\EqualityCondition;
 use Chamilo\Libraries\Storage\Query\Condition\InCondition;
@@ -96,7 +96,7 @@ class CourseUserCategoryRepository extends CommonDataClassRepository
             OrderBy::generate(CourseTypeUserCategoryRelCourse::class, CourseTypeUserCategoryRelCourse::PROPERTY_SORT);
 
         return $this->dataClassRepository->retrieves(
-            Course::class, new DataClassRetrievesParameters($condition, null, null, $orderBy, $joins)
+            Course::class, new RetrievesParameters($condition, null, null, $orderBy, $joins)
         );
     }
 }

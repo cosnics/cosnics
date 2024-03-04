@@ -34,7 +34,6 @@ class ColumnRenderer
     }
 
     /**
-     * @throws \Chamilo\Libraries\Storage\Exception\DataClassNoResultException
      * @throws \QuickformException
      */
     public function render(Element $column, bool $isGeneralMode = false, ?User $user = null): string

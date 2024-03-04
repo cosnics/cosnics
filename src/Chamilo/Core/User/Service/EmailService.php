@@ -58,8 +58,6 @@ class EmailService
 
     /**
      * @param string[] $targetUserIdentifiers
-     *
-     * @throws \Chamilo\Libraries\Storage\Exception\DataClassNoResultException
      */
     protected function displayTargets(array $targetUserIdentifiers): string
     {

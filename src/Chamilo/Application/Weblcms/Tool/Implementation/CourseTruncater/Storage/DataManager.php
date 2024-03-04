@@ -4,8 +4,8 @@ namespace Chamilo\Application\Weblcms\Tool\Implementation\CourseTruncater\Storag
 use Chamilo\Application\Weblcms\Storage\DataClass\ContentObjectPublication;
 use Chamilo\Application\Weblcms\Storage\DataClass\ContentObjectPublicationCategory;
 use Chamilo\Application\Weblcms\Storage\DataClass\CourseSection;
-use Chamilo\Libraries\Storage\Parameters\DataClassRetrieveParameters;
-use Chamilo\Libraries\Storage\Parameters\DataClassRetrievesParameters;
+use Chamilo\Libraries\Storage\Parameters\RetrieveParameters;
+use Chamilo\Libraries\Storage\Parameters\RetrievesParameters;
 use Chamilo\Libraries\Storage\Query\Condition\AndCondition;
 use Chamilo\Libraries\Storage\Query\Condition\EqualityCondition;
 use Chamilo\Libraries\Storage\Query\Condition\InCondition;
@@ -119,7 +119,7 @@ class DataManager extends \Chamilo\Libraries\Storage\DataManager\DataManager
 
         $course_sections = \Chamilo\Application\Weblcms\Storage\Datamanager::retrieves(
             CourseSection::class,
-            new DataClassRetrievesParameters($condition));
+            new RetrievesParameters($condition));
 
         foreach($course_sections as $course_section)
         {
@@ -310,6 +310,6 @@ class DataManager extends \Chamilo\Libraries\Storage\DataManager\DataManager
 
         return self::retrieve(
             ContentObjectPublicationCategory::class,
-            new DataClassRetrieveParameters($condition));
+            new RetrieveParameters($condition));
     }
 }

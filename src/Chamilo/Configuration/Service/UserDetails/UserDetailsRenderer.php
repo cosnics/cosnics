@@ -36,9 +36,6 @@ class UserDetailsRenderer implements UserDetailsRendererInterface
         return $this->viewer;
     }
 
-    /**
-     * @throws \Chamilo\Libraries\Storage\Exception\DataClassNoResultException
-     */
     public function hasContentForUser(User $user, User $requestingUser): bool
     {
         return $this->getViewer()->getFormValues(Manager::CONTEXT, 'account_fields', $user->getId())->count() > 0;
@@ -51,7 +48,6 @@ class UserDetailsRenderer implements UserDetailsRendererInterface
 
     /**
      * @throws \TableException
-     * @throws \Chamilo\Libraries\Storage\Exception\DataClassNoResultException
      */
     public function renderUserDetails(User $user, User $requestingUser): string
     {

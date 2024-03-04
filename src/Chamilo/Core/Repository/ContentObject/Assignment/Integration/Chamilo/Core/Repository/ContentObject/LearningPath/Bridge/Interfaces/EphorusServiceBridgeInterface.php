@@ -3,7 +3,7 @@ namespace Chamilo\Core\Repository\ContentObject\Assignment\Integration\Chamilo\C
 
 use Chamilo\Application\Weblcms\Tool\Implementation\Ephorus\Storage\DataClass\Request;
 use Chamilo\Core\Repository\ContentObject\LearningPath\Storage\DataClass\TreeNodeData;
-use Chamilo\Libraries\Storage\Parameters\RecordRetrievesParameters;
+use Chamilo\Libraries\Storage\Parameters\RetrievesParameters;
 use Chamilo\Libraries\Storage\Query\Condition\Condition;
 
 /**
@@ -21,16 +21,18 @@ interface EphorusServiceBridgeInterface
      *
      * @return int
      */
-    public function countAssignmentEntriesWithEphorusRequestsByTreeNodeData(TreeNodeData $treeNodeData, Condition $condition = null);
+    public function countAssignmentEntriesWithEphorusRequestsByTreeNodeData(
+        TreeNodeData $treeNodeData, Condition $condition = null
+    );
 
     /**
      * @param \Chamilo\Core\Repository\ContentObject\LearningPath\Storage\DataClass\TreeNodeData $treeNodeData
-     * @param \Chamilo\Libraries\Storage\Parameters\RecordRetrievesParameters $recordRetrievesParameters
+     * @param \Chamilo\Libraries\Storage\Parameters\RetrievesParameters $retrievesParameters
      *
      * @return \Doctrine\Common\Collections\ArrayCollection|\Chamilo\Core\Repository\Storage\DataClass\ContentObject[]
      */
     public function findAssignmentEntriesWithEphorusRequestsByTreeNodeData(
-        TreeNodeData $treeNodeData, RecordRetrievesParameters $recordRetrievesParameters = null
+        TreeNodeData $treeNodeData, RetrievesParameters $retrievesParameters = new RetrievesParameters()
     );
 
     /**
@@ -39,7 +41,9 @@ interface EphorusServiceBridgeInterface
      *
      * @return Request[]
      */
-    public function findEphorusRequestsForAssignmentEntriesByTreeNodeData(TreeNodeData $treeNodeData, array $entryIds = []);
+    public function findEphorusRequestsForAssignmentEntriesByTreeNodeData(
+        TreeNodeData $treeNodeData, array $entryIds = []
+    );
 
     /**
      * @return bool

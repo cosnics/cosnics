@@ -53,16 +53,16 @@ class WorkspaceService
         return $this->getWorkspaceRepository()->countAllWorkspaces();
     }
 
-    public function countSharedWorkspacesForUser(User $user): int
-    {
-        return $this->getWorkspaceRepository()->countSharedWorkspacesForEntities($this->getEntitiesForUser($user));
-    }
-
     public function countFavouriteWorkspacesByUser(User $user): int
     {
         return $this->getWorkspaceRepository()->countFavouriteWorkspacesByUser(
             $user, $this->getEntityService()->getEntitiesForUser($user)
         );
+    }
+
+    public function countSharedWorkspacesForUser(User $user): int
+    {
+        return $this->getWorkspaceRepository()->countSharedWorkspacesForEntities($this->getEntitiesForUser($user));
     }
 
     public function countWorkspacesByCreator(User $user): int
@@ -89,7 +89,6 @@ class WorkspaceService
     }
 
     /**
-     * @throws \Chamilo\Libraries\Storage\Exception\DataClassNoResultException
      * @throws \Chamilo\Libraries\Architecture\Exceptions\ObjectNotExistException
      * @throws \Exception
      */
@@ -132,8 +131,6 @@ class WorkspaceService
 
     /**
      * @param string[] $workspaceProperties
-     *
-     * @throws \Chamilo\Libraries\Storage\Exception\DataClassNoResultException
      */
     public function createWorkspace(array $workspaceProperties): ?Workspace
     {
@@ -148,9 +145,6 @@ class WorkspaceService
         return $workspace;
     }
 
-    /**
-     * @throws \Chamilo\Libraries\Storage\Exception\DataClassNoResultException
-     */
     public function createWorkspaceUserDefaultForWorkspaceIdentifierAndUserIdentifier(
         string $workspaceIdentifier, string $userIdentifier
     ): bool
@@ -207,7 +201,6 @@ class WorkspaceService
      * @param ?\Chamilo\Libraries\Storage\Query\OrderBy $orderProperty
      *
      * @return \Doctrine\Common\Collections\ArrayCollection<\Chamilo\Core\Repository\Workspace\Storage\DataClass\Workspace>
-     * @throws \Chamilo\Libraries\Storage\Exception\DataClassNoResultException
      */
     public function findFavouriteWorkspacesByUser(
         User $user, ?int $limit = null, ?int $offset = null, ?OrderBy $orderProperty = null
@@ -238,7 +231,6 @@ class WorkspaceService
      * @param ?\Chamilo\Libraries\Storage\Query\OrderBy $orderBy
      *
      * @return \Doctrine\Common\Collections\ArrayCollection<\Chamilo\Core\Repository\Workspace\Storage\DataClass\Workspace>
-     * @throws \Chamilo\Libraries\Storage\Exception\DataClassNoResultException
      */
     public function getAllWorkspaces(?int $count = null, ?int $offset = null, ?OrderBy $orderBy = null): ArrayCollection
     {
@@ -246,7 +238,6 @@ class WorkspaceService
     }
 
     /**
-     * @throws \Chamilo\Libraries\Storage\Exception\DataClassNoResultException
      * @throws \Chamilo\Libraries\Architecture\Exceptions\ObjectNotExistException
      */
     public function getDefaultWorkspaceForUserIdentifier(string $userIdentifier): Workspace
@@ -286,9 +277,6 @@ class WorkspaceService
         return $this->entityService;
     }
 
-    /**
-     * @throws \Chamilo\Libraries\Storage\Exception\DataClassNoResultException
-     */
     public function getSharedWorkspacesForUser(
         User $user, ?int $limit = null, ?int $offset = null, ?OrderBy $orderProperty = null
     ): ArrayCollection
@@ -325,7 +313,6 @@ class WorkspaceService
      * @param ?\Chamilo\Libraries\Storage\Query\OrderBy $orderProperty
      *
      * @return \Doctrine\Common\Collections\ArrayCollection<\Chamilo\Core\Repository\Workspace\Storage\DataClass\Workspace>
-     * @throws \Chamilo\Libraries\Storage\Exception\DataClassNoResultException
      */
     public function getWorkspacesByCreator(
         User $user, ?int $limit = null, ?int $offset = null, ?OrderBy $orderProperty = null
@@ -338,7 +325,6 @@ class WorkspaceService
      * @param string[] $identifiers
      *
      * @return \Doctrine\Common\Collections\ArrayCollection<\Chamilo\Core\Repository\Workspace\Storage\DataClass\Workspace>
-     * @throws \Chamilo\Libraries\Storage\Exception\DataClassNoResultException
      */
     public function getWorkspacesByIdentifiers(array $identifiers): ArrayCollection
     {
@@ -353,7 +339,6 @@ class WorkspaceService
      * @param ?\Chamilo\Libraries\Storage\Query\OrderBy $orderProperty
      *
      * @return \Doctrine\Common\Collections\ArrayCollection<\Chamilo\Core\Repository\Workspace\Storage\DataClass\Workspace>
-     * @throws \Chamilo\Libraries\Storage\Exception\DataClassNoResultException
      */
     public function getWorkspacesForUser(
         User $user, int $right = RightsService::RIGHT_VIEW, ?int $limit = null, ?int $offset = null,
@@ -377,7 +362,6 @@ class WorkspaceService
      * @param ?\Chamilo\Libraries\Storage\Query\OrderBy $orderProperty
      *
      * @return \Doctrine\Common\Collections\ArrayCollection<\Chamilo\Core\Repository\Workspace\Storage\DataClass\Workspace>
-     * @throws \Chamilo\Libraries\Storage\Exception\DataClassNoResultException
      */
     public function getWorkspacesForUserWithExcludedWorkspaces(
         User $user, int $right = RightsService::RIGHT_VIEW, array $excludedWorkspaceIdentifiers = [],
@@ -390,9 +374,6 @@ class WorkspaceService
         );
     }
 
-    /**
-     * @throws \Chamilo\Libraries\Storage\Exception\DataClassNoResultException
-     */
     public function saveWorkspaceUserDefaultForWorkspaceIdentifierAndUserIdentifier(
         string $workspaceIdentifier, string $userIdentifier
     ): bool
@@ -435,7 +416,6 @@ class WorkspaceService
      * @param string[] $workspaceProperties
      *
      * @return bool
-     * @throws \Chamilo\Libraries\Storage\Exception\DataClassNoResultException
      */
     public function updateWorkspace(Workspace $workspace, array $workspaceProperties): bool
     {
@@ -444,9 +424,6 @@ class WorkspaceService
         return $this->getWorkspaceRepository()->updateWorkspace($workspace);
     }
 
-    /**
-     * @throws \Chamilo\Libraries\Storage\Exception\DataClassNoResultException
-     */
     protected function updateWorkspaceUserDefault(WorkspaceUserDefault $workspaceUserDefault): bool
     {
         return $this->getWorkspaceRepository()->updateWorkspaceUserDefault($workspaceUserDefault);

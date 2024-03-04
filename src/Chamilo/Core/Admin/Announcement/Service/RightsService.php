@@ -173,7 +173,6 @@ class RightsService
      *
      * @return string[][]
      * @throws \Chamilo\Libraries\Rights\Exception\RightsLocationNotFoundException
-     * @throws \Chamilo\Libraries\Storage\Exception\DataClassNoResultException
      */
     public function getViewTargetUsersAndGroupsIdentifiersForPublicationIdentifier(string $publicationIdentifier): array
     {

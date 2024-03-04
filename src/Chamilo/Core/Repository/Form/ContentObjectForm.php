@@ -37,7 +37,7 @@ use Chamilo\Libraries\Format\Structure\Glyph\FontAwesomeGlyph;
 use Chamilo\Libraries\Format\Structure\Glyph\IdentGlyph;
 use Chamilo\Libraries\Format\Tabs\Form\FormTab;
 use Chamilo\Libraries\Format\Tabs\TabsCollection;
-use Chamilo\Libraries\Storage\Parameters\DataClassRetrieveParameters;
+use Chamilo\Libraries\Storage\Parameters\RetrieveParameters;
 use Chamilo\Libraries\Storage\Query\Condition\AndCondition;
 use Chamilo\Libraries\Storage\Query\Condition\EqualityCondition;
 use Chamilo\Libraries\Storage\Query\Variable\PropertyConditionVariable;
@@ -611,7 +611,7 @@ abstract class ContentObjectForm extends FormValidator
         $condition = new AndCondition($conditions);
 
         $existingNewCategory = DataManager::retrieve(
-            RepositoryCategory::class, new DataClassRetrieveParameters($condition)
+            RepositoryCategory::class, new RetrieveParameters($condition)
         );
 
         if ($existingNewCategory instanceof RepositoryCategory)

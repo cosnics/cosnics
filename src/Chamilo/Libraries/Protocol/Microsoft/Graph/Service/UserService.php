@@ -41,7 +41,6 @@ class UserService
      * @param \Chamilo\Core\User\Storage\DataClass\User $user
      *
      * @return string
-     * @throws \Chamilo\Libraries\Storage\Exception\DataClassNoResultException
      */
     public function getAzureUserIdentifier(User $user): string
     {

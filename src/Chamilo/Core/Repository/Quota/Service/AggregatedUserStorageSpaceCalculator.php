@@ -2,7 +2,7 @@
 namespace Chamilo\Core\Repository\Quota\Service;
 
 use Chamilo\Core\User\Service\UserService;
-use Chamilo\Libraries\Storage\Exception\DataClassNoResultException;
+use Exception;
 
 /**
  * @package Chamilo\Core\Repository\Quota\Service
@@ -36,7 +36,7 @@ class AggregatedUserStorageSpaceCalculator implements AggregatedUserStorageSpace
 
             return $totalQuota;
         }
-        catch (DataClassNoResultException $exception)
+        catch (Exception)
         {
             return 0;
         }

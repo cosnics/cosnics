@@ -10,7 +10,7 @@ use Chamilo\Core\Repository\Storage\DataClass\ComplexContentObjectItem;
 use Chamilo\Core\Repository\Storage\DataClass\ContentObject;
 use Chamilo\Core\Repository\Storage\DataManager;
 use Chamilo\Libraries\Translation\Translation;
-use Chamilo\Libraries\Storage\Parameters\DataClassRetrievesParameters;
+use Chamilo\Libraries\Storage\Parameters\RetrievesParameters;
 use Chamilo\Libraries\Storage\Query\Condition\EqualityCondition;
 use Chamilo\Libraries\Storage\Query\Variable\PropertyConditionVariable;
 use Chamilo\Libraries\Storage\Query\Variable\StaticConditionVariable;
@@ -30,7 +30,7 @@ class WikiMostEditedPageBlock extends ToolBlock
         $wiki = $publication->get_content_object();
         $complex_content_object_items = DataManager::retrieve_complex_content_object_items(
             ComplexContentObjectItem::class,
-            new DataClassRetrievesParameters(
+            new RetrievesParameters(
                 new EqualityCondition(
                     new PropertyConditionVariable(
                         ComplexContentObjectItem::class,

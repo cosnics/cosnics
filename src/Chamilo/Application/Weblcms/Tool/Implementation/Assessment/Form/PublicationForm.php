@@ -7,7 +7,7 @@ use Chamilo\Application\Weblcms\Tool\Implementation\Assessment\Storage\DataManag
 use Chamilo\Core\Repository\ContentObject\Assessment\Display\Configuration;
 use Chamilo\Core\Repository\ContentObject\Assessment\Display\Form\ConfigurationForm;
 use Chamilo\Core\User\Storage\DataClass\User;
-use Chamilo\Libraries\Storage\Parameters\DataClassRetrieveParameters;
+use Chamilo\Libraries\Storage\Parameters\RetrieveParameters;
 use Chamilo\Libraries\Storage\Query\Condition\EqualityCondition;
 use Chamilo\Libraries\Storage\Query\Variable\PropertyConditionVariable;
 use Chamilo\Libraries\Storage\Query\Variable\StaticConditionVariable;
@@ -49,7 +49,7 @@ class PublicationForm extends ContentObjectPublicationForm
         {
             $first_publication = $publications[0];
 
-            $parameters = new DataClassRetrieveParameters(
+            $parameters = new RetrieveParameters(
                 new EqualityCondition(
                     new PropertyConditionVariable(Publication::class, Publication::PROPERTY_PUBLICATION_ID),
                     new StaticConditionVariable($first_publication->get_id())
@@ -142,7 +142,7 @@ class PublicationForm extends ContentObjectPublicationForm
                         $succes &= $assessment_publication->create();
                         break;
                     case self::TYPE_UPDATE :
-                        $parameters = new DataClassRetrieveParameters(
+                        $parameters = new RetrieveParameters(
                             new EqualityCondition(
                                 new PropertyConditionVariable(
                                     Publication::class, Publication::PROPERTY_PUBLICATION_ID

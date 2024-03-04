@@ -15,7 +15,7 @@ use Chamilo\Application\Weblcms\Storage\DataManager;
 use Chamilo\Libraries\Format\Structure\Glyph\FontAwesomeGlyph;
 use Chamilo\Libraries\Format\Structure\Glyph\IdentGlyph;
 use Chamilo\Libraries\Format\Structure\Glyph\NamespaceIdentGlyph;
-use Chamilo\Libraries\Storage\Parameters\DataClassRetrievesParameters;
+use Chamilo\Libraries\Storage\Parameters\RetrievesParameters;
 use Chamilo\Libraries\Storage\Query\Condition\AndCondition;
 use Chamilo\Libraries\Storage\Query\Condition\EqualityCondition;
 use Chamilo\Libraries\Storage\Query\Condition\InCondition;
@@ -162,7 +162,7 @@ class FixedLocationToolListRenderer extends ToolListRenderer
         $condition = new AndCondition($conditions);
 
         $course_tool_rel_course_section = DataManager::retrieves(
-            CourseToolRelCourseSection::class, new DataClassRetrievesParameters($condition)
+            CourseToolRelCourseSection::class, new RetrievesParameters($condition)
         );
 
         if ($course_tool_rel_course_section->count() > 0)
@@ -193,7 +193,7 @@ class FixedLocationToolListRenderer extends ToolListRenderer
             $condition = new AndCondition($conditions);
 
             $this->publication_links = DataManager::retrieves(
-                ContentObjectPublication::class, new DataClassRetrievesParameters($condition)
+                ContentObjectPublication::class, new RetrievesParameters($condition)
             );
         }
 
@@ -474,7 +474,7 @@ class FixedLocationToolListRenderer extends ToolListRenderer
                 new PropertyConditionVariable(CourseSection::class, CourseSection::PROPERTY_DISPLAY_ORDER)
             )
         ];
-        $parameters = new DataClassRetrievesParameters($condition, null, null, new OrderBy($order_property));
+        $parameters = new RetrievesParameters($condition, null, null, new OrderBy($order_property));
         $sections = DataManager::retrieves(CourseSection::class, $parameters);
 
         foreach ($sections as $section)

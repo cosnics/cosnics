@@ -40,7 +40,6 @@ class WorkspaceUserService
      * @param \Chamilo\Core\Repository\Workspace\Storage\DataClass\Workspace $workspace
      *
      * @return \Doctrine\Common\Collections\ArrayCollection<\Chamilo\Core\User\Storage\DataClass\User[]>
-     * @throws \Chamilo\Libraries\Storage\Exception\DataClassNoResultException
      */
     public function getAllUsersInWorkspace(Workspace $workspace): ArrayCollection
     {

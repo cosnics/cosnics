@@ -142,7 +142,6 @@ class ColumnAddComponent extends Manager
      * @param ?\Chamilo\Core\User\Storage\DataClass\User $user
      *
      * @return \Doctrine\Common\Collections\ArrayCollection<\Chamilo\Core\Home\Storage\DataClass\Element>
-     * @throws \Chamilo\Libraries\Storage\Exception\DataClassNoResultException
      */
     public function getColumns(string $tabId, ?User $user = null): ArrayCollection
     {
@@ -151,9 +150,6 @@ class ColumnAddComponent extends Manager
         );
     }
 
-    /**
-     * @throws \Chamilo\Libraries\Storage\Exception\DataClassNoResultException
-     */
     public function getCurrentTotalWidth(ArrayCollection $columns): int
     {
         $widthTotal = 0;
@@ -191,7 +187,6 @@ class ColumnAddComponent extends Manager
 
     /**
      * @return int[]
-     * @throws \Chamilo\Libraries\Storage\Exception\DataClassNoResultException
      */
     public function recalculateColumnWidths(ArrayCollection $columns): array
     {

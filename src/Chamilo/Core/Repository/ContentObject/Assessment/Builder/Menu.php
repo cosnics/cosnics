@@ -17,7 +17,7 @@ use Chamilo\Libraries\Format\Menu\TreeMenuRenderer;
 use Chamilo\Libraries\Format\Structure\Breadcrumb;
 use Chamilo\Libraries\Format\Structure\Glyph\NamespaceIdentGlyph;
 use Chamilo\Libraries\Platform\ChamiloRequest;
-use Chamilo\Libraries\Storage\Parameters\DataClassRetrievesParameters;
+use Chamilo\Libraries\Storage\Parameters\RetrievesParameters;
 use Chamilo\Libraries\Storage\Query\Condition\EqualityCondition;
 use Chamilo\Libraries\Storage\Query\Variable\PropertyConditionVariable;
 use Chamilo\Libraries\Storage\Query\Variable\StaticConditionVariable;
@@ -188,7 +188,7 @@ class Menu extends HtmlMenu
                 ComplexContentObjectItem::class, ComplexContentObjectItem::PROPERTY_PARENT
             ), new StaticConditionVariable($parent_id), ComplexContentObjectItem::getStorageUnitName()
         );
-        $parameters = new DataClassRetrievesParameters($condition);
+        $parameters = new RetrievesParameters($condition);
         $clois = DataManager::retrieve_complex_content_object_items(
             ComplexContentObjectItem::class, $parameters
         );

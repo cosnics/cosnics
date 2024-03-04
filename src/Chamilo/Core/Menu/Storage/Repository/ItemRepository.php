@@ -6,7 +6,7 @@ use Chamilo\Core\Menu\Storage\DataClass\Item;
 use Chamilo\Libraries\Storage\DataClass\DataClass;
 use Chamilo\Libraries\Storage\DataManager\Repository\DataClassRepository;
 use Chamilo\Libraries\Storage\Parameters\DataClassCountParameters;
-use Chamilo\Libraries\Storage\Parameters\DataClassRetrievesParameters;
+use Chamilo\Libraries\Storage\Parameters\RetrievesParameters;
 use Chamilo\Libraries\Storage\Query\Condition\AndCondition;
 use Chamilo\Libraries\Storage\Query\Condition\EqualityCondition;
 use Chamilo\Libraries\Storage\Query\Condition\InCondition;
@@ -59,7 +59,6 @@ class ItemRepository
 
     /**
      * @return \Doctrine\Common\Collections\ArrayCollection<\Chamilo\Core\Menu\Storage\DataClass\Item>
-     * @throws \Chamilo\Libraries\Storage\Exception\DataClassNoResultException
      */
     public function findItems(): ArrayCollection
     {
@@ -68,7 +67,7 @@ class ItemRepository
         $orderBy->add(new OrderProperty(new PropertyConditionVariable(Item::class, Item::PROPERTY_SORT)));
 
         return $this->getDataClassRepository()->retrieves(
-            Item::class, new DataClassRetrievesParameters(orderBy: $orderBy)
+            Item::class, new RetrievesParameters(orderBy: $orderBy)
         );
     }
 
@@ -76,7 +75,6 @@ class ItemRepository
      * @param int[] $identifiers
      *
      * @return \Doctrine\Common\Collections\ArrayCollection<\Chamilo\Core\Menu\Storage\DataClass\Item>
-     * @throws \Chamilo\Libraries\Storage\Exception\DataClassNoResultException
      */
     public function findItemsByIdentifiers(array $identifiers): ArrayCollection
     {
@@ -84,7 +82,7 @@ class ItemRepository
             new PropertyConditionVariable(Item::class, DataClass::PROPERTY_ID), $identifiers
         );
 
-        return $this->getDataClassRepository()->retrieves(Item::class, new DataClassRetrievesParameters($condition));
+        return $this->getDataClassRepository()->retrieves(Item::class, new RetrievesParameters($condition));
     }
 
     /**
@@ -94,7 +92,6 @@ class ItemRepository
      * @param ?\Chamilo\Libraries\Storage\Query\OrderBy $orderBy
      *
      * @return \Doctrine\Common\Collections\ArrayCollection<\Chamilo\Core\Menu\Storage\DataClass\Item>
-     * @throws \Chamilo\Libraries\Storage\Exception\DataClassNoResultException
      */
     public function findItemsByParentIdentifier(
         string $parentIdentifier, ?int $count = null, ?int $offset = null, ?OrderBy $orderBy = null
@@ -113,7 +110,7 @@ class ItemRepository
         $orderBy->add(new OrderProperty(new PropertyConditionVariable(Item::class, Item::PROPERTY_SORT)));
 
         return $this->getDataClassRepository()->retrieves(
-            Item::class, new DataClassRetrievesParameters($condition, $count, $offset, $orderBy)
+            Item::class, new RetrievesParameters($condition, $count, $offset, $orderBy)
         );
     }
 
@@ -121,7 +118,6 @@ class ItemRepository
      * @param string $type
      *
      * @return \Doctrine\Common\Collections\ArrayCollection<\Chamilo\Core\Menu\Storage\DataClass\Item>
-     * @throws \Chamilo\Libraries\Storage\Exception\DataClassNoResultException
      */
     public function findItemsByType(string $type): ArrayCollection
     {
@@ -129,12 +125,11 @@ class ItemRepository
             new PropertyConditionVariable(Item::class, Item::PROPERTY_TYPE), new StaticConditionVariable($type)
         );
 
-        return $this->getDataClassRepository()->retrieves(Item::class, new DataClassRetrievesParameters($condition));
+        return $this->getDataClassRepository()->retrieves(Item::class, new RetrievesParameters($condition));
     }
 
     /**
      * @return \Doctrine\Common\Collections\ArrayCollection<\Chamilo\Core\Menu\Storage\DataClass\Item>
-     * @throws \Chamilo\Libraries\Storage\Exception\DataClassNoResultException
      */
     public function findRootCategoryItems(): ArrayCollection
     {
@@ -152,7 +147,7 @@ class ItemRepository
         $orderBy = new OrderBy([new OrderProperty(new PropertyConditionVariable(Item::class, Item::PROPERTY_SORT))]);
 
         return $this->getDataClassRepository()->retrieves(
-            Item::class, new DataClassRetrievesParameters(
+            Item::class, new RetrievesParameters(
                 condition: new AndCondition($conditions), orderBy: $orderBy
             )
         );

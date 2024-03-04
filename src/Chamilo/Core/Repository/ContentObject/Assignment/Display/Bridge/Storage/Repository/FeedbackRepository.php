@@ -5,7 +5,7 @@ use Chamilo\Core\Repository\ContentObject\Assignment\Display\Bridge\Storage\Data
 use Chamilo\Core\Repository\ContentObject\Assignment\Display\Bridge\Storage\DataClass\Feedback;
 use Chamilo\Libraries\Storage\DataManager\Repository\DataClassRepository;
 use Chamilo\Libraries\Storage\Parameters\DataClassCountParameters;
-use Chamilo\Libraries\Storage\Parameters\DataClassRetrievesParameters;
+use Chamilo\Libraries\Storage\Parameters\RetrievesParameters;
 use Chamilo\Libraries\Storage\Query\Condition\AndCondition;
 use Chamilo\Libraries\Storage\Query\Condition\Condition;
 use Chamilo\Libraries\Storage\Query\Condition\EqualityCondition;
@@ -234,7 +234,7 @@ abstract class FeedbackRepository
         );
 
         return $this->dataClassRepository->retrieves(
-            $this->getFeedbackClassName(), new DataClassRetrievesParameters($condition)
+            $this->getFeedbackClassName(), new RetrievesParameters($condition)
         );
     }
 

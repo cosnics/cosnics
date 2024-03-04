@@ -49,7 +49,6 @@ class AssignmentPlatformGroupScoresBlock extends AssignmentScoresBlock
      * @param int $course_id
      *
      * @return mixed | \Chamilo\Core\Group\Storage\DataClass\Group[]
-     * @throws \Chamilo\Libraries\Storage\Exception\DataClassNoResultException
      */
     protected function retrieveEntitiesForCourse($course_id)
     {

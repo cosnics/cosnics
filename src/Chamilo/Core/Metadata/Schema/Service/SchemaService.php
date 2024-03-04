@@ -20,7 +20,6 @@ class SchemaService
 
     /**
      * @return \Doctrine\Common\Collections\ArrayCollection<\Chamilo\Core\Metadata\Storage\DataClass\Schema>
-     * @throws \Chamilo\Libraries\Storage\Exception\DataClassNoResultException
      */
     public function findSchemasForCondition(?Condition $condition = null): ArrayCollection
     {

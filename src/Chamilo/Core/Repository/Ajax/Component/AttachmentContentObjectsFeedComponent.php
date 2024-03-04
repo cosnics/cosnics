@@ -11,7 +11,7 @@ use Chamilo\Libraries\Format\Form\Element\AdvancedElementFinder\AdvancedElementF
 use Chamilo\Libraries\Format\Structure\Glyph\FontAwesomeGlyph;
 use Chamilo\Libraries\Format\Structure\Glyph\IdentGlyph;
 use Chamilo\Libraries\Storage\Parameters\DataClassCountParameters;
-use Chamilo\Libraries\Storage\Parameters\DataClassRetrievesParameters;
+use Chamilo\Libraries\Storage\Parameters\RetrievesParameters;
 use Chamilo\Libraries\Storage\Query\Condition\AndCondition;
 use Chamilo\Libraries\Storage\Query\Condition\EqualityCondition;
 use Chamilo\Libraries\Storage\Query\Condition\InCondition;
@@ -424,7 +424,7 @@ class AttachmentContentObjectsFeedComponent extends Manager
      */
     protected function retrieveContentObjects()
     {
-        $parameters = new DataClassRetrievesParameters(
+        $parameters = new RetrievesParameters(
             $this->getContentObjectConditions(), 100, $this->getOffset(), new OrderBy(array(
                     new OrderProperty(
                         new PropertyConditionVariable(ContentObject::class, ContentObject::PROPERTY_TITLE)

@@ -91,7 +91,6 @@ class DisplayOrderDataClassListener extends DataClassListener
     }
 
     /**
-     * @throws \Chamilo\Libraries\Storage\Exception\DataClassNoResultException
      * @throws \Exception
      */
     public function onBeforeCreate(): bool
@@ -157,7 +156,6 @@ class DisplayOrderDataClassListener extends DataClassListener
     }
 
     /**
-     * @throws \Chamilo\Libraries\Storage\Exception\DataClassNoResultException
      * @throws \Exception
      */
     public function onBeforeUpdate(): bool

@@ -11,7 +11,7 @@ use Chamilo\Core\Repository\Storage\DataClass\ContentObject;
 use Chamilo\Core\Repository\Storage\DataManager;
 use Chamilo\Libraries\Architecture\Application\Application;
 use Chamilo\Libraries\Format\Structure\Glyph\FontAwesomeGlyph;
-use Chamilo\Libraries\Storage\Parameters\DataClassRetrievesParameters;
+use Chamilo\Libraries\Storage\Parameters\RetrievesParameters;
 use Chamilo\Libraries\Storage\Query\Condition\AndCondition;
 use Chamilo\Libraries\Storage\Query\Condition\EqualityCondition;
 use Chamilo\Libraries\Storage\Query\Variable\PropertyConditionVariable;
@@ -67,7 +67,7 @@ class ToolPublicationsBlock extends ToolBlock
         $condition = new AndCondition($conditions);
 
         $content_object_publications = \Chamilo\Application\Weblcms\Storage\DataManager::retrieves(
-            ContentObjectPublication::class, new DataClassRetrievesParameters($condition)
+            ContentObjectPublication::class, new RetrievesParameters($condition)
         );
 
         $glyph = new FontAwesomeGlyph('chart-pie', [], Translation::get('Details'));

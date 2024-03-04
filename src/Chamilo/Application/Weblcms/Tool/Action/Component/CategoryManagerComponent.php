@@ -11,7 +11,7 @@ use Chamilo\Libraries\Architecture\Application\ApplicationConfiguration;
 use Chamilo\Libraries\Architecture\Exceptions\NotAllowedException;
 use Chamilo\Libraries\Format\Breadcrumb\BreadcrumbLessComponentInterface;
 use Chamilo\Libraries\Storage\Parameters\DataClassCountParameters;
-use Chamilo\Libraries\Storage\Parameters\DataClassRetrievesParameters;
+use Chamilo\Libraries\Storage\Parameters\RetrievesParameters;
 use Chamilo\Libraries\Storage\Query\Condition\AndCondition;
 use Chamilo\Libraries\Storage\Query\Condition\EqualityCondition;
 use Chamilo\Libraries\Storage\Query\Condition\InCondition;
@@ -214,7 +214,7 @@ class CategoryManagerComponent extends Manager implements BreadcrumbLessComponen
             ), new StaticConditionVariable($category_id)
         );
         $subcategries = DataManager::retrieves(
-            ContentObjectPublicationCategory::class, new DataClassRetrievesParameters($condition)
+            ContentObjectPublicationCategory::class, new RetrievesParameters($condition)
         );
 
         foreach ($subcategries as $cat)
@@ -255,7 +255,7 @@ class CategoryManagerComponent extends Manager implements BreadcrumbLessComponen
 
         return DataManager::retrieves(
             ContentObjectPublicationCategory::class,
-            new DataClassRetrievesParameters($condition, $count, $offset, $order_property)
+            new RetrievesParameters($condition, $count, $offset, $order_property)
         );
     }
 

@@ -38,7 +38,6 @@ class Setting extends DataClass
     /**
      * @return bool
      * @throws \Chamilo\Libraries\Storage\Exception\ConnectionException
-     * @throws \Chamilo\Libraries\Storage\Exception\DataClassNoResultException
      * @throws \Symfony\Component\Cache\Exception\CacheException
      * @deprecated Use ConfigurationService::deleteSetting
      */

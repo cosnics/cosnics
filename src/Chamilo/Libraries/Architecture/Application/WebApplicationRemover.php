@@ -43,7 +43,6 @@ abstract class WebApplicationRemover extends Remover
     }
 
     /**
-     * @throws \Chamilo\Libraries\Storage\Exception\DataClassNoResultException
      * @throws \Psr\Cache\InvalidArgumentException
      * @throws \Psr\SimpleCache\InvalidArgumentException
      */

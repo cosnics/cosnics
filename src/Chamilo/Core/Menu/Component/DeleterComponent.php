@@ -75,7 +75,6 @@ class DeleterComponent extends Manager
     /**
      * @return \Doctrine\Common\Collections\ArrayCollection<\Chamilo\Core\Menu\Storage\DataClass\Item>
      * @throws \Chamilo\Libraries\Architecture\Exceptions\ParameterNotDefinedException
-     * @throws \Chamilo\Libraries\Storage\Exception\DataClassNoResultException
      */
     protected function getItems(): ArrayCollection
     {

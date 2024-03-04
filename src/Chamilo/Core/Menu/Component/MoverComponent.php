@@ -20,7 +20,6 @@ class MoverComponent extends Manager
     /**
      * @throws \Chamilo\Libraries\Architecture\Exceptions\NotAllowedException
      * @throws \Chamilo\Libraries\Architecture\Exceptions\ParameterNotDefinedException
-     * @throws \Chamilo\Libraries\Storage\Exception\DataClassNoResultException
      * @throws \Chamilo\Libraries\Storage\Exception\DisplayOrderException
      * @throws \Symfony\Component\Cache\Exception\CacheException
      */

@@ -13,7 +13,7 @@ use Chamilo\Core\Reporting\ReportingTemplate;
 use Chamilo\Core\Repository\Storage\DataClass\ComplexContentObjectItem;
 use Chamilo\Libraries\Architecture\Exceptions\ObjectNotExistException;
 use Chamilo\Libraries\Format\Structure\Breadcrumb;
-use Chamilo\Libraries\Storage\Parameters\DataClassRetrievesParameters;
+use Chamilo\Libraries\Storage\Parameters\RetrievesParameters;
 use Chamilo\Libraries\Storage\Query\Condition\EqualityCondition;
 use Chamilo\Libraries\Storage\Query\Variable\PropertyConditionVariable;
 use Chamilo\Libraries\Storage\Query\Variable\StaticConditionVariable;
@@ -70,7 +70,7 @@ class AssessmentAttemptsTemplate extends ReportingTemplate
             ), new StaticConditionVariable($publication->get_content_object_id())
         );
         $questions_resultset = \Chamilo\Core\Repository\Storage\DataManager::retrieve_complex_content_object_items(
-            ComplexContentObjectItem::class, new DataClassRetrievesParameters($condition)
+            ComplexContentObjectItem::class, new RetrievesParameters($condition)
         );
 
         foreach ($questions_resultset as $question)

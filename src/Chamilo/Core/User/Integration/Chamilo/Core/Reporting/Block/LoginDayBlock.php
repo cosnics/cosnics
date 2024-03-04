@@ -5,7 +5,7 @@ use Chamilo\Core\Reporting\ReportingData;
 use Chamilo\Core\Reporting\Viewer\Rendition\Block\Type\Html;
 use Chamilo\Core\User\Integration\Chamilo\Core\Tracking\Storage\DataClass\LoginLogout;
 use Chamilo\Libraries\Storage\DataManager\DataManager;
-use Chamilo\Libraries\Storage\Parameters\DataClassRetrievesParameters;
+use Chamilo\Libraries\Storage\Parameters\RetrievesParameters;
 use Chamilo\Libraries\Storage\Query\Condition\AndCondition;
 use Chamilo\Libraries\Storage\Query\Condition\EqualityCondition;
 use Chamilo\Libraries\Storage\Query\Variable\PropertyConditionVariable;
@@ -40,7 +40,7 @@ class LoginDayBlock extends Block
         $condition = new AndCondition($conditions);
 
         $data = DataManager::retrieves(
-            LoginLogout::class, new DataClassRetrievesParameters($condition)
+            LoginLogout::class, new RetrievesParameters($condition)
         );
 
         $days = [];

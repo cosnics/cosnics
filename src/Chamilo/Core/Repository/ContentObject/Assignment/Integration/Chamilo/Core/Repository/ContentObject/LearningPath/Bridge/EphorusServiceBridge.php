@@ -5,7 +5,7 @@ use Chamilo\Application\Weblcms\Tool\Implementation\Ephorus\Storage\DataClass\Re
 use Chamilo\Core\Repository\ContentObject\Assignment\Display\Bridge\Interfaces\EphorusServiceBridgeInterface;
 use Chamilo\Core\Repository\ContentObject\Assignment\Storage\DataClass\Assignment;
 use Chamilo\Core\Repository\ContentObject\LearningPath\Domain\TreeNode;
-use Chamilo\Libraries\Storage\Parameters\RecordRetrievesParameters;
+use Chamilo\Libraries\Storage\Parameters\RetrievesParameters;
 use Chamilo\Libraries\Storage\Query\Condition\Condition;
 use RuntimeException;
 
@@ -39,22 +39,6 @@ class EphorusServiceBridge implements EphorusServiceBridgeInterface
     }
 
     /**
-     * @param \Chamilo\Core\Repository\ContentObject\LearningPath\Domain\TreeNode $treeNode
-     */
-    public function setTreeNode(TreeNode $treeNode)
-    {
-        if (!$treeNode->getContentObject() instanceof Assignment)
-        {
-            throw new RuntimeException(
-                'The given treenode does not reference a valid assignment and should not be used'
-            );
-        }
-
-        $this->treeNode = $treeNode;
-    }
-
-
-    /**
      * @param \Chamilo\Libraries\Storage\Query\Condition\Condition $condition
      *
      * @return int
@@ -67,15 +51,16 @@ class EphorusServiceBridge implements EphorusServiceBridgeInterface
     }
 
     /**
-     * @param \Chamilo\Libraries\Storage\Parameters\RecordRetrievesParameters $recordRetrievesParameters
+     * @param \Chamilo\Libraries\Storage\Parameters\RetrievesParameters $retrievesParameters
      *
      * @return \Doctrine\Common\Collections\ArrayCollection|\Chamilo\Core\Repository\Storage\DataClass\ContentObject[]
      */
-    public function findAssignmentEntriesWithEphorusRequests(RecordRetrievesParameters $recordRetrievesParameters = null
+    public function findAssignmentEntriesWithEphorusRequests(
+        RetrievesParameters $retrievesParameters = new RetrievesParameters()
     )
     {
         return $this->ephorusServiceBridgeInterface->findAssignmentEntriesWithEphorusRequestsByTreeNodeData(
-            $this->treeNode->getTreeNodeData(), $recordRetrievesParameters
+            $this->treeNode->getTreeNodeData(), $retrievesParameters
         );
     }
 
@@ -97,5 +82,20 @@ class EphorusServiceBridge implements EphorusServiceBridgeInterface
     public function isEphorusEnabled()
     {
         return $this->ephorusServiceBridgeInterface->isEphorusEnabled();
+    }
+
+    /**
+     * @param \Chamilo\Core\Repository\ContentObject\LearningPath\Domain\TreeNode $treeNode
+     */
+    public function setTreeNode(TreeNode $treeNode)
+    {
+        if (!$treeNode->getContentObject() instanceof Assignment)
+        {
+            throw new RuntimeException(
+                'The given treenode does not reference a valid assignment and should not be used'
+            );
+        }
+
+        $this->treeNode = $treeNode;
     }
 }

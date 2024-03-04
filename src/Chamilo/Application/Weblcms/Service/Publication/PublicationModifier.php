@@ -126,9 +126,6 @@ class PublicationModifier implements PublicationModifierInterface
         $formValidator->setDefaults($defaults);
     }
 
-    /**
-     * @throws \Chamilo\Libraries\Storage\Exception\DataClassNoResultException
-     */
     public function deleteContentObjectPublication(string $publicationIdentifier): bool
     {
         if (empty($context) || $context == ContentObjectPublication::class)

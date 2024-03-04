@@ -4,8 +4,8 @@ namespace Chamilo\Libraries\Storage\DataManager\Interfaces;
 use Chamilo\Libraries\Storage\Parameters\DataClassCountGroupedParameters;
 use Chamilo\Libraries\Storage\Parameters\DataClassCountParameters;
 use Chamilo\Libraries\Storage\Parameters\DataClassDistinctParameters;
-use Chamilo\Libraries\Storage\Parameters\DataClassRetrieveParameters;
-use Chamilo\Libraries\Storage\Parameters\DataClassRetrievesParameters;
+use Chamilo\Libraries\Storage\Parameters\RetrieveParameters;
+use Chamilo\Libraries\Storage\Parameters\RetrievesParameters;
 use Chamilo\Libraries\Storage\Query\Condition\Condition;
 use Chamilo\Libraries\Storage\Query\UpdateProperties;
 
@@ -45,12 +45,12 @@ interface DataClassDatabaseInterface
     /**
      * @return ?string[]
      */
-    public function retrieve(string $dataClassStorageUnitName, DataClassRetrieveParameters $parameters): ?array;
+    public function retrieve(string $dataClassStorageUnitName, RetrieveParameters $parameters): ?array;
 
     /**
      * @return string[][]
      */
-    public function retrieves(string $dataClassStorageUnitName, DataClassRetrievesParameters $parameters): array;
+    public function retrieves(string $dataClassStorageUnitName, RetrievesParameters $parameters): array;
 
     /**
      *

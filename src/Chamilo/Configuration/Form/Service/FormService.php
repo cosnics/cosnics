@@ -54,7 +54,6 @@ class FormService
 
     /**
      * @return \Doctrine\Common\Collections\ArrayCollection<\Chamilo\Configuration\Form\Storage\DataClass\Option>
-     * @throws \Chamilo\Libraries\Storage\Exception\DataClassNoResultException
      */
     public function retrieveDynamicFormElementOptions(
         ?Condition $condition = null, ?int $offset = null, ?int $count = null, ?OrderBy $orderBy = null
@@ -65,7 +64,6 @@ class FormService
 
     /**
      * @return \Doctrine\Common\Collections\ArrayCollection<\Chamilo\Configuration\Form\Storage\DataClass\Value>
-     * @throws \Chamilo\Libraries\Storage\Exception\DataClassNoResultException
      */
     public function retrieveDynamicFormElementValues(
         ?Condition $condition = null, ?int $offset = null, ?int $count = null, ?OrderBy $orderBy = null
@@ -76,7 +74,6 @@ class FormService
 
     /**
      * @return \Doctrine\Common\Collections\ArrayCollection<\Chamilo\Configuration\Form\Storage\DataClass\Value>
-     * @throws \Chamilo\Libraries\Storage\Exception\DataClassNoResultException
      */
     public function retrieveDynamicFormElementValuesForFormIdentifierAndUserIdentifier(
         string $formIdentifier, string $userIdentifier
@@ -89,7 +86,6 @@ class FormService
 
     /**
      * @return \Doctrine\Common\Collections\ArrayCollection<\Chamilo\Configuration\Form\Storage\DataClass\Element>
-     * @throws \Chamilo\Libraries\Storage\Exception\DataClassNoResultException
      */
     public function retrieveDynamicFormElements(
         ?Condition $condition = null, ?int $offset = null, ?int $count = null, ?OrderBy $orderBy = null
@@ -100,7 +96,6 @@ class FormService
 
     /**
      * @return \Doctrine\Common\Collections\ArrayCollection<\Chamilo\Configuration\Form\Storage\DataClass\Element>
-     * @throws \Chamilo\Libraries\Storage\Exception\DataClassNoResultException
      */
     public function retrieveDynamicForms(
         ?Condition $condition = null, ?int $offset = null, ?int $count = null, ?OrderBy $orderBy = null
@@ -114,17 +109,11 @@ class FormService
         return $this->getFormRepository()->retrieveInstanceForContextAndName($context, $name);
     }
 
-    /**
-     * @throws \Chamilo\Libraries\Storage\Exception\DataClassNoResultException
-     */
     public function selectNextDynamicFormElementOptionOrder($dynamicFormElementIdentifier): int
     {
         return $this->getFormRepository()->selectNextDynamicFormElementOptionOrder($dynamicFormElementIdentifier);
     }
 
-    /**
-     * @throws \Chamilo\Libraries\Storage\Exception\DataClassNoResultException
-     */
     public function selectNextDynamicFormElementOrder(int $dynamicFormIdentifier): int
     {
         return $this->getFormRepository()->selectNextDynamicFormElementOrder($dynamicFormIdentifier);

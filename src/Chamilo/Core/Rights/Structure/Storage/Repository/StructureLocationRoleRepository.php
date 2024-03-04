@@ -7,8 +7,8 @@ use Chamilo\Core\Rights\Structure\Storage\Repository\Interfaces\StructureLocatio
 use Chamilo\Core\User\Roles\Storage\DataClass\Role;
 use Chamilo\Libraries\Storage\DataManager\DataManager;
 use Chamilo\Libraries\Storage\DataManager\Repository\DataManagerRepository;
-use Chamilo\Libraries\Storage\Parameters\DataClassRetrieveParameters;
-use Chamilo\Libraries\Storage\Parameters\RecordRetrievesParameters;
+use Chamilo\Libraries\Storage\Parameters\RetrieveParameters;
+use Chamilo\Libraries\Storage\Parameters\RetrievesParameters;
 use Chamilo\Libraries\Storage\Query\Condition\AndCondition;
 use Chamilo\Libraries\Storage\Query\Condition\EqualityCondition;
 use Chamilo\Libraries\Storage\Query\Join;
@@ -42,7 +42,7 @@ class StructureLocationRoleRepository extends DataManagerRepository implements S
 
         $condition = new AndCondition($conditions);
 
-        return DataManager::retrieve(StructureLocationRole::class, new DataClassRetrieveParameters($condition));
+        return DataManager::retrieve(StructureLocationRole::class, new RetrieveParameters($condition));
     }
 
     /**
@@ -76,9 +76,6 @@ class StructureLocationRoleRepository extends DataManagerRepository implements S
         );
     }
 
-    /**
-     * @return array|bool
-     */
     public function retrieveStructureLocationsAndRoles()
     {
         $properties = new RetrieveProperties();
@@ -111,8 +108,8 @@ class StructureLocationRoleRepository extends DataManagerRepository implements S
         );
 
         return DataManager::records(
-            StructureLocation::class, new RecordRetrievesParameters(
-                retrieveProperties: $properties, joins: $joins
+            StructureLocation::class, new RetrievesParameters(
+                joins: $joins, retrieveProperties: $properties
             )
         );
     }

@@ -15,9 +15,6 @@ use Chamilo\Core\Group\Service\GroupsTreeTraverser;
 class GroupUsersSubscribeComponent extends Manager
 {
 
-    /**
-     * @throws \Chamilo\Libraries\Storage\Exception\DataClassNoResultException
-     */
     public function run()
     {
         $course = $this->get_course();
@@ -59,9 +56,6 @@ class GroupUsersSubscribeComponent extends Manager
         return $this->getService(GroupsTreeTraverser::class);
     }
 
-    /**
-     * @throws \Chamilo\Libraries\Storage\Exception\DataClassNoResultException
-     */
     public function subscribe_group($group_id, $course): void
     {
         $groupUserIdentifiers = $this->getGroupsTreeTraverser()->findUserIdentifiersForGroup($group_id);

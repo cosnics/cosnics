@@ -4,7 +4,7 @@ namespace Chamilo\Core\Rights;
 use Chamilo\Core\Rights\Storage\DataManager;
 use Chamilo\Libraries\Architecture\ClassnameUtilities;
 use Chamilo\Libraries\Storage\DataClass\NestedSet;
-use Chamilo\Libraries\Storage\Parameters\DataClassRetrieveParameters;
+use Chamilo\Libraries\Storage\Parameters\RetrieveParameters;
 use Chamilo\Libraries\Storage\Query\Condition\AndCondition;
 use Chamilo\Libraries\Storage\Query\Condition\ComparisonCondition;
 use Chamilo\Libraries\Storage\Query\Condition\EqualityCondition;
@@ -175,7 +175,7 @@ abstract class RightsLocation extends NestedSet
             new OrderBy([new OrderProperty(new PropertyConditionVariable(self::class, self::PROPERTY_LEFT_VALUE))]);
 
         return DataManager::retrieve(
-            self::class, new DataClassRetrieveParameters($locked_parent_condition, $order)
+            self::class, new RetrieveParameters($locked_parent_condition, $order)
         );
     }
 

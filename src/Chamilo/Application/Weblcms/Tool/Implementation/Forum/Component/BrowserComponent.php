@@ -26,8 +26,8 @@ use Chamilo\Libraries\Format\Structure\ActionBar\Renderer\ButtonToolBarRenderer;
 use Chamilo\Libraries\Format\Structure\ActionBar\SubButton;
 use Chamilo\Libraries\Format\Structure\ActionBar\SubButtonDivider;
 use Chamilo\Libraries\Format\Structure\Glyph\FontAwesomeGlyph;
-use Chamilo\Libraries\Storage\Parameters\DataClassRetrieveParameters;
-use Chamilo\Libraries\Storage\Parameters\DataClassRetrievesParameters;
+use Chamilo\Libraries\Storage\Parameters\RetrieveParameters;
+use Chamilo\Libraries\Storage\Parameters\RetrievesParameters;
 use Chamilo\Libraries\Storage\Query\Condition\AndCondition;
 use Chamilo\Libraries\Storage\Query\Condition\EqualityCondition;
 use Chamilo\Libraries\Storage\Query\Condition\InCondition;
@@ -86,7 +86,7 @@ class BrowserComponent extends Manager implements BreadcrumbLessComponentInterfa
         $condition = new AndCondition($conditions);
 
         $this->introduction_text = WeblcmsDataManager::retrieve(
-            ContentObjectPublication::class, new DataClassRetrieveParameters($condition)
+            ContentObjectPublication::class, new RetrieveParameters($condition)
         );
 
         $this->size = 0;
@@ -789,7 +789,7 @@ class BrowserComponent extends Manager implements BreadcrumbLessComponentInterfa
 
         $categories = WeblcmsDataManager::retrieves(
             ContentObjectPublicationCategory::class,
-            new DataClassRetrievesParameters(new AndCondition($conditions), null, null, $order)
+            new RetrievesParameters(new AndCondition($conditions), null, null, $order)
         );
 
         $html = [];

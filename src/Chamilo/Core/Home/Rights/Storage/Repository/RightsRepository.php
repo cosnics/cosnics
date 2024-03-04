@@ -12,7 +12,7 @@ use Chamilo\Core\User\Storage\DataClass\User;
 use Chamilo\Libraries\Storage\DataClass\DataClass;
 use Chamilo\Libraries\Storage\DataManager\Repository\DataClassRepository;
 use Chamilo\Libraries\Storage\Parameters\DataClassDistinctParameters;
-use Chamilo\Libraries\Storage\Parameters\DataClassRetrievesParameters;
+use Chamilo\Libraries\Storage\Parameters\RetrievesParameters;
 use Chamilo\Libraries\Storage\Query\Condition\AndCondition;
 use Chamilo\Libraries\Storage\Query\Condition\EqualityCondition;
 use Chamilo\Libraries\Storage\Query\Condition\InCondition;
@@ -54,17 +54,11 @@ class RightsRepository
         );
     }
 
-    /**
-     * @throws \Chamilo\Libraries\Storage\Exception\DataClassNoResultException
-     */
     public function createBlockTypeTargetEntity(BlockTypeTargetEntity $blockTypeTargetEntity): bool
     {
         return $this->getDataClassRepository()->create($blockTypeTargetEntity);
     }
 
-    /**
-     * @throws \Chamilo\Libraries\Storage\Exception\DataClassNoResultException
-     */
     public function createElementTargetEntity(ElementTargetEntity $elementTargetEntity): bool
     {
         return $this->getDataClassRepository()->create($elementTargetEntity);
@@ -72,12 +66,11 @@ class RightsRepository
 
     /**
      * @return \Doctrine\Common\Collections\ArrayCollection<\Chamilo\Core\Home\Rights\Storage\DataClass\BlockTypeTargetEntity>
-     * @throws \Chamilo\Libraries\Storage\Exception\DataClassNoResultException
      */
     public function findBlockTypeTargetEntities(): ArrayCollection
     {
         return $this->getDataClassRepository()->retrieves(
-            BlockTypeTargetEntity::class, new DataClassRetrievesParameters()
+            BlockTypeTargetEntity::class, new RetrievesParameters()
         );
     }
 
@@ -150,12 +143,11 @@ class RightsRepository
 
     /**
      * @return \Doctrine\Common\Collections\ArrayCollection<\Chamilo\Core\Home\Rights\Storage\DataClass\ElementTargetEntity>
-     * @throws \Chamilo\Libraries\Storage\Exception\DataClassNoResultException
      */
     public function findElementTargetEntities(): ArrayCollection
     {
         return $this->getDataClassRepository()->retrieves(
-            ElementTargetEntity::class, new DataClassRetrievesParameters()
+            ElementTargetEntity::class, new RetrievesParameters()
         );
     }
 
@@ -163,13 +155,12 @@ class RightsRepository
      * @param string $blockType
      *
      * @return \Doctrine\Common\Collections\ArrayCollection<\Chamilo\Core\Home\Rights\Storage\DataClass\BlockTypeTargetEntity>
-     * @throws \Chamilo\Libraries\Storage\Exception\DataClassNoResultException
      */
     public function findTargetEntitiesForBlockType(string $blockType): ArrayCollection
     {
         return $this->getDataClassRepository()->retrieves(
             BlockTypeTargetEntity::class,
-            new DataClassRetrievesParameters($this->getBlockTypeTargetEntityConditionByBlockType($blockType))
+            new RetrievesParameters($this->getBlockTypeTargetEntityConditionByBlockType($blockType))
         );
     }
 
@@ -177,13 +168,12 @@ class RightsRepository
      * @param \Chamilo\Core\Home\Storage\DataClass\Element $element
      *
      * @return \Doctrine\Common\Collections\ArrayCollection<\Chamilo\Core\Home\Rights\Storage\DataClass\ElementTargetEntity>
-     * @throws \Chamilo\Libraries\Storage\Exception\DataClassNoResultException
      */
     public function findTargetEntitiesForElement(Element $element): ArrayCollection
     {
         return $this->getDataClassRepository()->retrieves(
             ElementTargetEntity::class,
-            new DataClassRetrievesParameters($this->getElementTargetEntityConditionByElement($element))
+            new RetrievesParameters($this->getElementTargetEntityConditionByElement($element))
         );
     }
 

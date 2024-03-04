@@ -29,9 +29,6 @@ class ItemMenu extends HtmlMenu
 
     private string $urlFormat;
 
-    /**
-     * @throws \Chamilo\Libraries\Storage\Exception\DataClassNoResultException
-     */
     public function __construct(
         ItemRendererFactory $itemRendererFactory, ItemService $itemService, Translator $translator, string $urlFormat,
         string $currentParentIdentifier = '0'
@@ -82,7 +79,6 @@ class ItemMenu extends HtmlMenu
 
     /**
      * @return string[][]
-     * @throws \Chamilo\Libraries\Storage\Exception\DataClassNoResultException
      */
     private function getItems(): array
     {

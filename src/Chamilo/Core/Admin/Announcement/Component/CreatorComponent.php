@@ -12,7 +12,7 @@ use Chamilo\Core\Repository\Workspace\Service\RightsService;
 use Chamilo\Libraries\Architecture\Application\ApplicationConfiguration;
 use Chamilo\Libraries\Format\Structure\Glyph\IdentGlyph;
 use Chamilo\Libraries\Storage\DataClass\DataClass;
-use Chamilo\Libraries\Storage\Parameters\DataClassRetrievesParameters;
+use Chamilo\Libraries\Storage\Parameters\RetrievesParameters;
 use Chamilo\Libraries\Storage\Query\Condition\InCondition;
 use Chamilo\Libraries\Storage\Query\Variable\PropertyConditionVariable;
 use Chamilo\Libraries\Utilities\StringUtilities;
@@ -122,7 +122,7 @@ class CreatorComponent extends Manager implements ViewerInterface
 
         if ($items_to_publish > 0)
         {
-            $parameters = new DataClassRetrievesParameters(
+            $parameters = new RetrievesParameters(
                 new InCondition(
                     new PropertyConditionVariable(ContentObject::class, DataClass::PROPERTY_ID),
                     $contentObjectIdentifiers

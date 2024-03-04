@@ -11,7 +11,7 @@ use Chamilo\Core\Repository\Storage\DataClass\ContentObject;
 use Chamilo\Libraries\Format\Tabs\ContentTab;
 use Chamilo\Libraries\Format\Tabs\TabsCollection;
 use Chamilo\Libraries\Format\Tabs\TabsRenderer;
-use Chamilo\Libraries\Storage\Parameters\DataClassRetrievesParameters;
+use Chamilo\Libraries\Storage\Parameters\RetrievesParameters;
 use Chamilo\Libraries\Storage\Query\Condition\AndCondition;
 use Chamilo\Libraries\Storage\Query\Condition\ComparisonCondition;
 use Chamilo\Libraries\Storage\Query\Condition\ContainsCondition;
@@ -66,7 +66,7 @@ class SearcherComponent extends Manager
 
             $publications = DataManager::retrieves(
                 ContentObjectPublication::class,
-                new DataClassRetrievesParameters($this->get_retrieve_publications_condition())
+                new RetrievesParameters($this->get_retrieve_publications_condition())
             );
 
             $tools = [];

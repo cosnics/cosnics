@@ -7,9 +7,8 @@ use Chamilo\Core\Repository\ContentObject\LearningPath\Storage\Repository\Common
 use Chamilo\Core\Repository\Storage\DataClass\ContentObject;
 use Chamilo\Core\User\Storage\DataClass\User;
 use Chamilo\Libraries\Storage\Parameters\DataClassCountParameters;
-use Chamilo\Libraries\Storage\Parameters\DataClassRetrieveParameters;
-use Chamilo\Libraries\Storage\Parameters\DataClassRetrievesParameters;
-use Chamilo\Libraries\Storage\Parameters\RecordRetrievesParameters;
+use Chamilo\Libraries\Storage\Parameters\RetrieveParameters;
+use Chamilo\Libraries\Storage\Parameters\RetrievesParameters;
 use Chamilo\Libraries\Storage\Query\Condition\Condition;
 use Chamilo\Libraries\Storage\Query\Condition\EqualityCondition;
 use Chamilo\Libraries\Storage\Query\Condition\InCondition;
@@ -56,7 +55,7 @@ class RequestRepository extends CommonDataClassRepository
             new PropertyConditionVariable(Request::class, Request::PROPERTY_GUID), new StaticConditionVariable($guid)
         );
 
-        return $this->dataClassRepository->retrieve(Request::class, new DataClassRetrieveParameters($condition));
+        return $this->dataClassRepository->retrieve(Request::class, new RetrieveParameters($condition));
     }
 
     /**
@@ -73,15 +72,15 @@ class RequestRepository extends CommonDataClassRepository
             new PropertyConditionVariable(Request::class, Request::PROPERTY_ID), new StaticConditionVariable($id)
         );
 
-        return $this->dataClassRepository->retrieve(Request::class, new DataClassRetrieveParameters($condition));
+        return $this->dataClassRepository->retrieve(Request::class, new RetrieveParameters($condition));
     }
 
     /**
-     * @param \Chamilo\Libraries\Storage\Parameters\RecordRetrievesParameters $recordRetrievesParameters
+     * @param \Chamilo\Libraries\Storage\Parameters\RetrievesParameters $retrievesParameters
      *
      * @return \Doctrine\Common\Collections\ArrayCollection
      */
-    public function findRequestsWithContentObjects(RecordRetrievesParameters $recordRetrievesParameters)
+    public function findRequestsWithContentObjects(RetrievesParameters $retrievesParameters)
     {
         $properties = new RetrieveProperties();
 
@@ -94,10 +93,10 @@ class RequestRepository extends CommonDataClassRepository
 
         $joins = $this->getRequestJoins();
 
-        $recordRetrievesParameters->setJoins($joins);
-        $recordRetrievesParameters->setRetrieveProperties($properties);
+        $retrievesParameters->setJoins($joins);
+        $retrievesParameters->setRetrieveProperties($properties);
 
-        $records = $this->dataClassRepository->records(Request::class, $recordRetrievesParameters);
+        $records = $this->dataClassRepository->records(Request::class, $retrievesParameters);
 
         $dataClasses = [];
         foreach ($records as $record)
@@ -125,10 +124,12 @@ class RequestRepository extends CommonDataClassRepository
         $properties->add(new PropertiesConditionVariable(ContentObject::class));
         $properties->add(new PropertyConditionVariable(Request::class, Request::PROPERTY_GUID));
 
-        $recordRetrievesParameters =
-            new RecordRetrievesParameters($properties, $condition, null, null, null, $this->getRequestJoins());
+        $retrievesParameters = new RetrievesParameters(
+            condition: $condition, count: null, offset: null, joins: $this->getRequestJoins(),
+            retrieveProperties: $properties
+        );
 
-        $records = $this->dataClassRepository->records(Request::class, $recordRetrievesParameters);
+        $records = $this->dataClassRepository->records(Request::class, $retrievesParameters);
 
         $dataClasses = [];
         foreach ($records as $record)
@@ -155,7 +156,7 @@ class RequestRepository extends CommonDataClassRepository
         $orderBy = [new OrderProperty(new PropertyConditionVariable(Result::class, Result::PROPERTY_PERCENTAGE))];
 
         return $this->dataClassRepository->retrieves(
-            Result::class, new DataClassRetrievesParameters($condition, null, null, new OrderBy($orderBy))
+            Result::class, new RetrievesParameters($condition, null, null, new OrderBy($orderBy))
         );
     }
 

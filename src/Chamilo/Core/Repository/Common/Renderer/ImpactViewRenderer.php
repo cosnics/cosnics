@@ -9,7 +9,7 @@ use Chamilo\Core\Repository\Table\ImpactViewTableRenderer;
 use Chamilo\Libraries\DependencyInjection\Traits\DependencyInjectionContainerTrait;
 use Chamilo\Libraries\Format\Table\RequestTableParameterValuesCompiler;
 use Chamilo\Libraries\Storage\Parameters\DataClassCountParameters;
-use Chamilo\Libraries\Storage\Parameters\DataClassRetrievesParameters;
+use Chamilo\Libraries\Storage\Parameters\RetrievesParameters;
 use Chamilo\Libraries\Storage\Query\Condition\Condition;
 
 /**
@@ -114,7 +114,7 @@ class ImpactViewRenderer
         );
 
         $contentObjects = DataManager::retrieve_active_content_objects(
-            ContentObject::class, new DataClassRetrievesParameters(
+            ContentObject::class, new RetrievesParameters(
                 $condition, $tableParameterValues->getNumberOfItemsPerPage(), $tableParameterValues->getOffset(),
                 $impactViewTableRenderer->determineOrderBy($tableParameterValues)
             )

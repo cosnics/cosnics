@@ -4,7 +4,7 @@ namespace Chamilo\Core\Repository\Ajax\Component;
 use Chamilo\Core\Repository\Ajax\Manager;
 use Chamilo\Core\Repository\Storage\DataClass\ContentObject;
 use Chamilo\Core\Repository\Storage\DataManager;
-use Chamilo\Libraries\Storage\Parameters\DataClassRetrievesParameters;
+use Chamilo\Libraries\Storage\Parameters\RetrievesParameters;
 use Chamilo\Libraries\Storage\Query\Condition\AndCondition;
 use Chamilo\Libraries\Storage\Query\Condition\EqualityCondition;
 use Chamilo\Libraries\Storage\Query\Condition\NotCondition;
@@ -44,7 +44,7 @@ class XmlSearchFeedComponent extends Manager
         $condition = new AndCondition($conditions);
 
         $objects = DataManager::retrieve_active_content_objects(
-            ContentObject::class, new DataClassRetrievesParameters($condition)
+            ContentObject::class, new RetrievesParameters($condition)
         );
 
         foreach ($objects as $lo)

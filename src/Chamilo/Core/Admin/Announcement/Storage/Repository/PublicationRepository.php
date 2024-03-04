@@ -7,9 +7,8 @@ use Chamilo\Core\Repository\Storage\DataClass\ContentObject;
 use Chamilo\Libraries\Storage\DataClass\DataClass;
 use Chamilo\Libraries\Storage\DataManager\Repository\DataClassRepository;
 use Chamilo\Libraries\Storage\Parameters\DataClassCountParameters;
-use Chamilo\Libraries\Storage\Parameters\DataClassRetrievesParameters;
-use Chamilo\Libraries\Storage\Parameters\RecordRetrieveParameters;
-use Chamilo\Libraries\Storage\Parameters\RecordRetrievesParameters;
+use Chamilo\Libraries\Storage\Parameters\RetrieveParameters;
+use Chamilo\Libraries\Storage\Parameters\RetrievesParameters;
 use Chamilo\Libraries\Storage\Query\Condition\AndCondition;
 use Chamilo\Libraries\Storage\Query\Condition\ComparisonCondition;
 use Chamilo\Libraries\Storage\Query\Condition\Condition;
@@ -142,8 +141,10 @@ class PublicationRepository
         );
 
         return $this->getDataClassRepository()->record(
-            Publication::class, new RecordRetrieveParameters(
-                new RetrieveProperties([new PropertiesConditionVariable(Publication::class)]), $condition
+            Publication::class, new RetrieveParameters(
+                condition: $condition, retrieveProperties: new RetrieveProperties(
+                [new PropertiesConditionVariable(Publication::class)]
+            )
             )
         );
     }
@@ -155,7 +156,6 @@ class PublicationRepository
      * @param ?\Chamilo\Libraries\Storage\Query\OrderBy $orderBy
      *
      * @return \Doctrine\Common\Collections\ArrayCollection<string[]>
-     * @throws \Chamilo\Libraries\Storage\Exception\DataClassNoResultException
      */
     public function findPublicationRecords(
         ?Condition $condition = null, ?int $count = null, ?int $offset = null, ?OrderBy $orderBy = null
@@ -187,8 +187,9 @@ class PublicationRepository
 
         $properties = new RetrieveProperties($retrieveProperties);
 
-        $parameters = new RecordRetrievesParameters(
-            $properties, $condition, $count, $offset, $orderBy, $this->getContentObjectPublicationJoins()
+        $parameters = new RetrievesParameters(
+            condition: $condition, count: $count, offset: $offset, orderBy: $orderBy,
+            joins: $this->getContentObjectPublicationJoins(), retrieveProperties: $properties
         );
 
         return $this->getDataClassRepository()->records(Publication::class, $parameters);
@@ -203,7 +204,6 @@ class PublicationRepository
      * @param ?\Chamilo\Libraries\Storage\Query\OrderBy $orderBy
      *
      * @return \Doctrine\Common\Collections\ArrayCollection<\Chamilo\Core\Admin\Announcement\Storage\DataClass\Publication>
-     * @throws \Chamilo\Libraries\Storage\Exception\DataClassNoResultException
      */
     public function findPublicationRecordsForTypeAndIdentifier(
         int $type, string $objectIdentifier, ?Condition $condition = null, ?int $count = null, ?int $offset = null,
@@ -247,14 +247,13 @@ class PublicationRepository
      * @param ?\Chamilo\Libraries\Storage\Query\OrderBy $orderBy
      *
      * @return \Doctrine\Common\Collections\ArrayCollection<\Chamilo\Core\Admin\Announcement\Storage\DataClass\Publication>
-     * @throws \Chamilo\Libraries\Storage\Exception\DataClassNoResultException
      */
     public function findPublications(
         ?Condition $condition = null, ?int $count = null, ?int $offset = null, ?OrderBy $orderBy = null
     ): ArrayCollection
     {
         return $this->getDataClassRepository()->retrieves(
-            Publication::class, new DataClassRetrievesParameters($condition, $count, $offset, $orderBy)
+            Publication::class, new RetrievesParameters($condition, $count, $offset, $orderBy)
         );
     }
 
@@ -262,7 +261,6 @@ class PublicationRepository
      * @param string $contentObjectIdentifier
      *
      * @return \Doctrine\Common\Collections\ArrayCollection<\Chamilo\Core\Admin\Announcement\Storage\DataClass\Publication>
-     * @throws \Chamilo\Libraries\Storage\Exception\DataClassNoResultException
      */
     public function findPublicationsForContentObjectIdentifier(string $contentObjectIdentifier): ArrayCollection
     {
@@ -276,8 +274,6 @@ class PublicationRepository
 
     /**
      * @param string[] $publicationIdentifiers
-     *
-     * @throws \Chamilo\Libraries\Storage\Exception\DataClassNoResultException
      */
     public function findVisiblePublicationRecordsForPublicationIdentifiers(
         array $publicationIdentifiers, ?Condition $condition = null, ?int $count = null, ?int $offset = null,

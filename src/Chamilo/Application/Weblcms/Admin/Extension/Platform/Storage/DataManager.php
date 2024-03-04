@@ -7,8 +7,7 @@ use Chamilo\Application\Weblcms\Admin\Extension\Platform\Manager;
 use Chamilo\Application\Weblcms\Admin\Extension\Platform\Storage\DataClass\Admin;
 use Chamilo\Application\Weblcms\Course\Storage\DataClass\Course;
 use Chamilo\Libraries\Storage\Parameters\DataClassCountParameters;
-use Chamilo\Libraries\Storage\Parameters\DataClassRetrievesParameters;
-use Chamilo\Libraries\Storage\Parameters\RecordRetrievesParameters;
+use Chamilo\Libraries\Storage\Parameters\RetrievesParameters;
 use Chamilo\Libraries\Storage\Query\Condition\AndCondition;
 use Chamilo\Libraries\Storage\Query\Condition\EqualityCondition;
 use Chamilo\Libraries\Storage\Query\Condition\InCondition;
@@ -179,7 +178,7 @@ class DataManager extends \Chamilo\Libraries\Storage\DataManager\DataManager
 
             $condition = new OrCondition($expanded_entities_conditions);
 
-            $admins = DataManager::retrieves(Admin::class, new DataClassRetrievesParameters($condition));
+            $admins = DataManager::retrieves(Admin::class, new RetrievesParameters($condition));
             $course_ids = [];
 
             foreach ($admins as $admin)
@@ -201,18 +200,18 @@ class DataManager extends \Chamilo\Libraries\Storage\DataManager\DataManager
                 ]
             );
 
-            $parameters = new RecordRetrievesParameters(
-                retrieveProperties: $properties, condition: new InCondition(
-                new PropertyConditionVariable(
-                    Course::class, Course::PROPERTY_ID
-                ), $course_ids
-            ), orderBy: new OrderBy([
+            $parameters = new RetrievesParameters(
+                condition: new InCondition(
+                    new PropertyConditionVariable(
+                        Course::class, Course::PROPERTY_ID
+                    ), $course_ids
+                ), orderBy: new OrderBy([
                 new OrderProperty(
                     new PropertyConditionVariable(
                         Course::class, Course::PROPERTY_TITLE
                     )
                 )
-            ])
+            ]), retrieveProperties: $properties
             );
 
             return DataManager::records(

@@ -16,7 +16,7 @@ use Chamilo\Libraries\Format\Structure\ActionBar\SubButton;
 use Chamilo\Libraries\Format\Structure\Glyph\FontAwesomeGlyph;
 use Chamilo\Libraries\Format\Structure\ToolbarItem;
 use Chamilo\Libraries\Storage\DataManager\DataManager;
-use Chamilo\Libraries\Storage\Parameters\DataClassRetrievesParameters;
+use Chamilo\Libraries\Storage\Parameters\RetrievesParameters;
 use Chamilo\Libraries\Storage\Query\Condition\AndCondition;
 use Chamilo\Libraries\Storage\Query\Condition\EqualityCondition;
 use Chamilo\Libraries\Storage\Query\Variable\PropertyConditionVariable;
@@ -142,7 +142,7 @@ abstract class Manager extends \Chamilo\Application\Weblcms\Tool\Manager
             $condition = new AndCondition([$condition_t, $condition_u]);
 
             $trackers = DataManager::retrieves(
-                AssessmentAttempt::class, new DataClassRetrievesParameters($condition)
+                AssessmentAttempt::class, new RetrievesParameters($condition)
             );
 
             $count = count($trackers);

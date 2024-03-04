@@ -23,7 +23,6 @@ class ItemForm extends FormValidator
 
     /**
      * @throws \QuickformException
-     * @throws \Chamilo\Libraries\Storage\Exception\DataClassNoResultException
      */
     public function __construct(string $itemType, string $action)
     {
@@ -41,7 +40,6 @@ class ItemForm extends FormValidator
 
     /**
      * @throws \QuickformException
-     * @throws \Chamilo\Libraries\Storage\Exception\DataClassNoResultException
      */
     protected function buildBasicForm(): void
     {
@@ -137,7 +135,6 @@ class ItemForm extends FormValidator
 
     /**
      * @return string[]
-     * @throws \Chamilo\Libraries\Storage\Exception\DataClassNoResultException
      */
     protected function getParentItems(): array
     {

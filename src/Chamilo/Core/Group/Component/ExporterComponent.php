@@ -23,7 +23,6 @@ class ExporterComponent extends Manager
 
     /**
      * @throws \Chamilo\Libraries\Architecture\Exceptions\NotAllowedException
-     * @throws \Chamilo\Libraries\Storage\Exception\DataClassNoResultException
      */
     public function run()
     {
@@ -49,9 +48,6 @@ class ExporterComponent extends Manager
         return $response;
     }
 
-    /**
-     * @throws \Chamilo\Libraries\Storage\Exception\DataClassNoResultException
-     */
     public function build_group_tree($parent_group): array
     {
         $condition = new EqualityCondition(

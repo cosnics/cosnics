@@ -21,7 +21,6 @@ class BrowserComponent extends TabComponent
     private ButtonToolBarRenderer $buttonToolbarRenderer;
 
     /**
-     * @throws \Chamilo\Libraries\Storage\Exception\DataClassNoResultException
      * @throws \TableException
      * @throws \Chamilo\Libraries\Format\Table\Exception\InvalidPageNumberException
      * @throws \QuickformException
@@ -90,7 +89,6 @@ class BrowserComponent extends TabComponent
      * @throws \TableException
      * @throws \Chamilo\Libraries\Format\Table\Exception\InvalidPageNumberException
      * @throws \QuickformException
-     * @throws \Chamilo\Libraries\Storage\Exception\DataClassNoResultException
      * @throws \Exception
      */
     protected function renderTable(): string

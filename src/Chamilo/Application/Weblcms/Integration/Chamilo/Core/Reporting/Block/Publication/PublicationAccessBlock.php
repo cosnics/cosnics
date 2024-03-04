@@ -12,7 +12,7 @@ use Chamilo\Core\User\Manager;
 use Chamilo\Core\User\Storage\DataClass\User;
 use Chamilo\Libraries\Architecture\Exceptions\ObjectNotExistException;
 use Chamilo\Libraries\Translation\Translation;
-use Chamilo\Libraries\Storage\Parameters\DataClassRetrievesParameters;
+use Chamilo\Libraries\Storage\Parameters\RetrievesParameters;
 
 class PublicationAccessBlock extends ToolBlock
 {
@@ -105,7 +105,7 @@ class PublicationAccessBlock extends ToolBlock
         );
 
         return WeblcmsTrackingDataManager::retrieves(
-            CourseVisit::class, new DataClassRetrievesParameters($condition)
+            CourseVisit::class, new RetrievesParameters($condition)
         );
     }
 

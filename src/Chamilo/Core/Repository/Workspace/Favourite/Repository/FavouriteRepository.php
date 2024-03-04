@@ -4,7 +4,7 @@ namespace Chamilo\Core\Repository\Workspace\Favourite\Repository;
 use Chamilo\Core\Repository\Workspace\Favourite\Storage\DataClass\WorkspaceUserFavourite;
 use Chamilo\Core\User\Storage\DataClass\User;
 use Chamilo\Libraries\Storage\DataManager\Repository\DataClassRepository;
-use Chamilo\Libraries\Storage\Parameters\DataClassRetrieveParameters;
+use Chamilo\Libraries\Storage\Parameters\RetrieveParameters;
 use Chamilo\Libraries\Storage\Query\Condition\AndCondition;
 use Chamilo\Libraries\Storage\Query\Condition\EqualityCondition;
 use Chamilo\Libraries\Storage\Query\Variable\PropertyConditionVariable;
@@ -60,7 +60,7 @@ class FavouriteRepository
         $condition = new AndCondition($conditions);
 
         return $this->getDataClassRepository()->retrieve(
-            WorkspaceUserFavourite::class, new DataClassRetrieveParameters($condition)
+            WorkspaceUserFavourite::class, new RetrieveParameters($condition)
         );
     }
 

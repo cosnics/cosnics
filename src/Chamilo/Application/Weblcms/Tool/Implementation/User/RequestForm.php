@@ -10,7 +10,7 @@ use Chamilo\Libraries\Architecture\ClassnameUtilities;
 use Chamilo\Libraries\Format\Form\FormValidator;
 use Chamilo\Libraries\Format\Form\FormValidatorHtmlEditorOptions;
 use Chamilo\Libraries\Format\Structure\Glyph\FontAwesomeGlyph;
-use Chamilo\Libraries\Storage\Parameters\DataClassRetrievesParameters;
+use Chamilo\Libraries\Storage\Parameters\RetrievesParameters;
 use Chamilo\Libraries\Storage\Query\OrderBy;
 use Chamilo\Libraries\Storage\Query\OrderProperty;
 use Chamilo\Libraries\Storage\Query\Variable\PropertyConditionVariable;
@@ -100,7 +100,7 @@ class RequestForm extends FormValidator
                 );
 
                 $users_result = DataManager::retrieves(
-                    User::class, new DataClassRetrievesParameters(null, null, null, $order)
+                    User::class, new RetrievesParameters(null, null, null, $order)
                 );
 
                 $users = [];

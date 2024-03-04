@@ -4,7 +4,7 @@ namespace Chamilo\Libraries\Storage\DataClass;
 use Chamilo\Libraries\DependencyInjection\Traits\DependencyInjectionContainerTrait;
 use Chamilo\Libraries\Storage\DataClass\Listeners\DataClassListener;
 use Chamilo\Libraries\Storage\DataManager\DataManager;
-use Chamilo\Libraries\Storage\Parameters\DataClassRetrievesParameters;
+use Chamilo\Libraries\Storage\Parameters\RetrievesParameters;
 use Chamilo\Libraries\Translation\Translation;
 
 /**
@@ -107,7 +107,6 @@ abstract class DataClass
     }
 
     /**
-     * @throws \Chamilo\Libraries\Storage\Exception\DataClassNoResultException
      * @deprecated Should be handled through services
      */
     public function delete(): bool
@@ -128,15 +127,12 @@ abstract class DataClass
         return $success;
     }
 
-    /**
-     * @throws \Chamilo\Libraries\Storage\Exception\DataClassNoResultException
-     */
     protected function deleteDependencies(): bool
     {
         foreach ($this->getDependencies() as $dependency_class => $dependency_condition)
         {
             $dependency_objects = DataManager::retrieves(
-                $dependency_class, new DataClassRetrievesParameters($dependency_condition)
+                $dependency_class, new RetrievesParameters($dependency_condition)
             );
 
             foreach ($dependency_objects as $dependency_object)

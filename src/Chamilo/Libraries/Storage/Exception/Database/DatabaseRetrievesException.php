@@ -1,7 +1,7 @@
 <?php
 namespace Chamilo\Libraries\Storage\Exception\Database;
 
-use Chamilo\Libraries\Storage\Parameters\DataClassRetrievesParameters;
+use Chamilo\Libraries\Storage\Parameters\RetrievesParameters;
 use Exception;
 
 /**
@@ -13,10 +13,10 @@ class DatabaseRetrievesException extends Exception
 
     protected string $dataClassStorageUnitName;
 
-    protected DataClassRetrievesParameters $parameters;
+    protected RetrievesParameters $parameters;
 
     public function __construct(
-        string $dataClassStorageUnitName, DataClassRetrievesParameters $parameters, string $exceptionMessage = ''
+        string $dataClassStorageUnitName, RetrievesParameters $parameters, string $exceptionMessage = ''
     )
     {
         $this->dataClassStorageUnitName = $dataClassStorageUnitName;

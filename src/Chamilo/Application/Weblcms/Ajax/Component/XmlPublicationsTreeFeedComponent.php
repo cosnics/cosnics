@@ -8,7 +8,7 @@ use Chamilo\Application\Weblcms\Storage\DataClass\ContentObjectPublicationCatego
 use Chamilo\Application\Weblcms\Storage\DataManager;
 use Chamilo\Libraries\Format\Structure\Glyph\FontAwesomeGlyph;
 use Chamilo\Libraries\Storage\Parameters\DataClassCountParameters;
-use Chamilo\Libraries\Storage\Parameters\DataClassRetrievesParameters;
+use Chamilo\Libraries\Storage\Parameters\RetrievesParameters;
 use Chamilo\Libraries\Storage\Query\Condition\EqualityCondition;
 use Chamilo\Libraries\Storage\Query\OrderBy;
 use Chamilo\Libraries\Storage\Query\OrderProperty;
@@ -33,7 +33,7 @@ class XmlPublicationsTreeFeedComponent extends Manager
         );
 
         $categories_tree = DataManager::retrieves(
-            ContentObjectPublicationCategory::class, new DataClassRetrievesParameters(
+            ContentObjectPublicationCategory::class, new RetrievesParameters(
                 condition: $condition, orderBy: new OrderBy([
                 new OrderProperty(
                     new PropertyConditionVariable(

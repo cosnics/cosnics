@@ -13,7 +13,7 @@ use Chamilo\Libraries\Format\Menu\TreeMenuRenderer;
 use Chamilo\Libraries\Format\Structure\Breadcrumb;
 use Chamilo\Libraries\Format\Structure\Glyph\FontAwesomeGlyph;
 use Chamilo\Libraries\Format\Tabs\GenericTabsRenderer;
-use Chamilo\Libraries\Storage\Parameters\DataClassRetrievesParameters;
+use Chamilo\Libraries\Storage\Parameters\RetrievesParameters;
 use Chamilo\Libraries\Storage\Query\Condition\EqualityCondition;
 use Chamilo\Libraries\Storage\Query\Variable\PropertyConditionVariable;
 use Chamilo\Libraries\Storage\Query\Variable\StaticConditionVariable;
@@ -109,7 +109,7 @@ class UserViewMenu extends HtmlMenu
             new PropertyConditionVariable(UserView::class, UserView::PROPERTY_USER_ID),
             new StaticConditionVariable($this->application->get_user_id())
         );
-        $userviews = DataManager::retrieves(UserView::class, new DataClassRetrievesParameters($condition));
+        $userviews = DataManager::retrieves(UserView::class, new RetrievesParameters($condition));
 
         $userview = [];
         $userview['title'] = Translation::get('UserViews');

@@ -13,7 +13,7 @@ use Chamilo\Libraries\Format\Table\Column\DataClassPropertyTableColumn;
 use Chamilo\Libraries\Format\Table\Column\StaticTableColumn;
 use Chamilo\Libraries\Storage\Parameters\DataClassCountParameters;
 use Chamilo\Libraries\Storage\Parameters\DataClassDistinctParameters;
-use Chamilo\Libraries\Storage\Parameters\RecordRetrievesParameters;
+use Chamilo\Libraries\Storage\Parameters\RetrievesParameters;
 use Chamilo\Libraries\Storage\Query\Condition\EqualityCondition;
 use Chamilo\Libraries\Storage\Query\Condition\InCondition;
 use Chamilo\Libraries\Storage\Query\Join;
@@ -214,8 +214,9 @@ class CourseCategoryEntityHelper
             )
         );
 
-        $parameters = new RecordRetrievesParameters(
-            $properties, $condition, $count, $offset, $order_property, self::get_joins()
+        $parameters = new RetrievesParameters(
+            condition: $condition, count: $count, offset: $offset, orderBy: $order_property, joins: self::get_joins(),
+            retrieveProperties: $properties
         );
 
         return DataManager::records(Admin::class, $parameters);

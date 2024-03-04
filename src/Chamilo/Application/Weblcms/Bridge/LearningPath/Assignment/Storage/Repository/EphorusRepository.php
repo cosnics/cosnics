@@ -5,7 +5,7 @@ use Chamilo\Application\Weblcms\Bridge\LearningPath\Assignment\Storage\DataClass
 use Chamilo\Application\Weblcms\Storage\DataClass\ContentObjectPublication;
 use Chamilo\Application\Weblcms\Tool\Implementation\Ephorus\Storage\DataClass\Request;
 use Chamilo\Core\Repository\ContentObject\LearningPath\Storage\DataClass\TreeNodeData;
-use Chamilo\Libraries\Storage\Parameters\RecordRetrievesParameters;
+use Chamilo\Libraries\Storage\Parameters\RetrievesParameters;
 use Chamilo\Libraries\Storage\Query\Condition\AndCondition;
 use Chamilo\Libraries\Storage\Query\Condition\Condition;
 use Chamilo\Libraries\Storage\Query\Condition\EqualityCondition;
@@ -17,35 +17,43 @@ use Chamilo\Libraries\Storage\Query\Variable\StaticConditionVariable;
  *
  * @author Sven Vanpoucke - Hogeschool Gent
  */
-class EphorusRepository extends \Chamilo\Core\Repository\ContentObject\Assignment\Integration\Chamilo\Core\Repository\ContentObject\LearningPath\Bridge\Storage\Repository\EphorusRepository
+class EphorusRepository extends
+    \Chamilo\Core\Repository\ContentObject\Assignment\Integration\Chamilo\Core\Repository\ContentObject\LearningPath\Bridge\Storage\Repository\EphorusRepository
 {
     /**
-     * @return string
+     * @param \Chamilo\Application\Weblcms\Storage\DataClass\ContentObjectPublication $contentObjectPublication
+     * @param \Chamilo\Core\Repository\ContentObject\LearningPath\Storage\DataClass\TreeNodeData $treeNodeData
+     * @param \Chamilo\Libraries\Storage\Query\Condition\Condition $condition
+     *
+     * @return int
      */
-    protected function getEntryClassName()
+    public function countAssignmentEntriesWithRequestsByTreeNodeData(
+        ContentObjectPublication $contentObjectPublication, TreeNodeData $treeNodeData, Condition $condition = null
+    )
     {
-        return Entry::class;
+        return $this->countAssignmentEntriesWithRequests(
+            $this->getConditionForTreeNodeDataAndPublication($contentObjectPublication, $treeNodeData, $condition)
+        );
     }
 
     /**
      * @param \Chamilo\Application\Weblcms\Storage\DataClass\ContentObjectPublication $contentObjectPublication
      * @param \Chamilo\Core\Repository\ContentObject\LearningPath\Storage\DataClass\TreeNodeData $treeNodeData
-     * @param \Chamilo\Libraries\Storage\Parameters\RecordRetrievesParameters $recordRetrievesParameters
+     * @param \Chamilo\Libraries\Storage\Parameters\RetrievesParameters $retrievesParameters
      *
      * @return \Chamilo\Core\Repository\Storage\DataClass\ContentObject[]|\Doctrine\Common\Collections\ArrayCollection
      */
     public function findAssignmentEntriesWithRequestsByTreeNodeData(
         ContentObjectPublication $contentObjectPublication, TreeNodeData $treeNodeData,
-        RecordRetrievesParameters $recordRetrievesParameters = null
+        RetrievesParameters $retrievesParameters = new RetrievesParameters()
     )
     {
-        $entryConditions =
-            $this->getConditionForTreeNodeDataAndPublication(
-                $contentObjectPublication, $treeNodeData, $recordRetrievesParameters->getCondition()
-            );
-        $recordRetrievesParameters->setCondition($entryConditions);
+        $entryConditions = $this->getConditionForTreeNodeDataAndPublication(
+            $contentObjectPublication, $treeNodeData, $retrievesParameters->getCondition()
+        );
+        $retrievesParameters->setCondition($entryConditions);
 
-        return $this->findAssignmentEntriesWithRequests($recordRetrievesParameters);
+        return $this->findAssignmentEntriesWithRequests($retrievesParameters);
     }
 
     /**
@@ -61,22 +69,6 @@ class EphorusRepository extends \Chamilo\Core\Repository\ContentObject\Assignmen
     {
         return $this->findEphorusRequestsForAssignmentEntries(
             $entryIds, $this->getConditionForTreeNodeDataAndPublication($contentObjectPublication, $treeNodeData)
-        );
-    }
-
-    /**
-     * @param \Chamilo\Application\Weblcms\Storage\DataClass\ContentObjectPublication $contentObjectPublication
-     * @param \Chamilo\Core\Repository\ContentObject\LearningPath\Storage\DataClass\TreeNodeData $treeNodeData
-     * @param \Chamilo\Libraries\Storage\Query\Condition\Condition $condition
-     *
-     * @return int
-     */
-    public function countAssignmentEntriesWithRequestsByTreeNodeData(
-        ContentObjectPublication $contentObjectPublication, TreeNodeData $treeNodeData, Condition $condition = null
-    )
-    {
-        return $this->countAssignmentEntriesWithRequests(
-            $this->getConditionForTreeNodeDataAndPublication($contentObjectPublication, $treeNodeData, $condition)
         );
     }
 
@@ -106,6 +98,14 @@ class EphorusRepository extends \Chamilo\Core\Repository\ContentObject\Assignmen
         $condition = new AndCondition($conditions);
 
         return $this->getConditionForTreeNodeData($treeNodeData, $condition);
+    }
+
+    /**
+     * @return string
+     */
+    protected function getEntryClassName()
+    {
+        return Entry::class;
     }
 
 }

@@ -11,7 +11,7 @@ use Chamilo\Core\Repository\Table\ImpactViewTableRenderer;
 use Chamilo\Libraries\Architecture\Application\ApplicationConfiguration;
 use Chamilo\Libraries\Format\Table\RequestTableParameterValuesCompiler;
 use Chamilo\Libraries\Storage\Parameters\DataClassCountParameters;
-use Chamilo\Libraries\Storage\Parameters\DataClassRetrievesParameters;
+use Chamilo\Libraries\Storage\Parameters\RetrievesParameters;
 use Chamilo\Libraries\Storage\Query\Condition\AndCondition;
 use Chamilo\Libraries\Storage\Query\Condition\EqualityCondition;
 use Chamilo\Libraries\Storage\Query\Condition\OrCondition;
@@ -289,7 +289,7 @@ class CategoryManagerComponent extends Manager implements ImpactViewSupport, Cat
         );
 
         $contentObjects = DataManager::retrieve_active_content_objects(
-            ContentObject::class, new DataClassRetrievesParameters(
+            ContentObject::class, new RetrievesParameters(
                 $condition, $tableParameterValues->getNumberOfItemsPerPage(), $tableParameterValues->getOffset(),
                 $impactViewTableRenderer->determineOrderBy($tableParameterValues)
             )

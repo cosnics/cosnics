@@ -5,10 +5,8 @@ use Chamilo\Libraries\Storage\DataClass\DataClass;
 use Chamilo\Libraries\Storage\DataClass\NestedSet;
 use Chamilo\Libraries\Storage\Parameters\DataClassCountParameters;
 use Chamilo\Libraries\Storage\Parameters\DataClassDistinctParameters;
-use Chamilo\Libraries\Storage\Parameters\DataClassRetrieveParameters;
-use Chamilo\Libraries\Storage\Parameters\DataClassRetrievesParameters;
-use Chamilo\Libraries\Storage\Parameters\RecordRetrieveParameters;
-use Chamilo\Libraries\Storage\Parameters\RecordRetrievesParameters;
+use Chamilo\Libraries\Storage\Parameters\RetrieveParameters;
+use Chamilo\Libraries\Storage\Parameters\RetrievesParameters;
 use Chamilo\Libraries\Storage\Query\Condition\AndCondition;
 use Chamilo\Libraries\Storage\Query\Condition\ComparisonCondition;
 use Chamilo\Libraries\Storage\Query\Condition\Condition;
@@ -219,13 +217,12 @@ class NestedSetDataClassRepository
      * @param ?\Chamilo\Libraries\Storage\Query\Condition\Condition $condition
      *
      * @return \Doctrine\Common\Collections\ArrayCollection<\Chamilo\Libraries\Storage\DataClass\NestedSet>
-     * @throws \Chamilo\Libraries\Storage\Exception\DataClassNoResultException
      */
     public function findAncestors(NestedSet $nestedSet, bool $includeSelf = true, ?Condition $condition = null
     ): ArrayCollection
     {
         return $this->getDataClassRepository()->retrieves(
-            get_class($nestedSet), new DataClassRetrievesParameters(
+            get_class($nestedSet), new RetrievesParameters(
                 condition: $this->getAncestorsCondition($nestedSet, $includeSelf, $condition),
                 orderBy: $this->getPostOrderBy($nestedSet)
             )
@@ -238,7 +235,6 @@ class NestedSetDataClassRepository
      * @param ?\Chamilo\Libraries\Storage\Query\Condition\Condition $condition
      *
      * @return \Doctrine\Common\Collections\ArrayCollection<\Chamilo\Libraries\Storage\DataClass\NestedSet>
-     * @throws \Chamilo\Libraries\Storage\Exception\DataClassNoResultException
      * @see NestedSet::get_children()
      * @see NestedSet::get_descendants()
      */
@@ -246,7 +242,7 @@ class NestedSetDataClassRepository
     ): ArrayCollection
     {
         return $this->getDataClassRepository()->retrieves(
-            get_class($nestedSet), new DataClassRetrievesParameters(
+            get_class($nestedSet), new RetrievesParameters(
                 $this->getDescendantsCondition($nestedSet, $recursive, false, $condition)
             )
         );
@@ -263,14 +259,13 @@ class NestedSetDataClassRepository
      * @param ?\Chamilo\Libraries\Storage\Query\Condition\Condition $condition
      *
      * @return \Doctrine\Common\Collections\ArrayCollection<\Chamilo\Libraries\Storage\DataClass\NestedSet>
-     * @throws \Chamilo\Libraries\Storage\Exception\DataClassNoResultException
      * @see NestedSet::get_siblings()
      */
     public function findSiblings(NestedSet $nestedSet, bool $includeSelf = true, ?Condition $condition = null
     ): ArrayCollection
     {
         return $this->getDataClassRepository()->retrieves(
-            get_class($nestedSet), new DataClassRetrievesParameters(
+            get_class($nestedSet), new RetrievesParameters(
                 condition: $this->getSiblingsCondition($nestedSet, $includeSelf, $condition),
                 orderBy: $this->getPreOrderBy($nestedSet)
             )
@@ -892,15 +887,12 @@ class NestedSetDataClassRepository
         return true;
     }
 
-    public function record(string $dataClassName, RecordRetrieveParameters $parameters): array
+    public function record(string $dataClassName, RetrieveParameters $parameters): array
     {
         return $this->getDataClassRepository()->record($dataClassName, $parameters);
     }
 
-    /**
-     * @throws \Chamilo\Libraries\Storage\Exception\DataClassNoResultException
-     */
-    public function records(string $dataClassName, RecordRetrievesParameters $parameters): ArrayCollection
+    public function records(string $dataClassName, RetrievesParameters $parameters): ArrayCollection
     {
         return $this->getDataClassRepository()->records($dataClassName, $parameters);
     }
@@ -912,7 +904,7 @@ class NestedSetDataClassRepository
      *
      * @return retrieveDataClassName
      */
-    public function retrieve(string $dataClassName, DataClassRetrieveParameters $parameters)
+    public function retrieve(string $dataClassName, RetrieveParameters $parameters)
     {
         return $this->getDataClassRepository()->retrieve($dataClassName, $parameters);
     }
@@ -934,12 +926,11 @@ class NestedSetDataClassRepository
      * @template tRetrieves
      *
      * @param class-string<tRetrieves> $dataClassName
-     * @param \Chamilo\Libraries\Storage\Parameters\DataClassRetrievesParameters $parameters
+     * @param \Chamilo\Libraries\Storage\Parameters\RetrievesParameters $parameters
      *
      * @return ArrayCollection<tRetrieves>
-     * @throws \Chamilo\Libraries\Storage\Exception\DataClassNoResultException
      */
-    public function retrieves(string $dataClassName, DataClassRetrievesParameters $parameters): ArrayCollection
+    public function retrieves(string $dataClassName, RetrievesParameters $parameters): ArrayCollection
     {
         return $this->getDataClassRepository()->retrieves($dataClassName, $parameters);
     }

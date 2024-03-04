@@ -40,7 +40,6 @@ class CachedItemService implements CacheDataPreLoaderInterface, ItemServiceInter
 
     /**
      * @return \Chamilo\Core\Menu\Storage\DataClass\Item[][]
-     * @throws \Chamilo\Libraries\Storage\Exception\DataClassNoResultException
      */
     protected function __findItemsGroupedByParentIdentifier(): array
     {
@@ -105,7 +104,6 @@ class CachedItemService implements CacheDataPreLoaderInterface, ItemServiceInter
     }
 
     /**
-     * @throws \Chamilo\Libraries\Storage\Exception\DataClassNoResultException
      * @throws \Psr\Cache\InvalidArgumentException
      * @throws \Symfony\Component\Cache\Exception\CacheException
      * @throws \Psr\SimpleCache\InvalidArgumentException
@@ -134,7 +132,6 @@ class CachedItemService implements CacheDataPreLoaderInterface, ItemServiceInter
 
     /**
      * @return \Doctrine\Common\Collections\ArrayCollection<\Chamilo\Core\Menu\Storage\DataClass\Item>
-     * @throws \Chamilo\Libraries\Storage\Exception\DataClassNoResultException
      */
     public function findApplicationItems(): ArrayCollection
     {
@@ -222,7 +219,6 @@ class CachedItemService implements CacheDataPreLoaderInterface, ItemServiceInter
     }
 
     /**
-     * @throws \Chamilo\Libraries\Storage\Exception\DataClassNoResultException
      * @throws \Symfony\Component\Cache\Exception\CacheException
      * @throws \Chamilo\Libraries\Storage\Exception\DisplayOrderException
      */
@@ -242,7 +238,6 @@ class CachedItemService implements CacheDataPreLoaderInterface, ItemServiceInter
     }
 
     /**
-     * @throws \Chamilo\Libraries\Storage\Exception\DataClassNoResultException
      * @throws \Symfony\Component\Cache\Exception\CacheException
      * @throws \Chamilo\Libraries\Storage\Exception\DisplayOrderException
      */
@@ -262,7 +257,6 @@ class CachedItemService implements CacheDataPreLoaderInterface, ItemServiceInter
     }
 
     /**
-     * @throws \Chamilo\Libraries\Storage\Exception\DataClassNoResultException
      * @throws \Symfony\Component\Cache\Exception\CacheException
      * @throws \Chamilo\Libraries\Storage\Exception\DisplayOrderException
      */

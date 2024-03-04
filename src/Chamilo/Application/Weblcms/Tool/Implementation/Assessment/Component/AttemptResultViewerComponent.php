@@ -14,8 +14,8 @@ use Chamilo\Libraries\Architecture\Exceptions\NotAllowedException;
 use Chamilo\Libraries\Format\Structure\Breadcrumb;
 use Chamilo\Libraries\Format\Structure\Page;
 use Chamilo\Libraries\Format\Structure\PageConfiguration;
-use Chamilo\Libraries\Storage\Parameters\DataClassRetrieveParameters;
-use Chamilo\Libraries\Storage\Parameters\DataClassRetrievesParameters;
+use Chamilo\Libraries\Storage\Parameters\RetrieveParameters;
+use Chamilo\Libraries\Storage\Parameters\RetrievesParameters;
 use Chamilo\Libraries\Storage\Query\Condition\AndCondition;
 use Chamilo\Libraries\Storage\Query\Condition\EqualityCondition;
 use Chamilo\Libraries\Storage\Query\Variable\PropertyConditionVariable;
@@ -76,7 +76,7 @@ class AttemptResultViewerComponent extends Manager
         );
 
         $this->assessment_attempt = DataManager::retrieve(
-            AssessmentAttempt::class, new DataClassRetrieveParameters($condition)
+            AssessmentAttempt::class, new RetrieveParameters($condition)
         );
 
         if (!$this->assessment_attempt)
@@ -93,7 +93,7 @@ class AttemptResultViewerComponent extends Manager
             ContentObjectPublication::class, $this->assessment_attempt->get_assessment_id()
         );
 
-        $parameters = new DataClassRetrieveParameters(
+        $parameters = new RetrieveParameters(
             new EqualityCondition(
                 new PropertyConditionVariable(Publication::class, Publication::PROPERTY_PUBLICATION_ID),
                 new StaticConditionVariable($this->assessment_publication->get_id())
@@ -204,7 +204,7 @@ class AttemptResultViewerComponent extends Manager
         $condition = new AndCondition($conditions);
 
         $question_attempt = DataManager::retrieve(
-            QuestionAttempt::class, new DataClassRetrieveParameters($condition)
+            QuestionAttempt::class, new RetrieveParameters($condition)
         );
 
         $question_attempt->set_score($score);
@@ -239,7 +239,7 @@ class AttemptResultViewerComponent extends Manager
 
     public function get_assessment_configuration()
     {
-        $parameters = new DataClassRetrieveParameters(
+        $parameters = new RetrieveParameters(
             new EqualityCondition(
                 new PropertyConditionVariable(Publication::class, Publication::PROPERTY_PUBLICATION_ID),
                 new StaticConditionVariable($this->assessment_publication->get_id())
@@ -353,7 +353,7 @@ class AttemptResultViewerComponent extends Manager
         }
 
         $question_attempts = DataManager::retrieves(
-            QuestionAttempt::class, new DataClassRetrievesParameters($condition)
+            QuestionAttempt::class, new RetrievesParameters($condition)
         );
 
         $results = [];
@@ -386,7 +386,7 @@ class AttemptResultViewerComponent extends Manager
         );
 
         $question_attempts_result_set = DataManager::retrieves(
-            QuestionAttempt::class, new DataClassRetrievesParameters($condition)
+            QuestionAttempt::class, new RetrievesParameters($condition)
         );
 
         foreach ($question_attempts_result_set as $question_attempt)

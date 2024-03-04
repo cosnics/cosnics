@@ -43,7 +43,6 @@ class SettingsConnector implements SettingsConnectorInterface
 
     /**
      * @return string[]
-     * @throws \Chamilo\Libraries\Storage\Exception\DataClassNoResultException
      */
     public function retrieveNamespaces(): array
     {

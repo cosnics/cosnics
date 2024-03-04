@@ -51,7 +51,6 @@ class HelpService
      * @param ?\Chamilo\Libraries\Storage\Query\OrderBy $orderBy
      *
      * @return \Doctrine\Common\Collections\ArrayCollection<\Chamilo\Core\Help\Storage\DataClass\HelpItem>
-     * @throws \Chamilo\Libraries\Storage\Exception\DataClassNoResultException
      */
     public function retrieveHelpItems(
         ?Condition $condition = null, ?int $offset = null, ?int $count = null, ?OrderBy $orderBy = null

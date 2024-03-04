@@ -6,7 +6,7 @@ use Chamilo\Application\Weblcms\CourseType\Storage\DataManager;
 use Chamilo\Libraries\Architecture\Application\Application;
 use Chamilo\Libraries\Architecture\Exceptions\NoObjectSelectedException;
 use Chamilo\Libraries\Architecture\Exceptions\ObjectNotExistException;
-use Chamilo\Libraries\Storage\Parameters\DataClassRetrievesParameters;
+use Chamilo\Libraries\Storage\Parameters\RetrievesParameters;
 use Chamilo\Libraries\Storage\Query\Condition\InCondition;
 use Chamilo\Libraries\Storage\Query\Variable\PropertyConditionVariable;
 use Chamilo\Libraries\Translation\Translation;
@@ -200,7 +200,7 @@ abstract class Manager extends Application
         $condition = new InCondition(
             new PropertyConditionVariable(CourseType::class, CourseType::PROPERTY_ID), $course_type_ids
         );
-        $result_set = DataManager::retrieves(CourseType::class, new DataClassRetrievesParameters($condition));
+        $result_set = DataManager::retrieves(CourseType::class, new RetrievesParameters($condition));
 
         if ($result_set->count() == 0)
         {

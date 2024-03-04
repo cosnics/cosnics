@@ -9,7 +9,7 @@ use Chamilo\Libraries\Format\Breadcrumb\BreadcrumbLessComponentInterface;
 use Chamilo\Libraries\Format\Structure\ActionBar\ButtonToolBar;
 use Chamilo\Libraries\Format\Structure\ActionBar\Renderer\ButtonToolBarRenderer;
 use Chamilo\Libraries\Format\Table\RequestTableParameterValuesCompiler;
-use Chamilo\Libraries\Storage\Parameters\RecordRetrievesParameters;
+use Chamilo\Libraries\Storage\Parameters\RetrievesParameters;
 use Chamilo\Libraries\Storage\Query\Condition\AndCondition;
 use Chamilo\Libraries\Storage\Query\OrderProperty;
 use Chamilo\Libraries\Storage\Query\Variable\PropertyConditionVariable;
@@ -120,9 +120,9 @@ class BrowserComponent extends Manager implements BreadcrumbLessComponentInterfa
         );
 
         $entries = $this->getDataProvider()->findAssignmentEntriesWithEphorusRequests(
-            new RecordRetrievesParameters(
-                null, $this->getEntryRequestCondition(), $tableParameterValues->getNumberOfItemsPerPage(),
-                $tableParameterValues->getOffset(), $orderBy
+            new RetrievesParameters(
+                condition: $this->getEntryRequestCondition(), count: $tableParameterValues->getNumberOfItemsPerPage(),
+                offset: $tableParameterValues->getOffset(), orderBy: $orderBy
             )
         );
 

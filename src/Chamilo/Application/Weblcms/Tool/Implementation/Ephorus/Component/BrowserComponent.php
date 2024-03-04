@@ -12,7 +12,7 @@ use Chamilo\Libraries\Format\Structure\ActionBar\Renderer\ButtonToolBarRenderer;
 use Chamilo\Libraries\Format\Structure\Glyph\FontAwesomeGlyph;
 use Chamilo\Libraries\Format\Structure\ToolbarItem;
 use Chamilo\Libraries\Format\Table\RequestTableParameterValuesCompiler;
-use Chamilo\Libraries\Storage\Parameters\RecordRetrievesParameters;
+use Chamilo\Libraries\Storage\Parameters\RetrievesParameters;
 use Chamilo\Libraries\Storage\Query\Condition\AndCondition;
 use Chamilo\Libraries\Storage\Query\Condition\Condition;
 use Chamilo\Libraries\Storage\Query\Condition\EqualityCondition;
@@ -148,9 +148,9 @@ class BrowserComponent extends Manager
         $orderBy->add(new OrderProperty(new PropertyConditionVariable(Request::class, Request::PROPERTY_REQUEST_TIME)));
 
         $requests = $this->getRequestManager()->findRequestsWithContentObjects(
-            new RecordRetrievesParameters(
-                null, $this->getRequestCondition(), $tableParameterValues->getNumberOfItemsPerPage(),
-                $tableParameterValues->getOffset(), $orderBy
+            new RetrievesParameters(
+                condition: $this->getRequestCondition(), count: $tableParameterValues->getNumberOfItemsPerPage(),
+                offset: $tableParameterValues->getOffset(), orderBy: $orderBy
             )
         );
 

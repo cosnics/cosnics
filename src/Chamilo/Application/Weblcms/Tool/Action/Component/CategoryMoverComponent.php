@@ -11,7 +11,7 @@ use Chamilo\Libraries\Format\Breadcrumb\BreadcrumbLessComponentInterface;
 use Chamilo\Libraries\Format\Form\FormValidator;
 use Chamilo\Libraries\Format\Structure\Breadcrumb;
 use Chamilo\Libraries\Format\Structure\Glyph\FontAwesomeGlyph;
-use Chamilo\Libraries\Storage\Parameters\DataClassRetrievesParameters;
+use Chamilo\Libraries\Storage\Parameters\RetrievesParameters;
 use Chamilo\Libraries\Storage\Query\Condition\AndCondition;
 use Chamilo\Libraries\Storage\Query\Condition\EqualityCondition;
 use Chamilo\Libraries\Storage\Query\Variable\PropertyConditionVariable;
@@ -86,7 +86,7 @@ class CategoryMoverComponent extends Manager implements BreadcrumbLessComponentI
                             new StaticConditionVariable($publication->get_tool())
                         );
                         $course_modules = DataManager::retrieves(
-                            CourseTool::class, new DataClassRetrievesParameters($condition)
+                            CourseTool::class, new RetrievesParameters($condition)
                         );
 
                         $course_module_id = $course_modules[0]->get_id();
@@ -185,7 +185,7 @@ class CategoryMoverComponent extends Manager implements BreadcrumbLessComponentI
         $condition = new AndCondition($conditions);
 
         $categories = DataManager::retrieves(
-            ContentObjectPublicationCategory::class, new DataClassRetrievesParameters($condition)
+            ContentObjectPublicationCategory::class, new RetrievesParameters($condition)
         );
 
         foreach($categories as $cat)

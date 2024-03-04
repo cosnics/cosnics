@@ -13,7 +13,7 @@ use Chamilo\Core\Repository\Workspace\Storage\DataClass\Workspace;
 use Chamilo\Libraries\Format\Form\FormValidator;
 use Chamilo\Libraries\Format\Menu\OptionsMenuRenderer;
 use Chamilo\Libraries\Format\Structure\Glyph\FontAwesomeGlyph;
-use Chamilo\Libraries\Storage\Parameters\DataClassRetrievesParameters;
+use Chamilo\Libraries\Storage\Parameters\RetrievesParameters;
 use Chamilo\Libraries\Storage\Query\Condition\EqualityCondition;
 use Chamilo\Libraries\Storage\Query\Variable\PropertyConditionVariable;
 use Chamilo\Libraries\Storage\Query\Variable\StaticConditionVariable;
@@ -279,7 +279,7 @@ class FormFilterRenderer extends FilterRenderer
             new PropertyConditionVariable(UserView::class, UserView::PROPERTY_USER_ID),
             new StaticConditionVariable($this->get_user_id())
         );
-        $parameters = new DataClassRetrievesParameters($condition);
+        $parameters = new RetrievesParameters($condition);
         $user_views = DataManager::retrieves(UserView::class, $parameters);
 
         $user_view_options = [];

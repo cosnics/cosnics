@@ -9,7 +9,7 @@ use Chamilo\Core\Reporting\ReportingData;
 use Chamilo\Core\Reporting\Viewer\Rendition\Block\Type\Html;
 use Chamilo\Core\User\Manager;
 use Chamilo\Core\User\Storage\DataClass\User;
-use Chamilo\Libraries\Storage\Parameters\DataClassRetrievesParameters;
+use Chamilo\Libraries\Storage\Parameters\RetrievesParameters;
 use Chamilo\Libraries\Storage\Query\Condition\EqualityCondition;
 use Chamilo\Libraries\Storage\Query\Variable\PropertyConditionVariable;
 use Chamilo\Libraries\Storage\Query\Variable\StaticConditionVariable;
@@ -47,7 +47,7 @@ class AssessmentOverviewBlock extends ToolBlock
         );
 
         $attempts_result_set = \Chamilo\Libraries\Storage\DataManager\DataManager::retrieves(
-            AssessmentAttempt::class, new DataClassRetrievesParameters($condition)
+            AssessmentAttempt::class, new RetrievesParameters($condition)
         );
 
         $attempts = [];

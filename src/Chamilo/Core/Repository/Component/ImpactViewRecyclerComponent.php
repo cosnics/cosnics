@@ -8,8 +8,7 @@ use Chamilo\Core\Repository\Manager;
 use Chamilo\Core\Repository\Storage\DataClass\ContentObject;
 use Chamilo\Core\Repository\Storage\DataManager;
 use Chamilo\Core\Tracking\Storage\DataClass\Event;
-use Chamilo\Libraries\Storage\Exception\DataClassNoResultException;
-use Chamilo\Libraries\Storage\Parameters\DataClassRetrievesParameters;
+use Chamilo\Libraries\Storage\Parameters\RetrievesParameters;
 use Chamilo\Libraries\Storage\Query\Condition\AndCondition;
 use Chamilo\Libraries\Storage\Query\Condition\Condition;
 use Chamilo\Libraries\Storage\Query\Condition\EqualityCondition;
@@ -47,7 +46,7 @@ class ImpactViewRecyclerComponent extends Manager
         $co_ids = $this->get_selected_co_ids();
         if (!is_array($co_ids))
         {
-            $co_ids = array($co_ids);
+            $co_ids = [$co_ids];
         }
 
         $has_impact = $this->has_impact($co_ids);
@@ -95,7 +94,7 @@ class ImpactViewRecyclerComponent extends Manager
     public function get_parameters(bool $include_search = false): array
     {
         return array_merge(
-            array(self::PARAM_CATEGORY_ID => $this->getRequest()->getFromRequestOrQuery(self::PARAM_CATEGORY_ID)),
+            [self::PARAM_CATEGORY_ID => $this->getRequest()->getFromRequestOrQuery(self::PARAM_CATEGORY_ID)],
             parent::get_parameters($include_search)
         );
     }
@@ -113,8 +112,8 @@ class ImpactViewRecyclerComponent extends Manager
      * @return string
      */
     public function get_result(
-        int $failures, int $count, string $fail_message_single, string $fail_message_multiple, string $succes_message_single,
-        string $succes_message_multiple, ?string $context = null
+        int $failures, int $count, string $fail_message_single, string $fail_message_multiple,
+        string $succes_message_single, string $succes_message_multiple, ?string $context = null
     ): string
     {
         if ($failures)
@@ -144,8 +143,6 @@ class ImpactViewRecyclerComponent extends Manager
      * Handles the deletion of the selected content objects.
      *
      * @param array $co_ids
-     *
-     * @throws DataClassNoResultException
      */
     private function handle_validated_co_ids(array $co_ids)
     {
@@ -155,7 +152,7 @@ class ImpactViewRecyclerComponent extends Manager
             new PropertyConditionVariable(ContentObject::class, ContentObjectPublication::PROPERTY_ID), $co_ids
         );
 
-        $parameters = new DataClassRetrievesParameters($condition);
+        $parameters = new RetrievesParameters($condition);
 
         $objects = DataManager::retrieves(ContentObject::class, $parameters);
 
@@ -195,13 +192,13 @@ class ImpactViewRecyclerComponent extends Manager
                 else
                 {
                     Event::trigger(
-                        'Activity', Manager::CONTEXT, array(
+                        'Activity', Manager::CONTEXT, [
                             Activity::PROPERTY_TYPE => Activity::ACTIVITY_RECYCLE,
                             Activity::PROPERTY_USER_ID => $this->get_user_id(),
                             Activity::PROPERTY_DATE => time(),
                             Activity::PROPERTY_CONTENT_OBJECT_ID => $version->get_id(),
                             Activity::PROPERTY_CONTENT => $version->get_title()
-                        )
+                        ]
                     );
                 }
             }
@@ -213,10 +210,10 @@ class ImpactViewRecyclerComponent extends Manager
         );
 
         $this->redirectWithMessage(
-            $result, $failures > 0, array(
+            $result, $failures > 0, [
                 self::PARAM_ACTION => self::ACTION_BROWSE_CONTENT_OBJECTS,
                 self::PARAM_CATEGORY_ID => $this->getRequest()->getFromRequestOrQuery(self::PARAM_CATEGORY_ID)
-            )
+            ]
         );
     }
 
@@ -233,7 +230,7 @@ class ImpactViewRecyclerComponent extends Manager
             new PropertyConditionVariable(ContentObject::class, ContentObjectPublication::PROPERTY_ID), $selected_ids
         );
 
-        $parameters = new DataClassRetrievesParameters($condition);
+        $parameters = new RetrievesParameters($condition);
 
         $objects = DataManager::retrieves(ContentObject::class, $parameters);
 

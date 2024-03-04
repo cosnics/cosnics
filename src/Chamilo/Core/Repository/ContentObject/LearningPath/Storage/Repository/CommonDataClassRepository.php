@@ -27,9 +27,6 @@ abstract class CommonDataClassRepository
         return $dataClass->create();
     }
 
-    /**
-     * @throws \Chamilo\Libraries\Storage\Exception\DataClassNoResultException
-     */
     public function delete(DataClass $dataClass): bool
     {
         return $dataClass->delete();

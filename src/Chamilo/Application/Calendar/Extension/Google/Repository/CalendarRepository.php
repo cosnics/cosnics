@@ -58,9 +58,6 @@ class CalendarRepository
         $this->currentUser = $currentUser;
     }
 
-    /**
-     * @throws \Chamilo\Libraries\Storage\Exception\DataClassNoResultException
-     */
     public function clearAccessToken(): bool
     {
         return $this->getUserSettingService()->saveUserSettingForSettingContextVariableAndUser(
@@ -68,9 +65,6 @@ class CalendarRepository
         );
     }
 
-    /**
-     * @throws \Chamilo\Libraries\Storage\Exception\DataClassNoResultException
-     */
     public function findEventsForCalendarIdentifierAndBetweenDates(
         string $calendarIdentifier, int $fromDate, int $toDate
     ): Google_Service_Calendar_Events
@@ -102,7 +96,6 @@ class CalendarRepository
 
     /**
      * @return \Chamilo\Application\Calendar\Storage\DataClass\AvailableCalendar[]
-     * @throws \Chamilo\Libraries\Storage\Exception\DataClassNoResultException
      */
     public function findOwnedCalendars(): array
     {
@@ -151,9 +144,6 @@ class CalendarRepository
         return md5(serialize($identifiers));
     }
 
-    /**
-     * @throws \Chamilo\Libraries\Storage\Exception\DataClassNoResultException
-     */
     public function getCalendarClient(): Google_Service_Calendar
     {
         if (!isset($this->calendarClient))
@@ -194,9 +184,6 @@ class CalendarRepository
         return $this->getConfigurationConsulter()->getSetting([Manager::CONTEXT, 'developer_key']);
     }
 
-    /**
-     * @throws \Chamilo\Libraries\Storage\Exception\DataClassNoResultException
-     */
     public function getGoogleClient(): Google_Client
     {
         if (!isset($this->googleClient))
@@ -276,9 +263,6 @@ class CalendarRepository
         return !empty($accessToken);
     }
 
-    /**
-     * @throws \Chamilo\Libraries\Storage\Exception\DataClassNoResultException
-     */
     public function login($authenticationCode = null)
     {
         if ($this->hasAccessToken())
@@ -321,7 +305,6 @@ class CalendarRepository
     }
 
     /**
-     * @throws \Chamilo\Libraries\Storage\Exception\DataClassNoResultException
      * @throws \Google_Auth_Exception
      */
     public function logout(): bool
@@ -334,9 +317,6 @@ class CalendarRepository
         return false;
     }
 
-    /**
-     * @throws \Chamilo\Libraries\Storage\Exception\DataClassNoResultException
-     */
     public function saveAccessToken(string $accessToken): bool
     {
         return $this->getUserSettingService()->saveUserSettingForSettingContextVariableAndUser(

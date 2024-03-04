@@ -18,7 +18,6 @@ class DefaultComponent extends Manager
 
     /**
      * @throws \Chamilo\Libraries\Architecture\Exceptions\NoObjectSelectedException
-     * @throws \Chamilo\Libraries\Storage\Exception\DataClassNoResultException
      * @throws \Chamilo\Libraries\Architecture\Exceptions\NotAllowedException
      */
     public function run()

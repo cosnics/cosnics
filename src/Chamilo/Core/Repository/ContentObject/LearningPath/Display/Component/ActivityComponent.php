@@ -65,7 +65,6 @@ class ActivityComponent extends BaseHtmlTreeComponent implements BreadcrumbLessC
      * @throws \Chamilo\Libraries\Format\Table\Exception\InvalidPageNumberException
      * @throws \QuickformException
      * @throws \TableException
-     * @throws \Chamilo\Libraries\Storage\Exception\DataClassNoResultException
      */
     protected function renderTable(): string
     {

@@ -122,7 +122,6 @@ class GroupService
 
     /**
      * @return string[]
-     * @throws \Chamilo\Libraries\Storage\Exception\DataClassNoResultException
      * @deprecated Use GroupsTreeTraverser::findAllSubscribedGroupIdentifiersForUserIdentifier(string $userIdentifier)
      */
     public function findAllSubscribedGroupIdentifiersForUserIdentifier(string $userIdentifier): array
@@ -134,7 +133,6 @@ class GroupService
      * @param string $userIdentifier
      *
      * @return \Doctrine\Common\Collections\ArrayCollection<\Chamilo\Core\Group\Storage\DataClass\Group>
-     * @throws \Chamilo\Libraries\Storage\Exception\DataClassNoResultException
      * @deprecated Use GroupsTreeTraverser::findAllSubscribedGroupsForUserIdentifier(string $userIdentifier)
      */
     public function findAllSubscribedGroupsForUserIdentifier(string $userIdentifier): ArrayCollection
@@ -204,7 +202,6 @@ class GroupService
      * @param ?\Chamilo\Libraries\Storage\Query\OrderBy $orderBy
      *
      * @return \Doctrine\Common\Collections\ArrayCollection<\Chamilo\Core\Group\Storage\DataClass\Group>
-     * @throws \Chamilo\Libraries\Storage\Exception\DataClassNoResultException
      */
     public function findGroups(
         ?Condition $condition = null, ?int $offset = 0, ?int $count = - 1, ?OrderBy $orderBy = null
@@ -217,7 +214,6 @@ class GroupService
      * @param string[] $groupIdentifiers
      *
      * @return \Doctrine\Common\Collections\ArrayCollection<\Chamilo\Core\Group\Storage\DataClass\Group>
-     * @throws \Chamilo\Libraries\Storage\Exception\DataClassNoResultException
      */
     public function findGroupsAndSubgroupsForGroupIdentifiers(array $groupIdentifiers = []): ArrayCollection
     {
@@ -244,7 +240,6 @@ class GroupService
      * @param string[] $groupIdentifiers
      *
      * @return \Doctrine\Common\Collections\ArrayCollection<\Chamilo\Core\Group\Storage\DataClass\Group>
-     * @throws \Chamilo\Libraries\Storage\Exception\DataClassNoResultException
      */
     public function findGroupsByIdentifiers(array $groupIdentifiers): ArrayCollection
     {
@@ -260,7 +255,6 @@ class GroupService
      * @param string $parentIdentifier
      *
      * @return \Doctrine\Common\Collections\ArrayCollection<\Chamilo\Core\Group\Storage\DataClass\Group>
-     * @throws \Chamilo\Libraries\Storage\Exception\DataClassNoResultException
      */
     public function findGroupsForParentIdentifier(string $parentIdentifier = '0'): ArrayCollection
     {
@@ -272,7 +266,6 @@ class GroupService
      * @param string $parentIdentifier
      *
      * @return \Doctrine\Common\Collections\ArrayCollection<\Chamilo\Core\Group\Storage\DataClass\Group>
-     * @throws \Chamilo\Libraries\Storage\Exception\DataClassNoResultException
      */
     public function findGroupsForSearchQueryAndParentIdentifier(
         ?string $searchQuery = null, string $parentIdentifier = '0'
@@ -317,7 +310,6 @@ class GroupService
      * @param \Chamilo\Core\Group\Storage\DataClass\Group $group
      *
      * @return string
-     * @throws \Chamilo\Libraries\Storage\Exception\DataClassNoResultException
      * @deprecated (use tree traverser)
      */
     public function getGroupPath(Group $group): string
@@ -331,7 +323,6 @@ class GroupService
     }
 
     /**
-     * @throws \Chamilo\Libraries\Storage\Exception\DataClassNoResultException
      * @deprecated (use tree traverser)
      */
     public function getHighestGroupQuotumForUser(User $user): int
@@ -340,7 +331,6 @@ class GroupService
     }
 
     /**
-     * @throws \Chamilo\Libraries\Storage\Exception\DataClassNoResultException
      * @deprecated (use tree traverser)
      */
     public function getLowestGroupQuotumForUser(User $user): int
@@ -373,9 +363,6 @@ class GroupService
         return $this->getGroupMembershipService()->subscribeUserToGroup($this->findGroupByCode($groupCode), $user);
     }
 
-    /**
-     * @throws \Chamilo\Libraries\Storage\Exception\DataClassNoResultException
-     */
     public function truncateGroup(Group $group): bool
     {
         return $this->getGroupMembershipService()->unsubscribeAllUsersFromGroup($group);

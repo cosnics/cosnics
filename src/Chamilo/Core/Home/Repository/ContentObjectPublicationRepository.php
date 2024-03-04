@@ -7,8 +7,8 @@ use Chamilo\Core\Repository\Publication\Storage\Repository\PublicationRepository
 use Chamilo\Core\Repository\Storage\DataClass\ContentObject;
 use Chamilo\Libraries\Storage\DataManager\Repository\DataClassRepository;
 use Chamilo\Libraries\Storage\Parameters\DataClassCountParameters;
-use Chamilo\Libraries\Storage\Parameters\DataClassRetrieveParameters;
-use Chamilo\Libraries\Storage\Parameters\RecordRetrievesParameters;
+use Chamilo\Libraries\Storage\Parameters\RetrieveParameters;
+use Chamilo\Libraries\Storage\Parameters\RetrievesParameters;
 use Chamilo\Libraries\Storage\Query\Condition\EqualityCondition;
 use Chamilo\Libraries\Storage\Query\Condition\InCondition;
 use Chamilo\Libraries\Storage\Query\Variable\PropertyConditionVariable;
@@ -86,36 +86,33 @@ class ContentObjectPublicationRepository
 
     /**
      * @return \Chamilo\Core\Home\Storage\DataClass\ContentObjectPublication[]
-     * @throws \Chamilo\Libraries\Storage\Exception\DataClassNoResultException
      */
     public function findContentObjectPublicationsByContentObjectId(string $contentObjectId): array
     {
         return $this->getPublicationRepository()->getPublicationsWithContentObjects(
-            new RecordRetrievesParameters(null, $this->getConditionByContentObjectId($contentObjectId)),
+            new RetrievesParameters(condition: $this->getConditionByContentObjectId($contentObjectId)),
             ContentObjectPublication::class
         );
     }
 
     /**
      * @return \Chamilo\Core\Home\Storage\DataClass\ContentObjectPublication[]
-     * @throws \Chamilo\Libraries\Storage\Exception\DataClassNoResultException
      */
     public function findContentObjectPublicationsByContentObjectOwnerId(string $ownerId): array
     {
         return $this->getPublicationRepository()->getPublicationsWithContentObjects(
-            new RecordRetrievesParameters(null, $this->getConditionByContentObjectOwnerId($ownerId)),
+            new RetrievesParameters(condition: $this->getConditionByContentObjectOwnerId($ownerId)),
             ContentObjectPublication::class
         );
     }
 
     /**
      * @return \Chamilo\Core\Home\Storage\DataClass\ContentObjectPublication[]
-     * @throws \Chamilo\Libraries\Storage\Exception\DataClassNoResultException
      */
     public function findContentObjectPublicationsByElementId(string $elementId): array
     {
         return $this->getPublicationRepository()->getPublicationsWithContentObjects(
-            new RecordRetrievesParameters(null, $this->getConditionByElementId($elementId)),
+            new RetrievesParameters(condition: $this->getConditionByElementId($elementId)),
             ContentObjectPublication::class
         );
     }
@@ -123,7 +120,7 @@ class ContentObjectPublicationRepository
     public function findFirstContentObjectPublicationByElementId(string $elementId): ?ContentObjectPublication
     {
         return $this->getDataClassRepository()->retrieve(
-            ContentObjectPublication::class, new DataClassRetrieveParameters($this->getConditionByElementId($elementId))
+            ContentObjectPublication::class, new RetrieveParameters($this->getConditionByElementId($elementId))
         );
     }
 

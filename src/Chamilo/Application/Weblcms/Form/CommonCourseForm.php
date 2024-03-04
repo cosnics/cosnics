@@ -28,7 +28,7 @@ use Chamilo\Libraries\Format\Tabs\Form\FormTab;
 use Chamilo\Libraries\Format\Tabs\TabsCollection;
 use Chamilo\Libraries\Format\Utilities\ResourceManager;
 use Chamilo\Libraries\Storage\DataClass\DataClass;
-use Chamilo\Libraries\Storage\Parameters\DataClassRetrievesParameters;
+use Chamilo\Libraries\Storage\Parameters\RetrievesParameters;
 use Chamilo\Libraries\Storage\Query\Condition\AndCondition;
 use Chamilo\Libraries\Storage\Query\Condition\EqualityCondition;
 use Chamilo\Libraries\Storage\Query\Condition\InCondition;
@@ -341,7 +341,7 @@ abstract class CommonCourseForm extends FormValidator implements CourseSettingsX
             new PropertyConditionVariable(CourseSetting::class, CourseSetting::PROPERTY_TOOL_ID), $settings_condition
         );
 
-        $toolsArray = DataManager::retrieves(CourseTool::class, new DataClassRetrievesParameters($tools_condition));
+        $toolsArray = DataManager::retrieves(CourseTool::class, new RetrievesParameters($tools_condition));
 
         usort(
             $toolsArray, function ($toolA, $toolB) {
@@ -413,7 +413,7 @@ abstract class CommonCourseForm extends FormValidator implements CourseSettingsX
             )
         );
 
-        $toolsArray = DataManager::retrieves(CourseTool::class, new DataClassRetrievesParameters($tools_condition));
+        $toolsArray = DataManager::retrieves(CourseTool::class, new RetrievesParameters($tools_condition));
 
         usort(
             $toolsArray, function ($toolA, $toolB) {

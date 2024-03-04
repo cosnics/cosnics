@@ -130,7 +130,6 @@ class SubscribeGroupsDetailsComponent extends SubscribeGroupsTabComponent
     }
 
     /**
-     * @throws \Chamilo\Libraries\Storage\Exception\DataClassNoResultException
      * @throws \TableException
      * @throws \Chamilo\Libraries\Format\Table\Exception\InvalidPageNumberException
      * @throws \QuickformException
@@ -165,7 +164,6 @@ class SubscribeGroupsDetailsComponent extends SubscribeGroupsTabComponent
     }
 
     /**
-     * @throws \Chamilo\Libraries\Storage\Exception\DataClassNoResultException
      * @throws \TableException
      * @throws \Chamilo\Libraries\Format\Table\Exception\InvalidPageNumberException
      * @throws \QuickformException

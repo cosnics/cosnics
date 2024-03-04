@@ -12,7 +12,7 @@ use Chamilo\Libraries\Format\Form\Element\AdvancedElementFinder\AdvancedElementF
 use Chamilo\Libraries\Format\Form\Element\AdvancedElementFinder\AdvancedElementFinderElements;
 use Chamilo\Libraries\Format\Structure\Glyph\FontAwesomeGlyph;
 use Chamilo\Libraries\Storage\Parameters\DataClassCountParameters;
-use Chamilo\Libraries\Storage\Parameters\DataClassRetrievesParameters;
+use Chamilo\Libraries\Storage\Parameters\RetrievesParameters;
 use Chamilo\Libraries\Storage\Query\Condition\AndCondition;
 use Chamilo\Libraries\Storage\Query\Condition\ContainsCondition;
 use Chamilo\Libraries\Storage\Query\Condition\EqualityCondition;
@@ -238,7 +238,7 @@ class CourseCategoryFeedComponent extends Manager
         }
 
         return DataManager::retrieves(
-            CourseCategory::class, new DataClassRetrievesParameters(
+            CourseCategory::class, new RetrievesParameters(
                 condition: $condition, orderBy: new OrderBy([
                 new OrderProperty(
                     new PropertyConditionVariable(CourseCategory::class, CourseCategory::PROPERTY_NAME)
@@ -297,7 +297,7 @@ class CourseCategoryFeedComponent extends Manager
         );
 
         return \Chamilo\Application\Weblcms\Course\Storage\DataManager::retrieves(
-            Course::class, new DataClassRetrievesParameters(
+            Course::class, new RetrievesParameters(
                 $condition, 100, $this->get_offset(), new OrderBy(
                     [new OrderProperty(new PropertyConditionVariable(Course::class, Course::PROPERTY_TITLE))]
                 )

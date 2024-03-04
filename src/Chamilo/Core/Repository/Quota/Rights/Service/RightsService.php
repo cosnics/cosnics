@@ -245,7 +245,6 @@ class RightsService
      * @param string[] $identifiers
      *
      * @return \Doctrine\Common\Collections\ArrayCollection<\Chamilo\Core\Repository\Quota\Rights\Storage\DataClass\RightsLocationEntityRightGroup>
-     * @throws \Chamilo\Libraries\Storage\Exception\DataClassNoResultException
      */
     public function findRightsLocationEntityRightGroupByIdentifiers(array $identifiers = []): ArrayCollection
     {
@@ -265,7 +264,6 @@ class RightsService
      * @param \Chamilo\Core\User\Storage\DataClass\User $user
      *
      * @return string[]
-     * @throws \Chamilo\Libraries\Storage\Exception\DataClassNoResultException
      */
     public function findRightsLocationEntityRightGroupIdentifiersForUser(User $user): array
     {
@@ -284,7 +282,6 @@ class RightsService
      * @param \Doctrine\Common\Collections\ArrayCollection<\Chamilo\Core\Repository\Quota\Rights\Storage\DataClass\RightsLocationEntityRight> $locationEntityRights
      *
      * @return \Doctrine\Common\Collections\ArrayCollection<\Chamilo\Core\Repository\Quota\Rights\Storage\DataClass\RightsLocationEntityRightGroup>
-     * @throws \Chamilo\Libraries\Storage\Exception\DataClassNoResultException
      */
     public function findRightsLocationEntityRightGroupsForRightsLocationEntityRights(
         ArrayCollection $locationEntityRights
@@ -306,7 +303,6 @@ class RightsService
      * @param \Chamilo\Core\User\Storage\DataClass\User $user
      *
      * @return \Doctrine\Common\Collections\ArrayCollection<\Chamilo\Core\Repository\Quota\Rights\Storage\DataClass\RightsLocationEntityRightGroup>
-     * @throws \Chamilo\Libraries\Storage\Exception\DataClassNoResultException
      */
     public function findRightsLocationEntityRightGroupsForSubscribedUserGroups(User $user): ArrayCollection
     {
@@ -324,7 +320,6 @@ class RightsService
      * @param \Chamilo\Core\User\Storage\DataClass\User $user
      *
      * @return \Doctrine\Common\Collections\ArrayCollection<\Chamilo\Core\Repository\Quota\Rights\Storage\DataClass\RightsLocationEntityRightGroup>
-     * @throws \Chamilo\Libraries\Storage\Exception\DataClassNoResultException
      */
     public function findRightsLocationEntityRightGroupsForUser(User $user): ArrayCollection
     {
@@ -349,7 +344,6 @@ class RightsService
      * @param \Chamilo\Core\User\Storage\DataClass\User $user
      *
      * @return string[]
-     * @throws \Chamilo\Libraries\Storage\Exception\DataClassNoResultException
      */
     public function findRightsLocationEntityRightGroupsIdentifiersForUser(User $user): array
     {
@@ -369,7 +363,6 @@ class RightsService
      * @param int $entityType
      *
      * @return \Doctrine\Common\Collections\ArrayCollection<\Chamilo\Libraries\Rights\Domain\RightsLocationEntityRight>
-     * @throws \Chamilo\Libraries\Storage\Exception\DataClassNoResultException
      */
     protected function findRightsLocationEntityRightsForEntityIdentifiersAndType(
         array $entityIdentifiers, int $entityType
@@ -385,7 +378,6 @@ class RightsService
      * @param string[] $userGroupIdentifiers
      *
      * @return \Doctrine\Common\Collections\ArrayCollection<\Chamilo\Core\Repository\Quota\Rights\Storage\DataClass\RightsLocationEntityRight>
-     * @throws \Chamilo\Libraries\Storage\Exception\DataClassNoResultException
      */
     public function findRightsLocationEntityRightsForTargetGroupIdentifiers(array $userGroupIdentifiers
     ): ArrayCollection
@@ -399,7 +391,6 @@ class RightsService
      * @param \Chamilo\Core\User\Storage\DataClass\User $user
      *
      * @return string[]
-     * @throws \Chamilo\Libraries\Storage\Exception\DataClassNoResultException
      */
     public function getAuthorizedUserIdentifiersForUser(User $user): array
     {
@@ -434,7 +425,6 @@ class RightsService
 
     /**
      * @return \Chamilo\Core\User\Storage\DataClass\User[]
-     * @throws \Chamilo\Libraries\Storage\Exception\DataClassNoResultException
      */
     public function getAuthorizedUsersForUser(User $user): array
     {
@@ -507,7 +497,6 @@ class RightsService
 
     /**
      * @return string[][]
-     * @throws \Chamilo\Libraries\Storage\Exception\DataClassNoResultException
      */
     public function getRightsLocationEntityRightGroupsWithEntityAndGroup(
         ?int $offset = null, ?int $count = null, ?OrderBy $orderBy = null
@@ -606,7 +595,6 @@ class RightsService
 
     /**
      * @return string[]
-     * @throws \Chamilo\Libraries\Storage\Exception\DataClassNoResultException
      */
     public function getTargetGroupIdentifiersForUser(User $user): array
     {
@@ -618,7 +606,6 @@ class RightsService
 
     /**
      * @return string[][][]
-     * @throws \Chamilo\Libraries\Storage\Exception\DataClassNoResultException
      */
     public function getTargetUsersAndGroupsForAvailableRights(): array
     {
@@ -630,7 +617,6 @@ class RightsService
 
     /**
      * @return string[]
-     * @throws \Chamilo\Libraries\Storage\Exception\DataClassNoResultException
      */
     public function getTargetUsersForUser(User $user): array
     {
@@ -669,9 +655,6 @@ class RightsService
         return $this->userService;
     }
 
-    /**
-     * @throws \Chamilo\Libraries\Storage\Exception\DataClassNoResultException
-     */
     public function isUserIdentifierTargetForUser(string $userIdentifier, User $user): bool
     {
         return $user->isPlatformAdmin() || in_array($userIdentifier, $this->getTargetUsersForUser($user));

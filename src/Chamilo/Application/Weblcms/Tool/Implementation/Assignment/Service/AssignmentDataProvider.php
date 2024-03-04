@@ -1,27 +1,27 @@
 <?php
 namespace Chamilo\Application\Weblcms\Tool\Implementation\Assignment\Service;
 
+use Chamilo\Application\Weblcms\Bridge\Assignment\Service\Entity\EntityServiceManager;
+use Chamilo\Application\Weblcms\Bridge\Assignment\Service\NotificationProcessor\EntryNotificationJobProcessor;
+use Chamilo\Application\Weblcms\Bridge\Assignment\Table\Entry\EntryTable;
 use Chamilo\Application\Weblcms\Integration\Chamilo\Core\Tracking\Service\AssignmentService;
 use Chamilo\Application\Weblcms\Storage\DataClass\ContentObjectPublication;
-use Chamilo\Application\Weblcms\Bridge\Assignment\Service\Entity\EntityServiceManager;
 use Chamilo\Application\Weblcms\Tool\Implementation\Assignment\Storage\DataClass\Publication;
-use Chamilo\Application\Weblcms\Bridge\Assignment\Table\Entry\EntryTable;
 use Chamilo\Application\Weblcms\Tool\Implementation\Ephorus\Storage\DataClass\Request;
 use Chamilo\Core\Queue\Service\JobProducer;
 use Chamilo\Core\Queue\Storage\Entity\Job;
-use Chamilo\Core\Repository\ContentObject\Assignment\Display\Interfaces\AssignmentEphorusSupportInterface;
 use Chamilo\Core\Repository\ContentObject\Assignment\Display\Bridge\Storage\DataClass\Entry;
 use Chamilo\Core\Repository\ContentObject\Assignment\Display\Bridge\Storage\DataClass\EntryAttachment;
 use Chamilo\Core\Repository\ContentObject\Assignment\Display\Bridge\Storage\DataClass\Note;
 use Chamilo\Core\Repository\ContentObject\Assignment\Display\Bridge\Storage\DataClass\Score;
+use Chamilo\Core\Repository\ContentObject\Assignment\Display\Interfaces\AssignmentEphorusSupportInterface;
 use Chamilo\Core\Repository\ContentObject\Assignment\Storage\DataClass\Assignment;
 use Chamilo\Core\Repository\Storage\DataClass\ContentObject;
 use Chamilo\Core\User\Storage\DataClass\User;
 use Chamilo\Libraries\Architecture\Application\Application;
 use Chamilo\Libraries\Storage\DataClass\DataClass;
-use Chamilo\Libraries\Storage\Parameters\RecordRetrievesParameters;
+use Chamilo\Libraries\Storage\Parameters\RetrievesParameters;
 use Chamilo\Libraries\Storage\Query\Condition\Condition;
-use Chamilo\Application\Weblcms\Bridge\Assignment\Service\NotificationProcessor\EntryNotificationJobProcessor;
 use Exception;
 use RuntimeException;
 
@@ -35,14 +35,19 @@ class AssignmentDataProvider
     AssignmentEphorusSupportInterface
 {
     /**
+     * @var \Chamilo\Application\Weblcms\Tool\Implementation\Assignment\Storage\DataClass\Publication
+     */
+    protected $assignmentPublication;
+
+    /**
      * @var \Chamilo\Application\Weblcms\Integration\Chamilo\Core\Tracking\Service\AssignmentService
      */
     protected $assignmentService;
 
     /**
-     * @var \Chamilo\Application\Weblcms\Bridge\Assignment\Service\Entity\EntityServiceManager
+     * @var bool
      */
-    protected $entityServiceManager;
+    protected $canEditAssignment;
 
     /**
      * @var ContentObjectPublication
@@ -50,14 +55,9 @@ class AssignmentDataProvider
     protected $contentObjectPublication;
 
     /**
-     * @var \Chamilo\Application\Weblcms\Tool\Implementation\Assignment\Storage\DataClass\Publication
+     * @var \Chamilo\Application\Weblcms\Bridge\Assignment\Service\Entity\EntityServiceManager
      */
-    protected $assignmentPublication;
-
-    /**
-     * @var bool
-     */
-    protected $canEditAssignment;
+    protected $entityServiceManager;
 
     /**
      * @var bool
@@ -86,65 +86,42 @@ class AssignmentDataProvider
     }
 
     /**
-     * @param ContentObjectPublication $contentObjectPublication
+     * @param \Chamilo\Core\Repository\ContentObject\Assignment\Display\Bridge\Storage\DataClass\Entry $entry
+     * @param \Chamilo\Core\Repository\Storage\DataClass\ContentObject $contentObject
+     *
+     * @return \Chamilo\Core\Repository\ContentObject\Assignment\Display\Bridge\Storage\DataClass\EntryAttachment
      */
-    public function setContentObjectPublication(ContentObjectPublication $contentObjectPublication)
+    public function attachContentObjectToEntry(Entry $entry, ContentObject $contentObject)
     {
-        if (!$contentObjectPublication->getContentObject() instanceof Assignment)
-        {
-            throw new RuntimeException(
-                'The given treenode does not reference a valid assignment and should not be used'
-            );
-        }
-
-        $this->contentObjectPublication = $contentObjectPublication;
-    }
-
-    /**
-     * @param \Chamilo\Application\Weblcms\Tool\Implementation\Assignment\Storage\DataClass\Publication $assignmentPublication
-     */
-    public function setAssignmentPublication(Publication $assignmentPublication)
-    {
-        if (!isset($this->contentObjectPublication) ||
-            $this->contentObjectPublication->getId() != $assignmentPublication->getPublicationId())
-        {
-            throw new RuntimeException(
-                'The given assignment publication does not belong to the given content object publication'
-            );
-        }
-
-        $this->assignmentPublication = $assignmentPublication;
-    }
-
-    /**
-     * @return \Chamilo\Core\Repository\Storage\DataClass\ContentObject | Assignment
-     */
-    protected function getAssignment()
-    {
-        return $this->contentObjectPublication->getContentObject();
-    }
-
-    /**
-     * @param bool $canEditAssignment
-     */
-    public function setCanEditAssignment($canEditAssignment = true)
-    {
-        $this->canEditAssignment = $canEditAssignment;
-    }
-
-    /**
-     * @param bool $ephorusEnabled
-     */
-    public function setEphorusEnabled($ephorusEnabled = true)
-    {
-        $this->ephorusEnabled = $ephorusEnabled;
+        return $this->assignmentService->attachContentObjectToEntry($entry, $contentObject);
     }
 
     /**
      *
-     * @param integer $entityType
+     * @return bool
+     */
+    public function canEditAssignment()
+    {
+        return $this->canEditAssignment;
+    }
+
+    /**
+     * @param \Chamilo\Libraries\Storage\Query\Condition\Condition $condition
      *
-     * @return integer
+     * @return int
+     */
+    public function countAssignmentEntriesWithEphorusRequests(Condition $condition = null)
+    {
+        return $this->assignmentService->countAssignmentEntriesWithEphorusRequestsByContentObjectPublication(
+            $this->contentObjectPublication, $condition
+        );
+    }
+
+    /**
+     *
+     * @param int $entityType
+     *
+     * @return int
      */
     public function countDistinctEntriesByEntityType($entityType)
     {
@@ -155,9 +132,9 @@ class AssignmentDataProvider
 
     /**
      *
-     * @param integer $entityType
+     * @param int $entityType
      *
-     * @return integer
+     * @return int
      */
     public function countDistinctFeedbackByEntityType($entityType)
     {
@@ -168,9 +145,23 @@ class AssignmentDataProvider
 
     /**
      *
-     * @param integer $entityType
+     * @param int $entityType
+     * @param int $entityId
      *
-     * @return integer
+     * @return int
+     */
+    public function countDistinctFeedbackForEntityTypeAndId($entityType, $entityId)
+    {
+        return $this->assignmentService->countDistinctFeedbackForContentObjectPublicationEntityTypeAndId(
+            $this->contentObjectPublication, $entityType, $entityId
+        );
+    }
+
+    /**
+     *
+     * @param int $entityType
+     *
+     * @return int
      */
     public function countDistinctLateEntriesByEntityType($entityType)
     {
@@ -181,9 +172,23 @@ class AssignmentDataProvider
 
     /**
      *
-     * @param integer $entityType
+     * @param int $entityType
+     * @param int $entityId
      *
-     * @return integer
+     * @return int
+     */
+    public function countDistinctScoreForEntityTypeAndId($entityType, $entityId)
+    {
+        return $this->assignmentService->countDistinctFeedbackForContentObjectPublicationEntityTypeAndId(
+            $this->contentObjectPublication, $entityType, $entityId
+        );
+    }
+
+    /**
+     *
+     * @param int $entityType
+     *
+     * @return int
      */
     public function countEntitiesByEntityType($entityType)
     {
@@ -205,6 +210,164 @@ class AssignmentDataProvider
     }
 
     /**
+     *
+     * @param int $entityType
+     * @param int $entityId
+     *
+     * @return int
+     */
+    public function countEntriesForEntityTypeAndId($entityType, $entityId)
+    {
+        return $this->assignmentService->countEntriesForContentObjectPublicationEntityTypeAndId(
+            $this->contentObjectPublication, $entityType, $entityId
+        );
+    }
+
+    /**
+     *
+     * @param int $entityType
+     * @param int $entityId
+     *
+     * @return int
+     */
+    public function countFeedbackByEntityTypeAndEntityId($entityType, $entityId)
+    {
+        return $this->assignmentService->countFeedbackForContentObjectPublicationByEntityTypeAndEntityId(
+            $this->contentObjectPublication, $entityType, $entityId
+        );
+    }
+
+    /**
+     *
+     * @param \Chamilo\Core\Repository\ContentObject\Assignment\Display\Bridge\Storage\DataClass\Entry $entry
+     *
+     * @return int
+     */
+    public function countFeedbackByEntry(Entry $entry)
+    {
+        return $this->assignmentService->countFeedbackByEntry($entry);
+    }
+
+    /**
+     *
+     * @param int $entryIdentifier
+     *
+     * @return int
+     */
+    public function countFeedbackByEntryIdentifier($entryIdentifier)
+    {
+        return $this->assignmentService->countFeedbackByEntryIdentifier($entryIdentifier);
+    }
+
+    /**
+     *
+     * @param int $entityType
+     * @param int $entityId
+     * @param int $userId
+     * @param int $contentObjectId
+     * @param string $ipAdress
+     *
+     * @return \Chamilo\Core\Repository\ContentObject\Assignment\Display\Bridge\Storage\DataClass\Entry
+     *
+     * @throws \Doctrine\ORM\ORMException
+     * @throws \Doctrine\ORM\OptimisticLockException
+     */
+    public function createEntry($entityType, $entityId, $userId, $contentObjectId, $ipAdress)
+    {
+        $entry = $this->assignmentService->createEntry(
+            $this->contentObjectPublication, $entityType, $entityId, $userId, $contentObjectId, $ipAdress
+        );
+
+        if ($entry instanceof Entry)
+        {
+            $job = new Job();
+            $job->setProcessorClass(EntryNotificationJobProcessor::class)->setParameter(
+                EntryNotificationJobProcessor::PARAM_ENTRY_ID, $entry->getId()
+            );
+
+            $this->jobProducer->produceJob($job, 'notifications');
+        }
+
+        return $entry;
+    }
+
+    /**
+     *
+     * @param \Chamilo\Core\Repository\ContentObject\Assignment\Display\Bridge\Storage\DataClass\Entry $entry
+     * @param \Chamilo\Core\User\Storage\DataClass\User $user
+     * @param string $submittedNote
+     *
+     * @return bool
+     */
+    public function createNote(Entry $entry, User $user, $submittedNote)
+    {
+        try
+        {
+            $this->assignmentService->createNote(
+                $entry, $user, $submittedNote
+            );
+        }
+        catch (Exception $ex)
+        {
+            return false;
+        }
+
+        return true;
+    }
+
+    /**
+     * @param Score $score
+     *
+     * @return Score
+     */
+    public function createScore(Score $score)
+    {
+        return $this->assignmentService->createScore(
+            $score
+        );
+    }
+
+    /**
+     * @param \Chamilo\Core\Repository\ContentObject\Assignment\Display\Bridge\Storage\DataClass\Entry $entry
+     */
+    public function deleteEntry(Entry $entry)
+    {
+        $this->assignmentService->deleteEntry($entry);
+    }
+
+    /**
+     * @param \Chamilo\Core\Repository\ContentObject\Assignment\Display\Bridge\Storage\DataClass\EntryAttachment $entryAttachment
+     */
+    public function deleteEntryAttachment(EntryAttachment $entryAttachment)
+    {
+        $this->assignmentService->deleteEntryAttachment($entryAttachment);
+    }
+
+    /**
+     * @param \Chamilo\Libraries\Storage\Parameters\RetrievesParameters $retrievesParameters
+     *
+     * @return \Doctrine\Common\Collections\ArrayCollection
+     */
+    public function findAssignmentEntriesWithEphorusRequests(
+        RetrievesParameters $retrievesParameters = new RetrievesParameters()
+    )
+    {
+        return $this->assignmentService->findAssignmentEntriesWithEphorusRequestsByContentObjectPublication(
+            $this->contentObjectPublication, $retrievesParameters
+        );
+    }
+
+    /**
+     * @param \Chamilo\Core\Repository\ContentObject\Assignment\Display\Bridge\Storage\DataClass\Entry $entry
+     *
+     * @return EntryAttachment[]
+     */
+    public function findAttachmentsByEntry(Entry $entry)
+    {
+        return $this->assignmentService->findAttachmentsByEntry($entry);
+    }
+
+    /**
      * @param int $entityType
      *
      * @return \Chamilo\Libraries\Storage\DataClass\DataClass[]
@@ -218,15 +381,181 @@ class AssignmentDataProvider
 
     /**
      *
-     * @param integer $entityType
-     *
-     * @return string
+     * @return \Chamilo\Core\Repository\ContentObject\Assignment\Display\Bridge\Storage\DataClass\Entry[]|\Doctrine\Common\Collections\ArrayCollection
      */
-    public function getPluralEntityNameByType($entityType)
+    public function findEntries()
     {
-        $entityService = $this->entityServiceManager->getEntityServiceByType($entityType);
+        return $this->assignmentService->findEntriesByContentObjectPublication($this->contentObjectPublication);
+    }
 
-        return $entityService->getPluralEntityName();
+    /**
+     *
+     * @param int $entityType
+     * @param int $entityIdentifiers
+     *
+     * @return \Chamilo\Core\Repository\ContentObject\Assignment\Display\Bridge\Storage\DataClass\Entry[]|\Doctrine\Common\Collections\ArrayCollection
+     */
+    public function findEntriesByEntityTypeAndIdentifiers($entityType, $entityIdentifiers)
+    {
+        return $this->assignmentService->findEntriesByContentObjectPublicationEntityTypeAndIdentifiers(
+            $this->contentObjectPublication, $entityType, $entityIdentifiers
+        );
+    }
+
+    /**
+     *
+     * @param int $entryIdentifiers
+     *
+     * @return \Chamilo\Core\Repository\ContentObject\Assignment\Display\Bridge\Storage\DataClass\Entry[]|\Doctrine\Common\Collections\ArrayCollection
+     */
+    public function findEntriesByIdentifiers($entryIdentifiers)
+    {
+        return $this->assignmentService->findEntriesByIdentifiers($entryIdentifiers);
+    }
+
+    /**
+     * @param int $entryAttachmentId
+     *
+     * @return EntryAttachment
+     */
+    public function findEntryAttachmentById($entryAttachmentId)
+    {
+        return $this->assignmentService->findEntryAttachmentById($entryAttachmentId);
+    }
+
+    /**
+     *
+     * @param int $entryIdentifier
+     *
+     * @return \Chamilo\Core\Repository\ContentObject\Assignment\Display\Bridge\Storage\DataClass\Entry
+     */
+    public function findEntryByIdentifier($entryIdentifier)
+    {
+        return $this->assignmentService->findEntryByIdentifier($entryIdentifier);
+    }
+
+    /**
+     * @param int[] $entryIds
+     *
+     * @return Request[]
+     */
+    public function findEphorusRequestsForAssignmentEntries(array $entryIds = [])
+    {
+        return $this->assignmentService->findEphorusRequestsForAssignmentEntriesByContentObjectPublication(
+            $this->contentObjectPublication, $entryIds
+        );
+    }
+
+    /**
+     *
+     * @param \Chamilo\Core\Repository\ContentObject\Assignment\Display\Bridge\Storage\DataClass\Entry $entry
+     *
+     * @return \Doctrine\Common\Collections\ArrayCollection
+     */
+    public function findFeedbackByEntry(Entry $entry)
+    {
+        return $this->assignmentService->findFeedbackByEntry($entry);
+    }
+
+    /**
+     *
+     * @param int $feedbackIdentifier
+     *
+     * @return \Chamilo\Core\Repository\ContentObject\Assignment\Display\Bridge\Storage\DataClass\Feedback
+     */
+    public function findFeedbackByIdentifier($feedbackIdentifier)
+    {
+        return $this->assignmentService->findFeedbackByIdentifier($feedbackIdentifier);
+    }
+
+    /**
+     * @param int $entityType
+     * @param int $entityIdentifier
+     *
+     * @return Entry
+     */
+    public function findLastEntryForEntity($entityType, $entityIdentifier)
+    {
+        return $this->assignmentService->findLastEntryForEntityByContentObjectPublication(
+            $this->contentObjectPublication, $entityType, $entityIdentifier
+        );
+    }
+
+    /**
+     *
+     * @param \Chamilo\Core\Repository\ContentObject\Assignment\Display\Bridge\Storage\DataClass\Entry $entry
+     *
+     * @return \Chamilo\Core\Repository\ContentObject\Assignment\Display\Bridge\Storage\DataClass\Note
+     */
+    public function findNoteByEntry(Entry $entry)
+    {
+        return $this->assignmentService->findNoteByEntry($entry);
+    }
+
+    /**
+     *
+     * @param \Chamilo\Core\Repository\ContentObject\Assignment\Display\Bridge\Storage\DataClass\Entry $entry
+     *
+     * @return \Chamilo\Core\Repository\ContentObject\Assignment\Display\Bridge\Storage\DataClass\Score
+     */
+    public function findScoreByEntry(Entry $entry)
+    {
+        return $this->assignmentService->findScoreByEntry($entry);
+    }
+
+    /**
+     * @return \Chamilo\Core\Repository\Storage\DataClass\ContentObject | Assignment
+     */
+    protected function getAssignment()
+    {
+        return $this->contentObjectPublication->getContentObject();
+    }
+
+    /**
+     * @param \Chamilo\Core\User\Storage\DataClass\User $currentUser
+     *
+     * @return int[]
+     */
+    public function getAvailableEntityIdentifiersForUser(User $currentUser)
+    {
+        $entityService = $this->entityServiceManager->getEntityServiceByType($this->getCurrentEntityType());
+
+        return $entityService->getAvailableEntityIdentifiersForUser($this->contentObjectPublication, $currentUser);
+    }
+
+    /**
+     *
+     * @param int $entityType
+     * @param int $entityId
+     *
+     * @return int
+     */
+    public function getAverageScoreForEntityTypeAndId($entityType, $entityId)
+    {
+        return $this->assignmentService->getAverageScoreForContentObjectPublicationEntityTypeAndId(
+            $this->contentObjectPublication, $entityType, $entityId
+        );
+    }
+
+    /**
+     * @param \Chamilo\Core\User\Storage\DataClass\User $currentUser
+     *
+     * @return int
+     */
+    public function getCurrentEntityIdentifier(User $currentUser)
+    {
+        $entityService = $this->entityServiceManager->getEntityServiceByType($this->getCurrentEntityType());
+
+        return $entityService->getCurrentEntityIdentifier($this->contentObjectPublication, $currentUser);
+    }
+
+    /**
+     *
+     * @return int
+     */
+    public function getCurrentEntityType()
+    {
+        return $this->assignmentPublication->getEntityType();
     }
 
     /**
@@ -244,7 +573,7 @@ class AssignmentDataProvider
     /**
      *
      * @param \Chamilo\Libraries\Architecture\Application\Application $application
-     * @param integer $entityType
+     * @param int $entityType
      *
      * @return \Chamilo\Core\Repository\ContentObject\Assignment\Display\Table\Entity\EntityTable
      */
@@ -258,8 +587,8 @@ class AssignmentDataProvider
     /**
      *
      * @param \Chamilo\Libraries\Architecture\Application\Application $application
-     * @param integer $entityType
-     * @param integer $entityId
+     * @param int $entityType
+     * @param int $entityId
      *
      * @return \Chamilo\Core\Repository\ContentObject\Assignment\Display\Table\Entry\EntryTable
      */
@@ -272,35 +601,76 @@ class AssignmentDataProvider
 
     /**
      *
-     * @return integer
-     */
-    public function getCurrentEntityType()
-    {
-        return $this->assignmentPublication->getEntityType();
-    }
-
-    /**
-     * @param \Chamilo\Core\User\Storage\DataClass\User $currentUser
+     * @param int $entityType
+     * @param int $entityId
      *
      * @return int
      */
-    public function getCurrentEntityIdentifier(User $currentUser)
+    public function getLastScoreForEntityTypeAndId($entityType, $entityId)
     {
-        $entityService = $this->entityServiceManager->getEntityServiceByType($this->getCurrentEntityType());
-
-        return $entityService->getCurrentEntityIdentifier($this->contentObjectPublication, $currentUser);
+        return $this->assignmentService->getLastScoreForContentObjectPublicationEntityTypeAndId(
+            $this->contentObjectPublication, $entityType, $entityId
+        );
     }
 
     /**
-     * @param \Chamilo\Core\User\Storage\DataClass\User $currentUser
      *
-     * @return int[]
+     * @param int $entityType
+     *
+     * @return string
      */
-    public function getAvailableEntityIdentifiersForUser(User $currentUser)
+    public function getPluralEntityNameByType($entityType)
     {
-        $entityService = $this->entityServiceManager->getEntityServiceByType($this->getCurrentEntityType());
+        $entityService = $this->entityServiceManager->getEntityServiceByType($entityType);
 
-        return $entityService->getAvailableEntityIdentifiersForUser($this->contentObjectPublication, $currentUser);
+        return $entityService->getPluralEntityName();
+    }
+
+    /**
+     *
+     * @return \Chamilo\Core\Repository\ContentObject\Assignment\Display\Bridge\Storage\DataClass\Feedback
+     */
+    public function initializeFeedback()
+    {
+        return $this->assignmentService->initializeFeedback();
+    }
+
+    /**
+     * @inheritdoc
+     */
+    public function initializeScore()
+    {
+        return $this->assignmentService->initializeScore();
+    }
+
+    /**
+     * @param \Chamilo\Core\Repository\ContentObject\Assignment\Display\Bridge\Storage\DataClass\Entry $entry
+     * @param \Chamilo\Core\Repository\Storage\DataClass\ContentObject $contentObject
+     *
+     * @return bool
+     */
+    public function isContentObjectAttachedToEntry(Entry $entry, ContentObject $contentObject)
+    {
+        return $this->assignmentService->isContentObjectAttachedToEntry($entry, $contentObject);
+    }
+
+    /**
+     *
+     * @param int $date
+     *
+     * @return bool
+     */
+    public function isDateAfterAssignmentEndTime($date)
+    {
+        return false;
+    }
+
+    /**
+     * @return bool
+     */
+    public function isEphorusEnabled()
+    {
+        return $this->ephorusEnabled;
     }
 
     /**
@@ -315,183 +685,6 @@ class AssignmentDataProvider
         $entityService = $this->entityServiceManager->getEntityServiceByType($this->getCurrentEntityType());
 
         return $entityService->isUserPartOfEntity($user, $this->contentObjectPublication, $entityId);
-    }
-
-    /**
-     *
-     * @param integer $date
-     *
-     * @return boolean
-     */
-    public function isDateAfterAssignmentEndTime($date)
-    {
-        return false;
-    }
-
-    /**
-     *
-     * @param integer $entityType
-     * @param integer $entityId
-     *
-     * @return int
-     */
-    public function countFeedbackByEntityTypeAndEntityId($entityType, $entityId)
-    {
-        return $this->assignmentService->countFeedbackForContentObjectPublicationByEntityTypeAndEntityId(
-            $this->contentObjectPublication, $entityType, $entityId
-        );
-    }
-
-    /**
-     *
-     * @return boolean
-     */
-    public function canEditAssignment()
-    {
-        return $this->canEditAssignment;
-    }
-
-    /**
-     *
-     * @param integer $entityType
-     * @param integer $entityId
-     * @param integer $userId
-     * @param integer $contentObjectId
-     * @param string $ipAdress
-     *
-     * @return \Chamilo\Core\Repository\ContentObject\Assignment\Display\Bridge\Storage\DataClass\Entry
-     *
-     * @throws \Doctrine\ORM\ORMException
-     * @throws \Doctrine\ORM\OptimisticLockException
-     */
-    public function createEntry($entityType, $entityId, $userId, $contentObjectId, $ipAdress)
-    {
-        $entry = $this->assignmentService->createEntry(
-            $this->contentObjectPublication, $entityType, $entityId, $userId,
-            $contentObjectId, $ipAdress
-        );
-
-        if($entry instanceof Entry)
-        {
-            $job = new Job();
-            $job->setProcessorClass(EntryNotificationJobProcessor::class)
-                ->setParameter(EntryNotificationJobProcessor::PARAM_ENTRY_ID, $entry->getId());
-
-            $this->jobProducer->produceJob($job, 'notifications');
-        }
-
-        return $entry;
-    }
-
-    /**
-     * @param \Chamilo\Core\Repository\ContentObject\Assignment\Display\Bridge\Storage\DataClass\Entry $entry
-     */
-    public function deleteEntry(Entry $entry)
-    {
-        $this->assignmentService->deleteEntry($entry);
-    }
-
-    /**
-     *
-     * @param integer $entityType
-     * @param integer $entityId
-     *
-     * @return integer
-     */
-    public function countEntriesForEntityTypeAndId($entityType, $entityId)
-    {
-        return $this->assignmentService->countEntriesForContentObjectPublicationEntityTypeAndId(
-            $this->contentObjectPublication, $entityType, $entityId
-        );
-    }
-
-    /**
-     *
-     * @param integer $entityType
-     * @param integer $entityId
-     *
-     * @return integer
-     */
-    public function countDistinctFeedbackForEntityTypeAndId($entityType, $entityId)
-    {
-        return $this->assignmentService->countDistinctFeedbackForContentObjectPublicationEntityTypeAndId(
-            $this->contentObjectPublication, $entityType, $entityId
-        );
-    }
-
-    /**
-     *
-     * @param integer $entityType
-     * @param integer $entityId
-     *
-     * @return integer
-     */
-    public function countDistinctScoreForEntityTypeAndId($entityType, $entityId)
-    {
-        return $this->assignmentService->countDistinctFeedbackForContentObjectPublicationEntityTypeAndId(
-            $this->contentObjectPublication, $entityType, $entityId
-        );
-    }
-
-    /**
-     *
-     * @param integer $entityType
-     * @param integer $entityId
-     *
-     * @return integer
-     */
-    public function getAverageScoreForEntityTypeAndId($entityType, $entityId)
-    {
-        return $this->assignmentService->getAverageScoreForContentObjectPublicationEntityTypeAndId(
-            $this->contentObjectPublication, $entityType, $entityId
-        );
-    }
-
-    /**
-     *
-     * @param integer $entityType
-     * @param integer $entityId
-     *
-     * @return integer
-     */
-    public function getLastScoreForEntityTypeAndId($entityType, $entityId)
-    {
-        return $this->assignmentService->getLastScoreForContentObjectPublicationEntityTypeAndId(
-            $this->contentObjectPublication, $entityType, $entityId
-        );
-    }
-
-    /**
-     *
-     * @param integer $entryIdentifier
-     *
-     * @return integer
-     */
-    public function countFeedbackByEntryIdentifier($entryIdentifier)
-    {
-        return $this->assignmentService->countFeedbackByEntryIdentifier($entryIdentifier);
-    }
-
-    /**
-     *
-     * @param integer $entryIdentifier
-     *
-     * @return \Chamilo\Core\Repository\ContentObject\Assignment\Display\Bridge\Storage\DataClass\Entry
-     */
-    public function findEntryByIdentifier($entryIdentifier)
-    {
-        return $this->assignmentService->findEntryByIdentifier($entryIdentifier);
-    }
-
-    /**
-     *
-     * @param integer[] $entryIdentifiers
-     *
-     * @return \Chamilo\Core\Repository\ContentObject\Assignment\Display\Bridge\Storage\DataClass\Entry[]|\Doctrine\Common\Collections\ArrayCollection
-     */
-    public function findEntriesByIdentifiers($entryIdentifiers)
-    {
-        return $this->assignmentService->findEntriesByIdentifiers($entryIdentifiers);
     }
 
     /**
@@ -521,55 +714,57 @@ class AssignmentDataProvider
     }
 
     /**
-     * @param Score $score
-     *
-     * @return Score
+     * @param \Chamilo\Application\Weblcms\Tool\Implementation\Assignment\Storage\DataClass\Publication $assignmentPublication
      */
-    public function createScore(Score $score)
+    public function setAssignmentPublication(Publication $assignmentPublication)
     {
-        return $this->assignmentService->createScore(
-            $score
-        );
-    }
-
-    /**
-     *
-     * @param \Chamilo\Core\Repository\ContentObject\Assignment\Display\Bridge\Storage\DataClass\Score $score
-     */
-    public function updateScore(Score $score)
-    {
-        $this->assignmentService->updateScore($score);
-    }
-
-    /**
-     *
-     * @param \Chamilo\Core\Repository\ContentObject\Assignment\Display\Bridge\Storage\DataClass\Entry $entry
-     * @param \Chamilo\Core\User\Storage\DataClass\User $user
-     * @param string $submittedNote
-     *
-     * @return boolean
-     */
-    public function createNote(Entry $entry, User $user, $submittedNote)
-    {
-        try
+        if (!isset($this->contentObjectPublication) ||
+            $this->contentObjectPublication->getId() != $assignmentPublication->getPublicationId())
         {
-            $this->assignmentService->createNote(
-                $entry, $user, $submittedNote
+            throw new RuntimeException(
+                'The given assignment publication does not belong to the given content object publication'
             );
         }
-        catch (Exception $ex)
+
+        $this->assignmentPublication = $assignmentPublication;
+    }
+
+    /**
+     * @param bool $canEditAssignment
+     */
+    public function setCanEditAssignment($canEditAssignment = true)
+    {
+        $this->canEditAssignment = $canEditAssignment;
+    }
+
+    /**
+     * @param ContentObjectPublication $contentObjectPublication
+     */
+    public function setContentObjectPublication(ContentObjectPublication $contentObjectPublication)
+    {
+        if (!$contentObjectPublication->getContentObject() instanceof Assignment)
         {
-            return false;
+            throw new RuntimeException(
+                'The given treenode does not reference a valid assignment and should not be used'
+            );
         }
 
-        return true;
+        $this->contentObjectPublication = $contentObjectPublication;
+    }
+
+    /**
+     * @param bool $ephorusEnabled
+     */
+    public function setEphorusEnabled($ephorusEnabled = true)
+    {
+        $this->ephorusEnabled = $ephorusEnabled;
     }
 
     /**
      *
      * @param \Chamilo\Core\Repository\ContentObject\Assignment\Display\Bridge\Storage\DataClass\Note $note
      *
-     * @return boolean
+     * @return bool
      */
     public function updateNote(Note $note)
     {
@@ -587,204 +782,10 @@ class AssignmentDataProvider
 
     /**
      *
-     * @param \Chamilo\Core\Repository\ContentObject\Assignment\Display\Bridge\Storage\DataClass\Entry $entry
-     *
-     * @return \Chamilo\Core\Repository\ContentObject\Assignment\Display\Bridge\Storage\DataClass\Score
+     * @param \Chamilo\Core\Repository\ContentObject\Assignment\Display\Bridge\Storage\DataClass\Score $score
      */
-    public function findScoreByEntry(Entry $entry)
+    public function updateScore(Score $score)
     {
-        return $this->assignmentService->findScoreByEntry($entry);
-    }
-
-    /**
-     *
-     * @param \Chamilo\Core\Repository\ContentObject\Assignment\Display\Bridge\Storage\DataClass\Entry $entry
-     *
-     * @return \Chamilo\Core\Repository\ContentObject\Assignment\Display\Bridge\Storage\DataClass\Note
-     */
-    public function findNoteByEntry(Entry $entry)
-    {
-        return $this->assignmentService->findNoteByEntry($entry);
-    }
-
-    /**
-     * @inheritdoc
-     */
-    public function initializeScore()
-    {
-        return $this->assignmentService->initializeScore();
-    }
-
-    /**
-     *
-     * @return \Chamilo\Core\Repository\ContentObject\Assignment\Display\Bridge\Storage\DataClass\Feedback
-     */
-    public function initializeFeedback()
-    {
-        return $this->assignmentService->initializeFeedback();
-    }
-
-    /**
-     *
-     * @param integer $feedbackIdentifier
-     *
-     * @return \Chamilo\Core\Repository\ContentObject\Assignment\Display\Bridge\Storage\DataClass\Feedback
-     */
-    public function findFeedbackByIdentifier($feedbackIdentifier)
-    {
-        return $this->assignmentService->findFeedbackByIdentifier($feedbackIdentifier);
-    }
-
-    /**
-     *
-     * @param \Chamilo\Core\Repository\ContentObject\Assignment\Display\Bridge\Storage\DataClass\Entry $entry
-     *
-     * @return integer
-     */
-    public function countFeedbackByEntry(Entry $entry)
-    {
-        return $this->assignmentService->countFeedbackByEntry($entry);
-    }
-
-    /**
-     *
-     * @param \Chamilo\Core\Repository\ContentObject\Assignment\Display\Bridge\Storage\DataClass\Entry $entry
-     *
-     * @return \Doctrine\Common\Collections\ArrayCollection
-     */
-    public function findFeedbackByEntry(Entry $entry)
-    {
-        return $this->assignmentService->findFeedbackByEntry($entry);
-    }
-
-    /**
-     *
-     * @param integer $entityType
-     * @param integer[] $entityIdentifiers
-     *
-     * @return \Chamilo\Core\Repository\ContentObject\Assignment\Display\Bridge\Storage\DataClass\Entry[]|\Doctrine\Common\Collections\ArrayCollection
-     */
-    public function findEntriesByEntityTypeAndIdentifiers($entityType, $entityIdentifiers)
-    {
-        return $this->assignmentService->findEntriesByContentObjectPublicationEntityTypeAndIdentifiers(
-            $this->contentObjectPublication, $entityType, $entityIdentifiers
-        );
-    }
-
-    /**
-     *
-     * @return \Chamilo\Core\Repository\ContentObject\Assignment\Display\Bridge\Storage\DataClass\Entry[]|\Doctrine\Common\Collections\ArrayCollection
-     */
-    public function findEntries()
-    {
-        return $this->assignmentService->findEntriesByContentObjectPublication($this->contentObjectPublication);
-    }
-
-    /**
-     * @param int $entityType
-     * @param int $entityIdentifier
-     *
-     * @return Entry
-     */
-    public function findLastEntryForEntity($entityType, $entityIdentifier)
-    {
-        return $this->assignmentService->findLastEntryForEntityByContentObjectPublication(
-            $this->contentObjectPublication, $entityType, $entityIdentifier
-        );
-    }
-
-    /**
-     * @param \Chamilo\Core\Repository\ContentObject\Assignment\Display\Bridge\Storage\DataClass\Entry $entry
-     * @param \Chamilo\Core\Repository\Storage\DataClass\ContentObject $contentObject
-     *
-     * @return \Chamilo\Core\Repository\ContentObject\Assignment\Display\Bridge\Storage\DataClass\EntryAttachment
-     */
-    public function attachContentObjectToEntry(Entry $entry, ContentObject $contentObject)
-    {
-        return $this->assignmentService->attachContentObjectToEntry($entry, $contentObject);
-    }
-
-    /**
-     * @param \Chamilo\Core\Repository\ContentObject\Assignment\Display\Bridge\Storage\DataClass\EntryAttachment $entryAttachment
-     */
-    public function deleteEntryAttachment(EntryAttachment $entryAttachment)
-    {
-        $this->assignmentService->deleteEntryAttachment($entryAttachment);
-    }
-
-    /**
-     * @param int $entryAttachmentId
-     *
-     * @return EntryAttachment
-     */
-    public function findEntryAttachmentById($entryAttachmentId)
-    {
-        return $this->assignmentService->findEntryAttachmentById($entryAttachmentId);
-    }
-
-    /**
-     * @param \Chamilo\Core\Repository\ContentObject\Assignment\Display\Bridge\Storage\DataClass\Entry $entry
-     *
-     * @return EntryAttachment[]
-     */
-    public function findAttachmentsByEntry(Entry $entry)
-    {
-        return $this->assignmentService->findAttachmentsByEntry($entry);
-    }
-
-    /**
-     * @param \Chamilo\Core\Repository\ContentObject\Assignment\Display\Bridge\Storage\DataClass\Entry $entry
-     * @param \Chamilo\Core\Repository\Storage\DataClass\ContentObject $contentObject
-     *
-     * @return bool
-     */
-    public function isContentObjectAttachedToEntry(Entry $entry, ContentObject $contentObject)
-    {
-        return $this->assignmentService->isContentObjectAttachedToEntry($entry, $contentObject);
-    }
-
-    /**
-     * @param \Chamilo\Libraries\Storage\Query\Condition\Condition $condition
-     *
-     * @return int
-     */
-    public function countAssignmentEntriesWithEphorusRequests(Condition $condition = null)
-    {
-        return $this->assignmentService->countAssignmentEntriesWithEphorusRequestsByContentObjectPublication(
-            $this->contentObjectPublication, $condition
-        );
-    }
-
-    /**
-     * @param \Chamilo\Libraries\Storage\Parameters\RecordRetrievesParameters $recordRetrievesParameters
-     *
-     * @return \Doctrine\Common\Collections\ArrayCollection
-     */
-    public function findAssignmentEntriesWithEphorusRequests(RecordRetrievesParameters $recordRetrievesParameters = null
-    )
-    {
-        return $this->assignmentService->findAssignmentEntriesWithEphorusRequestsByContentObjectPublication(
-            $this->contentObjectPublication, $recordRetrievesParameters
-        );
-    }
-
-    /**
-     * @param int[] $entryIds
-     *
-     * @return Request[]
-     */
-    public function findEphorusRequestsForAssignmentEntries(array $entryIds = [])
-    {
-        return $this->assignmentService->findEphorusRequestsForAssignmentEntriesByContentObjectPublication(
-            $this->contentObjectPublication, $entryIds
-        );
-    }
-
-    /**
-     * @return bool
-     */
-    public function isEphorusEnabled()
-    {
-        return $this->ephorusEnabled;
+        $this->assignmentService->updateScore($score);
     }
 }

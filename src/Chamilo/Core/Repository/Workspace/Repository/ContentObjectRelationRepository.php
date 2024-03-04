@@ -8,9 +8,8 @@ use Chamilo\Libraries\Storage\DataClass\DataClass;
 use Chamilo\Libraries\Storage\DataManager\Repository\DataClassRepository;
 use Chamilo\Libraries\Storage\Parameters\DataClassCountParameters;
 use Chamilo\Libraries\Storage\Parameters\DataClassDistinctParameters;
-use Chamilo\Libraries\Storage\Parameters\DataClassRetrieveParameters;
-use Chamilo\Libraries\Storage\Parameters\DataClassRetrievesParameters;
-use Chamilo\Libraries\Storage\Parameters\RecordRetrievesParameters;
+use Chamilo\Libraries\Storage\Parameters\RetrieveParameters;
+use Chamilo\Libraries\Storage\Parameters\RetrievesParameters;
 use Chamilo\Libraries\Storage\Query\Condition\AndCondition;
 use Chamilo\Libraries\Storage\Query\Condition\EqualityCondition;
 use Chamilo\Libraries\Storage\Query\Join;
@@ -81,9 +80,6 @@ class ContentObjectRelationRepository
         );
     }
 
-    /**
-     * @throws \Chamilo\Libraries\Storage\Exception\DataClassNoResultException
-     */
     public function createContentObjectRelation(WorkspaceContentObjectRelation $contentObjectRelation): bool
     {
         return $this->getDataClassRepository()->create($contentObjectRelation);
@@ -115,7 +111,7 @@ class ContentObjectRelationRepository
         $relationCondition = new AndCondition($relationConditions);
 
         return $this->getDataClassRepository()->retrieve(
-            WorkspaceContentObjectRelation::class, new DataClassRetrieveParameters($relationCondition)
+            WorkspaceContentObjectRelation::class, new RetrieveParameters($relationCondition)
         );
     }
 
@@ -123,7 +119,6 @@ class ContentObjectRelationRepository
      * @param \Chamilo\Core\Repository\Storage\DataClass\ContentObject $contentObject
      *
      * @return \Doctrine\Common\Collections\ArrayCollection<\Chamilo\Core\Repository\Workspace\Storage\DataClass\WorkspaceContentObjectRelation>
-     * @throws \Chamilo\Libraries\Storage\Exception\DataClassNoResultException
      */
     public function findContentObjectRelationsForContentObject(ContentObject $contentObject): ArrayCollection
     {
@@ -134,7 +129,6 @@ class ContentObjectRelationRepository
      * @param string $contentObjectId
      *
      * @return \Doctrine\Common\Collections\ArrayCollection<\Chamilo\Core\Repository\Workspace\Storage\DataClass\WorkspaceContentObjectRelation>
-     * @throws \Chamilo\Libraries\Storage\Exception\DataClassNoResultException
      */
     public function findContentObjectRelationsForContentObjectById(string $contentObjectId): ArrayCollection
     {
@@ -149,13 +143,10 @@ class ContentObjectRelationRepository
         $relationCondition = new AndCondition($relationConditions);
 
         return $this->getDataClassRepository()->retrieves(
-            WorkspaceContentObjectRelation::class, new DataClassRetrievesParameters($relationCondition)
+            WorkspaceContentObjectRelation::class, new RetrievesParameters($relationCondition)
         );
     }
 
-    /**
-     * @throws \Chamilo\Libraries\Storage\Exception\DataClassNoResultException
-     */
     public function findWorkspaceAndRelationForContentObjectIdentifier(
         string $contentObjectNumber, ?int $limit = null, ?int $count = null, ?OrderBy $orderBy = null
     ): ArrayCollection
@@ -192,8 +183,10 @@ class ContentObjectRelationRepository
         );
 
         return $this->getDataClassRepository()->records(
-            Workspace::class,
-            new RecordRetrievesParameters($retrieveProperties, $condition, $count, $limit, $orderBy, new Joins([$join]))
+            Workspace::class, new RetrievesParameters(
+                condition: $condition, count: $count, offset: $limit, orderBy: $orderBy, joins: new Joins([$join]),
+                retrieveProperties: $retrieveProperties
+            )
         );
     }
 
@@ -228,9 +221,6 @@ class ContentObjectRelationRepository
         return $this->dataClassRepository;
     }
 
-    /**
-     * @throws \Chamilo\Libraries\Storage\Exception\DataClassNoResultException
-     */
     public function updateContentObjectRelation(WorkspaceContentObjectRelation $contentObjectRelation): bool
     {
         return $this->getDataClassRepository()->update($contentObjectRelation);

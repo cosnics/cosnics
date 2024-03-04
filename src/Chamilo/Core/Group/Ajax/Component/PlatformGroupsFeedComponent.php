@@ -58,9 +58,6 @@ class PlatformGroupsFeedComponent extends GroupsFeedComponent
         return substr($filter, static::FILTER_PREFIX_LENGTH);
     }
 
-    /**
-     * @throws \Chamilo\Libraries\Storage\Exception\DataClassNoResultException
-     */
     public function get_group_element(Group $group): AdvancedElementFinderElement
     {
         $description = strip_tags(
@@ -103,7 +100,6 @@ class PlatformGroupsFeedComponent extends GroupsFeedComponent
 
     /**
      * @return \Doctrine\Common\Collections\ArrayCollection<\Chamilo\Core\Group\Storage\DataClass\Group>
-     * @throws \Chamilo\Libraries\Storage\Exception\DataClassNoResultException
      */
     public function retrieve_groups(): ArrayCollection
     {

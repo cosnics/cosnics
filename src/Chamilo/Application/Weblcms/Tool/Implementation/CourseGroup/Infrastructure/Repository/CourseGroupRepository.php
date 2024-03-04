@@ -7,8 +7,8 @@ use Chamilo\Application\Weblcms\Tool\Implementation\CourseGroup\Storage\DataClas
 use Chamilo\Core\Repository\ContentObject\LearningPath\Storage\Repository\CommonDataClassRepository;
 use Chamilo\Core\User\Storage\DataClass\User;
 use Chamilo\Libraries\Storage\Parameters\DataClassCountParameters;
-use Chamilo\Libraries\Storage\Parameters\DataClassRetrieveParameters;
-use Chamilo\Libraries\Storage\Parameters\DataClassRetrievesParameters;
+use Chamilo\Libraries\Storage\Parameters\RetrieveParameters;
+use Chamilo\Libraries\Storage\Parameters\RetrievesParameters;
 use Chamilo\Libraries\Storage\Query\Condition\AndCondition;
 use Chamilo\Libraries\Storage\Query\Condition\EqualityCondition;
 use Chamilo\Libraries\Storage\Query\Condition\InCondition;
@@ -84,7 +84,7 @@ class CourseGroupRepository extends CommonDataClassRepository implements CourseG
         );
 
         return $this->dataClassRepository->retrieves(
-            CourseGroupUserRelation::class, new DataClassRetrievesParameters($condition, null, null, null, $joins)
+            CourseGroupUserRelation::class, new RetrievesParameters($condition, null, null, null, $joins)
         );
     }
 
@@ -115,7 +115,7 @@ class CourseGroupRepository extends CommonDataClassRepository implements CourseG
         $condition = new AndCondition($conditions);
 
         return $this->dataClassRepository->retrieve(
-            CourseGroupUserRelation::class, new DataClassRetrieveParameters($condition)
+            CourseGroupUserRelation::class, new RetrieveParameters($condition)
         );
     }
 

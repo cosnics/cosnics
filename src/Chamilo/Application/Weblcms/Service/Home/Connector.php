@@ -7,7 +7,7 @@ use Chamilo\Application\Weblcms\Storage\DataClass\CourseUserCategory;
 use Chamilo\Application\Weblcms\Storage\DataManager;
 use Chamilo\Core\User\Manager;
 use Chamilo\Libraries\DependencyInjection\DependencyInjectionContainerBuilder;
-use Chamilo\Libraries\Storage\Parameters\DataClassRetrievesParameters;
+use Chamilo\Libraries\Storage\Parameters\RetrievesParameters;
 use Chamilo\Libraries\Storage\Query\Condition\AndCondition;
 use Chamilo\Libraries\Storage\Query\Condition\EqualityCondition;
 use Chamilo\Libraries\Storage\Query\Condition\SubselectCondition;
@@ -117,7 +117,7 @@ class Connector
         );
 
         return DataManager::retrieves(
-            CourseUserCategory::class, new DataClassRetrievesParameters($condition)
+            CourseUserCategory::class, new RetrievesParameters($condition)
         );
     }
 

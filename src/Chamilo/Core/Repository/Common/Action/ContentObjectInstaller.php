@@ -18,7 +18,7 @@ use Chamilo\Libraries\Architecture\ClassnameUtilities;
 use Chamilo\Libraries\File\Properties\FileProperties;
 use Chamilo\Libraries\File\SystemPathBuilder;
 use Chamilo\Libraries\Storage\DataManager\Repository\StorageUnitRepository;
-use Chamilo\Libraries\Storage\Parameters\DataClassRetrievesParameters;
+use Chamilo\Libraries\Storage\Parameters\RetrievesParameters;
 use Chamilo\Libraries\Storage\Query\Condition\EqualityCondition;
 use Chamilo\Libraries\Storage\Query\Variable\PropertyConditionVariable;
 use Chamilo\Libraries\Storage\Query\Variable\StaticConditionVariable;
@@ -56,9 +56,6 @@ class ContentObjectInstaller extends Installer
         $this->session = $session;
     }
 
-    /**
-     * @throws \Chamilo\Libraries\Storage\Exception\DataClassNoResultException
-     */
     public function extra(array $formValues): bool
     {
         if (!$this->register_templates())
@@ -87,7 +84,6 @@ class ContentObjectInstaller extends Installer
     /**
      * Import a sample content object (if available)
      *
-     * @throws \Chamilo\Libraries\Storage\Exception\DataClassNoResultException
      * @throws \Exception
      */
     public function import_content_object(): bool
@@ -102,7 +98,7 @@ class ContentObjectInstaller extends Installer
                 new PropertyConditionVariable(User::class, User::PROPERTY_PLATFORMADMIN), new StaticConditionVariable(1)
             );
             $user = DataManager::retrieves(
-                User::class, new DataClassRetrievesParameters($condition)
+                User::class, new RetrievesParameters($condition)
             )->current();
 
             $this->getSession()->set(Manager::SESSION_USER_ID, $user->get_id());

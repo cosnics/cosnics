@@ -18,9 +18,6 @@ abstract class DataManagerRepository implements DataManagerRepositoryInterface
         return $dataClass->create();
     }
 
-    /**
-     * @throws \Chamilo\Libraries\Storage\Exception\DataClassNoResultException
-     */
     public function delete(DataClass $dataClass): bool
     {
         return $dataClass->delete();

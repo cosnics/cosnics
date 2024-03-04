@@ -19,7 +19,6 @@ class UpdateElementComponent extends Manager
 {
 
     /**
-     * @throws \Chamilo\Libraries\Storage\Exception\DataClassNoResultException
      * @throws \QuickformException
      */
     public function run()

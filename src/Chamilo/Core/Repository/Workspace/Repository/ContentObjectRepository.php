@@ -7,7 +7,7 @@ use Chamilo\Core\Repository\Storage\DataManager;
 use Chamilo\Core\Repository\Workspace\Storage\DataClass\Workspace;
 use Chamilo\Core\Repository\Workspace\Storage\DataClass\WorkspaceContentObjectRelation;
 use Chamilo\Libraries\Storage\Parameters\DataClassCountParameters;
-use Chamilo\Libraries\Storage\Parameters\DataClassRetrievesParameters;
+use Chamilo\Libraries\Storage\Parameters\RetrievesParameters;
 use Chamilo\Libraries\Storage\Query\Condition\AndCondition;
 use Chamilo\Libraries\Storage\Query\Condition\Condition;
 use Chamilo\Libraries\Storage\Query\Condition\EqualityCondition;
@@ -90,11 +90,11 @@ class ContentObjectRepository
 
     /**
      * @param $contentObjectClassName
-     * @param DataClassRetrievesParameters $parameters
+     * @param RetrievesParameters $parameters
      *
      * @return \Doctrine\Common\Collections\ArrayCollection<\Chamilo\Core\Repository\Storage\DataClass\ContentObject>
      */
-    public function findAll($contentObjectClassName, DataClassRetrievesParameters $parameters)
+    public function findAll($contentObjectClassName, RetrievesParameters $parameters)
     {
         return DataManager::retrieves($contentObjectClassName, $parameters);
     }
@@ -113,7 +113,7 @@ class ContentObjectRepository
         $offset, ?OrderBy $orderBy = null
     )
     {
-        $parameters = new DataClassRetrievesParameters(
+        $parameters = new RetrievesParameters(
             $this->getWorkspaceConditions($workspace, $filterConditionRenderer), $count, $offset, $orderBy,
             $this->getWorkspaceJoins()
         );

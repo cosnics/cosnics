@@ -5,7 +5,7 @@ use Chamilo\Libraries\Storage\DataClass\DataClass;
 use Chamilo\Libraries\Storage\DataClass\Interfaces\CompositeDataClassExtensionInterface;
 use Chamilo\Libraries\Storage\DataClass\Interfaces\DataClassDisplayOrderSupport;
 use Chamilo\Libraries\Storage\Parameters\DataClassCountParameters;
-use Chamilo\Libraries\Storage\Parameters\RecordRetrieveParameters;
+use Chamilo\Libraries\Storage\Parameters\RetrieveParameters;
 use Chamilo\Libraries\Storage\Query\Condition\AndCondition;
 use Chamilo\Libraries\Storage\Query\Condition\ComparisonCondition;
 use Chamilo\Libraries\Storage\Query\Condition\EqualityCondition;
@@ -141,7 +141,9 @@ class DisplayOrderRepository
             ), new StaticConditionVariable($dataClass->getId())
         );
 
-        $parameters = new RecordRetrieveParameters($this->getDisplayOrderDataClassProperties($dataClass), $condition);
+        $parameters = new RetrieveParameters(
+            condition: $condition, retrieveProperties: $this->getDisplayOrderDataClassProperties($dataClass)
+        );
 
         return $this->getDataClassRepository()->record($dataClassName, $parameters);
     }

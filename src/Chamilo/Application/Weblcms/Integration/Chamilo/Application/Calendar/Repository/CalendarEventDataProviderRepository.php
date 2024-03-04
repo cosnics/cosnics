@@ -3,7 +3,7 @@ namespace Chamilo\Application\Weblcms\Integration\Chamilo\Application\Calendar\R
 
 use Chamilo\Application\Weblcms\Storage\DataClass\ContentObjectPublication;
 use Chamilo\Core\Repository\Publication\Storage\Repository\PublicationRepository;
-use Chamilo\Libraries\Storage\Parameters\RecordRetrievesParameters;
+use Chamilo\Libraries\Storage\Parameters\RetrievesParameters;
 use Chamilo\Libraries\Storage\Query\Condition\AndCondition;
 use Chamilo\Libraries\Storage\Query\Condition\Condition;
 use Chamilo\Libraries\Storage\Query\Condition\EqualityCondition;
@@ -13,7 +13,7 @@ use Chamilo\Libraries\Storage\Query\Variable\StaticConditionVariable;
 
 /**
  * Repository to retrieve calendar events for the assignment tool based on the due date of assignments
- * 
+ *
  * @author Sven Vanpoucke - Hogeschool Gent
  */
 abstract class CalendarEventDataProviderRepository
@@ -27,7 +27,7 @@ abstract class CalendarEventDataProviderRepository
 
     /**
      * CalendarEventDataProviderRepository constructor.
-     * 
+     *
      * @param PublicationRepository $publicationRepository
      */
     public function __construct(PublicationRepository $publicationRepository)
@@ -36,27 +36,32 @@ abstract class CalendarEventDataProviderRepository
     }
 
     /**
+     *
+     * @return string
+     */
+    abstract protected function getContentObjectClassName();
+
+    /**
      * Retrieves the valid publications for the user
-     * 
+     *
      * @param Course[]   $courses
      * @param int $fromDate
      * @param int $toDate
      *
      * @return ContentObjectPublication[]
      */
-    function getPublications($fromDate, $toDate, $courses = [])
+    public function getPublications($fromDate, $toDate, $courses = [])
     {
-        $parameters = new RecordRetrievesParameters(null, $this->getPublicationsCondition($fromDate, $toDate, $courses));
-        
+        $parameters = new RetrievesParameters(condition: $this->getPublicationsCondition($fromDate, $toDate, $courses));
+
         return $this->publicationRepository->getPublicationsWithContentObjects(
-            $parameters, 
-            ContentObjectPublication::class,
-            $this->getContentObjectClassName());
+            $parameters, ContentObjectPublication::class, $this->getContentObjectClassName()
+        );
     }
 
     /**
      * Retrieves the conditions to retrieve the publications
-     * 
+     *
      * @param Course[]   $courses
      * @param int $fromDate
      * @param int $toDate
@@ -70,37 +75,25 @@ abstract class CalendarEventDataProviderRepository
         {
             $courseIds[] = $course->getId();
         }
-        
+
         $conditions = [];
-        
+
         $conditions[] = new InCondition(
             new PropertyConditionVariable(
-                ContentObjectPublication::class,
-                ContentObjectPublication::PROPERTY_COURSE_ID), 
-            $courseIds);
-        
+                ContentObjectPublication::class, ContentObjectPublication::PROPERTY_COURSE_ID
+            ), $courseIds
+        );
+
         $conditions[] = new EqualityCondition(
             new PropertyConditionVariable(
-                ContentObjectPublication::class,
-                ContentObjectPublication::PROPERTY_TOOL), 
-            new StaticConditionVariable($this->getToolName()));
-        
+                ContentObjectPublication::class, ContentObjectPublication::PROPERTY_TOOL
+            ), new StaticConditionVariable($this->getToolName())
+        );
+
         $conditions[] = $this->getSpecificContentObjectConditions($fromDate, $toDate);
-        
+
         return new AndCondition($conditions);
     }
-
-    /**
-     *
-     * @return string
-     */
-    abstract protected function getToolName();
-
-    /**
-     *
-     * @return string
-     */
-    abstract protected function getContentObjectClassName();
 
     /**
      *
@@ -110,4 +103,10 @@ abstract class CalendarEventDataProviderRepository
      * @return Condition
      */
     abstract protected function getSpecificContentObjectConditions($fromDate, $toDate);
+
+    /**
+     *
+     * @return string
+     */
+    abstract protected function getToolName();
 }

@@ -7,8 +7,8 @@ use Chamilo\Core\Metadata\Storage\DataClass\Schema;
 use Chamilo\Core\Metadata\Storage\DataClass\SchemaInstance;
 use Chamilo\Core\Metadata\Storage\DataClass\Vocabulary;
 use Chamilo\Libraries\Storage\DataManager\DataManager;
-use Chamilo\Libraries\Storage\Parameters\DataClassRetrieveParameters;
-use Chamilo\Libraries\Storage\Parameters\DataClassRetrievesParameters;
+use Chamilo\Libraries\Storage\Parameters\RetrieveParameters;
+use Chamilo\Libraries\Storage\Parameters\RetrievesParameters;
 use Chamilo\Libraries\Storage\Query\Condition\AndCondition;
 use Chamilo\Libraries\Storage\Query\Condition\ComparisonCondition;
 use Chamilo\Libraries\Storage\Query\Join;
@@ -52,7 +52,7 @@ class ElementService
 
         $condition = new AndCondition($conditions);
 
-        return DataManager::retrieve(Element::class, new DataClassRetrieveParameters($condition));
+        return DataManager::retrieve(Element::class, new RetrieveParameters($condition));
     }
 
     /**
@@ -90,7 +90,7 @@ class ElementService
     public function getElementInstanceForSchemaInstanceAndElement(SchemaInstance $schemaInstance, Element $element)
     {
         return DataManager::retrieve(
-            ElementInstance::class, new DataClassRetrieveParameters(
+            ElementInstance::class, new RetrieveParameters(
                 $this->getElementInstanceConditionForSchemaInstanceAndElement($schemaInstance, $element)
             )
         );
@@ -121,7 +121,7 @@ class ElementService
         );
 
         return DataManager::retrieves(
-            Vocabulary::class, new DataClassRetrievesParameters(
+            Vocabulary::class, new RetrievesParameters(
                 condition: $this->getElementInstanceConditionForSchemaInstanceAndElement($schemaInstance, $element),
                 joins: $join
             )
@@ -152,7 +152,7 @@ class ElementService
         );
 
         return DataManager::retrieve(
-            Vocabulary::class, new DataClassRetrieveParameters(
+            Vocabulary::class, new RetrieveParameters(
                 $this->getElementInstanceConditionForSchemaInstanceAndElement($schemaInstance, $element), null, $join
             )
         );
@@ -169,7 +169,7 @@ class ElementService
     public function getElementInstancesForSchemaInstanceAndElement(SchemaInstance $schemaInstance, Element $element)
     {
         return DataManager::retrieves(
-            ElementInstance::class, new DataClassRetrievesParameters(
+            ElementInstance::class, new RetrievesParameters(
                 $this->getElementInstanceConditionForSchemaInstanceAndElement($schemaInstance, $element)
             )
         );
@@ -190,7 +190,7 @@ class ElementService
         );
 
         return DataManager::retrieves(
-            Element::class, new DataClassRetrievesParameters(
+            Element::class, new RetrievesParameters(
                 condition: $condition, orderBy: new OrderBy([
                 new OrderProperty(
                     new PropertyConditionVariable(Element::class, Element::PROPERTY_DISPLAY_ORDER)

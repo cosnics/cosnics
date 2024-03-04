@@ -20,7 +20,7 @@ use Chamilo\Core\Repository\Storage\DataClass\ContentObject;
 use Chamilo\Core\User\Service\UserService;
 use Chamilo\Core\User\Storage\DataClass\User;
 use Chamilo\Libraries\Format\Form\FormValidator;
-use Chamilo\Libraries\Storage\Parameters\DataClassRetrievesParameters;
+use Chamilo\Libraries\Storage\Parameters\RetrievesParameters;
 use Chamilo\Libraries\Storage\Query\Condition\Condition;
 use Chamilo\Libraries\Storage\Query\Condition\InCondition;
 use Chamilo\Libraries\Storage\Query\Condition\NotCondition;
@@ -78,7 +78,6 @@ class PublicationAggregator implements PublicationAggregatorInterface
     }
 
     /**
-     * @throws \Chamilo\Libraries\Storage\Exception\DataClassNoResultException
      * @throws \Psr\SimpleCache\InvalidArgumentException
      * @throws \Exception
      */
@@ -122,7 +121,7 @@ class PublicationAggregator implements PublicationAggregatorInterface
         $course_settings_controller = CourseSettingsController::getInstance();
         $course_management_rights = CourseManagementRights::getInstance();
 
-        $tools = DataManager::retrieves(CourseTool::class, new DataClassRetrievesParameters());
+        $tools = DataManager::retrieves(CourseTool::class, new RetrievesParameters());
 
         $toolNames = [];
         $types = [];

@@ -8,8 +8,8 @@ use Chamilo\Libraries\Storage\DataClass\DataClass;
 use Chamilo\Libraries\Storage\DataManager\Repository\DataClassRepository;
 use Chamilo\Libraries\Storage\Parameters\DataClassCountParameters;
 use Chamilo\Libraries\Storage\Parameters\DataClassDistinctParameters;
-use Chamilo\Libraries\Storage\Parameters\DataClassRetrieveParameters;
-use Chamilo\Libraries\Storage\Parameters\DataClassRetrievesParameters;
+use Chamilo\Libraries\Storage\Parameters\RetrieveParameters;
+use Chamilo\Libraries\Storage\Parameters\RetrievesParameters;
 use Chamilo\Libraries\Storage\Query\Condition\AndCondition;
 use Chamilo\Libraries\Storage\Query\Condition\Condition;
 use Chamilo\Libraries\Storage\Query\Condition\EqualityCondition;
@@ -113,7 +113,7 @@ class GroupMembershipRepository
         $condition = new AndCondition($conditions);
 
         return $this->getDataClassRepository()->retrieve(
-            GroupRelUser::class, new DataClassRetrieveParameters($condition, null)
+            GroupRelUser::class, new RetrieveParameters($condition, null)
         );
     }
 
@@ -144,7 +144,7 @@ class GroupMembershipRepository
         );
 
         return $this->getDataClassRepository()->retrieve(
-            GroupRelUser::class, new DataClassRetrieveParameters($condition, null, $joins)
+            GroupRelUser::class, new RetrieveParameters($condition, null, $joins)
         );
     }
 
@@ -170,7 +170,7 @@ class GroupMembershipRepository
         $condition = new AndCondition($conditions);
 
         return $this->getDataClassRepository()->retrieve(
-            GroupRelUser::class, new DataClassRetrieveParameters($condition)
+            GroupRelUser::class, new RetrieveParameters($condition)
         );
     }
 
@@ -202,9 +202,6 @@ class GroupMembershipRepository
         return $this->getDataClassRepository()->distinct(GroupRelUser::class, $parameters);
     }
 
-    /**
-     * @throws \Chamilo\Libraries\Storage\Exception\DataClassNoResultException
-     */
     public function findSubscribedUsersForGroupIdentifiers(
         array $groupIdentifiers, ?Condition $condition = null, ?int $offset = null, ?int $count = null,
         ?OrderBy $orderBy = null
@@ -247,7 +244,7 @@ class GroupMembershipRepository
         );
 
         return $this->getDataClassRepository()->retrieves(
-            SubscribedUser::class, new DataClassRetrievesParameters(
+            SubscribedUser::class, new RetrievesParameters(
                 condition: $condition, count: $count, offset: $offset, orderBy: $orderBy, joins: $joins,
                 retrieveProperties: $retrieveProperties
             )
@@ -263,7 +260,6 @@ class GroupMembershipRepository
      * @param string $groupIdentifier
      *
      * @return \Doctrine\Common\Collections\ArrayCollection<\Chamilo\Core\Group\Storage\DataClass\GroupRelUser>
-     * @throws \Chamilo\Libraries\Storage\Exception\DataClassNoResultException
      */
     public function getGroupUserRelationsByGroupIdentifier(string $groupIdentifier): ArrayCollection
     {
@@ -273,7 +269,7 @@ class GroupMembershipRepository
         );
 
         return $this->getDataClassRepository()->retrieves(
-            GroupRelUser::class, new DataClassRetrievesParameters($condition)
+            GroupRelUser::class, new RetrievesParameters($condition)
         );
     }
 

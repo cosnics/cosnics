@@ -98,9 +98,6 @@ class PublicationAggregator implements PublicationAggregatorInterface
         );
     }
 
-    /**
-     * @throws \Chamilo\Libraries\Storage\Exception\DataClassNoResultException
-     */
     public function deleteContentObjectPublications(ContentObject $contentObject): bool
     {
         return $this->getPublicationService()->deletePublicationsForContentObject($contentObject);
@@ -115,7 +112,6 @@ class PublicationAggregator implements PublicationAggregatorInterface
      * @param ?\Chamilo\Libraries\Storage\Query\OrderBy $orderBy
      *
      * @return \Doctrine\Common\Collections\ArrayCollection<\Chamilo\Core\Repository\Publication\Storage\DataClass\Attributes>
-     * @throws \Chamilo\Libraries\Storage\Exception\DataClassNoResultException
      */
     public function getContentObjectPublicationsAttributes(
         int $type, string $objectIdentifier, ?Condition $condition = null, ?int $count = null, ?int $offset = null,

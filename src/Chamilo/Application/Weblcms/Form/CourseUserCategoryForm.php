@@ -11,7 +11,7 @@ use Chamilo\Libraries\Format\Form\Element\AdvancedElementFinder\AdvancedElementF
 use Chamilo\Libraries\Format\Form\Element\AdvancedElementFinder\AdvancedElementFinderElementTypes;
 use Chamilo\Libraries\Format\Form\FormValidator;
 use Chamilo\Libraries\Format\Structure\Glyph\FontAwesomeGlyph;
-use Chamilo\Libraries\Storage\Parameters\DataClassRetrievesParameters;
+use Chamilo\Libraries\Storage\Parameters\RetrievesParameters;
 use Chamilo\Libraries\Storage\Query\Condition\EqualityCondition;
 use Chamilo\Libraries\Storage\Query\Variable\PropertyConditionVariable;
 use Chamilo\Libraries\Storage\Query\Variable\StaticConditionVariable;
@@ -209,7 +209,7 @@ class CourseUserCategoryForm extends FormValidator
             );
 
             $courseTypeUserCategories = DataManager::retrieves(
-                CourseTypeUserCategory::class, new DataClassRetrievesParameters($condition)
+                CourseTypeUserCategory::class, new RetrievesParameters($condition)
             );
 
             $defaultCourseTypes = new AdvancedElementFinderElements();
@@ -255,7 +255,7 @@ class CourseUserCategoryForm extends FormValidator
         );
 
         $existing_types = DataManager::retrieves(
-            CourseTypeUserCategory::class, new DataClassRetrievesParameters($condition)
+            CourseTypeUserCategory::class, new RetrievesParameters($condition)
         );
 
         if ($existing_types)

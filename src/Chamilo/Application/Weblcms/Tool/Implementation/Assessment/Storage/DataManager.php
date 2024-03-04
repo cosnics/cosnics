@@ -7,7 +7,7 @@ use Chamilo\Application\Weblcms\Storage\DataClass\ContentObjectPublication;
 use Chamilo\Core\Repository\Storage\DataClass\ComplexContentObjectItem;
 use Chamilo\Core\Repository\Storage\DataClass\ContentObject;
 use Chamilo\Core\User\Storage\DataClass\User;
-use Chamilo\Libraries\Storage\Parameters\RecordRetrievesParameters;
+use Chamilo\Libraries\Storage\Parameters\RetrievesParameters;
 use Chamilo\Libraries\Storage\Query\Condition\EqualityCondition;
 use Chamilo\Libraries\Storage\Query\Join;
 use Chamilo\Libraries\Storage\Query\Joins;
@@ -22,7 +22,7 @@ use Chamilo\Libraries\Storage\Query\Variable\PropertyConditionVariable;
  */
 class DataManager extends \Chamilo\Libraries\Storage\DataManager\DataManager
 {
-    const PREFIX = 'weblcms_assessment_';
+    public const PREFIX = 'weblcms_assessment_';
 
     /**
      * **************************************************************************************************************
@@ -35,10 +35,10 @@ class DataManager extends \Chamilo\Libraries\Storage\DataManager\DataManager
      * This method uses dynamic
      * variables and dynamic query construction. For each new table added, care must be taken. Example: Add new table
      * 'x' for class 'X'. The following constants must also be declared. $x_ref = 'x'; $x_table =
-     * {DataManager}::getInstance()->escape_table_name(X::getStorageUnitName()); //DataManager must be the appropriate data
-     * manager. $x_alias = {DataManager}::getInstance()->get_alias(X::getStorageUnitName()); //DataManager must be the
-     * appropriate data manager. Failure to declare them will break the code using dynamic variables. New columns to be
-     * added to $select. New tables to be added to $table_aliases using $x_ref. New joins to be added to
+     * {DataManager}::getInstance()->escape_table_name(X::getStorageUnitName()); //DataManager must be the appropriate
+     * data manager. $x_alias = {DataManager}::getInstance()->get_alias(X::getStorageUnitName()); //DataManager must be
+     * the appropriate data manager. Failure to declare them will break the code using dynamic variables. New columns
+     * to be added to $select. New tables to be added to $table_aliases using $x_ref. New joins to be added to
      * $join_declarations. Subselects are not catered for.
      *
      *
@@ -145,7 +145,10 @@ class DataManager extends \Chamilo\Libraries\Storage\DataManager\DataManager
             )
         );
 
-        $parameters = new RecordRetrievesParameters($properties, $condition, $max_objects, $offset, $order_by, $joins);
+        $parameters = new RetrievesParameters(
+            condition: $condition, count: $max_objects, offset: $offset, orderBy: $order_by, joins: $joins,
+            retrieveProperties: $properties
+        );
 
         return \Chamilo\Application\Weblcms\Integration\Chamilo\Core\Tracking\Storage\DataManager::records(
             QuestionAttempt::class, $parameters

@@ -8,7 +8,7 @@ use Chamilo\Application\Weblcms\Storage\DataClass\ContentObjectPublication;
 use Chamilo\Application\Weblcms\Storage\DataManager;
 use Chamilo\Core\Reporting\ReportingData;
 use Chamilo\Core\Reporting\Viewer\Rendition\Block\Type\Html;
-use Chamilo\Libraries\Storage\Parameters\DataClassRetrievesParameters;
+use Chamilo\Libraries\Storage\Parameters\RetrievesParameters;
 use Chamilo\Libraries\Storage\Query\Condition\EqualityCondition;
 use Chamilo\Libraries\Storage\Query\OrderBy;
 use Chamilo\Libraries\Storage\Query\OrderProperty;
@@ -22,7 +22,7 @@ class MostActiveInactiveLastPublicationBlock extends CourseBlock
     public function count_data()
     {
         $reporting_data = new ReportingData();
-        $courses = CourseDataManager::retrieves(Course::class, new DataClassRetrievesParameters());
+        $courses = CourseDataManager::retrieves(Course::class, new RetrievesParameters());
 
         $arr[Translation::get('Past24hr')] = 0;
         $arr[Translation::get('PastWeek')] = 0;

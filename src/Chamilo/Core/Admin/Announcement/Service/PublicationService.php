@@ -170,9 +170,6 @@ class PublicationService
         }
     }
 
-    /**
-     * @throws \Chamilo\Libraries\Storage\Exception\DataClassNoResultException
-     */
     public function deletePublicationsForContentObject(ContentObject $contentObject): bool
     {
         $publications = $this->findPublicationsForContentObjectIdentifier($contentObject->getId());
@@ -208,7 +205,6 @@ class PublicationService
      * @param ?\Chamilo\Libraries\Storage\Query\OrderBy $orderBy
      *
      * @return \Doctrine\Common\Collections\ArrayCollection<string[]>
-     * @throws \Chamilo\Libraries\Storage\Exception\DataClassNoResultException
      */
     public function findPublicationRecords(
         ?Condition $condition = null, ?int $count = null, ?int $offset = null, ?OrderBy $orderBy = null
@@ -226,7 +222,6 @@ class PublicationService
      * @param ?\Chamilo\Libraries\Storage\Query\OrderBy $orderProperties
      *
      * @return \Doctrine\Common\Collections\ArrayCollection<\Chamilo\Core\Admin\Announcement\Storage\DataClass\Publication>
-     * @throws \Chamilo\Libraries\Storage\Exception\DataClassNoResultException
      */
     public function findPublicationRecordsForTypeAndIdentifier(
         int $type, string $objectIdentifier, ?Condition $condition = null, ?int $count = null, ?int $offset = null,
@@ -250,16 +245,12 @@ class PublicationService
      * @param string $contentObjectIdentifier
      *
      * @return \Doctrine\Common\Collections\ArrayCollection<\Chamilo\Core\Admin\Announcement\Storage\DataClass\Publication>
-     * @throws \Chamilo\Libraries\Storage\Exception\DataClassNoResultException
      */
     public function findPublicationsForContentObjectIdentifier(string $contentObjectIdentifier): ArrayCollection
     {
         return $this->getPublicationRepository()->findPublicationsForContentObjectIdentifier($contentObjectIdentifier);
     }
 
-    /**
-     * @throws \Chamilo\Libraries\Storage\Exception\DataClassNoResultException
-     */
     public function findVisiblePublicationRecordsForUserIdentifier(
         string $userIdentifier, Condition $condition = null, int $count = null, int $offset = null,
         ?OrderBy $orderBy = null

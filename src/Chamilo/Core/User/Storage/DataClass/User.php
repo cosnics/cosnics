@@ -65,7 +65,6 @@ class User extends DataClass
     }
 
     /**
-     * @throws \Chamilo\Libraries\Storage\Exception\DataClassNoResultException
      * @deprecated Use UserService::deleteUser()
      */
     public function delete(): bool
@@ -241,7 +240,6 @@ class User extends DataClass
 
     /**
      * @return \Doctrine\Common\Collections\ArrayCollection<\Chamilo\Core\Group\Storage\DataClass\Group>|string[]
-     * @throws \Chamilo\Libraries\Storage\Exception\DataClassNoResultException
      * @deprecated Use GroupsTreeTraverser::findAllSubscribedGroupIdentifiersForUserIdentifier() or
      *             GroupsTreeTraverser::findAllSubscribedGroupsForUserIdentifier() based ont he value of
      *             $only_retrieve_ids
@@ -331,7 +329,6 @@ class User extends DataClass
 
     /**
      * @return \Doctrine\Common\Collections\ArrayCollection<\Chamilo\Core\Group\Storage\DataClass\Group>
-     * @throws \Chamilo\Libraries\Storage\Exception\DataClassNoResultException
      */
     public function get_user_groups(): ArrayCollection
     {

@@ -7,7 +7,7 @@ use Chamilo\Core\Repository\ContentObject\LearningPath\Storage\DataClass\Learnin
 use Chamilo\Core\Repository\ContentObject\LearningPath\Storage\Repository\TreeNodeDataRepository;
 use Chamilo\Core\Repository\Storage\DataClass\ContentObject;
 use Chamilo\Core\Repository\Workspace\Repository\ContentObjectRepository;
-use Chamilo\Libraries\Storage\Parameters\DataClassRetrievesParameters;
+use Chamilo\Libraries\Storage\Parameters\RetrievesParameters;
 use Chamilo\Libraries\Storage\Query\Condition\InCondition;
 use Chamilo\Libraries\Storage\Query\Variable\PropertyConditionVariable;
 
@@ -118,7 +118,7 @@ class TreeBuilder
 
         $contentObjects = $this->contentObjectRepository->findAll(
             ContentObject::class,
-            new DataClassRetrievesParameters(
+            new RetrievesParameters(
                 new InCondition(
                     new PropertyConditionVariable(ContentObject::class, ContentObject::PROPERTY_ID),
                     $contentObjectIds)));

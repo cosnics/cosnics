@@ -4,17 +4,17 @@ namespace Chamilo\Application\Calendar\Extension\Personal\Integration\Chamilo\Ap
 use Chamilo\Application\Calendar\Extension\Personal\Integration\Chamilo\Application\Calendar\Interfaces\PersonalCalendarEventDataProviderRepositoryInterface;
 use Chamilo\Application\Calendar\Extension\Personal\Storage\DataClass\Publication;
 use Chamilo\Core\Repository\Publication\Storage\Repository\PublicationRepository;
-use Chamilo\Libraries\Storage\Parameters\RecordRetrievesParameters;
+use Chamilo\Libraries\Storage\Parameters\RetrievesParameters;
 use Chamilo\Libraries\Storage\Query\Condition\AndCondition;
 use Chamilo\Libraries\Storage\Query\Condition\Condition;
 
 /**
  * Abstract class for the repository to provide publications for the personal calendar extension
- * 
+ *
  * @author Sven Vanpoucke - Hogeschool Gent
  */
-abstract class PersonalCalendarEventDataProviderRepository implements 
-    PersonalCalendarEventDataProviderRepositoryInterface
+abstract class PersonalCalendarEventDataProviderRepository
+    implements PersonalCalendarEventDataProviderRepositoryInterface
 {
 
     /**
@@ -25,7 +25,7 @@ abstract class PersonalCalendarEventDataProviderRepository implements
 
     /**
      * PersonalCalendarEventDataProviderRepository constructor.
-     * 
+     *
      * @param PublicationRepository $publicationRepository
      */
     public function __construct(PublicationRepository $publicationRepository)
@@ -34,54 +34,53 @@ abstract class PersonalCalendarEventDataProviderRepository implements
     }
 
     /**
-     * Returns the personal calendar publications for this specific content object type
-     * 
-     * @param RecordRetrievesParameters $parameters
-     * @param int $fromDate
-     * @param int $toDate
-     *
-     * @return Publication[]
-     */
-    public function getPublications(RecordRetrievesParameters $parameters, $fromDate, $toDate)
-    {
-        $parameters = clone $parameters;
-        
-        $condition = $this->getContentObjectCondition($fromDate, $toDate);
-        
-        if ($condition)
-        {
-            $baseCondition = $parameters->getCondition();
-            
-            if ($baseCondition instanceof Condition)
-            {
-                $parameters->setCondition(new AndCondition(array($baseCondition, $condition)));
-            }
-            else
-            {
-                $parameters->setCondition($condition);
-            }
-        }
-        
-        return $this->publicationRepository->getPublicationsWithContentObjects(
-            $parameters, 
-            Publication::class,
-            $this->getContentObjectClassName());
-    }
-
-    /**
      * Returns the class name for the content object to be joined with
-     * 
+     *
      * @return string
      */
     abstract protected function getContentObjectClassName();
 
     /**
      * Returns the condition for the content object
-     * 
+     *
      * @param int $fromDate
      * @param int $toDate
      *
      * @return Condition
      */
     abstract protected function getContentObjectCondition($fromDate, $toDate);
+
+    /**
+     * Returns the personal calendar publications for this specific content object type
+     *
+     * @param RetrievesParameters $parameters
+     * @param int $fromDate
+     * @param int $toDate
+     *
+     * @return Publication[]
+     */
+    public function getPublications(RetrievesParameters $parameters, $fromDate, $toDate)
+    {
+        $parameters = clone $parameters;
+
+        $condition = $this->getContentObjectCondition($fromDate, $toDate);
+
+        if ($condition)
+        {
+            $baseCondition = $parameters->getCondition();
+
+            if ($baseCondition instanceof Condition)
+            {
+                $parameters->setCondition(new AndCondition([$baseCondition, $condition]));
+            }
+            else
+            {
+                $parameters->setCondition($condition);
+            }
+        }
+
+        return $this->publicationRepository->getPublicationsWithContentObjects(
+            $parameters, Publication::class, $this->getContentObjectClassName()
+        );
+    }
 }

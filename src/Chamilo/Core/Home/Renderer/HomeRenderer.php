@@ -61,7 +61,6 @@ class HomeRenderer
     }
 
     /**
-     * @throws \Chamilo\Libraries\Storage\Exception\DataClassNoResultException
      * @throws \QuickformException
      */
     public function render(?int $currentTabIdentifier = null, bool $isGeneralMode = false, ?User $user = null): string
@@ -258,7 +257,6 @@ class HomeRenderer
     }
 
     /**
-     * @throws \Chamilo\Libraries\Storage\Exception\DataClassNoResultException
      * @throws \QuickformException
      */
     public function renderContent(?int $currentTabIdentifier = null, bool $isGeneralMode = false, ?User $user = null
@@ -386,7 +384,6 @@ class HomeRenderer
     }
 
     /**
-     * @throws \Chamilo\Libraries\Storage\Exception\DataClassNoResultException
      * @throws \QuickformException
      */
     public function renderTabs(?int $currentTabIdentifier = null, bool $isGeneralMode = false, ?User $user = null

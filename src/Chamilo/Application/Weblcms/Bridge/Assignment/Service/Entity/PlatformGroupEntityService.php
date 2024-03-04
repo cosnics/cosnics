@@ -92,7 +92,6 @@ class PlatformGroupEntityService implements EntityServiceInterface
      * @param \Chamilo\Core\User\Storage\DataClass\User $currentUser
      *
      * @return int[]
-     * @throws \Chamilo\Libraries\Storage\Exception\DataClassNoResultException
      */
     public function getAvailableEntityIdentifiersForUser(
         ContentObjectPublication $contentObjectPublication, User $currentUser

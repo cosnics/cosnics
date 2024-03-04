@@ -187,7 +187,6 @@ trait RecurringContentObjectTrait
     }
 
     /**
-     * @throws \Chamilo\Libraries\Storage\Exception\DataClassNoResultException
      * @throws \Exception
      */
     public function get_frequency_as_string(): string

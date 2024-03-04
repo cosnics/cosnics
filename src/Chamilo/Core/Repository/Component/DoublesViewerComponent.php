@@ -12,7 +12,7 @@ use Chamilo\Libraries\Format\Structure\Breadcrumb;
 use Chamilo\Libraries\Format\Table\RequestTableParameterValuesCompiler;
 use Chamilo\Libraries\Storage\DataClass\DataClass;
 use Chamilo\Libraries\Storage\DataManager\DataManager;
-use Chamilo\Libraries\Storage\Parameters\DataClassRetrievesParameters;
+use Chamilo\Libraries\Storage\Parameters\RetrievesParameters;
 use Chamilo\Libraries\Storage\Query\Condition\AndCondition;
 use Chamilo\Libraries\Storage\Query\Condition\EqualityCondition;
 use Chamilo\Libraries\Storage\Query\Condition\NotCondition;
@@ -143,7 +143,7 @@ class DoublesViewerComponent extends Manager
         );
 
         $contentObjects = \Chamilo\Core\Repository\Storage\DataManager::retrieve_active_content_objects(
-            ContentObject::class, new DataClassRetrievesParameters(
+            ContentObject::class, new RetrievesParameters(
                 $this->getDoublesDetailsCondition(), $tableParameterValues->getNumberOfItemsPerPage(),
                 $tableParameterValues->getOffset(), $doublesTableRenderer->determineOrderBy($tableParameterValues)
             )

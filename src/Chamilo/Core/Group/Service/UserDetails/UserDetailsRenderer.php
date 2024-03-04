@@ -49,9 +49,6 @@ class UserDetailsRenderer implements UserDetailsRendererInterface
         return $this->urlGenerator;
     }
 
-    /**
-     * @throws \Chamilo\Libraries\Storage\Exception\DataClassNoResultException
-     */
     public function hasContentForUser(User $user, User $requestingUser): bool
     {
         return $this->getGroupsTreeTraverser()->findAllSubscribedGroupsForUserIdentifier($user->getId())->count() > 0;
@@ -64,7 +61,6 @@ class UserDetailsRenderer implements UserDetailsRendererInterface
 
     /**
      * @throws \TableException
-     * @throws \Chamilo\Libraries\Storage\Exception\DataClassNoResultException
      */
     public function renderUserDetails(User $user, User $requestingUser): string
     {

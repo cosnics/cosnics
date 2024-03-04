@@ -4,10 +4,8 @@ namespace Chamilo\Application\Portfolio\Storage\Repository;
 use Chamilo\Application\Portfolio\Storage\DataClass\RightsLocation;
 use Chamilo\Application\Portfolio\Storage\DataClass\RightsLocationEntityRight;
 use Chamilo\Libraries\Storage\DataManager\Repository\DataClassRepository;
-use Chamilo\Libraries\Storage\Parameters\DataClassRetrieveParameters;
-use Chamilo\Libraries\Storage\Parameters\DataClassRetrievesParameters;
-use Chamilo\Libraries\Storage\Parameters\RecordRetrieveParameters;
-use Chamilo\Libraries\Storage\Parameters\RecordRetrievesParameters;
+use Chamilo\Libraries\Storage\Parameters\RetrieveParameters;
+use Chamilo\Libraries\Storage\Parameters\RetrievesParameters;
 use Chamilo\Libraries\Storage\Query\Condition\AndCondition;
 use Chamilo\Libraries\Storage\Query\Condition\Condition;
 use Chamilo\Libraries\Storage\Query\Condition\EqualityCondition;
@@ -96,7 +94,7 @@ class RightsRepository
         $condition = new AndCondition($conditions);
 
         return $this->getDataClassRepository()->retrieve(
-            RightsLocationEntityRight::class, new DataClassRetrieveParameters($condition)
+            RightsLocationEntityRight::class, new RetrieveParameters($condition)
         );
     }
 
@@ -136,7 +134,7 @@ class RightsRepository
         );
 
         return $this->getDataClassRepository()->retrieves(
-            RightsLocationEntityRight::class, new DataClassRetrievesParameters(
+            RightsLocationEntityRight::class, new RetrievesParameters(
                 condition: $condition, orderBy: new OrderBy([$order])
             )
         );
@@ -146,8 +144,6 @@ class RightsRepository
      *
      * @param \Chamilo\Application\Portfolio\Storage\DataClass\RightsLocation $location
      * @param \Chamilo\Libraries\Storage\Query\Condition\Condition $entitiesCondition
-     *
-     * @return string[]
      */
     public function findRightsLocationEntityRightsRecordsForLocation(
         RightsLocation $location, Condition $entitiesCondition
@@ -170,14 +166,14 @@ class RightsRepository
         $condition = new AndCondition($conditions);
 
         return $this->getDataClassRepository()->records(
-            RightsLocationEntityRight::class, new RecordRetrievesParameters(
-                new RetrieveProperties(
-                    array(
+            RightsLocationEntityRight::class, new RetrievesParameters(
+                condition: $condition, retrieveProperties: new RetrieveProperties(
+                    [
                         new PropertyConditionVariable(
                             RightsLocationEntityRight::class, RightsLocationEntityRight::PROPERTY_RIGHT_ID
                         )
-                    )
-                ), $condition
+                    ]
+                )
             )
         );
     }
@@ -204,10 +200,10 @@ class RightsRepository
         $condition = new AndCondition($conditions);
 
         return $this->getDataClassRepository()->record(
-            RightsLocation::class, new RecordRetrieveParameters(
-                new RetrieveProperties(
-                    array(new PropertyConditionVariable(RightsLocation::class, RightsLocation::PROPERTY_INHERIT))
-                ), $condition
+            RightsLocation::class, new RetrieveParameters(
+                condition: $condition, retrieveProperties: new RetrieveProperties(
+                [new PropertyConditionVariable(RightsLocation::class, RightsLocation::PROPERTY_INHERIT)]
+            )
             )
         );
     }

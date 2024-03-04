@@ -5,7 +5,7 @@ use Chamilo\Core\Repository\ContentObject\LearningPath\Storage\Repository\Common
 use Chamilo\Core\Repository\Integration\Chamilo\Core\Tracking\Storage\DataClass\Activity;
 use Chamilo\Core\Repository\Storage\DataClass\ContentObject;
 use Chamilo\Libraries\Storage\Parameters\DataClassCountParameters;
-use Chamilo\Libraries\Storage\Parameters\DataClassRetrievesParameters;
+use Chamilo\Libraries\Storage\Parameters\RetrievesParameters;
 use Chamilo\Libraries\Storage\Query\Condition\EqualityCondition;
 use Chamilo\Libraries\Storage\Query\OrderBy;
 use Chamilo\Libraries\Storage\Query\Variable\PropertyConditionVariable;
@@ -98,13 +98,12 @@ class ActivityRepository extends CommonDataClassRepository
      * @param \Chamilo\Core\Repository\Storage\DataClass\ContentObject $contentObject
      *
      * @return \Doctrine\Common\Collections\ArrayCollection<\Chamilo\Core\Repository\Integration\Chamilo\Core\Tracking\Storage\DataClass\Activity>
-     * @throws \Chamilo\Libraries\Storage\Exception\DataClassNoResultException
      */
     public function retrieveActivitiesForContentObject(ContentObject $contentObject): ArrayCollection
     {
         return $this->dataClassRepository->retrieves(
             Activity::class,
-            new DataClassRetrievesParameters($this->getActivityConditionForContentObject($contentObject))
+            new RetrievesParameters($this->getActivityConditionForContentObject($contentObject))
         );
     }
 }

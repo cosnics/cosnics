@@ -66,16 +66,12 @@ class ElementRightsService
      * @param \Chamilo\Core\Home\Storage\DataClass\Element $element
      *
      * @return \Doctrine\Common\Collections\ArrayCollection<\Chamilo\Core\Home\Rights\Storage\DataClass\ElementTargetEntity>
-     * @throws \Chamilo\Libraries\Storage\Exception\DataClassNoResultException
      */
     public function getTargetEntitiesForElement(Element $element): ArrayCollection
     {
         return $this->getRightsRepository()->findTargetEntitiesForElement($element);
     }
 
-    /**
-     * @throws \Chamilo\Libraries\Storage\Exception\DataClassNoResultException
-     */
     public function setTargetEntitiesForElement(Element $element, array $targetEntities = []): void
     {
         if (!$this->getRightsRepository()->clearTargetEntitiesForElement($element))

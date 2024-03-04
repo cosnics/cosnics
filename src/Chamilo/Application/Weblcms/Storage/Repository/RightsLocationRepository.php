@@ -8,7 +8,7 @@ use Chamilo\Application\Weblcms\Storage\DataClass\RightsLocation;
 use Chamilo\Application\Weblcms\Storage\DataClass\RightsLocationEntityRight;
 use Chamilo\Core\Repository\ContentObject\LearningPath\Storage\Repository\CommonDataClassRepository;
 use Chamilo\Libraries\Storage\Parameters\DataClassDistinctParameters;
-use Chamilo\Libraries\Storage\Parameters\DataClassRetrieveParameters;
+use Chamilo\Libraries\Storage\Parameters\RetrieveParameters;
 use Chamilo\Libraries\Storage\Query\Condition\AndCondition;
 use Chamilo\Libraries\Storage\Query\Condition\EqualityCondition;
 use Chamilo\Libraries\Storage\Query\Condition\InCondition;
@@ -53,7 +53,7 @@ class RightsLocationRepository extends CommonDataClassRepository
 
         $condition = new AndCondition($conditions);
 
-        return $this->dataClassRepository->retrieve(RightsLocation::class, new DataClassRetrieveParameters($condition));
+        return $this->dataClassRepository->retrieve(RightsLocation::class, new RetrieveParameters($condition));
     }
 
     /**

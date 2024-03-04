@@ -17,7 +17,7 @@ use Chamilo\Core\Repository\ContentObject\Assignment\Storage\DataClass\Assignmen
 use Chamilo\Core\Repository\ContentObject\LearningPath\Display\Attempt\TreeNodeAttempt;
 use Chamilo\Core\Repository\ContentObject\LearningPath\Storage\DataClass\TreeNodeData;
 use Chamilo\Core\User\Storage\DataClass\User;
-use Chamilo\Libraries\Storage\Parameters\RecordRetrievesParameters;
+use Chamilo\Libraries\Storage\Parameters\RetrievesParameters;
 use Chamilo\Libraries\Storage\Query\Condition\Condition;
 use Chamilo\Libraries\Storage\Query\OrderBy;
 use Chamilo\Libraries\Storage\Query\OrderProperty;
@@ -85,9 +85,9 @@ class LearningPathAssignmentService extends
     /**
      * @param \Chamilo\Application\Weblcms\Storage\DataClass\ContentObjectPublication $contentObjectPublication
      * @param \Chamilo\Core\Repository\ContentObject\LearningPath\Storage\DataClass\TreeNodeData $treeNodeData
-     * @param integer $entityType
+     * @param int $entityType
      *
-     * @return integer
+     * @return int
      */
     public function countDistinctEntriesByTreeNodeDataAndEntityType(
         ContentObjectPublication $contentObjectPublication, TreeNodeData $treeNodeData, $entityType
@@ -101,9 +101,9 @@ class LearningPathAssignmentService extends
     /**
      * @param \Chamilo\Application\Weblcms\Storage\DataClass\ContentObjectPublication $contentObjectPublication
      * @param \Chamilo\Core\Repository\ContentObject\LearningPath\Storage\DataClass\TreeNodeData $treeNodeData
-     * @param integer $entityType
+     * @param int $entityType
      *
-     * @return integer
+     * @return int
      */
     public function countDistinctFeedbackByTreeNodeDataAndEntityType(
         ContentObjectPublication $contentObjectPublication, TreeNodeData $treeNodeData, $entityType
@@ -117,10 +117,10 @@ class LearningPathAssignmentService extends
     /**
      * @param \Chamilo\Application\Weblcms\Storage\DataClass\ContentObjectPublication $contentObjectPublication
      * @param TreeNodeData $treeNodeData
-     * @param integer $entityType
-     * @param integer $entityId
+     * @param int $entityType
+     * @param int $entityId
      *
-     * @return integer
+     * @return int
      */
     public function countDistinctFeedbackForTreeNodeDataEntityTypeAndId(
         ContentObjectPublication $contentObjectPublication, TreeNodeData $treeNodeData, $entityType, $entityId
@@ -135,7 +135,7 @@ class LearningPathAssignmentService extends
      * @param \Chamilo\Core\Repository\ContentObject\Assignment\Storage\DataClass\Assignment $assignment
      * @param \Chamilo\Application\Weblcms\Storage\DataClass\ContentObjectPublication $contentObjectPublication
      * @param \Chamilo\Core\Repository\ContentObject\LearningPath\Storage\DataClass\TreeNodeData $treeNodeData
-     * @param integer $entityType
+     * @param int $entityType
      *
      * @return int
      */
@@ -152,10 +152,10 @@ class LearningPathAssignmentService extends
     /**
      * @param \Chamilo\Application\Weblcms\Storage\DataClass\ContentObjectPublication $contentObjectPublication
      * @param TreeNodeData $treeNodeData
-     * @param integer $entityType
-     * @param integer $entityId
+     * @param int $entityType
+     * @param int $entityId
      *
-     * @return integer
+     * @return int
      */
     public function countDistinctScoreForTreeNodeDataEntityTypeAndId(
         ContentObjectPublication $contentObjectPublication, TreeNodeData $treeNodeData, $entityType, $entityId
@@ -169,8 +169,8 @@ class LearningPathAssignmentService extends
     /**
      * @param \Chamilo\Application\Weblcms\Storage\DataClass\ContentObjectPublication $contentObjectPublication
      * @param TreeNodeData $treeNodeData
-     * @param integer $entityType
-     * @param integer $entityId
+     * @param int $entityType
+     * @param int $entityId
      * @param \Chamilo\Libraries\Storage\Query\Condition\Condition|null $condition
      *
      * @return int
@@ -188,9 +188,9 @@ class LearningPathAssignmentService extends
     /**
      *
      * @param \Chamilo\Application\Weblcms\Storage\DataClass\ContentObjectPublication $contentObjectPublication
-     * @param integer $treeNodeDataIdentifier
+     * @param int $treeNodeDataIdentifier
      *
-     * @return integer
+     * @return int
      */
     public function countEntriesForTreeNodeDataIdentifier(
         ContentObjectPublication $contentObjectPublication, $treeNodeDataIdentifier
@@ -204,10 +204,10 @@ class LearningPathAssignmentService extends
     /**
      * @param \Chamilo\Application\Weblcms\Storage\DataClass\ContentObjectPublication $contentObjectPublication
      * @param TreeNodeData $treeNodeData
-     * @param integer $entityType
-     * @param integer $entityId
+     * @param int $entityType
+     * @param int $entityId
      *
-     * @return integer
+     * @return int
      */
     public function countFeedbackForTreeNodeDataByEntityTypeAndEntityId(
         ContentObjectPublication $contentObjectPublication, TreeNodeData $treeNodeData, $entityType, $entityId
@@ -254,10 +254,10 @@ class LearningPathAssignmentService extends
      * @param \Chamilo\Application\Weblcms\Storage\DataClass\ContentObjectPublication $contentObjectPublication
      * @param \Chamilo\Core\Repository\ContentObject\LearningPath\Storage\DataClass\TreeNodeData $treeNodeData
      * @param \Chamilo\Core\Repository\ContentObject\LearningPath\Display\Attempt\TreeNodeAttempt|\Chamilo\Application\Weblcms\Integration\Chamilo\Core\Tracking\Storage\DataClass\LearningPathTreeNodeAttempt $treeNodeAttempt
-     * @param integer $entityType
-     * @param integer $entityId
-     * @param integer $userId
-     * @param integer $contentObjectId
+     * @param int $entityType
+     * @param int $entityId
+     * @param int $userId
+     * @param int $contentObjectId
      * @param string $ipAddress
      *
      * @return \Chamilo\Application\Weblcms\Bridge\LearningPath\Assignment\Storage\DataClass\Entry|\Chamilo\Core\Repository\ContentObject\Assignment\Display\Bridge\Storage\DataClass\Entry
@@ -360,17 +360,17 @@ class LearningPathAssignmentService extends
     /**
      * @param \Chamilo\Application\Weblcms\Storage\DataClass\ContentObjectPublication $contentObjectPublication
      * @param \Chamilo\Core\Repository\ContentObject\LearningPath\Storage\DataClass\TreeNodeData $treeNodeData
-     * @param \Chamilo\Libraries\Storage\Parameters\RecordRetrievesParameters $recordRetrievesParameters
+     * @param \Chamilo\Libraries\Storage\Parameters\RetrievesParameters $retrievesParameters
      *
      * @return \Doctrine\Common\Collections\ArrayCollection|\Chamilo\Core\Repository\Storage\DataClass\ContentObject[]
      */
     public function findAssignmentEntriesWithEphorusRequestsByTreeNodeData(
         ContentObjectPublication $contentObjectPublication, TreeNodeData $treeNodeData,
-        RecordRetrievesParameters $recordRetrievesParameters = null
+        RetrievesParameters $retrievesParameters = new RetrievesParameters()
     )
     {
         return $this->assignmentEphorusRepository->findAssignmentEntriesWithRequestsByTreeNodeData(
-            $contentObjectPublication, $treeNodeData, $recordRetrievesParameters
+            $contentObjectPublication, $treeNodeData, $retrievesParameters
         );
     }
 
@@ -391,8 +391,8 @@ class LearningPathAssignmentService extends
     /**
      * @param \Chamilo\Application\Weblcms\Storage\DataClass\ContentObjectPublication $contentObjectPublication
      * @param \Chamilo\Core\Repository\ContentObject\LearningPath\Storage\DataClass\TreeNodeData $treeNodeData
-     * @param integer $entityType
-     * @param integer[] $entityIdentifiers
+     * @param int $entityType
+     * @param int $entityIdentifiers
      *
      * @return \Doctrine\Common\Collections\ArrayCollection
      */
@@ -408,11 +408,11 @@ class LearningPathAssignmentService extends
     /**
      * @param \Chamilo\Application\Weblcms\Storage\DataClass\ContentObjectPublication $contentObjectPublication
      * @param TreeNodeData $treeNodeData
-     * @param integer $entityType
-     * @param integer $entityId
+     * @param int $entityType
+     * @param int $entityId
      * @param \Chamilo\Libraries\Storage\Query\Condition\Condition $condition
-     * @param integer $offset
-     * @param integer $count
+     * @param int $offset
+     * @param int $count
      * @param \Chamilo\Libraries\Storage\Query\OrderBy $orderProperty
      *
      * @return \Doctrine\Common\Collections\ArrayCollection
@@ -472,8 +472,8 @@ class LearningPathAssignmentService extends
      * @param TreeNodeData $treeNodeData
      * @param int[] $userIds
      * @param Condition $condition
-     * @param integer $offset
-     * @param integer $count
+     * @param int $offset
+     * @param int $count
      * @param \Chamilo\Libraries\Storage\Query\OrderBy $orderProperty
      *
      * @return \Doctrine\Common\Collections\ArrayCollection
@@ -520,8 +520,8 @@ class LearningPathAssignmentService extends
     /**
      * @param \Chamilo\Application\Weblcms\Storage\DataClass\ContentObjectPublication $contentObjectPublication
      * @param TreeNodeData $treeNodeData
-     * @param integer $entityType
-     * @param integer $entityId
+     * @param int $entityType
+     * @param int $entityId
      *
      * @return int
      */
@@ -553,8 +553,8 @@ class LearningPathAssignmentService extends
     /**
      * @param \Chamilo\Application\Weblcms\Storage\DataClass\ContentObjectPublication $contentObjectPublication
      * @param TreeNodeData $treeNodeData
-     * @param integer $entityType
-     * @param integer $entityId
+     * @param int $entityType
+     * @param int $entityId
      *
      * @return int
      */

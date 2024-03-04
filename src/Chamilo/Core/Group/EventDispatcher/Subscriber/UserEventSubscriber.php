@@ -19,9 +19,6 @@ class UserEventSubscriber implements EventSubscriberInterface
         $this->groupMembershipService = $groupMembershipService;
     }
 
-    /**
-     * @throws \Chamilo\Libraries\Storage\Exception\DataClassNoResultException
-     */
     public function beforeDelete(BeforeUserDeleteEvent $beforeUserDeleteEvent): bool
     {
         return $this->getGroupMembershipService()->unsubscribeUserFromAllGroups($beforeUserDeleteEvent->getUser());

@@ -11,7 +11,7 @@ use Chamilo\Application\Weblcms\Storage\DataClass\CourseCategory;
 use Chamilo\Libraries\Format\Table\Column\DataClassPropertyTableColumn;
 use Chamilo\Libraries\Format\Table\Column\StaticTableColumn;
 use Chamilo\Libraries\Storage\Parameters\DataClassCountParameters;
-use Chamilo\Libraries\Storage\Parameters\RecordRetrievesParameters;
+use Chamilo\Libraries\Storage\Parameters\RetrievesParameters;
 use Chamilo\Libraries\Storage\Query\Condition\EqualityCondition;
 use Chamilo\Libraries\Storage\Query\Join;
 use Chamilo\Libraries\Storage\Query\Joins;
@@ -188,8 +188,9 @@ class CourseEntityHelper
             new PropertyConditionVariable(Course::class, Course::PROPERTY_ID, self::PROPERTY_COURSE_ID)
         );
 
-        $parameters = new RecordRetrievesParameters(
-            $properties, $condition, $count, $offset, $order_property, self::get_joins()
+        $parameters = new RetrievesParameters(
+            condition: $condition, count: $count, offset: $offset, orderBy: $order_property, joins: self::get_joins(),
+            retrieveProperties: $properties
         );
 
         return DataManager::records(Admin::class, $parameters);

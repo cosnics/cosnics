@@ -9,7 +9,7 @@ use Chamilo\Core\Rights\Entity\UserEntity;
 use Chamilo\Libraries\Format\Form\Element\AdvancedElementFinder\AdvancedElementFinderElementTypes;
 use Chamilo\Libraries\Format\Form\FormValidator;
 use Chamilo\Libraries\Format\Structure\Glyph\FontAwesomeGlyph;
-use Chamilo\Libraries\Storage\Parameters\DataClassRetrieveParameters;
+use Chamilo\Libraries\Storage\Parameters\RetrieveParameters;
 use Chamilo\Libraries\Storage\Query\Condition\AndCondition;
 use Chamilo\Libraries\Storage\Query\Condition\EqualityCondition;
 use Chamilo\Libraries\Storage\Query\Variable\PropertyConditionVariable;
@@ -130,7 +130,7 @@ class RightsGroupForm extends FormValidator
                     $condition = new AndCondition($conditions);
 
                     $existing_right_group = DataManager::retrieve(
-                        RightsLocationEntityRightGroup::class, new DataClassRetrieveParameters($condition)
+                        RightsLocationEntityRightGroup::class, new RetrieveParameters($condition)
                     );
 
                     if (!$existing_right_group instanceof RightsLocationEntityRightGroup)

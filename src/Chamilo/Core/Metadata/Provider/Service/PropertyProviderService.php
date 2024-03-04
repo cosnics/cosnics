@@ -11,8 +11,8 @@ use Chamilo\Core\Metadata\Storage\DataClass\ProviderLink;
 use Chamilo\Core\Metadata\Storage\DataClass\ProviderRegistration;
 use Chamilo\Core\Metadata\Storage\DataClass\Schema;
 use Chamilo\Libraries\Storage\DataManager\DataManager;
-use Chamilo\Libraries\Storage\Parameters\DataClassRetrieveParameters;
-use Chamilo\Libraries\Storage\Parameters\DataClassRetrievesParameters;
+use Chamilo\Libraries\Storage\Parameters\RetrieveParameters;
+use Chamilo\Libraries\Storage\Parameters\RetrievesParameters;
 use Chamilo\Libraries\Storage\Query\Condition\AndCondition;
 use Chamilo\Libraries\Storage\Query\Condition\EqualityCondition;
 use Chamilo\Libraries\Storage\Query\Variable\PropertyConditionVariable;
@@ -143,7 +143,7 @@ class PropertyProviderService
 
         $condition = new AndCondition($conditions);
 
-        $providerLink = DataManager::retrieve(ProviderLink::class, new DataClassRetrieveParameters($condition));
+        $providerLink = DataManager::retrieve(ProviderLink::class, new RetrieveParameters($condition));
 
         if ($providerLink instanceof ProviderLink)
         {
@@ -168,7 +168,7 @@ class PropertyProviderService
             new StaticConditionVariable($entity->getDataClassName())
         );
 
-        $parameters = new DataClassRetrievesParameters($condition);
+        $parameters = new RetrievesParameters($condition);
 
         return DataManager::retrieves(ProviderLink::class, $parameters);
     }
@@ -186,7 +186,7 @@ class PropertyProviderService
             ), new StaticConditionVariable($entity->getDataClassName())
         );
 
-        $parameters = new DataClassRetrievesParameters($condition);
+        $parameters = new RetrievesParameters($condition);
 
         return DataManager::retrieves(ProviderRegistration::class, $parameters);
     }

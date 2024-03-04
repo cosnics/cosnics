@@ -5,8 +5,8 @@ use Chamilo\Core\Repository\Workspace\Storage\DataClass\Workspace;
 use Chamilo\Core\Repository\Workspace\Storage\DataClass\WorkspaceEntityRelation;
 use Chamilo\Libraries\Storage\DataManager\Repository\DataClassRepository;
 use Chamilo\Libraries\Storage\Parameters\DataClassCountParameters;
-use Chamilo\Libraries\Storage\Parameters\DataClassRetrieveParameters;
-use Chamilo\Libraries\Storage\Parameters\DataClassRetrievesParameters;
+use Chamilo\Libraries\Storage\Parameters\RetrieveParameters;
+use Chamilo\Libraries\Storage\Parameters\RetrievesParameters;
 use Chamilo\Libraries\Storage\Query\Condition\AndCondition;
 use Chamilo\Libraries\Storage\Query\Condition\Condition;
 use Chamilo\Libraries\Storage\Query\Condition\EqualityCondition;
@@ -44,9 +44,6 @@ class EntityRelationRepository
         );
     }
 
-    /**
-     * @throws \Chamilo\Libraries\Storage\Exception\DataClassNoResultException
-     */
     public function createWorkspaceEntityRelation(WorkspaceEntityRelation $workspaceEntityRelation): bool
     {
         return $this->getDataClassRepository()->create($workspaceEntityRelation);
@@ -120,18 +117,15 @@ class EntityRelationRepository
         $entityCondition = new AndCondition($entityConditions);
 
         return $this->getDataClassRepository()->retrieve(
-            WorkspaceEntityRelation::class, new DataClassRetrieveParameters($entityCondition)
+            WorkspaceEntityRelation::class, new RetrieveParameters($entityCondition)
         );
     }
 
-    /**
-     * @throws \Chamilo\Libraries\Storage\Exception\DataClassNoResultException
-     */
     public function findEntityRelations(?Condition $condition = null, ?int $limit = null, ?int $offset = null
     ): ArrayCollection
     {
         return $this->getDataClassRepository()->retrieves(
-            WorkspaceEntityRelation::class, new DataClassRetrievesParameters($condition, $limit, $offset)
+            WorkspaceEntityRelation::class, new RetrievesParameters($condition, $limit, $offset)
         );
     }
 
@@ -139,7 +133,6 @@ class EntityRelationRepository
      * @param \Chamilo\Core\Repository\Workspace\Storage\DataClass\Workspace $workspace
      *
      * @return \Doctrine\Common\Collections\ArrayCollection<\Chamilo\Core\Repository\Workspace\Storage\DataClass\WorkspaceEntityRelation>
-     * @throws \Chamilo\Libraries\Storage\Exception\DataClassNoResultException
      */
     public function findEntityRelationsForWorkspace(Workspace $workspace): ArrayCollection
     {
@@ -150,7 +143,7 @@ class EntityRelationRepository
         );
 
         return $this->getDataClassRepository()->retrieves(
-            WorkspaceEntityRelation::class, new DataClassRetrievesParameters($condition)
+            WorkspaceEntityRelation::class, new RetrievesParameters($condition)
         );
     }
 
@@ -200,9 +193,6 @@ class EntityRelationRepository
         return self::$entitiesConditions[$entitiesHash];
     }
 
-    /**
-     * @throws \Chamilo\Libraries\Storage\Exception\DataClassNoResultException
-     */
     public function updateWorkspaceEntityRelation(WorkspaceEntityRelation $workspaceEntityRelation): bool
     {
         return $this->getDataClassRepository()->update($workspaceEntityRelation);

@@ -4,7 +4,7 @@ namespace Chamilo\Libraries\Storage\DataClass\Listeners;
 use Chamilo\Configuration\Storage\DataClass\Registration;
 use Chamilo\Libraries\Storage\DataClass\DataClass;
 use Chamilo\Libraries\Storage\DataManager\DataManager;
-use Chamilo\Libraries\Storage\Parameters\DataClassRetrievesParameters;
+use Chamilo\Libraries\Storage\Parameters\RetrievesParameters;
 use Chamilo\Libraries\Storage\Query\Condition\EndsWithCondition;
 use Chamilo\Libraries\Storage\Query\Variable\PropertyConditionVariable;
 use InvalidArgumentException;
@@ -49,7 +49,6 @@ class ImplementationNotifierDataClassListener extends DataClassListener
 
     /**
      * @return string[]
-     * @throws \Chamilo\Libraries\Storage\Exception\DataClassNoResultException
      */
     protected function getImplementationPackages(): array
     {
@@ -64,7 +63,7 @@ class ImplementationNotifierDataClassListener extends DataClassListener
             $packages = [];
 
             $package_registrations = DataManager::retrieves(
-                Registration::class, new DataClassRetrievesParameters($condition)
+                Registration::class, new RetrievesParameters($condition)
             );
             foreach ($package_registrations as $package_registration)
             {
@@ -77,9 +76,6 @@ class ImplementationNotifierDataClassListener extends DataClassListener
         return $this->implementationPackages;
     }
 
-    /**
-     * @throws \Chamilo\Libraries\Storage\Exception\DataClassNoResultException
-     */
     protected function notifyImplementationPackages(string $dataClassListenerMethod, array $parameters = []): bool
     {
         if (!array_key_exists($dataClassListenerMethod, $this->methodMapping))
@@ -111,65 +107,41 @@ class ImplementationNotifierDataClassListener extends DataClassListener
         return true;
     }
 
-    /**
-     * @throws \Chamilo\Libraries\Storage\Exception\DataClassNoResultException
-     */
     public function onAfterCreate(bool $success): bool
     {
         return $this->notifyImplementationPackages(__FUNCTION__, func_get_args());
     }
 
-    /**
-     * @throws \Chamilo\Libraries\Storage\Exception\DataClassNoResultException
-     */
     public function onAfterDelete(bool $success): bool
     {
         return $this->notifyImplementationPackages(__FUNCTION__, func_get_args());
     }
 
-    /**
-     * @throws \Chamilo\Libraries\Storage\Exception\DataClassNoResultException
-     */
     public function onAfterSetProperty(string $name, string $value): bool
     {
         return $this->notifyImplementationPackages(__FUNCTION__, func_get_args());
     }
 
-    /**
-     * @throws \Chamilo\Libraries\Storage\Exception\DataClassNoResultException
-     */
     public function onAfterUpdate(bool $success): bool
     {
         return $this->notifyImplementationPackages(__FUNCTION__, func_get_args());
     }
 
-    /**
-     * @throws \Chamilo\Libraries\Storage\Exception\DataClassNoResultException
-     */
     public function onBeforeCreate(): bool
     {
         return $this->notifyImplementationPackages(__FUNCTION__, func_get_args());
     }
 
-    /**
-     * @throws \Chamilo\Libraries\Storage\Exception\DataClassNoResultException
-     */
     public function onBeforeDelete(): bool
     {
         return $this->notifyImplementationPackages(__FUNCTION__, func_get_args());
     }
 
-    /**
-     * @throws \Chamilo\Libraries\Storage\Exception\DataClassNoResultException
-     */
     public function onBeforeSetProperty(string $name, string $value): bool
     {
         return $this->notifyImplementationPackages(__FUNCTION__, func_get_args());
     }
 
-    /**
-     * @throws \Chamilo\Libraries\Storage\Exception\DataClassNoResultException
-     */
     public function onBeforeUpdate(): bool
     {
         return $this->notifyImplementationPackages(__FUNCTION__, func_get_args());
@@ -177,8 +149,6 @@ class ImplementationNotifierDataClassListener extends DataClassListener
 
     /**
      * @param string[] $dependencies
-     *
-     * @throws \Chamilo\Libraries\Storage\Exception\DataClassNoResultException
      */
     public function onGetDependencies(array &$dependencies = []): bool
     {

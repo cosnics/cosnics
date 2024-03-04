@@ -7,8 +7,8 @@ use Chamilo\Core\User\Roles\Storage\Repository\Interfaces\UserRoleRepositoryInte
 use Chamilo\Core\User\Storage\DataClass\User;
 use Chamilo\Libraries\Storage\DataManager\Repository\DataClassRepository;
 use Chamilo\Libraries\Storage\DataManager\Repository\DataManagerRepository;
-use Chamilo\Libraries\Storage\Parameters\DataClassRetrieveParameters;
-use Chamilo\Libraries\Storage\Parameters\DataClassRetrievesParameters;
+use Chamilo\Libraries\Storage\Parameters\RetrieveParameters;
+use Chamilo\Libraries\Storage\Parameters\RetrievesParameters;
 use Chamilo\Libraries\Storage\Query\Condition\AndCondition;
 use Chamilo\Libraries\Storage\Query\Condition\EqualityCondition;
 use Chamilo\Libraries\Storage\Query\Join;
@@ -33,7 +33,6 @@ class UserRoleRepository extends DataManagerRepository implements UserRoleReposi
 
     /**
      * @return \Doctrine\Common\Collections\ArrayCollection<\Chamilo\Core\User\Roles\Storage\DataClass\Role>
-     * @throws \Chamilo\Libraries\Storage\Exception\DataClassNoResultException
      */
     public function findRolesForUser(string $userId): ArrayCollection
     {
@@ -48,7 +47,7 @@ class UserRoleRepository extends DataManagerRepository implements UserRoleReposi
         );
 
         return $this->getDataClassRepository()->retrieves(
-            Role::class, new DataClassRetrievesParameters(
+            Role::class, new RetrievesParameters(
                 condition: $this->getConditionForUser($userId), joins: $joins
             )
         );
@@ -64,13 +63,12 @@ class UserRoleRepository extends DataManagerRepository implements UserRoleReposi
         $condition = new AndCondition($conditions);
 
         return $this->getDataClassRepository()->retrieve(
-            RoleRelation::class, new DataClassRetrieveParameters($condition)
+            RoleRelation::class, new RetrieveParameters($condition)
         );
     }
 
     /**
      * @return \Doctrine\Common\Collections\ArrayCollection<\Chamilo\Core\User\Storage\DataClass\User>
-     * @throws \Chamilo\Libraries\Storage\Exception\DataClassNoResultException
      */
     public function findUsersForRole(string $roleId): ArrayCollection
     {
@@ -85,7 +83,7 @@ class UserRoleRepository extends DataManagerRepository implements UserRoleReposi
         );
 
         return $this->getDataClassRepository()->retrieves(
-            User::class, new DataClassRetrievesParameters(
+            User::class, new RetrievesParameters(
                 condition: $this->getConditionForRole($roleId), joins: $joins
             )
         );

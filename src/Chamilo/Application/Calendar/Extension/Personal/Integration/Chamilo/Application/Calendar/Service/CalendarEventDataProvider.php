@@ -14,7 +14,7 @@ use Chamilo\Core\User\Storage\DataClass\User;
 use Chamilo\Libraries\Architecture\ClassnameUtilities;
 use Chamilo\Libraries\Calendar\Service\CalendarRendererProvider;
 use Chamilo\Libraries\DependencyInjection\Traits\DependencyInjectionContainerTrait;
-use Chamilo\Libraries\Storage\Parameters\RecordRetrievesParameters;
+use Chamilo\Libraries\Storage\Parameters\RetrievesParameters;
 
 /**
  * @package Chamilo\Application\Calendar\Extension\Personal\Integration\Chamilo\Application\Calendar
@@ -97,7 +97,7 @@ class CalendarEventDataProvider extends MixedCalendar
 
     /**
      * @param \Chamilo\Libraries\Calendar\Service\CalendarRendererProvider $calendarRendererProvider
-     * @param RecordRetrievesParameters $recordRetrievesParameters
+     * @param RetrievesParameters $retrievesParameters
      * @param int $fromDate
      * @param int $toDate
      *
@@ -105,8 +105,8 @@ class CalendarEventDataProvider extends MixedCalendar
      * @throws \Symfony\Component\Cache\Exception\CacheException
      */
     protected function getEventsByParameters(
-        CalendarRendererProvider $calendarRendererProvider, RecordRetrievesParameters $recordRetrievesParameters,
-        int $fromDate, int $toDate
+        CalendarRendererProvider $calendarRendererProvider, RetrievesParameters $retrievesParameters, int $fromDate,
+        int $toDate
     ): array
     {
         $publications = [];
@@ -131,7 +131,7 @@ class CalendarEventDataProvider extends MixedCalendar
                     if ($source instanceof PersonalCalendarEventDataProviderRepositoryInterface)
                     {
                         $publications = array_merge(
-                            $publications, $source->getPublications($recordRetrievesParameters, $fromDate, $toDate)
+                            $publications, $source->getPublications($retrievesParameters, $fromDate, $toDate)
                         );
                     }
                 }
@@ -154,11 +154,11 @@ class CalendarEventDataProvider extends MixedCalendar
     ): array
     {
         $repository = new CalendarEventDataProviderRepository();
-        $recordRetrievesParameters = $repository->getSharedPublicationsRecordRetrievesParameters(
+        $retrievesParameters = $repository->getSharedPublicationsRetrievesParameters(
             $calendarRendererProvider->getDataUser()
         );
 
-        return $this->getEventsByParameters($calendarRendererProvider, $recordRetrievesParameters, $fromDate, $toDate);
+        return $this->getEventsByParameters($calendarRendererProvider, $retrievesParameters, $fromDate, $toDate);
     }
 
     /**
@@ -169,7 +169,7 @@ class CalendarEventDataProvider extends MixedCalendar
     ): array
     {
         $repository = new CalendarEventDataProviderRepository();
-        $dataClassRetrievesParameters = $repository->getPublicationsRecordRetrievesParameters(
+        $dataClassRetrievesParameters = $repository->getPublicationsRetrievesParameters(
             $calendarRendererProvider->getDataUser()
         );
 

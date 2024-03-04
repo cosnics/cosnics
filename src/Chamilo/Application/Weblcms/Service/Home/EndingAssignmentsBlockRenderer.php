@@ -17,7 +17,7 @@ use Chamilo\Core\User\Storage\DataClass\User;
 use Chamilo\Libraries\Architecture\Application\Application;
 use Chamilo\Libraries\Architecture\Application\Routing\UrlGenerator;
 use Chamilo\Libraries\Storage\DataClass\DataClass;
-use Chamilo\Libraries\Storage\Parameters\DataClassRetrievesParameters;
+use Chamilo\Libraries\Storage\Parameters\RetrievesParameters;
 use Chamilo\Libraries\Storage\Query\Condition\AndCondition;
 use Chamilo\Libraries\Storage\Query\Condition\EqualityCondition;
 use Chamilo\Libraries\Storage\Query\Condition\InCondition;
@@ -55,9 +55,6 @@ class EndingAssignmentsBlockRenderer extends BlockRenderer
         $this->datetimeUtilities = $datetimeUtilities;
     }
 
-    /**
-     * @throws \Chamilo\Libraries\Storage\Exception\DataClassNoResultException
-     */
     public function displayContent(Element $block, ?User $user = null): string
     {
         // deadline min 1 week (60 * 60 * 24 * 7)
@@ -96,7 +93,7 @@ class EndingAssignmentsBlockRenderer extends BlockRenderer
         $condition = new AndCondition($conditions);
 
         $publications = DataManager::retrieves(
-            ContentObjectPublication::class, new DataClassRetrievesParameters(
+            ContentObjectPublication::class, new RetrievesParameters(
                 $condition, null, null, new OrderBy([
                     new OrderProperty(
                         new PropertyConditionVariable(

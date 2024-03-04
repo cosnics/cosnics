@@ -125,7 +125,6 @@ class Group extends NestedSet
     }
 
     /**
-     * @throws \Chamilo\Libraries\Storage\Exception\DataClassNoResultException
      * @deprecated Use GroupsTreeTraverser::getFullyQualifiedNameForGroup() now
      */
     public function get_fully_qualified_name(bool $include_self = true): string
@@ -155,7 +154,6 @@ class Group extends NestedSet
 
     /**
      * @return \Chamilo\Core\Group\Storage\DataClass\Group[]
-     * @throws \Chamilo\Libraries\Storage\Exception\DataClassNoResultException
      * @deprecated Use GroupsTreeTraverser::findSubGroupsForGroup() now
      */
     public function get_subgroups(bool $recursive = false): array

@@ -10,7 +10,7 @@ use Chamilo\Application\Weblcms\Storage\DataManager;
 use Chamilo\Core\Reporting\ReportingData;
 use Chamilo\Core\Reporting\Viewer\Rendition\Block\Type\Html;
 use Chamilo\Libraries\Translation\Translation;
-use Chamilo\Libraries\Storage\Parameters\DataClassRetrievesParameters;
+use Chamilo\Libraries\Storage\Parameters\RetrievesParameters;
 use Chamilo\Libraries\Storage\Query\Condition\EqualityCondition;
 use Chamilo\Libraries\Storage\Query\Variable\PropertyConditionVariable;
 use Chamilo\Libraries\Storage\Query\Variable\StaticConditionVariable;
@@ -26,7 +26,7 @@ class MostActiveInactiveLastDetailBlock extends CourseBlock
         $this->add_reporting_data_rows_for_course_visit_data($reporting_data);
         $reporting_data->add_row(Translation::get('LastPublication'));
         
-        $courses = CourseDataManager::retrieves(Course::class, new DataClassRetrievesParameters());
+        $courses = CourseDataManager::retrieves(Course::class, new RetrievesParameters());
         foreach($courses as $course)
         {
             $condition = new EqualityCondition(

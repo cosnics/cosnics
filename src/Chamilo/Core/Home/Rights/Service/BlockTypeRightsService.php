@@ -38,8 +38,6 @@ class BlockTypeRightsService
     /**
      * Checks whether or not a user can view the given block renderer, checking the target entities and checking
      * if the block is not read only and already added to the homepage
-     *
-     * @throws \Chamilo\Libraries\Storage\Exception\DataClassNoResultException
      */
     public function canUserViewBlockRenderer(User $user, BlockRenderer $blockRenderer): bool
     {
@@ -101,8 +99,6 @@ class BlockTypeRightsService
 
     /**
      * Returns a list of block types with target entities
-     *
-     * @throws \Chamilo\Libraries\Storage\Exception\DataClassNoResultException
      */
     public function getBlockTypesWithTargetEntities(): array
     {
@@ -147,7 +143,6 @@ class BlockTypeRightsService
      * @param string $blockType
      *
      * @return \Doctrine\Common\Collections\ArrayCollection
-     * @throws \Chamilo\Libraries\Storage\Exception\DataClassNoResultException
      */
     public function getTargetEntitiesForBlockType(string $blockType): ArrayCollection
     {
@@ -158,7 +153,6 @@ class BlockTypeRightsService
      * Helper function to get the target entities grouped per block type
      *
      * @return \Chamilo\Core\Home\Rights\Storage\DataClass\BlockTypeTargetEntity[][]
-     * @throws \Chamilo\Libraries\Storage\Exception\DataClassNoResultException
      */
     protected function getTargetEntitiesPerBlockType(): array
     {
@@ -174,9 +168,6 @@ class BlockTypeRightsService
         return $targetEntitiesPerBlockType;
     }
 
-    /**
-     * @throws \Chamilo\Libraries\Storage\Exception\DataClassNoResultException
-     */
     public function setTargetEntitiesForBlockType(string $blockType, array $targetEntities = []): void
     {
         if (!$this->getRightsRepository()->clearTargetEntitiesForBlockType($blockType))

@@ -11,7 +11,7 @@ use Chamilo\Core\User\Storage\DataClass\User;
 use Chamilo\Libraries\Ajax\Component\GroupsFeedComponent;
 use Chamilo\Libraries\Format\Form\Element\AdvancedElementFinder\AdvancedElementFinderElement;
 use Chamilo\Libraries\Format\Structure\Glyph\FontAwesomeGlyph;
-use Chamilo\Libraries\Storage\Parameters\DataClassRetrievesParameters;
+use Chamilo\Libraries\Storage\Parameters\RetrievesParameters;
 use Chamilo\Libraries\Storage\Query\Condition\AndCondition;
 use Chamilo\Libraries\Storage\Query\Condition\ContainsCondition;
 use Chamilo\Libraries\Storage\Query\Condition\EqualityCondition;
@@ -93,7 +93,7 @@ class CourseGroupsFeedComponent extends GroupsFeedComponent
             ), new StaticConditionVariable($filter_id)
         );
         $relations = DataManager::retrieves(
-            CourseGroupUserRelation::class, new DataClassRetrievesParameters($condition)
+            CourseGroupUserRelation::class, new RetrievesParameters($condition)
         );
 
         $user_ids = [];
@@ -167,7 +167,7 @@ class CourseGroupsFeedComponent extends GroupsFeedComponent
         }
 
         return DataManager::retrieves(
-            CourseGroup::class, new DataClassRetrievesParameters(
+            CourseGroup::class, new RetrievesParameters(
                 condition: $condition, orderBy: new OrderBy([
                 new OrderProperty(new PropertyConditionVariable(CourseGroup::class, CourseGroup::PROPERTY_NAME))
             ])

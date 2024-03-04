@@ -2,7 +2,7 @@
 namespace Chamilo\Core\Metadata\Schema\Storage;
 
 use Chamilo\Core\Metadata\Storage\DataClass\Schema;
-use Chamilo\Libraries\Storage\Parameters\DataClassRetrieveParameters;
+use Chamilo\Libraries\Storage\Parameters\RetrieveParameters;
 use Chamilo\Libraries\Storage\Query\Condition\ComparisonCondition;
 use Chamilo\Libraries\Storage\Query\Variable\PropertyConditionVariable;
 use Chamilo\Libraries\Storage\Query\Variable\StaticConditionVariable;
@@ -33,7 +33,7 @@ class DataManager extends \Chamilo\Libraries\Storage\DataManager\DataManager
             ComparisonCondition::EQUAL, 
             new StaticConditionVariable($namespace));
         
-        $schema = self::retrieve(Schema::class, new DataClassRetrieveParameters($condition));
+        $schema = self::retrieve(Schema::class, new RetrieveParameters($condition));
         
         if (! $schema)
         {

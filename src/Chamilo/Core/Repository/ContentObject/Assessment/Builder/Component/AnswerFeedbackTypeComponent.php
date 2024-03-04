@@ -8,7 +8,7 @@ use Chamilo\Core\Repository\Storage\DataManager;
 use Chamilo\Libraries\Format\Table\RequestTableParameterValuesCompiler;
 use Chamilo\Libraries\Storage\DataClass\DataClass;
 use Chamilo\Libraries\Storage\Parameters\DataClassCountParameters;
-use Chamilo\Libraries\Storage\Parameters\DataClassRetrievesParameters;
+use Chamilo\Libraries\Storage\Parameters\RetrievesParameters;
 use Chamilo\Libraries\Storage\Query\Condition\AndCondition;
 use Chamilo\Libraries\Storage\Query\Condition\EqualityCondition;
 use Chamilo\Libraries\Storage\Query\Condition\InCondition;
@@ -58,7 +58,7 @@ class AnswerFeedbackTypeComponent extends Manager
             $condition = new AndCondition($conditions);
 
             $complex_content_object_items = DataManager::retrieve_complex_content_object_items(
-                ComplexContentObjectItem::class, new DataClassRetrievesParameters($condition)
+                ComplexContentObjectItem::class, new RetrievesParameters($condition)
             );
 
             $failures = 0;
@@ -130,7 +130,6 @@ class AnswerFeedbackTypeComponent extends Manager
     }
 
     /**
-     * @throws \Chamilo\Libraries\Storage\Exception\DataClassNoResultException
      * @throws \TableException
      * @throws \Chamilo\Libraries\Format\Table\Exception\InvalidPageNumberException
      * @throws \QuickformException
@@ -158,7 +157,7 @@ class AnswerFeedbackTypeComponent extends Manager
             )
         );
 
-        $parameters = new DataClassRetrievesParameters(
+        $parameters = new RetrievesParameters(
             $this->getAnswerFeedbackTypeCondition(), $tableParameterValues->getNumberOfItemsPerPage(),
             $tableParameterValues->getOffset(), $orderBy
         );

@@ -4,8 +4,8 @@ namespace Chamilo\Core\Repository\ContentObject\LearningPath\Storage\Repository;
 use Chamilo\Core\Repository\ContentObject\LearningPath\Storage\DataClass\LearningPath;
 use Chamilo\Core\Repository\ContentObject\LearningPath\Storage\DataClass\TreeNodeData;
 use Chamilo\Libraries\Storage\Parameters\DataClassCountParameters;
-use Chamilo\Libraries\Storage\Parameters\DataClassRetrieveParameters;
-use Chamilo\Libraries\Storage\Parameters\DataClassRetrievesParameters;
+use Chamilo\Libraries\Storage\Parameters\RetrieveParameters;
+use Chamilo\Libraries\Storage\Parameters\RetrievesParameters;
 use Chamilo\Libraries\Storage\Query\Condition\AndCondition;
 use Chamilo\Libraries\Storage\Query\Condition\EqualityCondition;
 use Chamilo\Libraries\Storage\Query\Condition\InCondition;
@@ -39,7 +39,7 @@ class TreeNodeDataRepository extends CommonDataClassRepository
 
         $condition = new AndCondition($conditions);
 
-        return $this->dataClassRepository->retrieve(TreeNodeData::class, new DataClassRetrieveParameters($condition));
+        return $this->dataClassRepository->retrieve(TreeNodeData::class, new RetrieveParameters($condition));
     }
 
     /**
@@ -55,7 +55,7 @@ class TreeNodeDataRepository extends CommonDataClassRepository
 
         return $this->dataClassRepository->retrieves(
             TreeNodeData::class,
-            new DataClassRetrievesParameters($condition)
+            new RetrievesParameters($condition)
         );
     }
 
@@ -87,7 +87,7 @@ class TreeNodeDataRepository extends CommonDataClassRepository
 
         return $this->dataClassRepository->retrieves(
             TreeNodeData::class,
-            new DataClassRetrievesParameters($condition)
+            new RetrievesParameters($condition)
         );
     }
 
@@ -107,7 +107,7 @@ class TreeNodeDataRepository extends CommonDataClassRepository
 
         return $this->dataClassRepository->retrieves(
             TreeNodeData::class,
-            new DataClassRetrievesParameters($condition)
+            new RetrievesParameters($condition)
         );
     }
 

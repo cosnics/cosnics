@@ -8,8 +8,8 @@ use Chamilo\Configuration\Form\Storage\DataClass\Value;
 use Chamilo\Libraries\Storage\DataClass\DataClass;
 use Chamilo\Libraries\Storage\DataManager\Repository\DataClassRepository;
 use Chamilo\Libraries\Storage\Parameters\DataClassCountParameters;
-use Chamilo\Libraries\Storage\Parameters\DataClassRetrieveParameters;
-use Chamilo\Libraries\Storage\Parameters\DataClassRetrievesParameters;
+use Chamilo\Libraries\Storage\Parameters\RetrieveParameters;
+use Chamilo\Libraries\Storage\Parameters\RetrievesParameters;
 use Chamilo\Libraries\Storage\Query\Condition\AndCondition;
 use Chamilo\Libraries\Storage\Query\Condition\Condition;
 use Chamilo\Libraries\Storage\Query\Condition\EqualityCondition;
@@ -84,14 +84,13 @@ class FormRepository
      * @param ?\Chamilo\Libraries\Storage\Query\OrderBy $orderBy
      *
      * @return \Doctrine\Common\Collections\ArrayCollection<\Chamilo\Configuration\Form\Storage\DataClass\Option>
-     * @throws \Chamilo\Libraries\Storage\Exception\DataClassNoResultException
      */
     public function retrieveDynamicFormElementOptions(
         ?Condition $condition = null, ?int $offset = null, ?int $count = null, ?OrderBy $orderBy = null
     ): ArrayCollection
     {
         return $this->getDataClassRepository()->retrieves(
-            Option::class, new DataClassRetrievesParameters($condition, $count, $offset, $orderBy)
+            Option::class, new RetrievesParameters($condition, $count, $offset, $orderBy)
         );
     }
 
@@ -102,20 +101,18 @@ class FormRepository
      * @param ?\Chamilo\Libraries\Storage\Query\OrderBy $orderBy
      *
      * @return \Doctrine\Common\Collections\ArrayCollection<\Chamilo\Configuration\Form\Storage\DataClass\Value>
-     * @throws \Chamilo\Libraries\Storage\Exception\DataClassNoResultException
      */
     public function retrieveDynamicFormElementValues(
         ?Condition $condition = null, ?int $offset = null, ?int $count = null, ?OrderBy $orderBy = null
     ): ArrayCollection
     {
         return $this->getDataClassRepository()->retrieves(
-            Value::class, new DataClassRetrievesParameters($condition, $count, $offset, $orderBy)
+            Value::class, new RetrievesParameters($condition, $count, $offset, $orderBy)
         );
     }
 
     /**
      * @return \Doctrine\Common\Collections\ArrayCollection<\Chamilo\Configuration\Form\Storage\DataClass\Value>
-     * @throws \Chamilo\Libraries\Storage\Exception\DataClassNoResultException
      */
     public function retrieveDynamicFormElementValuesForFormIdentifierAndUserIdentifier(
         string $formIdentifier, string $userIdentifier
@@ -147,13 +144,12 @@ class FormRepository
      * @param ?\Chamilo\Libraries\Storage\Query\OrderBy $orderBy
      *
      * @return \Doctrine\Common\Collections\ArrayCollection<\Chamilo\Configuration\Form\Storage\DataClass\Element>
-     * @throws \Chamilo\Libraries\Storage\Exception\DataClassNoResultException
      */
     public function retrieveDynamicFormElements(
         ?Condition $condition = null, ?int $offset = null, ?int $count = null, ?OrderBy $orderBy = null
     ): ArrayCollection
     {
-        $parameters = new DataClassRetrievesParameters($condition, $count, $offset, $orderBy);
+        $parameters = new RetrievesParameters($condition, $count, $offset, $orderBy);
 
         return $this->getDataClassRepository()->retrieves(Element::class, $parameters);
     }
@@ -165,13 +161,12 @@ class FormRepository
      * @param ?\Chamilo\Libraries\Storage\Query\OrderBy $orderBy
      *
      * @return \Doctrine\Common\Collections\ArrayCollection<\Chamilo\Configuration\Form\Storage\DataClass\Element>
-     * @throws \Chamilo\Libraries\Storage\Exception\DataClassNoResultException
      */
     public function retrieveDynamicForms(
         ?Condition $condition = null, ?int $offset = null, ?int $count = null, ?OrderBy $orderBy = null
     ): ArrayCollection
     {
-        $parameters = new DataClassRetrievesParameters($condition, $count, $offset, $orderBy);
+        $parameters = new RetrievesParameters($condition, $count, $offset, $orderBy);
 
         return $this->getDataClassRepository()->retrieves(Instance::class, $parameters);
     }
@@ -190,12 +185,9 @@ class FormRepository
 
         $condition = new AndCondition($conditions);
 
-        return $this->getDataClassRepository()->retrieve(Instance::class, new DataClassRetrieveParameters($condition));
+        return $this->getDataClassRepository()->retrieve(Instance::class, new RetrieveParameters($condition));
     }
 
-    /**
-     * @throws \Chamilo\Libraries\Storage\Exception\DataClassNoResultException
-     */
     public function selectNextDynamicFormElementOptionOrder($dynamicFormElementIdentifier): int
     {
         $condition = new EqualityCondition(
@@ -208,9 +200,6 @@ class FormRepository
         );
     }
 
-    /**
-     * @throws \Chamilo\Libraries\Storage\Exception\DataClassNoResultException
-     */
     public function selectNextDynamicFormElementOrder(int $dynamicFormIdentifier): int
     {
         $condition = new EqualityCondition(

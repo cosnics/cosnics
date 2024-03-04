@@ -30,7 +30,7 @@ use Chamilo\Libraries\Format\Structure\Glyph\FontAwesomeGlyph;
 use Chamilo\Libraries\Format\Table\FormAction\TableAction;
 use Chamilo\Libraries\Format\Table\FormAction\TableActions;
 use Chamilo\Libraries\Storage\Parameters\DataClassCountParameters;
-use Chamilo\Libraries\Storage\Parameters\DataClassRetrievesParameters;
+use Chamilo\Libraries\Storage\Parameters\RetrievesParameters;
 use Chamilo\Libraries\Storage\Query\Condition\AndCondition;
 use Chamilo\Libraries\Storage\Query\Condition\ComparisonCondition;
 use Chamilo\Libraries\Storage\Query\Condition\ContainsCondition;
@@ -816,7 +816,7 @@ class BrowserComponent extends Manager implements BreadcrumbLessComponentInterfa
         $condition = new AndCondition($conditions);
 
         $objects = DataManager::retrieves(
-            ContentObjectPublicationCategory::class, new DataClassRetrievesParameters($condition)
+            ContentObjectPublicationCategory::class, new RetrievesParameters($condition)
         );
 
         return $objects->current();

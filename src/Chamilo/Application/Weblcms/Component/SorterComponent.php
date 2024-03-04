@@ -21,8 +21,8 @@ use Chamilo\Libraries\Format\Structure\Glyph\FontAwesomeGlyph;
 use Chamilo\Libraries\Format\Structure\Toolbar;
 use Chamilo\Libraries\Format\Structure\ToolbarItem;
 use Chamilo\Libraries\Storage\Cache\DataClassRepositoryCache;
-use Chamilo\Libraries\Storage\Parameters\DataClassRetrieveParameters;
-use Chamilo\Libraries\Storage\Parameters\DataClassRetrievesParameters;
+use Chamilo\Libraries\Storage\Parameters\RetrieveParameters;
+use Chamilo\Libraries\Storage\Parameters\RetrievesParameters;
 use Chamilo\Libraries\Storage\Query\Condition\AndCondition;
 use Chamilo\Libraries\Storage\Query\Condition\EqualityCondition;
 use Chamilo\Libraries\Storage\Query\Variable\PropertyConditionVariable;
@@ -158,7 +158,7 @@ class SorterComponent extends Manager
             $condition = new AndCondition($conditions);
 
             $course_type_user_category_rel_course = DataManager::retrieves(
-                CourseTypeUserCategoryRelCourse::class, new DataClassRetrievesParameters($condition)
+                CourseTypeUserCategoryRelCourse::class, new RetrievesParameters($condition)
             )->current();
         }
 
@@ -573,7 +573,7 @@ class SorterComponent extends Manager
         $condition = new AndCondition($conditions);
 
         $course_type_user_category_rel_course = DataManager::retrieve(
-            CourseTypeUserCategoryRelCourse::class, new DataClassRetrieveParameters($condition)
+            CourseTypeUserCategoryRelCourse::class, new RetrieveParameters($condition)
         );
 
         $sort_factor = $direction == 'up' ? - 1 : 1;

@@ -6,11 +6,11 @@ use Chamilo\Application\Weblcms\Admin\Extension\Platform\Entity\UserEntity;
 use Chamilo\Application\Weblcms\Admin\Extension\Platform\Manager;
 use Chamilo\Application\Weblcms\Admin\Extension\Platform\Storage\DataClass\Admin;
 use Chamilo\Core\User\Storage\DataClass\User;
-use Chamilo\Libraries\Storage\DataManager\DataManager;
 use Chamilo\Libraries\Format\Table\Column\DataClassPropertyTableColumn;
 use Chamilo\Libraries\Storage\DataClass\DataClass;
+use Chamilo\Libraries\Storage\DataManager\DataManager;
 use Chamilo\Libraries\Storage\Parameters\DataClassCountParameters;
-use Chamilo\Libraries\Storage\Parameters\RecordRetrievesParameters;
+use Chamilo\Libraries\Storage\Parameters\RetrievesParameters;
 use Chamilo\Libraries\Storage\Query\Condition\EqualityCondition;
 use Chamilo\Libraries\Storage\Query\Join;
 use Chamilo\Libraries\Storage\Query\Joins;
@@ -173,7 +173,10 @@ class UserEntityHelper
             )
         );
 
-        $parameters = new RecordRetrievesParameters($properties, $condition, $count, $offset, $order_property, $joins);
+        $parameters = new RetrievesParameters(
+            condition: $condition, count: $count, offset: $offset, orderBy: $order_property, joins: $joins,
+            retrieveProperties: $properties
+        );
 
         return DataManager::records(
             User::class, $parameters

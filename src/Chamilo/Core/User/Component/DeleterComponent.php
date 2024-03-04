@@ -16,7 +16,6 @@ class DeleterComponent extends Manager
 
     /**
      * @throws \Chamilo\Libraries\Architecture\Exceptions\NotAllowedException
-     * @throws \Chamilo\Libraries\Storage\Exception\DataClassNoResultException
      */
     public function run()
     {

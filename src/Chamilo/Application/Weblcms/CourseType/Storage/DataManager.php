@@ -4,9 +4,8 @@ namespace Chamilo\Application\Weblcms\CourseType\Storage;
 use Chamilo\Application\Weblcms\CourseType\Storage\DataClass\CourseType;
 use Chamilo\Application\Weblcms\CourseType\Storage\DataClass\CourseTypeUserOrder;
 use Chamilo\Libraries\Storage\Parameters\DataClassCountParameters;
-use Chamilo\Libraries\Storage\Parameters\DataClassRetrieveParameters;
-use Chamilo\Libraries\Storage\Parameters\DataClassRetrievesParameters;
-use Chamilo\Libraries\Storage\Parameters\RecordRetrievesParameters;
+use Chamilo\Libraries\Storage\Parameters\RetrieveParameters;
+use Chamilo\Libraries\Storage\Parameters\RetrievesParameters;
 use Chamilo\Libraries\Storage\Query\Condition\AndCondition;
 use Chamilo\Libraries\Storage\Query\Condition\EqualityCondition;
 use Chamilo\Libraries\Storage\Query\Condition\NotCondition;
@@ -29,7 +28,7 @@ use Chamilo\Libraries\Storage\Query\Variable\StaticConditionVariable;
  */
 class DataManager extends \Chamilo\Application\Weblcms\Storage\DataManager
 {
-    const PREFIX = 'weblcms_';
+    public const PREFIX = 'weblcms_';
 
     /**
      * **************************************************************************************************************
@@ -57,7 +56,7 @@ class DataManager extends \Chamilo\Application\Weblcms\Storage\DataManager
      *
      * @param $user_id int
      *
-     * @return boolean
+     * @return bool
      */
     public static function create_course_type_user_orders_for_user($user_id)
     {
@@ -86,7 +85,7 @@ class DataManager extends \Chamilo\Application\Weblcms\Storage\DataManager
      *
      * @param $user_id int
      *
-     * @return boolean
+     * @return bool
      */
     public static function fix_course_tab_user_orders_for_user($user_id)
     {
@@ -124,7 +123,7 @@ class DataManager extends \Chamilo\Application\Weblcms\Storage\DataManager
         $condition = new AndCondition($conditions);
 
         $active_course_types = DataManager::retrieves(
-            CourseType::class, new DataClassRetrievesParameters($condition)
+            CourseType::class, new RetrievesParameters($condition)
         );
 
         foreach ($active_course_types as $course_type)
@@ -160,7 +159,7 @@ class DataManager extends \Chamilo\Application\Weblcms\Storage\DataManager
         $condition = new AndCondition($conditions);
 
         while ($course_type_user_order = DataManager::retrieve(
-            CourseTypeUserOrder::class, new DataClassRetrieveParameters($condition)
+            CourseTypeUserOrder::class, new RetrieveParameters($condition)
         ))
         {
             if (!$course_type_user_order->delete())
@@ -250,11 +249,11 @@ class DataManager extends \Chamilo\Application\Weblcms\Storage\DataManager
             new StaticConditionVariable(1)
         );
 
-        $order = array(
+        $order = [
             new OrderProperty(new PropertyConditionVariable(CourseType::class, CourseType::PROPERTY_DISPLAY_ORDER))
-        );
+        ];
 
-        $parameters = new DataClassRetrievesParameters($condition, null, null, new OrderBy($order));
+        $parameters = new RetrievesParameters($condition, null, null, new OrderBy($order));
 
         return DataManager::retrieves(CourseType::class, $parameters);
     }
@@ -337,7 +336,7 @@ class DataManager extends \Chamilo\Application\Weblcms\Storage\DataManager
             new StaticConditionVariable($course_type_name)
         );
 
-        return self::retrieve(CourseType::class, new DataClassRetrieveParameters($condition));
+        return self::retrieve(CourseType::class, new RetrieveParameters($condition));
     }
 
     /**
@@ -374,9 +373,9 @@ class DataManager extends \Chamilo\Application\Weblcms\Storage\DataManager
 
         $joins->add(new Join(CourseTypeUserOrder::class, $join_condition, Join::TYPE_LEFT));
 
-        $parameters = new RecordRetrievesParameters(
-            new RetrieveProperties(array(new PropertiesConditionVariable(CourseType::class))), $condition,
-            $max_objects, $offset, $order_by, $joins
+        $parameters = new RetrievesParameters(
+            condition: $condition, count: $max_objects, offset: $offset, orderBy: $order_by, joins: $joins,
+            retrieveProperties: new RetrieveProperties([new PropertiesConditionVariable(CourseType::class)])
         );
 
         return self::records(CourseType::class, $parameters);
@@ -407,6 +406,6 @@ class DataManager extends \Chamilo\Application\Weblcms\Storage\DataManager
 
         $condition = new AndCondition($conditions);
 
-        return self::retrieve(CourseTypeUserOrder::class, new DataClassRetrieveParameters($condition));
+        return self::retrieve(CourseTypeUserOrder::class, new RetrieveParameters($condition));
     }
 }

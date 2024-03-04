@@ -13,7 +13,7 @@ use Chamilo\Libraries\Format\Structure\Glyph\FontAwesomeGlyph;
 use Chamilo\Libraries\Storage\DataManager\DataManager;
 use Chamilo\Libraries\Storage\Parameters\DataClassCountParameters;
 use Chamilo\Libraries\Storage\Parameters\DataClassDistinctParameters;
-use Chamilo\Libraries\Storage\Parameters\DataClassRetrievesParameters;
+use Chamilo\Libraries\Storage\Parameters\RetrievesParameters;
 use Chamilo\Libraries\Storage\Query\Condition\AndCondition;
 use Chamilo\Libraries\Storage\Query\Condition\EqualityCondition;
 use Chamilo\Libraries\Storage\Query\Condition\InCondition;
@@ -165,7 +165,7 @@ class CourseUsersFeedComponent extends Manager
         );
 
         $groups = \Chamilo\Application\Weblcms\Course\Storage\DataManager::retrieves(
-            Group::class, new DataClassRetrievesParameters(
+            Group::class, new RetrievesParameters(
                 condition: new AndCondition($groupConditions), joins: new Joins(
                 new Join(
                     CourseEntityRelation::class, new EqualityCondition(
@@ -231,7 +231,7 @@ class CourseUsersFeedComponent extends Manager
         }
         $this->user_count = DataManager::count(User::class, new DataClassCountParameters($condition));
 
-        $parameters = new DataClassRetrievesParameters(
+        $parameters = new RetrievesParameters(
             $condition, 100, $this->get_offset(), new OrderBy([
                 new OrderProperty(new PropertyConditionVariable(User::class, User::PROPERTY_LASTNAME)),
                 new OrderProperty(new PropertyConditionVariable(User::class, User::PROPERTY_FIRSTNAME))

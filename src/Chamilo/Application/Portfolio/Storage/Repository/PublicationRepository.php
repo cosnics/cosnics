@@ -6,10 +6,8 @@ use Chamilo\Core\Repository\Publication\Service\PublicationAggregatorInterface;
 use Chamilo\Core\Repository\Storage\DataClass\ContentObject;
 use Chamilo\Libraries\Storage\DataManager\Repository\DataClassRepository;
 use Chamilo\Libraries\Storage\Parameters\DataClassCountParameters;
-use Chamilo\Libraries\Storage\Parameters\DataClassRetrieveParameters;
-use Chamilo\Libraries\Storage\Parameters\DataClassRetrievesParameters;
-use Chamilo\Libraries\Storage\Parameters\RecordRetrieveParameters;
-use Chamilo\Libraries\Storage\Parameters\RecordRetrievesParameters;
+use Chamilo\Libraries\Storage\Parameters\RetrieveParameters;
+use Chamilo\Libraries\Storage\Parameters\RetrievesParameters;
 use Chamilo\Libraries\Storage\Query\Condition\AndCondition;
 use Chamilo\Libraries\Storage\Query\Condition\Condition;
 use Chamilo\Libraries\Storage\Query\Condition\EqualityCondition;
@@ -160,7 +158,7 @@ class PublicationRepository
         );
 
         return $this->getDataClassRepository()->retrieve(
-            Publication::class, new DataClassRetrieveParameters($condition)
+            Publication::class, new RetrieveParameters($condition)
         );
     }
 
@@ -178,8 +176,10 @@ class PublicationRepository
         );
 
         return $this->getDataClassRepository()->record(
-            Publication::class, new RecordRetrieveParameters(
-                new RetrieveProperties([new PropertiesConditionVariable(Publication::class)]), $condition
+            Publication::class, new RetrieveParameters(
+                condition: $condition, retrieveProperties: new RetrieveProperties(
+                [new PropertiesConditionVariable(Publication::class)]
+            )
             )
         );
     }
@@ -223,8 +223,9 @@ class PublicationRepository
 
         $properties = new RetrieveProperties($retrieveProperties);
 
-        $parameters = new RecordRetrievesParameters(
-            $properties, $condition, $count, $offset, $orderBy, $this->getContentObjectPublicationJoins()
+        $parameters = new RetrievesParameters(
+            condition: $condition, count: $count, offset: $offset, orderBy: $orderBy,
+            joins: $this->getContentObjectPublicationJoins(), retrieveProperties: $properties
         );
 
         return $this->getDataClassRepository()->records(Publication::class, $parameters);
@@ -289,7 +290,7 @@ class PublicationRepository
     )
     {
         return $this->getDataClassRepository()->retrieves(
-            Publication::class, new DataClassRetrievesParameters($condition, $count, $offset, $orderBy)
+            Publication::class, new RetrievesParameters($condition, $count, $offset, $orderBy)
         );
     }
 

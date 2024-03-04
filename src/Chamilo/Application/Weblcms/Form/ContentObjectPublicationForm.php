@@ -27,7 +27,7 @@ use Chamilo\Libraries\Format\Utilities\ResourceManager;
 use Chamilo\Libraries\Mail\Mailer\MailerInterface;
 use Chamilo\Libraries\Mail\ValueObject\Mail;
 use Chamilo\Libraries\Mail\ValueObject\MailFile;
-use Chamilo\Libraries\Storage\Parameters\DataClassRetrievesParameters;
+use Chamilo\Libraries\Storage\Parameters\RetrievesParameters;
 use Chamilo\Libraries\Storage\Query\Condition\AndCondition;
 use Chamilo\Libraries\Storage\Query\Condition\EqualityCondition;
 use Chamilo\Libraries\Storage\Query\Variable\PropertyConditionVariable;
@@ -530,7 +530,7 @@ class ContentObjectPublicationForm extends BasePublicationForm
         $condition = new AndCondition($conditions);
 
         $cats = DataManager::retrieves(
-            ContentObjectPublicationCategory::class, new DataClassRetrievesParameters($condition)
+            ContentObjectPublicationCategory::class, new RetrievesParameters($condition)
         );
 
         foreach ($cats as $cat)

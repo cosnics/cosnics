@@ -175,7 +175,6 @@ class HomeService
     }
 
     /**
-     * @throws \Chamilo\Libraries\Storage\Exception\DataClassNoResultException
      * @throws \Chamilo\Libraries\Storage\Exception\DisplayOrderException
      */
     public function createElement(Element $element): bool
@@ -188,9 +187,6 @@ class HomeService
         return $this->getHomeRepository()->createElement($element);
     }
 
-    /**
-     * @throws \Chamilo\Libraries\Storage\Exception\DataClassNoResultException
-     */
     public function deleteElement(Element $element): bool
     {
         $childElements = $this->findElementsByParentIdentifier($element->getId());
@@ -216,9 +212,6 @@ class HomeService
         return true;
     }
 
-    /**
-     * @throws \Chamilo\Libraries\Storage\Exception\DataClassNoResultException
-     */
     public function deleteElementsForUserIdentifier(string $userIdentifier): bool
     {
         $userTabs = $this->getHomeRepository()->findElementsByTypeUserIdentifierAndParentIdentifier(
@@ -306,7 +299,6 @@ class HomeService
      * @param string $tabIdentifier
      *
      * @return \Doctrine\Common\Collections\ArrayCollection<\Chamilo\Core\Home\Storage\DataClass\Element>
-     * @throws \Chamilo\Libraries\Storage\Exception\DataClassNoResultException
      */
     public function findBlocksForTabIdentifier(string $tabIdentifier): ArrayCollection
     {
@@ -332,7 +324,6 @@ class HomeService
      * @param string $parentIdentifier
      *
      * @return \Doctrine\Common\Collections\ArrayCollection<\Chamilo\Core\Home\Storage\DataClass\Element>
-     * @throws \Chamilo\Libraries\Storage\Exception\DataClassNoResultException
      */
     public function findElementsByParentIdentifier(string $parentIdentifier): ArrayCollection
     {
@@ -345,7 +336,6 @@ class HomeService
      * @param string $parentIdentifier
      *
      * @return \Doctrine\Common\Collections\ArrayCollection<\Chamilo\Core\Home\Storage\DataClass\Element>
-     * @throws \Chamilo\Libraries\Storage\Exception\DataClassNoResultException
      * @throws \Exception
      */
     public function findElementsByTypeUserAndParentIdentifier(
@@ -367,9 +357,6 @@ class HomeService
         );
     }
 
-    /**
-     * @throws \Chamilo\Libraries\Storage\Exception\DataClassNoResultException
-     */
     public function getAvailableBlockRenderersForUser(User $user): array
     {
         $blockRendererFactory = $this->getBlockRendererFactory();
@@ -468,7 +455,6 @@ class HomeService
      * @param string $userIdentifier
      *
      * @return \Doctrine\Common\Collections\ArrayCollection<\Chamilo\Core\Home\Storage\DataClass\Element>
-     * @throws \Chamilo\Libraries\Storage\Exception\DataClassNoResultException
      */
     public function getElementsByUserIdentifier(string $userIdentifier): ArrayCollection
     {
@@ -500,18 +486,12 @@ class HomeService
         return (boolean) $this->getConfigurationConsulter()->getSetting([Manager::CONTEXT, 'allow_user_home']);
     }
 
-    /**
-     * @throws \Chamilo\Libraries\Storage\Exception\DataClassNoResultException
-     */
     public function tabByUserAndIdentifierHasMultipleColumns(string $tabIdentifier, User $user = null): bool
     {
         return $this->findElementsByTypeUserAndParentIdentifier(Element::TYPE_COLUMN, $user, $tabIdentifier)->count() >
             1;
     }
 
-    /**
-     * @throws \Chamilo\Libraries\Storage\Exception\DataClassNoResultException
-     */
     public function tabCanBeDeleted(Element $tab): bool
     {
         $tabBlocks = $this->findBlocksForTabIdentifier($tab->getId());
@@ -528,7 +508,6 @@ class HomeService
     }
 
     /**
-     * @throws \Chamilo\Libraries\Storage\Exception\DataClassNoResultException
      * @throws \Chamilo\Libraries\Storage\Exception\DisplayOrderException
      */
     public function updateElement(Element $element): bool
@@ -541,9 +520,6 @@ class HomeService
         return $this->getHomeRepository()->updateElement($element);
     }
 
-    /**
-     * @throws \Chamilo\Libraries\Storage\Exception\DataClassNoResultException
-     */
     public function userHasMultipleTabs(User $user = null): bool
     {
         return $this->findElementsByTypeUserAndParentIdentifier(Element::TYPE_TAB, $user)->count() > 1;

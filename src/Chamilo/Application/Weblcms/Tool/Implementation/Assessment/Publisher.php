@@ -10,7 +10,7 @@ use Chamilo\Core\Repository\Storage\DataManager;
 use Chamilo\Core\Repository\Workspace\Service\RightsService;
 use Chamilo\Libraries\DependencyInjection\Traits\DependencyInjectionContainerTrait;
 use Chamilo\Libraries\Format\Structure\Glyph\IdentGlyph;
-use Chamilo\Libraries\Storage\Parameters\DataClassRetrievesParameters;
+use Chamilo\Libraries\Storage\Parameters\RetrievesParameters;
 use Chamilo\Libraries\Storage\Query\Condition\InCondition;
 use Chamilo\Libraries\Storage\Query\Variable\PropertyConditionVariable;
 use Chamilo\Libraries\Translation\Translation;
@@ -135,7 +135,7 @@ class Publisher
             $condition = new InCondition(
                 new PropertyConditionVariable(ContentObject::class, ContentObject::PROPERTY_ID), $content_object_ids
             );
-            $parameters = new DataClassRetrievesParameters($condition);
+            $parameters = new RetrievesParameters($condition);
 
             $content_objects = DataManager::retrieve_active_content_objects(
                 ContentObject::class, $parameters

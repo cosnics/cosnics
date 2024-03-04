@@ -13,7 +13,7 @@ use Chamilo\Core\Repository\Storage\DataManager;
 use Chamilo\Libraries\Architecture\Exceptions\UserException;
 use Chamilo\Libraries\File\Compression\ZipArchive\ZipArchiveFilecompression;
 use Chamilo\Libraries\Format\Breadcrumb\BreadcrumbTrail;
-use Chamilo\Libraries\Storage\Parameters\DataClassRetrievesParameters;
+use Chamilo\Libraries\Storage\Parameters\RetrievesParameters;
 use Chamilo\Libraries\Storage\Query\Condition\AndCondition;
 use Chamilo\Libraries\Storage\Query\Condition\EqualityCondition;
 use Chamilo\Libraries\Storage\Query\Condition\InCondition;
@@ -265,7 +265,7 @@ class ZipAndDownloadComponent extends Manager
         $condition = new AndCondition($conditions);
 
         $categories = WeblcmsDataManager::retrieves(
-            ContentObjectPublicationCategory::class, new DataClassRetrievesParameters($condition)
+            ContentObjectPublicationCategory::class, new RetrievesParameters($condition)
         );
 
         foreach ($categories as $category)

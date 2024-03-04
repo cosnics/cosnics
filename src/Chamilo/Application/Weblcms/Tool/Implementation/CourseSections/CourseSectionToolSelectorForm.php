@@ -9,7 +9,7 @@ use Chamilo\Application\Weblcms\Storage\DataClass\CourseTool;
 use Chamilo\Application\Weblcms\Storage\DataClass\CourseToolRelCourseSection;
 use Chamilo\Application\Weblcms\Storage\DataManager;
 use Chamilo\Libraries\Format\Form\FormValidator;
-use Chamilo\Libraries\Storage\Parameters\DataClassRetrievesParameters;
+use Chamilo\Libraries\Storage\Parameters\RetrievesParameters;
 use Chamilo\Libraries\Storage\Query\Condition\AndCondition;
 use Chamilo\Libraries\Storage\Query\Condition\EqualityCondition;
 use Chamilo\Libraries\Storage\Query\Condition\InCondition;
@@ -69,7 +69,7 @@ class CourseSectionToolSelectorForm extends FormValidator
         );
 
         return $registered_tools_resultset = \Chamilo\Libraries\Storage\DataManager\DataManager::retrieves(
-            CourseToolRelCourseSection::class, new DataClassRetrievesParameters($condition)
+            CourseToolRelCourseSection::class, new RetrievesParameters($condition)
         );
     }
 
@@ -87,7 +87,7 @@ class CourseSectionToolSelectorForm extends FormValidator
             new StaticConditionVariable(CourseSection::TYPE_TOOL)
         );
 
-        $tools = DataManager::retrieves(CourseTool::class, new DataClassRetrievesParameters($condition));
+        $tools = DataManager::retrieves(CourseTool::class, new RetrievesParameters($condition));
 
         $active_tools = [];
 
@@ -137,7 +137,7 @@ class CourseSectionToolSelectorForm extends FormValidator
             new StaticConditionVariable($this->getRequest()->query->get('course'))
         );
         $course_sections = DataManager::retrieves(
-            CourseSection::class, new DataClassRetrievesParameters($condition)
+            CourseSection::class, new RetrievesParameters($condition)
         );
 
         $course_section_ids = [];
@@ -182,7 +182,7 @@ class CourseSectionToolSelectorForm extends FormValidator
             $condition = new AndCondition($conditions);
 
             $course_tool_rel_course_sections = DataManager::retrieves(
-                CourseToolRelCourseSection::class, new DataClassRetrievesParameters($condition)
+                CourseToolRelCourseSection::class, new RetrievesParameters($condition)
             );
 
             if ($course_tool_rel_course_sections->count() > 0)

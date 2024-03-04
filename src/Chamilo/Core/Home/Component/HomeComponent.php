@@ -18,7 +18,6 @@ class HomeComponent extends Manager implements NoAuthenticationSupportInterface,
 {
 
     /**
-     * @throws \Chamilo\Libraries\Storage\Exception\DataClassNoResultException
      * @throws \Chamilo\Libraries\Authentication\AuthenticationException
      * @throws \QuickformException
      */

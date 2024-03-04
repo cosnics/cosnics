@@ -7,8 +7,7 @@ use Chamilo\Core\Repository\ContentObject\LearningPath\Storage\Repository\Common
 use Chamilo\Core\Repository\Storage\DataClass\ContentObject;
 use Chamilo\Core\User\Storage\DataClass\User;
 use Chamilo\Libraries\Storage\Parameters\DataClassCountParameters;
-use Chamilo\Libraries\Storage\Parameters\DataClassRetrievesParameters;
-use Chamilo\Libraries\Storage\Parameters\RecordRetrievesParameters;
+use Chamilo\Libraries\Storage\Parameters\RetrievesParameters;
 use Chamilo\Libraries\Storage\Query\Condition\AndCondition;
 use Chamilo\Libraries\Storage\Query\Condition\Condition;
 use Chamilo\Libraries\Storage\Query\Condition\EqualityCondition;
@@ -41,11 +40,13 @@ abstract class EphorusRepository extends CommonDataClassRepository
     }
 
     /**
-     * @param \Chamilo\Libraries\Storage\Parameters\RecordRetrievesParameters $recordRetrievesParameters
+     * @param \Chamilo\Libraries\Storage\Parameters\RetrievesParameters $retrievesParameters
      *
      * @return ContentObject[] | ArrayCollection
      */
-    public function findAssignmentEntriesWithRequests(RecordRetrievesParameters $recordRetrievesParameters = null)
+    public function findAssignmentEntriesWithRequests(
+        RetrievesParameters $retrievesParameters = new RetrievesParameters()
+    )
     {
         $entryClassName = $this->getEntryClassName();
 
@@ -78,10 +79,10 @@ abstract class EphorusRepository extends CommonDataClassRepository
 
         $joins = $this->getAssignmentRequestJoins();
 
-        $recordRetrievesParameters->setJoins($joins);
-        $recordRetrievesParameters->setRetrieveProperties($properties);
+        $retrievesParameters->setJoins($joins);
+        $retrievesParameters->setRetrieveProperties($properties);
 
-        $records = $this->dataClassRepository->records($entryClassName, $recordRetrievesParameters);
+        $records = $this->dataClassRepository->records($entryClassName, $retrievesParameters);
 
         $dataClasses = [];
         foreach ($records as $record)
@@ -135,7 +136,7 @@ abstract class EphorusRepository extends CommonDataClassRepository
         );
 
         return $this->dataClassRepository->retrieves(
-            Request::class, new DataClassRetrievesParameters(
+            Request::class, new RetrievesParameters(
                 condition: $condition, joins: $joins
             )
         );
@@ -171,17 +172,17 @@ abstract class EphorusRepository extends CommonDataClassRepository
         $joins->add(
             new Join(
                 Request::class, new AndCondition(
-                    [
-                        new EqualityCondition(
-                            new PropertyConditionVariable(Request::class, Request::PROPERTY_CONTENT_OBJECT_ID),
-                            new PropertyConditionVariable($entryClassName, Entry::PROPERTY_CONTENT_OBJECT_ID)
-                        ),
-                        new EqualityCondition(
-                            new PropertyConditionVariable(Request::class, Request::PROPERTY_AUTHOR_ID),
-                            new PropertyConditionVariable($entryClassName, Entry::PROPERTY_USER_ID)
-                        )
-                    ]
-                ), Join::TYPE_LEFT
+                [
+                    new EqualityCondition(
+                        new PropertyConditionVariable(Request::class, Request::PROPERTY_CONTENT_OBJECT_ID),
+                        new PropertyConditionVariable($entryClassName, Entry::PROPERTY_CONTENT_OBJECT_ID)
+                    ),
+                    new EqualityCondition(
+                        new PropertyConditionVariable(Request::class, Request::PROPERTY_AUTHOR_ID),
+                        new PropertyConditionVariable($entryClassName, Entry::PROPERTY_USER_ID)
+                    )
+                ]
+            ), Join::TYPE_LEFT
             )
         );
 

@@ -73,7 +73,6 @@ class SystemAnnouncementsBlockRenderer extends BlockRenderer implements Configur
 
     /**
      * @throws \Chamilo\Libraries\Architecture\Exceptions\ObjectNotExistException
-     * @throws \Chamilo\Libraries\Storage\Exception\DataClassNoResultException
      */
     public function displayContent(Element $block, ?User $user = null): string
     {
@@ -132,25 +131,16 @@ class SystemAnnouncementsBlockRenderer extends BlockRenderer implements Configur
         return $this->publicationService;
     }
 
-    /**
-     * @throws \Chamilo\Libraries\Storage\Exception\DataClassNoResultException
-     */
     public function getPublications(User $user): ArrayCollection
     {
         return $this->getPublicationService()->findVisiblePublicationRecordsForUserIdentifier($user->getId());
     }
 
-    /**
-     * @throws \Chamilo\Libraries\Storage\Exception\DataClassNoResultException
-     */
     public function isEmpty(User $user): bool
     {
         return $this->getPublications($user)->count() == 0;
     }
 
-    /**
-     * @throws \Chamilo\Libraries\Storage\Exception\DataClassNoResultException
-     */
     public function isVisible(Element $block, ?User $user = null): bool
     {
         if (!parent::isVisible($block, $user) || ($this->isEmpty($user) && !$this->showWhenEmpty($block)))

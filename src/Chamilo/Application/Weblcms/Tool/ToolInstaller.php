@@ -18,7 +18,7 @@ use Chamilo\Configuration\Package\Service\PackageFactory;
 use Chamilo\Libraries\Architecture\ClassnameUtilities;
 use Chamilo\Libraries\DependencyInjection\DependencyInjectionContainerBuilder;
 use Chamilo\Libraries\Storage\DataClass\DataClass;
-use Chamilo\Libraries\Storage\Parameters\DataClassRetrievesParameters;
+use Chamilo\Libraries\Storage\Parameters\RetrievesParameters;
 
 /**
  * Abstract class to define the installation of a tool
@@ -41,7 +41,6 @@ class ToolInstaller extends Installer
     private CourseTool $tool_registration;
 
     /**
-     * @throws \Chamilo\Libraries\Storage\Exception\DataClassNoResultException
      * @throws \Exception
      */
     public function extra(array $formValues): bool
@@ -152,13 +151,11 @@ class ToolInstaller extends Installer
 
     /**
      * Installs the tool in the existing course types Adds the static tool settings with a default disabled value
-     *
-     * @throws \Chamilo\Libraries\Storage\Exception\DataClassNoResultException
      */
     protected function install_tool_for_existing_course_types(): bool
     {
         $translator = $this->getTranslator();
-        $course_types = CourseTypeDataManager::retrieves(CourseType::class, new DataClassRetrievesParameters());
+        $course_types = CourseTypeDataManager::retrieves(CourseType::class, new RetrievesParameters());
 
         foreach ($course_types as $course_type)
         {
@@ -185,14 +182,12 @@ class ToolInstaller extends Installer
     /**
      * Installs the tool in the existing courses Adds the static tool settings with a default disabled value Adds a
      * rights location for the tool in each course
-     *
-     * @throws \Chamilo\Libraries\Storage\Exception\DataClassNoResultException
      */
     protected function install_tool_for_existing_courses(): bool
     {
         $translator = $this->getTranslator();
         $course_management_rights = CourseManagementRights::getInstance();
-        $courses = CourseDataManager::retrieves(Course::class, new DataClassRetrievesParameters());
+        $courses = CourseDataManager::retrieves(Course::class, new RetrievesParameters());
 
         foreach ($courses as $course)
         {

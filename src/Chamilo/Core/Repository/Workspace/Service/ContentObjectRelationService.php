@@ -35,9 +35,6 @@ class ContentObjectRelationService
         $this->contentObjectRelationRepository = $contentObjectRelationRepository;
     }
 
-    /**
-     * @throws \Chamilo\Libraries\Storage\Exception\DataClassNoResultException
-     */
     public function countAvailableWorkspacesForContentObjectIdentifiersAndUser(
         array $contentObjectIdentifiers, User $user
     ): int
@@ -99,17 +96,11 @@ class ContentObjectRelationService
         return count($this->getWorkspaceIdentifiersForContentObject($contentObject));
     }
 
-    /**
-     * @throws \Chamilo\Libraries\Storage\Exception\DataClassNoResultException
-     */
     public function createContentObjectRelation(WorkspaceContentObjectRelation $contentObjectRelation): bool
     {
         return $this->getContentObjectRelationRepository()->createContentObjectRelation($contentObjectRelation);
     }
 
-    /**
-     * @throws \Chamilo\Libraries\Storage\Exception\DataClassNoResultException
-     */
     public function createContentObjectRelationFromParameters(
         string $workspaceId, string $contentObjectId, string $categoryId
     ): ?WorkspaceContentObjectRelation
@@ -141,9 +132,6 @@ class ContentObjectRelationService
         return $this->deleteContentObjectRelation($contentObjectRelation);
     }
 
-    /**
-     * @throws \Chamilo\Libraries\Storage\Exception\DataClassNoResultException
-     */
     public function getAvailableWorkspacesForContentObjectIdentifiersAndUser(
         array $contentObjectIdentifiers, User $user, ?int $limit = null, ?int $offset = null, ?OrderBy $orderBy = null
     ): ArrayCollection
@@ -162,7 +150,6 @@ class ContentObjectRelationService
      * @param ?\Chamilo\Libraries\Storage\Query\OrderBy $orderBy
      *
      * @return \Doctrine\Common\Collections\ArrayCollection<\Chamilo\Core\Repository\Workspace\Storage\DataClass\Workspace>
-     * @throws \Chamilo\Libraries\Storage\Exception\DataClassNoResultException
      */
     public function getAvailableWorkspacesForContentObjectsAndUser(
         ArrayCollection $contentObjects, User $user, ?int $limit = null, ?int $offset = null, ?OrderBy $orderBy = null
@@ -200,7 +187,6 @@ class ContentObjectRelationService
      * @param \Chamilo\Core\Repository\Storage\DataClass\ContentObject $contentObject
      *
      * @return \Doctrine\Common\Collections\ArrayCollection<\Chamilo\Core\Repository\Workspace\Storage\DataClass\WorkspaceContentObjectRelation>
-     * @throws \Chamilo\Libraries\Storage\Exception\DataClassNoResultException
      */
     public function getContentObjectRelationsForContentObject(ContentObject $contentObject): ArrayCollection
     {
@@ -212,9 +198,6 @@ class ContentObjectRelationService
         return $this->contentObjectService;
     }
 
-    /**
-     * @throws \Chamilo\Libraries\Storage\Exception\DataClassNoResultException
-     */
     public function getWorkspaceAndRelationForContentObject(
         ContentObject $contentObject, ?int $limit = null, ?int $count = null, ?OrderBy $orderBy = null
     ): ArrayCollection
@@ -224,9 +207,6 @@ class ContentObjectRelationService
         );
     }
 
-    /**
-     * @throws \Chamilo\Libraries\Storage\Exception\DataClassNoResultException
-     */
     public function getWorkspaceAndRelationForContentObjectNumber(
         string $contentObjectNumber, ?int $limit = null, ?int $count = null, ?OrderBy $orderBy = null
     ): ArrayCollection
@@ -255,7 +235,6 @@ class ContentObjectRelationService
      * @param \Chamilo\Core\Repository\Storage\DataClass\ContentObject $contentObject
      *
      * @return \Doctrine\Common\Collections\ArrayCollection<\Chamilo\Core\Repository\Workspace\Storage\DataClass\Workspace>
-     * @throws \Chamilo\Libraries\Storage\Exception\DataClassNoResultException
      */
     public function getWorkspacesForContentObject(ContentObject $contentObject): ArrayCollection
     {
@@ -284,9 +263,6 @@ class ContentObjectRelationService
         $contentObjectRelation->setCategoryId($categoryId);
     }
 
-    /**
-     * @throws \Chamilo\Libraries\Storage\Exception\DataClassNoResultException
-     */
     public function updateContentObjectIdInAllWorkspaces(string $oldContentObjectId, string $newContentObjectId)
     {
         $contentObjectRelations =
@@ -310,17 +286,11 @@ class ContentObjectRelationService
         }
     }
 
-    /**
-     * @throws \Chamilo\Libraries\Storage\Exception\DataClassNoResultException
-     */
     public function updateContentObjectRelation(WorkspaceContentObjectRelation $contentObjectRelation): bool
     {
         return $this->getContentObjectRelationRepository()->updateContentObjectRelation($contentObjectRelation);
     }
 
-    /**
-     * @throws \Chamilo\Libraries\Storage\Exception\DataClassNoResultException
-     */
     public function updateContentObjectRelationFromParameters(
         WorkspaceContentObjectRelation $contentObjectRelation, string $workspaceId, string $contentObjectId,
         string $categoryId

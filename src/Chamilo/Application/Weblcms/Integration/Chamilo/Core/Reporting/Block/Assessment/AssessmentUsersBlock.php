@@ -10,7 +10,7 @@ use Chamilo\Core\Reporting\Viewer\Manager;
 use Chamilo\Core\Reporting\Viewer\Rendition\Block\Type\Html;
 use Chamilo\Core\User\Storage\DataClass\User;
 use Chamilo\Libraries\Format\Structure\Glyph\FontAwesomeGlyph;
-use Chamilo\Libraries\Storage\Parameters\DataClassRetrievesParameters;
+use Chamilo\Libraries\Storage\Parameters\RetrievesParameters;
 use Chamilo\Libraries\Storage\Query\Condition\EqualityCondition;
 use Chamilo\Libraries\Storage\Query\Variable\PropertyConditionVariable;
 use Chamilo\Libraries\Storage\Query\Variable\StaticConditionVariable;
@@ -236,7 +236,7 @@ class AssessmentUsersBlock extends AssessmentBlock
     {
         return WeblcmsTrackingDataManager::retrieves(
             AssessmentAttempt::class,
-            new DataClassRetrievesParameters($this->get_assessment_attempts_condition())
+            new RetrievesParameters($this->get_assessment_attempts_condition())
         );
     }
 

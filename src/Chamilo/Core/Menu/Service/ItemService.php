@@ -62,7 +62,6 @@ class ItemService implements ItemServiceInterface
 
     /**
      * @throws \Chamilo\Libraries\Storage\Exception\DisplayOrderException
-     * @throws \Chamilo\Libraries\Storage\Exception\DataClassNoResultException
      */
     public function createItem(Item $item): bool
     {
@@ -151,7 +150,6 @@ class ItemService implements ItemServiceInterface
     /**
      * @throws \Psr\Cache\InvalidArgumentException
      * @throws \Psr\SimpleCache\InvalidArgumentException
-     * @throws \Chamilo\Libraries\Storage\Exception\DataClassNoResultException
      */
     public function deleteItemChildren(Item $item): bool
     {
@@ -175,7 +173,6 @@ class ItemService implements ItemServiceInterface
 
     /**
      * @return \Doctrine\Common\Collections\ArrayCollection<\Chamilo\Core\Menu\Storage\DataClass\Item>
-     * @throws \Chamilo\Libraries\Storage\Exception\DataClassNoResultException
      */
     public function findApplicationItems(): ArrayCollection
     {
@@ -189,7 +186,6 @@ class ItemService implements ItemServiceInterface
 
     /**
      * @return \Doctrine\Common\Collections\ArrayCollection<\Chamilo\Core\Menu\Storage\DataClass\Item>
-     * @throws \Chamilo\Libraries\Storage\Exception\DataClassNoResultException
      */
     public function findItems(): ArrayCollection
     {
@@ -200,7 +196,6 @@ class ItemService implements ItemServiceInterface
      * @param string[] $identifiers
      *
      * @return \Doctrine\Common\Collections\ArrayCollection<\Chamilo\Core\Menu\Storage\DataClass\Item>
-     * @throws \Chamilo\Libraries\Storage\Exception\DataClassNoResultException
      */
     public function findItemsByIdentifiers(array $identifiers): ArrayCollection
     {
@@ -214,7 +209,6 @@ class ItemService implements ItemServiceInterface
      * @param ?\Chamilo\Libraries\Storage\Query\OrderBy $orderBy
      *
      * @return \Doctrine\Common\Collections\ArrayCollection<\Chamilo\Core\Menu\Storage\DataClass\Item>
-     * @throws \Chamilo\Libraries\Storage\Exception\DataClassNoResultException
      */
     public function findItemsByParentIdentifier(
         string $parentIdentifier, ?int $count = null, ?int $offset = null, ?OrderBy $orderBy = null
@@ -229,7 +223,6 @@ class ItemService implements ItemServiceInterface
      * @param string $type
      *
      * @return \Doctrine\Common\Collections\ArrayCollection<\Chamilo\Core\Menu\Storage\DataClass\Item>
-     * @throws \Chamilo\Libraries\Storage\Exception\DataClassNoResultException
      */
     public function findItemsByType(string $type): ArrayCollection
     {
@@ -238,7 +231,6 @@ class ItemService implements ItemServiceInterface
 
     /**
      * @return \Chamilo\Core\Menu\Storage\DataClass\Item[][]
-     * @throws \Chamilo\Libraries\Storage\Exception\DataClassNoResultException
      */
     public function findItemsGroupedByParentIdentifier(): array
     {
@@ -249,7 +241,6 @@ class ItemService implements ItemServiceInterface
 
     /**
      * @return \Doctrine\Common\Collections\ArrayCollection<\Chamilo\Core\Menu\Storage\DataClass\Item>
-     * @throws \Chamilo\Libraries\Storage\Exception\DataClassNoResultException
      */
     public function findRootCategoryItems(): ArrayCollection
     {
@@ -258,7 +249,6 @@ class ItemService implements ItemServiceInterface
 
     /**
      * @return \Doctrine\Common\Collections\ArrayCollection<\Chamilo\Core\Menu\Storage\DataClass\Item>
-     * @throws \Chamilo\Libraries\Storage\Exception\DataClassNoResultException
      */
     public function findRootItems(): ArrayCollection
     {
@@ -289,9 +279,6 @@ class ItemService implements ItemServiceInterface
         return $this->itemRepository;
     }
 
-    /**
-     * @throws \Chamilo\Libraries\Storage\Exception\DataClassNoResultException
-     */
     public function getNextItemSortValueByParentIdentifier(string $parentIdentifier): int
     {
         return $this->getItemRepository()->getNextItemSortValueByParentIdentifier($parentIdentifier);
@@ -319,7 +306,6 @@ class ItemService implements ItemServiceInterface
 
     /**
      * @throws \Chamilo\Libraries\Storage\Exception\DisplayOrderException
-     * @throws \Chamilo\Libraries\Storage\Exception\DataClassNoResultException
      */
     public function moveItemInDirection(Item $item, int $moveDirection): bool
     {
@@ -333,7 +319,6 @@ class ItemService implements ItemServiceInterface
      * @param string[]|string[][] $values
      *
      * @throws \Chamilo\Libraries\Storage\Exception\DisplayOrderException
-     * @throws \Chamilo\Libraries\Storage\Exception\DataClassNoResultException
      */
     public function saveItemFromValues(Item $item, array $values): bool
     {
@@ -368,7 +353,6 @@ class ItemService implements ItemServiceInterface
     }
 
     /**
-     * @throws \Chamilo\Libraries\Storage\Exception\DataClassNoResultException
      * @throws \Chamilo\Libraries\Storage\Exception\DisplayOrderException
      */
     public function updateItem(Item $item): bool

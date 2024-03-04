@@ -13,7 +13,6 @@ class DetailsComponent extends Manager
 
     /**
      * @throws \TableException
-     * @throws \Chamilo\Libraries\Storage\Exception\DataClassNoResultException
      */
     public function run()
     {

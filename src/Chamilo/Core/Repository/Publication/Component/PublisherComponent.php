@@ -10,7 +10,7 @@ use Chamilo\Core\Repository\Storage\DataManager;
 use Chamilo\Libraries\Architecture\Exceptions\NoObjectSelectedException;
 use Chamilo\Libraries\Architecture\Exceptions\NotAllowedException;
 use Chamilo\Libraries\Format\Breadcrumb\BreadcrumbLessComponentInterface;
-use Chamilo\Libraries\Storage\Parameters\DataClassRetrievesParameters;
+use Chamilo\Libraries\Storage\Parameters\RetrievesParameters;
 use Chamilo\Libraries\Storage\Query\Condition\InCondition;
 use Chamilo\Libraries\Storage\Query\OrderBy;
 use Chamilo\Libraries\Storage\Query\Variable\PropertyConditionVariable;
@@ -108,7 +108,7 @@ class PublisherComponent extends Manager implements BreadcrumbLessComponentInter
         $orderBy = OrderBy::generate(ContentObject::class, ContentObject::PROPERTY_ID);
 
         return DataManager::retrieve_content_objects(
-            ContentObject::class, new DataClassRetrievesParameters(
+            ContentObject::class, new RetrievesParameters(
                 condition: $condition, orderBy: $orderBy
             )
         );

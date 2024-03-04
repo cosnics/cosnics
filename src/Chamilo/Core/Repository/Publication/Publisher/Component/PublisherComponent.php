@@ -12,7 +12,7 @@ use Chamilo\Libraries\Format\Breadcrumb\BreadcrumbLessComponentInterface;
 use Chamilo\Libraries\Format\Form\FormValidator;
 use Chamilo\Libraries\Format\Structure\WizardHeader\WizardHeader;
 use Chamilo\Libraries\Format\Structure\WizardHeader\WizardHeaderRenderer;
-use Chamilo\Libraries\Storage\Parameters\DataClassRetrievesParameters;
+use Chamilo\Libraries\Storage\Parameters\RetrievesParameters;
 use Chamilo\Libraries\Storage\Query\Condition\InCondition;
 use Chamilo\Libraries\Storage\Query\Variable\PropertyConditionVariable;
 use Chamilo\Libraries\Translation\Translation;
@@ -95,7 +95,7 @@ class PublisherComponent extends Manager implements ViewerInterface, BreadcrumbL
                 new PropertyConditionVariable(ContentObject::class, ContentObject::PROPERTY_ID),
                 $selectedContentObjectIds
             );
-            $parameters = new DataClassRetrievesParameters($condition);
+            $parameters = new RetrievesParameters($condition);
 
             return DataManager::retrieve_active_content_objects(
                 ContentObject::class, $parameters

@@ -29,9 +29,6 @@ class EntityRelationService
         return $this->getEntityRelationRepository()->countEntityRelations($condition);
     }
 
-    /**
-     * @throws \Chamilo\Libraries\Storage\Exception\DataClassNoResultException
-     */
     public function createEntityRelation(string $workspaceId, int $entityType, string $entityIdentifier, int $right
     ): bool
     {
@@ -74,7 +71,6 @@ class EntityRelationService
      * @param ?\Chamilo\Libraries\Storage\Query\OrderBy $orderBy
      *
      * @return \Doctrine\Common\Collections\ArrayCollection<\Chamilo\Core\Repository\Workspace\Storage\DataClass\WorkspaceEntityRelation>
-     * @throws \Chamilo\Libraries\Storage\Exception\DataClassNoResultException
      */
     public function getEntityRelations(
         ?Condition $condition = null, ?int $limit = null, ?int $offset = null, ?OrderBy $orderBy = null
@@ -104,8 +100,6 @@ class EntityRelationService
 
     /**
      * @param string[][] $selectedEntityTypeIdentifiers
-     *
-     * @throws \Chamilo\Libraries\Storage\Exception\DataClassNoResultException
      */
     public function setEntityRelations(Workspace $workspace, array $selectedEntityTypeIdentifiers, int $right): bool
     {
@@ -138,9 +132,6 @@ class EntityRelationService
         return true;
     }
 
-    /**
-     * @throws \Chamilo\Libraries\Storage\Exception\DataClassNoResultException
-     */
     public function updateEntityRelation(
         WorkspaceEntityRelation $workspaceEntityRelation, string $workspaceId, int $entityType,
         string $entityIdentifier, int $right
