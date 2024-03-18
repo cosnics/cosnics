@@ -85,12 +85,12 @@ class UserRoleService implements UserRoleServiceInterface
 
         if ($userRoles->count() == 0)
         {
-            $userRoles = [$this->roleService->getOrCreateRoleByName('ROLE_DEFAULT_USER')];
+            $userRoles = new ArrayCollection([$this->roleService->getOrCreateRoleByName('ROLE_DEFAULT_USER')]);
         }
 
         if ($user->isPlatformAdmin())
         {
-            $userRoles[] = $this->roleService->getOrCreateRoleByName('ROLE_ADMINISTRATOR');
+            $userRoles->add($this->roleService->getOrCreateRoleByName('ROLE_ADMINISTRATOR'));
         }
 
         return $userRoles;
