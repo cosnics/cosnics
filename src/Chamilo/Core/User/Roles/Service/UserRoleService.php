@@ -77,9 +77,9 @@ class UserRoleService implements UserRoleServiceInterface
     }
 
     /**
-     * @return \Chamilo\Core\User\Roles\Storage\DataClass\Role[]
+     * @return \Doctrine\Common\Collections\ArrayCollection<\Chamilo\Core\User\Roles\Storage\DataClass\Role>
      */
-    public function getRolesForUser(User $user): array
+    public function getRolesForUser(User $user): ArrayCollection
     {
         $userRoles = $this->userRoleRepository->findRolesForUser($user->getId());
 
