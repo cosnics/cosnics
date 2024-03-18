@@ -21,9 +21,9 @@ interface UserRoleServiceInterface
     public function doesUserHaveAtLeastOneRole(User $user, array $rolesToMatch = []): bool;
 
     /**
-     * @return \Chamilo\Core\User\Roles\Storage\DataClass\Role[]
+     * @return \Doctrine\Common\Collections\ArrayCollection<\Chamilo\Core\User\Roles\Storage\DataClass\Role>
      */
-    public function getRolesForUser(User $user): array;
+    public function getRolesForUser(User $user): ArrayCollection;
 
     /**
      * @return \Doctrine\Common\Collections\ArrayCollection<\Chamilo\Core\User\Storage\DataClass\User>
