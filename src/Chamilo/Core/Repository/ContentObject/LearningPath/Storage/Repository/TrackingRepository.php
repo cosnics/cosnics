@@ -23,6 +23,7 @@ use Chamilo\Libraries\Storage\Query\Condition\NotCondition;
 use Chamilo\Libraries\Storage\Query\GroupBy;
 use Chamilo\Libraries\Storage\Query\Join;
 use Chamilo\Libraries\Storage\Query\Joins;
+use Chamilo\Libraries\Storage\Query\OrderBy;
 use Chamilo\Libraries\Storage\Query\Variable\FixedPropertyConditionVariable;
 use Chamilo\Libraries\Storage\Query\Variable\FunctionConditionVariable;
 use Chamilo\Libraries\Storage\Query\Variable\PropertyConditionVariable;
@@ -86,10 +87,10 @@ class TrackingRepository extends CommonDataClassRepository implements TrackingRe
     public function findTreeNodeAttempts(LearningPath $learningPath, User $user)
     {
         $condition = $this->getConditionForTreeNodeAttemptsForLearningPathAndUser($learningPath, $user);
-
+        $orderBy = new OrderBy(new PropertyConditionVariable($this->trackingParameters->getTreeNodeAttemptClassName(), TreeNodeAttempt::PROPERTY_START_TIME));
         return $this->dataClassRepository->retrieves(
             $this->trackingParameters->getTreeNodeAttemptClassName(),
-            new DataClassRetrievesParameters($condition));
+            new DataClassRetrievesParameters($condition, null, null, array($orderBy)));
     }
 
     /**
