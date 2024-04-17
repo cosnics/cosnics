@@ -7,12 +7,16 @@ use Chamilo\Core\API\Service\Architecture\Routing\APIRouteMatcher;
 use Chamilo\Core\User\Storage\DataClass\User;
 use Chamilo\Libraries\Architecture\Bootstrap\Kernel;
 use Chamilo\Libraries\Architecture\ErrorHandler\ExceptionLogger\ExceptionLoggerInterface;
+use Chamilo\Libraries\Architecture\Exceptions\NotAllowedException;
 use Chamilo\Libraries\Architecture\Exceptions\NotAuthenticatedException;
+use Chamilo\Libraries\Architecture\Exceptions\ObjectNotExistException;
 use Chamilo\Libraries\Architecture\Exceptions\PlatformNotAvailableException;
 use Chamilo\Libraries\Architecture\Exceptions\UserException;
 use Chamilo\Libraries\Architecture\Factory\ApplicationFactory;
 use Chamilo\Libraries\Authentication\AuthenticationValidator;
 use Chamilo\Libraries\Platform\Session\SessionUtilities;
+use Symfony\Component\HttpFoundation\JsonResponse;
+use Symfony\Component\Routing\Exception\ResourceNotFoundException;
 use Symfony\Component\Routing\Matcher\UrlMatcher;
 use Symfony\Component\Routing\RequestContext;
 use Symfony\Component\Routing\RouteCollection;
@@ -42,14 +46,29 @@ class CustomAPIKernel extends Kernel
             $this->configureTimezone()->checkAuthentication()
                 ->checkPlatformAvailability()->buildApplication()->runApplication();
         }
-        catch (NotAuthenticatedException $exception)
+        catch (NotAuthenticatedException|NotAllowedException $exception)
         {
+            $response = new JsonResponse(['error' => 'You are not allowed to access this resources.'], 403);
+            $response->send();
+            return;
         }
         catch (PlatformNotAvailableException $exception)
         {
+            $response = new JsonResponse(['error' => 'Platform is not available due to maintenance. Please try again later'], 503);
+            $response->send();
+            return;
+        }
+        catch(ResourceNotFoundException|ObjectNotExistException $exception)
+        {
+            $response = new JsonResponse(['error' => 'Resource not found'], 404);
+            $response->send();
+            return;
         }
         catch (UserException $exception)
         {
+            $response = new JsonResponse(['error' => $exception->getMessage()], 500);
+            $response->send();
+            return;
         }
     }
 
