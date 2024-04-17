@@ -39,6 +39,7 @@
 		"symfony/serializer": "^5.4",
 		"symfony/yaml": "^5.4",
 		"symfony/security-csrf": "^5.4",
+		"symfony/routing": "^5.4",
 		"twig/twig": "^3.7",
 		"assetic/framework": "3.0.0",
 		"wikimedia/minify": "2.2.6",
