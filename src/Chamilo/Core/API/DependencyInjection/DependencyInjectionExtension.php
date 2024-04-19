@@ -21,7 +21,7 @@ use Symfony\Component\DependencyInjection\Loader\YamlFileLoader;
  * @author Hans De Bisschop <hans.de.bisschop@ehb.be>
  * @author Magali Gillard <magali.gillard@ehb.be>
  */
-class DependencyInjectionExtension extends Extension implements ExtensionInterface, ICompilerPassExtension
+class DependencyInjectionExtension extends Extension implements ExtensionInterface, ICompilerPassExtension, IConfigurableExtension
 {
 
     /**
@@ -41,6 +41,23 @@ class DependencyInjectionExtension extends Extension implements ExtensionInterfa
             new FileLocator($pathBuilder->getConfigurationPath('Chamilo\Core\API') . 'DependencyInjection'));
 
         $loader->load('services.xml');
+    }
+
+    /**
+     * Loads the configuration for this package in the container
+     *
+     * @param \Symfony\Component\DependencyInjection\ContainerBuilder $container
+     */
+    public function loadContainerConfiguration(ContainerBuilder $container)
+    {
+        $loader = new YamlFileLoader(
+            $container, new FileLocator(
+                Path::getInstance()->namespaceToFullPath('Chamilo\Core\API') .
+                'Resources/Configuration'
+            )
+        );
+
+        $loader->load('Config.yml');
     }
 
     /**

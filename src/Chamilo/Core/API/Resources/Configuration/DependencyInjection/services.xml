@@ -26,6 +26,7 @@
                     id="Chamilo\Libraries\Authentication\AuthenticationValidator" />
             <argument>%chamilo.configuration.version%</argument>
             <argument type="service" id="Chamilo\Core\API\Service\Architecture\Routing\APIRouteMatcher"/>
+            <argument type="service" id="League\OAuth2\Server\ResourceServer"/>
             <argument
                     type="service"
                     id="chamilo.core.user.user"/>
@@ -36,5 +37,33 @@
         <service id="Chamilo\Core\API\Service\API\APIRoutingLoaderExtension" autowire="true">
             <tag name="Chamilo\Core\API\Service\Architecture\Routing\APIRoutingLoaderExtensionInterface" />
         </service>
+
+
+        <service id="Chamilo\Core\API\Storage\Repository\AccessTokenRepository">
+            <factory service="doctrine.orm.entity_manager" method="getRepository" />
+            <argument>Chamilo\Core\API\Entities\Oauth2\AccessToken</argument>
+        </service>
+
+        <service id="Chamilo\Core\API\Storage\Repository\AuthCodeRepository" autowire="true" />
+
+        <service id="Chamilo\Core\API\Storage\Repository\ClientRepository">
+            <factory service="doctrine.orm.entity_manager" method="getRepository" />
+            <argument>Chamilo\Core\API\Entities\Oauth2\Client</argument>
+        </service>
+
+        <service id="Chamilo\Core\API\Storage\Repository\ScopeRepository" autowire="true" />
+        <service id="Chamilo\Core\API\Storage\Repository\UserRepository" autowire="true" />
+
+        <service id="Chamilo\Core\API\Service\Oauth2\AuthorizationServerFactory" autowire="true" />
+        <service id="Chamilo\Core\API\Service\Oauth2\ResourceServerFactory" autowire="true" />
+
+        <service id="League\OAuth2\Server\ResourceServer">
+            <factory service="Chamilo\Core\API\Service\Oauth2\ResourceServerFactory" method="buildResourceServer"/>
+        </service>
+
+        <service id="League\OAuth2\Server\AuthorizationServer">
+            <factory service="Chamilo\Core\API\Service\Oauth2\AuthorizationServerFactory" method="buildAuthorizationServer"/>
+        </service>
+
     </services>
 </container>

@@ -2,20 +2,41 @@
 namespace Chamilo\Core\API\Component;
 
 use Chamilo\Core\API\Manager;
+use Chamilo\Libraries\Architecture\Interfaces\NoAuthenticationSupport;
+use League\OAuth2\Server\AuthorizationServer;
+use League\OAuth2\Server\Exception\OAuthServerException;
+use Nyholm\Psr7\Factory\Psr17Factory;
+use Symfony\Bridge\PsrHttpMessage\Factory\HttpFoundationFactory;
+use Symfony\Bridge\PsrHttpMessage\Factory\PsrHttpFactory;
+use Symfony\Component\HttpFoundation\JsonResponse;
 
 /**
- *
- * @package group.lib.group_manager.component
+ * @author Sven Vanpoucke - Hogeschool Gent
  */
-/**
- * Weblcms component which allows the user to manage his or her user subscriptions
- */
-class TokenComponent extends Manager
+class TokenComponent extends Manager implements NoAuthenticationSupport
 {
-    const PARAM_ID = 'id';
-
     function run()
     {
-        var_dump($this->get_parameter(self::PARAM_ID));
+        $psr17Factory = new Psr17Factory();
+        $psrHttpFactory = new PsrHttpFactory($psr17Factory, $psr17Factory, $psr17Factory, $psr17Factory);
+
+        try
+        {
+            $accessTokenResponse = $this->getAuthorizationServer()->respondToAccessTokenRequest(
+                $psrHttpFactory->createRequest($this->getRequest()), $psr17Factory->createResponse()
+            );
+        }
+        catch(OAuthServerException $ex)
+        {
+            return new JsonResponse(['error' => $ex->getMessage()], 500);
+        }
+
+        $httpFoundationFactory = new HttpFoundationFactory();
+        return $httpFoundationFactory->createResponse($accessTokenResponse);
+    }
+
+    protected function getAuthorizationServer(): AuthorizationServer
+    {
+        return $this->getService(AuthorizationServer::class);
     }
 }
