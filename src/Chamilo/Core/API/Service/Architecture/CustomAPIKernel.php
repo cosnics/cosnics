@@ -96,7 +96,13 @@ class CustomAPIKernel extends Kernel
 
         try
         {
-            $this->resourceServer->validateAuthenticatedRequest($psrHttpFactory->createRequest($this->getRequest()));
+            $psrRequest = $psrHttpFactory->createRequest($this->getRequest());
+            $psrRequest = $this->resourceServer->validateAuthenticatedRequest($psrRequest);
+
+            foreach($psrRequest->getAttributes() as $key => $attribute)
+            {
+                $this->getRequest()->attributes->set($key, $attribute);
+            }
         }
         catch(\Exception)
         {
