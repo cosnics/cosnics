@@ -1,0 +1,394 @@
+openapi: 3.0.0
+info:
+  title: 'CHAMILO API'
+  description: '<h3>Welcome to the API for Chamilo</h3><p>To authenticate to the API we use the OAuth2 protocol with the client_credentials flow.</p><ol><li>Retrieve an authorization token with a post request to /api/token. You must provide your client_id and client_secret in the body of the request. The server will return an access token which is valid for a limited amount of time.<p><code>client_id={{my_id}}&client_secret={{my_secret}}&grant_type=client_credentials</code></p></li><li>Use the retrieved access token from step 1 in the authorization header of all subsequent calls to our API.<p><code>Authorization: Bearer access_token</code></p></li><p>More information: <a href="https://www.oauth.com/oauth2-servers/access-tokens/client-credentials/" target="_blank">https://www.oauth.com/oauth2-servers/access-tokens/client-credentials/</a>'
+  version: 1.0.0
+servers:
+  -
+    url: /api
+    description: default
+  -
+    url: /chamilo/web/api
+    description: localhost
+  -
+    url: /php8/current/web/api
+    description: staging
+paths:
+  '/v1/courses/{course_id}':
+    get:
+      tags:
+        - Courses
+      summary: 'Retrieves a course by an id'
+      description: 'Retrieves a course by an id'
+      operationId: getCourse
+      parameters:
+        -
+          name: course_id
+          in: path
+          description: ID
+          required: true
+      responses:
+        '200':
+          description: 'The course'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/APICourse'
+      security:
+        -
+          oauth: []
+  '/v1/groups/{group_id}/users':
+    get:
+      tags:
+        - Groups
+      summary: 'Retrieves the users of a specific group'
+      description: 'Retrieves the users of a specific group'
+      operationId: getCourseGroupUsers
+      parameters:
+        -
+          name: group_id
+          in: path
+          description: ID
+          required: true
+      responses:
+        '200':
+          description: 'The users of a group'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/APIUser'
+      security:
+        -
+          oauth: []
+  '/v1/courses/{course_id}/groups':
+    get:
+      tags:
+        - Courses
+      summary: 'Retrieves the groups of course by an id'
+      description: 'Retrieves the groups of course by an id'
+      operationId: getCourseGroups
+      parameters:
+        -
+          name: course_id
+          in: path
+          description: ID
+          required: true
+      responses:
+        '200':
+          description: 'The groups of the course'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/APIGroup'
+      security:
+        -
+          oauth: []
+  '/v1/courses/{course_id}/users':
+    get:
+      tags:
+        - Courses
+      summary: 'Retrieves the users of course by an id'
+      description: 'Retrieves the users of course by an id'
+      operationId: getCourseUsers
+      parameters:
+        -
+          name: course_id
+          in: path
+          description: ID
+          required: true
+      responses:
+        '200':
+          description: 'The users of the course'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/APIUser'
+      security:
+        -
+          oauth: []
+  '/v1/users/{user_id}':
+    get:
+      tags:
+        - Users
+      summary: 'Retrieves a user by an id'
+      description: 'Retrieves a user by an id'
+      operationId: getUser
+      parameters:
+        -
+          name: user_id
+          in: path
+          description: ID
+          required: true
+      responses:
+        '200':
+          description: 'The user'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/APIUser'
+      security:
+        -
+          oauth: []
+components:
+  schemas:
+    APICourse:
+      title: Course
+      properties:
+        id:
+          type: integer
+        sisCourseId:
+          type: string
+          nullable: true
+        uuid:
+          type: string
+          nullable: true
+        integrationId:
+          type: string
+          nullable: true
+        sisImportId:
+          type: integer
+          nullable: true
+        name:
+          type: string
+        courseCode:
+          type: string
+        originalName:
+          type: string
+          nullable: true
+        workflowState:
+          type: string
+          nullable: true
+        accountId:
+          type: integer
+        rootAccountId:
+          type: integer
+        enrollmentTermId:
+          type: integer
+          nullable: true
+        gradingPeriods:
+          type: array
+          nullable: true
+        gradingStandardId:
+          type: integer
+        gradePassbackSetting:
+          type: string
+          nullable: true
+        createdAt:
+          type: string
+        startAt:
+          type: string
+          nullable: true
+        endAt:
+          type: string
+          nullable: true
+        locale:
+          type: string
+          nullable: true
+        enrollments:
+          type: array
+          nullable: true
+        totalStudents:
+          type: integer
+          nullable: true
+        calendar:
+          type: string
+          nullable: true
+        defaultView:
+          type: string
+          nullable: true
+        syllabusBody:
+          type: string
+          nullable: true
+        needsGradingCount:
+          type: integer
+          nullable: true
+        term:
+          type: array
+          nullable: true
+        courseProgress:
+          type: array
+          nullable: true
+        applyAssignmentGroupWeights:
+          type: boolean
+          nullable: true
+        permissions:
+          type: array
+          nullable: true
+        isPublic:
+          type: boolean
+          nullable: true
+        isPublicToAuthUsers:
+          type: boolean
+          nullable: true
+        publicSyllabus:
+          type: boolean
+          nullable: true
+        publicSyllabusToAuth:
+          type: boolean
+          nullable: true
+        publicDescription:
+          type: string
+          nullable: true
+        storageQuotaMb:
+          type: integer
+          nullable: true
+        storageQuotaUsedMb:
+          type: integer
+          nullable: true
+        hideFinalGrades:
+          type: boolean
+          nullable: true
+        license:
+          type: string
+          nullable: true
+        allowStudentAssignmentEdits:
+          type: boolean
+          nullable: true
+        allowWikiComments:
+          type: boolean
+          nullable: true
+        allowStudentForumAttachments:
+          type: boolean
+          nullable: true
+        openEnrollment:
+          type: boolean
+          nullable: true
+        selfEnrollment:
+          type: boolean
+          nullable: true
+        restrictEnrollmentsToCourseDates:
+          type: boolean
+          nullable: true
+        courseFormat:
+          type: string
+          nullable: true
+        accessRestrictedByDate:
+          type: boolean
+          nullable: true
+        timeZone:
+          type: string
+          nullable: true
+        blueprint:
+          type: boolean
+          nullable: true
+        blueprintRestrictions:
+          type: array
+          nullable: true
+        blueprintRestrictionsByObjectType:
+          type: array
+          nullable: true
+        template:
+          type: boolean
+          nullable: true
+      type: object
+    APIGroup:
+      title: Group
+      properties:
+        id:
+          type: integer
+        name:
+          type: string
+        description:
+          type: string
+          nullable: true
+        isPublic:
+          type: boolean
+          nullable: true
+        followedByUser:
+          type: boolean
+          nullable: true
+        joinLevel:
+          type: string
+          nullable: true
+        membersCount:
+          type: integer
+          nullable: true
+        avatarUrl:
+          type: string
+          nullable: true
+        contextType:
+          type: string
+          nullable: true
+        courseId:
+          type: integer
+        role:
+          type: string
+          nullable: true
+        groupCategoryId:
+          type: integer
+          nullable: true
+        sisGroupId:
+          type: string
+          nullable: true
+        sisImportId:
+          type: integer
+          nullable: true
+        storageQuotaMb:
+          type: integer
+          nullable: true
+        permissions:
+          type: array
+          nullable: true
+        users:
+          type: array
+          nullable: true
+      type: object
+    APIUser:
+      title: User
+      properties:
+        id:
+          type: integer
+        name:
+          type: string
+        sortableName:
+          type: string
+          nullable: true
+        lastName:
+          type: string
+        firstName:
+          type: string
+        shortName:
+          type: string
+          nullable: true
+        sisUserId:
+          type: string
+          nullable: true
+        sisImportId:
+          type: integer
+          nullable: true
+        integrationId:
+          type: string
+          nullable: true
+        loginId:
+          type: string
+        avatarUrl:
+          type: string
+          nullable: true
+        avatarState:
+          type: string
+          nullable: true
+        enrollments:
+          type: array
+          nullable: true
+        email:
+          type: string
+        locale:
+          type: string
+          nullable: true
+        lastLogin:
+          type: string
+          nullable: true
+        timeZone:
+          type: string
+          nullable: true
+        bio:
+          type: string
+          nullable: true
+      type: object
+  securitySchemes:
+    oauth:
+      type: oauth2
+      flows:
+        clientCredentials:
+          tokenUrl: token
+          scopes: {  }
