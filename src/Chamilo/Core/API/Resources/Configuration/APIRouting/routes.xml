@@ -5,5 +5,6 @@
         https://symfony.com/schema/routing/routing-1.0.xsd">
 
     <route id="api_token" path="/api/token" controller="Chamilo\Core\API\Component\TokenComponent"/>
+    <route id="api_doc" path="/api/doc" controller="Chamilo\Core\API\Component\DocComponent"/>
     <route id="api_test" path="/api/test/{id}" controller="Chamilo\Core\API\Component\TestComponent"/>
 </routes>

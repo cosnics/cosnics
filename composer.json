@@ -54,7 +54,8 @@
 		"fabpot/goutte": "^4",
 		"nelmio/alice": "^3.0@RC",
 		"phpunit/phpunit": "9.5.19",
-		"phpstan/phpstan": "1.5.2"
+		"phpstan/phpstan": "1.5.2",
+		"zircote/swagger-php": "4.9.0"
 	},
 	"repositories": [
 		{

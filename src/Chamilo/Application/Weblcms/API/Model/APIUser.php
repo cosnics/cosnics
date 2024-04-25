@@ -1,29 +1,49 @@
 <?php
 
 namespace Chamilo\Application\Weblcms\API\Model;
+use OpenApi\Attributes as OA;
 
 /**
  * @author Sven Vanpoucke - Hogeschool Gent
  */
+#[OA\Schema(title: 'User')]
 class APIUser
 {
+    #[OA\Property]
     protected int $id;
+    #[OA\Property]
     protected string $name;
+    #[OA\Property]
     protected ?string $sortableName = null;
+    #[OA\Property]
     protected string $lastName;
+    #[OA\Property]
     protected string $firstName;
+    #[OA\Property]
     protected ?string $shortName = null;
+    #[OA\Property]
     protected ?string $sisUserId = null;
+    #[OA\Property]
     protected ?int $sisImportId = null;
+    #[OA\Property]
     protected ?string $integrationId = null;
+    #[OA\Property]
     protected string $loginId;
+    #[OA\Property]
     protected ?string $avatarUrl = null;
+    #[OA\Property]
     protected ?string $avatarState = null;
+    #[OA\Property]
     protected ?array $enrollments = null;
+    #[OA\Property]
     protected string $email;
+    #[OA\Property]
     protected ?string $locale = null;
+    #[OA\Property]
     protected ?string $lastLogin = null;
+    #[OA\Property]
     protected ?string $timeZone = null;
+    #[OA\Property]
     protected ?string $bio = null;
 
     public function getId(): int

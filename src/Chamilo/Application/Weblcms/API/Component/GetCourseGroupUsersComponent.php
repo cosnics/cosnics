@@ -13,13 +13,33 @@ use Chamilo\Core\User\Storage\DataClass\User;
 use Chamilo\Libraries\Architecture\Exceptions\ObjectNotExistException;
 use Hogent\Integration\Ans\Service\ArrayUtilities;
 use Symfony\Component\HttpFoundation\JsonResponse;
+use OpenApi\Attributes as OA;
 
 /**
  * @author Sven Vanpoucke - Hogeschool Gent
  */
 class GetCourseGroupUsersComponent extends Manager
 {
-
+    #[OA\Get(
+        path: '/v1/groups/{group_id}/users',
+        operationId: 'getCourseGroupUsers',
+        description: 'Retrieves the users of a specific group',
+        summary: 'Retrieves the users of a specific group',
+        security: [['oauth' => []]], tags: ['Groups'])
+    ]
+    #[OA\Parameter(
+        name: 'group_id',
+        description: 'ID',
+        in: 'path',
+        required: true,
+    )]
+    #[OA\Response(
+        response: 200,
+        description: 'The users of a group',
+        content: new OA\JsonContent(
+            ref: APIUser::class
+        )
+    )]
     function run(): JsonResponse
     {
         $chamiloCourseGroupService = $this->getCourseGroupService();

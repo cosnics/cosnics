@@ -2,24 +2,44 @@
 
 namespace Chamilo\Application\Weblcms\API\Model;
 
+use OpenApi\Attributes as OA;
+
+#[OA\Schema(title: 'Group')]
 class APIGroup
 {
+    #[OA\Property]
     protected int $id;
+    #[OA\Property]
     protected string $name;
+    #[OA\Property]
     protected ?string $description = null;
+    #[OA\Property]
     protected ?bool $isPublic = null;
+    #[OA\Property]
     protected ?bool $followedByUser = null;
+    #[OA\Property]
     protected ?string $joinLevel = null;
+    #[OA\Property]
     protected ?int $membersCount = null;
+    #[OA\Property]
     protected ?string $avatarUrl = null;
+    #[OA\Property]
     protected ?string $contextType = null;
+    #[OA\Property]
     protected int $courseId;
+    #[OA\Property]
     protected ?string $role = null;
+    #[OA\Property]
     protected ?int $groupCategoryId = null;
+    #[OA\Property]
     protected ?string $sisGroupId = null;
+    #[OA\Property]
     protected ?int $sisImportId = null;
+    #[OA\Property]
     protected ?int $storageQuotaMb = null;
+    #[OA\Property]
     protected ?array $permissions = null;
+    #[OA\Property]
     protected ?array $users = null;
 
     public function getId(): int

@@ -12,7 +12,7 @@ use Symfony\Component\HttpFoundation\Response;
  *
  * @package application.lib.weblcms.tool.chat.component
  */
-require_once Path::getInstance()->getPluginPath() . '/phpfreechat/src/phpfreechat.class.php';
+//require_once Path::getInstance()->getPluginPath() . '/phpfreechat/src/phpfreechat.class.php';
 
 class ViewerComponent extends Manager
 {

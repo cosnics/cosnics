@@ -3,6 +3,7 @@
 namespace Chamilo\Application\Weblcms\API\Component;
 
 use Chamilo\Application\Weblcms\API\Manager;
+use Chamilo\Application\Weblcms\API\Model\APICourse;
 use Chamilo\Application\Weblcms\API\Model\APIGroup;
 use Chamilo\Application\Weblcms\Course\Storage\DataClass\Course;
 use Chamilo\Application\Weblcms\Service\CourseService;
@@ -11,13 +12,33 @@ use Chamilo\Application\Weblcms\Tool\Implementation\CourseGroup\Storage\DataClas
 use Chamilo\Libraries\Architecture\Exceptions\ObjectNotExistException;
 use Hogent\Integration\Ans\Service\ArrayUtilities;
 use Symfony\Component\HttpFoundation\JsonResponse;
+use OpenApi\Attributes as OA;
 
 /**
  * @author Sven Vanpoucke - Hogeschool Gent
  */
 class GetCourseGroupsComponent extends Manager
 {
-
+    #[OA\Get(
+        path: '/v1/courses/{course_id}/groups',
+        operationId: 'getCourseGroups',
+        description: 'Retrieves the groups of course by an id',
+        summary: 'Retrieves the groups of course by an id',
+        security: [['oauth' => []]], tags: ['Courses'])
+    ]
+    #[OA\Parameter(
+        name: 'course_id',
+        description: 'ID',
+        in: 'path',
+        required: true,
+    )]
+    #[OA\Response(
+        response: 200,
+        description: 'The groups of the course',
+        content: new OA\JsonContent(
+            ref: APIGroup::class
+        )
+    )]
     function run(): JsonResponse
     {
         $chamiloCourseService = $this->getCourseService();

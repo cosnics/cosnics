@@ -1,0 +1,6 @@
+[
+  {
+    "input": "Resources/Data/openapi.yaml",
+    "output": "Resources/Data/openapi.yaml"
+  }
+]

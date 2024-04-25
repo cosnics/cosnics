@@ -2,59 +2,114 @@
 
 namespace Chamilo\Application\Weblcms\API\Model;
 
+use OpenApi\Attributes as OA;
+
+#[OA\Schema(title: 'Course')]
+
 class APICourse
 {
+    #[OA\Property]
     protected int $id;
+    #[OA\Property]
     protected ?string $sisCourseId = null;
+    #[OA\Property]
     protected ?string $uuid = null;
+    #[OA\Property]
     protected ?string $integrationId = null;
+    #[OA\Property]
     protected ?int $sisImportId = null;
+    #[OA\Property]
     protected string $name;
+    #[OA\Property]
     protected string $courseCode;
+    #[OA\Property]
     protected ?string $originalName = null;
     //the current state of the course one of 'unpublished', 'available',
+    #[OA\Property]
     protected ?string $workflowState = null;
+    #[OA\Property]
     protected int $accountId = 0;
+    #[OA\Property]
     protected int $rootAccountId = 0;
+    #[OA\Property]
     protected ?int $enrollmentTermId = null;
+    #[OA\Property]
     protected ?array $gradingPeriods = null;
+    #[OA\Property]
     protected int $gradingStandardId = 0;
+    #[OA\Property]
     protected ?string $gradePassbackSetting = null;
+    #[OA\Property]
     protected string $createdAt = '';
+    #[OA\Property]
     protected ?string $startAt = null;
+    #[OA\Property]
     protected ?string $endAt = null;
+    #[OA\Property]
     protected ?string $locale = null;
+    #[OA\Property]
     protected ?array $enrollments = null;
+    #[OA\Property]
     protected ?int $totalStudents = null;
+    #[OA\Property]
     protected ?string $calendar = null;
+    #[OA\Property]
     protected ?string $defaultView = null;
+    #[OA\Property]
     protected ?string $syllabusBody = null;
+    #[OA\Property]
     protected ?int $needsGradingCount = null;
+    #[OA\Property]
     protected ?array $term = null;
+    #[OA\Property]
     protected ?array $courseProgress = null;
+    #[OA\Property]
     protected ?bool $applyAssignmentGroupWeights = null;
+    #[OA\Property]
     protected ?array $permissions = null;
+    #[OA\Property]
     protected ?bool $isPublic = null;
+    #[OA\Property]
     protected ?bool $isPublicToAuthUsers = null;
+    #[OA\Property]
     protected ?bool $publicSyllabus = null;
+    #[OA\Property]
     protected ?bool $publicSyllabusToAuth = null;
+    #[OA\Property]
     protected ?string $publicDescription = null;
+    #[OA\Property]
     protected ?int $storageQuotaMb = null;
+    #[OA\Property]
     protected ?int $storageQuotaUsedMb = null;
+    #[OA\Property]
     protected ?bool $hideFinalGrades = null;
+    #[OA\Property]
     protected ?string $license = null;
+    #[OA\Property]
     protected ?bool $allowStudentAssignmentEdits = null;
+    #[OA\Property]
     protected ?bool $allowWikiComments = null;
+    #[OA\Property]
     protected ?bool $allowStudentForumAttachments = null;
+    #[OA\Property]
     protected ?bool $openEnrollment = null;
+    #[OA\Property]
     protected ?bool $selfEnrollment = null;
+    #[OA\Property]
     protected ?bool $restrictEnrollmentsToCourseDates = null;
+    #[OA\Property]
     protected ?string $courseFormat = null;
+    #[OA\Property]
     protected ?bool $accessRestrictedByDate = null;
+    #[OA\Property]
     protected ?string $timeZone = null;
+    #[OA\Property]
     protected ?bool $blueprint = null;
+    #[OA\Property]
     protected ?array $blueprintRestrictions = null;
+    #[OA\Property]
     protected ?array $blueprintRestrictionsByObjectType = null;
+    #[OA\Property]
     protected ?bool $template = null;
 
     public function getCourseCode(): string
