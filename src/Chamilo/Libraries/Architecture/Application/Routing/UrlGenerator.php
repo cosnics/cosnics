@@ -7,7 +7,7 @@ use Symfony\Component\HttpFoundation\ParameterBag;
 /**
  * This service will be used to generate urls using the current url as a base
  *
- * @package Chamilo\Libraries\Architecture\Application\Routing
+ * @package Chamilo\Libraries\Architecture\Application\APIRouting
  * @author Sven
  */
 class UrlGenerator

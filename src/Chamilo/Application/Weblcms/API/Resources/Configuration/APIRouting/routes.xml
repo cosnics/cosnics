@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<routes xmlns="http://symfony.com/schema/routing"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:schemaLocation="http://symfony.com/schema/routing
+        https://symfony.com/schema/routing/routing-1.0.xsd">
+
+    <route id="application_weblcms_get_course" path="/api/v1/courses/{course_id}" controller="Chamilo\Application\Weblcms\API\Component\GetCourseComponent"/>
+    <route id="application_weblcms_get_course_users" path="/api/v1/courses/{course_id}/users" controller="Chamilo\Application\Weblcms\API\Component\GetCourseUsersComponent"/>
+    <route id="application_weblcms_get_course_groups" path="/api/v1/courses/{course_id}/groups" controller="Chamilo\Application\Weblcms\API\Component\GetCourseGroupsComponent"/>
+    <route id="application_weblcms_get_course_group_users" path="/api/v1/groups/{group_id}/users" controller="Chamilo\Application\Weblcms\API\Component\GetCourseGroupUsersComponent"/>
+    <route id="application_weblcms_get_user" path="/api/v1/users/{user_id}" controller="Chamilo\Application\Weblcms\API\Component\GetUserComponent"/>
+
+    <route id="application_weblcms_get_course_group_categories" path="/api/v1/courses/{course_id}/group_categories" controller="Chamilo\Application\Weblcms\API\Component\GetGroupCategoriesComponent"/>
+    <route id="application_weblcms_get_course_sections" path="/api/v1/courses/{course_id}/group_sections" controller="Chamilo\Application\Weblcms\API\Component\GetSectionsComponent"/>
+
+</routes>

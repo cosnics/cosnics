@@ -1,0 +1,50 @@
+<div id="swagger-ui">
+
+</div>
+
+{{ getCss('swagger-ui.css', 'Chamilo\\Core\\API') }}
+{{ getJavascript('swagger-ui-bundle.js', 'Chamilo\\Core\\API') }}
+{{ getJavascript('swagger-ui-standalone-preset.js', 'Chamilo\\Core\\API') }}
+
+<style>
+    body {
+        margin:0;
+    }
+
+    div.info span.url {
+        display: none;
+    }
+</style>
+<script type="text/javascript">
+    window.onload = function() {
+        //<editor-fold desc="Changeable Configuration Block">
+
+        // the following lines will be replaced by docker/configurator, when it runs in a docker-container
+        window.ui = SwaggerUIBundle({
+            url: "{{ BASE_PATH }}Chamilo/Core/API/Resources/Data/openapi.yaml",
+            dom_id: '#swagger-ui',
+            deepLinking: true,
+            presets: [
+                SwaggerUIBundle.presets.apis,
+                SwaggerUIStandalonePreset
+            ],
+            plugins: [
+                SwaggerUIBundle.plugins.DownloadUrl
+            ],
+            layout: "BaseLayout",
+            onComplete: function() {
+                var uri = window.location.href;
+
+                if(!uri.includes('localhost') && !uri.includes('staging'))
+                {
+                    var elements = document.getElementById('servers');
+                    elements.style.display = 'none';
+
+                    var elements = document.getElementsByClassName('servers-title');
+                    elements[0].style.display = 'none';
+                }
+            }
+        });
+    };
+
+</script>
