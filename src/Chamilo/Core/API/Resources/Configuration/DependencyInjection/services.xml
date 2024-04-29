@@ -65,5 +65,9 @@
             <factory service="Chamilo\Core\API\Service\Oauth2\AuthorizationServerFactory" method="buildAuthorizationServer"/>
         </service>
 
+        <service id="Chamilo\Core\API\Console\CreateClientCommand" autowire="true">
+            <tag name="chamilo.libraries.console.command"/>
+        </service>
+
     </services>
 </container>
