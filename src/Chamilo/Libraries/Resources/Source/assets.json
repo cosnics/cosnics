@@ -48,17 +48,6 @@
     },
     {
       "input": [
-        "{{ PackagePath }}/Resources/Javascript/Plugin/AngularJS/angular.min.js",
-        "{{ PackagePath }}/Resources/Javascript/Plugin/AngularJS/angular-sanitize.min.js",
-        "{{ PackagePath }}/Resources/Javascript/Plugin/AngularJS-UI-Bootstrap/ui-bootstrap.min.js"
-      ],
-      "output": {
-        "path": "Resources/Javascript",
-        "filename": "cosnics.angular.min.js"
-      }
-    },
-    {
-      "input": [
         "{{ PackagePath }}/Resources/Javascript/Plugin/Dropzone/dropzone.min.js",
         "{{ PackagePath }}/Resources/Javascript/Plugin/Highlight/highlight.pack.js",
         "{{ PackagePath }}/Resources/Javascript/Plugin/phpjs.js",

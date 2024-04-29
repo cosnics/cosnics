@@ -140,3 +140,12 @@ input[type="button"] {
     width: 100%;
   }
 }
+
+.btn-group-vertical {
+
+  > .btn:not(:first-child),
+  > .btn-group:not(:first-child) {
+    margin-top: -$btn-border-width;
+    margin-left: 0;
+  }
+}

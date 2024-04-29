@@ -1064,3 +1064,11 @@ table th.sorting,
 .popover-body {
 	padding: 1px;
 }
+
+.hide {
+	display: none !important;
+}
+
+.show {
+	display: block !important;
+}

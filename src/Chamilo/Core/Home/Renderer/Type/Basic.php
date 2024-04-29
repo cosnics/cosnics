@@ -9,7 +9,6 @@ use Chamilo\Core\Home\Renderer\Type\Basic\TabRenderer;
 use Chamilo\Core\Home\Repository\HomeRepository;
 use Chamilo\Core\Home\Rights\Service\ElementRightsService;
 use Chamilo\Core\Home\Rights\Storage\Repository\RightsRepository;
-use Chamilo\Core\Home\Service\AngularConnectorService;
 use Chamilo\Core\Home\Service\HomeService;
 use Chamilo\Core\Home\Storage\DataClass\Tab;
 use Chamilo\Core\User\Storage\DataClass\User;
@@ -238,22 +237,9 @@ class Basic extends Renderer
      */
     public function renderContent()
     {
-        $angularConnectorService = new AngularConnectorService(Configuration::getInstance());
-        $modules = $angularConnectorService->getAngularModules();
-        $moduleString = count($modules) > 0 ? '\'' . implode('\', \'', $modules) . '\'' : '';
-
         $html = array();
 
-        $html[] = $angularConnectorService->loadAngularModules();
-
-        $html[] = '<script type="text/javascript">';
-        $html[] = '(function(){';
-        $html[] = '    var homeApp = angular.module(\'homeApp\', [' . $moduleString . ']);';
-        $html[] = '    homeApp.filter(\'arrayToString\', function() { return function(x) { return x; }; });';
-        $html[] = '})();';
-        $html[] = '</script>';
-
-        $html[] = '<div class="portal-tabs" ng-app="homeApp">';
+        $html[] = '<div class="portal-tabs">';
 
         $tabs = $this->getHomeService()->getElements($this->get_user(), Tab::class_name());
 
