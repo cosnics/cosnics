@@ -42,7 +42,6 @@ class JavascriptHeaders
     {
         $javascriptFiles = [
             'cosnics.jquery.min.js',
-            'cosnics.angular.min.js',
             'cosnics.vue.min.js',
             'cosnics.vendors.min.js',
             'cosnics.common.min.js'

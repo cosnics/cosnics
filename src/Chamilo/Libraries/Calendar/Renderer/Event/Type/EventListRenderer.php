@@ -44,15 +44,15 @@ class EventListRenderer extends EventRenderer
         $html[] = '<div class="row' . $rowClasses . '" data-source-key="' . $legend->addSource($event->getSource()) .
              '">';
 
-        $html[] = '<div class="col-xs-1">';
+        $html[] = '<div class="col-1">';
         $html[] = '<span class="' . $eventClasses . '"></span>';
         $html[] = '</div>';
 
-        $html[] = '<div class="col-xs-3 list-event-item-time">';
+        $html[] = '<div class="col-3 list-event-item-time">';
         $html[] = $this->getRange();
         $html[] = '</div>';
 
-        $html[] = '<div class="col-xs-7 list-event-item-data">';
+        $html[] = '<div class="col-7 list-event-item-data">';
 
         if ($this->getEvent()->getUrl())
         {

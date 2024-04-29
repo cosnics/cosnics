@@ -73,12 +73,12 @@ abstract class FullRenderer extends ViewRenderer
         $html[] = '<div class="col col-lg-9 table-calendar-main">';
 
         $html[] = '<div class="row">';
-        $html[] = '<div class="col col-lg-4">';
-        $html[] = '<div class="pull-left">';
+        $html[] = '<div class="col col-lg-4 d-flex">';
+        $html[] = '<div class="pull-left align-self-center">';
         $html[] = $this->renderNavigation();
         $html[] = '</div>';
 
-        $html[] = '<div class="table-calendar-current-time pull-left">';
+        $html[] = '<div class="table-calendar-current-time pull-left align-self-center">';
         $html[] = '<h4>';
         $html[] = $this->renderTitle();
         $html[] = '</h4>';

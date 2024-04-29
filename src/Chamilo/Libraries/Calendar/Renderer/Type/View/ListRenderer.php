@@ -112,7 +112,7 @@ class ListRenderer extends FullRenderer
 
                 $html[] = '<div class="row' . ($allEventsAreHidden ? ' event-container-hidden' : '') . '">';
 
-                $html[] = '<div class="col table-calendar-list-date">';
+                $html[] = '<div class="col-12 table-calendar-list-date">';
                 $html[] = date('D, d M', $dateKey);
                 $html[] = '</div>';
 
