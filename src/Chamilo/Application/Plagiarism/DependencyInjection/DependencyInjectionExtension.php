@@ -2,6 +2,7 @@
 namespace Chamilo\Application\Plagiarism\DependencyInjection;
 
 use Chamilo\Application\Plagiarism\DependencyInjection\CompilerPass\PlagiarismEventListenerCompilerPass;
+use Chamilo\Application\Plagiarism\DependencyInjection\CompilerPass\PlagiarismEventSubscriberCompilerPass;
 use Chamilo\Application\Plagiarism\DependencyInjection\CompilerPass\UserConverterCompilerPass;
 use Chamilo\Libraries\Architecture\ClassnameUtilities;
 use Chamilo\Libraries\DependencyInjection\Interfaces\ICompilerPassExtension;
@@ -45,6 +46,7 @@ class DependencyInjectionExtension extends Extension implements ExtensionInterfa
 
         $xmlFileLoader->load('services.xml');
         $xmlFileLoader->load('turnitin.xml');
+        $xmlFileLoader->load('strike_plagiarism.xml');
     }
 
     /**
@@ -85,6 +87,7 @@ class DependencyInjectionExtension extends Extension implements ExtensionInterfa
     public function registerCompilerPasses(ContainerBuilder $container)
     {
         $container->addCompilerPass(new PlagiarismEventListenerCompilerPass());
+        $container->addCompilerPass(new PlagiarismEventSubscriberCompilerPass());
         $container->addCompilerPass(new UserConverterCompilerPass());
     }
 }

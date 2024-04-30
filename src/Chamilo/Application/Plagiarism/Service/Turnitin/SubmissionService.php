@@ -21,9 +21,6 @@ use function filesize;
  */
 class SubmissionService
 {
-    // 100 MB
-    const MAX_ALLOWED_FILE_SIZE = 100 * 1024 * 1024;
-
     /**
      * @var \Chamilo\Application\Plagiarism\Repository\Turnitin\TurnitinRepository
      */
@@ -69,44 +66,6 @@ class SubmissionService
         $this->eulaService = $eulaService;
         $this->webhookManager = $webhookManager;
         $this->submissionStatusParser = $submissionStatusParser;
-    }
-
-    /**
-     * Checks whether or not a file can be uploaded
-     *   File must exist
-     *   Filename must be within a list of valid extensions
-     *
-     * @param string $filePath
-     * @param string $filename
-     *
-     * @return bool
-     */
-    public function canUploadFile(string $filePath, string $filename)
-    {
-        if (!$this->isPlagiarismCheckerActive())
-        {
-            return false;
-        }
-
-        if (!file_exists($filePath))
-        {
-            return false;
-        }
-
-        $fileParts = explode('.', $filename);
-        $extension = array_pop($fileParts);
-        if (!in_array($extension, $this->getAllowedFileExtensions()))
-        {
-            return false;
-        }
-
-        $fileSize = filesize($filePath);
-        if($fileSize > self::MAX_ALLOWED_FILE_SIZE)
-        {
-            return false;
-        }
-
-        return true;
     }
 
     /**
@@ -211,11 +170,6 @@ class SubmissionService
             if (!$this->isPlagiarismCheckerActive())
             {
                 throw new InvalidConfigurationException();
-            }
-
-            if (!$this->canUploadFile($filePath, $filename))
-            {
-                throw new InvalidFileException($filePath, $filename);
             }
 
             $this->turnitinRepository->uploadSubmissionFile($submissionId, $filename, fopen($filePath, 'r'));
@@ -378,13 +332,4 @@ class SubmissionService
 
         throw new PlagiarismException($ex->getMessage(), 0, $ex);
     }
-
-    /**
-     * @return array
-     */
-    protected function getAllowedFileExtensions()
-    {
-        return ['doc', 'txt', 'rtf', 'sxw', 'odt', 'pdf', 'html', 'htm', 'docx', 'wpd'];
-    }
-
 }

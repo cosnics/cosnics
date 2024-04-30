@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<container
+        xmlns="http://symfony.com/schema/dic/services"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:schemaLocation="http://symfony.com/schema/dic/services http://symfony.com/schema/dic/services/services-1.0.xsd">
+    <services>
+        <defaults public="true" autowire="true" />
+        <service id="Chamilo\Application\Plagiarism\Service\StrikePlagiarism\PlagiarismChecker" autowire="true" />
+        <service id="Chamilo\Application\Plagiarism\Service\StrikePlagiarism\WebhookHandler" autowire="true" />
+        <service id="Chamilo\Application\Plagiarism\Service\StrikePlagiarism\WebhookManager" autowire="true" />
+        <service id="Chamilo\Application\Plagiarism\Service\StrikePlagiarism\SubmissionService" autowire="true" />
+
+        <service id="Chamilo\Application\Plagiarism\API\StrikePlagiarism\StrikePlagiarismRestClientFactory" autowire="true" />
+
+        <service id="Chamilo\Application\Plagiarism\API\StrikePlagiarism\StrikePlagiarismRestClient">
+            <factory service="Chamilo\Application\Plagiarism\API\StrikePlagiarism\StrikePlagiarismRestClientFactory" method="createRestClient" />
+        </service>
+
+        <service id="Chamilo\Application\Plagiarism\API\StrikePlagiarism\Repository\StrikePlagiarismRepository">
+            <argument key="$restClient" type="service" id="Chamilo\Application\Plagiarism\API\StrikePlagiarism\StrikePlagiarismRestClient" />
+        </service>
+
+    </services>
+</container>

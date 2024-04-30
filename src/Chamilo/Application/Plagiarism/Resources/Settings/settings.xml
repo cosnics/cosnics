@@ -23,5 +23,10 @@
             <setting name="turnitin_eula_valid_until_date" field="text" locked="true" default="" />
             <setting name="turnitin_eula_version" field="text" locked="true" default="" />
         </category>
+        <category name="strike_plagiarism">
+            <setting name="strike_plagiarism_api_url" field="text" default="" />
+            <setting name="strike_plagiarism_secret_key" field="text" default="" />
+            <setting name="strike_plagiarism_webhook_secret" field="text" locked="true" default="" />
+        </category>
     </settings>
 </package>

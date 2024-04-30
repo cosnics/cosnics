@@ -1,0 +1,55 @@
+<?php
+namespace {{ NAMESPACE }};
+
+
+/**
+ * @author Sven Vanpoucke - Hogeschool Gent
+ */
+class {{ MODEL_NAME }}
+{{ '{' }}
+    {% for property in PROPERTIES -%}
+        {%- if property.type == 'object' -%}
+            {%- if property.isArray %}
+
+    /**
+     * @var {{ property.name[:1]|upper ~ property.name[1:] }}[]
+     */
+    protected array ${{ property.name }};
+            {%- else %}
+
+    /**
+     * @var {{ property.name[:1]|upper ~ property.name[1:] }}
+     */
+    protected {{ property.name[:1]|upper ~ property.name[1:] }} ${{ property.name }};
+             {%- endif -%}
+        {%- else -%}
+        {%- if property.isArray -%}
+    /**
+     * @var {{ property.type }}[]
+     */
+    protected array ${{ property.name }};
+        {%- else -%}
+        protected {{ property.type }} ${{ property.name }};
+        {%- endif -%}
+        {%- endif %}
+
+    {% endfor %}
+    {# public function __construct({% for property in PROPERTIES %}{{ property.type }} ${{ property.name }}{% if not loop.last %}, {% endif %}{% endfor %})
+    {{ '{' }}
+        {%- for property in PROPERTIES ~%}
+        $this->{{ property.name }} = ${{ property.name }};
+        {%- endfor ~%}
+    {{ '}' }}
+    {{ '' }}
+    #}
+    {%- for property in PROPERTIES ~%}
+        {%- if property.isArray ~%}
+    public function get{{ property.name[:1]|upper ~ property.name[1:] }}(): array
+        {%- else ~%}
+    public function get{{ property.name[:1]|upper ~ property.name[1:] }}(): {{ property.type }}
+        {%- endif ~%}
+    {{ '{' }}
+        return $this->{{property.name }};
+    {{ '}' }}
+    {%~ endfor ~%}
+{{ '}' }}

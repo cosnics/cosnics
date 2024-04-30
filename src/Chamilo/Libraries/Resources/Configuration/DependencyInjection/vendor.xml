@@ -117,6 +117,15 @@
                 service="jms.serializer.serializer_factory" />
         </service>
 
+        <service id="Chamilo\Libraries\Format\Serializer\SymfonySerializerFactory" autowire="true" />
+
+        <service
+                id="Symfony\Component\Serializer\Serializer">
+            <factory
+                    method="buildSymfonySerializer"
+                    service="Chamilo\Libraries\Format\Serializer\SymfonySerializerFactory" />
+        </service>
+
         <service
                 alias="jms.serializer"
                 id="JMS\Serializer\Serializer">

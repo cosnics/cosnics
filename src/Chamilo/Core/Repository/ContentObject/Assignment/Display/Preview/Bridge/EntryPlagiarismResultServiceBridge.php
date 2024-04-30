@@ -51,7 +51,7 @@ class EntryPlagiarismResultServiceBridge implements EntryPlagiarismResultService
      *
      * @return \Chamilo\Core\Repository\ContentObject\Assignment\Extension\Plagiarism\Bridge\Storage\DataClass\EntryPlagiarismResult
      */
-    public function createEntryPlagiarismResultForEntry(Entry $entry, string $externalId)
+    public function createEntryPlagiarismResultForEntry(Entry $entry, string $externalId, ?int $status = null)
     {
         // TODO: Implement createEntryPlagiarismResultForEntry() method.
     }

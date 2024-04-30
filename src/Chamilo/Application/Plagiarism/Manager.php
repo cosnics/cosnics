@@ -16,6 +16,8 @@ abstract class Manager extends Application
     const ACTION_TURNITIN_EULA = 'TurnitinEula';
     const ACTION_TURNITIN_MANAGE_WEBHOOK = 'TurnitinWebhookManager';
 
+    const ACTION_STRIKEPLAGIARISM_WEBHOOK = 'StrikePlagiarismWebhook';
+
     /**
      * Manager constructor.
      *

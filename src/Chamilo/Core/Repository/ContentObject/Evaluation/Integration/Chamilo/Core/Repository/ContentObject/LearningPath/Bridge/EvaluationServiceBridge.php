@@ -243,4 +243,12 @@ class EvaluationServiceBridge implements EvaluationServiceBridgeInterface, Embed
     {
         return $this->learningPathEvaluationServiceBridge->getEntityNameByType($entityType);
     }
+
+    /**
+     * @return bool
+     */
+    public function canUseAns(): bool
+    {
+        return $this->learningPathEvaluationServiceBridge->canUseAns();
+    }
 }

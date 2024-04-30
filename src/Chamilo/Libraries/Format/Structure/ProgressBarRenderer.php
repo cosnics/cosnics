@@ -26,6 +26,11 @@ class ProgressBarRenderer
      */
     public function render($progress, $mode = self::MODE_DEFAULT, $maxWidth = 150, $striped = false)
     {
+        if($progress > 100)
+        {
+            $progress = 100;
+        }
+
         $this->validateProgress($progress);
         $this->validateMode($mode);
 
@@ -67,7 +72,7 @@ class ProgressBarRenderer
      */
     protected function validateProgress($progress)
     {
-        if (! is_int($progress) || $progress < 0 || $progress > 100)
+        if (! is_int($progress) || $progress < 0)
         {
             throw new \InvalidArgumentException(
                 'The given progress must be a valid integer and must be between 0 and 100');

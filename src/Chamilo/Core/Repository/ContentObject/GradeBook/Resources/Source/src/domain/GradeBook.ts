@@ -74,6 +74,12 @@ export interface CSVImportTotals {
 
 export type ResultsData = Record<ColumnId, Record<number, GradeScore>>;
 
+
+const TwoDigitsFormatter = new Intl.NumberFormat('en-US', {
+    minimumFractionDigits: 2,
+    maximumFractionDigits: 2,
+});
+
 export default class GradeBook {
     static readonly NO_SCORE = 0;
     static readonly MAX_SCORE = 1;
@@ -296,7 +302,9 @@ export default class GradeBook {
         const total = this.getResult('totals', user.id);
         if (total === null) { return false; } // unsynchronized user, cannot update
         if (typeof total !== 'number') { return true; }
-        return total.toFixed(2) !== parseFloat(this.getEndResult(user.id, false).toPrecision(8)).toFixed(2);
+
+        // @ts-ignore
+        return TwoDigitsFormatter.format(total) !== TwoDigitsFormatter.format(this.getEndResult(user.id, false).toPrecision(12));
     }
 
     get totalsNeedUpdating(): boolean {

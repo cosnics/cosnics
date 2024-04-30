@@ -9,28 +9,19 @@ namespace Chamilo\Application\Plagiarism\Service;
  */
 class PlagiarismCheckerFactory
 {
-    /**
-     * @var \Chamilo\Application\Plagiarism\Service\Turnitin\PlagiarismChecker
-     */
-    protected $turnitinPlagiarismChecker;
+    protected \Chamilo\Application\Plagiarism\Service\Turnitin\PlagiarismChecker $turnitinPlagiarismChecker;
+    protected \Chamilo\Application\Plagiarism\Service\StrikePlagiarism\PlagiarismChecker $strikePlagiarismChecker;
 
-    /**
-     * PlagiarismCheckerFactory constructor.
-     *
-     * @param \Chamilo\Application\Plagiarism\Service\Turnitin\PlagiarismChecker $turnitinPlagiarismChecker
-     */
-    public function __construct(
-        \Chamilo\Application\Plagiarism\Service\Turnitin\PlagiarismChecker $turnitinPlagiarismChecker
-    )
+    public function __construct(Turnitin\PlagiarismChecker $turnitinPlagiarismChecker, StrikePlagiarism\PlagiarismChecker $strikePlagiarismChecker)
     {
         $this->turnitinPlagiarismChecker = $turnitinPlagiarismChecker;
+        $this->strikePlagiarismChecker = $strikePlagiarismChecker;
     }
 
-    /**
-     * @return \Chamilo\Application\Plagiarism\Service\PlagiarismCheckerInterface
-     */
     public function createPlagiarismChecker()
     {
-        return $this->turnitinPlagiarismChecker;
+        //return $this->turnitinPlagiarismChecker;
+
+        return $this->strikePlagiarismChecker;
     }
 }

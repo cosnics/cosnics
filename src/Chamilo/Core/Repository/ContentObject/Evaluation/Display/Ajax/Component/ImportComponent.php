@@ -3,7 +3,7 @@
 namespace Chamilo\Core\Repository\ContentObject\Evaluation\Display\Ajax\Component;
 
 use Chamilo\Core\Repository\ContentObject\Evaluation\Display\Ajax\Manager;
-use Chamilo\Core\Repository\ContentObject\Evaluation\Display\Service\ImportResultsFromCuriosService;
+use Chamilo\Core\Repository\ContentObject\Evaluation\Display\Service\ImportEvaluationResultsService;
 use Chamilo\Libraries\Architecture\Exceptions\NotAllowedException;
 use Chamilo\Libraries\Architecture\JsonAjaxResult;
 use Chamilo\Libraries\Platform\Security\Csrf\CsrfComponentInterface;
@@ -27,8 +27,8 @@ class ImportComponent extends Manager implements CsrfComponentInterface
             $evaluation = $this->getEvaluation();
             $contextId = $this->getEvaluationServiceBridge()->getContextIdentifier();
 
-            /** @var ImportResultsFromCuriosService $importService */
-            $importService = $this->getService(ImportResultsFromCuriosService::class);
+            /** @var ImportEvaluationResultsService $importService */
+            $importService = $this->getService(ImportEvaluationResultsService::class);
             list('importedEntities' => $importedEntities) = $importService->importResults($evaluation->getId(), $this->getUser()->getId(), $contextId, $results);
 
             $missingUsers = $importService->filterUserFields(

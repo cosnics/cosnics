@@ -12,7 +12,7 @@ use PHPUnit\Framework\TestCase;
 abstract class ChamiloTestCase extends TestCase
 {
 
-    protected $backupGlobalsBlacklist = array('_MDB2_databases', 'container');
+    protected $backupGlobalsExcludeList = array('_MDB2_databases', 'container');
 
     /**
      * **************************************************************************************************************
