@@ -46,6 +46,8 @@ class APIUser
     #[OA\Property]
     protected ?string $bio = null;
 
+    #[OA\Property]
+    protected ?string $role = null;
     public function getId(): int
     {
         return $this->id;
@@ -241,6 +243,17 @@ class APIUser
     public function setBio(?string $bio): APIUser
     {
         $this->bio = $bio;
+        return $this;
+    }
+
+    public function getRole(): ?string
+    {
+        return $this->role;
+    }
+
+    public function setRole(?string $role): APIUser
+    {
+        $this->role = $role;
         return $this;
     }
 }
