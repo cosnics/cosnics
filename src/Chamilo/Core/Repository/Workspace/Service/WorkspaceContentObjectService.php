@@ -45,13 +45,13 @@ class WorkspaceContentObjectService
      * @param \Chamilo\Core\Repository\Filter\Renderer\ConditionFilterRenderer $filterConditionRenderer
      * @param ?int $count
      * @param ?int $offset
-     * @param ?\Chamilo\Libraries\Storage\Query\OrderBy $orderBy
+     * @param \Chamilo\Libraries\Storage\Query\OrderBy $orderBy
      *
      * @return \Doctrine\Common\Collections\ArrayCollection<\Chamilo\Core\Repository\Storage\DataClass\ContentObject>
      */
     public function getContentObjectsByTypeForWorkspace(
         string $contentObjectClassName, Workspace $workspace, ConditionFilterRenderer $filterConditionRenderer,
-        ?int $count = null, ?int $offset = null, ?OrderBy $orderBy = null
+        ?int $count = null, ?int $offset = null, OrderBy $orderBy = new OrderBy()
     ): ArrayCollection
     {
         $contentObjectClassName = empty($contentObjectClassName) ? ContentObject::class : $contentObjectClassName;

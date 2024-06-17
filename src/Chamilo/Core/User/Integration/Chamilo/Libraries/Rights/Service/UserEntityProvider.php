@@ -72,7 +72,7 @@ class UserEntityProvider implements RightsEntityProvider
      * @return \Chamilo\Core\User\Storage\DataClass\User[]
      */
     public function findEntityItems(
-        Condition $condition = null, int $offset = null, int $count = null, ?OrderBy $orderBy = null
+        Condition $condition = null, int $offset = null, int $count = null, OrderBy $orderBy = new OrderBy()
     )
     {
         return $this->getUserService()->findUsers($condition, $offset, $count, $orderBy);

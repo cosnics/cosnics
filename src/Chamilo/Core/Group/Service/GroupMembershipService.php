@@ -102,13 +102,13 @@ class GroupMembershipService
      * @param ?\Chamilo\Libraries\Storage\Query\Condition\Condition $condition
      * @param ?int $offset
      * @param ?int $count
-     * @param ?\Chamilo\Libraries\Storage\Query\OrderBy $orderBy
+     * @param \Chamilo\Libraries\Storage\Query\OrderBy $orderBy
      *
      * @return \Doctrine\Common\Collections\ArrayCollection<\Chamilo\Core\Group\Storage\DataClass\SubscribedUser>
      */
     public function findSubscribedUsersForGroupIdentifier(
         string $groupIdentifier, ?Condition $condition = null, ?int $offset = null, ?int $count = null,
-        ?OrderBy $orderBy = null
+        OrderBy $orderBy = new OrderBy()
     ): ArrayCollection
     {
         return $this->findSubscribedUsersForGroupIdentifiers([$groupIdentifier], $condition, $offset, $count, $orderBy);
@@ -119,13 +119,13 @@ class GroupMembershipService
      * @param ?\Chamilo\Libraries\Storage\Query\Condition\Condition $condition
      * @param ?int $offset
      * @param ?int $count
-     * @param ?\Chamilo\Libraries\Storage\Query\OrderBy $orderBy
+     * @param \Chamilo\Libraries\Storage\Query\OrderBy $orderBy
      *
      * @return \Doctrine\Common\Collections\ArrayCollection<\Chamilo\Core\Group\Storage\DataClass\SubscribedUser>
      */
     public function findSubscribedUsersForGroupIdentifiers(
         array $groupIdentifiers, ?Condition $condition = null, ?int $offset = null, ?int $count = null,
-        ?OrderBy $orderBy = null
+        OrderBy $orderBy = new OrderBy()
     ): ArrayCollection
     {
         return $this->getGroupMembershipRepository()->findSubscribedUsersForGroupIdentifiers(

@@ -81,12 +81,12 @@ class FormRepository
      * @param ?\Chamilo\Libraries\Storage\Query\Condition\Condition $condition
      * @param ?int $offset
      * @param ?int $count
-     * @param ?\Chamilo\Libraries\Storage\Query\OrderBy $orderBy
+     * @param \Chamilo\Libraries\Storage\Query\OrderBy $orderBy
      *
      * @return \Doctrine\Common\Collections\ArrayCollection<\Chamilo\Configuration\Form\Storage\DataClass\Option>
      */
     public function retrieveDynamicFormElementOptions(
-        ?Condition $condition = null, ?int $offset = null, ?int $count = null, ?OrderBy $orderBy = null
+        ?Condition $condition = null, ?int $offset = null, ?int $count = null, OrderBy $orderBy = new OrderBy()
     ): ArrayCollection
     {
         return $this->getDataClassRepository()->retrieves(
@@ -98,12 +98,12 @@ class FormRepository
      * @param ?\Chamilo\Libraries\Storage\Query\Condition\Condition $condition
      * @param ?int $offset
      * @param ?int $count
-     * @param ?\Chamilo\Libraries\Storage\Query\OrderBy $orderBy
+     * @param \Chamilo\Libraries\Storage\Query\OrderBy $orderBy
      *
      * @return \Doctrine\Common\Collections\ArrayCollection<\Chamilo\Configuration\Form\Storage\DataClass\Value>
      */
     public function retrieveDynamicFormElementValues(
-        ?Condition $condition = null, ?int $offset = null, ?int $count = null, ?OrderBy $orderBy = null
+        ?Condition $condition = null, ?int $offset = null, ?int $count = null, OrderBy $orderBy = new OrderBy()
     ): ArrayCollection
     {
         return $this->getDataClassRepository()->retrieves(
@@ -141,12 +141,12 @@ class FormRepository
      * @param ?\Chamilo\Libraries\Storage\Query\Condition\Condition $condition
      * @param ?int $offset
      * @param ?int $count
-     * @param ?\Chamilo\Libraries\Storage\Query\OrderBy $orderBy
+     * @param \Chamilo\Libraries\Storage\Query\OrderBy $orderBy
      *
      * @return \Doctrine\Common\Collections\ArrayCollection<\Chamilo\Configuration\Form\Storage\DataClass\Element>
      */
     public function retrieveDynamicFormElements(
-        ?Condition $condition = null, ?int $offset = null, ?int $count = null, ?OrderBy $orderBy = null
+        ?Condition $condition = null, ?int $offset = null, ?int $count = null, OrderBy $orderBy = new OrderBy()
     ): ArrayCollection
     {
         $parameters = new RetrievesParameters($condition, $count, $offset, $orderBy);
@@ -158,12 +158,12 @@ class FormRepository
      * @param ?\Chamilo\Libraries\Storage\Query\Condition\Condition $condition
      * @param ?int $offset
      * @param ?int $count
-     * @param ?\Chamilo\Libraries\Storage\Query\OrderBy $orderBy
+     * @param \Chamilo\Libraries\Storage\Query\OrderBy $orderBy
      *
      * @return \Doctrine\Common\Collections\ArrayCollection<\Chamilo\Configuration\Form\Storage\DataClass\Element>
      */
     public function retrieveDynamicForms(
-        ?Condition $condition = null, ?int $offset = null, ?int $count = null, ?OrderBy $orderBy = null
+        ?Condition $condition = null, ?int $offset = null, ?int $count = null, OrderBy $orderBy = new OrderBy()
     ): ArrayCollection
     {
         $parameters = new RetrievesParameters($condition, $count, $offset, $orderBy);

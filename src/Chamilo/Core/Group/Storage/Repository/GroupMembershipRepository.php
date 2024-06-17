@@ -204,7 +204,7 @@ class GroupMembershipRepository
 
     public function findSubscribedUsersForGroupIdentifiers(
         array $groupIdentifiers, ?Condition $condition = null, ?int $offset = null, ?int $count = null,
-        ?OrderBy $orderBy = null
+        OrderBy $orderBy = new OrderBy()
     ): ArrayCollection
     {
         $groupCondition = new InCondition(

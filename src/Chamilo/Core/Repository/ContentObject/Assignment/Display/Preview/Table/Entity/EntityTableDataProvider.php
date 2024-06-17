@@ -42,7 +42,7 @@ class EntityTableDataProvider
     }
 
     public function retrieveData(
-        ?Condition $condition = null, ?int $offset = null, ?int $count = null, ?OrderBy $orderBy = null
+        ?Condition $condition = null, ?int $offset = null, ?int $count = null, OrderBy $orderBy = new OrderBy()
     ): ArrayCollection
     {
         return new ArrayCollection($this->generateUsers());

@@ -77,7 +77,7 @@ class GroupEntityProvider implements RightsEntityProvider
      * @return mixed
      */
     public function findEntityItems(
-        Condition $condition = null, int $offset = null, int $count = null, ?OrderBy $orderBy = null
+        Condition $condition = null, int $offset = null, int $count = null, OrderBy $orderBy = new OrderBy()
     )
     {
         return $this->getGroupService()->findGroups($condition, $offset, $count, $orderBy);

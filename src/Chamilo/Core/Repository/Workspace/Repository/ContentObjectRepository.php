@@ -110,7 +110,7 @@ class ContentObjectRepository
      */
     public function findAllInWorkspace(
         $contentObjectClassName, Workspace $workspace, ConditionFilterRenderer $filterConditionRenderer, $count,
-        $offset, ?OrderBy $orderBy = null
+        $offset, OrderBy $orderBy = new OrderBy()
     )
     {
         $parameters = new RetrievesParameters(

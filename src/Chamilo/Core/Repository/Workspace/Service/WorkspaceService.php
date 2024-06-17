@@ -203,10 +203,10 @@ class WorkspaceService
      * @return \Doctrine\Common\Collections\ArrayCollection<\Chamilo\Core\Repository\Workspace\Storage\DataClass\Workspace>
      */
     public function findFavouriteWorkspacesByUser(
-        User $user, ?int $limit = null, ?int $offset = null, ?OrderBy $orderProperty = null
+        User $user, ?int $limit = null, ?int $offset = null, OrderBy $orderBy = new OrderBy()
     ): ArrayCollection
     {
-        if (is_null($orderProperty))
+        if ($orderBy->isEmpty())
         {
             $orderProperty = new OrderBy([
                 new OrderProperty(
@@ -228,11 +228,12 @@ class WorkspaceService
     /**
      * @param ?int $count
      * @param ?int $offset
-     * @param ?\Chamilo\Libraries\Storage\Query\OrderBy $orderBy
+     * @param \Chamilo\Libraries\Storage\Query\OrderBy $orderBy
      *
      * @return \Doctrine\Common\Collections\ArrayCollection<\Chamilo\Core\Repository\Workspace\Storage\DataClass\Workspace>
      */
-    public function getAllWorkspaces(?int $count = null, ?int $offset = null, ?OrderBy $orderBy = null): ArrayCollection
+    public function getAllWorkspaces(?int $count = null, ?int $offset = null, OrderBy $orderBy = new OrderBy()
+    ): ArrayCollection
     {
         return $this->getWorkspaceRepository()->findAllWorkspaces($count, $offset, $orderBy);
     }
@@ -278,11 +279,11 @@ class WorkspaceService
     }
 
     public function getSharedWorkspacesForUser(
-        User $user, ?int $limit = null, ?int $offset = null, ?OrderBy $orderProperty = null
+        User $user, ?int $limit = null, ?int $offset = null, OrderBy $orderBy = new OrderBy()
     ): ArrayCollection
     {
         return $this->getWorkspaceRepository()->findSharedWorkspacesForEntities(
-            $this->getEntitiesForUser($user), $limit, $offset, $orderProperty
+            $this->getEntitiesForUser($user), $limit, $offset, $orderBy
         );
     }
 
@@ -315,10 +316,10 @@ class WorkspaceService
      * @return \Doctrine\Common\Collections\ArrayCollection<\Chamilo\Core\Repository\Workspace\Storage\DataClass\Workspace>
      */
     public function getWorkspacesByCreator(
-        User $user, ?int $limit = null, ?int $offset = null, ?OrderBy $orderProperty = null
+        User $user, ?int $limit = null, ?int $offset = null, OrderBy $orderBy = new OrderBy()
     ): ArrayCollection
     {
-        return $this->getWorkspaceRepository()->findWorkspacesByCreator($user, $limit, $offset, $orderProperty);
+        return $this->getWorkspaceRepository()->findWorkspacesByCreator($user, $limit, $offset, $orderBy);
     }
 
     /**
@@ -342,11 +343,11 @@ class WorkspaceService
      */
     public function getWorkspacesForUser(
         User $user, int $right = RightsService::RIGHT_VIEW, ?int $limit = null, ?int $offset = null,
-        ?OrderBy $orderProperty = null
+        OrderBy $orderBy = new OrderBy()
     ): ArrayCollection
     {
         return $this->getWorkspaceRepository()->findWorkspacesForUser(
-            $user, $this->getEntitiesForUser($user), $right, $limit, $offset, $orderProperty
+            $user, $this->getEntitiesForUser($user), $right, $limit, $offset, $orderBy
         );
     }
 
@@ -365,12 +366,11 @@ class WorkspaceService
      */
     public function getWorkspacesForUserWithExcludedWorkspaces(
         User $user, int $right = RightsService::RIGHT_VIEW, array $excludedWorkspaceIdentifiers = [],
-        ?int $limit = null, ?int $offset = null, ?OrderBy $orderProperty = null
+        ?int $limit = null, ?int $offset = null, OrderBy $orderBy = new OrderBy()
     ): ArrayCollection
     {
         return $this->getWorkspaceRepository()->findWorkspacesForUserWithExcludedWorkspaces(
-            $user, $this->getEntitiesForUser($user), $right, $excludedWorkspaceIdentifiers, $limit, $offset,
-            $orderProperty
+            $user, $this->getEntitiesForUser($user), $right, $excludedWorkspaceIdentifiers, $limit, $offset, $orderBy
         );
     }
 

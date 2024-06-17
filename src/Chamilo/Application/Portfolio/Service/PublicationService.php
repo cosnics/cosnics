@@ -254,13 +254,12 @@ class PublicationService
      * @param ?\Chamilo\Libraries\Storage\Query\Condition\Condition $condition
      * @param ?int $count
      * @param ?int $offset
-     * @param ?\Chamilo\Libraries\Storage\Query\OrderBy $orderProperties
-     *
+     * @param \Chamilo\Libraries\Storage\Query\OrderBy $orderBy
      * @return \Doctrine\Common\Collections\ArrayCollection
      */
     public function findPublicationRecordsForTypeAndIdentifier(
         $type = PublicationAggregatorInterface::ATTRIBUTES_TYPE_OBJECT, string $objectIdentifier,
-        ?Condition $condition = null, ?int $count = null, ?int $offset = null, ?OrderBy $orderProperties = null
+        ?Condition $condition = null, ?int $count = null, ?int $offset = null, OrderBy $orderBy = new OrderBy()
     )
     {
         if ($type !== PublicationAggregatorInterface::ATTRIBUTES_TYPE_OBJECT &&
@@ -271,7 +270,7 @@ class PublicationService
         else
         {
             return $this->getPublicationRepository()->findPublicationRecordsForTypeAndIdentifier(
-                $type, $objectIdentifier, $condition, $count, $offset, $orderProperties
+                $type, $objectIdentifier, $condition, $count, $offset, $orderBy
             );
         }
     }
@@ -328,35 +327,19 @@ class PublicationService
     }
 
     /**
-     * @return \Chamilo\Application\Portfolio\Service\RightsService
-     */
-    public function getRightsService()
-    {
-        return $this->rightsService;
-    }
-
-    /**
-     * @return \Chamilo\Core\Repository\Service\TemplateRegistrationConsulter
-     */
-    public function getTemplateRegistrationConsulter(): TemplateRegistrationConsulter
-    {
-        return $this->templateRegistrationConsulter;
-    }
-
-    /**
-     * @return \Symfony\Component\Translation\Translator
-     */
-    public function getTranslator()
-    {
-        return $this->translator;
-    }
-
-    /**
      * @param \Chamilo\Application\Portfolio\Storage\Repository\PublicationRepository $publicationRepository
      */
     public function setPublicationRepository(PublicationRepository $publicationRepository)
     {
         $this->publicationRepository = $publicationRepository;
+    }
+
+    /**
+     * @return \Chamilo\Application\Portfolio\Service\RightsService
+     */
+    public function getRightsService()
+    {
+        return $this->rightsService;
     }
 
     /**
@@ -368,6 +351,14 @@ class PublicationService
     }
 
     /**
+     * @return \Chamilo\Core\Repository\Service\TemplateRegistrationConsulter
+     */
+    public function getTemplateRegistrationConsulter(): TemplateRegistrationConsulter
+    {
+        return $this->templateRegistrationConsulter;
+    }
+
+    /**
      * @param \Chamilo\Core\Repository\Service\TemplateRegistrationConsulter $templateRegistrationConsulter
      */
     public function setTemplateRegistrationConsulter(
@@ -375,6 +366,14 @@ class PublicationService
     ): void
     {
         $this->templateRegistrationConsulter = $templateRegistrationConsulter;
+    }
+
+    /**
+     * @return \Symfony\Component\Translation\Translator
+     */
+    public function getTranslator()
+    {
+        return $this->translator;
     }
 
     /**

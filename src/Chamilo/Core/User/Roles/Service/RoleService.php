@@ -98,7 +98,7 @@ class RoleService implements RoleServiceInterface
      * @return \Doctrine\Common\Collections\ArrayCollection<\Chamilo\Core\User\Roles\Storage\DataClass\Role>
      */
     public function getRoles(
-        ?Condition $condition = null, ?int $count = null, ?int $offset = null, ?OrderBy $orderBy = null
+        ?Condition $condition = null, ?int $count = null, ?int $offset = null, OrderBy $orderBy = new OrderBy()
     ): ArrayCollection
     {
         return $this->getRoleRepository()->findRoles($condition, $count, $offset, $orderBy);

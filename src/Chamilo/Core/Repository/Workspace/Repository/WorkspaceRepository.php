@@ -147,11 +147,11 @@ class WorkspaceRepository
      *
      * @return \Doctrine\Common\Collections\ArrayCollection<\Chamilo\Core\Repository\Workspace\Storage\DataClass\Workspace>
      */
-    public function findAllWorkspaces(?int $limit = null, ?int $offset = null, ?OrderBy $orderProperty = null
+    public function findAllWorkspaces(?int $limit = null, ?int $offset = null, OrderBy $orderBy = new OrderBy()
     ): ArrayCollection
     {
         return $this->getDataClassRepository()->retrieves(
-            Workspace::class, new RetrievesParameters(null, $limit, $offset, $orderProperty)
+            Workspace::class, new RetrievesParameters(null, $limit, $offset, $orderBy)
         );
     }
 
@@ -182,20 +182,20 @@ class WorkspaceRepository
      * @return \Doctrine\Common\Collections\ArrayCollection<\Chamilo\Core\Repository\Workspace\Storage\DataClass\Workspace>
      */
     public function findFavouriteWorkspacesByUser(
-        User $user, array $entities, ?int $limit = null, ?int $offset = null, ?OrderBy $orderProperty = null
+        User $user, array $entities, ?int $limit = null, ?int $offset = null, OrderBy $orderBy = new OrderBy()
     ): ArrayCollection
     {
         return $this->getDataClassRepository()->retrieves(
             Workspace::class, new RetrievesParameters(
                 condition: $this->getFavouriteWorkspacesByUserCondition($user, $entities, RightsService::RIGHT_VIEW),
-                count: $limit, offset: $offset, orderBy: $orderProperty,
-                joins: $this->getFavouriteWorkspacesByUserJoins(), retrieveProperties: new RetrieveProperties(
-                [
-                    new FunctionConditionVariable(
-                        FunctionConditionVariable::DISTINCT, new PropertiesConditionVariable(Workspace::class)
-                    )
-                ]
-            )
+                count: $limit, offset: $offset, orderBy: $orderBy, joins: $this->getFavouriteWorkspacesByUserJoins(),
+                retrieveProperties: new RetrieveProperties(
+                    [
+                        new FunctionConditionVariable(
+                            FunctionConditionVariable::DISTINCT, new PropertiesConditionVariable(Workspace::class)
+                        )
+                    ]
+                )
             )
         );
     }
@@ -209,12 +209,12 @@ class WorkspaceRepository
      * @return \Doctrine\Common\Collections\ArrayCollection<\Chamilo\Core\Repository\Workspace\Storage\DataClass\Workspace>
      */
     public function findSharedWorkspacesForEntities(
-        array $entities, ?int $limit = null, ?int $offset = null, ?OrderBy $orderProperty = null
+        array $entities, ?int $limit = null, ?int $offset = null, OrderBy $orderBy = new OrderBy()
     ): ArrayCollection
     {
         return $this->getDataClassRepository()->retrieves(
             Workspace::class, new RetrievesParameters(
-                $this->getSharedWorkspacesForEntitiesWithRightCondition($entities), $limit, $offset, $orderProperty,
+                $this->getSharedWorkspacesForEntitiesWithRightCondition($entities), $limit, $offset, $orderBy,
                 new Joins([$this->getSharedWorkspacesJoin()])
             )
         );
@@ -234,12 +234,12 @@ class WorkspaceRepository
      * @return \Doctrine\Common\Collections\ArrayCollection<\Chamilo\Core\Repository\Workspace\Storage\DataClass\Workspace>
      */
     public function findWorkspacesByCreator(
-        User $user, ?int $limit = null, ?int $offset = null, ?OrderBy $orderProperty = null
+        User $user, ?int $limit = null, ?int $offset = null, OrderBy $orderBy = new OrderBy()
     ): ArrayCollection
     {
         return $this->getDataClassRepository()->retrieves(
             Workspace::class, new RetrievesParameters(
-                $this->getWorkspacesByCreatorCondition($user), $limit, $offset, $orderProperty
+                $this->getWorkspacesByCreatorCondition($user), $limit, $offset, $orderBy
             )
         );
     }
@@ -253,7 +253,7 @@ class WorkspaceRepository
      * @return \Doctrine\Common\Collections\ArrayCollection<\Chamilo\Core\Repository\Workspace\Storage\DataClass\Workspace>
      */
     public function findWorkspacesByIdentifiers(
-        array $identifiers, ?int $limit = null, ?int $offset = null, ?OrderBy $orderProperty = null
+        array $identifiers, ?int $limit = null, ?int $offset = null, OrderBy $orderBy = new OrderBy()
     ): ArrayCollection
     {
         $condition = new InCondition(
@@ -261,7 +261,7 @@ class WorkspaceRepository
         );
 
         return $this->getDataClassRepository()->retrieves(
-            Workspace::class, new RetrievesParameters($condition, $limit, $offset, $orderProperty)
+            Workspace::class, new RetrievesParameters($condition, $limit, $offset, $orderBy)
         );
     }
 
@@ -276,10 +276,10 @@ class WorkspaceRepository
      * @return \Doctrine\Common\Collections\ArrayCollection<\Chamilo\Core\Repository\Workspace\Storage\DataClass\Workspace>
      */
     public function findWorkspacesForUser(
-        User $user, array $entities, int $right, ?int $limit = null, ?int $offset = null, ?OrderBy $orderProperty = null
+        User $user, array $entities, int $right, ?int $limit = null, ?int $offset = null, OrderBy $orderBy = new OrderBy()
     ): ArrayCollection
     {
-        return $this->retrieveWorkspacesForUser($user, $entities, $right, null, $limit, $offset, $orderProperty);
+        return $this->retrieveWorkspacesForUser($user, $entities, $right, null, $limit, $offset, $orderBy);
     }
 
     /**
@@ -298,12 +298,12 @@ class WorkspaceRepository
      */
     public function findWorkspacesForUserWithExcludedWorkspaces(
         User $user, array $entities, int $right, array $excludedWorkspaceIdentifiers = [], ?int $limit = null,
-        ?int $offset = null, ?OrderBy $orderProperty = null
+        ?int $offset = null, OrderBy $orderBy = new OrderBy()
     ): ArrayCollection
     {
         $condition = $this->getExcludedWorkspacesCondition($excludedWorkspaceIdentifiers);
 
-        return $this->retrieveWorkspacesForUser($user, $entities, $right, $condition, $limit, $offset, $orderProperty);
+        return $this->retrieveWorkspacesForUser($user, $entities, $right, $condition, $limit, $offset, $orderBy);
     }
 
     protected function getDataClassRepository(): DataClassRepository
@@ -505,13 +505,13 @@ class WorkspaceRepository
      */
     protected function retrieveWorkspacesForUser(
         User $user, array $entities, int $right, ?Condition $condition = null, ?int $limit = null, ?int $offset = null,
-        ?OrderBy $orderProperty = null
+        OrderBy $orderBy = new OrderBy()
     ): ArrayCollection
     {
         return $this->getDataClassRepository()->retrieves(
             Workspace::class, new RetrievesParameters(
                 $this->getWorkspaceByUserCondition($user, $entities, $right, $condition), $limit, $offset,
-                $orderProperty, new Joins([$this->getSharedWorkspacesJoin(Join::TYPE_LEFT)])
+                $orderBy, new Joins([$this->getSharedWorkspacesJoin(Join::TYPE_LEFT)])
             )
         );
     }

@@ -70,7 +70,9 @@ class PublicationService
      *
      * @return int
      */
-    public function countPublicationsForTypeAndIdentifier(int $type, string $objectIdentifier, ?Condition $condition = null)
+    public function countPublicationsForTypeAndIdentifier(
+        int $type, string $objectIdentifier, ?Condition $condition = null
+    )
     {
         if ($type !== PublicationAggregatorInterface::ATTRIBUTES_TYPE_OBJECT &&
             $type !== PublicationAggregatorInterface::ATTRIBUTES_TYPE_USER)
@@ -196,14 +198,14 @@ class PublicationService
      * @param ?\Chamilo\Libraries\Storage\Query\Condition\Condition $condition
      * @param ?int $count
      * @param ?int $offset
-     * @param ?\Chamilo\Libraries\Storage\Query\OrderBy $orderProperties
+     * @param \Chamilo\Libraries\Storage\Query\OrderBy $orderBy
      *
      * @return \Doctrine\Common\Collections\ArrayCollection
      * @throws \Exception
      */
     public function findPublicationRecordsForTypeAndIdentifier(
         int $type, string $objectIdentifier, ?Condition $condition = null, ?int $count = null, ?int $offset = null,
-        ?OrderBy $orderProperties = null
+        OrderBy $orderBy = new OrderBy()
     ): ArrayCollection
     {
         if ($type !== PublicationAggregatorInterface::ATTRIBUTES_TYPE_OBJECT &&
@@ -214,7 +216,7 @@ class PublicationService
         else
         {
             return $this->getPublicationRepository()->findPublicationRecordsForTypeAndIdentifier(
-                $type, $objectIdentifier, $condition, $count, $offset, $orderProperties
+                $type, $objectIdentifier, $condition, $count, $offset, $orderBy
             );
         }
     }
@@ -249,22 +251,6 @@ class PublicationService
     }
 
     /**
-     * @return \Chamilo\Application\Calendar\Extension\Personal\Service\RightsService
-     */
-    public function getRightsService(): RightsService
-    {
-        return $this->rightsService;
-    }
-
-    /**
-     * @return \Symfony\Component\Translation\Translator
-     */
-    public function getTranslator(): Translator
-    {
-        return $this->translator;
-    }
-
-    /**
      * @param \Chamilo\Application\Calendar\Extension\Personal\Storage\Repository\PublicationRepository $publicationRepository
      */
     public function setPublicationRepository(PublicationRepository $publicationRepository): void
@@ -273,11 +259,27 @@ class PublicationService
     }
 
     /**
+     * @return \Chamilo\Application\Calendar\Extension\Personal\Service\RightsService
+     */
+    public function getRightsService(): RightsService
+    {
+        return $this->rightsService;
+    }
+
+    /**
      * @param \Chamilo\Application\Calendar\Extension\Personal\Service\RightsService $rightsService
      */
     public function setRightsService(RightsService $rightsService): void
     {
         $this->rightsService = $rightsService;
+    }
+
+    /**
+     * @return \Symfony\Component\Translation\Translator
+     */
+    public function getTranslator(): Translator
+    {
+        return $this->translator;
     }
 
     /**

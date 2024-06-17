@@ -94,24 +94,21 @@ class UserProgressComponent extends BaseReportingComponent
         return implode(PHP_EOL, $html);
     }
 
-    protected function cleanupOrderBy(?OrderBy $orderBy = null): ?OrderBy
+    protected function cleanupOrderBy(OrderBy $orderBy = new OrderBy()): OrderBy
     {
-        if ($orderBy instanceof OrderBy)
+        $firstOrderProperty = $orderBy->getFirst();
+
+        if ($firstOrderProperty->getConditionVariable() instanceof StaticConditionVariable)
         {
-            $firstOrderProperty = $orderBy->getFirst();
+            $value = $firstOrderProperty->getConditionVariable()->getValue();
 
-            if ($firstOrderProperty->getConditionVariable() instanceof StaticConditionVariable)
+            if (in_array($value, ['progress', 'completed', 'started']))
             {
-                $value = $firstOrderProperty->getConditionVariable()->getValue();
-
-                if (in_array($value, ['progress', 'completed', 'started']))
-                {
-                    $firstOrderProperty->getConditionVariable()->setValue('nodes_completed');
-                    $firstOrderProperty->setDirection(
-                        $value == 'started' ? $firstOrderProperty->getDirection() :
-                            ($firstOrderProperty->getDirection() == SORT_ASC ? SORT_DESC : SORT_ASC)
-                    );
-                }
+                $firstOrderProperty->getConditionVariable()->setValue('nodes_completed');
+                $firstOrderProperty->setDirection(
+                    $value == 'started' ? $firstOrderProperty->getDirection() :
+                        ($firstOrderProperty->getDirection() == SORT_ASC ? SORT_DESC : SORT_ASC)
+                );
             }
         }
 

@@ -499,7 +499,7 @@ class RightsService
      * @return string[][]
      */
     public function getRightsLocationEntityRightGroupsWithEntityAndGroup(
-        ?int $offset = null, ?int $count = null, ?OrderBy $orderBy = null
+        ?int $offset = null, ?int $count = null, OrderBy $orderBy = new OrderBy()
     ): array
     {
         $groupRecordCollection =

@@ -128,7 +128,7 @@ class UserRepository implements UserRepositoryInterface
      * @return \Doctrine\Common\Collections\ArrayCollection<\Chamilo\Core\User\Storage\DataClass\User>
      */
     public function findActiveUsers(
-        ?Condition $condition = null, ?int $offset = null, ?int $count = null, ?OrderBy $orderProperty = null
+        ?Condition $condition = null, ?int $offset = null, ?int $count = null, OrderBy $orderBy = new OrderBy()
     ): ArrayCollection
     {
         $conditions = [];
@@ -144,7 +144,7 @@ class UserRepository implements UserRepositoryInterface
         );
 
         return $this->getDataClassRepository()->retrieves(
-            User::class, new RetrievesParameters(new AndCondition($conditions), $count, $offset, $orderProperty)
+            User::class, new RetrievesParameters(new AndCondition($conditions), $count, $offset, $orderBy)
         );
     }
 
@@ -367,13 +367,13 @@ class UserRepository implements UserRepositoryInterface
      * @return string[]
      */
     public function findUserProperties(
-        array $retrieveProperties, ?Condition $condition = null, ?OrderBy $orderProperty = null
+        array $retrieveProperties, ?Condition $condition = null, OrderBy $orderBy = new OrderBy()
     ): array
     {
         return $this->getDataClassRepository()->distinct(
             User::class, new DataClassDistinctParameters(
                 condition: $condition, retrieveProperties: new RetrieveProperties($retrieveProperties),
-                orderBy: $orderProperty
+                orderBy: $orderBy
             )
         );
     }
@@ -403,12 +403,12 @@ class UserRepository implements UserRepositoryInterface
      * @param ?\Chamilo\Libraries\Storage\Query\Condition\Condition $condition
      * @param ?int $count
      * @param ?int $offset
-     * @param ?\Chamilo\Libraries\Storage\Query\OrderBy $orderBy
+     * @param \Chamilo\Libraries\Storage\Query\OrderBy $orderBy
      *
      * @return \Doctrine\Common\Collections\ArrayCollection<\Chamilo\Core\User\Storage\DataClass\User>
      */
     public function findUsers(
-        ?Condition $condition = null, ?int $count = null, ?int $offset = null, ?OrderBy $orderBy = null
+        ?Condition $condition = null, ?int $count = null, ?int $offset = null, OrderBy $orderBy = new OrderBy()
     ): ArrayCollection
     {
         $parameters = new RetrievesParameters($condition, $count, $offset, $orderBy);
@@ -421,7 +421,7 @@ class UserRepository implements UserRepositoryInterface
      *
      * @return \Doctrine\Common\Collections\ArrayCollection<\Chamilo\Core\User\Storage\DataClass\User>
      */
-    public function findUsersByIdentifiers(array $userIdentifiers, ?OrderBy $orderBy = null): ArrayCollection
+    public function findUsersByIdentifiers(array $userIdentifiers, OrderBy $orderBy = new OrderBy()): ArrayCollection
     {
         $condition =
             new InCondition(new PropertyConditionVariable(User::class, DataClass::PROPERTY_ID), $userIdentifiers);
@@ -506,6 +506,11 @@ class UserRepository implements UserRepositoryInterface
         return $this->searchQueryConditionGenerator;
     }
 
+    public function setSearchQueryConditionGenerator(SearchQueryConditionGenerator $searchQueryConditionGenerator): void
+    {
+        $this->searchQueryConditionGenerator = $searchQueryConditionGenerator;
+    }
+
     protected function getUserConditionForSearchQuery(string $searchQuery = null): AndCondition
     {
         $conditions = [];
@@ -544,11 +549,6 @@ class UserRepository implements UserRepositoryInterface
             new InCondition(new PropertyConditionVariable(User::class, DataClass::PROPERTY_ID), $userIdentifiers);
 
         return new AndCondition($conditions);
-    }
-
-    public function setSearchQueryConditionGenerator(SearchQueryConditionGenerator $searchQueryConditionGenerator): void
-    {
-        $this->searchQueryConditionGenerator = $searchQueryConditionGenerator;
     }
 
     /**

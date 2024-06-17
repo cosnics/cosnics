@@ -51,12 +51,12 @@ class ActivityService
      * @param ContentObject $contentObject
      * @param ?int $offset
      * @param ?int $count
-     * @param ?OrderBy $orderBy
+     * @param OrderBy $orderBy
      *
      * @return \Doctrine\Common\Collections\ArrayCollection<\Chamilo\Core\Repository\Integration\Chamilo\Core\Tracking\Event\Activity>
      */
     public function retrieveActivitiesForContentObject(
-        ContentObject $contentObject, ?int $offset = null, ?int $count = null, ?OrderBy $orderBy = null
+        ContentObject $contentObject, ?int $offset = null, ?int $count = null, OrderBy $orderBy = new OrderBy()
     ): ArrayCollection
     {
         $activities = [];

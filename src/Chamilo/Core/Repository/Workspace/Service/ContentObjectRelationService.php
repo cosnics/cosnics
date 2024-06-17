@@ -133,7 +133,7 @@ class ContentObjectRelationService
     }
 
     public function getAvailableWorkspacesForContentObjectIdentifiersAndUser(
-        array $contentObjectIdentifiers, User $user, ?int $limit = null, ?int $offset = null, ?OrderBy $orderBy = null
+        array $contentObjectIdentifiers, User $user, ?int $limit = null, ?int $offset = null, OrderBy $orderBy = new OrderBy()
     ): ArrayCollection
     {
         $contentObjects =
@@ -147,12 +147,12 @@ class ContentObjectRelationService
      * @param \Chamilo\Core\User\Storage\DataClass\User $user
      * @param ?int $limit
      * @param ?int $offset
-     * @param ?\Chamilo\Libraries\Storage\Query\OrderBy $orderBy
+     * @param \Chamilo\Libraries\Storage\Query\OrderBy $orderBy
      *
      * @return \Doctrine\Common\Collections\ArrayCollection<\Chamilo\Core\Repository\Workspace\Storage\DataClass\Workspace>
      */
     public function getAvailableWorkspacesForContentObjectsAndUser(
-        ArrayCollection $contentObjects, User $user, ?int $limit = null, ?int $offset = null, ?OrderBy $orderBy = null
+        ArrayCollection $contentObjects, User $user, ?int $limit = null, ?int $offset = null, OrderBy $orderBy = new OrderBy()
     ): ArrayCollection
     {
         $workspaceIdentifiers = [];
@@ -199,7 +199,7 @@ class ContentObjectRelationService
     }
 
     public function getWorkspaceAndRelationForContentObject(
-        ContentObject $contentObject, ?int $limit = null, ?int $count = null, ?OrderBy $orderBy = null
+        ContentObject $contentObject, ?int $limit = null, ?int $count = null, OrderBy $orderBy = new OrderBy()
     ): ArrayCollection
     {
         return $this->getWorkspaceAndRelationForContentObjectNumber(
@@ -208,7 +208,7 @@ class ContentObjectRelationService
     }
 
     public function getWorkspaceAndRelationForContentObjectNumber(
-        string $contentObjectNumber, ?int $limit = null, ?int $count = null, ?OrderBy $orderBy = null
+        string $contentObjectNumber, ?int $limit = null, ?int $count = null, OrderBy $orderBy = new OrderBy()
     ): ArrayCollection
     {
         return $this->getContentObjectRelationRepository()->findWorkspaceAndRelationForContentObjectIdentifier(

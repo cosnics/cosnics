@@ -28,7 +28,7 @@ interface RightsEntityProvider
      * @return \Chamilo\Libraries\Storage\DataClass\DataClass[]
      */
     public function findEntityItems(
-        Condition $condition = null, int $offset = null, int $count = null, ?OrderBy $orderBy = null
+        Condition $condition = null, int $offset = null, int $count = null, OrderBy $orderBy = new OrderBy()
     );
 
     /**

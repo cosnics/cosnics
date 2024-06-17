@@ -153,12 +153,12 @@ class PublicationRepository
      * @param ?\Chamilo\Libraries\Storage\Query\Condition\Condition $condition
      * @param ?int $count
      * @param ?int $offset
-     * @param ?\Chamilo\Libraries\Storage\Query\OrderBy $orderBy
+     * @param \Chamilo\Libraries\Storage\Query\OrderBy $orderBy
      *
      * @return \Doctrine\Common\Collections\ArrayCollection<string[]>
      */
     public function findPublicationRecords(
-        ?Condition $condition = null, ?int $count = null, ?int $offset = null, ?OrderBy $orderBy = null
+        ?Condition $condition = null, ?int $count = null, ?int $offset = null, OrderBy $orderBy = new OrderBy()
     ): ArrayCollection
     {
         $retrieveProperties = [];
@@ -201,13 +201,13 @@ class PublicationRepository
      * @param ?\Chamilo\Libraries\Storage\Query\Condition\Condition $condition
      * @param ?int $count
      * @param ?int $offset
-     * @param ?\Chamilo\Libraries\Storage\Query\OrderBy $orderBy
+     * @param \Chamilo\Libraries\Storage\Query\OrderBy $orderBy
      *
      * @return \Doctrine\Common\Collections\ArrayCollection<\Chamilo\Core\Admin\Announcement\Storage\DataClass\Publication>
      */
     public function findPublicationRecordsForTypeAndIdentifier(
         int $type, string $objectIdentifier, ?Condition $condition = null, ?int $count = null, ?int $offset = null,
-        ?OrderBy $orderBy = null
+        OrderBy $orderBy = new OrderBy()
     ): ArrayCollection
     {
         switch ($type)
@@ -244,12 +244,12 @@ class PublicationRepository
      * @param ?\Chamilo\Libraries\Storage\Query\Condition\Condition $condition
      * @param ?int $count
      * @param ?int $offset
-     * @param ?\Chamilo\Libraries\Storage\Query\OrderBy $orderBy
+     * @param \Chamilo\Libraries\Storage\Query\OrderBy $orderBy
      *
      * @return \Doctrine\Common\Collections\ArrayCollection<\Chamilo\Core\Admin\Announcement\Storage\DataClass\Publication>
      */
     public function findPublications(
-        ?Condition $condition = null, ?int $count = null, ?int $offset = null, ?OrderBy $orderBy = null
+        ?Condition $condition = null, ?int $count = null, ?int $offset = null, OrderBy $orderBy = new OrderBy()
     ): ArrayCollection
     {
         return $this->getDataClassRepository()->retrieves(
@@ -277,7 +277,7 @@ class PublicationRepository
      */
     public function findVisiblePublicationRecordsForPublicationIdentifiers(
         array $publicationIdentifiers, ?Condition $condition = null, ?int $count = null, ?int $offset = null,
-        ?OrderBy $orderBy = null
+        OrderBy $orderBy = new OrderBy()
     ): ArrayCollection
     {
         $conditions = [];

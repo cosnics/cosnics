@@ -328,7 +328,7 @@ class UserService
         // TODO: This needs to be implemented some day
         //if (!$this->canUserBeDeleted($user))
         //{
-            return false;
+        return false;
         //}
 
         $this->getEventDispatcher()->dispatch(new BeforeUserDeleteEvent($user));
@@ -373,6 +373,16 @@ class UserService
     }
 
     /**
+     * @return \Doctrine\Common\Collections\ArrayCollection<\Chamilo\Core\User\Storage\DataClass\User>
+     */
+    public function findActiveUsers(
+        ?Condition $condition = null, ?int $offset = null, ?int $count = null, OrderBy $orderBy = new OrderBy()
+    ): ArrayCollection
+    {
+        return $this->getUserRepository()->findActiveUsers($condition, $offset, $count, $orderBy);
+    }
+
+    /**
      * @param int $status
      *
      * @return \Doctrine\Common\Collections\ArrayCollection<\Chamilo\Core\User\Storage\DataClass\User>
@@ -380,14 +390,6 @@ class UserService
     public function findActiveUsersByStatus(int $status): ArrayCollection
     {
         return $this->getUserRepository()->findActiveUsersByStatus($status);
-    }
-
-    /**
-     * @return \Doctrine\Common\Collections\ArrayCollection<\Chamilo\Core\User\Storage\DataClass\User>
-     */
-    public function findActiveUsers(?Condition $condition = null, ?int $offset = null, ?int $count = null, ?OrderBy $orderProperty = null): ArrayCollection
-    {
-        return $this->getUserRepository()->findActiveUsers($condition, $offset, $count, $orderProperty);
     }
 
     /**
@@ -476,10 +478,10 @@ class UserService
     }
 
     public function findUserProperties(
-        array $retrieveProperties, ?Condition $condition = null, ?OrderBy $orderProperty = null
+        array $retrieveProperties, ?Condition $condition = null, OrderBy $orderBy = new OrderBy()
     ): array
     {
-        return $this->getUserRepository()->findUserProperties($retrieveProperties, $condition, $orderProperty);
+        return $this->getUserRepository()->findUserProperties($retrieveProperties, $condition, $orderBy);
     }
 
     public function findUserSettingForSettingAndUser(Setting $setting, User $user): ?UserSetting
@@ -496,10 +498,10 @@ class UserService
      * @return \Doctrine\Common\Collections\ArrayCollection<\Chamilo\Core\User\Storage\DataClass\User>
      */
     public function findUsers(
-        ?Condition $condition = null, ?int $offset = null, ?int $count = null, ?OrderBy $orderProperty = null
+        ?Condition $condition = null, ?int $offset = null, ?int $count = null, OrderBy $orderBy = new OrderBy()
     ): ArrayCollection
     {
-        return $this->getUserRepository()->findUsers($condition, $count, $offset, $orderProperty);
+        return $this->getUserRepository()->findUsers($condition, $count, $offset, $orderBy);
     }
 
     /**
@@ -556,11 +558,11 @@ class UserService
      * @return \Chamilo\Core\User\Storage\DataClass\User[]
      */
     public function findUsersMappedByOfficialCode(
-        ?Condition $condition = null, ?int $offset = 0, ?int $count = - 1, ?OrderBy $orderProperty = null
+        ?Condition $condition = null, ?int $offset = 0, ?int $count = - 1, OrderBy $orderBy = new OrderBy()
     ): array
     {
         return $this->getPropertyMapper()->mapDataClassByProperty(
-            $this->findUsers($condition, $offset, $count, $orderProperty), User::PROPERTY_OFFICIAL_CODE
+            $this->findUsers($condition, $offset, $count, $orderBy), User::PROPERTY_OFFICIAL_CODE
         );
     }
 
@@ -573,7 +575,7 @@ class UserService
      * @return \Doctrine\Common\Collections\ArrayCollection<\Chamilo\Core\User\Storage\DataClass\User>
      */
     public function findUsersWaitingForApproval(
-        ?Condition $condition = null, ?int $offset = null, ?int $count = null, ?OrderBy $orderProperty = null
+        ?Condition $condition = null, ?int $offset = null, ?int $count = null, OrderBy $orderBy = new OrderBy()
     ): ArrayCollection
     {
         $conditions = [];
@@ -588,7 +590,7 @@ class UserService
         );
         $condition = new AndCondition($conditions);
 
-        return $this->findUsers($condition, $count, $offset, $orderProperty);
+        return $this->findUsers($condition, $count, $offset, $orderBy);
     }
 
     public function getActiveMailer(): MailerInterface

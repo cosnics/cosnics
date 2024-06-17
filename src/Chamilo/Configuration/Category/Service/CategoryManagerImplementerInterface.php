@@ -44,7 +44,7 @@ interface CategoryManagerImplementerInterface
     public function isAllowedToEditCategory(PlatformCategory $category): bool;
 
     public function retrieveCategories(
-        ?Condition $condition = null, ?int $offset = null, ?int $count = null, ?OrderBy $orderBy = null
+        ?Condition $condition = null, ?int $offset = null, ?int $count = null, OrderBy $orderBy = new OrderBy()
     );
 
     public function supportsCategoryVisibility(): bool;

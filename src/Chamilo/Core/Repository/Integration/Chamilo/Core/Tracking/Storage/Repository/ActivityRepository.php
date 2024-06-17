@@ -32,12 +32,12 @@ class ActivityRepository extends CommonDataClassRepository
      * @param \Chamilo\Core\Repository\Integration\Chamilo\Core\Tracking\Storage\DataClass\Activity[] $activities
      * @param ?int $offset
      * @param ?int $count
-     * @param ?OrderBy $orderBy
+     * @param OrderBy $orderBy
      *
      * @return \Chamilo\Core\Repository\Integration\Chamilo\Core\Tracking\Storage\DataClass\Activity[]
      */
     public function filterActivities(
-        array $activities, ?int $offset = null, ?int $count = null, ?OrderBy $orderBy = null
+        array $activities, ?int $offset = null, ?int $count = null, OrderBy $orderBy = new OrderBy()
     ): array
     {
         if ($orderBy instanceof OrderBy)

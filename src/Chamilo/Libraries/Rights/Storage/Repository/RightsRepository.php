@@ -608,13 +608,13 @@ class RightsRepository
      * @param ?\Chamilo\Libraries\Storage\Query\Condition\Condition $condition
      * @param ?int $offset
      * @param ?int $count
-     * @param ?\Chamilo\Libraries\Storage\Query\OrderBy $orderBy
+     * @param \Chamilo\Libraries\Storage\Query\OrderBy $orderBy
      *
      * @return \Doctrine\Common\Collections\ArrayCollection<\Chamilo\Libraries\Rights\Domain\RightsLocationEntityRight>
      */
     public function findRightsLocationEntityRights(
         string $rightsLocationEntityRightClassName, ?Condition $condition = null, ?int $offset = null,
-        ?int $count = null, ?OrderBy $orderBy = null
+        ?int $count = null, OrderBy $orderBy = new OrderBy()
     ): ArrayCollection
     {
         return $this->getDataClassRepository()->retrieves(

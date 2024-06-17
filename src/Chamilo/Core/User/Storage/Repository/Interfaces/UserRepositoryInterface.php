@@ -50,11 +50,11 @@ interface UserRepositoryInterface
      * @param ?\Chamilo\Libraries\Storage\Query\Condition\Condition $condition
      * @param ?int $count
      * @param ?int $offset
-     * @param ?\Chamilo\Libraries\Storage\Query\OrderBy $orderBy
+     * @param \Chamilo\Libraries\Storage\Query\OrderBy $orderBy
      *
      * @return \Doctrine\Common\Collections\ArrayCollection<\Chamilo\Core\User\Storage\DataClass\User>
      */
-    public function findUsers(?Condition $condition, ?int $count = null, ?int $offset = null, ?OrderBy $orderBy = null
+    public function findUsers(?Condition $condition, ?int $count = null, ?int $offset = null, OrderBy $orderBy = new OrderBy()
     ): ArrayCollection;
 
     /**

@@ -68,12 +68,12 @@ class EntityRelationService
      * @param ?\Chamilo\Libraries\Storage\Query\Condition\Condition $condition
      * @param ?int $limit
      * @param ?int $offset
-     * @param ?\Chamilo\Libraries\Storage\Query\OrderBy $orderBy
+     * @param \Chamilo\Libraries\Storage\Query\OrderBy $orderBy
      *
      * @return \Doctrine\Common\Collections\ArrayCollection<\Chamilo\Core\Repository\Workspace\Storage\DataClass\WorkspaceEntityRelation>
      */
     public function getEntityRelations(
-        ?Condition $condition = null, ?int $limit = null, ?int $offset = null, ?OrderBy $orderBy = null
+        ?Condition $condition = null, ?int $limit = null, ?int $offset = null, OrderBy $orderBy = new OrderBy()
     ): ArrayCollection
     {
         return $this->getEntityRelationRepository()->findEntityRelations($condition, $limit, $offset, $orderBy);

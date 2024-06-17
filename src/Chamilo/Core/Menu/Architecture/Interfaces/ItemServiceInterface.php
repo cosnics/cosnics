@@ -60,12 +60,12 @@ interface ItemServiceInterface
      * @param string $parentIdentifier
      * @param ?int $count
      * @param ?int $offset
-     * @param ?\Chamilo\Libraries\Storage\Query\OrderBy $orderBy
+     * @param \Chamilo\Libraries\Storage\Query\OrderBy $orderBy
      *
      * @return \Doctrine\Common\Collections\ArrayCollection<\Chamilo\Core\Menu\Storage\DataClass\Item>
      */
     public function findItemsByParentIdentifier(
-        string $parentIdentifier, ?int $count = null, ?int $offset = null, ?OrderBy $orderBy = null
+        string $parentIdentifier, ?int $count = null, ?int $offset = null, OrderBy $orderBy = new OrderBy()
     ): ArrayCollection;
 
     /**

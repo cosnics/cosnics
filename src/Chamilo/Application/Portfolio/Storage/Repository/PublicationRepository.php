@@ -194,7 +194,7 @@ class PublicationRepository
      * @throws \Exception
      */
     public function findPublicationRecords(
-        Condition $condition = null, int $count = null, int $offset = null, ?OrderBy $orderBy = null
+        Condition $condition = null, int $count = null, int $offset = null, OrderBy $orderBy = new OrderBy()
     ): ArrayCollection
     {
         $retrieveProperties = [];
@@ -237,13 +237,13 @@ class PublicationRepository
      * @param ?\Chamilo\Libraries\Storage\Query\Condition\Condition $condition
      * @param ?int $count
      * @param ?int $offset
-     * @param ?\Chamilo\Libraries\Storage\Query\OrderBy $orderBy
+     * @param \Chamilo\Libraries\Storage\Query\OrderBy $orderBy
      *
      * @return string[]
      */
     public function findPublicationRecordsForTypeAndIdentifier(
         $type = PublicationAggregatorInterface::ATTRIBUTES_TYPE_OBJECT, string $objectIdentifier,
-        ?Condition $condition = null, ?int $count = null, ?int $offset = null, ?OrderBy $orderBy = null
+        ?Condition $condition = null, ?int $count = null, ?int $offset = null, OrderBy $orderBy = new OrderBy()
     )
     {
         switch ($type)
@@ -286,7 +286,7 @@ class PublicationRepository
      * @throws \Exception
      */
     public function findPublications(
-        Condition $condition = null, int $count = null, int $offset = null, ?OrderBy $orderBy = null
+        Condition $condition = null, int $count = null, int $offset = null, OrderBy $orderBy = new OrderBy()
     )
     {
         return $this->getDataClassRepository()->retrieves(

@@ -56,7 +56,7 @@ class FormService
      * @return \Doctrine\Common\Collections\ArrayCollection<\Chamilo\Configuration\Form\Storage\DataClass\Option>
      */
     public function retrieveDynamicFormElementOptions(
-        ?Condition $condition = null, ?int $offset = null, ?int $count = null, ?OrderBy $orderBy = null
+        ?Condition $condition = null, ?int $offset = null, ?int $count = null, OrderBy $orderBy = new OrderBy()
     ): ArrayCollection
     {
         return $this->getFormRepository()->retrieveDynamicFormElementOptions($condition, $offset, $count, $orderBy);
@@ -66,7 +66,7 @@ class FormService
      * @return \Doctrine\Common\Collections\ArrayCollection<\Chamilo\Configuration\Form\Storage\DataClass\Value>
      */
     public function retrieveDynamicFormElementValues(
-        ?Condition $condition = null, ?int $offset = null, ?int $count = null, ?OrderBy $orderBy = null
+        ?Condition $condition = null, ?int $offset = null, ?int $count = null, OrderBy $orderBy = new OrderBy()
     ): ArrayCollection
     {
         return $this->getFormRepository()->retrieveDynamicFormElementValues($condition, $offset, $count, $orderBy);
@@ -88,7 +88,7 @@ class FormService
      * @return \Doctrine\Common\Collections\ArrayCollection<\Chamilo\Configuration\Form\Storage\DataClass\Element>
      */
     public function retrieveDynamicFormElements(
-        ?Condition $condition = null, ?int $offset = null, ?int $count = null, ?OrderBy $orderBy = null
+        ?Condition $condition = null, ?int $offset = null, ?int $count = null, OrderBy $orderBy = new OrderBy()
     ): ArrayCollection
     {
         return $this->getFormRepository()->retrieveDynamicFormElements($condition, $offset, $count, $orderBy);
@@ -98,7 +98,7 @@ class FormService
      * @return \Doctrine\Common\Collections\ArrayCollection<\Chamilo\Configuration\Form\Storage\DataClass\Element>
      */
     public function retrieveDynamicForms(
-        ?Condition $condition = null, ?int $offset = null, ?int $count = null, ?OrderBy $orderBy = null
+        ?Condition $condition = null, ?int $offset = null, ?int $count = null, OrderBy $orderBy = new OrderBy()
     ): ArrayCollection
     {
         return $this->getFormRepository()->retrieveDynamicForms($condition, $offset, $count, $orderBy);

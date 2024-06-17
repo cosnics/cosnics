@@ -148,7 +148,7 @@ class ContentObjectRelationRepository
     }
 
     public function findWorkspaceAndRelationForContentObjectIdentifier(
-        string $contentObjectNumber, ?int $limit = null, ?int $count = null, ?OrderBy $orderBy = null
+        string $contentObjectNumber, ?int $limit = null, ?int $count = null, OrderBy $orderBy = new OrderBy()
     ): ArrayCollection
     {
         $condition = new EqualityCondition(

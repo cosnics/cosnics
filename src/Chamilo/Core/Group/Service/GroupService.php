@@ -199,12 +199,12 @@ class GroupService
      * @param ?\Chamilo\Libraries\Storage\Query\Condition\Condition $condition
      * @param ?int $offset
      * @param ?int $count
-     * @param ?\Chamilo\Libraries\Storage\Query\OrderBy $orderBy
+     * @param \Chamilo\Libraries\Storage\Query\OrderBy $orderBy
      *
      * @return \Doctrine\Common\Collections\ArrayCollection<\Chamilo\Core\Group\Storage\DataClass\Group>
      */
     public function findGroups(
-        ?Condition $condition = null, ?int $offset = 0, ?int $count = - 1, ?OrderBy $orderBy = null
+        ?Condition $condition = null, ?int $offset = 0, ?int $count = - 1, OrderBy $orderBy = new OrderBy()
     ): ArrayCollection
     {
         return $this->getGroupRepository()->findGroups($condition, $count, $offset, $orderBy);

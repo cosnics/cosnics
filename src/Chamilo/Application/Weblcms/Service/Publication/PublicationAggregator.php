@@ -353,13 +353,13 @@ class PublicationAggregator implements PublicationAggregatorInterface
      * @param ?\Chamilo\Libraries\Storage\Query\Condition\Condition $condition
      * @param ?int $count
      * @param ?int $offset
-     * @param ?\Chamilo\Libraries\Storage\Query\OrderBy $orderBy
+     * @param \Chamilo\Libraries\Storage\Query\OrderBy $orderBy
      *
      * @return  \Doctrine\Common\Collections\ArrayCollection<\Chamilo\Core\Repository\Publication\Storage\DataClass\Attributes>
      */
     public function getContentObjectPublicationsAttributes(
         int $type, string $objectIdentifier, Condition $condition = null, int $count = null, int $offset = null,
-        ?OrderBy $orderBy = null
+        OrderBy $orderBy = new OrderBy()
     ): ArrayCollection
     {
         $publicationAttributes = DataManager::getContentObjectPublicationsAttributes(
