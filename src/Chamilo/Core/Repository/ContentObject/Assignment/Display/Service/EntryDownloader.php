@@ -2,12 +2,14 @@
 
 namespace Chamilo\Core\Repository\ContentObject\Assignment\Display\Service;
 
+use Chamilo\Application\Weblcms\Storage\DataManager;
 use Chamilo\Core\Repository\ContentObject\Assignment\Display\Bridge\Interfaces\AssignmentServiceBridgeInterface;
 use Chamilo\Core\Repository\ContentObject\Assignment\Display\Bridge\Storage\DataClass\Entry;
 use Chamilo\Core\Repository\ContentObject\Assignment\Display\Domain\EntryDownloadResponse;
 use Chamilo\Core\Repository\ContentObject\Assignment\Display\Manager;
 use Chamilo\Core\Repository\ContentObject\Assignment\Storage\DataClass\Assignment;
 use Chamilo\Core\Repository\ContentObject\File\Storage\DataClass\File;
+use Chamilo\Core\Rights\Entity\UserEntity;
 use Chamilo\Core\User\Storage\DataClass\User;
 use Chamilo\Libraries\Architecture\Exceptions\NotAllowedException;
 use Chamilo\Libraries\File\Compression\ArchiveCreator\Archive;
@@ -501,8 +503,15 @@ class EntryDownloader
             $entityName = $entry->getEntityId();
         }
 
+        if($entry->getEntityType() == \Chamilo\Application\Weblcms\Bridge\Assignment\Storage\DataClass\Entry::ENTITY_TYPE_USER)
+        {
+            /** @var User $entity */
+            $entity = DataManager::retrieve_by_id(User::class, $entry->getEntityId());
+            $entityName .= '--' . $entity->get_official_code();
+        }
+
         return Filesystem::create_safe_name(
-            $entityName . '_' . str_replace(
+            $entityName . '--' . str_replace(
                 '.' . $file->get_extension(), '--'
                 . date('d-m-Y--H-i', $entry->getSubmitted()) . '.' . $file->get_extension(),
                 $file->get_filename()

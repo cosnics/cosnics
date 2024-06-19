@@ -102,6 +102,7 @@ class GetCourseUsersComponent extends Manager
         $apiUser->setEmail($user->get_email());
         $apiUser->setLocale('nl'); //todo: get locale from user settings
         $apiUser->setTimeZone(date_default_timezone_get());
+        $apiUser->setRole($enrollmentType);
 
         return $apiUser;
     }
