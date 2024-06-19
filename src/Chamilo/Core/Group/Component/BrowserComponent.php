@@ -402,7 +402,7 @@ class BrowserComponent extends Manager implements TableSupport
             case GroupTable::class_name() :
                 $query = $this->buttonToolbarRenderer->getSearchForm()->getQuery();
 
-                if (is_null($query))
+                if (empty($query))
                 {
                     return $this->get_subgroups_condition();
                 }
