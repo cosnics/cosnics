@@ -265,7 +265,7 @@ class Basic extends Renderer
             }
         }
 
-        if($this->get_user()->is_teacher() && $showHOGENTNotification)
+        if($this->get_user() instanceof User && $this->get_user()->is_teacher() && $showHOGENTNotification)
         {
             $html[] = '<div class="alert alert-info text-center" style="font-weight: bold; font-size: 16px;">Chamilo verdwijnt in 2028. Wat brengt de toekomst? <a href="https://toekomstdlo.hogent.be" target="_blank">';
             $html[] = 'Bekijk het op https://toekomstdlo.hogent.be.';
