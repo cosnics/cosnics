@@ -563,7 +563,7 @@ class UserService
     {
         return $this->getPropertyMapper()->mapDataClassByProperty(
             $this->findUsers($condition, $offset, $count, $orderBy), User::PROPERTY_OFFICIAL_CODE
-        );
+        )->toArray();
     }
 
     /**
