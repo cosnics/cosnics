@@ -555,22 +555,22 @@ class UserService
     }
 
     /**
-     * @return \Chamilo\Core\User\Storage\DataClass\User[]
+     * @return \Doctrine\Common\Collections\ArrayCollection<\Chamilo\Core\User\Storage\DataClass\User>
      */
     public function findUsersMappedByOfficialCode(
         ?Condition $condition = null, ?int $offset = 0, ?int $count = - 1, OrderBy $orderBy = new OrderBy()
-    ): array
+    ): ArrayCollection
     {
         return $this->getPropertyMapper()->mapDataClassByProperty(
             $this->findUsers($condition, $offset, $count, $orderBy), User::PROPERTY_OFFICIAL_CODE
-        )->toArray();
+        );
     }
 
     /**
      * @param ?\Chamilo\Libraries\Storage\Query\Condition\Condition $condition
      * @param ?int $offset
      * @param ?int $count
-     * @param ?\Chamilo\Libraries\Storage\Query\OrderBy $orderProperty
+     * @param \Chamilo\Libraries\Storage\Query\OrderBy $orderBy
      *
      * @return \Doctrine\Common\Collections\ArrayCollection<\Chamilo\Core\User\Storage\DataClass\User>
      */
