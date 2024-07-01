@@ -312,7 +312,7 @@ class DataClassDatabase implements DataClassDatabaseInterface
 
             if (!is_array($record) || empty($record))
             {
-                $record = null;
+                throw new DatabaseRetrieveException($dataClassStorageUnitName, $parameters, 'No result for query');
             }
 
             return $record;
