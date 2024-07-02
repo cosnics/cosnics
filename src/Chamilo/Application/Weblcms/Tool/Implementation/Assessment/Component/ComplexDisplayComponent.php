@@ -14,7 +14,7 @@ use Chamilo\Core\Repository\ContentObject\Hotpotatoes\Storage\DataClass\Hotpotat
 use Chamilo\Libraries\Architecture\Application\ApplicationConfiguration;
 use Chamilo\Libraries\Format\Breadcrumb\BreadcrumbLessComponentInterface;
 use Chamilo\Libraries\Format\Breadcrumb\BreadcrumbTrail;
-use Chamilo\Libraries\Storage\Parameters\RetrieveParameters;
+use Chamilo\Libraries\Storage\Parameters\DataClassParameters;
 use Chamilo\Libraries\Storage\Parameters\RetrievesParameters;
 use Chamilo\Libraries\Storage\Query\Condition\AndCondition;
 use Chamilo\Libraries\Storage\Query\Condition\EqualityCondition;
@@ -220,7 +220,7 @@ class ComplexDisplayComponent extends Manager implements AssessmentDisplaySuppor
 
     public function get_assessment_configuration()
     {
-        $parameters = new RetrieveParameters(
+        $parameters = new DataClassParameters(
             condition: new EqualityCondition(
                 new PropertyConditionVariable(Publication::class, Publication::PROPERTY_PUBLICATION_ID),
                 new StaticConditionVariable($this->publication->get_id())

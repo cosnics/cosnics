@@ -9,7 +9,7 @@ use Chamilo\Core\Rights\Entity\NestedRightsEntity;
 use Chamilo\Libraries\Format\Form\Element\AdvancedElementFinder\AdvancedElementFinderElement;
 use Chamilo\Libraries\Format\Form\Element\AdvancedElementFinder\AdvancedElementFinderElementType;
 use Chamilo\Libraries\Format\Structure\Glyph\FontAwesomeGlyph;
-use Chamilo\Libraries\Storage\Parameters\DataClassCountParameters;
+use Chamilo\Libraries\Storage\Parameters\DataClassParameters;
 use Chamilo\Libraries\Storage\Parameters\RetrievesParameters;
 use Chamilo\Libraries\Storage\Query\Condition\AndCondition;
 use Chamilo\Libraries\Storage\Query\Condition\EqualityCondition;
@@ -50,7 +50,7 @@ class CourseGroupEntity implements NestedRightsEntity
     {
         $condition = $this->get_condition($condition);
 
-        return DataManager::count(CourseGroup::class, new DataClassCountParameters(condition: $condition));
+        return DataManager::count(CourseGroup::class, new DataClassParameters(condition: $condition));
     }
 
     /**

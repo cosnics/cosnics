@@ -4,7 +4,7 @@ namespace Chamilo\Core\Repository\ContentObject\Assessment\Builder\Component;
 use Chamilo\Core\Repository\ContentObject\Assessment\Builder\Manager;
 use Chamilo\Core\Repository\Storage\DataClass\ComplexContentObjectItem;
 use Chamilo\Core\Repository\Storage\DataManager;
-use Chamilo\Libraries\Storage\Parameters\DataClassCountParameters;
+use Chamilo\Libraries\Storage\Parameters\DataClassParameters;
 use Chamilo\Libraries\Storage\Query\Condition\AndCondition;
 use Chamilo\Libraries\Storage\Query\Condition\EqualityCondition;
 use Chamilo\Libraries\Storage\Query\Variable\PropertyConditionVariable;
@@ -37,7 +37,7 @@ class MoverComponent extends Manager
             );
             $parent = $complex_content_object_item->get_parent();
             $max = DataManager::count_complex_content_object_items(
-                ComplexContentObjectItem::class, new DataClassCountParameters(
+                ComplexContentObjectItem::class, new DataClassParameters(
                     condition: new EqualityCondition(
                         new PropertyConditionVariable(
                             ComplexContentObjectItem::class, ComplexContentObjectItem::PROPERTY_PARENT

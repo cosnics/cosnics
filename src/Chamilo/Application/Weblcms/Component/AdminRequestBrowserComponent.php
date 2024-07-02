@@ -19,7 +19,7 @@ use Chamilo\Libraries\Format\Structure\Glyph\FontAwesomeGlyph;
 use Chamilo\Libraries\Format\Structure\ToolbarItem;
 use Chamilo\Libraries\Format\Table\RequestTableParameterValuesCompiler;
 use Chamilo\Libraries\Format\Tabs\GenericTabsRenderer;
-use Chamilo\Libraries\Storage\Parameters\DataClassCountParameters;
+use Chamilo\Libraries\Storage\Parameters\DataClassParameters;
 use Chamilo\Libraries\Storage\Parameters\RetrievesParameters;
 use Chamilo\Libraries\Storage\Query\Condition\AndCondition;
 use Chamilo\Libraries\Storage\Query\Condition\ContainsCondition;
@@ -238,7 +238,7 @@ class AdminRequestBrowserComponent extends Manager
     public function renderTable(): string
     {
         $totalNumberOfItems = DataManager::count(
-            CourseRequest::class, new DataClassCountParameters(condition: $this->getAdminRequestCondition())
+            CourseRequest::class, new DataClassParameters(condition: $this->getAdminRequestCondition())
         );
         $adminRequestTableRenderer = $this->getAdminRequestTableRenderer();
 

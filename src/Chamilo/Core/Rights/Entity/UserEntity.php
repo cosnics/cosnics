@@ -7,8 +7,7 @@ use Chamilo\Libraries\Format\Form\Element\AdvancedElementFinder\AdvancedElementF
 use Chamilo\Libraries\Format\Form\Element\AdvancedElementFinder\AdvancedElementFinderElementType;
 use Chamilo\Libraries\Format\Structure\Glyph\FontAwesomeGlyph;
 use Chamilo\Libraries\Storage\DataManager\DataManager;
-use Chamilo\Libraries\Storage\Parameters\DataClassCountParameters;
-use Chamilo\Libraries\Storage\Parameters\RetrievesParameters;
+use Chamilo\Libraries\Storage\Parameters\DataClassParameters;
 use Chamilo\Libraries\Storage\Query\Condition\Condition;
 use Chamilo\Libraries\Translation\Translation;
 use Chamilo\Libraries\Utilities\StringUtilities;
@@ -50,7 +49,7 @@ class UserEntity implements RightsEntity
         $condition = $this->get_condition($condition);
 
         return DataManager::count(
-            User::class, new DataClassCountParameters(condition: $condition)
+            User::class, new DataClassParameters(condition: $condition)
         );
     }
 
@@ -209,8 +208,8 @@ class UserEntity implements RightsEntity
     public function retrieve_entity_items($condition = null, $offset = null, $count = null, $order_property = null)
     {
         $condition = $this->get_condition($condition);
-        $parameters = new RetrievesParameters(
-            condition: $condition, count: $count, offset: $offset, orderBy: $order_property
+        $parameters = new DataClassParameters(
+            condition: $condition, orderBy: $order_property, count: $count, offset: $offset
         );
 
         return DataManager::retrieves(User::class, $parameters);

@@ -15,7 +15,7 @@ use Chamilo\Libraries\Architecture\Application\Application;
 use Chamilo\Libraries\DependencyInjection\DependencyInjectionContainerBuilder;
 use Chamilo\Libraries\File\Properties\FileProperties;
 use Chamilo\Libraries\Storage\Cache\DataClassRepositoryCache;
-use Chamilo\Libraries\Storage\Parameters\RetrievesParameters;
+use Chamilo\Libraries\Storage\Parameters\DataClassParameters;
 use Chamilo\Libraries\Storage\Query\Condition\InCondition;
 use Chamilo\Libraries\Storage\Query\Variable\PropertyConditionVariable;
 use Chamilo\Libraries\Translation\Translation;
@@ -174,7 +174,7 @@ class ContentObjectCopier
             new PropertyConditionVariable(ContentObject::class, ContentObject::PROPERTY_ID), $contentObjectIdentifiers
         );
 
-        $parameters = new RetrievesParameters(condition: $condition);
+        $parameters = new DataClassParameters(condition: $condition);
 
         $content_objects = DataManager::retrieve_content_objects(ContentObject::class, $parameters);
 

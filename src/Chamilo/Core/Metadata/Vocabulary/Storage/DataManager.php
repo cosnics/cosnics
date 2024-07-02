@@ -3,8 +3,7 @@ namespace Chamilo\Core\Metadata\Vocabulary\Storage;
 
 use Chamilo\Core\Metadata\Storage\DataClass\Vocabulary;
 use Chamilo\Core\User\Storage\DataClass\User;
-use Chamilo\Libraries\Storage\Parameters\DataClassCountParameters;
-use Chamilo\Libraries\Storage\Parameters\RetrievesParameters;
+use Chamilo\Libraries\Storage\Parameters\DataClassParameters;
 use Chamilo\Libraries\Storage\Query\Condition\ComparisonCondition;
 use Chamilo\Libraries\Storage\Query\Join;
 use Chamilo\Libraries\Storage\Query\Joins;
@@ -42,15 +41,15 @@ class DataManager extends \Chamilo\Libraries\Storage\DataManager\DataManager
         );
 
         return self::count(
-            User::class, new DataClassCountParameters(
+            User::class, new DataClassParameters(
                 condition: $condition, joins: $joins, retrieveProperties: new RetrieveProperties(
-                    [
-                        new FunctionConditionVariable(
-                            FunctionConditionVariable::DISTINCT,
-                            new PropertyConditionVariable(User::class, User::PROPERTY_ID)
-                        )
-                    ]
-                )
+                [
+                    new FunctionConditionVariable(
+                        FunctionConditionVariable::DISTINCT,
+                        new PropertyConditionVariable(User::class, User::PROPERTY_ID)
+                    )
+                ]
+            )
             )
         );
     }
@@ -82,9 +81,9 @@ class DataManager extends \Chamilo\Libraries\Storage\DataManager\DataManager
             ]
         );
 
-        $parameters = new RetrievesParameters(
-            condition: $condition, count: $count, offset: $offset, orderBy: $order_property, joins: $joins,
-            retrieveProperties: $properties
+        $parameters = new DataClassParameters(
+            condition: $condition, joins: $joins, retrieveProperties: $properties, orderBy: $order_property,
+            count: $count, offset: $offset
         );
 
         return self::records(User::class, $parameters);

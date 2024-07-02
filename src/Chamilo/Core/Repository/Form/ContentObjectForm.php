@@ -37,7 +37,7 @@ use Chamilo\Libraries\Format\Structure\Glyph\FontAwesomeGlyph;
 use Chamilo\Libraries\Format\Structure\Glyph\IdentGlyph;
 use Chamilo\Libraries\Format\Tabs\Form\FormTab;
 use Chamilo\Libraries\Format\Tabs\TabsCollection;
-use Chamilo\Libraries\Storage\Parameters\RetrieveParameters;
+use Chamilo\Libraries\Storage\Parameters\DataClassParameters;
 use Chamilo\Libraries\Storage\Query\Condition\AndCondition;
 use Chamilo\Libraries\Storage\Query\Condition\EqualityCondition;
 use Chamilo\Libraries\Storage\Query\Variable\PropertyConditionVariable;
@@ -611,7 +611,7 @@ abstract class ContentObjectForm extends FormValidator
         $condition = new AndCondition($conditions);
 
         $existingNewCategory = DataManager::retrieve(
-            RepositoryCategory::class, new RetrieveParameters(condition: $condition)
+            RepositoryCategory::class, new DataClassParameters(condition: $condition)
         );
 
         if ($existingNewCategory instanceof RepositoryCategory)
@@ -783,6 +783,14 @@ abstract class ContentObjectForm extends FormValidator
     }
 
     /**
+     * @param \Chamilo\Core\Repository\Storage\DataClass\ContentObject $content_object
+     */
+    protected function set_content_object($content_object)
+    {
+        $this->content_object = $content_object;
+    }
+
+    /**
      * @return string
      */
     protected function get_content_object_class()
@@ -841,6 +849,14 @@ abstract class ContentObjectForm extends FormValidator
     protected function get_owner_id()
     {
         return $this->owner_id;
+    }
+
+    /**
+     * @param int $owner_id
+     */
+    protected function set_owner_id($owner_id)
+    {
+        $this->owner_id = $owner_id;
     }
 
     public function get_workspace(): Workspace
@@ -968,22 +984,6 @@ abstract class ContentObjectForm extends FormValidator
                 $this->workspace->getId(), $object->get_object_number(), $parent_id
             );
         }
-    }
-
-    /**
-     * @param \Chamilo\Core\Repository\Storage\DataClass\ContentObject $content_object
-     */
-    protected function set_content_object($content_object)
-    {
-        $this->content_object = $content_object;
-    }
-
-    /**
-     * @param int $owner_id
-     */
-    protected function set_owner_id($owner_id)
-    {
-        $this->owner_id = $owner_id;
     }
 
     /**

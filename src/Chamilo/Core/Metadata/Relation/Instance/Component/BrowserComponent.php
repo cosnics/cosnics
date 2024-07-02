@@ -13,8 +13,7 @@ use Chamilo\Libraries\Format\Structure\ActionBar\ButtonToolBar;
 use Chamilo\Libraries\Format\Structure\ActionBar\Renderer\ButtonToolBarRenderer;
 use Chamilo\Libraries\Format\Structure\Glyph\FontAwesomeGlyph;
 use Chamilo\Libraries\Format\Table\RequestTableParameterValuesCompiler;
-use Chamilo\Libraries\Storage\Parameters\DataClassCountParameters;
-use Chamilo\Libraries\Storage\Parameters\RetrievesParameters;
+use Chamilo\Libraries\Storage\Parameters\DataClassParameters;
 use Chamilo\Libraries\Storage\Query\Condition\AndCondition;
 use Chamilo\Libraries\Storage\Query\Condition\InCondition;
 use Chamilo\Libraries\Storage\Query\Variable\PropertyConditionVariable;
@@ -163,8 +162,9 @@ class BrowserComponent extends Manager
      */
     protected function renderTable(): string
     {
-        $totalNumberOfItems =
-            DataManager::count(RelationInstance::class, new DataClassCountParameters(condition: $this->getRelationCondition()));
+        $totalNumberOfItems = DataManager::count(
+            RelationInstance::class, new DataClassParameters(condition: $this->getRelationCondition())
+        );
         $relationInstanceTableRenderer = $this->getRelationInstanceTableRenderer();
 
         $tableParameterValues = $this->getRequestTableParameterValuesCompiler()->determineParameterValues(
@@ -173,9 +173,10 @@ class BrowserComponent extends Manager
         );
 
         $relations = DataManager::retrieves(
-            RelationInstance::class, new RetrievesParameters(
-                condition: $this->getRelationCondition(), count: $tableParameterValues->getNumberOfItemsPerPage(),
-                offset: $tableParameterValues->getOffset(), orderBy: $relationInstanceTableRenderer->determineOrderBy($tableParameterValues)
+            RelationInstance::class, new DataClassParameters(
+                condition: $this->getRelationCondition(), orderBy: $relationInstanceTableRenderer->determineOrderBy(
+                $tableParameterValues
+            ), count: $tableParameterValues->getNumberOfItemsPerPage(), offset: $tableParameterValues->getOffset()
             )
         );
 

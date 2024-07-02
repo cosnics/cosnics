@@ -20,7 +20,7 @@ use Chamilo\Core\User\Storage\DataClass\User;
 use Chamilo\Libraries\Architecture\Application\Application;
 use Chamilo\Libraries\Storage\DataClass\DataClass;
 use Chamilo\Libraries\Storage\DataManager\DataManager;
-use Chamilo\Libraries\Storage\Parameters\RetrievesParameters;
+use Chamilo\Libraries\Storage\Parameters\DataClassParameters;
 use Chamilo\Libraries\Storage\Query\Condition\Condition;
 use Exception;
 use InvalidArgumentException;
@@ -362,11 +362,13 @@ class AssignmentDataProvider
     }
 
     /**
-     * @param \Chamilo\Libraries\Storage\Parameters\RetrievesParameters $retrievesParameters
+     * @param \Chamilo\Libraries\Storage\Parameters\DataClassParameters $retrievesParameters
      *
      * @return \Doctrine\Common\Collections\ArrayCollection|\Chamilo\Core\Repository\Storage\DataClass\ContentObject[]
      */
-    public function findAssignmentEntriesWithEphorusRequests(RetrievesParameters $retrievesParameters = new RetrievesParameters())
+    public function findAssignmentEntriesWithEphorusRequests(
+        DataClassParameters $retrievesParameters = new DataClassParameters()
+    )
     {
         return $this->learningPathAssignmentService->findAssignmentEntriesWithEphorusRequestsByTreeNodeData(
             $this->contentObjectPublication, $this->treeNode->getTreeNodeData(), $retrievesParameters
@@ -692,6 +694,14 @@ class AssignmentDataProvider
     }
 
     /**
+     * @param bool $ephorusEnabled
+     */
+    public function setEphorusEnabled($ephorusEnabled = true)
+    {
+        $this->ephorusEnabled = $ephorusEnabled;
+    }
+
+    /**
      * @param \Chamilo\Core\User\Storage\DataClass\User $user
      * @param int $entityType
      * @param int $entityId
@@ -752,14 +762,6 @@ class AssignmentDataProvider
     public function setContentObjectPublication(ContentObjectPublication $contentObjectPublication)
     {
         $this->contentObjectPublication = $contentObjectPublication;
-    }
-
-    /**
-     * @param bool $ephorusEnabled
-     */
-    public function setEphorusEnabled($ephorusEnabled = true)
-    {
-        $this->ephorusEnabled = $ephorusEnabled;
     }
 
     /**

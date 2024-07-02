@@ -5,9 +5,7 @@ use Chamilo\Application\Calendar\Extension\Personal\Storage\DataClass\Publicatio
 use Chamilo\Application\Calendar\Extension\Personal\Storage\DataClass\PublicationGroup;
 use Chamilo\Application\Calendar\Extension\Personal\Storage\DataClass\PublicationUser;
 use Chamilo\Libraries\Storage\DataManager\Repository\DataClassRepository;
-use Chamilo\Libraries\Storage\Parameters\DataClassCountParameters;
-use Chamilo\Libraries\Storage\Parameters\DataClassDistinctParameters;
-use Chamilo\Libraries\Storage\Parameters\RetrievesParameters;
+use Chamilo\Libraries\Storage\Parameters\DataClassParameters;
 use Chamilo\Libraries\Storage\Query\Condition\AndCondition;
 use Chamilo\Libraries\Storage\Query\Condition\EqualityCondition;
 use Chamilo\Libraries\Storage\Query\Condition\InCondition;
@@ -51,7 +49,7 @@ class RightsRepository
         );
 
         return $this->getDataClassRepository()->count(
-            PublicationGroup::class, new DataClassCountParameters(condition: $condition)
+            PublicationGroup::class, new DataClassParameters(condition: $condition)
         );
     }
 
@@ -68,7 +66,7 @@ class RightsRepository
         );
 
         return $this->getDataClassRepository()->count(
-            PublicationUser::class, new DataClassCountParameters(condition: $condition)
+            PublicationUser::class, new DataClassParameters(condition: $condition)
         );
     }
 
@@ -180,6 +178,14 @@ class RightsRepository
     }
 
     /**
+     * @param \Chamilo\Libraries\Storage\DataManager\Repository\DataClassRepository $dataClassRepository
+     */
+    public function setDataClassRepository(DataClassRepository $dataClassRepository): void
+    {
+        $this->dataClassRepository = $dataClassRepository;
+    }
+
+    /**
      * @param \Chamilo\Application\Calendar\Extension\Personal\Storage\DataClass\Publication $publication
      *
      * @return int
@@ -196,8 +202,9 @@ class RightsRepository
         );
 
         return $this->getDataClassRepository()->distinct(
-            PublicationGroup::class, new DataClassDistinctParameters(
-                condition: $condition, retrieveProperties: $properties)
+            PublicationGroup::class, new DataClassParameters(
+                condition: $condition, retrieveProperties: $properties
+            )
         );
     }
 
@@ -214,7 +221,7 @@ class RightsRepository
         );
 
         return $this->getDataClassRepository()->retrieves(
-            PublicationGroup::class, new RetrievesParameters(condition: $condition)
+            PublicationGroup::class, new DataClassParameters(condition: $condition)
         );
     }
 
@@ -235,8 +242,9 @@ class RightsRepository
         );
 
         return $this->getDataClassRepository()->distinct(
-            PublicationUser::class, new DataClassDistinctParameters(
-                condition: $condition, retrieveProperties: $properties)
+            PublicationUser::class, new DataClassParameters(
+                condition: $condition, retrieveProperties: $properties
+            )
         );
     }
 
@@ -253,16 +261,8 @@ class RightsRepository
         );
 
         return $this->getDataClassRepository()->retrieves(
-            PublicationUser::class, new RetrievesParameters(condition: $condition)
+            PublicationUser::class, new DataClassParameters(condition: $condition)
         );
-    }
-
-    /**
-     * @param \Chamilo\Libraries\Storage\DataManager\Repository\DataClassRepository $dataClassRepository
-     */
-    public function setDataClassRepository(DataClassRepository $dataClassRepository): void
-    {
-        $this->dataClassRepository = $dataClassRepository;
     }
 }
 

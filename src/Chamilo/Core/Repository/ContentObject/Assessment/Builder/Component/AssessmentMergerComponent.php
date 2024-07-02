@@ -19,8 +19,7 @@ use Chamilo\Libraries\Format\Structure\ActionBar\Renderer\ButtonToolBarRenderer;
 use Chamilo\Libraries\Format\Structure\Breadcrumb;
 use Chamilo\Libraries\Format\Structure\Glyph\FontAwesomeGlyph;
 use Chamilo\Libraries\Format\Table\RequestTableParameterValuesCompiler;
-use Chamilo\Libraries\Storage\Parameters\DataClassCountParameters;
-use Chamilo\Libraries\Storage\Parameters\RetrievesParameters;
+use Chamilo\Libraries\Storage\Parameters\DataClassParameters;
 use Chamilo\Libraries\Storage\Query\Condition\EqualityCondition;
 use Chamilo\Libraries\Storage\Query\Condition\SubselectCondition;
 use Chamilo\Libraries\Storage\Query\Variable\PropertyConditionVariable;
@@ -113,8 +112,7 @@ class AssessmentMergerComponent extends Manager implements ViewerInterface
     public function getObjectCondition()
     {
         $selected_assessment = DataManager::retrieve_by_id(
-            Assessment::class,
-            $this->getObjectsSelectedInviewer()
+            Assessment::class, $this->getObjectsSelectedInviewer()
         );
 
         return $this->get_condition($selected_assessment);
@@ -174,7 +172,7 @@ class AssessmentMergerComponent extends Manager implements ViewerInterface
     protected function renderTable(): string
     {
         $totalNumberOfItems = DataManager::count_active_content_objects(
-            ContentObject::class, new DataClassCountParameters(condition: $this->getObjectCondition())
+            ContentObject::class, new DataClassParameters(condition: $this->getObjectCondition())
         );
 
         $objectTableRenderer = $this->getObjectTableRenderer();
@@ -185,9 +183,10 @@ class AssessmentMergerComponent extends Manager implements ViewerInterface
         );
 
         $objects = DataManager::retrieve_active_content_objects(
-            ContentObject::class, new RetrievesParameters(
-                condition: $this->getObjectCondition(), count: $tableParameterValues->getNumberOfItemsPerPage(),
-                offset: $tableParameterValues->getOffset(), orderBy: $objectTableRenderer->determineOrderBy($tableParameterValues)
+            ContentObject::class, new DataClassParameters(
+                condition: $this->getObjectCondition(), orderBy: $objectTableRenderer->determineOrderBy(
+                $tableParameterValues
+            ), count: $tableParameterValues->getNumberOfItemsPerPage(), offset: $tableParameterValues->getOffset()
             )
         );
 

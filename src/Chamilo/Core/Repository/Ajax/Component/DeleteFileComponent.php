@@ -3,58 +3,54 @@ namespace Chamilo\Core\Repository\Ajax\Component;
 
 use Chamilo\Core\Repository\Ajax\Manager;
 use Chamilo\Core\Repository\ContentObject\File\Storage\DataClass\File;
-use Chamilo\Libraries\Architecture\JsonAjaxResult;
-use Chamilo\Libraries\Translation\Translation;
-use Chamilo\Libraries\Storage\Query\Condition\EqualityCondition;
-use Chamilo\Libraries\Storage\Query\Variable\PropertyConditionVariable;
 use Chamilo\Core\Repository\Storage\DataClass\ContentObject;
 use Chamilo\Core\Repository\Storage\DataManager;
-use Chamilo\Libraries\Storage\Query\Variable\StaticConditionVariable;
-use Chamilo\Libraries\Storage\Parameters\RetrieveParameters;
+use Chamilo\Libraries\Architecture\JsonAjaxResult;
+use Chamilo\Libraries\Storage\Parameters\DataClassParameters;
 use Chamilo\Libraries\Storage\Query\Condition\AndCondition;
+use Chamilo\Libraries\Storage\Query\Condition\EqualityCondition;
+use Chamilo\Libraries\Storage\Query\Variable\PropertyConditionVariable;
+use Chamilo\Libraries\Storage\Query\Variable\StaticConditionVariable;
+use Chamilo\Libraries\Translation\Translation;
 
 class DeleteFileComponent extends Manager
 {
-    const PARAM_CONTENT_OBJECT_ID = 'content_object_id';
+    public const PARAM_CONTENT_OBJECT_ID = 'content_object_id';
 
     /*
      * (non-PHPdoc) @see common\libraries.AjaxManager::required_parameters()
      */
-    public function getRequiredPostParameters(array $postParameters = []): array
-    {
-        return array(self::PARAM_CONTENT_OBJECT_ID);
-    }
 
-    /*
-     * (non-PHPdoc) @see common\libraries.AjaxManager::run()
-     */
     public function run()
     {
         $contentObjectId = $this->getPostDataValue(self::PARAM_CONTENT_OBJECT_ID);
-        
+
         if (isset($contentObjectId))
         {
             $conditions = [];
-            
+
             $conditions[] = new EqualityCondition(
                 new PropertyConditionVariable(ContentObject::class, ContentObject::PROPERTY_TYPE),
-                new StaticConditionVariable(File::class));
+                new StaticConditionVariable(File::class)
+            );
             $conditions[] = new EqualityCondition(
                 new PropertyConditionVariable(ContentObject::class, ContentObject::PROPERTY_OWNER_ID),
-                new StaticConditionVariable($this->getUser()->getId()));
+                new StaticConditionVariable($this->getUser()->getId())
+            );
             $conditions[] = new EqualityCondition(
                 new PropertyConditionVariable(ContentObject::class, ContentObject::PROPERTY_ID),
-                new StaticConditionVariable($contentObjectId));
-            
+                new StaticConditionVariable($contentObjectId)
+            );
+
             $file = DataManager::retrieve(
-                ContentObject::class,
-                new RetrieveParameters(condition: new AndCondition($conditions)));
-            
+                ContentObject::class, new DataClassParameters(condition: new AndCondition($conditions))
+            );
+
             if ($file instanceof File)
             {
                 if (DataManager::content_object_deletion_allowed($file, 'version'))
                 {
-                    if (! $file->delete(true))
+                    if (!$file->delete(true))
                     {
                         JsonAjaxResult::general_error(Translation::get('FileNotDeleted'));
                     }
@@ -80,6 +76,10 @@ class DeleteFileComponent extends Manager
         }
     }
 
+    /*
+     * (non-PHPdoc) @see common\libraries.AjaxManager::run()
+     */
+
     /**
      *
      * @return \Symfony\Component\HttpFoundation\File\UploadedFile
@@ -87,6 +87,12 @@ class DeleteFileComponent extends Manager
     public function getFile()
     {
         $filePropertyName = $this->getRequest()->request->get('filePropertyName');
+
         return $this->getRequest()->files->get($filePropertyName);
+    }
+
+    public function getRequiredPostParameters(array $postParameters = []): array
+    {
+        return [self::PARAM_CONTENT_OBJECT_ID];
     }
 }

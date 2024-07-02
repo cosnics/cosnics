@@ -6,7 +6,7 @@ use Chamilo\Application\Weblcms\Tool\Implementation\CourseGroup\Storage\DataMana
 use Chamilo\Application\Weblcms\Tool\Implementation\CourseGroup\Table\CourseGroupTableRenderer;
 use Chamilo\Libraries\Format\Table\RequestTableParameterValuesCompiler;
 use Chamilo\Libraries\Storage\DataClass\NestedSet;
-use Chamilo\Libraries\Storage\Parameters\DataClassCountParameters;
+use Chamilo\Libraries\Storage\Parameters\DataClassParameters;
 use Chamilo\Libraries\Storage\Parameters\RetrievesParameters;
 use Chamilo\Libraries\Storage\Query\Condition\AndCondition;
 use Chamilo\Libraries\Storage\Query\Condition\EqualityCondition;
@@ -83,8 +83,9 @@ class BrowserComponent extends TabComponent
      */
     protected function renderTabContent(): string
     {
-        $totalNumberOfItems =
-            DataManager::count(CourseGroup::class, new DataClassCountParameters(condition: $this->getCourseGroupCondition()));
+        $totalNumberOfItems = DataManager::count(
+            CourseGroup::class, new DataClassParameters(condition: $this->getCourseGroupCondition())
+        );
         $courseGroupTableRenderer = $this->getCourseGroupTableRenderer();
 
         $tableParameterValues = $this->getRequestTableParameterValuesCompiler()->determineParameterValues(
@@ -95,7 +96,9 @@ class BrowserComponent extends TabComponent
         $courseGroups = DataManager::retrieves(
             CourseGroup::class, new RetrievesParameters(
                 condition: $this->getCourseGroupCondition(), count: $tableParameterValues->getNumberOfItemsPerPage(),
-                offset: $tableParameterValues->getOffset(), orderBy: $courseGroupTableRenderer->determineOrderBy($tableParameterValues)
+                offset: $tableParameterValues->getOffset(), orderBy: $courseGroupTableRenderer->determineOrderBy(
+                $tableParameterValues
+            )
             )
         );
 

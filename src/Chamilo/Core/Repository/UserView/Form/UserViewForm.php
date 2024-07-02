@@ -7,7 +7,7 @@ use Chamilo\Core\Repository\UserView\Storage\DataClass\UserViewRelContentObject;
 use Chamilo\Libraries\Format\Form\FormValidator;
 use Chamilo\Libraries\Format\Structure\Glyph\FontAwesomeGlyph;
 use Chamilo\Libraries\Storage\DataManager\DataManager;
-use Chamilo\Libraries\Storage\Parameters\RetrievesParameters;
+use Chamilo\Libraries\Storage\Parameters\DataClassParameters;
 use Chamilo\Libraries\Storage\Query\Condition\EqualityCondition;
 use Chamilo\Libraries\Storage\Query\Variable\PropertyConditionVariable;
 use Chamilo\Libraries\Storage\Query\Variable\StaticConditionVariable;
@@ -97,7 +97,7 @@ class UserViewForm extends FormValidator
         {
 
             $relations = DataManager::retrieves(
-                UserViewRelContentObject::class, new RetrievesParameters(
+                UserViewRelContentObject::class, new DataClassParameters(
                     condition: new EqualityCondition(
                         new PropertyConditionVariable(
                             UserViewRelContentObject::class, UserViewRelContentObject::PROPERTY_USER_VIEW_ID
@@ -227,7 +227,7 @@ class UserViewForm extends FormValidator
         );
 
         $types = DataManager::retrieves(
-            UserViewRelContentObject::class, new RetrievesParameters(condition: $condition)
+            UserViewRelContentObject::class, new DataClassParameters(condition: $condition)
         );
         $existing_types = [];
         foreach ($types as $type)

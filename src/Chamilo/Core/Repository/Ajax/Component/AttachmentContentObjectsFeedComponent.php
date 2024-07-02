@@ -10,8 +10,7 @@ use Chamilo\Libraries\Format\Form\Element\AdvancedElementFinder\AdvancedElementF
 use Chamilo\Libraries\Format\Form\Element\AdvancedElementFinder\AdvancedElementFinderElements;
 use Chamilo\Libraries\Format\Structure\Glyph\FontAwesomeGlyph;
 use Chamilo\Libraries\Format\Structure\Glyph\IdentGlyph;
-use Chamilo\Libraries\Storage\Parameters\DataClassCountParameters;
-use Chamilo\Libraries\Storage\Parameters\RetrievesParameters;
+use Chamilo\Libraries\Storage\Parameters\DataClassParameters;
 use Chamilo\Libraries\Storage\Query\Condition\AndCondition;
 use Chamilo\Libraries\Storage\Query\Condition\EqualityCondition;
 use Chamilo\Libraries\Storage\Query\Condition\InCondition;
@@ -191,7 +190,7 @@ class AttachmentContentObjectsFeedComponent extends Manager
     protected function countContentObjects()
     {
         return DataManager::count_active_content_objects(
-            ContentObject::class, new DataClassCountParameters(condition: $this->getContentObjectConditions())
+            ContentObject::class, new DataClassParameters(condition: $this->getContentObjectConditions())
         );
     }
 
@@ -424,13 +423,12 @@ class AttachmentContentObjectsFeedComponent extends Manager
      */
     protected function retrieveContentObjects()
     {
-        $parameters = new RetrievesParameters(
-            condition: $this->getContentObjectConditions(), count: 100, offset: $this->getOffset(),
-            orderBy: new OrderBy([
+        $parameters = new DataClassParameters(
+            condition: $this->getContentObjectConditions(), orderBy: new OrderBy([
             new OrderProperty(
                 new PropertyConditionVariable(ContentObject::class, ContentObject::PROPERTY_TITLE)
             )
-        ])
+        ]), count: 100, offset: $this->getOffset()
         );
 
         return DataManager::retrieve_active_content_objects(ContentObject::class, $parameters);

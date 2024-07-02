@@ -12,8 +12,7 @@ use Chamilo\Libraries\Format\Structure\ActionBar\ButtonToolBar;
 use Chamilo\Libraries\Format\Structure\ActionBar\Renderer\ButtonToolBarRenderer;
 use Chamilo\Libraries\Format\Structure\Glyph\FontAwesomeGlyph;
 use Chamilo\Libraries\Format\Table\RequestTableParameterValuesCompiler;
-use Chamilo\Libraries\Storage\Parameters\DataClassCountParameters;
-use Chamilo\Libraries\Storage\Parameters\RetrievesParameters;
+use Chamilo\Libraries\Storage\Parameters\DataClassParameters;
 use Chamilo\Libraries\Storage\Query\Variable\PropertyConditionVariable;
 use Chamilo\Libraries\Translation\Translation;
 use Chamilo\Libraries\Utilities\StringUtilities;
@@ -112,7 +111,7 @@ class BrowserComponent extends Manager
             [new PropertyConditionVariable(Schema::class, Schema::PROPERTY_NAME)]
         );
 
-        $totalNumberOfItems = DataManager::count(Schema::class, new DataClassCountParameters(condition: $condition));
+        $totalNumberOfItems = DataManager::count(Schema::class, new DataClassParameters(condition: $condition));
         $schemaTableRenderer = $this->getSchemaTableRenderer();
 
         $tableParameterValues = $this->getRequestTableParameterValuesCompiler()->determineParameterValues(
@@ -120,9 +119,10 @@ class BrowserComponent extends Manager
             $totalNumberOfItems
         );
 
-        $parameters = new RetrievesParameters(
-            condition: $condition, count: $tableParameterValues->getNumberOfItemsPerPage(),
-            offset: $tableParameterValues->getOffset(), orderBy: $schemaTableRenderer->determineOrderBy($tableParameterValues)
+        $parameters = new DataClassParameters(
+            condition: $condition, orderBy: $schemaTableRenderer->determineOrderBy(
+            $tableParameterValues
+        ), count: $tableParameterValues->getNumberOfItemsPerPage(), offset: $tableParameterValues->getOffset()
         );
 
         $schemas = DataManager::retrieves(Schema::class, $parameters);

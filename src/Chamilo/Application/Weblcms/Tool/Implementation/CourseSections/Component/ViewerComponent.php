@@ -13,7 +13,7 @@ use Chamilo\Libraries\Format\Structure\ActionBar\Renderer\ButtonToolBarRenderer;
 use Chamilo\Libraries\Format\Structure\Glyph\FontAwesomeGlyph;
 use Chamilo\Libraries\Format\Structure\ToolbarItem;
 use Chamilo\Libraries\Format\Table\RequestTableParameterValuesCompiler;
-use Chamilo\Libraries\Storage\Parameters\DataClassCountParameters;
+use Chamilo\Libraries\Storage\Parameters\DataClassParameters;
 use Chamilo\Libraries\Storage\Parameters\RetrievesParameters;
 use Chamilo\Libraries\Storage\Query\Condition\EqualityCondition;
 use Chamilo\Libraries\Storage\Query\Variable\PropertyConditionVariable;
@@ -115,7 +115,7 @@ class ViewerComponent extends Manager
     public function renderTable(): string
     {
         $totalNumberOfItems = DataManager::count(
-            CourseSection::class, new DataClassCountParameters(condition: $this->getCourseSectionsCondition())
+            CourseSection::class, new DataClassParameters(condition: $this->getCourseSectionsCondition())
         );
 
         $courseSectionsTableRenderer = $this->getCourseSectionsTableRenderer();
@@ -128,7 +128,9 @@ class ViewerComponent extends Manager
         $courseSections = DataManager::retrieves(
             CourseSection::class, new RetrievesParameters(
                 condition: $this->getCourseSectionsCondition(), count: $tableParameterValues->getNumberOfItemsPerPage(),
-                offset: $tableParameterValues->getOffset(), orderBy: $courseSectionsTableRenderer->determineOrderBy($tableParameterValues)
+                offset: $tableParameterValues->getOffset(), orderBy: $courseSectionsTableRenderer->determineOrderBy(
+                $tableParameterValues
+            )
             )
         );
 

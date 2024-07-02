@@ -8,7 +8,7 @@ use Chamilo\Core\Repository\Manager;
 use Chamilo\Core\Repository\Storage\DataClass\ContentObject;
 use Chamilo\Core\Repository\Storage\DataManager;
 use Chamilo\Core\Tracking\Storage\DataClass\Event;
-use Chamilo\Libraries\Storage\Parameters\RetrievesParameters;
+use Chamilo\Libraries\Storage\Parameters\DataClassParameters;
 use Chamilo\Libraries\Storage\Query\Condition\AndCondition;
 use Chamilo\Libraries\Storage\Query\Condition\Condition;
 use Chamilo\Libraries\Storage\Query\Condition\EqualityCondition;
@@ -152,7 +152,7 @@ class ImpactViewRecyclerComponent extends Manager
             new PropertyConditionVariable(ContentObject::class, ContentObjectPublication::PROPERTY_ID), $co_ids
         );
 
-        $parameters = new RetrievesParameters(condition: $condition);
+        $parameters = new DataClassParameters(condition: $condition);
 
         $objects = DataManager::retrieves(ContentObject::class, $parameters);
 
@@ -230,7 +230,7 @@ class ImpactViewRecyclerComponent extends Manager
             new PropertyConditionVariable(ContentObject::class, ContentObjectPublication::PROPERTY_ID), $selected_ids
         );
 
-        $parameters = new RetrievesParameters(condition: $condition);
+        $parameters = new DataClassParameters(condition: $condition);
 
         $objects = DataManager::retrieves(ContentObject::class, $parameters);
 

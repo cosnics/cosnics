@@ -7,7 +7,7 @@ use Chamilo\Application\Weblcms\Storage\DataManager;
 use Chamilo\Core\Reporting\ReportingData;
 use Chamilo\Core\Reporting\Viewer\Rendition\Block\Type\Html;
 use Chamilo\Core\User\Storage\DataClass\User;
-use Chamilo\Libraries\Storage\Parameters\DataClassCountParameters;
+use Chamilo\Libraries\Storage\Parameters\DataClassParameters;
 use Chamilo\Libraries\Storage\Query\Condition\EqualityCondition;
 use Chamilo\Libraries\Storage\Query\RetrieveProperties;
 use Chamilo\Libraries\Storage\Query\Variable\FunctionConditionVariable;
@@ -25,7 +25,7 @@ class NoOfUsersSubscribedCourseBlock extends CourseBlock
         $users = DataManager::count(User::class);
 
         $courses = DataManager::count(
-            CourseEntityRelation::class, new DataClassCountParameters(
+            CourseEntityRelation::class, new DataClassParameters(
                 condition: new EqualityCondition(
                     new PropertyConditionVariable(
                         CourseEntityRelation::class, CourseEntityRelation::PROPERTY_ENTITY_TYPE

@@ -4,8 +4,7 @@ namespace Chamilo\Core\Repository\Integration\Chamilo\Core\Tracking\Storage\Repo
 use Chamilo\Core\Repository\ContentObject\LearningPath\Storage\Repository\CommonDataClassRepository;
 use Chamilo\Core\Repository\Integration\Chamilo\Core\Tracking\Storage\DataClass\Activity;
 use Chamilo\Core\Repository\Storage\DataClass\ContentObject;
-use Chamilo\Libraries\Storage\Parameters\DataClassCountParameters;
-use Chamilo\Libraries\Storage\Parameters\RetrievesParameters;
+use Chamilo\Libraries\Storage\Parameters\DataClassParameters;
 use Chamilo\Libraries\Storage\Query\Condition\EqualityCondition;
 use Chamilo\Libraries\Storage\Query\OrderBy;
 use Chamilo\Libraries\Storage\Query\Variable\PropertyConditionVariable;
@@ -24,7 +23,8 @@ class ActivityRepository extends CommonDataClassRepository
     public function countActivitiesForContentObject(ContentObject $contentObject): int
     {
         return $this->dataClassRepository->count(
-            Activity::class, new DataClassCountParameters(condition: $this->getActivityConditionForContentObject($contentObject))
+            Activity::class,
+            new DataClassParameters(condition: $this->getActivityConditionForContentObject($contentObject))
         );
     }
 
@@ -103,7 +103,7 @@ class ActivityRepository extends CommonDataClassRepository
     {
         return $this->dataClassRepository->retrieves(
             Activity::class,
-            new RetrievesParameters(condition: $this->getActivityConditionForContentObject($contentObject))
+            new DataClassParameters(condition: $this->getActivityConditionForContentObject($contentObject))
         );
     }
 }

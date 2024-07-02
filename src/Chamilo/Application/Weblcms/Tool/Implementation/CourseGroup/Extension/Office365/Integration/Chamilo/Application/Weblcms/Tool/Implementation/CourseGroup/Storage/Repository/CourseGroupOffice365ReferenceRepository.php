@@ -4,7 +4,7 @@ namespace Chamilo\Application\Weblcms\Tool\Implementation\CourseGroup\Extension\
 use Chamilo\Application\Weblcms\Tool\Implementation\CourseGroup\Extension\Office365\Integration\Chamilo\Application\Weblcms\Tool\Implementation\CourseGroup\Storage\DataClass\CourseGroupOffice365Reference;
 use Chamilo\Application\Weblcms\Tool\Implementation\CourseGroup\Storage\DataClass\CourseGroup;
 use Chamilo\Core\Repository\ContentObject\LearningPath\Storage\Repository\CommonDataClassRepository;
-use Chamilo\Libraries\Storage\Parameters\RetrieveParameters;
+use Chamilo\Libraries\Storage\Parameters\DataClassParameters;
 use Chamilo\Libraries\Storage\Query\Condition\EqualityCondition;
 use Chamilo\Libraries\Storage\Query\Variable\PropertyConditionVariable;
 use Chamilo\Libraries\Storage\Query\Variable\StaticConditionVariable;
@@ -18,22 +18,6 @@ use Chamilo\Libraries\Storage\Query\Variable\StaticConditionVariable;
  */
 class CourseGroupOffice365ReferenceRepository extends CommonDataClassRepository
 {
-    /**
-     * Finds a reference by a given course group
-     *
-     * @param \Chamilo\Application\Weblcms\Tool\Implementation\CourseGroup\Storage\DataClass\CourseGroup $courseGroup
-     *
-     * @return CourseGroupOffice365Reference | \Chamilo\Libraries\Storage\DataClass\DataClass
-     */
-    public function findByCourseGroup(CourseGroup $courseGroup)
-    {
-        $condition = $this->getConditionByCourseGroup($courseGroup);
-
-        return $this->dataClassRepository->retrieve(
-            CourseGroupOffice365Reference::class, new RetrieveParameters(condition: $condition)
-        );
-    }
-
     /**
      * Creates a new reference object
      *
@@ -50,28 +34,19 @@ class CourseGroupOffice365ReferenceRepository extends CommonDataClassRepository
     }
 
     /**
-     * Updates an existing reference object
-     *
-     * @param \Chamilo\Application\Weblcms\Tool\Implementation\CourseGroup\Extension\Office365\Integration\Chamilo\Application\Weblcms\Tool\Implementation\CourseGroup\Storage\DataClass\CourseGroupOffice365Reference $courseGroupOffice365Reference
-     *
-     * @return bool
-     */
-    public function updateReference(CourseGroupOffice365Reference $courseGroupOffice365Reference)
-    {
-        return $this->dataClassRepository->update($courseGroupOffice365Reference);
-    }
-
-    /**
-     * Removes a reference by a given course group
+     * Finds a reference by a given course group
      *
      * @param \Chamilo\Application\Weblcms\Tool\Implementation\CourseGroup\Storage\DataClass\CourseGroup $courseGroup
      *
-     * @return bool
+     * @return CourseGroupOffice365Reference | \Chamilo\Libraries\Storage\DataClass\DataClass
      */
-    public function removeReferenceForCourseGroup(CourseGroup $courseGroup)
+    public function findByCourseGroup(CourseGroup $courseGroup)
     {
         $condition = $this->getConditionByCourseGroup($courseGroup);
-        return $this->dataClassRepository->deletes(CourseGroupOffice365Reference::class, $condition);
+
+        return $this->dataClassRepository->retrieve(
+            CourseGroupOffice365Reference::class, new DataClassParameters(condition: $condition)
+        );
     }
 
     /**
@@ -86,8 +61,33 @@ class CourseGroupOffice365ReferenceRepository extends CommonDataClassRepository
         return new EqualityCondition(
             new PropertyConditionVariable(
                 CourseGroupOffice365Reference::class, CourseGroupOffice365Reference::PROPERTY_COURSE_GROUP_ID
-            ),
-            new StaticConditionVariable($courseGroup->getId())
+            ), new StaticConditionVariable($courseGroup->getId())
         );
+    }
+
+    /**
+     * Removes a reference by a given course group
+     *
+     * @param \Chamilo\Application\Weblcms\Tool\Implementation\CourseGroup\Storage\DataClass\CourseGroup $courseGroup
+     *
+     * @return bool
+     */
+    public function removeReferenceForCourseGroup(CourseGroup $courseGroup)
+    {
+        $condition = $this->getConditionByCourseGroup($courseGroup);
+
+        return $this->dataClassRepository->deletes(CourseGroupOffice365Reference::class, $condition);
+    }
+
+    /**
+     * Updates an existing reference object
+     *
+     * @param \Chamilo\Application\Weblcms\Tool\Implementation\CourseGroup\Extension\Office365\Integration\Chamilo\Application\Weblcms\Tool\Implementation\CourseGroup\Storage\DataClass\CourseGroupOffice365Reference $courseGroupOffice365Reference
+     *
+     * @return bool
+     */
+    public function updateReference(CourseGroupOffice365Reference $courseGroupOffice365Reference)
+    {
+        return $this->dataClassRepository->update($courseGroupOffice365Reference);
     }
 }

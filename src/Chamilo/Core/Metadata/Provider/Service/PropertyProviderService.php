@@ -11,8 +11,7 @@ use Chamilo\Core\Metadata\Storage\DataClass\ProviderLink;
 use Chamilo\Core\Metadata\Storage\DataClass\ProviderRegistration;
 use Chamilo\Core\Metadata\Storage\DataClass\Schema;
 use Chamilo\Libraries\Storage\DataManager\DataManager;
-use Chamilo\Libraries\Storage\Parameters\RetrieveParameters;
-use Chamilo\Libraries\Storage\Parameters\RetrievesParameters;
+use Chamilo\Libraries\Storage\Parameters\DataClassParameters;
 use Chamilo\Libraries\Storage\Query\Condition\AndCondition;
 use Chamilo\Libraries\Storage\Query\Condition\EqualityCondition;
 use Chamilo\Libraries\Storage\Query\Variable\PropertyConditionVariable;
@@ -29,14 +28,14 @@ class PropertyProviderService
 {
 
     /**
-     * @var \Chamilo\Core\Metadata\Service\EntityService
-     */
-    private $entityService;
-
-    /**
      * @var \Chamilo\Core\Metadata\Element\Service\ElementService
      */
     private $elementService;
+
+    /**
+     * @var \Chamilo\Core\Metadata\Service\EntityService
+     */
+    private $entityService;
 
     /**
      * @var \Chamilo\Core\Metadata\Relation\Service\RelationService
@@ -143,7 +142,7 @@ class PropertyProviderService
 
         $condition = new AndCondition($conditions);
 
-        $providerLink = DataManager::retrieve(ProviderLink::class, new RetrieveParameters(condition: $condition));
+        $providerLink = DataManager::retrieve(ProviderLink::class, new DataClassParameters(condition: $condition));
 
         if ($providerLink instanceof ProviderLink)
         {
@@ -168,7 +167,7 @@ class PropertyProviderService
             new StaticConditionVariable($entity->getDataClassName())
         );
 
-        $parameters = new RetrievesParameters(condition: $condition);
+        $parameters = new DataClassParameters(condition: $condition);
 
         return DataManager::retrieves(ProviderLink::class, $parameters);
     }
@@ -186,7 +185,7 @@ class PropertyProviderService
             ), new StaticConditionVariable($entity->getDataClassName())
         );
 
-        $parameters = new RetrievesParameters(condition: $condition);
+        $parameters = new DataClassParameters(condition: $condition);
 
         return DataManager::retrieves(ProviderRegistration::class, $parameters);
     }
@@ -294,7 +293,7 @@ class PropertyProviderService
     {
         $elements = $this->getElementService()->getElementsForSchema($schema);
 
-        foreach($elements as $element)
+        foreach ($elements as $element)
         {
             if (isset($submittedSchemaValues[$element->get_id()]))
             {

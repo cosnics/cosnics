@@ -12,8 +12,7 @@ use Chamilo\Application\Weblcms\Storage\DataManager;
 use Chamilo\Application\Weblcms\Tool\Implementation\CourseGroup\Storage\DataManager as CourseGroupDataManager;
 use Chamilo\Core\User\Storage\DataClass\User;
 use Chamilo\Libraries\Architecture\Application\Application;
-use Chamilo\Libraries\Storage\Parameters\DataClassCountParameters;
-use Chamilo\Libraries\Storage\Parameters\RetrievesParameters;
+use Chamilo\Libraries\Storage\Parameters\DataClassParameters;
 use Chamilo\Libraries\Storage\Query\Condition\EqualityCondition;
 use Chamilo\Libraries\Storage\Query\Variable\PropertyConditionVariable;
 use Chamilo\Libraries\Storage\Query\Variable\StaticConditionVariable;
@@ -97,7 +96,7 @@ abstract class Manager extends Application
 
     public function count_requests($condition = null)
     {
-        return DataManager::count(CourseRequest::class, new DataClassCountParameters(condition: $condition));
+        return DataManager::count(CourseRequest::class, new DataClassParameters(condition: $condition));
     }
 
     /**
@@ -150,6 +149,16 @@ abstract class Manager extends Application
     public function get_course_group()
     {
         return $this->course_group;
+    }
+
+    /**
+     * Sets the course_group
+     *
+     * @param $course_group CourseGroup
+     */
+    public function set_course_group($course_group)
+    {
+        $this->course_group = $course_group;
     }
 
     /**
@@ -365,6 +374,11 @@ abstract class Manager extends Application
         return $this->request;
     }
 
+    public function set_request($request)
+    {
+        $this->request = $request;
+    }
+
     /**
      * Gets the identifier of the current tool
      *
@@ -411,7 +425,7 @@ abstract class Manager extends Application
                 new StaticConditionVariable($this->getRequest()->query->get(self::PARAM_COURSE))
             );
             $sections = DataManager::retrieves(
-                CourseSection::class, new RetrievesParameters(condition: $condition)
+                CourseSection::class, new DataClassParameters(condition: $condition)
             );
 
             foreach ($sections as $section)
@@ -459,21 +473,6 @@ abstract class Manager extends Application
     public function retrieve_course_user_relation($course_code, $user_id)
     {
         return CourseDataManager::retrieve_course_user_relation_by_course_and_user($course_code, $user_id);
-    }
-
-    /**
-     * Sets the course_group
-     *
-     * @param $course_group CourseGroup
-     */
-    public function set_course_group($course_group)
-    {
-        $this->course_group = $course_group;
-    }
-
-    public function set_request($request)
-    {
-        $this->request = $request;
     }
 
     /**

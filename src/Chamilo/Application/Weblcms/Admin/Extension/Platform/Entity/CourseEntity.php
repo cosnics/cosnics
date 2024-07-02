@@ -7,7 +7,7 @@ use Chamilo\Core\Rights\Entity\RightsEntity;
 use Chamilo\Libraries\Format\Form\Element\AdvancedElementFinder\AdvancedElementFinderElement;
 use Chamilo\Libraries\Format\Form\Element\AdvancedElementFinder\AdvancedElementFinderElementType;
 use Chamilo\Libraries\Format\Structure\Glyph\FontAwesomeGlyph;
-use Chamilo\Libraries\Storage\Parameters\DataClassCountParameters;
+use Chamilo\Libraries\Storage\Parameters\DataClassParameters;
 use Chamilo\Libraries\Storage\Parameters\RetrievesParameters;
 use Chamilo\Libraries\Translation\Translation;
 use Chamilo\Libraries\Utilities\StringUtilities;
@@ -47,7 +47,7 @@ class CourseEntity implements RightsEntity
     {
         $condition = $this->get_condition($condition);
 
-        return DataManager::count(Course::class, new DataClassCountParameters(condition: $condition));
+        return DataManager::count(Course::class, new DataClassParameters(condition: $condition));
     }
 
     /**
@@ -190,7 +190,7 @@ class CourseEntity implements RightsEntity
      */
     public function get_search_properties()
     {
-        return array(Course::PROPERTY_TITLE, Course::PROPERTY_VISUAL_CODE);
+        return [Course::PROPERTY_TITLE, Course::PROPERTY_VISUAL_CODE];
     }
 
     /**
@@ -205,7 +205,7 @@ class CourseEntity implements RightsEntity
         if (is_null($this->course_cache[$user_id]))
         {
 
-            $this->course_cache[$user_id] = array($user_id);
+            $this->course_cache[$user_id] = [$user_id];
         }
 
         return $this->course_cache[$user_id];
@@ -225,7 +225,8 @@ class CourseEntity implements RightsEntity
     {
         $condition = $this->get_condition($condition);
         $parameters = new RetrievesParameters(
-            condition: $condition, count: $count, offset: $offset, orderBy: $order_property);
+            condition: $condition, count: $count, offset: $offset, orderBy: $order_property
+        );
 
         return DataManager::retrieves(Course::class, $parameters);
     }

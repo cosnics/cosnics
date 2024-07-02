@@ -12,8 +12,7 @@ use Chamilo\Libraries\Format\Structure\ActionBar\ButtonToolBar;
 use Chamilo\Libraries\Format\Structure\ActionBar\Renderer\ButtonToolBarRenderer;
 use Chamilo\Libraries\Format\Structure\Glyph\FontAwesomeGlyph;
 use Chamilo\Libraries\Format\Table\RequestTableParameterValuesCompiler;
-use Chamilo\Libraries\Storage\Parameters\DataClassCountParameters;
-use Chamilo\Libraries\Storage\Parameters\RetrievesParameters;
+use Chamilo\Libraries\Storage\Parameters\DataClassParameters;
 use Chamilo\Libraries\Storage\Query\Condition\AndCondition;
 use Chamilo\Libraries\Utilities\StringUtilities;
 
@@ -127,7 +126,7 @@ class BrowserComponent extends Manager
     protected function renderTable(): string
     {
         $totalNumberOfItems = DataManager::count(
-            ProviderLink::class, new DataClassCountParameters(condition: $this->getProviderLinkCondition())
+            ProviderLink::class, new DataClassParameters(condition: $this->getProviderLinkCondition())
         );
         $providerLinkTableRenderer = $this->getProviderLinkTableRenderer();
 
@@ -137,11 +136,10 @@ class BrowserComponent extends Manager
         );
 
         $providerLinks = DataManager::retrieves(
-            ProviderLink::class, new RetrievesParameters(
-                condition: $this->getProviderLinkCondition(), count: $tableParameterValues->getNumberOfItemsPerPage(),
-                offset: $tableParameterValues->getOffset(), orderBy: $providerLinkTableRenderer->determineOrderBy(
+            ProviderLink::class, new DataClassParameters(
+                condition: $this->getProviderLinkCondition(), orderBy: $providerLinkTableRenderer->determineOrderBy(
                 $tableParameterValues
-            )
+            ), count: $tableParameterValues->getNumberOfItemsPerPage(), offset: $tableParameterValues->getOffset()
             )
         );
 

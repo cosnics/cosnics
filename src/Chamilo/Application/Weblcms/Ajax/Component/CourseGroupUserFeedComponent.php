@@ -12,8 +12,7 @@ use Chamilo\Libraries\Architecture\JsonAjaxResult;
 use Chamilo\Libraries\Format\Form\Element\AdvancedElementFinder\AdvancedElementFinderElement;
 use Chamilo\Libraries\Format\Form\Element\AdvancedElementFinder\AdvancedElementFinderElements;
 use Chamilo\Libraries\Format\Structure\Glyph\FontAwesomeGlyph;
-use Chamilo\Libraries\Storage\Parameters\DataClassCountParameters;
-use Chamilo\Libraries\Storage\Parameters\DataClassDistinctParameters;
+use Chamilo\Libraries\Storage\Parameters\DataClassParameters;
 use Chamilo\Libraries\Storage\Parameters\RetrievesParameters;
 use Chamilo\Libraries\Storage\Query\Condition\AndCondition;
 use Chamilo\Libraries\Storage\Query\Condition\EqualityCondition;
@@ -74,7 +73,7 @@ class CourseGroupUserFeedComponent extends Manager
     protected function countUsers()
     {
         return DataManager::count(
-            User::class, new DataClassCountParameters(condition: $this->getUserCondition())
+            User::class, new DataClassParameters(condition: $this->getUserCondition())
         );
     }
 
@@ -152,7 +151,7 @@ class CourseGroupUserFeedComponent extends Manager
                 ), new StaticConditionVariable(CourseEntityRelation::ENTITY_TYPE_USER)
             );
 
-            $parameters = new DataClassDistinctParameters(
+            $parameters = new DataClassParameters(
                 condition: new AndCondition($conditions), retrieveProperties: new RetrieveProperties(
                 [
                     new PropertyConditionVariable(
@@ -311,9 +310,11 @@ class CourseGroupUserFeedComponent extends Manager
         ];
 
         return DataManager::retrieves(
-            User::class,
-            new RetrievesParameters(
-                condition: $this->getUserCondition(), count: 100, offset: $this->getOffset(), orderBy: new OrderBy($order))
+            User::class, new RetrievesParameters(
+                condition: $this->getUserCondition(), count: 100, offset: $this->getOffset(), orderBy: new OrderBy(
+                $order
+            )
+            )
         );
     }
 }

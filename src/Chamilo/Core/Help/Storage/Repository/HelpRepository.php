@@ -3,9 +3,7 @@ namespace Chamilo\Core\Help\Storage\Repository;
 
 use Chamilo\Core\Help\Storage\DataClass\HelpItem;
 use Chamilo\Libraries\Storage\DataManager\Repository\DataClassRepository;
-use Chamilo\Libraries\Storage\Parameters\DataClassCountParameters;
-use Chamilo\Libraries\Storage\Parameters\RetrieveParameters;
-use Chamilo\Libraries\Storage\Parameters\RetrievesParameters;
+use Chamilo\Libraries\Storage\Parameters\DataClassParameters;
 use Chamilo\Libraries\Storage\Query\Condition\AndCondition;
 use Chamilo\Libraries\Storage\Query\Condition\Condition;
 use Chamilo\Libraries\Storage\Query\Condition\EqualityCondition;
@@ -29,7 +27,7 @@ class HelpRepository
 
     public function countHelpItemsForCondition(?Condition $condition = null): int
     {
-        return $this->getDataClassRepository()->count(HelpItem::class, new DataClassCountParameters(condition: $condition));
+        return $this->getDataClassRepository()->count(HelpItem::class, new DataClassParameters(condition: $condition));
     }
 
     public function getDataClassRepository(): DataClassRepository
@@ -63,7 +61,9 @@ class HelpRepository
 
         $condition = new AndCondition($conditions);
 
-        return $this->getDataClassRepository()->retrieve(HelpItem::class, new RetrieveParameters(condition: $condition));
+        return $this->getDataClassRepository()->retrieve(
+            HelpItem::class, new DataClassParameters(condition: $condition)
+        );
     }
 
     /**
@@ -79,8 +79,9 @@ class HelpRepository
     ): ArrayCollection
     {
         return $this->getDataClassRepository()->retrieves(
-            HelpItem::class, new RetrievesParameters(
-                condition: $condition, count: $count, offset: $offset, orderBy: $orderBy)
+            HelpItem::class, new DataClassParameters(
+                condition: $condition, orderBy: $orderBy, count: $count, offset: $offset
+            )
         );
     }
 

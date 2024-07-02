@@ -12,7 +12,7 @@ use Chamilo\Libraries\DependencyInjection\DependencyInjectionContainerBuilder;
 use Chamilo\Libraries\Format\Menu\TreeMenu\GenericTree;
 use Chamilo\Libraries\Format\Structure\Glyph\FontAwesomeGlyph;
 use Chamilo\Libraries\Format\Tabs\GenericTabsRenderer;
-use Chamilo\Libraries\Storage\Parameters\DataClassCountParameters;
+use Chamilo\Libraries\Storage\Parameters\DataClassParameters;
 use Chamilo\Libraries\Storage\Query\Condition\AndCondition;
 use Chamilo\Libraries\Storage\Query\Condition\EqualityCondition;
 use Chamilo\Libraries\Storage\Query\OrderBy;
@@ -221,7 +221,8 @@ class RepositoryCategoryTreeMenu extends GenericTree
     public function node_has_children($parent_node_id)
     {
         return (DataManager::count(
-                RepositoryCategory::class, new DataClassCountParameters(condition: $this->get_retrieve_condition($parent_node_id))
+                RepositoryCategory::class,
+                new DataClassParameters(condition: $this->get_retrieve_condition($parent_node_id))
             ) > 0);
     }
 }

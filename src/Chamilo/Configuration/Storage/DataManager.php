@@ -3,9 +3,7 @@ namespace Chamilo\Configuration\Storage;
 
 use Chamilo\Configuration\Storage\DataClass\Registration;
 use Chamilo\Configuration\Storage\DataClass\Setting;
-use Chamilo\Libraries\Storage\Parameters\DataClassDistinctParameters;
-use Chamilo\Libraries\Storage\Parameters\RetrieveParameters;
-use Chamilo\Libraries\Storage\Parameters\RetrievesParameters;
+use Chamilo\Libraries\Storage\Parameters\DataClassParameters;
 use Chamilo\Libraries\Storage\Query\Condition\AndCondition;
 use Chamilo\Libraries\Storage\Query\Condition\Condition;
 use Chamilo\Libraries\Storage\Query\Condition\EndsWithCondition;
@@ -54,7 +52,7 @@ class DataManager extends \Chamilo\Libraries\Storage\DataManager\DataManager
 
         $condition = new AndCondition($conditions);
 
-        return self::retrieves(Registration::class, new RetrievesParameters(condition: $condition));
+        return self::retrieves(Registration::class, new DataClassParameters(condition: $condition));
     }
 
     public static function retrieveRegistrationByContext($context)
@@ -64,12 +62,12 @@ class DataManager extends \Chamilo\Libraries\Storage\DataManager\DataManager
             new StaticConditionVariable($context)
         );
 
-        return self::retrieve(Registration::class, new RetrieveParameters(condition: $condition));
+        return self::retrieve(Registration::class, new DataClassParameters(condition: $condition));
     }
 
     public static function retrieve_setting_contexts(Condition $condition = null)
     {
-        $parameters = new DataClassDistinctParameters(
+        $parameters = new DataClassParameters(
             condition: $condition, retrieveProperties: new RetrieveProperties(
             [new PropertyConditionVariable(Setting::class, Setting::PROPERTY_CONTEXT)]
         )
@@ -98,6 +96,6 @@ class DataManager extends \Chamilo\Libraries\Storage\DataManager\DataManager
         );
         $condition = new AndCondition($conditions);
 
-        return self::retrieve(Setting::class, new RetrieveParameters(condition: $condition));
+        return self::retrieve(Setting::class, new DataClassParameters(condition: $condition));
     }
 }

@@ -3,13 +3,13 @@ namespace Chamilo\Application\Weblcms\Request\Rights\Form;
 
 use Chamilo\Application\Weblcms\Request\Rights\Rights;
 use Chamilo\Application\Weblcms\Request\Rights\Storage\DataClass\RightsLocationEntityRightGroup;
-use Chamilo\Libraries\Storage\DataManager\DataManager;
 use Chamilo\Core\Rights\Entity\PlatformGroupEntity;
 use Chamilo\Core\Rights\Entity\UserEntity;
 use Chamilo\Libraries\Format\Form\Element\AdvancedElementFinder\AdvancedElementFinderElementTypes;
 use Chamilo\Libraries\Format\Form\FormValidator;
 use Chamilo\Libraries\Format\Structure\Glyph\FontAwesomeGlyph;
-use Chamilo\Libraries\Storage\Parameters\RetrieveParameters;
+use Chamilo\Libraries\Storage\DataManager\DataManager;
+use Chamilo\Libraries\Storage\Parameters\DataClassParameters;
 use Chamilo\Libraries\Storage\Query\Condition\AndCondition;
 use Chamilo\Libraries\Storage\Query\Condition\EqualityCondition;
 use Chamilo\Libraries\Storage\Query\Variable\PropertyConditionVariable;
@@ -19,12 +19,12 @@ use Chamilo\Libraries\Utilities\StringUtilities;
 
 class RightsGroupForm extends FormValidator
 {
-    const PROPERTY_ACCESS = 'access';
-    const PROPERTY_TARGETS = 'targets';
+    public const PROPERTY_ACCESS = 'access';
+    public const PROPERTY_TARGETS = 'targets';
 
     private $form_user;
 
-    function __construct($form_user, $action)
+    public function __construct($form_user, $action)
     {
         parent::__construct('rights', self::FORM_METHOD_POST, $action);
 
@@ -33,7 +33,7 @@ class RightsGroupForm extends FormValidator
         $this->setDefaults();
     }
 
-    function build_form()
+    public function build_form()
     {
         $element_template = [];
         $element_template[] = '<div class="form-row">';
@@ -68,7 +68,7 @@ class RightsGroupForm extends FormValidator
         $this->addGroup($buttons, 'buttons', null, '&nbsp;', false);
     }
 
-    function setDefaults($defaultValues = [], $filter = null)
+    public function setDefaults($defaultValues = [], $filter = null)
     {
         /*
          * $default_elements = new AdvancedElementFinderElements(); $targets_entities = Rights ::
@@ -82,7 +82,7 @@ class RightsGroupForm extends FormValidator
         parent::setDefaults($defaultValues, $filter);
     }
 
-    function set_rights()
+    public function set_rights()
     {
         $values = $this->exportValues();
 
@@ -123,14 +123,13 @@ class RightsGroupForm extends FormValidator
                     );
                     $conditions[] = new EqualityCondition(
                         new PropertyConditionVariable(
-                            RightsLocationEntityRightGroup::class,
-                            RightsLocationEntityRightGroup::PROPERTY_GROUP_ID
+                            RightsLocationEntityRightGroup::class, RightsLocationEntityRightGroup::PROPERTY_GROUP_ID
                         ), new StaticConditionVariable($group_id)
                     );
                     $condition = new AndCondition($conditions);
 
                     $existing_right_group = DataManager::retrieve(
-                        RightsLocationEntityRightGroup::class, new RetrieveParameters(condition: $condition)
+                        RightsLocationEntityRightGroup::class, new DataClassParameters(condition: $condition)
                     );
 
                     if (!$existing_right_group instanceof RightsLocationEntityRightGroup)

@@ -18,7 +18,7 @@ use Chamilo\Libraries\Format\Structure\ActionBar\ButtonGroup;
 use Chamilo\Libraries\Format\Structure\ActionBar\ButtonToolBar;
 use Chamilo\Libraries\Format\Structure\ActionBar\Renderer\ButtonToolBarRenderer;
 use Chamilo\Libraries\Format\Structure\Breadcrumb;
-use Chamilo\Libraries\Storage\Parameters\DataClassCountParameters;
+use Chamilo\Libraries\Storage\Parameters\DataClassParameters;
 use Chamilo\Libraries\Storage\Parameters\RetrievesParameters;
 use Chamilo\Libraries\Storage\Query\Condition\AndCondition;
 use Chamilo\Libraries\Storage\Query\Condition\EqualityCondition;
@@ -106,7 +106,7 @@ class ViewerComponent extends Manager implements BreadcrumbLessComponentInterfac
 
     public function count_feedbacks()
     {
-        $parameters = new DataClassCountParameters(condition: $this->get_feedback_conditions());
+        $parameters = new DataClassParameters(condition: $this->get_feedback_conditions());
 
         return DataManager::count(
             Feedback::class, $parameters

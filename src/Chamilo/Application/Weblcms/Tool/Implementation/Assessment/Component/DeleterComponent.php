@@ -8,7 +8,7 @@ use Chamilo\Application\Weblcms\Tool\Implementation\Assessment\Storage\DataClass
 use Chamilo\Application\Weblcms\Tool\Implementation\Assessment\Storage\DataManager;
 use Chamilo\Core\Repository\ContentObject\Introduction\Storage\DataClass\Introduction;
 use Chamilo\Libraries\Format\Breadcrumb\BreadcrumbTrail;
-use Chamilo\Libraries\Storage\Parameters\RetrieveParameters;
+use Chamilo\Libraries\Storage\Parameters\DataClassParameters;
 use Chamilo\Libraries\Storage\Query\Condition\EqualityCondition;
 use Chamilo\Libraries\Storage\Query\Variable\PropertyConditionVariable;
 use Chamilo\Libraries\Storage\Query\Variable\StaticConditionVariable;
@@ -57,7 +57,7 @@ class DeleterComponent extends Manager
             {
                 if ($publication->delete())
                 {
-                    $parameters = new RetrieveParameters(
+                    $parameters = new DataClassParameters(
                         condition: new EqualityCondition(
                             new PropertyConditionVariable(
                                 Publication::class, Publication::PROPERTY_PUBLICATION_ID

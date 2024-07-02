@@ -9,7 +9,7 @@ use Chamilo\Libraries\Format\Form\Element\AdvancedElementFinder\AdvancedElementF
 use Chamilo\Libraries\Format\Form\Element\AdvancedElementFinder\Ajax\AjaxResultDataProviderInterface;
 use Chamilo\Libraries\Format\Form\Element\AdvancedElementFinder\Ajax\AjaxResultGenerator;
 use Chamilo\Libraries\Format\Structure\Glyph\FontAwesomeGlyph;
-use Chamilo\Libraries\Storage\Parameters\DataClassCountParameters;
+use Chamilo\Libraries\Storage\Parameters\DataClassParameters;
 use Chamilo\Libraries\Storage\Parameters\RetrievesParameters;
 use Chamilo\Libraries\Storage\Query\OrderBy;
 use Chamilo\Libraries\Storage\Query\OrderProperty;
@@ -91,8 +91,8 @@ class GetCoursesForElementFinderComponent extends Manager implements AjaxResultD
         $parameters = new RetrievesParameters(
             condition: $this->getCondition(), count: 100, offset: $this->ajaxResultGenerator->getOffset(),
             orderBy: new OrderBy(
-            [new OrderProperty(new PropertyConditionVariable(Course::class, Course::PROPERTY_TITLE))]
-        )
+                [new OrderProperty(new PropertyConditionVariable(Course::class, Course::PROPERTY_TITLE))]
+            )
         );
 
         return DataManager::retrieves(Course::class, $parameters);
@@ -106,7 +106,7 @@ class GetCoursesForElementFinderComponent extends Manager implements AjaxResultD
     public function getTotalNumberOfElements()
     {
         return DataManager::count(
-            Course::class, new DataClassCountParameters(condition: $this->getCondition())
+            Course::class, new DataClassParameters(condition: $this->getCondition())
         );
     }
 }

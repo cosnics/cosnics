@@ -20,7 +20,7 @@ use Chamilo\Libraries\Format\Structure\Glyph\IdentGlyph;
 use Chamilo\Libraries\Format\Structure\Toolbar;
 use Chamilo\Libraries\Format\Structure\ToolbarItem;
 use Chamilo\Libraries\Format\Table\RequestTableParameterValuesCompiler;
-use Chamilo\Libraries\Storage\Parameters\DataClassCountParameters;
+use Chamilo\Libraries\Storage\Parameters\DataClassParameters;
 use Chamilo\Libraries\Storage\Query\Condition\AndCondition;
 use Chamilo\Libraries\Storage\Query\Condition\EqualityCondition;
 use Chamilo\Libraries\Storage\Query\OrderBy;
@@ -158,6 +158,11 @@ abstract class ContentObjectPublicationListRenderer
     public function get_actions()
     {
         return $this->actions;
+    }
+
+    public function set_actions($actions)
+    {
+        $this->actions = $actions;
     }
 
     public function get_allowed_types(): array
@@ -754,7 +759,8 @@ abstract class ContentObjectPublicationListRenderer
             );
 
             $count = DataManager::count(
-                ContentObjectPublicationCategory::class, new DataClassCountParameters(condition: new AndCondition($conditions))
+                ContentObjectPublicationCategory::class,
+                new DataClassParameters(condition: new AndCondition($conditions))
             );
 
             $count ++;
@@ -963,11 +969,6 @@ abstract class ContentObjectPublicationListRenderer
                     $orderBy, $offset, $count, $tool_browser->get_user_id()
                 );
         }
-    }
-
-    public function set_actions($actions)
-    {
-        $this->actions = $actions;
     }
 
     /**

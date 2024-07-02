@@ -8,8 +8,7 @@ use Chamilo\Application\Weblcms\CourseType\Storage\DataClass\CourseType;
 use Chamilo\Application\Weblcms\Storage\DataClass\CourseEntityRelation;
 use Chamilo\Core\User\Roles\Storage\DataClass\Role;
 use Chamilo\Libraries\Storage\DataManager\Repository\DataManagerRepository;
-use Chamilo\Libraries\Storage\Parameters\DataClassCountParameters;
-use Chamilo\Libraries\Storage\Parameters\DataClassDistinctParameters;
+use Chamilo\Libraries\Storage\Parameters\DataClassParameters;
 use Chamilo\Libraries\Storage\Parameters\RetrievesParameters;
 use Chamilo\Libraries\Storage\Query\Condition\AndCondition;
 use Chamilo\Libraries\Storage\Query\Condition\Condition;
@@ -54,7 +53,7 @@ class OpenCourseRepository extends DataManagerRepository implements OpenCourseRe
     public function countClosedCourses(Condition $condition = null)
     {
         return DataManager::count(
-            Course::class, new DataClassCountParameters(condition: $this->getClosedCoursesCondition($condition))
+            Course::class, new DataClassParameters(condition: $this->getClosedCoursesCondition($condition))
         );
     }
 
@@ -67,7 +66,7 @@ class OpenCourseRepository extends DataManagerRepository implements OpenCourseRe
      */
     protected function countOpenCourses(Condition $condition = null)
     {
-        $countParameters = new DataClassCountParameters(condition: $condition, joins: $this->getOpenCoursesJoins());
+        $countParameters = new DataClassParameters(condition: $condition, joins: $this->getOpenCoursesJoins());
 
         return DataManager::count(Course::class, $countParameters);
     }
@@ -240,7 +239,7 @@ class OpenCourseRepository extends DataManagerRepository implements OpenCourseRe
 
         $condition = new AndCondition($conditions);
 
-        $distinctParameters = new DataClassDistinctParameters(
+        $distinctParameters = new DataClassParameters(
             condition: $condition, retrieveProperties: new RetrieveProperties(
             [
                 new PropertyConditionVariable(CourseEntityRelation::class, CourseEntityRelation::PROPERTY_COURSE_ID)

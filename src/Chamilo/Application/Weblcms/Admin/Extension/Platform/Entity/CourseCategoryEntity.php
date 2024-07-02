@@ -12,7 +12,7 @@ use Chamilo\Libraries\DependencyInjection\DependencyInjectionContainerBuilder;
 use Chamilo\Libraries\Format\Form\Element\AdvancedElementFinder\AdvancedElementFinderElement;
 use Chamilo\Libraries\Format\Form\Element\AdvancedElementFinder\AdvancedElementFinderElementType;
 use Chamilo\Libraries\Format\Structure\Glyph\FontAwesomeGlyph;
-use Chamilo\Libraries\Storage\Parameters\DataClassCountParameters;
+use Chamilo\Libraries\Storage\Parameters\DataClassParameters;
 use Chamilo\Libraries\Storage\Parameters\RetrievesParameters;
 use Chamilo\Libraries\Translation\Translation;
 use Chamilo\Libraries\Utilities\StringUtilities;
@@ -53,7 +53,7 @@ class CourseCategoryEntity implements NestedRightsEntity
         $condition = $this->get_condition($condition);
 
         return DataManager::count(
-            CourseCategory::class, new DataClassCountParameters(condition: $condition)
+            CourseCategory::class, new DataClassParameters(condition: $condition)
         );
     }
 
@@ -304,7 +304,8 @@ class CourseCategoryEntity implements NestedRightsEntity
 
         return \Chamilo\Application\Weblcms\Course\Storage\DataManager::retrieves(
             CourseCategory::class, new RetrievesParameters(
-                condition: $condition, count: $count, offset: $offset, orderBy: $order_property)
+                condition: $condition, count: $count, offset: $offset, orderBy: $order_property
+            )
         );
     }
 }

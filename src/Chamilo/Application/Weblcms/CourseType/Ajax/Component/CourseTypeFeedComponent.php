@@ -9,7 +9,7 @@ use Chamilo\Libraries\Architecture\JsonAjaxResult;
 use Chamilo\Libraries\Format\Form\Element\AdvancedElementFinder\AdvancedElementFinderElement;
 use Chamilo\Libraries\Format\Form\Element\AdvancedElementFinder\AdvancedElementFinderElements;
 use Chamilo\Libraries\Format\Structure\Glyph\FontAwesomeGlyph;
-use Chamilo\Libraries\Storage\Parameters\DataClassCountParameters;
+use Chamilo\Libraries\Storage\Parameters\DataClassParameters;
 use Chamilo\Libraries\Storage\Parameters\RetrievesParameters;
 use Chamilo\Libraries\Storage\Query\Condition\AndCondition;
 use Chamilo\Libraries\Storage\Query\Condition\InCondition;
@@ -45,7 +45,7 @@ class CourseTypeFeedComponent extends Manager
     public function countCourseTypes()
     {
         return DataManager::count(
-            CourseType::class, new DataClassCountParameters(condition: $this->getCourseTypeConditions())
+            CourseType::class, new DataClassParameters(condition: $this->getCourseTypeConditions())
         );
     }
 

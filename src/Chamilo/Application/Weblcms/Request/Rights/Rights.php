@@ -11,7 +11,7 @@ use Chamilo\Core\Rights\RightsUtil;
 use Chamilo\Core\User\Storage\DataClass\User;
 use Chamilo\Libraries\DependencyInjection\DependencyInjectionContainerBuilder;
 use Chamilo\Libraries\Storage\DataManager\DataManager;
-use Chamilo\Libraries\Storage\Parameters\DataClassCountParameters;
+use Chamilo\Libraries\Storage\Parameters\DataClassParameters;
 use Chamilo\Libraries\Storage\Parameters\RetrievesParameters;
 use Chamilo\Libraries\Storage\Query\Condition\EqualityCondition;
 use Chamilo\Libraries\Storage\Query\Condition\InCondition;
@@ -141,7 +141,7 @@ class Rights extends RightsUtil
                     ), $user_ids
                 );
                 $authorized_user_count = DataManager::count(
-                    User::class, new DataClassCountParameters(condition: $condition)
+                    User::class, new DataClassParameters(condition: $condition)
                 );
 
                 if ($authorized_user_count == 0)

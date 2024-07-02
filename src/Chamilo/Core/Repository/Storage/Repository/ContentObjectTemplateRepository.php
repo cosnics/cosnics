@@ -3,7 +3,7 @@ namespace Chamilo\Core\Repository\Storage\Repository;
 
 use Chamilo\Core\Repository\Storage\DataClass\TemplateRegistration;
 use Chamilo\Core\Repository\Storage\DataManager;
-use Chamilo\Libraries\Storage\Parameters\RetrieveParameters;
+use Chamilo\Libraries\Storage\Parameters\DataClassParameters;
 use Chamilo\Libraries\Storage\Query\Condition\AndCondition;
 use Chamilo\Libraries\Storage\Query\Condition\EqualityCondition;
 use Chamilo\Libraries\Storage\Query\Variable\PropertyConditionVariable;
@@ -29,19 +29,17 @@ class ContentObjectTemplateRepository
         $conditions[] = new EqualityCondition(
             new PropertyConditionVariable(
                 TemplateRegistration::class, TemplateRegistration::PROPERTY_CONTENT_OBJECT_TYPE
-            ),
-            new StaticConditionVariable($contentObjectType)
+            ), new StaticConditionVariable($contentObjectType)
         );
 
         $conditions[] = new EqualityCondition(
             new PropertyConditionVariable(
                 TemplateRegistration::class, TemplateRegistration::PROPERTY_NAME
-            ),
-            new StaticConditionVariable($templateName)
+            ), new StaticConditionVariable($templateName)
         );
 
         $condition = new AndCondition($conditions);
 
-        return DataManager::retrieve(TemplateRegistration::class, new RetrieveParameters(condition: $condition));
+        return DataManager::retrieve(TemplateRegistration::class, new DataClassParameters(condition: $condition));
     }
 }

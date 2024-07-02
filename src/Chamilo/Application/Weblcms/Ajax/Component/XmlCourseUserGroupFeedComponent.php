@@ -9,7 +9,7 @@ use Chamilo\Application\Weblcms\Tool\Implementation\CourseGroup\Storage\DataClas
 use Chamilo\Core\Group\Storage\DataClass\Group;
 use Chamilo\Core\User\Storage\DataClass\User;
 use Chamilo\Libraries\Format\Structure\Glyph\FontAwesomeGlyph;
-use Chamilo\Libraries\Storage\Parameters\DataClassDistinctParameters;
+use Chamilo\Libraries\Storage\Parameters\DataClassParameters;
 use Chamilo\Libraries\Storage\Parameters\RetrievesParameters;
 use Chamilo\Libraries\Storage\Query\Condition\AndCondition;
 use Chamilo\Libraries\Storage\Query\Condition\ContainsCondition;
@@ -145,7 +145,7 @@ class XmlCourseUserGroupFeedComponent extends Manager
                 ), new StaticConditionVariable(CourseEntityRelation::ENTITY_TYPE_USER)
             );
 
-            $parameters = new DataClassDistinctParameters(
+            $parameters = new DataClassParameters(
                 condition: new AndCondition($userConditions), retrieveProperties: new RetrieveProperties(
                 [
                     new PropertyConditionVariable(

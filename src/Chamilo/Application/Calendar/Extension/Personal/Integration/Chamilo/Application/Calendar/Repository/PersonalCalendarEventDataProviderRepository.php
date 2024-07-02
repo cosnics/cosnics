@@ -4,7 +4,7 @@ namespace Chamilo\Application\Calendar\Extension\Personal\Integration\Chamilo\Ap
 use Chamilo\Application\Calendar\Extension\Personal\Integration\Chamilo\Application\Calendar\Interfaces\PersonalCalendarEventDataProviderRepositoryInterface;
 use Chamilo\Application\Calendar\Extension\Personal\Storage\DataClass\Publication;
 use Chamilo\Core\Repository\Publication\Storage\Repository\PublicationRepository;
-use Chamilo\Libraries\Storage\Parameters\RetrievesParameters;
+use Chamilo\Libraries\Storage\Parameters\DataClassParameters;
 use Chamilo\Libraries\Storage\Query\Condition\AndCondition;
 use Chamilo\Libraries\Storage\Query\Condition\Condition;
 
@@ -53,13 +53,13 @@ abstract class PersonalCalendarEventDataProviderRepository
     /**
      * Returns the personal calendar publications for this specific content object type
      *
-     * @param RetrievesParameters $parameters
+     * @param DataClassParameters $parameters
      * @param int $fromDate
      * @param int $toDate
      *
      * @return Publication[]
      */
-    public function getPublications(RetrievesParameters $parameters, $fromDate, $toDate)
+    public function getPublications(DataClassParameters $parameters, $fromDate, $toDate)
     {
         $parameters = clone $parameters;
 

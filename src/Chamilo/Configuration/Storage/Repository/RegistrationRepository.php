@@ -3,8 +3,7 @@ namespace Chamilo\Configuration\Storage\Repository;
 
 use Chamilo\Configuration\Storage\DataClass\Registration;
 use Chamilo\Libraries\Storage\DataManager\Repository\DataClassRepository;
-use Chamilo\Libraries\Storage\Parameters\RetrieveParameters;
-use Chamilo\Libraries\Storage\Parameters\RetrievesParameters;
+use Chamilo\Libraries\Storage\Parameters\DataClassParameters;
 use Chamilo\Libraries\Storage\Query\Condition\EqualityCondition;
 use Chamilo\Libraries\Storage\Query\RetrieveProperties;
 use Chamilo\Libraries\Storage\Query\Variable\PropertiesConditionVariable;
@@ -50,7 +49,7 @@ class RegistrationRepository
         );
 
         return $this->getDataClassRepository()->retrieve(
-            Registration::class, new RetrieveParameters(condition: $condition)
+            Registration::class, new DataClassParameters(condition: $condition)
         );
     }
 
@@ -60,7 +59,7 @@ class RegistrationRepository
     public function findRegistrationsAsRecords(): ArrayCollection
     {
         return $this->getDataClassRepository()->records(
-            Registration::class, new RetrievesParameters(
+            Registration::class, new DataClassParameters(
                 retrieveProperties: new RetrieveProperties([new PropertiesConditionVariable(Registration::class)])
             )
         );

@@ -5,11 +5,7 @@ use Chamilo\Libraries\DependencyInjection\DependencyInjectionContainerBuilder;
 use Chamilo\Libraries\Storage\DataClass\DataClass;
 use Chamilo\Libraries\Storage\DataManager\Repository\DataClassRepository;
 use Chamilo\Libraries\Storage\DataManager\Repository\StorageUnitRepository;
-use Chamilo\Libraries\Storage\Parameters\DataClassCountGroupedParameters;
-use Chamilo\Libraries\Storage\Parameters\DataClassCountParameters;
-use Chamilo\Libraries\Storage\Parameters\DataClassDistinctParameters;
-use Chamilo\Libraries\Storage\Parameters\RetrieveParameters;
-use Chamilo\Libraries\Storage\Parameters\RetrievesParameters;
+use Chamilo\Libraries\Storage\Parameters\DataClassParameters;
 use Chamilo\Libraries\Storage\Query\Condition\Condition;
 use Chamilo\Libraries\Storage\Query\UpdateProperties;
 use Doctrine\Common\Collections\ArrayCollection;
@@ -43,7 +39,7 @@ class DataManager
     }
 
     public static function count(
-        string $dataClassName, DataClassCountParameters $parameters = new DataClassCountParameters()
+        string $dataClassName, DataClassParameters $parameters = new DataClassParameters()
     ): int
     {
         return self::getDataClassRepository()->count($dataClassName, $parameters);
@@ -53,7 +49,7 @@ class DataManager
      * @return int[]
      */
     public static function count_grouped(
-        string $dataClassName, DataClassCountGroupedParameters $parameters = new DataClassCountGroupedParameters()
+        string $dataClassName, DataClassParameters $parameters = new DataClassParameters()
     ): array
     {
         return self::getDataClassRepository()->countGrouped($dataClassName, $parameters);
@@ -100,8 +96,7 @@ class DataManager
     /**
      * @return string[]
      */
-    public static function distinct(
-        string $dataClassName, DataClassDistinctParameters $parameters = new DataClassDistinctParameters()
+    public static function distinct(string $dataClassName, DataClassParameters $parameters = new DataClassParameters()
     ): array
     {
         return self::getDataClassRepository()->distinct($dataClassName, $parameters);
@@ -149,13 +144,13 @@ class DataManager
     }
 
     public static function record(
-        string $dataClassName, RetrieveParameters $parameters = new RetrieveParameters()
+        string $dataClassName, DataClassParameters $parameters = new DataClassParameters()
     ): array
     {
         return self::getDataClassRepository()->record($dataClassName, $parameters);
     }
 
-    public static function records(string $dataClassName, RetrievesParameters $parameters): ArrayCollection
+    public static function records(string $dataClassName, DataClassParameters $parameters): ArrayCollection
     {
         return self::getDataClassRepository()->records($dataClassName, $parameters);
     }
@@ -172,7 +167,7 @@ class DataManager
      * @return retrieveDataClassName
      */
     public static function retrieve(
-        string $dataClassName, RetrieveParameters $parameters = new RetrieveParameters()
+        string $dataClassName, DataClassParameters $parameters = new DataClassParameters()
     )
     {
         return self::getDataClassRepository()->retrieve($dataClassName, $parameters);
@@ -214,12 +209,12 @@ class DataManager
     /**
      * @template tRetrieves
      * @param class-string<tRetrieves> $dataClassName
-     * @param \Chamilo\Libraries\Storage\Parameters\RetrievesParameters $parameters
+     * @param \Chamilo\Libraries\Storage\Parameters\DataClassParameters $parameters
      *
      * @return ArrayCollection<tRetrieves>
      */
     public static function retrieves(
-        string $dataClassName, RetrievesParameters $parameters = new RetrievesParameters()
+        string $dataClassName, DataClassParameters $parameters = new DataClassParameters()
     ): ArrayCollection
     {
         return self::getDataClassRepository()->retrieves($dataClassName, $parameters);

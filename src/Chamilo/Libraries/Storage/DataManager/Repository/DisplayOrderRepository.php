@@ -2,10 +2,8 @@
 namespace Chamilo\Libraries\Storage\DataManager\Repository;
 
 use Chamilo\Libraries\Storage\DataClass\DataClass;
-use Chamilo\Libraries\Storage\DataClass\Interfaces\CompositeDataClassExtensionInterface;
 use Chamilo\Libraries\Storage\DataClass\Interfaces\DataClassDisplayOrderSupport;
-use Chamilo\Libraries\Storage\Parameters\DataClassCountParameters;
-use Chamilo\Libraries\Storage\Parameters\RetrieveParameters;
+use Chamilo\Libraries\Storage\Parameters\DataClassParameters;
 use Chamilo\Libraries\Storage\Query\Condition\AndCondition;
 use Chamilo\Libraries\Storage\Query\Condition\ComparisonCondition;
 use Chamilo\Libraries\Storage\Query\Condition\EqualityCondition;
@@ -86,7 +84,7 @@ class DisplayOrderRepository
         }
 
         return $this->getDataClassRepository()->count(
-            $this->determinePropertyDataClassName($dataClass), new DataClassCountParameters(condition: $condition)
+            $this->determinePropertyDataClassName($dataClass), new DataClassParameters(condition: $condition)
         );
     }
 
@@ -141,7 +139,7 @@ class DisplayOrderRepository
             ), new StaticConditionVariable($dataClass->getId())
         );
 
-        $parameters = new RetrieveParameters(
+        $parameters = new DataClassParameters(
             condition: $condition, retrieveProperties: $this->getDisplayOrderDataClassProperties($dataClass)
         );
 
@@ -159,6 +157,14 @@ class DisplayOrderRepository
     public function getDataClassRepository(): DataClassRepository
     {
         return $this->dataClassRepository;
+    }
+
+    /**
+     * @param \Chamilo\Libraries\Storage\DataManager\Repository\DataClassRepository $dataClassRepository
+     */
+    public function setDataClassRepository(DataClassRepository $dataClassRepository): void
+    {
+        $this->dataClassRepository = $dataClassRepository;
     }
 
     protected function getDisplayOrderCondition(DataClassDisplayOrderSupport $dataClass): ?AndCondition
@@ -238,13 +244,5 @@ class DisplayOrderRepository
         );
 
         return new UpdateProperties([new UpdateProperty($displayOrderPropertyConditionVariable, $updateVariable)]);
-    }
-
-    /**
-     * @param \Chamilo\Libraries\Storage\DataManager\Repository\DataClassRepository $dataClassRepository
-     */
-    public function setDataClassRepository(DataClassRepository $dataClassRepository): void
-    {
-        $this->dataClassRepository = $dataClassRepository;
     }
 }

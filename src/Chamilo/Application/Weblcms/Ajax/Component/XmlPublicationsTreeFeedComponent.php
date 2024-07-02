@@ -7,7 +7,7 @@ use Chamilo\Application\Weblcms\Course\Storage\DataManager as CourseDataManager;
 use Chamilo\Application\Weblcms\Storage\DataClass\ContentObjectPublicationCategory;
 use Chamilo\Application\Weblcms\Storage\DataManager;
 use Chamilo\Libraries\Format\Structure\Glyph\FontAwesomeGlyph;
-use Chamilo\Libraries\Storage\Parameters\DataClassCountParameters;
+use Chamilo\Libraries\Storage\Parameters\DataClassParameters;
 use Chamilo\Libraries\Storage\Parameters\RetrievesParameters;
 use Chamilo\Libraries\Storage\Query\Condition\EqualityCondition;
 use Chamilo\Libraries\Storage\Query\OrderBy;
@@ -121,7 +121,7 @@ class XmlPublicationsTreeFeedComponent extends Manager
         );
 
         return DataManager::count(
-                ContentObjectPublicationCategory::class, new DataClassCountParameters(condition: $condition)
+                ContentObjectPublicationCategory::class, new DataClassParameters(condition: $condition)
             ) > 0;
     }
 }

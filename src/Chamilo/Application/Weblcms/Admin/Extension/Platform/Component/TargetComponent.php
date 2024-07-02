@@ -12,7 +12,7 @@ use Chamilo\Libraries\Format\Structure\Glyph\FontAwesomeGlyph;
 use Chamilo\Libraries\Format\Table\RequestTableParameterValuesCompiler;
 use Chamilo\Libraries\Format\Tabs\Link\LinkTab;
 use Chamilo\Libraries\Format\Tabs\TabsCollection;
-use Chamilo\Libraries\Storage\Parameters\DataClassCountParameters;
+use Chamilo\Libraries\Storage\Parameters\DataClassParameters;
 use Chamilo\Libraries\Storage\Query\Condition\AndCondition;
 use Chamilo\Libraries\Storage\Query\Condition\EqualityCondition;
 use Chamilo\Libraries\Storage\Query\Variable\PropertyConditionVariable;
@@ -102,7 +102,7 @@ class TargetComponent extends Manager
 
             $condition = new AndCondition($conditions);
 
-            $count = DataManager::count(Admin::class, new DataClassCountParameters(condition: $condition));
+            $count = DataManager::count(Admin::class, new DataClassParameters(condition: $condition));
 
             switch ($target_type::ENTITY_TYPE)
             {

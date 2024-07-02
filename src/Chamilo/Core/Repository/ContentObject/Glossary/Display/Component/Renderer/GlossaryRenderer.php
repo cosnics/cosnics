@@ -5,8 +5,7 @@ use Chamilo\Core\Repository\Storage\DataClass\ComplexContentObjectItem;
 use Chamilo\Core\Repository\Storage\DataClass\ContentObject;
 use Chamilo\Core\Repository\Storage\DataManager;
 use Chamilo\Libraries\DependencyInjection\Traits\DependencyInjectionContainerTrait;
-use Chamilo\Libraries\Storage\Parameters\DataClassCountParameters;
-use Chamilo\Libraries\Storage\Parameters\RetrievesParameters;
+use Chamilo\Libraries\Storage\Parameters\DataClassParameters;
 use Chamilo\Libraries\Storage\Query\Condition\AndCondition;
 use Chamilo\Libraries\Storage\Query\Condition\ContainsCondition;
 use Chamilo\Libraries\Storage\Query\Condition\EqualityCondition;
@@ -75,7 +74,7 @@ abstract class GlossaryRenderer
      */
     public function count_objects()
     {
-        $parameters = new DataClassCountParameters(condition: $this->get_condition(), joins: $this->get_joins());
+        $parameters = new DataClassParameters(condition: $this->get_condition(), joins: $this->get_joins());
 
         return DataManager::count_complex_content_object_items(
             ComplexContentObjectItem::class, $parameters
@@ -182,9 +181,9 @@ abstract class GlossaryRenderer
      */
     public function get_objects($offset = null, $count = null, $order_property = null)
     {
-        $parameters = new RetrievesParameters(
-            condition: $this->get_condition(), count: $count, offset: $offset, orderBy: $order_property,
-            joins: $this->get_joins()
+        $parameters = new DataClassParameters(
+            condition: $this->get_condition(), joins: $this->get_joins(), orderBy: $order_property, count: $count,
+            offset: $offset
         );
 
         return DataManager::retrieve_complex_content_object_items(

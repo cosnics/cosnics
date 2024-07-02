@@ -7,8 +7,7 @@ use Chamilo\Core\User\Roles\Storage\Repository\Interfaces\UserRoleRepositoryInte
 use Chamilo\Core\User\Storage\DataClass\User;
 use Chamilo\Libraries\Storage\DataManager\Repository\DataClassRepository;
 use Chamilo\Libraries\Storage\DataManager\Repository\DataManagerRepository;
-use Chamilo\Libraries\Storage\Parameters\RetrieveParameters;
-use Chamilo\Libraries\Storage\Parameters\RetrievesParameters;
+use Chamilo\Libraries\Storage\Parameters\DataClassParameters;
 use Chamilo\Libraries\Storage\Query\Condition\AndCondition;
 use Chamilo\Libraries\Storage\Query\Condition\EqualityCondition;
 use Chamilo\Libraries\Storage\Query\Join;
@@ -47,7 +46,7 @@ class UserRoleRepository extends DataManagerRepository implements UserRoleReposi
         );
 
         return $this->getDataClassRepository()->retrieves(
-            Role::class, new RetrievesParameters(
+            Role::class, new DataClassParameters(
                 condition: $this->getConditionForUser($userId), joins: $joins
             )
         );
@@ -63,7 +62,7 @@ class UserRoleRepository extends DataManagerRepository implements UserRoleReposi
         $condition = new AndCondition($conditions);
 
         return $this->getDataClassRepository()->retrieve(
-            RoleRelation::class, new RetrieveParameters(condition: $condition)
+            RoleRelation::class, new DataClassParameters(condition: $condition)
         );
     }
 
@@ -83,7 +82,7 @@ class UserRoleRepository extends DataManagerRepository implements UserRoleReposi
         );
 
         return $this->getDataClassRepository()->retrieves(
-            User::class, new RetrievesParameters(
+            User::class, new DataClassParameters(
                 condition: $this->getConditionForRole($roleId), joins: $joins
             )
         );

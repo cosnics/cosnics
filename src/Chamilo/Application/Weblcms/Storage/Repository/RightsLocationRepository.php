@@ -7,8 +7,7 @@ use Chamilo\Application\Weblcms\Storage\DataClass\CourseEntityRelation;
 use Chamilo\Application\Weblcms\Storage\DataClass\RightsLocation;
 use Chamilo\Application\Weblcms\Storage\DataClass\RightsLocationEntityRight;
 use Chamilo\Core\Repository\ContentObject\LearningPath\Storage\Repository\CommonDataClassRepository;
-use Chamilo\Libraries\Storage\Parameters\DataClassDistinctParameters;
-use Chamilo\Libraries\Storage\Parameters\RetrieveParameters;
+use Chamilo\Libraries\Storage\Parameters\DataClassParameters;
 use Chamilo\Libraries\Storage\Query\Condition\AndCondition;
 use Chamilo\Libraries\Storage\Query\Condition\EqualityCondition;
 use Chamilo\Libraries\Storage\Query\Condition\InCondition;
@@ -71,7 +70,7 @@ class RightsLocationRepository extends CommonDataClassRepository
         $condition = new AndCondition($conditions);
 
         return $this->dataClassRepository->retrieve(
-            RightsLocation::class, new RetrieveParameters(condition: $condition)
+            RightsLocation::class, new DataClassParameters(condition: $condition)
         );
     }
 
@@ -90,10 +89,10 @@ class RightsLocationRepository extends CommonDataClassRepository
         );
 
         $locationIds = $this->dataClassRepository->distinct(
-            RightsLocation::class, new DataClassDistinctParameters(
+            RightsLocation::class, new DataClassParameters(
                 condition: $locationCondition, retrieveProperties: new RetrieveProperties([
-                    new PropertyConditionVariable(RightsLocation::class, RightsLocation::PROPERTY_ID)
-                ])
+                new PropertyConditionVariable(RightsLocation::class, RightsLocation::PROPERTY_ID)
+            ])
             )
         );
 

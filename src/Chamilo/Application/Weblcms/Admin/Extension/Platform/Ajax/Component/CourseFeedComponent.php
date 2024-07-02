@@ -10,7 +10,7 @@ use Chamilo\Libraries\Architecture\JsonAjaxResult;
 use Chamilo\Libraries\Format\Form\Element\AdvancedElementFinder\AdvancedElementFinderElement;
 use Chamilo\Libraries\Format\Form\Element\AdvancedElementFinder\AdvancedElementFinderElements;
 use Chamilo\Libraries\Format\Structure\Glyph\FontAwesomeGlyph;
-use Chamilo\Libraries\Storage\Parameters\DataClassCountParameters;
+use Chamilo\Libraries\Storage\Parameters\DataClassParameters;
 use Chamilo\Libraries\Storage\Parameters\RetrievesParameters;
 use Chamilo\Libraries\Storage\Query\Condition\AndCondition;
 use Chamilo\Libraries\Storage\Query\OrderBy;
@@ -167,10 +167,12 @@ class CourseFeedComponent extends Manager
         }
 
         $this->course_count = DataManager::count(
-            Course::class, new DataClassCountParameters(condition: $condition)
+            Course::class, new DataClassParameters(condition: $condition)
         );
         $parameters = new RetrievesParameters(
-            condition: $condition, count: 100, offset: $this->get_offset(), orderBy: new OrderBy([new OrderProperty(new PropertyConditionVariable(Course::class, Course::PROPERTY_TITLE))])
+            condition: $condition, count: 100, offset: $this->get_offset(), orderBy: new OrderBy(
+            [new OrderProperty(new PropertyConditionVariable(Course::class, Course::PROPERTY_TITLE))]
+        )
         );
 
         return DataManager::retrieves(Course::class, $parameters);

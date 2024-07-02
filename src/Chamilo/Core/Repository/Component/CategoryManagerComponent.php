@@ -10,8 +10,7 @@ use Chamilo\Core\Repository\Storage\DataManager;
 use Chamilo\Core\Repository\Table\ImpactViewTableRenderer;
 use Chamilo\Libraries\Architecture\Application\ApplicationConfiguration;
 use Chamilo\Libraries\Format\Table\RequestTableParameterValuesCompiler;
-use Chamilo\Libraries\Storage\Parameters\DataClassCountParameters;
-use Chamilo\Libraries\Storage\Parameters\RetrievesParameters;
+use Chamilo\Libraries\Storage\Parameters\DataClassParameters;
 use Chamilo\Libraries\Storage\Query\Condition\AndCondition;
 use Chamilo\Libraries\Storage\Query\Condition\EqualityCondition;
 use Chamilo\Libraries\Storage\Query\Condition\OrCondition;
@@ -95,7 +94,7 @@ class CategoryManagerComponent extends Manager implements ImpactViewSupport, Cat
 
         $condition = new AndCondition($conditions);
 
-        $parameters = new DataClassCountParameters(condition: $condition);
+        $parameters = new DataClassParameters(condition: $condition);
 
         return DataManager::count(RepositoryCategory::class, $parameters);
     }
@@ -120,7 +119,7 @@ class CategoryManagerComponent extends Manager implements ImpactViewSupport, Cat
         );
         $condition = new AndCondition($conditions);
 
-        $parameters = new DataClassCountParameters(condition: $condition);
+        $parameters = new DataClassParameters(condition: $condition);
 
         return DataManager::count_active_content_objects(ContentObject::class, $parameters);
     }
@@ -244,7 +243,7 @@ class CategoryManagerComponent extends Manager implements ImpactViewSupport, Cat
             ]
         );
 
-        $parameters = new DataClassCountParameters(condition: $condition);
+        $parameters = new DataClassParameters(condition: $condition);
 
         return DataManager::count_active_content_objects(ContentObject::class, $parameters) > 0;
     }
@@ -278,7 +277,7 @@ class CategoryManagerComponent extends Manager implements ImpactViewSupport, Cat
         );
 
         $totalNumberOfItems = DataManager::count_active_content_objects(
-            ContentObject::class, new DataClassCountParameters(condition: $condition)
+            ContentObject::class, new DataClassParameters(condition: $condition)
         );
 
         $impactViewTableRenderer = $this->getImpactViewTableRenderer();
@@ -289,9 +288,10 @@ class CategoryManagerComponent extends Manager implements ImpactViewSupport, Cat
         );
 
         $contentObjects = DataManager::retrieve_active_content_objects(
-            ContentObject::class, new RetrievesParameters(
-                condition: $condition, count: $tableParameterValues->getNumberOfItemsPerPage(),
-                offset: $tableParameterValues->getOffset(), orderBy: $impactViewTableRenderer->determineOrderBy($tableParameterValues)
+            ContentObject::class, new DataClassParameters(
+                condition: $condition, orderBy: $impactViewTableRenderer->determineOrderBy(
+                $tableParameterValues
+            ), count: $tableParameterValues->getNumberOfItemsPerPage(), offset: $tableParameterValues->getOffset()
             )
         );
 

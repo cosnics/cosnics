@@ -4,7 +4,7 @@ namespace Chamilo\Libraries\Storage\DataClass\Listeners;
 use Chamilo\Configuration\Storage\DataClass\Registration;
 use Chamilo\Libraries\Storage\DataClass\DataClass;
 use Chamilo\Libraries\Storage\DataManager\DataManager;
-use Chamilo\Libraries\Storage\Parameters\RetrievesParameters;
+use Chamilo\Libraries\Storage\Parameters\DataClassParameters;
 use Chamilo\Libraries\Storage\Query\Condition\EndsWithCondition;
 use Chamilo\Libraries\Storage\Query\Variable\PropertyConditionVariable;
 use InvalidArgumentException;
@@ -63,7 +63,7 @@ class ImplementationNotifierDataClassListener extends DataClassListener
             $packages = [];
 
             $package_registrations = DataManager::retrieves(
-                Registration::class, new RetrievesParameters(condition: $condition)
+                Registration::class, new DataClassParameters(condition: $condition)
             );
             foreach ($package_registrations as $package_registration)
             {

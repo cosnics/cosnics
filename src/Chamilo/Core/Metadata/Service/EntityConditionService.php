@@ -3,7 +3,7 @@ namespace Chamilo\Core\Metadata\Service;
 
 use Chamilo\Core\Metadata\Entity\DataClassEntityFactory;
 use Chamilo\Libraries\Storage\DataManager\DataManager;
-use Chamilo\Libraries\Storage\Parameters\RetrievesParameters;
+use Chamilo\Libraries\Storage\Parameters\DataClassParameters;
 use Chamilo\Libraries\Storage\Query\Condition\AndCondition;
 use Chamilo\Libraries\Storage\Query\Condition\EqualityCondition;
 use Chamilo\Libraries\Storage\Query\Condition\OrCondition;
@@ -72,10 +72,10 @@ class EntityConditionService
         else
         {
             $dataClassInstances = DataManager::retrieves(
-                $entity->getDataClassName(), new RetrievesParameters()
+                $entity->getDataClassName(), new DataClassParameters()
             );
 
-            foreach($dataClassInstances as $dataClassInstance)
+            foreach ($dataClassInstances as $dataClassInstance)
             {
                 $expandedEntities[] = $this->getDataClassEntityFactory()->getEntityFromDataClass($dataClassInstance);
             }

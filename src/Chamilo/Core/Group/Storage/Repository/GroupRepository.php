@@ -6,10 +6,7 @@ use Chamilo\Core\Group\Storage\DataClass\GroupRelUser;
 use Chamilo\Libraries\Storage\DataClass\DataClass;
 use Chamilo\Libraries\Storage\DataClass\NestedSet;
 use Chamilo\Libraries\Storage\DataManager\Repository\NestedSetDataClassRepository;
-use Chamilo\Libraries\Storage\Parameters\DataClassCountParameters;
-use Chamilo\Libraries\Storage\Parameters\DataClassDistinctParameters;
-use Chamilo\Libraries\Storage\Parameters\RetrieveParameters;
-use Chamilo\Libraries\Storage\Parameters\RetrievesParameters;
+use Chamilo\Libraries\Storage\Parameters\DataClassParameters;
 use Chamilo\Libraries\Storage\Query\Condition\AndCondition;
 use Chamilo\Libraries\Storage\Query\Condition\ComparisonCondition;
 use Chamilo\Libraries\Storage\Query\Condition\Condition;
@@ -52,7 +49,9 @@ class GroupRepository
      */
     public function countGroups(?Condition $condition = null): int
     {
-        return $this->getNestedSetDataClassRepository()->count(Group::class, new DataClassCountParameters(condition: $condition));
+        return $this->getNestedSetDataClassRepository()->count(
+            Group::class, new DataClassParameters(condition: $condition)
+        );
     }
 
     /**
@@ -111,7 +110,7 @@ class GroupRepository
 
         $joins = new Joins([new Join(GroupRelUser::class, new AndCondition($joinConditions))]);
 
-        $parameters = new RetrievesParameters(joins: $joins, retrieveProperties: $properties);
+        $parameters = new DataClassParameters(joins: $joins, retrieveProperties: $properties);
 
         return $this->getNestedSetDataClassRepository()->records(Group::class, $parameters);
     }
@@ -142,7 +141,7 @@ class GroupRepository
 
         $joins = new Joins([$join]);
 
-        $parameters = new RetrievesParameters(joins: $joins);
+        $parameters = new DataClassParameters(joins: $joins);
 
         return $this->getNestedSetDataClassRepository()->retrieves(Group::class, $parameters);
     }
@@ -158,7 +157,7 @@ class GroupRepository
         );
 
         return $this->getNestedSetDataClassRepository()->retrieve(
-            Group::class, new RetrieveParameters(condition: $condition)
+            Group::class, new DataClassParameters(condition: $condition)
         );
     }
 
@@ -178,7 +177,7 @@ class GroupRepository
         );
 
         return $this->getNestedSetDataClassRepository()->retrieve(
-            Group::class, new RetrieveParameters(condition: new AndCondition($conditions))
+            Group::class, new DataClassParameters(condition: new AndCondition($conditions))
         );
     }
 
@@ -201,7 +200,7 @@ class GroupRepository
         ArrayCollection $directlySubscribedGroupNestingValues
     ): array
     {
-        $parameters = new DataClassDistinctParameters(
+        $parameters = new DataClassParameters(
             condition: $this->getDirectlySubscribedGroupNestingValuesConditions($directlySubscribedGroupNestingValues),
             retrieveProperties: new RetrieveProperties(
                 [new PropertyConditionVariable(Group::class, DataClass::PROPERTY_ID)]
@@ -224,7 +223,7 @@ class GroupRepository
         ?Condition $condition = null, ?int $count = null, ?int $offset = null, OrderBy $orderBy = new OrderBy()
     ): ArrayCollection
     {
-        $parameters = new RetrievesParameters(condition: $condition, count: $count, offset: $offset, orderBy: $orderBy);
+        $parameters = new DataClassParameters(condition: $condition, orderBy: $orderBy, count: $count, offset: $offset);
 
         return $this->getNestedSetDataClassRepository()->retrieves(Group::class, $parameters);
     }
@@ -243,7 +242,7 @@ class GroupRepository
             new InCondition(new PropertyConditionVariable(Group::class, DataClass::PROPERTY_ID), $groupIdentifiers);
 
         return $this->getNestedSetDataClassRepository()->retrieves(
-            Group::class, new RetrievesParameters(
+            Group::class, new DataClassParameters(
                 condition: $condition, orderBy: $orderBy
             )
         );
@@ -259,7 +258,7 @@ class GroupRepository
         ArrayCollection $directlySubscribedGroupNestingValues
     ): ArrayCollection
     {
-        $parameters = new RetrievesParameters(
+        $parameters = new DataClassParameters(
             condition: $this->getDirectlySubscribedGroupNestingValuesConditions($directlySubscribedGroupNestingValues)
         );
 
@@ -280,7 +279,7 @@ class GroupRepository
         );
 
         return $this->getNestedSetDataClassRepository()->retrieves(
-            Group::class, new RetrievesParameters(
+            Group::class, new DataClassParameters(
                 condition: $condition, orderBy: new OrderBy(
                 [new OrderProperty(new PropertyConditionVariable(Group::class, Group::PROPERTY_NAME))]
             )
@@ -319,7 +318,7 @@ class GroupRepository
         $condition = new AndCondition($conditions);
 
         return $this->getNestedSetDataClassRepository()->retrieves(
-            Group::class, new RetrievesParameters(
+            Group::class, new DataClassParameters(
                 condition: $condition, orderBy: new OrderBy(
                 [new OrderProperty(new PropertyConditionVariable(Group::class, Group::PROPERTY_NAME))]
             )
@@ -355,7 +354,7 @@ class GroupRepository
     public function findRootGroup(): ?Group
     {
         return $this->getNestedSetDataClassRepository()->retrieve(
-            Group::class, new RetrieveParameters(
+            Group::class, new DataClassParameters(
                 condition: new EqualityCondition(
                     new PropertyConditionVariable(Group::class, NestedSet::PROPERTY_PARENT_ID),
                     new StaticConditionVariable(0)
@@ -396,7 +395,7 @@ class GroupRepository
         }
 
         return $this->getNestedSetDataClassRepository()->distinct(
-            Group::class, new DataClassDistinctParameters(
+            Group::class, new DataClassParameters(
                 condition: $childrenCondition, retrieveProperties: new RetrieveProperties(
                 [new PropertyConditionVariable(Group::class, DataClass::PROPERTY_ID)]
             )
@@ -475,7 +474,7 @@ class GroupRepository
         $condition =
             new InCondition(new PropertyConditionVariable(Group::class, DataClass::PROPERTY_ID), $userGroupIdentifiers);
 
-        $parameters = new RetrieveParameters(
+        $parameters = new DataClassParameters(
             condition: $condition, retrieveProperties: new RetrieveProperties(
             [
                 new FunctionConditionVariable(

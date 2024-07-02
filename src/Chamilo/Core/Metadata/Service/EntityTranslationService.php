@@ -4,7 +4,7 @@ namespace Chamilo\Core\Metadata\Service;
 use Chamilo\Core\Metadata\Entity\DataClassEntity;
 use Chamilo\Core\Metadata\Storage\DataClass\EntityTranslation;
 use Chamilo\Libraries\Storage\DataManager\DataManager;
-use Chamilo\Libraries\Storage\Parameters\RetrievesParameters;
+use Chamilo\Libraries\Storage\Parameters\DataClassParameters;
 use Chamilo\Libraries\Storage\Query\Condition\AndCondition;
 use Chamilo\Libraries\Storage\Query\Condition\ComparisonCondition;
 use Chamilo\Libraries\Storage\Query\Variable\PropertyConditionVariable;
@@ -20,13 +20,13 @@ use Chamilo\Libraries\Storage\Query\Variable\StaticConditionVariable;
  */
 class EntityTranslationService
 {
-    const PROPERTY_TRANSLATION = 'translation';
+    public const PROPERTY_TRANSLATION = 'translation';
 
     /**
      * @param \Chamilo\Core\Metadata\Entity\DataClassEntity $entity
      * @param string[] $entityTranslations
      *
-     * @return boolean
+     * @return bool
      * @throws \Exception
      */
     public function createEntityTranslations(DataClassEntity $entity, $entityTranslations)
@@ -69,10 +69,10 @@ class EntityTranslationService
         );
 
         $translations = DataManager::retrieves(
-            EntityTranslation::class, new RetrievesParameters(condition: new AndCondition($conditions))
+            EntityTranslation::class, new DataClassParameters(condition: new AndCondition($conditions))
         );
 
-        foreach($translations as $translation)
+        foreach ($translations as $translation)
         {
             $translationsIndexedByIsocode[$translation->get_isocode()] = $translation;
         }
@@ -84,7 +84,7 @@ class EntityTranslationService
      * @param \Chamilo\Core\Metadata\Entity\DataClassEntity $entity
      * @param string[] $entityTranslations
      *
-     * @return boolean
+     * @return bool
      * @throws \Exception
      */
     public function updateEntityTranslations(DataClassEntity $entity, $entityTranslations)

@@ -13,8 +13,7 @@ use Chamilo\Libraries\Format\Table\RequestTableParameterValuesCompiler;
 use Chamilo\Libraries\Format\Utilities\ResourceManager;
 use Chamilo\Libraries\Storage\DataClass\DataClass;
 use Chamilo\Libraries\Storage\DataManager\DataManager;
-use Chamilo\Libraries\Storage\Parameters\DataClassCountParameters;
-use Chamilo\Libraries\Storage\Parameters\RetrievesParameters;
+use Chamilo\Libraries\Storage\Parameters\DataClassParameters;
 use Chamilo\Libraries\Storage\Query\Condition\AndCondition;
 use Chamilo\Libraries\Storage\Query\Condition\ComparisonCondition;
 use Chamilo\Libraries\Storage\Query\Condition\InCondition;
@@ -214,7 +213,9 @@ class SelectComponent extends Manager
 
     public function getSelectedVocabularyId()
     {
-        return (array) $this->getRequest()->getFromRequestOrQuery(\Chamilo\Core\Metadata\Vocabulary\Manager::PARAM_VOCABULARY_ID);
+        return (array) $this->getRequest()->getFromRequestOrQuery(
+            \Chamilo\Core\Metadata\Vocabulary\Manager::PARAM_VOCABULARY_ID
+        );
     }
 
     public function getVocabularyCondition()
@@ -257,7 +258,7 @@ class SelectComponent extends Manager
 
         $condition = new AndCondition($conditions);
 
-        return DataManager::retrieves(Vocabulary::class, new RetrievesParameters(condition: $condition));
+        return DataManager::retrieves(Vocabulary::class, new DataClassParameters(condition: $condition));
     }
 
     /**
@@ -269,7 +270,7 @@ class SelectComponent extends Manager
     protected function renderTable(): string
     {
         $totalNumberOfItems = \Chamilo\Core\Metadata\Vocabulary\Storage\DataManager::count(
-            Vocabulary::class, new DataClassCountParameters(condition: $this->getSelectCondition())
+            Vocabulary::class, new DataClassParameters(condition: $this->getSelectCondition())
         );
         $selectTableRenderer = $this->getSelectTableRenderer();
 
@@ -279,9 +280,10 @@ class SelectComponent extends Manager
         );
 
         $vocabularies = DataManager::retrieves(
-            Vocabulary::class, new RetrievesParameters(
-                condition: $this->getSelectCondition(), count: $tableParameterValues->getNumberOfItemsPerPage(),
-                offset: $tableParameterValues->getOffset(), orderBy: $selectTableRenderer->determineOrderBy($tableParameterValues)
+            Vocabulary::class, new DataClassParameters(
+                condition: $this->getSelectCondition(), orderBy: $selectTableRenderer->determineOrderBy(
+                $tableParameterValues
+            ), count: $tableParameterValues->getNumberOfItemsPerPage(), offset: $tableParameterValues->getOffset()
             )
         );
 

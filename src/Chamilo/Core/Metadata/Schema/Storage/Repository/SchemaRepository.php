@@ -3,7 +3,7 @@ namespace Chamilo\Core\Metadata\Schema\Storage\Repository;
 
 use Chamilo\Core\Metadata\Storage\DataClass\Schema;
 use Chamilo\Libraries\Storage\DataManager\Repository\DataClassRepository;
-use Chamilo\Libraries\Storage\Parameters\RetrievesParameters;
+use Chamilo\Libraries\Storage\Parameters\DataClassParameters;
 use Chamilo\Libraries\Storage\Query\Condition\Condition;
 use Doctrine\Common\Collections\ArrayCollection;
 
@@ -26,7 +26,7 @@ class SchemaRepository
     public function findSchemasForCondition(?Condition $condition = null): ArrayCollection
     {
         return $this->getDataClassRepository()->retrieves(
-            Schema::class, new RetrievesParameters(condition: $condition)
+            Schema::class, new DataClassParameters(condition: $condition)
         );
     }
 

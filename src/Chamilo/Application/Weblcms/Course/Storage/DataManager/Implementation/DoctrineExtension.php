@@ -6,7 +6,7 @@ use Chamilo\Core\Group\Storage\DataClass\Group;
 use Chamilo\Core\Group\Storage\DataClass\GroupRelUser;
 use Chamilo\Core\User\Storage\DataClass\User;
 use Chamilo\Libraries\DependencyInjection\DependencyInjectionContainerBuilder;
-use Chamilo\Libraries\Storage\Parameters\DataClassDistinctParameters;
+use Chamilo\Libraries\Storage\Parameters\DataClassParameters;
 use Chamilo\Libraries\Storage\Parameters\RetrievesParameters;
 use Chamilo\Libraries\Storage\Query\Condition\AndCondition;
 use Chamilo\Libraries\Storage\Query\Condition\ComparisonCondition;
@@ -107,8 +107,9 @@ class DoctrineExtension
 
             $condition = new AndCondition($conditions);
 
-            $parameters = new DataClassDistinctParameters(
-                condition: $condition, retrieveProperties: $properties, joins: $joins);
+            $parameters = new DataClassParameters(
+                condition: $condition, joins: $joins, retrieveProperties: $properties
+            );
 
             return $this->getDataClassDatabase()->distinct(Group::class, $parameters);
         }
@@ -158,8 +159,9 @@ class DoctrineExtension
 
         $condition = new AndCondition($conditions);
 
-        $parameters = new DataClassDistinctParameters(
-            condition: $condition, retrieveProperties: $properties, joins: $joins);
+        $parameters = new DataClassParameters(
+            condition: $condition, joins: $joins, retrieveProperties: $properties
+        );
 
         return $this->getDataClassDatabase()->distinct(CourseEntityRelation::class, $parameters);
     }
@@ -281,8 +283,9 @@ class DoctrineExtension
 
             $condition = new AndCondition($conditions);
 
-            $parameters = new DataClassDistinctParameters(
-                condition: $condition, retrieveProperties: $properties, joins: $joins);
+            $parameters = new DataClassParameters(
+                condition: $condition, joins: $joins, retrieveProperties: $properties
+            );
 
             return $this->getDataClassDatabase()->distinct(Group::class, $parameters);
         }
@@ -339,8 +342,9 @@ class DoctrineExtension
 
         $condition = new AndCondition($conditions);
 
-        $parameters = new DataClassDistinctParameters(
-            condition: $condition, retrieveProperties: $properties, joins: $joins);
+        $parameters = new DataClassParameters(
+            condition: $condition, joins: $joins, retrieveProperties: $properties
+        );
 
         return $this->getDataClassDatabase()->distinct(CourseEntityRelation::class, $parameters);
     }

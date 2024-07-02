@@ -3,7 +3,7 @@ namespace Chamilo\Configuration\Form\Storage;
 
 use Chamilo\Configuration\Form\Storage\DataClass\Element;
 use Chamilo\Configuration\Form\Storage\DataClass\Option;
-use Chamilo\Libraries\Storage\Parameters\RetrievesParameters;
+use Chamilo\Libraries\Storage\Parameters\DataClassParameters;
 use Chamilo\Libraries\Storage\Query\Condition\EqualityCondition;
 use Chamilo\Libraries\Storage\Query\Variable\PropertyConditionVariable;
 use Chamilo\Libraries\Storage\Query\Variable\StaticConditionVariable;
@@ -21,8 +21,8 @@ class DataManager extends \Chamilo\Libraries\Storage\DataManager\DataManager
         $condition = null, $offset = null, $count = null, $order_property = null
     )
     {
-        $parameters = new RetrievesParameters(
-            condition: $condition, count: $count, offset: $offset, orderBy: $order_property
+        $parameters = new DataClassParameters(
+            condition: $condition, orderBy: $order_property, count: $count, offset: $offset
         );
 
         return self::retrieves(Option::class, $parameters);
@@ -32,8 +32,8 @@ class DataManager extends \Chamilo\Libraries\Storage\DataManager\DataManager
         $condition = null, $offset = null, $count = null, $order_property = null
     )
     {
-        $parameters = new RetrievesParameters(
-            condition: $condition, count: $count, offset: $offset, orderBy: $order_property
+        $parameters = new DataClassParameters(
+            condition: $condition, orderBy: $order_property, count: $count, offset: $offset
         );
 
         return self::retrieves(Element::class, $parameters);

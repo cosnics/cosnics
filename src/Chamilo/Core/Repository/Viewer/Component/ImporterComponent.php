@@ -20,7 +20,7 @@ use Chamilo\Libraries\Format\Form\FormValidator;
 use Chamilo\Libraries\Format\Structure\Breadcrumb;
 use Chamilo\Libraries\Format\Structure\Glyph\FontAwesomeGlyph;
 use Chamilo\Libraries\Format\Utilities\ResourceManager;
-use Chamilo\Libraries\Storage\Parameters\DataClassDistinctParameters;
+use Chamilo\Libraries\Storage\Parameters\DataClassParameters;
 use Chamilo\Libraries\Storage\Query\Condition\AndCondition;
 use Chamilo\Libraries\Storage\Query\Condition\InCondition;
 use Chamilo\Libraries\Storage\Query\RetrieveProperties;
@@ -228,10 +228,10 @@ class ImporterComponent extends Manager implements BreadcrumbLessComponentInterf
         );
         $condition = new AndCondition($conditions);
 
-        $parameters = new DataClassDistinctParameters(
+        $parameters = new DataClassParameters(
             condition: $condition, retrieveProperties: new RetrieveProperties(
-                [new PropertyConditionVariable(ContentObject::class, ContentObject::PROPERTY_ID)]
-            )
+            [new PropertyConditionVariable(ContentObject::class, ContentObject::PROPERTY_ID)]
+        )
         );
 
         return DataManager::distinct(ContentObject::class, $parameters);

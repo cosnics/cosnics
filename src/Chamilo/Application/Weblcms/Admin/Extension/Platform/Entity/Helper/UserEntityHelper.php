@@ -9,7 +9,7 @@ use Chamilo\Core\User\Storage\DataClass\User;
 use Chamilo\Libraries\Format\Table\Column\DataClassPropertyTableColumn;
 use Chamilo\Libraries\Storage\DataClass\DataClass;
 use Chamilo\Libraries\Storage\DataManager\DataManager;
-use Chamilo\Libraries\Storage\Parameters\DataClassCountParameters;
+use Chamilo\Libraries\Storage\Parameters\DataClassParameters;
 use Chamilo\Libraries\Storage\Parameters\RetrievesParameters;
 use Chamilo\Libraries\Storage\Query\Condition\EqualityCondition;
 use Chamilo\Libraries\Storage\Query\Join;
@@ -51,7 +51,7 @@ class UserEntityHelper
         );
         $joins = new Joins([$join]);
 
-        $parameters = new DataClassCountParameters(
+        $parameters = new DataClassParameters(
             condition: $condition, joins: $joins, retrieveProperties: new RetrieveProperties(
             [
                 new FunctionConditionVariable(

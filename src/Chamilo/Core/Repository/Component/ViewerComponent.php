@@ -36,8 +36,7 @@ use Chamilo\Libraries\Format\Table\RequestTableParameterValuesCompiler;
 use Chamilo\Libraries\Format\Tabs\ContentTab;
 use Chamilo\Libraries\Format\Tabs\TabsCollection;
 use Chamilo\Libraries\Format\Utilities\ResourceManager;
-use Chamilo\Libraries\Storage\Parameters\DataClassCountParameters;
-use Chamilo\Libraries\Storage\Parameters\RetrievesParameters;
+use Chamilo\Libraries\Storage\Parameters\DataClassParameters;
 use Chamilo\Libraries\Storage\Query\Condition\EqualityCondition;
 use Chamilo\Libraries\Storage\Query\Variable\PropertyConditionVariable;
 use Chamilo\Libraries\Storage\Query\Variable\StaticConditionVariable;
@@ -643,7 +642,7 @@ class ViewerComponent extends Manager implements BreadcrumbLessComponentInterfac
         if ($contentObject->get_current() != ContentObject::CURRENT_SINGLE)
         {
             $totalNumberOfItems = DataManager::count_content_objects(
-                ContentObject::class, new DataClassCountParameters(condition: $this->getVersionTableCondition())
+                ContentObject::class, new DataClassParameters(condition: $this->getVersionTableCondition())
             );
 
             $versionTableRenderer = $this->getVersionTableRenderer();
@@ -654,9 +653,10 @@ class ViewerComponent extends Manager implements BreadcrumbLessComponentInterfac
             );
 
             $contentObjects = DataManager::retrieve_content_objects(
-                ContentObject::class, new RetrievesParameters(
-                    condition: $this->getVersionTableCondition(), count: $tableParameterValues->getNumberOfItemsPerPage(),
-                    offset: $tableParameterValues->getOffset(), orderBy: $versionTableRenderer->determineOrderBy($tableParameterValues)
+                ContentObject::class, new DataClassParameters(
+                    condition: $this->getVersionTableCondition(), orderBy: $versionTableRenderer->determineOrderBy(
+                    $tableParameterValues
+                ), count: $tableParameterValues->getNumberOfItemsPerPage(), offset: $tableParameterValues->getOffset()
                 )
             );
 

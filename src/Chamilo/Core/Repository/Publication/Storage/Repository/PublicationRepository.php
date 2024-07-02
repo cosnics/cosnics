@@ -5,8 +5,7 @@ use Chamilo\Core\Repository\Publication\Storage\DataClass\Publication;
 use Chamilo\Core\Repository\Storage\DataClass\ContentObject;
 use Chamilo\Libraries\Storage\DataClass\DataClass;
 use Chamilo\Libraries\Storage\DataManager\Repository\DataClassRepository;
-use Chamilo\Libraries\Storage\Parameters\DataClassCountParameters;
-use Chamilo\Libraries\Storage\Parameters\RetrievesParameters;
+use Chamilo\Libraries\Storage\Parameters\DataClassParameters;
 use Chamilo\Libraries\Storage\Query\Condition\EqualityCondition;
 use Chamilo\Libraries\Storage\Query\Join;
 use Chamilo\Libraries\Storage\Query\Joins;
@@ -57,13 +56,13 @@ class PublicationRepository
      * and to join with the additional attributes of that type
      */
     public function countPublicationsWithContentObjects(
-        DataClassCountParameters $baseCountParameters, string $publicationClassName,
+        DataClassParameters $baseCountParameters, string $publicationClassName,
         ?string $contentObjectTypeClassName = null
     ): int
     {
         $this->checkPublicationClassName($publicationClassName);
 
-        $parameters = new DataClassCountParameters(
+        $parameters = new DataClassParameters(
             condition: $baseCountParameters->getCondition(), joins: $this->getPublicationJoins(
             $publicationClassName, $baseCountParameters->getJoins(), $contentObjectTypeClassName
         ), retrieveProperties: $baseCountParameters->getRetrieveProperties()
@@ -123,8 +122,7 @@ class PublicationRepository
      * @return \Chamilo\Core\Repository\Publication\Storage\DataClass\Publication[]
      */
     public function getPublicationsWithContentObjects(
-        RetrievesParameters $baseRetrievesParameters, string $publicationClassName,
-        ?string $contentObjectTypeClassName = null
+        DataClassParameters $baseParameters, string $publicationClassName, ?string $contentObjectTypeClassName = null
     ): array
     {
         $this->checkPublicationClassName($publicationClassName);
@@ -154,14 +152,14 @@ class PublicationRepository
 
         $properties = new RetrieveProperties($propertiesArray);
 
-        $properties->merge($baseRetrievesParameters->getRetrieveProperties());
+        $properties->merge($baseParameters->getRetrieveProperties());
 
-        $retrievesParameters = new RetrievesParameters(
-            condition: $baseRetrievesParameters->getCondition(), count: $baseRetrievesParameters->getCount(),
-            offset: $baseRetrievesParameters->getOffset(), orderBy: $baseRetrievesParameters->getOrderBy(),
-            joins: $this->getPublicationJoins(
-                $publicationClassName, $baseRetrievesParameters->getJoins(), $contentObjectTypeClassName
-            ), groupBy: $baseRetrievesParameters->getGroupBy(), retrieveProperties: $properties
+        $retrievesParameters = new DataClassParameters(
+            condition: $baseParameters->getCondition(), joins: $this->getPublicationJoins(
+            $publicationClassName, $baseParameters->getJoins(), $contentObjectTypeClassName
+        ), retrieveProperties: $properties, orderBy: $baseParameters->getOrderBy(),
+            groupBy: $baseParameters->getGroupBy(), count: $baseParameters->getCount(),
+            offset: $baseParameters->getOffset()
         );
 
         $records = $this->getDataClassRepository()->records(

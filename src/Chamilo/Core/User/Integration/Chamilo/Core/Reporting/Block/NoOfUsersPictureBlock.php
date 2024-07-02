@@ -5,8 +5,8 @@ use Chamilo\Core\Reporting\ReportingData;
 use Chamilo\Core\Reporting\Viewer\Rendition\Block\Type\Html;
 use Chamilo\Core\User\Storage\DataClass\User;
 use Chamilo\Libraries\Storage\DataManager\DataManager;
+use Chamilo\Libraries\Storage\Parameters\DataClassParameters;
 use Chamilo\Libraries\Translation\Translation;
-use Chamilo\Libraries\Storage\Parameters\RetrievesParameters;
 
 class NoOfUsersPictureBlock extends Block
 {
@@ -15,14 +15,14 @@ class NoOfUsersPictureBlock extends Block
     {
         $reporting_data = new ReportingData();
         $users = DataManager::retrieves(
-            User::class,
-            new RetrievesParameters());
+            User::class, new DataClassParameters()
+        );
         $picturetext = Translation::get('Picture');
         $nopicturetext = Translation::get('NoPicture');
         $picture[$picturetext] = 0;
         $picture[$nopicturetext] = 0;
-        
-        foreach($users as $user)
+
+        foreach ($users as $user)
         {
             if ($user->get_picture_uri())
             {
@@ -33,42 +33,42 @@ class NoOfUsersPictureBlock extends Block
                 $picture[$nopicturetext] ++;
             }
         }
-        
-        $reporting_data->set_categories(array(Translation::get('Picture'), Translation::get('NoPicture')));
-        $reporting_data->set_rows(array(Translation::get('Count')));
-        
+
+        $reporting_data->set_categories([Translation::get('Picture'), Translation::get('NoPicture')]);
+        $reporting_data->set_rows([Translation::get('Count')]);
+
         $reporting_data->add_data_category_row(
-            Translation::get('Picture'), 
-            Translation::get('Count'), 
-            $picture[$picturetext]);
+            Translation::get('Picture'), Translation::get('Count'), $picture[$picturetext]
+        );
         $reporting_data->add_data_category_row(
-            Translation::get('NoPicture'), 
-            Translation::get('Count'), 
-            $picture[$nopicturetext]);
+            Translation::get('NoPicture'), Translation::get('Count'), $picture[$nopicturetext]
+        );
+
         return $reporting_data;
+    }
+
+    public function get_views()
+    {
+        return [
+            Html::VIEW_TABLE,
+            Html::VIEW_STACKED_AREA,
+            Html::VIEW_STACKED_BAR,
+            Html::VIEW_RADAR,
+            Html::VIEW_POLAR,
+            Html::VIEW_3D_PIE,
+            Html::VIEW_PIE,
+            Html::VIEW_RING,
+            Html::VIEW_BAR,
+            Html::VIEW_LINE,
+            Html::VIEW_AREA,
+            Html::VIEW_CSV,
+            Html::VIEW_XLSX,
+            Html::VIEW_XML
+        ];
     }
 
     public function retrieve_data()
     {
         return $this->count_data();
-    }
-
-    public function get_views()
-    {
-        return array(
-            Html::VIEW_TABLE, 
-            Html::VIEW_STACKED_AREA, 
-            Html::VIEW_STACKED_BAR, 
-            Html::VIEW_RADAR, 
-            Html::VIEW_POLAR, 
-            Html::VIEW_3D_PIE, 
-            Html::VIEW_PIE, 
-            Html::VIEW_RING, 
-            Html::VIEW_BAR, 
-            Html::VIEW_LINE, 
-            Html::VIEW_AREA, 
-            Html::VIEW_CSV, 
-            Html::VIEW_XLSX, 
-            Html::VIEW_XML);
     }
 }

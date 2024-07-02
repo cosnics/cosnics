@@ -3,7 +3,7 @@ namespace Chamilo\Libraries\Format\Form\Rule;
 
 use Chamilo\Core\User\Storage\DataClass\User;
 use Chamilo\Libraries\Storage\DataManager\DataManager;
-use Chamilo\Libraries\Storage\Parameters\DataClassCountParameters;
+use Chamilo\Libraries\Storage\Parameters\DataClassParameters;
 use Chamilo\Libraries\Storage\Query\Condition\AndCondition;
 use Chamilo\Libraries\Storage\Query\Condition\EqualityCondition;
 use Chamilo\Libraries\Storage\Query\Condition\NotCondition;
@@ -22,7 +22,7 @@ class HTML_QuickForm_Rule_UsernameAvailable extends HTML_QuickForm_Rule
     /**
      * Function to check if a username is available
      *
-     * @param string $value   Wanted username
+     * @param string $value Wanted username
      * @param string $options The current username
      *
      * @return bool True if username is available
@@ -47,7 +47,7 @@ class HTML_QuickForm_Rule_UsernameAvailable extends HTML_QuickForm_Rule
 
         $condition = new AndCondition($conditions);
         $count = DataManager::count(
-            User::class, new DataClassCountParameters(condition: $condition)
+            User::class, new DataClassParameters(condition: $condition)
         );
 
         return $count == 0;

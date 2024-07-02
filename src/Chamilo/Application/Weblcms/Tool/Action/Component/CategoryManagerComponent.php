@@ -10,7 +10,7 @@ use Chamilo\Configuration\Category\Interfaces\CategorySupport;
 use Chamilo\Libraries\Architecture\Application\ApplicationConfiguration;
 use Chamilo\Libraries\Architecture\Exceptions\NotAllowedException;
 use Chamilo\Libraries\Format\Breadcrumb\BreadcrumbLessComponentInterface;
-use Chamilo\Libraries\Storage\Parameters\DataClassCountParameters;
+use Chamilo\Libraries\Storage\Parameters\DataClassParameters;
 use Chamilo\Libraries\Storage\Parameters\RetrievesParameters;
 use Chamilo\Libraries\Storage\Query\Condition\AndCondition;
 use Chamilo\Libraries\Storage\Query\Condition\EqualityCondition;
@@ -149,7 +149,7 @@ class CategoryManagerComponent extends Manager implements BreadcrumbLessComponen
         $condition = new AndCondition($conditions);
 
         return DataManager::count(
-            ContentObjectPublicationCategory::class, new DataClassCountParameters(condition: $condition)
+            ContentObjectPublicationCategory::class, new DataClassParameters(condition: $condition)
         );
     }
 
@@ -206,6 +206,20 @@ class CategoryManagerComponent extends Manager implements BreadcrumbLessComponen
         return $this->type;
     }
 
+    /**
+     * Sets the type
+     *
+     * @param int $type
+     */
+    public function set_type($type)
+    {
+        $this->type = $type;
+    }
+
+    /*
+     * (non-PHPdoc) @see \configuration\category\CategorySupport::allowed_to_change_category_visibility()
+     */
+
     private function have_subcategories_publications($category_id)
     {
         $condition = new EqualityCondition(
@@ -230,7 +244,7 @@ class CategoryManagerComponent extends Manager implements BreadcrumbLessComponen
     }
 
     /*
-     * (non-PHPdoc) @see \configuration\category\CategorySupport::allowed_to_change_category_visibility()
+     * (non-PHPdoc) @see \configuration\category\CategorySupport::get_category_parameters()
      */
 
     public function retrieve_categories($condition, $offset = null, $count = null, $order_property = null)
@@ -257,19 +271,5 @@ class CategoryManagerComponent extends Manager implements BreadcrumbLessComponen
             ContentObjectPublicationCategory::class,
             new RetrievesParameters(condition: $condition, count: $count, offset: $offset, orderBy: $order_property)
         );
-    }
-
-    /*
-     * (non-PHPdoc) @see \configuration\category\CategorySupport::get_category_parameters()
-     */
-
-    /**
-     * Sets the type
-     *
-     * @param int $type
-     */
-    public function set_type($type)
-    {
-        $this->type = $type;
     }
 }

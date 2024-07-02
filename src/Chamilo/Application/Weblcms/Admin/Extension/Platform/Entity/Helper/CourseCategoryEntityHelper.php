@@ -11,8 +11,7 @@ use Chamilo\Application\Weblcms\Storage\DataClass\CourseCategory;
 use Chamilo\Configuration\Category\Storage\DataClass\PlatformCategory;
 use Chamilo\Libraries\Format\Table\Column\DataClassPropertyTableColumn;
 use Chamilo\Libraries\Format\Table\Column\StaticTableColumn;
-use Chamilo\Libraries\Storage\Parameters\DataClassCountParameters;
-use Chamilo\Libraries\Storage\Parameters\DataClassDistinctParameters;
+use Chamilo\Libraries\Storage\Parameters\DataClassParameters;
 use Chamilo\Libraries\Storage\Parameters\RetrievesParameters;
 use Chamilo\Libraries\Storage\Query\Condition\EqualityCondition;
 use Chamilo\Libraries\Storage\Query\Condition\InCondition;
@@ -48,15 +47,14 @@ class CourseCategoryEntityHelper
      */
     public function count_table_data($condition)
     {
-        $parameters = new DataClassCountParameters(
+        $parameters = new DataClassParameters(
             condition: $condition, joins: self::get_joins(), retrieveProperties: new RetrieveProperties(
-                [
-                    new FunctionConditionVariable(
-                        FunctionConditionVariable::DISTINCT,
-                        new PropertyConditionVariable(Admin::class, Admin::PROPERTY_ID)
-                    )
-                ]
-            )
+            [
+                new FunctionConditionVariable(
+                    FunctionConditionVariable::DISTINCT, new PropertyConditionVariable(Admin::class, Admin::PROPERTY_ID)
+                )
+            ]
+        )
         );
 
         return DataManager::count(Admin::class, $parameters);
@@ -100,7 +98,7 @@ class CourseCategoryEntityHelper
                 new PropertyConditionVariable(Course::class, Course::PROPERTY_CATEGORY_ID), $course_category_ids
             );
 
-            $parameters = new DataClassDistinctParameters(
+            $parameters = new DataClassParameters(
                 condition: $condition, retrieveProperties: new RetrieveProperties(
                 [new PropertyConditionVariable(Course::class, Course::PROPERTY_ID)]
             )

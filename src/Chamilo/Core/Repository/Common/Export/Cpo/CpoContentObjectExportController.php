@@ -15,7 +15,7 @@ use Chamilo\Core\Repository\Workspace\Storage\DataClass\WorkspaceContentObjectRe
 use Chamilo\Core\User\Manager;
 use Chamilo\Libraries\Architecture\Interfaces\ComplexContentObjectSupportInterface;
 use Chamilo\Libraries\File\Compression\ZipArchive\ZipArchiveFilecompression;
-use Chamilo\Libraries\Storage\Parameters\RetrievesParameters;
+use Chamilo\Libraries\Storage\Parameters\DataClassParameters;
 use Chamilo\Libraries\Storage\Query\Condition\EqualityCondition;
 use Chamilo\Libraries\Storage\Query\Condition\InCondition;
 use Chamilo\Libraries\Storage\Query\Variable\PropertyConditionVariable;
@@ -82,7 +82,7 @@ class CpoContentObjectExportController extends ContentObjectExportController
             $condition = null;
         }
 
-        $parameters = new RetrievesParameters(condition: $condition);
+        $parameters = new DataClassParameters(condition: $condition);
         $content_objects = DataManager::retrieve_active_content_objects(ContentObject::class, $parameters);
 
         foreach ($content_objects as $content_object)
@@ -185,6 +185,11 @@ class CpoContentObjectExportController extends ContentObjectExportController
     public function get_category_id_cache()
     {
         return $this->category_id_cache;
+    }
+
+    public function set_category_id_cache($category_id)
+    {
+        $this->category_id_cache[] = $category_id;
     }
 
     /**
@@ -317,11 +322,27 @@ class CpoContentObjectExportController extends ContentObjectExportController
     }
 
     /**
+     * @param $dom_document DOMDocument
+     */
+    public function set_dom_document($dom_document)
+    {
+        $this->dom_document = $dom_document;
+    }
+
+    /**
      * @return DOMXPath
      */
     public function get_dom_xpath()
     {
         return $this->dom_xpath;
+    }
+
+    /**
+     * @param $dom_xpath DOMXPath
+     */
+    public function set_dom_xpath($dom_xpath)
+    {
+        $this->dom_xpath = $dom_xpath;
     }
 
     /**
@@ -349,6 +370,11 @@ class CpoContentObjectExportController extends ContentObjectExportController
     public function get_id_cache()
     {
         return $this->id_cache;
+    }
+
+    public function set_id_cache($id)
+    {
+        $this->id_cache[] = $id;
     }
 
     public function get_xml_path()
@@ -445,7 +471,7 @@ class CpoContentObjectExportController extends ContentObjectExportController
             ), new StaticConditionVariable($content_object->get_id())
         );
         $content_object_attachments = DataManager::retrieves(
-            ContentObjectAttachment::class, new RetrievesParameters(condition: $condition)
+            ContentObjectAttachment::class, new DataClassParameters(condition: $condition)
         );
 
         if ($content_object_attachments->count() > 0)
@@ -553,6 +579,10 @@ class CpoContentObjectExportController extends ContentObjectExportController
         }
     }
 
+    /*
+     * (non-PHPdoc) @see repository.ContentObjectExportController::get_filename()
+     */
+
     /**
      * @param $content_object ContentObject
      */
@@ -613,7 +643,7 @@ class CpoContentObjectExportController extends ContentObjectExportController
             ), new StaticConditionVariable($content_object->get_id())
         );
         $content_object_includes = DataManager::retrieves(
-            ContentObjectInclude::class, new RetrievesParameters(condition: $condition)
+            ContentObjectInclude::class, new DataClassParameters(condition: $condition)
         );
 
         if ($content_object_includes->count() > 0)
@@ -627,36 +657,6 @@ class CpoContentObjectExportController extends ContentObjectExportController
                 }
             }
         }
-    }
-
-    public function set_category_id_cache($category_id)
-    {
-        $this->category_id_cache[] = $category_id;
-    }
-
-    /*
-     * (non-PHPdoc) @see repository.ContentObjectExportController::get_filename()
-     */
-
-    /**
-     * @param $dom_document DOMDocument
-     */
-    public function set_dom_document($dom_document)
-    {
-        $this->dom_document = $dom_document;
-    }
-
-    /**
-     * @param $dom_xpath DOMXPath
-     */
-    public function set_dom_xpath($dom_xpath)
-    {
-        $this->dom_xpath = $dom_xpath;
-    }
-
-    public function set_id_cache($id)
-    {
-        $this->id_cache[] = $id;
     }
 
     public function zip()

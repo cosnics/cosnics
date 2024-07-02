@@ -16,7 +16,7 @@ use Chamilo\Libraries\Architecture\Exceptions\NotAllowedException;
 use Chamilo\Libraries\Architecture\Exceptions\ObjectNotExistException;
 use Chamilo\Libraries\Format\Breadcrumb\BreadcrumbLessComponentInterface;
 use Chamilo\Libraries\Storage\DataManager\DataManager;
-use Chamilo\Libraries\Storage\Parameters\DataClassCountParameters;
+use Chamilo\Libraries\Storage\Parameters\DataClassParameters;
 use Chamilo\Libraries\Storage\Query\Condition\AndCondition;
 use Chamilo\Libraries\Storage\Query\Condition\EqualityCondition;
 use Chamilo\Libraries\Storage\Query\Variable\PropertyConditionVariable;
@@ -109,7 +109,7 @@ class ViewerComponent extends Manager implements ForumDisplaySupport, Breadcrumb
         $condition = new AndCondition($conditions);
 
         return DataManager::count(
-            ForumTopicView::class, new DataClassCountParameters(condition: $condition)
+            ForumTopicView::class, new DataClassParameters(condition: $condition)
         );
     }
 

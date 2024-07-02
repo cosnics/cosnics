@@ -39,7 +39,7 @@ use Chamilo\Libraries\Architecture\Exceptions\ObjectNotExistException;
 use Chamilo\Libraries\Architecture\Exceptions\UserException;
 use Chamilo\Libraries\Format\Breadcrumb\BreadcrumbLessComponentInterface;
 use Chamilo\Libraries\Format\Structure\PageConfiguration;
-use Chamilo\Libraries\Storage\Parameters\DataClassCountParameters;
+use Chamilo\Libraries\Storage\Parameters\DataClassParameters;
 use Chamilo\Libraries\Storage\Query\Condition\AndCondition;
 use Chamilo\Libraries\Storage\Query\Condition\EqualityCondition;
 use Chamilo\Libraries\Storage\Query\Variable\PropertyConditionVariable;
@@ -239,7 +239,7 @@ class ComplexDisplayComponent extends Manager
         );
         $condition = new AndCondition($conditions);
 
-        return DataManager::count(ForumTopicView::class, new DataClassCountParameters(condition: $condition));
+        return DataManager::count(ForumTopicView::class, new DataClassParameters(condition: $condition));
     }
 
     public function forum_topic_viewed($complex_topic_id)

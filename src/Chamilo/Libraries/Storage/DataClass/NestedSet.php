@@ -2,9 +2,7 @@
 namespace Chamilo\Libraries\Storage\DataClass;
 
 use Chamilo\Libraries\Storage\DataManager\DataManager;
-use Chamilo\Libraries\Storage\Parameters\DataClassCountParameters;
-use Chamilo\Libraries\Storage\Parameters\RetrieveParameters;
-use Chamilo\Libraries\Storage\Parameters\RetrievesParameters;
+use Chamilo\Libraries\Storage\Parameters\DataClassParameters;
 use Chamilo\Libraries\Storage\Query\Condition\AndCondition;
 use Chamilo\Libraries\Storage\Query\Condition\ComparisonCondition;
 use Chamilo\Libraries\Storage\Query\Condition\Condition;
@@ -193,7 +191,7 @@ abstract class NestedSet extends DataClass
     {
         return DataManager::count(
             get_class($this),
-            new DataClassCountParameters(condition: $this->build_ancestry_condition($include_self, $condition))
+            new DataClassParameters(condition: $this->build_ancestry_condition($include_self, $condition))
         );
     }
 
@@ -204,7 +202,7 @@ abstract class NestedSet extends DataClass
     {
         return DataManager::count(
             get_class($this),
-            new DataClassCountParameters(condition: $this->build_offspring_condition(false, false, $condition))
+            new DataClassParameters(condition: $this->build_offspring_condition(false, false, $condition))
         );
     }
 
@@ -215,7 +213,7 @@ abstract class NestedSet extends DataClass
     {
         return DataManager::count(
             get_class($this),
-            new DataClassCountParameters(condition: $this->build_offspring_condition(true, false, $condition))
+            new DataClassParameters(condition: $this->build_offspring_condition(true, false, $condition))
         );
     }
 
@@ -226,7 +224,7 @@ abstract class NestedSet extends DataClass
     {
         return DataManager::count(
             get_class($this),
-            new DataClassCountParameters(condition: $this->build_sibling_condition($include_self, $condition))
+            new DataClassParameters(condition: $this->build_sibling_condition($include_self, $condition))
         );
     }
 
@@ -386,7 +384,7 @@ abstract class NestedSet extends DataClass
         );
 
         return DataManager::retrieve(
-            get_class($this), new RetrieveParameters(condition: new AndCondition($conditions))
+            get_class($this), new DataClassParameters(condition: new AndCondition($conditions))
         );
     }
 
@@ -437,7 +435,7 @@ abstract class NestedSet extends DataClass
     public function get_ancestors(bool $include_self = true, ?Condition $condition = null): ArrayCollection
     {
         return DataManager::retrieves(
-            get_class($this), new RetrievesParameters(
+            get_class($this), new DataClassParameters(
                 condition: $this->build_ancestry_condition($include_self, $condition),
                 orderBy: $this->build_post_order_ordering()
             )
@@ -454,7 +452,7 @@ abstract class NestedSet extends DataClass
     {
         return DataManager::retrieves(
             get_class($this),
-            new RetrievesParameters(condition: $this->build_offspring_condition(false, false, $condition))
+            new DataClassParameters(condition: $this->build_offspring_condition(false, false, $condition))
         );
     }
 
@@ -468,7 +466,7 @@ abstract class NestedSet extends DataClass
     {
         return DataManager::retrieves(
             get_class($this),
-            new RetrievesParameters(condition: $this->build_offspring_condition(true, false, $condition))
+            new DataClassParameters(condition: $this->build_offspring_condition(true, false, $condition))
         );
     }
 
@@ -528,7 +526,7 @@ abstract class NestedSet extends DataClass
     public function get_siblings(bool $include_self = true, ?Condition $condition = null): ArrayCollection
     {
         return DataManager::retrieves(
-            get_class($this), new RetrievesParameters(
+            get_class($this), new DataClassParameters(
                 condition: $this->build_sibling_condition($include_self, $condition),
                 orderBy: $this->build_pre_order_ordering()
             )

@@ -9,8 +9,7 @@ use Chamilo\Core\Metadata\Storage\DataClass\SchemaInstance;
 use Chamilo\Core\Metadata\Storage\DataClass\Vocabulary;
 use Chamilo\Core\User\Storage\DataClass\User;
 use Chamilo\Libraries\Storage\DataManager\DataManager;
-use Chamilo\Libraries\Storage\Parameters\RetrieveParameters;
-use Chamilo\Libraries\Storage\Parameters\RetrievesParameters;
+use Chamilo\Libraries\Storage\Parameters\DataClassParameters;
 use Chamilo\Libraries\Storage\Query\Condition\AndCondition;
 use Chamilo\Libraries\Storage\Query\Condition\EqualityCondition;
 use Chamilo\Libraries\Storage\Query\Variable\PropertyConditionVariable;
@@ -59,7 +58,7 @@ class VocabularyService
         if (!$vocabulary->create())
         {
             throw new Exception(
-                Translation::get('ObjectCreationFailed', array('OBJECT' => 'Vocabulary'), StringUtilities::LIBRARIES)
+                Translation::get('ObjectCreationFailed', ['OBJECT' => 'Vocabulary'], StringUtilities::LIBRARIES)
             );
         }
 
@@ -142,7 +141,7 @@ class VocabularyService
 
         $condition = new AndCondition($conditions);
 
-        return DataManager::retrieves(Vocabulary::class, new RetrievesParameters(condition: $condition));
+        return DataManager::retrieves(Vocabulary::class, new DataClassParameters(condition: $condition));
     }
 
     /**
@@ -357,6 +356,6 @@ class VocabularyService
 
         $condition = new AndCondition($conditions);
 
-        return DataManager::retrieve(Vocabulary::class, new RetrieveParameters(condition: $condition));
+        return DataManager::retrieve(Vocabulary::class, new DataClassParameters(condition: $condition));
     }
 }

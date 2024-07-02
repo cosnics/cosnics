@@ -10,7 +10,7 @@ use Chamilo\Core\Tracking\Storage\DataClass\Event;
 use Chamilo\Libraries\Architecture\Application\Application;
 use Chamilo\Libraries\Format\Breadcrumb\BreadcrumbTrail;
 use Chamilo\Libraries\Format\Structure\Breadcrumb;
-use Chamilo\Libraries\Storage\Parameters\DataClassCountParameters;
+use Chamilo\Libraries\Storage\Parameters\DataClassParameters;
 use Chamilo\Libraries\Storage\Query\Condition\EqualityCondition;
 use Chamilo\Libraries\Storage\Query\Variable\PropertyConditionVariable;
 use Chamilo\Libraries\Storage\Query\Variable\StaticConditionVariable;
@@ -162,6 +162,6 @@ class RestorerComponent extends Manager
             new StaticConditionVariable($id)
         );
 
-        return (DataManager::count(RepositoryCategory::class, new DataClassCountParameters(condition: $condition)) > 0);
+        return (DataManager::count(RepositoryCategory::class, new DataClassParameters(condition: $condition)) > 0);
     }
 }

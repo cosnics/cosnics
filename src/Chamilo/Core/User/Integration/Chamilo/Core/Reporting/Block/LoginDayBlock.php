@@ -5,7 +5,7 @@ use Chamilo\Core\Reporting\ReportingData;
 use Chamilo\Core\Reporting\Viewer\Rendition\Block\Type\Html;
 use Chamilo\Core\User\Integration\Chamilo\Core\Tracking\Storage\DataClass\LoginLogout;
 use Chamilo\Libraries\Storage\DataManager\DataManager;
-use Chamilo\Libraries\Storage\Parameters\RetrievesParameters;
+use Chamilo\Libraries\Storage\Parameters\DataClassParameters;
 use Chamilo\Libraries\Storage\Query\Condition\AndCondition;
 use Chamilo\Libraries\Storage\Query\Condition\EqualityCondition;
 use Chamilo\Libraries\Storage\Query\Variable\PropertyConditionVariable;
@@ -40,7 +40,7 @@ class LoginDayBlock extends Block
         $condition = new AndCondition($conditions);
 
         $data = DataManager::retrieves(
-            LoginLogout::class, new RetrievesParameters(condition: $condition)
+            LoginLogout::class, new DataClassParameters(condition: $condition)
         );
 
         $days = [];
@@ -58,7 +58,7 @@ class LoginDayBlock extends Block
         }
         $new_days = [];
 
-        $day_names = array(
+        $day_names = [
             Translation::get('MondayLong', null, StringUtilities::LIBRARIES),
             Translation::get('TuesdayLong', null, StringUtilities::LIBRARIES),
             Translation::get('WednesdayLong', null, StringUtilities::LIBRARIES),
@@ -66,10 +66,10 @@ class LoginDayBlock extends Block
             Translation::get('FridayLong', null, StringUtilities::LIBRARIES),
             Translation::get('SaturdayLong', null, StringUtilities::LIBRARIES),
             Translation::get('SundayLong', null, StringUtilities::LIBRARIES)
-        );
+        ];
 
         $reporting_data->set_categories($day_names);
-        $reporting_data->set_rows(array(Translation::get('Logins')));
+        $reporting_data->set_rows([Translation::get('Logins')]);
 
         foreach ($day_names as $key => $name)
         {
@@ -83,11 +83,22 @@ class LoginDayBlock extends Block
 
     public function get_views()
     {
-        return array(
-            Html::VIEW_TABLE, Html::VIEW_STACKED_AREA, Html::VIEW_STACKED_BAR, Html::VIEW_RADAR, Html::VIEW_POLAR,
-            Html::VIEW_3D_PIE, Html::VIEW_PIE, Html::VIEW_RING, Html::VIEW_BAR, Html::VIEW_LINE, Html::VIEW_AREA,
-            Html::VIEW_CSV, Html::VIEW_XLSX, Html::VIEW_XML
-        );
+        return [
+            Html::VIEW_TABLE,
+            Html::VIEW_STACKED_AREA,
+            Html::VIEW_STACKED_BAR,
+            Html::VIEW_RADAR,
+            Html::VIEW_POLAR,
+            Html::VIEW_3D_PIE,
+            Html::VIEW_PIE,
+            Html::VIEW_RING,
+            Html::VIEW_BAR,
+            Html::VIEW_LINE,
+            Html::VIEW_AREA,
+            Html::VIEW_CSV,
+            Html::VIEW_XLSX,
+            Html::VIEW_XML
+        ];
     }
 
     public function retrieve_data()

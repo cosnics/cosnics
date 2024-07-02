@@ -4,8 +4,7 @@ namespace Chamilo\Application\Calendar\Repository;
 use Chamilo\Application\Calendar\Storage\DataClass\Availability;
 use Chamilo\Core\User\Storage\DataClass\User;
 use Chamilo\Libraries\Storage\DataManager\Repository\DataClassRepository;
-use Chamilo\Libraries\Storage\Parameters\RetrieveParameters;
-use Chamilo\Libraries\Storage\Parameters\RetrievesParameters;
+use Chamilo\Libraries\Storage\Parameters\DataClassParameters;
 use Chamilo\Libraries\Storage\Query\Condition\AndCondition;
 use Chamilo\Libraries\Storage\Query\Condition\EqualityCondition;
 use Chamilo\Libraries\Storage\Query\Variable\PropertyConditionVariable;
@@ -54,7 +53,7 @@ class AvailabilityRepository
         $condition = new AndCondition($conditions);
 
         return $this->getDataClassRepository()->retrieves(
-            Availability::class, new RetrievesParameters(condition: $condition)
+            Availability::class, new DataClassParameters(condition: $condition)
         );
     }
 
@@ -91,7 +90,7 @@ class AvailabilityRepository
         $condition = new AndCondition($conditions);
 
         return $this->getDataClassRepository()->retrieves(
-            Availability::class, new RetrievesParameters(condition: $condition)
+            Availability::class, new DataClassParameters(condition: $condition)
         );
     }
 
@@ -115,7 +114,7 @@ class AvailabilityRepository
         $condition = new AndCondition($conditions);
 
         return $this->getDataClassRepository()->retrieve(
-            Availability::class, new RetrieveParameters(condition: $condition)
+            Availability::class, new DataClassParameters(condition: $condition)
         );
     }
 

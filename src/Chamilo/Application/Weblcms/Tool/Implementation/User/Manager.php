@@ -5,7 +5,7 @@ use Chamilo\Application\Weblcms\Course\Storage\DataManager;
 use Chamilo\Application\Weblcms\Storage\DataClass\CourseEntityRelation;
 use Chamilo\Libraries\Format\Breadcrumb\BreadcrumbTrail;
 use Chamilo\Libraries\Format\Structure\Breadcrumb;
-use Chamilo\Libraries\Storage\Parameters\DataClassDistinctParameters;
+use Chamilo\Libraries\Storage\Parameters\DataClassParameters;
 use Chamilo\Libraries\Storage\Query\Condition\AndCondition;
 use Chamilo\Libraries\Storage\Query\Condition\EqualityCondition;
 use Chamilo\Libraries\Storage\Query\RetrieveProperties;
@@ -137,7 +137,7 @@ abstract class Manager extends \Chamilo\Application\Weblcms\Tool\Manager
         );
 
         return DataManager::distinct(
-            CourseEntityRelation::class, new DataClassDistinctParameters(
+            CourseEntityRelation::class, new DataClassParameters(
                 condition: new AndCondition($conditions), retrieveProperties: new RetrieveProperties(
                 [
                     new PropertyConditionVariable(

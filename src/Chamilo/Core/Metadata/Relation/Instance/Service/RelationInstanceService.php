@@ -6,7 +6,7 @@ use Chamilo\Core\Metadata\Entity\DataClassEntityFactory;
 use Chamilo\Core\Metadata\Storage\DataClass\RelationInstance;
 use Chamilo\Core\User\Storage\DataClass\User;
 use Chamilo\Libraries\Storage\DataManager\DataManager;
-use Chamilo\Libraries\Storage\Parameters\DataClassCountParameters;
+use Chamilo\Libraries\Storage\Parameters\DataClassParameters;
 use Chamilo\Libraries\Storage\Query\Condition\AndCondition;
 use Chamilo\Libraries\Storage\Query\Condition\EqualityCondition;
 use Chamilo\Libraries\Storage\Query\Variable\PropertyConditionVariable;
@@ -21,8 +21,8 @@ use Chamilo\Libraries\Storage\Query\Variable\StaticConditionVariable;
  */
 class RelationInstanceService
 {
-    const PROPERTY_SOURCE = 'source';
-    const PROPERTY_TARGET = 'target';
+    public const PROPERTY_SOURCE = 'source';
+    public const PROPERTY_TARGET = 'target';
 
     /**
      *
@@ -43,10 +43,10 @@ class RelationInstanceService
      *
      * @param User $user
      * @param \Chamilo\Core\Metadata\Entity\DataClassEntity[] $sourceEntities
-     * @param integer[] $relationIds
+     * @param int $relationIds
      * @param \Chamilo\Core\Metadata\Entity\DataClassEntity[] $targetEntities
      *
-     * @return boolean
+     * @return bool
      * @throws \Exception
      */
     public function createRelationInstances(User $user, $sourceEntities, $relationIds, $targetEntities)
@@ -93,7 +93,7 @@ class RelationInstanceService
      * @param \Chamilo\Core\User\Storage\DataClass\User $user
      * @param string[][] $submittedValues
      *
-     * @return boolean
+     * @return bool
      */
     public function createRelationInstancesFromSubmittedValues(User $user, $submittedValues)
     {
@@ -132,12 +132,12 @@ class RelationInstanceService
     /**
      *
      * @param string $sourceType
-     * @param integer $sourceIdentifier
+     * @param int $sourceIdentifier
      * @param string $targetType
-     * @param integer $targetIdentifier
-     * @param integer $relationId
+     * @param int $targetIdentifier
+     * @param int $relationId
      *
-     * @return boolean
+     * @return bool
      */
     public function relationInstanceExists($sourceType, $sourceIdentifier, $targetType, $targetIdentifier, $relationId)
     {
@@ -170,6 +170,6 @@ class RelationInstanceService
 
         $condition = new AndCondition($conditions);
 
-        return DataManager::count(RelationInstance::class, new DataClassCountParameters(condition: $condition)) > 0;
+        return DataManager::count(RelationInstance::class, new DataClassParameters(condition: $condition)) > 0;
     }
 }

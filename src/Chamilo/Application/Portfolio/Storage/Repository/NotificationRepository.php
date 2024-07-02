@@ -3,8 +3,7 @@ namespace Chamilo\Application\Portfolio\Storage\Repository;
 
 use Chamilo\Application\Portfolio\Storage\DataClass\Notification;
 use Chamilo\Libraries\Storage\DataManager\Repository\DataClassRepository;
-use Chamilo\Libraries\Storage\Parameters\RetrieveParameters;
-use Chamilo\Libraries\Storage\Parameters\RetrievesParameters;
+use Chamilo\Libraries\Storage\Parameters\DataClassParameters;
 use Chamilo\Libraries\Storage\Query\Condition\AndCondition;
 use Chamilo\Libraries\Storage\Query\Condition\EqualityCondition;
 use Chamilo\Libraries\Storage\Query\Variable\PropertyConditionVariable;
@@ -64,7 +63,7 @@ class NotificationRepository
         $condition = new AndCondition($conditions);
 
         return $this->getDataClassRepository()->retrieve(
-            Notification::class, new RetrieveParameters(condition: $condition)
+            Notification::class, new DataClassParameters(condition: $condition)
         );
     }
 
@@ -94,7 +93,7 @@ class NotificationRepository
         $condition = new AndCondition($conditions);
 
         return $this->getDataClassRepository()->retrieves(
-            Notification::class, new RetrievesParameters(condition: $condition)
+            Notification::class, new DataClassParameters(condition: $condition)
         );
     }
 

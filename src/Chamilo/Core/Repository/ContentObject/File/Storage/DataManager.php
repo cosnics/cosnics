@@ -2,7 +2,7 @@
 namespace Chamilo\Core\Repository\ContentObject\File\Storage;
 
 use Chamilo\Core\Repository\ContentObject\File\Storage\DataClass\File;
-use Chamilo\Libraries\Storage\Parameters\DataClassCountParameters;
+use Chamilo\Libraries\Storage\Parameters\DataClassParameters;
 use Chamilo\Libraries\Storage\Query\Condition\AndCondition;
 use Chamilo\Libraries\Storage\Query\Condition\EqualityCondition;
 use Chamilo\Libraries\Storage\Query\Variable\PropertyConditionVariable;
@@ -10,7 +10,7 @@ use Chamilo\Libraries\Storage\Query\Variable\StaticConditionVariable;
 
 class DataManager extends \Chamilo\Libraries\Storage\DataManager\DataManager
 {
-    const PREFIX = 'repository_';
+    public const PREFIX = 'repository_';
 
     public static function get_file_id_by_hash($hash)
     {
@@ -42,7 +42,7 @@ class DataManager extends \Chamilo\Libraries\Storage\DataManager\DataManager
         $condition = new AndCondition($conditions);
 
         $count = \Chamilo\Core\Repository\Storage\DataManager::count_content_objects(
-            File::class, new DataClassCountParameters(condition: $condition)
+            File::class, new DataClassParameters(condition: $condition)
         );
 
         return $count == 1;

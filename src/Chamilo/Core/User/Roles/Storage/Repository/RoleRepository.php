@@ -5,9 +5,7 @@ use Chamilo\Core\User\Roles\Storage\DataClass\Role;
 use Chamilo\Core\User\Roles\Storage\Repository\Interfaces\RoleRepositoryInterface;
 use Chamilo\Libraries\Storage\DataManager\Repository\DataClassRepository;
 use Chamilo\Libraries\Storage\DataManager\Repository\DataManagerRepository;
-use Chamilo\Libraries\Storage\Parameters\DataClassCountParameters;
-use Chamilo\Libraries\Storage\Parameters\RetrieveParameters;
-use Chamilo\Libraries\Storage\Parameters\RetrievesParameters;
+use Chamilo\Libraries\Storage\Parameters\DataClassParameters;
 use Chamilo\Libraries\Storage\Query\Condition\Condition;
 use Chamilo\Libraries\Storage\Query\Condition\EqualityCondition;
 use Chamilo\Libraries\Storage\Query\OrderBy;
@@ -31,7 +29,7 @@ class RoleRepository extends DataManagerRepository implements RoleRepositoryInte
 
     public function countRoles(?Condition $condition = null): int
     {
-        return $this->getDataClassRepository()->count(Role::class, new DataClassCountParameters(condition: $condition));
+        return $this->getDataClassRepository()->count(Role::class, new DataClassParameters(condition: $condition));
     }
 
     public function createRole(Role $role): bool
@@ -50,7 +48,7 @@ class RoleRepository extends DataManagerRepository implements RoleRepositoryInte
             new PropertyConditionVariable(Role::class, Role::PROPERTY_ROLE), new StaticConditionVariable($roleName)
         );
 
-        return $this->getDataClassRepository()->retrieve(Role::class, new RetrieveParameters(condition: $condition));
+        return $this->getDataClassRepository()->retrieve(Role::class, new DataClassParameters(condition: $condition));
     }
 
     /**
@@ -61,8 +59,8 @@ class RoleRepository extends DataManagerRepository implements RoleRepositoryInte
     ): ArrayCollection
     {
         return $this->getDataClassRepository()->retrieves(
-            Role::class, new RetrievesParameters(
-                condition: $condition, count: $count, offset: $offset, orderBy: $orderBy
+            Role::class, new DataClassParameters(
+                condition: $condition, orderBy: $orderBy, count: $count, offset: $offset
             )
         );
     }

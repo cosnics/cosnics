@@ -3,11 +3,11 @@ namespace Chamilo\Core\Repository\ContentObject\Assessment\ResultsExporter;
 
 use Chamilo\Core\Repository\Storage\DataClass\ComplexContentObjectItem;
 use Chamilo\Core\User\Storage\DataClass\User;
-use Chamilo\Libraries\Storage\DataManager\DataManager;
 use Chamilo\Libraries\DependencyInjection\DependencyInjectionContainerBuilder;
 use Chamilo\Libraries\File\ConfigurablePathBuilder;
 use Chamilo\Libraries\File\FilesystemTools;
-use Chamilo\Libraries\Storage\Parameters\RetrievesParameters;
+use Chamilo\Libraries\Storage\DataManager\DataManager;
+use Chamilo\Libraries\Storage\Parameters\DataClassParameters;
 use Chamilo\Libraries\Storage\Query\Condition\EqualityCondition;
 use Chamilo\Libraries\Storage\Query\Variable\PropertyConditionVariable;
 use Chamilo\Libraries\Storage\Query\Variable\StaticConditionVariable;
@@ -201,7 +201,7 @@ class AssessmentResultsExportController
 
         $complex_questions_resultset =
             \Chamilo\Core\Repository\Storage\DataManager::retrieve_complex_content_object_items(
-                ComplexContentObjectItem::class, new RetrievesParameters(condition: $condition)
+                ComplexContentObjectItem::class, new DataClassParameters(condition: $condition)
             );
 
         foreach ($complex_questions_resultset as $complex_question)
@@ -391,6 +391,16 @@ class AssessmentResultsExportController
     }
 
     /**
+     * Sets the assessment results
+     *
+     * @param AssessmentResult[] $assessment_results
+     */
+    public function set_assessment_results($assessment_results)
+    {
+        $this->assessment_results = $assessment_results;
+    }
+
+    /**
      * Returns the assessments
      *
      * @return Assessment[]
@@ -398,6 +408,16 @@ class AssessmentResultsExportController
     public function get_assessments()
     {
         return $this->assessments;
+    }
+
+    /**
+     * Sets the assessments
+     *
+     * @param Assessment[] $assessments
+     */
+    public function set_assessments($assessments)
+    {
+        $this->assessments = $assessments;
     }
 
     /**
@@ -412,25 +432,5 @@ class AssessmentResultsExportController
                 $this->question_results_by_question[$question_result->get_complex_question_id()][] = $question_result;
             }
         }
-    }
-
-    /**
-     * Sets the assessment results
-     *
-     * @param AssessmentResult[] $assessment_results
-     */
-    public function set_assessment_results($assessment_results)
-    {
-        $this->assessment_results = $assessment_results;
-    }
-
-    /**
-     * Sets the assessments
-     *
-     * @param Assessment[] $assessments
-     */
-    public function set_assessments($assessments)
-    {
-        $this->assessments = $assessments;
     }
 }

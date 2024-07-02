@@ -14,8 +14,7 @@ use Chamilo\Libraries\Format\Structure\ActionBar\ButtonToolBar;
 use Chamilo\Libraries\Format\Structure\ActionBar\Renderer\ButtonToolBarRenderer;
 use Chamilo\Libraries\Format\Structure\Glyph\FontAwesomeGlyph;
 use Chamilo\Libraries\Format\Table\RequestTableParameterValuesCompiler;
-use Chamilo\Libraries\Storage\Parameters\DataClassCountParameters;
-use Chamilo\Libraries\Storage\Parameters\RetrievesParameters;
+use Chamilo\Libraries\Storage\Parameters\DataClassParameters;
 use Chamilo\Libraries\Storage\Query\Condition\AndCondition;
 use Chamilo\Libraries\Storage\Query\Condition\ComparisonCondition;
 use Chamilo\Libraries\Storage\Query\OrderProperty;
@@ -144,7 +143,7 @@ class BrowserComponent extends Manager
     protected function renderTable(): string
     {
         $totalNumberOfItems =
-            DataManager::count(Element::class, new DataClassCountParameters(condition: $this->getElementTableCondition()));
+            DataManager::count(Element::class, new DataClassParameters(condition: $this->getElementTableCondition()));
         $elementTableRenderer = $this->getElementTableRenderer();
 
         $tableParameterValues = $this->getRequestTableParameterValuesCompiler()->determineParameterValues(
@@ -160,9 +159,9 @@ class BrowserComponent extends Manager
         );
 
         $elements = DataManager::retrieves(
-            Element::class, new RetrievesParameters(
-                condition: $this->getElementTableCondition(), count: $tableParameterValues->getOffset(),
-                offset: $tableParameterValues->getNumberOfItemsPerPage(), orderBy: $orderBy
+            Element::class, new DataClassParameters(
+                condition: $this->getElementTableCondition(), orderBy: $orderBy,
+                count: $tableParameterValues->getOffset(), offset: $tableParameterValues->getNumberOfItemsPerPage()
             )
         );
 

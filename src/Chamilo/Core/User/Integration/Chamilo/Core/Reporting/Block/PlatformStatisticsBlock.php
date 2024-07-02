@@ -5,7 +5,7 @@ use Chamilo\Core\Reporting\ReportingData;
 use Chamilo\Core\Reporting\Viewer\Rendition\Block\Type\Html;
 use Chamilo\Core\User\Integration\Chamilo\Core\Tracking\Storage\DataClass\LoginLogout;
 use Chamilo\Libraries\Storage\DataManager\DataManager;
-use Chamilo\Libraries\Storage\Parameters\RetrievesParameters;
+use Chamilo\Libraries\Storage\Parameters\DataClassParameters;
 use Chamilo\Libraries\Storage\Query\Condition\AndCondition;
 use Chamilo\Libraries\Storage\Query\Condition\EqualityCondition;
 use Chamilo\Libraries\Storage\Query\Variable\PropertyConditionVariable;
@@ -35,7 +35,7 @@ class PlatformStatisticsBlock extends Block
         );
         $condition = new AndCondition($conditions);
 
-        $trackerdata = DataManager::retrieves(LoginLogout::class, new RetrievesParameters(condition: $condition));
+        $trackerdata = DataManager::retrieves(LoginLogout::class, new DataClassParameters(condition: $condition));
 
         $firstconnection = null;
         foreach ($trackerdata as $key => $value)
@@ -72,7 +72,7 @@ class PlatformStatisticsBlock extends Block
 
         $keys = array_keys($arr);
         $reporting_data->set_categories($keys);
-        $reporting_data->set_rows(array(Translation::get('Date')));
+        $reporting_data->set_rows([Translation::get('Date')]);
 
         foreach ($keys as $key => $name)
         {
@@ -84,7 +84,7 @@ class PlatformStatisticsBlock extends Block
 
     public function get_views()
     {
-        return array(Html::VIEW_TABLE, Html::VIEW_CSV, Html::VIEW_XLSX, Html::VIEW_XML);
+        return [Html::VIEW_TABLE, Html::VIEW_CSV, Html::VIEW_XLSX, Html::VIEW_XML];
     }
 
     /**

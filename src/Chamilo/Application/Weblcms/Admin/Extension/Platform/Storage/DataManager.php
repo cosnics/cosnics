@@ -6,7 +6,7 @@ use Chamilo\Application\Weblcms\Admin\Extension\Platform\Entity\UserEntity;
 use Chamilo\Application\Weblcms\Admin\Extension\Platform\Manager;
 use Chamilo\Application\Weblcms\Admin\Extension\Platform\Storage\DataClass\Admin;
 use Chamilo\Application\Weblcms\Course\Storage\DataClass\Course;
-use Chamilo\Libraries\Storage\Parameters\DataClassCountParameters;
+use Chamilo\Libraries\Storage\Parameters\DataClassParameters;
 use Chamilo\Libraries\Storage\Parameters\RetrievesParameters;
 use Chamilo\Libraries\Storage\Query\Condition\AndCondition;
 use Chamilo\Libraries\Storage\Query\Condition\EqualityCondition;
@@ -60,7 +60,7 @@ class DataManager extends \Chamilo\Libraries\Storage\DataManager\DataManager
 
             $condition = new OrCondition($expanded_entities_conditions);
 
-            return DataManager::count(Admin::class, new DataClassCountParameters(condition: $condition)) > 0;
+            return DataManager::count(Admin::class, new DataClassParameters(condition: $condition)) > 0;
         }
         else
         {
@@ -134,7 +134,7 @@ class DataManager extends \Chamilo\Libraries\Storage\DataManager\DataManager
 
         $condition = new AndCondition($conditions);
 
-        return DataManager::count(Admin::class, new DataClassCountParameters(condition: $condition)) > 0;
+        return DataManager::count(Admin::class, new DataClassParameters(condition: $condition)) > 0;
     }
 
     /**

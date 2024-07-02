@@ -14,7 +14,7 @@ use Chamilo\Libraries\Architecture\Exceptions\NotAllowedException;
 use Chamilo\Libraries\Format\Structure\Breadcrumb;
 use Chamilo\Libraries\Format\Structure\Page;
 use Chamilo\Libraries\Format\Structure\PageConfiguration;
-use Chamilo\Libraries\Storage\Parameters\RetrieveParameters;
+use Chamilo\Libraries\Storage\Parameters\DataClassParameters;
 use Chamilo\Libraries\Storage\Parameters\RetrievesParameters;
 use Chamilo\Libraries\Storage\Query\Condition\AndCondition;
 use Chamilo\Libraries\Storage\Query\Condition\EqualityCondition;
@@ -76,7 +76,7 @@ class AttemptResultViewerComponent extends Manager
         );
 
         $this->assessment_attempt = DataManager::retrieve(
-            AssessmentAttempt::class, new RetrieveParameters(condition: $condition)
+            AssessmentAttempt::class, new DataClassParameters(condition: $condition)
         );
 
         if (!$this->assessment_attempt)
@@ -93,7 +93,7 @@ class AttemptResultViewerComponent extends Manager
             ContentObjectPublication::class, $this->assessment_attempt->get_assessment_id()
         );
 
-        $parameters = new RetrieveParameters(
+        $parameters = new DataClassParameters(
             condition: new EqualityCondition(
                 new PropertyConditionVariable(Publication::class, Publication::PROPERTY_PUBLICATION_ID),
                 new StaticConditionVariable($this->assessment_publication->get_id())
@@ -204,7 +204,7 @@ class AttemptResultViewerComponent extends Manager
         $condition = new AndCondition($conditions);
 
         $question_attempt = DataManager::retrieve(
-            QuestionAttempt::class, new RetrieveParameters(condition: $condition)
+            QuestionAttempt::class, new DataClassParameters(condition: $condition)
         );
 
         $question_attempt->set_score($score);
@@ -239,7 +239,7 @@ class AttemptResultViewerComponent extends Manager
 
     public function get_assessment_configuration()
     {
-        $parameters = new RetrieveParameters(
+        $parameters = new DataClassParameters(
             condition: new EqualityCondition(
                 new PropertyConditionVariable(Publication::class, Publication::PROPERTY_PUBLICATION_ID),
                 new StaticConditionVariable($this->assessment_publication->get_id())

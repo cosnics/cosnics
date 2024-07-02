@@ -10,7 +10,7 @@ use Chamilo\Application\Weblcms\Course\Storage\DataClass\Course;
 use Chamilo\Application\Weblcms\Storage\DataClass\CourseCategory;
 use Chamilo\Libraries\Format\Table\Column\DataClassPropertyTableColumn;
 use Chamilo\Libraries\Format\Table\Column\StaticTableColumn;
-use Chamilo\Libraries\Storage\Parameters\DataClassCountParameters;
+use Chamilo\Libraries\Storage\Parameters\DataClassParameters;
 use Chamilo\Libraries\Storage\Parameters\RetrievesParameters;
 use Chamilo\Libraries\Storage\Query\Condition\EqualityCondition;
 use Chamilo\Libraries\Storage\Query\Join;
@@ -45,7 +45,7 @@ class CourseEntityHelper
      */
     public static function count_table_data($condition)
     {
-        $parameters = new DataClassCountParameters(
+        $parameters = new DataClassParameters(
             condition: $condition, joins: self::get_joins(), retrieveProperties: new RetrieveProperties(
             [
                 new FunctionConditionVariable(

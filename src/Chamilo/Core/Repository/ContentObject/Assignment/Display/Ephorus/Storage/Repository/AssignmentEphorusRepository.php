@@ -6,8 +6,7 @@ use Chamilo\Core\Repository\ContentObject\Assignment\Display\Bridge\Storage\Data
 use Chamilo\Core\Repository\ContentObject\LearningPath\Storage\Repository\CommonDataClassRepository;
 use Chamilo\Core\Repository\Storage\DataClass\ContentObject;
 use Chamilo\Core\User\Storage\DataClass\User;
-use Chamilo\Libraries\Storage\Parameters\DataClassCountParameters;
-use Chamilo\Libraries\Storage\Parameters\RetrievesParameters;
+use Chamilo\Libraries\Storage\Parameters\DataClassParameters;
 use Chamilo\Libraries\Storage\Query\Condition\AndCondition;
 use Chamilo\Libraries\Storage\Query\Condition\Condition;
 use Chamilo\Libraries\Storage\Query\Condition\EqualityCondition;
@@ -35,17 +34,17 @@ abstract class AssignmentEphorusRepository extends CommonDataClassRepository
         $entryClassName = $this->getEntryClassName();
 
         return $this->dataClassRepository->count(
-            $entryClassName, new DataClassCountParameters(condition: $condition, joins: $this->getAssignmentRequestJoins())
+            $entryClassName, new DataClassParameters(condition: $condition, joins: $this->getAssignmentRequestJoins())
         );
     }
 
     /**
-     * @param \Chamilo\Libraries\Storage\Parameters\RetrievesParameters $retrievesParameters
+     * @param \Chamilo\Libraries\Storage\Parameters\DataClassParameters $retrievesParameters
      *
      * @return ContentObject[] | ArrayCollection
      */
     public function findAssignmentEntriesWithRequests(
-        RetrievesParameters $retrievesParameters = new RetrievesParameters()
+        DataClassParameters $retrievesParameters = new DataClassParameters()
     )
     {
         $entryClassName = $this->getEntryClassName();
@@ -136,7 +135,7 @@ abstract class AssignmentEphorusRepository extends CommonDataClassRepository
         );
 
         return $this->dataClassRepository->retrieves(
-            Request::class, new RetrievesParameters(
+            Request::class, new DataClassParameters(
                 condition: $condition, joins: $joins
             )
         );

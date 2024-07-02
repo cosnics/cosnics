@@ -13,7 +13,7 @@ use Chamilo\Core\Repository\Workspace\Storage\DataClass\Workspace;
 use Chamilo\Libraries\Format\Form\FormValidator;
 use Chamilo\Libraries\Format\Menu\OptionsMenuRenderer;
 use Chamilo\Libraries\Format\Structure\Glyph\FontAwesomeGlyph;
-use Chamilo\Libraries\Storage\Parameters\RetrievesParameters;
+use Chamilo\Libraries\Storage\Parameters\DataClassParameters;
 use Chamilo\Libraries\Storage\Query\Condition\EqualityCondition;
 use Chamilo\Libraries\Storage\Query\Variable\PropertyConditionVariable;
 use Chamilo\Libraries\Storage\Query\Variable\StaticConditionVariable;
@@ -247,6 +247,14 @@ class FormFilterRenderer extends FilterRenderer
     }
 
     /**
+     * @param string[] $content_object_types
+     */
+    public function set_content_object_types($content_object_types)
+    {
+        $this->content_object_types = $content_object_types;
+    }
+
+    /**
      * @return \Chamilo\Libraries\Format\Form\FormValidator
      */
     public function get_form_validitor()
@@ -271,6 +279,14 @@ class FormFilterRenderer extends FilterRenderer
     }
 
     /**
+     * @param int $user_id
+     */
+    public function set_user_id($user_id)
+    {
+        $this->user_id = $user_id;
+    }
+
+    /**
      * @return string[]
      */
     private function get_user_views()
@@ -279,7 +295,7 @@ class FormFilterRenderer extends FilterRenderer
             new PropertyConditionVariable(UserView::class, UserView::PROPERTY_USER_ID),
             new StaticConditionVariable($this->get_user_id())
         );
-        $parameters = new RetrievesParameters(condition: $condition);
+        $parameters = new DataClassParameters(condition: $condition);
         $user_views = DataManager::retrieves(UserView::class, $parameters);
 
         $user_view_options = [];
@@ -291,14 +307,6 @@ class FormFilterRenderer extends FilterRenderer
         }
 
         return $user_view_options;
-    }
-
-    /**
-     * @param string[] $content_object_types
-     */
-    public function set_content_object_types($content_object_types)
-    {
-        $this->content_object_types = $content_object_types;
     }
 
     public function set_defaults($defaults = [])
@@ -326,13 +334,5 @@ class FormFilterRenderer extends FilterRenderer
             $modification_date[FilterData::FILTER_TO_DATE];
 
         $this->form_validator->setDefaults($defaults);
-    }
-
-    /**
-     * @param int $user_id
-     */
-    public function set_user_id($user_id)
-    {
-        $this->user_id = $user_id;
     }
 }

@@ -7,7 +7,7 @@ use Chamilo\Application\Weblcms\Storage\DataManager;
 use Chamilo\Configuration\Category\Storage\DataClass\PlatformCategory;
 use Chamilo\Libraries\Storage\DataClass\Listeners\DisplayOrderDataClassListener;
 use Chamilo\Libraries\Storage\DataClass\Listeners\DisplayOrderDataClassListenerSupport;
-use Chamilo\Libraries\Storage\Parameters\DataClassDistinctParameters;
+use Chamilo\Libraries\Storage\Parameters\DataClassParameters;
 use Chamilo\Libraries\Storage\Query\Condition\EqualityCondition;
 use Chamilo\Libraries\Storage\Query\RetrieveProperties;
 use Chamilo\Libraries\Storage\Query\UpdateProperties;
@@ -131,7 +131,7 @@ class CourseCategory extends PlatformCategory implements DisplayOrderDataClassLi
 
         if (!$recursive)
         {
-            $parameters = new DataClassDistinctParameters(
+            $parameters = new DataClassParameters(
                 condition: $condition, retrieveProperties: new RetrieveProperties(
                 [new PropertyConditionVariable(self::class, self::PROPERTY_ID)]
             )

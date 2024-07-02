@@ -10,7 +10,7 @@ use Chamilo\Application\Weblcms\Rights\CourseManagementRights;
 use Chamilo\Behat\Behat\Context\Context;
 use Chamilo\Core\User\Service\UserService;
 use Chamilo\Libraries\DependencyInjection\DependencyInjectionContainerBuilder;
-use Chamilo\Libraries\Storage\Parameters\RetrieveParameters;
+use Chamilo\Libraries\Storage\Parameters\DataClassParameters;
 use Chamilo\Libraries\Storage\Query\Condition\EqualityCondition;
 use Chamilo\Libraries\Storage\Query\Variable\PropertyConditionVariable;
 use Chamilo\Libraries\Storage\Query\Variable\StaticConditionVariable;
@@ -113,7 +113,7 @@ class CoursesFeatureSubContext implements Context
         );
 
         $course = DataManager::retrieve(
-            Course::class, new RetrieveParameters(condition: $condition)
+            Course::class, new DataClassParameters(condition: $condition)
         );
 
         if (!$course)

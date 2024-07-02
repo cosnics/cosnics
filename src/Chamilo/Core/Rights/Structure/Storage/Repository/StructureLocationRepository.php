@@ -3,10 +3,10 @@ namespace Chamilo\Core\Rights\Structure\Storage\Repository;
 
 use Chamilo\Core\Rights\Structure\Storage\DataClass\StructureLocation;
 use Chamilo\Core\Rights\Structure\Storage\DataClass\StructureLocationRole;
-use Chamilo\Libraries\Storage\DataManager\DataManager;
 use Chamilo\Core\Rights\Structure\Storage\Repository\Interfaces\StructureLocationRepositoryInterface;
+use Chamilo\Libraries\Storage\DataManager\DataManager;
 use Chamilo\Libraries\Storage\DataManager\Repository\DataManagerRepository;
-use Chamilo\Libraries\Storage\Parameters\RetrieveParameters;
+use Chamilo\Libraries\Storage\Parameters\DataClassParameters;
 use Chamilo\Libraries\Storage\Query\Condition\AndCondition;
 use Chamilo\Libraries\Storage\Query\Condition\EqualityCondition;
 use Chamilo\Libraries\Storage\Query\Variable\PropertyConditionVariable;
@@ -14,7 +14,7 @@ use Chamilo\Libraries\Storage\Query\Variable\StaticConditionVariable;
 
 /**
  * Repository to manage the data of roles
- * 
+ *
  * @author Sven Vanpoucke - Hogeschool Gent
  */
 class StructureLocationRepository extends DataManagerRepository implements StructureLocationRepositoryInterface
@@ -22,7 +22,7 @@ class StructureLocationRepository extends DataManagerRepository implements Struc
 
     /**
      * Returns a structure location by a given context and action
-     * 
+     *
      * @param string $context
      * @param string $action
      *
@@ -31,34 +31,34 @@ class StructureLocationRepository extends DataManagerRepository implements Struc
     public function findStructureLocationByContextAndAction($context, $action = null)
     {
         $conditions = [];
-        
+
         $conditions[] = new EqualityCondition(
-            new PropertyConditionVariable(StructureLocation::class, StructureLocation::PROPERTY_CONTEXT), 
-            new StaticConditionVariable($context));
-        
-        $value = ! empty($action) ? new StaticConditionVariable($action) : null;
+            new PropertyConditionVariable(StructureLocation::class, StructureLocation::PROPERTY_CONTEXT),
+            new StaticConditionVariable($context)
+        );
+
+        $value = !empty($action) ? new StaticConditionVariable($action) : null;
         $conditions[] = new EqualityCondition(
-            new PropertyConditionVariable(StructureLocation::class, StructureLocation::PROPERTY_ACTION),
-            $value
+            new PropertyConditionVariable(StructureLocation::class, StructureLocation::PROPERTY_ACTION), $value
         );
 
         $condition = new AndCondition($conditions);
-        
-        return DataManager::retrieve(StructureLocation::class, new RetrieveParameters(condition: $condition));
+
+        return DataManager::retrieve(StructureLocation::class, new DataClassParameters(condition: $condition));
     }
 
     /**
      * Truncates the structure locations and roles for the structure locations
-     * 
+     *
      * @return bool
      */
     public function truncateStructureLocationsAndRoles()
     {
-        if (! DataManager::truncate_storage_unit(StructureLocation::getStorageUnitName()))
+        if (!DataManager::truncate_storage_unit(StructureLocation::getStorageUnitName()))
         {
             return false;
         }
-        
+
         return DataManager::truncate_storage_unit(StructureLocationRole::getStorageUnitName());
     }
 }

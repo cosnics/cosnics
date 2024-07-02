@@ -6,9 +6,7 @@ use Chamilo\Core\Repository\Quota\Rights\Storage\DataClass\RightsLocationEntityR
 use Chamilo\Core\Repository\Quota\Rights\Storage\DataClass\RightsLocationEntityRightGroup;
 use Chamilo\Libraries\Rights\Domain\RightsLocationEntityRight as DomainRightsLocationEntityRight;
 use Chamilo\Libraries\Storage\DataClass\DataClass;
-use Chamilo\Libraries\Storage\Parameters\DataClassCountParameters;
-use Chamilo\Libraries\Storage\Parameters\RetrieveParameters;
-use Chamilo\Libraries\Storage\Parameters\RetrievesParameters;
+use Chamilo\Libraries\Storage\Parameters\DataClassParameters;
 use Chamilo\Libraries\Storage\Query\Condition\AndCondition;
 use Chamilo\Libraries\Storage\Query\Condition\Condition;
 use Chamilo\Libraries\Storage\Query\Condition\EqualityCondition;
@@ -31,7 +29,7 @@ class RightsRepository extends \Chamilo\Libraries\Rights\Storage\Repository\Righ
     public function countRightsLocationEntityRightGroups(?Condition $condition = null): int
     {
         return $this->getDataClassRepository()->count(
-            RightsLocationEntityRightGroup::class, new DataClassCountParameters(condition: $condition)
+            RightsLocationEntityRightGroup::class, new DataClassParameters(condition: $condition)
         );
     }
 
@@ -75,7 +73,7 @@ class RightsRepository extends \Chamilo\Libraries\Rights\Storage\Repository\Righ
         );
 
         return $this->getDataClassRepository()->retrieves(
-            RightsLocationEntityRightGroup::class, new RetrievesParameters(condition: $condition)
+            RightsLocationEntityRightGroup::class, new DataClassParameters(condition: $condition)
         );
     }
 
@@ -98,7 +96,7 @@ class RightsRepository extends \Chamilo\Libraries\Rights\Storage\Repository\Righ
         );
 
         return $this->getDataClassRepository()->retrieve(
-            RightsLocationEntityRightGroup::class, new RetrieveParameters(condition: new AndCondition($conditions))
+            RightsLocationEntityRightGroup::class, new DataClassParameters(condition: new AndCondition($conditions))
         );
     }
 
@@ -118,7 +116,7 @@ class RightsRepository extends \Chamilo\Libraries\Rights\Storage\Repository\Righ
         );
 
         return $this->getDataClassRepository()->retrieves(
-            RightsLocationEntityRightGroup::class, new RetrievesParameters(condition: $condition)
+            RightsLocationEntityRightGroup::class, new DataClassParameters(condition: $condition)
         );
     }
 
@@ -138,7 +136,7 @@ class RightsRepository extends \Chamilo\Libraries\Rights\Storage\Repository\Righ
         );
 
         return $this->getDataClassRepository()->retrieves(
-            RightsLocationEntityRightGroup::class, new RetrievesParameters(condition: $condition)
+            RightsLocationEntityRightGroup::class, new DataClassParameters(condition: $condition)
         );
     }
 
@@ -200,7 +198,7 @@ class RightsRepository extends \Chamilo\Libraries\Rights\Storage\Repository\Righ
         );
 
         return $this->getDataClassRepository()->records(
-            RightsLocationEntityRightGroup::class, new RetrievesParameters(
+            RightsLocationEntityRightGroup::class, new DataClassParameters(
                 joins: $joins, retrieveProperties: $retrieveProperties
             )
         );
@@ -236,7 +234,7 @@ class RightsRepository extends \Chamilo\Libraries\Rights\Storage\Repository\Righ
         );
 
         return $this->getDataClassRepository()->retrieves(
-            RightsLocationEntityRight::class, new RetrievesParameters(
+            RightsLocationEntityRight::class, new DataClassParameters(
                 condition: $condition, joins: $joins
             )
         );

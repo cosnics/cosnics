@@ -4,9 +4,7 @@ namespace Chamilo\Application\Portfolio\Favourite\Storage\Repository;
 use Chamilo\Application\Portfolio\Favourite\Storage\DataClass\UserFavourite;
 use Chamilo\Core\User\Storage\DataClass\User;
 use Chamilo\Libraries\Storage\DataManager\Repository\DataClassRepository;
-use Chamilo\Libraries\Storage\Parameters\DataClassCountParameters;
-use Chamilo\Libraries\Storage\Parameters\RetrieveParameters;
-use Chamilo\Libraries\Storage\Parameters\RetrievesParameters;
+use Chamilo\Libraries\Storage\Parameters\DataClassParameters;
 use Chamilo\Libraries\Storage\Query\Condition\AndCondition;
 use Chamilo\Libraries\Storage\Query\Condition\Condition;
 use Chamilo\Libraries\Storage\Query\Condition\EqualityCondition;
@@ -51,7 +49,7 @@ class FavouriteRepository
      */
     public function countFavouriteUsers(User $sourceUser, $condition = null)
     {
-        $parameters = new DataClassCountParameters(
+        $parameters = new DataClassParameters(
             condition: $this->getUserFavouriteCondition($sourceUser, $condition), joins: $this->getFavouriteUsersJoins()
         );
 
@@ -91,9 +89,9 @@ class FavouriteRepository
             ]);
         }
 
-        $parameters = new RetrievesParameters(
-            condition: $this->getUserFavouriteCondition($sourceUser, $condition), count: $count, offset: $offset,
-            orderBy: $orderProperty, joins: $this->getFavouriteUsersJoins(), retrieveProperties: $retrieveProperties
+        $parameters = new DataClassParameters(
+            condition: $this->getUserFavouriteCondition($sourceUser, $condition), joins: $this->getFavouriteUsersJoins(
+            ), retrieveProperties: $retrieveProperties, orderBy: $orderProperty, count: $count, offset: $offset
         );
 
         return $this->getDataClassRepository()->records(User::class, $parameters);
@@ -135,7 +133,7 @@ class FavouriteRepository
 
         $condition = new AndCondition($conditions);
 
-        $parameters = new RetrieveParameters(condition: $condition);
+        $parameters = new DataClassParameters(condition: $condition);
 
         return $this->getDataClassRepository()->retrieve(UserFavourite::class, $parameters);
     }

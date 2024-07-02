@@ -4,8 +4,7 @@ namespace Chamilo\Core\Repository\ContentObject\Assignment\Display\Bridge\Storag
 use Chamilo\Core\Repository\ContentObject\Assignment\Display\Bridge\Storage\DataClass\Entry;
 use Chamilo\Core\Repository\ContentObject\Assignment\Display\Bridge\Storage\DataClass\Feedback;
 use Chamilo\Libraries\Storage\DataManager\Repository\DataClassRepository;
-use Chamilo\Libraries\Storage\Parameters\DataClassCountParameters;
-use Chamilo\Libraries\Storage\Parameters\RetrievesParameters;
+use Chamilo\Libraries\Storage\Parameters\DataClassParameters;
 use Chamilo\Libraries\Storage\Query\Condition\AndCondition;
 use Chamilo\Libraries\Storage\Query\Condition\Condition;
 use Chamilo\Libraries\Storage\Query\Condition\EqualityCondition;
@@ -65,7 +64,7 @@ abstract class FeedbackRepository
             new PropertyConditionVariable($this->getEntryClassName(), Entry::PROPERTY_ENTITY_ID)
         );
 
-        $parameters = new DataClassCountParameters(
+        $parameters = new DataClassParameters(
             condition: $this->getEntityTypeCondition($entityType, $condition), joins: $joins,
             retrieveProperties: new RetrieveProperties([$property])
         );
@@ -99,7 +98,7 @@ abstract class FeedbackRepository
             new PropertyConditionVariable($this->getEntryClassName(), Entry::PROPERTY_ID)
         );
 
-        $parameters = new DataClassCountParameters(
+        $parameters = new DataClassParameters(
             condition: $this->getEntityTypeAndIdCondition($entityType, $entityId, $condition), joins: $joins,
             retrieveProperties: new RetrieveProperties([$property])
         );
@@ -146,7 +145,7 @@ abstract class FeedbackRepository
             )
         );
 
-        $parameters = new DataClassCountParameters(condition: $condition, joins: $joins);
+        $parameters = new DataClassParameters(condition: $condition, joins: $joins);
 
         return $this->dataClassRepository->count($this->getEntryClassName(), $parameters);
     }
@@ -165,7 +164,7 @@ abstract class FeedbackRepository
         );
 
         return $this->dataClassRepository->count(
-            $this->getFeedbackClassName(), new DataClassCountParameters(condition: $condition)
+            $this->getFeedbackClassName(), new DataClassParameters(condition: $condition)
         );
     }
 
@@ -183,7 +182,7 @@ abstract class FeedbackRepository
         );
 
         return $this->dataClassRepository->count(
-            $this->getFeedbackClassName(), new DataClassCountParameters(condition: $condition)
+            $this->getFeedbackClassName(), new DataClassParameters(condition: $condition)
         );
     }
 
@@ -235,7 +234,7 @@ abstract class FeedbackRepository
         );
 
         return $this->dataClassRepository->retrieves(
-            $this->getFeedbackClassName(), new RetrievesParameters(condition: $condition)
+            $this->getFeedbackClassName(), new DataClassParameters(condition: $condition)
         );
     }
 

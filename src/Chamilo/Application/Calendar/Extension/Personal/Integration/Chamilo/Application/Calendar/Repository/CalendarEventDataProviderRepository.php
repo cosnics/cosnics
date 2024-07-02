@@ -5,7 +5,7 @@ use Chamilo\Application\Calendar\Extension\Personal\Storage\DataClass\Publicatio
 use Chamilo\Application\Calendar\Extension\Personal\Storage\DataClass\PublicationGroup;
 use Chamilo\Application\Calendar\Extension\Personal\Storage\DataClass\PublicationUser;
 use Chamilo\Core\User\Storage\DataClass\User;
-use Chamilo\Libraries\Storage\Parameters\RetrievesParameters;
+use Chamilo\Libraries\Storage\Parameters\DataClassParameters;
 use Chamilo\Libraries\Storage\Query\Condition\AndCondition;
 use Chamilo\Libraries\Storage\Query\Condition\EqualityCondition;
 use Chamilo\Libraries\Storage\Query\Condition\InCondition;
@@ -31,16 +31,16 @@ class CalendarEventDataProviderRepository
      *
      * @param User $user
      *
-     * @return RetrievesParameters
+     * @return DataClassParameters
      */
-    public function getPublicationsRetrievesParameters(User $user)
+    public function getPublicationsParameters(User $user)
     {
         $condition = new EqualityCondition(
             new PropertyConditionVariable(Publication::class, Publication::PROPERTY_PUBLISHER),
             new StaticConditionVariable($user->getId())
         );
 
-        return new RetrievesParameters(
+        return new DataClassParameters(
             condition: $condition, retrieveProperties: new RetrieveProperties(
             [new PropertiesConditionVariable(Publication::class)]
         )
@@ -52,9 +52,9 @@ class CalendarEventDataProviderRepository
      *
      * @param User $user
      *
-     * @return RetrievesParameters
+     * @return DataClassParameters
      */
-    public function getSharedPublicationsRetrievesParameters(User $user)
+    public function getSharedPublicationsParameters(User $user)
     {
         $user_groups = $user->get_groups(true);
 
@@ -97,7 +97,7 @@ class CalendarEventDataProviderRepository
         ), Join::TYPE_LEFT
         );
 
-        return new RetrievesParameters(
+        return new DataClassParameters(
             condition: $condition, joins: new Joins($joins), retrieveProperties: new RetrieveProperties(
             [new PropertiesConditionVariable(Publication::class)]
         )

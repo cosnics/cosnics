@@ -10,8 +10,7 @@ use Chamilo\Application\Weblcms\Storage\DataClass\CourseSetting;
 use Chamilo\Application\Weblcms\Storage\DataClass\CourseTool;
 use Chamilo\Application\Weblcms\Storage\Repository\Interfaces\CourseRepositoryInterface;
 use Chamilo\Core\User\Storage\DataClass\User;
-use Chamilo\Libraries\Storage\Parameters\DataClassCountParameters;
-use Chamilo\Libraries\Storage\Parameters\RetrieveParameters;
+use Chamilo\Libraries\Storage\Parameters\DataClassParameters;
 use Chamilo\Libraries\Storage\Parameters\RetrievesParameters;
 use Chamilo\Libraries\Storage\Query\Condition\AndCondition;
 use Chamilo\Libraries\Storage\Query\Condition\Condition;
@@ -65,7 +64,7 @@ class CourseRepository implements CourseRepositoryInterface
 
         $condition = new AndCondition($conditions);
 
-        return DataManager::count(CourseEntityRelation::class, new DataClassCountParameters(condition: $condition));
+        return DataManager::count(CourseEntityRelation::class, new DataClassParameters(condition: $condition));
     }
 
     /**
@@ -152,7 +151,7 @@ class CourseRepository implements CourseRepositoryInterface
         );
 
         return DataManager::retrieve(
-            CourseTool::class, new RetrieveParameters(condition: $condition)
+            CourseTool::class, new DataClassParameters(condition: $condition)
         );
     }
 
@@ -187,7 +186,7 @@ class CourseRepository implements CourseRepositoryInterface
         $condition = new AndCondition($conditions);
 
         return DataManager::retrieve(
-            CourseEntityRelation::class, new RetrieveParameters(condition: $condition)
+            CourseEntityRelation::class, new DataClassParameters(condition: $condition)
         );
     }
 

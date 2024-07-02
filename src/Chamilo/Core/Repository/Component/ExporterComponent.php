@@ -17,7 +17,7 @@ use Chamilo\Libraries\Format\Structure\Glyph\NamespaceIdentGlyph;
 use Chamilo\Libraries\Format\Table\ArrayCollectionTableRenderer;
 use Chamilo\Libraries\Format\Table\Column\StaticTableColumn;
 use Chamilo\Libraries\Storage\DataClass\DataClass;
-use Chamilo\Libraries\Storage\Parameters\DataClassDistinctParameters;
+use Chamilo\Libraries\Storage\Parameters\DataClassParameters;
 use Chamilo\Libraries\Storage\Query\Condition\AndCondition;
 use Chamilo\Libraries\Storage\Query\Condition\EqualityCondition;
 use Chamilo\Libraries\Storage\Query\Condition\InCondition;
@@ -149,6 +149,20 @@ class ExporterComponent extends Manager
     }
 
     /**
+     * @param string $type
+     * @param string[] $values
+     */
+    public function setExportTypesCache(string $type, array $values)
+    {
+        if (!array_key_exists($type, $this->exportTypesCache))
+        {
+            $this->exportTypesCache[$type] = [];
+        }
+
+        $this->exportTypesCache[$type] = array_merge($this->exportTypesCache[$type], $values);
+    }
+
+    /**
      * @param \Chamilo\Core\Repository\Common\Export\ExportParameters $exportParameters
      * @param string[] $contentObjectIdentifiers
      * @param string[] $categoryIdentifiers
@@ -215,10 +229,10 @@ class ExporterComponent extends Manager
         $condition = new InCondition(
             new PropertyConditionVariable(ContentObject::class, DataClass::PROPERTY_ID), $contentObjectIdentifiers
         );
-        $parameters = new DataClassDistinctParameters(
+        $parameters = new DataClassParameters(
             condition: $condition, retrieveProperties: new RetrieveProperties(
-                [new PropertyConditionVariable(ContentObject::class, ContentObject::PROPERTY_TYPE)]
-            )
+            [new PropertyConditionVariable(ContentObject::class, ContentObject::PROPERTY_TYPE)]
+        )
         );
 
         $types = DataManager::distinct(ContentObject::class, $parameters);
@@ -251,10 +265,10 @@ class ExporterComponent extends Manager
             );
             $condition = new AndCondition($conditions);
 
-            $parameters = new DataClassDistinctParameters(
+            $parameters = new DataClassParameters(
                 condition: $condition, retrieveProperties: new RetrieveProperties(
-                    [new PropertyConditionVariable(ContentObject::class, DataClass::PROPERTY_ID)]
-                )
+                [new PropertyConditionVariable(ContentObject::class, DataClass::PROPERTY_ID)]
+            )
             );
             $ids = DataManager::distinct(ContentObject::class, $parameters);
             $table_row[] = count($ids);
@@ -319,19 +333,5 @@ class ExporterComponent extends Manager
         }
 
         return $this->getArrayCollectionTableRenderer()->render($headers, $tableData, 0, SORT_ASC, 20, 'exporTable');
-    }
-
-    /**
-     * @param string $type
-     * @param string[] $values
-     */
-    public function setExportTypesCache(string $type, array $values)
-    {
-        if (!array_key_exists($type, $this->exportTypesCache))
-        {
-            $this->exportTypesCache[$type] = [];
-        }
-
-        $this->exportTypesCache[$type] = array_merge($this->exportTypesCache[$type], $values);
     }
 }

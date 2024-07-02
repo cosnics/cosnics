@@ -6,8 +6,7 @@ use Chamilo\Application\Weblcms\Tool\Implementation\Ephorus\Storage\DataClass\Re
 use Chamilo\Core\Repository\ContentObject\LearningPath\Storage\Repository\CommonDataClassRepository;
 use Chamilo\Core\Repository\Storage\DataClass\ContentObject;
 use Chamilo\Core\User\Storage\DataClass\User;
-use Chamilo\Libraries\Storage\Parameters\DataClassCountParameters;
-use Chamilo\Libraries\Storage\Parameters\RetrieveParameters;
+use Chamilo\Libraries\Storage\Parameters\DataClassParameters;
 use Chamilo\Libraries\Storage\Parameters\RetrievesParameters;
 use Chamilo\Libraries\Storage\Query\Condition\Condition;
 use Chamilo\Libraries\Storage\Query\Condition\EqualityCondition;
@@ -37,7 +36,7 @@ class RequestRepository extends CommonDataClassRepository
     public function countRequestsWithContentObjects(Condition $condition)
     {
         return $this->dataClassRepository->count(
-            Request::class, new DataClassCountParameters(condition: $condition, joins: $this->getRequestJoins())
+            Request::class, new DataClassParameters(condition: $condition, joins: $this->getRequestJoins())
         );
     }
 
@@ -55,7 +54,7 @@ class RequestRepository extends CommonDataClassRepository
             new PropertyConditionVariable(Request::class, Request::PROPERTY_GUID), new StaticConditionVariable($guid)
         );
 
-        return $this->dataClassRepository->retrieve(Request::class, new RetrieveParameters(condition: $condition));
+        return $this->dataClassRepository->retrieve(Request::class, new DataClassParameters(condition: $condition));
     }
 
     /**
@@ -72,7 +71,7 @@ class RequestRepository extends CommonDataClassRepository
             new PropertyConditionVariable(Request::class, Request::PROPERTY_ID), new StaticConditionVariable($id)
         );
 
-        return $this->dataClassRepository->retrieve(Request::class, new RetrieveParameters(condition: $condition));
+        return $this->dataClassRepository->retrieve(Request::class, new DataClassParameters(condition: $condition));
     }
 
     /**

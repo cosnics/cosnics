@@ -4,8 +4,7 @@ namespace Chamilo\Core\Admin\Repository;
 use Chamilo\Configuration\Service\Consulter\ConfigurationConsulter;
 use Chamilo\Core\Admin\Storage\DataClass\Online;
 use Chamilo\Libraries\Storage\DataManager\Repository\DataClassRepository;
-use Chamilo\Libraries\Storage\Parameters\DataClassDistinctParameters;
-use Chamilo\Libraries\Storage\Parameters\RetrieveParameters;
+use Chamilo\Libraries\Storage\Parameters\DataClassParameters;
 use Chamilo\Libraries\Storage\Query\Condition\ComparisonCondition;
 use Chamilo\Libraries\Storage\Query\Condition\EqualityCondition;
 use Chamilo\Libraries\Storage\Query\RetrieveProperties;
@@ -51,7 +50,7 @@ class WhoIsOnlineRepository
         );
 
         return $this->getDataClassRepository()->distinct(
-            Online::class, new DataClassDistinctParameters(
+            Online::class, new DataClassParameters(
                 condition: $condition, retrieveProperties: new RetrieveProperties(
                 [new PropertyConditionVariable(Online::class, Online::PROPERTY_USER_ID)]
             )
@@ -67,7 +66,7 @@ class WhoIsOnlineRepository
         );
 
         return $this->getDataClassRepository()->retrieve(
-            Online::class, new RetrieveParameters(condition: $condition)
+            Online::class, new DataClassParameters(condition: $condition)
         );
     }
 

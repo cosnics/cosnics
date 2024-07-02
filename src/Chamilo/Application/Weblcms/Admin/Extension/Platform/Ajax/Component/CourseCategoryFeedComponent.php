@@ -11,7 +11,7 @@ use Chamilo\Libraries\Architecture\JsonAjaxResult;
 use Chamilo\Libraries\Format\Form\Element\AdvancedElementFinder\AdvancedElementFinderElement;
 use Chamilo\Libraries\Format\Form\Element\AdvancedElementFinder\AdvancedElementFinderElements;
 use Chamilo\Libraries\Format\Structure\Glyph\FontAwesomeGlyph;
-use Chamilo\Libraries\Storage\Parameters\DataClassCountParameters;
+use Chamilo\Libraries\Storage\Parameters\DataClassParameters;
 use Chamilo\Libraries\Storage\Parameters\RetrievesParameters;
 use Chamilo\Libraries\Storage\Query\Condition\AndCondition;
 use Chamilo\Libraries\Storage\Query\Condition\ContainsCondition;
@@ -293,14 +293,14 @@ class CourseCategoryFeedComponent extends Manager
         }
 
         $this->course_count = \Chamilo\Application\Weblcms\Course\Storage\DataManager::count(
-            Course::class, new DataClassCountParameters(condition: $condition)
+            Course::class, new DataClassParameters(condition: $condition)
         );
 
         return \Chamilo\Application\Weblcms\Course\Storage\DataManager::retrieves(
             Course::class, new RetrievesParameters(
                 condition: $condition, count: 100, offset: $this->get_offset(), orderBy: new OrderBy(
-                    [new OrderProperty(new PropertyConditionVariable(Course::class, Course::PROPERTY_TITLE))]
-                )
+                [new OrderProperty(new PropertyConditionVariable(Course::class, Course::PROPERTY_TITLE))]
+            )
             )
         );
     }

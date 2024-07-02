@@ -11,8 +11,7 @@ use Chamilo\Libraries\Architecture\Exceptions\NotAllowedException;
 use Chamilo\Libraries\Format\Breadcrumb\BreadcrumbTrail;
 use Chamilo\Libraries\Format\Table\RequestTableParameterValuesCompiler;
 use Chamilo\Libraries\Format\Utilities\ResourceManager;
-use Chamilo\Libraries\Storage\Parameters\DataClassCountParameters;
-use Chamilo\Libraries\Storage\Parameters\RetrievesParameters;
+use Chamilo\Libraries\Storage\Parameters\DataClassParameters;
 use Chamilo\Libraries\Storage\Query\Condition\EqualityCondition;
 use Chamilo\Libraries\Storage\Query\Variable\PropertyConditionVariable;
 use Chamilo\Libraries\Storage\Query\Variable\StaticConditionVariable;
@@ -76,7 +75,7 @@ class WikiHistoryComponent extends Manager
             else
             {
                 $totalNumberOfItems = DataManager::count_content_objects(
-                    ContentObject::class, new DataClassCountParameters(condition: $this->getVersionTableCondition())
+                    ContentObject::class, new DataClassParameters(condition: $this->getVersionTableCondition())
                 );
 
                 $versionTableRenderer = $this->getVersionTableRenderer();
@@ -87,12 +86,11 @@ class WikiHistoryComponent extends Manager
                 );
 
                 $contentObjects = DataManager::retrieve_content_objects(
-                    ContentObject::class, new RetrievesParameters(
-                        condition: $this->getVersionTableCondition(),
-                        count: $tableParameterValues->getNumberOfItemsPerPage(),
-                        offset: $tableParameterValues->getOffset(), orderBy: $versionTableRenderer->determineOrderBy(
+                    ContentObject::class, new DataClassParameters(
+                        condition: $this->getVersionTableCondition(), orderBy: $versionTableRenderer->determineOrderBy(
                         $tableParameterValues
-                    )
+                    ), count: $tableParameterValues->getNumberOfItemsPerPage(),
+                        offset: $tableParameterValues->getOffset()
                     )
                 );
 

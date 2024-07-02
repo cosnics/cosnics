@@ -2,11 +2,7 @@
 namespace Chamilo\Libraries\Storage\Cache;
 
 use Chamilo\Libraries\Storage\DataClass\DataClass;
-use Chamilo\Libraries\Storage\Parameters\DataClassCountGroupedParameters;
-use Chamilo\Libraries\Storage\Parameters\DataClassCountParameters;
-use Chamilo\Libraries\Storage\Parameters\DataClassDistinctParameters;
 use Chamilo\Libraries\Storage\Parameters\DataClassParameters;
-use Chamilo\Libraries\Storage\Parameters\RetrieveParameters;
 use Doctrine\Common\Collections\ArrayCollection;
 
 /**
@@ -49,7 +45,7 @@ class DataClassRepositoryCache
     }
 
     public function addForCount(
-        string $className, DataClassCountParameters $parameters, int $count
+        string $className, DataClassParameters $parameters, int $count
     ): int
     {
         return $this->add($className, self::TYPE_COUNT, $parameters, $count);
@@ -61,20 +57,20 @@ class DataClassRepositoryCache
      * @return int[]
      */
     public function addForCountGrouped(
-        string $className, DataClassCountGroupedParameters $parameters, array $counts
+        string $className, DataClassParameters $parameters, array $counts
     ): array
     {
         return $this->add($className, self::TYPE_COUNT_GROUPED, $parameters, $counts);
     }
 
     public function addForDistinct(
-        string $className, DataClassDistinctParameters $parameters, array $propertyValues
+        string $className, DataClassParameters $parameters, array $propertyValues
     ): array
     {
         return $this->add($className, self::TYPE_DISTINCT, $parameters, $propertyValues);
     }
 
-    public function addForRecord(string $className, RetrieveParameters $parameters, array $record): array
+    public function addForRecord(string $className, DataClassParameters $parameters, array $record): array
     {
         return $this->add($className, self::TYPE_RECORD, $parameters, $record);
     }
@@ -87,7 +83,7 @@ class DataClassRepositoryCache
     }
 
     public function addForRetrieve(
-        string $cacheDataClassName, RetrieveParameters $parameters, ?DataClass $object = null
+        string $cacheDataClassName, DataClassParameters $parameters, ?DataClass $object = null
     ): ?DataClass
     {
         return $this->add($cacheDataClassName, self::TYPE_RETRIEVE, $parameters, $object);

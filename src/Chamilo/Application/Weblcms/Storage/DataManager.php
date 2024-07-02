@@ -36,9 +36,7 @@ use Chamilo\Core\User\Storage\DataClass\User;
 use Chamilo\Libraries\Architecture\Exceptions\ObjectNotExistException;
 use Chamilo\Libraries\DependencyInjection\DependencyInjectionContainerBuilder;
 use Chamilo\Libraries\Storage\DataClass\DataClass;
-use Chamilo\Libraries\Storage\Parameters\DataClassCountParameters;
-use Chamilo\Libraries\Storage\Parameters\DataClassDistinctParameters;
-use Chamilo\Libraries\Storage\Parameters\RetrieveParameters;
+use Chamilo\Libraries\Storage\Parameters\DataClassParameters;
 use Chamilo\Libraries\Storage\Parameters\RetrievesParameters;
 use Chamilo\Libraries\Storage\Query\Condition\AndCondition;
 use Chamilo\Libraries\Storage\Query\Condition\ComparisonCondition;
@@ -111,7 +109,7 @@ class DataManager extends \Chamilo\Libraries\Storage\DataManager\DataManager
             ), $object_ids
         );
 
-        return self::count(ContentObjectPublication::class, new DataClassCountParameters(condition: $condition)) >= 1;
+        return self::count(ContentObjectPublication::class, new DataClassParameters(condition: $condition)) >= 1;
     }
 
     /**
@@ -172,7 +170,7 @@ class DataManager extends \Chamilo\Libraries\Storage\DataManager\DataManager
         }
 
         $parameters =
-            new DataClassCountParameters(condition: $condition, joins: self::get_content_object_publication_joins());
+            new DataClassParameters(condition: $condition, joins: self::get_content_object_publication_joins());
 
         return self::count(ContentObjectPublication::class, $parameters);
     }
@@ -187,7 +185,7 @@ class DataManager extends \Chamilo\Libraries\Storage\DataManager\DataManager
     public static function count_content_object_publications($condition)
     {
         $parameters =
-            new DataClassCountParameters(condition: $condition, joins: self::get_content_object_publication_joins());
+            new DataClassParameters(condition: $condition, joins: self::get_content_object_publication_joins());
 
         return self::count(ContentObjectPublication::class, $parameters);
     }
@@ -684,7 +682,7 @@ class DataManager extends \Chamilo\Libraries\Storage\DataManager\DataManager
             ), new StaticConditionVariable($publication_id)
         );
         $record = self::record(
-            ContentObjectPublication::class, new RetrieveParameters(
+            ContentObjectPublication::class, new DataClassParameters(
                 condition: $condition, retrieveProperties: new RetrieveProperties(
                 [new PropertiesConditionVariable(ContentObjectPublication::class)]
             )
@@ -879,7 +877,7 @@ class DataManager extends \Chamilo\Libraries\Storage\DataManager\DataManager
 
         $course_module_access = self::retrieve(
             CourseModuleLastAccess::class,
-            new RetrieveParameters(condition: $condition, orderBy: new OrderBy($order_by))
+            new DataClassParameters(condition: $condition, orderBy: new OrderBy($order_by))
         );
 
         if (!$course_module_access)
@@ -1207,7 +1205,7 @@ class DataManager extends \Chamilo\Libraries\Storage\DataManager\DataManager
             ), new StaticConditionVariable($object_id)
         );
 
-        return self::count(ContentObjectPublication::class, new DataClassCountParameters(condition: $condition)) >= 1;
+        return self::count(ContentObjectPublication::class, new DataClassParameters(condition: $condition)) >= 1;
     }
 
     /**
@@ -1322,7 +1320,7 @@ class DataManager extends \Chamilo\Libraries\Storage\DataManager\DataManager
     public static function is_right_locked_for_location($location_id, $right_id)
     {
         return self::count(
-                RightsLocationLockedRight::class, new DataClassCountParameters(
+                RightsLocationLockedRight::class, new DataClassParameters(
                     condition: self::get_rights_location_locked_right_condition(
                         $location_id, $right_id
                     )
@@ -1365,7 +1363,7 @@ class DataManager extends \Chamilo\Libraries\Storage\DataManager\DataManager
 
         $condition = new AndCondition($conditions);
 
-        return (self::count(CourseRequest::class, new DataClassCountParameters(condition: $condition)) > 0);
+        return (self::count(CourseRequest::class, new DataClassParameters(condition: $condition)) > 0);
     }
 
     /**
@@ -1406,7 +1404,7 @@ class DataManager extends \Chamilo\Libraries\Storage\DataManager\DataManager
         $condition = new AndCondition($conditions);
 
         $course_module_last_access = self::retrieve(
-            CourseModuleLastAccess::class, new RetrieveParameters(condition: $condition)
+            CourseModuleLastAccess::class, new DataClassParameters(condition: $condition)
         );
 
         if (!$course_module_last_access)
@@ -1594,7 +1592,7 @@ class DataManager extends \Chamilo\Libraries\Storage\DataManager\DataManager
             new StaticConditionVariable($category_code)
         );
 
-        return self::retrieve(CourseCategory::class, new RetrieveParameters(condition: $condition));
+        return self::retrieve(CourseCategory::class, new DataClassParameters(condition: $condition));
     }
 
     /**
@@ -1768,7 +1766,7 @@ class DataManager extends \Chamilo\Libraries\Storage\DataManager\DataManager
             new StaticConditionVariable($course_tool_name)
         );
 
-        return self::retrieve(CourseTool::class, new RetrieveParameters(condition: $condition));
+        return self::retrieve(CourseTool::class, new DataClassParameters(condition: $condition));
     }
 
     /**
@@ -1827,7 +1825,7 @@ class DataManager extends \Chamilo\Libraries\Storage\DataManager\DataManager
 
         return self::retrieve(
             CourseTypeUserCategory::class,
-            new RetrieveParameters(condition: $condition, orderBy: new OrderBy($object_table_order))
+            new DataClassParameters(condition: $condition, orderBy: new OrderBy($object_table_order))
         );
     }
 
@@ -1926,7 +1924,7 @@ class DataManager extends \Chamilo\Libraries\Storage\DataManager\DataManager
 
         $condition = new AndCondition($conditions);
 
-        $parameters = new RetrieveParameters(condition: $condition, joins: $joins);
+        $parameters = new DataClassParameters(condition: $condition, joins: $joins);
 
         return self::retrieve(ContentObjectPublication::class, $parameters);
     }
@@ -2389,7 +2387,8 @@ class DataManager extends \Chamilo\Libraries\Storage\DataManager\DataManager
 
         return self::retrieves(
             CourseGroup::class, new RetrievesParameters(
-                condition: $group_condition, count: $count, offset: $offset, orderBy: $order_by)
+                condition: $group_condition, count: $count, offset: $offset, orderBy: $order_by
+            )
         );
     }
 
@@ -2468,7 +2467,7 @@ class DataManager extends \Chamilo\Libraries\Storage\DataManager\DataManager
             );
 
             $group_ids = DataManager::distinct(
-                CourseEntityRelation::class, new DataClassDistinctParameters(
+                CourseEntityRelation::class, new DataClassParameters(
                     condition: new AndCondition($cgrConditions), retrieveProperties: new RetrieveProperties(
                     [
                         new PropertyConditionVariable(
@@ -2558,7 +2557,8 @@ class DataManager extends \Chamilo\Libraries\Storage\DataManager\DataManager
 
         return DataManager::retrieves(
             User::class, new RetrievesParameters(
-                condition: $user_condition, count: $count, offset: $offset, orderBy: $order_by)
+                condition: $user_condition, count: $count, offset: $offset, orderBy: $order_by
+            )
         );
     }
 

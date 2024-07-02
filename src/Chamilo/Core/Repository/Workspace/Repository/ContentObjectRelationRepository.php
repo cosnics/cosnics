@@ -6,10 +6,7 @@ use Chamilo\Core\Repository\Workspace\Storage\DataClass\Workspace;
 use Chamilo\Core\Repository\Workspace\Storage\DataClass\WorkspaceContentObjectRelation;
 use Chamilo\Libraries\Storage\DataClass\DataClass;
 use Chamilo\Libraries\Storage\DataManager\Repository\DataClassRepository;
-use Chamilo\Libraries\Storage\Parameters\DataClassCountParameters;
-use Chamilo\Libraries\Storage\Parameters\DataClassDistinctParameters;
-use Chamilo\Libraries\Storage\Parameters\RetrieveParameters;
-use Chamilo\Libraries\Storage\Parameters\RetrievesParameters;
+use Chamilo\Libraries\Storage\Parameters\DataClassParameters;
 use Chamilo\Libraries\Storage\Query\Condition\AndCondition;
 use Chamilo\Libraries\Storage\Query\Condition\EqualityCondition;
 use Chamilo\Libraries\Storage\Query\Join;
@@ -55,7 +52,7 @@ class ContentObjectRelationRepository
         $relationCondition = new AndCondition($relationConditions);
 
         return $this->getDataClassRepository()->count(
-            WorkspaceContentObjectRelation::class, new DataClassCountParameters(condition: $relationCondition)
+            WorkspaceContentObjectRelation::class, new DataClassParameters(condition: $relationCondition)
         );
     }
 
@@ -76,7 +73,7 @@ class ContentObjectRelationRepository
         );
 
         return $this->getDataClassRepository()->count(
-            Workspace::class, new DataClassCountParameters(condition: $condition, joins: new Joins([$join]))
+            Workspace::class, new DataClassParameters(condition: $condition, joins: new Joins([$join]))
         );
     }
 
@@ -111,7 +108,7 @@ class ContentObjectRelationRepository
         $relationCondition = new AndCondition($relationConditions);
 
         return $this->getDataClassRepository()->retrieve(
-            WorkspaceContentObjectRelation::class, new RetrieveParameters(condition: $relationCondition)
+            WorkspaceContentObjectRelation::class, new DataClassParameters(condition: $relationCondition)
         );
     }
 
@@ -143,7 +140,7 @@ class ContentObjectRelationRepository
         $relationCondition = new AndCondition($relationConditions);
 
         return $this->getDataClassRepository()->retrieves(
-            WorkspaceContentObjectRelation::class, new RetrievesParameters(condition: $relationCondition)
+            WorkspaceContentObjectRelation::class, new DataClassParameters(condition: $relationCondition)
         );
     }
 
@@ -183,9 +180,9 @@ class ContentObjectRelationRepository
         );
 
         return $this->getDataClassRepository()->records(
-            Workspace::class, new RetrievesParameters(
-                condition: $condition, count: $count, offset: $limit, orderBy: $orderBy, joins: new Joins([$join]),
-                retrieveProperties: $retrieveProperties
+            Workspace::class, new DataClassParameters(
+                condition: $condition, joins: new Joins([$join]), retrieveProperties: $retrieveProperties,
+                orderBy: $orderBy, count: $count, offset: $limit
             )
         );
     }
@@ -204,7 +201,7 @@ class ContentObjectRelationRepository
         );
 
         return $this->getDataClassRepository()->distinct(
-            WorkspaceContentObjectRelation::class, new DataClassDistinctParameters(
+            WorkspaceContentObjectRelation::class, new DataClassParameters(
                 condition: $condition, retrieveProperties: new RetrieveProperties(
                 [
                     new PropertyConditionVariable(

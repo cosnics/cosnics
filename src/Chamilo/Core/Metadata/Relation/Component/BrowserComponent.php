@@ -12,8 +12,7 @@ use Chamilo\Libraries\Format\Structure\ActionBar\ButtonToolBar;
 use Chamilo\Libraries\Format\Structure\ActionBar\Renderer\ButtonToolBarRenderer;
 use Chamilo\Libraries\Format\Structure\Glyph\FontAwesomeGlyph;
 use Chamilo\Libraries\Format\Table\RequestTableParameterValuesCompiler;
-use Chamilo\Libraries\Storage\Parameters\DataClassCountParameters;
-use Chamilo\Libraries\Storage\Parameters\RetrievesParameters;
+use Chamilo\Libraries\Storage\Parameters\DataClassParameters;
 use Chamilo\Libraries\Storage\Query\Condition\Condition;
 use Chamilo\Libraries\Storage\Query\Variable\PropertyConditionVariable;
 use Chamilo\Libraries\Utilities\StringUtilities;
@@ -118,7 +117,7 @@ class BrowserComponent extends Manager
     protected function renderTable(): string
     {
         $totalNumberOfItems =
-            DataManager::count(Relation::class, new DataClassCountParameters(condition: $this->getRelationCondition()));
+            DataManager::count(Relation::class, new DataClassParameters(condition: $this->getRelationCondition()));
         $relationTableRenderer = $this->getRelationTableRenderer();
 
         $tableParameterValues = $this->getRequestTableParameterValuesCompiler()->determineParameterValues(
@@ -127,9 +126,10 @@ class BrowserComponent extends Manager
         );
 
         $relations = DataManager::retrieves(
-            Relation::class, new RetrievesParameters(
-                condition: $this->getRelationCondition(), count: $tableParameterValues->getNumberOfItemsPerPage(),
-                offset: $tableParameterValues->getOffset(), orderBy: $relationTableRenderer->determineOrderBy($tableParameterValues)
+            Relation::class, new DataClassParameters(
+                condition: $this->getRelationCondition(), orderBy: $relationTableRenderer->determineOrderBy(
+                $tableParameterValues
+            ), count: $tableParameterValues->getNumberOfItemsPerPage(), offset: $tableParameterValues->getOffset()
             )
         );
 

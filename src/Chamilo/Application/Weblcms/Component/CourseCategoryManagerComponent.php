@@ -13,7 +13,7 @@ use Chamilo\Libraries\Format\Breadcrumb\BreadcrumbLessComponentInterface;
 use Chamilo\Libraries\Format\Breadcrumb\BreadcrumbTrail;
 use Chamilo\Libraries\Format\Structure\Breadcrumb;
 use Chamilo\Libraries\Format\Tabs\GenericTabsRenderer;
-use Chamilo\Libraries\Storage\Parameters\DataClassCountParameters;
+use Chamilo\Libraries\Storage\Parameters\DataClassParameters;
 use Chamilo\Libraries\Storage\Parameters\RetrievesParameters;
 use Chamilo\Libraries\Translation\Translation;
 
@@ -85,7 +85,7 @@ class CourseCategoryManagerComponent extends Manager implements BreadcrumbLessCo
 
     public function count_categories($condition = null)
     {
-        return DataManager::count(CourseCategory::class, new DataClassCountParameters(condition: $condition));
+        return DataManager::count(CourseCategory::class, new DataClassParameters(condition: $condition));
     }
 
     // Runs through dataclass
@@ -126,7 +126,8 @@ class CourseCategoryManagerComponent extends Manager implements BreadcrumbLessCo
     {
         return DataManager::retrieves(
             CourseCategory::class, new RetrievesParameters(
-                condition: $condition, count: $count, offset: $offset, orderBy: $order_property)
+                condition: $condition, count: $count, offset: $offset, orderBy: $order_property
+            )
         );
     }
 }

@@ -3,7 +3,6 @@ namespace Chamilo\Core\Repository\UserView\Component;
 
 use Chamilo\Core\Repository\UserView\Manager;
 use Chamilo\Core\Repository\UserView\Storage\DataClass\UserView;
-use Chamilo\Libraries\Storage\DataManager\DataManager;
 use Chamilo\Core\Repository\UserView\Table\UserViewTableRenderer;
 use Chamilo\Libraries\Format\Breadcrumb\BreadcrumbLessComponentInterface;
 use Chamilo\Libraries\Format\Structure\ActionBar\Button;
@@ -13,8 +12,8 @@ use Chamilo\Libraries\Format\Structure\ActionBar\Renderer\ButtonToolBarRenderer;
 use Chamilo\Libraries\Format\Structure\Glyph\FontAwesomeGlyph;
 use Chamilo\Libraries\Format\Structure\ToolbarItem;
 use Chamilo\Libraries\Format\Table\RequestTableParameterValuesCompiler;
-use Chamilo\Libraries\Storage\Parameters\DataClassCountParameters;
-use Chamilo\Libraries\Storage\Parameters\RetrievesParameters;
+use Chamilo\Libraries\Storage\DataManager\DataManager;
+use Chamilo\Libraries\Storage\Parameters\DataClassParameters;
 use Chamilo\Libraries\Storage\Query\Condition\AndCondition;
 use Chamilo\Libraries\Storage\Query\Condition\ContainsCondition;
 use Chamilo\Libraries\Storage\Query\Condition\EqualityCondition;
@@ -126,7 +125,7 @@ class BrowserComponent extends Manager implements BreadcrumbLessComponentInterfa
     protected function renderTable(): string
     {
         $totalNumberOfItems =
-            DataManager::count(UserView::class, new DataClassCountParameters(condition: $this->getUserViewTableCondition()));
+            DataManager::count(UserView::class, new DataClassParameters(condition: $this->getUserViewTableCondition()));
 
         $userViewTableRenderer = $this->getUserViewTableRenderer();
 
@@ -136,9 +135,10 @@ class BrowserComponent extends Manager implements BreadcrumbLessComponentInterfa
         );
 
         $userViews = DataManager::retrieves(
-            UserView::class, new RetrievesParameters(
-                condition: $this->getUserViewTableCondition(), count: $tableParameterValues->getNumberOfItemsPerPage(),
-                offset: $tableParameterValues->getOffset(), orderBy: $userViewTableRenderer->determineOrderBy($tableParameterValues)
+            UserView::class, new DataClassParameters(
+                condition: $this->getUserViewTableCondition(), orderBy: $userViewTableRenderer->determineOrderBy(
+                $tableParameterValues
+            ), count: $tableParameterValues->getNumberOfItemsPerPage(), offset: $tableParameterValues->getOffset()
             )
         );
 

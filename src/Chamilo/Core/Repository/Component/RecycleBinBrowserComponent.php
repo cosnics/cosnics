@@ -15,8 +15,7 @@ use Chamilo\Libraries\Format\Structure\Glyph\FontAwesomeGlyph;
 use Chamilo\Libraries\Format\Structure\ToolbarItem;
 use Chamilo\Libraries\Format\Table\RequestTableParameterValuesCompiler;
 use Chamilo\Libraries\Storage\Cache\DataClassRepositoryCache;
-use Chamilo\Libraries\Storage\Parameters\DataClassCountParameters;
-use Chamilo\Libraries\Storage\Parameters\RetrievesParameters;
+use Chamilo\Libraries\Storage\Parameters\DataClassParameters;
 use Chamilo\Libraries\Storage\Query\Condition\AndCondition;
 use Chamilo\Libraries\Storage\Query\Condition\EqualityCondition;
 use Chamilo\Libraries\Storage\Query\Variable\PropertyConditionVariable;
@@ -75,7 +74,7 @@ class RecycleBinBrowserComponent extends Manager
      */
     private function emptyRecycleBin()
     {
-        $parameters = new RetrievesParameters(condition: $this->getRecycleBinTableCondition());
+        $parameters = new DataClassParameters(condition: $this->getRecycleBinTableCondition());
         $trashed_objects = DataManager::retrieve_active_content_objects(ContentObject::class, $parameters);
 
         foreach ($trashed_objects as $object)
@@ -149,7 +148,7 @@ class RecycleBinBrowserComponent extends Manager
     protected function renderTable(): string
     {
         $totalNumberOfItems = DataManager::count_active_content_objects(
-            ContentObject::class, new DataClassCountParameters(condition: $this->getRecycleBinTableCondition())
+            ContentObject::class, new DataClassParameters(condition: $this->getRecycleBinTableCondition())
         );
         $recycleBinTableRenderer = $this->getRecycleBinTableRenderer();
 
@@ -159,9 +158,10 @@ class RecycleBinBrowserComponent extends Manager
         );
 
         $contentObjects = DataManager::retrieve_active_content_objects(
-            ContentObject::class, new RetrievesParameters(
-                condition: $this->getRecycleBinTableCondition(), count: $tableParameterValues->getNumberOfItemsPerPage(),
-                offset: $tableParameterValues->getOffset(), orderBy: $recycleBinTableRenderer->determineOrderBy($tableParameterValues)
+            ContentObject::class, new DataClassParameters(
+                condition: $this->getRecycleBinTableCondition(), orderBy: $recycleBinTableRenderer->determineOrderBy(
+                $tableParameterValues
+            ), count: $tableParameterValues->getNumberOfItemsPerPage(), offset: $tableParameterValues->getOffset()
             )
         );
 

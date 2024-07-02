@@ -6,7 +6,7 @@ use Chamilo\Core\Repository\Storage\DataClass\RepositoryCategory;
 use Chamilo\Core\Repository\Storage\DataManager;
 use Chamilo\Core\Repository\Workspace\Storage\DataClass\Workspace;
 use Chamilo\Core\Repository\Workspace\Storage\DataClass\WorkspaceContentObjectRelation;
-use Chamilo\Libraries\Storage\Parameters\DataClassDistinctParameters;
+use Chamilo\Libraries\Storage\Parameters\DataClassParameters;
 use Chamilo\Libraries\Storage\Query\Condition\AndCondition;
 use Chamilo\Libraries\Storage\Query\Condition\EqualityCondition;
 use Chamilo\Libraries\Storage\Query\Condition\InCondition;
@@ -53,17 +53,14 @@ class ExportParameters
         }
     }
 
-    /**
-     * @return string
-     */
-    public function getType()
-    {
-        return $this->type;
-    }
-
     public function getWorkspace(): Workspace
     {
         return $this->workspace;
+    }
+
+    public function setWorkspace(Workspace $workspace)
+    {
+        $this->workspace = $workspace;
     }
 
     /**
@@ -72,6 +69,14 @@ class ExportParameters
     public function get_category_ids()
     {
         return $this->category_ids;
+    }
+
+    /**
+     * @param $category_ids
+     */
+    public function set_category_ids($category_ids)
+    {
+        $this->category_ids = $category_ids;
     }
 
     /**
@@ -105,10 +110,10 @@ class ExportParameters
                         ), new StaticConditionVariable($this->getWorkspace()->getId())
                     );
 
-                    $parameters = new DataClassDistinctParameters(
-                        condition: $condition, retrieveProperties: new RetrieveProperties(
+                    $parameters = new DataClassParameters(
+                        condition: $condition, joins: $joins, retrieveProperties: new RetrieveProperties(
                         [new PropertyConditionVariable(ContentObject::class, ContentObject::PROPERTY_ID)]
-                    ), joins: $joins
+                    )
                     );
                 }
                 else
@@ -153,10 +158,10 @@ class ExportParameters
 
                     $condition = new AndCondition($conditions);
 
-                    $parameters = new DataClassDistinctParameters(
-                        condition: $condition, retrieveProperties: new RetrieveProperties(
+                    $parameters = new DataClassParameters(
+                        condition: $condition, joins: $joins, retrieveProperties: new RetrieveProperties(
                         [new PropertyConditionVariable(ContentObject::class, ContentObject::PROPERTY_ID)]
-                    ), joins: $joins
+                    )
                     );
                 }
 
@@ -181,53 +186,19 @@ class ExportParameters
     }
 
     /**
-     * @return the $format
-     */
-    public function get_format()
-    {
-        return $this->format;
-    }
-
-    /**
-     * @deprecated Use ExportParameters::getType() now
-     */
-    public function get_type()
-    {
-        return $this->getType();
-    }
-
-    /**
-     * @return the $user
-     */
-    public function get_user()
-    {
-        return $this->user;
-    }
-
-    public function has_categories()
-    {
-        return count($this->get_category_ids()) > 0;
-    }
-
-    public function setWorkspace(Workspace $workspace)
-    {
-        $this->workspace = $workspace;
-    }
-
-    /**
-     * @param $category_ids
-     */
-    public function set_category_ids($category_ids)
-    {
-        $this->category_ids = $category_ids;
-    }
-
-    /**
      * @param $content_object_ids
      */
     public function set_content_object_ids($content_object_ids)
     {
         $this->content_object_ids = $content_object_ids;
+    }
+
+    /**
+     * @return the $format
+     */
+    public function get_format()
+    {
+        return $this->format;
     }
 
     /**
@@ -239,6 +210,22 @@ class ExportParameters
     }
 
     /**
+     * @deprecated Use ExportParameters::getType() now
+     */
+    public function get_type()
+    {
+        return $this->getType();
+    }
+
+    /**
+     * @return string
+     */
+    public function getType()
+    {
+        return $this->type;
+    }
+
+    /**
      * @param $type string
      */
     public function set_type($type)
@@ -247,10 +234,23 @@ class ExportParameters
     }
 
     /**
+     * @return the $user
+     */
+    public function get_user()
+    {
+        return $this->user;
+    }
+
+    /**
      * @param $user string
      */
     public function set_user($user)
     {
         $this->user = $user;
+    }
+
+    public function has_categories()
+    {
+        return count($this->get_category_ids()) > 0;
     }
 }

@@ -21,8 +21,7 @@ use Chamilo\Application\Weblcms\Tool\Manager;
 use Chamilo\Core\User\Storage\DataClass\User;
 use Chamilo\Libraries\DependencyInjection\DependencyInjectionContainerBuilder;
 use Chamilo\Libraries\Storage\DataClass\DataClass;
-use Chamilo\Libraries\Storage\Parameters\DataClassCountParameters;
-use Chamilo\Libraries\Storage\Parameters\RetrieveParameters;
+use Chamilo\Libraries\Storage\Parameters\DataClassParameters;
 use Chamilo\Libraries\Storage\Parameters\RetrievesParameters;
 use Chamilo\Libraries\Storage\Query\Condition\AndCondition;
 use Chamilo\Libraries\Storage\Query\Condition\EqualityCondition;
@@ -810,8 +809,7 @@ class Course extends DataClass
         );
 
         return DataManager::count(
-                CourseEntityRelation::class,
-                new DataClassCountParameters(condition: new AndCondition($relationConditions))
+                CourseEntityRelation::class, new DataClassParameters(condition: new AndCondition($relationConditions))
             ) > 0;
     }
 
@@ -834,8 +832,7 @@ class Course extends DataClass
         );
 
         return DataManager::count(
-                CourseEntityRelation::class,
-                new DataClassCountParameters(condition: new AndCondition($relationConditions))
+                CourseEntityRelation::class, new DataClassParameters(condition: new AndCondition($relationConditions))
             ) > 0;
     }
 
@@ -1002,7 +999,7 @@ class Course extends DataClass
 
         $condition = new AndCondition($conditions);
 
-        return DataManager::retrieve(CourseRelCourseSetting::class, new RetrieveParameters(condition: $condition));
+        return DataManager::retrieve(CourseRelCourseSetting::class, new DataClassParameters(condition: $condition));
     }
 
     /**

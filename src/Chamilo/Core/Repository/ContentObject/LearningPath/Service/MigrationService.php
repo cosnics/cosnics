@@ -11,8 +11,7 @@ use Chamilo\Core\Repository\Storage\DataClass\ComplexContentObjectItem;
 use Chamilo\Core\Repository\Storage\DataClass\ContentObject;
 use Chamilo\Core\Repository\Workspace\Repository\ContentObjectRepository;
 use Chamilo\Core\User\Storage\DataClass\User;
-use Chamilo\Libraries\Storage\Parameters\DataClassCountParameters;
-use Chamilo\Libraries\Storage\Parameters\RetrievesParameters;
+use Chamilo\Libraries\Storage\Parameters\DataClassParameters;
 use Chamilo\Libraries\Storage\Query\Condition\AndCondition;
 use Chamilo\Libraries\Storage\Query\Condition\EqualityCondition;
 use Chamilo\Libraries\Storage\Query\Condition\InCondition;
@@ -177,14 +176,14 @@ class MigrationService
         );
 
         return $this->contentObjectRepository->findAll(
-            ComplexContentObjectItem::class, new RetrievesParameters(
-                condition: $condition, count: null, offset: null, orderBy: new OrderBy([
+            ComplexContentObjectItem::class, new DataClassParameters(
+                condition: $condition, orderBy: new OrderBy([
                 new OrderProperty(
                     new PropertyConditionVariable(
                         ComplexContentObjectItem::class, ComplexContentObjectItem::PROPERTY_DISPLAY_ORDER
                     )
                 )
-            ])
+            ]), count: null, offset: null
             )
         );
     }
@@ -252,7 +251,7 @@ class MigrationService
         $condition = new AndCondition($conditions);
 
         return $this->contentObjectRepository->countAll(
-                ComplexLearningPathItem::class, new DataClassCountParameters(condition: $condition)
+                ComplexLearningPathItem::class, new DataClassParameters(condition: $condition)
             ) > 0;
     }
 

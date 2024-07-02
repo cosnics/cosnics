@@ -14,8 +14,7 @@ use Chamilo\Libraries\Format\Structure\ActionBar\Renderer\ButtonToolBarRenderer;
 use Chamilo\Libraries\Format\Structure\Breadcrumb;
 use Chamilo\Libraries\Format\Structure\Glyph\FontAwesomeGlyph;
 use Chamilo\Libraries\Format\Table\RequestTableParameterValuesCompiler;
-use Chamilo\Libraries\Storage\Parameters\DataClassCountParameters;
-use Chamilo\Libraries\Storage\Parameters\RetrievesParameters;
+use Chamilo\Libraries\Storage\Parameters\DataClassParameters;
 use Chamilo\Libraries\Storage\Query\Condition\AndCondition;
 use Chamilo\Libraries\Storage\Query\Condition\ComparisonCondition;
 use Chamilo\Libraries\Storage\Query\Variable\PropertyConditionVariable;
@@ -175,7 +174,7 @@ class BrowserComponent extends Manager
     protected function renderTable(): string
     {
         $totalNumberOfItems =
-            DataManager::count(Vocabulary::class, new DataClassCountParameters(condition: $this->getVocabularyCondition()));
+            DataManager::count(Vocabulary::class, new DataClassParameters(condition: $this->getVocabularyCondition()));
         $vocabularyTableRenderer = $this->getVocabularyTableRenderer();
 
         $tableParameterValues = $this->getRequestTableParameterValuesCompiler()->determineParameterValues(
@@ -184,9 +183,10 @@ class BrowserComponent extends Manager
         );
 
         $vocabularies = DataManager::retrieves(
-            Vocabulary::class, new RetrievesParameters(
-                condition: $this->getVocabularyCondition(), count: $tableParameterValues->getNumberOfItemsPerPage(),
-                offset: $tableParameterValues->getOffset(), orderBy: $vocabularyTableRenderer->determineOrderBy($tableParameterValues)
+            Vocabulary::class, new DataClassParameters(
+                condition: $this->getVocabularyCondition(), orderBy: $vocabularyTableRenderer->determineOrderBy(
+                $tableParameterValues
+            ), count: $tableParameterValues->getNumberOfItemsPerPage(), offset: $tableParameterValues->getOffset()
             )
         );
 

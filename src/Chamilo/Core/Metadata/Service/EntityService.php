@@ -15,8 +15,7 @@ use Chamilo\Core\Metadata\Storage\DataClass\SchemaInstance;
 use Chamilo\Core\Metadata\Storage\DataClass\Vocabulary;
 use Chamilo\Core\User\Storage\DataClass\User;
 use Chamilo\Libraries\Storage\DataManager\DataManager;
-use Chamilo\Libraries\Storage\Parameters\DataClassDistinctParameters;
-use Chamilo\Libraries\Storage\Parameters\RetrievesParameters;
+use Chamilo\Libraries\Storage\Parameters\DataClassParameters;
 use Chamilo\Libraries\Storage\Query\Condition\AndCondition;
 use Chamilo\Libraries\Storage\Query\Condition\ComparisonCondition;
 use Chamilo\Libraries\Storage\Query\Condition\InCondition;
@@ -88,7 +87,7 @@ class EntityService
         $schemaIds = $this->getAvailableSchemaIdsForEntityType($entity);
 
         return DataManager::retrieves(
-            Schema::class, new RetrievesParameters(
+            Schema::class, new DataClassParameters(
                 condition: new InCondition(
                     new PropertyConditionVariable(Schema::class, Schema::PROPERTY_ID), $schemaIds
                 )
@@ -183,7 +182,7 @@ class EntityService
         );
 
         return DataManager::retrieves(
-            SchemaInstance::class, new RetrievesParameters(condition: new AndCondition($conditions))
+            SchemaInstance::class, new DataClassParameters(condition: new AndCondition($conditions))
         );
     }
 
@@ -203,7 +202,7 @@ class EntityService
         );
 
         return DataManager::retrieves(
-            SchemaInstance::class, new RetrievesParameters(condition: new AndCondition($conditions))
+            SchemaInstance::class, new DataClassParameters(condition: new AndCondition($conditions))
         );
     }
 
@@ -238,7 +237,7 @@ class EntityService
         $condition = new AndCondition($conditions);
 
         return DataManager::distinct(
-            RelationInstance::class, new DataClassDistinctParameters(
+            RelationInstance::class, new DataClassParameters(
                 condition: $condition, retrieveProperties: new RetrieveProperties(
                 [new PropertyConditionVariable(RelationInstance::class, RelationInstance::PROPERTY_SOURCE_ID)]
             )
@@ -262,7 +261,7 @@ class EntityService
         );
 
         return DataManager::retrieves(
-            Vocabulary::class, new RetrievesParameters(condition: new AndCondition($conditions))
+            Vocabulary::class, new DataClassParameters(condition: new AndCondition($conditions))
         );
     }
 

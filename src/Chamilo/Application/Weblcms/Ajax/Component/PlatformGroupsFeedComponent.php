@@ -11,7 +11,7 @@ use Chamilo\Core\User\Storage\DataClass\User;
 use Chamilo\Libraries\Ajax\Component\GroupsFeedComponent;
 use Chamilo\Libraries\Format\Form\Element\AdvancedElementFinder\AdvancedElementFinderElement;
 use Chamilo\Libraries\Format\Structure\Glyph\FontAwesomeGlyph;
-use Chamilo\Libraries\Storage\Parameters\DataClassDistinctParameters;
+use Chamilo\Libraries\Storage\Parameters\DataClassParameters;
 use Chamilo\Libraries\Storage\Query\Condition\AndCondition;
 use Chamilo\Libraries\Storage\Query\Condition\ContainsCondition;
 use Chamilo\Libraries\Storage\Query\Condition\EqualityCondition;
@@ -147,14 +147,14 @@ class PlatformGroupsFeedComponent extends GroupsFeedComponent
             );
 
             $subscribed_group_ids = DataManager::distinct(
-                CourseEntityRelation::class, new DataClassDistinctParameters(
+                CourseEntityRelation::class, new DataClassParameters(
                     condition: new AndCondition($groupConditions), retrieveProperties: new RetrieveProperties(
-                        [
-                            new PropertyConditionVariable(
-                                CourseEntityRelation::class, CourseEntityRelation::PROPERTY_ENTITY_ID
-                            )
-                        ]
-                    )
+                    [
+                        new PropertyConditionVariable(
+                            CourseEntityRelation::class, CourseEntityRelation::PROPERTY_ENTITY_ID
+                        )
+                    ]
+                )
                 )
             );
 

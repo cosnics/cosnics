@@ -13,7 +13,7 @@ use Chamilo\Libraries\Architecture\Application\ApplicationConfiguration;
 use Chamilo\Libraries\Architecture\ClassnameUtilities;
 use Chamilo\Libraries\Architecture\Exceptions\NotAllowedException;
 use Chamilo\Libraries\Storage\DataManager\DataManager;
-use Chamilo\Libraries\Storage\Parameters\DataClassDistinctParameters;
+use Chamilo\Libraries\Storage\Parameters\DataClassParameters;
 use Chamilo\Libraries\Storage\Query\Condition\EqualityCondition;
 use Chamilo\Libraries\Storage\Query\Condition\InCondition;
 use Chamilo\Libraries\Storage\Query\RetrieveProperties;
@@ -111,26 +111,26 @@ class PublisherComponent extends Manager
         );
 
         $contentObjectNumbers = DataManager::distinct(
-            WorkspaceContentObjectRelation::class, new DataClassDistinctParameters(
+            WorkspaceContentObjectRelation::class, new DataClassParameters(
                 condition: $condition, retrieveProperties: new RetrieveProperties(
-                    [
-                        new PropertyConditionVariable(
-                            WorkspaceContentObjectRelation::class,
-                            WorkspaceContentObjectRelation::PROPERTY_CONTENT_OBJECT_ID
-                        )
-                    ]
-                )
+                [
+                    new PropertyConditionVariable(
+                        WorkspaceContentObjectRelation::class,
+                        WorkspaceContentObjectRelation::PROPERTY_CONTENT_OBJECT_ID
+                    )
+                ]
+            )
             )
         );
 
         return DataManager::distinct(
-            ContentObject::class, new DataClassDistinctParameters(
+            ContentObject::class, new DataClassParameters(
                 condition: new InCondition(
                     new PropertyConditionVariable(ContentObject::class, ContentObject::PROPERTY_OBJECT_NUMBER),
                     $contentObjectNumbers
                 ), retrieveProperties: new RetrieveProperties(
-                    [new PropertyConditionVariable(ContentObject::class, ContentObject::PROPERTY_ID)]
-                )
+                [new PropertyConditionVariable(ContentObject::class, ContentObject::PROPERTY_ID)]
+            )
             )
         );
     }

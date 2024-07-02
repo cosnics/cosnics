@@ -13,8 +13,7 @@ use Chamilo\Libraries\Architecture\Application\ApplicationConfigurationInterface
 use Chamilo\Libraries\Architecture\Exceptions\NotAllowedException;
 use Chamilo\Libraries\Architecture\Exceptions\ObjectNotExistException;
 use Chamilo\Libraries\Format\Table\RequestTableParameterValuesCompiler;
-use Chamilo\Libraries\Storage\Parameters\DataClassCountParameters;
-use Chamilo\Libraries\Storage\Parameters\RetrievesParameters;
+use Chamilo\Libraries\Storage\Parameters\DataClassParameters;
 use Chamilo\Libraries\Storage\Query\Condition\EqualityCondition;
 use Chamilo\Libraries\Storage\Query\OrderProperty;
 use Chamilo\Libraries\Storage\Query\Variable\PropertyConditionVariable;
@@ -344,7 +343,7 @@ abstract class Manager extends Application
     public function get_complex_content_object_table_html()
     {
         $totalNumberOfItems = DataManager::count_complex_content_object_items(
-            ComplexContentObjectItem::class, new DataClassCountParameters(condition: $this->getComplexCondition())
+            ComplexContentObjectItem::class, new DataClassParameters(condition: $this->getComplexCondition())
         );
 
         $complexTableRenderer = $this->getComplexTableRenderer();
@@ -363,9 +362,9 @@ abstract class Manager extends Application
                 )
             )
         );
-        $parameters = new RetrievesParameters(
-            condition: $this->getComplexCondition(), count: $tableParameterValues->getNumberOfItemsPerPage(),
-            offset: $tableParameterValues->getOffset(), orderBy: $orderBy
+        $parameters = new DataClassParameters(
+            condition: $this->getComplexCondition(), orderBy: $orderBy, count: $tableParameterValues->getNumberOfItemsPerPage(),
+            offset: $tableParameterValues->getOffset()
         );
 
         $complexContentObjectItems =

@@ -15,7 +15,7 @@ use Chamilo\Libraries\Format\Structure\Glyph\InlineGlyph;
 use Chamilo\Libraries\Format\Structure\Glyph\NamespaceIdentGlyph;
 use Chamilo\Libraries\Format\Tabs\ContentTab;
 use Chamilo\Libraries\Format\Tabs\TabsCollection;
-use Chamilo\Libraries\Storage\Parameters\DataClassCountParameters;
+use Chamilo\Libraries\Storage\Parameters\DataClassParameters;
 use Chamilo\Libraries\Storage\Query\Condition\AndCondition;
 use Chamilo\Libraries\Storage\Query\Condition\EqualityCondition;
 use Chamilo\Libraries\Storage\Query\Variable\PropertyConditionVariable;
@@ -83,7 +83,7 @@ class TabsTypeSelectorRenderer extends TypeSelectorRenderer
             if ($most_used_content)
             {
                 $glyph = new FontAwesomeGlyph(
-                    'bookmark', array('fa-lg', 'fa-fw'), null, 'fas'
+                    'bookmark', ['fa-lg', 'fa-fw'], null, 'fas'
                 );
 
                 $tabs->add(
@@ -98,7 +98,7 @@ class TabsTypeSelectorRenderer extends TypeSelectorRenderer
         {
             $glyph = new NamespaceIdentGlyph(
                 'Chamilo\Core\Repository\ContentObject\Category\\' . $category->getType(), true, false, false,
-                IdentGlyph::SIZE_SMALL, array('fa-fw')
+                IdentGlyph::SIZE_SMALL, ['fa-fw']
             );
 
             $tabs->add(
@@ -111,7 +111,7 @@ class TabsTypeSelectorRenderer extends TypeSelectorRenderer
         if ($this->has_additional_links() > 0)
         {
             $glyph = new FontAwesomeGlyph(
-                'magic', array('fa-lg', 'fa-fw'), null, 'fas'
+                'magic', ['fa-lg', 'fa-fw'], null, 'fas'
             );
 
             $tabs->add(
@@ -235,7 +235,7 @@ class TabsTypeSelectorRenderer extends TypeSelectorRenderer
                 $type = $context . '\Storage\DataClass\\' .
                     (string) StringUtilities::getInstance()->createString($package)->upperCamelize();
 
-                $parameters = new DataClassCountParameters(condition: $condition);
+                $parameters = new DataClassParameters(condition: $condition);
                 $count = DataManager::count_active_content_objects($type, $parameters);
 
                 if ($count > 0)

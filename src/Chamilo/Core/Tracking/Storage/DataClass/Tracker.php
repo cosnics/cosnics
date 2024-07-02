@@ -2,11 +2,9 @@
 namespace Chamilo\Core\Tracking\Storage\DataClass;
 
 use Chamilo\Core\Tracking\Manager;
-use Chamilo\Libraries\Storage\DataManager\DataManager;
 use Chamilo\Libraries\Storage\DataClass\DataClass;
-use Chamilo\Libraries\Storage\Parameters\DataClassCountParameters;
-use Chamilo\Libraries\Storage\Parameters\RetrieveParameters;
-use Chamilo\Libraries\Storage\Parameters\RetrievesParameters;
+use Chamilo\Libraries\Storage\DataManager\DataManager;
+use Chamilo\Libraries\Storage\Parameters\DataClassParameters;
 use Chamilo\Libraries\Storage\Query\Condition\Condition;
 
 abstract class Tracker extends DataClass
@@ -32,7 +30,7 @@ abstract class Tracker extends DataClass
 
     public static function count_data($class_name, $application, $condition)
     {
-        return DataManager::count($class_name, new DataClassCountParameters(condition: $condition));
+        return DataManager::count($class_name, new DataClassParameters(condition: $condition));
     }
 
     /**
@@ -50,8 +48,9 @@ abstract class Tracker extends DataClass
     )
     {
         return DataManager::retrieves(
-            $class_name, new RetrievesParameters(
-                condition: $condition, count: $max_objects, offset: $offset, orderBy: $order_by)
+            $class_name, new DataClassParameters(
+                condition: $condition, orderBy: $order_by, count: $max_objects, offset: $offset
+            )
         );
     }
 
@@ -64,6 +63,14 @@ abstract class Tracker extends DataClass
     }
 
     /**
+     * @param $event Event
+     */
+    public function set_event(Event $event)
+    {
+        $this->event = $event;
+    }
+
+    /**
      * @param $type        string
      * @param $application string
      * @param $condition   Condition
@@ -73,17 +80,7 @@ abstract class Tracker extends DataClass
      */
     public static function get_singular_data($class_name, $application, $condition, $order_by = null)
     {
-        return DataManager::retrieve($class_name, new RetrieveParameters(condition: $condition, orderBy: $order_by));
-    }
-
-    /**
-     * Removes tracker items with a given condition
-     *
-     * @param $condition Condition
-     */
-    public function remove(Condition $condition = null)
-    {
-        return DataManager::deletes(static::class, $condition);
+        return DataManager::retrieve($class_name, new DataClassParameters(condition: $condition, orderBy: $order_by));
     }
 
     /**
@@ -100,11 +97,13 @@ abstract class Tracker extends DataClass
     // }
 
     /**
-     * @param $event Event
+     * Removes tracker items with a given condition
+     *
+     * @param $condition Condition
      */
-    public function set_event(Event $event)
+    public function remove(Condition $condition = null)
     {
-        $this->event = $event;
+        return DataManager::deletes(static::class, $condition);
     }
 
     /**

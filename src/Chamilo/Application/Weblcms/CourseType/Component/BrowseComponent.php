@@ -12,7 +12,7 @@ use Chamilo\Libraries\Format\Structure\ActionBar\Renderer\ButtonToolBarRenderer;
 use Chamilo\Libraries\Format\Structure\Glyph\FontAwesomeGlyph;
 use Chamilo\Libraries\Format\Structure\ToolbarItem;
 use Chamilo\Libraries\Format\Table\RequestTableParameterValuesCompiler;
-use Chamilo\Libraries\Storage\Parameters\DataClassCountParameters;
+use Chamilo\Libraries\Storage\Parameters\DataClassParameters;
 use Chamilo\Libraries\Storage\Parameters\RetrievesParameters;
 use Chamilo\Libraries\Storage\Query\Condition\AndCondition;
 use Chamilo\Libraries\Storage\Query\OrderProperty;
@@ -125,7 +125,7 @@ class BrowseComponent extends Manager
     protected function renderTable(): string
     {
         $totalNumberOfItems =
-            DataManager::count(CourseType::class, new DataClassCountParameters(condition: $this->getCourseTypeCondition()));
+            DataManager::count(CourseType::class, new DataClassParameters(condition: $this->getCourseTypeCondition()));
         $courseTypeTableRenderer = $this->getCourseTypeTableRenderer();
 
         $tableParameterValues = $this->getRequestTableParameterValuesCompiler()->determineParameterValues(

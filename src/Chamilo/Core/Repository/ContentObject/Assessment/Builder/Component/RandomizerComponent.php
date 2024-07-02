@@ -11,7 +11,7 @@ use Chamilo\Core\Repository\ContentObject\HotspotQuestion\Storage\DataClass\Comp
 use Chamilo\Core\Repository\ContentObject\OrderingQuestion\Storage\DataClass\ComplexOrderingQuestion;
 use Chamilo\Core\Repository\Storage\DataClass\ComplexContentObjectItem;
 use Chamilo\Core\Repository\Storage\DataManager;
-use Chamilo\Libraries\Storage\Parameters\RetrievesParameters;
+use Chamilo\Libraries\Storage\Parameters\DataClassParameters;
 use Chamilo\Libraries\Storage\Query\Condition\EqualityCondition;
 use Chamilo\Libraries\Storage\Query\Variable\PropertyConditionVariable;
 use Chamilo\Libraries\Storage\Query\Variable\StaticConditionVariable;
@@ -23,7 +23,7 @@ class RandomizerComponent extends Manager
     public function run()
     {
         $complex_content_object_items = DataManager::retrieve_complex_content_object_items(
-            ComplexContentObjectItem::class, new RetrievesParameters(
+            ComplexContentObjectItem::class, new DataClassParameters(
                 condition: new EqualityCondition(
                     new PropertyConditionVariable(
                         ComplexContentObjectItem::class, ComplexContentObjectItem::PROPERTY_PARENT

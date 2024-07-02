@@ -16,7 +16,7 @@ use Chamilo\Libraries\Format\Structure\Glyph\FontAwesomeGlyph;
 use Chamilo\Libraries\Format\Tabs\Link\LinkTab;
 use Chamilo\Libraries\Format\Tabs\Link\LinkTabsRenderer;
 use Chamilo\Libraries\Format\Tabs\TabsCollection;
-use Chamilo\Libraries\Storage\Parameters\DataClassCountParameters;
+use Chamilo\Libraries\Storage\Parameters\DataClassParameters;
 use Chamilo\Libraries\Storage\Query\Condition\AndCondition;
 use Chamilo\Libraries\Storage\Query\Condition\EqualityCondition;
 use Chamilo\Libraries\Storage\Query\Variable\PropertyConditionVariable;
@@ -114,7 +114,7 @@ abstract class Manager extends Application
             new StaticConditionVariable($selected_type)
         );
 
-        if (DataManager::count(Admin::class, new DataClassCountParameters(condition: $condition)) == 0 &&
+        if (DataManager::count(Admin::class, new DataClassParameters(condition: $condition)) == 0 &&
             $selected_type == UserEntity::ENTITY_TYPE)
         {
             return PlatformGroupEntity::ENTITY_TYPE;
@@ -151,7 +151,7 @@ abstract class Manager extends Application
 
         $condition = new AndCondition($conditions);
 
-        if (DataManager::count(Admin::class, new DataClassCountParameters(condition: $condition)) == 0 &&
+        if (DataManager::count(Admin::class, new DataClassParameters(condition: $condition)) == 0 &&
             $selected_type == CourseEntity::ENTITY_TYPE)
         {
             return CourseCategoryEntity::ENTITY_TYPE;

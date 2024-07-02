@@ -7,8 +7,7 @@ use Chamilo\Core\Repository\Publication\Service\PublicationAggregator;
 use Chamilo\Core\Repository\Storage\DataManager;
 use Chamilo\Core\Repository\Workspace\Storage\DataClass\Workspace;
 use Chamilo\Libraries\DependencyInjection\DependencyInjectionContainerBuilder;
-use Chamilo\Libraries\Storage\Parameters\DataClassCountParameters;
-use Chamilo\Libraries\Storage\Parameters\DataClassDistinctParameters;
+use Chamilo\Libraries\Storage\Parameters\DataClassParameters;
 use Chamilo\Libraries\Storage\Query\Condition\AndCondition;
 use Chamilo\Libraries\Storage\Query\Condition\EqualityCondition;
 use Chamilo\Libraries\Storage\Query\Condition\NotCondition;
@@ -62,7 +61,7 @@ class RepositoryCategory extends PlatformCategory
                 new PropertyConditionVariable(RepositoryCategory::class, RepositoryCategory::PROPERTY_ID),
                 new StaticConditionVariable($this->get_parent())
             );
-            $count = DataManager::count(RepositoryCategory::class, new DataClassCountParameters(condition: $condition));
+            $count = DataManager::count(RepositoryCategory::class, new DataClassParameters(condition: $condition));
             if ($count == 0)
             {
                 $this->addError(Translation::get('ParentDoesNotExist'));
@@ -108,7 +107,7 @@ class RepositoryCategory extends PlatformCategory
         );
 
         $condition = new AndCondition($conditions);
-        $count = DataManager::count(RepositoryCategory::class, new DataClassCountParameters(condition: $condition));
+        $count = DataManager::count(RepositoryCategory::class, new DataClassParameters(condition: $condition));
 
         if ($count > 0)
         {
@@ -264,8 +263,10 @@ class RepositoryCategory extends PlatformCategory
 
         if (!$recursive)
         {
-            $parameters = new DataClassDistinctParameters(
-                condition: $condition, retrieveProperties: new RetrieveProperties([new PropertyConditionVariable(self::class, self::PROPERTY_ID)])
+            $parameters = new DataClassParameters(
+                condition: $condition, retrieveProperties: new RetrieveProperties(
+                [new PropertyConditionVariable(self::class, self::PROPERTY_ID)]
+            )
             );
 
             return (DataManager::distinct(self::class, $parameters));
@@ -331,7 +332,7 @@ class RepositoryCategory extends PlatformCategory
             new StaticConditionVariable($this->get_id())
         );
 
-        return DataManager::count(RepositoryCategory::class, new DataClassCountParameters(condition: $condition)) > 0;
+        return DataManager::count(RepositoryCategory::class, new DataClassParameters(condition: $condition)) > 0;
     }
 
     public function setType($type)

@@ -25,10 +25,7 @@ use Chamilo\Libraries\Storage\Cache\DataClassRepositoryCache;
 use Chamilo\Libraries\Storage\DataClass\DataClass;
 use Chamilo\Libraries\Storage\DataClass\Interfaces\DataClassTypeAwareInterface;
 use Chamilo\Libraries\Storage\DataClass\Traits\DataClassTypeAwareTrait;
-use Chamilo\Libraries\Storage\Parameters\DataClassCountParameters;
-use Chamilo\Libraries\Storage\Parameters\DataClassDistinctParameters;
-use Chamilo\Libraries\Storage\Parameters\RetrieveParameters;
-use Chamilo\Libraries\Storage\Parameters\RetrievesParameters;
+use Chamilo\Libraries\Storage\Parameters\DataClassParameters;
 use Chamilo\Libraries\Storage\Query\Condition\AndCondition;
 use Chamilo\Libraries\Storage\Query\Condition\EqualityCondition;
 use Chamilo\Libraries\Storage\Query\Condition\NotCondition;
@@ -222,7 +219,7 @@ class ContentObject extends DataClass implements DataClassTypeAwareInterface
             )
         );
 
-        $parameters = new DataClassCountParameters(condition: $condition, joins: new Joins([$join]));
+        $parameters = new DataClassParameters(condition: $condition, joins: new Joins([$join]));
 
         return DataManager::count(ContentObjectAttachment::class, $parameters);
     }
@@ -243,7 +240,7 @@ class ContentObject extends DataClass implements DataClassTypeAwareInterface
             )
         );
 
-        $parameters = new DataClassCountParameters(condition: $condition, joins: new Joins([$join]));
+        $parameters = new DataClassParameters(condition: $condition, joins: new Joins([$join]));
 
         return DataManager::count(ContentObjectAttachment::class, $parameters);
     }
@@ -257,7 +254,7 @@ class ContentObject extends DataClass implements DataClassTypeAwareInterface
         );
 
         return DataManager::count_complex_content_object_items(
-            ComplexContentObjectItem::class, new DataClassCountParameters(condition: $condition)
+            ComplexContentObjectItem::class, new DataClassParameters(condition: $condition)
         );
     }
 
@@ -277,7 +274,7 @@ class ContentObject extends DataClass implements DataClassTypeAwareInterface
             )
         );
 
-        $parameters = new DataClassCountParameters(condition: $condition, joins: new Joins([$join]));
+        $parameters = new DataClassParameters(condition: $condition, joins: new Joins([$join]));
 
         return DataManager::count(ContentObjectInclude::class, $parameters);
     }
@@ -298,7 +295,7 @@ class ContentObject extends DataClass implements DataClassTypeAwareInterface
             )
         );
 
-        $parameters = new DataClassCountParameters(condition: $condition, joins: new Joins([$join]));
+        $parameters = new DataClassParameters(condition: $condition, joins: new Joins([$join]));
 
         return DataManager::count(ContentObjectInclude::class, $parameters);
     }
@@ -328,7 +325,7 @@ class ContentObject extends DataClass implements DataClassTypeAwareInterface
         $condition = new OrCondition($conditions);
 
         return DataManager::count_complex_content_object_items(
-            ComplexContentObjectItem::class, new DataClassCountParameters(condition: $condition)
+            ComplexContentObjectItem::class, new DataClassParameters(condition: $condition)
         );
     }
 
@@ -399,7 +396,7 @@ class ContentObject extends DataClass implements DataClassTypeAwareInterface
                     );
                     $condition = new AndCondition($conditions);
 
-                    $parameters = new RetrievesParameters(condition: $condition);
+                    $parameters = new DataClassParameters(condition: $condition);
 
                     $objects = DataManager::retrieve_content_objects(get_class($content_object), $parameters);
 
@@ -655,7 +652,7 @@ class ContentObject extends DataClass implements DataClassTypeAwareInterface
         $condition = new AndCondition($conditions);
 
         $attachment = DataManager::retrieve(
-            ContentObjectAttachment::class, new RetrieveParameters(condition: $condition)
+            ContentObjectAttachment::class, new DataClassParameters(condition: $condition)
         );
 
         if ($attachment instanceof ContentObjectAttachment)
@@ -709,7 +706,7 @@ class ContentObject extends DataClass implements DataClassTypeAwareInterface
         $condition = new AndCondition($conditions);
 
         $include = DataManager::retrieve(
-            ContentObjectInclude::class, new RetrieveParameters(condition: $condition)
+            ContentObjectInclude::class, new DataClassParameters(condition: $condition)
         );
 
         if ($include instanceof ContentObjectInclude)
@@ -950,7 +947,7 @@ class ContentObject extends DataClass implements DataClassTypeAwareInterface
             }
             $condition = new AndCondition($conditions);
 
-            $parameters = new DataClassDistinctParameters(
+            $parameters = new DataClassParameters(
                 condition: $condition, retrieveProperties: new RetrieveProperties(
                 [
                     new PropertyConditionVariable(
@@ -981,8 +978,8 @@ class ContentObject extends DataClass implements DataClassTypeAwareInterface
             )
         );
 
-        $parameters = new RetrievesParameters(
-            condition: $condition, count: $count, offset: $offset, orderBy: $order_by, joins: new Joins([$join])
+        $parameters = new DataClassParameters(
+            condition: $condition, joins: new Joins([$join]), orderBy: $order_by, count: $count, offset: $offset
         );
 
         return DataManager::retrieve_content_objects(ContentObject::class, $parameters);
@@ -1014,8 +1011,8 @@ class ContentObject extends DataClass implements DataClassTypeAwareInterface
                 )
             );
 
-            $parameters = new RetrievesParameters(
-                condition: $condition, count: $count, offset: $offset, orderBy: $order_by, joins: new Joins([$join])
+            $parameters = new DataClassParameters(
+                condition: $condition, joins: new Joins([$join]), orderBy: $order_by, count: $count, offset: $offset
             );
             $this->attachments[$type] = DataManager::retrieve_content_objects(ContentObject::class, $parameters);
         }
@@ -1041,7 +1038,7 @@ class ContentObject extends DataClass implements DataClassTypeAwareInterface
             ), new StaticConditionVariable($this->getId())
         );
         $parameters =
-            new RetrievesParameters(condition: $condition, count: $count, offset: $offset, orderBy: $order_by);
+            new DataClassParameters(condition: $condition, orderBy: $order_by, count: $count, offset: $offset);
 
         return DataManager::retrieve_complex_content_object_items(ComplexContentObjectItem::class, $parameters);
     }
@@ -1208,8 +1205,8 @@ class ContentObject extends DataClass implements DataClassTypeAwareInterface
             )
         );
 
-        $parameters = new RetrievesParameters(
-            condition: $condition, count: $count, offset: $offset, orderBy: $order_by, joins: new Joins([$join])
+        $parameters = new DataClassParameters(
+            condition: $condition, joins: new Joins([$join]), orderBy: $order_by, count: $count, offset: $offset
         );
 
         return DataManager::retrieve_content_objects(ContentObject::class, $parameters);
@@ -1238,8 +1235,8 @@ class ContentObject extends DataClass implements DataClassTypeAwareInterface
                 )
             );
 
-            $parameters = new RetrievesParameters(
-                condition: $condition, count: $count, offset: $offset, orderBy: $order_by, joins: new Joins([$join])
+            $parameters = new DataClassParameters(
+                condition: $condition, joins: new Joins([$join]), orderBy: $order_by, count: $count, offset: $offset
             );
             $this->includes = DataManager::retrieve_content_objects(ContentObject::class, $parameters);
         }
@@ -1358,7 +1355,7 @@ class ContentObject extends DataClass implements DataClassTypeAwareInterface
 
         $condition = new OrCondition($conditions);
         $parameters =
-            new RetrievesParameters(condition: $condition, count: $count, offset: $offset, orderBy: $order_by);
+            new DataClassParameters(condition: $condition, orderBy: $order_by, count: $count, offset: $offset);
 
         return DataManager::retrieve_complex_content_object_items(ComplexContentObjectItem::class, $parameters);
     }
@@ -1609,8 +1606,7 @@ class ContentObject extends DataClass implements DataClassTypeAwareInterface
         );
         $condition = new AndCondition($conditions);
 
-        return DataManager::count(ContentObjectAttachment::class, new DataClassCountParameters(condition: $condition)) >
-            0;
+        return DataManager::count(ContentObjectAttachment::class, new DataClassParameters(condition: $condition)) > 0;
     }
 
     /**
@@ -1686,7 +1682,7 @@ class ContentObject extends DataClass implements DataClassTypeAwareInterface
         );
         $condition = new AndCondition($conditions);
 
-        return DataManager::count(ContentObjectInclude::class, new DataClassCountParameters(condition: $condition)) > 0;
+        return DataManager::count(ContentObjectInclude::class, new DataClassParameters(condition: $condition)) > 0;
     }
 
     /**

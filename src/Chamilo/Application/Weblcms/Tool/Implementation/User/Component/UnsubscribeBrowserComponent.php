@@ -27,7 +27,7 @@ use Chamilo\Libraries\Format\Tabs\Link\LinkTab;
 use Chamilo\Libraries\Format\Tabs\Link\LinkTabsRenderer;
 use Chamilo\Libraries\Format\Tabs\TabsCollection;
 use Chamilo\Libraries\Storage\DataClass\NestedSet;
-use Chamilo\Libraries\Storage\Parameters\DataClassCountParameters;
+use Chamilo\Libraries\Storage\Parameters\DataClassParameters;
 use Chamilo\Libraries\Storage\Parameters\RetrievesParameters;
 use Chamilo\Libraries\Storage\Query\Condition\AndCondition;
 use Chamilo\Libraries\Storage\Query\Condition\ContainsCondition;
@@ -461,7 +461,7 @@ class UnsubscribeBrowserComponent extends Manager
     private function get_platformgroups_users_tab(): string
     {
         $totalNumberOfItems = \Chamilo\Libraries\Storage\DataManager\DataManager::count(
-            GroupRelUser::class, new DataClassCountParameters(condition: $this->get_condition())
+            GroupRelUser::class, new DataClassParameters(condition: $this->get_condition())
         );
         $platformGroupRelUserTableRenderer = $this->getPlatformGroupRelUserTableRenderer();
 

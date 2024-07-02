@@ -7,8 +7,7 @@ use Chamilo\Core\Repository\Storage\DataClass\ComplexContentObjectItem;
 use Chamilo\Core\Repository\Storage\DataManager;
 use Chamilo\Libraries\Format\Table\RequestTableParameterValuesCompiler;
 use Chamilo\Libraries\Storage\DataClass\DataClass;
-use Chamilo\Libraries\Storage\Parameters\DataClassCountParameters;
-use Chamilo\Libraries\Storage\Parameters\RetrievesParameters;
+use Chamilo\Libraries\Storage\Parameters\DataClassParameters;
 use Chamilo\Libraries\Storage\Query\Condition\AndCondition;
 use Chamilo\Libraries\Storage\Query\Condition\EqualityCondition;
 use Chamilo\Libraries\Storage\Query\Condition\InCondition;
@@ -58,7 +57,7 @@ class AnswerFeedbackTypeComponent extends Manager
             $condition = new AndCondition($conditions);
 
             $complex_content_object_items = DataManager::retrieve_complex_content_object_items(
-                ComplexContentObjectItem::class, new RetrievesParameters(condition: $condition)
+                ComplexContentObjectItem::class, new DataClassParameters(condition: $condition)
             );
 
             $failures = 0;
@@ -137,7 +136,7 @@ class AnswerFeedbackTypeComponent extends Manager
     protected function renderTable(): string
     {
         $totalNumberOfItems = DataManager::count(
-            ComplexContentObjectItem::class, new DataClassCountParameters(condition: $this->getAnswerFeedbackTypeCondition())
+            ComplexContentObjectItem::class, new DataClassParameters(condition: $this->getAnswerFeedbackTypeCondition())
         );
 
         $answerFeedbackTypeTableRenderer = $this->getAnswerFeedbackTypeTableRenderer();
@@ -157,9 +156,9 @@ class AnswerFeedbackTypeComponent extends Manager
             )
         );
 
-        $parameters = new RetrievesParameters(
-            condition: $this->getAnswerFeedbackTypeCondition(), count: $tableParameterValues->getNumberOfItemsPerPage(),
-            offset: $tableParameterValues->getOffset(), orderBy: $orderBy
+        $parameters = new DataClassParameters(
+            condition: $this->getAnswerFeedbackTypeCondition(), orderBy: $orderBy,
+            count: $tableParameterValues->getNumberOfItemsPerPage(), offset: $tableParameterValues->getOffset()
         );
 
         $complexContentObjectItems = DataManager::retrieves(

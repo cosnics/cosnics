@@ -6,7 +6,7 @@ use Chamilo\Application\Weblcms\Admin\Extension\Platform\Storage\DataClass\Admin
 use Chamilo\Application\Weblcms\Admin\Extension\Platform\Storage\DataManager;
 use Chamilo\Libraries\Architecture\Exceptions\NoObjectSelectedException;
 use Chamilo\Libraries\Architecture\Exceptions\NotAllowedException;
-use Chamilo\Libraries\Storage\Parameters\DataClassCountParameters;
+use Chamilo\Libraries\Storage\Parameters\DataClassParameters;
 use Chamilo\Libraries\Storage\Query\Condition\AndCondition;
 use Chamilo\Libraries\Storage\Query\Condition\EqualityCondition;
 use Chamilo\Libraries\Storage\Query\Condition\InCondition;
@@ -85,7 +85,7 @@ class DeleterComponent extends Manager
 
                         $condition = new AndCondition($condition);
 
-                        $count = DataManager::count(Admin::class, new DataClassCountParameters(condition: $condition));
+                        $count = DataManager::count(Admin::class, new DataClassParameters(condition: $condition));
 
                         if ($count > 0)
                         {
@@ -96,7 +96,7 @@ class DeleterComponent extends Manager
                         }
                         else
                         {
-                            $count = DataManager::count(Admin::class, new DataClassCountParameters());
+                            $count = DataManager::count(Admin::class, new DataClassParameters());
 
                             if ($count > 0)
                             {
@@ -151,7 +151,7 @@ class DeleterComponent extends Manager
 
                 $condition = new AndCondition($conditions);
 
-                $count = DataManager::count(Admin::class, new DataClassCountParameters(condition: $condition));
+                $count = DataManager::count(Admin::class, new DataClassParameters(condition: $condition));
 
                 if ($count > 0)
                 {
@@ -177,7 +177,7 @@ class DeleterComponent extends Manager
 
                 $condition = new AndCondition($conditions);
 
-                $count = DataManager::count(Admin::class, new DataClassCountParameters(condition: $condition));
+                $count = DataManager::count(Admin::class, new DataClassParameters(condition: $condition));
 
                 if ($count > 0)
                 {
@@ -195,7 +195,7 @@ class DeleterComponent extends Manager
                     new StaticConditionVariable($admin->get_entity_type())
                 );
 
-                $count = DataManager::count(Admin::class, new DataClassCountParameters(condition: $condition));
+                $count = DataManager::count(Admin::class, new DataClassParameters(condition: $condition));
 
                 if ($count > 0)
                 {

@@ -8,7 +8,7 @@ use Chamilo\Application\Weblcms\Tool\Implementation\Assessment\Manager;
 use Chamilo\Libraries\Architecture\Exceptions\NotAllowedException;
 use Chamilo\Libraries\Format\Breadcrumb\BreadcrumbTrail;
 use Chamilo\Libraries\Storage\DataManager\DataManager;
-use Chamilo\Libraries\Storage\Parameters\RetrieveParameters;
+use Chamilo\Libraries\Storage\Parameters\DataClassParameters;
 use Chamilo\Libraries\Storage\Parameters\RetrievesParameters;
 use Chamilo\Libraries\Storage\Query\Condition\EqualityCondition;
 use Chamilo\Libraries\Storage\Query\Variable\PropertyConditionVariable;
@@ -39,7 +39,7 @@ class ResultsDeleterComponent extends Manager
             );
 
             $item = DataManager::retrieve(
-                AssessmentAttempt::class, new RetrieveParameters(condition: $condition)
+                AssessmentAttempt::class, new DataClassParameters(condition: $condition)
             );
 
             if ($item)

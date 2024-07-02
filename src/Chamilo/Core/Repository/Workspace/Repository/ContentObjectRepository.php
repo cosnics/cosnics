@@ -6,8 +6,7 @@ use Chamilo\Core\Repository\Storage\DataClass\ContentObject;
 use Chamilo\Core\Repository\Storage\DataManager;
 use Chamilo\Core\Repository\Workspace\Storage\DataClass\Workspace;
 use Chamilo\Core\Repository\Workspace\Storage\DataClass\WorkspaceContentObjectRelation;
-use Chamilo\Libraries\Storage\Parameters\DataClassCountParameters;
-use Chamilo\Libraries\Storage\Parameters\RetrievesParameters;
+use Chamilo\Libraries\Storage\Parameters\DataClassParameters;
 use Chamilo\Libraries\Storage\Query\Condition\AndCondition;
 use Chamilo\Libraries\Storage\Query\Condition\Condition;
 use Chamilo\Libraries\Storage\Query\Condition\EqualityCondition;
@@ -38,11 +37,11 @@ class ContentObjectRepository
 
     /**
      * @param $contentObjectClassName
-     * @param DataClassCountParameters $parameters
+     * @param DataClassParameters $parameters
      *
      * @return int
      */
-    public function countAll($contentObjectClassName, DataClassCountParameters $parameters)
+    public function countAll($contentObjectClassName, DataClassParameters $parameters)
     {
         return DataManager::count($contentObjectClassName, $parameters);
     }
@@ -57,8 +56,9 @@ class ContentObjectRepository
         $contentObjectClassName, Workspace $workspace, ConditionFilterRenderer $filterConditionRenderer
     )
     {
-        $parameters = new DataClassCountParameters(
-            condition: $this->getWorkspaceConditions($workspace, $filterConditionRenderer), joins: $this->getWorkspaceJoins()
+        $parameters = new DataClassParameters(
+            condition: $this->getWorkspaceConditions($workspace, $filterConditionRenderer),
+            joins: $this->getWorkspaceJoins()
         );
 
         return $this->countAll($contentObjectClassName, $parameters);
@@ -90,11 +90,11 @@ class ContentObjectRepository
 
     /**
      * @param $contentObjectClassName
-     * @param RetrievesParameters $parameters
+     * @param DataClassParameters $parameters
      *
      * @return \Doctrine\Common\Collections\ArrayCollection<\Chamilo\Core\Repository\Storage\DataClass\ContentObject>
      */
-    public function findAll($contentObjectClassName, RetrievesParameters $parameters)
+    public function findAll($contentObjectClassName, DataClassParameters $parameters)
     {
         return DataManager::retrieves($contentObjectClassName, $parameters);
     }
@@ -113,9 +113,9 @@ class ContentObjectRepository
         $offset, OrderBy $orderBy = new OrderBy()
     )
     {
-        $parameters = new RetrievesParameters(
-            condition: $this->getWorkspaceConditions($workspace, $filterConditionRenderer), count: $count,
-            offset: $offset, orderBy: $orderBy, joins: $this->getWorkspaceJoins()
+        $parameters = new DataClassParameters(
+            condition: $this->getWorkspaceConditions($workspace, $filterConditionRenderer),
+            joins: $this->getWorkspaceJoins(), orderBy: $orderBy, count: $count, offset: $offset
         );
 
         return $this->findAll($contentObjectClassName, $parameters);

@@ -7,7 +7,7 @@ use Chamilo\Application\Weblcms\Tool\Implementation\Assessment\Storage\DataManag
 use Chamilo\Core\Repository\ContentObject\Assessment\Display\Configuration;
 use Chamilo\Core\Repository\ContentObject\Assessment\Display\Form\ConfigurationForm;
 use Chamilo\Core\User\Storage\DataClass\User;
-use Chamilo\Libraries\Storage\Parameters\RetrieveParameters;
+use Chamilo\Libraries\Storage\Parameters\DataClassParameters;
 use Chamilo\Libraries\Storage\Query\Condition\EqualityCondition;
 use Chamilo\Libraries\Storage\Query\Variable\PropertyConditionVariable;
 use Chamilo\Libraries\Storage\Query\Variable\StaticConditionVariable;
@@ -24,11 +24,11 @@ class PublicationForm extends ContentObjectPublicationForm
     /**
      *
      * @param \Chamilo\Core\User\Storage\DataClass\User $user
-     * @param integer $form_type
+     * @param int $form_type
      * @param ContentObjectPublication[] $publications
      * @param \Chamilo\Application\Weblcms\Course\Storage\DataClass\Course $course
      * @param string $action
-     * @param boolean $is_course_admin
+     * @param bool $is_course_admin
      *
      * @param array $selectedContentObjects
      *
@@ -49,7 +49,7 @@ class PublicationForm extends ContentObjectPublicationForm
         {
             $first_publication = $publications[0];
 
-            $parameters = new RetrieveParameters(
+            $parameters = new DataClassParameters(
                 condition: new EqualityCondition(
                     new PropertyConditionVariable(Publication::class, Publication::PROPERTY_PUBLICATION_ID),
                     new StaticConditionVariable($first_publication->get_id())
@@ -91,7 +91,7 @@ class PublicationForm extends ContentObjectPublicationForm
     /**
      * Handles the submit of the form for both create and edit
      *
-     * @return boolean
+     * @return bool
      */
     public function handle_form_submit()
     {
@@ -142,7 +142,7 @@ class PublicationForm extends ContentObjectPublicationForm
                         $succes &= $assessment_publication->create();
                         break;
                     case self::TYPE_UPDATE :
-                        $parameters = new RetrieveParameters(
+                        $parameters = new DataClassParameters(
                             condition: new EqualityCondition(
                                 new PropertyConditionVariable(
                                     Publication::class, Publication::PROPERTY_PUBLICATION_ID

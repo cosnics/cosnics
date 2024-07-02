@@ -3,7 +3,7 @@ namespace Chamilo\Core\Metadata\Relation\Service;
 
 use Chamilo\Core\Metadata\Storage\DataClass\Relation;
 use Chamilo\Libraries\Storage\DataManager\DataManager;
-use Chamilo\Libraries\Storage\Parameters\RetrieveParameters;
+use Chamilo\Libraries\Storage\Parameters\DataClassParameters;
 use Chamilo\Libraries\Storage\Query\Condition\ComparisonCondition;
 use Chamilo\Libraries\Storage\Query\Variable\PropertyConditionVariable;
 use Chamilo\Libraries\Storage\Query\Variable\StaticConditionVariable;
@@ -32,6 +32,6 @@ class RelationService
             new StaticConditionVariable($relationName)
         );
 
-        return DataManager::retrieve(Relation::class, new RetrieveParameters(condition: $condition));
+        return DataManager::retrieve(Relation::class, new DataClassParameters(condition: $condition));
     }
 }

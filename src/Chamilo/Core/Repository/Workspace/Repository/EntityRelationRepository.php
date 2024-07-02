@@ -4,9 +4,7 @@ namespace Chamilo\Core\Repository\Workspace\Repository;
 use Chamilo\Core\Repository\Workspace\Storage\DataClass\Workspace;
 use Chamilo\Core\Repository\Workspace\Storage\DataClass\WorkspaceEntityRelation;
 use Chamilo\Libraries\Storage\DataManager\Repository\DataClassRepository;
-use Chamilo\Libraries\Storage\Parameters\DataClassCountParameters;
-use Chamilo\Libraries\Storage\Parameters\RetrieveParameters;
-use Chamilo\Libraries\Storage\Parameters\RetrievesParameters;
+use Chamilo\Libraries\Storage\Parameters\DataClassParameters;
 use Chamilo\Libraries\Storage\Query\Condition\AndCondition;
 use Chamilo\Libraries\Storage\Query\Condition\Condition;
 use Chamilo\Libraries\Storage\Query\Condition\EqualityCondition;
@@ -40,7 +38,7 @@ class EntityRelationRepository
     public function countEntityRelations(?Condition $condition = null): int
     {
         return $this->getDataClassRepository()->count(
-            WorkspaceEntityRelation::class, new DataClassCountParameters(condition: $condition)
+            WorkspaceEntityRelation::class, new DataClassParameters(condition: $condition)
         );
     }
 
@@ -80,7 +78,7 @@ class EntityRelationRepository
         $entityRelationCondition = new AndCondition($entityRelationConditions);
 
         $entityRelationCount = $this->getDataClassRepository()->count(
-            WorkspaceEntityRelation::class, new DataClassCountParameters(condition: $entityRelationCondition)
+            WorkspaceEntityRelation::class, new DataClassParameters(condition: $entityRelationCondition)
         );
 
         return $entityRelationCount > 0;
@@ -117,7 +115,7 @@ class EntityRelationRepository
         $entityCondition = new AndCondition($entityConditions);
 
         return $this->getDataClassRepository()->retrieve(
-            WorkspaceEntityRelation::class, new RetrieveParameters(condition: $entityCondition)
+            WorkspaceEntityRelation::class, new DataClassParameters(condition: $entityCondition)
         );
     }
 
@@ -125,8 +123,9 @@ class EntityRelationRepository
     ): ArrayCollection
     {
         return $this->getDataClassRepository()->retrieves(
-            WorkspaceEntityRelation::class, new RetrievesParameters(
-                condition: $condition, count: $limit, offset: $offset)
+            WorkspaceEntityRelation::class, new DataClassParameters(
+                condition: $condition, count: $limit, offset: $offset
+            )
         );
     }
 
@@ -144,7 +143,7 @@ class EntityRelationRepository
         );
 
         return $this->getDataClassRepository()->retrieves(
-            WorkspaceEntityRelation::class, new RetrievesParameters(condition: $condition)
+            WorkspaceEntityRelation::class, new DataClassParameters(condition: $condition)
         );
     }
 

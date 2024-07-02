@@ -8,7 +8,7 @@ use Chamilo\Core\Repository\Common\Export\ExportParameters;
 use Chamilo\Core\Repository\Storage\DataClass\ContentObject;
 use Chamilo\Core\Repository\Storage\DataManager;
 use Chamilo\Core\User\Manager;
-use Chamilo\Libraries\Storage\Parameters\RetrievesParameters;
+use Chamilo\Libraries\Storage\Parameters\DataClassParameters;
 use Chamilo\Libraries\Storage\Query\Condition\InCondition;
 use Chamilo\Libraries\Storage\Query\Variable\PropertyConditionVariable;
 
@@ -50,7 +50,7 @@ class HtmlContentObjectExportController extends ContentObjectExportController
         {
             $condition = null;
         }
-        $parameters = new RetrievesParameters(condition: $condition);
+        $parameters = new DataClassParameters(condition: $condition);
         $content_objects = DataManager::retrieve_active_content_objects(ContentObject::class, $parameters);
         foreach ($content_objects as $content_object)
         {
