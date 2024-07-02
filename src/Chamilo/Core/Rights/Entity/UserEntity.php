@@ -3,10 +3,10 @@ namespace Chamilo\Core\Rights\Entity;
 
 use Chamilo\Core\Rights\Manager;
 use Chamilo\Core\User\Storage\DataClass\User;
-use Chamilo\Libraries\Storage\DataManager\DataManager;
 use Chamilo\Libraries\Format\Form\Element\AdvancedElementFinder\AdvancedElementFinderElement;
 use Chamilo\Libraries\Format\Form\Element\AdvancedElementFinder\AdvancedElementFinderElementType;
 use Chamilo\Libraries\Format\Structure\Glyph\FontAwesomeGlyph;
+use Chamilo\Libraries\Storage\DataManager\DataManager;
 use Chamilo\Libraries\Storage\Parameters\DataClassCountParameters;
 use Chamilo\Libraries\Storage\Parameters\RetrievesParameters;
 use Chamilo\Libraries\Storage\Query\Condition\Condition;
@@ -50,7 +50,7 @@ class UserEntity implements RightsEntity
         $condition = $this->get_condition($condition);
 
         return DataManager::count(
-            User::class, new DataClassCountParameters($condition)
+            User::class, new DataClassCountParameters(condition: $condition)
         );
     }
 
@@ -170,12 +170,12 @@ class UserEntity implements RightsEntity
      */
     public function get_search_properties()
     {
-        return array(
+        return [
             User::PROPERTY_USERNAME,
             User::PROPERTY_FIRSTNAME,
             User::PROPERTY_LASTNAME,
             User::PROPERTY_OFFICIAL_CODE
-        );
+        ];
     }
 
     /**
@@ -190,7 +190,7 @@ class UserEntity implements RightsEntity
         if (is_null($this->user_cache[$user_id]))
         {
 
-            $this->user_cache[$user_id] = array($user_id);
+            $this->user_cache[$user_id] = [$user_id];
         }
 
         return $this->user_cache[$user_id];
@@ -209,7 +209,9 @@ class UserEntity implements RightsEntity
     public function retrieve_entity_items($condition = null, $offset = null, $count = null, $order_property = null)
     {
         $condition = $this->get_condition($condition);
-        $parameters = new RetrievesParameters($condition, $count, $offset, $order_property);
+        $parameters = new RetrievesParameters(
+            condition: $condition, count: $count, offset: $offset, orderBy: $order_property
+        );
 
         return DataManager::retrieves(User::class, $parameters);
     }

@@ -47,7 +47,7 @@ class AssessmentOverviewBlock extends ToolBlock
         );
 
         $attempts_result_set = \Chamilo\Libraries\Storage\DataManager\DataManager::retrieves(
-            AssessmentAttempt::class, new RetrievesParameters($condition)
+            AssessmentAttempt::class, new RetrievesParameters(condition: $condition)
         );
 
         $attempts = [];

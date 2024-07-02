@@ -123,7 +123,7 @@ class CreatorComponent extends Manager implements ViewerInterface
         if ($items_to_publish > 0)
         {
             $parameters = new RetrievesParameters(
-                new InCondition(
+                condition: new InCondition(
                     new PropertyConditionVariable(ContentObject::class, DataClass::PROPERTY_ID),
                     $contentObjectIdentifiers
                 )

@@ -144,8 +144,8 @@ class DoublesViewerComponent extends Manager
 
         $contentObjects = \Chamilo\Core\Repository\Storage\DataManager::retrieve_active_content_objects(
             ContentObject::class, new RetrievesParameters(
-                $this->getDoublesDetailsCondition(), $tableParameterValues->getNumberOfItemsPerPage(),
-                $tableParameterValues->getOffset(), $doublesTableRenderer->determineOrderBy($tableParameterValues)
+                condition: $this->getDoublesDetailsCondition(), count: $tableParameterValues->getNumberOfItemsPerPage(),
+                offset: $tableParameterValues->getOffset(), orderBy: $doublesTableRenderer->determineOrderBy($tableParameterValues)
             )
         );
 

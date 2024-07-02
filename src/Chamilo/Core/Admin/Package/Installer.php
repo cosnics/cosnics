@@ -116,7 +116,7 @@ class Installer extends \Chamilo\Configuration\Package\Action\Installer
         $settings[] = ['Chamilo\Core\Admin', 'administrator_email', $values['admin_email']];
         $settings[] = ['Chamilo\Core\Admin', 'administrator_telephone', $values['admin_phone']];
 
-        $this->getDataClassRepositoryCache()->truncate(Setting::class);
+        $this->getDataClassRepositoryCache()->truncateClass(Setting::class);
 
         foreach ($settings as $setting)
         {

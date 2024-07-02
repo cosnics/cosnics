@@ -32,7 +32,7 @@ abstract class Tracker extends DataClass
 
     public static function count_data($class_name, $application, $condition)
     {
-        return DataManager::count($class_name, new DataClassCountParameters($condition));
+        return DataManager::count($class_name, new DataClassCountParameters(condition: $condition));
     }
 
     /**
@@ -50,7 +50,8 @@ abstract class Tracker extends DataClass
     )
     {
         return DataManager::retrieves(
-            $class_name, new RetrievesParameters($condition, $max_objects, $offset, $order_by)
+            $class_name, new RetrievesParameters(
+                condition: $condition, count: $max_objects, offset: $offset, orderBy: $order_by)
         );
     }
 
@@ -72,7 +73,7 @@ abstract class Tracker extends DataClass
      */
     public static function get_singular_data($class_name, $application, $condition, $order_by = null)
     {
-        return DataManager::retrieve($class_name, new RetrieveParameters($condition, $order_by));
+        return DataManager::retrieve($class_name, new RetrieveParameters(condition: $condition, orderBy: $order_by));
     }
 
     /**

@@ -130,7 +130,7 @@ class RightsGroupForm extends FormValidator
                     $condition = new AndCondition($conditions);
 
                     $existing_right_group = DataManager::retrieve(
-                        RightsLocationEntityRightGroup::class, new RetrieveParameters($condition)
+                        RightsLocationEntityRightGroup::class, new RetrieveParameters(condition: $condition)
                     );
 
                     if (!$existing_right_group instanceof RightsLocationEntityRightGroup)

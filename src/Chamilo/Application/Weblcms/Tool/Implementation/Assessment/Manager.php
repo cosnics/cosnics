@@ -142,7 +142,7 @@ abstract class Manager extends \Chamilo\Application\Weblcms\Tool\Manager
             $condition = new AndCondition([$condition_t, $condition_u]);
 
             $trackers = DataManager::retrieves(
-                AssessmentAttempt::class, new RetrievesParameters($condition)
+                AssessmentAttempt::class, new RetrievesParameters(condition: $condition)
             );
 
             $count = count($trackers);

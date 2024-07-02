@@ -103,7 +103,7 @@ class ImpactViewRenderer
     private function renderImpactView(Condition $condition): string
     {
         $totalNumberOfItems = DataManager::count_active_content_objects(
-            ContentObject::class, new DataClassCountParameters($condition)
+            ContentObject::class, new DataClassCountParameters(condition: $condition)
         );
 
         $impactViewTableRenderer = $this->getImpactViewTableRenderer();
@@ -115,8 +115,8 @@ class ImpactViewRenderer
 
         $contentObjects = DataManager::retrieve_active_content_objects(
             ContentObject::class, new RetrievesParameters(
-                $condition, $tableParameterValues->getNumberOfItemsPerPage(), $tableParameterValues->getOffset(),
-                $impactViewTableRenderer->determineOrderBy($tableParameterValues)
+                condition: $condition, count: $tableParameterValues->getNumberOfItemsPerPage(),
+                offset: $tableParameterValues->getOffset(), orderBy: $impactViewTableRenderer->determineOrderBy($tableParameterValues)
             )
         );
 

@@ -58,7 +58,7 @@ class AnswerFeedbackTypeComponent extends Manager
             $condition = new AndCondition($conditions);
 
             $complex_content_object_items = DataManager::retrieve_complex_content_object_items(
-                ComplexContentObjectItem::class, new RetrievesParameters($condition)
+                ComplexContentObjectItem::class, new RetrievesParameters(condition: $condition)
             );
 
             $failures = 0;
@@ -137,7 +137,7 @@ class AnswerFeedbackTypeComponent extends Manager
     protected function renderTable(): string
     {
         $totalNumberOfItems = DataManager::count(
-            ComplexContentObjectItem::class, new DataClassCountParameters($this->getAnswerFeedbackTypeCondition())
+            ComplexContentObjectItem::class, new DataClassCountParameters(condition: $this->getAnswerFeedbackTypeCondition())
         );
 
         $answerFeedbackTypeTableRenderer = $this->getAnswerFeedbackTypeTableRenderer();
@@ -158,8 +158,8 @@ class AnswerFeedbackTypeComponent extends Manager
         );
 
         $parameters = new RetrievesParameters(
-            $this->getAnswerFeedbackTypeCondition(), $tableParameterValues->getNumberOfItemsPerPage(),
-            $tableParameterValues->getOffset(), $orderBy
+            condition: $this->getAnswerFeedbackTypeCondition(), count: $tableParameterValues->getNumberOfItemsPerPage(),
+            offset: $tableParameterValues->getOffset(), orderBy: $orderBy
         );
 
         $complexContentObjectItems = DataManager::retrieves(

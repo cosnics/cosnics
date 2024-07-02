@@ -293,12 +293,12 @@ class CourseCategoryFeedComponent extends Manager
         }
 
         $this->course_count = \Chamilo\Application\Weblcms\Course\Storage\DataManager::count(
-            Course::class, new DataClassCountParameters($condition)
+            Course::class, new DataClassCountParameters(condition: $condition)
         );
 
         return \Chamilo\Application\Weblcms\Course\Storage\DataManager::retrieves(
             Course::class, new RetrievesParameters(
-                $condition, 100, $this->get_offset(), new OrderBy(
+                condition: $condition, count: 100, offset: $this->get_offset(), orderBy: new OrderBy(
                     [new OrderProperty(new PropertyConditionVariable(Course::class, Course::PROPERTY_TITLE))]
                 )
             )

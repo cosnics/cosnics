@@ -611,7 +611,7 @@ abstract class ContentObjectForm extends FormValidator
         $condition = new AndCondition($conditions);
 
         $existingNewCategory = DataManager::retrieve(
-            RepositoryCategory::class, new RetrieveParameters($condition)
+            RepositoryCategory::class, new RetrieveParameters(condition: $condition)
         );
 
         if ($existingNewCategory instanceof RepositoryCategory)

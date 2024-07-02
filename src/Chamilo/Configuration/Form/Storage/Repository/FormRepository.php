@@ -35,17 +35,23 @@ class FormRepository
 
     public function countDynamicFormElementOptions(?Condition $condition = null): int
     {
-        return $this->getDataClassRepository()->count(Option::class, new DataClassCountParameters($condition));
+        return $this->getDataClassRepository()->count(
+            Option::class, new DataClassCountParameters(condition: $condition)
+        );
     }
 
     public function countDynamicFormElementValues(?Condition $condition = null): int
     {
-        return $this->getDataClassRepository()->count(Value::class, new DataClassCountParameters($condition));
+        return $this->getDataClassRepository()->count(
+            Value::class, new DataClassCountParameters(condition: $condition)
+        );
     }
 
     public function countDynamicFormElements(?Condition $condition = null): int
     {
-        return $this->getDataClassRepository()->count(Element::class, new DataClassCountParameters($condition));
+        return $this->getDataClassRepository()->count(
+            Element::class, new DataClassCountParameters(condition: $condition)
+        );
     }
 
     public function deleteAllOptionsFromFormElement(int $dynamicFormElementIdentifier): bool
@@ -90,7 +96,9 @@ class FormRepository
     ): ArrayCollection
     {
         return $this->getDataClassRepository()->retrieves(
-            Option::class, new RetrievesParameters($condition, $count, $offset, $orderBy)
+            Option::class, new RetrievesParameters(
+                condition: $condition, count: $count, offset: $offset, orderBy: $orderBy
+            )
         );
     }
 
@@ -107,7 +115,9 @@ class FormRepository
     ): ArrayCollection
     {
         return $this->getDataClassRepository()->retrieves(
-            Value::class, new RetrievesParameters($condition, $count, $offset, $orderBy)
+            Value::class, new RetrievesParameters(
+                condition: $condition, count: $count, offset: $offset, orderBy: $orderBy
+            )
         );
     }
 
@@ -149,7 +159,7 @@ class FormRepository
         ?Condition $condition = null, ?int $offset = null, ?int $count = null, OrderBy $orderBy = new OrderBy()
     ): ArrayCollection
     {
-        $parameters = new RetrievesParameters($condition, $count, $offset, $orderBy);
+        $parameters = new RetrievesParameters(condition: $condition, count: $count, offset: $offset, orderBy: $orderBy);
 
         return $this->getDataClassRepository()->retrieves(Element::class, $parameters);
     }
@@ -166,7 +176,7 @@ class FormRepository
         ?Condition $condition = null, ?int $offset = null, ?int $count = null, OrderBy $orderBy = new OrderBy()
     ): ArrayCollection
     {
-        $parameters = new RetrievesParameters($condition, $count, $offset, $orderBy);
+        $parameters = new RetrievesParameters(condition: $condition, count: $count, offset: $offset, orderBy: $orderBy);
 
         return $this->getDataClassRepository()->retrieves(Instance::class, $parameters);
     }
@@ -185,7 +195,9 @@ class FormRepository
 
         $condition = new AndCondition($conditions);
 
-        return $this->getDataClassRepository()->retrieve(Instance::class, new RetrieveParameters($condition));
+        return $this->getDataClassRepository()->retrieve(
+            Instance::class, new RetrieveParameters(condition: $condition)
+        );
     }
 
     public function selectNextDynamicFormElementOptionOrder($dynamicFormElementIdentifier): int

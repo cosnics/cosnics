@@ -76,7 +76,7 @@ class DataManager extends \Chamilo\Libraries\Storage\DataManager\DataManager
 
         $condition = new AndCondition($conditions);
 
-        return self::count(CourseSection::class, new DataClassCountParameters($condition));
+        return self::count(CourseSection::class, new DataClassCountParameters(condition: $condition));
     }
 
     /**
@@ -119,7 +119,7 @@ class DataManager extends \Chamilo\Libraries\Storage\DataManager\DataManager
 
         $course_sections = \Chamilo\Application\Weblcms\Storage\Datamanager::retrieves(
             CourseSection::class,
-            new RetrievesParameters($condition));
+            new RetrievesParameters(condition: $condition));
 
         foreach($course_sections as $course_section)
         {
@@ -310,6 +310,6 @@ class DataManager extends \Chamilo\Libraries\Storage\DataManager\DataManager
 
         return self::retrieve(
             ContentObjectPublicationCategory::class,
-            new RetrieveParameters($condition));
+            new RetrieveParameters(condition: $condition));
     }
 }

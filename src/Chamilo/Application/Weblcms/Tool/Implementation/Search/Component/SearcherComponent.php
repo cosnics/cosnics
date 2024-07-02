@@ -66,7 +66,7 @@ class SearcherComponent extends Manager
 
             $publications = DataManager::retrieves(
                 ContentObjectPublication::class,
-                new RetrievesParameters($this->get_retrieve_publications_condition())
+                new RetrievesParameters(condition: $this->get_retrieve_publications_condition())
             );
 
             $tools = [];

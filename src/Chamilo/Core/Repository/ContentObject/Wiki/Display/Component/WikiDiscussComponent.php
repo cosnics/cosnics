@@ -5,12 +5,12 @@ use Chamilo\Core\Repository\ContentObject\Wiki\Display\Manager;
 use Chamilo\Core\Repository\ContentObject\WikiPage\Storage\DataClass\ComplexWikiPage;
 use Chamilo\Core\Repository\ContentObject\WikiPage\Storage\DataClass\WikiPage;
 use Chamilo\Core\Repository\ContentObject\WikiPage\Storage\DataClass\WikiPageFeedback;
-use Chamilo\Libraries\Storage\DataManager\DataManager;
 use Chamilo\Core\Repository\Feedback\FeedbackSupport;
 use Chamilo\Core\Repository\Storage\DataClass\ComplexContentObjectItem;
 use Chamilo\Libraries\Architecture\Application\ApplicationConfiguration;
 use Chamilo\Libraries\Format\Breadcrumb\BreadcrumbLessComponentInterface;
 use Chamilo\Libraries\Format\Breadcrumb\BreadcrumbTrail;
+use Chamilo\Libraries\Storage\DataManager\DataManager;
 use Chamilo\Libraries\Storage\Parameters\DataClassCountParameters;
 use Chamilo\Libraries\Storage\Parameters\RetrievesParameters;
 use Chamilo\Libraries\Storage\Query\Condition\EqualityCondition;
@@ -79,7 +79,7 @@ class WikiDiscussComponent extends Manager implements BreadcrumbLessComponentInt
     public function count_feedbacks()
     {
         return DataManager::count(
-            WikiPageFeedback::class, new DataClassCountParameters($this->getWikiPageFeedbackCondition())
+            WikiPageFeedback::class, new DataClassCountParameters(condition: $this->getWikiPageFeedbackCondition())
         );
     }
 
@@ -197,7 +197,7 @@ class WikiDiscussComponent extends Manager implements BreadcrumbLessComponentInt
     {
         return DataManager::retrieves(
             WikiPageFeedback::class,
-            new RetrievesParameters($this->getWikiPageFeedbackCondition(), $count, $offset)
+            new RetrievesParameters(condition: $this->getWikiPageFeedbackCondition(), count: $count, offset: $offset)
         );
     }
 }

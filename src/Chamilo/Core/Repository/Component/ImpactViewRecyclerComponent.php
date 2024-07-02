@@ -152,7 +152,7 @@ class ImpactViewRecyclerComponent extends Manager
             new PropertyConditionVariable(ContentObject::class, ContentObjectPublication::PROPERTY_ID), $co_ids
         );
 
-        $parameters = new RetrievesParameters($condition);
+        $parameters = new RetrievesParameters(condition: $condition);
 
         $objects = DataManager::retrieves(ContentObject::class, $parameters);
 
@@ -230,7 +230,7 @@ class ImpactViewRecyclerComponent extends Manager
             new PropertyConditionVariable(ContentObject::class, ContentObjectPublication::PROPERTY_ID), $selected_ids
         );
 
-        $parameters = new RetrievesParameters($condition);
+        $parameters = new RetrievesParameters(condition: $condition);
 
         $objects = DataManager::retrieves(ContentObject::class, $parameters);
 

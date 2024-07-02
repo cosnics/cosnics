@@ -118,7 +118,7 @@ class DataManager extends \Chamilo\Libraries\Storage\DataManager\DataManager
         );
         $condition = new AndCondition($conditions);
 
-        return self::retrieve(RightsLocationEntityRight::class, new RetrieveParameters($condition));
+        return self::retrieve(RightsLocationEntityRight::class, new RetrieveParameters(condition: $condition));
     }
 
     /**

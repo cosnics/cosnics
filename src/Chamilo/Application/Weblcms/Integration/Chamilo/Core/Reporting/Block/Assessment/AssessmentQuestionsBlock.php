@@ -188,7 +188,7 @@ class AssessmentQuestionsBlock extends AssessmentBlock
         );
 
         $questions = DataManager::retrieve_complex_content_object_items(
-            ComplexContentObjectItem::class, new RetrievesParameters($condition)
+            ComplexContentObjectItem::class, new RetrievesParameters(condition: $condition)
         );
 
         $questions_arr = [];

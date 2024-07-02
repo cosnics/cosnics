@@ -89,7 +89,9 @@ class EntityService
 
         return DataManager::retrieves(
             Schema::class, new RetrievesParameters(
-                new InCondition(new PropertyConditionVariable(Schema::class, Schema::PROPERTY_ID), $schemaIds)
+                condition: new InCondition(
+                    new PropertyConditionVariable(Schema::class, Schema::PROPERTY_ID), $schemaIds
+                )
             )
         );
     }
@@ -100,6 +102,14 @@ class EntityService
     public function getElementService(): ElementService
     {
         return $this->elementService;
+    }
+
+    /**
+     * @param \Chamilo\Core\Metadata\Element\Service\ElementService $elementService
+     */
+    public function setElementService(ElementService $elementService): void
+    {
+        $this->elementService = $elementService;
     }
 
     /**
@@ -132,11 +142,29 @@ class EntityService
     }
 
     /**
+     * @param \Chamilo\Core\Metadata\Provider\Service\PropertyProviderService $propertyProviderService
+     */
+    public function setPropertyProviderService(
+        PropertyProviderService $propertyProviderService
+    ): void
+    {
+        $this->propertyProviderService = $propertyProviderService;
+    }
+
+    /**
      * @return \Chamilo\Core\Metadata\Relation\Service\RelationService
      */
     public function getRelationService(): RelationService
     {
         return $this->relationService;
+    }
+
+    /**
+     * @param \Chamilo\Core\Metadata\Relation\Service\RelationService $relationService
+     */
+    public function setRelationService(RelationService $relationService): void
+    {
+        $this->relationService = $relationService;
     }
 
     /**
@@ -155,7 +183,7 @@ class EntityService
         );
 
         return DataManager::retrieves(
-            SchemaInstance::class, new RetrievesParameters(new AndCondition($conditions))
+            SchemaInstance::class, new RetrievesParameters(condition: new AndCondition($conditions))
         );
     }
 
@@ -175,7 +203,7 @@ class EntityService
         );
 
         return DataManager::retrieves(
-            SchemaInstance::class, new RetrievesParameters(new AndCondition($conditions))
+            SchemaInstance::class, new RetrievesParameters(condition: new AndCondition($conditions))
         );
     }
 
@@ -211,9 +239,9 @@ class EntityService
 
         return DataManager::distinct(
             RelationInstance::class, new DataClassDistinctParameters(
-                $condition, new RetrieveProperties(
-                    [new PropertyConditionVariable(RelationInstance::class, RelationInstance::PROPERTY_SOURCE_ID)]
-                )
+                condition: $condition, retrieveProperties: new RetrieveProperties(
+                [new PropertyConditionVariable(RelationInstance::class, RelationInstance::PROPERTY_SOURCE_ID)]
+            )
             )
         );
     }
@@ -234,7 +262,7 @@ class EntityService
         );
 
         return DataManager::retrieves(
-            Vocabulary::class, new RetrievesParameters(new AndCondition($conditions))
+            Vocabulary::class, new RetrievesParameters(condition: new AndCondition($conditions))
         );
     }
 
@@ -492,32 +520,6 @@ class EntityService
         }
 
         return true;
-    }
-
-    /**
-     * @param \Chamilo\Core\Metadata\Element\Service\ElementService $elementService
-     */
-    public function setElementService(ElementService $elementService): void
-    {
-        $this->elementService = $elementService;
-    }
-
-    /**
-     * @param \Chamilo\Core\Metadata\Provider\Service\PropertyProviderService $propertyProviderService
-     */
-    public function setPropertyProviderService(
-        PropertyProviderService $propertyProviderService
-    ): void
-    {
-        $this->propertyProviderService = $propertyProviderService;
-    }
-
-    /**
-     * @param \Chamilo\Core\Metadata\Relation\Service\RelationService $relationService
-     */
-    public function setRelationService(RelationService $relationService): void
-    {
-        $this->relationService = $relationService;
     }
 
     /**

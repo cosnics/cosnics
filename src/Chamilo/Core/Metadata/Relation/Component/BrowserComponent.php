@@ -118,7 +118,7 @@ class BrowserComponent extends Manager
     protected function renderTable(): string
     {
         $totalNumberOfItems =
-            DataManager::count(Relation::class, new DataClassCountParameters($this->getRelationCondition()));
+            DataManager::count(Relation::class, new DataClassCountParameters(condition: $this->getRelationCondition()));
         $relationTableRenderer = $this->getRelationTableRenderer();
 
         $tableParameterValues = $this->getRequestTableParameterValuesCompiler()->determineParameterValues(
@@ -128,8 +128,8 @@ class BrowserComponent extends Manager
 
         $relations = DataManager::retrieves(
             Relation::class, new RetrievesParameters(
-                $this->getRelationCondition(), $tableParameterValues->getNumberOfItemsPerPage(),
-                $tableParameterValues->getOffset(), $relationTableRenderer->determineOrderBy($tableParameterValues)
+                condition: $this->getRelationCondition(), count: $tableParameterValues->getNumberOfItemsPerPage(),
+                offset: $tableParameterValues->getOffset(), orderBy: $relationTableRenderer->determineOrderBy($tableParameterValues)
             )
         );
 

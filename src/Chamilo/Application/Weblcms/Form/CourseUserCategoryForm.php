@@ -209,7 +209,7 @@ class CourseUserCategoryForm extends FormValidator
             );
 
             $courseTypeUserCategories = DataManager::retrieves(
-                CourseTypeUserCategory::class, new RetrievesParameters($condition)
+                CourseTypeUserCategory::class, new RetrievesParameters(condition: $condition)
             );
 
             $defaultCourseTypes = new AdvancedElementFinderElements();
@@ -255,7 +255,7 @@ class CourseUserCategoryForm extends FormValidator
         );
 
         $existing_types = DataManager::retrieves(
-            CourseTypeUserCategory::class, new RetrievesParameters($condition)
+            CourseTypeUserCategory::class, new RetrievesParameters(condition: $condition)
         );
 
         if ($existing_types)

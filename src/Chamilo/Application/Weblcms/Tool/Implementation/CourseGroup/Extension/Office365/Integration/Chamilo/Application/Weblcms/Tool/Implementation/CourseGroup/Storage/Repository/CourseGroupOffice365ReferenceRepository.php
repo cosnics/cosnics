@@ -30,7 +30,7 @@ class CourseGroupOffice365ReferenceRepository extends CommonDataClassRepository
         $condition = $this->getConditionByCourseGroup($courseGroup);
 
         return $this->dataClassRepository->retrieve(
-            CourseGroupOffice365Reference::class, new RetrieveParameters($condition)
+            CourseGroupOffice365Reference::class, new RetrieveParameters(condition: $condition)
         );
     }
 
@@ -44,7 +44,7 @@ class CourseGroupOffice365ReferenceRepository extends CommonDataClassRepository
     public function createReference(CourseGroupOffice365Reference $courseGroupOffice365Reference)
     {
         $reference = $this->dataClassRepository->create($courseGroupOffice365Reference);
-        $this->dataClassRepository->getDataClassRepositoryCache()->truncate(CourseGroupOffice365Reference::class);
+        $this->dataClassRepository->getDataClassRepositoryCache()->truncateClass(CourseGroupOffice365Reference::class);
 
         return $reference;
     }

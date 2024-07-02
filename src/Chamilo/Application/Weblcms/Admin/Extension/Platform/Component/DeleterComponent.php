@@ -85,7 +85,7 @@ class DeleterComponent extends Manager
 
                         $condition = new AndCondition($condition);
 
-                        $count = DataManager::count(Admin::class, new DataClassCountParameters($condition));
+                        $count = DataManager::count(Admin::class, new DataClassCountParameters(condition: $condition));
 
                         if ($count > 0)
                         {
@@ -151,7 +151,7 @@ class DeleterComponent extends Manager
 
                 $condition = new AndCondition($conditions);
 
-                $count = DataManager::count(Admin::class, new DataClassCountParameters($condition));
+                $count = DataManager::count(Admin::class, new DataClassCountParameters(condition: $condition));
 
                 if ($count > 0)
                 {
@@ -177,7 +177,7 @@ class DeleterComponent extends Manager
 
                 $condition = new AndCondition($conditions);
 
-                $count = DataManager::count(Admin::class, new DataClassCountParameters($condition));
+                $count = DataManager::count(Admin::class, new DataClassCountParameters(condition: $condition));
 
                 if ($count > 0)
                 {
@@ -195,7 +195,7 @@ class DeleterComponent extends Manager
                     new StaticConditionVariable($admin->get_entity_type())
                 );
 
-                $count = DataManager::count(Admin::class, new DataClassCountParameters($condition));
+                $count = DataManager::count(Admin::class, new DataClassCountParameters(condition: $condition));
 
                 if ($count > 0)
                 {

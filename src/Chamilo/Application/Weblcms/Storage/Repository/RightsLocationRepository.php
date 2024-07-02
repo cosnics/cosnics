@@ -22,6 +22,23 @@ use Chamilo\Libraries\Storage\Query\Variable\StaticConditionVariable;
 class RightsLocationRepository extends CommonDataClassRepository
 {
     /**
+     * Creates a rights location directly into the database.
+     *
+     * WARNING: DO NOT USE THIS, DO NOT EVER USE THIS UNLESS YOU KNOW WHAT YOU ARE DOING AND NEED
+     * TO BYPASS THE LEFT AND RIGHT VALUES OF THE LOCATION. THIS IS ONLY USED IN SITUATIONS WHERE BATCH OPERATIONS
+     * OR ERROR CLEANUPS ARE NEEDED. MAKE SURE TO FIX THE LEFT AND THE RIGHT VALUES OF YOUR LOCATIONS IF YOU DO
+     * USE THIS!
+     *
+     * @param \Chamilo\Application\Weblcms\Storage\DataClass\RightsLocation $rightsLocation
+     *
+     * @return bool
+     */
+    public function createRightsLocationDirectlyInDatabase(RightsLocation $rightsLocation)
+    {
+        return $this->dataClassRepository->create($rightsLocation);
+    }
+
+    /**
      * Finds a single rights location in a given course identified by his type and identifier
      *
      * @param \Chamilo\Application\Weblcms\Course\Storage\DataClass\Course $course
@@ -53,7 +70,9 @@ class RightsLocationRepository extends CommonDataClassRepository
 
         $condition = new AndCondition($conditions);
 
-        return $this->dataClassRepository->retrieve(RightsLocation::class, new RetrieveParameters($condition));
+        return $this->dataClassRepository->retrieve(
+            RightsLocation::class, new RetrieveParameters(condition: $condition)
+        );
     }
 
     /**
@@ -71,12 +90,10 @@ class RightsLocationRepository extends CommonDataClassRepository
         );
 
         $locationIds = $this->dataClassRepository->distinct(
-            RightsLocation::class,
-            new DataClassDistinctParameters(
-                $locationCondition,
-                new RetrieveProperties([
-                    new PropertyConditionVariable(RightsLocation::class, RightsLocation::PROPERTY_ID)]
-                )
+            RightsLocation::class, new DataClassDistinctParameters(
+                condition: $locationCondition, retrieveProperties: new RetrieveProperties([
+                    new PropertyConditionVariable(RightsLocation::class, RightsLocation::PROPERTY_ID)
+                ])
             )
         );
 
@@ -103,23 +120,6 @@ class RightsLocationRepository extends CommonDataClassRepository
         $condition = new AndCondition($conditions);
 
         $this->dataClassRepository->deletes(CourseEntityRelation::class, $condition);
-    }
-
-    /**
-     * Creates a rights location directly into the database.
-     *
-     * WARNING: DO NOT USE THIS, DO NOT EVER USE THIS UNLESS YOU KNOW WHAT YOU ARE DOING AND NEED
-     * TO BYPASS THE LEFT AND RIGHT VALUES OF THE LOCATION. THIS IS ONLY USED IN SITUATIONS WHERE BATCH OPERATIONS
-     * OR ERROR CLEANUPS ARE NEEDED. MAKE SURE TO FIX THE LEFT AND THE RIGHT VALUES OF YOUR LOCATIONS IF YOU DO
-     * USE THIS!
-     *
-     * @param \Chamilo\Application\Weblcms\Storage\DataClass\RightsLocation $rightsLocation
-     *
-     * @return bool
-     */
-    public function createRightsLocationDirectlyInDatabase(RightsLocation $rightsLocation)
-    {
-        return $this->dataClassRepository->create($rightsLocation);
     }
 
     /**

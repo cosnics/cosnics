@@ -40,7 +40,7 @@ class PublicationRepository
 
     public function countPublications(?Condition $condition = null): int
     {
-        return $this->getDataClassRepository()->count(Publication::class, new DataClassCountParameters($condition));
+        return $this->getDataClassRepository()->count(Publication::class, new DataClassCountParameters(condition: $condition));
     }
 
     /**
@@ -111,7 +111,7 @@ class PublicationRepository
         $conditions[] = $this->getTimeConditions();
 
         return $this->getDataClassRepository()->count(
-            Publication::class, new DataClassCountParameters(new AndCondition($conditions))
+            Publication::class, new DataClassCountParameters(condition: new AndCondition($conditions))
         );
     }
 
@@ -253,7 +253,8 @@ class PublicationRepository
     ): ArrayCollection
     {
         return $this->getDataClassRepository()->retrieves(
-            Publication::class, new RetrievesParameters($condition, $count, $offset, $orderBy)
+            Publication::class, new RetrievesParameters(
+                condition: $condition, count: $count, offset: $offset, orderBy: $orderBy)
         );
     }
 

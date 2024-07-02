@@ -164,7 +164,7 @@ class CourseGroupMenu extends HtmlMenu
             new PropertyConditionVariable(CourseGroup::class, CourseGroup::PROPERTY_PARENT_ID),
             new StaticConditionVariable($parent_id)
         );
-        $groups = DataManager::retrieves(CourseGroup::class, new RetrievesParameters($condition));
+        $groups = DataManager::retrieves(CourseGroup::class, new RetrievesParameters(condition: $condition));
 
         // $current_group = $this->current_group;
 

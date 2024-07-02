@@ -220,7 +220,7 @@ class CourseGroup extends NestedSet
             $condition = $this->get_members_condition($include_subgroups, $recursive_subgroups);
 
             $course_group_user_relations = DataManager::retrieves(
-                CourseGroupUserRelation::class, new RetrievesParameters($condition)
+                CourseGroupUserRelation::class, new RetrievesParameters(condition: $condition)
             );
 
             $users = [];

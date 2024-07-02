@@ -132,7 +132,9 @@ class CourseCategory extends PlatformCategory implements DisplayOrderDataClassLi
         if (!$recursive)
         {
             $parameters = new DataClassDistinctParameters(
-                $condition, new RetrieveProperties([new PropertyConditionVariable(self::class, self::PROPERTY_ID)])
+                condition: $condition, retrieveProperties: new RetrieveProperties(
+                [new PropertyConditionVariable(self::class, self::PROPERTY_ID)]
+            )
             );
 
             return DataManager::distinct(self::class, $parameters);

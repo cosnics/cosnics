@@ -112,7 +112,7 @@ class PublisherComponent extends Manager
 
         $contentObjectNumbers = DataManager::distinct(
             WorkspaceContentObjectRelation::class, new DataClassDistinctParameters(
-                $condition, new RetrieveProperties(
+                condition: $condition, retrieveProperties: new RetrieveProperties(
                     [
                         new PropertyConditionVariable(
                             WorkspaceContentObjectRelation::class,
@@ -125,10 +125,10 @@ class PublisherComponent extends Manager
 
         return DataManager::distinct(
             ContentObject::class, new DataClassDistinctParameters(
-                new InCondition(
+                condition: new InCondition(
                     new PropertyConditionVariable(ContentObject::class, ContentObject::PROPERTY_OBJECT_NUMBER),
                     $contentObjectNumbers
-                ), new RetrieveProperties(
+                ), retrieveProperties: new RetrieveProperties(
                     [new PropertyConditionVariable(ContentObject::class, ContentObject::PROPERTY_ID)]
                 )
             )

@@ -107,7 +107,8 @@ class DoctrineExtension
 
             $condition = new AndCondition($conditions);
 
-            $parameters = new DataClassDistinctParameters($condition, $properties, $joins);
+            $parameters = new DataClassDistinctParameters(
+                condition: $condition, retrieveProperties: $properties, joins: $joins);
 
             return $this->getDataClassDatabase()->distinct(Group::class, $parameters);
         }
@@ -157,7 +158,8 @@ class DoctrineExtension
 
         $condition = new AndCondition($conditions);
 
-        $parameters = new DataClassDistinctParameters($condition, $properties, $joins);
+        $parameters = new DataClassDistinctParameters(
+            condition: $condition, retrieveProperties: $properties, joins: $joins);
 
         return $this->getDataClassDatabase()->distinct(CourseEntityRelation::class, $parameters);
     }
@@ -279,7 +281,8 @@ class DoctrineExtension
 
             $condition = new AndCondition($conditions);
 
-            $parameters = new DataClassDistinctParameters($condition, $properties, $joins);
+            $parameters = new DataClassDistinctParameters(
+                condition: $condition, retrieveProperties: $properties, joins: $joins);
 
             return $this->getDataClassDatabase()->distinct(Group::class, $parameters);
         }
@@ -336,7 +339,8 @@ class DoctrineExtension
 
         $condition = new AndCondition($conditions);
 
-        $parameters = new DataClassDistinctParameters($condition, $properties, $joins);
+        $parameters = new DataClassDistinctParameters(
+            condition: $condition, retrieveProperties: $properties, joins: $joins);
 
         return $this->getDataClassDatabase()->distinct(CourseEntityRelation::class, $parameters);
     }

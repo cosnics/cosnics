@@ -61,8 +61,8 @@ class BrowserComponent extends Manager
         );
 
         $parameters = new RetrievesParameters(
-            null, $tableParameterValues->getNumberOfItemsPerPage(), $tableParameterValues->getOffset(),
-            $entityTableRenderer->determineOrderBy($tableParameterValues)
+            count: $tableParameterValues->getNumberOfItemsPerPage(), offset: $tableParameterValues->getOffset(),
+            orderBy: $entityTableRenderer->determineOrderBy($tableParameterValues)
         );
 
         $entities = DataManager::retrieves(RightsLocationEntityRightGroup::class, $parameters);

@@ -35,7 +35,7 @@ class StatusChangerPlatformgroupTeacherComponent extends StatusChangerComponent
         
         return DataManager::retrieve(
             CourseEntityRelation::class,
-            new RetrieveParameters($condition));
+            new RetrieveParameters(condition: $condition));
     }
 
     public function get_status()

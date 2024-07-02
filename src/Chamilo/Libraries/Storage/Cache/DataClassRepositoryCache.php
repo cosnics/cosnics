@@ -7,9 +7,6 @@ use Chamilo\Libraries\Storage\Parameters\DataClassCountParameters;
 use Chamilo\Libraries\Storage\Parameters\DataClassDistinctParameters;
 use Chamilo\Libraries\Storage\Parameters\DataClassParameters;
 use Chamilo\Libraries\Storage\Parameters\RetrieveParameters;
-use Chamilo\Libraries\Storage\Query\Condition\EqualityCondition;
-use Chamilo\Libraries\Storage\Query\Variable\PropertyConditionVariable;
-use Chamilo\Libraries\Storage\Query\Variable\StaticConditionVariable;
 use Doctrine\Common\Collections\ArrayCollection;
 
 /**
@@ -21,11 +18,18 @@ use Doctrine\Common\Collections\ArrayCollection;
  */
 class DataClassRepositoryCache
 {
+    public const TYPE_COUNT = 1;
+    public const TYPE_COUNT_GROUPED = 2;
+    public const TYPE_DISTINCT = 3;
+    public const TYPE_RECORD = 4;
+    public const TYPE_RECORDS = 5;
+    public const TYPE_RETRIEVE = 6;
+    public const TYPE_RETRIEVES = 7;
 
     /**
      * The cache
      *
-     * @var array[][]
+     * @var array[][][]
      */
     private array $cache;
 
@@ -34,85 +38,73 @@ class DataClassRepositoryCache
         $this->cache = [];
     }
 
-    private function add(string $className, ?DataClassParameters $parameters, mixed $value): bool
+    private function add(string $className, int $type, ?DataClassParameters $parameters, mixed $value): mixed
     {
-        if (!$this->exists($className, $parameters))
+        if (!$this->existsForType($type, $className, $parameters))
         {
-            $this->set($className, $parameters->hash(), $value);
+            $this->setForType($type, $className, $parameters->hash(), $value);
         }
 
-        return true;
+        return $this->getForType($type, $className, $parameters);
     }
 
-    public function addForArrayCollection(
-        string $cacheDataClassName, ArrayCollection $arrayCollection, DataClassParameters $parameters
-    ): bool
+    public function addForCount(
+        string $className, DataClassCountParameters $parameters, int $count
+    ): int
     {
-        return $this->add($cacheDataClassName, $parameters, $arrayCollection);
-    }
-
-    public function addForDataClass(
-        string $cacheDataClassName, RetrieveParameters $parameters, ?DataClass $object = null
-    ): bool
-    {
-        if ($object instanceof DataClass)
-        {
-            foreach ($object::getCacheablePropertyNames() as $cacheableProperty)
-            {
-                $value = $object->getDefaultProperty($cacheableProperty);
-
-                if (isset($value))
-                {
-                    $cacheablePropertyParameters = new RetrieveParameters(
-                        new EqualityCondition(
-                            new PropertyConditionVariable($cacheDataClassName, $cacheableProperty),
-                            new StaticConditionVariable($value)
-                        )
-                    );
-                    $this->set($cacheDataClassName, $cacheablePropertyParameters->hash(), $object);
-                }
-            }
-        }
-
-        $this->set($cacheDataClassName, $parameters->hash(), $object);
-
-        return true;
-    }
-
-    public function addForDataClassCount(string $className, DataClassCountParameters $parameters, int $count): bool
-    {
-        return $this->add($className, $parameters, $count);
+        return $this->add($className, self::TYPE_COUNT, $parameters, $count);
     }
 
     /**
      * @param int[] $counts
+     *
+     * @return int[]
      */
-    public function addForDataClassCountGrouped(
+    public function addForCountGrouped(
         string $className, DataClassCountGroupedParameters $parameters, array $counts
-    ): bool
+    ): array
     {
-        return $this->add($className, $parameters, $counts);
+        return $this->add($className, self::TYPE_COUNT_GROUPED, $parameters, $counts);
     }
 
-    public function addForDataClassDistinct(
+    public function addForDistinct(
         string $className, DataClassDistinctParameters $parameters, array $propertyValues
-    ): bool
+    ): array
     {
-        return $this->add($className, $parameters, $propertyValues);
+        return $this->add($className, self::TYPE_DISTINCT, $parameters, $propertyValues);
     }
 
-    public function addForRecord(string $className, array $record, RetrieveParameters $parameters): bool
+    public function addForRecord(string $className, RetrieveParameters $parameters, array $record): array
     {
-        $this->set($className, $parameters->hash(), $record);
-
-        return true;
+        return $this->add($className, self::TYPE_RECORD, $parameters, $record);
     }
 
-    public function exists(string $class, DataClassParameters $parameters): bool
+    public function addForRecords(
+        string $cacheDataClassName, DataClassParameters $parameters, ArrayCollection $arrayCollection
+    ): ArrayCollection
+    {
+        return $this->add($cacheDataClassName, self::TYPE_RECORDS, $parameters, $arrayCollection);
+    }
+
+    public function addForRetrieve(
+        string $cacheDataClassName, RetrieveParameters $parameters, ?DataClass $object = null
+    ): ?DataClass
+    {
+        return $this->add($cacheDataClassName, self::TYPE_RETRIEVE, $parameters, $object);
+    }
+
+    public function addForRetrieves(
+        string $cacheDataClassName, DataClassParameters $parameters, ArrayCollection $arrayCollection
+    ): ArrayCollection
+    {
+        return $this->add($cacheDataClassName, self::TYPE_RETRIEVES, $parameters, $arrayCollection);
+    }
+
+    public function existsForType(int $type, string $class, DataClassParameters $parameters): bool
     {
         $hash = $parameters->hash();
 
-        if (isset($this->cache[$class][$hash]))
+        if (isset($this->cache[$class][$type][$hash]))
         {
             return true;
         }
@@ -122,11 +114,11 @@ class DataClassRepositoryCache
         }
     }
 
-    public function get(string $class, DataClassParameters $parameters)
+    public function getForType(int $type, string $class, DataClassParameters $parameters)
     {
-        if ($this->exists($class, $parameters))
+        if ($this->existsForType($type, $class, $parameters))
         {
-            return $this->cache[$class][$parameters->hash()];
+            return $this->cache[$class][$type][$parameters->hash()];
         }
         else
 
@@ -140,12 +132,12 @@ class DataClassRepositoryCache
         $this->cache = [];
     }
 
-    private function set(string $class, string $hash, mixed $value): void
+    private function setForType(int $type, string $class, string $hash, mixed $value): void
     {
-        $this->cache[$class][$hash] = $value;
+        $this->cache[$class][$type][$hash] = $value;
     }
 
-    public function truncate(string $class): bool
+    public function truncateClass(string $class): bool
     {
         if (isset($this->cache[$class]))
         {
@@ -158,11 +150,11 @@ class DataClassRepositoryCache
     /**
      * @param string[] $classes
      */
-    public function truncates(array $classes = []): bool
+    public function truncateClasses(array $classes = []): bool
     {
         foreach ($classes as $class)
         {
-            if (!$this->truncate($class))
+            if (!$this->truncateClass($class))
             {
                 return false;
             }

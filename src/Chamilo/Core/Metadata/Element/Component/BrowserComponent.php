@@ -144,7 +144,7 @@ class BrowserComponent extends Manager
     protected function renderTable(): string
     {
         $totalNumberOfItems =
-            DataManager::count(Element::class, new DataClassCountParameters($this->getElementTableCondition()));
+            DataManager::count(Element::class, new DataClassCountParameters(condition: $this->getElementTableCondition()));
         $elementTableRenderer = $this->getElementTableRenderer();
 
         $tableParameterValues = $this->getRequestTableParameterValuesCompiler()->determineParameterValues(
@@ -161,8 +161,8 @@ class BrowserComponent extends Manager
 
         $elements = DataManager::retrieves(
             Element::class, new RetrievesParameters(
-                $this->getElementTableCondition(), $tableParameterValues->getOffset(),
-                $tableParameterValues->getNumberOfItemsPerPage(), $orderBy
+                condition: $this->getElementTableCondition(), count: $tableParameterValues->getOffset(),
+                offset: $tableParameterValues->getNumberOfItemsPerPage(), orderBy: $orderBy
             )
         );
 

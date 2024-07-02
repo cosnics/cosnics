@@ -35,7 +35,7 @@ abstract class AssignmentEphorusRepository extends CommonDataClassRepository
         $entryClassName = $this->getEntryClassName();
 
         return $this->dataClassRepository->count(
-            $entryClassName, new DataClassCountParameters($condition, $this->getAssignmentRequestJoins())
+            $entryClassName, new DataClassCountParameters(condition: $condition, joins: $this->getAssignmentRequestJoins())
         );
     }
 

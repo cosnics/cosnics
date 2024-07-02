@@ -104,7 +104,7 @@ class WikiBrowserComponent extends Manager implements BreadcrumbLessComponentInt
     protected function renderTable(): string
     {
         $totalNumberOfItems = DataManager::count_complex_wiki_pages(
-            ComplexContentObjectItem::class, new DataClassCountParameters($this->get_condition())
+            ComplexContentObjectItem::class, new DataClassCountParameters(condition: $this->get_condition())
         );
         $wikiPageTableRenderer = $this->getWikiPageTableRenderer();
 
@@ -115,8 +115,10 @@ class WikiBrowserComponent extends Manager implements BreadcrumbLessComponentInt
 
         $wikiPages = DataManager::retrieve_complex_wiki_pages(
             ComplexContentObjectItem::class, new RetrievesParameters(
-                $this->get_condition(), $tableParameterValues->getNumberOfItemsPerPage(),
-                $tableParameterValues->getOffset(), $wikiPageTableRenderer->determineOrderBy($tableParameterValues)
+                condition: $this->get_condition(), count: $tableParameterValues->getNumberOfItemsPerPage(),
+                offset: $tableParameterValues->getOffset(), orderBy: $wikiPageTableRenderer->determineOrderBy(
+                $tableParameterValues
+            )
             )
         );
 

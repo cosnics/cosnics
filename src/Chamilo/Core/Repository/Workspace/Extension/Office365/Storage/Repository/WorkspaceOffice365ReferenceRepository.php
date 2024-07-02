@@ -30,7 +30,7 @@ class WorkspaceOffice365ReferenceRepository extends CommonDataClassRepository
         $condition = $this->getConditionByWorkspace($workspace);
 
         return $this->dataClassRepository->retrieve(
-            WorkspaceOffice365Reference::class, new RetrieveParameters($condition)
+            WorkspaceOffice365Reference::class, new RetrieveParameters(condition: $condition)
         );
     }
 
@@ -43,7 +43,7 @@ class WorkspaceOffice365ReferenceRepository extends CommonDataClassRepository
      */
     public function createReference(WorkspaceOffice365Reference $workspaceOffice365Reference)
     {
-        $this->dataClassRepository->getDataClassRepositoryCache()->truncate(WorkspaceOffice365Reference::class);
+        $this->dataClassRepository->getDataClassRepositoryCache()->truncateClass(WorkspaceOffice365Reference::class);
         return $this->dataClassRepository->create($workspaceOffice365Reference);
     }
 

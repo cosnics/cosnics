@@ -72,7 +72,7 @@ abstract class ProfileComponent extends Manager implements BreadcrumbLessPackage
         $condition = new AndCondition($conditions);
 
         $extra_form = DataManager::retrieve(
-            Instance::class, new RetrieveParameters($condition)
+            Instance::class, new RetrieveParameters(condition: $condition)
         );
 
         if ($extra_form instanceof Instance && count($extra_form->get_elements()) > 0)

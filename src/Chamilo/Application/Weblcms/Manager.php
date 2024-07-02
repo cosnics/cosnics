@@ -97,7 +97,7 @@ abstract class Manager extends Application
 
     public function count_requests($condition = null)
     {
-        return DataManager::count(CourseRequest::class, new DataClassCountParameters($condition));
+        return DataManager::count(CourseRequest::class, new DataClassCountParameters(condition: $condition));
     }
 
     /**
@@ -411,7 +411,7 @@ abstract class Manager extends Application
                 new StaticConditionVariable($this->getRequest()->query->get(self::PARAM_COURSE))
             );
             $sections = DataManager::retrieves(
-                CourseSection::class, new RetrievesParameters($condition)
+                CourseSection::class, new RetrievesParameters(condition: $condition)
             );
 
             foreach ($sections as $section)

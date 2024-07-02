@@ -115,7 +115,7 @@ class ViewerComponent extends Manager
     public function renderTable(): string
     {
         $totalNumberOfItems = DataManager::count(
-            CourseSection::class, new DataClassCountParameters($this->getCourseSectionsCondition())
+            CourseSection::class, new DataClassCountParameters(condition: $this->getCourseSectionsCondition())
         );
 
         $courseSectionsTableRenderer = $this->getCourseSectionsTableRenderer();
@@ -127,9 +127,8 @@ class ViewerComponent extends Manager
 
         $courseSections = DataManager::retrieves(
             CourseSection::class, new RetrievesParameters(
-                $this->getCourseSectionsCondition(), $tableParameterValues->getNumberOfItemsPerPage(),
-                $tableParameterValues->getOffset(),
-                $courseSectionsTableRenderer->determineOrderBy($tableParameterValues)
+                condition: $this->getCourseSectionsCondition(), count: $tableParameterValues->getNumberOfItemsPerPage(),
+                offset: $tableParameterValues->getOffset(), orderBy: $courseSectionsTableRenderer->determineOrderBy($tableParameterValues)
             )
         );
 

@@ -1,30 +1,30 @@
 <?php
 namespace Chamilo\Libraries\Storage\Exception\Database;
 
-use Chamilo\Libraries\Storage\Parameters\RetrieveParameters;
+use Chamilo\Libraries\Storage\Parameters\DataClassParameters;
 use Exception;
 
 /**
  * @package Chamilo\Libraries\Storage\Exception
  * @author Hans De Bisschop <hans.de.bisschop@ehb.be>
  */
-class DatabaseRetrieveException extends Exception
+class StorageNoResultException extends Exception
 {
-
     protected string $dataClassStorageUnitName;
 
-    protected RetrieveParameters $parameters;
+    protected DataClassParameters $parameters;
+
+    protected string $query;
 
     public function __construct(
-        string $dataClassStorageUnitName, RetrieveParameters $parameters, string $exceptionMessage = ''
+        string $method, string $dataClassStorageUnitName, DataClassParameters $parameters, string $exceptionMessage = ''
     )
     {
         $this->dataClassStorageUnitName = $dataClassStorageUnitName;
         $this->parameters = $parameters;
 
         parent::__construct(
-            'Retrieve for ' . $dataClassStorageUnitName . ' with parameters ' . serialize($parameters) .
-            ', failed with the following message:' . $exceptionMessage
+            $method . ' for ' . $dataClassStorageUnitName . ' failed with the following message:' . $exceptionMessage
         );
     }
 }

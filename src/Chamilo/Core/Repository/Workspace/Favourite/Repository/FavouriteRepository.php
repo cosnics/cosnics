@@ -60,7 +60,7 @@ class FavouriteRepository
         $condition = new AndCondition($conditions);
 
         return $this->getDataClassRepository()->retrieve(
-            WorkspaceUserFavourite::class, new RetrieveParameters($condition)
+            WorkspaceUserFavourite::class, new RetrieveParameters(condition: $condition)
         );
     }
 

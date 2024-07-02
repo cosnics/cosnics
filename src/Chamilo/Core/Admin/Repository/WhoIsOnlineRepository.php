@@ -52,8 +52,9 @@ class WhoIsOnlineRepository
 
         return $this->getDataClassRepository()->distinct(
             Online::class, new DataClassDistinctParameters(
-                $condition,
-                new RetrieveProperties([new PropertyConditionVariable(Online::class, Online::PROPERTY_USER_ID)])
+                condition: $condition, retrieveProperties: new RetrieveProperties(
+                [new PropertyConditionVariable(Online::class, Online::PROPERTY_USER_ID)]
+            )
             )
         );
     }
@@ -66,7 +67,7 @@ class WhoIsOnlineRepository
         );
 
         return $this->getDataClassRepository()->retrieve(
-            Online::class, new RetrieveParameters($condition)
+            Online::class, new RetrieveParameters(condition: $condition)
         );
     }
 

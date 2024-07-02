@@ -49,7 +49,7 @@ class CourseCategoryEntityHelper
     public function count_table_data($condition)
     {
         $parameters = new DataClassCountParameters(
-            $condition, self::get_joins(), new RetrieveProperties(
+            condition: $condition, joins: self::get_joins(), retrieveProperties: new RetrieveProperties(
                 [
                     new FunctionConditionVariable(
                         FunctionConditionVariable::DISTINCT,
@@ -101,7 +101,9 @@ class CourseCategoryEntityHelper
             );
 
             $parameters = new DataClassDistinctParameters(
-                $condition, new RetrieveProperties([new PropertyConditionVariable(Course::class, Course::PROPERTY_ID)])
+                condition: $condition, retrieveProperties: new RetrieveProperties(
+                [new PropertyConditionVariable(Course::class, Course::PROPERTY_ID)]
+            )
             );
 
             return \Chamilo\Application\Weblcms\Course\Storage\DataManager::distinct(Course::class, $parameters);

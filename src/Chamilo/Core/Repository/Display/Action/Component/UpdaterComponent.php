@@ -69,7 +69,7 @@ class UpdaterComponent extends Manager
                             ComplexContentObjectItem::class, ComplexContentObjectItem::PROPERTY_PARENT
                         ), new StaticConditionVariable($old_id), ComplexContentObjectItem::getStorageUnitName()
                     );
-                    $parameters = new RetrievesParameters($condition);
+                    $parameters = new RetrievesParameters(condition: $condition);
                     $children = DataManager::retrieve_complex_content_object_items(
                         ComplexContentObjectItem::class, $parameters
                     );

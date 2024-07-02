@@ -141,11 +141,11 @@ class CourseUsersFeedComponent extends Manager
         );
 
         $parameters = new DataClassDistinctParameters(
-            new AndCondition($userConditions), new RetrieveProperties(
-                [
-                    new PropertyConditionVariable(CourseEntityRelation::class, CourseEntityRelation::PROPERTY_ENTITY_ID)
-                ]
-            )
+            condition: new AndCondition($userConditions), retrieveProperties: new RetrieveProperties(
+            [
+                new PropertyConditionVariable(CourseEntityRelation::class, CourseEntityRelation::PROPERTY_ENTITY_ID)
+            ]
+        )
         );
 
         $user_ids = DataManager::distinct(
@@ -167,23 +167,26 @@ class CourseUsersFeedComponent extends Manager
         $groups = \Chamilo\Application\Weblcms\Course\Storage\DataManager::retrieves(
             Group::class, new RetrievesParameters(
                 condition: new AndCondition($groupConditions), joins: new Joins(
-                new Join(
-                    CourseEntityRelation::class, new EqualityCondition(
-                        new PropertyConditionVariable(Group::class, Group::PROPERTY_ID), new PropertyConditionVariable(
-                            CourseEntityRelation::class, CourseEntityRelation::PROPERTY_ENTITY_ID
+                [
+                    new Join(
+                        CourseEntityRelation::class, new EqualityCondition(
+                            new PropertyConditionVariable(Group::class, Group::PROPERTY_ID),
+                            new PropertyConditionVariable(
+                                CourseEntityRelation::class, CourseEntityRelation::PROPERTY_ENTITY_ID
+                            )
                         )
                     )
-                )
+                ]
             )
             )
         );
 
         $parameters = new DataClassDistinctParameters(
-            new AndCondition($userConditions), new RetrieveProperties(
-                [
-                    new PropertyConditionVariable(CourseEntityRelation::class, CourseEntityRelation::PROPERTY_ENTITY_ID)
-                ]
-            )
+            condition: new AndCondition($userConditions), retrieveProperties: new RetrieveProperties(
+            [
+                new PropertyConditionVariable(CourseEntityRelation::class, CourseEntityRelation::PROPERTY_ENTITY_ID)
+            ]
+        )
         );
 
         $group_users = [];
@@ -229,13 +232,13 @@ class CourseUsersFeedComponent extends Manager
         {
             $condition = $conditions[0];
         }
-        $this->user_count = DataManager::count(User::class, new DataClassCountParameters($condition));
+        $this->user_count = DataManager::count(User::class, new DataClassCountParameters(condition: $condition));
 
         $parameters = new RetrievesParameters(
-            $condition, 100, $this->get_offset(), new OrderBy([
-                new OrderProperty(new PropertyConditionVariable(User::class, User::PROPERTY_LASTNAME)),
-                new OrderProperty(new PropertyConditionVariable(User::class, User::PROPERTY_FIRSTNAME))
-            ])
+            condition: $condition, count: 100, offset: $this->get_offset(), orderBy: new OrderBy([
+            new OrderProperty(new PropertyConditionVariable(User::class, User::PROPERTY_LASTNAME)),
+            new OrderProperty(new PropertyConditionVariable(User::class, User::PROPERTY_FIRSTNAME))
+        ])
         );
 
         return DataManager::retrieves(User::class, $parameters);

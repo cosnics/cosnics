@@ -58,7 +58,7 @@ class DeleterComponent extends Manager
                 if ($publication->delete())
                 {
                     $parameters = new RetrieveParameters(
-                        new EqualityCondition(
+                        condition: new EqualityCondition(
                             new PropertyConditionVariable(
                                 Publication::class, Publication::PROPERTY_PUBLICATION_ID
                             ), new StaticConditionVariable($publication->get_id())

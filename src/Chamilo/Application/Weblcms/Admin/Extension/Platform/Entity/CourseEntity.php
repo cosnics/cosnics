@@ -47,7 +47,7 @@ class CourseEntity implements RightsEntity
     {
         $condition = $this->get_condition($condition);
 
-        return DataManager::count(Course::class, new DataClassCountParameters($condition));
+        return DataManager::count(Course::class, new DataClassCountParameters(condition: $condition));
     }
 
     /**
@@ -224,7 +224,8 @@ class CourseEntity implements RightsEntity
     public function retrieve_entity_items($condition = null, $offset = null, $count = null, $order_property = null)
     {
         $condition = $this->get_condition($condition);
-        $parameters = new RetrievesParameters($condition, $count, $offset, $order_property);
+        $parameters = new RetrievesParameters(
+            condition: $condition, count: $count, offset: $offset, orderBy: $order_property);
 
         return DataManager::retrieves(Course::class, $parameters);
     }

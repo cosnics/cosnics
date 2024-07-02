@@ -25,7 +25,9 @@ class SchemaRepository
      */
     public function findSchemasForCondition(?Condition $condition = null): ArrayCollection
     {
-        return $this->getDataClassRepository()->retrieves(Schema::class, new RetrievesParameters($condition));
+        return $this->getDataClassRepository()->retrieves(
+            Schema::class, new RetrievesParameters(condition: $condition)
+        );
     }
 
     public function getDataClassRepository(): DataClassRepository

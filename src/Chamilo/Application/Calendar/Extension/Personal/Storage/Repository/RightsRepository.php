@@ -51,7 +51,7 @@ class RightsRepository
         );
 
         return $this->getDataClassRepository()->count(
-            PublicationGroup::class, new DataClassCountParameters($condition)
+            PublicationGroup::class, new DataClassCountParameters(condition: $condition)
         );
     }
 
@@ -68,7 +68,7 @@ class RightsRepository
         );
 
         return $this->getDataClassRepository()->count(
-            PublicationUser::class, new DataClassCountParameters($condition)
+            PublicationUser::class, new DataClassCountParameters(condition: $condition)
         );
     }
 
@@ -196,7 +196,8 @@ class RightsRepository
         );
 
         return $this->getDataClassRepository()->distinct(
-            PublicationGroup::class, new DataClassDistinctParameters($condition, $properties)
+            PublicationGroup::class, new DataClassDistinctParameters(
+                condition: $condition, retrieveProperties: $properties)
         );
     }
 
@@ -213,7 +214,7 @@ class RightsRepository
         );
 
         return $this->getDataClassRepository()->retrieves(
-            PublicationGroup::class, new RetrievesParameters($condition)
+            PublicationGroup::class, new RetrievesParameters(condition: $condition)
         );
     }
 
@@ -234,7 +235,8 @@ class RightsRepository
         );
 
         return $this->getDataClassRepository()->distinct(
-            PublicationUser::class, new DataClassDistinctParameters($condition, $properties)
+            PublicationUser::class, new DataClassDistinctParameters(
+                condition: $condition, retrieveProperties: $properties)
         );
     }
 
@@ -251,7 +253,7 @@ class RightsRepository
         );
 
         return $this->getDataClassRepository()->retrieves(
-            PublicationUser::class, new RetrievesParameters($condition)
+            PublicationUser::class, new RetrievesParameters(condition: $condition)
         );
     }
 

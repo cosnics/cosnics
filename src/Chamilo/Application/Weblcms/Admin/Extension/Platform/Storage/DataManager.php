@@ -60,7 +60,7 @@ class DataManager extends \Chamilo\Libraries\Storage\DataManager\DataManager
 
             $condition = new OrCondition($expanded_entities_conditions);
 
-            return DataManager::count(Admin::class, new DataClassCountParameters($condition)) > 0;
+            return DataManager::count(Admin::class, new DataClassCountParameters(condition: $condition)) > 0;
         }
         else
         {
@@ -134,7 +134,7 @@ class DataManager extends \Chamilo\Libraries\Storage\DataManager\DataManager
 
         $condition = new AndCondition($conditions);
 
-        return DataManager::count(Admin::class, new DataClassCountParameters($condition)) > 0;
+        return DataManager::count(Admin::class, new DataClassCountParameters(condition: $condition)) > 0;
     }
 
     /**
@@ -178,7 +178,7 @@ class DataManager extends \Chamilo\Libraries\Storage\DataManager\DataManager
 
             $condition = new OrCondition($expanded_entities_conditions);
 
-            $admins = DataManager::retrieves(Admin::class, new RetrievesParameters($condition));
+            $admins = DataManager::retrieves(Admin::class, new RetrievesParameters(condition: $condition));
             $course_ids = [];
 
             foreach ($admins as $admin)

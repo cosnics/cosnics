@@ -138,13 +138,13 @@ abstract class Manager extends \Chamilo\Application\Weblcms\Tool\Manager
 
         return DataManager::distinct(
             CourseEntityRelation::class, new DataClassDistinctParameters(
-                new AndCondition($conditions), new RetrieveProperties(
-                    [
-                        new PropertyConditionVariable(
-                            CourseEntityRelation::class, CourseEntityRelation::PROPERTY_ENTITY_ID
-                        )
-                    ]
-                )
+                condition: new AndCondition($conditions), retrieveProperties: new RetrieveProperties(
+                [
+                    new PropertyConditionVariable(
+                        CourseEntityRelation::class, CourseEntityRelation::PROPERTY_ENTITY_ID
+                    )
+                ]
+            )
             )
         );
     }

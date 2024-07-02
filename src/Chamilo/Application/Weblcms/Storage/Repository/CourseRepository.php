@@ -65,7 +65,7 @@ class CourseRepository implements CourseRepositoryInterface
 
         $condition = new AndCondition($conditions);
 
-        return DataManager::count(CourseEntityRelation::class, new DataClassCountParameters($condition));
+        return DataManager::count(CourseEntityRelation::class, new DataClassCountParameters(condition: $condition));
     }
 
     /**
@@ -133,7 +133,7 @@ class CourseRepository implements CourseRepositoryInterface
         $condition = new AndCondition($conditions);
 
         return DataManager::retrieves(
-            CourseEntityRelation::class, new RetrievesParameters($condition)
+            CourseEntityRelation::class, new RetrievesParameters(condition: $condition)
         );
     }
 
@@ -152,7 +152,7 @@ class CourseRepository implements CourseRepositoryInterface
         );
 
         return DataManager::retrieve(
-            CourseTool::class, new RetrieveParameters($condition)
+            CourseTool::class, new RetrieveParameters(condition: $condition)
         );
     }
 
@@ -187,7 +187,7 @@ class CourseRepository implements CourseRepositoryInterface
         $condition = new AndCondition($conditions);
 
         return DataManager::retrieve(
-            CourseEntityRelation::class, new RetrieveParameters($condition)
+            CourseEntityRelation::class, new RetrieveParameters(condition: $condition)
         );
     }
 
@@ -205,7 +205,7 @@ class CourseRepository implements CourseRepositoryInterface
         );
 
         return DataManager::retrieves(
-            Course::class, new RetrievesParameters($condition)
+            Course::class, new RetrievesParameters(condition: $condition)
         );
     }
 
@@ -238,7 +238,7 @@ class CourseRepository implements CourseRepositoryInterface
         $orderBy = [new OrderProperty(new PropertyConditionVariable(Course::class, Course::PROPERTY_TITLE))];
 
         return DataManager::retrieves(
-            Course::class, new RetrievesParameters($condition, null, null, new OrderBy($orderBy))
+            Course::class, new RetrievesParameters(condition: $condition, orderBy: new OrderBy($orderBy))
         );
     }
 
@@ -258,7 +258,7 @@ class CourseRepository implements CourseRepositoryInterface
         $orderBy = [new OrderProperty(new PropertyConditionVariable(Course::class, Course::PROPERTY_TITLE))];
 
         return DataManager::retrieves(
-            Course::class, new RetrievesParameters($condition, null, null, new OrderBy($orderBy))
+            Course::class, new RetrievesParameters(condition: $condition, orderBy: new OrderBy($orderBy))
         );
     }
 
@@ -324,7 +324,9 @@ class CourseRepository implements CourseRepositoryInterface
         );
 
         return DataManager::retrieves(
-            Course::class, new RetrievesParameters($condition, null, null, null, $joins)
+            Course::class, new RetrievesParameters(
+                condition: $condition, joins: $joins
+            )
         );
     }
 
@@ -413,7 +415,7 @@ class CourseRepository implements CourseRepositoryInterface
         );
 
         $retrievesParameters = new RetrievesParameters(
-            condition: $condition, count: null, offset: null, joins: $joins, retrieveProperties: $properties
+            condition: $condition, joins: $joins, retrieveProperties: $properties
         );
 
         $courseRecords = DataManager::records(

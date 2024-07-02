@@ -188,7 +188,7 @@ class Menu extends HtmlMenu
                 ComplexContentObjectItem::class, ComplexContentObjectItem::PROPERTY_PARENT
             ), new StaticConditionVariable($parent_id), ComplexContentObjectItem::getStorageUnitName()
         );
-        $parameters = new RetrievesParameters($condition);
+        $parameters = new RetrievesParameters(condition: $condition);
         $clois = DataManager::retrieve_complex_content_object_items(
             ComplexContentObjectItem::class, $parameters
         );

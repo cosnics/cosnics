@@ -117,7 +117,7 @@ class Connector
         );
 
         return DataManager::retrieves(
-            CourseUserCategory::class, new RetrievesParameters($condition)
+            CourseUserCategory::class, new RetrievesParameters(condition: $condition)
         );
     }
 

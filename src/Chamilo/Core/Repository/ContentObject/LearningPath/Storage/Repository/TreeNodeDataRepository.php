@@ -39,7 +39,7 @@ class TreeNodeDataRepository extends CommonDataClassRepository
 
         $condition = new AndCondition($conditions);
 
-        return $this->dataClassRepository->retrieve(TreeNodeData::class, new RetrieveParameters($condition));
+        return $this->dataClassRepository->retrieve(TreeNodeData::class, new RetrieveParameters(condition: $condition));
     }
 
     /**
@@ -55,7 +55,7 @@ class TreeNodeDataRepository extends CommonDataClassRepository
 
         return $this->dataClassRepository->retrieves(
             TreeNodeData::class,
-            new RetrievesParameters($condition)
+            new RetrievesParameters(condition: $condition)
         );
     }
 
@@ -68,7 +68,7 @@ class TreeNodeDataRepository extends CommonDataClassRepository
     {
         $condition = $this->getConditionForLearningPath($learningPath);
 
-        return $this->dataClassRepository->count(TreeNodeData::class, new DataClassCountParameters($condition));
+        return $this->dataClassRepository->count(TreeNodeData::class, new DataClassCountParameters(condition: $condition));
     }
 
     /**
@@ -87,7 +87,7 @@ class TreeNodeDataRepository extends CommonDataClassRepository
 
         return $this->dataClassRepository->retrieves(
             TreeNodeData::class,
-            new RetrievesParameters($condition)
+            new RetrievesParameters(condition: $condition)
         );
     }
 
@@ -107,7 +107,7 @@ class TreeNodeDataRepository extends CommonDataClassRepository
 
         return $this->dataClassRepository->retrieves(
             TreeNodeData::class,
-            new RetrievesParameters($condition)
+            new RetrievesParameters(condition: $condition)
         );
     }
 
@@ -130,7 +130,7 @@ class TreeNodeDataRepository extends CommonDataClassRepository
      */
     public function clearTreeNodesDataCache()
     {
-        return $this->dataClassRepository->getDataClassRepositoryCache()->truncate(TreeNodeData::class);
+        return $this->dataClassRepository->getDataClassRepositoryCache()->truncateClass(TreeNodeData::class);
     }
 
     /**

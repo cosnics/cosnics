@@ -221,7 +221,7 @@ class RepositoryCategoryTreeMenu extends GenericTree
     public function node_has_children($parent_node_id)
     {
         return (DataManager::count(
-                RepositoryCategory::class, new DataClassCountParameters($this->get_retrieve_condition($parent_node_id))
+                RepositoryCategory::class, new DataClassCountParameters(condition: $this->get_retrieve_condition($parent_node_id))
             ) > 0);
     }
 }

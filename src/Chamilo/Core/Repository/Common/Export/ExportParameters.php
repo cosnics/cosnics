@@ -106,9 +106,9 @@ class ExportParameters
                     );
 
                     $parameters = new DataClassDistinctParameters(
-                        $condition, new RetrieveProperties(
+                        condition: $condition, retrieveProperties: new RetrieveProperties(
                         [new PropertyConditionVariable(ContentObject::class, ContentObject::PROPERTY_ID)]
-                    ), $joins
+                    ), joins: $joins
                     );
                 }
                 else
@@ -154,9 +154,9 @@ class ExportParameters
                     $condition = new AndCondition($conditions);
 
                     $parameters = new DataClassDistinctParameters(
-                        $condition, new RetrieveProperties(
+                        condition: $condition, retrieveProperties: new RetrieveProperties(
                         [new PropertyConditionVariable(ContentObject::class, ContentObject::PROPERTY_ID)]
-                    ), $joins
+                    ), joins: $joins
                     );
                 }
 

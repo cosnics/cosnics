@@ -16,14 +16,6 @@ class PublicationGroup extends DataClass
     public const PROPERTY_PUBLICATION = 'publication_id';
 
     /**
-     * @return string[]
-     */
-    public static function getCacheablePropertyNames(array $cacheablePropertyNames = []): array
-    {
-        return [];
-    }
-
-    /**
      * Get the default properties
      *
      * @return array The property names.

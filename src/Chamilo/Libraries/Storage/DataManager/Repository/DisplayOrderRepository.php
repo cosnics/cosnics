@@ -86,7 +86,7 @@ class DisplayOrderRepository
         }
 
         return $this->getDataClassRepository()->count(
-            $this->determinePropertyDataClassName($dataClass), new DataClassCountParameters($condition)
+            $this->determinePropertyDataClassName($dataClass), new DataClassCountParameters(condition: $condition)
         );
     }
 

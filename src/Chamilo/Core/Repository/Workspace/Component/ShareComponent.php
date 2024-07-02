@@ -65,14 +65,14 @@ class ShareComponent extends Manager
 
             $selectedContentObjectNumbers = DataManager::distinct(
                 ContentObject::class, new DataClassDistinctParameters(
-                    new InCondition(
+                    condition: new InCondition(
                         new PropertyConditionVariable(ContentObject::class, DataClass::PROPERTY_ID),
                         $selectedContentObjectIdentifiers
-                    ), new RetrieveProperties(
-                        [
-                            new PropertyConditionVariable(ContentObject::class, ContentObject::PROPERTY_OBJECT_NUMBER)
-                        ]
-                    )
+                    ), retrieveProperties: new RetrieveProperties(
+                    [
+                        new PropertyConditionVariable(ContentObject::class, ContentObject::PROPERTY_OBJECT_NUMBER)
+                    ]
+                )
                 )
             );
 
@@ -101,7 +101,7 @@ class ShareComponent extends Manager
             {
                 $contentObjects = DataManager::retrieves(
                     ContentObject::class, new RetrievesParameters(
-                        new InCondition(
+                        condition: new InCondition(
                             new PropertyConditionVariable(ContentObject::class, DataClass::PROPERTY_ID),
                             $contentObjectIdentifiers
                         )

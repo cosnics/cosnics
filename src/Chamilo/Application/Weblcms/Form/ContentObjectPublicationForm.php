@@ -530,7 +530,7 @@ class ContentObjectPublicationForm extends BasePublicationForm
         $condition = new AndCondition($conditions);
 
         $cats = DataManager::retrieves(
-            ContentObjectPublicationCategory::class, new RetrievesParameters($condition)
+            ContentObjectPublicationCategory::class, new RetrievesParameters(condition: $condition)
         );
 
         foreach ($cats as $cat)

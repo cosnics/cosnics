@@ -106,7 +106,7 @@ class ViewerComponent extends Manager implements BreadcrumbLessComponentInterfac
 
     public function count_feedbacks()
     {
-        $parameters = new DataClassCountParameters($this->get_feedback_conditions());
+        $parameters = new DataClassCountParameters(condition: $this->get_feedback_conditions());
 
         return DataManager::count(
             Feedback::class, $parameters
@@ -271,13 +271,13 @@ class ViewerComponent extends Manager implements BreadcrumbLessComponentInterfac
     public function retrieve_feedbacks($count, $offset)
     {
         $parameters = new RetrievesParameters(
-            $this->get_feedback_conditions(), $count, $offset, new OrderBy([
-                new OrderProperty(
-                    new PropertyConditionVariable(
-                        Feedback::class, Feedback::PROPERTY_MODIFICATION_DATE
-                    )
+            condition: $this->get_feedback_conditions(), count: $count, offset: $offset, orderBy: new OrderBy([
+            new OrderProperty(
+                new PropertyConditionVariable(
+                    Feedback::class, Feedback::PROPERTY_MODIFICATION_DATE
                 )
-            ])
+            )
+        ])
         );
 
         return DataManager::retrieves(

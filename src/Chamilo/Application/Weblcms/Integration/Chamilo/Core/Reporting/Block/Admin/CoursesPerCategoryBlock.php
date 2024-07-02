@@ -33,7 +33,7 @@ class CoursesPerCategoryBlock extends CourseBlock
             $reporting_data->add_data_category_row(
                 $category->get_name(),
                 Translation::get('count'),
-                CourseDataManager::count(Course::class, new DataClassCountParameters($condition)));
+                CourseDataManager::count(Course::class, new DataClassCountParameters(condition: $condition)));
         }
 
         return $reporting_data;

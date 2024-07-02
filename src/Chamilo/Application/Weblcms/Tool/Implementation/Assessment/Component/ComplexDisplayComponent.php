@@ -107,7 +107,7 @@ class ComplexDisplayComponent extends Manager implements AssessmentDisplaySuppor
         $condition = new AndCondition($conditions);
 
         $trackers = DataManager::retrieves(
-            AssessmentAttempt::class, new RetrievesParameters($condition)
+            AssessmentAttempt::class, new RetrievesParameters(condition: $condition)
         );
 
         $count = $trackers->count();
@@ -221,7 +221,7 @@ class ComplexDisplayComponent extends Manager implements AssessmentDisplaySuppor
     public function get_assessment_configuration()
     {
         $parameters = new RetrieveParameters(
-            new EqualityCondition(
+            condition: new EqualityCondition(
                 new PropertyConditionVariable(Publication::class, Publication::PROPERTY_PUBLICATION_ID),
                 new StaticConditionVariable($this->publication->get_id())
             )
@@ -383,7 +383,7 @@ class ComplexDisplayComponent extends Manager implements AssessmentDisplaySuppor
         );
 
         $question_attempts_result_set = DataManager::retrieves(
-            QuestionAttempt::class, new RetrievesParameters($condition)
+            QuestionAttempt::class, new RetrievesParameters(condition: $condition)
         );
 
         foreach ($question_attempts_result_set as $question_attempt)

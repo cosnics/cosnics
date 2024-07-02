@@ -113,7 +113,7 @@ class CoursesFeatureSubContext implements Context
         );
 
         $course = DataManager::retrieve(
-            Course::class, new RetrieveParameters($condition)
+            Course::class, new RetrieveParameters(condition: $condition)
         );
 
         if (!$course)

@@ -44,7 +44,7 @@ class DataManager extends \Chamilo\Libraries\Storage\DataManager\DataManager
             new StaticConditionVariable($forum_id)
         );
 
-        return self::count(ForumSubscribe::class, new DataClassCountParameters($condition));
+        return self::count(ForumSubscribe::class, new DataClassCountParameters(condition: $condition));
     }
 
     /**
@@ -171,7 +171,7 @@ class DataManager extends \Chamilo\Libraries\Storage\DataManager\DataManager
             new PropertyConditionVariable(ForumPost::class, ForumPost::PROPERTY_CREATION_DATE), SORT_DESC
         );
 
-        $parameters = new RetrieveParameters($condition, new OrderBy($order_by), $joins);
+        $parameters = new RetrieveParameters(condition: $condition, orderBy: new OrderBy($order_by), joins: $joins);
 
         return self::retrieve(ForumPost::class, $parameters);
     }
@@ -200,7 +200,7 @@ class DataManager extends \Chamilo\Libraries\Storage\DataManager\DataManager
 
         $condition = new AndCondition($conditions);
 
-        return self::retrieve(ForumSubscribe::class, new RetrieveParameters($condition));
+        return self::retrieve(ForumSubscribe::class, new RetrieveParameters(condition: $condition));
     }
 
     /**
@@ -218,7 +218,7 @@ class DataManager extends \Chamilo\Libraries\Storage\DataManager\DataManager
         );
 
         $subscriptions = DataManager::retrieves(
-            ForumSubscribe::class, new RetrievesParameters($condition)
+            ForumSubscribe::class, new RetrievesParameters(condition: $condition)
         );
 
         $users = [];

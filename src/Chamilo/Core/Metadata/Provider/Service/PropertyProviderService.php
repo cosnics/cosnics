@@ -143,7 +143,7 @@ class PropertyProviderService
 
         $condition = new AndCondition($conditions);
 
-        $providerLink = DataManager::retrieve(ProviderLink::class, new RetrieveParameters($condition));
+        $providerLink = DataManager::retrieve(ProviderLink::class, new RetrieveParameters(condition: $condition));
 
         if ($providerLink instanceof ProviderLink)
         {
@@ -168,7 +168,7 @@ class PropertyProviderService
             new StaticConditionVariable($entity->getDataClassName())
         );
 
-        $parameters = new RetrievesParameters($condition);
+        $parameters = new RetrievesParameters(condition: $condition);
 
         return DataManager::retrieves(ProviderLink::class, $parameters);
     }
@@ -186,7 +186,7 @@ class PropertyProviderService
             ), new StaticConditionVariable($entity->getDataClassName())
         );
 
-        $parameters = new RetrievesParameters($condition);
+        $parameters = new RetrievesParameters(condition: $condition);
 
         return DataManager::retrieves(ProviderRegistration::class, $parameters);
     }

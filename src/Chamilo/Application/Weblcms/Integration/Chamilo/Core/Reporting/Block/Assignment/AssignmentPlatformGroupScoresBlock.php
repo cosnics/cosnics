@@ -2,6 +2,7 @@
 namespace Chamilo\Application\Weblcms\Integration\Chamilo\Core\Reporting\Block\Assignment;
 
 use Chamilo\Application\Weblcms\Bridge\Assignment\Storage\DataClass\Entry;
+use Chamilo\Application\Weblcms\Course\Storage\DataManager;
 use Chamilo\Application\Weblcms\Storage\DataClass\CourseEntityRelation;
 use Chamilo\Libraries\Storage\Parameters\DataClassDistinctParameters;
 use Chamilo\Libraries\Storage\Query\Condition\AndCondition;
@@ -63,15 +64,15 @@ class AssignmentPlatformGroupScoresBlock extends AssignmentScoresBlock
             ), new StaticConditionVariable(CourseEntityRelation::ENTITY_TYPE_GROUP)
         );
 
-        $group_ids = \Chamilo\Application\Weblcms\Course\Storage\DataManager::distinct(
+        $group_ids = DataManager::distinct(
             CourseEntityRelation::class, new DataClassDistinctParameters(
-                new AndCondition($conditions), new RetrieveProperties(
-                    [
-                        new PropertyConditionVariable(
-                            CourseEntityRelation::class, CourseEntityRelation::PROPERTY_ENTITY_ID
-                        )
-                    ]
-                )
+                condition: new AndCondition($conditions), retrieveProperties: new RetrieveProperties(
+                [
+                    new PropertyConditionVariable(
+                        CourseEntityRelation::class, CourseEntityRelation::PROPERTY_ENTITY_ID
+                    )
+                ]
+            )
             )
         );
 

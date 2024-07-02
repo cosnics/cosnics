@@ -33,7 +33,7 @@ class DataManager extends \Chamilo\Libraries\Storage\DataManager\DataManager
             ComparisonCondition::EQUAL, 
             new StaticConditionVariable($namespace));
         
-        $schema = self::retrieve(Schema::class, new RetrieveParameters($condition));
+        $schema = self::retrieve(Schema::class, new RetrieveParameters(condition: $condition));
         
         if (! $schema)
         {

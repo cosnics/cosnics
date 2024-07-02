@@ -369,7 +369,7 @@ abstract class Manager extends \Chamilo\Core\Repository\Display\Manager
             new PropertyConditionVariable(ComplexWikiPage::class, ComplexWikiPage::PROPERTY_IS_HOMEPAGE),
             new StaticConditionVariable(1)
         );
-        $parameters = new RetrievesParameters(new AndCondition($conditions), 1, 0);
+        $parameters = new RetrievesParameters(condition: new AndCondition($conditions), count: 1, offset: 0);
         $complex_wiki_homepage = DataManager::retrieve_complex_content_object_items(
             ComplexWikiPage::class, $parameters
         );

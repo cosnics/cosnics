@@ -237,8 +237,9 @@ class AdminRequestBrowserComponent extends Manager
      */
     public function renderTable(): string
     {
-        $totalNumberOfItems =
-            DataManager::count(CourseRequest::class, new DataClassCountParameters($this->getAdminRequestCondition()));
+        $totalNumberOfItems = DataManager::count(
+            CourseRequest::class, new DataClassCountParameters(condition: $this->getAdminRequestCondition())
+        );
         $adminRequestTableRenderer = $this->getAdminRequestTableRenderer();
 
         $tableParameterValues = $this->getRequestTableParameterValuesCompiler()->determineParameterValues(
@@ -248,8 +249,10 @@ class AdminRequestBrowserComponent extends Manager
 
         $requests = DataManager::retrieves(
             CourseRequest::class, new RetrievesParameters(
-                $this->getAdminRequestCondition(), $tableParameterValues->getNumberOfItemsPerPage(),
-                $tableParameterValues->getOffset(), $adminRequestTableRenderer->determineOrderBy($tableParameterValues)
+                condition: $this->getAdminRequestCondition(), count: $tableParameterValues->getNumberOfItemsPerPage(),
+                offset: $tableParameterValues->getOffset(), orderBy: $adminRequestTableRenderer->determineOrderBy(
+                $tableParameterValues
+            )
             )
         );
 

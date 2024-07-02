@@ -167,11 +167,10 @@ class CourseFeedComponent extends Manager
         }
 
         $this->course_count = DataManager::count(
-            Course::class, new DataClassCountParameters($condition)
+            Course::class, new DataClassCountParameters(condition: $condition)
         );
         $parameters = new RetrievesParameters(
-            $condition, 100, $this->get_offset(),
-            new OrderBy([new OrderProperty(new PropertyConditionVariable(Course::class, Course::PROPERTY_TITLE))])
+            condition: $condition, count: 100, offset: $this->get_offset(), orderBy: new OrderBy([new OrderProperty(new PropertyConditionVariable(Course::class, Course::PROPERTY_TITLE))])
         );
 
         return DataManager::retrieves(Course::class, $parameters);

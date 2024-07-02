@@ -57,15 +57,15 @@ class WorkspaceRepository
     {
         return $this->getDataClassRepository()->count(
             Workspace::class, new DataClassCountParameters(
-                $this->getFavouriteWorkspacesByUserCondition($user, $entities, RightsService::RIGHT_VIEW),
-                $this->getFavouriteWorkspacesByUserJoins(), new RetrieveProperties(
-                    [
-                        new FunctionConditionVariable(
-                            FunctionConditionVariable::DISTINCT,
-                            new PropertyConditionVariable(Workspace::class, DataClass::PROPERTY_ID)
-                        )
-                    ]
-                )
+                condition: $this->getFavouriteWorkspacesByUserCondition($user, $entities, RightsService::RIGHT_VIEW),
+                joins: $this->getFavouriteWorkspacesByUserJoins(), retrieveProperties: new RetrieveProperties(
+                [
+                    new FunctionConditionVariable(
+                        FunctionConditionVariable::DISTINCT,
+                        new PropertyConditionVariable(Workspace::class, DataClass::PROPERTY_ID)
+                    )
+                ]
+            )
             )
         );
     }
@@ -77,8 +77,9 @@ class WorkspaceRepository
     {
         return $this->getDataClassRepository()->count(
             Workspace::class, new DataClassCountParameters(
-                $this->getSharedWorkspacesForEntitiesWithRightCondition($entities),
-                new Joins([$this->getSharedWorkspacesJoin()])
+                condition: $this->getSharedWorkspacesForEntitiesWithRightCondition($entities), joins: new Joins(
+                [$this->getSharedWorkspacesJoin()]
+            )
             )
         );
     }
@@ -86,7 +87,7 @@ class WorkspaceRepository
     public function countWorkspacesByCreator(User $user): int
     {
         return $this->getDataClassRepository()->count(
-            Workspace::class, new DataClassCountParameters($this->getWorkspacesByCreatorCondition($user))
+            Workspace::class, new DataClassCountParameters(condition: $this->getWorkspacesByCreatorCondition($user))
         );
     }
 
@@ -104,8 +105,9 @@ class WorkspaceRepository
     {
         return $this->getDataClassRepository()->count(
             Workspace::class, new DataClassCountParameters(
-                $this->getWorkspaceByUserCondition($user, $entities, $right, $condition),
-                new Joins([$this->getSharedWorkspacesJoin(Join::TYPE_LEFT)])
+                condition: $this->getWorkspaceByUserCondition($user, $entities, $right, $condition), joins: new Joins(
+                [$this->getSharedWorkspacesJoin(Join::TYPE_LEFT)]
+            )
             )
         );
     }
@@ -151,7 +153,7 @@ class WorkspaceRepository
     ): ArrayCollection
     {
         return $this->getDataClassRepository()->retrieves(
-            Workspace::class, new RetrievesParameters(null, $limit, $offset, $orderBy)
+            Workspace::class, new RetrievesParameters(count: $limit, offset: $offset, orderBy: $orderBy)
         );
     }
 
@@ -165,9 +167,10 @@ class WorkspaceRepository
     {
         return $this->getDataClassRepository()->distinct(
             Workspace::class, new DataClassDistinctParameters(
-                $this->getFavouriteWorkspacesByUserCondition($user, $entities, RightsService::RIGHT_VIEW),
-                new RetrieveProperties([new PropertyConditionVariable(Workspace::class, Workspace::PROPERTY_ID)]),
-                $this->getFavouriteWorkspacesByUserJoins()
+                condition: $this->getFavouriteWorkspacesByUserCondition($user, $entities, RightsService::RIGHT_VIEW),
+                retrieveProperties: new RetrieveProperties(
+                    [new PropertyConditionVariable(Workspace::class, Workspace::PROPERTY_ID)]
+                ), joins: $this->getFavouriteWorkspacesByUserJoins()
             )
         );
     }
@@ -214,8 +217,8 @@ class WorkspaceRepository
     {
         return $this->getDataClassRepository()->retrieves(
             Workspace::class, new RetrievesParameters(
-                $this->getSharedWorkspacesForEntitiesWithRightCondition($entities), $limit, $offset, $orderBy,
-                new Joins([$this->getSharedWorkspacesJoin()])
+                condition: $this->getSharedWorkspacesForEntitiesWithRightCondition($entities), count: $limit,
+                offset: $offset, orderBy: $orderBy, joins: new Joins([$this->getSharedWorkspacesJoin()])
             )
         );
     }
@@ -239,7 +242,8 @@ class WorkspaceRepository
     {
         return $this->getDataClassRepository()->retrieves(
             Workspace::class, new RetrievesParameters(
-                $this->getWorkspacesByCreatorCondition($user), $limit, $offset, $orderBy
+                condition: $this->getWorkspacesByCreatorCondition($user), count: $limit, offset: $offset,
+                orderBy: $orderBy
             )
         );
     }
@@ -261,7 +265,9 @@ class WorkspaceRepository
         );
 
         return $this->getDataClassRepository()->retrieves(
-            Workspace::class, new RetrievesParameters($condition, $limit, $offset, $orderBy)
+            Workspace::class, new RetrievesParameters(
+                condition: $condition, count: $limit, offset: $offset, orderBy: $orderBy
+            )
         );
     }
 
@@ -276,7 +282,8 @@ class WorkspaceRepository
      * @return \Doctrine\Common\Collections\ArrayCollection<\Chamilo\Core\Repository\Workspace\Storage\DataClass\Workspace>
      */
     public function findWorkspacesForUser(
-        User $user, array $entities, int $right, ?int $limit = null, ?int $offset = null, OrderBy $orderBy = new OrderBy()
+        User $user, array $entities, int $right, ?int $limit = null, ?int $offset = null,
+        OrderBy $orderBy = new OrderBy()
     ): ArrayCollection
     {
         return $this->retrieveWorkspacesForUser($user, $entities, $right, null, $limit, $offset, $orderBy);
@@ -474,7 +481,7 @@ class WorkspaceRepository
         );
 
         return $this->getDataClassRepository()->retrieve(
-            Workspace::class, new RetrieveParameters($condition, null, new Joins([$join]))
+            Workspace::class, new RetrieveParameters(condition: $condition, joins: new Joins([$join]))
         );
     }
 
@@ -486,7 +493,7 @@ class WorkspaceRepository
         );
 
         return $this->getDataClassRepository()->retrieve(
-            WorkspaceUserDefault::class, new RetrieveParameters($condition)
+            WorkspaceUserDefault::class, new RetrieveParameters(condition: $condition)
         );
     }
 
@@ -510,8 +517,8 @@ class WorkspaceRepository
     {
         return $this->getDataClassRepository()->retrieves(
             Workspace::class, new RetrievesParameters(
-                $this->getWorkspaceByUserCondition($user, $entities, $right, $condition), $limit, $offset,
-                $orderBy, new Joins([$this->getSharedWorkspacesJoin(Join::TYPE_LEFT)])
+                condition: $this->getWorkspaceByUserCondition($user, $entities, $right, $condition), count: $limit,
+                offset: $offset, orderBy: $orderBy, joins: new Joins([$this->getSharedWorkspacesJoin(Join::TYPE_LEFT)])
             )
         );
     }

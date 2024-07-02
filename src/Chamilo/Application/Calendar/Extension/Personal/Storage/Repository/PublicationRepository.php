@@ -43,7 +43,9 @@ class PublicationRepository
 
     public function countPublications(Condition $condition)
     {
-        return $this->getDataClassRepository()->count(Publication::class, new DataClassCountParameters($condition));
+        return $this->getDataClassRepository()->count(
+            Publication::class, new DataClassCountParameters(condition: $condition)
+        );
     }
 
     /**
@@ -262,7 +264,9 @@ class PublicationRepository
     )
     {
         return $this->getDataClassRepository()->retrieves(
-            Publication::class, new RetrievesParameters($condition, $count, $offset, $orderBy)
+            Publication::class, new RetrievesParameters(
+                condition: $condition, count: $count, offset: $offset, orderBy: $orderBy
+            )
         );
     }
 

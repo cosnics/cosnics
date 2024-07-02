@@ -94,7 +94,7 @@ class RightsRepository
         $condition = new AndCondition($conditions);
 
         return $this->getDataClassRepository()->retrieve(
-            RightsLocationEntityRight::class, new RetrieveParameters($condition)
+            RightsLocationEntityRight::class, new RetrieveParameters(condition: $condition)
         );
     }
 

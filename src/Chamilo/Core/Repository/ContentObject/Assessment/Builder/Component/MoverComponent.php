@@ -38,7 +38,7 @@ class MoverComponent extends Manager
             $parent = $complex_content_object_item->get_parent();
             $max = DataManager::count_complex_content_object_items(
                 ComplexContentObjectItem::class, new DataClassCountParameters(
-                    new EqualityCondition(
+                    condition: new EqualityCondition(
                         new PropertyConditionVariable(
                             ComplexContentObjectItem::class, ComplexContentObjectItem::PROPERTY_PARENT
                         ), new StaticConditionVariable($parent)

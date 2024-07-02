@@ -87,14 +87,14 @@ class PublicationCategoriesTree extends GenericTree
 
         $children = DataManager::retrieves(
             ContentObjectPublicationCategory::class, new RetrievesParameters(
-                $condition, null, null, new OrderBy([
-                    new OrderProperty(
-                        new PropertyConditionVariable(
-                            ContentObjectPublicationCategory::class,
-                            ContentObjectPublicationCategory::PROPERTY_DISPLAY_ORDER
-                        )
+                condition: $condition, orderBy: new OrderBy([
+                new OrderProperty(
+                    new PropertyConditionVariable(
+                        ContentObjectPublicationCategory::class,
+                        ContentObjectPublicationCategory::PROPERTY_DISPLAY_ORDER
                     )
-                ])
+                )
+            ])
             )
         );
 
@@ -247,7 +247,7 @@ class PublicationCategoriesTree extends GenericTree
         $condition = new AndCondition($conditions);
 
         return DataManager::count(
-                ContentObjectPublicationCategory::class, new DataClassCountParameters($condition)
+                ContentObjectPublicationCategory::class, new DataClassCountParameters(condition: $condition)
             ) > 0;
     }
 }

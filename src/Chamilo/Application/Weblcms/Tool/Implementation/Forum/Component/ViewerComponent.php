@@ -109,7 +109,7 @@ class ViewerComponent extends Manager implements ForumDisplaySupport, Breadcrumb
         $condition = new AndCondition($conditions);
 
         return DataManager::count(
-            ForumTopicView::class, new DataClassCountParameters($condition)
+            ForumTopicView::class, new DataClassCountParameters(condition: $condition)
         );
     }
 

@@ -62,7 +62,7 @@ class AssessmentUserScoresBlock extends ToolBlock
 
         $publication_resultset = DataManager::retrieves(
             ContentObjectPublication::class,
-            new RetrievesParameters($condition, null, null, new OrderBy($order_by))
+            new RetrievesParameters(condition: $condition, orderBy: new OrderBy($order_by))
         );
 
         $publications = [];
@@ -133,7 +133,7 @@ class AssessmentUserScoresBlock extends ToolBlock
                 $condition = new AndCondition($conditions);
 
                 $attempts_by_user = \Chamilo\Libraries\Storage\DataManager\DataManager::retrieves(
-                    AssessmentAttempt::class, new RetrievesParameters($condition)
+                    AssessmentAttempt::class, new RetrievesParameters(condition: $condition)
                 );
 
                 if ($attempts_by_user->count() == 0)

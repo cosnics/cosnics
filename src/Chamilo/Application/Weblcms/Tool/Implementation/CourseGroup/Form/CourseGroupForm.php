@@ -647,7 +647,7 @@ class CourseGroupForm extends FormValidator
             new PropertyConditionVariable(CourseGroup::class, CourseGroup::PROPERTY_PARENT_ID),
             new StaticConditionVariable($parent_course_group->getId())
         );
-        $course_groups = DataManager::retrieves(CourseGroup::class, new RetrievesParameters($condition));
+        $course_groups = DataManager::retrieves(CourseGroup::class, new RetrievesParameters(condition: $condition));
 
         $size_children = 0;
         foreach ($course_groups as $existing_course_group)
@@ -765,7 +765,7 @@ class CourseGroupForm extends FormValidator
         }
         $condition = new AndCondition($conditions);
 
-        $data_set = DataManager::retrieves(CourseGroup::class, new RetrievesParameters($condition));
+        $data_set = DataManager::retrieves(CourseGroup::class, new RetrievesParameters(condition: $condition));
 
         return ($data_set->count() > 0);
     }
@@ -1187,7 +1187,7 @@ class CourseGroupForm extends FormValidator
                 );
 
                 $c_course_groups = DataManager::retrieves(
-                    CourseGroup::class, new RetrievesParameters($condition)
+                    CourseGroup::class, new RetrievesParameters(condition: $condition)
                 );
 
                 foreach ($c_course_groups as $course_group)

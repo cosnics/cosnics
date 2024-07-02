@@ -126,7 +126,7 @@ class BrowserComponent extends Manager implements BreadcrumbLessComponentInterfa
     protected function renderTable(): string
     {
         $totalNumberOfItems =
-            DataManager::count(UserView::class, new DataClassCountParameters($this->getUserViewTableCondition()));
+            DataManager::count(UserView::class, new DataClassCountParameters(condition: $this->getUserViewTableCondition()));
 
         $userViewTableRenderer = $this->getUserViewTableRenderer();
 
@@ -137,8 +137,8 @@ class BrowserComponent extends Manager implements BreadcrumbLessComponentInterfa
 
         $userViews = DataManager::retrieves(
             UserView::class, new RetrievesParameters(
-                $this->getUserViewTableCondition(), $tableParameterValues->getNumberOfItemsPerPage(),
-                $tableParameterValues->getOffset(), $userViewTableRenderer->determineOrderBy($tableParameterValues)
+                condition: $this->getUserViewTableCondition(), count: $tableParameterValues->getNumberOfItemsPerPage(),
+                offset: $tableParameterValues->getOffset(), orderBy: $userViewTableRenderer->determineOrderBy($tableParameterValues)
             )
         );
 

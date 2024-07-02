@@ -81,15 +81,15 @@ class RightsRepository
         );
 
         $parameters = new DataClassCountParameters(
-            $condition, $joins, new RetrieveProperties(
-                [
-                    new FunctionConditionVariable(
-                        FunctionConditionVariable::DISTINCT, new PropertyConditionVariable(
-                            $rightsLocationClassName, RightsLocation::PROPERTY_IDENTIFIER
-                        )
+            condition: $condition, joins: $joins, retrieveProperties: new RetrieveProperties(
+            [
+                new FunctionConditionVariable(
+                    FunctionConditionVariable::DISTINCT, new PropertyConditionVariable(
+                        $rightsLocationClassName, RightsLocation::PROPERTY_IDENTIFIER
                     )
-                ]
-            )
+                )
+            ]
+        )
         );
 
         return $this->getDataClassRepository()->count($rightsLocationClassName, $parameters);
@@ -102,7 +102,7 @@ class RightsRepository
 
     public function createRightsLocationEntityRight(RightsLocationEntityRight $rightsLocationEntityRight): bool
     {
-        $this->getDataClassRepositoryCache()->truncate(get_class($rightsLocationEntityRight));
+        $this->getDataClassRepositoryCache()->truncateClass(get_class($rightsLocationEntityRight));
 
         return $this->getDataClassRepository()->create($rightsLocationEntityRight);
     }
@@ -237,7 +237,7 @@ class RightsRepository
 
         return $this->getDataClassRepository()->distinct(
             $rightsLocationEntityRightClassName, new DataClassDistinctParameters(
-                $condition, $properties, new Joins([$join])
+                condition: $condition, retrieveProperties: $properties, joins: new Joins([$join])
             )
         );
     }
@@ -271,15 +271,15 @@ class RightsRepository
         );
 
         $parameters = new DataClassDistinctParameters(
-            new AndCondition(
+            condition: new AndCondition(
                 $conditions
-            ), new RetrieveProperties(
-                [
-                    new PropertyConditionVariable(
-                        $rightsLocationClassName, RightsLocation::PROPERTY_IDENTIFIER
-                    )
-                ]
-            )
+            ), retrieveProperties: new RetrieveProperties(
+            [
+                new PropertyConditionVariable(
+                    $rightsLocationClassName, RightsLocation::PROPERTY_IDENTIFIER
+                )
+            ]
+        )
         );
 
         return $this->getDataClassRepository()->distinct($rightsLocationClassName, $parameters);
@@ -435,13 +435,15 @@ class RightsRepository
         );
 
         $parameters = new DataClassDistinctParameters(
-            new AndCondition($nonInheritingConditions), new RetrieveProperties(
+            condition: new AndCondition($nonInheritingConditions), retrieveProperties: new RetrieveProperties(
             [
                 new PropertyConditionVariable(
                     $rightsLocationClassName, RightsLocation::PROPERTY_IDENTIFIER
                 )
             ]
-        ), $this->getRightsLocationEntityRightJoins($rightsLocationClassName, $rightsLocationEntityRightClassName)
+        ), joins: $this->getRightsLocationEntityRightJoins(
+            $rightsLocationClassName, $rightsLocationEntityRightClassName
+        )
         );
 
         return $this->getDataClassRepository()->distinct($rightsLocationClassName, $parameters);
@@ -503,7 +505,7 @@ class RightsRepository
     ): ?RightsLocation
     {
         return $this->getDataClassRepository()->retrieve(
-            $rightsLocationClassName, new RetrieveParameters($condition)
+            $rightsLocationClassName, new RetrieveParameters(condition: $condition)
         );
     }
 
@@ -548,7 +550,7 @@ class RightsRepository
         }
 
         return $this->getDataClassRepository()->retrieve(
-            $rightsLocationClassName, new RetrieveParameters(new AndCondition($conditions))
+            $rightsLocationClassName, new RetrieveParameters(condition: new AndCondition($conditions))
         );
     }
 
@@ -599,7 +601,7 @@ class RightsRepository
         );
 
         return $this->getDataClassRepository()->retrieve(
-            $rightsLocationEntityRightClassName, new RetrieveParameters(new AndCondition($conditions))
+            $rightsLocationEntityRightClassName, new RetrieveParameters(condition: new AndCondition($conditions))
         );
     }
 
@@ -618,7 +620,9 @@ class RightsRepository
     ): ArrayCollection
     {
         return $this->getDataClassRepository()->retrieves(
-            $rightsLocationEntityRightClassName, new RetrievesParameters($condition, $count, $offset, $orderBy)
+            $rightsLocationEntityRightClassName, new RetrievesParameters(
+                condition: $condition, count: $count, offset: $offset, orderBy: $orderBy
+            )
         );
     }
 
@@ -663,7 +667,7 @@ class RightsRepository
         );
 
         return $this->getDataClassRepository()->retrieves(
-            $rightsLocationEntityRightClassName, new RetrievesParameters(new AndCondition($conditions))
+            $rightsLocationEntityRightClassName, new RetrievesParameters(condition: new AndCondition($conditions))
         );
     }
 
@@ -718,13 +722,15 @@ class RightsRepository
             }
 
             $parameters = new DataClassDistinctParameters(
-                new AndCondition($conditions), new RetrieveProperties(
+                condition: new AndCondition($conditions), retrieveProperties: new RetrieveProperties(
                 [
                     new PropertyConditionVariable(
                         $rightsLocationClassName, RightsLocation::PROPERTY_IDENTIFIER
                     )
                 ]
-            ), $this->getRightsLocationEntityRightJoins($rightsLocationClassName, $rightsLocationEntityRightClassName)
+            ), joins: $this->getRightsLocationEntityRightJoins(
+                $rightsLocationClassName, $rightsLocationEntityRightClassName
+            )
             );
 
             return $this->getDataClassRepository()->distinct($rightsLocationClassName, $parameters);

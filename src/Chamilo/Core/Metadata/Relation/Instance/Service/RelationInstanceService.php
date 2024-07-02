@@ -170,6 +170,6 @@ class RelationInstanceService
 
         $condition = new AndCondition($conditions);
 
-        return DataManager::count(RelationInstance::class, new DataClassCountParameters($condition)) > 0;
+        return DataManager::count(RelationInstance::class, new DataClassCountParameters(condition: $condition)) > 0;
     }
 }

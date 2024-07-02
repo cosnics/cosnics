@@ -76,7 +76,7 @@ class AttemptResultViewerComponent extends Manager
         );
 
         $this->assessment_attempt = DataManager::retrieve(
-            AssessmentAttempt::class, new RetrieveParameters($condition)
+            AssessmentAttempt::class, new RetrieveParameters(condition: $condition)
         );
 
         if (!$this->assessment_attempt)
@@ -94,7 +94,7 @@ class AttemptResultViewerComponent extends Manager
         );
 
         $parameters = new RetrieveParameters(
-            new EqualityCondition(
+            condition: new EqualityCondition(
                 new PropertyConditionVariable(Publication::class, Publication::PROPERTY_PUBLICATION_ID),
                 new StaticConditionVariable($this->assessment_publication->get_id())
             )
@@ -204,7 +204,7 @@ class AttemptResultViewerComponent extends Manager
         $condition = new AndCondition($conditions);
 
         $question_attempt = DataManager::retrieve(
-            QuestionAttempt::class, new RetrieveParameters($condition)
+            QuestionAttempt::class, new RetrieveParameters(condition: $condition)
         );
 
         $question_attempt->set_score($score);
@@ -240,7 +240,7 @@ class AttemptResultViewerComponent extends Manager
     public function get_assessment_configuration()
     {
         $parameters = new RetrieveParameters(
-            new EqualityCondition(
+            condition: new EqualityCondition(
                 new PropertyConditionVariable(Publication::class, Publication::PROPERTY_PUBLICATION_ID),
                 new StaticConditionVariable($this->assessment_publication->get_id())
             )
@@ -353,7 +353,7 @@ class AttemptResultViewerComponent extends Manager
         }
 
         $question_attempts = DataManager::retrieves(
-            QuestionAttempt::class, new RetrievesParameters($condition)
+            QuestionAttempt::class, new RetrievesParameters(condition: $condition)
         );
 
         $results = [];
@@ -386,7 +386,7 @@ class AttemptResultViewerComponent extends Manager
         );
 
         $question_attempts_result_set = DataManager::retrieves(
-            QuestionAttempt::class, new RetrievesParameters($condition)
+            QuestionAttempt::class, new RetrievesParameters(condition: $condition)
         );
 
         foreach ($question_attempts_result_set as $question_attempt)

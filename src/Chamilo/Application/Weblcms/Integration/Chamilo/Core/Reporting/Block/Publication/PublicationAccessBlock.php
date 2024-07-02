@@ -105,7 +105,7 @@ class PublicationAccessBlock extends ToolBlock
         );
 
         return WeblcmsTrackingDataManager::retrieves(
-            CourseVisit::class, new RetrievesParameters($condition)
+            CourseVisit::class, new RetrievesParameters(condition: $condition)
         );
     }
 

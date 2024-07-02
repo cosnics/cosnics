@@ -83,7 +83,7 @@ class RepositoryCategoryService
         $condition = new AndCondition($conditions);
 
         return DataManager::retrieve(
-            RepositoryCategory::class, new RetrieveParameters($condition)
+            RepositoryCategory::class, new RetrieveParameters(condition: $condition)
         );
     }
 }

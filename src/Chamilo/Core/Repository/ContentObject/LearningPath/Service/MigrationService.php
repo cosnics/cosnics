@@ -124,7 +124,7 @@ class MigrationService
 
         $this->treeNodeDataService->createTreeNodeData($treeNodeData);
 
-        echo "Create TreeNodeData " . $treeNodeData->getId() . PHP_EOL;
+        echo 'Create TreeNodeData ' . $treeNodeData->getId() . PHP_EOL;
 
         return $treeNodeData;
     }
@@ -178,13 +178,13 @@ class MigrationService
 
         return $this->contentObjectRepository->findAll(
             ComplexContentObjectItem::class, new RetrievesParameters(
-                condition: $condition, count: null, offset: null, orderBy: new OrderBy(array(
-                        new OrderProperty(
-                            new PropertyConditionVariable(
-                                ComplexContentObjectItem::class, ComplexContentObjectItem::PROPERTY_DISPLAY_ORDER
-                            )
-                        )
-                    ))
+                condition: $condition, count: null, offset: null, orderBy: new OrderBy([
+                new OrderProperty(
+                    new PropertyConditionVariable(
+                        ComplexContentObjectItem::class, ComplexContentObjectItem::PROPERTY_DISPLAY_ORDER
+                    )
+                )
+            ])
             )
         );
     }
@@ -218,7 +218,7 @@ class MigrationService
 
             $this->contentObjectRepository->copyIncludesFromContentObject($learningPath, $section);
 
-            echo "Create Section " . $section->getId() . PHP_EOL;
+            echo 'Create Section ' . $section->getId() . PHP_EOL;
 
             $this->sectionFromLearningPathCache[$learningPath->getId()] = $section;
         }
@@ -252,7 +252,7 @@ class MigrationService
         $condition = new AndCondition($conditions);
 
         return $this->contentObjectRepository->countAll(
-                ComplexLearningPathItem::class, new DataClassCountParameters($condition)
+                ComplexLearningPathItem::class, new DataClassCountParameters(condition: $condition)
             ) > 0;
     }
 

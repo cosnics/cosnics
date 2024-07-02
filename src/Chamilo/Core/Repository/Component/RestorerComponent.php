@@ -162,6 +162,6 @@ class RestorerComponent extends Manager
             new StaticConditionVariable($id)
         );
 
-        return (DataManager::count(RepositoryCategory::class, new DataClassCountParameters($condition)) > 0);
+        return (DataManager::count(RepositoryCategory::class, new DataClassCountParameters(condition: $condition)) > 0);
     }
 }

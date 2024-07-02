@@ -23,7 +23,7 @@ class WikiMostVisitedPageBlock extends ToolBlock
     public function count_data()
     {
         $reporting_data = new ReportingData();
-        $reporting_data->set_rows(array(Translation::get('MostVisitedPage'), Translation::get('NumberOfVisits')));
+        $reporting_data->set_rows([Translation::get('MostVisitedPage'), Translation::get('NumberOfVisits')]);
 
         $publication = \Chamilo\Application\Weblcms\Storage\DataManager::retrieve_by_id(
             ContentObjectPublication::class, $this->getPublicationId()
@@ -33,7 +33,7 @@ class WikiMostVisitedPageBlock extends ToolBlock
         $complex_content_object_items =
             \Chamilo\Core\Repository\Storage\DataManager::retrieve_complex_content_object_items(
                 ComplexContentObjectItem::class, new RetrievesParameters(
-                    new EqualityCondition(
+                    condition: new EqualityCondition(
                         new PropertyConditionVariable(
                             ComplexContentObjectItem::class, ComplexContentObjectItem::PROPERTY_PARENT
                         ), new StaticConditionVariable($wiki->get_id())
@@ -80,7 +80,7 @@ class WikiMostVisitedPageBlock extends ToolBlock
 
                 $condition = new AndCondition($conditions);
 
-                $items = DataManager::retrieves(Visit::class, new RetrievesParameters($condition));
+                $items = DataManager::retrieves(Visit::class, new RetrievesParameters(condition: $condition));
 
                 if (count($items) >= $most_visits)
                 {
@@ -111,7 +111,7 @@ class WikiMostVisitedPageBlock extends ToolBlock
 
     public function get_views()
     {
-        return array(Html::VIEW_TABLE);
+        return [Html::VIEW_TABLE];
     }
 
     public function retrieve_data()

@@ -64,9 +64,9 @@ class PublicationRepository
         $this->checkPublicationClassName($publicationClassName);
 
         $parameters = new DataClassCountParameters(
-            $baseCountParameters->getCondition(), $this->getPublicationJoins(
+            condition: $baseCountParameters->getCondition(), joins: $this->getPublicationJoins(
             $publicationClassName, $baseCountParameters->getJoins(), $contentObjectTypeClassName
-        ), $baseCountParameters->getRetrieveProperties()
+        ), retrieveProperties: $baseCountParameters->getRetrieveProperties()
         );
 
         return $this->getDataClassRepository()->count($publicationClassName, $parameters);

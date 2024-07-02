@@ -174,7 +174,7 @@ class ContentObjectCopier
             new PropertyConditionVariable(ContentObject::class, ContentObject::PROPERTY_ID), $contentObjectIdentifiers
         );
 
-        $parameters = new RetrievesParameters($condition);
+        $parameters = new RetrievesParameters(condition: $condition);
 
         $content_objects = DataManager::retrieve_content_objects(ContentObject::class, $parameters);
 

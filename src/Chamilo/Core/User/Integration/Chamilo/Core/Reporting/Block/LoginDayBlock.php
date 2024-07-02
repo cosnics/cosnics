@@ -40,7 +40,7 @@ class LoginDayBlock extends Block
         $condition = new AndCondition($conditions);
 
         $data = DataManager::retrieves(
-            LoginLogout::class, new RetrievesParameters($condition)
+            LoginLogout::class, new RetrievesParameters(condition: $condition)
         );
 
         $days = [];

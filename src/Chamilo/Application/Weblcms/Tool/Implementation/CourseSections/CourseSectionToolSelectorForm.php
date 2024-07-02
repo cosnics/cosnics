@@ -69,7 +69,7 @@ class CourseSectionToolSelectorForm extends FormValidator
         );
 
         return $registered_tools_resultset = \Chamilo\Libraries\Storage\DataManager\DataManager::retrieves(
-            CourseToolRelCourseSection::class, new RetrievesParameters($condition)
+            CourseToolRelCourseSection::class, new RetrievesParameters(condition: $condition)
         );
     }
 
@@ -87,7 +87,7 @@ class CourseSectionToolSelectorForm extends FormValidator
             new StaticConditionVariable(CourseSection::TYPE_TOOL)
         );
 
-        $tools = DataManager::retrieves(CourseTool::class, new RetrievesParameters($condition));
+        $tools = DataManager::retrieves(CourseTool::class, new RetrievesParameters(condition: $condition));
 
         $active_tools = [];
 
@@ -137,7 +137,7 @@ class CourseSectionToolSelectorForm extends FormValidator
             new StaticConditionVariable($this->getRequest()->query->get('course'))
         );
         $course_sections = DataManager::retrieves(
-            CourseSection::class, new RetrievesParameters($condition)
+            CourseSection::class, new RetrievesParameters(condition: $condition)
         );
 
         $course_section_ids = [];
@@ -182,7 +182,7 @@ class CourseSectionToolSelectorForm extends FormValidator
             $condition = new AndCondition($conditions);
 
             $course_tool_rel_course_sections = DataManager::retrieves(
-                CourseToolRelCourseSection::class, new RetrievesParameters($condition)
+                CourseToolRelCourseSection::class, new RetrievesParameters(condition: $condition)
             );
 
             if ($course_tool_rel_course_sections->count() > 0)

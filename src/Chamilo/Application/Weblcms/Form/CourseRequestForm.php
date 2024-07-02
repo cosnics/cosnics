@@ -7,11 +7,11 @@ use Chamilo\Application\Weblcms\Storage\DataClass\CommonRequest;
 use Chamilo\Application\Weblcms\Storage\DataClass\CourseRequest;
 use Chamilo\Core\User\Manager;
 use Chamilo\Core\User\Storage\DataClass\User;
-use Chamilo\Libraries\Storage\DataManager\DataManager;
 use Chamilo\Libraries\Architecture\ClassnameUtilities;
 use Chamilo\Libraries\Format\Form\FormValidator;
 use Chamilo\Libraries\Format\Form\FormValidatorHtmlEditorOptions;
 use Chamilo\Libraries\Format\Structure\Glyph\FontAwesomeGlyph;
+use Chamilo\Libraries\Storage\DataManager\DataManager;
 use Chamilo\Libraries\Storage\Parameters\RetrievesParameters;
 use Chamilo\Libraries\Storage\Query\OrderBy;
 use Chamilo\Libraries\Storage\Query\OrderProperty;
@@ -26,13 +26,13 @@ use Chamilo\Libraries\Utilities\StringUtilities;
  */
 class CourseRequestForm extends FormValidator
 {
-    const CHOOSE_DATE = 'choose date';
+    public const CHOOSE_DATE = 'choose date';
 
-    const TYPE_CREATE = 1;
+    public const TYPE_CREATE = 1;
 
-    const TYPE_EDIT = 2;
+    public const TYPE_EDIT = 2;
 
-    const TYPE_VIEW = 3;
+    public const TYPE_VIEW = 3;
 
     private $course;
 
@@ -116,7 +116,7 @@ class CourseRequestForm extends FormValidator
                     )
                 );
 
-                $parameters = new RetrievesParameters(null, null, null, $order);
+                $parameters = new RetrievesParameters(orderBy: $order);
                 $users_result = DataManager::retrieves(
                     User::class, $parameters
                 );
@@ -127,8 +127,7 @@ class CourseRequestForm extends FormValidator
                     $users[$user->get_id()] = $user_name;
                 }
                 $this->addElement(
-                    'select', CommonRequest::PROPERTY_USER_ID, Translation::get('User', null, Manager::CONTEXT),
-                    $users
+                    'select', CommonRequest::PROPERTY_USER_ID, Translation::get('User', null, Manager::CONTEXT), $users
                 );
             }
             else
@@ -148,7 +147,7 @@ class CourseRequestForm extends FormValidator
 
             $this->add_html_editor(
                 CommonRequest::PROPERTY_MOTIVATION, Translation::get('Motivation'), true,
-                array(FormValidatorHtmlEditorOptions::OPTION_TOOLBAR => 'BasicMarkup')
+                [FormValidatorHtmlEditorOptions::OPTION_TOOLBAR => 'BasicMarkup']
             );
         }
 
@@ -176,11 +175,13 @@ class CourseRequestForm extends FormValidator
             $motivation = $this->request->get_motivation();
             $this->addElement('static', 'request', Translation::get('Motivation'), $motivation);
 
-            $creation_date = DatetimeUtilities::getInstance()->formatLocaleDate(null, $this->request->get_creation_date());
+            $creation_date =
+                DatetimeUtilities::getInstance()->formatLocaleDate(null, $this->request->get_creation_date());
             $this->addElement('static', 'request', Translation::get('CreationDate'), $creation_date);
 
             $decision = $this->request->get_decision();
-            $decision_date = DatetimeUtilities::getInstance()->formatLocaleDate(null, $this->request->get_decision_date());
+            $decision_date =
+                DatetimeUtilities::getInstance()->formatLocaleDate(null, $this->request->get_decision_date());
             switch ($decision)
             {
                 case CommonRequest::ALLOWED_DECISION :

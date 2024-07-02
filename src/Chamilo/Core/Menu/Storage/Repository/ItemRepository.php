@@ -38,7 +38,7 @@ class ItemRepository
         );
 
         return $this->getDataClassRepository()->count(
-            Item::class, new DataClassCountParameters($condition)
+            Item::class, new DataClassCountParameters(condition: $condition)
         );
     }
 
@@ -82,7 +82,7 @@ class ItemRepository
             new PropertyConditionVariable(Item::class, DataClass::PROPERTY_ID), $identifiers
         );
 
-        return $this->getDataClassRepository()->retrieves(Item::class, new RetrievesParameters($condition));
+        return $this->getDataClassRepository()->retrieves(Item::class, new RetrievesParameters(condition: $condition));
     }
 
     /**
@@ -110,7 +110,8 @@ class ItemRepository
         $orderBy->add(new OrderProperty(new PropertyConditionVariable(Item::class, Item::PROPERTY_SORT)));
 
         return $this->getDataClassRepository()->retrieves(
-            Item::class, new RetrievesParameters($condition, $count, $offset, $orderBy)
+            Item::class, new RetrievesParameters(
+                condition: $condition, count: $count, offset: $offset, orderBy: $orderBy)
         );
     }
 
@@ -125,7 +126,7 @@ class ItemRepository
             new PropertyConditionVariable(Item::class, Item::PROPERTY_TYPE), new StaticConditionVariable($type)
         );
 
-        return $this->getDataClassRepository()->retrieves(Item::class, new RetrievesParameters($condition));
+        return $this->getDataClassRepository()->retrieves(Item::class, new RetrievesParameters(condition: $condition));
     }
 
     /**

@@ -754,7 +754,7 @@ abstract class ContentObjectPublicationListRenderer
             );
 
             $count = DataManager::count(
-                ContentObjectPublicationCategory::class, new DataClassCountParameters(new AndCondition($conditions))
+                ContentObjectPublicationCategory::class, new DataClassCountParameters(condition: new AndCondition($conditions))
             );
 
             $count ++;

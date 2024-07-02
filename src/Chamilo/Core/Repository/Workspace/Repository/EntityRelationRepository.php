@@ -40,7 +40,7 @@ class EntityRelationRepository
     public function countEntityRelations(?Condition $condition = null): int
     {
         return $this->getDataClassRepository()->count(
-            WorkspaceEntityRelation::class, new DataClassCountParameters($condition)
+            WorkspaceEntityRelation::class, new DataClassCountParameters(condition: $condition)
         );
     }
 
@@ -80,7 +80,7 @@ class EntityRelationRepository
         $entityRelationCondition = new AndCondition($entityRelationConditions);
 
         $entityRelationCount = $this->getDataClassRepository()->count(
-            WorkspaceEntityRelation::class, new DataClassCountParameters($entityRelationCondition)
+            WorkspaceEntityRelation::class, new DataClassCountParameters(condition: $entityRelationCondition)
         );
 
         return $entityRelationCount > 0;
@@ -117,7 +117,7 @@ class EntityRelationRepository
         $entityCondition = new AndCondition($entityConditions);
 
         return $this->getDataClassRepository()->retrieve(
-            WorkspaceEntityRelation::class, new RetrieveParameters($entityCondition)
+            WorkspaceEntityRelation::class, new RetrieveParameters(condition: $entityCondition)
         );
     }
 
@@ -125,7 +125,8 @@ class EntityRelationRepository
     ): ArrayCollection
     {
         return $this->getDataClassRepository()->retrieves(
-            WorkspaceEntityRelation::class, new RetrievesParameters($condition, $limit, $offset)
+            WorkspaceEntityRelation::class, new RetrievesParameters(
+                condition: $condition, count: $limit, offset: $offset)
         );
     }
 
@@ -143,7 +144,7 @@ class EntityRelationRepository
         );
 
         return $this->getDataClassRepository()->retrieves(
-            WorkspaceEntityRelation::class, new RetrievesParameters($condition)
+            WorkspaceEntityRelation::class, new RetrievesParameters(condition: $condition)
         );
     }
 

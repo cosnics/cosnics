@@ -53,15 +53,15 @@ class PlatformGroupEntityHelper
         $joins = new Joins([$join]);
 
         $parameters = new DataClassCountParameters(
-            $condition, $joins, new RetrieveProperties(
-                [
-                    new FunctionConditionVariable(
-                        FunctionConditionVariable::DISTINCT, new PropertyConditionVariable(
-                            Group::class, Group::PROPERTY_ID
-                        )
+            condition: $condition, joins: $joins, retrieveProperties: new RetrieveProperties(
+            [
+                new FunctionConditionVariable(
+                    FunctionConditionVariable::DISTINCT, new PropertyConditionVariable(
+                        Group::class, Group::PROPERTY_ID
                     )
-                ]
-            )
+                )
+            ]
+        )
         );
 
         return DataManager::count(

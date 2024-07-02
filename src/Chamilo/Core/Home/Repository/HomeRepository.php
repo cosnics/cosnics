@@ -37,12 +37,15 @@ class HomeRepository
             new StaticConditionVariable($parentIdentifier)
         );
 
-        return $this->getDataClassRepository()->count(Element::class, new DataClassCountParameters($condition));
+        return $this->getDataClassRepository()->count(
+            Element::class, new DataClassCountParameters(condition: $condition)
+        );
     }
 
     public function countElementsByUserIdentifier(string $userIdentifier): int
     {
-        $parameters = new DataClassCountParameters($this->getElementsByUserIdentifierCondition($userIdentifier));
+        $parameters =
+            new DataClassCountParameters(condition: $this->getElementsByUserIdentifierCondition($userIdentifier));
 
         return $this->getDataClassRepository()->count(Element::class, $parameters);
     }
@@ -78,7 +81,7 @@ class HomeRepository
 
         return $this->getDataClassRepository()->retrieves(
             Element::class, new RetrievesParameters(
-                new AndCondition($conditions)
+                condition: new AndCondition($conditions)
             )
         );
     }
@@ -102,7 +105,7 @@ class HomeRepository
         );
 
         return $this->getDataClassRepository()->retrieves(
-            Element::class, new RetrievesParameters(new AndCondition($conditions))
+            Element::class, new RetrievesParameters(condition: new AndCondition($conditions))
         );
     }
 
@@ -126,8 +129,9 @@ class HomeRepository
 
         return $this->getDataClassRepository()->distinct(
             Element::class, new DataClassDistinctParameters(
-                new AndCondition($conditions),
-                new RetrieveProperties([new PropertyConditionVariable(Element::class, DataClass::PROPERTY_ID)])
+                condition: new AndCondition($conditions), retrieveProperties: new RetrieveProperties(
+                [new PropertyConditionVariable(Element::class, DataClass::PROPERTY_ID)]
+            )
             )
         );
     }
@@ -149,7 +153,9 @@ class HomeRepository
             new StaticConditionVariable($parentIdentifier)
         );
 
-        return $this->getDataClassRepository()->retrieves(Element::class, new RetrievesParameters($condition));
+        return $this->getDataClassRepository()->retrieves(
+            Element::class, new RetrievesParameters(condition: $condition)
+        );
     }
 
     /**
@@ -195,9 +201,9 @@ class HomeRepository
     {
         $parameters = new RetrievesParameters(
             condition: $this->getElementsByUserIdentifierCondition($userIdentifier), orderBy: new OrderBy([
-                new OrderProperty(new PropertyConditionVariable(Element::class, Element::PROPERTY_TYPE)),
-                new OrderProperty(new PropertyConditionVariable(Element::class, Element::PROPERTY_SORT))
-            ])
+            new OrderProperty(new PropertyConditionVariable(Element::class, Element::PROPERTY_TYPE)),
+            new OrderProperty(new PropertyConditionVariable(Element::class, Element::PROPERTY_SORT))
+        ])
         );
 
         return $this->getDataClassRepository()->retrieves(Element::class, $parameters);

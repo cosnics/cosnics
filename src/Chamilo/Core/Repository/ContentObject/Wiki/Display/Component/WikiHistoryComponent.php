@@ -76,7 +76,7 @@ class WikiHistoryComponent extends Manager
             else
             {
                 $totalNumberOfItems = DataManager::count_content_objects(
-                    ContentObject::class, new DataClassCountParameters($this->getVersionTableCondition())
+                    ContentObject::class, new DataClassCountParameters(condition: $this->getVersionTableCondition())
                 );
 
                 $versionTableRenderer = $this->getVersionTableRenderer();
@@ -88,9 +88,11 @@ class WikiHistoryComponent extends Manager
 
                 $contentObjects = DataManager::retrieve_content_objects(
                     ContentObject::class, new RetrievesParameters(
-                        $this->getVersionTableCondition(), $tableParameterValues->getNumberOfItemsPerPage(),
-                        $tableParameterValues->getOffset(),
-                        $versionTableRenderer->determineOrderBy($tableParameterValues)
+                        condition: $this->getVersionTableCondition(),
+                        count: $tableParameterValues->getNumberOfItemsPerPage(),
+                        offset: $tableParameterValues->getOffset(), orderBy: $versionTableRenderer->determineOrderBy(
+                        $tableParameterValues
+                    )
                     )
                 );
 

@@ -7,7 +7,7 @@ use Exception;
  * @package Chamilo\Libraries\Storage\Exception
  * @author Hans De Bisschop <hans.de.bisschop@ehb.be>
  */
-class DatabaseLastInsertedIdentifierException extends Exception
+class StorageLastInsertedIdentifierException extends Exception
 {
 
     protected string $dataClassStorageUnitName;

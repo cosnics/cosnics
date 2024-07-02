@@ -60,7 +60,7 @@ class AssessmentsBlock extends AssessmentBlock
         $condition = new AndCondition($conditions);
 
         $pub_resultset = WeblcmsDataManager::retrieves(
-            ContentObjectPublication::class, new RetrievesParameters($condition)
+            ContentObjectPublication::class, new RetrievesParameters(condition: $condition)
         );
 
         foreach($pub_resultset as $pub)

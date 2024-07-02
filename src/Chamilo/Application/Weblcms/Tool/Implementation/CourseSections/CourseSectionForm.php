@@ -122,7 +122,7 @@ class CourseSectionForm extends FormValidator
         $condition = new AndCondition($conditions);
 
         $course_sections = DataManager::retrieves(
-            CourseSection::class, new RetrievesParameters($condition)
+            CourseSection::class, new RetrievesParameters(condition: $condition)
         );
 
         if ($course_sections->count() > 0)

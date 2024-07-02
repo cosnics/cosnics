@@ -201,7 +201,7 @@ class AssessmentResultsExportController
 
         $complex_questions_resultset =
             \Chamilo\Core\Repository\Storage\DataManager::retrieve_complex_content_object_items(
-                ComplexContentObjectItem::class, new RetrievesParameters($condition)
+                ComplexContentObjectItem::class, new RetrievesParameters(condition: $condition)
             );
 
         foreach ($complex_questions_resultset as $complex_question)

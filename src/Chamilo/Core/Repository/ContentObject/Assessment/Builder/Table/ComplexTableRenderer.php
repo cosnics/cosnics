@@ -46,7 +46,8 @@ class ComplexTableRenderer extends DataClassListTableRenderer implements TableRo
         $movedown_allowed = true;
 
         $count = DataManager::count_complex_content_object_items(
-            ComplexContentObjectItem::class, new DataClassCountParameters($this->application->getComplexCondition())
+            ComplexContentObjectItem::class,
+            new DataClassCountParameters(condition: $this->application->getComplexCondition())
         );
         if ($count == 1)
         {

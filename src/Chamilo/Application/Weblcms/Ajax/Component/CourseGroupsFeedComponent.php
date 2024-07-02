@@ -93,7 +93,7 @@ class CourseGroupsFeedComponent extends GroupsFeedComponent
             ), new StaticConditionVariable($filter_id)
         );
         $relations = DataManager::retrieves(
-            CourseGroupUserRelation::class, new RetrievesParameters($condition)
+            CourseGroupUserRelation::class, new RetrievesParameters(condition: $condition)
         );
 
         $user_ids = [];

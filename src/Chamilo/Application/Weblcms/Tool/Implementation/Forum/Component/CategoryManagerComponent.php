@@ -103,7 +103,7 @@ class CategoryManagerComponent extends Manager implements BreadcrumbLessComponen
         $condition = new AndCondition($conditions);
 
         return DataManager::count(
-            ContentObjectPublicationCategory::class, new DataClassCountParameters($condition)
+            ContentObjectPublicationCategory::class, new DataClassCountParameters(condition: $condition)
         );
     }
 
@@ -169,7 +169,7 @@ class CategoryManagerComponent extends Manager implements BreadcrumbLessComponen
             ), new StaticConditionVariable($category_id)
         );
         $subcategries = DataManager::retrieves(
-            ContentObjectPublicationCategory::class, new RetrievesParameters($condition)
+            ContentObjectPublicationCategory::class, new RetrievesParameters(condition: $condition)
         );
 
         foreach ($subcategries as $cat)
@@ -209,7 +209,7 @@ class CategoryManagerComponent extends Manager implements BreadcrumbLessComponen
 
         return DataManager::retrieves(
             ContentObjectPublicationCategory::class,
-            new RetrievesParameters($condition, $count, $offset, $order_property)
+            new RetrievesParameters(condition: $condition, count: $count, offset: $offset, orderBy: $order_property)
         );
     }
 }

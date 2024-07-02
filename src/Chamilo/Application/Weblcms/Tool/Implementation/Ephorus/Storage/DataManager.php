@@ -37,6 +37,6 @@ class DataManager extends \Chamilo\Libraries\Storage\DataManager\DataManager
             new PropertyConditionVariable(Request::class, Request::PROPERTY_GUID),
             new StaticConditionVariable($guid));
         
-        return static::retrieve(Request::class, new RetrieveParameters($condition));
+        return static::retrieve(Request::class, new RetrieveParameters(condition: $condition));
     }
 }

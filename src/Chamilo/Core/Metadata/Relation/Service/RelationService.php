@@ -32,6 +32,6 @@ class RelationService
             new StaticConditionVariable($relationName)
         );
 
-        return DataManager::retrieve(Relation::class, new RetrieveParameters($condition));
+        return DataManager::retrieve(Relation::class, new RetrieveParameters(condition: $condition));
     }
 }

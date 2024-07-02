@@ -11,6 +11,7 @@ use Chamilo\Libraries\Storage\Query\Join;
 use Chamilo\Libraries\Storage\Query\Joins;
 use Chamilo\Libraries\Storage\Query\OrderBy;
 use Chamilo\Libraries\Storage\Query\RetrieveProperties;
+use Chamilo\Libraries\Storage\Query\UpdateProperties;
 use Doctrine\DBAL\Query\QueryBuilder;
 
 /**
@@ -48,6 +49,26 @@ class QueryBuilderConfigurator
         $this->processLimit($queryBuilder, $parameters->getCount(), $parameters->getOffset());
     }
 
+    public function applyUpdate(
+        DataClassDatabase $dataClassDatabase, QueryBuilder $queryBuilder, UpdateProperties $properties,
+        Condition $condition
+    ): void
+    {
+        foreach ($properties as $dataClassProperty)
+        {
+            $key = $this->translateConditionPart(
+                $dataClassDatabase, $dataClassProperty->getPropertyConditionVariable(), false
+            );
+            $value = $this->translateConditionPart(
+                $dataClassDatabase, $dataClassProperty->getValueConditionVariable(), false
+            );
+
+            $queryBuilder->set($key, $value);
+        }
+
+        $this->processCondition($dataClassDatabase, $queryBuilder, $condition, false);
+    }
+
     public function getConditionPartTranslatorService(): ConditionPartTranslatorService
     {
         return $this->conditionPartTranslatorService;
@@ -59,12 +80,13 @@ class QueryBuilderConfigurator
     }
 
     protected function processCondition(
-        DataClassDatabase $dataClassDatabase, QueryBuilder $queryBuilder, ?Condition $condition = null
+        DataClassDatabase $dataClassDatabase, QueryBuilder $queryBuilder, ?Condition $condition = null,
+        ?bool $enableAliasing = true
     ): void
     {
         if ($condition instanceof Condition)
         {
-            $queryBuilder->where($this->translateConditionPart($dataClassDatabase, $condition));
+            $queryBuilder->where($this->translateConditionPart($dataClassDatabase, $condition, $enableAliasing));
         }
     }
 
@@ -140,11 +162,11 @@ class QueryBuilderConfigurator
         DataClassDatabase $dataClassDatabase, QueryBuilder $queryBuilder, OrderBy $orderBy = new OrderBy()
     ): void
     {
-        foreach ($orderBy as $orderBy)
+        foreach ($orderBy as $orderByProperty)
         {
             $queryBuilder->addOrderBy(
-                $this->translateConditionPart($dataClassDatabase, $orderBy->getConditionVariable()),
-                ($orderBy->getDirection() == SORT_DESC ? 'DESC' : 'ASC')
+                $this->translateConditionPart($dataClassDatabase, $orderByProperty->getConditionVariable()),
+                ($orderByProperty->getDirection() == SORT_DESC ? 'DESC' : 'ASC')
             );
         }
     }
@@ -160,10 +182,13 @@ class QueryBuilderConfigurator
         }
     }
 
-    protected function translateConditionPart(DataClassDatabase $dataClassDatabase, ConditionPart $conditionPart
+    protected function translateConditionPart(
+        DataClassDatabase $dataClassDatabase, ConditionPart $conditionPart, ?bool $enableAliasing = true
     ): string
     {
-        return $this->getConditionPartTranslatorService()->translate($dataClassDatabase, $conditionPart);
+        return $this->getConditionPartTranslatorService()->translate(
+            $dataClassDatabase, $conditionPart, $enableAliasing
+        );
     }
 }
 

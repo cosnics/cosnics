@@ -62,7 +62,7 @@ class DataManager extends \Chamilo\Libraries\Storage\DataManager\DataManager
             }
 
             return \Chamilo\Libraries\Storage\DataManager\DataManager::count(
-                User::class, new DataClassCountParameters($condition)
+                User::class, new DataClassCountParameters(condition: $condition)
             );
         }
         else
@@ -158,7 +158,7 @@ class DataManager extends \Chamilo\Libraries\Storage\DataManager\DataManager
 
         $condition = new AndCondition($conditions);
 
-        return self::count(CourseGroupUserRelation::class, new DataClassCountParameters($condition)) > 0;
+        return self::count(CourseGroupUserRelation::class, new DataClassCountParameters(condition: $condition)) > 0;
     }
 
     /**
@@ -214,7 +214,7 @@ class DataManager extends \Chamilo\Libraries\Storage\DataManager\DataManager
             $condition = new AndCondition($conditions);
 
             $users = self::retrieves(
-                CourseGroupUserRelation::class, new RetrievesParameters($condition)
+                CourseGroupUserRelation::class, new RetrievesParameters(condition: $condition)
             );
 
             if ($users->current() != null)
@@ -240,7 +240,7 @@ class DataManager extends \Chamilo\Libraries\Storage\DataManager\DataManager
             new StaticConditionVariable($name)
         );
 
-        return self::retrieve(CourseGroup::class, new RetrieveParameters($condition));
+        return self::retrieve(CourseGroup::class, new RetrieveParameters(condition: $condition));
     }
 
     /**
@@ -266,7 +266,7 @@ class DataManager extends \Chamilo\Libraries\Storage\DataManager\DataManager
 
         $condition = new AndCondition($conditions);
 
-        return self::retrieve(CourseGroup::class, new RetrieveParameters($condition));
+        return self::retrieve(CourseGroup::class, new RetrieveParameters(condition: $condition));
     }
 
     /**
@@ -285,7 +285,7 @@ class DataManager extends \Chamilo\Libraries\Storage\DataManager\DataManager
         );
 
         $relations = self::retrieves(
-            CourseGroupUserRelation::class, new RetrievesParameters($condition)
+            CourseGroupUserRelation::class, new RetrievesParameters(condition: $condition)
         );
         $user_ids = [];
 
@@ -337,7 +337,8 @@ class DataManager extends \Chamilo\Libraries\Storage\DataManager\DataManager
         }
 
         return \Chamilo\Libraries\Storage\DataManager\DataManager::retrieves(
-            User::class, new RetrievesParameters($condition, $count, $offset, $order_property)
+            User::class, new RetrievesParameters(
+                condition: $condition, count: $count, offset: $offset, orderBy: $order_property)
         );
     }
 
@@ -429,7 +430,7 @@ class DataManager extends \Chamilo\Libraries\Storage\DataManager\DataManager
             new PropertyConditionVariable(CourseGroup::class, CourseGroup::PROPERTY_ID), $group_ids
         );
 
-        $direct_groups = self::retrieves(CourseGroup::class, new RetrievesParameters($dg_condition));
+        $direct_groups = self::retrieves(CourseGroup::class, new RetrievesParameters(condition: $dg_condition));
 
         $direct_group_conditions = [];
         foreach ($direct_groups as $group)
@@ -481,7 +482,8 @@ class DataManager extends \Chamilo\Libraries\Storage\DataManager\DataManager
         }
 
         return self::retrieves(
-            CourseGroup::class, new RetrievesParameters($group_condition, $count, $offset, $order_by)
+            CourseGroup::class, new RetrievesParameters(
+                condition: $group_condition, count: $count, offset: $offset, orderBy: $order_by)
         );
     }
 
@@ -524,7 +526,9 @@ class DataManager extends \Chamilo\Libraries\Storage\DataManager\DataManager
 
         $condition = new AndCondition($conditions);
 
-        $parameters = new RetrievesParameters($condition, null, null, null, $joins);
+        $parameters = new RetrievesParameters(
+            condition: $condition, joins: $joins
+        );
 
         return self::retrieves(CourseGroup::class, $parameters);
     }

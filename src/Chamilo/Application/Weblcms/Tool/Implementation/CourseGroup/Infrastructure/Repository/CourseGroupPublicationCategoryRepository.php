@@ -26,16 +26,17 @@ class CourseGroupPublicationCategoryRepository extends CommonDataClassRepository
      * @param \Chamilo\Application\Weblcms\Tool\Implementation\CourseGroup\Storage\DataClass\CourseGroup $courseGroup
      * @param string $toolName
      *
-     * @return \Doctrine\Common\Collections\ArrayCollection | \Chamilo\Application\Weblcms\Storage\DataClass\ContentObjectPublicationCategory[]
+     * @return \Doctrine\Common\Collections\ArrayCollection | CourseGroupPublicationCategory[]
      */
-    public function findPublicationCategoriesForCourseGroup(CourseGroup $courseGroup, $toolName = null)
+    public function findCourseGroupPublicationCategoriesForCourseGroup(CourseGroup $courseGroup, $toolName = null)
     {
-        $joins = $this->getJoinsWithPublicationCategory(CourseGroupPublicationCategory::class);
+        $joins = $this->getJoinsWithPublicationCategory(ContentObjectPublicationCategory::class);
         $condition = $this->getConditionsForCourseGroupAndTool($courseGroup, $toolName);
 
         return $this->dataClassRepository->retrieves(
-            ContentObjectPublicationCategory::class,
-            new RetrievesParameters($condition, null, null, null, $joins)
+            CourseGroupPublicationCategory::class, new RetrievesParameters(
+                condition: $condition, joins: $joins
+            )
         );
     }
 
@@ -45,16 +46,16 @@ class CourseGroupPublicationCategoryRepository extends CommonDataClassRepository
      * @param \Chamilo\Application\Weblcms\Tool\Implementation\CourseGroup\Storage\DataClass\CourseGroup $courseGroup
      * @param string $toolName
      *
-     * @return \Doctrine\Common\Collections\ArrayCollection | CourseGroupPublicationCategory[]
+     * @return \Doctrine\Common\Collections\ArrayCollection |
+     *     \Chamilo\Application\Weblcms\Storage\DataClass\ContentObjectPublicationCategory[]
      */
-    public function findCourseGroupPublicationCategoriesForCourseGroup(CourseGroup $courseGroup, $toolName = null)
+    public function findPublicationCategoriesForCourseGroup(CourseGroup $courseGroup, $toolName = null)
     {
-        $joins = $this->getJoinsWithPublicationCategory(ContentObjectPublicationCategory::class);
+        $joins = $this->getJoinsWithPublicationCategory(CourseGroupPublicationCategory::class);
         $condition = $this->getConditionsForCourseGroupAndTool($courseGroup, $toolName);
 
         return $this->dataClassRepository->retrieves(
-            CourseGroupPublicationCategory::class,
-            new RetrievesParameters($condition, null, null, null, $joins)
+            ContentObjectPublicationCategory::class, new RetrievesParameters(condition: $condition, joins: $joins)
         );
     }
 
@@ -71,10 +72,8 @@ class CourseGroupPublicationCategoryRepository extends CommonDataClassRepository
         $conditions = [
             new EqualityCondition(
                 new PropertyConditionVariable(
-                    CourseGroupPublicationCategory::class,
-                    CourseGroupPublicationCategory::PROPERTY_COURSE_GROUP_ID
-                ),
-                new StaticConditionVariable($courseGroup->getId())
+                    CourseGroupPublicationCategory::class, CourseGroupPublicationCategory::PROPERTY_COURSE_GROUP_ID
+                ), new StaticConditionVariable($courseGroup->getId())
             )
         ];
 
@@ -82,10 +81,8 @@ class CourseGroupPublicationCategoryRepository extends CommonDataClassRepository
         {
             $conditions[] = new EqualityCondition(
                 new PropertyConditionVariable(
-                    ContentObjectPublicationCategory::class,
-                    ContentObjectPublicationCategory::PROPERTY_TOOL
-                ),
-                new StaticConditionVariable($toolName)
+                    ContentObjectPublicationCategory::class, ContentObjectPublicationCategory::PROPERTY_TOOL
+                ), new StaticConditionVariable($toolName)
             );
         }
 
@@ -107,10 +104,8 @@ class CourseGroupPublicationCategoryRepository extends CommonDataClassRepository
                     new PropertyConditionVariable(
                         CourseGroupPublicationCategory::class,
                         CourseGroupPublicationCategory::PROPERTY_PUBLICATION_CATEGORY_ID
-                    ),
-                    new PropertyConditionVariable(
-                        ContentObjectPublicationCategory::class,
-                        ContentObjectPublicationCategory::PROPERTY_ID
+                    ), new PropertyConditionVariable(
+                        ContentObjectPublicationCategory::class, ContentObjectPublicationCategory::PROPERTY_ID
                     )
                 )
             )

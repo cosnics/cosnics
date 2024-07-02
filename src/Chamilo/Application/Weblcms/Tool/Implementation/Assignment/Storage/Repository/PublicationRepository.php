@@ -30,7 +30,7 @@ class PublicationRepository extends CommonDataClassRepository
             new StaticConditionVariable($contentObjectPublication->getId())
         );
 
-        return $this->dataClassRepository->retrieve(Publication::class, new RetrieveParameters($condition));
+        return $this->dataClassRepository->retrieve(Publication::class, new RetrieveParameters(condition: $condition));
     }
 
     /**
@@ -45,7 +45,7 @@ class PublicationRepository extends CommonDataClassRepository
             $contentObjectPublicationIdentifiers
         );
 
-        return $this->dataClassRepository->retrieves(Publication::class, new RetrievesParameters($condition));
+        return $this->dataClassRepository->retrieves(Publication::class, new RetrievesParameters(condition: $condition));
     }
 
     /**

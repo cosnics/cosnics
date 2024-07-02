@@ -69,7 +69,7 @@ class DataManager extends \Chamilo\Libraries\Storage\DataManager\DataManager
         
         $count = \Chamilo\Core\Repository\Storage\DataManager::count_content_objects(
             Webpage::class, 
-            new DataClassCountParameters($condition));
+            new DataClassCountParameters(condition: $condition));
         
         return $count == 1;
     }

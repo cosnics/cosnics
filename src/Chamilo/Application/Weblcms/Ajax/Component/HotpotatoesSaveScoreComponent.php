@@ -25,7 +25,7 @@ class HotpotatoesSaveScoreComponent extends Manager
         );
 
         $tracker = DataManager::retrieve(
-            AssessmentAttempt::class, new RetrieveParameters($condition)
+            AssessmentAttempt::class, new RetrieveParameters(condition: $condition)
         );
 
         if ($tracker)

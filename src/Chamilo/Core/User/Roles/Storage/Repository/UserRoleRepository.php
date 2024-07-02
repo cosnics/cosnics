@@ -63,7 +63,7 @@ class UserRoleRepository extends DataManagerRepository implements UserRoleReposi
         $condition = new AndCondition($conditions);
 
         return $this->getDataClassRepository()->retrieve(
-            RoleRelation::class, new RetrieveParameters($condition)
+            RoleRelation::class, new RetrieveParameters(condition: $condition)
         );
     }
 

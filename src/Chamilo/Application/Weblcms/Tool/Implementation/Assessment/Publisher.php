@@ -135,7 +135,7 @@ class Publisher
             $condition = new InCondition(
                 new PropertyConditionVariable(ContentObject::class, ContentObject::PROPERTY_ID), $content_object_ids
             );
-            $parameters = new RetrievesParameters($condition);
+            $parameters = new RetrievesParameters(condition: $condition);
 
             $content_objects = DataManager::retrieve_active_content_objects(
                 ContentObject::class, $parameters

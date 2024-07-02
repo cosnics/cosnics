@@ -216,7 +216,7 @@ class ExporterComponent extends Manager
             new PropertyConditionVariable(ContentObject::class, DataClass::PROPERTY_ID), $contentObjectIdentifiers
         );
         $parameters = new DataClassDistinctParameters(
-            $condition, new RetrieveProperties(
+            condition: $condition, retrieveProperties: new RetrieveProperties(
                 [new PropertyConditionVariable(ContentObject::class, ContentObject::PROPERTY_TYPE)]
             )
         );
@@ -252,7 +252,7 @@ class ExporterComponent extends Manager
             $condition = new AndCondition($conditions);
 
             $parameters = new DataClassDistinctParameters(
-                $condition, new RetrieveProperties(
+                condition: $condition, retrieveProperties: new RetrieveProperties(
                     [new PropertyConditionVariable(ContentObject::class, DataClass::PROPERTY_ID)]
                 )
             );

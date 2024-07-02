@@ -66,7 +66,8 @@ abstract class FeedbackRepository
         );
 
         $parameters = new DataClassCountParameters(
-            $this->getEntityTypeCondition($entityType, $condition), $joins, new RetrieveProperties([$property])
+            condition: $this->getEntityTypeCondition($entityType, $condition), joins: $joins,
+            retrieveProperties: new RetrieveProperties([$property])
         );
 
         return $this->dataClassRepository->count($this->getEntryClassName(), $parameters);
@@ -99,8 +100,8 @@ abstract class FeedbackRepository
         );
 
         $parameters = new DataClassCountParameters(
-            $this->getEntityTypeAndIdCondition($entityType, $entityId, $condition), $joins,
-            new RetrieveProperties([$property])
+            condition: $this->getEntityTypeAndIdCondition($entityType, $entityId, $condition), joins: $joins,
+            retrieveProperties: new RetrieveProperties([$property])
         );
 
         return $this->dataClassRepository->count($this->getEntryClassName(), $parameters);
@@ -145,7 +146,7 @@ abstract class FeedbackRepository
             )
         );
 
-        $parameters = new DataClassCountParameters($condition, $joins);
+        $parameters = new DataClassCountParameters(condition: $condition, joins: $joins);
 
         return $this->dataClassRepository->count($this->getEntryClassName(), $parameters);
     }
@@ -164,7 +165,7 @@ abstract class FeedbackRepository
         );
 
         return $this->dataClassRepository->count(
-            $this->getFeedbackClassName(), new DataClassCountParameters($condition)
+            $this->getFeedbackClassName(), new DataClassCountParameters(condition: $condition)
         );
     }
 
@@ -182,7 +183,7 @@ abstract class FeedbackRepository
         );
 
         return $this->dataClassRepository->count(
-            $this->getFeedbackClassName(), new DataClassCountParameters($condition)
+            $this->getFeedbackClassName(), new DataClassCountParameters(condition: $condition)
         );
     }
 
@@ -234,7 +235,7 @@ abstract class FeedbackRepository
         );
 
         return $this->dataClassRepository->retrieves(
-            $this->getFeedbackClassName(), new RetrievesParameters($condition)
+            $this->getFeedbackClassName(), new RetrievesParameters(condition: $condition)
         );
     }
 

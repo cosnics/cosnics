@@ -132,7 +132,7 @@ abstract class DataClass
         foreach ($this->getDependencies() as $dependency_class => $dependency_condition)
         {
             $dependency_objects = DataManager::retrieves(
-                $dependency_class, new RetrievesParameters($dependency_condition)
+                $dependency_class, new RetrievesParameters(condition: $dependency_condition)
             );
 
             foreach ($dependency_objects as $dependency_object)
@@ -145,18 +145,6 @@ abstract class DataClass
         }
 
         return true;
-    }
-
-    /**
-     * @param string[] $cacheablePropertyNames
-     *
-     * @return string[]
-     */
-    public static function getCacheablePropertyNames(array $cacheablePropertyNames = []): array
-    {
-        $cacheablePropertyNames[] = static::PROPERTY_ID;
-
-        return $cacheablePropertyNames;
     }
 
     /**
@@ -238,6 +226,16 @@ abstract class DataClass
         return $this->listeners;
     }
 
+    /**
+     * @param \Chamilo\Libraries\Storage\DataClass\Listeners\DataClassListener[] $listeners
+     */
+    public function setListeners(array $listeners): static
+    {
+        $this->listeners = $listeners;
+
+        return $this;
+    }
+
     public function getOptionalProperties(): array
     {
         return $this->getSpecificProperties(self::PROPERTIES_OPTIONAL);
@@ -254,6 +252,16 @@ abstract class DataClass
     public function getProperties(): array
     {
         return $this->properties;
+    }
+
+    /**
+     * @param string[][] $properties
+     */
+    public function setProperties(array $properties): static
+    {
+        $this->properties = $properties;
+
+        return $this;
     }
 
     public function getSpecificProperties(string $propertiesType): array
@@ -375,16 +383,6 @@ abstract class DataClass
     }
 
     /**
-     * @param \Chamilo\Libraries\Storage\DataClass\Listeners\DataClassListener[] $listeners
-     */
-    public function setListeners(array $listeners): static
-    {
-        $this->listeners = $listeners;
-
-        return $this;
-    }
-
-    /**
      * @param string[] $optionalProperties
      */
     public function setOptionalProperties(array $optionalProperties): static
@@ -397,16 +395,6 @@ abstract class DataClass
     public function setOptionalProperty(string $name, mixed $value): static
     {
         $this->setSpecificProperty(self::PROPERTIES_OPTIONAL, $name, $value);
-
-        return $this;
-    }
-
-    /**
-     * @param string[][] $properties
-     */
-    public function setProperties(array $properties): static
-    {
-        $this->properties = $properties;
 
         return $this;
     }

@@ -85,7 +85,7 @@ class Installer extends \Chamilo\Core\Metadata\Action\Installer
     public function linkToSchemas(): bool
     {
         $schemaNamespaces = ['dc', 'ct'];
-        $this->getDataClassRepositoryCache()->truncate(Schema::class);
+        $this->getDataClassRepositoryCache()->truncateClass(Schema::class);
 
         $relationService = new RelationService();
         $relation = $relationService->getRelationByName('isAvailableFor');

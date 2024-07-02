@@ -3,7 +3,6 @@ namespace Chamilo\Core\Repository\UserView\Menu;
 
 use Chamilo\Core\Repository\UserView\Manager;
 use Chamilo\Core\Repository\UserView\Storage\DataClass\UserView;
-use Chamilo\Libraries\Storage\DataManager\DataManager;
 use Chamilo\Libraries\Architecture\Application\Application;
 use Chamilo\Libraries\Architecture\ClassnameUtilities;
 use Chamilo\Libraries\Format\Menu\Library\HtmlMenu;
@@ -13,6 +12,7 @@ use Chamilo\Libraries\Format\Menu\TreeMenuRenderer;
 use Chamilo\Libraries\Format\Structure\Breadcrumb;
 use Chamilo\Libraries\Format\Structure\Glyph\FontAwesomeGlyph;
 use Chamilo\Libraries\Format\Tabs\GenericTabsRenderer;
+use Chamilo\Libraries\Storage\DataManager\DataManager;
 use Chamilo\Libraries\Storage\Parameters\RetrievesParameters;
 use Chamilo\Libraries\Storage\Query\Condition\EqualityCondition;
 use Chamilo\Libraries\Storage\Query\Variable\PropertyConditionVariable;
@@ -28,7 +28,7 @@ use Chamilo\Libraries\Translation\Translation;
  */
 class UserViewMenu extends HtmlMenu
 {
-    const TREE_NAME = __CLASS__;
+    public const TREE_NAME = __CLASS__;
 
     /**
      *
@@ -109,18 +109,18 @@ class UserViewMenu extends HtmlMenu
             new PropertyConditionVariable(UserView::class, UserView::PROPERTY_USER_ID),
             new StaticConditionVariable($this->application->get_user_id())
         );
-        $userviews = DataManager::retrieves(UserView::class, new RetrievesParameters($condition));
+        $userviews = DataManager::retrieves(UserView::class, new RetrievesParameters(condition: $condition));
 
         $userview = [];
         $userview['title'] = Translation::get('UserViews');
         $userview['url'] = $this->application->get_url(
-            array(
+            [
                 \Chamilo\Core\Repository\Manager::PARAM_ACTION => \Chamilo\Core\Repository\Manager::ACTION_USER_VIEW,
-                GenericTabsRenderer::PARAM_SELECTED_TAB => array(
+                GenericTabsRenderer::PARAM_SELECTED_TAB => [
                     \Chamilo\Core\Repository\Manager::TABS_FILTER => \Chamilo\Core\Repository\Manager::TAB_USERVIEW
-                ),
+                ],
                 Manager::PARAM_ACTION => Manager::ACTION_BROWSE
-            ), array(\Chamilo\Core\Repository\Manager::PARAM_CATEGORY_ID)
+            ], [\Chamilo\Core\Repository\Manager::PARAM_CATEGORY_ID]
         );
 
         $glyph = new FontAwesomeGlyph('search', [], null, 'fas');

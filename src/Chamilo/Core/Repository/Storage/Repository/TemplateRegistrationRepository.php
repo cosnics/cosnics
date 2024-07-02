@@ -37,7 +37,7 @@ class TemplateRegistrationRepository
      */
     public function clearTemplateRegistrationCache()
     {
-        return $this->getDataClassRepository()->getDataClassRepositoryCache()->truncate(TemplateRegistration::class);
+        return $this->getDataClassRepository()->getDataClassRepositoryCache()->truncateClass(TemplateRegistration::class);
     }
 
     /**

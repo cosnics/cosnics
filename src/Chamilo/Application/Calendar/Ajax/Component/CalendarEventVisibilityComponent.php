@@ -14,7 +14,7 @@ class CalendarEventVisibilityComponent
     public function retrieveVisibility(Condition $condition): ?\Chamilo\Libraries\Calendar\Event\Visibility
     {
         $visibility =
-            $this->getDataClassRepository()->retrieve(Visibility::class, new RetrieveParameters($condition));
+            $this->getDataClassRepository()->retrieve(Visibility::class, new RetrieveParameters(condition: $condition));
 
         if ($visibility instanceof \Chamilo\Libraries\Calendar\Event\Visibility)
         {

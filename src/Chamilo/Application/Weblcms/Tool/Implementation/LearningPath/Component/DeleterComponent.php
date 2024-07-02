@@ -57,7 +57,7 @@ class DeleterComponent extends Manager
                 );
 
                 $attempts = DataManager::retrieves(
-                    LearningPathTreeNodeAttempt::class, new RetrievesParameters($condition)
+                    LearningPathTreeNodeAttempt::class, new RetrievesParameters(condition: $condition)
                 );
 
                 foreach ($attempts as $attempt)

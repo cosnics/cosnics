@@ -42,7 +42,7 @@ class StructureLocationRoleRepository extends DataManagerRepository implements S
 
         $condition = new AndCondition($conditions);
 
-        return DataManager::retrieve(StructureLocationRole::class, new RetrieveParameters($condition));
+        return DataManager::retrieve(StructureLocationRole::class, new RetrieveParameters(condition: $condition));
     }
 
     /**

@@ -77,7 +77,7 @@ abstract class AssignmentRepository
             $contentObjectIds
         );
 
-        return $this->dataClassRepository->count($this->getEntryClassName(), new DataClassCountParameters($condition));
+        return $this->dataClassRepository->count($this->getEntryClassName(), new DataClassCountParameters(condition: $condition));
     }
 
     /**
@@ -129,7 +129,7 @@ abstract class AssignmentRepository
         );
 
         $parameters = new DataClassCountParameters(
-            $this->getEntityTypeCondition($entityType, $condition), $joins, new RetrieveProperties([$property])
+            condition: $this->getEntityTypeCondition($entityType, $condition), joins: $joins, retrieveProperties: new RetrieveProperties([$property])
         );
 
         return $this->dataClassRepository->count($this->getEntryClassName(), $parameters);
@@ -162,8 +162,8 @@ abstract class AssignmentRepository
         );
 
         $parameters = new DataClassCountParameters(
-            $this->getEntityTypeAndIdCondition($entityType, $entityId, $condition), $joins,
-            new RetrieveProperties([$property])
+            condition: $this->getEntityTypeAndIdCondition($entityType, $entityId, $condition), joins: $joins,
+            retrieveProperties: new RetrieveProperties([$property])
         );
 
         return $this->dataClassRepository->count($this->getEntryClassName(), $parameters);
@@ -228,8 +228,8 @@ abstract class AssignmentRepository
         );
 
         $parameters = new DataClassCountParameters(
-            $this->getEntityTypeAndIdCondition($entityType, $entityId, $condition), $joins,
-            new RetrieveProperties([$property])
+            condition: $this->getEntityTypeAndIdCondition($entityType, $entityId, $condition), joins: $joins,
+            retrieveProperties: new RetrieveProperties([$property])
         );
 
         return $this->dataClassRepository->count($this->getEntryClassName(), $parameters);
@@ -243,7 +243,7 @@ abstract class AssignmentRepository
      */
     protected function countEntries(Condition $condition)
     {
-        return $this->dataClassRepository->count($this->getEntryClassName(), new DataClassCountParameters($condition));
+        return $this->dataClassRepository->count($this->getEntryClassName(), new DataClassCountParameters(condition: $condition));
     }
 
     /**
@@ -257,7 +257,7 @@ abstract class AssignmentRepository
     {
         $condition = $this->getEntityTypeCondition($entityType, $condition);
 
-        return $this->dataClassRepository->count($this->getEntryClassName(), new DataClassCountParameters($condition));
+        return $this->dataClassRepository->count($this->getEntryClassName(), new DataClassCountParameters(condition: $condition));
     }
 
     /**
@@ -272,7 +272,7 @@ abstract class AssignmentRepository
     {
         $condition = $this->getEntityTypeAndIdCondition($entityType, $entityId, $condition);
 
-        return $this->dataClassRepository->count($this->getEntryClassName(), new DataClassCountParameters($condition));
+        return $this->dataClassRepository->count($this->getEntryClassName(), new DataClassCountParameters(condition: $condition));
     }
 
     /**
@@ -297,7 +297,7 @@ abstract class AssignmentRepository
 
         $condition = new AndCondition($conditions);
 
-        return $this->dataClassRepository->count($this->getEntryClassName(), new DataClassCountParameters($condition));
+        return $this->dataClassRepository->count($this->getEntryClassName(), new DataClassCountParameters(condition: $condition));
     }
 
     /**
@@ -314,7 +314,7 @@ abstract class AssignmentRepository
         );
 
         return $this->dataClassRepository->count(
-            $this->getEntryAttachmentClassName(), new DataClassCountParameters($condition)
+            $this->getEntryAttachmentClassName(), new DataClassCountParameters(condition: $condition)
         );
     }
 
@@ -343,7 +343,7 @@ abstract class AssignmentRepository
         );
 
         return $this->dataClassRepository->count(
-            $this->getEntryAttachmentClassName(), new DataClassCountParameters($condition, $joins)
+            $this->getEntryAttachmentClassName(), new DataClassCountParameters(condition: $condition, joins: $joins)
         );
     }
 
@@ -386,7 +386,7 @@ abstract class AssignmentRepository
             )
         );
 
-        $parameters = new DataClassCountParameters($condition, $joins);
+        $parameters = new DataClassCountParameters(condition: $condition, joins: $joins);
 
         return $this->dataClassRepository->count($this->getEntryClassName(), $parameters);
     }
@@ -405,7 +405,7 @@ abstract class AssignmentRepository
         );
 
         return $this->dataClassRepository->count(
-            $this->getFeedbackClassName(), new DataClassCountParameters($condition)
+            $this->getFeedbackClassName(), new DataClassCountParameters(condition: $condition)
         );
     }
 
@@ -423,7 +423,7 @@ abstract class AssignmentRepository
         );
 
         return $this->dataClassRepository->count(
-            $this->getFeedbackClassName(), new DataClassCountParameters($condition)
+            $this->getFeedbackClassName(), new DataClassCountParameters(condition: $condition)
         );
     }
 
@@ -450,7 +450,7 @@ abstract class AssignmentRepository
         );
 
         $condition = new AndCondition($conditions);
-        $parameters = new DataClassCountParameters($condition);
+        $parameters = new DataClassCountParameters(condition: $condition);
 
         return $this->dataClassRepository->count($this->getEntryClassName(), $parameters);
     }
@@ -583,7 +583,7 @@ abstract class AssignmentRepository
         );
 
         return $this->dataClassRepository->retrieves(
-            $this->getEntryAttachmentClassName(), new RetrievesParameters($condition)
+            $this->getEntryAttachmentClassName(), new RetrievesParameters(condition: $condition)
         );
     }
 
@@ -601,7 +601,7 @@ abstract class AssignmentRepository
         }
 
         return $this->dataClassRepository->retrieves(
-            $this->getEntryClassName(), new RetrievesParameters($condition)
+            $this->getEntryClassName(), new RetrievesParameters(condition: $condition)
         );
     }
 
@@ -618,7 +618,7 @@ abstract class AssignmentRepository
         );
 
         return $this->dataClassRepository->retrieves(
-            $this->getEntryClassName(), new RetrievesParameters($condition)
+            $this->getEntryClassName(), new RetrievesParameters(condition: $condition)
         );
     }
 
@@ -650,7 +650,7 @@ abstract class AssignmentRepository
         $condition = new AndCondition($conditions);
 
         return $this->dataClassRepository->retrieves(
-            $this->getEntryClassName(), new RetrievesParameters($condition)
+            $this->getEntryClassName(), new RetrievesParameters(condition: $condition)
         );
     }
 
@@ -678,7 +678,7 @@ abstract class AssignmentRepository
         $condition = new AndCondition($conditions);
 
         return $this->dataClassRepository->retrieve(
-            $this->getEntryAttachmentClassName(), new RetrieveParameters($condition)
+            $this->getEntryAttachmentClassName(), new RetrieveParameters(condition: $condition)
         );
     }
 
@@ -706,7 +706,7 @@ abstract class AssignmentRepository
         );
 
         return $this->dataClassRepository->retrieves(
-            $this->getEntryAttachmentClassName(), new RetrievesParameters($condition)
+            $this->getEntryAttachmentClassName(), new RetrievesParameters(condition: $condition)
         );
     }
 
@@ -847,7 +847,7 @@ abstract class AssignmentRepository
         );
 
         return $this->dataClassRepository->retrieves(
-            $this->getFeedbackClassName(), new RetrievesParameters($condition)
+            $this->getFeedbackClassName(), new RetrievesParameters(condition: $condition)
         );
     }
 
@@ -863,7 +863,7 @@ abstract class AssignmentRepository
         $condition = $this->getEntityTypeAndIdCondition($entityType, $entityIdentifier, $condition);
 
         $retrieveParameters = new RetrieveParameters(
-            $condition, new OrderBy([
+            condition: $condition, orderBy: new OrderBy([
                 new OrderProperty(
                     new PropertyConditionVariable($this->getEntryClassName(), Entry::PROPERTY_SUBMITTED), SORT_DESC
                 )
@@ -997,7 +997,8 @@ abstract class AssignmentRepository
         $group_by->add($baseVariable);
 
         $parameters = new RetrievesParameters(
-            $condition, $count, $offset, $orderBy, $joins, $group_by, $havingCondition
+            condition: $condition, count: $count, offset: $offset, orderBy: $orderBy, joins: $joins, groupBy: $group_by,
+            havingCondition: $havingCondition
         );
 
         return $this->dataClassRepository->retrieves($baseClass, $parameters);
@@ -1161,7 +1162,7 @@ abstract class AssignmentRepository
         );
 
         return $this->dataClassRepository->retrieves(
-            $this->getEntryClassName(), new RetrievesParameters($condition)
+            $this->getEntryClassName(), new RetrievesParameters(condition: $condition)
         );
     }
 
@@ -1310,7 +1311,7 @@ abstract class AssignmentRepository
         );
 
         $note = $this->dataClassRepository->retrieve(
-            $this->getNoteClassName(), new RetrieveParameters($condition)
+            $this->getNoteClassName(), new RetrieveParameters(condition: $condition)
         );
 
         if ($note instanceof Note)
@@ -1337,7 +1338,7 @@ abstract class AssignmentRepository
         );
 
         $score = $this->dataClassRepository->retrieve(
-            $this->getScoreClassName(), new RetrieveParameters($condition)
+            $this->getScoreClassName(), new RetrieveParameters(condition: $condition)
         );
 
         if ($score instanceof Score)

@@ -461,7 +461,7 @@ class UnsubscribeBrowserComponent extends Manager
     private function get_platformgroups_users_tab(): string
     {
         $totalNumberOfItems = \Chamilo\Libraries\Storage\DataManager\DataManager::count(
-            GroupRelUser::class, new DataClassCountParameters($this->get_condition())
+            GroupRelUser::class, new DataClassCountParameters(condition: $this->get_condition())
         );
         $platformGroupRelUserTableRenderer = $this->getPlatformGroupRelUserTableRenderer();
 
@@ -472,9 +472,9 @@ class UnsubscribeBrowserComponent extends Manager
 
         $groupUserRelations = \Chamilo\Libraries\Storage\DataManager\DataManager::retrieves(
             GroupRelUser::class, new RetrievesParameters(
-                $this->get_condition(), $tableParameterValues->getNumberOfItemsPerPage(),
-                $tableParameterValues->getOffset(),
-                $platformGroupRelUserTableRenderer->determineOrderBy($tableParameterValues)
+                condition: $this->get_condition(), count: $tableParameterValues->getNumberOfItemsPerPage(),
+                offset: $tableParameterValues->getOffset(),
+                orderBy: $platformGroupRelUserTableRenderer->determineOrderBy($tableParameterValues)
             )
         );
 

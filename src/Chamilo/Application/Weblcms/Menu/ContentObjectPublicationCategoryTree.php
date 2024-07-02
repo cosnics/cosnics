@@ -220,7 +220,7 @@ class ContentObjectPublicationCategoryTree extends HtmlMenu
         $condition = new AndCondition($conditions);
 
         $objects = DataManager::retrieves(
-            ContentObjectPublicationCategory::class, new RetrievesParameters($condition)
+            ContentObjectPublicationCategory::class, new RetrievesParameters(condition: $condition)
         );
 
         $categories = [];

@@ -52,7 +52,7 @@ class FavouriteRepository
     public function countFavouriteUsers(User $sourceUser, $condition = null)
     {
         $parameters = new DataClassCountParameters(
-            $this->getUserFavouriteCondition($sourceUser, $condition), $this->getFavouriteUsersJoins()
+            condition: $this->getUserFavouriteCondition($sourceUser, $condition), joins: $this->getFavouriteUsersJoins()
         );
 
         return $this->getDataClassRepository()->count(User::class, $parameters);
@@ -135,7 +135,7 @@ class FavouriteRepository
 
         $condition = new AndCondition($conditions);
 
-        $parameters = new RetrieveParameters($condition);
+        $parameters = new RetrieveParameters(condition: $condition);
 
         return $this->getDataClassRepository()->retrieve(UserFavourite::class, $parameters);
     }
@@ -147,6 +147,15 @@ class FavouriteRepository
     protected function getDataClassRepository()
     {
         return $this->dataClassRepository;
+    }
+
+    /**
+     *
+     * @param \Chamilo\Libraries\Storage\DataManager\Repository\DataClassRepository $dataClassRepository
+     */
+    protected function setDataClassRepository($dataClassRepository)
+    {
+        $this->dataClassRepository = $dataClassRepository;
     }
 
     /**
@@ -204,14 +213,5 @@ class FavouriteRepository
         }
 
         return new AndCondition($conditions);
-    }
-
-    /**
-     *
-     * @param \Chamilo\Libraries\Storage\DataManager\Repository\DataClassRepository $dataClassRepository
-     */
-    protected function setDataClassRepository($dataClassRepository)
-    {
-        $this->dataClassRepository = $dataClassRepository;
     }
 }

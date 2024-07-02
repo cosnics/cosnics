@@ -31,13 +31,13 @@ use stdClass;
  */
 class AttachmentContentObjectsFeedComponent extends Manager
 {
-    const PARAM_EXCLUDE_CONTENT_OBJECT_IDS = 'exclude_content_object_ids';
-    const PARAM_FILTER = 'filter';
-    const PARAM_OFFSET = 'offset';
-    const PARAM_SEARCH_QUERY = 'query';
+    public const PARAM_EXCLUDE_CONTENT_OBJECT_IDS = 'exclude_content_object_ids';
+    public const PARAM_FILTER = 'filter';
+    public const PARAM_OFFSET = 'offset';
+    public const PARAM_SEARCH_QUERY = 'query';
 
-    const PROPERTY_ELEMENTS = 'elements';
-    const PROPERTY_TOTAL_ELEMENTS = 'total_elements';
+    public const PROPERTY_ELEMENTS = 'elements';
+    public const PROPERTY_TOTAL_ELEMENTS = 'total_elements';
 
     /**
      * @throws \Chamilo\Libraries\Architecture\Exceptions\ObjectNotExistException
@@ -186,24 +186,24 @@ class AttachmentContentObjectsFeedComponent extends Manager
     }
 
     /**
-     * @return integer
+     * @return int
      */
     protected function countContentObjects()
     {
         return DataManager::count_active_content_objects(
-            ContentObject::class, new DataClassCountParameters($this->getContentObjectConditions())
+            ContentObject::class, new DataClassCountParameters(condition: $this->getContentObjectConditions())
         );
     }
 
     /**
      * @param \Chamilo\Core\Repository\Storage\DataClass\RepositoryCategory $category
-     * @param integer $elementType
+     * @param int $elementType
      *
      * @return \Chamilo\Libraries\Format\Form\Element\AdvancedElementFinder\AdvancedElementFinderElement
      */
     protected function getCategoryAdvancedElementFinderElement(RepositoryCategory $category, int $elementType)
     {
-        $glyph = new FontAwesomeGlyph(($category->getId() == 0 ? 'hdd' : 'folder'), array('fa-fw'), null, 'fas');
+        $glyph = new FontAwesomeGlyph(($category->getId() == 0 ? 'hdd' : 'folder'), ['fa-fw'], null, 'fas');
 
         return new AdvancedElementFinderElement(
             'category_' . $category->getId(), $glyph->getClassNamesString(), $category->get_name(),
@@ -212,7 +212,7 @@ class AttachmentContentObjectsFeedComponent extends Manager
     }
 
     /**
-     * @return integer[]
+     * @return int
      */
     protected function getCategoryIdentifiers()
     {
@@ -241,7 +241,7 @@ class AttachmentContentObjectsFeedComponent extends Manager
         }
         else
         {
-            return array($this->getFilter());
+            return [$this->getFilter()];
         }
     }
 
@@ -255,7 +255,7 @@ class AttachmentContentObjectsFeedComponent extends Manager
     {
         return new AdvancedElementFinderElement(
             'content_object_' . $contentObject->getId(),
-            $contentObject->getGlyph(IdentGlyph::SIZE_MINI, true, array('fa-fw'))->getClassNamesString(),
+            $contentObject->getGlyph(IdentGlyph::SIZE_MINI, true, ['fa-fw'])->getClassNamesString(),
             $contentObject->get_title(), $contentObject->get_type_string()
         );
     }
@@ -273,7 +273,7 @@ class AttachmentContentObjectsFeedComponent extends Manager
         if (!empty($searchQuery))
         {
             $conditions[] = $this->getSearchQueryConditionGenerator()->getSearchConditions(
-                $searchQuery, array(new PropertyConditionVariable(ContentObject::class, ContentObject::PROPERTY_TITLE))
+                $searchQuery, [new PropertyConditionVariable(ContentObject::class, ContentObject::PROPERTY_TITLE)]
             );
         }
 
@@ -356,7 +356,7 @@ class AttachmentContentObjectsFeedComponent extends Manager
     }
 
     /**
-     * @return integer
+     * @return int
      */
     protected function getFilter()
     {
@@ -376,7 +376,7 @@ class AttachmentContentObjectsFeedComponent extends Manager
     }
 
     /**
-     * @return integer
+     * @return int
      */
     protected function getOffset()
     {
@@ -425,18 +425,19 @@ class AttachmentContentObjectsFeedComponent extends Manager
     protected function retrieveContentObjects()
     {
         $parameters = new RetrievesParameters(
-            $this->getContentObjectConditions(), 100, $this->getOffset(), new OrderBy(array(
-                    new OrderProperty(
-                        new PropertyConditionVariable(ContentObject::class, ContentObject::PROPERTY_TITLE)
-                    )
-                ))
+            condition: $this->getContentObjectConditions(), count: 100, offset: $this->getOffset(),
+            orderBy: new OrderBy([
+            new OrderProperty(
+                new PropertyConditionVariable(ContentObject::class, ContentObject::PROPERTY_TITLE)
+            )
+        ])
         );
 
         return DataManager::retrieve_active_content_objects(ContentObject::class, $parameters);
     }
 
     /**
-     * @param integer $repositoryCategoryByIdentifier
+     * @param int $repositoryCategoryByIdentifier
      *
      * @return \Chamilo\Core\Repository\Storage\DataClass\RepositoryCategory
      */

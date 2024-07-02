@@ -102,7 +102,7 @@ class TargetComponent extends Manager
 
             $condition = new AndCondition($conditions);
 
-            $count = DataManager::count(Admin::class, new DataClassCountParameters($condition));
+            $count = DataManager::count(Admin::class, new DataClassCountParameters(condition: $condition));
 
             switch ($target_type::ENTITY_TYPE)
             {

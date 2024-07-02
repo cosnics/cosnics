@@ -69,7 +69,7 @@ class EntityTranslationService
         );
 
         $translations = DataManager::retrieves(
-            EntityTranslation::class, new RetrievesParameters(new AndCondition($conditions))
+            EntityTranslation::class, new RetrievesParameters(condition: new AndCondition($conditions))
         );
 
         foreach($translations as $translation)

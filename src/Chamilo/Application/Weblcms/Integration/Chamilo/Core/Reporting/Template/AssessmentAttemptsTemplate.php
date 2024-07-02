@@ -70,7 +70,7 @@ class AssessmentAttemptsTemplate extends ReportingTemplate
             ), new StaticConditionVariable($publication->get_content_object_id())
         );
         $questions_resultset = \Chamilo\Core\Repository\Storage\DataManager::retrieve_complex_content_object_items(
-            ComplexContentObjectItem::class, new RetrievesParameters($condition)
+            ComplexContentObjectItem::class, new RetrievesParameters(condition: $condition)
         );
 
         foreach ($questions_resultset as $question)

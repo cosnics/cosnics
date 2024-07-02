@@ -40,8 +40,36 @@ class CourseGroupRepository extends CommonDataClassRepository implements CourseG
         );
 
         return $this->dataClassRepository->count(
-            CourseGroup::class,
-            new DataClassCountParameters($condition)
+            CourseGroup::class, new DataClassCountParameters(condition: $condition)
+        );
+    }
+
+    /**
+     * @param \Chamilo\Application\Weblcms\Tool\Implementation\CourseGroup\Storage\DataClass\CourseGroup $courseGroup
+     * @param \Chamilo\Core\User\Storage\DataClass\User $user
+     *
+     * @return CourseGroup|\Chamilo\Libraries\Storage\DataClass\DataClass
+     */
+    public function findCourseGroupUserRelationByCourseGroupAndUser(CourseGroup $courseGroup, User $user)
+    {
+        $conditions = [];
+
+        $conditions[] = new EqualityCondition(
+            new PropertyConditionVariable(
+                CourseGroupUserRelation::class, CourseGroupUserRelation::PROPERTY_COURSE_GROUP
+            ), new StaticConditionVariable($courseGroup->getId())
+        );
+
+        $conditions[] = new EqualityCondition(
+            new PropertyConditionVariable(
+                CourseGroupUserRelation::class, CourseGroupUserRelation::PROPERTY_USER
+            ), new StaticConditionVariable($user->getId())
+        );
+
+        $condition = new AndCondition($conditions);
+
+        return $this->dataClassRepository->retrieve(
+            CourseGroupUserRelation::class, new RetrieveParameters(condition: $condition)
         );
     }
 
@@ -63,8 +91,7 @@ class CourseGroupRepository extends CommonDataClassRepository implements CourseG
         $conditions[] = new InCondition(
             new PropertyConditionVariable(
                 CourseGroupUserRelation::class, CourseGroupUserRelation::PROPERTY_USER
-            ),
-            $userIds
+            ), $userIds
         );
 
         $condition = new AndCondition($conditions);
@@ -73,8 +100,7 @@ class CourseGroupRepository extends CommonDataClassRepository implements CourseG
 
         $joins->add(
             new Join(
-                CourseGroup::class,
-                new EqualityCondition(
+                CourseGroup::class, new EqualityCondition(
                     new PropertyConditionVariable(CourseGroup::class, CourseGroup::PROPERTY_ID),
                     new PropertyConditionVariable(
                         CourseGroupUserRelation::class, CourseGroupUserRelation::PROPERTY_COURSE_GROUP
@@ -84,38 +110,9 @@ class CourseGroupRepository extends CommonDataClassRepository implements CourseG
         );
 
         return $this->dataClassRepository->retrieves(
-            CourseGroupUserRelation::class, new RetrievesParameters($condition, null, null, null, $joins)
-        );
-    }
-
-    /**
-     * @param \Chamilo\Application\Weblcms\Tool\Implementation\CourseGroup\Storage\DataClass\CourseGroup $courseGroup
-     * @param \Chamilo\Core\User\Storage\DataClass\User $user
-     *
-     * @return CourseGroup|\Chamilo\Libraries\Storage\DataClass\DataClass
-     */
-    public function findCourseGroupUserRelationByCourseGroupAndUser(CourseGroup $courseGroup, User $user)
-    {
-        $conditions = [];
-
-        $conditions[] = new EqualityCondition(
-            new PropertyConditionVariable(
-                CourseGroupUserRelation::class, CourseGroupUserRelation::PROPERTY_COURSE_GROUP
-            ),
-            new StaticConditionVariable($courseGroup->getId())
-        );
-
-        $conditions[] = new EqualityCondition(
-            new PropertyConditionVariable(
-                CourseGroupUserRelation::class, CourseGroupUserRelation::PROPERTY_USER
-            ),
-            new StaticConditionVariable($user->getId())
-        );
-
-        $condition = new AndCondition($conditions);
-
-        return $this->dataClassRepository->retrieve(
-            CourseGroupUserRelation::class, new RetrieveParameters($condition)
+            CourseGroupUserRelation::class, new RetrievesParameters(
+                condition: $condition, joins: $joins
+            )
         );
     }
 

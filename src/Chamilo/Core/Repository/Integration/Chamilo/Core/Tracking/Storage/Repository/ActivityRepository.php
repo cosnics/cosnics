@@ -24,7 +24,7 @@ class ActivityRepository extends CommonDataClassRepository
     public function countActivitiesForContentObject(ContentObject $contentObject): int
     {
         return $this->dataClassRepository->count(
-            Activity::class, new DataClassCountParameters($this->getActivityConditionForContentObject($contentObject))
+            Activity::class, new DataClassCountParameters(condition: $this->getActivityConditionForContentObject($contentObject))
         );
     }
 
@@ -103,7 +103,7 @@ class ActivityRepository extends CommonDataClassRepository
     {
         return $this->dataClassRepository->retrieves(
             Activity::class,
-            new RetrievesParameters($this->getActivityConditionForContentObject($contentObject))
+            new RetrievesParameters(condition: $this->getActivityConditionForContentObject($contentObject))
         );
     }
 }

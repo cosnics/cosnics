@@ -22,7 +22,7 @@ abstract class Block extends ReportingBlock
         $c = 0;
         $array = [];
 
-        $trackerdata = DataManager::retrieves(get_class($tracker), new RetrievesParameters($condition));
+        $trackerdata = DataManager::retrieves(get_class($tracker), new RetrievesParameters(condition: $condition));
 
         foreach ($trackerdata as $key => $value)
         {

@@ -50,7 +50,7 @@ class HtmlContentObjectExportController extends ContentObjectExportController
         {
             $condition = null;
         }
-        $parameters = new RetrievesParameters($condition);
+        $parameters = new RetrievesParameters(condition: $condition);
         $content_objects = DataManager::retrieve_active_content_objects(ContentObject::class, $parameters);
         foreach ($content_objects as $content_object)
         {

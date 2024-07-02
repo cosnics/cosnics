@@ -344,7 +344,7 @@ abstract class Manager extends Application
     public function get_complex_content_object_table_html()
     {
         $totalNumberOfItems = DataManager::count_complex_content_object_items(
-            ComplexContentObjectItem::class, new DataClassCountParameters($this->getComplexCondition())
+            ComplexContentObjectItem::class, new DataClassCountParameters(condition: $this->getComplexCondition())
         );
 
         $complexTableRenderer = $this->getComplexTableRenderer();
@@ -364,8 +364,8 @@ abstract class Manager extends Application
             )
         );
         $parameters = new RetrievesParameters(
-            $this->getComplexCondition(), $tableParameterValues->getNumberOfItemsPerPage(),
-            $tableParameterValues->getOffset(), $orderBy
+            condition: $this->getComplexCondition(), count: $tableParameterValues->getNumberOfItemsPerPage(),
+            offset: $tableParameterValues->getOffset(), orderBy: $orderBy
         );
 
         $complexContentObjectItems =

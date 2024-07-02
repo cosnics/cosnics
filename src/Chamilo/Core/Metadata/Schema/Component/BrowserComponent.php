@@ -112,7 +112,7 @@ class BrowserComponent extends Manager
             [new PropertyConditionVariable(Schema::class, Schema::PROPERTY_NAME)]
         );
 
-        $totalNumberOfItems = DataManager::count(Schema::class, new DataClassCountParameters($condition));
+        $totalNumberOfItems = DataManager::count(Schema::class, new DataClassCountParameters(condition: $condition));
         $schemaTableRenderer = $this->getSchemaTableRenderer();
 
         $tableParameterValues = $this->getRequestTableParameterValuesCompiler()->determineParameterValues(
@@ -121,8 +121,8 @@ class BrowserComponent extends Manager
         );
 
         $parameters = new RetrievesParameters(
-            $condition, $tableParameterValues->getNumberOfItemsPerPage(), $tableParameterValues->getOffset(),
-            $schemaTableRenderer->determineOrderBy($tableParameterValues)
+            condition: $condition, count: $tableParameterValues->getNumberOfItemsPerPage(),
+            offset: $tableParameterValues->getOffset(), orderBy: $schemaTableRenderer->determineOrderBy($tableParameterValues)
         );
 
         $schemas = DataManager::retrieves(Schema::class, $parameters);

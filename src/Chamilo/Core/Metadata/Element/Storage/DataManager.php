@@ -18,6 +18,6 @@ class DataManager extends \Chamilo\Libraries\Storage\DataManager\DataManager
             ComparisonCondition::EQUAL,
             new StaticConditionVariable($schema_id));
 
-        return DataManager::count(Element::class, new DataClassCountParameters($condition));
+        return DataManager::count(Element::class, new DataClassCountParameters(condition: $condition));
     }
 }

@@ -811,7 +811,7 @@ class RightsUtil
             else
             {
                 $class = $context . '\Storage\DataClass\RightsLocationEntityRight';
-                $this->getDataClassRepositoryCache()->truncate($class);
+                $this->getDataClassRepositoryCache()->truncateClass($class);
 
                 return $this->create_rights_location_entity_right(
                     $context, $right, $entity_id, $entity_type, $location_id

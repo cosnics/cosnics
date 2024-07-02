@@ -280,7 +280,7 @@ class CourseGroupSubscriptionsForm extends FormValidator
             $condition = new InCondition(
                 new PropertyConditionVariable(User::class, User::PROPERTY_ID), $members_to_add
             );
-            $parameters = new RetrievesParameters($condition);
+            $parameters = new RetrievesParameters(condition: $condition);
             $users_to_add = DataManager::retrieves(
                 User::class, $parameters
             );

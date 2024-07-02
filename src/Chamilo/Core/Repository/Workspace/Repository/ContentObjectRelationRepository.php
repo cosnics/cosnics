@@ -55,7 +55,7 @@ class ContentObjectRelationRepository
         $relationCondition = new AndCondition($relationConditions);
 
         return $this->getDataClassRepository()->count(
-            WorkspaceContentObjectRelation::class, new DataClassCountParameters($relationCondition)
+            WorkspaceContentObjectRelation::class, new DataClassCountParameters(condition: $relationCondition)
         );
     }
 
@@ -76,7 +76,7 @@ class ContentObjectRelationRepository
         );
 
         return $this->getDataClassRepository()->count(
-            Workspace::class, new DataClassCountParameters($condition, new Joins([$join]))
+            Workspace::class, new DataClassCountParameters(condition: $condition, joins: new Joins([$join]))
         );
     }
 
@@ -111,7 +111,7 @@ class ContentObjectRelationRepository
         $relationCondition = new AndCondition($relationConditions);
 
         return $this->getDataClassRepository()->retrieve(
-            WorkspaceContentObjectRelation::class, new RetrieveParameters($relationCondition)
+            WorkspaceContentObjectRelation::class, new RetrieveParameters(condition: $relationCondition)
         );
     }
 
@@ -143,7 +143,7 @@ class ContentObjectRelationRepository
         $relationCondition = new AndCondition($relationConditions);
 
         return $this->getDataClassRepository()->retrieves(
-            WorkspaceContentObjectRelation::class, new RetrievesParameters($relationCondition)
+            WorkspaceContentObjectRelation::class, new RetrievesParameters(condition: $relationCondition)
         );
     }
 
@@ -205,13 +205,13 @@ class ContentObjectRelationRepository
 
         return $this->getDataClassRepository()->distinct(
             WorkspaceContentObjectRelation::class, new DataClassDistinctParameters(
-                $condition, new RetrieveProperties(
-                    [
-                        new PropertyConditionVariable(
-                            WorkspaceContentObjectRelation::class, WorkspaceContentObjectRelation::PROPERTY_WORKSPACE_ID
-                        )
-                    ]
-                )
+                condition: $condition, retrieveProperties: new RetrieveProperties(
+                [
+                    new PropertyConditionVariable(
+                        WorkspaceContentObjectRelation::class, WorkspaceContentObjectRelation::PROPERTY_WORKSPACE_ID
+                    )
+                ]
+            )
             )
         );
     }

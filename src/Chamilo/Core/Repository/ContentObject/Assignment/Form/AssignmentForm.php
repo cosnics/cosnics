@@ -319,7 +319,7 @@ class AssignmentForm extends ContentObjectForm
                 );
 
                 $attachments = DataManager::retrieve_active_content_objects(
-                    ContentObject::class, new RetrievesParameters($condition)
+                    ContentObject::class, new RetrievesParameters(condition: $condition)
                 );
 
                 $defaultAttachments = new AdvancedElementFinderElements();

@@ -37,6 +37,9 @@ class GroupMembershipRepository
         $this->dataClassRepository = $dataClassRepository;
     }
 
+    /**
+     * @throws \Chamilo\Libraries\Storage\Exception\Database\StorageMethodException
+     */
     public function countSubscribedUsersForGroupIdentifier(string $groupIdentifier, ?Condition $condition = null): int
     {
         return $this->countSubscribedUsersForGroupIdentifiers([$groupIdentifier], $condition);
@@ -44,6 +47,8 @@ class GroupMembershipRepository
 
     /**
      * @param string[] $groupIdentifiers
+     *
+     * @throws \Chamilo\Libraries\Storage\Exception\Database\StorageMethodException
      */
     public function countSubscribedUsersForGroupIdentifiers(array $groupIdentifiers, ?Condition $condition = null): int
     {
@@ -72,20 +77,30 @@ class GroupMembershipRepository
         );
 
         return $this->getDataClassRepository()->count(
-            SubscribedUser::class, new DataClassCountParameters($condition, $joins)
+            SubscribedUser::class, new DataClassCountParameters(condition: $condition, joins: $joins)
         );
     }
 
+    /**
+     * @throws \Chamilo\Libraries\Storage\Exception\Database\StorageMethodException
+     * @throws \Chamilo\Libraries\Storage\Exception\Database\StorageLastInsertedIdentifierException
+     */
     public function createGroupUserRelation(GroupRelUser $groupUserRelation): bool
     {
         return $this->dataClassRepository->create($groupUserRelation);
     }
 
+    /**
+     * @throws \Chamilo\Libraries\Storage\Exception\Database\StorageMethodException
+     */
     public function deleteGroupUserRelation(GroupRelUser $groupUserRelation): bool
     {
         return $this->dataClassRepository->delete($groupUserRelation);
     }
 
+    /**
+     * @throws \Chamilo\Libraries\Storage\Exception\Database\StorageMethodException
+     */
     public function emptyGroup(Group $group): bool
     {
         $condition = new EqualityCondition(
@@ -96,6 +111,10 @@ class GroupMembershipRepository
         return $this->getDataClassRepository()->deletes(GroupRelUser::class, $condition);
     }
 
+    /**
+     * @throws \Chamilo\Libraries\Storage\Exception\Database\StorageMethodException
+     * @throws \Chamilo\Libraries\Storage\Exception\Database\StorageNoResultException
+     */
     public function findGroupRelUserByGroupAndUserId(string $groupId, string $userId): ?GroupRelUser
     {
         $conditions = [];
@@ -113,10 +132,14 @@ class GroupMembershipRepository
         $condition = new AndCondition($conditions);
 
         return $this->getDataClassRepository()->retrieve(
-            GroupRelUser::class, new RetrieveParameters($condition, null)
+            GroupRelUser::class, new RetrieveParameters(condition: $condition)
         );
     }
 
+    /**
+     * @throws \Chamilo\Libraries\Storage\Exception\Database\StorageMethodException
+     * @throws \Chamilo\Libraries\Storage\Exception\Database\StorageNoResultException
+     */
     public function findGroupRelUserByGroupCodeAndUserId(string $groupCode, string $userId): ?GroupRelUser
     {
         $conditions = [];
@@ -144,15 +167,23 @@ class GroupMembershipRepository
         );
 
         return $this->getDataClassRepository()->retrieve(
-            GroupRelUser::class, new RetrieveParameters($condition, null, $joins)
+            GroupRelUser::class, new RetrieveParameters(condition: $condition, joins: $joins)
         );
     }
 
+    /**
+     * @throws \Chamilo\Libraries\Storage\Exception\Database\StorageMethodException
+     * @throws \Chamilo\Libraries\Storage\Exception\Database\StorageNoResultException
+     */
     public function findGroupRelUserByIdentifier(string $groupRelUserIdentifier): ?GroupRelUser
     {
         return $this->getDataClassRepository()->retrieveById(GroupRelUser::class, $groupRelUserIdentifier);
     }
 
+    /**
+     * @throws \Chamilo\Libraries\Storage\Exception\Database\StorageMethodException
+     * @throws \Chamilo\Libraries\Storage\Exception\Database\StorageNoResultException
+     */
     public function findGroupUserRelationByGroupIdentifierAndUserIdentifier(
         string $groupIdentifier, string $userIdentifier
     ): ?GroupRelUser
@@ -170,12 +201,13 @@ class GroupMembershipRepository
         $condition = new AndCondition($conditions);
 
         return $this->getDataClassRepository()->retrieve(
-            GroupRelUser::class, new RetrieveParameters($condition)
+            GroupRelUser::class, new RetrieveParameters(condition: $condition)
         );
     }
 
     /**
      * @return string[]
+     * @throws \Chamilo\Libraries\Storage\Exception\Database\StorageMethodException
      */
     public function findSubscribedUserIdentifiersForGroupIdentifier(string $groupIdentifier): array
     {
@@ -186,6 +218,7 @@ class GroupMembershipRepository
      * @param string[] $groupIdentifiers
      *
      * @return string[]
+     * @throws \Chamilo\Libraries\Storage\Exception\Database\StorageMethodException
      */
     public function findSubscribedUserIdentifiersForGroupIdentifiers(array $groupIdentifiers): array
     {
@@ -194,14 +227,17 @@ class GroupMembershipRepository
         );
 
         $parameters = new DataClassDistinctParameters(
-            $condition, new RetrieveProperties(
-                [new PropertyConditionVariable(GroupRelUser::class, GroupRelUser::PROPERTY_USER_ID)]
-            )
+            condition: $condition, retrieveProperties: new RetrieveProperties(
+            [new PropertyConditionVariable(GroupRelUser::class, GroupRelUser::PROPERTY_USER_ID)]
+        )
         );
 
         return $this->getDataClassRepository()->distinct(GroupRelUser::class, $parameters);
     }
 
+    /**
+     * @throws \Chamilo\Libraries\Storage\Exception\Database\StorageMethodException
+     */
     public function findSubscribedUsersForGroupIdentifiers(
         array $groupIdentifiers, ?Condition $condition = null, ?int $offset = null, ?int $count = null,
         OrderBy $orderBy = new OrderBy()
@@ -260,6 +296,7 @@ class GroupMembershipRepository
      * @param string $groupIdentifier
      *
      * @return \Doctrine\Common\Collections\ArrayCollection<\Chamilo\Core\Group\Storage\DataClass\GroupRelUser>
+     * @throws \Chamilo\Libraries\Storage\Exception\Database\StorageMethodException
      */
     public function getGroupUserRelationsByGroupIdentifier(string $groupIdentifier): ArrayCollection
     {
@@ -269,12 +306,14 @@ class GroupMembershipRepository
         );
 
         return $this->getDataClassRepository()->retrieves(
-            GroupRelUser::class, new RetrievesParameters($condition)
+            GroupRelUser::class, new RetrievesParameters(condition: $condition)
         );
     }
 
     /**
      * @param string[] $groupsIdentifiers
+     *
+     * @throws \Chamilo\Libraries\Storage\Exception\Database\StorageMethodException
      */
     public function unsubscribeUsersFromGroupIdentifiers(array $groupsIdentifiers): bool
     {

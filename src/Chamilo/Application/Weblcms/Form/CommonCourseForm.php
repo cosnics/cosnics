@@ -341,7 +341,7 @@ abstract class CommonCourseForm extends FormValidator implements CourseSettingsX
             new PropertyConditionVariable(CourseSetting::class, CourseSetting::PROPERTY_TOOL_ID), $settings_condition
         );
 
-        $toolsArray = DataManager::retrieves(CourseTool::class, new RetrievesParameters($tools_condition));
+        $toolsArray = DataManager::retrieves(CourseTool::class, new RetrievesParameters(condition: $tools_condition));
 
         usort(
             $toolsArray, function ($toolA, $toolB) {
@@ -413,7 +413,7 @@ abstract class CommonCourseForm extends FormValidator implements CourseSettingsX
             )
         );
 
-        $toolsArray = DataManager::retrieves(CourseTool::class, new RetrievesParameters($tools_condition));
+        $toolsArray = DataManager::retrieves(CourseTool::class, new RetrievesParameters(condition: $tools_condition));
 
         usort(
             $toolsArray, function ($toolA, $toolB) {

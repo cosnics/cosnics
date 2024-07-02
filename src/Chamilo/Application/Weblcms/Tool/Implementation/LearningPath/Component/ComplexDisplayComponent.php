@@ -239,7 +239,7 @@ class ComplexDisplayComponent extends Manager
         );
         $condition = new AndCondition($conditions);
 
-        return DataManager::count(ForumTopicView::class, new DataClassCountParameters($condition));
+        return DataManager::count(ForumTopicView::class, new DataClassCountParameters(condition: $condition));
     }
 
     public function forum_topic_viewed($complex_topic_id)

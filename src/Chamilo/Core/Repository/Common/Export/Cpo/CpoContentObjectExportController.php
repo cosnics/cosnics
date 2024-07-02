@@ -82,7 +82,7 @@ class CpoContentObjectExportController extends ContentObjectExportController
             $condition = null;
         }
 
-        $parameters = new RetrievesParameters($condition);
+        $parameters = new RetrievesParameters(condition: $condition);
         $content_objects = DataManager::retrieve_active_content_objects(ContentObject::class, $parameters);
 
         foreach ($content_objects as $content_object)
@@ -445,7 +445,7 @@ class CpoContentObjectExportController extends ContentObjectExportController
             ), new StaticConditionVariable($content_object->get_id())
         );
         $content_object_attachments = DataManager::retrieves(
-            ContentObjectAttachment::class, new RetrievesParameters($condition)
+            ContentObjectAttachment::class, new RetrievesParameters(condition: $condition)
         );
 
         if ($content_object_attachments->count() > 0)
@@ -613,7 +613,7 @@ class CpoContentObjectExportController extends ContentObjectExportController
             ), new StaticConditionVariable($content_object->get_id())
         );
         $content_object_includes = DataManager::retrieves(
-            ContentObjectInclude::class, new RetrievesParameters($condition)
+            ContentObjectInclude::class, new RetrievesParameters(condition: $condition)
         );
 
         if ($content_object_includes->count() > 0)

@@ -54,7 +54,7 @@ class AvailabilityRepository
         $condition = new AndCondition($conditions);
 
         return $this->getDataClassRepository()->retrieves(
-            Availability::class, new RetrievesParameters($condition)
+            Availability::class, new RetrievesParameters(condition: $condition)
         );
     }
 
@@ -91,7 +91,7 @@ class AvailabilityRepository
         $condition = new AndCondition($conditions);
 
         return $this->getDataClassRepository()->retrieves(
-            Availability::class, new RetrievesParameters($condition)
+            Availability::class, new RetrievesParameters(condition: $condition)
         );
     }
 
@@ -115,7 +115,7 @@ class AvailabilityRepository
         $condition = new AndCondition($conditions);
 
         return $this->getDataClassRepository()->retrieve(
-            Availability::class, new RetrieveParameters($condition)
+            Availability::class, new RetrieveParameters(condition: $condition)
         );
     }
 

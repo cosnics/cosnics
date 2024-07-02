@@ -69,7 +69,9 @@ class AssessmentQuestionsUsersBlock extends ToolBlock
         $order_by = OrderBy::generate(QuestionAttempt::class, QuestionAttempt::PROPERTY_QUESTION_COMPLEX_ID);
 
         $question_attempts_trackers = DataManager::retrieves(
-            QuestionAttempt::class, new RetrievesParameters($condition, null, null, $order_by)
+            QuestionAttempt::class, new RetrievesParameters(
+                condition: $condition, orderBy: $order_by
+            )
         );
 
         $user_question_statistics = [];
@@ -194,7 +196,7 @@ class AssessmentQuestionsUsersBlock extends ToolBlock
             ), new StaticConditionVariable($publication->get_content_object_id())
         );
         $complex_questions = \Chamilo\Core\Repository\Storage\DataManager::retrieve_complex_content_object_items(
-            ComplexContentObjectItem::class, new RetrievesParameters($condition)
+            ComplexContentObjectItem::class, new RetrievesParameters(condition: $condition)
         );
 
         /**
@@ -241,7 +243,9 @@ class AssessmentQuestionsUsersBlock extends ToolBlock
         $order_by = OrderBy::generate(AssessmentAttempt::class, AssessmentAttempt::PROPERTY_USER_ID);
 
         $assessment_attempts_trackers = \Chamilo\Libraries\Storage\DataManager\DataManager::retrieves(
-            AssessmentAttempt::class, new RetrievesParameters($condition, null, null, $order_by)
+            AssessmentAttempt::class, new RetrievesParameters(
+                condition: $condition, orderBy: $order_by
+            )
         );
 
         $user_question_statistics = [];

@@ -46,14 +46,13 @@ class CourseEntityHelper
     public static function count_table_data($condition)
     {
         $parameters = new DataClassCountParameters(
-            $condition, self::get_joins(), new RetrieveProperties(
-                [
-                    new FunctionConditionVariable(
-                        FunctionConditionVariable::DISTINCT,
-                        new PropertyConditionVariable(Admin::class, Admin::PROPERTY_ID)
-                    )
-                ]
-            )
+            condition: $condition, joins: self::get_joins(), retrieveProperties: new RetrieveProperties(
+            [
+                new FunctionConditionVariable(
+                    FunctionConditionVariable::DISTINCT, new PropertyConditionVariable(Admin::class, Admin::PROPERTY_ID)
+                )
+            ]
+        )
         );
 
         return DataManager::count(Admin::class, $parameters);

@@ -21,7 +21,9 @@ class DataManager extends \Chamilo\Libraries\Storage\DataManager\DataManager
         $condition = null, $offset = null, $count = null, $order_property = null
     )
     {
-        $parameters = new RetrievesParameters($condition, $count, $offset, $order_property);
+        $parameters = new RetrievesParameters(
+            condition: $condition, count: $count, offset: $offset, orderBy: $order_property
+        );
 
         return self::retrieves(Option::class, $parameters);
     }
@@ -30,7 +32,9 @@ class DataManager extends \Chamilo\Libraries\Storage\DataManager\DataManager
         $condition = null, $offset = null, $count = null, $order_property = null
     )
     {
-        $parameters = new RetrievesParameters($condition, $count, $offset, $order_property);
+        $parameters = new RetrievesParameters(
+            condition: $condition, count: $count, offset: $offset, orderBy: $order_property
+        );
 
         return self::retrieves(Element::class, $parameters);
     }

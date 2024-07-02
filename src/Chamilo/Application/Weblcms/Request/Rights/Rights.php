@@ -72,7 +72,7 @@ class Rights extends RightsUtil
                     ), new StaticConditionVariable($user_group_id)
                 );
                 $right_groups = DataManager::retrieves(
-                    RightsLocationEntityRightGroup::class, new RetrievesParameters($condition)
+                    RightsLocationEntityRightGroup::class, new RetrievesParameters(condition: $condition)
                 );
 
                 foreach ($right_groups as $right_group)
@@ -141,7 +141,7 @@ class Rights extends RightsUtil
                     ), $user_ids
                 );
                 $authorized_user_count = DataManager::count(
-                    User::class, new DataClassCountParameters($condition)
+                    User::class, new DataClassCountParameters(condition: $condition)
                 );
 
                 if ($authorized_user_count == 0)
@@ -162,7 +162,7 @@ class Rights extends RightsUtil
                 );
             }
             $authorized_users = DataManager::retrieves(
-                User::class, new RetrievesParameters($condition)
+                User::class, new RetrievesParameters(condition: $condition)
             );
 
             foreach ($authorized_users as $authorized_user)
@@ -226,7 +226,7 @@ class Rights extends RightsUtil
                     ), new StaticConditionVariable($location_entity_right->get_id())
                 );
                 $right_groups = DataManager::retrieves(
-                    RightsLocationEntityRightGroup::class, new RetrievesParameters($condition)
+                    RightsLocationEntityRightGroup::class, new RetrievesParameters(condition: $condition)
                 );
 
                 foreach ($right_groups as $right_group)
@@ -254,7 +254,7 @@ class Rights extends RightsUtil
                         ), new StaticConditionVariable($location_entity_right->get_id())
                     );
                     $right_groups = DataManager::retrieves(
-                        RightsLocationEntityRightGroup::class, new RetrievesParameters($condition)
+                        RightsLocationEntityRightGroup::class, new RetrievesParameters(condition: $condition)
                     );
 
                     foreach ($right_groups as $right_group)
@@ -269,7 +269,7 @@ class Rights extends RightsUtil
 
             self::$target_users[$user->get_id()] = [];
 
-            $this->getDataClassRepositoryCache()->truncate(Group::class);
+            $this->getDataClassRepositoryCache()->truncateClass(Group::class);
 
             if (count($allowed_groups) > 0)
             {
@@ -279,7 +279,7 @@ class Rights extends RightsUtil
                     ), $allowed_groups
                 );
                 $groups = DataManager::retrieves(
-                    Group::class, new RetrievesParameters($condition)
+                    Group::class, new RetrievesParameters(condition: $condition)
                 );
 
                 foreach ($groups as $group)

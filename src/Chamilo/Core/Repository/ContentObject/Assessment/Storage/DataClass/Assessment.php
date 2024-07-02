@@ -54,7 +54,7 @@ class Assessment extends ContentObject
         {
             $this->question_count = DataManager::count_complex_content_object_items(
                 ComplexContentObjectItem::class, new DataClassCountParameters(
-                    new EqualityCondition(
+                    condition: new EqualityCondition(
                         new PropertyConditionVariable(
                             ComplexContentObjectItem::class, ComplexContentObjectItem::PROPERTY_PARENT
                         ), new StaticConditionVariable($this->get_id()), ComplexContentObjectItem::getStorageUnitName()

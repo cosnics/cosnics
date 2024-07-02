@@ -85,7 +85,7 @@ class CourseCategoryManagerComponent extends Manager implements BreadcrumbLessCo
 
     public function count_categories($condition = null)
     {
-        return DataManager::count(CourseCategory::class, new DataClassCountParameters($condition));
+        return DataManager::count(CourseCategory::class, new DataClassCountParameters(condition: $condition));
     }
 
     // Runs through dataclass
@@ -125,7 +125,8 @@ class CourseCategoryManagerComponent extends Manager implements BreadcrumbLessCo
     public function retrieve_categories($condition, $offset, $count, $order_property)
     {
         return DataManager::retrieves(
-            CourseCategory::class, new RetrievesParameters($condition, $count, $offset, $order_property)
+            CourseCategory::class, new RetrievesParameters(
+                condition: $condition, count: $count, offset: $offset, orderBy: $order_property)
         );
     }
 }

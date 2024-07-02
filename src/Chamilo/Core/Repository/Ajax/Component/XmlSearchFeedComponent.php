@@ -44,7 +44,7 @@ class XmlSearchFeedComponent extends Manager
         $condition = new AndCondition($conditions);
 
         $objects = DataManager::retrieve_active_content_objects(
-            ContentObject::class, new RetrievesParameters($condition)
+            ContentObject::class, new RetrievesParameters(condition: $condition)
         );
 
         foreach ($objects as $lo)

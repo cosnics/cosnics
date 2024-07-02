@@ -175,7 +175,7 @@ class BrowserComponent extends Manager
     protected function renderTable(): string
     {
         $totalNumberOfItems =
-            DataManager::count(Vocabulary::class, new DataClassCountParameters($this->getVocabularyCondition()));
+            DataManager::count(Vocabulary::class, new DataClassCountParameters(condition: $this->getVocabularyCondition()));
         $vocabularyTableRenderer = $this->getVocabularyTableRenderer();
 
         $tableParameterValues = $this->getRequestTableParameterValuesCompiler()->determineParameterValues(
@@ -185,8 +185,8 @@ class BrowserComponent extends Manager
 
         $vocabularies = DataManager::retrieves(
             Vocabulary::class, new RetrievesParameters(
-                $this->getVocabularyCondition(), $tableParameterValues->getNumberOfItemsPerPage(),
-                $tableParameterValues->getOffset(), $vocabularyTableRenderer->determineOrderBy($tableParameterValues)
+                condition: $this->getVocabularyCondition(), count: $tableParameterValues->getNumberOfItemsPerPage(),
+                offset: $tableParameterValues->getOffset(), orderBy: $vocabularyTableRenderer->determineOrderBy($tableParameterValues)
             )
         );
 

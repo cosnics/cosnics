@@ -99,7 +99,7 @@ class AssessmentAttemptTableRenderer extends RecordListTableRenderer implements 
 
         $publication = $this->application->get_publication();
         $parameters = new RetrieveParameters(
-            new EqualityCondition(
+            condition: new EqualityCondition(
                 new PropertyConditionVariable(Publication::class, Publication::PROPERTY_PUBLICATION_ID),
                 new StaticConditionVariable($publication->get_id())
             )
@@ -205,7 +205,7 @@ class AssessmentAttemptTableRenderer extends RecordListTableRenderer implements 
         $assessment = $pub->get_content_object();
 
         $parameters = new RetrieveParameters(
-            new EqualityCondition(
+            condition: new EqualityCondition(
                 new PropertyConditionVariable(Publication::class, Publication::PROPERTY_PUBLICATION_ID),
                 new StaticConditionVariable($pub->getId())
             )

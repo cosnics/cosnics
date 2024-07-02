@@ -236,7 +236,7 @@ class AssessmentUsersBlock extends AssessmentBlock
     {
         return WeblcmsTrackingDataManager::retrieves(
             AssessmentAttempt::class,
-            new RetrievesParameters($this->get_assessment_attempts_condition())
+            new RetrievesParameters(condition: $this->get_assessment_attempts_condition())
         );
     }
 

@@ -75,7 +75,7 @@ class ComplexWikiPage extends ComplexContentObjectItem implements DataClassExten
                 )
             );
 
-            $parameters = new RetrievesParameters(new AndCondition($conditions));
+            $parameters = new RetrievesParameters(condition: new AndCondition($conditions));
 
             $children = DataManager::retrieve_complex_content_object_items(
                 ComplexContentObjectItem::class, $parameters

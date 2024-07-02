@@ -124,7 +124,7 @@ class FileContentObjectImportController extends ContentObjectImportController
                 new StaticConditionVariable($hash)
             );
             $condition = new AndCondition($conditions);
-            $parameters = new RetrievesParameters($condition);
+            $parameters = new RetrievesParameters(condition: $condition);
 
             $content_objects = DataManager::retrieve_active_content_objects(File::class, $parameters);
 

@@ -23,12 +23,12 @@ class AttachmentImagesFeedComponent extends AttachmentContentObjectsFeedComponen
 {
 
     /**
-     * @return integer
+     * @return int
      */
     protected function countContentObjects()
     {
         return DataManager::count_active_content_objects(
-            File::class, new DataClassCountParameters($this->getContentObjectConditions())
+            File::class, new DataClassCountParameters(condition: $this->getContentObjectConditions())
         );
     }
 
@@ -62,11 +62,12 @@ class AttachmentImagesFeedComponent extends AttachmentContentObjectsFeedComponen
     protected function retrieveContentObjects()
     {
         $parameters = new RetrievesParameters(
-            $this->getContentObjectConditions(), 100, $this->getOffset(), new OrderBy(array(
-                    new OrderProperty(
-                        new PropertyConditionVariable(ContentObject::class, ContentObject::PROPERTY_TITLE)
-                    )
-                ))
+            condition: $this->getContentObjectConditions(), count: 100, offset: $this->getOffset(),
+            orderBy: new OrderBy([
+                new OrderProperty(
+                    new PropertyConditionVariable(ContentObject::class, ContentObject::PROPERTY_TITLE)
+                )
+            ])
         );
 
         return DataManager::retrieve_active_content_objects(File::class, $parameters);

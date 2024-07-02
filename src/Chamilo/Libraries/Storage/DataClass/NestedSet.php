@@ -192,7 +192,8 @@ abstract class NestedSet extends DataClass
     public function count_ancestors(bool $include_self = true, ?Condition $condition = null): int
     {
         return DataManager::count(
-            get_class($this), new DataClassCountParameters($this->build_ancestry_condition($include_self, $condition))
+            get_class($this),
+            new DataClassCountParameters(condition: $this->build_ancestry_condition($include_self, $condition))
         );
     }
 
@@ -202,7 +203,8 @@ abstract class NestedSet extends DataClass
     public function count_children(?Condition $condition = null): int
     {
         return DataManager::count(
-            get_class($this), new DataClassCountParameters($this->build_offspring_condition(false, false, $condition))
+            get_class($this),
+            new DataClassCountParameters(condition: $this->build_offspring_condition(false, false, $condition))
         );
     }
 
@@ -212,7 +214,8 @@ abstract class NestedSet extends DataClass
     public function count_descendants(?Condition $condition = null): int
     {
         return DataManager::count(
-            get_class($this), new DataClassCountParameters($this->build_offspring_condition(true, false, $condition))
+            get_class($this),
+            new DataClassCountParameters(condition: $this->build_offspring_condition(true, false, $condition))
         );
     }
 
@@ -222,7 +225,8 @@ abstract class NestedSet extends DataClass
     public function count_siblings(bool $include_self = true, ?Condition $condition = null): int
     {
         return DataManager::count(
-            get_class($this), new DataClassCountParameters($this->build_sibling_condition($include_self, $condition))
+            get_class($this),
+            new DataClassCountParameters(condition: $this->build_sibling_condition($include_self, $condition))
         );
     }
 
@@ -382,7 +386,7 @@ abstract class NestedSet extends DataClass
         );
 
         return DataManager::retrieve(
-            get_class($this), new RetrieveParameters(new AndCondition($conditions))
+            get_class($this), new RetrieveParameters(condition: new AndCondition($conditions))
         );
     }
 
@@ -450,7 +454,7 @@ abstract class NestedSet extends DataClass
     {
         return DataManager::retrieves(
             get_class($this),
-            new RetrievesParameters($this->build_offspring_condition(false, false, $condition))
+            new RetrievesParameters(condition: $this->build_offspring_condition(false, false, $condition))
         );
     }
 
@@ -464,7 +468,7 @@ abstract class NestedSet extends DataClass
     {
         return DataManager::retrieves(
             get_class($this),
-            new RetrievesParameters($this->build_offspring_condition(true, false, $condition))
+            new RetrievesParameters(condition: $this->build_offspring_condition(true, false, $condition))
         );
     }
 

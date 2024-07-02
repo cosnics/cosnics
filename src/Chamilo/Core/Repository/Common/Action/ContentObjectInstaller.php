@@ -98,7 +98,7 @@ class ContentObjectInstaller extends Installer
                 new PropertyConditionVariable(User::class, User::PROPERTY_PLATFORMADMIN), new StaticConditionVariable(1)
             );
             $user = DataManager::retrieves(
-                User::class, new RetrievesParameters($condition)
+                User::class, new RetrievesParameters(condition: $condition)
             )->current();
 
             $this->getSession()->set(Manager::SESSION_USER_ID, $user->get_id());

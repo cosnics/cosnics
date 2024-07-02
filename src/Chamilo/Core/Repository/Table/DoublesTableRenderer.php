@@ -54,7 +54,7 @@ class DoublesTableRenderer extends DoublesDetailsTableRenderer implements TableR
                 $condition = new AndCondition($conditions);
 
                 return (string) DataManager::count_active_content_objects(
-                    ContentObject::class, new DataClassCountParameters($condition)
+                    ContentObject::class, new DataClassCountParameters(condition: $condition)
                 );
         }
 

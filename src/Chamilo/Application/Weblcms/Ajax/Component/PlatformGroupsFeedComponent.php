@@ -148,7 +148,7 @@ class PlatformGroupsFeedComponent extends GroupsFeedComponent
 
             $subscribed_group_ids = DataManager::distinct(
                 CourseEntityRelation::class, new DataClassDistinctParameters(
-                    new AndCondition($groupConditions), new RetrieveProperties(
+                    condition: new AndCondition($groupConditions), retrieveProperties: new RetrieveProperties(
                         [
                             new PropertyConditionVariable(
                                 CourseEntityRelation::class, CourseEntityRelation::PROPERTY_ENTITY_ID

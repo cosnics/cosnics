@@ -29,7 +29,7 @@ class RegistrationRepository
 
     public function clearRegistrationCache(): bool
     {
-        return $this->getDataClassRepository()->getDataClassRepositoryCache()->truncate(Registration::class);
+        return $this->getDataClassRepository()->getDataClassRepositoryCache()->truncateClass(Registration::class);
     }
 
     public function createRegistration(Registration $registration): bool
@@ -50,7 +50,7 @@ class RegistrationRepository
         );
 
         return $this->getDataClassRepository()->retrieve(
-            Registration::class, new RetrieveParameters($condition)
+            Registration::class, new RetrieveParameters(condition: $condition)
         );
     }
 

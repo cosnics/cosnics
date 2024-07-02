@@ -96,7 +96,9 @@ class CourseUserCategoryRepository extends CommonDataClassRepository
             OrderBy::generate(CourseTypeUserCategoryRelCourse::class, CourseTypeUserCategoryRelCourse::PROPERTY_SORT);
 
         return $this->dataClassRepository->retrieves(
-            Course::class, new RetrievesParameters($condition, null, null, $orderBy, $joins)
+            Course::class, new RetrievesParameters(
+                condition: $condition, orderBy: $orderBy, joins: $joins
+            )
         );
     }
 }

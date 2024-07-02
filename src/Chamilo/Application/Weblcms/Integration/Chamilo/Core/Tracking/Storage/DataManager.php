@@ -46,7 +46,8 @@ class DataManager extends \Chamilo\Libraries\Storage\DataManager\DataManager
      */
     public static function count_assessment_attempts_with_user($condition = null)
     {
-        $parameters = new DataClassCountParameters($condition, self::get_assessment_attempts_user_joins());
+        $parameters =
+            new DataClassCountParameters(condition: $condition, joins: self::get_assessment_attempts_user_joins());
 
         return self::count(AssessmentAttempt::class, $parameters);
     }
@@ -351,7 +352,7 @@ class DataManager extends \Chamilo\Libraries\Storage\DataManager\DataManager
             $user_id, $course_id, $tool_id, $category_id, $publication_id, $useNullValues
         );
 
-        return self::retrieve(CourseVisit::class, new RetrieveParameters($condition));
+        return self::retrieve(CourseVisit::class, new RetrieveParameters(condition: $condition));
     }
 
     /**
@@ -435,8 +436,7 @@ class DataManager extends \Chamilo\Libraries\Storage\DataManager\DataManager
         $group_by->add($course_tool_name_variable);
 
         $parameters = new RetrievesParameters(
-            condition: null, count: null, offset: null, joins: $joins, groupBy: $group_by,
-            retrieveProperties: $properties
+            joins: $joins, groupBy: $group_by, retrieveProperties: $properties
         );
 
         return self::records(CourseVisit::class, $parameters);

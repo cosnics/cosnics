@@ -95,7 +95,7 @@ class CategoryManagerComponent extends Manager implements ImpactViewSupport, Cat
 
         $condition = new AndCondition($conditions);
 
-        $parameters = new DataClassCountParameters($condition);
+        $parameters = new DataClassCountParameters(condition: $condition);
 
         return DataManager::count(RepositoryCategory::class, $parameters);
     }
@@ -120,7 +120,7 @@ class CategoryManagerComponent extends Manager implements ImpactViewSupport, Cat
         );
         $condition = new AndCondition($conditions);
 
-        $parameters = new DataClassCountParameters($condition);
+        $parameters = new DataClassCountParameters(condition: $condition);
 
         return DataManager::count_active_content_objects(ContentObject::class, $parameters);
     }
@@ -244,7 +244,7 @@ class CategoryManagerComponent extends Manager implements ImpactViewSupport, Cat
             ]
         );
 
-        $parameters = new DataClassCountParameters($condition);
+        $parameters = new DataClassCountParameters(condition: $condition);
 
         return DataManager::count_active_content_objects(ContentObject::class, $parameters) > 0;
     }
@@ -278,7 +278,7 @@ class CategoryManagerComponent extends Manager implements ImpactViewSupport, Cat
         );
 
         $totalNumberOfItems = DataManager::count_active_content_objects(
-            ContentObject::class, new DataClassCountParameters($condition)
+            ContentObject::class, new DataClassCountParameters(condition: $condition)
         );
 
         $impactViewTableRenderer = $this->getImpactViewTableRenderer();
@@ -290,8 +290,8 @@ class CategoryManagerComponent extends Manager implements ImpactViewSupport, Cat
 
         $contentObjects = DataManager::retrieve_active_content_objects(
             ContentObject::class, new RetrievesParameters(
-                $condition, $tableParameterValues->getNumberOfItemsPerPage(), $tableParameterValues->getOffset(),
-                $impactViewTableRenderer->determineOrderBy($tableParameterValues)
+                condition: $condition, count: $tableParameterValues->getNumberOfItemsPerPage(),
+                offset: $tableParameterValues->getOffset(), orderBy: $impactViewTableRenderer->determineOrderBy($tableParameterValues)
             )
         );
 

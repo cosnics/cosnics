@@ -35,7 +35,7 @@ class ContentObjectPublicationRepository
     {
         return $this->getDataClassRepository()->count(
             ContentObjectPublication::class,
-            new DataClassCountParameters($this->getConditionByContentObjectId($contentObjectId))
+            new DataClassCountParameters(condition: $this->getConditionByContentObjectId($contentObjectId))
         );
     }
 
@@ -43,14 +43,14 @@ class ContentObjectPublicationRepository
     {
         return $this->getDataClassRepository()->count(
             ContentObjectPublication::class,
-            new DataClassCountParameters($this->getConditionByContentObjectIds($contentObjectIds))
+            new DataClassCountParameters(condition: $this->getConditionByContentObjectIds($contentObjectIds))
         );
     }
 
     public function countContentObjectPublicationsByContentObjectOwnerId(string $ownerId): int
     {
         return $this->getPublicationRepository()->countPublicationsWithContentObjects(
-            new DataClassCountParameters($this->getConditionByContentObjectOwnerId($ownerId)),
+            new DataClassCountParameters(condition: $this->getConditionByContentObjectOwnerId($ownerId)),
             ContentObjectPublication::class
         );
     }
@@ -120,7 +120,7 @@ class ContentObjectPublicationRepository
     public function findFirstContentObjectPublicationByElementId(string $elementId): ?ContentObjectPublication
     {
         return $this->getDataClassRepository()->retrieve(
-            ContentObjectPublication::class, new RetrieveParameters($this->getConditionByElementId($elementId))
+            ContentObjectPublication::class, new RetrieveParameters(condition: $this->getConditionByElementId($elementId))
         );
     }
 

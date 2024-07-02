@@ -265,7 +265,7 @@ class ZipAndDownloadComponent extends Manager
         $condition = new AndCondition($conditions);
 
         $categories = WeblcmsDataManager::retrieves(
-            ContentObjectPublicationCategory::class, new RetrievesParameters($condition)
+            ContentObjectPublicationCategory::class, new RetrievesParameters(condition: $condition)
         );
 
         foreach ($categories as $category)

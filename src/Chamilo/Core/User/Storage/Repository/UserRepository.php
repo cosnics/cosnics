@@ -51,13 +51,13 @@ class UserRepository implements UserRepositoryInterface
 
     public function countUsers(?Condition $condition = null): int
     {
-        return $this->getDataClassRepository()->count(User::class, new DataClassCountParameters($condition));
+        return $this->getDataClassRepository()->count(User::class, new DataClassCountParameters(condition: $condition));
     }
 
     public function countUsersForSearchQuery(?string $searchQuery = null): int
     {
         return $this->getDataClassRepository()->count(
-            User::class, new DataClassCountParameters($this->getUserConditionForSearchQuery($searchQuery))
+            User::class, new DataClassCountParameters(condition: $this->getUserConditionForSearchQuery($searchQuery))
         );
     }
 
@@ -70,7 +70,7 @@ class UserRepository implements UserRepositoryInterface
     {
         return $this->getDataClassRepository()->count(
             User::class, new DataClassCountParameters(
-                $this->getUserConditionForSearchQueryAndUserIdentifiers($searchQuery, $userIdentifiers)
+                condition: $this->getUserConditionForSearchQueryAndUserIdentifiers($searchQuery, $userIdentifiers)
             )
         );
     }
@@ -144,7 +144,9 @@ class UserRepository implements UserRepositoryInterface
         );
 
         return $this->getDataClassRepository()->retrieves(
-            User::class, new RetrievesParameters(new AndCondition($conditions), $count, $offset, $orderBy)
+            User::class, new RetrievesParameters(
+                condition: new AndCondition($conditions), count: $count, offset: $offset, orderBy: $orderBy
+            )
         );
     }
 
@@ -166,7 +168,7 @@ class UserRepository implements UserRepositoryInterface
         );
 
         return $this->getDataClassRepository()->retrieves(
-            User::class, new RetrievesParameters(new AndCondition($conditions))
+            User::class, new RetrievesParameters(condition: new AndCondition($conditions))
         );
     }
 
@@ -202,7 +204,7 @@ class UserRepository implements UserRepositoryInterface
         );
 
         return $this->getDataClassRepository()->retrieves(
-            User::class, new RetrievesParameters(new AndCondition($conditions))
+            User::class, new RetrievesParameters(condition: new AndCondition($conditions))
         );
     }
 
@@ -270,7 +272,7 @@ class UserRepository implements UserRepositoryInterface
             new PropertyConditionVariable(User::class, User::PROPERTY_EMAIL), new StaticConditionVariable($email)
         );
 
-        return $this->getDataClassRepository()->retrieve(User::class, new RetrieveParameters($condition));
+        return $this->getDataClassRepository()->retrieve(User::class, new RetrieveParameters(condition: $condition));
     }
 
     public function findUserByIdentifier(string $identifier): ?User
@@ -285,7 +287,7 @@ class UserRepository implements UserRepositoryInterface
             new StaticConditionVariable($officialCode)
         );
 
-        return $this->getDataClassRepository()->retrieve(User::class, new RetrieveParameters($condition));
+        return $this->getDataClassRepository()->retrieve(User::class, new RetrieveParameters(condition: $condition));
     }
 
     public function findUserBySecurityToken(string $securityToken): ?User
@@ -295,7 +297,7 @@ class UserRepository implements UserRepositoryInterface
             new StaticConditionVariable($securityToken)
         );
 
-        return $this->getDataClassRepository()->retrieve(User::class, new RetrieveParameters($condition));
+        return $this->getDataClassRepository()->retrieve(User::class, new RetrieveParameters(condition: $condition));
     }
 
     public function findUserByUsername(string $username): ?User
@@ -304,7 +306,7 @@ class UserRepository implements UserRepositoryInterface
             new PropertyConditionVariable(User::class, User::PROPERTY_USERNAME), new StaticConditionVariable($username)
         );
 
-        return $this->getDataClassRepository()->retrieve(User::class, new RetrieveParameters($condition));
+        return $this->getDataClassRepository()->retrieve(User::class, new RetrieveParameters(condition: $condition));
     }
 
     public function findUserByUsernameOrEmail(string $usernameOrEmail): ?User
@@ -321,7 +323,7 @@ class UserRepository implements UserRepositoryInterface
         );
 
         return $this->getDataClassRepository()->retrieve(
-            User::class, new RetrieveParameters(new OrCondition($conditions))
+            User::class, new RetrieveParameters(condition: new OrCondition($conditions))
         );
     }
 
@@ -334,7 +336,7 @@ class UserRepository implements UserRepositoryInterface
         $retrieveProperties->add(new PropertyConditionVariable(User::class, DataClass::PROPERTY_ID));
 
         return $this->getDataClassRepository()->distinct(
-            User::class, new DataClassDistinctParameters(null, $retrieveProperties)
+            User::class, new DataClassDistinctParameters(retrieveProperties: $retrieveProperties)
         );
     }
 
@@ -350,13 +352,13 @@ class UserRepository implements UserRepositoryInterface
 
         return $this->getDataClassRepository()->distinct(
             User::class, new DataClassDistinctParameters(
-                $condition, new RetrieveProperties(
-                    [
-                        new PropertyConditionVariable(
-                            User::class, DataClass::PROPERTY_ID
-                        )
-                    ]
-                )
+                condition: $condition, retrieveProperties: new RetrieveProperties(
+                [
+                    new PropertyConditionVariable(
+                        User::class, DataClass::PROPERTY_ID
+                    )
+                ]
+            )
             )
         );
     }
@@ -395,7 +397,7 @@ class UserRepository implements UserRepositoryInterface
         $condition = new AndCondition($conditions);
 
         return $this->getDataClassRepository()->retrieve(
-            UserSetting::class, new RetrieveParameters($condition)
+            UserSetting::class, new RetrieveParameters(condition: $condition)
         );
     }
 
@@ -411,7 +413,7 @@ class UserRepository implements UserRepositoryInterface
         ?Condition $condition = null, ?int $count = null, ?int $offset = null, OrderBy $orderBy = new OrderBy()
     ): ArrayCollection
     {
-        $parameters = new RetrievesParameters($condition, $count, $offset, $orderBy);
+        $parameters = new RetrievesParameters(condition: $condition, count: $count, offset: $offset, orderBy: $orderBy);
 
         return $this->getDataClassRepository()->retrieves(User::class, $parameters);
     }
@@ -465,7 +467,8 @@ class UserRepository implements UserRepositoryInterface
         ];
 
         $parameters = new RetrievesParameters(
-            $this->getUserConditionForSearchQuery($searchQuery), $count, $offset, new OrderBy($orderProperties)
+            condition: $this->getUserConditionForSearchQuery($searchQuery), count: $count, offset: $offset,
+            orderBy: new OrderBy($orderProperties)
         );
 
         return $this->getDataClassRepository()->retrieves(User::class, $parameters);
@@ -489,8 +492,8 @@ class UserRepository implements UserRepositoryInterface
         ];
 
         $parameters = new RetrievesParameters(
-            $this->getUserConditionForSearchQueryAndUserIdentifiers($searchQuery, $userIdentifiers), $count, $offset,
-            new OrderBy($orderProperties)
+            condition: $this->getUserConditionForSearchQueryAndUserIdentifiers($searchQuery, $userIdentifiers),
+            count: $count, offset: $offset, orderBy: new OrderBy($orderProperties)
         );
 
         return $this->getDataClassRepository()->retrieves(User::class, $parameters);

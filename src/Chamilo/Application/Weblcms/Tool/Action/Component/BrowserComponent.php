@@ -129,7 +129,7 @@ class BrowserComponent extends Manager implements BreadcrumbLessComponentInterfa
         $condition = new AndCondition($conditions);
 
         return DataManager::count(
-            ContentObjectPublicationCategory::class, new DataClassCountParameters($condition)
+            ContentObjectPublicationCategory::class, new DataClassCountParameters(condition: $condition)
         );
     }
 
@@ -625,7 +625,7 @@ class BrowserComponent extends Manager implements BreadcrumbLessComponentInterfa
         );
 
         return \Chamilo\Libraries\Storage\DataManager\DataManager::count(
-                ContentObjectPublicationCategory::class, new DataClassCountParameters(new AndCondition($conditions))
+                ContentObjectPublicationCategory::class, new DataClassCountParameters(condition: new AndCondition($conditions))
             ) > 0;
     }
 
@@ -816,7 +816,7 @@ class BrowserComponent extends Manager implements BreadcrumbLessComponentInterfa
         $condition = new AndCondition($conditions);
 
         $objects = DataManager::retrieves(
-            ContentObjectPublicationCategory::class, new RetrievesParameters($condition)
+            ContentObjectPublicationCategory::class, new RetrievesParameters(condition: $condition)
         );
 
         return $objects->current();

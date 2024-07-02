@@ -28,7 +28,7 @@ class WeblcmsRepository implements WeblcmsRepositoryInterface
      */
     public function clearCourseEntityRelationCache()
     {
-        $this->getDataClassRepositoryCache()->truncate(CourseEntityRelation::class);
+        $this->getDataClassRepositoryCache()->truncateClass(CourseEntityRelation::class);
     }
 
     /**
@@ -98,7 +98,7 @@ class WeblcmsRepository implements WeblcmsRepositoryInterface
         $condition = new AndCondition($conditions);
 
         return DataManager::retrieve(
-            CourseEntityRelation::class, new RetrieveParameters($condition)
+            CourseEntityRelation::class, new RetrieveParameters(condition: $condition)
         );
     }
 

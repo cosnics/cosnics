@@ -54,7 +54,7 @@ class ConfigurationRepository
         );
 
         return $this->getDataClassRepository()->retrieve(
-            Setting::class, new RetrieveParameters(new AndCondition($conditions))
+            Setting::class, new RetrieveParameters(condition: new AndCondition($conditions))
         );
     }
 
@@ -65,8 +65,9 @@ class ConfigurationRepository
     {
         return $this->getDataClassRepository()->distinct(
             Setting::class, new DataClassDistinctParameters(
-                $condition,
-                new RetrieveProperties([new PropertyConditionVariable(Setting::class, Setting::PROPERTY_CONTEXT)])
+                condition: $condition, retrieveProperties: new RetrieveProperties(
+                [new PropertyConditionVariable(Setting::class, Setting::PROPERTY_CONTEXT)]
+            )
             )
         );
     }

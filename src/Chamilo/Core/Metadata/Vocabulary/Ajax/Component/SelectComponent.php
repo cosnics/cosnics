@@ -257,7 +257,7 @@ class SelectComponent extends Manager
 
         $condition = new AndCondition($conditions);
 
-        return DataManager::retrieves(Vocabulary::class, new RetrievesParameters($condition));
+        return DataManager::retrieves(Vocabulary::class, new RetrievesParameters(condition: $condition));
     }
 
     /**
@@ -269,7 +269,7 @@ class SelectComponent extends Manager
     protected function renderTable(): string
     {
         $totalNumberOfItems = \Chamilo\Core\Metadata\Vocabulary\Storage\DataManager::count(
-            Vocabulary::class, new DataClassCountParameters($this->getSelectCondition())
+            Vocabulary::class, new DataClassCountParameters(condition: $this->getSelectCondition())
         );
         $selectTableRenderer = $this->getSelectTableRenderer();
 
@@ -280,8 +280,8 @@ class SelectComponent extends Manager
 
         $vocabularies = DataManager::retrieves(
             Vocabulary::class, new RetrievesParameters(
-                $this->getSelectCondition(), $tableParameterValues->getNumberOfItemsPerPage(),
-                $tableParameterValues->getOffset(), $selectTableRenderer->determineOrderBy($tableParameterValues)
+                condition: $this->getSelectCondition(), count: $tableParameterValues->getNumberOfItemsPerPage(),
+                offset: $tableParameterValues->getOffset(), orderBy: $selectTableRenderer->determineOrderBy($tableParameterValues)
             )
         );
 

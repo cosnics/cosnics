@@ -54,7 +54,7 @@ class DataManager extends \Chamilo\Libraries\Storage\DataManager\DataManager
 
         $condition = new AndCondition($conditions);
 
-        return self::retrieves(Registration::class, new RetrievesParameters($condition));
+        return self::retrieves(Registration::class, new RetrievesParameters(condition: $condition));
     }
 
     public static function retrieveRegistrationByContext($context)
@@ -64,14 +64,15 @@ class DataManager extends \Chamilo\Libraries\Storage\DataManager\DataManager
             new StaticConditionVariable($context)
         );
 
-        return self::retrieve(Registration::class, new RetrieveParameters($condition));
+        return self::retrieve(Registration::class, new RetrieveParameters(condition: $condition));
     }
 
     public static function retrieve_setting_contexts(Condition $condition = null)
     {
         $parameters = new DataClassDistinctParameters(
-            $condition,
-            new RetrieveProperties([new PropertyConditionVariable(Setting::class, Setting::PROPERTY_CONTEXT)])
+            condition: $condition, retrieveProperties: new RetrieveProperties(
+            [new PropertyConditionVariable(Setting::class, Setting::PROPERTY_CONTEXT)]
+        )
         );
 
         return self::distinct(Setting::class, $parameters);
@@ -97,6 +98,6 @@ class DataManager extends \Chamilo\Libraries\Storage\DataManager\DataManager
         );
         $condition = new AndCondition($conditions);
 
-        return self::retrieve(Setting::class, new RetrieveParameters($condition));
+        return self::retrieve(Setting::class, new RetrieveParameters(condition: $condition));
     }
 }

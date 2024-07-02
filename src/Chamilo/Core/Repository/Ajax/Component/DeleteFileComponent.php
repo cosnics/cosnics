@@ -48,7 +48,7 @@ class DeleteFileComponent extends Manager
             
             $file = DataManager::retrieve(
                 ContentObject::class,
-                new RetrieveParameters(new AndCondition($conditions)));
+                new RetrieveParameters(condition: new AndCondition($conditions)));
             
             if ($file instanceof File)
             {

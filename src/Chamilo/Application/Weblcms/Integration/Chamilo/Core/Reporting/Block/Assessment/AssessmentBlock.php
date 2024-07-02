@@ -87,7 +87,7 @@ abstract class AssessmentBlock extends ToolBlock
         $condition = new AndCondition($conditions);
 
         return WeblcmsTrackingDataManager::retrieves(
-            AssessmentAttempt::class, new RetrievesParameters($condition)
+            AssessmentAttempt::class, new RetrievesParameters(condition: $condition)
         );
     }
 
@@ -236,7 +236,7 @@ abstract class AssessmentBlock extends ToolBlock
         $condition = new AndCondition($conditions);
 
         return WeblcmsTrackingDataManager::retrieves(
-            QuestionAttempt::class, new RetrievesParameters($condition)
+            QuestionAttempt::class, new RetrievesParameters(condition: $condition)
         );
     }
 

@@ -73,7 +73,7 @@ class EntityComponent extends Manager
                 new PropertyConditionVariable(Admin::class, Admin::PROPERTY_ENTITY_TYPE),
                 new StaticConditionVariable($entity_type::ENTITY_TYPE)
             );
-            $count = DataManager::count(Admin::class, new DataClassCountParameters($condition));
+            $count = DataManager::count(Admin::class, new DataClassCountParameters(condition: $condition));
 
             if ($count > 0)
             {

@@ -52,7 +52,7 @@ class ElementService
 
         $condition = new AndCondition($conditions);
 
-        return DataManager::retrieve(Element::class, new RetrieveParameters($condition));
+        return DataManager::retrieve(Element::class, new RetrieveParameters(condition: $condition));
     }
 
     /**
@@ -91,7 +91,7 @@ class ElementService
     {
         return DataManager::retrieve(
             ElementInstance::class, new RetrieveParameters(
-                $this->getElementInstanceConditionForSchemaInstanceAndElement($schemaInstance, $element)
+                condition: $this->getElementInstanceConditionForSchemaInstanceAndElement($schemaInstance, $element)
             )
         );
     }
@@ -153,7 +153,8 @@ class ElementService
 
         return DataManager::retrieve(
             Vocabulary::class, new RetrieveParameters(
-                $this->getElementInstanceConditionForSchemaInstanceAndElement($schemaInstance, $element), null, $join
+                condition: $this->getElementInstanceConditionForSchemaInstanceAndElement($schemaInstance, $element),
+                joins: $join
             )
         );
     }
@@ -170,7 +171,7 @@ class ElementService
     {
         return DataManager::retrieves(
             ElementInstance::class, new RetrievesParameters(
-                $this->getElementInstanceConditionForSchemaInstanceAndElement($schemaInstance, $element)
+                condition: $this->getElementInstanceConditionForSchemaInstanceAndElement($schemaInstance, $element)
             )
         );
     }

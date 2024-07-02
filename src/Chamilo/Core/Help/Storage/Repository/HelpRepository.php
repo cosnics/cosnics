@@ -29,7 +29,7 @@ class HelpRepository
 
     public function countHelpItemsForCondition(?Condition $condition = null): int
     {
-        return $this->getDataClassRepository()->count(HelpItem::class, new DataClassCountParameters($condition));
+        return $this->getDataClassRepository()->count(HelpItem::class, new DataClassCountParameters(condition: $condition));
     }
 
     public function getDataClassRepository(): DataClassRepository
@@ -63,7 +63,7 @@ class HelpRepository
 
         $condition = new AndCondition($conditions);
 
-        return $this->getDataClassRepository()->retrieve(HelpItem::class, new RetrieveParameters($condition));
+        return $this->getDataClassRepository()->retrieve(HelpItem::class, new RetrieveParameters(condition: $condition));
     }
 
     /**
@@ -79,7 +79,8 @@ class HelpRepository
     ): ArrayCollection
     {
         return $this->getDataClassRepository()->retrieves(
-            HelpItem::class, new RetrievesParameters($condition, $count, $offset, $orderBy)
+            HelpItem::class, new RetrievesParameters(
+                condition: $condition, count: $count, offset: $offset, orderBy: $orderBy)
         );
     }
 

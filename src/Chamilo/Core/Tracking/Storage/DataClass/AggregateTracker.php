@@ -37,7 +37,7 @@ abstract class AggregateTracker extends Tracker
         $condition = new AndCondition($conditions);
 
         $tracker_items = DataManager::retrieves(
-            static::class, new RetrievesParameters($condition)
+            static::class, new RetrievesParameters(condition: $condition)
         );
 
         if ($tracker_items->count() != 0)

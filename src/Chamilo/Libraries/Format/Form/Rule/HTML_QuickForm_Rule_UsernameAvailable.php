@@ -47,7 +47,7 @@ class HTML_QuickForm_Rule_UsernameAvailable extends HTML_QuickForm_Rule
 
         $condition = new AndCondition($conditions);
         $count = DataManager::count(
-            User::class, new DataClassCountParameters($condition)
+            User::class, new DataClassCountParameters(condition: $condition)
         );
 
         return $count == 0;

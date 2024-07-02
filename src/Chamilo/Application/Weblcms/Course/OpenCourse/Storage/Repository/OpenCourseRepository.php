@@ -54,7 +54,7 @@ class OpenCourseRepository extends DataManagerRepository implements OpenCourseRe
     public function countClosedCourses(Condition $condition = null)
     {
         return DataManager::count(
-            Course::class, new DataClassCountParameters($this->getClosedCoursesCondition($condition))
+            Course::class, new DataClassCountParameters(condition: $this->getClosedCoursesCondition($condition))
         );
     }
 
@@ -67,7 +67,7 @@ class OpenCourseRepository extends DataManagerRepository implements OpenCourseRe
      */
     protected function countOpenCourses(Condition $condition = null)
     {
-        $countParameters = new DataClassCountParameters($condition, $this->getOpenCoursesJoins());
+        $countParameters = new DataClassCountParameters(condition: $condition, joins: $this->getOpenCoursesJoins());
 
         return DataManager::count(Course::class, $countParameters);
     }
@@ -113,8 +113,10 @@ class OpenCourseRepository extends DataManagerRepository implements OpenCourseRe
     public function findClosedCourses(Condition $condition = null, $offset = null, $count = null, $orderBy = null)
     {
         return DataManager::retrieves(
-            Course::class,
-            new RetrievesParameters($this->getClosedCoursesCondition($condition), $count, $offset, $orderBy)
+            Course::class, new RetrievesParameters(
+                condition: $this->getClosedCoursesCondition($condition), count: $count, offset: $offset,
+                orderBy: $orderBy
+            )
         );
     }
 
@@ -239,11 +241,11 @@ class OpenCourseRepository extends DataManagerRepository implements OpenCourseRe
         $condition = new AndCondition($conditions);
 
         $distinctParameters = new DataClassDistinctParameters(
-            $condition, new RetrieveProperties(
-                [
-                    new PropertyConditionVariable(CourseEntityRelation::class, CourseEntityRelation::PROPERTY_COURSE_ID)
-                ]
-            )
+            condition: $condition, retrieveProperties: new RetrieveProperties(
+            [
+                new PropertyConditionVariable(CourseEntityRelation::class, CourseEntityRelation::PROPERTY_COURSE_ID)
+            ]
+        )
         );
 
         return DataManager::distinct(
@@ -336,7 +338,9 @@ class OpenCourseRepository extends DataManagerRepository implements OpenCourseRe
         );
 
         return DataManager::retrieves(
-            Role::class, new RetrievesParameters($condition, null, null, null, $joins)
+            Role::class, new RetrievesParameters(
+                condition: $condition, joins: $joins
+            )
         );
     }
 

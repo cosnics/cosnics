@@ -21,15 +21,15 @@ class TreeBuilder
 
     /**
      *
-     * @var TreeNodeDataRepository
-     */
-    protected $treeNodeDataRepository;
-
-    /**
-     *
      * @var ContentObjectRepository
      */
     protected $contentObjectRepository;
+
+    /**
+     *
+     * @var TreeNodeDataRepository
+     */
+    protected $treeNodeDataRepository;
 
     /**
      *
@@ -43,42 +43,12 @@ class TreeBuilder
      * @param TreeNodeDataRepository $treeNodeDataRepository
      * @param ContentObjectRepository $contentObjectRepository
      */
-    public function __construct(TreeNodeDataRepository $treeNodeDataRepository,
-        ContentObjectRepository $contentObjectRepository)
+    public function __construct(
+        TreeNodeDataRepository $treeNodeDataRepository, ContentObjectRepository $contentObjectRepository
+    )
     {
         $this->treeNodeDataRepository = $treeNodeDataRepository;
         $this->contentObjectRepository = $contentObjectRepository;
-    }
-
-    /**
-     * Builds an in memory tree for an entire learning path based on a given root
-     *
-     * @param LearningPath $learningPath
-     *
-     * @return Tree
-     */
-    public function buildTree(LearningPath $learningPath)
-    {
-        $this->treeNodeDataRepository->clearTreeNodesDataCache();
-
-        $tree = new Tree();
-
-        $treeNodesData = $this->treeNodeDataRepository->findTreeNodesDataForLearningPath($learningPath);
-
-        $orderedTreeNodesData = [];
-
-        foreach ($treeNodesData as $treeNodeData)
-        {
-            $orderedTreeNodesData[$treeNodeData->getParentTreeNodeDataId()][$treeNodeData->getDisplayOrder()] = $treeNodeData;
-        }
-
-        $this->addChildrenForSection(0, $orderedTreeNodesData, $tree);
-
-        $this->addContentObjectsToTreeNodes();
-
-        unset($this->treeNodesPerContentObjectId);
-
-        return $tree;
     }
 
     /**
@@ -88,8 +58,9 @@ class TreeBuilder
      * @param Tree $tree
      * @param TreeNode $parentTreeNode
      */
-    protected function addChildrenForSection($parentTreeNodeDataId = 0, $orderedTreeNodesData = [], Tree $tree,
-        TreeNode $parentTreeNode = null)
+    protected function addChildrenForSection(
+        $parentTreeNodeDataId = 0, $orderedTreeNodesData = [], Tree $tree, TreeNode $parentTreeNode = null
+    )
     {
         $treeNodeDataForSection = $orderedTreeNodesData[$parentTreeNodeDataId];
         ksort($treeNodeDataForSection);
@@ -117,13 +88,14 @@ class TreeBuilder
         $contentObjectIds = array_keys($this->treeNodesPerContentObjectId);
 
         $contentObjects = $this->contentObjectRepository->findAll(
-            ContentObject::class,
-            new RetrievesParameters(
-                new InCondition(
-                    new PropertyConditionVariable(ContentObject::class, ContentObject::PROPERTY_ID),
-                    $contentObjectIds)));
+            ContentObject::class, new RetrievesParameters(
+                condition: new InCondition(
+                    new PropertyConditionVariable(ContentObject::class, ContentObject::PROPERTY_ID), $contentObjectIds
+                )
+            )
+        );
 
-        foreach($contentObjects as $contentObject)
+        foreach ($contentObjects as $contentObject)
         {
             /** @var ContentObject $contentObject */
             $nodes = $this->treeNodesPerContentObjectId[$contentObject->getId()];
@@ -132,5 +104,37 @@ class TreeBuilder
                 $node->setContentObject($contentObject);
             }
         }
+    }
+
+    /**
+     * Builds an in memory tree for an entire learning path based on a given root
+     *
+     * @param LearningPath $learningPath
+     *
+     * @return Tree
+     */
+    public function buildTree(LearningPath $learningPath)
+    {
+        $this->treeNodeDataRepository->clearTreeNodesDataCache();
+
+        $tree = new Tree();
+
+        $treeNodesData = $this->treeNodeDataRepository->findTreeNodesDataForLearningPath($learningPath);
+
+        $orderedTreeNodesData = [];
+
+        foreach ($treeNodesData as $treeNodeData)
+        {
+            $orderedTreeNodesData[$treeNodeData->getParentTreeNodeDataId()][$treeNodeData->getDisplayOrder()] =
+                $treeNodeData;
+        }
+
+        $this->addChildrenForSection(0, $orderedTreeNodesData, $tree);
+
+        $this->addContentObjectsToTreeNodes();
+
+        unset($this->treeNodesPerContentObjectId);
+
+        return $tree;
     }
 }

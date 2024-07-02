@@ -39,7 +39,7 @@ class ResultsDeleterComponent extends Manager
             );
 
             $item = DataManager::retrieve(
-                AssessmentAttempt::class, new RetrieveParameters($condition)
+                AssessmentAttempt::class, new RetrieveParameters(condition: $condition)
             );
 
             if ($item)
@@ -83,7 +83,7 @@ class ResultsDeleterComponent extends Manager
         );
 
         $items = DataManager::retrieves(
-            AssessmentAttempt::class, new RetrievesParameters($condition)
+            AssessmentAttempt::class, new RetrievesParameters(condition: $condition)
         );
 
         foreach ($items as $assessment_attempt)
@@ -103,7 +103,7 @@ class ResultsDeleterComponent extends Manager
             );
 
             $items = DataManager::retrieves(
-                QuestionAttempt::class, new RetrievesParameters($condition)
+                QuestionAttempt::class, new RetrievesParameters(condition: $condition)
             );
 
             foreach ($items as $question_attempt)

@@ -67,7 +67,7 @@ class ToolPublicationsBlock extends ToolBlock
         $condition = new AndCondition($conditions);
 
         $content_object_publications = \Chamilo\Application\Weblcms\Storage\DataManager::retrieves(
-            ContentObjectPublication::class, new RetrievesParameters($condition)
+            ContentObjectPublication::class, new RetrievesParameters(condition: $condition)
         );
 
         $glyph = new FontAwesomeGlyph('chart-pie', [], Translation::get('Details'));

@@ -94,13 +94,13 @@ class EndingAssignmentsBlockRenderer extends BlockRenderer
 
         $publications = DataManager::retrieves(
             ContentObjectPublication::class, new RetrievesParameters(
-                $condition, null, null, new OrderBy([
-                    new OrderProperty(
-                        new PropertyConditionVariable(
-                            ContentObjectPublication::class, ContentObjectPublication::PROPERTY_DISPLAY_ORDER_INDEX
-                        )
+                condition: $condition, orderBy: new OrderBy([
+                new OrderProperty(
+                    new PropertyConditionVariable(
+                        ContentObjectPublication::class, ContentObjectPublication::PROPERTY_DISPLAY_ORDER_INDEX
                     )
-                ])
+                )
+            ])
             )
         );
 

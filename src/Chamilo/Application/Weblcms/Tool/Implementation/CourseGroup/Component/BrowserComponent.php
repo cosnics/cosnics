@@ -84,7 +84,7 @@ class BrowserComponent extends TabComponent
     protected function renderTabContent(): string
     {
         $totalNumberOfItems =
-            DataManager::count(CourseGroup::class, new DataClassCountParameters($this->getCourseGroupCondition()));
+            DataManager::count(CourseGroup::class, new DataClassCountParameters(condition: $this->getCourseGroupCondition()));
         $courseGroupTableRenderer = $this->getCourseGroupTableRenderer();
 
         $tableParameterValues = $this->getRequestTableParameterValuesCompiler()->determineParameterValues(
@@ -94,8 +94,8 @@ class BrowserComponent extends TabComponent
 
         $courseGroups = DataManager::retrieves(
             CourseGroup::class, new RetrievesParameters(
-                $this->getCourseGroupCondition(), $tableParameterValues->getNumberOfItemsPerPage(),
-                $tableParameterValues->getOffset(), $courseGroupTableRenderer->determineOrderBy($tableParameterValues)
+                condition: $this->getCourseGroupCondition(), count: $tableParameterValues->getNumberOfItemsPerPage(),
+                offset: $tableParameterValues->getOffset(), orderBy: $courseGroupTableRenderer->determineOrderBy($tableParameterValues)
             )
         );
 

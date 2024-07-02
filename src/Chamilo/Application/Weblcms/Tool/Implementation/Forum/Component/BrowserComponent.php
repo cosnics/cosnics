@@ -86,7 +86,7 @@ class BrowserComponent extends Manager implements BreadcrumbLessComponentInterfa
         $condition = new AndCondition($conditions);
 
         $this->introduction_text = WeblcmsDataManager::retrieve(
-            ContentObjectPublication::class, new RetrieveParameters($condition)
+            ContentObjectPublication::class, new RetrieveParameters(condition: $condition)
         );
 
         $this->size = 0;
@@ -789,7 +789,7 @@ class BrowserComponent extends Manager implements BreadcrumbLessComponentInterfa
 
         $categories = WeblcmsDataManager::retrieves(
             ContentObjectPublicationCategory::class,
-            new RetrievesParameters(new AndCondition($conditions), null, null, $order)
+            new RetrievesParameters(condition: new AndCondition($conditions), orderBy: $order)
         );
 
         $html = [];

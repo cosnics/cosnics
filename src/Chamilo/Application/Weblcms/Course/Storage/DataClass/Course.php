@@ -502,9 +502,9 @@ class Course extends DataClass
 
         return DataManager::retrieves(
             CourseGroup::class, new RetrievesParameters(
-                $condition, null, null, new OrderBy([
-                    new OrderProperty(new PropertyConditionVariable(CourseGroup::class, CourseGroup::PROPERTY_NAME))
-                ])
+                condition: $condition, count: null, offset: null, orderBy: new OrderBy([
+                new OrderProperty(new PropertyConditionVariable(CourseGroup::class, CourseGroup::PROPERTY_NAME))
+            ])
             )
         );
     }
@@ -724,7 +724,7 @@ class Course extends DataClass
         );
 
         return DataManager::retrieves(
-            CourseEntityRelation::class, new RetrievesParameters(new AndCondition($relationConditions))
+            CourseEntityRelation::class, new RetrievesParameters(condition: new AndCondition($relationConditions))
         );
     }
 
@@ -747,7 +747,7 @@ class Course extends DataClass
         );
 
         return DataManager::retrieves(
-            CourseEntityRelation::class, new RetrievesParameters(new AndCondition($relationConditions))
+            CourseEntityRelation::class, new RetrievesParameters(condition: new AndCondition($relationConditions))
         );
     }
 
@@ -810,7 +810,8 @@ class Course extends DataClass
         );
 
         return DataManager::count(
-                CourseEntityRelation::class, new DataClassCountParameters(new AndCondition($relationConditions))
+                CourseEntityRelation::class,
+                new DataClassCountParameters(condition: new AndCondition($relationConditions))
             ) > 0;
     }
 
@@ -833,7 +834,8 @@ class Course extends DataClass
         );
 
         return DataManager::count(
-                CourseEntityRelation::class, new DataClassCountParameters(new AndCondition($relationConditions))
+                CourseEntityRelation::class,
+                new DataClassCountParameters(condition: new AndCondition($relationConditions))
             ) > 0;
     }
 
@@ -1000,7 +1002,7 @@ class Course extends DataClass
 
         $condition = new AndCondition($conditions);
 
-        return DataManager::retrieve(CourseRelCourseSetting::class, new RetrieveParameters($condition));
+        return DataManager::retrieve(CourseRelCourseSetting::class, new RetrieveParameters(condition: $condition));
     }
 
     /**

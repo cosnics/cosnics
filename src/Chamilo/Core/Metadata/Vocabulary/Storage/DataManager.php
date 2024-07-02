@@ -43,7 +43,7 @@ class DataManager extends \Chamilo\Libraries\Storage\DataManager\DataManager
 
         return self::count(
             User::class, new DataClassCountParameters(
-                $condition, $joins, new RetrieveProperties(
+                condition: $condition, joins: $joins, retrieveProperties: new RetrieveProperties(
                     [
                         new FunctionConditionVariable(
                             FunctionConditionVariable::DISTINCT,

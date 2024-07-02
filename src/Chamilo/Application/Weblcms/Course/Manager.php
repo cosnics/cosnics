@@ -199,7 +199,7 @@ abstract class Manager extends Application
         $condition = new InCondition(
             new PropertyConditionVariable(Course::class, Course::PROPERTY_ID), $course_ids
         );
-        $result_set = DataManager::retrieves(Course::class, new RetrievesParameters($condition));
+        $result_set = DataManager::retrieves(Course::class, new RetrievesParameters(condition: $condition));
         if ($result_set->count() == 0)
         {
             throw new ObjectNotExistException(Translation::get('Course'), $course_ids);

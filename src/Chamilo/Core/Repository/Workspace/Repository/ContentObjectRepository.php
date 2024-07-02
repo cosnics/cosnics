@@ -58,7 +58,7 @@ class ContentObjectRepository
     )
     {
         $parameters = new DataClassCountParameters(
-            $this->getWorkspaceConditions($workspace, $filterConditionRenderer), $this->getWorkspaceJoins()
+            condition: $this->getWorkspaceConditions($workspace, $filterConditionRenderer), joins: $this->getWorkspaceJoins()
         );
 
         return $this->countAll($contentObjectClassName, $parameters);
@@ -114,8 +114,8 @@ class ContentObjectRepository
     )
     {
         $parameters = new RetrievesParameters(
-            $this->getWorkspaceConditions($workspace, $filterConditionRenderer), $count, $offset, $orderBy,
-            $this->getWorkspaceJoins()
+            condition: $this->getWorkspaceConditions($workspace, $filterConditionRenderer), count: $count,
+            offset: $offset, orderBy: $orderBy, joins: $this->getWorkspaceJoins()
         );
 
         return $this->findAll($contentObjectClassName, $parameters);

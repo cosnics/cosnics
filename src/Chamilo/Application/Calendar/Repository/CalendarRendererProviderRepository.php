@@ -37,7 +37,7 @@ class CalendarRendererProviderRepository
         $condition = new AndCondition($conditions);
 
         return $this->getDataClassRepository()->retrieves(
-            Visibility::class, new RetrievesParameters($condition)
+            Visibility::class, new RetrievesParameters(condition: $condition)
         );
     }
 
@@ -55,7 +55,7 @@ class CalendarRendererProviderRepository
         $condition = new AndCondition($conditions);
 
         return $this->getDataClassRepository()->retrieve(
-            Visibility::class, new RetrieveParameters($condition)
+            Visibility::class, new RetrieveParameters(condition: $condition)
         );
     }
 

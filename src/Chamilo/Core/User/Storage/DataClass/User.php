@@ -96,11 +96,6 @@ class User extends DataClass
         return $this->getDefaultProperty(self::PROPERTY_AUTH_SOURCE);
     }
 
-    public static function getCacheablePropertyNames(array $cacheablePropertyNames = []): array
-    {
-        return parent::getCacheablePropertyNames([self::PROPERTY_USERNAME]);
-    }
-
     /**
      * @return string[]
      */

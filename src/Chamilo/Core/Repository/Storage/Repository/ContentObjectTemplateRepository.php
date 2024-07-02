@@ -42,6 +42,6 @@ class ContentObjectTemplateRepository
 
         $condition = new AndCondition($conditions);
 
-        return DataManager::retrieve(TemplateRegistration::class, new RetrieveParameters($condition));
+        return DataManager::retrieve(TemplateRegistration::class, new RetrieveParameters(condition: $condition));
     }
 }

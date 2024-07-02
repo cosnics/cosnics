@@ -47,16 +47,25 @@ class GroupRepository
         $this->searchQueryConditionGenerator = $searchQueryConditionGenerator;
     }
 
+    /**
+     * @throws \Chamilo\Libraries\Storage\Exception\Database\StorageMethodException
+     */
     public function countGroups(?Condition $condition = null): int
     {
-        return $this->getNestedSetDataClassRepository()->count(Group::class, new DataClassCountParameters($condition));
+        return $this->getNestedSetDataClassRepository()->count(Group::class, new DataClassCountParameters(condition: $condition));
     }
 
+    /**
+     * @throws \Chamilo\Libraries\Storage\Exception\Database\StorageMethodException
+     */
     public function countSubGroupsForGroup(Group $group, bool $recursiveSubgroups = false): int
     {
         return $this->getNestedSetDataClassRepository()->countDescendants($group, $recursiveSubgroups);
     }
 
+    /**
+     * @throws \Throwable
+     */
     public function createGroup(Group $group): bool
     {
         return $this->getNestedSetDataClassRepository()->create($group);
@@ -66,6 +75,7 @@ class GroupRepository
      * @param \Chamilo\Core\Group\Storage\DataClass\Group $group
      *
      * @return  \Doctrine\Common\Collections\ArrayCollection<\Chamilo\Core\Group\Storage\DataClass\Group>
+     * @throws \Throwable
      */
     public function deleteGroup(Group $group): ArrayCollection
     {
@@ -76,6 +86,7 @@ class GroupRepository
      * @param string $userIdentifier
      *
      * @return \Doctrine\Common\Collections\ArrayCollection<string[]>
+     * @throws \Chamilo\Libraries\Storage\Exception\Database\StorageMethodException
      */
     public function findDirectlySubscribedGroupNestingValuesForUserIdentifier(string $userIdentifier): ArrayCollection
     {
@@ -109,6 +120,7 @@ class GroupRepository
      * @param string $userIdentifier
      *
      * @return ArrayCollection<\Chamilo\Core\Group\Storage\DataClass\Group>
+     * @throws \Chamilo\Libraries\Storage\Exception\Database\StorageMethodException
      */
     public function findDirectlySubscribedGroupsForUserIdentifier(string $userIdentifier): ArrayCollection
     {
@@ -135,6 +147,10 @@ class GroupRepository
         return $this->getNestedSetDataClassRepository()->retrieves(Group::class, $parameters);
     }
 
+    /**
+     * @throws \Chamilo\Libraries\Storage\Exception\Database\StorageNoResultException
+     * @throws \Chamilo\Libraries\Storage\Exception\Database\StorageMethodException
+     */
     public function findGroupByCode(string $groupCode): ?Group
     {
         $condition = new EqualityCondition(
@@ -142,10 +158,14 @@ class GroupRepository
         );
 
         return $this->getNestedSetDataClassRepository()->retrieve(
-            Group::class, new RetrieveParameters($condition)
+            Group::class, new RetrieveParameters(condition: $condition)
         );
     }
 
+    /**
+     * @throws \Chamilo\Libraries\Storage\Exception\Database\StorageNoResultException
+     * @throws \Chamilo\Libraries\Storage\Exception\Database\StorageMethodException
+     */
     public function findGroupByCodeAndParentIdentifier(string $groupCode, string $parentIdentifier): ?Group
     {
         $conditions = [];
@@ -158,10 +178,14 @@ class GroupRepository
         );
 
         return $this->getNestedSetDataClassRepository()->retrieve(
-            Group::class, new RetrieveParameters(new AndCondition($conditions))
+            Group::class, new RetrieveParameters(condition: new AndCondition($conditions))
         );
     }
 
+    /**
+     * @throws \Chamilo\Libraries\Storage\Exception\Database\StorageNoResultException
+     * @throws \Chamilo\Libraries\Storage\Exception\Database\StorageMethodException
+     */
     public function findGroupByIdentifier(string $groupId): ?Group
     {
         return $this->getNestedSetDataClassRepository()->retrieveById(Group::class, $groupId);
@@ -171,14 +195,17 @@ class GroupRepository
      * @param \Doctrine\Common\Collections\ArrayCollection<string[]> $directlySubscribedGroupNestingValues
      *
      * @return string[]
+     * @throws \Chamilo\Libraries\Storage\Exception\Database\StorageMethodException
      */
     public function findGroupIdentifiersForDirectlySubscribedGroupNestingValues(
         ArrayCollection $directlySubscribedGroupNestingValues
     ): array
     {
         $parameters = new DataClassDistinctParameters(
-            $this->getDirectlySubscribedGroupNestingValuesConditions($directlySubscribedGroupNestingValues),
-            new RetrieveProperties([new PropertyConditionVariable(Group::class, DataClass::PROPERTY_ID)])
+            condition: $this->getDirectlySubscribedGroupNestingValuesConditions($directlySubscribedGroupNestingValues),
+            retrieveProperties: new RetrieveProperties(
+                [new PropertyConditionVariable(Group::class, DataClass::PROPERTY_ID)]
+            )
         );
 
         return $this->getNestedSetDataClassRepository()->distinct(Group::class, $parameters);
@@ -191,12 +218,13 @@ class GroupRepository
      * @param \Chamilo\Libraries\Storage\Query\OrderBy $orderBy
      *
      * @return \Doctrine\Common\Collections\ArrayCollection<\Chamilo\Core\Group\Storage\DataClass\Group>
+     * @throws \Chamilo\Libraries\Storage\Exception\Database\StorageMethodException
      */
     public function findGroups(
         ?Condition $condition = null, ?int $count = null, ?int $offset = null, OrderBy $orderBy = new OrderBy()
     ): ArrayCollection
     {
-        $parameters = new RetrievesParameters($condition, $count, $offset, $orderBy);
+        $parameters = new RetrievesParameters(condition: $condition, count: $count, offset: $offset, orderBy: $orderBy);
 
         return $this->getNestedSetDataClassRepository()->retrieves(Group::class, $parameters);
     }
@@ -205,6 +233,7 @@ class GroupRepository
      * @param string[] $groupIdentifiers
      *
      * @return \Doctrine\Common\Collections\ArrayCollection<\Chamilo\Core\Group\Storage\DataClass\Group>
+     * @throws \Chamilo\Libraries\Storage\Exception\Database\StorageMethodException
      */
     public function findGroupsByIdentifiersOrderedByName(array $groupIdentifiers): ArrayCollection
     {
@@ -224,13 +253,14 @@ class GroupRepository
      * @param \Doctrine\Common\Collections\ArrayCollection<string[]> $directlySubscribedGroupNestingValues
      *
      * @return \Doctrine\Common\Collections\ArrayCollection<\Chamilo\Core\Group\Storage\DataClass\Group>
+     * @throws \Chamilo\Libraries\Storage\Exception\Database\StorageMethodException
      */
     public function findGroupsForDirectlySubscribedGroupNestingValues(
         ArrayCollection $directlySubscribedGroupNestingValues
     ): ArrayCollection
     {
         $parameters = new RetrievesParameters(
-            $this->getDirectlySubscribedGroupNestingValuesConditions($directlySubscribedGroupNestingValues)
+            condition: $this->getDirectlySubscribedGroupNestingValuesConditions($directlySubscribedGroupNestingValues)
         );
 
         return $this->getNestedSetDataClassRepository()->retrieves(Group::class, $parameters);
@@ -240,6 +270,7 @@ class GroupRepository
      * @param string $parentIdentifier
      *
      * @return \Doctrine\Common\Collections\ArrayCollection<\Chamilo\Core\Group\Storage\DataClass\Group>
+     * @throws \Chamilo\Libraries\Storage\Exception\Database\StorageMethodException
      */
     public function findGroupsForParentIdentifier(string $parentIdentifier = '0'): ArrayCollection
     {
@@ -262,6 +293,7 @@ class GroupRepository
      * @param string $parentIdentifier
      *
      * @return \Doctrine\Common\Collections\ArrayCollection<\Chamilo\Core\Group\Storage\DataClass\Group>
+     * @throws \Chamilo\Libraries\Storage\Exception\Database\StorageMethodException
      */
     public function findGroupsForSearchQueryAndParentIdentifier(
         ?string $searchQuery = null, string $parentIdentifier = '0'
@@ -297,6 +329,7 @@ class GroupRepository
 
     /**
      * @return string[]
+     * @throws \Chamilo\Libraries\Storage\Exception\Database\StorageMethodException
      */
     public function findParentGroupIdentifiersForGroup(Group $group, bool $includeSelf = true): array
     {
@@ -308,17 +341,22 @@ class GroupRepository
      * @param bool $includeSelf
      *
      * @return \Doctrine\Common\Collections\ArrayCollection<\Chamilo\Core\Group\Storage\DataClass\Group>
+     * @throws \Chamilo\Libraries\Storage\Exception\Database\StorageMethodException
      */
     public function findParentGroupsForGroup(Group $group, bool $includeSelf = true): ArrayCollection
     {
         return $this->getNestedSetDataClassRepository()->findAncestors($group, $includeSelf);
     }
 
+    /**
+     * @throws \Chamilo\Libraries\Storage\Exception\Database\StorageNoResultException
+     * @throws \Chamilo\Libraries\Storage\Exception\Database\StorageMethodException
+     */
     public function findRootGroup(): ?Group
     {
         return $this->getNestedSetDataClassRepository()->retrieve(
             Group::class, new RetrieveParameters(
-                new EqualityCondition(
+                condition: new EqualityCondition(
                     new PropertyConditionVariable(Group::class, NestedSet::PROPERTY_PARENT_ID),
                     new StaticConditionVariable(0)
                 )
@@ -328,6 +366,7 @@ class GroupRepository
 
     /**
      * @return string[]
+     * @throws \Chamilo\Libraries\Storage\Exception\Database\StorageMethodException
      * @todo This could be generalized to the NestedSetDataClassRepository
      */
     public function findSubGroupIdentifiersForGroup(Group $group, bool $recursiveSubgroups = false): array
@@ -358,8 +397,9 @@ class GroupRepository
 
         return $this->getNestedSetDataClassRepository()->distinct(
             Group::class, new DataClassDistinctParameters(
-                $childrenCondition,
-                new RetrieveProperties([new PropertyConditionVariable(Group::class, DataClass::PROPERTY_ID)])
+                condition: $childrenCondition, retrieveProperties: new RetrieveProperties(
+                [new PropertyConditionVariable(Group::class, DataClass::PROPERTY_ID)]
+            )
             )
         );
     }
@@ -369,6 +409,7 @@ class GroupRepository
      * @param bool $recursiveSubgroups
      *
      * @return  \Doctrine\Common\Collections\ArrayCollection<\Chamilo\Core\Group\Storage\DataClass\Group>
+     * @throws \Chamilo\Libraries\Storage\Exception\Database\StorageMethodException
      */
     public function findSubGroupsForGroup(Group $group, bool $recursiveSubgroups = false): ArrayCollection
     {
@@ -424,6 +465,9 @@ class GroupRepository
 
     /**
      * @param int[] $userGroupIdentifiers
+     *
+     * @throws \Chamilo\Libraries\Storage\Exception\Database\StorageMethodException
+     * @throws \Chamilo\Libraries\Storage\Exception\Database\StorageNoResultException
      */
     protected function getGroupQuotumWithFunctionForUserGroupIdentifiers(int $function, array $userGroupIdentifiers
     ): int
@@ -449,6 +493,9 @@ class GroupRepository
 
     /**
      * @param int[] $userGroupIdentifiers
+     *
+     * @throws \Chamilo\Libraries\Storage\Exception\Database\StorageMethodException
+     * @throws \Chamilo\Libraries\Storage\Exception\Database\StorageNoResultException
      */
     public function getHighestGroupQuotumForUserGroupIdentifiers(array $userGroupIdentifiers): int
     {
@@ -459,6 +506,9 @@ class GroupRepository
 
     /**
      * @param int[] $userGroupIdentifiers
+     *
+     * @throws \Chamilo\Libraries\Storage\Exception\Database\StorageMethodException
+     * @throws \Chamilo\Libraries\Storage\Exception\Database\StorageNoResultException
      */
     public function getLowestGroupQuotumForUserGroupIdentifiers(array $userGroupIdentifiers): int
     {
@@ -477,11 +527,19 @@ class GroupRepository
         return $this->searchQueryConditionGenerator;
     }
 
+    /**
+     * @throws \Chamilo\Libraries\Storage\Exception\Database\StorageNoResultException
+     * @throws \Throwable
+     * @throws \Chamilo\Libraries\Storage\Exception\Database\StorageMethodException
+     */
     public function moveGroup(Group $group, string $parentGroupIdentifier): bool
     {
         return $this->getNestedSetDataClassRepository()->move($group, $parentGroupIdentifier);
     }
 
+    /**
+     * @throws \Chamilo\Libraries\Storage\Exception\Database\StorageMethodException
+     */
     public function updateGroup(Group $group): bool
     {
         return $this->getNestedSetDataClassRepository()->update($group);

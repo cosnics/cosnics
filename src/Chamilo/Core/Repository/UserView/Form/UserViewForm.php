@@ -4,14 +4,14 @@ namespace Chamilo\Core\Repository\UserView\Form;
 use Chamilo\Core\Repository\Selector\TypeSelectorFactory;
 use Chamilo\Core\Repository\UserView\Storage\DataClass\UserView;
 use Chamilo\Core\Repository\UserView\Storage\DataClass\UserViewRelContentObject;
-use Chamilo\Libraries\Storage\DataManager\DataManager;
 use Chamilo\Libraries\Format\Form\FormValidator;
 use Chamilo\Libraries\Format\Structure\Glyph\FontAwesomeGlyph;
-use Chamilo\Libraries\Translation\Translation;
+use Chamilo\Libraries\Storage\DataManager\DataManager;
 use Chamilo\Libraries\Storage\Parameters\RetrievesParameters;
 use Chamilo\Libraries\Storage\Query\Condition\EqualityCondition;
 use Chamilo\Libraries\Storage\Query\Variable\PropertyConditionVariable;
 use Chamilo\Libraries\Storage\Query\Variable\StaticConditionVariable;
+use Chamilo\Libraries\Translation\Translation;
 use Chamilo\Libraries\Utilities\StringUtilities;
 
 /**
@@ -23,20 +23,20 @@ use Chamilo\Libraries\Utilities\StringUtilities;
  */
 class UserViewForm extends FormValidator
 {
-    const TYPE_CREATE = 1;
-    const TYPE_EDIT = 2;
-
-    /**
-     *
-     * @var \core\repository\user_view\UserView
-     */
-    private $user_view;
+    public const TYPE_CREATE = 1;
+    public const TYPE_EDIT = 2;
 
     /**
      *
      * @var int
      */
     private $form_type;
+
+    /**
+     *
+     * @var \core\repository\user_view\UserView
+     */
+    private $user_view;
 
     /**
      *
@@ -67,7 +67,7 @@ class UserViewForm extends FormValidator
     {
         $this->addElement(
             'text', UserView::PROPERTY_NAME, Translation::get('Name', null, StringUtilities::LIBRARIES),
-            array("size" => "50")
+            ['size' => '50']
         );
         $this->addRule(
             UserView::PROPERTY_NAME, Translation::get('ThisFieldIsRequired', null, StringUtilities::LIBRARIES),
@@ -98,7 +98,7 @@ class UserViewForm extends FormValidator
 
             $relations = DataManager::retrieves(
                 UserViewRelContentObject::class, new RetrievesParameters(
-                    new EqualityCondition(
+                    condition: new EqualityCondition(
                         new PropertyConditionVariable(
                             UserViewRelContentObject::class, UserViewRelContentObject::PROPERTY_USER_VIEW_ID
                         ), new StaticConditionVariable($this->get_user_view()->get_id())
@@ -106,20 +106,34 @@ class UserViewForm extends FormValidator
                 )
             );
 
-            foreach($relations as $relation)
+            foreach ($relations as $relation)
             {
                 $defaults[] = $relation->get_content_object_template_id();
             }
         }
 
         $this->addElement(
-            'select', 'types', Translation::get('SelectTypesToShow'), $content_object_template_ids, array(
+            'select', 'types', Translation::get('SelectTypesToShow'), $content_object_template_ids, [
                 'multiple' => 'true',
                 'size' => (count($content_object_template_ids) > 10 ? 10 : count($content_object_template_ids))
-            )
+            ]
         );
 
-        $this->setDefaults(array('types' => $defaults));
+        $this->setDefaults(['types' => $defaults]);
+    }
+
+    public function build_creation_form()
+    {
+        $this->build_basic_form();
+
+        $buttons[] = $this->createElement(
+            'style_submit_button', 'submit', Translation::get('Create', null, StringUtilities::LIBRARIES)
+        );
+        $buttons[] = $this->createElement(
+            'style_reset_button', 'reset', Translation::get('Reset', null, StringUtilities::LIBRARIES)
+        );
+
+        $this->addGroup($buttons, 'buttons', null, '&nbsp;', false);
     }
 
     public function build_editing_form()
@@ -140,74 +154,9 @@ class UserViewForm extends FormValidator
         $this->addGroup($buttons, 'buttons', null, '&nbsp;', false);
     }
 
-    public function build_creation_form()
-    {
-        $this->build_basic_form();
-
-        $buttons[] = $this->createElement(
-            'style_submit_button', 'submit', Translation::get('Create', null, StringUtilities::LIBRARIES)
-        );
-        $buttons[] = $this->createElement(
-            'style_reset_button', 'reset', Translation::get('Reset', null, StringUtilities::LIBRARIES)
-        );
-
-        $this->addGroup($buttons, 'buttons', null, '&nbsp;', false);
-    }
-
     /**
      *
-     * @return boolean
-     */
-    public function update_user_view()
-    {
-        $user_view = $this->user_view;
-        $values = $this->exportValues();
-
-        $user_view->set_name($values[UserView::PROPERTY_NAME]);
-        $user_view->set_description($values[UserView::PROPERTY_DESCRIPTION]);
-
-        $condition = new EqualityCondition(
-            new PropertyConditionVariable(
-                UserViewRelContentObject::class, UserViewRelContentObject::PROPERTY_USER_VIEW_ID
-            ), new StaticConditionVariable($user_view->get_id())
-        );
-
-        $types = DataManager::retrieves(
-            UserViewRelContentObject::class, new RetrievesParameters($condition)
-        );
-        $existing_types = [];
-        foreach($types as $type)
-        {
-            $existing_types[] = $type->get_content_object_template_id();
-        }
-
-        $new_types = $values['types'];
-        $to_add = array_diff($new_types, $existing_types);
-        $to_delete = array_diff($existing_types, $new_types);
-
-        foreach ($to_add as $type_to_add)
-        {
-            $user_view_type = new UserViewRelContentObject();
-            $user_view_type->set_user_view_id($user_view->get_id());
-            $user_view_type->set_content_object_template_id($type_to_add);
-            $user_view_type->create();
-        }
-
-        $types->first();
-        foreach($types as $type)
-        {
-            if (in_array($type->get_content_object_template_id(), $to_delete))
-            {
-                $type->delete();
-            }
-        }
-
-        return $user_view->update();
-    }
-
-    /**
-     *
-     * @return boolean
+     * @return bool
      */
     public function create_user_view()
     {
@@ -240,6 +189,15 @@ class UserViewForm extends FormValidator
 
     /**
      *
+     * @return \core\repository\user_view\UserView
+     */
+    public function get_user_view()
+    {
+        return $this->user_view;
+    }
+
+    /**
+     *
      * @see HTML_QuickForm::setDefaults()
      */
     public function setDefaults($defaults = [], $filter = null)
@@ -252,10 +210,52 @@ class UserViewForm extends FormValidator
 
     /**
      *
-     * @return \core\repository\user_view\UserView
+     * @return bool
      */
-    public function get_user_view()
+    public function update_user_view()
     {
-        return $this->user_view;
+        $user_view = $this->user_view;
+        $values = $this->exportValues();
+
+        $user_view->set_name($values[UserView::PROPERTY_NAME]);
+        $user_view->set_description($values[UserView::PROPERTY_DESCRIPTION]);
+
+        $condition = new EqualityCondition(
+            new PropertyConditionVariable(
+                UserViewRelContentObject::class, UserViewRelContentObject::PROPERTY_USER_VIEW_ID
+            ), new StaticConditionVariable($user_view->get_id())
+        );
+
+        $types = DataManager::retrieves(
+            UserViewRelContentObject::class, new RetrievesParameters(condition: $condition)
+        );
+        $existing_types = [];
+        foreach ($types as $type)
+        {
+            $existing_types[] = $type->get_content_object_template_id();
+        }
+
+        $new_types = $values['types'];
+        $to_add = array_diff($new_types, $existing_types);
+        $to_delete = array_diff($existing_types, $new_types);
+
+        foreach ($to_add as $type_to_add)
+        {
+            $user_view_type = new UserViewRelContentObject();
+            $user_view_type->set_user_view_id($user_view->get_id());
+            $user_view_type->set_content_object_template_id($type_to_add);
+            $user_view_type->create();
+        }
+
+        $types->first();
+        foreach ($types as $type)
+        {
+            if (in_array($type->get_content_object_template_id(), $to_delete))
+            {
+                $type->delete();
+            }
+        }
+
+        return $user_view->update();
     }
 }

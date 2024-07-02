@@ -22,7 +22,7 @@ use Exception;
 abstract class RightsLocation extends NestedSet
 {
     public const CONTEXT = Manager::CONTEXT;
-    
+
     public const PROPERTY_IDENTIFIER = 'identifier';
     public const PROPERTY_INHERIT = 'inherit';
     public const PROPERTY_LOCKED = 'locked';
@@ -44,7 +44,8 @@ abstract class RightsLocation extends NestedSet
     public function clear_right($right_id)
     {
         return DataManager::delete_rights_location_entity_rights(
-            location: $this, right_id: $right_id);
+            location: $this, right_id: $right_id
+        );
     }
 
     /**
@@ -125,6 +126,14 @@ abstract class RightsLocation extends NestedSet
     }
 
     /**
+     * @param string $context
+     */
+    public function set_context($context)
+    {
+        $this->context = $context;
+    }
+
+    /**
      * @return int
      */
     public function get_identifier()
@@ -175,7 +184,7 @@ abstract class RightsLocation extends NestedSet
             new OrderBy([new OrderProperty(new PropertyConditionVariable(self::class, self::PROPERTY_LEFT_VALUE))]);
 
         return DataManager::retrieve(
-            self::class, new RetrieveParameters($locked_parent_condition, $order)
+            self::class, new RetrieveParameters(condition: $locked_parent_condition, orderBy: $order)
         );
     }
 
@@ -311,14 +320,6 @@ abstract class RightsLocation extends NestedSet
     public function setType($type)
     {
         $this->setDefaultProperty(self::PROPERTY_TYPE, $type);
-    }
-
-    /**
-     * @param string $context
-     */
-    public function set_context($context)
-    {
-        $this->context = $context;
     }
 
     /**

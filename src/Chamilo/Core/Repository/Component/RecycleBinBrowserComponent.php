@@ -75,7 +75,7 @@ class RecycleBinBrowserComponent extends Manager
      */
     private function emptyRecycleBin()
     {
-        $parameters = new RetrievesParameters($this->getRecycleBinTableCondition());
+        $parameters = new RetrievesParameters(condition: $this->getRecycleBinTableCondition());
         $trashed_objects = DataManager::retrieve_active_content_objects(ContentObject::class, $parameters);
 
         foreach ($trashed_objects as $object)
@@ -83,7 +83,7 @@ class RecycleBinBrowserComponent extends Manager
             $object->delete();
         }
 
-        $this->getDataClassRepositoryCache()->truncate(ContentObject::class);
+        $this->getDataClassRepositoryCache()->truncateClass(ContentObject::class);
     }
 
     public function getButtonToolbarRenderer(): ButtonToolBarRenderer
@@ -149,7 +149,7 @@ class RecycleBinBrowserComponent extends Manager
     protected function renderTable(): string
     {
         $totalNumberOfItems = DataManager::count_active_content_objects(
-            ContentObject::class, new DataClassCountParameters($this->getRecycleBinTableCondition())
+            ContentObject::class, new DataClassCountParameters(condition: $this->getRecycleBinTableCondition())
         );
         $recycleBinTableRenderer = $this->getRecycleBinTableRenderer();
 
@@ -160,8 +160,8 @@ class RecycleBinBrowserComponent extends Manager
 
         $contentObjects = DataManager::retrieve_active_content_objects(
             ContentObject::class, new RetrievesParameters(
-                $this->getRecycleBinTableCondition(), $tableParameterValues->getNumberOfItemsPerPage(),
-                $tableParameterValues->getOffset(), $recycleBinTableRenderer->determineOrderBy($tableParameterValues)
+                condition: $this->getRecycleBinTableCondition(), count: $tableParameterValues->getNumberOfItemsPerPage(),
+                offset: $tableParameterValues->getOffset(), orderBy: $recycleBinTableRenderer->determineOrderBy($tableParameterValues)
             )
         );
 

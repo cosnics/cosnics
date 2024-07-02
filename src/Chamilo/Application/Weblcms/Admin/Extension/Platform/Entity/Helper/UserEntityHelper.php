@@ -52,15 +52,15 @@ class UserEntityHelper
         $joins = new Joins([$join]);
 
         $parameters = new DataClassCountParameters(
-            $condition, $joins, new RetrieveProperties(
-                [
-                    new FunctionConditionVariable(
-                        FunctionConditionVariable::DISTINCT, new PropertyConditionVariable(
-                            User::class, User::PROPERTY_ID
-                        )
+            condition: $condition, joins: $joins, retrieveProperties: new RetrieveProperties(
+            [
+                new FunctionConditionVariable(
+                    FunctionConditionVariable::DISTINCT, new PropertyConditionVariable(
+                        User::class, User::PROPERTY_ID
                     )
-                ]
-            )
+                )
+            ]
+        )
         );
 
         return DataManager::count(

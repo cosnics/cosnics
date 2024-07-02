@@ -50,7 +50,7 @@ class PublicationForm extends ContentObjectPublicationForm
             $first_publication = $publications[0];
 
             $parameters = new RetrieveParameters(
-                new EqualityCondition(
+                condition: new EqualityCondition(
                     new PropertyConditionVariable(Publication::class, Publication::PROPERTY_PUBLICATION_ID),
                     new StaticConditionVariable($first_publication->get_id())
                 )
@@ -143,7 +143,7 @@ class PublicationForm extends ContentObjectPublicationForm
                         break;
                     case self::TYPE_UPDATE :
                         $parameters = new RetrieveParameters(
-                            new EqualityCondition(
+                            condition: new EqualityCondition(
                                 new PropertyConditionVariable(
                                     Publication::class, Publication::PROPERTY_PUBLICATION_ID
                                 ), new StaticConditionVariable($publication->get_id())

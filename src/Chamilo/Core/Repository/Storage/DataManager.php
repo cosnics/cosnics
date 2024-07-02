@@ -107,7 +107,7 @@ class DataManager extends \Chamilo\Libraries\Storage\DataManager\DataManager
         );
         $condition = new AndCondition($conditions);
 
-        return self::count(RepositoryCategory::class, new DataClassCountParameters($condition)) > 0;
+        return self::count(RepositoryCategory::class, new DataClassCountParameters(condition: $condition)) > 0;
     }
 
     /**
@@ -135,7 +135,7 @@ class DataManager extends \Chamilo\Libraries\Storage\DataManager\DataManager
         $condition = new AndCondition($conditions);
 
         return (self::count_complex_content_object_items(
-                ComplexContentObjectItem::class, new DataClassCountParameters($condition)
+                ComplexContentObjectItem::class, new DataClassCountParameters(condition: $condition)
             ) > 0);
     }
 
@@ -164,7 +164,7 @@ class DataManager extends \Chamilo\Libraries\Storage\DataManager\DataManager
         //
         // $usedInBlocks = \Chamilo\Core\Home\Storage\DataManager::count(
         // Block::class,
-        // new DataClassCountParameters($condition));
+        // new DataClassCountParameters(condition: $condition));
         //
         // if ($usedInBlocks > 0)
         // {
@@ -223,7 +223,7 @@ class DataManager extends \Chamilo\Libraries\Storage\DataManager\DataManager
 
         $condition = new OrCondition($conditions);
         $count_wrapper_items = self::count_complex_content_object_items(
-            ComplexContentObjectItem::class, new DataClassCountParameters($condition)
+            ComplexContentObjectItem::class, new DataClassCountParameters(condition: $condition)
         );
 
         if ($count_wrapper_items > 0)
@@ -251,7 +251,7 @@ class DataManager extends \Chamilo\Libraries\Storage\DataManager\DataManager
 
         $count_children = self::count_complex_content_object_items(
             ComplexContentObjectItem::class, new DataClassCountParameters(
-                new EqualityCondition(
+                condition: new EqualityCondition(
                     new PropertyConditionVariable(
                         ComplexContentObjectItem::class, ComplexContentObjectItem::PROPERTY_PARENT
                     ), new StaticConditionVariable($object->get_id())
@@ -323,7 +323,7 @@ class DataManager extends \Chamilo\Libraries\Storage\DataManager\DataManager
         );
         $condition = new AndCondition($conditions);
 
-        $parameters = new DataClassCountParameters($condition);
+        $parameters = new DataClassCountParameters(condition: $condition);
 
         return self::count_active_content_objects(ContentObject::class, $parameters) > 0;
     }
@@ -532,7 +532,7 @@ class DataManager extends \Chamilo\Libraries\Storage\DataManager\DataManager
         // Delete all subcategories by recursively repeating the entire process
         $categories = DataManager::retrieves(
             RepositoryCategory::class, new RetrievesParameters(
-                new EqualityCondition(
+                condition: new EqualityCondition(
                     new PropertyConditionVariable(
                         RepositoryCategory::class, RepositoryCategory::PROPERTY_PARENT
                     ), new StaticConditionVariable($category->get_id())
@@ -582,7 +582,7 @@ class DataManager extends \Chamilo\Libraries\Storage\DataManager\DataManager
         // Delete all subcategories by recursively repeating the entire process
         $categories = self::retrieves(
             RepositoryCategory::class, new RetrievesParameters(
-                new EqualityCondition(
+                condition: new EqualityCondition(
                     new PropertyConditionVariable(
                         RepositoryCategory::class, RepositoryCategory::PROPERTY_PARENT
                     ), new StaticConditionVariable($category->get_id())
@@ -734,9 +734,9 @@ class DataManager extends \Chamilo\Libraries\Storage\DataManager\DataManager
             new StaticConditionVariable($object->get_object_number())
         );
         $parameters = new DataClassDistinctParameters(
-            $condition, new RetrieveProperties(
-                [new PropertyConditionVariable(ContentObject::class, ContentObject::PROPERTY_ID)]
-            )
+            condition: $condition, retrieveProperties: new RetrieveProperties(
+            [new PropertyConditionVariable(ContentObject::class, ContentObject::PROPERTY_ID)]
+        )
         );
         $version_ids = self::distinct(ContentObject::class, $parameters);
         sort($version_ids);
@@ -817,7 +817,7 @@ class DataManager extends \Chamilo\Libraries\Storage\DataManager\DataManager
         $condition = new AndCondition($conditions);
 
         $number_of_attachments = self::count(
-            ContentObjectAttachment::class, new DataClassCountParameters($condition)
+            ContentObjectAttachment::class, new DataClassCountParameters(condition: $condition)
         );
         if ($number_of_attachments > 0)
         {
@@ -944,11 +944,11 @@ class DataManager extends \Chamilo\Libraries\Storage\DataManager\DataManager
 
         $condition = new AndCondition($conditions);
         $parameters = new RetrieveParameters(
-            $condition, new OrderBy([
-                new OrderProperty(
-                    new PropertyConditionVariable(ContentObject::class, ContentObject::PROPERTY_ID), SORT_DESC
-                )
-            ])
+            condition: $condition, orderBy: new OrderBy([
+            new OrderProperty(
+                new PropertyConditionVariable(ContentObject::class, ContentObject::PROPERTY_ID), SORT_DESC
+            )
+        ])
         );
 
         return self::retrieve(ContentObject::class, $parameters);
@@ -972,7 +972,7 @@ class DataManager extends \Chamilo\Libraries\Storage\DataManager\DataManager
             )
         );
 
-        $parameters = new RetrievesParameters($condition, $count, $offset, $orderBy);
+        $parameters = new RetrievesParameters(condition: $condition, count: $count, offset: $offset, orderBy: $orderBy);
 
         return self::retrieves(RepositoryCategory::class, $parameters);
     }
@@ -1013,7 +1013,7 @@ class DataManager extends \Chamilo\Libraries\Storage\DataManager\DataManager
             new PropertyConditionVariable(ContentObject::class, ContentObject::PROPERTY_OWNER_ID),
             new StaticConditionVariable($user_id)
         );
-        $parameters = new RetrievesParameters($condition);
+        $parameters = new RetrievesParameters(condition: $condition);
 
         return self::retrieve_content_objects(ContentObject::class, $parameters);
     }
@@ -1046,7 +1046,7 @@ class DataManager extends \Chamilo\Libraries\Storage\DataManager\DataManager
                 new StaticConditionVariable($hash)
             );
             $content_objects[] = self::retrieve_active_content_objects(
-                ContentObject::class, new RetrievesParameters($condition, 1)
+                ContentObject::class, new RetrievesParameters(condition: $condition, count: 1)
             )->current();
         }
 
@@ -1110,11 +1110,11 @@ class DataManager extends \Chamilo\Libraries\Storage\DataManager\DataManager
 
         $condition = new AndCondition($conditions);
         $parameters = new RetrieveParameters(
-            $condition, new OrderBy([
-                new OrderProperty(
-                    new PropertyConditionVariable(ContentObject::class, ContentObject::PROPERTY_ID), SORT_DESC
-                )
-            ])
+            condition: $condition, orderBy: new OrderBy([
+            new OrderProperty(
+                new PropertyConditionVariable(ContentObject::class, ContentObject::PROPERTY_ID), SORT_DESC
+            )
+        ])
         );
 
         return self::retrieve(get_class($object), $parameters);
@@ -1205,7 +1205,7 @@ class DataManager extends \Chamilo\Libraries\Storage\DataManager\DataManager
 
             self::$workspace_has_categories[$workspaceImplemention->getWorkspaceType()][$workspaceImplemention->getId(
             )] = (self::count(
-                    RepositoryCategory::class, new DataClassCountParameters($condition)
+                    RepositoryCategory::class, new DataClassCountParameters(condition: $condition)
                 ) > 0);
         }
 

@@ -95,7 +95,7 @@ class PublisherComponent extends Manager implements ViewerInterface, BreadcrumbL
                 new PropertyConditionVariable(ContentObject::class, ContentObject::PROPERTY_ID),
                 $selectedContentObjectIds
             );
-            $parameters = new RetrievesParameters($condition);
+            $parameters = new RetrievesParameters(condition: $condition);
 
             return DataManager::retrieve_active_content_objects(
                 ContentObject::class, $parameters

@@ -25,7 +25,7 @@ class LanguageRepository
 
     public function clearLanguageCache(): bool
     {
-        return $this->getDataClassRepository()->getDataClassRepositoryCache()->truncate(Language::class);
+        return $this->getDataClassRepository()->getDataClassRepositoryCache()->truncateClass(Language::class);
     }
 
     /**

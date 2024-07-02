@@ -44,7 +44,9 @@ class CourseTypeFeedComponent extends Manager
      */
     public function countCourseTypes()
     {
-        return DataManager::count(CourseType::class, new DataClassCountParameters($this->getCourseTypeConditions()));
+        return DataManager::count(
+            CourseType::class, new DataClassCountParameters(condition: $this->getCourseTypeConditions())
+        );
     }
 
     /**
@@ -154,9 +156,9 @@ class CourseTypeFeedComponent extends Manager
     public function retrieveCourseTypes()
     {
         $parameters = new RetrievesParameters(
-            $this->getCourseTypeConditions(), null, null, new OrderBy(
-                [new OrderProperty(new PropertyConditionVariable(CourseType::class, CourseType::PROPERTY_TITLE))]
-            )
+            condition: $this->getCourseTypeConditions(), orderBy: new OrderBy(
+            [new OrderProperty(new PropertyConditionVariable(CourseType::class, CourseType::PROPERTY_TITLE))]
+        )
         );
 
         return DataManager::retrieves(CourseType::class, $parameters);

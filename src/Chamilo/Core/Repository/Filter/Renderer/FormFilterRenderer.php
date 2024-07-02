@@ -279,7 +279,7 @@ class FormFilterRenderer extends FilterRenderer
             new PropertyConditionVariable(UserView::class, UserView::PROPERTY_USER_ID),
             new StaticConditionVariable($this->get_user_id())
         );
-        $parameters = new RetrievesParameters($condition);
+        $parameters = new RetrievesParameters(condition: $condition);
         $user_views = DataManager::retrieves(UserView::class, $parameters);
 
         $user_view_options = [];

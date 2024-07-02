@@ -121,7 +121,7 @@ class XmlPublicationsTreeFeedComponent extends Manager
         );
 
         return DataManager::count(
-                ContentObjectPublicationCategory::class, new DataClassCountParameters($condition)
+                ContentObjectPublicationCategory::class, new DataClassCountParameters(condition: $condition)
             ) > 0;
     }
 }

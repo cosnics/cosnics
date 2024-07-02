@@ -80,7 +80,7 @@ class GroupSubscribeComponent extends Manager
                         $parent_group_id = $group->get_parent_id();
                     }
 
-                    $this->getDataClassRepositoryCache()->truncate(CourseEntityRelation::class);
+                    $this->getDataClassRepositoryCache()->truncateClass(CourseEntityRelation::class);
                 }
 
                 if ($failures == 0)

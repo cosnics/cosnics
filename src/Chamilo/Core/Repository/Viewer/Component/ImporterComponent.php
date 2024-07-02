@@ -229,7 +229,7 @@ class ImporterComponent extends Manager implements BreadcrumbLessComponentInterf
         $condition = new AndCondition($conditions);
 
         $parameters = new DataClassDistinctParameters(
-            $condition, new RetrieveProperties(
+            condition: $condition, retrieveProperties: new RetrieveProperties(
                 [new PropertyConditionVariable(ContentObject::class, ContentObject::PROPERTY_ID)]
             )
         );

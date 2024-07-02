@@ -164,7 +164,7 @@ class BrowserComponent extends Manager implements BreadcrumbLessComponentInterfa
 
         $count = DataManager::count(
             Registration::class, new DataClassCountParameters(
-                new EqualityCondition(
+                condition: new EqualityCondition(
                     new PropertyConditionVariable(Registration::class, Registration::PROPERTY_TYPE),
                     new StaticConditionVariable($this->getCurrentType())
                 )
@@ -219,7 +219,7 @@ class BrowserComponent extends Manager implements BreadcrumbLessComponentInterfa
         $translator = $this->getTranslator();
 
         $parameters = new RetrievesParameters(
-            new EqualityCondition(
+            condition: new EqualityCondition(
                 new PropertyConditionVariable(Registration::class, Registration::PROPERTY_TYPE),
                 new StaticConditionVariable($this->getCurrentType())
             )

@@ -280,6 +280,18 @@ class RightsService
     }
 
     /**
+     * @param \Chamilo\Libraries\Storage\Cache\DataClassRepositoryCache $dataClassRepositoryCache
+     *
+     * @return RightsService
+     */
+    public function setDataClassRepositoryCache(DataClassRepositoryCache $dataClassRepositoryCache): RightsService
+    {
+        $this->dataClassRepositoryCache = $dataClassRepositoryCache;
+
+        return $this;
+    }
+
+    /**
      * @return string[]
      */
     private function getEmulationStorage()
@@ -293,6 +305,14 @@ class RightsService
     public function getRightsRepository()
     {
         return $this->rightsRepository;
+    }
+
+    /**
+     * @param \Chamilo\Application\Portfolio\Storage\Repository\RightsRepository $rightsRepository
+     */
+    public function setRightsRepository(RightsRepository $rightsRepository)
+    {
+        $this->rightsRepository = $rightsRepository;
     }
 
     /**
@@ -319,6 +339,11 @@ class RightsService
         return $this->session;
     }
 
+    public function setSession(SessionInterface $session)
+    {
+        $this->session = $session;
+    }
+
     /**
      * @return \Symfony\Component\Translation\Translator
      */
@@ -328,11 +353,27 @@ class RightsService
     }
 
     /**
+     * @param \Symfony\Component\Translation\Translator $translator
+     */
+    public function setTranslator($translator)
+    {
+        $this->translator = $translator;
+    }
+
+    /**
      * @return \Chamilo\Core\User\Service\UserService
      */
     public function getUserService()
     {
         return $this->userService;
+    }
+
+    /**
+     * @param \Chamilo\Core\User\Service\UserService $userService
+     */
+    public function setUserService(UserService $userService)
+    {
+        $this->userService = $userService;
     }
 
     /**
@@ -352,6 +393,16 @@ class RightsService
     public function getWorkspaceRightsService()
     {
         return $this->workspaceRightsService;
+    }
+
+    /**
+     * @param \Chamilo\Core\Repository\Workspace\Service\RightsService $workspaceRightsService
+     */
+    public function setWorkspaceRightsService(
+        \Chamilo\Core\Repository\Workspace\Service\RightsService $workspaceRightsService
+    )
+    {
+        $this->workspaceRightsService = $workspaceRightsService;
     }
 
     /**
@@ -508,7 +559,7 @@ class RightsService
             }
             else
             {
-                $this->getDataClassRepositoryCache()->truncate(RightsLocationEntityRight::class);
+                $this->getDataClassRepositoryCache()->truncateClass(RightsLocationEntityRight::class);
 
                 return $this->createRightsLocationEntityRightFromParameters(
                     $right, $entityId, $entityType, $locationId, $publicationId
@@ -795,47 +846,6 @@ class RightsService
     }
 
     /**
-     * @param \Chamilo\Libraries\Storage\Cache\DataClassRepositoryCache $dataClassRepositoryCache
-     *
-     * @return RightsService
-     */
-    public function setDataClassRepositoryCache(DataClassRepositoryCache $dataClassRepositoryCache): RightsService
-    {
-        $this->dataClassRepositoryCache = $dataClassRepositoryCache;
-
-        return $this;
-    }
-
-    /**
-     * @param \Chamilo\Application\Portfolio\Storage\Repository\RightsRepository $rightsRepository
-     */
-    public function setRightsRepository(RightsRepository $rightsRepository)
-    {
-        $this->rightsRepository = $rightsRepository;
-    }
-
-    public function setSession(SessionInterface $session)
-    {
-        $this->session = $session;
-    }
-
-    /**
-     * @param \Symfony\Component\Translation\Translator $translator
-     */
-    public function setTranslator($translator)
-    {
-        $this->translator = $translator;
-    }
-
-    /**
-     * @param \Chamilo\Core\User\Service\UserService $userService
-     */
-    public function setUserService(UserService $userService)
-    {
-        $this->userService = $userService;
-    }
-
-    /**
      * @param int $virtualUserIdentifier
      *
      * @return bool
@@ -856,15 +866,5 @@ class RightsService
         {
             return false;
         }
-    }
-
-    /**
-     * @param \Chamilo\Core\Repository\Workspace\Service\RightsService $workspaceRightsService
-     */
-    public function setWorkspaceRightsService(
-        \Chamilo\Core\Repository\Workspace\Service\RightsService $workspaceRightsService
-    )
-    {
-        $this->workspaceRightsService = $workspaceRightsService;
     }
 }

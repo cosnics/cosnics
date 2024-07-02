@@ -77,7 +77,7 @@ class AssignmentSubmissionsBlockRenderer extends BlockRenderer
         $condition = new AndCondition($conditions);
 
         $assignment_publications_resultset = WeblcmsDataManager::retrieves(
-            ContentObjectPublication::class, new RetrievesParameters($condition)
+            ContentObjectPublication::class, new RetrievesParameters(condition: $condition)
         );
 
         if ($assignment_publications_resultset->count() == 0)

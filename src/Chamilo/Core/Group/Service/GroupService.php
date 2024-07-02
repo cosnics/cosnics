@@ -7,9 +7,11 @@ use Chamilo\Core\Group\EventDispatcher\Event\AfterGroupMoveEvent;
 use Chamilo\Core\Group\EventDispatcher\Event\AfterGroupUpdateEvent;
 use Chamilo\Core\Group\Storage\DataClass\Group;
 use Chamilo\Core\Group\Storage\DataClass\GroupRelUser;
+use Chamilo\Core\Group\Storage\Exception\NoSuchGroupException;
 use Chamilo\Core\Group\Storage\Repository\GroupRepository;
 use Chamilo\Core\User\Storage\DataClass\User;
 use Chamilo\Libraries\Storage\DataClass\PropertyMapper;
+use Chamilo\Libraries\Storage\Exception\Database\StorageNoResultException;
 use Chamilo\Libraries\Storage\Query\Condition\Condition;
 use Chamilo\Libraries\Storage\Query\OrderBy;
 use Doctrine\Common\Collections\ArrayCollection;
@@ -81,11 +83,17 @@ class GroupService
         $this->groupsTreeTraverser = $groupsTreeTraverser;
     }
 
+    /**
+     * @throws \Chamilo\Libraries\Storage\Exception\Database\StorageMethodException
+     */
     public function countGroups(?Condition $condition = null): int
     {
         return $this->getGroupRepository()->countGroups($condition);
     }
 
+    /**
+     * @throws \Throwable
+     */
     public function createGroup(Group $group): bool
     {
         if (!$this->getGroupRepository()->createGroup($group))
@@ -98,6 +106,9 @@ class GroupService
         return true;
     }
 
+    /**
+     * @throws \Throwable
+     */
     public function deleteGroup(Group $group): bool
     {
         $subGroupIds = [];
@@ -140,6 +151,10 @@ class GroupService
         return $this->groupsTreeTraverser->findAllSubscribedGroupsForUserIdentifier($userIdentifier);
     }
 
+    /**
+     * @throws \Chamilo\Libraries\Storage\Exception\Database\StorageNoResultException
+     * @throws \Chamilo\Libraries\Storage\Exception\Database\StorageMethodException
+     */
     public function findGroupByCode(string $groupCode): Group
     {
         if (empty($groupCode))
@@ -157,6 +172,9 @@ class GroupService
         return $group;
     }
 
+    /**
+     * @throws \Chamilo\Libraries\Storage\Exception\Database\StorageMethodException
+     */
     public function findGroupByCodeAndParentIdentifier(string $groupCode, string $parentIdentifier): Group
     {
         if (empty($groupCode))
@@ -171,18 +189,20 @@ class GroupService
             );
         }
 
-        $group = $this->groupRepository->findGroupByCodeAndParentIdentifier($groupCode, $parentIdentifier);
-
-        if (!$group instanceof Group)
+        try
         {
-            throw new RuntimeException(
-                'Could not find the group with groupcode ' . $groupCode . ' and parent identifier ' . $parentIdentifier
-            );
+            return $this->groupRepository->findGroupByCodeAndParentIdentifier($groupCode, $parentIdentifier);
         }
-
-        return $group;
+        catch (StorageNoResultException)
+        {
+            throw new NoSuchGroupException(code: $groupCode, parentIdentifier: $parentIdentifier);
+        }
     }
 
+    /**
+     * @throws \Chamilo\Libraries\Storage\Exception\Database\StorageNoResultException
+     * @throws \Chamilo\Libraries\Storage\Exception\Database\StorageMethodException
+     */
     public function findGroupByIdentifier(string $groupIdentifier): Group
     {
         $group = $this->groupRepository->findGroupByIdentifier($groupIdentifier);
@@ -202,6 +222,7 @@ class GroupService
      * @param \Chamilo\Libraries\Storage\Query\OrderBy $orderBy
      *
      * @return \Doctrine\Common\Collections\ArrayCollection<\Chamilo\Core\Group\Storage\DataClass\Group>
+     * @throws \Chamilo\Libraries\Storage\Exception\Database\StorageMethodException
      */
     public function findGroups(
         ?Condition $condition = null, ?int $offset = 0, ?int $count = - 1, OrderBy $orderBy = new OrderBy()
@@ -214,6 +235,8 @@ class GroupService
      * @param string[] $groupIdentifiers
      *
      * @return \Doctrine\Common\Collections\ArrayCollection<\Chamilo\Core\Group\Storage\DataClass\Group>
+     * @throws \Chamilo\Libraries\Storage\Exception\Database\StorageMethodException
+     * @throws \Chamilo\Libraries\Storage\Exception\Database\StorageNoResultException
      */
     public function findGroupsAndSubgroupsForGroupIdentifiers(array $groupIdentifiers = []): ArrayCollection
     {
@@ -240,6 +263,7 @@ class GroupService
      * @param string[] $groupIdentifiers
      *
      * @return \Doctrine\Common\Collections\ArrayCollection<\Chamilo\Core\Group\Storage\DataClass\Group>
+     * @throws \Chamilo\Libraries\Storage\Exception\Database\StorageMethodException
      */
     public function findGroupsByIdentifiers(array $groupIdentifiers): ArrayCollection
     {
@@ -255,6 +279,7 @@ class GroupService
      * @param string $parentIdentifier
      *
      * @return \Doctrine\Common\Collections\ArrayCollection<\Chamilo\Core\Group\Storage\DataClass\Group>
+     * @throws \Chamilo\Libraries\Storage\Exception\Database\StorageMethodException
      */
     public function findGroupsForParentIdentifier(string $parentIdentifier = '0'): ArrayCollection
     {
@@ -266,6 +291,7 @@ class GroupService
      * @param string $parentIdentifier
      *
      * @return \Doctrine\Common\Collections\ArrayCollection<\Chamilo\Core\Group\Storage\DataClass\Group>
+     * @throws \Chamilo\Libraries\Storage\Exception\Database\StorageMethodException
      */
     public function findGroupsForSearchQueryAndParentIdentifier(
         ?string $searchQuery = null, string $parentIdentifier = '0'
@@ -276,6 +302,10 @@ class GroupService
         );
     }
 
+    /**
+     * @throws \Chamilo\Libraries\Storage\Exception\Database\StorageNoResultException
+     * @throws \Chamilo\Libraries\Storage\Exception\Database\StorageMethodException
+     */
     public function findRootGroup(): Group
     {
         $group = $this->groupRepository->findRootGroup();
@@ -294,6 +324,8 @@ class GroupService
     }
 
     /**
+     * @throws \Chamilo\Libraries\Storage\Exception\Database\StorageMethodException
+     * @throws \Chamilo\Libraries\Storage\Exception\Database\StorageNoResultException
      * @deprecated Use GroupService::findGroupByIdentifier() now
      */
     public function getGroupByIdentifier(string $groupIdentifier): ?Group
@@ -343,6 +375,11 @@ class GroupService
         return $this->propertyMapper;
     }
 
+    /**
+     * @throws \Throwable
+     * @throws \Chamilo\Libraries\Storage\Exception\Database\StorageNoResultException
+     * @throws \Chamilo\Libraries\Storage\Exception\Database\StorageMethodException
+     */
     public function moveGroup(Group $group, string $parentGroupIdentifier): bool
     {
         $oldParentGroup = $this->findGroupByIdentifier($group->getParentId());
@@ -358,6 +395,10 @@ class GroupService
         return true;
     }
 
+    /**
+     * @throws \Chamilo\Libraries\Storage\Exception\Database\StorageNoResultException
+     * @throws \Chamilo\Libraries\Storage\Exception\Database\StorageMethodException
+     */
     public function subscribeUserToGroupByCode(string $groupCode, User $user): GroupRelUser
     {
         return $this->getGroupMembershipService()->subscribeUserToGroup($this->findGroupByCode($groupCode), $user);
@@ -368,6 +409,9 @@ class GroupService
         return $this->getGroupMembershipService()->unsubscribeAllUsersFromGroup($group);
     }
 
+    /**
+     * @throws \Chamilo\Libraries\Storage\Exception\Database\StorageMethodException
+     */
     public function updateGroup(Group $group): bool
     {
         if (!$this->getGroupRepository()->updateGroup($group))

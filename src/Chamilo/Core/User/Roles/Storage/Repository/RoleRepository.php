@@ -31,7 +31,7 @@ class RoleRepository extends DataManagerRepository implements RoleRepositoryInte
 
     public function countRoles(?Condition $condition = null): int
     {
-        return $this->getDataClassRepository()->count(Role::class, new DataClassCountParameters($condition));
+        return $this->getDataClassRepository()->count(Role::class, new DataClassCountParameters(condition: $condition));
     }
 
     public function createRole(Role $role): bool
@@ -50,7 +50,7 @@ class RoleRepository extends DataManagerRepository implements RoleRepositoryInte
             new PropertyConditionVariable(Role::class, Role::PROPERTY_ROLE), new StaticConditionVariable($roleName)
         );
 
-        return $this->getDataClassRepository()->retrieve(Role::class, new RetrieveParameters($condition));
+        return $this->getDataClassRepository()->retrieve(Role::class, new RetrieveParameters(condition: $condition));
     }
 
     /**
@@ -61,7 +61,9 @@ class RoleRepository extends DataManagerRepository implements RoleRepositoryInte
     ): ArrayCollection
     {
         return $this->getDataClassRepository()->retrieves(
-            Role::class, new RetrievesParameters($condition, $count, $offset, $orderBy)
+            Role::class, new RetrievesParameters(
+                condition: $condition, count: $count, offset: $offset, orderBy: $orderBy
+            )
         );
     }
 

@@ -200,7 +200,7 @@ abstract class Manager extends Application
         $condition = new InCondition(
             new PropertyConditionVariable(CourseType::class, CourseType::PROPERTY_ID), $course_type_ids
         );
-        $result_set = DataManager::retrieves(CourseType::class, new RetrievesParameters($condition));
+        $result_set = DataManager::retrieves(CourseType::class, new RetrievesParameters(condition: $condition));
 
         if ($result_set->count() == 0)
         {

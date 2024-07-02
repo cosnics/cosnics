@@ -37,7 +37,7 @@ class RequestRepository extends CommonDataClassRepository
     public function countRequestsWithContentObjects(Condition $condition)
     {
         return $this->dataClassRepository->count(
-            Request::class, new DataClassCountParameters($condition, $this->getRequestJoins())
+            Request::class, new DataClassCountParameters(condition: $condition, joins: $this->getRequestJoins())
         );
     }
 
@@ -55,7 +55,7 @@ class RequestRepository extends CommonDataClassRepository
             new PropertyConditionVariable(Request::class, Request::PROPERTY_GUID), new StaticConditionVariable($guid)
         );
 
-        return $this->dataClassRepository->retrieve(Request::class, new RetrieveParameters($condition));
+        return $this->dataClassRepository->retrieve(Request::class, new RetrieveParameters(condition: $condition));
     }
 
     /**
@@ -72,7 +72,7 @@ class RequestRepository extends CommonDataClassRepository
             new PropertyConditionVariable(Request::class, Request::PROPERTY_ID), new StaticConditionVariable($id)
         );
 
-        return $this->dataClassRepository->retrieve(Request::class, new RetrieveParameters($condition));
+        return $this->dataClassRepository->retrieve(Request::class, new RetrieveParameters(condition: $condition));
     }
 
     /**
@@ -125,8 +125,7 @@ class RequestRepository extends CommonDataClassRepository
         $properties->add(new PropertyConditionVariable(Request::class, Request::PROPERTY_GUID));
 
         $retrievesParameters = new RetrievesParameters(
-            condition: $condition, count: null, offset: null, joins: $this->getRequestJoins(),
-            retrieveProperties: $properties
+            condition: $condition, joins: $this->getRequestJoins(), retrieveProperties: $properties
         );
 
         $records = $this->dataClassRepository->records(Request::class, $retrievesParameters);
@@ -156,7 +155,7 @@ class RequestRepository extends CommonDataClassRepository
         $orderBy = [new OrderProperty(new PropertyConditionVariable(Result::class, Result::PROPERTY_PERCENTAGE))];
 
         return $this->dataClassRepository->retrieves(
-            Result::class, new RetrievesParameters($condition, null, null, new OrderBy($orderBy))
+            Result::class, new RetrievesParameters(condition: $condition, orderBy: new OrderBy($orderBy))
         );
     }
 

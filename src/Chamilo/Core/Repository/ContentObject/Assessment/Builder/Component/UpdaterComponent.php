@@ -86,7 +86,7 @@ class UpdaterComponent extends Manager implements BreadcrumbLessComponentInterfa
 
                 $children = DataManager::retrieve_complex_content_object_items(
                     ComplexContentObjectItem::class, new RetrievesParameters(
-                        new EqualityCondition(
+                        condition: new EqualityCondition(
                             new PropertyConditionVariable(
                                 ComplexContentObjectItem::class, ComplexContentObjectItem::PROPERTY_PARENT
                             ), new StaticConditionVariable($old_id)

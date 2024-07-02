@@ -162,7 +162,7 @@ class FixedLocationToolListRenderer extends ToolListRenderer
         $condition = new AndCondition($conditions);
 
         $course_tool_rel_course_section = DataManager::retrieves(
-            CourseToolRelCourseSection::class, new RetrievesParameters($condition)
+            CourseToolRelCourseSection::class, new RetrievesParameters(condition: $condition)
         );
 
         if ($course_tool_rel_course_section->count() > 0)
@@ -193,7 +193,7 @@ class FixedLocationToolListRenderer extends ToolListRenderer
             $condition = new AndCondition($conditions);
 
             $this->publication_links = DataManager::retrieves(
-                ContentObjectPublication::class, new RetrievesParameters($condition)
+                ContentObjectPublication::class, new RetrievesParameters(condition: $condition)
             );
         }
 
@@ -474,7 +474,7 @@ class FixedLocationToolListRenderer extends ToolListRenderer
                 new PropertyConditionVariable(CourseSection::class, CourseSection::PROPERTY_DISPLAY_ORDER)
             )
         ];
-        $parameters = new RetrievesParameters($condition, null, null, new OrderBy($order_property));
+        $parameters = new RetrievesParameters(condition: $condition, orderBy: new OrderBy($order_property));
         $sections = DataManager::retrieves(CourseSection::class, $parameters);
 
         foreach ($sections as $section)

@@ -126,8 +126,9 @@ class BrowserComponent extends Manager
      */
     protected function renderTable(): string
     {
-        $totalNumberOfItems =
-            DataManager::count(ProviderLink::class, new DataClassCountParameters($this->getProviderLinkCondition()));
+        $totalNumberOfItems = DataManager::count(
+            ProviderLink::class, new DataClassCountParameters(condition: $this->getProviderLinkCondition())
+        );
         $providerLinkTableRenderer = $this->getProviderLinkTableRenderer();
 
         $tableParameterValues = $this->getRequestTableParameterValuesCompiler()->determineParameterValues(
@@ -137,9 +138,10 @@ class BrowserComponent extends Manager
 
         $providerLinks = DataManager::retrieves(
             ProviderLink::class, new RetrievesParameters(
-                $this->getProviderLinkCondition(),
-                $tableParameterValues->getNumberOfItemsPerPage(),$tableParameterValues->getOffset(),
-                $providerLinkTableRenderer->determineOrderBy($tableParameterValues)
+                condition: $this->getProviderLinkCondition(), count: $tableParameterValues->getNumberOfItemsPerPage(),
+                offset: $tableParameterValues->getOffset(), orderBy: $providerLinkTableRenderer->determineOrderBy(
+                $tableParameterValues
+            )
             )
         );
 

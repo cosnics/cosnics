@@ -100,7 +100,7 @@ class RequestForm extends FormValidator
                 );
 
                 $users_result = DataManager::retrieves(
-                    User::class, new RetrievesParameters(null, null, null, $order)
+                    User::class, new RetrievesParameters(orderBy: $order)
                 );
 
                 $users = [];

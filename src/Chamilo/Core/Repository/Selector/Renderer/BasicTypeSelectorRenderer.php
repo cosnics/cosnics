@@ -148,7 +148,7 @@ class BasicTypeSelectorRenderer extends TypeSelectorRenderer
                 $type = $context . '\Storage\DataClass\\' .
                     (string) StringUtilities::getInstance()->createString($package)->upperCamelize();
 
-                $parameters = new DataClassCountParameters($condition);
+                $parameters = new DataClassCountParameters(condition: $condition);
                 $count = DataManager::count_active_content_objects($type, $parameters);
 
                 if ($count > 0)

@@ -28,7 +28,7 @@ class LearningPathTreeNodeAttempt extends TreeNodeAttempt
         );
 
         $trackers = DataManager::retrieves(
-            LearningPathTreeNodeQuestionAttempt::class, new RetrievesParameters($condition)
+            LearningPathTreeNodeQuestionAttempt::class, new RetrievesParameters(condition: $condition)
         );
 
         foreach ($trackers as $tracker)

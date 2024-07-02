@@ -418,7 +418,7 @@ class CourseType extends DataClass implements DisplayOrderDataClassListenerSuppo
         $condition = new AndCondition($conditions);
 
         return DataManager::retrieve(
-            CourseTypeRelCourseSetting::class, new RetrieveParameters($condition)
+            CourseTypeRelCourseSetting::class, new RetrieveParameters(condition: $condition)
         );
     }
 

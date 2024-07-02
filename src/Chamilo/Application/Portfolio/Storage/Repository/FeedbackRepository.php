@@ -37,11 +37,11 @@ class FeedbackRepository
 
     /**
      *
-     * @param integer $publicationIdentifier
-     * @param integer $complexContentObjectIdentifier
-     * @param integer $userIdentifier
+     * @param int $publicationIdentifier
+     * @param int $complexContentObjectIdentifier
+     * @param int $userIdentifier
      *
-     * @return integer
+     * @return int
      */
     public function countFeedbackForPublicationComplexContentObjectAndUserIdentifiers(
         int $publicationIdentifier, int $complexContentObjectIdentifier = null, int $userIdentifier = null
@@ -49,14 +49,16 @@ class FeedbackRepository
     {
         return $this->getDataClassRepository()->count(
             Feedback::class, new DataClassCountParameters(
-                $this->getFeedbackConditions($publicationIdentifier, $complexContentObjectIdentifier, $userIdentifier)
+                condition: $this->getFeedbackConditions(
+                    $publicationIdentifier, $complexContentObjectIdentifier, $userIdentifier
+                )
             )
         );
     }
 
     /**
      *
-     * @param integer $identifier
+     * @param int $identifier
      *
      * @return \Chamilo\Application\Portfolio\Storage\DataClass\Feedback
      */
@@ -67,11 +69,11 @@ class FeedbackRepository
 
     /**
      *
-     * @param integer $publicationIdentifier
-     * @param integer $complexContentObjectIdentifier
-     * @param integer $userIdentifier
-     * @param integer $count
-     * @param integer $offset
+     * @param int $publicationIdentifier
+     * @param int $complexContentObjectIdentifier
+     * @param int $userIdentifier
+     * @param int $count
+     * @param int $offset
      *
      * @return \Chamilo\Application\Portfolio\Storage\DataClass\Feedback[]
      */
@@ -81,8 +83,8 @@ class FeedbackRepository
     )
     {
         $parameters = new RetrievesParameters(
-            $this->getFeedbackConditions($publicationIdentifier, $complexContentObjectIdentifier, $userIdentifier),
-            $count, $offset, new OrderBy([
+            condition: $this->getFeedbackConditions($publicationIdentifier, $complexContentObjectIdentifier, $userIdentifier),
+            count: $count, offset: $offset, orderBy: new OrderBy([
                 new OrderProperty(
                     new PropertyConditionVariable(Feedback::class, Feedback::PROPERTY_MODIFICATION_DATE), SORT_DESC
                 )
@@ -112,9 +114,9 @@ class FeedbackRepository
 
     /**
      *
-     * @param integer $publicationIdentifier
-     * @param integer $complexContentObjectIdentifier
-     * @param integer $userIdentifier
+     * @param int $publicationIdentifier
+     * @param int $complexContentObjectIdentifier
+     * @param int $userIdentifier
      *
      * @return \Chamilo\Libraries\Storage\Query\Condition\AndCondition
      */

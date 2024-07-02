@@ -58,7 +58,7 @@ class CourseCopierRepository implements CourseCopierRepositoryInterface
 
             return $datamanager_class::retrieve(
                 $possible_publication_class, new RetrieveParameters(
-                    new EqualityCondition(
+                    condition: new EqualityCondition(
                         new PropertyConditionVariable(
                             $possible_publication_class, $possible_publication_class::PROPERTY_PUBLICATION_ID
                         ), new StaticConditionVariable($contentObjectPublication->getId())
@@ -109,8 +109,7 @@ class CourseCopierRepository implements CourseCopierRepositoryInterface
         );
 
         return DataManager::retrieves(
-            ContentObjectPublicationCategory::class,
-            new RetrievesParameters($condition, null, null, $order_by)
+            ContentObjectPublicationCategory::class, new RetrievesParameters(condition: $condition, orderBy: $order_by)
         );
     }
 

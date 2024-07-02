@@ -53,7 +53,7 @@ class CourseCategoryEntity implements NestedRightsEntity
         $condition = $this->get_condition($condition);
 
         return DataManager::count(
-            CourseCategory::class, new DataClassCountParameters($condition)
+            CourseCategory::class, new DataClassCountParameters(condition: $condition)
         );
     }
 
@@ -303,7 +303,8 @@ class CourseCategoryEntity implements NestedRightsEntity
         $condition = $this->get_condition($condition);
 
         return \Chamilo\Application\Weblcms\Course\Storage\DataManager::retrieves(
-            CourseCategory::class, new RetrievesParameters($condition, $count, $offset, $order_property)
+            CourseCategory::class, new RetrievesParameters(
+                condition: $condition, count: $count, offset: $offset, orderBy: $order_property)
         );
     }
 }

@@ -146,13 +146,13 @@ class XmlCourseUserGroupFeedComponent extends Manager
             );
 
             $parameters = new DataClassDistinctParameters(
-                new AndCondition($userConditions), new RetrieveProperties(
-                    [
-                        new PropertyConditionVariable(
-                            CourseEntityRelation::class, CourseEntityRelation::PROPERTY_ENTITY_ID
-                        )
-                    ]
-                )
+                condition: new AndCondition($userConditions), retrieveProperties: new RetrieveProperties(
+                [
+                    new PropertyConditionVariable(
+                        CourseEntityRelation::class, CourseEntityRelation::PROPERTY_ENTITY_ID
+                    )
+                ]
+            )
             );
 
             $user_ids = DataManager::distinct(CourseEntityRelation::class, $parameters);

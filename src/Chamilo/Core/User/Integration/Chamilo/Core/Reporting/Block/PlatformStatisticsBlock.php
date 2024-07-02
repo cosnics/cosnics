@@ -35,7 +35,7 @@ class PlatformStatisticsBlock extends Block
         );
         $condition = new AndCondition($conditions);
 
-        $trackerdata = DataManager::retrieves(LoginLogout::class, new RetrievesParameters($condition));
+        $trackerdata = DataManager::retrieves(LoginLogout::class, new RetrievesParameters(condition: $condition));
 
         $firstconnection = null;
         foreach ($trackerdata as $key => $value)

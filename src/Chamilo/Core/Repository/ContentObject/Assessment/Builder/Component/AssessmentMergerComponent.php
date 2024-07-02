@@ -174,7 +174,7 @@ class AssessmentMergerComponent extends Manager implements ViewerInterface
     protected function renderTable(): string
     {
         $totalNumberOfItems = DataManager::count_active_content_objects(
-            ContentObject::class, new DataClassCountParameters($this->getObjectCondition())
+            ContentObject::class, new DataClassCountParameters(condition: $this->getObjectCondition())
         );
 
         $objectTableRenderer = $this->getObjectTableRenderer();
@@ -186,8 +186,8 @@ class AssessmentMergerComponent extends Manager implements ViewerInterface
 
         $objects = DataManager::retrieve_active_content_objects(
             ContentObject::class, new RetrievesParameters(
-                $this->getObjectCondition(), $tableParameterValues->getNumberOfItemsPerPage(),
-                $tableParameterValues->getOffset(), $objectTableRenderer->determineOrderBy($tableParameterValues)
+                condition: $this->getObjectCondition(), count: $tableParameterValues->getNumberOfItemsPerPage(),
+                offset: $tableParameterValues->getOffset(), orderBy: $objectTableRenderer->determineOrderBy($tableParameterValues)
             )
         );
 

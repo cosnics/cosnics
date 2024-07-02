@@ -643,7 +643,7 @@ class ViewerComponent extends Manager implements BreadcrumbLessComponentInterfac
         if ($contentObject->get_current() != ContentObject::CURRENT_SINGLE)
         {
             $totalNumberOfItems = DataManager::count_content_objects(
-                ContentObject::class, new DataClassCountParameters($this->getVersionTableCondition())
+                ContentObject::class, new DataClassCountParameters(condition: $this->getVersionTableCondition())
             );
 
             $versionTableRenderer = $this->getVersionTableRenderer();
@@ -655,8 +655,8 @@ class ViewerComponent extends Manager implements BreadcrumbLessComponentInterfac
 
             $contentObjects = DataManager::retrieve_content_objects(
                 ContentObject::class, new RetrievesParameters(
-                    $this->getVersionTableCondition(), $tableParameterValues->getNumberOfItemsPerPage(),
-                    $tableParameterValues->getOffset(), $versionTableRenderer->determineOrderBy($tableParameterValues)
+                    condition: $this->getVersionTableCondition(), count: $tableParameterValues->getNumberOfItemsPerPage(),
+                    offset: $tableParameterValues->getOffset(), orderBy: $versionTableRenderer->determineOrderBy($tableParameterValues)
                 )
             );
 

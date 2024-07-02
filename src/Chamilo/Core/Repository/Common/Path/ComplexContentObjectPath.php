@@ -207,12 +207,11 @@ abstract class ComplexContentObjectPath
 
     /**
      * @return \Chamilo\Libraries\Storage\Cache\DataClassRepositoryCache
+     * @throws \Exception
      */
-    protected function getDataClassRepositoryCache()
+    protected function getDataClassRepositoryCache(): DataClassRepositoryCache
     {
-        return $this->getService(
-            DataClassRepositoryCache::class
-        );
+        return $this->getService(DataClassRepositoryCache::class);
     }
 
     /**
@@ -376,7 +375,7 @@ abstract class ComplexContentObjectPath
         $this->children = [];
         $this->parents = [];
 
-        $this->getDataClassRepositoryCache()->truncate(ComplexContentObjectItem::class);
+        $this->getDataClassRepositoryCache()->truncateClass(ComplexContentObjectItem::class);
 
         $this->initialize($root);
     }

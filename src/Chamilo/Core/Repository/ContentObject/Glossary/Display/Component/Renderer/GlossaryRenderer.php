@@ -75,7 +75,7 @@ abstract class GlossaryRenderer
      */
     public function count_objects()
     {
-        $parameters = new DataClassCountParameters($this->get_condition(), $this->get_joins());
+        $parameters = new DataClassCountParameters(condition: $this->get_condition(), joins: $this->get_joins());
 
         return DataManager::count_complex_content_object_items(
             ComplexContentObjectItem::class, $parameters
@@ -183,7 +183,8 @@ abstract class GlossaryRenderer
     public function get_objects($offset = null, $count = null, $order_property = null)
     {
         $parameters = new RetrievesParameters(
-            $this->get_condition(), $count, $offset, $order_property, $this->get_joins()
+            condition: $this->get_condition(), count: $count, offset: $offset, orderBy: $order_property,
+            joins: $this->get_joins()
         );
 
         return DataManager::retrieve_complex_content_object_items(

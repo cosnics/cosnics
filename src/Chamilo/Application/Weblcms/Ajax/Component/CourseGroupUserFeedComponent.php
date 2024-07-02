@@ -74,7 +74,7 @@ class CourseGroupUserFeedComponent extends Manager
     protected function countUsers()
     {
         return DataManager::count(
-            User::class, new DataClassCountParameters($this->getUserCondition())
+            User::class, new DataClassCountParameters(condition: $this->getUserCondition())
         );
     }
 
@@ -153,13 +153,13 @@ class CourseGroupUserFeedComponent extends Manager
             );
 
             $parameters = new DataClassDistinctParameters(
-                new AndCondition($conditions), new RetrieveProperties(
-                    [
-                        new PropertyConditionVariable(
-                            CourseEntityRelation::class, CourseEntityRelation::PROPERTY_ENTITY_ID
-                        )
-                    ]
-                )
+                condition: new AndCondition($conditions), retrieveProperties: new RetrieveProperties(
+                [
+                    new PropertyConditionVariable(
+                        CourseEntityRelation::class, CourseEntityRelation::PROPERTY_ENTITY_ID
+                    )
+                ]
+            )
             );
 
             $this->courseUserIdentifiers = DataManager::distinct(CourseEntityRelation::class, $parameters);
@@ -312,7 +312,8 @@ class CourseGroupUserFeedComponent extends Manager
 
         return DataManager::retrieves(
             User::class,
-            new RetrievesParameters($this->getUserCondition(), 100, $this->getOffset(), new OrderBy($order))
+            new RetrievesParameters(
+                condition: $this->getUserCondition(), count: 100, offset: $this->getOffset(), orderBy: new OrderBy($order))
         );
     }
 }

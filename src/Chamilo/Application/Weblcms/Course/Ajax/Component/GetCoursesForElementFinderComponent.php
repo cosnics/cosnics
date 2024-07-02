@@ -89,8 +89,10 @@ class GetCoursesForElementFinderComponent extends Manager implements AjaxResultD
     protected function getCourses()
     {
         $parameters = new RetrievesParameters(
-            $this->getCondition(), 100, $this->ajaxResultGenerator->getOffset(),
-            new OrderBy([new OrderProperty(new PropertyConditionVariable(Course::class, Course::PROPERTY_TITLE))])
+            condition: $this->getCondition(), count: 100, offset: $this->ajaxResultGenerator->getOffset(),
+            orderBy: new OrderBy(
+            [new OrderProperty(new PropertyConditionVariable(Course::class, Course::PROPERTY_TITLE))]
+        )
         );
 
         return DataManager::retrieves(Course::class, $parameters);
@@ -104,7 +106,7 @@ class GetCoursesForElementFinderComponent extends Manager implements AjaxResultD
     public function getTotalNumberOfElements()
     {
         return DataManager::count(
-            Course::class, new DataClassCountParameters($this->getCondition())
+            Course::class, new DataClassCountParameters(condition: $this->getCondition())
         );
     }
 }

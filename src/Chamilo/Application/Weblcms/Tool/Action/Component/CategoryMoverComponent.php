@@ -86,7 +86,7 @@ class CategoryMoverComponent extends Manager implements BreadcrumbLessComponentI
                             new StaticConditionVariable($publication->get_tool())
                         );
                         $course_modules = DataManager::retrieves(
-                            CourseTool::class, new RetrievesParameters($condition)
+                            CourseTool::class, new RetrievesParameters(condition: $condition)
                         );
 
                         $course_module_id = $course_modules[0]->get_id();
@@ -185,7 +185,7 @@ class CategoryMoverComponent extends Manager implements BreadcrumbLessComponentI
         $condition = new AndCondition($conditions);
 
         $categories = DataManager::retrieves(
-            ContentObjectPublicationCategory::class, new RetrievesParameters($condition)
+            ContentObjectPublicationCategory::class, new RetrievesParameters(condition: $condition)
         );
 
         foreach($categories as $cat)

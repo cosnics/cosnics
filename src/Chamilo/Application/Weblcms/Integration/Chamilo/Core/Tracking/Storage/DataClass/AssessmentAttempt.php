@@ -70,7 +70,7 @@ class AssessmentAttempt extends AbstractAttempt
             $condition = new AndCondition($conditions);
         }
 
-        $trackers = DataManager::retrieves(self::class, new RetrievesParameters($condition));
+        $trackers = DataManager::retrieves(self::class, new RetrievesParameters(condition: $condition));
         $num = $trackers->count();
 
         $total_score = 0;
@@ -114,7 +114,7 @@ class AssessmentAttempt extends AbstractAttempt
             $condition = new AndCondition($conditions);
         }
 
-        return DataManager::count(self::class, new DataClassCountParameters($condition));
+        return DataManager::count(self::class, new DataClassCountParameters(condition: $condition));
     }
 
     /**

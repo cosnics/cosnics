@@ -81,7 +81,8 @@ class RightsRepository
     {
         return $this->getDataClassRepository()->distinct(
             BlockTypeTargetEntity::class, new DataClassDistinctParameters(
-                $this->getTargetEntitiesConditionForUser(BlockTypeTargetEntity::class, $user), new RetrieveProperties(
+                condition: $this->getTargetEntitiesConditionForUser(BlockTypeTargetEntity::class, $user),
+                retrieveProperties: new RetrieveProperties(
                     [
                         new PropertyConditionVariable(
                             BlockTypeTargetEntity::class, BlockTypeTargetEntity::PROPERTY_BLOCK_TYPE
@@ -99,7 +100,8 @@ class RightsRepository
     {
         return $this->getDataClassRepository()->distinct(
             ElementTargetEntity::class, new DataClassDistinctParameters(
-                $this->getTargetEntitiesConditionForUser(ElementTargetEntity::class, $user), new RetrieveProperties(
+                condition: $this->getTargetEntitiesConditionForUser(ElementTargetEntity::class, $user),
+                retrieveProperties: new RetrieveProperties(
                     [
                         new PropertyConditionVariable(
                             ElementTargetEntity::class, ElementTargetEntity::PROPERTY_ELEMENT_ID
@@ -117,7 +119,7 @@ class RightsRepository
     {
         $targetedEntityIds = $this->getDataClassRepository()->distinct(
             ElementTargetEntity::class, new DataClassDistinctParameters(
-                null, new RetrieveProperties(
+                retrieveProperties: new RetrieveProperties(
                     [
                         new PropertyConditionVariable(
                             ElementTargetEntity::class, ElementTargetEntity::PROPERTY_ELEMENT_ID
@@ -135,8 +137,9 @@ class RightsRepository
 
         return $this->getDataClassRepository()->distinct(
             Element::class, new DataClassDistinctParameters(
-                $condition,
-                new RetrieveProperties([new PropertyConditionVariable(Element::class, DataClass::PROPERTY_ID)])
+                condition: $condition, retrieveProperties: new RetrieveProperties(
+                [new PropertyConditionVariable(Element::class, DataClass::PROPERTY_ID)]
+            )
             )
         );
     }
@@ -160,7 +163,7 @@ class RightsRepository
     {
         return $this->getDataClassRepository()->retrieves(
             BlockTypeTargetEntity::class,
-            new RetrievesParameters($this->getBlockTypeTargetEntityConditionByBlockType($blockType))
+            new RetrievesParameters(condition: $this->getBlockTypeTargetEntityConditionByBlockType($blockType))
         );
     }
 
@@ -173,7 +176,7 @@ class RightsRepository
     {
         return $this->getDataClassRepository()->retrieves(
             ElementTargetEntity::class,
-            new RetrievesParameters($this->getElementTargetEntityConditionByElement($element))
+            new RetrievesParameters(condition: $this->getElementTargetEntityConditionByElement($element))
         );
     }
 
@@ -184,7 +187,7 @@ class RightsRepository
     {
         return $this->getDataClassRepository()->distinct(
             BlockTypeTargetEntity::class, new DataClassDistinctParameters(
-                null, new RetrieveProperties(
+                retrieveProperties: new RetrieveProperties(
                     [
                         new PropertyConditionVariable(
                             BlockTypeTargetEntity::class, BlockTypeTargetEntity::PROPERTY_BLOCK_TYPE

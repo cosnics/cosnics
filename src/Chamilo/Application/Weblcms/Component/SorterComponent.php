@@ -158,7 +158,7 @@ class SorterComponent extends Manager
             $condition = new AndCondition($conditions);
 
             $course_type_user_category_rel_course = DataManager::retrieves(
-                CourseTypeUserCategoryRelCourse::class, new RetrievesParameters($condition)
+                CourseTypeUserCategoryRelCourse::class, new RetrievesParameters(condition: $condition)
             )->current();
         }
 
@@ -573,7 +573,7 @@ class SorterComponent extends Manager
         $condition = new AndCondition($conditions);
 
         $course_type_user_category_rel_course = DataManager::retrieve(
-            CourseTypeUserCategoryRelCourse::class, new RetrieveParameters($condition)
+            CourseTypeUserCategoryRelCourse::class, new RetrieveParameters(condition: $condition)
         );
 
         $sort_factor = $direction == 'up' ? - 1 : 1;
@@ -639,7 +639,7 @@ class SorterComponent extends Manager
                     $this->get_user_id()
                 );
 
-                $this->getDataClassRepositoryCache()->truncate(CourseTypeUserOrder::class);
+                $this->getDataClassRepositoryCache()->truncateClass(CourseTypeUserOrder::class);
 
                 $selected_course_type_user_order =
                     \Chamilo\Application\Weblcms\CourseType\Storage\DataManager::retrieve_user_order_for_course_type(

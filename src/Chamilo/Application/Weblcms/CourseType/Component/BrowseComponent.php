@@ -125,7 +125,7 @@ class BrowseComponent extends Manager
     protected function renderTable(): string
     {
         $totalNumberOfItems =
-            DataManager::count(CourseType::class, new DataClassCountParameters($this->getCourseTypeCondition()));
+            DataManager::count(CourseType::class, new DataClassCountParameters(condition: $this->getCourseTypeCondition()));
         $courseTypeTableRenderer = $this->getCourseTypeTableRenderer();
 
         $tableParameterValues = $this->getRequestTableParameterValuesCompiler()->determineParameterValues(
@@ -142,8 +142,8 @@ class BrowseComponent extends Manager
         );
 
         $parameters = new RetrievesParameters(
-            $this->getCourseTypeCondition(), $tableParameterValues->getNumberOfItemsPerPage(),
-            $tableParameterValues->getOffset(), $orderBy
+            condition: $this->getCourseTypeCondition(), count: $tableParameterValues->getNumberOfItemsPerPage(),
+            offset: $tableParameterValues->getOffset(), orderBy: $orderBy
         );
 
         $courseTypes = DataManager::retrieves(CourseType::class, $parameters);

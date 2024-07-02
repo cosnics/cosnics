@@ -24,7 +24,7 @@ class RandomizerComponent extends Manager
     {
         $complex_content_object_items = DataManager::retrieve_complex_content_object_items(
             ComplexContentObjectItem::class, new RetrievesParameters(
-                new EqualityCondition(
+                condition: new EqualityCondition(
                     new PropertyConditionVariable(
                         ComplexContentObjectItem::class, ComplexContentObjectItem::PROPERTY_PARENT
                     ), new StaticConditionVariable($this->get_parent_content_object_id())
