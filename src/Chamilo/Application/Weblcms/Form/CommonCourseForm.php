@@ -28,7 +28,6 @@ use Chamilo\Libraries\Format\Tabs\Form\FormTab;
 use Chamilo\Libraries\Format\Tabs\TabsCollection;
 use Chamilo\Libraries\Format\Utilities\ResourceManager;
 use Chamilo\Libraries\Storage\DataClass\DataClass;
-use Chamilo\Libraries\Storage\Parameters\RetrievesParameters;
 use Chamilo\Libraries\Storage\Query\Condition\AndCondition;
 use Chamilo\Libraries\Storage\Query\Condition\EqualityCondition;
 use Chamilo\Libraries\Storage\Query\Condition\InCondition;
@@ -130,9 +129,9 @@ abstract class CommonCourseForm extends FormValidator implements CourseSettingsX
      * Adds xml defined settings to the form
      *
      * @param String $xml_file_path
-     * @param String $context         - [OPTIONAL] The context - Default common\libraries
+     * @param String $context - [OPTIONAL] The context - Default common\libraries
      * @param Object $connector_class - [OPTIONAL] The connector class to retrieve the dynamic options
-     * @param String $prefix          - [OPTIONAL] The prefix for the elements
+     * @param String $prefix - [OPTIONAL] The prefix for the elements
      */
     protected function add_settings_from_xml(
         $xml_file_path, $context = null, $connector_class = null, $prefix = null, $tool_id = 0
@@ -341,7 +340,7 @@ abstract class CommonCourseForm extends FormValidator implements CourseSettingsX
             new PropertyConditionVariable(CourseSetting::class, CourseSetting::PROPERTY_TOOL_ID), $settings_condition
         );
 
-        $toolsArray = DataManager::retrieves(CourseTool::class, new RetrievesParameters(condition: $tools_condition));
+        $toolsArray = DataManager::retrieves(CourseTool::class, new DataClassParameters(condition: $tools_condition));
 
         usort(
             $toolsArray, function ($toolA, $toolB) {
@@ -413,7 +412,7 @@ abstract class CommonCourseForm extends FormValidator implements CourseSettingsX
             )
         );
 
-        $toolsArray = DataManager::retrieves(CourseTool::class, new RetrievesParameters(condition: $tools_condition));
+        $toolsArray = DataManager::retrieves(CourseTool::class, new DataClassParameters(condition: $tools_condition));
 
         usort(
             $toolsArray, function ($toolA, $toolB) {
@@ -617,15 +616,6 @@ abstract class CommonCourseForm extends FormValidator implements CourseSettingsX
      */
 
     /**
-     * Returns the defaults for the selected base object (course_type)
-     *
-     * @param DataClass $base_object
-     *
-     * @return string[]
-     */
-    abstract public function get_base_object_default_values(DataClass $base_object);
-
-    /**
      * Sets the base object for this form
      *
      * @param DataClass $base_object
@@ -634,6 +624,15 @@ abstract class CommonCourseForm extends FormValidator implements CourseSettingsX
     {
         $this->base_object = $base_object;
     }
+
+    /**
+     * Returns the defaults for the selected base object (course_type)
+     *
+     * @param DataClass $base_object
+     *
+     * @return string[]
+     */
+    abstract public function get_base_object_default_values(DataClass $base_object);
 
     /**
      * **************************************************************************************************************
@@ -709,8 +708,8 @@ abstract class CommonCourseForm extends FormValidator implements CourseSettingsX
                     continue;
                 }
 
-                if ($selected_entity->get_entity_type() == 1 &&
-                    $selected_entity->get_entity_id() == $this->getSession()->get(\Chamilo\Core\User\Manager::SESSION_USER_ID))
+                if ($selected_entity->get_entity_type() == 1 && $selected_entity->get_entity_id() ==
+                    $this->getSession()->get(\Chamilo\Core\User\Manager::SESSION_USER_ID))
                 {
                     $defaults[$option_name] = CourseManagementRights::RIGHT_OTPION_ME;
                     continue;

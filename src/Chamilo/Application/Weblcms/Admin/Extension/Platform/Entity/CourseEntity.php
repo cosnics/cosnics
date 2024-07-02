@@ -7,8 +7,7 @@ use Chamilo\Core\Rights\Entity\RightsEntity;
 use Chamilo\Libraries\Format\Form\Element\AdvancedElementFinder\AdvancedElementFinderElement;
 use Chamilo\Libraries\Format\Form\Element\AdvancedElementFinder\AdvancedElementFinderElementType;
 use Chamilo\Libraries\Format\Structure\Glyph\FontAwesomeGlyph;
-use Chamilo\Libraries\Storage\Parameters\DataClassParameters;
-use Chamilo\Libraries\Storage\Parameters\RetrievesParameters;
+use Chamilo\Libraries\Storage\Query\DataClassParameters;
 use Chamilo\Libraries\Translation\Translation;
 use Chamilo\Libraries\Utilities\StringUtilities;
 
@@ -224,7 +223,7 @@ class CourseEntity implements RightsEntity
     public function retrieve_entity_items($condition = null, $offset = null, $count = null, $order_property = null)
     {
         $condition = $this->get_condition($condition);
-        $parameters = new RetrievesParameters(
+        $parameters = new DataClassParameters(
             condition: $condition, count: $count, offset: $offset, orderBy: $order_property
         );
 

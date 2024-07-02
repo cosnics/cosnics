@@ -4,7 +4,7 @@ namespace Chamilo\Core\User\Integration\Chamilo\Core\Reporting\Block;
 use Chamilo\Core\Reporting\ReportingBlock;
 use Chamilo\Core\User\Manager;
 use Chamilo\Libraries\Storage\DataManager\DataManager;
-use Chamilo\Libraries\Storage\Parameters\DataClassParameters;
+use Chamilo\Libraries\Storage\Query\DataClassParameters;
 
 abstract class Block extends ReportingBlock
 {

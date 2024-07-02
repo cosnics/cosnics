@@ -6,12 +6,11 @@ use Chamilo\Application\Weblcms\Admin\Extension\Platform\Entity\UserEntity;
 use Chamilo\Application\Weblcms\Admin\Extension\Platform\Manager;
 use Chamilo\Application\Weblcms\Admin\Extension\Platform\Storage\DataClass\Admin;
 use Chamilo\Application\Weblcms\Course\Storage\DataClass\Course;
-use Chamilo\Libraries\Storage\Parameters\DataClassParameters;
-use Chamilo\Libraries\Storage\Parameters\RetrievesParameters;
 use Chamilo\Libraries\Storage\Query\Condition\AndCondition;
 use Chamilo\Libraries\Storage\Query\Condition\EqualityCondition;
 use Chamilo\Libraries\Storage\Query\Condition\InCondition;
 use Chamilo\Libraries\Storage\Query\Condition\OrCondition;
+use Chamilo\Libraries\Storage\Query\DataClassParameters;
 use Chamilo\Libraries\Storage\Query\OrderBy;
 use Chamilo\Libraries\Storage\Query\OrderProperty;
 use Chamilo\Libraries\Storage\Query\RetrieveProperties;
@@ -178,7 +177,7 @@ class DataManager extends \Chamilo\Libraries\Storage\DataManager\DataManager
 
             $condition = new OrCondition($expanded_entities_conditions);
 
-            $admins = DataManager::retrieves(Admin::class, new RetrievesParameters(condition: $condition));
+            $admins = DataManager::retrieves(Admin::class, new DataClassParameters(condition: $condition));
             $course_ids = [];
 
             foreach ($admins as $admin)
@@ -200,7 +199,7 @@ class DataManager extends \Chamilo\Libraries\Storage\DataManager\DataManager
                 ]
             );
 
-            $parameters = new RetrievesParameters(
+            $parameters = new DataClassParameters(
                 condition: new InCondition(
                     new PropertyConditionVariable(
                         Course::class, Course::PROPERTY_ID

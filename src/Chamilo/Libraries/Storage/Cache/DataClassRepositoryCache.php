@@ -2,7 +2,7 @@
 namespace Chamilo\Libraries\Storage\Cache;
 
 use Chamilo\Libraries\Storage\DataClass\DataClass;
-use Chamilo\Libraries\Storage\Parameters\DataClassParameters;
+use Chamilo\Libraries\Storage\Query\DataClassParameters;
 use Doctrine\Common\Collections\ArrayCollection;
 
 /**

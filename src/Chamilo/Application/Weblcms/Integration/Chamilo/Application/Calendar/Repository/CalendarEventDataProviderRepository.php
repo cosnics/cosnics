@@ -3,7 +3,6 @@ namespace Chamilo\Application\Weblcms\Integration\Chamilo\Application\Calendar\R
 
 use Chamilo\Application\Weblcms\Storage\DataClass\ContentObjectPublication;
 use Chamilo\Core\Repository\Publication\Storage\Repository\PublicationRepository;
-use Chamilo\Libraries\Storage\Parameters\RetrievesParameters;
 use Chamilo\Libraries\Storage\Query\Condition\AndCondition;
 use Chamilo\Libraries\Storage\Query\Condition\Condition;
 use Chamilo\Libraries\Storage\Query\Condition\EqualityCondition;
@@ -52,7 +51,7 @@ abstract class CalendarEventDataProviderRepository
      */
     public function getPublications($fromDate, $toDate, $courses = [])
     {
-        $parameters = new RetrievesParameters(condition: $this->getPublicationsCondition($fromDate, $toDate, $courses));
+        $parameters = new DataClassParameters(condition: $this->getPublicationsCondition($fromDate, $toDate, $courses));
 
         return $this->publicationRepository->getPublicationsWithContentObjects(
             $parameters, ContentObjectPublication::class, $this->getContentObjectClassName()

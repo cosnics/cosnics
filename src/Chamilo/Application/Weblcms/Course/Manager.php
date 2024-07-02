@@ -8,7 +8,6 @@ use Chamilo\Libraries\Architecture\Application\Application;
 use Chamilo\Libraries\Architecture\Application\ApplicationConfigurationInterface;
 use Chamilo\Libraries\Architecture\Exceptions\NoObjectSelectedException;
 use Chamilo\Libraries\Architecture\Exceptions\ObjectNotExistException;
-use Chamilo\Libraries\Storage\Parameters\RetrievesParameters;
 use Chamilo\Libraries\Storage\Query\Condition\InCondition;
 use Chamilo\Libraries\Storage\Query\Variable\PropertyConditionVariable;
 use Chamilo\Libraries\Translation\Translation;
@@ -199,7 +198,7 @@ abstract class Manager extends Application
         $condition = new InCondition(
             new PropertyConditionVariable(Course::class, Course::PROPERTY_ID), $course_ids
         );
-        $result_set = DataManager::retrieves(Course::class, new RetrievesParameters(condition: $condition));
+        $result_set = DataManager::retrieves(Course::class, new DataClassParameters(condition: $condition));
         if ($result_set->count() == 0)
         {
             throw new ObjectNotExistException(Translation::get('Course'), $course_ids);

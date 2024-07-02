@@ -6,11 +6,11 @@ use Chamilo\Core\Repository\ContentObject\Assignment\Display\Bridge\Storage\Data
 use Chamilo\Core\Repository\ContentObject\LearningPath\Storage\Repository\CommonDataClassRepository;
 use Chamilo\Core\Repository\Storage\DataClass\ContentObject;
 use Chamilo\Core\User\Storage\DataClass\User;
-use Chamilo\Libraries\Storage\Parameters\DataClassParameters;
 use Chamilo\Libraries\Storage\Query\Condition\AndCondition;
 use Chamilo\Libraries\Storage\Query\Condition\Condition;
 use Chamilo\Libraries\Storage\Query\Condition\EqualityCondition;
 use Chamilo\Libraries\Storage\Query\Condition\InCondition;
+use Chamilo\Libraries\Storage\Query\DataClassParameters;
 use Chamilo\Libraries\Storage\Query\Join;
 use Chamilo\Libraries\Storage\Query\Joins;
 use Chamilo\Libraries\Storage\Query\RetrieveProperties;
@@ -39,12 +39,12 @@ abstract class EphorusRepository extends CommonDataClassRepository
     }
 
     /**
-     * @param \Chamilo\Libraries\Storage\Parameters\DataClassParameters $retrievesParameters
+     * @param \Chamilo\Libraries\Storage\Query\DataClassParameters $dataClassParameters
      *
      * @return ContentObject[] | ArrayCollection
      */
     public function findAssignmentEntriesWithRequests(
-        DataClassParameters $retrievesParameters = new DataClassParameters()
+        DataClassParameters $dataClassParameters = new DataClassParameters()
     )
     {
         $entryClassName = $this->getEntryClassName();
@@ -78,10 +78,10 @@ abstract class EphorusRepository extends CommonDataClassRepository
 
         $joins = $this->getAssignmentRequestJoins();
 
-        $retrievesParameters->setJoins($joins);
-        $retrievesParameters->setRetrieveProperties($properties);
+        $dataClassParameters->setJoins($joins);
+        $dataClassParameters->setRetrieveProperties($properties);
 
-        $records = $this->dataClassRepository->records($entryClassName, $retrievesParameters);
+        $records = $this->dataClassRepository->records($entryClassName, $dataClassParameters);
 
         $dataClasses = [];
         foreach ($records as $record)

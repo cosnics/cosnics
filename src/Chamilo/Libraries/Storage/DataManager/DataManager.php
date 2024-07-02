@@ -5,8 +5,8 @@ use Chamilo\Libraries\DependencyInjection\DependencyInjectionContainerBuilder;
 use Chamilo\Libraries\Storage\DataClass\DataClass;
 use Chamilo\Libraries\Storage\DataManager\Repository\DataClassRepository;
 use Chamilo\Libraries\Storage\DataManager\Repository\StorageUnitRepository;
-use Chamilo\Libraries\Storage\Parameters\DataClassParameters;
 use Chamilo\Libraries\Storage\Query\Condition\Condition;
+use Chamilo\Libraries\Storage\Query\DataClassParameters;
 use Chamilo\Libraries\Storage\Query\UpdateProperties;
 use Doctrine\Common\Collections\ArrayCollection;
 
@@ -209,7 +209,7 @@ class DataManager
     /**
      * @template tRetrieves
      * @param class-string<tRetrieves> $dataClassName
-     * @param \Chamilo\Libraries\Storage\Parameters\DataClassParameters $parameters
+     * @param \Chamilo\Libraries\Storage\Query\DataClassParameters $parameters
      *
      * @return ArrayCollection<tRetrieves>
      */

@@ -4,10 +4,9 @@ namespace Chamilo\Application\Weblcms\Tool\Implementation\Assignment\Storage\Rep
 use Chamilo\Application\Weblcms\Storage\DataClass\ContentObjectPublication;
 use Chamilo\Application\Weblcms\Tool\Implementation\Assignment\Storage\DataClass\Publication;
 use Chamilo\Core\Repository\ContentObject\LearningPath\Storage\Repository\CommonDataClassRepository;
-use Chamilo\Libraries\Storage\Parameters\DataClassParameters;
-use Chamilo\Libraries\Storage\Parameters\RetrievesParameters;
 use Chamilo\Libraries\Storage\Query\Condition\EqualityCondition;
 use Chamilo\Libraries\Storage\Query\Condition\InCondition;
+use Chamilo\Libraries\Storage\Query\DataClassParameters;
 use Chamilo\Libraries\Storage\Query\Variable\PropertyConditionVariable;
 use Chamilo\Libraries\Storage\Query\Variable\StaticConditionVariable;
 
@@ -62,7 +61,7 @@ class PublicationRepository extends CommonDataClassRepository
         );
 
         return $this->dataClassRepository->retrieves(
-            Publication::class, new RetrievesParameters(condition: $condition)
+            Publication::class, new DataClassParameters(condition: $condition)
         );
     }
 }

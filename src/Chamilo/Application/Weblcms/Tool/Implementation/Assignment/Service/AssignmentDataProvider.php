@@ -20,8 +20,8 @@ use Chamilo\Core\Repository\Storage\DataClass\ContentObject;
 use Chamilo\Core\User\Storage\DataClass\User;
 use Chamilo\Libraries\Architecture\Application\Application;
 use Chamilo\Libraries\Storage\DataClass\DataClass;
-use Chamilo\Libraries\Storage\Parameters\RetrievesParameters;
 use Chamilo\Libraries\Storage\Query\Condition\Condition;
+use Chamilo\Libraries\Storage\Query\DataClassParameters;
 use Exception;
 use RuntimeException;
 
@@ -344,16 +344,16 @@ class AssignmentDataProvider
     }
 
     /**
-     * @param \Chamilo\Libraries\Storage\Parameters\RetrievesParameters $retrievesParameters
+     * @param \Chamilo\Libraries\Storage\Query\DataClassParameters $dataClassParameters
      *
      * @return \Doctrine\Common\Collections\ArrayCollection
      */
     public function findAssignmentEntriesWithEphorusRequests(
-        RetrievesParameters $retrievesParameters = new RetrievesParameters()
+        DataClassParameters $dataClassParameters = new DataClassParameters()
     )
     {
         return $this->assignmentService->findAssignmentEntriesWithEphorusRequestsByContentObjectPublication(
-            $this->contentObjectPublication, $retrievesParameters
+            $this->contentObjectPublication, $dataClassParameters
         );
     }
 

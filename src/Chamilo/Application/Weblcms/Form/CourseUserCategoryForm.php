@@ -11,7 +11,6 @@ use Chamilo\Libraries\Format\Form\Element\AdvancedElementFinder\AdvancedElementF
 use Chamilo\Libraries\Format\Form\Element\AdvancedElementFinder\AdvancedElementFinderElementTypes;
 use Chamilo\Libraries\Format\Form\FormValidator;
 use Chamilo\Libraries\Format\Structure\Glyph\FontAwesomeGlyph;
-use Chamilo\Libraries\Storage\Parameters\RetrievesParameters;
 use Chamilo\Libraries\Storage\Query\Condition\EqualityCondition;
 use Chamilo\Libraries\Storage\Query\Variable\PropertyConditionVariable;
 use Chamilo\Libraries\Storage\Query\Variable\StaticConditionVariable;
@@ -20,21 +19,21 @@ use Chamilo\Libraries\Utilities\StringUtilities;
 
 class CourseUserCategoryForm extends FormValidator
 {
-    const COURSE_TYPE_TARGET = 'course_type_target';
+    public const COURSE_TYPE_TARGET = 'course_type_target';
 
-    const COURSE_TYPE_TARGET_ELEMENTS = 'course_type_target_elements';
+    public const COURSE_TYPE_TARGET_ELEMENTS = 'course_type_target_elements';
 
-    const COURSE_TYPE_TARGET_OPTION = 'course_type_target_option';
+    public const COURSE_TYPE_TARGET_OPTION = 'course_type_target_option';
 
-    const TYPE_CREATE = 1;
+    public const TYPE_CREATE = 1;
 
-    const TYPE_EDIT = 2;
+    public const TYPE_EDIT = 2;
 
     private $course_user_category;
 
-    private $user;
-
     private $parent;
+
+    private $user;
 
     public function __construct($form_type, $course_user_category, $user, $action, $parent)
     {
@@ -61,7 +60,7 @@ class CourseUserCategoryForm extends FormValidator
     {
         $this->add_textfield(
             CourseUserCategory::PROPERTY_TITLE, Translation::get('Title', null, StringUtilities::LIBRARIES), true,
-            array("maxlength" => 50, "size" => 50)
+            ['maxlength' => 50, 'size' => 50]
         );
         $this->addRule(
             CourseUserCategory::PROPERTY_TITLE,
@@ -209,13 +208,13 @@ class CourseUserCategoryForm extends FormValidator
             );
 
             $courseTypeUserCategories = DataManager::retrieves(
-                CourseTypeUserCategory::class, new RetrievesParameters(condition: $condition)
+                CourseTypeUserCategory::class, new DataClassParameters(condition: $condition)
             );
 
             $defaultCourseTypes = new AdvancedElementFinderElements();
             $courseTypeGlyph = new FontAwesomeGlyph('layer-group', [], null, 'fas');
 
-            foreach($courseTypeUserCategories as $type)
+            foreach ($courseTypeUserCategories as $type)
             {
                 $courseType = DataManager::retrieve_by_id(CourseType::class, $type->get_course_type_id());
                 $defaultCourseTypes->add_element(
@@ -255,7 +254,7 @@ class CourseUserCategoryForm extends FormValidator
         );
 
         $existing_types = DataManager::retrieves(
-            CourseTypeUserCategory::class, new RetrievesParameters(condition: $condition)
+            CourseTypeUserCategory::class, new DataClassParameters(condition: $condition)
         );
 
         if ($existing_types)

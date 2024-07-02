@@ -1,8 +1,8 @@
 <?php
 namespace Chamilo\Libraries\Storage\DataManager\Interfaces;
 
-use Chamilo\Libraries\Storage\Parameters\DataClassParameters;
 use Chamilo\Libraries\Storage\Query\Condition\Condition;
+use Chamilo\Libraries\Storage\Query\DataClassParameters;
 use Chamilo\Libraries\Storage\Query\UpdateProperties;
 
 /**

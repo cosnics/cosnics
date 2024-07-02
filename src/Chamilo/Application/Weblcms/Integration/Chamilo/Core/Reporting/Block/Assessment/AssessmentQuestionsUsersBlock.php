@@ -9,9 +9,9 @@ use Chamilo\Application\Weblcms\Storage\DataManager;
 use Chamilo\Core\Reporting\ReportingData;
 use Chamilo\Core\Reporting\Viewer\Rendition\Block\Type\Html;
 use Chamilo\Core\Repository\Storage\DataClass\ComplexContentObjectItem;
-use Chamilo\Libraries\Storage\Parameters\RetrievesParameters;
 use Chamilo\Libraries\Storage\Query\Condition\EqualityCondition;
 use Chamilo\Libraries\Storage\Query\Condition\InCondition;
+use Chamilo\Libraries\Storage\Query\DataClassParameters;
 use Chamilo\Libraries\Storage\Query\OrderBy;
 use Chamilo\Libraries\Storage\Query\Variable\PropertyConditionVariable;
 use Chamilo\Libraries\Storage\Query\Variable\StaticConditionVariable;
@@ -69,7 +69,7 @@ class AssessmentQuestionsUsersBlock extends ToolBlock
         $order_by = OrderBy::generate(QuestionAttempt::class, QuestionAttempt::PROPERTY_QUESTION_COMPLEX_ID);
 
         $question_attempts_trackers = DataManager::retrieves(
-            QuestionAttempt::class, new RetrievesParameters(
+            QuestionAttempt::class, new DataClassParameters(
                 condition: $condition, orderBy: $order_by
             )
         );
@@ -196,7 +196,7 @@ class AssessmentQuestionsUsersBlock extends ToolBlock
             ), new StaticConditionVariable($publication->get_content_object_id())
         );
         $complex_questions = \Chamilo\Core\Repository\Storage\DataManager::retrieve_complex_content_object_items(
-            ComplexContentObjectItem::class, new RetrievesParameters(condition: $condition)
+            ComplexContentObjectItem::class, new DataClassParameters(condition: $condition)
         );
 
         /**
@@ -243,7 +243,7 @@ class AssessmentQuestionsUsersBlock extends ToolBlock
         $order_by = OrderBy::generate(AssessmentAttempt::class, AssessmentAttempt::PROPERTY_USER_ID);
 
         $assessment_attempts_trackers = \Chamilo\Libraries\Storage\DataManager\DataManager::retrieves(
-            AssessmentAttempt::class, new RetrievesParameters(
+            AssessmentAttempt::class, new DataClassParameters(
                 condition: $condition, orderBy: $order_by
             )
         );

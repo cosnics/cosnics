@@ -1,16 +1,11 @@
 <?php
-namespace Chamilo\Libraries\Storage\Parameters;
+namespace Chamilo\Libraries\Storage\Query;
 
 use Chamilo\Libraries\Architecture\Interfaces\HashableInterface;
 use Chamilo\Libraries\Architecture\Traits\HashableTrait;
 use Chamilo\Libraries\Storage\Query\Condition\AndCondition;
 use Chamilo\Libraries\Storage\Query\Condition\Condition;
 use Chamilo\Libraries\Storage\Query\Condition\OrCondition;
-use Chamilo\Libraries\Storage\Query\GroupBy;
-use Chamilo\Libraries\Storage\Query\Join;
-use Chamilo\Libraries\Storage\Query\Joins;
-use Chamilo\Libraries\Storage\Query\OrderBy;
-use Chamilo\Libraries\Storage\Query\RetrieveProperties;
 
 /**
  * @package Chamilo\Libraries\Storage\Parameters

@@ -43,7 +43,7 @@ use Chamilo\Libraries\Format\Structure\Breadcrumb;
 use Chamilo\Libraries\Format\Structure\Glyph\FontAwesomeGlyph;
 use Chamilo\Libraries\Format\Structure\Page;
 use Chamilo\Libraries\Format\Structure\ToolbarItem;
-use Chamilo\Libraries\Storage\Parameters\RetrievesParameters;
+use Chamilo\Libraries\Storage\Query\DataClassParameters;
 use Chamilo\Libraries\Translation\Translation;
 use Chamilo\Libraries\Utilities\StringUtilities;
 use Exception;
@@ -613,7 +613,7 @@ abstract class Manager extends Application
         $tools = [];
 
         $course_tools = DataManager::retrieves(
-            CourseTool::class, new RetrievesParameters()
+            CourseTool::class, new DataClassParameters()
         );
 
         $edit_right = $this->is_allowed(WeblcmsRights::EDIT_RIGHT);

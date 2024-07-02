@@ -3,9 +3,9 @@ namespace Chamilo\Libraries\Storage\DataManager\Doctrine\Service;
 
 use Chamilo\Libraries\Storage\DataManager\Doctrine\Database\DataClassDatabase;
 use Chamilo\Libraries\Storage\DataManager\StorageAliasGenerator;
-use Chamilo\Libraries\Storage\Parameters\DataClassParameters;
 use Chamilo\Libraries\Storage\Query\Condition\Condition;
 use Chamilo\Libraries\Storage\Query\ConditionPart;
+use Chamilo\Libraries\Storage\Query\DataClassParameters;
 use Chamilo\Libraries\Storage\Query\GroupBy;
 use Chamilo\Libraries\Storage\Query\Join;
 use Chamilo\Libraries\Storage\Query\Joins;

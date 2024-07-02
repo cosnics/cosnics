@@ -10,11 +10,10 @@ use Chamilo\Configuration\Category\Interfaces\CategorySupport;
 use Chamilo\Libraries\Architecture\Application\ApplicationConfiguration;
 use Chamilo\Libraries\Architecture\Exceptions\NotAllowedException;
 use Chamilo\Libraries\Format\Breadcrumb\BreadcrumbLessComponentInterface;
-use Chamilo\Libraries\Storage\Parameters\DataClassParameters;
-use Chamilo\Libraries\Storage\Parameters\RetrievesParameters;
 use Chamilo\Libraries\Storage\Query\Condition\AndCondition;
 use Chamilo\Libraries\Storage\Query\Condition\EqualityCondition;
 use Chamilo\Libraries\Storage\Query\Condition\InCondition;
+use Chamilo\Libraries\Storage\Query\DataClassParameters;
 use Chamilo\Libraries\Storage\Query\Variable\PropertyConditionVariable;
 use Chamilo\Libraries\Storage\Query\Variable\StaticConditionVariable;
 
@@ -169,7 +168,7 @@ class CategoryManagerComponent extends Manager implements BreadcrumbLessComponen
             ), new StaticConditionVariable($category_id)
         );
         $subcategries = DataManager::retrieves(
-            ContentObjectPublicationCategory::class, new RetrievesParameters(condition: $condition)
+            ContentObjectPublicationCategory::class, new DataClassParameters(condition: $condition)
         );
 
         foreach ($subcategries as $cat)
@@ -209,7 +208,7 @@ class CategoryManagerComponent extends Manager implements BreadcrumbLessComponen
 
         return DataManager::retrieves(
             ContentObjectPublicationCategory::class,
-            new RetrievesParameters(condition: $condition, count: $count, offset: $offset, orderBy: $order_property)
+            new DataClassParameters(condition: $condition, count: $count, offset: $offset, orderBy: $order_property)
         );
     }
 }

@@ -6,7 +6,6 @@ use Chamilo\Application\Weblcms\CourseType\Storage\DataManager;
 use Chamilo\Libraries\Architecture\Application\Application;
 use Chamilo\Libraries\Architecture\Exceptions\NoObjectSelectedException;
 use Chamilo\Libraries\Architecture\Exceptions\ObjectNotExistException;
-use Chamilo\Libraries\Storage\Parameters\RetrievesParameters;
 use Chamilo\Libraries\Storage\Query\Condition\InCondition;
 use Chamilo\Libraries\Storage\Query\Variable\PropertyConditionVariable;
 use Chamilo\Libraries\Translation\Translation;
@@ -67,7 +66,7 @@ abstract class Manager extends Application
      */
     public function get_browse_course_type_url()
     {
-        return $this->get_url(array(self::PARAM_ACTION => self::ACTION_BROWSE));
+        return $this->get_url([self::PARAM_ACTION => self::ACTION_BROWSE]);
     }
 
     /**
@@ -114,7 +113,7 @@ abstract class Manager extends Application
      */
     public function get_create_course_type_url()
     {
-        return $this->get_url(array(self::PARAM_ACTION => self::ACTION_CREATE));
+        return $this->get_url([self::PARAM_ACTION => self::ACTION_CREATE]);
     }
 
     /**
@@ -151,7 +150,7 @@ abstract class Manager extends Application
     public function get_move_course_type_url($course_type_id, $direction = self::MOVE_DIRECTION_UP)
     {
         return $this->get_course_type_url(
-            self::ACTION_MOVE, $course_type_id, array(self::PARAM_MOVE_DIRECTION => $direction)
+            self::ACTION_MOVE, $course_type_id, [self::PARAM_MOVE_DIRECTION => $direction]
         );
     }
 
@@ -181,7 +180,7 @@ abstract class Manager extends Application
 
         if (!is_array($course_type_ids))
         {
-            $course_type_ids = array($course_type_ids);
+            $course_type_ids = [$course_type_ids];
         }
 
         return $course_type_ids;
@@ -200,7 +199,7 @@ abstract class Manager extends Application
         $condition = new InCondition(
             new PropertyConditionVariable(CourseType::class, CourseType::PROPERTY_ID), $course_type_ids
         );
-        $result_set = DataManager::retrieves(CourseType::class, new RetrievesParameters(condition: $condition));
+        $result_set = DataManager::retrieves(CourseType::class, new DataClassParameters(condition: $condition));
 
         if ($result_set->count() == 0)
         {

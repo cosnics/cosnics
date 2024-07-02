@@ -1,7 +1,7 @@
 <?php
 namespace Chamilo\Application\Calendar\Extension\Personal\Integration\Chamilo\Application\Calendar\Interfaces;
 
-use Chamilo\Libraries\Storage\Parameters\DataClassParameters;
+use Chamilo\Libraries\Storage\Query\DataClassParameters;
 
 /**
  * Interface for a CalendarEventDataProviderRepository which is used by the personal calendar extension

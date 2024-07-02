@@ -8,13 +8,12 @@ use Chamilo\Application\Weblcms\CourseType\Storage\DataClass\CourseType;
 use Chamilo\Application\Weblcms\Storage\DataClass\CourseEntityRelation;
 use Chamilo\Core\User\Roles\Storage\DataClass\Role;
 use Chamilo\Libraries\Storage\DataManager\Repository\DataManagerRepository;
-use Chamilo\Libraries\Storage\Parameters\DataClassParameters;
-use Chamilo\Libraries\Storage\Parameters\RetrievesParameters;
 use Chamilo\Libraries\Storage\Query\Condition\AndCondition;
 use Chamilo\Libraries\Storage\Query\Condition\Condition;
 use Chamilo\Libraries\Storage\Query\Condition\EqualityCondition;
 use Chamilo\Libraries\Storage\Query\Condition\InCondition;
 use Chamilo\Libraries\Storage\Query\Condition\NotCondition;
+use Chamilo\Libraries\Storage\Query\DataClassParameters;
 use Chamilo\Libraries\Storage\Query\Join;
 use Chamilo\Libraries\Storage\Query\Joins;
 use Chamilo\Libraries\Storage\Query\RetrieveProperties;
@@ -112,7 +111,7 @@ class OpenCourseRepository extends DataManagerRepository implements OpenCourseRe
     public function findClosedCourses(Condition $condition = null, $offset = null, $count = null, $orderBy = null)
     {
         return DataManager::retrieves(
-            Course::class, new RetrievesParameters(
+            Course::class, new DataClassParameters(
                 condition: $this->getClosedCoursesCondition($condition), count: $count, offset: $offset,
                 orderBy: $orderBy
             )
@@ -140,7 +139,7 @@ class OpenCourseRepository extends DataManagerRepository implements OpenCourseRe
             )
         );
 
-        $recordsParameters = new RetrievesParameters(
+        $recordsParameters = new DataClassParameters(
             condition: $condition, count: $count, offset: $offset, orderBy: $orderBy, joins: $this->getOpenCoursesJoins(
         ), retrieveProperties: $properties
         );
@@ -337,7 +336,7 @@ class OpenCourseRepository extends DataManagerRepository implements OpenCourseRe
         );
 
         return DataManager::retrieves(
-            Role::class, new RetrievesParameters(
+            Role::class, new DataClassParameters(
                 condition: $condition, joins: $joins
             )
         );

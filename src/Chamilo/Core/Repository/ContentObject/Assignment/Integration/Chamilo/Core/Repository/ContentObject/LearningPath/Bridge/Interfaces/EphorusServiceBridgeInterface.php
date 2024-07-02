@@ -3,8 +3,8 @@ namespace Chamilo\Core\Repository\ContentObject\Assignment\Integration\Chamilo\C
 
 use Chamilo\Application\Weblcms\Tool\Implementation\Ephorus\Storage\DataClass\Request;
 use Chamilo\Core\Repository\ContentObject\LearningPath\Storage\DataClass\TreeNodeData;
-use Chamilo\Libraries\Storage\Parameters\DataClassParameters;
 use Chamilo\Libraries\Storage\Query\Condition\Condition;
+use Chamilo\Libraries\Storage\Query\DataClassParameters;
 
 /**
  * Interface EphorusServiceBridgeInterface
@@ -27,12 +27,12 @@ interface EphorusServiceBridgeInterface
 
     /**
      * @param \Chamilo\Core\Repository\ContentObject\LearningPath\Storage\DataClass\TreeNodeData $treeNodeData
-     * @param \Chamilo\Libraries\Storage\Parameters\DataClassParameters $retrievesParameters
+     * @param \Chamilo\Libraries\Storage\Query\DataClassParameters $dataClassParameters
      *
      * @return \Doctrine\Common\Collections\ArrayCollection|\Chamilo\Core\Repository\Storage\DataClass\ContentObject[]
      */
     public function findAssignmentEntriesWithEphorusRequestsByTreeNodeData(
-        TreeNodeData $treeNodeData, DataClassParameters $retrievesParameters = new DataClassParameters()
+        TreeNodeData $treeNodeData, DataClassParameters $dataClassParameters = new DataClassParameters()
     );
 
     /**

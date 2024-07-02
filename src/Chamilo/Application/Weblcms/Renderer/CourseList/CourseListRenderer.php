@@ -11,7 +11,7 @@ use Chamilo\Application\Weblcms\Storage\DataClass\CourseTool;
 use Chamilo\Application\Weblcms\Storage\DataManager;
 use Chamilo\Libraries\DependencyInjection\Traits\DependencyInjectionContainerTrait;
 use Chamilo\Libraries\Format\Structure\Glyph\NamespaceIdentGlyph;
-use Chamilo\Libraries\Storage\Parameters\RetrievesParameters;
+use Chamilo\Libraries\Storage\Query\DataClassParameters;
 use Chamilo\Libraries\Translation\Translation;
 
 /**
@@ -178,7 +178,7 @@ class CourseListRenderer
         if (!isset($this->tools))
         {
             $this->tools =
-                DataManager::retrieves(CourseTool::class, new RetrievesParameters());
+                DataManager::retrieves(CourseTool::class, new DataClassParameters());
         }
 
         return $this->tools;

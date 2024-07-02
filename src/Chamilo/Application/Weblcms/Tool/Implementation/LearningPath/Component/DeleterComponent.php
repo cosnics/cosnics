@@ -10,8 +10,8 @@ use Chamilo\Application\Weblcms\Tool\Implementation\LearningPath\Storage\DataMan
 use Chamilo\Core\Repository\ContentObject\Assignment\Storage\DataClass\Assignment;
 use Chamilo\Core\Repository\ContentObject\LearningPath\Storage\DataClass\LearningPath;
 use Chamilo\Libraries\Architecture\Exceptions\NotAllowedException;
-use Chamilo\Libraries\Storage\Parameters\RetrievesParameters;
 use Chamilo\Libraries\Storage\Query\Condition\EqualityCondition;
+use Chamilo\Libraries\Storage\Query\DataClassParameters;
 use Chamilo\Libraries\Storage\Query\Variable\PropertyConditionVariable;
 use Chamilo\Libraries\Storage\Query\Variable\StaticConditionVariable;
 use Chamilo\Libraries\Translation\Translation;
@@ -57,7 +57,7 @@ class DeleterComponent extends Manager
                 );
 
                 $attempts = DataManager::retrieves(
-                    LearningPathTreeNodeAttempt::class, new RetrievesParameters(condition: $condition)
+                    LearningPathTreeNodeAttempt::class, new DataClassParameters(condition: $condition)
                 );
 
                 foreach ($attempts as $attempt)

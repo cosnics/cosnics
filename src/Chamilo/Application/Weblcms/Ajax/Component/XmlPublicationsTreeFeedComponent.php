@@ -7,9 +7,8 @@ use Chamilo\Application\Weblcms\Course\Storage\DataManager as CourseDataManager;
 use Chamilo\Application\Weblcms\Storage\DataClass\ContentObjectPublicationCategory;
 use Chamilo\Application\Weblcms\Storage\DataManager;
 use Chamilo\Libraries\Format\Structure\Glyph\FontAwesomeGlyph;
-use Chamilo\Libraries\Storage\Parameters\DataClassParameters;
-use Chamilo\Libraries\Storage\Parameters\RetrievesParameters;
 use Chamilo\Libraries\Storage\Query\Condition\EqualityCondition;
+use Chamilo\Libraries\Storage\Query\DataClassParameters;
 use Chamilo\Libraries\Storage\Query\OrderBy;
 use Chamilo\Libraries\Storage\Query\OrderProperty;
 use Chamilo\Libraries\Storage\Query\Variable\PropertyConditionVariable;
@@ -33,7 +32,7 @@ class XmlPublicationsTreeFeedComponent extends Manager
         );
 
         $categories_tree = DataManager::retrieves(
-            ContentObjectPublicationCategory::class, new RetrievesParameters(
+            ContentObjectPublicationCategory::class, new DataClassParameters(
                 condition: $condition, orderBy: new OrderBy([
                 new OrderProperty(
                     new PropertyConditionVariable(

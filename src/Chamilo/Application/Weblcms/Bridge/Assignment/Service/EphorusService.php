@@ -3,8 +3,8 @@ namespace Chamilo\Application\Weblcms\Bridge\Assignment\Service;
 
 use Chamilo\Application\Weblcms\Bridge\Assignment\Storage\Repository\EphorusRepository;
 use Chamilo\Application\Weblcms\Storage\DataClass\ContentObjectPublication;
-use Chamilo\Libraries\Storage\Parameters\RetrievesParameters;
 use Chamilo\Libraries\Storage\Query\Condition\Condition;
+use Chamilo\Libraries\Storage\Query\DataClassParameters;
 
 /**
  *
@@ -44,17 +44,17 @@ class EphorusService extends \Chamilo\Core\Repository\ContentObject\Assignment\D
 
     /**
      * @param \Chamilo\Application\Weblcms\Storage\DataClass\ContentObjectPublication $contentObjectPublication
-     * @param \Chamilo\Libraries\Storage\Parameters\RetrievesParameters $retrievesParameters
+     * @param \Chamilo\Libraries\Storage\Query\DataClassParameters $dataClassParameters
      *
      * @return \Doctrine\Common\Collections\ArrayCollection|\Chamilo\Core\Repository\Storage\DataClass\ContentObject[]
      */
     public function findAssignmentEntriesWithEphorusRequestsByContentObjectPublication(
         ContentObjectPublication $contentObjectPublication,
-        RetrievesParameters $retrievesParameters = new RetrievesParameters()
+        DataClassParameters $dataClassParameters = new DataClassParameters()
     )
     {
         return $this->ephorusRepository->findAssignmentEntriesWithRequestsByContentObjectPublication(
-            $contentObjectPublication, $retrievesParameters
+            $contentObjectPublication, $dataClassParameters
         );
     }
 

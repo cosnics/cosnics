@@ -11,8 +11,8 @@ use Chamilo\Core\Reporting\Viewer\Rendition\Block\Type\Html;
 use Chamilo\Core\User\Manager;
 use Chamilo\Core\User\Storage\DataClass\User;
 use Chamilo\Libraries\Architecture\Exceptions\ObjectNotExistException;
+use Chamilo\Libraries\Storage\Query\DataClassParameters;
 use Chamilo\Libraries\Translation\Translation;
-use Chamilo\Libraries\Storage\Parameters\RetrievesParameters;
 
 class PublicationAccessBlock extends ToolBlock
 {
@@ -22,10 +22,10 @@ class PublicationAccessBlock extends ToolBlock
         $reporting_data = new ReportingData();
 
         $reporting_data->set_rows(
-            array(
+            [
                 Translation::get('User', null, Manager::CONTEXT),
                 Translation::get('OfficialCode', null, Manager::CONTEXT)
-            )
+            ]
         );
 
         $this->add_reporting_data_rows_for_course_visit_data($reporting_data);
@@ -71,7 +71,7 @@ class PublicationAccessBlock extends ToolBlock
 
     public function get_views()
     {
-        return array(Html::VIEW_TABLE);
+        return [Html::VIEW_TABLE];
     }
 
     /**
@@ -105,7 +105,7 @@ class PublicationAccessBlock extends ToolBlock
         );
 
         return WeblcmsTrackingDataManager::retrieves(
-            CourseVisit::class, new RetrievesParameters(condition: $condition)
+            CourseVisit::class, new DataClassParameters(condition: $condition)
         );
     }
 

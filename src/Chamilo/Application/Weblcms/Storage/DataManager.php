@@ -36,8 +36,6 @@ use Chamilo\Core\User\Storage\DataClass\User;
 use Chamilo\Libraries\Architecture\Exceptions\ObjectNotExistException;
 use Chamilo\Libraries\DependencyInjection\DependencyInjectionContainerBuilder;
 use Chamilo\Libraries\Storage\DataClass\DataClass;
-use Chamilo\Libraries\Storage\Parameters\DataClassParameters;
-use Chamilo\Libraries\Storage\Parameters\RetrievesParameters;
 use Chamilo\Libraries\Storage\Query\Condition\AndCondition;
 use Chamilo\Libraries\Storage\Query\Condition\ComparisonCondition;
 use Chamilo\Libraries\Storage\Query\Condition\Condition;
@@ -46,6 +44,7 @@ use Chamilo\Libraries\Storage\Query\Condition\InCondition;
 use Chamilo\Libraries\Storage\Query\Condition\NotCondition;
 use Chamilo\Libraries\Storage\Query\Condition\OrCondition;
 use Chamilo\Libraries\Storage\Query\Condition\SubselectCondition;
+use Chamilo\Libraries\Storage\Query\DataClassParameters;
 use Chamilo\Libraries\Storage\Query\Join;
 use Chamilo\Libraries\Storage\Query\Joins;
 use Chamilo\Libraries\Storage\Query\OrderBy;
@@ -312,7 +311,7 @@ class DataManager extends \Chamilo\Libraries\Storage\DataManager\DataManager
             ), new StaticConditionVariable($object_id)
         );
         $publications = self::retrieves(
-            ContentObjectPublication::class, new RetrievesParameters(condition: $condition)
+            ContentObjectPublication::class, new DataClassParameters(condition: $condition)
         );
 
         foreach ($publications as $publication)
@@ -342,7 +341,7 @@ class DataManager extends \Chamilo\Libraries\Storage\DataManager\DataManager
         );
 
         $result_set = DataManager::retrieves(
-            CourseTypeUserCategoryRelCourse::class, new RetrievesParameters(condition: $condition)
+            CourseTypeUserCategoryRelCourse::class, new DataClassParameters(condition: $condition)
         );
 
         foreach ($result_set as $course_type_user_category_rel_course)
@@ -486,7 +485,7 @@ class DataManager extends \Chamilo\Libraries\Storage\DataManager\DataManager
         $condition = new AndCondition($conditions);
 
         $result_set = DataManager::retrieves(
-            CourseTypeUserCategoryRelCourse::class, new RetrievesParameters(condition: $condition)
+            CourseTypeUserCategoryRelCourse::class, new DataClassParameters(condition: $condition)
         );
 
         foreach ($result_set as $course_type_user_category_rel_course)
@@ -637,7 +636,7 @@ class DataManager extends \Chamilo\Libraries\Storage\DataManager\DataManager
                         new PropertyConditionVariable(Group::class, Group::PROPERTY_ID), $entity_ids
                     );
                     $groups_resultset = DataManager::retrieves(
-                        Group::class, new RetrievesParameters(condition: $group_condition)
+                        Group::class, new DataClassParameters(condition: $group_condition)
                     );
 
                     foreach ($groups_resultset as $group)
@@ -782,7 +781,7 @@ class DataManager extends \Chamilo\Libraries\Storage\DataManager\DataManager
      * @param int $count
      * @param \Chamilo\Libraries\Storage\Query\OrderBy $order_by
      *
-     * @return RetrievesParameters
+     * @return DataClassParameters
      */
     private static function get_course_settings_with_values_parameters(
         $course_setting_relation_class, $course_setting_foreign_property, $condition = null, $offset = null,
@@ -810,7 +809,7 @@ class DataManager extends \Chamilo\Libraries\Storage\DataManager\DataManager
             )
         );
 
-        return new RetrievesParameters(
+        return new DataClassParameters(
             condition: $condition, count: $offset, offset: $count, orderBy: $order_by, joins: new Joins($joins),
             retrieveProperties: new RetrieveProperties($retrieveProperties)
         );
@@ -1047,7 +1046,7 @@ class DataManager extends \Chamilo\Libraries\Storage\DataManager\DataManager
         if (count($user_ids) > 0)
         {
             $users = DataManager::records(
-                User::class, new RetrievesParameters(
+                User::class, new DataClassParameters(
                     condition: new InCondition(
                         new PropertyConditionVariable(User::class, DataClass::PROPERTY_ID), $user_ids
                     ), retrieveProperties: new RetrieveProperties([new PropertiesConditionVariable(User::class)])
@@ -1291,7 +1290,7 @@ class DataManager extends \Chamilo\Libraries\Storage\DataManager\DataManager
                         );
 
                         $group_user_rels = self::retrieves(
-                            GroupRelUser::class, new RetrievesParameters(condition: $condition)
+                            GroupRelUser::class, new DataClassParameters(condition: $condition)
                         );
                         foreach ($group_user_rels as $group_user_rel)
                         {
@@ -1515,7 +1514,7 @@ class DataManager extends \Chamilo\Libraries\Storage\DataManager\DataManager
 
         $properties = new RetrieveProperties($retrieveProperties);
 
-        $parameters = new RetrievesParameters(
+        $parameters = new DataClassParameters(
             condition: $condition, count: $max_objects, offset: $offset, orderBy: $order_by,
             joins: self::get_content_object_publication_joins(), retrieveProperties: $properties
         );
@@ -1573,7 +1572,7 @@ class DataManager extends \Chamilo\Libraries\Storage\DataManager\DataManager
         );
 
         return DataManager::retrieves(
-            CourseCategory::class, new RetrievesParameters(
+            CourseCategory::class, new DataClassParameters(
                 condition: $condition, count: $offset, offset: $count, orderBy: $order_by
             )
         );
@@ -1688,7 +1687,7 @@ class DataManager extends \Chamilo\Libraries\Storage\DataManager\DataManager
             )
         );
 
-        $parameters = new RetrievesParameters(
+        $parameters = new DataClassParameters(
             condition: $condition, count: $count, offset: $offset, orderBy: $order_by, joins: new Joins($joins),
             retrieveProperties: new RetrieveProperties($retrieveProperties)
         );
@@ -1737,7 +1736,7 @@ class DataManager extends \Chamilo\Libraries\Storage\DataManager\DataManager
             )
         );
 
-        $parameters = new RetrievesParameters(
+        $parameters = new DataClassParameters(
             condition: $condition, count: $count, offset: $offset, orderBy: $order_by, joins: $joins,
             retrieveProperties: $properties
         );
@@ -1880,7 +1879,7 @@ class DataManager extends \Chamilo\Libraries\Storage\DataManager\DataManager
             )
         ];
 
-        $parameters = new RetrievesParameters(
+        $parameters = new DataClassParameters(
             condition: $condition, count: null, offset: null, orderBy: new OrderBy($order_by), joins: $joins,
             retrieveProperties: $properties
         );
@@ -2158,7 +2157,7 @@ class DataManager extends \Chamilo\Libraries\Storage\DataManager\DataManager
             );
         }
 
-        $parameters = new RetrievesParameters(
+        $parameters = new DataClassParameters(
             condition: $condition, count: null, offset: null, joins: new Joins([$join]), retrieveProperties: $properties
         );
 
@@ -2200,7 +2199,7 @@ class DataManager extends \Chamilo\Libraries\Storage\DataManager\DataManager
             )
         );
 
-        $parameters = new RetrievesParameters(condition: $condition, retrieveProperties: $properties);
+        $parameters = new DataClassParameters(condition: $condition, retrieveProperties: $properties);
 
         $categories = self::records(ContentObjectPublicationCategory::class, $parameters);
 
@@ -2278,7 +2277,7 @@ class DataManager extends \Chamilo\Libraries\Storage\DataManager\DataManager
             )
         );
 
-        $parameters = new RetrievesParameters(condition: $condition, retrieveProperties: $properties);
+        $parameters = new DataClassParameters(condition: $condition, retrieveProperties: $properties);
 
         $categories = self::records(ContentObjectPublicationCategory::class, $parameters);
 
@@ -2386,7 +2385,7 @@ class DataManager extends \Chamilo\Libraries\Storage\DataManager\DataManager
         }
 
         return self::retrieves(
-            CourseGroup::class, new RetrievesParameters(
+            CourseGroup::class, new DataClassParameters(
                 condition: $group_condition, count: $count, offset: $offset, orderBy: $order_by
             )
         );
@@ -2556,7 +2555,7 @@ class DataManager extends \Chamilo\Libraries\Storage\DataManager\DataManager
         $user_condition = new AndCondition($conditions);
 
         return DataManager::retrieves(
-            User::class, new RetrievesParameters(
+            User::class, new DataClassParameters(
                 condition: $user_condition, count: $count, offset: $offset, orderBy: $order_by
             )
         );

@@ -12,7 +12,6 @@ use Chamilo\Libraries\Format\Form\FormValidator;
 use Chamilo\Libraries\Format\Form\FormValidatorHtmlEditorOptions;
 use Chamilo\Libraries\Format\Structure\Glyph\FontAwesomeGlyph;
 use Chamilo\Libraries\Storage\DataManager\DataManager;
-use Chamilo\Libraries\Storage\Parameters\RetrievesParameters;
 use Chamilo\Libraries\Storage\Query\OrderBy;
 use Chamilo\Libraries\Storage\Query\OrderProperty;
 use Chamilo\Libraries\Storage\Query\Variable\PropertyConditionVariable;
@@ -116,7 +115,7 @@ class CourseRequestForm extends FormValidator
                     )
                 );
 
-                $parameters = new RetrievesParameters(orderBy: $order);
+                $parameters = new DataClassParameters(orderBy: $order);
                 $users_result = DataManager::retrieves(
                     User::class, $parameters
                 );

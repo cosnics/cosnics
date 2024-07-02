@@ -14,8 +14,8 @@ use Chamilo\Libraries\Format\Form\FormValidator;
 use Chamilo\Libraries\Format\Structure\Glyph\FontAwesomeGlyph;
 use Chamilo\Libraries\Format\Structure\Toolbar;
 use Chamilo\Libraries\Format\Structure\ToolbarItem;
-use Chamilo\Libraries\Storage\Parameters\RetrievesParameters;
 use Chamilo\Libraries\Storage\Query\Condition\InCondition;
+use Chamilo\Libraries\Storage\Query\DataClassParameters;
 use Chamilo\Libraries\Storage\Query\Variable\PropertyConditionVariable;
 use Chamilo\Libraries\Translation\Translation;
 use Chamilo\Libraries\Utilities\StringUtilities;
@@ -280,7 +280,7 @@ class CourseGroupSubscriptionsForm extends FormValidator
             $condition = new InCondition(
                 new PropertyConditionVariable(User::class, User::PROPERTY_ID), $members_to_add
             );
-            $parameters = new RetrievesParameters(condition: $condition);
+            $parameters = new DataClassParameters(condition: $condition);
             $users_to_add = DataManager::retrieves(
                 User::class, $parameters
             );

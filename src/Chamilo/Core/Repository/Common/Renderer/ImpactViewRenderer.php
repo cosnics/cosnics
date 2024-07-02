@@ -8,8 +8,8 @@ use Chamilo\Core\Repository\Storage\DataManager;
 use Chamilo\Core\Repository\Table\ImpactViewTableRenderer;
 use Chamilo\Libraries\DependencyInjection\Traits\DependencyInjectionContainerTrait;
 use Chamilo\Libraries\Format\Table\RequestTableParameterValuesCompiler;
-use Chamilo\Libraries\Storage\Parameters\DataClassParameters;
 use Chamilo\Libraries\Storage\Query\Condition\Condition;
+use Chamilo\Libraries\Storage\Query\DataClassParameters;
 
 /**
  * Renderer to render the impact viewer

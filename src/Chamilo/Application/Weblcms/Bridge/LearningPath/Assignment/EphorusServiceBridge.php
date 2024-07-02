@@ -6,8 +6,8 @@ use Chamilo\Application\Weblcms\Storage\DataClass\ContentObjectPublication;
 use Chamilo\Application\Weblcms\Tool\Implementation\Ephorus\Storage\DataClass\Request;
 use Chamilo\Core\Repository\ContentObject\Assignment\Integration\Chamilo\Core\Repository\ContentObject\LearningPath\Bridge\Interfaces\EphorusServiceBridgeInterface;
 use Chamilo\Core\Repository\ContentObject\LearningPath\Storage\DataClass\TreeNodeData;
-use Chamilo\Libraries\Storage\Parameters\RetrievesParameters;
 use Chamilo\Libraries\Storage\Query\Condition\Condition;
+use Chamilo\Libraries\Storage\Query\DataClassParameters;
 
 /**
  * @package Chamilo\Application\Weblcms\Bridge\LearningPath\Assignment
@@ -58,16 +58,16 @@ class EphorusServiceBridge implements EphorusServiceBridgeInterface
 
     /**
      * @param \Chamilo\Core\Repository\ContentObject\LearningPath\Storage\DataClass\TreeNodeData $treeNodeData
-     * @param \Chamilo\Libraries\Storage\Parameters\RetrievesParameters $retrievesParameters
+     * @param \Chamilo\Libraries\Storage\Query\DataClassParameters $dataClassParameters
      *
      * @return \Doctrine\Common\Collections\ArrayCollection|\Chamilo\Core\Repository\Storage\DataClass\ContentObject[]
      */
     public function findAssignmentEntriesWithEphorusRequestsByTreeNodeData(
-        TreeNodeData $treeNodeData, RetrievesParameters $retrievesParameters = new RetrievesParameters()
+        TreeNodeData $treeNodeData, DataClassParameters $dataClassParameters = new DataClassParameters()
     )
     {
         return $this->ephorusService->findAssignmentEntriesWithEphorusRequestsByTreeNodeData(
-            $this->contentObjectPublication, $treeNodeData, $retrievesParameters
+            $this->contentObjectPublication, $treeNodeData, $dataClassParameters
         );
     }
 
@@ -95,18 +95,18 @@ class EphorusServiceBridge implements EphorusServiceBridgeInterface
     }
 
     /**
-     * @param \Chamilo\Application\Weblcms\Storage\DataClass\ContentObjectPublication $contentObjectPublication
-     */
-    public function setContentObjectPublication(ContentObjectPublication $contentObjectPublication)
-    {
-        $this->contentObjectPublication = $contentObjectPublication;
-    }
-
-    /**
      * @param bool $ephorusEnabled
      */
     public function setEphorusEnabled($ephorusEnabled)
     {
         $this->ephorusEnabled = $ephorusEnabled;
+    }
+
+    /**
+     * @param \Chamilo\Application\Weblcms\Storage\DataClass\ContentObjectPublication $contentObjectPublication
+     */
+    public function setContentObjectPublication(ContentObjectPublication $contentObjectPublication)
+    {
+        $this->contentObjectPublication = $contentObjectPublication;
     }
 }

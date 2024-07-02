@@ -11,8 +11,8 @@ use Chamilo\Libraries\Format\Menu\Library\Renderer\HtmlMenuArrayRenderer;
 use Chamilo\Libraries\Format\Menu\OptionsMenuRenderer;
 use Chamilo\Libraries\Format\Menu\TreeMenuRenderer;
 use Chamilo\Libraries\Format\Structure\Glyph\FontAwesomeGlyph;
-use Chamilo\Libraries\Storage\Parameters\RetrievesParameters;
 use Chamilo\Libraries\Storage\Query\Condition\EqualityCondition;
+use Chamilo\Libraries\Storage\Query\DataClassParameters;
 use Chamilo\Libraries\Storage\Query\Variable\PropertyConditionVariable;
 use Chamilo\Libraries\Storage\Query\Variable\StaticConditionVariable;
 use Chamilo\Libraries\Translation\Translation;
@@ -164,7 +164,7 @@ class CourseGroupMenu extends HtmlMenu
             new PropertyConditionVariable(CourseGroup::class, CourseGroup::PROPERTY_PARENT_ID),
             new StaticConditionVariable($parent_id)
         );
-        $groups = DataManager::retrieves(CourseGroup::class, new RetrievesParameters(condition: $condition));
+        $groups = DataManager::retrieves(CourseGroup::class, new DataClassParameters(condition: $condition));
 
         // $current_group = $this->current_group;
 

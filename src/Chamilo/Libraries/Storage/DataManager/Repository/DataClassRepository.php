@@ -10,12 +10,12 @@ use Chamilo\Libraries\Storage\DataClass\Interfaces\DataClassTypeAwareInterface;
 use Chamilo\Libraries\Storage\DataClass\Interfaces\DataClassVirtualExtensionInterface;
 use Chamilo\Libraries\Storage\DataClass\Interfaces\UuidDataClassInterface;
 use Chamilo\Libraries\Storage\DataManager\Interfaces\DataClassDatabaseInterface;
-use Chamilo\Libraries\Storage\Parameters\DataClassParameters;
 use Chamilo\Libraries\Storage\Query\Condition\AndCondition;
 use Chamilo\Libraries\Storage\Query\Condition\ComparisonCondition;
 use Chamilo\Libraries\Storage\Query\Condition\Condition;
 use Chamilo\Libraries\Storage\Query\Condition\EqualityCondition;
 use Chamilo\Libraries\Storage\Query\Condition\InCondition;
+use Chamilo\Libraries\Storage\Query\DataClassParameters;
 use Chamilo\Libraries\Storage\Query\Join;
 use Chamilo\Libraries\Storage\Query\RetrieveProperties;
 use Chamilo\Libraries\Storage\Query\UpdateProperties;
@@ -246,7 +246,7 @@ class DataClassRepository
      * @template tInternalRetrievesClass
      *
      * @param class-string<tInternalRetrievesClass> $dataClassName
-     * @param \Chamilo\Libraries\Storage\Parameters\DataClassParameters $parameters
+     * @param \Chamilo\Libraries\Storage\Query\DataClassParameters $parameters
      *
      * @return ArrayCollection<tInternalRetrievesClass>
      * @throws \Chamilo\Libraries\Storage\Exception\Database\StorageMethodException
@@ -308,7 +308,7 @@ class DataClassRepository
     }
 
     /**
-     * @param \Chamilo\Libraries\Storage\Parameters\DataClassParameters $parameters
+     * @param \Chamilo\Libraries\Storage\Query\DataClassParameters $parameters
      * @param string $dataClassName
      *
      * @return void
@@ -631,7 +631,7 @@ class DataClassRepository
 
     /**
      * @param string $dataClassName
-     * @param \Chamilo\Libraries\Storage\Parameters\DataClassParameters $parameters
+     * @param \Chamilo\Libraries\Storage\Query\DataClassParameters $parameters
      *
      * @return \Doctrine\Common\Collections\ArrayCollection<string[]>
      * @throws \Chamilo\Libraries\Storage\Exception\Database\StorageMethodException
@@ -732,7 +732,7 @@ class DataClassRepository
      * @template tRetrieves
      *
      * @param class-string<tRetrieves> $dataClassName
-     * @param \Chamilo\Libraries\Storage\Parameters\DataClassParameters $parameters
+     * @param \Chamilo\Libraries\Storage\Query\DataClassParameters $parameters
      *
      * @return ArrayCollection<tRetrieves>
      * @throws \Chamilo\Libraries\Storage\Exception\Database\StorageMethodException

@@ -18,7 +18,7 @@ use Chamilo\Configuration\Package\Service\PackageFactory;
 use Chamilo\Libraries\Architecture\ClassnameUtilities;
 use Chamilo\Libraries\DependencyInjection\DependencyInjectionContainerBuilder;
 use Chamilo\Libraries\Storage\DataClass\DataClass;
-use Chamilo\Libraries\Storage\Parameters\RetrievesParameters;
+use Chamilo\Libraries\Storage\Query\DataClassParameters;
 
 /**
  * Abstract class to define the installation of a tool
@@ -155,7 +155,7 @@ class ToolInstaller extends Installer
     protected function install_tool_for_existing_course_types(): bool
     {
         $translator = $this->getTranslator();
-        $course_types = CourseTypeDataManager::retrieves(CourseType::class, new RetrievesParameters());
+        $course_types = CourseTypeDataManager::retrieves(CourseType::class, new DataClassParameters());
 
         foreach ($course_types as $course_type)
         {
@@ -187,7 +187,7 @@ class ToolInstaller extends Installer
     {
         $translator = $this->getTranslator();
         $course_management_rights = CourseManagementRights::getInstance();
-        $courses = CourseDataManager::retrieves(Course::class, new RetrievesParameters());
+        $courses = CourseDataManager::retrieves(Course::class, new DataClassParameters());
 
         foreach ($courses as $course)
         {

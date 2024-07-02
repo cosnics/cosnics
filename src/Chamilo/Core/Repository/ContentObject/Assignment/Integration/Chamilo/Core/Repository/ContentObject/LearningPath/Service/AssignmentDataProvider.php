@@ -20,8 +20,8 @@ use Chamilo\Core\User\Storage\DataClass\User;
 use Chamilo\Libraries\Architecture\Application\Application;
 use Chamilo\Libraries\Storage\DataClass\DataClass;
 use Chamilo\Libraries\Storage\DataManager\DataManager;
-use Chamilo\Libraries\Storage\Parameters\DataClassParameters;
 use Chamilo\Libraries\Storage\Query\Condition\Condition;
+use Chamilo\Libraries\Storage\Query\DataClassParameters;
 use Exception;
 use InvalidArgumentException;
 use RuntimeException;
@@ -362,16 +362,16 @@ class AssignmentDataProvider
     }
 
     /**
-     * @param \Chamilo\Libraries\Storage\Parameters\DataClassParameters $retrievesParameters
+     * @param \Chamilo\Libraries\Storage\Query\DataClassParameters $dataClassParameters
      *
      * @return \Doctrine\Common\Collections\ArrayCollection|\Chamilo\Core\Repository\Storage\DataClass\ContentObject[]
      */
     public function findAssignmentEntriesWithEphorusRequests(
-        DataClassParameters $retrievesParameters = new DataClassParameters()
+        DataClassParameters $dataClassParameters = new DataClassParameters()
     )
     {
         return $this->learningPathAssignmentService->findAssignmentEntriesWithEphorusRequestsByTreeNodeData(
-            $this->contentObjectPublication, $this->treeNode->getTreeNodeData(), $retrievesParameters
+            $this->contentObjectPublication, $this->treeNode->getTreeNodeData(), $dataClassParameters
         );
     }
 

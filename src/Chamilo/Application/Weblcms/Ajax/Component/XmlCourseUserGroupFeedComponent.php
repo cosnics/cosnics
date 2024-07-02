@@ -9,14 +9,13 @@ use Chamilo\Application\Weblcms\Tool\Implementation\CourseGroup\Storage\DataClas
 use Chamilo\Core\Group\Storage\DataClass\Group;
 use Chamilo\Core\User\Storage\DataClass\User;
 use Chamilo\Libraries\Format\Structure\Glyph\FontAwesomeGlyph;
-use Chamilo\Libraries\Storage\Parameters\DataClassParameters;
-use Chamilo\Libraries\Storage\Parameters\RetrievesParameters;
 use Chamilo\Libraries\Storage\Query\Condition\AndCondition;
 use Chamilo\Libraries\Storage\Query\Condition\ContainsCondition;
 use Chamilo\Libraries\Storage\Query\Condition\EqualityCondition;
 use Chamilo\Libraries\Storage\Query\Condition\InCondition;
 use Chamilo\Libraries\Storage\Query\Condition\NotCondition;
 use Chamilo\Libraries\Storage\Query\Condition\OrCondition;
+use Chamilo\Libraries\Storage\Query\DataClassParameters;
 use Chamilo\Libraries\Storage\Query\OrderBy;
 use Chamilo\Libraries\Storage\Query\OrderProperty;
 use Chamilo\Libraries\Storage\Query\RetrieveProperties;
@@ -210,7 +209,7 @@ class XmlCourseUserGroupFeedComponent extends Manager
             ];
 
             $user_result_set = DataManager::retrieves(
-                User::class, new RetrievesParameters(
+                User::class, new DataClassParameters(
                     condition: $user_condition, orderBy: new OrderBy($order)
                 )
             );
@@ -226,7 +225,7 @@ class XmlCourseUserGroupFeedComponent extends Manager
                 $groups = [];
 
                 $group_result_set = DataManager::retrieves(
-                    CourseGroup::class, new RetrievesParameters(
+                    CourseGroup::class, new DataClassParameters(
                         condition: $group_condition, orderBy: new OrderBy([
                         new OrderProperty(
                             new PropertyConditionVariable(CourseGroup::class, CourseGroup::PROPERTY_NAME)

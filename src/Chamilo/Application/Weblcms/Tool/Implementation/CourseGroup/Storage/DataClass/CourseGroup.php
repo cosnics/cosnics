@@ -5,9 +5,9 @@ use Chamilo\Application\Weblcms\Tool\Implementation\CourseGroup\Manager;
 use Chamilo\Application\Weblcms\Tool\Implementation\CourseGroup\Storage\DataManager;
 use Chamilo\Core\User\Storage\DataClass\User;
 use Chamilo\Libraries\Storage\DataClass\NestedSet;
-use Chamilo\Libraries\Storage\Parameters\RetrievesParameters;
 use Chamilo\Libraries\Storage\Query\Condition\EqualityCondition;
 use Chamilo\Libraries\Storage\Query\Condition\InCondition;
+use Chamilo\Libraries\Storage\Query\DataClassParameters;
 use Chamilo\Libraries\Storage\Query\Variable\PropertyConditionVariable;
 use Chamilo\Libraries\Storage\Query\Variable\StaticConditionVariable;
 use Chamilo\Libraries\Translation\Translation;
@@ -220,7 +220,7 @@ class CourseGroup extends NestedSet
             $condition = $this->get_members_condition($include_subgroups, $recursive_subgroups);
 
             $course_group_user_relations = DataManager::retrieves(
-                CourseGroupUserRelation::class, new RetrievesParameters(condition: $condition)
+                CourseGroupUserRelation::class, new DataClassParameters(condition: $condition)
             );
 
             $users = [];

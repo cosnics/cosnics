@@ -8,8 +8,8 @@ use Chamilo\Application\Weblcms\CourseSettingsController;
 use Chamilo\Application\Weblcms\Integration\Chamilo\Core\Reporting\Block\CourseBlock;
 use Chamilo\Core\Reporting\ReportingData;
 use Chamilo\Core\Reporting\Viewer\Rendition\Block\Type\Html;
+use Chamilo\Libraries\Storage\Query\DataClassParameters;
 use Chamilo\Libraries\Translation\Translation;
-use Chamilo\Libraries\Storage\Parameters\RetrievesParameters;
 use Chamilo\Libraries\Utilities\StringUtilities;
 
 class NoOfCoursesByLanguageBlock extends CourseBlock
@@ -19,7 +19,7 @@ class NoOfCoursesByLanguageBlock extends CourseBlock
     {
         $reporting_data = new ReportingData();
         $arr = [];
-        $courses = CourseDataManager::retrieves(Course::class, new RetrievesParameters());
+        $courses = CourseDataManager::retrieves(Course::class, new DataClassParameters());
         
         $categories = [];
         

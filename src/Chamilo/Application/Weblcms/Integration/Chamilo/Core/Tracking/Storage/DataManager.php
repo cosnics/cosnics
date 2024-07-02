@@ -5,12 +5,11 @@ use Chamilo\Application\Weblcms\Integration\Chamilo\Core\Tracking\Storage\DataCl
 use Chamilo\Application\Weblcms\Integration\Chamilo\Core\Tracking\Storage\DataClass\CourseVisit;
 use Chamilo\Application\Weblcms\Storage\DataClass\CourseTool;
 use Chamilo\Core\User\Storage\DataClass\User;
-use Chamilo\Libraries\Storage\Parameters\DataClassParameters;
-use Chamilo\Libraries\Storage\Parameters\RetrievesParameters;
 use Chamilo\Libraries\Storage\Query\Condition\AndCondition;
 use Chamilo\Libraries\Storage\Query\Condition\ComparisonCondition;
 use Chamilo\Libraries\Storage\Query\Condition\Condition;
 use Chamilo\Libraries\Storage\Query\Condition\EqualityCondition;
+use Chamilo\Libraries\Storage\Query\DataClassParameters;
 use Chamilo\Libraries\Storage\Query\GroupBy;
 use Chamilo\Libraries\Storage\Query\Join;
 use Chamilo\Libraries\Storage\Query\Joins;
@@ -291,7 +290,7 @@ class DataManager extends \Chamilo\Libraries\Storage\DataManager\DataManager
         $properties->add(new PropertyConditionVariable(User::class, User::PROPERTY_LASTNAME));
         $properties->add(new PropertyConditionVariable(User::class, User::PROPERTY_OFFICIAL_CODE));
 
-        $parameters = new RetrievesParameters(
+        $parameters = new DataClassParameters(
             condition: $condition, count: $count, offset: $offset, orderBy: $order_by,
             joins: self::get_assessment_attempts_user_joins(), retrieveProperties: $properties
         );
@@ -432,7 +431,7 @@ class DataManager extends \Chamilo\Libraries\Storage\DataManager\DataManager
         $group_by = new GroupBy();
         $group_by->add($course_tool_name_variable);
 
-        $parameters = new RetrievesParameters(
+        $parameters = new DataClassParameters(
             joins: $joins, groupBy: $group_by, retrieveProperties: $properties
         );
 

@@ -15,10 +15,10 @@ use Chamilo\Libraries\Format\Structure\Glyph\FontAwesomeGlyph;
 use Chamilo\Libraries\Format\Tabs\Form\FormTab;
 use Chamilo\Libraries\Format\Tabs\TabsCollection;
 use Chamilo\Libraries\Format\Utilities\ResourceManager;
-use Chamilo\Libraries\Storage\Parameters\RetrievesParameters;
 use Chamilo\Libraries\Storage\Query\Condition\AndCondition;
 use Chamilo\Libraries\Storage\Query\Condition\EqualityCondition;
 use Chamilo\Libraries\Storage\Query\Condition\NotCondition;
+use Chamilo\Libraries\Storage\Query\DataClassParameters;
 use Chamilo\Libraries\Storage\Query\Variable\PropertyConditionVariable;
 use Chamilo\Libraries\Storage\Query\Variable\StaticConditionVariable;
 use Chamilo\Libraries\Translation\Translation;
@@ -647,7 +647,7 @@ class CourseGroupForm extends FormValidator
             new PropertyConditionVariable(CourseGroup::class, CourseGroup::PROPERTY_PARENT_ID),
             new StaticConditionVariable($parent_course_group->getId())
         );
-        $course_groups = DataManager::retrieves(CourseGroup::class, new RetrievesParameters(condition: $condition));
+        $course_groups = DataManager::retrieves(CourseGroup::class, new DataClassParameters(condition: $condition));
 
         $size_children = 0;
         foreach ($course_groups as $existing_course_group)
@@ -765,7 +765,7 @@ class CourseGroupForm extends FormValidator
         }
         $condition = new AndCondition($conditions);
 
-        $data_set = DataManager::retrieves(CourseGroup::class, new RetrievesParameters(condition: $condition));
+        $data_set = DataManager::retrieves(CourseGroup::class, new DataClassParameters(condition: $condition));
 
         return ($data_set->count() > 0);
     }
@@ -1187,7 +1187,7 @@ class CourseGroupForm extends FormValidator
                 );
 
                 $c_course_groups = DataManager::retrieves(
-                    CourseGroup::class, new RetrievesParameters(condition: $condition)
+                    CourseGroup::class, new DataClassParameters(condition: $condition)
                 );
 
                 foreach ($c_course_groups as $course_group)

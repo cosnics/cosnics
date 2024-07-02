@@ -14,10 +14,9 @@ use Chamilo\Libraries\Architecture\Exceptions\NotAllowedException;
 use Chamilo\Libraries\Format\Structure\Breadcrumb;
 use Chamilo\Libraries\Format\Structure\Page;
 use Chamilo\Libraries\Format\Structure\PageConfiguration;
-use Chamilo\Libraries\Storage\Parameters\DataClassParameters;
-use Chamilo\Libraries\Storage\Parameters\RetrievesParameters;
 use Chamilo\Libraries\Storage\Query\Condition\AndCondition;
 use Chamilo\Libraries\Storage\Query\Condition\EqualityCondition;
+use Chamilo\Libraries\Storage\Query\DataClassParameters;
 use Chamilo\Libraries\Storage\Query\Variable\PropertyConditionVariable;
 use Chamilo\Libraries\Storage\Query\Variable\StaticConditionVariable;
 use Chamilo\Libraries\Translation\Translation;
@@ -353,7 +352,7 @@ class AttemptResultViewerComponent extends Manager
         }
 
         $question_attempts = DataManager::retrieves(
-            QuestionAttempt::class, new RetrievesParameters(condition: $condition)
+            QuestionAttempt::class, new DataClassParameters(condition: $condition)
         );
 
         $results = [];
@@ -386,7 +385,7 @@ class AttemptResultViewerComponent extends Manager
         );
 
         $question_attempts_result_set = DataManager::retrieves(
-            QuestionAttempt::class, new RetrievesParameters(condition: $condition)
+            QuestionAttempt::class, new DataClassParameters(condition: $condition)
         );
 
         foreach ($question_attempts_result_set as $question_attempt)

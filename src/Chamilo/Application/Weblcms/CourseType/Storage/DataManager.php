@@ -3,13 +3,12 @@ namespace Chamilo\Application\Weblcms\CourseType\Storage;
 
 use Chamilo\Application\Weblcms\CourseType\Storage\DataClass\CourseType;
 use Chamilo\Application\Weblcms\CourseType\Storage\DataClass\CourseTypeUserOrder;
-use Chamilo\Libraries\Storage\Parameters\DataClassParameters;
-use Chamilo\Libraries\Storage\Parameters\RetrievesParameters;
 use Chamilo\Libraries\Storage\Query\Condition\AndCondition;
 use Chamilo\Libraries\Storage\Query\Condition\EqualityCondition;
 use Chamilo\Libraries\Storage\Query\Condition\NotCondition;
 use Chamilo\Libraries\Storage\Query\Condition\OrCondition;
 use Chamilo\Libraries\Storage\Query\Condition\SubselectCondition;
+use Chamilo\Libraries\Storage\Query\DataClassParameters;
 use Chamilo\Libraries\Storage\Query\Join;
 use Chamilo\Libraries\Storage\Query\Joins;
 use Chamilo\Libraries\Storage\Query\OrderBy;
@@ -122,7 +121,7 @@ class DataManager extends \Chamilo\Application\Weblcms\Storage\DataManager
         $condition = new AndCondition($conditions);
 
         $active_course_types = DataManager::retrieves(
-            CourseType::class, new RetrievesParameters(condition: $condition)
+            CourseType::class, new DataClassParameters(condition: $condition)
         );
 
         foreach ($active_course_types as $course_type)
@@ -252,7 +251,7 @@ class DataManager extends \Chamilo\Application\Weblcms\Storage\DataManager
             new OrderProperty(new PropertyConditionVariable(CourseType::class, CourseType::PROPERTY_DISPLAY_ORDER))
         ];
 
-        $parameters = new RetrievesParameters(condition: $condition, orderBy: new OrderBy($order));
+        $parameters = new DataClassParameters(condition: $condition, orderBy: new OrderBy($order));
 
         return DataManager::retrieves(CourseType::class, $parameters);
     }
@@ -372,7 +371,7 @@ class DataManager extends \Chamilo\Application\Weblcms\Storage\DataManager
 
         $joins->add(new Join(CourseTypeUserOrder::class, $join_condition, Join::TYPE_LEFT));
 
-        $parameters = new RetrievesParameters(
+        $parameters = new DataClassParameters(
             condition: $condition, count: $max_objects, offset: $offset, orderBy: $order_by, joins: $joins,
             retrieveProperties: new RetrieveProperties([new PropertiesConditionVariable(CourseType::class)])
         );

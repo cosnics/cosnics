@@ -3,9 +3,9 @@ namespace Chamilo\Application\Weblcms\Service\Home;
 
 use Chamilo\Core\User\Integration\Chamilo\Core\Tracking\Storage\DataClass\LoginLogout;
 use Chamilo\Libraries\Storage\DataManager\DataManager;
-use Chamilo\Libraries\Storage\Parameters\RetrievesParameters;
 use Chamilo\Libraries\Storage\Query\Condition\AndCondition;
 use Chamilo\Libraries\Storage\Query\Condition\EqualityCondition;
+use Chamilo\Libraries\Storage\Query\DataClassParameters;
 use Chamilo\Libraries\Storage\Query\OrderBy;
 use Chamilo\Libraries\Storage\Query\OrderProperty;
 use Chamilo\Libraries\Storage\Query\Variable\PropertyConditionVariable;
@@ -50,7 +50,7 @@ abstract class BlockRenderer extends \Chamilo\Core\Home\Renderer\BlockRenderer
 
         $trackers = DataManager::retrieves(
             LoginLogout::class,
-            new RetrievesParameters(condition: $condition, count: 1, offset: 0, orderBy: new OrderBy([$order_by]))
+            new DataClassParameters(condition: $condition, count: 1, offset: 0, orderBy: new OrderBy([$order_by]))
         );
 
         $tracker = $trackers->current();

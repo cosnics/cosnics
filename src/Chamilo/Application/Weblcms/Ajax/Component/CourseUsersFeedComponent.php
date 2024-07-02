@@ -11,11 +11,10 @@ use Chamilo\Libraries\Format\Form\Element\AdvancedElementFinder\AdvancedElementF
 use Chamilo\Libraries\Format\Form\Element\AdvancedElementFinder\AdvancedElementFinderElements;
 use Chamilo\Libraries\Format\Structure\Glyph\FontAwesomeGlyph;
 use Chamilo\Libraries\Storage\DataManager\DataManager;
-use Chamilo\Libraries\Storage\Parameters\DataClassParameters;
-use Chamilo\Libraries\Storage\Parameters\RetrievesParameters;
 use Chamilo\Libraries\Storage\Query\Condition\AndCondition;
 use Chamilo\Libraries\Storage\Query\Condition\EqualityCondition;
 use Chamilo\Libraries\Storage\Query\Condition\InCondition;
+use Chamilo\Libraries\Storage\Query\DataClassParameters;
 use Chamilo\Libraries\Storage\Query\Join;
 use Chamilo\Libraries\Storage\Query\Joins;
 use Chamilo\Libraries\Storage\Query\OrderBy;
@@ -164,7 +163,7 @@ class CourseUsersFeedComponent extends Manager
         );
 
         $groups = \Chamilo\Application\Weblcms\Course\Storage\DataManager::retrieves(
-            Group::class, new RetrievesParameters(
+            Group::class, new DataClassParameters(
                 condition: new AndCondition($groupConditions), joins: new Joins(
                 [
                     new Join(
@@ -233,7 +232,7 @@ class CourseUsersFeedComponent extends Manager
         }
         $this->user_count = DataManager::count(User::class, new DataClassParameters(condition: $condition));
 
-        $parameters = new RetrievesParameters(
+        $parameters = new DataClassParameters(
             condition: $condition, count: 100, offset: $this->get_offset(), orderBy: new OrderBy([
             new OrderProperty(new PropertyConditionVariable(User::class, User::PROPERTY_LASTNAME)),
             new OrderProperty(new PropertyConditionVariable(User::class, User::PROPERTY_FIRSTNAME))

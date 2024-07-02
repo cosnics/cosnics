@@ -8,8 +8,8 @@ use Chamilo\Application\Weblcms\Storage\DataClass\ContentObjectPublication;
 use Chamilo\Application\Weblcms\Storage\DataManager;
 use Chamilo\Core\Reporting\ReportingData;
 use Chamilo\Core\Reporting\Viewer\Rendition\Block\Type\Html;
-use Chamilo\Libraries\Storage\Parameters\RetrievesParameters;
 use Chamilo\Libraries\Storage\Query\Condition\EqualityCondition;
+use Chamilo\Libraries\Storage\Query\DataClassParameters;
 use Chamilo\Libraries\Storage\Query\OrderBy;
 use Chamilo\Libraries\Storage\Query\OrderProperty;
 use Chamilo\Libraries\Storage\Query\Variable\PropertyConditionVariable;
@@ -22,7 +22,7 @@ class MostActiveInactiveLastPublicationBlock extends CourseBlock
     public function count_data()
     {
         $reporting_data = new ReportingData();
-        $courses = CourseDataManager::retrieves(Course::class, new RetrievesParameters());
+        $courses = CourseDataManager::retrieves(Course::class, new DataClassParameters());
 
         $arr[Translation::get('Past24hr')] = 0;
         $arr[Translation::get('PastWeek')] = 0;
@@ -40,13 +40,13 @@ class MostActiveInactiveLastPublicationBlock extends CourseBlock
                     ContentObjectPublication::class, ContentObjectPublication::PROPERTY_COURSE_ID
                 ), new StaticConditionVariable($course->get_id())
             );
-            $order_by = array(
+            $order_by = [
                 new OrderProperty(
                     new PropertyConditionVariable(
                         ContentObjectPublication::class, ContentObjectPublication::PROPERTY_MODIFIED_DATE
                     )
                 )
-            );
+            ];
             $publications = DataManager::retrieve_content_object_publications(
                 $condition, new OrderBy($order_by), 0, 1
             );
@@ -95,16 +95,16 @@ class MostActiveInactiveLastPublicationBlock extends CourseBlock
             }
         }
         $reporting_data->set_categories(
-            array(
+            [
                 Translation::get('Past24hr'),
                 Translation::get('PastWeek'),
                 Translation::get('PastMonth'),
                 Translation::get('PastYear'),
                 Translation::get('MoreThenOneYear'),
                 Translation::get('NothingPublished')
-            )
+            ]
         );
-        $reporting_data->set_rows(array(Translation::get('count')));
+        $reporting_data->set_rows([Translation::get('count')]);
 
         $reporting_data->add_data_category_row(
             Translation::get('Past24hr'), Translation::get('count'), $arr[Translation::get('Past24hr')]
@@ -130,10 +130,10 @@ class MostActiveInactiveLastPublicationBlock extends CourseBlock
 
     public function get_views()
     {
-        return array(
+        return [
             Html::VIEW_TABLE,
             Html::VIEW_PIE
-        );
+        ];
     }
 
     public function retrieve_data()

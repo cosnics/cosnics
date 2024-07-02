@@ -6,8 +6,8 @@ use Chamilo\Application\Weblcms\Storage\DataClass\ContentObjectPublication;
 use Chamilo\Application\Weblcms\Tool\Implementation\Ephorus\Storage\DataClass\Request;
 use Chamilo\Core\Repository\ContentObject\Assignment\Display\Bridge\Interfaces\EphorusServiceBridgeInterface;
 use Chamilo\Core\Repository\ContentObject\Assignment\Storage\DataClass\Assignment;
-use Chamilo\Libraries\Storage\Parameters\RetrievesParameters;
 use Chamilo\Libraries\Storage\Query\Condition\Condition;
+use Chamilo\Libraries\Storage\Query\DataClassParameters;
 use RuntimeException;
 
 /**
@@ -55,16 +55,16 @@ class EphorusServiceBridge implements EphorusServiceBridgeInterface
     }
 
     /**
-     * @param \Chamilo\Libraries\Storage\Parameters\RetrievesParameters $retrievesParameters
+     * @param \Chamilo\Libraries\Storage\Query\DataClassParameters $dataClassParameters
      *
      * @return \Doctrine\Common\Collections\ArrayCollection
      */
     public function findAssignmentEntriesWithEphorusRequests(
-        RetrievesParameters $retrievesParameters = new RetrievesParameters()
+        DataClassParameters $dataClassParameters = new DataClassParameters()
     )
     {
         return $this->ephorusService->findAssignmentEntriesWithEphorusRequestsByContentObjectPublication(
-            $this->contentObjectPublication, $retrievesParameters
+            $this->contentObjectPublication, $dataClassParameters
         );
     }
 
@@ -89,6 +89,14 @@ class EphorusServiceBridge implements EphorusServiceBridgeInterface
     }
 
     /**
+     * @param bool $ephorusEnabled
+     */
+    public function setEphorusEnabled($ephorusEnabled = true)
+    {
+        $this->ephorusEnabled = $ephorusEnabled;
+    }
+
+    /**
      * @param ContentObjectPublication $contentObjectPublication
      */
     public function setContentObjectPublication(ContentObjectPublication $contentObjectPublication)
@@ -101,13 +109,5 @@ class EphorusServiceBridge implements EphorusServiceBridgeInterface
         }
 
         $this->contentObjectPublication = $contentObjectPublication;
-    }
-
-    /**
-     * @param bool $ephorusEnabled
-     */
-    public function setEphorusEnabled($ephorusEnabled = true)
-    {
-        $this->ephorusEnabled = $ephorusEnabled;
     }
 }

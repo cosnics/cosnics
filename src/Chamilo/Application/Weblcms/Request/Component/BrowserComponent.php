@@ -19,11 +19,10 @@ use Chamilo\Libraries\Format\Tabs\ContentTab;
 use Chamilo\Libraries\Format\Tabs\TabsCollection;
 use Chamilo\Libraries\Format\Tabs\TabsRenderer;
 use Chamilo\Libraries\Storage\DataManager\DataManager;
-use Chamilo\Libraries\Storage\Parameters\DataClassParameters;
-use Chamilo\Libraries\Storage\Parameters\RetrievesParameters;
 use Chamilo\Libraries\Storage\Query\Condition\AndCondition;
 use Chamilo\Libraries\Storage\Query\Condition\EqualityCondition;
 use Chamilo\Libraries\Storage\Query\Condition\InCondition;
+use Chamilo\Libraries\Storage\Query\DataClassParameters;
 use Chamilo\Libraries\Storage\Query\Variable\PropertyConditionVariable;
 use Chamilo\Libraries\Storage\Query\Variable\StaticConditionVariable;
 
@@ -71,7 +70,7 @@ class BrowserComponent extends Manager implements BreadcrumbLessComponentInterfa
                 );
 
                 $requests = DataManager::retrieves(
-                    Request::class, new RetrievesParameters(
+                    Request::class, new DataClassParameters(
                         condition: $this->getRequestCondition(RequestTableRenderer::TYPE_PERSONAL),
                         count: $tableParameterValues->getNumberOfItemsPerPage(),
                         offset: $tableParameterValues->getOffset(), orderBy: $requestTableRenderer->determineOrderBy(
@@ -338,7 +337,7 @@ class BrowserComponent extends Manager implements BreadcrumbLessComponentInterfa
         );
 
         $requests = DataManager::retrieves(
-            Request::class, new RetrievesParameters(
+            Request::class, new DataClassParameters(
                 condition: $this->getRequestCondition($requestType),
                 count: $tableParameterValues->getNumberOfItemsPerPage(), offset: $tableParameterValues->getOffset(),
                 orderBy: $requestTableRenderer->determineOrderBy($tableParameterValues)

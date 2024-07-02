@@ -2,8 +2,8 @@
 namespace Chamilo\Core\Metadata\Schema\Storage;
 
 use Chamilo\Core\Metadata\Storage\DataClass\Schema;
-use Chamilo\Libraries\Storage\Parameters\DataClassParameters;
 use Chamilo\Libraries\Storage\Query\Condition\ComparisonCondition;
+use Chamilo\Libraries\Storage\Query\DataClassParameters;
 use Chamilo\Libraries\Storage\Query\Variable\PropertyConditionVariable;
 use Chamilo\Libraries\Storage\Query\Variable\StaticConditionVariable;
 use InvalidArgumentException;

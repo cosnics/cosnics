@@ -5,10 +5,10 @@ use Chamilo\Application\Weblcms\Bridge\LearningPath\Assignment\Storage\DataClass
 use Chamilo\Application\Weblcms\Storage\DataClass\ContentObjectPublication;
 use Chamilo\Application\Weblcms\Tool\Implementation\Ephorus\Storage\DataClass\Request;
 use Chamilo\Core\Repository\ContentObject\LearningPath\Storage\DataClass\TreeNodeData;
-use Chamilo\Libraries\Storage\Parameters\RetrievesParameters;
 use Chamilo\Libraries\Storage\Query\Condition\AndCondition;
 use Chamilo\Libraries\Storage\Query\Condition\Condition;
 use Chamilo\Libraries\Storage\Query\Condition\EqualityCondition;
+use Chamilo\Libraries\Storage\Query\DataClassParameters;
 use Chamilo\Libraries\Storage\Query\Variable\PropertyConditionVariable;
 use Chamilo\Libraries\Storage\Query\Variable\StaticConditionVariable;
 
@@ -39,21 +39,21 @@ class LearningPathAssignmentEphorusRepository extends
     /**
      * @param \Chamilo\Application\Weblcms\Storage\DataClass\ContentObjectPublication $contentObjectPublication
      * @param \Chamilo\Core\Repository\ContentObject\LearningPath\Storage\DataClass\TreeNodeData $treeNodeData
-     * @param \Chamilo\Libraries\Storage\Parameters\RetrievesParameters $retrievesParameters
+     * @param \Chamilo\Libraries\Storage\Query\DataClassParameters $dataClassParameters
      *
      * @return \Chamilo\Core\Repository\Storage\DataClass\ContentObject[]|\Doctrine\Common\Collections\ArrayCollection
      */
     public function findAssignmentEntriesWithRequestsByTreeNodeData(
         ContentObjectPublication $contentObjectPublication, TreeNodeData $treeNodeData,
-        RetrievesParameters $retrievesParameters = new RetrievesParameters()
+        DataClassParameters $dataClassParameters = new DataClassParameters()
     )
     {
         $entryConditions = $this->getConditionForTreeNodeDataAndPublication(
-            $contentObjectPublication, $treeNodeData, $retrievesParameters->getCondition()
+            $contentObjectPublication, $treeNodeData, $dataClassParameters->getCondition()
         );
-        $retrievesParameters->setCondition($entryConditions);
+        $dataClassParameters->setCondition($entryConditions);
 
-        return $this->findAssignmentEntriesWithRequests($retrievesParameters);
+        return $this->findAssignmentEntriesWithRequests($dataClassParameters);
     }
 
     /**

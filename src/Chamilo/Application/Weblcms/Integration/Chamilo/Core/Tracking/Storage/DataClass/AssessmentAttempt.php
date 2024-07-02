@@ -3,10 +3,9 @@ namespace Chamilo\Application\Weblcms\Integration\Chamilo\Core\Tracking\Storage\
 
 use Chamilo\Application\Weblcms\Integration\Chamilo\Core\Tracking\Storage\DataManager;
 use Chamilo\Core\Repository\ContentObject\Assessment\Display\Attempt\AbstractAttempt;
-use Chamilo\Libraries\Storage\Parameters\DataClassParameters;
-use Chamilo\Libraries\Storage\Parameters\RetrievesParameters;
 use Chamilo\Libraries\Storage\Query\Condition\AndCondition;
 use Chamilo\Libraries\Storage\Query\Condition\EqualityCondition;
+use Chamilo\Libraries\Storage\Query\DataClassParameters;
 use Chamilo\Libraries\Storage\Query\Variable\PropertyConditionVariable;
 use Chamilo\Libraries\Storage\Query\Variable\StaticConditionVariable;
 
@@ -70,7 +69,7 @@ class AssessmentAttempt extends AbstractAttempt
             $condition = new AndCondition($conditions);
         }
 
-        $trackers = DataManager::retrieves(self::class, new RetrievesParameters(condition: $condition));
+        $trackers = DataManager::retrieves(self::class, new DataClassParameters(condition: $condition));
         $num = $trackers->count();
 
         $total_score = 0;

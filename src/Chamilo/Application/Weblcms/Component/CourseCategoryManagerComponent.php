@@ -13,8 +13,7 @@ use Chamilo\Libraries\Format\Breadcrumb\BreadcrumbLessComponentInterface;
 use Chamilo\Libraries\Format\Breadcrumb\BreadcrumbTrail;
 use Chamilo\Libraries\Format\Structure\Breadcrumb;
 use Chamilo\Libraries\Format\Tabs\GenericTabsRenderer;
-use Chamilo\Libraries\Storage\Parameters\DataClassParameters;
-use Chamilo\Libraries\Storage\Parameters\RetrievesParameters;
+use Chamilo\Libraries\Storage\Query\DataClassParameters;
 use Chamilo\Libraries\Translation\Translation;
 
 /**
@@ -125,7 +124,7 @@ class CourseCategoryManagerComponent extends Manager implements BreadcrumbLessCo
     public function retrieve_categories($condition, $offset, $count, $order_property)
     {
         return DataManager::retrieves(
-            CourseCategory::class, new RetrievesParameters(
+            CourseCategory::class, new DataClassParameters(
                 condition: $condition, count: $count, offset: $offset, orderBy: $order_property
             )
         );

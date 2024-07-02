@@ -11,12 +11,11 @@ use Chamilo\Libraries\Architecture\JsonAjaxResult;
 use Chamilo\Libraries\Format\Form\Element\AdvancedElementFinder\AdvancedElementFinderElement;
 use Chamilo\Libraries\Format\Form\Element\AdvancedElementFinder\AdvancedElementFinderElements;
 use Chamilo\Libraries\Format\Structure\Glyph\FontAwesomeGlyph;
-use Chamilo\Libraries\Storage\Parameters\DataClassParameters;
-use Chamilo\Libraries\Storage\Parameters\RetrievesParameters;
 use Chamilo\Libraries\Storage\Query\Condition\AndCondition;
 use Chamilo\Libraries\Storage\Query\Condition\ContainsCondition;
 use Chamilo\Libraries\Storage\Query\Condition\EqualityCondition;
 use Chamilo\Libraries\Storage\Query\Condition\OrCondition;
+use Chamilo\Libraries\Storage\Query\DataClassParameters;
 use Chamilo\Libraries\Storage\Query\OrderBy;
 use Chamilo\Libraries\Storage\Query\OrderProperty;
 use Chamilo\Libraries\Storage\Query\Variable\PropertyConditionVariable;
@@ -238,7 +237,7 @@ class CourseCategoryFeedComponent extends Manager
         }
 
         return DataManager::retrieves(
-            CourseCategory::class, new RetrievesParameters(
+            CourseCategory::class, new DataClassParameters(
                 condition: $condition, orderBy: new OrderBy([
                 new OrderProperty(
                     new PropertyConditionVariable(CourseCategory::class, CourseCategory::PROPERTY_NAME)
@@ -297,7 +296,7 @@ class CourseCategoryFeedComponent extends Manager
         );
 
         return \Chamilo\Application\Weblcms\Course\Storage\DataManager::retrieves(
-            Course::class, new RetrievesParameters(
+            Course::class, new DataClassParameters(
                 condition: $condition, count: 100, offset: $this->get_offset(), orderBy: new OrderBy(
                 [new OrderProperty(new PropertyConditionVariable(Course::class, Course::PROPERTY_TITLE))]
             )

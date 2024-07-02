@@ -4,14 +4,14 @@ namespace Chamilo\Application\Weblcms\Integration\Chamilo\Core\Reporting\Block\A
 use Chamilo\Application\Weblcms\Bridge\Assignment\Storage\DataClass\Entry;
 use Chamilo\Application\Weblcms\Tool\Implementation\CourseGroup\Storage\DataClass\CourseGroup;
 use Chamilo\Application\Weblcms\Tool\Implementation\CourseGroup\Storage\DataManager as CourseGroupDataManager;
-use Chamilo\Libraries\Storage\Parameters\RetrievesParameters;
 use Chamilo\Libraries\Storage\Query\Condition\EqualityCondition;
+use Chamilo\Libraries\Storage\Query\DataClassParameters;
 use Chamilo\Libraries\Storage\Query\Variable\PropertyConditionVariable;
 use Chamilo\Libraries\Storage\Query\Variable\StaticConditionVariable;
 
 /**
  * Reporting block with scores for the course groups.
- * 
+ *
  * @author Bert De Clercq (Hogeschool Gent)
  */
 class AssignmentCourseGroupScoresBlock extends AssignmentScoresBlock
@@ -28,21 +28,21 @@ class AssignmentCourseGroupScoresBlock extends AssignmentScoresBlock
     /**
      * @param CourseGroup $entity
      *
-     * @return string
-     */
-    protected function renderEntityName($entity)
-    {
-        return $entity->get_name();
-    }
-
-    /**
-     * @param CourseGroup $entity
-     *
      * @return int
      */
     protected function getEntityIdFromEntity($entity)
     {
         return $entity->getId();
+    }
+
+    /**
+     * @param CourseGroup $entity
+     *
+     * @return string
+     */
+    protected function renderEntityName($entity)
+    {
+        return $entity->get_name();
     }
 
     /**
@@ -54,10 +54,11 @@ class AssignmentCourseGroupScoresBlock extends AssignmentScoresBlock
     {
         $condition = new EqualityCondition(
             new PropertyConditionVariable(CourseGroup::class, CourseGroup::PROPERTY_COURSE_CODE),
-            new StaticConditionVariable($course_id));
+            new StaticConditionVariable($course_id)
+        );
 
         return CourseGroupDataManager::retrieves(
-            CourseGroup::class,
-            new RetrievesParameters(condition: $condition));
+            CourseGroup::class, new DataClassParameters(condition: $condition)
+        );
     }
 }

@@ -7,7 +7,7 @@ use Chamilo\Application\Weblcms\Request\Rights\Table\EntityTableRenderer;
 use Chamilo\Libraries\Architecture\Exceptions\NotAllowedException;
 use Chamilo\Libraries\Format\Table\RequestTableParameterValuesCompiler;
 use Chamilo\Libraries\Storage\DataManager\DataManager;
-use Chamilo\Libraries\Storage\Parameters\RetrievesParameters;
+use Chamilo\Libraries\Storage\Query\DataClassParameters;
 
 class BrowserComponent extends Manager
 {
@@ -60,7 +60,7 @@ class BrowserComponent extends Manager
             $totalNumberOfItems
         );
 
-        $parameters = new RetrievesParameters(
+        $parameters = new DataClassParameters(
             count: $tableParameterValues->getNumberOfItemsPerPage(), offset: $tableParameterValues->getOffset(),
             orderBy: $entityTableRenderer->determineOrderBy($tableParameterValues)
         );

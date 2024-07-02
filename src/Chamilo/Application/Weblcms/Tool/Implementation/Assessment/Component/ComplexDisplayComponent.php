@@ -14,10 +14,9 @@ use Chamilo\Core\Repository\ContentObject\Hotpotatoes\Storage\DataClass\Hotpotat
 use Chamilo\Libraries\Architecture\Application\ApplicationConfiguration;
 use Chamilo\Libraries\Format\Breadcrumb\BreadcrumbLessComponentInterface;
 use Chamilo\Libraries\Format\Breadcrumb\BreadcrumbTrail;
-use Chamilo\Libraries\Storage\Parameters\DataClassParameters;
-use Chamilo\Libraries\Storage\Parameters\RetrievesParameters;
 use Chamilo\Libraries\Storage\Query\Condition\AndCondition;
 use Chamilo\Libraries\Storage\Query\Condition\EqualityCondition;
+use Chamilo\Libraries\Storage\Query\DataClassParameters;
 use Chamilo\Libraries\Storage\Query\Variable\PropertyConditionVariable;
 use Chamilo\Libraries\Storage\Query\Variable\StaticConditionVariable;
 use Chamilo\Libraries\Translation\Translation;
@@ -107,7 +106,7 @@ class ComplexDisplayComponent extends Manager implements AssessmentDisplaySuppor
         $condition = new AndCondition($conditions);
 
         $trackers = DataManager::retrieves(
-            AssessmentAttempt::class, new RetrievesParameters(condition: $condition)
+            AssessmentAttempt::class, new DataClassParameters(condition: $condition)
         );
 
         $count = $trackers->count();
@@ -383,7 +382,7 @@ class ComplexDisplayComponent extends Manager implements AssessmentDisplaySuppor
         );
 
         $question_attempts_result_set = DataManager::retrieves(
-            QuestionAttempt::class, new RetrievesParameters(condition: $condition)
+            QuestionAttempt::class, new DataClassParameters(condition: $condition)
         );
 
         foreach ($question_attempts_result_set as $question_attempt)

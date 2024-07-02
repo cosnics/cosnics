@@ -5,9 +5,9 @@ use Chamilo\Application\Weblcms\Storage\DataClass\ContentObjectPublicationCatego
 use Chamilo\Application\Weblcms\Tool\Implementation\CourseGroup\Storage\DataClass\CourseGroup;
 use Chamilo\Application\Weblcms\Tool\Implementation\CourseGroup\Storage\DataClass\CourseGroupPublicationCategory;
 use Chamilo\Core\Repository\ContentObject\LearningPath\Storage\Repository\CommonDataClassRepository;
-use Chamilo\Libraries\Storage\Parameters\RetrievesParameters;
 use Chamilo\Libraries\Storage\Query\Condition\AndCondition;
 use Chamilo\Libraries\Storage\Query\Condition\EqualityCondition;
+use Chamilo\Libraries\Storage\Query\DataClassParameters;
 use Chamilo\Libraries\Storage\Query\Join;
 use Chamilo\Libraries\Storage\Query\Joins;
 use Chamilo\Libraries\Storage\Query\Variable\PropertyConditionVariable;
@@ -34,7 +34,7 @@ class CourseGroupPublicationCategoryRepository extends CommonDataClassRepository
         $condition = $this->getConditionsForCourseGroupAndTool($courseGroup, $toolName);
 
         return $this->dataClassRepository->retrieves(
-            CourseGroupPublicationCategory::class, new RetrievesParameters(
+            CourseGroupPublicationCategory::class, new DataClassParameters(
                 condition: $condition, joins: $joins
             )
         );
@@ -55,7 +55,7 @@ class CourseGroupPublicationCategoryRepository extends CommonDataClassRepository
         $condition = $this->getConditionsForCourseGroupAndTool($courseGroup, $toolName);
 
         return $this->dataClassRepository->retrieves(
-            ContentObjectPublicationCategory::class, new RetrievesParameters(condition: $condition, joins: $joins)
+            ContentObjectPublicationCategory::class, new DataClassParameters(condition: $condition, joins: $joins)
         );
     }
 

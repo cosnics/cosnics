@@ -15,10 +15,10 @@ use Chamilo\Application\Weblcms\Storage\DataManager;
 use Chamilo\Libraries\Format\Structure\Glyph\FontAwesomeGlyph;
 use Chamilo\Libraries\Format\Structure\Glyph\IdentGlyph;
 use Chamilo\Libraries\Format\Structure\Glyph\NamespaceIdentGlyph;
-use Chamilo\Libraries\Storage\Parameters\RetrievesParameters;
 use Chamilo\Libraries\Storage\Query\Condition\AndCondition;
 use Chamilo\Libraries\Storage\Query\Condition\EqualityCondition;
 use Chamilo\Libraries\Storage\Query\Condition\InCondition;
+use Chamilo\Libraries\Storage\Query\DataClassParameters;
 use Chamilo\Libraries\Storage\Query\OrderBy;
 use Chamilo\Libraries\Storage\Query\OrderProperty;
 use Chamilo\Libraries\Storage\Query\Variable\PropertyConditionVariable;
@@ -162,7 +162,7 @@ class FixedLocationToolListRenderer extends ToolListRenderer
         $condition = new AndCondition($conditions);
 
         $course_tool_rel_course_section = DataManager::retrieves(
-            CourseToolRelCourseSection::class, new RetrievesParameters(condition: $condition)
+            CourseToolRelCourseSection::class, new DataClassParameters(condition: $condition)
         );
 
         if ($course_tool_rel_course_section->count() > 0)
@@ -193,7 +193,7 @@ class FixedLocationToolListRenderer extends ToolListRenderer
             $condition = new AndCondition($conditions);
 
             $this->publication_links = DataManager::retrieves(
-                ContentObjectPublication::class, new RetrievesParameters(condition: $condition)
+                ContentObjectPublication::class, new DataClassParameters(condition: $condition)
             );
         }
 
@@ -474,7 +474,7 @@ class FixedLocationToolListRenderer extends ToolListRenderer
                 new PropertyConditionVariable(CourseSection::class, CourseSection::PROPERTY_DISPLAY_ORDER)
             )
         ];
-        $parameters = new RetrievesParameters(condition: $condition, orderBy: new OrderBy($order_property));
+        $parameters = new DataClassParameters(condition: $condition, orderBy: new OrderBy($order_property));
         $sections = DataManager::retrieves(CourseSection::class, $parameters);
 
         foreach ($sections as $section)

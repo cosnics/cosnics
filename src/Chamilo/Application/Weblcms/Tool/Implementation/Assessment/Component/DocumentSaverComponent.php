@@ -16,10 +16,10 @@ use Chamilo\Core\Repository\Storage\DataManager;
 use Chamilo\Core\Repository\Workspace\Storage\DataClass\Workspace;
 use Chamilo\Libraries\Architecture\Exceptions\NotAllowedException;
 use Chamilo\Libraries\Format\Breadcrumb\BreadcrumbTrail;
-use Chamilo\Libraries\Storage\Parameters\RetrievesParameters;
 use Chamilo\Libraries\Storage\Query\Condition\AndCondition;
 use Chamilo\Libraries\Storage\Query\Condition\EqualityCondition;
 use Chamilo\Libraries\Storage\Query\Condition\InCondition;
+use Chamilo\Libraries\Storage\Query\DataClassParameters;
 use Chamilo\Libraries\Storage\Query\Variable\PropertyConditionVariable;
 use Chamilo\Libraries\Storage\Query\Variable\StaticConditionVariable;
 use Chamilo\Libraries\Translation\Translation;
@@ -136,7 +136,7 @@ class DocumentSaverComponent extends Manager
 
         $question_attempt_trackers =
             \Chamilo\Application\Weblcms\Integration\Chamilo\Core\Tracking\Storage\DataManager::retrieves(
-                QuestionAttempt::class, new RetrievesParameters(condition: $condition)
+                QuestionAttempt::class, new DataClassParameters(condition: $condition)
             );
 
         $document_ids = [];
@@ -179,7 +179,7 @@ class DocumentSaverComponent extends Manager
 
         $assessment_attempt_trackers =
             \Chamilo\Application\Weblcms\Integration\Chamilo\Core\Tracking\Storage\DataManager::retrieves(
-                AssessmentAttempt::class, new RetrievesParameters(condition: $condition)
+                AssessmentAttempt::class, new DataClassParameters(condition: $condition)
             );
 
         $assessment_attempt_tracker_ids = [];
