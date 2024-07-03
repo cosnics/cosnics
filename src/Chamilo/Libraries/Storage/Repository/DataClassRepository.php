@@ -30,7 +30,7 @@ use Doctrine\Common\Collections\ArrayCollection;
 use Symfony\Component\Uid\Uuid;
 
 /**
- * @package Chamilo\Libraries\Storage\DataManager\Repository
+ * @package Chamilo\Libraries\Storage\Repository
  * @author  Hans De Bisschop <hans.de.bisschop@ehb.be>
  * @author  Magali Gillard <magali.gillard@ehb.be>
  */

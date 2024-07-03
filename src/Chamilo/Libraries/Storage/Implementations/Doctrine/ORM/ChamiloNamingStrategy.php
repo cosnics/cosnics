@@ -1,5 +1,5 @@
 <?php
-namespace Chamilo\Libraries\Storage\DataManager\Doctrine;
+namespace Chamilo\Libraries\Storage\Implementations\Doctrine\ORM;
 
 use Chamilo\Libraries\Architecture\ClassnameUtilities;
 use Chamilo\Libraries\Utilities\StringUtilities;
@@ -9,7 +9,7 @@ use ReflectionClass;
 /**
  * The chamilo naming strategy, defining table prefixes by the use of a const or the package name
  *
- * @package Chamilo\Libraries\Storage\DataManager\Doctrine
+ * @package Chamilo\Libraries\Storage\Implementations\Doctrine\ORM
  * @author  Sven Vanpoucke - Hogeschool Gent
  */
 class ChamiloNamingStrategy extends DefaultNamingStrategy

@@ -7,9 +7,9 @@ use Chamilo\Core\Install\Architecture\Interfaces\InstallerObserverInterface;
 use Chamilo\Libraries\Architecture\ClassnameUtilities;
 use Chamilo\Libraries\Architecture\ErrorHandler\ExceptionLogger\FileExceptionLogger;
 use Chamilo\Libraries\File\SystemPathBuilder;
-use Chamilo\Libraries\Storage\DataManager\Doctrine\Database\StorageUnitDatabase;
-use Chamilo\Libraries\Storage\DataManager\Doctrine\DataSourceName;
-use Chamilo\Libraries\Storage\DataManager\Doctrine\Factory\ConnectionFactory;
+use Chamilo\Libraries\Storage\Implementations\Doctrine\Database\StorageUnitDatabase;
+use Chamilo\Libraries\Storage\Implementations\Doctrine\DataSourceName;
+use Chamilo\Libraries\Storage\Implementations\Doctrine\Service\ConnectionFactory;
 use Chamilo\Libraries\Storage\Repository\StorageUnitRepository;
 use Chamilo\Libraries\Storage\Service\StorageAliasGenerator;
 use Chamilo\Libraries\Utilities\StringUtilities;
@@ -54,7 +54,8 @@ class PlatformInstallerFactory
     /**
      * @throws \Chamilo\Libraries\Storage\Architecture\Exceptions\ConnectionException
      */
-    public function getInstaller(InstallerObserverInterface $installerObserver, array $configurationValues): PlatformInstaller
+    public function getInstaller(InstallerObserverInterface $installerObserver, array $configurationValues
+    ): PlatformInstaller
     {
         $storageUnitRepository = $this->getStorageUnitRepository($configurationValues);
 
@@ -70,7 +71,8 @@ class PlatformInstallerFactory
      *
      * @throws \Chamilo\Libraries\Storage\Architecture\Exceptions\ConnectionException
      */
-    public function getInstallerFromArray(InstallerObserverInterface $installerObserver, array $values): PlatformInstaller
+    public function getInstallerFromArray(InstallerObserverInterface $installerObserver, array $values
+    ): PlatformInstaller
     {
         return $this->getInstaller($installerObserver, $values);
     }

@@ -1,10 +1,10 @@
 <?php
-namespace Chamilo\Test\Integration\Storage\DataManager\Doctrine\ORM;
+namespace Chamilo\Libraries\Test\Integration\Storage\DataManager\Doctrine\ORM;
 
 use Chamilo\Libraries\Architecture\Test\TestCases\DependencyInjectionBasedTestCase;
 use Chamilo\Libraries\DependencyInjection\DependencyInjectionContainerBuilder;
 use Chamilo\Libraries\File\SystemPathBuilder;
-use Chamilo\Libraries\Storage\DataManager\Doctrine\ORM\MappingDriverFactory;
+use Chamilo\Libraries\Storage\Implementations\Doctrine\ORM\MappingDriverFactory;
 
 /**
  * Integration test for the mapping driver factory

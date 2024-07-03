@@ -1,5 +1,5 @@
 <?php
-namespace Chamilo\Libraries\Storage\DataManager\Doctrine\ORM;
+namespace Chamilo\Libraries\Storage\Implementations\Doctrine\ORM;
 
 use Chamilo\Libraries\DependencyInjection\Configuration\LibrariesConfiguration;
 use Doctrine\Persistence\Mapping\Driver\MappingDriver;
@@ -13,7 +13,7 @@ use Symfony\Component\Yaml\Parser;
  * Parses the configuration of the packages and creates
  * the mapping driver based on the configurations
  *
- * @package Chamilo\Libraries\Storage\DataManager\Doctrine\ORM
+ * @package Chamilo\Libraries\Storage\Implementations\Doctrine\ORM
  * @author Sven Vanpoucke - Hogeschool Gent
  */
 class PackagesMappingDriverFactory

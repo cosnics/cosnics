@@ -1,5 +1,5 @@
 <?php
-namespace Chamilo\Libraries\Storage\DataManager\Doctrine\ORM;
+namespace Chamilo\Libraries\Storage\Implementations\Doctrine\ORM;
 
 use Chamilo\Libraries\Cache\FileBasedCacheService;
 use Chamilo\Libraries\File\ConfigurablePathBuilder;
@@ -11,7 +11,7 @@ use Symfony\Component\Filesystem\Filesystem;
 /**
  * Manages the cache for the doctrine ORM proxies
  *
- * @package Chamilo\Libraries\Storage\DataManager\Doctrine\ORM
+ * @package Chamilo\Libraries\Storage\Implementations\Doctrine\ORM
  * @author  Sven Vanpoucke - Hogeschool Gent
  * @author  Hans De Bisschop <hans.de.bisschop@ehb.be>
  */

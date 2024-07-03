@@ -22,7 +22,7 @@ use Doctrine\Common\Collections\ArrayCollection;
 use Exception;
 
 /**
- * @package Chamilo\Libraries\Storage\DataManager\Repository
+ * @package Chamilo\Libraries\Storage\Repository
  * @author  Hans De Bisschop <hans.de.bisschop@ehb.be>
  */
 class NestedSetDataClassRepository

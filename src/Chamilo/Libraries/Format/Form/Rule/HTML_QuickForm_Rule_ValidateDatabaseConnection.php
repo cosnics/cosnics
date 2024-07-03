@@ -1,8 +1,8 @@
 <?php
 namespace Chamilo\Libraries\Format\Form\Rule;
 
-use Chamilo\Libraries\Storage\DataManager\Doctrine\DataSourceName;
-use Chamilo\Libraries\Storage\DataManager\Doctrine\Factory\ConnectionFactory;
+use Chamilo\Libraries\Storage\Implementations\Doctrine\DataSourceName;
+use Chamilo\Libraries\Storage\Implementations\Doctrine\Service\ConnectionFactory;
 use Exception;
 use HTML_QuickForm_Rule;
 

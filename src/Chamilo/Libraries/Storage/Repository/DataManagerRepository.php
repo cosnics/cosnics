@@ -7,7 +7,7 @@ use Chamilo\Libraries\Storage\DataClass\DataClass;
 /**
  * Abstract repository that can be used as a base for repositories that still use the old DataManagers.
  *
- * @package Chamilo\Libraries\Storage\DataManager\Repository
+ * @package Chamilo\Libraries\Storage\Repository
  * @author Sven Vanpoucke - Hogeschool Gent
  */
 abstract class DataManagerRepository implements DataManagerRepositoryInterface

@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8" ?>
-<container xmlns="http://symfony.com/schema/dic/services"
-           xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+<container xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+           xmlns="http://symfony.com/schema/dic/services"
            xsi:schemaLocation="http://symfony.com/schema/dic/services http://symfony.com/schema/dic/services/services-1.0.xsd">
     <services>
         <defaults autowire="true"
@@ -10,11 +10,10 @@
         <service id="Chamilo\Libraries\Storage\Cache\ConditionPartCache"/>
         <service id="Chamilo\Libraries\Storage\Cache\DataClassRepositoryCache"/>
         <service id="Chamilo\Libraries\Storage\DataClass\DataClassFactory"/>
-        <service id="Chamilo\Libraries\Storage\Service\StorageAliasGenerator"/>
-        <service id="Chamilo\Libraries\Storage\Service\PropertyMapper"/>
-        <service id="Chamilo\Libraries\Storage\Service\DisplayOrderHandler"/>
-        <service id="Chamilo\Libraries\Storage\Service\SearchQueryConditionGenerator"/>
         <service id="Chamilo\Libraries\Storage\Repository\DisplayOrderRepository"/>
-
+        <service id="Chamilo\Libraries\Storage\Service\DisplayOrderHandler"/>
+        <service id="Chamilo\Libraries\Storage\Service\PropertyMapper"/>
+        <service id="Chamilo\Libraries\Storage\Service\SearchQueryConditionGenerator"/>
+        <service id="Chamilo\Libraries\Storage\Service\StorageAliasGenerator"/>
     </services>
 </container>

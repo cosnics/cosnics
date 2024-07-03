@@ -1,5 +1,5 @@
 <?php
-namespace Chamilo\Libraries\Storage\DataManager\Doctrine\Service;
+namespace Chamilo\Libraries\Storage\Implementations\Doctrine\Service;
 
 use Chamilo\Libraries\Architecture\ClassnameUtilities;
 use Chamilo\Libraries\Storage\Architecture\Interfaces\ConditionPartTranslatorServiceInterface;
@@ -10,7 +10,7 @@ use Chamilo\Libraries\Storage\Query\ConditionPartTranslator;
 use OutOfBoundsException;
 
 /**
- * @package Chamilo\Libraries\Storage\DataManager\Doctrine\Service
+ * @package Chamilo\Libraries\Storage\Implementations\Doctrine\Service
  * @author  Hans De Bisschop <hans.de.bisschop@ehb.be>
  */
 class ConditionPartTranslatorService implements ConditionPartTranslatorServiceInterface

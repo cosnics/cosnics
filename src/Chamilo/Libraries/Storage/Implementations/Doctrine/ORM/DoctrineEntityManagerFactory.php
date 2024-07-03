@@ -1,8 +1,7 @@
 <?php
-namespace Chamilo\Libraries\Storage\DataManager\Doctrine\ORM;
+namespace Chamilo\Libraries\Storage\Implementations\Doctrine\ORM;
 
 use Chamilo\Libraries\File\ConfigurablePathBuilder;
-use Chamilo\Libraries\Storage\DataManager\Doctrine\ChamiloNamingStrategy;
 use Doctrine\Common\Cache\ArrayCache;
 use Doctrine\DBAL\Connection;
 use Doctrine\ORM\EntityManager;
@@ -14,7 +13,7 @@ use Doctrine\Persistence\Mapping\Driver\MappingDriver;
  * More information can be found at the Doctrine ORM
  *
  * @link http://docs.doctrine-project.org/projects/doctrine-orm/en/latest/index.html
- * @package Chamilo\Libraries\Storage\DataManager\Doctrine\ORM
+ * @package Chamilo\Libraries\Storage\Implementations\Doctrine\ORM
  * @author Sven Vanpoucke - Hogeschool Gent
  */
 class DoctrineEntityManagerFactory

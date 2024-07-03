@@ -29,29 +29,29 @@ use Chamilo\Libraries\Platform\Session\SessionFactory;
 use Chamilo\Libraries\Storage\Cache\ConditionPartCache;
 use Chamilo\Libraries\Storage\Cache\DataClassRepositoryCache;
 use Chamilo\Libraries\Storage\DataClass\DataClassFactory;
-use Chamilo\Libraries\Storage\DataManager\Doctrine\ConditionPart\AndConditionTranslator;
-use Chamilo\Libraries\Storage\DataManager\Doctrine\ConditionPart\CaseConditionVariableTranslator;
-use Chamilo\Libraries\Storage\DataManager\Doctrine\ConditionPart\CaseElementConditionVariableTranslator;
-use Chamilo\Libraries\Storage\DataManager\Doctrine\ConditionPart\ComparisonConditionTranslator;
-use Chamilo\Libraries\Storage\DataManager\Doctrine\ConditionPart\DateFormatConditionVariableTranslator;
-use Chamilo\Libraries\Storage\DataManager\Doctrine\ConditionPart\DistinctConditionVariableTranslator;
-use Chamilo\Libraries\Storage\DataManager\Doctrine\ConditionPart\EqualityConditionTranslator;
-use Chamilo\Libraries\Storage\DataManager\Doctrine\ConditionPart\FunctionConditionVariableTranslator;
-use Chamilo\Libraries\Storage\DataManager\Doctrine\ConditionPart\InConditionTranslator;
-use Chamilo\Libraries\Storage\DataManager\Doctrine\ConditionPart\NotConditionTranslator;
-use Chamilo\Libraries\Storage\DataManager\Doctrine\ConditionPart\OperationConditionVariableTranslator;
-use Chamilo\Libraries\Storage\DataManager\Doctrine\ConditionPart\OrConditionTranslator;
-use Chamilo\Libraries\Storage\DataManager\Doctrine\ConditionPart\PatternMatchConditionTranslator;
-use Chamilo\Libraries\Storage\DataManager\Doctrine\ConditionPart\PropertiesConditionVariableTranslator;
-use Chamilo\Libraries\Storage\DataManager\Doctrine\ConditionPart\PropertyConditionVariableTranslator;
-use Chamilo\Libraries\Storage\DataManager\Doctrine\ConditionPart\RegularExpressionConditionTranslator;
-use Chamilo\Libraries\Storage\DataManager\Doctrine\ConditionPart\StaticConditionVariableTranslator;
-use Chamilo\Libraries\Storage\DataManager\Doctrine\ConditionPart\SubselectConditionTranslator;
-use Chamilo\Libraries\Storage\DataManager\Doctrine\Database\DataClassDatabase;
-use Chamilo\Libraries\Storage\DataManager\Doctrine\DataSourceName;
-use Chamilo\Libraries\Storage\DataManager\Doctrine\Factory\ConnectionFactory;
-use Chamilo\Libraries\Storage\DataManager\Doctrine\Service\ConditionPartTranslatorService;
-use Chamilo\Libraries\Storage\DataManager\Doctrine\Service\QueryBuilderConfigurator;
+use Chamilo\Libraries\Storage\Implementations\Doctrine\Database\DataClassDatabase;
+use Chamilo\Libraries\Storage\Implementations\Doctrine\DataSourceName;
+use Chamilo\Libraries\Storage\Implementations\Doctrine\Service\ConditionPartTranslatorService;
+use Chamilo\Libraries\Storage\Implementations\Doctrine\Service\ConnectionFactory;
+use Chamilo\Libraries\Storage\Implementations\Doctrine\Service\Query\Condition\AndConditionTranslator;
+use Chamilo\Libraries\Storage\Implementations\Doctrine\Service\Query\Condition\ComparisonConditionTranslator;
+use Chamilo\Libraries\Storage\Implementations\Doctrine\Service\Query\Condition\EqualityConditionTranslator;
+use Chamilo\Libraries\Storage\Implementations\Doctrine\Service\Query\Condition\InConditionTranslator;
+use Chamilo\Libraries\Storage\Implementations\Doctrine\Service\Query\Condition\NotConditionTranslator;
+use Chamilo\Libraries\Storage\Implementations\Doctrine\Service\Query\Condition\OrConditionTranslator;
+use Chamilo\Libraries\Storage\Implementations\Doctrine\Service\Query\Condition\PatternMatchConditionTranslator;
+use Chamilo\Libraries\Storage\Implementations\Doctrine\Service\Query\Condition\RegularExpressionConditionTranslator;
+use Chamilo\Libraries\Storage\Implementations\Doctrine\Service\Query\Condition\SubselectConditionTranslator;
+use Chamilo\Libraries\Storage\Implementations\Doctrine\Service\Query\Variable\CaseConditionVariableTranslator;
+use Chamilo\Libraries\Storage\Implementations\Doctrine\Service\Query\Variable\CaseElementConditionVariableTranslator;
+use Chamilo\Libraries\Storage\Implementations\Doctrine\Service\Query\Variable\DateFormatConditionVariableTranslator;
+use Chamilo\Libraries\Storage\Implementations\Doctrine\Service\Query\Variable\DistinctConditionVariableTranslator;
+use Chamilo\Libraries\Storage\Implementations\Doctrine\Service\Query\Variable\FunctionConditionVariableTranslator;
+use Chamilo\Libraries\Storage\Implementations\Doctrine\Service\Query\Variable\OperationConditionVariableTranslator;
+use Chamilo\Libraries\Storage\Implementations\Doctrine\Service\Query\Variable\PropertiesConditionVariableTranslator;
+use Chamilo\Libraries\Storage\Implementations\Doctrine\Service\Query\Variable\PropertyConditionVariableTranslator;
+use Chamilo\Libraries\Storage\Implementations\Doctrine\Service\Query\Variable\StaticConditionVariableTranslator;
+use Chamilo\Libraries\Storage\Implementations\Doctrine\Service\QueryBuilderConfigurator;
 use Chamilo\Libraries\Storage\Repository\DataClassRepository;
 use Chamilo\Libraries\Storage\Service\StorageAliasGenerator;
 use Chamilo\Libraries\Utilities\StringUtilities;
@@ -228,6 +228,12 @@ class DependencyInjectionContainerBuilder
         }
 
         return $this->containerExtensionFinder;
+    }
+
+    public function setContainerExtensionFinder(?ContainerExtensionFinderInterface $containerExtensionFinder = null
+    ): void
+    {
+        $this->containerExtensionFinder = $containerExtensionFinder;
     }
 
     protected function getFileConfigurationConsulter(): ConfigurationConsulter
@@ -578,11 +584,5 @@ class DependencyInjectionContainerBuilder
     public function setBuilder(?ContainerBuilder $builder = null): void
     {
         $this->builder = $builder;
-    }
-
-    public function setContainerExtensionFinder(?ContainerExtensionFinderInterface $containerExtensionFinder = null
-    ): void
-    {
-        $this->containerExtensionFinder = $containerExtensionFinder;
     }
 }

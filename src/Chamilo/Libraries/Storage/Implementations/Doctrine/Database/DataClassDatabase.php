@@ -1,13 +1,13 @@
 <?php
-namespace Chamilo\Libraries\Storage\DataManager\Doctrine\Database;
+namespace Chamilo\Libraries\Storage\Implementations\Doctrine\Database;
 
 use Chamilo\Libraries\Architecture\ErrorHandler\ExceptionLogger\ExceptionLoggerInterface;
 use Chamilo\Libraries\Storage\Architecture\Exceptions\StorageLastInsertedIdentifierException;
 use Chamilo\Libraries\Storage\Architecture\Exceptions\StorageMethodException;
 use Chamilo\Libraries\Storage\Architecture\Exceptions\StorageNoResultException;
 use Chamilo\Libraries\Storage\Architecture\Interfaces\DataClassDatabaseInterface;
-use Chamilo\Libraries\Storage\DataManager\Doctrine\Service\ConditionPartTranslatorService;
-use Chamilo\Libraries\Storage\DataManager\Doctrine\Service\QueryBuilderConfigurator;
+use Chamilo\Libraries\Storage\Implementations\Doctrine\Service\ConditionPartTranslatorService;
+use Chamilo\Libraries\Storage\Implementations\Doctrine\Service\QueryBuilderConfigurator;
 use Chamilo\Libraries\Storage\Query\Condition\Condition;
 use Chamilo\Libraries\Storage\Query\UpdateProperties;
 use Chamilo\Libraries\Storage\Service\StorageAliasGenerator;
@@ -21,7 +21,7 @@ use Throwable;
  * This class provides basic functionality for database connections Create Table, Get next id, Insert, Update, Delete,
  * Select(with use of conditions), Count(with use of conditions)
  *
- * @package Chamilo\Libraries\Storage\DataManager\Doctrine
+ * @package Chamilo\Libraries\Storage\Implementations\Doctrine\Database
  * @author  Hans De Bisschop <hans.de.bisschop@ehb.be>
  * @author  Sven Vanpoucke <sven.vanpoucke@hogent.be>
  * @author  Magali Gillard <magali.gillard@ehb.be>

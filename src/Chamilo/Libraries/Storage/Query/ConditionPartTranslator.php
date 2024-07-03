@@ -1,7 +1,7 @@
 <?php
 namespace Chamilo\Libraries\Storage\Query;
 
-use Chamilo\Libraries\Storage\DataManager\Doctrine\Service\ConditionPartTranslatorService;
+use Chamilo\Libraries\Storage\Implementations\Doctrine\Service\ConditionPartTranslatorService;
 use Chamilo\Libraries\Storage\Service\StorageAliasGenerator;
 
 /**

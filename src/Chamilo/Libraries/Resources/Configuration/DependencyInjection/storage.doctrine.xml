@@ -29,7 +29,7 @@
         <service id="Chamilo\Libraries\Storage\Implementations\Doctrine\Database\StorageUnitDatabase"/>
 
         <!-- Repositories -->
-        <service id="Chamilo\Libraries\Storage\Implementations\Doctrine\DataClassRepository"
+        <service id="Chamilo\Libraries\Storage\Implementations\Doctrine\Repository\DataClassRepository"
                  class="Chamilo\Libraries\Storage\Repository\DataClassRepository">
             <argument key="$dataClassDatabase"
                       type="service"
@@ -37,11 +37,11 @@
             <argument key="$queryCacheEnabled">%chamilo.configuration.debug.enable_query_cache%</argument>
         </service>
 
-        <service id="Chamilo\Libraries\Storage\Implementations\Doctrine\NestedSetDataClassRepository"
+        <service id="Chamilo\Libraries\Storage\Implementations\Doctrine\Repository\NestedSetDataClassRepository"
                  class="Chamilo\Libraries\Storage\Repository\NestedSetDataClassRepository">
             <argument key="$dataClassRepository"
                       type="service"
-                      id="Chamilo\Libraries\Storage\Implementations\Doctrine\DataClassRepository"/>
+                      id="Chamilo\Libraries\Storage\Implementations\Doctrine\Repository\DataClassRepository"/>
         </service>
 
         <service id="Chamilo\Libraries\Storage\Implementations\Doctrine\Repository\StorageUnitRepository"
@@ -52,87 +52,85 @@
         </service>
 
         <service id="Chamilo\Libraries\Storage\Repository\DataClassRepository"
-                 alias="Chamilo\Libraries\Storage\Implementations\Doctrine\DataClassRepository"/>
+                 alias="Chamilo\Libraries\Storage\Implementations\Doctrine\Repository\DataClassRepository"/>
 
         <service id="Chamilo\Libraries\Storage\Repository\NestedSetDataClassRepository"
-                 alias="Chamilo\Libraries\Storage\Implementations\Doctrine\NestedSetDataClassRepository"/>
+                 alias="Chamilo\Libraries\Storage\Implementations\Doctrine\Repository\NestedSetDataClassRepository"/>
 
         <service id="Chamilo\Libraries\Storage\Repository\StorageUnitRepository"
                  alias="Chamilo\Libraries\Storage\Implementations\Doctrine\Repository\StorageUnitRepository"/>
 
         <!-- Utilities -->
-        <service id="Chamilo\Libraries\Storage\Implementations\Doctrine\Factory\ConditionPartTranslatorFactory"/>
         <service id="Chamilo\Libraries\Storage\Implementations\Doctrine\Service\QueryBuilderConfigurator"/>
 
         <service id="Chamilo\Libraries\Storage\Implementations\Doctrine\Service\ConditionPartTranslatorService">
             <argument key="$queryCacheEnabled">%chamilo.configuration.debug.enable_query_cache%</argument>
         </service>
 
-        <service id="Chamilo\Libraries\Storage\Implementations\Doctrine\ConditionPart\CaseConditionVariableTranslator">
+        <service id="Chamilo\Libraries\Storage\Implementations\Doctrine\Service\Query\Variable\CaseConditionVariableTranslator">
             <tag name="Chamilo\Libraries\Storage\Implementations\Doctrine\Service\ConditionPartTranslatorService"/>
         </service>
-        <service id="Chamilo\Libraries\Storage\Implementations\Doctrine\ConditionPart\CaseElementConditionVariableTranslator">
+        <service id="Chamilo\Libraries\Storage\Implementations\Doctrine\Service\Query\Variable\CaseElementConditionVariableTranslator">
             <tag name="Chamilo\Libraries\Storage\Implementations\Doctrine\Service\ConditionPartTranslatorService"/>
         </service>
-        <service id="Chamilo\Libraries\Storage\Implementations\Doctrine\ConditionPart\DateFormatConditionVariableTranslator">
+        <service id="Chamilo\Libraries\Storage\Implementations\Doctrine\Service\Query\Variable\DateFormatConditionVariableTranslator">
             <tag name="Chamilo\Libraries\Storage\Implementations\Doctrine\Service\ConditionPartTranslatorService"/>
         </service>
-        <service id="Chamilo\Libraries\Storage\Implementations\Doctrine\ConditionPart\DistinctConditionVariableTranslator">
+        <service id="Chamilo\Libraries\Storage\Implementations\Doctrine\Service\Query\Variable\DistinctConditionVariableTranslator">
             <tag name="Chamilo\Libraries\Storage\Implementations\Doctrine\Service\ConditionPartTranslatorService"/>
         </service>
-        <service id="Chamilo\Libraries\Storage\Implementations\Doctrine\ConditionPart\FunctionConditionVariableTranslator">
+        <service id="Chamilo\Libraries\Storage\Implementations\Doctrine\Service\Query\Variable\FunctionConditionVariableTranslator">
             <tag name="Chamilo\Libraries\Storage\Implementations\Doctrine\Service\ConditionPartTranslatorService"/>
         </service>
-        <service id="Chamilo\Libraries\Storage\Implementations\Doctrine\ConditionPart\OperationConditionVariableTranslator">
+        <service id="Chamilo\Libraries\Storage\Implementations\Doctrine\Service\Query\Variable\OperationConditionVariableTranslator">
             <tag name="Chamilo\Libraries\Storage\Implementations\Doctrine\Service\ConditionPartTranslatorService"/>
         </service>
-        <service id="Chamilo\Libraries\Storage\Implementations\Doctrine\ConditionPart\PropertiesConditionVariableTranslator">
+        <service id="Chamilo\Libraries\Storage\Implementations\Doctrine\Service\Query\Variable\PropertiesConditionVariableTranslator">
             <tag name="Chamilo\Libraries\Storage\Implementations\Doctrine\Service\ConditionPartTranslatorService"/>
         </service>
-        <service id="Chamilo\Libraries\Storage\Implementations\Doctrine\ConditionPart\PropertyConditionVariableTranslator">
+        <service id="Chamilo\Libraries\Storage\Implementations\Doctrine\Service\Query\Variable\PropertyConditionVariableTranslator">
             <tag name="Chamilo\Libraries\Storage\Implementations\Doctrine\Service\ConditionPartTranslatorService"/>
         </service>
-        <service id="Chamilo\Libraries\Storage\Implementations\Doctrine\ConditionPart\StaticConditionVariableTranslator">
-            <tag name="Chamilo\Libraries\Storage\Implementations\Doctrine\Service\ConditionPartTranslatorService"/>
-        </service>
-
-        <service id="Chamilo\Libraries\Storage\Implementations\Doctrine\ConditionPart\ComparisonConditionTranslator">
-            <tag name="Chamilo\Libraries\Storage\Implementations\Doctrine\Service\ConditionPartTranslatorService"/>
-        </service>
-        <service id="Chamilo\Libraries\Storage\Implementations\Doctrine\ConditionPart\EqualityConditionTranslator">
-            <tag name="Chamilo\Libraries\Storage\Implementations\Doctrine\Service\ConditionPartTranslatorService"/>
-        </service>
-        <service id="Chamilo\Libraries\Storage\Implementations\Doctrine\ConditionPart\InConditionTranslator">
-            <tag name="Chamilo\Libraries\Storage\Implementations\Doctrine\Service\ConditionPartTranslatorService"/>
-        </service>
-        <service id="Chamilo\Libraries\Storage\Implementations\Doctrine\ConditionPart\AndConditionTranslator">
-            <tag name="Chamilo\Libraries\Storage\Implementations\Doctrine\Service\ConditionPartTranslatorService"/>
-        </service>
-        <service id="Chamilo\Libraries\Storage\Implementations\Doctrine\ConditionPart\OrConditionTranslator">
-            <tag name="Chamilo\Libraries\Storage\Implementations\Doctrine\Service\ConditionPartTranslatorService"/>
-        </service>
-        <service id="Chamilo\Libraries\Storage\Implementations\Doctrine\ConditionPart\NotConditionTranslator">
-            <tag name="Chamilo\Libraries\Storage\Implementations\Doctrine\Service\ConditionPartTranslatorService"/>
-        </service>
-        <service id="Chamilo\Libraries\Storage\Implementations\Doctrine\ConditionPart\PatternMatchConditionTranslator">
-            <tag name="Chamilo\Libraries\Storage\Implementations\Doctrine\Service\ConditionPartTranslatorService"/>
-        </service>
-        <service id="Chamilo\Libraries\Storage\Implementations\Doctrine\ConditionPart\RegularExpressionConditionTranslator">
-            <tag name="Chamilo\Libraries\Storage\Implementations\Doctrine\Service\ConditionPartTranslatorService"/>
-        </service>
-        <service id="Chamilo\Libraries\Storage\Implementations\Doctrine\ConditionPart\SubselectConditionTranslator">
+        <service id="Chamilo\Libraries\Storage\Implementations\Doctrine\Service\Query\Variable\StaticConditionVariableTranslator">
             <tag name="Chamilo\Libraries\Storage\Implementations\Doctrine\Service\ConditionPartTranslatorService"/>
         </service>
 
-        <service id="Chamilo\Libraries\Storage\Implementations\Doctrine\ConditionPart\ContainsConditionTranslator">
+        <service id="Chamilo\Libraries\Storage\Implementations\Doctrine\Service\Query\Condition\ComparisonConditionTranslator">
             <tag name="Chamilo\Libraries\Storage\Implementations\Doctrine\Service\ConditionPartTranslatorService"/>
         </service>
-        <service id="Chamilo\Libraries\Storage\Implementations\Doctrine\ConditionPart\StartsWithConditionTranslator">
+        <service id="Chamilo\Libraries\Storage\Implementations\Doctrine\Service\Query\Condition\EqualityConditionTranslator">
             <tag name="Chamilo\Libraries\Storage\Implementations\Doctrine\Service\ConditionPartTranslatorService"/>
         </service>
-        <service id="Chamilo\Libraries\Storage\Implementations\Doctrine\ConditionPart\EndsWithConditionTranslator">
+        <service id="Chamilo\Libraries\Storage\Implementations\Doctrine\Service\Query\Condition\InConditionTranslator">
+            <tag name="Chamilo\Libraries\Storage\Implementations\Doctrine\Service\ConditionPartTranslatorService"/>
+        </service>
+        <service id="Chamilo\Libraries\Storage\Implementations\Doctrine\Service\Query\Condition\AndConditionTranslator">
+            <tag name="Chamilo\Libraries\Storage\Implementations\Doctrine\Service\ConditionPartTranslatorService"/>
+        </service>
+        <service id="Chamilo\Libraries\Storage\Implementations\Doctrine\Service\Query\Condition\OrConditionTranslator">
+            <tag name="Chamilo\Libraries\Storage\Implementations\Doctrine\Service\ConditionPartTranslatorService"/>
+        </service>
+        <service id="Chamilo\Libraries\Storage\Implementations\Doctrine\Service\Query\Condition\NotConditionTranslator">
+            <tag name="Chamilo\Libraries\Storage\Implementations\Doctrine\Service\ConditionPartTranslatorService"/>
+        </service>
+        <service id="Chamilo\Libraries\Storage\Implementations\Doctrine\Service\Query\Condition\PatternMatchConditionTranslator">
+            <tag name="Chamilo\Libraries\Storage\Implementations\Doctrine\Service\ConditionPartTranslatorService"/>
+        </service>
+        <service id="Chamilo\Libraries\Storage\Implementations\Doctrine\Service\Query\Condition\RegularExpressionConditionTranslator">
+            <tag name="Chamilo\Libraries\Storage\Implementations\Doctrine\Service\ConditionPartTranslatorService"/>
+        </service>
+        <service id="Chamilo\Libraries\Storage\Implementations\Doctrine\Service\Query\Condition\SubselectConditionTranslator">
             <tag name="Chamilo\Libraries\Storage\Implementations\Doctrine\Service\ConditionPartTranslatorService"/>
         </service>
 
+        <service id="Chamilo\Libraries\Storage\Implementations\Doctrine\Service\Query\Condition\ContainsConditionTranslator">
+            <tag name="Chamilo\Libraries\Storage\Implementations\Doctrine\Service\ConditionPartTranslatorService"/>
+        </service>
+        <service id="Chamilo\Libraries\Storage\Implementations\Doctrine\Service\Query\Condition\StartsWithConditionTranslator">
+            <tag name="Chamilo\Libraries\Storage\Implementations\Doctrine\Service\ConditionPartTranslatorService"/>
+        </service>
+        <service id="Chamilo\Libraries\Storage\Implementations\Doctrine\Service\Query\Condition\EndsWithConditionTranslator">
+            <tag name="Chamilo\Libraries\Storage\Implementations\Doctrine\Service\ConditionPartTranslatorService"/>
+        </service>
     </services>
 </container>

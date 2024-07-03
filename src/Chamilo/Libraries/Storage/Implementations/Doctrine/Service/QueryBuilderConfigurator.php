@@ -1,7 +1,7 @@
 <?php
-namespace Chamilo\Libraries\Storage\DataManager\Doctrine\Service;
+namespace Chamilo\Libraries\Storage\Implementations\Doctrine\Service;
 
-use Chamilo\Libraries\Storage\DataManager\Doctrine\Database\DataClassDatabase;
+use Chamilo\Libraries\Storage\Implementations\Doctrine\Database\DataClassDatabase;
 use Chamilo\Libraries\Storage\Query\Condition\Condition;
 use Chamilo\Libraries\Storage\Query\ConditionPart;
 use Chamilo\Libraries\Storage\Query\GroupBy;
@@ -15,7 +15,7 @@ use Chamilo\Libraries\Storage\StorageParameters;
 use Doctrine\DBAL\Query\QueryBuilder;
 
 /**
- * @package Chamilo\Libraries\Storage\DataManager\Doctrine\Service
+ * @package Chamilo\Libraries\Storage\Implementations\Doctrine\Service
  * @author Hans De Bisschop <hans.de.bisschop@ehb.be>
  */
 class QueryBuilderConfigurator

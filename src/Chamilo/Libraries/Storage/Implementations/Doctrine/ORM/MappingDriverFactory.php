@@ -1,5 +1,5 @@
 <?php
-namespace Chamilo\Libraries\Storage\DataManager\Doctrine\ORM;
+namespace Chamilo\Libraries\Storage\Implementations\Doctrine\ORM;
 
 use Chamilo\Libraries\DependencyInjection\Configuration\DoctrineORMMappingsConfiguration;
 use Chamilo\Libraries\DependencyInjection\DependencyInjectionContainerBuilder;
@@ -29,7 +29,7 @@ use InvalidArgumentException;
  *      )
  *  )
  *
- * @package Chamilo\Libraries\Storage\DataManager\Doctrine\ORM
+ * @package Chamilo\Libraries\Storage\Implementations\Doctrine\ORM
  * @author  Sven Vanpoucke - Hogeschool Gent
  */
 class MappingDriverFactory

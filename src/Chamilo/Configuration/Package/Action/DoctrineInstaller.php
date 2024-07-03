@@ -3,7 +3,7 @@ namespace Chamilo\Configuration\Package\Action;
 
 use Chamilo\Libraries\DependencyInjection\DependencyInjectionContainerBuilder;
 use Chamilo\Libraries\DependencyInjection\ExtensionFinder\DirectoryContainerExtensionFinder;
-use Chamilo\Libraries\Storage\DataManager\Doctrine\ORM\PackagesMappingDriverFactory;
+use Chamilo\Libraries\Storage\Implementations\Doctrine\ORM\PackagesMappingDriverFactory;
 use Doctrine\ORM\EntityManager;
 use Doctrine\ORM\Tools\SchemaTool;
 use Exception;

@@ -14,7 +14,7 @@
             <argument>%chamilo.configuration.database.test%</argument>
         </service>
 
-        <service id="Chamilo\Libraries\Storage\Implementations\Doctrine\Test\Factory\ConnectionFactory"
+        <service id="Chamilo\Libraries\Storage\Implementations\Doctrine\Test\Service\ConnectionFactory"
                  class="Chamilo\Libraries\Storage\Implementations\Doctrine\Service\ConnectionFactory">
             <argument type="service"
                       id="Chamilo\Libraries\Storage\Implementations\Doctrine\Test\DataSourceName"/>
@@ -22,7 +22,7 @@
 
         <service id="Doctrine\Test\DBAL\Connection"
                  class="Doctrine\DBAL\Connection">
-            <factory service="Chamilo\Libraries\Storage\Implementations\Doctrine\Test\Factory\ConnectionFactory"
+            <factory service="Chamilo\Libraries\Storage\Implementations\Doctrine\Test\Service\ConnectionFactory"
                      method="getConnection"/>
         </service>
 
@@ -51,7 +51,7 @@
             <argument key="$queryCacheEnabled">%chamilo.configuration.debug.enable_query_cache%</argument>
         </service>
 
-        <service id="Chamilo\Libraries\Storage\Implementations\Doctrine\Test\NestedSetDataClassRepository"
+        <service id="Chamilo\Libraries\Storage\Implementations\Doctrine\Test\Repository\NestedSetDataClassRepository"
                  class="Chamilo\Libraries\Storage\Repository\NestedSetDataClassRepository">
             <argument key="$dataClassRepository"
                       type="service"

@@ -3,7 +3,6 @@ namespace Chamilo\Libraries\Storage\Repository;
 
 use Chamilo\Libraries\Storage\DataClass\DataClass;
 use Chamilo\Libraries\Storage\DataClass\Interfaces\DataClassDisplayOrderSupport;
-use Chamilo\Libraries\Storage\DataManager\Repository\CompositeDataClassExtensionInterface;
 use Chamilo\Libraries\Storage\Query\Condition\AndCondition;
 use Chamilo\Libraries\Storage\Query\Condition\ComparisonCondition;
 use Chamilo\Libraries\Storage\Query\Condition\EqualityCondition;
@@ -17,7 +16,7 @@ use Chamilo\Libraries\Storage\Query\Variable\StaticConditionVariable;
 use Chamilo\Libraries\Storage\StorageParameters;
 
 /**
- * @package Chamilo\Libraries\Storage\DataManager\Repository
+ * @package Chamilo\Libraries\Storage\Repository
  *
  * @author  Hans De Bisschop <hans.de.bisschop@ehb.be>
  */

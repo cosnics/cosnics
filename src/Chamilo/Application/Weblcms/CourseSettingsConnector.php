@@ -225,7 +225,7 @@ class CourseSettingsConnector
             $order = array_reverse($order);
         }
 
-        $activeUsers = self::getUserService()->findActiveUsers()
+        $activeUsers = self::getUserService()->findActiveUsers();
 
         foreach ($activeUsers as $user)
         {

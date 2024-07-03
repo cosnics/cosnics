@@ -1,8 +1,8 @@
 <?php
-namespace Chamilo\Libraries\Storage\DataManager\Doctrine\Factory;
+namespace Chamilo\Libraries\Storage\Implementations\Doctrine\Service;
 
 use Chamilo\Libraries\Storage\Architecture\Exceptions\ConnectionException;
-use Chamilo\Libraries\Storage\DataManager\Doctrine\DataSourceName;
+use Chamilo\Libraries\Storage\Implementations\Doctrine\DataSourceName;
 use Doctrine\DBAL\Configuration;
 use Doctrine\DBAL\Connection;
 use Doctrine\DBAL\DriverManager;
@@ -10,7 +10,7 @@ use Exception;
 
 /**
  *
- * @package Chamilo\Libraries\Storage\DataManager\Doctrine\Factory
+ * @package Chamilo\Libraries\Storage\Implementations\Doctrine\Service
  * @author Hans De Bisschop <hans.de.bisschop@ehb.be>
  * @author Magali Gillard <magali.gillard@ehb.be>
  */
@@ -52,10 +52,6 @@ class ConnectionFactory
         }
     }
 
-    /**
-     *
-     * @return \Chamilo\Libraries\Storage\DataManager\Doctrine\DataSourceName
-     */
     public function getDataSourceName(): DataSourceName
     {
         return $this->dataSourceName;

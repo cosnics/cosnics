@@ -40,7 +40,7 @@ class RequestForm extends FormValidator
         if ($this->request->get_id())
         {
             $user_details =
-                $this->getUserDetailsRenderer()->renderUserDetails($this->request->get_user(), $this->getCurrentUser())
+                $this->getUserDetailsRenderer()->renderUserDetails($this->request->get_user(), $this->getCurrentUser());
             $this->addElement('static', null, Translation::get('User'), $user_details);
         }
 

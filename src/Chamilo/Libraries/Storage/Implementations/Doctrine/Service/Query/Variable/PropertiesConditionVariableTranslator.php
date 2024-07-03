@@ -1,12 +1,12 @@
 <?php
-namespace Chamilo\Libraries\Storage\DataManager\Doctrine\ConditionPart;
+namespace Chamilo\Libraries\Storage\Implementations\Doctrine\Service\Query\Variable;
 
 use Chamilo\Libraries\Storage\Architecture\Interfaces\DataClassDatabaseInterface;
 use Chamilo\Libraries\Storage\Query\ConditionVariableTranslator;
 use Chamilo\Libraries\Storage\Query\Variable\PropertiesConditionVariable;
 
 /**
- * @package Chamilo\Libraries\Storage\DataManager\Doctrine\ConditionPart
+ * @package Chamilo\Libraries\Storage\Implementations\Doctrine\Service\Query\Variable
  * @author  Sven Vanpoucke <sven.vanpoucke@hogent.be>
  * @author  Hans De Bisschop <hans.de.bisschop@ehb.be>
  * @author  Magali Gillard <magali.gillard@ehb.be>

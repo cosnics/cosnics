@@ -4,8 +4,7 @@ namespace Chamilo\Libraries\Storage\Architecture\Interfaces;
 use Chamilo\Libraries\Storage\Query\ConditionPart;
 
 /**
- *
- * @package Chamilo\Libraries\Storage\DataManager\Interfaces
+ * @package Chamilo\Libraries\Storage\Architecture\Interfaces
  * @author Hans De Bisschop <hans.de.bisschop@ehb.be>
  */
 interface ConditionPartTranslatorServiceInterface

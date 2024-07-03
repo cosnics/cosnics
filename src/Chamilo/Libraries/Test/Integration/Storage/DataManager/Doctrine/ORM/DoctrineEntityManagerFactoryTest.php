@@ -1,8 +1,8 @@
 <?php
-namespace Chamilo\Test\Integration\Storage\DataManager\Doctrine\ORM;
+namespace Chamilo\Libraries\Test\Integration\Storage\DataManager\Doctrine\ORM;
 
 use Chamilo\Libraries\Architecture\Test\TestCases\DependencyInjectionBasedTestCase;
-use Chamilo\Libraries\Storage\DataManager\Doctrine\ORM\DoctrineEntityManagerFactory;
+use Chamilo\Libraries\Storage\Implementations\Doctrine\ORM\DoctrineEntityManagerFactory;
 
 /**
  * Integration test for the doctrine entity manager factory

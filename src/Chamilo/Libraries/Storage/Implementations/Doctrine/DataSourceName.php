@@ -1,10 +1,10 @@
 <?php
-namespace Chamilo\Libraries\Storage\DataManager\Doctrine;
+namespace Chamilo\Libraries\Storage\Implementations\Doctrine;
 
 use Exception;
 
 /**
- * @package Chamilo\Libraries\Storage\DataManager\Doctrine
+ * @package Chamilo\Libraries\Storage\Implementations\Doctrine
  * @author  Hans De Bisschop <hans.de.bisschop@ehb.be>
  * @author  Magali Gillard <magali.gillard@ehb.be>
  * @author  Eduard Vossen <eduard.vossen@ehb.be>

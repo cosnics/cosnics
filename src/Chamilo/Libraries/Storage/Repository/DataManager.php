@@ -108,7 +108,7 @@ class DataManager
     public static function getDataClassRepository(): DataClassRepository
     {
         return self::getService(
-            'Chamilo\Libraries\Storage\DataManager\Doctrine\DataClassRepository'
+            'Chamilo\Libraries\Storage\Implementations\Doctrine\Repository\DataClassRepository'
         );
     }
 
@@ -122,7 +122,7 @@ class DataManager
     public static function getStorageUnitRepository(): StorageUnitRepository
     {
         return self::getService(
-            'Chamilo\Libraries\Storage\DataManager\Doctrine\Repository\StorageUnitRepository'
+            'Chamilo\Libraries\Storage\Implementations\Doctrine\Repository\StorageUnitRepository'
         );
     }
 

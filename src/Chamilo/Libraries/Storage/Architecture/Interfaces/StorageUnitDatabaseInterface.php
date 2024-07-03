@@ -2,7 +2,7 @@
 namespace Chamilo\Libraries\Storage\Architecture\Interfaces;
 
 /**
- * @package Chamilo\Libraries\Storage\DataManager\Interfaces
+ * @package Chamilo\Libraries\Storage\Architecture\Interfaces
  * @author  Hans De Bisschop <hans.de.bisschop@ehb.be>
  * @author  Magali Gillard <magali.gillard@ehb.be>
  */

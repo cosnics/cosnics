@@ -1,5 +1,5 @@
 <?php
-namespace Chamilo\Libraries\Storage\DataManager\Doctrine\Database;
+namespace Chamilo\Libraries\Storage\Implementations\Doctrine\Database;
 
 use Chamilo\Libraries\Architecture\ErrorHandler\ExceptionLogger\ExceptionLoggerInterface;
 use Chamilo\Libraries\Storage\Architecture\Interfaces\StorageUnitDatabaseInterface;
@@ -17,7 +17,7 @@ use Exception;
 /**
  * This class provides basic functionality for storage unit manipulations via Doctrine
  *
- * @package Chamilo\Libraries\Storage\DataManager\Doctrine
+ * @package Chamilo\Libraries\Storage\Implementations\Doctrine\Database
  * @author  Hans De Bisschop <hans.de.bisschop@ehb.be>
  * @author  Magali Gillard <magali.gillard@ehb.be>
  */

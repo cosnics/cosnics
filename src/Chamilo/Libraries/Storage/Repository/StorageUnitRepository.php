@@ -4,7 +4,7 @@ namespace Chamilo\Libraries\Storage\Repository;
 use Chamilo\Libraries\Storage\Architecture\Interfaces\StorageUnitDatabaseInterface;
 
 /**
- * @package Chamilo\Libraries\Storage\DataManager\Repository
+ * @package Chamilo\Libraries\Storage\Repository
  * @author  Hans De Bisschop <hans.de.bisschop@ehb.be>
  * @author  Magali Gillard <magali.gillard@ehb.be>
  */

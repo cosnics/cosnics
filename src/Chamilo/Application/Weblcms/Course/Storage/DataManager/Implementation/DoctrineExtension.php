@@ -187,7 +187,7 @@ class DoctrineExtension
      */
     protected function getDataClassDatabase()
     {
-        return $this->getService('Chamilo\Libraries\Storage\DataManager\Doctrine\Database\DataClassDatabase');
+        return $this->getService('Chamilo\Libraries\Storage\Implementations\Doctrine\Database\DataClassDatabase');
     }
 
     /**
