@@ -9,6 +9,7 @@ use Chamilo\Libraries\Storage\Query\Condition\EqualityCondition;
 use Chamilo\Libraries\Storage\Query\Condition\InCondition;
 use Chamilo\Libraries\Storage\Query\Variable\PropertyConditionVariable;
 use Chamilo\Libraries\Storage\Query\Variable\StaticConditionVariable;
+use Chamilo\Libraries\Storage\StorageParameters;
 
 /**
  * Repository to retrieve calendar events for the assignment tool based on the due date of assignments
@@ -51,7 +52,7 @@ abstract class CalendarEventDataProviderRepository
      */
     public function getPublications($fromDate, $toDate, $courses = [])
     {
-        $parameters = new DataClassParameters(condition: $this->getPublicationsCondition($fromDate, $toDate, $courses));
+        $parameters = new StorageParameters(condition: $this->getPublicationsCondition($fromDate, $toDate, $courses));
 
         return $this->publicationRepository->getPublicationsWithContentObjects(
             $parameters, ContentObjectPublication::class, $this->getContentObjectClassName()

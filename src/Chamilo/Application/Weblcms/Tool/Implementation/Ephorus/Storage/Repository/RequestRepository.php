@@ -9,7 +9,6 @@ use Chamilo\Core\User\Storage\DataClass\User;
 use Chamilo\Libraries\Storage\Query\Condition\Condition;
 use Chamilo\Libraries\Storage\Query\Condition\EqualityCondition;
 use Chamilo\Libraries\Storage\Query\Condition\InCondition;
-use Chamilo\Libraries\Storage\Query\StorageParameters;
 use Chamilo\Libraries\Storage\Query\Join;
 use Chamilo\Libraries\Storage\Query\Joins;
 use Chamilo\Libraries\Storage\Query\OrderBy;
@@ -18,6 +17,7 @@ use Chamilo\Libraries\Storage\Query\RetrieveProperties;
 use Chamilo\Libraries\Storage\Query\Variable\PropertiesConditionVariable;
 use Chamilo\Libraries\Storage\Query\Variable\PropertyConditionVariable;
 use Chamilo\Libraries\Storage\Query\Variable\StaticConditionVariable;
+use Chamilo\Libraries\Storage\StorageParameters;
 use Doctrine\Common\Collections\ArrayCollection;
 
 /**
@@ -74,11 +74,11 @@ class RequestRepository extends CommonDataClassRepository
     }
 
     /**
-     * @param \Chamilo\Libraries\Storage\Query\StorageParameters $dataClassParameters
+     * @param \Chamilo\Libraries\Storage\StorageParameters $storageParameters
      *
      * @return \Doctrine\Common\Collections\ArrayCollection
      */
-    public function findRequestsWithContentObjects(StorageParameters $dataClassParameters)
+    public function findRequestsWithContentObjects(StorageParameters $storageParameters)
     {
         $properties = new RetrieveProperties();
 
@@ -91,10 +91,10 @@ class RequestRepository extends CommonDataClassRepository
 
         $joins = $this->getRequestJoins();
 
-        $dataClassParameters->setJoins($joins);
-        $dataClassParameters->setRetrieveProperties($properties);
+        $storageParameters->setJoins($joins);
+        $storageParameters->setRetrieveProperties($properties);
 
-        $records = $this->dataClassRepository->records(Request::class, $dataClassParameters);
+        $records = $this->dataClassRepository->records(Request::class, $storageParameters);
 
         $dataClasses = [];
         foreach ($records as $record)
@@ -122,11 +122,11 @@ class RequestRepository extends CommonDataClassRepository
         $properties->add(new PropertiesConditionVariable(ContentObject::class));
         $properties->add(new PropertyConditionVariable(Request::class, Request::PROPERTY_GUID));
 
-        $dataClassParameters = new StorageParameters(
+        $storageParameters = new StorageParameters(
             condition: $condition, joins: $this->getRequestJoins(), retrieveProperties: $properties
         );
 
-        $records = $this->dataClassRepository->records(Request::class, $dataClassParameters);
+        $records = $this->dataClassRepository->records(Request::class, $storageParameters);
 
         $dataClasses = [];
         foreach ($records as $record)

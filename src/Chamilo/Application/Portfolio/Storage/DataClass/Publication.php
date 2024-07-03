@@ -4,11 +4,11 @@ namespace Chamilo\Application\Portfolio\Storage\DataClass;
 use Chamilo\Application\Portfolio\Manager;
 use Chamilo\Core\Repository\Storage\DataClass\ContentObject;
 use Chamilo\Core\User\Storage\DataClass\User;
-use Chamilo\Libraries\Storage\DataManager\DataManager;
 use Chamilo\Libraries\Storage\DataClass\DataClass;
 use Chamilo\Libraries\Storage\Query\Condition\EqualityCondition;
 use Chamilo\Libraries\Storage\Query\Variable\PropertyConditionVariable;
 use Chamilo\Libraries\Storage\Query\Variable\StaticConditionVariable;
+use Chamilo\Libraries\Storage\Repository\DataManager;
 
 /**
  * @package Chamilo\Application\Portfolio\Storage\DataClass

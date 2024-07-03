@@ -4,7 +4,7 @@ namespace Chamilo\Core\Repository\Workspace\Favourite\Storage\DataClass;
 use Chamilo\Core\Repository\Workspace\Favourite\Manager;
 use Chamilo\Core\Repository\Workspace\Storage\DataClass\Workspace;
 use Chamilo\Libraries\Storage\DataClass\DataClass;
-use Chamilo\Libraries\Storage\DataManager\DataManager;
+use Chamilo\Libraries\Storage\Repository\DataManager;
 
 /**
  * @package Chamilo\Core\Repository\Workspace\Storage\DataClass

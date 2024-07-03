@@ -29,7 +29,7 @@ use Chamilo\Libraries\Format\Theme\ThemePathBuilder;
 use Chamilo\Libraries\Format\Utilities\ResourceManager;
 use Chamilo\Libraries\Format\Validator\ValidatorDecorator;
 use Chamilo\Libraries\Platform\ChamiloRequest;
-use Chamilo\Libraries\Storage\DataManager\Repository\DataClassRepository;
+use Chamilo\Libraries\Storage\Repository\DataClassRepository;
 use Chamilo\Libraries\Utilities\StringUtilities;
 use Doctrine\ORM\EntityManager;
 use Monolog\Logger;

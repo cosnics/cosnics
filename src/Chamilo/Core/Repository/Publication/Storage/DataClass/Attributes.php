@@ -2,9 +2,9 @@
 namespace Chamilo\Core\Repository\Publication\Storage\DataClass;
 
 use Chamilo\Core\Repository\Publication\Manager;
-use Chamilo\Libraries\Storage\DataManager\DataManager;
 use Chamilo\Core\Repository\Storage\DataClass\ContentObject;
 use Chamilo\Libraries\Storage\DataClass\DataClass;
+use Chamilo\Libraries\Storage\Repository\DataManager;
 
 /**
  * Instances of this class group generic information about a publication of an object within an application.

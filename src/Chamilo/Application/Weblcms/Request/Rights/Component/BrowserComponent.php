@@ -6,8 +6,8 @@ use Chamilo\Application\Weblcms\Request\Rights\Storage\DataClass\RightsLocationE
 use Chamilo\Application\Weblcms\Request\Rights\Table\EntityTableRenderer;
 use Chamilo\Libraries\Architecture\Exceptions\NotAllowedException;
 use Chamilo\Libraries\Format\Table\RequestTableParameterValuesCompiler;
-use Chamilo\Libraries\Storage\DataManager\DataManager;
-use Chamilo\Libraries\Storage\Query\StorageParameters;
+use Chamilo\Libraries\Storage\Repository\DataManager;
+use Chamilo\Libraries\Storage\StorageParameters;
 
 class BrowserComponent extends Manager
 {

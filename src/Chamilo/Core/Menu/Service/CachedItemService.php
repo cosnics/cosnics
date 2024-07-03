@@ -5,8 +5,8 @@ use Chamilo\Core\Menu\Architecture\Interfaces\ItemServiceInterface;
 use Chamilo\Core\Menu\Storage\DataClass\Item;
 use Chamilo\Libraries\Cache\Interfaces\CacheDataPreLoaderInterface;
 use Chamilo\Libraries\Cache\Traits\SingleCacheAdapterHandlerTrait;
-use Chamilo\Libraries\Storage\DataClass\PropertyMapper;
 use Chamilo\Libraries\Storage\Query\OrderBy;
+use Chamilo\Libraries\Storage\Service\PropertyMapper;
 use Doctrine\Common\Collections\ArrayCollection;
 use Symfony\Component\Cache\Adapter\AdapterInterface;
 use Symfony\Component\Cache\Exception\CacheException;
@@ -220,7 +220,7 @@ class CachedItemService implements CacheDataPreLoaderInterface, ItemServiceInter
 
     /**
      * @throws \Symfony\Component\Cache\Exception\CacheException
-     * @throws \Chamilo\Libraries\Storage\Exception\DisplayOrderException
+     * @throws \Chamilo\Libraries\Storage\Architecture\Exceptions\DisplayOrderException
      */
     public function moveItemInDirection(Item $item, int $moveDirection): bool
     {
@@ -239,7 +239,7 @@ class CachedItemService implements CacheDataPreLoaderInterface, ItemServiceInter
 
     /**
      * @throws \Symfony\Component\Cache\Exception\CacheException
-     * @throws \Chamilo\Libraries\Storage\Exception\DisplayOrderException
+     * @throws \Chamilo\Libraries\Storage\Architecture\Exceptions\DisplayOrderException
      */
     public function saveItemFromValues(Item $item, array $values): bool
     {
@@ -258,7 +258,7 @@ class CachedItemService implements CacheDataPreLoaderInterface, ItemServiceInter
 
     /**
      * @throws \Symfony\Component\Cache\Exception\CacheException
-     * @throws \Chamilo\Libraries\Storage\Exception\DisplayOrderException
+     * @throws \Chamilo\Libraries\Storage\Architecture\Exceptions\DisplayOrderException
      */
     public function updateItem(Item $item): bool
     {

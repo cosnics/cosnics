@@ -52,8 +52,8 @@ use Chamilo\Libraries\Storage\DataManager\Doctrine\DataSourceName;
 use Chamilo\Libraries\Storage\DataManager\Doctrine\Factory\ConnectionFactory;
 use Chamilo\Libraries\Storage\DataManager\Doctrine\Service\ConditionPartTranslatorService;
 use Chamilo\Libraries\Storage\DataManager\Doctrine\Service\QueryBuilderConfigurator;
-use Chamilo\Libraries\Storage\DataManager\Repository\DataClassRepository;
-use Chamilo\Libraries\Storage\DataManager\StorageAliasGenerator;
+use Chamilo\Libraries\Storage\Repository\DataClassRepository;
+use Chamilo\Libraries\Storage\Service\StorageAliasGenerator;
 use Chamilo\Libraries\Utilities\StringUtilities;
 use Exception;
 use Symfony\Component\Cache\Adapter\ArrayAdapter;
@@ -146,7 +146,7 @@ class DependencyInjectionContainerBuilder
      * Creates and returns the default dependency injection container for Chamilo
      *
      * @throws \Symfony\Component\Cache\Exception\CacheException
-     * @throws \Chamilo\Libraries\Storage\Exception\ConnectionException
+     * @throws \Chamilo\Libraries\Storage\Architecture\Exceptions\ConnectionException
      */
     public function createContainer(): ContainerInterface
     {
@@ -214,7 +214,7 @@ class DependencyInjectionContainerBuilder
 
     /**
      * @throws \Symfony\Component\Cache\Exception\CacheException
-     * @throws \Chamilo\Libraries\Storage\Exception\ConnectionException
+     * @throws \Chamilo\Libraries\Storage\Architecture\Exceptions\ConnectionException
      */
     public function getContainerExtensionFinder(): ContainerExtensionFinderInterface
     {
@@ -273,7 +273,7 @@ class DependencyInjectionContainerBuilder
     }
 
     /**
-     * @throws \Chamilo\Libraries\Storage\Exception\ConnectionException
+     * @throws \Chamilo\Libraries\Storage\Architecture\Exceptions\ConnectionException
      */
     protected function getPackageBundlesCacheService(): PackageBundlesCacheService
     {
@@ -294,7 +294,7 @@ class DependencyInjectionContainerBuilder
     /**
      * @return string[]
      * @throws \Symfony\Component\Cache\Exception\CacheException
-     * @throws \Chamilo\Libraries\Storage\Exception\ConnectionException
+     * @throws \Chamilo\Libraries\Storage\Architecture\Exceptions\ConnectionException
      */
     protected function getPackageNamespaces(): array
     {
@@ -320,7 +320,7 @@ class DependencyInjectionContainerBuilder
     /**
      * @return string[]
      * @throws \Symfony\Component\Cache\Exception\CacheException
-     * @throws \Chamilo\Libraries\Storage\Exception\ConnectionException
+     * @throws \Chamilo\Libraries\Storage\Architecture\Exceptions\ConnectionException
      */
     protected function getPackageNamespacesFromFilesystem(): array
     {
@@ -330,7 +330,7 @@ class DependencyInjectionContainerBuilder
     }
 
     /**
-     * @throws \Chamilo\Libraries\Storage\Exception\ConnectionException
+     * @throws \Chamilo\Libraries\Storage\Architecture\Exceptions\ConnectionException
      * @throws \Exception
      */
     protected function getRegistrationConsulter(): RegistrationConsulter
@@ -456,7 +456,7 @@ class DependencyInjectionContainerBuilder
     }
 
     /**
-     * @throws \Chamilo\Libraries\Storage\Exception\ConnectionException
+     * @throws \Chamilo\Libraries\Storage\Architecture\Exceptions\ConnectionException
      */
     protected function getSession(): Session
     {
@@ -510,7 +510,7 @@ class DependencyInjectionContainerBuilder
      * @param \Symfony\Component\DependencyInjection\ContainerBuilder $container
      *
      * @throws \Symfony\Component\Cache\Exception\CacheException
-     * @throws \Chamilo\Libraries\Storage\Exception\ConnectionException
+     * @throws \Chamilo\Libraries\Storage\Architecture\Exceptions\ConnectionException
      */
     protected function loadContainerExtensions(ContainerBuilder $container): void
     {
@@ -545,7 +545,7 @@ class DependencyInjectionContainerBuilder
     }
 
     /**
-     * @throws \Chamilo\Libraries\Storage\Exception\ConnectionException
+     * @throws \Chamilo\Libraries\Storage\Architecture\Exceptions\ConnectionException
      * @throws \Symfony\Component\Cache\Exception\CacheException
      */
     public function rebuildContainer(

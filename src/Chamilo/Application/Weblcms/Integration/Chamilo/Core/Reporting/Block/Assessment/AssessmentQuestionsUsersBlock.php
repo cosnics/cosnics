@@ -11,10 +11,10 @@ use Chamilo\Core\Reporting\Viewer\Rendition\Block\Type\Html;
 use Chamilo\Core\Repository\Storage\DataClass\ComplexContentObjectItem;
 use Chamilo\Libraries\Storage\Query\Condition\EqualityCondition;
 use Chamilo\Libraries\Storage\Query\Condition\InCondition;
-use Chamilo\Libraries\Storage\Query\StorageParameters;
 use Chamilo\Libraries\Storage\Query\OrderBy;
 use Chamilo\Libraries\Storage\Query\Variable\PropertyConditionVariable;
 use Chamilo\Libraries\Storage\Query\Variable\StaticConditionVariable;
+use Chamilo\Libraries\Storage\StorageParameters;
 use Chamilo\Libraries\Translation\Translation;
 
 /**
@@ -242,7 +242,7 @@ class AssessmentQuestionsUsersBlock extends ToolBlock
 
         $order_by = OrderBy::generate(AssessmentAttempt::class, AssessmentAttempt::PROPERTY_USER_ID);
 
-        $assessment_attempts_trackers = \Chamilo\Libraries\Storage\DataManager\DataManager::retrieves(
+        $assessment_attempts_trackers = \Chamilo\Libraries\Storage\Repository\DataManager::retrieves(
             AssessmentAttempt::class, new StorageParameters(
                 condition: $condition, orderBy: $order_by
             )

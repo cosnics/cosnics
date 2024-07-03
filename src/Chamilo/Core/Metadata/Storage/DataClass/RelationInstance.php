@@ -4,7 +4,7 @@ namespace Chamilo\Core\Metadata\Storage\DataClass;
 use Chamilo\Core\Metadata\Manager;
 use Chamilo\Core\User\Storage\DataClass\User;
 use Chamilo\Libraries\Storage\DataClass\DataClass;
-use Chamilo\Libraries\Storage\DataManager\DataManager;
+use Chamilo\Libraries\Storage\Repository\DataManager;
 
 /**
  * @package Chamilo\Core\Metadata\Relation\Instance\Storage\DataClass

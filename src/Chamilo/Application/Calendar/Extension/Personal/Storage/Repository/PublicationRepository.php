@@ -4,12 +4,10 @@ namespace Chamilo\Application\Calendar\Extension\Personal\Storage\Repository;
 use Chamilo\Application\Calendar\Extension\Personal\Storage\DataClass\Publication;
 use Chamilo\Core\Repository\Publication\Service\PublicationAggregatorInterface;
 use Chamilo\Core\Repository\Storage\DataClass\ContentObject;
-use Chamilo\Libraries\Storage\DataManager\Repository\DataClassRepository;
 use Chamilo\Libraries\Storage\Query\Condition\AndCondition;
 use Chamilo\Libraries\Storage\Query\Condition\Condition;
 use Chamilo\Libraries\Storage\Query\Condition\EqualityCondition;
 use Chamilo\Libraries\Storage\Query\Condition\InCondition;
-use Chamilo\Libraries\Storage\Query\StorageParameters;
 use Chamilo\Libraries\Storage\Query\Join;
 use Chamilo\Libraries\Storage\Query\Joins;
 use Chamilo\Libraries\Storage\Query\OrderBy;
@@ -17,6 +15,8 @@ use Chamilo\Libraries\Storage\Query\RetrieveProperties;
 use Chamilo\Libraries\Storage\Query\Variable\PropertiesConditionVariable;
 use Chamilo\Libraries\Storage\Query\Variable\PropertyConditionVariable;
 use Chamilo\Libraries\Storage\Query\Variable\StaticConditionVariable;
+use Chamilo\Libraries\Storage\Repository\DataClassRepository;
+use Chamilo\Libraries\Storage\StorageParameters;
 use Doctrine\Common\Collections\ArrayCollection;
 
 /**
@@ -27,12 +27,12 @@ class PublicationRepository
 {
 
     /**
-     * @var \Chamilo\Libraries\Storage\DataManager\Repository\DataClassRepository
+     * @var \Chamilo\Libraries\Storage\Repository\DataClassRepository
      */
     private $dataClassRepository;
 
     /**
-     * @param \Chamilo\Libraries\Storage\DataManager\Repository\DataClassRepository $dataClassRepository
+     * @param \Chamilo\Libraries\Storage\Repository\DataClassRepository $dataClassRepository
      */
     public function __construct(DataClassRepository $dataClassRepository)
     {
@@ -301,7 +301,7 @@ class PublicationRepository
     }
 
     /**
-     * @return \Chamilo\Libraries\Storage\DataManager\Repository\DataClassRepository
+     * @return \Chamilo\Libraries\Storage\Repository\DataClassRepository
      */
     public function getDataClassRepository(): DataClassRepository
     {
@@ -309,7 +309,7 @@ class PublicationRepository
     }
 
     /**
-     * @param \Chamilo\Libraries\Storage\DataManager\Repository\DataClassRepository $dataClassRepository
+     * @param \Chamilo\Libraries\Storage\Repository\DataClassRepository $dataClassRepository
      */
     public function setDataClassRepository(DataClassRepository $dataClassRepository): void
     {

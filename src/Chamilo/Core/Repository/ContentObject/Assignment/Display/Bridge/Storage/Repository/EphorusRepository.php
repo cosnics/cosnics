@@ -10,11 +10,11 @@ use Chamilo\Libraries\Storage\Query\Condition\AndCondition;
 use Chamilo\Libraries\Storage\Query\Condition\Condition;
 use Chamilo\Libraries\Storage\Query\Condition\EqualityCondition;
 use Chamilo\Libraries\Storage\Query\Condition\InCondition;
-use Chamilo\Libraries\Storage\Query\StorageParameters;
 use Chamilo\Libraries\Storage\Query\Join;
 use Chamilo\Libraries\Storage\Query\Joins;
 use Chamilo\Libraries\Storage\Query\RetrieveProperties;
 use Chamilo\Libraries\Storage\Query\Variable\PropertyConditionVariable;
+use Chamilo\Libraries\Storage\StorageParameters;
 use Doctrine\Common\Collections\ArrayCollection;
 
 /**
@@ -39,12 +39,12 @@ abstract class EphorusRepository extends CommonDataClassRepository
     }
 
     /**
-     * @param \Chamilo\Libraries\Storage\Query\StorageParameters $dataClassParameters
+     * @param \Chamilo\Libraries\Storage\StorageParameters $storageParameters
      *
      * @return ContentObject[] | ArrayCollection
      */
     public function findAssignmentEntriesWithRequests(
-        StorageParameters $dataClassParameters = new StorageParameters()
+        StorageParameters $storageParameters = new StorageParameters()
     )
     {
         $entryClassName = $this->getEntryClassName();
@@ -78,10 +78,10 @@ abstract class EphorusRepository extends CommonDataClassRepository
 
         $joins = $this->getAssignmentRequestJoins();
 
-        $dataClassParameters->setJoins($joins);
-        $dataClassParameters->setRetrieveProperties($properties);
+        $storageParameters->setJoins($joins);
+        $storageParameters->setRetrieveProperties($properties);
 
-        $records = $this->dataClassRepository->records($entryClassName, $dataClassParameters);
+        $records = $this->dataClassRepository->records($entryClassName, $storageParameters);
 
         $dataClasses = [];
         foreach ($records as $record)

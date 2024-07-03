@@ -2,7 +2,7 @@
 namespace Chamilo\Core\Group\Storage\Repository;
 
 use Chamilo\Core\Group\Storage\DataClass\GroupActivity;
-use Chamilo\Libraries\Storage\DataManager\Repository\DataClassRepository;
+use Chamilo\Libraries\Storage\Repository\DataClassRepository;
 
 /**
  * @package Chamilo\Core\Group\Storage\Repository

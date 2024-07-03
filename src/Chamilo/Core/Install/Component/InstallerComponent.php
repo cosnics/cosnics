@@ -152,7 +152,7 @@ class InstallerComponent extends Manager implements NoAuthenticationSupportInter
     }
 
     /**
-     * @throws \Chamilo\Libraries\Storage\Exception\ConnectionException
+     * @throws \Chamilo\Libraries\Storage\Architecture\Exceptions\ConnectionException
      */
     public function getInstaller(InstallerObserverInterface $installerObserver): PlatformInstaller
     {

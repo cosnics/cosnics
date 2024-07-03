@@ -1,12 +1,12 @@
 <?php
 namespace Chamilo\Libraries\Storage\DataClass\Listeners;
 
-use Chamilo\Libraries\Storage\DataManager\DataManager;
 use Chamilo\Libraries\Storage\Query\Condition\AndCondition;
 use Chamilo\Libraries\Storage\Query\Condition\Condition;
 use Chamilo\Libraries\Storage\Query\Condition\EqualityCondition;
 use Chamilo\Libraries\Storage\Query\Variable\PropertyConditionVariable;
 use Chamilo\Libraries\Storage\Query\Variable\StaticConditionVariable;
+use Chamilo\Libraries\Storage\Repository\DataManager;
 
 /**
  * Dataclass listener which manipulates the crud methods to support common functionality for sort order logic

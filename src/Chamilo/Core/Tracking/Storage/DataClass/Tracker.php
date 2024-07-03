@@ -3,9 +3,9 @@ namespace Chamilo\Core\Tracking\Storage\DataClass;
 
 use Chamilo\Core\Tracking\Manager;
 use Chamilo\Libraries\Storage\DataClass\DataClass;
-use Chamilo\Libraries\Storage\DataManager\DataManager;
 use Chamilo\Libraries\Storage\Query\Condition\Condition;
-use Chamilo\Libraries\Storage\Query\StorageParameters;
+use Chamilo\Libraries\Storage\Repository\DataManager;
+use Chamilo\Libraries\Storage\StorageParameters;
 
 abstract class Tracker extends DataClass
 {

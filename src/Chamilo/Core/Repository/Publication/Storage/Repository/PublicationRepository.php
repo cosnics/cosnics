@@ -4,14 +4,14 @@ namespace Chamilo\Core\Repository\Publication\Storage\Repository;
 use Chamilo\Core\Repository\Publication\Storage\DataClass\Publication;
 use Chamilo\Core\Repository\Storage\DataClass\ContentObject;
 use Chamilo\Libraries\Storage\DataClass\DataClass;
-use Chamilo\Libraries\Storage\DataManager\Repository\DataClassRepository;
 use Chamilo\Libraries\Storage\Query\Condition\EqualityCondition;
-use Chamilo\Libraries\Storage\Query\StorageParameters;
 use Chamilo\Libraries\Storage\Query\Join;
 use Chamilo\Libraries\Storage\Query\Joins;
 use Chamilo\Libraries\Storage\Query\RetrieveProperties;
 use Chamilo\Libraries\Storage\Query\Variable\PropertiesConditionVariable;
 use Chamilo\Libraries\Storage\Query\Variable\PropertyConditionVariable;
+use Chamilo\Libraries\Storage\Repository\DataClassRepository;
+use Chamilo\Libraries\Storage\StorageParameters;
 use Doctrine\Common\Collections\ArrayCollection;
 use DomainException;
 use InvalidArgumentException;
@@ -154,7 +154,7 @@ class PublicationRepository
 
         $properties->merge($baseParameters->getRetrieveProperties());
 
-        $dataClassParameters = new StorageParameters(
+        $storageParameters = new StorageParameters(
             condition: $baseParameters->getCondition(), joins: $this->getPublicationJoins(
             $publicationClassName, $baseParameters->getJoins(), $contentObjectTypeClassName
         ), retrieveProperties: $properties, orderBy: $baseParameters->getOrderBy(),
@@ -163,7 +163,7 @@ class PublicationRepository
         );
 
         $records = $this->getDataClassRepository()->records(
-            $publicationClassName, $dataClassParameters
+            $publicationClassName, $storageParameters
         );
 
         return $this->hydratePublications($records, $publicationClassName, $contentObjectTypeClassName);

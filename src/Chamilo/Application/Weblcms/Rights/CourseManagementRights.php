@@ -355,7 +355,7 @@ class CourseManagementRights extends WeblcmsRights
 
         if (!$this->rights[$entity_type][$group_id])
         {
-            $base_group = \Chamilo\Libraries\Storage\DataManager\DataManager::retrieve_by_id(Group::class, $group_id);
+            $base_group = \Chamilo\Libraries\Storage\Repository\DataManager::retrieve_by_id(Group::class, $group_id);
             $location = CourseDataManager::retrieve_by_id(Course::class, $course_id)->get_rights_location();
 
             if (is_null($base_group))

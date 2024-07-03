@@ -26,7 +26,7 @@
 
         <!-- Factory Services -->
         <service id="Doctrine\ORM\EntityManagerFactory"
-                 class="Chamilo\Libraries\Storage\DataManager\Doctrine\ORM\DoctrineEntityManagerFactory">
+                 class="Chamilo\Libraries\Storage\Implementations\Doctrine\ORM\DoctrineEntityManagerFactory">
             <argument type="service"
                       id="Doctrine\ORM\MappingDriver"/>
             <argument type="service"
@@ -34,17 +34,17 @@
         </service>
 
         <service id="Doctrine\ORM\MappingDriverFactory"
-                 class="Chamilo\Libraries\Storage\DataManager\Doctrine\ORM\MappingDriverFactory">
+                 class="Chamilo\Libraries\Storage\Implementations\Doctrine\ORM\MappingDriverFactory">
             <argument type="service"
                       id="Doctrine\ORM\Configuration"/>
         </service>
 
-        <service id="Chamilo\Libraries\Storage\DataManager\Doctrine\ORM\DoctrineProxyCacheService">
+        <service id="Chamilo\Libraries\Storage\Implementations\Doctrine\ORM\DoctrineProxyCacheService">
             <tag name="Chamilo\Libraries\Cache\CacheDataPreLoaderService"/>
         </service>
 
         <service id="Doctrine\ORM\PackagesMappingDriverFactory"
-                 class="Chamilo\Libraries\Storage\DataManager\Doctrine\ORM\PackagesMappingDriverFactory">
+                 class="Chamilo\Libraries\Storage\Implementations\Doctrine\ORM\PackagesMappingDriverFactory">
             <argument type="service"
                       id="Doctrine\ORM\MappingDriverFactory"/>
             <argument type="service"
@@ -71,7 +71,7 @@
         </service>
 
         <service id="Doctrine\ORM\Test\EntityManagerFactory"
-                 class="Chamilo\Libraries\Storage\DataManager\Doctrine\ORM\DoctrineEntityManagerFactory">
+                 class="Chamilo\Libraries\Storage\Implementations\Doctrine\ORM\DoctrineEntityManagerFactory">
             <argument type="service"
                       id="Doctrine\ORM\MappingDriver"/>
             <argument type="service"

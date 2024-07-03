@@ -18,7 +18,7 @@ use Chamilo\Core\Repository\Service\Menu\WorkspaceCategoryItemRenderer;
 use Chamilo\Core\User\Service\Menu\WidgetItemRenderer;
 use Chamilo\Libraries\Architecture\ClassnameUtilities;
 use Chamilo\Libraries\File\SystemPathBuilder;
-use Chamilo\Libraries\Storage\DataManager\Repository\StorageUnitRepository;
+use Chamilo\Libraries\Storage\Repository\StorageUnitRepository;
 use Chamilo\Libraries\Utilities\StringUtilities;
 use Symfony\Component\Translation\Translator;
 
@@ -56,7 +56,7 @@ class Installer extends \Chamilo\Configuration\Package\Action\Installer
     }
 
     /**
-     * @throws \Chamilo\Libraries\Storage\Exception\DisplayOrderException
+     * @throws \Chamilo\Libraries\Storage\Architecture\Exceptions\DisplayOrderException
      */
     protected function createDefaultItems(): bool
     {
@@ -85,7 +85,7 @@ class Installer extends \Chamilo\Configuration\Package\Action\Installer
     }
 
     /**
-     * @throws \Chamilo\Libraries\Storage\Exception\DisplayOrderException
+     * @throws \Chamilo\Libraries\Storage\Architecture\Exceptions\DisplayOrderException
      * @throws \Exception
      */
     public function extra(array $formValues): bool

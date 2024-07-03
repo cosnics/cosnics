@@ -6,7 +6,7 @@ use Chamilo\Application\Calendar\Extension\Personal\Storage\DataClass\Publicatio
 use Chamilo\Core\Repository\Publication\Storage\Repository\PublicationRepository;
 use Chamilo\Libraries\Storage\Query\Condition\AndCondition;
 use Chamilo\Libraries\Storage\Query\Condition\Condition;
-use Chamilo\Libraries\Storage\Query\StorageParameters;
+use Chamilo\Libraries\Storage\StorageParameters;
 
 /**
  * Abstract class for the repository to provide publications for the personal calendar extension

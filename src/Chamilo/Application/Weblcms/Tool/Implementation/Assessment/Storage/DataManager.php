@@ -8,11 +8,11 @@ use Chamilo\Core\Repository\Storage\DataClass\ComplexContentObjectItem;
 use Chamilo\Core\Repository\Storage\DataClass\ContentObject;
 use Chamilo\Core\User\Storage\DataClass\User;
 use Chamilo\Libraries\Storage\Query\Condition\EqualityCondition;
-use Chamilo\Libraries\Storage\Query\StorageParameters;
 use Chamilo\Libraries\Storage\Query\Join;
 use Chamilo\Libraries\Storage\Query\Joins;
 use Chamilo\Libraries\Storage\Query\RetrieveProperties;
 use Chamilo\Libraries\Storage\Query\Variable\PropertyConditionVariable;
+use Chamilo\Libraries\Storage\StorageParameters;
 
 /**
  * This class represents the data manager for this package
@@ -20,7 +20,7 @@ use Chamilo\Libraries\Storage\Query\Variable\PropertyConditionVariable;
  * @author Sven Vanpoucke - Hogeschool Gent
  * @package application.weblcms.tool.assignment
  */
-class DataManager extends \Chamilo\Libraries\Storage\DataManager\DataManager
+class DataManager extends \Chamilo\Libraries\Storage\Repository\DataManager
 {
     public const PREFIX = 'weblcms_assessment_';
 

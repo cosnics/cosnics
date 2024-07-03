@@ -9,7 +9,6 @@ use Chamilo\Libraries\Storage\Query\Condition\AndCondition;
 use Chamilo\Libraries\Storage\Query\Condition\ComparisonCondition;
 use Chamilo\Libraries\Storage\Query\Condition\Condition;
 use Chamilo\Libraries\Storage\Query\Condition\EqualityCondition;
-use Chamilo\Libraries\Storage\Query\StorageParameters;
 use Chamilo\Libraries\Storage\Query\GroupBy;
 use Chamilo\Libraries\Storage\Query\Join;
 use Chamilo\Libraries\Storage\Query\Joins;
@@ -18,13 +17,14 @@ use Chamilo\Libraries\Storage\Query\Variable\FunctionConditionVariable;
 use Chamilo\Libraries\Storage\Query\Variable\PropertiesConditionVariable;
 use Chamilo\Libraries\Storage\Query\Variable\PropertyConditionVariable;
 use Chamilo\Libraries\Storage\Query\Variable\StaticConditionVariable;
+use Chamilo\Libraries\Storage\StorageParameters;
 
 /**
  * @package Chamilo\Application\Weblcms\Integration\Chamilo\Core\Tracking\Storage
  *
  * @author Hans De Bisschop <hans.de.bisschop@ehb.be>
  */
-class DataManager extends \Chamilo\Libraries\Storage\DataManager\DataManager
+class DataManager extends \Chamilo\Libraries\Storage\Repository\DataManager
 {
     public const PREFIX = 'tracking_weblcms_';
 

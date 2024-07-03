@@ -2,10 +2,10 @@
 namespace Chamilo\Core\Repository\Storage\Repository;
 
 use Chamilo\Core\Repository\Storage\DataClass\TemplateRegistration;
-use Chamilo\Libraries\Storage\DataManager\Repository\DataClassRepository;
-use Chamilo\Libraries\Storage\Query\StorageParameters;
 use Chamilo\Libraries\Storage\Query\RetrieveProperties;
 use Chamilo\Libraries\Storage\Query\Variable\PropertiesConditionVariable;
+use Chamilo\Libraries\Storage\Repository\DataClassRepository;
+use Chamilo\Libraries\Storage\StorageParameters;
 
 /**
  *
@@ -18,13 +18,13 @@ class TemplateRegistrationRepository
 
     /**
      *
-     * @var \Chamilo\Libraries\Storage\DataManager\Repository\DataClassRepository
+     * @var \Chamilo\Libraries\Storage\Repository\DataClassRepository
      */
     private $dataClassRepository;
 
     /**
      *
-     * @param \Chamilo\Libraries\Storage\DataManager\Repository\DataClassRepository $dataClassRepository
+     * @param \Chamilo\Libraries\Storage\Repository\DataClassRepository $dataClassRepository
      */
     public function __construct(DataClassRepository $dataClassRepository)
     {
@@ -72,7 +72,7 @@ class TemplateRegistrationRepository
 
     /**
      *
-     * @return \Chamilo\Libraries\Storage\DataManager\Repository\DataClassRepository
+     * @return \Chamilo\Libraries\Storage\Repository\DataClassRepository
      */
     protected function getDataClassRepository()
     {
@@ -81,7 +81,7 @@ class TemplateRegistrationRepository
 
     /**
      *
-     * @param \Chamilo\Libraries\Storage\DataManager\Repository\DataClassRepository $dataClassRepository
+     * @param \Chamilo\Libraries\Storage\Repository\DataClassRepository $dataClassRepository
      */
     protected function setDataClassRepository($dataClassRepository)
     {

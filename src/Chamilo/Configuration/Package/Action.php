@@ -10,7 +10,7 @@ use Chamilo\Configuration\Service\RegistrationService;
 use Chamilo\Libraries\Architecture\ClassnameUtilities;
 use Chamilo\Libraries\File\FilesystemTools;
 use Chamilo\Libraries\File\SystemPathBuilder;
-use Chamilo\Libraries\Storage\DataManager\Repository\StorageUnitRepository;
+use Chamilo\Libraries\Storage\Repository\StorageUnitRepository;
 use Symfony\Component\Translation\Translator;
 
 abstract class Action

@@ -3,17 +3,17 @@ namespace Chamilo\Core\Repository\ContentObject\Assignment\Display\Bridge\Storag
 
 use Chamilo\Core\Repository\ContentObject\Assignment\Display\Bridge\Storage\DataClass\Entry;
 use Chamilo\Core\Repository\ContentObject\Assignment\Display\Bridge\Storage\DataClass\Feedback;
-use Chamilo\Libraries\Storage\DataManager\Repository\DataClassRepository;
 use Chamilo\Libraries\Storage\Query\Condition\AndCondition;
 use Chamilo\Libraries\Storage\Query\Condition\Condition;
 use Chamilo\Libraries\Storage\Query\Condition\EqualityCondition;
-use Chamilo\Libraries\Storage\Query\StorageParameters;
 use Chamilo\Libraries\Storage\Query\Join;
 use Chamilo\Libraries\Storage\Query\Joins;
 use Chamilo\Libraries\Storage\Query\RetrieveProperties;
 use Chamilo\Libraries\Storage\Query\Variable\FunctionConditionVariable;
 use Chamilo\Libraries\Storage\Query\Variable\PropertyConditionVariable;
 use Chamilo\Libraries\Storage\Query\Variable\StaticConditionVariable;
+use Chamilo\Libraries\Storage\Repository\DataClassRepository;
+use Chamilo\Libraries\Storage\StorageParameters;
 
 /**
  * Abstract class to provide common functionality to handle assignment entries, feedback, scores and notes
@@ -25,14 +25,14 @@ use Chamilo\Libraries\Storage\Query\Variable\StaticConditionVariable;
 abstract class FeedbackRepository
 {
     /**
-     * @var \Chamilo\Libraries\Storage\DataManager\Repository\DataClassRepository
+     * @var \Chamilo\Libraries\Storage\Repository\DataClassRepository
      */
     protected $dataClassRepository;
 
     /**
      * LearningPathAssignmentRepository constructor.
      *
-     * @param \Chamilo\Libraries\Storage\DataManager\Repository\DataClassRepository $dataClassRepository
+     * @param \Chamilo\Libraries\Storage\Repository\DataClassRepository $dataClassRepository
      */
     public function __construct(DataClassRepository $dataClassRepository)
     {

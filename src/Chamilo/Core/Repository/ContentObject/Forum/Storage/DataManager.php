@@ -9,7 +9,6 @@ use Chamilo\Core\Repository\Storage\DataClass\ComplexContentObjectItem;
 use Chamilo\Core\User\Storage\DataClass\User;
 use Chamilo\Libraries\Storage\Query\Condition\AndCondition;
 use Chamilo\Libraries\Storage\Query\Condition\EqualityCondition;
-use Chamilo\Libraries\Storage\Query\StorageParameters;
 use Chamilo\Libraries\Storage\Query\Join;
 use Chamilo\Libraries\Storage\Query\Joins;
 use Chamilo\Libraries\Storage\Query\OrderBy;
@@ -17,6 +16,7 @@ use Chamilo\Libraries\Storage\Query\OrderProperty;
 use Chamilo\Libraries\Storage\Query\RetrieveProperties;
 use Chamilo\Libraries\Storage\Query\Variable\PropertyConditionVariable;
 use Chamilo\Libraries\Storage\Query\Variable\StaticConditionVariable;
+use Chamilo\Libraries\Storage\StorageParameters;
 
 /**
  * Class for the specific Forum data management, it receives data calls and delegates it to the mdb2 class.
@@ -24,7 +24,7 @@ use Chamilo\Libraries\Storage\Query\Variable\StaticConditionVariable;
  * @author Mattias De Pauw - Hogeschool Gent
  * @author Maarten Volckaert - Hogeschool Gent
  */
-class DataManager extends \Chamilo\Libraries\Storage\DataManager\DataManager
+class DataManager extends \Chamilo\Libraries\Storage\Repository\DataManager
 {
     public const PREFIX = 'repository_';
 

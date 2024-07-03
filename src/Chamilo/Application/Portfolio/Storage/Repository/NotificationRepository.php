@@ -2,12 +2,12 @@
 namespace Chamilo\Application\Portfolio\Storage\Repository;
 
 use Chamilo\Application\Portfolio\Storage\DataClass\Notification;
-use Chamilo\Libraries\Storage\DataManager\Repository\DataClassRepository;
 use Chamilo\Libraries\Storage\Query\Condition\AndCondition;
 use Chamilo\Libraries\Storage\Query\Condition\EqualityCondition;
-use Chamilo\Libraries\Storage\Query\StorageParameters;
 use Chamilo\Libraries\Storage\Query\Variable\PropertyConditionVariable;
 use Chamilo\Libraries\Storage\Query\Variable\StaticConditionVariable;
+use Chamilo\Libraries\Storage\Repository\DataClassRepository;
+use Chamilo\Libraries\Storage\StorageParameters;
 
 /**
  *
@@ -19,13 +19,13 @@ class NotificationRepository
 
     /**
      *
-     * @var \Chamilo\Libraries\Storage\DataManager\Repository\DataClassRepository
+     * @var \Chamilo\Libraries\Storage\Repository\DataClassRepository
      */
     private $dataClassRepository;
 
     /**
      *
-     * @param \Chamilo\Libraries\Storage\DataManager\Repository\DataClassRepository $dataClassRepository
+     * @param \Chamilo\Libraries\Storage\Repository\DataClassRepository $dataClassRepository
      */
     public function __construct(DataClassRepository $dataClassRepository)
     {
@@ -99,7 +99,7 @@ class NotificationRepository
 
     /**
      *
-     * @return \Chamilo\Libraries\Storage\DataManager\Repository\DataClassRepository
+     * @return \Chamilo\Libraries\Storage\Repository\DataClassRepository
      */
     protected function getDataClassRepository()
     {
@@ -108,7 +108,7 @@ class NotificationRepository
 
     /**
      *
-     * @param \Chamilo\Libraries\Storage\DataManager\Repository\DataClassRepository $dataClassRepository
+     * @param \Chamilo\Libraries\Storage\Repository\DataClassRepository $dataClassRepository
      */
     protected function setDataClassRepository($dataClassRepository)
     {

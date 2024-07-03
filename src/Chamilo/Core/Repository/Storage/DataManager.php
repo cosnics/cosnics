@@ -25,7 +25,6 @@ use Chamilo\Libraries\Storage\Query\Condition\EqualityCondition;
 use Chamilo\Libraries\Storage\Query\Condition\InCondition;
 use Chamilo\Libraries\Storage\Query\Condition\NotCondition;
 use Chamilo\Libraries\Storage\Query\Condition\OrCondition;
-use Chamilo\Libraries\Storage\Query\StorageParameters;
 use Chamilo\Libraries\Storage\Query\GroupBy;
 use Chamilo\Libraries\Storage\Query\OrderBy;
 use Chamilo\Libraries\Storage\Query\OrderProperty;
@@ -36,11 +35,12 @@ use Chamilo\Libraries\Storage\Query\Variable\FunctionConditionVariable;
 use Chamilo\Libraries\Storage\Query\Variable\OperationConditionVariable;
 use Chamilo\Libraries\Storage\Query\Variable\PropertyConditionVariable;
 use Chamilo\Libraries\Storage\Query\Variable\StaticConditionVariable;
+use Chamilo\Libraries\Storage\StorageParameters;
 use Chamilo\Libraries\Utilities\StringUtilities;
 use Doctrine\Common\Collections\ArrayCollection;
 use Symfony\Component\HttpFoundation\Session\SessionInterface;
 
-class DataManager extends \Chamilo\Libraries\Storage\DataManager\DataManager
+class DataManager extends \Chamilo\Libraries\Storage\Repository\DataManager
 {
     public const ACTION_COUNT = 1;
     public const ACTION_RETRIEVES = 2;
@@ -160,7 +160,7 @@ class DataManager extends \Chamilo\Libraries\Storage\DataManager\DataManager
         //
         // $usedInBlocks = \Chamilo\Core\Home\Storage\DataManager::count(
         // Block::class,
-        // new DataClassParameters(condition: $condition));
+        // new StorageParameters(condition: $condition));
         //
         // if ($usedInBlocks > 0)
         // {

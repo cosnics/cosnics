@@ -5,7 +5,7 @@ use Chamilo\Core\Repository\ContentObject\LearningPath\Storage\Repository\Common
 use Chamilo\Core\Repository\ContentObject\LearningPath\Test\Helper\CommonDataClassRepositoryExtension;
 use Chamilo\Libraries\Architecture\Test\TestCases\ChamiloTestCase;
 use Chamilo\Libraries\Storage\DataClass\DataClass;
-use Chamilo\Libraries\Storage\DataManager\Repository\DataClassRepository;
+use Chamilo\Libraries\Storage\Repository\DataClassRepository;
 
 /**
  * Tests the CommonDataClassRepository

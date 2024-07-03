@@ -2,7 +2,7 @@
 namespace Chamilo\Libraries\Storage\Query;
 
 use Chamilo\Libraries\Storage\DataManager\Doctrine\Service\ConditionPartTranslatorService;
-use Chamilo\Libraries\Storage\DataManager\StorageAliasGenerator;
+use Chamilo\Libraries\Storage\Service\StorageAliasGenerator;
 
 /**
  * @package Chamilo\Libraries\Storage\Query

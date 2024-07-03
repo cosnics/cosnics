@@ -187,7 +187,7 @@ trait TestApplication
 
         $this->assertTrue(
             $this->checkIfClassInFileIsSubclassOf(
-                $file, array('Chamilo\Libraries\Storage\DataManager\DataManager')
+                $file, array('Chamilo\Libraries\Storage\Repository\DataManager')
             )
         );
     }

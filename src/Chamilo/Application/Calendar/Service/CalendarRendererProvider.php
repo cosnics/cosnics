@@ -65,7 +65,7 @@ class CalendarRendererProvider extends \Chamilo\Libraries\Calendar\Service\Calen
      * @param int|null $endTime
      *
      * @return array|\Chamilo\Libraries\Calendar\Event\Event[]
-     * @throws \Chamilo\Libraries\Storage\Exception\ConnectionException
+     * @throws \Chamilo\Libraries\Storage\Architecture\Exceptions\ConnectionException
      * @throws \Symfony\Component\Cache\Exception\CacheException
      */
     public function aggregateEvents(?int $startTime = null, ?int $endTime = null): array
@@ -162,7 +162,7 @@ class CalendarRendererProvider extends \Chamilo\Libraries\Calendar\Service\Calen
     /**
      * @return \Chamilo\Application\Calendar\Architecture\CalendarInterface[][]
      * @throws \Symfony\Component\Cache\Exception\CacheException
-     * @throws \Chamilo\Libraries\Storage\Exception\ConnectionException
+     * @throws \Chamilo\Libraries\Storage\Architecture\Exceptions\ConnectionException
      */
     public function getSources()
     {

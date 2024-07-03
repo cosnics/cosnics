@@ -14,6 +14,7 @@ use Chamilo\Libraries\Format\Structure\Glyph\FontAwesomeGlyph;
 use Chamilo\Libraries\Storage\Query\Condition\EqualityCondition;
 use Chamilo\Libraries\Storage\Query\Variable\PropertyConditionVariable;
 use Chamilo\Libraries\Storage\Query\Variable\StaticConditionVariable;
+use Chamilo\Libraries\Storage\StorageParameters;
 use Chamilo\Libraries\Translation\Translation;
 use Chamilo\Libraries\Utilities\StringUtilities;
 
@@ -208,7 +209,7 @@ class CourseUserCategoryForm extends FormValidator
             );
 
             $courseTypeUserCategories = DataManager::retrieves(
-                CourseTypeUserCategory::class, new DataClassParameters(condition: $condition)
+                CourseTypeUserCategory::class, new StorageParameters(condition: $condition)
             );
 
             $defaultCourseTypes = new AdvancedElementFinderElements();
@@ -254,7 +255,7 @@ class CourseUserCategoryForm extends FormValidator
         );
 
         $existing_types = DataManager::retrieves(
-            CourseTypeUserCategory::class, new DataClassParameters(condition: $condition)
+            CourseTypeUserCategory::class, new StorageParameters(condition: $condition)
         );
 
         if ($existing_types)

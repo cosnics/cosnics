@@ -4,8 +4,8 @@ namespace Chamilo\Core\Repository\Quota\Form\Rule;
 use Chamilo\Core\Repository\Quota\Calculator;
 use Chamilo\Core\User\Manager;
 use Chamilo\Core\User\Storage\DataClass\User;
-use Chamilo\Libraries\Storage\DataManager\DataManager;
 use Chamilo\Libraries\DependencyInjection\DependencyInjectionContainerBuilder;
+use Chamilo\Libraries\Storage\Repository\DataManager;
 use HTML_QuickForm_Rule;
 use Symfony\Component\HttpFoundation\Session\SessionInterface;
 

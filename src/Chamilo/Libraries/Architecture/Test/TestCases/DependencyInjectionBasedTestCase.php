@@ -2,8 +2,8 @@
 namespace Chamilo\Libraries\Architecture\Test\TestCases;
 
 use Chamilo\Libraries\DependencyInjection\DependencyInjectionContainerBuilder;
-use Chamilo\Libraries\Storage\DataManager\Repository\DataClassRepository;
-use Chamilo\Libraries\Storage\DataManager\Repository\StorageUnitRepository;
+use Chamilo\Libraries\Storage\Repository\DataClassRepository;
+use Chamilo\Libraries\Storage\Repository\StorageUnitRepository;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 
 /**

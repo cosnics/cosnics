@@ -7,7 +7,7 @@ use Chamilo\Application\Weblcms\Tool\Implementation\Ephorus\Storage\DataClass\Re
 use Chamilo\Core\Repository\ContentObject\Assignment\Integration\Chamilo\Core\Repository\ContentObject\LearningPath\Bridge\Interfaces\EphorusServiceBridgeInterface;
 use Chamilo\Core\Repository\ContentObject\LearningPath\Storage\DataClass\TreeNodeData;
 use Chamilo\Libraries\Storage\Query\Condition\Condition;
-use Chamilo\Libraries\Storage\Query\StorageParameters;
+use Chamilo\Libraries\Storage\StorageParameters;
 
 /**
  * @package Chamilo\Application\Weblcms\Bridge\LearningPath\Assignment
@@ -58,16 +58,16 @@ class EphorusServiceBridge implements EphorusServiceBridgeInterface
 
     /**
      * @param \Chamilo\Core\Repository\ContentObject\LearningPath\Storage\DataClass\TreeNodeData $treeNodeData
-     * @param \Chamilo\Libraries\Storage\Query\StorageParameters $dataClassParameters
+     * @param \Chamilo\Libraries\Storage\StorageParameters $storageParameters
      *
      * @return \Doctrine\Common\Collections\ArrayCollection|\Chamilo\Core\Repository\Storage\DataClass\ContentObject[]
      */
     public function findAssignmentEntriesWithEphorusRequestsByTreeNodeData(
-        TreeNodeData $treeNodeData, StorageParameters $dataClassParameters = new StorageParameters()
+        TreeNodeData $treeNodeData, StorageParameters $storageParameters = new StorageParameters()
     )
     {
         return $this->ephorusService->findAssignmentEntriesWithEphorusRequestsByTreeNodeData(
-            $this->contentObjectPublication, $treeNodeData, $dataClassParameters
+            $this->contentObjectPublication, $treeNodeData, $storageParameters
         );
     }
 

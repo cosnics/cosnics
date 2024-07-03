@@ -3,7 +3,7 @@ namespace Chamilo\Core\Repository\Workspace\Storage\DataClass;
 
 use Chamilo\Core\Repository\Workspace\Manager;
 use Chamilo\Libraries\Storage\DataClass\DataClass;
-use Chamilo\Libraries\Storage\DataManager\DataManager;
+use Chamilo\Libraries\Storage\Repository\DataManager;
 
 /**
  * @package Chamilo\Core\Repository\Workspace\Storage\DataClass

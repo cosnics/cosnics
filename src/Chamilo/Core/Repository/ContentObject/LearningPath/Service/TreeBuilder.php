@@ -8,8 +8,8 @@ use Chamilo\Core\Repository\ContentObject\LearningPath\Storage\Repository\TreeNo
 use Chamilo\Core\Repository\Storage\DataClass\ContentObject;
 use Chamilo\Core\Repository\Workspace\Repository\ContentObjectRepository;
 use Chamilo\Libraries\Storage\Query\Condition\InCondition;
-use Chamilo\Libraries\Storage\Query\StorageParameters;
 use Chamilo\Libraries\Storage\Query\Variable\PropertyConditionVariable;
+use Chamilo\Libraries\Storage\StorageParameters;
 
 /**
  * Builds an in memory tree for an entire learning path based on a given root

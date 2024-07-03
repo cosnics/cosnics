@@ -14,7 +14,6 @@ use Chamilo\Libraries\Storage\Query\Condition\AndCondition;
 use Chamilo\Libraries\Storage\Query\Condition\Condition;
 use Chamilo\Libraries\Storage\Query\Condition\EqualityCondition;
 use Chamilo\Libraries\Storage\Query\Condition\InCondition;
-use Chamilo\Libraries\Storage\Query\StorageParameters;
 use Chamilo\Libraries\Storage\Query\Join;
 use Chamilo\Libraries\Storage\Query\Joins;
 use Chamilo\Libraries\Storage\Query\OrderBy;
@@ -23,6 +22,7 @@ use Chamilo\Libraries\Storage\Query\RetrieveProperties;
 use Chamilo\Libraries\Storage\Query\Variable\PropertiesConditionVariable;
 use Chamilo\Libraries\Storage\Query\Variable\PropertyConditionVariable;
 use Chamilo\Libraries\Storage\Query\Variable\StaticConditionVariable;
+use Chamilo\Libraries\Storage\StorageParameters;
 
 /**
  * The repository class for the Course Entity
@@ -263,14 +263,14 @@ class CourseRepository implements CourseRepositoryInterface
     /**
      * Returns Courses with an array of course ids and a given set of parameters
      *
-     * @param StorageParameters $dataClassParameters
+     * @param StorageParameters $storageParameters
      *
      * @return Course[]
      */
-    public function findCoursesByParameters(StorageParameters $dataClassParameters)
+    public function findCoursesByParameters(StorageParameters $storageParameters)
     {
         return DataManager::retrieves(
-            Course::class, $dataClassParameters
+            Course::class, $storageParameters
         );
     }
 
@@ -412,12 +412,12 @@ class CourseRepository implements CourseRepositoryInterface
             )
         );
 
-        $dataClassParameters = new StorageParameters(
+        $storageParameters = new StorageParameters(
             condition: $condition, joins: $joins, retrieveProperties: $properties
         );
 
         $courseRecords = DataManager::records(
-            Course::class, $dataClassParameters
+            Course::class, $storageParameters
         );
 
         $courses = [];

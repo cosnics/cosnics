@@ -5,7 +5,7 @@ use Chamilo\Core\Repository\ContentObject\LearningPath\Domain\TrackingParameters
 use Chamilo\Core\Repository\ContentObject\LearningPath\Service\AttemptService;
 use Chamilo\Core\Repository\ContentObject\LearningPath\Storage\Repository\TrackingRepository;
 use Chamilo\Core\Repository\ContentObject\LearningPath\Storage\Repository\TrackingRepositoryInterface;
-use Chamilo\Libraries\Storage\DataManager\Repository\DataClassRepository;
+use Chamilo\Libraries\Storage\Repository\DataClassRepository;
 
 /**
  * Builds the TrackingServices and TrackingRepository based on the

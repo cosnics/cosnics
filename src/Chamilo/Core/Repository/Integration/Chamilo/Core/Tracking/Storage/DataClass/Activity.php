@@ -3,8 +3,8 @@ namespace Chamilo\Core\Repository\Integration\Chamilo\Core\Tracking\Storage\Data
 
 use Chamilo\Core\Tracking\Storage\DataClass\Tracker;
 use Chamilo\Core\User\Storage\DataClass\User;
-use Chamilo\Libraries\Storage\DataManager\DataManager;
 use Chamilo\Libraries\Format\Structure\Glyph\FontAwesomeGlyph;
+use Chamilo\Libraries\Storage\Repository\DataManager;
 use Chamilo\Libraries\Translation\Translation;
 
 class Activity extends Tracker

@@ -2,7 +2,7 @@
 namespace Chamilo\Core\User\Roles\Storage\Repository\Interfaces;
 
 use Chamilo\Core\User\Roles\Storage\DataClass\RoleRelation;
-use Chamilo\Libraries\Storage\DataManager\Interfaces\DataManagerRepositoryInterface;
+use Chamilo\Libraries\Storage\Architecture\Interfaces\DataManagerRepositoryInterface;
 use Doctrine\Common\Collections\ArrayCollection;
 
 /**

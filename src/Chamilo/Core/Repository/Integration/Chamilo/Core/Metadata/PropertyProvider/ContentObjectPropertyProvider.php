@@ -4,8 +4,8 @@ namespace Chamilo\Core\Repository\Integration\Chamilo\Core\Metadata\PropertyProv
 use Chamilo\Core\Metadata\Provider\PropertyProviderInterface;
 use Chamilo\Core\User\Manager;
 use Chamilo\Core\User\Storage\DataClass\User;
-use Chamilo\Libraries\Storage\DataManager\DataManager;
 use Chamilo\Libraries\Storage\DataClass\DataClass;
+use Chamilo\Libraries\Storage\Repository\DataManager;
 use Chamilo\Libraries\Translation\Translation;
 use Chamilo\Libraries\Utilities\DatetimeUtilities;
 

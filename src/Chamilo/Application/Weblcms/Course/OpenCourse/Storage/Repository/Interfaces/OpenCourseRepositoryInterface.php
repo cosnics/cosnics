@@ -2,9 +2,9 @@
 namespace Chamilo\Application\Weblcms\Course\OpenCourse\Storage\Repository\Interfaces;
 
 use Chamilo\Application\Weblcms\Course\Storage\DataClass\Course;
-use Chamilo\Libraries\Storage\DataManager\Interfaces\DataManagerRepositoryInterface;
-use Doctrine\Common\Collections\ArrayCollection;
+use Chamilo\Libraries\Storage\Architecture\Interfaces\DataManagerRepositoryInterface;
 use Chamilo\Libraries\Storage\Query\Condition\Condition;
+use Doctrine\Common\Collections\ArrayCollection;
 
 /**
  * Repository to manage the data open courses

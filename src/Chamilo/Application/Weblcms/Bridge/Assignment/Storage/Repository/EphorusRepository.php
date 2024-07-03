@@ -6,9 +6,9 @@ use Chamilo\Application\Weblcms\Storage\DataClass\ContentObjectPublication;
 use Chamilo\Libraries\Storage\Query\Condition\AndCondition;
 use Chamilo\Libraries\Storage\Query\Condition\Condition;
 use Chamilo\Libraries\Storage\Query\Condition\EqualityCondition;
-use Chamilo\Libraries\Storage\Query\StorageParameters;
 use Chamilo\Libraries\Storage\Query\Variable\PropertyConditionVariable;
 use Chamilo\Libraries\Storage\Query\Variable\StaticConditionVariable;
+use Chamilo\Libraries\Storage\StorageParameters;
 
 /**
  * @package Chamilo\Application\Weblcms\Integration\Chamilo\Core\Tracking\Storage\Repository
@@ -35,21 +35,21 @@ class EphorusRepository
 
     /**
      * @param \Chamilo\Application\Weblcms\Storage\DataClass\ContentObjectPublication $contentObjectPublication
-     * @param \Chamilo\Libraries\Storage\Query\StorageParameters $dataClassParameters
+     * @param \Chamilo\Libraries\Storage\StorageParameters $storageParameters
      *
      * @return \Chamilo\Core\Repository\Storage\DataClass\ContentObject[]|\Doctrine\Common\Collections\ArrayCollection
      */
     public function findAssignmentEntriesWithRequestsByContentObjectPublication(
         ContentObjectPublication $contentObjectPublication,
-        StorageParameters $dataClassParameters = new StorageParameters()
+        StorageParameters $storageParameters = new StorageParameters()
     )
     {
         $entryConditions = $this->getConditionsByContentObjectPublication(
-            $contentObjectPublication, $dataClassParameters->getCondition()
+            $contentObjectPublication, $storageParameters->getCondition()
         );
-        $dataClassParameters->setCondition($entryConditions);
+        $storageParameters->setCondition($entryConditions);
 
-        return $this->findAssignmentEntriesWithRequests($dataClassParameters);
+        return $this->findAssignmentEntriesWithRequests($storageParameters);
     }
 
     /**

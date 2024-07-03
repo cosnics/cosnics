@@ -152,7 +152,7 @@ class CourseUserLearningPathInformationBlock extends ToolBlock
     }
 
     /**
-     * @return \Chamilo\Libraries\Storage\DataManager\Repository\DataClassRepository
+     * @return \Chamilo\Libraries\Storage\Repository\DataClassRepository
      * @throws \Exception
      */
     protected function getDataClassRepository()

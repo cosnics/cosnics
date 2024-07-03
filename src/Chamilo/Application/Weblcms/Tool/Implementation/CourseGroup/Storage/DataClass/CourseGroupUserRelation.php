@@ -4,7 +4,7 @@ namespace Chamilo\Application\Weblcms\Tool\Implementation\CourseGroup\Storage\Da
 use Chamilo\Application\Weblcms\Tool\Implementation\CourseGroup\Manager;
 use Chamilo\Core\User\Storage\DataClass\User;
 use Chamilo\Libraries\Storage\DataClass\DataClass;
-use Chamilo\Libraries\Storage\DataManager\DataManager;
+use Chamilo\Libraries\Storage\Repository\DataManager;
 
 /**
  * @package application.lib.weblcms.course_group

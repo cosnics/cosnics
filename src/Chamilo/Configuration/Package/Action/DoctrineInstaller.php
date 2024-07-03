@@ -27,7 +27,7 @@ abstract class DoctrineInstaller extends Installer
     }
 
     /**
-     * @throws \Chamilo\Libraries\Storage\Exception\ConnectionException
+     * @throws \Chamilo\Libraries\Storage\Architecture\Exceptions\ConnectionException
      * @throws \Symfony\Component\Cache\Exception\CacheException
      */
     public function installStorageUnits(): bool

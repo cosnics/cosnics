@@ -2,7 +2,7 @@
 namespace Chamilo\Core\Repository\Publication\Component;
 
 use Chamilo\Core\Repository\Publication\Manager;
-use Chamilo\Libraries\Storage\DataManager\DataManager;
+use Chamilo\Libraries\Storage\Repository\DataManager;
 use Chamilo\Libraries\Translation\Translation;
 use Chamilo\Libraries\Utilities\StringUtilities;
 

@@ -5,9 +5,9 @@ use Chamilo\Core\Menu\Architecture\Interfaces\ItemServiceInterface;
 use Chamilo\Core\Menu\Service\Renderer\ApplicationItemRenderer;
 use Chamilo\Core\Menu\Storage\DataClass\Item;
 use Chamilo\Core\Menu\Storage\Repository\ItemRepository;
-use Chamilo\Libraries\Storage\DataClass\PropertyMapper;
 use Chamilo\Libraries\Storage\Query\OrderBy;
 use Chamilo\Libraries\Storage\Service\DisplayOrderHandler;
+use Chamilo\Libraries\Storage\Service\PropertyMapper;
 use Chamilo\Libraries\Utilities\StringUtilities;
 use Doctrine\Common\Collections\ArrayCollection;
 use Symfony\Component\Translation\Translator;
@@ -61,7 +61,7 @@ class ItemService implements ItemServiceInterface
     }
 
     /**
-     * @throws \Chamilo\Libraries\Storage\Exception\DisplayOrderException
+     * @throws \Chamilo\Libraries\Storage\Architecture\Exceptions\DisplayOrderException
      */
     public function createItem(Item $item): bool
     {
@@ -86,7 +86,7 @@ class ItemService implements ItemServiceInterface
     /**
      * @param string[]|string[][] $values
      *
-     * @throws \Chamilo\Libraries\Storage\Exception\DisplayOrderException
+     * @throws \Chamilo\Libraries\Storage\Architecture\Exceptions\DisplayOrderException
      * @throws \Exception
      */
     public function createItemForTypeFromValues(string $itemType, array $values): ?Item
@@ -305,7 +305,7 @@ class ItemService implements ItemServiceInterface
     }
 
     /**
-     * @throws \Chamilo\Libraries\Storage\Exception\DisplayOrderException
+     * @throws \Chamilo\Libraries\Storage\Architecture\Exceptions\DisplayOrderException
      */
     public function moveItemInDirection(Item $item, int $moveDirection): bool
     {
@@ -318,7 +318,7 @@ class ItemService implements ItemServiceInterface
     /**
      * @param string[]|string[][] $values
      *
-     * @throws \Chamilo\Libraries\Storage\Exception\DisplayOrderException
+     * @throws \Chamilo\Libraries\Storage\Architecture\Exceptions\DisplayOrderException
      */
     public function saveItemFromValues(Item $item, array $values): bool
     {
@@ -353,7 +353,7 @@ class ItemService implements ItemServiceInterface
     }
 
     /**
-     * @throws \Chamilo\Libraries\Storage\Exception\DisplayOrderException
+     * @throws \Chamilo\Libraries\Storage\Architecture\Exceptions\DisplayOrderException
      */
     public function updateItem(Item $item): bool
     {

@@ -10,8 +10,8 @@ use Chamilo\Core\Repository\Storage\DataManager;
 use Chamilo\Core\User\Manager;
 use Chamilo\Libraries\File\Compression\ZipArchive\ZipArchiveFilecompression;
 use Chamilo\Libraries\Storage\Query\Condition\InCondition;
-use Chamilo\Libraries\Storage\Query\StorageParameters;
 use Chamilo\Libraries\Storage\Query\Variable\PropertyConditionVariable;
+use Chamilo\Libraries\Storage\StorageParameters;
 
 class ZipContentObjectExportController extends ContentObjectExportController
 {

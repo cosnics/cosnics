@@ -12,9 +12,9 @@ use Chamilo\Libraries\Architecture\Interfaces\ComplexContentObjectSupportInterfa
 use Chamilo\Libraries\Storage\DataClass\Interfaces\DataClassExtensionInterface;
 use Chamilo\Libraries\Storage\DataClass\Traits\DataClassExtensionTrait;
 use Chamilo\Libraries\Storage\Query\Condition\EqualityCondition;
-use Chamilo\Libraries\Storage\Query\StorageParameters;
 use Chamilo\Libraries\Storage\Query\Variable\PropertyConditionVariable;
 use Chamilo\Libraries\Storage\Query\Variable\StaticConditionVariable;
+use Chamilo\Libraries\Storage\StorageParameters;
 
 /**
  * @package Chamilo\Core\Repository\ContentObject\Assessment\Storage\DataClass

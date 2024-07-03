@@ -211,7 +211,7 @@ class Registration extends DataClass
     }
 
     /**
-     * @throws \Chamilo\Libraries\Storage\Exception\ConnectionException
+     * @throws \Chamilo\Libraries\Storage\Architecture\Exceptions\ConnectionException
      * @throws \Symfony\Component\Cache\Exception\CacheException
      */
     protected function on_change($success = true)

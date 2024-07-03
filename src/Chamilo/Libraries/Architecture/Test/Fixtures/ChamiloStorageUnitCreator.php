@@ -2,7 +2,7 @@
 namespace Chamilo\Libraries\Architecture\Test\Fixtures;
 
 use Chamilo\Libraries\File\SystemPathBuilder;
-use Chamilo\Libraries\Storage\DataManager\Repository\StorageUnitRepository;
+use Chamilo\Libraries\Storage\Repository\StorageUnitRepository;
 use DOMDocument;
 use DOMElement;
 use InvalidArgumentException;

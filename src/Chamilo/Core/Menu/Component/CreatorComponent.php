@@ -22,7 +22,7 @@ class CreatorComponent extends Manager implements BreadcrumbLessComponentInterfa
     /**
      * @throws \Chamilo\Libraries\Architecture\Exceptions\NotAllowedException
      * @throws \Chamilo\Libraries\Architecture\Exceptions\ParameterNotDefinedException
-     * @throws \Chamilo\Libraries\Storage\Exception\DisplayOrderException
+     * @throws \Chamilo\Libraries\Storage\Architecture\Exceptions\DisplayOrderException
      * @throws \QuickformException
      */
     public function run()

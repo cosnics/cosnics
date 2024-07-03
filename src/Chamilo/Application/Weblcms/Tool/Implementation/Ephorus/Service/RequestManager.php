@@ -10,7 +10,7 @@ use Chamilo\Core\Repository\Workspace\Repository\ContentObjectRepository;
 use Chamilo\Core\User\Service\UserService;
 use Chamilo\Core\User\Storage\DataClass\User;
 use Chamilo\Libraries\Storage\Query\Condition\Condition;
-use Chamilo\Libraries\Storage\Query\StorageParameters;
+use Chamilo\Libraries\Storage\StorageParameters;
 use Doctrine\Common\Collections\ArrayCollection;
 use Exception;
 use InvalidArgumentException;
@@ -156,13 +156,13 @@ class RequestManager
     }
 
     /**
-     * @param \Chamilo\Libraries\Storage\Query\StorageParameters $dataClassParameters
+     * @param \Chamilo\Libraries\Storage\StorageParameters $storageParameters
      *
      * @return \Doctrine\Common\Collections\ArrayCollection
      */
-    public function findRequestsWithContentObjects(StorageParameters $dataClassParameters)
+    public function findRequestsWithContentObjects(StorageParameters $storageParameters)
     {
-        return $this->requestRepository->findRequestsWithContentObjects($dataClassParameters);
+        return $this->requestRepository->findRequestsWithContentObjects($storageParameters);
     }
 
     /**

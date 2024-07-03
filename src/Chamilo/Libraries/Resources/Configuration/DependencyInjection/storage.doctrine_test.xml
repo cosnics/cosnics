@@ -9,33 +9,33 @@
 
         <!-- Identical to the Doctrine Storage configuration but entirely configured to the test database connection -->
         <!-- Connection -->
-        <service id="Chamilo\Libraries\Storage\DataManager\Doctrine\Test\DataSourceName"
-                 class="Chamilo\Libraries\Storage\DataManager\Doctrine\DataSourceName">
+        <service id="Chamilo\Libraries\Storage\Implementations\Doctrine\Test\DataSourceName"
+                 class="Chamilo\Libraries\Storage\Implementations\Doctrine\DataSourceName">
             <argument>%chamilo.configuration.database.test%</argument>
         </service>
 
-        <service id="Chamilo\Libraries\Storage\DataManager\Doctrine\Test\Factory\ConnectionFactory"
-                 class="Chamilo\Libraries\Storage\DataManager\Doctrine\Factory\ConnectionFactory">
+        <service id="Chamilo\Libraries\Storage\Implementations\Doctrine\Test\Factory\ConnectionFactory"
+                 class="Chamilo\Libraries\Storage\Implementations\Doctrine\Service\ConnectionFactory">
             <argument type="service"
-                      id="Chamilo\Libraries\Storage\DataManager\Doctrine\Test\DataSourceName"/>
+                      id="Chamilo\Libraries\Storage\Implementations\Doctrine\Test\DataSourceName"/>
         </service>
 
         <service id="Doctrine\Test\DBAL\Connection"
                  class="Doctrine\DBAL\Connection">
-            <factory service="Chamilo\Libraries\Storage\DataManager\Doctrine\Test\Factory\ConnectionFactory"
+            <factory service="Chamilo\Libraries\Storage\Implementations\Doctrine\Test\Factory\ConnectionFactory"
                      method="getConnection"/>
         </service>
 
         <!-- Database Layer -->
-        <service id="Chamilo\Libraries\Storage\DataManager\Doctrine\Test\Database\DataClassDatabase"
-                 class="Chamilo\Libraries\Storage\DataManager\Doctrine\Database\DataClassDatabase">
+        <service id="Chamilo\Libraries\Storage\Implementations\Doctrine\Test\Database\DataClassDatabase"
+                 class="Chamilo\Libraries\Storage\Implementations\Doctrine\Database\DataClassDatabase">
             <argument key="$connection"
                       type="service"
                       id="Doctrine\Test\DBAL\Connection"/>
         </service>
 
-        <service id="Chamilo\Libraries\Storage\DataManager\Doctrine\Test\Database\StorageUnitDatabase"
-                 class="Chamilo\Libraries\Storage\DataManager\Doctrine\Database\StorageUnitDatabase">
+        <service id="Chamilo\Libraries\Storage\Implementations\Doctrine\Test\Database\StorageUnitDatabase"
+                 class="Chamilo\Libraries\Storage\Implementations\Doctrine\Database\StorageUnitDatabase">
             <argument key="$connection"
                       type="service"
                       id="Doctrine\Test\DBAL\Connection"/>
@@ -43,24 +43,24 @@
 
         <!-- Repositories -->
 
-        <service id="Chamilo\Libraries\Storage\DataManager\Doctrine\Test\Repository\DataClassRepository"
-                 class="Chamilo\Libraries\Storage\DataManager\Repository\DataClassRepository">
+        <service id="Chamilo\Libraries\Storage\Implementations\Doctrine\Test\Repository\DataClassRepository"
+                 class="Chamilo\Libraries\Storage\Repository\DataClassRepository">
             <argument key="$dataClassDatabase"
                       type="service"
-                      id="Chamilo\Libraries\Storage\DataManager\Doctrine\Test\Database\DataClassDatabase"/>
+                      id="Chamilo\Libraries\Storage\Implementations\Doctrine\Test\Database\DataClassDatabase"/>
             <argument key="$queryCacheEnabled">%chamilo.configuration.debug.enable_query_cache%</argument>
         </service>
 
-        <service id="Chamilo\Libraries\Storage\DataManager\Doctrine\Test\NestedSetDataClassRepository"
-                 class="Chamilo\Libraries\Storage\DataManager\Repository\NestedSetDataClassRepository">
+        <service id="Chamilo\Libraries\Storage\Implementations\Doctrine\Test\NestedSetDataClassRepository"
+                 class="Chamilo\Libraries\Storage\Repository\NestedSetDataClassRepository">
             <argument key="$dataClassRepository"
                       type="service"
-                      id="Chamilo\Libraries\Storage\DataManager\Doctrine\Test\Repository\DataClassRepository"/>
+                      id="Chamilo\Libraries\Storage\Implementations\Doctrine\Test\Repository\DataClassRepository"/>
         </service>
 
-        <service id="Chamilo\Libraries\Storage\DataManager\Doctrine\Test\Repository\StorageUnitRepository">
+        <service id="Chamilo\Libraries\Storage\Implementations\Doctrine\Test\Repository\StorageUnitRepository">
             <argument type="service"
-                      id="Chamilo\Libraries\Storage\DataManager\Doctrine\Test\Database\StorageUnitDatabase"/>
+                      id="Chamilo\Libraries\Storage\Implementations\Doctrine\Test\Database\StorageUnitDatabase"/>
         </service>
 
     </services>

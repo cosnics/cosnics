@@ -5,10 +5,10 @@ use Chamilo\Configuration\Service\Consulter\ConfigurationConsulter;
 use Chamilo\Core\User\Storage\DataClass\UserSetting;
 use Chamilo\Libraries\DependencyInjection\DependencyInjectionContainerBuilder;
 use Chamilo\Libraries\Storage\DataClass\DataClass;
-use Chamilo\Libraries\Storage\DataManager\DataManager;
 use Chamilo\Libraries\Storage\Query\Condition\EqualityCondition;
 use Chamilo\Libraries\Storage\Query\Variable\PropertyConditionVariable;
 use Chamilo\Libraries\Storage\Query\Variable\StaticConditionVariable;
+use Chamilo\Libraries\Storage\Repository\DataManager;
 
 /**
  * @package Chamilo\Configuration\Storage\DataClass
@@ -26,7 +26,7 @@ class Setting extends DataClass
 
     /**
      * @return bool
-     * @throws \Chamilo\Libraries\Storage\Exception\ConnectionException
+     * @throws \Chamilo\Libraries\Storage\Architecture\Exceptions\ConnectionException
      * @throws \Symfony\Component\Cache\Exception\CacheException
      * @deprecated Use ConfigurationService::createSetting
      */
@@ -37,7 +37,7 @@ class Setting extends DataClass
 
     /**
      * @return bool
-     * @throws \Chamilo\Libraries\Storage\Exception\ConnectionException
+     * @throws \Chamilo\Libraries\Storage\Architecture\Exceptions\ConnectionException
      * @throws \Symfony\Component\Cache\Exception\CacheException
      * @deprecated Use ConfigurationService::deleteSetting
      */
@@ -139,7 +139,7 @@ class Setting extends DataClass
     }
 
     /**
-     * @throws \Chamilo\Libraries\Storage\Exception\ConnectionException
+     * @throws \Chamilo\Libraries\Storage\Architecture\Exceptions\ConnectionException
      * @throws \Symfony\Component\Cache\Exception\CacheException
      */
     protected function on_change($success = true)
@@ -210,7 +210,7 @@ class Setting extends DataClass
 
     /**
      * @return bool
-     * @throws \Chamilo\Libraries\Storage\Exception\ConnectionException
+     * @throws \Chamilo\Libraries\Storage\Architecture\Exceptions\ConnectionException
      * @throws \Symfony\Component\Cache\Exception\CacheException
      * @deprecated Use ConfigurationService::updateSetting
      */

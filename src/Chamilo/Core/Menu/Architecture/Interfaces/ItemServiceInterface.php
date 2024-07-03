@@ -14,7 +14,7 @@ interface ItemServiceInterface
     public function countItemsByParentIdentifier(string $parentIdentifier): int;
 
     /**
-     * @throws \Chamilo\Libraries\Storage\Exception\DisplayOrderException
+     * @throws \Chamilo\Libraries\Storage\Architecture\Exceptions\DisplayOrderException
      * @throws \Exception
      */
     public function createItem(Item $item): bool;
@@ -22,7 +22,7 @@ interface ItemServiceInterface
     /**
      * @param string[][] $values
      *
-     * @throws \Chamilo\Libraries\Storage\Exception\DisplayOrderException
+     * @throws \Chamilo\Libraries\Storage\Architecture\Exceptions\DisplayOrderException
      * @throws \Exception
      */
     public function createItemForTypeFromValues(string $itemType, array $values): ?Item;
@@ -86,19 +86,19 @@ interface ItemServiceInterface
     public function getNextItemSortValueByParentIdentifier(string $parentIdentifier): int;
 
     /**
-     * @throws \Chamilo\Libraries\Storage\Exception\DisplayOrderException
+     * @throws \Chamilo\Libraries\Storage\Architecture\Exceptions\DisplayOrderException
      */
     public function moveItemInDirection(Item $item, int $moveDirection): bool;
 
     /**
      * @param string[][] $values
      *
-     * @throws \Chamilo\Libraries\Storage\Exception\DisplayOrderException
+     * @throws \Chamilo\Libraries\Storage\Architecture\Exceptions\DisplayOrderException
      */
     public function saveItemFromValues(Item $item, array $values): bool;
 
     /**
-     * @throws \Chamilo\Libraries\Storage\Exception\DisplayOrderException
+     * @throws \Chamilo\Libraries\Storage\Architecture\Exceptions\DisplayOrderException
      */
     public function updateItem(Item $item): bool;
 }

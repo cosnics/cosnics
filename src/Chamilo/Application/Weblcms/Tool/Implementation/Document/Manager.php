@@ -81,7 +81,7 @@ abstract class Manager extends \Chamilo\Application\Weblcms\Tool\Manager
     }
 
     /**
-     * @throws \Chamilo\Libraries\Storage\Exception\ConnectionException
+     * @throws \Chamilo\Libraries\Storage\Architecture\Exceptions\ConnectionException
      * @throws \Symfony\Component\Cache\Exception\CacheException
      */
     public static function get_allowed_types()

@@ -2,7 +2,7 @@
 namespace Chamilo\Core\Metadata\Entity;
 
 use Chamilo\Libraries\Storage\DataClass\DataClass;
-use Chamilo\Libraries\Storage\DataManager\DataManager;
+use Chamilo\Libraries\Storage\Repository\DataManager;
 
 /**
  *

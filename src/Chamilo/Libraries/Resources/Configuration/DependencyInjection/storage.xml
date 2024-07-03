@@ -10,11 +10,11 @@
         <service id="Chamilo\Libraries\Storage\Cache\ConditionPartCache"/>
         <service id="Chamilo\Libraries\Storage\Cache\DataClassRepositoryCache"/>
         <service id="Chamilo\Libraries\Storage\DataClass\DataClassFactory"/>
-        <service id="Chamilo\Libraries\Storage\DataManager\StorageAliasGenerator"/>
-        <service id="Chamilo\Libraries\Storage\DataClass\PropertyMapper"/>
+        <service id="Chamilo\Libraries\Storage\Service\StorageAliasGenerator"/>
+        <service id="Chamilo\Libraries\Storage\Service\PropertyMapper"/>
         <service id="Chamilo\Libraries\Storage\Service\DisplayOrderHandler"/>
         <service id="Chamilo\Libraries\Storage\Service\SearchQueryConditionGenerator"/>
-        <service id="Chamilo\Libraries\Storage\DataManager\Repository\DisplayOrderRepository"/>
+        <service id="Chamilo\Libraries\Storage\Repository\DisplayOrderRepository"/>
 
     </services>
 </container>

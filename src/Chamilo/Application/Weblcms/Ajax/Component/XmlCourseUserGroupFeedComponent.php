@@ -15,12 +15,12 @@ use Chamilo\Libraries\Storage\Query\Condition\EqualityCondition;
 use Chamilo\Libraries\Storage\Query\Condition\InCondition;
 use Chamilo\Libraries\Storage\Query\Condition\NotCondition;
 use Chamilo\Libraries\Storage\Query\Condition\OrCondition;
-use Chamilo\Libraries\Storage\Query\StorageParameters;
 use Chamilo\Libraries\Storage\Query\OrderBy;
 use Chamilo\Libraries\Storage\Query\OrderProperty;
 use Chamilo\Libraries\Storage\Query\RetrieveProperties;
 use Chamilo\Libraries\Storage\Query\Variable\PropertyConditionVariable;
 use Chamilo\Libraries\Storage\Query\Variable\StaticConditionVariable;
+use Chamilo\Libraries\Storage\StorageParameters;
 use Chamilo\Libraries\Translation\Translation;
 
 class XmlCourseUserGroupFeedComponent extends Manager
@@ -368,7 +368,7 @@ class XmlCourseUserGroupFeedComponent extends Manager
 
             foreach ($group_relations as $group_relation)
             {
-                $group = \Chamilo\Libraries\Storage\DataManager\DataManager::retrieve_by_id(
+                $group = \Chamilo\Libraries\Storage\Repository\DataManager::retrieve_by_id(
                     Group::class, $group_relation->getEntityId()
                 );
 

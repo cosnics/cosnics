@@ -3,11 +3,9 @@ namespace Chamilo\Application\Portfolio\Favourite\Storage\Repository;
 
 use Chamilo\Application\Portfolio\Favourite\Storage\DataClass\UserFavourite;
 use Chamilo\Core\User\Storage\DataClass\User;
-use Chamilo\Libraries\Storage\DataManager\Repository\DataClassRepository;
 use Chamilo\Libraries\Storage\Query\Condition\AndCondition;
 use Chamilo\Libraries\Storage\Query\Condition\Condition;
 use Chamilo\Libraries\Storage\Query\Condition\EqualityCondition;
-use Chamilo\Libraries\Storage\Query\StorageParameters;
 use Chamilo\Libraries\Storage\Query\Join;
 use Chamilo\Libraries\Storage\Query\Joins;
 use Chamilo\Libraries\Storage\Query\OrderBy;
@@ -15,6 +13,8 @@ use Chamilo\Libraries\Storage\Query\OrderProperty;
 use Chamilo\Libraries\Storage\Query\RetrieveProperties;
 use Chamilo\Libraries\Storage\Query\Variable\PropertyConditionVariable;
 use Chamilo\Libraries\Storage\Query\Variable\StaticConditionVariable;
+use Chamilo\Libraries\Storage\Repository\DataClassRepository;
+use Chamilo\Libraries\Storage\StorageParameters;
 
 /**
  *
@@ -26,13 +26,13 @@ class FavouriteRepository
 
     /**
      *
-     * @var \Chamilo\Libraries\Storage\DataManager\Repository\DataClassRepository
+     * @var \Chamilo\Libraries\Storage\Repository\DataClassRepository
      */
     private $dataClassRepository;
 
     /**
      *
-     * @param \Chamilo\Libraries\Storage\DataManager\Repository\DataClassRepository $dataClassRepository
+     * @param \Chamilo\Libraries\Storage\Repository\DataClassRepository $dataClassRepository
      */
     public function __construct(DataClassRepository $dataClassRepository)
     {
@@ -140,7 +140,7 @@ class FavouriteRepository
 
     /**
      *
-     * @return \Chamilo\Libraries\Storage\DataManager\Repository\DataClassRepository
+     * @return \Chamilo\Libraries\Storage\Repository\DataClassRepository
      */
     protected function getDataClassRepository()
     {
@@ -149,7 +149,7 @@ class FavouriteRepository
 
     /**
      *
-     * @param \Chamilo\Libraries\Storage\DataManager\Repository\DataClassRepository $dataClassRepository
+     * @param \Chamilo\Libraries\Storage\Repository\DataClassRepository $dataClassRepository
      */
     protected function setDataClassRepository($dataClassRepository)
     {

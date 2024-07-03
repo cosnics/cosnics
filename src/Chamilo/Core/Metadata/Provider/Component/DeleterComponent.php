@@ -5,8 +5,8 @@ use Chamilo\Core\Metadata\Provider\Manager;
 use Chamilo\Core\Metadata\Storage\DataClass\ProviderLink;
 use Chamilo\Libraries\Architecture\Exceptions\NoObjectSelectedException;
 use Chamilo\Libraries\Architecture\Exceptions\NotAllowedException;
+use Chamilo\Libraries\Storage\Repository\DataManager;
 use Chamilo\Libraries\Translation\Translation;
-use Chamilo\Libraries\Storage\DataManager\DataManager;
 use Chamilo\Libraries\Utilities\StringUtilities;
 use Exception;
 

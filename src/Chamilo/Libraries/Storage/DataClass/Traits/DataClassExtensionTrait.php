@@ -2,7 +2,7 @@
 namespace Chamilo\Libraries\Storage\DataClass\Traits;
 
 use Chamilo\Libraries\Storage\DataClass\Interfaces\DataClassExtensionInterface;
-use Chamilo\Libraries\Storage\DataManager\DataManager;
+use Chamilo\Libraries\Storage\Repository\DataManager;
 
 /**
  * @package Chamilo\Libraries\Storage\DataClass

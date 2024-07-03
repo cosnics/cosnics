@@ -156,7 +156,7 @@ class LearningPathProgressUsersBlock extends ToolBlock
 
     /**
      *
-     * @return \Chamilo\Libraries\Storage\DataManager\Repository\DataClassRepository
+     * @return \Chamilo\Libraries\Storage\Repository\DataClassRepository
      */
     protected function getDataClassRepository()
     {

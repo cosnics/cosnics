@@ -3,8 +3,8 @@ namespace Chamilo\Core\Repository\Feedback\Storage\DataClass;
 
 use Chamilo\Core\Repository\Feedback\Manager;
 use Chamilo\Core\User\Storage\DataClass\User;
-use Chamilo\Libraries\Storage\DataManager\DataManager;
 use Chamilo\Libraries\Storage\DataClass\DataClass;
+use Chamilo\Libraries\Storage\Repository\DataManager;
 
 abstract class Feedback extends DataClass
 {

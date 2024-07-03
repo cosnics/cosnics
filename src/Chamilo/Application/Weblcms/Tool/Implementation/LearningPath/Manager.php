@@ -171,7 +171,7 @@ abstract class Manager extends \Chamilo\Application\Weblcms\Tool\Manager
     }
 
     /**
-     * @return \Chamilo\Libraries\Storage\DataManager\Repository\DataClassRepository
+     * @return \Chamilo\Libraries\Storage\Repository\DataClassRepository
      */
     protected function getDataClassRepository()
     {

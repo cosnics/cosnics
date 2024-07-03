@@ -1,9 +1,9 @@
 <?php
 namespace Chamilo\Libraries\Storage\Service;
 
+use Chamilo\Libraries\Storage\Architecture\Exceptions\DisplayOrderException;
 use Chamilo\Libraries\Storage\DataClass\Interfaces\DataClassDisplayOrderSupport;
-use Chamilo\Libraries\Storage\DataManager\Repository\DisplayOrderRepository;
-use Chamilo\Libraries\Storage\Exception\DisplayOrderException;
+use Chamilo\Libraries\Storage\Repository\DisplayOrderRepository;
 use Chamilo\Libraries\Utilities\StringUtilities;
 use Symfony\Component\Translation\Translator;
 
@@ -136,7 +136,7 @@ class DisplayOrderHandler
     }
 
     /**
-     * @throws \Chamilo\Libraries\Storage\Exception\DisplayOrderException
+     * @throws \Chamilo\Libraries\Storage\Architecture\Exceptions\DisplayOrderException
      */
     public function handleDisplayOrderBeforeCreate(DataClassDisplayOrderSupport $dataClass): bool
     {
@@ -146,7 +146,7 @@ class DisplayOrderHandler
     }
 
     /**
-     * @throws \Chamilo\Libraries\Storage\Exception\DisplayOrderException
+     * @throws \Chamilo\Libraries\Storage\Architecture\Exceptions\DisplayOrderException
      */
     public function handleDisplayOrderBeforeUpdate(DataClassDisplayOrderSupport $dataClass): bool
     {
@@ -219,7 +219,7 @@ class DisplayOrderHandler
     }
 
     /**
-     * @throws \Chamilo\Libraries\Storage\Exception\DisplayOrderException
+     * @throws \Chamilo\Libraries\Storage\Architecture\Exceptions\DisplayOrderException
      */
     protected function validateDisplayOrder(DataClassDisplayOrderSupport $dataClass)
     {

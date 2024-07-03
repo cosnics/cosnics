@@ -31,6 +31,7 @@ use Chamilo\Libraries\Storage\Query\Condition\AndCondition;
 use Chamilo\Libraries\Storage\Query\Condition\EqualityCondition;
 use Chamilo\Libraries\Storage\Query\Variable\PropertyConditionVariable;
 use Chamilo\Libraries\Storage\Query\Variable\StaticConditionVariable;
+use Chamilo\Libraries\Storage\StorageParameters;
 use Chamilo\Libraries\Translation\Translation;
 use Chamilo\Libraries\Utilities\DatetimeUtilities;
 use Chamilo\Libraries\Utilities\StringUtilities;
@@ -530,7 +531,7 @@ class ContentObjectPublicationForm extends BasePublicationForm
         $condition = new AndCondition($conditions);
 
         $cats = DataManager::retrieves(
-            ContentObjectPublicationCategory::class, new DataClassParameters(condition: $condition)
+            ContentObjectPublicationCategory::class, new StorageParameters(condition: $condition)
         );
 
         foreach ($cats as $cat)

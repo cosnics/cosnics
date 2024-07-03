@@ -4,7 +4,7 @@ namespace Chamilo\Application\Calendar\Ajax\Component;
 use Chamilo\Application\Calendar\Manager;
 use Chamilo\Application\Calendar\Storage\DataClass\Visibility;
 use Chamilo\Libraries\Storage\Query\Condition\Condition;
-use Chamilo\Libraries\Storage\Query\StorageParameters;
+use Chamilo\Libraries\Storage\StorageParameters;
 
 class CalendarEventVisibilityComponent
     extends \Chamilo\Libraries\Calendar\Ajax\Component\CalendarEventVisibilityComponent

@@ -4,7 +4,7 @@ namespace Chamilo\Core\Metadata\Vocabulary\Ajax\Component;
 use Chamilo\Core\Metadata\Service\EntityService;
 use Chamilo\Core\Metadata\Storage\DataClass\Element;
 use Chamilo\Core\Metadata\Vocabulary\Ajax\Manager;
-use Chamilo\Libraries\Storage\DataManager\DataManager;
+use Chamilo\Libraries\Storage\Repository\DataManager;
 use stdClass;
 
 /**

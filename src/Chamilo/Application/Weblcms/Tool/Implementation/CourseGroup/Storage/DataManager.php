@@ -10,12 +10,12 @@ use Chamilo\Libraries\Storage\Query\Condition\Condition;
 use Chamilo\Libraries\Storage\Query\Condition\EqualityCondition;
 use Chamilo\Libraries\Storage\Query\Condition\InCondition;
 use Chamilo\Libraries\Storage\Query\Condition\OrCondition;
-use Chamilo\Libraries\Storage\Query\StorageParameters;
 use Chamilo\Libraries\Storage\Query\Join;
 use Chamilo\Libraries\Storage\Query\Joins;
 use Chamilo\Libraries\Storage\Query\RetrieveProperties;
 use Chamilo\Libraries\Storage\Query\Variable\PropertyConditionVariable;
 use Chamilo\Libraries\Storage\Query\Variable\StaticConditionVariable;
+use Chamilo\Libraries\Storage\StorageParameters;
 
 /**
  * This class represents the data manager for this package
@@ -23,7 +23,7 @@ use Chamilo\Libraries\Storage\Query\Variable\StaticConditionVariable;
  * @author  Sven Vanpoucke - Hogeschool Gent
  * @package application.weblcms.tool.assignment
  */
-class DataManager extends \Chamilo\Libraries\Storage\DataManager\DataManager
+class DataManager extends \Chamilo\Libraries\Storage\Repository\DataManager
 {
     public const PREFIX = 'weblcms_';
 
@@ -59,7 +59,7 @@ class DataManager extends \Chamilo\Libraries\Storage\DataManager\DataManager
                 $condition = new AndCondition([$condition, $user_condition]);
             }
 
-            return \Chamilo\Libraries\Storage\DataManager\DataManager::count(
+            return \Chamilo\Libraries\Storage\Repository\DataManager::count(
                 User::class, new StorageParameters(condition: $condition)
             );
         }
@@ -334,7 +334,7 @@ class DataManager extends \Chamilo\Libraries\Storage\DataManager\DataManager
             );
         }
 
-        return \Chamilo\Libraries\Storage\DataManager\DataManager::retrieves(
+        return \Chamilo\Libraries\Storage\Repository\DataManager::retrieves(
             User::class, new StorageParameters(
                 condition: $condition, count: $count, offset: $offset, orderBy: $order_property
             )

@@ -4,7 +4,7 @@ namespace Chamilo\Core\User\Storage\Repository;
 use Chamilo\Core\User\Storage\DataClass\UserActivity;
 use Chamilo\Core\User\Storage\DataClass\UserAuthenticationActivity;
 use Chamilo\Core\User\Storage\DataClass\UserVisit;
-use Chamilo\Libraries\Storage\DataManager\Repository\DataClassRepository;
+use Chamilo\Libraries\Storage\Repository\DataClassRepository;
 
 /**
  * @package Chamilo\Core\User\Storage\Repository

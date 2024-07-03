@@ -10,8 +10,8 @@ use Chamilo\Libraries\File\SystemPathBuilder;
 use Chamilo\Libraries\Storage\DataManager\Doctrine\Database\StorageUnitDatabase;
 use Chamilo\Libraries\Storage\DataManager\Doctrine\DataSourceName;
 use Chamilo\Libraries\Storage\DataManager\Doctrine\Factory\ConnectionFactory;
-use Chamilo\Libraries\Storage\DataManager\Repository\StorageUnitRepository;
-use Chamilo\Libraries\Storage\DataManager\StorageAliasGenerator;
+use Chamilo\Libraries\Storage\Repository\StorageUnitRepository;
+use Chamilo\Libraries\Storage\Service\StorageAliasGenerator;
 use Chamilo\Libraries\Utilities\StringUtilities;
 use Symfony\Component\Filesystem\Filesystem;
 use Symfony\Component\Translation\Translator;
@@ -52,7 +52,7 @@ class PlatformInstallerFactory
     }
 
     /**
-     * @throws \Chamilo\Libraries\Storage\Exception\ConnectionException
+     * @throws \Chamilo\Libraries\Storage\Architecture\Exceptions\ConnectionException
      */
     public function getInstaller(InstallerObserverInterface $installerObserver, array $configurationValues): PlatformInstaller
     {
@@ -68,7 +68,7 @@ class PlatformInstallerFactory
     /**
      * @param string[][] $values
      *
-     * @throws \Chamilo\Libraries\Storage\Exception\ConnectionException
+     * @throws \Chamilo\Libraries\Storage\Architecture\Exceptions\ConnectionException
      */
     public function getInstallerFromArray(InstallerObserverInterface $installerObserver, array $values): PlatformInstaller
     {
@@ -86,7 +86,7 @@ class PlatformInstallerFactory
     }
 
     /**
-     * @throws \Chamilo\Libraries\Storage\Exception\ConnectionException
+     * @throws \Chamilo\Libraries\Storage\Architecture\Exceptions\ConnectionException
      * @throws \Exception
      */
     public function getStorageUnitRepository(array $configurationValues): StorageUnitRepository

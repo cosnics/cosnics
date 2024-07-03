@@ -2,7 +2,7 @@
 namespace Chamilo\Libraries\Test\Unit\Storage\Service;
 
 use Chamilo\Libraries\Architecture\Test\TestCases\ChamiloTestCase;
-use Chamilo\Libraries\Storage\DataManager\Repository\DisplayOrderRepository;
+use Chamilo\Libraries\Storage\Repository\DisplayOrderRepository;
 use Chamilo\Libraries\Storage\Service\DisplayOrderHandler;
 use Chamilo\Libraries\Test\Stub\DisplayOrderDataClassStub;
 use Symfony\Component\Translation\Translator;
@@ -20,7 +20,7 @@ class DisplayOrderHandlerTest extends ChamiloTestCase
     protected $displayOrderHandler;
 
     /**
-     * @var \Chamilo\Libraries\Storage\DataManager\Repository\DisplayOrderRepository|\PHPUnit\Framework\MockObject\MockObject
+     * @var \Chamilo\Libraries\Storage\Repository\DisplayOrderRepository|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $displayOrderRepositoryMock;
 
@@ -267,8 +267,8 @@ class DisplayOrderHandlerTest extends ChamiloTestCase
     }
 
     /**
-     * @expectedException \Chamilo\Libraries\Storage\Exception\DisplayOrderException
-     * @throws \Chamilo\Libraries\Storage\Exception\DisplayOrderException
+     * @expectedException \Chamilo\Libraries\Storage\Architecture\Exceptions\DisplayOrderException
+     * @throws \Chamilo\Libraries\Storage\Architecture\Exceptions\DisplayOrderException
      */
     public function testWithInvalidDisplayOrder()
     {
