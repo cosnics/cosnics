@@ -349,7 +349,9 @@ class DataClassRepository
         if ($this->isQueryCacheEnabled())
         {
             return $this->getDataClassRepositoryCache()->addForCount(
-                $dataClassName, $parameters, $this->__count($dataClassName, $parameters)
+                $dataClassName, $parameters, function () use ($dataClassName, $parameters) {
+                return $this->__count($dataClassName, $parameters);
+            }
             );
         }
         else
@@ -369,7 +371,9 @@ class DataClassRepository
         if ($this->isQueryCacheEnabled())
         {
             return $this->getDataClassRepositoryCache()->addForCountGrouped(
-                $dataClassName, $parameters, $this->__countGrouped($dataClassName, $parameters)
+                $dataClassName, $parameters, function () use ($dataClassName, $parameters) {
+                return $this->__countGrouped($dataClassName, $parameters);
+            }
             );
         }
         else
@@ -411,7 +415,9 @@ class DataClassRepository
             {
                 $this->getDataClassRepositoryCache()->addForRetrieve(
                     $dataClassName, $this->buildRetrieveByIdentifierParameters($dataClassName, $dataClass->getId()),
-                    $dataClass
+                    function () use ($dataClass) {
+                        return $dataClass;
+                    }
                 );
 
                 return true;
@@ -514,7 +520,9 @@ class DataClassRepository
         if ($this->isQueryCacheEnabled())
         {
             return $this->getDataClassRepositoryCache()->addForDistinct(
-                $dataClassName, $parameters, $this->__distinct($dataClassName, $parameters)
+                $dataClassName, $parameters, function () use ($dataClassName, $parameters) {
+                return $this->__distinct($dataClassName, $parameters);
+            }
             );
         }
         else
@@ -618,7 +626,9 @@ class DataClassRepository
         if ($this->isQueryCacheEnabled())
         {
             return $this->getDataClassRepositoryCache()->addForRecord(
-                $dataClassName, $parameters, $this->__record($dataClassName, $parameters)
+                $dataClassName, $parameters, function () use ($dataClassName, $parameters) {
+                return $this->__record($dataClassName, $parameters);
+            }
             );
         }
         else
@@ -641,7 +651,9 @@ class DataClassRepository
         if ($this->isQueryCacheEnabled())
         {
             $recordIterator = $this->getDataClassRepositoryCache()->addForRecords(
-                $dataClassName, $parameters, $this->__records($dataClassName, $parameters)
+                $dataClassName, $parameters, function () use ($dataClassName, $parameters) {
+                return $this->__records($dataClassName, $parameters);
+            }
             );
             $recordIterator->first();
 
@@ -669,7 +681,9 @@ class DataClassRepository
         if ($this->isQueryCacheEnabled())
         {
             return $this->getDataClassRepositoryCache()->addForRetrieve(
-                $dataClassName, $parameters, $this->__retrieve($dataClassName, $parameters)
+                $dataClassName, $parameters, function () use ($dataClassName, $parameters) {
+                return $this->__retrieve($dataClassName, $parameters);
+            }
             );
         }
         else
@@ -742,7 +756,9 @@ class DataClassRepository
         if ($this->isQueryCacheEnabled())
         {
             $arrayCollection = $this->getDataClassRepositoryCache()->addForRetrieves(
-                $dataClassName, $parameters, $this->__retrieves($dataClassName, $parameters)
+                $dataClassName, $parameters, function () use ($dataClassName, $parameters) {
+                return $this->__retrieves($dataClassName, $parameters);
+            }
             );
             $arrayCollection->first();
 

@@ -22,6 +22,16 @@ class ConditionPartCache
         $this->cache = [true => [], false => []];
     }
 
+    public function add(ConditionPart $conditionPart, bool $enableAliasing, callable $value): ?string
+    {
+        if (!$this->exists($conditionPart, $enableAliasing))
+        {
+            $this->set($conditionPart, $enableAliasing, $value());
+        }
+
+        return $this->get($conditionPart, $enableAliasing);
+    }
+
     public function exists(ConditionPart $conditionPart, bool $enableAliasing): bool
     {
         if (isset($this->cache[$enableAliasing][$conditionPart->hash()]))
@@ -34,7 +44,7 @@ class ConditionPartCache
         }
     }
 
-    public function get(ConditionPart $conditionPart, bool $enableAliasing): string
+    public function get(ConditionPart $conditionPart, bool $enableAliasing): ?string
     {
         if ($this->exists($conditionPart, $enableAliasing))
         {
@@ -42,7 +52,7 @@ class ConditionPartCache
         }
         else
         {
-            return false;
+            return null;
         }
     }
 

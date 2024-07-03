@@ -34,66 +34,64 @@ class DataClassRepositoryCache
         $this->cache = [];
     }
 
-    private function add(string $className, int $type, ?StorageParameters $parameters, mixed $value): mixed
+    private function add(string $className, int $type, ?StorageParameters $parameters, callable $value): mixed
     {
         if (!$this->existsForType($type, $className, $parameters))
         {
-            $this->setForType($type, $className, $parameters->hash(), $value);
+            $this->setForType($type, $className, $parameters->hash(), $value());
         }
 
         return $this->getForType($type, $className, $parameters);
     }
 
     public function addForCount(
-        string $className, StorageParameters $parameters, int $count
+        string $className, StorageParameters $parameters, callable $value
     ): int
     {
-        return $this->add($className, self::TYPE_COUNT, $parameters, $count);
+        return $this->add($className, self::TYPE_COUNT, $parameters, $value);
     }
 
     /**
-     * @param int[] $counts
-     *
      * @return int[]
      */
     public function addForCountGrouped(
-        string $className, StorageParameters $parameters, array $counts
+        string $className, StorageParameters $parameters, callable $value
     ): array
     {
-        return $this->add($className, self::TYPE_COUNT_GROUPED, $parameters, $counts);
+        return $this->add($className, self::TYPE_COUNT_GROUPED, $parameters, $value);
     }
 
     public function addForDistinct(
-        string $className, StorageParameters $parameters, array $propertyValues
+        string $className, StorageParameters $parameters, callable $value
     ): array
     {
-        return $this->add($className, self::TYPE_DISTINCT, $parameters, $propertyValues);
+        return $this->add($className, self::TYPE_DISTINCT, $parameters, $value);
     }
 
-    public function addForRecord(string $className, StorageParameters $parameters, array $record): array
+    public function addForRecord(string $className, StorageParameters $parameters, callable $value): array
     {
-        return $this->add($className, self::TYPE_RECORD, $parameters, $record);
+        return $this->add($className, self::TYPE_RECORD, $parameters, $value);
     }
 
     public function addForRecords(
-        string $cacheDataClassName, StorageParameters $parameters, ArrayCollection $arrayCollection
+        string $cacheDataClassName, StorageParameters $parameters, callable $value
     ): ArrayCollection
     {
-        return $this->add($cacheDataClassName, self::TYPE_RECORDS, $parameters, $arrayCollection);
+        return $this->add($cacheDataClassName, self::TYPE_RECORDS, $parameters, $value);
     }
 
     public function addForRetrieve(
-        string $cacheDataClassName, StorageParameters $parameters, ?DataClass $object = null
+        string $cacheDataClassName, StorageParameters $parameters, callable $value
     ): ?DataClass
     {
-        return $this->add($cacheDataClassName, self::TYPE_RETRIEVE, $parameters, $object);
+        return $this->add($cacheDataClassName, self::TYPE_RETRIEVE, $parameters, $value);
     }
 
     public function addForRetrieves(
-        string $cacheDataClassName, StorageParameters $parameters, ArrayCollection $arrayCollection
+        string $cacheDataClassName, StorageParameters $parameters, callable $value
     ): ArrayCollection
     {
-        return $this->add($cacheDataClassName, self::TYPE_RETRIEVES, $parameters, $arrayCollection);
+        return $this->add($cacheDataClassName, self::TYPE_RETRIEVES, $parameters, $value);
     }
 
     public function existsForType(int $type, string $class, StorageParameters $parameters): bool

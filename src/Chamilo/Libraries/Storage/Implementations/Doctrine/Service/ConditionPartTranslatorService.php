@@ -70,15 +70,11 @@ class ConditionPartTranslatorService implements ConditionPartTranslatorServiceIn
     {
         if ($this->isQueryCacheEnabled())
         {
-            if (!$this->getConditionPartCache()->exists($conditionPart, $enableAliasing))
-            {
-                $this->getConditionPartCache()->set(
-                    $conditionPart, $enableAliasing,
-                    $this->translateConditionPart($dataClassDatabase, $conditionPart, $enableAliasing)
-                );
+            return $this->getConditionPartCache()->add(
+                $conditionPart, $enableAliasing, function () use ($dataClassDatabase, $conditionPart, $enableAliasing) {
+                return $this->translateConditionPart($dataClassDatabase, $conditionPart, $enableAliasing);
             }
-
-            return $this->getConditionPartCache()->get($conditionPart, $enableAliasing);
+            );
         }
         else
         {
