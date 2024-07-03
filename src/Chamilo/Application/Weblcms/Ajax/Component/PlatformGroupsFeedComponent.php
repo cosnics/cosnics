@@ -15,7 +15,7 @@ use Chamilo\Libraries\Storage\Query\Condition\AndCondition;
 use Chamilo\Libraries\Storage\Query\Condition\ContainsCondition;
 use Chamilo\Libraries\Storage\Query\Condition\EqualityCondition;
 use Chamilo\Libraries\Storage\Query\Condition\InCondition;
-use Chamilo\Libraries\Storage\Query\DataClassParameters;
+use Chamilo\Libraries\Storage\Query\StorageParameters;
 use Chamilo\Libraries\Storage\Query\OrderBy;
 use Chamilo\Libraries\Storage\Query\OrderProperty;
 use Chamilo\Libraries\Storage\Query\RetrieveProperties;
@@ -147,7 +147,7 @@ class PlatformGroupsFeedComponent extends GroupsFeedComponent
             );
 
             $subscribed_group_ids = DataManager::distinct(
-                CourseEntityRelation::class, new DataClassParameters(
+                CourseEntityRelation::class, new StorageParameters(
                     condition: new AndCondition($groupConditions), retrieveProperties: new RetrieveProperties(
                     [
                         new PropertyConditionVariable(

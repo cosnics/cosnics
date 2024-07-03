@@ -6,7 +6,7 @@ use Chamilo\Libraries\Storage\DataManager\DataManager;
 use Chamilo\Libraries\Storage\Query\Condition\AndCondition;
 use Chamilo\Libraries\Storage\Query\Condition\EqualityCondition;
 use Chamilo\Libraries\Storage\Query\Condition\OrCondition;
-use Chamilo\Libraries\Storage\Query\DataClassParameters;
+use Chamilo\Libraries\Storage\Query\StorageParameters;
 use Chamilo\Libraries\Storage\Query\Variable\PropertyConditionVariable;
 use Chamilo\Libraries\Storage\Query\Variable\StaticConditionVariable;
 
@@ -72,7 +72,7 @@ class EntityConditionService
         else
         {
             $dataClassInstances = DataManager::retrieves(
-                $entity->getDataClassName(), new DataClassParameters()
+                $entity->getDataClassName(), new StorageParameters()
             );
 
             foreach ($dataClassInstances as $dataClassInstance)

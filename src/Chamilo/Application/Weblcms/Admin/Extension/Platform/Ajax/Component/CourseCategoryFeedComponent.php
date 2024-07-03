@@ -15,7 +15,7 @@ use Chamilo\Libraries\Storage\Query\Condition\AndCondition;
 use Chamilo\Libraries\Storage\Query\Condition\ContainsCondition;
 use Chamilo\Libraries\Storage\Query\Condition\EqualityCondition;
 use Chamilo\Libraries\Storage\Query\Condition\OrCondition;
-use Chamilo\Libraries\Storage\Query\DataClassParameters;
+use Chamilo\Libraries\Storage\Query\StorageParameters;
 use Chamilo\Libraries\Storage\Query\OrderBy;
 use Chamilo\Libraries\Storage\Query\OrderProperty;
 use Chamilo\Libraries\Storage\Query\Variable\PropertyConditionVariable;
@@ -237,7 +237,7 @@ class CourseCategoryFeedComponent extends Manager
         }
 
         return DataManager::retrieves(
-            CourseCategory::class, new DataClassParameters(
+            CourseCategory::class, new StorageParameters(
                 condition: $condition, orderBy: new OrderBy([
                 new OrderProperty(
                     new PropertyConditionVariable(CourseCategory::class, CourseCategory::PROPERTY_NAME)
@@ -292,11 +292,11 @@ class CourseCategoryFeedComponent extends Manager
         }
 
         $this->course_count = \Chamilo\Application\Weblcms\Course\Storage\DataManager::count(
-            Course::class, new DataClassParameters(condition: $condition)
+            Course::class, new StorageParameters(condition: $condition)
         );
 
         return \Chamilo\Application\Weblcms\Course\Storage\DataManager::retrieves(
-            Course::class, new DataClassParameters(
+            Course::class, new StorageParameters(
                 condition: $condition, count: 100, offset: $this->get_offset(), orderBy: new OrderBy(
                 [new OrderProperty(new PropertyConditionVariable(Course::class, Course::PROPERTY_TITLE))]
             )

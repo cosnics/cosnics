@@ -5,7 +5,7 @@ use Chamilo\Core\Repository\Storage\DataClass\TemplateRegistration;
 use Chamilo\Core\Repository\Storage\DataManager;
 use Chamilo\Libraries\Storage\Query\Condition\AndCondition;
 use Chamilo\Libraries\Storage\Query\Condition\EqualityCondition;
-use Chamilo\Libraries\Storage\Query\DataClassParameters;
+use Chamilo\Libraries\Storage\Query\StorageParameters;
 use Chamilo\Libraries\Storage\Query\Variable\PropertyConditionVariable;
 use Chamilo\Libraries\Storage\Query\Variable\StaticConditionVariable;
 
@@ -40,6 +40,6 @@ class ContentObjectTemplateRepository
 
         $condition = new AndCondition($conditions);
 
-        return DataManager::retrieve(TemplateRegistration::class, new DataClassParameters(condition: $condition));
+        return DataManager::retrieve(TemplateRegistration::class, new StorageParameters(condition: $condition));
     }
 }

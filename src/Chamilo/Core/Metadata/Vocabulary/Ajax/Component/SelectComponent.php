@@ -17,7 +17,7 @@ use Chamilo\Libraries\Storage\Query\Condition\AndCondition;
 use Chamilo\Libraries\Storage\Query\Condition\ComparisonCondition;
 use Chamilo\Libraries\Storage\Query\Condition\InCondition;
 use Chamilo\Libraries\Storage\Query\Condition\OrCondition;
-use Chamilo\Libraries\Storage\Query\DataClassParameters;
+use Chamilo\Libraries\Storage\Query\StorageParameters;
 use Chamilo\Libraries\Storage\Query\Variable\PropertyConditionVariable;
 use Chamilo\Libraries\Storage\Query\Variable\StaticConditionVariable;
 use Doctrine\Common\Collections\ArrayCollection;
@@ -258,7 +258,7 @@ class SelectComponent extends Manager
 
         $condition = new AndCondition($conditions);
 
-        return DataManager::retrieves(Vocabulary::class, new DataClassParameters(condition: $condition));
+        return DataManager::retrieves(Vocabulary::class, new StorageParameters(condition: $condition));
     }
 
     /**
@@ -270,7 +270,7 @@ class SelectComponent extends Manager
     protected function renderTable(): string
     {
         $totalNumberOfItems = \Chamilo\Core\Metadata\Vocabulary\Storage\DataManager::count(
-            Vocabulary::class, new DataClassParameters(condition: $this->getSelectCondition())
+            Vocabulary::class, new StorageParameters(condition: $this->getSelectCondition())
         );
         $selectTableRenderer = $this->getSelectTableRenderer();
 
@@ -280,7 +280,7 @@ class SelectComponent extends Manager
         );
 
         $vocabularies = DataManager::retrieves(
-            Vocabulary::class, new DataClassParameters(
+            Vocabulary::class, new StorageParameters(
                 condition: $this->getSelectCondition(), orderBy: $selectTableRenderer->determineOrderBy(
                 $tableParameterValues
             ), count: $tableParameterValues->getNumberOfItemsPerPage(), offset: $tableParameterValues->getOffset()

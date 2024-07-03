@@ -2,7 +2,7 @@
 namespace Chamilo\Libraries\Storage\DataManager\Interfaces;
 
 use Chamilo\Libraries\Storage\Query\Condition\Condition;
-use Chamilo\Libraries\Storage\Query\DataClassParameters;
+use Chamilo\Libraries\Storage\Query\StorageParameters;
 use Chamilo\Libraries\Storage\Query\UpdateProperties;
 
 /**
@@ -17,13 +17,13 @@ interface DataClassDatabaseInterface
     /**
      * @throws \Chamilo\Libraries\Storage\Exception\StorageMethodException
      */
-    public function count(string $dataClassStorageUnitName, DataClassParameters $parameters): int;
+    public function count(string $dataClassStorageUnitName, StorageParameters $parameters): int;
 
     /**
      * @return int[]
      * @throws \Chamilo\Libraries\Storage\Exception\StorageMethodException
      */
-    public function countGrouped(string $dataClassStorageUnitName, DataClassParameters $parameters): array;
+    public function countGrouped(string $dataClassStorageUnitName, StorageParameters $parameters): array;
 
     /**
      * @throws \Chamilo\Libraries\Storage\Exception\StorageMethodException
@@ -39,7 +39,7 @@ interface DataClassDatabaseInterface
      * @return string[]
      * @throws \Chamilo\Libraries\Storage\Exception\StorageMethodException
      */
-    public function distinct(string $dataClassStorageUnitName, DataClassParameters $parameters): array;
+    public function distinct(string $dataClassStorageUnitName, StorageParameters $parameters): array;
 
     public function escapeColumnName(string $columnName, ?string $storageUnitAlias = null): string;
 
@@ -58,13 +58,13 @@ interface DataClassDatabaseInterface
      * @throws \Chamilo\Libraries\Storage\Exception\StorageNoResultException
      * @throws \Chamilo\Libraries\Storage\Exception\StorageMethodException
      */
-    public function retrieve(string $dataClassStorageUnitName, DataClassParameters $parameters): ?array;
+    public function retrieve(string $dataClassStorageUnitName, StorageParameters $parameters): ?array;
 
     /**
      * @return string[][]
      * @throws \Chamilo\Libraries\Storage\Exception\StorageMethodException
      */
-    public function retrieves(string $dataClassStorageUnitName, DataClassParameters $parameters): array;
+    public function retrieves(string $dataClassStorageUnitName, StorageParameters $parameters): array;
 
     /**
      * @param callable $function

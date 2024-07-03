@@ -12,7 +12,7 @@ use Chamilo\Libraries\Storage\Query\Condition\Condition;
 use Chamilo\Libraries\Storage\Query\Condition\EqualityCondition;
 use Chamilo\Libraries\Storage\Query\Condition\InCondition;
 use Chamilo\Libraries\Storage\Query\Condition\OrCondition;
-use Chamilo\Libraries\Storage\Query\DataClassParameters;
+use Chamilo\Libraries\Storage\Query\StorageParameters;
 use Chamilo\Libraries\Storage\Query\Join;
 use Chamilo\Libraries\Storage\Query\Joins;
 use Chamilo\Libraries\Storage\Query\OrderBy;
@@ -50,7 +50,7 @@ class GroupRepository
     public function countGroups(?Condition $condition = null): int
     {
         return $this->getNestedSetDataClassRepository()->count(
-            Group::class, new DataClassParameters(condition: $condition)
+            Group::class, new StorageParameters(condition: $condition)
         );
     }
 
@@ -110,7 +110,7 @@ class GroupRepository
 
         $joins = new Joins([new Join(GroupRelUser::class, new AndCondition($joinConditions))]);
 
-        $parameters = new DataClassParameters(joins: $joins, retrieveProperties: $properties);
+        $parameters = new StorageParameters(joins: $joins, retrieveProperties: $properties);
 
         return $this->getNestedSetDataClassRepository()->records(Group::class, $parameters);
     }
@@ -141,7 +141,7 @@ class GroupRepository
 
         $joins = new Joins([$join]);
 
-        $parameters = new DataClassParameters(joins: $joins);
+        $parameters = new StorageParameters(joins: $joins);
 
         return $this->getNestedSetDataClassRepository()->retrieves(Group::class, $parameters);
     }
@@ -157,7 +157,7 @@ class GroupRepository
         );
 
         return $this->getNestedSetDataClassRepository()->retrieve(
-            Group::class, new DataClassParameters(condition: $condition)
+            Group::class, new StorageParameters(condition: $condition)
         );
     }
 
@@ -177,7 +177,7 @@ class GroupRepository
         );
 
         return $this->getNestedSetDataClassRepository()->retrieve(
-            Group::class, new DataClassParameters(condition: new AndCondition($conditions))
+            Group::class, new StorageParameters(condition: new AndCondition($conditions))
         );
     }
 
@@ -200,7 +200,7 @@ class GroupRepository
         ArrayCollection $directlySubscribedGroupNestingValues
     ): array
     {
-        $parameters = new DataClassParameters(
+        $parameters = new StorageParameters(
             condition: $this->getDirectlySubscribedGroupNestingValuesConditions($directlySubscribedGroupNestingValues),
             retrieveProperties: new RetrieveProperties(
                 [new PropertyConditionVariable(Group::class, DataClass::PROPERTY_ID)]
@@ -223,7 +223,7 @@ class GroupRepository
         ?Condition $condition = null, ?int $count = null, ?int $offset = null, OrderBy $orderBy = new OrderBy()
     ): ArrayCollection
     {
-        $parameters = new DataClassParameters(condition: $condition, orderBy: $orderBy, count: $count, offset: $offset);
+        $parameters = new StorageParameters(condition: $condition, orderBy: $orderBy, count: $count, offset: $offset);
 
         return $this->getNestedSetDataClassRepository()->retrieves(Group::class, $parameters);
     }
@@ -242,7 +242,7 @@ class GroupRepository
             new InCondition(new PropertyConditionVariable(Group::class, DataClass::PROPERTY_ID), $groupIdentifiers);
 
         return $this->getNestedSetDataClassRepository()->retrieves(
-            Group::class, new DataClassParameters(
+            Group::class, new StorageParameters(
                 condition: $condition, orderBy: $orderBy
             )
         );
@@ -258,7 +258,7 @@ class GroupRepository
         ArrayCollection $directlySubscribedGroupNestingValues
     ): ArrayCollection
     {
-        $parameters = new DataClassParameters(
+        $parameters = new StorageParameters(
             condition: $this->getDirectlySubscribedGroupNestingValuesConditions($directlySubscribedGroupNestingValues)
         );
 
@@ -279,7 +279,7 @@ class GroupRepository
         );
 
         return $this->getNestedSetDataClassRepository()->retrieves(
-            Group::class, new DataClassParameters(
+            Group::class, new StorageParameters(
                 condition: $condition, orderBy: new OrderBy(
                 [new OrderProperty(new PropertyConditionVariable(Group::class, Group::PROPERTY_NAME))]
             )
@@ -318,7 +318,7 @@ class GroupRepository
         $condition = new AndCondition($conditions);
 
         return $this->getNestedSetDataClassRepository()->retrieves(
-            Group::class, new DataClassParameters(
+            Group::class, new StorageParameters(
                 condition: $condition, orderBy: new OrderBy(
                 [new OrderProperty(new PropertyConditionVariable(Group::class, Group::PROPERTY_NAME))]
             )
@@ -354,7 +354,7 @@ class GroupRepository
     public function findRootGroup(): ?Group
     {
         return $this->getNestedSetDataClassRepository()->retrieve(
-            Group::class, new DataClassParameters(
+            Group::class, new StorageParameters(
                 condition: new EqualityCondition(
                     new PropertyConditionVariable(Group::class, NestedSet::PROPERTY_PARENT_ID),
                     new StaticConditionVariable(0)
@@ -395,7 +395,7 @@ class GroupRepository
         }
 
         return $this->getNestedSetDataClassRepository()->distinct(
-            Group::class, new DataClassParameters(
+            Group::class, new StorageParameters(
                 condition: $childrenCondition, retrieveProperties: new RetrieveProperties(
                 [new PropertyConditionVariable(Group::class, DataClass::PROPERTY_ID)]
             )
@@ -474,7 +474,7 @@ class GroupRepository
         $condition =
             new InCondition(new PropertyConditionVariable(Group::class, DataClass::PROPERTY_ID), $userGroupIdentifiers);
 
-        $parameters = new DataClassParameters(
+        $parameters = new StorageParameters(
             condition: $condition, retrieveProperties: new RetrieveProperties(
             [
                 new FunctionConditionVariable(

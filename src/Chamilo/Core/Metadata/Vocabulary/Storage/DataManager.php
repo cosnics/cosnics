@@ -4,7 +4,7 @@ namespace Chamilo\Core\Metadata\Vocabulary\Storage;
 use Chamilo\Core\Metadata\Storage\DataClass\Vocabulary;
 use Chamilo\Core\User\Storage\DataClass\User;
 use Chamilo\Libraries\Storage\Query\Condition\ComparisonCondition;
-use Chamilo\Libraries\Storage\Query\DataClassParameters;
+use Chamilo\Libraries\Storage\Query\StorageParameters;
 use Chamilo\Libraries\Storage\Query\Join;
 use Chamilo\Libraries\Storage\Query\Joins;
 use Chamilo\Libraries\Storage\Query\RetrieveProperties;
@@ -41,7 +41,7 @@ class DataManager extends \Chamilo\Libraries\Storage\DataManager\DataManager
         );
 
         return self::count(
-            User::class, new DataClassParameters(
+            User::class, new StorageParameters(
                 condition: $condition, joins: $joins, retrieveProperties: new RetrieveProperties(
                 [
                     new FunctionConditionVariable(
@@ -81,7 +81,7 @@ class DataManager extends \Chamilo\Libraries\Storage\DataManager\DataManager
             ]
         );
 
-        $parameters = new DataClassParameters(
+        $parameters = new StorageParameters(
             condition: $condition, joins: $joins, retrieveProperties: $properties, orderBy: $order_property,
             count: $count, offset: $offset
         );

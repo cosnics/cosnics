@@ -12,7 +12,7 @@ use Chamilo\Libraries\Storage\DataManager\DataManager;
 use Chamilo\Libraries\Storage\Query\Condition\AndCondition;
 use Chamilo\Libraries\Storage\Query\Condition\ContainsCondition;
 use Chamilo\Libraries\Storage\Query\Condition\EqualityCondition;
-use Chamilo\Libraries\Storage\Query\DataClassParameters;
+use Chamilo\Libraries\Storage\Query\StorageParameters;
 use Chamilo\Libraries\Storage\Query\Variable\PropertyConditionVariable;
 use Chamilo\Libraries\Storage\Query\Variable\StaticConditionVariable;
 use Chamilo\Libraries\Translation\Translation;
@@ -32,7 +32,7 @@ class WikiMostVisitedPageBlock extends ToolBlock
 
         $complex_content_object_items =
             \Chamilo\Core\Repository\Storage\DataManager::retrieve_complex_content_object_items(
-                ComplexContentObjectItem::class, new DataClassParameters(
+                ComplexContentObjectItem::class, new StorageParameters(
                     condition: new EqualityCondition(
                         new PropertyConditionVariable(
                             ComplexContentObjectItem::class, ComplexContentObjectItem::PROPERTY_PARENT
@@ -80,7 +80,7 @@ class WikiMostVisitedPageBlock extends ToolBlock
 
                 $condition = new AndCondition($conditions);
 
-                $items = DataManager::retrieves(Visit::class, new DataClassParameters(condition: $condition));
+                $items = DataManager::retrieves(Visit::class, new StorageParameters(condition: $condition));
 
                 if (count($items) >= $most_visits)
                 {

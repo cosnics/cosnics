@@ -11,7 +11,7 @@ use Chamilo\Libraries\Format\Form\Element\AdvancedElementFinder\AdvancedElementF
 use Chamilo\Libraries\Format\Structure\Glyph\FontAwesomeGlyph;
 use Chamilo\Libraries\Storage\Query\Condition\AndCondition;
 use Chamilo\Libraries\Storage\Query\Condition\EqualityCondition;
-use Chamilo\Libraries\Storage\Query\DataClassParameters;
+use Chamilo\Libraries\Storage\Query\StorageParameters;
 use Chamilo\Libraries\Storage\Query\Variable\PropertyConditionVariable;
 use Chamilo\Libraries\Storage\Query\Variable\StaticConditionVariable;
 use Chamilo\Libraries\Translation\Translation;
@@ -49,7 +49,7 @@ class CourseGroupEntity implements NestedRightsEntity
     {
         $condition = $this->get_condition($condition);
 
-        return DataManager::count(CourseGroup::class, new DataClassParameters(condition: $condition));
+        return DataManager::count(CourseGroup::class, new StorageParameters(condition: $condition));
     }
 
     /**
@@ -276,7 +276,7 @@ class CourseGroupEntity implements NestedRightsEntity
         $condition = $this->get_condition($condition);
 
         return CourseGroupDataManager::retrieves(
-            CourseGroup::class, new DataClassParameters(
+            CourseGroup::class, new StorageParameters(
                 condition: $condition, count: $count, offset: $offset, orderBy: $order_property
             )
         );

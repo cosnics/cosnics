@@ -8,7 +8,7 @@ use Chamilo\Libraries\Storage\DataClass\DataClass;
 use Chamilo\Libraries\Storage\DataManager\Repository\DataClassRepository;
 use Chamilo\Libraries\Storage\Query\Condition\AndCondition;
 use Chamilo\Libraries\Storage\Query\Condition\EqualityCondition;
-use Chamilo\Libraries\Storage\Query\DataClassParameters;
+use Chamilo\Libraries\Storage\Query\StorageParameters;
 use Chamilo\Libraries\Storage\Query\Join;
 use Chamilo\Libraries\Storage\Query\Joins;
 use Chamilo\Libraries\Storage\Query\OrderBy;
@@ -52,7 +52,7 @@ class ContentObjectRelationRepository
         $relationCondition = new AndCondition($relationConditions);
 
         return $this->getDataClassRepository()->count(
-            WorkspaceContentObjectRelation::class, new DataClassParameters(condition: $relationCondition)
+            WorkspaceContentObjectRelation::class, new StorageParameters(condition: $relationCondition)
         );
     }
 
@@ -73,7 +73,7 @@ class ContentObjectRelationRepository
         );
 
         return $this->getDataClassRepository()->count(
-            Workspace::class, new DataClassParameters(condition: $condition, joins: new Joins([$join]))
+            Workspace::class, new StorageParameters(condition: $condition, joins: new Joins([$join]))
         );
     }
 
@@ -108,7 +108,7 @@ class ContentObjectRelationRepository
         $relationCondition = new AndCondition($relationConditions);
 
         return $this->getDataClassRepository()->retrieve(
-            WorkspaceContentObjectRelation::class, new DataClassParameters(condition: $relationCondition)
+            WorkspaceContentObjectRelation::class, new StorageParameters(condition: $relationCondition)
         );
     }
 
@@ -140,7 +140,7 @@ class ContentObjectRelationRepository
         $relationCondition = new AndCondition($relationConditions);
 
         return $this->getDataClassRepository()->retrieves(
-            WorkspaceContentObjectRelation::class, new DataClassParameters(condition: $relationCondition)
+            WorkspaceContentObjectRelation::class, new StorageParameters(condition: $relationCondition)
         );
     }
 
@@ -180,7 +180,7 @@ class ContentObjectRelationRepository
         );
 
         return $this->getDataClassRepository()->records(
-            Workspace::class, new DataClassParameters(
+            Workspace::class, new StorageParameters(
                 condition: $condition, joins: new Joins([$join]), retrieveProperties: $retrieveProperties,
                 orderBy: $orderBy, count: $count, offset: $limit
             )
@@ -201,7 +201,7 @@ class ContentObjectRelationRepository
         );
 
         return $this->getDataClassRepository()->distinct(
-            WorkspaceContentObjectRelation::class, new DataClassParameters(
+            WorkspaceContentObjectRelation::class, new StorageParameters(
                 condition: $condition, retrieveProperties: new RetrieveProperties(
                 [
                     new PropertyConditionVariable(

@@ -24,7 +24,7 @@ use Chamilo\Libraries\Storage\DataManager\DataManager;
 use Chamilo\Libraries\Storage\Query\Condition\AndCondition;
 use Chamilo\Libraries\Storage\Query\Condition\EqualityCondition;
 use Chamilo\Libraries\Storage\Query\Condition\InCondition;
-use Chamilo\Libraries\Storage\Query\DataClassParameters;
+use Chamilo\Libraries\Storage\Query\StorageParameters;
 use Chamilo\Libraries\Storage\Query\Variable\PropertyConditionVariable;
 use Chamilo\Libraries\Storage\Query\Variable\StaticConditionVariable;
 use Chamilo\Libraries\Utilities\DatetimeUtilities;
@@ -65,7 +65,7 @@ class BrowserComponent extends Manager
             new PropertyConditionVariable(Request::class, Request::PROPERTY_USER_ID),
             new StaticConditionVariable($this->getUser()->getId())
         );
-        $user_requests = DataManager::count(Request::class, new DataClassParameters(condition: $condition));
+        $user_requests = DataManager::count(Request::class, new StorageParameters(condition: $condition));
 
         if ($user_requests > 0 || $rightsService->canUserViewQuotaRequests($this->getUser()))
         {
@@ -83,7 +83,7 @@ class BrowserComponent extends Manager
                 if ($user_requests > 0)
                 {
                     $totalNumberOfItems = DataManager::count(
-                        Request::class, new DataClassParameters(
+                        Request::class, new StorageParameters(
                             condition: $this->getRequestCondition(
                                 RequestTableRenderer::TYPE_PERSONAL
                             )
@@ -97,7 +97,7 @@ class BrowserComponent extends Manager
                     );
 
                     $requests = DataManager::retrieves(
-                        Request::class, new DataClassParameters(
+                        Request::class, new StorageParameters(
                             condition: $this->getRequestCondition(RequestTableRenderer::TYPE_PERSONAL),
                             orderBy: $requestTableRenderer->determineOrderBy($tableParameterValues),
                             count: $tableParameterValues->getNumberOfItemsPerPage(),
@@ -197,7 +197,7 @@ class BrowserComponent extends Manager
 
                     $condition = new AndCondition($conditions);
 
-                    if (DataManager::count(Request::class, new DataClassParameters(condition: $condition)) > 0)
+                    if (DataManager::count(Request::class, new StorageParameters(condition: $condition)) > 0)
                     {
                         $tabs->add(
                             new ContentTab(
@@ -222,7 +222,7 @@ class BrowserComponent extends Manager
 
                     $condition = new AndCondition($conditions);
 
-                    if (DataManager::count(Request::class, new DataClassParameters(condition: $condition)) > 0)
+                    if (DataManager::count(Request::class, new StorageParameters(condition: $condition)) > 0)
                     {
                         $tabs->add(
                             new ContentTab(
@@ -247,7 +247,7 @@ class BrowserComponent extends Manager
 
                     $condition = new AndCondition($conditions);
 
-                    if (DataManager::count(Request::class, new DataClassParameters(condition: $condition)) > 0)
+                    if (DataManager::count(Request::class, new StorageParameters(condition: $condition)) > 0)
                     {
                         $tabs->add(
                             new ContentTab(
@@ -504,7 +504,7 @@ class BrowserComponent extends Manager
     protected function renderManagementRequestTable(int $requestType): string
     {
         $totalNumberOfItems = DataManager::count(
-            Request::class, new DataClassParameters(condition: $this->getRequestCondition($requestType))
+            Request::class, new StorageParameters(condition: $this->getRequestCondition($requestType))
         );
         $requestTableRenderer = $this->getUserRequestTableRenderer();
 
@@ -514,7 +514,7 @@ class BrowserComponent extends Manager
         );
 
         $requests = DataManager::retrieves(
-            Request::class, new DataClassParameters(
+            Request::class, new StorageParameters(
                 condition: $this->getRequestCondition($requestType),
                 count: $tableParameterValues->getNumberOfItemsPerPage(), offset: $tableParameterValues->getOffset(),
                 orderBy: $requestTableRenderer->determineOrderBy($tableParameterValues)
@@ -543,7 +543,7 @@ class BrowserComponent extends Manager
         $properties = [];
         $properties[$translator->trans('NumberOfContentObjects', [], Manager::CONTEXT)] =
             \Chamilo\Core\Repository\Storage\DataManager::count_active_content_objects(
-                ContentObject::class, new DataClassParameters(condition: $condition)
+                ContentObject::class, new StorageParameters(condition: $condition)
             );
 
         $type_counts = [];
@@ -553,7 +553,7 @@ class BrowserComponent extends Manager
         foreach (\Chamilo\Core\Repository\Storage\DataManager::get_registered_types() as $type)
         {
             $type_counts[$type] = \Chamilo\Core\Repository\Storage\DataManager::count_active_content_objects(
-                $type, new DataClassParameters(condition: $condition)
+                $type, new StorageParameters(condition: $condition)
             );
             if ($type_counts[$type] > $type_counts[$most_used])
             {
@@ -599,7 +599,7 @@ class BrowserComponent extends Manager
             new StaticConditionVariable($this->getUser()->getId())
         );
         $oldest_object = \Chamilo\Core\Repository\Storage\DataManager::retrieve_active_content_objects(
-            ContentObject::class, new DataClassParameters(condition: $condition)
+            ContentObject::class, new StorageParameters(condition: $condition)
         )->current();
 
         if ($oldest_object instanceof ContentObject)

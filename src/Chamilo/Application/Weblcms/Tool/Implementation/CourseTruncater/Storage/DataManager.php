@@ -7,7 +7,7 @@ use Chamilo\Application\Weblcms\Storage\DataClass\CourseSection;
 use Chamilo\Libraries\Storage\Query\Condition\AndCondition;
 use Chamilo\Libraries\Storage\Query\Condition\EqualityCondition;
 use Chamilo\Libraries\Storage\Query\Condition\InCondition;
-use Chamilo\Libraries\Storage\Query\DataClassParameters;
+use Chamilo\Libraries\Storage\Query\StorageParameters;
 use Chamilo\Libraries\Storage\Query\Variable\PropertyConditionVariable;
 use Chamilo\Libraries\Storage\Query\Variable\StaticConditionVariable;
 
@@ -73,7 +73,7 @@ class DataManager extends \Chamilo\Libraries\Storage\DataManager\DataManager
 
         $condition = new AndCondition($conditions);
 
-        return self::count(CourseSection::class, new DataClassParameters(condition: $condition));
+        return self::count(CourseSection::class, new StorageParameters(condition: $condition));
     }
 
     /**
@@ -157,7 +157,7 @@ class DataManager extends \Chamilo\Libraries\Storage\DataManager\DataManager
         );
 
         $course_sections = \Chamilo\Application\Weblcms\Storage\Datamanager::retrieves(
-            CourseSection::class, new DataClassParameters(condition: $condition)
+            CourseSection::class, new StorageParameters(condition: $condition)
         );
 
         foreach ($course_sections as $course_section)
@@ -279,7 +279,7 @@ class DataManager extends \Chamilo\Libraries\Storage\DataManager\DataManager
         );
 
         return self::retrieve(
-            ContentObjectPublicationCategory::class, new DataClassParameters(condition: $condition)
+            ContentObjectPublicationCategory::class, new StorageParameters(condition: $condition)
         );
     }
 

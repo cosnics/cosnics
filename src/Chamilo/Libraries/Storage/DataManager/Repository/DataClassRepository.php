@@ -15,7 +15,7 @@ use Chamilo\Libraries\Storage\Query\Condition\ComparisonCondition;
 use Chamilo\Libraries\Storage\Query\Condition\Condition;
 use Chamilo\Libraries\Storage\Query\Condition\EqualityCondition;
 use Chamilo\Libraries\Storage\Query\Condition\InCondition;
-use Chamilo\Libraries\Storage\Query\DataClassParameters;
+use Chamilo\Libraries\Storage\Query\StorageParameters;
 use Chamilo\Libraries\Storage\Query\Join;
 use Chamilo\Libraries\Storage\Query\RetrieveProperties;
 use Chamilo\Libraries\Storage\Query\UpdateProperties;
@@ -62,7 +62,7 @@ class DataClassRepository
      *
      * @throws \Chamilo\Libraries\Storage\Exception\StorageMethodException
      */
-    protected function __count(string $dataClassName, DataClassParameters $parameters): int
+    protected function __count(string $dataClassName, StorageParameters $parameters): int
     {
         $this->applyDataClassExtensionToParameters($dataClassName, $parameters);
 
@@ -87,7 +87,7 @@ class DataClassRepository
      *
      * @throws \Chamilo\Libraries\Storage\Exception\StorageMethodException
      */
-    protected function __countGrouped(string $dataClassName, DataClassParameters $parameters): array
+    protected function __countGrouped(string $dataClassName, StorageParameters $parameters): array
     {
         $retrieveProperties = $parameters->getRetrieveProperties();
         $retrieveProperties->add(
@@ -102,7 +102,7 @@ class DataClassRepository
      *
      * @throws \Chamilo\Libraries\Storage\Exception\StorageMethodException
      */
-    protected function __distinct(string $dataClassName, DataClassParameters $parameters): array
+    protected function __distinct(string $dataClassName, StorageParameters $parameters): array
     {
         $parameters->setRetrieveProperties(
             new RetrieveProperties([new DistinctConditionVariable($parameters->getRetrieveProperties()->toArray())])
@@ -149,7 +149,7 @@ class DataClassRepository
         foreach ($additionalQueries as $dataClassExtensionType => $identifiers)
         {
             $additionalRecordsForIdentifiers = $this->getDataClassDatabase()->retrieves(
-                $dataClassExtensionType::getStorageUnitName(), new DataClassParameters(
+                $dataClassExtensionType::getStorageUnitName(), new StorageParameters(
                     condition: new InCondition(
                         new PropertyConditionVariable($dataClassExtensionType, DataClass::PROPERTY_ID), $identifiers
                     ), retrieveProperties: new RetrieveProperties(
@@ -186,7 +186,7 @@ class DataClassRepository
      * @throws \Chamilo\Libraries\Storage\Exception\StorageMethodException
      * @throws \Chamilo\Libraries\Storage\Exception\StorageNoResultException
      */
-    protected function __record(string $dataClassName, DataClassParameters $parameters): ?array
+    protected function __record(string $dataClassName, StorageParameters $parameters): ?array
     {
         if (is_subclass_of($dataClassName, DataClassTypeAwareInterface::class) &&
             !is_subclass_of($dataClassName, DataClassBaseExtensionInterface::class))
@@ -209,7 +209,7 @@ class DataClassRepository
      *
      * @throws \Chamilo\Libraries\Storage\Exception\StorageMethodException
      */
-    protected function __records(string $dataClassName, DataClassParameters $parameters): ArrayCollection
+    protected function __records(string $dataClassName, StorageParameters $parameters): ArrayCollection
     {
         $expandRecords = $parameters->getRetrieveProperties()->isEmpty();
 
@@ -235,7 +235,7 @@ class DataClassRepository
      * @throws \Chamilo\Libraries\Storage\Exception\StorageMethodException
      * @throws \Chamilo\Libraries\Storage\Exception\StorageNoResultException
      */
-    protected function __retrieve(string $dataClassName, DataClassParameters $parameters)
+    protected function __retrieve(string $dataClassName, StorageParameters $parameters)
     {
         return $this->getDataClassFactory()->getDataClass(
             $dataClassName, $this->__record($dataClassName, $parameters)
@@ -246,12 +246,12 @@ class DataClassRepository
      * @template tInternalRetrievesClass
      *
      * @param class-string<tInternalRetrievesClass> $dataClassName
-     * @param \Chamilo\Libraries\Storage\Query\DataClassParameters $parameters
+     * @param \Chamilo\Libraries\Storage\Query\StorageParameters $parameters
      *
      * @return ArrayCollection<tInternalRetrievesClass>
      * @throws \Chamilo\Libraries\Storage\Exception\StorageMethodException
      */
-    protected function __retrieves(string $dataClassName, DataClassParameters $parameters): ArrayCollection
+    protected function __retrieves(string $dataClassName, StorageParameters $parameters): ArrayCollection
     {
         $records = $this->__records($dataClassName, $parameters);
         $dataClasses = [];
@@ -279,7 +279,7 @@ class DataClassRepository
     }
 
     protected function applyDataClassExtensionToParameters(
-        string $dataClassName, DataClassParameters $dataClassParameters
+        string $dataClassName, StorageParameters $dataClassParameters
     ): void
     {
         if (is_subclass_of($dataClassName, DataClassBaseExtensionInterface::class))
@@ -308,12 +308,12 @@ class DataClassRepository
     }
 
     /**
-     * @param \Chamilo\Libraries\Storage\Query\DataClassParameters $parameters
+     * @param \Chamilo\Libraries\Storage\Query\StorageParameters $parameters
      * @param string $dataClassName
      *
      * @return void
      */
-    protected function applyDataClassPropertiesToParameters(string $dataClassName, DataClassParameters $parameters
+    protected function applyDataClassPropertiesToParameters(string $dataClassName, StorageParameters $parameters
     ): void
     {
         if ($parameters->getRetrieveProperties()->isEmpty())
@@ -333,9 +333,9 @@ class DataClassRepository
     }
 
     protected function buildRetrieveByIdentifierParameters(string $dataClassName, string $identifier
-    ): DataClassParameters
+    ): StorageParameters
     {
-        return new DataClassParameters(
+        return new StorageParameters(
             condition: new EqualityCondition(
                 new PropertyConditionVariable($dataClassName, DataClass::PROPERTY_ID),
                 new StaticConditionVariable($identifier)
@@ -346,7 +346,7 @@ class DataClassRepository
     /**
      * @throws \Chamilo\Libraries\Storage\Exception\StorageMethodException
      */
-    public function count(string $dataClassName, DataClassParameters $parameters = new DataClassParameters()): int
+    public function count(string $dataClassName, StorageParameters $parameters = new StorageParameters()): int
     {
         if ($this->isQueryCacheEnabled())
         {
@@ -365,7 +365,7 @@ class DataClassRepository
      * @throws \Chamilo\Libraries\Storage\Exception\StorageMethodException
      */
     public function countGrouped(
-        string $dataClassName, DataClassParameters $parameters = new DataClassParameters()
+        string $dataClassName, StorageParameters $parameters = new StorageParameters()
     ): array
     {
         if ($this->isQueryCacheEnabled())
@@ -493,9 +493,9 @@ class DataClassRepository
      * @throws \Chamilo\Libraries\Storage\Exception\StorageNoResultException
      * @throws \Chamilo\Libraries\Storage\Exception\StorageMethodException
      */
-    protected function determineDataExtensionClassName(string $dataClassName, DataClassParameters $parameters): string
+    protected function determineDataExtensionClassName(string $dataClassName, StorageParameters $parameters): string
     {
-        $parameters = new DataClassParameters(
+        $parameters = new StorageParameters(
             condition: $parameters->getCondition(), joins: $parameters->getJoins(),
             retrieveProperties: new RetrieveProperties(
                 [new PropertyConditionVariable($dataClassName, DataClassTypeAwareInterface::PROPERTY_TYPE)]
@@ -511,7 +511,7 @@ class DataClassRepository
      * @return string[]
      * @throws \Chamilo\Libraries\Storage\Exception\StorageMethodException
      */
-    public function distinct(string $dataClassName, DataClassParameters $parameters = new DataClassParameters()): array
+    public function distinct(string $dataClassName, StorageParameters $parameters = new StorageParameters()): array
     {
         if ($this->isQueryCacheEnabled())
         {
@@ -615,7 +615,7 @@ class DataClassRepository
      * @throws \Chamilo\Libraries\Storage\Exception\StorageNoResultException
      * @throws \Chamilo\Libraries\Storage\Exception\StorageMethodException
      */
-    public function record(string $dataClassName, DataClassParameters $parameters = new DataClassParameters()): ?array
+    public function record(string $dataClassName, StorageParameters $parameters = new StorageParameters()): ?array
     {
         if ($this->isQueryCacheEnabled())
         {
@@ -631,13 +631,13 @@ class DataClassRepository
 
     /**
      * @param string $dataClassName
-     * @param \Chamilo\Libraries\Storage\Query\DataClassParameters $parameters
+     * @param \Chamilo\Libraries\Storage\Query\StorageParameters $parameters
      *
      * @return \Doctrine\Common\Collections\ArrayCollection<string[]>
      * @throws \Chamilo\Libraries\Storage\Exception\StorageMethodException
      */
     public function records(
-        string $dataClassName, DataClassParameters $parameters = new DataClassParameters()
+        string $dataClassName, StorageParameters $parameters = new StorageParameters()
     ): ArrayCollection
     {
         if ($this->isQueryCacheEnabled())
@@ -665,7 +665,7 @@ class DataClassRepository
      * @throws \Chamilo\Libraries\Storage\Exception\StorageNoResultException
      */
     public function retrieve(
-        string $dataClassName, DataClassParameters $parameters = new DataClassParameters()
+        string $dataClassName, StorageParameters $parameters = new StorageParameters()
     )
     {
         if ($this->isQueryCacheEnabled())
@@ -703,7 +703,7 @@ class DataClassRepository
      */
     public function retrieveMaximumValue(string $dataClassName, string $property, ?Condition $condition = null): int
     {
-        $parameters = new DataClassParameters(
+        $parameters = new StorageParameters(
             condition: $condition, retrieveProperties: new RetrieveProperties(
             [
                 new FunctionConditionVariable(
@@ -732,13 +732,13 @@ class DataClassRepository
      * @template tRetrieves
      *
      * @param class-string<tRetrieves> $dataClassName
-     * @param \Chamilo\Libraries\Storage\Query\DataClassParameters $parameters
+     * @param \Chamilo\Libraries\Storage\Query\StorageParameters $parameters
      *
      * @return ArrayCollection<tRetrieves>
      * @throws \Chamilo\Libraries\Storage\Exception\StorageMethodException
      */
     public function retrieves(
-        string $dataClassName, DataClassParameters $parameters = new DataClassParameters()
+        string $dataClassName, StorageParameters $parameters = new StorageParameters()
     ): ArrayCollection
     {
         if ($this->isQueryCacheEnabled())

@@ -15,7 +15,7 @@ use Chamilo\Libraries\Format\Structure\Glyph\FontAwesomeGlyph;
 use Chamilo\Libraries\Storage\Query\Condition\AndCondition;
 use Chamilo\Libraries\Storage\Query\Condition\EqualityCondition;
 use Chamilo\Libraries\Storage\Query\Condition\InCondition;
-use Chamilo\Libraries\Storage\Query\DataClassParameters;
+use Chamilo\Libraries\Storage\Query\StorageParameters;
 use Chamilo\Libraries\Storage\Query\OrderBy;
 use Chamilo\Libraries\Storage\Query\OrderProperty;
 use Chamilo\Libraries\Storage\Query\RetrieveProperties;
@@ -72,7 +72,7 @@ class CourseGroupUserFeedComponent extends Manager
     protected function countUsers()
     {
         return DataManager::count(
-            User::class, new DataClassParameters(condition: $this->getUserCondition())
+            User::class, new StorageParameters(condition: $this->getUserCondition())
         );
     }
 
@@ -150,7 +150,7 @@ class CourseGroupUserFeedComponent extends Manager
                 ), new StaticConditionVariable(CourseEntityRelation::ENTITY_TYPE_USER)
             );
 
-            $parameters = new DataClassParameters(
+            $parameters = new StorageParameters(
                 condition: new AndCondition($conditions), retrieveProperties: new RetrieveProperties(
                 [
                     new PropertyConditionVariable(
@@ -309,7 +309,7 @@ class CourseGroupUserFeedComponent extends Manager
         ];
 
         return DataManager::retrieves(
-            User::class, new DataClassParameters(
+            User::class, new StorageParameters(
                 condition: $this->getUserCondition(), count: 100, offset: $this->getOffset(), orderBy: new OrderBy(
                 $order
             )

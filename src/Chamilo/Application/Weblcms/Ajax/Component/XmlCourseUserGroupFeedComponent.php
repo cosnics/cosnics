@@ -15,7 +15,7 @@ use Chamilo\Libraries\Storage\Query\Condition\EqualityCondition;
 use Chamilo\Libraries\Storage\Query\Condition\InCondition;
 use Chamilo\Libraries\Storage\Query\Condition\NotCondition;
 use Chamilo\Libraries\Storage\Query\Condition\OrCondition;
-use Chamilo\Libraries\Storage\Query\DataClassParameters;
+use Chamilo\Libraries\Storage\Query\StorageParameters;
 use Chamilo\Libraries\Storage\Query\OrderBy;
 use Chamilo\Libraries\Storage\Query\OrderProperty;
 use Chamilo\Libraries\Storage\Query\RetrieveProperties;
@@ -144,7 +144,7 @@ class XmlCourseUserGroupFeedComponent extends Manager
                 ), new StaticConditionVariable(CourseEntityRelation::ENTITY_TYPE_USER)
             );
 
-            $parameters = new DataClassParameters(
+            $parameters = new StorageParameters(
                 condition: new AndCondition($userConditions), retrieveProperties: new RetrieveProperties(
                 [
                     new PropertyConditionVariable(
@@ -209,7 +209,7 @@ class XmlCourseUserGroupFeedComponent extends Manager
             ];
 
             $user_result_set = DataManager::retrieves(
-                User::class, new DataClassParameters(
+                User::class, new StorageParameters(
                     condition: $user_condition, orderBy: new OrderBy($order)
                 )
             );
@@ -225,7 +225,7 @@ class XmlCourseUserGroupFeedComponent extends Manager
                 $groups = [];
 
                 $group_result_set = DataManager::retrieves(
-                    CourseGroup::class, new DataClassParameters(
+                    CourseGroup::class, new StorageParameters(
                         condition: $group_condition, orderBy: new OrderBy([
                         new OrderProperty(
                             new PropertyConditionVariable(CourseGroup::class, CourseGroup::PROPERTY_NAME)

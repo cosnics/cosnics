@@ -4,7 +4,7 @@ namespace Chamilo\Application\Weblcms\Integration\Chamilo\Core\Tracking\Storage\
 use Chamilo\Application\Weblcms\Integration\Chamilo\Core\Tracking\Storage\DataManager;
 use Chamilo\Core\Repository\ContentObject\LearningPath\Display\Attempt\TreeNodeAttempt;
 use Chamilo\Libraries\Storage\Query\Condition\EqualityCondition;
-use Chamilo\Libraries\Storage\Query\DataClassParameters;
+use Chamilo\Libraries\Storage\Query\StorageParameters;
 use Chamilo\Libraries\Storage\Query\Variable\PropertyConditionVariable;
 use Chamilo\Libraries\Storage\Query\Variable\StaticConditionVariable;
 
@@ -28,7 +28,7 @@ class LearningPathTreeNodeAttempt extends TreeNodeAttempt
         );
 
         $trackers = DataManager::retrieves(
-            LearningPathTreeNodeQuestionAttempt::class, new DataClassParameters(condition: $condition)
+            LearningPathTreeNodeQuestionAttempt::class, new StorageParameters(condition: $condition)
         );
 
         foreach ($trackers as $tracker)

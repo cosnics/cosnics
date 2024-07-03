@@ -11,7 +11,7 @@ use Chamilo\Libraries\Storage\Query\Condition\Condition;
 use Chamilo\Libraries\Storage\Query\Condition\EqualityCondition;
 use Chamilo\Libraries\Storage\Query\Condition\InCondition;
 use Chamilo\Libraries\Storage\Query\Condition\NotCondition;
-use Chamilo\Libraries\Storage\Query\DataClassParameters;
+use Chamilo\Libraries\Storage\Query\StorageParameters;
 use Chamilo\Libraries\Storage\Query\Join;
 use Chamilo\Libraries\Storage\Query\Joins;
 use Chamilo\Libraries\Storage\Query\OrderBy;
@@ -65,7 +65,7 @@ class ContentObjectRepository
         );
 
         return $this->getDataClassRepository()->count(
-            ContentObjectAttachment::class, new DataClassParameters(condition: new AndCondition($conditions))
+            ContentObjectAttachment::class, new StorageParameters(condition: new AndCondition($conditions))
         );
     }
 
@@ -162,7 +162,7 @@ class ContentObjectRepository
         }
 
         $usedStorageSpaceRecord = $this->getDataClassRepository()->record(
-            $contentObjectType, new DataClassParameters(
+            $contentObjectType, new StorageParameters(
                 condition: $condition, joins: $joins, retrieveProperties: $retrieveProperties
             )
         );
@@ -201,7 +201,7 @@ class ContentObjectRepository
         );
 
         return $this->getDataClassRepository()->retrieve(
-            ContentObjectAttachment::class, new DataClassParameters(condition: new AndCondition($conditions))
+            ContentObjectAttachment::class, new StorageParameters(condition: new AndCondition($conditions))
         );
     }
 
@@ -242,7 +242,7 @@ class ContentObjectRepository
             )
         );
 
-        $parameters = new DataClassParameters(
+        $parameters = new StorageParameters(
             condition: new AndCondition($conditions), joins: new Joins([$join]), orderBy: $orderBy, count: $count,
             offset: $offset
         );
@@ -257,11 +257,11 @@ class ContentObjectRepository
 
     /**
      * @param string $contentObjectType
-     * @param \Chamilo\Libraries\Storage\Query\DataClassParameters $parameters
+     * @param \Chamilo\Libraries\Storage\Query\StorageParameters $parameters
      *
      * @return \Doctrine\Common\Collections\ArrayCollection<\Chamilo\Core\Repository\Storage\DataClass\ContentObject>
      */
-    public function retrieveContentObjects(string $contentObjectType, DataClassParameters $parameters): ArrayCollection
+    public function retrieveContentObjects(string $contentObjectType, StorageParameters $parameters): ArrayCollection
     {
         if ($parameters->getCondition() instanceof Condition)
         {
@@ -292,7 +292,7 @@ class ContentObjectRepository
         );
 
         return $this->getDataClassRepository()->retrieves(
-            ContentObject::class, new DataClassParameters(condition: $condition)
+            ContentObject::class, new StorageParameters(condition: $condition)
         );
     }
 
@@ -338,7 +338,7 @@ class ContentObjectRepository
             )
         ]);
 
-        $parameters = new DataClassParameters(
+        $parameters = new StorageParameters(
             condition: new AndCondition($conditions), orderBy: $orderBy
         );
 

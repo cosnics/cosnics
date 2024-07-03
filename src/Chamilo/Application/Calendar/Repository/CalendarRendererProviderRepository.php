@@ -6,7 +6,7 @@ use Chamilo\Libraries\Calendar\Event\Visibility as GenericVisibility;
 use Chamilo\Libraries\Storage\DataManager\Repository\DataClassRepository;
 use Chamilo\Libraries\Storage\Query\Condition\AndCondition;
 use Chamilo\Libraries\Storage\Query\Condition\EqualityCondition;
-use Chamilo\Libraries\Storage\Query\DataClassParameters;
+use Chamilo\Libraries\Storage\Query\StorageParameters;
 use Chamilo\Libraries\Storage\Query\Variable\PropertyConditionVariable;
 use Chamilo\Libraries\Storage\Query\Variable\StaticConditionVariable;
 use Doctrine\Common\Collections\ArrayCollection;
@@ -36,7 +36,7 @@ class CalendarRendererProviderRepository
         $condition = new AndCondition($conditions);
 
         return $this->getDataClassRepository()->retrieves(
-            Visibility::class, new DataClassParameters(condition: $condition)
+            Visibility::class, new StorageParameters(condition: $condition)
         );
     }
 
@@ -54,7 +54,7 @@ class CalendarRendererProviderRepository
         $condition = new AndCondition($conditions);
 
         return $this->getDataClassRepository()->retrieve(
-            Visibility::class, new DataClassParameters(condition: $condition)
+            Visibility::class, new StorageParameters(condition: $condition)
         );
     }
 

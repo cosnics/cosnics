@@ -20,7 +20,7 @@ use Chamilo\Libraries\Storage\DataClass\DataClass;
 use Chamilo\Libraries\Storage\Query\Condition\AndCondition;
 use Chamilo\Libraries\Storage\Query\Condition\EqualityCondition;
 use Chamilo\Libraries\Storage\Query\Condition\InCondition;
-use Chamilo\Libraries\Storage\Query\DataClassParameters;
+use Chamilo\Libraries\Storage\Query\StorageParameters;
 use Chamilo\Libraries\Storage\Query\RetrieveProperties;
 use Chamilo\Libraries\Storage\Query\Variable\PropertyConditionVariable;
 use Chamilo\Libraries\Storage\Query\Variable\StaticConditionVariable;
@@ -229,7 +229,7 @@ class ExporterComponent extends Manager
         $condition = new InCondition(
             new PropertyConditionVariable(ContentObject::class, DataClass::PROPERTY_ID), $contentObjectIdentifiers
         );
-        $parameters = new DataClassParameters(
+        $parameters = new StorageParameters(
             condition: $condition, retrieveProperties: new RetrieveProperties(
             [new PropertyConditionVariable(ContentObject::class, ContentObject::PROPERTY_TYPE)]
         )
@@ -265,7 +265,7 @@ class ExporterComponent extends Manager
             );
             $condition = new AndCondition($conditions);
 
-            $parameters = new DataClassParameters(
+            $parameters = new StorageParameters(
                 condition: $condition, retrieveProperties: new RetrieveProperties(
                 [new PropertyConditionVariable(ContentObject::class, DataClass::PROPERTY_ID)]
             )

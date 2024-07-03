@@ -12,7 +12,7 @@ use Chamilo\Libraries\Format\Structure\Glyph\FontAwesomeGlyph;
 use Chamilo\Libraries\Storage\Query\Condition\AndCondition;
 use Chamilo\Libraries\Storage\Query\Condition\InCondition;
 use Chamilo\Libraries\Storage\Query\Condition\NotCondition;
-use Chamilo\Libraries\Storage\Query\DataClassParameters;
+use Chamilo\Libraries\Storage\Query\StorageParameters;
 use Chamilo\Libraries\Storage\Query\OrderBy;
 use Chamilo\Libraries\Storage\Query\OrderProperty;
 use Chamilo\Libraries\Storage\Query\Variable\PropertyConditionVariable;
@@ -44,7 +44,7 @@ class CourseTypeFeedComponent extends Manager
     public function countCourseTypes()
     {
         return DataManager::count(
-            CourseType::class, new DataClassParameters(condition: $this->getCourseTypeConditions())
+            CourseType::class, new StorageParameters(condition: $this->getCourseTypeConditions())
         );
     }
 
@@ -154,7 +154,7 @@ class CourseTypeFeedComponent extends Manager
      */
     public function retrieveCourseTypes()
     {
-        $parameters = new DataClassParameters(
+        $parameters = new StorageParameters(
             condition: $this->getCourseTypeConditions(), orderBy: new OrderBy(
             [new OrderProperty(new PropertyConditionVariable(CourseType::class, CourseType::PROPERTY_TITLE))]
         )

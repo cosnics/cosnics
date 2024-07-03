@@ -10,7 +10,7 @@ use Chamilo\Core\Repository\ContentObject\LearningPath\Storage\Repository\Common
 use Chamilo\Libraries\Storage\Query\Condition\AndCondition;
 use Chamilo\Libraries\Storage\Query\Condition\EqualityCondition;
 use Chamilo\Libraries\Storage\Query\Condition\InCondition;
-use Chamilo\Libraries\Storage\Query\DataClassParameters;
+use Chamilo\Libraries\Storage\Query\StorageParameters;
 use Chamilo\Libraries\Storage\Query\Join;
 use Chamilo\Libraries\Storage\Query\Joins;
 use Chamilo\Libraries\Storage\Query\OrderBy;
@@ -96,7 +96,7 @@ class CourseUserCategoryRepository extends CommonDataClassRepository
             OrderBy::generate(CourseTypeUserCategoryRelCourse::class, CourseTypeUserCategoryRelCourse::PROPERTY_SORT);
 
         return $this->dataClassRepository->retrieves(
-            Course::class, new DataClassParameters(
+            Course::class, new StorageParameters(
                 condition: $condition, orderBy: $orderBy, joins: $joins
             )
         );

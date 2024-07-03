@@ -10,7 +10,7 @@ use Chamilo\Libraries\Storage\Query\Condition\AndCondition;
 use Chamilo\Libraries\Storage\Query\Condition\EqualityCondition;
 use Chamilo\Libraries\Storage\Query\Condition\InCondition;
 use Chamilo\Libraries\Storage\Query\Condition\OrCondition;
-use Chamilo\Libraries\Storage\Query\DataClassParameters;
+use Chamilo\Libraries\Storage\Query\StorageParameters;
 use Chamilo\Libraries\Storage\Query\OrderBy;
 use Chamilo\Libraries\Storage\Query\OrderProperty;
 use Chamilo\Libraries\Storage\Query\RetrieveProperties;
@@ -59,7 +59,7 @@ class DataManager extends \Chamilo\Libraries\Storage\DataManager\DataManager
 
             $condition = new OrCondition($expanded_entities_conditions);
 
-            return DataManager::count(Admin::class, new DataClassParameters(condition: $condition)) > 0;
+            return DataManager::count(Admin::class, new StorageParameters(condition: $condition)) > 0;
         }
         else
         {
@@ -133,7 +133,7 @@ class DataManager extends \Chamilo\Libraries\Storage\DataManager\DataManager
 
         $condition = new AndCondition($conditions);
 
-        return DataManager::count(Admin::class, new DataClassParameters(condition: $condition)) > 0;
+        return DataManager::count(Admin::class, new StorageParameters(condition: $condition)) > 0;
     }
 
     /**
@@ -177,7 +177,7 @@ class DataManager extends \Chamilo\Libraries\Storage\DataManager\DataManager
 
             $condition = new OrCondition($expanded_entities_conditions);
 
-            $admins = DataManager::retrieves(Admin::class, new DataClassParameters(condition: $condition));
+            $admins = DataManager::retrieves(Admin::class, new StorageParameters(condition: $condition));
             $course_ids = [];
 
             foreach ($admins as $admin)
@@ -199,7 +199,7 @@ class DataManager extends \Chamilo\Libraries\Storage\DataManager\DataManager
                 ]
             );
 
-            $parameters = new DataClassParameters(
+            $parameters = new StorageParameters(
                 condition: new InCondition(
                     new PropertyConditionVariable(
                         Course::class, Course::PROPERTY_ID

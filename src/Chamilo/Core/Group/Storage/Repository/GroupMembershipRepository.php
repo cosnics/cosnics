@@ -10,7 +10,7 @@ use Chamilo\Libraries\Storage\Query\Condition\AndCondition;
 use Chamilo\Libraries\Storage\Query\Condition\Condition;
 use Chamilo\Libraries\Storage\Query\Condition\EqualityCondition;
 use Chamilo\Libraries\Storage\Query\Condition\InCondition;
-use Chamilo\Libraries\Storage\Query\DataClassParameters;
+use Chamilo\Libraries\Storage\Query\StorageParameters;
 use Chamilo\Libraries\Storage\Query\Join;
 use Chamilo\Libraries\Storage\Query\Joins;
 use Chamilo\Libraries\Storage\Query\OrderBy;
@@ -74,7 +74,7 @@ class GroupMembershipRepository
         );
 
         return $this->getDataClassRepository()->count(
-            SubscribedUser::class, new DataClassParameters(condition: $condition, joins: $joins)
+            SubscribedUser::class, new StorageParameters(condition: $condition, joins: $joins)
         );
     }
 
@@ -129,7 +129,7 @@ class GroupMembershipRepository
         $condition = new AndCondition($conditions);
 
         return $this->getDataClassRepository()->retrieve(
-            GroupRelUser::class, new DataClassParameters(condition: $condition)
+            GroupRelUser::class, new StorageParameters(condition: $condition)
         );
     }
 
@@ -164,7 +164,7 @@ class GroupMembershipRepository
         );
 
         return $this->getDataClassRepository()->retrieve(
-            GroupRelUser::class, new DataClassParameters(condition: $condition, joins: $joins)
+            GroupRelUser::class, new StorageParameters(condition: $condition, joins: $joins)
         );
     }
 
@@ -198,7 +198,7 @@ class GroupMembershipRepository
         $condition = new AndCondition($conditions);
 
         return $this->getDataClassRepository()->retrieve(
-            GroupRelUser::class, new DataClassParameters(condition: $condition)
+            GroupRelUser::class, new StorageParameters(condition: $condition)
         );
     }
 
@@ -223,7 +223,7 @@ class GroupMembershipRepository
             new PropertyConditionVariable(GroupRelUser::class, GroupRelUser::PROPERTY_GROUP_ID), $groupIdentifiers
         );
 
-        $parameters = new DataClassParameters(
+        $parameters = new StorageParameters(
             condition: $condition, retrieveProperties: new RetrieveProperties(
             [new PropertyConditionVariable(GroupRelUser::class, GroupRelUser::PROPERTY_USER_ID)]
         )
@@ -277,7 +277,7 @@ class GroupMembershipRepository
         );
 
         return $this->getDataClassRepository()->retrieves(
-            SubscribedUser::class, new DataClassParameters(
+            SubscribedUser::class, new StorageParameters(
                 condition: $condition, joins: $joins, retrieveProperties: $retrieveProperties, orderBy: $orderBy,
                 count: $count, offset: $offset
             )
@@ -303,7 +303,7 @@ class GroupMembershipRepository
         );
 
         return $this->getDataClassRepository()->retrieves(
-            GroupRelUser::class, new DataClassParameters(condition: $condition)
+            GroupRelUser::class, new StorageParameters(condition: $condition)
         );
     }
 

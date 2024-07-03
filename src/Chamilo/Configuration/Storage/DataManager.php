@@ -8,7 +8,7 @@ use Chamilo\Libraries\Storage\Query\Condition\Condition;
 use Chamilo\Libraries\Storage\Query\Condition\EndsWithCondition;
 use Chamilo\Libraries\Storage\Query\Condition\EqualityCondition;
 use Chamilo\Libraries\Storage\Query\Condition\StartsWithCondition;
-use Chamilo\Libraries\Storage\Query\DataClassParameters;
+use Chamilo\Libraries\Storage\Query\StorageParameters;
 use Chamilo\Libraries\Storage\Query\RetrieveProperties;
 use Chamilo\Libraries\Storage\Query\Variable\PropertyConditionVariable;
 use Chamilo\Libraries\Storage\Query\Variable\StaticConditionVariable;
@@ -52,7 +52,7 @@ class DataManager extends \Chamilo\Libraries\Storage\DataManager\DataManager
 
         $condition = new AndCondition($conditions);
 
-        return self::retrieves(Registration::class, new DataClassParameters(condition: $condition));
+        return self::retrieves(Registration::class, new StorageParameters(condition: $condition));
     }
 
     public static function retrieveRegistrationByContext($context)
@@ -62,12 +62,12 @@ class DataManager extends \Chamilo\Libraries\Storage\DataManager\DataManager
             new StaticConditionVariable($context)
         );
 
-        return self::retrieve(Registration::class, new DataClassParameters(condition: $condition));
+        return self::retrieve(Registration::class, new StorageParameters(condition: $condition));
     }
 
     public static function retrieve_setting_contexts(Condition $condition = null)
     {
-        $parameters = new DataClassParameters(
+        $parameters = new StorageParameters(
             condition: $condition, retrieveProperties: new RetrieveProperties(
             [new PropertyConditionVariable(Setting::class, Setting::PROPERTY_CONTEXT)]
         )
@@ -96,6 +96,6 @@ class DataManager extends \Chamilo\Libraries\Storage\DataManager\DataManager
         );
         $condition = new AndCondition($conditions);
 
-        return self::retrieve(Setting::class, new DataClassParameters(condition: $condition));
+        return self::retrieve(Setting::class, new StorageParameters(condition: $condition));
     }
 }

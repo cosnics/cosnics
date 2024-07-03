@@ -6,7 +6,7 @@ use Chamilo\Application\Weblcms\CourseType\Storage\DataClass\CourseType;
 use Chamilo\Application\Weblcms\Storage\DataClass\CourseTool;
 use Chamilo\Core\User\Storage\DataClass\User;
 use Chamilo\Libraries\Storage\Query\Condition\Condition;
-use Chamilo\Libraries\Storage\Query\DataClassParameters;
+use Chamilo\Libraries\Storage\Query\StorageParameters;
 
 /**
  * Interface to describe the necessary functions needed from the CourseEntityRepository
@@ -111,11 +111,11 @@ interface CourseRepositoryInterface
     /**
      * Returns Courses with a given set of parameters
      *
-     * @param DataClassParameters $dataClassParameters
+     * @param StorageParameters $dataClassParameters
      *
      * @return Course[]
      */
-    public function findCoursesByParameters(DataClassParameters $dataClassParameters);
+    public function findCoursesByParameters(StorageParameters $dataClassParameters);
 
     /**
      * Returns courses where a user is subscribed

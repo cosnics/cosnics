@@ -13,7 +13,7 @@ use Chamilo\Libraries\Storage\Query\Condition\Condition;
 use Chamilo\Libraries\Storage\Query\Condition\EqualityCondition;
 use Chamilo\Libraries\Storage\Query\Condition\InCondition;
 use Chamilo\Libraries\Storage\Query\Condition\NotCondition;
-use Chamilo\Libraries\Storage\Query\DataClassParameters;
+use Chamilo\Libraries\Storage\Query\StorageParameters;
 use Chamilo\Libraries\Storage\Query\Join;
 use Chamilo\Libraries\Storage\Query\Joins;
 use Chamilo\Libraries\Storage\Query\RetrieveProperties;
@@ -52,7 +52,7 @@ class OpenCourseRepository extends DataManagerRepository implements OpenCourseRe
     public function countClosedCourses(Condition $condition = null)
     {
         return DataManager::count(
-            Course::class, new DataClassParameters(condition: $this->getClosedCoursesCondition($condition))
+            Course::class, new StorageParameters(condition: $this->getClosedCoursesCondition($condition))
         );
     }
 
@@ -65,7 +65,7 @@ class OpenCourseRepository extends DataManagerRepository implements OpenCourseRe
      */
     protected function countOpenCourses(Condition $condition = null)
     {
-        $countParameters = new DataClassParameters(condition: $condition, joins: $this->getOpenCoursesJoins());
+        $countParameters = new StorageParameters(condition: $condition, joins: $this->getOpenCoursesJoins());
 
         return DataManager::count(Course::class, $countParameters);
     }
@@ -111,7 +111,7 @@ class OpenCourseRepository extends DataManagerRepository implements OpenCourseRe
     public function findClosedCourses(Condition $condition = null, $offset = null, $count = null, $orderBy = null)
     {
         return DataManager::retrieves(
-            Course::class, new DataClassParameters(
+            Course::class, new StorageParameters(
                 condition: $this->getClosedCoursesCondition($condition), count: $count, offset: $offset,
                 orderBy: $orderBy
             )
@@ -139,7 +139,7 @@ class OpenCourseRepository extends DataManagerRepository implements OpenCourseRe
             )
         );
 
-        $recordsParameters = new DataClassParameters(
+        $recordsParameters = new StorageParameters(
             condition: $condition, count: $count, offset: $offset, orderBy: $orderBy, joins: $this->getOpenCoursesJoins(
         ), retrieveProperties: $properties
         );
@@ -238,7 +238,7 @@ class OpenCourseRepository extends DataManagerRepository implements OpenCourseRe
 
         $condition = new AndCondition($conditions);
 
-        $distinctParameters = new DataClassParameters(
+        $distinctParameters = new StorageParameters(
             condition: $condition, retrieveProperties: new RetrieveProperties(
             [
                 new PropertyConditionVariable(CourseEntityRelation::class, CourseEntityRelation::PROPERTY_COURSE_ID)
@@ -336,7 +336,7 @@ class OpenCourseRepository extends DataManagerRepository implements OpenCourseRe
         );
 
         return DataManager::retrieves(
-            Role::class, new DataClassParameters(
+            Role::class, new StorageParameters(
                 condition: $condition, joins: $joins
             )
         );

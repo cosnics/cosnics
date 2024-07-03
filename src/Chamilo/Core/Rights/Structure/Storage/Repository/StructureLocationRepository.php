@@ -8,7 +8,7 @@ use Chamilo\Libraries\Storage\DataManager\DataManager;
 use Chamilo\Libraries\Storage\DataManager\Repository\DataManagerRepository;
 use Chamilo\Libraries\Storage\Query\Condition\AndCondition;
 use Chamilo\Libraries\Storage\Query\Condition\EqualityCondition;
-use Chamilo\Libraries\Storage\Query\DataClassParameters;
+use Chamilo\Libraries\Storage\Query\StorageParameters;
 use Chamilo\Libraries\Storage\Query\Variable\PropertyConditionVariable;
 use Chamilo\Libraries\Storage\Query\Variable\StaticConditionVariable;
 
@@ -44,7 +44,7 @@ class StructureLocationRepository extends DataManagerRepository implements Struc
 
         $condition = new AndCondition($conditions);
 
-        return DataManager::retrieve(StructureLocation::class, new DataClassParameters(condition: $condition));
+        return DataManager::retrieve(StructureLocation::class, new StorageParameters(condition: $condition));
     }
 
     /**

@@ -3,7 +3,7 @@ namespace Chamilo\Core\Repository\ContentObject\Assignment\Display\Bridge\Interf
 
 use Chamilo\Application\Weblcms\Tool\Implementation\Ephorus\Storage\DataClass\Request;
 use Chamilo\Libraries\Storage\Query\Condition\Condition;
-use Chamilo\Libraries\Storage\Query\DataClassParameters;
+use Chamilo\Libraries\Storage\Query\StorageParameters;
 
 /**
  * Interface AssignmentEphorusSupportInterface
@@ -20,12 +20,12 @@ interface EphorusServiceBridgeInterface
     public function countAssignmentEntriesWithEphorusRequests(Condition $condition = null);
 
     /**
-     * @param \Chamilo\Libraries\Storage\Query\DataClassParameters $dataClassParameters
+     * @param \Chamilo\Libraries\Storage\Query\StorageParameters $dataClassParameters
      *
      * @return \Doctrine\Common\Collections\ArrayCollection
      */
     public function findAssignmentEntriesWithEphorusRequests(
-        DataClassParameters $dataClassParameters = new DataClassParameters()
+        StorageParameters $dataClassParameters = new StorageParameters()
     );
 
     /**

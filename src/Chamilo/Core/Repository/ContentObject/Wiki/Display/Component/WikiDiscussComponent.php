@@ -12,7 +12,7 @@ use Chamilo\Libraries\Format\Breadcrumb\BreadcrumbLessComponentInterface;
 use Chamilo\Libraries\Format\Breadcrumb\BreadcrumbTrail;
 use Chamilo\Libraries\Storage\DataManager\DataManager;
 use Chamilo\Libraries\Storage\Query\Condition\EqualityCondition;
-use Chamilo\Libraries\Storage\Query\DataClassParameters;
+use Chamilo\Libraries\Storage\Query\StorageParameters;
 use Chamilo\Libraries\Storage\Query\Variable\PropertyConditionVariable;
 use Chamilo\Libraries\Storage\Query\Variable\StaticConditionVariable;
 use Chamilo\Libraries\Translation\Translation;
@@ -78,7 +78,7 @@ class WikiDiscussComponent extends Manager implements BreadcrumbLessComponentInt
     public function count_feedbacks()
     {
         return DataManager::count(
-            WikiPageFeedback::class, new DataClassParameters(condition: $this->getWikiPageFeedbackCondition())
+            WikiPageFeedback::class, new StorageParameters(condition: $this->getWikiPageFeedbackCondition())
         );
     }
 
@@ -196,7 +196,7 @@ class WikiDiscussComponent extends Manager implements BreadcrumbLessComponentInt
     {
         return DataManager::retrieves(
             WikiPageFeedback::class,
-            new DataClassParameters(condition: $this->getWikiPageFeedbackCondition(), count: $count, offset: $offset)
+            new StorageParameters(condition: $this->getWikiPageFeedbackCondition(), count: $count, offset: $offset)
         );
     }
 }

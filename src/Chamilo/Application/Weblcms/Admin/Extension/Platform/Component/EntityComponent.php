@@ -13,7 +13,7 @@ use Chamilo\Libraries\Format\Table\RequestTableParameterValuesCompiler;
 use Chamilo\Libraries\Format\Tabs\Link\LinkTab;
 use Chamilo\Libraries\Format\Tabs\TabsCollection;
 use Chamilo\Libraries\Storage\Query\Condition\EqualityCondition;
-use Chamilo\Libraries\Storage\Query\DataClassParameters;
+use Chamilo\Libraries\Storage\Query\StorageParameters;
 use Chamilo\Libraries\Storage\Query\Variable\PropertyConditionVariable;
 use Chamilo\Libraries\Storage\Query\Variable\StaticConditionVariable;
 
@@ -73,7 +73,7 @@ class EntityComponent extends Manager
                 new PropertyConditionVariable(Admin::class, Admin::PROPERTY_ENTITY_TYPE),
                 new StaticConditionVariable($entity_type::ENTITY_TYPE)
             );
-            $count = DataManager::count(Admin::class, new DataClassParameters(condition: $condition));
+            $count = DataManager::count(Admin::class, new StorageParameters(condition: $condition));
 
             if ($count > 0)
             {

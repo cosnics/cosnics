@@ -13,7 +13,7 @@ use Chamilo\Libraries\DependencyInjection\DependencyInjectionContainerBuilder;
 use Chamilo\Libraries\Storage\DataManager\DataManager;
 use Chamilo\Libraries\Storage\Query\Condition\EqualityCondition;
 use Chamilo\Libraries\Storage\Query\Condition\InCondition;
-use Chamilo\Libraries\Storage\Query\DataClassParameters;
+use Chamilo\Libraries\Storage\Query\StorageParameters;
 use Chamilo\Libraries\Storage\Query\Variable\PropertyConditionVariable;
 use Chamilo\Libraries\Storage\Query\Variable\StaticConditionVariable;
 use Chamilo\Libraries\Translation\Translation;
@@ -71,7 +71,7 @@ class Rights extends RightsUtil
                     ), new StaticConditionVariable($user_group_id)
                 );
                 $right_groups = DataManager::retrieves(
-                    RightsLocationEntityRightGroup::class, new DataClassParameters(condition: $condition)
+                    RightsLocationEntityRightGroup::class, new StorageParameters(condition: $condition)
                 );
 
                 foreach ($right_groups as $right_group)
@@ -140,7 +140,7 @@ class Rights extends RightsUtil
                     ), $user_ids
                 );
                 $authorized_user_count = DataManager::count(
-                    User::class, new DataClassParameters(condition: $condition)
+                    User::class, new StorageParameters(condition: $condition)
                 );
 
                 if ($authorized_user_count == 0)
@@ -161,7 +161,7 @@ class Rights extends RightsUtil
                 );
             }
             $authorized_users = DataManager::retrieves(
-                User::class, new DataClassParameters(condition: $condition)
+                User::class, new StorageParameters(condition: $condition)
             );
 
             foreach ($authorized_users as $authorized_user)
@@ -225,7 +225,7 @@ class Rights extends RightsUtil
                     ), new StaticConditionVariable($location_entity_right->get_id())
                 );
                 $right_groups = DataManager::retrieves(
-                    RightsLocationEntityRightGroup::class, new DataClassParameters(condition: $condition)
+                    RightsLocationEntityRightGroup::class, new StorageParameters(condition: $condition)
                 );
 
                 foreach ($right_groups as $right_group)
@@ -253,7 +253,7 @@ class Rights extends RightsUtil
                         ), new StaticConditionVariable($location_entity_right->get_id())
                     );
                     $right_groups = DataManager::retrieves(
-                        RightsLocationEntityRightGroup::class, new DataClassParameters(condition: $condition)
+                        RightsLocationEntityRightGroup::class, new StorageParameters(condition: $condition)
                     );
 
                     foreach ($right_groups as $right_group)
@@ -278,7 +278,7 @@ class Rights extends RightsUtil
                     ), $allowed_groups
                 );
                 $groups = DataManager::retrieves(
-                    Group::class, new DataClassParameters(condition: $condition)
+                    Group::class, new StorageParameters(condition: $condition)
                 );
 
                 foreach ($groups as $group)

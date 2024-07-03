@@ -11,7 +11,7 @@ use Chamilo\Libraries\Format\Tabs\Link\LinkTabsRenderer;
 use Chamilo\Libraries\Format\Tabs\TabsCollection;
 use Chamilo\Libraries\Storage\Query\Condition\AndCondition;
 use Chamilo\Libraries\Storage\Query\Condition\EqualityCondition;
-use Chamilo\Libraries\Storage\Query\DataClassParameters;
+use Chamilo\Libraries\Storage\Query\StorageParameters;
 use Chamilo\Libraries\Storage\Query\Variable\PropertyConditionVariable;
 use Chamilo\Libraries\Storage\Query\Variable\StaticConditionVariable;
 
@@ -72,7 +72,7 @@ abstract class ProfileComponent extends Manager implements BreadcrumbLessPackage
         $condition = new AndCondition($conditions);
 
         $extra_form = DataManager::retrieve(
-            Instance::class, new DataClassParameters(condition: $condition)
+            Instance::class, new StorageParameters(condition: $condition)
         );
 
         if ($extra_form instanceof Instance && count($extra_form->get_elements()) > 0)

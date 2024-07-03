@@ -3,7 +3,7 @@ namespace Chamilo\Application\Weblcms\Tool\Implementation\Ephorus\Storage;
 
 use Chamilo\Application\Weblcms\Tool\Implementation\Ephorus\Storage\DataClass\Request;
 use Chamilo\Libraries\Storage\Query\Condition\EqualityCondition;
-use Chamilo\Libraries\Storage\Query\DataClassParameters;
+use Chamilo\Libraries\Storage\Query\StorageParameters;
 use Chamilo\Libraries\Storage\Query\Variable\PropertyConditionVariable;
 use Chamilo\Libraries\Storage\Query\Variable\StaticConditionVariable;
 use InvalidArgumentException;
@@ -37,6 +37,6 @@ class DataManager extends \Chamilo\Libraries\Storage\DataManager\DataManager
             new PropertyConditionVariable(Request::class, Request::PROPERTY_GUID), new StaticConditionVariable($guid)
         );
 
-        return static::retrieve(Request::class, new DataClassParameters(condition: $condition));
+        return static::retrieve(Request::class, new StorageParameters(condition: $condition));
     }
 }

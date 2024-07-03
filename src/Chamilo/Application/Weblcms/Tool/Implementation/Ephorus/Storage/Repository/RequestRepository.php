@@ -9,7 +9,7 @@ use Chamilo\Core\User\Storage\DataClass\User;
 use Chamilo\Libraries\Storage\Query\Condition\Condition;
 use Chamilo\Libraries\Storage\Query\Condition\EqualityCondition;
 use Chamilo\Libraries\Storage\Query\Condition\InCondition;
-use Chamilo\Libraries\Storage\Query\DataClassParameters;
+use Chamilo\Libraries\Storage\Query\StorageParameters;
 use Chamilo\Libraries\Storage\Query\Join;
 use Chamilo\Libraries\Storage\Query\Joins;
 use Chamilo\Libraries\Storage\Query\OrderBy;
@@ -35,7 +35,7 @@ class RequestRepository extends CommonDataClassRepository
     public function countRequestsWithContentObjects(Condition $condition)
     {
         return $this->dataClassRepository->count(
-            Request::class, new DataClassParameters(condition: $condition, joins: $this->getRequestJoins())
+            Request::class, new StorageParameters(condition: $condition, joins: $this->getRequestJoins())
         );
     }
 
@@ -53,7 +53,7 @@ class RequestRepository extends CommonDataClassRepository
             new PropertyConditionVariable(Request::class, Request::PROPERTY_GUID), new StaticConditionVariable($guid)
         );
 
-        return $this->dataClassRepository->retrieve(Request::class, new DataClassParameters(condition: $condition));
+        return $this->dataClassRepository->retrieve(Request::class, new StorageParameters(condition: $condition));
     }
 
     /**
@@ -70,15 +70,15 @@ class RequestRepository extends CommonDataClassRepository
             new PropertyConditionVariable(Request::class, Request::PROPERTY_ID), new StaticConditionVariable($id)
         );
 
-        return $this->dataClassRepository->retrieve(Request::class, new DataClassParameters(condition: $condition));
+        return $this->dataClassRepository->retrieve(Request::class, new StorageParameters(condition: $condition));
     }
 
     /**
-     * @param \Chamilo\Libraries\Storage\Query\DataClassParameters $dataClassParameters
+     * @param \Chamilo\Libraries\Storage\Query\StorageParameters $dataClassParameters
      *
      * @return \Doctrine\Common\Collections\ArrayCollection
      */
-    public function findRequestsWithContentObjects(DataClassParameters $dataClassParameters)
+    public function findRequestsWithContentObjects(StorageParameters $dataClassParameters)
     {
         $properties = new RetrieveProperties();
 
@@ -122,7 +122,7 @@ class RequestRepository extends CommonDataClassRepository
         $properties->add(new PropertiesConditionVariable(ContentObject::class));
         $properties->add(new PropertyConditionVariable(Request::class, Request::PROPERTY_GUID));
 
-        $dataClassParameters = new DataClassParameters(
+        $dataClassParameters = new StorageParameters(
             condition: $condition, joins: $this->getRequestJoins(), retrieveProperties: $properties
         );
 
@@ -153,7 +153,7 @@ class RequestRepository extends CommonDataClassRepository
         $orderBy = [new OrderProperty(new PropertyConditionVariable(Result::class, Result::PROPERTY_PERCENTAGE))];
 
         return $this->dataClassRepository->retrieves(
-            Result::class, new DataClassParameters(condition: $condition, orderBy: new OrderBy($orderBy))
+            Result::class, new StorageParameters(condition: $condition, orderBy: new OrderBy($orderBy))
         );
     }
 

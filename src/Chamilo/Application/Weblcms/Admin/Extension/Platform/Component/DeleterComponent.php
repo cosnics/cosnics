@@ -9,7 +9,7 @@ use Chamilo\Libraries\Architecture\Exceptions\NotAllowedException;
 use Chamilo\Libraries\Storage\Query\Condition\AndCondition;
 use Chamilo\Libraries\Storage\Query\Condition\EqualityCondition;
 use Chamilo\Libraries\Storage\Query\Condition\InCondition;
-use Chamilo\Libraries\Storage\Query\DataClassParameters;
+use Chamilo\Libraries\Storage\Query\StorageParameters;
 use Chamilo\Libraries\Storage\Query\Variable\PropertyConditionVariable;
 use Chamilo\Libraries\Storage\Query\Variable\StaticConditionVariable;
 use Chamilo\Libraries\Translation\Translation;
@@ -85,7 +85,7 @@ class DeleterComponent extends Manager
 
                         $condition = new AndCondition($condition);
 
-                        $count = DataManager::count(Admin::class, new DataClassParameters(condition: $condition));
+                        $count = DataManager::count(Admin::class, new StorageParameters(condition: $condition));
 
                         if ($count > 0)
                         {
@@ -96,7 +96,7 @@ class DeleterComponent extends Manager
                         }
                         else
                         {
-                            $count = DataManager::count(Admin::class, new DataClassParameters());
+                            $count = DataManager::count(Admin::class, new StorageParameters());
 
                             if ($count > 0)
                             {
@@ -151,7 +151,7 @@ class DeleterComponent extends Manager
 
                 $condition = new AndCondition($conditions);
 
-                $count = DataManager::count(Admin::class, new DataClassParameters(condition: $condition));
+                $count = DataManager::count(Admin::class, new StorageParameters(condition: $condition));
 
                 if ($count > 0)
                 {
@@ -177,7 +177,7 @@ class DeleterComponent extends Manager
 
                 $condition = new AndCondition($conditions);
 
-                $count = DataManager::count(Admin::class, new DataClassParameters(condition: $condition));
+                $count = DataManager::count(Admin::class, new StorageParameters(condition: $condition));
 
                 if ($count > 0)
                 {
@@ -195,7 +195,7 @@ class DeleterComponent extends Manager
                     new StaticConditionVariable($admin->get_entity_type())
                 );
 
-                $count = DataManager::count(Admin::class, new DataClassParameters(condition: $condition));
+                $count = DataManager::count(Admin::class, new StorageParameters(condition: $condition));
 
                 if ($count > 0)
                 {

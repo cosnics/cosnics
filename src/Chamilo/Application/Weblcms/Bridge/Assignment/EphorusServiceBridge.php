@@ -7,7 +7,7 @@ use Chamilo\Application\Weblcms\Tool\Implementation\Ephorus\Storage\DataClass\Re
 use Chamilo\Core\Repository\ContentObject\Assignment\Display\Bridge\Interfaces\EphorusServiceBridgeInterface;
 use Chamilo\Core\Repository\ContentObject\Assignment\Storage\DataClass\Assignment;
 use Chamilo\Libraries\Storage\Query\Condition\Condition;
-use Chamilo\Libraries\Storage\Query\DataClassParameters;
+use Chamilo\Libraries\Storage\Query\StorageParameters;
 use RuntimeException;
 
 /**
@@ -55,12 +55,12 @@ class EphorusServiceBridge implements EphorusServiceBridgeInterface
     }
 
     /**
-     * @param \Chamilo\Libraries\Storage\Query\DataClassParameters $dataClassParameters
+     * @param \Chamilo\Libraries\Storage\Query\StorageParameters $dataClassParameters
      *
      * @return \Doctrine\Common\Collections\ArrayCollection
      */
     public function findAssignmentEntriesWithEphorusRequests(
-        DataClassParameters $dataClassParameters = new DataClassParameters()
+        StorageParameters $dataClassParameters = new StorageParameters()
     )
     {
         return $this->ephorusService->findAssignmentEntriesWithEphorusRequestsByContentObjectPublication(

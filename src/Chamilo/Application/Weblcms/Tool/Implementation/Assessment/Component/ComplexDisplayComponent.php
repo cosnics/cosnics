@@ -16,7 +16,7 @@ use Chamilo\Libraries\Format\Breadcrumb\BreadcrumbLessComponentInterface;
 use Chamilo\Libraries\Format\Breadcrumb\BreadcrumbTrail;
 use Chamilo\Libraries\Storage\Query\Condition\AndCondition;
 use Chamilo\Libraries\Storage\Query\Condition\EqualityCondition;
-use Chamilo\Libraries\Storage\Query\DataClassParameters;
+use Chamilo\Libraries\Storage\Query\StorageParameters;
 use Chamilo\Libraries\Storage\Query\Variable\PropertyConditionVariable;
 use Chamilo\Libraries\Storage\Query\Variable\StaticConditionVariable;
 use Chamilo\Libraries\Translation\Translation;
@@ -106,7 +106,7 @@ class ComplexDisplayComponent extends Manager implements AssessmentDisplaySuppor
         $condition = new AndCondition($conditions);
 
         $trackers = DataManager::retrieves(
-            AssessmentAttempt::class, new DataClassParameters(condition: $condition)
+            AssessmentAttempt::class, new StorageParameters(condition: $condition)
         );
 
         $count = $trackers->count();
@@ -219,7 +219,7 @@ class ComplexDisplayComponent extends Manager implements AssessmentDisplaySuppor
 
     public function get_assessment_configuration()
     {
-        $parameters = new DataClassParameters(
+        $parameters = new StorageParameters(
             condition: new EqualityCondition(
                 new PropertyConditionVariable(Publication::class, Publication::PROPERTY_PUBLICATION_ID),
                 new StaticConditionVariable($this->publication->get_id())
@@ -382,7 +382,7 @@ class ComplexDisplayComponent extends Manager implements AssessmentDisplaySuppor
         );
 
         $question_attempts_result_set = DataManager::retrieves(
-            QuestionAttempt::class, new DataClassParameters(condition: $condition)
+            QuestionAttempt::class, new StorageParameters(condition: $condition)
         );
 
         foreach ($question_attempts_result_set as $question_attempt)

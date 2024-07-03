@@ -9,7 +9,7 @@ use Chamilo\Libraries\Storage\Query\Condition\Condition;
 use Chamilo\Libraries\Storage\Query\Condition\EqualityCondition;
 use Chamilo\Libraries\Storage\Query\Condition\NotCondition;
 use Chamilo\Libraries\Storage\Query\Condition\OrCondition;
-use Chamilo\Libraries\Storage\Query\DataClassParameters;
+use Chamilo\Libraries\Storage\Query\StorageParameters;
 use Chamilo\Libraries\Storage\Query\OrderBy;
 use Chamilo\Libraries\Storage\Query\OrderProperty;
 use Chamilo\Libraries\Storage\Query\RetrieveProperties;
@@ -37,7 +37,7 @@ class NestedSetDataClassRepository
     /**
      * @throws \Chamilo\Libraries\Storage\Exception\StorageMethodException
      */
-    public function count(string $dataClassName, DataClassParameters $parameters): int
+    public function count(string $dataClassName, StorageParameters $parameters): int
     {
         return $this->getDataClassRepository()->count($dataClassName, $parameters);
     }
@@ -50,7 +50,7 @@ class NestedSetDataClassRepository
     {
         return $this->getDataClassRepository()->count(
             get_class($nestedSet),
-            new DataClassParameters(condition: $this->getAncestorsCondition($nestedSet, $includeSelf, $condition))
+            new StorageParameters(condition: $this->getAncestorsCondition($nestedSet, $includeSelf, $condition))
         );
     }
 
@@ -62,7 +62,7 @@ class NestedSetDataClassRepository
     public function countDescendants(NestedSet $nestedSet, bool $recursive = true, ?Condition $condition = null): int
     {
         return $this->getDataClassRepository()->count(
-            get_class($nestedSet), new DataClassParameters(
+            get_class($nestedSet), new StorageParameters(
                 condition: $this->getDescendantsCondition(
                     $nestedSet, $recursive, false, $condition
                 )
@@ -78,7 +78,7 @@ class NestedSetDataClassRepository
     {
         return $this->getDataClassRepository()->count(
             get_class($nestedSet),
-            new DataClassParameters(condition: $this->getSiblingsCondition($nestedSet, $includeSelf, $condition))
+            new StorageParameters(condition: $this->getSiblingsCondition($nestedSet, $includeSelf, $condition))
         );
     }
 
@@ -200,7 +200,7 @@ class NestedSetDataClassRepository
      * @return string[]
      * @throws \Chamilo\Libraries\Storage\Exception\StorageMethodException
      */
-    public function distinct(string $dataClassName, DataClassParameters $parameters): array
+    public function distinct(string $dataClassName, StorageParameters $parameters): array
     {
         return $this->getDataClassRepository()->distinct($dataClassName, $parameters);
     }
@@ -213,7 +213,7 @@ class NestedSetDataClassRepository
     ): array
     {
         return $this->getDataClassRepository()->distinct(
-            get_class($nestedSet), new DataClassParameters(
+            get_class($nestedSet), new StorageParameters(
                 condition: $this->getAncestorsCondition($nestedSet, $includeSelf, $condition),
                 retrieveProperties: new RetrieveProperties(
                     [new PropertyConditionVariable(get_class($nestedSet), DataClass::PROPERTY_ID)]
@@ -234,7 +234,7 @@ class NestedSetDataClassRepository
     ): ArrayCollection
     {
         return $this->getDataClassRepository()->retrieves(
-            get_class($nestedSet), new DataClassParameters(
+            get_class($nestedSet), new StorageParameters(
                 condition: $this->getAncestorsCondition($nestedSet, $includeSelf, $condition),
                 orderBy: $this->getPostOrderBy($nestedSet)
             )
@@ -255,7 +255,7 @@ class NestedSetDataClassRepository
     ): ArrayCollection
     {
         return $this->getDataClassRepository()->retrieves(
-            get_class($nestedSet), new DataClassParameters(
+            get_class($nestedSet), new StorageParameters(
                 condition: $this->getDescendantsCondition($nestedSet, $recursive, false, $condition)
             )
         );
@@ -283,7 +283,7 @@ class NestedSetDataClassRepository
     ): ArrayCollection
     {
         return $this->getDataClassRepository()->retrieves(
-            get_class($nestedSet), new DataClassParameters(
+            get_class($nestedSet), new StorageParameters(
                 condition: $this->getSiblingsCondition($nestedSet, $includeSelf, $condition),
                 orderBy: $this->getPreOrderBy($nestedSet)
             )
@@ -919,7 +919,7 @@ class NestedSetDataClassRepository
      * @throws \Chamilo\Libraries\Storage\Exception\StorageNoResultException
      * @throws \Chamilo\Libraries\Storage\Exception\StorageMethodException
      */
-    public function record(string $dataClassName, DataClassParameters $parameters): array
+    public function record(string $dataClassName, StorageParameters $parameters): array
     {
         return $this->getDataClassRepository()->record($dataClassName, $parameters);
     }
@@ -927,7 +927,7 @@ class NestedSetDataClassRepository
     /**
      * @throws \Chamilo\Libraries\Storage\Exception\StorageMethodException
      */
-    public function records(string $dataClassName, DataClassParameters $parameters): ArrayCollection
+    public function records(string $dataClassName, StorageParameters $parameters): ArrayCollection
     {
         return $this->getDataClassRepository()->records($dataClassName, $parameters);
     }
@@ -941,7 +941,7 @@ class NestedSetDataClassRepository
      * @throws \Chamilo\Libraries\Storage\Exception\StorageMethodException
      * @throws \Chamilo\Libraries\Storage\Exception\StorageNoResultException
      */
-    public function retrieve(string $dataClassName, DataClassParameters $parameters)
+    public function retrieve(string $dataClassName, StorageParameters $parameters)
     {
         return $this->getDataClassRepository()->retrieve($dataClassName, $parameters);
     }
@@ -965,12 +965,12 @@ class NestedSetDataClassRepository
      * @template tRetrieves
      *
      * @param class-string<tRetrieves> $dataClassName
-     * @param \Chamilo\Libraries\Storage\Query\DataClassParameters $parameters
+     * @param \Chamilo\Libraries\Storage\Query\StorageParameters $parameters
      *
      * @return ArrayCollection<tRetrieves>
      * @throws \Chamilo\Libraries\Storage\Exception\StorageMethodException
      */
-    public function retrieves(string $dataClassName, DataClassParameters $parameters): ArrayCollection
+    public function retrieves(string $dataClassName, StorageParameters $parameters): ArrayCollection
     {
         return $this->getDataClassRepository()->retrieves($dataClassName, $parameters);
     }

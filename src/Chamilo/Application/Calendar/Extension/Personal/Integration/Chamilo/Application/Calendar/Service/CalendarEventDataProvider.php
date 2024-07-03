@@ -14,7 +14,7 @@ use Chamilo\Core\User\Storage\DataClass\User;
 use Chamilo\Libraries\Architecture\ClassnameUtilities;
 use Chamilo\Libraries\Calendar\Service\CalendarRendererProvider;
 use Chamilo\Libraries\DependencyInjection\Traits\DependencyInjectionContainerTrait;
-use Chamilo\Libraries\Storage\Query\DataClassParameters;
+use Chamilo\Libraries\Storage\Query\StorageParameters;
 
 /**
  * @package Chamilo\Application\Calendar\Extension\Personal\Integration\Chamilo\Application\Calendar
@@ -97,7 +97,7 @@ class CalendarEventDataProvider extends MixedCalendar
 
     /**
      * @param \Chamilo\Libraries\Calendar\Service\CalendarRendererProvider $calendarRendererProvider
-     * @param DataClassParameters $dataClassParameters
+     * @param StorageParameters $dataClassParameters
      * @param int $fromDate
      * @param int $toDate
      *
@@ -105,7 +105,7 @@ class CalendarEventDataProvider extends MixedCalendar
      * @throws \Symfony\Component\Cache\Exception\CacheException
      */
     protected function getEventsByParameters(
-        CalendarRendererProvider $calendarRendererProvider, DataClassParameters $dataClassParameters, int $fromDate,
+        CalendarRendererProvider $calendarRendererProvider, StorageParameters $dataClassParameters, int $fromDate,
         int $toDate
     ): array
     {

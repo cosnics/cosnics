@@ -13,7 +13,7 @@ use Chamilo\Libraries\Format\Breadcrumb\BreadcrumbLessComponentInterface;
 use Chamilo\Libraries\Format\Form\FormValidator;
 use Chamilo\Libraries\Format\Structure\Breadcrumb;
 use Chamilo\Libraries\Storage\Query\Condition\EqualityCondition;
-use Chamilo\Libraries\Storage\Query\DataClassParameters;
+use Chamilo\Libraries\Storage\Query\StorageParameters;
 use Chamilo\Libraries\Storage\Query\Variable\PropertyConditionVariable;
 use Chamilo\Libraries\Storage\Query\Variable\StaticConditionVariable;
 use Chamilo\Libraries\Translation\Translation;
@@ -85,7 +85,7 @@ class UpdaterComponent extends Manager implements BreadcrumbLessComponentInterfa
                 $complex_content_object_item->set_ref($new_id);
 
                 $children = DataManager::retrieve_complex_content_object_items(
-                    ComplexContentObjectItem::class, new DataClassParameters(
+                    ComplexContentObjectItem::class, new StorageParameters(
                         condition: new EqualityCondition(
                             new PropertyConditionVariable(
                                 ComplexContentObjectItem::class, ComplexContentObjectItem::PROPERTY_PARENT

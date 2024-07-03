@@ -17,7 +17,7 @@ use Chamilo\Libraries\Storage\Query\Condition\AndCondition;
 use Chamilo\Libraries\Storage\Query\Condition\EqualityCondition;
 use Chamilo\Libraries\Storage\Query\Condition\InCondition;
 use Chamilo\Libraries\Storage\Query\Condition\SubselectCondition;
-use Chamilo\Libraries\Storage\Query\DataClassParameters;
+use Chamilo\Libraries\Storage\Query\StorageParameters;
 use Chamilo\Libraries\Storage\Query\Variable\PropertyConditionVariable;
 use Chamilo\Libraries\Storage\Query\Variable\StaticConditionVariable;
 use Chamilo\Libraries\Translation\Translation;
@@ -265,7 +265,7 @@ class ZipAndDownloadComponent extends Manager
         $condition = new AndCondition($conditions);
 
         $categories = WeblcmsDataManager::retrieves(
-            ContentObjectPublicationCategory::class, new DataClassParameters(condition: $condition)
+            ContentObjectPublicationCategory::class, new StorageParameters(condition: $condition)
         );
 
         foreach ($categories as $category)

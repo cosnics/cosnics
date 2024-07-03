@@ -3,7 +3,7 @@ namespace Chamilo\Configuration\Storage\Repository;
 
 use Chamilo\Configuration\Storage\DataClass\Language;
 use Chamilo\Libraries\Storage\DataManager\Repository\DataClassRepository;
-use Chamilo\Libraries\Storage\Query\DataClassParameters;
+use Chamilo\Libraries\Storage\Query\StorageParameters;
 use Chamilo\Libraries\Storage\Query\RetrieveProperties;
 use Chamilo\Libraries\Storage\Query\Variable\PropertiesConditionVariable;
 use Doctrine\Common\Collections\ArrayCollection;
@@ -34,7 +34,7 @@ class LanguageRepository
     public function findLanguagesAsRecords(): ArrayCollection
     {
         return $this->getDataClassRepository()->records(
-            Language::class, new DataClassParameters(
+            Language::class, new StorageParameters(
                 retrieveProperties: new RetrieveProperties([new PropertiesConditionVariable(Language::class)])
             )
         );

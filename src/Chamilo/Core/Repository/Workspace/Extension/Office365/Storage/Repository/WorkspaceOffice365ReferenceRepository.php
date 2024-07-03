@@ -5,7 +5,7 @@ use Chamilo\Core\Repository\ContentObject\LearningPath\Storage\Repository\Common
 use Chamilo\Core\Repository\Workspace\Extension\Office365\Storage\DataClass\WorkspaceOffice365Reference;
 use Chamilo\Core\Repository\Workspace\Storage\DataClass\Workspace;
 use Chamilo\Libraries\Storage\Query\Condition\EqualityCondition;
-use Chamilo\Libraries\Storage\Query\DataClassParameters;
+use Chamilo\Libraries\Storage\Query\StorageParameters;
 use Chamilo\Libraries\Storage\Query\Variable\PropertyConditionVariable;
 use Chamilo\Libraries\Storage\Query\Variable\StaticConditionVariable;
 
@@ -44,7 +44,7 @@ class WorkspaceOffice365ReferenceRepository extends CommonDataClassRepository
         $condition = $this->getConditionByWorkspace($workspace);
 
         return $this->dataClassRepository->retrieve(
-            WorkspaceOffice365Reference::class, new DataClassParameters(condition: $condition)
+            WorkspaceOffice365Reference::class, new StorageParameters(condition: $condition)
         );
     }
 

@@ -20,7 +20,7 @@ use Chamilo\Libraries\Format\Structure\ActionBar\Renderer\ButtonToolBarRenderer;
 use Chamilo\Libraries\Format\Structure\Breadcrumb;
 use Chamilo\Libraries\Storage\Query\Condition\AndCondition;
 use Chamilo\Libraries\Storage\Query\Condition\EqualityCondition;
-use Chamilo\Libraries\Storage\Query\DataClassParameters;
+use Chamilo\Libraries\Storage\Query\StorageParameters;
 use Chamilo\Libraries\Storage\Query\OrderBy;
 use Chamilo\Libraries\Storage\Query\OrderProperty;
 use Chamilo\Libraries\Storage\Query\Variable\PropertyConditionVariable;
@@ -105,7 +105,7 @@ class ViewerComponent extends Manager implements BreadcrumbLessComponentInterfac
 
     public function count_feedbacks()
     {
-        $parameters = new DataClassParameters(condition: $this->get_feedback_conditions());
+        $parameters = new StorageParameters(condition: $this->get_feedback_conditions());
 
         return DataManager::count(
             Feedback::class, $parameters
@@ -269,7 +269,7 @@ class ViewerComponent extends Manager implements BreadcrumbLessComponentInterfac
      */
     public function retrieve_feedbacks($count, $offset)
     {
-        $parameters = new DataClassParameters(
+        $parameters = new StorageParameters(
             condition: $this->get_feedback_conditions(), count: $count, offset: $offset, orderBy: new OrderBy([
             new OrderProperty(
                 new PropertyConditionVariable(

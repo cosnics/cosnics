@@ -5,7 +5,7 @@ use Chamilo\Application\Portfolio\Storage\DataClass\RightsLocationEntityRight;
 use Chamilo\Libraries\Storage\Query\Condition\AndCondition;
 use Chamilo\Libraries\Storage\Query\Condition\EqualityCondition;
 use Chamilo\Libraries\Storage\Query\Condition\InCondition;
-use Chamilo\Libraries\Storage\Query\DataClassParameters;
+use Chamilo\Libraries\Storage\Query\StorageParameters;
 use Chamilo\Libraries\Storage\Query\OrderBy;
 use Chamilo\Libraries\Storage\Query\OrderProperty;
 use Chamilo\Libraries\Storage\Query\Variable\PropertyConditionVariable;
@@ -117,7 +117,7 @@ class DataManager extends \Chamilo\Libraries\Storage\DataManager\DataManager
         );
         $condition = new AndCondition($conditions);
 
-        return self::retrieve(RightsLocationEntityRight::class, new DataClassParameters(condition: $condition));
+        return self::retrieve(RightsLocationEntityRight::class, new StorageParameters(condition: $condition));
     }
 
     /**
@@ -162,7 +162,7 @@ class DataManager extends \Chamilo\Libraries\Storage\DataManager\DataManager
 
         return self::retrieves(
             RightsLocationEntityRight::class,
-            new DataClassParameters(condition: $condition, orderBy: new OrderBy([$order]))
+            new StorageParameters(condition: $condition, orderBy: new OrderBy([$order]))
         );
     }
 }

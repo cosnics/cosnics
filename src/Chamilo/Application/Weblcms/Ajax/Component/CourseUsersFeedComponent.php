@@ -14,7 +14,7 @@ use Chamilo\Libraries\Storage\DataManager\DataManager;
 use Chamilo\Libraries\Storage\Query\Condition\AndCondition;
 use Chamilo\Libraries\Storage\Query\Condition\EqualityCondition;
 use Chamilo\Libraries\Storage\Query\Condition\InCondition;
-use Chamilo\Libraries\Storage\Query\DataClassParameters;
+use Chamilo\Libraries\Storage\Query\StorageParameters;
 use Chamilo\Libraries\Storage\Query\Join;
 use Chamilo\Libraries\Storage\Query\Joins;
 use Chamilo\Libraries\Storage\Query\OrderBy;
@@ -138,7 +138,7 @@ class CourseUsersFeedComponent extends Manager
             ), new StaticConditionVariable(CourseEntityRelation::ENTITY_TYPE_USER)
         );
 
-        $parameters = new DataClassParameters(
+        $parameters = new StorageParameters(
             condition: new AndCondition($userConditions), retrieveProperties: new RetrieveProperties(
             [
                 new PropertyConditionVariable(CourseEntityRelation::class, CourseEntityRelation::PROPERTY_ENTITY_ID)
@@ -163,7 +163,7 @@ class CourseUsersFeedComponent extends Manager
         );
 
         $groups = \Chamilo\Application\Weblcms\Course\Storage\DataManager::retrieves(
-            Group::class, new DataClassParameters(
+            Group::class, new StorageParameters(
                 condition: new AndCondition($groupConditions), joins: new Joins(
                 [
                     new Join(
@@ -179,7 +179,7 @@ class CourseUsersFeedComponent extends Manager
             )
         );
 
-        $parameters = new DataClassParameters(
+        $parameters = new StorageParameters(
             condition: new AndCondition($userConditions), retrieveProperties: new RetrieveProperties(
             [
                 new PropertyConditionVariable(CourseEntityRelation::class, CourseEntityRelation::PROPERTY_ENTITY_ID)
@@ -230,9 +230,9 @@ class CourseUsersFeedComponent extends Manager
         {
             $condition = $conditions[0];
         }
-        $this->user_count = DataManager::count(User::class, new DataClassParameters(condition: $condition));
+        $this->user_count = DataManager::count(User::class, new StorageParameters(condition: $condition));
 
-        $parameters = new DataClassParameters(
+        $parameters = new StorageParameters(
             condition: $condition, count: 100, offset: $this->get_offset(), orderBy: new OrderBy([
             new OrderProperty(new PropertyConditionVariable(User::class, User::PROPERTY_LASTNAME)),
             new OrderProperty(new PropertyConditionVariable(User::class, User::PROPERTY_FIRSTNAME))

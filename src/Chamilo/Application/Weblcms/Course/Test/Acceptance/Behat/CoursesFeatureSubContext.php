@@ -11,7 +11,7 @@ use Chamilo\Behat\Behat\Context\Context;
 use Chamilo\Core\User\Service\UserService;
 use Chamilo\Libraries\DependencyInjection\DependencyInjectionContainerBuilder;
 use Chamilo\Libraries\Storage\Query\Condition\EqualityCondition;
-use Chamilo\Libraries\Storage\Query\DataClassParameters;
+use Chamilo\Libraries\Storage\Query\StorageParameters;
 use Chamilo\Libraries\Storage\Query\Variable\PropertyConditionVariable;
 use Chamilo\Libraries\Storage\Query\Variable\StaticConditionVariable;
 use Chamilo\Libraries\Utilities\StringUtilities;
@@ -113,7 +113,7 @@ class CoursesFeatureSubContext implements Context
         );
 
         $course = DataManager::retrieve(
-            Course::class, new DataClassParameters(condition: $condition)
+            Course::class, new StorageParameters(condition: $condition)
         );
 
         if (!$course)

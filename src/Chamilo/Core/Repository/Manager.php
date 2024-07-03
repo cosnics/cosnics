@@ -32,7 +32,7 @@ use Chamilo\Libraries\Format\Tabs\ContentTab;
 use Chamilo\Libraries\Format\Tabs\GenericTabsRenderer;
 use Chamilo\Libraries\Format\Tabs\TabsCollection;
 use Chamilo\Libraries\Format\Tabs\TabsRenderer;
-use Chamilo\Libraries\Storage\Query\DataClassParameters;
+use Chamilo\Libraries\Storage\Query\StorageParameters;
 use Chamilo\Libraries\Translation\Translation;
 
 /**
@@ -181,7 +181,7 @@ abstract class Manager extends Application implements MenuComponentInterface
 
     public function count_categories($conditions = null)
     {
-        return DataManager::count(RepositoryCategory::class, new DataClassParameters(condition: $conditions));
+        return DataManager::count(RepositoryCategory::class, new StorageParameters(condition: $conditions));
     }
 
     /**

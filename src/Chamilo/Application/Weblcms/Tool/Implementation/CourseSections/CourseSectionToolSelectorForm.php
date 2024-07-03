@@ -12,7 +12,7 @@ use Chamilo\Libraries\Format\Form\FormValidator;
 use Chamilo\Libraries\Storage\Query\Condition\AndCondition;
 use Chamilo\Libraries\Storage\Query\Condition\EqualityCondition;
 use Chamilo\Libraries\Storage\Query\Condition\InCondition;
-use Chamilo\Libraries\Storage\Query\DataClassParameters;
+use Chamilo\Libraries\Storage\Query\StorageParameters;
 use Chamilo\Libraries\Storage\Query\Variable\PropertyConditionVariable;
 use Chamilo\Libraries\Storage\Query\Variable\StaticConditionVariable;
 use Chamilo\Libraries\Translation\Translation;
@@ -69,7 +69,7 @@ class CourseSectionToolSelectorForm extends FormValidator
         );
 
         return $registered_tools_resultset = \Chamilo\Libraries\Storage\DataManager\DataManager::retrieves(
-            CourseToolRelCourseSection::class, new DataClassParameters(condition: $condition)
+            CourseToolRelCourseSection::class, new StorageParameters(condition: $condition)
         );
     }
 
@@ -87,7 +87,7 @@ class CourseSectionToolSelectorForm extends FormValidator
             new StaticConditionVariable(CourseSection::TYPE_TOOL)
         );
 
-        $tools = DataManager::retrieves(CourseTool::class, new DataClassParameters(condition: $condition));
+        $tools = DataManager::retrieves(CourseTool::class, new StorageParameters(condition: $condition));
 
         $active_tools = [];
 
@@ -137,7 +137,7 @@ class CourseSectionToolSelectorForm extends FormValidator
             new StaticConditionVariable($this->getRequest()->query->get('course'))
         );
         $course_sections = DataManager::retrieves(
-            CourseSection::class, new DataClassParameters(condition: $condition)
+            CourseSection::class, new StorageParameters(condition: $condition)
         );
 
         $course_section_ids = [];
@@ -182,7 +182,7 @@ class CourseSectionToolSelectorForm extends FormValidator
             $condition = new AndCondition($conditions);
 
             $course_tool_rel_course_sections = DataManager::retrieves(
-                CourseToolRelCourseSection::class, new DataClassParameters(condition: $condition)
+                CourseToolRelCourseSection::class, new StorageParameters(condition: $condition)
             );
 
             if ($course_tool_rel_course_sections->count() > 0)

@@ -5,7 +5,7 @@ use Chamilo\Libraries\Storage\DataManager\Doctrine\Database\DataClassDatabase;
 use Chamilo\Libraries\Storage\DataManager\StorageAliasGenerator;
 use Chamilo\Libraries\Storage\Query\Condition\Condition;
 use Chamilo\Libraries\Storage\Query\ConditionPart;
-use Chamilo\Libraries\Storage\Query\DataClassParameters;
+use Chamilo\Libraries\Storage\Query\StorageParameters;
 use Chamilo\Libraries\Storage\Query\GroupBy;
 use Chamilo\Libraries\Storage\Query\Join;
 use Chamilo\Libraries\Storage\Query\Joins;
@@ -34,7 +34,7 @@ class QueryBuilderConfigurator
     }
 
     public function applyParameters(
-        DataClassDatabase $dataClassDatabase, QueryBuilder $queryBuilder, DataClassParameters $parameters,
+        DataClassDatabase $dataClassDatabase, QueryBuilder $queryBuilder, StorageParameters $parameters,
         string $dataClassStorageUnitName
     ): void
     {

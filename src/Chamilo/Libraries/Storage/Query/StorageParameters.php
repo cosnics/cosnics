@@ -13,7 +13,7 @@ use Chamilo\Libraries\Storage\Query\Condition\OrCondition;
  * @author  Magali Gillard <magali.gillard@ehb.be>
  * @author  Eduard Vossen <eduard.vossen@ehb.be>
  */
-class DataClassParameters implements HashableInterface
+class StorageParameters implements HashableInterface
 {
     use HashableTrait;
 

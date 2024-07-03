@@ -4,7 +4,7 @@ namespace Chamilo\Libraries\Storage\DataClass;
 use Chamilo\Libraries\DependencyInjection\Traits\DependencyInjectionContainerTrait;
 use Chamilo\Libraries\Storage\DataClass\Listeners\DataClassListener;
 use Chamilo\Libraries\Storage\DataManager\DataManager;
-use Chamilo\Libraries\Storage\Query\DataClassParameters;
+use Chamilo\Libraries\Storage\Query\StorageParameters;
 use Chamilo\Libraries\Translation\Translation;
 
 /**
@@ -132,7 +132,7 @@ abstract class DataClass
         foreach ($this->getDependencies() as $dependency_class => $dependency_condition)
         {
             $dependency_objects = DataManager::retrieves(
-                $dependency_class, new DataClassParameters(condition: $dependency_condition)
+                $dependency_class, new StorageParameters(condition: $dependency_condition)
             );
 
             foreach ($dependency_objects as $dependency_object)

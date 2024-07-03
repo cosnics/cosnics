@@ -6,7 +6,7 @@ use Chamilo\Core\Metadata\Storage\DataClass\EntityTranslation;
 use Chamilo\Libraries\Storage\DataManager\DataManager;
 use Chamilo\Libraries\Storage\Query\Condition\AndCondition;
 use Chamilo\Libraries\Storage\Query\Condition\ComparisonCondition;
-use Chamilo\Libraries\Storage\Query\DataClassParameters;
+use Chamilo\Libraries\Storage\Query\StorageParameters;
 use Chamilo\Libraries\Storage\Query\Variable\PropertyConditionVariable;
 use Chamilo\Libraries\Storage\Query\Variable\StaticConditionVariable;
 
@@ -69,7 +69,7 @@ class EntityTranslationService
         );
 
         $translations = DataManager::retrieves(
-            EntityTranslation::class, new DataClassParameters(condition: new AndCondition($conditions))
+            EntityTranslation::class, new StorageParameters(condition: new AndCondition($conditions))
         );
 
         foreach ($translations as $translation)

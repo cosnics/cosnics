@@ -8,7 +8,7 @@ use Chamilo\Core\Repository\Storage\DataClass\ContentObject;
 use Chamilo\Libraries\Storage\DataManager\Repository\DataClassRepository;
 use Chamilo\Libraries\Storage\Query\Condition\EqualityCondition;
 use Chamilo\Libraries\Storage\Query\Condition\InCondition;
-use Chamilo\Libraries\Storage\Query\DataClassParameters;
+use Chamilo\Libraries\Storage\Query\StorageParameters;
 use Chamilo\Libraries\Storage\Query\Variable\PropertyConditionVariable;
 use Chamilo\Libraries\Storage\Query\Variable\StaticConditionVariable;
 
@@ -33,7 +33,7 @@ class ContentObjectPublicationRepository
     {
         return $this->getDataClassRepository()->count(
             ContentObjectPublication::class,
-            new DataClassParameters(condition: $this->getConditionByContentObjectId($contentObjectId))
+            new StorageParameters(condition: $this->getConditionByContentObjectId($contentObjectId))
         );
     }
 
@@ -41,14 +41,14 @@ class ContentObjectPublicationRepository
     {
         return $this->getDataClassRepository()->count(
             ContentObjectPublication::class,
-            new DataClassParameters(condition: $this->getConditionByContentObjectIds($contentObjectIds))
+            new StorageParameters(condition: $this->getConditionByContentObjectIds($contentObjectIds))
         );
     }
 
     public function countContentObjectPublicationsByContentObjectOwnerId(string $ownerId): int
     {
         return $this->getPublicationRepository()->countPublicationsWithContentObjects(
-            new DataClassParameters(condition: $this->getConditionByContentObjectOwnerId($ownerId)),
+            new StorageParameters(condition: $this->getConditionByContentObjectOwnerId($ownerId)),
             ContentObjectPublication::class
         );
     }
@@ -88,7 +88,7 @@ class ContentObjectPublicationRepository
     public function findContentObjectPublicationsByContentObjectId(string $contentObjectId): array
     {
         return $this->getPublicationRepository()->getPublicationsWithContentObjects(
-            new DataClassParameters(condition: $this->getConditionByContentObjectId($contentObjectId)),
+            new StorageParameters(condition: $this->getConditionByContentObjectId($contentObjectId)),
             ContentObjectPublication::class
         );
     }
@@ -99,7 +99,7 @@ class ContentObjectPublicationRepository
     public function findContentObjectPublicationsByContentObjectOwnerId(string $ownerId): array
     {
         return $this->getPublicationRepository()->getPublicationsWithContentObjects(
-            new DataClassParameters(condition: $this->getConditionByContentObjectOwnerId($ownerId)),
+            new StorageParameters(condition: $this->getConditionByContentObjectOwnerId($ownerId)),
             ContentObjectPublication::class
         );
     }
@@ -110,7 +110,7 @@ class ContentObjectPublicationRepository
     public function findContentObjectPublicationsByElementId(string $elementId): array
     {
         return $this->getPublicationRepository()->getPublicationsWithContentObjects(
-            new DataClassParameters(condition: $this->getConditionByElementId($elementId)),
+            new StorageParameters(condition: $this->getConditionByElementId($elementId)),
             ContentObjectPublication::class
         );
     }
@@ -119,7 +119,7 @@ class ContentObjectPublicationRepository
     {
         return $this->getDataClassRepository()->retrieve(
             ContentObjectPublication::class,
-            new DataClassParameters(condition: $this->getConditionByElementId($elementId))
+            new StorageParameters(condition: $this->getConditionByElementId($elementId))
         );
     }
 

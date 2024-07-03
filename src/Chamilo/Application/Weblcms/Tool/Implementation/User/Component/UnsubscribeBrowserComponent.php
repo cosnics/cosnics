@@ -31,7 +31,7 @@ use Chamilo\Libraries\Storage\Query\Condition\AndCondition;
 use Chamilo\Libraries\Storage\Query\Condition\ContainsCondition;
 use Chamilo\Libraries\Storage\Query\Condition\EqualityCondition;
 use Chamilo\Libraries\Storage\Query\Condition\OrCondition;
-use Chamilo\Libraries\Storage\Query\DataClassParameters;
+use Chamilo\Libraries\Storage\Query\StorageParameters;
 use Chamilo\Libraries\Storage\Query\Variable\PropertyConditionVariable;
 use Chamilo\Libraries\Storage\Query\Variable\StaticConditionVariable;
 use Chamilo\Libraries\Utilities\StringUtilities;
@@ -460,7 +460,7 @@ class UnsubscribeBrowserComponent extends Manager
     private function get_platformgroups_users_tab(): string
     {
         $totalNumberOfItems = \Chamilo\Libraries\Storage\DataManager\DataManager::count(
-            GroupRelUser::class, new DataClassParameters(condition: $this->get_condition())
+            GroupRelUser::class, new StorageParameters(condition: $this->get_condition())
         );
         $platformGroupRelUserTableRenderer = $this->getPlatformGroupRelUserTableRenderer();
 
@@ -470,7 +470,7 @@ class UnsubscribeBrowserComponent extends Manager
         );
 
         $groupUserRelations = \Chamilo\Libraries\Storage\DataManager\DataManager::retrieves(
-            GroupRelUser::class, new DataClassParameters(
+            GroupRelUser::class, new StorageParameters(
                 condition: $this->get_condition(), count: $tableParameterValues->getNumberOfItemsPerPage(),
                 offset: $tableParameterValues->getOffset(),
                 orderBy: $platformGroupRelUserTableRenderer->determineOrderBy($tableParameterValues)

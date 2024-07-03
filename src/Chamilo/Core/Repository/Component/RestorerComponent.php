@@ -11,7 +11,7 @@ use Chamilo\Libraries\Architecture\Application\Application;
 use Chamilo\Libraries\Format\Breadcrumb\BreadcrumbTrail;
 use Chamilo\Libraries\Format\Structure\Breadcrumb;
 use Chamilo\Libraries\Storage\Query\Condition\EqualityCondition;
-use Chamilo\Libraries\Storage\Query\DataClassParameters;
+use Chamilo\Libraries\Storage\Query\StorageParameters;
 use Chamilo\Libraries\Storage\Query\Variable\PropertyConditionVariable;
 use Chamilo\Libraries\Storage\Query\Variable\StaticConditionVariable;
 use Chamilo\Libraries\Translation\Translation;
@@ -162,6 +162,6 @@ class RestorerComponent extends Manager
             new StaticConditionVariable($id)
         );
 
-        return (DataManager::count(RepositoryCategory::class, new DataClassParameters(condition: $condition)) > 0);
+        return (DataManager::count(RepositoryCategory::class, new StorageParameters(condition: $condition)) > 0);
     }
 }

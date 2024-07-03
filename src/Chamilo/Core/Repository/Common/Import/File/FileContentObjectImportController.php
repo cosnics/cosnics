@@ -13,7 +13,7 @@ use Chamilo\Libraries\Architecture\Application\Application;
 use Chamilo\Libraries\File\Properties\FileProperties;
 use Chamilo\Libraries\Storage\Query\Condition\AndCondition;
 use Chamilo\Libraries\Storage\Query\Condition\EqualityCondition;
-use Chamilo\Libraries\Storage\Query\DataClassParameters;
+use Chamilo\Libraries\Storage\Query\StorageParameters;
 use Chamilo\Libraries\Storage\Query\Variable\PropertyConditionVariable;
 use Chamilo\Libraries\Storage\Query\Variable\StaticConditionVariable;
 use Chamilo\Libraries\Translation\Translation;
@@ -124,7 +124,7 @@ class FileContentObjectImportController extends ContentObjectImportController
                 new StaticConditionVariable($hash)
             );
             $condition = new AndCondition($conditions);
-            $parameters = new DataClassParameters(condition: $condition);
+            $parameters = new StorageParameters(condition: $condition);
 
             $content_objects = DataManager::retrieve_active_content_objects(File::class, $parameters);
 

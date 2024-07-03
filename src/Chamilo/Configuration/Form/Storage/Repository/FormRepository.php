@@ -11,7 +11,7 @@ use Chamilo\Libraries\Storage\Query\Condition\AndCondition;
 use Chamilo\Libraries\Storage\Query\Condition\Condition;
 use Chamilo\Libraries\Storage\Query\Condition\EqualityCondition;
 use Chamilo\Libraries\Storage\Query\Condition\SubselectCondition;
-use Chamilo\Libraries\Storage\Query\DataClassParameters;
+use Chamilo\Libraries\Storage\Query\StorageParameters;
 use Chamilo\Libraries\Storage\Query\OrderBy;
 use Chamilo\Libraries\Storage\Query\Variable\PropertyConditionVariable;
 use Chamilo\Libraries\Storage\Query\Variable\StaticConditionVariable;
@@ -34,21 +34,21 @@ class FormRepository
     public function countDynamicFormElementOptions(?Condition $condition = null): int
     {
         return $this->getDataClassRepository()->count(
-            Option::class, new DataClassParameters(condition: $condition)
+            Option::class, new StorageParameters(condition: $condition)
         );
     }
 
     public function countDynamicFormElementValues(?Condition $condition = null): int
     {
         return $this->getDataClassRepository()->count(
-            Value::class, new DataClassParameters(condition: $condition)
+            Value::class, new StorageParameters(condition: $condition)
         );
     }
 
     public function countDynamicFormElements(?Condition $condition = null): int
     {
         return $this->getDataClassRepository()->count(
-            Element::class, new DataClassParameters(condition: $condition)
+            Element::class, new StorageParameters(condition: $condition)
         );
     }
 
@@ -94,7 +94,7 @@ class FormRepository
     ): ArrayCollection
     {
         return $this->getDataClassRepository()->retrieves(
-            Option::class, new DataClassParameters(
+            Option::class, new StorageParameters(
                 condition: $condition, orderBy: $orderBy, count: $count, offset: $offset
             )
         );
@@ -113,7 +113,7 @@ class FormRepository
     ): ArrayCollection
     {
         return $this->getDataClassRepository()->retrieves(
-            Value::class, new DataClassParameters(
+            Value::class, new StorageParameters(
                 condition: $condition, orderBy: $orderBy, count: $count, offset: $offset
             )
         );
@@ -157,7 +157,7 @@ class FormRepository
         ?Condition $condition = null, ?int $offset = null, ?int $count = null, OrderBy $orderBy = new OrderBy()
     ): ArrayCollection
     {
-        $parameters = new DataClassParameters(condition: $condition, orderBy: $orderBy, count: $count, offset: $offset);
+        $parameters = new StorageParameters(condition: $condition, orderBy: $orderBy, count: $count, offset: $offset);
 
         return $this->getDataClassRepository()->retrieves(Element::class, $parameters);
     }
@@ -174,7 +174,7 @@ class FormRepository
         ?Condition $condition = null, ?int $offset = null, ?int $count = null, OrderBy $orderBy = new OrderBy()
     ): ArrayCollection
     {
-        $parameters = new DataClassParameters(condition: $condition, orderBy: $orderBy, count: $count, offset: $offset);
+        $parameters = new StorageParameters(condition: $condition, orderBy: $orderBy, count: $count, offset: $offset);
 
         return $this->getDataClassRepository()->retrieves(Instance::class, $parameters);
     }
@@ -194,7 +194,7 @@ class FormRepository
         $condition = new AndCondition($conditions);
 
         return $this->getDataClassRepository()->retrieve(
-            Instance::class, new DataClassParameters(condition: $condition)
+            Instance::class, new StorageParameters(condition: $condition)
         );
     }
 

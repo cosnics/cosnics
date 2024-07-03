@@ -13,7 +13,7 @@ use Chamilo\Libraries\Format\Structure\Glyph\FontAwesomeGlyph;
 use Chamilo\Libraries\Storage\Query\Condition\AndCondition;
 use Chamilo\Libraries\Storage\Query\Condition\EqualityCondition;
 use Chamilo\Libraries\Storage\Query\Condition\InCondition;
-use Chamilo\Libraries\Storage\Query\DataClassParameters;
+use Chamilo\Libraries\Storage\Query\StorageParameters;
 use Chamilo\Libraries\Storage\Query\Variable\PropertyConditionVariable;
 use Chamilo\Libraries\Storage\Query\Variable\StaticConditionVariable;
 use Chamilo\Libraries\Translation\Translation;
@@ -87,7 +87,7 @@ abstract class AssessmentBlock extends ToolBlock
         $condition = new AndCondition($conditions);
 
         return WeblcmsTrackingDataManager::retrieves(
-            AssessmentAttempt::class, new DataClassParameters(condition: $condition)
+            AssessmentAttempt::class, new StorageParameters(condition: $condition)
         );
     }
 
@@ -236,7 +236,7 @@ abstract class AssessmentBlock extends ToolBlock
         $condition = new AndCondition($conditions);
 
         return WeblcmsTrackingDataManager::retrieves(
-            QuestionAttempt::class, new DataClassParameters(condition: $condition)
+            QuestionAttempt::class, new StorageParameters(condition: $condition)
         );
     }
 

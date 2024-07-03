@@ -30,7 +30,7 @@ use Chamilo\Libraries\Storage\Query\Condition\AndCondition;
 use Chamilo\Libraries\Storage\Query\Condition\EqualityCondition;
 use Chamilo\Libraries\Storage\Query\Condition\InCondition;
 use Chamilo\Libraries\Storage\Query\Condition\SubselectCondition;
-use Chamilo\Libraries\Storage\Query\DataClassParameters;
+use Chamilo\Libraries\Storage\Query\StorageParameters;
 use Chamilo\Libraries\Storage\Query\OrderBy;
 use Chamilo\Libraries\Storage\Query\OrderProperty;
 use Chamilo\Libraries\Storage\Query\Variable\PropertyConditionVariable;
@@ -85,7 +85,7 @@ class BrowserComponent extends Manager implements BreadcrumbLessComponentInterfa
         $condition = new AndCondition($conditions);
 
         $this->introduction_text = WeblcmsDataManager::retrieve(
-            ContentObjectPublication::class, new DataClassParameters(condition: $condition)
+            ContentObjectPublication::class, new StorageParameters(condition: $condition)
         );
 
         $this->size = 0;
@@ -788,7 +788,7 @@ class BrowserComponent extends Manager implements BreadcrumbLessComponentInterfa
 
         $categories = WeblcmsDataManager::retrieves(
             ContentObjectPublicationCategory::class,
-            new DataClassParameters(condition: new AndCondition($conditions), orderBy: $order)
+            new StorageParameters(condition: new AndCondition($conditions), orderBy: $order)
         );
 
         $html = [];

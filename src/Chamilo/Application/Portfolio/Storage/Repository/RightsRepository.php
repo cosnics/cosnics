@@ -8,7 +8,7 @@ use Chamilo\Libraries\Storage\Query\Condition\AndCondition;
 use Chamilo\Libraries\Storage\Query\Condition\Condition;
 use Chamilo\Libraries\Storage\Query\Condition\EqualityCondition;
 use Chamilo\Libraries\Storage\Query\Condition\InCondition;
-use Chamilo\Libraries\Storage\Query\DataClassParameters;
+use Chamilo\Libraries\Storage\Query\StorageParameters;
 use Chamilo\Libraries\Storage\Query\OrderBy;
 use Chamilo\Libraries\Storage\Query\OrderProperty;
 use Chamilo\Libraries\Storage\Query\RetrieveProperties;
@@ -93,7 +93,7 @@ class RightsRepository
         $condition = new AndCondition($conditions);
 
         return $this->getDataClassRepository()->retrieve(
-            RightsLocationEntityRight::class, new DataClassParameters(condition: $condition)
+            RightsLocationEntityRight::class, new StorageParameters(condition: $condition)
         );
     }
 
@@ -133,7 +133,7 @@ class RightsRepository
         );
 
         return $this->getDataClassRepository()->retrieves(
-            RightsLocationEntityRight::class, new DataClassParameters(
+            RightsLocationEntityRight::class, new StorageParameters(
                 condition: $condition, orderBy: new OrderBy([$order])
             )
         );
@@ -165,7 +165,7 @@ class RightsRepository
         $condition = new AndCondition($conditions);
 
         return $this->getDataClassRepository()->records(
-            RightsLocationEntityRight::class, new DataClassParameters(
+            RightsLocationEntityRight::class, new StorageParameters(
                 condition: $condition, retrieveProperties: new RetrieveProperties(
                 [
                     new PropertyConditionVariable(
@@ -199,7 +199,7 @@ class RightsRepository
         $condition = new AndCondition($conditions);
 
         return $this->getDataClassRepository()->record(
-            RightsLocation::class, new DataClassParameters(
+            RightsLocation::class, new StorageParameters(
                 condition: $condition, retrieveProperties: new RetrieveProperties(
                 [new PropertyConditionVariable(RightsLocation::class, RightsLocation::PROPERTY_INHERIT)]
             )

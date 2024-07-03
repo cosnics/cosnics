@@ -12,7 +12,7 @@ use Chamilo\Libraries\Architecture\Exceptions\NotAllowedException;
 use Chamilo\Libraries\Format\Form\FormValidator;
 use Chamilo\Libraries\Format\Structure\Breadcrumb;
 use Chamilo\Libraries\Storage\Query\Condition\EqualityCondition;
-use Chamilo\Libraries\Storage\Query\DataClassParameters;
+use Chamilo\Libraries\Storage\Query\StorageParameters;
 use Chamilo\Libraries\Storage\Query\Variable\PropertyConditionVariable;
 use Chamilo\Libraries\Storage\Query\Variable\StaticConditionVariable;
 use Chamilo\Libraries\Translation\Translation;
@@ -75,7 +75,7 @@ class UpdaterComponent extends ItemComponent
                             ComplexContentObjectItem::class, ComplexContentObjectItem::PROPERTY_PARENT
                         ), new StaticConditionVariable($old_id), ComplexContentObjectItem::getStorageUnitName()
                     );
-                    $parameters = new DataClassParameters(condition: $condition);
+                    $parameters = new StorageParameters(condition: $condition);
                     $children = DataManager::retrieve_complex_content_object_items(
                         ComplexContentObjectItem::class, $parameters
                     );

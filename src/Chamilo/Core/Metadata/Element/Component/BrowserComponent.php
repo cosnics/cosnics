@@ -16,7 +16,7 @@ use Chamilo\Libraries\Format\Structure\Glyph\FontAwesomeGlyph;
 use Chamilo\Libraries\Format\Table\RequestTableParameterValuesCompiler;
 use Chamilo\Libraries\Storage\Query\Condition\AndCondition;
 use Chamilo\Libraries\Storage\Query\Condition\ComparisonCondition;
-use Chamilo\Libraries\Storage\Query\DataClassParameters;
+use Chamilo\Libraries\Storage\Query\StorageParameters;
 use Chamilo\Libraries\Storage\Query\OrderProperty;
 use Chamilo\Libraries\Storage\Query\Variable\PropertyConditionVariable;
 use Chamilo\Libraries\Storage\Query\Variable\StaticConditionVariable;
@@ -143,7 +143,7 @@ class BrowserComponent extends Manager
     protected function renderTable(): string
     {
         $totalNumberOfItems =
-            DataManager::count(Element::class, new DataClassParameters(condition: $this->getElementTableCondition()));
+            DataManager::count(Element::class, new StorageParameters(condition: $this->getElementTableCondition()));
         $elementTableRenderer = $this->getElementTableRenderer();
 
         $tableParameterValues = $this->getRequestTableParameterValuesCompiler()->determineParameterValues(
@@ -159,7 +159,7 @@ class BrowserComponent extends Manager
         );
 
         $elements = DataManager::retrieves(
-            Element::class, new DataClassParameters(
+            Element::class, new StorageParameters(
                 condition: $this->getElementTableCondition(), orderBy: $orderBy,
                 count: $tableParameterValues->getOffset(), offset: $tableParameterValues->getNumberOfItemsPerPage()
             )

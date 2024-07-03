@@ -2,7 +2,7 @@
 namespace Chamilo\Libraries\Storage\Cache;
 
 use Chamilo\Libraries\Storage\DataClass\DataClass;
-use Chamilo\Libraries\Storage\Query\DataClassParameters;
+use Chamilo\Libraries\Storage\Query\StorageParameters;
 use Doctrine\Common\Collections\ArrayCollection;
 
 /**
@@ -34,7 +34,7 @@ class DataClassRepositoryCache
         $this->cache = [];
     }
 
-    private function add(string $className, int $type, ?DataClassParameters $parameters, mixed $value): mixed
+    private function add(string $className, int $type, ?StorageParameters $parameters, mixed $value): mixed
     {
         if (!$this->existsForType($type, $className, $parameters))
         {
@@ -45,7 +45,7 @@ class DataClassRepositoryCache
     }
 
     public function addForCount(
-        string $className, DataClassParameters $parameters, int $count
+        string $className, StorageParameters $parameters, int $count
     ): int
     {
         return $this->add($className, self::TYPE_COUNT, $parameters, $count);
@@ -57,46 +57,46 @@ class DataClassRepositoryCache
      * @return int[]
      */
     public function addForCountGrouped(
-        string $className, DataClassParameters $parameters, array $counts
+        string $className, StorageParameters $parameters, array $counts
     ): array
     {
         return $this->add($className, self::TYPE_COUNT_GROUPED, $parameters, $counts);
     }
 
     public function addForDistinct(
-        string $className, DataClassParameters $parameters, array $propertyValues
+        string $className, StorageParameters $parameters, array $propertyValues
     ): array
     {
         return $this->add($className, self::TYPE_DISTINCT, $parameters, $propertyValues);
     }
 
-    public function addForRecord(string $className, DataClassParameters $parameters, array $record): array
+    public function addForRecord(string $className, StorageParameters $parameters, array $record): array
     {
         return $this->add($className, self::TYPE_RECORD, $parameters, $record);
     }
 
     public function addForRecords(
-        string $cacheDataClassName, DataClassParameters $parameters, ArrayCollection $arrayCollection
+        string $cacheDataClassName, StorageParameters $parameters, ArrayCollection $arrayCollection
     ): ArrayCollection
     {
         return $this->add($cacheDataClassName, self::TYPE_RECORDS, $parameters, $arrayCollection);
     }
 
     public function addForRetrieve(
-        string $cacheDataClassName, DataClassParameters $parameters, ?DataClass $object = null
+        string $cacheDataClassName, StorageParameters $parameters, ?DataClass $object = null
     ): ?DataClass
     {
         return $this->add($cacheDataClassName, self::TYPE_RETRIEVE, $parameters, $object);
     }
 
     public function addForRetrieves(
-        string $cacheDataClassName, DataClassParameters $parameters, ArrayCollection $arrayCollection
+        string $cacheDataClassName, StorageParameters $parameters, ArrayCollection $arrayCollection
     ): ArrayCollection
     {
         return $this->add($cacheDataClassName, self::TYPE_RETRIEVES, $parameters, $arrayCollection);
     }
 
-    public function existsForType(int $type, string $class, DataClassParameters $parameters): bool
+    public function existsForType(int $type, string $class, StorageParameters $parameters): bool
     {
         $hash = $parameters->hash();
 
@@ -110,7 +110,7 @@ class DataClassRepositoryCache
         }
     }
 
-    public function getForType(int $type, string $class, DataClassParameters $parameters)
+    public function getForType(int $type, string $class, StorageParameters $parameters)
     {
         if ($this->existsForType($type, $class, $parameters))
         {

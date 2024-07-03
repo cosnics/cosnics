@@ -5,7 +5,7 @@ use Chamilo\Core\Tracking\Manager;
 use Chamilo\Libraries\Storage\DataClass\DataClass;
 use Chamilo\Libraries\Storage\DataManager\DataManager;
 use Chamilo\Libraries\Storage\Query\Condition\Condition;
-use Chamilo\Libraries\Storage\Query\DataClassParameters;
+use Chamilo\Libraries\Storage\Query\StorageParameters;
 
 abstract class Tracker extends DataClass
 {
@@ -30,7 +30,7 @@ abstract class Tracker extends DataClass
 
     public static function count_data($class_name, $application, $condition)
     {
-        return DataManager::count($class_name, new DataClassParameters(condition: $condition));
+        return DataManager::count($class_name, new StorageParameters(condition: $condition));
     }
 
     /**
@@ -48,7 +48,7 @@ abstract class Tracker extends DataClass
     )
     {
         return DataManager::retrieves(
-            $class_name, new DataClassParameters(
+            $class_name, new StorageParameters(
                 condition: $condition, orderBy: $order_by, count: $max_objects, offset: $offset
             )
         );
@@ -80,7 +80,7 @@ abstract class Tracker extends DataClass
      */
     public static function get_singular_data($class_name, $application, $condition, $order_by = null)
     {
-        return DataManager::retrieve($class_name, new DataClassParameters(condition: $condition, orderBy: $order_by));
+        return DataManager::retrieve($class_name, new StorageParameters(condition: $condition, orderBy: $order_by));
     }
 
     /**

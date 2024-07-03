@@ -41,7 +41,7 @@ use Chamilo\Libraries\Format\Breadcrumb\BreadcrumbLessComponentInterface;
 use Chamilo\Libraries\Format\Structure\PageConfiguration;
 use Chamilo\Libraries\Storage\Query\Condition\AndCondition;
 use Chamilo\Libraries\Storage\Query\Condition\EqualityCondition;
-use Chamilo\Libraries\Storage\Query\DataClassParameters;
+use Chamilo\Libraries\Storage\Query\StorageParameters;
 use Chamilo\Libraries\Storage\Query\Variable\PropertyConditionVariable;
 use Chamilo\Libraries\Storage\Query\Variable\StaticConditionVariable;
 use Chamilo\Libraries\Translation\Translation;
@@ -239,7 +239,7 @@ class ComplexDisplayComponent extends Manager
         );
         $condition = new AndCondition($conditions);
 
-        return DataManager::count(ForumTopicView::class, new DataClassParameters(condition: $condition));
+        return DataManager::count(ForumTopicView::class, new StorageParameters(condition: $condition));
     }
 
     public function forum_topic_viewed($complex_topic_id)

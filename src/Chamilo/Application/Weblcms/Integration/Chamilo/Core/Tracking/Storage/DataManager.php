@@ -9,7 +9,7 @@ use Chamilo\Libraries\Storage\Query\Condition\AndCondition;
 use Chamilo\Libraries\Storage\Query\Condition\ComparisonCondition;
 use Chamilo\Libraries\Storage\Query\Condition\Condition;
 use Chamilo\Libraries\Storage\Query\Condition\EqualityCondition;
-use Chamilo\Libraries\Storage\Query\DataClassParameters;
+use Chamilo\Libraries\Storage\Query\StorageParameters;
 use Chamilo\Libraries\Storage\Query\GroupBy;
 use Chamilo\Libraries\Storage\Query\Join;
 use Chamilo\Libraries\Storage\Query\Joins;
@@ -43,7 +43,7 @@ class DataManager extends \Chamilo\Libraries\Storage\DataManager\DataManager
      */
     public static function count_assessment_attempts_with_user($condition = null)
     {
-        $parameters = new DataClassParameters(condition: $condition, joins: self::get_assessment_attempts_user_joins());
+        $parameters = new StorageParameters(condition: $condition, joins: self::get_assessment_attempts_user_joins());
 
         return self::count(AssessmentAttempt::class, $parameters);
     }
@@ -81,7 +81,7 @@ class DataManager extends \Chamilo\Libraries\Storage\DataManager\DataManager
             ), $operator, new StaticConditionVariable($timestamp)
         );
 
-        $parameters = new DataClassParameters(
+        $parameters = new StorageParameters(
             retrieveProperties: new RetrieveProperties(
                 [new PropertyConditionVariable(CourseVisit::class, CourseVisit::PROPERTY_COURSE_ID)]
             ), groupBy: new GroupBy(
@@ -290,7 +290,7 @@ class DataManager extends \Chamilo\Libraries\Storage\DataManager\DataManager
         $properties->add(new PropertyConditionVariable(User::class, User::PROPERTY_LASTNAME));
         $properties->add(new PropertyConditionVariable(User::class, User::PROPERTY_OFFICIAL_CODE));
 
-        $parameters = new DataClassParameters(
+        $parameters = new StorageParameters(
             condition: $condition, count: $count, offset: $offset, orderBy: $order_by,
             joins: self::get_assessment_attempts_user_joins(), retrieveProperties: $properties
         );
@@ -312,7 +312,7 @@ class DataManager extends \Chamilo\Libraries\Storage\DataManager\DataManager
             $user_id, $course_id, null, null, null, false
         ) : self::get_course_visit_conditions_by_course_data($course_id, null, null, null, false);
 
-        $parameters = new DataClassParameters(
+        $parameters = new StorageParameters(
             condition: $condition, retrieveProperties: self::get_course_visit_summary_select_properties()
         );
 
@@ -348,7 +348,7 @@ class DataManager extends \Chamilo\Libraries\Storage\DataManager\DataManager
             $user_id, $course_id, $tool_id, $category_id, $publication_id, $useNullValues
         );
 
-        return self::retrieve(CourseVisit::class, new DataClassParameters(condition: $condition));
+        return self::retrieve(CourseVisit::class, new StorageParameters(condition: $condition));
     }
 
     /**
@@ -372,7 +372,7 @@ class DataManager extends \Chamilo\Libraries\Storage\DataManager\DataManager
             $course_id, $tool_id, $category_id, $publication_id, false
         );
 
-        $parameters = new DataClassParameters(
+        $parameters = new StorageParameters(
             condition: $condition, retrieveProperties: self::get_course_visit_summary_select_properties()
         );
 
@@ -431,7 +431,7 @@ class DataManager extends \Chamilo\Libraries\Storage\DataManager\DataManager
         $group_by = new GroupBy();
         $group_by->add($course_tool_name_variable);
 
-        $parameters = new DataClassParameters(
+        $parameters = new StorageParameters(
             joins: $joins, groupBy: $group_by, retrieveProperties: $properties
         );
 

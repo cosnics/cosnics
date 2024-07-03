@@ -10,7 +10,7 @@ use Chamilo\Libraries\Storage\Query\Condition\EqualityCondition;
 use Chamilo\Libraries\Storage\Query\Condition\InCondition;
 use Chamilo\Libraries\Storage\Query\Condition\NotCondition;
 use Chamilo\Libraries\Storage\Query\Condition\OrCondition;
-use Chamilo\Libraries\Storage\Query\DataClassParameters;
+use Chamilo\Libraries\Storage\Query\StorageParameters;
 use Chamilo\Libraries\Storage\Query\Join;
 use Chamilo\Libraries\Storage\Query\Joins;
 use Chamilo\Libraries\Storage\Query\RetrieveProperties;
@@ -31,7 +31,7 @@ class CalendarEventDataProviderRepository
      *
      * @param User $user
      *
-     * @return DataClassParameters
+     * @return StorageParameters
      */
     public function getPublicationsParameters(User $user)
     {
@@ -40,7 +40,7 @@ class CalendarEventDataProviderRepository
             new StaticConditionVariable($user->getId())
         );
 
-        return new DataClassParameters(
+        return new StorageParameters(
             condition: $condition, retrieveProperties: new RetrieveProperties(
             [new PropertiesConditionVariable(Publication::class)]
         )
@@ -52,7 +52,7 @@ class CalendarEventDataProviderRepository
      *
      * @param User $user
      *
-     * @return DataClassParameters
+     * @return StorageParameters
      */
     public function getSharedPublicationsParameters(User $user)
     {
@@ -97,7 +97,7 @@ class CalendarEventDataProviderRepository
         ), Join::TYPE_LEFT
         );
 
-        return new DataClassParameters(
+        return new StorageParameters(
             condition: $condition, joins: new Joins($joins), retrieveProperties: new RetrieveProperties(
             [new PropertiesConditionVariable(Publication::class)]
         )

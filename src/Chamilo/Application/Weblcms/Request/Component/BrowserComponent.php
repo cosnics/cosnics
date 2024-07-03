@@ -22,7 +22,7 @@ use Chamilo\Libraries\Storage\DataManager\DataManager;
 use Chamilo\Libraries\Storage\Query\Condition\AndCondition;
 use Chamilo\Libraries\Storage\Query\Condition\EqualityCondition;
 use Chamilo\Libraries\Storage\Query\Condition\InCondition;
-use Chamilo\Libraries\Storage\Query\DataClassParameters;
+use Chamilo\Libraries\Storage\Query\StorageParameters;
 use Chamilo\Libraries\Storage\Query\Variable\PropertyConditionVariable;
 use Chamilo\Libraries\Storage\Query\Variable\StaticConditionVariable;
 
@@ -46,7 +46,7 @@ class BrowserComponent extends Manager implements BreadcrumbLessComponentInterfa
             new PropertyConditionVariable(Request::class, Request::PROPERTY_USER_ID),
             new StaticConditionVariable($this->getUser()->getId())
         );
-        $user_requests = DataManager::count(Request::class, new DataClassParameters(condition: $condition));
+        $user_requests = DataManager::count(Request::class, new StorageParameters(condition: $condition));
 
         $tabs = new TabsCollection();
 
@@ -56,7 +56,7 @@ class BrowserComponent extends Manager implements BreadcrumbLessComponentInterfa
             if ($user_requests > 0)
             {
                 $totalNumberOfItems = DataManager::count(
-                    \Chamilo\Core\Repository\Quota\Storage\DataClass\Request::class, new DataClassParameters(
+                    \Chamilo\Core\Repository\Quota\Storage\DataClass\Request::class, new StorageParameters(
                         condition: $this->getRequestCondition(
                             RequestTableRenderer::TYPE_PERSONAL
                         )
@@ -70,7 +70,7 @@ class BrowserComponent extends Manager implements BreadcrumbLessComponentInterfa
                 );
 
                 $requests = DataManager::retrieves(
-                    Request::class, new DataClassParameters(
+                    Request::class, new StorageParameters(
                         condition: $this->getRequestCondition(RequestTableRenderer::TYPE_PERSONAL),
                         count: $tableParameterValues->getNumberOfItemsPerPage(),
                         offset: $tableParameterValues->getOffset(), orderBy: $requestTableRenderer->determineOrderBy(
@@ -119,7 +119,7 @@ class BrowserComponent extends Manager implements BreadcrumbLessComponentInterfa
                 }
                 $condition = new AndCondition($conditions);
 
-                if (DataManager::count(Request::class, new DataClassParameters(condition: $condition)) > 0)
+                if (DataManager::count(Request::class, new StorageParameters(condition: $condition)) > 0)
                 {
                     $tabs->add(
                         new ContentTab(
@@ -142,7 +142,7 @@ class BrowserComponent extends Manager implements BreadcrumbLessComponentInterfa
                 }
                 $condition = new AndCondition($conditions);
 
-                if (DataManager::count(Request::class, new DataClassParameters(condition: $condition)) > 0)
+                if (DataManager::count(Request::class, new StorageParameters(condition: $condition)) > 0)
                 {
                     $tabs->add(
                         new ContentTab(
@@ -165,7 +165,7 @@ class BrowserComponent extends Manager implements BreadcrumbLessComponentInterfa
                 }
                 $condition = new AndCondition($conditions);
 
-                if (DataManager::count(Request::class, new DataClassParameters(condition: $condition)) > 0)
+                if (DataManager::count(Request::class, new StorageParameters(condition: $condition)) > 0)
                 {
                     $tabs->add(
                         new ContentTab(
@@ -327,7 +327,7 @@ class BrowserComponent extends Manager implements BreadcrumbLessComponentInterfa
     {
         $totalNumberOfItems = DataManager::count(
             \Chamilo\Core\Repository\Quota\Storage\DataClass\Request::class,
-            new DataClassParameters(condition: $this->getRequestCondition($requestType))
+            new StorageParameters(condition: $this->getRequestCondition($requestType))
         );
         $requestTableRenderer = $this->getUserRequestTableRenderer();
 
@@ -337,7 +337,7 @@ class BrowserComponent extends Manager implements BreadcrumbLessComponentInterfa
         );
 
         $requests = DataManager::retrieves(
-            Request::class, new DataClassParameters(
+            Request::class, new StorageParameters(
                 condition: $this->getRequestCondition($requestType),
                 count: $tableParameterValues->getNumberOfItemsPerPage(), offset: $tableParameterValues->getOffset(),
                 orderBy: $requestTableRenderer->determineOrderBy($tableParameterValues)

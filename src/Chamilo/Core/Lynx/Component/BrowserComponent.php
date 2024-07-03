@@ -21,7 +21,7 @@ use Chamilo\Libraries\Format\Tabs\ContentTab;
 use Chamilo\Libraries\Format\Tabs\TabsCollection;
 use Chamilo\Libraries\Format\Tabs\TabsRenderer;
 use Chamilo\Libraries\Storage\Query\Condition\EqualityCondition;
-use Chamilo\Libraries\Storage\Query\DataClassParameters;
+use Chamilo\Libraries\Storage\Query\StorageParameters;
 use Chamilo\Libraries\Storage\Query\Variable\PropertyConditionVariable;
 use Chamilo\Libraries\Storage\Query\Variable\StaticConditionVariable;
 use Chamilo\Libraries\Utilities\StringUtilities;
@@ -162,7 +162,7 @@ class BrowserComponent extends Manager implements BreadcrumbLessComponentInterfa
         $tabs = new TabsCollection();
 
         $count = DataManager::count(
-            Registration::class, new DataClassParameters(
+            Registration::class, new StorageParameters(
                 condition: new EqualityCondition(
                     new PropertyConditionVariable(Registration::class, Registration::PROPERTY_TYPE),
                     new StaticConditionVariable($this->getCurrentType())
@@ -217,7 +217,7 @@ class BrowserComponent extends Manager implements BreadcrumbLessComponentInterfa
     {
         $translator = $this->getTranslator();
 
-        $parameters = new DataClassParameters(
+        $parameters = new StorageParameters(
             condition: new EqualityCondition(
                 new PropertyConditionVariable(Registration::class, Registration::PROPERTY_TYPE),
                 new StaticConditionVariable($this->getCurrentType())

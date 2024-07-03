@@ -10,7 +10,7 @@ use Chamilo\Libraries\Storage\DataClass\DataClass;
 use Chamilo\Libraries\Storage\Query\Condition\AndCondition;
 use Chamilo\Libraries\Storage\Query\Condition\EqualityCondition;
 use Chamilo\Libraries\Storage\Query\Condition\InCondition;
-use Chamilo\Libraries\Storage\Query\DataClassParameters;
+use Chamilo\Libraries\Storage\Query\StorageParameters;
 use Chamilo\Libraries\Storage\Query\OrderProperty;
 use Chamilo\Libraries\Storage\Query\Variable\PropertyConditionVariable;
 use Chamilo\Libraries\Storage\Query\Variable\StaticConditionVariable;
@@ -57,7 +57,7 @@ class AnswerFeedbackTypeComponent extends Manager
             $condition = new AndCondition($conditions);
 
             $complex_content_object_items = DataManager::retrieve_complex_content_object_items(
-                ComplexContentObjectItem::class, new DataClassParameters(condition: $condition)
+                ComplexContentObjectItem::class, new StorageParameters(condition: $condition)
             );
 
             $failures = 0;
@@ -136,7 +136,7 @@ class AnswerFeedbackTypeComponent extends Manager
     protected function renderTable(): string
     {
         $totalNumberOfItems = DataManager::count(
-            ComplexContentObjectItem::class, new DataClassParameters(condition: $this->getAnswerFeedbackTypeCondition())
+            ComplexContentObjectItem::class, new StorageParameters(condition: $this->getAnswerFeedbackTypeCondition())
         );
 
         $answerFeedbackTypeTableRenderer = $this->getAnswerFeedbackTypeTableRenderer();
@@ -156,7 +156,7 @@ class AnswerFeedbackTypeComponent extends Manager
             )
         );
 
-        $parameters = new DataClassParameters(
+        $parameters = new StorageParameters(
             condition: $this->getAnswerFeedbackTypeCondition(), orderBy: $orderBy,
             count: $tableParameterValues->getNumberOfItemsPerPage(), offset: $tableParameterValues->getOffset()
         );

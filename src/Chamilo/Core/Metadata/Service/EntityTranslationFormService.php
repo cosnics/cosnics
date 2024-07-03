@@ -6,7 +6,7 @@ use Chamilo\Configuration\Storage\DataClass\Language;
 use Chamilo\Core\Metadata\Interfaces\EntityTranslationInterface;
 use Chamilo\Libraries\Format\Form\FormValidator;
 use Chamilo\Libraries\Storage\DataManager\DataManager;
-use Chamilo\Libraries\Storage\Query\DataClassParameters;
+use Chamilo\Libraries\Storage\Query\StorageParameters;
 use Chamilo\Libraries\Translation\Translation;
 use Chamilo\Libraries\Utilities\StringUtilities;
 use Exception;
@@ -37,7 +37,7 @@ class EntityTranslationFormService
         $formValidator->addElement('category', Translation::get('Translations'));
 
         $languages = DataManager::retrieves(
-            Language::class, new DataClassParameters()
+            Language::class, new StorageParameters()
         );
         $platformLanguage = $this->getConfigurationConsulter()->getSetting(['Chamilo\Core\Admin', 'platform_language']);
 

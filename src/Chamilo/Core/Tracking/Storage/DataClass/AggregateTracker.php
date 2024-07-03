@@ -5,7 +5,7 @@ use Chamilo\Core\Tracking\Manager;
 use Chamilo\Libraries\Storage\DataManager\DataManager;
 use Chamilo\Libraries\Storage\Query\Condition\AndCondition;
 use Chamilo\Libraries\Storage\Query\Condition\EqualityCondition;
-use Chamilo\Libraries\Storage\Query\DataClassParameters;
+use Chamilo\Libraries\Storage\Query\StorageParameters;
 use Chamilo\Libraries\Storage\Query\Variable\PropertyConditionVariable;
 use Chamilo\Libraries\Storage\Query\Variable\StaticConditionVariable;
 
@@ -37,7 +37,7 @@ abstract class AggregateTracker extends Tracker
         $condition = new AndCondition($conditions);
 
         $tracker_items = DataManager::retrieves(
-            static::class, new DataClassParameters(condition: $condition)
+            static::class, new StorageParameters(condition: $condition)
         );
 
         if ($tracker_items->count() != 0)

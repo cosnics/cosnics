@@ -13,7 +13,7 @@ use Chamilo\Libraries\Format\Table\Column\DataClassPropertyTableColumn;
 use Chamilo\Libraries\Format\Table\Column\StaticTableColumn;
 use Chamilo\Libraries\Storage\Query\Condition\EqualityCondition;
 use Chamilo\Libraries\Storage\Query\Condition\InCondition;
-use Chamilo\Libraries\Storage\Query\DataClassParameters;
+use Chamilo\Libraries\Storage\Query\StorageParameters;
 use Chamilo\Libraries\Storage\Query\Join;
 use Chamilo\Libraries\Storage\Query\Joins;
 use Chamilo\Libraries\Storage\Query\RetrieveProperties;
@@ -46,7 +46,7 @@ class CourseCategoryEntityHelper
      */
     public function count_table_data($condition)
     {
-        $parameters = new DataClassParameters(
+        $parameters = new StorageParameters(
             condition: $condition, joins: self::get_joins(), retrieveProperties: new RetrieveProperties(
             [
                 new FunctionConditionVariable(
@@ -97,7 +97,7 @@ class CourseCategoryEntityHelper
                 new PropertyConditionVariable(Course::class, Course::PROPERTY_CATEGORY_ID), $course_category_ids
             );
 
-            $parameters = new DataClassParameters(
+            $parameters = new StorageParameters(
                 condition: $condition, retrieveProperties: new RetrieveProperties(
                 [new PropertyConditionVariable(Course::class, Course::PROPERTY_ID)]
             )
@@ -213,7 +213,7 @@ class CourseCategoryEntityHelper
             )
         );
 
-        $parameters = new DataClassParameters(
+        $parameters = new StorageParameters(
             condition: $condition, count: $count, offset: $offset, orderBy: $order_property, joins: self::get_joins(),
             retrieveProperties: $properties
         );

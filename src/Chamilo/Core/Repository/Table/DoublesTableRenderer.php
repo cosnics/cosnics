@@ -13,7 +13,7 @@ use Chamilo\Libraries\Format\Table\Interfaces\TableRowActionsSupport;
 use Chamilo\Libraries\Format\Table\TableResultPosition;
 use Chamilo\Libraries\Storage\Query\Condition\AndCondition;
 use Chamilo\Libraries\Storage\Query\Condition\EqualityCondition;
-use Chamilo\Libraries\Storage\Query\DataClassParameters;
+use Chamilo\Libraries\Storage\Query\StorageParameters;
 use Chamilo\Libraries\Storage\Query\Variable\PropertyConditionVariable;
 use Chamilo\Libraries\Storage\Query\Variable\StaticConditionVariable;
 
@@ -54,7 +54,7 @@ class DoublesTableRenderer extends DoublesDetailsTableRenderer implements TableR
                 $condition = new AndCondition($conditions);
 
                 return (string) DataManager::count_active_content_objects(
-                    ContentObject::class, new DataClassParameters(condition: $condition)
+                    ContentObject::class, new StorageParameters(condition: $condition)
                 );
         }
 

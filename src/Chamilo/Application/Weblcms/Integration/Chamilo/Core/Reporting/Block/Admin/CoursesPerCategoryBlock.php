@@ -8,7 +8,7 @@ use Chamilo\Application\Weblcms\Storage\DataManager;
 use Chamilo\Core\Reporting\ReportingData;
 use Chamilo\Core\Reporting\Viewer\Rendition\Block\Type\Html;
 use Chamilo\Libraries\Storage\Query\Condition\EqualityCondition;
-use Chamilo\Libraries\Storage\Query\DataClassParameters;
+use Chamilo\Libraries\Storage\Query\StorageParameters;
 use Chamilo\Libraries\Storage\Query\Variable\PropertyConditionVariable;
 use Chamilo\Libraries\Storage\Query\Variable\StaticConditionVariable;
 use Chamilo\Libraries\Translation\Translation;
@@ -33,7 +33,7 @@ class CoursesPerCategoryBlock extends CourseBlock
             $reporting_data->add_category($category->get_name());
             $reporting_data->add_data_category_row(
                 $category->get_name(), Translation::get('count'),
-                CourseDataManager::count(Course::class, new DataClassParameters(condition: $condition))
+                CourseDataManager::count(Course::class, new StorageParameters(condition: $condition))
             );
         }
 

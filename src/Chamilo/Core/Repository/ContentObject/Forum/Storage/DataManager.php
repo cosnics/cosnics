@@ -9,7 +9,7 @@ use Chamilo\Core\Repository\Storage\DataClass\ComplexContentObjectItem;
 use Chamilo\Core\User\Storage\DataClass\User;
 use Chamilo\Libraries\Storage\Query\Condition\AndCondition;
 use Chamilo\Libraries\Storage\Query\Condition\EqualityCondition;
-use Chamilo\Libraries\Storage\Query\DataClassParameters;
+use Chamilo\Libraries\Storage\Query\StorageParameters;
 use Chamilo\Libraries\Storage\Query\Join;
 use Chamilo\Libraries\Storage\Query\Joins;
 use Chamilo\Libraries\Storage\Query\OrderBy;
@@ -42,7 +42,7 @@ class DataManager extends \Chamilo\Libraries\Storage\DataManager\DataManager
             new StaticConditionVariable($forum_id)
         );
 
-        return self::count(ForumSubscribe::class, new DataClassParameters(condition: $condition));
+        return self::count(ForumSubscribe::class, new StorageParameters(condition: $condition));
     }
 
     /**
@@ -110,7 +110,7 @@ class DataManager extends \Chamilo\Libraries\Storage\DataManager\DataManager
             )
         );
 
-        $parameters = new DataClassParameters(
+        $parameters = new StorageParameters(
             condition: $condition, orderBy: $order_by, joins: $joins, retrieveProperties: $properties
         );
 
@@ -169,7 +169,7 @@ class DataManager extends \Chamilo\Libraries\Storage\DataManager\DataManager
             new PropertyConditionVariable(ForumPost::class, ForumPost::PROPERTY_CREATION_DATE), SORT_DESC
         );
 
-        $parameters = new DataClassParameters(condition: $condition, orderBy: new OrderBy($order_by), joins: $joins);
+        $parameters = new StorageParameters(condition: $condition, orderBy: new OrderBy($order_by), joins: $joins);
 
         return self::retrieve(ForumPost::class, $parameters);
     }
@@ -198,7 +198,7 @@ class DataManager extends \Chamilo\Libraries\Storage\DataManager\DataManager
 
         $condition = new AndCondition($conditions);
 
-        return self::retrieve(ForumSubscribe::class, new DataClassParameters(condition: $condition));
+        return self::retrieve(ForumSubscribe::class, new StorageParameters(condition: $condition));
     }
 
     /**
@@ -216,7 +216,7 @@ class DataManager extends \Chamilo\Libraries\Storage\DataManager\DataManager
         );
 
         $subscriptions = DataManager::retrieves(
-            ForumSubscribe::class, new DataClassParameters(condition: $condition)
+            ForumSubscribe::class, new StorageParameters(condition: $condition)
         );
 
         $users = [];

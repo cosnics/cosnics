@@ -9,7 +9,7 @@ use Chamilo\Core\Repository\Workspace\Storage\DataClass\WorkspaceContentObjectRe
 use Chamilo\Libraries\Storage\Query\Condition\AndCondition;
 use Chamilo\Libraries\Storage\Query\Condition\EqualityCondition;
 use Chamilo\Libraries\Storage\Query\Condition\InCondition;
-use Chamilo\Libraries\Storage\Query\DataClassParameters;
+use Chamilo\Libraries\Storage\Query\StorageParameters;
 use Chamilo\Libraries\Storage\Query\Join;
 use Chamilo\Libraries\Storage\Query\Joins;
 use Chamilo\Libraries\Storage\Query\RetrieveProperties;
@@ -110,7 +110,7 @@ class ExportParameters
                         ), new StaticConditionVariable($this->getWorkspace()->getId())
                     );
 
-                    $parameters = new DataClassParameters(
+                    $parameters = new StorageParameters(
                         condition: $condition, joins: $joins, retrieveProperties: new RetrieveProperties(
                         [new PropertyConditionVariable(ContentObject::class, ContentObject::PROPERTY_ID)]
                     )
@@ -158,7 +158,7 @@ class ExportParameters
 
                     $condition = new AndCondition($conditions);
 
-                    $parameters = new DataClassParameters(
+                    $parameters = new StorageParameters(
                         condition: $condition, joins: $joins, retrieveProperties: new RetrieveProperties(
                         [new PropertyConditionVariable(ContentObject::class, ContentObject::PROPERTY_ID)]
                     )

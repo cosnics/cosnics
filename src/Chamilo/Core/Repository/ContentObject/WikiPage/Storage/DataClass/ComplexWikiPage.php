@@ -8,7 +8,7 @@ use Chamilo\Libraries\Storage\DataClass\Traits\DataClassExtensionTrait;
 use Chamilo\Libraries\Storage\Query\Condition\AndCondition;
 use Chamilo\Libraries\Storage\Query\Condition\EqualityCondition;
 use Chamilo\Libraries\Storage\Query\Condition\NotCondition;
-use Chamilo\Libraries\Storage\Query\DataClassParameters;
+use Chamilo\Libraries\Storage\Query\StorageParameters;
 use Chamilo\Libraries\Storage\Query\Variable\PropertyConditionVariable;
 use Chamilo\Libraries\Storage\Query\Variable\StaticConditionVariable;
 
@@ -75,7 +75,7 @@ class ComplexWikiPage extends ComplexContentObjectItem implements DataClassExten
                 )
             );
 
-            $parameters = new DataClassParameters(condition: new AndCondition($conditions));
+            $parameters = new StorageParameters(condition: new AndCondition($conditions));
 
             $children = DataManager::retrieve_complex_content_object_items(
                 ComplexContentObjectItem::class, $parameters

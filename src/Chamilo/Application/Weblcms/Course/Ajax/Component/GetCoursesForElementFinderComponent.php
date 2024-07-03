@@ -9,7 +9,7 @@ use Chamilo\Libraries\Format\Form\Element\AdvancedElementFinder\AdvancedElementF
 use Chamilo\Libraries\Format\Form\Element\AdvancedElementFinder\Ajax\AjaxResultDataProviderInterface;
 use Chamilo\Libraries\Format\Form\Element\AdvancedElementFinder\Ajax\AjaxResultGenerator;
 use Chamilo\Libraries\Format\Structure\Glyph\FontAwesomeGlyph;
-use Chamilo\Libraries\Storage\Query\DataClassParameters;
+use Chamilo\Libraries\Storage\Query\StorageParameters;
 use Chamilo\Libraries\Storage\Query\OrderBy;
 use Chamilo\Libraries\Storage\Query\OrderProperty;
 use Chamilo\Libraries\Storage\Query\Variable\PropertyConditionVariable;
@@ -87,7 +87,7 @@ class GetCoursesForElementFinderComponent extends Manager implements AjaxResultD
      */
     protected function getCourses()
     {
-        $parameters = new DataClassParameters(
+        $parameters = new StorageParameters(
             condition: $this->getCondition(), count: 100, offset: $this->ajaxResultGenerator->getOffset(),
             orderBy: new OrderBy(
                 [new OrderProperty(new PropertyConditionVariable(Course::class, Course::PROPERTY_TITLE))]
@@ -105,7 +105,7 @@ class GetCoursesForElementFinderComponent extends Manager implements AjaxResultD
     public function getTotalNumberOfElements()
     {
         return DataManager::count(
-            Course::class, new DataClassParameters(condition: $this->getCondition())
+            Course::class, new StorageParameters(condition: $this->getCondition())
         );
     }
 }

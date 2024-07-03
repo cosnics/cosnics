@@ -12,7 +12,7 @@ use Chamilo\Core\Repository\Storage\DataManager;
 use Chamilo\Libraries\Architecture\ClassnameUtilities;
 use Chamilo\Libraries\Format\Structure\Glyph\FontAwesomeGlyph;
 use Chamilo\Libraries\Storage\Query\Condition\EqualityCondition;
-use Chamilo\Libraries\Storage\Query\DataClassParameters;
+use Chamilo\Libraries\Storage\Query\StorageParameters;
 use Chamilo\Libraries\Storage\Query\Variable\PropertyConditionVariable;
 use Chamilo\Libraries\Storage\Query\Variable\StaticConditionVariable;
 use Chamilo\Libraries\Translation\Translation;
@@ -188,7 +188,7 @@ class AssessmentQuestionsBlock extends AssessmentBlock
         );
 
         $questions = DataManager::retrieve_complex_content_object_items(
-            ComplexContentObjectItem::class, new DataClassParameters(condition: $condition)
+            ComplexContentObjectItem::class, new StorageParameters(condition: $condition)
         );
 
         $questions_arr = [];

@@ -19,7 +19,7 @@ use Chamilo\Libraries\File\Properties\FileProperties;
 use Chamilo\Libraries\File\SystemPathBuilder;
 use Chamilo\Libraries\Storage\DataManager\Repository\StorageUnitRepository;
 use Chamilo\Libraries\Storage\Query\Condition\EqualityCondition;
-use Chamilo\Libraries\Storage\Query\DataClassParameters;
+use Chamilo\Libraries\Storage\Query\StorageParameters;
 use Chamilo\Libraries\Storage\Query\Variable\PropertyConditionVariable;
 use Chamilo\Libraries\Storage\Query\Variable\StaticConditionVariable;
 use Exception;
@@ -98,7 +98,7 @@ class ContentObjectInstaller extends Installer
                 new PropertyConditionVariable(User::class, User::PROPERTY_PLATFORMADMIN), new StaticConditionVariable(1)
             );
             $user = DataManager::retrieves(
-                User::class, new DataClassParameters(condition: $condition)
+                User::class, new StorageParameters(condition: $condition)
             )->current();
 
             $this->getSession()->set(Manager::SESSION_USER_ID, $user->get_id());

@@ -7,7 +7,7 @@ use Chamilo\Libraries\Storage\Query\Condition\AndCondition;
 use Chamilo\Libraries\Storage\Query\Condition\ComparisonCondition;
 use Chamilo\Libraries\Storage\Query\Condition\EqualityCondition;
 use Chamilo\Libraries\Storage\Query\Condition\NotCondition;
-use Chamilo\Libraries\Storage\Query\DataClassParameters;
+use Chamilo\Libraries\Storage\Query\StorageParameters;
 use Chamilo\Libraries\Storage\Query\RetrieveProperties;
 use Chamilo\Libraries\Storage\Query\UpdateProperties;
 use Chamilo\Libraries\Storage\Query\UpdateProperty;
@@ -84,7 +84,7 @@ class DisplayOrderRepository
         }
 
         return $this->getDataClassRepository()->count(
-            $this->determinePropertyDataClassName($dataClass), new DataClassParameters(condition: $condition)
+            $this->determinePropertyDataClassName($dataClass), new StorageParameters(condition: $condition)
         );
     }
 
@@ -139,7 +139,7 @@ class DisplayOrderRepository
             ), new StaticConditionVariable($dataClass->getId())
         );
 
-        $parameters = new DataClassParameters(
+        $parameters = new StorageParameters(
             condition: $condition, retrieveProperties: $this->getDisplayOrderDataClassProperties($dataClass)
         );
 

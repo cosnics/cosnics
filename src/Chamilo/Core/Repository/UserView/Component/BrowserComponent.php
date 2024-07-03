@@ -17,7 +17,7 @@ use Chamilo\Libraries\Storage\Query\Condition\AndCondition;
 use Chamilo\Libraries\Storage\Query\Condition\ContainsCondition;
 use Chamilo\Libraries\Storage\Query\Condition\EqualityCondition;
 use Chamilo\Libraries\Storage\Query\Condition\OrCondition;
-use Chamilo\Libraries\Storage\Query\DataClassParameters;
+use Chamilo\Libraries\Storage\Query\StorageParameters;
 use Chamilo\Libraries\Storage\Query\Variable\PropertyConditionVariable;
 use Chamilo\Libraries\Storage\Query\Variable\StaticConditionVariable;
 use Chamilo\Libraries\Utilities\StringUtilities;
@@ -125,7 +125,7 @@ class BrowserComponent extends Manager implements BreadcrumbLessComponentInterfa
     protected function renderTable(): string
     {
         $totalNumberOfItems =
-            DataManager::count(UserView::class, new DataClassParameters(condition: $this->getUserViewTableCondition()));
+            DataManager::count(UserView::class, new StorageParameters(condition: $this->getUserViewTableCondition()));
 
         $userViewTableRenderer = $this->getUserViewTableRenderer();
 
@@ -135,7 +135,7 @@ class BrowserComponent extends Manager implements BreadcrumbLessComponentInterfa
         );
 
         $userViews = DataManager::retrieves(
-            UserView::class, new DataClassParameters(
+            UserView::class, new StorageParameters(
                 condition: $this->getUserViewTableCondition(), orderBy: $userViewTableRenderer->determineOrderBy(
                 $tableParameterValues
             ), count: $tableParameterValues->getNumberOfItemsPerPage(), offset: $tableParameterValues->getOffset()

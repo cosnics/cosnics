@@ -18,7 +18,7 @@ use Chamilo\Libraries\Format\Structure\ToolbarItem;
 use Chamilo\Libraries\Storage\DataManager\DataManager;
 use Chamilo\Libraries\Storage\Query\Condition\AndCondition;
 use Chamilo\Libraries\Storage\Query\Condition\EqualityCondition;
-use Chamilo\Libraries\Storage\Query\DataClassParameters;
+use Chamilo\Libraries\Storage\Query\StorageParameters;
 use Chamilo\Libraries\Storage\Query\Variable\PropertyConditionVariable;
 use Chamilo\Libraries\Storage\Query\Variable\StaticConditionVariable;
 use Chamilo\Libraries\Translation\Translation;
@@ -142,7 +142,7 @@ abstract class Manager extends \Chamilo\Application\Weblcms\Tool\Manager
             $condition = new AndCondition([$condition_t, $condition_u]);
 
             $trackers = DataManager::retrieves(
-                AssessmentAttempt::class, new DataClassParameters(condition: $condition)
+                AssessmentAttempt::class, new StorageParameters(condition: $condition)
             );
 
             $count = count($trackers);

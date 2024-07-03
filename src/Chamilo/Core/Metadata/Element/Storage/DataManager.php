@@ -3,7 +3,7 @@ namespace Chamilo\Core\Metadata\Element\Storage;
 
 use Chamilo\Core\Metadata\Storage\DataClass\Element;
 use Chamilo\Libraries\Storage\Query\Condition\ComparisonCondition;
-use Chamilo\Libraries\Storage\Query\DataClassParameters;
+use Chamilo\Libraries\Storage\Query\StorageParameters;
 use Chamilo\Libraries\Storage\Query\Variable\PropertyConditionVariable;
 use Chamilo\Libraries\Storage\Query\Variable\StaticConditionVariable;
 
@@ -18,6 +18,6 @@ class DataManager extends \Chamilo\Libraries\Storage\DataManager\DataManager
             new StaticConditionVariable($schema_id)
         );
 
-        return DataManager::count(Element::class, new DataClassParameters(condition: $condition));
+        return DataManager::count(Element::class, new StorageParameters(condition: $condition));
     }
 }

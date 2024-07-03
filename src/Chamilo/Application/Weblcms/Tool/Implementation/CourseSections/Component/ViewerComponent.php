@@ -14,7 +14,7 @@ use Chamilo\Libraries\Format\Structure\Glyph\FontAwesomeGlyph;
 use Chamilo\Libraries\Format\Structure\ToolbarItem;
 use Chamilo\Libraries\Format\Table\RequestTableParameterValuesCompiler;
 use Chamilo\Libraries\Storage\Query\Condition\EqualityCondition;
-use Chamilo\Libraries\Storage\Query\DataClassParameters;
+use Chamilo\Libraries\Storage\Query\StorageParameters;
 use Chamilo\Libraries\Storage\Query\Variable\PropertyConditionVariable;
 use Chamilo\Libraries\Storage\Query\Variable\StaticConditionVariable;
 use Chamilo\Libraries\Utilities\StringUtilities;
@@ -114,7 +114,7 @@ class ViewerComponent extends Manager
     public function renderTable(): string
     {
         $totalNumberOfItems = DataManager::count(
-            CourseSection::class, new DataClassParameters(condition: $this->getCourseSectionsCondition())
+            CourseSection::class, new StorageParameters(condition: $this->getCourseSectionsCondition())
         );
 
         $courseSectionsTableRenderer = $this->getCourseSectionsTableRenderer();
@@ -125,7 +125,7 @@ class ViewerComponent extends Manager
         );
 
         $courseSections = DataManager::retrieves(
-            CourseSection::class, new DataClassParameters(
+            CourseSection::class, new StorageParameters(
                 condition: $this->getCourseSectionsCondition(), count: $tableParameterValues->getNumberOfItemsPerPage(),
                 offset: $tableParameterValues->getOffset(), orderBy: $courseSectionsTableRenderer->determineOrderBy(
                 $tableParameterValues

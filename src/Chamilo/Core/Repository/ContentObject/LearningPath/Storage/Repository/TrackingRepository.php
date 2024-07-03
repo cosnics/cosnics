@@ -14,7 +14,7 @@ use Chamilo\Libraries\Storage\Query\Condition\Condition;
 use Chamilo\Libraries\Storage\Query\Condition\EqualityCondition;
 use Chamilo\Libraries\Storage\Query\Condition\InCondition;
 use Chamilo\Libraries\Storage\Query\Condition\NotCondition;
-use Chamilo\Libraries\Storage\Query\DataClassParameters;
+use Chamilo\Libraries\Storage\Query\StorageParameters;
 use Chamilo\Libraries\Storage\Query\GroupBy;
 use Chamilo\Libraries\Storage\Query\Join;
 use Chamilo\Libraries\Storage\Query\Joins;
@@ -85,7 +85,7 @@ class TrackingRepository extends CommonDataClassRepository implements TrackingRe
         LearningPath $learningPath, $treeNodeDataIds = [], Condition $condition = null
     )
     {
-        $parameters = new DataClassParameters(
+        $parameters = new StorageParameters(
             condition: $condition, joins: $this->getJoinsForTreeNodeAttemptsWithUser($learningPath, $treeNodeDataIds),
             retrieveProperties: new RetrieveProperties([
                 new FunctionConditionVariable(
@@ -116,7 +116,7 @@ class TrackingRepository extends CommonDataClassRepository implements TrackingRe
 
         $condition = $this->getConditionForTargetUsersForLearningPath($learningPath, $condition);
 
-        return $this->dataClassRepository->count(User::class, new DataClassParameters(condition: $condition));
+        return $this->dataClassRepository->count(User::class, new StorageParameters(condition: $condition));
     }
 
     /**
@@ -151,7 +151,7 @@ class TrackingRepository extends CommonDataClassRepository implements TrackingRe
         $condition = new AndCondition($conditions);
 
         return $this->dataClassRepository->retrieve(
-            $this->trackingParameters->getTreeNodeAttemptClassName(), new DataClassParameters(condition: $condition)
+            $this->trackingParameters->getTreeNodeAttemptClassName(), new StorageParameters(condition: $condition)
         );
     }
 
@@ -219,7 +219,7 @@ class TrackingRepository extends CommonDataClassRepository implements TrackingRe
         $condition = $this->getConditionForTreeNodeAttemptsForLearningPath($learningPath);
 
         return $this->dataClassRepository->records(
-            $treeNodeAttemptClassName, new DataClassParameters(
+            $treeNodeAttemptClassName, new StorageParameters(
                 condition: $condition, joins: $joins, retrieveProperties: $properties
             )
         );
@@ -243,7 +243,7 @@ class TrackingRepository extends CommonDataClassRepository implements TrackingRe
         $orderBy = null
     )
     {
-        $parameters = new DataClassParameters(
+        $parameters = new StorageParameters(
             condition: $condition, joins: $this->getJoinsForTreeNodeAttemptsWithUser($learningPath, $treeNodeDataIds),
             retrieveProperties: $this->getPropertiesForLearningPathAttemptsWithUser(), orderBy: $orderBy,
             groupBy: $this->getGroupByUserId(), count: $count, offset: $offset
@@ -277,7 +277,7 @@ class TrackingRepository extends CommonDataClassRepository implements TrackingRe
         $groupBy = $this->getGroupByUserId();
 
         return $this->dataClassRepository->records(
-            $this->trackingParameters->getTreeNodeAttemptClassName(), new DataClassParameters(
+            $this->trackingParameters->getTreeNodeAttemptClassName(), new StorageParameters(
                 condition: $condition, joins: $joins, retrieveProperties: $properties, orderBy: $orderBy,
                 groupBy: $groupBy, count: $count, offset: $offset
             )
@@ -311,7 +311,7 @@ class TrackingRepository extends CommonDataClassRepository implements TrackingRe
         $condition = $this->getConditionForTreeNodeAttemptsForLearningPathAndUser($learningPath, $user);
 
         return $this->dataClassRepository->retrieves(
-            $this->trackingParameters->getTreeNodeAttemptClassName(), new DataClassParameters(condition: $condition)
+            $this->trackingParameters->getTreeNodeAttemptClassName(), new StorageParameters(condition: $condition)
         );
     }
 
@@ -327,7 +327,7 @@ class TrackingRepository extends CommonDataClassRepository implements TrackingRe
         $condition = $this->getConditionForTreeNodeAttemptsForLearningPath($learningPath);
 
         return $this->dataClassRepository->retrieves(
-            $this->trackingParameters->getTreeNodeAttemptClassName(), new DataClassParameters(condition: $condition)
+            $this->trackingParameters->getTreeNodeAttemptClassName(), new StorageParameters(condition: $condition)
         );
     }
 
@@ -349,7 +349,7 @@ class TrackingRepository extends CommonDataClassRepository implements TrackingRe
 
         return $this->dataClassRepository->retrieves(
             $this->trackingParameters->getTreeNodeQuestionAttemptClassName(),
-            new DataClassParameters(condition: $condition)
+            new StorageParameters(condition: $condition)
         );
     }
 

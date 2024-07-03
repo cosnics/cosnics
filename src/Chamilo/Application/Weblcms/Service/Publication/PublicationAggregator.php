@@ -23,7 +23,7 @@ use Chamilo\Libraries\Format\Form\FormValidator;
 use Chamilo\Libraries\Storage\Query\Condition\Condition;
 use Chamilo\Libraries\Storage\Query\Condition\InCondition;
 use Chamilo\Libraries\Storage\Query\Condition\NotCondition;
-use Chamilo\Libraries\Storage\Query\DataClassParameters;
+use Chamilo\Libraries\Storage\Query\StorageParameters;
 use Chamilo\Libraries\Storage\Query\OrderBy;
 use Chamilo\Libraries\Storage\Query\Variable\PropertyConditionVariable;
 use Doctrine\Common\Collections\ArrayCollection;
@@ -121,7 +121,7 @@ class PublicationAggregator implements PublicationAggregatorInterface
         $course_settings_controller = CourseSettingsController::getInstance();
         $course_management_rights = CourseManagementRights::getInstance();
 
-        $tools = DataManager::retrieves(CourseTool::class, new DataClassParameters());
+        $tools = DataManager::retrieves(CourseTool::class, new StorageParameters());
 
         $toolNames = [];
         $types = [];

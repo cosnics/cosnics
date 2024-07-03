@@ -6,7 +6,7 @@ use Chamilo\Libraries\Storage\DataManager\Repository\DataClassRepository;
 use Chamilo\Libraries\Storage\Query\Condition\AndCondition;
 use Chamilo\Libraries\Storage\Query\Condition\Condition;
 use Chamilo\Libraries\Storage\Query\Condition\EqualityCondition;
-use Chamilo\Libraries\Storage\Query\DataClassParameters;
+use Chamilo\Libraries\Storage\Query\StorageParameters;
 use Chamilo\Libraries\Storage\Query\RetrieveProperties;
 use Chamilo\Libraries\Storage\Query\Variable\PropertiesConditionVariable;
 use Chamilo\Libraries\Storage\Query\Variable\PropertyConditionVariable;
@@ -52,7 +52,7 @@ class ConfigurationRepository
         );
 
         return $this->getDataClassRepository()->retrieve(
-            Setting::class, new DataClassParameters(condition: new AndCondition($conditions))
+            Setting::class, new StorageParameters(condition: new AndCondition($conditions))
         );
     }
 
@@ -62,7 +62,7 @@ class ConfigurationRepository
     public function findSettingContextsForCondition(?Condition $condition = null): array
     {
         return $this->getDataClassRepository()->distinct(
-            Setting::class, new DataClassParameters(
+            Setting::class, new StorageParameters(
                 condition: $condition, retrieveProperties: new RetrieveProperties(
                 [new PropertyConditionVariable(Setting::class, Setting::PROPERTY_CONTEXT)]
             )
@@ -73,7 +73,7 @@ class ConfigurationRepository
     public function findSettingsAsRecords(): ArrayCollection
     {
         return $this->getDataClassRepository()->records(
-            Setting::class, new DataClassParameters(
+            Setting::class, new StorageParameters(
                 retrieveProperties: new RetrieveProperties([new PropertiesConditionVariable(Setting::class)])
             )
         );

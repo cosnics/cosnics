@@ -17,7 +17,7 @@ use Chamilo\Libraries\Storage\Query\Condition\ContainsCondition;
 use Chamilo\Libraries\Storage\Query\Condition\EqualityCondition;
 use Chamilo\Libraries\Storage\Query\Condition\NotCondition;
 use Chamilo\Libraries\Storage\Query\Condition\OrCondition;
-use Chamilo\Libraries\Storage\Query\DataClassParameters;
+use Chamilo\Libraries\Storage\Query\StorageParameters;
 use Chamilo\Libraries\Storage\Query\Variable\PropertyConditionVariable;
 use Chamilo\Libraries\Storage\Query\Variable\StaticConditionVariable;
 use Chamilo\Libraries\Translation\Translation;
@@ -66,7 +66,7 @@ class SearcherComponent extends Manager
 
             $publications = DataManager::retrieves(
                 ContentObjectPublication::class,
-                new DataClassParameters(condition: $this->get_retrieve_publications_condition())
+                new StorageParameters(condition: $this->get_retrieve_publications_condition())
             );
 
             $tools = [];

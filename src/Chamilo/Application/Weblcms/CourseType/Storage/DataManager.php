@@ -8,7 +8,7 @@ use Chamilo\Libraries\Storage\Query\Condition\EqualityCondition;
 use Chamilo\Libraries\Storage\Query\Condition\NotCondition;
 use Chamilo\Libraries\Storage\Query\Condition\OrCondition;
 use Chamilo\Libraries\Storage\Query\Condition\SubselectCondition;
-use Chamilo\Libraries\Storage\Query\DataClassParameters;
+use Chamilo\Libraries\Storage\Query\StorageParameters;
 use Chamilo\Libraries\Storage\Query\Join;
 use Chamilo\Libraries\Storage\Query\Joins;
 use Chamilo\Libraries\Storage\Query\OrderBy;
@@ -46,7 +46,7 @@ class DataManager extends \Chamilo\Application\Weblcms\Storage\DataManager
             new StaticConditionVariable(1)
         );
 
-        return DataManager::count(CourseType::class, new DataClassParameters(condition: $condition));
+        return DataManager::count(CourseType::class, new StorageParameters(condition: $condition));
     }
 
     /**
@@ -92,7 +92,7 @@ class DataManager extends \Chamilo\Application\Weblcms\Storage\DataManager
             new StaticConditionVariable($user_id)
         );
 
-        if (self::count(CourseTypeUserOrder::class, new DataClassParameters(condition: $user_condition)) == 0)
+        if (self::count(CourseTypeUserOrder::class, new StorageParameters(condition: $user_condition)) == 0)
         {
             return true;
         }
@@ -121,7 +121,7 @@ class DataManager extends \Chamilo\Application\Weblcms\Storage\DataManager
         $condition = new AndCondition($conditions);
 
         $active_course_types = DataManager::retrieves(
-            CourseType::class, new DataClassParameters(condition: $condition)
+            CourseType::class, new StorageParameters(condition: $condition)
         );
 
         foreach ($active_course_types as $course_type)
@@ -157,7 +157,7 @@ class DataManager extends \Chamilo\Application\Weblcms\Storage\DataManager
         $condition = new AndCondition($conditions);
 
         while ($course_type_user_order = DataManager::retrieve(
-            CourseTypeUserOrder::class, new DataClassParameters(condition: $condition)
+            CourseTypeUserOrder::class, new StorageParameters(condition: $condition)
         ))
         {
             if (!$course_type_user_order->delete())
@@ -232,7 +232,7 @@ class DataManager extends \Chamilo\Application\Weblcms\Storage\DataManager
             new StaticConditionVariable($course_type_name)
         );
 
-        return DataManager::count(CourseType::class, new DataClassParameters(condition: $condition)) != 0;
+        return DataManager::count(CourseType::class, new StorageParameters(condition: $condition)) != 0;
     }
 
     /**
@@ -251,7 +251,7 @@ class DataManager extends \Chamilo\Application\Weblcms\Storage\DataManager
             new OrderProperty(new PropertyConditionVariable(CourseType::class, CourseType::PROPERTY_DISPLAY_ORDER))
         ];
 
-        $parameters = new DataClassParameters(condition: $condition, orderBy: new OrderBy($order));
+        $parameters = new StorageParameters(condition: $condition, orderBy: new OrderBy($order));
 
         return DataManager::retrieves(CourseType::class, $parameters);
     }
@@ -334,7 +334,7 @@ class DataManager extends \Chamilo\Application\Weblcms\Storage\DataManager
             new StaticConditionVariable($course_type_name)
         );
 
-        return self::retrieve(CourseType::class, new DataClassParameters(condition: $condition));
+        return self::retrieve(CourseType::class, new StorageParameters(condition: $condition));
     }
 
     /**
@@ -371,7 +371,7 @@ class DataManager extends \Chamilo\Application\Weblcms\Storage\DataManager
 
         $joins->add(new Join(CourseTypeUserOrder::class, $join_condition, Join::TYPE_LEFT));
 
-        $parameters = new DataClassParameters(
+        $parameters = new StorageParameters(
             condition: $condition, count: $max_objects, offset: $offset, orderBy: $order_by, joins: $joins,
             retrieveProperties: new RetrieveProperties([new PropertiesConditionVariable(CourseType::class)])
         );
@@ -404,6 +404,6 @@ class DataManager extends \Chamilo\Application\Weblcms\Storage\DataManager
 
         $condition = new AndCondition($conditions);
 
-        return self::retrieve(CourseTypeUserOrder::class, new DataClassParameters(condition: $condition));
+        return self::retrieve(CourseTypeUserOrder::class, new StorageParameters(condition: $condition));
     }
 }

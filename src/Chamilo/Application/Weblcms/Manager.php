@@ -13,7 +13,7 @@ use Chamilo\Application\Weblcms\Tool\Implementation\CourseGroup\Storage\DataMana
 use Chamilo\Core\User\Storage\DataClass\User;
 use Chamilo\Libraries\Architecture\Application\Application;
 use Chamilo\Libraries\Storage\Query\Condition\EqualityCondition;
-use Chamilo\Libraries\Storage\Query\DataClassParameters;
+use Chamilo\Libraries\Storage\Query\StorageParameters;
 use Chamilo\Libraries\Storage\Query\Variable\PropertyConditionVariable;
 use Chamilo\Libraries\Storage\Query\Variable\StaticConditionVariable;
 
@@ -96,7 +96,7 @@ abstract class Manager extends Application
 
     public function count_requests($condition = null)
     {
-        return DataManager::count(CourseRequest::class, new DataClassParameters(condition: $condition));
+        return DataManager::count(CourseRequest::class, new StorageParameters(condition: $condition));
     }
 
     /**
@@ -425,7 +425,7 @@ abstract class Manager extends Application
                 new StaticConditionVariable($this->getRequest()->query->get(self::PARAM_COURSE))
             );
             $sections = DataManager::retrieves(
-                CourseSection::class, new DataClassParameters(condition: $condition)
+                CourseSection::class, new StorageParameters(condition: $condition)
             );
 
             foreach ($sections as $section)

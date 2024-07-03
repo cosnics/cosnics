@@ -17,7 +17,7 @@ use Chamilo\Libraries\Format\Table\RequestTableParameterValuesCompiler;
 use Chamilo\Libraries\Storage\Cache\DataClassRepositoryCache;
 use Chamilo\Libraries\Storage\Query\Condition\AndCondition;
 use Chamilo\Libraries\Storage\Query\Condition\EqualityCondition;
-use Chamilo\Libraries\Storage\Query\DataClassParameters;
+use Chamilo\Libraries\Storage\Query\StorageParameters;
 use Chamilo\Libraries\Storage\Query\Variable\PropertyConditionVariable;
 use Chamilo\Libraries\Storage\Query\Variable\StaticConditionVariable;
 
@@ -74,7 +74,7 @@ class RecycleBinBrowserComponent extends Manager
      */
     private function emptyRecycleBin()
     {
-        $parameters = new DataClassParameters(condition: $this->getRecycleBinTableCondition());
+        $parameters = new StorageParameters(condition: $this->getRecycleBinTableCondition());
         $trashed_objects = DataManager::retrieve_active_content_objects(ContentObject::class, $parameters);
 
         foreach ($trashed_objects as $object)
@@ -148,7 +148,7 @@ class RecycleBinBrowserComponent extends Manager
     protected function renderTable(): string
     {
         $totalNumberOfItems = DataManager::count_active_content_objects(
-            ContentObject::class, new DataClassParameters(condition: $this->getRecycleBinTableCondition())
+            ContentObject::class, new StorageParameters(condition: $this->getRecycleBinTableCondition())
         );
         $recycleBinTableRenderer = $this->getRecycleBinTableRenderer();
 
@@ -158,7 +158,7 @@ class RecycleBinBrowserComponent extends Manager
         );
 
         $contentObjects = DataManager::retrieve_active_content_objects(
-            ContentObject::class, new DataClassParameters(
+            ContentObject::class, new StorageParameters(
                 condition: $this->getRecycleBinTableCondition(), orderBy: $recycleBinTableRenderer->determineOrderBy(
                 $tableParameterValues
             ), count: $tableParameterValues->getNumberOfItemsPerPage(), offset: $tableParameterValues->getOffset()

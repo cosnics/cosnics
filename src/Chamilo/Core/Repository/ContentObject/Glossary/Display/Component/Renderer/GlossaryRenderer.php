@@ -9,7 +9,7 @@ use Chamilo\Libraries\Storage\Query\Condition\AndCondition;
 use Chamilo\Libraries\Storage\Query\Condition\ContainsCondition;
 use Chamilo\Libraries\Storage\Query\Condition\EqualityCondition;
 use Chamilo\Libraries\Storage\Query\Condition\OrCondition;
-use Chamilo\Libraries\Storage\Query\DataClassParameters;
+use Chamilo\Libraries\Storage\Query\StorageParameters;
 use Chamilo\Libraries\Storage\Query\Join;
 use Chamilo\Libraries\Storage\Query\Joins;
 use Chamilo\Libraries\Storage\Query\Variable\PropertyConditionVariable;
@@ -74,7 +74,7 @@ abstract class GlossaryRenderer
      */
     public function count_objects()
     {
-        $parameters = new DataClassParameters(condition: $this->get_condition(), joins: $this->get_joins());
+        $parameters = new StorageParameters(condition: $this->get_condition(), joins: $this->get_joins());
 
         return DataManager::count_complex_content_object_items(
             ComplexContentObjectItem::class, $parameters
@@ -181,7 +181,7 @@ abstract class GlossaryRenderer
      */
     public function get_objects($offset = null, $count = null, $order_property = null)
     {
-        $parameters = new DataClassParameters(
+        $parameters = new StorageParameters(
             condition: $this->get_condition(), joins: $this->get_joins(), orderBy: $order_property, count: $count,
             offset: $offset
         );

@@ -10,7 +10,7 @@ use Chamilo\Libraries\Storage\Query\Condition\AndCondition;
 use Chamilo\Libraries\Storage\Query\Condition\Condition;
 use Chamilo\Libraries\Storage\Query\Condition\EqualityCondition;
 use Chamilo\Libraries\Storage\Query\Condition\NotCondition;
-use Chamilo\Libraries\Storage\Query\DataClassParameters;
+use Chamilo\Libraries\Storage\Query\StorageParameters;
 use Chamilo\Libraries\Storage\Query\Join;
 use Chamilo\Libraries\Storage\Query\Joins;
 use Chamilo\Libraries\Storage\Query\OrderBy;
@@ -37,11 +37,11 @@ class ContentObjectRepository
 
     /**
      * @param $contentObjectClassName
-     * @param DataClassParameters $parameters
+     * @param StorageParameters $parameters
      *
      * @return int
      */
-    public function countAll($contentObjectClassName, DataClassParameters $parameters)
+    public function countAll($contentObjectClassName, StorageParameters $parameters)
     {
         return DataManager::count($contentObjectClassName, $parameters);
     }
@@ -56,7 +56,7 @@ class ContentObjectRepository
         $contentObjectClassName, Workspace $workspace, ConditionFilterRenderer $filterConditionRenderer
     )
     {
-        $parameters = new DataClassParameters(
+        $parameters = new StorageParameters(
             condition: $this->getWorkspaceConditions($workspace, $filterConditionRenderer),
             joins: $this->getWorkspaceJoins()
         );
@@ -90,11 +90,11 @@ class ContentObjectRepository
 
     /**
      * @param $contentObjectClassName
-     * @param DataClassParameters $parameters
+     * @param StorageParameters $parameters
      *
      * @return \Doctrine\Common\Collections\ArrayCollection<\Chamilo\Core\Repository\Storage\DataClass\ContentObject>
      */
-    public function findAll($contentObjectClassName, DataClassParameters $parameters)
+    public function findAll($contentObjectClassName, StorageParameters $parameters)
     {
         return DataManager::retrieves($contentObjectClassName, $parameters);
     }
@@ -113,7 +113,7 @@ class ContentObjectRepository
         $offset, OrderBy $orderBy = new OrderBy()
     )
     {
-        $parameters = new DataClassParameters(
+        $parameters = new StorageParameters(
             condition: $this->getWorkspaceConditions($workspace, $filterConditionRenderer),
             joins: $this->getWorkspaceJoins(), orderBy: $orderBy, count: $count, offset: $offset
         );

@@ -6,7 +6,7 @@ use Chamilo\Core\Repository\Storage\DataClass\ContentObject;
 use Chamilo\Libraries\Storage\DataClass\DataClass;
 use Chamilo\Libraries\Storage\DataManager\Repository\DataClassRepository;
 use Chamilo\Libraries\Storage\Query\Condition\EqualityCondition;
-use Chamilo\Libraries\Storage\Query\DataClassParameters;
+use Chamilo\Libraries\Storage\Query\StorageParameters;
 use Chamilo\Libraries\Storage\Query\Join;
 use Chamilo\Libraries\Storage\Query\Joins;
 use Chamilo\Libraries\Storage\Query\RetrieveProperties;
@@ -56,13 +56,13 @@ class PublicationRepository
      * and to join with the additional attributes of that type
      */
     public function countPublicationsWithContentObjects(
-        DataClassParameters $baseCountParameters, string $publicationClassName,
+        StorageParameters $baseCountParameters, string $publicationClassName,
         ?string $contentObjectTypeClassName = null
     ): int
     {
         $this->checkPublicationClassName($publicationClassName);
 
-        $parameters = new DataClassParameters(
+        $parameters = new StorageParameters(
             condition: $baseCountParameters->getCondition(), joins: $this->getPublicationJoins(
             $publicationClassName, $baseCountParameters->getJoins(), $contentObjectTypeClassName
         ), retrieveProperties: $baseCountParameters->getRetrieveProperties()
@@ -122,7 +122,7 @@ class PublicationRepository
      * @return \Chamilo\Core\Repository\Publication\Storage\DataClass\Publication[]
      */
     public function getPublicationsWithContentObjects(
-        DataClassParameters $baseParameters, string $publicationClassName, ?string $contentObjectTypeClassName = null
+        StorageParameters $baseParameters, string $publicationClassName, ?string $contentObjectTypeClassName = null
     ): array
     {
         $this->checkPublicationClassName($publicationClassName);
@@ -154,7 +154,7 @@ class PublicationRepository
 
         $properties->merge($baseParameters->getRetrieveProperties());
 
-        $dataClassParameters = new DataClassParameters(
+        $dataClassParameters = new StorageParameters(
             condition: $baseParameters->getCondition(), joins: $this->getPublicationJoins(
             $publicationClassName, $baseParameters->getJoins(), $contentObjectTypeClassName
         ), retrieveProperties: $properties, orderBy: $baseParameters->getOrderBy(),

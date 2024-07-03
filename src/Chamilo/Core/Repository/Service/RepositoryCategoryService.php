@@ -6,7 +6,7 @@ use Chamilo\Core\Repository\Storage\DataManager;
 use Chamilo\Core\Repository\Workspace\Storage\DataClass\Workspace;
 use Chamilo\Libraries\Storage\Query\Condition\AndCondition;
 use Chamilo\Libraries\Storage\Query\Condition\EqualityCondition;
-use Chamilo\Libraries\Storage\Query\DataClassParameters;
+use Chamilo\Libraries\Storage\Query\StorageParameters;
 use Chamilo\Libraries\Storage\Query\Variable\PropertyConditionVariable;
 use Chamilo\Libraries\Storage\Query\Variable\StaticConditionVariable;
 
@@ -83,7 +83,7 @@ class RepositoryCategoryService
         $condition = new AndCondition($conditions);
 
         return DataManager::retrieve(
-            RepositoryCategory::class, new DataClassParameters(condition: $condition)
+            RepositoryCategory::class, new StorageParameters(condition: $condition)
         );
     }
 }

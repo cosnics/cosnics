@@ -14,7 +14,7 @@ use Chamilo\Libraries\Storage\Query\Condition\AndCondition;
 use Chamilo\Libraries\Storage\Query\Condition\Condition;
 use Chamilo\Libraries\Storage\Query\Condition\EqualityCondition;
 use Chamilo\Libraries\Storage\Query\Condition\InCondition;
-use Chamilo\Libraries\Storage\Query\DataClassParameters;
+use Chamilo\Libraries\Storage\Query\StorageParameters;
 use Chamilo\Libraries\Storage\Query\Join;
 use Chamilo\Libraries\Storage\Query\Joins;
 use Chamilo\Libraries\Storage\Query\OrderBy;
@@ -63,7 +63,7 @@ class CourseRepository implements CourseRepositoryInterface
 
         $condition = new AndCondition($conditions);
 
-        return DataManager::count(CourseEntityRelation::class, new DataClassParameters(condition: $condition));
+        return DataManager::count(CourseEntityRelation::class, new StorageParameters(condition: $condition));
     }
 
     /**
@@ -131,7 +131,7 @@ class CourseRepository implements CourseRepositoryInterface
         $condition = new AndCondition($conditions);
 
         return DataManager::retrieves(
-            CourseEntityRelation::class, new DataClassParameters(condition: $condition)
+            CourseEntityRelation::class, new StorageParameters(condition: $condition)
         );
     }
 
@@ -150,7 +150,7 @@ class CourseRepository implements CourseRepositoryInterface
         );
 
         return DataManager::retrieve(
-            CourseTool::class, new DataClassParameters(condition: $condition)
+            CourseTool::class, new StorageParameters(condition: $condition)
         );
     }
 
@@ -185,7 +185,7 @@ class CourseRepository implements CourseRepositoryInterface
         $condition = new AndCondition($conditions);
 
         return DataManager::retrieve(
-            CourseEntityRelation::class, new DataClassParameters(condition: $condition)
+            CourseEntityRelation::class, new StorageParameters(condition: $condition)
         );
     }
 
@@ -203,7 +203,7 @@ class CourseRepository implements CourseRepositoryInterface
         );
 
         return DataManager::retrieves(
-            Course::class, new DataClassParameters(condition: $condition)
+            Course::class, new StorageParameters(condition: $condition)
         );
     }
 
@@ -236,7 +236,7 @@ class CourseRepository implements CourseRepositoryInterface
         $orderBy = [new OrderProperty(new PropertyConditionVariable(Course::class, Course::PROPERTY_TITLE))];
 
         return DataManager::retrieves(
-            Course::class, new DataClassParameters(condition: $condition, orderBy: new OrderBy($orderBy))
+            Course::class, new StorageParameters(condition: $condition, orderBy: new OrderBy($orderBy))
         );
     }
 
@@ -256,18 +256,18 @@ class CourseRepository implements CourseRepositoryInterface
         $orderBy = [new OrderProperty(new PropertyConditionVariable(Course::class, Course::PROPERTY_TITLE))];
 
         return DataManager::retrieves(
-            Course::class, new DataClassParameters(condition: $condition, orderBy: new OrderBy($orderBy))
+            Course::class, new StorageParameters(condition: $condition, orderBy: new OrderBy($orderBy))
         );
     }
 
     /**
      * Returns Courses with an array of course ids and a given set of parameters
      *
-     * @param DataClassParameters $dataClassParameters
+     * @param StorageParameters $dataClassParameters
      *
      * @return Course[]
      */
-    public function findCoursesByParameters(DataClassParameters $dataClassParameters)
+    public function findCoursesByParameters(StorageParameters $dataClassParameters)
     {
         return DataManager::retrieves(
             Course::class, $dataClassParameters
@@ -322,7 +322,7 @@ class CourseRepository implements CourseRepositoryInterface
         );
 
         return DataManager::retrieves(
-            Course::class, new DataClassParameters(
+            Course::class, new StorageParameters(
                 condition: $condition, joins: $joins
             )
         );
@@ -412,7 +412,7 @@ class CourseRepository implements CourseRepositoryInterface
             )
         );
 
-        $dataClassParameters = new DataClassParameters(
+        $dataClassParameters = new StorageParameters(
             condition: $condition, joins: $joins, retrieveProperties: $properties
         );
 
@@ -473,7 +473,7 @@ class CourseRepository implements CourseRepositoryInterface
      */
     public function findToolRegistrations()
     {
-        return DataManager::retrieves(CourseTool::class, new DataClassParameters());
+        return DataManager::retrieves(CourseTool::class, new StorageParameters());
     }
 
     /**

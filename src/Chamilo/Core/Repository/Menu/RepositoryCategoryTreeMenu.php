@@ -14,7 +14,7 @@ use Chamilo\Libraries\Format\Structure\Glyph\FontAwesomeGlyph;
 use Chamilo\Libraries\Format\Tabs\GenericTabsRenderer;
 use Chamilo\Libraries\Storage\Query\Condition\AndCondition;
 use Chamilo\Libraries\Storage\Query\Condition\EqualityCondition;
-use Chamilo\Libraries\Storage\Query\DataClassParameters;
+use Chamilo\Libraries\Storage\Query\StorageParameters;
 use Chamilo\Libraries\Storage\Query\OrderBy;
 use Chamilo\Libraries\Storage\Query\OrderProperty;
 use Chamilo\Libraries\Storage\Query\Variable\PropertyConditionVariable;
@@ -222,7 +222,7 @@ class RepositoryCategoryTreeMenu extends GenericTree
     {
         return (DataManager::count(
                 RepositoryCategory::class,
-                new DataClassParameters(condition: $this->get_retrieve_condition($parent_node_id))
+                new StorageParameters(condition: $this->get_retrieve_condition($parent_node_id))
             ) > 0);
     }
 }

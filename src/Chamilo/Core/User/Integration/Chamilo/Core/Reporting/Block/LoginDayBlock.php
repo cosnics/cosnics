@@ -7,7 +7,7 @@ use Chamilo\Core\User\Integration\Chamilo\Core\Tracking\Storage\DataClass\LoginL
 use Chamilo\Libraries\Storage\DataManager\DataManager;
 use Chamilo\Libraries\Storage\Query\Condition\AndCondition;
 use Chamilo\Libraries\Storage\Query\Condition\EqualityCondition;
-use Chamilo\Libraries\Storage\Query\DataClassParameters;
+use Chamilo\Libraries\Storage\Query\StorageParameters;
 use Chamilo\Libraries\Storage\Query\Variable\PropertyConditionVariable;
 use Chamilo\Libraries\Storage\Query\Variable\StaticConditionVariable;
 use Chamilo\Libraries\Translation\Translation;
@@ -40,7 +40,7 @@ class LoginDayBlock extends Block
         $condition = new AndCondition($conditions);
 
         $data = DataManager::retrieves(
-            LoginLogout::class, new DataClassParameters(condition: $condition)
+            LoginLogout::class, new StorageParameters(condition: $condition)
         );
 
         $days = [];

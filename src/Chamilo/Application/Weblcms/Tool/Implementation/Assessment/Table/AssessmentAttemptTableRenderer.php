@@ -26,7 +26,7 @@ use Chamilo\Libraries\Format\Table\TableParameterValues;
 use Chamilo\Libraries\Format\Table\TableResultPosition;
 use Chamilo\Libraries\Storage\DataClass\DataClass;
 use Chamilo\Libraries\Storage\Query\Condition\EqualityCondition;
-use Chamilo\Libraries\Storage\Query\DataClassParameters;
+use Chamilo\Libraries\Storage\Query\StorageParameters;
 use Chamilo\Libraries\Storage\Query\Variable\PropertyConditionVariable;
 use Chamilo\Libraries\Storage\Query\Variable\StaticConditionVariable;
 use Chamilo\Libraries\Utilities\DatetimeUtilities;
@@ -98,7 +98,7 @@ class AssessmentAttemptTableRenderer extends RecordListTableRenderer implements 
         );
 
         $publication = $this->application->get_publication();
-        $parameters = new DataClassParameters(
+        $parameters = new StorageParameters(
             condition: new EqualityCondition(
                 new PropertyConditionVariable(Publication::class, Publication::PROPERTY_PUBLICATION_ID),
                 new StaticConditionVariable($publication->get_id())
@@ -204,7 +204,7 @@ class AssessmentAttemptTableRenderer extends RecordListTableRenderer implements 
 
         $assessment = $pub->get_content_object();
 
-        $parameters = new DataClassParameters(
+        $parameters = new StorageParameters(
             condition: new EqualityCondition(
                 new PropertyConditionVariable(Publication::class, Publication::PROPERTY_PUBLICATION_ID),
                 new StaticConditionVariable($pub->getId())

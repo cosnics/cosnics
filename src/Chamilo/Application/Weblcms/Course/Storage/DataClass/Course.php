@@ -23,7 +23,7 @@ use Chamilo\Libraries\DependencyInjection\DependencyInjectionContainerBuilder;
 use Chamilo\Libraries\Storage\DataClass\DataClass;
 use Chamilo\Libraries\Storage\Query\Condition\AndCondition;
 use Chamilo\Libraries\Storage\Query\Condition\EqualityCondition;
-use Chamilo\Libraries\Storage\Query\DataClassParameters;
+use Chamilo\Libraries\Storage\Query\StorageParameters;
 use Chamilo\Libraries\Storage\Query\OrderBy;
 use Chamilo\Libraries\Storage\Query\OrderProperty;
 use Chamilo\Libraries\Storage\Query\Variable\PropertyConditionVariable;
@@ -269,7 +269,7 @@ class Course extends DataClass
         }
 
         // Create a location for each tool
-        $tools = DataManager::retrieves(CourseTool::class, new DataClassParameters());
+        $tools = DataManager::retrieves(CourseTool::class, new StorageParameters());
         foreach ($tools as $tool)
         {
             if (!CourseManagementRights::getInstance()->create_location_in_courses_subtree(
@@ -499,7 +499,7 @@ class Course extends DataClass
         );
 
         return DataManager::retrieves(
-            CourseGroup::class, new DataClassParameters(
+            CourseGroup::class, new StorageParameters(
                 condition: $condition, count: null, offset: null, orderBy: new OrderBy([
                 new OrderProperty(new PropertyConditionVariable(CourseGroup::class, CourseGroup::PROPERTY_NAME))
             ])
@@ -722,7 +722,7 @@ class Course extends DataClass
         );
 
         return DataManager::retrieves(
-            CourseEntityRelation::class, new DataClassParameters(condition: new AndCondition($relationConditions))
+            CourseEntityRelation::class, new StorageParameters(condition: new AndCondition($relationConditions))
         );
     }
 
@@ -745,7 +745,7 @@ class Course extends DataClass
         );
 
         return DataManager::retrieves(
-            CourseEntityRelation::class, new DataClassParameters(condition: new AndCondition($relationConditions))
+            CourseEntityRelation::class, new StorageParameters(condition: new AndCondition($relationConditions))
         );
     }
 
@@ -808,7 +808,7 @@ class Course extends DataClass
         );
 
         return DataManager::count(
-                CourseEntityRelation::class, new DataClassParameters(condition: new AndCondition($relationConditions))
+                CourseEntityRelation::class, new StorageParameters(condition: new AndCondition($relationConditions))
             ) > 0;
     }
 
@@ -831,7 +831,7 @@ class Course extends DataClass
         );
 
         return DataManager::count(
-                CourseEntityRelation::class, new DataClassParameters(condition: new AndCondition($relationConditions))
+                CourseEntityRelation::class, new StorageParameters(condition: new AndCondition($relationConditions))
             ) > 0;
     }
 
@@ -998,7 +998,7 @@ class Course extends DataClass
 
         $condition = new AndCondition($conditions);
 
-        return DataManager::retrieve(CourseRelCourseSetting::class, new DataClassParameters(condition: $condition));
+        return DataManager::retrieve(CourseRelCourseSetting::class, new StorageParameters(condition: $condition));
     }
 
     /**

@@ -14,7 +14,7 @@ use Chamilo\Libraries\Format\Table\RequestTableParameterValuesCompiler;
 use Chamilo\Libraries\Storage\DataClass\DataClass;
 use Chamilo\Libraries\Storage\DataManager\DataManager;
 use Chamilo\Libraries\Storage\Query\Condition\InCondition;
-use Chamilo\Libraries\Storage\Query\DataClassParameters;
+use Chamilo\Libraries\Storage\Query\StorageParameters;
 use Chamilo\Libraries\Storage\Query\RetrieveProperties;
 use Chamilo\Libraries\Storage\Query\Variable\PropertyConditionVariable;
 
@@ -63,7 +63,7 @@ class ShareComponent extends Manager
             );
 
             $selectedContentObjectNumbers = DataManager::distinct(
-                ContentObject::class, new DataClassParameters(
+                ContentObject::class, new StorageParameters(
                     condition: new InCondition(
                         new PropertyConditionVariable(ContentObject::class, DataClass::PROPERTY_ID),
                         $selectedContentObjectIdentifiers
@@ -99,7 +99,7 @@ class ShareComponent extends Manager
             if (count($contentObjectIdentifiers) >= 1)
             {
                 $contentObjects = DataManager::retrieves(
-                    ContentObject::class, new DataClassParameters(
+                    ContentObject::class, new StorageParameters(
                         condition: new InCondition(
                             new PropertyConditionVariable(ContentObject::class, DataClass::PROPERTY_ID),
                             $contentObjectIdentifiers

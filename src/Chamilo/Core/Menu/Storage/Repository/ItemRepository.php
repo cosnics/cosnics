@@ -8,7 +8,7 @@ use Chamilo\Libraries\Storage\DataManager\Repository\DataClassRepository;
 use Chamilo\Libraries\Storage\Query\Condition\AndCondition;
 use Chamilo\Libraries\Storage\Query\Condition\EqualityCondition;
 use Chamilo\Libraries\Storage\Query\Condition\InCondition;
-use Chamilo\Libraries\Storage\Query\DataClassParameters;
+use Chamilo\Libraries\Storage\Query\StorageParameters;
 use Chamilo\Libraries\Storage\Query\OrderBy;
 use Chamilo\Libraries\Storage\Query\OrderProperty;
 use Chamilo\Libraries\Storage\Query\Variable\PropertyConditionVariable;
@@ -37,7 +37,7 @@ class ItemRepository
         );
 
         return $this->getDataClassRepository()->count(
-            Item::class, new DataClassParameters(condition: $condition)
+            Item::class, new StorageParameters(condition: $condition)
         );
     }
 
@@ -66,7 +66,7 @@ class ItemRepository
         $orderBy->add(new OrderProperty(new PropertyConditionVariable(Item::class, Item::PROPERTY_SORT)));
 
         return $this->getDataClassRepository()->retrieves(
-            Item::class, new DataClassParameters(orderBy: $orderBy)
+            Item::class, new StorageParameters(orderBy: $orderBy)
         );
     }
 
@@ -81,7 +81,7 @@ class ItemRepository
             new PropertyConditionVariable(Item::class, DataClass::PROPERTY_ID), $identifiers
         );
 
-        return $this->getDataClassRepository()->retrieves(Item::class, new DataClassParameters(condition: $condition));
+        return $this->getDataClassRepository()->retrieves(Item::class, new StorageParameters(condition: $condition));
     }
 
     /**
@@ -109,7 +109,7 @@ class ItemRepository
         $orderBy->add(new OrderProperty(new PropertyConditionVariable(Item::class, Item::PROPERTY_SORT)));
 
         return $this->getDataClassRepository()->retrieves(
-            Item::class, new DataClassParameters(
+            Item::class, new StorageParameters(
                 condition: $condition, orderBy: $orderBy, count: $count, offset: $offset
             )
         );
@@ -126,7 +126,7 @@ class ItemRepository
             new PropertyConditionVariable(Item::class, Item::PROPERTY_TYPE), new StaticConditionVariable($type)
         );
 
-        return $this->getDataClassRepository()->retrieves(Item::class, new DataClassParameters(condition: $condition));
+        return $this->getDataClassRepository()->retrieves(Item::class, new StorageParameters(condition: $condition));
     }
 
     /**
@@ -148,7 +148,7 @@ class ItemRepository
         $orderBy = new OrderBy([new OrderProperty(new PropertyConditionVariable(Item::class, Item::PROPERTY_SORT))]);
 
         return $this->getDataClassRepository()->retrieves(
-            Item::class, new DataClassParameters(
+            Item::class, new StorageParameters(
                 condition: new AndCondition($conditions), orderBy: $orderBy
             )
         );

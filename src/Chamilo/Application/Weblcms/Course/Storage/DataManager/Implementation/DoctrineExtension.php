@@ -10,7 +10,7 @@ use Chamilo\Libraries\Storage\Query\Condition\AndCondition;
 use Chamilo\Libraries\Storage\Query\Condition\ComparisonCondition;
 use Chamilo\Libraries\Storage\Query\Condition\EqualityCondition;
 use Chamilo\Libraries\Storage\Query\Condition\OrCondition;
-use Chamilo\Libraries\Storage\Query\DataClassParameters;
+use Chamilo\Libraries\Storage\Query\StorageParameters;
 use Chamilo\Libraries\Storage\Query\Join;
 use Chamilo\Libraries\Storage\Query\Joins;
 use Chamilo\Libraries\Storage\Query\RetrieveProperties;
@@ -106,7 +106,7 @@ class DoctrineExtension
 
             $condition = new AndCondition($conditions);
 
-            $parameters = new DataClassParameters(
+            $parameters = new StorageParameters(
                 condition: $condition, joins: $joins, retrieveProperties: $properties
             );
 
@@ -158,7 +158,7 @@ class DoctrineExtension
 
         $condition = new AndCondition($conditions);
 
-        $parameters = new DataClassParameters(
+        $parameters = new StorageParameters(
             condition: $condition, joins: $joins, retrieveProperties: $properties
         );
 
@@ -282,7 +282,7 @@ class DoctrineExtension
 
             $condition = new AndCondition($conditions);
 
-            $parameters = new DataClassParameters(
+            $parameters = new StorageParameters(
                 condition: $condition, joins: $joins, retrieveProperties: $properties
             );
 
@@ -341,7 +341,7 @@ class DoctrineExtension
 
         $condition = new AndCondition($conditions);
 
-        $parameters = new DataClassParameters(
+        $parameters = new StorageParameters(
             condition: $condition, joins: $joins, retrieveProperties: $properties
         );
 
@@ -468,7 +468,7 @@ class DoctrineExtension
         );
         $condition = new AndCondition($conditions);
 
-        $parameters = new DataClassParameters(
+        $parameters = new StorageParameters(
             condition: $condition, count: null, offset: null, joins: $joins, retrieveProperties: $properties
         );
 

@@ -10,7 +10,7 @@ use Chamilo\Core\Repository\ContentObject\LearningPath\Storage\Repository\Common
 use Chamilo\Libraries\Storage\Query\Condition\AndCondition;
 use Chamilo\Libraries\Storage\Query\Condition\EqualityCondition;
 use Chamilo\Libraries\Storage\Query\Condition\InCondition;
-use Chamilo\Libraries\Storage\Query\DataClassParameters;
+use Chamilo\Libraries\Storage\Query\StorageParameters;
 use Chamilo\Libraries\Storage\Query\RetrieveProperties;
 use Chamilo\Libraries\Storage\Query\Variable\PropertyConditionVariable;
 use Chamilo\Libraries\Storage\Query\Variable\StaticConditionVariable;
@@ -70,7 +70,7 @@ class RightsLocationRepository extends CommonDataClassRepository
         $condition = new AndCondition($conditions);
 
         return $this->dataClassRepository->retrieve(
-            RightsLocation::class, new DataClassParameters(condition: $condition)
+            RightsLocation::class, new StorageParameters(condition: $condition)
         );
     }
 
@@ -89,7 +89,7 @@ class RightsLocationRepository extends CommonDataClassRepository
         );
 
         $locationIds = $this->dataClassRepository->distinct(
-            RightsLocation::class, new DataClassParameters(
+            RightsLocation::class, new StorageParameters(
                 condition: $locationCondition, retrieveProperties: new RetrieveProperties([
                 new PropertyConditionVariable(RightsLocation::class, RightsLocation::PROPERTY_ID)
             ])

@@ -10,7 +10,7 @@ use Chamilo\Libraries\Storage\Query\Condition\AndCondition;
 use Chamilo\Libraries\Storage\Query\Condition\Condition;
 use Chamilo\Libraries\Storage\Query\Condition\EqualityCondition;
 use Chamilo\Libraries\Storage\Query\Condition\InCondition;
-use Chamilo\Libraries\Storage\Query\DataClassParameters;
+use Chamilo\Libraries\Storage\Query\StorageParameters;
 use Chamilo\Libraries\Storage\Query\Join;
 use Chamilo\Libraries\Storage\Query\Joins;
 use Chamilo\Libraries\Storage\Query\RetrieveProperties;
@@ -34,17 +34,17 @@ abstract class EphorusRepository extends CommonDataClassRepository
         $entryClassName = $this->getEntryClassName();
 
         return $this->dataClassRepository->count(
-            $entryClassName, new DataClassParameters(condition: $condition, joins: $this->getAssignmentRequestJoins())
+            $entryClassName, new StorageParameters(condition: $condition, joins: $this->getAssignmentRequestJoins())
         );
     }
 
     /**
-     * @param \Chamilo\Libraries\Storage\Query\DataClassParameters $dataClassParameters
+     * @param \Chamilo\Libraries\Storage\Query\StorageParameters $dataClassParameters
      *
      * @return ContentObject[] | ArrayCollection
      */
     public function findAssignmentEntriesWithRequests(
-        DataClassParameters $dataClassParameters = new DataClassParameters()
+        StorageParameters $dataClassParameters = new StorageParameters()
     )
     {
         $entryClassName = $this->getEntryClassName();
@@ -135,7 +135,7 @@ abstract class EphorusRepository extends CommonDataClassRepository
         );
 
         return $this->dataClassRepository->retrieves(
-            Request::class, new DataClassParameters(
+            Request::class, new StorageParameters(
                 condition: $condition, joins: $joins
             )
         );

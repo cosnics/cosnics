@@ -14,7 +14,7 @@ use Chamilo\Libraries\Format\Structure\Glyph\IdentGlyph;
 use Chamilo\Libraries\Format\Structure\Glyph\InlineGlyph;
 use Chamilo\Libraries\Storage\Query\Condition\AndCondition;
 use Chamilo\Libraries\Storage\Query\Condition\EqualityCondition;
-use Chamilo\Libraries\Storage\Query\DataClassParameters;
+use Chamilo\Libraries\Storage\Query\StorageParameters;
 use Chamilo\Libraries\Storage\Query\Variable\PropertyConditionVariable;
 use Chamilo\Libraries\Storage\Query\Variable\StaticConditionVariable;
 use Chamilo\Libraries\Translation\Translation;
@@ -148,7 +148,7 @@ class BasicTypeSelectorRenderer extends TypeSelectorRenderer
                 $type = $context . '\Storage\DataClass\\' .
                     (string) StringUtilities::getInstance()->createString($package)->upperCamelize();
 
-                $parameters = new DataClassParameters(condition: $condition);
+                $parameters = new StorageParameters(condition: $condition);
                 $count = DataManager::count_active_content_objects($type, $parameters);
 
                 if ($count > 0)

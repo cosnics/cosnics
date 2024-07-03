@@ -13,7 +13,7 @@ use Chamilo\Core\Metadata\Storage\DataClass\Schema;
 use Chamilo\Libraries\Storage\DataManager\DataManager;
 use Chamilo\Libraries\Storage\Query\Condition\AndCondition;
 use Chamilo\Libraries\Storage\Query\Condition\EqualityCondition;
-use Chamilo\Libraries\Storage\Query\DataClassParameters;
+use Chamilo\Libraries\Storage\Query\StorageParameters;
 use Chamilo\Libraries\Storage\Query\Variable\PropertyConditionVariable;
 use Chamilo\Libraries\Storage\Query\Variable\StaticConditionVariable;
 
@@ -142,7 +142,7 @@ class PropertyProviderService
 
         $condition = new AndCondition($conditions);
 
-        $providerLink = DataManager::retrieve(ProviderLink::class, new DataClassParameters(condition: $condition));
+        $providerLink = DataManager::retrieve(ProviderLink::class, new StorageParameters(condition: $condition));
 
         if ($providerLink instanceof ProviderLink)
         {
@@ -167,7 +167,7 @@ class PropertyProviderService
             new StaticConditionVariable($entity->getDataClassName())
         );
 
-        $parameters = new DataClassParameters(condition: $condition);
+        $parameters = new StorageParameters(condition: $condition);
 
         return DataManager::retrieves(ProviderLink::class, $parameters);
     }
@@ -185,7 +185,7 @@ class PropertyProviderService
             ), new StaticConditionVariable($entity->getDataClassName())
         );
 
-        $parameters = new DataClassParameters(condition: $condition);
+        $parameters = new StorageParameters(condition: $condition);
 
         return DataManager::retrieves(ProviderRegistration::class, $parameters);
     }

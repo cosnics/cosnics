@@ -15,7 +15,7 @@ use Chamilo\Libraries\Format\Structure\Glyph\FontAwesomeGlyph;
 use Chamilo\Libraries\Storage\Query\Condition\AndCondition;
 use Chamilo\Libraries\Storage\Query\Condition\EqualityCondition;
 use Chamilo\Libraries\Storage\Query\Condition\InCondition;
-use Chamilo\Libraries\Storage\Query\DataClassParameters;
+use Chamilo\Libraries\Storage\Query\StorageParameters;
 use Chamilo\Libraries\Storage\Query\OrderBy;
 use Chamilo\Libraries\Storage\Query\OrderProperty;
 use Chamilo\Libraries\Storage\Query\Variable\PropertyConditionVariable;
@@ -95,7 +95,7 @@ class PanelToolListRenderer extends ToolListRenderer
             $condition = new AndCondition($conditions);
 
             $this->publicationLinks = DataManager::retrieves(
-                ContentObjectPublication::class, new DataClassParameters(condition: $condition)
+                ContentObjectPublication::class, new StorageParameters(condition: $condition)
             );
         }
 
@@ -137,7 +137,7 @@ class PanelToolListRenderer extends ToolListRenderer
             );
 
             $toolSectionRelations = DataManager::retrieves(
-                CourseToolRelCourseSection::class, new DataClassParameters(condition: $condition)
+                CourseToolRelCourseSection::class, new StorageParameters(condition: $condition)
             );
 
             foreach ($toolSectionRelations as $toolSectionRelation)
@@ -194,7 +194,7 @@ class PanelToolListRenderer extends ToolListRenderer
 
             $this->sections = DataManager::retrieves(
                 CourseSection::class,
-                new DataClassParameters(condition: $condition, orderBy: new OrderBy($orderProperty))
+                new StorageParameters(condition: $condition, orderBy: new OrderBy($orderProperty))
             );
         }
 

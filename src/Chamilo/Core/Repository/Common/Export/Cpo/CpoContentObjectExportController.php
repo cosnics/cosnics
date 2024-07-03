@@ -17,7 +17,7 @@ use Chamilo\Libraries\Architecture\Interfaces\ComplexContentObjectSupportInterfa
 use Chamilo\Libraries\File\Compression\ZipArchive\ZipArchiveFilecompression;
 use Chamilo\Libraries\Storage\Query\Condition\EqualityCondition;
 use Chamilo\Libraries\Storage\Query\Condition\InCondition;
-use Chamilo\Libraries\Storage\Query\DataClassParameters;
+use Chamilo\Libraries\Storage\Query\StorageParameters;
 use Chamilo\Libraries\Storage\Query\Variable\PropertyConditionVariable;
 use Chamilo\Libraries\Storage\Query\Variable\StaticConditionVariable;
 use DOMDocument;
@@ -82,7 +82,7 @@ class CpoContentObjectExportController extends ContentObjectExportController
             $condition = null;
         }
 
-        $parameters = new DataClassParameters(condition: $condition);
+        $parameters = new StorageParameters(condition: $condition);
         $content_objects = DataManager::retrieve_active_content_objects(ContentObject::class, $parameters);
 
         foreach ($content_objects as $content_object)
@@ -471,7 +471,7 @@ class CpoContentObjectExportController extends ContentObjectExportController
             ), new StaticConditionVariable($content_object->get_id())
         );
         $content_object_attachments = DataManager::retrieves(
-            ContentObjectAttachment::class, new DataClassParameters(condition: $condition)
+            ContentObjectAttachment::class, new StorageParameters(condition: $condition)
         );
 
         if ($content_object_attachments->count() > 0)
@@ -643,7 +643,7 @@ class CpoContentObjectExportController extends ContentObjectExportController
             ), new StaticConditionVariable($content_object->get_id())
         );
         $content_object_includes = DataManager::retrieves(
-            ContentObjectInclude::class, new DataClassParameters(condition: $condition)
+            ContentObjectInclude::class, new StorageParameters(condition: $condition)
         );
 
         if ($content_object_includes->count() > 0)

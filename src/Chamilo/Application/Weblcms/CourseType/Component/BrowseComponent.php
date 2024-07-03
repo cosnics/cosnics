@@ -13,7 +13,7 @@ use Chamilo\Libraries\Format\Structure\Glyph\FontAwesomeGlyph;
 use Chamilo\Libraries\Format\Structure\ToolbarItem;
 use Chamilo\Libraries\Format\Table\RequestTableParameterValuesCompiler;
 use Chamilo\Libraries\Storage\Query\Condition\AndCondition;
-use Chamilo\Libraries\Storage\Query\DataClassParameters;
+use Chamilo\Libraries\Storage\Query\StorageParameters;
 use Chamilo\Libraries\Storage\Query\OrderProperty;
 use Chamilo\Libraries\Storage\Query\Variable\PropertyConditionVariable;
 use Chamilo\Libraries\Utilities\StringUtilities;
@@ -124,7 +124,7 @@ class BrowseComponent extends Manager
     protected function renderTable(): string
     {
         $totalNumberOfItems =
-            DataManager::count(CourseType::class, new DataClassParameters(condition: $this->getCourseTypeCondition()));
+            DataManager::count(CourseType::class, new StorageParameters(condition: $this->getCourseTypeCondition()));
         $courseTypeTableRenderer = $this->getCourseTypeTableRenderer();
 
         $tableParameterValues = $this->getRequestTableParameterValuesCompiler()->determineParameterValues(
@@ -140,7 +140,7 @@ class BrowseComponent extends Manager
             )
         );
 
-        $parameters = new DataClassParameters(
+        $parameters = new StorageParameters(
             condition: $this->getCourseTypeCondition(), count: $tableParameterValues->getNumberOfItemsPerPage(),
             offset: $tableParameterValues->getOffset(), orderBy: $orderBy
         );

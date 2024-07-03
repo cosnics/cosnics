@@ -16,7 +16,7 @@ use Chamilo\Libraries\Storage\Query\Condition\EqualityCondition;
 use Chamilo\Libraries\Storage\Query\Condition\InCondition;
 use Chamilo\Libraries\Storage\Query\Condition\NotCondition;
 use Chamilo\Libraries\Storage\Query\Condition\OrCondition;
-use Chamilo\Libraries\Storage\Query\DataClassParameters;
+use Chamilo\Libraries\Storage\Query\StorageParameters;
 use Chamilo\Libraries\Storage\Query\RetrieveProperties;
 use Chamilo\Libraries\Storage\Query\Variable\PropertyConditionVariable;
 use Chamilo\Libraries\Storage\Query\Variable\StaticConditionVariable;
@@ -69,7 +69,7 @@ class RightsRepository
     public function findBlockTypeTargetEntities(): ArrayCollection
     {
         return $this->getDataClassRepository()->retrieves(
-            BlockTypeTargetEntity::class, new DataClassParameters()
+            BlockTypeTargetEntity::class, new StorageParameters()
         );
     }
 
@@ -79,7 +79,7 @@ class RightsRepository
     public function findBlockTypesTargetedForUser(User $user): array
     {
         return $this->getDataClassRepository()->distinct(
-            BlockTypeTargetEntity::class, new DataClassParameters(
+            BlockTypeTargetEntity::class, new StorageParameters(
                 condition: $this->getTargetEntitiesConditionForUser(BlockTypeTargetEntity::class, $user),
                 retrieveProperties: new RetrieveProperties(
                     [
@@ -98,7 +98,7 @@ class RightsRepository
     public function findElementIdsTargetedForUser(User $user): array
     {
         return $this->getDataClassRepository()->distinct(
-            ElementTargetEntity::class, new DataClassParameters(
+            ElementTargetEntity::class, new StorageParameters(
                 condition: $this->getTargetEntitiesConditionForUser(ElementTargetEntity::class, $user),
                 retrieveProperties: new RetrieveProperties(
                     [
@@ -117,7 +117,7 @@ class RightsRepository
     public function findElementIdsWithNoTargetEntities(): array
     {
         $targetedEntityIds = $this->getDataClassRepository()->distinct(
-            ElementTargetEntity::class, new DataClassParameters(
+            ElementTargetEntity::class, new StorageParameters(
                 retrieveProperties: new RetrieveProperties(
                     [
                         new PropertyConditionVariable(
@@ -135,7 +135,7 @@ class RightsRepository
         );
 
         return $this->getDataClassRepository()->distinct(
-            Element::class, new DataClassParameters(
+            Element::class, new StorageParameters(
                 condition: $condition, retrieveProperties: new RetrieveProperties(
                 [new PropertyConditionVariable(Element::class, DataClass::PROPERTY_ID)]
             )
@@ -149,7 +149,7 @@ class RightsRepository
     public function findElementTargetEntities(): ArrayCollection
     {
         return $this->getDataClassRepository()->retrieves(
-            ElementTargetEntity::class, new DataClassParameters()
+            ElementTargetEntity::class, new StorageParameters()
         );
     }
 
@@ -162,7 +162,7 @@ class RightsRepository
     {
         return $this->getDataClassRepository()->retrieves(
             BlockTypeTargetEntity::class,
-            new DataClassParameters(condition: $this->getBlockTypeTargetEntityConditionByBlockType($blockType))
+            new StorageParameters(condition: $this->getBlockTypeTargetEntityConditionByBlockType($blockType))
         );
     }
 
@@ -175,7 +175,7 @@ class RightsRepository
     {
         return $this->getDataClassRepository()->retrieves(
             ElementTargetEntity::class,
-            new DataClassParameters(condition: $this->getElementTargetEntityConditionByElement($element))
+            new StorageParameters(condition: $this->getElementTargetEntityConditionByElement($element))
         );
     }
 
@@ -185,7 +185,7 @@ class RightsRepository
     public function findTargetedBlockTypes(): array
     {
         return $this->getDataClassRepository()->distinct(
-            BlockTypeTargetEntity::class, new DataClassParameters(
+            BlockTypeTargetEntity::class, new StorageParameters(
                 retrieveProperties: new RetrieveProperties(
                     [
                         new PropertyConditionVariable(

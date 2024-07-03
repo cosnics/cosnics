@@ -5,7 +5,7 @@ use Chamilo\Application\Weblcms\Tool\Implementation\CourseGroup\Extension\Office
 use Chamilo\Application\Weblcms\Tool\Implementation\CourseGroup\Storage\DataClass\CourseGroup;
 use Chamilo\Core\Repository\ContentObject\LearningPath\Storage\Repository\CommonDataClassRepository;
 use Chamilo\Libraries\Storage\Query\Condition\EqualityCondition;
-use Chamilo\Libraries\Storage\Query\DataClassParameters;
+use Chamilo\Libraries\Storage\Query\StorageParameters;
 use Chamilo\Libraries\Storage\Query\Variable\PropertyConditionVariable;
 use Chamilo\Libraries\Storage\Query\Variable\StaticConditionVariable;
 
@@ -45,7 +45,7 @@ class CourseGroupOffice365ReferenceRepository extends CommonDataClassRepository
         $condition = $this->getConditionByCourseGroup($courseGroup);
 
         return $this->dataClassRepository->retrieve(
-            CourseGroupOffice365Reference::class, new DataClassParameters(condition: $condition)
+            CourseGroupOffice365Reference::class, new StorageParameters(condition: $condition)
         );
     }
 

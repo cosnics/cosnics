@@ -10,7 +10,7 @@ use Chamilo\Core\Repository\Storage\DataManager;
 use Chamilo\Core\User\Manager;
 use Chamilo\Libraries\File\Compression\ZipArchive\ZipArchiveFilecompression;
 use Chamilo\Libraries\Storage\Query\Condition\InCondition;
-use Chamilo\Libraries\Storage\Query\DataClassParameters;
+use Chamilo\Libraries\Storage\Query\StorageParameters;
 use Chamilo\Libraries\Storage\Query\Variable\PropertyConditionVariable;
 
 class ZipContentObjectExportController extends ContentObjectExportController
@@ -42,7 +42,7 @@ class ZipContentObjectExportController extends ContentObjectExportController
             $condition = null;
         }
 
-        $parameters = new DataClassParameters(condition: $condition);
+        $parameters = new StorageParameters(condition: $condition);
         $content_objects = DataManager::retrieve_active_content_objects(ContentObject::class, $parameters);
 
         foreach ($content_objects as $content_object)

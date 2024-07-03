@@ -13,7 +13,7 @@ use Chamilo\Libraries\Format\Structure\ActionBar\Renderer\ButtonToolBarRenderer;
 use Chamilo\Libraries\Format\Structure\Glyph\FontAwesomeGlyph;
 use Chamilo\Libraries\Format\Table\RequestTableParameterValuesCompiler;
 use Chamilo\Libraries\Storage\Query\Condition\Condition;
-use Chamilo\Libraries\Storage\Query\DataClassParameters;
+use Chamilo\Libraries\Storage\Query\StorageParameters;
 use Chamilo\Libraries\Storage\Query\Variable\PropertyConditionVariable;
 use Chamilo\Libraries\Utilities\StringUtilities;
 
@@ -117,7 +117,7 @@ class BrowserComponent extends Manager
     protected function renderTable(): string
     {
         $totalNumberOfItems =
-            DataManager::count(Relation::class, new DataClassParameters(condition: $this->getRelationCondition()));
+            DataManager::count(Relation::class, new StorageParameters(condition: $this->getRelationCondition()));
         $relationTableRenderer = $this->getRelationTableRenderer();
 
         $tableParameterValues = $this->getRequestTableParameterValuesCompiler()->determineParameterValues(
@@ -126,7 +126,7 @@ class BrowserComponent extends Manager
         );
 
         $relations = DataManager::retrieves(
-            Relation::class, new DataClassParameters(
+            Relation::class, new StorageParameters(
                 condition: $this->getRelationCondition(), orderBy: $relationTableRenderer->determineOrderBy(
                 $tableParameterValues
             ), count: $tableParameterValues->getNumberOfItemsPerPage(), offset: $tableParameterValues->getOffset()

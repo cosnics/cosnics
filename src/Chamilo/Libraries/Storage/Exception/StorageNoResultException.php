@@ -1,7 +1,7 @@
 <?php
 namespace Chamilo\Libraries\Storage\Exception;
 
-use Chamilo\Libraries\Storage\Query\DataClassParameters;
+use Chamilo\Libraries\Storage\Query\StorageParameters;
 use Exception;
 
 /**
@@ -12,12 +12,12 @@ class StorageNoResultException extends Exception
 {
     protected string $dataClassStorageUnitName;
 
-    protected DataClassParameters $parameters;
+    protected StorageParameters $parameters;
 
     protected string $query;
 
     public function __construct(
-        string $method, string $dataClassStorageUnitName, DataClassParameters $parameters, string $exceptionMessage = ''
+        string $method, string $dataClassStorageUnitName, StorageParameters $parameters, string $exceptionMessage = ''
     )
     {
         $this->dataClassStorageUnitName = $dataClassStorageUnitName;

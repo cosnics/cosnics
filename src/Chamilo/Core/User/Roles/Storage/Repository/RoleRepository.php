@@ -7,7 +7,7 @@ use Chamilo\Libraries\Storage\DataManager\Repository\DataClassRepository;
 use Chamilo\Libraries\Storage\DataManager\Repository\DataManagerRepository;
 use Chamilo\Libraries\Storage\Query\Condition\Condition;
 use Chamilo\Libraries\Storage\Query\Condition\EqualityCondition;
-use Chamilo\Libraries\Storage\Query\DataClassParameters;
+use Chamilo\Libraries\Storage\Query\StorageParameters;
 use Chamilo\Libraries\Storage\Query\OrderBy;
 use Chamilo\Libraries\Storage\Query\Variable\PropertyConditionVariable;
 use Chamilo\Libraries\Storage\Query\Variable\StaticConditionVariable;
@@ -29,7 +29,7 @@ class RoleRepository extends DataManagerRepository implements RoleRepositoryInte
 
     public function countRoles(?Condition $condition = null): int
     {
-        return $this->getDataClassRepository()->count(Role::class, new DataClassParameters(condition: $condition));
+        return $this->getDataClassRepository()->count(Role::class, new StorageParameters(condition: $condition));
     }
 
     public function createRole(Role $role): bool
@@ -48,7 +48,7 @@ class RoleRepository extends DataManagerRepository implements RoleRepositoryInte
             new PropertyConditionVariable(Role::class, Role::PROPERTY_ROLE), new StaticConditionVariable($roleName)
         );
 
-        return $this->getDataClassRepository()->retrieve(Role::class, new DataClassParameters(condition: $condition));
+        return $this->getDataClassRepository()->retrieve(Role::class, new StorageParameters(condition: $condition));
     }
 
     /**
@@ -59,7 +59,7 @@ class RoleRepository extends DataManagerRepository implements RoleRepositoryInte
     ): ArrayCollection
     {
         return $this->getDataClassRepository()->retrieves(
-            Role::class, new DataClassParameters(
+            Role::class, new StorageParameters(
                 condition: $condition, orderBy: $orderBy, count: $count, offset: $offset
             )
         );

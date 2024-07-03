@@ -18,7 +18,7 @@ use Chamilo\Core\Repository\Workspace\Storage\DataClass\Workspace;
 use Chamilo\Libraries\Storage\DataManager\Repository\DataClassRepository;
 use Chamilo\Libraries\Storage\Query\Condition\ContainsCondition;
 use Chamilo\Libraries\Storage\Query\Condition\OrCondition;
-use Chamilo\Libraries\Storage\Query\DataClassParameters;
+use Chamilo\Libraries\Storage\Query\StorageParameters;
 use Chamilo\Libraries\Storage\Query\Variable\PropertyConditionVariable;
 
 /**
@@ -124,7 +124,7 @@ class ResourceFixerRepository
             )
         ];
 
-        $parameters = new DataClassParameters(condition: new OrCondition($conditions));
+        $parameters = new StorageParameters(condition: new OrCondition($conditions));
 
         return $this->dataClassRepository->count(ContentObject::class, $parameters);
     }
@@ -183,7 +183,7 @@ class ResourceFixerRepository
     public function findAssessmentMatchNumericQuestions($offset = 0)
     {
         return $this->dataClassRepository->retrieves(
-            AssessmentMatchNumericQuestion::class, new DataClassParameters(count: 1000, offset: $offset)
+            AssessmentMatchNumericQuestion::class, new StorageParameters(count: 1000, offset: $offset)
         );
     }
 
@@ -196,7 +196,7 @@ class ResourceFixerRepository
     public function findAssessmentMatchTextQuestions($offset = 0)
     {
         return $this->dataClassRepository->retrieves(
-            AssessmentMatchTextQuestion::class, new DataClassParameters(count: 1000, offset: $offset)
+            AssessmentMatchTextQuestion::class, new StorageParameters(count: 1000, offset: $offset)
         );
     }
 
@@ -209,7 +209,7 @@ class ResourceFixerRepository
     public function findAssessmentMatchingQuestions($offset = 0)
     {
         return $this->dataClassRepository->retrieves(
-            AssessmentMatchingQuestion::class, new DataClassParameters(count: 1000, offset: $offset)
+            AssessmentMatchingQuestion::class, new StorageParameters(count: 1000, offset: $offset)
         );
     }
 
@@ -222,7 +222,7 @@ class ResourceFixerRepository
     public function findAssessmentMatrixQuestions($offset = 0)
     {
         return $this->dataClassRepository->retrieves(
-            AssessmentMatrixQuestion::class, new DataClassParameters(count: 1000, offset: $offset)
+            AssessmentMatrixQuestion::class, new StorageParameters(count: 1000, offset: $offset)
         );
     }
 
@@ -235,7 +235,7 @@ class ResourceFixerRepository
     public function findAssessmentMultipleChoiceQuestions($offset = 0)
     {
         return $this->dataClassRepository->retrieves(
-            AssessmentMultipleChoiceQuestion::class, new DataClassParameters(count: 1000, offset: $offset)
+            AssessmentMultipleChoiceQuestion::class, new StorageParameters(count: 1000, offset: $offset)
         );
     }
 
@@ -248,7 +248,7 @@ class ResourceFixerRepository
     public function findAssessmentRatingQuestions($offset = 0)
     {
         return $this->dataClassRepository->retrieves(
-            AssessmentRatingQuestion::class, new DataClassParameters(count: 1000, offset: $offset)
+            AssessmentRatingQuestion::class, new StorageParameters(count: 1000, offset: $offset)
         );
     }
 
@@ -261,7 +261,7 @@ class ResourceFixerRepository
     public function findAssessmentSelectQuestions($offset = 0)
     {
         return $this->dataClassRepository->retrieves(
-            AssessmentSelectQuestion::class, new DataClassParameters(count: 1000, offset: $offset)
+            AssessmentSelectQuestion::class, new StorageParameters(count: 1000, offset: $offset)
         );
     }
 
@@ -297,7 +297,7 @@ class ResourceFixerRepository
             )
         ];
 
-        $parameters = new DataClassParameters(condition: new OrCondition($conditions), count: 1000, offset: $offset);
+        $parameters = new StorageParameters(condition: new OrCondition($conditions), count: 1000, offset: $offset);
 
         return $this->dataClassRepository->retrieves(ContentObject::class, $parameters);
     }
@@ -311,7 +311,7 @@ class ResourceFixerRepository
     public function findFillInBlanksQuestions($offset = 0)
     {
         return $this->dataClassRepository->retrieves(
-            FillInBlanksQuestion::class, new DataClassParameters(count: 1000, offset: $offset)
+            FillInBlanksQuestion::class, new StorageParameters(count: 1000, offset: $offset)
         );
     }
 
@@ -324,7 +324,7 @@ class ResourceFixerRepository
     public function findForumPosts($offset = 0)
     {
         return $this->dataClassRepository->retrieves(
-            ForumPost::class, new DataClassParameters(count: 1000, offset: $offset)
+            ForumPost::class, new StorageParameters(count: 1000, offset: $offset)
         );
     }
 
@@ -337,7 +337,7 @@ class ResourceFixerRepository
     public function findHotspotQuestions($offset = 0)
     {
         return $this->dataClassRepository->retrieves(
-            HotspotQuestion::class, new DataClassParameters(count: 1000, offset: $offset)
+            HotspotQuestion::class, new StorageParameters(count: 1000, offset: $offset)
         );
     }
 
@@ -350,7 +350,7 @@ class ResourceFixerRepository
     public function findOrderingQuestions($offset = 0)
     {
         return $this->dataClassRepository->retrieves(
-            OrderingQuestion::class, new DataClassParameters(count: 1000, offset: $offset)
+            OrderingQuestion::class, new StorageParameters(count: 1000, offset: $offset)
         );
     }
 
@@ -363,7 +363,7 @@ class ResourceFixerRepository
     public function findWorkspaces($offset = 0)
     {
         return $this->dataClassRepository->retrieves(
-            Workspace::class, new DataClassParameters(count: 1000, offset: $offset)
+            Workspace::class, new StorageParameters(count: 1000, offset: $offset)
         );
     }
 }

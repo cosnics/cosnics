@@ -8,7 +8,7 @@ use Chamilo\Libraries\Storage\DataManager\Repository\DataClassRepository;
 use Chamilo\Libraries\Storage\Query\Condition\AndCondition;
 use Chamilo\Libraries\Storage\Query\Condition\EqualityCondition;
 use Chamilo\Libraries\Storage\Query\Condition\InCondition;
-use Chamilo\Libraries\Storage\Query\DataClassParameters;
+use Chamilo\Libraries\Storage\Query\StorageParameters;
 use Chamilo\Libraries\Storage\Query\RetrieveProperties;
 use Chamilo\Libraries\Storage\Query\Variable\PropertyConditionVariable;
 use Chamilo\Libraries\Storage\Query\Variable\StaticConditionVariable;
@@ -49,7 +49,7 @@ class RightsRepository
         );
 
         return $this->getDataClassRepository()->count(
-            PublicationGroup::class, new DataClassParameters(condition: $condition)
+            PublicationGroup::class, new StorageParameters(condition: $condition)
         );
     }
 
@@ -66,7 +66,7 @@ class RightsRepository
         );
 
         return $this->getDataClassRepository()->count(
-            PublicationUser::class, new DataClassParameters(condition: $condition)
+            PublicationUser::class, new StorageParameters(condition: $condition)
         );
     }
 
@@ -202,7 +202,7 @@ class RightsRepository
         );
 
         return $this->getDataClassRepository()->distinct(
-            PublicationGroup::class, new DataClassParameters(
+            PublicationGroup::class, new StorageParameters(
                 condition: $condition, retrieveProperties: $properties
             )
         );
@@ -221,7 +221,7 @@ class RightsRepository
         );
 
         return $this->getDataClassRepository()->retrieves(
-            PublicationGroup::class, new DataClassParameters(condition: $condition)
+            PublicationGroup::class, new StorageParameters(condition: $condition)
         );
     }
 
@@ -242,7 +242,7 @@ class RightsRepository
         );
 
         return $this->getDataClassRepository()->distinct(
-            PublicationUser::class, new DataClassParameters(
+            PublicationUser::class, new StorageParameters(
                 condition: $condition, retrieveProperties: $properties
             )
         );
@@ -261,7 +261,7 @@ class RightsRepository
         );
 
         return $this->getDataClassRepository()->retrieves(
-            PublicationUser::class, new DataClassParameters(condition: $condition)
+            PublicationUser::class, new StorageParameters(condition: $condition)
         );
     }
 }

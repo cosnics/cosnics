@@ -10,7 +10,7 @@ use Chamilo\Libraries\Storage\Exception\StorageLastInsertedIdentifierException;
 use Chamilo\Libraries\Storage\Exception\StorageMethodException;
 use Chamilo\Libraries\Storage\Exception\StorageNoResultException;
 use Chamilo\Libraries\Storage\Query\Condition\Condition;
-use Chamilo\Libraries\Storage\Query\DataClassParameters;
+use Chamilo\Libraries\Storage\Query\StorageParameters;
 use Chamilo\Libraries\Storage\Query\UpdateProperties;
 use Doctrine\DBAL\Connection;
 use Doctrine\DBAL\Result;
@@ -54,7 +54,7 @@ class DataClassDatabase implements DataClassDatabaseInterface
     /**
      * @throws \Chamilo\Libraries\Storage\Exception\StorageMethodException
      */
-    protected function __retrieve(string $dataClassStorageUnitName, DataClassParameters $parameters): Result
+    protected function __retrieve(string $dataClassStorageUnitName, StorageParameters $parameters): Result
     {
         $sqlQuery = $this->buildFromQuery($dataClassStorageUnitName, $parameters);
 
@@ -72,7 +72,7 @@ class DataClassDatabase implements DataClassDatabaseInterface
         }
     }
 
-    protected function buildFromQuery(string $dataClassStorageUnitName, DataClassParameters $parameters): string
+    protected function buildFromQuery(string $dataClassStorageUnitName, StorageParameters $parameters): string
     {
         $queryBuilder = $this->getConnection()->createQueryBuilder();
 
@@ -87,7 +87,7 @@ class DataClassDatabase implements DataClassDatabaseInterface
     /**
      * @throws \Chamilo\Libraries\Storage\Exception\StorageMethodException
      */
-    public function count(string $dataClassStorageUnitName, DataClassParameters $parameters): int
+    public function count(string $dataClassStorageUnitName, StorageParameters $parameters): int
     {
         $sqlQuery = $this->buildFromQuery($dataClassStorageUnitName, $parameters);
 
@@ -111,7 +111,7 @@ class DataClassDatabase implements DataClassDatabaseInterface
      * @return int[]
      * @throws \Chamilo\Libraries\Storage\Exception\StorageMethodException
      */
-    public function countGrouped(string $dataClassStorageUnitName, DataClassParameters $parameters): array
+    public function countGrouped(string $dataClassStorageUnitName, StorageParameters $parameters): array
     {
         $sqlQuery = $this->buildFromQuery($dataClassStorageUnitName, $parameters);
 
@@ -187,7 +187,7 @@ class DataClassDatabase implements DataClassDatabaseInterface
      * @return string[]
      * @throws \Chamilo\Libraries\Storage\Exception\StorageMethodException
      */
-    public function distinct(string $dataClassStorageUnitName, DataClassParameters $parameters): array
+    public function distinct(string $dataClassStorageUnitName, StorageParameters $parameters): array
     {
         $sqlQuery = $this->buildFromQuery($dataClassStorageUnitName, $parameters);
 
@@ -308,7 +308,7 @@ class DataClassDatabase implements DataClassDatabaseInterface
      * @throws \Chamilo\Libraries\Storage\Exception\StorageNoResultException
      * @throws \Chamilo\Libraries\Storage\Exception\StorageMethodException
      */
-    public function retrieve(string $dataClassStorageUnitName, DataClassParameters $parameters): ?array
+    public function retrieve(string $dataClassStorageUnitName, StorageParameters $parameters): ?array
     {
         $statement = $this->__retrieve($dataClassStorageUnitName, $parameters);
 
@@ -333,7 +333,7 @@ class DataClassDatabase implements DataClassDatabaseInterface
      * @return string[][]
      * @throws \Chamilo\Libraries\Storage\Exception\StorageMethodException
      */
-    public function retrieves(string $dataClassStorageUnitName, DataClassParameters $parameters): array
+    public function retrieves(string $dataClassStorageUnitName, StorageParameters $parameters): array
     {
         $statement = $this->__retrieve($dataClassStorageUnitName, $parameters);
 

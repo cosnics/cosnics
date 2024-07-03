@@ -6,7 +6,7 @@ use Chamilo\Core\Repository\ContentObject\LearningPath\Storage\DataClass\TreeNod
 use Chamilo\Libraries\Storage\Query\Condition\AndCondition;
 use Chamilo\Libraries\Storage\Query\Condition\EqualityCondition;
 use Chamilo\Libraries\Storage\Query\Condition\InCondition;
-use Chamilo\Libraries\Storage\Query\DataClassParameters;
+use Chamilo\Libraries\Storage\Query\StorageParameters;
 use Chamilo\Libraries\Storage\Query\Variable\PropertyConditionVariable;
 use Chamilo\Libraries\Storage\Query\Variable\StaticConditionVariable;
 
@@ -36,7 +36,7 @@ class TreeNodeDataRepository extends CommonDataClassRepository
     {
         $condition = $this->getConditionForLearningPath($learningPath);
 
-        return $this->dataClassRepository->count(TreeNodeData::class, new DataClassParameters(condition: $condition));
+        return $this->dataClassRepository->count(TreeNodeData::class, new StorageParameters(condition: $condition));
     }
 
     /**
@@ -109,7 +109,7 @@ class TreeNodeDataRepository extends CommonDataClassRepository
         $condition = new AndCondition($conditions);
 
         return $this->dataClassRepository->retrieve(
-            TreeNodeData::class, new DataClassParameters(condition: $condition)
+            TreeNodeData::class, new StorageParameters(condition: $condition)
         );
     }
 
@@ -128,7 +128,7 @@ class TreeNodeDataRepository extends CommonDataClassRepository
         );
 
         return $this->dataClassRepository->retrieves(
-            TreeNodeData::class, new DataClassParameters(condition: $condition)
+            TreeNodeData::class, new StorageParameters(condition: $condition)
         );
     }
 
@@ -147,7 +147,7 @@ class TreeNodeDataRepository extends CommonDataClassRepository
         );
 
         return $this->dataClassRepository->retrieves(
-            TreeNodeData::class, new DataClassParameters(condition: $condition)
+            TreeNodeData::class, new StorageParameters(condition: $condition)
         );
     }
 
@@ -163,7 +163,7 @@ class TreeNodeDataRepository extends CommonDataClassRepository
         $condition = $this->getConditionForLearningPath($learningPath);
 
         return $this->dataClassRepository->retrieves(
-            TreeNodeData::class, new DataClassParameters(condition: $condition)
+            TreeNodeData::class, new StorageParameters(condition: $condition)
         );
     }
 

@@ -10,7 +10,7 @@ use Chamilo\Libraries\DependencyInjection\DependencyInjectionContainerBuilder;
 use Chamilo\Libraries\Storage\Query\Condition\AndCondition;
 use Chamilo\Libraries\Storage\Query\Condition\EqualityCondition;
 use Chamilo\Libraries\Storage\Query\Condition\NotCondition;
-use Chamilo\Libraries\Storage\Query\DataClassParameters;
+use Chamilo\Libraries\Storage\Query\StorageParameters;
 use Chamilo\Libraries\Storage\Query\RetrieveProperties;
 use Chamilo\Libraries\Storage\Query\Variable\PropertyConditionVariable;
 use Chamilo\Libraries\Storage\Query\Variable\StaticConditionVariable;
@@ -61,7 +61,7 @@ class RepositoryCategory extends PlatformCategory
                 new PropertyConditionVariable(RepositoryCategory::class, RepositoryCategory::PROPERTY_ID),
                 new StaticConditionVariable($this->get_parent())
             );
-            $count = DataManager::count(RepositoryCategory::class, new DataClassParameters(condition: $condition));
+            $count = DataManager::count(RepositoryCategory::class, new StorageParameters(condition: $condition));
             if ($count == 0)
             {
                 $this->addError(Translation::get('ParentDoesNotExist'));
@@ -107,7 +107,7 @@ class RepositoryCategory extends PlatformCategory
         );
 
         $condition = new AndCondition($conditions);
-        $count = DataManager::count(RepositoryCategory::class, new DataClassParameters(condition: $condition));
+        $count = DataManager::count(RepositoryCategory::class, new StorageParameters(condition: $condition));
 
         if ($count > 0)
         {
@@ -263,7 +263,7 @@ class RepositoryCategory extends PlatformCategory
 
         if (!$recursive)
         {
-            $parameters = new DataClassParameters(
+            $parameters = new StorageParameters(
                 condition: $condition, retrieveProperties: new RetrieveProperties(
                 [new PropertyConditionVariable(self::class, self::PROPERTY_ID)]
             )
@@ -332,7 +332,7 @@ class RepositoryCategory extends PlatformCategory
             new StaticConditionVariable($this->get_id())
         );
 
-        return DataManager::count(RepositoryCategory::class, new DataClassParameters(condition: $condition)) > 0;
+        return DataManager::count(RepositoryCategory::class, new StorageParameters(condition: $condition)) > 0;
     }
 
     public function setType($type)

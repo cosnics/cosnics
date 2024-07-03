@@ -18,7 +18,7 @@ use Chamilo\Libraries\Format\Breadcrumb\BreadcrumbLessComponentInterface;
 use Chamilo\Libraries\Storage\DataManager\DataManager;
 use Chamilo\Libraries\Storage\Query\Condition\AndCondition;
 use Chamilo\Libraries\Storage\Query\Condition\EqualityCondition;
-use Chamilo\Libraries\Storage\Query\DataClassParameters;
+use Chamilo\Libraries\Storage\Query\StorageParameters;
 use Chamilo\Libraries\Storage\Query\Variable\PropertyConditionVariable;
 use Chamilo\Libraries\Storage\Query\Variable\StaticConditionVariable;
 use Chamilo\Libraries\Translation\Translation;
@@ -109,7 +109,7 @@ class ViewerComponent extends Manager implements ForumDisplaySupport, Breadcrumb
         $condition = new AndCondition($conditions);
 
         return DataManager::count(
-            ForumTopicView::class, new DataClassParameters(condition: $condition)
+            ForumTopicView::class, new StorageParameters(condition: $condition)
         );
     }
 

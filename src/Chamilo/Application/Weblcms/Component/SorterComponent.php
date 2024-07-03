@@ -23,7 +23,7 @@ use Chamilo\Libraries\Format\Structure\ToolbarItem;
 use Chamilo\Libraries\Storage\Cache\DataClassRepositoryCache;
 use Chamilo\Libraries\Storage\Query\Condition\AndCondition;
 use Chamilo\Libraries\Storage\Query\Condition\EqualityCondition;
-use Chamilo\Libraries\Storage\Query\DataClassParameters;
+use Chamilo\Libraries\Storage\Query\StorageParameters;
 use Chamilo\Libraries\Storage\Query\Variable\PropertyConditionVariable;
 use Chamilo\Libraries\Storage\Query\Variable\StaticConditionVariable;
 use Chamilo\Libraries\Translation\Translation;
@@ -157,7 +157,7 @@ class SorterComponent extends Manager
             $condition = new AndCondition($conditions);
 
             $course_type_user_category_rel_course = DataManager::retrieves(
-                CourseTypeUserCategoryRelCourse::class, new DataClassParameters(condition: $condition)
+                CourseTypeUserCategoryRelCourse::class, new StorageParameters(condition: $condition)
             )->current();
         }
 
@@ -572,7 +572,7 @@ class SorterComponent extends Manager
         $condition = new AndCondition($conditions);
 
         $course_type_user_category_rel_course = DataManager::retrieve(
-            CourseTypeUserCategoryRelCourse::class, new DataClassParameters(condition: $condition)
+            CourseTypeUserCategoryRelCourse::class, new StorageParameters(condition: $condition)
         );
 
         $sort_factor = $direction == 'up' ? - 1 : 1;

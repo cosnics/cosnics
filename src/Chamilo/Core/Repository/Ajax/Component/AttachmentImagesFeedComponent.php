@@ -8,7 +8,7 @@ use Chamilo\Libraries\File\FileType;
 use Chamilo\Libraries\Storage\Query\Condition\AndCondition;
 use Chamilo\Libraries\Storage\Query\Condition\EndsWithCondition;
 use Chamilo\Libraries\Storage\Query\Condition\OrCondition;
-use Chamilo\Libraries\Storage\Query\DataClassParameters;
+use Chamilo\Libraries\Storage\Query\StorageParameters;
 use Chamilo\Libraries\Storage\Query\OrderBy;
 use Chamilo\Libraries\Storage\Query\OrderProperty;
 use Chamilo\Libraries\Storage\Query\Variable\PropertyConditionVariable;
@@ -27,7 +27,7 @@ class AttachmentImagesFeedComponent extends AttachmentContentObjectsFeedComponen
     protected function countContentObjects()
     {
         return DataManager::count_active_content_objects(
-            File::class, new DataClassParameters(condition: $this->getContentObjectConditions())
+            File::class, new StorageParameters(condition: $this->getContentObjectConditions())
         );
     }
 
@@ -60,7 +60,7 @@ class AttachmentImagesFeedComponent extends AttachmentContentObjectsFeedComponen
      */
     protected function retrieveContentObjects()
     {
-        $parameters = new DataClassParameters(
+        $parameters = new StorageParameters(
             condition: $this->getContentObjectConditions(), orderBy: new OrderBy([
             new OrderProperty(
                 new PropertyConditionVariable(ContentObject::class, ContentObject::PROPERTY_TITLE)

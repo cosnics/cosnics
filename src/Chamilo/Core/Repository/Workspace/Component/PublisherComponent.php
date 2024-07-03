@@ -15,7 +15,7 @@ use Chamilo\Libraries\Architecture\Exceptions\NotAllowedException;
 use Chamilo\Libraries\Storage\DataManager\DataManager;
 use Chamilo\Libraries\Storage\Query\Condition\EqualityCondition;
 use Chamilo\Libraries\Storage\Query\Condition\InCondition;
-use Chamilo\Libraries\Storage\Query\DataClassParameters;
+use Chamilo\Libraries\Storage\Query\StorageParameters;
 use Chamilo\Libraries\Storage\Query\RetrieveProperties;
 use Chamilo\Libraries\Storage\Query\Variable\PropertyConditionVariable;
 use Chamilo\Libraries\Storage\Query\Variable\StaticConditionVariable;
@@ -111,7 +111,7 @@ class PublisherComponent extends Manager
         );
 
         $contentObjectNumbers = DataManager::distinct(
-            WorkspaceContentObjectRelation::class, new DataClassParameters(
+            WorkspaceContentObjectRelation::class, new StorageParameters(
                 condition: $condition, retrieveProperties: new RetrieveProperties(
                 [
                     new PropertyConditionVariable(
@@ -124,7 +124,7 @@ class PublisherComponent extends Manager
         );
 
         return DataManager::distinct(
-            ContentObject::class, new DataClassParameters(
+            ContentObject::class, new StorageParameters(
                 condition: new InCondition(
                     new PropertyConditionVariable(ContentObject::class, ContentObject::PROPERTY_OBJECT_NUMBER),
                     $contentObjectNumbers

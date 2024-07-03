@@ -21,7 +21,7 @@ use Chamilo\Libraries\Format\Structure\Glyph\FontAwesomeGlyph;
 use Chamilo\Libraries\Format\Table\RequestTableParameterValuesCompiler;
 use Chamilo\Libraries\Storage\Query\Condition\EqualityCondition;
 use Chamilo\Libraries\Storage\Query\Condition\SubselectCondition;
-use Chamilo\Libraries\Storage\Query\DataClassParameters;
+use Chamilo\Libraries\Storage\Query\StorageParameters;
 use Chamilo\Libraries\Storage\Query\Variable\PropertyConditionVariable;
 use Chamilo\Libraries\Storage\Query\Variable\StaticConditionVariable;
 use Chamilo\Libraries\Translation\Translation;
@@ -172,7 +172,7 @@ class AssessmentMergerComponent extends Manager implements ViewerInterface
     protected function renderTable(): string
     {
         $totalNumberOfItems = DataManager::count_active_content_objects(
-            ContentObject::class, new DataClassParameters(condition: $this->getObjectCondition())
+            ContentObject::class, new StorageParameters(condition: $this->getObjectCondition())
         );
 
         $objectTableRenderer = $this->getObjectTableRenderer();
@@ -183,7 +183,7 @@ class AssessmentMergerComponent extends Manager implements ViewerInterface
         );
 
         $objects = DataManager::retrieve_active_content_objects(
-            ContentObject::class, new DataClassParameters(
+            ContentObject::class, new StorageParameters(
                 condition: $this->getObjectCondition(), orderBy: $objectTableRenderer->determineOrderBy(
                 $tableParameterValues
             ), count: $tableParameterValues->getNumberOfItemsPerPage(), offset: $tableParameterValues->getOffset()

@@ -7,7 +7,7 @@ use Chamilo\Core\Rights\Entity\RightsEntity;
 use Chamilo\Libraries\Format\Form\Element\AdvancedElementFinder\AdvancedElementFinderElement;
 use Chamilo\Libraries\Format\Form\Element\AdvancedElementFinder\AdvancedElementFinderElementType;
 use Chamilo\Libraries\Format\Structure\Glyph\FontAwesomeGlyph;
-use Chamilo\Libraries\Storage\Query\DataClassParameters;
+use Chamilo\Libraries\Storage\Query\StorageParameters;
 use Chamilo\Libraries\Translation\Translation;
 use Chamilo\Libraries\Utilities\StringUtilities;
 
@@ -46,7 +46,7 @@ class CourseEntity implements RightsEntity
     {
         $condition = $this->get_condition($condition);
 
-        return DataManager::count(Course::class, new DataClassParameters(condition: $condition));
+        return DataManager::count(Course::class, new StorageParameters(condition: $condition));
     }
 
     /**
@@ -223,7 +223,7 @@ class CourseEntity implements RightsEntity
     public function retrieve_entity_items($condition = null, $offset = null, $count = null, $order_property = null)
     {
         $condition = $this->get_condition($condition);
-        $parameters = new DataClassParameters(
+        $parameters = new StorageParameters(
             condition: $condition, count: $count, offset: $offset, orderBy: $order_property
         );
 

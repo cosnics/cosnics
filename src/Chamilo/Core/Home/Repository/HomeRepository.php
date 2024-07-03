@@ -8,7 +8,7 @@ use Chamilo\Libraries\Storage\DataManager\Repository\DataClassRepository;
 use Chamilo\Libraries\Storage\Query\Condition\AndCondition;
 use Chamilo\Libraries\Storage\Query\Condition\EqualityCondition;
 use Chamilo\Libraries\Storage\Query\Condition\InCondition;
-use Chamilo\Libraries\Storage\Query\DataClassParameters;
+use Chamilo\Libraries\Storage\Query\StorageParameters;
 use Chamilo\Libraries\Storage\Query\OrderBy;
 use Chamilo\Libraries\Storage\Query\OrderProperty;
 use Chamilo\Libraries\Storage\Query\RetrieveProperties;
@@ -36,13 +36,13 @@ class HomeRepository
         );
 
         return $this->getDataClassRepository()->count(
-            Element::class, new DataClassParameters(condition: $condition)
+            Element::class, new StorageParameters(condition: $condition)
         );
     }
 
     public function countElementsByUserIdentifier(string $userIdentifier): int
     {
-        $parameters = new DataClassParameters(condition: $this->getElementsByUserIdentifierCondition($userIdentifier));
+        $parameters = new StorageParameters(condition: $this->getElementsByUserIdentifierCondition($userIdentifier));
 
         return $this->getDataClassRepository()->count(Element::class, $parameters);
     }
@@ -77,7 +77,7 @@ class HomeRepository
         );
 
         return $this->getDataClassRepository()->retrieves(
-            Element::class, new DataClassParameters(
+            Element::class, new StorageParameters(
                 condition: new AndCondition($conditions)
             )
         );
@@ -102,7 +102,7 @@ class HomeRepository
         );
 
         return $this->getDataClassRepository()->retrieves(
-            Element::class, new DataClassParameters(condition: new AndCondition($conditions))
+            Element::class, new StorageParameters(condition: new AndCondition($conditions))
         );
     }
 
@@ -125,7 +125,7 @@ class HomeRepository
         );
 
         return $this->getDataClassRepository()->distinct(
-            Element::class, new DataClassParameters(
+            Element::class, new StorageParameters(
                 condition: new AndCondition($conditions), retrieveProperties: new RetrieveProperties(
                 [new PropertyConditionVariable(Element::class, DataClass::PROPERTY_ID)]
             )
@@ -151,7 +151,7 @@ class HomeRepository
         );
 
         return $this->getDataClassRepository()->retrieves(
-            Element::class, new DataClassParameters(condition: $condition)
+            Element::class, new StorageParameters(condition: $condition)
         );
     }
 
@@ -179,7 +179,7 @@ class HomeRepository
             new StaticConditionVariable($parentIdentifier)
         );
 
-        $parameters = new DataClassParameters(
+        $parameters = new StorageParameters(
             condition: new AndCondition($conditions), orderBy: new OrderBy([
             new OrderProperty(new PropertyConditionVariable(Element::class, Element::PROPERTY_TYPE)),
             new OrderProperty(new PropertyConditionVariable(Element::class, Element::PROPERTY_SORT))
@@ -196,7 +196,7 @@ class HomeRepository
      */
     public function findElementsByUserIdentifier(string $userIdentifier): ArrayCollection
     {
-        $parameters = new DataClassParameters(
+        $parameters = new StorageParameters(
             condition: $this->getElementsByUserIdentifierCondition($userIdentifier), orderBy: new OrderBy([
             new OrderProperty(new PropertyConditionVariable(Element::class, Element::PROPERTY_TYPE)),
             new OrderProperty(new PropertyConditionVariable(Element::class, Element::PROPERTY_SORT))

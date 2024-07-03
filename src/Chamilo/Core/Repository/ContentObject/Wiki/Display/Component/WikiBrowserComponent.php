@@ -13,7 +13,7 @@ use Chamilo\Libraries\Storage\Query\Condition\AndCondition;
 use Chamilo\Libraries\Storage\Query\Condition\ContainsCondition;
 use Chamilo\Libraries\Storage\Query\Condition\EqualityCondition;
 use Chamilo\Libraries\Storage\Query\Condition\OrCondition;
-use Chamilo\Libraries\Storage\Query\DataClassParameters;
+use Chamilo\Libraries\Storage\Query\StorageParameters;
 use Chamilo\Libraries\Storage\Query\Variable\PropertyConditionVariable;
 use Chamilo\Libraries\Storage\Query\Variable\StaticConditionVariable;
 
@@ -103,7 +103,7 @@ class WikiBrowserComponent extends Manager implements BreadcrumbLessComponentInt
     protected function renderTable(): string
     {
         $totalNumberOfItems = DataManager::count_complex_wiki_pages(
-            ComplexContentObjectItem::class, new DataClassParameters(condition: $this->get_condition())
+            ComplexContentObjectItem::class, new StorageParameters(condition: $this->get_condition())
         );
         $wikiPageTableRenderer = $this->getWikiPageTableRenderer();
 
@@ -113,7 +113,7 @@ class WikiBrowserComponent extends Manager implements BreadcrumbLessComponentInt
         );
 
         $wikiPages = DataManager::retrieve_complex_wiki_pages(
-            ComplexContentObjectItem::class, new DataClassParameters(
+            ComplexContentObjectItem::class, new StorageParameters(
                 condition: $this->get_condition(), orderBy: $wikiPageTableRenderer->determineOrderBy(
                 $tableParameterValues
             ), count: $tableParameterValues->getNumberOfItemsPerPage(), offset: $tableParameterValues->getOffset()

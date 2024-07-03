@@ -37,7 +37,7 @@ use Chamilo\Libraries\Format\Tabs\ContentTab;
 use Chamilo\Libraries\Format\Tabs\TabsCollection;
 use Chamilo\Libraries\Format\Utilities\ResourceManager;
 use Chamilo\Libraries\Storage\Query\Condition\EqualityCondition;
-use Chamilo\Libraries\Storage\Query\DataClassParameters;
+use Chamilo\Libraries\Storage\Query\StorageParameters;
 use Chamilo\Libraries\Storage\Query\Variable\PropertyConditionVariable;
 use Chamilo\Libraries\Storage\Query\Variable\StaticConditionVariable;
 use Chamilo\Libraries\Utilities\StringUtilities;
@@ -642,7 +642,7 @@ class ViewerComponent extends Manager implements BreadcrumbLessComponentInterfac
         if ($contentObject->get_current() != ContentObject::CURRENT_SINGLE)
         {
             $totalNumberOfItems = DataManager::count_content_objects(
-                ContentObject::class, new DataClassParameters(condition: $this->getVersionTableCondition())
+                ContentObject::class, new StorageParameters(condition: $this->getVersionTableCondition())
             );
 
             $versionTableRenderer = $this->getVersionTableRenderer();
@@ -653,7 +653,7 @@ class ViewerComponent extends Manager implements BreadcrumbLessComponentInterfac
             );
 
             $contentObjects = DataManager::retrieve_content_objects(
-                ContentObject::class, new DataClassParameters(
+                ContentObject::class, new StorageParameters(
                     condition: $this->getVersionTableCondition(), orderBy: $versionTableRenderer->determineOrderBy(
                     $tableParameterValues
                 ), count: $tableParameterValues->getNumberOfItemsPerPage(), offset: $tableParameterValues->getOffset()

@@ -35,7 +35,7 @@ use Chamilo\Libraries\Storage\Query\Condition\ContainsCondition;
 use Chamilo\Libraries\Storage\Query\Condition\EqualityCondition;
 use Chamilo\Libraries\Storage\Query\Condition\InCondition;
 use Chamilo\Libraries\Storage\Query\Condition\OrCondition;
-use Chamilo\Libraries\Storage\Query\DataClassParameters;
+use Chamilo\Libraries\Storage\Query\StorageParameters;
 use Chamilo\Libraries\Storage\Query\OrderBy;
 use Chamilo\Libraries\Storage\Query\OrderProperty;
 use Chamilo\Libraries\Storage\Query\Variable\PropertyConditionVariable;
@@ -128,7 +128,7 @@ class BrowserComponent extends Manager implements BreadcrumbLessComponentInterfa
         $condition = new AndCondition($conditions);
 
         return DataManager::count(
-            ContentObjectPublicationCategory::class, new DataClassParameters(condition: $condition)
+            ContentObjectPublicationCategory::class, new StorageParameters(condition: $condition)
         );
     }
 
@@ -625,7 +625,7 @@ class BrowserComponent extends Manager implements BreadcrumbLessComponentInterfa
 
         return \Chamilo\Libraries\Storage\DataManager\DataManager::count(
                 ContentObjectPublicationCategory::class,
-                new DataClassParameters(condition: new AndCondition($conditions))
+                new StorageParameters(condition: new AndCondition($conditions))
             ) > 0;
     }
 
@@ -816,7 +816,7 @@ class BrowserComponent extends Manager implements BreadcrumbLessComponentInterfa
         $condition = new AndCondition($conditions);
 
         $objects = DataManager::retrieves(
-            ContentObjectPublicationCategory::class, new DataClassParameters(condition: $condition)
+            ContentObjectPublicationCategory::class, new StorageParameters(condition: $condition)
         );
 
         return $objects->current();

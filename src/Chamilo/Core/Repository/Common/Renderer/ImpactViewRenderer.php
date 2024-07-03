@@ -9,7 +9,7 @@ use Chamilo\Core\Repository\Table\ImpactViewTableRenderer;
 use Chamilo\Libraries\DependencyInjection\Traits\DependencyInjectionContainerTrait;
 use Chamilo\Libraries\Format\Table\RequestTableParameterValuesCompiler;
 use Chamilo\Libraries\Storage\Query\Condition\Condition;
-use Chamilo\Libraries\Storage\Query\DataClassParameters;
+use Chamilo\Libraries\Storage\Query\StorageParameters;
 
 /**
  * Renderer to render the impact viewer
@@ -102,7 +102,7 @@ class ImpactViewRenderer
     private function renderImpactView(Condition $condition): string
     {
         $totalNumberOfItems = DataManager::count_active_content_objects(
-            ContentObject::class, new DataClassParameters(condition: $condition)
+            ContentObject::class, new StorageParameters(condition: $condition)
         );
 
         $impactViewTableRenderer = $this->getImpactViewTableRenderer();
@@ -113,7 +113,7 @@ class ImpactViewRenderer
         );
 
         $contentObjects = DataManager::retrieve_active_content_objects(
-            ContentObject::class, new DataClassParameters(
+            ContentObject::class, new StorageParameters(
                 condition: $condition, orderBy: $impactViewTableRenderer->determineOrderBy(
                 $tableParameterValues
             ), count: $tableParameterValues->getNumberOfItemsPerPage(), offset: $tableParameterValues->getOffset()

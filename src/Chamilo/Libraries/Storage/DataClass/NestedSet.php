@@ -8,7 +8,7 @@ use Chamilo\Libraries\Storage\Query\Condition\Condition;
 use Chamilo\Libraries\Storage\Query\Condition\EqualityCondition;
 use Chamilo\Libraries\Storage\Query\Condition\NotCondition;
 use Chamilo\Libraries\Storage\Query\Condition\OrCondition;
-use Chamilo\Libraries\Storage\Query\DataClassParameters;
+use Chamilo\Libraries\Storage\Query\StorageParameters;
 use Chamilo\Libraries\Storage\Query\OrderBy;
 use Chamilo\Libraries\Storage\Query\OrderProperty;
 use Chamilo\Libraries\Storage\Query\UpdateProperties;
@@ -191,7 +191,7 @@ abstract class NestedSet extends DataClass
     {
         return DataManager::count(
             get_class($this),
-            new DataClassParameters(condition: $this->build_ancestry_condition($include_self, $condition))
+            new StorageParameters(condition: $this->build_ancestry_condition($include_self, $condition))
         );
     }
 
@@ -202,7 +202,7 @@ abstract class NestedSet extends DataClass
     {
         return DataManager::count(
             get_class($this),
-            new DataClassParameters(condition: $this->build_offspring_condition(false, false, $condition))
+            new StorageParameters(condition: $this->build_offspring_condition(false, false, $condition))
         );
     }
 
@@ -213,7 +213,7 @@ abstract class NestedSet extends DataClass
     {
         return DataManager::count(
             get_class($this),
-            new DataClassParameters(condition: $this->build_offspring_condition(true, false, $condition))
+            new StorageParameters(condition: $this->build_offspring_condition(true, false, $condition))
         );
     }
 
@@ -224,7 +224,7 @@ abstract class NestedSet extends DataClass
     {
         return DataManager::count(
             get_class($this),
-            new DataClassParameters(condition: $this->build_sibling_condition($include_self, $condition))
+            new StorageParameters(condition: $this->build_sibling_condition($include_self, $condition))
         );
     }
 
@@ -384,7 +384,7 @@ abstract class NestedSet extends DataClass
         );
 
         return DataManager::retrieve(
-            get_class($this), new DataClassParameters(condition: new AndCondition($conditions))
+            get_class($this), new StorageParameters(condition: new AndCondition($conditions))
         );
     }
 
@@ -435,7 +435,7 @@ abstract class NestedSet extends DataClass
     public function get_ancestors(bool $include_self = true, ?Condition $condition = null): ArrayCollection
     {
         return DataManager::retrieves(
-            get_class($this), new DataClassParameters(
+            get_class($this), new StorageParameters(
                 condition: $this->build_ancestry_condition($include_self, $condition),
                 orderBy: $this->build_post_order_ordering()
             )
@@ -452,7 +452,7 @@ abstract class NestedSet extends DataClass
     {
         return DataManager::retrieves(
             get_class($this),
-            new DataClassParameters(condition: $this->build_offspring_condition(false, false, $condition))
+            new StorageParameters(condition: $this->build_offspring_condition(false, false, $condition))
         );
     }
 
@@ -466,7 +466,7 @@ abstract class NestedSet extends DataClass
     {
         return DataManager::retrieves(
             get_class($this),
-            new DataClassParameters(condition: $this->build_offspring_condition(true, false, $condition))
+            new StorageParameters(condition: $this->build_offspring_condition(true, false, $condition))
         );
     }
 
@@ -526,7 +526,7 @@ abstract class NestedSet extends DataClass
     public function get_siblings(bool $include_self = true, ?Condition $condition = null): ArrayCollection
     {
         return DataManager::retrieves(
-            get_class($this), new DataClassParameters(
+            get_class($this), new StorageParameters(
                 condition: $this->build_sibling_condition($include_self, $condition),
                 orderBy: $this->build_pre_order_ordering()
             )

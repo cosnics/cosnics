@@ -9,7 +9,7 @@ use Chamilo\Core\User\Storage\DataClass\User;
 use Chamilo\Libraries\Storage\Query\Condition\AndCondition;
 use Chamilo\Libraries\Storage\Query\Condition\EqualityCondition;
 use Chamilo\Libraries\Storage\Query\Condition\InCondition;
-use Chamilo\Libraries\Storage\Query\DataClassParameters;
+use Chamilo\Libraries\Storage\Query\StorageParameters;
 use Chamilo\Libraries\Storage\Query\Join;
 use Chamilo\Libraries\Storage\Query\Joins;
 use Chamilo\Libraries\Storage\Query\Variable\PropertyConditionVariable;
@@ -38,7 +38,7 @@ class CourseGroupRepository extends CommonDataClassRepository implements CourseG
         );
 
         return $this->dataClassRepository->count(
-            CourseGroup::class, new DataClassParameters(condition: $condition)
+            CourseGroup::class, new StorageParameters(condition: $condition)
         );
     }
 
@@ -67,7 +67,7 @@ class CourseGroupRepository extends CommonDataClassRepository implements CourseG
         $condition = new AndCondition($conditions);
 
         return $this->dataClassRepository->retrieve(
-            CourseGroupUserRelation::class, new DataClassParameters(condition: $condition)
+            CourseGroupUserRelation::class, new StorageParameters(condition: $condition)
         );
     }
 
@@ -108,7 +108,7 @@ class CourseGroupRepository extends CommonDataClassRepository implements CourseG
         );
 
         return $this->dataClassRepository->retrieves(
-            CourseGroupUserRelation::class, new DataClassParameters(
+            CourseGroupUserRelation::class, new StorageParameters(
                 condition: $condition, joins: $joins
             )
         );

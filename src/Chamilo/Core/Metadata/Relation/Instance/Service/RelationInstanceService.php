@@ -8,7 +8,7 @@ use Chamilo\Core\User\Storage\DataClass\User;
 use Chamilo\Libraries\Storage\DataManager\DataManager;
 use Chamilo\Libraries\Storage\Query\Condition\AndCondition;
 use Chamilo\Libraries\Storage\Query\Condition\EqualityCondition;
-use Chamilo\Libraries\Storage\Query\DataClassParameters;
+use Chamilo\Libraries\Storage\Query\StorageParameters;
 use Chamilo\Libraries\Storage\Query\Variable\PropertyConditionVariable;
 use Chamilo\Libraries\Storage\Query\Variable\StaticConditionVariable;
 
@@ -170,6 +170,6 @@ class RelationInstanceService
 
         $condition = new AndCondition($conditions);
 
-        return DataManager::count(RelationInstance::class, new DataClassParameters(condition: $condition)) > 0;
+        return DataManager::count(RelationInstance::class, new StorageParameters(condition: $condition)) > 0;
     }
 }

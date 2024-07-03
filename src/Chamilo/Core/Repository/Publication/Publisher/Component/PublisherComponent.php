@@ -13,7 +13,7 @@ use Chamilo\Libraries\Format\Form\FormValidator;
 use Chamilo\Libraries\Format\Structure\WizardHeader\WizardHeader;
 use Chamilo\Libraries\Format\Structure\WizardHeader\WizardHeaderRenderer;
 use Chamilo\Libraries\Storage\Query\Condition\InCondition;
-use Chamilo\Libraries\Storage\Query\DataClassParameters;
+use Chamilo\Libraries\Storage\Query\StorageParameters;
 use Chamilo\Libraries\Storage\Query\Variable\PropertyConditionVariable;
 use Chamilo\Libraries\Translation\Translation;
 use RuntimeException;
@@ -95,7 +95,7 @@ class PublisherComponent extends Manager implements ViewerInterface, BreadcrumbL
                 new PropertyConditionVariable(ContentObject::class, ContentObject::PROPERTY_ID),
                 $selectedContentObjectIds
             );
-            $parameters = new DataClassParameters(condition: $condition);
+            $parameters = new StorageParameters(condition: $condition);
 
             return DataManager::retrieve_active_content_objects(
                 ContentObject::class, $parameters

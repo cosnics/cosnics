@@ -15,7 +15,7 @@ use Chamilo\Libraries\Format\Structure\Glyph\FontAwesomeGlyph;
 use Chamilo\Libraries\Format\Table\RequestTableParameterValuesCompiler;
 use Chamilo\Libraries\Storage\Query\Condition\AndCondition;
 use Chamilo\Libraries\Storage\Query\Condition\InCondition;
-use Chamilo\Libraries\Storage\Query\DataClassParameters;
+use Chamilo\Libraries\Storage\Query\StorageParameters;
 use Chamilo\Libraries\Storage\Query\Variable\PropertyConditionVariable;
 use Chamilo\Libraries\Utilities\StringUtilities;
 
@@ -163,7 +163,7 @@ class BrowserComponent extends Manager
     protected function renderTable(): string
     {
         $totalNumberOfItems = DataManager::count(
-            RelationInstance::class, new DataClassParameters(condition: $this->getRelationCondition())
+            RelationInstance::class, new StorageParameters(condition: $this->getRelationCondition())
         );
         $relationInstanceTableRenderer = $this->getRelationInstanceTableRenderer();
 
@@ -173,7 +173,7 @@ class BrowserComponent extends Manager
         );
 
         $relations = DataManager::retrieves(
-            RelationInstance::class, new DataClassParameters(
+            RelationInstance::class, new StorageParameters(
                 condition: $this->getRelationCondition(), orderBy: $relationInstanceTableRenderer->determineOrderBy(
                 $tableParameterValues
             ), count: $tableParameterValues->getNumberOfItemsPerPage(), offset: $tableParameterValues->getOffset()

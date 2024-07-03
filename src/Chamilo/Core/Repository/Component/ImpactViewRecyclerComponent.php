@@ -13,7 +13,7 @@ use Chamilo\Libraries\Storage\Query\Condition\Condition;
 use Chamilo\Libraries\Storage\Query\Condition\EqualityCondition;
 use Chamilo\Libraries\Storage\Query\Condition\InCondition;
 use Chamilo\Libraries\Storage\Query\Condition\OrCondition;
-use Chamilo\Libraries\Storage\Query\DataClassParameters;
+use Chamilo\Libraries\Storage\Query\StorageParameters;
 use Chamilo\Libraries\Storage\Query\Variable\PropertyConditionVariable;
 use Chamilo\Libraries\Storage\Query\Variable\StaticConditionVariable;
 use Chamilo\Libraries\Translation\Translation;
@@ -152,7 +152,7 @@ class ImpactViewRecyclerComponent extends Manager
             new PropertyConditionVariable(ContentObject::class, ContentObjectPublication::PROPERTY_ID), $co_ids
         );
 
-        $parameters = new DataClassParameters(condition: $condition);
+        $parameters = new StorageParameters(condition: $condition);
 
         $objects = DataManager::retrieves(ContentObject::class, $parameters);
 
@@ -230,7 +230,7 @@ class ImpactViewRecyclerComponent extends Manager
             new PropertyConditionVariable(ContentObject::class, ContentObjectPublication::PROPERTY_ID), $selected_ids
         );
 
-        $parameters = new DataClassParameters(condition: $condition);
+        $parameters = new StorageParameters(condition: $condition);
 
         $objects = DataManager::retrieves(ContentObject::class, $parameters);
 

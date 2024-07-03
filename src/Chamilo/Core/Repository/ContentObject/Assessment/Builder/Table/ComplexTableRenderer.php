@@ -20,7 +20,7 @@ use Chamilo\Libraries\Format\Table\Interfaces\TableActionsSupport;
 use Chamilo\Libraries\Format\Table\Interfaces\TableRowActionsSupport;
 use Chamilo\Libraries\Format\Table\TableParameterValues;
 use Chamilo\Libraries\Format\Table\TableResultPosition;
-use Chamilo\Libraries\Storage\Query\DataClassParameters;
+use Chamilo\Libraries\Storage\Query\StorageParameters;
 use Chamilo\Libraries\Utilities\StringUtilities;
 use Doctrine\Common\Collections\ArrayCollection;
 
@@ -47,7 +47,7 @@ class ComplexTableRenderer extends DataClassListTableRenderer implements TableRo
 
         $count = DataManager::count_complex_content_object_items(
             ComplexContentObjectItem::class,
-            new DataClassParameters(condition: $this->application->getComplexCondition())
+            new StorageParameters(condition: $this->application->getComplexCondition())
         );
         if ($count == 1)
         {

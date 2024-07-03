@@ -7,7 +7,7 @@ use Chamilo\Core\User\Integration\Chamilo\Core\Tracking\Storage\DataClass\LoginL
 use Chamilo\Libraries\Storage\DataManager\DataManager;
 use Chamilo\Libraries\Storage\Query\Condition\AndCondition;
 use Chamilo\Libraries\Storage\Query\Condition\EqualityCondition;
-use Chamilo\Libraries\Storage\Query\DataClassParameters;
+use Chamilo\Libraries\Storage\Query\StorageParameters;
 use Chamilo\Libraries\Storage\Query\Variable\PropertyConditionVariable;
 use Chamilo\Libraries\Storage\Query\Variable\StaticConditionVariable;
 use Chamilo\Libraries\Translation\Translation;
@@ -35,7 +35,7 @@ class PlatformStatisticsBlock extends Block
         );
         $condition = new AndCondition($conditions);
 
-        $trackerdata = DataManager::retrieves(LoginLogout::class, new DataClassParameters(condition: $condition));
+        $trackerdata = DataManager::retrieves(LoginLogout::class, new StorageParameters(condition: $condition));
 
         $firstconnection = null;
         foreach ($trackerdata as $key => $value)

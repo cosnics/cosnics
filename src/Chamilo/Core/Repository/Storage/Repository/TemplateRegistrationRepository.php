@@ -3,7 +3,7 @@ namespace Chamilo\Core\Repository\Storage\Repository;
 
 use Chamilo\Core\Repository\Storage\DataClass\TemplateRegistration;
 use Chamilo\Libraries\Storage\DataManager\Repository\DataClassRepository;
-use Chamilo\Libraries\Storage\Query\DataClassParameters;
+use Chamilo\Libraries\Storage\Query\StorageParameters;
 use Chamilo\Libraries\Storage\Query\RetrieveProperties;
 use Chamilo\Libraries\Storage\Query\Variable\PropertiesConditionVariable;
 
@@ -50,7 +50,7 @@ class TemplateRegistrationRepository
     public function findTemplateRegistrations()
     {
         return $this->getDataClassRepository()->retrieves(
-            TemplateRegistration::class, new DataClassParameters()
+            TemplateRegistration::class, new StorageParameters()
         );
     }
 
@@ -62,7 +62,7 @@ class TemplateRegistrationRepository
     public function findTemplateRegistrationsAsRecords()
     {
         return $this->getDataClassRepository()->records(
-            TemplateRegistration::class, new DataClassParameters(
+            TemplateRegistration::class, new StorageParameters(
                 retrieveProperties: new RetrieveProperties(
                     [new PropertiesConditionVariable(TemplateRegistration::class)]
                 )

@@ -6,7 +6,7 @@ use Chamilo\Core\User\Storage\DataClass\User;
 use Chamilo\Libraries\Storage\DataManager\Repository\DataClassRepository;
 use Chamilo\Libraries\Storage\Query\Condition\AndCondition;
 use Chamilo\Libraries\Storage\Query\Condition\EqualityCondition;
-use Chamilo\Libraries\Storage\Query\DataClassParameters;
+use Chamilo\Libraries\Storage\Query\StorageParameters;
 use Chamilo\Libraries\Storage\Query\Variable\PropertyConditionVariable;
 use Chamilo\Libraries\Storage\Query\Variable\StaticConditionVariable;
 use Doctrine\Common\Collections\ArrayCollection;
@@ -53,7 +53,7 @@ class AvailabilityRepository
         $condition = new AndCondition($conditions);
 
         return $this->getDataClassRepository()->retrieves(
-            Availability::class, new DataClassParameters(condition: $condition)
+            Availability::class, new StorageParameters(condition: $condition)
         );
     }
 
@@ -90,7 +90,7 @@ class AvailabilityRepository
         $condition = new AndCondition($conditions);
 
         return $this->getDataClassRepository()->retrieves(
-            Availability::class, new DataClassParameters(condition: $condition)
+            Availability::class, new StorageParameters(condition: $condition)
         );
     }
 
@@ -114,7 +114,7 @@ class AvailabilityRepository
         $condition = new AndCondition($conditions);
 
         return $this->getDataClassRepository()->retrieve(
-            Availability::class, new DataClassParameters(condition: $condition)
+            Availability::class, new StorageParameters(condition: $condition)
         );
     }
 

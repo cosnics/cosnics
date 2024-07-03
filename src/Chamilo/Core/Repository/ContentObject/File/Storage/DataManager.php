@@ -4,7 +4,7 @@ namespace Chamilo\Core\Repository\ContentObject\File\Storage;
 use Chamilo\Core\Repository\ContentObject\File\Storage\DataClass\File;
 use Chamilo\Libraries\Storage\Query\Condition\AndCondition;
 use Chamilo\Libraries\Storage\Query\Condition\EqualityCondition;
-use Chamilo\Libraries\Storage\Query\DataClassParameters;
+use Chamilo\Libraries\Storage\Query\StorageParameters;
 use Chamilo\Libraries\Storage\Query\Variable\PropertyConditionVariable;
 use Chamilo\Libraries\Storage\Query\Variable\StaticConditionVariable;
 
@@ -42,7 +42,7 @@ class DataManager extends \Chamilo\Libraries\Storage\DataManager\DataManager
         $condition = new AndCondition($conditions);
 
         $count = \Chamilo\Core\Repository\Storage\DataManager::count_content_objects(
-            File::class, new DataClassParameters(condition: $condition)
+            File::class, new StorageParameters(condition: $condition)
         );
 
         return $count == 1;

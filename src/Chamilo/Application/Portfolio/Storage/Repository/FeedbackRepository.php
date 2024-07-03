@@ -5,7 +5,7 @@ use Chamilo\Application\Portfolio\Storage\DataClass\Feedback;
 use Chamilo\Libraries\Storage\DataManager\Repository\DataClassRepository;
 use Chamilo\Libraries\Storage\Query\Condition\AndCondition;
 use Chamilo\Libraries\Storage\Query\Condition\EqualityCondition;
-use Chamilo\Libraries\Storage\Query\DataClassParameters;
+use Chamilo\Libraries\Storage\Query\StorageParameters;
 use Chamilo\Libraries\Storage\Query\OrderBy;
 use Chamilo\Libraries\Storage\Query\OrderProperty;
 use Chamilo\Libraries\Storage\Query\Variable\PropertyConditionVariable;
@@ -47,7 +47,7 @@ class FeedbackRepository
     )
     {
         return $this->getDataClassRepository()->count(
-            Feedback::class, new DataClassParameters(
+            Feedback::class, new StorageParameters(
                 condition: $this->getFeedbackConditions(
                     $publicationIdentifier, $complexContentObjectIdentifier, $userIdentifier
                 )
@@ -81,7 +81,7 @@ class FeedbackRepository
         int $count = null, int $offset = null
     )
     {
-        $parameters = new DataClassParameters(
+        $parameters = new StorageParameters(
             condition: $this->getFeedbackConditions(
                 $publicationIdentifier, $complexContentObjectIdentifier, $userIdentifier
             ), orderBy: new OrderBy([
