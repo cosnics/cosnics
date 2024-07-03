@@ -6,9 +6,9 @@ use Chamilo\Libraries\Storage\DataManager\Doctrine\Service\ConditionPartTranslat
 use Chamilo\Libraries\Storage\DataManager\Doctrine\Service\QueryBuilderConfigurator;
 use Chamilo\Libraries\Storage\DataManager\Interfaces\DataClassDatabaseInterface;
 use Chamilo\Libraries\Storage\DataManager\StorageAliasGenerator;
-use Chamilo\Libraries\Storage\Exception\Database\StorageLastInsertedIdentifierException;
-use Chamilo\Libraries\Storage\Exception\Database\StorageMethodException;
-use Chamilo\Libraries\Storage\Exception\Database\StorageNoResultException;
+use Chamilo\Libraries\Storage\Exception\StorageLastInsertedIdentifierException;
+use Chamilo\Libraries\Storage\Exception\StorageMethodException;
+use Chamilo\Libraries\Storage\Exception\StorageNoResultException;
 use Chamilo\Libraries\Storage\Query\Condition\Condition;
 use Chamilo\Libraries\Storage\Query\DataClassParameters;
 use Chamilo\Libraries\Storage\Query\UpdateProperties;
@@ -52,7 +52,7 @@ class DataClassDatabase implements DataClassDatabaseInterface
     }
 
     /**
-     * @throws \Chamilo\Libraries\Storage\Exception\Database\StorageMethodException
+     * @throws \Chamilo\Libraries\Storage\Exception\StorageMethodException
      */
     protected function __retrieve(string $dataClassStorageUnitName, DataClassParameters $parameters): Result
     {
@@ -85,7 +85,7 @@ class DataClassDatabase implements DataClassDatabaseInterface
     }
 
     /**
-     * @throws \Chamilo\Libraries\Storage\Exception\Database\StorageMethodException
+     * @throws \Chamilo\Libraries\Storage\Exception\StorageMethodException
      */
     public function count(string $dataClassStorageUnitName, DataClassParameters $parameters): int
     {
@@ -109,7 +109,7 @@ class DataClassDatabase implements DataClassDatabaseInterface
 
     /**
      * @return int[]
-     * @throws \Chamilo\Libraries\Storage\Exception\Database\StorageMethodException
+     * @throws \Chamilo\Libraries\Storage\Exception\StorageMethodException
      */
     public function countGrouped(string $dataClassStorageUnitName, DataClassParameters $parameters): array
     {
@@ -137,7 +137,7 @@ class DataClassDatabase implements DataClassDatabaseInterface
     }
 
     /**
-     * @throws \Chamilo\Libraries\Storage\Exception\Database\StorageMethodException
+     * @throws \Chamilo\Libraries\Storage\Exception\StorageMethodException
      */
     public function create(string $dataClassStorageUnitName, array $record): bool
     {
@@ -156,7 +156,7 @@ class DataClassDatabase implements DataClassDatabaseInterface
     }
 
     /**
-     * @throws \Chamilo\Libraries\Storage\Exception\Database\StorageMethodException
+     * @throws \Chamilo\Libraries\Storage\Exception\StorageMethodException
      */
     public function delete(string $dataClassStorageUnitName, ?Condition $condition = null): bool
     {
@@ -185,7 +185,7 @@ class DataClassDatabase implements DataClassDatabaseInterface
 
     /**
      * @return string[]
-     * @throws \Chamilo\Libraries\Storage\Exception\Database\StorageMethodException
+     * @throws \Chamilo\Libraries\Storage\Exception\StorageMethodException
      */
     public function distinct(string $dataClassStorageUnitName, DataClassParameters $parameters): array
     {
@@ -266,7 +266,7 @@ class DataClassDatabase implements DataClassDatabaseInterface
     }
 
     /**
-     * @throws \Chamilo\Libraries\Storage\Exception\Database\StorageLastInsertedIdentifierException
+     * @throws \Chamilo\Libraries\Storage\Exception\StorageLastInsertedIdentifierException
      */
     public function getLastInsertedIdentifier(string $dataClassStorageUnitName): int
     {
@@ -305,8 +305,8 @@ class DataClassDatabase implements DataClassDatabaseInterface
     }
 
     /**
-     * @throws \Chamilo\Libraries\Storage\Exception\Database\StorageNoResultException
-     * @throws \Chamilo\Libraries\Storage\Exception\Database\StorageMethodException
+     * @throws \Chamilo\Libraries\Storage\Exception\StorageNoResultException
+     * @throws \Chamilo\Libraries\Storage\Exception\StorageMethodException
      */
     public function retrieve(string $dataClassStorageUnitName, DataClassParameters $parameters): ?array
     {
@@ -331,7 +331,7 @@ class DataClassDatabase implements DataClassDatabaseInterface
 
     /**
      * @return string[][]
-     * @throws \Chamilo\Libraries\Storage\Exception\Database\StorageMethodException
+     * @throws \Chamilo\Libraries\Storage\Exception\StorageMethodException
      */
     public function retrieves(string $dataClassStorageUnitName, DataClassParameters $parameters): array
     {
@@ -391,7 +391,7 @@ class DataClassDatabase implements DataClassDatabaseInterface
     }
 
     /**
-     * @throws \Chamilo\Libraries\Storage\Exception\Database\StorageMethodException
+     * @throws \Chamilo\Libraries\Storage\Exception\StorageMethodException
      */
     public function update(string $dataClassStorageUnitName, UpdateProperties $properties, Condition $condition): bool
     {

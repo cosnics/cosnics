@@ -60,7 +60,7 @@ class DataClassRepository
     /**
      * @param class-string<\Chamilo\Libraries\Storage\DataClass\DataClass> $dataClassName
      *
-     * @throws \Chamilo\Libraries\Storage\Exception\Database\StorageMethodException
+     * @throws \Chamilo\Libraries\Storage\Exception\StorageMethodException
      */
     protected function __count(string $dataClassName, DataClassParameters $parameters): int
     {
@@ -85,7 +85,7 @@ class DataClassRepository
     /**
      * @param class-string<\Chamilo\Libraries\Storage\DataClass\DataClass> $dataClassName
      *
-     * @throws \Chamilo\Libraries\Storage\Exception\Database\StorageMethodException
+     * @throws \Chamilo\Libraries\Storage\Exception\StorageMethodException
      */
     protected function __countGrouped(string $dataClassName, DataClassParameters $parameters): array
     {
@@ -100,7 +100,7 @@ class DataClassRepository
     /**
      * @param class-string<\Chamilo\Libraries\Storage\DataClass\DataClass> $dataClassName
      *
-     * @throws \Chamilo\Libraries\Storage\Exception\Database\StorageMethodException
+     * @throws \Chamilo\Libraries\Storage\Exception\StorageMethodException
      */
     protected function __distinct(string $dataClassName, DataClassParameters $parameters): array
     {
@@ -112,7 +112,7 @@ class DataClassRepository
     }
 
     /**
-     * @throws \Chamilo\Libraries\Storage\Exception\Database\StorageMethodException
+     * @throws \Chamilo\Libraries\Storage\Exception\StorageMethodException
      */
     protected function __expandRecordsWithAdditionalProperties(string $dataClassName, array $records): array
     {
@@ -183,8 +183,8 @@ class DataClassRepository
      * @param class-string<\Chamilo\Libraries\Storage\DataClass\DataClass> $dataClassName
      *
      * @return ?string[]
-     * @throws \Chamilo\Libraries\Storage\Exception\Database\StorageMethodException
-     * @throws \Chamilo\Libraries\Storage\Exception\Database\StorageNoResultException
+     * @throws \Chamilo\Libraries\Storage\Exception\StorageMethodException
+     * @throws \Chamilo\Libraries\Storage\Exception\StorageNoResultException
      */
     protected function __record(string $dataClassName, DataClassParameters $parameters): ?array
     {
@@ -207,7 +207,7 @@ class DataClassRepository
     /**
      * @param class-string<\Chamilo\Libraries\Storage\DataClass\DataClass> $dataClassName
      *
-     * @throws \Chamilo\Libraries\Storage\Exception\Database\StorageMethodException
+     * @throws \Chamilo\Libraries\Storage\Exception\StorageMethodException
      */
     protected function __records(string $dataClassName, DataClassParameters $parameters): ArrayCollection
     {
@@ -232,8 +232,8 @@ class DataClassRepository
      * @param class-string<tInternalRetrieveClass> $dataClassName
      *
      * @return ?tInternalRetrieveClass
-     * @throws \Chamilo\Libraries\Storage\Exception\Database\StorageMethodException
-     * @throws \Chamilo\Libraries\Storage\Exception\Database\StorageNoResultException
+     * @throws \Chamilo\Libraries\Storage\Exception\StorageMethodException
+     * @throws \Chamilo\Libraries\Storage\Exception\StorageNoResultException
      */
     protected function __retrieve(string $dataClassName, DataClassParameters $parameters)
     {
@@ -249,7 +249,7 @@ class DataClassRepository
      * @param \Chamilo\Libraries\Storage\Query\DataClassParameters $parameters
      *
      * @return ArrayCollection<tInternalRetrievesClass>
-     * @throws \Chamilo\Libraries\Storage\Exception\Database\StorageMethodException
+     * @throws \Chamilo\Libraries\Storage\Exception\StorageMethodException
      */
     protected function __retrieves(string $dataClassName, DataClassParameters $parameters): ArrayCollection
     {
@@ -344,7 +344,7 @@ class DataClassRepository
     }
 
     /**
-     * @throws \Chamilo\Libraries\Storage\Exception\Database\StorageMethodException
+     * @throws \Chamilo\Libraries\Storage\Exception\StorageMethodException
      */
     public function count(string $dataClassName, DataClassParameters $parameters = new DataClassParameters()): int
     {
@@ -362,7 +362,7 @@ class DataClassRepository
 
     /**
      * @return int[]
-     * @throws \Chamilo\Libraries\Storage\Exception\Database\StorageMethodException
+     * @throws \Chamilo\Libraries\Storage\Exception\StorageMethodException
      */
     public function countGrouped(
         string $dataClassName, DataClassParameters $parameters = new DataClassParameters()
@@ -381,8 +381,8 @@ class DataClassRepository
     }
 
     /**
-     * @throws \Chamilo\Libraries\Storage\Exception\Database\StorageLastInsertedIdentifierException
-     * @throws \Chamilo\Libraries\Storage\Exception\Database\StorageMethodException
+     * @throws \Chamilo\Libraries\Storage\Exception\StorageLastInsertedIdentifierException
+     * @throws \Chamilo\Libraries\Storage\Exception\StorageMethodException
      */
     public function create(DataClass $dataClass): bool
     {
@@ -428,7 +428,7 @@ class DataClassRepository
     /**
      * @param class-string<\Chamilo\Libraries\Storage\DataClass\DataClass> $dataClassName
      *
-     * @throws \Chamilo\Libraries\Storage\Exception\Database\StorageMethodException
+     * @throws \Chamilo\Libraries\Storage\Exception\StorageMethodException
      */
     public function createRecord(string $dataClassName, array $record): bool
     {
@@ -436,7 +436,7 @@ class DataClassRepository
     }
 
     /**
-     * @throws \Chamilo\Libraries\Storage\Exception\Database\StorageMethodException
+     * @throws \Chamilo\Libraries\Storage\Exception\StorageMethodException
      */
     public function delete(DataClass $dataClass): bool
     {
@@ -453,7 +453,7 @@ class DataClassRepository
     /**
      * @param class-string<\Chamilo\Libraries\Storage\DataClass\DataClass> $dataClassName
      *
-     * @throws \Chamilo\Libraries\Storage\Exception\Database\StorageMethodException
+     * @throws \Chamilo\Libraries\Storage\Exception\StorageMethodException
      */
     public function deletes(string $dataClassName, Condition $condition): bool
     {
@@ -490,8 +490,8 @@ class DataClassRepository
     }
 
     /**
-     * @throws \Chamilo\Libraries\Storage\Exception\Database\StorageNoResultException
-     * @throws \Chamilo\Libraries\Storage\Exception\Database\StorageMethodException
+     * @throws \Chamilo\Libraries\Storage\Exception\StorageNoResultException
+     * @throws \Chamilo\Libraries\Storage\Exception\StorageMethodException
      */
     protected function determineDataExtensionClassName(string $dataClassName, DataClassParameters $parameters): string
     {
@@ -509,7 +509,7 @@ class DataClassRepository
 
     /**
      * @return string[]
-     * @throws \Chamilo\Libraries\Storage\Exception\Database\StorageMethodException
+     * @throws \Chamilo\Libraries\Storage\Exception\StorageMethodException
      */
     public function distinct(string $dataClassName, DataClassParameters $parameters = new DataClassParameters()): array
     {
@@ -546,7 +546,7 @@ class DataClassRepository
     }
 
     /**
-     * @throws \Chamilo\Libraries\Storage\Exception\Database\StorageMethodException
+     * @throws \Chamilo\Libraries\Storage\Exception\StorageMethodException
      */
     public function moveDisplayOrders(
         string $dataClassName, string $displayOrderProperty, ?int $start = 1, ?int $end = null,
@@ -612,8 +612,8 @@ class DataClassRepository
     }
 
     /**
-     * @throws \Chamilo\Libraries\Storage\Exception\Database\StorageNoResultException
-     * @throws \Chamilo\Libraries\Storage\Exception\Database\StorageMethodException
+     * @throws \Chamilo\Libraries\Storage\Exception\StorageNoResultException
+     * @throws \Chamilo\Libraries\Storage\Exception\StorageMethodException
      */
     public function record(string $dataClassName, DataClassParameters $parameters = new DataClassParameters()): ?array
     {
@@ -634,7 +634,7 @@ class DataClassRepository
      * @param \Chamilo\Libraries\Storage\Query\DataClassParameters $parameters
      *
      * @return \Doctrine\Common\Collections\ArrayCollection<string[]>
-     * @throws \Chamilo\Libraries\Storage\Exception\Database\StorageMethodException
+     * @throws \Chamilo\Libraries\Storage\Exception\StorageMethodException
      */
     public function records(
         string $dataClassName, DataClassParameters $parameters = new DataClassParameters()
@@ -661,8 +661,8 @@ class DataClassRepository
      * @param class-string<retrieveDataClassName> $dataClassName
      *
      * @return ?retrieveDataClassName
-     * @throws \Chamilo\Libraries\Storage\Exception\Database\StorageMethodException
-     * @throws \Chamilo\Libraries\Storage\Exception\Database\StorageNoResultException
+     * @throws \Chamilo\Libraries\Storage\Exception\StorageMethodException
+     * @throws \Chamilo\Libraries\Storage\Exception\StorageNoResultException
      */
     public function retrieve(
         string $dataClassName, DataClassParameters $parameters = new DataClassParameters()
@@ -687,8 +687,8 @@ class DataClassRepository
      * @param string $identifier
      *
      * @return ?retrieveById
-     * @throws \Chamilo\Libraries\Storage\Exception\Database\StorageMethodException
-     * @throws \Chamilo\Libraries\Storage\Exception\Database\StorageNoResultException
+     * @throws \Chamilo\Libraries\Storage\Exception\StorageMethodException
+     * @throws \Chamilo\Libraries\Storage\Exception\StorageNoResultException
      */
     public function retrieveById(string $dataClassName, string $identifier)
     {
@@ -698,8 +698,8 @@ class DataClassRepository
     }
 
     /**
-     * @throws \Chamilo\Libraries\Storage\Exception\Database\StorageNoResultException
-     * @throws \Chamilo\Libraries\Storage\Exception\Database\StorageMethodException
+     * @throws \Chamilo\Libraries\Storage\Exception\StorageNoResultException
+     * @throws \Chamilo\Libraries\Storage\Exception\StorageMethodException
      */
     public function retrieveMaximumValue(string $dataClassName, string $property, ?Condition $condition = null): int
     {
@@ -720,8 +720,8 @@ class DataClassRepository
     }
 
     /**
-     * @throws \Chamilo\Libraries\Storage\Exception\Database\StorageNoResultException
-     * @throws \Chamilo\Libraries\Storage\Exception\Database\StorageMethodException
+     * @throws \Chamilo\Libraries\Storage\Exception\StorageNoResultException
+     * @throws \Chamilo\Libraries\Storage\Exception\StorageMethodException
      */
     public function retrieveNextValue(string $dataClassName, string $property, ?Condition $condition = null): int
     {
@@ -735,7 +735,7 @@ class DataClassRepository
      * @param \Chamilo\Libraries\Storage\Query\DataClassParameters $parameters
      *
      * @return ArrayCollection<tRetrieves>
-     * @throws \Chamilo\Libraries\Storage\Exception\Database\StorageMethodException
+     * @throws \Chamilo\Libraries\Storage\Exception\StorageMethodException
      */
     public function retrieves(
         string $dataClassName, DataClassParameters $parameters = new DataClassParameters()
@@ -765,7 +765,7 @@ class DataClassRepository
     }
 
     /**
-     * @throws \Chamilo\Libraries\Storage\Exception\Database\StorageMethodException
+     * @throws \Chamilo\Libraries\Storage\Exception\StorageMethodException
      */
     public function update(DataClass $dataClass): bool
     {
@@ -797,7 +797,7 @@ class DataClassRepository
     /**
      * @param class-string<\Chamilo\Libraries\Storage\DataClass\DataClass> $dataClassName
      *
-     * @throws \Chamilo\Libraries\Storage\Exception\Database\StorageMethodException
+     * @throws \Chamilo\Libraries\Storage\Exception\StorageMethodException
      */
     public function updates(string $dataClassName, UpdateProperties $properties, Condition $condition): bool
     {

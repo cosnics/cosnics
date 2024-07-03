@@ -1,5 +1,5 @@
 <?php
-namespace Chamilo\Libraries\Storage\Exception\Database;
+namespace Chamilo\Libraries\Storage\Exception;
 
 use Exception;
 

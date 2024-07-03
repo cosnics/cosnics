@@ -34,6 +34,9 @@ class SubselectConditionTranslator extends ConditionTranslator
 
         $string[] = 'FROM';
 
+        /**
+         * @var class-string<\Chamilo\Libraries\Storage\DataClass\DataClass> $class
+         */
         $class = $subselectCondition->getSubselectConditionVariable()->getDataClassName();
 
         $string[] = $class::getStorageUnitName();
