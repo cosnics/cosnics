@@ -9,6 +9,7 @@ use Chamilo\Configuration\Storage\DataClass\Registration;
 use Chamilo\Core\User\Storage\DataClass\User;
 use Chamilo\Libraries\Architecture\ActionResult;
 use Chamilo\Libraries\Architecture\ClassnameUtilities;
+use Chamilo\Libraries\Storage\Architecture\Exceptions\StorageNoResultException;
 use ReflectionClass;
 
 /**
@@ -104,6 +105,8 @@ class AvailabilityService
      * @param string $calendarIdentifier
      *
      * @return \Chamilo\Application\Calendar\Storage\DataClass\Availability
+     * @throws \Chamilo\Libraries\Storage\Architecture\Exceptions\StorageMethodException
+     * @throws \Chamilo\Libraries\Storage\Architecture\Exceptions\StorageNoResultException
      */
     public function getAvailabilityByUserAndCalendarTypeAndCalendarIdentifier(
         User $user, $calendarType, $calendarIdentifier
@@ -120,6 +123,14 @@ class AvailabilityService
     public function getAvailabilityRepository()
     {
         return $this->availabilityRepository;
+    }
+
+    /**
+     * @param \Chamilo\Application\Calendar\Repository\AvailabilityRepository $availabilityRepository
+     */
+    public function setAvailabilityRepository(AvailabilityRepository $availabilityRepository)
+    {
+        $this->availabilityRepository = $availabilityRepository;
     }
 
     /**
@@ -180,16 +191,24 @@ class AvailabilityService
      * @param string $calendarIdentifier
      *
      * @return bool
+     * @throws \Chamilo\Libraries\Storage\Architecture\Exceptions\StorageMethodException
      */
     public function isAvailableForUserAndCalendarTypeAndCalendarIdentifier(
         User $user, $calendarType, $calendarIdentifier
     )
     {
-        $availability = $this->getAvailabilityByUserAndCalendarTypeAndCalendarIdentifier(
-            $user, $calendarType, $calendarIdentifier
-        );
+        try
+        {
+            $availability = $this->getAvailabilityByUserAndCalendarTypeAndCalendarIdentifier(
+                $user, $calendarType, $calendarIdentifier
+            );
 
-        return !$availability instanceof Availability || $availability->getAvailability() == 1;
+            return $availability->getAvailability() == 1;
+        }
+        catch (StorageNoResultException $exception)
+        {
+            return false;
+        }
     }
 
     /**
@@ -228,20 +247,21 @@ class AvailabilityService
      * @param bool $isAvailable
      *
      * @return \Chamilo\Application\Calendar\Storage\DataClass\Availability
+     * @throws \Chamilo\Libraries\Storage\Architecture\Exceptions\StorageMethodException
      */
     public function setAvailability(User $user, $calendarType, $calendarIdentifier, $isAvailable = true, $colour = null)
     {
-        $availability = $this->getAvailabilityByUserAndCalendarTypeAndCalendarIdentifier(
-            $user, $calendarType, $calendarIdentifier
-        );
-
-        if ($availability instanceof Availability)
+        try
         {
+            $availability = $this->getAvailabilityByUserAndCalendarTypeAndCalendarIdentifier(
+                $user, $calendarType, $calendarIdentifier
+            );
+
             return $this->updateAvailability(
                 $availability, $user, $calendarType, $calendarIdentifier, $isAvailable, $colour
             );
         }
-        else
+        catch (StorageNoResultException)
         {
             return $this->createAvailability($user, $calendarType, $calendarIdentifier, $isAvailable, $colour);
         }
@@ -264,14 +284,6 @@ class AvailabilityService
         $availability->setCalendarId($calendarIdentifier);
         $availability->setAvailability($isAvailable);
         $availability->setColour($colour);
-    }
-
-    /**
-     * @param \Chamilo\Application\Calendar\Repository\AvailabilityRepository $availabilityRepository
-     */
-    public function setAvailabilityRepository(AvailabilityRepository $availabilityRepository)
-    {
-        $this->availabilityRepository = $availabilityRepository;
     }
 
     /**

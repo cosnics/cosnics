@@ -94,9 +94,13 @@ class AvailabilityRepository
         );
     }
 
+    /**
+     * @throws \Chamilo\Libraries\Storage\Architecture\Exceptions\StorageNoResultException
+     * @throws \Chamilo\Libraries\Storage\Architecture\Exceptions\StorageMethodException
+     */
     public function findAvailabilityByUserAndCalendarTypeAndCalendarIdentifier(
         User $user, string $calendarType, string $calendarIdentifier
-    ): ?Availability
+    ): Availability
     {
         $conditions = [];
         $conditions[] = new EqualityCondition(

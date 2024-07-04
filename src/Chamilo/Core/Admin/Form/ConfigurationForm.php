@@ -247,7 +247,7 @@ class ConfigurationForm extends FormValidator
 
     protected function getUser(): ?User
     {
-        return $this->getService(User::class);
+        return $this->getService('Chamilo\Core\User\CurrentUser');
     }
 
     protected function isHidden($setting): bool
@@ -451,7 +451,9 @@ class ConfigurationForm extends FormValidator
                     if ($settingsConnector instanceof SettingsConnectorInterface &&
                         method_exists($settingsConnector, $setting['availability']['source']))
                     {
-                        return $settingsConnector->$setting['availability']['source']();
+                        $methodName = $setting['availability']['source'];
+
+                        return $settingsConnector->$methodName();
                     }
                     else
                     {

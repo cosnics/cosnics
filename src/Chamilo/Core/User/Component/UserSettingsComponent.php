@@ -32,12 +32,7 @@ class UserSettingsComponent extends ProfileComponent
     public function run()
     {
         $this->checkAuthorization(Manager::CONTEXT, 'ManageAccount');
-        $this->context = $this->getRequest()->query->get(self::PARAM_CONTEXT);
-
-        if (!$this->context)
-        {
-            $this->context = \Chamilo\Core\Admin\Manager::CONTEXT;
-        }
+        $this->context = $this->getRequest()->query->get(self::PARAM_CONTEXT, \Chamilo\Core\Admin\Manager::CONTEXT);
 
         if (!$this->getRegistrationConsulter()->isContextRegisteredAndActive($this->context))
         {

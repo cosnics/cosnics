@@ -92,6 +92,7 @@ class Bootstrap
 
     protected function startSession(): Bootstrap
     {
+        ini_set('session.gc_probability', 1);
         $this->getSession()->start();
         $this->getRequest()->setSession($this->getSession());
 

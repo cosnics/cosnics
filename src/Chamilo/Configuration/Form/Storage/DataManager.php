@@ -4,6 +4,7 @@ namespace Chamilo\Configuration\Form\Storage;
 use Chamilo\Configuration\Form\Storage\DataClass\Element;
 use Chamilo\Configuration\Form\Storage\DataClass\Option;
 use Chamilo\Libraries\Storage\Query\Condition\EqualityCondition;
+use Chamilo\Libraries\Storage\Query\OrderBy;
 use Chamilo\Libraries\Storage\Query\Variable\PropertyConditionVariable;
 use Chamilo\Libraries\Storage\Query\Variable\StaticConditionVariable;
 use Chamilo\Libraries\Storage\StorageParameters;
@@ -29,7 +30,7 @@ class DataManager extends \Chamilo\Libraries\Storage\Repository\DataManager
     }
 
     public static function retrieve_dynamic_form_elements(
-        $condition = null, $offset = null, $count = null, $order_property = null
+        $condition = null, $offset = null, $count = null, ?OrderBy $order_property = new OrderBy()
     )
     {
         $parameters = new StorageParameters(
