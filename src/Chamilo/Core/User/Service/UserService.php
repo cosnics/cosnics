@@ -23,6 +23,7 @@ use Chamilo\Libraries\File\WebPathBuilder;
 use Chamilo\Libraries\Hashing\HashingUtilities;
 use Chamilo\Libraries\Mail\Mailer\MailerInterface;
 use Chamilo\Libraries\Mail\ValueObject\Mail;
+use Chamilo\Libraries\Storage\Architecture\Exceptions\StorageNoResultException;
 use Chamilo\Libraries\Storage\DataClass\DataClass;
 use Chamilo\Libraries\Storage\Query\Condition\AndCondition;
 use Chamilo\Libraries\Storage\Query\Condition\Condition;
@@ -682,7 +683,16 @@ class UserService
 
     public function isUsernameAvailable(string $username): bool
     {
-        return !$this->findUserByUsername($username) instanceof User;
+        try
+        {
+            $this->findUserByUsername($username);
+
+            return false;
+        }
+        catch (StorageNoResultException)
+        {
+            return true;
+        }
     }
 
     public function isValidKeyForUser(string $requestKey, User $user): bool
