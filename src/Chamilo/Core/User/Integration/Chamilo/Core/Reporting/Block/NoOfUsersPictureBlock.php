@@ -5,7 +5,6 @@ use Chamilo\Core\Reporting\ReportingData;
 use Chamilo\Core\Reporting\Viewer\Rendition\Block\Type\Html;
 use Chamilo\Core\User\Storage\DataClass\User;
 use Chamilo\Libraries\Storage\Repository\DataManager;
-use Chamilo\Libraries\Storage\StorageParameters;
 use Chamilo\Libraries\Translation\Translation;
 
 class NoOfUsersPictureBlock extends Block
@@ -14,9 +13,7 @@ class NoOfUsersPictureBlock extends Block
     public function count_data()
     {
         $reporting_data = new ReportingData();
-        $users = DataManager::retrieves(
-            User::class, new StorageParameters()
-        );
+        $users = DataManager::retrieves(User::class);
         $picturetext = Translation::get('Picture');
         $nopicturetext = Translation::get('NoPicture');
         $picture[$picturetext] = 0;

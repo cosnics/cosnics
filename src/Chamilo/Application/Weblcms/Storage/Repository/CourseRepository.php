@@ -473,7 +473,7 @@ class CourseRepository implements CourseRepositoryInterface
      */
     public function findToolRegistrations()
     {
-        return DataManager::retrieves(CourseTool::class, new StorageParameters());
+        return DataManager::retrieves(CourseTool::class);
     }
 
     /**

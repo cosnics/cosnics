@@ -71,9 +71,7 @@ class EntityConditionService
         }
         else
         {
-            $dataClassInstances = DataManager::retrieves(
-                $entity->getDataClassName(), new StorageParameters()
-            );
+            $dataClassInstances = DataManager::retrieves($entity->getDataClassName());
 
             foreach ($dataClassInstances as $dataClassInstance)
             {

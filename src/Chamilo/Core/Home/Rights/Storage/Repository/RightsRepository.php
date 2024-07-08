@@ -68,9 +68,7 @@ class RightsRepository
      */
     public function findBlockTypeTargetEntities(): ArrayCollection
     {
-        return $this->getDataClassRepository()->retrieves(
-            BlockTypeTargetEntity::class, new StorageParameters()
-        );
+        return $this->getDataClassRepository()->retrieves(BlockTypeTargetEntity::class);
     }
 
     /**
@@ -148,9 +146,7 @@ class RightsRepository
      */
     public function findElementTargetEntities(): ArrayCollection
     {
-        return $this->getDataClassRepository()->retrieves(
-            ElementTargetEntity::class, new StorageParameters()
-        );
+        return $this->getDataClassRepository()->retrieves(ElementTargetEntity::class);
     }
 
     /**

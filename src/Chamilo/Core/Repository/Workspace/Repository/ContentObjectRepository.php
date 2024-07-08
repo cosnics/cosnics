@@ -94,7 +94,7 @@ class ContentObjectRepository
      *
      * @return \Doctrine\Common\Collections\ArrayCollection<\Chamilo\Core\Repository\Storage\DataClass\ContentObject>
      */
-    public function findAll($contentObjectClassName, StorageParameters $parameters)
+    public function findAll($contentObjectClassName, StorageParameters $parameters = new StorageParameters())
     {
         return DataManager::retrieves($contentObjectClassName, $parameters);
     }

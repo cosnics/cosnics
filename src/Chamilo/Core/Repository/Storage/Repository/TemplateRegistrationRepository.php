@@ -49,9 +49,7 @@ class TemplateRegistrationRepository
      */
     public function findTemplateRegistrations()
     {
-        return $this->getDataClassRepository()->retrieves(
-            TemplateRegistration::class, new StorageParameters()
-        );
+        return $this->getDataClassRepository()->retrieves(TemplateRegistration::class);
     }
 
     /**

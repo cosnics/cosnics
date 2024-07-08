@@ -19,7 +19,7 @@ class NoOfCoursesByLanguageBlock extends CourseBlock
     {
         $reporting_data = new ReportingData();
         $arr = [];
-        $courses = CourseDataManager::retrieves(Course::class, new StorageParameters());
+        $courses = CourseDataManager::retrieves(Course::class);
         
         $categories = [];
         

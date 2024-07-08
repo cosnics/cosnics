@@ -181,7 +181,7 @@ class LearningPathService
     public function getLearningPaths()
     {
         /** @var LearningPath[] $learningPaths */
-        $learningPaths = $this->contentObjectRepository->findAll(LearningPath::class, new StorageParameters());
+        $learningPaths = $this->contentObjectRepository->findAll(LearningPath::class);
 
         return $learningPaths;
     }

@@ -155,7 +155,7 @@ class ToolInstaller extends Installer
     protected function install_tool_for_existing_course_types(): bool
     {
         $translator = $this->getTranslator();
-        $course_types = CourseTypeDataManager::retrieves(CourseType::class, new StorageParameters());
+        $course_types = CourseTypeDataManager::retrieves(CourseType::class);
 
         foreach ($course_types as $course_type)
         {
@@ -187,7 +187,7 @@ class ToolInstaller extends Installer
     {
         $translator = $this->getTranslator();
         $course_management_rights = CourseManagementRights::getInstance();
-        $courses = CourseDataManager::retrieves(Course::class, new StorageParameters());
+        $courses = CourseDataManager::retrieves(Course::class);
 
         foreach ($courses as $course)
         {

@@ -2,6 +2,7 @@
 namespace Chamilo\Libraries\Format\Tabs;
 
 use Chamilo\Libraries\Platform\ChamiloRequest;
+use Symfony\Component\HttpFoundation\Exception\BadRequestException;
 
 class GenericTabsRenderer
 {
@@ -27,19 +28,22 @@ class GenericTabsRenderer
      */
     protected function getSelectedTab(string $name, TabsCollection $tabs): ?string
     {
-        $selectedTabs = $this->getRequest()->query->get(self::PARAM_SELECTED_TAB);
-
-        if (is_array($selectedTabs))
+        try
         {
+            $selectedTabs = $this->getRequest()->query->all(self::PARAM_SELECTED_TAB);
             $selectedTab = $selectedTabs[$name];
 
             if (!is_null($selectedTab) && $tabs->isValidIdentifier($selectedTab))
             {
                 return $selectedTab;
             }
-        }
 
-        return null;
+            return null;
+        }
+        catch (BadRequestException)
+        {
+            return null;
+        }
     }
 
     /**

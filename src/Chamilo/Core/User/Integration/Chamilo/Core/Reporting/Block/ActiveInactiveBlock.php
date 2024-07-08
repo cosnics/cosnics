@@ -14,9 +14,7 @@ class ActiveInactiveBlock extends Block
     public function count_data()
     {
         $reporting_data = new ReportingData();
-        $users = DataManager::retrieves(
-            User::class, new StorageParameters()
-        );
+        $users = DataManager::retrieves(User::class);
         $active[Translation::get('Active')] = 0;
         $active[Translation::get('Inactive')] = 0;
         foreach ($users as $user)

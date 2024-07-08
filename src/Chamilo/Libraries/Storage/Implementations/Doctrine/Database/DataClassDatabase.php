@@ -272,7 +272,14 @@ class DataClassDatabase implements DataClassDatabaseInterface
     {
         try
         {
-            return $this->getConnection()->lastInsertId($dataClassStorageUnitName);
+            $lastInsertedId = $this->getConnection()->lastInsertId($dataClassStorageUnitName);
+
+            if (!$lastInsertedId)
+            {
+                $lastInsertedId = $this->getConnection()->lastInsertId();
+            }
+
+            return $lastInsertedId;
         }
         catch (Throwable $throwable)
         {

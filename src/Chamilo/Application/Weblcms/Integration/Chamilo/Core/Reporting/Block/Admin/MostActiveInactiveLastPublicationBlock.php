@@ -22,7 +22,7 @@ class MostActiveInactiveLastPublicationBlock extends CourseBlock
     public function count_data()
     {
         $reporting_data = new ReportingData();
-        $courses = CourseDataManager::retrieves(Course::class, new StorageParameters());
+        $courses = CourseDataManager::retrieves(Course::class);
 
         $arr[Translation::get('Past24hr')] = 0;
         $arr[Translation::get('PastWeek')] = 0;

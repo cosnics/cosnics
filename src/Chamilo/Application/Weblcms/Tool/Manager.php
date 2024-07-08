@@ -612,9 +612,7 @@ abstract class Manager extends Application
     {
         $tools = [];
 
-        $course_tools = DataManager::retrieves(
-            CourseTool::class, new StorageParameters()
-        );
+        $course_tools = DataManager::retrieves(CourseTool::class);
 
         $edit_right = $this->is_allowed(WeblcmsRights::EDIT_RIGHT);
 

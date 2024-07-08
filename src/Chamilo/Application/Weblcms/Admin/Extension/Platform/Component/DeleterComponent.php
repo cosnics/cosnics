@@ -96,7 +96,7 @@ class DeleterComponent extends Manager
                         }
                         else
                         {
-                            $count = DataManager::count(Admin::class, new StorageParameters());
+                            $count = DataManager::count(Admin::class);
 
                             if ($count > 0)
                             {
