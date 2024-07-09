@@ -58,6 +58,10 @@ class WhoIsOnlineRepository
         );
     }
 
+    /**
+     * @throws \Chamilo\Libraries\Storage\Architecture\Exceptions\StorageMethodException
+     * @throws \Chamilo\Libraries\Storage\Architecture\Exceptions\StorageNoResultException
+     */
     public function findWhoIsOnlineForUserIdentifier(string $userIdentifier): ?Online
     {
         $condition = new EqualityCondition(

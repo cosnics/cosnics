@@ -1,13 +1,13 @@
 <?php
 namespace Chamilo\Libraries\Storage\Architecture\Exceptions;
 
-use Exception;
+use Chamilo\Libraries\Architecture\Exceptions\UserException;
 
 /**
  * @package Chamilo\Libraries\Storage\Exception\Database
  * @author Hans De Bisschop <hans.de.bisschop@ehb.be>
  */
-class StorageMethodException extends Exception
+class StorageMethodException extends UserException
 {
     protected string $dataClassStorageUnitName;
 
@@ -30,7 +30,7 @@ class StorageMethodException extends Exception
             $message .= '[' . $query . ']';
         }
 
-        $message .= ' failed with the following message:' . $exceptionMessage;
+        $message .= ' failed. ' . $exceptionMessage;
 
         parent::__construct($message);
     }

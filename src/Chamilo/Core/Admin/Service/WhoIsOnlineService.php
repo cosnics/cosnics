@@ -3,6 +3,7 @@ namespace Chamilo\Core\Admin\Service;
 
 use Chamilo\Core\Admin\Repository\WhoIsOnlineRepository;
 use Chamilo\Core\Admin\Storage\DataClass\Online;
+use Chamilo\Libraries\Storage\Architecture\Exceptions\StorageNoResultException;
 
 /**
  * @package Chamilo\Core\Admin\Service
@@ -36,6 +37,10 @@ class WhoIsOnlineService
         return $this->getWhoIsOnlineRepository()->findDistinctOnlineUserIdentifiers();
     }
 
+    /**
+     * @throws \Chamilo\Libraries\Storage\Architecture\Exceptions\StorageNoResultException
+     * @throws \Chamilo\Libraries\Storage\Architecture\Exceptions\StorageMethodException
+     */
     public function findWhoIsOnlineForUserIdentifier(string $userIdentifier): ?Online
     {
         return $this->getWhoIsOnlineRepository()->findWhoIsOnlineForUserIdentifier($userIdentifier);
@@ -51,20 +56,23 @@ class WhoIsOnlineService
         return $this->getWhoIsOnlineRepository()->updateWhoIsOnline($online);
     }
 
+    /**
+     * @throws \Chamilo\Libraries\Storage\Architecture\Exceptions\StorageMethodException
+     */
     public function updateWhoIsOnlineForUserIdentifierWithCurrentTime(?string $userIdentifier): bool
     {
         $time = time();
 
-        $online = $this->findWhoIsOnlineForUserIdentifier($userIdentifier);
-
-        if ($online instanceof Online)
+        try
         {
+            $online = $this->findWhoIsOnlineForUserIdentifier($userIdentifier);
+
             $online->setUserId($userIdentifier);
             $online->setLastAccessDate($time);
 
             return $this->updateWhoIsOnline($online);
         }
-        else
+        catch (StorageNoResultException)
         {
             return $this->createWhoIsOnlineForUserIdentifierAndLastAccessDate($userIdentifier, $time);
         }

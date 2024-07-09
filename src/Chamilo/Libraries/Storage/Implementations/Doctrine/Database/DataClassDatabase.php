@@ -65,9 +65,8 @@ class DataClassDatabase implements DataClassDatabaseInterface
         catch (Throwable $throwable)
         {
             $this->handleError($throwable);
-
             throw new StorageMethodException(
-                __METHOD__, $dataClassStorageUnitName, $throwable->getMessage(), $sqlQuery
+                __FUNCTION__, $dataClassStorageUnitName, $throwable->getMessage(), $sqlQuery
             );
         }
     }
@@ -102,7 +101,7 @@ class DataClassDatabase implements DataClassDatabaseInterface
             $this->handleError($throwable);
 
             throw new StorageMethodException(
-                __METHOD__, $dataClassStorageUnitName, $throwable->getMessage(), $sqlQuery
+                __FUNCTION__, $dataClassStorageUnitName, $throwable->getMessage(), $sqlQuery
             );
         }
     }
@@ -132,7 +131,7 @@ class DataClassDatabase implements DataClassDatabaseInterface
         {
             $this->handleError($throwable);
 
-            throw new StorageMethodException(__METHOD__, $dataClassStorageUnitName, $throwable->getMessage());
+            throw new StorageMethodException(__FUNCTION__, $dataClassStorageUnitName, $throwable->getMessage());
         }
     }
 
@@ -151,7 +150,7 @@ class DataClassDatabase implements DataClassDatabaseInterface
         {
             $this->handleError($throwable);
 
-            throw new StorageMethodException(__METHOD__, $dataClassStorageUnitName, $throwable->getMessage());
+            throw new StorageMethodException(__FUNCTION__, $dataClassStorageUnitName, $throwable->getMessage());
         }
     }
 
@@ -179,7 +178,7 @@ class DataClassDatabase implements DataClassDatabaseInterface
         {
             $this->handleError($throwable);
 
-            throw new StorageMethodException(__METHOD__, $dataClassStorageUnitName, $throwable->getMessage());
+            throw new StorageMethodException(__FUNCTION__, $dataClassStorageUnitName, $throwable->getMessage());
         }
     }
 
@@ -216,7 +215,7 @@ class DataClassDatabase implements DataClassDatabaseInterface
             $this->handleError($throwable);
 
             throw new StorageMethodException(
-                __METHOD__, $dataClassStorageUnitName, $throwable->getMessage(), $sqlQuery
+                __FUNCTION__, $dataClassStorageUnitName, $throwable->getMessage(), $sqlQuery
             );
         }
     }
@@ -317,22 +316,31 @@ class DataClassDatabase implements DataClassDatabaseInterface
      */
     public function retrieve(string $dataClassStorageUnitName, StorageParameters $parameters): ?array
     {
-        $statement = $this->__retrieve($dataClassStorageUnitName, $parameters);
+        $sqlQuery = $this->buildFromQuery($dataClassStorageUnitName, $parameters);
 
         try
         {
-            $record = $statement->fetchAssociative();
+            $record = $this->getConnection()->executeQuery($sqlQuery)->fetchAssociative();
 
             if ($record === false)
             {
-                throw new StorageNoResultException(__METHOD__, $dataClassStorageUnitName, $parameters);
+                throw new StorageNoResultException(
+                    __FUNCTION__, $dataClassStorageUnitName, $parameters, 'No result for query: ' . $sqlQuery
+                );
             }
 
             return $record;
         }
-        catch (\Doctrine\DBAL\Exception $exception)
+        catch (StorageNoResultException $exception)
         {
-            throw new StorageMethodException(__METHOD__, $dataClassStorageUnitName, $exception->getMessage());
+            throw $exception;
+        }
+        catch (Throwable $throwable)
+        {
+            $this->handleError($throwable);
+            throw new StorageMethodException(
+                __FUNCTION__, $dataClassStorageUnitName, $throwable->getMessage(), $sqlQuery
+            );
         }
     }
 
@@ -342,22 +350,18 @@ class DataClassDatabase implements DataClassDatabaseInterface
      */
     public function retrieves(string $dataClassStorageUnitName, StorageParameters $parameters): array
     {
-        $statement = $this->__retrieve($dataClassStorageUnitName, $parameters);
+        $sqlQuery = $this->buildFromQuery($dataClassStorageUnitName, $parameters);
 
         try
         {
-            $records = [];
-
-            while ($record = $statement->fetchAssociative())
-            {
-                $records[] = $record;
-            }
-
-            return $records;
+            return $this->getConnection()->executeQuery($sqlQuery)->fetchAllAssociative();
         }
-        catch (\Doctrine\DBAL\Exception $exception)
+        catch (Throwable $throwable)
         {
-            throw new StorageMethodException(__METHOD__, $dataClassStorageUnitName, $exception->getMessage());
+            $this->handleError($throwable);
+            throw new StorageMethodException(
+                __FUNCTION__, $dataClassStorageUnitName, $throwable->getMessage(), $sqlQuery
+            );
         }
     }
 
@@ -421,9 +425,8 @@ class DataClassDatabase implements DataClassDatabaseInterface
         catch (Throwable $throwable)
         {
             $this->handleError($throwable);
-
             throw new StorageMethodException(
-                __METHOD__, $dataClassStorageUnitName, $throwable->getMessage(), $sqlQuery
+                __FUNCTION__, $dataClassStorageUnitName, $throwable->getMessage(), $sqlQuery
             );
         }
     }

@@ -1,13 +1,13 @@
 <?php
 namespace Chamilo\Libraries\Storage\Architecture\Exceptions;
 
-use Exception;
+use Chamilo\Libraries\Architecture\Exceptions\UserException;
 
 /**
  * @package Chamilo\Libraries\Storage\Exception
  * @author Hans De Bisschop <hans.de.bisschop@ehb.be>
  */
-class StorageLastInsertedIdentifierException extends Exception
+class StorageLastInsertedIdentifierException extends UserException
 {
 
     protected string $dataClassStorageUnitName;

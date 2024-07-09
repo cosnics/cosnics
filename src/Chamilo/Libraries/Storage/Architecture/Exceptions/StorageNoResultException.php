@@ -1,14 +1,14 @@
 <?php
 namespace Chamilo\Libraries\Storage\Architecture\Exceptions;
 
+use Chamilo\Libraries\Architecture\Exceptions\UserException;
 use Chamilo\Libraries\Storage\StorageParameters;
-use Exception;
 
 /**
  * @package Chamilo\Libraries\Storage\Exception
  * @author Hans De Bisschop <hans.de.bisschop@ehb.be>
  */
-class StorageNoResultException extends Exception
+class StorageNoResultException extends UserException
 {
     protected string $dataClassStorageUnitName;
 
@@ -24,7 +24,7 @@ class StorageNoResultException extends Exception
         $this->parameters = $parameters;
 
         parent::__construct(
-            $method . ' for ' . $dataClassStorageUnitName . ' failed with the following message:' . $exceptionMessage
+            $method . ' for ' . $dataClassStorageUnitName . ' failed. ' . $exceptionMessage
         );
     }
 }
