@@ -307,6 +307,11 @@ class DataClassDatabase implements DataClassDatabaseInterface
 
     public function quote(mixed $value, ?string $type = null): mixed
     {
+        if (is_null($value))
+        {
+            return 'NULL';
+        }
+
         return $this->getConnection()->quote($value, $type);
     }
 
