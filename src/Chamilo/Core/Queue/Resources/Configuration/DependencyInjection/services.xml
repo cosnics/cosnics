@@ -7,7 +7,7 @@
                   autoconfigure="true"
                   public="true"/>
 
-        <prototype namespace="Chamilo\Core\Queue\"
+<!--        <prototype namespace="Chamilo\Core\Queue\"
                    resource="../../../{Service, Storage/Repository}/*"
                    exclude="../../../Service/Producer"/>
 
@@ -32,7 +32,7 @@
         <prototype namespace="Chamilo\Core\Queue\Console\Command\"
                    resource="../../../Console/Command/*">
             <tag name="Chamilo\Libraries\Console\Command"/>
-        </prototype>
+        </prototype>-->
 
     </services>
 </container>

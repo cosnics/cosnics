@@ -7,7 +7,7 @@
                   autoconfigure="true"
                   public="true"/>
 
-        <prototype namespace="Chamilo\Core\Notification\"
+       <!-- <prototype namespace="Chamilo\Core\Notification\"
                    resource="../../../{Service}/*"/>
 
         <service id="Chamilo\Core\Notification\Storage\Repository\NotificationRepository">
@@ -26,7 +26,7 @@
             <factory service="Doctrine\ORM\EntityManager"
                      method="getRepository"/>
             <argument>Chamilo\Core\Notification\Storage\Entity\Filter</argument>
-        </service>
+        </service>-->
 
     </services>
 </container>

@@ -102,6 +102,18 @@ class PackageContextSequencer
     }
 
     /**
+     * @param \Chamilo\Configuration\Package\Service\PackageFactory $packageFactory
+     *
+     * @return PackageContextSequencer
+     */
+    public function setPackageFactory(PackageFactory $packageFactory): PackageContextSequencer
+    {
+        $this->packageFactory = $packageFactory;
+
+        return $this;
+    }
+
+    /**
      * @param string[] $packageContexts
      * @param \Chamilo\Configuration\Package\Properties\Dependencies\Dependencies|null $dependencies
      *
@@ -140,7 +152,8 @@ class PackageContextSequencer
         {
             $package = $this->getPackageFactory()->getPackage($unprocessed_package_context);
 
-            if ($this->verifyDependency($sequence, $package->get_dependencies()))
+            if (is_null($package->get_dependencies()) ||
+                $this->verifyDependency($sequence, $package->get_dependencies()))
             {
                 $sequence[] = $unprocessed_package_context;
             }
@@ -151,18 +164,6 @@ class PackageContextSequencer
         }
 
         return $sequence;
-    }
-
-    /**
-     * @param \Chamilo\Configuration\Package\Service\PackageFactory $packageFactory
-     *
-     * @return PackageContextSequencer
-     */
-    public function setPackageFactory(PackageFactory $packageFactory): PackageContextSequencer
-    {
-        $this->packageFactory = $packageFactory;
-
-        return $this;
     }
 
     /**

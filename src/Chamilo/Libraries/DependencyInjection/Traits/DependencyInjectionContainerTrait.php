@@ -31,7 +31,6 @@ use Chamilo\Libraries\Format\Validator\ValidatorDecorator;
 use Chamilo\Libraries\Platform\ChamiloRequest;
 use Chamilo\Libraries\Storage\Repository\DataClassRepository;
 use Chamilo\Libraries\Utilities\StringUtilities;
-use Doctrine\ORM\EntityManager;
 use Monolog\Logger;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 use Symfony\Component\EventDispatcher\EventDispatcherInterface;
@@ -100,11 +99,6 @@ trait DependencyInjectionContainerTrait
     protected function getDataClassRepository(): DataClassRepository
     {
         return $this->getService('Chamilo\Libraries\Storage\Implementations\Doctrine\DataClassRepository');
-    }
-
-    public function getEntityManager(): EntityManager
-    {
-        return $this->getService(EntityManager::class);
     }
 
     public function getEventDispatcher(): EventDispatcherInterface
