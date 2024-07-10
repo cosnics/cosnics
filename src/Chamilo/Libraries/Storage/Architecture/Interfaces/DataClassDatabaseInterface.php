@@ -48,7 +48,7 @@ interface DataClassDatabaseInterface
     /**
      * @throws \Chamilo\Libraries\Storage\Architecture\Exceptions\StorageLastInsertedIdentifierException
      */
-    public function getLastInsertedIdentifier(string $dataClassStorageUnitName): int;
+    public function getLastInsertedIdentifier(string $dataClassStorageUnitName): int|string;
 
     public function quote(mixed $value, ?string $type = null): mixed;
 
