@@ -4,11 +4,9 @@ use Chamilo\Libraries\Architecture\Bootstrap\Bootstrap;
 use Chamilo\Libraries\Architecture\ErrorHandler\ExceptionLogger\ExceptionLoggerInterface;
 use Chamilo\Libraries\Console;
 use Chamilo\Libraries\DependencyInjection\DependencyInjectionContainerBuilder;
-use Doctrine\Common\Annotations\AnnotationRegistry;
 use Symfony\Component\Console\Output\ConsoleOutput;
 
 $autoloader = require __DIR__ . '/vendor/autoload.php';
-AnnotationRegistry::registerLoader([$autoloader, 'loadClass']);
 
 $container = DependencyInjectionContainerBuilder::getInstance()->createContainer();
 $container->get(Bootstrap::class)->setup();

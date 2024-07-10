@@ -19,6 +19,34 @@ abstract class DependencyInjectionBasedTestCase extends ChamiloTestCase
     protected $container;
 
     /**
+     * Returns a service from the container
+     *
+     * @param string $serviceId
+     *
+     * @return object | mixed
+     */
+    protected function getService($serviceId)
+    {
+        return $this->container->get($serviceId);
+    }
+
+    /**
+     * @return object | DataClassRepository
+     */
+    protected function getTestDataClassRepository()
+    {
+        return $this->getService('Chamilo\Libraries\Storage\Implementations\Doctrine\Test\DataClassRepository');
+    }
+
+    /**
+     * @return object | StorageUnitRepository
+     */
+    protected function getTestStorageUnitRepository()
+    {
+        return $this->getService('Chamilo\Libraries\Storage\Implementations\Doctrine\Test\StorageUnitRepository');
+    }
+
+    /**
      * Setup before each test
      */
     protected function setUp(): void
@@ -34,43 +62,5 @@ abstract class DependencyInjectionBasedTestCase extends ChamiloTestCase
     protected function tearDown(): void
     {
         unset($this->container);
-    }
-
-    /**
-     * Returns a service from the container
-     *
-     * @param string $serviceId
-     *
-     * @return object | mixed
-     */
-    protected function getService($serviceId)
-    {
-        return $this->container->get($serviceId);
-    }
-
-    /**
-     * @return object | StorageUnitRepository
-     */
-    protected function getTestStorageUnitRepository()
-    {
-        return $this->getService('Chamilo\Libraries\Storage\Implementations\Doctrine\Test\StorageUnitRepository');
-    }
-
-    /**
-     * @return object | DataClassRepository
-     */
-    protected function getTestDataClassRepository()
-    {
-        return $this->getService('Chamilo\Libraries\Storage\Implementations\Doctrine\Test\DataClassRepository');
-    }
-
-    /**
-     * Returns the test entity manager from the dependency injection container
-     *
-     * @return \Doctrine\ORM\EntityManager | object
-     */
-    public function getTestEntityManager()
-    {
-        return $this->getService('Doctrine\ORM\Test\EntityManager');
     }
 }

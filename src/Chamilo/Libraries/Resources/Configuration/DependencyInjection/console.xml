@@ -22,14 +22,6 @@
                      method="getHelperSet"/>
         </service>
 
-        <service id="Chamilo\Libraries\Console\Helper\Doctrine\ORM\EntityManager"
-                 class="Doctrine\ORM\Tools\Console\Helper\EntityManagerHelper">
-            <argument type="service"
-                      id="Doctrine\ORM\EntityManager"/>
-            <tag name="chamilo.libraries.console.helper"
-                 alias="em"/>
-        </service>
-
         <service id="Chamilo\Libraries\Console\Command\PreLoadCacheCommand">
             <tag name="Chamilo\Libraries\Console\Command"/>
         </service>

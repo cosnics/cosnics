@@ -1,6 +1,0 @@
-chamilo.libraries:
-  doctrine:
-    orm:
-      mappings:
-        default:
-          - 'Chamilo/Libraries/Test/Integration/Storage/DataManager/Doctrine/ORM'
