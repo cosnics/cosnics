@@ -82,4 +82,10 @@ class ProviderRepository extends EntityRepository
         return $this->findAll();
     }
 
+    public function getProviderByName(string $name)
+    {
+        return $this->findOneBy(['name' => $name]);
+    }
+
+
 }

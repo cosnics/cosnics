@@ -148,6 +148,18 @@ class ProviderService
         return $provider;
     }
 
+    public function getProviderByName(string $name): Provider
+    {
+        $provider = $this->providerRepository->getProviderByName($name);
+
+        if(!$provider instanceof Provider)
+        {
+            throw new \InvalidArgumentException(sprintf('The provider with name %s could not be found', $name));
+        }
+
+        return $provider;
+    }
+
     /**
      * @return Provider[]
      */
