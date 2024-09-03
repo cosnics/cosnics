@@ -133,11 +133,11 @@ class PropertyMapper
     }
 
     /**
-     * @param string[][] $records
+     * @param string[][]|ArrayCollection $records
      *
-     * @return string[][]
+     * @return string[][]|ArrayCollection
      */
-    public function groupRecordsByProperty(array $records, string $propertyName): array
+    public function groupRecordsByProperty(array|ArrayCollection $records, string $propertyName): array|ArrayCollection
     {
         $mappedRecords = [];
 
@@ -155,6 +155,11 @@ class PropertyMapper
                     $mappedRecords[$record[$propertyName]][] = $record;
                 }
             }
+        }
+
+        if ($records instanceof ArrayCollection)
+        {
+            $mappedRecords = new ArrayCollection($mappedRecords);
         }
 
         return $mappedRecords;
@@ -234,11 +239,11 @@ class PropertyMapper
     }
 
     /**
-     * @param string[][] $records
+     * @param string[][]|ArrayCollection $records
      *
-     * @return string[][]
+     * @return string[][]|ArrayCollection
      */
-    public function mapRecordsByProperty(array $records, string $propertyName): array
+    public function mapRecordsByProperty(array|ArrayCollection $records, string $propertyName): array|ArrayCollection
     {
         $mappedRecords = [];
 
@@ -250,6 +255,11 @@ class PropertyMapper
             {
                 $mappedRecords[$propertyValue] = $record;
             }
+        }
+
+        if ($records instanceof ArrayCollection)
+        {
+            $mappedRecords = new ArrayCollection($mappedRecords);
         }
 
         return $mappedRecords;
