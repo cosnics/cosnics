@@ -189,11 +189,11 @@ class PropertyMapper
     }
 
     /**
-     * @param \Chamilo\Libraries\Storage\DataClass\DataClass[]|\Doctrine\Common\Collections\ArrayCollection $dataClasses
+     * @param \Doctrine\Common\Collections\ArrayCollection|\Chamilo\Libraries\Storage\DataClass\DataClass[] $dataClasses
      *
-     * @return \Chamilo\Libraries\Storage\DataClass\DataClass[]
+     * @return \Chamilo\Libraries\Storage\DataClass\DataClass[]|ArrayCollection
      */
-    public function mapDataClassByMethod($dataClasses, string $methodName): array
+    public function mapDataClassByMethod(array|ArrayCollection $dataClasses, string $methodName): array|ArrayCollection
     {
         $mappedDataClasses = [];
 
@@ -205,6 +205,11 @@ class PropertyMapper
             {
                 $mappedDataClasses[$mapValue] = $dataClass;
             }
+        }
+
+        if ($dataClasses instanceof ArrayCollection)
+        {
+            $mappedDataClasses = new ArrayCollection($mappedDataClasses);
         }
 
         return $mappedDataClasses;
