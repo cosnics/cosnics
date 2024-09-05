@@ -37,7 +37,7 @@ class RequestForm extends FormValidator
         if ($this->request->get_id())
         {
             $user_details = new \Chamilo\Core\User\UserDetails($this->request->get_user());
-            $this->addElement('static', null, Translation::get('User'), $user_details->toHtml());
+            $this->addElement('static', '', Translation::get('User'), $user_details->toHtml());
         }
         
         $this->addElement(
