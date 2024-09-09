@@ -50,13 +50,13 @@ class BrowserComponent extends Manager implements TableSupport
         $checkEntriesUrl = $this->get_url([self::PARAM_ACTION => self::ACTION_CHECK_ALL_ENTRIES]);
 
         $toolbar = new ButtonToolBar($this->get_url());
-        $toolbar->addItem(
+        /*$toolbar->addItem(
             new Button(
                 $this->getTranslator()->trans('CheckAllEntries', [], Manager::context()),
                 new FontAwesomeGlyph('files-o'),
                 $checkEntriesUrl
             )
-        );
+        );*/
 
         $renderer = new ButtonToolBarRenderer($toolbar);
         $table->setSearchForm($renderer->getSearchForm());

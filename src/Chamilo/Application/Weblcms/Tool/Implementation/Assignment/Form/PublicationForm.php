@@ -151,7 +151,7 @@ class PublicationForm extends ContentObjectPublicationForm
                 Publication::PROPERTY_ENTITY_TYPE => Entry::ENTITY_TYPE_USER
             ]);
 
-        if($this->registrationConsulter->isContextRegisteredAndActive('Chamilo\Core\Repository\ContentObject\Assignment\Extension\Plagiarism'))
+        /*if($this->registrationConsulter->isContextRegisteredAndActive('Chamilo\Core\Repository\ContentObject\Assignment\Extension\Plagiarism'))
         {
             $redirect = new Redirect(
                 [
@@ -174,10 +174,10 @@ class PublicationForm extends ContentObjectPublicationForm
                 '</div>'
             );
         }
-        else
-        {
+        /*else
+        {*/
             $this->addElement('hidden', Publication::PROPERTY_CHECK_FOR_PLAGIARISM);
-        }
+        //}
     }
 
     /**

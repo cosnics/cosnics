@@ -90,9 +90,11 @@ class EntryPlagiarismResultServiceBridge implements
     /**
      * @return bool
      */
-    public function checkForPlagiarismAfterSubmission()
+    public function checkForPlagiarismAfterSubmission(): bool
     {
-        return $this->assignmentPublication->getCheckForPlagiarism();
+        return false;
+
+        //return $this->assignmentPublication->getCheckForPlagiarism();
     }
 
     /**

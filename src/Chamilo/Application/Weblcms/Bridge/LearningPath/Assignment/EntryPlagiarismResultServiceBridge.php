@@ -64,12 +64,13 @@ class EntryPlagiarismResultServiceBridge implements EntryPlagiarismResultService
      *
      * @return bool
      */
-    public function checkForPlagiarismAfterSubmission(TreeNode $treeNode)
+    public function checkForPlagiarismAfterSubmission(TreeNode $treeNode): bool
     {
+        return false;
         /** @var AssignmentConfiguration $configuration */
-        $configuration = $treeNode->getConfiguration(new AssignmentConfiguration());
+/*        $configuration = $treeNode->getConfiguration(new AssignmentConfiguration());
 
-        return $configuration->getCheckForPlagiarism();
+        return $configuration->getCheckForPlagiarism();*/
     }
 
     /**

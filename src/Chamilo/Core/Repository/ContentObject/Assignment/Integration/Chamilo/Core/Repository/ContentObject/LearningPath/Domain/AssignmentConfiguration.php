@@ -35,7 +35,8 @@ class AssignmentConfiguration implements TreeNodeConfigurationInterface
     public function __construct(int $entityType = 0, bool $checkForPlagiarism = false)
     {
         $this->entityType = $entityType;
-        $this->checkForPlagiarism = $checkForPlagiarism;
+        //$this->checkForPlagiarism = $checkForPlagiarism;
+        $this->checkForPlagiarism = false;
     }
 
     /**

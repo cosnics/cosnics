@@ -87,7 +87,7 @@ class ConfigurationFormBuilder
             ''
         );
 
-        if($this->registrationConsulter->isContextRegisteredAndActive('Chamilo\Core\Repository\ContentObject\Assignment\Extension\Plagiarism'))
+        /*if($this->registrationConsulter->isContextRegisteredAndActive('Chamilo\Core\Repository\ContentObject\Assignment\Extension\Plagiarism'))
         {
             $redirect = new Redirect(
                 [
@@ -103,17 +103,11 @@ class ConfigurationFormBuilder
                 'checkbox', self::FORM_PROPERTY_CHECK_FOR_PLAGIARISM,
                 $this->translator->trans('CheckForPlagiarism', [], 'Chamilo\Core\Repository\ContentObject\Assignment\Extension\Plagiarism')
             );
-
-            $formBuilder->addElement(
-                'html', '<div class="alert alert-info" style="margin-top: 15px;">' .
-                $this->translator->trans('CheckForPlagiarismEULAWarning', ['{EULA_PAGE_URL}' => $eulaPageUrl], 'Chamilo\Core\Repository\ContentObject\Assignment\Extension\Plagiarism') .
-                '</div>'
-            );
         }
         else
-        {
+        {*/
             $formBuilder->addElement('hidden', self::FORM_PROPERTY_CHECK_FOR_PLAGIARISM);
-        }
+        //}
 
         $buttons = array();
 
@@ -131,7 +125,8 @@ class ConfigurationFormBuilder
         $formBuilder->setDefaults(
             [
                 self::FORM_PROPERTY_ENTITY_TYPE => $configuration->getEntityType(),
-                self::FORM_PROPERTY_CHECK_FOR_PLAGIARISM => $configuration->getCheckForPlagiarism()
+                //self::FORM_PROPERTY_CHECK_FOR_PLAGIARISM => $configuration->getCheckForPlagiarism()
+                self::FORM_PROPERTY_CHECK_FOR_PLAGIARISM => false
             ]
         );
     }

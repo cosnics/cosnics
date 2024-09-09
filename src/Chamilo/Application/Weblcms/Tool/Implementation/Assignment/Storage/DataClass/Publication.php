@@ -91,6 +91,12 @@ class Publication extends DataClass
         $this->set_default_property(self::PROPERTY_CHECK_FOR_PLAGIARISM, $checkForPlagiarism);
     }
 
+    public function create(): bool
+    {
+        $this->setCheckForPlagiarism(false); //override to always make this false
+        return parent::create();
+    }
+
     public static function get_table_name()
     {
         return 'weblcms_assignment_publication';
