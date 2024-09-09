@@ -157,7 +157,7 @@ class CourseUserLearningPathInformationBlock extends ToolBlock
      */
     protected function getDataClassRepository()
     {
-        return $this->getService('Chamilo\Libraries\Storage\Implementations\Doctrine\DataClassRepository');
+        return $this->getService('Chamilo\Libraries\Storage\Implementations\Doctrine\Repository\DataClassRepository');
     }
 
     /**

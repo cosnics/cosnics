@@ -64,7 +64,7 @@ class LeaveItemComponent extends Manager
     protected function getTrackingServiceBuilder()
     {
         return new TrackingServiceBuilder(
-            $this->getService('Chamilo\Libraries\Storage\Implementations\Doctrine\DataClassRepository')
+            $this->getService('Chamilo\Libraries\Storage\Implementations\Doctrine\Repository\DataClassRepository')
         );
     }
 }

@@ -98,7 +98,7 @@ trait DependencyInjectionContainerTrait
 
     protected function getDataClassRepository(): DataClassRepository
     {
-        return $this->getService('Chamilo\Libraries\Storage\Implementations\Doctrine\DataClassRepository');
+        return $this->getService('Chamilo\Libraries\Storage\Implementations\Doctrine\Repository\DataClassRepository');
     }
 
     public function getEventDispatcher(): EventDispatcherInterface

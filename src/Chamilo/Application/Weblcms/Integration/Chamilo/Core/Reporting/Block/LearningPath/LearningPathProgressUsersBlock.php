@@ -162,7 +162,7 @@ class LearningPathProgressUsersBlock extends ToolBlock
     {
         $container = DependencyInjectionContainerBuilder::getInstance()->createContainer();
 
-        return $container->get('Chamilo\Libraries\Storage\DataManager\Doctrine\DataClassRepository');
+        return $container->get('Chamilo\Libraries\Storage\Implementations\Doctrine\Repository\DataClassRepository');
     }
 
     /**
