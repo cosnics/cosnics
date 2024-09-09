@@ -253,6 +253,25 @@ class Basic extends Renderer
         $html[] = '})();';
         $html[] = '</script>';
 
+        $allowedHosts = ['localhost', 'hogent.be'];
+        $showHOGENTNotification = false;
+
+        foreach($allowedHosts as $host)
+        {
+            if(strpos($_SERVER['HTTP_HOST'], $host) !== false)
+            {
+                $showHOGENTNotification = true;
+                break;
+            }
+        }
+
+        if($this->get_user() instanceof User && $this->get_user()->is_teacher() && $showHOGENTNotification)
+        {
+            $html[] = '<div class="alert alert-info text-center" style="font-weight: bold; font-size: 16px;">Chamilo verdwijnt in 2028. Wat brengt de toekomst? <a href="https://toekomstdlo.hogent.be" target="_blank">';
+            $html[] = 'Bekijk het op https://toekomstdlo.hogent.be.';
+            $html[] = '</a></div>';
+        }
+
         $html[] = '<div class="portal-tabs" ng-app="homeApp">';
 
         $tabs = $this->getHomeService()->getElements($this->get_user(), Tab::class_name());
