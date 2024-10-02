@@ -72,7 +72,7 @@ CKEDITOR.editorConfig = function(config)
 
     // config.startupFocus = true;
 
-    config.mathJaxLib = '//cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.0/MathJax.js?config=TeX-AMS_HTML';
+    config.mathJaxLib = '//cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js';
 
     config.forcePasteAsPlainText = false;
     //config.pasteFromWordRemoveFontStyles = true;
