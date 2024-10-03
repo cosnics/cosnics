@@ -3,6 +3,7 @@
 namespace Chamilo\Application\Lti\Service\Launch;
 
 use Chamilo\Application\Lti\Domain\LaunchParameters\LaunchParameters;
+use Chamilo\Application\Lti\Domain\LaunchParameters\Role\InstitutionRole;
 use Chamilo\Application\Lti\Domain\Provider\ProviderInterface;
 use Chamilo\Application\Lti\Manager;
 use Chamilo\Application\Lti\Service\Outcome\ResultIdEncoder;
@@ -109,7 +110,8 @@ class LaunchParametersGenerator
             ->setToolConsumerInstanceName(
                 $this->configurationConsulter->getSetting(['Chamilo\Core\Admin', 'site_name'])
             )
-            ->setUserId(md5($user->getId()));
+            ->setUserId(md5($user->getId()))
+            ->addRole(new InstitutionRole(($user->is_teacher() ? InstitutionRole::ROLE_INSTRUCTOR : InstitutionRole::ROLE_LEARNER)));
 
         return $launchParameters;
     }
