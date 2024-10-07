@@ -41,7 +41,7 @@ class SubmissionService
         $documentId = UUID::v4();
 
         $submitterId = $this->userConverter->convertUserToId($owner);
-        $uploadDocumentRequestParameters->setLanguageCode('nl')
+        $uploadDocumentRequestParameters->setLanguageCode('nl-be')
             ->setAction(UploadDocumentRequestParameters::ACTION_CHECK)
             ->setCallback($this->webhookManager->getWebhookUrlForDocumentId($documentId))
             ->setId($documentId)
