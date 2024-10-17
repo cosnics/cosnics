@@ -87,7 +87,7 @@ class LinkItem extends Item
         }
     }
 
-    public function get_target_types($types_only = false)
+    public static function get_target_types($types_only = false)
     {
         $types = array();
         
