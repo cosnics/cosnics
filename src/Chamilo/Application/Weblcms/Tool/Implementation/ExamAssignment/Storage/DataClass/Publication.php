@@ -106,5 +106,10 @@ class Publication extends \Chamilo\Application\Weblcms\Tool\Implementation\Assig
     {
         return 'weblcms_exam_assignment_publication';
     }
+
+    public function create(): bool
+    {
+        return DataClass::create();
+    }
 }
 
