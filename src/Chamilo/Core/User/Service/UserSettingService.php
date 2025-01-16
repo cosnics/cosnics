@@ -6,6 +6,7 @@ use Chamilo\Configuration\Storage\DataClass\Setting;
 use Chamilo\Core\User\Storage\DataClass\User;
 use Chamilo\Core\User\Storage\DataClass\UserSetting;
 use Chamilo\Libraries\Cache\Traits\CacheAdapterHandlerTrait;
+use Chamilo\Libraries\Storage\Architecture\Exceptions\StorageNoResultException;
 use Chamilo\Libraries\Storage\Query\Condition\EqualityCondition;
 use Chamilo\Libraries\Storage\Query\Variable\PropertyConditionVariable;
 use Chamilo\Libraries\Storage\Query\Variable\StaticConditionVariable;
@@ -144,6 +145,10 @@ class UserSettingService
         return $this->userService;
     }
 
+    /**
+     * @throws \Chamilo\Libraries\Storage\Architecture\Exceptions\StorageMethodException
+     * @throws \Chamilo\Libraries\Storage\Architecture\Exceptions\StorageNoResultException
+     */
     public function getUserSettingForSettingContextVariableAndUser(string $context, string $variable, User $user
     ): ?UserSetting
     {
@@ -158,26 +163,33 @@ class UserSettingService
     }
 
     /**
+     * @throws \Chamilo\Libraries\Storage\Architecture\Exceptions\StorageMethodException
+     * @throws \Chamilo\Libraries\Storage\Architecture\Exceptions\StorageNoResultException
      * @throws \Symfony\Component\Cache\Exception\CacheException
      */
     public function saveUserSettingForSettingContextVariableAndUser(
         string $context, string $variable, User $user, ?string $value = null
     ): bool
     {
-        $userSetting = $this->getUserSettingForSettingContextVariableAndUser($context, $variable, $user);
-
-        if (!$userSetting instanceof UserSetting)
+        try
         {
-            $setting = $this->getConfigurationService()->findSettingByContextAndVariableName($context, $variable);
+            $userSetting = $this->getUserSettingForSettingContextVariableAndUser($context, $variable, $user);
 
-            if (!$this->getUserService()->createUserSettingFromParameters($setting->getId(), $user->getId(), $value))
+            if (!$this->getUserService()->updateUserSettingValue($userSetting, $value))
             {
                 return false;
             }
         }
-        elseif (!$this->getUserService()->updateUserSettingValue($userSetting, $value))
+        catch (StorageNoResultException)
         {
-            return false;
+            $setting = $this->getConfigurationService()->findSettingByContextAndVariableName($context, $variable);
+
+            if (!$this->getUserService()->createUserSettingFromParameters(
+                $setting->getId(), $user->getId(), $value
+            ))
+            {
+                return false;
+            }
         }
 
         return $this->clearSettingsCacheforUser($user);

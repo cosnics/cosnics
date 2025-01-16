@@ -485,6 +485,10 @@ class UserService
         return $this->getUserRepository()->findUserProperties($retrieveProperties, $condition, $orderBy);
     }
 
+    /**
+     * @throws \Chamilo\Libraries\Storage\Architecture\Exceptions\StorageMethodException
+     * @throws \Chamilo\Libraries\Storage\Architecture\Exceptions\StorageNoResultException
+     */
     public function findUserSettingForSettingAndUser(Setting $setting, User $user): ?UserSetting
     {
         return $this->getUserRepository()->findUserSettingForSettingAndUser($setting, $user);

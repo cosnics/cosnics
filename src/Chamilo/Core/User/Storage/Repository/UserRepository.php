@@ -377,6 +377,10 @@ class UserRepository implements UserRepositoryInterface
         );
     }
 
+    /**
+     * @throws \Chamilo\Libraries\Storage\Architecture\Exceptions\StorageNoResultException
+     * @throws \Chamilo\Libraries\Storage\Architecture\Exceptions\StorageMethodException
+     */
     public function findUserSettingForSettingAndUser(Setting $setting, User $user): ?UserSetting
     {
         $conditions = [];

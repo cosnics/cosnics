@@ -38,6 +38,10 @@ class ConfigurationRepository
         return $this->getDataClassRepository()->delete($setting);
     }
 
+    /**
+     * @throws \Chamilo\Libraries\Storage\Architecture\Exceptions\StorageMethodException
+     * @throws \Chamilo\Libraries\Storage\Architecture\Exceptions\StorageNoResultException
+     */
     public function findSettingByContextAndVariableName(string $context, string $variable): ?Setting
     {
         $conditions = [];

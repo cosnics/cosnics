@@ -131,6 +131,10 @@ class ConfigurationService
         }
     }
 
+    /**
+     * @throws \Chamilo\Libraries\Storage\Architecture\Exceptions\StorageMethodException
+     * @throws \Chamilo\Libraries\Storage\Architecture\Exceptions\StorageNoResultException
+     */
     public function findSettingByContextAndVariableName(string $context, string $variable): ?Setting
     {
         return $this->getConfigurationRepository()->findSettingByContextAndVariableName($context, $variable);

@@ -130,6 +130,7 @@ class CalendarEventDataProvider extends ExternalCalendar
                 try
                 {
                     $availableCalendars = [];
+
                     $ownedCalendars = $this->getCalendarService()->listOwnedCalendars($user);
 
                     foreach ($ownedCalendars as $calendarItem)
@@ -143,7 +144,7 @@ class CalendarEventDataProvider extends ExternalCalendar
                         $availableCalendars[] = $availableCalendar;
                     }
                 }
-                catch (Exception)
+                catch (Exception $exception)
                 {
                     $availableCalendars = [];
                 }
