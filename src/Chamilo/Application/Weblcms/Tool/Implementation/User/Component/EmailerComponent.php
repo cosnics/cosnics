@@ -4,6 +4,7 @@ namespace Chamilo\Application\Weblcms\Tool\Implementation\User\Component;
 use Chamilo\Application\Weblcms\Tool\Implementation\User\Manager;
 use Chamilo\Core\User\Service\EmailService;
 use Chamilo\Libraries\Format\Structure\Breadcrumb;
+use Symfony\Component\HttpFoundation\RedirectResponse;
 
 /**
  * @package Chamilo\Application\Weblcms\Tool\Implementation\User\Component
@@ -17,7 +18,26 @@ class EmailerComponent extends Manager
      */
     public function run()
     {
-        return $this->getEmailService()->execute($this, $this->getUser(), $this->getCurrentTargetUserIdentifiers());
+        $result = $this->getEmailService()->execute($this->getUser(), $this->getCurrentTargetUserIdentifiers());
+
+        if ($result === true)
+        {
+            return new RedirectResponse(
+                $this->getUrlGenerator()->fromRequest([], [
+                        \Chamilo\Application\Weblcms\Manager::PARAM_USERS
+                    ])
+            );
+        }
+        else
+        {
+            $html = [];
+
+            $html[] = $this->renderHeader();
+            $html[] = $result;
+            $html[] = $this->renderFooter();
+
+            return implode(PHP_EOL, $html);
+        }
     }
 
     public function getCurrentTargetUserIdentifiers(): array

@@ -5,7 +5,6 @@ use Chamilo\Configuration\Service\Consulter\ConfigurationConsulter;
 use Chamilo\Core\User\Form\EmailForm;
 use Chamilo\Core\User\Manager;
 use Chamilo\Core\User\Storage\DataClass\User;
-use Chamilo\Libraries\Architecture\Application\Application;
 use Chamilo\Libraries\Architecture\Application\Routing\UrlGenerator;
 use Chamilo\Libraries\Architecture\Exceptions\NotAllowedException;
 use Chamilo\Libraries\Format\NotificationMessage\NotificationMessage;
@@ -16,8 +15,6 @@ use Chamilo\Libraries\Mail\Mailer\MailerInterface;
 use Chamilo\Libraries\Mail\ValueObject\Mail;
 use Chamilo\Libraries\Utilities\StringUtilities;
 use Exception;
-use Symfony\Component\HttpFoundation\RedirectResponse;
-use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Translation\Translator;
 
 /**
@@ -92,8 +89,7 @@ class EmailService
      * @throws \Chamilo\Libraries\Architecture\Exceptions\NotAllowedException
      * @throws \Exception
      */
-    public function execute(Application $executingApplication, User $executingUser, array $targetUserIdentifiers
-    ): Response
+    public function execute(User $executingUser, array $targetUserIdentifiers): string|bool
     {
         if ($this->getConfigurationConsulter()->getSetting(['Chamilo\Core\Admin', 'active_online_email_editor']) == 0 ||
             !$executingUser->isPlatformAdmin())
@@ -109,7 +105,6 @@ class EmailService
 
             if ($emailForm->validate())
             {
-
                 try
                 {
                     $values = $emailForm->exportValues();
@@ -125,48 +120,40 @@ class EmailService
                     $this->getActiveMailer()->sendMail($mail);
 
                     $this->getNotificationMessageManager()->addMessage(
-                        new NotificationMessage(NotificationMessage::TYPE_INFO, $translator->trans('EmailSent'))
+                        new NotificationMessage($translator->trans('EmailSent'), NotificationMessage::TYPE_INFO)
                     );
                 }
                 catch (Exception)
                 {
                     $this->getNotificationMessageManager()->addMessage(
-                        new NotificationMessage(NotificationMessage::TYPE_DANGER, $translator->trans('EmailNotSent'))
+                        new NotificationMessage($translator->trans('EmailNotSent'), NotificationMessage::TYPE_DANGER)
                     );
                 }
 
-                return new RedirectResponse(
-                    $this->getUrlGenerator()->fromParameters($executingApplication->get_parameters())
-                );
+                return true;
             }
             else
             {
                 $html = [];
 
-                $html[] = $executingApplication->renderHeader();
                 $html[] = $this->displayTargets($targetUserIdentifiers);
                 $html[] = $emailForm->render();
-                $html[] = $executingApplication->renderFooter();
 
-                return new Response(implode(PHP_EOL, $html));
+                return implode(PHP_EOL, $html);
             }
         }
         else
         {
-            $message = new NotificationMessage(
-                $translator->trans(
-                    'NoObjectSelected', ['OBJECT' => $translator->trans('User', [], Manager::CONTEXT)],
-                    StringUtilities::LIBRARIES
-                ), NotificationMessage::TYPE_DANGER
+            $this->getNotificationMessageManager()->addMessage(
+                new NotificationMessage(
+                    $translator->trans(
+                        'NoObjectSelected', ['OBJECT' => $translator->trans('User', [], Manager::CONTEXT)],
+                        StringUtilities::LIBRARIES
+                    ), NotificationMessage::TYPE_INFO
+                )
             );
 
-            $html = [];
-
-            $html[] = $executingApplication->renderHeader();
-            $html[] = $this->getNotificationMessageRenderer()->renderOne($message);
-            $html[] = $executingApplication->renderFooter();
-
-            return new Response(implode(PHP_EOL, $html));
+            return true;
         }
     }
 
