@@ -173,6 +173,14 @@ class DatetimeUtilities
         return $minutes . ':' . $seconds;
     }
 
+    public function getFormattedCurrentTimestamp(string $format = 'Y-m-d H:i:s.000'): string
+    {
+        $dateTime = new DateTime();
+        $dateTime = $dateTime->setTimezone(new DateTimeZone('Europe/Brussels'));
+
+        return $dateTime->format($format);
+    }
+
     /**
      * Defining the days of the week to allow translation of the days.
      *

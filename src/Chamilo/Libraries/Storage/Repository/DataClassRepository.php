@@ -335,7 +335,7 @@ class DataClassRepository
     {
         return new StorageParameters(
             condition: new EqualityCondition(
-                new PropertyConditionVariable($dataClassName, DataClass::PROPERTY_ID),
+                new PropertyConditionVariable($dataClassName, $dataClassName::PROPERTY_ID),
                 new StaticConditionVariable($identifier)
             )
         );
@@ -786,12 +786,12 @@ class DataClassRepository
         $dataClassName = get_class($dataClass);
 
         $condition = new EqualityCondition(
-            new PropertyConditionVariable($dataClassName, DataClass::PROPERTY_ID),
+            new PropertyConditionVariable($dataClassName, $dataClassName::PROPERTY_ID),
             new StaticConditionVariable($dataClass->getId())
         );
 
         $defaultProperties = $dataClass->getDefaultProperties();
-        unset($defaultProperties[DataClass::PROPERTY_ID]);
+        unset($defaultProperties[$dataClassName::PROPERTY_ID]);
 
         $updatePropertes = new UpdateProperties();
 

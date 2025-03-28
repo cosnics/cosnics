@@ -39,6 +39,9 @@ trait SingleCacheAdapterHandlerTrait
         return $this->cacheAdapter;
     }
 
+    /**
+     * @param string[] $cacheKeyParts
+     */
     public function getCacheKeyForParts(array $cacheKeyParts): string
     {
         return md5(serialize($cacheKeyParts));
@@ -49,58 +52,52 @@ trait SingleCacheAdapterHandlerTrait
         return $this->hasCacheDataForAdapterAndKey($this->getCacheAdapter(), $cacheKey);
     }
 
-    public function hasCacheDataForKeyParts(string $cacheKey): bool
+    /**
+     * @param string[] $cacheKeyParts
+     */
+    public function hasCacheDataForKeyParts(array $cacheKeyParts): bool
     {
-        return $this->hasCacheDataForAdapterAndKeyParts($this->getCacheAdapter(), $cacheKey);
+        return $this->hasCacheDataForAdapterAndKeyParts($this->getCacheAdapter(), $cacheKeyParts);
     }
 
     /**
-     * @param string $cacheKey
-     * @param callable $dataSource
-     *
-     * @return mixed
      * @throws \Symfony\Component\Cache\Exception\CacheException
      */
-    public function loadCacheDataForKey(string $cacheKey, callable $dataSource)
+    public function loadCacheDataForKey(string $cacheKey, callable $dataSource): mixed
     {
         return $this->loadCacheDataForAdapterAndKey($this->getCacheAdapter(), $cacheKey, $dataSource);
     }
 
     /**
      * @param string[] $cacheKeyParts
-     * @param callable $dataSource
      *
-     * @return mixed
      * @throws \Symfony\Component\Cache\Exception\CacheException
      */
-    public function loadCacheDataForKeyParts(array $cacheKeyParts, callable $dataSource)
+    public function loadCacheDataForKeyParts(array $cacheKeyParts, callable $dataSource): mixed
     {
         return $this->loadCacheDataForAdapterAndKeyParts($this->getCacheAdapter(), $cacheKeyParts, $dataSource);
     }
 
     /**
-     * @return mixed
      * @throws \Symfony\Component\Cache\Exception\CacheException
      */
-    public function readCacheDataForKey(string $cacheKey)
+    public function readCacheDataForKey(string $cacheKey): mixed
     {
         return $this->readCacheDataForAdapterAndKey($this->getCacheAdapter(), $cacheKey);
     }
 
     /**
-     * @return mixed
      * @throws \Symfony\Component\Cache\Exception\CacheException
      */
-    public function readCacheDataForKeyParts(array $cacheKeyParts)
+    public function readCacheDataForKeyParts(array $cacheKeyParts): mixed
     {
         return $this->readCacheDataForAdapterAndKeyParts($this->getCacheAdapter(), $cacheKeyParts);
     }
 
     /**
-     * @return mixed
      * @throws \Symfony\Component\Cache\Exception\CacheException
      */
-    public function reloadCacheDataForKey(string $cacheKey, callable $dataSource)
+    public function reloadCacheDataForKey(string $cacheKey, callable $dataSource): mixed
     {
         return $this->reloadCacheDataForAdapterAndKey($this->getCacheAdapter(), $cacheKey, $dataSource);
     }
@@ -108,10 +105,9 @@ trait SingleCacheAdapterHandlerTrait
     /**
      * @param string[] $cacheKeyParts
      *
-     * @return mixed
      * @throws \Symfony\Component\Cache\Exception\CacheException
      */
-    public function reloadCacheDataForKeyParts(array $cacheKeyParts, callable $dataSource)
+    public function reloadCacheDataForKeyParts(array $cacheKeyParts, callable $dataSource): mixed
     {
         return $this->reloadCacheDataForAdapterAndKeyParts($this->getCacheAdapter(), $cacheKeyParts, $dataSource);
     }
@@ -131,6 +127,8 @@ trait SingleCacheAdapterHandlerTrait
      */
     public function saveCacheDataForKeyParts(array $cacheKeyParts, $cacheData, ?int $lifetime = null): bool
     {
-        return $this->saveCacheDataForAdapterAndKeyParts($this->getCacheAdapter(), $cacheKeyParts, $cacheData, $lifetime);
+        return $this->saveCacheDataForAdapterAndKeyParts(
+            $this->getCacheAdapter(), $cacheKeyParts, $cacheData, $lifetime
+        );
     }
 }
