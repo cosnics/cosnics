@@ -59,7 +59,7 @@ class AssignmentForm extends ContentObjectForm
             $defaults[Assignment::PROPERTY_AUTOMATIC_FEEDBACK_TEXT] = $object->get_automatic_feedback_text();
             $defaults[Assignment::PROPERTY_SELECT_ATTACHMENT] = array();
 
-            $co_ids = explode(',', $object->get_automatic_feedback_co_ids());
+            /*$co_ids = explode(',', $object->get_automatic_feedback_co_ids());
 
             if ($co_ids)
             {
@@ -75,6 +75,8 @@ class AssignmentForm extends ContentObjectForm
                 $defaults[Assignment::PROPERTY_SELECT_ATTACHMENT] = Utilities::content_objects_for_element_finder(
                     $attached_objects
                 );
+
+                dump($defaults);
             }
 
             $active = $this->getElement(Assignment::PROPERTY_SELECT_ATTACHMENT);
@@ -84,7 +86,7 @@ class AssignmentForm extends ContentObjectForm
                 {
                     $active->getElements[0]->setValue(serialize($defaults[Assignment::PROPERTY_SELECT_ATTACHMENT]));
                 }
-            }
+            }*/
 
             $defaults[Assignment::PROPERTY_PAGE_TEMPLATE] = $object->getPageTemplate();
             $defaults[Assignment::PROPERTY_LAST_ENTRY_AS_TEMPLATE] = $object->useLastEntryAsTemplate();
@@ -272,13 +274,32 @@ class AssignmentForm extends ContentObjectForm
             )
         );
 
+        $co_ids = explode(',', $this->get_content_object()->get_automatic_feedback_co_ids());
+
+        if ($co_ids)
+        {
+            $condition = new InCondition(
+                new PropertyConditionVariable(ContentObject::class_name(), ContentObject::PROPERTY_ID),
+                $co_ids,
+                ContentObject::get_table_name()
+            );
+            $attached_objects = \Chamilo\Core\Repository\Storage\DataManager::retrieve_active_content_objects(
+                ContentObject::class_name(),
+                new DataClassRetrievesParameters($condition)
+            )->as_array();
+
+            $selectedAutomaticFeedbackObjects = Utilities::content_objects_for_element_finder(
+                $attached_objects
+            );
+        }
+
         $this->addElement(
             'element_finder',
             Assignment::PROPERTY_SELECT_ATTACHMENT,
             Translation::get('SelectFeedbackAttachment'),
             $url,
             $locale,
-            array()
+            $selectedAutomaticFeedbackObjects
         );
 
         $this->add_html_editor(Assignment::PROPERTY_AUTOMATIC_FEEDBACK_TEXT, Translation::get('Text'), false);
@@ -381,6 +402,7 @@ class AssignmentForm extends ContentObjectForm
                 $cos .= ',' . $co;
             }
         }
+
         $object->set_automatic_feedback_co_ids($cos);
         $object->set_automatic_feedback_text($values[Assignment::PROPERTY_AUTOMATIC_FEEDBACK_TEXT]);
         $this->setAllowedTypes($object, $values[Assignment::PROPERTY_ALLOWED_TYPES]['']);
