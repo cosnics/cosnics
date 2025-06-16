@@ -62,7 +62,7 @@ class UserUrlGenerator
 
     public function getEmailUrl(User $user): string
     {
-        return $this->getUserActionUrl(Manager::ACTION_MANAGE_METADATA, $user);
+        return $this->getUserActionUrl(Manager::ACTION_EMAIL, $user);
     }
 
     public function getReportingUrl(User $user): string
