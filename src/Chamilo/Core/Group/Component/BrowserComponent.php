@@ -46,7 +46,7 @@ class BrowserComponent extends Manager implements MenuComponentInterface
 
     private ?Group $group;
 
-    private ?string $groupIdentifier;
+    private ?string $groupIdentifier = null;
 
     private ?Group $rootGroup;
 
@@ -133,7 +133,7 @@ class BrowserComponent extends Manager implements MenuComponentInterface
 
     public function getGroupIdentifier(): string
     {
-        if (!$this->groupIdentifier)
+        if (!isset($this->groupIdentifier))
         {
             $this->groupIdentifier =
                 $this->getRequest()->query->get(self::PARAM_GROUP_ID, $this->getRootGroup()->getId());
@@ -188,7 +188,7 @@ class BrowserComponent extends Manager implements MenuComponentInterface
 
     public function getRootGroup(): Group
     {
-        if (!$this->rootGroup)
+        if (!isset($this->rootGroup))
         {
             $this->rootGroup = $this->getGroupService()->findRootGroup();
         }
