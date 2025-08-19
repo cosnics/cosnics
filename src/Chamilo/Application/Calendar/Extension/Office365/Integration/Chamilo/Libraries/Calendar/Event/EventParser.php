@@ -105,8 +105,19 @@ class EventParser
                 $responseDate = null;
             }
 
-            $email = $sourceAttendee['emailAddress']['address'] ?? '-';
+            $email = $sourceAttendee['emailAddress']['address'];
+
+            if (is_null($email))
+            {
+                $email = '-';
+            }
+
             $name = $sourceAttendee['emailAddress']['name'] ?? 'Unknown';
+
+            if (is_null($name))
+            {
+                $name = 'Unknown';
+            }
 
             $attendees[] = new EventAttendee(
                 $email, $name, $this->determineAttendeeType($sourceAttendee['type']), $responseStatus, $responseDate
