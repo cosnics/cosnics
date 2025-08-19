@@ -190,8 +190,22 @@ class EventParser
     {
         if ($sourceOrganizer instanceof Recipient)
         {
+            $email = $sourceOrganizer->getEmailAddress()->getAddress();
+
+            if (is_null($email))
+            {
+                $email = '-';
+            }
+
+            $name = $sourceOrganizer->getEmailAddress()->getName();
+
+            if (is_null($name))
+            {
+                $name = 'Unknown';
+            }
+
             return new EventAttendee(
-                $sourceOrganizer->getEmailAddress()->getAddress(), $sourceOrganizer->getEmailAddress()->getName(),
+                $email, $name,
                 EventAttendee::TYPE_ORGANIZER, null, EventAttendee::RESPONSE_STATUS_ORGANIZER
             );
         }
