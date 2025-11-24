@@ -73,6 +73,9 @@
 		"allow-plugins": {
 			"php-http/discovery": true,
 			"simplesamlphp/*": true
+		},
+		"audit": {
+			"block-insecure": false
 		}
 	},
 	"scripts": {
