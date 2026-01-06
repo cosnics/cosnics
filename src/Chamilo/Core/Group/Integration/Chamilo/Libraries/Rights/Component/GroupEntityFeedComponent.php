@@ -25,20 +25,16 @@ class GroupEntityFeedComponent extends Manager
     /**
      * The length for the filter prefix to remove
      */
-    const FILTER_PREFIX_LENGTH = 2;
+    public const FILTER_PREFIX_LENGTH = 2;
 
-    const PARAM_FILTER = 'filter';
+    public const PARAM_FILTER = 'filter';
+    public const PARAM_GROUP = 'group';
+    public const PARAM_OFFSET = 'offset';
+    public const PARAM_SEARCH_QUERY = 'query';
+    public const PARAM_USER = 'user';
 
-    const PARAM_GROUP = 'group';
-
-    const PARAM_OFFSET = 'offset';
-
-    const PARAM_SEARCH_QUERY = 'query';
-
-    const PARAM_USER = 'user';
-
-    const PROPERTY_ELEMENTS = 'elements';
-    const PROPERTY_TOTAL_ELEMENTS = 'total_elements';
+    public const PROPERTY_ELEMENTS = 'elements';
+    public const PROPERTY_TOTAL_ELEMENTS = 'total_elements';
 
     /**
      *
@@ -61,7 +57,7 @@ class GroupEntityFeedComponent extends Manager
     }
 
     /**
-     * @return integer
+     * @return int
      * @throws \Exception
      */
     protected function countUsers()
@@ -123,7 +119,8 @@ class GroupEntityFeedComponent extends Manager
         if ($groups->count() > 0)
         {
             $groupLabel = $this->getTranslator()->trans('Groups', [], 'Chamilo\Core\Group');
-            $groupCategory = new AdvancedElementFinderElement('groups', $glyph->getClassNamesString(), $groupLabel, $groupLabel);
+            $groupCategory =
+                new AdvancedElementFinderElement('groups', $glyph->getClassNamesString(), $groupLabel, $groupLabel);
             $elements->add_element($groupCategory);
 
             foreach ($groups as $group)
@@ -138,7 +135,8 @@ class GroupEntityFeedComponent extends Manager
         if ($users->count() > 0)
         {
             $userLabel = $this->getTranslator()->trans('Users', [], 'Chamilo\Core\User');
-            $userCategory = new AdvancedElementFinderElement('users',  $glyph->getClassNamesString(), $userLabel, $userLabel);
+            $userCategory =
+                new AdvancedElementFinderElement('users', $glyph->getClassNamesString(), $userLabel, $userLabel);
             $elements->add_element($userCategory);
 
             foreach ($users as $user)
@@ -177,8 +175,16 @@ class GroupEntityFeedComponent extends Manager
     }
 
     /**
+     * @return \Chamilo\Core\Group\Service\GroupMembershipService
+     */
+    protected function getGroupMemberShipService()
+    {
+        return $this->getService(GroupMembershipService::class);
+    }
+
+    /**
      *
-     * @return integer
+     * @return int
      */
     protected function getOffset()
     {
@@ -195,13 +201,13 @@ class GroupEntityFeedComponent extends Manager
         $glyph = new FontAwesomeGlyph('user', [], null, 'fas');
 
         return new AdvancedElementFinderElement(
-            UserEntityProvider::ENTITY_TYPE . '_' . $user->getId(), $glyph->getClassNamesString(), $user->get_fullname(),
-            $user->get_official_code()
+            UserEntityProvider::ENTITY_TYPE . '_' . $user->getId(), $glyph->getClassNamesString(),
+            $user->get_fullname(), $user->get_official_code()
         );
     }
 
     /**
-     * @return integer[]
+     * @return int
      * @throws \Exception
      */
     public function getUserIdentifiers()
@@ -214,13 +220,5 @@ class GroupEntityFeedComponent extends Manager
         }
 
         return $this->getGroupMemberShipService()->findSubscribedUserIdentifiersForGroupIdentifier($filterIdentifier);
-    }
-
-    /**
-     * @return \Chamilo\Core\Group\Service\GroupMembershipService
-     */
-    protected function getGroupMemberShipService()
-    {
-        return $this->getService(GroupMembershipService::class);
     }
 }

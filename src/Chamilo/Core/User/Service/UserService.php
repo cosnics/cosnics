@@ -185,11 +185,8 @@ class UserService
             $mailBody[] = '<p>' . $translator->trans('MailResetPasswordCloser', [], Manager::CONTEXT) . '<br/>';
             $mailBody[] = $translator->trans(
                     'MailResetPasswordSender', [
-                    'ADMINFIRSTNAME' => $configurationConsulter->getSetting(
-                        ['Chamilo\Core\Admin', 'administrator_firstname']
-                    ),
-                    'ADMINLASTNAME' => $configurationConsulter->getSetting(
-                        ['Chamilo\Core\Admin', 'administrator_surname']
+                    'ADMINNAME' => $configurationConsulter->getSetting(
+                        ['Chamilo\Core\Admin', 'administrator_name']
                     )
                 ], Manager::CONTEXT
                 ) . '</p>';
@@ -815,11 +812,8 @@ class UserService
             $mailBody[] = '<p>' . $translator->trans('MailResetPasswordCloser', [], Manager::CONTEXT) . '<br/>';
             $mailBody[] = $translator->trans(
                     'MailResetPasswordSender', [
-                    'ADMINFIRSTNAME' => $configurationConsulter->getSetting(
-                        ['Chamilo\Core\Admin', 'administrator_firstname']
-                    ),
-                    'ADMINLASTNAME' => $configurationConsulter->getSetting(
-                        ['Chamilo\Core\Admin', 'administrator_surname']
+                    'ADMINNAME' => $configurationConsulter->getSetting(
+                        ['Chamilo\Core\Admin', 'administrator_name']
                     )
                 ], Manager::CONTEXT
                 ) . '</p>';
@@ -853,14 +847,8 @@ class UserService
         $options['password'] = $password;
         $options['site_name'] = $configurationConsulter->getSetting(['Chamilo\Core\Admin', 'site_name']);
         $options['site_url'] = $this->getWebPathBuilder()->getBasePath();
-        $options['admin_firstname'] = $configurationConsulter->getSetting(
-            ['Chamilo\Core\Admin', 'administrator_firstname']
-        );
-        $options['admin_surname'] = $configurationConsulter->getSetting(
-            ['Chamilo\Core\Admin', 'administrator_surname']
-        );
-        $options['admin_telephone'] = $configurationConsulter->getSetting(
-            ['Chamilo\Core\Admin', 'administrator_telephone']
+        $options['admin_name'] = $configurationConsulter->getSetting(
+            ['Chamilo\Core\Admin', 'administrator_name']
         );
         $options['admin_email'] = $configurationConsulter->getSetting(
             ['Chamilo\Core\Admin', 'administrator_email']
@@ -876,8 +864,7 @@ class UserService
         }
 
         $mail = new Mail(
-            $subject, $body, $user->get_email(), true, [], [],
-            $options['admin_firstname'] . ' ' . $options['admin_surname'], $options['admin_email']
+            $subject, $body, $user->get_email(), true, [], [], $options['admin_name'], $options['admin_email']
         );
 
         try

@@ -3,17 +3,17 @@ namespace Chamilo\Core\Admin\Component;
 
 use Chamilo\Configuration\Package\Service\PackageBundlesCacheService;
 use Chamilo\Core\Admin\Manager;
-use Chamilo\Core\Admin\Menu\PackageTypeLinksMenu;
 use Chamilo\Core\Admin\Service\ActionProvider;
+use Chamilo\Core\User\Storage\DataClass\User;
 use Chamilo\Libraries\Architecture\ClassnameUtilities;
-use Chamilo\Libraries\Architecture\Interfaces\MenuComponentInterface;
-use Chamilo\Libraries\Format\Breadcrumb\BreadcrumbLessComponentInterface;
+use Chamilo\Libraries\Architecture\Exceptions\NotAllowedException;
 use Chamilo\Libraries\Format\Tabs\TabsRenderer;
 
 /**
  * @package Chamilo\Core\Admin\Component
+ * @author Hans De Bisschop <hans.de.bisschop@ehb.be>
  */
-class BrowserComponent extends Manager implements BreadcrumbLessComponentInterface, MenuComponentInterface
+class BrowserComponent extends Manager
 {
     public const PARAM_TAB = 'tab';
 
@@ -26,7 +26,10 @@ class BrowserComponent extends Manager implements BreadcrumbLessComponentInterfa
      */
     public function run()
     {
-        $this->checkAuthorization(Manager::CONTEXT, 'ManageChamilo');
+        if (!$this->getUser() instanceof User || !$this->getUser()->isPlatformAdmin())
+        {
+            throw new NotAllowedException();
+        }
 
         $html = [];
 
@@ -65,20 +68,6 @@ class BrowserComponent extends Manager implements BreadcrumbLessComponentInterfa
     protected function getTabsRenderer(): TabsRenderer
     {
         return $this->getService(TabsRenderer::class);
-    }
-
-    /**
-     * @throws \Symfony\Component\Cache\Exception\CacheException
-     */
-    public function renderApplicationMenu(): string
-    {
-        $tabNamespace = $this->getClassnameUtilities()->getNamespaceFromId($this->getCurrentTab());
-        $menu = new PackageTypeLinksMenu(
-            $this->getClassnameUtilities(), $this->getPackageBundlesCacheService(), $this->getRegistrationConsulter(),
-            $this->getActionProvider(), $tabNamespace, $this->get_url([self::PARAM_TAB => '__TYPE__'])
-        );
-
-        return $menu->render_as_tree();
     }
 
     /**

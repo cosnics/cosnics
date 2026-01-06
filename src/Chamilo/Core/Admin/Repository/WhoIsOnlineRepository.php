@@ -28,6 +28,10 @@ class WhoIsOnlineRepository
         $this->configurationConsulter = $configurationConsulter;
     }
 
+    /**
+     * @throws \Chamilo\Libraries\Storage\Architecture\Exceptions\StorageLastInsertedIdentifierException
+     * @throws \Chamilo\Libraries\Storage\Architecture\Exceptions\StorageMethodException
+     */
     public function createWhoIsOnline(Online $online): bool
     {
         return $this->getDataClassRepository()->create($online);
@@ -35,6 +39,7 @@ class WhoIsOnlineRepository
 
     /**
      * @return string[]
+     * @throws \Chamilo\Libraries\Storage\Architecture\Exceptions\StorageMethodException
      */
     public function findDistinctOnlineUserIdentifiers(): array
     {
@@ -84,6 +89,9 @@ class WhoIsOnlineRepository
         return $this->dataClassRepository;
     }
 
+    /**
+     * @throws \Chamilo\Libraries\Storage\Architecture\Exceptions\StorageMethodException
+     */
     public function updateWhoIsOnline(Online $online): bool
     {
         return $this->getDataClassRepository()->update($online);

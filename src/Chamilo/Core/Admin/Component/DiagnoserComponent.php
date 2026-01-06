@@ -2,13 +2,13 @@
 namespace Chamilo\Core\Admin\Component;
 
 use Chamilo\Core\Admin\Manager;
-use Chamilo\Core\Admin\Service\BreadcrumbGenerator;
-use Chamilo\Libraries\Format\Breadcrumb\BreadcrumbGeneratorInterface;
+use Chamilo\Core\User\Storage\DataClass\User;
+use Chamilo\Libraries\Architecture\Exceptions\NotAllowedException;
 use Chamilo\Libraries\Support\Diagnoser;
 
 /**
  * @package Chamilo\Core\Admin\Component
- * @author  Hans De Bisschop <hans.de.bisschop@ehb.be>
+ * @author Hans De Bisschop <hans.de.bisschop@ehb.be>
  */
 class DiagnoserComponent extends Manager
 {
@@ -19,7 +19,10 @@ class DiagnoserComponent extends Manager
      */
     public function run()
     {
-        $this->checkAuthorization(Manager::CONTEXT, 'ManageChamilo');
+        if (!$this->getUser() instanceof User || !$this->getUser()->isPlatformAdmin())
+        {
+            throw new NotAllowedException();
+        }
 
         $html = [];
 
@@ -33,10 +36,5 @@ class DiagnoserComponent extends Manager
     protected function getDiagnoser(): Diagnoser
     {
         return $this->getService(Diagnoser::class);
-    }
-
-    public function getBreadcrumbGenerator(): BreadcrumbGeneratorInterface
-    {
-        return $this->getService(BreadcrumbGenerator::class);
     }
 }

@@ -35,16 +35,6 @@
                     "output": "Chamilo/Libraries/Resources/Css/cosnics.common.Ruby.min.css",
                     "input": "Resources/Css/Aqua/Stylesheet.min.css"
                 }
-            ],
-            "install": {
-                "core": 1,
-                "default": 0
-            },
-            "dependencies": [
-                {
-                    "id": "Chamilo\\Libraries",
-                    "version": ">=1.0.0"
-                }
             ]
         }
     }

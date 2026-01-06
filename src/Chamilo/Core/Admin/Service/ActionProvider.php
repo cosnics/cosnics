@@ -2,7 +2,6 @@
 namespace Chamilo\Core\Admin\Service;
 
 use Chamilo\Configuration\Service\Consulter\RegistrationConsulter;
-use Chamilo\Configuration\Storage\DataClass\Registration;
 use Chamilo\Core\Admin\Form\AdminSearchForm;
 use Chamilo\Libraries\Architecture\ClassnameUtilities;
 use Chamilo\Libraries\Format\Structure\Glyph\FontAwesomeGlyph;
@@ -53,7 +52,7 @@ class ActionProvider
      * @throws \Symfony\Component\Cache\Exception\CacheException
      * @throws \QuickformException
      */
-    public function getTabsCollection(string $typeContext): TabsCollection
+    public function getTabsCollection(): TabsCollection
     {
         $registrationConsulter = $this->registrationConsulter;
         $tabsCollection = new TabsCollection();
@@ -61,10 +60,7 @@ class ActionProvider
 
         foreach ($this->actionProviders as $actionProvider)
         {
-            $registration = $registrationConsulter->getRegistrationForContext($actionProvider->getContext());
-
-            if ($registrationConsulter->isContextRegisteredAndActive($actionProvider->getContext()) &&
-                $registration[Registration::PROPERTY_TYPE] == $typeContext)
+            if ($registrationConsulter->isContextRegisteredAndActive($actionProvider->getContext()))
             {
                 $index ++;
 

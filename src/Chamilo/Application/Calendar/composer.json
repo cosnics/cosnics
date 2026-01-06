@@ -26,7 +26,6 @@
             "name": "Personal Calendar",
             "context": "Chamilo\\Application\\Calendar",
             "type": "Chamilo\\Application",
-            "category": "social",
             "resources": [
                 {
                     "output": "Chamilo/Application/Calendar/Resources/Css/print.Aqua.min.css",
@@ -43,19 +42,6 @@
                 {
                     "output": "Chamilo/Libraries/Resources/Css/cosnics.common.Ruby.min.css",
                     "input": "Resources/Css/Aqua/Stylesheet.min.css"
-                }
-            ],
-            "install": {
-                "default": 1,
-                "core": 0
-            },
-            "additional": [
-                "Chamilo\\Application\\Calendar\\Extension\\Personal"
-            ],
-            "dependencies": [
-                {
-                    "id": "Chamilo\\Configuration",
-                    "version": ">=1.0.0"
                 }
             ]
         }

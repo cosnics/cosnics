@@ -13,11 +13,5 @@
                       id="Chamilo\Core\User\CurrentUser"/>
         </service>
 
-        <service id="Chamilo\Core\User\Table\UserApprovalTableRenderer">
-            <argument key="$user"
-                      type="service"
-                      id="Chamilo\Core\User\CurrentUser"/>
-        </service>
-
     </services>
 </container>

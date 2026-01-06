@@ -186,15 +186,6 @@ class Diagnoser
             );
         }
 
-        $installationPath = $this->systemPathBuilder->namespaceToFullPath('Chamilo\Core\Install');
-
-        $exists = !file_exists($installationPath);
-        $status = $exists ? self::STATUS_OK : self::STATUS_WARNING;
-        $array[] = $this->build_setting(
-            $status, '[FILES]', $this->getTranslation('DirectoryExists') . ': ' . $installationPath,
-            'http://be2.php.net/file_exists', $writable, 0, 'yes_no', $this->getTranslation('DirectoryShouldBeRemoved')
-        );
-
         $date = $this->getInstallationDate();
         $date = $this->datetimeUtilities->formatLocaleDate(
             $this->getTranslation('DateFormatShort') . ', ' . $this->getTranslation('TimeNoSecFormat'), (int) $date

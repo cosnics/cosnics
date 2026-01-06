@@ -16,11 +16,8 @@ use Chamilo\Libraries\Storage\Query\Variable\PropertyConditionVariable;
 use Chamilo\Libraries\Storage\Query\Variable\StaticConditionVariable;
 
 /**
- * @package admin.lib.admin_manager.component
- */
-
-/**
- * Component to view whois online
+ * @package Chamilo\Core\Admin\Component
+ * @author Hans De Bisschop <hans.de.bisschop@ehb.be>
  */
 class WhoisOnlineComponent extends Manager
 {
@@ -33,33 +30,29 @@ class WhoisOnlineComponent extends Manager
      */
     public function run()
     {
-        $this->checkAuthorization(Manager::CONTEXT, 'ViewWhoisOnline');
-
-        if ($this->getUser() instanceof User)
-        {
-            $html = [];
-
-            $html[] = $this->renderHeader();
-
-            $userIdentifier = $this->getRequest()->query->get(self::PARAM_USER_ID);
-
-            if (isset($userIdentifier))
-            {
-                $html[] = $this->renderUserInformation($userIdentifier);
-            }
-            else
-            {
-                $html[] = $this->renderWhoIsOnlineTable();
-            }
-
-            $html[] = $this->renderFooter();
-
-            return implode(PHP_EOL, $html);
-        }
-        else
+        if (!$this->getUser() instanceof User || !$this->getUser()->isPlatformAdmin())
         {
             throw new NotAllowedException();
         }
+
+        $html = [];
+
+        $html[] = $this->renderHeader();
+
+        $userIdentifier = $this->getRequest()->query->get(self::PARAM_USER_ID);
+
+        if (isset($userIdentifier))
+        {
+            $html[] = $this->renderUserInformation($userIdentifier);
+        }
+        else
+        {
+            $html[] = $this->renderWhoIsOnlineTable();
+        }
+
+        $html[] = $this->renderFooter();
+
+        return implode(PHP_EOL, $html);
     }
 
     public function getRequestTableParameterValuesCompiler(): RequestTableParameterValuesCompiler
@@ -100,6 +93,12 @@ class WhoisOnlineComponent extends Manager
         return $this->getService(WhoIsOnlineTableRenderer::class);
     }
 
+    /**
+     * @param string $userIdentifier
+     *
+     * @return string
+     * @throws \TableException
+     */
     private function renderUserInformation(string $userIdentifier): string
     {
         return $this->getUserDetailsRenderer()->renderUserDetailsForUserIdentifier($userIdentifier, $this->getUser());

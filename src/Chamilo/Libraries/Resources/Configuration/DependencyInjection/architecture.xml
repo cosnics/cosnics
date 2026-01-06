@@ -11,8 +11,6 @@
             <argument key="$showErrors">%chamilo.configuration.debug.show_errors%</argument>
         </service>
 
-        <service id="Chamilo\Libraries\Architecture\Bridge\BridgeManager"/>
-
         <service id="Chamilo\Libraries\Architecture\Bootstrap\Kernel">
             <argument key="$user"
                       type="service"
@@ -40,7 +38,6 @@
             <argument key="$errorHandlingConfiguration">%chamilo.configuration.error_handling%</argument>
         </service>
 
-        <service id="Chamilo\Libraries\Architecture\Test\PHPUnitGenerator\PHPUnitGenerator"/>
         <service id="Chamilo\Libraries\Architecture\Application\Routing\DataClassUrlGenerator"/>
         <service id="Chamilo\Libraries\Architecture\Application\Routing\UrlGenerator"/>
 

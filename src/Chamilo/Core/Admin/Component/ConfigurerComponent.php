@@ -4,9 +4,9 @@ namespace Chamilo\Core\Admin\Component;
 use Chamilo\Configuration\Package\Service\PackageBundlesCacheService;
 use Chamilo\Core\Admin\Form\ConfigurationForm;
 use Chamilo\Core\Admin\Manager;
-use Chamilo\Core\Admin\Menu\PackageTypeSettingsMenu;
+use Chamilo\Core\User\Storage\DataClass\User;
 use Chamilo\Libraries\Architecture\Application\Application;
-use Chamilo\Libraries\Architecture\Interfaces\MenuComponentInterface;
+use Chamilo\Libraries\Architecture\Exceptions\NotAllowedException;
 use Chamilo\Libraries\Format\Form\FormValidator;
 use Chamilo\Libraries\Format\Structure\Breadcrumb;
 use Chamilo\Libraries\Format\Structure\Glyph\IdentGlyph;
@@ -19,24 +19,28 @@ use Chamilo\Libraries\Utilities\StringUtilities;
 
 /**
  * @package Chamilo\Core\Admin\Component
+ * @author Hans De Bisschop <hans.de.bisschop@ehb.be>
  */
-class ConfigurerComponent extends Manager implements MenuComponentInterface
+class ConfigurerComponent extends Manager
 {
     public const PARAM_TAB = 'tab';
 
     /**
-     * Runs this component and displays its output.
-     *
-     * @throws \Symfony\Component\Cache\Exception\CacheException
      * @throws \Chamilo\Libraries\Architecture\Exceptions\NotAllowedException
+     * @throws \Chamilo\Libraries\Storage\Architecture\Exceptions\StorageMethodException
+     * @throws \Chamilo\Libraries\Storage\Architecture\Exceptions\StorageNoResultException
      * @throws \QuickformException
+     * @throws \Symfony\Component\Cache\Exception\CacheException
      */
     public function run()
     {
+        if (!$this->getUser() instanceof User || !$this->getUser()->isPlatformAdmin())
+        {
+            throw new NotAllowedException();
+        }
+
         $translator = $this->getTranslator();
         $this->set_parameter(self::PARAM_CONTEXT, $this->getContext());
-
-        $this->checkAuthorization(Manager::CONTEXT, 'ManageChamilo');
 
         $form = new ConfigurationForm(
             $this->getContext(), 'config', FormValidator::FORM_METHOD_POST,
@@ -66,9 +70,9 @@ class ConfigurerComponent extends Manager implements MenuComponentInterface
                 )
             );
 
-            $packages = $this->getPackageBundlesCacheService()->getAllPackages()->getNestedTypedPackages();
+            $packages = $this->getPackageBundlesCacheService()->getAllPackages()->getNestedPackages();
 
-            foreach ($packages[$this->getTab()] as $package)
+            foreach ($packages as $package)
             {
                 if ($this->getConfigurationConsulter()->hasSettingsForContext($package->get_context()))
                 {
@@ -153,18 +157,5 @@ class ConfigurerComponent extends Manager implements MenuComponentInterface
     public function getTab(): string
     {
         return $this->getRequest()->query->get(self::PARAM_TAB, 'Chamilo\Core');
-    }
-
-    /**
-     * @throws \Symfony\Component\Cache\Exception\CacheException
-     */
-    public function renderApplicationMenu(): string
-    {
-        $menu = new PackageTypeSettingsMenu(
-            $this->getClassnameUtilities(), $this->getConfigurationConsulter(), $this->getPackageBundlesCacheService(),
-            $this->getTab(), $this->get_url([self::PARAM_TAB => '__TYPE__', self::PARAM_CONTEXT => null])
-        );
-
-        return $menu->render_as_tree();
     }
 }

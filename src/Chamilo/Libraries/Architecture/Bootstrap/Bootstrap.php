@@ -2,8 +2,6 @@
 namespace Chamilo\Libraries\Architecture\Bootstrap;
 
 use Chamilo\Configuration\Service\FileConfigurationLocator;
-use Chamilo\Core\Install\Manager as InstallationManager;
-use Chamilo\Libraries\Architecture\Application\Application;
 use Chamilo\Libraries\Architecture\ErrorHandler\ErrorHandler;
 use Chamilo\Libraries\Platform\ChamiloRequest;
 use Symfony\Component\HttpFoundation\Session\SessionInterface;
@@ -36,18 +34,6 @@ class Bootstrap
         $this->session = $session;
         $this->errorHandler = $errorHandler;
         $this->showErrors = $showErrors;
-    }
-
-    protected function checkInstallation(): Bootstrap
-    {
-        $context = $this->getRequest()->query->get(Application::PARAM_CONTEXT);
-
-        if (!$this->getFileConfigurationLocator()->isAvailable() && $context != InstallationManager::CONTEXT)
-        {
-            $this->getRequest()->initialize([Application::PARAM_CONTEXT => InstallationManager::CONTEXT]);
-        }
-
-        return $this;
     }
 
     public function getErrorHandler(): ErrorHandler
@@ -87,7 +73,7 @@ class Bootstrap
 
     public function setup(): void
     {
-        $this->registerErrorHandlers()->checkInstallation()->startSession();
+        $this->registerErrorHandlers()->startSession();
     }
 
     protected function startSession(): Bootstrap

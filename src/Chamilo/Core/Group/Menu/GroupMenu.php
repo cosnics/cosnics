@@ -48,11 +48,11 @@ class GroupMenu extends HtmlMenu
     /**
      * Creates a new category navigation menu.
      *
-     * @param int $owner            The ID of the owner of the categories to provide in this menu.
+     * @param int $owner The ID of the owner of the categories to provide in this menu.
      * @param int $current_category The ID of the current category in the menu.
-     * @param string $url_format    The format to use for the URL of a category. Passed to sprintf(). Defaults to the
+     * @param string $url_format The format to use for the URL of a category. Passed to sprintf(). Defaults to the
      *                              string "?category=%s".
-     * @param array $extra_items    An array of extra tree items, added to the root.
+     * @param array $extra_items An array of extra tree items, added to the root.
      *
      * @throws \Chamilo\Libraries\Architecture\Exceptions\ObjectNotExistException
      */

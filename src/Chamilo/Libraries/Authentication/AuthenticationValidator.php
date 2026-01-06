@@ -114,9 +114,7 @@ class AuthenticationValidator
         else
         {
             $parameters = [
-                Application::PARAM_CONTEXT => $this->configurationConsulter->getSetting(
-                    ['Chamilo\Core\Admin', 'page_after_login']
-                )
+                Application::PARAM_CONTEXT => 'Chamilo\Core\Home'
             ];
         }
 

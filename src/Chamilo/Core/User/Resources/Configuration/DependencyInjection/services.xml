@@ -22,12 +22,6 @@
                       id="Chamilo\Libraries\Format\Theme\ThemeSystemPathBuilder"/>
         </service>
 
-        <service id="Chamilo\Core\User\Service\UserImporter\UserImporter">
-            <argument key="$mailer"
-                      type="service"
-                      id="Chamilo\Libraries\Mail\Mailer\ActiveMailer"/>
-        </service>
-        <service id="Chamilo\Core\User\Service\UserImporter\ImportParser\ImportParserFactory"/>
         <service id="Chamilo\Core\User\Service\UserService">
             <argument key="$userSettingsCacheAdapter"
                       type="service"
@@ -49,12 +43,6 @@
             <factory service="Chamilo\Libraries\Cache\SymfonyCacheAdapterFactory"
                      method="createFilesystemAdapter"/>
             <argument key="$namespace">Chamilo\Core\User\UserSetting</argument>
-        </service>
-
-        <service id="Chamilo\Core\User\Service\EmailService">
-            <argument key="$activeMailer"
-                      type="service"
-                      id="Chamilo\Libraries\Mail\Mailer\ActiveMailer"/>
         </service>
 
         <service id="Chamilo\Core\User\Service\PasswordGenerator"/>

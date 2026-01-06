@@ -6,6 +6,7 @@ use Chamilo\Libraries\Architecture\Application\Application;
 use Chamilo\Libraries\Format\Structure\Glyph\FontAwesomeGlyph;
 use Chamilo\Libraries\Format\Tabs\Action;
 use Chamilo\Libraries\Format\Tabs\Actions;
+use Chamilo\Libraries\Utilities\StringUtilities;
 
 /**
  * @package Chamilo\Core\Admin\Service
@@ -32,40 +33,6 @@ class AdminActionProvider extends AbstractActionProvider implements ActionProvid
         );
 
         $parameters = [
-            Application::PARAM_CONTEXT => \Chamilo\Core\Admin\Announcement\Manager::CONTEXT
-        ];
-
-        $links[] = new Action(
-            $translator->trans('SystemAnnouncementsDescription', [], $context),
-            $translator->trans('SystemAnnouncements', [], $context),
-            new FontAwesomeGlyph('list', ['fa-fw', 'fa-2x'], null, 'fas'), $urlGenerator->fromParameters($parameters)
-        );
-
-        $parameters = [
-            Application::PARAM_CONTEXT => \Chamilo\Core\Admin\Language\Manager::CONTEXT,
-            Application::PARAM_ACTION => \Chamilo\Core\Admin\Language\Manager::ACTION_IMPORT
-        ];
-
-        $links[] = new Action(
-            $translator->trans('TranslationsImportDescription', [], $context),
-            $translator->trans('TranslationsImport', [], $context),
-            new FontAwesomeGlyph('language', ['fa-fw', 'fa-2x'], null, 'fas'),
-            $urlGenerator->fromParameters($parameters)
-        );
-
-        $parameters = [
-            Application::PARAM_CONTEXT => \Chamilo\Core\Admin\Language\Manager::CONTEXT,
-            Application::PARAM_ACTION => \Chamilo\Core\Admin\Language\Manager::ACTION_EXPORT
-        ];
-
-        $links[] = new Action(
-            $translator->trans('TranslationsExportDescription', [], $context),
-            $translator->trans('TranslationsExport', [], $context),
-            new FontAwesomeGlyph('language', ['fa-fw', 'fa-2x'], null, 'fas'),
-            $urlGenerator->fromParameters($parameters)
-        );
-
-        $parameters = [
             Application::PARAM_CONTEXT => $context,
             Application::PARAM_ACTION => Manager::ACTION_DIAGNOSE
         ];
@@ -85,6 +52,17 @@ class AdminActionProvider extends AbstractActionProvider implements ActionProvid
             $translator->trans('LogsViewerDescription', [], $context), $translator->trans('LogsViewer', [], $context),
             new FontAwesomeGlyph('info-circle', ['fa-fw', 'fa-2x'], null, 'fas'),
             $urlGenerator->fromParameters($parameters)
+        );
+
+        $parameters = [
+            Application::PARAM_CONTEXT => $context,
+            Application::PARAM_ACTION => Manager::ACTION_WHOIS_ONLINE
+        ];
+
+        $links[] = new Action(
+            $translator->trans('WhoisOnline', [], StringUtilities::LIBRARIES),
+            $translator->trans('WhoisOnline', [], StringUtilities::LIBRARIES),
+            new FontAwesomeGlyph('user', ['fa-fw', 'fa-2x'], null, 'fas'), $urlGenerator->fromParameters($parameters)
         );
 
         return new Actions($context, $links);

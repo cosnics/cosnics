@@ -7,7 +7,6 @@ use Chamilo\Libraries\DependencyInjection\CompilerPass\CacheDataPreLoaderCompile
 use Chamilo\Libraries\DependencyInjection\CompilerPass\ConsoleCompilerPass;
 use Chamilo\Libraries\DependencyInjection\CompilerPass\DoctrineConditionPartTranslatorCompilerPass;
 use Chamilo\Libraries\DependencyInjection\CompilerPass\EventDispatcherCompilerPass;
-use Chamilo\Libraries\DependencyInjection\CompilerPass\FormTypeCompilerPass;
 use Chamilo\Libraries\DependencyInjection\Interfaces\ICompilerPassExtension;
 use Chamilo\Libraries\DependencyInjection\Traits\ExtensionTrait;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
@@ -35,7 +34,6 @@ class DependencyInjectionExtension extends AbstractDependencyInjectionExtension
     {
         return [
             'Chamilo\Libraries' => [
-                'package.xml',
                 'architecture.xml',
                 'authentication.xml',
                 'cache.xml',
@@ -46,7 +44,6 @@ class DependencyInjectionExtension extends AbstractDependencyInjectionExtension
                 'platform.xml',
                 'storage.xml',
                 'storage.doctrine.xml',
-                'storage.doctrine_test.xml',
                 'support.xml',
                 'translation.xml',
                 'utilities.xml',
@@ -72,7 +69,6 @@ class DependencyInjectionExtension extends AbstractDependencyInjectionExtension
         $container->addCompilerPass(new ConsoleCompilerPass());
         $container->addCompilerPass(new CacheDataPreLoaderCompilerPass());
         $container->addCompilerPass(new CacheAdapterCompilerPass());
-        $container->addCompilerPass(new FormTypeCompilerPass());
         $container->addCompilerPass(new AuthenticationCompilerPass());
         $container->addCompilerPass(new DoctrineConditionPartTranslatorCompilerPass());
         $container->addCompilerPass(new EventDispatcherCompilerPass());

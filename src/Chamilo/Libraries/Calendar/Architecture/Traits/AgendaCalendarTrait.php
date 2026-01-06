@@ -41,7 +41,8 @@ trait AgendaCalendarTrait
         foreach ($events as $event)
         {
             $startDate = $event->getStartDate();
-            $dateKey = mktime(0, 0, 0, date('n', $startDate), date('j', $startDate), date('Y', $startDate));
+            $dateKey =
+                mktime(0, 0, 0, (int) date('n', $startDate), (int) date('j', $startDate), (int) date('Y', $startDate));
 
             if (!isset($structuredEvents[$dateKey]))
             {
@@ -79,7 +80,7 @@ trait AgendaCalendarTrait
 
     public function orderEvents(Event $eventLeft, Event $eventRight): int
     {
-        return strcmp($eventLeft->getStartDate(), $eventRight->getStartDate());
+        return strcmp((string) $eventLeft->getStartDate(), (string) $eventRight->getStartDate());
     }
 
     /**

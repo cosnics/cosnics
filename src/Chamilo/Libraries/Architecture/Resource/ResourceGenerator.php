@@ -3,7 +3,6 @@ namespace Chamilo\Libraries\Architecture\Resource;
 
 use Chamilo\Configuration\Package\Service\PackageBundlesCacheService;
 use Chamilo\Configuration\Package\Storage\DataClass\Package;
-use Chamilo\Configuration\Service\PackageContextSequencer;
 use Chamilo\Libraries\File\SystemPathBuilder;
 use stdClass;
 use Symfony\Component\Filesystem\Filesystem;
@@ -14,22 +13,18 @@ use Symfony\Component\Filesystem\Filesystem;
  */
 class ResourceGenerator
 {
-
     protected Filesystem $filesystem;
 
     private PackageBundlesCacheService $packageBundlesCacheService;
 
-    private PackageContextSequencer $packageContextSequencer;
-
     private SystemPathBuilder $systemPathBuilder;
 
     public function __construct(
-        PackageBundlesCacheService $packageBundlesCacheService, PackageContextSequencer $packageContextSequencer,
-        SystemPathBuilder $systemPathBuilder, Filesystem $filesystem
+        PackageBundlesCacheService $packageBundlesCacheService, SystemPathBuilder $systemPathBuilder,
+        Filesystem $filesystem
     )
     {
         $this->packageBundlesCacheService = $packageBundlesCacheService;
-        $this->packageContextSequencer = $packageContextSequencer;
         $this->systemPathBuilder = $systemPathBuilder;
         $this->filesystem = $filesystem;
     }
@@ -70,13 +65,11 @@ class ResourceGenerator
         $packageBundlesCacheService = $this->getPackageBundlesCacheService();
         $packages = $packageBundlesCacheService->getAllPackages()->getNestedPackages();
 
-        $orderedPackageContexts = $this->getPackageContextSequencer()->sequencePackageContexts(array_keys($packages));
-
         $resourceFiles = [];
 
-        foreach ($orderedPackageContexts as $orderedPackageContext)
+        foreach ($packages as $package)
         {
-            $this->processPackageResourceDefiniton($resourceFiles, $packages[$orderedPackageContext]);
+            $this->processPackageResourceDefiniton($resourceFiles, $package);
         }
 
         return $resourceFiles;
@@ -103,11 +96,6 @@ class ResourceGenerator
     public function getPackageBundlesCacheService(): PackageBundlesCacheService
     {
         return $this->packageBundlesCacheService;
-    }
-
-    public function getPackageContextSequencer(): PackageContextSequencer
-    {
-        return $this->packageContextSequencer;
     }
 
     public function getSystemPathBuilder(): SystemPathBuilder

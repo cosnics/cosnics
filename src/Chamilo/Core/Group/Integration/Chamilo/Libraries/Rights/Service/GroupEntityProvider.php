@@ -11,6 +11,7 @@ use Chamilo\Libraries\Rights\Interfaces\RightsEntityProvider;
 use Chamilo\Libraries\Storage\Query\Condition\Condition;
 use Chamilo\Libraries\Storage\Query\OrderBy;
 use Chamilo\Libraries\Utilities\StringUtilities;
+use Doctrine\Common\Collections\ArrayCollection;
 use Symfony\Component\Translation\Translator;
 
 /**
@@ -21,28 +22,19 @@ use Symfony\Component\Translation\Translator;
  */
 class GroupEntityProvider implements RightsEntityProvider
 {
-    const ENTITY_NAME = 'group';
-    const ENTITY_TYPE = 2;
+    public const ENTITY_NAME = 'group';
+    public const ENTITY_TYPE = 2;
 
     /**
-     * @var \Chamilo\Core\Group\Service\GroupService
+     * @var int[]
      */
-    private $groupService;
+    private array $groupCache = [];
 
-    /**
-     * @var \Symfony\Component\Translation\Translator
-     */
-    private $translator;
+    private GroupService $groupService;
 
-    /**
-     * @var \Chamilo\Libraries\Utilities\StringUtilities
-     */
-    private $stringUtilities;
+    private StringUtilities $stringUtilities;
 
-    /**
-     * @var integer[]
-     */
-    private $groupCache = [];
+    private Translator $translator;
 
     /**
      * @param \Chamilo\Core\Group\Service\GroupService $groupService
@@ -59,38 +51,30 @@ class GroupEntityProvider implements RightsEntityProvider
     }
 
     /**
-     * @param \Chamilo\Libraries\Storage\Query\Condition\Condition $condition
-     *
-     * @return integer
+     * @throws \Chamilo\Libraries\Storage\Architecture\Exceptions\StorageMethodException
      */
-    public function countEntityItems(Condition $condition = null)
+    public function countEntityItems(Condition $condition = null): int
     {
         return $this->getGroupService()->countGroups($condition);
     }
 
     /**
-     * @param \Chamilo\Libraries\Storage\Query\Condition\Condition $condition
-     * @param integer $offset
-     * @param integer $count
-     * @param \Chamilo\Libraries\Storage\Query\OrderBy $orderBy
-     *
-     * @return mixed
+     * @throws \Chamilo\Libraries\Storage\Architecture\Exceptions\StorageMethodException
      */
     public function findEntityItems(
         Condition $condition = null, int $offset = null, int $count = null, OrderBy $orderBy = new OrderBy()
-    )
+    ): ArrayCollection
     {
         return $this->getGroupService()->findGroups($condition, $offset, $count, $orderBy);
     }
 
     /**
-     * @param integer $entityIdentifier
-     *
-     * @return string
+     * @throws \Chamilo\Libraries\Storage\Architecture\Exceptions\StorageNoResultException
+     * @throws \Chamilo\Libraries\Storage\Architecture\Exceptions\StorageMethodException
      */
     public function getEntityDescriptionByIdentifier(int $entityIdentifier)
     {
-        $group = $this->getGroupService()->findGroupByIdentifier($entityIdentifier);
+        $group = $this->getGroupService()->findGroupByIdentifier((string) $entityIdentifier);
 
         if (!$group instanceof Group)
         {
@@ -101,7 +85,7 @@ class GroupEntityProvider implements RightsEntityProvider
     }
 
     /**
-     * @param integer $entityIdentifier
+     * @param int $entityIdentifier
      *
      * @return mixed
      */
@@ -143,9 +127,9 @@ class GroupEntityProvider implements RightsEntityProvider
     }
 
     /**
-     * @param integer $userIdentifier
+     * @param int $userIdentifier
      *
-     * @return integer[]
+     * @return int
      * @throws \Exception
      */
     public function getEntityItemIdentifiersForUserIdentifier($userIdentifier)
@@ -168,7 +152,7 @@ class GroupEntityProvider implements RightsEntityProvider
     }
 
     /**
-     * @param integer $entityIdentifier
+     * @param int $entityIdentifier
      *
      * @return string
      */

@@ -17,13 +17,9 @@ class Package extends DataClass
 {
     public const CONTEXT = 'Chamilo\Configuration\Package';
 
-    public const PROPERTY_ADDITIONAL = 'additional';
     public const PROPERTY_AUTHORS = 'authors';
     public const PROPERTY_CATEGORY = 'category';
     public const PROPERTY_CONTEXT = 'context';
-    public const PROPERTY_CORE_INSTALL = 'core_install';
-    public const PROPERTY_DEFAULT_INSTALL = 'default_install';
-    public const PROPERTY_DEPENDENCIES = 'dependencies';
     public const PROPERTY_DESCRIPTION = 'description';
     public const PROPERTY_EXTRA = 'extra';
     public const PROPERTY_NAME = 'name';
@@ -75,30 +71,6 @@ class Package extends DataClass
     }
 
     /**
-     * @return string[]
-     */
-    public function getAdditional()
-    {
-        return unserialize($this->getDefaultProperty(self::PROPERTY_ADDITIONAL));
-    }
-
-    /**
-     * @return int
-     */
-    public function getCoreInstall()
-    {
-        return $this->getDefaultProperty(self::PROPERTY_CORE_INSTALL);
-    }
-
-    /**
-     * @return int
-     */
-    public function getDefaultInstall()
-    {
-        return $this->getDefaultProperty(self::PROPERTY_DEFAULT_INSTALL);
-    }
-
-    /**
      * @param string[] $extendedPropertyNames
      *
      * @return mixed
@@ -112,12 +84,8 @@ class Package extends DataClass
         $extendedPropertyNames[] = self::PROPERTY_AUTHORS;
         $extendedPropertyNames[] = self::PROPERTY_VERSION;
         $extendedPropertyNames[] = self::PROPERTY_DESCRIPTION;
-        $extendedPropertyNames[] = self::PROPERTY_CORE_INSTALL;
-        $extendedPropertyNames[] = self::PROPERTY_DEFAULT_INSTALL;
-        $extendedPropertyNames[] = self::PROPERTY_DEPENDENCIES;
         $extendedPropertyNames[] = self::PROPERTY_EXTRA;
         $extendedPropertyNames[] = self::PROPERTY_RESOURCES;
-        $extendedPropertyNames[] = self::PROPERTY_ADDITIONAL;
 
         return parent::getDefaultPropertyNames($extendedPropertyNames);
     }
@@ -173,16 +141,6 @@ class Package extends DataClass
     }
 
     /**
-     * Returns the dependencies for this dataclass
-     *
-     * @return ?\Chamilo\Configuration\Package\Properties\Dependencies\Dependencies
-     */
-    public function get_dependencies()
-    {
-        return unserialize($this->getDefaultProperty(self::PROPERTY_DEPENDENCIES));
-    }
-
-    /**
      * @return string
      */
     public function get_description()
@@ -220,38 +178,6 @@ class Package extends DataClass
     public function get_version()
     {
         return $this->getDefaultProperty(self::PROPERTY_VERSION);
-    }
-
-    /**
-     * @return bool
-     */
-    public function has_dependencies()
-    {
-        return (!is_null($this->get_dependencies()));
-    }
-
-    /**
-     * @param string[] $additional
-     */
-    public function setAdditional($additional)
-    {
-        $this->setDefaultProperty(self::PROPERTY_ADDITIONAL, serialize($additional));
-    }
-
-    /**
-     * @param int $coreInstall
-     */
-    public function setCoreInstall($coreInstall)
-    {
-        $this->setDefaultProperty(self::PROPERTY_CORE_INSTALL, $coreInstall);
-    }
-
-    /**
-     * @param int $defaultInstall
-     */
-    public function setDefaultInstall($defaultInstall)
-    {
-        $this->setDefaultProperty(self::PROPERTY_DEFAULT_INSTALL, $defaultInstall);
     }
 
     /**
@@ -294,14 +220,6 @@ class Package extends DataClass
     public function set_context($context)
     {
         $this->setDefaultProperty(self::PROPERTY_CONTEXT, $context);
-    }
-
-    /**
-     * @param $dependencies
-     */
-    public function set_dependencies($dependencies)
-    {
-        $this->setDefaultProperty(self::PROPERTY_DEPENDENCIES, serialize($dependencies));
     }
 
     /**

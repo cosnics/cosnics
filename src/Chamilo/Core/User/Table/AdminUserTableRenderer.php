@@ -2,7 +2,6 @@
 namespace Chamilo\Core\User\Table;
 
 use Chamilo\Configuration\Service\Consulter\ConfigurationConsulter;
-use Chamilo\Core\User\Integration\Chamilo\Core\Reporting\Template\LoginTemplate;
 use Chamilo\Core\User\Manager;
 use Chamilo\Core\User\Service\UserUrlGenerator;
 use Chamilo\Core\User\Storage\DataClass\User;
@@ -108,19 +107,6 @@ class AdminUserTableRenderer extends DataClassListTableRenderer implements Table
             )
         );
 
-        if ($this->getConfigurationConsulter()->getSetting(['Chamilo\Core\Admin', 'active_online_email_editor']))
-        {
-            $emailUrl = $urlGenerator->fromParameters(
-                [Application::PARAM_CONTEXT => Manager::CONTEXT, Application::PARAM_ACTION => Manager::ACTION_EMAIL]
-            );
-
-            $actions->addAction(
-                new TableAction(
-                    $emailUrl, $translator->trans('EmailSelected', [], Manager::CONTEXT), false
-                )
-            );
-        }
-
         return $actions;
     }
 
@@ -219,23 +205,6 @@ class AdminUserTableRenderer extends DataClassListTableRenderer implements Table
                 )
             );
 
-            $reportUrl = $urlGenerator->fromParameters(
-                [
-                    Application::PARAM_CONTEXT => Manager::CONTEXT,
-                    Application::PARAM_ACTION => Manager::ACTION_REPORTING,
-                    \Chamilo\Core\User\Integration\Chamilo\Core\Reporting\Manager::PARAM_ACTION => \Chamilo\Core\User\Integration\Chamilo\Core\Reporting\Manager::ACTION_VIEW,
-                    \Chamilo\Core\User\Integration\Chamilo\Core\Reporting\Manager::PARAM_TEMPLATE_ID => LoginTemplate::TEMPLATE_ID,
-                    Manager::PARAM_USER_USER_ID => $user->get_id()
-                ]
-            );
-
-            $toolbar->add_item(
-                new ToolBarItem(
-                    $translator->trans('Report', [], Manager::CONTEXT), new FontAwesomeGlyph('chart-pie'), $reportUrl,
-                    ToolbarItem::DISPLAY_ICON
-                )
-            );
-
             $viewQuotaUrl = $this->getUserUrlGenerator()->getViewQuotaUrl($user);
 
             $toolbar->add_item(
@@ -244,18 +213,6 @@ class AdminUserTableRenderer extends DataClassListTableRenderer implements Table
                     $viewQuotaUrl, ToolbarItem::DISPLAY_ICON
                 )
             );
-
-            if ($this->getConfigurationConsulter()->getSetting(['Chamilo\Core\Admin', 'active_online_email_editor']))
-            {
-                $emailUrl = $this->getUserUrlGenerator()->getEmailUrl($user);
-
-                $toolbar->add_item(
-                    new ToolBarItem(
-                        $translator->trans('SendEmail', [], Manager::CONTEXT), new FontAwesomeGlyph('envelope'),
-                        $emailUrl, ToolbarItem::DISPLAY_ICON
-                    )
-                );
-            }
         }
 
         if ($user->get_id() != $this->getUser()->getId())

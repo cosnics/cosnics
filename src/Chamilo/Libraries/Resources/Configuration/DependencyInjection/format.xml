@@ -33,15 +33,11 @@
         <service id="Chamilo\Libraries\Format\NotificationMessage\NotificationMessageStorageInterface"
                  alias="Chamilo\Libraries\Format\NotificationMessage\NotificationMessageSessionStorage"/>
 
-        <service id="Chamilo\Libraries\Format\Slideshow\SlideshowRenderer"/>
-
         <service id="Chamilo\Libraries\Format\Table\ArrayCollectionTableRenderer"/>
         <service id="Chamilo\Libraries\Format\Table\PropertiesTableRenderer"/>
         <service id="Chamilo\Libraries\Format\Table\SimpleTableRenderer"/>
         <service id="Chamilo\Libraries\Format\Table\ListTableRenderer"/>
         <service id="Chamilo\Libraries\Format\Table\ListHtmlTableRenderer"/>
-        <service id="Chamilo\Libraries\Format\Table\GalleryTableRenderer"/>
-        <service id="Chamilo\Libraries\Format\Table\GalleryHtmlTableRenderer"/>
         <service id="Chamilo\Libraries\Format\Table\Pager"/>
         <service id="Chamilo\Libraries\Format\Table\PagerRenderer"/>
         <service id="Chamilo\Libraries\Format\Table\RequestTableParameterValuesCompiler"/>

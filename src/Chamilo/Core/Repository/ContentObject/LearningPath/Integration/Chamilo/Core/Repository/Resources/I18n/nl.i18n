@@ -1,7 +1,0 @@
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-; Package = Chamilo\Core\Repository\ContentObject\LearningPath\Integration\Chamilo\Core\Repository
-; Language = nl
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-
-TypeName = "Repository"
-PublicationImpossible = "Rechtstreekse publicatie van <em>%CONTENT_OBJECT%</em> in een leerpad is niet mogelijk"

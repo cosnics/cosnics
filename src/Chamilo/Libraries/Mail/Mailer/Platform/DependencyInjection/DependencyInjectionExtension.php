@@ -20,6 +20,6 @@ class DependencyInjectionExtension extends AbstractDependencyInjectionExtension 
 
     public function getConfigurationFiles(): array
     {
-        return ['Chamilo\Libraries\Mail\Mailer\Platform' => ['package.xml']];
+        return [];
     }
 }

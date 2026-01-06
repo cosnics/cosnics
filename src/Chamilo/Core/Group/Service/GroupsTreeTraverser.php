@@ -70,6 +70,9 @@ class GroupsTreeTraverser
         $this->propertyMapper = $propertyMapper;
     }
 
+    /**
+     * @throws \Chamilo\Libraries\Storage\Architecture\Exceptions\StorageMethodException
+     */
     public function countSubGroupsForGroup(Group $group, bool $recursiveSubgroups = false): int
     {
         $cacheKey = md5(serialize([$group->getId(), $recursiveSubgroups]));
@@ -97,6 +100,9 @@ class GroupsTreeTraverser
         return $this->subGroupsCount[$cacheKey];
     }
 
+    /**
+     * @throws \Chamilo\Libraries\Storage\Architecture\Exceptions\StorageMethodException
+     */
     public function countUsersForGroup(Group $group, bool $includeSubGroups = false, bool $recursiveSubgroups = false
     ): int
     {
@@ -124,6 +130,7 @@ class GroupsTreeTraverser
 
     /**
      * @return string[]
+     * @throws \Chamilo\Libraries\Storage\Architecture\Exceptions\StorageMethodException
      */
     public function findAllSubscribedGroupIdentifiersForUserIdentifier(string $userIdentifier): array
     {
@@ -152,6 +159,7 @@ class GroupsTreeTraverser
      * @param string $userIdentifier
      *
      * @return \Doctrine\Common\Collections\ArrayCollection<\Chamilo\Core\Group\Storage\DataClass\Group>
+     * @throws \Chamilo\Libraries\Storage\Architecture\Exceptions\StorageMethodException
      */
     public function findAllSubscribedGroupsForUserIdentifier(string $userIdentifier): ArrayCollection
     {
@@ -180,6 +188,7 @@ class GroupsTreeTraverser
      * @param string $userIdentifier
      *
      * @return ArrayCollection<string[]>
+     * @throws \Chamilo\Libraries\Storage\Architecture\Exceptions\StorageMethodException
      */
     public function findDirectlySubscribedGroupNestingValuesForUserIdentifier(string $userIdentifier): ArrayCollection
     {
@@ -190,6 +199,7 @@ class GroupsTreeTraverser
      * @param string $userIdentifier
      *
      * @return \Doctrine\Common\Collections\ArrayCollection<\Chamilo\Core\Group\Storage\DataClass\Group>
+     * @throws \Chamilo\Libraries\Storage\Architecture\Exceptions\StorageMethodException
      */
     public function findDirectlySubscribedGroupsForUserIdentifier(string $userIdentifier): ArrayCollection
     {
@@ -198,6 +208,7 @@ class GroupsTreeTraverser
 
     /**
      * @return int[]
+     * @throws \Chamilo\Libraries\Storage\Architecture\Exceptions\StorageMethodException
      */
     public function findParentGroupIdentifiersForGroup(Group $group, bool $includeSelf = true): array
     {
@@ -217,6 +228,7 @@ class GroupsTreeTraverser
      * @param bool $includeSelf
      *
      * @return \Doctrine\Common\Collections\ArrayCollection<\Chamilo\Core\Group\Storage\DataClass\Group>
+     * @throws \Chamilo\Libraries\Storage\Architecture\Exceptions\StorageMethodException
      */
     public function findParentGroupsForGroup(Group $group, bool $includeSelf = true): ArrayCollection
     {
@@ -225,6 +237,7 @@ class GroupsTreeTraverser
 
     /**
      * @return string[]
+     * @throws \Chamilo\Libraries\Storage\Architecture\Exceptions\StorageMethodException
      */
     public function findSubGroupIdentifiersForGroup(Group $group, bool $recursiveSubgroups = false): array
     {
@@ -241,6 +254,7 @@ class GroupsTreeTraverser
 
     /**
      * @return \Chamilo\Core\Group\Storage\DataClass\Group[]
+     * @throws \Chamilo\Libraries\Storage\Architecture\Exceptions\StorageMethodException
      */
     public function findSubGroupsForGroup(Group $group, bool $recursiveSubgroups = false): array
     {
@@ -259,6 +273,7 @@ class GroupsTreeTraverser
 
     /**
      * @return string[]
+     * @throws \Chamilo\Libraries\Storage\Architecture\Exceptions\StorageMethodException
      */
     public function findUserIdentifiersForGroup(
         Group $group, bool $includeSubGroups = false, bool $recursiveSubgroups = false
@@ -286,6 +301,9 @@ class GroupsTreeTraverser
         return $this->groupUserIdentifiers[$cacheKey];
     }
 
+    /**
+     * @throws \Chamilo\Libraries\Storage\Architecture\Exceptions\StorageMethodException
+     */
     public function getFullyQualifiedNameForGroup(Group $group, bool $includeSelf = true): string
     {
         $parentGroups = $this->findParentGroupsForGroup($group, $includeSelf);
@@ -300,6 +318,10 @@ class GroupsTreeTraverser
         return implode(' <span class="text-primary">></span> ', array_reverse($names));
     }
 
+    /**
+     * @throws \Chamilo\Libraries\Storage\Architecture\Exceptions\StorageMethodException
+     * @throws \Chamilo\Libraries\Storage\Architecture\Exceptions\StorageNoResultException
+     */
     public function getHighestGroupQuotumForUser(User $user): int
     {
         $userGroupIdentifiers = $this->findAllSubscribedGroupIdentifiersForUserIdentifier($user->getId());
@@ -312,6 +334,10 @@ class GroupsTreeTraverser
         return $this->groupRepository->getHighestGroupQuotumForUserGroupIdentifiers($userGroupIdentifiers);
     }
 
+    /**
+     * @throws \Chamilo\Libraries\Storage\Architecture\Exceptions\StorageNoResultException
+     * @throws \Chamilo\Libraries\Storage\Architecture\Exceptions\StorageMethodException
+     */
     public function getLowestGroupQuotumForUser(User $user): int
     {
         $userGroupIdentifiers = $this->findAllSubscribedGroupIdentifiersForUserIdentifier($user->getId());

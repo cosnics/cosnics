@@ -64,20 +64,6 @@ class Group extends NestedSet
     }
 
     /**
-     * Instructs the DataManager to delete this group.
-     *
-     * @param $in_batch - delete groups in batch and fix nested values later
-     *
-     * @return bool True if success, false otherwise.
-     * @throws \Throwable
-     * @deprecated should use $this->delete() of self::deletes( $array ) instead
-     */
-    public function delete_group($in_batch = false): bool
-    {
-        return self::delete();
-    }
-
-    /**
      * @return string[]
      */
     public static function getDefaultPropertyNames(array $extendedPropertyNames = []): array
@@ -125,6 +111,7 @@ class Group extends NestedSet
     }
 
     /**
+     * @throws \Chamilo\Libraries\Storage\Architecture\Exceptions\StorageMethodException
      * @deprecated Use GroupsTreeTraverser::getFullyQualifiedNameForGroup() now
      */
     public function get_fully_qualified_name(bool $include_self = true): string
@@ -154,6 +141,7 @@ class Group extends NestedSet
 
     /**
      * @return \Chamilo\Core\Group\Storage\DataClass\Group[]
+     * @throws \Chamilo\Libraries\Storage\Architecture\Exceptions\StorageMethodException
      * @deprecated Use GroupsTreeTraverser::findSubGroupsForGroup() now
      */
     public function get_subgroups(bool $recursive = false): array
@@ -166,6 +154,7 @@ class Group extends NestedSet
      * @param bool $recursive_subgroups
      *
      * @return string[]
+     * @throws \Chamilo\Libraries\Storage\Architecture\Exceptions\StorageMethodException
      * @deprecated Use GroupsTreeTraverser::findUserIdentifiersForGroup() now
      */
     public function get_users(bool $include_subgroups = false, bool $recursive_subgroups = false): array
@@ -192,6 +181,10 @@ class Group extends NestedSet
     }
 
     /**
+     * @param $new_parent_id
+     * @param $new_previous_id
+     * @param $condition
+     *
      * @return bool
      * @throws \Throwable
      * @deprecated Use GroupService::moveGroup() now

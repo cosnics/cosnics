@@ -140,7 +140,7 @@ class EventParser
     }
 
     /**
-     * @return \Chamilo\Core\Repository\Integration\Chamilo\Libraries\Calendar\Event\Event[]
+     * @return \Chamilo\Application\Calendar\Extension\Office365\Integration\Chamilo\Libraries\Calendar\Event\Event[]
      */
     public function getEvents(): array
     {
@@ -205,8 +205,7 @@ class EventParser
             }
 
             return new EventAttendee(
-                $email, $name,
-                EventAttendee::TYPE_ORGANIZER, null, EventAttendee::RESPONSE_STATUS_ORGANIZER
+                $email, $name, EventAttendee::TYPE_ORGANIZER, null, EventAttendee::RESPONSE_STATUS_ORGANIZER
             );
         }
 

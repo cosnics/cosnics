@@ -93,7 +93,7 @@ class ClassnameUtilities
     }
 
     /**
-     * Get the child namespace, e.g.  Chamilo\Core\Repository > Core\Repository
+     * Get the child namespace, e.g.  Chamilo\Core\User > Core\User
      */
     public function getNamespaceChild(string $namespace, $levels = 1): string
     {
@@ -134,7 +134,7 @@ class ClassnameUtilities
     }
 
     /**
-     * @description Get the parent namespace, e.g. Chamilo\Core\Repository > Chamilo\Core
+     * @description Get the parent namespace, e.g. Chamilo\Core\User > Chamilo\Core
      */
     public function getNamespaceParent(string $namespace, $levels = 1): string
     {

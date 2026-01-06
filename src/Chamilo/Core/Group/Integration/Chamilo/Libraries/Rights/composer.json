@@ -29,21 +29,7 @@
         "cosnics": {
             "name": "Rights",
             "context": "Chamilo\\Core\\Group\\Integration\\Chamilo\\Libraries\\Rights",
-            "type": "Chamilo\\Core\\Group\\Integration",
-            "dependencies": [
-                {
-                    "id": "Chamilo\\Core\\Group",
-                    "version": ">=1.0.0"
-                },
-                {
-                    "id": "Chamilo\\Libraries\\Rights",
-                    "version": ">=1.0.0"
-                }
-            ],
-            "install": {
-                "default": 0,
-                "core": 0
-            }
+            "type": "Chamilo\\Core\\Group\\Integration"
         }
     }
 }

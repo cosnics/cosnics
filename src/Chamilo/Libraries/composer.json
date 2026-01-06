@@ -10,7 +10,6 @@
         "phpmailer/phpmailer": "6.9.*",
         "phpoffice/phpspreadsheet": "2.*",
         "sentry/sdk": "4.*",
-        "simplepie/simplepie": "1.*",
         "spipu/html2pdf": "5.2.*",
         "voku/stringy": "6.*"
     },
@@ -34,10 +33,6 @@
             "name": "Libraries",
             "context": "Chamilo\\Libraries",
             "type": "Chamilo",
-            "install": {
-                "core": 1,
-                "default": 0
-            },
             "resources": [
                 {
                     "output": "Chamilo/Libraries/Resources/Javascript/",
@@ -163,16 +158,6 @@
                 {
                     "output": "Chamilo/Libraries/Resources/Css/ErrorPages.Ruby.min.css",
                     "input": "Resources/Css/Ruby/ErrorPages.min.css"
-                }
-            ],
-            "additional": [
-                "Chamilo\\Libraries\\Calendar",
-                "Chamilo\\Libraries\\Rights"
-            ],
-            "dependencies": [
-                {
-                    "id": "Chamilo\\Configuration",
-                    "version": ">=1.0.0"
                 }
             ]
         }

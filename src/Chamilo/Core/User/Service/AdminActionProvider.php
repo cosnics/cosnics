@@ -43,23 +43,6 @@ class AdminActionProvider extends AbstractActionProvider implements ActionProvid
             new FontAwesomeGlyph('list', ['fa-fw', 'fa-2x'], null, 'fas'), $urlGenerator->fromParameters($parameters)
         );
 
-        $allowRegistration = $this->getConfigurationConsulter()->getSetting([$context, 'allow_registration']);
-
-        if ($allowRegistration == 2)
-        {
-            $parameters = [
-                Application::PARAM_CONTEXT => $context,
-                Application::PARAM_ACTION => Manager::ACTION_USER_APPROVAL_BROWSER
-            ];
-
-            $links[] = new Action(
-                $translator->trans('ApproveListDescription', [], $context),
-                $translator->trans('ApproveList', [], $context),
-                new FontAwesomeGlyph('list', ['fa-fw', 'fa-2x'], null, 'fas'),
-                $urlGenerator->fromParameters($parameters)
-            );
-        }
-
         $parameters = [
             Application::PARAM_CONTEXT => $context,
             Application::PARAM_ACTION => Manager::ACTION_CREATE_USER
@@ -92,17 +75,6 @@ class AdminActionProvider extends AbstractActionProvider implements ActionProvid
             $translator->trans('ImportDescription', [], $context),
             $translator->trans('Import', [], StringUtilities::LIBRARIES),
             new FontAwesomeGlyph('upload', ['fa-fw', 'fa-2x'], null, 'fas'), $urlGenerator->fromParameters($parameters)
-        );
-
-        $parameters = [
-            Application::PARAM_CONTEXT => $context,
-            Application::PARAM_ACTION => Manager::ACTION_BUILD_USER_FIELDS
-        ];
-
-        $links[] = new Action(
-            $translator->trans('BuildUserFieldsDescription', [], $context),
-            $translator->trans('BuildUserFields', [], $context),
-            new FontAwesomeGlyph('user', ['fa-fw', 'fa-2x'], null, 'fas'), $urlGenerator->fromParameters($parameters)
         );
 
         $parameters = [

@@ -18,6 +18,7 @@ class DeleterComponent extends Manager
 
     /**
      * @throws \Exception
+     * @throws \Throwable
      */
     public function run()
     {

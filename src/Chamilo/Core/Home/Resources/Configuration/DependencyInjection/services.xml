@@ -19,7 +19,6 @@
         <service id="Chamilo\Core\Home\Renderer\ColumnRenderer"/>
         <service id="Chamilo\Core\Home\Renderer\BlockRendererFactory"/>
 
-        <service id="Chamilo\Core\Home\Service\AngularConnectorService"/>
         <service id="Chamilo\Core\Home\Service\HomeService"/>
         <service id="Chamilo\Core\Home\Repository\HomeRepository"/>
 

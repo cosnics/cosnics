@@ -396,14 +396,22 @@ class GroupService
     }
 
     /**
-     * @throws \Chamilo\Libraries\Storage\Architecture\Exceptions\StorageNoResultException
+     * @param string $groupCode
+     * @param \Chamilo\Core\User\Storage\DataClass\User $user
+     *
+     * @return \Chamilo\Core\Group\Storage\DataClass\GroupRelUser
+     * @throws \Chamilo\Libraries\Storage\Architecture\Exceptions\StorageLastInsertedIdentifierException
      * @throws \Chamilo\Libraries\Storage\Architecture\Exceptions\StorageMethodException
+     * @throws \Chamilo\Libraries\Storage\Architecture\Exceptions\StorageNoResultException
      */
     public function subscribeUserToGroupByCode(string $groupCode, User $user): GroupRelUser
     {
         return $this->getGroupMembershipService()->subscribeUserToGroup($this->findGroupByCode($groupCode), $user);
     }
 
+    /**
+     * @throws \Chamilo\Libraries\Storage\Architecture\Exceptions\StorageMethodException
+     */
     public function truncateGroup(Group $group): bool
     {
         return $this->getGroupMembershipService()->unsubscribeAllUsersFromGroup($group);

@@ -6,16 +6,10 @@ use Chamilo\Application\Calendar\Repository\CalendarRendererProviderRepository;
 use Chamilo\Configuration\Service\Consulter\RegistrationConsulter;
 use Chamilo\Configuration\Storage\DataClass\Registration;
 use Chamilo\Core\User\Storage\DataClass\User;
-use Chamilo\Libraries\Architecture\Application\Application;
 use Chamilo\Libraries\Architecture\Application\Routing\UrlGenerator;
-use Chamilo\Libraries\Calendar\Architecture\Interfaces\ActionSupport;
 use Chamilo\Libraries\Calendar\Architecture\Interfaces\VisibilitySupport;
-use Chamilo\Libraries\Calendar\Event\Event;
 use Chamilo\Libraries\DependencyInjection\DependencyInjectionContainerBuilder;
-use Chamilo\Libraries\Format\Structure\Glyph\FontAwesomeGlyph;
-use Chamilo\Libraries\Format\Structure\ToolbarItem;
 use Chamilo\Libraries\Translation\Translation;
-use Chamilo\Libraries\Utilities\StringUtilities;
 use ReflectionClass;
 
 /**
@@ -25,7 +19,7 @@ use ReflectionClass;
  * @author  Eduard Vossen <eduard.vossen@ehb.be>
  */
 class CalendarRendererProvider extends \Chamilo\Libraries\Calendar\Service\CalendarRendererProvider
-    implements VisibilitySupport, ActionSupport
+    implements VisibilitySupport
 {
 
     /**
@@ -88,61 +82,6 @@ class CalendarRendererProvider extends \Chamilo\Libraries\Calendar\Service\Calen
     public function getCalendarRendererProviderRepository()
     {
         return $this->dataProviderRepository;
-    }
-
-    /**
-     * @see \Chamilo\Libraries\Calendar\Architecture\Interfaces\ActionSupport::getEventActions()
-     */
-    public function getEventActions(Event $event): array
-    {
-        $actions = [];
-
-        if ($event->getContext() == \Chamilo\Application\Calendar\Extension\Personal\Manager::CONTEXT)
-        {
-            $actions[] = new ToolbarItem(
-                Translation::get('Edit', null, StringUtilities::LIBRARIES), new FontAwesomeGlyph('pencil-alt'),
-                $this->getPublicationEditingUrl($event->getId()), ToolbarItem::DISPLAY_ICON
-            );
-
-            $actions[] = new ToolbarItem(
-                Translation::get('Delete', null, StringUtilities::LIBRARIES), new FontAwesomeGlyph('times'),
-                $this->getPublicationDeletingUrl($event->getId()), ToolbarItem::DISPLAY_ICON, true
-            );
-        }
-
-        return $actions;
-    }
-
-    /**
-     * @param int $eventIdentifier
-     *
-     * @return string
-     */
-    private function getPublicationDeletingUrl($eventIdentifier)
-    {
-        return $this->getUrlGenerator()->fromParameters(
-            [
-                Application::PARAM_CONTEXT => \Chamilo\Application\Calendar\Extension\Personal\Manager::CONTEXT,
-                \Chamilo\Application\Calendar\Extension\Personal\Manager::PARAM_ACTION => \Chamilo\Application\Calendar\Extension\Personal\Manager::ACTION_DELETE,
-                \Chamilo\Application\Calendar\Extension\Personal\Manager::PARAM_PUBLICATION_ID => $eventIdentifier
-            ]
-        );
-    }
-
-    /**
-     * @param int $eventIdentifier
-     *
-     * @return string
-     */
-    private function getPublicationEditingUrl($eventIdentifier)
-    {
-        return $this->getUrlGenerator()->fromParameters(
-            [
-                Application::PARAM_CONTEXT => \Chamilo\Application\Calendar\Extension\Personal\Manager::CONTEXT,
-                \Chamilo\Application\Calendar\Extension\Personal\Manager::PARAM_ACTION => \Chamilo\Application\Calendar\Extension\Personal\Manager::ACTION_EDIT,
-                \Chamilo\Application\Calendar\Extension\Personal\Manager::PARAM_PUBLICATION_ID => $eventIdentifier
-            ]
-        );
     }
 
     public function getSourceNames()
@@ -231,6 +170,14 @@ class CalendarRendererProvider extends \Chamilo\Libraries\Calendar\Service\Calen
         return $this->visibilityContext;
     }
 
+    /**
+     * @param string $visibilityContext
+     */
+    public function setVisibilityContext($visibilityContext)
+    {
+        $this->visibilityContext = $visibilityContext;
+    }
+
     public function getVisibilityData(): array
     {
         return [];
@@ -252,13 +199,5 @@ class CalendarRendererProvider extends \Chamilo\Libraries\Calendar\Service\Calen
     public function setCalendarRendererProviderRepository(CalendarRendererProviderRepository $dataProviderRepository)
     {
         $this->dataProviderRepository = $dataProviderRepository;
-    }
-
-    /**
-     * @param string $visibilityContext
-     */
-    public function setVisibilityContext($visibilityContext)
-    {
-        $this->visibilityContext = $visibilityContext;
     }
 }

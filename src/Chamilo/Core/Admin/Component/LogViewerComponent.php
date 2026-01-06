@@ -2,8 +2,8 @@
 namespace Chamilo\Core\Admin\Component;
 
 use Chamilo\Core\Admin\Manager;
-use Chamilo\Core\Admin\Service\BreadcrumbGenerator;
-use Chamilo\Libraries\Format\Breadcrumb\BreadcrumbGeneratorInterface;
+use Chamilo\Core\User\Storage\DataClass\User;
+use Chamilo\Libraries\Architecture\Exceptions\NotAllowedException;
 use Chamilo\Libraries\Format\Form\FormValidator;
 use Chamilo\Libraries\Utilities\StringUtilities;
 use HTML_Table;
@@ -11,6 +11,7 @@ use Symfony\Component\Finder\Iterator\FileTypeFilterIterator;
 
 /**
  * @package Chamilo\Core\Admin\Component
+ * @author Hans De Bisschop <hans.de.bisschop@ehb.be>
  */
 class LogViewerComponent extends Manager
 {
@@ -22,7 +23,10 @@ class LogViewerComponent extends Manager
      */
     public function run()
     {
-        $this->checkAuthorization(Manager::CONTEXT, 'ManageChamilo');
+        if (!$this->getUser() instanceof User || !$this->getUser()->isPlatformAdmin())
+        {
+            throw new NotAllowedException();
+        }
 
         $form = $this->buildForm();
 
@@ -147,10 +151,5 @@ class LogViewerComponent extends Manager
         }
 
         return $table->toHtml();
-    }
-
-    public function getBreadcrumbGenerator(): BreadcrumbGeneratorInterface
-    {
-        return $this->getService(BreadcrumbGenerator::class);
     }
 }

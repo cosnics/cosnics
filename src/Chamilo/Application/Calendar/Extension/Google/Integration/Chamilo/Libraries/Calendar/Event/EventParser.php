@@ -119,7 +119,7 @@ class EventParser
 
     /**
      *
-     * @return \Chamilo\Core\Repository\Integration\Chamilo\Libraries\Calendar\Event\Event[]
+     * @return \Chamilo\Application\Calendar\Extension\Google\Integration\Chamilo\Libraries\Calendar\Event\Event[]
      */
     public function getEvents()
     {
@@ -145,7 +145,7 @@ class EventParser
         $event->setCalendarProperties($this->getCalendarProperties());
         $event->setGoogleCalendarEvent($googleCalendarEvent);
 
-        return array($event);
+        return [$event];
     }
 
     /**
@@ -206,7 +206,7 @@ class EventParser
     private function getSource(CalendarProperties $calendarProperties)
     {
         return Translation::get(
-            'SourceName', array('CALENDAR' => $calendarProperties->getSummary()), Manager::CONTEXT
+            'SourceName', ['CALENDAR' => $calendarProperties->getSummary()], Manager::CONTEXT
         );
     }
 

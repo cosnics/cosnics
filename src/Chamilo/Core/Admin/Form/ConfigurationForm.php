@@ -477,11 +477,11 @@ class ConfigurationForm extends FormValidator
     }
 
     /**
-     * Updates the configuration.
-     *
-     * @return bool True if the update succeeded, false otherwise.
-     * @throws \Symfony\Component\Cache\Exception\CacheException
+     * @return bool
+     * @throws \Chamilo\Libraries\Storage\Architecture\Exceptions\StorageMethodException
+     * @throws \Chamilo\Libraries\Storage\Architecture\Exceptions\StorageNoResultException
      * @throws \QuickformException
+     * @throws \Symfony\Component\Cache\Exception\CacheException
      */
     public function update_configuration(): bool
     {
@@ -533,6 +533,9 @@ class ConfigurationForm extends FormValidator
     }
 
     /**
+     * @return bool
+     * @throws \Chamilo\Libraries\Storage\Architecture\Exceptions\StorageMethodException
+     * @throws \Chamilo\Libraries\Storage\Architecture\Exceptions\StorageNoResultException
      * @throws \QuickformException
      * @throws \Symfony\Component\Cache\Exception\CacheException
      */

@@ -204,7 +204,7 @@ class User extends DataClass
 
     /**
      * Returns the external authentication system unique id for this user (useful for instance with : Shibboleth,
-     * OpenID, LDAP, ...)
+     * OpenID, ...)
      */
     public function get_external_uid(): ?string
     {

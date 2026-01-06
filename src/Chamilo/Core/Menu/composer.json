@@ -38,16 +38,6 @@
                         "Resources/Css/Ruby/Stylesheet.min.css"
                     ]
                 }
-            ],
-            "install": {
-                "core": 1,
-                "default": 0
-            },
-            "dependencies": [
-                {
-                    "id": "Chamilo\\Configuration",
-                    "version": ">=1.0.0"
-                }
             ]
         }
     }

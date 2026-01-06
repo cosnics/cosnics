@@ -43,50 +43,10 @@
                      method="getPdoSessionHandler"/>
         </service>
 
-        <service id="Chamilo\Libraries\Format\Twig\TwigEnvironmentFactory"/>
-
-        <service id="Twig\Environment">
-            <factory method="createEnvironment"
-                     service="Chamilo\Libraries\Format\Twig\TwigEnvironmentFactory"/>
-            <argument type="service"
-                      id="Symfony\Component\Translation\Translator"/>
-            <argument type="service"
-                      id="Chamilo\Libraries\Architecture\Application\Routing\UrlGenerator"/>
-        </service>
-
-        <service id="Chamilo\Libraries\Format\Twig\TwigCacheService">
-            <tag name="Chamilo\Libraries\Cache\CacheDataPreLoaderService"/>
-        </service>
-
-        <service id="Symfony\Component\Form\FormFactory">
-            <factory method="buildFormFactory"
-                     service="Chamilo\Libraries\Format\Form\SymfonyFormFactoryBuilder"/>
-            <argument type="service"
-                      id="Twig\Environment"/>
-            <argument type="service"
-                      id="Symfony\Component\Validator\Validator"/>
-        </service>
-
         <service id="HTMLPurifier"
                  class="HTMLPurifier">
             <factory method="buildHtmlPurifier"
                      service="Chamilo\Libraries\File\HtmlPurifierFactory"/>
-        </service>
-
-        <service id="SimplePie\SimplePie"/>
-
-        <service id="Chamilo\Libraries\Format\Form\SymfonyFormFactoryBuilder"/>
-
-        <service id="Symfony\Component\Validator\Validator">
-            <factory method="createValidator"
-                     service="Chamilo\Libraries\Format\Validator\ValidatorFactory"/>
-        </service>
-
-        <service id="Chamilo\Libraries\Format\Validator\ValidatorFactory">
-            <argument key="$translator"
-                      type="service"
-                      id="Symfony\Component\Translation\Translator"/>
-            <argument key="$devMode">%chamilo.configuration.debug.show_errors%</argument>
         </service>
 
         <service id="Symfony\Component\Validator\ValidatorBuilder"/>

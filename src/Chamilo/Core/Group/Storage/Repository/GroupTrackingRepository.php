@@ -17,6 +17,10 @@ class GroupTrackingRepository
         $this->dataClassRepository = $dataClassRepository;
     }
 
+    /**
+     * @throws \Chamilo\Libraries\Storage\Architecture\Exceptions\StorageMethodException
+     * @throws \Chamilo\Libraries\Storage\Architecture\Exceptions\StorageLastInsertedIdentifierException
+     */
     public function createGroupActivity(GroupActivity $groupActivity): bool
     {
         return $this->getDataClassRepository()->create($groupActivity);

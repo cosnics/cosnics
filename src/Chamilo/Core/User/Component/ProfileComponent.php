@@ -1,19 +1,12 @@
 <?php
 namespace Chamilo\Core\User\Component;
 
-use Chamilo\Configuration\Form\Storage\DataClass\Instance;
-use Chamilo\Configuration\Form\Storage\DataManager;
 use Chamilo\Core\User\Manager;
 use Chamilo\Libraries\Format\Breadcrumb\BreadcrumbLessPackageInterface;
 use Chamilo\Libraries\Format\Structure\Glyph\FontAwesomeGlyph;
 use Chamilo\Libraries\Format\Tabs\Link\LinkTab;
 use Chamilo\Libraries\Format\Tabs\Link\LinkTabsRenderer;
 use Chamilo\Libraries\Format\Tabs\TabsCollection;
-use Chamilo\Libraries\Storage\Query\Condition\AndCondition;
-use Chamilo\Libraries\Storage\Query\Condition\EqualityCondition;
-use Chamilo\Libraries\Storage\Query\Variable\PropertyConditionVariable;
-use Chamilo\Libraries\Storage\Query\Variable\StaticConditionVariable;
-use Chamilo\Libraries\Storage\StorageParameters;
 
 /**
  * @package Chamilo\Core\User\Component
@@ -58,33 +51,6 @@ abstract class ProfileComponent extends Manager implements BreadcrumbLessPackage
             $this->get_url([self::PARAM_ACTION => self::ACTION_USER_SETTINGS]),
             self::ACTION_USER_SETTINGS == $this->get_action()
         );
-
-        $conditions = [];
-        $conditions[] = new EqualityCondition(
-            new PropertyConditionVariable(Instance::class, Instance::PROPERTY_APPLICATION), new StaticConditionVariable(
-                Manager::CONTEXT
-            )
-        );
-        $conditions[] = new EqualityCondition(
-            new PropertyConditionVariable(Instance::class, Instance::PROPERTY_NAME),
-            new StaticConditionVariable('account_fields')
-        );
-        $condition = new AndCondition($conditions);
-
-        $extra_form = DataManager::retrieve(
-            Instance::class, new StorageParameters(condition: $condition)
-        );
-
-        if ($extra_form instanceof Instance && count($extra_form->get_elements()) > 0)
-        {
-            $tabs[] = new LinkTab(
-                self::ACTION_ADDITIONAL_ACCOUNT_INFORMATION, htmlentities(
-                $translator->trans(self::ACTION_ADDITIONAL_ACCOUNT_INFORMATION . 'Title', [], Manager::CONTEXT)
-            ), new FontAwesomeGlyph('lightbulb', ['fa-lg'], null, 'fas'),
-                $this->get_url([self::PARAM_ACTION => self::ACTION_ADDITIONAL_ACCOUNT_INFORMATION]),
-                self::ACTION_ADDITIONAL_ACCOUNT_INFORMATION == $this->get_action()
-            );
-        }
 
         return $tabs;
     }

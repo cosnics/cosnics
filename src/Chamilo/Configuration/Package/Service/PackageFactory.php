@@ -2,8 +2,6 @@
 namespace Chamilo\Configuration\Package\Service;
 
 use Chamilo\Configuration\Package\Properties\Authors\Author;
-use Chamilo\Configuration\Package\Properties\Dependencies\Dependencies;
-use Chamilo\Configuration\Package\Properties\Dependencies\Dependency\Dependency;
 use Chamilo\Configuration\Package\Storage\DataClass\Package;
 use Chamilo\Libraries\File\SystemPathBuilder;
 use OutOfBoundsException;
@@ -77,41 +75,11 @@ class PackageFactory
         $package->set_version($jsonPackageObject->version);
         $package->set_description($jsonPackageObject->description);
 
-        if (!isset($cosnicsProperties->extra))
-        {
-            $extra = [];
-        }
-        else
-        {
-            $extra = $cosnicsProperties->extra;
-        }
-
         $package->setResources($cosnicsProperties->resources ?? []);
-
-        $package->set_extra($extra);
-
-        $package->setCoreInstall($cosnicsProperties->install->core ?: 0);
-        $package->setDefaultInstall($cosnicsProperties->install->default ?: 0);
 
         foreach ($jsonPackageObject->authors as $author)
         {
             $package->add_author(new Author($author->name, $author->email));
-        }
-
-        if (isset($cosnicsProperties->dependencies) && count($cosnicsProperties->dependencies) > 0)
-        {
-            $dependencies = new Dependencies();
-
-            foreach ($cosnicsProperties->dependencies as $cosnicsDependency)
-            {
-                $dependencies->add_dependency(new Dependency($cosnicsDependency->id, $cosnicsDependency->version));
-            }
-
-            $package->set_dependencies($dependencies);
-        }
-        else
-        {
-            $package->set_dependencies(null);
         }
 
         return $package;

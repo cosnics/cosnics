@@ -29,26 +29,6 @@ class RegistrationConsulter
      * @return string[][]
      * @throws \Symfony\Component\Cache\Exception\CacheException
      */
-    public function getContentObjectRegistrations(bool $alsoReturnInactiveTypes = true): array
-    {
-        $registrations = $this->getRegistrationsByType('Chamilo\Core\Repository\ContentObject');
-        $contentObjectTypes = [];
-
-        foreach ($registrations as $registration)
-        {
-            if ($alsoReturnInactiveTypes || $this->isRegistrationActive($registration))
-            {
-                $contentObjectTypes[] = $registration;
-            }
-        }
-
-        return $contentObjectTypes;
-    }
-
-    /**
-     * @return string[][]
-     * @throws \Symfony\Component\Cache\Exception\CacheException
-     */
     public function getIntegrationRegistrations(string $integration, ?string $root = null): array
     {
         $registrations = $this->getRegistrations();

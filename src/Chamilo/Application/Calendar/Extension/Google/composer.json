@@ -37,16 +37,6 @@
                     "output": "Chamilo/Libraries/Resources/Css/cosnics.common.Ruby.min.css",
                     "input": "Resources/Css/Aqua/Stylesheet.min.css"
                 }
-            ],
-            "install": {
-                "default": 1,
-                "core": 0
-            },
-            "dependencies": [
-                {
-                    "id": "Chamilo\\Application\\Calendar",
-                    "version": ">=1.0.0"
-                }
             ]
         }
     }

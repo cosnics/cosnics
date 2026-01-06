@@ -1,9 +1,7 @@
 <?php
 namespace Chamilo\Core\Home\Rights;
 
-use Chamilo\Core\Admin\Service\BreadcrumbGenerator;
 use Chamilo\Libraries\Architecture\Application\Application;
-use Chamilo\Libraries\Format\Breadcrumb\BreadcrumbGeneratorInterface;
 
 /**
  * Manager for the components
@@ -19,9 +17,4 @@ abstract class Manager extends Application
     public const DEFAULT_ACTION = self::ACTION_BROWSE_BLOCK_TYPE_TARGET_ENTITIES;
 
     public const PARAM_BLOCK_TYPE = 'block_type';
-
-    public function getBreadcrumbGenerator(): BreadcrumbGeneratorInterface
-    {
-        return $this->getService(BreadcrumbGenerator::class);
-    }
 }

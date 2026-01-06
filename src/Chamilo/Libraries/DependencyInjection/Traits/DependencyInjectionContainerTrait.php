@@ -8,7 +8,6 @@ use Chamilo\Core\Rights\Structure\Service\AuthorizationChecker;
 use Chamilo\Core\User\Service\UserService;
 use Chamilo\Core\User\Service\UserSettingService;
 use Chamilo\Libraries\Architecture\Application\Routing\UrlGenerator;
-use Chamilo\Libraries\Architecture\Bridge\BridgeManager;
 use Chamilo\Libraries\Architecture\ClassnameUtilities;
 use Chamilo\Libraries\Architecture\ErrorHandler\ExceptionLogger\ExceptionLoggerInterface;
 use Chamilo\Libraries\Architecture\Factory\ApplicationFactory;
@@ -27,7 +26,6 @@ use Chamilo\Libraries\Format\Structure\HeaderRendererInterface;
 use Chamilo\Libraries\Format\Structure\PageConfiguration;
 use Chamilo\Libraries\Format\Theme\ThemePathBuilder;
 use Chamilo\Libraries\Format\Utilities\ResourceManager;
-use Chamilo\Libraries\Format\Validator\ValidatorDecorator;
 use Chamilo\Libraries\Platform\ChamiloRequest;
 use Chamilo\Libraries\Storage\Repository\DataClassRepository;
 use Chamilo\Libraries\Utilities\StringUtilities;
@@ -35,11 +33,9 @@ use Monolog\Logger;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 use Symfony\Component\Filesystem\Filesystem;
-use Symfony\Component\Form\FormFactory;
 use Symfony\Component\HttpFoundation\Session\SessionInterface;
 use Symfony\Component\Serializer\Serializer;
 use Symfony\Component\Translation\Translator;
-use Twig\Environment;
 
 /**
  * @package Chamilo\Libraries\Architecture\Traits
@@ -66,11 +62,6 @@ trait DependencyInjectionContainerTrait
         return $this->getService(BreadcrumbTrail::class);
     }
 
-    public function getBridgeManager(): BridgeManager
-    {
-        return $this->getService(BridgeManager::class);
-    }
-
     public function getClassnameUtilities(): ClassnameUtilities
     {
         return $this->getService(ClassnameUtilities::class);
@@ -94,6 +85,13 @@ trait DependencyInjectionContainerTrait
         }
 
         return $this->container;
+    }
+
+    public function setContainer(ContainerInterface $container): static
+    {
+        $this->container = $container;
+
+        return $this;
     }
 
     protected function getDataClassRepository(): DataClassRepository
@@ -124,11 +122,6 @@ trait DependencyInjectionContainerTrait
     public function getFooterRenderer(): FooterRendererInterface
     {
         return $this->getService(FooterRenderer::class);
-    }
-
-    public function getForm(): FormFactory
-    {
-        return $this->getService(FormFactory::class);
     }
 
     public function getGroupService(): GroupService
@@ -222,11 +215,6 @@ trait DependencyInjectionContainerTrait
         return $this->getService(Translator::class);
     }
 
-    public function getTwig(): Environment
-    {
-        return $this->getService(Environment::class);
-    }
-
     public function getUrlGenerator(): UrlGenerator
     {
         return $this->getService(UrlGenerator::class);
@@ -242,20 +230,8 @@ trait DependencyInjectionContainerTrait
         return $this->getService(UserSettingService::class);
     }
 
-    public function getValidator(): ValidatorDecorator
-    {
-        return $this->getService('Symfony\Component\Validator\Validator');
-    }
-
     public function getWebPathBuilder(): WebPathBuilder
     {
         return $this->getService(WebPathBuilder::class);
-    }
-
-    public function setContainer(ContainerInterface $container): static
-    {
-        $this->container = $container;
-
-        return $this;
     }
 }

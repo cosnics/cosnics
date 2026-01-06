@@ -43,50 +43,6 @@ class SettingsConnector implements SettingsConnectorInterface
         $this->translator = $translator;
     }
 
-    public function getConfigurationConsulter(): ConfigurationConsulter
-    {
-        return $this->configurationConsulter;
-    }
-
-    public function getContext(): string
-    {
-        return Manager::CONTEXT;
-    }
-
-    public function getLanguageConsulter(): LanguageConsulter
-    {
-        return $this->languageConsulter;
-    }
-
-    public function getMailerFactory(): MailerFactory
-    {
-        return $this->mailerFactory;
-    }
-
-    /**
-     * @return string[]
-     * @throws \Symfony\Component\Cache\Exception\CacheException
-     */
-    public function getMailers(): array
-    {
-        return $this->getMailerFactory()->getAvailableMailers();
-    }
-
-    public function getRegistrationConsulter(): RegistrationConsulter
-    {
-        return $this->registrationConsulter;
-    }
-
-    public function getThemeSystemPathBuilder(): ThemePathBuilder
-    {
-        return $this->themeSystemPathBuilder;
-    }
-
-    public function getTranslator(): Translator
-    {
-        return $this->translator;
-    }
-
     /**
      * @throws \Symfony\Component\Cache\Exception\CacheException
      */
@@ -113,6 +69,21 @@ class SettingsConnector implements SettingsConnectorInterface
         return $options;
     }
 
+    public function getConfigurationConsulter(): ConfigurationConsulter
+    {
+        return $this->configurationConsulter;
+    }
+
+    public function getContext(): string
+    {
+        return Manager::CONTEXT;
+    }
+
+    public function getLanguageConsulter(): LanguageConsulter
+    {
+        return $this->languageConsulter;
+    }
+
     /**
      * @return string[]
      */
@@ -121,12 +92,41 @@ class SettingsConnector implements SettingsConnectorInterface
         return $this->getLanguageConsulter()->getLanguages();
     }
 
+    public function getMailerFactory(): MailerFactory
+    {
+        return $this->mailerFactory;
+    }
+
+    /**
+     * @return string[]
+     * @throws \Symfony\Component\Cache\Exception\CacheException
+     */
+    public function getMailers(): array
+    {
+        return $this->getMailerFactory()->getAvailableMailers();
+    }
+
+    public function getRegistrationConsulter(): RegistrationConsulter
+    {
+        return $this->registrationConsulter;
+    }
+
+    public function getThemeSystemPathBuilder(): ThemePathBuilder
+    {
+        return $this->themeSystemPathBuilder;
+    }
+
     /**
      * @return string[]
      */
     public function getThemes(): array
     {
         return $this->getThemeSystemPathBuilder()->getAvailableThemes();
+    }
+
+    public function getTranslator(): Translator
+    {
+        return $this->translator;
     }
 
     /**

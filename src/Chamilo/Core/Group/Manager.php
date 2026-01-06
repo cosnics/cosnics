@@ -1,12 +1,10 @@
 <?php
 namespace Chamilo\Core\Group;
 
-use Chamilo\Core\Admin\Service\BreadcrumbGenerator;
 use Chamilo\Core\Group\Service\GroupMembershipService;
 use Chamilo\Core\Group\Service\GroupUrlGenerator;
 use Chamilo\Libraries\Architecture\Application\Application;
 use Chamilo\Libraries\Architecture\Application\ApplicationConfigurationInterface;
-use Chamilo\Libraries\Format\Breadcrumb\BreadcrumbGeneratorInterface;
 
 /**
  * @package Chamilo\Core\Group
@@ -45,11 +43,6 @@ abstract class Manager extends Application
         parent::__construct($applicationConfiguration);
 
         $this->checkAuthorization(Manager::CONTEXT);
-    }
-
-    public function getBreadcrumbGenerator(): BreadcrumbGeneratorInterface
-    {
-        return $this->getService(BreadcrumbGenerator::class);
     }
 
     protected function getGroupMembershipService(): GroupMembershipService

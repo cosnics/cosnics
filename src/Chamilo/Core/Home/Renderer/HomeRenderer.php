@@ -3,7 +3,6 @@ namespace Chamilo\Core\Home\Renderer;
 
 use Chamilo\Configuration\Service\Consulter\ConfigurationConsulter;
 use Chamilo\Core\Home\Manager;
-use Chamilo\Core\Home\Service\AngularConnectorService;
 use Chamilo\Core\Home\Service\HomeService;
 use Chamilo\Core\Home\Storage\DataClass\Element;
 use Chamilo\Core\User\Storage\DataClass\User;
@@ -28,8 +27,6 @@ use Symfony\Component\Translation\Translator;
  */
 class HomeRenderer
 {
-    protected AngularConnectorService $angularConnectorService;
-
     protected ConfigurationConsulter $configurationConsulter;
 
     protected HomeService $homeService;
@@ -45,12 +42,11 @@ class HomeRenderer
     protected WebPathBuilder $webPathBuilder;
 
     public function __construct(
-        AngularConnectorService $angularConnectorService, ConfigurationConsulter $configurationConsulter,
-        HomeService $homeService, Translator $translator, UrlGenerator $urlGenerator, WebPathBuilder $webPathBuilder,
-        TabHeaderRenderer $tabHeaderRenderer, TabRenderer $tabRenderer
+        ConfigurationConsulter $configurationConsulter, HomeService $homeService, Translator $translator,
+        UrlGenerator $urlGenerator, WebPathBuilder $webPathBuilder, TabHeaderRenderer $tabHeaderRenderer,
+        TabRenderer $tabRenderer
     )
     {
-        $this->angularConnectorService = $angularConnectorService;
         $this->configurationConsulter = $configurationConsulter;
         $this->homeService = $homeService;
         $this->translator = $translator;
@@ -105,11 +101,6 @@ class HomeRenderer
             '<script src="' . $webPathBuilder->getJavascriptPath('Chamilo\Core\Home') . 'HomeView.js' . '"></script>';
 
         return implode(PHP_EOL, $html);
-    }
-
-    public function getAngularConnectorService(): AngularConnectorService
-    {
-        return $this->angularConnectorService;
     }
 
     public function getConfigurationConsulter(): ConfigurationConsulter
@@ -262,24 +253,11 @@ class HomeRenderer
     public function renderContent(?int $currentTabIdentifier = null, bool $isGeneralMode = false, ?User $user = null
     ): string
     {
-        $angularConnectorService = $this->getAngularConnectorService();
         $tabRenderer = $this->getTabRenderer();
-
-        $modules = $angularConnectorService->getAngularModules();
-        $moduleString = count($modules) > 0 ? '\'' . implode('\', \'', $modules) . '\'' : '';
 
         $html = [];
 
-        $html[] = $angularConnectorService->loadAngularModules();
-
-        $html[] = '<script>';
-        $html[] = '(function(){';
-        $html[] = '    var homeApp = angular.module(\'homeApp\', [' . $moduleString . ']);';
-        $html[] = '    homeApp.filter(\'arrayToString\', function() { return function(x) { return x; }; });';
-        $html[] = '})();';
-        $html[] = '</script>';
-
-        $html[] = '<div class="portal-tabs" ng-app="homeApp">';
+        $html[] = '<div class="portal-tabs">';
 
         $tabs = $this->getHomeService()->findElementsByTypeUserAndParentIdentifier(Element::TYPE_TAB, $user);
 

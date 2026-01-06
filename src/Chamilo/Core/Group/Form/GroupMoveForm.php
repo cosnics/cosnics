@@ -1,63 +1,60 @@
 <?php
 namespace Chamilo\Core\Group\Form;
 
+use Chamilo\Core\Group\Manager;
 use Chamilo\Core\Group\Menu\GroupMenu;
+use Chamilo\Core\Group\Service\GroupService;
+use Chamilo\Core\Group\Storage\DataClass\Group;
 use Chamilo\Libraries\Format\Form\FormValidator;
 use Chamilo\Libraries\Format\Menu\OptionsMenuRenderer;
 use Chamilo\Libraries\Format\Structure\Glyph\FontAwesomeGlyph;
-use Chamilo\Libraries\Translation\Translation;
-use Chamilo\Libraries\Utilities\StringUtilities;
 
 /**
- *
- * @package groups.lib.forms
+ * @package Chamilo\Core\Group\Form
+ * @author Hans De Bisschop <hans.de.bisschop@ehb.be>
  */
 class GroupMoveForm extends FormValidator
 {
-    const PROPERTY_LOCATION = 'location';
+    public const PROPERTY_LOCATION = 'location';
 
-    private $group;
+    private Group $group;
 
-    private $locations = [];
-
-    private $level = 1;
-
-    public function __construct($group, $action, $user)
+    /**
+     * @throws \Chamilo\Libraries\Architecture\Exceptions\ObjectNotExistException
+     * @throws \QuickformException
+     */
+    public function __construct(Group $group, $action)
     {
         parent::__construct('group_move', self::FORM_METHOD_POST, $action);
         $this->group = $group;
 
         $this->build_form();
-
         $this->setDefaults();
     }
 
-    public function build_form()
+    /**
+     * @throws \QuickformException
+     * @throws \Chamilo\Libraries\Architecture\Exceptions\ObjectNotExistException
+     */
+    public function build_form(): void
     {
-        $this->addElement('select', self::PROPERTY_LOCATION, Translation::get('NewLocation'), $this->get_groups());
+        $this->addElement('select', self::PROPERTY_LOCATION, $this->getTranslation('NewLocation', [], Manager::CONTEXT),
+            $this->get_groups());
         $buttons[] = $this->createElement(
-            'style_submit_button', 'submit', Translation::get('Move', null, StringUtilities::LIBRARIES), null, null,
-            new FontAwesomeGlyph('move')
+            'style_submit_button', 'submit', $this->getTranslation('Move'), null, null, new FontAwesomeGlyph('move')
         );
 
         $this->addGroup($buttons, 'buttons', null, '&nbsp;', false);
     }
 
-    public function move_group()
-    {
-        return $this->group->move($this->get_new_parent());
-    }
-
-    public function get_new_parent()
-    {
-        return $this->exportValue(self::PROPERTY_LOCATION);
-    }
-
-    public function get_groups()
+    /**
+     * @throws \Chamilo\Libraries\Architecture\Exceptions\ObjectNotExistException
+     */
+    public function get_groups(): array
     {
         $group = $this->group;
 
-        $group_menu = new GroupMenu($group->get_id(), null, true, true);
+        $group_menu = new GroupMenu($group->getId(), null, true, true);
         $renderer = new OptionsMenuRenderer();
         $group_menu->render($renderer, 'sitemap');
 
@@ -65,14 +62,26 @@ class GroupMoveForm extends FormValidator
     }
 
     /**
-     * Sets default values.
-     *
-     * @param array $defaults Default values for this form's parameters.
+     * @throws \QuickformException
      */
-    public function setDefaults($defaults = [], $filter = null)
+    public function get_new_parent()
+    {
+        return $this->exportValue(self::PROPERTY_LOCATION);
+    }
+
+    /**
+     * @throws \Throwable
+     * @throws \QuickformException
+     */
+    public function move_group(): bool
+    {
+        return $this->getService(GroupService::class)->moveGroup($this->group, $this->get_new_parent());
+    }
+
+    public function setDefaults(array $defaultValues = [], $filter = null)
     {
         $group = $this->group;
-        $defaults[self::PROPERTY_LOCATION] = $group->get_parent_id();
+        $defaults[self::PROPERTY_LOCATION] = $group->getParentId();
         parent::setDefaults($defaults);
     }
 }

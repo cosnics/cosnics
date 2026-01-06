@@ -6,26 +6,5 @@
         <defaults autowire="true"
                   autoconfigure="true"
                   public="true"/>
-
-        <service id="Chamilo\Application\Calendar\Extension\Google\Integration\Chamilo\Application\Calendar\Package\Activator"
-                 class="Chamilo\Configuration\Package\Action\Activator">
-            <tag name="Chamilo\Configuration\Package\Action\Activator"/>
-            <argument key="$context">Chamilo\Application\Calendar\Extension\Google\Integration\Chamilo\Application\Calendar</argument>
-        </service>
-        <service id="Chamilo\Application\Calendar\Extension\Google\Integration\Chamilo\Application\Calendar\Package\Deactivator"
-                 class="Chamilo\Configuration\Package\Action\Deactivator">
-            <tag name="Chamilo\Configuration\Package\Action\Deactivator"/>
-            <argument key="$context">Chamilo\Application\Calendar\Extension\Google\Integration\Chamilo\Application\Calendar</argument>
-        </service>
-        <service id="Chamilo\Application\Calendar\Extension\Google\Integration\Chamilo\Application\Calendar\Package\Installer"
-                 class="Chamilo\Configuration\Package\Action\Installer">
-            <tag name="Chamilo\Configuration\Package\Action\Installer"/>
-            <argument key="$context">Chamilo\Application\Calendar\Extension\Google\Integration\Chamilo\Application\Calendar</argument>
-        </service>
-        <service id="Chamilo\Application\Calendar\Extension\Google\Integration\Chamilo\Application\Calendar\Package\Remover"
-                 class="Chamilo\Configuration\Package\Action\Remover">
-            <tag name="Chamilo\Configuration\Package\Action\Remover"/>
-            <argument key="$context">Chamilo\Application\Calendar\Extension\Google\Integration\Chamilo\Application\Calendar</argument>
-        </service>
     </services>
 </container>

@@ -1,14 +1,12 @@
 <?php
 namespace Chamilo\Core\Menu;
 
-use Chamilo\Core\Admin\Service\BreadcrumbGenerator;
 use Chamilo\Core\Menu\Factory\ItemRendererFactory;
 use Chamilo\Core\Menu\Service\CachedItemService;
 use Chamilo\Core\Menu\Service\ItemService;
 use Chamilo\Core\Menu\Service\RightsService;
 use Chamilo\Libraries\Architecture\Application\Application;
 use Chamilo\Libraries\Architecture\Application\ApplicationConfigurationInterface;
-use Chamilo\Libraries\Format\Breadcrumb\BreadcrumbGeneratorInterface;
 
 /**
  * @package Chamilo\Core\Menu
@@ -45,11 +43,6 @@ abstract class Manager extends Application
         parent::__construct($applicationConfiguration);
 
         $this->checkAuthorization(Manager::CONTEXT);
-    }
-
-    public function getBreadcrumbGenerator(): BreadcrumbGeneratorInterface
-    {
-        return $this->getService(BreadcrumbGenerator::class);
     }
 
     public function getCachedItemService(): CachedItemService
